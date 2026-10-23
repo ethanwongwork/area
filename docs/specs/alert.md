@@ -117,7 +117,7 @@ The dismiss beside the products' icon buttons under the pointer:
 | shell · fill / edge | tone surface + tone border; neutral `bg-component` #f7f7f7 + `border-decorative` #f3f3f3 | Semantic roles (`surface.css:284-289`) | The edge is a container seam, which the second pass kept decorative (rules take `border-divider`) |
 | text · size | 14/20 (`ui-size`) | Peer: Toast (`inset.css:184-188`), menus and rows use UI body | — |
 | title · weight / ink | 500, the tone ink (`surface.css:571`) | Surface title at body size (audit S2, owner 2026-09-30) | Was 400 before the type pass |
-| description · ink | **`fg-muted` #666666 in every tone** (`surface.css:177, 293`) | Second pass, decision 5: supporting text takes the muted role | Was the tone ink at 0.85 opacity on tones, an opacity rather than a role |
+| description · ink | **`fg-muted` #646464 in every tone** (`surface.css:177, 293`) | Second pass, decision 5: supporting text takes the muted role | Was the tone ink at 0.85 opacity on tones, an opacity rather than a role |
 | dismiss · control | **a ghost small Button** (`size="sm" variant="ghost" tone="neutral" iconOnly`) with the Area `dismiss` glyph, in a `span.area-alert__dismiss` wrapper (`primitives.tsx:197-201`, `surface.css:703-709`) | The close recipe for rectangular surfaces (audit S9, owner): Popover and Toast | Was a hand-built button with a Fluent filled glyph |
 | dismiss · size | 28 (`control-sm`) | Button sm; Notion's icon button is 28 (`notion--icon-button--hover`) | Figma 24, ChatGPT 36 |
 | dismiss · radius | **`radius-control-sm` 6**, Button's own | Notion 6 on 28; peers Popover and Toast close | — |
@@ -297,3 +297,9 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 
 - **What changed:** in the multiline layout the description sits directly under the title: 10 from the title's baseline to the description's cap, was 15.
 - **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs".
+
+## Review note, 2026-10-23 (press room)
+
+- **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
+- **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
+  on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.

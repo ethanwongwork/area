@@ -68,6 +68,11 @@ has not requested; they propose them as candidates.
 - **Settings are numbers or names with one effect each** ([Principles](PRINCIPLES.md#7-settings-not-looks)).
   Never package several settings into a named look. Never cut an existing option to
   simplify; make its effect visible instead.
+- **Every viable option is offered** (owner, 2026-10-22, "everything to be part of a series of choices"). A detail that
+  could go more than one way becomes a setting, not a fixed value; its range is every option that renders correctly with
+  every other setting and clears contrast, proved by a test over the whole range.
+- **Both themes are decided.** Say whether the setting differs by mode (one per mode, set apart in the Inspector and the
+  setup, as Ground, Layers and Tint strength) or is shared (as Tint hue and Text tint), and test it in both.
 
 ## 4. One vocabulary
 

@@ -12,7 +12,8 @@ components and accurate specs matter more than speed.
   - **Titlebar:** the tabs Theme, Components, Typography, Icons, Color, Testing, Brand
     and Materials; search; toggles; light / dark.
   - **Sidebar, Canvas** and **Inspector** (Theme, Design, Code, Chat).
-  - The app runs at type 13, Compact. Its UI follows `docs/PRODUCT_UI.md`.
+  - The app's own UI takes the Inspector's settings, type and density included (owner, 2026-10-22); its layout was
+    measured at type 13, Compact. Its UI follows `docs/PRODUCT_UI.md`.
   - `apps/docs` is archived: don't extend it or check work there.
 - **One session at a time.** Before starting, check `origin/main` and open pull requests,
   so you don't build what another session has. When resuming, read `.Codex/HANDOFF.md`

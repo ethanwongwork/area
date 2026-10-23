@@ -112,7 +112,7 @@ Area (node trees): md 32px tall, 20px apart, selected ink rgb(40, 40, 40), rest 
 | tab · inline padding | 0, content-aligned | Manifest contract ("labels align with panel content"); `inset.css:65` | Notion pads 8 each side; kept (third pass): padding would carry the underline past the content |
 | tab · gap | 16 / 20 / 24 (`space-*`) | not found (searched PRIOR_DECISIONS.md, navigation.css comments); unsourced, kept in the third pass | Notion 16 label to label (8 + 8, no gap); Untitled 12 |
 | text | 14/20 at every size (`control-sm/md/lg-text`; sm was 12/16 until small controls moved to 14/20); **400 at rest, 500 selected**, each tab's width reserved at 500 | Owner 2026-10-21 (C); Figma 450 → 550 with a hidden copy; Radix 400 → 500 with a hidden copy; Fluent and Primer 400 → 600, reserved | A written exception to one weight per label (DESIGN_SYSTEM.md): tabs carry no fill, so weight marks the selected view. Notion, Material 3, shadcn and Atlassian keep 500; Spectrum 2 and Ant keep 400 |
-| rest / selected ink | `fg-muted` #666666 / `fg-default` #282828 | Second pass: unselected options muted (Figma 50% black, Notion tertiary) | Untitled selected brand-700 |
+| rest / selected ink | `fg-muted` #646464 / `fg-default` #282828 | Second pass: unselected options muted (Figma 50% black, Notion tertiary) | Untitled selected brand-700 |
 | indicator | 2px, `radius-full`, `fg-selection` (neutral: `fg-default`), whole tab | Owner (rounded underline spanning icon and count); Notion 2px in primary ink | Untitled 2px square-ended brand-600 |
 | hover | pending indicator `border-hover` #b4b4b4 / #585858; ink fixed | Foreground fixed on hover; Figma panel tab keeps 50% ink on hover | Figma paints a #f5 plate; Untitled hovers to the selected paint |
 | pressed | indicator `fg-muted` | Earlier Area value | — |
@@ -235,3 +235,9 @@ Tab labels are not selectable. See [interaction polish](../research/interaction-
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-23 (press room)
+
+- **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
+- **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
+  on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.

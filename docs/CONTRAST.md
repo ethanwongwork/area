@@ -10,6 +10,12 @@ Small labels, placeholders and code are normal text and must meet 4.5:1. Hover d
 change that classification. The token suite also retains a supplementary APCA floor in
 dark mode; APCA is not a WCAG conformance standard.
 
+Tinted grays (Tint hue and strength, `axes/tint.ts`) keep these targets by construction: the inks are solved for
+lightness as if every colour were gray, and a tint changes a colour's luminance at the same lightness, so text moves 0.25
+× the tint's strength away from its ground (`INK_MARGIN`, color/layers.ts). Without it a 0.005 tint put muted text under
+4.5:1 on some hues; with it every hue at every strength and every Text tint share passes the Layers gate in both modes
+(docs/research/custom-neutral-2026-10-22/). An untinted gray moves 0, so Neutral is unchanged.
+
 Required boundaries and state indicators need a distinct signal against their adjacent
 surfaces. Area's increased-contrast preference targets at least 3:1 for these roles.
 The standard soft presentation falls below that threshold in some cases and must not be
@@ -36,9 +42,10 @@ measurements are in Git history (`archive/docs/batches/V01/`, removed after comm
   frame: the card edge, or the strong stroke) follow the same switch, so every field reaches 3:1 under increased
   contrast (boundary sweep, 2026-10-15).
 
-Contrast is a level, `--area-contrast-more` from 0 to 1: `data-area-contrast="standard"` (0), `"medium"` (0.5,
-owner 2026-10-18: More "seems very extreme"; Material 3's Standard / Medium / High) and `"more"` (1), which selects the
-strong endpoints. Every derivation mixes by the level, so Medium sits half way. It also brings Surface 0's frames back
+Contrast is a level, `--area-contrast-more` from 0 to 1, in nine steps since 2026-10-22 (owner: "i want more
+granularity in those options"): `data-area-contrast="0"` (Standard) to `"8"` (More), an eighth a step. The names
+`"standard"` (0), `"medium"` (0.5, owner 2026-10-18: More "seems very extreme"; Material 3's Standard / Medium / High) and
+`"more"` (1) stay as aliases of 0, 4 and 8. Every derivation mixes by the level, so every step sits its share of the way. It also brings Surface 0's frames back
 at 1px at any raised level (`border-width` = the Surface's `frame-width`, or 1px; owner, 2026-10-15), as macOS Increase
 Contrast adds borders and forced colours restore them. The soft edge (`shadow-edge`) is drawn only while no frame is,
 so the returned frame replaces it rather than doubling it (audit 2026-10-18). A Hairline frame (Surface 0.5) becomes 1px at any raised level, as
@@ -61,6 +68,11 @@ and Color field's inner opacity seam. Strokes already strong (checked marks, tod
 (A first pass, the same day, moved seams and frames a third of the way while control edges went all of it; it read as
 two settings.) A soft Button's edge mixes toward its outline's line, itself already mixed, so at Medium it goes about a
 quarter of the way.
+Edges are measured from the ground under them (2026-10-23; DESIGN_SYSTEM.md, Layers). A ground darker than the page
+(light) or lighter than the raised layer (dark) moves every edge role, rails included, by its distance, mixed by
+(1 − the Contrast level), which is exact for an OKLab mix: each level still lands where it did, and at More every edge
+is the strong stroke, which is solved on the deepest ground already. `layers.test.ts` checks every edge's distance and the
+frame minimum on every ground, card tone and Layers step.
 Rails are fills, not strokes: `fill-track` / `fill-track-hover` (Progress, Meter, Slider, the off Switch) keep their value
 at every level, since the fill or thumb on them is what has to read (under More the 3:1 rail left an accent fill 1.2:1).
 Switch outlines instead, as macOS does: its edge and an off thumb's ring take the strong stroke.

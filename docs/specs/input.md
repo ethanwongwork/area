@@ -103,12 +103,12 @@ hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 a
 | shell · shadow | none at rest, outline and soft (`input.css:45, 54`); focus halo only | Outline pass (number-field.md): controls at rest carry no shadow; no product field draws one (Notion, Figma, ChatGPT) | Untitled's `shadow-xs`; the third pass had kept `shadow-1`, since removed |
 | text · inset | 10.03 md (inset contract) | `inset.css:17-18` | Notion 8–8.55, Figma 8, ChatGPT 12, UUI 14: Area centres the cap height |
 | text · type | 14/20 400 at every size (sm was 12/16 until small controls moved to 14/20; `density.ts`) | Notion 14/20 400; ChatGPT 14/18 400 | Figma 11/16; UUI md 16/24 |
-| icon | 16px square, `fg-muted` #666, equal inset (8 from the edge at md) | Notion 6 in a 28 row and Figma 10 in a 32 row are both (H − glyph) / 2 | ChatGPT 12 in |
+| icon | 16px square, `fg-muted` #646464, equal inset (8 from the edge at md) | Notion 6 in a 28 row and Figma 10 in a 32 row are both (H − glyph) / 2 | ChatGPT 12 in |
 | gap | **6** at sm, md and lg (`gap-sm/md/lg`, `input.css:18`, `:234-236`); also the file button's end margin (`input.css:138`); compact sm 4 | Notion 6 at 28, Figma 6 at 32 | ChatGPT 8 at 36. Was 8 (sm 4) until audit S14 |
 | action · box | field height − 8: 20 / 24 / 32 (`input.css:19`), corner field radius − 4, concentric (md 24 box, 4 ring, radius 4, measured); hover `bg-component-hover`, pressed `bg-component-active`; on soft fields the translucent `bg-hover` / `bg-active` (`input.css:206-211`); disabled: `fg-disabled` ink, no hover, not-allowed cursor (audit B-8) | Audit B-7 B + C (owner); row-plate rule; NumberField steppers | Was a fixed 24 with `radius-small` 6; the opaque #f3 all but vanished on the #f7 soft fill |
 | action · hint | a real Tooltip on the shared engine (`AnchoredTooltip`: `popover="manual"`, 500ms delay, bottom side, end-aligned, 4 from the action); describes the button only when `aria-label` names it (`describes`) | Peer: [Tooltip](tooltip.md); second pass item 17; audit S16 (owner 2026-09-30) | Was a second tooltip style, then a CSS-revealed absolute span (`input.css`, removed); was announced twice |
 | file button · label | `fg-default`, 500 (`input.css:141`) | Owner: neutral by default | Was `fg-accent` |
-| placeholder | `fg-placeholder` #666 | UUI neutral-500; contrast | Notion's resting search text rgb(161,158,153) is 2.6:1 on white; kept (third pass): the contrast floor wins |
+| placeholder | `fg-placeholder` #646464 | UUI neutral-500; contrast | Notion's resting search text rgb(161,158,153) is 2.6:1 on white; kept (third pass): the contrast floor wins |
 
 ## States
 
@@ -260,3 +260,9 @@ Action buttons press at `bg-component-pressed`, one step past selected (Notion p
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-23 (press room)
+
+- **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
+- **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
+  on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.

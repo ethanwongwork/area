@@ -103,3 +103,54 @@ A state indicator needs 3:1 against what is next to it (WCAG 1.4.11). On white:
 - ChatGPT #3a83f7 is 3.6:1 and Area accent #006df5 is 4.7:1, so both pass.
 - Figma #0d99ff is 2.99:1, just short.
 - WCAG 2.4.13 (AAA) asks for a focus indicator with at least a 2px perimeter at 3:1.
+
+## Press room and edges per ground, 2026-10-23
+
+The three proposals left open by PR #151's layer map (https://claude.ai/artifact/2AtkSCcTm3GqwAveDbdqXY): the press had no
+room where muted text was solved, edges were measured from the page only, and the setup's visual was squeezed in a 1024
+window.
+
+**Press room.** The press stops where muted text keeps 4.6:1, and muted was solved on the deepest selected fill, so on
+that ground the press equalled selected: recessed in light at Layers 4 to 8 (L 0.925 to 0.925 at the defaults), raised in
+dark from 16 + 8 (0.436 to 0.436). The references press with one wash on every ground (ChatGPT 12% of #0d0d0d, Notion 10%
+of its black), so their press is the same step on a sidebar as on the page. Area now solves the inks on the deepest
+selected fill pushed `PRESS_ROOM` further, the smallest steps it ships that read (0.012 L light, 0.04 dark; layers.test.ts
+MIN). Measured in the app at the defaults: muted #646464 (was #666666); page selected 0.949 → pressed 0.913 (was 0.925);
+sidebar selected 0.925 → pressed 0.913 (was 0.925, no press). Dark at the defaults is unchanged (muted L 0.823, body
+0.949). At dark 24 + 8 no ink keeps 4.6:1 past L 0.563, so both inks go to L 0.990 (were 0.933 and 0.949).
+
+**Edges per ground.** A card's edge on a sidebar was 1.01:1 at Layers 8. Each edge role is now its page value moved by
+how far its ground sits past the page (light) or the raised layer (dark), set on every ground and restated on its
+children; what a ground draws on itself keeps its parent's, so its frame is measured against what it sits on. Measured
+in the app at the defaults: an Input on a gallery tile's page-tone frame 0.913 (as before); the Asset card's outline 0.913
+(as before); a Card on the Sidebar frames at 0.925 (0.051 from the sidebar's 0.976, the page's distance) with its fields
+at 0.913 (from the card); a dark card tone of +4 moves its edges 0.025 lighter, its own lift past the raised layer.
+
+**State sweep** (`docs/research/layers-2026-10-16/sweep/states.mjs`, now with a Contrast argument and `no-press`):
+18 families with row, option or press plates (Nav, Menu, Tree view, List box, Command palette, Combobox, Custom select,
+Table, Tabs, Segmented, Toggle group, Button, Asset card, Surface, Radio, Checkbox, Context menu, Calendar), this branch
+against `origin/main` (ef9cbf03), each run alone:
+
+| Setting | main | this branch |
+|---|---|---|
+| light 100 + 4, Contrast 0 and 8 | 1 text: Menu's ⌘L keycap on a pressed row, 4.05:1 | the keycap, 4.02:1 |
+| light 100 + 8 | 3 text: Menu danger pressed 4.24:1 ×2, the keycap | the keycap |
+| light 90 + 8 | 2 text: Menu danger pressed 3.84:1 ×2 | none |
+| dark 8 + 4, Contrast 0 and 8 | 1 text: the keycap, 3.9:1 | the same |
+| dark 24 + 8 | 2 text: the keycap hovered 4.46:1, pressed 3.67:1 | the keycap pressed, 3.78:1; Nav's Save row action no longer shows a hover |
+
+- **Fixed in the sweep:** Menu's danger red restated an older press (selected 3% toward the ink, 7% in dark) and failed
+  on the real one once it deepened (4.39:1 at the defaults in a first run, 3.84:1 at 90 + 8 on main already). It is now
+  solved for the press layers.css paints (surface.css, docs/specs/menu.md).
+- **Open:** Nav's row actions show hover by ink alone (quiet → body). At dark 24 + 8 the press room puts muted and body at
+  the same near-white, so that ink step is gone; on main it was 0.012 L (0.937 → 0.949), already too small to see. A
+  plate for row actions, or a quiet ink that keeps its distance from body, would fix it.
+- **Pre-existing, unchanged:** Nav rows, Table links and Custom select's trigger draw no press plate (10 `no-press` in
+  both builds at every setting); Menu's ⌘L keycap (muted on the Kbd plate) on a hovered or pressed row, 3.7 to 4.5:1
+  in both builds, the only text finding left.
+- **Not swept:** the other 101 families; Contrast on dark 24 + 8. Fourteen headless Edges at once rendered some runs in
+  the wrong theme (a "dark" run with light plates); every run above was redone alone and its plates checked.
+
+**Setup at 1024.** The Sidebar and Inspector (which grow with type) leave the Canvas about 470 to 530; beside the 400 panel
+the visual was 20 to 80 wide. Under an 816 Canvas the visual now sits over the panel at `clamp(200px, 36vh, 420px)`:
+438 × 276 visual and 438 × 338 panel in a 1024 × 768 window at type 14; at 1440 they stay side by side (438 and 400).

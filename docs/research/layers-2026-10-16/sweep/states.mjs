@@ -2,8 +2,11 @@
 // forced through the DevTools protocol, its text contrast on the state's plate and whether the state shows at all
 // (a plate step, an ink change or an edge change from rest). Run against the static build (desktop-dist, 4410).
 //
-//   node states.mjs <outdir> <theme> <ground> <layers> [port]      one combination, every family (SLUGS narrows)
-//   node states.mjs --all <outdir>                                 six combinations, three at a time
+//   node states.mjs <outdir> <theme> <ground> <layers> [port] [contrast]   one combination, every family (SLUGS narrows)
+//   node states.mjs --all <outdir>                                          six combinations, three at a time
+//
+// Since 2026-10-23 it also records `no-press`: a control whose hover shows but whose press paints exactly as its hover
+// (the press cap, docs/research/states-2026-10-21), and takes the Contrast level (0 to 8, default 0).
 import { spawn } from "node:child_process";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -26,7 +29,7 @@ if (process.argv[2] === "--all") {
   process.exit(0);
 }
 
-const [outdir, theme, ground, layers, portArg = "9800"] = process.argv.slice(2);
+const [outdir, theme, ground, layers, portArg = "9800", contrast = "0"] = process.argv.slice(2);
 const REPO = join(here, "../../../..");
 const { COMPLETE_COMPONENTS, REVIEW_COMPONENTS } = await import(join(REPO, "apps/desktop/src/content/component-status.mjs"));
 const slugs = process.env.SLUGS ? process.env.SLUGS.split(",") : [...COMPLETE_COMPONENTS, ...REVIEW_COMPONENTS];
@@ -70,7 +73,7 @@ const MEASURE = `function () {
 }`;
 
 const profile = mkdtempSync(join(tmpdir(), "edge-states-"));
-const edge = spawn("/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge", ["--headless=new", `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, "--no-first-run", "--disable-gpu", "about:blank"], { stdio: "ignore" });
+const edge = spawn("/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge", ["--headless=new", "--guest", "--disable-features=msImplicitSignin", `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, "--no-first-run", "--disable-gpu", "about:blank"], { stdio: "ignore" });
 let ws;
 try {
   let list; for (let i = 0; i < 50; i++) { try { list = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json(); if (list.some(t => t.type === "page")) break; } catch {} await sleep(200); }
@@ -82,10 +85,10 @@ try {
   await send("Emulation.setDeviceMetricsOverride", { width: 1600, height: 1200, deviceScaleFactor: 1, mobile: false });
   await send("Page.navigate", { url: BASE + `?theme=${theme}` }); await sleep(1500);
   const axis = theme === "dark" ? "ground-dark" : "ground-light";
-  await ev(`(() => { const all = JSON.parse(localStorage.getItem("area-desktop") || "{}"); all.theme = ${JSON.stringify(theme)}; all.canvas = { ...(all.canvas || {}), ${JSON.stringify(axis)}: ${JSON.stringify(ground)}, "layers-light": ${JSON.stringify(layers)}, "layers-dark": ${JSON.stringify(layers)} }; localStorage.setItem("area-desktop", JSON.stringify(all)); })()`);
+  await ev(`(() => { const all = JSON.parse(localStorage.getItem("area-desktop") || "{}"); all.theme = ${JSON.stringify(theme)}; all.canvas = { ...(all.canvas || {}), ${JSON.stringify(axis)}: ${JSON.stringify(ground)}, "layers-light": ${JSON.stringify(layers)}, "layers-dark": ${JSON.stringify(layers)}, contrast: ${JSON.stringify(contrast)} }; localStorage.setItem("area-desktop", JSON.stringify(all)); })()`);
   await ev(`location.hash = "components"`); await send("Page.reload", { ignoreCache: true }); await sleep(2500);
   await ev(`(() => { const s = document.createElement("style"); s.textContent = "*,*::before,*::after{transition:none!important;animation-play-state:paused!important}"; document.head.append(s); })()`);
-  const results = { theme, ground, layers, families: {} };
+  const results = { theme, ground, layers, contrast, families: {} };
   for (const slug of slugs) {
     const findings = [];
     try {
@@ -106,6 +109,7 @@ try {
           const measure = async () => (await send("Runtime.callFunctionOn", { objectId: obj, functionDeclaration: MEASURE, returnByValue: true })).result?.result?.value;
           const desc = (await send("Runtime.callFunctionOn", { objectId: obj, functionDeclaration: `function () { const t = this.closest(".gallery-tile"); return (t?.querySelector(".gallery-tile__label,.gallery-tile__title")?.textContent || "?").trim().slice(0, 40) + " :: " + this.localName + "." + [...this.classList].filter(c => c.startsWith("area-")).slice(0, 2).join(".") + (this.getAttribute("role") ? "[role=" + this.getAttribute("role") + "]" : "") + (this.getAttribute("aria-label") ? "[" + this.getAttribute("aria-label") + "]" : ""); }`, returnByValue: true })).result?.result?.value;
           const rest = await measure(); if (!rest) continue;
+          let hovered;
           // A current, selected, pressed, open, busy or disabled control may rightly keep its paint under the pointer.
           const settled = (await send("Runtime.callFunctionOn", { objectId: obj, functionDeclaration: `function () { return !!this.closest("[disabled],[aria-disabled=true],[data-disabled],[aria-busy=true],[data-loading]") || !!(this.closest("[aria-current]:not([aria-current=false]),[aria-selected=true],[aria-pressed=true],[data-selected],[aria-checked=true],[aria-expanded=true]") || this.querySelector(":scope > [aria-current]:not([aria-current=false])")); }`, returnByValue: true })).result?.result?.value;
           for (const state of ["hover", "active"]) {
@@ -113,6 +117,9 @@ try {
             const m = await measure();
             if (m?.texts.length) findings.push({ kind: "text", state, el: desc, ...m.texts[0], count: m.texts.length });
             if (m && state === "hover" && m.sig === rest.sig && !settled) findings.push({ kind: "no-hover", el: desc, plate: rest.plate });
+            if (state === "hover") hovered = m;
+            // A plate under the pointer that the press leaves as it was.
+            if (m && state === "active" && hovered && hovered.plate !== rest.plate && m.sig === hovered.sig && !settled) findings.push({ kind: "no-press", el: desc, plate: m.plate });
             // A hover that is only a plate step, and a small one (OKLab ΔE, so a tinted step counts its hue).
             const dE = m ? Math.hypot(...m.lab.map((v, i) => v - rest.lab[i])) : 0;
             if (m && state === "hover" && m.plate !== rest.plate && dE < (theme === "dark" ? 0.02 : 0.008) && m.sig.split("|").slice(1).join("|") === rest.sig.split("|").slice(1).join("|"))
@@ -126,7 +133,7 @@ try {
     process.stdout.write(`${theme}/${ground}/${layers} ${slug}: ${findings.filter(f => f.kind === "text").length} text, ${findings.filter(f => f.kind !== "text").length} other\n`);
   }
   mkdirSync(outdir, { recursive: true });
-  writeFileSync(join(outdir, `${theme}-${ground}-${layers}.json`), JSON.stringify(results, null, 1));
+  writeFileSync(join(outdir, `${theme}-${ground}-${layers}${contrast === "0" ? "" : "-c" + contrast}.json`), JSON.stringify(results, null, 1));
 } finally {
   try { ws?.close(); } catch {}
   edge.kill("SIGKILL"); await sleep(300);

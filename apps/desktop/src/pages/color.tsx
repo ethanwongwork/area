@@ -203,7 +203,7 @@ export function ColorPage() {
               <CanvasSection key={entry.id} role={mode === "list" ? undefined : "group"} id={`scale-${entry.id}`} title={view ? undefined : title(entry.id)} count={steps.length}>
                 {mode === "list" ? (
                   // List: one row per step, its token and values.
-                    <Table size="md" interactive flush aria-label={`${title(entry.id)} steps`}>
+                    <Table size="md" interactive aria-label={`${title(entry.id)} steps`}>
                       <thead><tr><th scope="col">Step</th><th scope="col">Token</th><th scope="col">Hex</th><th scope="col">OKLCH</th><th scope="col">Text</th></tr></thead>
                       <tbody>
                         {steps.map(item => (

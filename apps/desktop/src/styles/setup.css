@@ -12,6 +12,13 @@
   .setup--side { grid-template-columns: minmax(0, 1fr) 400px; max-inline-size: none; block-size: 100%; box-sizing: border-box; padding: 0; gap: var(--area-space-16); } /* pick */
   .setup--side .setup__stage { min-block-size: 0; }
   .setup--side .setup__stage-view { block-size: auto; min-block-size: 0; }
+  /* A narrow Canvas stacks them (2026-10-23): in a 1024 window the Sidebar and the Inspector, which grow with type
+     (PRODUCT_UI.md rule 18), leave the Canvas about 470 to 530, and beside the 400 column the visual was 20 to 80 wide.
+     Under a stage as wide as the column (400 + 16 + 400), the visual sits over the settings at the one-column setup's
+     share of the window and the settings scroll under it, both the Canvas's width. */
+  @container (inline-size < 816px) {
+    .setup--side { grid-template-columns: minmax(0, 1fr); grid-template-rows: clamp(200px, 36vh, 420px) minmax(0, 1fr); } /* pick: the one-column stage's height */
+  }
   /* One setting's section: its name and question, then its choice cards or swatches, sections 24 apart. */
   .setup__panel-body { gap: var(--area-space-24); }
   .setup-choice { display: grid; gap: var(--area-space-8); }
@@ -142,3 +149,46 @@
   .setup-bento__cell--bare { display: grid; place-items: center; }
   /* Example: the Testing tab's screen at its own width. */
   .setup-example { inline-size: 1200px; pointer-events: none; } /* pick: the Testing thumbnails' width */
+
+  /* --- Layer map (src/layer-map.tsx) --------------------------------------------- */
+  /* A window drawn only from the Layers roles, each region tagged with its name, layer and painted colour (owner,
+     2026-10-22: "make those combinations extremely clear"). Laid out at 520, the stage's narrow column, and scaled whole to it; no
+     transitions, so a tag reads the colour the choice paints, not one on its way there. */
+  /* The map is the page in its own theme (the stage's tile is the setup's), so the strip under the window reads in dark. */
+  .lm { display: grid; gap: var(--area-space-16); inline-size: 520px; padding: var(--area-space-16); border-radius: 16px; background: var(--area-bg-page); color: var(--area-fg-default); font-size: 12px; line-height: 16px; } /* pick */
+  .lm * { transition: none; }
+  .lm-window { display: grid; grid-template-rows: 36px 480px; overflow: hidden; border: 1px solid var(--area-border-float); border-radius: 12px; background: var(--area-bg-page); box-shadow: var(--area-shadow-float); } /* pick */
+  .lm-bar { display: flex; align-items: center; gap: var(--area-space-12); padding-inline: var(--area-space-12); border-block-end: 1px solid var(--area-border-divider); background: var(--area-bg-page); }
+  .lm-lights { display: flex; gap: 6px; }
+  .lm-lights > i { inline-size: 10px; block-size: 10px; border-radius: 50%; background: var(--area-border-subtle); }
+  .lm-body { display: grid; grid-template-columns: 136px minmax(0, 1fr) 128px; min-block-size: 0; } /* pick */
+  .lm-side { display: grid; align-content: start; gap: var(--area-space-4); padding: var(--area-space-12); border-inline-end: 1px solid var(--area-border-divider); background: var(--area-bg-subtle); }
+  .lm-side > .lm-tag { margin-block-end: var(--area-space-8); }
+  .lm-nav { display: flex; align-items: center; block-size: 24px; padding-inline: var(--area-space-4); border-radius: 6px; } /* pick */
+  .lm-nav:empty::before { content: ""; inline-size: 60%; block-size: 6px; border-radius: 3px; background: var(--area-border-subtle); }
+  .lm-nav--current { background: var(--area-bg-component-active); }
+  .lm-nav--hover { background: var(--area-bg-component-hover); }
+  .lm-main { position: relative; display: grid; grid-template-rows: auto auto 1fr; align-content: start; gap: var(--area-space-12); padding: 0 var(--area-space-12) var(--area-space-12); background: var(--area-bg-page); }
+  .lm-header { display: flex; align-items: center; justify-content: space-between; block-size: 40px; margin-inline: calc(var(--area-space-12) * -1); padding-inline: var(--area-space-12); border-block-end: 1px solid var(--area-border-divider); background: var(--area-bg-page); }
+  .lm-control { inline-size: 40px; block-size: 24px; border-radius: 6px; background: var(--area-bg-component); } /* pick */
+  .lm-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-12); align-items: start; }
+  .lm-card { display: grid; gap: var(--area-space-8); padding: var(--area-space-12); border: 1px solid var(--area-border-card); border-radius: 10px; background: var(--area-bg-card); } /* pick */
+  .lm-line { block-size: 6px; border-radius: 3px; background: var(--area-border-subtle); }
+  .lm-line--short { inline-size: 60%; }
+  .lm-field { display: flex; align-items: center; min-block-size: 28px; padding-inline: var(--area-space-4); border-radius: 6px; background: var(--area-bg-component); } /* pick */
+  .lm-menu { position: absolute; inset-inline-end: var(--area-space-12); inset-block-end: var(--area-space-12); display: grid; gap: var(--area-space-2); inline-size: 168px; padding: var(--area-space-4); border: 1px solid var(--area-border-float); border-radius: 10px; background: var(--area-bg-surface); box-shadow: var(--area-shadow-float); } /* pick */
+  .lm-menu > .lm-tag { margin: var(--area-space-4) var(--area-space-4) var(--area-space-4); }
+  .lm-inspector { display: grid; align-content: start; gap: var(--area-space-8); padding: var(--area-space-12); border-inline-start: 1px solid var(--area-border-divider); background: var(--area-bg-page); }
+  /* A tag reads on every region: the ink as its plate, the page as its text. */
+  .lm-tag { display: inline-flex; flex-wrap: wrap; align-items: baseline; justify-self: start; gap: 0 var(--area-space-4); padding: 2px var(--area-space-6); border-radius: 4px; background: var(--area-fg-default); color: var(--area-bg-page); font-size: 11px; line-height: 14px; } /* pick */
+  .lm-tag > span { opacity: 0.72; }
+  .lm-tag > code { font-family: var(--area-font-mono); font-size: 10px; opacity: 0.72; }
+  .lm-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-12); }
+  .lm-tone { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--area-space-8); align-items: center; }
+  .lm-tone > .lm-swatch { grid-row: span 3; inline-size: 40px; block-size: 40px; border: 1px solid var(--area-border-divider); border-radius: 8px; } /* pick */
+  .lm-tone > span:not(.lm-swatch), .lm-tone > code { color: var(--area-fg-muted); }
+  .lm-tone > code { font-family: var(--area-font-mono); font-size: 11px; }
+  .lm-swatch--page { background: var(--area-bg-page); }
+  .lm-swatch--recessed { background: var(--area-bg-subtle); }
+  .lm-swatch--raised { background: var(--area-bg-surface); }
+  .lm-swatch--fill { background: var(--area-bg-component); }

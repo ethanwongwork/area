@@ -76,6 +76,16 @@ export const GalleryAssetCardContainerlessSelected = () => <AssetCard style={car
 export const GalleryAssetCardContainerlessImageSelected = () => (
   <AssetCard style={card} container="containerless" selected media="images/david-tee.jpg" name="David Tee" />
 );
+/* Landscape: the frame 5:4 instead of square, as the Components gallery shows four across. */
+export const GalleryAssetCardLandscape = () => <AssetCard style={card} aspect="landscape" media={<Button>Button</Button>} name="Button" />;
+/* Name below: the head under the frame, the card's inset above it. */
+export const GalleryAssetCardCaptionBelow = () => <AssetCard style={card} caption="below" media={<Button>Button</Button>} name="Button" />;
+/* Basic: one surface, the head and the asset on the card's fill, no frame of its own. */
+export const GalleryAssetCardBasic = () => <AssetCard style={card} container="basic" media={<Button>Button</Button>} name="Button" />;
+/* Raised: the card in the surface, white in light. */
+export const GalleryAssetCardRaised = () => <AssetCard style={card} container="basic" fill="raised" media={<Button>Button</Button>} name="Button" />;
+/* Borderless: no edge at rest. */
+export const GalleryAssetCardBorderless = () => <AssetCard style={card} container="basic" borderless media={<Button>Button</Button>} name="Button" />;
 /* Hug: the frame as tall as its asset, here a component, instead of square. */
 export const GalleryAssetCardHug = () => <AssetCard style={card} aspect="hug" media={<Button>Button</Button>} name="Button" />;
 /* A waterfall: each card hugs its asset and drops into the shortest column, in reading order. */

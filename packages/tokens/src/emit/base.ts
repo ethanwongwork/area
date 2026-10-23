@@ -13,7 +13,7 @@
 import { PREFIX } from "../axes/schema.ts";
 import { MOTION_AXIS, duration } from "../axes/motion.ts";
 import { SOFT_EDGE, SOFT_EDGE_FILTER } from "../axes/surface.ts";
-import { contrastMix, layerCss, rawEdge, strokeEdge, strokeEdgeHover } from "../color/layers.ts";
+import { type GroundEdge, contrastMix, layerCss, onGround, rawEdge, strokeEdge, strokeEdgeHover } from "../color/layers.ts";
 import { depthDerived } from "../axes/depth.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 
@@ -64,6 +64,10 @@ export const Z_LAYERS = {
 export function baseTokens(): Record<string, string> {
   // The focus ring's width and offsets belong to the Focus ring setting (axes/states.ts).
   const out: Record<string, string> = { "--area-contrast-more": "0", "--area-stroke-width": "1px", "--area-input-inline-size": "16rem" };
+  // How far the ground under an edge sits past the page (light) or the raised layer (dark): 0 here; styles/layers.css sets
+  // it on every ground (color/layers.ts GROUND_EDGES). Not derived, so it inherits through setting scopes.
+  out["--area-edge-shift-light"] = "0";
+  out["--area-edge-shift-dark"] = "0";
   // Keyboard legends use the same native UI face for letters and modifier symbols.
   // Keep this separate from the creative typography axis: a custom text font may lack
   // keyboard glyphs, causing individual characters to fall back at different metrics.
@@ -117,6 +121,14 @@ function role(_id: string, switchName: string, map: Record<string, [string, stri
  * `<aside data-area-ui="compact">` correctly re-derive its own corner radius.
  */
 export function derivedTokens(): Record<string, string> {
+  const out = derivedOnPage();
+  // The edge roles written here are on the page (`<role>-page`); each one on the ground under it (color/layers.ts GROUND_EDGES).
+  for (const role of ["edge-control", "edge-control-hover", "edge-selected", "edge-control-strong", "fill-toggle", "fill-toggle-hover", "composer-edge", "composer-focus-color"] as const satisfies readonly GroundEdge[])
+    out[`${PREFIX}${role}`] = onGround(role);
+  return out;
+}
+
+function derivedOnPage(): Record<string, string> {
   return {
     // The Elevation roles, from Depth and the Edge and Depth levers (axes/depth.ts): every input is an axis, so they
     // re-derive wherever one is set.
@@ -125,16 +137,16 @@ export function derivedTokens(): Record<string, string> {
     // axis: it changes emphasis while every axis keeps its own namespaces.
     // Each mixes from its edge at standard contrast (rawEdge), by the level, as every border-* does (color/layers.ts), so a
     // control edge and a seam move the same share at Medium and More (owner, 2026-10-18).
-    [`${PREFIX}edge-control`]: contrastMix(strokeEdge("faint"), `var(${PREFIX}stroke-control)`),
+    [`${PREFIX}edge-control-page`]: contrastMix(strokeEdge("faint"), `var(${PREFIX}stroke-control)`),
     // The hover edge a step past rest: border-subtle in light (#d4 after #e2). In dark border-subtle is the rest edge's own
     // value (both #333, today and in the Layers model), so a field's hover drew nothing; it takes `border` (#4b4b4b),
     // the dark step the model's edges use (hover and pressed sweep 2026-10-17: Custom select, Input, Select, Textarea).
     // The step itself is the Hover stroke setting (axes/states.ts; 2 is the step above, light subtle and dark border).
-    [`${PREFIX}edge-control-hover`]: contrastMix(strokeEdgeHover(), `var(${PREFIX}stroke-control-hover)`),
-    [`${PREFIX}edge-selected`]: contrastMix(strokeEdge("faint"), `var(${PREFIX}stroke-control)`),
+    [`${PREFIX}edge-control-hover-page`]: contrastMix(strokeEdgeHover(), `var(${PREFIX}stroke-control-hover)`),
+    [`${PREFIX}edge-selected-page`]: contrastMix(strokeEdge("faint"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}accent-indicator) calc(var(${PREFIX}contrast-more) * 100%))`,
-    [`${PREFIX}fill-toggle`]: contrastMix(rawEdge("subtle"), `var(${PREFIX}stroke-control)`),
-    [`${PREFIX}fill-toggle-hover`]: contrastMix(rawEdge("border"), `var(${PREFIX}stroke-control-hover)`),
+    [`${PREFIX}fill-toggle-page`]: contrastMix(rawEdge("subtle"), `var(${PREFIX}stroke-control)`),
+    [`${PREFIX}fill-toggle-hover-page`]: contrastMix(rawEdge("border"), `var(${PREFIX}stroke-control-hover)`),
     // The strong hover edge, a step past edge-control-hover: an unchecked Checkbox or Radio and a selected Chip under
     // the pointer (consistency pass 2026-10-12: both had written the mix themselves).
     // The decorative frame's width: the Surface setting's (`frame-width`, 1px or 0), or 1px under increased contrast
@@ -146,7 +158,7 @@ export function derivedTokens(): Record<string, string> {
     // 2026-10-19): its own setting, no longer switched on by a 0 frame.
     [`${PREFIX}shadow-edge`]: SOFT_EDGE,
     [`${PREFIX}shadow-edge-filter`]: SOFT_EDGE_FILTER,
-    [`${PREFIX}edge-control-strong`]: contrastMix(strokeEdge("hover"), `var(${PREFIX}stroke-control-hover)`),
+    [`${PREFIX}edge-control-strong-page`]: contrastMix(strokeEdge("hover"), `var(${PREFIX}stroke-control-hover)`),
     // The page, its layers, control fills on each ground, edges and inks: the Layers model (color/layers.ts), live over
     // the ground and layer-contrast settings and the Neutral cast. border-card (Card, Composer, Code block) is among
     // them: today's neutral-100 / 750, now a step from the page.
@@ -171,9 +183,9 @@ export function derivedTokens(): Record<string, string> {
     // Composer is a surface that holds a field; it keeps the quiet neutral focus edge. Its resting frame is the card
     // edge, and the strong control stroke under increased contrast, where a field's boundary targets 3:1 (CONTRAST.md;
     // the card edge alone read 1.16:1 light, 1.33:1 dark, 2026-10-15).
-    [`${PREFIX}composer-edge`]:
+    [`${PREFIX}composer-edge-page`]:
       contrastMix(strokeEdge("card"), `var(${PREFIX}stroke-control)`),
-    [`${PREFIX}composer-focus-color`]:
+    [`${PREFIX}composer-focus-color-page`]:
       contrastMix(rawEdge("subtle"), `var(${PREFIX}focus-color)`),
     // A field's focus, by the Focus ring setting (axes/states.ts): the ring when the setting draws one (and always under
     // increased contrast), the soft halo when it does not; the field's edge takes the ring's colour only in Halo.
@@ -215,6 +227,10 @@ export function derivedTokens(): Record<string, string> {
       // The keyboard ring follows Selection too (owner, 2026-10-22), so Selection Neutral is an entirely neutral look and
       // Accent keeps the blue ring. It still reads apart from a selected edge by placement: on or outside, never inside.
       "focus-color": ["neutral-solid", "accent-indicator"],
+      // Selected text (`::selection`, base.css) follows Selection too, so Neutral leaves nothing in the accent. At Neutral
+      // it is the pressed wash, the strongest neutral state step: translucent, so it reads a step past any ground it sits
+      // on (page, surface, a filled field, a hovered row), where an opaque grey could match the ground (2026-10-22).
+      "selection-highlight": ["bg-pressed", "accent-surface-active"],
     }),
     // Badge's public width hook. (badge-bg, badge-fg and badge-tracking-wide were pruned in
     // audit S21b: Badge paints from its tone slots and never read them.)

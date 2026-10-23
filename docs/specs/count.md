@@ -88,7 +88,7 @@ keeps the same fill and ink on the current tab (`primer--underline-nav-counter--
 | text | 12/16 (`control-xs`) | Primer 12, Fluent medium 12, shadcn 12; Badge md | Notion sets its count in its 14px heading text; Area keeps the count a step below the label, as Badge |
 | weight | plain 400, soft 500 | Type ramp: 500 only for a label on a fill; Notion 400 | Primer 600 |
 | numerals | tabular | shadcn, Chakra, Indicator | — |
-| plain ink | `fg-muted` #666 | Notion's neutral count rgb(95, 94, 89) (muted heading ink); Nav trailing ink | — |
+| plain ink | `fg-muted` #646464 | Notion's neutral count rgb(95, 94, 89) (muted heading ink); Nav trailing ink | — |
 | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))` /* spec */ | Primer 12% of neutral 8 = #f0 on white = 6% black | Translucent so it stays visible on the hover and selected row plates (#f3 / active); dark 10% white, not measured |
 | soft ink | `fg-muted` | Badge neutral soft (muted metadata) | Primer uses default ink |
 | owner state | ink fixed on hover and selection | Nav's rule (`nav.css:207`: trailing annotations stay muted on the current row); Primer keeps paint on the current tab | Polaris and Untitled switch tone on the selected tab; not adopted |
@@ -173,3 +173,9 @@ Linear and GitHub swap the digits in place.
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-23 (press room)
+
+- **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
+- **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
+  on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.

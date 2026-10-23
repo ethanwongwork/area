@@ -319,6 +319,8 @@ export default {
       ["Do", "Pass components and designs to a group as elements: each cell shows a scaled-down image of it, inert."],
       ["Do", "Put a small ghost More or Copy button in actions; it ends on the frame's side. Give each its own label."],
       ["Do", "Lay cards out in an AssetGrid to browse, choose and open them, and pass onOpen for Enter and double click."],
+      ["Do", "Pick the aspect for the grid: square by default, landscape (5:4) where cards are narrow and their assets wide, hug for a waterfall."],
+      ["Do", "Set one look for a whole grid: caption above or below, container framed, basic or containerless, fill recessed or raised, an edge or borderless."],
       ["Do", "Set mediaAlt only when the image says more than the name; it is empty by default."],
       ["Don't", "Scope the frame alone (frameProps with data-area-theme or a ground): a dark frame on a light card breaks the pair."],
       ["Don't", "Put text at the head's end: a detail goes in the asset itself (a type sample's line) or behind Copy."],

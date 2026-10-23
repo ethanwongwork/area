@@ -23,10 +23,17 @@ import { STATE_AXES } from "./states.ts";
 import { DENSITY_AXIS } from "./density.ts";
 import { TYPE_AXIS } from "./type-size.ts";
 import { GROUND_DARK_AXIS, GROUND_LIGHT_AXIS, LAYERS_DARK_AXIS, LAYERS_LIGHT_AXIS } from "./layers.ts";
+import { INK_TINT_AXIS, TINT_DARK_AXIS, TINT_HUE_AXIS, TINT_LIGHT_AXIS } from "./tint.ts";
+import { CARD_TONE_DARK_AXIS, CARD_TONE_LIGHT_AXIS } from "./card-tone.ts";
 
 export const AXES: AxisDefinition[] = [
   THEME_AXIS,
   NEUTRAL_AXIS,
+  // The grays' hue and strength and the text's share of it (2026-10-22): Auto follows Neutral.
+  TINT_HUE_AXIS,
+  TINT_LIGHT_AXIS,
+  TINT_DARK_AXIS,
+  INK_TINT_AXIS,
   ACCENT_AXIS,
   ACTION_AXIS,
   SELECTION_AXIS,
@@ -34,6 +41,9 @@ export const AXES: AxisDefinition[] = [
   GROUND_DARK_AXIS,
   LAYERS_LIGHT_AXIS,
   LAYERS_DARK_AXIS,
+  // Cards and asset cards against the page, per mode (2026-10-22): Auto keeps each container's own tone.
+  CARD_TONE_LIGHT_AXIS,
+  CARD_TONE_DARK_AXIS,
   TYPE_AXIS,
   DENSITY_AXIS,
   RADIUS_AXIS,
@@ -55,7 +65,7 @@ export const AXES: AxisDefinition[] = [
  * (`settingLabel`): Stroke width reads Width under Stroke, Shadow size Size under Shadow.
  */
 export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly string[] }> = [
-  { heading: "Color", settings: ["theme", "neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast"] },
+  { heading: "Color", settings: ["theme", "neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast"] },
   { heading: "Size", settings: ["type", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },
   { heading: "Stroke", settings: ["surface", "stroke", "stroke-hover", "selected-stroke", "focus-ring", "shadow-rest"] },
@@ -66,7 +76,7 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
 
 /** The scoped settings that are not axes: `data-area-contrast` (styles, docs/CONTRAST.md) and `data-area-pills` (pills.ts). */
 export const SCOPED_SETTINGS: ReadonlyArray<{ id: string; label: string; description: string }> = [
-  { id: "contrast", label: "Contrast", description: "How strong edges, focus and state are: System follows the OS; Medium and More strengthen them, More to 3:1." },
+  { id: "contrast", label: "Contrast", description: "How strong edges, focus and state are: System follows the OS; 0 (Standard) to 8 (More) strengthen them, 8 to 3:1." },
   { id: "pills", label: "Pills", description: "Which components draw a pill instead of the Radius corner." },
 ];
 

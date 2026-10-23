@@ -9,7 +9,7 @@
  * controls' line at 19. Was 14, 13 for the 41 bar at type 12.
  * --dev reloads the window when the renderer rebuilds; --capture=<file.png> saves one frame and
  * quits, for checking the window without looking at it (--theme=dark, --hash=icons/arrows,
- * --store='{"canvas":{"ui":"compact"}}' for saved settings).
+ * --store='{"canvas":{"ui":"compact"}}' for saved settings, --width=1024 for a narrow window).
  */
 const { app, BrowserWindow, ipcMain, nativeTheme, net, protocol, session, shell } = require("electron");
 const { existsSync, watch, writeFileSync } = require("node:fs");
@@ -23,12 +23,14 @@ const themeArg = process.argv.find(arg => arg.startsWith("--theme="))?.slice("--
 const hashArg = process.argv.find(arg => arg.startsWith("--hash="))?.slice("--hash=".length);
 /* --store=<json>: saved settings for a capture, e.g. {"canvas":{"ui":"compact"}}. */
 const storeArg = process.argv.find(arg => arg.startsWith("--store="))?.slice("--store=".length);
+/* --width=<px>: the window's width for a capture (the setup's narrow Canvas was found in a 1024 window, 2026-10-23). */
+const widthArg = Number(process.argv.find(arg => arg.startsWith("--width="))?.slice("--width=".length)) || 0;
 /* Neutral 975 and white: the app's page ground in each theme, so a resize never shows a flash. */
 const GROUND = { dark: "#020202", light: "#ffffff" };
 
 function createWindow() {
   const window = new BrowserWindow({
-    width: 1440,
+    width: widthArg ? Math.max(960, widthArg) : 1440,
     height: 900,
     minWidth: 960,
     minHeight: 600,
@@ -108,6 +110,19 @@ ipcMain.on("area:brand-reveal", (_event, path) => {
 ipcMain.on("area:theme", (event, theme) => {
   nativeTheme.themeSource = theme === "dark" ? "dark" : "light";
   BrowserWindow.fromWebContents(event.sender)?.setBackgroundColor(GROUND[nativeTheme.themeSource]);
+});
+
+/* The chosen ground (Light ground, Dark ground), as the page paints it, so a resize shows the app's own page. */
+ipcMain.on("area:ground", (event, color) => {
+  if (/^#[0-9a-f]{6}$/i.test(String(color))) BrowserWindow.fromWebContents(event.sender)?.setBackgroundColor(String(color));
+});
+
+/* The traffic lights centred on the Titlebar, whatever type and density make its height: Cursor's y = floor((bar - 14) / 2)
+   (12 at the 39 of 13 Compact). x stays 13, the start Titlebar's macOS reserve (83 = 13 + 54 + 16) is measured from. */
+ipcMain.on("area:titlebar", (event, height) => {
+  const bar = Number(height);
+  if (process.platform !== "darwin" || !(bar >= 14 && bar <= 200)) return;
+  BrowserWindow.fromWebContents(event.sender)?.setWindowButtonPosition({ x: 13, y: Math.floor((bar - 14) / 2) });
 });
 
 app.setName("Area");

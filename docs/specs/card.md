@@ -39,6 +39,9 @@ block (container radius), Badge and Button (slots), Slider (templates)
   rather than none: flush text would sit 8 from a 20 corner, inside the curve's reach, while 4
   reads as one column with the picture. Over a picture (immersive) the text keeps the overlay
   controls' line, two insets in.
+- 2026-10-22: "i just want users to be able to choose the option of making these containers/cards match the background or
+  making them slightly different, lighter or darker" → the Card tone setting (axes/card-tone.ts), per mode: Auto keeps
+  the container's own tone, else −4 (darker) to +4 (lighter) from the page, 0 matching it. A Card paints `bg-card` (Auto: the raised layer, `bg-surface`) and declares the card ground, so its controls step from it.
 
 ## Job and boundaries
 

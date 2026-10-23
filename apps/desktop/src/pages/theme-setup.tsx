@@ -19,13 +19,13 @@
  */
 import { ArrowLeftIcon, CopyIcon, ResetIcon } from "@area/icons";
 import {
-  Button, Checkbox, CheckboxGroup, Code, ColorSwatchPicker, EmptyState, Nav, NavGroup, NavItem, PanelSection, Radio,
+  Button, Checkbox, CheckboxGroup, Code, ColorField, ColorSwatchPicker, EmptyState, Nav, NavGroup, NavItem, PanelSection, Radio,
   RadioGroup, SectionHeading, Segmented, Stepper, StepperStep, Table,
 } from "@area/react";
 import { SETTING_GROUPS } from "@area/tokens/config";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { ChoicePreview, kindOf, ratioOf } from "../choice-visuals.tsx";
-import { APP_SCALE } from "../app-scale.ts";
+import { SETUP_SCALE } from "../app-scale.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { CopyButton } from "../copy.tsx";
 import { Facts } from "../facts.tsx";
@@ -36,8 +36,23 @@ import { STATE_SETTINGS, StateDrawing } from "../abstract.tsx";
 import { AXES } from "../tokens.ts";
 import { attributeOf, defaultLabel, isDefault, SETTINGS, scopeOf, themeOf, tileLabel, type Mode, type Setting } from "./theme-settings.ts";
 import { SETUP_VIEWS, SetupDrawing } from "./theme-views.tsx";
+import { LayerMap } from "../layer-map.tsx";
+import { snapPageColour } from "../page-colour.ts";
 
 type StageView = (typeof SETUP_VIEWS)[number]["value"];
+
+/*
+ * The Setup's categories: the Inspector's, with dark's Ground and Layers in a step of their own after Color, drawn in
+ * dark (owner, 2026-10-22: "separate the dark mode choice from the light mode, i shouldnt be choosing both at the same
+ * time"). Color asks light's pair; Dark mode asks dark's, so each is chosen looking at its own theme.
+ */
+const DARK_ONLY: ReadonlySet<string> = new Set(["tint-dark", "ground-dark", "layers-dark", "card-tone-dark"]);
+/** The settings the stage answers with the layer map (src/layer-map.tsx) instead of the header's view. */
+const LAYERED = /^((ground|layers|tint|card-tone)-(light|dark)|tint-hue|ink-tint)$/;
+const SETUP_GROUPS = SETTING_GROUPS.flatMap(group => group.heading === "Color"
+  ? [{ heading: "Color", settings: group.settings.filter(id => !DARK_ONLY.has(id)) }, { heading: "Dark mode", settings: group.settings.filter(id => DARK_ONLY.has(id)) }]
+  : [group]);
+const SETUP_STEPS: Setting[] = SETUP_GROUPS.flatMap(group => group.settings.map(id => ({ ...SETTINGS.find(entry => entry.id === id)!, heading: group.heading })));
 /** A choice card's least width: a mini UI reads from about 96; a mark or a text card can be narrower (picks). */
 const CHOICE_MIN = { mini: 104, mark: 88 } as const; /* pick */
 
@@ -45,11 +60,17 @@ const CHOICE_MIN = { mini: 104, mark: 88 } as const; /* pick */
 const QUESTIONS: Record<string, string> = {
   theme: "Light or dark?",
   neutral: "Which grey should the interface be drawn in?",
+  "tint-hue": "Which hue should the greys lean toward?",
+  "tint-light": "In light, how strongly should the greys take that hue?",
+  "tint-dark": "In dark, how strongly should the greys take that hue?",
+  "ink-tint": "How much of the tint should text take?",
   accent: "Which accent colour?",
   "ground-light": "How white should the light page be?",
   "ground-dark": "How dark should the dark page be?",
   "layers-light": "In light, how far should cards and sidebars sit from the page?",
   "layers-dark": "In dark, how far should cards and sidebars sit from the page?",
+  "card-tone-light": "In light, should cards match the page, or sit darker or lighter?",
+  "card-tone-dark": "In dark, should cards match the page, or sit darker or lighter?",
   action: "Should primary actions use the accent?",
   selection: "Should selected states and the focus ring use the accent?",
   contrast: "How strong should edges and focus be?",
@@ -80,7 +101,7 @@ const QUESTIONS: Record<string, string> = {
 };
 
 /** The OS's contrast, which System writes nothing for: a System card shows it, not the Canvas's own pick. */
-const systemContrast = () => typeof matchMedia === "function" && matchMedia("(prefers-contrast: more)").matches ? "more" : "standard";
+const systemContrast = () => typeof matchMedia === "function" && matchMedia("(prefers-contrast: more)").matches ? "8" : "0";
 
 export interface ThemeSetupProps {
   mode: Mode;
@@ -96,7 +117,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
   const [view, setView] = useViewOption<StageView>("theme-setup-view", "bento", SETUP_VIEWS.map(entry => entry.value));
   /** The choice under the pointer or keyboard focus, which the visual shows until it leaves. */
   const [preview, setPreview] = useState<{ axis: string; preset: string }>();
-  const steps = SETTINGS;
+  const steps = SETUP_STEPS;
   const listed = steps.filter(entry => matches(query, entry.label, entry.id, entry.description, QUESTIONS[entry.id] ?? ""));
   const index = steps.findIndex(entry => entry.id === item);
   const step = index >= 0 ? steps[index] : undefined;
@@ -126,7 +147,8 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
   /** The visual takes the choice under the pointer over the picks so far, in the setting's theme (else the page's). */
   const visualScope = (): Record<string, string> => {
     const entry = preview && steps.find(candidate => candidate.id === preview.axis);
-    if (!entry || !preview) return { ...picks, "data-area-theme": mode };
+    // With nothing under the pointer, a setting that exists once per theme is drawn in its own (Dark mode in dark).
+    if (!entry || !preview) return { ...picks, "data-area-theme": step ? themeOf(step.id, mode) : mode };
     const theme = entry.id === "theme" ? preview.preset : themeOf(entry.id, mode);
     if (entry.id === "theme") return { ...picks, "data-area-theme": theme };
     if (entry.id === "contrast") return { ...picks, "data-area-theme": theme, "data-area-contrast": preview.preset === "system" ? systemContrast() : preview.preset };
@@ -135,10 +157,10 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
   };
 
   const go = (next?: Setting) => { setPreview(undefined); select(next?.id ?? ""); };
-  const groupIndex = step ? SETTING_GROUPS.findIndex(group => group.heading === step.heading) : -1;
-  const group = groupIndex >= 0 ? SETTING_GROUPS[groupIndex] : undefined;
+  const groupIndex = step ? SETUP_GROUPS.findIndex(group => group.heading === step.heading) : -1;
+  const group = groupIndex >= 0 ? SETUP_GROUPS[groupIndex] : undefined;
   const inGroup = step ? steps.filter(entry => entry.heading === step.heading) : [];
-  const firstOf = (place: number) => steps.find(entry => entry.heading === SETTING_GROUPS[place]?.heading);
+  const firstOf = (place: number) => steps.find(entry => entry.heading === SETUP_GROUPS[place]?.heading);
   // A setting opened from the Sidebar or a link brings its section into view in the panel.
   useEffect(() => { if (item) document.getElementById(`setup-${item}`)?.scrollIntoView({ block: "nearest" }); }, [item]);
 
@@ -146,6 +168,27 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
   const choiceLabel = (entry: Setting, preset: { id: string; label: string }) => tileLabel(preset.label, isDefault(entry, preset.id) ? "Default" : undefined);
   /** The accent's own colour per option, the swatch's paint (the registry's 500 step, the solid fill). */
   const accentHex = (id: string) => AXES.find(axis => axis.id === "accent")?.presets.find(preset => preset.id === id)?.tokens["--area-accent-500"] ?? id;
+  /** A swatch choice's paint: an accent's solid; a tint hue the hue itself (Auto, Neutral's own grey). */
+  const swatchOf = (entry: Setting, id: string) => entry.id === "tint-hue" ? (id === "auto" ? "var(--area-neutral-500)" : `oklch(0.72 0.12 ${id})`) : accentHex(id);
+  /** The last page colour picked in each mode, and what it snapped to. */
+  const [picked, setPicked] = useState<Partial<Record<Mode, { hex: string; note: string }>>>({});
+  const pickPage = (theme: Mode, hex: string) => {
+    const snap = snapPageColour(hex, theme);
+    setCanvas(`ground-${theme}`, snap.ground); setCanvas(`tint-${theme}`, snap.tint); if (snap.hue) setCanvas("tint-hue", snap.hue);
+    setPicked(current => ({ ...current, [theme]: { hex, note: `Ground ${snap.ground}, tint ${snap.tint}${snap.hue ? `, hue ${snap.hue}°` : ""}` } }));
+  };
+  /**
+   * Pick a page colour (owner, 2026-10-22): one colour sets the mode's Ground, Tint strength and Tint hue, snapped to their
+   * steps (src/page-colour.ts), so it is a shortcut to the settings below, never a setting of its own.
+   */
+  const pageColour = (theme: Mode) => (
+    <section key={`page-${theme}`} id={`setup-page-colour-${theme}`} className="setup-choice">
+      <span className="setup-choice__legend">Page colour</span>
+      <span className="setup-choice__question">Pick any colour for the {theme} page; its lightness sets Ground, its strength the tint and its hue the tint hue.</span>
+      <ColorField aria-label={`${theme === "light" ? "Light" : "Dark"} page colour`} value={picked[theme]?.hex ?? (theme === "light" ? "#FFFFFF" : "#020202")} onValueChange={hex => pickPage(theme, hex)} />
+      <span className="studio-muted setup-choice__value">{picked[theme]?.note ?? "Snaps to the nearest Ground, tint and 5° of hue."}</span>
+    </section>
+  );
 
   /** Pointer and focus on a section's choices preview them in the visual: the nth choice is the nth option. */
   const previewing = (entry: Setting) => {
@@ -180,9 +223,9 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
       <div className="setup-choice__swatches">
         <span className="setup-choice__legend">{entry.name}</span>
         <span className="setup-choice__question">{description}</span>
-        <ColorSwatchPicker label={entry.name} size="md" layout="row" value={accentHex(valueOf(entry))}
-          items={entry.presets.map(preset => ({ value: accentHex(preset.id), label: choiceLabel(entry, preset) }))}
-          onValueChange={hex => { const preset = entry.presets.find(candidate => accentHex(candidate.id) === hex); if (preset) pick(entry, preset.id); }} />
+        <ColorSwatchPicker label={entry.name} size="md" layout="row" value={swatchOf(entry, valueOf(entry))}
+          items={entry.presets.map(preset => ({ value: swatchOf(entry, preset.id), label: choiceLabel(entry, preset) }))}
+          onValueChange={hex => { const preset = entry.presets.find(candidate => swatchOf(entry, candidate.id) === hex); if (preset) pick(entry, preset.id); }} />
         <span className="studio-muted setup-choice__value">{choiceLabel(entry, presetOf(entry, valueOf(entry)) ?? { id: "", label: "—" })}</span>
       </div>
     );
@@ -209,19 +252,22 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
     <div className="setup setup--side">
       {/* The visual: the chosen view over the picks so far, showing the choice under the pointer or keyboard focus. */}
       <div className="gallery-tile gallery-tile--plain setup__stage" data-area-ground="raised">
-        <div className="gallery-tile__head" {...APP_SCALE}>
-          <span className="gallery-tile__label">{previewed ? `${previewed.name}: ${choiceLabel(previewed, presetOf(previewed, preview.preset) ?? { id: "", label: "" })}` : SETUP_VIEWS.find(entry => entry.value === view)?.label}</span>
+        <div className="gallery-tile__head" {...SETUP_SCALE}>
+          <span className="gallery-tile__label">{previewed ? `${previewed.name}: ${choiceLabel(previewed, presetOf(previewed, preview.preset) ?? { id: "", label: "" })}` : LAYERED.test(step.id) ? `Layer map · ${themeOf(step.id, mode) === "dark" ? "Dark" : "Light"}` : SETUP_VIEWS.find(entry => entry.value === view)?.label}</span>
         </div>
         <div className="setup__stage-view" inert {...visualScope()}>
-          {previewed && STATE_SETTINGS.has(previewed.id) ? <StateDrawing axis={previewed.id} /> : <SetupDrawing view={view} axis={previewed?.id ?? step.id} preset={preview?.preset ?? ""} />}
+          {/* Ground and Layers draw the layer map: every region named with the layer it takes and the colour it paints. */}
+          {LAYERED.test(previewed?.id ?? step.id) ? <LayerMap theme={themeOf(previewed?.id ?? step.id, mode)} />
+            : previewed && STATE_SETTINGS.has(previewed.id) ? <StateDrawing axis={previewed.id} /> : <SetupDrawing view={view} axis={previewed?.id ?? step.id} preset={preview?.preset ?? ""} />}
         </div>
       </div>
       {/* The panel: the open category's settings, each a section of choices (Tesla's design page; the owner's
           Appearance picker), and the way between categories at its foot. */}
-      <section className="setup__panel" aria-labelledby="setup-category" {...APP_SCALE}>
+      <section className="setup__panel" aria-labelledby="setup-category" {...SETUP_SCALE}>
         <div className="setup__panel-body">
           <SectionHeading level={2} titleId="setup-category" title={group.heading}
-            lede={`${groupIndex + 1} of ${SETTING_GROUPS.length} · ${inGroup.length} ${inGroup.length === 1 ? "setting" : "settings"}`} />
+            lede={`${groupIndex + 1} of ${SETUP_GROUPS.length} · ${inGroup.length} ${inGroup.length === 1 ? "setting" : "settings"}`} />
+          {group.heading === "Color" ? pageColour("light") : group.heading === "Dark mode" ? pageColour("dark") : null}
           {inGroup.map(section)}
         </div>
         <div className="setup__panel-foot">
@@ -229,7 +275,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
             <Button variant="outline" tone="neutral" icon={<ArrowLeftIcon />} onClick={() => go(groupIndex > 0 ? firstOf(groupIndex - 1) : undefined)}>Back</Button>
             <div className="setup__nav-end">
               <Button variant="ghost" tone="neutral" icon={<ResetIcon />} disabled={inGroup.every(atDefault)} onClick={() => inGroup.forEach(reset)}>Use defaults</Button>
-              <Button onClick={() => go(firstOf(groupIndex + 1))}>{groupIndex < SETTING_GROUPS.length - 1 ? "Continue" : "Finish"}</Button>
+              <Button onClick={() => go(firstOf(groupIndex + 1))}>{groupIndex < SETUP_GROUPS.length - 1 ? "Continue" : "Finish"}</Button>
             </div>
           </div>
         </div>
@@ -239,12 +285,12 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
     // The start, and after the last category the summary: every setting with what it is set to.
     <div className="setup setup--start">
       <SectionHeading className="setup__question" level={2} title="Set up your theme"
-        lede={`${steps.length} settings in ${SETTING_GROUPS.length} categories. Each shows every option; a pick sets the Canvas, so every tab shows it.`} />
-      <div className="setup__nav setup__nav--start" {...APP_SCALE}>
+        lede={`${steps.length} settings in ${SETUP_GROUPS.length} categories. Each shows every option; a pick sets the Canvas, so every tab shows it.`} />
+      <div className="setup__nav setup__nav--start" {...SETUP_SCALE}>
         <Button onClick={() => go(steps[0])}>Start</Button>
         <CopyButton label="Copy picks" icon={<CopyIcon />} value={() => steps.map(entry => `${attributeOf(entry, valueOf(entry))}`).join(" ")} />
       </div>
-      <Table size="md" interactive flush aria-label="Picks">
+      <Table size="md" interactive aria-label="Picks">
         <thead><tr><th scope="col">Setting</th><th scope="col">Picked</th><th scope="col">Default</th></tr></thead>
         <tbody>
           {listed.map(entry => (
@@ -274,7 +320,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
         // A search lists the matching settings under their headings.
         <Nav aria-label="Steps">
           <SidebarAll tab="theme" count={listed.length} current={!step} />
-          {SETTING_GROUPS.map(group => {
+          {SETUP_GROUPS.map(group => {
             const rows = listed.filter(entry => entry.heading === group.heading);
             return rows.length ? <NavGroup key={group.heading} label={group.heading}>{rows.map(row)}</NavGroup> : null;
           })}
@@ -284,9 +330,9 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
           <Nav aria-label="Setup"><SidebarAll tab="theme" count={steps.length} current={!step} /></Nav>
           {/* The categories as a vertical Stepper (owner, 2026-10-21: the Sidebar rail): the open one lists its
               settings with what each is set to; the others say how many of theirs have changed. */}
-          <Stepper className="setup-rail" orientation="vertical" current={groupIndex} nonLinear aria-label="Categories" {...APP_SCALE}
+          <Stepper className="setup-rail" orientation="vertical" current={groupIndex} nonLinear aria-label="Categories" {...SETUP_SCALE}
             onStepSelect={next => go(firstOf(next))}>
-            {SETTING_GROUPS.map((group, place) => {
+            {SETUP_GROUPS.map((group, place) => {
               const rows = steps.filter(entry => entry.heading === group.heading);
               const changed = rows.filter(entry => !atDefault(entry)).length;
               return (

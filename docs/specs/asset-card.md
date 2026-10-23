@@ -24,6 +24,23 @@ values below are read from pixels, not estimated. Figma's file browser (the 2026
   two axes: `container` (framed · containerless) on the card, `layout` (grid · waterfall) on the grid, whose cards hug.
   Then: "i want the containerless design to be tested on components first" (Container in the Components tab's header).
   Carried onto the round-61 card in the merge (2026-10-20).
+- 2026-10-22: "i want the component gallery to feel more like a gallery … smaller, so 4 columns can fit? can update the
+  aspect ratio of the asset cards" → `aspect="landscape"`, the frame 5:4 (the reference gallery's media measured
+  195 × 158), on the Components gallery's cards four across; square stays the default.
+- 2026-10-22: "explore different asset card styles and add them as options to the dropdown. very simple adjustments,
+  maybe different placements of the text, inside the card, outside the card, different paddings, layering" → `caption`
+  (above · below), `inset` (snug · roomy) and a `flush` container. Then, the same day: "no divider lines across, no
+  roomy version. maybe just a basic container would work, maybe try playing with the fill and stroke" → `inset` and
+  `flush` removed; a `basic` container (one surface), `fill` (recessed · raised) and `borderless`. The Container menu
+  offers eight combinations: Framed, Name below, Basic, Basic with the name below, Basic white, Basic with no stroke,
+  Containerless, Containerless with the name below. The head keeps its own 4 (`--_head-pad`) apart from the inset.
+- 2026-10-22: the layer map (https://claude.ai/artifact/2AtkSCcTm3GqwAveDbdqXY): on the raised frame a Card inside matched
+  it, 1.00:1, on every grey and dark ground; owner: "make the Asset card frame the page tone" → the frame paints
+  `bg-page` and declares the page ground, so raised components lift from it (1.11:1 at light 94 + 4) and controls step
+  from the page as they do in an app. White at the default light ground, so the default looks the same.
+- 2026-10-22: "i just want users to be able to choose the option of making these containers/cards match the background or
+  making them slightly different, lighter or darker" → the Card tone setting (axes/card-tone.ts), per mode: Auto keeps
+  the container's own tone, else −4 (darker) to +4 (lighter) from the page, 0 matching it. An Asset card paints `bg-tile` (Auto: the recessed layer, `bg-subtle`) and declares the tile ground; a basic card's frame declares the tile ground too; the `raised` fill and the frame keep their own tones.
 
 ## Job and boundaries
 
@@ -47,7 +64,11 @@ actions (Card), a framed preview of a page at its own size (Preview frame).
 | interactive | off · on: the card is a control outside an asset grid | `interactive` | the app's gallery tiles |
 | state | hover (lift), pressed, selected (edge), focus (ring on the card) | — | gallery tile |
 | container | framed (default): the card · containerless: no card at rest (no fill, edge or shadow), the head and the frame in the same places; a component's frame shows the hovered edge on hover and the selected edge when selected; an image or group is its own surface and selection rings it (2, `stroke-selected`) | Owner 2026-10-19 (main): containerless views | Pinterest, Cosmos |
-| aspect | square (default) · hug: the card as tall as its head and its asset at its width (an image at `mediaRatio`, a group and a colour square) | Owner 2026-10-19 (main): "a waterfall view that hugs the size of assets" | Pinterest's board |
+| caption | above (default): the head over the frame · below: the head under it, the card's inset above the frame | Owner 2026-10-22: "different placements of the text, inside the card, outside the card" | Spline's file grid (name under the asset) |
+| container (basic) | basic: one surface, the head and the asset on the card's fill, no inset, no frame of its own and no divider; Card's corner | Owner 2026-10-22: "no divider lines across … maybe just a basic container would work" | A gallery's tile (the owner's references) |
+| fill | recessed (default): bg-subtle · raised: bg-surface, white in light; the frame of a basic card declares the same ground | Owner 2026-10-22: "playing with the fill and stroke" | — |
+| borderless | off · on: no edge at rest, its width kept; hover and selection still draw | Owner 2026-10-22: "playing with the fill and stroke" | — |
+| aspect | square (default) · landscape: the frame 5:4, an image at its own ratio · hug: the card as tall as its head and its asset at its width (an image at `mediaRatio`, a group and a colour square) | Owner 2026-10-19 (main): "a waterfall view that hugs the size of assets"; landscape owner 2026-10-22: "update the aspect ratio of the asset cards" | Pinterest's board; landscape: a gallery's media, 195 × 158 (the owner's reference, 2026-10-22) |
 | grid layout | grid (default): square cards in rows · waterfall: hugging cards in columns of the least width, each into the shortest column in reading order | Owner 2026-10-19 (main) | Pinterest's board, Cosmos, Savee |
 
 `layout` is derived from the content, never passed. The extended kinds are elements, so they need no axis: a type
@@ -61,7 +82,7 @@ area-asset-card          the card: as tall as its head and its frame, Card's cor
   __head                 control-sm + 2 × 4 tall; the name, then the controls, nothing else (round 58)
     __name               UI text, regular, default ink; cap-trimmed; one line, then an ellipsis
     __actions            small ghost controls, ending 4 in (on the frame's side), centred on the head
-  __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; surface + divider edge at stroke-width; raised ground
+  __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; the page tone + divider edge at stroke-width; page ground (2026-10-22; was surface, raised)
     __media              asset: centred, 12 of room · image: covers the frame (object-fit cover)
     __mosaic             group: 2 × 2, 4 apart, the frame's place (the frame paints nothing)
       __cell             one asset cropped to its cell, the frame's corner
@@ -91,12 +112,12 @@ Inset equations (the designs at 300, edge 1; Area at the default):
 | controls · plates | — | the card is a recessed ground (layers.css), the frame a raised one: a button's hover plate steps from the card's fill (light #ebebeb on #f7f7f7, 1.11:1; it was the page's #f3f3f3, 1.04:1); the glyph 6.85:1 (light) and 12.6:1 (dark) on the fill, 6.2:1 and 10.3:1 on its plate; the focus ring 7.4:1 and 13.7:1 | owner round 60: "make sure the backplate on the button is accessible"; layers.css |
 | frame · inset | 4 inside the edge, none above (under the head) | `space-4` | design |
 | frame · corner | 11 | card − (edge + inset) × concentric | design, exact concentric (owner: "mathematically correct") |
-| frame · edge, fill | 1px #eee–#f0f0f0; component: white | `border-divider` at `stroke-width` (light #e2e2e2, 1.21:1 on the card's #f7f7f7, 1.30:1 on the frame's white; dark #333, 1.56:1, as before); `bg-surface` | DESIGN_SYSTEM Strokes: a frame with no shadow, as Table's; owner 2026-10-21 ("too thin": the design's #eee was 1.08:1 on Area's recessed card, which is darker than the design's #fafafa) |
+| frame · edge, fill | 1px #eee–#f0f0f0; component: white | `border-divider` at `stroke-width` (light #e2e2e2, 1.21:1 on the card's #f7f7f7, 1.30:1 on the frame's white; dark #333, 1.56:1, as before); `bg-page` (2026-10-22; was `bg-surface`) | DESIGN_SYSTEM Strokes: a frame with no shadow, as Table's; owner 2026-10-21 ("too thin": the design's #eee was 1.08:1 on Area's recessed card, which is darker than the design's #fafafa) |
 | image | covers the frame (cropped) | `object-fit: cover` | Image container |
 | specimen room | — (centred) | 12 (pick) | — |
 | group · cells | 143 × 128, 4 apart, corner 11, no edge | 2 × 2, gap = inset (4) = margin to the card's edge (the frame gives up its edge's width), corner = frame corner | Group container; owner round 59 |
 | group · element cell | — | a thumbnail: laid out at twice the cell (about its own card's frame), scaled to half, inert | owner round 57: "image versions that are scaled down when that image is a thumbnail in a group" |
-| setting · scope | — | the option's own scope on the whole card (e.g. `data-area-theme="dark"`), so the card and its frame paint that option's grounds together: the frame always the raised step of the card's recessed fill (light: white on #f7f7f7; dark: #121212 on #0b0b0b) | owner round 57: "it doesnt always have to be white"; 2026-10-21: "the frame color and card color dont seem to always update together" (the frame alone was scoped, a dark frame on a light card) |
+| setting · scope | — | the option's own scope on the whole card (e.g. `data-area-theme="dark"`), so the card and its frame paint that option's grounds together: the frame always the page tone inside the card's recessed fill (light: white on #f7f7f7; dark: #020202 on #0b0b0b) | owner round 57: "it doesnt always have to be white"; 2026-10-21: "the frame color and card color dont seem to always update together" (the frame alone was scoped, a dark frame on a light card) |
 | head · end | — | controls only: Copy for what is used (component code, colour value, type role, icon name), More for what is managed (image, group); `meta` deprecated and ignored | owner round 58: "it should always be controls, maybe a copy button?" |
 | colour · value | — | behind Copy (copies `#2563EB`) | Figma's colour styles carry the value |
 | type · detail | — | in the sample: "Aa" over "Geist · Medium · 24 / 32" | Figma's text styles: "Ag" over the face |
@@ -133,7 +154,7 @@ One language across Area's framed surfaces: a quiet band names the thing, a whit
 | Container | Head | Body | Edge | Why it differs |
 |---|---|---|---|---|
 | Table | the header row on `bg-subtle` | rows on `bg-surface`, flush | `border-divider` at `stroke-width` (rows inside, so the frame is never lighter than its rules) | data: rows run to the frame |
-| Asset card | the head on `bg-subtle` (the card's ground) | the asset on `bg-surface`, 4 in, concentric | the card: `border-card` (a standalone surface); the frame: `border-divider` at `stroke-width` (no shadow carries it, as Table's) | an asset is visual, so it gets its own frame and corner inside the card |
+| Asset card | the head on `bg-subtle` (the card's ground) | the asset on `bg-page`, 4 in, concentric | the card: `border-card` (a standalone surface); the frame: `border-divider` at `stroke-width` (no shadow carries it, as Table's) | an asset is visual, so it gets its own frame and corner inside the card |
 | Card | title in the body | content on `bg-surface` | `border-card`, Card's corner | content, not an asset; Asset card takes Card's corner |
 | Code block / Edit summary | a header with a `border-decorative` seam | code on `bg-surface` | `border-card` at `stroke-width` | a seam instead of an inset frame: text needs no frame of its own |
 

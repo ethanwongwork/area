@@ -13,7 +13,7 @@
  * Tiles come in three spans on one grid (src/studio.css, .studio-grid):
  *   unit  one base cell, 152 at the least: a swatch, an icon
  *   wide  2 units and the gap between them: a component, a setting's preset, a type specimen
- * Every frame is square (owner, 2026-10-19). A grid holds one span (TileGrid); `cards` lays square cards on columns
+ * Every frame is square (owner, 2026-10-19), a card's 5:4 (owner, 2026-10-22). A grid holds one span (TileGrid); `cards` lays square cards on columns
  * of a least width (360 for components, Theme's 280).
  *
  * The frame keeps the docs gallery's class names (gallery-tile, __view, __stage), so the shared fit
@@ -21,7 +21,7 @@
  */
 import type { CSSProperties, ReactNode } from "react";
 import { AssetCard, AssetGridItem, ListBoxItem, SectionHeading } from "@area/react";
-import { APP_SCALE } from "./app-scale.ts";
+import { appScale } from "./app-scale.ts";
 
 export type TileSpan = "unit" | "wide";
 /**
@@ -32,6 +32,9 @@ export type TileSpan = "unit" | "wide";
  *   none    no stage: the frame is the visual (a swatch)
  */
 export type TileStage = "fit" | "center" | "flow" | "none";
+
+/** An Asset card tile's look: its container, where its name sits, its fill and whether it has an edge (Asset card's axes). */
+export interface CardLook { container: "framed" | "basic" | "containerless"; caption: "above" | "below"; fill: "recessed" | "raised"; borderless: boolean }
 
 export interface TileProps {
   /** The name, in the caption under the frame. */
@@ -70,9 +73,8 @@ export interface TileProps {
   stageScope?: Record<string, string>;
   /** The stage is shown, not used: its content is inert. */
   inert?: boolean;
-  /** No container at rest: the specimen on the Canvas's ground, the frame's edge shown on hover and selection
-      (Asset card's `containerless`; owner, 2026-10-19, a trial on Components). */
-  containerless?: boolean;
+  /** How an Asset card tile is drawn (the Components tab's Container menu): Asset card's container, caption, fill, edge. */
+  look?: CardLook;
   /** A card (owner, 2026-10-14, after Compass's gallery): a square frame, the specimen in a wider margin. */
   card?: boolean;
   /** Controls in the caption, at the end of the name's line (a Copy code button). */
@@ -111,7 +113,7 @@ function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card
       data-area-ground={paint ? undefined : "raised"}
       style={paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined} {...scope}>
       {/* The name is the app's chrome, at the app's scale whatever the Canvas previews. */}
-      <div className="gallery-tile__head" {...APP_SCALE}>
+      <div className="gallery-tile__head" {...appScale()}>
         <span className="gallery-tile__label">{label}</span>
         {value != null ? <span className="gallery-tile__value">{value}</span> : null}
         {actions}
@@ -152,12 +154,12 @@ function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card
 }
 
 /** Area's Asset card (Components). */
-function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card, containerless, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card, look, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
   const view = stage === "none" ? null : stage === "fit"
     ? <div className="gallery-tile__view" {...stageScope}><div className="gallery-tile__stage">{children}</div></div>
     : <div className="gallery-tile__view" inert={inert || undefined} {...stageScope}>{children}</div>;
-  // The frame: the app's own class and modes on Asset card's frame. The ground it paints (bg-surface, or bg-subtle when
-  // scoped) lets the specimen's control fills step from the frame, not the Canvas (styles layers.css).
+  // The frame: the app's own class and modes on Asset card's frame. The ground it declares (the page, a basic card's own
+  // fill, or recessed when scoped) lets the specimen's control fills step from the frame, not the Canvas (layers.css).
   const frameProps = {
     className: "gallery-tile",
     "data-span": span,
@@ -165,14 +167,16 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
     "data-layout": card ? "card" : undefined,
     "data-painted": paint ? "" : undefined,
     "data-scoped": scope ? "" : undefined,
-    "data-area-ground": paint || containerless ? undefined : scope ? "recessed" : "raised",
+    "data-area-ground": paint || look?.container === "containerless" ? undefined : scope ? "recessed" : look?.container === "basic" ? (look.fill === "raised" ? "raised" : "tile") : "page",
     style: paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined,
     ...scope,
   } as Record<string, string | undefined> & { className: string; style?: CSSProperties };
   // The caption is the app's chrome, at the app's scale whatever the Canvas previews.
-  const captionProps = { className: "gallery-tile__caption", ...APP_SCALE };
+  const captionProps = { className: "gallery-tile__caption", ...appScale() };
   const shared = { id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, name: label, meta: value, actions, frameProps, captionProps,
-    container: containerless ? "containerless" as const : undefined };
+    container: look?.container, caption: look?.caption, fill: look?.fill, borderless: look?.borderless,
+    // A card's frame is 5:4, the gallery four across (owner, 2026-10-22; Asset card's landscape aspect).
+    aspect: card ? "landscape" as const : undefined };
   if (option !== undefined) {
     return <AssetGridItem value={option} className="gallery-asset" textValue={typeof label === "string" ? label : undefined} {...shared}>{view}</AssetGridItem>;
   }
@@ -197,7 +201,7 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
 
 /**
  * A grid of one span: unit or wide tiles on the shared unit. `cards`: square tiles on their own columns, at least
- * `min` wide (360 by default), growing and shrinking with the zoom.
+ * `min` wide (260 by default, at most four across), growing and shrinking with the zoom.
  */
 export function TileGrid({ span, cards, min, children }: { span: TileSpan; cards?: boolean; min?: number; children: ReactNode }) {
   return (
@@ -218,7 +222,7 @@ export function CanvasSection({ id, title, count, lede, role, children }: { id: 
   return (
     <section className="studio-section" id={id} role={role} aria-labelledby={title ? `${id}-title` : undefined}>
       {/* Area's SectionHeading (app-shell.css): the strong title trimmed to its cap, the muted lede 8 under it. */}
-      {title ? <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede} {...APP_SCALE}
+      {title ? <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede} {...appScale()}
         title={count === undefined ? title : <>{title} <span className="studio-muted studio-tabular">{count}</span></>} /> : null}
       {children}
     </section>
