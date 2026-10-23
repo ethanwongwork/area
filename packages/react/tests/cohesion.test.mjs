@@ -494,3 +494,45 @@ test('the pressed fill is re-derived on every ground and every setting scope', (
     assert.ok(pressed.includes(`[data-area-${setting}]`), `a scope setting ${setting} keeps its parent's pressed fill`);
   }
 });
+
+// layers.css: edges on the ground they sit on (@area/tokens color/layers.ts GROUND_EDGES). Every ground sets how far it
+// moves the edges (`edge-shift-light` / `-dark`) and its children restate every edge role and every token that reads one,
+// since a property that reads another resolves where it is declared; the ground keeps its parent's for what it draws on
+// itself, its boundary with the ground it sits on. The roles and their readers come from the built tokens, so a new edge
+// role or alias fails here until layers.css restates it.
+test('every ground moves the edges and restates every edge role and its readers', () => {
+  const tokens = readFileSync(new URL('../../tokens/dist/css/tokens.css', import.meta.url), 'utf8');
+  const root = Object.fromEntries([...tokens.matchAll(/(--area-[\w-]+):\s*([^;]+);/g)].map(([, name, value]) => [name, value.trim()]));
+  const roles = Object.keys(root).filter(name => root[name].includes(`oklab(from var(${name}-page)`) && root[name].includes('--area-edge-shift-light'));
+  assert.ok(roles.length >= 18, `only ${roles.length} edge roles read the edge shift`);
+  const readers = new Set(roles);
+  for (let grew = true; grew;) {
+    grew = false;
+    for (const [name, value] of Object.entries(root)) {
+      if (readers.has(name) || name.endsWith('-page')) continue;
+      if ([...readers].some(role => value.includes(`var(${role})`))) { readers.add(name); grew = true; }
+    }
+  }
+  // The tokens' own rules (:root, the setting scopes) are in the bundle too; the grounds' rules list components.
+  const restate = rules.find(rule => /\.area-card/.test(rule.selector) && /> \*$/.test(rule.selector) && /--area-border:\s*light-dark\(oklab/.test(rule.body));
+  assert.ok(restate, 'layers.css restates no edge roles on a ground\'s children');
+  for (const name of readers) {
+    const value = restate.body.match(new RegExp(`(?:^|;)\\s*${name}:\\s*([^;]+)`))?.[1].trim();
+    assert.equal(value, root[name], `${name} is not restated as the tokens write it`);
+  }
+  // Every ground that re-points the fills sets the shift and restates the roles, and so does every ground that sets it.
+  const split = list => { const out = []; let depth = 0, start = 0;
+    for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
+    return [...out, list.slice(start)].map(part => part.trim()).filter(Boolean); };
+  const parts = selector => split(selector).flatMap(part => /^:where\(.*\)$/.test(part) ? parts(part.slice(7, -1)) : [part]);
+  const shifting = new Set(rules.filter(rule => /--area-edge-shift-light:\s*(0|max\()/.test(rule.body) && !/:root/.test(rule.selector)).flatMap(rule => parts(rule.selector)));
+  const restating = new Set(parts(restate.selector.replace(/ > \*$/, '')));
+  for (const ground of ['raised', 'page', 'recessed', 'card', 'tile']) {
+    for (const rule of rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${ground})`)))
+      for (const part of parts(rule.selector)) {
+        if (part === '.area-select::picker(select)') continue;
+        assert.ok(shifting.has(part), `${part} re-points the fills (${ground}) but does not set the edge shift`);
+      }
+  }
+  for (const part of shifting) assert.ok(restating.has(part), `${part} moves the edges but its children do not restate them`);
+});

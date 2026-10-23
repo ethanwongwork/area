@@ -1,7 +1,14 @@
 # Handoff
 
-## Current state (2026-10-22)
+## Current state (2026-10-23)
 
+- **Branch `claude/eager-maxwell-0a929b`, committed, not pushed.** PR #151's three open proposals. Press room (`PRESS_ROOM`,
+  color/layers.ts): inks solved on the deepest selected fill pressed 0.012 L (dark 0.04), so a press shows on every
+  ground (it equalled selected on recessed in light at Layers 4–8, raised in dark from 16 + 8); muted #646464 (was
+  #666666), page press L 0.913. Edges per ground (`GROUND_EDGES`, layers.css): every ground sets `edge-shift-*`, its
+  children restate the roles from `<role>-page`; what a ground draws on itself keeps its parent's. Menu's danger red
+  solved for the real press (sweep: 4.39:1 pressed). Setup stacks visual over panel under an 816 Canvas.
+  `states.mjs` takes a Contrast level and records `no-press`. Research: docs/research/states-2026-10-21 (2026-10-23).
 - **PR (this branch), `claude/neutral-accent-theme-ca527b`.** Every detail is a choice (PRINCIPLES.md 7, GOVERNANCE.md
   option gates; owner 2026-10-22). New settings: Tint hue / Light tint / Dark tint / Text tint (`axes/tint.ts`, custom
   neutral, Auto follows Neutral; text moves 0.25 × strength, `INK_MARGIN`), Light / Dark card tone (`axes/card-tone.ts`,
@@ -11,8 +18,8 @@
   Asset card `aspect="landscape"`, `caption`, `fill`, `borderless`, `container="basic"`, frame = page tone. Pressed fill
   re-derives on every scope (cohesion test). Setup: separate Dark mode step, layer map stage, page colour picker.
   Research: docs/research/custom-neutral-2026-10-22; artifacts Layer Map https://claude.ai/artifact/2AtkSCcTm3GqwAveDbdqXY,
-  Neutral Tint https://claude.ai/artifact/8Czr8Wcu9rTwdW97SzFLzQ. Open proposals: recessed press cap, per-tone edges;
-  the setup's stage is narrow in a 1024 window.
+  Neutral Tint https://claude.ai/artifact/8Czr8Wcu9rTwdW97SzFLzQ. Its open proposals (recessed press cap, per-tone edges,
+  the setup's narrow stage at 1024) are built on `claude/eager-maxwell-0a929b`, above.
 
 - **PR #150, `claude/electron-canvas-feed-layout-8b2924`.** The Canvas as a documentation feed (32 margin, 12 / 40
   rhythm measured to ink, title + count + subtitle per section), Code block md corner concentric with its copy (11),
@@ -42,8 +49,8 @@
   indicator rung for `focus-color` and `stroke-selected` (`semantic/aliases.ts`), resting and lift one tight layer.
   THEMING.md "Interaction states"; docs/research/states-2026-10-21. Inspector rows under Stroke, Shadow and Fill; a
   Theme tile and a Setup question for each.
-- **Open for the owner.** Pressed in light at default Layers is capped by muted text 4.6:1 (about 9%, not 12%), so its
-  four steps are 0.006 apart there; the indicator blue is #0160d9 / #79aeff, not ChatGPT's #3a83f7 (fails 3:1 on
+- **Open for the owner.** Pressed in light at default Layers is capped by muted text 4.6:1 (about 10%, not 12%), so its
+  four steps are 0.009 apart there; the indicator blue is #0160d9 / #79aeff, not ChatGPT's #3a83f7 (fails 3:1 on
   fills and APCA on the dark page); Rest shadow applies to cards and panels, not outline buttons.
 - **Theme tab (PR #145, merged).** No option label says "(Default)" (`registry.test.ts` enforces it); Language is
   **Theme** again; Theme → Setup (default) / Browse, one question per setting, not yet reviewed by the owner. The

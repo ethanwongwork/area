@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import {
   DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, HUED_INKS, LAYER_STEPS, VIVID_ROLES, castOf, DEFAULT_FILL, FILL_STEPS, type FillSelection, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
   DEFAULT_INK_TINT, INK_TINT_STEPS, TINT_HUES, TINT_STEP, TINT_STEPS, inkHex, CARD_TONE_STEPS, type CardTone,
+  EDGE_OFFSET, PRESS_ROOM, edgeShift,
 } from "./layers.ts";
 import { wcagContrastHex } from "./contrast.ts";
 import { type Rgb, SRGB, clampRgb, oklabToRgb, parseHex, rgbToOklab, toHex } from "./oklab.ts";
@@ -180,12 +181,14 @@ describe("layers: inks with a hue follow the ground", () => {
 });
 
 describe("layers: the defaults are Area as it was", () => {
+  // Muted text is #646464, not #666666, since 2026-10-23: it is solved on the recessed selected fill pressed by PRESS_ROOM,
+  // so a sidebar row's press shows (it equalled selected at the defaults).
   it("light 100 + 4 reproduces the light theme", () => {
     const t = layerTokens("light", { groundLight: 100, groundDark: 8, layersLight: 4, layersDark: 4 }, { chroma: 0, hue: 0 });
     expect(t).toMatchObject({
       "bg-page": "#ffffff", "bg-surface": "#ffffff", "bg-subtle": "#f7f7f7", "bg-stripe": "#fafafa", "bg-code": "#ffffff",
       "bg-component": "#f7f7f7", "bg-component-hover": "#f3f3f3", "bg-component-active": "#eeeeee",
-      "fg-default": "#282828", "fg-muted": "#666666", "fg-placeholder": "#666666",
+      "fg-default": "#282828", "fg-muted": "#646464", "fg-placeholder": "#646464",
       "border-decorative": "#f3f3f3", "border-card": "#eeeeee", "border-float": "#eeeeee", "border-faint": "#e2e2e2", "border-divider": "#e2e2e2",
       "border-subtle": "#d4d4d4", "border": "#c5c5c5", "border-hover": "#b4b4b4", "stroke-control": "#838383", "stroke-control-hover": "#747474",
     });
@@ -207,6 +210,51 @@ describe("layers: the state fills keep their order and read apart at every setti
         if (sign * (hover - rest) < -1e-9) problems.push(`${theme} ${g}/${n} ${f.hover}/${f.selected} ${ground}: hover behind rest`);
         if (sign * (selected - hover) < -1e-9) problems.push(`${theme} ${g}/${n} ${f.hover}/${f.selected} ${ground}: selected behind hover`);
         if (f.selected > 0 && Math.abs(selected - hover) < 0.008) problems.push(`${theme} ${g}/${n} ${f.hover}/${f.selected} ${ground}: selected reads as hover (${(selected - hover).toFixed(4)})`);
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+});
+
+// Pressed (styles/layers.css): the selected fill moved 12% (light) or 14% (dark) toward the body ink, stopped where muted text
+// keeps 4.6:1. The inks are solved with PRESS_ROOM to spare on the deepest (light) or lightest (dark) ground, so on every
+// ground, at every fill step, card tone and Layers setting, the firmest press moves at least that far past selected (dark:
+// as far as white text allows, 0.563 L, on the lightest grounds). The layer map (2026-10-22) found it equal to selected on
+// recessed in light at Layers 4 to 8 and on raised in dark from 16 + 8.
+describe("layers: a press has room on every ground", () => {
+  const whiteLimit = Math.cbrt((1 + 0.05) / 4.6 - 0.05);
+  for (const theme of THEMES) it(theme, () => {
+    const problems: string[] = [];
+    for (const tone of ["auto", ...CARD_TONE_STEPS] as CardTone[]) for (const f of tone === "auto" ? FILL_COMBOS : [DEFAULT_FILL]) for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
+      const m = layerLightness(theme, g, n, f, tone), muted = m.ink.muted ** 3, body = m.ink.body;
+      const bound = theme === "light" ? Math.cbrt(4.6 * (muted + 0.05) - 0.05) : Math.cbrt(Math.max(0, (muted + 0.05) / 4.6 - 0.05));
+      for (const ground of ["page", "raised", "recessed", "card", "tile"] as const) {
+        const selected = m.fill[ground][2];
+        const pressed = theme === "light" ? Math.max(selected - 0.12 * (selected - body), bound) : Math.min(selected + 0.14 * (body - selected), bound);
+        const room = theme === "light" ? PRESS_ROOM.light : Math.min(PRESS_ROOM.dark, whiteLimit - selected);
+        if (Math.abs(pressed - selected) < room - 1e-6) problems.push(`${tone} ${f.hover}/${f.selected} ${g}/${n} ${ground}: press ${(pressed - selected).toFixed(4)}`);
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+});
+
+// Edges on the ground they sit on (color/layers.ts GROUND_EDGES, styles/layers.css): every edge keeps its page distance
+// (dark: from the raised layer) on every ground, so a card's frame on a sidebar reads as it does on the page (the layer map,
+// 2026-10-22: 1.01:1 at Layers 8 before), and frames clear the frame minimum on every ground.
+describe("layers: edges keep their contrast on every ground", () => {
+  for (const theme of THEMES) it(theme, () => {
+    const problems: string[] = [];
+    for (const tone of ["auto", ...CARD_TONE_STEPS] as CardTone[]) for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
+      const m = layerLightness(theme, g, n, DEFAULT_FILL, tone), ref = theme === "light" ? m.page : m.raised;
+      for (const ground of ["page", "raised", "recessed", "card", "tile"] as const) {
+        const L = m[ground], shift = edgeShift(theme, m, L);
+        for (const k of Object.keys(EDGE_OFFSET.light) as (keyof typeof EDGE_OFFSET.light)[]) {
+          const on = theme === "light" ? m.edge[k] - shift : m.edge[k] + shift;
+          if (Math.abs(on - L) < Math.abs(m.edge[k] - ref) - 1e-9 && Math.abs(on - L) < Math.abs(m.edge[k] - L) - 1e-9) problems.push(`${tone} ${g}/${n} ${k} on ${ground}`);
+        }
+        const frame = theme === "light" ? m.edge.card - shift : m.edge.card + shift;
+        if (Math.abs(frame - L) < MIN[theme].frame) problems.push(`${tone} ${g}/${n} card frame on ${ground}: ${Math.abs(frame - L).toFixed(4)}`);
       }
     }
     expect(problems).toEqual([]);
