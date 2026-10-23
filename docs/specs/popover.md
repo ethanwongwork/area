@@ -207,3 +207,15 @@ Open questions: none new.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the shared anchored close now one step faster (fast, was base); rests at `scale: none`; arrow centre and header cap offset rounded to whole pixels (`surface.css`).
 - 2026-10-12 · type size and density split (owner) → surface corners (`radius-container`) cap at 1.5 × `inset-surface-md`, so a compact popover stays at 18 when the radius setting asks for 20 or 24 (`emit/base.ts`). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the popover lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Then the arrow too: at 0 it takes `shadow-edge-filter`, the same edge as a drop-shadow, clipped so the shadow of its 1px shell overlap stays out of the shell (its shoulders join as the 1px frame's do). Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** the description sits directly under the title: 10 from the title's baseline to the description's cap, was 15 (a 5 gap).
+- **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs". Alert and Toast shared the 5 and change with it.
+
+## Review note, 2026-10-22 (round 70)
+
+- **What changed:** the teaching step's footer reads "1 of 3" instead of a bare "1". It is a new part, `PopoverStep`
+  (`current`, `total`): UI text in the muted ink, with figures of one width so the footer doesn't shift between steps.
+- **Why:** your round 68 note, "is it supposed to just say 1? is it 1/5 steps?". The number was the step without its
+  total, so it didn't say what it counted. Tours write both (Atlassian's spotlight, Notion's onboarding: "1 of 3").

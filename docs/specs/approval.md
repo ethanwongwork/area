@@ -195,3 +195,15 @@ the foot the keycap ends 16 and the hint's baseline 20 from it, so top and foot 
 
 - **What changed:** Its choices sit on Menu's list column at every density: 12 between the number and the label at Default (8 at the app's Compact, unchanged there), with Menu's 2 between rows. A pressed choice takes Menu's pressed fill, one step darker than before. Its corner is now Composer's exactly, so with pill buttons it becomes a pill like the Composer it replaces. `options` is now `items` (the old name still works).
 - **Why:** The audit against the new docs found the rows used 8 where Menu uses its row gap, the pressed fill was the selected step, and the corner formula had drifted from Composer's.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** stacked rows sit 1px apart (were 2px at the default size, and touching at Compact). Keyboard focus is the brighter indicator blue (#0160d9, was #004cb0), as everywhere since the state settings.
+- **Why:** you asked for the gap between nav items to stay the same and not disappear at Compact. ChatGPT's and
+  Notion's sidebars put their rows 1px apart, so `ui-row-gap` is now 1px at every type size and density, for every
+  family that stacks rows. The focus colour is your pick on the state page (2026-10-21).
+
+## Review note, 2026-10-22 (round 68, keys)
+
+- **What changed:** the choice numbers (1, 2, 3) are small keycaps instead of muted numbers at the label's size; they still sit in the row's icon slot.
+- **Why:** your note that every Kbd should have its backplate, for one look everywhere (docs/specs/kbd.md, "When a key has a backplate").

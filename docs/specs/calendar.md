@@ -15,7 +15,7 @@ fill, Complete), Breadcrumb (chevron glyph, Complete), Badge/Indicator (today ma
 - 2026-09-26: Calendar is a gap the owner named ("things like calendar and color picker
   come to mind"); build it with its variants.
 - 2026-09-26: "Why is purple being used? … I'd prefer if neutral was used all the time and
-  accent was an override." Selection is neutral by default; `tone="accent"` is the
+  accent was an override." Selection is the accent by default (neutral before 2026-10-22); `tone="accent"` is the
   override. The rule is system-wide (`docs/DESIGN_SYSTEM.md`, "Neutral by default, accent
   by override"). *Superseded 2026-09-29 (owner, D1): selected days and the range band are the
   Selection role (`selection-solid`, `selection-band`; calendar.css:20-26), accent by theme;
@@ -338,3 +338,12 @@ Days press at `bg-pressed` (10%; they pressed with the 5% hover); circle days at
   The title sits exactly on the arrows' centre line, and the weekday names sit a short, even gap above the first row.
 - **Why:** the margin was uneven (8 at the top, 14 at the sides and bottom) and the header sat directly on the weekday
   row. Every gap now comes from the system's spacing tokens, so it holds at every density.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

@@ -108,3 +108,19 @@ Grid options press at `bg-component-pressed`, one step past selected (Notion pre
 - 2026-10-15 · owner: "merge it, then continue working" → List box, from PRODUCT_UI.md's open gaps.
 - 2026-10-15 · owner: "merge it, then continue working" (PR #106) → Typography and Color adopt it; the app's grid-keys.ts removed.
 - 2026-10-16 · owner, review round 27 (components27) → approved → Complete in `component-status.mjs`.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** stacked rows sit 1px apart (were 2px at the default size, and touching at Compact). Keyboard focus is the brighter indicator blue (#0160d9, was #004cb0), as everywhere since the state settings.
+- **Why:** you asked for the gap between nav items to stay the same and not disappear at Compact. ChatGPT's and
+  Notion's sidebars put their rows 1px apart, so `ui-row-gap` is now 1px at every type size and density, for every
+  family that stacks rows. The focus colour is your pick on the state page (2026-10-21).
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

@@ -51,7 +51,7 @@ const QUESTIONS: Record<string, string> = {
   "layers-light": "In light, how far should cards and sidebars sit from the page?",
   "layers-dark": "In dark, how far should cards and sidebars sit from the page?",
   action: "Should primary actions use the accent?",
-  selection: "Should checked and selected states use the accent?",
+  selection: "Should selected states and the focus ring use the accent?",
   contrast: "How strong should edges and focus be?",
   type: "What size should text be?",
   density: "How much room should controls have?",

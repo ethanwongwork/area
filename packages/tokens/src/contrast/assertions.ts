@@ -169,11 +169,13 @@ function chromeAssertions(): ContrastAssertion[] {
 
     // The focus ring is checked against every surface it can land on. Checking only the
     // page is the classic miss: a ring that clears the page can vanish against a filled
-    // control or an inset well.
-    { fg: "focus-color", bg: "bg-page", ...STROKE.focus, note: "focus ring on page" },
-    { fg: "focus-color", bg: "bg-surface", ...STROKE.focus, note: "focus ring on surface" },
-    { fg: "focus-color", bg: "bg-component", ...STROKE.focus, note: "focus ring on control" },
-    { fg: "focus-color", bg: "bg-subtle", ...STROKE.focus, note: "focus ring on inset" },
+    // control or an inset well. The ring is a Selection role (2026-10-22), so both of its endpoints are checked.
+    ...(["accent-indicator", "neutral-solid"] as const).flatMap(fg => [
+      { fg, bg: "bg-page", ...STROKE.focus, note: "focus ring on page" },
+      { fg, bg: "bg-surface", ...STROKE.focus, note: "focus ring on surface" },
+      { fg, bg: "bg-component", ...STROKE.focus, note: "focus ring on control" },
+      { fg, bg: "bg-subtle", ...STROKE.focus, note: "focus ring on inset" },
+    ]),
 
     // The neutral button fills. Neutral solid is the strongest call to action a neutral palette
     // can make, so its label has to clear body-text contrast, not merely large-text.
@@ -208,8 +210,9 @@ function stateAssertions(): ContrastAssertion[] {
   const out: ContrastAssertion[] = [];
   const surfaces = [...TEXT_SURFACES, "bg-component-hover", "bg-component-active"];
   for (const bg of surfaces) {
-    for (const fg of ["stroke-control", "stroke-control-hover", "stroke-selected", "fg-danger", "focus-color"]) {
-      if (fg === "focus-color" && TEXT_SURFACES.includes(bg)) continue;
+    // The selected edge is a Selection role (emit/base.ts, 2026-10-22): its two endpoints, the accent's indicator rung
+    // and the neutral solid, each hold 3:1, so every mix the setting produces does too.
+    for (const fg of ["stroke-control", "stroke-control-hover", "accent-indicator", "neutral-solid", "fg-danger"]) {
       out.push({fg,bg,wcag:WCAG.NON_TEXT,apca:0,note:"required boundary, state or opaque focus"});
     }
     out.push({fg:"fg-default",bg,wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"UI label in interactive state"});
@@ -222,9 +225,10 @@ function stateAssertions(): ContrastAssertion[] {
   out.push({fg:"fg-on-neutral",bg:"neutral-solid-hover",wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"neutral button hover label"});
   for (const tone of TONES) for (const state of ["", "-hover", "-active"]) {
     const bg = `${tone}-surface${state}`;
-    out.push({fg:"focus-color",bg,wcag:WCAG.NON_TEXT,apca:0,note:"opaque focus on a tinted surface"});
+    // The focus ring is a Selection role (2026-10-22): both endpoints hold on every tinted surface.
+    for (const fg of ["accent-indicator", "neutral-solid"]) out.push({fg,bg,wcag:WCAG.NON_TEXT,apca:0,note:"opaque focus on a tinted surface"});
     if(state) out.push({fg:`fg-${tone}`,bg,wcag:WCAG.TEXT,apca:APCA.CONTENT,note:"tonal UI label in interactive state"});
   }
-  for (const state of ["", "-hover", "-active"]) out.push({fg:"stroke-selected",bg:`accent-surface${state}`,wcag:WCAG.NON_TEXT,apca:0,note:"increased-contrast selected chip border on its tint"});
+  for (const state of ["", "-hover", "-active"]) out.push({fg:"accent-indicator",bg:`accent-surface${state}`,wcag:WCAG.NON_TEXT,apca:0,note:"increased-contrast selected chip border on its tint"});
   return out;
 }

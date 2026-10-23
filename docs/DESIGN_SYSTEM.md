@@ -72,17 +72,20 @@ the contrast tests, including its strong ink on its tint.
 
 **Emphasis roles.** Area has one chosen colour, the accent, plus neutral. Components never
 offer an accent tone. They paint one of two roles, and the `action` and `selection` settings
-decide whether each is neutral (the default) or the accent:
+decide whether each is neutral or the accent. Action defaults to neutral, Selection to the accent (2026-10-22):
 
 | Role | Tokens | Paints |
 |---|---|---|
 | Action: what you press to commit | `action-solid`, `-solid-hover`, `fg-on-action`, `fg-action` | A neutral solid Button's fill and everything built on it: Split button, Composer send, footer actions. Soft, outline and ghost Buttons stay neutral. |
-| Selection: what shows state | `selection-solid`, `-solid-hover`, `fg-on-selection`, `fg-selection`, `selection-surface`, `-band`, `-edge` | Checkbox, Radio, Switch on; Slider, Progress and Spinner fills; Calendar selected days and range band; selected Chip; the Tabs indicator; the Nav marker; checks in Menu, Select, Combobox, Model picker and Tree view; Alignment picker bars; the swatch picker ring; the Avatar active ring; a linked code line |
+| Selection: what shows state | `selection-solid`, `-solid-hover`, `fg-on-selection`, `fg-selection`, `selection-surface`, `-band`, `-edge`, `stroke-selected` | A selected container's edge (Card, Asset card, choice cards); Checkbox, Radio, Switch on; Slider, Progress and Spinner fills; Calendar selected days and range band; selected Chip; the Tabs indicator; the Nav marker; checks in Menu, Select, Combobox, Model picker and Tree view; Alignment picker bars; the swatch picker ring; the Avatar active ring; a linked code line |
 | Neither | — | Row plates (hover, current, selected), the Segmented thumb, surfaces, text, dividers and field chrome. On a row only the mark takes the role. |
 
-Each role is its neutral endpoint mixed toward the accent by the setting's 0/1 switch, so
-the default renders exactly the neutral paint. Focus is its own setting and is never a
-selection marker.
+Each role is its neutral endpoint mixed toward the accent by the setting's 0/1 switch. The keyboard focus ring follows
+Selection too (`focus-color`, owner 2026-10-22), so two settings decide every use of colour: Action for what you press,
+Selection for state, the selected edge and focus. Both on Neutral is an entirely neutral look; nothing else reads the
+accent. Status colours (danger, success, warning, info) and category colours (a tag's or badge's hue) are their own
+scales and never the accent. At the defaults (Action Neutral, Selection Accent) the accent appears in state marks,
+selected edges and the focus ring; everything you press to commit is neutral.
 
 **Ink and weight.**
 
@@ -131,9 +134,12 @@ own step.
 
 **Selected containers and focus** (owner, 2026-10-21; `axes/states.ts`):
 
-- **Selected and focus are two states with one colour**, the accent's indicator rung (`stroke-selected`,
-  `focus-color`). They differ by placement, as the ARIA Authoring Practices require: selection is an edge drawn inside
+- **Selected and focus are two states with one colour**, both Selection roles: the accent's indicator rung at Selection
+  Accent (the default), the neutral solid at Neutral (`stroke-selected`, `focus-color`). They differ by placement, as the ARIA Authoring Practices require: selection is an edge drawn inside
   the container, focus a ring on or outside it.
+- **A selected edge and the mark inside it are one colour** (owner, 2026-10-22, option B): `stroke-selected` is a
+  Selection role, the accent's indicator rung at Selection Accent (the default) and the neutral solid at Neutral. Focus
+  follows the same setting. No component picks its own selection or focus colour; the setting decides for all of them.
 - **A selected container** (Card, Asset card, a choice card, a containerless image) draws its edge inside at
   `selected-width` (Selected stroke, 2px by default, ChatGPT's tile): its own line in `stroke-selected`, topped up by
   an inset ring of `selected-width` minus that line, so selecting never moves anything. Under it, `selected-tint`
@@ -333,7 +339,28 @@ and `emit/base.ts`; never copy a table into a component
   Small text is the base minus 2, and never under 10.
 - **Every scope restarts at the body role.** Below the page root, an element with its own Type sets `text-md` for
   text set straight in it (THEMING.md, CSS inheritance). A component that holds free text states its own role
-  (Card and Surface use `text-sm`); inline parts (Link, Code, Abbreviation) inherit the text they sit in.
+  (Card and Surface use `text-sm`); inline parts (Link, Code, Abbreviation) inherit the text they sit in. A part that
+  stands on its own (a row, a cell) takes a ramp size, never inline Code's 0.875em.
+- **Text pairs** (owner, 2026-09-28 on Card, 2026-10-22 for every family; measured in
+  `docs/research/text-gaps-2026-10-22`). Gaps are read on the glyphs (baseline to cap), and each kind of pair has one:
+  - a line that belongs to a title or label (description, subtitle, a group legend's description) **joins** it, with
+    no gap between their line boxes: title baseline to description cap is about 12 for a 16 title over 14 text and
+    10 for 14 over 14 (Figma and Notion 11.5). A 12/16 line has 2 less leading, so it sits 2 below (10.5 under a 14
+    title), as a choice's description does. Card, Dialog, Drawer, Popover, Alert, Toast, Empty state,
+    Infobox, choices and their groups, Switch and Approval all follow it;
+  - a label above its one control: `ui-stack` (6), Field's gap, so the label's baseline sits 11 above the control's edge;
+  - a text group (a title or legend, with or without its description) above a **set** it introduces (options, rows,
+    links, a list) stands one step further from it than the set's items stand from each other, on Area's ladder
+    2 · 4 · 6 · 8 · 12 · 16 · 24: options 8 apart take 12 (`gap-row`, Stack's group), links 4 apart take 8, Infobox
+    rows 4 apart take 6. So the space inside the text group < the space between items < the space from the text to
+    the items, and the heading reads as belonging to everything below it, not only the first item. Panel's heading is
+    itself a row with Figma's 8 above and below, so it keeps its row rhythm;
+  - a label beside its value: the label column is as wide as the longest label (shared by the rows, up to 40%), and
+    the value starts `gap-row` (12) after it. A fixed column is for editable property rows only (Description list's
+    `columns`, Notion's properties);
+  - a text group to the block after it (a list, actions, a footer): the container's block gap (Card's 12).
+  Weight and ink follow the part, not the family: a title that names a surface or section is strong (500); the name
+  of an item or control (a choice, a step, a row, a file) is regular (400); supporting lines are muted and regular.
 - **Shared controls use the same tier's icon, text and gap tokens.**
 - **Icon-to-label gap:**
   - 6 at sm, md and lg; 4 at xs and compact;

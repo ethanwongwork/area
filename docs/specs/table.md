@@ -216,3 +216,12 @@ Interactive rows press at `bg-component-pressed`, one step past selected (Notion
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → row rules and column dividers are at `stroke-width`, as the frame (were `border-width`, so under Elevated a framed table lost its rows) (navigation.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · type size and density split (owner) → cell insets follow the spacing step (`ui-dense`, 8 → 18 at the side); the frame's corner is capped at 1.5 × the side inset (compact at type 12–13, radius 12+: 18 over 8 → 12) (`navigation.css`). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-15 · PRODUCT_UI.md open gap ("Table props for its fit and numeric cells"), owner: "merge it, then continue working" → `TableCell` and `TableHeaderCell` (`scope="col"` by default) take `numeric` and `fit`, writing the existing `area-table__cell--numeric` / `--fit` modifiers; nothing renders differently. The app (Facts, the Stage's anatomy, Components' list, the Icons list) and the Table demos use them instead of the class names.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

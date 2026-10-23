@@ -32,7 +32,7 @@
     --_glyph-line: calc(var(--area-weight-icon) * (0.8 + 0.0846 * clamp(0, var(--area-ui-dense), 1)));
     /* spec: ChatGPT 16 under the tile, 8 between title and line, 16 above the actions. */
     --_media-gap: var(--area-space-16);
-    --_title-gap: var(--area-space-8);
+    --_title-gap: 0px; /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 8 after ChatGPT's empty state, baseline to cap 20) */
     --_actions-gap: var(--area-space-16);
     /* The surface title role, Dialog's and Drawer's: 16/24 at both densities (owner, 2026-10-12: consistency pass O3;
        was ChatGPT's 18/24, off the type ramp). */
@@ -51,7 +51,7 @@
     --_glyph-line: calc(var(--area-weight-icon) * (0.8846 + 0.1154 * clamp(0, var(--area-ui-dense), 1)));
     /* spec: Notion 12 under the icon, 2 between title and line, 8 above the action. */
     --_media-gap: var(--area-space-12);
-    --_title-gap: var(--area-space-2);
+    --_title-gap: 0px; /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 2 after Notion) */
     --_actions-gap: var(--area-space-8);
     /* spec: Notion 14/20 500, the UI type (12/16 in compact). */
     --_title-size: var(--area-ui-size);

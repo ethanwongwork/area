@@ -21,7 +21,7 @@ export const GalleryOverlayPopoverArrow = () => (
 
 export const GalleryOverlayMenu = () => (
   <Menu trigger={<Button variant="outline" trailingIcon={<ChevronDownIcon />}>Button</Button>}>
-    <MenuItem shortcut={<Kbd keys={["cmd", "D"]} variant="quiet" />}>Item one</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "D"]} size="sm" />}>Item one</MenuItem>
     <MenuItem>Item two</MenuItem>
     <MenuItem disabled>Item three</MenuItem>
     <MenuSeparator />

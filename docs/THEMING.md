@@ -27,9 +27,9 @@ named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carrie
 |---|---|---|
 | `theme` | `light` (default), `dark` | Colour polarity and `color-scheme`, including native controls |
 | `neutral` | `neutral` (default), `cool`, `warm` | The grey cast of every neutral role |
-| `accent` | 11 hues, `blue` (default) | The chosen colour. The focus ring and `stroke-selected` follow it |
+| `accent` | 11 hues, `blue` (default) | The chosen colour. State marks, selected edges and the focus ring take it while Selection is Accent; solid actions while Action is Accent |
 | `action` | `neutral` (default), `accent` | Whether committing actions (solid Buttons) paint the accent |
-| `selection` | `neutral` (default), `accent` | Whether state marks (checked, on, selected, current, filled) paint the accent |
+| `selection` | `neutral`, `accent` (default since 2026-10-22) | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards) and the focus ring paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |
 | `ground-light` | `100` (White, default) … `90` | The light page's OKLCH lightness, in 1% steps |
 | `ground-dark` | `0` (Black), `8` (default, #020202), `12` … `24` | The dark page's lightness |
 | `layers-light`, `layers-dark` | `0` (Flat) … `8`, `4` (default) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
@@ -100,10 +100,11 @@ headings, **Stroke** and **Shadow**:
 
 **Interaction states** (`axes/states.ts`, `axes/depth.ts`; owner, 2026-10-21)
 
-The owner's picks on the state page are the defaults; every other option branches from them. Selected and focus share
-one colour, the accent's indicator rung (`stroke-selected`, `focus-color`: the lightest step of the accent that keeps
-3:1 on every ground, fill and tinted surface, #0160d9 light, #79aeff dark for blue), and differ by placement: the
-selected edge is drawn inside, the focus ring on or outside.
+The owner's picks on the state page are the defaults; every other option branches from them. The selected edge
+(`stroke-selected`) and the focus ring (`focus-color`) are Selection roles (2026-10-22): the accent's indicator rung
+(`accent-indicator`: the lightest step of the accent that keeps 3:1 on every ground, fill and tinted surface, #0160d9
+light, #79aeff dark for blue) at Selection Accent, the default, and the neutral solid (#282828 / #f3f3f3) at Neutral.
+Selected and focus share a colour and differ by placement: the selected edge inside, the focus ring on or outside.
 
 | Setting | Inspector label | Values (default) | What it sets |
 |---|---|---|---|

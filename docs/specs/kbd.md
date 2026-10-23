@@ -228,22 +228,24 @@ Key gap: `--area-keyboard-gap` is `round(nearest, 0.25ch, 1px)` (2), so keys aft
   row. On the page it looks nearly the same (6% of black over the page instead of a fixed grey); in dark it now takes
   its tone from the surface under it, so the review page marks every filled keycap as changed.
 
-## When a key has a backplate (round 52, 2026-10-19)
+## When a key has a backplate (round 52, 2026-10-19; replaced 2026-10-22)
 
-Owner: "what is the guidance for using kbd without a backplate? should all kbd instances use a backplate?" Not all.
-The rule, read from where Area already uses each and from the products in this spec's sources:
+**Always** (owner, 2026-10-22: "i prefer having kbd with backplate everywhere it shows up in all components ... i
+prefer the look and consistency of always having the backplate"). Every key is a keycap: hints, prose, shortcut
+lists, Buttons, a field's hint, menu and Context menu rows, Command palette rows and its footer, Approval's numbers.
+`variant="quiet"` and Shortcut list's `quiet` are deprecated: they render the keycap. A string `shortcut` on a
+MenuItem is set verbatim in the small keycap.
 
-| Variant | Use it for | Why | In Area |
-|---|---|---|---|
-| default (filled keycap) | a key presented as a key: named in prose or a hint ("Esc to cancel"), the keys of a shortcut list, a field's hint (⌘K), a Button's trailing shortcut | it stands apart from the words around it; Notion's shortcut hints are filled keycaps | Approval's hint, Shortcut list, Search field, Button templates |
-| quiet (no backplate) | a key in a list of rows that have their own plate: menu shortcuts, a palette's rows, numbered choices | the row's plate is the backplate; a keycap on a highlighted row is a plate on a plate, and down a list it becomes noise (Notion and Figma menus write shortcuts as text) | Menu, Command palette rows, Approval's numbers |
-| on-color | a key on a strong fill | adapts on its own in a Tooltip, a solid Button and a danger row | Tooltip, Video player |
+| Host | Keycap | Why |
+|---|---|---|
+| standalone, prose, a hint, a shortcut list, a field's hint | md (20), the 6% mark fill | as before |
+| a menu or palette row, Approval's numbers, a palette's footer | sm (16), the same fill | fits the 28 row with 6 to spare at every density; translucent, so it holds on a hovered or selected row |
+| a Button, a Tooltip, a destructive row | a 14% plate of the host's ink | survives hover, press and selected fills, and coloured rows |
 
-The filled keycap's grey is translucent (round 51), so where a keycap must sit on a plate (a Button's hover, a
-selected row) it still reads.
-
-One place breaks the rule today: Command palette's footer (↑ ↓ ↵ esc inside its footer buttons) uses quiet keys,
-where the rule says a Button's shortcut is a keycap. Left as is for the owner (open question below).
+Where references do it differently (the trade-off accepted): macOS, Notion, Figma, ChatGPT and VS Code write menu
+shortcuts as plain text, because a column of plates down a long menu adds weight and the row's own plate already
+frames the item. Claude Code and Codex number their choices without a plate. In Area the keycap is the small one and
+its fill is the faintest mark (6%), which keeps a full column light.
 
 ## Open questions
 
@@ -278,3 +280,13 @@ the keycap read as touching its words.
   before, a button's keycap sat a space (4) from its label.
 - **Why:** you asked for a rule; 8 is ChatGPT's tooltip and Area's own tooltip gap, so every key beside words now
   matches.
+- 2026-10-22 · owner, round 67 ("content modal kbd compoennt looks wrong", Command palette) → a quiet Kbd inside a Button or Tooltip stays a string: the in-Button keycap plate (`.area-button .area-kbd`) outranked `--quiet` and drew a 14% plate tight round ⌘K with no padding. kbd.css. Superseded the same day: every key is a keycap (owner), quiet deprecated; cohesion test "every Kbd is a keycap".
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** every key is a keycap with its backplate. Menu and Command palette rows, the palette's footer
+  (↑ ↓ Open), Approval's numbers and Shortcut list's quiet option used plain muted text; they now show the small
+  keycap (16), the same everywhere. A string shortcut on a menu item becomes the small keycap too.
+- **Why:** your note, "i prefer having kbd with backplate everywhere ... the look and consistency". Round 52 had
+  dropped the plate in rows (the row is its own plate; Notion and Figma write menu shortcuts as text); that trade-off
+  is now on the side of one look.

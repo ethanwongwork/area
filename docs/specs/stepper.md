@@ -61,7 +61,7 @@ area  ol.area-stepper.area-stepper--horizontal|vertical[aria-label]       flex; 
 ## Measurements
 
 From the Area captures (light, Default, round 25): marker 24 with a 1px ring, 12 tabular numerals; title 14/20 400
-starting 36 from the marker's start (24 + 12, Timeline's); the line 1px divider, 12 after the title and 4 before the
+starting 36 from the marker's start (24 + 12, Timeline's); the line 1px divider, 12 after the title and 12 before the
 next marker; vertical: Timeline's column, 16 between steps, the line 4 clear of each marker.
 
 | property | MUI | Mantine md | Ant default / small | Untitled UI | Carbon | Area |
@@ -92,7 +92,7 @@ choice controls' paint.
 | complete | a 1px Selection ring with the 12 check in Selection ink | MUI, Mantine (a check marks done) | Kept quieter than current |
 | invalid | a 1px danger ring, "!" in danger | Carbon, Ant, MUI error | — |
 | line | Timeline's: 1px `border-divider`, one paint in every state | peer Timeline (owner, round 25) | Round 24 painted it Selection after done steps (Carbon, Mantine, Ant), a black line no other Area line draws |
-| horizontal | steps take their content's width and share what is left; the line runs 12 after the text and stops 4 before the next marker, level with the marker's centre; a step never shrinks below its content, so the line can't run into a title | Timeline's gaps | Round 24 let steps shrink, and the line overlapped titles |
+| horizontal | steps take their content's width and share what is left; the line runs 12 after the text and stops 12 before the next marker, level with the marker's centre; a step never shrinks below its content, so the line can't run into a title | Timeline's gaps | Round 24 let steps shrink, and the line overlapped titles |
 | vertical | Timeline's column: the line through the marker's centre, 4 clear of each marker, 16 between steps | peer Timeline | — |
 | open step | `children` sit under the text, in line with the title (marker + 12), 8 below it; vertical: the line runs on beside them, since the step grows; horizontal: a row of its own under the step | Base Web ProgressSteps, GOV.UK step-by-step (intake: a slot, rung 4; a description is muted text and an `ol` holds only steps) | — |
 | going back | done steps are buttons; the row plate (hover, pressed) and the focus ring lie 4 outside, behind, taking no room | WAI, Atlassian, Spectrum, MUI linear; PRODUCT_UI rules 2-3 | Round 24's −4 margin made the button narrower than it drew, one cause of the overlap |
@@ -161,3 +161,39 @@ Step buttons press at `bg-component-pressed`, one step past selected (Notion pre
   you approved them in round 25.
 - **Why:** you picked the Sidebar rail. Base Web and GOV.UK open the current step in place the same way, and only a
   vertical stepper nests sub-steps.
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** in the horizontal stepper the line now stops 12 short of the next marker, the same 12 it keeps
+  from the text before it (it stopped 4 short, so it nearly touched the next circle). A step's title and description
+  are unchanged.
+- **Why:** your round 67 note on the horizontal gaps. The line's two ends followed different rules; MUI (8), Chakra
+  (12) and Mantine (16) keep the same gap at both ends, and 12 is the step's own marker-to-title gap.
+- **Your other questions** (smaller markers, other shapes, standalone, outline or fill) all have a precedent:
+  `docs/research/text-gaps-2026-10-22/stepper.md`. In short: a 16 size, a dot or bar indicator, visually hidden
+  labels for a standalone row, and a tint style (light fill upcoming and complete, solid when current, Ant's default
+  look) are each established. Your round 25 approval kept one size and no dots, so these are proposed, not built:
+  pick the ones you want and they go through intake as separate options.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-22 (round 70)
+
+- **What changed:** the markers are soft plates instead of circles: Kbd's keycap, the one that numbers Approval's
+  choices, at 20 (16 at Compact) with its 6 corner and no outline, the number at 12 / 500. The fill carries the state
+  from light to dark: a step to come is the faint grey mark fill with a muted number, a done step the light Selection
+  tint with a check, the current step the solid Selection fill, an invalid step the danger tint with "!". The check is
+  the 16 drawing in the 20 plate (its own 12 cut at Compact), so it stands as tall as the digits (ink 8 vs the digit's
+  8.6; the 12 check was 5.5). The title now starts 32 from the column (20 + 12, was 36).
+- **Why:** your round 68 note: "i dont like the circles ... softer fills, like the 1 2 3 for approval? are those
+  using kbd? rounder backplates and not outline ... better sizing of the icons compared to the numbers". Yes, Approval's
+  numbers are Kbd keycaps, so the marker now is one too. The light-to-dark fill is your round 67 idea and Ant's default
+  steps. The spacing you liked is unchanged. Dots, bars and a small size remain proposals
+  (`docs/research/text-gaps-2026-10-22/stepper.md`).

@@ -614,7 +614,7 @@ export default {
       section: "A run of rows, 12 from the next with a divider between.",
       heading: "The section's title in strong UI text, 6 above its rows.",
       rows: "The dl holding a section's rows, 4 apart.",
-      row: "One label and its value: side by side in a 120 label column, or stacked.",
+      row: "One label and its value: side by side, the label column as wide as the longest label, or stacked.",
       label: "What the value is, in the muted UI text.",
       value: "The fact, in the default UI text.",
     },

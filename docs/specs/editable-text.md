@@ -161,3 +161,12 @@ text does not move between states. Not compared side by side with Figma in one s
 - 2026-10-11 · owner, review round 8 (rethink): "not very clear that the text is editable" → hover plate + hint Tooltip
   (`hint`), tests for the hint, the opt-out and disabled (no tooltip). Round 9.
 - 2026-10-12 · owner, review round 9: approved → Complete in `component-status.mjs`.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

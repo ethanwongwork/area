@@ -558,7 +558,7 @@ export default {
       ["Do", "Stack several lists for a full sheet, inside a Dialog, Popover or Panel."],
       ["Do", "Pass keys as a list of chords for alternatives; they are read with \"or\" between them."],
       ["Do", "Use shortcut with a KbdGroup for keys pressed in sequence."],
-      ["Do", "Use keycaps by default; quiet sets the keys as muted text."],
+      ["Do", "Every key is a keycap; the quiet option is deprecated and ignored."],
       ["Don't", "Expect the list to bind keys. The page binds them; the list only shows them."],
       ["Don't", "Make rows editable or switchable; a key binding editor is a settings form."],
     ],
@@ -569,7 +569,7 @@ export default {
       items: "The description list holding the rows.",
       item: "One row: what the shortcut does at the start, its keys at the end, a divider under all but the last.",
       label: "What the shortcut does.",
-      keys: "The chord as Kbd keycaps, or muted text when quiet; alternatives sit side by side.",
+      keys: "The chord as Kbd keycaps; alternatives sit side by side.",
     },
     aria: [
       ["aria-labelledby", "On the section, pointing at the title; pass aria-label when there is no title."],

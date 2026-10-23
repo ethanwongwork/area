@@ -296,3 +296,19 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
 - 2026-10-16 · from the owner's round-28 note → the sidebar demo (`GalleryNavSidebar`): the Nav kept its 240 default inside the 264 sidebar's 248 column, so its plates stopped 16 from the right edge and 8 from the left, out of line with the header's buttons. It now fills its column (`--area-nav-inline-size: 100%`, the sidebar sets the width), so the plates and the header's buttons both end 8 from each edge; the name starts on the rows' icon column (8 + the row's 8). The name had no type role and showed whatever it inherited (16 in the review page's Before frame, 14 in its After); it is now the surface title size (`title-xs`, 16 / 24 at type 14), at the regular weight, the old size. Nav's CSS unchanged. The Library row's `document` icon was redrawn with evenly spaced lines (docs/specs/icons.md, 2026-10-16).
 - 2026-10-16 · owner, review round 29 (components29) → approved (row actions, the sidebar demo) → Complete again in `component-status.mjs`.
 - 2026-10-22 · owner, review of docs/research/cursor-audit-2026-10-22.md (items 2 and 9) → (1) rows keep at least 5 above and below their text (`ui-row` = leading + max(5, 6 + 2 × level) × 2): 28 at type 13 Compact, was 26; Default and Comfortable unchanged (emit/base.ts). Cursor's Agents rows 28 (12/16 + 6), Figma's file browser 28 (11/16), ChatGPT 35 (14/20); Notion's 30 (14/21) was Area's proportion; the owner chose 28. (2) Revealed actions over a trailing count take its place: the row is their positioning box, they sit at its end (4 in), and the count gives way as they land (at once; back on `fast`); without hover they always show and the count is hidden. Notion's sidebar keeps a 0-wide slot and shows "…" and "+" at the end on hover (`tree-view/notion--sidebar-row`), ChatGPT's recents cover the row's end (`baseline/chatgpt--sidebar-recent--hover`), Figma's file browser a 24 action (`baseline/figma--sidebar-row`). Product UI rule 2 gains this one exception; cohesion.test.mjs names it. First use: the desktop Components Sidebar's Pin → nav.css.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** stacked rows sit 1px apart (were 2px at the default size, and touching at Compact). Keyboard focus is the brighter indicator blue (#0160d9, was #004cb0), as everywhere since the state settings.
+- **Why:** you asked for the gap between nav items to stay the same and not disappear at Compact. ChatGPT's and
+  Notion's sidebars put their rows 1px apart, so `ui-row-gap` is now 1px at every type size and density, for every
+  family that stacks rows. The focus colour is your pick on the state page (2026-10-21).
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

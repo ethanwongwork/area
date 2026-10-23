@@ -180,3 +180,8 @@ starts at y 328.07. That is Dialog's, reported to the lead rather than changed h
   one is "Tone / danger" (lead, build.mjs); (c) recs taken: no icon; one 500 weight on both
   footer buttons via Button (button.css). No change to confirm-dialog.css or ConfirmDialog.tsx.
 - 2026-10-08 · owner: approved on the component review page (re-review after the requested changes).
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** the description sits directly under the title: 12 from the title's baseline to the description's cap, was 16.
+- **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs".

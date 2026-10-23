@@ -212,3 +212,10 @@ buttons keep their own corner.
 - **Why:** you asked that hover colours come from rules, not one-off fixes. The rule is now written (DESIGN_SYSTEM.md,
   Layers: a component that paints a ground declares it in layers.css) and enforced by a test; this family painted a
   raised ground without declaring it.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** stacked rows sit 1px apart (were 2px at the default size, and touching at Compact). Keyboard focus is the brighter indicator blue (#0160d9, was #004cb0), as everywhere since the state settings.
+- **Why:** you asked for the gap between nav items to stay the same and not disappear at Compact. ChatGPT's and
+  Notion's sidebars put their rows 1px apart, so `ui-row-gap` is now 1px at every type size and density, for every
+  family that stacks rows. The focus colour is your pick on the state page (2026-10-21).

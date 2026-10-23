@@ -292,3 +292,8 @@ The link's underline takes Link's offset, 0.25em, clear of descenders (link.md).
 - 2026-10-08 · owner went with Link's recommendation to align Area's underlines (docs/specs/link.md, "Peers aligned") → the link's underline (inline and banner) is Link's line: 40% of the tone ink at rest, full on hover and focus; the banner's duplicate link rule removed (surface.css) → back in review.
 
 Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** in the multiline layout the description sits directly under the title: 10 from the title's baseline to the description's cap, was 15.
+- **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs".

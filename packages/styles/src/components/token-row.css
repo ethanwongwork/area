@@ -22,6 +22,10 @@
     margin: 0;
     padding-block: 0;
     padding-inline: round(nearest, calc((var(--_token-height) - 1cap) / 2 - var(--_code-border, var(--area-border-width))), 1px);
+    /* A row, not code in a sentence: the small text role, not inline Code's 0.875em of its host (text pass 2026-10-22:
+       12.25/16.54 in a 14 host, off the type ramp; the row stays 22 tall). */
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
     text-align: start;
     white-space: nowrap;
   }

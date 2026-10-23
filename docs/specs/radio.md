@@ -219,3 +219,17 @@ selection with a real keyboard.
 ## Spacing audit (2026-10-17)
 
 Group rhythm: as Checkbox group, the description and validation sit `ui-stack` (6, compact 4) from what's above (validation was 12). Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** a group's description sits 2 under its legend (was 6), exactly as a choice's own description sits under its title, and the options now start 12 below that text (was 6), one step more than the 8 between options (Compact: 8, was 4).
+- **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs". Your follow-up: the description sat closer to the first option (6) than the options sit to each other (8), so the text read as a label for the first option only. Text that introduces a set now stands one step further from it than the items are apart.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

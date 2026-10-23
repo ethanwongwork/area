@@ -202,12 +202,14 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
    * with its own label, and a lime or amber solid measures 1.2:1 on white. The indicator is the most vivid rung that
    * clears 3:1 and APCA 45 on every ground, per family and theme, so one rule stays conformant for every accent while
    * reading vivid (owner, 2026-10-21: ChatGPT's vibrant blue). It was the text level (textTonal), which read as navy.
-   * The selected stroke takes the same rung: selected and focus share a colour and differ by placement (DESIGN_SYSTEM.md).
+   * `accent-indicator` names that rung. The selected stroke is a Selection role (emit/base.ts): this rung at Selection
+   * Accent, the neutral solid at Neutral, so a selected edge and the mark inside it are always one colour family (owner,
+   * 2026-10-22, option B; docs/research/selection-colour-2026-10-22). Focus follows Selection the same way (owner,
+   * 2026-10-22: "make the focus ring follow Selection, so Selection Neutral is an entirely neutral look").
    */
   "stroke-control": at("neutral", "strokeControl"),
   "stroke-control-hover": at("neutral", "strokeControlHover"),
-  "stroke-selected": indicator("accent"),
-  "focus-color": indicator("accent"),
+  "accent-indicator": indicator("accent"),
 
   // --- Tonal blocks -------------------------------------------------------------
   ...tonalBlock("accent", "accent"),

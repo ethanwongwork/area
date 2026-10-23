@@ -141,7 +141,7 @@ native (group `disabled` also sets `aria-disabled`); an uncontrolled picker rest
 |---|---|---|---|---|
 | Segmented | hover on its own track | `bg-hover` | `bg-hover` | match |
 | ColorSwatchPicker | picker cell ladder | `control-xs/sm/md` 24 / 28 / 32, plate + ring (`color.css:83-85`) | (control + icon) / 2: 22 (min 20) / 24 / 28, bars (`alignment-picker.css:15-17`) | differs by design (audit F-31 A, owner 2026-09-30): two ladders kept; a swatch cell holds a chit, an alignment cell a mark |
-| Radio / Checkbox / Chip | selection paint | Selection role, neutral by default | `fg-selection` bars | match |
+| Radio / Checkbox / Chip | selection paint | Selection role, the accent by default (neutral before 2026-10-22) | `fg-selection` bars | match |
 | Input (soft) | field fill | `input-bg-soft` | same | match |
 | All controls | disabled | 50% | 50% | match |
 
@@ -299,3 +299,12 @@ Cells are not selectable. See [interaction polish](../research/interaction-polis
   corner `radius-control-sm` 6 (was 8 / 6), edge transparent in both themes (was `border-decorative`),
   88 : 56 kept, preview glyph keeps its instant swap. Checked on `/alignment-picker.html` (computed,
   light / dark / compact): radius 6, cells 4, edge transparent, inset 4, fill #f7 / #282828.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.
