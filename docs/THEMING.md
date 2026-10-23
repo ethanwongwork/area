@@ -118,6 +118,7 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 | `fill-hover` | Fill › Hover | `1` … `4`, `2` (default) | The hover plate under rows and ghost controls, opaque and translucent (`bg-component-hover`, `bg-hover`) |
 | `fill-selected` | Fill › Selected | `0` (Same as hover) … `4`, `1` (default) | How far past hover the selected plate sits (`bg-component-active`, `bg-active`) |
 | `fill-pressed` | Fill › Pressed | `1` … `4`, `4` (default) | Quarters of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1 |
+| `danger-hover` | Fill › Danger hover | `tint` (default), `neutral` | A destructive row's hover, highlight and pressed plate (Menu, Context menu): the row's own plate turned to the danger hue at the same lightness, or the grey plate every row takes (`row-danger-tint`, 1 or 0) |
 | `selected-tint` | Fill › Selected tint | `none` (default), `tint`, `neutral` | A selected container's fill under its stroke: nothing, the accent's faint surface (half strength in dark), or the row's selected wash (`selected-tint`) |
 
 - Hover, selected and pressed are built on each other, so their order holds at every combination (`color/layers.ts`

@@ -37,6 +37,7 @@ function gallerySpecimenTable() {
     ],
     "color-picker": [
       { id: "default", title: "Default", demo: "GalleryColorPicker" },
+      { id: "swatches", title: "Saved colors", demo: "GalleryColorPickerSwatches" },
       { id: "views", title: "Views", demo: "GalleryColorPickerViews" },
       { id: "view-grid", title: "Grid", demo: "GalleryColorPickerGrid" },
       { id: "view-sliders", title: "Sliders", demo: "GalleryColorPickerSliders" },

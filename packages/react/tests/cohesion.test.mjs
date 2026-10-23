@@ -494,3 +494,34 @@ test('the pressed fill is re-derived on every ground and every setting scope', (
     assert.ok(pressed.includes(`[data-area-${setting}]`), `a scope setting ${setting} keeps its parent's pressed fill`);
   }
 });
+
+test('a destructive row paints every plate from Danger hover and keeps its ink (owner 2026-10-23)', () => {
+  // axes/states.ts: the danger row's hover, highlight and pressed plates mix toward the danger hue by the setting's
+  // switch, so Neutral is exactly the shared plates and Tint keeps their lightness. The ink is never restated per state.
+  const plates = rules.filter(rule => rule.selector.includes('.area-menu__item--danger') && /background-color/.test(rule.body));
+  for (const state of [':hover', ':focus-visible', ':active']) {
+    const rule = plates.find(rule => rule.selector.includes(state));
+    assert.ok(rule, `no danger plate for ${state}`);
+    assert.match(rule.body, /background-color:\s*var\(--_danger-(hover|pressed)\)/, `${state}: the plate is not Danger hover's`);
+    assert.doesNotMatch(rule.body, /(^|[;\s{])color:/, `${state}: the ink changes with the state`);
+  }
+  const base = ruleFor('.area-menu__item--danger')?.body ?? '';
+  assert.match(base, /--area-row-danger-tint/);
+  assert.match(base, /--_danger-hover:\s*color-mix\(in oklab,\s*var\(--area-bg-component-hover\)/);
+  assert.match(base, /--_danger-pressed:\s*color-mix\(in oklab,\s*var\(--area-bg-component-pressed\)/);
+});
+
+test('a list opened from a field takes the field\'s corner; Menus keep the list shape (owner 2026-10-23)', () => {
+  // surface.css "A list opened from a field", navigation.css (Select's picker): rows at the field's corner from its own
+  // --_radius and --_height, the list 4 rounder. One formula for the four families.
+  const shared = rules.find(rule => rule.selector.includes('.area-custom-select__listbox') && rule.selector.includes('.area-combobox__listbox') && rule.selector.includes('.area-tag-picker__listbox') && rule.body.includes('--area-radius-list-row'));
+  assert.ok(shared, 'no shared rule for field lists');
+  const picker = rules.find(rule => rule.selector.includes('::picker(select)') && rule.body.includes('--area-radius-list-row'));
+  assert.ok(picker, "Select's picker does not take the field's corner");
+  const formula = body => body.match(/--area-radius-list-row:\s*([^;]+);/)?.[1].trim();
+  assert.equal(formula(picker.body), formula(shared.body), "Select's picker and the other field lists differ");
+  assert.match(formula(shared.body), /var\(--_radius,[^)]*\)/);
+  assert.match(formula(shared.body), /var\(--_height,/);
+  const menu = ruleFor('.area-menu')?.body ?? '';
+  assert.doesNotMatch(menu, /--area-radius-list-row:/, 'Menu re-points its own row corner');
+});

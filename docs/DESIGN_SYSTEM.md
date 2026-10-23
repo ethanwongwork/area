@@ -122,6 +122,10 @@ neutral ghost Buttons):
 | Selected, current | `bg-component-active`, one step firmer, so selection survives hover | `bg-active` |
 | Pressed | `bg-component-pressed`, one step further, so every click shows | `bg-pressed` |
 
+A destructive row (a Menu's "Delete") keeps its red label in every state, and its plates follow Danger hover: at Tint
+(the default) each plate keeps its neutral lightness in the danger hue, so the red ink solved for the neutral plate holds
+on it; at Neutral it takes the plates above (`axes/states.ts`, owner 2026-10-23).
+
 Use the translucent twins on grounds a component cannot know (a segmented track, a swatch
 cell) and for controls nested on a row. The pressed fill follows every ground and Layers
 setting (`packages/styles/src/layers.css`). How dark each plate is comes from the Fill settings (Hover, Selected,
@@ -413,10 +417,15 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   raised, `soft` recessed), with one edge per boundary. **Stack** spaces children by role
   (related, group, section) and never wider than the inset of the Surface it sits in
   ([Surface](specs/surface.md), [Stack](specs/stack.md)).
-- **Rows in floating lists** (Menu, Combobox, Command palette, Select picker) use
+- **Rows in floating lists** (Menu, Context menu, Command palette) use
   `radius-list-row`: the surface less its inset, no rounder than a medium Button, and a pill
   only at Pill. The list uses `radius-list` (rows + inset). Standalone rows (Nav, Tree view)
   use `radius-row`.
+- **A list opened from a field** (Select, Custom select, Combobox, Tag picker) takes the field's
+  corner: its rows are the field's corner (short of a pill before Pill), the list 4 rounder, or
+  the rows' own corner more below 4, so it reads as the field's own list and goes square with it
+  (owner 2026-10-23; Notion: field 6, menu 10, rows 6). It re-points `radius-list-row` and
+  `radius-list` on the list (`surface.css`, `navigation.css`).
 - **Bars and keycaps.** A one-line bar (Alert banner, Toast) and Tooltip take the large
   control corner. Multiline ones are surfaces. Kbd is a 24px box's corner at every size.
 - **Pills are a set** (`data-area-pills`), not a radius.

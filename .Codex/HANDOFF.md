@@ -1,6 +1,18 @@
 # Handoff
 
-## Current state (2026-10-22)
+## Current state (2026-10-23)
+
+- **Uncommitted, `claude/semantic-color-hover-states-c30c80`.** New setting Danger hover (Fill; `axes/states.ts`,
+  `row-danger-tint`): `tint` (default, owner 2026-10-23) turns a Menu danger row's hover and pressed plates to the danger
+  hue at the neutral plates' lightness; `neutral` is the old grey. The danger red's solve now restates the real pressed
+  fill (was the 2026-10-16 3%/7% one: 4.18:1 at light warm, Contrast 8). Swept light 4.62:1 worst; dark extremes (ground
+  24, layers 8, heavy fills) fail for tint and neutral alike, since even white misses 4.5:1 there.
+  Same branch: Color picker pass (owner 2026-10-23): Default tile is the editor alone, Saved colors its own tile; saved
+  chips md (20 in 28, nine across) aligned 16 to the area and the bottom; save button on the header's end inset;
+  sliders-view tracks one rhythm apart; header rule inset so actions centre on whole pixels. Before committing, merge
+  origin/main (PR #152 rewrote `--_danger-fill-*` in surface.css and touched menu.md, THEMING, DESIGN_SYSTEM, cohesion).
+  Same branch: lists opened from a field (Select, Custom select, Combobox, Tag picker) take the field's corner: rows at
+  the field's corner, list 4 rounder (sm 10/6, md 12/8, lg 14/10); Menus keep 12/8 (surface.css, navigation.css).
 
 - **PR (this branch), `claude/neutral-accent-theme-ca527b`.** Every detail is a choice (PRINCIPLES.md 7, GOVERNANCE.md
   option gates; owner 2026-10-22). New settings: Tint hue / Light tint / Dark tint / Text tint (`axes/tint.ts`, custom

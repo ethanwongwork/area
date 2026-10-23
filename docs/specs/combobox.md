@@ -89,8 +89,8 @@ chevron as a 24px action whose 16 glyph lands 6 / 8 / 12 from the end at sm / md
 same place as Select's chevron and Input's trailing icons, centred vertically. Figma's 11px
 text is compact density. Open list: ChatGPT's settings dropdown menu (`chatgpt--settings-select-menu--open`)
 is 172 wide, 10 padding, corner 16, 90% white, 2 below its trigger, two-line rows 50 tall with a
-12 corner; Area's listbox is Menu's (4 padding, corner 12, 32 rows with an 8 corner, 4 below the
-field), matched to Notion's menu when Menu was approved. No change. Unverified: dark theme.
+12 corner; Area's listbox is Menu's (4 padding, 32 rows, 4 below the field) with the field's corner:
+rows at the Input's corner, the list 4 rounder (12 / 8 at md, 10 / 6 at sm; owner 2026-10-23). Unverified: dark theme.
 
 ## Motion and interaction, 2026-10-07
 
@@ -142,6 +142,7 @@ commit with a filtered list (rows held while closing).
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: the list keeps its rows while it fades out (a commit no longer re-lists every option mid-exit); field and list motion stay Input's and Menu's. "Motion and interaction, 2026-10-07".
 - 2026-10-08 · owner: recommendations accepted (custom-select.md Q3–Q7) → `data-selected` no longer set on options (Combobox.tsx), so the chosen row is the check alone and highlight is the only plate; the field's end padding is the chevron inset less half the action's free space (`inset.css`: sm 3 → 5, glyph 6 → 8 from the edge; md and lg unchanged; compact sm 24 → 7, glyph 8); toggle glyph `input-chevron` (combobox.css; rgb(131) / dark rgb(147)). Verified in the gallery (computed rects, light/dark, default/compact; chosen Geist row transparent when not highlighted). Note: in dark, the soft field's pressed toggle plate (`bg-active` over #28) puts the chevron at about 2.6:1 for the press only; rest, hover and every opaque field fill are ≥ 3:1.
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
+- 2026-10-23 · owner, 2026-10-23: "is it supposed to be much rounder than the actual input? im okay with it being a bit rounder but it seems drastic" → a list opened from a field takes the field's corner (surface.css, "A list opened from a field"; navigation.css for Select's picker): rows at the field's corner, the list 4 rounder (or, below a 4 corner, the rows' own corner more), rows short of a pill before Pill. Default: sm 6 → list 10 / rows 6 (Notion's field 6, menu 10, rows 6; was 12 / 8, twice the field), md 8 → 12 / 8 (unchanged), lg 10 → 14 / 10. Menus and Context menus keep 12 / 8. Swept every size × Radius 0–14 and Pill × density 28/32/36 × pill fields: Select, Custom select, Combobox and Tag picker agree at every combination.
 
 ## Review note, 2026-10-22 (round 67)
 
