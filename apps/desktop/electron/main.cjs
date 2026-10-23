@@ -110,6 +110,19 @@ ipcMain.on("area:theme", (event, theme) => {
   BrowserWindow.fromWebContents(event.sender)?.setBackgroundColor(GROUND[nativeTheme.themeSource]);
 });
 
+/* The chosen ground (Light ground, Dark ground), as the page paints it, so a resize shows the app's own page. */
+ipcMain.on("area:ground", (event, color) => {
+  if (/^#[0-9a-f]{6}$/i.test(String(color))) BrowserWindow.fromWebContents(event.sender)?.setBackgroundColor(String(color));
+});
+
+/* The traffic lights centred on the Titlebar, whatever type and density make its height: Cursor's y = floor((bar - 14) / 2)
+   (12 at the 39 of 13 Compact). x stays 13, the start Titlebar's macOS reserve (83 = 13 + 54 + 16) is measured from. */
+ipcMain.on("area:titlebar", (event, height) => {
+  const bar = Number(height);
+  if (process.platform !== "darwin" || !(bar >= 14 && bar <= 200)) return;
+  BrowserWindow.fromWebContents(event.sender)?.setWindowButtonPosition({ x: 13, y: Math.floor((bar - 14) / 2) });
+});
+
 app.setName("Area");
 app.whenReady().then(() => {
   protocol.handle("area-brand", serveBrand);

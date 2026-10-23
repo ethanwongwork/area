@@ -27,10 +27,25 @@ test('the kind follows the content: an image covers, a colour paints, a group ma
   assert.match(group, /area-asset-card__mosaic" aria-hidden="true"/);
 });
 
-test('the deprecated caption is ignored and captionProps still reach the head', () => {
+// 2026-10-22: caption places the head (above, the default, or below the frame); captionProps still reach the head.
+test('caption places the head and captionProps still reach the head', () => {
+  assert.match(render(h(AssetCard, { name: 'Title' })), /area-asset-card--above/);
   const html = render(h(AssetCard, { name: 'Title', caption: 'below', captionProps: { 'data-host': 'x' } }));
-  assert.doesNotMatch(html, /area-asset-card--below|area-asset-card--inside/);
+  assert.match(html, /area-asset-card--below/);
+  assert.doesNotMatch(html, /area-asset-card--inside/);
   assert.match(html, /area-asset-card__head" data-host="x"/);
+});
+
+test('basic, fill and borderless are classes on the card; a basic frame declares the card\'s fill', () => {
+  const html = render(h(AssetCard, { name: 'Title', container: 'basic', fill: 'raised', borderless: true }));
+  assert.match(html, /area-asset-card--basic/);
+  assert.match(html, /area-asset-card--raised/);
+  assert.match(html, /area-asset-card--borderless/);
+  assert.match(html, /area-asset-card__frame" data-area-ground="raised"/);
+  assert.match(render(h(AssetCard, { name: 'Title', container: 'basic' })), /area-asset-card__frame" data-area-ground="tile"/);
+  // A framed card's frame is the page tone (2026-10-22, the layer map), so a raised component inside lifts from it.
+  assert.match(render(h(AssetCard, { name: 'Title', media: 'x' })), /area-asset-card__frame" data-area-ground="page"/);
+  assert.match(render(h(AssetCard, { name: 'Title' })), /area-asset-card--recessed/);
 });
 
 test('in a grid each card is an option named by its name', () => {

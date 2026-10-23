@@ -5,7 +5,8 @@
  *                 (white), 99% 98% 97% 96% 95%, etc").
  *   ground-dark   the dark page's lightness: 0 (black), 8 (Area's near-black #020202, the default), 12 to 24 in 2%
  *                 steps (below 12 a 1% step doesn't show on a screen).
- *   layers-light  layer contrast in light, 0 (Flat) to 8: how far cards, menus and sidebars sit from the page, and
+ *   layers-light  layer contrast in light, 0 (Flat) to 8 in five steps (0, 2, 4, 6, 8; owner, 2026-10-22, was every whole
+ *                 number): how far cards, menus and sidebars sit from the page, and
  *   layers-dark   controls from their ground; the same in dark. 4 is the default for both; light 100 + 4 is Area's
  *                 light theme as it was. One setting per theme since 2026-10-17 (owner: "the most possible
  *                 customization"); it was one `layers` setting for both.

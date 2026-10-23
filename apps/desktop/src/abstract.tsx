@@ -363,8 +363,14 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
         </Window>
       )];
     case "neutral":
+    case "tint-hue":
+    case "tint-light":
+    case "tint-dark":
+    case "ink-tint":
     case "layers-light":
     case "layers-dark":
+    case "card-tone-light":
+    case "card-tone-dark":
       return [FILL.window, (
         <Window>
           <div className="lang-layers">

@@ -14,7 +14,7 @@ export function Facts({ items, label }: { items: ReadonlyArray<Fact | null | fal
   return (
     // Flush: rows on the panel's own column, no frame round them, as Figma's and Framer's
     // inspectors draw their properties (owner, 2026-10-14).
-    <Table size="md" flush aria-label={label}>
+    <Table size="md" aria-label={label}>
       <tbody>
         {items.filter((item): item is Fact => Boolean(item)).map(([term, value], index) => (
           <tr key={index}>

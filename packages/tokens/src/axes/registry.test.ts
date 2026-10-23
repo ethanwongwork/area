@@ -25,7 +25,11 @@ describe("axis registry", () => {
     expect(AXES.map((a) => a.id).sort()).toEqual(
       ["accent", "action", "density", "easing", "elevation", "ground-dark", "ground-light", "layers-dark", "layers-light", "motion", "neutral", "radius", "selection", "shadow-color", "shadow-field", "shadow-light", "shadow-rest", "shadow-resting", "shadow-size", "shadow-softness", "stroke", "surface", "theme", "type",
         // Interaction states, 2026-10-21 (axes/states.ts, depth.ts).
-        "focus-ring", "stroke-hover", "selected-stroke", "selected-tint", "fill-hover", "fill-selected", "fill-pressed", "shadow-hover"].sort(),
+        "focus-ring", "stroke-hover", "selected-stroke", "selected-tint", "fill-hover", "fill-selected", "fill-pressed", "shadow-hover",
+        // Tint, 2026-10-22 (axes/tint.ts).
+        "tint-hue", "tint-light", "tint-dark", "ink-tint",
+        // Card tone, 2026-10-22 (axes/card-tone.ts).
+        "card-tone-light", "card-tone-dark"].sort(),
     );
   });
 });

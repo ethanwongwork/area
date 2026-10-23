@@ -14,7 +14,7 @@ export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "sh
 export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | DepthLever;
+  axis: "theme" | "neutral" | "tint-hue" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | DepthLever;
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -62,6 +62,12 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   // from it. Neutral and Accent name a scale, a Select each (eleven accents). Action and Selection are two words each, a Segmented, as Mode. An accent shows on a component
   // only where Action or Selection is Accent (and in focus rings and links), which Accent's hint says.
   { axis: "neutral", kind: "select", label: label("neutral"), hint: "The grey every surface, edge and text is drawn in", defaultValue: DEFAULT_AXES.neutral, items: named("neutral") },
+  // Tint (axes/tint.ts, owner 2026-10-22: "they pick the exact shade they want"): the grays' hue and, per mode, their
+  // strength, Auto following Neutral; and Text tint, how much of it text takes. Selects, their options from the registry.
+  { axis: "tint-hue", kind: "select", label: label("tint-hue"), hint: "The hue of the grays: Auto follows Neutral, or any hue in 5° steps", defaultValue: DEFAULT_AXES["tint-hue"], items: AXIS_PRESETS["tint-hue"].map(value => ({ value, label: value === "auto" ? "Auto" : `${value}°` })) },
+  { axis: "tint-light", kind: "select", label: label("tint-light"), hint: "In light: how strongly the grays take the hue, Auto (Neutral's) or 0 (None) to 8", defaultValue: DEFAULT_AXES["tint-light"], items: AXIS_PRESETS["tint-light"].map(value => ({ value, label: value === "auto" ? "Auto" : value === "0" ? "0 (None)" : value })) },
+  { axis: "tint-dark", kind: "select", label: label("tint-dark"), hint: "In dark: how strongly the grays take the hue, Auto (Neutral's) or 0 (None) to 8", defaultValue: DEFAULT_AXES["tint-dark"], items: AXIS_PRESETS["tint-dark"].map(value => ({ value, label: value === "auto" ? "Auto" : value === "0" ? "0 (None)" : value })) },
+  { axis: "ink-tint", kind: "select", label: label("ink-tint"), hint: "How much of the tint body and muted text take, 0 (None) to 4 (Full)", defaultValue: DEFAULT_AXES["ink-tint"], items: AXIS_PRESETS["ink-tint"].map(value => ({ value, label: value === "0" ? "0 (None)" : value === "4" ? "4 (Full)" : value })) },
   { axis: "accent", kind: "select", label: label("accent"), hint: "Shows where Action or Selection is Accent, and in focus rings and links", defaultValue: DEFAULT_AXES.accent, items: named("accent") },
   // The Layers (axes/layers.ts, owner 2026-10-16; docs/research/layers-2026-10-16): the light and the dark page's
   // lightness, and how far cards, menus, sidebars and control fills sit from it. Numbers, as Elevation; Selects, their
@@ -70,6 +76,10 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "ground-dark", kind: "select", label: label("ground-dark"), hint: "The dark page's lightness, 0 (black) to 24", defaultValue: DEFAULT_AXES["ground-dark"], items: numbered("ground-dark", { "0": "0 (Black)" }) },
   { axis: "layers-light", kind: "select", label: label("layers-light"), hint: "In light: how far cards, menus, sidebars and control fills sit from the page, 0 (Flat) to 8", defaultValue: DEFAULT_AXES["layers-light"], items: numbered("layers-light", { "0": "0 (Flat)" }) },
   { axis: "layers-dark", kind: "select", label: label("layers-dark"), hint: "In dark: how far cards, menus, sidebars and control fills sit from the page, 0 (Flat) to 8", defaultValue: DEFAULT_AXES["layers-dark"], items: numbered("layers-dark", { "0": "0 (Flat)" }) },
+  // Card tone (axes/card-tone.ts, owner 2026-10-22): cards and asset cards against the page, per mode, Auto keeping each
+  // container's own tone, else −4 (darker) to +4 (lighter); 0 matches the page.
+  { axis: "card-tone-light", kind: "select", label: label("card-tone-light"), hint: "In light: cards and asset cards against the page, Auto or −4 (darker) to +4 (lighter)", defaultValue: DEFAULT_AXES["card-tone-light"], items: AXIS_PRESETS["card-tone-light"].map(value => ({ value, label: value === "auto" ? "Auto" : value === "0" ? "0 (Page)" : Number(value) > 0 ? `+${value}` : value })) },
+  { axis: "card-tone-dark", kind: "select", label: label("card-tone-dark"), hint: "In dark: cards and asset cards against the page, Auto or −4 (darker) to +4 (lighter)", defaultValue: DEFAULT_AXES["card-tone-dark"], items: AXIS_PRESETS["card-tone-dark"].map(value => ({ value, label: value === "auto" ? "Auto" : value === "0" ? "0 (Page)" : Number(value) > 0 ? `+${value}` : value })) },
   { axis: "action", kind: "segmented", label: label("action"), hint: "The colour of primary actions", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: label("selection"), hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   // Increased contrast (docs/CONTRAST.md): not a registry axis but the same kind of scoped setting,
@@ -77,7 +87,8 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   // or More under Increase contrast), as it does for the app; it is the default.
   // Medium goes half way (owner, 2026-10-18: More "seems very extreme"; Material 3's Standard / Medium / High).
   // A Select, as Density: "Standard" needs 56 of text in a 32 segment beside the label.
-  { axis: "contrast", kind: "select", label: label("contrast"), hint: "System follows the OS preference; Medium and More strengthen every edge, focus and state, More to 3:1", defaultValue: "system", items: [{ value: "system", label: "System" }, { value: "standard", label: "Standard" }, { value: "medium", label: "Medium" }, { value: "more", label: "More" }] },
+  // Nine levels since 2026-10-22 (owner: "more granularity"): 0 (Standard) to 8 (More), each an eighth of the way.
+  { axis: "contrast", kind: "select", label: label("contrast"), hint: "System follows the OS preference; 1 to 8 strengthen every edge, focus and state, 8 to 3:1", defaultValue: "system", items: [{ value: "system", label: "System" }, ...Array.from({ length: 9 }, (_, n) => ({ value: String(n), label: n === 0 ? "0 (Standard)" : n === 8 ? "8 (More)" : String(n) }))] },
   // Type size and density, separate (owner, 2026-10-12; axes/type-size.ts, axes/density.ts). Five
   // two-digit sizes fit a Segmented. Density is one number since 2026-10-14 (axes/density.ts), the medium
   // Button's height at type 14, 28 / 32 / 36; a Select, as Radius is, since "36 (Comfortable)" does not fit a

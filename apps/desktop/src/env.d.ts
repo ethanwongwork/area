@@ -3,6 +3,10 @@ interface AreaDesktop {
   platform: string;
   /** Matches the window's native chrome (traffic lights, vibrancy) to the app's theme. */
   setTheme(theme: "light" | "dark"): void;
+  /** The page ground as #rrggbb, for the window behind the page. Absent in an older shell. */
+  setGround?(color: string): void;
+  /** The Titlebar's height, so the traffic lights stay centred on it (macOS). */
+  setTitlebar?(height: number): void;
   /** Shows a file of the Brand library (a path inside it, "originals/<id>.jpg") in Finder. */
   revealBrand?(path: string): void;
 }

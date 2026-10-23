@@ -44,13 +44,21 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
    */
   interactive?: boolean;
   /**
-   * framed (the default): the card. containerless: no card at rest (no fill, edge or shadow), the head and the asset on
-   * the page's own ground, in the same places. A component's frame shows its edge on hover and selection; an image or a
-   * group is its own surface and the states paint it.
+   * framed (the default): the card. basic: one surface, the head and the asset on the card's fill, no frame of its own.
+   * containerless: no card at rest (no fill, edge or shadow), the head and the asset on the page's own ground, in the
+   * same places. A component's frame shows its edge on hover and selection; an image or a group is its own surface and
+   * the states paint it.
    */
-  container?: "framed" | "containerless";
-  /** square (the default): the frame is 1:1, or an image's own ratio, and the card adds its head. hug: a component's frame takes its own height. */
-  aspect?: "square" | "hug";
+  container?: "framed" | "basic" | "containerless";
+  /** above (the default): the head, its name and controls, over the frame. below: under it. */
+  caption?: "above" | "below";
+  /** recessed (the default): the card in bg-subtle. raised: the surface, white in light. */
+  fill?: "recessed" | "raised";
+  /** No edge at rest; hover and selection still draw theirs. */
+  borderless?: boolean;
+  /** square (the default): the frame is 1:1, or an image's own ratio, and the card adds its head. landscape: the same at
+   * 5:4. hug: a component's frame takes its own height. */
+  aspect?: "square" | "landscape" | "hug";
   /** An image's width over its height, so it holds its shape before it loads (a waterfall's cards). */
   mediaRatio?: number;
   /** The frame's content as the host lays it out, in place of `media` (an app's specimen stage). */
@@ -61,8 +69,6 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
   headProps?: PartProps;
   /** @deprecated Use `headProps`. */
   captionProps?: PartProps;
-  /** @deprecated The name is always in the head, above the frame (round 55's designs); ignored. */
-  caption?: "inside" | "below";
 }
 
 const image = (source: string, alt: string, ratio?: number) => (
@@ -71,7 +77,7 @@ const image = (source: string, alt: string, ratio?: number) => (
 const join = (...names: Array<string | undefined>) => names.filter(Boolean).join(" ");
 
 export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardProps>(function AssetCard(
-  { name, meta: _meta, actions, media, mediaAlt = "", color, group, selected, interactive, caption: _caption, container = "framed", aspect = "square",
+  { name, meta: _meta, actions, media, mediaAlt = "", color, group, selected, interactive, caption = "above", fill = "recessed", borderless, container = "framed", aspect = "square",
     mediaRatio, children, frameProps, headProps, captionProps, className, style, ...rest }, ref,
 ) {
   const layout = group ? "group" : color !== undefined && children === undefined ? "color" : typeof media === "string" && children === undefined ? "image" : "asset";
@@ -79,15 +85,16 @@ export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardPro
   const { className: frameClass, ...frameRest } = frameProps ?? {};
   const { className: headClass, ...headRest } = headProps ?? captionProps ?? {};
   return (
-    <div ref={ref} className={assetCardVariants({ layout, container, aspect, interactive }, className)} data-selected={selected ? "" : undefined}
+    <div ref={ref} className={assetCardVariants({ layout, container, caption, fill, aspect, interactive, borderless }, className)} data-selected={selected ? "" : undefined}
       style={layout === "color" ? { ...style, "--_asset-color": color } as CSSProperties : style} {...rest}>
       <div className={join(assetCardVariants.element("head"), headClass)} {...headRest}>
         <span className={assetCardVariants.element("name")}>{name}</span>
         {actions ? <div className={assetCardVariants.element("actions")}>{actions}</div> : null}
       </div>
-      {/* A frame paints the raised ground, so a component inside steps its fills from it (layers.css); a containerless
-          one paints none, so the component steps from the page's ground. */}
-      <div className={join(assetCardVariants.element("frame"), frameClass)} data-area-ground={container === "containerless" ? undefined : "raised"} {...frameRest}>
+      {/* A frame paints the page tone, so a component inside steps its fills from the page and a raised one lifts from it
+          (layers.css); a basic card's frame paints nothing, so it declares the card's own ground (the tile tone, or raised);
+          a containerless one, none, the page's ground under it. */}
+      <div className={join(assetCardVariants.element("frame"), frameClass)} data-area-ground={container === "containerless" ? undefined : container === "basic" ? (fill === "raised" ? "raised" : "tile") : "page"} {...frameRest}>
         {layout === "group" ? (
           <div className={assetCardVariants.element("mosaic")} aria-hidden="true">
             {cells.map((cell, index) => (
@@ -199,7 +206,7 @@ export const AssetGrid = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGridPro
   );
 });
 
-export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | "textValue" | "color">, Pick<AssetCardProps, "name" | "meta" | "actions" | "media" | "mediaAlt" | "mediaRatio" | "color" | "group" | "caption" | "container" | "aspect" | "children" | "frameProps" | "headProps" | "captionProps"> {
+export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | "textValue" | "color">, Pick<AssetCardProps, "name" | "meta" | "actions" | "media" | "mediaAlt" | "mediaRatio" | "color" | "group" | "caption" | "fill" | "borderless" | "container" | "aspect" | "children" | "frameProps" | "headProps" | "captionProps"> {
   /** The text typeahead matches; the name when it is a string. */
   textValue?: string;
 }
@@ -207,7 +214,7 @@ export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | 
 /** One card in an AssetGrid: an option whose content is an AssetCard. A waterfall's cards hug; the grid's container is
     every card's unless a card sets its own. */
 export const AssetGridItem = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGridItemProps>(function AssetGridItem(
-  { name, meta, actions, media, mediaAlt, mediaRatio, color, group, caption, container, aspect, children, frameProps, headProps, captionProps, textValue, value, className, onDoubleClick, ...rest }, ref,
+  { name, meta, actions, media, mediaAlt, mediaRatio, color, group, caption, fill, borderless, container, aspect, children, frameProps, headProps, captionProps, textValue, value, className, onDoubleClick, ...rest }, ref,
 ) {
   const grid = useContext(GridContext);
   return (
@@ -219,7 +226,7 @@ export const AssetGridItem = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGri
       onDoubleClick={event => { onDoubleClick?.(event); if (!event.defaultPrevented && !rest.disabled) grid.open?.(value); }}
       {...rest}
     >
-      <AssetCard name={name} meta={meta} actions={actions} media={media} mediaAlt={mediaAlt} mediaRatio={mediaRatio} color={color} group={group} caption={caption}
+      <AssetCard name={name} meta={meta} actions={actions} media={media} mediaAlt={mediaAlt} mediaRatio={mediaRatio} color={color} group={group} caption={caption} fill={fill} borderless={borderless}
         container={container ?? grid.container} aspect={aspect ?? (grid.layout === "waterfall" ? "hug" : "square")}
         frameProps={frameProps} headProps={headProps ?? captionProps}>{children}</AssetCard>
     </ListBoxItem>

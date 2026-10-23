@@ -467,3 +467,30 @@ test('stacked row plates sit one fixed break apart at every density (owner 2026-
     assert.ok(rule, `.${family} stacks its rows ui-row-gap apart`);
   }
 });
+
+// layers.css: the pressed fill reads the selected fill, the ink and the fill steps, and a property that reads another
+// resolves where it is declared. So it is restated on every ground that re-points the fills and on every element that
+// sets a setting it reads (the layer map, 2026-10-22: a scoped page and half the surfaces kept the root's press).
+test('the pressed fill is re-derived on every ground and every setting scope', () => {
+  const pointer = name => rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${name})`)).map(rule => rule.selector);
+  const pressed = rules.filter(rule => /--area-bg-component-pressed:\s*light-dark/.test(rule.body)).map(rule => rule.selector).join(',');
+  assert.ok(pressed, 'no rule derives the pressed fill');
+  // Each compound in a selector list, with :where() lists opened: split on commas at depth 0 only.
+  const split = list => { const out = []; let depth = 0, start = 0;
+    for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
+    return [...out, list.slice(start)].map(part => part.trim()).filter(Boolean); };
+  const parts = selector => split(selector).flatMap(part => /^:where\(.*\)$/.test(part) ? parts(part.slice(7, -1)) : [part]);
+  for (const ground of ['raised', 'page', 'recessed', 'card', 'tile']) {
+    for (const selector of pointer(ground)) for (const part of parts(selector)) {
+      if (part.startsWith('[data-area-ground=')) continue;
+      // The native Select's picker is a pseudo-element (it cannot join a list) and its options never press
+      // (navigation.css: hover and focus plates only).
+      if (part === '.area-select::picker(select)') continue;
+      assert.ok(pressed.includes(part), `${part} re-points the fills (${ground}) but does not re-derive the pressed fill`);
+    }
+  }
+  assert.match(pressed, /\[data-area-ground\]/);
+  for (const setting of ['theme', 'neutral', 'ground-light', 'ground-dark', 'layers-light', 'layers-dark', 'fill-hover', 'fill-selected', 'fill-pressed']) {
+    assert.ok(pressed.includes(`[data-area-${setting}]`), `a scope setting ${setting} keeps its parent's pressed fill`);
+  }
+});

@@ -27,12 +27,16 @@ named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carrie
 |---|---|---|
 | `theme` | `light` (default), `dark` | Colour polarity and `color-scheme`, including native controls |
 | `neutral` | `neutral` (default), `cool`, `warm` | The grey cast of every neutral role |
-| `accent` | 11 hues, `blue` (default) | The chosen colour. State marks, selected edges and the focus ring take it while Selection is Accent; solid actions while Action is Accent |
+| `accent` | 11 hues, `blue` (default) | The chosen colour. State marks, selected edges, the focus ring and selected text take it while Selection is Accent; solid actions while Action is Accent |
 | `action` | `neutral` (default), `accent` | Whether committing actions (solid Buttons) paint the accent |
-| `selection` | `neutral`, `accent` (default since 2026-10-22) | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards) and the focus ring paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |
+| `selection` | `neutral`, `accent` (default since 2026-10-22) | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards), the focus ring and selected text paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |
 | `ground-light` | `100` (White, default) … `90` | The light page's OKLCH lightness, in 1% steps |
 | `ground-dark` | `0` (Black), `8` (default, #020202), `12` … `24` | The dark page's lightness |
-| `layers-light`, `layers-dark` | `0` (Flat) … `8`, `4` (default) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
+| `tint-hue` | `auto` (default: the Neutral setting's own hue), `0` … `355` in 5° steps | The hue the grays lean toward, one for both modes |
+| `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `8`, each step 0.005 of OKLCH chroma | How strongly the grays take the hue, per mode. Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable") |
+| `ink-tint` | `0` (None) … `4` (Full) in quarters, `2` (default) | How much of the tint body and muted text take. Text also moves 0.25 × the strength away from its ground, so it keeps 4.5:1 on every hue (`INK_MARGIN`, docs/research/custom-neutral-2026-10-22/) |
+| `card-tone-light`, `card-tone-dark` | `auto` (default: each container's own tone, a Card raised, an Asset card recessed), `-4` (darker) … `0` (the page) … `+4` (lighter), a light step 0.012 L, a dark one 0.03 | Cards and asset cards against the page, per mode; their controls step from it and text is solved against the darkest (light) or lightest (dark) card, so every step reads (`layers.test.ts`, "every card tone is usable"). Menus, popovers and dialogs stay raised |
+| `layers-light`, `layers-dark` | `0` (Flat), `2`, `4` (default), `6`, `8` (five steps since 2026-10-22; was every whole number) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
 
 The action and selection settings combine:
 
@@ -76,7 +80,7 @@ headings, **Stroke** and **Shadow**:
 | Setting | Inspector label | Values (default) | What it sets |
 |---|---|---|---|
 | `surface` | Stroke › Width | `0` (Flat), `0.5`, `1` (default), `1.5`, `2` px | The frame of cards, panels and floating surfaces (`frame-width`, read as `border-width`) |
-| `stroke` | Stroke › Strength | `0` (None) … `8`, `4` (default) | How dark every stroke is, its distance from its ground |
+| `stroke` | Stroke › Strength | `0` (None) … `8` in half steps (since 2026-10-22), `4` (default) | How dark every stroke is, its distance from its ground; a style, where Contrast is the accessibility layer |
 | `shadow-rest` | Stroke › Rest shadow | `0` (None, default) … `8` | `shadow-edge`, a subtle edge round the same surfaces, with the line or instead of it |
 | `elevation` | Shadow › Floating | `0` (Flat) … `8`, `3` (default) | The Menu's shadow strength in percent: tooltip, float and modal roles |
 | `shadow-resting` | Shadow › Resting | `0` … `8`, `3` (default) | Cards, panels and raised thumbs at rest: one tight layer, `0 1px 2px -1px`, 8% at 3 (ChatGPT's sm) |
@@ -131,9 +135,12 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 
 **Not axes**
 
-- `data-area-contrast`: `standard`, `medium` or `more` (`--area-contrast-more` 0, 0.5, 1).
-  With no attribute it follows the OS `prefers-contrast`. The Inspector offers System
-  (default), Standard, Medium and More ([Contrast](CONTRAST.md)).
+- `data-area-contrast`: `0` (Standard) … `8` (More), `--area-contrast-more` an eighth a level (nine levels since
+  2026-10-22); `standard`, `medium` and `more` stay as aliases of 0, 4 and 8. With no attribute it follows the OS
+  `prefers-contrast`. The Inspector offers System (default) and the nine levels ([Contrast](CONTRAST.md)). It is the
+  accessibility layer, apart from Stroke strength (a style): it pulls every edge toward the 3:1 stroke, adds boundaries
+  where the soft style has none (frames at Stroke width 0, soft fields and buttons, the Switch thumb), puts the focus
+  ring on fields, and follows the OS.
 - `data-area-material` (`axes/material.ts`, `styles/material.css`):
   - a bundle (`none`, `glass`, `tactile`, `jelly`, `soft`, `aero`, `glow`);
   - per-lever overrides `data-area-material-<lever>` (light angle, gradient, sheen,

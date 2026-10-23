@@ -92,6 +92,14 @@ looks. Options are kept and their effect is shown, rather than cut to simplify (
 *Test:* every value of every setting renders correctly across the whole gallery.
 Contrast-failing options are never offered.
 
+**Every detail is a choice** (owner, 2026-10-22: "the key with this design system is i want everything to be part of a
+series of choices. any small detail, i want the user to be able to choose from as many viable options as they want").
+Where a detail could reasonably go more than one way (how tinted the text is, how far layers step, how a card frames its
+asset), it is a setting with every viable option, not a value fixed in the code. "Viable" is the only limit: an option
+must render correctly with every other setting and clear contrast, so a rule that keeps text readable (the tint's ink
+margin) is a guarantee, not a choice. Every such setting is considered in light and in dark: a value that differs by
+mode is set apart per mode (Ground, Layers, Tint strength), and one that does not is shared (Tint hue, Text tint).
+
 ### 8. Axes stay independent
 
 Size, tone, emphasis, state, layout and composition are separate axes, each with its own

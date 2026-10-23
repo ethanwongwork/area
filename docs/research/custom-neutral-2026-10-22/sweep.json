@@ -1,0 +1,271 @@
+{
+ "hues": [
+  0,
+  15,
+  30,
+  45,
+  60,
+  75,
+  90,
+  105,
+  120,
+  135,
+  150,
+  165,
+  180,
+  195,
+  210,
+  225,
+  240,
+  255,
+  270,
+  285,
+  300,
+  315,
+  330,
+  345
+ ],
+ "chromas": [
+  0,
+  0.005,
+  0.01,
+  0.015,
+  0.02,
+  0.025,
+  0.03,
+  0.04,
+  0.05,
+  0.06,
+  0.08
+ ],
+ "result": {
+  "light": {
+   "0": {
+    "max": 0.04,
+    "firstFailure": "0.05: 98/0 muted on a hovered mark on page (+15)",
+    "worstAtMax": 4.59
+   },
+   "15": {
+    "max": 0.03,
+    "firstFailure": "0.04: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.58
+   },
+   "30": {
+    "max": 0.03,
+    "firstFailure": "0.04: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.58
+   },
+   "45": {
+    "max": 0.03,
+    "firstFailure": "0.04: 97/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.57
+   },
+   "60": {
+    "max": 0.03,
+    "firstFailure": "0.04: 99/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.59
+   },
+   "75": {
+    "max": 0.05,
+    "firstFailure": "0.06: 97/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.58
+   },
+   "90": {
+    "max": 0.02,
+    "firstFailure": "0.025: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "105": {
+    "max": 0.005,
+    "firstFailure": "0.01: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.56
+   },
+   "120": {
+    "max": 0,
+    "firstFailure": "0.005: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "135": {
+    "max": 0,
+    "firstFailure": "0.005: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "150": {
+    "max": 0.005,
+    "firstFailure": "0.01: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "165": {
+    "max": 0.005,
+    "firstFailure": "0.01: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "180": {
+    "max": 0.01,
+    "firstFailure": "0.015: 100/0 muted on a hovered mark on page (+9)",
+    "worstAtMax": 4.56
+   },
+   "195": {
+    "max": 0.005,
+    "firstFailure": "0.01: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "210": {
+    "max": 0,
+    "firstFailure": "0.005: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "225": {
+    "max": 0,
+    "firstFailure": "0.005: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "240": {
+    "max": 0,
+    "firstFailure": "0.005: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "255": {
+    "max": 0.005,
+    "firstFailure": "0.01: 100/0 muted on a hovered mark on page (+5)",
+    "worstAtMax": 4.57
+   },
+   "270": {
+    "max": 0.05,
+    "firstFailure": "0.06: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.57
+   },
+   "285": {
+    "max": 0.06,
+    "firstFailure": "0.08: 95/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.56
+   },
+   "300": {
+    "max": 0.08,
+    "worstAtMax": 4.58
+   },
+   "315": {
+    "max": 0.06,
+    "firstFailure": "0.08: 97/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.61
+   },
+   "330": {
+    "max": 0.05,
+    "firstFailure": "0.06: 97/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.6
+   },
+   "345": {
+    "max": 0.04,
+    "firstFailure": "0.05: 97/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.59
+   }
+  },
+  "dark": {
+   "0": {
+    "max": 0.06,
+    "firstFailure": "0.08: 22/8 muted on raised (+1)",
+    "worstAtMax": 4.51
+   },
+   "15": {
+    "max": 0.05,
+    "firstFailure": "0.06: 24/8 muted on raised (+0)",
+    "worstAtMax": 4.54
+   },
+   "30": {
+    "max": 0.05,
+    "firstFailure": "0.06: 24/8 muted on raised (+0)",
+    "worstAtMax": 4.53
+   },
+   "45": {
+    "max": 0.05,
+    "firstFailure": "0.06: 24/8 muted on raised (+0)",
+    "worstAtMax": 4.53
+   },
+   "60": {
+    "max": 0.06,
+    "firstFailure": "0.08: 24/8 muted on raised (+0)",
+    "worstAtMax": 4.5
+   },
+   "75": {
+    "max": 0.08,
+    "worstAtMax": 4.5
+   },
+   "90": {
+    "max": 0.08,
+    "worstAtMax": 4.58
+   },
+   "105": {
+    "max": 0.08,
+    "worstAtMax": 4.56
+   },
+   "120": {
+    "max": 0.08,
+    "worstAtMax": 4.54
+   },
+   "135": {
+    "max": 0.08,
+    "worstAtMax": 4.54
+   },
+   "150": {
+    "max": 0.08,
+    "worstAtMax": 4.54
+   },
+   "165": {
+    "max": 0.08,
+    "worstAtMax": 4.52
+   },
+   "180": {
+    "max": 0.08,
+    "worstAtMax": 4.53
+   },
+   "195": {
+    "max": 0.06,
+    "firstFailure": "0.08: 16/8 muted on raised (+0)",
+    "worstAtMax": 4.53
+   },
+   "210": {
+    "max": 0.08,
+    "worstAtMax": 4.51
+   },
+   "225": {
+    "max": 0.08,
+    "worstAtMax": 4.52
+   },
+   "240": {
+    "max": 0.06,
+    "firstFailure": "0.08: 24/8 muted on raised (+0)",
+    "worstAtMax": 4.51
+   },
+   "255": {
+    "max": 0.06,
+    "firstFailure": "0.08: 24/8 muted on raised (+0)",
+    "worstAtMax": 4.53
+   },
+   "270": {
+    "max": 0.08,
+    "worstAtMax": 4.51
+   },
+   "285": {
+    "max": 0.08,
+    "worstAtMax": 4.51
+   },
+   "300": {
+    "max": 0.08,
+    "worstAtMax": 4.54
+   },
+   "315": {
+    "max": 0.08,
+    "worstAtMax": 4.61
+   },
+   "330": {
+    "max": 0.08,
+    "worstAtMax": 4.51
+   },
+   "345": {
+    "max": 0.06,
+    "firstFailure": "0.08: 24/8 muted on raised (+0)",
+    "worstAtMax": 4.53
+   }
+  }
+ }
+}

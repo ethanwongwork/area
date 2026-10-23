@@ -44,8 +44,27 @@ import { Facts } from "../facts.tsx";
 import { SpecimenBox } from "../specimen-box.tsx";
 import { CodeWell, Selection } from "../inspector.tsx";
 import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
-import { APP_SCALE } from "../app-scale.ts";
-import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
+import { appScale } from "../app-scale.ts";
+import { CanvasSection, Tile, TileGrid, type CardLook } from "../tile.tsx";
+
+/*
+ * The Container menu's card looks (owner, 2026-10-22: "different placements of the text, inside the card, outside the
+ * card"; then "no divider lines across, no roomy version. maybe just a basic container would work, maybe try playing with
+ * the fill and stroke"). Each is a combination of Asset card's axes, not a style of its own: the name above or below,
+ * framed (a frame inside the card) or basic (one surface) or no card at rest, a gray or white fill, an edge or none.
+ */
+const CARD_LOOKS = {
+  framed: { label: "Framed", look: { container: "framed", caption: "above", fill: "recessed", borderless: false } },
+  "framed-below": { label: "Name below", look: { container: "framed", caption: "below", fill: "recessed", borderless: false } },
+  basic: { label: "Basic", look: { container: "basic", caption: "above", fill: "recessed", borderless: false } },
+  "basic-below": { label: "Basic, name below", look: { container: "basic", caption: "below", fill: "recessed", borderless: false } },
+  "basic-white": { label: "Basic, white", look: { container: "basic", caption: "above", fill: "raised", borderless: false } },
+  "basic-fill": { label: "Basic, no stroke", look: { container: "basic", caption: "above", fill: "recessed", borderless: true } },
+  containerless: { label: "Containerless", look: { container: "containerless", caption: "above", fill: "recessed", borderless: false } },
+  "containerless-below": { label: "Containerless, name below", look: { container: "containerless", caption: "below", fill: "recessed", borderless: false } },
+} as const satisfies Record<string, { label: string; look: CardLook }>;
+type CardLookId = keyof typeof CARD_LOOKS;
+const CARD_LOOK_IDS = Object.keys(CARD_LOOKS) as CardLookId[];
 import { Properties, Stage, useStageKeys } from "../stage.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { ChromeButton, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
@@ -186,7 +205,7 @@ function useFit(ref: { current: HTMLElement | null }, key: unknown, enabled = tr
  * click on the card (not on a control inside its specimen) opens the Stage, as does Enter on its
  * name; ninety specimens fit in one pass (the per-family sections held nearly 900).
  */
-function Overview({ groups, selected, onOpen, zoom, containerless }: { groups: Array<[string, Family[]]>; selected?: string; onOpen: (slug: string) => void; zoom: string; containerless: boolean }) {
+function Overview({ groups, selected, onOpen, zoom, look }: { groups: Array<[string, Family[]]>; selected?: string; onOpen: (slug: string) => void; zoom: string; look: CardLook }) {
   const ref = useRef<HTMLDivElement>(null);
   const shown = groups.filter(([, list]) => list.length);
   useFit(ref, `${shown.map(([label, list]) => `${label}:${list.map(entry => entry.slug).join(",")}`).join("|")}:${zoom}`);
@@ -200,7 +219,7 @@ function Overview({ groups, selected, onOpen, zoom, containerless }: { groups: A
             {list.map(entry => {
               const first = TILES.get(entry.slug)![0];
               return (
-                <Tile key={entry.slug} container="asset" id={`family-${entry.slug}`} span="wide" stage="fit" card containerless={containerless} openOnClick aria-label={entry.name} data-key={entry.slug} data-name={entry.name}
+                <Tile key={entry.slug} container="asset" id={`family-${entry.slug}`} span="wide" stage="fit" card look={look} openOnClick aria-label={entry.name} data-key={entry.slug} data-name={entry.name}
                   label={<a href={`#components/${entry.slug}`} className="studio-section__link" onClick={event => { event.preventDefault(); onOpen(entry.slug); }}>{entry.name}</a>}
                   selected={entry.slug === selected} onOpen={() => onOpen(entry.slug)}
                   actions={<CopyCode code={first ? SNIPPETS[first.demo] : undefined} name={entry.name} />}>
@@ -219,8 +238,8 @@ function Overview({ groups, selected, onOpen, zoom, containerless }: { groups: A
  * A family's Overview tab: the Stage, then the family's tiles in their groups (the same tiles as on the grid,
  * labelled by their value under the group's heading). The reference is in the other tabs (src/family-tabs.tsx).
  */
-function FamilyOverview({ family, tiles, tile, config, onSelectTile, onChange, zoom, replays, containerless }: {
-  family: Family; tiles: Tile[]; tile: Tile; config: Config | null; onSelectTile: (tile: Tile) => void; onChange: (prop: string, value: PropValue) => void; zoom: string; replays: number; containerless: boolean;
+function FamilyOverview({ family, tiles, tile, config, onSelectTile, onChange, zoom, replays, look }: {
+  family: Family; tiles: Tile[]; tile: Tile; config: Config | null; onSelectTile: (tile: Tile) => void; onChange: (prop: string, value: PropValue) => void; zoom: string; replays: number; look: CardLook;
 }) {
   const playground = PLAYGROUNDS[family.slug];
   const strips = useRef<HTMLDivElement>(null);
@@ -243,7 +262,7 @@ function FamilyOverview({ family, tiles, tile, config, onSelectTile, onChange, z
           <CanvasSection key={group} id={`group-${group.toLowerCase().replace(/\W+/g, "-")}`} lede={GROUP_LEDES[group]} title={group} count={list.length}>
             <TileGrid span="wide" cards>
               {list.map(entry => (
-                <Tile key={entry.id} container="asset" span="wide" stage="fit" card containerless={containerless} label={group === "Default" ? entry.label : entry.value} aria-label={`${family.name}: ${entry.label}`}
+                <Tile key={entry.id} container="asset" span="wide" stage="fit" card look={look} label={group === "Default" ? entry.label : entry.value} aria-label={`${family.name}: ${entry.label}`}
                   selected={entry.id === onStage?.id} onSelect={() => onSelectTile(entry)}
                   actions={<CopyCode code={SNIPPETS[entry.demo]} name={`${family.name} ${entry.label}`} />}>
                   <TileBoundary><Demo name={entry.demo} /></TileBoundary>
@@ -279,9 +298,9 @@ function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
   const purpose = manifestOf(family)?.description;
   return (
     <>
-    {purpose ? <p className="studio-lede" {...APP_SCALE}>{purpose}</p> : null}
+    {purpose ? <p className="studio-lede" {...appScale()}>{purpose}</p> : null}
     <Tabs className="studio-family-tabs" size="sm" aria-label={`${family.name} views`} value={tab} onValueChange={next => onTab(next as FamilyTab)}
-      items={FAMILY_TABS.map(entry => ({ id: entry.id, label: entry.label }))} {...APP_SCALE}>
+      items={FAMILY_TABS.map(entry => ({ id: entry.id, label: entry.label }))} {...appScale()}>
       <div className="studio-family-tabs__panel" {...(tab === "overview" ? { "data-area-type": canvas.type, "data-area-density": canvas.density } : {})}>
         {tab === "overview" ? overview
           : tab === "documentation" ? <DocumentationTab family={info} onOpenFamily={onOpenFamily} familyName={familyName} />
@@ -311,9 +330,11 @@ export function ComponentsPage() {
   // and "2" meant at most 100% and 200%.
   // A new key again (2026-10-18): the old "fit" was today's Auto.
   const [zoom, setZoom] = useViewOption<Zoom>("components-zoom", "auto", ZOOMS);
-  // Container (owner, 2026-10-19: "i want the containerless design to be tested on components first"): the tiles
-  // framed, or containerless, each specimen on the Canvas's ground with its frame's edge shown on hover and selection.
-  const [container, setContainer] = useViewOption<"framed" | "containerless">("components-container", "framed", ["framed", "containerless"]);
+  // Container (owner, 2026-10-19: "i want the containerless design to be tested on components first"; 2026-10-22:
+  // "explore different asset card styles and add them as options to the dropdown … different placements of the text,
+  // inside the card, outside the card, different paddings, layering"): how the tiles are drawn, each Asset card's axes.
+  const [container, setContainer] = useViewOption<CardLookId>("components-container", "framed", CARD_LOOK_IDS);
+  const look = CARD_LOOKS[container].look;
   const [status, setStatus] = useViewOption<"all" | Status>("components-status", "all", ["all", "complete", "review", "unrefined"]);
   // A family's tab (src/family-tabs.tsx), kept from family to family, so Next reads the next family's Documentation.
   const [familyTab, setFamilyTab] = useViewOption<FamilyTab>("components-family-tab", "overview", FAMILY_TAB_IDS);
@@ -429,9 +450,8 @@ export function ComponentsPage() {
 
   // How the tiles are drawn, after the zoom (PRODUCT_UI rule 14: zoom, style, size).
   const containerControl = (
-    <Select size="sm" variant="soft" aria-label="Container" value={container} onChange={event => setContainer(event.currentTarget.value as "framed" | "containerless")}>
-      <option value="framed">Framed</option>
-      <option value="containerless">Containerless</option>
+    <Select size="sm" variant="soft" aria-label="Container" value={container} onChange={event => setContainer(event.currentTarget.value as CardLookId)}>
+      {CARD_LOOK_IDS.map(id => <option key={id} value={id}>{CARD_LOOKS[id].label}</option>)}
     </Select>
   );
 
@@ -479,11 +499,11 @@ export function ComponentsPage() {
       canvas={family ? (
         stageTile
           ? <FamilyPage family={family} tab={familyTab} onTab={setFamilyTab} onOpenFamily={open}
-              overview={<FamilyOverview family={family} tiles={tiles} tile={stageTile} config={config} onSelectTile={selectTile} onChange={change} zoom={zoom} replays={replays} containerless={container === "containerless"} />} />
+              overview={<FamilyOverview family={family} tiles={tiles} tile={stageTile} config={config} onSelectTile={selectTile} onChange={change} zoom={zoom} replays={replays} look={look} />} />
           : <EmptyState title="No tiles yet" description="This family has no gallery specimens." />
       ) : onCanvas.length ? mode === "list" ? (
         // List: one row per family, its status, tile count and import.
-          <Table size="md" interactive flush aria-label="Components">
+          <Table size="md" interactive aria-label="Components">
             <thead><tr><th scope="col">Family</th><th scope="col">Status</th><th scope="col">Tiles</th><th scope="col">Import</th></tr></thead>
             <tbody>
               {onCanvas.map(entry => (
@@ -499,7 +519,7 @@ export function ComponentsPage() {
       ) : (
         <PinMenu pins={pins} label="Component">
           <Overview groups={groups.map(([label, list]) => [label, list.filter(entry => status === "all" || statusOf(entry) === status)])}
-            selected={selectedSlug} onOpen={open} zoom={zoom} containerless={container === "containerless"} />
+            selected={selectedSlug} onOpen={open} zoom={zoom} look={look} />
         </PinMenu>
       ) : <EmptyState title="No components" description={`Nothing matches “${query}”.`} />}
       inspector={{

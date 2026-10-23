@@ -256,9 +256,9 @@ export function IconsPage() {
           {onCanvas.map(section => (
             <CanvasSection key={section.slug} role={mode === "list" ? undefined : "group"} id={`icons-${section.slug}`} title={view || onCanvas.length === 1 ? undefined : section.name} count={section.shown.length}>
               {mode === "list" ? (
-                // List: one row per icon on the Canvas's surface (a flush Table), drawn at the
+                // List: one row per icon in the framed Table, drawn at the
                 // chosen size, with its facts.
-                <Table size="md" interactive flush aria-label={section.name}>
+                <Table size="md" interactive aria-label={section.name}>
                   <thead><tr><th scope="col">Icon</th><th scope="col">Name</th><th scope="col">Keyline</th><th scope="col">Status</th></tr></thead>
                   <tbody>
                     {section.shown.map(name => {
