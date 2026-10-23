@@ -16,6 +16,19 @@ lightness as if every colour were gray, and a tint changes a colour's luminance 
 4.5:1 on some hues; with it every hue at every strength and every Text tint share passes the Layers gate in both modes
 (docs/research/custom-neutral-2026-10-22/). An untinted gray moves 0, so Neutral is unchanged.
 
+A tint is held inside what sRGB can show at its hue and lightness (`tintRoom`, color/layers.ts, 2026-10-23), never clipped:
+Chromium clips an out-of-gamut colour per channel, which moves its luminance and hue, and from Tint 12 that tipped control
+edges on red and orange pages under 3:1. On a tinted light page the hued inks (vivid and tonal) darken as if the page were
+0.25 × the tint's strength darker (`HUED_INK_MARGIN`, past the Neutral setting's own Cool and Warm casts), since a tint
+lowers a page's luminance at the same lightness: a red tint at 8 on a 92 page had left danger's vivid ink at 4.3:1.
+`layers.test.ts` checks every vivid and tonal ink, of every named accent and every hue at full and lowest strength, on
+every tinted page (hues in 15° steps, Tint 1 to 16).
+
+Any accent the settings can make is gated too (`contrast/accents.test.ts`): every pairing that reads an accent token, on
+the palette's eleven and the 72 hues, at every Accent strength, on every neutral, in both modes, and the solid pairings at
+every Solid step, about a million measurements. Accent strength is the mix the solvers walk with, so the gate measures what
+paints (the CSS and the model agree to the channel, measured in the browser 2026-10-23).
+
 Required boundaries and state indicators need a distinct signal against their adjacent
 surfaces. Area's increased-contrast preference targets at least 3:1 for these roles.
 The standard soft presentation falls below that threshold in some cases and must not be

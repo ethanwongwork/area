@@ -9,6 +9,8 @@ import { type BuiltScale, type Theme, WHITE, buildScale } from "../color/scale.t
 import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES, ROLE_SCALES } from "../color/presets.ts";
 import { type Role, type ScaleLookup, resolveAliases } from "./aliases.ts";
 import { DEFAULT_LAYER_SELECTION, type LayerSelection, castOf, layerTokens } from "../color/layers.ts";
+import { ACCENT_HUES, DEFAULT_ACCENT_STRENGTH, type SolidPick, generatedSpec, hueScaleId, withStrength } from "../color/generate.ts";
+import { SEMANTIC_ALIASES } from "./aliases.ts";
 
 export interface ThemeSelection {
   theme: Theme;
@@ -16,8 +18,12 @@ export interface ThemeSelection {
   layers?: LayerSelection;
   /** Which neutral scale the interface is built from. */
   neutral: string;
-  /** Which chromatic scale fills the accent role. */
+  /** Which chromatic scale fills the accent role: a named family ("blue") or a hue in 5° steps ("260"). */
   accent: string;
+  /** Accent strength (axes/accent.ts), percent of the accent's own chroma; 100 when omitted. */
+  accentStrength?: number;
+  /** The Solid setting per mode (axes/accent.ts); Auto when omitted. */
+  solid?: { light: SolidPick; dark: SolidPick };
 }
 
 export interface ResolvedTheme extends ThemeSelection {
@@ -36,7 +42,7 @@ export function scaleFor(id: string, theme: Theme): BuiltScale {
   const cached = scaleCache.get(key);
   if (cached) return cached;
 
-  const spec = ALL_SCALES.find((s) => s.id === id);
+  const spec = ALL_SCALES.find((s) => s.id === id) ?? generatedSpec(id);
   if (!spec) throw new Error(`Unknown scale "${id}". Known: ${ALL_SCALES.map((s) => s.id).join(", ")}`);
 
   const built = buildScale(spec, theme);
@@ -50,15 +56,16 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
   if (!NEUTRAL_SCALES.some((s) => s.id === neutral)) {
     throw new Error(`"${neutral}" is not a neutral scale.`);
   }
-  if (!CHROMATIC_SCALES.some((s) => s.id === accent)) {
-    throw new Error(`"${accent}" is not a chromatic scale.`);
+  const accentScale = accentScaleId(accent);
+  if (!CHROMATIC_SCALES.some((s) => s.id === accentScale) && !ACCENT_HUES.some(hue => hueScaleId(hue) === accentScale)) {
+    throw new Error(`"${accent}" is not a chromatic scale or an accent hue.`);
   }
 
   const scales = Object.fromEntries(ALL_SCALES.map((s) => [s.id, scaleFor(s.id, theme)]));
 
   const roles: Record<Role, BuiltScale> = {
     neutral: scaleFor(neutral, theme),
-    accent: scaleFor(accent, theme),
+    accent: scaleFor(accentScale, theme),
     danger: scaleFor(ROLE_SCALES.danger, theme),
     warning: scaleFor(ROLE_SCALES.warning, theme),
     caution: scaleFor(ROLE_SCALES.caution, theme),
@@ -95,7 +102,36 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
   const hexAt = (t: Theme, level: number) => scaleFor(neutral, t).steps.find(s => s.level === level)!.hex;
   const cast = castOf(hexAt("light", 50), hexAt("dark", 900))[theme];
   const resolvedTokens = { ...resolveAliases(lookup, theme), ...layerTokens(theme, selection.layers ?? DEFAULT_LAYER_SELECTION, cast) };
-  return { theme, neutral, accent, scales, roles, tokens: resolvedTokens };
+  Object.assign(resolvedTokens, accentPaint(roles.accent, theme, resolvedTokens, selection));
+  return { ...selection, theme, neutral, accent, scales, roles, tokens: resolvedTokens };
+}
+
+/** An accent setting's scale: a hue's generated family ("260" → "hue-260"), or the named family itself. */
+export function accentScaleId(accent: string): string {
+  return /^\d+$/.test(accent) ? hueScaleId(Number(accent)) : accent;
+}
+
+/** Accent tokens that are labels, measured black or white: Strength never moves them (emit/base.ts ACCENT_LABELS). */
+export const ACCENT_LABELS: ReadonlySet<string> = new Set(["fg-on-accent"]);
+
+/**
+ * What Solid and Accent strength paint over the accent's own tokens, as emit/base.ts derives them in CSS: the solid and
+ * its hover at the Solid step, then every accent colour but its label at the strength's share of its chroma.
+ */
+function accentPaint(scale: BuiltScale, theme: Theme, tokens: Record<string, string>, selection: ThemeSelection): Record<string, string> {
+  const strength = selection.accentStrength ?? DEFAULT_ACCENT_STRENGTH;
+  const pick = selection.solid?.[theme] ?? "auto";
+  const hexAt = (level: number) => scale.steps.find(s => s.level === level)!.hex;
+  const out: Record<string, string> = {};
+  if (pick !== "auto") {
+    out["accent-solid"] = hexAt(scale.solidSteps[pick].level);
+    out["accent-solid-hover"] = hexAt(scale.solidSteps[pick].hover);
+  }
+  for (const [name, alias] of Object.entries(SEMANTIC_ALIASES)) {
+    if (alias.role !== "accent" || ACCENT_LABELS.has(name)) continue;
+    out[name] = withStrength(out[name] ?? tokens[name]!, strength);
+  }
+  return out;
 }
 
 /** The selection Area ships as its default. */

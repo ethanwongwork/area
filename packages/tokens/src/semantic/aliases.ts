@@ -24,6 +24,7 @@ import { type Level, type Position, type Slot, INVERSION, LEVELS } from "../colo
 import { apcaMagnitude, wcagContrastHex } from "../color/contrast.ts";
 import type { Theme } from "../color/scale.ts";
 import { tonalStroke } from "./stroke.ts";
+import { ACCENT_STRENGTHS, withStrength } from "../color/generate.ts";
 
 /** The roles the semantic layer addresses. The colour axis repoints `accent`. */
 export const ROLES = [
@@ -353,10 +354,16 @@ function indicatorLevel(role: Role, scales: ScaleLookup, theme: Theme): Level {
     .map(slot => neutral.byLevel[slot[theme]]!);
   const tints = Object.values(scales).flatMap(s => [s.tonal.surface, s.tonal.surfaceHover, s.tonal.surfaceActive].map(level => s.byLevel[level[theme]]!));
   const start = LEVELS.indexOf(500 as Level), direction = theme === "light" ? 1 : -1;
+  // The accent's own tints quiet with it at every Accent strength (color/generate.ts); the grounds and other tones' tints stay.
+  const own = new Set([view.tonal.surface, view.tonal.surfaceHover, view.tonal.surfaceActive].map(level => view.byLevel[level[theme]]!));
   for (let i = start; i >= 0 && i < LEVELS.length; i += direction) {
     const hex = view.byLevel[LEVELS[i]!];
     if (!hex) continue;
-    if (grounds.every(g => wcagContrastHex(hex, g) >= 3 && apcaMagnitude(hex, g) >= 45) && tints.every(g => wcagContrastHex(hex, g) >= 3)) return LEVELS[i]!;
+    if (ACCENT_STRENGTHS.every(strength => {
+      const ring = withStrength(hex, strength);
+      return grounds.every(g => wcagContrastHex(ring, g) >= 3 && apcaMagnitude(ring, g) >= 45) &&
+        tints.every(g => wcagContrastHex(ring, own.has(g) ? withStrength(g, strength) : g) >= 3);
+    })) return LEVELS[i]!;
   }
   return INVERSION.textTonal[theme] as Level;
 }

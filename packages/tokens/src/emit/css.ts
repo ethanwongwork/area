@@ -197,10 +197,10 @@ export function emitAxes(): string {
   out.push(`${INDENT}/* Re-derive cross-axis values wherever an axis is redeclared. */`);
   out.push(rule(axisBearing, derivedTokens()));
 
-  // Material's paints read only its own inputs and the accent, so they re-derive only where either is set.
+  // Material's paints read only its own inputs and the accent's solid, so they re-derive only where one of those is set.
   out.push("");
   out.push(`${INDENT}/* Re-derive material paints wherever a material or the accent is redeclared. */`);
-  out.push(rule([...MATERIAL_ATTRIBUTES.map(a => `[${a}]`), "[data-area-accent]"].join(",\n" + INDENT), materialDerived()));
+  out.push(rule([...MATERIAL_ATTRIBUTES.map(a => `[${a}]`), "[data-area-accent]", "[data-area-accent-strength]", "[data-area-solid-light]", "[data-area-solid-dark]"].join(",\n" + INDENT), materialDerived()));
 
   out.push("");
   // The system preference wins over a page's or subtree's own motion setting (motion pass,

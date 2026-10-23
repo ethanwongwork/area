@@ -34,7 +34,11 @@ const SHADOW: Record<string, string> = {
 function Glyph({ axis }: { axis: string }): ReactNode {
   switch (axis) {
     case "accent": return <span className="cv-swatch cv-swatch--accent" />;
-    case "action": return <span className="cv-bar cv-bar--action" />;
+    case "action":
+    // Accent strength and Solid paint the accent's solid (axes/accent.ts), as Action Accent does.
+    case "accent-strength":
+    case "solid-light":
+    case "solid-dark": return <span className="cv-bar cv-bar--action" />;
     case "selection": return <span className="cv-check" />;
     case "neutral": return <span className="cv-steps"><i className="cv-step--page" /><i className="cv-step--subtle" /><i className="cv-step--edge" /><i className="cv-step--muted" /></span>;
     case "theme":

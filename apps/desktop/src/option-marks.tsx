@@ -47,10 +47,16 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
   const neutral = { "data-area-neutral": canvas.neutral };
   switch (axis) {
     case "neutral": return swatch("var(--area-neutral-500)", { "data-area-neutral": value });
-    case "accent": return swatch("var(--area-accent-solid)", { "data-area-accent": value });
+    case "accent": return swatch("var(--area-accent-solid)", { "data-area-accent": value, "data-area-accent-strength": canvas["accent-strength"] });
+    // Accent strength and Solid (axes/accent.ts): the accent's solid at the option, on the Canvas's accent.
+    case "accent-strength": return swatch("var(--area-accent-solid)", { "data-area-accent": canvas.accent, "data-area-accent-strength": value });
+    case "solid-light":
+    case "solid-dark": return swatch("var(--area-accent-solid)", { "data-area-theme": axis === "solid-light" ? "light" : "dark", "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"], [`data-area-${axis}`]: value });
     // Tint: the hue itself (Auto, Neutral's own, as the Neutral swatch); a strength, the mode's page at it, on the hue
     // chosen; Text tint, muted text's own colour at the share.
-    case "tint-hue": return value === "auto" ? swatch("var(--area-neutral-500)", neutral) : swatch(`oklch(0.72 0.12 ${value})`, {});
+    case "tint-hue": return value === "auto" ? swatch("var(--area-neutral-500)", neutral)
+      : value === "accent" ? swatch("var(--area-accent-solid)", { "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"] })
+      : swatch(`oklch(0.72 0.12 ${value})`, {});
     case "tint-light":
     case "tint-dark": {
       const theme = axis === "tint-light" ? "light" : "dark";

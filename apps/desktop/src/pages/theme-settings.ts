@@ -17,6 +17,10 @@ const NO_SHADOW = { "data-area-shadow-rest": "0", "data-area-shadow-resting": "0
 const SHARED_SHADOW = { "data-area-elevation": "8" };
 export const ALSO: Record<string, Record<string, string>> = {
   accent: { "data-area-action": "accent", "data-area-selection": "accent" },
+  // Accent strength and Solid show on the accent's own paint (axes/accent.ts).
+  "accent-strength": { "data-area-action": "accent", "data-area-selection": "accent" },
+  "solid-light": { "data-area-action": "accent", "data-area-selection": "accent" },
+  "solid-dark": { "data-area-action": "accent", "data-area-selection": "accent" },
   neutral: { "data-area-layers-light": "8", "data-area-layers-dark": "8" },
   // Tint: a hue shows at a strength, a strength on a hue, and Text tint on both at their strongest (axes/tint.ts).
   "tint-hue": { "data-area-tint-light": "6", "data-area-tint-dark": "6" },
@@ -40,6 +44,10 @@ export const ALSO: Record<string, Record<string, string>> = {
 /** What a preview is set to besides its own setting, said in the Inspector so a tile is never mistaken for the default. */
 export const HELD: Record<string, string> = {
   easing: "Motion at 300, so the curve has time to show.",
+  accent: "Action and Selection at Accent, so the accent shows on buttons and marks.",
+  "accent-strength": "Action and Selection at Accent, so the accent shows on buttons and marks.",
+  "solid-light": "Action and Selection at Accent, so the solid shows on buttons and marks.",
+  "solid-dark": "Action and Selection at Accent, so the solid shows on buttons and marks.",
   neutral: "Layers at 8, so the greys are large enough for the tint to show.",
   "tint-hue": "Tint strength at 6, so each hue shows.",
   "tint-light": "Tint hue at 70°, so each strength shows.",
@@ -67,8 +75,8 @@ export const HELD: Record<string, string> = {
 export type Mode = "light" | "dark";
 /** A preset's least card width (owner, 2026-10-19: "the minimum size of the containers can be smaller"; was 280). */
 export const MIN = 200; /* pick */
-// Ground, Layers, Tint strength and Card tone exist once per theme; Shadow light's "-light" is not a theme (it hid in Dark until 2026-10-19).
-export const PER_THEME = /^(ground|layers|tint|card-tone)-(light|dark)$/;
+// Ground, Layers, Tint strength, Card tone and Solid exist once per theme; Shadow light's "-light" is not a theme (it hid in Dark until 2026-10-19).
+export const PER_THEME = /^(ground|layers|tint|card-tone|solid)-(light|dark)$/;
 export const inMode = (id: string, mode: Mode) => !PER_THEME.test(id) || id.endsWith(`-${mode}`);
 /** The same setting in the other theme ("ground-dark" for "ground-light"). */
 export const pairOf = (id: string, mode: Mode) => PER_THEME.test(id) ? id.replace(/-(light|dark)$/, `-${mode}`) : id;
