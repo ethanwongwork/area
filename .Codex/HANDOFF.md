@@ -1,19 +1,21 @@
 # Handoff
 
 ## Current state (2026-10-23)
+- **PR, `claude/semantic-color-hover-states-c30c80` (owner 2026-10-23).** Danger hover (Fill; `axes/states.ts`,
+  `row-danger-tint`): `tint` (default) turns a Menu danger row's hover and pressed plates to the danger hue at the
+  neutral plates' lightness, `neutral` the old grey; the red follows the Pressed step (kept over PR #152's firmest press
+  so the red plate matches the grey one). Dark extremes (ground 24, layers 8, heavy fills) fail for both, white
+  included. Color picker: default is the editor alone, Saved colors its own tile, chips md (20 in 28, nine across) on the
+  area's edge; sliders-view tracks one rhythm apart; header rule inset. Lists opened from a field (Select, Custom select,
+  Combobox, Tag picker) take the field's corner (sm 10/6, md 12/8, lg 14/10); Menus keep 12/8.
 
-- **Uncommitted, `claude/semantic-color-hover-states-c30c80`.** New setting Danger hover (Fill; `axes/states.ts`,
-  `row-danger-tint`): `tint` (default, owner 2026-10-23) turns a Menu danger row's hover and pressed plates to the danger
-  hue at the neutral plates' lightness; `neutral` is the old grey. The danger red's solve now restates the real pressed
-  fill (was the 2026-10-16 3%/7% one: 4.18:1 at light warm, Contrast 8). Swept light 4.62:1 worst; dark extremes (ground
-  24, layers 8, heavy fills) fail for tint and neutral alike, since even white misses 4.5:1 there.
-  Same branch: Color picker pass (owner 2026-10-23): Default tile is the editor alone, Saved colors its own tile; saved
-  chips md (20 in 28, nine across) aligned 16 to the area and the bottom; save button on the header's end inset;
-  sliders-view tracks one rhythm apart; header rule inset so actions centre on whole pixels. Before committing, merge
-  origin/main (PR #152 rewrote `--_danger-fill-*` in surface.css and touched menu.md, THEMING, DESIGN_SYSTEM, cohesion).
-  Same branch: lists opened from a field (Select, Custom select, Combobox, Tag picker) take the field's corner: rows at
-  the field's corner, list 4 rounder (sm 10/6, md 12/8, lg 14/10); Menus keep 12/8 (surface.css, navigation.css).
-
+- **Branch `claude/eager-maxwell-0a929b`, committed, not pushed.** PR #151's three open proposals. Press room (`PRESS_ROOM`,
+  color/layers.ts): inks solved on the deepest selected fill pressed 0.012 L (dark 0.04), so a press shows on every
+  ground (it equalled selected on recessed in light at Layers 4–8, raised in dark from 16 + 8); muted #646464 (was
+  #666666), page press L 0.913. Edges per ground (`GROUND_EDGES`, layers.css): every ground sets `edge-shift-*`, its
+  children restate the roles from `<role>-page`; what a ground draws on itself keeps its parent's. Menu's danger red
+  solved for the real press (sweep: 4.39:1 pressed). Setup stacks visual over panel under an 816 Canvas.
+  `states.mjs` takes a Contrast level and records `no-press`. Research: docs/research/states-2026-10-21 (2026-10-23).
 - **PR (this branch), `claude/neutral-accent-theme-ca527b`.** Every detail is a choice (PRINCIPLES.md 7, GOVERNANCE.md
   option gates; owner 2026-10-22). New settings: Tint hue / Light tint / Dark tint / Text tint (`axes/tint.ts`, custom
   neutral, Auto follows Neutral; text moves 0.25 × strength, `INK_MARGIN`), Light / Dark card tone (`axes/card-tone.ts`,
@@ -23,9 +25,15 @@
   Asset card `aspect="landscape"`, `caption`, `fill`, `borderless`, `container="basic"`, frame = page tone. Pressed fill
   re-derives on every scope (cohesion test). Setup: separate Dark mode step, layer map stage, page colour picker.
   Research: docs/research/custom-neutral-2026-10-22; artifacts Layer Map https://claude.ai/artifact/2AtkSCcTm3GqwAveDbdqXY,
-  Neutral Tint https://claude.ai/artifact/8Czr8Wcu9rTwdW97SzFLzQ. Open proposals: recessed press cap, per-tone edges;
-  the setup's stage is narrow in a 1024 window.
+  Neutral Tint https://claude.ai/artifact/8Czr8Wcu9rTwdW97SzFLzQ. Its open proposals (recessed press cap, per-tone edges,
+  the setup's narrow stage at 1024) are built on `claude/eager-maxwell-0a929b`, above.
 
+- **UI composition skills (`claude/ui-patterns-research-b87a2f`, merged by its PR).** Research on how ChatGPT desktop,
+  Cursor, Figma, Notion, Spotify, Airbnb, Nike, YouTube, Apple and 13 design systems lay out whole UIs, and how shells
+  separate regions and treat navigation (`docs/research/ui-patterns-2026-10-22/`, README first); skills
+  `area-ui-compose` (shell, treatments, spacing, content, copy, components, screen recipes) and `area-ui-review`
+  (`scripts/layout-audit.js`); three layout candidates in COMPONENTS.md (App-shell layout, Grid, Shelf). Not yet
+  reviewed by the owner. Open: region treatment as a setting (recommended, undecided; `region-treatments.md` › In Area).
 - **PR #150, `claude/electron-canvas-feed-layout-8b2924`.** The Canvas as a documentation feed (32 margin, 12 / 40
   rhythm measured to ink, title + count + subtitle per section), Code block md corner concentric with its copy (11),
   flush Table trims its outer rows, and the Cursor audit's validated items: Menu-family group labels take Nav's (rows'
@@ -54,8 +62,8 @@
   indicator rung for `focus-color` and `stroke-selected` (`semantic/aliases.ts`), resting and lift one tight layer.
   THEMING.md "Interaction states"; docs/research/states-2026-10-21. Inspector rows under Stroke, Shadow and Fill; a
   Theme tile and a Setup question for each.
-- **Open for the owner.** Pressed in light at default Layers is capped by muted text 4.6:1 (about 9%, not 12%), so its
-  four steps are 0.006 apart there; the indicator blue is #0160d9 / #79aeff, not ChatGPT's #3a83f7 (fails 3:1 on
+- **Open for the owner.** Pressed in light at default Layers is capped by muted text 4.6:1 (about 10%, not 12%), so its
+  four steps are 0.009 apart there; the indicator blue is #0160d9 / #79aeff, not ChatGPT's #3a83f7 (fails 3:1 on
   fills and APCA on the dark page); Rest shadow applies to cards and panels, not outline buttons.
 - **Theme tab (PR #145, merged).** No option label says "(Default)" (`registry.test.ts` enforces it); Language is
   **Theme** again; Theme → Setup (default) / Browse, one question per setting, not yet reviewed by the owner. The

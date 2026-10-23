@@ -39,6 +39,8 @@ components and accurate specs matter more than speed.
 | `area-component-docs` | A family's Documentation entry (usage, do and don't, parts, keys, ARIA) |
 | `area-foundation-change` | Changing a setting, token or system-wide rule across every family |
 | `area-icon-construction` | Drawing or reviewing Area's icons |
+| `area-ui-compose` | Composing screens and layouts from Area: shell, panels, spacing, feeds, grids, shelves, media, copy, screen recipes |
+| `area-ui-review` | Measuring and checking a composed screen's spacing, regions and copy (`scripts/layout-audit.js`) |
 | `checkpoint` | A requested checkpoint or handoff |
 
 ## Work

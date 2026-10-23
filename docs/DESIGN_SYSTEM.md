@@ -128,7 +128,7 @@ on it; at Neutral it takes the plates above (`axes/states.ts`, owner 2026-10-23)
 
 Use the translucent twins on grounds a component cannot know (a segmented track, a swatch
 cell) and for controls nested on a row. The pressed fill follows every ground and Layers
-setting (`packages/styles/src/layers.css`). How dark each plate is comes from the Fill settings (Hover, Selected,
+setting (`packages/styles/src/layers.css`), and always moves at least the press room past selected, on a sidebar too. How dark each plate is comes from the Fill settings (Hover, Selected,
 Pressed; [Theming](THEMING.md#settings), interaction states), each built on the one before so the order always holds.
 
 Stacked plates sit `ui-row-gap` apart: **1px at every type and density**, so a hovered row never runs into the current
@@ -445,6 +445,15 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
 - Every ground, control fill, edge and ink derives from the light ground, the dark ground
   and the layer contrast.
 - Control fills step from the ground they sit on, and in dark never fall under L 0.20.
+- **Edges keep their contrast on the ground they sit on** (2026-10-23). An edge is a distance from the page in light
+  and from the raised layer in dark; on a ground past that (recessed, and Card tone's card and tile below the page in
+  light or above the raised layer in dark) every edge role moves as far as the ground does (`edge-shift-light` /
+  `-dark`, `layers.css`; `color/layers.ts` `GROUND_EDGES`), so a card's frame on a sidebar reads as on the page
+  (1.01:1 at Layers 8 before). What sits inside a ground measures from it; what a ground draws on itself (its frame,
+  a hover or selected edge) measures from the ground it sits on, since that line is the boundary between the two: a
+  Card on a sidebar frames itself against the sidebar and its fields against the card. Every ground sets the shift
+  and its children restate every edge role and every token that reads one (`cohesion.test.mjs`). At the defaults only
+  what sits on the recessed layer (a sidebar, a soft Surface, a preview choice card) and an Asset card's tile moves.
 - **A component that paints a ground declares it.** When a component's own CSS paints
   `bg-surface` or `bg-code` (raised), `bg-subtle` (recessed) or `bg-page` under anything
   with a control fill (a hover or selected plate, a soft field, a ghost button), it is

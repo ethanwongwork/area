@@ -9,7 +9,7 @@
  * controls' line at 19. Was 14, 13 for the 41 bar at type 12.
  * --dev reloads the window when the renderer rebuilds; --capture=<file.png> saves one frame and
  * quits, for checking the window without looking at it (--theme=dark, --hash=icons/arrows,
- * --store='{"canvas":{"ui":"compact"}}' for saved settings).
+ * --store='{"canvas":{"ui":"compact"}}' for saved settings, --width=1024 for a narrow window).
  */
 const { app, BrowserWindow, ipcMain, nativeTheme, net, protocol, session, shell } = require("electron");
 const { existsSync, watch, writeFileSync } = require("node:fs");
@@ -23,12 +23,14 @@ const themeArg = process.argv.find(arg => arg.startsWith("--theme="))?.slice("--
 const hashArg = process.argv.find(arg => arg.startsWith("--hash="))?.slice("--hash=".length);
 /* --store=<json>: saved settings for a capture, e.g. {"canvas":{"ui":"compact"}}. */
 const storeArg = process.argv.find(arg => arg.startsWith("--store="))?.slice("--store=".length);
+/* --width=<px>: the window's width for a capture (the setup's narrow Canvas was found in a 1024 window, 2026-10-23). */
+const widthArg = Number(process.argv.find(arg => arg.startsWith("--width="))?.slice("--width=".length)) || 0;
 /* Neutral 975 and white: the app's page ground in each theme, so a resize never shows a flash. */
 const GROUND = { dark: "#020202", light: "#ffffff" };
 
 function createWindow() {
   const window = new BrowserWindow({
-    width: 1440,
+    width: widthArg ? Math.max(960, widthArg) : 1440,
     height: 900,
     minWidth: 960,
     minHeight: 600,

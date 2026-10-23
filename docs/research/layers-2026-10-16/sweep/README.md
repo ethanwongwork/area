@@ -161,6 +161,11 @@ Run it with `node states.mjs --all <out>`; it starts twelve browsers. Twelve at 
 processes timed out, and others rendered without Area's stylesheet or theme. Those settings were rerun four browsers
 at a time.
 
+Since 2026-10-23 it takes a Contrast level as a sixth argument (`node states.mjs <out> light 100 4 9800 8`), records
+`no-press` (a plate under the pointer that the press leaves as it was), and starts Edge as a guest with implicit sign-in
+off. Fourteen at once (the press room's before and after) again rendered some settings in the wrong theme; run them
+one or two at a time, and check a dark run's plates are dark.
+
 **Found and fixed:**
 - **Menu's danger red** failed on its own row fills: 4.15:1 hovered and 3.97:1 pressed at the defaults, 3.2:1 pressed at
   dark 24 + 8. It is now solved for the row's pressed fill, and the same red holds at rest (surface.css).

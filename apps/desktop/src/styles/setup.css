@@ -12,6 +12,13 @@
   .setup--side { grid-template-columns: minmax(0, 1fr) 400px; max-inline-size: none; block-size: 100%; box-sizing: border-box; padding: 0; gap: var(--area-space-16); } /* pick */
   .setup--side .setup__stage { min-block-size: 0; }
   .setup--side .setup__stage-view { block-size: auto; min-block-size: 0; }
+  /* A narrow Canvas stacks them (2026-10-23): in a 1024 window the Sidebar and the Inspector, which grow with type
+     (PRODUCT_UI.md rule 18), leave the Canvas about 470 to 530, and beside the 400 column the visual was 20 to 80 wide.
+     Under a stage as wide as the column (400 + 16 + 400), the visual sits over the settings at the one-column setup's
+     share of the window and the settings scroll under it, both the Canvas's width. */
+  @container (inline-size < 816px) {
+    .setup--side { grid-template-columns: minmax(0, 1fr); grid-template-rows: clamp(200px, 36vh, 420px) minmax(0, 1fr); } /* pick: the one-column stage's height */
+  }
   /* One setting's section: its name and question, then its choice cards or swatches, sections 24 apart. */
   .setup__panel-body { gap: var(--area-space-24); }
   .setup-choice { display: grid; gap: var(--area-space-8); }

@@ -117,12 +117,16 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 | `focus-ring` | Stroke › Focus ring | `hug` (default), `gap`, `halo`, `inset`, `bold` | Where the keyboard ring sits: `focus-width`, `focus-offset` (controls), `focus-gap` (containers and text) and the fields' ring, recolour and halo switches |
 | `fill-hover` | Fill › Hover | `1` … `4`, `2` (default) | The hover plate under rows and ghost controls, opaque and translucent (`bg-component-hover`, `bg-hover`) |
 | `fill-selected` | Fill › Selected | `0` (Same as hover) … `4`, `1` (default) | How far past hover the selected plate sits (`bg-component-active`, `bg-active`) |
-| `fill-pressed` | Fill › Pressed | `1` … `4`, `4` (default) | Quarters of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1 |
+| `fill-pressed` | Fill › Pressed | `1` … `4`, `4` (default) | Quarters of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1, which is always at least the press room past selected |
 | `danger-hover` | Fill › Danger hover | `tint` (default), `neutral` | A destructive row's hover, highlight and pressed plate (Menu, Context menu): the row's own plate turned to the danger hue at the same lightness, or the grey plate every row takes (`row-danger-tint`, 1 or 0) |
 | `selected-tint` | Fill › Selected tint | `none` (default), `tint`, `neutral` | A selected container's fill under its stroke: nothing, the accent's faint surface (half strength in dark), or the row's selected wash (`selected-tint`) |
 
 - Hover, selected and pressed are built on each other, so their order holds at every combination (`color/layers.ts`
-  `FILL_STEPS`, checked against the CSS in `layers.test.ts`). Inks are solved against the selected fill.
+  `FILL_STEPS`, checked against the CSS in `layers.test.ts`). Inks are solved against the deepest ground's selected fill
+  pressed by the press room (`PRESS_ROOM`, 2026-10-23: 0.012 L in light, 0.04 in dark, the smallest steps Area ships
+  that read), so a press shows on every ground: it had equalled selected on recessed surfaces in light at Layers 4 to 8
+  and on raised ones in dark from 16 + 8. At the defaults muted text is #646464 (was #666666) and the page's firmest press
+  L 0.913 (was 0.925). A rule, not a setting: a press that cannot show is not a viable look.
 - Contrast More still lifts the hover edge to its 3:1 stroke, and a field's ring always draws under it.
 
 **Motion**

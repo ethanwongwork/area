@@ -68,6 +68,11 @@ and Color field's inner opacity seam. Strokes already strong (checked marks, tod
 (A first pass, the same day, moved seams and frames a third of the way while control edges went all of it; it read as
 two settings.) A soft Button's edge mixes toward its outline's line, itself already mixed, so at Medium it goes about a
 quarter of the way.
+Edges are measured from the ground under them (2026-10-23; DESIGN_SYSTEM.md, Layers). A ground darker than the page
+(light) or lighter than the raised layer (dark) moves every edge role, rails included, by its distance, mixed by
+(1 − the Contrast level), which is exact for an OKLab mix: each level still lands where it did, and at More every edge
+is the strong stroke, which is solved on the deepest ground already. `layers.test.ts` checks every edge's distance and the
+frame minimum on every ground, card tone and Layers step.
 Rails are fills, not strokes: `fill-track` / `fill-track-hover` (Progress, Meter, Slider, the off Switch) keep their value
 at every level, since the fill or thumb on them is what has to read (under More the 3:1 rail left an accent fill 1.2:1).
 Switch outlines instead, as macOS does: its edge and an off thumb's ring take the strong stroke.

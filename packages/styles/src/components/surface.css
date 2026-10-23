@@ -1277,13 +1277,14 @@
      (ChatGPT "Delete"). The red is solved for the
      row's pressed fill, the deepest it sits on, not the page: in light it darkens by what that fill needs beyond the
      page's own darken (the vivid inks' bound, tokens color/layers.ts VIVID_Y), in dark it lifts once the raised
-     layer's pressed fill passes L 0.396, 6.1× the excess (fitted over every accent and neutral; 0 up to the defaults).
+     layer's pressed fill passes L 0.396, 6.1× the excess (fitted over every accent and neutral; 0.06 at the defaults).
      It holds at rest too, so the ink stays fixed across states (state sweep 2026-10-17: 3.97:1 pressed at the defaults,
      3.2:1 at dark 24 + 8). The deepest fill is the pressed one, and its lightness is restated here from layers.css
      ("Pressed": the selected fill toward the body ink, 12% in light and 14% in dark at Pressed 4, stopped where muted
      text keeps 4.6:1). OKLab mixing is linear in L, so the restatement is exact. Until 2026-10-23 it was the 2026-10-16
-     pressed (3% and 7%), which the Pressed setting outgrew: 4.18:1 pressed at light warm, Contrast 8, Hover 1, Selected
-     0, and an ink lifted for a fill the row never took. */
+     pressed (3% and 7%), which the Pressed setting and the press room outgrew: the state sweep found 4.39:1 pressed at
+     the defaults (#cd073c on #e2e2e2, PR #152, which restated the firmest press) and 4.18:1 at light warm, Contrast 8,
+     Hover 1, Selected 0. It follows the Pressed step, so Danger hover's red plate keeps the grey plate's lightness. */
   .area-menu__item--danger {
     --_danger-fill-light: calc(var(--area-layer-light-raised-fill-2) + 0.25 * var(--area-fill-pressed-step) * (max(var(--area-layer-light-raised-fill-2) + 0.12 * (var(--area-layer-light-body) - var(--area-layer-light-raised-fill-2)), pow(calc(4.6 * (pow(var(--area-layer-light-muted), 3) + 0.05) - 0.05), 0.333333)) - var(--area-layer-light-raised-fill-2))); /* spec: layers.css, Pressed */
     --_danger-fill-dark: calc(var(--area-layer-dark-raised-fill-2) + 0.25 * var(--area-fill-pressed-step) * (min(var(--area-layer-dark-raised-fill-2) + 0.14 * (var(--area-layer-dark-body) - var(--area-layer-dark-raised-fill-2)), pow(max(0, calc((pow(var(--area-layer-dark-muted), 3) + 0.05) / 4.6 - 0.05)), 0.333333)) - var(--area-layer-dark-raised-fill-2))); /* spec: layers.css, Pressed */

@@ -154,4 +154,82 @@
         calc(25% * var(--area-fill-pressed-step)))); /* spec */
   }
   /* The translucent pressed plate is derived with its twins in tokens (emit/base.ts), from the Pressed fill setting. */
+
+  /*
+   * Edges on the ground they sit on (2026-10-23; @area/tokens color/layers.ts GROUND_EDGES). Every edge was a distance from
+   * the page (dark: from the raised layer), so on a ground darker than the page it nearly vanished: the layer map
+   * (2026-10-22) measured a card's edge on a sidebar at 1.01:1 at Layers 8. Each ground above sets how far it sits past the
+   * page in light or the raised layer in dark, `edge-shift-light` / `-dark` (the recessed layer, and Card tone's card and
+   * tile when they sit there; 0 on the page and raised grounds), and every edge role moves that far from its page value,
+   * so an edge keeps the page's contrast on the ground under it.
+   *
+   * What sits inside a ground measures from it, and what a ground draws on itself (its frame, a hover or selected edge)
+   * from the ground it sits on, since that line is the boundary between the two: so a Card on a sidebar frames itself
+   * against the sidebar and the fields in it against the card, and an Asset card's outline stays as it was on the page.
+   * The ground sets the shift and its children restate every role and every token that reads one, since a property that
+   * reads another resolves where it is declared; cohesion.test.mjs keeps the list and the formulas equal to the tokens'.
+   * At the defaults only what sits on the recessed layer and on an Asset card's tile moves, 0.024 L in light; nothing
+   * moves in dark.
+   */
+  :where(.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
+    .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
+    .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
+    .area-edit-summary, .area-plan, .area-queue, .area-infobox--framed, .area-menu__search-surface, .area-diff,
+    .area-surface--surface, .area-asset-card--raised,
+    .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame), [data-area-ground="raised"], [data-area-ground="page"] {
+    --area-edge-shift-light: 0;
+    --area-edge-shift-dark: 0;
+  }
+  :where(.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview), [data-area-ground="recessed"] {
+    --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-recessed)));
+    --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-recessed) - var(--area-layer-dark-raised)));
+  }
+  :where(.area-card), [data-area-ground="card"] {
+    --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-card)));
+    --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-card) - var(--area-layer-dark-raised)));
+  }
+  :where(.area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised)), [data-area-ground="tile"] {
+    --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-tile)));
+    --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-tile) - var(--area-layer-dark-raised)));
+  }
+  :where(.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
+    .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
+    .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
+    .area-edit-summary, .area-plan, .area-queue, .area-infobox--framed, .area-menu__search-surface, .area-diff,
+    .area-surface--surface, .area-asset-card--raised, [data-area-ground="raised"],
+    .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, [data-area-ground="page"],
+    .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview,
+    [data-area-ground="recessed"], .area-card, [data-area-ground="card"],
+    .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), [data-area-ground="tile"]) > * {
+    --area-border-decorative: light-dark(oklab(from var(--area-border-decorative-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-decorative-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-border-card: light-dark(oklab(from var(--area-border-card-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-card-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-border-float: light-dark(oklab(from var(--area-border-float-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-float-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-border-faint: light-dark(oklab(from var(--area-border-faint-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-faint-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-border-divider: light-dark(oklab(from var(--area-border-divider-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-divider-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-border-subtle: light-dark(oklab(from var(--area-border-subtle-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-subtle-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-border: light-dark(oklab(from var(--area-border-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-border-hover: light-dark(oklab(from var(--area-border-hover-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-hover-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-edge-control: light-dark(oklab(from var(--area-edge-control-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-edge-control-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-edge-control-hover: light-dark(oklab(from var(--area-edge-control-hover-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-edge-control-hover-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-edge-selected: light-dark(oklab(from var(--area-edge-selected-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-edge-selected-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-edge-control-strong: light-dark(oklab(from var(--area-edge-control-strong-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-edge-control-strong-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-fill-toggle: light-dark(oklab(from var(--area-fill-toggle-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-fill-toggle-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-fill-toggle-hover: light-dark(oklab(from var(--area-fill-toggle-hover-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-fill-toggle-hover-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-composer-edge: light-dark(oklab(from var(--area-composer-edge-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-composer-edge-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-composer-focus-color: light-dark(oklab(from var(--area-composer-focus-color-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-composer-focus-color-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
+    --area-fill-track: light-dark(oklab(from var(--area-fill-track-page) calc(l - var(--area-edge-shift-light)) a b), oklab(from var(--area-fill-track-page) calc(l + var(--area-edge-shift-dark)) a b));
+    --area-fill-track-hover: light-dark(oklab(from var(--area-fill-track-hover-page) calc(l - var(--area-edge-shift-light)) a b), oklab(from var(--area-fill-track-hover-page) calc(l + var(--area-edge-shift-dark)) a b));
+    --area-input-edge: var(--area-edge-control);
+    --area-input-edge-hover: var(--area-edge-control-hover);
+    --area-input-edge-soft: color-mix(in srgb, transparent, var(--area-edge-control) calc(var(--area-contrast-more) * 100%));
+    --area-textarea-edge: var(--area-input-edge);
+    --area-textarea-edge-hover: var(--area-input-edge-hover);
+    --area-textarea-edge-soft: var(--area-input-edge-soft);
+    --area-select-edge: var(--area-input-edge);
+    --area-select-edge-hover: var(--area-input-edge-hover);
+    --area-selection-edge: color-mix(in srgb, var(--area-edge-control-hover), var(--area-edge-accent) calc(var(--area-selection-accent) * 100%));
+    --area-token-edge: light-dark(var(--area-border-decorative), var(--area-border-faint));
+  }
 }
