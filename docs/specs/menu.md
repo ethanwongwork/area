@@ -300,3 +300,12 @@ computes the same fill, image, frost, stroke and box-shadow as a plain Menu.
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-23 (press room)
+
+- **What changed:** a danger item's red is solved for the press Area actually paints (the selected fill 12% toward the
+  body ink in light, 14% in dark, stopped where muted text keeps 4.6:1), was an older press (3% and 7%). At the defaults
+  it is a touch deeper in light, and in dark 6% lighter (the real dark press, L 0.406, passes the 0.396 where the lift
+  starts; the old formula put it at 0.362).
+- **Why:** the press room (THEMING.md, Interaction states) deepened the light press to L 0.913, and the state sweep found
+  the red at 4.39:1 pressed (#cd073c on #e2e2e2). The muted ink is #646464 at the defaults, was #666666.

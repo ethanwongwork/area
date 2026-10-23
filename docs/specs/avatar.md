@@ -94,7 +94,7 @@ icon content: 20px viewport at md, ink 14 × 16 (`area--content-icon`). Group: i
 | shell · radius | circle `radius-full`; square its own corner, the corner setting × size ÷ 32 (24 → 6, 32 → 8, 40 → 10 at the default), at least `radius-min`, capped at 7/16 of the side (`display.css:22-25, 52-53`) | ChatGPT, Figma and Untitled round; owner, one corner setting (2026-10-03) and pill shapes (2026-10-04) | — |
 | fill · neutral | `bg-component-active` #eeeeee (dark #3f3f3f) | Untitled neutral-100 #f5f5f5 | One step darker, so the disc reads on `bg-component` rows. Figma paints a per-user hue, rgb(102, 119, 153); neutral kept (third pass) |
 | tone · treatment | tone also switches treatment: `neutral` is a soft plate (`bg-component-active`, `fg-muted` ink); `inverse` is solid (`bg-inverse`, `fg-on-inverse`) (`display.css:55-64`) | Owner, audit C-21 A (2026-09-30) | Badge's soft accent differs; kept and documented. The hued `accent` tone that was also solid was removed 2026-09-29 (D1) |
-| initials · ink | `fg-muted` #666666 | Untitled neutral-500 #737373 | Area's muted role; Figma white on its hue |
+| initials · ink | `fg-muted` #646464 | Untitled neutral-500 #737373 | Area's muted role; Figma white on its hue |
 | initials · size | **12 / 14 / 16 at sm / md / lg** (`--_text`, `display.css`) | Notion 14 on its 32 Share-list avatar (`notion--share-person-avatar`, initials layer 14px/32px); Untitled 12 / 14 / 16 by size; owner (2026-09-28) | Was 12 at sm and md, 14 at lg: two initials read small on the 32 disc (37% of the side against Notion's 44% and Figma's 50%) |
 | initials · weight | 500 (`weight-strong`) | Type ramp (500 for labels on fills, DESIGN_SYSTEM "Color and focus") | Notion 400 (person), 500 (workspace); Figma 400; Untitled 600; one label weight (third pass) |
 | icon · size | 16 / 20 / 24 at sm / md / lg | Native Fluent cuts at their size | — |
@@ -240,3 +240,9 @@ ChatGPT and Notion show the disc colour, then the image, with no fade.
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-23 (press room)
+
+- **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
+- **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
+  on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.

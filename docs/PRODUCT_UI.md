@@ -170,6 +170,10 @@ header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
     snapped to. It is a shortcut to the settings, never a setting of its own.
   - **The panel** at the right holds the open category's settings, one section each (its name and question, then its
     choices), with Back, Use defaults and Continue between categories at its foot. A pick applies at once.
+  - **In a narrow Canvas** (under 816, a 400 visual beside the 400 panel; 2026-10-23) the visual sits over the panel,
+    the Canvas's width and the one-column setup's height (`clamp(200px, 36vh, 420px)`), and the panel scrolls under it.
+    In a 1024 window the Sidebar and Inspector leave the Canvas about 470 to 530, where the visual beside the panel was
+    20 to 80 wide; at 1440 the two stay side by side.
   - **The choices** are kept apart from the visual (owner: "separate the choices from the visual"): choice cards (Radio
     and Checkbox `variant="card" layout="preview"`) each showing the option as a mini UI (colour, grounds, layers,
     emphasis, contrast, density) or one simple mark at true size on a page plate (corners, lines, lifts, plates, rings,

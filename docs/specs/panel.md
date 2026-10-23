@@ -119,7 +119,7 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | bar | `--_row` + 2 × `--_panel-gap` + rule: sm 45, md 57 (`panel.css:43-45`) | Owner 2026-09-28: the bar's button has one field gap above and below | Was `control-sm` + 2 × 4 + rule = 37 at every size |
 | title | 500; md 16/24, sm 14/20 (`--_panel-title-*`, `panel.css:105-111`) | Surface title (audit S2, owner 2026-09-30); type by size (owner 2026-09-28) | Was UI 14/20 at both sizes |
 | heading | **500, `fg-default`; md 14/20, sm 12/16** (`--_panel-label-*`, `panel.css:162-177`; audit S2) | Second pass: the heading outranks muted labels by ink | Was 12/16, smaller than the 14px labels under it. Figma's title is 11/16 550 at the same ink as its field text; kept (third pass): one label weight, so ink sets headings apart |
-| field labels | **`fg-muted` #666666** (`panel.css:147`) | Second pass | Was the Field default ink |
+| field labels | **`fg-muted` #646464** (`panel.css:147`) | Second pass | Was the Field default ink |
 | numeric rows | **NumberField soft with letter prefixes** X / Y / W / H (`apps/desktop/src/content/demos/gallery.tsx:680-690`) | Figma's letter-prefixed number fields (`figma--number-field`) | Prefix ink and box differ from Figma; see [number-field.md](number-field.md) |
 | rules (bar, section, footer) | **`border-decorative`**, the panel's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 | Second pass: new divider role for rules; Figma #e6 (`figma--size-select` edge), ChatGPT 10% black; Notion's menu rules are lighter, 7% (#f0, `menu/notion--page-menu--open`); #e2 is the nearest rung to #e5 | Was `border-decorative` #f3f3f3 |
 | section rule extent | full width; last section none (`panel.css:114-127`) | Area's own | — |
@@ -350,3 +350,9 @@ The section toggle is not selectable. See [interaction polish](../research/inter
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-23 (press room)
+
+- **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
+- **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
+  on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.
