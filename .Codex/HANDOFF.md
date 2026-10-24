@@ -1,6 +1,18 @@
 # Handoff
 
 ## Current state (2026-10-23)
+- **PR, `claude/nice-swirles-989844` (owner 2026-10-23: "a user wants to choose like 2-3 colors overall").** Any palette
+  from a page colour and an accent. Accent takes the eleven or any hue in 5° (`color/generate.ts`: the palette's ladder
+  between the two nearest families; named accents paint as before, checked pixel for pixel). New settings
+  (`axes/accent.ts`): Accent strength 100–30 (an OKLab mix toward the gray of the colour's own luminance, not chroma
+  scaling, which broke contrast; the solvers walk at every strength), Light / Dark solid (400–850, clamped toward the
+  label). Tint to 16, held inside each hue's sRGB room (`tintRoom`; clipping had painted a blue tint cyan), Tint hue
+  Accent, hued inks darken for tinted pages (`HUED_INK_MARGIN`). Setup: greys as one first choice (Neutral, Warmer,
+  Cooler, Tinted, Accent) and an accent colour field that snaps. Gate: `contrast/accents.test.ts` (every accent ×
+  strength × Solid × neutral × mode). Sweep of all 119 families in light and dark with two custom palettes: no new text
+  contrast failures (Folder's count, 2.52:1, predates it). Research and review page: docs/research/
+  palette-customization-2026-10-23. Open: palette names (presets not built), a separate button colour (deferred), P3.
+
 - **PR, `claude/semantic-color-hover-states-c30c80` (owner 2026-10-23).** Danger hover (Fill; `axes/states.ts`,
   `row-danger-tint`): `tint` (default) turns a Menu danger row's hover and pressed plates to the danger hue at the
   neutral plates' lightness, `neutral` the old grey; the red follows the Pressed step (kept over PR #152's firmest press

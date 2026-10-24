@@ -17,9 +17,11 @@
 import { type Oklch, SRGB, parseHex, toHex, toOklchCss } from "./oklab.ts";
 import { gamutMap, maxChromaAt } from "./gamut.ts";
 import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, type Level, type Ramp, CHROMA_TRIM, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight } from "./curves.ts";
-import { apcaMagnitude, wcagContrastHex } from "./contrast.ts";
+import { apcaMagnitude, relativeLuminance, wcagContrastHex } from "./contrast.ts";
+import { TONAL_Y } from "./layers.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
 import PALETTE from "./palette.json" with { type: "json" };
+import { ACCENT_STRENGTHS, SOLID_STEPS, type SolidStep, familyFor, withStrength } from "./generate.ts";
 
 export type Theme = "light" | "dark";
 export type ScaleKind = "neutral" | "chromatic";
@@ -47,6 +49,8 @@ export interface ScaleSpec {
    * give ground only as far as the gate requires.
    */
   solidForeground?: "light" | "dark";
+  /** A generated family's light-end chroma trim (color/generate.ts: its neighbours' `CHROMA_TRIM`, mixed). */
+  trim?: number;
 }
 
 export interface StepContrast {
@@ -122,6 +126,12 @@ export interface BuiltScale {
   tonal: TonalChoice;
   /** This theme's solid fill, resolved. */
   solidHex: string;
+  /**
+   * The Solid setting's steps (axes/accent.ts), this theme: the rung each step draws and its hover. A step the label
+   * cannot clear on, at every Accent strength, moves toward the label's side to the first that can. Chromatic only; a
+   * neutral's steps are its own solid.
+   */
+  solidSteps: Record<SolidStep, { level: Level; hover: Level }>;
   vivid: VividChoice;
   contrast: { hex: "#ffffff" | "#000000"; wcag: number; apca: number };
 }
@@ -141,7 +151,7 @@ const SOLID_CONTRAST_TARGET = 4.6;
 const SOLID_APCA_TARGET = 61;
 
 export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
-  const family = FAMILIES[spec.id];
+  const family = familyFor(spec.id);
   if (!family) {
     throw new Error(
       `"${spec.id}" is not a family in the vendored palette. Known: ${Object.keys(FAMILIES).join(", ")}`,
@@ -152,7 +162,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
   // the light end, and bounded lightness/chroma curves for the dark end. Neutral families
   // bypass this path because their palette anchors also define surface contrast.
   const rotation = HUE_ROTATION[spec.id] ?? 0;
-  const trim = CHROMA_TRIM[spec.id] ?? 1;
+  const trim = CHROMA_TRIM[spec.id] ?? spec.trim ?? 1;
   const familyPeakChroma = Math.max(...Object.values(family).map((rung) => rung.oklch.C));
   const familyPeakLevel = LEVELS.reduce(
     (peak, level) => family[String(level)]!.oklch.C > family[String(peak)]!.oklch.C ? level : peak,
@@ -205,6 +215,9 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     // solid-wall rung. Start the contrast walk from the export's own peak instead.
     : chooseSolid(steps, familyPeakLevel, spec.solidForeground ?? "light");
   const solidHex = steps.find((x) => x.level === solid.level[theme])!.hex;
+  const solidSteps = Object.fromEntries(SOLID_STEPS.map(step => [step, spec.kind === "neutral"
+    ? { level: solid.level[theme], hover: solid.hover[theme] }
+    : solidAt(steps, step, solid.foreground, theme)])) as BuiltScale["solidSteps"];
   const stroke: StrokeChoice = {
     // The bars are the gate's own ambient and hover stroke tiers; see contrast/assertions.ts.
     rest: {
@@ -247,6 +260,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     vivid,
     contrast: { hex: solid.foreground, wcag: solid.wcag, apca: solid.apca },
     solidHex,
+    solidSteps,
   };
 }
 
@@ -281,10 +295,13 @@ function chooseTonalPair(steps: readonly ScaleStep[], kind: ScaleKind): TonalCho
     for (const surfaces of TONAL_SURFACE_SEQUENCES[theme]) {
       const grounds = [...ambient, ...surfaces.map(level => byLevel.get(level)!.hex)];
       for (const foreground of steps) {
-        const readable = grounds.every(background =>
-          wcagContrastHex(foreground.hex, background) >= 4.5 &&
-          (theme === "light" || apcaMagnitude(foreground.hex, background) >= 60)
-        );
+        // At every Accent strength (color/generate.ts): the ink and its tints quiet together; the neutral grounds stay. In
+        // light the ink is also no brighter than TONAL_Y, the bound the Layers model darkens hued inks by on a gray page
+        // (layers.ts): every named family's is, and a hue's generated family has to be too (2026-10-23).
+        const readable = ACCENT_STRENGTHS.every(strength => grounds.every((background, i) => {
+          const ink = withStrength(foreground.hex, strength), ground = i < ambient.length ? background : withStrength(background, strength);
+          return wcagContrastHex(ink, ground) >= 4.5 && (theme === "light" ? relativeLuminance(parseHex(ink)) <= TONAL_Y : apcaMagnitude(ink, ground) >= 60);
+        }));
         if (!readable) continue;
         const surfaceChroma = surfaces.reduce((sum, level) => sum + byLevel.get(level)!.oklch.C, 0);
         if (!best || foreground.oklch.C > best.foreground.oklch.C + 1e-9 ||
@@ -382,6 +399,26 @@ function chooseSolid(
     apca: Number(apcaMagnitude(fg, chosen.hex).toFixed(1)),
     retreat: Math.abs(index - start),
   };
+}
+
+/**
+ * A Solid step (axes/accent.ts): the rung itself when its label clears at every Accent strength, else the first rung
+ * toward the label's side that does (darker for white, lighter for black). Its hover follows `chooseSolid`'s rule: away
+ * from the page (darker in light, lighter in dark) when the label still clears there, else the other way.
+ */
+function solidAt(steps: readonly ScaleStep[], step: SolidStep, fg: "#ffffff" | "#000000", theme: Theme): { level: Level; hover: Level } {
+  const passes = (hex: string) => ACCENT_STRENGTHS.every(strength => {
+    const paint = withStrength(hex, strength);
+    return wcagContrastHex(fg, paint) >= SOLID_CONTRAST_TARGET && apcaMagnitude(fg, paint) >= SOLID_APCA_TARGET;
+  });
+  const direction = fg === "#ffffff" ? 1 : -1;
+  const start = steps.findIndex(s => s.level === step);
+  let index = start;
+  while (index >= 0 && index < steps.length && !passes(steps[index]!.hex)) index += direction;
+  if (index < 0 || index >= steps.length) index = start;
+  const at = (i: number) => steps[Math.min(steps.length - 1, Math.max(0, i))]!;
+  const away = theme === "light" ? index + 1 : index - 1, back = theme === "light" ? index - 1 : index + 1;
+  return { level: steps[index]!.level, hover: passes(at(away).hex) ? at(away).level : at(back).level };
 }
 
 /**
@@ -483,7 +520,7 @@ function stepContrast(hex: string): StepContrast {
  */
 export function assertScale(scale: BuiltScale): void {
   for (const step of scale.steps) {
-    const rung = FAMILIES[scale.id]![String(step.level)]!;
+    const rung = familyFor(scale.id)![String(step.level)]!;
     const parsed = parseHex(rung.hex);
     if (parsed.some((c) => Number.isNaN(c))) {
       throw new Error(`${scale.id}-${step.level}: "${rung.hex}" is not a colour.`);

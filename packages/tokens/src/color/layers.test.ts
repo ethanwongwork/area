@@ -6,12 +6,13 @@
 import { describe, expect, it } from "vitest";
 import {
   DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, HUED_INKS, LAYER_STEPS, VIVID_ROLES, castOf, DEFAULT_FILL, FILL_STEPS, type FillSelection, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
-  DEFAULT_INK_TINT, INK_TINT_STEPS, TINT_HUES, TINT_STEP, TINT_STEPS, inkHex, CARD_TONE_STEPS, type CardTone,
+  DEFAULT_INK_TINT, INK_TINT_STEPS, TINT_HUES, TINT_STEP, TINT_STEPS, inkHex, CARD_TONE_STEPS, type CardTone, tintedDarken, TONAL_Y, VIVID_Y,
   EDGE_OFFSET, PRESS_ROOM, edgeShift,
 } from "./layers.ts";
 import { wcagContrastHex } from "./contrast.ts";
 import { type Rgb, SRGB, clampRgb, oklabToRgb, parseHex, rgbToOklab, toHex } from "./oklab.ts";
 import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
+import { ACCENT_HUES } from "./generate.ts";
 import { resolveTheme, scaleFor } from "../semantic/resolve.ts";
 
 const THEMES = ["light", "dark"] as const;
@@ -70,7 +71,8 @@ describe("layers: every combination is usable", () => {
   });
 });
 
-// Tint (axes/tint.ts, 2026-10-22): every hue in its 5° steps at every strength 1 to 8, at every Text tint share, in both
+// Tint (axes/tint.ts, 2026-10-22): every hue in its 5° steps at every strength 1 to 16 (16 since 2026-10-23, each held
+// inside its hue's room: tintRoom), at every Text tint share, in both
 // modes, through every check above, at every ground and Layers step (docs/research/custom-neutral-2026-10-22/).
 describe("layers: every tint is usable", () => {
   for (const theme of THEMES) it(`${theme}: every hue, strength and text share`, () => {
@@ -81,7 +83,7 @@ describe("layers: every tint is usable", () => {
       if (found.length) problems.push(`hue ${hue}, tint ${step}, text ${share}: ${found[0]} (+${found.length - 1})`);
     }
     expect(problems).toEqual([]);
-  });
+  }, 60_000);
   it("an untinted gray is unchanged by the text rule", () => {
     for (const share of INK_TINT_STEPS) expect(inkHex("light", 0.5, { hue: 0, chroma: 0 }, share / 4)).toBe(layerHex("light", 0.5, { hue: 0, chroma: 0 }));
   });
@@ -97,7 +99,7 @@ function evaluate(expr: string, vars: Record<string, number>): number {
 }
 function cssLightness(theme: "light" | "dark", g: number, n: number, f: FillSelection = DEFAULT_FILL, tone: CardTone = "auto") {
   const auto = tone === "auto" ? 1 : 0, k = tone === "auto" ? 0 : tone;
-  const css = layerLightnessCss(), vars: Record<string, number> = { "ground-light": theme === "light" ? groundLightness("light", g) : 1, "ground-dark": theme === "dark" ? groundLightness("dark", g) : 0, "layers-light": theme === "light" ? n : 8 - n, "layers-dark": theme === "dark" ? n : 8 - n, "fill-hover-step": f.hover, "fill-selected-step": f.selected,
+  const css = layerLightnessCss(), vars: Record<string, number> = { "cast-chroma-light": 0, "ground-light": theme === "light" ? groundLightness("light", g) : 1, "ground-dark": theme === "dark" ? groundLightness("dark", g) : 0, "layers-light": theme === "light" ? n : 8 - n, "layers-dark": theme === "dark" ? n : 8 - n, "fill-hover-step": f.hover, "fill-selected-step": f.selected,
     "card-tone-light-auto": theme === "light" ? auto : 1, "card-tone-light": theme === "light" ? k : 0, "card-tone-dark-auto": theme === "dark" ? auto : 1, "card-tone-dark": theme === "dark" ? k : 0 };
   // Resolve in dependency order: keep going until every helper is known.
   for (let pass = 0; pass < 6; pass++) for (const [k, e] of Object.entries(css)) if (!(k in vars)) { try { vars[k] = evaluate(e, vars); } catch { /* a later pass */ } }
@@ -155,6 +157,11 @@ describe("layers: inks with a hue follow the ground", () => {
     const t = resolveTheme({ theme: "light", neutral: neutral.id, accent: accent.id }).tokens;
     for (const { token, darken } of HUED_INKS) inks[darken].add(t[token]!);
   }
+  // And the accent at every hue (axes/color.ts, 2026-10-23), at full strength and the quietest.
+  for (const hue of ACCENT_HUES) for (const accentStrength of [100, 30]) {
+    const t = resolveTheme({ theme: "light", neutral: "neutral", accent: String(hue), accentStrength }).tokens;
+    for (const { token, darken } of HUED_INKS) inks[darken].add(t[token]!);
+  }
   it("light: vivid and tonal inks keep 4.5:1 on every page, and are unchanged on white", () => {
     const problems: string[] = [];
     for (const g of GROUND_LIGHT_STEPS) for (const n of LAYER_STEPS) {
@@ -165,6 +172,18 @@ describe("layers: inks with a hue follow the ground", () => {
     }
     expect(problems).toEqual([]);
   });
+  // On a tinted page too (palette research 2026-10-23: "a blue link on a 0.08 yellow page is unproven"): every hue in 15°
+  // steps at Tint 1, 2, 4, 8, 12 and 16, held inside its room as the CSS holds it.
+  it("light: vivid and tonal inks keep 4.5:1 on every tinted page", () => {
+    const problems: string[] = [];
+    for (const g of GROUND_LIGHT_STEPS) for (const n of LAYER_STEPS) for (let hue = 0; hue < 360; hue += 15) for (const step of [1, 2, 4, 8, 12, 16]) {
+      const m = layerLightness("light", g, n), page = layerHex("light", m.page, { chroma: step * TINT_STEP, hue });
+      const darken = { vivid: tintedDarken(m.page, step * TINT_STEP, VIVID_Y), tonal: tintedDarken(m.page, step * TINT_STEP, TONAL_Y) };
+      for (const [kind, d] of [["vivid", darken.vivid], ["tonal", darken.tonal]] as const)
+        for (const ink of inks[kind]) if (wcagContrastHex(mixOklab(ink, "black", d), page) < 4.5) problems.push(`${g}/${n} hue ${hue} tint ${step}: ${kind} ${ink} on ${page}`);
+    }
+    expect(problems.slice(0, 20)).toEqual([]);
+  }, 60_000);
   // Tag's dark inks (tag.css: the vivid rungs, gray, and its green and yellow literals) over a 16% wash of themselves.
   const tagInks = [...VIVID_ROLES.filter(r => r !== "accent" && r !== "caution" && r !== "success").map(r => resolveTheme({ theme: "dark", neutral: "neutral", accent: "blue" }).tokens[`fg-${r}-vivid`]!), resolveTheme({ theme: "dark", neutral: "neutral", accent: "blue" }).tokens["fg-gray"]!, "#85ce94", "#e2b968"];
   it("dark: tinted labels keep 4.5:1 on their plate on every raised layer, field and hovered row", () => {

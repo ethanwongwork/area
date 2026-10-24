@@ -37,7 +37,7 @@ import { AXES } from "../tokens.ts";
 import { attributeOf, defaultLabel, isDefault, SETTINGS, scopeOf, themeOf, tileLabel, type Mode, type Setting } from "./theme-settings.ts";
 import { SETUP_VIEWS, SetupDrawing } from "./theme-views.tsx";
 import { LayerMap } from "../layer-map.tsx";
-import { snapPageColour } from "../page-colour.ts";
+import { accentSolidHex, snapAccentColour, snapPageColour } from "../page-colour.ts";
 
 type StageView = (typeof SETUP_VIEWS)[number]["value"];
 
@@ -46,25 +46,57 @@ type StageView = (typeof SETUP_VIEWS)[number]["value"];
  * dark (owner, 2026-10-22: "separate the dark mode choice from the light mode, i shouldnt be choosing both at the same
  * time"). Color asks light's pair; Dark mode asks dark's, so each is chosen looking at its own theme.
  */
-const DARK_ONLY: ReadonlySet<string> = new Set(["tint-dark", "ground-dark", "layers-dark", "card-tone-dark"]);
+const DARK_ONLY: ReadonlySet<string> = new Set(["tint-dark", "ground-dark", "layers-dark", "card-tone-dark", "solid-dark"]);
 /** The settings the stage answers with the layer map (src/layer-map.tsx) instead of the header's view. */
 const LAYERED = /^((ground|layers|tint|card-tone)-(light|dark)|tint-hue|ink-tint)$/;
 const SETUP_GROUPS = SETTING_GROUPS.flatMap(group => group.heading === "Color"
   ? [{ heading: "Color", settings: group.settings.filter(id => !DARK_ONLY.has(id)) }, { heading: "Dark mode", settings: group.settings.filter(id => DARK_ONLY.has(id)) }]
   : [group]);
 const SETUP_STEPS: Setting[] = SETUP_GROUPS.flatMap(group => group.settings.map(id => ({ ...SETTINGS.find(entry => entry.id === id)!, heading: group.heading })));
+/**
+ * The greys as one first choice (owner, 2026-10-23: "presented in the beginning with the choice between neutral, to
+ * warmer, to cooler, or even a color tint ... selecting any of the options will allow further customization further in"):
+ * each family writes Neutral and Tint, which stay the settings, and opens only the settings that refine it, Warmer and
+ * Cooler their own range of hues, Tinted every hue, Accent the accent's own.
+ */
+type GreyFamily = "neutral" | "warm" | "cool" | "tinted" | "accent";
+const GREY_FAMILIES: ReadonlyArray<{ id: GreyFamily; label: string; picks: Partial<Record<keyof CanvasAxes, string>> }> = [
+  { id: "neutral", label: "Neutral", picks: { neutral: "neutral", "tint-hue": "auto", "tint-light": "auto", "tint-dark": "auto" } },
+  { id: "warm", label: "Warmer", picks: { neutral: "warm", "tint-hue": "auto", "tint-light": "auto", "tint-dark": "auto" } },
+  { id: "cool", label: "Cooler", picks: { neutral: "cool", "tint-hue": "auto", "tint-light": "auto", "tint-dark": "auto" } },
+  { id: "tinted", label: "Tinted", picks: { neutral: "neutral", "tint-hue": "95", "tint-light": "6", "tint-dark": "2" } },
+  { id: "accent", label: "Accent", picks: { neutral: "neutral", "tint-hue": "accent", "tint-light": "3", "tint-dark": "2" } },
+];
+/** The hues Warmer and Cooler refine with, around Warm's 68° and Cool's 248°. */
+const FAMILY_HUES: Partial<Record<GreyFamily, (hue: number) => boolean>> = { warm: hue => hue >= 25 && hue <= 100, cool: hue => hue >= 185 && hue <= 285 };
+/** Which family the Canvas's Neutral and Tint draw. */
+function familyOf(canvas: CanvasAxes): GreyFamily {
+  const hue = canvas["tint-hue"], tinted = canvas["tint-light"] !== "auto" && canvas["tint-light"] !== "0";
+  if (hue === "accent") return "accent";
+  if (hue === "auto") return canvas.neutral === "warm" || canvas.neutral === "cool" ? canvas.neutral : tinted ? "tinted" : "neutral";
+  const range = FAMILY_HUES[canvas.neutral as GreyFamily];
+  return range?.(Number(hue)) ? canvas.neutral as GreyFamily : "tinted";
+}
+/** The settings each family opens: Tint hue where it has hues to choose, the strengths and Text tint wherever it tints. */
+const opensFor = (family: GreyFamily, id: string) =>
+  id === "tint-hue" ? family === "warm" || family === "cool" || family === "tinted"
+  : id === "tint-light" || id === "tint-dark" || id === "ink-tint" ? family !== "neutral" : true;
+
 /** A choice card's least width: a mini UI reads from about 96; a mark or a text card can be narrower (picks). */
 const CHOICE_MIN = { mini: 104, mark: 88 } as const; /* pick */
 
 /** Each step's question: what the person is choosing, in their words, not the setting's name. */
 const QUESTIONS: Record<string, string> = {
   theme: "Light or dark?",
-  neutral: "Which grey should the interface be drawn in?",
+  neutral: "Neutral greys, warmer, cooler, or tinted with a colour?",
   "tint-hue": "Which hue should the greys lean toward?",
   "tint-light": "In light, how strongly should the greys take that hue?",
   "tint-dark": "In dark, how strongly should the greys take that hue?",
   "ink-tint": "How much of the tint should text take?",
   accent: "Which accent colour?",
+  "accent-strength": "How much of its colour should the accent keep?",
+  "solid-light": "In light, how deep should accent buttons and checked marks be?",
+  "solid-dark": "In dark, how deep should accent buttons and checked marks be?",
   "ground-light": "How white should the light page be?",
   "ground-dark": "How dark should the dark page be?",
   "layers-light": "In light, how far should cards and sidebars sit from the page?",
@@ -168,9 +200,12 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
   const presetOf = (entry: Setting, id?: string) => entry.presets.find(preset => preset.id === id);
   const choiceLabel = (entry: Setting, preset: { id: string; label: string }) => tileLabel(preset.label, isDefault(entry, preset.id) ? "Default" : undefined);
   /** The accent's own colour per option, the swatch's paint (the registry's 500 step, the solid fill). */
-  const accentHex = (id: string) => AXES.find(axis => axis.id === "accent")?.presets.find(preset => preset.id === id)?.tokens["--area-accent-500"] ?? id;
+  // The accent axis writes its colours at full strength (`-full`); Accent strength quiets them live (axes/accent.ts).
+  const accentHex = (id: string) => AXES.find(axis => axis.id === "accent")?.presets.find(preset => preset.id === id)?.tokens["--area-accent-500-full"] ?? id;
   /** A swatch choice's paint: an accent's solid; a tint hue the hue itself (Auto, Neutral's own grey). */
-  const swatchOf = (entry: Setting, id: string) => entry.id === "tint-hue" ? (id === "auto" ? "var(--area-neutral-500)" : `oklch(0.72 0.12 ${id})`) : accentHex(id);
+  const swatchOf = (entry: Setting, id: string) => entry.id === "tint-hue"
+    ? (id === "auto" ? "var(--area-neutral-500)" : id === "accent" ? accentHex(valueOf(SETUP_STEPS.find(step => step.id === "accent")!)) : `oklch(0.72 0.12 ${id})`)
+    : accentHex(id);
   /** The last page colour picked in each mode, and what it snapped to. */
   const [picked, setPicked] = useState<Partial<Record<Mode, { hex: string; note: string }>>>({});
   const pickPage = (theme: Mode, hex: string) => {
@@ -190,6 +225,74 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
       <span className="studio-muted setup-choice__value">{picked[theme]?.note ?? "Snaps to the nearest Ground, tint and 5° of hue."}</span>
     </section>
   );
+
+  /** The last accent colour picked, and what it snapped to. */
+  const [pickedAccent, setPickedAccent] = useState<{ hex: string; note: string }>();
+  const pickAccent = (hex: string) => {
+    const snap = snapAccentColour(hex);
+    setCanvas("accent", snap.accent); setCanvas("accent-strength", snap.strength); setCanvas("solid-light", snap.solid);
+    const name = /^\d+$/.test(snap.accent) ? `hue ${snap.accent}°` : snap.accent[0]!.toUpperCase() + snap.accent.slice(1);
+    setPickedAccent({ hex, note: `${name}, strength ${snap.strength}, Light solid ${snap.solid === "auto" ? "Auto" : snap.solid} · ΔE ${snap.distance}${snap.distance > 0.02 ? ": the nearest Area draws with a readable label" : ""}` });
+  };
+  /** Whether the accent's 72 hues are open: always while the accent is a hue, else after "More hues". */
+  const [moreHues, setMoreHues] = useState(false);
+  const family = familyOf(canvas);
+  const pickFamily = (id: GreyFamily) => {
+    const picks = { ...GREY_FAMILIES.find(entry => entry.id === id)!.picks };
+    // Tinted keeps a hue already chosen, and Warmer or Cooler one in its own range.
+    const hue = canvas["tint-hue"];
+    if (id === "tinted" && /^\d+$/.test(hue)) picks["tint-hue"] = hue;
+    for (const [key, value] of Object.entries(picks)) setCanvas(key as keyof CanvasAxes, value!);
+  };
+
+  /**
+   * The greys' first choice: one card per family, each drawn in it. Neutral and Tint stay the settings; the sections
+   * below open only for what the family refines (opensFor).
+   */
+  const greys = () => {
+    const theme = themeOf("neutral", mode);
+    const picture = (id: GreyFamily) => {
+      const scope = Object.fromEntries(Object.entries(GREY_FAMILIES.find(entry => entry.id === id)!.picks).map(([key, value]) => [`data-area-${key}`, value!]));
+      return <span className="setup-choice__picture" inert {...picks} data-area-theme={theme} data-area-layers-light="8" data-area-layers-dark="8" {...scope}><ChoicePreview axis="neutral" preset="neutral" /></span>;
+    };
+    const style = { "--area-choice-ratio": ratioOf("neutral"), "--area-choice-min": `${CHOICE_MIN.mark}px` } as CSSProperties;
+    return (
+      <section key="neutral" id="setup-neutral" className="setup-choice">
+        <RadioGroup label="Greys" description={QUESTIONS.neutral} name="setup-greys" value={family} onValueChange={next => pickFamily(next as GreyFamily)} style={style}>
+          {GREY_FAMILIES.map(entry => (
+            <Radio key={entry.id} variant="card" layout="preview" value={entry.id} label={tileLabel(entry.label, entry.id === "neutral" ? "Default" : undefined)} leadingVisual={picture(entry.id)} />
+          ))}
+        </RadioGroup>
+      </section>
+    );
+  };
+
+  /** The accent: the palette's eleven, every hue in 5° steps behind More hues, and any colour, snapped (snapAccentColour). */
+  const accent = (entry: Setting) => {
+    const value = valueOf(entry), hue = /^\d+$/.test(value), open = hue || moreHues;
+    const named = entry.presets.filter(preset => !/^\d+$/.test(preset.id)), hues = entry.presets.filter(preset => /^\d+$/.test(preset.id));
+    const picker = (label: string, list: typeof entry.presets) => (
+      <ColorSwatchPicker label={label} size="md" layout="row" value={swatchOf(entry, value)}
+        items={list.map(preset => ({ value: swatchOf(entry, preset.id), label: choiceLabel(entry, preset) }))}
+        onValueChange={hex => { const preset = list.find(candidate => swatchOf(entry, candidate.id) === hex); if (preset) pick(entry, preset.id); }} />
+    );
+    return (
+      <section key={entry.id} id={`setup-${entry.id}`} className="setup-choice">
+        <div className="setup-choice__swatches">
+          <span className="setup-choice__legend">{entry.name}</span>
+          <span className="setup-choice__question">{QUESTIONS.accent}</span>
+          {picker(entry.name, named)}
+          {open ? picker(`${entry.name}: every hue`, hues) : null}
+          <span className="studio-muted setup-choice__value">{choiceLabel(entry, presetOf(entry, value) ?? { id: "", label: "—" })}</span>
+          {hue ? null : <Button variant="ghost" tone="neutral" size="sm" onClick={() => setMoreHues(current => !current)}>{moreHues ? "Fewer hues" : "More hues"}</Button>}
+        </div>
+        <span className="setup-choice__legend">Accent colour</span>
+        <span className="setup-choice__question">Pick any colour for accent buttons; its hue sets Accent, its colour Accent strength and its depth Light solid.</span>
+        <ColorField aria-label="Accent colour" value={pickedAccent?.hex ?? accentSolidHex(value, canvas["accent-strength"], canvas["solid-light"])} onValueChange={pickAccent} />
+        <span className="studio-muted setup-choice__value">{pickedAccent?.note ?? "Snaps to the nearest accent, strength and solid step."}</span>
+      </section>
+    );
+  };
 
   /** Pointer and focus on a section's choices preview them in the visual: the nth choice is the nth option. */
   const previewing = (entry: Setting) => {
@@ -220,13 +323,16 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
     const picture = (preset: { id: string }) => <span className="setup-choice__picture" inert {...choiceScope(entry, preset.id)}><ChoicePreview axis={entry.id} preset={preset.id} /></span>;
     const description = QUESTIONS[entry.id] ?? entry.description;
     let choices: ReactNode;
+    // Tint hue offers what the greys' family refines with: Warmer and Cooler their own range, Tinted every hue.
+    const offered = entry.id === "tint-hue" ? entry.presets.filter(preset => preset.id === "auto" ? family === "warm" || family === "cool"
+      : preset.id === "accent" ? false : FAMILY_HUES[family]?.(Number(preset.id)) ?? true) : entry.presets;
     if (kind === "swatch") choices = (
       <div className="setup-choice__swatches">
         <span className="setup-choice__legend">{entry.name}</span>
         <span className="setup-choice__question">{description}</span>
         <ColorSwatchPicker label={entry.name} size="md" layout="row" value={swatchOf(entry, valueOf(entry))}
-          items={entry.presets.map(preset => ({ value: swatchOf(entry, preset.id), label: choiceLabel(entry, preset) }))}
-          onValueChange={hex => { const preset = entry.presets.find(candidate => swatchOf(entry, candidate.id) === hex); if (preset) pick(entry, preset.id); }} />
+          items={offered.map(preset => ({ value: swatchOf(entry, preset.id), label: choiceLabel(entry, preset) }))}
+          onValueChange={hex => { const preset = offered.find(candidate => swatchOf(entry, candidate.id) === hex); if (preset) pick(entry, preset.id); }} />
         <span className="studio-muted setup-choice__value">{choiceLabel(entry, presetOf(entry, valueOf(entry)) ?? { id: "", label: "—" })}</span>
       </div>
     );
@@ -269,7 +375,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
           <SectionHeading level={2} titleId="setup-category" title={group.heading}
             lede={`${groupIndex + 1} of ${SETUP_GROUPS.length} · ${inGroup.length} ${inGroup.length === 1 ? "setting" : "settings"}`} />
           {group.heading === "Color" ? pageColour("light") : group.heading === "Dark mode" ? pageColour("dark") : null}
-          {inGroup.map(section)}
+          {inGroup.filter(entry => opensFor(family, entry.id)).map(entry => entry.id === "neutral" ? greys() : entry.id === "accent" ? accent(entry) : section(entry))}
         </div>
         <div className="setup__panel-foot">
           <div className="setup__nav">
