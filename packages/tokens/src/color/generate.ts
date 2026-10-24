@@ -125,6 +125,16 @@ export function withStrength(hex: string, strength: number): string {
   return toHex(clampRgb(oklabToRgb({ L: a.L * t + g.L * (1 - t), a: a.a * t + g.a * (1 - t), b: a.b * t + g.b * (1 - t) }, SRGB))) + alpha;
 }
 
+/** Two colours mixed in OKLab, `share` of the way to the second: what CSS's `color-mix(in oklab, a, b share%)` paints. */
+export function mixOklab(a: string, b: string, share: number): string {
+  if (share <= 0) return a;
+  const x = rgbToOklab(parseHex(a), SRGB), y = rgbToOklab(parseHex(b), SRGB);
+  return toHex(clampRgb(oklabToRgb({ L: x.L + (y.L - x.L) * share, a: x.a + (y.a - x.a) * share, b: x.b + (y.b - x.b) * share }, SRGB)));
+}
+
+/** Label tint (axes/accent.ts): 0 (the measured black or white) to 4 (Label tint's end, `tintedLabel`), in quarters. */
+export const LABEL_TINT_STEPS = [0, 1, 2, 3, 4] as const;
+
 /**
  * Solid (axes/accent.ts): the accent step solid fills sit on, per mode. Auto is the solver's own step (`chooseSolid`);
  * a step from 400 to 850 is that step, moved toward the label's side until the label clears (scale.ts `solidAt`), so a

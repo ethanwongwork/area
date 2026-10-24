@@ -361,6 +361,12 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
     case "solid-light":
     case "solid-dark":
       return [FILL.control, <Button>Button</Button>];
+    // Label tint: an accent Button, its label the setting.
+    case "label-tint":
+      return [FILL.control, <Button>Button</Button>];
+    // Status colours: the status tones the setting quiets, as solid Badges.
+    case "status-colours":
+      return [FILL.wide, <div className="lang-row"><Badge tone="danger" variant="solid">Failed</Badge><Badge tone="warning" variant="solid">Due</Badge><Badge tone="success" variant="solid">Done</Badge></div>];
     // How much of its colour the accent keeps: everything it paints, a Button, a checked mark and a selected chip's tint.
     case "accent-strength":
       return [FILL.wide, <div className="lang-row"><Button>Save</Button><Checkbox label="On" defaultChecked /></div>];

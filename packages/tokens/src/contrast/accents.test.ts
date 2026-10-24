@@ -3,14 +3,14 @@
  *
  * contrast.test.ts measures every pairing on the shipped named accents one test at a time. This file measures every
  * pairing that reads an accent token on every other accent the settings can make: the palette's eleven and the 72 hues,
- * at every strength, in both modes and on every neutral, and the solid pairings at every Solid step. About a million
+ * at every strength, in both modes and on every neutral, and the solid pairings at every Solid step and Label tint. About a million
  * measurements, so they are collected rather than reported one test each; a failure lists the worst cases.
  */
 import { describe, expect, it } from "vitest";
 import { ASSERTIONS } from "./assertions.ts";
 import { apcaMagnitude, wcagContrastHex } from "../color/contrast.ts";
 import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "../color/presets.ts";
-import { ACCENT_HUES, ACCENT_STRENGTHS, SOLID_STEPS } from "../color/generate.ts";
+import { ACCENT_HUES, ACCENT_STRENGTHS, LABEL_TINT_STEPS, SOLID_STEPS } from "../color/generate.ts";
 import { resolveTheme } from "../semantic/resolve.ts";
 
 const ACCENTS = [...CHROMATIC_SCALES.map(s => s.id), ...ACCENT_HUES.map(String)];
@@ -28,15 +28,27 @@ describe("contrast gate: every accent the settings can make", () => {
   for (const theme of ["light", "dark"] as const) it(`${theme}: every hue, strength and Solid step`, () => {
     const problems: string[] = [];
     for (const neutral of NEUTRAL_SCALES) for (const accent of ACCENTS) for (const accentStrength of ACCENT_STRENGTHS) {
-      for (const pick of ["auto", ...SOLID_STEPS] as const) {
-        if (pick !== "auto" && neutral.id !== "neutral") continue;
-        const t = resolveTheme({ theme, neutral: neutral.id, accent, accentStrength, solid: { light: pick, dark: pick } }).tokens;
-        for (const a of pick === "auto" ? ACCENTED : SOLID) {
+      for (const pick of ["auto", ...SOLID_STEPS] as const) for (const labelTint of LABEL_TINT_STEPS) {
+        if ((pick !== "auto" || labelTint !== 0) && neutral.id !== "neutral") continue;
+        const t = resolveTheme({ theme, neutral: neutral.id, accent, accentStrength, solid: { light: pick, dark: pick }, labelTint }).tokens;
+        for (const a of pick === "auto" && labelTint === 0 ? ACCENTED : SOLID) {
           const fg = t[a.fg]!, bg = t[a.bg]!, wcag = wcagContrastHex(fg, bg), apca = theme === "dark" ? apcaMagnitude(fg, bg) : Infinity;
-          if (wcag < a.wcag || apca < a.apca) problems.push(`${neutral.id}/${accent}/${accentStrength}/${pick}: ${a.fg} on ${a.bg} ${wcag.toFixed(2)}:1${theme === "dark" ? ` Lc ${apca.toFixed(0)}` : ""}`);
+          if (wcag < a.wcag || apca < a.apca) problems.push(`${neutral.id}/${accent}/${accentStrength}/${pick}/label ${labelTint}: ${a.fg} on ${a.bg} ${wcag.toFixed(2)}:1${theme === "dark" ? ` Lc ${apca.toFixed(0)}` : ""}`);
         }
       }
     }
     expect(problems.slice(0, 20)).toEqual([]);
   }, 120_000);
+  // Status colours Match (axes/accent.ts): the status tones quieted to every Accent strength, every pairing, every neutral.
+  for (const theme of ["light", "dark"] as const) it(`${theme}: status colours at every strength`, () => {
+    const problems: string[] = [];
+    for (const neutral of NEUTRAL_SCALES) for (const accentStrength of ACCENT_STRENGTHS) {
+      const t = resolveTheme({ theme, neutral: neutral.id, accent: "blue", accentStrength, statusColours: "match" }).tokens;
+      for (const a of ASSERTIONS) {
+        const fg = t[a.fg]!, bg = t[a.bg]!, wcag = wcagContrastHex(fg, bg), apca = theme === "dark" ? apcaMagnitude(fg, bg) : Infinity;
+        if (wcag < a.wcag || apca < a.apca) problems.push(`${neutral.id}/${accentStrength}: ${a.fg} on ${a.bg} ${wcag.toFixed(2)}:1${theme === "dark" ? ` Lc ${apca.toFixed(0)}` : ""}`);
+      }
+    }
+    expect(problems.slice(0, 20)).toEqual([]);
+  });
 });

@@ -10,7 +10,7 @@ on any ancestor changes every component inside it. The rules every setting follo
 
 Each is `data-area-<id>` on any element (in React, a `Theme` value). Missing settings
 inherit; an explicit setting starts a local scope. The registry
-(`packages/tokens/src/axes/registry.ts`) defines 28 axes. Most are one number named after
+(`packages/tokens/src/axes/registry.ts`) defines 30 axes. Most are one number named after
 what it measures.
 
 The registry is also the source of every setting's name and place (owner, 2026-10-19: "i want the axises to be the
@@ -29,6 +29,8 @@ named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carrie
 | `neutral` | `neutral` (default), `cool`, `warm` | The grey cast of every neutral role |
 | `accent` | The palette's 11 (`blue`, default) or any hue `0` … `355` in 5° steps | The chosen colour. State marks, selected edges, the focus ring and selected text take it while Selection is Accent; solid actions while Action is Accent. A hue draws the palette's ladder between its two nearest families (`color/generate.ts`), so at a family's own hue the result is the family, and every solved step (solid, indicator, tonal ink) is solved again for it |
 | `accent-strength` | `100` (Full, default) … `30` (Dusty) in tens, one for both modes | How much of its own colour the accent keeps: every accent colour mixes in OKLab toward the gray of its own luminance, so hue holds and contrast stays within 0.09:1; the solvers walk at every strength, so each step clears at each (docs/research/palette-customization-2026-10-23) |
+| `label-tint` | `0` (None, default) … `4` (Full), one for both modes | How much of the accent's hue the label on an accent solid takes: a quarter a step from its measured black or white toward the most coloured rung that still clears 4.6:1 and APCA 61 on the Solid step's fill and hover at every strength (`tintedLabel`, scale.ts). A navy button at 2 has a pale blue label; on a bright fill no rung clears and the label stays white |
+| `status-colours` | `fixed` (default), `match` | Danger, warning, caution, success, info and discovery as the palette draws them, or quieted to the Accent strength by the same mix, so a dusty palette has dusty statuses. Their hues never move, and tag colours (pink, gray, brown) stay |
 | `solid-light`, `solid-dark` | `auto` (default: the accent's own solid) or `400` … `850` | The accent step solid fills (accent Buttons, checked marks) sit on, per mode: a navy button is blue at 750. A step whose label cannot clear moves toward the label's side to the first that can, so no step fails; the label keeps the hue's own colour. Dark's Auto stays the solver's own step whatever light picks (a navy fill measures 1.66:1 on the near-black page) |
 | `action` | `neutral` (default), `accent` | Whether committing actions (solid Buttons) paint the accent |
 | `selection` | `neutral`, `accent` (default since 2026-10-22) | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards), the focus ring and selected text paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |

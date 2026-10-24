@@ -8,7 +8,9 @@
   scaling, which broke contrast; the solvers walk at every strength), Light / Dark solid (400–850, clamped toward the
   label). Tint to 16, held inside each hue's sRGB room (`tintRoom`; clipping had painted a blue tint cyan), Tint hue
   Accent, hued inks darken for tinted pages (`HUED_INK_MARGIN`). Setup: greys as one first choice (Neutral, Warmer,
-  Cooler, Tinted, Accent) and an accent colour field that snaps. Gate: `contrast/accents.test.ts` (every accent ×
+  Cooler, Tinted, Accent) and an accent colour field that snaps. Then Label tint 0–4 (the label on an accent solid toward
+  the most coloured rung that clears it, `tintedLabel`) and Status colours Fixed / Match (status tones quieted to the
+  Accent strength; hues never rotate; tags stay). Gate: `contrast/accents.test.ts` (every accent ×
   strength × Solid × neutral × mode). Sweep of all 119 families in light and dark with two custom palettes: no new text
   contrast failures (Folder's count, 2.52:1, predates it). Research and review page: docs/research/
   palette-customization-2026-10-23. Open: palette names (presets not built), a separate button colour (deferred), P3.
