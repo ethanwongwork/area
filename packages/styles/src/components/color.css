@@ -294,8 +294,10 @@
     display: flex; align-items: center; gap: var(--area-space-4);
     min-block-size: 40px; /* spec */
     padding-inline: var(--_inset) var(--_header-end);
-    /* A rule inside a container is never darker than its edge (owner 2026-09-27; audit F-6). Was border-faint #e2. */
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    /* A rule inside a container is never darker than its edge (owner 2026-09-27; audit F-6). Was border-faint #e2.
+       Drawn inside the 40 (Figma's inset divider), so a 28 action centres on whole pixels: as a border it took 1 of
+       the 40 and left the close button at 5.5 (2026-10-23). */
+    box-shadow: inset 0 calc(var(--area-border-width) * -1) 0 var(--area-border-decorative);
   }
   .area-color-picker__header > :first-child { margin-inline-end: auto; }
   .area-color-picker__body { display: grid; gap: var(--_rhythm); padding: var(--_inset); }
@@ -373,7 +375,9 @@
   .area-color-picker__slider[data-channel="ok-l"] { background: linear-gradient(90deg in oklch, oklch(0 var(--_ok-c) var(--_ok-h)) var(--_half), oklch(1 var(--_ok-c) var(--_ok-h)) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="ok-c"] { background: linear-gradient(90deg in oklch, oklch(var(--_ok-l) 0 var(--_ok-h)) var(--_half), oklch(var(--_ok-l) 0.4 var(--_ok-h)) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="ok-h"] { background: linear-gradient(90deg in oklch, oklch(var(--_ok-l) var(--_ok-c) 0) var(--_half), oklch(var(--_ok-l) var(--_ok-c) 60), oklch(var(--_ok-l) var(--_ok-c) 120), oklch(var(--_ok-l) var(--_ok-c) 180), oklch(var(--_ok-l) var(--_ok-c) 240), oklch(var(--_ok-l) var(--_ok-c) 300), oklch(var(--_ok-l) var(--_ok-c) 360) calc(100% - var(--_half))); }
-  .area-color-picker__channel-row { display: grid; grid-template-columns: var(--area-icon-md) minmax(0, 1fr); align-items: center; gap: var(--area-ui-cluster); }
+  .area-color-picker__channel-row { display: grid; grid-template-columns: var(--area-icon-md) minmax(0, 1fr); grid-template-rows: var(--_track); align-items: center; gap: var(--area-ui-cluster); }
+  /* The row is the track's height, so channel tracks sit the rhythm apart as the hue and opacity tracks do (they were
+     16 apart: the label's 20px line set the row); the label's line overflows the row, centred. */
   .area-color-picker__channel-label { color: var(--area-fg-muted); text-align: center; font-variant-numeric: tabular-nums; }
   .area-color-picker__views { inline-size: 100%; }
   .area-color-picker__grid { inline-size: 100%; }
@@ -434,20 +438,24 @@
   .area-color-picker__fields.area-input-group > .area-number-field:not(.area-color-picker__opacity) { flex: 1 1 auto; inline-size: auto; min-inline-size: max-content; }
   .area-color-picker__fields.area-input-group > .area-number-field:not(.area-color-picker__opacity) > .area-number-field__control { flex: 1 1 auto; field-sizing: content; min-inline-size: 1ch; }
   .area-color-picker__fields input { font-variant-numeric: tabular-nums; }
+  /* Saved colours (2026-10-23): ColorSwatchPicker md, a 20 chip in a 28 cell, the row's size as the picker is ten rows
+     wide (Figma: 16 in 24 at its 24 rows, nine across; Area fits nine across at every scale). The cells reach out by
+     their inset (cell − chip) / 2, so every chip's edge lines up with the area's on the start and at the bottom: the
+     section's end padding is the body's inset less that cell inset, 16 to the chip at both densities (it was the
+     rhythm, so the chips sat 1 off at the start and 12 from the bottom at compact). */
   .area-color-picker__swatches {
+    --_cell-inset: var(--area-space-4); /* spec: (cell − chip) / 2, color-swatch-picker */
     display: grid; gap: var(--area-space-4);
-    padding: var(--_rhythm) var(--_inset);
+    padding: var(--_rhythm) var(--_inset) calc(var(--_inset) - var(--_cell-inset));
     border-block-start: var(--area-border-width) solid var(--area-border-decorative); /* audit F-6 */
   }
-  .area-color-picker__heading { display: flex; align-items: center; justify-content: space-between; min-block-size: var(--area-control-sm); color: var(--area-fg-muted); }
-  /* Contiguous cells reach 4px past the inset, so each 16px chip aligns with the area edge. */
+  .area-color-picker__heading { display: flex; align-items: center; justify-content: space-between; min-block-size: var(--area-control-sm); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
+  /* The save button sits on the header's end inset (8, Figma's), so a picker's ghost actions share one column. */
+  .area-color-picker__heading > .area-button { margin-inline-end: calc(var(--_header-end) - var(--_inset)); }
   .area-color-picker__swatches > .area-color-swatch-picker {
-    gap: 0; margin-inline: calc(var(--_rhythm) - var(--_inset));
+    gap: 0; margin-inline: calc(var(--_cell-inset) * -1);
     grid-template-columns: repeat(auto-fill, var(--_cell));
   }
-  /* Keyboard focus is the thumb's ring alone; the area drew a second ring, and kept it after
-     every mouse drag because pointer-down focuses the input (audit F-15). */
-  .area-color-picker__heading { display: flex; align-items: center; justify-content: space-between; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
   .area-color-picker[aria-disabled="true"] { opacity: var(--area-opacity-disabled); }
   /* One dimming (audit F-14): the picker dims as a whole, so its Buttons, Segmented options and
      swatch cells don't dim again, and its fields keep their ink. */

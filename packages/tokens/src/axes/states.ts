@@ -88,6 +88,26 @@ export const SELECTED_TINT_AXIS: AxisDefinition = {
 };
 
 /**
+ * Danger hover: the plate under a hovered, highlighted or pressed destructive row ("Delete" in a Menu or Context menu).
+ * Tint is the owner's pick (2026-10-23, "the better ux and more visually appealing option"): the row's own plate,
+ * at the same lightness, turned to the danger hue, so the red label sits on a red plate as in shadcn's destructive item
+ * (`focus:bg-destructive/10`, dark `/20`) and Primer's danger ActionList item (`control-danger-bgColor-hover`). Neutral
+ * keeps every row on the same grey plate, the red label alone marking danger (ChatGPT's "Delete", measured 2026-09-26).
+ * The plate keeps the neutral plate's lightness, so the red ink solved for that plate holds on both (surface.css).
+ */
+export const DANGER_HOVER_AXIS: AxisDefinition = {
+  id: "danger-hover",
+  label: "Danger hover",
+  description: "A destructive row's hover plate: tinted red, or the same grey as every other row.",
+  defaultPreset: "tint",
+  namespaces: [`${PREFIX}row-danger-tint:`],
+  presets: [
+    { id: "tint", label: "Tint", description: "A red plate under the red label (shadcn, Primer).", tokens: tokens({ "row-danger-tint": 1 }) },
+    { id: "neutral", label: "Neutral", description: "The grey plate every row takes; the red label marks danger (ChatGPT).", tokens: tokens({ "row-danger-tint": 0 }) },
+  ],
+};
+
+/**
  * Hover stroke: how far a control's edge darkens under the pointer (a field, an outline button, a select), 0 (stays) to 4.
  * 2 is the step Area always took and the owner kept (2026-10-21; light #e2e2e2 → #d4d4d4). Every step is the same
  * distance in lightness, so neighbours read apart, and Contrast More still lifts the hover edge to its 3:1 stroke.
@@ -133,4 +153,4 @@ export const FILL_SELECTED_AXIS = fillAxis("fill-selected", "Selected fill", "Ho
 export const FILL_PRESSED_AXIS = fillAxis("fill-pressed", "Pressed fill", "How much firmer the plate is while pressed, 1 to 4: quarters of the way from selected to the firmest press.", "pressed", null,
   i => i === 4 ? "The firmest press muted text allows: ChatGPT's 12% where it can be." : `${i} quarter${i === 1 ? "" : "s"} of the way to the firmest press.`);
 
-export const STATE_AXES: readonly AxisDefinition[] = [FOCUS_RING_AXIS, HOVER_STROKE_AXIS, SELECTED_STROKE_AXIS, SELECTED_TINT_AXIS, FILL_HOVER_AXIS, FILL_SELECTED_AXIS, FILL_PRESSED_AXIS];
+export const STATE_AXES: readonly AxisDefinition[] = [FOCUS_RING_AXIS, HOVER_STROKE_AXIS, SELECTED_STROKE_AXIS, SELECTED_TINT_AXIS, FILL_HOVER_AXIS, FILL_SELECTED_AXIS, FILL_PRESSED_AXIS, DANGER_HOVER_AXIS];

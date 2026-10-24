@@ -6,7 +6,10 @@
  * combobox's options look exactly like a menu's. docs/specs/combobox.md.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  .area-combobox { display: inline-flex; vertical-align: middle; min-inline-size: 0; }
+  /* The field's size, for its list's corner (surface.css, "A list opened from a field"): the Input's tier. */
+  .area-combobox { display: inline-flex; vertical-align: middle; min-inline-size: 0; --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); }
+  .area-combobox:has(> .area-input--sm, > * > .area-input--sm) { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); }
+  .area-combobox:has(> .area-input--lg, > * > .area-input--lg) { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); }
   .area-combobox--full-width { display: flex; inline-size: 100%; }
   .area-combobox--full-width > .area-input { flex: 1; }
 

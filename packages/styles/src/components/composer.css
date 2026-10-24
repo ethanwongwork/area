@@ -82,4 +82,8 @@
   .area-composer__actions > .area-button { flex: none; }
   /* The send action is an Area Button (solid neutral, icon-only, md); it keeps its own shape and states. */
   .area-composer:has(.area-composer__submit.area-button--pill) { --_composer-button-radius: calc(var(--_composer-action) / 2); --_composer-concentric: 1; }
+  /* A pill composer's other actions are pills too: set into the shell's round ends at the inset, their concentric corner
+     is the shell's less the inset, a pill (ChatGPT's + and tools). At 8 the leading button sat square in a round end
+     (corner audit 2026-10-23). `rounded` still opts one out. */
+  .area-composer:has(.area-composer__submit.area-button--pill) .area-composer__actions > .area-button:not(.area-button--rounded) { --_button-pill: 1; }
 }

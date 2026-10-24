@@ -79,7 +79,7 @@ export default {
       ["Do", "Set alpha={false} for colours that cannot be translucent, such as a theme colour; values then stay six-digit."],
       ["Do", "Offer several views (spectrum, grid, sliders) when people choose in different ways; more than one adds a switcher."],
       ["Do", "Pass contrast with the background a text colour will sit on, so the ratio and the failing band show while choosing."],
-      ["Do", "Set onAddSwatch to let people save the current colour; its button disables once that colour is saved."],
+      ["Do", "Leave saved colours off unless people reuse colours; pass swatches to show them and onAddSwatch to let people save the current colour (its button disables once that colour is saved)."],
       ["Don't", "Rely on the eyedropper: it shows only where the browser has the EyeDropper API."],
       ["Don't", "Use it for gradients, images or blend modes: it edits one solid colour, and those need their own editors."],
     ],
@@ -117,7 +117,7 @@ export default {
       "text-field": "The hex or CSS field: keeps a draft while typing and commits on Enter or blur; Escape restores.",
       opacity: "The opacity percentage field; absent without alpha and in the CSS model, whose text carries alpha.",
       note: "A status line when an OKLCH value is outside sRGB and the nearest colour with less chroma is shown.",
-      swatches: "The saved colours under a rule: a heading and a small Color swatch picker.",
+      swatches: "Opt-in (swatches, onAddSwatch): the saved colours under a rule, a heading and a Color swatch picker at the row's size, nine to a row.",
       heading: "The saved colours' label and, with onAddSwatch, the save button.",
     },
     // Source: ColorPicker.tsx areaKey(), DraftInput; native range inputs.

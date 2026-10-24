@@ -37,8 +37,10 @@
     block-size: var(--_height);
     gap: var(--area-space-2);
     padding-inline: var(--_side);
-    /* The radius setting's corner for this height, 4 at the default (Notion 4). */
-    border-radius: max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px));
+    /* The radius setting's corner for this height, 4 at the default (Notion 4). A host that nests the tag restates
+       `--_corner` (Tag picker's field), and the remove button follows it. */
+    --_corner: max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px));
+    border-radius: var(--_corner);
     background: var(--_bg);
     color: var(--_fg);
     font-family: var(--area-font-sans);
@@ -117,7 +119,7 @@
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: max(var(--area-space-2), calc(max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px)) - var(--_remove-inset)));
+    border-radius: max(min(var(--area-space-2), var(--_corner)), calc(var(--_corner) - var(--_remove-inset))); /* nested in the tag's corner, at least 2, square only in a square tag (Sharp) */
     background: transparent;
     /* The tag's own ink, as Badge's dismiss (owner 2026-10-06, after the vivid inks: a grey × on a
        coloured tag read as a separate object). Notion's is its muted ink, rgb(142,139,134). */

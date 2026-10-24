@@ -479,6 +479,10 @@
       /* The floating frame, as Menu's and Popover's (consistency pass 2026-10-12; was `border-decorative`, which in
          dark is the #282828 seam rather than the #4b4b4b frame every other floating surface draws). */
       border: var(--area-border-width) solid var(--area-border-float);
+      /* The field's corner, as every list opened from a field (surface.css, "A list opened from a field"): options at the
+         select's corner, the picker 4 rounder (owner, 2026-10-23). */
+      --area-radius-list-row: max(0px, min(calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height, var(--area-control-md)) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full)), calc(var(--area-ui-row) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
+      --area-radius-list: calc(var(--area-radius-list-row) + min(var(--area-space-4), var(--area-radius-list-row)));
       border-radius: var(--area-radius-list); /* concentric with its options */
       background: var(--area-bg-surface);
       color: var(--area-fg-default);

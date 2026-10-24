@@ -130,6 +130,7 @@ const QUESTIONS: Record<string, string> = {
   "fill-selected": "How much firmer should a selected row be than hover?",
   "fill-pressed": "How firm should a press be?",
   "selected-tint": "Should a selected card also fill?",
+  "danger-hover": "Should a destructive row hover red?",
 };
 
 /** The OS's contrast, which System writes nothing for: a System card shows it, not the Canvas's own pick. */

@@ -59,6 +59,7 @@ function Glyph({ axis }: { axis: string }): ReactNode {
     case "focus-ring": return <span className="cv-square cv-square--focus" />;
     case "fill-hover":
     case "fill-selected":
+    case "danger-hover": return <span className="cv-plates"><i className="cv-plate--rest" /><i className="cv-plate--danger" /></span>;
     case "fill-pressed": return <span className="cv-plates"><i className="cv-plate--rest" /><i className="cv-plate--hover" /><i className="cv-plate--selected" /><i className="cv-plate--pressed" /></span>;
     case "motion":
     case "easing": return <span className="cv-track"><i /></span>;

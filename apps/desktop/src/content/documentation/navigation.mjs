@@ -281,7 +281,7 @@ export default {
     // Spec: Anatomy, Decisions, Review notes; surface.css.
     parts: {
       root: "The menu surface: rows in a floating, lifted frame that scrolls when it outgrows the room beside its trigger.",
-      item: "A row: a native button that owns the height and the hover and pressed plate; danger turns its label red, sub marks a submenu row.",
+      item: "A row: a native button that owns the height and the hover and pressed plate; danger turns its label red and, under Danger hover's default, its plates red too; sub marks a submenu row.",
       icon: "The leading icon box, hidden from assistive tech; labels line up in one column across rows.",
       text: "The row's label.",
       lines: "Stacks the label over a description, for a row with a note under it.",
