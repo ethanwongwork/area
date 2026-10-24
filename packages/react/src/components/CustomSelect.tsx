@@ -22,6 +22,9 @@ export interface CustomSelectOption {
   disabled?: boolean;
   /** Options with the same group are listed together under it, groups ruled apart. */
   group?: string;
+  /** In the grid layout, a picture of the option drawn over its label in a 4:3 frame (a setting's figure). Without
+   *  one, a grid cell draws the option's icon at the large icon size (a swatch). Ignored in the list. */
+  preview?: ReactNode;
 }
 
 type Manifest = VariantProps<typeof MANIFESTS.customSelect>;
@@ -39,6 +42,12 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
   variant?: Manifest["variant"];
   size?: Manifest["size"];
   fullWidth?: boolean;
+  /**
+   * How the open list lays its options out. `list` (default): Menu's rows. `grid`: cells in equal columns, each its
+   * `preview` (or its icon, large) over its label, the list as wide as the Field it sits in; Left / Right step in
+   * reading order and Up / Down go to the nearest cell in the next row (List box's grid).
+   */
+  layout?: Manifest["layout"];
   invalid?: boolean;
   /** Submits the chosen value with a form under this name. */
   name?: string;
@@ -70,7 +79,7 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
  * Menu's surface and rows, placed by the shared overlay engine.
  */
 export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(function CustomSelect(
-  { items, value, defaultValue = null, onValueChange, placeholder = "Select…", variant, size, fullWidth, invalid, name, required,
+  { items, value, defaultValue = null, onValueChange, placeholder = "Select…", variant, size, fullWidth, layout = "list", invalid, name, required,
     onOpenChange, onHighlightChange, multiple = false, values, defaultValues, onValuesChange, disabled, className, style, onKeyDown, onBlur, onClick, form, ...rest }, ref,
 ) {
   const options = items ?? NO_ITEMS;
@@ -159,7 +168,29 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     if (!open && shown) list.hidePopover();
   }, [open]);
   // Menu's engine (audit S16): the list starts at the trigger's start, 4 below it, flips and shifts.
-  useAnchoredPosition(rootRef, listRef, open, { side: "bottom", align: "start", offset: MENU_OFFSET, padding: OVERLAY_PADDING });
+  // A grid starts at its Field and takes its width, so a horizontal Field's label column gives the cells room.
+  const grid = layout === "grid";
+  useAnchoredPosition(rootRef, listRef, open, { side: "bottom", align: "start", offset: MENU_OFFSET, padding: OVERLAY_PADDING,
+    anchorRect: grid ? anchor => (anchor.closest(".area-field") ?? anchor).getBoundingClientRect() : undefined });
+  // Up and Down in a grid: the nearest enabled cell by centre in the row below or above (List box's geometry).
+  const vertical = (from: number, down: boolean) => {
+    const cells = [...(listRef.current?.querySelectorAll<HTMLElement>("[data-index]") ?? [])];
+    const current = cells.find(cell => Number(cell.dataset.index) === from);
+    if (!current) return from;
+    const box = current.getBoundingClientRect();
+    const centre = box.left + box.width / 2;
+    let best: { index: number; row: number; dx: number } | undefined;
+    for (const cell of cells) {
+      const index = Number(cell.dataset.index);
+      if (!enabled(index)) continue;
+      const rect = cell.getBoundingClientRect();
+      if (down ? rect.top < box.bottom - 1 : rect.bottom > box.top + 1) continue;
+      const row = down ? rect.top : -rect.bottom;
+      const dx = Math.abs(rect.left + rect.width / 2 - centre);
+      if (!best || row < best.row - 1 || (Math.abs(row - best.row) <= 1 && dx < best.dx)) best = { index, row, dx };
+    }
+    return best?.index ?? from;
+  };
   // The highlighted option, told once per change; null once the list is closed.
   const highlighted = open && active >= 0 ? rows[active]?.value ?? null : null;
   const told = useRef<string | null>(null);
@@ -208,12 +239,20 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
       return;
     }
     switch (key) {
-      case "ArrowDown": event.preventDefault(); setActive(current => move(current < 0 ? -1 : current, 1)); break;
+      case "ArrowDown": event.preventDefault(); setActive(current => grid && current >= 0 ? vertical(current, true) : move(current < 0 ? -1 : current, 1)); break;
       case "ArrowUp":
         event.preventDefault();
         if (altKey) { if (!multiple) choose(active, event); close(); }
-        else setActive(current => move(current < 0 ? rows.length : current, -1));
+        else setActive(current => grid && current >= 0 ? vertical(current, false) : move(current < 0 ? rows.length : current, -1));
         break;
+      case "ArrowRight":
+      case "ArrowLeft": {
+        if (!grid) break;
+        event.preventDefault();
+        const forward = (key === "ArrowRight") !== (getComputedStyle(event.currentTarget).direction === "rtl");
+        setActive(current => move(current < 0 ? (forward ? -1 : rows.length) : current, forward ? 1 : -1));
+        break;
+      }
       case "Home": event.preventDefault(); setActive(firstEnabled()); break;
       case "End": event.preventDefault(); setActive(lastEnabled()); break;
       case "PageDown": event.preventDefault(); setActive(current => move(current, PAGE)); break;
@@ -250,15 +289,26 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
       onPointerDown={event => event.preventDefault()}
       onPointerMove={() => { if (!option.disabled && index !== active) setActive(index); }}
       onClick={event => { if (option.disabled) return; choose(index, event); if (!multiple) close(); triggerRef.current?.focus(); }}>
+      {grid ? [
+        option.preview ? <span key="preview" className="area-custom-select__preview" aria-hidden="true">{option.preview}</span>
+          : option.icon ? <span key="icon" className="area-menu__icon" aria-hidden="true">{option.icon}</span> : null,
+        <span key="caption" className="area-custom-select__caption">{option.label}</span>,
+      ] : <>
       {option.icon ? <span className="area-menu__icon" aria-hidden="true">{option.icon}</span> : null}
       {option.description
         ? <span className="area-menu__lines"><span className="area-menu__text">{option.label}</span><span className="area-menu__description">{option.description}</span></span>
         : <span className="area-menu__text">{option.label}</span>}
       <span className="area-menu__check" aria-hidden="true"><Glyph name="check" /></span>
+      </>}
     </div>;
   };
 
-  return <div ref={rootRef} className={customSelectVariants({ variant, size, fullWidth }, className)} style={style}
+  // In a grid each run of options (the whole list, or a group's) is one grid of cells.
+  const run = (indexes: number[], key: string) => grid
+    ? <div key={key} className="area-custom-select__grid" role="presentation">{indexes.map(renderRow)}</div>
+    : indexes.map(renderRow);
+
+  return <div ref={rootRef} className={customSelectVariants({ variant, size, fullWidth, layout }, className)} style={style}
     data-open={open ? "" : undefined}>
     <button ref={node => { triggerRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
       {...rest} type="button" form={form} className="area-custom-select__trigger" disabled={disabled}
@@ -282,9 +332,9 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
         ? [position > 0 ? <div key={`${group}-rule`} className="area-menu__separator area-custom-select__separator" role="presentation" /> : null,
           <div key={group} role="group" aria-labelledby={`${id}-group-${position}`} className="area-custom-select__group">
             <div id={`${id}-group-${position}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
-            {indexes.map(renderRow)}
+            {run(indexes, `${group}-cells`)}
           </div>]
-        : indexes.map(renderRow))}
+        : run(indexes, "cells"))}
     </ScrollArea>
   </div>;
 });

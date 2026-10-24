@@ -28,6 +28,19 @@
   edge (rounds 52/57), Composer context Chips stay pills (Pills set). Merged main with a sparse checkout that leaves out
   `.claude/skills/area-ui-*` (the app's merge refused: unconfirmed pinned origin); they are in the commit, not on disk.
 
+- **PR #157, `claude/theme-dropdown-visuals-d6e169`, merged 2026-10-24** (main merged in by hand with `git merge
+  origin/main` after the owner confirmed the pinned origin; the app's sync still refused). Main's palette settings keep
+  their swatch marks; Danger hover got a plate glyph (red / grey); main's new settings have no figures yet (they open as
+  lists in grid view). All checks passed locally; CI had not finished when merged.
+  What it holds: Custom select `layout="grid"` + option `preview` (spec "Intake: Layout grid"; Custom select in
+  review); the Inspector opens visual settings as figure grids (`choice-figures.tsx`), swatch grids for Accent and Tint
+  hue, one List / Grid switch; one-idea option glyphs incl. Pills, shadow details, Material (owner prefers today's
+  token-true marks for most menus: read the review page's picks before changing marks); Typography as one Headings and
+  one Copy section, measures not usage, cards in grid view; Testing → Hairline empty states (trial,
+  `@lucasmarkes/hairline` 0.5.1 mapped to tokens; owner deciding keep vs remove). Review page
+  https://claude.ai/artifact/JvT2iJZHfe6A9nEekqT4xP: lineage, icon-to-illustration ladder (collection `ladder`), line
+  illustrations after Medusa UI (collection `line`, owner's current direction: flat, one ink, light fills, no captions,
+  one control kind per drawing). Research and sources: docs/research/theme-visuals-2026-10-23.
 - **Branch `claude/eager-maxwell-0a929b`, committed, not pushed.** PR #151's three open proposals. Press room (`PRESS_ROOM`,
   color/layers.ts): inks solved on the deepest selected fill pressed 0.012 L (dark 0.04), so a press shows on every
   ground (it equalled selected on recessed in light at Layers 4–8, raised in dark from 16 + 8); muted #646464 (was

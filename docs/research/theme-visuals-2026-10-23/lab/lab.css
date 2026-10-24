@@ -1,0 +1,103 @@
+/* Lab only: lays out captures and draws the proposals with Area's tokens. */
+body.lab { margin: 0; padding: 16px; background: #c9cacf; font-family: var(--area-font-sans); color: var(--area-fg-default); }
+.lab-cap { display: inline-block; vertical-align: top; margin: 0 12px 12px 0; padding: 16px; background: var(--area-bg-page); color: var(--area-fg-default); }
+
+/* Glyphs: the icon slot's 16 box, icon line weight. --_g-bg is whatever is behind the glyph. */
+.g { display: block; inline-size: 100%; block-size: 100%; fill: none; stroke: currentColor; stroke-width: var(--area-weight-icon, 1.125px); stroke-linecap: round; stroke-linejoin: round; overflow: visible; --_g-bg: var(--area-bg-surface); }
+.g * { vector-effect: non-scaling-stroke; }
+.area-custom-select__trigger .g { --_g-bg: var(--area-bg-component); }
+
+/* A listbox drawn in place, not as a popover. */
+.lab-pop { position: static !important; inset: auto !important; transform: none !important; translate: none !important; display: block !important; margin: 0; opacity: 1 !important; visibility: visible !important; max-block-size: none !important; inline-size: max-content; min-inline-size: 156px; }
+.lab-sep { block-size: 0; margin: 4px 8px; border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
+.lab-more .area-menu__text { color: var(--area-fg-muted); }
+
+/* Inspector: 296 wide, fields 268 at a 14 inset (measured in the app at type 14, density 32). */
+.lab-inspector { position: relative; inline-size: 296px; box-sizing: border-box; background: var(--area-bg-page); box-shadow: inset 1px 0 0 var(--area-border-divider); overflow: hidden; }
+.lab-inspector .area-panel__section { padding-inline: 14px; }
+.lab-anchor { position: absolute; z-index: 2; }
+.lab-cap:has(.lab-inspector) { padding: 0; }
+
+/* Grid menu: the listbox at the field's width; choices as figure cards. */
+.lab-grid { min-inline-size: 0; }
+.gm-head { display: flex; align-items: center; justify-content: space-between; padding: 6px 6px 0 12px; font-size: var(--area-text-xs-size); line-height: 24px; font-weight: 500; color: var(--area-fg-muted); }
+.gm-views { display: flex; gap: 2px; }
+.gm-view { display: grid; place-items: center; inline-size: 24px; block-size: 24px; border-radius: var(--area-radius-control-xs); color: var(--area-fg-muted); }
+.gm-view[aria-pressed="true"] { background: var(--area-bg-active); color: var(--area-fg-default); }
+.gm-view svg { inline-size: 16px; block-size: 16px; }
+.gm { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 2px; padding: 4px 5px 5px; }
+.gm-item { display: grid; gap: 4px; padding: 4px 4px 5px; border-radius: var(--area-radius-row); }
+.gm-plate { position: relative; display: block; aspect-ratio: 4 / 3; border-radius: calc(var(--area-radius-row) - 2px); overflow: hidden; outline: var(--area-stroke-width) solid var(--area-border); outline-offset: calc(-1 * var(--area-stroke-width)); }
+.gm-item[aria-selected="true"] .gm-plate { outline: 2px solid var(--area-stroke-selected); outline-offset: -2px; }
+.gm-label { font-size: var(--area-text-xs-size); line-height: 16px; color: var(--area-fg-muted); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gm-item[aria-selected="true"] .gm-label { color: var(--area-fg-default); font-weight: 500; }
+.gm--swatch { gap: 8px 2px; padding: 6px 8px 10px; }
+.gm-swatch { display: grid; justify-items: center; gap: 4px; }
+.gm-dot { display: block; inline-size: 24px; block-size: 24px; border-radius: 50%; background: var(--area-accent-solid); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); }
+.gm--swatch[style*="--cols:8"] .gm-dot { inline-size: 22px; block-size: 22px; }
+.gm-swatch[aria-selected="true"] .gm-dot { outline: 2px solid var(--area-stroke-selected); outline-offset: 2px; }
+.gm-swatch .gm-label { max-inline-size: 100%; }
+.gm-dot--sm { inline-size: 12px; block-size: 12px; margin: 2px; }
+
+/* Figures: the Folder / File page outline look (folder.css): control fill, a thin edge, quiet ink, paper a step lighter. */
+.f { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; container-type: size; background: var(--area-bg-page); color: var(--area-fg-default);
+  --_fill: var(--area-bg-component); --_edge: var(--area-border); --_paper: light-dark(var(--area-bg-surface), var(--area-bg-component-hover));
+  --_quiet: color-mix(in oklab, var(--area-fg-muted), var(--_fill) 45%); }
+.f > * { box-sizing: border-box; }
+.f * { box-sizing: border-box; }
+.f-center { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
+.f-stack { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 9cqh; }
+.f-page { inline-size: 100%; block-size: 100%; background: var(--area-bg-page); }
+.f-bar { display: block; block-size: max(3px, 7cqh); border-radius: 999px; background: var(--_quiet); }
+.f-bar--title { background: var(--area-fg-muted); }
+.f-field { display: block; background: var(--_fill); border: var(--area-stroke-width) solid var(--_edge); border-radius: var(--area-radius-control-sm); }
+.f-field--edge { background: var(--area-bg-surface); border: var(--area-stroke-width) solid var(--area-edge-control); }
+.f-field--hover { border-color: var(--area-edge-control-hover); }
+.f-field--mini { inline-size: 100%; block-size: 16cqh; border-radius: var(--area-radius-control-xs); }
+.f-field--focus { border-color: color-mix(in srgb, var(--area-edge-control), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%));
+  outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color); outline-offset: var(--area-focus-offset); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color); }
+.f-btn { display: block; background: var(--area-action-solid, var(--area-fg-default)); }
+.f-outline-btn { display: block; border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: var(--area-radius-control-sm); background: var(--area-bg-surface); }
+.f-box { display: block; inline-size: 14cqh; aspect-ratio: 1; flex: none; border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: var(--area-radius-control-xs); background: var(--area-bg-surface); }
+.f-card { display: grid; align-content: center; gap: 9cqh; padding: 10cqh 9cqw; background: var(--area-bg-card, var(--area-bg-surface)); border-radius: var(--area-radius-small); border: var(--area-border-width) solid var(--area-border-card); }
+.f-card--bare { border: 0; }
+.f-card--selected { border: var(--area-border-width) solid var(--area-stroke-selected); box-shadow: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-border-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
+.f-rule { display: block; block-size: 0; border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
+.f-window { display: grid; grid-template-columns: 34% 1fr; inline-size: 100%; block-size: 100%; background: var(--area-bg-page); }
+.f-side { display: grid; align-content: start; gap: 9cqh; padding: 14cqh 12%; background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+.f-main { display: grid; align-content: start; gap: 9cqh; padding: 14cqh 10% 0; }
+.f-main .f-card { padding: 9cqh 9cqw; }
+.f-list { display: grid; gap: 2px; inline-size: 80%; }
+.f-row { display: flex; align-items: center; gap: 8%; block-size: var(--_row, 13cqh); padding-inline: 7%; border-radius: var(--area-radius-row); }
+.f-list .f-row { block-size: calc((var(--area-control-md) - 22px) * 1.2); }
+.f-row.is-on { background: var(--area-bg-active); }
+.f-dot { display: block; inline-size: 9cqh; aspect-ratio: 1; flex: none; border-radius: 2px; background: var(--_quiet); }
+.f-menu { display: grid; gap: 1px; inline-size: 62%; padding: 5cqh 4%; background: var(--area-bg-surface); border-radius: var(--area-radius-small); border: var(--area-border-width) solid var(--area-border-card); }
+.f-menu .f-row { block-size: 13cqh; }
+.f-menu .f-row.is-on { background: var(--area-bg-hover); }
+.f-row--hover { background: var(--area-bg-hover); }
+.f-row--active { background: var(--area-bg-active); }
+.f-row--pressed { background: var(--area-bg-pressed); }
+.f-row.is-mine .f-bar { background: var(--area-fg-muted); }
+.f-pointer { position: absolute; inset: auto -14% -38% auto; inline-size: 11px; block-size: 14px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 14'%3E%3Cpath d='M1 1v10.5l2.7-2.5 1.9 3.9 1.9-.9-1.9-3.9H9.6z' fill='black' stroke='white' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat; }
+.f-track { position: relative; inline-size: 100%; block-size: 4px; border-radius: 2px; background: var(--_fill); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_edge); }
+.f-track > i { position: absolute; inset-block: 0; inset-inline-start: 0; border-radius: 2px; background: var(--area-fg-default); }
+.f-track > b { position: absolute; inset-block-start: -5px; inline-size: 14px; block-size: 14px; border-radius: 50%; background: var(--area-bg-surface); box-shadow: 0 0 0 var(--area-stroke-width) var(--area-edge-control), 0 1px 2px rgb(0 0 0 / .15); }
+.f-svg { inline-size: 86%; block-size: 86%; overflow: visible; }
+.f-guide { fill: none; stroke: var(--area-border-divider); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.f-curve { fill: none; stroke: var(--area-fg-default); stroke-width: 1.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.f-dotsvg { fill: var(--area-fg-default); }
+.f-aa { font-size: var(--area-title-md-size); line-height: 1; color: var(--area-fg-default); }
+.f-seg { display: flex; gap: 2px; padding: 3px; inline-size: 66%; block-size: 26%; border-radius: 999px; background: var(--_fill); border: var(--area-stroke-width) solid var(--_edge); }
+.f-seg > i { flex: 1; border-radius: 999px; }
+.f-seg > i.is-on { background: var(--area-bg-surface); box-shadow: 0 0 0 var(--area-stroke-width) var(--area-border-card); }
+.f-badge { display: block; inline-size: 36%; block-size: 20%; border-radius: 999px; background: var(--_fill); border: var(--area-stroke-width) solid var(--_edge); }
+.f-switch { position: relative; display: block; inline-size: 34%; block-size: 26%; border-radius: 999px; background: var(--area-selection-solid); }
+.f-switch > b { position: absolute; inset-block: 3px; inset-inline-end: 3px; aspect-ratio: 1; border-radius: 50%; background: #fff; }
+.f-avatar { display: block; inline-size: 30%; aspect-ratio: 1; border-radius: 50%; background: var(--_fill); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_edge); }
+.f-bigglyph .g { inline-size: 40%; block-size: auto; aspect-ratio: 1; stroke-width: 1.5px; --_g-bg: var(--area-bg-page); }
+
+/* Setup cards: the panel's 400 column. */
+.lab-setup { inline-size: 368px; }
+.lab-setup .setup-choice__picture { position: relative; }

@@ -310,6 +310,8 @@ export default {
       ["Do", "Use ghost for an inline value with no chrome until hovered, as a property in a row."],
       ["Do", "Set name to submit the chosen value through a hidden input; the label is never submitted."],
       ["Do", "Use onHighlightChange to preview an option while the pointer or arrows are on it; it never chooses."],
+      ["Do", "Use layout grid when each choice is best seen as a picture (a setting's look, a colour); give options a preview, or an icon for a swatch grid."],
+      ["Don't", "Use the grid for long ramps of numbers or plain words; the list reads them faster and its icons carry the order."],
       ["Don't", "Use it for plain-text options in a form; Select is native and lighter."],
       ["Don't", "Use it for a long list people would rather search; use Combobox."],
     ],
@@ -324,6 +326,9 @@ export default {
       option: "Menu's row: an icon, the label, an optional description line and a trailing check on chosen rows. The plate marks highlight only.",
       group: "Options that share a group, under its label.",
       separator: "The rule between groups.",
+      grid: "In layout grid, a run of options (the list's, or a group's) in equal columns.",
+      preview: "In layout grid, the option's picture in a 4:3 frame with Folder's thin edge; the selected stroke frames the chosen one.",
+      caption: "In layout grid, the option's label under its picture, on one line, muted until chosen.",
     },
     // Spec: States.
     states: {
@@ -335,7 +340,8 @@ export default {
     keyboard: [
       ["Enter or Space or Down or Up", "When closed, opens the list on the chosen option; Up opens on the last when nothing is chosen."],
       ["Home or End", "Opens on, or moves to, the first or last option."],
-      ["Down or Up", "When open, moves the highlight, skipping disabled options and stopping at the ends."],
+      ["Down or Up", "When open, moves the highlight, skipping disabled options and stopping at the ends; in layout grid, to the nearest cell in the row below or above."],
+      ["Right or Left", "In layout grid, moves the highlight to the next or previous cell in reading order."],
       ["PageUp or PageDown", "Moves the highlight by ten options."],
       ["Enter or Space", "Chooses the highlighted option and closes; with multiple, toggles it and the list stays open."],
       ["Tab", "Chooses the highlighted option and moves on; with multiple, closes without choosing."],

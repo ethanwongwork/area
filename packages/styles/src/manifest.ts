@@ -740,13 +740,13 @@ export const combobox = {
 
 export const customSelect = {
   block: "area-custom-select",
-  description: "Picks a value (or several, with multiple) from a short list whose options carry icons, descriptions and groups.",
-  variants: { variant: ["outline", "soft", "ghost"], size: ["sm", "md", "lg"] },
+  description: "Picks a value (or several, with multiple) from a short list whose options carry icons, descriptions and groups, as rows or a grid of previews.",
+  variants: { variant: ["outline", "soft", "ghost"], size: ["sm", "md", "lg"], layout: ["list", "grid"] },
   booleans: ["full-width"],
   states: ["open", "disabled", "invalid"],
   stateAttributes: { disabled: "disabled", invalid: "aria-invalid" },
-  elements: ["trigger", "icon", "value", "chevron", "listbox", "option", "group", "separator"],
-  defaults: { variant: "outline", size: "md" },
+  elements: ["trigger", "icon", "value", "chevron", "listbox", "option", "group", "separator", "grid", "preview", "caption"],
+  defaults: { variant: "outline", size: "md", layout: "list" },
 } as const satisfies ComponentManifest;
 
 export const tag = {

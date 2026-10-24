@@ -643,6 +643,8 @@ function gallerySpecimenTable() {
       { id: "size-sm", title: "Size / sm", demo: "GalleryCustomSelectSm" },
       { id: "size-md", title: "Size / md", demo: "GalleryCustomSelectMd" },
       { id: "size-lg", title: "Size / lg", demo: "GalleryCustomSelectLg" },
+      { id: "layout-grid", title: "Layout / grid", demo: "GalleryCustomSelectGrid" },
+      { id: "layout-grid-swatches", title: "Layout / grid, swatches", demo: "GalleryCustomSelectGridSwatches" },
       { id: "state-placeholder", title: "State / placeholder", demo: "GalleryCustomSelectPlaceholder" },
       { id: "state-disabled-option", title: "State / disabled option", demo: "GalleryCustomSelectDisabledOption" },
       { id: "state-disabled", title: "State / disabled", demo: "GalleryCustomSelectDisabled" },

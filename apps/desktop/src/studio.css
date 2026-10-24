@@ -21,6 +21,7 @@
 @import url("styles/examples.css") layer(studio);
 @import url("styles/materials.css") layer(studio);
 @import url("styles/option-marks.css") layer(studio);
+@import url("styles/choice-figures.css") layer(studio);
 @import url("styles/brand.css") layer(studio);
 @import url("styles/chat.css") layer(studio);
 @import url("styles/abstract-board.css") layer(studio);

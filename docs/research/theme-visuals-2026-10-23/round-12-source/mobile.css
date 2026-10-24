@@ -1,0 +1,37 @@
+/* iPhone: a 390 × 844 screen in a 10px device frame (hardware, not theme paint), laid out to Apple's HIG. */
+.sx-iphone { width: 410px; height: 864px; padding: 10px; border-radius: 62px; background: #1b1b1d; box-shadow: inset 0 0 0 1.5px #3a3a3e; }
+.sx-phone { width: 390px; height: 844px; padding: 0; display: grid; grid-template-rows: 54px minmax(0, 1fr); overflow: hidden; position: relative; border-radius: 52px; border: 0; background: var(--area-bg-page); }
+.sx-phone__status { position: relative; display: flex; justify-content: space-between; align-items: center; padding: 16px 30px 0 52px; color: var(--area-fg-default); }
+.sx-clock { font: 600 17px/22px var(--area-font-sans); letter-spacing: -0.02em; }
+.sx-island { position: absolute; inset-block-start: 11px; inset-inline-start: 50%; width: 124px; height: 36px; margin-inline-start: -62px; border-radius: 20px; background: #000; }
+.sx-sysglyphs { display: flex; align-items: center; gap: 6px; }
+.sx-sysglyphs svg { fill: currentColor; stroke: none; }
+.sx-sysglyphs .sx-batt { fill: none; stroke: currentColor; opacity: 0.4; }
+.sx-phone__body { position: relative; display: flex; flex-direction: column; min-height: 0; overflow: hidden; padding-bottom: 34px; }
+.sx-phone--tabs .sx-phone__body { padding-bottom: 104px; }
+.sx-phone__home { position: absolute; inset-block-end: 8px; inset-inline-start: 50%; width: 140px; height: 5px; margin-inline-start: -70px; border-radius: 3px; background: var(--area-fg-default); z-index: 2; }
+.sx-t--navtitle { font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading); font-weight: 600; }
+.sx-mh { flex: none; padding: 0 8px; }
+.sx-mh__row { display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; justify-items: center; height: 44px; }
+.sx-mh__large { display: block; padding: 4px 12px 10px; font-size: calc(var(--area-text-md-size) * 1.9); }
+.sx-mbody { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 16px; padding: 10px 20px 16px; }
+.sx-phone .sx-t--sm { font-size: var(--area-text-xs-size, 14px); }
+.sx-mdock { flex: none; display: flex; gap: 8px; align-items: center; padding: 8px 16px 6px; }
+.sx-mlist { display: flex; flex-direction: column; }
+.sx-mrow { display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 6px 4px; border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+.sx-mrow:last-child { border-block-end: 0; }
+.sx-mrow > svg { color: var(--area-fg-muted); }
+/* Floating tab bar: a 62 pill of tabs and a 62 round search button, 20 from the sides, over the home indicator. */
+.sx-tabdock { position: absolute; inset-inline: 20px; inset-block-end: 30px; display: flex; gap: 12px; align-items: center; z-index: 2; }
+.sx-tabpill { flex: 1; height: 62px; padding: 4px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; border-radius: 999px; border: var(--area-border-width) solid var(--area-border-card); box-shadow: var(--area-shadow-float); }
+.sx-tabitem { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 999px; padding: 0; color: var(--area-fg-default); }
+.sx-tabitem--on { color: var(--area-fg-selection); background-color: var(--area-selection-surface); }
+.sx-tablabel { font: 600 10px/12px var(--area-font-sans); }
+.sx-tabsearch { width: 62px; height: 62px; flex: none; padding: 0; display: grid; place-items: center; border-radius: 50%; border: var(--area-border-width) solid var(--area-border-card); box-shadow: var(--area-shadow-float); color: var(--area-fg-default); }
+.sx-plans .area-radio-group__options { display: flex; flex-direction: column; gap: 10px; }
+.sx-widgets { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sx-widget--tall { grid-row: span 2; }
+.sx-widget { display: flex; flex-direction: column; gap: 6px; height: 100%; }
+.sx-mhero { height: 320px; border-radius: 0; flex: none; }
+.sx-mactions { display: flex; justify-content: space-around; }
+.st-hover-row { background: var(--area-bg-component-hover); border-radius: var(--area-radius-row); }

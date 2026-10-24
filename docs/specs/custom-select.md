@@ -20,6 +20,35 @@ trigger's paint), Popover (anchoring)
   contract). Q5: field chevrons take `input-chevron` (`stroke-control`). Q6: list stays
   start-aligned. Q7: chevrons stay still. Q1–Q2 carried no recommendation and stay open.
 
+- owner 2026-10-23: "Go with the exaggerated glyphs, the 20 new marks and the grid menu as default. Start with
+  component intake for the Custom select grid layout, then build it in the app." Intake below (Layout: grid); evidence
+  in docs/research/theme-visuals-2026-10-23 and the review page https://claude.ai/artifact/JvT2iJZHfe6A9nEekqT4xP.
+
+## Intake: Layout grid (2026-10-23)
+
+- **Need:** choose a setting's value by seeing what each option looks like, in a list opened from an Inspector field.
+- **Answer:** rung 5, a value on an axis the system already names: `layout: list | grid`, as List box. Plus rung 4, a
+  slot: an option's `preview`, a picture drawn over its label in the grid (without one, the option's icon is drawn
+  larger, as a swatch).
+- **Why not the smaller answers:** nothing new: List box's grid is an inline set, not a field's popup, and Color
+  swatch picker is an inline row. Not a setting: whether a list is a grid depends on its options, per use. Not a
+  composition: Popover + List box would lose the select's trigger, value, form input, typeahead and select-only
+  combobox semantics.
+- **Evidence:** the owner's references (theme pickers whose layouts are thumbnail cards over a label; colour as a row of
+  swatches; an interface chooser as a grid of thumbnail tiles), macOS Appearance, Area's own List box grid, File grid
+  and Asset grid; the Setup choice cards (Radio `layout="preview"`) for the card anatomy.
+- **Shape:** `layout="grid"`: the list spans its Field (inside a horizontal Field, the label's start to the control's
+  end; else the trigger, at least 224) and its options flow in equal columns. An option is a cell: its preview in a 4:3
+  frame (Folder's thin edge), or its icon at the large icon size, then its label on one line. Highlight is the row
+  plate on the cell; the chosen value is the frame in the selected stroke (the check is not drawn: the frame says it).
+  Keyboard: Left / Right step in reading order, Up / Down go to the nearest cell in the row above or below (List box's
+  geometry), Home / End, Page keys, typeahead, Enter / Space choose. Groups grid their own options under their label.
+  Works with `multiple`.
+- **Peers:** List box grid, Asset grid, File grid, Radio card preview, Color swatch picker.
+- **Cost:** two gallery tiles (previews, swatches); no new states; the Documentation entry's grid row.
+- **Open:** none; the desktop Inspector uses the grid by default for visual settings of 12 options or fewer and a
+  list for long ramps, with one List / Grid preference in the Inspector (app code).
+
 ## Job and boundaries
 
 Pick one value (or, with `multiple`, several) from a short, fixed list whose options need more
@@ -40,6 +69,8 @@ list), not Menu (commands, no value), not ModelPicker (a composer recipe that co
 | selection | single (default); `multiple` (React prop, owner 2026-10-14): rows toggle, the list stays open, the trigger lists the chosen labels | Owner: "pill can be a dropdown too with multi select"; Notion multi-select, Figma toggled lists | desktop Inspector; no gallery tile |
 | state | open, placeholder, disabled, disabled option, invalid | WAI; Select's states | — |
 | boolean | fullWidth | Layout | — |
+| layout | list (default), grid | Choices that are pictures: a grid of preview cells at the field's width (owner 2026-10-23) | desktop Inspector setting pickers; owner's theme-picker references |
+| content | option `preview` (grid only): a picture over the label | The grid's reason to exist; without one the icon is drawn large | desktop Inspector (Folder-style setting figures) |
 
 Excluded: an open-on-load tile (the list lives in the top layer and would float over the
 gallery; the Review page opens it on click). A growing list of coloured values with typing and
@@ -167,6 +198,7 @@ these captures predates the 2026-10-08 decision (check only now; Decisions).
 | check on two-line rows | centred in the row | Peer: Menu's description row | Notion aligns it with the title; see Open questions |
 | group label | Menu label: the rows' size at 500, muted, row pitch (Nav's, 2026-10-22) | Peer: Menu (one label pattern) | Notion 12/14.4 500 |
 | group rule | Menu separator, between groups only | Notion (rule between sections) | Combobox groups have no rule |
+| grid layout | list spans its Field (or its trigger, ≥ 224), ≤ 432 tall; cells in `repeat(auto-fill, minmax(76px, 1fr))` (48 for icon-only cells, five swatches across), 2 apart, 4 padding, row radius; preview 4:3, radius the cell's less its 4 inset, Folder's edge (`stroke-width`, `border`); chosen: the frame in `stroke-selected` at `selected-width`; label `text-xs`, muted, the chosen one default ink | owner-approved review page 2026-10-23 (three 84 cells across a 268 field); List box grid (2 gap, row plates); Folder (edge) | `pick`: no product measured for a grid select; 432 holds four rows of cells where the list's 324 holds three |
 | list placement | overlay engine: 4 below, flips, ≥ trigger width and 224, ≤ 324 tall; the list scrolls in a Scroll area (owner 2026-10-09) | Peer: Combobox | — |
 
 ## States
@@ -367,3 +399,6 @@ The trigger's label is not selectable. See [interaction polish](../research/inte
   "100 (White)"); the Language tab alone marks the default. Reverses the 2026-10-14 labels. Enforced by
   registry.test.ts. No change to Custom select's own geometry.
 - 2026-10-23 · owner, 2026-10-23: "is it supposed to be much rounder than the actual input? im okay with it being a bit rounder but it seems drastic" → a list opened from a field takes the field's corner (surface.css, "A list opened from a field"; navigation.css for Select's picker): rows at the field's corner, the list 4 rounder (or, below a 4 corner, the rows' own corner more), rows short of a pill before Pill. Default: sm 6 → list 10 / rows 6 (Notion's field 6, menu 10, rows 6; was 12 / 8, twice the field), md 8 → 12 / 8 (unchanged), lg 10 → 14 / 10. Menus and Context menus keep 12 / 8. Swept every size × Radius 0–14 and Pill × density 28/32/36 × pill fields: Select, Custom select, Combobox and Tag picker agree at every combination.
+- 2026-10-23 · owner: "Go with the exaggerated glyphs, the 20 new marks and the grid menu as default … component intake
+  for the Custom select grid layout, then build it" → `layout="grid"` and the option `preview` slot (Intake above);
+  the desktop Inspector opens its visual settings as grids. Back in review.

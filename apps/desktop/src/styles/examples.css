@@ -65,3 +65,24 @@
 .ex-legend > span { display: inline-flex; align-items: center; gap: var(--area-space-6, 6px) }
 .ex-legend > span::before { content: ""; inline-size: 14px; block-size: 2px; border-radius: 1px; background: var(--area-accent-solid) }
 .ex-legend__prior::before { background: var(--area-border) !important }
+
+  /* --- Testing · Hairline (trial, content/examples/hairline.tsx) ------------------------------------------------------
+     Hairline's six properties as Area's tokens: the plate is the card the figure sits on, the greys the body ink mixed
+     toward it at Hairline's own steps, the stroke the icon weight. */
+  .ex-hl { display: grid; gap: var(--area-space-16); padding: var(--area-space-24); }
+  .ex-hl__head { display: flex; justify-content: flex-end; }
+  .ex-hl__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-space-96) * 3), 1fr)); gap: var(--area-space-16); } /* pick: 288 cards */
+  .ex-hl__card {
+    --hairline-plate: var(--area-bg-card, var(--area-bg-surface));
+    --hairline-hi: var(--_hl-hi, var(--area-fg-default));
+    --hairline-edge: color-mix(in oklab, var(--area-fg-default) 42%, var(--hairline-plate));
+    --hairline-mid: color-mix(in oklab, var(--area-fg-default) 28%, var(--hairline-plate));
+    --hairline-lo: color-mix(in oklab, var(--area-fg-default) 14%, var(--hairline-plate));
+    --hairline-stroke: var(--area-weight-icon);
+    display: grid; justify-items: center; gap: var(--area-space-8);
+    padding: var(--area-space-16) var(--area-space-16) var(--area-space-24);
+    background: var(--area-bg-card, var(--area-bg-surface));
+    border: var(--area-border-width) solid var(--area-border-card);
+    border-radius: var(--area-radius-container);
+  }
+  .ex-hl__figure { inline-size: min(100%, 240px); }
