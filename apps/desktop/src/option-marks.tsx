@@ -114,8 +114,19 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
   const n = Number(value);
   switch (axis) {
     case "neutral": return swatch("var(--area-neutral-500)", { "data-area-neutral": value });
-    case "accent": return swatch("var(--area-accent-solid)", { "data-area-accent": value });
-    case "tint-hue": return value === "auto" ? swatch("var(--area-neutral-500)", neutral) : swatch(`oklch(0.72 0.12 ${value})`, {});
+    case "accent": return swatch("var(--area-accent-solid)", { "data-area-accent": value, "data-area-accent-strength": canvas["accent-strength"] });
+    // Accent strength and Solid (axes/accent.ts): the accent's solid at the option, on the Canvas's accent.
+    case "accent-strength": return swatch("var(--area-accent-solid)", { "data-area-accent": canvas.accent, "data-area-accent-strength": value });
+    // Label tint: the label itself, on the Canvas's accent and Light solid; Status colours: the danger fill at the strength.
+    case "label-tint": return swatch("var(--area-fg-on-accent)", { "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"], "data-area-solid-light": canvas["solid-light"], "data-area-label-tint": value });
+    case "status-colours": return swatch("var(--area-danger-solid)", { "data-area-accent-strength": canvas["accent-strength"], "data-area-status-colours": value });
+    case "solid-light":
+    case "solid-dark": return swatch("var(--area-accent-solid)", { "data-area-theme": axis === "solid-light" ? "light" : "dark", "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"], [`data-area-${axis}`]: value });
+    // Tint: the hue itself (Auto, Neutral's own, as the Neutral swatch); a strength, the mode's page at it, on the hue
+    // chosen; Text tint, muted text's own colour at the share.
+    case "tint-hue": return value === "auto" ? swatch("var(--area-neutral-500)", neutral)
+      : value === "accent" ? swatch("var(--area-accent-solid)", { "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"] })
+      : swatch(`oklch(0.72 0.12 ${value})`, {});
     case "ink-tint": return swatch("var(--area-fg-muted)", { ...neutral, "data-area-tint-hue": canvas["tint-hue"], "data-area-tint-light": canvas["tint-light"], "data-area-ink-tint": value });
     case "action": return swatch("var(--area-action-solid)", { ...neutral, "data-area-accent": canvas.accent, "data-area-action": value });
     case "selection": return swatch("var(--area-selection-solid)", { ...neutral, "data-area-accent": canvas.accent, "data-area-selection": value });
@@ -125,7 +136,7 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     case "tint-light":
     case "tint-dark": {
       if (value === "auto") return <Dashed />;
-      const hue = canvas["tint-hue"] === "auto" ? "var(--area-neutral-500)" : `oklch(0.74 0.12 ${canvas["tint-hue"]})`;
+      const hue = canvas["tint-hue"] === "auto" ? "var(--area-neutral-500)" : canvas["tint-hue"] === "accent" ? "var(--area-accent-solid)" : `oklch(0.74 0.12 ${canvas["tint-hue"]})`;
       return <Svg><rect x="2.5" y="2.5" width="11" height="11" rx="2.5" fill={hue} fillOpacity={0.06 + 0.6 * t} strokeOpacity={0.55} /></Svg>;
     }
     // Layers: a page whose sidebar strip steps further from it.
@@ -192,6 +203,8 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     case "fill-hover": return <Plate ink={0.06 + 0.07 * n} />;
     case "fill-selected": return <Plate ink={0.13 + 0.06 * n} />;
     case "fill-pressed": return <Plate ink={0.12 + 0.09 * n} />;
+    // Danger hover: the row's plate, red at Tint, the neutral grey at Neutral.
+    case "danger-hover": return value === "tint" ? <Plate ink={0.22} color="var(--area-danger-solid)" /> : <Plate ink={0.12} />;
     case "pills": return PILL[value] ? <Svg>{PILL[value]}</Svg> : null;
     case "motion": {
       // The Menu's open as a share of the longest, 300 ms; 0 (None) is an empty ring.

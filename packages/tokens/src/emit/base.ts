@@ -15,6 +15,7 @@ import { MOTION_AXIS, duration } from "../axes/motion.ts";
 import { SOFT_EDGE, SOFT_EDGE_FILTER } from "../axes/surface.ts";
 import { type GroundEdge, contrastMix, layerCss, onGround, rawEdge, strokeEdge, strokeEdgeHover } from "../color/layers.ts";
 import { depthDerived } from "../axes/depth.ts";
+import { accentDerived, statusDerived } from "../axes/accent.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 
 /** 4px base with 2px, 6px and 10px half-steps for tight control interiors. */
@@ -133,6 +134,11 @@ function derivedOnPage(): Record<string, string> {
     // The Elevation roles, from Depth and the Edge and Depth levers (axes/depth.ts): every input is an axis, so they
     // re-derive wherever one is set.
     ...depthDerived(),
+    // The accent's paint (axes/accent.ts): each colour at the Accent strength, the solid and its hover at the Solid step,
+    // from the Accent setting's full-strength tokens, so a subtree that sets any of the three re-derives.
+    ...accentDerived(),
+    // The status tones' colours (axes/accent.ts Status colours): full, or quieted with the accent.
+    ...statusDerived(),
     // Presentation aliases choose existing palette endpoints. A preference is not a color
     // axis: it changes emphasis while every axis keeps its own namespaces.
     // Each mixes from its edge at standard contrast (rawEdge), by the level, as every border-* does (color/layers.ts), so a

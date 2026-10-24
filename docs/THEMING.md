@@ -10,7 +10,7 @@ on any ancestor changes every component inside it. The rules every setting follo
 
 Each is `data-area-<id>` on any element (in React, a `Theme` value). Missing settings
 inherit; an explicit setting starts a local scope. The registry
-(`packages/tokens/src/axes/registry.ts`) defines 24 axes. Most are one number named after
+(`packages/tokens/src/axes/registry.ts`) defines 30 axes. Most are one number named after
 what it measures.
 
 The registry is also the source of every setting's name and place (owner, 2026-10-19: "i want the axises to be the
@@ -27,13 +27,17 @@ named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carrie
 |---|---|---|
 | `theme` | `light` (default), `dark` | Colour polarity and `color-scheme`, including native controls |
 | `neutral` | `neutral` (default), `cool`, `warm` | The grey cast of every neutral role |
-| `accent` | 11 hues, `blue` (default) | The chosen colour. State marks, selected edges, the focus ring and selected text take it while Selection is Accent; solid actions while Action is Accent |
+| `accent` | The palette's 11 (`blue`, default) or any hue `0` … `355` in 5° steps | The chosen colour. State marks, selected edges, the focus ring and selected text take it while Selection is Accent; solid actions while Action is Accent. A hue draws the palette's ladder between its two nearest families (`color/generate.ts`), so at a family's own hue the result is the family, and every solved step (solid, indicator, tonal ink) is solved again for it |
+| `accent-strength` | `100` (Full, default) … `30` (Dusty) in tens, one for both modes | How much of its own colour the accent keeps: every accent colour mixes in OKLab toward the gray of its own luminance, so hue holds and contrast stays within 0.09:1; the solvers walk at every strength, so each step clears at each (docs/research/palette-customization-2026-10-23) |
+| `label-tint` | `0` (None, default) … `4` (Full), one for both modes | How much of the accent's hue the label on an accent solid takes: a quarter a step from its measured black or white toward the most coloured rung that still clears 4.6:1 and APCA 61 on the Solid step's fill and hover at every strength (`tintedLabel`, scale.ts). A navy button at 2 has a pale blue label; on a bright fill no rung clears and the label stays white |
+| `status-colours` | `fixed` (default), `match` | Danger, warning, caution, success, info and discovery as the palette draws them, or quieted to the Accent strength by the same mix, so a dusty palette has dusty statuses. Their hues never move, and tag colours (pink, gray, brown) stay |
+| `solid-light`, `solid-dark` | `auto` (default: the accent's own solid) or `400` … `850` | The accent step solid fills (accent Buttons, checked marks) sit on, per mode: a navy button is blue at 750. A step whose label cannot clear moves toward the label's side to the first that can, so no step fails; the label keeps the hue's own colour. Dark's Auto stays the solver's own step whatever light picks (a navy fill measures 1.66:1 on the near-black page) |
 | `action` | `neutral` (default), `accent` | Whether committing actions (solid Buttons) paint the accent |
 | `selection` | `neutral`, `accent` (default since 2026-10-22) | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards), the focus ring and selected text paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |
 | `ground-light` | `100` (White, default) … `90` | The light page's OKLCH lightness, in 1% steps |
 | `ground-dark` | `0` (Black), `8` (default, #020202), `12` … `24` | The dark page's lightness |
-| `tint-hue` | `auto` (default: the Neutral setting's own hue), `0` … `355` in 5° steps | The hue the grays lean toward, one for both modes |
-| `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `8`, each step 0.005 of OKLCH chroma | How strongly the grays take the hue, per mode. Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable") |
+| `tint-hue` | `auto` (default: the Neutral setting's own hue), `accent` (the accent's hue), `0` … `355` in 5° steps | The hue the grays lean toward, one for both modes |
+| `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `16`, each step 0.005 of OKLCH chroma (to 16 since 2026-10-23, for a butter-yellow page) | How strongly the grays take the hue, per mode. A step past what sRGB can show at a hue and lightness is held at that room (`tintRoom`, two slopes under the gamut), not clipped, so steps past it draw the same colour; clipping moved luminance and hue (a blue tint at 8 on a 97 page painted cyan). Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable") |
 | `ink-tint` | `0` (None) … `4` (Full) in quarters, `2` (default) | How much of the tint body and muted text take. Text also moves 0.25 × the strength away from its ground, so it keeps 4.5:1 on every hue (`INK_MARGIN`, docs/research/custom-neutral-2026-10-22/) |
 | `card-tone-light`, `card-tone-dark` | `auto` (default: each container's own tone, a Card raised, an Asset card recessed), `-4` (darker) … `0` (the page) … `+4` (lighter), a light step 0.012 L, a dark one 0.03 | Cards and asset cards against the page, per mode; their controls step from it and text is solved against the darkest (light) or lightest (dark) card, so every step reads (`layers.test.ts`, "every card tone is usable"). Menus, popovers and dialogs stay raised |
 | `layers-light`, `layers-dark` | `0` (Flat), `2`, `4` (default), `6`, `8` (five steps since 2026-10-22; was every whole number) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
@@ -48,7 +52,16 @@ The action and selection settings combine:
 | neutral | accent | Neutral actions, coloured state |
 
 Semantic tones (info, success, warning, caution, danger, discovery) keep their colour in
-every combination. `custom` (Switch's `--area-switch-color`) is a per-instance colour
+every combination, at every accent hue and strength.
+
+**Any palette, from a few colours** (2026-10-23, docs/research/palette-customization-2026-10-23). A palette is two
+colours, optionally three: a **page** (Ground and Tint: the page and every gray), an **accent** (Accent, Accent strength,
+Solid), and Action and Selection deciding where the accent paints. The Theme tab's Setup asks the greys as one first choice
+(Neutral, Warmer, Cooler, Tinted, Accent), each opening only the settings that refine it, and offers a colour field for the
+page and one for the accent; each snaps to the settings that draw it nearest and says what it chose. A pick is an input,
+never a token value: every role (hover, press, tints, strokes, ink, the label on a fill, the focus rung, the dark
+counterpart) is solved from the settings, so a custom colour has the guarantees a named one has. A separate button colour
+(a third chromatic colour) is not offered; Solid makes buttons deeper or lighter in the accent's own hue. `custom` (Switch's `--area-switch-color`) is a per-instance colour
 outside both roles.
 
 **Size and shape**
@@ -118,6 +131,7 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 | `fill-hover` | Fill › Hover | `1` … `4`, `2` (default) | The hover plate under rows and ghost controls, opaque and translucent (`bg-component-hover`, `bg-hover`) |
 | `fill-selected` | Fill › Selected | `0` (Same as hover) … `4`, `1` (default) | How far past hover the selected plate sits (`bg-component-active`, `bg-active`) |
 | `fill-pressed` | Fill › Pressed | `1` … `4`, `4` (default) | Quarters of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1, which is always at least the press room past selected |
+| `danger-hover` | Fill › Danger hover | `tint` (default), `neutral` | A destructive row's hover, highlight and pressed plate (Menu, Context menu): the row's own plate turned to the danger hue at the same lightness, or the grey plate every row takes (`row-danger-tint`, 1 or 0) |
 | `selected-tint` | Fill › Selected tint | `none` (default), `tint`, `neutral` | A selected container's fill under its stroke: nothing, the accent's faint surface (half strength in dark), or the row's selected wash (`selected-tint`) |
 
 - Hover, selected and pressed are built on each other, so their order holds at every combination (`color/layers.ts`
@@ -245,7 +259,10 @@ seams or come from `palette.json`. A parked token is not a promise of use.
 ## Limits
 
 - **Required browser features.** The colour scope model requires CSS `light-dark()` and
-  `color-scheme`; there is no fallback.
+  `color-scheme`, and the accent's paint relative colour syntax (`color(from …)`, `oklch(from …)`; Chrome 119, Safari
+  18, Firefox 128) inside `color-mix()`; there is no fallback.
+- **Size.** Each accent preset writes 60 colours per mode plus its Solid steps; the 72 hues bring `axes.css` to about
+  790 KB (about 80 KB gzipped).
 - **Saved settings migrate.** The app restores older saved Canvas settings: the `ui`
   shorthand as type and density, density saved by name as its number, one Layers value as
   both themes. Values that are no longer an option are dropped (`restoreCanvas` in

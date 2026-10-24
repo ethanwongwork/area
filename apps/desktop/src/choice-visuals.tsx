@@ -34,7 +34,14 @@ const SHADOW: Record<string, string> = {
 function Glyph({ axis }: { axis: string }): ReactNode {
   switch (axis) {
     case "accent": return <span className="cv-swatch cv-swatch--accent" />;
-    case "action": return <span className="cv-bar cv-bar--action" />;
+    case "action":
+    // Accent strength and Solid paint the accent's solid (axes/accent.ts), as Action Accent does.
+    case "accent-strength":
+    case "solid-light":
+    case "solid-dark": return <span className="cv-bar cv-bar--action" />;
+    // Label tint: an accent button with its label; Status colours: danger, warning and success fills.
+    case "label-tint": return <span className="cv-bar cv-bar--action cv-bar--label">Aa</span>;
+    case "status-colours": return <span className="cv-steps cv-steps--status"><i /><i /><i /></span>;
     case "selection": return <span className="cv-check" />;
     case "neutral": return <span className="cv-steps"><i className="cv-step--page" /><i className="cv-step--subtle" /><i className="cv-step--edge" /><i className="cv-step--muted" /></span>;
     case "theme":
@@ -55,6 +62,7 @@ function Glyph({ axis }: { axis: string }): ReactNode {
     case "focus-ring": return <span className="cv-square cv-square--focus" />;
     case "fill-hover":
     case "fill-selected":
+    case "danger-hover": return <span className="cv-plates"><i className="cv-plate--rest" /><i className="cv-plate--danger" /></span>;
     case "fill-pressed": return <span className="cv-plates"><i className="cv-plate--rest" /><i className="cv-plate--hover" /><i className="cv-plate--selected" /><i className="cv-plate--pressed" /></span>;
     case "motion":
     case "easing": return <span className="cv-track"><i /></span>;

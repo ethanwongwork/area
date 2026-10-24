@@ -29,7 +29,11 @@ describe("axis registry", () => {
         // Tint, 2026-10-22 (axes/tint.ts).
         "tint-hue", "tint-light", "tint-dark", "ink-tint",
         // Card tone, 2026-10-22 (axes/card-tone.ts).
-        "card-tone-light", "card-tone-dark"].sort(),
+        "card-tone-light", "card-tone-dark",
+        // Any accent colour, 2026-10-23 (axes/accent.ts).
+        "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours",
+        // Danger hover, 2026-10-23 (axes/states.ts).
+        "danger-hover"].sort(),
     );
   });
 });
@@ -137,7 +141,8 @@ it('rejects a dark-only collision with another axis', () => {
   const axes = structuredClone(AXES);
   axes.find(a => a.id === 'neutral')!.presets[0]!.darkTokens = {
     ...axes.find(a => a.id === 'neutral')!.presets[0]!.darkTokens,
-    '--area-accent-solid': '#ffffff',
+    // The accent axis writes its solid at full strength; emit/base.ts derives the public `accent-solid` from it.
+    '--area-accent-solid-full': '#ffffff',
   };
   expect(checkAxisIntegrity(axes).some(p => p.kind === 'collision')).toBe(true);
 });

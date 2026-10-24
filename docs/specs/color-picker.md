@@ -37,7 +37,7 @@ are Figma features outside this component (see Excluded).
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | composition | `header` | A title, tabs or close action above the editor, divided from it | Figma: every picker has a 40px header (Custom / Libraries tabs, +, close) |
-| composition | `swatches` (+ `onAddSwatch`) | Saved colors under the editor | Figma: "On this page" document colors |
+| composition | `swatches` (+ `onAddSwatch`) | Saved colors under the editor; opt-in, so the default is the editor alone (owner 2026-10-23) | Figma: "On this page" document colors |
 | composition | `eyedropper` | Sample a color from the screen | Figma: 24px button beside the tracks |
 | layout | `alpha={false}` | Colors without opacity (a page background in CSS, a theme color) | React Aria/Ant `disabledAlpha`; Figma's page background still shows opacity, so on by default |
 | state | `model`: hex, rgb, css, hsl, hsb | Figma's color model menu | Figma format menu (captured open) |
@@ -87,13 +87,14 @@ shell       10 rows wide (240 compact, 280 default), 1px `border-float`, radius 
 header      optional, min 40, padding 16 start / 8 end (border counted), `border-decorative` rule
 body        padding 16 at both densities (border counted), gap 12 (compact 8): views → contrast → area or grid → controls
             (eyedropper, tracks, preview) → values → note
-swatches    `border-decorative` rule, padding 12 16 (compact 8 16), heading row (label + save), ColorSwatchPicker sm,
-            contiguous cells pulled outward by (inset − rhythm)
+swatches    opt-in; `border-decorative` rule, padding rhythm 16 12 (border counted; compact 8 at the top), heading row
+            (label + save on the header's end inset), ColorSwatchPicker md (20 chips in 28 cells, nine across),
+            contiguous cells pulled outward by the cell inset (4), so chips meet the area's edge and sit 16 from the bottom
 ```
 
 Inset equations: outer inset = border 1 + padding 15 = 16 (Figma 16, no border). Header end
 inset = 1 + 7 = 8 (Figma 8). Swatch chip = 1 + 15 − 4 (grid pull) + 4 (cell inset) = 16
-(Figma 12 + 4 = 16). Tracks: the input is the track, so a 16px thumb travels between the
+(Figma 12 + 4 = 16), at the start and at the bottom (1 + 11 + 4). Tracks: the input is the track, so a 16px thumb travels between the
 ends and gradient stops sit half a thumb in (Figma's `linear-gradient(90deg, #f00 8px, …,
 #f00 calc(100% - 8px))`).
 
@@ -130,7 +131,7 @@ RGB, CSS, HSL, HSB in a dark 24px-row listbox.
 |---|---|---|---|
 | view switcher | Segmented sm, full width, first row of the body | iOS tabs; Area Segmented (Complete) | Shown only when `views` has more than one entry |
 | grid view | ColorSwatchPicker `layout="palette"`: contiguous square cells filling the width, container radius-control-sm with the area's hairline; selection is the thumb ring (2px white, hairline edges) inside the cell with radius-control-xs | iOS grid; this spec's thumb | Palette = `AREA_COLOR_GRID`, generated from palette.json by `scripts/gen-color-grid.mjs`: 11 hue columns (red → pink by OKLCH hue) × rungs 900 → 100, under a white → neutral → black row |
-| sliders view | a track per channel of the current model (Hex/CSS edit as RGB), a one-letter label column (icon-md wide, fg-muted), then opacity | iOS Sliders; Figma tracks | Gradients hold the other channels at the current color, computed in CSS from numeric custom properties; RGB, HSB (as HWB) and HSL S are exact two-stop sRGB gradients; OKLCH tracks interpolate `in oklch` |
+| sliders view | a track per channel of the current model (Hex/CSS edit as RGB), a one-letter label column (icon-md wide, fg-muted), then opacity; each row the track's height, so tracks sit the rhythm apart as in the spectrum view | iOS Sliders; Figma tracks | Gradients hold the other channels at the current color, computed in CSS from numeric custom properties; RGB, HSB (as HWB) and HSL S are exact two-stop sRGB gradients; OKLCH tracks interpolate `in oklch` |
 | OKLCH | L % (0–100), C % of 0.4 (0–100), H ° | CSS Color 4 (`C` percentage reference 0.4) | Integers fit the 3-field row like HSL. Out-of-sRGB input keeps L and h and reduces C (binary search); a status line says so. Conversion matches palette.json's stored OKLCH within 6e-4 for every color (test) |
 | contrast | row above the area: pair swatch (current / background), ratio `n.nn : 1`, check or dismiss glyph + level (danger ink when failing); on the area, the failing band dotted (white 55%) between two white edges | Figma contrast checker (owner reference) | Ratio uses the color composited at its opacity over the background. The band is solved per saturation column: WCAG contrast is V-shaped in luminance, so there is a dark edge and a light edge; either can be absent |
 | preview | control-sm wide, stretch to the tracks, new over original, hairline edge, checker under alpha; original is a button that restores it | iOS current swatch; Photoshop new/current | Disabled when unchanged |
@@ -147,7 +148,7 @@ foreground/background popover (the background is a prop).
 | shell · surface | `border-float`, radius container (12), the Surface axis's `--area-shadow-edge` (an edge at Surface 0) then the Elevation axis's float role `--area-shadow-float` (0 0 2 + 0 8 16, 3% key at the default step; transparent at 0); `plain` sets background, edge and lift to transparent / none (color.css, `.area-color-picker--plain`) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
 | shell · inset | 16 at both densities (border counted) | Figma 16; compact evidence audit 2026-10-02 | — |
 | vertical rhythm | 12, compact 8 | Figma: area→tracks 12, track gap 12, tracks→values 12 | — |
-| header | min 40, 16 start / 8 end, `border-decorative` rule | Figma 40, divider rgb(230) | Figma's tab text sits at 16 (8 + tab padding); a plain title uses the same column. A rule inside a container is never darker than its edge (audit F-6; was border-faint) |
+| header | min 40, 16 start / 8 end, `border-decorative` rule drawn inside the 40 (an inset shadow) | Figma 40, inset divider rgb(230) | Figma's tab text sits at 16 (8 + tab padding); a plain title uses the same column. A rule inside a container is never darker than its edge (audit F-6; was border-faint). As a border the rule took 1 of the 40 and a 28 action sat at 5.5 |
 | area · size, radius | square, full width; radius-control-sm (6) | Figma 208 square, radius 5 = its control radius | Area's control radius for the sm tier |
 | area / track · hairline | inset `token-swatch-ring` (black 10%, white 10% in dark) at `stroke-width`; also the contrast pair and the preview | Figma rgba(0,0,0,.1); consistency pass 2026-10-12 | Dark value not captured |
 | thumbs | 16px, 4px #fff ring, current-color fill, an opaque 1px `edge-control-hover` outer edge (#d4, Slider's thumb edge), the swatch ring (black 10%) inside, a fixed lift the Elevation setting does not move | Figma; owner round 16 | Figma's outer edge is black 20% (translucent): it changed colour around the circle where the thumb meets the track. Lift uses −2px spread to draw Figma's 12px shadow disc on one element |
@@ -157,7 +158,7 @@ foreground/background popover (the background is a prop).
 | eyedropper | Button ghost sm, Fluent `eyedropper_16_regular` | Figma 24px button left of the tracks | Shown only where `window.EyeDropper` exists (Chromium); Figma samples its own canvas |
 | values · model | Select sm, content width | Figma 57 × 24 (content width) | — |
 | values · fields | InputGroup soft sm; 1px surface divider; opacity 54 with % in a 14px box; value text runs to the field end | Figma | Hex fill is bg-component (247; Figma 245) |
-| swatches | ColorSwatchPicker sm, contiguous 24px cells pulled 4px outward, `border-decorative` rule (audit F-6), padding 12 16, heading row (muted 12/16 label, the save button) | Figma: rule, padding-top 11 + 1, 24px cells from 12, 16px chits | Heading is a label with a save button instead of Figma's source select (no libraries) |
+| swatches | opt-in; ColorSwatchPicker md: contiguous control-sm cells (28) with 20 chips, pulled 4 outward; `border-decorative` rule (audit F-6); padding rhythm 16 12; heading row (muted 12/16 label, the save button on the header's 8 end inset) | Figma: rule, padding-top 11 + 1, 24px cells from 12, 16px chits, nine across | Scaled to Area's row as the width is (Figma's 16 in 24 at 24 rows; nine across at every scale). Heading is a label with a save button instead of Figma's source select (no libraries) |
 | grid view · selected cell | ColorSwatchPicker `palette`'s: a white outline straddling the cell edge with a 15% line inside (color-swatch-picker.md, round 20) | owner rounds 18–20 | — |
 | type | control-sm 12/16 400 | Type ramp (small controls 12/16) | Figma 11/16 450 |
 
@@ -311,6 +312,15 @@ rules. The one deliberate difference is the palette cell, which uses the thumb's
 - 2026-10-12 · owner, review round 17: approved.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the area, track, contrast-pair and preview hairlines are the swatch ring token at `stroke-width` (were a literal 1px and colour), and the thumb's outer edge reads Slider's `edge-control-hover` (same #d4 as `border-subtle`; stronger under increased contrast) (color.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the surface picker lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+- 2026-10-23 · owner: "can the default state just be top part, without the saved colors? can you make sure the design of the sliders, and the size of the swatches, and the overall design of each variant, the placement of every control, the alignment, gaps, padding, layout, etc are all correct and intentional?" → measured every tile at the default and at density 28/36 × type 12–16, light and dark: the Default tile is the editor alone and Saved colors is its own tile (the component already made them opt-in); saved chips are md, 20 in 28 (were 16 in 24, Figma's size at its 24 rows, small beside Area's 28 rows), nine across; the chips sat 1 off the area's edge (the pull used the rhythm, not the cell inset) and 12 from the bottom at compact, now 16 at both; the save button takes the header's 8 end inset; the sliders view's tracks were 16 apart (the label's line set the row), now the rhythm, as hue and opacity; the header's rule is drawn inside its 40, so a 28 action centres on whole pixels (it sat at 5.5); the Disabled tile no longer carries saved colors and Plain no longer drops opacity (one variant per tile). Checked, unchanged: area and track geometry (16 inset, 12 / 8 rhythm, 16 pills, thumbs), the value row, preview, contrast row, grid view.
+
+## Review note, 2026-10-23
+
+- **What changed:** the default picker is the editor alone; saved colours are their own tile. Saved chips are a size up
+  (20, from 16) and line up with the area's edge; the + sits where the header's close does; the sliders view's tracks
+  are as far apart as the hue and opacity tracks; the header's close button sits on whole pixels.
+- **Why:** your note that the default should be just the top part, and that every size, gap and alignment should be
+  intentional. The chips were Figma's size at Figma's smaller rows; scaled to Area's rows they keep Figma's nine across.
 
 ## Review note, 2026-10-19 (round 56)
 

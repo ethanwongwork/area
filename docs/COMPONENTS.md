@@ -80,6 +80,9 @@ before it is built.
 | Chat, next | Voice input; a labelled date divider (would change Separator); Markdown as an Area component | Mixed | Owner's call on each |
 | Stack divider | A rule between a Stack's children (MUI `divider`, Chakra `separator`, Atlassian Inline `separator`) | A Stack option, or Separator in a Stack | A screen that needs it; lists and settings groups draw their own seams ([research](research/layout-primitives-2026-10-20.md)) |
 | Content tools | Carousel, rich text, code editor, gradient and easing editors | Adapters to mature engines, not reimplementations | Owner's go-ahead |
+| App-shell layout | A window's regions (top bar, nav panel, content, side panel, dock) with their default, minimum and maximum sizes, the collapse order, and a `layered` option: the content as one raised layer on the chrome ground (ChatGPT desktop's `PageSurfaceLayout`, shadcn `inset`) | Layout component on Titlebar, Panel and Surface (Mantine AppShell, Atlassian page layout, shadcn Sidebar) | Owner's go-ahead; the layer's inset and corner as owner picks; ChatGPT desktop measured live ([research](research/ui-patterns-2026-10-22/)) |
+| Grid | A page-level grid of cards whose columns come from a minimum card width and the container's width, gap by role | Layout component beside Stack (Mantine SimpleGrid, Polaris Grid); Stack's spec leaves 2-D layout to CSS today | A second screen that needs it outside Asset grid and File grid ([research](research/ui-patterns-2026-10-22/); `area-ui-compose` › content) |
+| Shelf | A page-level row of cards that scrolls sideways under a section heading, with a peek, scroll snap and previous / next controls | A component on Card Carousel's behaviour, or the Carousel content tool | Owner's go-ahead; Spotify, Nike, Airbnb, Apple and Figma Community shelves measured ([research](research/ui-patterns-2026-10-22/)) |
 
 Built since the 2026-09-26 [gap audit](research/component-gap-audit.md) of 13 catalogues:
 

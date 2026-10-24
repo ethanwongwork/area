@@ -1,6 +1,32 @@
 # Handoff
 
 ## Current state (2026-10-23)
+- **PR, `claude/nice-swirles-989844` (owner 2026-10-23: "a user wants to choose like 2-3 colors overall").** Any palette
+  from a page colour and an accent. Accent takes the eleven or any hue in 5° (`color/generate.ts`: the palette's ladder
+  between the two nearest families; named accents paint as before, checked pixel for pixel). New settings
+  (`axes/accent.ts`): Accent strength 100–30 (an OKLab mix toward the gray of the colour's own luminance, not chroma
+  scaling, which broke contrast; the solvers walk at every strength), Light / Dark solid (400–850, clamped toward the
+  label). Tint to 16, held inside each hue's sRGB room (`tintRoom`; clipping had painted a blue tint cyan), Tint hue
+  Accent, hued inks darken for tinted pages (`HUED_INK_MARGIN`). Setup: greys as one first choice (Neutral, Warmer,
+  Cooler, Tinted, Accent) and an accent colour field that snaps. Then Label tint 0–4 (the label on an accent solid toward
+  the most coloured rung that clears it, `tintedLabel`) and Status colours Fixed / Match (status tones quieted to the
+  Accent strength; hues never rotate; tags stay). Gate: `contrast/accents.test.ts` (every accent ×
+  strength × Solid × neutral × mode). Sweep of all 119 families in light and dark with two custom palettes: no new text
+  contrast failures (Folder's count, 2.52:1, predates it). Research and review page: docs/research/
+  palette-customization-2026-10-23. Open: palette names (presets not built), a separate button colour (deferred), P3.
+
+- **PR, `claude/semantic-color-hover-states-c30c80` (owner 2026-10-23).** Danger hover (Fill; `axes/states.ts`,
+  `row-danger-tint`): `tint` (default) turns a Menu danger row's hover and pressed plates to the danger hue at the
+  neutral plates' lightness, `neutral` the old grey; the red follows the Pressed step (kept over PR #152's firmest press
+  so the red plate matches the grey one). Dark extremes (ground 24, layers 8, heavy fills) fail for both, white
+  included. Color picker: default is the editor alone, Saved colors its own tile, chips md (20 in 28, nine across) on the
+  area's edge; sliders-view tracks one rhythm apart; header rule inset. Lists opened from a field (Select, Custom select,
+  Combobox, Tag picker) take the field's corner (sm 10/6, md 12/8, lg 14/10); Menus keep 12/8.
+  Corner audit (all 119 families, default settings; every nested rounded pair against outer − inset): fixed the pill
+  Composer's other actions (now pills), Tag picker's tags (nested corner, 4 at every size; was 6 at lg), the bottom
+  Drawer (Dialog's 16, was 12). Left by decision: keycaps keep 6 in Buttons (owner 2026-09-28), Asset card counts its
+  edge (rounds 52/57), Composer context Chips stay pills (Pills set). Merged main with a sparse checkout that leaves out
+  `.claude/skills/area-ui-*` (the app's merge refused: unconfirmed pinned origin); they are in the commit, not on disk.
 
 - **PR #157, `claude/theme-dropdown-visuals-d6e169`, open, not yet merged with main.** Merging main conflicts in
   `apps/desktop/src/canvas-settings.tsx`, `option-marks.tsx` and `docs/specs/custom-select.md` (main's Danger hover and
@@ -35,6 +61,12 @@
   Neutral Tint https://claude.ai/artifact/8Czr8Wcu9rTwdW97SzFLzQ. Its open proposals (recessed press cap, per-tone edges,
   the setup's narrow stage at 1024) are built on `claude/eager-maxwell-0a929b`, above.
 
+- **UI composition skills (`claude/ui-patterns-research-b87a2f`, merged by its PR).** Research on how ChatGPT desktop,
+  Cursor, Figma, Notion, Spotify, Airbnb, Nike, YouTube, Apple and 13 design systems lay out whole UIs, and how shells
+  separate regions and treat navigation (`docs/research/ui-patterns-2026-10-22/`, README first); skills
+  `area-ui-compose` (shell, treatments, spacing, content, copy, components, screen recipes) and `area-ui-review`
+  (`scripts/layout-audit.js`); three layout candidates in COMPONENTS.md (App-shell layout, Grid, Shelf). Not yet
+  reviewed by the owner. Open: region treatment as a setting (recommended, undecided; `region-treatments.md` › In Area).
 - **PR #150, `claude/electron-canvas-feed-layout-8b2924`.** The Canvas as a documentation feed (32 margin, 12 / 40
   rhythm measured to ink, title + count + subtitle per section), Code block md corner concentric with its copy (11),
   flush Table trims its outer rows, and the Cursor audit's validated items: Menu-family group labels take Nav's (rows'

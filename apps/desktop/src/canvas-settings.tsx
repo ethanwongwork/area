@@ -45,14 +45,14 @@ function ViewSwitch({ view, onChange }: { view: View; onChange: (view: View) => 
     items={[{ value: "grid", label: "Grid", icon: <GridIcon /> }, { value: "list", label: "List", icon: <ListIcon /> }]} />;
 }
 
-export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
+export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "accent", "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
   // Material shows with every setting: a tab that narrows its settings shows no surfaces a material paints.
   const showMaterial = material ?? axes.length === GALLERY_CONTROLS.length - 1;
   // Ground, Layers, Tint strength and Card tone exist once per theme; the Inspector sets the mode the app is in (owner, 2026-10-22: "separate the
   // dark mode choice from the light mode, i shouldnt be choosing both at the same time"), the Titlebar's switch choosing
   // which, so light's pair shows in Light and dark's in Dark.
   const { theme } = useStudio();
-  const inTheme = (axis: Axis) => !/^(ground|layers|tint|card-tone)-(light|dark)$/.test(axis) || axis.endsWith(`-${theme}`);
+  const inTheme = (axis: Axis) => !/^(ground|layers|tint|card-tone|solid)-(light|dark)$/.test(axis) || axis.endsWith(`-${theme}`);
   const [view, setViewState] = useState<View>(() => readStored<View>("inspector-list-view", "grid"));
   const setView = (next: View) => { setViewState(next); writeStored("inspector-list-view", next); };
   const first = GROUPS.find(group => (group.settings as readonly Axis[]).some(axis => axes.includes(axis) && inTheme(axis)))?.heading;

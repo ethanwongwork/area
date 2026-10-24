@@ -25,6 +25,7 @@ import { TYPE_AXIS } from "./type-size.ts";
 import { GROUND_DARK_AXIS, GROUND_LIGHT_AXIS, LAYERS_DARK_AXIS, LAYERS_LIGHT_AXIS } from "./layers.ts";
 import { INK_TINT_AXIS, TINT_DARK_AXIS, TINT_HUE_AXIS, TINT_LIGHT_AXIS } from "./tint.ts";
 import { CARD_TONE_DARK_AXIS, CARD_TONE_LIGHT_AXIS } from "./card-tone.ts";
+import { ACCENT_STRENGTH_AXIS, LABEL_TINT_AXIS, SOLID_DARK_AXIS, SOLID_LIGHT_AXIS, STATUS_COLOURS_AXIS } from "./accent.ts";
 
 export const AXES: AxisDefinition[] = [
   THEME_AXIS,
@@ -35,6 +36,14 @@ export const AXES: AxisDefinition[] = [
   TINT_DARK_AXIS,
   INK_TINT_AXIS,
   ACCENT_AXIS,
+  // Any accent colour (2026-10-23): how much of its colour it keeps, and the step solid fills sit on per mode.
+  ACCENT_STRENGTH_AXIS,
+  SOLID_LIGHT_AXIS,
+  SOLID_DARK_AXIS,
+  // The label on an accent solid: how much of the accent's hue it takes (2026-10-23).
+  LABEL_TINT_AXIS,
+  // The status tones: as the palette draws them, or quieted with the accent (2026-10-23).
+  STATUS_COLOURS_AXIS,
   ACTION_AXIS,
   SELECTION_AXIS,
   GROUND_LIGHT_AXIS,
@@ -65,12 +74,12 @@ export const AXES: AxisDefinition[] = [
  * (`settingLabel`): Stroke width reads Width under Stroke, Shadow size Size under Shadow.
  */
 export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly string[] }> = [
-  { heading: "Color", settings: ["theme", "neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast"] },
+  { heading: "Color", settings: ["theme", "neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "accent", "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast"] },
   { heading: "Size", settings: ["type", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },
   { heading: "Stroke", settings: ["surface", "stroke", "stroke-hover", "selected-stroke", "focus-ring", "shadow-rest"] },
   { heading: "Shadow", settings: ["elevation", "shadow-resting", "shadow-hover", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] },
-  { heading: "Fill", settings: ["fill-hover", "fill-selected", "fill-pressed", "selected-tint"] },
+  { heading: "Fill", settings: ["fill-hover", "fill-selected", "fill-pressed", "selected-tint", "danger-hover"] },
   { heading: "Effects", settings: ["motion", "easing"] },
 ];
 

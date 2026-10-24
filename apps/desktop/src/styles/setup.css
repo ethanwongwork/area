@@ -53,6 +53,10 @@
   .cv-swatch { inline-size: 32px; block-size: 32px; border-radius: var(--area-radius-full); background: var(--area-accent-solid); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); } /* pick */
   .cv-bar { inline-size: 56px; block-size: var(--area-control-sm); border-radius: var(--area-radius-control-sm); } /* pick */
   .cv-bar--action { background: var(--area-action-solid, var(--area-fg-default)); }
+  .cv-bar--label { display: grid; place-items: center; color: var(--area-fg-on-action); font-weight: var(--area-wght-500); }
+  .cv-steps--status > i:nth-child(1) { background: var(--area-danger-solid); }
+  .cv-steps--status > i:nth-child(2) { background: var(--area-warning-solid); }
+  .cv-steps--status > i:nth-child(3) { background: var(--area-success-solid); }
   .cv-bar--pill { border-radius: var(--area-radius-full); background: var(--area-fg-default); }
   .cv-check { display: grid; place-items: center; inline-size: 28px; block-size: 28px; border-radius: var(--area-radius-control-xs); background: var(--area-selection-solid); } /* pick */
   .cv-check::after { content: ""; inline-size: 10px; block-size: 5px; border-inline-start: 2px solid var(--area-fg-on-selection); border-block-end: 2px solid var(--area-fg-on-selection); translate: 0 -1px; rotate: -45deg; } /* pick: the check, as Checkbox draws it */
@@ -92,6 +96,8 @@
   .cv-plate--hover { background: var(--area-bg-component-hover); }
   .cv-plate--selected { background: var(--area-bg-component-active); }
   .cv-plate--pressed { background: var(--area-bg-component-pressed); }
+  /* Danger hover: the row's plate, turned red at Tint (axes/states.ts), as the Menu paints it. */
+  .cv-plate--danger { background: color-mix(in oklab, var(--area-bg-component-hover), light-dark(var(--area-danger-surface-hover), color-mix(in srgb, var(--area-danger-solid) 22%, transparent)) calc(var(--area-row-danger-tint) * 100%)); }
   .cv-track { position: relative; inline-size: 64px; block-size: 4px; border-radius: 2px; background: var(--area-fill-track); } /* pick */
   .cv-track > i { position: absolute; inset-block-start: -6px; inline-size: 16px; block-size: 16px; border-radius: var(--area-radius-full); background: var(--area-fg-default); animation: cv-travel calc(var(--area-duration-base) * 4) var(--area-ease-in-out) infinite alternate; } /* pick */
   @keyframes cv-travel { from { inset-inline-start: 0; } to { inset-inline-start: calc(100% - 16px); } }

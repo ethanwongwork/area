@@ -37,6 +37,7 @@
  *     focus-ring      Focus ring: a field, a button and a card each focused, 1.25x
  *     shadow-hover    Hover shadow: a hovered card, 1.25x
  *     fill-hover, -selected, -pressed: a menu's rows hovered, selected and pressed, 1.25x
+ *     danger-hover    Danger hover: a menu with its Delete row hovered, 1.25x
  *   motion       a switch flipping (a close-up, 1.5x)
  *   easing       the same switch flipping at Motion 300, so the curve has time to show (a close-up, 1.5x)
  *   pills        the shape the tile names, as a pill (a close-up, 1.5x; a field and a segmented track at 1x)
@@ -261,6 +262,14 @@ const StateMenu = () => (
     <MenuItem className="lang-state-pressed">Pressed</MenuItem>
   </div>
 );
+/** A row menu whose destructive row is hovered (keyboard-highlighted, real): its plate is what Danger hover sets. */
+const DangerMenu = () => (
+  <div className="area-menu lang-zoom-menu" role="menu" aria-label="Menu">
+    <MenuItem>Rename</MenuItem>
+    <MenuItem>Duplicate</MenuItem>
+    <MenuItem tone="danger" data-highlighted="">Delete</MenuItem>
+  </div>
+);
 /** A field over a button: their corners (Radius); a field, a box and an outline button: their edges (Contrast). Each one
     a column narrow enough that the close-up shows every corner whole inside a choice. */
 const Corners = () => (
@@ -304,6 +313,7 @@ const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
   "fill-hover": { scale: 1.25, subject: StateMenu },
   "fill-selected": { scale: 1.25, subject: StateMenu },
   "fill-pressed": { scale: 1.25, subject: StateMenu },
+  "danger-hover": { scale: 1.25, subject: DangerMenu },
 };
 
 /** Whether a setting draws a close-up (its component cropped a little over its size) rather than a fitted drawing. */
@@ -347,7 +357,19 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
     case "theme":
       return [FILL.wide, <Note><div className="lang-row lang-row--start"><Button size="sm">Button</Button></div></Note>];
     case "accent":
+    // The step solid fills sit on (axes/accent.ts): a filled Button.
+    case "solid-light":
+    case "solid-dark":
       return [FILL.control, <Button>Button</Button>];
+    // Label tint: an accent Button, its label the setting.
+    case "label-tint":
+      return [FILL.control, <Button>Button</Button>];
+    // Status colours: the status tones the setting quiets, as solid Badges.
+    case "status-colours":
+      return [FILL.wide, <div className="lang-row"><Badge tone="danger" variant="solid">Failed</Badge><Badge tone="warning" variant="solid">Due</Badge><Badge tone="success" variant="solid">Done</Badge></div>];
+    // How much of its colour the accent keeps: everything it paints, a Button, a checked mark and a selected chip's tint.
+    case "accent-strength":
+      return [FILL.wide, <div className="lang-row"><Button>Save</Button><Checkbox label="On" defaultChecked /></div>];
     case "action":
       return [FILL.wide, <div className="lang-row"><Button variant="outline" tone="neutral">Cancel</Button><Button>Save</Button></div>];
     case "selection":
@@ -417,7 +439,7 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
  * The settings whose change shows only in a state (hover, selection, focus, press): no view draws that state, so the
  * Setup's stage draws the state itself, the close-up's component at true scale (theme-setup.tsx).
  */
-export const STATE_SETTINGS = new Set(["stroke-hover", "selected-stroke", "selected-tint", "focus-ring", "shadow-hover", "fill-hover", "fill-selected", "fill-pressed"]);
+export const STATE_SETTINGS = new Set(["stroke-hover", "selected-stroke", "selected-tint", "focus-ring", "shadow-hover", "fill-hover", "fill-selected", "fill-pressed", "danger-hover"]);
 export function StateDrawing({ axis }: { axis: string }) {
   const Subject = CLOSE_UPS[axis]?.subject;
   return Subject ? <Fit fill={FILL.window} max={1} group={`stage-${axis}`}><div className="lang-zoom-whole"><Subject /></div></Fit> : null;

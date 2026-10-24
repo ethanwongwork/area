@@ -57,6 +57,24 @@ them:
 - A dark-end lightness adjustment is an explicit, bounded table entry, so it cannot move a
   surface ground or the white-label contrast wall unnoticed.
 
+**An accent at any colour** (2026-10-23, docs/research/palette-customization-2026-10-23).
+
+- **Any hue.** An accent hue draws the palette's ladder between its two nearest families (`color/generate.ts`): their
+  lightness at each rung and their share of the room sRGB has there, mixed by how far the hue sits between them, at the
+  hue itself. At a family's own hue that is the family, so the palette's eleven never move; `palette.json` is read, never
+  written.
+- **Strength holds hue and contrast.** Accent strength mixes every accent colour in OKLab toward the gray of its own
+  luminance, never scales chroma at a held lightness (which moved blue 500's label contrast 0.3:1 at 30%). The accent's
+  solvers (solid, tonal pair, indicator) walk at every strength, so each step they pick clears at each.
+- **Solid is a step, not a colour.** It moves the accent's solid and its hover only; the label keeps the hue's own colour,
+  and a step the label cannot clear on moves toward the label's side until it can.
+- **Labels can take the hue, never lose the contract.** Label tint mixes an accent solid's label toward the most coloured
+  rung that clears the label's contract on the fill and its hover at every strength; each of its five steps is gated.
+- **Status colours keep their hue.** Under Status colours Match they quiet to the Accent strength with the accent's own
+  mix; they never rotate toward it, so danger never reads as warning.
+- **Tonal inks stay under the gray-page bound.** A light tonal ink is no brighter than `TONAL_Y` (teal's #00766a, the
+  brightest named one), the luminance the Layers model darkens hued inks for on a gray page.
+
 **Tone means meaning; treatment means emphasis.**
 
 - `tone` is semantic: `neutral`, `info`, `success`, `warning`, `caution`, `danger`,
@@ -70,7 +88,7 @@ without a meaning. `gray` has tints and inks only: a near-neutral scale has no t
 stroke that clears the outline floor. Every label colour has light and dark pairs checked by
 the contrast tests, including its strong ink on its tint.
 
-**Emphasis roles.** Area has one chosen colour, the accent, plus neutral. Components never
+**Emphasis roles.** Area has one chosen colour, the accent (any hue, strength and solid step), plus neutral. Components never
 offer an accent tone. They paint one of two roles, and the `action` and `selection` settings
 decide whether each is neutral or the accent. Action defaults to neutral, Selection to the accent (2026-10-22):
 
@@ -121,6 +139,10 @@ neutral ghost Buttons):
 | Hover | `bg-component-hover` | `bg-hover` |
 | Selected, current | `bg-component-active`, one step firmer, so selection survives hover | `bg-active` |
 | Pressed | `bg-component-pressed`, one step further, so every click shows | `bg-pressed` |
+
+A destructive row (a Menu's "Delete") keeps its red label in every state, and its plates follow Danger hover: at Tint
+(the default) each plate keeps its neutral lightness in the danger hue, so the red ink solved for the neutral plate holds
+on it; at Neutral it takes the plates above (`axes/states.ts`, owner 2026-10-23).
 
 Use the translucent twins on grounds a component cannot know (a segmented track, a swatch
 cell) and for controls nested on a row. The pressed fill follows every ground and Layers
@@ -413,10 +435,15 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   raised, `soft` recessed), with one edge per boundary. **Stack** spaces children by role
   (related, group, section) and never wider than the inset of the Surface it sits in
   ([Surface](specs/surface.md), [Stack](specs/stack.md)).
-- **Rows in floating lists** (Menu, Combobox, Command palette, Select picker) use
+- **Rows in floating lists** (Menu, Context menu, Command palette) use
   `radius-list-row`: the surface less its inset, no rounder than a medium Button, and a pill
   only at Pill. The list uses `radius-list` (rows + inset). Standalone rows (Nav, Tree view)
   use `radius-row`.
+- **A list opened from a field** (Select, Custom select, Combobox, Tag picker) takes the field's
+  corner: its rows are the field's corner (short of a pill before Pill), the list 4 rounder, or
+  the rows' own corner more below 4, so it reads as the field's own list and goes square with it
+  (owner 2026-10-23; Notion: field 6, menu 10, rows 6). It re-points `radius-list-row` and
+  `radius-list` on the list (`surface.css`, `navigation.css`).
 - **Bars and keycaps.** A one-line bar (Alert banner, Toast) and Tooltip take the large
   control corner. Multiline ones are surfaces. Kbd is a 24px box's corner at every size.
 - **Pills are a set** (`data-area-pills`), not a radius.

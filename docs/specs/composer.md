@@ -147,6 +147,8 @@ from a hover-out). Recommendation: keep; the outline carries the ring, and it is
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the edge reads `border-card` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "go with your recs" (elevation audit) → Composer takes the Elevation axis's resting role at rest and under its focus halo (was no shadow, owner 2026-09-26): ChatGPT lifts its composer (0 2 8 at 4%, 0 4 80 8 at 2.4%, captured 2026-10-13); 1.5% at the default step, none at 0 (composer.css; docs/research/elevation-2026-10-14.md).
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the frame is `composer-edge`, the card edge at standard contrast and the strong control stroke at more (it read 1.16:1 light, 1.33:1 dark; now 3.79:1 / 5.49:1), as its focus colour already switched.
+- 2026-10-23 · owner: "make sure all inset corner radius pairings are not broken" → corner audit: with a pill send button (`submitPill`) the shell is a pill, so its other actions are pills too (their concentric corner, the shell's less the inset); the leading + sat at 8 in the round end (composer.css; `rounded` opts one out). Swept Radius 0–14 and Pill; the default composer is unchanged. Not changed: context-row Chips are pills by the Pills set and sit in the 16 corner rounder than its 8 concentric corner (owner's Pills decision).
+
 
 ## Chat additions, 2026-10-19
 

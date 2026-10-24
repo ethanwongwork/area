@@ -2040,7 +2040,9 @@ const pickerSwatches = [
   {value: "#DF127D", label: "Pink 500"}, {value: "#E80945", label: "Red 500"},
   {value: "#EA7401", label: "Orange 500"}, {value: "#00A797", label: "Teal 500"},
 ];
-export const GalleryColorPicker = () => {
+export const GalleryColorPicker = () => <ColorPicker label="Fill" defaultValue="#8D4DF3" />;
+/* Saved colours are opt-in: `swatches`, and `onAddSwatch` for the save button. */
+export const GalleryColorPickerSwatches = () => {
   const [swatches, setSwatches] = useState(pickerSwatches);
   return <ColorPicker label="Fill" defaultValue="#8D4DF3" swatches={swatches} onAddSwatch={value => setSwatches(current => current.some(item => item.value === value) ? current : [...current, {value, label: value}])} />;
 };
@@ -2062,8 +2064,8 @@ export const GalleryColorPickerModelHsl = () => <ColorPicker label="Shadow" defa
 export const GalleryColorPickerModelCss = () => <ColorPicker label="Background" defaultValue="#00A79780" defaultModel="css" />;
 export const GalleryColorPickerOpaque = () => <ColorPicker label="Page background" defaultValue="#F5F5F5" alpha={false} />;
 /* Plain drops the floating plate, for a picker inside a Popover or Panel (audit F-20). */
-export const GalleryColorPickerPlain = () => <ColorPicker variant="plain" label="Fill" defaultValue="#8D4DF3" alpha={false} />;
-export const GalleryColorPickerDisabled = () => <ColorPicker label="Locked fill" defaultValue="#8D4DF3" disabled swatches={pickerSwatches.slice(0, 4)} />;
+export const GalleryColorPickerPlain = () => <ColorPicker variant="plain" label="Fill" defaultValue="#8D4DF3" />;
+export const GalleryColorPickerDisabled = () => <ColorPicker label="Locked fill" defaultValue="#8D4DF3" disabled />;
 
 /* Calendar. A fixed "today" keeps the gallery deterministic. */
 const calendarToday = "2026-09-26";
