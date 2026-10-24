@@ -28,11 +28,10 @@
   edge (rounds 52/57), Composer context Chips stay pills (Pills set). Merged main with a sparse checkout that leaves out
   `.claude/skills/area-ui-*` (the app's merge refused: unconfirmed pinned origin); they are in the commit, not on disk.
 
-- **PR #157, `claude/theme-dropdown-visuals-d6e169`, open, not yet merged with main.** Merging main conflicts in
-  `apps/desktop/src/canvas-settings.tsx`, `option-marks.tsx` and `docs/specs/custom-select.md` (main's Danger hover and
-  palette settings). The app's sync refuses until the owner confirms the pinned origin (Help → Troubleshooting →
-  Review Pinned Git Origins), because main adds `.claude/skills/area-ui-*`; then sync, resolve, add a glyph (and
-  figure) for Danger hover and the new palette settings, rerun the checks, merge.
+- **PR #157, `claude/theme-dropdown-visuals-d6e169`, merged 2026-10-24** (main merged in by hand with `git merge
+  origin/main` after the owner confirmed the pinned origin; the app's sync still refused). Main's palette settings keep
+  their swatch marks; Danger hover got a plate glyph (red / grey); main's new settings have no figures yet (they open as
+  lists in grid view). All checks passed locally; CI had not finished when merged.
   What it holds: Custom select `layout="grid"` + option `preview` (spec "Intake: Layout grid"; Custom select in
   review); the Inspector opens visual settings as figure grids (`choice-figures.tsx`), swatch grids for Accent and Tint
   hue, one List / Grid switch; one-idea option glyphs incl. Pills, shadow details, Material (owner prefers today's
