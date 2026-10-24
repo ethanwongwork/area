@@ -2,19 +2,20 @@
 
 ## Current state (2026-10-23)
 
-- **Branch `claude/theme-dropdown-visuals-d6e169`, uncommitted, not merged with main** (main's `.claude/skills` files need
-  the origin confirmed in the app first; main adds Danger hover, which still needs a glyph and a figure here). Theme setting
-  visuals (docs/research/theme-visuals-2026-10-23, review page https://claude.ai/artifact/JvT2iJZHfe6A9nEekqT4xP):
-  Custom select `layout="grid"` and option `preview` (spec "Intake: Layout grid"; Custom select back in review); the
-  Inspector opens visual settings as grids of Folder-style figures (`choice-figures.tsx`, `styles/choice-figures.css`),
-  swatch grids for Accent and Tint hue, lists for long ramps, one List / Grid switch on the first section; option marks
-  are exaggerated one-idea glyphs, with marks for Pills, the shadow details and Material (`option-marks.tsx`). Setup
-  cards are unchanged (still round 3's mini UI and marks).
-  Typography tab (owner, 2026-10-23): Headings and Copy each one section, a role's two weights stacked in one Example
-  cell; columns Size, Line height, Tracking, Weight (usage and the token column removed; the token stays in the
-  Inspector's Code tab); the grid view is a sheet of cards (Aa at both weights over the four measures). Review page
-  sections since: icon-to-illustration ladder and line illustrations (Medusa style, `docs/research/theme-visuals-
-  2026-10-23/line/ln.css`), picks in collections `ladder` and `line`.
+- **PR #157, `claude/theme-dropdown-visuals-d6e169`, open, not yet merged with main.** Merging main conflicts in
+  `apps/desktop/src/canvas-settings.tsx`, `option-marks.tsx` and `docs/specs/custom-select.md` (main's Danger hover and
+  palette settings). The app's sync refuses until the owner confirms the pinned origin (Help → Troubleshooting →
+  Review Pinned Git Origins), because main adds `.claude/skills/area-ui-*`; then sync, resolve, add a glyph (and
+  figure) for Danger hover and the new palette settings, rerun the checks, merge.
+  What it holds: Custom select `layout="grid"` + option `preview` (spec "Intake: Layout grid"; Custom select in
+  review); the Inspector opens visual settings as figure grids (`choice-figures.tsx`), swatch grids for Accent and Tint
+  hue, one List / Grid switch; one-idea option glyphs incl. Pills, shadow details, Material (owner prefers today's
+  token-true marks for most menus: read the review page's picks before changing marks); Typography as one Headings and
+  one Copy section, measures not usage, cards in grid view; Testing → Hairline empty states (trial,
+  `@lucasmarkes/hairline` 0.5.1 mapped to tokens; owner deciding keep vs remove). Review page
+  https://claude.ai/artifact/JvT2iJZHfe6A9nEekqT4xP: lineage, icon-to-illustration ladder (collection `ladder`), line
+  illustrations after Medusa UI (collection `line`, owner's current direction: flat, one ink, light fills, no captions,
+  one control kind per drawing). Research and sources: docs/research/theme-visuals-2026-10-23.
 - **Branch `claude/eager-maxwell-0a929b`, committed, not pushed.** PR #151's three open proposals. Press room (`PRESS_ROOM`,
   color/layers.ts): inks solved on the deepest selected fill pressed 0.012 L (dark 0.04), so a press shows on every
   ground (it equalled selected on recessed in light at Layers 4–8, raised in dark from 16 + 8); muted #646464 (was
