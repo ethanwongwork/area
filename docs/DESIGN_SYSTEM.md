@@ -68,6 +68,10 @@ them:
   solvers (solid, tonal pair, indicator) walk at every strength, so each step they pick clears at each.
 - **Solid is a step, not a colour.** It moves the accent's solid and its hover only; the label keeps the hue's own colour,
   and a step the label cannot clear on moves toward the label's side until it can.
+- **Labels can take the hue, never lose the contract.** Label tint mixes an accent solid's label toward the most coloured
+  rung that clears the label's contract on the fill and its hover at every strength; each of its five steps is gated.
+- **Status colours keep their hue.** Under Status colours Match they quiet to the Accent strength with the accent's own
+  mix; they never rotate toward it, so danger never reads as warning.
 - **Tonal inks stay under the gray-page bound.** A light tonal ink is no brighter than `TONAL_Y` (teal's #00766a, the
   brightest named one), the luminance the Layers model darkens hued inks for on a gray page.
 

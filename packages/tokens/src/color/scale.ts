@@ -131,7 +131,9 @@ export interface BuiltScale {
    * cannot clear on, at every Accent strength, moves toward the label's side to the first that can. Chromatic only; a
    * neutral's steps are its own solid.
    */
-  solidSteps: Record<SolidStep, { level: Level; hover: Level }>;
+  solidSteps: Record<SolidStep, { level: Level; hover: Level; label: Level | null }>;
+  /** Label tint's end (axes/accent.ts) on this theme's own solid: see `tintedLabel`. */
+  labelTint: Level | null;
   vivid: VividChoice;
   contrast: { hex: "#ffffff" | "#000000"; wcag: number; apca: number };
 }
@@ -215,9 +217,12 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     // solid-wall rung. Start the contrast walk from the export's own peak instead.
     : chooseSolid(steps, familyPeakLevel, spec.solidForeground ?? "light");
   const solidHex = steps.find((x) => x.level === solid.level[theme])!.hex;
-  const solidSteps = Object.fromEntries(SOLID_STEPS.map(step => [step, spec.kind === "neutral"
-    ? { level: solid.level[theme], hover: solid.hover[theme] }
-    : solidAt(steps, step, solid.foreground, theme)])) as BuiltScale["solidSteps"];
+  const solidSteps = Object.fromEntries(SOLID_STEPS.map(step => {
+    if (spec.kind === "neutral") return [step, { level: solid.level[theme], hover: solid.hover[theme], label: null }];
+    const at = solidAt(steps, step, solid.foreground, theme);
+    return [step, { ...at, label: tintedLabel(steps, at.level, at.hover, solid.foreground) }];
+  })) as BuiltScale["solidSteps"];
+  const labelTint = spec.kind === "neutral" ? null : tintedLabel(steps, solid.level[theme], solid.hover[theme], solid.foreground);
   const stroke: StrokeChoice = {
     // The bars are the gate's own ambient and hover stroke tiers; see contrast/assertions.ts.
     rest: {
@@ -261,6 +266,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     contrast: { hex: solid.foreground, wcag: solid.wcag, apca: solid.apca },
     solidHex,
     solidSteps,
+    labelTint,
   };
 }
 
@@ -419,6 +425,28 @@ function solidAt(steps: readonly ScaleStep[], step: SolidStep, fg: "#ffffff" | "
   const at = (i: number) => steps[Math.min(steps.length - 1, Math.max(0, i))]!;
   const away = theme === "light" ? index + 1 : index - 1, back = theme === "light" ? index - 1 : index + 1;
   return { level: steps[index]!.level, hover: passes(at(away).hex) ? at(away).level : at(back).level };
+}
+
+/**
+ * Label tint's end (axes/accent.ts, owner 2026-10-23: "the foreground being a lighter version of that color with some
+ * slight hue, while still being accessible"): the most coloured rung on the label's side (the light end for a white
+ * label, the dark end for black) that still carries the label's contract on the fill and its hover at every Accent
+ * strength, the fill and the label quieted together. Null where no rung does (a bright fill white only just clears, as
+ * blue's 500 at 4.66:1): the label stays as it is. Label tint mixes the label toward this rung in quarters.
+ */
+function tintedLabel(steps: readonly ScaleStep[], fill: Level, hover: Level, fg: "#ffffff" | "#000000"): Level | null {
+  const byLevel = new Map(steps.map(step => [step.level, step.hex]));
+  const order = fg === "#ffffff" ? steps : [...steps].reverse();
+  let found: Level | null = null;
+  for (const step of order) {
+    const clears = ACCENT_STRENGTHS.every(strength => [fill, hover].every(level => {
+      const ink = withStrength(step.hex, strength), ground = withStrength(byLevel.get(level)!, strength);
+      return wcagContrastHex(ink, ground) >= SOLID_CONTRAST_TARGET && apcaMagnitude(ink, ground) >= SOLID_APCA_TARGET;
+    }));
+    if (!clears) break;
+    found = step.level;
+  }
+  return found;
 }
 
 /**

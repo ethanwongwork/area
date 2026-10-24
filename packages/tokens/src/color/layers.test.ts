@@ -157,9 +157,10 @@ describe("layers: inks with a hue follow the ground", () => {
     const t = resolveTheme({ theme: "light", neutral: neutral.id, accent: accent.id }).tokens;
     for (const { token, darken } of HUED_INKS) inks[darken].add(t[token]!);
   }
-  // And the accent at every hue (axes/color.ts, 2026-10-23), at full strength and the quietest.
+  // And the accent at every hue (axes/color.ts, 2026-10-23), at full strength and the quietest, with the status tones
+  // quieted to it (Status colours Match, axes/accent.ts).
   for (const hue of ACCENT_HUES) for (const accentStrength of [100, 30]) {
-    const t = resolveTheme({ theme: "light", neutral: "neutral", accent: String(hue), accentStrength }).tokens;
+    const t = resolveTheme({ theme: "light", neutral: "neutral", accent: String(hue), accentStrength, statusColours: "match" }).tokens;
     for (const { token, darken } of HUED_INKS) inks[darken].add(t[token]!);
   }
   it("light: vivid and tonal inks keep 4.5:1 on every page, and are unchanged on white", () => {

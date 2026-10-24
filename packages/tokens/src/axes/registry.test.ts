@@ -31,7 +31,7 @@ describe("axis registry", () => {
         // Card tone, 2026-10-22 (axes/card-tone.ts).
         "card-tone-light", "card-tone-dark",
         // Any accent colour, 2026-10-23 (axes/accent.ts).
-        "accent-strength", "solid-light", "solid-dark",
+        "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours",
         // Danger hover, 2026-10-23 (axes/states.ts).
         "danger-hover"].sort(),
     );

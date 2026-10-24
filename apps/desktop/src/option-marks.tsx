@@ -50,6 +50,9 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     case "accent": return swatch("var(--area-accent-solid)", { "data-area-accent": value, "data-area-accent-strength": canvas["accent-strength"] });
     // Accent strength and Solid (axes/accent.ts): the accent's solid at the option, on the Canvas's accent.
     case "accent-strength": return swatch("var(--area-accent-solid)", { "data-area-accent": canvas.accent, "data-area-accent-strength": value });
+    // Label tint: the label itself, on the Canvas's accent and Light solid; Status colours: the danger fill at the strength.
+    case "label-tint": return swatch("var(--area-fg-on-accent)", { "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"], "data-area-solid-light": canvas["solid-light"], "data-area-label-tint": value });
+    case "status-colours": return swatch("var(--area-danger-solid)", { "data-area-accent-strength": canvas["accent-strength"], "data-area-status-colours": value });
     case "solid-light":
     case "solid-dark": return swatch("var(--area-accent-solid)", { "data-area-theme": axis === "solid-light" ? "light" : "dark", "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"], [`data-area-${axis}`]: value });
     // Tint: the hue itself (Auto, Neutral's own, as the Neutral swatch); a strength, the mode's page at it, on the hue

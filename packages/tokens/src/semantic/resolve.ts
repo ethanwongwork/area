@@ -6,10 +6,10 @@
  * than against source data, because what ships is what has to be readable.
  */
 import { type BuiltScale, type Theme, WHITE, buildScale } from "../color/scale.ts";
-import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES, ROLE_SCALES } from "../color/presets.ts";
+import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES, ROLE_SCALES, STATUS_TONES } from "../color/presets.ts";
 import { type Role, type ScaleLookup, resolveAliases } from "./aliases.ts";
 import { DEFAULT_LAYER_SELECTION, type LayerSelection, castOf, layerTokens } from "../color/layers.ts";
-import { ACCENT_HUES, DEFAULT_ACCENT_STRENGTH, type SolidPick, generatedSpec, hueScaleId, withStrength } from "../color/generate.ts";
+import { ACCENT_HUES, DEFAULT_ACCENT_STRENGTH, type SolidPick, generatedSpec, hueScaleId, mixOklab, withStrength } from "../color/generate.ts";
 import { SEMANTIC_ALIASES } from "./aliases.ts";
 
 export interface ThemeSelection {
@@ -24,6 +24,10 @@ export interface ThemeSelection {
   accentStrength?: number;
   /** The Solid setting per mode (axes/accent.ts); Auto when omitted. */
   solid?: { light: SolidPick; dark: SolidPick };
+  /** Label tint (axes/accent.ts), 0 to 4; 0 when omitted. */
+  labelTint?: number;
+  /** Status colours (axes/accent.ts): "match" quiets the status tones to the Accent strength; "fixed" when omitted. */
+  statusColours?: "fixed" | "match";
 }
 
 export interface ResolvedTheme extends ThemeSelection {
@@ -103,6 +107,9 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
   const cast = castOf(hexAt("light", 50), hexAt("dark", 900))[theme];
   const resolvedTokens = { ...resolveAliases(lookup, theme), ...layerTokens(theme, selection.layers ?? DEFAULT_LAYER_SELECTION, cast) };
   Object.assign(resolvedTokens, accentPaint(roles.accent, theme, resolvedTokens, selection));
+  // Status colours Match: every status tone's colour but its label at the Accent strength, as emit/base.ts derives it.
+  if (selection.statusColours === "match") for (const [name, alias] of Object.entries(SEMANTIC_ALIASES))
+    if (alias.role && STATUS_TONES.includes(alias.role) && !name.startsWith("fg-on-")) resolvedTokens[name] = withStrength(resolvedTokens[name]!, selection.accentStrength ?? DEFAULT_ACCENT_STRENGTH);
   return { ...selection, theme, neutral, accent, scales, roles, tokens: resolvedTokens };
 }
 
@@ -131,6 +138,10 @@ function accentPaint(scale: BuiltScale, theme: Theme, tokens: Record<string, str
     if (alias.role !== "accent" || ACCENT_LABELS.has(name)) continue;
     out[name] = withStrength(out[name] ?? tokens[name]!, strength);
   }
+  // Label tint: the measured label mixed toward the Solid step's tinted label, at the strength.
+  const tint = selection.labelTint ?? 0;
+  const end = pick === "auto" ? scale.labelTint : scale.solidSteps[pick].label;
+  if (tint > 0 && end !== null) out["fg-on-accent"] = mixOklab(tokens["fg-on-accent"]!, withStrength(hexAt(end), strength), tint / 4);
   return out;
 }
 

@@ -21,6 +21,9 @@ export const ALSO: Record<string, Record<string, string>> = {
   "accent-strength": { "data-area-action": "accent", "data-area-selection": "accent" },
   "solid-light": { "data-area-action": "accent", "data-area-selection": "accent" },
   "solid-dark": { "data-area-action": "accent", "data-area-selection": "accent" },
+  // Label tint shows on a deep solid (a bright one leaves no room); Status colours on a quieted accent.
+  "label-tint": { "data-area-action": "accent", "data-area-solid-light": "750", "data-area-solid-dark": "750" },
+  "status-colours": { "data-area-accent-strength": "50" },
   neutral: { "data-area-layers-light": "8", "data-area-layers-dark": "8" },
   // Tint: a hue shows at a strength, a strength on a hue, and Text tint on both at their strongest (axes/tint.ts).
   "tint-hue": { "data-area-tint-light": "6", "data-area-tint-dark": "6" },
@@ -48,6 +51,8 @@ export const HELD: Record<string, string> = {
   "accent-strength": "Action and Selection at Accent, so the accent shows on buttons and marks.",
   "solid-light": "Action and Selection at Accent, so the solid shows on buttons and marks.",
   "solid-dark": "Action and Selection at Accent, so the solid shows on buttons and marks.",
+  "label-tint": "Action at Accent and Solid at 750, so the label has room to take the hue.",
+  "status-colours": "Accent strength at 50, so Match shows.",
   neutral: "Layers at 8, so the greys are large enough for the tint to show.",
   "tint-hue": "Tint strength at 6, so each hue shows.",
   "tint-light": "Tint hue at 70°, so each strength shows.",

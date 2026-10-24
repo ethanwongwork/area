@@ -495,6 +495,14 @@ allow further customization further in".
 | Gate | `contrast/accents.test.ts`, `layers.test.ts` | Every accent × strength × Solid step × neutral × mode (about a million measurements); inks of every accent on every tinted page; CSS and model agree to the channel (measured in the browser) |
 | Setup | `theme-setup.tsx`, `page-colour.ts` | Greys as one first choice (Neutral, Warmer, Cooler, Tinted, Accent), each opening only its refinements; accent swatches, every hue behind More hues, and an accent colour field that snaps (#1F3A68 → hue 255°, strength 80, Light solid 800, ΔE 0.014) |
 
+Then (owner, 2026-10-23: "will a full set be generated too, to provide colors for semantic colors? ... the foreground being a
+lighter version of that color with some slight hue, while still being accessible"): **Label tint** 0–4 (`axes/accent.ts`,
+`scale.ts tintedLabel`: a quarter a step toward the most coloured rung that clears 4.6:1 and APCA 61 on the Solid step's fill
+and hover at every strength; navy at 2 is #D2E4F9) and **Status colours** Fixed / Match (the status tones quieted to the
+Accent strength by the same mix; hue never rotates, tags stay). Both gated in `contrast/accents.test.ts`; Match moves the
+Menu's danger row by at most 0.05:1 and adds no failure (126 combinations of mode, ground, layers, Danger hover, strength).
+A strength-aware vivid solver was tried and reverted: it moved danger's default vivid ink (#e80945 to #cf033c).
+
 Answered by the build: question 3 (5° hues, the Tint grid), 4 (static presets in `axes.css`, about 790 KB, 80 KB gzipped,
 since the CSS emitter ships no runtime code), 6 (absolute steps, held at the room), 7 (dark's Auto is its own step), 8 (fade
 kept). Still open: 1 (palette names, Level 1 is not built), 2 (a separate button colour, deferred by the owner), 5 (P3).

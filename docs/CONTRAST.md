@@ -26,7 +26,8 @@ every tinted page (hues in 15° steps, Tint 1 to 16).
 
 Any accent the settings can make is gated too (`contrast/accents.test.ts`): every pairing that reads an accent token, on
 the palette's eleven and the 72 hues, at every Accent strength, on every neutral, in both modes, and the solid pairings at
-every Solid step, about a million measurements. Accent strength is the mix the solvers walk with, so the gate measures what
+every Solid step and Label tint, and every pairing with Status colours Match at every strength, about four million
+measurements. Accent strength is the mix the solvers walk with, so the gate measures what
 paints (the CSS and the model agree to the channel, measured in the browser 2026-10-23).
 
 Required boundaries and state indicators need a distinct signal against their adjacent

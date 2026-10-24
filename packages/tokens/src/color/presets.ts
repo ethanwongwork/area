@@ -103,6 +103,9 @@ export type NeutralScaleId = (typeof NEUTRAL_SCALES)[number]["id"];
  * avoided is accepted, because a consumer who turns the roles to accent picks their own hue.
  * (Indigo was the default until then: 17 degrees from blue, OKLab distance 0.068.)
  */
+/** The tones Status colours can quiet with the accent (axes/accent.ts): the status meanings, not the tag colours. */
+export const STATUS_TONES: readonly string[] = ["danger", "warning", "caution", "success", "info", "discovery"];
+
 export const ROLE_SCALES = {
   accent: "blue",
   danger: "red",

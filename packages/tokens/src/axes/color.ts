@@ -10,7 +10,7 @@
  * the fixed semantic tones (danger, warning, success, info), and the shadow colour.
  */
 import { type AxisDefinition, type AxisPreset, type TokenMap, tokens } from "./schema.ts";
-import { CHROMATIC_SCALES, MUTED_SCALES, NEUTRAL_SCALES, SCALE_DESCRIPTIONS } from "../color/presets.ts";
+import { CHROMATIC_SCALES, MUTED_SCALES, NEUTRAL_SCALES, SCALE_DESCRIPTIONS, STATUS_TONES } from "../color/presets.ts";
 import { type Theme } from "../color/scale.ts";
 import { type ResolvedTheme, DEFAULT_SELECTION, resolveTheme } from "../semantic/resolve.ts";
 import { SEMANTIC_ALIASES, type Alias } from "../semantic/aliases.ts";
@@ -89,7 +89,10 @@ function themePreset(t: Theme): AxisPreset {
   const fixedTones: Record<string, string> = {};
   // pink and gray are the tag tones (owner 2026-10-06; docs/specs/tag.md).
   for (const role of ["danger", "warning", "caution", "success", "info", "discovery", "pink", "gray", "brown"]) {
-    Object.assign(fixedTones, tokensForRole(resolved, role));
+    // A status tone's colours are written at full strength (`-full`); emit/base.ts derives the public ones with Status
+    // colours (axes/accent.ts), which can quiet them with the accent. Its label never quiets; tag tones stay as they are.
+    for (const [name, value] of Object.entries(tokensForRole(resolved, role)))
+      fixedTones[STATUS_TONES.includes(role) && !name.startsWith("fg-on-") ? `${name}-full` : name] = value;
   }
 
   return {
@@ -214,9 +217,13 @@ function accentTokens(t: Theme, accent: string): TokenMap {
   for (const [name, value] of Object.entries(own)) out[ACCENT_LABEL_TOKENS.has(name) ? name : `${name}-full`] = value;
   const scale = resolved.roles.accent;
   const hexAt = (level: number) => scale.steps.find(step => step.level === level)!.hex;
+  // Label tint's end on each solid: its tinted rung, or the label itself where none clears (scale.ts tintedLabel).
+  const label = scale.contrast.hex, tinted = (level: number | null) => level === null ? label : hexAt(level);
+  out["accent-label-full"] = tinted(scale.labelTint);
   for (const step of SOLID_STEPS) {
     out[`accent-solid-${step}-full`] = hexAt(scale.solidSteps[step].level);
     out[`accent-solid-hover-${step}-full`] = hexAt(scale.solidSteps[step].hover);
+    out[`accent-label-${step}-full`] = tinted(scale.solidSteps[step].label);
   }
   const hue = Number(scale.steps.find(step => step.level === 500)!.oklch.h.toFixed(2));
   out["accent-hue"] = String(hue);
@@ -226,8 +233,9 @@ function accentTokens(t: Theme, accent: string): TokenMap {
   return tokens(out);
 }
 
-/** The accent tokens that are labels: written as measured, never quieted by Accent strength. */
-export const ACCENT_LABEL_TOKENS: ReadonlySet<string> = new Set(["accent-contrast", "fg-on-accent"]);
+/** The accent's measured label (black or white), written as it is: Accent strength never quiets it. `fg-on-accent` is
+ * derived from it with Label tint (axes/accent.ts), so the axis writes that one as `fg-on-accent-full`. */
+export const ACCENT_LABEL_TOKENS: ReadonlySet<string> = new Set(["accent-contrast"]);
 
 export const ACCENT_AXIS: AxisDefinition = {
   id: "accent",

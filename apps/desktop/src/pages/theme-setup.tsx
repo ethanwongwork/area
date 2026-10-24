@@ -97,6 +97,8 @@ const QUESTIONS: Record<string, string> = {
   "accent-strength": "How much of its colour should the accent keep?",
   "solid-light": "In light, how deep should accent buttons and checked marks be?",
   "solid-dark": "In dark, how deep should accent buttons and checked marks be?",
+  "label-tint": "Should accent button labels take a little of the accent's hue?",
+  "status-colours": "Should danger, warning and success quiet with the accent?",
   "ground-light": "How white should the light page be?",
   "ground-dark": "How dark should the dark page be?",
   "layers-light": "In light, how far should cards and sidebars sit from the page?",
