@@ -1,28 +1,40 @@
   /* --- Color --------------------------------------------------------------- */
 
   /*
-   * A step's card (src/pages/color.tsx, ColorCard): the painted tile, its level and a contrast
-   * badge in the header, then one blank line, then hex, RGB and OKLCH in tabular figures. All its
-   * text is the one ink that reads on the colour (owner, 2026-10-14: no thinned field names); only
-   * the badge's plate is that ink thinned (12%, a pick).
+   * A step's card (src/pages/color.tsx, ColorCard; owner, 2026-10-23, a sketch): the painted tile, its level at the head,
+   * two blank lines, then HEX, RGB and OKLCH, each named and on one line. One face: the mono the Inspector and the list
+   * set values in (Code). The level is the head's UI size and the values the size under it (owner, 2026-10-23: "the color
+   * codes can be smaller than the color name at the top"), so the name leads. All its text is the one ink that reads on
+   * the colour (owner, 2026-10-14: no thinned field names); regular weight (owner, 2026-10-12: no bold on the cards). The
+   * edge is Color swatch's ring (canvas.css, painted tiles).
    */
-  .studio-swatch__level { font-weight: var(--area-weight-regular); font-variant-numeric: tabular-nums; } /* regular weight: no bold on the cards (owner, 2026-10-12) */
-  /* Block lines, so the last value's baseline is trimmed onto the tile's inset at the foot, as the
-     level's cap is at the head. One blank line of the values' leading under the level (owner,
-     2026-10-14): from the level's baseline to the hex's cap is a line's leading and the leading less
-     the cap, as in untrimmed text with an empty line between. A long value wraps onto the next line. */
-  .studio-swatch__grade { color: var(--_ink); }
+  /* Every column is one card wide and the cards hug their text (owner, 2026-10-23: "the width can hug the cards more
+     closely"): the longest line, "OKLCH 1.000 0.000 359.9" (23 characters of the mono at the values' size), and the
+     tile's insets, as many across as fit, from the start. 190 at type 14 (12 values), 176 at 12, 217 at 16. The grid is
+     set in the values' face and size so `ch` measures their characters. */
+  .studio-color-grid {
+    --_card-width: calc(23ch + var(--_tile-inset) * 2);
+    grid-template-columns: repeat(auto-fill, min(100%, var(--_card-width)));
+    font-family: var(--area-font-mono);
+    font-size: var(--area-text-xs-size);
+  }
+  /* The card hugs its text: no square view under the head. */
+  .studio-color-grid .gallery-tile--plain > .gallery-tile__view { aspect-ratio: auto; }
+  .studio-color-grid .gallery-tile--plain > .gallery-tile__head .studio-swatch__level { color: var(--_ink); }
+  /* Block lines, so the last value's baseline is trimmed onto the tile's inset at the foot, as the level's cap is at the
+     head. Two blank lines of the values' leading under the level: from the level's baseline to the hex's cap is three
+     leadings less the cap, as in untrimmed text with two empty lines between; the tile's 12 row gap is counted. */
   .studio-swatch__values {
     display: block;
     text-box: trim-both cap alphabetic;
     align-self: start;
-    margin-block-start: calc(2lh - 1cap - var(--area-space-8)); /* the caption's 8 counted */
+    margin-block-start: calc(3lh - 1cap - var(--area-space-12));
     min-inline-size: 0;
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
-    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
   }
-  .studio-swatch__values > * { display: block; overflow-wrap: anywhere; }
+  .studio-swatch__values > * { display: block; }
 
   /* A list row's step: a colour chip beside its level. */
   .studio-step { display: inline-flex; align-items: center; gap: var(--area-space-8); font-variant-numeric: tabular-nums; }

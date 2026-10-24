@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 import {
   DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, HUED_INKS, LAYER_STEPS, VIVID_ROLES, castOf, DEFAULT_FILL, FILL_STEPS, type FillSelection, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
   DEFAULT_INK_TINT, INK_TINT_STEPS, TINT_HUES, TINT_STEP, TINT_STEPS, inkHex, CARD_TONE_STEPS, type CardTone,
-  EDGE_OFFSET, PRESS_ROOM, edgeShift,
+  EDGE_OFFSET, PRESS_ROOM, edgeShift, FRAME_SAME,
 } from "./layers.ts";
 import { wcagContrastHex } from "./contrast.ts";
 import { type Rgb, SRGB, clampRgb, oklabToRgb, parseHex, rgbToOklab, toHex } from "./oklab.ts";
@@ -131,6 +131,27 @@ describe("layers: every card tone is usable", () => {
   });
 });
 
+// An Asset card's frame (FRAME_SAME, owner 2026-10-23): the page tone, or the recessed tone where the card around it is the
+// page's, so wherever the layers differ at all the frame reads apart from its card; it is never a third tone.
+describe("layers: an Asset card's frame reads apart from its card", () => {
+  for (const theme of THEMES) it(theme, () => {
+    const problems: string[] = [];
+    for (const tone of ["auto", ...CARD_TONE_STEPS] as CardTone[]) for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
+      const m = layerLightness(theme, g, n, DEFAULT_FILL, tone), at = `${tone} ${g}/${n}`;
+      for (const [frame, card, name] of [[m.frame, m.tile, "frame"], [m.frameRaised, m.raised, "raised frame"]] as const) {
+        if (frame !== m.page && frame !== m.recessed) problems.push(`${at}: ${name} is neither the page nor the recessed tone`);
+        if (Math.abs(card - m.page) >= FRAME_SAME && frame !== m.page) problems.push(`${at}: ${name} left the page tone on a card that differs`);
+        if (Math.abs(card - m.page) < FRAME_SAME && m.recessed !== m.page && Math.abs(frame - card) < FRAME_SAME) problems.push(`${at}: ${name} matches its card`);
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+  it("Auto and the default light page keep today's page-tone frame", () => {
+    const m = layerLightness("light", 100, 4);
+    expect(m.frame).toBe(m.page);
+  });
+});
+
 describe("layers: the shipped CSS computes what the model does", () => {
   for (const theme of THEMES) it(theme, () => {
     for (const tone of ["auto", ...CARD_TONE_STEPS] as CardTone[]) for (const f of tone === "auto" ? FILL_COMBOS : [DEFAULT_FILL]) for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
@@ -140,6 +161,7 @@ describe("layers: the shipped CSS computes what the model does", () => {
         ["page-fill-0", m.fill.page[0]], ["page-fill-1", m.fill.page[1]], ["page-fill-2", m.fill.page[2]],
         ["raised-fill-0", m.fill.raised[0]], ["raised-fill-2", m.fill.raised[2]], ["recessed-fill-1", m.fill.recessed[1]],
         ["card", m.card], ["tile", m.tile], ["card-fill-0", m.fill.card[0]], ["card-fill-2", m.fill.card[2]], ["tile-fill-1", m.fill.tile[1]],
+        ["frame", m.frame], ["frame-raised", m.frameRaised], ["frame-fill-0", m.fill.frame[0]], ["frame-fill-2", m.fill.frame[2]], ["frame-raised-fill-1", m.fill.frameRaised[1]],
         ["body", m.ink.body], ["muted", m.ink.muted], ["edge", m.ink.edge],
         ...(theme === "light" ? [["vivid-darken", m.vividDarken], ["tonal-darken", m.tonalDarken]] as Array<[string, number]> : [["tint-lift", m.tintLift], ["tint-lift-fill", m.tintLiftFill]] as Array<[string, number]>),
       ];

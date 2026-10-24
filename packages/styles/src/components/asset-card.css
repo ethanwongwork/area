@@ -18,7 +18,7 @@
  *            end, the inset from the edge, so a button's side lines up with the frame's
  *   frame    4 in on three sides, directly under the head; its corner the card's less the edge and the inset
  *            (16 − 1 − 4 = 11: mathematically concentric, round 55: "the inset radius should be mathematically correct");
- *            the page tone (since 2026-10-22; was the surface) with the card edge
+ *            the frame tone with the card edge: the page's, or the recessed tone where the card is the page's (2026-10-23)
  *
  * The asset grid is a ListBox grid of cards (one Tab stop, arrows in two dimensions, typeahead), plus open on Enter or a
  * double click, as File grid. The card shows the states: selection its edge in the selection colour, hover its lift.
@@ -127,10 +127,13 @@
        ground in light, so it read too thin (owner, 2026-10-21); now 1.21:1, and dark is unchanged (both roles #333). */
     border: var(--area-stroke-width) solid var(--area-border-divider);
     border-radius: var(--_frame-corner);
-    /* The page tone, the ground every component is drawn for: a raised surface inside (Card, Menu, Dialog) lifts from it
-       as in an app (owner, 2026-10-22, the layer map: on the raised tone a Card matched its frame, 1.00:1, on every grey
-       and dark ground). White at the default light ground, as the designs' white; was bg-surface. */
-    background-color: var(--area-bg-page); /* spec */
+    /* The frame tone (color/layers.ts FRAME_SAME): the page tone, the ground every component is drawn for, so a raised
+       surface inside (Card, Menu, Dialog) lifts from it as in an app (owner, 2026-10-22, the layer map: on the raised tone a
+       Card matched its frame, 1.00:1, on every grey and dark ground); white at the default light ground, as the designs'
+       white. Where the card is the page tone too (Card tone 0, or a raised card on a white page) it is the recessed tone,
+       so the frame always reads apart from its card (owner, 2026-10-23: "i want it to be a light gray since the card
+       container around it will be white, just like the page"). Was bg-page (2026-10-22), bg-surface before. */
+    background-color: var(--area-bg-frame); /* spec */
   }
 
   /* An asset: any element, centred, at its own size (a component as it ships, a type sample, an icon, a preview). */
@@ -239,6 +242,8 @@
   /* Fill: raised, the surface (white in light) for the whole card; recessed, the default, the tile tone (Card tone). */
   .area-asset-card--recessed {}
   .area-asset-card--raised { background-color: var(--area-bg-surface); }
+  /* A raised card's frame reads the raised tone; at the frame's own weight, so a colour, a group and a basic card keep theirs. */
+  :where(.area-asset-card--raised) > .area-asset-card__frame { background-color: var(--area-bg-frame-raised); }
   /* Borderless: no edge at rest, its width kept so nothing moves; the selected and hover edges still draw. */
   .area-asset-card--borderless { border-color: transparent; }
   /* Landscape: 5:4 for every kind but an image (spec: owner 2026-10-22; the reference gallery's media 195 x 158). */

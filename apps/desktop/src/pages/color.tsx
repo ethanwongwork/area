@@ -93,9 +93,10 @@ function oklchShort(value: string) {
 
 /**
  * One step as its own card (owner, 2026-10-12, after brand-guide colour sheets): the card is the
- * colour, edged with the swatch picker's 10% hairline. Its level and the contrast of the text it
- * carries head it; hex, RGB and OKLCH follow a line below, all in the one ink that reads on it.
- * A unit tile that hugs its text (owner, 2026-10-14), so a long value wraps rather than clips.
+ * colour, edged with Color swatch's ring. Its level heads it; hex, RGB and OKLCH follow two lines
+ * below, each named and on one line, all in the one ink that reads on it (owner, 2026-10-23, a
+ * sketch: the contrast grade left the card for the Inspector and the label). The card hugs its
+ * text and the grid's columns are as wide as the longest line (styles/color.css).
  */
 /*
  * The Canvas's steps. In the grid every card is an option of one Asset grid (docs/specs/asset-card.md, list-box.md): one Tab stop, the
@@ -114,11 +115,9 @@ function ColorCard({ scale, item }: { scale: string; item: ScaleStep }) {
     <Tile span="unit" stage="flow" option={`${scale}-${item.level}`}
       aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${ink === "#ffffff" ? "white" : "black"} text ${item.contrast.ratio.toFixed(2)} to 1, ${item.contrast.grade}`}
       paint={{ background: `var(--area-${scale}-${item.level})`, color: ink }}
-      label={<span className="studio-swatch__level">{item.level}</span>}
-      // The contrast grade in the caption at the frame's top, in the colour's ink (it was a Badge onColor on the colour).
-      value={<span className="studio-tabular studio-swatch__grade">{item.contrast.grade} · {item.contrast.ratio.toFixed(2)}</span>}>
+      label={<span className="studio-swatch__level">{item.level}</span>}>
       <span className="studio-swatch__values">
-        <span>{item.hex.toUpperCase()}</span>
+        <span>HEX {item.hex.toUpperCase()}</span>
         <span>RGB {r} {g} {b}</span>
         <span>OKLCH {oklchShort(item.oklch)}</span>
       </span>
@@ -225,8 +224,8 @@ export function ColorPage() {
                 ) : (
                   // Grid: every step its own card, painted in its colour, in every view (owner,
                   // 2026-10-12: colours are their own containers; the joined ramp strip is gone).
-                  // On the components' grid (owner, 2026-10-12): wide tiles, 280 at the least, 5:4.
-                  <TileGrid span="unit">
+                  // Columns one card wide, the card as wide as its longest line, so every value stays on one line (owner, 2026-10-23).
+                  <TileGrid span="unit" className="studio-color-grid">
                     {steps.map(item => (
                       <ColorCard key={item.level} scale={entry.id} item={item} />
                     ))}

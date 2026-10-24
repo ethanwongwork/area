@@ -26,7 +26,7 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
      `fast` (hover) → dropped at once (held) → the edge in `stroke-selected`, one line (selected); the edge
      (`neutral-100`, 750 in dark) stays, and steps to `edge-control-hover` only at Elevation 0 (owner, 2026-10-18). A tile stands alone like a Card, so it is never
      on `border-decorative`, which is for rules inside a surface.
-   - Painted (colour cards): their one outline, the swatch picker's 10% hairline, steps to the
+   - Painted (colour cards): their one outline, Color swatch's ring (`token-swatch-ring`, 10%, at stroke-width), steps to the
      card's ink at 24% → 48% held → 2px solid selected. Never a second ring.
 4. **Every icon-only control names itself in an Area Tooltip**, never the browser's `title`,
    with its shortcut as `Kbd` when it has one. When the tooltip repeats the accessible name, it

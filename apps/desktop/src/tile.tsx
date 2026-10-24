@@ -158,8 +158,8 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
   const view = stage === "none" ? null : stage === "fit"
     ? <div className="gallery-tile__view" {...stageScope}><div className="gallery-tile__stage">{children}</div></div>
     : <div className="gallery-tile__view" inert={inert || undefined} {...stageScope}>{children}</div>;
-  // The frame: the app's own class and modes on Asset card's frame. The ground it declares (the page, a basic card's own
-  // fill, or recessed when scoped) lets the specimen's control fills step from the frame, not the Canvas (layers.css).
+  // The frame: the app's own class and modes on Asset card's frame. The ground it declares (the frame tone, a basic card's
+  // own fill, or recessed when scoped) lets the specimen's control fills step from the frame, not the Canvas (layers.css).
   const frameProps = {
     className: "gallery-tile",
     "data-span": span,
@@ -167,7 +167,7 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
     "data-layout": card ? "card" : undefined,
     "data-painted": paint ? "" : undefined,
     "data-scoped": scope ? "" : undefined,
-    "data-area-ground": paint || look?.container === "containerless" ? undefined : scope ? "recessed" : look?.container === "basic" ? (look.fill === "raised" ? "raised" : "tile") : "page",
+    "data-area-ground": paint || look?.container === "containerless" ? undefined : scope ? "recessed" : look?.container === "basic" ? (look.fill === "raised" ? "raised" : "tile") : look?.fill === "raised" ? "frame-raised" : "frame",
     style: paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined,
     ...scope,
   } as Record<string, string | undefined> & { className: string; style?: CSSProperties };
@@ -203,9 +203,9 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
  * A grid of one span: unit or wide tiles on the shared unit. `cards`: square tiles on their own columns, at least
  * `min` wide (260 by default, at most four across), growing and shrinking with the zoom.
  */
-export function TileGrid({ span, cards, min, children }: { span: TileSpan; cards?: boolean; min?: number; children: ReactNode }) {
+export function TileGrid({ span, cards, min, className, children }: { span: TileSpan; cards?: boolean; min?: number; className?: string; children: ReactNode }) {
   return (
-    <div className={`studio-grid studio-grid--${span}${cards ? " studio-grid--cards" : ""}`}
+    <div className={`studio-grid studio-grid--${span}${cards ? " studio-grid--cards" : ""}${className ? ` ${className}` : ""}`}
       style={min ? ({ "--_card-min": `${min}px` } as CSSProperties) : undefined}>{children}</div>
   );
 }

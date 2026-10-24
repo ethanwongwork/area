@@ -60,9 +60,11 @@
     --_canvas-heading: var(--area-space-12);
     --_canvas-section: var(--area-space-40);
     --_canvas-measure: calc(300px * 4 + var(--area-space-12) * 3); /* spec: four 300 cards and their gaps, 1236 (owner, 2026-10-22; was 1120, a pick) */
-    /* Tiles: the Asset card's corner held at 12 whatever the Canvas's Radius previews (owner, 2026-10-13: "make the
-       corner radius sharper"), and its inset; the Stage (src/stage.tsx) is the tile made large, with the same. */
-    --_tile-radius: 12px; /* pick */
+    /* Tiles: every Canvas container's corner (plain tiles, Asset cards, colour cards, the Stage, Theme's setup panel),
+       held at 16 whatever the Canvas's Radius previews (owner, 2026-10-23: "make all the containers tiles 16px corner";
+       was 12 from 2026-10-13, "make the corner radius sharper"), and its inset; the Stage (src/stage.tsx) is the tile
+       made large, with the same. */
+    --_tile-radius: 16px; /* pick */
     --_tile-inset: var(--area-space-12);
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);

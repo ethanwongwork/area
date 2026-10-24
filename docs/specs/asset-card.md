@@ -41,6 +41,12 @@ values below are read from pixels, not estimated. Figma's file browser (the 2026
 - 2026-10-22: "i just want users to be able to choose the option of making these containers/cards match the background or
   making them slightly different, lighter or darker" → the Card tone setting (axes/card-tone.ts), per mode: Auto keeps
   the container's own tone, else −4 (darker) to +4 (lighter) from the page, 0 matching it. An Asset card paints `bg-tile` (Auto: the recessed layer, `bg-subtle`) and declares the tile ground; a basic card's frame declares the tile ground too; the `raised` fill and the frame keep their own tones.
+- 2026-10-23: "i want to make it so the color on the inside frame of the asset cards is different from the outside card
+  material, in my case i want it to be a light gray since the card container around it will be white, just like the
+  page"; chose "the frame adapts … no new setting" → the frame is the page tone unless the card is the page tone (Card
+  tone 0, a step clamped at white, or the raised fill on a white page), where it takes the recessed tone (`bg-frame`,
+  `bg-frame-raised`, color/layers.ts `FRAME_SAME`); the frame and frame-raised grounds point its controls and edges at
+  it. Auto and every non-zero step are unchanged. Containerless cards follow the same rule.
 
 ## Job and boundaries
 
@@ -82,7 +88,7 @@ area-asset-card          the card: as tall as its head and its frame, Card's cor
   __head                 control-sm + 2 × 4 tall; the name, then the controls, nothing else (round 58)
     __name               UI text, regular, default ink; cap-trimmed; one line, then an ellipsis
     __actions            small ghost controls, ending 4 in (on the frame's side), centred on the head
-  __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; the page tone + divider edge at stroke-width; page ground (2026-10-22; was surface, raised)
+  __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; the frame tone (`bg-frame`: the page tone, or the recessed tone where the card is the page's; a raised card's `bg-frame-raised`) + divider edge at stroke-width; frame ground (2026-10-23; the page tone and ground from 2026-10-22; was surface, raised)
     __media              asset: centred, 12 of room · image: covers the frame (object-fit cover)
     __mosaic             group: 2 × 2, 4 apart, the frame's place (the frame paints nothing)
       __cell             one asset cropped to its cell, the frame's corner
@@ -154,7 +160,7 @@ One language across Area's framed surfaces: a quiet band names the thing, a whit
 | Container | Head | Body | Edge | Why it differs |
 |---|---|---|---|---|
 | Table | the header row on `bg-subtle` | rows on `bg-surface`, flush | `border-divider` at `stroke-width` (rows inside, so the frame is never lighter than its rules) | data: rows run to the frame |
-| Asset card | the head on `bg-subtle` (the card's ground) | the asset on `bg-page`, 4 in, concentric | the card: `border-card` (a standalone surface); the frame: `border-divider` at `stroke-width` (no shadow carries it, as Table's) | an asset is visual, so it gets its own frame and corner inside the card |
+| Asset card | the head on `bg-tile` (the card's ground) | the asset on `bg-frame` (the page tone, or recessed where the card is the page's), 4 in, concentric | the card: `border-card` (a standalone surface); the frame: `border-divider` at `stroke-width` (no shadow carries it, as Table's) | an asset is visual, so it gets its own frame and corner inside the card |
 | Card | title in the body | content on `bg-surface` | `border-card`, Card's corner | content, not an asset; Asset card takes Card's corner |
 | Code block / Edit summary | a header with a `border-decorative` seam | code on `bg-surface` | `border-card` at `stroke-width` | a seam instead of an inset frame: text needs no frame of its own |
 
@@ -322,3 +328,12 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
 - **Why:** your round 65 note on the selected border, answered by your picks on the state page (2026-10-21), now the
   defaults of the state settings. The frame's line was the card's edge colour, which almost disappears on the card's
   grey ground (1.08:1); a frame with no shadow takes the divider colour, as Table's does.
+
+## Review note, 2026-10-23 (frame tone)
+
+- **What changed:** the frame inside the card is no longer always the page tone. Where the card is the page tone too
+  (Card tone 0, a lighter step clamped at white, or the raised fill on a white page) the frame takes the recessed tone,
+  light #f7f7f7 on a white card at the defaults, slightly lighter than the page in dark. Everywhere else it is white as
+  before. Controls and edges inside the frame step from its tone.
+- **Why:** with the card matching the page, frame and card were one tone and only the hairline held the frame (owner,
+  2026-10-23). The frame stays the page tone wherever it can, because components are drawn for the page.
