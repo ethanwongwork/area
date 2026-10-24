@@ -16,6 +16,7 @@ import { ChatScreen } from "../chat/chat.tsx";
 import { ABSTRACT_BOARD, AbstractBoard } from "../content/examples/abstract-board.tsx";
 import { MobileScreen } from "../content/examples/mobile.tsx";
 import { SettingsScreen } from "../content/examples/settings.tsx";
+import { HairlineScreen } from "../content/examples/hairline.tsx";
 
 const EXAMPLES = [
   {
@@ -57,6 +58,14 @@ const EXAMPLES = [
     families: ["Button", "Segmented", "Checkbox", "Chip", "Card", "Avatar", "Badge", "Composer"],
     gaps: ["The dashed time line and the time pills are app CSS: Timeline has no dashed line or pill markers."],
     Screen: MobileScreen,
+  },
+  {
+    id: "hairline",
+    label: "Hairline empty states (trial)",
+    description: "Lucas Marques's isometric line figures (@lucasmarkes/hairline 0.5.1, MIT) above Empty states, themed with Area's tokens; each answers the pointer (2026-10-24).",
+    families: ["Empty state", "Button", "Segmented"],
+    gaps: ["Empty state has no figure slot: its icon slot holds a 16 glyph, so the figure sits above it.", "The figures are a third-party package on trial, not part of Area."],
+    Screen: HairlineScreen,
   },
 ] as const;
 

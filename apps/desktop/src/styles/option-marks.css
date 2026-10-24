@@ -1,14 +1,13 @@
 /* ---------------------------------------------------------------------------
  * Option marks (src/option-marks.tsx): what a setting's option sets, drawn in Menu's and Custom select's icon slot
- * (Area's icon box, centred). Strokes use the icon line weight; frames, shadows and edges are the option's own tokens
- * under its scope; a plate that could vanish on the list's ground carries the swatch ring, as Color swatch does.
+ * (Area's icon box, centred). Colours are Color swatches under the option's scope; everything else is a glyph at the icon
+ * line weight in the row's ink, its one changing property exaggerated so each step shows (owner, 2026-10-23).
  * ------------------------------------------------------------------------- */
 .studio-mark { display: block; box-sizing: border-box; flex: none }
 svg.studio-mark { inline-size: 100%; block-size: 100%; fill: none; stroke: currentColor; stroke-width: var(--area-weight-icon, 1.125px); vector-effect: non-scaling-stroke; overflow: visible }
 svg.studio-mark * { vector-effect: non-scaling-stroke }
-/* Marks keep to the icons' keylines (icon-construction: square 13, horizontal 14 × 11), so a mark reads the size of the
-   glyph beside it: Layers and Contrast are 14 × 10 pages (were the whole 16 box), frames and the duration ring 12 squares,
-   and a Color swatch takes the square keyline from its slot (color.css). */
+/* Glyphs keep to the icons' keylines (icon-construction: square 13, horizontal 14 × 11); a Color swatch takes the square
+   keyline from its slot (color.css). */
 /* A mark painted under another theme's scope (a ground, a layer) sits in a host that reads the Inspector's swatch ring
    first, so the ring outlines it on the list's ground: scoped dark, a Dark ground swatch drew dark's white ring in a
    light Inspector. The ring is a light-dark() pair, which resolves where it is used, so this private property is
@@ -16,29 +15,6 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
    (DESIGN_SYSTEM.md), since they must follow the scope they are read in. */
 @property --_host-ring { syntax: "<color>"; inherits: true; initial-value: transparent; }
 .studio-mark--host { display: grid; place-items: center; inline-size: 100%; block-size: 100%; --_host-ring: var(--area-token-swatch-ring) }
-.studio-mark--host > :is(.studio-mark__swatch, .studio-mark--layers) { outline-color: var(--_host-ring) }
-.studio-mark--layers {
-  position: relative; inline-size: 87.5%; block-size: 62.5%; overflow: hidden; border-radius: 3px;
-  background: var(--area-bg-page); outline: var(--area-stroke-width) solid var(--area-token-swatch-ring); outline-offset: calc(-1 * var(--area-stroke-width));
-}
-.studio-mark__recessed { position: absolute; inset: 0 auto 0 0; inline-size: 37.5%; background: var(--area-bg-subtle) }
-.studio-mark__raised { position: absolute; inset: 25% 12.5% 25% 50%; border-radius: 1.5px; background: var(--area-bg-surface); box-shadow: 0 0 0 var(--area-stroke-width) var(--area-border-card) }
-.studio-mark--edge { inline-size: 87.5%; block-size: 62.5%; border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: 3px; background: var(--area-bg-surface) }
-.studio-mark--frame, .studio-mark--lift { inline-size: 75%; block-size: 75%; border-radius: 3px; background: var(--area-bg-surface) }
-.studio-mark--frame { border: var(--area-border-width) solid var(--area-border-card); box-shadow: var(--area-shadow-edge) }
-.studio-mark--edge-hover { border-color: var(--area-edge-control-hover) }
-.studio-mark--selected { border-color: var(--area-stroke-selected); box-shadow: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-border-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint) }
-.studio-mark--focus {
-  border-color: color-mix(in srgb, var(--area-edge-control), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%));
-  outline: calc(var(--area-field-focus-outline-width) / 2) solid var(--area-field-focus-color); outline-offset: calc(var(--area-focus-offset) / 2);
-  box-shadow: 0 0 0 calc(var(--area-field-focus-halo-width) / 2) var(--area-field-focus-halo-color);
-}
-.studio-mark--plate { inline-size: 87.5%; block-size: 62.5%; border-radius: 3px; background: linear-gradient(var(--_plate), var(--_plate)), var(--area-bg-surface); outline: var(--area-stroke-width) solid var(--area-token-swatch-ring); outline-offset: calc(-1 * var(--area-stroke-width)) }
-.studio-mark--lift { outline: var(--area-stroke-width) solid var(--area-token-swatch-ring); outline-offset: calc(-1 * var(--area-stroke-width)); box-shadow: 0 calc(var(--_lift) * 0.25px) calc(var(--_lift) * 0.5px) light-dark(rgb(0 0 0 / calc(var(--_lift) * 5%)), rgb(0 0 0 / calc(var(--_lift) * 10%))) }
+.studio-mark--host > .studio-mark__swatch { outline-color: var(--_host-ring) }
 .studio-mark--curve { inline-size: 100%; block-size: 100%; overflow: visible; }
 .studio-mark--curve path { fill: none; stroke: currentColor; stroke-width: var(--area-weight-icon, 1.125px); stroke-linecap: round; }
-.studio-mark--duration {
-  inline-size: 75%; block-size: 75%; border-radius: 50%;
-  background: conic-gradient(currentColor var(--_share), transparent 0);
-  box-shadow: inset 0 0 0 var(--area-weight-icon, 1.125px) currentColor;
-}

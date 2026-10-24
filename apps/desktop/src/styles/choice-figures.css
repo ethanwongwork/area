@@ -1,0 +1,107 @@
+/* ---------------------------------------------------------------------------
+ * Choice figures (src/choice-figures.tsx): a setting's option drawn in a grid list's preview frame (Custom select
+ * layout="grid"). Folder's outline look (folder.css): the control fill, a thin edge, quiet ink (muted 45% toward the
+ * fill), paper a step lighter, the page as ground. Geometry is in shares of the frame so a figure fits any cell; every
+ * colour, line, corner and shadow is a token, read under the option's scope.
+ * ------------------------------------------------------------------------- */
+.cf {
+  --_fill: var(--area-bg-component);
+  --_edge: var(--area-border);
+  --_quiet: color-mix(in oklab, var(--area-fg-muted), var(--_fill) 45%); /* Folder's quiet ink */
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  container-type: size;
+  background: var(--area-bg-page);
+  color: var(--area-fg-default);
+}
+.cf * { box-sizing: border-box; }
+.cf-center { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
+.cf-stack { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 9cqh; }
+.cf-page { inline-size: 100%; block-size: 100%; background: var(--area-bg-page); }
+.cf-pair { display: flex; align-items: center; gap: 8%; inline-size: 70%; block-size: 22%; }
+.cf-pair--split { justify-content: center; inline-size: 100%; block-size: 30%; }
+.cf-pair--split > .cf-field { inline-size: 38%; block-size: 100%; }
+.cf-bar { display: block; block-size: max(3px, 7cqh); border-radius: var(--area-radius-full); background: var(--_quiet); }
+.cf-bar--strong { background: var(--area-fg-muted); }
+.cf-field { display: block; background: var(--_fill); border: var(--area-stroke-width) solid var(--_edge); border-radius: var(--area-radius-control-sm); }
+.cf-field--edge { background: var(--area-bg-surface); border-color: var(--area-edge-control); }
+.cf-field--hover { border-color: var(--area-edge-control-hover); }
+.cf-field--mini { inline-size: 100%; block-size: 16cqh; border-radius: var(--area-radius-control-xs); }
+.cf-field--pill { inline-size: 70%; block-size: 26%; border-radius: var(--area-radius-full); }
+.cf-field--focus {
+  border-color: color-mix(in srgb, var(--area-edge-control), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%));
+  outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
+  outline-offset: var(--area-focus-offset);
+  box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
+}
+.cf-btn { display: block; background: var(--area-action-solid, var(--area-fg-default)); }
+.cf-btn--pill { inline-size: 52%; block-size: 26%; border-radius: var(--area-radius-full); }
+.cf-outline-btn { display: block; background: var(--area-bg-surface); border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: var(--area-radius-control-sm); }
+.cf-outline-btn--pill { inline-size: 42%; block-size: 24%; border-radius: var(--area-radius-full); }
+.cf-box { display: block; flex: none; inline-size: auto; block-size: 70%; aspect-ratio: 1; background: var(--area-bg-surface); border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: var(--area-radius-control-xs); }
+.cf-card { display: grid; align-content: center; gap: 9cqh; padding: 10cqh 9cqw; background: var(--area-bg-card, var(--area-bg-surface)); border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-small); }
+.cf-card--bare { border: 0; }
+.cf-card--selected {
+  border-color: var(--area-stroke-selected);
+  box-shadow: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-border-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint);
+}
+.cf-rule { display: block; block-size: 0; border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
+.cf-window { display: grid; grid-template-columns: 34% 1fr; inline-size: 100%; block-size: 100%; background: var(--area-bg-page); }
+.cf-side { display: grid; align-content: start; gap: 9cqh; padding: 14cqh 12%; background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+.cf-main { display: grid; align-content: start; gap: 9cqh; padding: 14cqh 10% 0; }
+.cf-main > .cf-card { padding: 9cqh 9cqw; }
+.cf-list { display: grid; gap: 2px; inline-size: 80%; }
+.cf-row { display: flex; align-items: center; gap: 8%; block-size: 13cqh; padding-inline: 7%; border-radius: var(--area-radius-row); }
+/* Three rows at the density's row height, scaled so the tallest (36) still fits the frame: 7, 12 and 17 tall. */
+.cf-row--dense { block-size: calc((var(--area-control-md) - 22px) * 1.2); }
+.cf-row--hover { background: var(--area-bg-hover); }
+.cf-row--active { background: var(--area-bg-active); }
+.cf-row--pressed { background: var(--area-bg-pressed); }
+.cf-row--mine > .cf-bar { background: var(--area-fg-muted); }
+.cf-dot { display: block; flex: none; inline-size: 9cqh; aspect-ratio: 1; border-radius: 2px; background: var(--_quiet); }
+.cf-menu { display: grid; gap: 1px; inline-size: 62%; padding: 5cqh 4%; background: var(--area-bg-surface); border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-small); }
+.cf-menu--float { box-shadow: var(--area-shadow-float); }
+.cf-track { position: relative; inline-size: 76%; block-size: 4px; border-radius: 2px; background: var(--_fill); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_edge); }
+.cf-track > i { position: absolute; inset-block: 0; inset-inline-start: 0; border-radius: 2px; background: var(--area-fg-default); }
+.cf-track > b { position: absolute; inset-block-start: -5px; inline-size: 14px; block-size: 14px; border-radius: 50%; background: var(--area-bg-surface); box-shadow: 0 0 0 var(--area-stroke-width) var(--area-edge-control); }
+.cf-svg { inline-size: 86%; block-size: 86%; overflow: visible; }
+.cf-guide { fill: none; stroke: var(--area-border-divider); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.cf-curve { fill: none; stroke: var(--area-fg-default); stroke-width: 1.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.cf-end { fill: var(--area-fg-default); }
+.cf-seg { display: flex; gap: 2px; inline-size: 66%; block-size: 26%; padding: 3px; background: var(--_fill); border: var(--area-stroke-width) solid var(--_edge); border-radius: var(--area-radius-full); }
+.cf-seg > i { flex: 1; border-radius: var(--area-radius-full); }
+.cf-seg > .cf-seg--on { background: var(--area-bg-surface); box-shadow: 0 0 0 var(--area-stroke-width) var(--area-border-card); }
+.cf-badge { display: block; inline-size: 36%; block-size: 20%; background: var(--_fill); border: var(--area-stroke-width) solid var(--_edge); border-radius: var(--area-radius-full); }
+.cf-badge--round { inline-size: 20cqh; block-size: 20cqh; }
+.cf-switch { position: relative; display: block; inline-size: 34%; block-size: 26%; background: var(--area-selection-solid); border-radius: var(--area-radius-full); }
+.cf-switch > b { position: absolute; inset-block: 3px; inset-inline-end: 3px; aspect-ratio: 1; background: var(--area-fg-on-selection, white); border-radius: 50%; }
+.cf-avatar { display: block; inline-size: 30%; aspect-ratio: 1; background: var(--_fill); border-radius: 50%; box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_edge); }
+.cf-material { pointer-events: none; }
+/* Radius: a list's corner around its row's, magnified so a 2 step and the 4 inset show (both corners are the tokens,
+   times the zoom). The circles are each corner's radius, drawn from the corner inward. */
+.cf-corner { --_zoom: 2; position: absolute; inset: 0; overflow: hidden; background: var(--area-bg-page); }
+.cf-corner__outer {
+  position: absolute; inset-block-start: 18%; inset-inline-start: 16%; inline-size: 160%; block-size: 160%;
+  padding: calc(var(--area-space-4) * var(--_zoom));
+  background: var(--area-bg-surface);
+  border-radius: calc(var(--area-radius-list) * var(--_zoom));
+  box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border);
+}
+.cf-corner__inner {
+  position: relative; inline-size: 100%; block-size: 100%; overflow: hidden;
+  background: var(--_fill);
+  border-radius: calc(var(--area-radius-list-row) * var(--_zoom));
+  box-shadow: inset 0 0 0 1.5px var(--area-stroke-selected);
+}
+.cf-corner__circle {
+  position: absolute; inset-block-start: 0; inset-inline-start: 0;
+  inline-size: calc(var(--area-radius-list-row) * var(--_zoom) * 2); aspect-ratio: 1; border-radius: 50%;
+  background: color-mix(in oklab, var(--area-stroke-selected) 16%, transparent);
+}
+.cf-corner__circle--outer {
+  inline-size: calc(var(--area-radius-list) * var(--_zoom) * 2);
+  background: color-mix(in oklab, var(--area-fg-muted) 10%, transparent);
+}

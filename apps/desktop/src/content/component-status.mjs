@@ -65,7 +65,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-08 after their requested changes.
   'date-picker',
   // Approved 2026-10-09 on the review page, round 2 (components2).
-  'pagination', 'scroll-area', 'toggletip', 'combobox', 'custom-select', // tag-picker: reopened 2026-10-16 (round 30).
+  'pagination', 'scroll-area', 'toggletip', 'combobox', // tag-picker: reopened 2026-10-16 (round 30); custom-select: reopened 2026-10-23 (layout grid and the option preview).
   // Approved 2026-10-09 on the review page, round 3 (components3), after the round-2 feedback.
   'link', // kbd: reopened in round 51
   // Approved 2026-10-10 on the review page, round 5 (components5).

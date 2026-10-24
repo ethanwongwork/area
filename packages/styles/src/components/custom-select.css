@@ -176,4 +176,72 @@
   /* spec: Notion's access menu rules its sections off (1px, 12 in; captures/custom-select/
      notion--member-access-menu--open--light); Menu's separator, between groups only. */
   .area-custom-select__separator { flex: none; }
+
+  /*
+   * Layout grid (owner 2026-10-23; spec "Intake: Layout grid"): choices that are pictures. The list spans its Field (the
+   * React side anchors it there) and its options flow in equal columns of cells, List box's grid at a field's width: an
+   * option is a cell with its preview in a 4:3 frame (Folder's thin edge, folder.css) or its icon large, over its label.
+   * Highlight is the row plate (Menu's); the chosen value is the frame in the selected stroke, or the selected plate on an
+   * icon cell (List box's grid), never the check.
+   */
+  /* list is the default: Menu's rows (above). The hook is for a caller's layout, as List box's. */
+  .area-custom-select--list {}
+  .area-custom-select--grid > .area-custom-select__listbox[popover] {
+    inline-size: max(var(--area-overlay-anchor-width, 0px), var(--area-menu-min-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-32))));
+    max-block-size: min(432px, var(--area-overlay-available-height, 50vh)); /* spec: pick, four rows of cells (the list's 324 holds three) */
+  }
+  .area-custom-select__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); /* spec: pick, three cells across a 268 field */
+    gap: var(--area-space-2); /* List box's grid */
+  }
+  /* Cells that draw an icon (a swatch) need only the label's width: five across a 268 field. */
+  .area-custom-select__grid:not(:has(.area-custom-select__preview)) { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); } /* spec: pick */
+  .area-custom-select--grid .area-custom-select__option {
+    display: grid;
+    align-content: start;
+    justify-items: stretch;
+    gap: var(--area-space-4);
+    block-size: auto;
+    min-block-size: 0;
+    padding: var(--area-space-4);
+    text-align: center;
+  }
+  .area-custom-select__preview {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    /* Concentric with the cell: its row corner less the 4 inset. */
+    border-radius: max(var(--area-radius-min), calc(var(--area-radius-list-row) - var(--area-space-4)));
+  }
+  /* The frame is drawn over the preview, which may paint its own ground to the edge: Folder's edge, or the selected
+     stroke on the chosen value. */
+  .area-custom-select__preview::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border); /* Folder's edge */
+    pointer-events: none;
+  }
+  .area-custom-select__option[aria-selected="true"] > .area-custom-select__preview::after { box-shadow: inset 0 0 0 var(--area-selected-width) var(--area-stroke-selected); }
+  .area-custom-select--grid .area-custom-select__option > .area-menu__icon {
+    justify-self: center;
+    inline-size: var(--area-control-xs); /* a swatch's cell: List box's grid draws icons and swatches in a control-sized box */
+    block-size: var(--area-control-xs);
+  }
+  .area-custom-select--grid .area-custom-select__option[aria-selected="true"]:not(:has(> .area-custom-select__preview)) { background: var(--area-bg-component-active); }
+  .area-custom-select__caption {
+    min-inline-size: 0;
+    overflow: hidden;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .area-custom-select__option[aria-selected="true"] > .area-custom-select__caption { color: var(--area-fg-default); }
 }

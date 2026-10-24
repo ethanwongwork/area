@@ -1,6 +1,6 @@
 /** Custom select gallery specimens: one variant per tile. docs/specs/custom-select.md. */
 import type { CSSProperties } from "react";
-import { CustomSelect, type CustomSelectOption } from "@area/react";
+import { ColorSwatch, CustomSelect, FileImage, FilePage, Folder, type CustomSelectOption } from "@area/react";
 import { GlobeIcon, GalleryIcon, KanbanIcon, ListIcon, LockIcon, TableIcon, CalendarIcon } from "@area/icons";
 
 /* Notion's Share popover access levels: a label and a line saying what it allows. */
@@ -60,4 +60,22 @@ export const GalleryCustomSelectDisabled = () => (
 );
 export const GalleryCustomSelectInvalid = () => (
   <div style={frame}><CustomSelect fullWidth invalid aria-label="Label" placeholder="Placeholder" items={access} /></div>
+);
+
+/* Layout grid: choices that are pictures; in a Field the list takes the Field's width (the desktop Inspector's 268). Each
+   option's preview is drawn over its label; Area's own file figures stand in for a setting's figures. */
+const kinds: CustomSelectOption[] = [
+  { value: "folder", label: "Option one", preview: <Folder size="sm" /> },
+  { value: "page", label: "Option two", preview: <FilePage size="sm" /> },
+  { value: "image", label: "Option three", preview: <FileImage size="sm" /> },
+];
+const field: CSSProperties = { inlineSize: 268 };
+export const GalleryCustomSelectGrid = () => (
+  <div style={field}><CustomSelect fullWidth layout="grid" aria-label="Label" items={kinds} defaultValue="page" /></div>
+);
+/* Without a preview a cell draws the option's icon large: a colour as a grid of swatches. */
+const colours: CustomSelectOption[] = ["red", "orange", "yellow", "green", "teal", "blue", "indigo", "purple", "pink"].map(name =>
+  ({ value: name, label: name[0]!.toUpperCase() + name.slice(1), icon: <ColorSwatch size="sm" color={`var(--area-${name}-500, ${name})`} aria-hidden="true" /> }));
+export const GalleryCustomSelectGridSwatches = () => (
+  <div style={field}><CustomSelect fullWidth layout="grid" aria-label="Label" items={colours} defaultValue="blue" /></div>
 );

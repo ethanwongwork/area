@@ -1,0 +1,75 @@
+/* ---------------------------------------------------------------------------
+ * One illustration language for every rung above the icon (2026-10-23): a zoom through one scene.
+ *
+ *   Object    the icon's shape grown into Folder's outline look, alone in the plate
+ *   Scene     the same object, same size and place, with its context drawn quieter around it
+ *   Close-up  the same object magnified at the measure its setting moves, the measure marked
+ *   Screen    the setting across a whole app (choice-illustrations round 12, semi-abstract)
+ *   Real      Area's components under the option
+ *
+ * Shared by every rung: one 4:3 plate on the page ground with Folder's thin edge; Folder's control fill, edge and
+ * quiet ink (folder.css); text as cap-height bars (round 12's semi-abstract rule); the setting's own property always the
+ * real token; annotations only in the selected stroke's blue, with mono labels.
+ * ------------------------------------------------------------------------- */
+.il-plate { position: relative; display: block; inline-size: 120px; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 8px; }
+.il-plate::after { content: ""; position: absolute; inset: 0; z-index: 3; border-radius: inherit; box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border); pointer-events: none; }
+.il {
+  --_fill: var(--area-bg-component);
+  --_edge: var(--area-border);
+  --_quiet: color-mix(in oklab, var(--area-fg-muted), var(--_fill) 45%);
+  --_mark: var(--area-stroke-selected);
+  position: absolute; inset: 0; overflow: hidden; container-type: size;
+  display: grid; place-items: center;
+  background: var(--area-bg-page); color: var(--area-fg-default);
+}
+.il * { box-sizing: border-box; }
+.il-abs { position: absolute; }
+.il-col { display: flex; flex-direction: column; align-items: stretch; gap: 6cqh; }
+.il-row-flex { display: flex; align-items: center; gap: 6cqw; }
+/* Context is the scene around the object, a step quieter. */
+.il-ctx { opacity: .55; }
+
+/* Text: cap-height bars. */
+.il-bar { display: block; flex: none; block-size: max(3px, 6cqh); border-radius: 999px; background: var(--_quiet); }
+.il-bar--strong { background: var(--area-fg-muted); }
+.il-bar--on { background: currentColor; opacity: .5; }
+
+/* Parts, in Folder's look unless the setting paints them. */
+.il-field { display: flex; align-items: center; padding-inline: 8cqw; background: var(--area-bg-surface); border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: var(--area-radius-control-md); }
+.il-btn { display: flex; align-items: center; justify-content: center; background: var(--_fill); border: var(--area-stroke-width) solid var(--_edge); border-radius: var(--area-radius-control-md); }
+.il-btn--solid { background: var(--area-action-solid, var(--area-fg-default)); border-color: transparent; }
+.il-btn--solid .il-bar { background: var(--area-fg-on-action, white); opacity: .85; }
+.il-card { display: flex; flex-direction: column; gap: 6cqh; padding: 9cqh 9cqw; background: var(--area-bg-card, var(--area-bg-surface)); border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-container); }
+.il-list { display: flex; flex-direction: column; gap: 1px; padding: 4px; background: var(--area-bg-surface); border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-list); }
+.il-item { display: flex; align-items: center; gap: 6cqw; block-size: 14cqh; padding-inline: 6cqw; border-radius: var(--area-radius-list-row); }
+.il-item--hover { background: var(--area-bg-hover); }
+.il-item--active { background: var(--area-bg-active); }
+.il-item--pressed { background: var(--area-bg-pressed); }
+.il-dot { display: block; flex: none; inline-size: 8cqh; aspect-ratio: 1; border-radius: 2px; background: var(--_quiet); }
+.il-focus { border-color: color-mix(in srgb, var(--area-edge-control), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color); outline-offset: var(--area-focus-offset); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color); }
+.il-switch { position: relative; display: block; flex: none; inline-size: 22cqw; block-size: 16cqh; border-radius: 999px; background: var(--_fill); border: var(--area-stroke-width) solid var(--_edge); }
+.il-switch--on { background: var(--area-selection-solid); border-color: transparent; }
+.il-switch > b { position: absolute; inset-block: 2px; inset-inline-start: var(--_at, 2px); aspect-ratio: 1; border-radius: 50%; background: var(--area-bg-surface); box-shadow: 0 0 0 var(--area-stroke-width) var(--_edge); }
+.il-switch > s { position: absolute; inset-block: 2px; aspect-ratio: 1; border-radius: 50%; background: var(--area-bg-surface); opacity: .35; }
+.il-check { display: block; flex: none; inline-size: 12cqh; aspect-ratio: 1; border-radius: var(--area-radius-control-xs); background: var(--area-selection-solid); }
+.il-swatch { display: block; border-radius: 28%; background: var(--area-accent-solid); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); }
+
+/* Layers' planes, painted by their grounds. */
+.il-planes { position: absolute; inset: 0; display: grid; grid-template-columns: 34% 1fr; background: var(--area-bg-page); }
+.il-planes__side { background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+.il-planes__main { position: relative; }
+.il-planes__card { position: absolute; inset: 22% 14% 22% 14%; background: var(--area-bg-card, var(--area-bg-surface)); border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-small); }
+
+/* Motion's dial: the share of the longest Motion, in Folder's fill. */
+.il-dial { display: block; inline-size: 46cqh; aspect-ratio: 1; border-radius: 50%; background: conic-gradient(var(--area-fg-muted) var(--_share), var(--_fill) 0); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_edge); }
+
+/* Annotation: the measure, in the selected stroke's blue. */
+.il-tag { position: absolute; z-index: 2; padding: 0 5px; border-radius: 999px; background: var(--_mark); color: white; font: 500 9px/14px var(--area-font-mono); white-space: nowrap; }
+.il-circle { position: absolute; border-radius: 50%; background: color-mix(in oklab, var(--_mark) 16%, transparent); }
+.il-circle--quiet { background: color-mix(in oklab, var(--area-fg-muted) 10%, transparent); }
+.il-guide { position: absolute; border: 0 solid var(--_mark); }
+.il-outline { box-shadow: inset 0 0 0 1.5px var(--_mark) !important; }
+
+/* Screen: a round-12 screen on the page ground, as a window. */
+.il-screen { position: absolute; inset: 0; display: grid; place-items: center; background: var(--area-bg-page); }
+.il-screen > img { display: block; inline-size: 92%; block-size: auto; border-radius: 4px; box-shadow: 0 0 0 var(--area-border-width) var(--area-border-card); }

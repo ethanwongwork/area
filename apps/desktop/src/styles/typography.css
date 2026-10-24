@@ -6,8 +6,10 @@
   .studio-type { display: grid; grid-template-columns: minmax(0, 1fr) calc(var(--area-space-96) * 2); align-items: start; gap: var(--area-space-16); }
   .studio-type__sample { overflow-wrap: anywhere; }
   /* The table's example cell: the role's name in the role itself (Geist). */
-  .studio-type__example { display: inline; }
-  .studio-type__token { display: inline-flex; align-items: center; gap: var(--area-space-4); white-space: nowrap; }
+  .studio-type__example { display: inline; white-space: nowrap; }
+  /* Regular over strong in one cell (owner, 2026-10-23), each on its own line. */
+  .studio-nowrap { white-space: nowrap; }
+  .studio-type__examples { display: grid; justify-items: start; gap: var(--area-space-4); }
   .studio-type__specs {
     display: grid;
     grid-template-columns: auto auto;
@@ -37,34 +39,42 @@
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
   }
+  /*
+   * The grid view is a sheet of cards (owner, 2026-10-23: "maybe type can have cards too?"): a card per style, its "Aa"
+   * at each weight shown, over its name and what it is made of (size, line height, tracking, weight), with the List box
+   * option's selection as the card's selected edge.
+   */
   .studio-type-sheet {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-space-96) + var(--area-space-80)), 1fr)); /* pick: 176, the illustrations' card */
-    gap: var(--area-space-2);
-    margin-inline: calc(var(--area-space-12) * -1);
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-space-96) * 2 + var(--area-space-16)), 1fr)); /* pick: 208, two "Aa" at Display 72 */
+    gap: var(--area-space-12);
   }
   .studio-type-cell {
     display: grid;
-    place-items: normal; /* a List box option centres its content; a type cell stacks the sample over its label */
+    place-items: normal; /* a List box option centres its content; a type card stacks the samples over its label */
     grid-template-rows: minmax(calc(var(--area-space-96) + var(--area-space-16)), 1fr) auto; /* pick: 112, room for Display 72 */
-    gap: var(--area-space-8);
+    gap: var(--area-space-12);
     margin: 0;
-    padding: var(--area-space-12);
-    border: 0;
-    border-radius: var(--area-radius-row);
-    background: transparent;
+    padding: var(--area-space-16);
+    border: var(--area-border-width) solid var(--area-border-card);
+    border-radius: var(--area-radius-container);
+    background: var(--area-bg-card, var(--area-bg-surface));
     color: var(--area-fg-default);
     font: inherit;
     text-align: start;
     cursor: default;
     transition: var(--area-transition);
   }
-  .studio-type-cell__sample { align-self: end; overflow: hidden; white-space: nowrap; }
-  /* The name over its metrics, both one line, so every cell's label is two lines and the samples
-     above them share one baseline row. */
-  .studio-type-cell__label { display: grid; min-inline-size: 0; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
-  .studio-type-cell__label > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* The row plates' pair, as the icon cells (product UI rule 3). */
-  @media (hover: hover) { .studio-type-cell:hover { background: var(--area-bg-component-hover); transition-duration: 0s; } }
-  .studio-type-cell:is(:active, [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
-  .studio-type-cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+  .studio-type-cell__samples { display: flex; align-items: baseline; gap: var(--area-space-16); align-self: end; min-inline-size: 0; overflow: hidden; white-space: nowrap; }
+  .studio-type-cell__sample { flex: none; }
+  /* The name over its measures; every card's label is the same height, so the samples above share one baseline row. */
+  .studio-type-cell__label { display: grid; gap: var(--area-space-8); min-inline-size: 0; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .studio-type-cell__name { overflow: hidden; color: var(--area-fg-default); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-strong); text-overflow: ellipsis; white-space: nowrap; }
+  .studio-type-cell__measures { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--area-space-2) var(--area-space-12); margin: 0; padding-block-start: var(--area-space-8); border-block-start: var(--area-border-width) solid var(--area-border-divider); }
+  .studio-type-cell__measures > div { display: contents; }
+  .studio-type-cell__measures dt { color: var(--area-fg-muted); }
+  .studio-type-cell__measures dd { margin: 0; text-align: end; }
+  /* The card's states: the hover plate, and the selected edge (Asset card's, the Selected stroke). */
+  @media (hover: hover) { .studio-type-cell:hover { background: var(--area-bg-component-card-hover, var(--area-bg-component-hover)); transition-duration: 0s; } }
+  .studio-type-cell[aria-selected="true"] { border-color: var(--area-stroke-selected); box-shadow: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-border-width))) var(--area-stroke-selected); transition-duration: 0s; }
+  .studio-type-cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }

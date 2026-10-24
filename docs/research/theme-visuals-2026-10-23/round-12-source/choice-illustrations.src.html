@@ -1,0 +1,774 @@
+<title>Choice Illustrations</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Area's built CSS (packages/styles/dist/area.css: tokens, every setting and every component), inlined so the screens are
+   Area's real components. Each choice is drawn inside an element carrying that choice's data-area-* attribute. */
+__AREA_CSS__
+</style>
+<style>
+/* Layout: a sticky control panel, then the screens gallery or every setting's choice cards, each holding a scaled screen. */
+:root {
+  --bg: #fff;                    /* Area bg-page */
+  --bg2: oklch(0.976 0 0);       /* bg-subtle: the choice card */
+  --bg3: oklch(0.964 0 0);       /* bg-component-hover */
+  --surf: #fff;                  /* bg-surface */
+  --line: oklch(0.913 0 0);      /* border-divider */
+  --line2: oklch(0.823 0 0);     /* border */
+  --fg: oklch(0.277 0 0);        /* fg-default */
+  --fg2: oklch(0.51 0 0);        /* fg-muted */
+  --fg3: oklch(0.66 0 0);
+  --sel: #0160d9;                /* stroke-selected */
+  --good: #0a7d3e;
+  --warn: #a35a00;
+  --font: "Geist", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: oklch(0.085 0 0); --bg2: oklch(0.15 0 0); --bg3: oklch(0.2 0 0); --surf: oklch(0.18 0 0);
+    --line: oklch(0.321 0 0); --line2: oklch(0.413 0 0); --fg: oklch(0.949 0 0); --fg2: oklch(0.823 0 0); --fg3: oklch(0.6 0 0);
+    --sel: #79aeff; --good: #5fd28f; --warn: #f0b056; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: oklch(0.085 0 0); --bg2: oklch(0.15 0 0); --bg3: oklch(0.2 0 0); --surf: oklch(0.18 0 0);
+  --line: oklch(0.321 0 0); --line2: oklch(0.413 0 0); --fg: oklch(0.949 0 0); --fg2: oklch(0.823 0 0); --fg3: oklch(0.6 0 0);
+  --sel: #79aeff; --good: #5fd28f; --warn: #f0b056; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 13px/1.45 var(--font); margin: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1440px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 64px; }
+.wrap h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+.wrap h2 { font-size: 15px; font-weight: 600; margin: 0; }
+.wrap h3 { font-size: 13px; font-weight: 600; margin: 0; }
+.wrap p { margin: 0; }
+.muted { color: var(--fg2); }
+.top { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: flex-end; justify-content: space-between; margin-bottom: 14px; }
+.top p { max-width: 80ch; color: var(--fg2); margin-top: 4px; }
+.status { font-size: 12px; color: var(--fg2); }
+
+/* Controls */
+.panel { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); padding-block: 10px; margin-bottom: 18px; }
+.ctrls { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+.ctrl { display: flex; align-items: center; gap: 6px; }
+.ctrl > span { color: var(--fg2); font-size: 12px; }
+.seg { display: inline-flex; flex-wrap: wrap; background: var(--bg2); border-radius: 7px; padding: 2px; gap: 1px; }
+.seg button, .btn {
+  font: inherit; font-size: 12px; color: var(--fg); background: none; border: 0; border-radius: 5px;
+  height: 24px; padding: 0 8px; cursor: pointer;
+}
+.seg button:hover { background: var(--bg3); }
+.seg button[aria-checked="true"] { background: var(--surf); box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgb(0 0 0 / 0.06); font-weight: 500; }
+.btn { border: 1px solid var(--line2); height: 28px; padding: 0 12px; border-radius: 7px; font-weight: 500; }
+.btn:hover { background: var(--bg3); }
+.btn--primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn--primary:hover { background: var(--fg); opacity: 0.88; }
+.wrap button:focus-visible, .wrap select:focus-visible, .wrap input:focus-visible, .cc:focus-visible { outline: 2px solid var(--sel); outline-offset: 1px; }
+.wrap select, .wrap input[type="text"] {
+  font: inherit; font-size: 12px; color: var(--fg); background: var(--surf); border: 1px solid var(--line2);
+  border-radius: 6px; height: 26px; padding: 0 6px; min-width: 0;
+}
+.overall { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.overall input { flex: 1 1 240px; height: 28px; }
+.tabs { display: flex; gap: 4px; margin: 4px 0 16px; border-bottom: 1px solid var(--line); }
+.tabs button { font: inherit; font-weight: 500; color: var(--fg2); background: none; border: 0; padding: 8px 10px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--fg); }
+
+/* Setting blocks */
+.group { margin-bottom: 30px; }
+.group > h2 { margin-bottom: 10px; color: var(--fg2); font-weight: 500; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.sets { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 640px), 1fr)); gap: 28px 32px; align-items: start; }
+.set { min-width: 0; }
+.set__head { display: flex; gap: 8px 10px; align-items: center; flex-wrap: wrap; margin-bottom: 2px; }
+.set__head .def { font-size: 12px; color: var(--fg2); }
+.set__head select { margin-inline-start: auto; height: 24px; }
+.set__note { font-size: 12px; color: var(--fg2); margin-bottom: 8px; }
+.pick { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
+.pick input { flex: 1 1 160px; height: 24px; }
+.pick .v { display: inline-flex; gap: 2px; }
+.pick .v button { font: inherit; font-size: 12px; height: 24px; padding: 0 8px; border-radius: 6px; border: 1px solid var(--line); background: none; color: var(--fg2); cursor: pointer; }
+.pick .v button[aria-pressed="true"][data-v="good"] { color: var(--good); border-color: currentColor; }
+.pick .v button[aria-pressed="true"][data-v="work"] { color: var(--warn); border-color: currentColor; }
+.saved { font-size: 11px; color: var(--fg3); min-width: 3em; }
+
+/* Screens gallery */
+.gallery { display: grid; gap: 26px; }
+.gallery__row { display: grid; gap: 8px; }
+.gallery__row h3 { display: flex; gap: 8px; align-items: baseline; }
+.gallery__row h3 span { font-weight: 400; color: var(--fg2); font-size: 12px; }
+
+/* Choice cards: the app's Radio card layout="preview" (soft ground, picture and centred label, selected stroke inside). */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, var(--w)); gap: 8px; }
+.cc {
+  box-sizing: border-box; display: grid; gap: 6px; padding: 6px; border-radius: 12px; cursor: pointer; min-width: 0;
+  background: var(--cg); box-shadow: inset 0 0 0 var(--cgw, 0px) var(--cge, transparent); text-align: center;
+}
+.cc__l { font-size: 12px; line-height: 16px; color: var(--fg); padding: 0 2px 2px; overflow-wrap: anywhere; }
+.cc:hover { --cg: var(--cgh); }
+.cc[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--sel); }
+.cg-soft { --cg: var(--bg2); --cgh: var(--bg3); }
+.cg-white { --cg: var(--surf); --cgh: var(--surf); --cgw: 1px; --cge: var(--line); }
+.cg-white .cc:hover { --cge: var(--line2); }
+.cg-clear { --cg: transparent; --cgh: var(--bg2); }
+.lb-none .cc__l { display: none; }
+.lb-below .cc { background: none; box-shadow: none; padding: 0; gap: 5px; }
+.lb-below .cc[aria-pressed="true"] .k-stage { outline: 2px solid var(--sel); outline-offset: 2px; }
+
+/* ---- The stage: the screen, at its real size, scaled to the card ---- */
+.k-stage { position: relative; display: block; aspect-ratio: var(--ratio); max-width: 100%; overflow: hidden; border-radius: 6px; pointer-events: none; color: var(--area-fg-default); text-align: start; font-family: var(--area-font-sans); }
+.k-z { position: absolute; inset-block-start: 50%; inset-inline-start: 50%; transform: translate(-50%, -50%) scale(var(--fit, 0.3)); }
+.k-cap {
+  position: absolute; inset-inline-end: 6px; inset-block-end: 5px; font: 500 10px/14px var(--mono); letter-spacing: 0.01em;
+  color: var(--area-fg-muted); background: var(--area-bg-page); box-shadow: 0 0 0 1px var(--area-border-divider); padding: 0 4px; border-radius: 4px;
+}
+.an-off .k-cap { display: none; }
+.k-split { position: absolute; inset: 0; }
+.k-split--l { clip-path: inset(0 50% 0 0); }
+.k-split--r { clip-path: inset(0 0 0 50%); }
+.k-split-line { position: absolute; inset-block: 0; inset-inline-start: 50%; border-inline-start: 1px dashed var(--area-border); }
+
+/* ---- Screens: arrangement only; every paint is the components' own. Two desktop shells (App: sidebar + page header;
+   Site: top bar) and one iPhone shell keep navigation the same on every screen. Layout values follow
+   docs/research/app-screens-2026-10-21.md, scaled to the 1024 × 576 frame. ---- */
+.sx-row { display: flex; align-items: center; min-width: 0; }
+.sx-col { display: flex; flex-direction: column; min-width: 0; }
+.sx-between { justify-content: space-between; }
+.sx-grow { flex: 1 1 0; min-width: 0; min-height: 0; }
+.sx-stack { display: flex; flex-direction: column; gap: 12px; }
+.sx-t { color: var(--area-fg-default); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+.sx-t--sm, .sx-t--label, .sx-t--tab { font-size: var(--area-text-xs-size, 12px); line-height: var(--area-text-xs-leading, 16px); color: var(--area-fg-muted); }
+.sx-t--label { padding-inline: var(--area-ui-row-inset); }
+.sx-t--tab { font-size: 10px; line-height: 12px; }
+.sx-tab--on { color: var(--area-fg-default); }
+.sx-t--strong { font-weight: var(--area-weight-strong, 500); }
+.sx-t--title { font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading); font-weight: 600; }
+.sx-t--h2 { font-size: calc(var(--area-text-md-size) * 1.3); line-height: 1.3; font-weight: 600; }
+.sx-t--page { font-size: calc(var(--area-text-md-size) * 2.2); line-height: 1.2; font-weight: 700; }
+.sx-t--large { font-size: calc(var(--area-text-md-size) * 1.9); line-height: 1.2; font-weight: 700; }
+.sx-t--greeting { font-size: calc(var(--area-text-md-size) * 1.6); line-height: 1.2; }
+.sx-t--hero { font-size: calc(var(--area-text-md-size) * 3); line-height: 1; font-weight: 800; letter-spacing: -0.02em; }
+.sx-t--balance { font-size: calc(var(--area-text-md-size) * 2.4); line-height: 1.1; font-weight: 600; font-variant-numeric: tabular-nums; }
+.sx-h3 { margin: 0 0 6px; font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading); font-weight: 600; }
+.sx-media { padding: 0; border-radius: var(--area-radius-container); }
+.sx-fill { width: 100%; height: 100%; }
+.sx-square { aspect-ratio: 1 !important; }
+.sx-menu { position: absolute; z-index: 3; }
+[data-st="menu"] { display: none !important; }
+.st-show-menu [data-st="menu"] { display: grid !important; }
+.sx-pointer { position: absolute; width: 14px; height: 21px; z-index: 4; }
+.sx-pointer path { fill: #000; stroke: #fff; stroke-width: 1; stroke-linejoin: round; }
+.sx-desk, .sx-phone { --area-composer-inline-size: 100%; }
+.sx-props { width: 100%; }
+.sx-mcarousel { --_n: 3.4; }
+
+/* Desktop window: 1024 × 576, a 28 title bar. Its edge is the divider stroke so it reads on any card ground. */
+.sx-desk { width: 1024px; height: 576px; padding: 0; display: grid; grid-template-rows: 28px minmax(0, 1fr); overflow: hidden; position: relative; border: 1px solid var(--area-border); background: var(--area-bg-page); }
+.sx-desk__bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 10px; background: var(--area-bg-subtle); border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+.sx-lights { display: flex; gap: 6px; }
+.sx-lights i { width: 10px; height: 10px; border-radius: 50%; background: var(--area-border); }
+.sx-desk__body { display: grid; min-height: 0; position: relative; background: var(--area-bg-page); }
+/* App shell */
+.sx-app .sx-desk__body { grid-template-columns: 208px minmax(0, 1fr); }
+.sx-sb { background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-divider); padding: 8px; display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow: hidden; }
+.sx-sb__ws, .sx-sb__foot { display: flex; align-items: center; gap: 8px; padding: 2px var(--area-ui-row-inset); }
+.sx-appmain { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; }
+.sx-ph { flex: none; padding: 0 16px; }
+.sx-ph--tabs { border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+.sx-ph:not(.sx-ph--tabs) { border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+.sx-ph__row { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 48px; }
+.sx-scroll { flex: 1 1 0; min-height: 0; overflow: hidden; }
+.sx-pad { padding: 16px; }
+.sx-colwrap { display: flex; justify-content: center; }
+.sx-col560 { width: 560px; max-width: 100%; }
+.sx-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding-bottom: 48px; }
+.sx-thread { flex: 1; min-height: 0; overflow: hidden; width: 560px; align-self: center; display: flex; flex-direction: column; gap: 14px; padding-top: 16px; }
+.sx-dock { width: 560px; align-self: center; padding: 8px 0 16px; }
+.sx-setrow { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 0; border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+.sx-setrow:last-child { border-block-end: 0; }
+.sx-inline .area-radio-group__options { display: flex; flex-direction: row; gap: 14px; }
+.sx-props { display: flex; flex-direction: column; gap: 2px; }
+.sx-prop { display: grid; grid-template-columns: 150px minmax(0, 1fr); align-items: center; min-height: 30px; }
+.sx-prop__k { display: flex; gap: 6px; align-items: center; color: var(--area-fg-muted); }
+.sx-callout { padding: 12px 14px; border-radius: var(--area-radius-container); }
+.sx-board { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 16px; }
+.sx-boardcol { padding: 8px; display: flex; flex-direction: column; gap: 8px; border-radius: var(--area-radius-container); min-height: 0; overflow: hidden; }
+.sx-editor__body { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 280px; }
+.sx-editor__body > .area-code-block { margin: 0; border-radius: 0; border: 0; min-height: 0; overflow: hidden; }
+.sx-agent { display: flex; flex-direction: column; gap: 12px; padding: 12px; border-inline-start: var(--area-border-width) solid var(--area-border-divider); min-height: 0; overflow: hidden; }
+.sx-status { flex: none; display: flex; justify-content: space-between; align-items: center; height: 24px; padding: 0 12px; color: var(--area-fg-muted); background: var(--area-bg-subtle); border-block-start: var(--area-border-width) solid var(--area-border-divider); }
+.sx-status svg { width: 14px; height: 14px; }
+.sx-group { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 16px; background: var(--area-bg-subtle); }
+.sx-issue { display: flex; align-items: center; gap: 10px; height: 36px; padding: 0 16px; border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+.sx-issue[data-selected] { background: var(--area-bg-active); }
+.sx-issue__id { width: 44px; flex: none; }
+.sx-group svg, .sx-issue > svg { width: 14px; height: 14px; color: var(--area-fg-muted); flex: none; }
+.sx-mail__split { flex: 1; min-height: 0; display: grid; grid-template-columns: 300px minmax(0, 1fr); }
+.sx-mail__list { display: flex; flex-direction: column; min-height: 0; overflow: hidden; border-inline-end: var(--area-border-width) solid var(--area-border-divider); }
+.sx-mail__read { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.sx-grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.sx-librow { padding: 2px var(--area-ui-row-inset); }
+.sx-libcover { width: 36px; height: 36px; flex: none; border-radius: var(--area-radius-control); }
+.sx-album__head { display: flex; gap: 18px; align-items: flex-end; }
+.sx-cover { width: 140px; height: 140px; flex: none; }
+.sx-player { flex: none; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 64px; padding: 0 16px; border-block-start: var(--area-border-width) solid var(--area-border-divider); background: var(--area-bg-subtle); }
+.sx-player > :last-child { justify-self: end; }
+/* Site shell */
+.sx-site .sx-desk__body { grid-template-rows: auto minmax(0, 1fr); }
+.sx-tb { display: flex; justify-content: space-between; align-items: center; gap: 16px; height: 52px; padding: 0 24px; border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+.sx-sitemain { position: relative; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.sx-sitemain > .sx-ph { padding-inline: 24px; border: 0; }
+.sx-listing { flex: 1; min-height: 0; display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 24px; padding: 0 24px; overflow: hidden; }
+.sx-filters { display: flex; flex-direction: column; gap: 12px; }
+.sx-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-content: start; }
+.sx-pdp { flex: 1; min-height: 0; display: grid; grid-template-columns: 52px 400px 300px; gap: 18px; justify-content: center; padding: 18px 24px; overflow: hidden; }
+.sx-pdp__rail { display: flex; flex-direction: column; gap: 8px; }
+.sx-pdp__hero { position: relative; min-height: 0; }
+.sx-pdp__nav { position: absolute; inset-inline-end: 12px; inset-block-end: 12px; }
+.sx-pdp__info { min-height: 0; overflow: hidden; }
+.sx-sizes { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.sx-sizes > * { width: 100%; }
+.sx-booking { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 16px; padding: 0 24px 16px; overflow: hidden; }
+.sx-photos { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 112px 112px; gap: 6px; border-radius: var(--area-radius-container); overflow: hidden; flex: none; }
+.sx-photos > * { border-radius: 0; }
+.sx-photo--hero { grid-row: span 2; }
+.sx-booking__cols { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 48px; align-items: start; }
+.sx-reserve__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px; margin: 10px 0; }
+.sx-reserve__grid > * { min-width: 0; width: 100%; }
+.sx-span2 { grid-column: span 2; }
+
+
+/* Isolated components: one subject centred in a 4:3 frame, no window. */
+.sx-iso { position: relative; display: grid; place-items: center; overflow: hidden; }
+.sx-iso--top { align-items: start; padding-top: 24px; }
+.sx-iso--corner { place-items: start; }
+.sx-cropwin { position: absolute; inset-block-start: 28px; inset-inline-start: 34px; width: 380px; height: 340px; padding: 0; overflow: hidden; border: 1px solid var(--area-border); background: var(--area-bg-subtle); }
+.sx-cropwin__in { padding: 20px 18px; display: flex; flex-direction: column; gap: 14px; width: 250px; }
+.sx-isomenu { position: relative; width: 300px; }
+.sx-isomenu__choices { padding: 2px 6px 6px; }
+.sx-isochoices .area-radio-group__options { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; --area-choice-min: 0px; }
+.sx-mini { display: block; position: relative; width: 44px; height: 30px; border-radius: 6px; background: var(--area-bg-surface); box-shadow: inset 0 0 0 1px var(--area-border-divider); overflow: hidden; }
+.sx-mini i { position: absolute; inset: 4px auto 4px 4px; width: 16px; border-radius: 3px; background: var(--area-bg-component-active); }
+.sx-mini b { position: absolute; inset-inline-end: 4px; inset-block-end: 4px; width: 12px; height: 8px; border-radius: 2px; background: var(--area-bg-component-active); }
+.sx-mini--1 i { width: 20px; } .sx-mini--2 i { display: none; } .sx-mini--2 b { inset-inline: 10px; width: auto; }
+.sx-float { box-shadow: var(--area-shadow-float); }
+.sx-center-row { justify-content: center; }
+.sx-insgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: start; }
+/* iPhone: a 390 × 844 screen in a 10px device frame (hardware, not theme paint), laid out to Apple's HIG. */
+.sx-iphone { width: 410px; height: 864px; padding: 10px; border-radius: 62px; background: #1b1b1d; box-shadow: inset 0 0 0 1.5px #3a3a3e; }
+.sx-phone { width: 390px; height: 844px; padding: 0; display: grid; grid-template-rows: 54px minmax(0, 1fr); overflow: hidden; position: relative; border-radius: 52px; border: 0; background: var(--area-bg-page); }
+/* Status bar (54): the time centred in the left ear, the glyphs centred in the right, both on the island's midline. */
+.sx-phone__status { position: relative; display: grid; grid-template-columns: 1fr 124px 1fr; align-items: center; padding: 10px 0 0; height: 54px; color: var(--area-fg-default); }
+.sx-phone__status > :first-child { justify-self: center; padding-inline-start: 14px; }
+.sx-phone__status > :last-child { justify-self: center; padding-inline-end: 10px; }
+.sx-clock { font: 600 17px/22px var(--area-font-sans); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.sx-island { width: 124px; height: 36px; border-radius: 20px; background: #000; }
+.sx-sysglyphs { display: flex; align-items: center; gap: 5px; }
+.sx-sysglyphs svg { fill: currentColor; stroke: none; }
+.sx-sysglyphs .sx-batt { fill: none; stroke: currentColor; opacity: 0.4; }
+.sx-phone__body { position: relative; display: flex; flex-direction: column; min-height: 0; overflow: hidden; padding-bottom: 34px; }
+.sx-phone--tabs .sx-phone__body { padding-bottom: 100px; }
+.sx-phone__home { position: absolute; inset-block-end: 7px; inset-inline-start: 50%; width: 140px; height: 5px; margin-inline-start: -70px; border-radius: 3px; background: var(--area-fg-default); z-index: 2; }
+.sx-t--navtitle { font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading); font-weight: 600; }
+.sx-mh { flex: none; padding: 0 8px; }
+.sx-mh__row { display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; justify-items: center; height: 52px; }
+.sx-mh__large { display: block; padding: 4px 12px 10px; font-size: calc(var(--area-text-md-size) * 1.9); }
+.sx-mbody { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 16px; padding: 10px 20px 16px; }
+.sx-phone .sx-t--sm { font-size: var(--area-text-xs-size, 14px); }
+.sx-mdock { flex: none; display: flex; gap: 8px; align-items: center; padding: 8px 16px 6px; }
+.sx-mlist { display: flex; flex-direction: column; }
+.sx-mrow { display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 6px 4px; border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+.sx-mrow:last-child { border-block-end: 0; }
+.sx-mrow > svg { color: var(--area-fg-muted); }
+/* Floating tab bar: a 62 pill of tabs and a 62 round search button, 20 from the sides, over the home indicator. */
+/* Floating tab bar (iOS 26): a 64 pill and a 64 search circle, 21 from the sides, 21 above the bottom edge. */
+.sx-tabdock { position: absolute; inset-inline: 21px; inset-block-end: 21px; display: flex; gap: 10px; align-items: center; z-index: 2; }
+.sx-tabpill { flex: 1; height: 64px; padding: 4px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; border-radius: 999px; border: var(--area-border-width) solid var(--area-border-card); box-shadow: var(--area-shadow-float); }
+.sx-tabcell { display: grid; }
+.sx-tabitem { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 999px; padding: 0; color: var(--area-fg-default); }
+.sx-tabitem svg { display: block; }
+.sx-tabitem--on { color: var(--area-fg-selection); background-color: var(--area-selection-surface); }
+.sx-tablabel { font: 500 10px/12px var(--area-font-sans); letter-spacing: 0.01em; }
+.sx-tabsearch { width: 64px; height: 64px; flex: none; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: var(--area-border-width) solid var(--area-border-card); box-shadow: var(--area-shadow-float); color: var(--area-fg-default); }
+.sx-plans .area-radio-group__options { display: flex; flex-direction: column; gap: 10px; }
+.sx-widgets { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sx-widget--tall { grid-row: span 2; }
+.sx-widget { display: flex; flex-direction: column; gap: 6px; height: 100%; }
+.sx-mhero { height: 320px; border-radius: 0; flex: none; }
+.sx-mactions { display: flex; justify-content: space-around; }
+.st-hover-row { background: var(--area-bg-component-hover); border-radius: var(--area-radius-row); }
+
+/* ---- Fidelity: one screen drawn three ways. Real is the components as they are. Semi-abstract keeps every
+   component, frame and icon and turns words into bars of the text's own colour. Abstract keeps only shapes. ---- */
+/* A word becomes a bar exactly its own width, the height of its capitals (0.7em) on the text's line, in its own colour
+   at 40%: titles read darker than body, muted text lighter, a label on a solid button stays light. */
+.fid-semi .tx {
+  -webkit-text-fill-color: transparent; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  background: linear-gradient(color-mix(in srgb, currentColor 40%, transparent) 0 0) left 54% / 100% 0.7em no-repeat;
+  border-radius: 0.2em;
+}
+.fid-semi ::placeholder, .fid-abstract ::placeholder { color: transparent; }
+.fid-semi select, .fid-abstract select { -webkit-text-fill-color: transparent; }
+.fid-abstract .tx { visibility: hidden; }
+.fid-abstract svg:not(.sx-pointer) { visibility: hidden; }
+
+/* Forced states, as the app's own close-ups (apps/desktop/src/studio.css, lang-state-*): the component's hover, press
+   and focus paint, held still. The page adds these classes to the element each setting needs. */
+.st-hover.area-button { background-color: var(--_bg-hover); background-image: var(--_wash-hover); border-color: var(--_border-hover); }
+.st-hover.area-nav__item { background-color: var(--area-bg-component-hover); }
+.st-hover-field { border-color: var(--area-edge-control-hover) !important; }
+.st-press.area-button { background-color: var(--_bg-active); background-image: var(--_wash-active); }
+.st-focus { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+.st-focus-field {
+  border-color: color-mix(in srgb, var(--area-input-edge), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)) !important;
+  box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
+  outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color); outline-offset: var(--area-focus-offset);
+}
+.st-lift.area-card { --_card-lift: var(--area-shadow-lift); }
+
+/* Compare */
+.cmp-bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin-bottom: 14px; }
+.cmp-row { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); align-items: start; }
+@media (max-width: 560px) { .cmp-row { grid-template-columns: minmax(0, 1fr); } }
+
+/* Picks */
+.tbl-wrap { overflow-x: auto; }
+.picks-table { border-collapse: collapse; width: 100%; font-size: 12px; }
+.picks-table th, .picks-table td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.picks-table th { color: var(--fg2); font-weight: 500; }
+.picks-table td.note { max-width: 46ch; }
+.empty { color: var(--fg2); padding: 20px 0; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Choice Illustrations</h1>
+      <p>App screens built only from Area's components, laid out after ChatGPT, Notion, Cursor, Nike, Linear, Spotify, Airbnb and mobile references: fourteen desktop screens at 16:9, six iPhone screens and fourteen isolated components, each drawn three ways (abstract, semi-abstract and real). Screens shows them as a set; Every setting shows each choice on a screen, scoped to that choice, so what changes is exactly what the app changes. Mark what works and add notes.</p>
+    </div>
+    <div class="ctrl">
+      <span>Theme</span>
+      <div class="seg" role="radiogroup" aria-label="Theme" id="theme"></div>
+    </div>
+  </header>
+
+  <section class="panel" aria-label="Card controls">
+    <div class="ctrls" id="ctrls"></div>
+    <div class="overall">
+      <button class="btn btn--primary" id="save-overall" type="button">Save as my overall pick</button>
+      <input type="text" id="overall-note" placeholder="Note on the overall look (optional)" aria-label="Note on the overall look">
+      <span class="status" id="overall-status"></span>
+    </div>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Views">
+    <button role="tab" id="tab-screens" aria-selected="true" aria-controls="view-screens">Screens</button>
+    <button role="tab" id="tab-all" aria-selected="false" aria-controls="view-all">Every setting</button>
+    <button role="tab" id="tab-picks" aria-selected="false" aria-controls="view-picks">Your picks</button>
+  </div>
+
+  <main id="rv">
+    <section id="view-screens" role="tabpanel" aria-labelledby="tab-screens"></section>
+    <section id="view-all" role="tabpanel" aria-labelledby="tab-all" hidden></section>
+    <section id="view-picks" role="tabpanel" aria-labelledby="tab-picks" hidden></section>
+  </main>
+  <p class="status" id="db-status" style="margin-top:24px"></p>
+</div>
+
+<script>
+const DATA = __DATA__;
+const SCREENS = __SCREENS__;
+const AX = DATA.out;
+const BYID = Object.fromEntries(AX.map(a => [a.id, a]));
+const FORCE_THEME = { "ground-light": "light", "layers-light": "light", "ground-dark": "dark", "layers-dark": "dark" };
+const BASE = { desktop: [1024, 576], mobile: [410, 864] };
+/* Stage shapes: a 16:9 card for desktop windows, a 3:5 card for the iPhone. Each screen sits inset on the card ground. */
+const STAGE = { desktop: "16 / 9", mobile: "1 / 2", isolated: "4 / 3" };
+const FIDELITY = [["abstract", "Abstract"], ["semi", "Semi-abstract"], ["real", "Real"]];
+
+/* The screen each setting shows best on (Auto), and the states it needs held still. */
+const AUTO = {
+  theme: "dashboard", neutral: "doc", accent: "detail", "ground-light": "booking", "ground-dark": "album", "layers-light": "mail",
+  "layers-dark": "editor", action: "chat-home", selection: "settings", contrast: "database", type: "chat", density: "issues",
+  radius: "board", pills: "settings", surface: "board", stroke: "database", "stroke-hover": "settings", "selected-stroke": "listing",
+  "focus-ring": "chat-home", "shadow-rest": "settings", elevation: "database", "shadow-resting": "listing", "shadow-hover": "board",
+  "shadow-field": "booking", "shadow-size": "detail", "shadow-softness": "mail", "shadow-light": "dashboard", "shadow-color": "board",
+  "fill-hover": "issues", "fill-selected": "doc", "fill-pressed": "chat-home", "selected-tint": "listing", motion: "settings", easing: "listing",
+};
+const AUTO_MOBILE = {
+  theme: "team", neutral: "menu", accent: "plan", "ground-light": "finance", "ground-dark": "finance", "layers-light": "team", "layers-dark": "team",
+  action: "plan", selection: "plan", contrast: "menu", type: "chat", density: "menu", radius: "plan", pills: "detail", surface: "team",
+  stroke: "menu", "stroke-hover": "finance", "selected-stroke": "detail", "focus-ring": "chat", "shadow-rest": "finance", elevation: "chat",
+  "shadow-resting": "team", "shadow-hover": "team", "shadow-field": "finance", "shadow-size": "team", "shadow-softness": "menu",
+  "shadow-light": "plan", "shadow-color": "team", "fill-hover": "menu", "fill-selected": "plan", "fill-pressed": "finance",
+  "selected-tint": "detail", motion: "team", easing: "team",
+};
+const AUTO_ISOLATED = {
+  theme: "card", neutral: "sidebar", accent: "player", "ground-light": "card", "ground-dark": "carousel", "layers-light": "sidebar",
+  "layers-dark": "inspector", action: "form", selection: "badges", contrast: "inspector", type: "card", density: "menu", radius: "card",
+  pills: "badges", surface: "carousel", stroke: "inspector", "stroke-hover": "form", "selected-stroke": "menu", "focus-ring": "form",
+  "shadow-rest": "buttons", elevation: "menu", "shadow-resting": "card", "shadow-hover": "player", "shadow-field": "form",
+  "shadow-size": "buttons", "shadow-softness": "menu", "shadow-light": "toolbar", "shadow-color": "toast", "fill-hover": "sidebar",
+  "fill-selected": "sidebar", "fill-pressed": "toolbar", "selected-tint": "menu", motion: "buttons", easing: "buttons",
+};
+/* hover-edge holds the focus-marked field or button in its hover state: the Hover stroke setting's subject. */
+const STATES = {
+  "stroke-hover": ["hover-edge"], "fill-hover": ["hover"], "fill-pressed": ["press"], "focus-ring": ["focus"], "shadow-hover": ["lift"],
+  "selected-stroke": ["selected"], "selected-tint": ["selected"], elevation: ["menu"], "shadow-size": ["menu"], "shadow-softness": ["menu"],
+  "shadow-light": ["menu"], "shadow-color": ["menu"], "shadow-field": ["focus"],
+};
+const SHOWS = {
+  theme: "The whole screen in each mode.", neutral: "The screen's greys tinted by the neutral's hue.",
+  accent: "Where Area paints the accent: when Action and Selection use it (the primary button, selected segments, checks and switches).",
+  "ground-light": "The page's lightness around white surfaces.", "ground-dark": "The page's darkness around raised surfaces.",
+  "layers-light": "How far page, sidebar, cards and plates step apart.", "layers-dark": "How far page, sidebar, cards and plates step apart.",
+  action: "The primary button.", selection: "Selected segments, radios, checks and switches.",
+  contrast: "Edges and ink. System follows the device, so it shows Standard and More side by side.",
+  type: "Text and every control that grows with it.", density: "Row and control heights.", radius: "Card and control corners.",
+  pills: "Each component that can go fully round.", surface: "The edge of surfaces: cards and panes.", stroke: "How dark every edge and divider is.",
+  "stroke-hover": "A field under the pointer.", "selected-stroke": "The selected card's edge.", "focus-ring": "A focused field.",
+  "shadow-rest": "Controls' shadow at rest.", elevation: "An open menu floating over the screen.", "shadow-resting": "Cards resting on the page.",
+  "shadow-hover": "A card lifting under the pointer.", "shadow-field": "Fields' shadow.", "shadow-size": "How far every shadow reaches.",
+  "shadow-softness": "Crisp to smooth.", "shadow-light": "A lip under each lifted edge and a highlight inside its top.", "shadow-color": "The shadow's tint.",
+  "fill-hover": "The hovered row's plate.", "fill-selected": "The current row's plate.", "fill-pressed": "A button while pressed.",
+  "selected-tint": "What fills a selected card.", motion: "Hover a card: the switches move at this duration.", easing: "Hover a card: the switches move on this curve.",
+};
+
+const CTRL = [
+  { k: "device", label: "Device", opts: [["desktop", "Desktop"], ["mobile", "Mobile"], ["isolated", "Components"]] },
+  { k: "screen", label: "Screen", opts: [["auto", "Auto"]] }, /* filled per device from SCREENS */
+  { k: "fidelity", label: "Fidelity", opts: FIDELITY },
+  { k: "pops", label: "Accent pops", opts: [["on", "On"], ["off", "Off"]] },
+  { k: "width", label: "Width", opts: [["240", "240"], ["304", "304"], ["368", "368"], ["432", "432"]] },
+  { k: "card", label: "Card", opts: [["soft", "Grey"], ["white", "White"], ["clear", "Clear"]] },
+  { k: "label", label: "Label", opts: [["in", "Inside"], ["below", "Below"], ["none", "Hidden"]] },
+  { k: "annotate", label: "Values", opts: [["on", "Shown"], ["off", "Hidden"]] },
+];
+const CTRL_BY = Object.fromEntries(CTRL.map(c => [c.k, c]));
+/* The owner's picks, 2026-10-21: grey card, 304 wide; screens are 16:9 (desktop) and 9:16 (mobile). */
+const DEFAULTS = { device: "desktop", screen: "auto", fidelity: "real", pops: "on", width: "304", card: "soft", label: "in", annotate: "on" };
+
+const state = {
+  ctrl: { ...DEFAULTS },
+  sel: Object.fromEntries(AX.map(a => [a.id, a.id === "pills" ? new Set(DATA.pills) : (a.def ?? a.opts[0].id)])),
+  picks: {}, screenPicks: {}, overall: null, theme: "system",
+};
+try { const s = JSON.parse(localStorage.getItem("ci8-ctrl") || "null"); if (s) Object.assign(state.ctrl, s); } catch {}
+try { const t = localStorage.getItem("ci-theme"); if (t) state.theme = t; } catch {}
+const isDark = () => state.theme === "dark" || (state.theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+const pageTheme = () => (isDark() ? "dark" : "light");
+
+/* ---- Stages ---- */
+let UID = 0;
+const capFirst = s => s.charAt(0).toUpperCase() + s.slice(1);
+/* Phones are drawn at the same scale as desktop windows (one CSS pixel = one CSS pixel), so a card's width follows. */
+const desktopFit = ctrl => ((+ctrl.width - 12) * 0.9) / BASE.desktop[0];
+const cardWidth = (ctrl, device) => (device === "mobile" ? Math.round((BASE.mobile[0] * desktopFit(ctrl)) / 0.94) + 12 : +ctrl.width);
+const screenOpts = device => [["auto", "Auto"], ...Object.entries(SCREENS[device]).map(([id, s]) => [id, s.label])];
+function screenId(axisId, ctrl, device) {
+  const pk = axisId ? state.picks[axisId] || {} : {};
+  const auto = ({ mobile: AUTO_MOBILE, isolated: AUTO_ISOLATED }[device] || AUTO)[axisId] || Object.keys(SCREENS[device])[0];
+  for (const id of [pk.screen, ctrl.screen === "auto" ? auto : ctrl.screen, auto]) if (id && SCREENS[device][id]) return id;
+  return Object.keys(SCREENS[device])[0];
+}
+function screenHtml(device, id) {
+  /* Each card is its own form: radio names must not join across cards. */
+  return SCREENS[device][id].html.replace(/name="([^"]+)"/g, (_, n) => `name="${n}-${++UID}"`);
+}
+function stage({ device, id, fidelity, scope, axis, states = [] }) {
+  const html = screenHtml(device, id);
+  const [w, h] = device === "isolated" ? [SCREENS.isolated[id].w, SCREENS.isolated[id].h] : BASE[device];
+  const z = `<div class="k-z" inert>${html}</div>`;
+  let inner = z;
+  if (axis === "contrast" && scope.includes('data-area-contrast="system"')) {
+    scope = scope.replace(' data-area-contrast="system"', "");
+    inner = `<div class="k-split k-split--l" data-area-contrast="standard">${z}</div><div class="k-split k-split--r" data-area-contrast="more">${z}</div><i class="k-split-line"></i>`;
+  }
+  const cls = `k-stage fid-${fidelity}${states.includes("menu") ? " st-show-menu" : ""}`;
+  return `<span class="${cls}" ${scope} data-axis="${axis || ""}" data-states="${states.join(" ")}" data-w="${w}" data-h="${h}" style="--ratio:${STAGE[device]}">${inner}${axis && CAPS[axis] ? `<span class="k-cap"></span>` : ""}</span>`;
+}
+/* Mobile screens run at Area's touch sizes (type 16, Comfortable), unless the card is showing that setting itself. */
+const touch = (device, axisId) => (device === "mobile" ? `${axisId === "type" ? "" : ' data-area-type="16"'}${axisId === "density" ? "" : ' data-area-density="36"'}` : "");
+function scopeFor(axis, opt) {
+  const theme = axis.id === "theme" ? opt.id : FORCE_THEME[axis.id] || pageTheme();
+  let s = `data-area-theme="${theme}"` + touch(state.ctrl.device, axis.id);
+  if (axis.id !== "theme") s += ` data-area-${axis.id}="${opt.id}"`;
+  if (axis.id === "accent") s += ` data-area-action="accent" data-area-selection="accent"`;
+  return s;
+}
+function cards(axis, ctrl) {
+  const device = ctrl.device, id = screenId(axis.id, ctrl, device);
+  const items = axis.opts.map(o => {
+    const on = axis.id === "pills" ? state.sel.pills.has(o.id) : state.sel[axis.id] === o.id;
+    const label = axis.id === "pills" ? capFirst(o.label) : o.label;
+    return `<div class="cc" role="button" tabindex="0" aria-pressed="${on}" data-ax="${axis.id}" data-op="${o.id}" aria-label="${axis.name}: ${label}">` +
+      stage({ device, id, fidelity: ctrl.fidelity, scope: scopeFor(axis, o), axis: axis.id, states: STATES[axis.id] || [] }) + `<span class="cc__l">${label}</span></div>`;
+  }).join("");
+  return `<div class="grid cg-${ctrl.card} lb-${ctrl.label} an-${ctrl.annotate}" data-device="${device}" style="--w:${cardWidth(ctrl, device)}px">${items}</div>`;
+}
+
+/* ---- After render: scale each screen to its card, hold states, read real values back ---- */
+const px = v => `${Math.round(parseFloat(v) * 10) / 10}`;
+const ms = v => { const t = String(v).trim(); return Math.round(parseFloat(t) * (/ms$/.test(t) ? 1 : 1000)); };
+const resolve = (st, v) => { const i = document.createElement("i"); i.style.cssText = `position:absolute;visibility:hidden;width:var(${v})`; st.append(i); const w = getComputedStyle(i).width; i.remove(); return w; };
+const CAPS = {
+  type: st => { const c = getComputedStyle(st); return `${px(c.getPropertyValue("--area-text-sm-size"))} / ${px(c.getPropertyValue("--area-text-sm-leading"))}`; },
+  density: st => `row ${px(resolve(st, "--area-ui-row"))}`,
+  radius: st => `container ${px(resolve(st, "--area-radius-container"))} · control ${px(resolve(st, "--area-radius-control"))}`,
+  surface: st => `edge ${px(getComputedStyle(st).getPropertyValue("--area-frame-width"))}`,
+  "selected-stroke": st => `edge ${px(getComputedStyle(st).getPropertyValue("--area-selected-width"))}`,
+  "focus-ring": st => { const c = getComputedStyle(st); return `ring ${px(c.getPropertyValue("--area-focus-width"))} · offset ${px(c.getPropertyValue("--area-focus-offset"))}`; },
+  motion: st => `${ms(getComputedStyle(st).getPropertyValue("--area-duration-base"))}ms`,
+  easing: st => getComputedStyle(st).getPropertyValue("--area-ease-out").trim().replace("cubic-bezier", "").replace(/\s+/g, ""),
+};
+const POINTER = `<svg class="sx-pointer" viewBox="0 0 11 17" aria-hidden="true"><path d="M.5.5v13.2l3.3-3.1 2.3 5.2 2.1-.9-2.3-5.1h4.6Z"/></svg>`;
+function holdStates(st) {
+  const want = (st.dataset.states || "").split(" ").filter(Boolean);
+  for (const z of st.querySelectorAll(".k-z")) {
+    const screen = z.firstElementChild;
+    for (const s of want) {
+      if (s === "menu") continue;
+      const t = z.querySelector(`[data-st="${s === "hover-edge" ? "focus" : s}"]`);
+      if (!t) continue;
+      if (s === "hover" || s === "hover-edge") t.classList.add(t.matches(".area-button, .area-nav__item") ? "st-hover" : t.matches(".sx-mrow, .sx-librow") ? "st-hover-row" : "st-hover-field");
+      if (s === "press") t.classList.add("st-press");
+      if (s === "focus") t.classList.add(t.matches(".area-button") ? "st-focus" : "st-focus-field");
+      if (s === "lift") t.classList.add("st-lift");
+      if (s === "selected") t.setAttribute("data-selected", "");
+      if (["hover", "hover-edge", "press", "lift"].includes(s) && screen) {
+        const fit = parseFloat(getComputedStyle(st).getPropertyValue("--fit")) || 1;
+        const a = t.getBoundingClientRect(), b = screen.getBoundingClientRect();
+        screen.insertAdjacentHTML("beforeend", POINTER);
+        const p = screen.lastElementChild;
+        p.style.left = `${(a.left - b.left) / fit + Math.min(a.width / fit * 0.7, a.width / fit - 12)}px`;
+        p.style.top = `${(a.top - b.top) / fit + a.height / fit * 0.55}px`;
+      }
+    }
+  }
+}
+function finish(root) {
+  for (const st of root.querySelectorAll(".k-stage")) {
+    const pad = st.closest("[data-device=isolated]") ? 1 : +st.dataset.h > +st.dataset.w ? 0.94 : 0.9;
+    st.style.setProperty("--fit", Math.min(st.clientWidth * pad / +st.dataset.w, st.clientHeight * pad / +st.dataset.h).toFixed(4));
+    /* Accent pops: the few places products paint the accent take it through Area's own Action and Selection settings,
+       except on those two settings' own cards. */
+    if (state.ctrl.pops === "on" && !["action", "selection"].includes(st.dataset.axis)) {
+      for (const e of st.querySelectorAll('[data-pop="action"]')) e.setAttribute("data-area-action", "accent");
+      for (const e of st.querySelectorAll('[data-pop="selection"]')) e.setAttribute("data-area-selection", "accent");
+    }
+    holdStates(st);
+    const cap = st.querySelector(".k-cap"), f = CAPS[st.dataset.axis];
+    if (cap && f) cap.textContent = f(st);
+  }
+}
+/* Motion and Easing: hovering a card flips its switches, which move at the setting's real duration and curve. */
+document.addEventListener("pointerover", e => {
+  const c = e.target.closest?.(".cc"); if (!c || c.contains(e.relatedTarget)) return;
+  for (const i of c.querySelectorAll(".sx-mover input[type=checkbox]")) i.checked = !i.checked;
+});
+document.addEventListener("pointerout", e => {
+  const c = e.target.closest?.(".cc"); if (!c || c.contains(e.relatedTarget)) return;
+  for (const i of c.querySelectorAll(".sx-mover input[type=checkbox]")) i.checked = !i.checked;
+});
+
+/* ---- Screens gallery ---- */
+const viewScreens = document.getElementById("view-screens");
+function paintScreens() {
+  const ctrl = state.ctrl;
+  const block = device => {
+    const w = cardWidth(ctrl, device);
+    return `<section class="group" data-device="${device}"><h2>${{ desktop: "Desktop · 16:9", mobile: "Mobile · iPhone", isolated: "Components · isolated" }[device]}</h2><div class="gallery">` +
+      Object.entries(SCREENS[device]).map(([id, s]) => {
+        const key = `${device}-${id}`, pk = state.screenPicks[key] || {};
+        return `<div class="gallery__row"><h3>${s.label}<span>${{ desktop: "1024 × 576", mobile: "iPhone · 390 × 844 pt", isolated: `${s.w} × ${s.h}` }[device]}</span></h3>` +
+          `<div class="grid cg-${ctrl.card} lb-${ctrl.label}" style="--w:${w}px">` +
+          FIDELITY.map(([f, l]) => `<div class="cc" aria-pressed="false">${stage({ device, id, fidelity: f, scope: `data-area-theme="${pageTheme()}"` + touch(device, "") })}<span class="cc__l">${l}</span></div>`).join("") +
+          `</div><div class="pick" data-spick="${key}"><span class="v"><button type="button" data-v="good" aria-pressed="${pk.verdict === "good"}">Works</button><button type="button" data-v="work" aria-pressed="${pk.verdict === "work"}">Needs work</button></span>` +
+          `<input type="text" data-f="note" placeholder="Note on this screen" aria-label="Note on ${s.label}, ${device}" value="${esc(pk.note || "")}"><span class="saved" aria-live="polite"></span></div></div>`;
+      }).join("") + `</div></section>`;
+  };
+  viewScreens.innerHTML = block("desktop") + block("mobile") + block("isolated");
+  finish(viewScreens);
+}
+
+/* ---- Every setting ---- */
+const viewAll = document.getElementById("view-all");
+function optLabel(axis, id) { const o = axis.opts.find(x => x.id === id); return o ? o.label : id; }
+function buildAll() {
+  const groups = [...new Set(AX.map(a => a.g))];
+  const options = screenOpts(state.ctrl.device).map(([v, l]) => `<option value="${v === "auto" ? "" : v}">${v === "auto" ? "Screen: global" : l}</option>`).join("");
+  viewAll.innerHTML = groups.map(g => `<section class="group" aria-labelledby="g-${g}"><h2 id="g-${g}">${g}</h2><div class="sets">` +
+    AX.filter(a => a.g === g).map(a => `<article class="set" id="set-${a.id}">
+      <div class="set__head"><h3>${a.name}</h3><span class="def">${a.id === "pills" ? "Default: " + DATA.pills.join(", ") : a.def ? "Default: " + optLabel(a, a.def) : "No default"}</span>
+        <select data-f="screen" data-for="${a.id}" aria-label="Screen for ${a.name}">${options}</select></div>
+      <p class="set__note">${SHOWS[a.id] || ""}</p>
+      <div class="slot" data-slot="${a.id}"></div>
+      <div class="pick" data-pick="${a.id}">
+        <span class="v"><button type="button" data-v="good" aria-pressed="false">Works</button><button type="button" data-v="work" aria-pressed="false">Needs work</button></span>
+        <input type="text" data-f="note" placeholder="Note" aria-label="Note for ${a.name}">
+        <span class="saved" aria-live="polite"></span>
+      </div></article>`).join("") + `</div></section>`).join("");
+}
+function paintSlot(id) {
+  const slot = viewAll.querySelector(`[data-slot="${id}"]`);
+  if (!slot) return;
+  slot.innerHTML = cards(BYID[id], state.ctrl);
+  finish(slot);
+}
+function paintAll() { if (!viewAll.hidden) for (const a of AX) paintSlot(a.id); }
+function syncPickUI() {
+  for (const a of AX) {
+    const pk = state.picks[a.id] || {};
+    const r = viewAll.querySelector(`[data-pick="${a.id}"]`);
+    if (r) {
+      for (const el of r.querySelectorAll("[data-f]")) if (el !== document.activeElement) el.value = pk[el.dataset.f] || "";
+      for (const b of r.querySelectorAll("[data-v]")) b.setAttribute("aria-pressed", String(pk.verdict === b.dataset.v));
+    }
+    const sel = viewAll.querySelector(`select[data-for="${a.id}"]`);
+    if (sel && sel !== document.activeElement) sel.value = pk.screen || "";
+  }
+}
+
+/* ---- Picks ---- */
+const esc = s => String(s).replace(/[&<>"]/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[ch]);
+function paintPicks() {
+  const el = document.getElementById("view-picks");
+  const rows = AX.filter(a => { const p = state.picks[a.id]; return p && (p.screen || p.verdict || p.note); });
+  const srows = Object.entries(state.screenPicks).filter(([, p]) => p.verdict || p.note);
+  const o = state.overall;
+  const describe = c => CTRL.filter(x => c[x.k] != null).map(x => `${x.label} ${(x.opts.find(([v]) => v === c[x.k]) || [, c[x.k]])[1]}`).join(" · ");
+  const verdict = v => (v === "good" ? "Works" : v === "work" ? "Needs work" : "");
+  el.innerHTML = `<h2 style="margin-bottom:8px">Overall pick</h2>` +
+    (o ? `<p>${describe(o.ctrl)}</p>${o.note ? `<p class="muted" style="margin-top:4px">${esc(o.note)}</p>` : ""}` : `<p class="empty">No overall pick yet. Set the controls and choose “Save as my overall pick”.</p>`) +
+    `<h2 style="margin:24px 0 8px">Screens</h2>` +
+    (srows.length ? `<div class="tbl-wrap"><table class="picks-table"><thead><tr><th>Screen</th><th>Verdict</th><th>Note</th></tr></thead><tbody>` +
+      srows.map(([k, p]) => { const [d, id] = k.split("-"); return `<tr><td>${SCREENS[d]?.[id]?.label || id} · ${capFirst(d)}</td><td>${verdict(p.verdict)}</td><td class="note">${esc(p.note || "")}</td></tr>`; }).join("") +
+      `</tbody></table></div>` : `<p class="empty">No screen marked yet.</p>`) +
+    `<h2 style="margin:24px 0 8px">Per setting</h2>` +
+    (rows.length ? `<div class="tbl-wrap"><table class="picks-table"><thead><tr><th>Setting</th><th>Screen</th><th>Verdict</th><th>Note</th></tr></thead><tbody>` +
+      rows.map(a => { const p = state.picks[a.id]; return `<tr><td>${a.name}</td><td>${p.screen ? (SCREENS.desktop[p.screen] || SCREENS.mobile[p.screen] || { label: p.screen }).label : "Global"}</td><td>${verdict(p.verdict)}</td><td class="note">${esc(p.note || "")}</td></tr>`; }).join("") +
+      `</tbody></table></div>` : `<p class="empty">Nothing marked yet.</p>`);
+}
+
+/* ---- Controls ---- */
+function seg(el, items, current, onPick) {
+  if (!el) return;
+  el.innerHTML = items.map(([v, l]) => `<button type="button" role="radio" aria-checked="${v === current}" data-v="${v}">${l}</button>`).join("");
+  el.onclick = e => { const b = e.target.closest("button[data-v]"); if (b) onPick(b.dataset.v); };
+}
+function buildCtrls() {
+  document.getElementById("ctrls").innerHTML = CTRL.map(c => `<div class="ctrl"><span id="cl-${c.k}">${c.label}</span><div class="seg" role="radiogroup" aria-labelledby="cl-${c.k}" data-k="${c.k}"></div></div>`).join("");
+}
+function paintCtrls() {
+  for (const c of CTRL) seg(document.querySelector(`.seg[data-k="${c.k}"]`), c.k === "screen" ? screenOpts(state.ctrl.device) : c.opts, state.ctrl[c.k], v => {
+    state.ctrl[c.k] = v;
+    if (c.k === "device") { if (!SCREENS[v][state.ctrl.screen]) state.ctrl.screen = "auto"; buildAll(); syncPickUI(); }
+    changed();
+  });
+  seg(document.getElementById("theme"), [["system", "System"], ["light", "Light"], ["dark", "Dark"]], state.theme, v => {
+    state.theme = v;
+    if (v === "system") delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = v;
+    try { localStorage.setItem("ci-theme", v); } catch {}
+    changed();
+  });
+}
+function changed() {
+  try { localStorage.setItem("ci8-ctrl", JSON.stringify(state.ctrl)); } catch {}
+  paintCtrls(); paintVisible();
+}
+function paintVisible() {
+  if (!viewScreens.hidden) paintScreens();
+  if (!viewAll.hidden) paintAll();
+  if (!document.getElementById("view-picks").hidden) paintPicks();
+}
+
+/* ---- Events ---- */
+function choose(c) {
+  const ax = c.dataset.ax, op = c.dataset.op; if (!ax) return;
+  if (ax === "pills") { const s = state.sel.pills; s.has(op) ? s.delete(op) : s.add(op); } else state.sel[ax] = op;
+  document.querySelectorAll(`.cc[data-ax="${ax}"]`).forEach(x => x.setAttribute("aria-pressed", String(ax === "pills" ? state.sel.pills.has(x.dataset.op) : x.dataset.op === state.sel[ax])));
+}
+const rv = document.getElementById("rv");
+rv.addEventListener("keydown", e => { const c = e.target.closest(".cc"); if (c && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); choose(c); } });
+rv.addEventListener("click", e => {
+  const c = e.target.closest(".cc"); if (c) { choose(c); return; }
+  const v = e.target.closest(".pick [data-v]"); if (!v) return;
+  const row = v.closest(".pick");
+  if (row.dataset.pick) { const id = row.dataset.pick, pk = state.picks[id] ||= {}; pk.verdict = pk.verdict === v.dataset.v ? "" : v.dataset.v; syncPickUI(); savePick(id); }
+  if (row.dataset.spick) { const k = row.dataset.spick, pk = state.screenPicks[k] ||= {}; pk.verdict = pk.verdict === v.dataset.v ? "" : v.dataset.v;
+    row.querySelectorAll("[data-v]").forEach(b => b.setAttribute("aria-pressed", String(pk.verdict === b.dataset.v))); saveScreenPick(k); }
+});
+rv.addEventListener("change", e => {
+  const id = e.target.dataset.for; if (!id) return;
+  const pk = state.picks[id] ||= {}; pk.screen = e.target.value; savePick(id); paintSlot(id);
+});
+const noteTimers = {};
+rv.addEventListener("input", e => {
+  if (e.target.dataset.f !== "note") return;
+  const row = e.target.closest(".pick");
+  if (row.dataset.pick) { const id = row.dataset.pick, pk = state.picks[id] ||= {}; pk.note = e.target.value; clearTimeout(noteTimers[id]); noteTimers[id] = setTimeout(() => savePick(id), 700); }
+  if (row.dataset.spick) { const k = row.dataset.spick, pk = state.screenPicks[k] ||= {}; pk.note = e.target.value; clearTimeout(noteTimers[k]); noteTimers[k] = setTimeout(() => saveScreenPick(k), 700); }
+});
+const tabs = { screens: "view-screens", all: "view-all", picks: "view-picks" };
+document.querySelector(".tabs").addEventListener("click", e => {
+  const b = e.target.closest("[role=tab]"); if (!b) return;
+  const key = b.id.slice(4);
+  for (const [k, v] of Object.entries(tabs)) { document.getElementById("tab-" + k).setAttribute("aria-selected", String(k === key)); document.getElementById(v).hidden = k !== key; }
+  if (key === "all" && !viewAll.querySelector(".grid")) { paintAll(); syncPickUI(); } else paintVisible();
+});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (state.theme === "system") changed(); });
+
+/* ---- Saving (Artifact database: picks/<setting>, screens/<device>-<screen>, overall/pick) ---- */
+let db = null;
+const dbStatus = document.getElementById("db-status");
+function rowStatus(sel, text) { const s = rv.querySelector(`${sel} .saved`); if (s) s.textContent = text; }
+async function put(path, doc, sel) {
+  if (!db) { rowStatus(sel, "Kept here"); try { localStorage.setItem("ci5-local", JSON.stringify({ picks: state.picks, screens: state.screenPicks })); } catch {} return; }
+  rowStatus(sel, "Saving…");
+  try { await db.doc(path).set(doc); rowStatus(sel, "Saved"); }
+  catch (err) { rowStatus(sel, "Not saved"); dbStatus.textContent = "A pick did not save: " + (err?.message || err?.code || "unknown error") + ". Try again in a moment."; }
+}
+function savePick(id) { const pk = state.picks[id] = { ...state.picks[id], round: 5, at: new Date().toISOString() }; put("picks/" + id, pk, `[data-pick="${id}"]`); }
+function saveScreenPick(k) { const pk = state.screenPicks[k] = { ...state.screenPicks[k], at: new Date().toISOString() }; put("screens/" + k, pk, `[data-spick="${k}"]`); }
+document.getElementById("save-overall").onclick = async () => {
+  const st = document.getElementById("overall-status");
+  const doc = { ctrl: { ...state.ctrl }, note: document.getElementById("overall-note").value, at: new Date().toISOString(), round: 5 };
+  state.overall = doc;
+  if (!db) { st.textContent = "Kept in this browser only"; return; }
+  st.textContent = "Saving…";
+  try { await db.doc("overall/pick").set(doc); st.textContent = "Saved"; } catch (err) { st.textContent = "Not saved: " + (err?.message || "unknown error"); }
+};
+
+/* ---- Start ---- */
+try { const p = JSON.parse(localStorage.getItem("ci5-local") || "null"); if (p) { state.picks = p.picks || {}; state.screenPicks = p.screens || {}; } } catch {}
+if (state.theme !== "system") document.documentElement.dataset.theme = state.theme;
+buildCtrls(); buildAll(); paintCtrls(); paintScreens();
+if (document.fonts?.ready) document.fonts.ready.then(() => paintVisible());
+dbStatus.textContent = "Connecting to saved picks…";
+(async () => {
+  try { db = window.claude?.use ? await window.claude.use("db") : null; } catch { db = null; }
+  if (!db) { dbStatus.textContent = "Picks can't be shared from this view, so they stay in this browser. Open the page signed in to claude.ai to save them."; return; }
+  dbStatus.textContent = "Picks save automatically.";
+  db.collection("picks").onSnapshot(snap => {
+    for (const d of snap.docs) { const r = d.data() || {}; if (r.round >= 5) state.picks[d.id] = r; }
+    syncPickUI(); if (!viewAll.hidden) paintAll(); if (!document.getElementById("view-picks").hidden) paintPicks();
+  }, err => { dbStatus.textContent = "Saved picks could not load: " + (err?.message || err?.code); });
+  db.collection("screens").onSnapshot(snap => {
+    for (const d of snap.docs) state.screenPicks[d.id] = d.data() || {};
+    if (!viewScreens.hidden) {
+      for (const [k, pk] of Object.entries(state.screenPicks)) {
+        const row = viewScreens.querySelector(`[data-spick="${k}"]`); if (!row) continue;
+        row.querySelectorAll("[data-v]").forEach(b => b.setAttribute("aria-pressed", String(pk.verdict === b.dataset.v)));
+        const n = row.querySelector("[data-f=note]"); if (n !== document.activeElement) n.value = pk.note || "";
+      }
+    }
+  });
+  db.doc("overall/pick").onSnapshot(s => {
+    if (s.exists) { state.overall = s.data(); const n = document.getElementById("overall-note"); if (n !== document.activeElement) n.value = state.overall.note || ""; document.getElementById("overall-status").textContent = "Overall pick saved " + new Date(state.overall.at).toLocaleString(); }
+  });
+})();
+</script>

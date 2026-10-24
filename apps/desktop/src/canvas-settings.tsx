@@ -9,12 +9,15 @@
  * They write data-area-* on the Canvas only, so the app's own chrome stays compact. Where every setting shows (Components,
  * Examples), Material follows: a bundle, then each lever, its switches shown while it is on (src/material.ts).
  */
-import type { ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import { CustomSelect, Field, PanelSection, Segmented } from "@area/react";
+import { GridIcon, ListIcon } from "@area/icons";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, MATERIAL_STROKE_STYLES, MATERIAL_SWITCHES, SETTING_GROUPS } from "@area/tokens/config";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { materialValue, type MaterialState } from "./material.ts";
-import { optionMark } from "./option-marks.tsx";
+import { choiceFigure, FIGURED } from "./choice-figures.tsx";
+import { materialMark, optionMark } from "./option-marks.tsx";
+import { readStored, writeStored } from "./storage.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
 
 type Axis = keyof CanvasAxes;
@@ -24,6 +27,24 @@ type Axis = keyof CanvasAxes;
 // sit under Stroke (Width, Strength, Rest shadow) and Shadow (Floating, Resting, Field, Size, Softness, Light, Colour).
 const GROUPS = SETTING_GROUPS;
 
+/**
+ * How the setting lists open (owner, 2026-10-23; docs/research/theme-visuals-2026-10-23): as a grid of figures by
+ * default, or as rows. One preference for every list, remembered, switched in the first section's heading, so the
+ * Inspector never changes shape from list to list. The switch lives in the panel, not in the open list: a select-only
+ * combobox keeps focus on its trigger, so a button inside the list could not be reached from the keyboard.
+ */
+type View = "grid" | "list";
+const ViewContext = createContext<View>("grid");
+/** Colours open as a grid of swatches at any length; other settings as figures when they have one and fit four rows. */
+const SWATCHES = new Set<string>(["accent", "tint-hue"]);
+const GRID_MOST = 12;
+const layoutOf = (view: View, axis: string, count: number) =>
+  view === "grid" && (SWATCHES.has(axis) || (FIGURED.has(axis) && count <= GRID_MOST)) ? "grid" as const : "list" as const;
+function ViewSwitch({ view, onChange }: { view: View; onChange: (view: View) => void }) {
+  return <Segmented size="sm" iconOnly aria-label="Show setting lists as" value={view} onValueChange={next => onChange(next as View)}
+    items={[{ value: "grid", label: "Grid", icon: <GridIcon /> }, { value: "list", label: "List", icon: <ListIcon /> }]} />;
+}
+
 export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
   // Material shows with every setting: a tab that narrows its settings shows no surfaces a material paints.
   const showMaterial = material ?? axes.length === GALLERY_CONTROLS.length - 1;
@@ -32,19 +53,22 @@ export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-
   // which, so light's pair shows in Light and dark's in Dark.
   const { theme } = useStudio();
   const inTheme = (axis: Axis) => !/^(ground|layers|tint|card-tone)-(light|dark)$/.test(axis) || axis.endsWith(`-${theme}`);
+  const [view, setViewState] = useState<View>(() => readStored<View>("inspector-list-view", "grid"));
+  const setView = (next: View) => { setViewState(next); writeStored("inspector-list-view", next); };
+  const first = GROUPS.find(group => (group.settings as readonly Axis[]).some(axis => axes.includes(axis) && inTheme(axis)))?.heading;
   return (
-    <>
+    <ViewContext.Provider value={view}>
       {GROUPS.map(group => {
         const shown = (group.settings as readonly Axis[]).filter(axis => axes.includes(axis) && inTheme(axis));
         return shown.length ? (
-          <PanelSection key={group.heading} heading={group.heading}>
+          <PanelSection key={group.heading} heading={group.heading} actions={group.heading === first ? <ViewSwitch view={view} onChange={setView} /> : undefined}>
             {shown.map(axis => <Setting key={axis} axis={axis} />)}
           </PanelSection>
         ) : null;
       })}
       {showMaterial ? <MaterialSettings /> : null}
       {children ? <PanelSection heading="Display">{children}</PanelSection> : null}
-    </>
+    </ViewContext.Provider>
   );
 }
 
@@ -54,16 +78,19 @@ export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-
  * closes (owner, 2026-10-18; docs/research/settings-pickers-2026-10-18). A set previews the highlighted part toggled.
  */
 function Setting({ axis }: { axis: Axis }) {
-  const { canvas, setCanvas, previewCanvas } = useStudio();
+  const { canvas, material, setCanvas, previewCanvas } = useStudio();
+  const view = useContext(ViewContext);
   const control = GALLERY_CONTROLS.find(entry => entry.axis === axis)!;
   const value = canvas[axis];
-  const items = control.items.map(item => ({ value: item.value, label: item.label, icon: optionMark(axis, item.value, canvas) ?? undefined }));
+  const layout = layoutOf(view, axis, control.items.length);
+  const items = control.items.map(item => ({ value: item.value, label: item.label, icon: optionMark(axis, item.value, canvas) ?? undefined,
+    preview: layout === "grid" ? choiceFigure(axis, item.value, canvas, material) : undefined }));
   return (
     <Field label={control.label} orientation="horizontal">
       {control.kind === "chips" ? (
         // A set (several on at once) is a multi-select dropdown (owner, 2026-10-14; was a group of
         // toggle Chips): its rows toggle and the list stays open.
-        <CustomSelect multiple size="sm" variant="soft" fullWidth aria-label={control.label} placeholder="None"
+        <CustomSelect multiple size="sm" variant="soft" fullWidth layout={layout} aria-label={control.label} placeholder="None"
           items={items} values={value.split(" ").filter(Boolean)} onValuesChange={next => setCanvas(axis, next.join(" "))}
           onHighlightChange={part => {
             if (part === null) return previewCanvas(axis, null);
@@ -72,7 +99,7 @@ function Setting({ axis }: { axis: Axis }) {
             previewCanvas(axis, control.items.map(item => item.value).filter(name => toggled.includes(name)).join(" "));
           }} />
       ) : control.kind === "select" ? (
-        <CustomSelect size="sm" variant="soft" fullWidth aria-label={control.label} title={control.hint}
+        <CustomSelect size="sm" variant="soft" fullWidth layout={layout} aria-label={control.label} title={control.hint}
           items={items} value={value} onValueChange={next => setCanvas(axis, next)} onHighlightChange={next => previewCanvas(axis, next)} />
       ) : (
         // Two or three words in a 256 Inspector: a swatch would truncate them, so segments stay text.
@@ -88,7 +115,9 @@ function Setting({ axis }: { axis: Axis }) {
  * switches show while it is on, so None is one row and a bundle shows only what it uses.
  */
 function MaterialSettings() {
-  const { material, setMaterialBundle, setMaterialValue, previewCanvas, previewMaterial } = useStudio();
+  const { canvas, material, setMaterialBundle, setMaterialValue, previewCanvas, previewMaterial } = useStudio();
+  const view = useContext(ViewContext);
+  const bundleLayout = layoutOf(view, "material", Object.keys(MATERIAL_BUNDLES).length);
   // A highlighted bundle previews with the Layers it is drawn for (Soft's gray, flat page), as choosing it applies them.
   const previewBundle = (next: string | null) => {
     for (const axis of ["ground-light", "ground-dark", "layers-light", "layers-dark"] as const) {
@@ -104,8 +133,9 @@ function MaterialSettings() {
   return (
     <PanelSection heading="Material">
       <Field label="Material" orientation="horizontal">
-        <CustomSelect size="sm" variant="soft" fullWidth aria-label="Material" value={material.bundle}
-          items={Object.entries(MATERIAL_BUNDLES).map(([id, entry]) => ({ value: id, label: entry.label }))}
+        <CustomSelect size="sm" variant="soft" fullWidth layout={bundleLayout} aria-label="Material" value={material.bundle}
+          items={Object.entries(MATERIAL_BUNDLES).map(([id, entry]) => ({ value: id, label: entry.label, icon: materialMark("bundle", id),
+            preview: bundleLayout === "grid" ? choiceFigure("material", id, canvas, material) : undefined }))}
           onValueChange={setMaterialBundle} onHighlightChange={previewBundle} />
       </Field>
       {MATERIAL_LEVERS.map(lever => {
@@ -116,7 +146,7 @@ function MaterialSettings() {
             <CustomSelect size="sm" variant="soft" fullWidth aria-label={lever.label} title={lever.hint} value={value}
               items={lever.steps.map(step => {
                 const text = lever.id === "angle" ? `${step}°${step === 0 ? " (Top)" : ""}` : step === 0 ? "0 (Off)" : String(step);
-                return { value: String(step), label: named(lever.id, String(step), text) };
+                return { value: String(step), label: named(lever.id, String(step), text), icon: materialMark(lever.id, String(step)) };
               })}
               onValueChange={next => setMaterialValue(lever.id, next)} onHighlightChange={previewValue(lever.id)} />
           </Field>,

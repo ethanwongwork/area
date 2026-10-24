@@ -2,6 +2,19 @@
 
 ## Current state (2026-10-23)
 
+- **Branch `claude/theme-dropdown-visuals-d6e169`, uncommitted, not merged with main** (main's `.claude/skills` files need
+  the origin confirmed in the app first; main adds Danger hover, which still needs a glyph and a figure here). Theme setting
+  visuals (docs/research/theme-visuals-2026-10-23, review page https://claude.ai/artifact/JvT2iJZHfe6A9nEekqT4xP):
+  Custom select `layout="grid"` and option `preview` (spec "Intake: Layout grid"; Custom select back in review); the
+  Inspector opens visual settings as grids of Folder-style figures (`choice-figures.tsx`, `styles/choice-figures.css`),
+  swatch grids for Accent and Tint hue, lists for long ramps, one List / Grid switch on the first section; option marks
+  are exaggerated one-idea glyphs, with marks for Pills, the shadow details and Material (`option-marks.tsx`). Setup
+  cards are unchanged (still round 3's mini UI and marks).
+  Typography tab (owner, 2026-10-23): Headings and Copy each one section, a role's two weights stacked in one Example
+  cell; columns Size, Line height, Tracking, Weight (usage and the token column removed; the token stays in the
+  Inspector's Code tab); the grid view is a sheet of cards (Aa at both weights over the four measures). Review page
+  sections since: icon-to-illustration ladder and line illustrations (Medusa style, `docs/research/theme-visuals-
+  2026-10-23/line/ln.css`), picks in collections `ladder` and `line`.
 - **Branch `claude/eager-maxwell-0a929b`, committed, not pushed.** PR #151's three open proposals. Press room (`PRESS_ROOM`,
   color/layers.ts): inks solved on the deepest selected fill pressed 0.012 L (dark 0.04), so a press shows on every
   ground (it equalled selected on recessed in light at Layers 4–8, raised in dark from 16 + 8); muted #646464 (was

@@ -1822,11 +1822,12 @@ export const COMPONENT_PAGES = [
     name: "Custom select",
     manifest: "customSelect",
     api: [
-      ["items", "{ value, label, description?, icon?, disabled?, group? }[]", "—"],
+      ["items", "{ value, label, description?, icon?, preview?, disabled?, group? }[]", "—"],
       ["value / defaultValue / onValueChange", "string | null / (value, event) => void", "null"],
       ["placeholder", "ReactNode", '"Select…"'],
       ["variant", '"outline" | "soft" | "ghost"', '"outline"'],
       ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["layout", '"list" | "grid" (cells: each option\'s preview, or its icon large, over its label; the list as wide as its Field)', '"list"'],
       ["fullWidth / disabled / invalid / required", "boolean", "false"],
       ["name / form", "string (a hidden input carries the value)", "—"],
       ["onOpenChange", "(open) => void", "—"],
@@ -1837,6 +1838,7 @@ export const COMPONENT_PAGES = [
       { id: "icons", title: "Icons", note: "The chosen option's icon shows in the trigger too.", demo: "GalleryCustomSelectIcons" },
       { id: "groups", title: "Groups", note: "Options sharing a group are listed under its label, groups ruled apart (Notion's access menu).", demo: "GalleryCustomSelectGroups" },
       { id: "ghost", title: "Ghost", note: "Notion's inline select: no chrome at rest, as wide as its value.", demo: "GalleryCustomSelectGhost" },
+      { id: "grid", title: "Grid", note: "Choices that are pictures: the list spans its Field and each option is a cell, its preview in a framed 4:3 over its label, the chosen one framed in the selected stroke. ←/→ step through the cells, ↑/↓ go to the row above or below.", demo: "GalleryCustomSelectGrid" },
     ],
   },
   {
