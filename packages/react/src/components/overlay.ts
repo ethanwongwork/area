@@ -155,9 +155,19 @@ export function useNativePopover(surface: RefObject<HTMLElement | null>, trigger
   useIsoLayoutEffect(() => {
     const node = surface.current;
     if (!node || typeof node.showPopover !== "function") return;
-    const shown = node.matches(":popover-open");
-    if (open && !shown) node.showPopover();
-    if (!open && shown) node.hidePopover();
+    const sync = () => {
+      const shown = node.matches(":popover-open");
+      if (open && !shown) node.showPopover();
+      if (!open && shown) node.hidePopover();
+    };
+    // Showing or hiding while another popover is mid-show throws InvalidStateError (2026-10-23: a Menu's keepOpen
+    // item regrouped the Icons Canvas, a hover card under the pointer opened as the Menu lit up, and the throw from a
+    // layout effect unmounted the app). The other show finishes within the frame, so the change waits for the next.
+    try { sync(); } catch (error) {
+      if (!(error instanceof DOMException && error.name === "InvalidStateError")) throw error;
+      const frame = requestAnimationFrame(() => { if (node.isConnected) try { sync(); } catch { /* superseded by a later change */ } });
+      return () => cancelAnimationFrame(frame);
+    }
   }, [open]);
   useEffect(() => {
     const node = surface.current;

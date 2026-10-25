@@ -390,3 +390,11 @@ Solid presses one step past hover in the same direction (`--_solid-active`: neut
 - **What changed:** a trailing keycap (Save ⌘S) now sits 8 from the label instead of a space (4); Button lifts it out
   of the label so its gap spaces it.
 - **Why:** Kbd's new rule for the gap between a key and its words (Tooltip's and ChatGPT's 8).
+
+## Review note, 2026-10-24 (onColor)
+
+- **What changed:** `onColor` (class `area-button--on-color`): a button on a painted colour takes the ink its parent
+  sets, with no fill or edge at rest and plates of that ink at 12% (hover) and 20% (held), overriding the variant's and
+  tone's paint. The app's colour cards use it for Copy.
+- **Why:** the owner: "copy added to color?". A ghost button's neutral ink and plates are made for the page, not for a
+  colour; Badge already had `onColor` for the same case.

@@ -24,7 +24,8 @@
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
     .area-file-upload-item, .area-code-block, .area-edit-summary, .area-plan, .area-queue,
-    .area-infobox--framed, .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised
+    .area-infobox--framed, .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions
   ),
   [data-area-ground="raised"] {
     --area-bg-component: var(--area-bg-component-raised);
@@ -52,9 +53,8 @@
   }
   /* A region painted the page tone (a Titlebar, a flush Panel) inside a raised or recessed one points the fills back at
      the page (Layers sweep 2026-10-16: inside a raised gallery tile a Titlebar's selected tab came out lighter than the
-     bar at light 90 + 8). An Asset card's frame is the page tone too (owner, 2026-10-22, the layer map: on a raised
-     frame a Card inside matched it, 1.00:1, on every grey and dark ground; on the page it lifts 1.11:1). */
-  :where(.area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame),
+     bar at light 90 + 8). */
+  :where(.area-titlebar:not(.area-titlebar--floating), .area-panel--flush),
   [data-area-ground="page"] {
     --area-bg-component: var(--area-bg-component-page);
     --area-bg-component-hover: var(--area-bg-component-page-hover);
@@ -94,6 +94,32 @@
     --area-selection-surface-hover: var(--area-selection-surface-tile-hover);
     --area-selection-band: var(--area-selection-band-tile);
     --area-selection-band-hover: var(--area-selection-band-tile-hover);
+  }
+  /* An Asset card's frame (color/layers.ts FRAME_SAME): the page tone, the ground components are drawn for (owner, 2026-10-22,
+     the layer map: on a raised frame a Card inside matched it, 1.00:1; on the page it lifts 1.11:1), unless its card is the
+     page tone too, where it is the recessed tone (owner, 2026-10-23: "the color on the inside frame of the asset cards is
+     different from the outside card material"). A raised card's frame reads the raised tone instead of the tile's. */
+  :where(.area-asset-card__frame), [data-area-ground="frame"] {
+    --area-bg-component: var(--area-bg-component-frame);
+    --area-bg-component-hover: var(--area-bg-component-frame-hover);
+    --area-bg-component-active: var(--area-bg-component-frame-active);
+    --area-input-bg-soft: var(--area-bg-component-frame);
+    --area-input-bg-disabled: var(--area-bg-component-frame);
+    --area-selection-surface: var(--area-selection-surface-frame);
+    --area-selection-surface-hover: var(--area-selection-surface-frame-hover);
+    --area-selection-band: var(--area-selection-band-frame);
+    --area-selection-band-hover: var(--area-selection-band-frame-hover);
+  }
+  :where(.area-asset-card--raised > .area-asset-card__frame), [data-area-ground="frame-raised"] {
+    --area-bg-component: var(--area-bg-component-frame-raised);
+    --area-bg-component-hover: var(--area-bg-component-frame-raised-hover);
+    --area-bg-component-active: var(--area-bg-component-frame-raised-active);
+    --area-input-bg-soft: var(--area-bg-component-frame-raised);
+    --area-input-bg-disabled: var(--area-bg-component-frame-raised);
+    --area-selection-surface: var(--area-selection-surface-frame-raised);
+    --area-selection-surface-hover: var(--area-selection-surface-frame-raised-hover);
+    --area-selection-band: var(--area-selection-band-frame-raised);
+    --area-selection-band-hover: var(--area-selection-band-frame-raised-hover);
   }
   :where(.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview),
   [data-area-ground="recessed"] {
@@ -136,7 +162,8 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
     .area-file-upload-item, .area-code-block, .area-edit-summary, .area-plan, .area-queue,
     .area-infobox--framed, .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
-    .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame,
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions,
+    .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, .area-asset-card--raised > .area-asset-card__frame,
     .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-surface--soft,
     .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview
   ),
@@ -178,8 +205,8 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary, .area-plan, .area-queue, .area-infobox--framed, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised,
-    .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame), [data-area-ground="raised"], [data-area-ground="page"] {
+    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions,
+    .area-titlebar:not(.area-titlebar--floating), .area-panel--flush), [data-area-ground="raised"], [data-area-ground="page"] {
     --area-edge-shift-light: 0;
     --area-edge-shift-dark: 0;
   }
@@ -195,13 +222,22 @@
     --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-tile)));
     --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-tile) - var(--area-layer-dark-raised)));
   }
+  :where(.area-asset-card__frame), [data-area-ground="frame"] {
+    --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-frame)));
+    --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-frame) - var(--area-layer-dark-raised)));
+  }
+  :where(.area-asset-card--raised > .area-asset-card__frame), [data-area-ground="frame-raised"] {
+    --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-frame-raised)));
+    --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-frame-raised) - var(--area-layer-dark-raised)));
+  }
   :where(.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary, .area-plan, .area-queue, .area-infobox--framed, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised, [data-area-ground="raised"],
-    .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, [data-area-ground="page"],
+    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, [data-area-ground="raised"],
+    .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, [data-area-ground="page"],
+    .area-asset-card__frame, [data-area-ground="frame"], .area-asset-card--raised > .area-asset-card__frame, [data-area-ground="frame-raised"],
     .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview,
     [data-area-ground="recessed"], .area-card, [data-area-ground="card"],
     .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), [data-area-ground="tile"]) > * {
@@ -250,7 +286,9 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary, .area-plan, .area-queue, .area-infobox--framed, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised, [data-area-ground="raised"]) {
+    .area-surface--surface, .area-asset-card--raised,
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, [data-area-ground="raised"]) {
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],

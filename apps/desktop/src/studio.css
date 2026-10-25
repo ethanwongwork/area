@@ -5,7 +5,7 @@
  *
  *   app.css             the layout values, base, Titlebar, Workspace, Sidebar and Inspector
  *   canvas.css          the Canvas feed, tiles and the grid, a family's tabs, the Stage
- *   typography.css, icons.css, color.css, theme.css, setup.css, brand.css   one per tab
+ *   typography.css, icons.css, color.css, theme.css, setup.css, imagery.css   one per tab
  *   option-marks.css    the marks in a setting's options (src/option-marks.tsx)
  *   chat.css            the Inspector's Chat
  *   examples.css, materials.css, abstract-board.css   the Testing and Materials screens
@@ -22,6 +22,6 @@
 @import url("styles/materials.css") layer(studio);
 @import url("styles/option-marks.css") layer(studio);
 @import url("styles/choice-figures.css") layer(studio);
-@import url("styles/brand.css") layer(studio);
+@import url("styles/imagery.css") layer(studio);
 @import url("styles/chat.css") layer(studio);
 @import url("styles/abstract-board.css") layer(studio);

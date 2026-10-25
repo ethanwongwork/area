@@ -3,17 +3,22 @@
  * its name set in its own style at both weights (owner, 2026-10-23: "combine heading and heading strong, and copy and
  * copy strong"), then what the role is made of, its size, line height, tracking and weights (the same
  * day: "remove the type usage, just focus on showing the size, line height, and weight and leading/tracking"); or as a
- * grid of cards, each its "Aa" at both weights over those measures ("maybe type can have cards too?"). Choosing a role
+ * grid of cards, the default view (owner, 2026-10-24: "can you make typography cards?"): a card per style, the Components
+ * tab's Asset card, basic with the name below, the "Aa" at the start and Copy CSS in the opposite corner, landscape and
+ * with no measures ("make the card more landscape, remove the size leading tracking details"). Choosing a role
  * in the Sidebar shows it at each weight and at every type size, in a sample line the Inspector's Canvas section edits.
  * The Inspector shows the chosen role (its "Aa", its CSS and token to copy, its facts) or, with none, the type scale.
  */
 import { useState, type ReactNode } from "react";
-import { Code, EmptyState, Field, ListBox, ListBoxItem, Nav, NavGroup, NavItem, PanelSection, Table, TableLink, Textarea } from "@area/react";
-import { CopyIcon } from "@area/icons";
+import { Code, CopyButton as AreaCopyButton, EmptyState, Field, ListBox, PanelSection, Table, TableLink, Textarea, Tooltip } from "@area/react";
+import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { appScale } from "../app-scale.ts";
-import { CanvasSection } from "../tile.tsx";
+import { CanvasSection, Tile, TileGrid, type CardLook } from "../tile.tsx";
+
+/* Type cards keep the name below (owner, 2026-10-24); the other galleries show it on hover (tile.tsx, GALLERY_LOOK). */
+const TYPE_LOOK: CardLook = { container: "basic", caption: "below", fill: "recessed", borderless: false };
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { CodeWell, Preview, Selection } from "../inspector.tsx";
@@ -91,7 +96,9 @@ export function TypographyPage() {
   const role = view ?? TYPE_ROLES.find(entry => entry.id === selectedId);
   // The Canvas's type size (Inspector, Canvas section): roles are measured at it.
   const density = canvas.type;
-  const [mode, setMode] = useViewOption<ViewMode>("typography", "list", ["grid", "list"]);
+  // The cards by default (owner, 2026-10-24: "can you make typography cards?"), Geist's table one click away; a new key, so
+  // a view saved on the table opens on the cards once.
+  const [mode, setMode] = useViewOption<ViewMode>("typography-view", "grid", ["grid", "list"]);
   const [weights, setWeights] = useViewOption<"all" | "regular" | "strong">("typography-weight", "all", ["all", "regular", "strong"]);
   // One role's density rows take the header's weight (strong only when it shows strong alone).
   const weight = weights === "strong" ? "strong" : "regular";
@@ -105,24 +112,11 @@ export function TypographyPage() {
 
   return (
     <Workspace
-      sidebar={<SidebarList>{
-        <Nav aria-label="Type roles">
-          <SidebarAll tab="typography" count={shown.length} current={!view} />
-          {sections.map(group => {
-            const list = shown.filter(entry => (group.groups as readonly string[]).includes(entry.group));
-            return list.length ? (
-              <NavGroup key={group.id} label={group.label}>
-                {list.map(entry => (
-                  <NavItem key={entry.id} href={`#typography/${entry.id}`} current={entry.id === view?.id}
-                    onClick={event => { event.preventDefault(); select(entry.id); }}>
-                    {entry.name}
-                  </NavItem>
-                ))}
-              </NavGroup>
-            ) : null;
-          })}
-        </Nav>
-      }</SidebarList>}
+      sidebar={<SidebarList>
+        <SidebarTree tab="typography" label="Type roles" count={shown.length} current={view?.id}
+          groups={sections.map(group => ({ id: group.id, label: group.label,
+            items: shown.filter(entry => (group.groups as readonly string[]).includes(entry.group)).map(entry => ({ id: entry.id, label: entry.name })) }))} />
+      </SidebarList>}
       canvasActions={
         <ViewControls>
           <ViewFilter label="Weight" value={weights} onChange={setWeights}
@@ -167,23 +161,28 @@ export function TypographyPage() {
             return (
               <CanvasSection key={group.id} role={mode === "grid" ? "group" : undefined} id={`type-${group.id}`} title={group.label} count={list.length} lede={group.lede}>
                 {mode === "grid" ? (
-                  // Cards: every style its own card, its "Aa" at each weight over its name and what it is made of.
-                  <div className="studio-type-sheet">
-                    {list.map(entry => (
-                      <ListBoxItem key={entry.id} value={`${shownWeights[0]!.id}:${entry.id}`} textValue={entry.name} className="studio-type-cell"
-                        aria-label={`${entry.name}, ${metrics(entry, density)}`}>
-                        <span className="studio-type-cell__samples" aria-hidden="true">
-                          {shownWeights.map(w => <span key={w.id} className="studio-type-cell__sample" style={roleStyle(entry, w.id)}>Aa</span>)}
+                  // Cards: every style its own card (both weights side by side), basic with the name below (owner, 2026-10-24:
+                  // "make the card more landscape, remove the size leading tracking details"): the "Aa" at the start in the
+                  // style, Copy CSS in the opposite corner.
+                  <TileGrid span="wide" cards>
+                    {list.flatMap(entry => shownWeights.map(w => ({ entry, w }))).map(({ entry, w }) => (
+                      <Tile key={`${w.id}:${entry.id}`} container="asset" look={TYPE_LOOK} aspect="hug" span="wide" stage="flow" option={`${w.id}:${entry.id}`}
+                        label={`${entry.name}${w.suffix}`} aria-label={`${entry.name}${w.suffix}, ${metrics(entry, density)}`}
+                        // Copy, for what is used (Asset card's rule): the role's CSS at this weight, as the Inspector's Copy CSS.
+                        actions={
+                          <Tooltip side="bottom" describes={false} trigger={
+                            <AreaCopyButton variant="ghost" tone="neutral" size="sm" iconOnly label={`Copy ${entry.name}${w.suffix} CSS`} icon={<CopyIcon />} copiedIcon={<CheckIcon />}
+                              value={`${roleCss(entry)}\nfont-weight: var(--area-weight-${w.id});`} />
+                          }>
+                            Copy CSS
+                          </Tooltip>
+                        }>
+                        <span className="studio-type-card" aria-hidden="true">
+                          <span className="studio-type-card__sample" style={roleStyle(entry, w.id)}>Aa</span>
                         </span>
-                        <span className="studio-type-cell__label" {...appScale()} aria-hidden="true">
-                          <span className="studio-type-cell__name">{entry.name}</span>
-                          <dl className="studio-type-cell__measures">
-                            {measures(entry, density, shownWeights).map(([label, value]) => <div key={label}><dt>{label}</dt><dd className="studio-tabular">{value}</dd></div>)}
-                          </dl>
-                        </span>
-                      </ListBoxItem>
+                      </Tile>
                     ))}
-                  </div>
+                  </TileGrid>
                 ) : (
                   // List: Geist's table, each example its own name set in its own style, at each weight shown. In the
                   // framed Table, every cell on its first baseline, so a 72 example and its 14 values share a line.

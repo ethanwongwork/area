@@ -96,25 +96,28 @@
   .studio-grid--wide { grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr)); }
   /*
    * The tile is Area's Asset card (asset-card.css: the 1 card edge, 12 inset, the lift, the selected edge, the caption
-   * 8 under the frame). The app holds its corner at 12 whatever the Canvas's Radius previews (owner, 2026-10-13: "make
-   * the corner radius sharper"; Area's surface corner at the default radius), through the card's public hook.
+   * 8 under the frame). The app holds its corner at the tile corner (app.css, 16) whatever the Canvas's Radius previews,
+   * through the card's public hook.
    */
   .studio-canvas__body {
     --area-asset-card-corner: var(--_tile-radius);
+    --area-asset-card-name-inset: var(--_card-inset);
+    --area-asset-grid-gap: var(--_canvas-gap);
     /* The tile's edge is read here, under the Canvas's own settings (Layers, theme), not the chrome's. */
     --_tile-edge: var(--area-border-card); /* Card's edge */
   }
   .gallery-tile { scroll-margin-block: var(--_canvas-margin); }
   .gallery-asset { min-inline-size: 0; }
-  /* Painted: the frame is the colour (Color). Its edge is Color swatch picker's palette hairline (color.css: 1px, black
-     10% / white 10%, drawn inside; owner, 2026-10-12), so a colour card is outlined as Area's own swatches are, the
-     lightest and darkest steps included; selected, that outline takes the colour's ink, which reads on every step. */
+  /* Painted: the frame is the colour (Color). Its edge is Color swatch's own ring (color.css: `token-swatch-ring`, black
+     10% / white 10%, at stroke-width, drawn inside; owner, 2026-10-12 and 2026-10-23: "match the inner stroke with the
+     one used for swatch"), so a colour card is outlined as Area's swatches are, the lightest and darkest steps included,
+     and takes Contrast as they do; selected, that outline takes the colour's ink, which reads on every step. */
   .gallery-tile[data-painted] {
     border-color: transparent;
     background: var(--_paint);
     color: var(--_ink);
-    outline: var(--area-border-width) solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec: color.css, swatch picker palette */
-    outline-offset: calc(var(--area-border-width) * -1);
+    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring);
+    outline-offset: calc(var(--area-stroke-width) * -1);
   }
   .gallery-asset[aria-selected="true"] .gallery-tile[data-painted] { border-color: transparent; outline-color: var(--_ink); }
   /* At Elevation 0 there is no lift, so a painted frame's outline steps to its ink at 24% on hover, 48% held. */

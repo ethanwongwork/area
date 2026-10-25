@@ -67,6 +67,14 @@ export const INK_MARGIN = 0.25;
  */
 // Half steps since 2026-10-24 (owner, the controls review: "can you add more granularity?"): 0.006 L in light, 0.015 in dark.
 export const CARD_TONE_STEPS = [-4, -3.5, -3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4] as const;
+/**
+ * An Asset card's frame (owner, 2026-10-23: "the color on the inside frame of the asset cards is different from the outside
+ * card material"): the page tone, the ground components are drawn for, unless the card around it is the page tone too (Card
+ * tone 0, a step clamped at white or black, or a raised card on a white page), where it takes the recessed tone, so the
+ * frame always reads apart from its card. Two grounds: `frame` in a tile-toned card, `frameRaised` in a raised one. Two
+ * lightnesses closer than FRAME_SAME are the same tone (Card tone's smallest step is 0.006).
+ */
+export const FRAME_SAME = 0.0001;
 export const CARD_TONE_UNIT = { light: 0.012, dark: 0.03 } as const;
 export type CardTone = number | "auto";
 
@@ -220,8 +228,10 @@ export interface LayerLightness {
   page: number; raised: number; recessed: number; stripe: number; step: number;
   /** Card tone's two grounds: a Card's (Auto: raised) and an Asset card's (Auto: recessed). */
   card: number; tile: number;
+  /** An Asset card's frame, in a tile-toned card and in a raised one: the page, or the recessed tone where the card is the page's (FRAME_SAME). */
+  frame: number; frameRaised: number;
   /** Rest, hover, pressed / selected on each ground. */
-  fill: { page: [number, number, number]; raised: [number, number, number]; recessed: [number, number, number]; card: [number, number, number]; tile: [number, number, number] };
+  fill: { page: [number, number, number]; raised: [number, number, number]; recessed: [number, number, number]; card: [number, number, number]; tile: [number, number, number]; frame: [number, number, number]; frameRaised: [number, number, number] };
   edge: Record<keyof typeof EDGE_OFFSET.light, number>;
   ink: { body: number; muted: number; edge: number; edgeHover: number };
   /** How far the vivid and tonal inks mix toward black (light) and tinted labels toward white (dark), 0 to 1. */
@@ -243,8 +253,9 @@ export function layerLightness(theme: "light" | "dark", groundStep: number, n: n
     const page = g, raised = Math.min(1, g + Math.min(1 - g, LAYER_PER_STEP.light.raised * n)), recessed = g - LAYER_PER_STEP.light.recessed * n;
     const explicit = cardTone === "auto" ? undefined : clamp01(page + cardTone * CARD_TONE_UNIT.light);
     const card = explicit ?? raised, tile = explicit ?? recessed;
+    const frameIn = (x: number) => Math.abs(x - page) < FRAME_SAME ? recessed : page, frame = frameIn(tile), frameRaised = frameIn(raised);
     const fills = (x: number) => FM.light.map(m => x - m * s) as [number, number, number];
-    const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile) };
+    const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile), frame: fills(frame), frameRaised: fills(frameRaised) };
     const edge = Object.fromEntries(Object.entries(EDGE_OFFSET.light).map(([k, d]) => [k, page - d])) as LayerLightness["edge"];
     // The deepest surface text sits on: the recessed layer, or a card darker than it (Card tone); its hovered fill for
     // edges, its selected fill for body text. A hovered soft mark sits on the page or a card, whichever is darker.
@@ -258,14 +269,15 @@ export function layerLightness(theme: "light" | "dark", groundStep: number, n: n
       muted: Math.min(INK_TODAY.light.muted, inkOn("light", firmest, INK_TARGET.text), inkOn("light", MARK_SHADE * deepest, INK_TARGET.text), inkOn("light", washedLightness(markGround, MARK_HOVER_KEEP), markHoverTarget(markGround))),
       edge: edgeInk, edgeHover: edgeInk + INK_TODAY.light.edgeHover,
     };
-    return { page, raised, recessed, card, tile, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(Math.min(page, card), VIVID_Y), tonalDarken: darkenFor(deepest, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
+    return { page, raised, recessed, card, tile, frame, frameRaised, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(Math.min(page, card), VIVID_Y), tonalDarken: darkenFor(deepest, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
   }
   const lift = n > 0 && g < DARK_LAYER_FLOOR ? DARK_LAYER_FLOOR - g : 0;
   const page = g, raised = g + lift + LAYER_PER_STEP.dark.raised * n, recessed = g + lift + LAYER_PER_STEP.dark.recessed * n;
   const explicit = cardTone === "auto" ? undefined : clamp01(page + cardTone * CARD_TONE_UNIT.dark);
   const card = explicit ?? raised, tile = explicit ?? recessed;
+  const frameIn = (x: number) => Math.abs(x - page) < FRAME_SAME ? recessed : page, frame = frameIn(tile), frameRaised = frameIn(raised);
   const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR), t = Math.min(s, Math.max(0, (DARK_FILL_CEILING - rest) / FM.dark[2])); return FM.dark.map(m => rest + m * t) as [number, number, number]; };
-  const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile) };
+  const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile), frame: fills(frame), frameRaised: fills(frameRaised) };
   // The lightest surface text sits on: the raised layer, or a card lighter than it (Card tone).
   const top = fills(Math.max(raised, card, tile));
   const edge = Object.fromEntries(Object.entries(EDGE_OFFSET.dark).map(([k, d]) => [k, Math.max(EDGE_DARK_TODAY[k as keyof typeof EDGE_DARK_TODAY], raised + d)])) as LayerLightness["edge"];
@@ -281,7 +293,7 @@ export function layerLightness(theme: "light" | "dark", groundStep: number, n: n
   };
   const toWhite = (L: number, { from, perL }: { from: number; perL: number }) => Math.min(1, Math.max(0, (L - from) * perL));
   const tintLift = toWhite(Math.max(raised, card, tile), TINT_LIFT.layer), tintLiftFill = toWhite(top[1], TINT_LIFT.fill);
-  return { page, raised, recessed, card, tile, stripe: raised + 0.5 * s, step: s, fill, edge, ink, vividDarken: 0, tonalDarken: 0, tintLift, tintLiftFill };
+  return { page, raised, recessed, card, tile, frame, frameRaised, stripe: raised + 0.5 * s, step: s, fill, edge, ink, vividDarken: 0, tonalDarken: 0, tintLift, tintLiftFill };
 }
 
 /** The Neutral setting's tint: the hue and chroma of its own ramp, at 50 in light and 900 in dark. */
@@ -345,6 +357,8 @@ export const LAYER_COLOR_TOKENS = [
   "bg-component-recessed", "bg-component-recessed-hover", "bg-component-recessed-active",
   "bg-card", "bg-tile", "bg-component-card", "bg-component-card-hover", "bg-component-card-active",
   "bg-component-tile", "bg-component-tile-hover", "bg-component-tile-active",
+  "bg-frame", "bg-frame-raised", "bg-component-frame", "bg-component-frame-hover", "bg-component-frame-active",
+  "bg-component-frame-raised", "bg-component-frame-raised-hover", "bg-component-frame-raised-active",
   "fg-default", "fg-muted", "fg-placeholder",
   "border-decorative", "border-card", "border-float", "border-faint", "border-divider", "border-subtle", "border", "border-hover",
   "stroke-control", "stroke-control-hover", "fill-track", "fill-track-hover",
@@ -359,6 +373,9 @@ export function layerTokens(theme: "light" | "dark", sel: LayerSelection, cast: 
     "bg-card": hx(m.card), "bg-tile": hx(m.tile),
     "bg-component-card": hx(m.fill.card[0]), "bg-component-card-hover": hx(m.fill.card[1]), "bg-component-card-active": hx(m.fill.card[2]),
     "bg-component-tile": hx(m.fill.tile[0]), "bg-component-tile-hover": hx(m.fill.tile[1]), "bg-component-tile-active": hx(m.fill.tile[2]),
+    "bg-frame": hx(m.frame), "bg-frame-raised": hx(m.frameRaised),
+    "bg-component-frame": hx(m.fill.frame[0]), "bg-component-frame-hover": hx(m.fill.frame[1]), "bg-component-frame-active": hx(m.fill.frame[2]),
+    "bg-component-frame-raised": hx(m.fill.frameRaised[0]), "bg-component-frame-raised-hover": hx(m.fill.frameRaised[1]), "bg-component-frame-raised-active": hx(m.fill.frameRaised[2]),
     "bg-component": hx(m.fill.page[0]), "bg-component-hover": hx(m.fill.page[1]), "bg-component-active": hx(m.fill.page[2]),
     "bg-component-raised": hx(m.fill.raised[0]), "bg-component-raised-hover": hx(m.fill.raised[1]), "bg-component-raised-active": hx(m.fill.raised[2]),
     "bg-component-recessed": hx(m.fill.recessed[0]), "bg-component-recessed-hover": hx(m.fill.recessed[1]), "bg-component-recessed-active": hx(m.fill.recessed[2]),
@@ -412,7 +429,14 @@ export function layerLightnessCss(): Record<string, string> {
     "layer-dark-card": `calc(${v("card-tone-dark-auto")} * ${v("layer-dark-raised")} + (1 - ${v("card-tone-dark-auto")}) * ${v("layer-dark-card-step")})`,
     "layer-dark-tile": `calc(${v("card-tone-dark-auto")} * ${v("layer-dark-recessed")} + (1 - ${v("card-tone-dark-auto")}) * ${v("layer-dark-card-step")})`,
   };
-  for (const ground of ["page", "raised", "recessed", "card", "tile"]) lm.forEach((m, i) => {
+  // An Asset card's frame: the page, or the recessed tone where the card is the page's (FRAME_SAME: `same` is 1 there, 0
+  // once the two are FRAME_SAME apart).
+  for (const theme of ["light", "dark"] as const) for (const [name, card] of [["frame", "tile"], ["frame-raised", "raised"]] as const) {
+    const page = v(`layer-${theme}-page`), other = v(`layer-${theme}-${card}`);
+    const same = `(1 - clamp(0, max(${other} - ${page}, ${page} - ${other}) / ${num(FRAME_SAME)}, 1))`;
+    out[`layer-${theme}-${name}`] = `calc(${page} + (${v(`layer-${theme}-recessed`)} - ${page}) * ${same})`;
+  }
+  for (const ground of ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised"]) lm.forEach((m, i) => {
     out[`layer-light-${ground}-fill-${i}`] = lf(v(`layer-light-${ground}`), m);
     out[`layer-dark-${ground}-fill-${i}`] = df(v(`layer-dark-${ground}`), dm[i]!);
   });
@@ -575,6 +599,8 @@ export function layerCss(): Record<string, string> {
     [`${P}bg-code`]: both("raised"),
     [`${P}bg-card`]: both("card"),
     [`${P}bg-tile`]: both("tile"),
+    [`${P}bg-frame`]: both("frame"),
+    [`${P}bg-frame-raised`]: both("frame-raised"),
     [`${P}fg-default`]: inkColor(L("light", "body"), L("dark", "body")),
     [`${P}fg-muted`]: inkColor(L("light", "muted"), L("dark", "muted")),
     [`${P}fg-placeholder`]: inkColor(L("light", "muted"), L("dark", "muted")),
@@ -606,12 +632,12 @@ export function layerCss(): Record<string, string> {
   const suffix = ["", "-hover", "-active"];
   // `bg-component` is the page's fill until a surface points it at its own ground; `-page` keeps the page's, so a region
   // painted the page tone inside a raised one (a Titlebar or a flush Panel in a card or a gallery tile) can point back.
-  for (const [ground, prefix] of [["page", "bg-component"], ["page", "bg-component-page"], ["raised", "bg-component-raised"], ["recessed", "bg-component-recessed"], ["card", "bg-component-card"], ["tile", "bg-component-tile"]] as const)
+  for (const [ground, prefix] of [["page", "bg-component"], ["page", "bg-component-page"], ["raised", "bg-component-raised"], ["recessed", "bg-component-recessed"], ["card", "bg-component-card"], ["tile", "bg-component-tile"], ["frame", "bg-component-frame"], ["frame-raised", "bg-component-frame-raised"]] as const)
     suffix.forEach((s, i) => { out[`${P}${prefix}${s}`] = both(`${ground}-fill-${i}`); });
   // The Selection role on a raised or recessed ground, as base.ts writes it on the page: the ground's pressed fill (or
   // hovered, for a band) mixed toward the accent when Selection is Accent. A surface points the role at these.
   const mix = (fill: string, accent: string) => `color-mix(in srgb, var(${P}${fill}), var(${P}${accent}) calc(var(${P}selection-accent) * 100%))`;
-  for (const ground of ["page", "raised", "recessed", "card", "tile"] as const) Object.assign(out, {
+  for (const ground of ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised"] as const) Object.assign(out, {
     [`${P}selection-surface-${ground}`]: mix(`bg-component-${ground}-active`, "accent-surface"),
     [`${P}selection-surface-${ground}-hover`]: mix(`bg-component-${ground}-active`, "accent-surface-hover"),
     [`${P}selection-band-${ground}`]: mix(`bg-component-${ground}-hover`, "accent-surface"),

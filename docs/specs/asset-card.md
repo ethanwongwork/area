@@ -41,6 +41,12 @@ values below are read from pixels, not estimated. Figma's file browser (the 2026
 - 2026-10-22: "i just want users to be able to choose the option of making these containers/cards match the background or
   making them slightly different, lighter or darker" → the Card tone setting (axes/card-tone.ts), per mode: Auto keeps
   the container's own tone, else −4 (darker) to +4 (lighter) from the page, 0 matching it. An Asset card paints `bg-tile` (Auto: the recessed layer, `bg-subtle`) and declares the tile ground; a basic card's frame declares the tile ground too; the `raised` fill and the frame keep their own tones.
+- 2026-10-23: "i want to make it so the color on the inside frame of the asset cards is different from the outside card
+  material, in my case i want it to be a light gray since the card container around it will be white, just like the
+  page"; chose "the frame adapts … no new setting" → the frame is the page tone unless the card is the page tone (Card
+  tone 0, a step clamped at white, or the raised fill on a white page), where it takes the recessed tone (`bg-frame`,
+  `bg-frame-raised`, color/layers.ts `FRAME_SAME`); the frame and frame-raised grounds point its controls and edges at
+  it. Auto and every non-zero step are unchanged. Containerless cards follow the same rule.
 
 ## Job and boundaries
 
@@ -64,7 +70,7 @@ actions (Card), a framed preview of a page at its own size (Preview frame).
 | interactive | off · on: the card is a control outside an asset grid | `interactive` | the app's gallery tiles |
 | state | hover (lift), pressed, selected (edge), focus (ring on the card) | — | gallery tile |
 | container | framed (default): the card · containerless: no card at rest (no fill, edge or shadow), the head and the frame in the same places; a component's frame shows the hovered edge on hover and the selected edge when selected; an image or group is its own surface and selection rings it (2, `stroke-selected`) | Owner 2026-10-19 (main): containerless views | Pinterest, Cosmos |
-| caption | above (default): the head over the frame · below: the head under it, the card's inset above the frame | Owner 2026-10-22: "different placements of the text, inside the card, outside the card" | Spline's file grid (name under the asset) |
+| caption | above (default): the head over the frame · below: the head under it, the card's inset above the frame · overlay: the frame fills the card and the name shows on it as a plate at its bottom start (the raised surface, control-sm tall, a pill, `shadow-control`, padded as far across as its height leaves over the cap, so the name keeps the card's name inset both ways), fading in on hover, shown for focus and where nothing hovers (owner 2026-10-24: "have names/titles appear on hover"; Bencho's block gallery: a white 94% pill 14 in) | Owner 2026-10-22: "different placements of the text, inside the card, outside the card" | Spline's file grid (name under the asset) |
 | container (basic) | basic: one surface, the head and the asset on the card's fill, no inset, no frame of its own and no divider; Card's corner | Owner 2026-10-22: "no divider lines across … maybe just a basic container would work" | A gallery's tile (the owner's references) |
 | fill | recessed (default): bg-subtle · raised: bg-surface, white in light; the frame of a basic card declares the same ground | Owner 2026-10-22: "playing with the fill and stroke" | — |
 | borderless | off · on: no edge at rest, its width kept; hover and selection still draw | Owner 2026-10-22: "playing with the fill and stroke" | — |
@@ -82,7 +88,7 @@ area-asset-card          the card: as tall as its head and its frame, Card's cor
   __head                 control-sm + 2 × 4 tall; the name, then the controls, nothing else (round 58)
     __name               UI text, regular, default ink; cap-trimmed; one line, then an ellipsis
     __actions            small ghost controls, ending 4 in (on the frame's side), centred on the head
-  __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; the page tone + divider edge at stroke-width; page ground (2026-10-22; was surface, raised)
+  __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; the frame tone (`bg-frame`: the page tone, or the recessed tone where the card is the page's; a raised card's `bg-frame-raised`) + divider edge at stroke-width; frame ground (2026-10-23; the page tone and ground from 2026-10-22; was surface, raised)
     __media              asset: centred, 12 of room · image: covers the frame (object-fit cover)
     __mosaic             group: 2 × 2, 4 apart, the frame's place (the frame paints nothing)
       __cell             one asset cropped to its cell, the frame's corner
@@ -103,7 +109,8 @@ Inset equations (the designs at 300, edge 1; Area at the default):
 |---|---|---|---|
 | card · size | 300 × 300 | the host's width; as tall as the head plus the frame (a 224 card is 224 × 252) | owner, round 65: the frame decides, not the card |
 | frame · size | 291 × 262 (the card's rest) | 1:1 for a component, group, colour, type, icon or setting; an image's own ratio (`mediaRatio`, or its natural size once loaded; square until then) | owner, round 65: "for components can you make the top layer frame a 1:1 AR always. for images, it can vary based on the image height" |
-| card · corner | 16 (straight edges from 15–16) | Card's: `radius-container` + inset × concentric (16 at the default); `--area-asset-card-corner` overrides | design = Card |
+| card · corner | 16 (straight edges from 15–16) | Card's: `radius-container` + inset × concentric (16 at the default); `--area-asset-card-corner` overrides |
+| head · name inset | the name's cap centred in the head | `(head − 1cap) / 2` inside the edge by default; `--area-asset-card-name-inset` sets it from the outer edge (the head grows to keep it, never under its controls; controls end that inset less their half-height over the cap). The app sets 16, its colour cards' padding (2026-10-24) | design = Card |
 | card · edge | 1px #f0f0f0 | `border-card` at `border-width` (Card's), `shadow-edge` under Borderless; state edges at least `stroke-width` | design; DESIGN_SYSTEM Strokes |
 | card · fill | #fafafa (neutral/25) | `bg-subtle` (neutral/50, #f7f7f7 at the default settings; Table's header fill) | design; round 58 tried a mix to #fafafa, outside the roles; round 59 reverted (no role lands on neutral/25; a new role would be a foundation change) |
 | head · height | 33 inside the edge | `control-sm` + 2 × 4 | design |
@@ -154,7 +161,7 @@ One language across Area's framed surfaces: a quiet band names the thing, a whit
 | Container | Head | Body | Edge | Why it differs |
 |---|---|---|---|---|
 | Table | the header row on `bg-subtle` | rows on `bg-surface`, flush | `border-divider` at `stroke-width` (rows inside, so the frame is never lighter than its rules) | data: rows run to the frame |
-| Asset card | the head on `bg-subtle` (the card's ground) | the asset on `bg-page`, 4 in, concentric | the card: `border-card` (a standalone surface); the frame: `border-divider` at `stroke-width` (no shadow carries it, as Table's) | an asset is visual, so it gets its own frame and corner inside the card |
+| Asset card | the head on `bg-tile` (the card's ground) | the asset on `bg-frame` (the page tone, or recessed where the card is the page's), 4 in, concentric | the card: `border-card` (a standalone surface); the frame: `border-divider` at `stroke-width` (no shadow carries it, as Table's) | an asset is visual, so it gets its own frame and corner inside the card |
 | Card | title in the body | content on `bg-surface` | `border-card`, Card's corner | content, not an asset; Asset card takes Card's corner |
 | Code block / Edit summary | a header with a `border-decorative` seam | code on `bg-surface` | `border-card` at `stroke-width` | a seam instead of an inset frame: text needs no frame of its own |
 
@@ -322,3 +329,37 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
 - **Why:** your round 65 note on the selected border, answered by your picks on the state page (2026-10-21), now the
   defaults of the state settings. The frame's line was the card's edge colour, which almost disappears on the card's
   grey ground (1.08:1); a frame with no shadow takes the divider colour, as Table's does.
+
+## Review note, 2026-10-23 (frame tone)
+
+- **What changed:** the frame inside the card is no longer always the page tone. Where the card is the page tone too
+  (Card tone 0, a lighter step clamped at white, or the raised fill on a white page) the frame takes the recessed tone,
+  light #f7f7f7 on a white card at the defaults, slightly lighter than the page in dark. Everywhere else it is white as
+  before. Controls and edges inside the frame step from its tone.
+- **Why:** with the card matching the page, frame and card were one tone and only the hairline held the frame (owner,
+  2026-10-23). The frame stays the page tone wherever it can, because components are drawn for the page.
+
+## Review note, 2026-10-24 (gallery cards)
+
+- **What changed:** a new public hook, `--area-asset-card-name-inset`, sets how far the name sits from the card's edge;
+  at its default nothing moves. The app sets it to 16 so its Asset cards match the colour cards (corner 16, name 16 in,
+  the same UI size). An Asset grid item now takes its column in any grid List box, not only inside Asset grid, so the
+  app's type cards (List box sections, each a grid) fill their columns.
+- **Why:** the owner: "i do want to see the name below treatment have the same corner, padding, and text title size to
+  match color", with basic and the name below as the app's card for Components and Typography.
+
+## Review note, 2026-10-24 (overlay caption, Imagery)
+
+- **What changed:** `caption="overlay"`: the asset fills the card and its name appears on it, a small plate at the
+  bottom start, while the card is hovered or focused (always on touch screens). The app's Imagery tab (was Brand) shows
+  every image this way, as a basic card the image fills.
+- **Why:** the owner: "make the images themselves fill the full width of the card, and also have names/titles appear on
+  hover", after Bencho's block gallery.
+
+## Review note, 2026-10-24 (grid gap, group inset, rows)
+
+- **What changed:** `--area-asset-grid-gap` sets the grid's gap (12 by default; the app uses 8). An Asset grid's rows
+  share their top and each card keeps its own height. Where the host sets the name inset, a group's cells line up with
+  the name and sit that far apart and from the edge; at the default they keep the design's 4.
+- **Why:** the owner: "the images inside the groups can align to the text and have gaps that match the margins",
+  images with "their own unique height, and the top of each image row always aligns", and "maybe everything can be 8px".

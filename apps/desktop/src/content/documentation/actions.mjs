@@ -12,6 +12,7 @@ export default {
     practices: [
       ["Do", "Use solid for the strongest action in a view, and soft or outline for secondary actions."],
       ["Do", "Use ghost for quiet actions in toolbars, headers and message actions."],
+      ["Do", "Set onColor on a Button that sits on a painted colour (a colour card): it takes the colour's ink, with plates of that ink, as Badge's onColor."],
       ["Do", "Give an icon-only Button an aria-label: it is its only name."],
       ["Do", "Set loading while an action is pending: the Button keeps focus and ignores clicks, so a submit isn't sent twice."],
       ["Do", "Show a shortcut with a Kbd as the last child: it sits one gap after the label, and set aria-keyshortcuts when the page binds the key."],
