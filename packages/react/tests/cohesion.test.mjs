@@ -392,6 +392,8 @@ test('every painted ground is declared in layers.css', () => {
   // Painted grounds that hold nothing with a control fill, each with its reason.
   const EXEMPT = {
     '.area-asset-card__cell': 'a group cell: an image or an inert thumbnail',
+    '.area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__name': 'the name\'s plate holds text only',
+    '.area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__name': 'the name\'s plate holds text only',
     '.area-asset-row__preview': 'an image well',
     '.area-attachment': 'its close button paints the video glass tints, not ground fills',
     '.area-box-model': 'labels and values only',
@@ -481,7 +483,7 @@ test('the pressed fill is re-derived on every ground and every setting scope', (
     for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
     return [...out, list.slice(start)].map(part => part.trim()).filter(Boolean); };
   const parts = selector => split(selector).flatMap(part => /^:where\(.*\)$/.test(part) ? parts(part.slice(7, -1)) : [part]);
-  for (const ground of ['raised', 'page', 'recessed', 'card', 'tile']) {
+  for (const ground of ['raised', 'page', 'recessed', 'card', 'tile', 'frame', 'frame-raised']) {
     for (const selector of pointer(ground)) for (const part of parts(selector)) {
       if (part.startsWith('[data-area-ground=')) continue;
       // The native Select's picker is a pseudo-element (it cannot join a list) and its options never press
@@ -584,7 +586,7 @@ test('every ground moves the edges and restates every edge role and its readers'
   const parts = selector => split(selector).flatMap(part => /^:where\(.*\)$/.test(part) ? parts(part.slice(7, -1)) : [part]);
   const shifting = new Set(rules.filter(rule => /--area-edge-shift-light:\s*(0|max\()/.test(rule.body) && !/:root/.test(rule.selector)).flatMap(rule => parts(rule.selector)));
   const restating = new Set(parts(restate.selector.replace(/ > \*$/, '')));
-  for (const ground of ['raised', 'page', 'recessed', 'card', 'tile']) {
+  for (const ground of ['raised', 'page', 'recessed', 'card', 'tile', 'frame', 'frame-raised']) {
     for (const rule of rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${ground})`) && !/^:where\(\s*\[data-area-/.test(rule.selector)))
       for (const part of parts(rule.selector)) {
         if (part === '.area-select::picker(select)') continue;

@@ -1054,11 +1054,13 @@
     /* spec: 12, border included, at both densities (owner 2026-10-02, cursor-desktop.md): dense
      * popovers inset 16 (Cursor's upsell popover, Figma's Edit text style and color picker); none
      * shows 8. Holds the default rather than exceed it. */
-    --_inset: calc(var(--area-space-12) - var(--area-border-width));
+    --_inset: calc(var(--area-popover-inset, var(--area-space-12)) - var(--area-border-width));
     /* spec: the surface corner at both densities, 12 (Cursor's popover 12, Figma 13), stepping by 4
      * with the radius setting (owner, 2026-10-03). At the default it is also concentric with the compact
      * header close (6 + 12 - 6); the old min() against the close only differed away from it. */
-    --_popover-radius: var(--area-radius-container);
+    /* Public hooks (2026-10-24, the app's icon card matching its gallery cards): `--area-popover-corner` and
+       `--area-popover-inset`, the inset from the outer edge with the edge counted once. */
+    --_popover-radius: var(--area-popover-corner, var(--area-radius-container));
     border-radius: var(--_popover-radius);
     position: relative;
     isolation: isolate;

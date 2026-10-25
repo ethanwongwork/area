@@ -34,6 +34,10 @@ test('caption places the head and captionProps still reach the head', () => {
   assert.match(html, /area-asset-card--below/);
   assert.doesNotMatch(html, /area-asset-card--inside/);
   assert.match(html, /area-asset-card__head" data-host="x"/);
+  // 2026-10-24: overlay sets the name on the frame, shown on hover or focus; the name stays in the markup.
+  const overlay = render(h(AssetCard, { name: 'Title', caption: 'overlay', media: '/a.png' }));
+  assert.match(overlay, /area-asset-card--overlay/);
+  assert.match(overlay, /area-asset-card__name">Title</);
 });
 
 test('basic, fill and borderless are classes on the card; a basic frame declares the card\'s fill', () => {

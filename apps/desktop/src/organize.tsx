@@ -135,16 +135,20 @@ export function PinButton({ pinned, onToggle, name, row }: { pinned: boolean; on
 
 /**
  * A context menu to pin or unpin: right-click (or Shift+F10 on) a Sidebar row or a Canvas item.
- * Pinnable things name themselves with `data-key` and `data-name`; anywhere else nothing of ours opens (Electron
- * shows no menu of its own).
+ * Pinnable things name themselves with `data-key` and `data-name`; a Sidebar tree's row (studio.tsx, SidebarTree) by its
+ * id, `key:<key>` for a pinnable row and `pin:<key>` for a row under Pinned, its name the row's label. Anywhere else
+ * nothing of ours opens (Electron shows no menu of its own).
  */
+const PINNABLE = '[data-key], [role="treeitem"][data-tree-id^="key:"], [role="treeitem"][data-tree-id^="pin:"]';
+const pinKey = (row: HTMLElement) => row.dataset.key ?? (row.dataset.treeId ?? "").replace(/^(key|pin):/, "");
+const pinName = (row: HTMLElement) => row.dataset.name ?? row.querySelector(".area-tree-view__label")?.textContent ?? pinKey(row);
 export function PinMenu({ pins, children, label = "Sidebar" }: { pins: ReturnType<typeof usePins>; children: ReactNode; label?: string }) {
   // ContextMenu's per-item target (2026-10-15): it opens only on a row that names its key, hands that row to the
   // menu, and marks it data-context-target while open.
   return (
-    <ContextMenu menuLabel={`${label} actions`} itemSelector="[data-key]"
+    <ContextMenu menuLabel={`${label} actions`} itemSelector={PINNABLE}
       menu={row => {
-        const key = row.dataset.key!, name = row.dataset.name ?? key;
+        const key = pinKey(row), name = pinName(row);
         return (
           <MenuItem icon={<PushpinIcon />} onClick={() => pins.toggle(key)}>
             {pins.has(key) ? `Unpin ${name}` : `Pin ${name}`}

@@ -46,9 +46,14 @@
    */
   .studio-icon-card {
     --area-popover-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-64)); /* pick: 256, the Inspector's width */
+    /* In the gallery cards' shape (owner, 2026-10-24: "can the icon hover card be updated to match the style of the canvas
+       asset cards?"): their corner and their 16 from the edge to the name, through Popover's public hooks. */
+    --area-popover-corner: var(--_tile-radius);
+    --area-popover-inset: var(--_card-inset);
   }
   .studio-icon-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--area-space-8); min-inline-size: 0; }
-  .studio-icon-card__name { min-inline-size: 0; overflow: hidden; font-family: var(--area-font-mono); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-overflow: ellipsis; white-space: nowrap; }
+  /* The name as an Asset card's: the UI text, regular (was the mono). */
+  .studio-icon-card__name { min-inline-size: 0; overflow: hidden; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-overflow: ellipsis; white-space: nowrap; }
   /* The category is the card's secondary line at the UI size, as Popover's description (owner,
      2026-10-17: the xs step read too small beside the name). */
   .studio-icon-card__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }

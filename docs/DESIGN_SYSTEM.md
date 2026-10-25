@@ -481,6 +481,12 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   1.04:1 instead of 1.11:1 (round 60). `cohesion.test.mjs` ("every painted ground is
   declared") fails an undeclared ground; a ground with nothing on it that paints a control
   fill (an image well, a dot, a control's own card) is exempted there with its reason.
+- **An inner frame always reads apart from its card** (2026-10-23). Asset card's frame is
+  the page tone, the ground components are drawn for, unless the card around it is the
+  page tone too (Card tone 0, a step clamped at white or black, or a raised card on a white
+  page): then it takes the recessed tone (`bg-frame`, `bg-frame-raised`; `color/layers.ts`
+  `FRAME_SAME`). It is never a third tone, and its controls step from it (the `frame` and
+  `frame-raised` grounds). At Layers 0 every tone is one and the edges set it apart.
 - Dark mode is near-black by default: the page is #020202, cards #121212 and sidebars
   #0b0b0b.
 

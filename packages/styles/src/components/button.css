@@ -430,6 +430,21 @@
   /* Pressed is one step firmer than selected (layers.css, "Pressed"; Notion 5% → 10%, ChatGPT 5% → 12%). */
   .area-button--neutral.area-button--outline { --_bg-active: var(--area-bg-component-pressed); }
 
+  /*
+   * On a colour (owner, 2026-10-24, the Color tab's cards: "copy added to color?"): the button sits on a painted ground
+   * and takes the ink its parent sets for it, as Badge's `onColor` does; no fill or edge at rest, the ink at 12% under
+   * the pointer and 20% held, so each step is a plate in the colour's own ink on every step of every scale. Overrides
+   * the variant's and tone's paint (two classes, after them).
+   */
+  .area-button.area-button--on-color {
+    --_bg: transparent;
+    --_bg-hover: color-mix(in oklab, currentcolor 12%, transparent); /* pick */
+    --_bg-active: color-mix(in oklab, currentcolor 20%, transparent); /* pick */
+    --_border: transparent;
+    --_border-hover: transparent;
+    color: inherit; /* the ink the colour carries, set by its parent; the plates mix from it */
+  }
+
   /* --- Shape and alignment ---------------------------------------------------- */
 
   /* Fully round. OpenAI ships this as the default button shape; Area makes it opt-in, per instance
