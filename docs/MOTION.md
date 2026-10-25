@@ -104,7 +104,7 @@ shadcn don't scale at all).
 | Spinner | 1s per turn, linear | — | `rotate` | stops at Motion 0 and under reduced motion |
 | Skeleton shimmer, pulse | linear, long | — | `background-position` / `opacity` | stops under reduced motion |
 | Theme / density change | instant | instant | — | never animate a theme switch: the app sets `data-area-switching` (base.css) on the scope it repaints for one frame, so token-built colour transitions jump (the desktop app does it for Light / Dark and every Canvas setting, hover previews included). Restyling the whole document costs about 300ms, so the desktop app's chrome takes a setting 160ms after the last change of a drag (studio.tsx, `useSettled`); a preview of a theme may crossfade its picture (Setup's stage, below) |
-| A step of a flow (Setup) | fade `base`, slide 16px `slow` ease-out from the side it comes from | fade `fast`, drift 8px away | `opacity` + `translate` | both steps in place at once; the leaving one is a copy, so nothing waits for it (Base UI's animated panels: fade 175, move 350 on (0.22, 1, 0.36, 1)) |
+| A turn of a conversation (Setup's chat) | rise 8px and fade, `slow` ease-out | — | `opacity` + `translate` | a new question, and a reopened one's choices; the thread scrolls to it smoothly (instantly under reduced motion). Earlier turns stay; nothing leaves |
 | A preview's picture (Setup's stage) | crossfade `moderate` ease-out | — | `opacity` of a copy of the old drawing | a pick or a hover preview only; a run of changes (a drag) cuts (setup-screen.tsx, `crossfade`) |
 
 Exits are one step faster than entrances. Anything opened from the keyboard should feel no slower
