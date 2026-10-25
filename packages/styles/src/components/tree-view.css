@@ -57,8 +57,8 @@
   /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
      takes the pressed fill while held, one step firmer than selected, landing at once like the hover. */
   .area-tree-view [role="treeitem"]:active:not([data-disabled], [aria-current="page"], [aria-selected="true"]) { background: var(--area-bg-component-pressed); }
-  @media (hover: hover) { .area-tree-view [role="treeitem"]:hover { transition-duration: 0s; } }
-  .area-tree-view [role="treeitem"]:is(:active, [aria-selected="true"], [aria-current="page"]) { transition-duration: 0s; }
+  @media (hover: hover) { .area-tree-view [role="treeitem"]:hover { transition-duration: var(--area-hover-in); } }
+  .area-tree-view [role="treeitem"]:is(:active, [aria-selected="true"], [aria-current="page"]) { transition-duration: var(--area-press-in); }
   /* The current row is marked by fill and ink alone; the edge marker was removed (owner, pass 3). */
   /* Inset ring, as Nav and Tabs (audit S11b). */
   .area-tree-view [role="treeitem"]:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
@@ -90,7 +90,7 @@
 
  /* Controls nested on a row hover with the translucent wash, so they show on a hovered or
      current row plate (audit S11c; was bg-component-hover, invisible there). */
-  @media (hover: hover) { .area-tree-view__chevron:has(svg):hover::before { background: var(--area-bg-hover); transition-duration: 0s; } }
+  @media (hover: hover) { .area-tree-view__chevron:has(svg):hover::before { background: var(--area-bg-hover); transition-duration: var(--area-hover-in); } }
   .area-tree-view__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-active); }
   .area-tree-view__icon { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
   /* spec: the label follows the row's even 6px gap; its own inset is 0 (pass 3). */
@@ -123,7 +123,7 @@
   /* The box's edge at rest is Checkbox's, the choice glyphs' `edge-control-hover` (audit S5; consistency pass
      2026-10-12, it was the lighter field edge). Checked paints like Checkbox: the neutral solid face and its mark. It used a tint with a
      focus-colour edge, which read as focus rather than as a checked box. */
-  .area-tree-view [aria-checked="true"] .area-tree-view__check { color: var(--_tree-check-mark, var(--area-fg-on-selection)); background: var(--_tree-check, var(--area-selection-solid)); border-color: var(--_tree-check, var(--area-selection-solid)); transition-duration: 0s; }
+  .area-tree-view [aria-checked="true"] .area-tree-view__check { color: var(--_tree-check-mark, var(--area-fg-on-selection)); background: var(--_tree-check, var(--area-selection-solid)); border-color: var(--_tree-check, var(--area-selection-solid)); transition-duration: var(--area-hover-in); }
   /* The mark is the 16px drawing on the box's own 16px grid: it covers the border box (a negative
      margin of the border), as Checkbox's mark does; it was the 16 drawing at 14/16 inside the
      border. It is always rendered and shown when checked, entering from 0.6 with opacity on fast

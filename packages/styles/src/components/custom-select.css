@@ -95,7 +95,7 @@
       border-color: var(--_border-hover);
       background-color: var(--_bg-hover);
     }
-    .area-custom-select__trigger:hover { transition-duration: 0s; }
+    .area-custom-select__trigger:hover { transition-duration: var(--area-hover-in); }
   }
   .area-custom-select__trigger:is(:active, :focus-visible),
   .area-custom-select[data-open] > .area-custom-select__trigger { transition-duration: 0s; }

@@ -156,7 +156,8 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 | Setting | Values (default) | What it sets |
 |---|---|---|
 | `motion` | `0` (None) … `300` in steps of 30, `210` (default) | The Menu's open in milliseconds. Every duration is a third-multiple of it ([Motion](MOTION.md)) |
-| `easing` | `standard` (default), `snappy`, `gentle`, `spring` | The shape of every transition (`--area-ease-*`, owned by Easing since 2026-10-19). Spring overshoots on enters and moves, never on exits ([Motion](MOTION.md)) |
+| `easing` | `subtle` (default since 2026-10-24), `standard`, `snappy`, `gentle`, `spring` | The shape of every transition (`--area-ease-*`, owned by Easing since 2026-10-19). Subtle's ease-out is `(0.22, 1, 0.36, 1)`, a gentler start than Standard's; Spring overshoots on enters and moves, never on exits ([Motion](MOTION.md)) |
+| `feedback` | `off`, `subtle` (default), `pronounced` | How a control answers the pointer (`--area-feedback-*`, 2026-10-24): hover's and a press's arrival as shares of `duration-fast` (derived `--area-hover-in`, `--area-press-in` in `emit/base.ts`), and the give under a pointer press by size (`feedback-scale-sm`, `feedback-scale`, `feedback-scale-lg`, `feedback-scale-wide`). Reduced motion resolves it to Off ([Motion](MOTION.md)) |
 
 `0` and `prefers-reduced-motion` make every duration 0 and stop every loop.
 

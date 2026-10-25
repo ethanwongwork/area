@@ -1,6 +1,27 @@
 # Handoff
 
 ## Current state (2026-10-24)
+- **Subtle motion as the default, same branch (owner 2026-10-24: "the smoothness of the sliders is not very smooth ...
+  apply the motion in a subtle way ... implement the subtle package as the default"; bencho.dev).** New setting
+  Feedback (`axes/feedback.ts`; Off / Subtle default / Pronounced): hover and press arrive over `hover-in` / `press-in`
+  (≈91ms at Subtle) instead of 0s in 46 component files, and a pointer press gives 0.96–0.985 by size (Button, Chip,
+  choice cards, linked Cards; never keys or menu triggers). Easing gains Subtle `(0.22, 1, 0.36, 1)` as the default.
+  Segmented's plate slides (`data-plate`). Slider jank: the chrome restyle (~300ms on `<html>`) now settles 160ms after
+  a drag (`useSettled`, studio.tsx); Setup's stage repaints at most every 180ms; drag frames 69ms → ~25ms mean in
+  headless Edge. Setup steps slide and crossfade; the stage crossfades picks. Research:
+  docs/research/motion-subtle-2026-10-24/systems.md. Open: Tabs' sliding underline, keeping fades under reduced
+  motion (needs fade vs movement tokens), hover-plate scale-in for ghost buttons; not swept across all 119 families.
+- **Setup as a questionnaire, `claude/theme-questionnaire-builder-1df19a` (owner 2026-10-24), uncommitted.** Setup
+  rebuilt: a panel (welcome with Essentials 14 / Every detail, an opening card per chapter, one question at a time, a
+  review) beside a stage holding one product screen (`setup-screen.tsx`) drawn with the area-illustration engine (the
+  build copies `engine/abstract.css` to `dist/styles/figures.css`; `engine/markup.js` now shared with the skill). 44
+  questions in 10 chapters (`pages/setup-questions.ts`): each has one sentence, the parts it changes (ringed on the
+  stage), held states, and a control. Simplified the same day (owner: "less text overall, more simple and visual"):
+  cards are a picture and a name, the choice's caption and Default one line under them; pictures drawn as shapes, a
+  small part shown whole with the screen veiled round it; no text-only cards. Hovering a choice previews it on the
+  stage. `theme-views.tsx` (Bento/Desktop/Mobile views) removed; `choice-visuals.tsx`'s
+  ChoicePreview is now unused (MiniUI still feeds a gallery demo). Owner will add examples to the stage next. Open:
+  the stage with the Inspector open is narrow (Setup doesn't close it); per-setting figures from the skill not ported.
 - **Theme review, Inspector bars and Setup as a finder: PR #159 (`claude/theme-color-review-29db0d`), merged
   2026-10-24.** Next: the owner starts a new theme-creation session for Setup with the Hairline session's figures.
   - *Setup* (owner, a mouse-finder reference): a stage (the view in the theme so far, the library faint round it) and a

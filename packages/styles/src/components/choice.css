@@ -278,19 +278,26 @@
     scale: 1;
   }
 
-  /* Hover, press and checking land at once and fade out over fast (docs/MOTION.md recipes). A
-     pointer or Space press is :active and an arrow key moves a focus-visible radio, so checking
-     by hand paints at once; the option given up, or a change from script, fades. Focus rings
-     are outlines, which --area-transition does not animate. */
-  .area-checkbox__control:is(:active, :focus-visible),
-  .area-radio__control:is(:active, :focus-visible),
-  .area-checkbox--card:is(:active, :has(> .area-checkbox__control:focus-visible)),
-  .area-radio--card:is(:active, :has(> .area-radio__control:focus-visible)) { transition-duration: 0s; }
+  /* Hover, press and checking arrive on Feedback's clocks (hover-in, press-in; 0 at Off) and fade out over fast
+     (docs/MOTION.md recipes). A pointer or Space press is :active; an arrow key moves a focus-visible radio, and the
+     keyboard is never kept waiting, so that check lands at once. The option given up, or a change from script, fades.
+     Focus rings are outlines, which --area-transition does not animate. */
+  .area-checkbox__control:active,
+  .area-radio__control:active,
+  .area-checkbox--card:active,
+  .area-radio--card:active { transition-duration: var(--area-press-in); }
+  /* A choice card is a wide surface: it gives the wide amount under a press (Feedback). */
+  .area-checkbox--card:active:not([data-disabled], :has(> :focus-visible)),
+  .area-radio--card:active:not([data-disabled], :has(> :focus-visible)) { scale: var(--area-feedback-scale-wide); }
+  .area-checkbox__control:focus-visible,
+  .area-radio__control:focus-visible,
+  .area-checkbox--card:has(> .area-checkbox__control:focus-visible),
+  .area-radio--card:has(> .area-radio__control:focus-visible) { transition-duration: 0s; }
   @media (hover: hover) {
     .area-checkbox__control:hover,
     .area-radio__control:hover,
     .area-checkbox--card:hover,
-    .area-radio--card:hover { transition-duration: 0s; }
+    .area-radio--card:hover { transition-duration: var(--area-hover-in); }
   }
 
   .area-checkbox__control:is([data-invalid], [aria-invalid="true"]) {

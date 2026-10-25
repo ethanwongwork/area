@@ -84,7 +84,7 @@
       border-color: var(--_border-hover);
       background-color: var(--_bg-hover);
     }
-    .area-date-picker__trigger:hover { transition-duration: 0s; }
+    .area-date-picker__trigger:hover { transition-duration: var(--area-hover-in); }
   }
   .area-date-picker__trigger:is(:active, :focus-visible),
   .area-date-picker[data-open] > .area-date-picker__trigger { transition-duration: 0s; }

@@ -36,12 +36,13 @@ band and Progress stripe, so the nearest motion scope decides: a non-zero scope 
 
 Easings: one setting, `data-area-easing` (`axes/easing.ts`, owner 2026-10-19: "an easing setting (Standard, Snappy,
 Gentle, Spring) beside the duration"). Each value sets the same roles, so components read the tokens below and never
-branch on it. Standard is the default and the values in this table. Every curve is a product's own
-(`docs/research/motion-2026-10-07/design-systems.md`):
+branch on it. Subtle is the default since 2026-10-24 (owner: "not great easing ... subtle, clean"); every curve is a
+product's own (`docs/research/motion-2026-10-07/design-systems.md`, `docs/research/motion-subtle-2026-10-24/systems.md`):
 
 | Easing | `ease-out` | `ease-in-out` | `ease-in` | `ease-drawer` | From |
 |---|---|---|---|---|---|
-| Standard (default) | `(0.16, 1, 0.3, 1)` | `(0.65, 0, 0.35, 1)` | `(0.4, 0, 1, 1)` | `(0.32, 0.72, 0, 1)` | ChatGPT, Radix; Figma; Material, Tailwind; Vaul |
+| Subtle (default) | `(0.22, 1, 0.36, 1)` | `(0.65, 0, 0.35, 1)` | `(0.4, 0, 1, 1)` | `(0.32, 0.72, 0, 1)` | bencho.dev, Base UI's panels; then Standard's. 40% of the way in the first tenth of the time (Standard 49%), so a surface eases in rather than snapping |
+| Standard | `(0.16, 1, 0.3, 1)` | `(0.65, 0, 0.35, 1)` | `(0.4, 0, 1, 1)` | `(0.32, 0.72, 0, 1)` | ChatGPT, Radix; Figma; Material, Tailwind; Vaul (the default until 2026-10-24) |
 | Snappy | `(0.19, 1, 0.22, 1)` | `(0.6, 0, 0.2, 1)` | `(0.6, 0, 0.8, 0.6)` | `(0.19, 1, 0.22, 1)` | Linear's expo-out; Primer; Atlassian in-practical |
 | Gentle | `(0.33, 1, 0.68, 1)` | `(0.33, 0, 0.67, 1)` | `(0.5, 0, 1, 1)` | `(0.33, 1, 0.68, 1)` | Primer overlay and side sheet; Fluent EasyEase; Spectrum |
 | Spring | `(0.175, 0.885, 0.32, 1.1)` | `(0.175, 0.885, 0.32, 1.275)` | `(0.4, 0, 1, 1)` | `(0.175, 0.885, 0.32, 1.1)` | Geist's swift; Material's switch handle; exits never overshoot |
@@ -49,31 +50,49 @@ branch on it. Standard is the default and the values in this table. Every curve 
 `ease-linear` is linear at every value, and the deprecated `ease-spring` keeps its value. Reduced motion makes every
 duration 0, so the curve no longer applies there.
 
-| Token | Value (Standard) | Use |
+| Token | Value (Subtle) | Use |
 |---|---|---|
-| `--area-ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | almost everything: colour, enters, exits of anchored surfaces, marks (ChatGPT, Radix Themes) |
+| `--area-ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` | almost everything: colour, enters, exits of anchored surfaces, marks, a press's give |
 | `--area-ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | something moving across the screen while visible: switch thumb, tabs and segmented indicator, accordion height (Figma, Primer) |
 | `--area-ease-drawer` | `cubic-bezier(0.32, 0.72, 0, 1)` | surfaces sliding from a screen edge, both ways (Vaul) |
 | `--area-ease-in` | `cubic-bezier(0.4, 0, 1, 1)` | rarely: a full-screen surface leaving for good, and a lift fading out |
 | `--area-ease-linear` | `linear` | spinners, progress, shimmer |
 | `--area-ease-spring` | deprecated | never; an overshoot reads as play, not as Area |
 
-`--area-transition` is the shared colour transition (background, border, colour, box-shadow over
-`duration-fast` with `ease-out`).
+`--area-transition` is the shared transition (background, border, colour, box-shadow and `scale` over `duration-fast`
+with `ease-out`): the leave of every state, the release of a press.
+
+Feedback: one setting, `data-area-feedback` (`axes/feedback.ts`, owner 2026-10-24: "alot of the components dont have
+any visible motion/interaction animation ... implement the subtle package as the default"; bencho.dev the reference).
+It sets how a control answers the pointer, on top of Speed and Easing: hover's and a press's arrival as shares of
+`duration-fast`, and the give under a pointer press by size. Derived in `emit/base.ts`: `--area-hover-in` and
+`--area-press-in`. Speed 0 makes both 0; reduced motion resolves Feedback to Off as well.
+
+| Feedback | Hover in | Press in | Give (sm · md · lg · wide) | From |
+|---|---|---|---|---|
+| Off | 0 | 0 | 1 · 1 · 1 · 1 | the 2026-10-07 behaviour (ChatGPT 0s; Linear 0 in) |
+| Subtle (default) | 0.65 × fast (≈91ms) | 0.65 × fast (≈91ms) | 0.96 · 0.97 · 0.975 · 0.985 | bencho 0.96 / 0.985 in 90ms; Linear's site 0.97; Raycast 0.98; Emil Kowalski 0.97 |
+| Pronounced | 1.15 × fast (≈160ms) | 0.65 × fast | 0.94 · 0.95 · 0.96 · 0.975 | bencho's 160ms hover plates |
+
+Never given: inputs, Switch, Checkbox, Radio, Slider, Tabs, Segmented options, menu triggers (`aria-haspopup`), a key
+press (`:focus-visible`), disabled and loading controls. Given: Button (by size; full width the wide amount), Chip
+(small), choice cards and linked Cards (wide). Library-wide the give stays at or under 4% (Geist, Radix Themes and
+shadcn don't scale at all).
 
 ## Recipes
 
 | Interaction | Enter | Leave | Properties | Notes |
 |---|---|---|---|---|
-| Hover plate / colour | instant | `fast` ease-out | colours only | `:hover { transition-duration: 0s }` under `@media (hover: hover)`: feedback appears at once and fades away (ChatGPT 0s, Notion 20ms, Linear 0s in / 150 out) |
+| Hover plate / colour | `hover-in` ease-out | `fast` ease-out | colours only | `:hover { transition-duration: var(--area-hover-in) }` under `@media (hover: hover)`: ≈91ms at Feedback Subtle, 0 at Off (ChatGPT 0s, Notion 20ms, Linear 0s in / 150 out; bencho 160 in). A highlight the keyboard moves stays instant |
 | Lift (linked Card, gallery tiles) | `fast` ease-out | `base` ease-in | `box-shadow` to the lift shadow (Elevation's `lift` role, shadow8 at half the float's weight; owner, 2026-10-18: the float shadow read "too drastic") | the edge stays; a press drops the lift at once; Elevation 0 steps the edge instead (owner, 2026-10-18; Notion's linked card fades its shadow in 150 / out 200, `docs/research/card-hover-2026-10-18.md`). A selected gallery tile is one line, its own edge in the selection colour, crossfading on `fast` ease-out both ways and lifting like the rest (owner, 2026-10-18: the 2px stroke read thick and landed at once) |
-| Press | instant | `fast` | colours | `:active { transition-duration: 0s }`. No press scale by default (no target product shrinks controls) |
+| Press | `press-in` ease-out | `fast` ease-out | colours + `scale` to the give | `:active { transition-duration: var(--area-press-in) }`; the give only for a pointer press (Feedback, above) |
 | Focus ring | instant | instant | outline / box-shadow | rings never fade in; a ring that animates lags the keyboard |
-| Selected / checked colour | instant | `fast` | colours | same rule as hover |
+| Selected / checked colour | `hover-in` | `fast` | colours | same clock as hover; a check made by the keyboard lands at once |
 | Small mark (checkbox tick, radio dot, indeterminate bar) | `fast` ease-out | `fast` | `scale` from 0.6 + `opacity` | no overshoot; marks are drawn 1:1 on the control's own pixel grid, one drawing per size, whole pixels at rest |
 | Chevron rotation | `fast` ease-out | `fast` | `rotate` | one rule for every chevron that turns (Accordion, Tree view, Nav, Split button). A select trigger's chevron stays still (native Select, ChatGPT, Notion) |
 | Switch thumb | `base` ease-in-out | same | `translate` (whole pixels) | track colour on the same clock; never animate `left` / `inset`. The 2px press-stretch may change the thumb's `inline-size` on the same clock (a `scale` would distort the pill ends) |
-| Tabs / Segmented indicator | `base` ease-in-out | same | `translate` + `scale`/`inline-size` of one indicator | only if the component draws a moving indicator |
+| Tabs / Segmented indicator | `base` ease-in-out | same | `translate` + `inline-size` of one indicator | Segmented slides one plate since 2026-10-24 (`data-plate`, docs/specs/segmented.md); Tabs still mark each tab (open) |
+| Slider thumb and fill | 1:1 | 1:1 | — | track the pointer exactly while dragging; a key step or a track click jumps (Apple, Radix, Material 3; research 2026-10-24). The app keeps the drag smooth by throttling what it repaints, never by easing the thumb |
 | Popover, menu, select list, combobox list, hover card, date panel | `base` ease-out | `fast` ease-out | `opacity` + `scale` from 0.97 | `transform-origin` at the trigger (overlay.ts writes it); `@starting-style` for the enter; exit by `allow-discrete` on `display`/`overlay` |
 | Context menu | `fast` ease-out | `fast` | `opacity` + `scale` from 0.97 | origin at the pointer |
 | Tooltip | `fast` ease-out after the open delay | instant | `opacity` + `scale` 0.97 | open delay 500–700ms; once one tooltip is open, neighbours open at once (skip window ~300ms) |
@@ -84,7 +103,9 @@ duration 0, so the curve no longer applies there.
 | Accordion body | `slow` ease-in-out | `moderate` ease-in-out | `block-size` via `interpolate-size: allow-keywords` + `opacity` | progressive enhancement; without support it snaps |
 | Spinner | 1s per turn, linear | — | `rotate` | stops at Motion 0 and under reduced motion |
 | Skeleton shimmer, pulse | linear, long | — | `background-position` / `opacity` | stops under reduced motion |
-| Theme / density change | instant | instant | — | never animate a theme switch: the app sets `data-area-switching` (base.css) on the scope it repaints for one frame, so token-built colour transitions jump (the desktop app does it for Light / Dark and every Canvas setting, hover previews included) |
+| Theme / density change | instant | instant | — | never animate a theme switch: the app sets `data-area-switching` (base.css) on the scope it repaints for one frame, so token-built colour transitions jump (the desktop app does it for Light / Dark and every Canvas setting, hover previews included). Restyling the whole document costs about 300ms, so the desktop app's chrome takes a setting 160ms after the last change of a drag (studio.tsx, `useSettled`); a preview of a theme may crossfade its picture (Setup's stage, below) |
+| A step of a flow (Setup) | fade `base`, slide 16px `slow` ease-out from the side it comes from | fade `fast`, drift 8px away | `opacity` + `translate` | both steps in place at once; the leaving one is a copy, so nothing waits for it (Base UI's animated panels: fade 175, move 350 on (0.22, 1, 0.36, 1)) |
+| A preview's picture (Setup's stage) | crossfade `moderate` ease-out | — | `opacity` of a copy of the old drawing | a pick or a hover preview only; a run of changes (a drag) cuts (setup-screen.tsx, `crossfade`) |
 
 Exits are one step faster than entrances. Anything opened from the keyboard should feel no slower
 than pressing a key: keep keyboard-opened surfaces on the same short clock and never delay focus
@@ -118,9 +139,11 @@ an edge stays put at a fractional scale (browser zoom included):
 ## Reduced motion
 
 `prefers-reduced-motion: reduce` resolves every duration to 0 wherever motion is set, including
-subtrees with their own `data-area-motion` (it used to apply only where none was set). Loops
-(spinner, shimmer, pulse) stop, through the same `duration-loop` token. Open question for the owner: keep short opacity fades under reduced
-motion, as Apple and Emil Kowalski recommend, instead of 0.
+subtrees with their own `data-area-motion` (it used to apply only where none was set), and Feedback to Off (the give
+rests at 1). Loops (spinner, shimmer, pulse) stop, through the same `duration-loop` token. Open question for the owner:
+keep short opacity and colour fades (160ms) under reduced motion and drop only movement, as Apple's guidance, Emil
+Kowalski, Motion's `reducedMotion="user"`, Base UI and bencho.dev do (research 2026-10-24); that needs separate tokens
+for fades and for movement.
 
 ## Checking a component
 

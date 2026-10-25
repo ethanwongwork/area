@@ -116,8 +116,8 @@
     border-radius: var(--area-radius-small);
     transition: var(--area-transition);
   }
-  @media (hover: hover) { .area-accordion-item__trigger:enabled:hover .area-accordion-item__chevron::before { background: var(--_plate-hover); transition-duration: 0s; } }
-  .area-accordion-item__trigger:enabled:active .area-accordion-item__chevron::before { background: var(--_plate-active); transition-duration: 0s; }
+  @media (hover: hover) { .area-accordion-item__trigger:enabled:hover .area-accordion-item__chevron::before { background: var(--_plate-hover); transition-duration: var(--area-hover-in); } }
+  .area-accordion-item__trigger:enabled:active .area-accordion-item__chevron::before { background: var(--_plate-active); transition-duration: var(--area-press-in); }
   .area-accordion-item__chevron svg {
     inline-size: var(--area-icon-md);
     block-size: var(--area-icon-md);

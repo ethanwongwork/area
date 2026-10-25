@@ -9,6 +9,7 @@
  *   option-marks.css    the marks in a setting's options (src/option-marks.tsx)
  *   chat.css            the Inspector's Chat
  *   examples.css, materials.css, abstract-board.css   the Testing and Materials screens
+ *   figures.css         the area-illustration skill's engine, copied in at build (Setup's product screen)
  */
 @layer studio;
 @import url("styles/app.css") layer(studio);
@@ -25,3 +26,6 @@
 @import url("styles/brand.css") layer(studio);
 @import url("styles/chat.css") layer(studio);
 @import url("styles/abstract-board.css") layer(studio);
+/* The figure engine, copied from .claude/skills/area-illustration/engine/abstract.css by the build (scripts/renderer.mjs).
+   Unlayered, as the skill's pages load it, so its held states paint over the components' own rest (Area's CSS is unlayered). */
+@import url("styles/figures.css");

@@ -33,7 +33,9 @@ describe("axis registry", () => {
         // Any accent colour, 2026-10-23 (axes/accent.ts).
         "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours",
         // Danger hover, 2026-10-23 (axes/states.ts).
-        "danger-hover"].sort(),
+        "danger-hover",
+        // Feedback, 2026-10-24 (axes/feedback.ts).
+        "feedback"].sort(),
     );
   });
 });

@@ -65,15 +65,16 @@
   }
 
   /* Background and border move; the label does not. See button.css.
-     Motion (docs/MOTION.md, 2026-10-07): hover and press land at once and fade out over fast
-     (ease-out). A pointer or Space press is :active and Enter acts on a focus-visible chip, so
-     toggling selection by hand paints at once; a change from script fades. */
-  .area-chip:is(:active, :focus-visible, :has(> .area-chip__action:focus-visible)) { transition-duration: 0s; }
+     Motion (docs/MOTION.md): hover and press arrive on Feedback's clocks and fade out over fast (ease-out), and a
+     press gives as a Button's does. Enter acts on a focus-visible chip, so a keyboard toggle lands at once; a change
+     from script fades. */
+  .area-chip:active { transition-duration: var(--area-press-in); }
+  .area-chip:is(:focus-visible, :has(> .area-chip__action:focus-visible)) { transition-duration: 0s; }
   @media (hover: hover) {
     .area-chip:hover:not([data-disabled]) {
       background-color: var(--_bg-hover);
       border-color: var(--_border-hover, var(--area-edge-control-hover));
-      transition-duration: 0s;
+      transition-duration: var(--area-hover-in);
     }
   }
   /* Pressing the remove button is the remove button's press, not the chip's. */
@@ -81,6 +82,8 @@
     background-color: var(--_bg-active);
     border-color: var(--_border-hover, var(--area-edge-control-hover));
   }
+  /* A pointer press gives as a small Button's does (Feedback); a key press does not. */
+  .area-chip:active:not([data-disabled], :focus-visible, :has(> .area-chip__remove:active, > .area-chip__action:focus-visible)) { scale: var(--area-feedback-scale-sm); }
 
   /* Focus is the ring alone, as Button, Segmented, Checkbox and Switch (audit C-13). */
   .area-chip:focus-visible {
@@ -257,13 +260,13 @@
     /* The plate lands at once and fades out over fast, as every hover plate (was untimed). */
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
-  .area-chip__remove:active { transition-duration: 0s; }
+  .area-chip__remove:active { transition-duration: var(--area-press-in); }
 
   .area-chip[data-invalid] .area-chip__remove { color: var(--area-fg-danger); }
   /* Foreground stays fixed on hover; a plate in the chip's own ink shows the target, as the
      Alert dismiss does on its tinted ground. */
   .area-chip__remove[data-hover] { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); }
-  @media (hover: hover) { .area-chip__remove:hover { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); transition-duration: 0s; } }
+  @media (hover: hover) { .area-chip__remove:hover { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); transition-duration: var(--area-hover-in); } }
   /* spec: pressed 20% of the ink, a step past the 12% hover (Notion's 5% → 10% press doubles it). */
   .area-chip__remove:active { background: var(--_remove-active, color-mix(in srgb, currentColor 20%, transparent)); }
   .area-chip__remove:focus-visible,

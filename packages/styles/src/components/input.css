@@ -239,8 +239,8 @@
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
     user-select: none;
   }
-  @media (hover: hover) { .area-input__action-button:hover { transition-duration: 0s; } }
-  .area-input__action-button:active { transition-duration: 0s; }
+  @media (hover: hover) { .area-input__action-button:hover { transition-duration: var(--area-hover-in); } }
+  .area-input__action-button:active { transition-duration: var(--area-press-in); }
 
   /* The row pair: hover #f3, pressed #ee, as the NumberField steppers beside it (audit B-8). */
   @media (hover: hover) { .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-component-hover); } }

@@ -111,8 +111,9 @@
     transition: var(--area-transition);
     user-select: none;
   }
-  @media (hover: hover) { .area-calendar__day:hover { transition-duration: 0s; } }
-  .area-calendar__day:is(:active, :focus-visible) { transition-duration: 0s; }
+  @media (hover: hover) { .area-calendar__day:hover { transition-duration: var(--area-hover-in); } }
+  .area-calendar__day:active { transition-duration: var(--area-press-in); }
+  .area-calendar__day:focus-visible { transition-duration: 0s; }
   /* A neighbouring month's day is quieter but live: muted, not disabled ink (audit F-10). */
   .area-calendar__day[data-outside] { color: var(--area-fg-muted); }
   /* The shared plates, as every row and ghost control (DESIGN_SYSTEM.md, Shared state paint): the calendar declares its

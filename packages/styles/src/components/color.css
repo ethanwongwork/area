@@ -130,8 +130,8 @@
        and fade out on fast (was instant both ways); the focus ring (outline) never animates. */
     transition: background-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out);
   }
-  @media (hover: hover) { .area-color-swatch-picker__cell:hover { transition-duration: 0s; } }
-  .area-color-swatch-picker__cell:has(input:checked) { transition-duration: 0s; }
+  @media (hover: hover) { .area-color-swatch-picker__cell:hover { transition-duration: var(--area-hover-in); } }
+  .area-color-swatch-picker__cell:has(input:checked) { transition-duration: var(--area-hover-in); }
   .area-color-swatch-picker__cell > input {
     position: absolute;
     inset: 0;
@@ -189,7 +189,7 @@
   @media (hover: hover) {
     .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) > .area-color-swatch {
       box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.7), inset 0 0 0 2px rgb(0 0 0 / 0.15); /* spec */
-      transition-duration: 0s;
+      transition-duration: var(--area-hover-in);
     }
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 1; background: none; box-shadow: none; }
@@ -198,7 +198,7 @@
     --_inner-radius: var(--_radius);
     overflow: visible;
     box-shadow: 0 0 0 1px #fff, inset 0 0 0 1px #fff, inset 0 0 0 2px rgb(0 0 0 / 0.15); /* spec: iOS white, 10% of the cell */
-    transition-duration: 0s;
+    transition-duration: var(--area-hover-in);
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:focus-visible) { outline-offset: calc(var(--area-focus-width) * -1); z-index: 2; }
 

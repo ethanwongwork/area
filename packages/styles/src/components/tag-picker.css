@@ -86,7 +86,7 @@
   }
   @media (hover: hover) {
     .area-tag-picker__field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); }
-    .area-tag-picker__field:hover { transition-duration: 0s; }
+    .area-tag-picker__field:hover { transition-duration: var(--area-hover-in); }
   }
   .area-tag-picker__field:focus-within,
   .area-tag-picker[data-open] > .area-tag-picker__field { transition-duration: 0s; }

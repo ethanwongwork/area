@@ -115,7 +115,16 @@ From `SETTINGS` (figures/index.jsx). "In the app today" is the audit of the Them
 | Motion | its own vignette (motion) |  |  | reads |
 | Easing | its own vignette (easing) |  |  | reads |
 
-## Into theme creation (proposed, not built)
+## Into theme creation
+
+**Built 2026-10-24 (branch `claude/theme-questionnaire-builder-1df19a`):** Setup's stage is one product screen drawn
+with this engine (`apps/desktop/src/setup-screen.tsx`). The app's build copies `engine/abstract.css` into
+`dist/styles/figures.css` (unlayered, as the skill's pages load it); words are wrapped by `engine/markup.js`, now shared
+by `figures/index.jsx` and the app. The screen renders once per set of held states to static markup, and its choices'
+cards show close-ups of it under each choice. The proposal below is kept for the per-setting figures, which are not
+ported yet.
+
+### The proposal (2026-10-24)
 
 The Theme tab's grid option cards draw hand-made figures (`choiceFigure` in `apps/desktop/src/choice-figures.tsx`,
 35 settings, `cf-bar` bars). These figures could replace them:

@@ -56,10 +56,10 @@
      (ChatGPT, Fluent and Untitled darken the ink instead; Spectrum plates). Pressed and pinned keep
      the pressed plate, as an open menu trigger. */
   @media (hover: hover) {
-    .area-toggletip:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; }
+    .area-toggletip:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); }
   }
-  .area-toggletip[aria-expanded="true"] { background-color: var(--area-bg-component-active); transition-duration: 0s; }
-  .area-toggletip:active { background-color: var(--area-bg-component-pressed); transition-duration: 0s; }
+  .area-toggletip[aria-expanded="true"] { background-color: var(--area-bg-component-active); transition-duration: var(--area-press-in); }
+  .area-toggletip:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
   .area-toggletip:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
   /* An invisible 24px target (44 on coarse pointers) centred on the box (WCAG 2.5.8), as Tag's remove. */

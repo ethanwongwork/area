@@ -17,6 +17,7 @@ import { REGISTERED_PROPERTIES } from "./base.ts";
 import { THEME_AXIS } from "../axes/color.ts";
 import { UI_SHORTHAND } from "../axes/ui-scale.ts";
 import { MOTION_NONE } from "../axes/motion.ts";
+import { FEEDBACK_NONE } from "../axes/feedback.ts";
 import { MATERIAL_ATTRIBUTES, materialDefaults, materialDerived, materialRules } from "../axes/material.ts";
 
 import { colorPairs } from "./colors.ts";
@@ -206,10 +207,13 @@ export function emitAxes(): string {
   out.push("");
   // The system preference wins over a page's or subtree's own motion setting (motion pass,
   // 2026-10-07): it used to apply only where no data-area-motion was set.
-  out.push(`${INDENT}/* Reduced motion resolves to the same tokens as motion 0, wherever motion is set. */`);
+  out.push(`${INDENT}/* Reduced motion resolves to the same tokens as motion 0 and feedback Off, wherever either is set. */`);
   out.push(`${INDENT}@media (prefers-reduced-motion: reduce) {`);
   const none = AXES.find((a) => a.id === "motion")!.presets.find((p) => p.id === MOTION_NONE)!;
   out.push(rule(":root, [data-area-motion]", none.tokens, INDENT + INDENT));
+  // A press's give rests at 1 too: with no time to move, a scale would jump (Feedback, 2026-10-24).
+  const still = AXES.find((a) => a.id === "feedback")!.presets.find((p) => p.id === FEEDBACK_NONE)!;
+  out.push(rule(":root, [data-area-feedback]", still.tokens, INDENT + INDENT));
   out.push(`${INDENT}}`);
   out.push("}");
   out.push("");

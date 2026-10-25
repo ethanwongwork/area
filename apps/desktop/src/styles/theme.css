@@ -79,3 +79,6 @@
 /* Theme (src/pages/theme.tsx): the custom properties a preset writes, one Code each, wrapping. */
 .studio-writes { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--area-space-4); }
 .studio-brand__colour { display: inline-flex; align-items: center; gap: var(--area-space-6); }
+  /* Feedback's drawing (abstract.tsx, LoopingPress): the Button's own press paint and give, held for a moment by class,
+     arriving on the press clock as a real press does. */
+  .lang-press { background-color: var(--_bg-active); background-image: var(--_wash-active); scale: var(--_give, var(--area-feedback-scale)); transition-duration: var(--area-press-in); }

@@ -99,7 +99,7 @@
   .area-scroll-area--scroll {}
   .area-scroll-area--always > .area-scroll-area__scrollbar { opacity: 1; pointer-events: auto; }
   @media (hover: hover) {
-    .area-scroll-area--hover:hover > .area-scroll-area__scrollbar { opacity: 1; pointer-events: auto; transition-duration: 0s; }
+    .area-scroll-area--hover:hover > .area-scroll-area__scrollbar { opacity: 1; pointer-events: auto; transition-duration: var(--area-hover-in); }
   }
   .area-scroll-area[data-scrolling] > .area-scroll-area__scrollbar,
   .area-scroll-area > .area-scroll-area__scrollbar[data-dragging] { opacity: 1; pointer-events: auto; transition-duration: 0s; }

@@ -82,10 +82,10 @@
    */
   @media (hover: hover) {
     .area-tabs__tab:hover,
-    .area-tabs__tab:hover::after { transition-duration: 0s; }
+    .area-tabs__tab:hover::after { transition-duration: var(--area-hover-in); }
   }
   .area-tabs__tab:is(:active, [data-selected]),
-  .area-tabs__tab:is(:active, [data-selected])::after { transition-duration: 0s; }
+  .area-tabs__tab:is(:active, [data-selected])::after { transition-duration: var(--area-press-in); }
   /*
    * The selected label is strong (owner 2026-10-21, a written exception to "a label's weight never changes with state",
    * DESIGN_SYSTEM.md): rest 400, selected 500, as Figma (450 → 550) and Radix (400 → 500). Each label reserves its
@@ -212,7 +212,7 @@
   .area-table tbody :is(tr, td) {
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
-  @media (hover: hover) { .area-table--interactive tbody tr:hover td { transition-duration: 0s; } }
+  @media (hover: hover) { .area-table--interactive tbody tr:hover td { transition-duration: var(--area-hover-in); } }
 
   /* Row plates follow Menu and Nav: hover is the component hover fill, selection the active fill. */
   @media (hover: hover) {
@@ -225,7 +225,7 @@
      takes the pressed fill while held, one step firmer than selected, landing at once like the hover. */
   .area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active td {
     background-color: var(--area-bg-component-pressed);
-    transition-duration: 0s;
+    transition-duration: var(--area-press-in);
   }
 
   /* A clickable row (audit F-23 A): one stretched link covers the row, as CardLink covers a card;
@@ -306,7 +306,7 @@
      alignment), for rows whose cells are set at different sizes, such as a type specimen beside
      its token. */
   .area-table--baseline td { vertical-align: baseline; }
-  .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: var(--area-hover-in); }
   .area-table caption { padding: var(--area-space-12); text-align: start; color: var(--area-fg-muted); }
 
   /* --- Select ------------------------------------------------------------- */
@@ -538,7 +538,7 @@
          movement is instant both ways, so no row trails a fade behind the arrow keys. */
       transition: background-color var(--area-duration-fast) var(--area-ease-out);
     }
-    @media (hover: hover) { .area-select option:hover { transition-duration: 0s; } }
+    @media (hover: hover) { .area-select option:hover { transition-duration: var(--area-hover-in); } }
     .area-select option:is(:focus-visible, :active),
     .area-select:has(option:focus-visible) option { transition-duration: 0s; }
     .area-select option:first-child { margin-block-start: 0; }

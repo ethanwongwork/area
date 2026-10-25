@@ -55,6 +55,12 @@
     background-color: var(--area-bg-component);
     outline: var(--area-border-width) solid var(--area-border-decorative);
     outline-offset: calc(-1 * var(--area-border-width));
+    /* Concentric with the track, but never sharper than radius-floor, 4 (radius audit 2026-10-03:
+       a compact sm track left its items 2; Figma's nested segments keep 3-5), capped against the
+       item's own height. The option and the sliding plate share it. */
+    --_item-radius: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_item) * var(--area-radius-factor)), 2px))), calc(var(--_track-radius) - var(--_inset)));
+    position: relative;
+    isolation: isolate;
   }
 
   .area-segmented__item {
@@ -65,10 +71,7 @@
 
     block-size: var(--_item);
     border: var(--area-stroke-width) solid transparent;
-    /* Concentric with the track, but never sharper than radius-floor, 4 (radius audit 2026-10-03:
-       a compact sm track left its items 2; Figma's nested segments keep 3-5), capped against the
-       item's own height. */
-    border-radius: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_item) * var(--area-radius-factor)), 2px))), calc(var(--_track-radius) - var(--_inset)));
+    border-radius: var(--_item-radius);
 
     background: transparent;
     /* Unselected options read one step quieter, as ChatGPT (rgb 93) and Figma (50% black) set
@@ -85,15 +88,15 @@
     transition: var(--area-transition);
     user-select: none;
   }
-  /* Motion (docs/MOTION.md, 2026-10-07): hover, press and selection land at once; leaving
-     them fades over fast (ease-out), so the option given up fades while the chosen one is
-     already raised. The selected plate does not slide: there is one plate per option. */
+  /* Motion (docs/MOTION.md, "Tabs / Segmented indicator"): hover, press and the label's colour arrive on Feedback's
+     clocks and fade out over fast (ease-out). The selected plate is one plate that slides to the chosen option
+     (`data-plate`, below), on base with ease-in-out, the move of something visible across the screen. */
   .area-segmented__item:active,
-  .area-segmented__item[data-selected] { transition-duration: 0s; }
+  .area-segmented__item[data-selected] { transition-duration: var(--area-hover-in); }
   @media (hover: hover) {
     .area-segmented__item:hover:not([data-selected]):not(:disabled) {
       background-color: var(--area-bg-hover);
-      transition-duration: 0s;
+      transition-duration: var(--area-hover-in);
     }
   }
   /* Pressed, a step past hover (layers.css, "Pressed"); it pressed with the hover paint. spec: in light as firm as
@@ -116,6 +119,32 @@
     border-color: var(--area-edge-selected);
     box-shadow: var(--area-shadow-control);
   }
+
+  /*
+   * The sliding plate (owner, 2026-10-24: subtle motion; Apple's and Radix's segmented controls move their thumb). Once
+   * React has measured the chosen option (`data-plate`, `--_plate-x`, `--_plate-w`), the track paints the selected
+   * paint above as one plate behind the options, exactly over the chosen one, and slides it there when the choice
+   * changes; the option itself paints nothing. Before that, and in static markup, each option paints its own.
+   */
+  .area-segmented[data-plate]::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset-block-start: var(--_inset);
+    inset-inline-start: 0;
+    inline-size: var(--_plate-w);
+    block-size: var(--_item);
+    box-sizing: border-box;
+    translate: var(--_plate-x) 0;
+    border: var(--area-stroke-width) solid var(--area-edge-selected);
+    border-radius: var(--_item-radius);
+    background-color: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec: the selected item's */
+    box-shadow: var(--area-shadow-control);
+    pointer-events: none;
+    transition: translate var(--area-duration-base) var(--area-ease-in-out), inline-size var(--area-duration-base) var(--area-ease-in-out);
+  }
+  .area-segmented[data-plate] .area-segmented__item { position: relative; z-index: 1; }
+  .area-segmented[data-plate] .area-segmented__item[data-selected] { background-color: transparent; border-color: transparent; box-shadow: none; }
 
   .area-segmented__item:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);

@@ -15,7 +15,7 @@ export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "sh
 export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "tint-hue" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | DepthLever;
+  axis: "theme" | "neutral" | "tint-hue" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | "feedback" | DepthLever;
   /**
    * Named choices are a Segmented (Apple and Primer cap segments at 5-7); an ordered range is a bar, Slider's field
    * variant with its exact value inside it (owner, 2026-10-24), which answers the stepped Slider's old fault of reading as
@@ -155,6 +155,8 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   // Effects: the Menu's open in ms, and the shape of every transition.
   bar("motion", value => value === "0" ? "Off" : `${value}ms`, { hint: "The Menu's open; every duration scales from it" }),
   { axis: "easing", kind: "select", label: label("easing"), hint: "The shape of every transition: how it speeds up and settles", defaultValue: DEFAULT_AXES.easing, items: AXIS_PRESETS.easing.map(value => ({ value, label: title(value) })) },
+  // How a control answers the pointer (axes/feedback.ts, 2026-10-24): hover's fade-in, a press's arrival and its give.
+  { axis: "feedback", kind: "segmented", label: label("feedback"), hint: "How a control answers the pointer: hover fades in, a press gives a little", defaultValue: DEFAULT_AXES.feedback, items: AXIS_PRESETS.feedback.map(value => ({ value, label: title(value) })) },
 ] satisfies GalleryControl[]).map(control => INACTIVE[control.axis] ? { ...control, inactive: INACTIVE[control.axis] } : control);
 
 /** The archived docs gallery's storage key and canvas id (apps/docs reads them); the app saves its

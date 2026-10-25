@@ -111,9 +111,9 @@ system setting.
 
 ### 9. Quiet, exact motion
 
-States land at once and fade out on `fast`. Surfaces open from where they were triggered
-and close a step faster. Nothing bounces, nothing makes the person wait, and every resting
-state sits on whole pixels.
+States arrive quickly and fade out on `fast`; a control gives a little under a pointer press (Feedback, Subtle by
+default, 2026-10-24). Surfaces open from where they were triggered and close a step faster. Nothing bounces, nothing
+makes the person wait, and every resting state sits on whole pixels.
 *Test:* [Motion](MOTION.md), "Checking a component".
 
 ### 10. Native and accessible by construction

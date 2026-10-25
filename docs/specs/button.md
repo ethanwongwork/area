@@ -295,22 +295,26 @@ chevron, as ChatGPT's model picker).
 - Unverified: dark theme (products not switched), Figma hover, disabled/loading/selected against references, compact density
   (the gap follows density since audit S14; compact sm is 4).
 
-## Motion and interaction, 2026-10-07
+## Motion and interaction
 
-Contract: `docs/MOTION.md`. Button is the system's reference interaction: feedback lands at once,
-fades out over `duration-fast` with `ease-out`, colours only (`button.css`, "Motion").
+Contract: `docs/MOTION.md`. Button is the system's reference interaction. Since 2026-10-24 its arrivals follow the
+Feedback setting (`axes/feedback.ts`; default Subtle): hover and press ease in over `hover-in` / `press-in` (0.65 of
+`duration-fast`, about 90ms at Speed 210) and fade out over `fast`, on the Easing setting's `ease-out` (Subtle,
+`(0.22, 1, 0.36, 1)`, by default); a pointer press gives a little (`button.css`, "Motion"). Feedback Off is the
+2026-10-07 behaviour (every arrival 0s, no give).
 
-| Interaction | Before | After |
+| Interaction | 2026-10-07 | Now (Feedback Subtle) |
 |---|---|---|
-| hover in | colours over `duration-fast` (100) `ease-out` | **instant** (`:hover { transition-duration: 0s }` under `@media (hover: hover)`) |
-| hover out | colours over `fast` `ease-out` | unchanged: `fast` `ease-out` (`--area-transition`) |
-| press (`:active`) | colours over `fast` `ease-out` | **instant** in; release to rest `fast`, release while still hovered instant (it lands on the hover state, also 0s) |
-| selected on / off (`data-selected`) | `fast` both ways | **instant** on, `fast` off |
-| menu open (`aria-expanded="true"`) | `fast` both ways | **instant** on, `fast` off as the menu closes |
+| hover in | **instant** (`:hover` 0s) | `hover-in` (≈91ms) `ease-out`, under `@media (hover: hover)` |
+| hover out | `fast` `ease-out` | unchanged (`--area-transition`) |
+| press (`:active`) | **instant** in; release `fast` | `press-in` (≈91ms) in, release `fast` |
+| press give | none | `scale` to `--_give`: sm and icon-only 0.96, md 0.97, lg 0.975, full width 0.985 (`feedback-scale-*`), released over `fast`; never for a key press (`:focus-visible`), a menu trigger (`aria-haspopup`), disabled or loading |
+| selected on / off (`data-selected`) | **instant** on, `fast` off | `press-in` on, `fast` off |
+| menu open (`aria-expanded="true"`) | **instant** on, `fast` off | `press-in` on, `fast` off |
 | focus-visible | outline, not transitioned | unchanged: instant both ways |
 | disabled | opacity, not transitioned | unchanged |
-| loading | Spinner swaps in for the leading icon at once; the hover plate fades out (`fast`) as `data-loading` takes hover away | unchanged; the spinner's turn is Spinner's (`display.css`, 1s linear, slowed under reduced motion, stopped by motion "none") |
-| press scale, transforms | none | none (no target product shrinks controls) |
+| loading | Spinner swaps in for the leading icon at once; the hover plate fades out (`fast`) | unchanged |
+| reduced motion | tokens | durations 0 and the give at 1 (`emit/css.ts`) |
 
 Crispness: no resting transform, `will-change` or `box-shadow` edge (the border is a real
 `border`, the ring an `outline`). Heights are whole pixels at every tier; widths follow the label
@@ -372,6 +376,7 @@ Solid presses one step past hover in the same direction (`--_solid-active`: neut
 - 2026-10-01 · compact pass → a trailing Kbd's end inset reads the mark role (was a literal 20), so at compact the Kbd sits 6 from the top and the end (was 6 / 4). docs/research/compact-pass-2026-10-01.md.
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-button` (data-area-pills="button") makes every Button a pill; `pill` is now three-way: unset follows the list, true forces a pill, false (`--rounded`) the radius corner (`button.css`, `Button.tsx`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover, press, selected and menu-open land instantly and fade out over duration-fast (button.css, "Motion"); no press scale; focus ring unchanged (instant).
+- 2026-10-24 · owner: "alot of the components dont have any visible motion/interaction animation ... implement the subtle package as the default" (bencho.dev as the reference) → arrivals on the Feedback setting (Subtle: ≈91ms hover and press in), a pointer press gives 0.96–0.985 by size, never for keys or menu triggers; Easing defaults to Subtle (docs/research/motion-subtle-2026-10-24/systems.md).
 - 2026-10-08 · owner (Confirm dialog review: "go with your recs"; one weight for both footer
   buttons) → Button's label weight is 500 on every variant (`button.css:29-31`; the solid rule's
   own 500 removed). Knock-on, all through Button with no host override: Button group, Split

@@ -59,7 +59,7 @@
   .area-otp-field--soft { --_field-lift: 0 0 0 0 transparent; --_bg: var(--area-input-bg-soft); --_border: var(--area-input-edge-soft); --_border-hover: var(--area-input-edge); }
 
   @media (hover: hover) {
-    .area-otp-field:hover:not([data-disabled], [data-read-only]) .area-otp-field__slot:not([data-active]) { border-color: var(--_border-hover); transition-duration: 0s; }
+    .area-otp-field:hover:not([data-disabled], [data-read-only]) .area-otp-field__slot:not([data-active]) { border-color: var(--_border-hover); transition-duration: var(--area-hover-in); }
   }
 
   /* The slot the code continues in (or the selected slots): Input's focus edge, halo and outline, raised so the halo

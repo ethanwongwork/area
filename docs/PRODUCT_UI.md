@@ -149,23 +149,48 @@ Zoom is Zoom control's stepper (− Auto +):
 **Theme tab** (Language 2026-10-19 to 20; owner, 2026-10-20: "i want to change language back to theme"). The Canvas
 header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
 
-- **Setup** (the default; `src/pages/theme-setup.tsx`; rebuilt 2026-10-24 after a product finder the owner sent: "i want
-  to really try to build this experience with the options or sliders on the bottom for customization"):
-  - **The stage** fills the Canvas: the header's view (Bento, Desktop or Mobile) in the theme so far, with the rest of the
-    library faint round it, every piece re-drawn as an answer moves. The header also chooses the mode the stage shows, apart from the app's own (owner, 2026-10-24: "keep Setup's own Light/Dark switch separate from the app's mode"), so a light page can be set while the app is dark; the Inspector shows the app's mode.
-  - **The dock** floats at the stage's foot, one question at a time: Back and Reset, the question, how far along (3 of
-    39); one control; Skip (the chapter) and Continue. **Quick** asks the twelve that change the most (the page, its greys,
-    the accent, its saturation and where it shows, corners, text size, room, layers, edges, lift, motion); **Full** asks
-    about every setting, chapter by chapter (Page, Accent, Shape and size, Edges and depth, States, Motion, Accessibility,
-    Dark mode), skipping a question the answers so far make moot (Button shade while the accent shows nowhere, Text tint
-    while the greys are neutral). A light/dark pair is asked in light in its chapter and again in Dark mode, the stage
-    turned to it (owner, 2026-10-24: "shouldnt there be more than 12 questions?"). Each control is the Inspector's own
-    row at a larger size (`src/inspector-rows.tsx`), or choices drawn as cards sharing the dock's width, or swatches.
-  - **Setup and the Inspector are two ways into the same settings** (the Canvas's): every answer is an Inspector row and
-    reads there at once; what Setup does not ask keeps its default. The summary lists the answers and hands over to the
-    Inspector (Fine-tune), with Copy theme and Start over.
+- **Setup** (the default; `src/pages/theme-setup.tsx`, questions in `src/pages/setup-questions.ts`; rebuilt 2026-10-24
+  as a questionnaire: "really focusing on a detailed questionnaire process ... the exact correct visual for each
+  question, to show exactly how the choices change"):
+  - **The panel** (left of the Canvas) shows one step at a time: a welcome that chooses the path (Essentials, 14
+    questions, or Every detail, every setting) and lists the chapters; an opening card per chapter (what it decides, its
+    questions with their answers, Skip chapter, Begin); each question (progress by chapter and time left, the question,
+    one sentence on what it changes, its control, now and then a note); a review of every answer by chapter (changes
+    in bold, each a way back), with Copy theme and Fine-tune (the Inspector). Back, Default (reset this answer) and
+    Continue sit at its foot.
+  - **Controls** by what is chosen, kept to pictures (owner, 2026-10-24: "less text overall, more simple and visual
+    choice based"): choice cards are a picture and a one- or two-word name, nothing else; what the choice under the
+    pointer (or the picked one) is for, and whether it is the default, is one line under them. A picture is a close-up
+    of the product screen under that choice, drawn as shapes alone (no word bars; bars where the text is the question,
+    real text where its colour is), at one scale for every choice; a part small enough is shown whole with the screen
+    round it veiled in the page colour, a large region is cropped. Other controls: a large bar with named presets
+    (saturation, edge strength, shadow reach and softness, grey strength), a toggle with a bar for how much (text tint,
+    label tint, soft edge, field lift, edge light), swatches and a hue bar (accent, tint colour), checkable cards (pills),
+    a Switch moving at the speed and curve (motion, easing). An exact value folds under the cards. Each question has one
+    short sentence under it.
+  - **The stage** (right) is one product screen (`src/setup-screen.tsx`): a desktop window drawn as an Area figure
+    (the area-illustration skill's engine: words as bars, numbers as digits, strokes at 1px), in the theme so far and
+    the mode the step belongs to. The parts a question changes are ringed (dashed, in the stage's ink, settling to a
+    trace); the states it is about are held (the menu open, a field focused, a row hovered, a card selected or lifted,
+    a button pressed) with the pointer where it would be. A choice under the pointer is drawn on the stage before it
+    is picked ("Previewing …"). A narrow Canvas stacks the stage above the panel.
+  - **Motion** (owner, 2026-10-24: "subtle, clean"): a new step fades in and slides 16px from the side it comes from
+    while the old one fades out drifting 8px away; the hint under the cards fades as it changes; the progress fills; the
+    stage crossfades a pick or a hover preview and marks what a step changes. While a bar is dragged the bar follows
+    the pointer on every frame and the stage and pictures repaint at most every 180ms (each themed screen costs about
+    60ms to restyle); the chrome takes the setting 160ms after the drag ends. All of it runs on the app's own Speed and
+    Easing, so reduced motion cuts it.
+  - **Pacing**: chapters in the order a system is built (Page, Accent, Text and room, Shape, Lines, Depth, Interaction,
+    Motion, Accessibility, Dark mode); a question is asked only while it can change something under the answers so far
+    (Text tint while the greys are neutral, Fill shade while the accent shows nowhere), and a light/dark pair is asked in
+    light in its chapter and again in Dark mode, the stage turned to it. The Sidebar is the outline: every question on
+    the path with its answer.
+  - **Setup and the Inspector are two ways into the same settings** (the Canvas's): every answer is an Inspector
+    setting and reads there at once; what Setup does not ask keeps its default. The header chooses the path and the
+    stage's mode, apart from the app's own (owner, 2026-10-24).
   - **The setup's own UI never changes as picks are made**: the Canvas body restates the defaults over the app's picks
-    (`Workspace canvasPicks={false}`); only the stage takes them. The chrome around it follows the picks (rule 18).
+    (`Workspace canvasPicks={false}`); only the stage and the choices' pictures take them. The chrome around it follows
+    the picks (rule 18).
 - **Browse** lists the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
   wide.
 - **Containers.** Asset card is the Components tab's container only; every other tab's tiles are the plain container

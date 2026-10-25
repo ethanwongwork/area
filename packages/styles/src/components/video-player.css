@@ -85,7 +85,7 @@
   .area-video-player__start > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-video-player__start:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* The glass a step lighter under the pointer, as the buttons' plates. */
-  @media (hover: hover) { .area-video-player__start:hover { transition-duration: 0s; box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px rgb(255 255 255 / 0.12), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ } }
+  @media (hover: hover) { .area-video-player__start:hover { transition-duration: var(--area-hover-in); box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px rgb(255 255 255 / 0.12), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ } }
 
   /* The time: Area's muted UI text, tabular (Apple's secondary time; the references' 400). */
   .area-video-player__clock {

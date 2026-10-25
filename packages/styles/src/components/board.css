@@ -123,8 +123,8 @@
     --_add-plate: color-mix(in oklab, var(--_color) 6%, transparent);
     --_add-plate-active: color-mix(in oklab, var(--_color) 12%, transparent); /* spec: twice the hover, as Notion 5% → 10% */
   }
-  @media (hover: hover) { .area-board-column__add:hover { background-color: var(--_add-plate); transition-duration: 0s; } }
-  .area-board-column__add:active { background-color: var(--_add-plate-active); transition-duration: 0s; }
+  @media (hover: hover) { .area-board-column__add:hover { background-color: var(--_add-plate); transition-duration: var(--area-hover-in); } }
+  .area-board-column__add:active { background-color: var(--_add-plate-active); transition-duration: var(--area-press-in); }
   .area-board-column__add:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-board-column__add-icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--area-ui-leading); block-size: var(--area-ui-leading); }
   .area-board-column__add-icon > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
@@ -151,7 +151,7 @@
     user-select: none;
   }
   /* Hover darkens the card as a row plate would; the ink stays. */
-  @media (hover: hover) { .area-board-card:hover { --_card-bg: var(--area-bg-component-hover); transition-duration: 0s; } }
+  @media (hover: hover) { .area-board-card:hover { --_card-bg: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
   /* In a coloured column the hover takes the colour too (owner, review round 8: "hover state of the board cards
      should be colored too"), at 6% (owner, 2026-10-12: 8% "seems too drastic/dark"). Notion's hovered card, measured:
      the column's own tint laid over the column (purple L 0.960, chroma 0.015; blue and the default column alike). At 8%
@@ -162,7 +162,7 @@
   }
   /* Pressed, a step past hover (layers.css, "Pressed"): the card's next row rung, or 9% of the column's colour
      (the hover's 6% and as much again by half); the card's own actions press on their own. */
-  .area-board-card:active:not(:has(.area-board-card__actions :active)) { --_card-bg: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-board-card:active:not(:has(.area-board-card__actions :active)) { --_card-bg: var(--area-bg-component-active); transition-duration: var(--area-press-in); }
   .area-board-column:not(.area-board-column--neutral) .area-board-card:active:not(:has(.area-board-card__actions :active)) { --_card-bg: light-dark(color-mix(in oklab, var(--_color) 9%, var(--area-bg-surface)), color-mix(in oklab, var(--_color) 7%, var(--area-bg-surface))); /* spec: 7% in dark, where 9% left a tinted badge at 4.41:1 at dark 24 + 8 */ }
 
   .area-board-card__heading { display: flex; align-items: flex-start; gap: var(--area-gap-md); min-inline-size: 0; }
@@ -232,5 +232,5 @@
   @media (hover: hover) { .area-board-card__actions .area-button.area-button--ghost:hover { --_fg: var(--area-fg-default); } }
   .area-board-card__actions .area-button.area-button--ghost:is(:active, [aria-expanded="true"][aria-haspopup]) { --_fg: var(--area-fg-default); }
   .area-board-card:is(:focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-board-card__actions { opacity: 1; pointer-events: auto; transition-duration: 0s; }
-  @media (hover: hover) { .area-board-card:hover > .area-board-card__actions { opacity: 1; pointer-events: auto; transition-duration: 0s; } }
+  @media (hover: hover) { .area-board-card:hover > .area-board-card__actions { opacity: 1; pointer-events: auto; transition-duration: var(--area-hover-in); } }
 }

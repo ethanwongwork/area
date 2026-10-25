@@ -361,9 +361,14 @@ function derivedOnPage(): Record<string, string> {
     // `data-area-radius` subtree re-derives its own corners.
     ...radiusDerivations(),
 
-    // Standard transition for interactive chrome. Only properties that actually change.
+    // Standard transition for interactive chrome. Only properties that actually change. `scale` carries a press's give
+    // (Feedback); it rests at 1, so a control that never presses never moves.
     [`${PREFIX}transition`]:
-      `background-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), border-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), box-shadow var(${PREFIX}duration-fast) var(${PREFIX}ease-out)`,
+      `background-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), border-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), box-shadow var(${PREFIX}duration-fast) var(${PREFIX}ease-out), scale var(${PREFIX}duration-fast) var(${PREFIX}ease-out)`,
+    // Feedback (axes/feedback.ts) on the Speed setting: how long a hover and a press take to arrive. A state's own rule
+    // sets its arrival to these (the base transition is the leave), so Off and Speed 0 land at once as before.
+    [`${PREFIX}hover-in`]: `calc(var(${PREFIX}duration-fast) * var(${PREFIX}feedback-hover))`,
+    [`${PREFIX}press-in`]: `calc(var(${PREFIX}duration-fast) * var(${PREFIX}feedback-press))`,
   };
 }
 

@@ -62,8 +62,8 @@
     margin-inline-end: calc(var(--_plate-in) - var(--_card-column));
   }
   .area-queue__chevron::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: max(var(--area-radius-min), calc(var(--area-radius-small) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_plate-in) - var(--area-radius-small)) * var(--area-radius-concentric))); transition: var(--area-transition); }
-  @media (hover: hover) { .area-queue__head:hover .area-queue__chevron::before { background: var(--area-bg-hover); transition-duration: 0s; } }
-  .area-queue__head:active .area-queue__chevron::before { background: var(--area-bg-pressed); transition-duration: 0s; }
+  @media (hover: hover) { .area-queue__head:hover .area-queue__chevron::before { background: var(--area-bg-hover); transition-duration: var(--area-hover-in); } }
+  .area-queue__head:active .area-queue__chevron::before { background: var(--area-bg-pressed); transition-duration: var(--area-press-in); }
   /* An ordered list (messages send in order), with Menu's list padding and its break between rows (ui-row-gap: 1)
      so adjacent plates stay distinct. */
   .area-queue__items { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-row-gap); margin: 0; padding: var(--_card-list); list-style: none; }
@@ -82,7 +82,7 @@
     background-color: var(--_row-plate);
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
-  @media (hover: hover) { .area-queue__item:hover { --_row-plate: var(--area-bg-component-hover); transition-duration: 0s; } }
+  @media (hover: hover) { .area-queue__item:hover { --_row-plate: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
   .area-queue__item:focus-within { --_row-plate: var(--area-bg-component-hover); transition-duration: 0s; }
   /* Row actions change ink, not plate (Nav's, Board's and Edit summary's rule): muted ghost buttons, the default ink on
      hover and press (round 51: their own plate was the row's grey, so the hover could not be seen). */
@@ -109,7 +109,7 @@
       border-radius: inherit;
       background: linear-gradient(var(--_row-plate), var(--_row-plate)), var(--area-bg-surface);
     }
-    .area-queue__item:hover > .area-queue__actions { opacity: 1; transition-duration: 0s; }
+    .area-queue__item:hover > .area-queue__actions { opacity: 1; transition-duration: var(--area-hover-in); }
     .area-queue__item--failed > .area-queue__actions { position: static; padding: 0; margin-inline-end: calc(var(--_card-end) - var(--area-ui-row-inset)); background: none; }
   }
   .area-queue__item:focus-within > .area-queue__actions,

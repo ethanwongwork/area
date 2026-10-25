@@ -34,7 +34,7 @@
   }
   /* Motion (docs/MOTION.md, "Hover plate"): the edge darkens at once and fades back on fast. */
   @media (hover: hover) {
-    .area-file-upload:hover:not([data-disabled]) { border-color: var(--_edge-hover); transition-duration: 0s; }
+    .area-file-upload:hover:not([data-disabled]) { border-color: var(--_edge-hover); transition-duration: var(--area-hover-in); }
   }
   /* Files over the zone: the selection edge and the row plate, until they leave or drop. */
   .area-file-upload[data-dragging] {

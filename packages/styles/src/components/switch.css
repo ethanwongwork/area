@@ -141,8 +141,8 @@
   /* data-checked: a display-only switch whose state lives on its host (a menu's checkable row). */
   .area-switch__track[data-checked] .area-switch__thumb,
   .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { --_x: round(nearest, calc(var(--_w) - var(--_inset) * 2 - var(--_thumb-width)), 1px); }
-  .area-switch[data-hover]:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track::before { opacity: 1; transition-duration: 0s, var(--area-duration-base); }
-  @media (hover: hover) { .area-switch:hover:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track::before { opacity: 1; transition-duration: 0s, var(--area-duration-base); } }
+  .area-switch[data-hover]:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track::before { opacity: 1; transition-duration: var(--area-hover-in), var(--area-duration-base); }
+  @media (hover: hover) { .area-switch:hover:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track::before { opacity: 1; transition-duration: var(--area-hover-in), var(--area-duration-base); } }
   /* Press stretch: the thumb grows 2px toward the far side; when on, it grows back toward the start. */
   .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__thumb { inline-size: calc(var(--_thumb-width) + var(--area-space-2)); }
   .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { --_x: round(nearest, calc(var(--_w) - var(--_inset) * 2 - var(--_thumb-width) - var(--area-space-2)), 1px); }
