@@ -176,7 +176,8 @@ export function emitAxes(): string {
   // Standard / Medium / High. Every derivation mixes by it, so any value between 0 and 1 reads.
   // Nine levels since 2026-10-22 (owner: "i want more granularity in those options"), 0 (Standard) to 8 (More), each an
   // eighth of the way; the names Standard, Medium and More stay as aliases of 0, 4 and 8.
-  for (let level = 0; level <= 8; level++) out.push(rule(`[data-area-contrast="${level}"]`, { "--area-contrast-more": String(level / 8) }));
+  // Quarter levels since 2026-10-24 (owner, the controls review: "more granularity"): 33 levels, 0 to 8.
+  for (let quarter = 0; quarter <= 32; quarter++) out.push(rule(`[data-area-contrast="${quarter / 4}"]`, { "--area-contrast-more": String(quarter / 32) }));
   out.push(rule('[data-area-contrast="more"]', { "--area-contrast-more": "1" }));
   out.push(rule('[data-area-contrast="medium"]', { "--area-contrast-more": "0.5" }));
   out.push(rule('[data-area-contrast="standard"]', { "--area-contrast-more": "0" }));
@@ -197,10 +198,10 @@ export function emitAxes(): string {
   out.push(`${INDENT}/* Re-derive cross-axis values wherever an axis is redeclared. */`);
   out.push(rule(axisBearing, derivedTokens()));
 
-  // Material's paints read only its own inputs and the accent, so they re-derive only where either is set.
+  // Material's paints read only its own inputs and the accent's solid, so they re-derive only where one of those is set.
   out.push("");
   out.push(`${INDENT}/* Re-derive material paints wherever a material or the accent is redeclared. */`);
-  out.push(rule([...MATERIAL_ATTRIBUTES.map(a => `[${a}]`), "[data-area-accent]"].join(",\n" + INDENT), materialDerived()));
+  out.push(rule([...MATERIAL_ATTRIBUTES.map(a => `[${a}]`), "[data-area-accent]", "[data-area-accent-strength]", "[data-area-solid-light]", "[data-area-solid-dark]"].join(",\n" + INDENT), materialDerived()));
 
   out.push("");
   // The system preference wins over a page's or subtree's own motion setting (motion pass,

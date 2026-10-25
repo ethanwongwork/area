@@ -14,8 +14,8 @@ import { CARD_TONE_STEPS, CARD_TONE_UNIT } from "../color/layers.ts";
 
 const cardToneAxis = (theme: "light" | "dark"): AxisDefinition => ({
   id: `card-tone-${theme}`,
-  label: theme === "light" ? "Light card tone" : "Dark card tone",
-  description: `In ${theme}: cards and asset cards against the page. Auto keeps each one's own tone; −4 (darker) to +4 (lighter), 0 matches the page.`,
+  label: theme === "light" ? "Light card shade" : "Dark card shade",
+  description: `In ${theme}: cards and asset cards against the page. Auto keeps each one's own tone; −4 (darker) to +4 (lighter) in half steps, 0 matches the page.`,
   defaultPreset: "auto",
   namespaces: [`--area-card-tone-${theme}-auto:`, `--area-card-tone-${theme}:`],
   presets: [
@@ -23,7 +23,7 @@ const cardToneAxis = (theme: "light" | "dark"): AxisDefinition => ({
     ...CARD_TONE_STEPS.map(step => ({
       id: String(step),
       label: step === 0 ? "0 (Page)" : step < 0 ? `${step}` : `+${step}`,
-      description: step === 0 ? "The page's own tone." : `${Math.abs(step)} step${Math.abs(step) === 1 ? "" : "s"} ${step < 0 ? "darker" : "lighter"} than the page (${(Math.abs(step) * CARD_TONE_UNIT[theme]).toFixed(3)} L).`,
+      description: step === 0 ? "The page's own tone." : `${Math.abs(step)} step${Math.abs(step) === 1 ? "" : "s"} ${step < 0 ? "darker" : "lighter"} than the page (${(Math.abs(step) * CARD_TONE_UNIT[theme]).toFixed(4)} L).`,
       tokens: tokens({ [`card-tone-${theme}-auto`]: 0, [`card-tone-${theme}`]: step }),
     })),
   ],

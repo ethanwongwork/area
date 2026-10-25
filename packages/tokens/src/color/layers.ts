@@ -19,6 +19,7 @@
  * two agree and that every combination keeps text readable and controls, frames and selection visible.
  */
 import { type Rgb, oklchToRgb, rgbToOklab, labToLch, parseHex, SRGB, toHex, clampRgb } from "./oklab.ts";
+import { findCusp, maxChromaAt } from "./gamut.ts";
 
 // ---------------------------------------------------------------------------
 // The settings
@@ -36,13 +37,16 @@ export const DEFAULT_GROUND_DARK = 8;
 export const DEFAULT_LAYERS = 4;
 
 /**
- * Tint (axes/tint.ts, owner 2026-10-22): a hue in 5° steps, a strength per mode in steps of 0.005 OKLCH chroma (8 = 0.04,
- * the most sRGB shows on every hue from a 95 page down: docs/research/custom-neutral-2026-10-22/gamut.ts), and the share
- * of it text takes, in quarters. Auto, each tint setting's default, follows the Neutral setting's own cast.
+ * Tint (axes/tint.ts, owner 2026-10-22): a hue in 5° steps, a strength per mode in steps of 0.005 OKLCH chroma, and the
+ * share of it text takes, in quarters. Auto, each tint setting's default, follows the Neutral setting's own cast.
+ * Strength runs to 16 (0.08) since 2026-10-23 (a butter-yellow page needs 0.03 to 0.08: docs/research/
+ * palette-customization-2026-10-23). 8 (0.04) is what every hue shows from a 95 page down; yellow has three times that
+ * room, blue a third of it on a 98 page, so a step past a hue's room clips to the most sRGB shows there
+ * (docs/research/custom-neutral-2026-10-22/gamut.ts). The text margin was swept to 0.08 on every hue.
  */
 export const TINT_HUES = Array.from({ length: 72 }, (_, i) => i * 5);
 export const TINT_STEP = 0.005;
-export const TINT_STEPS = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
+export const TINT_STEPS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] as const;
 export const INK_TINT_STEPS = [0, 1, 2, 3, 4] as const;
 export const DEFAULT_INK_TINT = 2;
 /**
@@ -61,13 +65,14 @@ export const INK_MARGIN = 0.25;
  * 0.012 L (−3 on white is #f3f3f3, the gallery tiles of the owner's reference); a dark one 0.03 (small steps near black
  * do not show). Two tones read it: `card` (Card, Auto = raised) and `tile` (Asset card, Auto = recessed).
  */
-export const CARD_TONE_STEPS = [-4, -3, -2, -1, 0, 1, 2, 3, 4] as const;
+// Half steps since 2026-10-24 (owner, the controls review: "can you add more granularity?"): 0.006 L in light, 0.015 in dark.
+export const CARD_TONE_STEPS = [-4, -3.5, -3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4] as const;
 /**
  * An Asset card's frame (owner, 2026-10-23: "the color on the inside frame of the asset cards is different from the outside
  * card material"): the page tone, the ground components are drawn for, unless the card around it is the page tone too (Card
  * tone 0, a step clamped at white or black, or a raised card on a white page), where it takes the recessed tone, so the
  * frame always reads apart from its card. Two grounds: `frame` in a tile-toned card, `frameRaised` in a raised one. Two
- * lightnesses closer than FRAME_SAME are the same tone (Card tone's smallest step is 0.012).
+ * lightnesses closer than FRAME_SAME are the same tone (Card tone's smallest step is 0.006).
  */
 export const FRAME_SAME = 0.0001;
 export const CARD_TONE_UNIT = { light: 0.012, dark: 0.03 } as const;
@@ -151,6 +156,11 @@ export const INK_TODAY = {
 } as const;
 /** Targets, a touch over WCAG's 4.5 and 3 so a rounded hex never lands under them. */
 export const INK_TARGET = { text: 4.6, edge: 3.1 } as const;
+/** The lightest a dark selected fill sits (2026-10-23 theme review): where white text still keeps the text target once
+ * pressed by the press room (L 0.523). Strong Hover and Selected fills on a light dark ground went past it (at 20 + 8 with
+ * both at 4 the selected plate was #999999 and white text 2.85:1); there the fills' step shrinks so the selected fill
+ * stops here, hover and pressed keeping their order. The defaults sit under it (0.516 at most), so they are unchanged. */
+export const DARK_FILL_CEILING = Number((Math.cbrt((1 + 0.05) / INK_TARGET.text - 0.05) - PRESS_ROOM.dark).toFixed(6));
 /** The cast fades to none at white and at black, as the tinted ramps do: full chroma from 0.024 under white, and at or
  * above L 0.18 in dark. */
 export const CAST_FADE = { light: 0.024, dark: 0.18 } as const;
@@ -170,12 +180,16 @@ export const washedLightness = (L: number, keep: number) => Math.cbrt((((1.055 *
 /** The roles with a vivid ink (`fg-<role>-vivid`: validation, danger rows, syntax). Each is chosen for 4.6:1 on white
  * (scale.ts chooseVivid; the code ground is white in light), so its luminance is at most VIVID_Y. On a gray light page
  * the inks mix toward black in OKLab, which scales luminance by (1 − d)³ exactly, by just enough to keep 4.6:1 on the
- * page; on white d is 0, so the light theme as it was is unchanged (sweep: 3.83:1 at 90). Dark needs no change. */
+ * page, or on a Card toned darker than it (Card tone; 2026-10-23); on white d is 0, so the light theme as it was is
+ * unchanged (sweep: 3.83:1 at 90). On the recessed layer they measure about 4.3:1 at the defaults (white's ink on L
+ * 0.976); solving them there would darken them at the defaults, an open choice. Dark needs no change. */
 export const VIVID_ROLES = ["accent", "danger", "warning", "caution", "success", "info", "discovery", "pink", "brown"] as const;
 export const VIVID_Y = (1 + 0.05) / INK_TARGET.text - 0.05;
 /** The tonal inks (`fg-<role>`: outline Buttons and Badges, links, statuses) are darker; the brightest in any accent is
- * teal's #00766a, luminance 0.140. They take the same mix, solved for that bound, so they hold on gray pages from about
- * L 0.94 down (sweep: 4.18:1 at 90 + 0) and are unchanged on 100 to 95. */
+ * teal's #00766a, luminance 0.140. They take the same mix, solved for that bound on the deepest ground text sits on (the
+ * recessed layer or a darker card, as body text; the page until 2026-10-23, when an accent Badge on a Card at Card tone
+ * −4 on a 91 page measured 4.07:1), so they hold on gray pages and grounds from about L 0.94 down (sweep: 4.18:1 at 90 + 0)
+ * and are unchanged at the defaults. */
 export const TONAL_ROLES = ["accent", "danger", "warning", "caution", "success", "info", "discovery", "pink", "gray", "brown"] as const;
 export const TONAL_Y = 0.141;
 /** Every hued ink the model derives: its token, the rung the axes write and the luminance bound it is solved for. */
@@ -184,6 +198,15 @@ export const HUED_INKS = [
   ...TONAL_ROLES.map(role => ({ token: `fg-${role}`, bound: TONAL_Y, darken: "tonal" as const })),
 ];
 const darkenFor = (page: number, bound: number) => 1 - Math.min(1, Math.cbrt(Math.max(0, (page ** 3 + 0.05) / INK_TARGET.text - 0.05) / bound));
+/**
+ * On a tinted page the hued inks darken as if the page were this share of its tint darker (2026-10-23): the darkening is
+ * solved for a gray page's luminance, and a tint lowers the page's luminance at the same lightness (a red or pink tint at
+ * 8 on a 92 page left danger's vivid ink at 4.3:1). The text rule's own margin (INK_MARGIN) covers every hue to Tint 16.
+ * It counts the tint past HUED_INK_FREE, the Neutral setting's own Cool and Warm casts (0.0034), so they paint as they did.
+ */
+export const HUED_INK_MARGIN = 0.25;
+export const HUED_INK_FREE = 0.004;
+export const tintedDarken = (page: number, chroma: number, bound: number) => darkenFor(page - HUED_INK_MARGIN * Math.max(0, chroma - HUED_INK_FREE), bound);
 /** Tinted labels on tinted plates (Tag, Board: the ink over a 16% wash of itself) lose contrast as the dark ground under
  * the plate lightens, so they mix toward white. Two amounts, by the ground the label sits on:
  *   layer  on a card, a menu or the page: past a raised layer of L 0.30, 4× the excess (0.24 at 24 + 8, every Tag ink
@@ -246,14 +269,14 @@ export function layerLightness(theme: "light" | "dark", groundStep: number, n: n
       muted: Math.min(INK_TODAY.light.muted, inkOn("light", firmest, INK_TARGET.text), inkOn("light", MARK_SHADE * deepest, INK_TARGET.text), inkOn("light", washedLightness(markGround, MARK_HOVER_KEEP), markHoverTarget(markGround))),
       edge: edgeInk, edgeHover: edgeInk + INK_TODAY.light.edgeHover,
     };
-    return { page, raised, recessed, card, tile, frame, frameRaised, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(page, VIVID_Y), tonalDarken: darkenFor(page, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
+    return { page, raised, recessed, card, tile, frame, frameRaised, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(Math.min(page, card), VIVID_Y), tonalDarken: darkenFor(deepest, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
   }
   const lift = n > 0 && g < DARK_LAYER_FLOOR ? DARK_LAYER_FLOOR - g : 0;
   const page = g, raised = g + lift + LAYER_PER_STEP.dark.raised * n, recessed = g + lift + LAYER_PER_STEP.dark.recessed * n;
   const explicit = cardTone === "auto" ? undefined : clamp01(page + cardTone * CARD_TONE_UNIT.dark);
   const card = explicit ?? raised, tile = explicit ?? recessed;
   const frameIn = (x: number) => Math.abs(x - page) < FRAME_SAME ? recessed : page, frame = frameIn(tile), frameRaised = frameIn(raised);
-  const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR); return FM.dark.map(m => rest + m * s) as [number, number, number]; };
+  const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR), t = Math.min(s, Math.max(0, (DARK_FILL_CEILING - rest) / FM.dark[2])); return FM.dark.map(m => rest + m * t) as [number, number, number]; };
   const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile), frame: fills(frame), frameRaised: fills(frameRaised) };
   // The lightest surface text sits on: the raised layer, or a card lighter than it (Card tone).
   const top = fills(Math.max(raised, card, tile));
@@ -284,9 +307,36 @@ export function castOf(hexLight50: string, hexDark900: string): { light: Cast; d
   };
 }
 
+/**
+ * The most tint a hue can take at a lightness without leaving sRGB, as two slopes under its gamut (2026-10-23): toward
+ * white the room shrinks about linearly with 1 − L, toward black with L, so `min(white × (1 − L), black × L)` sits under the
+ * boundary at every lightness. A strong tint past a hue's room is held there instead of clipped: clipping (what Chromium
+ * paints, per channel) moves a colour's luminance and hue, which tipped control edges under 3:1 on red and orange pages
+ * from Tint 12. Each slope is the boundary's least ratio on its side of the cusp, 2% inside, floored to 0.001, and only
+ * where the room is under 0.085 (above it no tint reaches). docs/research/palette-customization-2026-10-23.
+ */
+const ROOM_CACHE = new Map<number, { white: number; black: number }>();
+export function tintRoom(hue: number): { white: number; black: number } {
+  const h = ((hue % 360) + 360) % 360, cached = ROOM_CACHE.get(h);
+  if (cached) return cached;
+  const cusp = findCusp(h, SRGB).L;
+  let white = Infinity, black = Infinity;
+  for (let L = 0.001; L < 0.9995; L += 0.001) {
+    const room = maxChromaAt(L, h, SRGB);
+    if (room > 0.085) continue;
+    if (L >= cusp) white = Math.min(white, room / (1 - L)); else black = Math.min(black, room / L);
+  }
+  const floor = (x: number) => Number.isFinite(x) ? Math.floor(x * 0.98 * 1000) / 1000 : 9;
+  const out = { white: floor(white), black: floor(black) };
+  ROOM_CACHE.set(h, out);
+  return out;
+}
+
 function castChroma(theme: "light" | "dark", L: number, cast: Cast) {
   const fade = theme === "light" ? Math.min(1, Math.max(0, (1 - L) / CAST_FADE.light)) : Math.min(1, Math.max(0, L / CAST_FADE.dark));
-  return cast.chroma * fade;
+  if (cast.chroma === 0) return 0;
+  const room = tintRoom(cast.hue);
+  return Math.min(cast.chroma * fade, room.white * (1 - L), room.black * L);
 }
 export function layerHex(theme: "light" | "dark", L: number, cast: Cast): string {
   const L01 = clamp01(L);
@@ -348,9 +398,15 @@ const num = (x: number) => String(Number(x.toFixed(6)));
 /** The light and dark lightness of every role, as CSS math over the three settings. */
 export function layerLightnessCss(): Record<string, string> {
   const gl = v("ground-light"), gd = v("ground-dark"), nl = v("layers-light"), nd = v("layers-dark");
+  // The grounds the hued inks darken for (VIVID_ROLES, TONAL_ROLES), darker by HUED_INK_MARGIN of the light tint
+  // (tintedDarken): the deepest one text sits on for the tonal inks, the page or a darker Card tone for the vivid ones.
+  const tint = `${num(HUED_INK_MARGIN)} * max(0, ${v("cast-chroma-light")} - ${num(HUED_INK_FREE)})`;
+  const tintedTonal = `calc(min(${v("layer-light-recessed")}, ${v("layer-light-card")}, ${v("layer-light-tile")}) - ${tint})`;
+  const tintedVivid = `calc(min(${gl}, ${v("layer-light-card")}) - ${tint})`;
   const sl = v("layer-light-step"), sd = v("layer-dark-step");
   const lf = (x: string, m: string) => `calc(${x} - ${m} * ${sl})`;
-  const df = (x: string, m: string) => `calc(max(${x} + ${sd}, ${num(DARK_FILL_FLOOR)}) + ${m} * ${sd})`;
+  // Dark fills step from the rest fill, the step shrinking where the selected fill would pass DARK_FILL_CEILING.
+  const df = (x: string, m: string) => { const rest = `max(${x} + ${sd}, ${num(DARK_FILL_FLOOR)})`; return `calc(${rest} + ${m} * clamp(0, (${num(DARK_FILL_CEILING)} - ${rest}) / ${dm[2]}, ${sd}))`; };
   // The fill settings' multiples (fillMultiples, as CSS): rest, hover, selected.
   const h = v("fill-hover-step"), a = v("fill-selected-step");
   const lh = `max(1.25, 1.5 + 0.375 * (${h} - 2))`, dh = `(0.5 * ${h})`;
@@ -402,8 +458,8 @@ export function layerLightnessCss(): Record<string, string> {
     "layer-dark-body": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.body),
     "layer-dark-muted": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.muted),
     "layer-dark-edge": inkDark(top(0), INK_TARGET.edge, INK_TODAY.dark.edge),
-    "layer-light-vivid-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(gl)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(VIVID_Y)}`)}))`,
-    "layer-light-tonal-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(gl)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(TONAL_Y)}`)}))`,
+    "layer-light-vivid-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedVivid)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(VIVID_Y)}`)}))`,
+    "layer-light-tonal-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedTonal)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(TONAL_Y)}`)}))`,
     "layer-dark-tint-lift": `clamp(0, calc((max(${v("layer-dark-raised")}, ${v("layer-dark-card")}, ${v("layer-dark-tile")}) - ${num(TINT_LIFT.layer.from)}) * ${num(TINT_LIFT.layer.perL)}), 1)`,
     "layer-dark-tint-lift-fill": `clamp(0, calc((${top(1)} - ${num(TINT_LIFT.fill.from)}) * ${num(TINT_LIFT.fill.perL)}), 1)`,
   });
@@ -416,9 +472,19 @@ export function layerLightnessCss(): Record<string, string> {
  */
 function castCss(): Record<string, string> {
   const pick = (auto: string, neutral: string, own: string) => `calc(${v(auto)} * ${v(neutral)} + (1 - ${v(auto)}) * ${v(own)})`;
+  // Tint hue's own value: a hue, or the accent's (its Accent value, 2026-10-23: grays that lean toward the brand colour).
+  const hue = `calc((1 - ${v("tint-hue-accent")}) * ${v("tint-hue")} + ${v("tint-hue-accent")} * ${v("accent-hue")})`;
+  const pickHue = (neutral: string) => `calc(${v("tint-hue-auto")} * ${v(neutral)} + (1 - ${v("tint-hue-auto")}) * ${hue})`;
+  // Each mode's room (tintRoom): the Neutral setting's for its own hue at Auto, else Tint hue's or the accent's.
+  const pickRoom = (side: "white" | "black", theme: "light" | "dark") =>
+    `calc(${v("tint-hue-auto")} * ${v(`neutral-room-${side}-${theme}`)} + (1 - ${v("tint-hue-auto")}) * ((1 - ${v("tint-hue-accent")}) * ${v(`tint-room-${side}`)} + ${v("tint-hue-accent")} * ${v(`accent-room-${side}`)}))`;
   return {
-    "cast-hue-light": pick("tint-hue-auto", "neutral-hue-light", "tint-hue"),
-    "cast-hue-dark": pick("tint-hue-auto", "neutral-hue-dark", "tint-hue"),
+    "cast-room-white-light": pickRoom("white", "light"),
+    "cast-room-black-light": pickRoom("black", "light"),
+    "cast-room-white-dark": pickRoom("white", "dark"),
+    "cast-room-black-dark": pickRoom("black", "dark"),
+    "cast-hue-light": pickHue("neutral-hue-light"),
+    "cast-hue-dark": pickHue("neutral-hue-dark"),
     "cast-chroma-light": pick("tint-light-auto", "neutral-chroma-light", "tint-chroma-light"),
     "cast-chroma-dark": pick("tint-dark-auto", "neutral-chroma-dark", "tint-chroma-dark"),
   };
@@ -426,8 +492,10 @@ function castCss(): Record<string, string> {
 
 /** `light-dark(oklch(...), oklch(...))` for a role, tinted by the mode's cast (`share` of it: text takes Text tint's). */
 function color(light: string, dark: string, share = "1"): string {
-  const cl = `calc(${v("cast-chroma-light")} * ${share} * clamp(0, (1 - ${light}) / ${num(CAST_FADE.light)}, 1))`;
-  const cd = `calc(${v("cast-chroma-dark")} * ${share} * clamp(0, ${dark} / ${num(CAST_FADE.dark)}, 1))`;
+  // The tint, faded toward white (light) or black (dark), and held inside the hue's room (tintRoom).
+  const room = (L: string, theme: "light" | "dark") => `calc(${v(`cast-room-white-${theme}`)} * (1 - ${L})), calc(${v(`cast-room-black-${theme}`)} * ${L})`;
+  const cl = `min(calc(${v("cast-chroma-light")} * ${share} * clamp(0, (1 - ${light}) / ${num(CAST_FADE.light)}, 1)), ${room(light, "light")})`;
+  const cd = `min(calc(${v("cast-chroma-dark")} * ${share} * clamp(0, ${dark} / ${num(CAST_FADE.dark)}, 1)), ${room(dark, "dark")})`;
   return `light-dark(oklch(${light} ${cl} ${v("cast-hue-light")}), oklch(${dark} ${cd} ${v("cast-hue-dark")}))`;
 }
 /** A text ink (inkHex as CSS): Text tint's share of the cast, moved INK_MARGIN × the strength away from its ground. */

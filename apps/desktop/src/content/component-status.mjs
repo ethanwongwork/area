@@ -7,7 +7,7 @@
 // command-palette, combobox, tooltip, dialog, code-block, panel, color-picker, checkbox, radio,
 // chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
 export const COMPLETE_COMPONENTS = new Set([
-  'color-picker', 'color-swatch', 'color-swatch-picker', 'count', 'editable-text', 'file-upload', 'input', 'list-box', 'menu', 'meter', 'nav', 'panel', 'plan', 'progress', 'queue', 'radio', 'reference-list', 'search-field', 'slider', 'spinner', 'switch', 'table', 'table-of-contents', 'tabs', 'time-field', 'timeline', 'tree-view', // round 69 approved by the owner in chat (2026-10-22)
+  'color-picker', 'color-swatch', 'color-swatch-picker', 'count', 'editable-text', 'file-upload', 'input', 'list-box', 'menu', 'meter', 'nav', 'panel', 'plan', 'progress', 'queue', 'radio', 'reference-list', 'search-field', 'spinner', 'switch', 'table', 'table-of-contents', 'tabs', 'time-field', 'timeline', 'tree-view', // round 69 approved by the owner in chat (2026-10-22)
   'alignment-picker', 'attachment', 'avatar', 'calendar', 'checkbox', 'chip', 'code-block', 'command-palette', 'popover', 'stepper', // rounds 69-70 approved (2026-10-22)
   'infobox', 'dialog', 'confirm-dialog', 'drawer', 'alert', 'toast', 'empty-state', 'token-row', 'kbd', 'approval', 'shortcut-list', // round 68 approved (2026-10-22)
   'asset-card', 'number-field', 'field', // round 67 approved (2026-10-22)
@@ -65,7 +65,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-08 after their requested changes.
   'date-picker',
   // Approved 2026-10-09 on the review page, round 2 (components2).
-  'pagination', 'scroll-area', 'toggletip', 'combobox', 'custom-select', // tag-picker: reopened 2026-10-16 (round 30).
+  'pagination', 'scroll-area', 'toggletip', 'combobox', // tag-picker: reopened 2026-10-16 (round 30); custom-select: reopened 2026-10-23 (layout grid and the option preview).
   // Approved 2026-10-09 on the review page, round 3 (components3), after the round-2 feedback.
   'link', // kbd: reopened in round 51
   // Approved 2026-10-10 on the review page, round 5 (components5).
@@ -139,7 +139,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Round 68 (2026-10-22): the text-pair rule (a line joins its title) reopens Dialog, Confirm dialog, Drawer, Popover,
 // Alert, Toast, Empty state, Checkbox and Radio; Token row's text moves onto the ramp.
 // Round 69 (2026-10-22): Selection defaults to the accent (option B), so every family whose default paints Selection reopens.
-export const REVIEW_COMPONENTS = new Set([]); // nothing in review after round 70 (2026-10-22)
+export const REVIEW_COMPONENTS = new Set(['slider']); // reopened 2026-10-24: the field variant (owner's settings-panel reference)
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

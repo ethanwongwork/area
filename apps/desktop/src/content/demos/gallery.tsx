@@ -1784,6 +1784,17 @@ export const GallerySliderMedium = () => <Slider aria-label="Label" size="md" de
 export const GallerySliderLarge = () => <Slider aria-label="Label" size="lg" defaultValue={80} readout={value => `${value}%`} />;
 export const GallerySliderTrack = () => <Slider variant="track" aria-label="Label" defaultValue={60} readout={value => `${value}%`} />;
 export const GallerySliderBar = () => <Slider variant="bar" aria-label="Label" defaultValue={60} readout={value => `${value}%`} />;
+/* A range with a neutral middle fills out from it (origin, owner 2026-10-24: the Temperature bar). */
+export const GallerySliderOrigin = () => <Slider variant="field" label="Label" min={-50} max={50} origin={0} defaultValue={25} readout={value => value === 0 ? "0" : `${value > 0 ? "+" : "−"}${Math.abs(value)}`} />;
+export const GallerySliderField = () => <Slider variant="field" label="Label" defaultValue={60} readout={value => `${value}%`} />;
+/* A list of settings, as the owner's settings panel reference (2026-10-24): each row a field slider in its own unit. */
+export const GallerySliderFieldList = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-8)", inlineSize: "100%" }}>
+    <Slider variant="field" label="Label" defaultValue={60} readout={value => `${value}%`} />
+    <Slider variant="field" label="Label" min={0} max={16} defaultValue={8} readout={value => `${value}px`} />
+    <Slider variant="field" label="Label" min={0} max={300} step={30} defaultValue={210} readout={value => `${value}ms`} />
+  </div>
+);
 export const GallerySliderRangeTrack = () => <SliderRange variant="track" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
 export const GallerySliderRangeBar = () => <SliderRange variant="bar" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
 export const GallerySliderBuffered = () => <Slider aria-label="Position" defaultValue={40} buffered={65} />;

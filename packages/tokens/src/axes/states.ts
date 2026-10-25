@@ -56,7 +56,7 @@ export const FOCUS_RING_AXIS: AxisDefinition = {
  */
 export const SELECTED_STROKE_AXIS: AxisDefinition = {
   id: "selected-stroke",
-  label: "Selected stroke",
+  label: "Selected edge",
   description: "How wide a selected card's or tile's edge is, drawn inside it: 1, 2 or 3px.",
   defaultPreset: "2",
   namespaces: [`${PREFIX}selected-width:`],
@@ -79,11 +79,14 @@ export const SELECTED_TINT_AXIS: AxisDefinition = {
   label: "Selected tint",
   description: "Whether a selected card or tile also fills: none, the accent's tint, or a neutral wash.",
   defaultPreset: "none",
-  namespaces: [`${PREFIX}selected-tint:`],
+  // Two switches; the paint (`selected-tint`) is derived in emit/base.ts from the accent's surface and the selected wash,
+  // so a scope that changes the accent or the fills re-derives it (2026-10-23 theme review: a preset reading another
+  // axis's token resolved once, where the setting was declared).
+  namespaces: [`${PREFIX}selected-tint-accent:`, `${PREFIX}selected-tint-neutral:`],
   presets: [
-    { id: "none", label: "None", description: "The stroke alone marks selection.", tokens: tokens({ "selected-tint": "transparent" }) },
-    { id: "tint", label: "Tint", description: "The accent's faint tint under the stroke.", tokens: tokens({ "selected-tint": `light-dark(var(${PREFIX}accent-surface), color-mix(in srgb, var(${PREFIX}accent-surface) 50%, transparent))` }) },
-    { id: "neutral", label: "Neutral", description: "The row's selected wash under the stroke.", tokens: tokens({ "selected-tint": `var(${PREFIX}bg-active)` }) },
+    { id: "none", label: "None", description: "The stroke alone marks selection.", tokens: tokens({ "selected-tint-accent": 0, "selected-tint-neutral": 0 }) },
+    { id: "tint", label: "Tint", description: "The accent's faint tint under the stroke.", tokens: tokens({ "selected-tint-accent": 1, "selected-tint-neutral": 0 }) },
+    { id: "neutral", label: "Neutral", description: "The row's selected wash under the stroke.", tokens: tokens({ "selected-tint-accent": 0, "selected-tint-neutral": 1 }) },
   ],
 };
 
@@ -114,7 +117,7 @@ export const DANGER_HOVER_AXIS: AxisDefinition = {
  */
 export const HOVER_STROKE_AXIS: AxisDefinition = {
   id: "stroke-hover",
-  label: "Hover stroke",
+  label: "Hover edge",
   description: "How far a control's edge darkens under the pointer: 0 (it stays) to 4.",
   defaultPreset: "2",
   namespaces: [`${PREFIX}stroke-hover-step:`],

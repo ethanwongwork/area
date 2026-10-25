@@ -1,13 +1,13 @@
 /**
- * Typography: the ramp as a table, after Vercel's Geist (owner, 2026-10-11): Headings and Copy, each
- * at the regular and the strong weight as separate ramps, each row's example its own name set in
- * its own style ("Heading 72", "Copy 14 Strong"), then its token, weight and what it is for; or as
- * a grid of cards, the Components tab's Asset card with the "Aa" in its style and its name and metrics below. Choosing a role in the Sidebar shows it at each
- * weight and at every type size, in a sample line the Inspector's Canvas section edits. The Inspector shows
- * the chosen role (its "Aa", its CSS and token to copy, its facts) or, with none, the type scale.
- *
- * The usage notes come from where Area uses each role (packages/styles) and the ramp's own notes
- * (packages/tokens/src/axes/typography.ts).
+ * Typography: the ramp as a table, after Vercel's Geist (owner, 2026-10-11): Headings and Copy, one row per role with
+ * its name set in its own style at both weights (owner, 2026-10-23: "combine heading and heading strong, and copy and
+ * copy strong"), then what the role is made of, its size, line height, tracking and weights (the same
+ * day: "remove the type usage, just focus on showing the size, line height, and weight and leading/tracking"); or as a
+ * grid of cards, the default view (owner, 2026-10-24: "can you make typography cards?"): a card per style, the Components
+ * tab's Asset card, basic with the name below, the "Aa" at the start and Copy CSS in the opposite corner, landscape and
+ * with no measures ("make the card more landscape, remove the size leading tracking details"). Choosing a role
+ * in the Sidebar shows it at each weight and at every type size, in a sample line the Inspector's Canvas section edits.
+ * The Inspector shows the chosen role (its "Aa", its CSS and token to copy, its facts) or, with none, the type scale.
  */
 import { useState, type ReactNode } from "react";
 import { Code, CopyButton as AreaCopyButton, EmptyState, Field, ListBox, PanelSection, Table, TableLink, Textarea, Tooltip } from "@area/react";
@@ -35,19 +35,8 @@ const GROUPS = [
   { id: "copy", label: "Copy", lede: "Body text and interface text. Copy follows the type size: the base, two under it for small text, two over it for reading.", groups: ["text"] },
 ] as const;
 
-const USAGE: Record<string, string> = {
-  "display-lg": "Hero type, for marketing heroes and empty canvases.",
-  "display-sm": "Hero type a step down, for landing sections.",
-  "title-lg": "Page titles and large figures, like a Card's value.",
-  "title-md": "Section titles in documents and settings.",
-  "title-sm": "Sub-section titles and dialog headlines.",
-  "title-xs": "Surface titles: Card, Dialog, Drawer.",
-  "text-md": "Body text: messages, the composer, accordion content.",
-  "text-sm": "The interface size: controls, rows, panels, code.",
-  "text-xs": "Captions: hints, counts, keys, field descriptions.",
-};
-
-/* The two weights as separate ramps (owner, 2026-10-11), their values from the UI scale (400, 500). */
+/* The two weights, shown together on each role's row and card (owner, 2026-10-23; until then two ramps), their values
+   from the UI scale (400, 500). */
 const WEIGHTS = [
   { id: "regular", suffix: "", value: 400 },
   { id: "strong", suffix: " Strong", value: 500 },
@@ -75,20 +64,15 @@ const metrics = (role: TypeRole, type: string) => {
   const { size, leading, tracking } = role.metrics[type]!;
   return `${size} / ${leading}${tracking && tracking !== "0em" ? ` · ${tracking}` : ""}`;
 };
-
-/**
- * Copies a token: Area's icon-only CopyButton (docs/specs/copy-button.md), its check standing in for the copy glyph for
- * two seconds and the result said once to assistive tech, with ChromeButton's tooltip and bar class.
- */
-function CopyToken({ token }: { token: string }) {
-  return (
-    <Tooltip side="bottom" describes={false} trigger={
-      <AreaCopyButton className="studio-bar-icon" label={`Copy ${token}`} icon={<CopyIcon />} copiedIcon={<CheckIcon />} value={`var(${token})`} />
-    }>
-      Copy {token}
-    </Tooltip>
-  );
-}
+/** Tracking as read: 0 for none, else the token's em value. */
+const trackingOf = (role: TypeRole, type: string) => { const value = role.metrics[type]!.tracking; return !value || value === "0em" ? "0" : value; };
+/** What a role is made of at a type size, as label and value pairs (the table's columns, the card's rows). */
+const measures = (role: TypeRole, type: string, weights: readonly (typeof WEIGHTS)[number][]) => [
+  ["Size", `${role.metrics[type]!.size}`],
+  ["Line height", `${role.metrics[type]!.leading}`],
+  ["Tracking", trackingOf(role, type)],
+  ["Weight", weights.map(entry => entry.value).join(" · ")],
+] as const;
 
 /*
  * The Canvas's roles. In the grid every cell is an option of one ListBox (docs/specs/list-box.md): one Tab stop, the
@@ -119,7 +103,7 @@ export function TypographyPage() {
   // One role's density rows take the header's weight (strong only when it shows strong alone).
   const weight = weights === "strong" ? "strong" : "regular";
   const arrangement = useArrangement<Sort, Group>("typography", { sort: "size", descending: false, group: "kind" }, SORTS, ARRANGE_GROUPS);
-  const matching = TYPE_ROLES.filter(entry => matches(query, entry.name, entry.id, USAGE[entry.id]));
+  const matching = TYPE_ROLES.filter(entry => matches(query, entry.name, entry.id));
   // The Sidebar and the Canvas share one order (product UI rule 7).
   const shown = arrangement.sort === "name" ? sortBy(matching, entry => entry.name, arrangement.descending)
     : sortBy(matching, entry => -entry.metrics[DEFAULT_TYPE]!.size, arrangement.descending);
@@ -170,27 +154,24 @@ export function TypographyPage() {
       ) : (
         <Sheet grid={mode === "grid"} value={selected ?? null} onChoose={setSelected}>
           {sections.map(group => {
-            // One section a group, each role in both weights side by side (owner, 2026-10-24: "combine the groups into just
-            // heading and copy groups, dont separate by strong"), in the grid and the table alike.
             const list = shown.filter(entry => (group.groups as readonly string[]).includes(entry.group));
-            const styles = list.flatMap(entry => WEIGHTS.filter(w => weights === "all" || weights === w.id).map(w => ({ entry, w })));
-            if (!styles.length) return null;
-            const styleName = (entry: TypeRole, w: (typeof WEIGHTS)[number]) => `${entry.name}${w.suffix}`;
+            if (!list.length) return null;
+            // The weights shown: both, or the one the header filters to.
+            const shownWeights = WEIGHTS.filter(w => weights === "all" || weights === w.id);
             return (
-              <CanvasSection key={group.id} role={mode === "grid" ? "group" : undefined} id={`type-${group.id}`} title={group.label} count={styles.length} lede={group.lede}>
+              <CanvasSection key={group.id} role={mode === "grid" ? "group" : undefined} id={`type-${group.id}`} title={group.label} count={list.length} lede={group.lede}>
                 {mode === "grid" ? (
-                  // Grid: every style a card, basic with the name below (owner, 2026-10-24: "i like the old typography cards
-                  // better"; then "make the card more landscape, remove the size leading tracking details"): the "Aa" at
-                  // the start in the style, Copy CSS in the opposite corner.
+                  // Cards: every style its own card (both weights side by side), basic with the name below (owner, 2026-10-24:
+                  // "make the card more landscape, remove the size leading tracking details"): the "Aa" at the start in the
+                  // style, Copy CSS in the opposite corner.
                   <TileGrid span="wide" cards>
-                    {styles.map(({ entry, w }) => (
+                    {list.flatMap(entry => shownWeights.map(w => ({ entry, w }))).map(({ entry, w }) => (
                       <Tile key={`${w.id}:${entry.id}`} container="asset" look={TYPE_LOOK} aspect="hug" span="wide" stage="flow" option={`${w.id}:${entry.id}`}
-                        label={styleName(entry, w)} value={<span className="studio-tabular">{metrics(entry, density)}</span>}
-                        aria-label={`${styleName(entry, w)}, ${metrics(entry, density)}`}
+                        label={`${entry.name}${w.suffix}`} aria-label={`${entry.name}${w.suffix}, ${metrics(entry, density)}`}
                         // Copy, for what is used (Asset card's rule): the role's CSS at this weight, as the Inspector's Copy CSS.
                         actions={
                           <Tooltip side="bottom" describes={false} trigger={
-                            <AreaCopyButton variant="ghost" tone="neutral" size="sm" iconOnly label={`Copy ${styleName(entry, w)} CSS`} icon={<CopyIcon />} copiedIcon={<CheckIcon />}
+                            <AreaCopyButton variant="ghost" tone="neutral" size="sm" iconOnly label={`Copy ${entry.name}${w.suffix} CSS`} icon={<CopyIcon />} copiedIcon={<CheckIcon />}
                               value={`${roleCss(entry)}\nfont-weight: var(--area-weight-${w.id});`} />
                           }>
                             Copy CSS
@@ -203,27 +184,32 @@ export function TypographyPage() {
                     ))}
                   </TileGrid>
                 ) : (
-                  // List: Geist's table, each example its own name set in its own style.
-                  // In the framed Table, every cell on its first baseline, so a 72 example
-                  // and its 14 token share a line.
+                  // List: Geist's table, each example its own name set in its own style, at each weight shown. In the
+                  // framed Table, every cell on its first baseline, so a 72 example and its 14 values share a line.
                   <Table size="lg" interactive baseline aria-label={group.label}>
                       {/* One set of column widths for every table, so the columns line up down the Canvas. */}
-                      <colgroup><col style={{ inlineSize: "40%" }} /><col style={{ inlineSize: "26%" }} /><col style={{ inlineSize: "10%" }} /><col /></colgroup>
+                      <colgroup><col style={{ inlineSize: "52%" }} /><col style={{ inlineSize: "10%" }} /><col style={{ inlineSize: "13%" }} /><col style={{ inlineSize: "13%" }} /><col /></colgroup>
                       <thead>
-                        <tr><th scope="col">Example</th><th scope="col">Token</th><th scope="col">Weight</th><th scope="col">Usage</th></tr>
+                        <tr><th scope="col">Example</th><th scope="col">Size</th><th scope="col">Line height</th><th scope="col">Tracking</th><th scope="col">Weight</th></tr>
                       </thead>
                       <tbody>
-                        {styles.map(({ entry, w }) => (
-                          <tr key={`${w.id}:${entry.id}`} data-selected={selected === `${w.id}:${entry.id}` ? "" : undefined}>
+                        {list.map(entry => (
+                          <tr key={entry.id} data-selected={selectedId === entry.id ? "" : undefined}>
+                            {/* Both weights in one cell, regular over strong, so a 72 example keeps one line. */}
                             <td>
-                              <TableLink href={`#typography/${entry.id}`} className="studio-type__example" style={roleStyle(entry, w.id)}
-                                onClick={event => { event.preventDefault(); setSelected(`${w.id}:${entry.id}`); }}>
-                                {styleName(entry, w)}
-                              </TableLink>
+                              <span className="studio-type__examples">
+                                {shownWeights.map(w => (
+                                  <TableLink key={w.id} href={`#typography/${entry.id}`} className="studio-type__example" style={roleStyle(entry, w.id)}
+                                    onClick={event => { event.preventDefault(); setSelected(`${w.id}:${entry.id}`); }}>
+                                    {entry.name}
+                                  </TableLink>
+                                ))}
+                              </span>
                             </td>
-                            <td><span className="studio-type__token"><Code>--area-{entry.id}</Code><CopyToken token={`--area-${entry.id}-size`} /></span></td>
-                            <td><span className="studio-tabular">{w.value}</span></td>
-                            <td><span className="studio-muted">{USAGE[entry.id]}</span></td>
+                            <td><span className="studio-tabular">{entry.metrics[density]!.size}</span></td>
+                            <td><span className="studio-tabular">{entry.metrics[density]!.leading}</span></td>
+                            <td><span className="studio-tabular">{trackingOf(entry, density)}</span></td>
+                            <td><span className="studio-tabular studio-nowrap">{shownWeights.map(w => w.value).join(" · ")}</span></td>
                           </tr>
                         ))}
                       </tbody>
@@ -250,12 +236,10 @@ export function TypographyPage() {
                 <Selection preview={<Preview><span style={roleStyle(role, view ? weight : selectedWeight ?? weight)} aria-hidden="true">Aa</span></Preview>} />
                 <PanelSection heading="Role">
                   <Facts label="Role" items={[
-                    ["At type " + density, metrics(role, density)],
+                    ...measures(role, density, WEIGHTS),
                     ["Type 12 to 16", `${role.metrics["12"]!.size} to ${role.metrics["16"]!.size}`],
                     ["Ratio", (role.metrics[density]!.leading / role.metrics[density]!.size).toFixed(2)],
-                    ["Weights", WEIGHTS.map(entry => entry.value).join(" · ")],
                     ["Group", role.group === "text" ? "Copy" : "Heading"],
-                    ["Usage", USAGE[role.id]],
                   ]} />
                 </PanelSection>
               </>

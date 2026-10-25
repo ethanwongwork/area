@@ -52,7 +52,7 @@ test("renders interior marks only for an explicit discrete range", () => {
 });
 
 test("rail is the default; track and bar are variants on Slider and SliderRange", () => {
-  assert.deepEqual(MANIFESTS.slider.variants.variant, ["track", "bar"]);
+  assert.deepEqual(MANIFESTS.slider.variants.variant, ["track", "bar", "field"]);
   assert.deepEqual(MANIFESTS.sliderRange.variants.variant, ["track", "bar"]);
   const rail = render({ "aria-label": "Volume", variant: "rail" });
   assert.doesNotMatch(rail, /area-slider--(rail|track|bar)/);
@@ -87,4 +87,33 @@ test("startLabel and endLabel name the ends under the track, hidden from assisti
   const html = render({ "aria-label": "Intensity", defaultValue: 4, startLabel: "Low", endLabel: "High" });
   assert.match(html, /<span class="area-slider__ends" aria-hidden="true"><span class="area-slider__end">Low<\/span><span class="area-slider__end">High<\/span><\/span>/);
   assert.doesNotMatch(render({ "aria-label": "Intensity" }), /area-slider__ends/);
+});
+
+// Field (owner 2026-10-24): label and value inside a field-height bar, dragged from any point.
+test("field carries its label and value inside the bar and shows the value by default", () => {
+  const html = render({ variant: "field", label: "Label", defaultValue: 40 });
+  assert.match(html, /area-slider--field/);
+  assert.match(html, /area-slider__label">Label</);
+  assert.match(html, /area-slider__value" aria-hidden="true">40</);
+  assert.doesNotMatch(render({ variant: "field", label: "Label", readout: false }), /area-slider__value/);
+  assert.match(render({ variant: "field", label: "Label", defaultValue: 8, max: 16, readout: v => `${v}px` }), /aria-valuetext="8px"/);
+  assert.doesNotMatch(render({ variant: "field", label: "Label", orientation: "vertical" }), /area-slider--vertical/, "field is horizontal only");
+  const css = readFileSync(new URL("../../styles/dist/area.css", import.meta.url), "utf8");
+  const rule = css.slice(css.indexOf(".area-slider.area-slider--field {"));
+  assert.match(rule, /--_track: var\(--_height\)/, "the bar is the control's full height");
+  assert.match(rule, /--_thumb-paint: transparent/, "no grip: the fill's end is the value");
+  assert.match(css, /\.area-slider--field > \.area-slider__control \{ position: absolute; z-index: 0; inset: 0/, "any point of the bar drags it");
+});
+
+// Origin (owner 2026-10-24, the Temperature bar): the fill runs between the origin and the value, either side of it.
+test("origin fills from a neutral middle to the value, either way, and is absent unless given", () => {
+  const warm = render({ variant: "field", label: "Temperature", min: -8, max: 8, origin: 0, defaultValue: 4 });
+  assert.match(warm, /data-origin=""/);
+  assert.match(warm, /--_lo:0\.5;--_hi:0\.75/);
+  const cool = render({ variant: "field", label: "Temperature", min: -8, max: 8, origin: 0, defaultValue: -8 });
+  assert.match(cool, /--_lo:0;--_hi:0\.5/);
+  assert.match(render({ variant: "field", label: "Temperature", min: -8, max: 8, origin: 0, defaultValue: 0 }), /--_lo:0\.5;--_hi:0\.5/, "at the origin the bar is empty");
+  assert.doesNotMatch(render({ variant: "field", label: "Label", defaultValue: 40 }), /data-origin|--_lo/);
+  const css = readFileSync(new URL("../../styles/dist/area.css", import.meta.url), "utf8");
+  assert.match(css, /\.area-slider\[data-origin\] \.area-slider__control \{[^}]*--_rail: linear-gradient\(var\(--_fill-dir, to right\), var\(--_track-fill\) 0 var\(--_from\), var\(--_fill\) 0 var\(--_to\)/);
 });

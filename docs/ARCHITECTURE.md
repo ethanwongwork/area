@@ -21,7 +21,7 @@ leftovers listed under [Loose ends](#loose-ends).
 **Settings are axes.** Each axis (`src/axes/*.ts`) is a list of presets selected with
 `data-area-<id>="<preset>"` on any element. Axes write only *leaf* tokens, usually a
 single number: `--area-elevation: 3`, `--area-density-level: 0`, `--area-radius-factor`.
-There are 23 axes in `src/axes/registry.ts`. Their meaning and values are documented in
+There are 30 axes in `src/axes/registry.ts`. Their meaning and values are documented in
 [Theming](THEMING.md).
 
 Two attributes look like axes but are not:

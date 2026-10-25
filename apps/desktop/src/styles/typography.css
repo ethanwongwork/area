@@ -6,8 +6,10 @@
   .studio-type { display: grid; grid-template-columns: minmax(0, 1fr) calc(var(--area-space-96) * 2); align-items: start; gap: var(--area-space-16); }
   .studio-type__sample { overflow-wrap: anywhere; }
   /* The table's example cell: the role's name in the role itself (Geist). */
-  .studio-type__example { display: inline; }
-  .studio-type__token { display: inline-flex; align-items: center; gap: var(--area-space-4); white-space: nowrap; }
+  .studio-type__example { display: inline; white-space: nowrap; }
+  /* Regular over strong in one cell (owner, 2026-10-23), each on its own line. */
+  .studio-nowrap { white-space: nowrap; }
+  .studio-type__examples { display: grid; justify-items: start; gap: var(--area-space-4); }
   .studio-type__specs {
     display: grid;
     grid-template-columns: auto auto;

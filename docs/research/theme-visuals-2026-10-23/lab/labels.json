@@ -1,0 +1,2103 @@
+[
+ {
+  "label": "Neutral",
+  "group": "Color",
+  "value": "Neutral",
+  "options": [
+   {
+    "text": "Neutral",
+    "selected": true
+   },
+   {
+    "text": "Cool",
+    "selected": false
+   },
+   {
+    "text": "Warm",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Tint hue",
+  "group": "Color",
+  "value": "Auto",
+  "options": [
+   {
+    "text": "Auto",
+    "selected": true
+   },
+   {
+    "text": "0°",
+    "selected": false
+   },
+   {
+    "text": "5°",
+    "selected": false
+   },
+   {
+    "text": "10°",
+    "selected": false
+   },
+   {
+    "text": "15°",
+    "selected": false
+   },
+   {
+    "text": "20°",
+    "selected": false
+   },
+   {
+    "text": "25°",
+    "selected": false
+   },
+   {
+    "text": "30°",
+    "selected": false
+   },
+   {
+    "text": "35°",
+    "selected": false
+   },
+   {
+    "text": "40°",
+    "selected": false
+   },
+   {
+    "text": "45°",
+    "selected": false
+   },
+   {
+    "text": "50°",
+    "selected": false
+   },
+   {
+    "text": "55°",
+    "selected": false
+   },
+   {
+    "text": "60°",
+    "selected": false
+   },
+   {
+    "text": "65°",
+    "selected": false
+   },
+   {
+    "text": "70°",
+    "selected": false
+   },
+   {
+    "text": "75°",
+    "selected": false
+   },
+   {
+    "text": "80°",
+    "selected": false
+   },
+   {
+    "text": "85°",
+    "selected": false
+   },
+   {
+    "text": "90°",
+    "selected": false
+   },
+   {
+    "text": "95°",
+    "selected": false
+   },
+   {
+    "text": "100°",
+    "selected": false
+   },
+   {
+    "text": "105°",
+    "selected": false
+   },
+   {
+    "text": "110°",
+    "selected": false
+   },
+   {
+    "text": "115°",
+    "selected": false
+   },
+   {
+    "text": "120°",
+    "selected": false
+   },
+   {
+    "text": "125°",
+    "selected": false
+   },
+   {
+    "text": "130°",
+    "selected": false
+   },
+   {
+    "text": "135°",
+    "selected": false
+   },
+   {
+    "text": "140°",
+    "selected": false
+   },
+   {
+    "text": "145°",
+    "selected": false
+   },
+   {
+    "text": "150°",
+    "selected": false
+   },
+   {
+    "text": "155°",
+    "selected": false
+   },
+   {
+    "text": "160°",
+    "selected": false
+   },
+   {
+    "text": "165°",
+    "selected": false
+   },
+   {
+    "text": "170°",
+    "selected": false
+   },
+   {
+    "text": "175°",
+    "selected": false
+   },
+   {
+    "text": "180°",
+    "selected": false
+   },
+   {
+    "text": "185°",
+    "selected": false
+   },
+   {
+    "text": "190°",
+    "selected": false
+   },
+   {
+    "text": "195°",
+    "selected": false
+   },
+   {
+    "text": "200°",
+    "selected": false
+   },
+   {
+    "text": "205°",
+    "selected": false
+   },
+   {
+    "text": "210°",
+    "selected": false
+   },
+   {
+    "text": "215°",
+    "selected": false
+   },
+   {
+    "text": "220°",
+    "selected": false
+   },
+   {
+    "text": "225°",
+    "selected": false
+   },
+   {
+    "text": "230°",
+    "selected": false
+   },
+   {
+    "text": "235°",
+    "selected": false
+   },
+   {
+    "text": "240°",
+    "selected": false
+   },
+   {
+    "text": "245°",
+    "selected": false
+   },
+   {
+    "text": "250°",
+    "selected": false
+   },
+   {
+    "text": "255°",
+    "selected": false
+   },
+   {
+    "text": "260°",
+    "selected": false
+   },
+   {
+    "text": "265°",
+    "selected": false
+   },
+   {
+    "text": "270°",
+    "selected": false
+   },
+   {
+    "text": "275°",
+    "selected": false
+   },
+   {
+    "text": "280°",
+    "selected": false
+   },
+   {
+    "text": "285°",
+    "selected": false
+   },
+   {
+    "text": "290°",
+    "selected": false
+   },
+   {
+    "text": "295°",
+    "selected": false
+   },
+   {
+    "text": "300°",
+    "selected": false
+   },
+   {
+    "text": "305°",
+    "selected": false
+   },
+   {
+    "text": "310°",
+    "selected": false
+   },
+   {
+    "text": "315°",
+    "selected": false
+   },
+   {
+    "text": "320°",
+    "selected": false
+   },
+   {
+    "text": "325°",
+    "selected": false
+   },
+   {
+    "text": "330°",
+    "selected": false
+   },
+   {
+    "text": "335°",
+    "selected": false
+   },
+   {
+    "text": "340°",
+    "selected": false
+   },
+   {
+    "text": "345°",
+    "selected": false
+   },
+   {
+    "text": "350°",
+    "selected": false
+   },
+   {
+    "text": "355°",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Light tint",
+  "group": "Color",
+  "value": "Auto",
+  "options": [
+   {
+    "text": "Auto",
+    "selected": true
+   },
+   {
+    "text": "0 (None)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Text tint",
+  "group": "Color",
+  "value": "2",
+  "options": [
+   {
+    "text": "0 (None)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": true
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4 (Full)",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Accent",
+  "group": "Color",
+  "value": "Blue",
+  "options": [
+   {
+    "text": "Red",
+    "selected": false
+   },
+   {
+    "text": "Orange",
+    "selected": false
+   },
+   {
+    "text": "Yellow",
+    "selected": false
+   },
+   {
+    "text": "Lime",
+    "selected": false
+   },
+   {
+    "text": "Green",
+    "selected": false
+   },
+   {
+    "text": "Teal",
+    "selected": false
+   },
+   {
+    "text": "Cyan",
+    "selected": false
+   },
+   {
+    "text": "Blue",
+    "selected": true
+   },
+   {
+    "text": "Indigo",
+    "selected": false
+   },
+   {
+    "text": "Purple",
+    "selected": false
+   },
+   {
+    "text": "Pink",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Light ground",
+  "group": "Color",
+  "value": "100 (White)",
+  "options": [
+   {
+    "text": "100 (White)",
+    "selected": true
+   },
+   {
+    "text": "99",
+    "selected": false
+   },
+   {
+    "text": "98",
+    "selected": false
+   },
+   {
+    "text": "97",
+    "selected": false
+   },
+   {
+    "text": "96",
+    "selected": false
+   },
+   {
+    "text": "95",
+    "selected": false
+   },
+   {
+    "text": "94",
+    "selected": false
+   },
+   {
+    "text": "93",
+    "selected": false
+   },
+   {
+    "text": "92",
+    "selected": false
+   },
+   {
+    "text": "91",
+    "selected": false
+   },
+   {
+    "text": "90",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Light layers",
+  "group": "Color",
+  "value": "4",
+  "options": [
+   {
+    "text": "0 (Flat)",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": true
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Light card tone",
+  "group": "Color",
+  "value": "Auto",
+  "options": [
+   {
+    "text": "Auto",
+    "selected": true
+   },
+   {
+    "text": "-4",
+    "selected": false
+   },
+   {
+    "text": "-3",
+    "selected": false
+   },
+   {
+    "text": "-2",
+    "selected": false
+   },
+   {
+    "text": "-1",
+    "selected": false
+   },
+   {
+    "text": "0 (Page)",
+    "selected": false
+   },
+   {
+    "text": "+1",
+    "selected": false
+   },
+   {
+    "text": "+2",
+    "selected": false
+   },
+   {
+    "text": "+3",
+    "selected": false
+   },
+   {
+    "text": "+4",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Contrast",
+  "group": "Color",
+  "value": "System",
+  "options": [
+   {
+    "text": "System",
+    "selected": true
+   },
+   {
+    "text": "0 (Standard)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8 (More)",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Density",
+  "group": "Size",
+  "value": "32",
+  "options": [
+   {
+    "text": "28 (Compact)",
+    "selected": false
+   },
+   {
+    "text": "32",
+    "selected": true
+   },
+   {
+    "text": "36 (Comfortable)",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Radius",
+  "group": "Shape",
+  "value": "8",
+  "options": [
+   {
+    "text": "0 (Sharp)",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": true
+   },
+   {
+    "text": "10",
+    "selected": false
+   },
+   {
+    "text": "12",
+    "selected": false
+   },
+   {
+    "text": "14",
+    "selected": false
+   },
+   {
+    "text": "Pill",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Pills",
+  "group": "Shape",
+  "value": "Chip, Badge, Count, Switch, Avatar",
+  "options": [
+   {
+    "text": "Button",
+    "selected": false
+   },
+   {
+    "text": "Fields",
+    "selected": false
+   },
+   {
+    "text": "Segmented",
+    "selected": false
+   },
+   {
+    "text": "Chip",
+    "selected": true
+   },
+   {
+    "text": "Badge",
+    "selected": true
+   },
+   {
+    "text": "Count",
+    "selected": true
+   },
+   {
+    "text": "Switch",
+    "selected": true
+   },
+   {
+    "text": "Avatar",
+    "selected": true
+   }
+  ]
+ },
+ {
+  "label": "Width",
+  "group": "Stroke",
+  "value": "1",
+  "options": [
+   {
+    "text": "0 (Flat)",
+    "selected": false
+   },
+   {
+    "text": "0.5",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": true
+   },
+   {
+    "text": "1.5",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Strength",
+  "group": "Stroke",
+  "value": "4",
+  "options": [
+   {
+    "text": "0 (None)",
+    "selected": false
+   },
+   {
+    "text": "0.5",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "1.5",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "2.5",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "3.5",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": true
+   },
+   {
+    "text": "4.5",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "5.5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "6.5",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "7.5",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Hover",
+  "group": "Stroke",
+  "value": "2",
+  "options": [
+   {
+    "text": "0 (None)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": true
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Selected",
+  "group": "Stroke",
+  "value": "2",
+  "options": [
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": true
+   },
+   {
+    "text": "3",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Focus ring",
+  "group": "Stroke",
+  "value": "Hug",
+  "options": [
+   {
+    "text": "Hug",
+    "selected": true
+   },
+   {
+    "text": "Gap",
+    "selected": false
+   },
+   {
+    "text": "Halo",
+    "selected": false
+   },
+   {
+    "text": "Inset",
+    "selected": false
+   },
+   {
+    "text": "Bold",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Rest shadow",
+  "group": "Stroke",
+  "value": "0 (None)",
+  "options": [
+   {
+    "text": "0 (None)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Floating",
+  "group": "Shadow",
+  "value": "3",
+  "options": [
+   {
+    "text": "0 (Flat)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": true
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Resting",
+  "group": "Shadow",
+  "value": "3",
+  "options": [
+   {
+    "text": "0 (None)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": true
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Hover",
+  "group": "Shadow",
+  "value": "3",
+  "options": [
+   {
+    "text": "0 (None)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": true
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Field",
+  "group": "Shadow",
+  "value": "0 (None)",
+  "options": [
+   {
+    "text": "0 (None)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Size",
+  "group": "Shadow",
+  "value": "4",
+  "options": [
+   {
+    "text": "0 (Touching)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": true
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Softness",
+  "group": "Shadow",
+  "value": "2",
+  "options": [
+   {
+    "text": "0 (Crisp)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": true
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8 (Smooth)",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Light",
+  "group": "Shadow",
+  "value": "0 (Flat)",
+  "options": [
+   {
+    "text": "0 (Flat)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Colour",
+  "group": "Shadow",
+  "value": "Black",
+  "options": [
+   {
+    "text": "Black",
+    "selected": true
+   },
+   {
+    "text": "Warm",
+    "selected": false
+   },
+   {
+    "text": "Cool",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Hover",
+  "group": "Fill",
+  "value": "2",
+  "options": [
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": true
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Selected",
+  "group": "Fill",
+  "value": "1",
+  "options": [
+   {
+    "text": "0 (Same as hover)",
+    "selected": false
+   },
+   {
+    "text": "1",
+    "selected": true
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Pressed",
+  "group": "Fill",
+  "value": "4",
+  "options": [
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": true
+   }
+  ]
+ },
+ {
+  "label": "Selected tint",
+  "group": "Fill",
+  "value": "None",
+  "options": [
+   {
+    "text": "None",
+    "selected": true
+   },
+   {
+    "text": "Tint",
+    "selected": false
+   },
+   {
+    "text": "Neutral",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Motion",
+  "group": "Effects",
+  "value": "210",
+  "options": [
+   {
+    "text": "0 (None)",
+    "selected": false
+   },
+   {
+    "text": "30",
+    "selected": false
+   },
+   {
+    "text": "60",
+    "selected": false
+   },
+   {
+    "text": "90",
+    "selected": false
+   },
+   {
+    "text": "120",
+    "selected": false
+   },
+   {
+    "text": "150",
+    "selected": false
+   },
+   {
+    "text": "180",
+    "selected": false
+   },
+   {
+    "text": "210",
+    "selected": true
+   },
+   {
+    "text": "240",
+    "selected": false
+   },
+   {
+    "text": "270",
+    "selected": false
+   },
+   {
+    "text": "300",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Easing",
+  "group": "Effects",
+  "value": "Standard",
+  "options": [
+   {
+    "text": "Standard",
+    "selected": true
+   },
+   {
+    "text": "Snappy",
+    "selected": false
+   },
+   {
+    "text": "Gentle",
+    "selected": false
+   },
+   {
+    "text": "Spring",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Material",
+  "group": "Material",
+  "value": "None",
+  "options": [
+   {
+    "text": "None",
+    "selected": true
+   },
+   {
+    "text": "Glass",
+    "selected": false
+   },
+   {
+    "text": "Tactile",
+    "selected": false
+   },
+   {
+    "text": "Jelly",
+    "selected": false
+   },
+   {
+    "text": "Soft",
+    "selected": false
+   },
+   {
+    "text": "Aero",
+    "selected": false
+   },
+   {
+    "text": "Glow",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Light angle",
+  "group": "Material",
+  "value": "0° (Top)",
+  "options": [
+   {
+    "text": "0° (Top)",
+    "selected": true
+   },
+   {
+    "text": "15°",
+    "selected": false
+   },
+   {
+    "text": "30°",
+    "selected": false
+   },
+   {
+    "text": "45°",
+    "selected": false
+   },
+   {
+    "text": "60°",
+    "selected": false
+   },
+   {
+    "text": "75°",
+    "selected": false
+   },
+   {
+    "text": "90°",
+    "selected": false
+   },
+   {
+    "text": "105°",
+    "selected": false
+   },
+   {
+    "text": "120°",
+    "selected": false
+   },
+   {
+    "text": "135°",
+    "selected": false
+   },
+   {
+    "text": "150°",
+    "selected": false
+   },
+   {
+    "text": "165°",
+    "selected": false
+   },
+   {
+    "text": "180°",
+    "selected": false
+   },
+   {
+    "text": "195°",
+    "selected": false
+   },
+   {
+    "text": "210°",
+    "selected": false
+   },
+   {
+    "text": "225°",
+    "selected": false
+   },
+   {
+    "text": "240°",
+    "selected": false
+   },
+   {
+    "text": "255°",
+    "selected": false
+   },
+   {
+    "text": "270°",
+    "selected": false
+   },
+   {
+    "text": "285°",
+    "selected": false
+   },
+   {
+    "text": "300°",
+    "selected": false
+   },
+   {
+    "text": "315°",
+    "selected": false
+   },
+   {
+    "text": "330°",
+    "selected": false
+   },
+   {
+    "text": "345°",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Gradient",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Sheen",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Transparency",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Frost",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Stroke",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Inner shadow",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Inner softness",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Catch-light",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Emboss",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Contact",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Glow",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Grain",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ },
+ {
+  "label": "Page glow",
+  "group": "Material",
+  "value": "0 (Off)",
+  "options": [
+   {
+    "text": "0 (Off)",
+    "selected": true
+   },
+   {
+    "text": "1",
+    "selected": false
+   },
+   {
+    "text": "2",
+    "selected": false
+   },
+   {
+    "text": "3",
+    "selected": false
+   },
+   {
+    "text": "4",
+    "selected": false
+   },
+   {
+    "text": "5",
+    "selected": false
+   },
+   {
+    "text": "6",
+    "selected": false
+   },
+   {
+    "text": "7",
+    "selected": false
+   },
+   {
+    "text": "8",
+    "selected": false
+   }
+  ]
+ }
+]

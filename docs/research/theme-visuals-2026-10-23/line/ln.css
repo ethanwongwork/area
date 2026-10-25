@@ -1,0 +1,56 @@
+/* ---------------------------------------------------------------------------
+ * Line illustrations (2026-10-23, after Medusa UI's illustration set): flat drawings of components and layouts in one
+ * ink, one stroke weight and light fills. Text is short rounded lines; no captions or labels; one kind of control per
+ * drawing; real shadows only where the setting is a shadow. Every length is drawn at a 280 × 180 master and scaled by
+ * --_k, so a card-sized drawing keeps the composition; the setting's own property is always its token (times --_k).
+ * ------------------------------------------------------------------------- */
+.ln {
+  --_k: 1;
+  --_ink: color-mix(in oklab, var(--area-fg-default) 74%, var(--area-bg-page));
+  --_w: max(1px, calc(1.25px * var(--_k)));
+  --_paper: var(--area-bg-surface);
+  --_wash: color-mix(in oklab, var(--area-fg-default) 4%, var(--area-bg-page));
+  --_media: color-mix(in oklab, var(--area-fg-default) 10%, var(--area-bg-page));
+  --_text: color-mix(in oklab, var(--area-fg-default) 26%, var(--area-bg-page));
+  --_title: color-mix(in oklab, var(--area-fg-default) 55%, var(--area-bg-page));
+  position: relative; display: grid; place-items: center; overflow: hidden;
+  inline-size: calc(280px * var(--_k)); block-size: calc(180px * var(--_k));
+  background: var(--area-bg-page); color: var(--_ink);
+}
+.ln * { box-sizing: border-box; }
+.ln--card { --_k: 0.36; }
+
+/* Shapes. */
+.ln-box { position: relative; display: flex; flex-direction: column; background: var(--_paper); border: var(--_w) solid var(--_ink); }
+.ln-abs { position: absolute; }
+.ln-wash { background: var(--_wash); }
+.ln-media { display: block; background: var(--_media); border-radius: calc(4px * var(--_k)); }
+.ln-dash { border-style: dashed; background: transparent; }
+.ln-rule { display: block; block-size: 0; border-block-start: var(--_w) solid var(--_ink); }
+
+/* Text: rounded lines. */
+.ln-t { display: block; flex: none; block-size: max(1.5px, calc(3px * var(--_k))); border-radius: 99px; background: var(--_text); }
+.ln-t--title { block-size: max(2px, calc(4px * var(--_k))); background: var(--_title); }
+.ln-t--on { background: var(--_paper); opacity: .9; }
+
+/* Window chrome: three dots over a rule. */
+.ln-chrome { display: flex; align-items: center; gap: calc(3px * var(--_k)); block-size: calc(14px * var(--_k)); padding-inline: calc(7px * var(--_k)); border-block-end: var(--_w) solid var(--_ink); flex: none; }
+.ln-chrome > i { inline-size: calc(4px * var(--_k)); block-size: calc(4px * var(--_k)); border-radius: 50%; border: var(--_w) solid var(--_ink); }
+
+/* Controls, one kind per drawing. */
+.ln-btn { display: flex; align-items: center; justify-content: center; flex: none; border: var(--_w) solid var(--_ink); background: var(--_ink); }
+.ln-btn > .ln-t { background: var(--_paper); }
+.ln-btn--accent { background: var(--area-accent-solid); border-color: var(--area-accent-solid); }
+.ln-field { display: flex; align-items: center; gap: calc(4px * var(--_k)); flex: none; padding-inline: calc(8px * var(--_k)); background: var(--_paper); border: var(--_w) solid var(--_ink); }
+.ln-caret { display: block; inline-size: var(--_w); block-size: 45%; background: var(--_ink); }
+.ln-switch { position: relative; display: block; flex: none; inline-size: calc(64px * var(--_k)); block-size: calc(34px * var(--_k)); border-radius: 99px; border: var(--_w) solid var(--_ink); background: var(--_wash); }
+.ln-switch--on { background: var(--_ink); }
+.ln-knob { position: absolute; inset-block-start: calc(3px * var(--_k)); inline-size: calc(26px * var(--_k)); block-size: calc(26px * var(--_k)); border-radius: 50%; background: var(--_paper); border: var(--_w) solid var(--_ink); }
+.ln-knob--ghost { background: transparent; border-style: dashed; border-color: var(--_paper); opacity: .8; }
+.ln-row { display: flex; align-items: center; gap: calc(6px * var(--_k)); padding-inline: calc(8px * var(--_k)); border-radius: calc(var(--area-radius-list-row) * var(--_k)); }
+.ln-row--on { background: var(--area-bg-active); }
+.ln-row--hover { background: var(--area-bg-hover); }
+.ln-glyph { display: block; flex: none; inline-size: calc(8px * var(--_k)); block-size: calc(8px * var(--_k)); border: var(--_w) solid var(--_ink); border-radius: calc(2px * var(--_k)); }
+.ln-cursor { position: absolute; inline-size: calc(11px * var(--_k)); block-size: calc(15px * var(--_k)); max-inline-size: none; overflow: visible; }
+.ln-cursor path { fill: var(--_paper); stroke: var(--_ink); stroke-width: max(1px, calc(1.25px * var(--_k))); stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.ln-focus { border-color: color-mix(in srgb, var(--_ink), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); outline: calc(var(--area-field-focus-outline-width) * var(--_k) * 1.5) solid var(--area-field-focus-color); outline-offset: calc(var(--area-focus-offset) * var(--_k) * 1.5); box-shadow: 0 0 0 calc(var(--area-field-focus-halo-width) * var(--_k) * 1.5) var(--area-field-focus-halo-color); }

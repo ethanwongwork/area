@@ -1,6 +1,53 @@
 # Handoff
 
-## Current state (2026-10-23)
+## Current state (2026-10-24)
+- **Theme review, Inspector bars and Setup as a finder: PR #159 (`claude/theme-color-review-29db0d`), merged
+  2026-10-24.** Next: the owner starts a new theme-creation session for Setup with the Hairline session's figures.
+  - *Setup* (owner, a mouse-finder reference): a stage (the view in the theme so far, the library faint round it) and a
+    floating dock: one question, one control (the Inspector's row at lg, cards, swatches), Continue. Quick (12) or Full
+    (42 by chapter, moot ones skipped, Skip chapter, Dark mode re-asks the pairs); the summary hands over to the
+    Inspector. Setup's stage mode stays apart from the app's (owner). Open: page and accent colour fields (dropped).
+    Figures from `claude/hairline-area-visuals-00cda9` (area-illustration skill, `figures/index.jsx` SETTINGS = best
+    figure per setting; merged PR #158) map onto three seams in `pages/theme-setup.tsx`: the stage (`SetupDrawing`), choice-card
+    pictures (`ChoicePreview`) and the faint scatter (`SCATTER`); they must move into apps/desktop first.
+  - *Inspector* (owner, a settings-panel reference): Slider `variant="field"` (label and value inside a field-height
+    bar) and `origin` (fill from a neutral value; Temperature); Slider In review. `inspector-rows.tsx` is shared by
+    Inspector, Setup and the review page (https://claude.ai/artifact/XbbMMBCfHriS8vZV9ARiaV, `round2`). Ordered settings
+    are bars in units, named choices Segmented, Greys = Temperature + Tint colour, Card shade halves, Contrast quarters.
+    Headings Page, Accent, Where it paints, Size, Shape, Stroke, Shadow, States, Effects; labels renamed in the
+    registry, preset ids unchanged. Next (docs/research/theme-review-2026-10-23/controls-plan.md): finer 0–100 scales,
+    Tint by hue room, every corner px, id renames with aliases, then the colour rules approved on the Axis review page
+    (collection `verdicts`).
+  - *Theme review* (owner: "no visual errors due to all the combinations"): rendered sweeps of all 119 families × 12
+    combinations and 30 random all-setting combinations × light/dark (docs/research/theme-review-2026-10-23). Fixed: a
+    setting scope inside a ground reset its fills (`@scope` per ground), Selected tint in inner scopes, pressed fill
+    scopes, dark fills past white text's limit (`DARK_FILL_CEILING`), tonal/vivid inks on deep grounds, Label tint on the
+    press, Code block and Box model inks, dark wash order (`DARK_WASH`), gallery fit clipping labelled demos. Defaults
+    unchanged (token probe identical). Open for the owner: keycaps in accent Buttons, hued text on state fills, edges on
+    grey grounds, Selection Accent at low strength. `claude/color-cards-refinement-2c56b7` edits layers.ts/.css: its
+    frame grounds need `@scope` too.
+- **Area figures, `claude/hairline-area-visuals-00cda9` (owner 2026-10-24, eleven rounds; merged to main by PR).** Area's
+  own illustration style for theme visuals; next, per the owner, a new session combines it with a new theme creation
+  process. Start at `docs/research/area-figures-2026-10-24/README.md` ("Pick up here": captures, each setting's figure,
+  the proposed port into the Theme tab's option cards, open items). Skill `.claude/skills/area-illustration`: real
+  components rendered to markup, every word a light shape, numbers as digits, field text overlaid, figures scaled
+  with CSS zoom so strokes draw at exactly 1px; 14 desktop + 6 iPhone screens, 16 vignettes, 5 compositions (one per
+  setting), all 119 families, 46 settings on screens. Review https://claude.ai/artifact/V1qnJfnVQ8Y1WhkUAFNgkt. The
+  app is unchanged (`choice-figures.tsx` still draws the Theme tab's figures).
+- **PR, `claude/nice-swirles-989844` (owner 2026-10-23: "a user wants to choose like 2-3 colors overall").** Any palette
+  from a page colour and an accent. Accent takes the eleven or any hue in 5° (`color/generate.ts`: the palette's ladder
+  between the two nearest families; named accents paint as before, checked pixel for pixel). New settings
+  (`axes/accent.ts`): Accent strength 100–30 (an OKLab mix toward the gray of the colour's own luminance, not chroma
+  scaling, which broke contrast; the solvers walk at every strength), Light / Dark solid (400–850, clamped toward the
+  label). Tint to 16, held inside each hue's sRGB room (`tintRoom`; clipping had painted a blue tint cyan), Tint hue
+  Accent, hued inks darken for tinted pages (`HUED_INK_MARGIN`). Setup: greys as one first choice (Neutral, Warmer,
+  Cooler, Tinted, Accent) and an accent colour field that snaps. Then Label tint 0–4 (the label on an accent solid toward
+  the most coloured rung that clears it, `tintedLabel`) and Status colours Fixed / Match (status tones quieted to the
+  Accent strength; hues never rotate; tags stay). Gate: `contrast/accents.test.ts` (every accent ×
+  strength × Solid × neutral × mode). Sweep of all 119 families in light and dark with two custom palettes: no new text
+  contrast failures (Folder's count, 2.52:1, predates it). Research and review page: docs/research/
+  palette-customization-2026-10-23. Open: palette names (presets not built), a separate button colour (deferred), P3.
+
 - **PR, `claude/semantic-color-hover-states-c30c80` (owner 2026-10-23).** Danger hover (Fill; `axes/states.ts`,
   `row-danger-tint`): `tint` (default) turns a Menu danger row's hover and pressed plates to the danger hue at the
   neutral plates' lightness, `neutral` the old grey; the red follows the Pressed step (kept over PR #152's firmest press
@@ -14,6 +61,19 @@
   edge (rounds 52/57), Composer context Chips stay pills (Pills set). Merged main with a sparse checkout that leaves out
   `.claude/skills/area-ui-*` (the app's merge refused: unconfirmed pinned origin); they are in the commit, not on disk.
 
+- **PR #157, `claude/theme-dropdown-visuals-d6e169`, merged 2026-10-24** (main merged in by hand with `git merge
+  origin/main` after the owner confirmed the pinned origin; the app's sync still refused). Main's palette settings keep
+  their swatch marks; Danger hover got a plate glyph (red / grey); main's new settings have no figures yet (they open as
+  lists in grid view). All checks passed locally; CI had not finished when merged.
+  What it holds: Custom select `layout="grid"` + option `preview` (spec "Intake: Layout grid"; Custom select in
+  review); the Inspector opens visual settings as figure grids (`choice-figures.tsx`), swatch grids for Accent and Tint
+  hue, one List / Grid switch; one-idea option glyphs incl. Pills, shadow details, Material (owner prefers today's
+  token-true marks for most menus: read the review page's picks before changing marks); Typography as one Headings and
+  one Copy section, measures not usage, cards in grid view; Testing → Hairline empty states (trial,
+  `@lucasmarkes/hairline` 0.5.1 mapped to tokens; owner deciding keep vs remove). Review page
+  https://claude.ai/artifact/JvT2iJZHfe6A9nEekqT4xP: lineage, icon-to-illustration ladder (collection `ladder`), line
+  illustrations after Medusa UI (collection `line`, owner's current direction: flat, one ink, light fills, no captions,
+  one control kind per drawing). Research and sources: docs/research/theme-visuals-2026-10-23.
 - **Branch `claude/eager-maxwell-0a929b`, committed, not pushed.** PR #151's three open proposals. Press room (`PRESS_ROOM`,
   color/layers.ts): inks solved on the deepest selected fill pressed 0.012 L (dark 0.04), so a press shows on every
   ground (it equalled selected on recessed in light at Layers 4–8, raised in dark from 16 + 8); muted #646464 (was

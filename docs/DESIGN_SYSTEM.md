@@ -57,6 +57,24 @@ them:
 - A dark-end lightness adjustment is an explicit, bounded table entry, so it cannot move a
   surface ground or the white-label contrast wall unnoticed.
 
+**An accent at any colour** (2026-10-23, docs/research/palette-customization-2026-10-23).
+
+- **Any hue.** An accent hue draws the palette's ladder between its two nearest families (`color/generate.ts`): their
+  lightness at each rung and their share of the room sRGB has there, mixed by how far the hue sits between them, at the
+  hue itself. At a family's own hue that is the family, so the palette's eleven never move; `palette.json` is read, never
+  written.
+- **Strength holds hue and contrast.** Accent strength mixes every accent colour in OKLab toward the gray of its own
+  luminance, never scales chroma at a held lightness (which moved blue 500's label contrast 0.3:1 at 30%). The accent's
+  solvers (solid, tonal pair, indicator) walk at every strength, so each step they pick clears at each.
+- **Solid is a step, not a colour.** It moves the accent's solid and its hover only; the label keeps the hue's own colour,
+  and a step the label cannot clear on moves toward the label's side until it can.
+- **Labels can take the hue, never lose the contract.** Label tint mixes an accent solid's label toward the most coloured
+  rung that clears the label's contract on the fill and its hover at every strength; each of its five steps is gated.
+- **Status colours keep their hue.** Under Status colours Match they quiet to the Accent strength with the accent's own
+  mix; they never rotate toward it, so danger never reads as warning.
+- **Tonal inks stay under the gray-page bound.** A light tonal ink is no brighter than `TONAL_Y` (teal's #00766a, the
+  brightest named one), the luminance the Layers model darkens hued inks for on a gray page.
+
 **Tone means meaning; treatment means emphasis.**
 
 - `tone` is semantic: `neutral`, `info`, `success`, `warning`, `caution`, `danger`,
@@ -70,7 +88,7 @@ without a meaning. `gray` has tints and inks only: a near-neutral scale has no t
 stroke that clears the outline floor. Every label colour has light and dark pairs checked by
 the contrast tests, including its strong ink on its tint.
 
-**Emphasis roles.** Area has one chosen colour, the accent, plus neutral. Components never
+**Emphasis roles.** Area has one chosen colour, the accent (any hue, strength and solid step), plus neutral. Components never
 offer an accent tone. They paint one of two roles, and the `action` and `selection` settings
 decide whether each is neutral or the accent. Action defaults to neutral, Selection to the accent (2026-10-22):
 

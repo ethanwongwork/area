@@ -64,7 +64,7 @@ const describe = (step: number) =>
 
 export const MOTION_AXIS: AxisDefinition = {
   id: "motion",
-  label: "Motion",
+  label: "Speed",
   description: "How long transitions take, as the Menu's open in ms from 0 (none) to 300, 210 by default; every duration scales from it.",
   defaultPreset: "210",
   namespaces: ["--area-duration-"],

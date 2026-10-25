@@ -1,0 +1,97 @@
+/* ---------------------------------------------------------------------------
+ * Area figures: the abstraction. A figure is Area's real components, rendered with @area/react, with every
+ * text node wrapped in span.tx (render.mjs). This sheet draws that markup three ways, and nothing else about
+ * the components changes, so the abstraction always looks like Area:
+ *   Real    the components as they are.
+ *   Bars    every word becomes a rounded bar exactly its own width and the height of its ink (cap height,
+ *           0.7em), in its own colour, light: a title reads darker than body, muted text lighter. A button,
+ *           badge, chip or count keeps only its colour. Icons, edges, fills and shadows stay.
+ *   Shapes  words and icons go; only shapes stay.
+ * A stage shows the markup in a frame at one normal scale for every figure (only what would not fit is shrunk),
+ * scaled uniformly (transform), so a figure at any size is the same drawing, strokes included. Forced states hold a hover, a press, a focus or a lift still, with Area's own paint.
+ * ------------------------------------------------------------------------- */
+.af-stage {
+  --af-ink: 20%;                      /* how much of the text's own colour a bar takes */
+  position: relative; display: block; overflow: hidden; flex: none;
+  inline-size: var(--af-w, 280px); block-size: var(--af-h, 180px);
+  background: var(--area-bg-page); color: var(--area-fg-default);
+  font-family: var(--area-font-sans); text-align: start; pointer-events: none;
+}
+.af-z { position: absolute; inset-block-start: 50%; inset-inline-start: 50%; translate: var(--af-dx, 0px) var(--af-dy, 0px); transform: translate(-50%, -50%); }
+/* The figure is scaled with zoom, not a transform: zoom lays it out at its drawn size, so a stroke lands on whole device
+   pixels instead of being smeared across them. */
+.af-zoom { position: relative; zoom: var(--af-fit, 1); }
+/* Strokes draw at one width, 1px on screen, at every size: a stroke is set to 1px divided by the figure's zoom, so the
+   zoom brings it back to exactly 1px (a 1px stroke would otherwise draw at 0.3px on a screen and 1.3px on a large
+   tile). The frame keeps its Stroke width setting (0, 0.5 … 2) drawn at its own value, so that setting still reads. */
+/* 4% over, because the browser floors a border to whole device pixels: 1px ÷ 0.4868 × 0.4868 lands a hair under 1px
+   and would floor to half. */
+.af-zoom { --area-stroke-width: calc(1.04px / var(--af-fit, 1)); --area-border-width: calc(var(--area-frame-width, 1px) * 1.04 / var(--af-fit, 1)); }
+
+/* Bars. Each word's ink is drawn as a pill behind it: its own width, 0.7em tall (the cap height), centred on the
+   x-height, in its own colour at --af-ink, so a sentence reads as words with their spaces between. The text itself
+   goes clear, so the line keeps its exact spacing and wraps where the words wrap. Every label has them, a button's,
+   badge's, tag's and chip's included (owner, 2026-10-24: "maybe its better to add it everywhere"). */
+.af-bars .tx { position: relative; -webkit-text-fill-color: transparent; }
+.af-bars .tx::before {
+  content: ""; position: absolute; inset-inline: 0; inset-block-start: 50%; block-size: 0.7em; translate: 0 -46%;
+  border-radius: 99px; background: color-mix(in srgb, currentColor var(--af-ink), transparent);
+}
+/* A number is drawn digit by digit (index.jsx, wrapText): each digit a block its own numeral width, a hair apart and
+   squarer than a word, its separators (: . , / %) left as space, so a time reads 09:41 and a date 24. */
+.af-bars .tx--d::before { inset-inline: 0.05em; border-radius: 0.14em; }
+.af-bars .tx--p::before { content: none; }
+/* A field's value or placeholder, laid over the field (stage.js, fieldText): the same shapes, in the field's font. */
+.af-value { position: absolute; display: flex; overflow: hidden; pointer-events: none; }
+.af-value > span { flex: 1; min-inline-size: 0; }
+.af-bars ::placeholder, .af-shapes ::placeholder { color: transparent; }
+/* A field's value is not a text node, so it can't become a bar: it goes clear, like a placeholder. */
+.af-bars :is(select, input, textarea), .af-shapes :is(select, input, textarea) { -webkit-text-fill-color: transparent; }
+/* Images are blank media blocks (figures/index.jsx empties their src): the soft fill, no alt text. */
+.af-stage img { background: var(--area-bg-component); color: transparent; }
+/* Shapes. */
+.af-shapes .tx { visibility: hidden; }
+.af-shapes svg:not(.af-pointer) { visibility: hidden; }
+
+/* Forced states: each component's own hover, press, focus and lift paint, held still (as studio.css lang-state-*). */
+.st-hover.area-button { background-color: var(--_bg-hover); background-image: var(--_wash-hover); border-color: var(--_border-hover); }
+.st-hover.area-nav__item { background-color: var(--area-bg-component-hover); }
+.st-press.area-button { background-color: var(--_bg-active); background-image: var(--_wash-active); }
+.st-press.area-menu__item { background-color: var(--area-bg-component-pressed); }
+.st-press.area-menu__item--danger { background-color: var(--_danger-pressed); }
+.st-focus { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+.st-hover-field { border-color: var(--area-edge-control-hover) !important; }
+.st-focus-field {
+  border-color: color-mix(in srgb, var(--area-input-edge), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)) !important;
+  box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
+  outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color); outline-offset: var(--area-focus-offset);
+}
+.st-lift.area-card { --_card-lift: var(--area-shadow-lift); }
+
+/* The pointer, placed by stage.js on the element marked data-af-pointer. */
+.af-pointer { position: absolute; inline-size: 14px; block-size: 21px; z-index: 4; overflow: visible; }
+.af-pointer path { fill: #000; stroke: #fff; stroke-width: 1; stroke-linejoin: round; }
+
+/* Motion and Easing: ghost thumbs over a real Slider, at equal steps of time (stage.js reads data-af-ghosts). */
+.af-ghosts { position: absolute; inset: 0; }
+.af-ghosts > i { position: absolute; inset-block-start: 50%; inline-size: 16px; aspect-ratio: 1; border-radius: 50%; translate: -50% -50%; box-shadow: inset 0 0 0 1px var(--area-edge-control); background: color-mix(in srgb, var(--area-bg-surface) 60%, transparent); }
+
+/* A gallery tile: one family in the screens' vignette frame (480 × 360), at its own size, centred on what it paints
+   with room around it (engine/stage.js, centre). A few show a tight set: a row (avatars), a column (badges), a small
+   grid (chips, tags, presence), a pair laid over each other (menus) or stacked (messages). */
+.af-tile { display: grid; place-items: center; inline-size: 480px; block-size: 360px; padding: 24px; background: var(--area-bg-page); }
+.af-tile__demo { display: grid; place-items: center; max-inline-size: 432px; min-inline-size: 0; }
+/* A bar that takes its container's width (progress, a skeleton block) has none of its own in a centred tile: give it a column's. */
+.af-tile__demo > :is(.area-progress, .area-skeleton--block) { inline-size: 240px; }
+/* A tile or vignette grid shows the tab row alone, in one line; its panel's text read as a second row of tabs. */
+:is(.af-tile, .sx-vgrid, .sx-tabpage) [role="tabpanel"] { display: none; }
+/* A titlebar spans its tile as the top of a window does, at a window's narrow width. */
+.af-tile--width .af-tile__demo { inline-size: 420px; max-inline-size: none; }
+.af-tile--width .af-tile__demo > * { inline-size: 100%; min-inline-size: 0; }
+.af-tile--row { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.af-tile--column { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.af-tile--grid { grid-template-columns: repeat(var(--cols, 2), auto); justify-content: center; align-content: center; gap: 14px 18px; }
+.af-tile--overlap > * { grid-area: 1 / 1; }
+.af-tile--overlap > :nth-child(2) { translate: 64px 48px; }
+.af-tile--overlap > :first-child { translate: -40px -30px; }
+.af-tile--stack { align-content: center; gap: 16px; }
