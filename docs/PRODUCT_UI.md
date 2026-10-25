@@ -168,7 +168,9 @@ header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
     label tint, soft edge, field lift, edge light), swatches and a hue bar (accent, tint colour), checkable cards (pills),
     a Switch moving at the speed and curve (motion, easing). An exact value folds under the cards. Each question has one
     short sentence under it.
-  - **The stage** (right) is one product screen (`src/setup-screen.tsx`): a desktop window drawn as an Area figure
+  - **The stage** (right) is one product screen (`src/setup-screen.tsx`) on a ground a clear step from any page (the
+    app's ink 10% into its page) with a fixed window shadow, nothing else round it (owner, 2026-10-24: "i just want to
+    see the plain ui in a container with a background that provides enough contrast"): a desktop window drawn as an Area figure
     (the area-illustration skill's engine: words as bars, numbers as digits, strokes at 1px), in the theme so far and
     the mode the step belongs to. The parts a question changes are ringed (dashed, in the stage's ink, settling to a
     trace); the states it is about are held (the menu open, a field focused, a row hovered, a card selected or lifted,

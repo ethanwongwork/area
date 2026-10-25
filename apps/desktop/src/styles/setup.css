@@ -13,8 +13,8 @@
   /* Progress: one bar per chapter on the path, filled by how far through it the person is; where they are and how long is left. */
   .setup-progress { display: grid; grid-template-columns: minmax(0, 1fr) auto; row-gap: var(--area-space-8); padding: var(--area-space-16) var(--area-space-24) 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
   .setup-progress__chapters { grid-column: 1 / -1; display: flex; gap: var(--area-space-4); }
-  .setup-progress__chapter { flex: 1; block-size: 4px; border-radius: 2px; background: linear-gradient(to right, var(--area-fg-default) calc(var(--_fill, 0) * 100%), var(--area-bg-component) 0); transition: --_fill var(--area-duration-slow) var(--area-ease-out); } /* pick: a 4px track */
-  .setup-progress__chapter[data-current] { background: linear-gradient(to right, var(--area-fg-default) calc(var(--_fill, 0) * 100%), var(--area-bg-component-active) 0); }
+  .setup-progress__chapter { flex: 1; block-size: 4px; border-radius: 2px; background: linear-gradient(to right, var(--area-fg-default) calc(var(--setup-progress-fill, 0) * 100%), var(--area-bg-component) 0); transition: --setup-progress-fill var(--area-duration-slow) var(--area-ease-out); } /* pick: a 4px track */
+  .setup-progress__chapter[data-current] { background: linear-gradient(to right, var(--area-fg-default) calc(var(--setup-progress-fill, 0) * 100%), var(--area-bg-component-active) 0); }
   .setup-progress__label { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
   .setup-progress__time { font-variant-numeric: tabular-nums; }
 
@@ -82,7 +82,12 @@
   .setup-review__changed { font-weight: var(--area-weight-strong); }
 
   /* The stage: the product screen fitted whole on the page's ground, the parts a step changes marked over it. */
-  .setup-stage { position: relative; min-block-size: 0; overflow: hidden; border-radius: var(--_tile-radius); background: var(--area-bg-subtle); }
+  /* The stage's ground is a clear step from any page the window can have (owner, 2026-10-24: "a background that provides
+     enough contrast to see the ui window"): the app's ink mixed 10% into its page, about #e6e6e6 in light and #262626
+     in dark, so a white or near-black window always stands off it; the window casts a soft shadow of its own, fixed,
+     whatever the theme's shadow settings. */
+  .setup-stage { position: relative; min-block-size: 0; overflow: hidden; border-radius: var(--_tile-radius); background: color-mix(in srgb, var(--area-fg-default) 10%, var(--area-bg-page)); } /* pick */
+  .setup-stage .ss-window { box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 16px 40px -12px rgb(0 0 0 / 0.28); } /* pick: a desktop window's shadow */
   .setup-stage > .setup-stage__screen { position: absolute; inset: var(--area-space-24); inline-size: auto; block-size: auto; background: transparent; } /* pick: the stage's margin */
   .setup-stage__marks { position: absolute; inset: var(--area-space-24); pointer-events: none; }
   /* What a step changes, marked on the screen: a dashed ring 4px off each part, in the stage's own ink so it reads on a
@@ -100,7 +105,8 @@
    * crossfades a pick or a preview (setup-screen.tsx, crossfade) and marks the parts a step changes. All of it runs on
    * the app's own Speed and Easing, so it stops with them under reduced motion.
    */
-  @property --_fill { syntax: "<number>"; inherits: false; initial-value: 0; }
+  /* Its own name: a registered property applies everywhere, and components use `--_fill` for colours. */
+  @property --setup-progress-fill { syntax: "<number>"; inherits: false; initial-value: 0; }
   @keyframes setup-fade { from { opacity: 0; } }
   @keyframes setup-step-move { from { translate: calc(var(--_direction, 1) * 16px) 0; } }
   .setup-panel__body { position: relative; overflow-x: clip; }
@@ -279,3 +285,5 @@
   .lm-swatch--recessed { background: var(--area-bg-subtle); }
   .lm-swatch--raised { background: var(--area-bg-surface); }
   .lm-swatch--fill { background: var(--area-bg-component); }
+  /* A setting elsewhere that changes what a question shows, set apart so it reads as a heads-up. */
+  .setup-step__note--context { padding: var(--area-space-8) var(--area-space-12); border-radius: var(--area-radius-small); background: var(--area-bg-component); color: var(--area-fg-default); }

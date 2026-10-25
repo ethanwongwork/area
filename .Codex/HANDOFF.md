@@ -1,6 +1,12 @@
 # Handoff
 
 ## Current state (2026-10-24)
+- **PR #161 merged, then fixes on the same branch (owner's review of an old window: the screenshot was another
+  worktree's pre-#161 Setup).** Fixed a break #161 shipped: the app registered `--_fill` as a number, blanking every
+  Checkbox, Radio and Slider fill in the app; renamed, Slider's registered ratio is `--_slider-ratio`, and a cohesion
+  test now rejects a registered name another family uses. Slider `glide` (stepped ranges follow the pointer, settle on
+  the step); Setup's stage on a contrasting ground with a window shadow; a heads-up when Fill shade makes the accent
+  darker than its swatch (Match the swatch); Text tint as pictured cards (Plain, Tinted, Full).
 - **Subtle motion as the default, same branch (owner 2026-10-24: "the smoothness of the sliders is not very smooth ...
   apply the motion in a subtle way ... implement the subtle package as the default"; bencho.dev).** New setting
   Feedback (`axes/feedback.ts`; Off / Subtle default / Pronounced): hover and press arrive over `hover-in` / `press-in`

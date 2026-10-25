@@ -162,7 +162,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
           const rows = asked.filter(row => row.chapter === entry.id);
           const done = step.kind === "review" ? rows.length : rows.filter(row => asked.indexOf(row) < (question ? asked.indexOf(question) : step.kind === "chapter" && CHAPTERS.indexOf(entry) < CHAPTERS.indexOf(chapter!) ? Infinity : -1)).length;
           const fill = step.kind === "chapter" && CHAPTERS.indexOf(entry) < CHAPTERS.indexOf(chapter!) ? 1 : done / rows.length;
-          return <i key={entry.id} className="setup-progress__chapter" data-current={entry.id === chapter?.id ? "" : undefined} style={{ "--_fill": fill } as CSSProperties} />;
+          return <i key={entry.id} className="setup-progress__chapter" data-current={entry.id === chapter?.id ? "" : undefined} style={{ "--setup-progress-fill": fill } as CSSProperties} />;
         })}
       </div>
       <span className="setup-progress__label">
@@ -240,6 +240,9 @@ export function ThemeSetup({ mode, setMode, flowSwitch }: ThemeSetupProps) {
         <p className="setup-step__lede">{question.description}</p>
         <QuestionControl question={question} values={values} mode={stageMode} set={set} scopeOf={scopeOf} onPreview={setPreview} />
         {question.note ? <p className="setup-step__note"><InfoIcon /><span>{question.note}</span></p> : null}
+        {(() => { const context = question.context?.(values); return context ? (
+          <p className="setup-step__note setup-step__note--context"><InfoIcon /><span>{context.note} <button type="button" className="setup__link" onClick={() => set(context.set)}>{context.action}</button></span></p>
+        ) : null; })()}
       </div>
     );
     const last = steps[index + 1]?.kind === "review";

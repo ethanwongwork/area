@@ -110,7 +110,7 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | fill | **`selection-solid`** (slider.css:25; range slider.css:95): `neutral-solid` by default, the accent when a scope turns the Selection role on | Owner; Selection emphasis role (`emit/base.ts:140-142`) | Untitled brand; Figma's usage fill is its blue |
 | thumb · size | **16 / 16 / 20** (`icon-sm`, `icon-md`, `space-20`; slider.css:299-301) | Second pass: the choice glyph ladder (Checkbox, Radio); Figma 16 | Was the icon ramp, 16 at every tier. Untitled 24 |
 | thumb · construction | **plain knob**: `light-dark(bg-surface, bg-component-active)`, 1px `edge-control-hover` #d4 (the Checkbox and Radio glyph edge, audit S5) | Owner 2026-10-21 ("B"); Figma's adjustment thumb (white, 1px ring); dark paint is Segmented's raised thumb | Was a fill-colour dot to 42% of the radius, which read as a selected Radio on the rail; in dark the surface knob read as a hole in the fill |
-| fill · end | the thumb's centre: `thumb/2 + (100% − thumb) × --_ratio` (slider.css `--_stop`), `--_pct` when no ratio is given | Figma's fill runs under its knob | Was `--_pct` of the whole rail, up to half a thumb off; hidden by a 4px rail, visible on a full-height track |
+| fill · end | the thumb's centre: `thumb/2 + (100% − thumb) × --_slider-ratio` (slider.css `--_stop`), `--_pct` when no ratio is given | Figma's fill runs under its knob | Was `--_pct` of the whole rail, up to half a thumb off; hidden by a 4px rail, visible on a full-height track |
 | track variant | track = thumb 16 / 16 / 20, `bg-component` | `figma--adjustment-slider`: 16 track, 16 thumb, #f5 (`bg-component` #f7 is the nearest role; Segmented's trough) | — |
 | buffered | `fill-toggle-hover` on the rail (#d0 light, #4e dark), `fill-track` on the track and bar troughs; ends at the thumb-inset position of `buffered`, hidden behind the fill | Owner 2026-10-21; one step over each trough in both themes (probed in headless Edge) | Video player paints its loaded part as ink at 35% because it sits on footage |
 | bar variant | track = tier height, `radius-control-*`; thumb the fill's end, one glyph wide; grip 4 × glyph, `fg-on-selection` | Owner's reference (bar with an inner grip, beside a same-height button); peers Button and Input for height and corner | Grip length and thumb width are the glyph ladder, not read off the reference |
@@ -132,7 +132,7 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 ## Behavior and accessibility
 
 Native `input type="range"`: keyboard, value and announcements are the browser's. The fill is
-`--_pct` and `--_ratio` (0 to 1) set by React from the normalized value, kept in sync on input and form reset
+`--_pct` and `--_slider-ratio` (0 to 1; registered as a number, so a glide can ease it) set by React from the normalized value, or the pointer's place while a glide drags, kept in sync on input and form reset
 (primitives.tsx:713); `onValueChange(value, event)` passes the input event. Shift+arrow moves
 ten steps (Carbon, MUI; audit C-31 A, owner 2026-09-30), following the reading direction in
 RTL; the native control takes the value and fires its own input event (primitives.tsx:813-820). The readout is `aria-hidden` (the input announces the value).
@@ -239,7 +239,7 @@ eye (background tab).
 - 2026-10-21 · owner: "the slider/track options for our current component are not great. i want to fix the current
   slider visual and also add a track variant" → mock sheet (A current, B fix, C Figma track, D line handle); owner
   picked B + C, then sent the "Rate your driver" bar ("1 circle style and 1 of this style") → plain knob, ticks under
-  the rail, top layout full width, fill ends at the thumb's centre (`--_ratio`), hover through `--_fill`; `variant`
+  the rail, top layout full width, fill ends at the thumb's centre (`--_ratio`, now `--_slider-ratio`), hover through `--_fill`; `variant`
   `track` and `bar` on Slider and SliderRange (slider.css, primitives.tsx, SliderRange.tsx, manifest.ts, material.css)
   → `figma--adjustment-slider--rest--light`; headless Edge sheets light and dark.
 
@@ -302,3 +302,4 @@ eye (background tab).
   take the accent at Selection Accent (the reference is neutral, and an accent plate behind text needs its own step).
 - **Origin (same day):** a range with a neutral middle (Temperature, Cool to Warm) now fills from that middle to the value,
   either way, so Neutral is an empty bar; you asked for it after the round-2 controls page. Any variant takes it.
+- 2026-10-24 · owner: "the sliders are not very smooth in between their options" → `glide` (on by default for a range of 60 steps or fewer): while the pointer drags, the native control runs continuously (`step="any"`) and the fill follows it, `onValueChange` fires only when the step changes, and the value stays whole steps; on release, a key step or any change the field variant's fill eases onto the step (`--_slider-ratio` on `fast` ease-out, `data-glide`, `data-dragging`). Rail, track and bar keep their native thumb, which lands on the step at release. Checked in headless Edge: the fill moved 0.07 → 0.53 continuously while the value stepped 40% → 70%, then settled on 4/7. The ratio was renamed from `--_ratio` when it was registered, so no other family's private name is retyped (cohesion test "a registered custom property has a name no other family uses").
