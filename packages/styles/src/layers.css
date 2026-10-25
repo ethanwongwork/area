@@ -286,7 +286,9 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary, .area-plan, .area-queue, .area-infobox--framed, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised, [data-area-ground="raised"]) {
+    .area-surface--surface, .area-asset-card--raised,
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, [data-area-ground="raised"]) {
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
