@@ -595,3 +595,23 @@ test('every ground moves the edges and restates every edge role and its readers'
   }
   for (const part of shifting) assert.ok(restating.has(part), `${part} moves the edges but its children do not restate them`);
 });
+
+// A registered custom property (`@property`) applies to every element, not the component that declares it: registering a
+// name another rule uses for something else retypes it there. In 2026-10-24 the app registered `--_fill` as a number
+// for Setup's progress bar, and every Checkbox, Radio and Slider fill (`--_fill`, a colour) fell to 0 and went blank.
+// Every registered name must be used by one family's file only (in Area's stylesheet and the app's).
+test('a registered custom property has a name no other family uses', () => {
+  const sources = new URL('../../styles/src/components/', import.meta.url);
+  const appStyles = new URL('../../../apps/desktop/src/styles/', import.meta.url);
+  const files = [
+    ...readdirSync(sources).filter(name => name.endsWith('.css')).map(name => ({ name: `components/${name}`, text: readFileSync(new URL(name, sources), 'utf8') })),
+    ...['base.css', 'layers.css', 'inset.css', 'material.css'].map(name => ({ name, text: readFileSync(new URL(`../../styles/src/${name}`, import.meta.url), 'utf8') })),
+    ...readdirSync(appStyles).filter(name => name.endsWith('.css')).map(name => ({ name: `app/${name}`, text: readFileSync(new URL(name, appStyles), 'utf8') })),
+  ].map(file => ({ ...file, text: file.text.replace(/\/\*[\s\S]*?\*\//g, '') }));
+  for (const file of files) {
+    for (const [, name] of file.text.matchAll(/@property\s+(--[\w-]+)/g)) {
+      const users = files.filter(other => other !== file && new RegExp(`${name}(?![\\w-])`).test(other.text)).map(other => other.name);
+      assert.deepEqual(users, [], `${file.name} registers ${name}, which ${users.join(', ')} also use${users.length === 1 ? 's' : ''}`);
+    }
+  }
+});

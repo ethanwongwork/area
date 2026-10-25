@@ -78,6 +78,8 @@ export interface Question {
   /** Real text where the text's colour is the question. */
   fidelity?: "bars" | "real";
   essential?: boolean;
+  /** A setting elsewhere that changes what this question shows, said under it with a way to undo it, or null. */
+  context?: (values: Values) => { note: string; action: string; set: Partial<Record<Axis, string>> } | null;
   mode?: Mode;
   when?: (values: Values) => boolean;
 }
@@ -114,6 +116,10 @@ const accentParts = (values: Values): Region[] => [
   ...(values.action === "accent" ? ["primary", "action"] as Region[] : []),
   ...(values.selection === "accent" ? ["checks", "switch", "segmented", "tabs", "slider"] as Region[] : []),
 ];
+/** The accent's fills sit at a chosen shade, so they no longer match the swatch picked (owner, 2026-10-24: "doesnt make the
+    accent color the blue that i picked at 100% saturation, it looks dark"). */
+const fillShade = (values: Values) => values["solid-light"] === "auto" ? null
+  : { note: `Accent fills are set to a fixed shade (${Number(values["solid-light"]) >= 650 ? "deep" : Number(values["solid-light"]) <= 500 ? "light" : "medium"}), so they look different from the swatch.`, action: "Match the swatch", set: { "solid-light": "auto" } };
 /** The parts an accent solid fills: accent buttons, checked boxes and switches. */
 const solidParts = (values: Values): Region[] => [...(values.action === "accent" ? ["primary", "action"] as Region[] : []), ...(values.selection === "accent" ? ["checks", "switch"] as Region[] : [])];
 const numericHue = (value: string) => /^\d+$/.test(value);
@@ -125,7 +131,7 @@ const resting = one("shadow-resting"), hoverFill = one("fill-hover"), strokeHove
 const selectedFill = one("fill-selected"), selectedEdge = one("selected-stroke"), selectedTint = one("selected-tint"), pressed = one("fill-pressed");
 const focusRing = one("focus-ring"), danger = one("danger-hover"), motion = one("motion"), easing = one("easing"), contrast = one("contrast");
 const feedback = one("feedback");
-const shadowColour = one("shadow-color"), status = one("status-colours");
+const shadowColour = one("shadow-color"), status = one("status-colours"), inkTint = one("ink-tint");
 
 /** The greys at a temperature: Neutral's own ramp, or Cool's or Warm's, with no tint of another colour. */
 const greys = (neutral: string, hue = "auto", strength = "auto"): Partial<Record<Axis, string>> =>
@@ -176,10 +182,13 @@ export const QUESTIONS: readonly Question[] = [
   {
     id: "text-tint", chapter: "page", name: "Text tint", axes: ["ink-tint"], focus: ["text", "list"], fidelity: "real",
     when: values => greysTinted(values, "light"),
-    question: "Should text take the greys' colour?",
-    description: "Text can lean the same way as the greys.",
-    control: { kind: "toggle", axis: "ink-tint", label: "Tint text", off: "0", on: "2", low: "A little", high: "Fully",
-      visual: crop("list", 0.85, { fidelity: "real" }) },
+    question: "Should text be tinted too?",
+    description: "Your greys lean toward a colour; body and muted text can lean the same way, or stay plain grey.",
+    control: { kind: "cards", visual: crop("list", 0.9, { fidelity: "real" }), choices: [
+      inkTint("0", "Plain", "Text stays neutral grey."),
+      inkTint("2", "Tinted", "Text takes half the greys' colour."),
+      inkTint("4", "Full", "Text takes all of it."),
+    ] },
   },
   {
     id: "layers", chapter: "page", name: "Layers", essential: true, mode: "light", axes: ["layers-light"], focus: ["sidebar", "stats", "form"],
@@ -206,7 +215,7 @@ export const QUESTIONS: readonly Question[] = [
   },
   // ——— Accent ———
   {
-    id: "accent", chapter: "accent", name: "Accent", essential: true, axes: ["accent"], focus: accentParts,
+    id: "accent", chapter: "accent", name: "Accent", essential: true, axes: ["accent"], focus: accentParts, context: fillShade,
     question: "Which colour is your accent?",
     description: "The colour for actions, selection and focus.",
     note: "Contrast is solved for every hue.",
@@ -224,7 +233,7 @@ export const QUESTIONS: readonly Question[] = [
     ] },
   },
   {
-    id: "saturation", chapter: "accent", name: "Saturation", essential: true, axes: ["accent-strength"], focus: accentParts,
+    id: "saturation", chapter: "accent", name: "Saturation", essential: true, axes: ["accent-strength"], focus: accentParts, context: fillShade,
     when: accentShows,
     question: "How vivid should the accent be?",
     description: "How much colour the accent keeps.",

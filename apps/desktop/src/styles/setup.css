@@ -1,31 +1,52 @@
   /* --- Theme · Setup (pages/theme-setup.tsx) ----------------------------------- */
-  /* The questionnaire (owner, 2026-10-24): the panel holds one step at a time, the stage the product screen beside it.
-     The panel is the Inspector's width plus room for two columns of pictured choices; the stage takes the rest. */
+  /* Two panels (owner, 2026-10-24: "a 2 panel view with 1 side being a vertically scrolling chat like experience ... and
+     then visuals on the right side"): the chat, about a reading column wide, and the visuals taking the rest. The
+     Sidebar and the Inspector are left out (Workspace panels={false}). */
+  /* The Setup fills the Canvas edge to edge, as sections rather than cards (owner, 2026-10-24: "not sure about using panels,
+     when the design system visual language just uses sections ... fill the canvas space"): the chat, a reading column,
+     and the visuals beside it, one rule between them. */
+  .studio-canvas__body:has(> .setup) { padding: 0; overflow: hidden; }
   .setup { container-type: inline-size; block-size: 100%; }
-  .setup__layout { --_panel: clamp(380px, 36cqi, 460px); display: grid; grid-template-columns: var(--_panel) minmax(0, 1fr); gap: var(--area-space-12); block-size: 100%; min-block-size: 560px; } /* pick: two cards of 170 to 210 and the panel's inset */
-  /* A narrow Canvas stacks them, the stage first. */
-  @container (max-width: 760px) { .setup__layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(320px, 42vh) auto; } .setup-stage { grid-row: 1; } } /* pick */
-  .setup-panel { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-block-size: 0; border-radius: var(--_tile-radius); background: var(--area-bg-surface); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-card); overflow: hidden; }
-  .setup-panel__body { min-block-size: 0; overflow: auto; padding: var(--area-space-24) var(--area-space-24) var(--area-space-16); scrollbar-gutter: stable; }
-  .setup-foot { display: flex; align-items: center; gap: var(--area-space-8); padding: var(--area-space-12) var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
+  .setup__layout { --_chat: clamp(400px, 36cqi, 520px); display: grid; grid-template-columns: var(--_chat) minmax(0, 1fr); block-size: 100%; min-block-size: 560px; } /* pick: a reading column, two cards of 180 to 230 */
+  /* A narrow Canvas stacks them, the visuals first. */
+  @container (max-width: 760px) { .setup__layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(320px, 46vh) minmax(0, 1fr); } .setup-stage { grid-row: 1; } .setup-chat { border-inline-end: 0; border-block-start: var(--area-stroke-width) solid var(--area-border-divider); } } /* pick */
+
+  /* The chat: the thread scrolls, the dock stays at its foot. */
+  .setup-chat { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-block-size: 0; border-inline-end: var(--area-stroke-width) solid var(--area-border-divider); background: var(--area-bg-page); }
+  .setup-chat__thread { position: relative; display: grid; align-content: start; gap: var(--area-space-32); min-block-size: 0; overflow: auto; padding: var(--area-space-32) var(--area-space-32) 0; scrollbar-gutter: stable; } /* the Canvas's 32 margin */
+  /* Room under the last turn so the question being asked can scroll to the top of the chat. */
+  .setup-chat__end { block-size: 40vh; } /* pick */
+  /* A turn: the question as Setup's message, then the choices or the person's reply. The question's text introduces its
+     choices, so it sits one ladder step further from them than they sit from each other (DESIGN_SYSTEM.md, Text pairs). */
+  .setup-chat__turn { display: grid; gap: var(--area-space-12); animation: setup-turn-in var(--area-duration-slow) var(--area-ease-out) both; }
+  .setup-chat__question { margin: 0; font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); font-weight: var(--area-weight-strong); text-wrap: balance; }
+  .setup-chat__lede { margin: var(--area-space-4) 0 0; color: var(--area-fg-muted); text-wrap: pretty; }
+  .setup-chat__answer-area { display: grid; gap: var(--area-space-12); margin-block-start: var(--area-space-4); animation: setup-turn-in var(--area-duration-slow) var(--area-ease-out) both; }
+  /* The person's reply: their answer as a bubble at the end, which reopens its question. */
+  .setup-chat__reply { display: grid; cursor: pointer; outline: none; }
+  .setup-chat__reply:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); border-radius: var(--area-radius-container); }
+  @media (hover: hover) { .setup-chat__reply:hover { opacity: 0.8; transition: opacity var(--area-hover-in) var(--area-ease-out); } } /* pick */
+  /* A chapter opens with its name and what it decides, over a rule. */
+  .setup-chat__chapter { display: grid; gap: var(--area-space-2); padding-block-start: var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
+  .setup-chat__turn:first-child .setup-chat__chapter, .setup-chat__turn:nth-child(2) > .setup-chat__chapter { border-block-start: 0; padding-block-start: 0; }
+  .setup-chat__chapter-name { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-strong); }
+  .setup-chat__chapter-lede { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  .setup-chat__summary { margin-block-start: var(--area-space-4); }
+  .setup-chat__dock { border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
+  @keyframes setup-turn-in { from { opacity: 0; translate: 0 8px; } }
+  .setup-foot { display: flex; align-items: center; gap: var(--area-space-8); padding: var(--area-space-12) var(--area-space-16); }
   .setup-foot__grow { flex: 1; }
 
   /* Progress: one bar per chapter on the path, filled by how far through it the person is; where they are and how long is left. */
-  .setup-progress { display: grid; grid-template-columns: minmax(0, 1fr) auto; row-gap: var(--area-space-8); padding: var(--area-space-16) var(--area-space-24) 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  .setup-progress { display: grid; grid-template-columns: minmax(0, 1fr) auto; row-gap: var(--area-space-8); padding: var(--area-space-12) var(--area-space-16) 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
   .setup-progress__chapters { grid-column: 1 / -1; display: flex; gap: var(--area-space-4); }
-  .setup-progress__chapter { flex: 1; block-size: 4px; border-radius: 2px; background: linear-gradient(to right, var(--area-fg-default) calc(var(--_fill, 0) * 100%), var(--area-bg-component) 0); transition: --_fill var(--area-duration-slow) var(--area-ease-out); } /* pick: a 4px track */
-  .setup-progress__chapter[data-current] { background: linear-gradient(to right, var(--area-fg-default) calc(var(--_fill, 0) * 100%), var(--area-bg-component-active) 0); }
+  .setup-progress__chapter { flex: 1; block-size: 4px; border-radius: 2px; background: linear-gradient(to right, var(--area-fg-default) calc(var(--setup-progress-fill, 0) * 100%), var(--area-bg-component) 0); transition: --setup-progress-fill var(--area-duration-slow) var(--area-ease-out); } /* pick: a 4px track */
+  .setup-progress__chapter[data-current] { background: linear-gradient(to right, var(--area-fg-default) calc(var(--setup-progress-fill, 0) * 100%), var(--area-bg-component-active) 0); }
   .setup-progress__label { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
   .setup-progress__time { font-variant-numeric: tabular-nums; }
 
   /* A step: the question, what it changes, the choices, an aside. Text that introduces the choices sits one step further
      from them than they sit from each other (DESIGN_SYSTEM.md, Text pairs). */
-  .setup-step { display: grid; align-content: start; gap: var(--area-space-12); }
-  .setup-step > :is(.setup-choices, .setup-control, .setup-outline, .setup-outline__list, .setup-review__chapter:first-of-type) { margin-block-start: var(--area-space-8); }
-  .setup-step__eyebrow { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
-  .setup-step__title { margin: 0; font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); font-weight: var(--area-weight-strong); text-wrap: balance; }
-  .setup-step__title--question { font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); }
-  .setup-step__lede { margin: 0; color: var(--area-fg-muted); text-wrap: pretty; }
   .setup-step__note { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--area-space-8); align-items: start; margin: var(--area-space-4) 0 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
   .setup-step__note > svg { margin-block-start: 1px; color: var(--area-fg-muted); } /* pick: the 16 icon on the first 18 line */
   .setup__link { padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: start; text-decoration: underline; text-decoration-color: var(--area-border-subtle); text-underline-offset: 3px; cursor: pointer; }
@@ -63,18 +84,8 @@
   .setup-fine__body { display: grid; gap: var(--area-space-8); padding-block-start: var(--area-space-12); }
 
   /* The welcome's outline and a chapter's questions: numbered rows, the count or the answer at the end. */
-  .setup-outline { display: grid; gap: var(--area-space-8); }
-  .setup-outline__heading { margin: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-strong); }
-  .setup-outline__list { display: grid; margin: 0; padding: 0; list-style: none; }
-  .setup-outline__row { display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; align-items: baseline; gap: var(--area-space-8); padding-block: var(--area-space-6); border-block-end: var(--area-stroke-width) solid var(--area-border-divider); }
-  .setup-outline__list--plain .setup-outline__row { grid-template-columns: minmax(0, 1fr) auto; }
-  .setup-outline__row:last-child { border-block-end: 0; }
-  .setup-outline__number { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
-  .setup-outline__count { color: var(--area-fg-muted); text-align: end; }
 
   /* The review: every answer by chapter, each name a way back to its question. */
-  .setup-review__chapter { display: grid; gap: var(--area-space-4); margin-block-start: var(--area-space-8); }
-  .setup-review__heading { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-strong); }
   .setup-review__rows { display: grid; margin: 0; }
   .setup-review__row { display: flex; justify-content: space-between; gap: var(--area-space-12); padding-block: var(--area-space-4); }
   .setup-review__row dd { display: flex; gap: var(--area-space-8); margin: 0; text-align: end; }
@@ -82,9 +93,17 @@
   .setup-review__changed { font-weight: var(--area-weight-strong); }
 
   /* The stage: the product screen fitted whole on the page's ground, the parts a step changes marked over it. */
-  .setup-stage { position: relative; min-block-size: 0; overflow: hidden; border-radius: var(--_tile-radius); background: var(--area-bg-subtle); }
-  .setup-stage > .setup-stage__screen { position: absolute; inset: var(--area-space-24); inline-size: auto; block-size: auto; background: transparent; } /* pick: the stage's margin */
+  /* The visuals: a bar over the view and one under it, the view between on a plain ground a step off any page the window
+     can have (owner, 2026-10-24: "just plain background behind it, no drop shadow"), the window's own edge its outline. */
+  .setup-stage { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-block-size: 0; overflow: hidden; background: color-mix(in srgb, var(--area-fg-default) 6%, var(--area-bg-page)); } /* pick: #f0f0f0 light, about #161616 dark */
+  .setup-stage__bar { display: flex; align-items: center; gap: var(--area-space-8); padding: var(--area-space-12) var(--area-space-16); }
+  .setup-stage__caption { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  .setup-stage__view { position: relative; min-block-size: 0; }
+  .setup-stage__part { position: absolute; inset: var(--area-space-24); display: grid; }
+  .setup-picture--stage { block-size: 100%; background: transparent; }
+  .setup-stage__view > .setup-stage__screen { position: absolute; inset: var(--area-space-24); inline-size: auto; block-size: auto; background: transparent; } /* pick: the view's margin */
   .setup-stage__marks { position: absolute; inset: var(--area-space-24); pointer-events: none; }
+  .ss-example { inline-size: 1200px; } /* pick: the Testing screens' width */
   /* What a step changes, marked on the screen: a dashed ring 4px off each part, in the stage's own ink so it reads on a
      light or a dark screen without borrowing the accent the person is choosing; it settles to a trace after a moment. */
   .setup-stage__mark { position: absolute; margin: -5px; padding: 5px; box-sizing: content-box; border-radius: 10px; outline: 1.5px dashed var(--area-fg-default); outline-offset: 0; box-shadow: 0 0 0 3px color-mix(in srgb, var(--area-bg-surface) 70%, transparent);
@@ -100,12 +119,9 @@
    * crossfades a pick or a preview (setup-screen.tsx, crossfade) and marks the parts a step changes. All of it runs on
    * the app's own Speed and Easing, so it stops with them under reduced motion.
    */
-  @property --_fill { syntax: "<number>"; inherits: false; initial-value: 0; }
+  /* Its own name: a registered property applies everywhere, and components use `--_fill` for colours. */
+  @property --setup-progress-fill { syntax: "<number>"; inherits: false; initial-value: 0; }
   @keyframes setup-fade { from { opacity: 0; } }
-  @keyframes setup-step-move { from { translate: calc(var(--_direction, 1) * 16px) 0; } }
-  .setup-panel__body { position: relative; overflow-x: clip; }
-  .setup-step { animation: setup-fade var(--area-duration-base) var(--area-ease-out) both, setup-step-move var(--area-duration-slow) var(--area-ease-out) both; }
-  .setup-step--leaving { position: absolute; inset: var(--area-space-24) var(--area-space-24) auto; z-index: 0; animation: none; pointer-events: none; }
   .setup-choices__line > * { animation: setup-fade var(--area-duration-base) var(--area-ease-out) both; }
   .ss-frame--ghost { pointer-events: none; }
 
@@ -119,6 +135,7 @@
      shows through the inner edge of the veil's spread, so a lift still reads). */
   .ss-frame__veil { position: absolute; border-radius: 16px; box-shadow: 0 0 0 100vmax color-mix(in srgb, var(--area-bg-page) 72%, transparent); pointer-events: none; } /* pick */
   .ss-frame__veil[hidden] { display: none; }
+  .ss-frame__veil--solid { box-shadow: 0 0 0 100vmax var(--area-bg-page); }
   .ss-frame .af-zoom > * { position: relative; }
   .ss-window { position: relative; display: grid; grid-template-rows: 28px minmax(0, 1fr); inline-size: 1024px; block-size: 640px; padding: 0; overflow: hidden; border: 1px solid var(--area-border); background: var(--area-bg-page); }
   .ss-window__bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 10px; background: var(--area-bg-subtle); border-block-end: var(--area-border-width) solid var(--area-border-divider); }
@@ -279,3 +296,5 @@
   .lm-swatch--recessed { background: var(--area-bg-subtle); }
   .lm-swatch--raised { background: var(--area-bg-surface); }
   .lm-swatch--fill { background: var(--area-bg-component); }
+  /* A setting elsewhere that changes what a question shows, set apart so it reads as a heads-up. */
+  .setup-step__note--context { padding: var(--area-space-8) var(--area-space-12); border-radius: var(--area-radius-small); background: var(--area-bg-component); color: var(--area-fg-default); }

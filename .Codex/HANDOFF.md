@@ -1,6 +1,19 @@
 # Handoff
 
 ## Current state (2026-10-24)
+- **Setup as a chat (owner 2026-10-24, after IDE / Codex / Cube references: "a 2 panel view ... a vertically scrolling chat
+  like experience ... visuals on the right").** No Sidebar or Inspector in Setup (Workspace `panels`); questions arrive as
+  messages with choices inline, answers stay as reply bubbles that reopen (Done returns to the latest), chapters as
+  dividers, a dock with progress and Continue. Then (owner: sections not panels, fill the Canvas, a real detailed UI on a
+  plain ground, view controls): two edge-to-edge sections; the visuals have a top bar (Screen / Component, product:
+  Workspace, Analytics, Settings, Phone; Real / Wireframe; Light / Dark) and a bottom bar (caption, Zoom control); the
+  Workspace screen has real copy; the chat at the default scale. Same branch as PR #162, uncommitted.
+- **PR #161 merged, then fixes on the same branch (owner's review of an old window: the screenshot was another
+  worktree's pre-#161 Setup).** Fixed a break #161 shipped: the app registered `--_fill` as a number, blanking every
+  Checkbox, Radio and Slider fill in the app; renamed, Slider's registered ratio is `--_slider-ratio`, and a cohesion
+  test now rejects a registered name another family uses. Slider `glide` (stepped ranges follow the pointer, settle on
+  the step); Setup's stage on a contrasting ground with a window shadow; a heads-up when Fill shade makes the accent
+  darker than its swatch (Match the swatch); Text tint as pictured cards (Plain, Tinted, Full).
 - **Subtle motion as the default, same branch (owner 2026-10-24: "the smoothness of the sliders is not very smooth ...
   apply the motion in a subtle way ... implement the subtle package as the default"; bencho.dev).** New setting
   Feedback (`axes/feedback.ts`; Off / Subtle default / Pronounced): hover and press arrive over `hover-in` / `press-in`

@@ -29,7 +29,10 @@ import {
   AddIcon, CalendarIcon, CopyIcon, DocumentIcon, FolderIcon, HomeIcon, InboxIcon, LayersIcon, MoreHorizontalIcon, PanelLeftIcon, PencilIcon,
   SearchIcon, SettingsIcon, ShareIcon, TrashIcon,
 } from "@area/icons";
-import { figureMarkup } from "../../../.claude/skills/area-illustration/engine/markup.js";
+import { blankImages, figureMarkup } from "../../../.claude/skills/area-illustration/engine/markup.js";
+import { AnalyticsDashboard } from "./content/examples/analytics.tsx";
+import { MobileScreen } from "./content/examples/mobile.tsx";
+import { SettingsScreen } from "./content/examples/settings.tsx";
 
 /** The screen's true size: a desktop window at 16:10. */
 export const SCREEN = { w: 1024, h: 640 } as const;
@@ -56,14 +59,15 @@ export const REGION_LABEL: Record<Region, string> = {
  */
 export type Hold = "hover" | "press" | "focus" | "hover-edge" | "lift" | "menu" | "danger" | "selected";
 
-const ROWS: ReadonlyArray<{ name: string; tone: "success" | "warning" | "danger" | "info"; who: string; checked?: boolean }> = [
-  { name: "Item one", tone: "success", who: "DT", checked: true },
-  { name: "Item two", tone: "warning", who: "T1" },
-  { name: "Item three", tone: "danger", who: "T2" },
-  { name: "Item four", tone: "info", who: "T3" },
+const ROWS: ReadonlyArray<{ name: string; status: string; tone: "success" | "warning" | "danger" | "info"; who: string; checked?: boolean }> = [
+  { name: "Update the pricing page", status: "Done", tone: "success", who: "DT", checked: true },
+  { name: "Fix the mobile navigation", status: "In review", tone: "warning", who: "DE" },
+  { name: "Broken image on the blog", status: "Blocked", tone: "danger", who: "EN" },
+  { name: "Write the launch email", status: "Planned", tone: "info", who: "MK" },
 ];
-const STATS = ["1,204", "86%", "32"];
-const three = [{ value: "one", label: "One" }, { value: "two", label: "Two" }, { value: "three", label: "Three" }];
+const TEAMS: Record<string, string> = { DT: "David Tee", DE: "Design team", EN: "Engineering team", MK: "Marketing team" };
+const STATS: ReadonlyArray<[string, string]> = [["Open issues", "128"], ["Progress", "86%"], ["Due this week", "12"]];
+const priority = [{ value: "low", label: "Low" }, { value: "medium", label: "Medium" }, { value: "high", label: "High" }];
 /** A region round a component whose own attributes reach its input, not its box (Switch, Slider, a pair of Chips). */
 const R = ({ id, children, inline }: { id: Region; children: ReactNode; inline?: boolean }) =>
   <div data-region={id} className={inline ? "ss-region ss-region--inline" : "ss-region"}>{children}</div>;
@@ -73,88 +77,88 @@ function ProductScreen({ hold }: { hold: ReadonlySet<Hold> }) {
   const pointer = (state: Hold) => on(state) ? { "data-af-pointer": "" } : {};
   return (
     <Surface className="ss-window" data-region="screen">
-      <div className="ss-window__bar"><span className="ss-lights"><i /><i /><i /></span><span className="ss-window__title">Title</span><span /></div>
+      <div className="ss-window__bar"><span className="ss-lights"><i /><i /><i /></span><span className="ss-window__title">Northwind</span><span /></div>
       <div className="ss-app">
         {/* The side, on the recessed fill as the skill's screens draw it (figures/screens.css). */}
         <aside className="ss-side" data-region="sidebar">
           <div className="ss-side__ws">
-            <Avatar size="sm" shape="square" fallback="T1" aria-label="Team one" />
-            <span className="ss-strong ss-grow">Team one</span>
+            <Avatar size="sm" shape="square" fallback="N" aria-label="Northwind" />
+            <span className="ss-strong ss-grow">Northwind</span>
             <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="Sidebar" icon={<PanelLeftIcon />} />
           </div>
           <Nav aria-label="Primary">
-            <NavItem href="#" icon={<HomeIcon />} current data-region="nav-current">Item one</NavItem>
+            <NavItem href="#" icon={<HomeIcon />} current data-region="nav-current">Projects</NavItem>
             <NavItem href="#" icon={<InboxIcon />} className={on("hover") ? "st-hover" : undefined} {...pointer("hover")} data-region="nav-hover"
-              trailing={<Count count={3} variant="soft" data-region="count" />}>Item two</NavItem>
-            <NavItem href="#" icon={<SearchIcon />}>Item three</NavItem>
+              trailing={<Count count={3} variant="soft" data-region="count" />}>Inbox</NavItem>
+            <NavItem href="#" icon={<SearchIcon />}>Search</NavItem>
           </Nav>
           <Nav aria-label="Group">
-            <NavGroup label="Label">
-              <NavItem href="#" icon={<DocumentIcon />}>Item four</NavItem>
-              <NavItem href="#" icon={<LayersIcon />}>Item five</NavItem>
-              <NavItem href="#" icon={<CalendarIcon />}>Item six</NavItem>
-              <NavItem href="#" icon={<FolderIcon />}>Item seven</NavItem>
+            <NavGroup label="Teams">
+              <NavItem href="#" icon={<DocumentIcon />}>Design</NavItem>
+              <NavItem href="#" icon={<LayersIcon />}>Engineering</NavItem>
+              <NavItem href="#" icon={<CalendarIcon />}>Marketing</NavItem>
+              <NavItem href="#" icon={<FolderIcon />}>Support</NavItem>
             </NavGroup>
           </Nav>
           <span className="ss-grow" />
           <div className="ss-side__foot">
             <Avatar size="sm" fallback="DT" aria-label="David Tee" />
-            <span className="ss-grow ss-stack0"><span className="ss-strong">David Tee</span><span className="ss-muted">Label</span></span>
+            <span className="ss-grow ss-stack0"><span className="ss-strong">David Tee</span><span className="ss-muted">Admin</span></span>
             <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="Settings" icon={<SettingsIcon />} />
           </div>
         </aside>
         <main className="ss-main">
           <header className="ss-head" data-region="header">
             <Breadcrumb><BreadcrumbList>
-              <BreadcrumbItem><BreadcrumbLink href="#">Item one</BreadcrumbLink></BreadcrumbItem>
+              <BreadcrumbItem><BreadcrumbLink href="#">Projects</BreadcrumbLink></BreadcrumbItem>
               <BreadcrumbSeparator />
-              <BreadcrumbItem><BreadcrumbPage>Title</BreadcrumbPage></BreadcrumbItem>
+              <BreadcrumbItem><BreadcrumbPage>Website relaunch</BreadcrumbPage></BreadcrumbItem>
             </BreadcrumbList></Breadcrumb>
             <span className="ss-grow" />
             <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="More" icon={<MoreHorizontalIcon />} data-region="more" />
-            <Button size="sm" variant="outline" tone="neutral" icon={<ShareIcon />} className={on("press") ? "st-press" : undefined} {...pointer("press")} data-region="button">Button</Button>
-            <Button size="sm" icon={<AddIcon />} data-region="primary">Action</Button>
+            <Button size="sm" variant="outline" tone="neutral" icon={<ShareIcon />} className={on("press") ? "st-press" : undefined} {...pointer("press")} data-region="button">Share</Button>
+            <Button size="sm" icon={<AddIcon />} data-region="primary">New issue</Button>
           </header>
-          <div className="ss-tabs"><Tabs data-region="tabs" size="sm" aria-label="Views" defaultValue="one" items={[{ id: "one", label: "One" }, { id: "two", label: "Two" }, { id: "three", label: "Three" }]} /></div>
+          <div className="ss-tabs"><Tabs data-region="tabs" size="sm" aria-label="Views" defaultValue="one" items={[{ id: "one", label: "Overview" }, { id: "two", label: "Issues" }, { id: "three", label: "Timeline" }]} /></div>
           <div className="ss-body">
             <div className="ss-intro" data-region="text">
-              <span className="ss-heading">Title</span>
-              <span className="ss-body-text">Body text, a description that runs across the page so it reads as a line of prose.</span>
+              <span className="ss-heading">Website relaunch</span>
+              <span className="ss-body-text">Ship the new marketing site and docs before the October launch.</span>
             </div>
             <div className="ss-stats" data-region="stats">
-              {STATS.map((value, at) => (
+              {STATS.map(([name, value], at) => (
                 <Card key={value} size="sm" selected={at === 1 && on("selected")} className={at === 2 && on("lift") ? "st-lift" : undefined} {...(at === 2 ? pointer("lift") : {})}
                   data-region={at === 1 ? "stat-selected" : at === 2 ? "stat-hover" : "stat"}><CardContent>
-                  <span className="ss-muted">Label</span>
+                  <span className="ss-muted">{name}</span>
                   <span className="ss-value">{value}</span>
                 </CardContent></Card>
               ))}
             </div>
             <div className="ss-grid">
               <Card size="sm" data-region="list"><CardContent>
-                <CardTitle>Title</CardTitle>
+                <CardTitle>Recent issues</CardTitle>
                 <div className="ss-rows">
                   {ROWS.map(row => (
                     <div key={row.name} className="ss-row">
                       <span className="ss-cell" data-region={row.checked ? "checks" : undefined}><Checkbox aria-label={row.name} defaultChecked={row.checked} /></span>
                       <span className="ss-grow">{row.name}</span>
-                      <Badge tone={row.tone} data-region={row.checked ? "badges status" : "status"}>Label</Badge>
-                      <Avatar size="sm" fallback={row.who} aria-label={row.who === "DT" ? "David Tee" : "Team"} data-region={row.checked ? "avatar" : undefined} />
+                      <Badge tone={row.tone} data-region={row.checked ? "badges status" : "status"}>{row.status}</Badge>
+                      <Avatar size="sm" fallback={row.who} aria-label={TEAMS[row.who]} data-region={row.checked ? "avatar" : undefined} />
                     </div>
                   ))}
                 </div>
               </CardContent></Card>
               <Card size="sm" data-region="form"><CardContent>
-                <CardTitle>Title</CardTitle>
-                <Field label="Label"><Input size="sm" fullWidth placeholder="Placeholder" data-region="field"
+                <CardTitle>New issue</CardTitle>
+                <Field label="Title"><Input size="sm" fullWidth placeholder="What needs doing?" data-region="field"
                   className={on("focus") ? "st-focus-field" : on("hover-edge") ? "st-hover-field" : undefined} {...pointer("hover-edge")} /></Field>
-                <Segmented size="sm" fullWidth aria-label="Label" defaultValue="one" items={three} data-region="segmented" />
+                <Segmented size="sm" fullWidth aria-label="Priority" defaultValue="medium" items={priority} data-region="segmented" />
                 <div className="ss-line">
-                  <R id="switch" inline><Switch label="Label" defaultChecked /></R>
-                  <R id="chips" inline><Chip size="sm">Chip</Chip><Chip size="sm">Chip</Chip></R>
+                  <R id="switch" inline><Switch label="Notify team" defaultChecked /></R>
+                  <R id="chips" inline><Chip size="sm">Design</Chip><Chip size="sm">Web</Chip></R>
                 </div>
-                <R id="slider"><Slider aria-label="Label" defaultValue={60} /></R>
-                <Button size="sm" fullWidth data-region="action">Action</Button>
+                <R id="slider"><Slider aria-label="Estimate" defaultValue={60} /></R>
+                <Button size="sm" fullWidth data-region="action">Create issue</Button>
               </CardContent></Card>
             </div>
           </div>
@@ -162,9 +166,9 @@ function ProductScreen({ hold }: { hold: ReadonlySet<Hold> }) {
           {on("menu") || on("danger") ? (
             <div className="ss-menu" data-region="menu">
               <div className="area-menu" role="menu" aria-label="More">
-                <MenuItem icon={<CopyIcon />} data-region="menu-row" data-highlighted={on("menu") && !on("danger") ? "" : undefined}>Item one</MenuItem>
-                <MenuItem icon={<PencilIcon />}>Item two</MenuItem>
-                <MenuItem icon={<ShareIcon />}>Item three</MenuItem>
+                <MenuItem icon={<CopyIcon />} data-region="menu-row" data-highlighted={on("menu") && !on("danger") ? "" : undefined}>Duplicate</MenuItem>
+                <MenuItem icon={<PencilIcon />}>Rename</MenuItem>
+                <MenuItem icon={<ShareIcon />}>Move to…</MenuItem>
                 <MenuSeparator />
                 <MenuItem icon={<TrashIcon />} tone="danger" data-region="menu-danger" data-highlighted={on("danger") ? "" : undefined} {...pointer("danger")}>Delete</MenuItem>
               </div>
@@ -176,13 +180,28 @@ function ProductScreen({ hold }: { hold: ReadonlySet<Hold> }) {
   );
 }
 
+/**
+ * The product screens the visuals can show (owner, 2026-10-24: "change to a different product ui"): the Workspace, which
+ * marks every region and holds every state a question needs, and the app's own example screens (the Testing tab's), drawn
+ * at their own widths. Only the Workspace points at the parts a question changes.
+ */
+export const SCREENS = {
+  workspace: { label: "Workspace", node: (hold: ReadonlySet<Hold>) => <ProductScreen hold={hold} /> },
+  analytics: { label: "Analytics", node: () => <div className="ss-example"><AnalyticsDashboard /></div> },
+  settings: { label: "Settings", node: () => <div className="ss-example"><SettingsScreen /></div> },
+  phone: { label: "Phone", node: () => <MobileScreen /> },
+} as const;
+export type ScreenId = keyof typeof SCREENS;
+
 const MARKUP = new Map<string, string>();
-/** The screen's figure markup for a set of held states, rendered once each. */
-function markupOf(hold: readonly Hold[]): string {
-  const key = [...hold].sort().join(" ");
+/** A screen's figure markup for a set of held states, rendered once each; words wrapped as shapes only where they are
+    drawn as bars or shapes (a wrapped word in a flex label would take the label's gap). */
+function markupOf(screen: ScreenId, hold: readonly Hold[], words: boolean): string {
+  const key = `${screen}:${words}:${[...hold].sort().join(" ")}`;
   let html = MARKUP.get(key);
   if (!html) {
-    html = figureMarkup(renderToStaticMarkup(<ProductScreen hold={new Set(hold)} />));
+    const rendered = renderToStaticMarkup(SCREENS[screen].node(new Set(hold)));
+    html = words ? figureMarkup(rendered) : blankImages(rendered);
     MARKUP.set(key, html);
   }
   return html;
@@ -200,11 +219,16 @@ const LAYOUT = ["data-area-type", "data-area-density", "data-area-surface", "dat
 const WHOLE: ReadonlySet<Region> = new Set<Region>(["nav-current", "nav-hover", "more", "button", "primary", "tabs", "stat", "stat-selected", "stat-hover",
   "checks", "badges", "avatar", "count", "field", "segmented", "switch", "chips", "slider", "action", "menu", "menu-row", "menu-danger", "status", "form"]);
 
-/** How the figure is framed: the whole screen fitted to its frame, or one region at a fixed zoom, centred on it. */
-export type FigureView = { region?: undefined } | { region: Region; zoom: number };
+/**
+ * How the figure is framed: the whole screen fitted to its frame (at most true size), or at a chosen scale centred on a
+ * part (`focus`, else the middle); or one region close up at one zoom, centred on it.
+ */
+export type FigureView = { region?: undefined; scale?: number; focus?: Region } | { region: Region; zoom: number };
 export interface RegionBox { region: Region; x: number; y: number; w: number; h: number }
 
 export interface ScreenFigureProps {
+  /** Which product screen (the Workspace by default). */
+  screen?: ScreenId;
   /** The theme: data-area-* attributes for the frame. */
   scope: Record<string, string | undefined>;
   hold?: readonly Hold[];
@@ -217,6 +241,10 @@ export interface ScreenFigureProps {
   onMeasure?: (boxes: RegionBox[]) => void;
   /** Crossfade from the last drawing when a discrete change lands (a pick, a preview); a run of changes (a drag) cuts. */
   crossfade?: boolean;
+  /** The scale the figure is drawn at, once it has fitted (a zoom control's readout). */
+  onFit?: (scale: number) => void;
+  /** A part shown whole stands quite alone: the screen round it is hidden, not veiled (the visuals' Component view). */
+  isolate?: boolean;
   className?: string;
 }
 
@@ -224,9 +252,9 @@ export interface ScreenFigureProps {
  * The screen in a frame: fitted whole (the stage), or a region close up at one zoom for every option of a question, so
  * the options compare (an option card). Strokes stay at exactly 1px at any zoom (figures.css, .af-zoom).
  */
-export function ScreenFigure({ scope, hold = [], fidelity = "bars", view = {}, measure, onMeasure, crossfade, className }: ScreenFigureProps) {
+export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity = "bars", view = {}, measure, onMeasure, crossfade, onFit, isolate, className }: ScreenFigureProps) {
   const frame = useRef<HTMLDivElement>(null), place = useRef<HTMLDivElement>(null), zoom = useRef<HTMLDivElement>(null), veilRef = useRef<HTMLSpanElement>(null);
-  const html = markupOf(hold);
+  const html = markupOf(screen, hold, fidelity !== "real");
   // The crossfade: before the new choices paint, a copy of the drawing under the old ones is laid over it and fades out
   // (opacity only, on the compositor). It is the stage's own motion, so it takes the app's Speed and Easing (the Canvas
   // body's defaults) and stops under reduced motion with them.
@@ -259,6 +287,7 @@ export function ScreenFigure({ scope, hold = [], fidelity = "bars", view = {}, m
   // Only the settings that move geometry re-measure the figure; a colour or a shadow repaints without it.
   const signature = LAYOUT.map(name => scope[name] ?? "").join(" ");
   const region = view.region, regionZoom = view.region ? view.zoom : 0;
+  const scale = view.region ? undefined : view.scale, focusOn = view.region ? undefined : view.focus;
   useLayoutEffect(() => {
     const z = zoom.current, p = place.current, f = frame.current;
     if (!z || !p || !f || !size.w || !size.h) return;
@@ -268,6 +297,8 @@ export function ScreenFigure({ scope, hold = [], fidelity = "bars", view = {}, m
     const root = z.firstElementChild as HTMLElement | null;
     if (!root) return;
     const origin = root.getBoundingClientRect();
+    // The screen's own size: a desktop window, an example at its width, a phone.
+    const natural = { w: root.offsetWidth || SCREEN.w, h: root.offsetHeight || SCREEN.h };
     const rectOf = (element: Element) => { const r = element.getBoundingClientRect(); return { x: r.left - origin.left, y: r.top - origin.top, w: r.width, h: r.height }; };
     // A region is every element marked with it (a column of badges is four), as one box.
     const regionRect = (id: Region) => {
@@ -278,7 +309,7 @@ export function ScreenFigure({ scope, hold = [], fidelity = "bars", view = {}, m
     };
     let fit: number, left: number, top: number;
     if (region) {
-      const r = regionRect(region) ?? { x: 0, y: 0, w: SCREEN.w, h: SCREEN.h };
+      const r = regionRect(region) ?? { x: 0, y: 0, w: natural.w, h: natural.h };
       // A part shows whole (a field, a button, a menu), shrunk from the question's zoom only if the frame is narrower than
       // it; a region larger than any card (the sidebar, the cards, a form) is cropped at the zoom. A part's size is the
       // same under every choice unless the choice is its size, so the choices keep one scale.
@@ -286,13 +317,22 @@ export function ScreenFigure({ scope, hold = [], fidelity = "bars", view = {}, m
       left = size.w / 2 - (r.x + r.w / 2) * fit;
       top = size.h / 2 - (r.y + r.h / 2) * fit;
       // Keep the window covering the frame where it is larger than it, so no edge of it shows.
-      if (SCREEN.w * fit >= size.w) left = Math.min(0, Math.max(size.w - SCREEN.w * fit, left));
-      if (SCREEN.h * fit >= size.h) top = Math.min(0, Math.max(size.h - SCREEN.h * fit, top));
+      if (natural.w * fit >= size.w) left = Math.min(0, Math.max(size.w - natural.w * fit, left));
+      if (natural.h * fit >= size.h) top = Math.min(0, Math.max(size.h - natural.h * fit, top));
+    } else if (scale) {
+      // A chosen scale: centred on the part the question changes when there is one, the screen kept over the frame.
+      fit = scale;
+      const r = (focusOn && regionRect(focusOn)) || { x: 0, y: 0, w: natural.w, h: natural.h };
+      left = size.w / 2 - (r.x + r.w / 2) * fit;
+      top = size.h / 2 - (r.y + r.h / 2) * fit;
+      left = natural.w * fit >= size.w ? Math.min(0, Math.max(size.w - natural.w * fit, left)) : (size.w - natural.w * fit) / 2;
+      top = natural.h * fit >= size.h ? Math.min(0, Math.max(size.h - natural.h * fit, top)) : (size.h - natural.h * fit) / 2;
     } else {
-      fit = Math.min(1, size.w / SCREEN.w, size.h / SCREEN.h);
-      left = (size.w - SCREEN.w * fit) / 2;
-      top = (size.h - SCREEN.h * fit) / 2;
+      fit = Math.min(1, size.w / natural.w, size.h / natural.h);
+      left = (size.w - natural.w * fit) / 2;
+      top = (size.h - natural.h * fit) / 2;
     }
+    onFit?.(fit);
     // Field text as shapes, and the pointer, in the screen's own coordinates (the zoom scales them with it).
     if (fidelity !== "real") {
       for (const input of z.querySelectorAll<HTMLInputElement>("input:not([type=checkbox]):not([type=radio]):not([type=range])")) {
@@ -332,11 +372,11 @@ export function ScreenFigure({ scope, hold = [], fidelity = "bars", view = {}, m
     p.style.left = `${left.toFixed(1)}px`;
     p.style.top = `${top.toFixed(1)}px`;
     onMeasure?.(boxes);
-  }, [html, signature, size.w, size.h, region, regionZoom, fidelity, measure?.join(" ")]);
+  }, [html, signature, size.w, size.h, region, regionZoom, scale, focusOn, fidelity, measure?.join(" ")]);
   return (
     <div ref={frame} className={`ss-frame af-${fidelity}${className ? ` ${className}` : ""}`} inert aria-hidden="true" {...scope}>
       <div ref={place} className="ss-frame__place"><div ref={zoom} className="af-zoom" dangerouslySetInnerHTML={{ __html: html }} /></div>
-      <span ref={veilRef} className="ss-frame__veil" hidden />
+      <span ref={veilRef} className={isolate ? "ss-frame__veil ss-frame__veil--solid" : "ss-frame__veil"} hidden />
     </div>
   );
 }

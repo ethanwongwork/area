@@ -439,6 +439,12 @@ export interface WorkspaceProps {
    * has nothing for, and the shell leaves out its tab (rule 14: a control that does not apply is left out).
    */
   inspector: ReactNode | InspectorViews;
+  /**
+   * The Sidebar and the Inspector: shown as the person last left them (the default), or left out for a view that is its
+   * own two panels (Setup, owner 2026-10-24: "dont need all these panels open ... a 2 panel view"). Leaving them out never
+   * changes the saved panels, so the other tabs keep theirs.
+   */
+  panels?: boolean;
   /** The Canvas's scrolling body (fitting tiles, scrolling a selection into view). */
   canvasRef?: Ref<HTMLDivElement>;
   /** Attributes the Canvas's body takes beyond the Inspector's settings: a tab's own preview (the Theme tab's mode). */
@@ -463,8 +469,9 @@ export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof 
  * Inspector's first heading sit on one line. Every region insets its content by Panel's 14
  * (src/studio.css).
  */
-export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true }: WorkspaceProps) {
+export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
   const studio = useStudio();
+  const showSidebar = panels && studio.sidebar, showInspector = panels && studio.inspector;
   const sidebarWidth = usePanelWidth("sidebar", studio.canvas.type, studio.canvas.density);
   const inspectorWidth = usePanelWidth("inspector", studio.canvas.type, studio.canvas.density);
   // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
@@ -484,11 +491,11 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
     switchInstantly(main.current);
   }, [signature]);
   return (
-    <div className="studio-workspace" data-sidebar={studio.sidebar ? "" : undefined} data-inspector={studio.inspector ? "" : undefined}>
+    <div className="studio-workspace" data-sidebar={showSidebar ? "" : undefined} data-inspector={showInspector ? "" : undefined}>
       {/* The Sidebar is chrome on a recessed ground (owner, 2026-10-22; cursor-audit-2026-10-22.md item 4), as the
           Testing screens' sidebars: the Panel is a chrome region painting the fill styles/app.css names (panel.css) and
           declares the recessed ground, so its row plates step from what is under them (layers.css). */}
-      {studio.sidebar ? (
+      {showSidebar ? (
         <div className="studio-sidebar">
           <Panel flush resizable="end" aria-label="Sidebar" data-area-chrome="" data-area-ground="recessed" {...sidebarWidth}>{sidebar}</Panel>
         </div>
@@ -497,7 +504,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
         <header className="studio-canvas__bar">{canvasLead}{canvasActions}</header>
         <div ref={canvasRef} className="studio-canvas__body" {...axes}>{canvas}</div>
       </main>
-      {studio.inspector ? (
+      {showInspector ? (
         <div className="studio-inspector">
           {isViews(inspector) ? <InspectorPanel views={inspector} width={inspectorWidth} />
             : <Panel flush bareBar resizable="start" aria-label="Inspector" {...inspectorWidth}>{inspector}</Panel>}

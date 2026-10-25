@@ -14,6 +14,10 @@
  * unordered set use Segmented or Chip, where the options are named rather than implied
  * by position.
  * ------------------------------------------------------------------------- */
+/* The fill's place as a number, registered so a glide can ease it (it inherits into the control's track). Its name is
+   the slider's own: a registered property applies to every element, so a shared private name would retype others. */
+@property --_slider-ratio { syntax: "<number>"; inherits: true; initial-value: 0; }
+
 @layer area.components {
   .area-slider {
     --_height: var(--area-control-md);
@@ -189,15 +193,15 @@
    * the pointer target matches every other control on the row. The track is painted as
    * the input's own background and the thumb is centred on it.
    *
-   * The fill ends at the thumb's centre: the host gives `--_ratio` (0 to 1) beside `--_pct`, and the stop is
-   * the thumb's half plus that share of its travel. Without `--_ratio` the stop falls back to `--_pct`, which
+   * The fill ends at the thumb's centre: the host gives `--_slider-ratio` (0 to 1) beside `--_pct`, and the stop is
+   * the thumb's half plus that share of its travel. Without `--_slider-ratio` the stop falls back to `--_pct`, which
    * a 4px rail hides under its thumb but a full-height track (variant track, bar) does not.
    *
    * `--_buffered` (0 to 1, set from the `buffered` prop) paints a second stretch after the fill, to the same thumb-inset
    * position; without it the stretch has no width.
    */
   .area-slider__control {
-    --_stop: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_ratio));
+    --_stop: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_slider-ratio));
     --_buffer-stop: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_buffered));
     --_rail: linear-gradient(var(--_fill-dir, to right), var(--_fill) 0 var(--_stop, var(--_pct)), var(--_buffer-fill) 0 var(--_buffer-stop, 0%), var(--_track-fill) 0 100%);
     position: relative;
@@ -442,6 +446,10 @@
     isolation: isolate;
   }
   .area-slider--field > .area-slider__control { position: absolute; z-index: 0; inset: 0; inline-size: 100%; cursor: ew-resize; }
+  /* A glide (Slider `glide`, owner 2026-10-24: "not very smooth in between their options"): while the pointer drags,
+     the fill follows it (React paints the pointer's place); otherwise a change of step, a key or the release, eases
+     the fill to the step on fast, ease-out. A field has no thumb to jump ahead of it. */
+  .area-slider--field[data-glide]:not([data-dragging]) { transition: --_slider-ratio var(--area-duration-fast) var(--area-ease-out); }
   .area-slider--field[data-disabled] > .area-slider__control { cursor: not-allowed; }
   .area-slider--field > .area-slider__label,
   .area-slider--field > .area-slider__value { position: relative; z-index: 1; pointer-events: none; color: var(--area-fg-default); }

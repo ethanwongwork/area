@@ -65,7 +65,7 @@ test("rail is the default; track and bar are variants on Slider and SliderRange"
 });
 
 test("hands the CSS the value as a ratio so a full-height fill ends at the thumb's centre", () => {
-  assert.match(render({ "aria-label": "Volume", defaultValue: 25 }), /--_pct:25%;--_ratio:0\.25/);
+  assert.match(render({ "aria-label": "Volume", defaultValue: 25 }), /--_pct:25%;--_slider-ratio:0\.25/);
 });
 
 test("the knob is plain: no fill-colour dot, and hover paints the fill only (owner 2026-10-21)", () => {

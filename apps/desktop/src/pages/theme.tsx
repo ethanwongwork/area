@@ -44,7 +44,7 @@ export function ThemePage() {
       items={[{ value: "setup", label: "Setup" }, { value: "browse", label: "Browse" }]} />
   );
   return flow === "setup"
-    ? <ThemeSetup mode={mode} setMode={setMode} flowSwitch={flowSwitch} />
+    ? <ThemeSetup mode={mode} setMode={setMode} flowSwitch={flowSwitch} onBrowse={() => setFlow("browse")} />
     : <ThemeBrowse mode={mode} setMode={setMode} flowSwitch={flowSwitch} />;
 }
 

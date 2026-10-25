@@ -783,6 +783,13 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   readout?: boolean | ReactNode | ((value: number) => ReactNode);
   /** Called with the normalized native value and the input event, for every input event. */
   onValueChange?: (value: number, event: FormEvent<HTMLInputElement>) => void;
+  /**
+   * A stepped range glides (owner, 2026-10-24: "the sliders are not very smooth in between their options"): while the
+   * pointer drags, the track follows it continuously and the value lands on whole steps (`onValueChange` fires when the
+   * step changes); on release the fill settles onto the step. On by default for a range of 60 steps or fewer; `false`
+   * keeps the native stepping. Keyboard steps are always whole.
+   */
+  glide?: boolean;
   disabled?: boolean;
 }
 
@@ -830,6 +837,7 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
     origin,
     readout,
     onValueChange,
+    glide,
     onInput,
     className,
     disabled,
@@ -852,13 +860,25 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
     : normalizeSliderValue(value, min, max, step);
   const lower = finiteNumber(min, 0);
   const upper = Math.max(lower, finiteNumber(max, 100));
-  const pct = upper > lower ? ((current - lower) / (upper - lower)) * 100 : 0;
   const bufferedRatio = buffered === undefined || upper <= lower
     ? undefined
     : Math.min(1, Math.max(0, (finiteNumber(buffered, lower) - lower) / (upper - lower)));
   // An origin inside the range: the fill's two ends as ratios, the origin's and the value's in order.
   const originRatio = origin === undefined || upper <= lower ? undefined : Math.min(1, Math.max(0, (finiteNumber(origin, lower) - lower) / (upper - lower)));
   const interval = step === "any" ? 0 : finiteNumber(step, 1);
+  // The glide: the pointer's exact place on the track while it drags (null otherwise).
+  const glides = (glide ?? true) && interval > 0 && (upper - lower) / interval <= 60;
+  const [dragged, setDragged] = useState<number | null>(null);
+  const emitted = useRef<number | null>(null);
+  useEffect(() => {
+    if (dragged === null) return;
+    const end = () => { setDragged(null); emitted.current = null; };
+    addEventListener("pointerup", end);
+    addEventListener("pointercancel", end);
+    return () => { removeEventListener("pointerup", end); removeEventListener("pointercancel", end); };
+  }, [dragged === null]);
+  const shown = dragged ?? current;
+  const painted = upper > lower ? ((shown - lower) / (upper - lower)) * 100 : 0;
   const markCount = stepMarks && interval > 0
     ? Math.min(24, Math.max(0, Math.round((upper - lower) / interval) - 1))
     : 0;
@@ -896,16 +916,19 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
         labelPosition: labelPosition === "top" ? "top" : undefined,
         orientation: orientation === "vertical" && variant !== "field" ? "vertical" : undefined,
       }, className)}
-      // `--_ratio` lets the CSS end the fill at the thumb's centre, which sits inset by half the thumb.
+      // `--_slider-ratio` lets the CSS end the fill at the thumb's centre, which sits inset by half the thumb. While a glide
+      // drags, the fill follows the pointer, not the step.
       style={{
-        ["--_pct" as string]: `${pct}%`,
-        ["--_ratio" as string]: pct / 100,
+        ["--_pct" as string]: `${painted}%`,
+        ["--_slider-ratio" as string]: painted / 100,
         ...(bufferedRatio === undefined ? {} : { ["--_buffered" as string]: bufferedRatio }),
-        ...(originRatio === undefined ? {} : { ["--_lo" as string]: Math.min(originRatio, pct / 100), ["--_hi" as string]: Math.max(originRatio, pct / 100) }),
+        ...(originRatio === undefined ? {} : { ["--_lo" as string]: Math.min(originRatio, painted / 100), ["--_hi" as string]: Math.max(originRatio, painted / 100) }),
         ...style,
       }}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(originRatio === undefined ? {} : { "data-origin": "" })}
+      {...(glides ? { "data-glide": "" } : {})}
+      {...(dragged !== null ? { "data-dragging": "" } : {})}
     >
       {label ? <span className="area-slider__label">{label}</span> : null}
       {markCount > 0 ? <span className="area-slider__marks" aria-hidden="true">{Array.from({ length: markCount }, (_, index) => <i key={index} style={{ ["--_mark" as string]: `${((index + 1) / (markCount + 1)) * 100}%` }} />)}</span> : null}
@@ -918,8 +941,8 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
         className="area-slider__control"
         min={min}
         max={max}
-        step={step}
-        value={value === undefined ? undefined : current}
+        step={dragged !== null ? "any" : step}
+        value={value === undefined && dragged === null ? undefined : shown}
         defaultValue={defaultValue}
         disabled={disabled}
         // Shift+arrow moves ten steps, as Carbon and MUI (audit C-31). The native control takes the
@@ -936,11 +959,25 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
           Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(control, String(next));
           control.dispatchEvent(new Event("input", { bubbles: true }));
         }}
+        onPointerDown={event => {
+          rest.onPointerDown?.(event);
+          // A glide follows the pointer from the press: the native control drags continuously ("any") meanwhile.
+          if (glides && !disabled && event.button === 0) { emitted.current = current; setDragged(current); }
+        }}
         onInput={event => {
           onInput?.(event);
-          const nextValue = event.currentTarget.valueAsNumber;
-          if (value === undefined) setLocalValue(nextValue);
-          onValueChange?.(nextValue, event);
+          const raw = event.currentTarget.valueAsNumber;
+          if (glides && dragged !== null) {
+            setDragged(raw);
+            const nextValue = normalizeSliderValue(raw, min, max, step);
+            if (nextValue === emitted.current) return;
+            emitted.current = nextValue;
+            if (value === undefined) setLocalValue(nextValue);
+            onValueChange?.(nextValue, event);
+            return;
+          }
+          if (value === undefined) setLocalValue(raw);
+          onValueChange?.(raw, event);
         }}
       />
       {shownReadout === false || shownReadout === undefined ? null : (
