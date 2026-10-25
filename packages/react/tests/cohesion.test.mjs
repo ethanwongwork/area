@@ -472,7 +472,8 @@ test('stacked row plates sit one fixed break apart at every density (owner 2026-
 // resolves where it is declared. So it is restated on every ground that re-points the fills and on every element that
 // sets a setting it reads (the layer map, 2026-10-22: a scoped page and half the surfaces kept the root's press).
 test('the pressed fill is re-derived on every ground and every setting scope', () => {
-  const pointer = name => rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${name})`)).map(rule => rule.selector);
+  // The setting scopes inside a ground (`@scope`, below) re-point the fills but read a press their ground already derived.
+  const pointer = name => rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${name})`) && !/^:where\(\s*\[data-area-/.test(rule.selector)).map(rule => rule.selector);
   const pressed = rules.filter(rule => /--area-bg-component-pressed:\s*light-dark/.test(rule.body)).map(rule => rule.selector).join(',');
   assert.ok(pressed, 'no rule derives the pressed fill');
   // Each compound in a selector list, with :where() lists opened: split on commas at depth 0 only.
@@ -490,8 +491,33 @@ test('the pressed fill is re-derived on every ground and every setting scope', (
     }
   }
   assert.match(pressed, /\[data-area-ground\]/);
-  for (const setting of ['theme', 'neutral', 'ground-light', 'ground-dark', 'layers-light', 'layers-dark', 'fill-hover', 'fill-selected', 'fill-pressed']) {
+  // The press mixes toward the body ink (Tint, Text tint, and the accent's hue at Tint hue Accent) and stops at muted,
+  // which is solved on the deepest ground, a card's at Card tone (2026-10-23 theme review).
+  for (const setting of ['theme', 'neutral', 'ground-light', 'ground-dark', 'layers-light', 'layers-dark', 'fill-hover', 'fill-selected', 'fill-pressed', 'tint-hue', 'tint-light', 'tint-dark', 'ink-tint', 'accent', 'card-tone-light', 'card-tone-dark']) {
     assert.ok(pressed.includes(`[data-area-${setting}]`), `a scope setting ${setting} keeps its parent's pressed fill`);
+  }
+});
+
+// layers.css: every element that sets a setting re-derives the control fills as the page's, so each ground re-points
+// them on the setting scopes inside it with `@scope`, the nearest ground winning (2026-10-23 theme review: a scope setting
+// only Motion in a recessed region painted its fields the page's fill).
+test('a setting scope inside a ground keeps the ground\'s fills', async () => {
+  const { AXIS_PRESETS } = await import('../../tokens/dist/config.js');
+  const scopes = [...css.matchAll(/@scope \(([^{]*)\) \{\s*:where\(([^{]*)\) \{([^{}]*)\}/g)].map(([, root, settings, body]) => ({
+    root: root.replace(/\s+/g, ' '), settings: settings.replace(/\s+/g, ' '), ground: /--area-bg-component: var\(--area-bg-component-(\w+)\)/.exec(body)?.[1] }));
+  const grounds = ['raised', 'page', 'card', 'tile', 'recessed'];
+  assert.deepEqual(scopes.map(scope => scope.ground).sort(), [...grounds].sort());
+  const split = list => { const out = []; let depth = 0, start = 0;
+    for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
+    return [...out, list.slice(start)].map(part => part.trim()).filter(Boolean); };
+  const open = part => /^:where\(.*\)$/.test(part) ? split(part.slice(7, -1)) : [part];
+  for (const scope of scopes) {
+    const settings = split(scope.settings);
+    for (const id of [...Object.keys(AXIS_PRESETS), 'ui', 'contrast']) assert.ok(settings.includes(`[data-area-${id}]`), `${scope.ground}: a scope setting ${id} inside it falls back to the page's fills`);
+    const roots = split(scope.root);
+    const pointers = rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${scope.ground})`) && !/^:where\(\s*\[data-area-/.test(rule.selector))
+      .flatMap(rule => split(rule.selector).flatMap(open)).filter(part => part !== '.area-select::picker(select)');
+    for (const part of pointers) assert.ok(roots.includes(part), `${part} is a ${scope.ground} ground but its setting scopes fall back to the page's fills`);
   }
 });
 
@@ -559,7 +585,7 @@ test('every ground moves the edges and restates every edge role and its readers'
   const shifting = new Set(rules.filter(rule => /--area-edge-shift-light:\s*(0|max\()/.test(rule.body) && !/:root/.test(rule.selector)).flatMap(rule => parts(rule.selector)));
   const restating = new Set(parts(restate.selector.replace(/ > \*$/, '')));
   for (const ground of ['raised', 'page', 'recessed', 'card', 'tile']) {
-    for (const rule of rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${ground})`)))
+    for (const rule of rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${ground})`) && !/^:where\(\s*\[data-area-/.test(rule.selector)))
       for (const part of parts(rule.selector)) {
         if (part === '.area-select::picker(select)') continue;
         assert.ok(shifting.has(part), `${part} re-points the fills (${ground}) but does not set the edge shift`);

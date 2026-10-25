@@ -1,7 +1,7 @@
 /**
  * The axis registry, and the invariant that makes the whole design hold together.
  *
- * Twenty-three axes produce more combinations than any test could visit. The property that makes targeted
+ * Forty-four axes produce more combinations than any test could visit. The property that makes targeted
  * verification tractable
  * is proving the axes are *orthogonal*, which reduces the problem to checking each axis
  * once. Orthogonality is not a hope here -- `assertAxisIntegrity` fails the build if any
@@ -74,12 +74,16 @@ export const AXES: AxisDefinition[] = [
  * (`settingLabel`): Stroke width reads Width under Stroke, Shadow size Size under Shadow.
  */
 export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly string[] }> = [
-  { heading: "Color", settings: ["theme", "neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "accent", "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast"] },
+  // In palette order (owner, 2026-10-24, the axis review): the page and its greys, the accent, then where the accent
+  // paints; the interaction states under one heading, so one state's settings sit together.
+  { heading: "Page", settings: ["theme", "ground-light", "ground-dark", "neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark"] },
+  { heading: "Accent", settings: ["accent", "accent-strength", "solid-light", "solid-dark", "label-tint"] },
+  { heading: "Where it paints", settings: ["action", "selection", "status-colours", "contrast"] },
   { heading: "Size", settings: ["type", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },
-  { heading: "Stroke", settings: ["surface", "stroke", "stroke-hover", "selected-stroke", "focus-ring", "shadow-rest"] },
-  { heading: "Shadow", settings: ["elevation", "shadow-resting", "shadow-hover", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] },
-  { heading: "Fill", settings: ["fill-hover", "fill-selected", "fill-pressed", "selected-tint", "danger-hover"] },
+  { heading: "Stroke", settings: ["surface", "stroke"] },
+  { heading: "Shadow", settings: ["elevation", "shadow-resting", "shadow-field", "shadow-rest", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] },
+  { heading: "States", settings: ["fill-hover", "stroke-hover", "shadow-hover", "fill-selected", "selected-stroke", "selected-tint", "fill-pressed", "focus-ring", "danger-hover"] },
   { heading: "Effects", settings: ["motion", "easing"] },
 ];
 

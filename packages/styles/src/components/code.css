@@ -395,9 +395,12 @@
    * 2026-10-16: 3.3-4.3:1 before, 3.97:1 at the defaults). Light: the 6.7% wash needs 0.063-0.073 more on every
    * ground, the fixed diff tints 0.042. Dark: the 19% white wash needs nothing up to a raised layer of L 0.225, then
    * 4.5x the excess (0.57 at 24 + 8); the diff tints are dark plates and need none.
+   * The light wash is the selected fill's (`bg-active`), so its darkening scales with the Hover and Selected fill steps
+   * as the wash's alpha does (base.ts): 0.075 at the defaults' 7%, 0.168 at Hover 4 + Selected 4's 15.6%, which needs
+   * 0.160 (theme sweep 2026-10-23: keywords 3.83:1 there before).
    */
   .area-code-block__line:is(.area-code-block__line--highlighted, :target) {
-    --_ink-darken: 0.075; /* spec */
+    --_ink-darken: calc(0.075 * (max(1.25, 1.5 + 0.375 * (var(--area-fill-hover-step) - 2)) + 0.625 * var(--area-fill-selected-step)) / 2.125); /* spec */
     --_ink-lift: clamp(0, calc((var(--area-layer-dark-raised) - 0.225) * 4.5), 1); /* spec */
   }
   .area-code-block__line:is(.area-code-block__line--added, .area-code-block__line--removed) { --_ink-darken: 0.05; } /* spec */

@@ -414,7 +414,7 @@ export const slider = {
   description: "Picks a value from an ordered range.",
   variants: {
     size: ["sm", "md", "lg"],
-    variant: ["track", "bar"],
+    variant: ["track", "bar", "field"],
     labelPosition: ["top"],
     orientation: ["vertical"],
   },

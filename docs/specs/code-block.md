@@ -304,6 +304,7 @@ The collapse toggle is not selectable; line-number and toggle underlines take Li
 
 Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").
 - 2026-10-22 · md corner `radius-container` 12 → concentric with the header's copy, 6 + 4 + 1 = 11 (owner: "the corner inset here is incorrect", on the Stage's code block). The same rule the small size took in round 11; it now follows the Radius setting through `radius-control-sm` and is square at Sharp.
+- 2026-10-23 · theme review (owner: "make sure ... there are no visual errors due to all the combinations") → a highlighted line's light ink darkening scales with its wash, the selected fill's (`bg-active`), which the Hover and Selected fill settings set: 0.075 at the default 7%, 0.168 at both 4 (15.6%), which needs 0.160 (keywords 3.83:1 there before; unchanged at the defaults) → code.css.
 
 ## Review note, 2026-10-20 (round 62)
 

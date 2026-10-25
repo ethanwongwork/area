@@ -55,7 +55,7 @@ export const SURFACE_AXIS: AxisDefinition = {
 
 export const REST_SHADOW_AXIS: AxisDefinition = {
   id: "shadow-rest",
-  label: "Rest shadow",
+  label: "Edge shadow",
   description: "A subtle shadow round cards, panels and floating surfaces at rest, 0 (none) to 8, with the line or instead of it.",
   defaultPreset: "0",
   namespaces: ["--area-shadow-rest-step:"],

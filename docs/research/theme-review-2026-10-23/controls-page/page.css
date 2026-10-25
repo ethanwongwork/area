@@ -1,0 +1,41 @@
+
+  /* Layout: the controls as cards in a column grid on the left, a sticky preview of real components on the right. */
+  :root { --bg: var(--area-bg-page, #fff); --fg: var(--area-fg-default, #1f1f1f); --muted: var(--area-fg-muted, #646464); --line: var(--area-border-card, #e5e5e5); --card: var(--area-bg-surface, #fff); --well: var(--area-bg-subtle, #f7f7f7); --change: var(--area-fg-warning, #9a5b00); --good: var(--area-fg-success, #1b7a43); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: var(--area-bg-page, #020202); --fg: var(--area-fg-default, #eee); --muted: var(--area-fg-muted, #a0a0a0); --line: var(--area-border-card, #2a2a2a); --card: var(--area-bg-surface, #111); --well: var(--area-bg-subtle, #161616); --change: var(--area-fg-warning, #e8b765); --good: var(--area-fg-success, #6fd39b); color-scheme: dark; } }
+  :root[data-theme="dark"] { --bg: var(--area-bg-page, #020202); --fg: var(--area-fg-default, #eee); --muted: var(--area-fg-muted, #a0a0a0); --line: var(--area-border-card, #2a2a2a); --card: var(--area-bg-surface, #111); --well: var(--area-bg-subtle, #161616); --change: var(--area-fg-warning, #e8b765); --good: var(--area-fg-success, #6fd39b); color-scheme: dark; }
+  html, body { background: var(--bg); color: var(--fg); }
+  body { font-family: "Geist", ui-sans-serif, system-ui, sans-serif; font-size: 14px; line-height: 1.5; }
+  .page { max-width: 1480px; margin: 0 auto; padding-block: 32px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 28px; }
+  .masthead { display: grid; gap: 8px; }
+  .masthead h1 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+  .lede { margin: 0; max-width: 70ch; color: var(--muted); }
+  .eyebrow { font: 500 11.5px/1 "Geist Mono", ui-monospace, monospace; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .masthead-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 8px; }
+  .tally { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .tally b { color: var(--fg); }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 28px; align-items: start; }
+  .groups { display: grid; gap: 32px; min-width: 0; }
+  .group { display: grid; gap: 12px; }
+  .group h2 { margin: 0; font-size: 17px; font-weight: 600; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+  .control-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+  .control-card[data-verdict="good"] { border-color: var(--good); }
+  .control-card[data-verdict="change"] { border-color: var(--change); }
+  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .card-head h3 { margin: 0; font-size: 14px; font-weight: 600; display: flex; gap: 6px; align-items: baseline; }
+  .card-head code { font: 11.5px "Geist Mono", ui-monospace, monospace; color: var(--muted); }
+  .mode { font-weight: 500; font-size: 11.5px; color: var(--muted); text-transform: capitalize; }
+  .well { background: var(--area-bg-page); color: var(--area-fg-default); border: 1px solid var(--line); border-radius: 10px; padding: 12px; max-width: 280px; width: 100%; box-sizing: border-box; }
+  .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  dl { margin: 0; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 10px; font-size: 12.5px; }
+  dt { color: var(--muted); }
+  dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+  .verdict { display: grid; gap: 8px; }
+  .verdict textarea { font: inherit; font-size: 13px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-height: 56px; resize: vertical; }
+  .verdict textarea:focus-visible { outline: 2px solid var(--area-focus-color, #0160d9); outline-offset: 1px; }
+  .note { margin: 0; font-size: 12.5px; color: var(--muted); }
+  .preview-pane { position: sticky; top: env(safe-area-inset-top, 0px); padding-top: 4px; display: grid; gap: 10px; }
+  .preview { display: grid; gap: 14px; padding: 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--area-bg-page); color: var(--area-fg-default); }
+  .preview-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .preview-card-body { display: grid; gap: 12px; padding: 0 16px 16px; }
+  @media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } .preview-pane { position: static; order: -1; } }

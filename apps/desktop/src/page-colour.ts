@@ -30,7 +30,9 @@ export function snapPageColour(hex: string, theme: "light" | "dark"): { ground: 
   const { L, C, h } = oklchOf(hex);
   const grounds = AXIS_PRESETS[`ground-${theme}`].map(Number);
   const ground = grounds.reduce((best, step) => Math.abs(groundL(theme, step) - L) < Math.abs(groundL(theme, best) - L) ? step : best);
-  const tint = Math.min(8, Math.round(C / TINT_STEP));
+  // The strongest Tint the registry offers (16 since 2026-10-23), read from it so the field reaches every step.
+  const strongest = Math.max(...AXIS_PRESETS[`tint-${theme}`].map(Number).filter(Number.isFinite));
+  const tint = Math.min(strongest, Math.round(C / TINT_STEP));
   return { ground: String(ground), tint: String(tint), hue: C > GRAY ? String(Math.round(h / 5) * 5 % 360) : undefined };
 }
 

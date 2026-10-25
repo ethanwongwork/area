@@ -21,7 +21,7 @@ import { ACCENT_AXIS, THEME_AXIS } from "./color.ts";
 
 export const ACCENT_STRENGTH_AXIS: AxisDefinition = {
   id: "accent-strength",
-  label: "Accent strength",
+  label: "Saturation",
   description: "How much of its own colour the accent keeps, 100 (the palette) to 30 (dusty). Hue and contrast hold.",
   defaultPreset: String(DEFAULT_ACCENT_STRENGTH),
   namespaces: ["--area-strength-accent:"],
@@ -35,7 +35,7 @@ export const ACCENT_STRENGTH_AXIS: AxisDefinition = {
 
 const solidAxis = (theme: "light" | "dark"): AxisDefinition => ({
   id: `solid-${theme}`,
-  label: theme === "light" ? "Light solid" : "Dark solid",
+  label: theme === "light" ? "Light button shade" : "Dark button shade",
   description: `In ${theme}: the accent step solid fills (accent buttons, checked marks) sit on. Auto, or 400 (lighter) to 850 (deeper).`,
   defaultPreset: "auto",
   namespaces: [`--area-solid-${theme}-`],

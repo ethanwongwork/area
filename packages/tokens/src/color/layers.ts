@@ -65,7 +65,8 @@ export const INK_MARGIN = 0.25;
  * 0.012 L (−3 on white is #f3f3f3, the gallery tiles of the owner's reference); a dark one 0.03 (small steps near black
  * do not show). Two tones read it: `card` (Card, Auto = raised) and `tile` (Asset card, Auto = recessed).
  */
-export const CARD_TONE_STEPS = [-4, -3, -2, -1, 0, 1, 2, 3, 4] as const;
+// Half steps since 2026-10-24 (owner, the controls review: "can you add more granularity?"): 0.006 L in light, 0.015 in dark.
+export const CARD_TONE_STEPS = [-4, -3.5, -3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4] as const;
 export const CARD_TONE_UNIT = { light: 0.012, dark: 0.03 } as const;
 export type CardTone = number | "auto";
 
@@ -147,6 +148,11 @@ export const INK_TODAY = {
 } as const;
 /** Targets, a touch over WCAG's 4.5 and 3 so a rounded hex never lands under them. */
 export const INK_TARGET = { text: 4.6, edge: 3.1 } as const;
+/** The lightest a dark selected fill sits (2026-10-23 theme review): where white text still keeps the text target once
+ * pressed by the press room (L 0.523). Strong Hover and Selected fills on a light dark ground went past it (at 20 + 8 with
+ * both at 4 the selected plate was #999999 and white text 2.85:1); there the fills' step shrinks so the selected fill
+ * stops here, hover and pressed keeping their order. The defaults sit under it (0.516 at most), so they are unchanged. */
+export const DARK_FILL_CEILING = Number((Math.cbrt((1 + 0.05) / INK_TARGET.text - 0.05) - PRESS_ROOM.dark).toFixed(6));
 /** The cast fades to none at white and at black, as the tinted ramps do: full chroma from 0.024 under white, and at or
  * above L 0.18 in dark. */
 export const CAST_FADE = { light: 0.024, dark: 0.18 } as const;
@@ -166,12 +172,16 @@ export const washedLightness = (L: number, keep: number) => Math.cbrt((((1.055 *
 /** The roles with a vivid ink (`fg-<role>-vivid`: validation, danger rows, syntax). Each is chosen for 4.6:1 on white
  * (scale.ts chooseVivid; the code ground is white in light), so its luminance is at most VIVID_Y. On a gray light page
  * the inks mix toward black in OKLab, which scales luminance by (1 − d)³ exactly, by just enough to keep 4.6:1 on the
- * page; on white d is 0, so the light theme as it was is unchanged (sweep: 3.83:1 at 90). Dark needs no change. */
+ * page, or on a Card toned darker than it (Card tone; 2026-10-23); on white d is 0, so the light theme as it was is
+ * unchanged (sweep: 3.83:1 at 90). On the recessed layer they measure about 4.3:1 at the defaults (white's ink on L
+ * 0.976); solving them there would darken them at the defaults, an open choice. Dark needs no change. */
 export const VIVID_ROLES = ["accent", "danger", "warning", "caution", "success", "info", "discovery", "pink", "brown"] as const;
 export const VIVID_Y = (1 + 0.05) / INK_TARGET.text - 0.05;
 /** The tonal inks (`fg-<role>`: outline Buttons and Badges, links, statuses) are darker; the brightest in any accent is
- * teal's #00766a, luminance 0.140. They take the same mix, solved for that bound, so they hold on gray pages from about
- * L 0.94 down (sweep: 4.18:1 at 90 + 0) and are unchanged on 100 to 95. */
+ * teal's #00766a, luminance 0.140. They take the same mix, solved for that bound on the deepest ground text sits on (the
+ * recessed layer or a darker card, as body text; the page until 2026-10-23, when an accent Badge on a Card at Card tone
+ * −4 on a 91 page measured 4.07:1), so they hold on gray pages and grounds from about L 0.94 down (sweep: 4.18:1 at 90 + 0)
+ * and are unchanged at the defaults. */
 export const TONAL_ROLES = ["accent", "danger", "warning", "caution", "success", "info", "discovery", "pink", "gray", "brown"] as const;
 export const TONAL_Y = 0.141;
 /** Every hued ink the model derives: its token, the rung the axes write and the luminance bound it is solved for. */
@@ -248,13 +258,13 @@ export function layerLightness(theme: "light" | "dark", groundStep: number, n: n
       muted: Math.min(INK_TODAY.light.muted, inkOn("light", firmest, INK_TARGET.text), inkOn("light", MARK_SHADE * deepest, INK_TARGET.text), inkOn("light", washedLightness(markGround, MARK_HOVER_KEEP), markHoverTarget(markGround))),
       edge: edgeInk, edgeHover: edgeInk + INK_TODAY.light.edgeHover,
     };
-    return { page, raised, recessed, card, tile, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(page, VIVID_Y), tonalDarken: darkenFor(page, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
+    return { page, raised, recessed, card, tile, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(Math.min(page, card), VIVID_Y), tonalDarken: darkenFor(deepest, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
   }
   const lift = n > 0 && g < DARK_LAYER_FLOOR ? DARK_LAYER_FLOOR - g : 0;
   const page = g, raised = g + lift + LAYER_PER_STEP.dark.raised * n, recessed = g + lift + LAYER_PER_STEP.dark.recessed * n;
   const explicit = cardTone === "auto" ? undefined : clamp01(page + cardTone * CARD_TONE_UNIT.dark);
   const card = explicit ?? raised, tile = explicit ?? recessed;
-  const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR); return FM.dark.map(m => rest + m * s) as [number, number, number]; };
+  const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR), t = Math.min(s, Math.max(0, (DARK_FILL_CEILING - rest) / FM.dark[2])); return FM.dark.map(m => rest + m * t) as [number, number, number]; };
   const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile) };
   // The lightest surface text sits on: the raised layer, or a card lighter than it (Card tone).
   const top = fills(Math.max(raised, card, tile));
@@ -371,11 +381,15 @@ const num = (x: number) => String(Number(x.toFixed(6)));
 /** The light and dark lightness of every role, as CSS math over the three settings. */
 export function layerLightnessCss(): Record<string, string> {
   const gl = v("ground-light"), gd = v("ground-dark"), nl = v("layers-light"), nd = v("layers-dark");
-  // The page the hued inks darken for: darker by HUED_INK_MARGIN of the light tint (tintedDarken).
-  const tinted = `calc(${gl} - ${num(HUED_INK_MARGIN)} * max(0, ${v("cast-chroma-light")} - ${num(HUED_INK_FREE)}))`;
+  // The grounds the hued inks darken for (VIVID_ROLES, TONAL_ROLES), darker by HUED_INK_MARGIN of the light tint
+  // (tintedDarken): the deepest one text sits on for the tonal inks, the page or a darker Card tone for the vivid ones.
+  const tint = `${num(HUED_INK_MARGIN)} * max(0, ${v("cast-chroma-light")} - ${num(HUED_INK_FREE)})`;
+  const tintedTonal = `calc(min(${v("layer-light-recessed")}, ${v("layer-light-card")}, ${v("layer-light-tile")}) - ${tint})`;
+  const tintedVivid = `calc(min(${gl}, ${v("layer-light-card")}) - ${tint})`;
   const sl = v("layer-light-step"), sd = v("layer-dark-step");
   const lf = (x: string, m: string) => `calc(${x} - ${m} * ${sl})`;
-  const df = (x: string, m: string) => `calc(max(${x} + ${sd}, ${num(DARK_FILL_FLOOR)}) + ${m} * ${sd})`;
+  // Dark fills step from the rest fill, the step shrinking where the selected fill would pass DARK_FILL_CEILING.
+  const df = (x: string, m: string) => { const rest = `max(${x} + ${sd}, ${num(DARK_FILL_FLOOR)})`; return `calc(${rest} + ${m} * clamp(0, (${num(DARK_FILL_CEILING)} - ${rest}) / ${dm[2]}, ${sd}))`; };
   // The fill settings' multiples (fillMultiples, as CSS): rest, hover, selected.
   const h = v("fill-hover-step"), a = v("fill-selected-step");
   const lh = `max(1.25, 1.5 + 0.375 * (${h} - 2))`, dh = `(0.5 * ${h})`;
@@ -420,8 +434,8 @@ export function layerLightnessCss(): Record<string, string> {
     "layer-dark-body": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.body),
     "layer-dark-muted": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.muted),
     "layer-dark-edge": inkDark(top(0), INK_TARGET.edge, INK_TODAY.dark.edge),
-    "layer-light-vivid-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tinted)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(VIVID_Y)}`)}))`,
-    "layer-light-tonal-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tinted)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(TONAL_Y)}`)}))`,
+    "layer-light-vivid-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedVivid)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(VIVID_Y)}`)}))`,
+    "layer-light-tonal-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedTonal)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(TONAL_Y)}`)}))`,
     "layer-dark-tint-lift": `clamp(0, calc((max(${v("layer-dark-raised")}, ${v("layer-dark-card")}, ${v("layer-dark-tile")}) - ${num(TINT_LIFT.layer.from)}) * ${num(TINT_LIFT.layer.perL)}), 1)`,
     "layer-dark-tint-lift-fill": `clamp(0, calc((${top(1)} - ${num(TINT_LIFT.fill.from)}) * ${num(TINT_LIFT.fill.perL)}), 1)`,
   });

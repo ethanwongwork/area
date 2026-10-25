@@ -121,6 +121,26 @@ function role(_id: string, switchName: string, map: Record<string, [string, stri
  * combination, and custom properties inherit -- so a live calc() is what lets
  * `<aside data-area-ui="compact">` correctly re-derive its own corner radius.
  */
+/**
+ * The dark translucent state washes (`bg-hover`, `bg-active`, `bg-pressed`): white at 7% a Hover step, 5% more a Selected
+ * step and 0.425% more a Pressed step, the press stopping at `max`. Hover stops where a selected plate still sits
+ * `gap` above it with the press's room left, and selected where the press has its room, so the three stay in order.
+ */
+export const DARK_WASH = { hover: 0.07, selected: 0.05, pressed: 0.00425, max: 0.22, gap: 0.02 } as const;
+const DARK_SELECTED_MAX = DARK_WASH.max - 4 * DARK_WASH.pressed, DARK_HOVER_MAX = DARK_SELECTED_MAX - DARK_WASH.gap;
+/** The washes' alphas at a setting, as the CSS computes them. */
+export function darkWashAlphas(hover: number, selected: number, pressed: number): { hover: number; selected: number; pressed: number } {
+  const h = Math.min(DARK_HOVER_MAX, DARK_WASH.hover * hover), s = Math.min(DARK_SELECTED_MAX, h + DARK_WASH.selected * selected);
+  return { hover: h, selected: s, pressed: s + DARK_WASH.pressed * pressed };
+}
+function darkWashCss(state: "hover" | "selected" | "pressed"): string {
+  const step = (name: string) => `var(${PREFIX}fill-${name}-step)`;
+  const num = (x: number) => String(Number(x.toFixed(6)));
+  const h = `min(${num(DARK_HOVER_MAX)}, ${DARK_WASH.hover} * ${step("hover")})`;
+  const s = `min(${num(DARK_SELECTED_MAX)}, ${h} + ${DARK_WASH.selected} * ${step("selected")})`;
+  return state === "hover" ? `calc(${h})` : state === "selected" ? `calc(${s})` : `calc(${s} + ${DARK_WASH.pressed} * ${step("pressed")})`;
+}
+
 export function derivedTokens(): Record<string, string> {
   const out = derivedOnPage();
   // The edge roles written here are on the page (`<role>-page`); each one on the ground under it (color/layers.ts GROUND_EDGES).
@@ -202,11 +222,17 @@ function derivedOnPage(): Record<string, string> {
     // The translucent plates, for a plate over a ground a component cannot know (a segmented track, a swatch cell, a
     // control on a row): the state fills' steps as washes (axes/states.ts). At the defaults they are what they were,
     // hover #141414 at 5% and selected black at 7% (dark white 14% / 19%); pressed adds 1.375% a step past selected,
-    // 5.5% at the default 4 (12.5% black, about ChatGPT's 12%), and dark 0.425% a step. Dark washes stop at 21% and 22%: a translucent plate cannot be bounded by
-    // its ink, and 24% left muted text at 4.43:1 at dark 24 + 8 (2026-10-16).
-    [`${PREFIX}bg-hover`]: `light-dark(rgb(20 20 20 / calc(0.05 * max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) / 1.5)), rgb(255 255 255 / min(0.21, calc(0.14 * (0.5 * var(${PREFIX}fill-hover-step))))))`,
-    [`${PREFIX}bg-active`]: `light-dark(rgb(0 0 0 / calc(0.07 * (max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) + 0.625 * var(${PREFIX}fill-selected-step)) / 2.125)), rgb(250 250 250 / min(0.21, calc(0.14 * (0.5 * var(${PREFIX}fill-hover-step)) + 0.05 * var(${PREFIX}fill-selected-step)))))`,
-    [`${PREFIX}bg-pressed`]: `light-dark(rgb(0 0 0 / calc(0.07 * (max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) + 0.625 * var(${PREFIX}fill-selected-step)) / 2.125 + 0.01375 * var(${PREFIX}fill-pressed-step))), rgb(252 252 252 / min(0.22, calc(0.14 * (0.5 * var(${PREFIX}fill-hover-step)) + 0.05 * var(${PREFIX}fill-selected-step) + 0.00425 * var(${PREFIX}fill-pressed-step)))))`,
+    // 5.5% at the default 4 (12.5% black, about ChatGPT's 12%), and dark 0.425% a step. The dark washes stop at 22%: a
+    // translucent plate cannot be bounded by its ink, and 24% left muted text at 4.43:1 at dark 24 + 8 (2026-10-16). Hover
+    // stops at 18.3% and selected at 20.3% (`DARK_WASH`), so selected stays a step past hover and every press shows:
+    // capped one by one at 21% / 21% / 22%, at Hover 3 and 4 every Selected and Pressed step equalled hover (theme review
+    // 2026-10-24). The defaults sit under both stops (14%, 19%, 20.7%), so they are unchanged.
+    [`${PREFIX}bg-hover`]: `light-dark(rgb(20 20 20 / calc(0.05 * max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) / 1.5)), rgb(255 255 255 / ${darkWashCss("hover")}))`,
+    [`${PREFIX}bg-active`]: `light-dark(rgb(0 0 0 / calc(0.07 * (max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) + 0.625 * var(${PREFIX}fill-selected-step)) / 2.125)), rgb(250 250 250 / ${darkWashCss("selected")}))`,
+    [`${PREFIX}bg-pressed`]: `light-dark(rgb(0 0 0 / calc(0.07 * (max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) + 0.625 * var(${PREFIX}fill-selected-step)) / 2.125 + 0.01375 * var(${PREFIX}fill-pressed-step))), rgb(252 252 252 / ${darkWashCss("pressed")}))`,
+    // Selected tint (axes/states.ts): under a selected container's stroke, the accent's faint surface (half in dark, where
+    // it reads as a fill) or the selected wash, by the setting's two switches; transparent at None.
+    [`${PREFIX}selected-tint`]: `color-mix(in srgb, light-dark(var(${PREFIX}accent-surface), color-mix(in srgb, var(${PREFIX}accent-surface) 50%, transparent)) calc(var(${PREFIX}selected-tint-accent) * 100%), color-mix(in srgb, var(${PREFIX}bg-active) calc(var(${PREFIX}selected-tint-neutral) * 100%), transparent))`,
     // Emphasis roles (axes/emphasis.ts). Each role is its neutral endpoint mixed toward the
     // accent by the role's 0/1 switch, so the default renders exactly the neutral paint and
     // a subtree that changes theme, neutral or accent re-derives the role here.

@@ -10,7 +10,7 @@ import { describe, expect, it } from "vitest";
 import { ASSERTIONS } from "./assertions.ts";
 import { apcaMagnitude, wcagContrastHex } from "../color/contrast.ts";
 import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "../color/presets.ts";
-import { ACCENT_HUES, ACCENT_STRENGTHS, LABEL_TINT_STEPS, SOLID_STEPS } from "../color/generate.ts";
+import { ACCENT_HUES, ACCENT_STRENGTHS, LABEL_TINT_STEPS, SOLID_STEPS, mixOklab } from "../color/generate.ts";
 import { resolveTheme } from "../semantic/resolve.ts";
 
 const ACCENTS = [...CHROMATIC_SCALES.map(s => s.id), ...ACCENT_HUES.map(String)];
@@ -32,8 +32,13 @@ describe("contrast gate: every accent the settings can make", () => {
         if ((pick !== "auto" || labelTint !== 0) && neutral.id !== "neutral") continue;
         const t = resolveTheme({ theme, neutral: neutral.id, accent, accentStrength, solid: { light: pick, dark: pick }, labelTint }).tokens;
         for (const a of pick === "auto" && labelTint === 0 ? ACCENTED : SOLID) {
-          const fg = t[a.fg]!, bg = t[a.bg]!, wcag = wcagContrastHex(fg, bg), apca = theme === "dark" ? apcaMagnitude(fg, bg) : Infinity;
-          if (wcag < a.wcag || apca < a.apca) problems.push(`${neutral.id}/${accent}/${accentStrength}/${pick}/label ${labelTint}: ${a.fg} on ${a.bg} ${wcag.toFixed(2)}:1${theme === "dark" ? ` Lc ${apca.toFixed(0)}` : ""}`);
+          // A label on the solid's hover is on its press too: the hover 10% toward black (button.css), 2026-10-23. WCAG
+          // only there: a black label on a pressed orange or yellow in dark reads Lc 58 at every Label tint, the press
+          // darkening toward the label; whether a press under a black label should lighten instead is the owner's call.
+          for (const [bg, state] of [[t[a.bg]!, ""], ...(/accent-solid-hover/.test(a.bg) && /on-accent/.test(a.fg) ? [[mixOklab(t[a.bg]!, "#000000", 0.1), " pressed"]] : [])] as Array<[string, string]>) {
+            const fg = t[a.fg]!, wcag = wcagContrastHex(fg, bg), apca = theme === "dark" && !state ? apcaMagnitude(fg, bg) : Infinity;
+            if (wcag < a.wcag || apca < a.apca) problems.push(`${neutral.id}/${accent}/${accentStrength}/${pick}/label ${labelTint}: ${a.fg} on ${a.bg}${state} ${wcag.toFixed(2)}:1${theme === "dark" ? ` Lc ${apca.toFixed(0)}` : ""}`);
+          }
         }
       }
     }

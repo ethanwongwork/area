@@ -749,9 +749,11 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   /**
    * The track's treatment. `rail` (default): a thin rail and a round knob. `track`: a pill as tall as the knob,
    * the fill running under it (Figma's adjustment slider). `bar`: the track is the control's full height and
-   * corner, its fill ending in a grip.
+   * corner, its fill ending in a grip. `field`: a field-height bar with the label at its start and the value at its end
+   * inside it, the fill a plate behind them, dragged from any point; it shows the value unless `readout` is false.
+   * Horizontal only, without step marks or end labels.
    */
-  variant?: "rail" | "track" | "bar";
+  variant?: "rail" | "track" | "bar" | "field";
   /** Visible label for the range. */
   label?: ReactNode;
   /** Places the label and readout above opposite ends of the track. */
@@ -768,6 +770,12 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
    * lighter stretch after the fill. Decorative; it is not announced.
    */
   buffered?: number;
+  /**
+   * The value the fill grows from, for a range with a neutral middle (a temperature from Cool through Neutral to Warm):
+   * the fill runs between it and the value, either side of it, so at the origin the track is empty. Defaults to `min`.
+   * The buffered stretch is not drawn with an origin.
+   */
+  origin?: number;
   /**
    * Rendered after the track. `true` shows the normalized numeric value; a function can
    * format that live value. A React node remains supported for fully custom content.
@@ -819,6 +827,7 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
     startLabel,
     endLabel,
     buffered,
+    origin,
     readout,
     onValueChange,
     onInput,
@@ -847,6 +856,8 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
   const bufferedRatio = buffered === undefined || upper <= lower
     ? undefined
     : Math.min(1, Math.max(0, (finiteNumber(buffered, lower) - lower) / (upper - lower)));
+  // An origin inside the range: the fill's two ends as ratios, the origin's and the value's in order.
+  const originRatio = origin === undefined || upper <= lower ? undefined : Math.min(1, Math.max(0, (finiteNumber(origin, lower) - lower) / (upper - lower)));
   const interval = step === "any" ? 0 : finiteNumber(step, 1);
   const markCount = stepMarks && interval > 0
     ? Math.min(24, Math.max(0, Math.round((upper - lower) / interval) - 1))
@@ -869,11 +880,13 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
     }
   }, [defaultValue, localValue, max, min, step, value]);
 
-  const renderedReadout = typeof readout === "function"
-    ? readout(current)
-    : readout === true
+  // A field slider carries its value inside the bar, so it shows one unless told not to.
+  const shownReadout = readout === undefined && variant === "field" ? true : readout;
+  const renderedReadout = typeof shownReadout === "function"
+    ? shownReadout(current)
+    : shownReadout === true
       ? current
-      : readout;
+      : shownReadout;
 
   return (
     <label
@@ -881,16 +894,18 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
         size,
         variant: variant === "rail" ? undefined : variant,
         labelPosition: labelPosition === "top" ? "top" : undefined,
-        orientation: orientation === "vertical" ? "vertical" : undefined,
+        orientation: orientation === "vertical" && variant !== "field" ? "vertical" : undefined,
       }, className)}
       // `--_ratio` lets the CSS end the fill at the thumb's centre, which sits inset by half the thumb.
       style={{
         ["--_pct" as string]: `${pct}%`,
         ["--_ratio" as string]: pct / 100,
         ...(bufferedRatio === undefined ? {} : { ["--_buffered" as string]: bufferedRatio }),
+        ...(originRatio === undefined ? {} : { ["--_lo" as string]: Math.min(originRatio, pct / 100), ["--_hi" as string]: Math.max(originRatio, pct / 100) }),
         ...style,
       }}
       {...(disabled ? { "data-disabled": "" } : {})}
+      {...(originRatio === undefined ? {} : { "data-origin": "" })}
     >
       {label ? <span className="area-slider__label">{label}</span> : null}
       {markCount > 0 ? <span className="area-slider__marks" aria-hidden="true">{Array.from({ length: markCount }, (_, index) => <i key={index} style={{ ["--_mark" as string]: `${((index + 1) / (markCount + 1)) * 100}%` }} />)}</span> : null}
@@ -928,7 +943,7 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
           onValueChange?.(nextValue, event);
         }}
       />
-      {readout === false || readout === undefined ? null : (
+      {shownReadout === false || shownReadout === undefined ? null : (
         <span className="area-slider__value" aria-hidden="true">{renderedReadout}</span>
       )}
       {startLabel != null || endLabel != null ? (

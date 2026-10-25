@@ -5,7 +5,8 @@
  * the Inspector's Canvas section and the saved Canvas (studio.tsx restoreCanvas, which keeps only
  * values listed here) both read this list.
  */
-import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, DEPTH_LEVERS, PILL_SHAPES, SETTING_GROUPS, SETTINGS, settingLabel } from "@area/tokens/config";
+import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, PILL_SHAPES, SETTING_GROUPS, SETTINGS, settingLabel } from "@area/tokens/config";
+import TOKENS from "@area/tokens/tokens.json";
 /** Edge and Depth's controls besides Stroke width (Surface) and Shadow (Elevation) (@area/tokens axes/depth.ts), and the
  * interaction states (axes/states.ts), each one `data-area-<axis>`. */
 export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color",
@@ -16,33 +17,49 @@ export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 export interface GalleryControl {
   axis: "theme" | "neutral" | "tint-hue" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | DepthLever;
   /**
-   * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
-   * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
-   * The stepped Slider read as an approximate value and fit 13 marks in 60px (2026-10-03).
-   * A set (several on at once) is a multi-select dropdown in the app (a group of toggle Chips in the
-   * archived docs); its value is a space-separated list.
+   * Named choices are a Segmented (Apple and Primer cap segments at 5-7); an ordered range is a bar, Slider's field
+   * variant with its exact value inside it (owner, 2026-10-24), which answers the stepped Slider's old fault of reading as
+   * an approximate value (2026-10-03). A set (several on at once) is a multi-select dropdown; its value is a
+   * space-separated list. Select remains for a long list of names.
    */
-  kind: "segmented" | "select" | "chips";
+  kind: "segmented" | "select" | "chips" | "bar";
   label: string;
   /** What a Select's option labels mean, as its tooltip. */
   hint?: string;
+  /** Every value the setting takes, each named as the Inspector shows it (a bar's in its unit: "60%", "8px", "210ms"). */
   items: ReadonlyArray<{ value: string; label: string }>;
   defaultValue: string;
+  /**
+   * A bar (owner, 2026-10-24: "i like the 0 to 100 scale, as well as binary toggles"): Slider's field variant over the
+   * values in `scale`, in order, its readout the value's label. `named` are the choices off the scale (Auto, Accent,
+   * System), a Segmented with Custom beside them; the bar shows while the value is on the scale, and Custom picks `custom`.
+   */
+  scale?: readonly string[];
+  named?: ReadonlyArray<{ value: string; label: string }>;
+  custom?: string;
+  /** A bar under its named choices names what it sets, in a word (Hue, Strength), since the row above names the setting. */
+  barLabel?: string;
+  /**
+   * Why the setting changes nothing under the others, or null (owner, 2026-10-24: "some of the axises i cant tell what im
+   * even updating"): the Inspector dims the row and says so, as Button shade while Buttons and Selection are Neutral.
+   */
+  inactive?: (values: Readonly<Record<string, string>>, mode: "light" | "dark") => string | null;
 }
 
-/**
- * A named axis's presets as options. No option is marked "(Default)" (owner, 2026-10-20: "i dont like seeing (default)");
- * the Theme tab marks the default.
- */
-function named(axis: "neutral" | "accent"): GalleryControl["items"] {
-  // An accent is a named family or a hue in degrees (axes/color.ts, 2026-10-23).
-  return AXIS_PRESETS[axis].map(value => ({ value, label: /^\d+$/.test(value) ? `${value}°` : value[0]!.toUpperCase() + value.slice(1) }));
-}
-
-/** A number axis's presets as options, in the registry's order (light ground from white down), the named ends as given. */
-function numbered(axis: "ground-light" | "ground-dark" | "layers-light" | "layers-dark", names: Record<string, string>): GalleryControl["items"] {
-  return AXIS_PRESETS[axis].map(value => ({ value, label: names[value] ?? value }));
-}
+/** Whether the greys carry any colour: a temperature, a tint colour, or a tint strength on Neutral's own hue. */
+export const greysTinted = (values: Readonly<Record<string, string>>, mode: "light" | "dark") =>
+  values.neutral !== "neutral" || values["tint-hue"] !== "auto" || !["auto", "0"].includes(values[`tint-${mode}`] ?? "auto");
+const accentShows = (values: Readonly<Record<string, string>>) => values.action === "accent" || values.selection === "accent";
+/** The dependencies the Inspector shows (docs/research/theme-review-2026-10-23, axis review "Say when a setting has no effect"). */
+const INACTIVE: Partial<Record<string, GalleryControl["inactive"]>> = {
+  "ink-tint": (values, mode) => greysTinted(values, mode) ? null : "No effect while the greys are neutral",
+  "solid-light": values => accentShows(values) ? null : "Shows only while Buttons or Selection is Accent",
+  "solid-dark": values => accentShows(values) ? null : "Shows only while Buttons or Selection is Accent",
+  "label-tint": values => values.action === "accent" || values.selection === "accent" ? null : "Shows only while Buttons or Selection is Accent",
+  "status-colours": values => values["accent-strength"] === "100" ? "No effect at Saturation 100%" : null,
+  "shadow-color": (_, mode) => mode === "dark" ? "Dark shadows are always black" : null,
+  "stroke-hover": values => values.stroke === "0" ? "No effect while Edge contrast is 0%" : null,
+};
 
 /** The heading a setting sits under (the registry's SETTING_GROUPS). */
 export const headingOf = (axis: string) => SETTING_GROUPS.find(group => group.settings.includes(axis))?.heading ?? "";
@@ -50,107 +67,95 @@ export const headingOf = (axis: string) => SETTING_GROUPS.find(group => group.se
  * A setting's name, the registry's (owner, 2026-10-19: "i want the axises to be the source of truth"), under its heading
  * without the heading's word: Stroke width reads Width under Stroke, Floating shadow Floating under Shadow.
  */
-const label = (axis: string) => settingLabel(SETTINGS[axis]?.label ?? axis, headingOf(axis));
+const label = (axis: string) => settingLabel((SETTINGS[axis]?.label ?? axis).replace(/^(Light|Dark) (\w)/, (_, __, first: string) => first.toUpperCase()), headingOf(axis));
 
-/** An Edge and Depth lever's options, as the registry labels them ("0 (None)", "0 (Flat)", "8 (Smooth)"). */
-function depthItems(axis: string): GalleryControl["items"] {
-  return DEPTH_LEVERS.find(entry => entry.axis === axis)!.options.map(option => ({ value: option.value, label: option.label }));
+/*
+ * Values as people read them (owner, 2026-10-24: "i dont particularly like the naming convention of numbers"): a share
+ * in %, a length in px, a duration in ms, a hue in °, never the step's index. The ends that have a name keep it.
+ */
+const percent = (value: string, steps: number) => `${Math.round((Number(value) / steps) * 100)}%`;
+const signedPercent = (value: string, steps: number) => Number(value) === 0 ? "Page" : `${Number(value) > 0 ? "+" : "−"}${Math.round((Math.abs(Number(value)) / steps) * 100)}%`;
+/** A bar over a number axis's presets, low to high, each labelled by `say`; `named` are the presets off the scale. */
+function bar(axis: GalleryControl["axis"], say: (value: string) => string, options: { hint?: string; named?: Record<string, string>; custom?: string; barLabel?: string; defaultValue?: string } = {}): GalleryControl {
+  const all = axis === "contrast" ? ["system", ...Array.from({ length: 33 }, (_, quarter) => String(quarter / 4))] : [...AXIS_PRESETS[axis as keyof typeof AXIS_PRESETS] as readonly string[]];
+  const named = options.named ?? {};
+  const scale = all.filter(value => !(value in named)).sort((a, b) => order(a) - order(b));
+  return {
+    axis, kind: "bar", label: label(axis), hint: options.hint,
+    defaultValue: options.defaultValue ?? (axis === "contrast" ? "system" : DEFAULT_AXES[axis as keyof typeof DEFAULT_AXES] as string),
+    items: [...Object.entries(named).map(([value, text]) => ({ value, label: text })), ...scale.map(value => ({ value, label: say(value) }))],
+    scale, named: Object.entries(named).map(([value, text]) => ({ value, label: text })), custom: options.custom, barLabel: options.barLabel,
+  };
 }
+/** Where a preset sits on its bar: a number, a hue for a named accent, and Pill past every corner. */
+const ACCENT_HUE: Record<string, number> = Object.fromEntries(((TOKENS.axes as unknown as Array<{ id: string; presets: Array<{ id: string; tokens: Record<string, string> }> }>).find(axis => axis.id === "accent")?.presets ?? [])
+  .map(preset => [preset.id, Number(preset.tokens["--area-accent-hue"] ?? preset.id)]));
+const order = (value: string) => value === "pill" ? Infinity : /^-?\d+(\.\d+)?$/.test(value) ? Number(value) : ACCENT_HUE[value] ?? 0;
+const title = (value: string) => value[0]!.toUpperCase() + value.slice(1);
+/** A Solid step as a depth: the palette's 400 (lightest) to 850 (deepest). */
+const depth = (value: string) => value === "400" ? "Lightest" : value === "850" ? "Deepest" : percent(String(Number(value) - 400), 450);
 
-export const GALLERY_CONTROLS: readonly GalleryControl[] = [
+
+export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
+  // Page: the mode, the page and its greys, how far layers and cards sit from it. A light/dark pair shows in its own mode.
   { axis: "theme", kind: "segmented", label: label("theme"), defaultValue: "light", items: [{ value: "light", label: "Light" }, { value: "dark", label: "Dark" }] },
-  // The colour settings (axes/color.ts, axes/emphasis.ts), in the registry's order, their options and defaults read
-  // from it. Neutral and Accent name a scale, a Select each (eleven accents and 72 hues). Action and Selection are two words each, a Segmented, as Mode. An accent shows on a component
-  // only where Action or Selection is Accent (and in focus rings and links), which Accent's hint says.
-  { axis: "neutral", kind: "select", label: label("neutral"), hint: "The grey every surface, edge and text is drawn in", defaultValue: DEFAULT_AXES.neutral, items: named("neutral") },
-  // Tint (axes/tint.ts, owner 2026-10-22: "they pick the exact shade they want"): the grays' hue and, per mode, their
-  // strength, Auto following Neutral; and Text tint, how much of it text takes. Selects, their options from the registry.
-  { axis: "tint-hue", kind: "select", label: label("tint-hue"), hint: "The hue of the grays: Auto follows Neutral, Accent the accent's hue, or any hue in 5° steps", defaultValue: DEFAULT_AXES["tint-hue"], items: AXIS_PRESETS["tint-hue"].map(value => ({ value, label: value === "auto" ? "Auto" : value === "accent" ? "Accent" : `${value}°` })) },
-  { axis: "tint-light", kind: "select", label: label("tint-light"), hint: "In light: how strongly the grays take the hue, Auto (Neutral's) or 0 (None) to 16", defaultValue: DEFAULT_AXES["tint-light"], items: AXIS_PRESETS["tint-light"].map(value => ({ value, label: value === "auto" ? "Auto" : value === "0" ? "0 (None)" : value })) },
-  { axis: "tint-dark", kind: "select", label: label("tint-dark"), hint: "In dark: how strongly the grays take the hue, Auto (Neutral's) or 0 (None) to 16", defaultValue: DEFAULT_AXES["tint-dark"], items: AXIS_PRESETS["tint-dark"].map(value => ({ value, label: value === "auto" ? "Auto" : value === "0" ? "0 (None)" : value })) },
-  { axis: "ink-tint", kind: "select", label: label("ink-tint"), hint: "How much of the tint body and muted text take, 0 (None) to 4 (Full)", defaultValue: DEFAULT_AXES["ink-tint"], items: AXIS_PRESETS["ink-tint"].map(value => ({ value, label: value === "0" ? "0 (None)" : value === "4" ? "4 (Full)" : value })) },
-  { axis: "accent", kind: "select", label: label("accent"), hint: "One of the palette's eleven, or any hue in 5° steps; shows where Action or Selection is Accent", defaultValue: DEFAULT_AXES.accent, items: named("accent") },
-  // Any accent colour (axes/accent.ts, owner 2026-10-23: "a darker navy color as the button color ... a specific hue and
-  // chroma"): how much of its colour the accent keeps, one for both modes, and per mode the step solid fills sit on.
-  { axis: "accent-strength", kind: "select", label: label("accent-strength"), hint: "How much of its own colour the accent keeps, 100 (Full) to 30 (Dusty); hue and contrast hold", defaultValue: DEFAULT_AXES["accent-strength"], items: AXIS_PRESETS["accent-strength"].map(value => ({ value, label: value === "100" ? "100 (Full)" : value === "30" ? "30 (Dusty)" : value })) },
-  { axis: "solid-light", kind: "select", label: label("solid-light"), hint: "In light: the accent step solid fills sit on, Auto or 400 (lighter) to 850 (deeper)", defaultValue: DEFAULT_AXES["solid-light"], items: AXIS_PRESETS["solid-light"].map(value => ({ value, label: value === "auto" ? "Auto" : value })) },
-  { axis: "solid-dark", kind: "select", label: label("solid-dark"), hint: "In dark: the accent step solid fills sit on, Auto or 400 (lighter) to 850 (deeper)", defaultValue: DEFAULT_AXES["solid-dark"], items: AXIS_PRESETS["solid-dark"].map(value => ({ value, label: value === "auto" ? "Auto" : value })) },
-  // The label on an accent solid (axes/accent.ts, owner 2026-10-23: "the foreground being a lighter version of that color
-  // with some slight hue, while still being accessible"), 0 to 4 as Text tint; and the status tones with the accent or not.
-  { axis: "label-tint", kind: "select", label: label("label-tint"), hint: "How much of the accent's hue an accent button's label takes, 0 (None) to 4 (Full); every step stays readable", defaultValue: DEFAULT_AXES["label-tint"], items: AXIS_PRESETS["label-tint"].map(value => ({ value, label: value === "0" ? "0 (None)" : value === "4" ? "4 (Full)" : value })) },
-  { axis: "status-colours", kind: "segmented", label: label("status-colours"), hint: "Danger, warning, success and info as the palette draws them, or quieted to the Accent strength", defaultValue: DEFAULT_AXES["status-colours"], items: [{ value: "fixed", label: "Fixed" }, { value: "match", label: "Match" }] },
-  // The Layers (axes/layers.ts, owner 2026-10-16; docs/research/layers-2026-10-16): the light and the dark page's
-  // lightness, and how far cards, menus, sidebars and control fills sit from it. Numbers, as Elevation; Selects, their
-  // options and defaults read from the registry. Each ground shows in its own mode.
-  { axis: "ground-light", kind: "select", label: label("ground-light"), hint: "The light page's lightness, 100 (white) to 90", defaultValue: DEFAULT_AXES["ground-light"], items: numbered("ground-light", { "100": "100 (White)" }) },
-  { axis: "ground-dark", kind: "select", label: label("ground-dark"), hint: "The dark page's lightness, 0 (black) to 24", defaultValue: DEFAULT_AXES["ground-dark"], items: numbered("ground-dark", { "0": "0 (Black)" }) },
-  { axis: "layers-light", kind: "select", label: label("layers-light"), hint: "In light: how far cards, menus, sidebars and control fills sit from the page, 0 (Flat) to 8", defaultValue: DEFAULT_AXES["layers-light"], items: numbered("layers-light", { "0": "0 (Flat)" }) },
-  { axis: "layers-dark", kind: "select", label: label("layers-dark"), hint: "In dark: how far cards, menus, sidebars and control fills sit from the page, 0 (Flat) to 8", defaultValue: DEFAULT_AXES["layers-dark"], items: numbered("layers-dark", { "0": "0 (Flat)" }) },
-  // Card tone (axes/card-tone.ts, owner 2026-10-22): cards and asset cards against the page, per mode, Auto keeping each
-  // container's own tone, else −4 (darker) to +4 (lighter); 0 matches the page.
-  { axis: "card-tone-light", kind: "select", label: label("card-tone-light"), hint: "In light: cards and asset cards against the page, Auto or −4 (darker) to +4 (lighter)", defaultValue: DEFAULT_AXES["card-tone-light"], items: AXIS_PRESETS["card-tone-light"].map(value => ({ value, label: value === "auto" ? "Auto" : value === "0" ? "0 (Page)" : Number(value) > 0 ? `+${value}` : value })) },
-  { axis: "card-tone-dark", kind: "select", label: label("card-tone-dark"), hint: "In dark: cards and asset cards against the page, Auto or −4 (darker) to +4 (lighter)", defaultValue: DEFAULT_AXES["card-tone-dark"], items: AXIS_PRESETS["card-tone-dark"].map(value => ({ value, label: value === "auto" ? "Auto" : value === "0" ? "0 (Page)" : Number(value) > 0 ? `+${value}` : value })) },
-  { axis: "action", kind: "segmented", label: label("action"), hint: "The colour of primary actions", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
+  bar("ground-light", value => value === "100" ? "White" : `${value}%`, { hint: "The light page's lightness" }),
+  bar("ground-dark", value => value === "0" ? "Black" : `${value}%`, { hint: "The dark page's lightness" }),
+  { axis: "neutral", kind: "segmented", label: label("neutral"), hint: "The grey every surface, edge and text is drawn in", defaultValue: DEFAULT_AXES.neutral, items: AXIS_PRESETS.neutral.map(value => ({ value, label: title(value) })) },
+  bar("tint-hue", value => `${value}°`, { hint: "The hue the greys lean toward: the Grey setting's own, the accent's, or any hue", named: { auto: "Grey", accent: "Accent" }, custom: "60", barLabel: "Hue" }),
+  bar("tint-light", value => percent(value, 16), { hint: "In light: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "4", barLabel: "Strength" }),
+  bar("tint-dark", value => percent(value, 16), { hint: "In dark: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "4", barLabel: "Strength" }),
+  bar("ink-tint", value => percent(value, 4), { hint: "How much of the greys' colour body and muted text take" }),
+  bar("layers-light", value => value === "0" ? "Flat" : percent(value, 8), { hint: "In light: how far cards, menus, sidebars and control fills sit from the page" }),
+  bar("layers-dark", value => value === "0" ? "Flat" : percent(value, 8), { hint: "In dark: how far cards, menus, sidebars and control fills sit from the page" }),
+  bar("card-tone-light", value => signedPercent(value, 4), { hint: "In light: cards against the page, darker or lighter", named: { auto: "Auto" }, custom: "0", barLabel: "Shade" }),
+  bar("card-tone-dark", value => signedPercent(value, 4), { hint: "In dark: cards against the page, darker or lighter", named: { auto: "Auto" }, custom: "0", barLabel: "Shade" }),
+  // Accent: one hue bar through the palette's eleven (each at its own hue) and every 5°, then how much colour it keeps,
+  // how deep its buttons sit and how much of it their label takes.
+  bar("accent", value => /^\d+$/.test(value) ? `${value}°` : title(value), { hint: "The accent's hue: the palette's eleven by name, any other in 5° steps" }),
+  bar("accent-strength", value => `${value}%`, { hint: "How much of its own colour the accent keeps; hue and contrast hold" }),
+  bar("solid-light", value => depth(value), { hint: "How light or deep accent buttons and checked marks are; their label always stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
+  bar("solid-dark", value => depth(value), { hint: "How light or deep accent buttons and checked marks are; their label always stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
+  bar("label-tint", value => percent(value, 4), { hint: "How much of the accent's colour the text on an accent button takes; it stays readable" }),
+  // Where it paints: the accent on buttons and on selection, the status tones, and the accessibility level.
+  { axis: "action", kind: "segmented", label: label("action"), hint: "The colour of primary buttons", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: label("selection"), hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
-  // Increased contrast (docs/CONTRAST.md): not a registry axis but the same kind of scoped setting,
-  // data-area-contrast="standard", "medium" or "more". System writes no attribute, so the OS preference decides (Standard,
-  // or More under Increase contrast), as it does for the app; it is the default.
-  // Medium goes half way (owner, 2026-10-18: More "seems very extreme"; Material 3's Standard / Medium / High).
-  // A Select, as Density: "Standard" needs 56 of text in a 32 segment beside the label.
-  // Nine levels since 2026-10-22 (owner: "more granularity"): 0 (Standard) to 8 (More), each an eighth of the way.
-  { axis: "contrast", kind: "select", label: label("contrast"), hint: "System follows the OS preference; 1 to 8 strengthen every edge, focus and state, 8 to 3:1", defaultValue: "system", items: [{ value: "system", label: "System" }, ...Array.from({ length: 9 }, (_, n) => ({ value: String(n), label: n === 0 ? "0 (Standard)" : n === 8 ? "8 (More)" : String(n) }))] },
-  // Type size and density, separate (owner, 2026-10-12; axes/type-size.ts, axes/density.ts). Five
-  // two-digit sizes fit a Segmented. Density is one number since 2026-10-14 (axes/density.ts), the medium
-  // Button's height at type 14, 28 / 32 / 36; a Select, as Radius is, since "36 (Comfortable)" does not fit a
-  // segment beside a label in the 256 Inspector. The type bounds the density (28 up to 14, 36 from 13) and
-  // the tokens resolve it, so every option stays pickable and its hint says so.
+  { axis: "status-colours", kind: "segmented", label: label("status-colours"), hint: "Red, amber, green and blue messages and badges: in their full colour, or muted to the accent's Saturation", defaultValue: DEFAULT_AXES["status-colours"], items: [{ value: "fixed", label: "Vivid" }, { value: "match", label: "Muted" }] },
+  // Increased contrast (docs/CONTRAST.md): a scoped setting, not an axis. System writes no attribute, so the OS decides.
+  bar("contrast", value => percent(value, 8), { hint: "Stronger edges, focus and state; System follows the OS", named: { system: "System" }, custom: "4", barLabel: "Level" }),
+  // Size: whole px for text (half px blurs), density by name.
   { axis: "type", kind: "segmented", label: label("type"), defaultValue: "14", items: ["12", "13", "14", "15", "16"].map(value => ({ value, label: value })) },
-  { axis: "density", kind: "select", label: label("density"), hint: "The medium Button's height at type 14; 28 up to type 14, 36 from type 13", defaultValue: "32", items: [
-    { value: "28", label: "28 (Compact)" },
-    { value: "32", label: "32" },
-    { value: "36", label: "36 (Comfortable)" },
+  { axis: "density", kind: "segmented", label: label("density"), hint: "28 up to type 14, 36 from type 13", defaultValue: "32", items: [
+    { value: "28", label: "Compact" }, { value: "32", label: "Default" }, { value: "36", label: "Comfy" },
   ] },
-  // The one corner setting (axes/radius.ts): a single number, the medium Button's corner, from 0
-  // (Sharp) to Pill; everything else scales off it (owner, 2026-10-04).
-  { axis: "radius", kind: "select", label: label("radius"), hint: "The medium Button's corner; everything scales from it", defaultValue: "8", items: ["0", "2", "4", "6", "8", "10", "12", "14", "pill"].map(value => ({
-    value,
-    label: value === "0" ? "0 (Sharp)" : value === "pill" ? "Pill" : value,
-  })) },
-  // Stroke width and Rest shadow (axes/surface.ts, owner 2026-10-19): how surfaces at rest are set apart, by a line, a
-  // subtle shadow, both or neither, each its own setting. Selects, as Radius and Elevation: five and nine steps.
-  { axis: "surface", kind: "select", label: label("surface"), hint: "The line round cards, panels and floating surfaces in px; 0 is flat", defaultValue: "1", items: ["0", "0.5", "1", "1.5", "2"].map(value => ({
-    value,
-    label: value === "0" ? "0 (Flat)" : value,
-  })) },
-  { axis: "shadow-rest", kind: "select", label: label("shadow-rest"), hint: "A subtle shadow round surfaces at rest, with the line or instead of it; not their lift (Elevation)", defaultValue: "0", items: ["0", "1", "2", "3", "4", "5", "6", "7", "8"].map(value => ({
-    value,
-    label: value === "0" ? "0 (None)" : value,
-  })) },
-  // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): one number, the Menu's shadow strength in percent,
-  // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps. Labelled Floating under the
-  // Shadow heading (owner, 2026-10-18): it sets menus, popovers, tooltips and dialogs; Resting and Hover have their own.
-  { axis: "elevation", kind: "select", label: label("elevation"), hint: "Menus, popovers, tooltips and dialogs: the Menu's shadow in % (data-area-elevation)", defaultValue: "3", items: depthItems("elevation") },
-  // Edge and Depth's other controls (axes/depth.ts, 2026-10-18): options, defaults and hints are the registry's; the
-  // Inspector names each in a word, since its heading (Stroke or Shadow) says the rest.
-  ...DEPTH_LEVER_AXES.map(axis => {
-    const lever = DEPTH_LEVERS.find(entry => entry.axis === axis)!;
-    return { axis, kind: "select" as const, label: label(axis), hint: lever.hint, defaultValue: lever.defaultValue, items: depthItems(axis) };
-  }),
-  // How long transitions take (axes/motion.ts, owner 2026-10-14): one number, the Menu's open in ms, 0 (None)
-  // to 300 in steps of 30, 210 by default, as Elevation is the Menu's shadow. A Select, as Elevation: eleven steps.
-  { axis: "motion", kind: "select", label: label("motion"), hint: "The Menu's open in ms; every duration scales from it", defaultValue: "210", items: ["0", "30", "60", "90", "120", "150", "180", "210", "240", "270", "300"].map(value => ({
-    value,
-    label: value === "0" ? "0 (None)" : value,
-  })) },
-  // The shape of every transition (axes/easing.ts, owner 2026-10-19: "an easing setting (Standard, Snappy, Gentle,
-  // Spring) beside the duration"): four names, a Select (four words do not fit a Segmented beside its label at 256).
-  { axis: "easing", kind: "select", label: label("easing"), hint: "The shape of every transition; Motion sets how long", defaultValue: DEFAULT_AXES.easing, items: AXIS_PRESETS.easing.map(value => ({
-    value,
-    label: value[0]!.toUpperCase() + value.slice(1),
-  })) },
-  // Which components draw a pill instead of the radius corner (axes/pills.ts), as data-area-pills.
-  { axis: "pills", kind: "chips", label: label("pills"), hint: "On: a pill. Off: follows Radius.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : value[0]!.toUpperCase() + value.slice(1) })) },
-];
+  // Shape: the medium Button's corner in px, Pill past the last.
+  bar("radius", value => value === "pill" ? "Pill" : `${value}px`, { hint: "The medium Button's corner; every corner scales from it" }),
+  { axis: "pills", kind: "chips", label: label("pills"), hint: "On: a pill. Off: follows Corner.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : title(value) })) },
+  // Stroke and Shadow: lengths in px, strengths as a share of the strongest.
+  bar("surface", value => `${value}px`, { hint: "The line round cards, panels and floating surfaces" }),
+  bar("stroke", value => percent(value, 8), { hint: "How dark every edge is against its ground" }),
+  bar("elevation", value => percent(value, 8), { hint: "Menus, popovers, tooltips and dialogs" }),
+  bar("shadow-resting", value => percent(value, 8), { hint: "Cards, panels and raised thumbs at rest" }),
+  bar("shadow-field", value => percent(value, 8), { hint: "Outline fields, select triggers, outline and soft buttons" }),
+  bar("shadow-rest", value => percent(value, 8), { hint: "A soft edge round surfaces at rest, with the line or instead of it" }),
+  bar("shadow-size", value => percent(value, 8), { hint: "How far every shadow reaches" }),
+  bar("shadow-softness", value => percent(value, 8), { hint: "One crisp layer to several soft ones" }),
+  bar("shadow-light", value => percent(value, 4), { hint: "A lip under each lifted edge and a highlight inside its top" }),
+  { axis: "shadow-color", kind: "segmented", label: label("shadow-color"), hint: "The light theme's shadow tint; dark stays black", defaultValue: DEFAULT_AXES["shadow-color"], items: AXIS_PRESETS["shadow-color"].map(value => ({ value, label: title(value) })) },
+  // States: hover, selected and pressed, then focus and the destructive row.
+  bar("fill-hover", value => percent(value, 4), { hint: "The plate under a hovered row or ghost control" }),
+  bar("stroke-hover", value => percent(value, 4), { hint: "How far a control's edge darkens under the pointer" }),
+  bar("shadow-hover", value => percent(value, 8), { hint: "How much a hovered card or tile lifts" }),
+  bar("fill-selected", value => value === "0" ? "As hover" : percent(value, 4), { hint: "How much firmer a selected row's plate is than hover" }),
+  { axis: "selected-stroke", kind: "segmented", label: label("selected-stroke"), hint: "A selected card's or tile's edge, drawn inside", defaultValue: DEFAULT_AXES["selected-stroke"], items: AXIS_PRESETS["selected-stroke"].map(value => ({ value, label: `${value}px` })) },
+  { axis: "selected-tint", kind: "segmented", label: label("selected-tint"), hint: "A selected card's fill under its edge", defaultValue: DEFAULT_AXES["selected-tint"], items: [{ value: "none", label: "None" }, { value: "tint", label: "Accent" }, { value: "neutral", label: "Grey" }] },
+  bar("fill-pressed", value => percent(value, 4), { hint: "How far a press moves past selected" }),
+  { axis: "focus-ring", kind: "segmented", label: label("focus-ring"), hint: "Where the keyboard ring sits", defaultValue: DEFAULT_AXES["focus-ring"], items: AXIS_PRESETS["focus-ring"].map(value => ({ value, label: title(value) })) },
+  { axis: "danger-hover", kind: "segmented", label: label("danger-hover"), hint: "A destructive row's hover plate", defaultValue: DEFAULT_AXES["danger-hover"], items: [{ value: "tint", label: "Red" }, { value: "neutral", label: "Grey" }] },
+  // Effects: the Menu's open in ms, and the shape of every transition.
+  bar("motion", value => value === "0" ? "Off" : `${value}ms`, { hint: "The Menu's open; every duration scales from it" }),
+  { axis: "easing", kind: "select", label: label("easing"), hint: "The shape of every transition: how it speeds up and settles", defaultValue: DEFAULT_AXES.easing, items: AXIS_PRESETS.easing.map(value => ({ value, label: title(value) })) },
+] satisfies GalleryControl[]).map(control => INACTIVE[control.axis] ? { ...control, inactive: INACTIVE[control.axis] } : control);
 
 /** The archived docs gallery's storage key and canvas id (apps/docs reads them); the app saves its
  * Canvas under `area-desktop`.canvas (src/storage.ts). */

@@ -424,17 +424,20 @@ export default {
       ["Do", "Turn on stepMarks for a short discrete range so each stop is visible."],
       ["Do", "Pass buffered for media playback, in the same units as the value, so the loaded stretch shows ahead of the playhead."],
       ["Do", "Keep the rail in dense panels and inspectors. Use track where the slider is a main control, as Figma's image adjustments, and bar where it is the one control in its row and pairs with a Button or field of the same height."],
+      ["Do", "Use field for a list of settings, one per row, each with its label and value inside the bar, as a theme or tool panel; it shows its value unless readout is false."],
+      ["Do", "Pass origin for a range with a neutral middle, such as cool to warm, so the fill grows from it either way and is empty there."],
       ["Do", "Use SliderRange for a start and an end, with optional number fields either side."],
       ["Don't", "Use a Slider for named options that have no order; use Segmented or Chip."],
       ["Don't", "Build a range from two Sliders; SliderRange keeps both handles on one rail and the start never above the end."],
-      ["Don't", "Mix rail, track and bar in one group of sliders; pick one treatment per panel."],
+      ["Don't", "Mix rail, track, bar and field in one group of sliders; pick one treatment per panel."],
+      ["Don't", "Give a field slider step marks, end labels or a vertical orientation; it is horizontal and its value is the readout."],
     ],
     // Spec: Anatomy.
     parts: {
-      root: "The label: lays out the label, rail and readout in a row the control tier tall, or with label and readout above at labelPosition top.",
+      root: "The label: lays out the label, rail and readout in a row the control tier tall, or with label and readout above at labelPosition top; on field, the bar itself, with the label and readout inside it.",
       label: "The visible name of the range.",
-      control: "The native range input, the full row tall for a large hit area; draws the rail, its fill and the thumb (a round knob, or on the bar the fill's end with a grip).",
-      value: "The readout after the rail, in muted tabular figures; hidden from assistive tech, which reads the input.",
+      control: "The native range input, the full row tall for a large hit area; draws the rail, its fill and the thumb (a round knob, or on the bar the fill's end with a grip). On field it covers the bar, so any point drags it, with no visible thumb.",
+      value: "The readout after the rail, in muted tabular figures; on field, at the bar's end in the body ink. Hidden from assistive tech, which reads the input.",
       marks: "A tick under the rail at each interior step, shown with stepMarks; decorative.",
       ends: "With startLabel and endLabel, the range's two ends named under the track, such as Low and High; decorative, horizontal only.",
       end: "One end's name, under its end of the track.",
@@ -443,7 +446,7 @@ export default {
     states: {
       disabled: "The whole slider dims to half and ignores input.",
       hover: "The fill darkens one step (with the bar's thumb, which is the fill's end); the rail and the knob stay the same.",
-      "focus-visible": "A focus ring wraps the knob; on the bar it wraps the whole bar, as on a field.",
+      "focus-visible": "A focus ring wraps the knob; on the bar and the field it wraps the whole bar, as on a field.",
     },
     // Native range keys; source: Slider onKeyDown (Shift+arrow).
     keyboard: [

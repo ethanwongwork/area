@@ -1,47 +1,37 @@
   /* --- Theme · Setup (pages/theme-setup.tsx) ----------------------------------- */
-  /* One step (owner, 2026-10-21, after a product finder's flow): the stage, then the question with where it sits, the
-     choices, what the shown choice does, and Back, Use default and Continue, in one readable column. */
-  .setup { display: grid; gap: var(--area-space-24); align-content: start; max-inline-size: 960px; } /* pick; the Canvas's 32 margin is its inset (was 24 / 16 / 32 inside the 14 margin) */
-  .setup--start { max-inline-size: 720px; } /* pick */
-  /* The stage: the chosen view at a fixed share of the window, so the question and the choices stay in sight under it. */
-  /* One track the view's own size, so a view laid out at 1x and larger than the stage centres on it as it scales. */
-  .setup__stage-view { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: unsafe center; inline-size: 100%; block-size: clamp(200px, 36vh, 420px); min-block-size: 0; overflow: clip; } /* pick */
-
-  /* Side panel (Tesla's design page, the owner's Appearance picker): the visual fills the left and the window's height;
-     the open category's settings in a 400 column that scrolls on its own, the way between categories fixed at its foot. */
-  .setup--side { grid-template-columns: minmax(0, 1fr) 400px; max-inline-size: none; block-size: 100%; box-sizing: border-box; padding: 0; gap: var(--area-space-16); } /* pick */
-  .setup--side .setup__stage { min-block-size: 0; }
-  .setup--side .setup__stage-view { block-size: auto; min-block-size: 0; }
-  /* A narrow Canvas stacks them (2026-10-23): in a 1024 window the Sidebar and the Inspector, which grow with type
-     (PRODUCT_UI.md rule 18), leave the Canvas about 470 to 530, and beside the 400 column the visual was 20 to 80 wide.
-     Under a stage as wide as the column (400 + 16 + 400), the visual sits over the settings at the one-column setup's
-     share of the window and the settings scroll under it, both the Canvas's width. */
-  @container (inline-size < 816px) {
-    .setup--side { grid-template-columns: minmax(0, 1fr); grid-template-rows: clamp(200px, 36vh, 420px) minmax(0, 1fr); } /* pick: the one-column stage's height */
-  }
-  /* One setting's section: its name and question, then its choice cards or swatches, sections 24 apart. */
-  .setup__panel-body { gap: var(--area-space-24); }
-  .setup-choice { display: grid; gap: var(--area-space-8); }
+  /* The flow (owner, 2026-10-24, after a product finder): the stage fills the Canvas in the theme so far, the rest of the
+     library faint round the view; the dock floats at its foot, one question at a time. */
+  .setup-flow { --_dock: 300px; position: relative; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); block-size: 100%; min-block-size: 560px; overflow: clip; border-radius: var(--_tile-radius); } /* pick: the dock's usual height, which the view clears */
+  .setup-flow__stage { grid-area: 1 / 1; position: relative; overflow: clip; background: var(--area-bg-page); color: var(--area-fg-default); }
+  .setup-flow__view { position: absolute; inset: 0 0 var(--_dock) 0; display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: unsafe center; overflow: clip; }
+  .setup-flow__scatter { position: absolute; inset: 0; pointer-events: none; }
+  .setup-flow__piece { position: absolute; translate: -50% -50%; opacity: 0.3; } /* pick: the finder's faint products */
+  .setup-flow__dock { grid-area: 1 / 1; align-self: end; display: flex; justify-content: center; padding: 0 var(--area-space-16) var(--area-space-24); pointer-events: none; }
+  .setup-flow__dock > * { pointer-events: auto; }
+  .setup-dock { inline-size: min(720px, 100%); } /* pick: the finder's dock */
+  .setup-dock__body { display: grid; gap: var(--area-space-16); }
+  .setup-dock__head { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: var(--area-space-4); }
+  .setup-dock__head--start { grid-template-columns: minmax(0, 1fr) auto; }
+  .setup-dock__question { margin: 0; text-align: center; font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); font-weight: var(--area-weight-strong); text-wrap: balance; }
+  .setup-dock__head--start .setup-dock__question { text-align: start; }
+  .setup-dock__count { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .setup-dock__lede { margin: 0; color: var(--area-fg-muted); }
+  .setup-dock__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--area-space-8); }
+  .setup-dock__control { display: grid; gap: var(--area-space-12); }
+  .setup-stack { display: grid; gap: var(--area-space-12); }
+  /* The question names a card group, so its legend is for assistive tech only. */
+  .setup-cards > legend { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); }
+  .setup-dock__foot { display: flex; gap: var(--area-space-8); }
+  .setup-dock__grow { display: grid; flex: 1; }
+  /* The summary by chapter, scrolling inside the dock when Full has asked everything. */
+  .setup-summary { display: grid; gap: var(--area-space-12); max-block-size: 48vh; overflow: auto; } /* pick */
+  .setup-summary__chapter { display: grid; gap: var(--area-space-4); }
+  .setup-summary__heading { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-strong); }
+  .setup-summary__rows { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-4) var(--area-space-24); margin: 0; }
+  .setup-summary__row { display: flex; justify-content: space-between; gap: var(--area-space-12); }
+  .setup-summary__row dd { margin: 0; color: var(--area-fg-muted); text-align: end; }
   /* One track the frame's size, so a mini UI laid out at 1x centres on it as it scales (as the visual's view does). */
   .setup-choice__picture { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: unsafe center; inline-size: 100%; block-size: 100%; min-block-size: 0; overflow: hidden; }
-  /* The swatches' legend and question set as a Radio group's (choice.css: the legend in the control text, the question
-     in the description's), so every section reads alike. */
-  .setup-choice__swatches { display: grid; justify-items: start; }
-  .setup-choice__swatches > .area-color-swatch-picker { margin-block: var(--area-ui-stack) var(--area-space-4); }
-  .setup-choice__legend { color: var(--area-fg-default); font-size: var(--area-control-md-text); line-height: var(--area-control-md-leading); }
-  .setup-choice__question { margin-block-start: var(--area-ui-stack); color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
-  .setup-choice__value { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
-  .setup__panel { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-block-size: 0; border: var(--area-stroke-width) solid var(--area-border-card); border-radius: var(--_tile-radius); background: var(--area-bg-page); overflow: hidden; }
-  .setup__panel-body { display: grid; align-content: start; gap: var(--area-space-16); padding: var(--area-space-16); overflow: auto; }
-  .setup__panel-foot { padding: var(--area-space-12) var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-border-decorative); }
-  .setup__panel .setup__nav { flex-wrap: wrap; }
-
-
-  .setup__nav { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); }
-  .setup__nav-end { display: flex; align-items: center; gap: var(--area-space-8); }
-  .setup__nav--start { justify-content: flex-start; }
-  /* The Sidebar's rail starts where the rows' text does, so its markers line up under All. */
-  .setup-rail { padding: var(--area-space-8) var(--area-ui-row-inset) 0 calc(var(--area-ui-row-inset) * 2); }
   .setup__link { color: inherit; text-decoration: none; }
   .setup__link:hover { text-decoration: underline; }
   .setup__value { max-inline-size: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* pick */
