@@ -1,0 +1,306 @@
+<meta charset="utf-8">
+<title>Area Figures</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="area.css">
+<style>
+/* Layout: a gallery. A short argument, a sticky bar that sets the Canvas, then grids of figures by kind: screens,
+   phones, vignettes, every component family, then the theme settings on screens. Page rules never reach inside a
+   figure (:not(.af-stage *)), so every figure is Area's own CSS only. */
+:root {
+  --bg: #f6f6f7; --surface: #ffffff; --ink: #1b1c1f; --muted: #63656b; --rule: #e3e4e7; --chip: #eeeff1;
+  --accent: #0160d9; --none: #b3261e; --weak: #a15c00; --good: #1d7a46; --shade: rgba(20, 22, 28, .06);
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --measure: 68ch;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0b0c; --surface: #161618; --ink: #ececee; --muted: #9a9ca3; --rule: #2a2b2f; --chip: #222326;
+  --accent: #79aeff; --none: #f08a82; --weak: #e6a94f; --good: #5cc98b; --shade: rgba(0, 0, 0, .4); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0b0b0c; --surface: #161618; --ink: #ececee; --muted: #9a9ca3; --rule: #2a2b2f; --chip: #222326;
+  --accent: #79aeff; --none: #f08a82; --weak: #e6a94f; --good: #5cc98b; --shade: rgba(0, 0, 0, .4); color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--sans); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-block: 40px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 40px; }
+.top { display: grid; gap: 12px; max-width: var(--measure); }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1:not(.af-stage *) { font: 600 34px/1.15 var(--sans); letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+h2:not(.af-stage *) { font: 600 22px/1.25 var(--sans); letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+h3:not(.af-stage *) { font: 600 15px/1.35 var(--sans); margin: 0; }
+p:not(.af-stage *) { margin: 0; max-width: var(--measure); }
+code:not(.af-stage *) { font-family: var(--mono); font-size: .86em; background: var(--chip); padding: 1px 5px; border-radius: 4px; }
+a:not(.af-stage *) { color: var(--accent); }
+.lede { color: var(--muted); font-size: 16px; }
+.sec { display: grid; gap: 16px; min-width: 0; scroll-margin-top: 70px; }
+.sec > header { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+.sec > header p { color: var(--muted); font-size: 14px; }
+.small { font-size: 13px; color: var(--muted); }
+.plain { margin: 0; padding-left: 18px; display: grid; gap: 6px; max-width: var(--measure); }
+
+/* Bar. */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; padding: 10px 0; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.ctl { display: flex; align-items: center; gap: 8px; }
+.ctl > span, .ctl > label { font: 500 11px/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; background: var(--chip); border-radius: 8px; padding: 2px; }
+.seg button { font: 500 13px/1 var(--sans); color: var(--muted); background: none; border: 0; border-radius: 6px; padding: 7px 10px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px var(--shade); }
+.seg button:focus-visible, .sw:focus-visible, .pg-select:focus-visible, .flag:focus-visible, .toc a:focus-visible, .pick button:focus-visible, .pick input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.sws { display: flex; gap: 4px; }
+.sw { inline-size: 18px; block-size: 18px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+.sw[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--ink); }
+.pg-select { font: 13px/1.2 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 6px; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+.toc a:not(.af-stage *) { color: var(--muted); text-decoration: none; }
+.toc a:hover { color: var(--ink); }
+
+/* The gallery. */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, var(--tile)); gap: 16px 14px; }
+.tile { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.tile .af-stage { border-radius: 10px; box-shadow: 0 0 0 1px var(--rule); }
+.tile .af-stage[data-flag] { box-shadow: 0 0 0 2px var(--weak); }
+.cap { display: flex; gap: 8px; align-items: baseline; justify-content: space-between; font-size: 13px; }
+.cap b { font-weight: 500; }
+.flag { font: 500 11px/1 var(--sans); color: var(--muted); background: none; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 8px; cursor: pointer; flex: none; }
+.flag[aria-pressed="true"] { color: var(--surface); background: var(--weak); border-color: var(--weak); }
+.kind { display: grid; gap: 12px; }
+.kind > h3 { padding-top: 6px; border-top: 1px solid var(--rule); }
+
+/* Settings. */
+.setting { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; min-width: 0; scroll-margin-top: 70px; }
+.setting > header { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.setting > header p { font-size: 13px; color: var(--muted); }
+.need { font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 4px; background: var(--chip); }
+.need.none { color: var(--none); } .need.weak { color: var(--weak); } .need.reads { color: var(--good); }
+.opts { display: grid; grid-template-columns: repeat(auto-fill, var(--tile)); gap: 16px 14px; }
+.opt { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.opt .af-stage { border-radius: 10px; box-shadow: 0 0 0 1px var(--rule); }
+.opt > span { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.opt.is-default > span { color: var(--ink); font-weight: 600; }
+.pick { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pick button { font: 500 12px/1 var(--sans); color: var(--muted); background: var(--bg); border: 1px solid var(--rule); border-radius: 999px; padding: 6px 10px; cursor: pointer; }
+.pick button[aria-pressed="true"] { color: var(--surface); background: var(--ink); border-color: var(--ink); }
+.pick input { font: 13px/1.2 var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 8px; flex: 1 1 200px; min-width: 0; }
+.saved { font-size: 12px; color: var(--muted); }
+.decision { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; display: grid; gap: 8px; }
+.list { display: grid; gap: 12px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/*FIGURE_CSS*/
+</style>
+
+<div class="wrap">
+<header class="top">
+  <span class="eyebrow">Area · Illustration · round 11 · 2026-10-24</span>
+  <h1>Area figures</h1>
+  <p class="lede">Everything in the style of the screens: Area's real components laid out as real UI, with every word drawn as a light shape and numbers as their digits. The gallery covers every kind of UI Area makes: 14 desktop screens, 6 phone screens, 16 vignettes, 5 compositions (a few parts the same size showing one theme setting: accent, strokes, corners, states, status) and all 119 component families, one specimen each. Then each theme setting on the screen that shows it best.</p>
+</header>
+
+<div class="bar" role="toolbar" aria-label="Canvas for the figures">
+  <div class="ctl"><span>Theme</span><div class="seg" data-ctl="theme"><button type="button" data-v="light">Light</button><button type="button" data-v="dark">Dark</button></div></div>
+  <div class="ctl"><span>Draw</span><div class="seg" data-ctl="fid"><button type="button" data-v="bars">Bars</button><button type="button" data-v="shapes">Shapes</button><button type="button" data-v="real">Real</button></div></div>
+  <div class="ctl"><span>Size</span><div class="seg" data-ctl="size"><button type="button" data-v="s">S</button><button type="button" data-v="m">M</button><button type="button" data-v="l">L</button></div></div>
+  <div class="ctl"><label for="neutral">Neutral</label><select class="pg-select" id="neutral"><option value="cool">Cool</option><option value="neutral" selected>Neutral</option><option value="warm">Warm</option></select></div>
+  <div class="ctl"><span>Accent</span><div class="sws" id="accents"></div></div>
+</div>
+
+<nav class="toc" id="toc" aria-label="Sections"></nav>
+<div id="gallery"></div>
+
+<section class="sec" id="settings">
+  <header><h2>Theme settings</h2><p>Each option on the screen that shows it, holding the state it needs (a hover, a focus, an open menu).</p></header>
+  <div class="bar" style="position:static;border:0;padding:0" role="toolbar" aria-label="Settings view">
+    <div class="ctl"><span>On</span><div class="seg" data-ctl="device"><button type="button" data-v="desktop">Desktop</button><button type="button" data-v="mobile">iPhone</button><button type="button" data-v="isolated">Vignette</button></div></div>
+    <div class="ctl"><span>Show</span><div class="seg" data-ctl="show"><button type="button" data-v="needs">Needs a visual</button><button type="button" data-v="all">All</button></div></div>
+  </div>
+  <div class="list" id="settings-list"></div>
+</section>
+
+<section class="sec" id="about">
+  <header><h2>How it's made</h2></header>
+  <ul class="plain">
+    <li>Every figure is Area's React components or the app's own demos, rendered to markup from this branch. The screens and vignettes are round 12's (the choice-illustrations review). The components are each family's default specimen, the same one the app's Components gallery shows.</li>
+    <li><b>Bars</b> draws every word as a rounded shape its own width and the height of its ink, in its own colour at 20%, on every label (buttons and badges too); numbers are drawn digit by digit; field values and placeholders get the same shapes. <b>Shapes</b> drops words and icons. <b>Real</b> is the components as they are.</li>
+    <li>One specimen per component, the same one the app's gallery shows first, or a better one (a button with its icon). A few show variants close together: avatars and chips in a row, badges in a column, tags and presence in a tight grid; or a pair of overlapping menus. The drawer fills the right side; the titlebar spans its tile.</li>
+    <li>One scale per kind of frame: screens at 0.31 (M), components at 0.5 (M). Every component and vignette is centred on what it actually paints, both ways, with wide margins (at most 60% of the tile); a small one may grow up to 1.8× and a large one shrinks, so sizes stay close across tiles. Strokes draw at exactly 1px at every size, as in the product. The theme settings' screens are staged exactly as the Screens are. Nothing is redrawn.</li>
+    <li>The skill <code>.claude/skills/area-illustration</code> renders all of it (<code>figures/index.jsx</code>). Use Flag on any tile that needs work; flags save to this page.</li>
+  </ul>
+</section>
+
+<section class="sec" id="decisions">
+  <header><h2>Decisions for you</h2></header>
+  <div class="list" id="decision-list"></div>
+</section>
+</div>
+
+<script>
+/*FIGURE_JS*/
+</script>
+<script>
+const DEFAULTS = /*DEFAULTS*/;
+const F = /*FIGURES*/;
+const LABELS = F.labels;
+const ACCENTS = { blue: "#0160d9", indigo: "#4f46e5", purple: "#8b3fd9", pink: "#d6337f", red: "#d92d20", orange: "#e8590c", yellow: "#d4a106", lime: "#65a30d", green: "#16a34a", teal: "#0d9488", cyan: "#0891b2" };
+const GROUPS = ["Color", "Size", "Shape", "Stroke", "Shadow", "Fill", "Effects"];
+const NEED = { none: "No figure", weak: "Doesn't read", reads: "Reads" };
+/* One scale per kind of frame, by size: screens (1024 × 576), phones (390 × 844), vignettes and components (480 × 360). */
+const SCALE = { s: { screen: 0.22, comp: 0.36 }, m: { screen: 0.31, comp: 0.5 }, l: { screen: 0.42, comp: 0.7 } };
+const darkPage = () => document.documentElement.dataset.theme === "dark" || (document.documentElement.dataset.theme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+const S = { theme: darkPage() ? "dark" : "light", fid: "bars", size: "m", neutral: "neutral", accent: "blue", device: "desktop", show: "needs" };
+try { Object.assign(S, JSON.parse(localStorage.getItem("af5-settings") || "{}")); } catch {}
+const canvas = (extra = {}) => ({ ...DEFAULTS, "data-area-theme": S.theme, "data-area-neutral": S.neutral, "data-area-accent": S.accent, ...extra });
+const TOUCH = { "data-area-type": "16", "data-area-density": "36" };
+const frameOf = (set, k) => set === "desktop" ? [1024 * k, 576 * k] : set === "mobile" ? [410 * k, 864 * k] : [480 * k, 360 * k];
+
+/* One staging for every screen and vignette, so a screen reads the same in Screens and in Theme settings: a screen
+   fills its frame as a window does (shrinking only if it would overflow); a vignette is centred on what it paints,
+   with room around it. */
+function stageFrame(parent, { html, set, k, scope, states = [], fidelity = S.fid, pad = set === "isolated" ? 0.72 : 1, max = k * 1.15 }) {
+  const [w, h] = frameOf(set, k);
+  const st = AFS.stage(parent, { html, w: Math.round(w), h: Math.round(h), fidelity, scope, states, fit: k, pad, max, center: set === "isolated" ? "contain" : null });
+  if (set !== "isolated") { const z = st.firstElementChild, over = Math.max(z.offsetWidth / w, z.offsetHeight / h); if (over > 1) st.style.setProperty("--af-fit", (k / over * 0.96).toFixed(4)); }
+  return st;
+}
+
+/* Gallery. */
+function tile(grid, id, name, html, set, k, fill) {
+  const t = document.createElement("div"); t.className = "tile"; grid.append(t);
+  stageFrame(t, { html, set, k, scope: canvas(set === "mobile" ? TOUCH : {}), ...fill });
+  t.insertAdjacentHTML("beforeend", `<div class="cap"><b>${name}</b><button type="button" class="flag" data-flag="${id}" aria-pressed="false" aria-label="Flag ${name} as needing work">Flag</button></div>`);
+  if (state.gallery[id]?.flag) mark(id, true);
+}
+/* A family's tile: its one specimen (or a tight row, column, grid or pair) in the 480 × 360 frame, fitted and centred
+   on what it paints with 40% of the frame left around it. A small part grows up to 1.8× the section's scale and a
+   large one shrinks, so components come out at more similar sizes. The drawer fills the right side, the titlebar the
+   width. */
+let uid = 0;
+function familyTile(grid, c, k) {
+  const t = document.createElement("div"); t.className = "tile"; grid.append(t);
+  const [w, h] = frameOf("isolated", k);
+  const parts = c.parts.map((p) => p.replace(/name="([^"]+)"/g, (_, n) => `name="${n}-t${++uid}"`)).join("");
+  AFS.stage(t, { html: `<div class="af-tile af-tile--${c.layout}" style="--cols:${c.cols || 2}">${parts}</div>`, w: Math.round(w), h: Math.round(h), fidelity: S.fid, scope: canvas(), fit: k, center: c.bleed || "contain", pad: 0.6, max: k * 1.8 });
+  const id = `c-${c.slug}`;
+  t.insertAdjacentHTML("beforeend", `<div class="cap"><b>${c.name}</b><button type="button" class="flag" data-flag="${id}" aria-pressed="false" aria-label="Flag ${c.name} as needing work">Flag</button></div>`);
+  if (state.gallery[id]?.flag) mark(id, true);
+}
+function renderGallery() {
+  const root = document.getElementById("gallery"); root.replaceChildren();
+  const toc = document.getElementById("toc"); toc.replaceChildren();
+  const k = SCALE[S.size];
+  const section = (id, title, about) => {
+    const sec = document.createElement("section"); sec.className = "sec"; sec.id = id;
+    sec.innerHTML = `<header><h2>${title}</h2><p>${about}</p></header>`;
+    root.append(sec); toc.insertAdjacentHTML("beforeend", `<a href="#${id}">${title}</a>`);
+    return sec;
+  };
+  const grid = (sec, min) => { const g = document.createElement("div"); g.className = "grid"; g.style.setProperty("--tile", `${min}px`); sec.append(g); return g; };
+  for (const [set, title, about, scale] of [["desktop", "Screens", "Desktop, 1024 × 576.", k.screen], ["mobile", "iPhone", "390 × 844, at Area's touch sizes (type 16, density 36).", k.screen], ["isolated", "Vignettes", "Components in context, 480 × 360.", k.comp]]) {
+    const g = grid(section(`g-${set}`, title, about), Math.round(frameOf(set, scale)[0]));
+    for (const [id, sc] of Object.entries(F.screens[set])) tile(g, `${set}-${id}`, sc.label, sc.html, set, scale);
+  }
+  const cg = grid(section("g-compositions", "Compositions", "4 to 6 similarly sized components showing one thing, 480 × 360."), Math.round(frameOf("isolated", k.comp)[0]));
+  for (const [id, c] of Object.entries(F.compositions)) tile(cg, `comp-${id}`, c.label, c.html, "isolated", k.comp, { pad: 0.86, max: k.comp * 1.6 });
+  const sec = section("g-components", "Components", `All ${F.gallery.length} families, one specimen each (a few show a small grid or a pair), at one scale.`);
+  for (const kind of F.kinds) {
+    const items = F.gallery.filter((c) => c.kind === kind);
+    if (!items.length) continue;
+    const box = document.createElement("div"); box.className = "kind"; box.innerHTML = `<h3>${kind}</h3>`; sec.append(box);
+    const g = grid(box, Math.round(480 * k.comp));
+    for (const c of items) familyTile(g, c, k.comp);
+  }
+  toc.insertAdjacentHTML("beforeend", `<a href="#settings">Theme settings</a><a href="#decisions">Decisions</a>`);
+}
+document.getElementById("gallery").addEventListener("click", (e) => {
+  const b = e.target.closest(".flag"); if (!b) return;
+  const on = b.getAttribute("aria-pressed") !== "true";
+  mark(b.dataset.flag, on); save("gallery", b.dataset.flag, { flag: on });
+});
+function mark(id, on) {
+  const b = document.querySelector(`.flag[data-flag="${id}"]`); if (!b) return;
+  b.setAttribute("aria-pressed", String(on));
+  b.closest(".tile").querySelector(".af-stage").toggleAttribute("data-flag", on);
+}
+
+/* Settings on screens. */
+const optLabel = (id, v) => (LABELS[id]?.options?.[v] ?? v);
+const isDefault = (id, v) => LABELS[id]?.def === v || (id === "pills" && LABELS.pills.def.split(" ").includes(v));
+const modeOf = (id) => (/-light$/.test(id) ? "light" : /-dark$/.test(id) ? "dark" : null);
+function renderSettings() {
+  const list = document.getElementById("settings-list"); list.replaceChildren();
+  const k = SCALE[S.size];
+  for (const g of GROUPS) for (const s of F.settings.filter((x) => x.group === g && (S.show === "all" || x.need !== "reads"))) {
+    const name = LABELS[s.id]?.label || s.id;
+    const art = document.createElement("article"); art.className = "setting"; art.id = "set-" + s.id;
+    art.innerHTML = `<header><h3>${name}</h3><span class="need ${s.need}">${NEED[s.need]}</span><p>${s.shows}</p></header>`;
+    list.append(art);
+    const opts = document.createElement("div"); opts.className = "opts"; art.append(opts);
+    const set = s.vignette ? "isolated" : S.device;
+    const scale = set === "isolated" ? k.comp : k.screen;
+    opts.style.setProperty("--tile", `${Math.round(frameOf(set, scale)[0])}px`);
+    for (const v of s.show) {
+      const html = s.vignette ? F.vignettes[s.id][v] : (F.screens[set][s[set]] || Object.values(F.screens[set])[0]).html;
+      const scope = canvas({ ...(set === "mobile" ? TOUCH : {}), ...(modeOf(s.id) ? { "data-area-theme": modeOf(s.id) } : {}), ...(s.scope || {}), [s.attr || `data-area-${s.id}`]: v });
+      const o = document.createElement("div"); o.className = "opt" + (isDefault(s.id, v) ? " is-default" : ""); opts.append(o);
+      stageFrame(o, { html, set, k: scale, scope, states: s.states || [], fidelity: s.fidelity || S.fid });
+      o.insertAdjacentHTML("beforeend", `<span>${optLabel(s.id, v)}</span>`);
+    }
+    const pick = document.createElement("div"); pick.className = "pick";
+    pick.innerHTML = `<button type="button" data-verdict="keep" aria-pressed="false">Keep</button><button type="button" data-verdict="rework" aria-pressed="false">Rework</button><input type="text" id="axes-note-${s.id}" placeholder="Note" aria-label="Note on ${name}"><span class="saved" id="axes-saved-${s.id}"></span>`;
+    pick.addEventListener("click", (e) => { const b = e.target.closest("button[data-verdict]"); if (b) save("axes", s.id, { verdict: b.dataset.verdict }); });
+    pick.querySelector("input").addEventListener("change", (e) => save("axes", s.id, { note: e.target.value }));
+    art.append(pick);
+  }
+}
+
+/* Bar. */
+function apply() {
+  try { localStorage.setItem("af5-settings", JSON.stringify(S)); } catch {}
+  for (const seg of document.querySelectorAll("[data-ctl]")) for (const b of seg.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b.dataset.v === S[seg.dataset.ctl]));
+  for (const b of document.querySelectorAll("#accents .sw")) b.setAttribute("aria-pressed", String(b.dataset.v === S.accent));
+  document.getElementById("neutral").value = S.neutral;
+  renderGallery(); renderSettings();
+  for (const [coll, docs] of Object.entries(state)) for (const [id, d] of Object.entries(docs)) paint(coll, id, d);
+}
+for (const seg of document.querySelectorAll("[data-ctl]")) seg.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) { S[seg.dataset.ctl] = b.dataset.v; apply(); } });
+document.getElementById("accents").innerHTML = Object.entries(ACCENTS).map(([k, c]) => `<button type="button" class="sw" data-v="${k}" style="background:${c}" aria-label="${k[0].toUpperCase() + k.slice(1)}"></button>`).join("");
+document.getElementById("accents").addEventListener("click", (e) => { const b = e.target.closest(".sw"); if (b) { S.accent = b.dataset.v; apply(); } });
+document.getElementById("neutral").addEventListener("change", (e) => { S.neutral = e.target.value; apply(); });
+
+/* Decisions. */
+const DECISIONS = [
+  ["fidelity", "The default drawing", "Bars keeps every component and turns words into light bars. Shapes drops words and icons. Real keeps the words.", ["Bars", "Shapes", "Real"]],
+  ["replace", "Use these in the app", "Replace the app's setting pictures (Setup cards and the grid menu) with these.", ["Yes", "Only where the app has none", "Not yet"]],
+  ["ink", "How light a bar is", "20% of the text's own colour now.", ["Lighter (14%)", "20%", "Darker (28%)"]],
+];
+const dl = document.getElementById("decision-list");
+dl.innerHTML = DECISIONS.map(([k, title, about, opts]) => `<div class="decision"><h3>${title}</h3><p class="small">${about}</p><div class="pick" data-k="${k}">${opts.map((o) => `<button type="button" data-verdict="${o}" aria-pressed="false">${o}</button>`).join("")}<input type="text" id="round2-note-${k}" placeholder="Note" aria-label="Note on ${title}"><span class="saved" id="round2-saved-${k}"></span></div></div>`).join("");
+dl.addEventListener("click", (e) => { const b = e.target.closest("button[data-verdict]"); if (b) save("round2", b.closest("[data-k]").dataset.k, { pick: b.dataset.verdict }); });
+dl.addEventListener("change", (e) => { const p = e.target.closest("[data-k]"); if (p && e.target.matches("input")) save("round2", p.dataset.k, { note: e.target.value }); });
+
+/* Saving: the artifact's database when it's there; otherwise marks stay on screen. */
+let db = null;
+const state = { gallery: {}, axes: {}, round2: {} };
+function paint(coll, id, d) {
+  state[coll][id] = d;
+  if (coll === "gallery") { mark(id, !!d.flag); return; }
+  const n = document.getElementById(`${coll}-note-${id}`); if (!n) return;
+  for (const b of n.closest(".pick").querySelectorAll("button[data-verdict]")) b.setAttribute("aria-pressed", String(b.dataset.verdict === (d.verdict ?? d.pick)));
+  if (document.activeElement !== n) n.value = d.note || "";
+  const s = document.getElementById(`${coll}-saved-${id}`); if (s) s.textContent = d.at ? "Saved" : "";
+}
+async function save(coll, id, patch) {
+  const d = { ...(state[coll][id] || {}), ...patch, at: new Date().toISOString() };
+  paint(coll, id, d);
+  if (db) try { await db.doc(`${coll}/${id}`).set(d); } catch {}
+}
+
+apply();
+(async () => {
+  db = await window.claude?.use?.("db");
+  if (!db) return;
+  for (const coll of Object.keys(state)) db.collection(coll).onSnapshot((snap) => snap.docs.forEach((d) => paint(coll, d.id, d.data() || {})), () => {});
+})();
+</script>
