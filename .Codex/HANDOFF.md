@@ -1,6 +1,15 @@
 # Handoff
 
 ## Current state (2026-10-24)
+- **Components: Overview and Single, variants in the tree (owner 2026-10-25), branch
+  `claude/component-card-copy-isolated-view-0d9970`, uncommitted, main merged at a16397fe.** All is now the Overview
+  (every family a section of its tiles, one row until Show all, drawn as it nears the view); a card opens the tile alone
+  (family tab Preview, was Overview), growing from the card; Esc / the Overview button / the breadcrumb go back, the
+  Stage shrinking into its card, the section open and the tile selected, "Back to …" and Esc return. Variants are rows
+  under each family in the Sidebar (Tree view branches, `SidebarTree reveal`). New Breadcrumb `nowrap` (Breadcrumb back
+  to In review). Also: overlay cards' Copy now shows on hover (Asset card selector, cohesion test). Research and the
+  owner's picks: docs/research/isolated-view-2026-10-24/. Known: `test:desktop` fails on main too (reads the renamed
+  pages/brand.tsx). Not built: projects / Designs, explorations, the new statuses, systems.
 - **Setup as a chat (owner 2026-10-24, after IDE / Codex / Cube references: "a 2 panel view ... a vertically scrolling chat
   like experience ... visuals on the right").** No Sidebar or Inspector in Setup (Workspace `panels`); questions arrive as
   messages with choices inline, answers stay as reply bubbles that reopen (Done returns to the latest), chapters as

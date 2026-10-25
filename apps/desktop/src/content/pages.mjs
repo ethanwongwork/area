@@ -249,11 +249,12 @@ export const COMPONENT_PAGES = [
   {
     slug: "breadcrumb", name: "Breadcrumb", manifest: "breadcrumb",
     imports: "Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis",
-    api: [["Breadcrumb", "nav props and ref", "aria-label: Breadcrumb"], ["BreadcrumbLink", "native anchor props and ref", "—"], ["BreadcrumbPage", "span props and ref", "aria-current: page"], ["BreadcrumbSeparator", "optional children", "simple chevron"], ["BreadcrumbEllipsis", "items ({ label, href }[]) open a Menu of the hidden pages; without them a decorative mark; aria-label", "More pages"]],
+    api: [["Breadcrumb", "nav props and ref", "aria-label: Breadcrumb"], ["Breadcrumb: nowrap", "one line; the current page is cut with an ellipsis first", "false"], ["BreadcrumbLink", "native anchor props and ref", "—"], ["BreadcrumbPage", "span props and ref", "aria-current: page"], ["BreadcrumbSeparator", "optional children", "simple chevron"], ["BreadcrumbEllipsis", "items ({ label, href }[]) open a Menu of the hidden pages; without them a decorative mark; aria-label", "More pages"]],
     examples: [
       { id: "default", title: "Default", note: "Use links for ancestors and a non-interactive current page. The chevron is decorative and reverses in RTL.", demo: "GalleryBreadcrumb" },
       { id: "collapsed", title: "Collapsed path", note: "Pass the omitted levels as items and the ellipsis becomes a button that opens a Menu of them; each row is a link. Without items it is a decorative mark.", demo: "GalleryBreadcrumbCollapsed" },
       { id: "icons", title: "With icons", demo: "GalleryBreadcrumbIcons" },
+      { id: "nowrap", title: "One line", group: "Layout", note: "nowrap keeps the trail on one line, as in a bar of one fixed height: the ancestors keep their width and the current page is cut with an ellipsis first.", demo: "GalleryBreadcrumbNowrap" },
     ],
   },
   {

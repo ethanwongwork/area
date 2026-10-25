@@ -597,25 +597,35 @@ export function SidebarList({ children }: { children: ReactNode }) {
  * Canvas as a Nav row did; a branch only opens and closes. Every branch starts open, and stays as it is set while the tab
  * is open. A pinnable row's id is `key:<key>` and a row under Pinned `pin:<key>` (organize.tsx, PinMenu); without
  * `onSelect` a row selects its key, the prefix dropped.
+ *
+ * A row may hold rows of its own (owner, 2026-10-25: a component's variants "should live under the tree view … as
+ * legitimate standalone design items"). Those branches start closed, and `reveal` opens the ones that hold what the
+ * Canvas shows, so the current row is always in view; an `axis:` row only opens and closes, as a group does.
  */
 export interface SidebarTreeGroup { id: string; label: string; items: TreeViewNode[] }
-export function SidebarTree({ tab, label, count, groups, current, onSelect }: {
-  tab: TabId; label: string; count: number; groups: SidebarTreeGroup[]; current?: string; onSelect?: (id: string) => void;
+export function SidebarTree({ tab, label, count, groups, current, reveal, onSelect }: {
+  tab: TabId; label: string; count: number; groups: SidebarTreeGroup[]; current?: string; reveal?: string[]; onSelect?: (id: string) => void;
 }) {
   const { select } = useStudio();
   const branches = groups.filter(group => group.items.length).map(group => `group:${group.id}`);
   const [closed, setClosed] = useState<string[]>([]);
+  // Nested branches the person opened, and those `reveal` opened for them.
+  const [opened, setOpened] = useState<string[]>(reveal ?? []);
+  const revealKey = (reveal ?? []).join("|");
+  useEffect(() => { if (reveal?.length) setOpened(open => [...new Set([...open, ...reveal])]); }, [revealKey]);
   const items: TreeViewNode[] = [
     { id: "all", label: "All", trailing: <Count count={count} max={9999} /> },
     ...groups.filter(group => group.items.length).map(group => ({ id: `group:${group.id}`, label: group.label, trailing: <Count count={group.items.length} max={9999} />, children: group.items })),
   ];
   const now = current ?? "all";
+  const toggle = (id: string) => setOpened(open => open.includes(id) ? open.filter(entry => entry !== id) : [...open, id]);
   return (
     <TreeView aria-label={label} className="studio-sidebar__tree" items={items} currentId={now} selectedIds={[now]}
-      expandedIds={branches.filter(id => !closed.includes(id))}
-      onExpandedChange={ids => setClosed(branches.filter(id => !ids.includes(id)))}
+      expandedIds={[...branches.filter(id => !closed.includes(id)), ...opened]}
+      onExpandedChange={ids => { setClosed(branches.filter(id => !ids.includes(id))); setOpened(ids.filter(id => !id.startsWith("group:"))); }}
       onActivate={id => {
         if (id.startsWith("group:")) { setClosed(open => open.includes(id) ? open.filter(entry => entry !== id) : [...open, id]); return; }
+        if (id.startsWith("axis:")) { toggle(id); return; }
         if (id === "all") select(""); else if (onSelect) onSelect(id); else select(id.replace(/^(key|pin):/, ""));
       }}
       data-tab={tab} />

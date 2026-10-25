@@ -52,7 +52,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
   // code-block: reopened 2026-10-12 for size sm; approved again on the review page, round 12 (components12); reopened
   // 2026-10-16 (Layers sweep, round 30).
-  'box-field', 'breadcrumb',
+  'box-field', // breadcrumb: reopened 2026-10-25 for `nowrap` (the Canvas bar's trail).
   'button', 'button-group',
   // code and color-swatch reopened 2026-10-12 for the translucent swatch ring (owner: "yes apply the swatch fix").
   'composer',
@@ -139,7 +139,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Round 68 (2026-10-22): the text-pair rule (a line joins its title) reopens Dialog, Confirm dialog, Drawer, Popover,
 // Alert, Toast, Empty state, Checkbox and Radio; Token row's text moves onto the ramp.
 // Round 69 (2026-10-22): Selection defaults to the accent (option B), so every family whose default paints Selection reopens.
-export const REVIEW_COMPONENTS = new Set(['slider']); // reopened 2026-10-24: the field variant (owner's settings-panel reference)
+export const REVIEW_COMPONENTS = new Set(['slider', 'breadcrumb']); // breadcrumb: reopened 2026-10-25, nowrap // reopened 2026-10-24: the field variant (owner's settings-panel reference)
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

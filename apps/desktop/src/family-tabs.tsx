@@ -23,7 +23,9 @@ import { highlight } from "./content/highlight.mjs";
 import { appScale } from "./app-scale.ts";
 
 export const FAMILY_TABS = [
-  { id: "overview", label: "Overview" },
+  // The tab's id stays "overview" (a saved view option); it shows one tile alone (owner, 2026-10-25), so it says Preview,
+  // and Overview names the whole library's gallery.
+  { id: "overview", label: "Preview" },
   { id: "documentation", label: "Documentation" },
   { id: "api", label: "API" },
   { id: "code", label: "Code" },

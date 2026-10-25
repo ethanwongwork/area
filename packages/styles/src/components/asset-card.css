@@ -255,9 +255,12 @@
      title, can you make the button on the opposite corner"): with the name below or over the asset, the controls leave
      the head for the card's top end, their box as far in as its centre sits from the name's cap, so a button's glyph keeps
      the name's inset from the top and the side (inset.css). They show while the card is under the pointer or holds focus,
-     always where nothing hovers; they fade out on `fast` and appear at once (MOTION.md). */
+     always where nothing hovers; they fade out on `fast` and appear at once (MOTION.md). The hiding rule is a list, not
+     `.area-asset-card:is(…)`, so it weighs no more than the rules below that show the controls (2026-10-24: the :is form
+     outranked overlay's, and Copy never showed on the Components cards). */
   .area-asset-card:is(.area-asset-card--below, .area-asset-card--overlay) { position: relative; }
-  .area-asset-card:is(.area-asset-card--below, .area-asset-card--overlay) > .area-asset-card__head > .area-asset-card__actions {
+  .area-asset-card--below > .area-asset-card__head > .area-asset-card__actions,
+  .area-asset-card--overlay > .area-asset-card__head > .area-asset-card__actions {
     position: absolute;
     --_actions-offset: max(0px, calc(var(--_name-pad) - (var(--area-control-sm) - 1cap) / 2));
     /* Concentric with the card from where they sit: its corner less the edge and their offset (16 − 1 − 6 = 9 in the

@@ -615,3 +615,50 @@ test('a registered custom property has a name no other family uses', () => {
     }
   }
 });
+
+test('a revealed control\'s showing rules outrank the rule that hides it (2026-10-24: Copy never showed on overlay cards)', () => {
+  // Asset card hides the head and the corner controls under a caption that reveals them (below, overlay) and shows them
+  // with other rules: at rest, on hover, with focus, and where nothing hovers. Each showing rule must beat the hiding
+  // one in the cascade: a higher specificity, or the same one later in the file.
+  const split = list => { const out = []; let depth = 0, start = 0;
+    for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
+    return [...out, list.slice(start)].map(part => part.trim()).filter(Boolean); };
+  // Selectors Level 4 specificity as [ids, classes, types]: :is/:not/:has take their heaviest argument, :where none.
+  const specificity = selector => {
+    const score = [0, 0, 0];
+    const add = other => other.forEach((n, i) => { score[i] += n; });
+    let rest = selector.replace(/:(is|not|has|where)\(/g, '\u0000$1(');
+    for (let open; (open = rest.indexOf('\u0000')) !== -1;) {
+      const name = rest.slice(open + 1).match(/^\w+/)[0];
+      let depth = 0, end = open;
+      for (let i = open + 1 + name.length; i < rest.length; i++) { if (rest[i] === '(') depth++; else if (rest[i] === ')' && --depth === 0) { end = i; break; } }
+      if (name !== 'where') add(split(rest.slice(open + name.length + 2, end).replace(/\u0000/g, ':')).map(specificity).reduce((a, b) => (a[0] - b[0] || a[1] - b[1] || a[2] - b[2]) >= 0 ? a : b));
+      rest = rest.slice(0, open) + ' ' + rest.slice(end + 1);
+    }
+    score[0] += (rest.match(/#[\w-]+/g) ?? []).length;
+    score[1] += (rest.match(/\.[\w-]+|\[[^\]]+\]|:(?!:)[\w-]+/g) ?? []).length;
+    score[2] += (rest.replace(/\[[^\]]+\]/g, '').match(/(^|[\s>+~])[a-z][\w-]*|::[\w-]+/gi) ?? []).length;
+    return score;
+  };
+  const compare = (a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+  const parts = rules.map((rule, index) => ({ ...rule, index })).filter(rule => /\.area-asset-card/.test(rule.selector))
+    .flatMap(rule => {
+      const opacity = rule.body.match(/(?:^|[;\s])opacity\s*:\s*([^;]+)/)?.[1].trim();
+      return opacity === '0' || opacity === '1' ? split(rule.selector).map(selector => ({ selector, index: rule.index, shown: opacity === '1' })) : [];
+    });
+  const target = selector => selector.match(/(\.area-asset-card__(?:head|actions))$/)?.[1];
+  const captions = selector => new Set(selector.match(/\.area-asset-card--(?:below|overlay)\b/g) ?? []);
+  const hiding = parts.filter(part => !part.shown && target(part.selector));
+  assert.ok(hiding.length >= 2, 'Asset card hides no head or corner controls');
+  let checked = 0;
+  for (const show of parts.filter(part => part.shown && target(part.selector))) {
+    for (const hide of hiding) {
+      if (target(hide.selector) !== target(show.selector)) continue;
+      if (![...captions(hide.selector)].some(caption => captions(show.selector).has(caption))) continue;
+      const order = compare(specificity(show.selector), specificity(hide.selector));
+      assert.ok(order > 0 || (order === 0 && show.index > hide.index), `${show.selector} does not outrank ${hide.selector}, which hides it`);
+      checked++;
+    }
+  }
+  assert.ok(checked >= 5, `only ${checked} showing rules checked`);
+});

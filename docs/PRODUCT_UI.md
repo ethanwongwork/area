@@ -87,6 +87,7 @@ the scale the layout was measured at; the app now takes the chosen type and dens
 
 - There is no title over the Canvas or the Inspector; the Sidebar's selected row names what
   the Canvas shows.
+  A tile on the Components Stage carries its path at the bar's start instead (Breadcrumb `nowrap`, owner 2026-10-24: "breadcrumbs can be used to help with layer management").
 - The Canvas header's controls, the Sidebar's first row and the Inspector's first heading
   share one line. The Sidebar and Inspector are 14 in on all sides.
 - **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4): the Titlebar keeps its
@@ -130,15 +131,31 @@ Zoom is Zoom control's stepper (− Auto +):
 
 **Components tab.**
 
-- All shows one card per family, its default specimen; a click opens the family.
+- **Overview and Single** (owner, 2026-10-25; `docs/research/isolated-view-2026-10-24/variations.md` §10). All is the
+  Overview: every family in the Sidebar's order, a section each (its title, tile count and status badge 12 over its
+  cards, sections 40 apart), one row of its tiles until "Show all N" (a text control 12 under the cards, on their edge)
+  opens every tile in its groups (a group's name 8 over its row, groups 24 apart). Sections draw their cards as they near
+  the view, holding their room with empty cards until then. The arrangement's groups set the order but draw no title
+  (the Sidebar names them). A card opens that tile alone (Single: the family page on Preview, the Stage at real size);
+  Escape, ⌘↑, ⌘[, the Overview button or the breadcrumb's first step go back to the Overview at the family left, its
+  section open and the tile selected, with "Back to <family>" at the bar's start, which Escape also does. Opening grows
+  the Stage from the card on `slow`; leaving shrinks it into its card on `moderate` (ease-in-out; Motion 0 and reduced
+  motion skip both). In the Overview a family's Sidebar row scrolls to its section; a variant's row opens it.
+- **Variants in the Sidebar** (owner, 2026-10-25: "legitimate standalone design items"): a family's row opens to its
+  Default tile and a branch per group (Variants, Sizes, States …) of its tiles, named by value. Those branches start
+  closed; the tile on the Stage opens its family and group. Pinned rows are shortcuts with no rows under them.
+- **The bar on a tile**: the Overview button (Grid, its Tooltip with Esc), then the path, Area's Breadcrumb `nowrap`
+  (Components › family › tile), its first letter 12 from the button's glyph; then Replay, zoom and previous / next,
+  which walk every tile in the Sidebar's order. The bar's start and its controls stay at least 12 apart; the path's
+  page is cut first.
 - Specimens sit in square cards at least 360 wide, 8 apart, the specimen 24 in. The title
   and a Copy code button sit at the frame's top.
 - Every tab's tiles are Asset cards, always square, with the name, a value and controls in
   the frame's first row (owner, 2026-10-19, a trial).
 - A family's page opens with its purpose in plain text (the manifest's description), 24 over its tabs, as a
   documentation page opens; the tab bar stands 24 off its panel. It is Area Tabs (`src/family-tabs.tsx`):
-  - **Overview**: the Stage, its code, then the tiles, one section per group (Default, Variants, Sizes …), each its
-    heading over its own row of cards;
+  - **Preview** (was Overview; 2026-10-25): the Stage and its code, one tile alone; the family's other tiles are in
+    the Sidebar, the bar's previous / next and the Overview;
   - **Documentation**: usage, from `content/documentation/` and the spec;
   - **API**: props from JSDoc, classes, parts, states and CSS properties;
   - **Code**: React source, stylesheet, manifest and every demo;
