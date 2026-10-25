@@ -1,7 +1,7 @@
 # Handoff
 
 ## Current state (2026-10-24)
-- **Theme review, Inspector bars and Setup as a finder: PR #NNN (`claude/theme-color-review-29db0d`), merged
+- **Theme review, Inspector bars and Setup as a finder: PR #159 (`claude/theme-color-review-29db0d`), merged
   2026-10-24.** Next: the owner starts a new theme-creation session for Setup with the Hairline session's figures.
   - *Setup* (owner, a mouse-finder reference): a stage (the view in the theme so far, the library faint round it) and a
     floating dock: one question, one control (the Inspector's row at lg, cards, swatches), Continue. Quick (12) or Full
