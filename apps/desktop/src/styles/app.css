@@ -47,7 +47,8 @@
        documentation style that is simple, repeatable, consistent"; after a component docs page and Primer's
        UnderlineNav page). One column of sections, each a heading (and lede) over one block: a grid of cards, a Stage,
        plain text, a Table or a Code block. Four spacings, each clearly larger than the one inside it:
-         gap      12  between cards (Compass's 12, measured; owner, 2026-10-14)
+         gap       8  between cards, one gap for every gallery (owner, 2026-10-24: "maybe everything can be 8px?";
+                      was 12, Compass's, 2026-10-14); colour's swatch sheet is tighter, 4 (styles/color.css)
          heading  12  from a section's heading to its block, so a title reads with what it names
          section  40  between sections
          margin   16  round the feed, a step past the gap, so a gallery of cards fills the Canvas as a set (owner,
@@ -56,15 +57,18 @@
        The feed is at most 1236 wide and centred (four 300 cards) when the panels are hidden;
        the grid's columns are counted from that width (cqw is the body's content box). */
     --_canvas-margin: var(--area-space-16);
-    --_canvas-gap: var(--area-space-12);
+    --_canvas-gap: var(--area-space-8); /* pick */
     --_canvas-heading: var(--area-space-12);
     --_canvas-section: var(--area-space-40);
-    --_canvas-measure: calc(300px * 4 + var(--area-space-12) * 3); /* spec: four 300 cards and their gaps, 1236 (owner, 2026-10-22; was 1120, a pick) */
+    --_canvas-measure: calc(300px * 4 + var(--area-space-12) * 3); /* spec: four 300 cards and 12 gaps, 1236 (owner, 2026-10-22; was 1120, a pick) */
     /* Tiles: every Canvas container's corner (plain tiles, Asset cards, colour cards, the Stage, Theme's setup panel),
        held at 16 whatever the Canvas's Radius previews (owner, 2026-10-23: "make all the containers tiles 16px corner";
        was 12 from 2026-10-13, "make the corner radius sharper"), and its inset; the Stage (src/stage.tsx) is the tile
        made large, with the same. */
     --_tile-radius: 16px; /* pick */
+    /* Cards (colour cards, and the Asset cards on Components and Typography): 16 from the edge to the text, a step past the
+       plain tiles' 12 (owner, 2026-10-24: "the same corner, padding, and text title size to match color"). */
+    --_card-inset: var(--area-space-16); /* pick */
     --_tile-inset: var(--area-space-12);
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);

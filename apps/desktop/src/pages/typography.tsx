@@ -2,7 +2,7 @@
  * Typography: the ramp as a table, after Vercel's Geist (owner, 2026-10-11): Headings and Copy, each
  * at the regular and the strong weight as separate ramps, each row's example its own name set in
  * its own style ("Heading 72", "Copy 14 Strong"), then its token, weight and what it is for; or as
- * a grid of "Aa" tiles. Choosing a role in the Sidebar shows it at each
+ * a grid of cards, the Components tab's Asset card with the "Aa" in its style and its name and metrics below. Choosing a role in the Sidebar shows it at each
  * weight and at every type size, in a sample line the Inspector's Canvas section edits. The Inspector shows
  * the chosen role (its "Aa", its CSS and token to copy, its facts) or, with none, the type scale.
  *
@@ -10,12 +10,15 @@
  * (packages/tokens/src/axes/typography.ts).
  */
 import { useState, type ReactNode } from "react";
-import { Code, CopyButton as AreaCopyButton, EmptyState, Field, ListBox, ListBoxItem, Nav, NavGroup, NavItem, PanelSection, Table, TableLink, Textarea, Tooltip } from "@area/react";
+import { Code, CopyButton as AreaCopyButton, EmptyState, Field, ListBox, PanelSection, Table, TableLink, Textarea, Tooltip } from "@area/react";
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { appScale } from "../app-scale.ts";
-import { CanvasSection } from "../tile.tsx";
+import { CanvasSection, Tile, TileGrid, type CardLook } from "../tile.tsx";
+
+/* Type cards keep the name below (owner, 2026-10-24); the other galleries show it on hover (tile.tsx, GALLERY_LOOK). */
+const TYPE_LOOK: CardLook = { container: "basic", caption: "below", fill: "recessed", borderless: false };
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { CodeWell, Preview, Selection } from "../inspector.tsx";
@@ -109,7 +112,9 @@ export function TypographyPage() {
   const role = view ?? TYPE_ROLES.find(entry => entry.id === selectedId);
   // The Canvas's type size (Inspector, Canvas section): roles are measured at it.
   const density = canvas.type;
-  const [mode, setMode] = useViewOption<ViewMode>("typography", "list", ["grid", "list"]);
+  // The cards by default (owner, 2026-10-24: "can you make typography cards?"), Geist's table one click away; a new key, so
+  // a view saved on the table opens on the cards once.
+  const [mode, setMode] = useViewOption<ViewMode>("typography-view", "grid", ["grid", "list"]);
   const [weights, setWeights] = useViewOption<"all" | "regular" | "strong">("typography-weight", "all", ["all", "regular", "strong"]);
   // One role's density rows take the header's weight (strong only when it shows strong alone).
   const weight = weights === "strong" ? "strong" : "regular";
@@ -123,24 +128,11 @@ export function TypographyPage() {
 
   return (
     <Workspace
-      sidebar={<SidebarList>{
-        <Nav aria-label="Type roles">
-          <SidebarAll tab="typography" count={shown.length} current={!view} />
-          {sections.map(group => {
-            const list = shown.filter(entry => (group.groups as readonly string[]).includes(entry.group));
-            return list.length ? (
-              <NavGroup key={group.id} label={group.label}>
-                {list.map(entry => (
-                  <NavItem key={entry.id} href={`#typography/${entry.id}`} current={entry.id === view?.id}
-                    onClick={event => { event.preventDefault(); select(entry.id); }}>
-                    {entry.name}
-                  </NavItem>
-                ))}
-              </NavGroup>
-            ) : null;
-          })}
-        </Nav>
-      }</SidebarList>}
+      sidebar={<SidebarList>
+        <SidebarTree tab="typography" label="Type roles" count={shown.length} current={view?.id}
+          groups={sections.map(group => ({ id: group.id, label: group.label,
+            items: shown.filter(entry => (group.groups as readonly string[]).includes(entry.group)).map(entry => ({ id: entry.id, label: entry.name })) }))} />
+      </SidebarList>}
       canvasActions={
         <ViewControls>
           <ViewFilter label="Weight" value={weights} onChange={setWeights}
@@ -177,45 +169,56 @@ export function TypographyPage() {
         <EmptyState title="No type roles" description={`Nothing matches “${query}”.`} />
       ) : (
         <Sheet grid={mode === "grid"} value={selected ?? null} onChoose={setSelected}>
-          {sections.flatMap(group => WEIGHTS.filter(w => weights === "all" || weights === w.id).map(w => {
+          {sections.map(group => {
+            // One section a group, each role in both weights side by side (owner, 2026-10-24: "combine the groups into just
+            // heading and copy groups, dont separate by strong"), in the grid and the table alike.
             const list = shown.filter(entry => (group.groups as readonly string[]).includes(entry.group));
-            if (!list.length) return null;
-            const styleName = (entry: TypeRole) => `${entry.name}${w.suffix}`;
+            const styles = list.flatMap(entry => WEIGHTS.filter(w => weights === "all" || weights === w.id).map(w => ({ entry, w })));
+            if (!styles.length) return null;
+            const styleName = (entry: TypeRole, w: (typeof WEIGHTS)[number]) => `${entry.name}${w.suffix}`;
             return (
-              <CanvasSection key={`${group.id}-${w.id}`} role={mode === "grid" ? "group" : undefined} id={`type-${group.id}-${w.id}`} title={`${group.label}${w.suffix}`} count={list.length}
-                lede={w.id === "regular" ? group.lede : `The same ramp at the strong weight (${w.value}), for emphasis and titles that need it.`}>
+              <CanvasSection key={group.id} role={mode === "grid" ? "group" : undefined} id={`type-${group.id}`} title={group.label} count={styles.length} lede={group.lede}>
                 {mode === "grid" ? (
-                  // Grid: every style a cell on the surface, its "Aa" set in the style over its name and
-                  // values, with the icon cells' plates (Cursor's sheet; no containers for type).
-                  <div className="studio-type-sheet">
-                    {list.map(entry => (
-                      <ListBoxItem key={entry.id} value={`${w.id}:${entry.id}`} textValue={styleName(entry)} className="studio-type-cell"
-                        aria-label={`${styleName(entry)}, ${metrics(entry, density)}`}>
-                        <span className="studio-type-cell__sample" style={roleStyle(entry, w.id)} aria-hidden="true">Aa</span>
-                        <span className="studio-type-cell__label" {...appScale()} aria-hidden="true">
-                          <span>{styleName(entry)}</span>
-                          <span className="studio-muted studio-tabular">{metrics(entry, density)}</span>
+                  // Grid: every style a card, basic with the name below (owner, 2026-10-24: "i like the old typography cards
+                  // better"; then "make the card more landscape, remove the size leading tracking details"): the "Aa" at
+                  // the start in the style, Copy CSS in the opposite corner.
+                  <TileGrid span="wide" cards>
+                    {styles.map(({ entry, w }) => (
+                      <Tile key={`${w.id}:${entry.id}`} container="asset" look={TYPE_LOOK} aspect="hug" span="wide" stage="flow" option={`${w.id}:${entry.id}`}
+                        label={styleName(entry, w)} value={<span className="studio-tabular">{metrics(entry, density)}</span>}
+                        aria-label={`${styleName(entry, w)}, ${metrics(entry, density)}`}
+                        // Copy, for what is used (Asset card's rule): the role's CSS at this weight, as the Inspector's Copy CSS.
+                        actions={
+                          <Tooltip side="bottom" describes={false} trigger={
+                            <AreaCopyButton variant="ghost" tone="neutral" size="sm" iconOnly label={`Copy ${styleName(entry, w)} CSS`} icon={<CopyIcon />} copiedIcon={<CheckIcon />}
+                              value={`${roleCss(entry)}\nfont-weight: var(--area-weight-${w.id});`} />
+                          }>
+                            Copy CSS
+                          </Tooltip>
+                        }>
+                        <span className="studio-type-card" aria-hidden="true">
+                          <span className="studio-type-card__sample" style={roleStyle(entry, w.id)}>Aa</span>
                         </span>
-                      </ListBoxItem>
+                      </Tile>
                     ))}
-                  </div>
+                  </TileGrid>
                 ) : (
                   // List: Geist's table, each example its own name set in its own style.
                   // In the framed Table, every cell on its first baseline, so a 72 example
                   // and its 14 token share a line.
-                  <Table size="lg" interactive baseline aria-label={`${group.label}${w.suffix}`}>
+                  <Table size="lg" interactive baseline aria-label={group.label}>
                       {/* One set of column widths for every table, so the columns line up down the Canvas. */}
                       <colgroup><col style={{ inlineSize: "40%" }} /><col style={{ inlineSize: "26%" }} /><col style={{ inlineSize: "10%" }} /><col /></colgroup>
                       <thead>
                         <tr><th scope="col">Example</th><th scope="col">Token</th><th scope="col">Weight</th><th scope="col">Usage</th></tr>
                       </thead>
                       <tbody>
-                        {list.map(entry => (
-                          <tr key={entry.id} data-selected={selected === `${w.id}:${entry.id}` ? "" : undefined}>
+                        {styles.map(({ entry, w }) => (
+                          <tr key={`${w.id}:${entry.id}`} data-selected={selected === `${w.id}:${entry.id}` ? "" : undefined}>
                             <td>
                               <TableLink href={`#typography/${entry.id}`} className="studio-type__example" style={roleStyle(entry, w.id)}
                                 onClick={event => { event.preventDefault(); setSelected(`${w.id}:${entry.id}`); }}>
-                                {styleName(entry)}
+                                {styleName(entry, w)}
                               </TableLink>
                             </td>
                             <td><span className="studio-type__token"><Code>--area-{entry.id}</Code><CopyToken token={`--area-${entry.id}-size`} /></span></td>
@@ -228,7 +231,7 @@ export function TypographyPage() {
                 )}
               </CanvasSection>
             );
-          }))}
+          })}
         </Sheet>
       )}
       inspector={{

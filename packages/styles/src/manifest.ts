@@ -49,7 +49,7 @@ export const button = {
     size: ["sm", "md", "lg"],
     align: ["start", "end"],
   },
-  booleans: ["full-width", "icon-only", "pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
+  booleans: ["full-width", "icon-only", "pill", "rounded", "on-color"], // pill / rounded override data-area-pills (2026-10-04)
   states: ["disabled", "loading", "selected"],
   elements: ["icon", "label"],
   defaults: { variant: "solid", tone: "neutral", size: "md" },
@@ -1115,8 +1115,8 @@ export const fileGrid = {
 
 export const assetCard = {
   block: "area-asset-card",
-  description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio; an element, a colour, or a group as a 2×2 mosaic); framed, basic or containerless, its name above or below, recessed or raised, square, landscape or hugging its asset.",
-  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below"], fill: ["recessed", "raised"], aspect: ["square", "landscape", "hug"] },
+  description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio; an element, a colour, or a group as a 2×2 mosaic); framed, basic or containerless, its name above, below or over the asset on hover, recessed or raised, square, landscape or hugging its asset.",
+  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below", "overlay"], fill: ["recessed", "raised"], aspect: ["square", "landscape", "hug"] },
   booleans: ["interactive", "borderless"],
   states: ["selected"],
   elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb"],

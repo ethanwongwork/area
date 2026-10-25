@@ -392,6 +392,8 @@ test('every painted ground is declared in layers.css', () => {
   // Painted grounds that hold nothing with a control fill, each with its reason.
   const EXEMPT = {
     '.area-asset-card__cell': 'a group cell: an image or an inert thumbnail',
+    '.area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__name': 'the name\'s plate holds text only',
+    '.area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__name': 'the name\'s plate holds text only',
     '.area-asset-row__preview': 'an image well',
     '.area-attachment': 'its close button paints the video glass tints, not ground fills',
     '.area-box-model': 'labels and values only',

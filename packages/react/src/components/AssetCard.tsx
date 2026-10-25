@@ -51,7 +51,7 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
    */
   container?: "framed" | "basic" | "containerless";
   /** above (the default): the head, its name and controls, over the frame. below: under it. */
-  caption?: "above" | "below";
+  caption?: "above" | "below" | "overlay";
   /** recessed (the default): the card in bg-subtle. raised: the surface, white in light. */
   fill?: "recessed" | "raised";
   /** No edge at rest; hover and selection still draw theirs. */

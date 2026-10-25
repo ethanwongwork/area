@@ -97,7 +97,7 @@ the scale the layout was measured at; the app now takes the chosen type and dens
 - **The Canvas is a feed** (owner, 2026-10-22: "margins larger than the gaps … a consistent feed style … documentation
   style that is simple, repeatable, consistent"). One column of sections, at most 1236 wide (four 300 cards) and centred; each section
   is a heading (and a muted lede) over one block: a grid of cards, the Stage, plain text, a Table or a Code block.
-  Spacings grow outward: cards 12 apart, at least 260 wide (277 to 300 in a 1440 window), at most four across (owner, 2026-10-22: "more like a gallery", "280 to 300 px
+  Spacings grow outward: cards 8 apart (colour's swatch sheet 4; owner, 2026-10-24: "maybe everything can be 8px?"; was 12), at least 260 wide (277 to 300 in a 1440 window), at most four across (owner, 2026-10-22: "more like a gallery", "280 to 300 px
   width … 4 columns across not more"), a heading 12 over its block, sections 40 apart, the Canvas margin 16, each
   measured to what is drawn: a frame's edge, a text's cap or baseline (titles, ledes and prose are trimmed; a Table
   measures to its frame, as a card does).
@@ -131,7 +131,7 @@ Zoom is Zoom control's stepper (− Auto +):
 **Components tab.**
 
 - All shows one card per family, its default specimen; a click opens the family.
-- Specimens sit in square cards at least 360 wide, 12 apart, the specimen 24 in. The title
+- Specimens sit in square cards at least 360 wide, 8 apart, the specimen 24 in. The title
   and a Copy code button sit at the frame's top.
 - Every tab's tiles are Asset cards, always square, with the name, a value and controls in
   the frame's first row (owner, 2026-10-19, a trial).

@@ -9,10 +9,10 @@
 import { useEffect, useState, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
 import { ROLE_SCALES } from "../../../../packages/tokens/src/color/presets.ts";
-import { Code, ColorSwatch, ListBox, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
-import { CopyIcon } from "@area/icons";
+import { Code, ColorSwatch, CopyButton as AreaCopyButton, ListBox, EmptyState, PanelSection, Table, TableLink, Tooltip } from "@area/react";
+import { CheckIcon, CopyIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
-import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -36,6 +36,24 @@ const NEUTRALS = new Set(["neutral", "cool", "warm"]);
 /* Contrast filter: every step, or the steps that carry body text (AA, 4.5:1) on white or black. */
 type Contrast = "all" | "white" | "black";
 const CONTRASTS = [{ value: "all", label: "All steps" }, { value: "white", label: "Text on white" }, { value: "black", label: "Text on black" }] as const;
+/*
+ * What a card's Copy button copies (owner, 2026-10-24: "copy added to color? and you can choose which color style to
+ * copy?"): one format for every card, chosen in the Canvas's header, so a click copies what the work needs.
+ */
+type CopyFormat = "hex" | "rgb" | "oklch" | "variable" | "token";
+const COPY_FORMATS = [
+  { value: "hex", label: "Copy hex" }, { value: "rgb", label: "Copy RGB" }, { value: "oklch", label: "Copy OKLCH" },
+  { value: "variable", label: "Copy var()" }, { value: "token", label: "Copy token" },
+] as const;
+const COPY_NAMES: Record<CopyFormat, string> = { hex: "hex", rgb: "RGB", oklch: "OKLCH", variable: "CSS variable", token: "token" };
+function copyValue(format: CopyFormat, scale: string, item: ScaleStep) {
+  const [r, g, b] = rgbOf(item.hex);
+  return format === "hex" ? item.hex.toUpperCase() : format === "rgb" ? `rgb(${r} ${g} ${b})` : format === "oklch" ? item.oklch
+    : format === "variable" ? `var(--area-${scale}-${item.level})` : `--area-${scale}-${item.level}`;
+}
+/* A card's text: tinted from its own scale (tintedInk), or the black or white it carries. */
+type Ink = "tinted" | "mono";
+const INKS = [{ value: "tinted", label: "Tinted text" }, { value: "mono", label: "Black and white text" }] as const;
 
 /*
  * The semantic tokens a step is (tokens.json semantics: a role, and the level it takes in light and
@@ -69,14 +87,29 @@ const roleLabel = (role: string) => role === "neutral" ? "Neutral" : role[0]!.to
 
 /* A step's values, as a colour card and the Inspector show them. */
 const rgbOf = (hex: string) => [1, 3, 5].map(at => parseInt(hex.slice(at, at + 2), 16)) as [number, number, number];
+/** WCAG 2 relative luminance, and the contrast of two colours. */
+const luminance = (hex: string) => {
+  const [r, g, b] = rgbOf(hex).map(value => { const c = value / 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
+  return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!;
+};
+const ratioOf = (a: string, b: string) => { const x = luminance(a), y = luminance(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
 /** WCAG 2 contrast of a colour against white or black. */
-function contrastWith(hex: string, against: "#ffffff" | "#000000") {
-  const lum = (rgb: number[]) => {
-    const [r, g, b] = rgb.map(value => { const c = value / 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
-    return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!;
-  };
-  const a = lum(rgbOf(hex)), b = against === "#ffffff" ? 1 : 0;
-  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+const contrastWith = (hex: string, against: "#ffffff" | "#000000") => ratioOf(hex, against);
+/**
+ * A card's tinted ink (owner, 2026-10-24: "explore making the foreground a tinted color of that same palette"; "more
+ * subtle overall, optimize for contrast"; then "add some color back into the text"): of its own scale's steps on the side
+ * its black or white text is on, the nearest that keeps 7:1 (AAA), so the ink keeps as much of the scale's colour as that
+ * contrast allows (Blue 25 takes Blue 650, Blue 700 takes Blue 100); where none does (mid steps), the one with the most
+ * contrast, if it keeps 4.5:1 (Area's text floor, CONTRAST.md). Else (10 steps today) the black or white the step carries.
+ */
+function tintedInk(ramp: ScaleStep[], step: ScaleStep) {
+  const darker = step.contrast.fg !== "#ffffff";
+  const side = ramp.filter(other => darker ? other.level > step.level : other.level < step.level);
+  const near = (a: ScaleStep, b: ScaleStep) => Math.abs(a.level - step.level) - Math.abs(b.level - step.level);
+  const strong = side.filter(other => ratioOf(other.hex, step.hex) >= 7).sort(near)[0];
+  if (strong) return strong;
+  const best = side.sort((a, b) => ratioOf(b.hex, step.hex) - ratioOf(a.hex, step.hex))[0];
+  return best && ratioOf(best.hex, step.hex) >= 4.5 ? best : undefined;
 }
 const grade = (ratio: number) => ratio >= 7 ? "AAA" : ratio >= 4.5 ? "AA" : ratio >= 3 ? "AA Large" : "Fails";
 /**
@@ -108,14 +141,28 @@ function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: stri
     : <div className="studio-sections">{children}</div>;
 }
 
-function ColorCard({ scale, item }: { scale: string; item: ScaleStep }) {
-  const ink = item.contrast.fg;
+function ColorCard({ scale, item, ink, copy }: { scale: string; item: ScaleStep; ink?: ScaleStep; copy: CopyFormat }) {
   const [r, g, b] = rgbOf(item.hex);
+  const ratio = ink ? ratioOf(ink.hex, item.hex) : item.contrast.ratio;
+  const inkName = ink ? `${title(scale)} ${ink.level}` : item.contrast.fg === "#ffffff" ? "white" : "black";
   return (
     <Tile span="unit" stage="flow" option={`${scale}-${item.level}`}
-      aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${ink === "#ffffff" ? "white" : "black"} text ${item.contrast.ratio.toFixed(2)} to 1, ${item.contrast.grade}`}
-      paint={{ background: `var(--area-${scale}-${item.level})`, color: ink }}
-      label={<span className="studio-swatch__level">{item.level}</span>}>
+      aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${inkName} text ${ratio.toFixed(2)} to 1, ${grade(ratio)}`}
+      // The ink paints its live step, as the card does, so a Neutral tint moves both together.
+      paint={{ background: `var(--area-${scale}-${item.level})`, color: ink ? `var(--area-${scale}-${ink.level})` : item.contrast.fg }}
+      label={<span className="studio-swatch__level">{item.level}</span>}
+      // Copy, in the card's corner on the level's line and in the colour's own ink (Button onColor); it shows while the card
+      // is under the pointer, focused or selected, and always where nothing hovers (styles/color.css).
+      actions={
+        <span className="studio-swatch__copy">
+          <Tooltip side="bottom" describes={false} trigger={
+            <AreaCopyButton variant="ghost" size="sm" iconOnly onColor label={`Copy ${title(scale)} ${item.level} ${COPY_NAMES[copy]}`}
+              icon={<CopyIcon />} copiedIcon={<CheckIcon />} value={() => copyValue(copy, scale, item)} />
+          }>
+            Copy {COPY_NAMES[copy]}
+          </Tooltip>
+        </span>
+      }>
       <span className="studio-swatch__values">
         <span>HEX {item.hex.toUpperCase()}</span>
         <span>RGB {r} {g} {b}</span>
@@ -149,6 +196,8 @@ export function ColorPage() {
   const chosen = selected ? parse(selected) : undefined;
   const picked = chosen ? { ...chosen, step: paints(chosen.scale.id, chosen.step) } : undefined;
   const [contrast, setContrast] = useViewOption<Contrast>("color-contrast", "all", ["all", "white", "black"]);
+  const [ink, setInk] = useViewOption<Ink>("color-ink", "tinted", ["tinted", "mono"]);
+  const [copyFormat, setCopyFormat] = useViewOption<CopyFormat>("color-copy", "hex", ["hex", "rgb", "oklch", "variable", "token"]);
   const passes = (item: ScaleStep) => contrast === "all" || contrastWith(item.hex, contrast === "white" ? "#ffffff" : "#000000") >= 4.5;
   const arrangement = useArrangement<Sort, Group>("color", { sort: "palette", descending: false, group: "kind" }, SORTS, GROUPS);
   const filtered = SCALES.filter(entry => matches(query, entry.id, NEUTRALS.has(entry.id) ? "neutral grey gray" : entry.description));
@@ -167,26 +216,17 @@ export function ColorPage() {
 
   return (
     <Workspace
-      sidebar={<SidebarList>{
-        <Nav aria-label="Scales">
-          <SidebarAll tab="color" count={shown.length} current={!view} />
-          {groups.filter(([, list]) => list.length).map(([label, list]) => (
-            <NavGroup key={label} label={label}>
-              {list.map(entry => (
-                <NavItem key={entry.id} href={`#color/${entry.id}`} current={entry.id === view?.id}
-                  icon={<ColorSwatch size="sm" color={`var(--area-${entry.id}-500)`} aria-hidden="true" />}
-                  onClick={event => { event.preventDefault(); select(entry.id); }}>
-                  {title(entry.id)}
-                </NavItem>
-              ))}
-            </NavGroup>
-          ))}
-        </Nav>
-      }</SidebarList>}
+      sidebar={<SidebarList>
+        <SidebarTree tab="color" label="Scales" count={shown.length} current={view?.id}
+          groups={groups.map(([label, list]) => ({ id: label.toLowerCase(), label,
+            items: list.map(entry => ({ id: entry.id, label: title(entry.id), icon: <ColorSwatch size="sm" color={`var(--area-${entry.id}-500)`} aria-hidden="true" /> })) }))} />
+      </SidebarList>}
       canvasTitle={view ? title(view.id) : "All scales"}
       canvasActions={
         <ViewControls>
           <ViewFilter label="Contrast" value={contrast} onChange={setContrast} options={CONTRASTS} />
+          {mode === "list" ? null : <ViewFilter label="Card text" value={ink} onChange={setInk} options={INKS} />}
+          {mode === "list" ? null : <ViewFilter label="Copy format" value={copyFormat} onChange={setCopyFormat} options={COPY_FORMATS} />}
           {view ? null : <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={GROUPS}
             directions={arrangement.sort === "name" ? ["A to Z", "Z to A"] : arrangement.sort === "chroma" ? ["Greyest first", "Most colourful first"] : ["First to last", "Last to first"]} />}
           <ViewSwitch value={mode} onChange={setMode} />
@@ -196,7 +236,8 @@ export function ColorPage() {
         <Sheet grid={mode !== "list"} value={picked ? `${picked.scale.id}-${picked.step.level}` : null} onChoose={choose}>
           {onCanvas.map(entry => {
             const isSelected = (level: number) => entry.id === picked?.scale.id && level === picked?.step.level;
-            const steps = entry.steps.map(step => paints(entry.id, step)).filter(passes);
+            const ramp = entry.steps.map(step => paints(entry.id, step));
+            const steps = ramp.filter(passes);
             const pick = (level: number) => choose(`${entry.id}-${level}`);
             return (
               <CanvasSection key={entry.id} role={mode === "list" ? undefined : "group"} id={`scale-${entry.id}`} title={view ? undefined : title(entry.id)} count={steps.length}>
@@ -227,7 +268,7 @@ export function ColorPage() {
                   // Columns one card wide, the card as wide as its longest line, so every value stays on one line (owner, 2026-10-23).
                   <TileGrid span="unit" className="studio-color-grid">
                     {steps.map(item => (
-                      <ColorCard key={item.level} scale={entry.id} item={item} />
+                      <ColorCard key={item.level} scale={entry.id} item={item} ink={ink === "tinted" ? tintedInk(ramp, item) : undefined} copy={copyFormat} />
                     ))}
                   </TileGrid>
                 )}

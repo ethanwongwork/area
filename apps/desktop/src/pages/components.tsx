@@ -23,7 +23,7 @@
  */
 import { Component, createElement, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import * as AreaReact from "@area/react";
-import { Badge, Button, Code, Count, EmptyState, Kbd, Link, Nav, NavGroup, NavItem, PanelSection, SectionHeading, Select, Table, TableCell, TableLink, Tabs, Tooltip, ZoomControl } from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, Kbd, Link, PanelSection, SectionHeading, Select, Table, TableCell, TableLink, Tabs, Tooltip, ZoomControl } from "@area/react";
 import { ArrowLeftIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, OpenIcon, ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
 import SNIPPETS from "virtual:demo-snippets";
@@ -58,6 +58,7 @@ const CARD_LOOKS = {
   "framed-below": { label: "Name below", look: { container: "framed", caption: "below", fill: "recessed", borderless: false } },
   basic: { label: "Basic", look: { container: "basic", caption: "above", fill: "recessed", borderless: false } },
   "basic-below": { label: "Basic, name below", look: { container: "basic", caption: "below", fill: "recessed", borderless: false } },
+  "basic-hover": { label: "Basic, name on hover", look: { container: "basic", caption: "overlay", fill: "recessed", borderless: false } },
   "basic-white": { label: "Basic, white", look: { container: "basic", caption: "above", fill: "raised", borderless: false } },
   "basic-fill": { label: "Basic, no stroke", look: { container: "basic", caption: "above", fill: "recessed", borderless: true } },
   containerless: { label: "Containerless", look: { container: "containerless", caption: "above", fill: "recessed", borderless: false } },
@@ -67,7 +68,7 @@ type CardLookId = keyof typeof CARD_LOOKS;
 const CARD_LOOK_IDS = Object.keys(CARD_LOOKS) as CardLookId[];
 import { Properties, Stage, useStageKeys } from "../stage.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
-import { ChromeButton, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { ChromeButton, SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { matches } from "../search.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
 
@@ -333,7 +334,9 @@ export function ComponentsPage() {
   // Container (owner, 2026-10-19: "i want the containerless design to be tested on components first"; 2026-10-22:
   // "explore different asset card styles and add them as options to the dropdown … different placements of the text,
   // inside the card, outside the card, different paddings, layering"): how the tiles are drawn, each Asset card's axes.
-  const [container, setContainer] = useViewOption<CardLookId>("components-container", "framed", CARD_LOOK_IDS);
+  // Basic with the name and Copy shown on hover by default (owner, 2026-10-24: "the text and copy button can be hidden on
+  // hover for everything"), the look Typography's and Imagery's cards share (tile.tsx, GALLERY_LOOK).
+  const [container, setContainer] = useViewOption<CardLookId>("components-card", "basic-hover", CARD_LOOK_IDS);
   const look = CARD_LOOKS[container].look;
   const [status, setStatus] = useViewOption<"all" | Status>("components-status", "all", ["all", "complete", "review", "unrefined"]);
   // A family's tab (src/family-tabs.tsx), kept from family to family, so Next reads the next family's Documentation.
@@ -370,16 +373,12 @@ export function ComponentsPage() {
   const ordered = groups.flatMap(([, list]) => list);
   const onCanvas = ordered.filter(entry => status === "all" || statusOf(entry) === status);
   const pinned = pins.pins.map(key => FAMILIES.find(entry => entry.slug === key)).filter((entry): entry is Family => Boolean(entry && shown.includes(entry)));
-  const navItem = (entry: Family) => (
-    <NavItem key={entry.slug} href={`#components/${entry.slug}`} current={entry.slug === family?.slug} data-key={entry.slug} data-name={entry.name}
-      onClick={event => { event.preventDefault(); select(entry.slug); }}
-      trailing={<Count count={TILES.get(entry.slug)!.length} />}
-      // Pin on the row itself, in its count's place while the row is hovered or focused (Nav revealActions; product UI
-      // rules 2 and 8, owner 2026-10-22). The context menu and the Inspector heading pin too.
-      actions={<PinButton row pinned={pins.has(entry.slug)} onToggle={() => pins.toggle(entry.slug)} name={entry.name} />} revealActions>
-      {entry.name}
-    </NavItem>
-  );
+  // A family's row in the Sidebar tree (studio.tsx, SidebarTree): `key:` where it is listed, `pin:` under Pinned, so the
+  // context menu pins either (organize.tsx, PinMenu); the Inspector heading pins too. No pin on the row: Tree view keeps
+  // a row's actions' room when they are hidden, which set the rows' counts in from the branches'.
+  const treeRow = (entry: Family, prefix: "key" | "pin") => ({
+    id: `${prefix}:${entry.slug}`, label: entry.name, trailing: <Count count={TILES.get(entry.slug)!.length} />,
+  });
 
   // Opening and leaving the Stage. Opening keeps the tile; leaving, by any route (Escape, ⌘↑, ⌘[,
   // All), selects the tile the Stage last showed and brings it into view on the grid.
@@ -460,13 +459,11 @@ export function ComponentsPage() {
       sidebar={
         <SidebarList>
           <PinMenu pins={pins} label="Components">
-            <Nav aria-label="Components">
-              <SidebarAll tab="components" count={shown.length} current={!family} />
-              {pinned.length ? <NavGroup label="Pinned">{pinned.map(navItem)}</NavGroup> : null}
-              {groups.filter(([, list]) => list.length).map(([label, list]) => (
-                <NavGroup key={label} label={label}>{list.map(navItem)}</NavGroup>
-              ))}
-            </Nav>
+            <SidebarTree tab="components" label="Components" count={shown.length} current={family ? `key:${family.slug}` : undefined}
+              groups={[
+                { id: "pinned", label: "Pinned", items: pinned.map(entry => treeRow(entry, "pin")) },
+                ...groups.map(([label, list]) => ({ id: label.toLowerCase().replace(/\s+/g, "-"), label, items: list.map(entry => treeRow(entry, "key")) })),
+              ]} />
           </PinMenu>
         </SidebarList>
       }

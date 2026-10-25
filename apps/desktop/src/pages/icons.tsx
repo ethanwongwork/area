@@ -1,19 +1,19 @@
 /**
- * Icons: the categories in the Sidebar, every Area icon grouped by category on the Canvas
- * (filtered by the Titlebar search, which also reads each icon's keywords and its names in other
+ * Icons: the categories in the Sidebar, every Area icon on the Canvas as one wall in the curated order, or grouped by
+ * category or status (filtered by the Titlebar search, which also reads each icon's keywords and its names in other
  * libraries), drawn in the style and at the size the Canvas's header sets. The Inspector shows the chosen
  * icon (its drawing, Copy SVG, Download, Copy name and import, its facts and search words from
  * @area/icons/meta), else the Sidebar's category, else the set. Icons, categories and batches come from
  * @area/icons; the SVG export and CopyButton are ../copy.tsx.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
-import { Badge, Button, Code, Count, EmptyState, HoverCard, ListBox, ListBoxItem, Nav, NavGroup, NavItem, PanelSection, Segmented, Select, Table, TableCell, TableLink } from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, HoverCard, ListBox, ListBoxItem, PanelSection, Segmented, Select, Table, TableCell, TableLink } from "@area/react";
 import { batches as ICON_BATCHES, categories as ICON_CATEGORIES, icons as ICON_META } from "@area/icons/meta";
 import * as APPROVED from "@area/icons";
 import * as IN_REVIEW from "@area/icons/review";
 import { CopyIcon, DownloadIcon, StarFilledIcon, StarIcon } from "@area/icons";
 import { CopyButton, standaloneSvg } from "../copy.tsx";
-import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -56,10 +56,12 @@ const importLine = (name: string, style: "outline" | "filled") => {
   return `import { ${style === "filled" ? meta.filledComponent : meta.component} } from "@area/icons${meta.status === "approved" ? "" : "/review"}";`;
 };
 
-/* Sort and group (src/organize.tsx). The default is the curated order: by category, each in the
-   order its category lists it. */
+/* Sort and group (src/organize.tsx). The default is one wall of every icon, ungrouped, in the curated order (each
+   category's icons together, in the order it lists them), as Cursor's icon gallery (owner, 2026-10-23: "i kinda want
+   icons to be organized in just a wall of icons, as the main gallery view. sorting by category can be another view").
+   Group by Category gives each category its own titled sheet. */
 const SORTS = [{ value: "category", label: "Category order" }, { value: "name", label: "Name" }] as const;
-const GROUPS = [{ value: "category", label: "Category" }, { value: "status", label: "Status" }, { value: "none", label: "None" }] as const;
+const GROUPS = [{ value: "none", label: "None" }, { value: "category", label: "Category" }, { value: "status", label: "Status" }] as const;
 type Sort = (typeof SORTS)[number]["value"];
 type Group = (typeof GROUPS)[number]["value"];
 const ORDER = new Map(ICON_CATEGORIES.flatMap(category => category.icons).map((name, index) => [name, index] as const));
@@ -154,7 +156,8 @@ export function IconsPage() {
   const icon = selected ? BY_NAME.get(selected) : undefined;
   const [mode, setMode] = useViewOption<ViewMode>("icons", "grid", ["grid", "list"]);
   const [status, setStatus] = useViewOption<"all" | "approved" | "review">("icons-status", "all", ["all", "approved", "review"]);
-  const arrangement = useArrangement<Sort, Group>("icons", { sort: "category", descending: false, group: "category" }, SORTS, GROUPS);
+  // A new key (was "icons", grouped by category), so the wall is what every saved arrangement opens on.
+  const arrangement = useArrangement<Sort, Group>("icons-wall", { sort: "category", descending: false, group: "none" }, SORTS, GROUPS);
   const pins = usePins("icons");
   const filtered = useMemo(() => ICON_CATEGORIES.map(category => ({
     ...category,
@@ -201,36 +204,22 @@ export function IconsPage() {
 
   return (
     <Workspace
-      sidebar={<SidebarList><PinMenu pins={pins} label="Icons">{
-        <Nav aria-label="Icon categories">
-          <SidebarAll tab="icons" count={listed.reduce((sum, section) => sum + section.shown.length, 0)} current={!view} />
-          {pinned.length ? (
-            <NavGroup label="Pinned">
-              {pinned.map(name => {
-                const entry = BY_NAME.get(name)!;
-                const Glyph = style === "filled" ? entry.Filled : entry.Icon;
-                return (
-                  <NavItem key={name} href={`#icons`} data-key={name} data-name={titleCase(name)} icon={<Glyph size={16} aria-hidden="true" />}
-                    onClick={event => { event.preventDefault(); choose(name); }}>
-                    {titleCase(name)}
-                  </NavItem>
-                );
-              })}
-            </NavGroup>
-          ) : null}
-          <NavGroup label="Categories">
-            {/* The categories in the Canvas's order (product UI rule 7): A to Z under Name, reversed
-                under descending; the curated order otherwise. */}
-            {(arrangement.sort === "name" ? sortBy(listed, section => section.name, arrangement.descending) : arrangement.descending ? [...listed].reverse() : listed).map(section => (
-              <NavItem key={section.slug} href={`#icons/${section.slug}`} current={section.slug === view?.slug}
-                onClick={event => { event.preventDefault(); select(section.slug); }}
-                trailing={<Count count={section.shown.length} />}>
-                {section.name}
-              </NavItem>
-            ))}
-          </NavGroup>
-        </Nav>
-      }</PinMenu></SidebarList>}
+      sidebar={<SidebarList><PinMenu pins={pins} label="Icons">
+        {/* A tree (studio.tsx, SidebarTree): Pinned icons (`pin:` rows, which the context menu unpins and which choose the
+            icon), then the categories in the Canvas's order (product UI rule 7): A to Z under Name, reversed under
+            descending; the curated order otherwise. */}
+        <SidebarTree tab="icons" label="Icon categories" count={listed.reduce((sum, section) => sum + section.shown.length, 0)} current={view?.slug}
+          onSelect={id => id.startsWith("pin:") ? choose(id.slice(4)) : select(id)}
+          groups={[
+            { id: "pinned", label: "Pinned", items: pinned.map(name => {
+              const entry = BY_NAME.get(name)!;
+              const Glyph = style === "filled" ? entry.Filled : entry.Icon;
+              return { id: `pin:${name}`, label: titleCase(name), icon: <Glyph size={16} aria-hidden="true" /> };
+            }) },
+            { id: "categories", label: "Categories", items: (arrangement.sort === "name" ? sortBy(listed, section => section.name, arrangement.descending) : arrangement.descending ? [...listed].reverse() : listed)
+              .map(section => ({ id: section.slug, label: section.name, trailing: <Count count={section.shown.length} /> })) },
+          ]} />
+      </PinMenu></SidebarList>}
       canvasTitle={view ? view.name : "All icons"}
       canvasRef={canvas}
       canvasActions={

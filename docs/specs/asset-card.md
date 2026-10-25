@@ -70,7 +70,7 @@ actions (Card), a framed preview of a page at its own size (Preview frame).
 | interactive | off · on: the card is a control outside an asset grid | `interactive` | the app's gallery tiles |
 | state | hover (lift), pressed, selected (edge), focus (ring on the card) | — | gallery tile |
 | container | framed (default): the card · containerless: no card at rest (no fill, edge or shadow), the head and the frame in the same places; a component's frame shows the hovered edge on hover and the selected edge when selected; an image or group is its own surface and selection rings it (2, `stroke-selected`) | Owner 2026-10-19 (main): containerless views | Pinterest, Cosmos |
-| caption | above (default): the head over the frame · below: the head under it, the card's inset above the frame | Owner 2026-10-22: "different placements of the text, inside the card, outside the card" | Spline's file grid (name under the asset) |
+| caption | above (default): the head over the frame · below: the head under it, the card's inset above the frame · overlay: the frame fills the card and the name shows on it as a plate at its bottom start (the raised surface, control-sm tall, a pill, `shadow-control`, padded as far across as its height leaves over the cap, so the name keeps the card's name inset both ways), fading in on hover, shown for focus and where nothing hovers (owner 2026-10-24: "have names/titles appear on hover"; Bencho's block gallery: a white 94% pill 14 in) | Owner 2026-10-22: "different placements of the text, inside the card, outside the card" | Spline's file grid (name under the asset) |
 | container (basic) | basic: one surface, the head and the asset on the card's fill, no inset, no frame of its own and no divider; Card's corner | Owner 2026-10-22: "no divider lines across … maybe just a basic container would work" | A gallery's tile (the owner's references) |
 | fill | recessed (default): bg-subtle · raised: bg-surface, white in light; the frame of a basic card declares the same ground | Owner 2026-10-22: "playing with the fill and stroke" | — |
 | borderless | off · on: no edge at rest, its width kept; hover and selection still draw | Owner 2026-10-22: "playing with the fill and stroke" | — |
@@ -109,7 +109,8 @@ Inset equations (the designs at 300, edge 1; Area at the default):
 |---|---|---|---|
 | card · size | 300 × 300 | the host's width; as tall as the head plus the frame (a 224 card is 224 × 252) | owner, round 65: the frame decides, not the card |
 | frame · size | 291 × 262 (the card's rest) | 1:1 for a component, group, colour, type, icon or setting; an image's own ratio (`mediaRatio`, or its natural size once loaded; square until then) | owner, round 65: "for components can you make the top layer frame a 1:1 AR always. for images, it can vary based on the image height" |
-| card · corner | 16 (straight edges from 15–16) | Card's: `radius-container` + inset × concentric (16 at the default); `--area-asset-card-corner` overrides | design = Card |
+| card · corner | 16 (straight edges from 15–16) | Card's: `radius-container` + inset × concentric (16 at the default); `--area-asset-card-corner` overrides |
+| head · name inset | the name's cap centred in the head | `(head − 1cap) / 2` inside the edge by default; `--area-asset-card-name-inset` sets it from the outer edge (the head grows to keep it, never under its controls; controls end that inset less their half-height over the cap). The app sets 16, its colour cards' padding (2026-10-24) | design = Card |
 | card · edge | 1px #f0f0f0 | `border-card` at `border-width` (Card's), `shadow-edge` under Borderless; state edges at least `stroke-width` | design; DESIGN_SYSTEM Strokes |
 | card · fill | #fafafa (neutral/25) | `bg-subtle` (neutral/50, #f7f7f7 at the default settings; Table's header fill) | design; round 58 tried a mix to #fafafa, outside the roles; round 59 reverted (no role lands on neutral/25; a new role would be a foundation change) |
 | head · height | 33 inside the edge | `control-sm` + 2 × 4 | design |
@@ -337,3 +338,28 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
   before. Controls and edges inside the frame step from its tone.
 - **Why:** with the card matching the page, frame and card were one tone and only the hairline held the frame (owner,
   2026-10-23). The frame stays the page tone wherever it can, because components are drawn for the page.
+
+## Review note, 2026-10-24 (gallery cards)
+
+- **What changed:** a new public hook, `--area-asset-card-name-inset`, sets how far the name sits from the card's edge;
+  at its default nothing moves. The app sets it to 16 so its Asset cards match the colour cards (corner 16, name 16 in,
+  the same UI size). An Asset grid item now takes its column in any grid List box, not only inside Asset grid, so the
+  app's type cards (List box sections, each a grid) fill their columns.
+- **Why:** the owner: "i do want to see the name below treatment have the same corner, padding, and text title size to
+  match color", with basic and the name below as the app's card for Components and Typography.
+
+## Review note, 2026-10-24 (overlay caption, Imagery)
+
+- **What changed:** `caption="overlay"`: the asset fills the card and its name appears on it, a small plate at the
+  bottom start, while the card is hovered or focused (always on touch screens). The app's Imagery tab (was Brand) shows
+  every image this way, as a basic card the image fills.
+- **Why:** the owner: "make the images themselves fill the full width of the card, and also have names/titles appear on
+  hover", after Bencho's block gallery.
+
+## Review note, 2026-10-24 (grid gap, group inset, rows)
+
+- **What changed:** `--area-asset-grid-gap` sets the grid's gap (12 by default; the app uses 8). An Asset grid's rows
+  share their top and each card keeps its own height. Where the host sets the name inset, a group's cells line up with
+  the name and sit that far apart and from the edge; at the default they keep the design's 4.
+- **Why:** the owner: "the images inside the groups can align to the text and have gaps that match the margins",
+  images with "their own unique height, and the top of each image row always aligns", and "maybe everything can be 8px".

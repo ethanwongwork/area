@@ -23,8 +23,8 @@
   /*
    * Type on the surface (owner, 2026-10-12): no tiles. One role's samples are ruled rows, a label
    * line (name at the start, metrics at the end) one gap over the sample, rows a margin apart with
-   * the divider between them. The grid view is a sheet of cells with the icon cells' plates: "Aa"
-   * in the style over its name and metrics.
+   * the divider between them. The grid view is cards (Components' Asset card, basic with the name
+   * below): "Aa" in the style, its name and metrics under it.
    */
   .studio-type-rows { display: grid; }
   .studio-type-row { display: grid; gap: var(--area-space-8); padding-block: var(--area-space-16); border-block-start: var(--area-border-width) solid var(--area-border-divider); } /* was the 14 margin */
@@ -37,34 +37,18 @@
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
   }
-  .studio-type-sheet {
+  /* A type card (src/pages/typography.tsx): the "Aa" at the start, its cap the card's inset from the top and the side, as
+     the colour cards' level, in a frame twice as wide as tall (owner, 2026-10-24: "make the card more landscape, remove the
+     size leading tracking details"; was 5:4 with the metrics at the foot). The frame has no edge of its own, so the card's
+     edge is counted once. */
+  .gallery-tile__view:has(> .studio-type-card) { align-content: stretch; }
+  .studio-type-card {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-space-96) + var(--area-space-80)), 1fr)); /* pick: 176, the illustrations' card */
-    gap: var(--area-space-2);
-    margin-inline: calc(var(--area-space-12) * -1);
+    align-content: start;
+    aspect-ratio: 2;
+    max-inline-size: 100%;
+    box-sizing: border-box;
+    padding: calc(var(--_card-inset) - var(--area-stroke-width)) calc(var(--_card-inset) - var(--area-stroke-width)) 0;
+    min-inline-size: 0;
   }
-  .studio-type-cell {
-    display: grid;
-    place-items: normal; /* a List box option centres its content; a type cell stacks the sample over its label */
-    grid-template-rows: minmax(calc(var(--area-space-96) + var(--area-space-16)), 1fr) auto; /* pick: 112, room for Display 72 */
-    gap: var(--area-space-8);
-    margin: 0;
-    padding: var(--area-space-12);
-    border: 0;
-    border-radius: var(--area-radius-row);
-    background: transparent;
-    color: var(--area-fg-default);
-    font: inherit;
-    text-align: start;
-    cursor: default;
-    transition: var(--area-transition);
-  }
-  .studio-type-cell__sample { align-self: end; overflow: hidden; white-space: nowrap; }
-  /* The name over its metrics, both one line, so every cell's label is two lines and the samples
-     above them share one baseline row. */
-  .studio-type-cell__label { display: grid; min-inline-size: 0; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
-  .studio-type-cell__label > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* The row plates' pair, as the icon cells (product UI rule 3). */
-  @media (hover: hover) { .studio-type-cell:hover { background: var(--area-bg-component-hover); transition-duration: 0s; } }
-  .studio-type-cell:is(:active, [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
-  .studio-type-cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+  .studio-type-card__sample { overflow: hidden; white-space: nowrap; text-box: trim-both cap alphabetic; }

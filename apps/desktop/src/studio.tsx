@@ -13,7 +13,7 @@
  * page (src/pages/) that fills the three panels through <Workspace>.
  */
 import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
-import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, SearchField, Titlebar, Tooltip } from "@area/react";
+import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, SearchField, Titlebar, Tooltip, TreeView, type TreeViewNode } from "@area/react";
 import { MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./gallery/controls.ts";
 import { ComponentsPage } from "./pages/components.tsx";
@@ -23,7 +23,7 @@ import { ColorPage } from "./pages/color.tsx";
 import { ThemePage } from "./pages/theme.tsx";
 import { ExamplesPage } from "./pages/examples.tsx";
 import { MaterialsPage } from "./pages/materials.tsx";
-import { BrandPage } from "./pages/brand.tsx";
+import { ImageryPage } from "./pages/imagery.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
@@ -42,8 +42,9 @@ export const TABS = [
   /* Whole screens built from Area, to test the defaults and every setting (owner, 2026-10-17; "Examples" until the owner
      renamed it the same day). */
   { id: "testing", label: "Testing" },
-  /* The owner's brand inspiration in folders, browsed with Area's file explorer components (owner, 2026-10-18). */
-  { id: "brand", label: "Brand" },
+  /* Images in folders, browsed with Area's file explorer components (owner, 2026-10-18, as Brand; renamed 2026-10-24: "dont
+     associate them just with brand. rename brand to imagery"; #brand links still open it). */
+  { id: "imagery", label: "Imagery" },
   /* A temporary lab for tuning the Material setting's bundles (owner, 2026-10-18); it goes when they are settled. */
   { id: "materials", label: "Materials" },
 ] as const;
@@ -127,7 +128,7 @@ const isMac = () => typeof document !== "undefined" && document.documentElement.
 function readLocation(): { tab: TabId; item?: string } {
   const [hash, ...item] = decodeURIComponent(location.hash.slice(1)).split("/");
   // Testing was the Examples tab until 2026-10-17, Theme the Language tab 2026-10-19 to 20: an old link or saved tab opens it.
-  const renamed = (id?: string) => id === "examples" ? "testing" : id === "language" ? "theme" : id;
+  const renamed = (id?: string) => id === "examples" ? "testing" : id === "language" ? "theme" : id === "brand" ? "imagery" : id;
   const known = TABS.find(entry => entry.id === renamed(hash));
   const stored = TABS.find(entry => entry.id === renamed(readStored<string>("tab", "components")));
   return known ? { tab: known.id, item: item.join("/") || undefined } : { tab: stored?.id ?? "components" };
@@ -341,7 +342,7 @@ export function Studio() {
           tab === "icons" ? <IconsPage /> :
           tab === "testing" ? <ExamplesPage /> :
           tab === "materials" ? <MaterialsPage /> :
-          tab === "brand" ? <BrandPage /> : <ColorPage />}
+          tab === "imagery" ? <ImageryPage /> : <ColorPage />}
       </div>
       </ChatProvider>
     </AppScaleContext.Provider>
@@ -560,6 +561,37 @@ function ChatShortcut() {
  */
 export function SidebarList({ children }: { children: ReactNode }) {
   return <div className="studio-sidebar__list">{children}</div>;
+}
+
+/**
+ * The Sidebar as a tree (owner, 2026-10-24: "can you make the left nav more like a tree?"): All, then each group a branch
+ * that opens and closes, its rows under it, on Area's Tree view (one Tab stop, the arrows, typeahead). A row narrows the
+ * Canvas as a Nav row did; a branch only opens and closes. Every branch starts open, and stays as it is set while the tab
+ * is open. A pinnable row's id is `key:<key>` and a row under Pinned `pin:<key>` (organize.tsx, PinMenu); without
+ * `onSelect` a row selects its key, the prefix dropped.
+ */
+export interface SidebarTreeGroup { id: string; label: string; items: TreeViewNode[] }
+export function SidebarTree({ tab, label, count, groups, current, onSelect }: {
+  tab: TabId; label: string; count: number; groups: SidebarTreeGroup[]; current?: string; onSelect?: (id: string) => void;
+}) {
+  const { select } = useStudio();
+  const branches = groups.filter(group => group.items.length).map(group => `group:${group.id}`);
+  const [closed, setClosed] = useState<string[]>([]);
+  const items: TreeViewNode[] = [
+    { id: "all", label: "All", trailing: <Count count={count} max={9999} /> },
+    ...groups.filter(group => group.items.length).map(group => ({ id: `group:${group.id}`, label: group.label, trailing: <Count count={group.items.length} max={9999} />, children: group.items })),
+  ];
+  const now = current ?? "all";
+  return (
+    <TreeView aria-label={label} className="studio-sidebar__tree" items={items} currentId={now} selectedIds={[now]}
+      expandedIds={branches.filter(id => !closed.includes(id))}
+      onExpandedChange={ids => setClosed(branches.filter(id => !ids.includes(id)))}
+      onActivate={id => {
+        if (id.startsWith("group:")) { setClosed(open => open.includes(id) ? open.filter(entry => entry !== id) : [...open, id]); return; }
+        if (id === "all") select(""); else if (onSelect) onSelect(id); else select(id.replace(/^(key|pin):/, ""));
+      }}
+      data-tab={tab} />
+  );
 }
 
 /**

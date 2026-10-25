@@ -42,6 +42,11 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
    * focusable at full ink (`aria-disabled`, not native `disabled`), so focus isn't lost on submit.
    */
   loading?: boolean;
+  /**
+   * On a painted colour (a colour card, a swatch): the colour's own ink and no fill, its hover and press plates that ink
+   * at 12% and 20%, as Badge's `onColor`. Overrides the variant's and tone's paint.
+   */
+  onColor?: boolean;
   /** Rendered before the label. */
   icon?: ReactNode;
   /** Rendered after the label. */
@@ -70,6 +75,7 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
     loading,
     icon,
     trailingIcon,
+    onColor,
     className,
     children,
     disabled,
@@ -102,7 +108,7 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
       ref={ref}
       type={type}
       className={buttonVariants(
-        { variant, tone, size, fullWidth, iconOnly, pill: pill === true, rounded: pill === false, align },
+        { variant, tone, size, fullWidth, iconOnly, pill: pill === true, rounded: pill === false, align, onColor },
         className,
       )}
       disabled={disabled}

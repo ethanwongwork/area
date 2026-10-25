@@ -4,17 +4,23 @@
    * A step's card (src/pages/color.tsx, ColorCard; owner, 2026-10-23, a sketch): the painted tile, its level at the head,
    * two blank lines, then HEX, RGB and OKLCH, each named and on one line. One face: the mono the Inspector and the list
    * set values in (Code). The level is the head's UI size and the values the size under it (owner, 2026-10-23: "the color
-   * codes can be smaller than the color name at the top"), so the name leads. All its text is the one ink that reads on
-   * the colour (owner, 2026-10-14: no thinned field names); regular weight (owner, 2026-10-12: no bold on the cards). The
+   * codes can be smaller than the color name at the top"), so the name leads. All its text is one ink (owner, 2026-10-14:
+   * no thinned field names): by default the nearest step of the card's own scale that keeps 7:1, never under 4.5:1
+   * (color.tsx, tintedInk; owner, 2026-10-24), or the black or white it carries (the Canvas header's Card text); regular weight (owner, 2026-10-12: no bold on the cards). The
    * edge is Color swatch's ring (canvas.css, painted tiles).
    */
-  /* Every column is one card wide and the cards hug their text (owner, 2026-10-23: "the width can hug the cards more
-     closely"): the longest line, "OKLCH 1.000 0.000 359.9" (23 characters of the mono at the values' size), and the
-     tile's insets, as many across as fit, from the start. 190 at type 14 (12 values), 176 at 12, 217 at 16. The grid is
-     set in the values' face and size so `ch` measures their characters. */
+  /* As many columns as cards of the least width fit, and the cards share the rest, so the rows fill the Canvas (owner,
+     2026-10-24: "make the cards fill the canvas"; they hugged their text the day before). The least width is the longest
+     line, "OKLCH 1.000 0.000 359.9" (23 characters of the mono at the values' size), and the card's insets: 198 at type
+     14 (12 values), 184 at 12, 225 at 16, so no value wraps. The cards sit 16 in from their edges, a step past the
+     Canvas tiles' 12 ("increase the padding on the current color cards"), and 4 apart, a swatch sheet's gap rather than
+     the tiles' 12 ("make the gaps 4px"). The grid is set in the values' face and size so `ch` measures their
+     characters. */
   .studio-color-grid {
+    --_tile-inset: var(--_card-inset);
+    --_gap: var(--area-space-4); /* pick */
     --_card-width: calc(23ch + var(--_tile-inset) * 2);
-    grid-template-columns: repeat(auto-fill, min(100%, var(--_card-width)));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--_card-width)), 1fr));
     font-family: var(--area-font-mono);
     font-size: var(--area-text-xs-size);
   }
@@ -35,6 +41,21 @@
     white-space: nowrap;
   }
   .studio-swatch__values > * { display: block; }
+  /* Copy (color.tsx, ColorCard): out of the flow, so the level's line keeps its height, in the corner with the button's box
+     as far in as its centre sits from the level's cap: its glyph centres on the level's line and keeps the card's inset
+     from the side as it does from the top. Shown under the pointer, with focus inside or selected; always without hover. */
+  .studio-color-grid .gallery-tile--plain { position: relative; }
+  .studio-swatch__copy {
+    position: absolute;
+    /* From the padding box, inside the card's edge, so the edge is counted once. */
+    inset-block-start: calc(var(--_tile-inset) - var(--area-stroke-width) - (var(--area-control-sm) - 1cap) / 2);
+    inset-inline-end: calc(var(--_tile-inset) - var(--area-stroke-width) - (var(--area-control-sm) - 1cap) / 2);
+    opacity: 0;
+    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) { .gallery-plain:hover .studio-swatch__copy { opacity: 1; transition-duration: 0s; } }
+  .gallery-plain:is(:focus-within, [aria-selected="true"]) .studio-swatch__copy { opacity: 1; transition-duration: 0s; }
+  @media (hover: none) { .studio-swatch__copy { opacity: 1; } }
 
   /* A list row's step: a colour chip beside its level. */
   .studio-step { display: inline-flex; align-items: center; gap: var(--area-space-8); font-variant-numeric: tabular-nums; }

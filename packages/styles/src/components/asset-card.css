@@ -28,7 +28,10 @@
  *              the asset in the same places, so nothing moves: a component's frame shows its edge on hover and
  *              selection; an image or a group is its own surface, and selection and focus ring it
  *   caption    above (the default): the head over the frame; below, the head under it, the card's inset above the
- *              frame instead (owner, 2026-10-22: "different placements of the text … different paddings, layering")
+ *              frame instead (owner, 2026-10-22: "different placements of the text … different paddings, layering");
+ *              overlay, the frame alone fills the card and the name shows on it, a plate at its bottom start, while
+ *              the card is under the pointer or holds focus, always where nothing hovers (owner, 2026-10-24, the app's
+ *              images: "have names/titles appear on hover", after Bencho's block gallery)
  *   container  basic: one surface, the head and the asset on the card's own fill, no frame of its own and no divider
  *              (owner, 2026-10-22: "no divider lines across … maybe just a basic container would work")
  *   fill       recessed (the default), the card in the tile tone (Card tone; Auto bg-subtle); raised, bg-surface
@@ -38,7 +41,9 @@
  *              it can vary based on the image height"); landscape, the same at 5:4 (owner, 2026-10-22: the gallery
               four across; a gallery's media, measured 195 x 158); hug, a component's frame takes its own height instead
  *   waterfall  (AssetGrid) columns of the least width, each card hugging, dropped into the shortest column
- * Public hooks: `--area-asset-card-size` (the grid's column), `--area-asset-card-corner` (the card's corner).
+ * Public hooks: `--area-asset-card-size` (the grid's column), `--area-asset-grid-gap` (the grid's gap), `--area-asset-card-corner` (the card's corner),
+ * `--area-asset-card-name-inset` (how far the name's cap sits from the card's edge, across and above and below; the head
+ * grows to keep it, never under its controls).
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-asset-card {
@@ -54,6 +59,16 @@
     /* The head's own padding, the designs' 4, apart from the frame's inset, so a basic card (no inset) keeps its head. */
     --_head-pad: var(--area-space-4);
     --_head: calc(var(--area-control-sm) + 2 * var(--_head-pad)); /* spec: the designs' 33 inside the edge */
+    /* The name's cap from the card's outer edge, the edge counted once: centred in the head by default ((H − 1cap) / 2
+       inside the edge, inset.css), or the hook's length, the head then as tall as the name and that inset on both sides
+       (owner, 2026-10-24: the app's cards match its colour cards' 16). `--_name-pad` is the same inside the edge. `1cap`
+       resolves in the head, where it is used. */
+    --_name-inset: var(--area-asset-card-name-inset, calc((var(--_head) - 1cap) / 2 + var(--_edge)));
+    --_name-pad: calc(var(--_name-inset) - var(--_edge));
+    /* A group's inset and the gap between its cells: the design's 4, or, where the host sets the name's inset, that inset,
+       so the cells line up with the name and sit as far apart as from the edge (owner, 2026-10-24: "the images inside the
+       groups can align to the text and have gaps that match the margins"). */
+    --_group-inset: calc(var(--area-asset-card-name-inset, calc(var(--area-space-4) + var(--_edge))) - var(--_edge));
     --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent;
     display: flex;
     flex-direction: column;
@@ -91,8 +106,10 @@
     align-items: center;
     gap: var(--area-space-8);
     min-inline-size: 0;
-    block-size: var(--_head);
-    padding-inline: max(0px, calc((var(--_head) - 1cap) / 2 - var(--_inset))) 0;
+    block-size: max(var(--_head), calc(var(--_name-pad) * 2 + 1cap));
+    /* The controls end as far in as their box sits from the head's top and bottom, so a button's edge keeps the name's
+       inset less its own half-height over the cap: 0 past the inset on a framed card, 4 on a basic one, at the default. */
+    padding-inline: max(0px, calc(var(--_name-pad) - var(--_inset))) max(0px, calc(var(--_name-pad) - var(--_inset) - (var(--area-control-sm) - 1cap) / 2));
   }
   .area-asset-card__name {
     flex: 1 1 auto;
@@ -105,7 +122,7 @@
     text-box: trim-both cap alphabetic;
   }
   /* With no controls the name ends as far in as it starts. */
-  .area-asset-card__head:not(:has(> .area-asset-card__actions)) { padding-inline-end: max(0px, calc((var(--_head) - 1cap) / 2 - var(--_inset))); }
+  .area-asset-card__head:not(:has(> .area-asset-card__actions)) { padding-inline-end: max(0px, calc(var(--_name-pad) - var(--_inset))); }
   .area-asset-card__actions { display: flex; flex: none; align-items: center; gap: var(--area-space-2); }
   /* A button set into the card's corner takes that corner less what lies between, as the frame does (round 52's rule;
      owner, round 57: "make sure the button nesting is correct"): both sit the edge and the inset in, so both take the
@@ -171,6 +188,7 @@
   /* The frame draws no edge here, and gives up its edge's width, so the cells sit exactly the inset (4) from the card's
      edge, the same as the gap between them (owner, round 59: "the gaps between the images in the group should be the
      same as the margin around it, 4px"; a transparent 1px edge had made the margin 5). */
+  .area-asset-card--group { --_inset: var(--_group-inset); }
   .area-asset-card--group .area-asset-card__frame { border-width: 0; background-color: transparent; }
   .area-asset-card__mosaic {
     display: grid;
@@ -233,11 +251,86 @@
   .area-asset-card--above {}
   .area-asset-card--below { padding: var(--_inset) var(--_inset) 0; }
   .area-asset-card--below > .area-asset-card__head { order: 1; }
+  /* Controls sit in the corner opposite the name (owner, 2026-10-24: "i dont like the button being right next to the
+     title, can you make the button on the opposite corner"): with the name below or over the asset, the controls leave
+     the head for the card's top end, their box as far in as its centre sits from the name's cap, so a button's glyph keeps
+     the name's inset from the top and the side (inset.css). They show while the card is under the pointer or holds focus,
+     always where nothing hovers; they fade out on `fast` and appear at once (MOTION.md). */
+  .area-asset-card:is(.area-asset-card--below, .area-asset-card--overlay) { position: relative; }
+  .area-asset-card:is(.area-asset-card--below, .area-asset-card--overlay) > .area-asset-card__head > .area-asset-card__actions {
+    position: absolute;
+    --_actions-offset: max(0px, calc(var(--_name-pad) - (var(--area-control-sm) - 1cap) / 2));
+    /* Concentric with the card from where they sit: its corner less the edge and their offset (16 − 1 − 6 = 9 in the
+       app), as the frame's is (round 52's rule); a button's corner and its plate's take it. */
+    --_actions-corner: max(var(--area-radius-min), round(nearest, calc(var(--_corner) - (var(--_edge) + var(--_actions-offset)) * var(--area-radius-concentric)), 1px));
+    inset-block-start: var(--_actions-offset);
+    inset-inline-end: var(--_actions-offset);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+  }
+  /* Overlay: the asset fills the card; the name sits on it at the bottom start, the name's inset from the edge, and the
+     head shows, with the controls, under the pointer or with focus (owner, 2026-10-24, the app's cards: "have
+     names/titles appear on hover"; "the text and copy button can be hidden on hover for everything"). On an image or a
+     group, which can be any colour, the name and the controls each sit on a plate of the raised surface (Bencho's block
+     gallery, measured 2026-10-24: a white 94% pill 14 in): the name's a pill padded as far across as its height leaves
+     over the cap, the controls' at a small control's corner. The name stays in the accessibility tree throughout. */
+  .area-asset-card--overlay { padding: var(--_inset); }
+  .area-asset-card--overlay > .area-asset-card__head {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    block-size: auto;
+    padding: 0;
+    pointer-events: none; /* the card under it takes the press; the controls take their own */
+    opacity: 0;
+    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-asset-card--overlay > .area-asset-card__head > .area-asset-card__name {
+    position: absolute;
+    inset-inline-start: var(--_name-pad);
+    inset-block-end: var(--_name-pad);
+    max-inline-size: calc(100% - var(--_name-pad) * 2);
+  }
+  .area-asset-card--overlay > .area-asset-card__head > .area-asset-card__actions { pointer-events: auto; opacity: 1; }
+  .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__name,
+  .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__name {
+    --_plate-pad: calc((var(--area-control-sm) - 1cap) / 2);
+    display: flex;
+    align-items: center;
+    inset-inline-start: max(0px, calc(var(--_name-pad) - var(--_plate-pad)));
+    inset-block-end: max(0px, calc(var(--_name-pad) - var(--_plate-pad)));
+    max-inline-size: calc(100% - max(0px, calc(var(--_name-pad) - var(--_plate-pad))) * 2);
+    box-sizing: border-box;
+    block-size: var(--area-control-sm);
+    padding-inline: var(--_plate-pad);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-control); /* the raised plate's edge, as Segmented's thumb */
+    text-box: normal;
+  }
+  .area-asset-card:is(.area-asset-card--below, .area-asset-card--overlay) > .area-asset-card__head > .area-asset-card__actions .area-button { --_shape: var(--_actions-corner); }
+  .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
+  .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions {
+    border-radius: var(--_actions-corner);
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-control);
+  }
+  @media (hover: hover) {
+    :is(.area-asset-card--overlay:hover, .area-asset-grid__item:hover > .area-asset-card--overlay) > .area-asset-card__head,
+    :is(.area-asset-card--below:hover, .area-asset-grid__item:hover > .area-asset-card--below) > .area-asset-card__head > .area-asset-card__actions { opacity: 1; transition-duration: 0s; }
+  }
+  :is(.area-asset-card--overlay:focus-within, .area-asset-card--overlay:focus-visible, .area-asset-grid__item:focus-visible > .area-asset-card--overlay) > .area-asset-card__head,
+  :is(.area-asset-card--below:focus-within, .area-asset-card--below:focus-visible, .area-asset-grid__item:focus-visible > .area-asset-card--below) > .area-asset-card__head > .area-asset-card__actions { opacity: 1; transition-duration: 0s; }
+  @media (hover: none) {
+    .area-asset-card--overlay > .area-asset-card__head,
+    .area-asset-card--below > .area-asset-card__head > .area-asset-card__actions { opacity: 1; }
+  }
   /* Basic: one surface (owner, 2026-10-22). No inset and no frame of its own: the asset sits on the card's fill, the
      head over or under it with nothing between; its corner is Card's, with no frame inside to be concentric with. The
-     head keeps its own 4 at the end, where the card no longer pads it. */
+     head's controls end 4 in, where the card no longer pads them (the head rule, with no inset). */
   .area-asset-card--basic { --_inset: 0px; padding: 0; }
-  .area-asset-card--basic > .area-asset-card__head { padding-inline-end: var(--_head-pad); }
   .area-asset-card--basic > .area-asset-card__frame { border-width: 0; border-radius: 0; background-color: transparent; }
   /* Fill: raised, the surface (white in light) for the whole card; recessed, the default, the tile tone (Card tone). */
   .area-asset-card--recessed {}
@@ -296,18 +389,26 @@
   .area-asset-grid.area-list-box--grid:has(> .area-list-box__item),
   .area-asset-grid.area-list-box--grid .area-list-box__options {
     grid-template-columns: repeat(auto-fill, minmax(var(--area-asset-card-size), 1fr));
-    gap: var(--area-space-12); /* spec: cards 12 apart both ways (PRODUCT_UI rule 11); the name is inside each card */
+    /* spec: cards 12 apart both ways (PRODUCT_UI rule 11); `--area-asset-grid-gap` sets another (the app's 8). */
+    gap: var(--area-asset-grid-gap, var(--area-space-12));
+    /* Each card keeps its own height and a row's cards share their top (owner, 2026-10-24: images "just their own unique
+       height, and the top of each image row always aligns"); square cards are one height anyway. */
+    align-items: start;
   }
   /* The option is the card: no row plate, no inset ring; the card shows the states. The plate stays clear when selected
      or under the pointer, too: List box's grid paints a square selected plate behind the rounded card (round 59: "a
-     sharp corner shape appears in selected"). */
-  .area-asset-grid.area-list-box--grid .area-list-box__item.area-asset-grid__item:is(*, [aria-selected], :active) { background: transparent; }
-  @media (hover: hover) { .area-asset-grid.area-list-box--grid .area-list-box__item.area-asset-grid__item:hover { background: transparent; } }
-  .area-asset-grid.area-list-box--grid .area-list-box__item.area-asset-grid__item {
+     sharp corner shape appears in selected"). In any grid List box, not only Asset grid's own, so cards laid out by another
+     grid (sections of a List box, each its own grid of cards) take their column too (2026-10-24, the app's type cards). */
+  /* Five classes, past List box's own plate rules (four: `:hover:not([data-disabled])`, `[aria-selected]:not(…)`), which
+     painted a square plate round the card in the app's type grid (2026-10-24: "the shape is sharp and goes outside of the
+     container"). The option takes the card's corner, so its focus ring follows the card. */
+  .area-list-box.area-list-box--grid .area-list-box__item.area-asset-grid__item:is(*, [aria-selected], :active) { background: transparent; }
+  @media (hover: hover) { .area-list-box.area-list-box--grid .area-list-box__item.area-asset-grid__item:hover { background: transparent; } }
+  .area-list-box.area-list-box--grid .area-list-box__item.area-asset-grid__item {
     display: block;
     place-items: stretch; /* the card takes the column (ListBox's grid centres an option's content) */
     min-block-size: 0;
-    border-radius: var(--_corner, 0);
+    border-radius: var(--area-asset-card-corner, var(--area-radius-container));
     background: transparent;
     cursor: default;
     outline: none;

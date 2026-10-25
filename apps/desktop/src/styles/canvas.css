@@ -101,6 +101,8 @@
    */
   .studio-canvas__body {
     --area-asset-card-corner: var(--_tile-radius);
+    --area-asset-card-name-inset: var(--_card-inset);
+    --area-asset-grid-gap: var(--_canvas-gap);
     /* The tile's edge is read here, under the Canvas's own settings (Layers, theme), not the chrome's. */
     --_tile-edge: var(--area-border-card); /* Card's edge */
   }

@@ -1,7 +1,8 @@
 /**
- * Brand: the owner's brand inspiration (owner, 2026-10-18: "an organized place in the electron browser called brand,
- * where i can explore things in organized folders"), from the Pinterest board oval / brand, downloaded to the app's own
- * data folder (~/Library/Application Support/Area/Brand), never into the repository.
+ * Imagery: images in organized folders (owner, 2026-10-18: "an organized place in the electron browser called brand,
+ * where i can explore things in organized folders"; renamed 2026-10-24: "dont associate them just with brand"), from
+ * the Pinterest board oval / brand, downloaded to the app's own data folder (~/Library/Application Support/Area/Brand,
+ * the library's own name, kept), never into the repository.
  *
  * Assets and groups (owner, 2026-10-18: "the gallery for brand to just be a bunch of containers ... they are
  * essentially all assets, then you can group assets together in a group ... a 2x2 grid with each asset scaled down",
@@ -12,15 +13,20 @@
  * Sidebar; on the Canvas an AssetGrid of groups, a group's assets, or one asset at full size; the chosen one in the
  * Inspector. Folder, File page and File tile stay in the library for file browsers.
  *
+ * Images (owner, 2026-10-24: "make the images themselves fill the full width of the card, and also have names/titles appear
+ * on hover"): each image is an Asset card, basic with the overlay caption, so the image is the whole card and its name
+ * shows on it under the pointer or with focus; a group is the layered (framed) card, its mosaic inside the card's inset
+ * and its name below. Both hold the gallery cards' look
+ * (tile.tsx, CARD_SCOPE).
+ *
  * Electron serves the library as area-brand://library/ (electron/main.cjs); the browser preview as /__brand/
- * (scripts/dev.mjs). Location: #brand/<folder>, #brand/<folder>/<image> for the viewer.
+ * (scripts/dev.mjs). Location: #imagery/<folder>, #imagery/<folder>/<image> for the viewer.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { AssetGrid, ListBoxItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
+import { AssetGrid, AssetGridItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, GridIcon, OpenIcon } from "@area/icons";
-import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
-import { CanvasSection } from "../tile.tsx";
-import { appScale } from "../app-scale.ts";
+import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { CanvasSection, CARD_SCOPE } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewSwitch } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
@@ -41,8 +47,10 @@ const url = (path: string) => BASE + path;
 const nameOf = (item: BrandItem) => item.title || (item.alt ? item.alt[0]!.toUpperCase() + item.alt.slice(1) : "") || item.source || "Untitled";
 const kindLabel = (item: BrandItem) => item.kind === "jpeg" ? "JPG" : item.kind.toUpperCase();
 
-/* Card sizes: a column's least width (the Asset grid's --area-asset-card-size). Medium is the default. */
-const SIZES = { small: 160, medium: 224, large: 320 } as const; /* pick */
+/* Card sizes: a column's least width (the Asset grid's --area-asset-card-size). Medium is the default, four across a 1440
+   window with both panels (owner, 2026-10-24: "smaller tho to fit more columns", then "the min width for the images can
+   be slightly larger"; was 160 / 224 / 320, then 120 / 160 / 240). */
+const SIZES = { small: 144, medium: 192, large: 288 } as const; /* pick */
 type Size = keyof typeof SIZES;
 type Mode = "grid" | "waterfall" | "list";
 
@@ -59,7 +67,7 @@ function useLibrary() {
   return state;
 }
 
-export function BrandPage() {
+export function ImageryPage() {
   const { library, error } = useLibrary();
   const { item, select, query } = useStudio();
   const [folderId, openedId] = (item ?? "").split("/");
@@ -113,12 +121,12 @@ export function BrandPage() {
 
   const total = library?.items.length ?? 0;
   const trail = (
-    <Breadcrumb aria-label="Location" className="studio-brand__trail">
+    <Breadcrumb aria-label="Location" className="studio-imagery__trail">
       <BreadcrumbList>
-        <BreadcrumbItem>{folder || opened ? <BreadcrumbLink href="#brand" onClick={event => { event.preventDefault(); select(""); }}>Brand</BreadcrumbLink> : <BreadcrumbPage>Brand</BreadcrumbPage>}</BreadcrumbItem>
+        <BreadcrumbItem>{folder || opened ? <BreadcrumbLink href="#imagery" onClick={event => { event.preventDefault(); select(""); }}>Imagery</BreadcrumbLink> : <BreadcrumbPage>Imagery</BreadcrumbPage>}</BreadcrumbItem>
         {folder ? <>
           <BreadcrumbSeparator />
-          <BreadcrumbItem>{opened ? <BreadcrumbLink href={`#brand/${folder.id}`} onClick={event => { event.preventDefault(); closeViewer(); }}>{folder.name}</BreadcrumbLink> : <BreadcrumbPage>{folder.name}</BreadcrumbPage>}</BreadcrumbItem>
+          <BreadcrumbItem>{opened ? <BreadcrumbLink href={`#imagery/${folder.id}`} onClick={event => { event.preventDefault(); closeViewer(); }}>{folder.name}</BreadcrumbLink> : <BreadcrumbPage>{folder.name}</BreadcrumbPage>}</BreadcrumbItem>
         </> : null}
         {opened ? <><BreadcrumbSeparator /><BreadcrumbItem><BreadcrumbPage>{nameOf(opened)}</BreadcrumbPage></BreadcrumbItem></> : null}
       </BreadcrumbList>
@@ -131,8 +139,8 @@ export function BrandPage() {
       <tbody>
         {entries.map(entry => (
           <tr key={entry.id} data-selected={entry.id === chosen ? "" : undefined} onClick={() => setChosen(entry.id)} onDoubleClick={() => openImage(entry)}>
-            <TableCell fit><img className="studio-brand__row-thumb" src={url(entry.thumb)} alt="" loading="lazy" decoding="async" /></TableCell>
-            <td><a href={`#brand/${entry.folder}/${entry.id}`} onClick={event => { event.preventDefault(); openImage(entry); }}>{nameOf(entry)}</a></td>
+            <TableCell fit><img className="studio-imagery__row-thumb" src={url(entry.thumb)} alt="" loading="lazy" decoding="async" /></TableCell>
+            <td><a href={`#imagery/${entry.folder}/${entry.id}`} onClick={event => { event.preventDefault(); openImage(entry); }}>{nameOf(entry)}</a></td>
             <td><span className="studio-muted">{entry.source || "—"}</span></td>
             <td><span className="studio-muted">{entry.width} × {entry.height}</span></td>
           </tr>
@@ -141,20 +149,22 @@ export function BrandPage() {
     </Table>
   ) : (
     <AssetGrid aria-label={label} value={chosen} onValueChange={setChosen} onOpen={id => { const entry = entries.find(e => e.id === id); if (entry) openImage(entry); }}
-      layout={mode === "waterfall" ? "waterfall" : "grid"}
+      layout={mode === "waterfall" ? "waterfall" : "grid"} {...CARD_SCOPE}
       style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
       {entries.map(entry => (
-        <BrandItem key={entry.id} value={entry.id} name={nameOf(entry)} images={[url(entry.thumb)]}
-          ratio={mode === "waterfall" && entry.width && entry.height ? entry.width / entry.height : undefined} />
+        <AssetGridItem key={entry.id} value={entry.id} name={nameOf(entry)} media={url(entry.thumb)} container="basic" caption="overlay"
+          // Its own shape, in the grid too (owner, 2026-10-24: "just their own unique height, and the top of each image row
+          // always aligns": the Asset grid tops its rows); packed into columns in the waterfall.
+          mediaRatio={entry.width && entry.height ? entry.width / entry.height : undefined} />
       ))}
     </AssetGrid>
   );
 
   let body;
-  if (error) body = <EmptyState title="No brand library" description="The library is read from ~/Library/Application Support/Area/Brand/library.json, which is missing or unreadable." />;
-  else if (!library) body = <div className="studio-brand__loading"><Spinner size="md" label="Loading the brand library" /></div>;
+  if (error) body = <EmptyState title="No image library" description="The library is read from ~/Library/Application Support/Area/Brand/library.json, which is missing or unreadable." />;
+  else if (!library) body = <div className="studio-imagery__loading"><Spinner size="md" label="Loading the image library" /></div>;
   else if (opened) body = (
-    <figure className="studio-brand__viewer">
+    <figure className="studio-imagery__viewer">
       <img key={opened.id} src={url(opened.file)} alt={opened.alt || nameOf(opened)} style={{ aspectRatio: `${opened.width} / ${opened.height}`, background: opened.color }} />
       <figcaption className="studio-muted">{siblings.findIndex(entry => entry.id === opened.id) + 1} of {siblings.length}</figcaption>
     </figure>
@@ -164,15 +174,15 @@ export function BrandPage() {
   ) : <EmptyState title="Nothing found" description={`Nothing matches “${query}”.`} />;
   else body = (
     <CanvasSection id="brand-groups" title="Groups" count={folders.length}>
-      <AssetGrid aria-label="Groups" value={chosen} onValueChange={setChosen} onOpen={openFolder}
+      <AssetGrid aria-label="Groups" value={chosen} onValueChange={setChosen} onOpen={openFolder} {...CARD_SCOPE}
         style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
-        {folders.map(entry => {
-          const inside = byFolder.get(entry.id) ?? [];
-          return (
-            <BrandItem key={entry.id} value={entry.id} name={entry.name} value2={`${inside.length}`}
-              images={inside.slice(0, 4).map(asset => url(asset.thumb))} group />
-          );
-        })}
+        {folders.map(entry => (
+          // A group keeps the layered card (owner, 2026-10-24: "use the old asset card style with the layered containers for
+          // groups"): framed, landscape ("the AR can be landscape"), its four cells lined up with the name and as far apart
+          // as from the edge (Asset card's group inset), the name below, in the gallery cards' look.
+          <AssetGridItem key={entry.id} value={entry.id} name={entry.name} container="framed" caption="below" aspect="landscape"
+            group={(byFolder.get(entry.id) ?? []).slice(0, 4).map(asset => url(asset.thumb))} />
+        ))}
       </AssetGrid>
     </CanvasSection>
   );
@@ -181,24 +191,14 @@ export function BrandPage() {
   return (
     <Workspace
       sidebar={<SidebarList>
-        <Nav aria-label="Brand groups">
-          <SidebarAll tab="brand" count={total} current={!folder} />
-          <NavGroup label="Groups">
-            {folders.map(entry => (
-              <NavItem key={entry.id} href={`#brand/${entry.id}`} current={entry.id === folder?.id} icon={<GridIcon />}
-                onClick={event => { event.preventDefault(); openFolder(entry.id); }}
-                trailing={<span className="studio-muted studio-brand__count">{byFolder.get(entry.id)?.length ?? 0}</span>}>
-                {entry.name}
-              </NavItem>
-            ))}
-          </NavGroup>
-        </Nav>
+        <SidebarTree tab="imagery" label="Image groups" count={total} current={folder?.id} onSelect={openFolder}
+          groups={[{ id: "groups", label: "Groups", items: folders.map(entry => ({ id: entry.id, label: entry.name, icon: <GridIcon />, trailing: <span className="studio-muted studio-imagery__count">{byFolder.get(entry.id)?.length ?? 0}</span> })) }]} />
       </SidebarList>}
       canvasLead={opened ? <>
-        <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ArrowLeftIcon />} aria-label={`Back to ${folder?.name ?? "Brand"}`} onClick={closeViewer} />
+        <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ArrowLeftIcon />} aria-label={`Back to ${folder?.name ?? "Imagery"}`} onClick={closeViewer} />
         {trail}
       </> : trail}
-      canvasTitle={opened ? nameOf(opened) : folder?.name ?? "Brand"}
+      canvasTitle={opened ? nameOf(opened) : folder?.name ?? "Imagery"}
       canvasRef={canvas}
       canvasActions={
         <ViewControls>
@@ -215,14 +215,14 @@ export function BrandPage() {
           </>}
         </ViewControls>
       }
-      canvas={<div className="studio-brand">{body}</div>}
+      canvas={<div className="studio-imagery">{body}</div>}
       inspector={{
         theme: <CanvasSettings axes={["type", "density"]} />,
         // An image library: what is chosen, and no code.
         design: <>
           {selected ? (
             <>
-              <Selection preview={<Preview label={nameOf(selected)} paint={selected.color}><img className="studio-brand__preview" src={url(selected.thumb)} alt="" /></Preview>}>
+              <Selection preview={<Preview label={nameOf(selected)} paint={selected.color}><img className="studio-imagery__preview" src={url(selected.thumb)} alt="" /></Preview>}>
                 {!opened ? <Button variant="outline" size="sm" fullWidth onClick={() => openImage(selected)}>Open</Button> : null}
                 <Button variant="outline" size="sm" fullWidth icon={<OpenIcon />} onClick={() => window.open(selected.pin, "_blank")}>Pinterest</Button>
                 {selected.link ? <Button variant="outline" size="sm" fullWidth icon={<OpenIcon />} onClick={() => window.open(selected.link, "_blank")}>Source</Button> : null}
@@ -235,7 +235,7 @@ export function BrandPage() {
                   selected.source ? ["Source", selected.source] : null,
                   ["Size", `${selected.width} × ${selected.height}`],
                   ["Format", kindLabel(selected)],
-                  ["Colour", <span className="studio-brand__colour"><ColorSwatch color={selected.color} size="sm" aria-hidden="true" /><Code>{selected.color}</Code></span>],
+                  ["Colour", <span className="studio-imagery__colour"><ColorSwatch color={selected.color} size="sm" aria-hidden="true" /><Code>{selected.color}</Code></span>],
                   selected.alt && selected.title ? ["Description", selected.alt] : null,
                 ]} />
               </PanelSection>
@@ -258,33 +258,5 @@ export function BrandPage() {
         </>,
       }}
     />
-  );
-}
-
-/**
- * An image or a group in Brand's grid: the plain container the Canvas uses outside the Components tab (owner,
- * 2026-10-21), its name in the first row, then the image (its own ratio in the waterfall, else square, cropped) or the
- * group's first four as a 2 x 2 mosaic. The Asset grid around it keeps the keyboard, the waterfall and Enter to open.
- */
-function BrandItem({ value, name, value2, images, ratio, group }: { value: string; name: string; value2?: string; images: string[]; ratio?: number; group?: boolean }) {
-  return (
-    <ListBoxItem value={value} textValue={name} className="gallery-plain area-asset-grid__item">
-      <div className="gallery-tile gallery-tile--plain studio-brand__item" data-stage="none" data-area-ground="raised">
-        <div className="gallery-tile__head" {...appScale()}>
-          <span className="gallery-tile__label">{name}</span>
-          {value2 ? <span className="gallery-tile__value">{value2}</span> : null}
-        </div>
-        {group ? (
-          <div className="studio-brand__mosaic" aria-hidden="true">
-            {[0, 1, 2, 3].map(index => images[index]
-              ? <img key={index} src={images[index]} alt="" loading="lazy" decoding="async" draggable={false} />
-              : <span key={index} />)}
-          </div>
-        ) : (
-          <img className="studio-brand__image" src={images[0]} alt="" loading="lazy" decoding="async" draggable={false}
-            style={{ aspectRatio: ratio ? String(ratio) : "1" }} />
-        )}
-      </div>
-    </ListBoxItem>
   );
 }
