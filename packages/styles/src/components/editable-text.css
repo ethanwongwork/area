@@ -48,7 +48,7 @@
      file name take a hover plate; Notion's title doesn't, which is why it read as plain text. */
   .area-editable-text__preview { transition: background-color var(--area-duration-fast) var(--area-ease-out); }
   @media (hover: hover) {
-    .area-editable-text:not([data-editing], [data-disabled]) .area-editable-text__preview:hover { background-color: var(--area-bg-hover); transition-duration: 0s; }
+    .area-editable-text:not([data-editing], [data-disabled]) .area-editable-text__preview:hover { background-color: var(--area-bg-hover); transition-duration: var(--area-hover-in); }
   }
   .area-editable-text__preview:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   /* While editing the preview keeps the draft's width under the field, so the field grows as you type. */

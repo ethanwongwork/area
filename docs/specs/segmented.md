@@ -169,18 +169,18 @@ Compared `segmented/area--{size-small,size-medium,size-large,icon-only,default,d
 [the audit](../research/cohesion-audit.md#verification). Unverified: hover and focus
 captures, dark theme.
 
-## Motion and interaction, 2026-10-07
+## Motion and interaction
 
-Contract: [`docs/MOTION.md`](../MOTION.md).
+Contract: [`docs/MOTION.md`](../MOTION.md). Since 2026-10-24 the selected plate slides, and arrivals follow Feedback.
 
-| Interaction | Before | After |
+| Interaction | 2026-10-07 | Now |
 |---|---|---|
-| hover (unselected option) | `--area-transition`: `bg-hover` over `fast` ease-out, both ways | lands at once (`:hover` 0s), fades out over `fast` ease-out |
-| press | eased over `fast` | at once (`:active` 0s) |
-| selection | both options eased over `fast`: the old plate faded out while the new one faded in | the chosen option is raised at once (`[data-selected]` 0s, so pointer and arrow keys alike); the option given up fades out over `fast` ease-out. There is still one plate per option; nothing slides |
+| hover (unselected option) | lands at once (`:hover` 0s), fades out over `fast` ease-out | arrives over `hover-in` (Feedback; ≈91ms at Subtle), fades out over `fast` ease-out |
+| press | at once (`:active` 0s) | `hover-in`; no give (a segment is a value, not a button: research, "Never scaled") |
+| selection | one plate per option: the chosen one raised at once, the old one fading | **one plate that slides**: once React has measured the chosen option, the track draws the selected paint (surface fill in light, active fill in dark, `edge-selected` edge, `shadow-control`) as `::before` exactly over it (`data-plate`, `--_plate-x`, `--_plate-w`, from the option's box in the track's own pixels) and moves it on `base` with `ease-in-out`, `translate` and `inline-size`; the option paints nothing. Before measuring, and in static markup (figures, SSR), each option paints its own plate as before. The label's colour arrives over `hover-in` |
 | focus-visible | outline | unchanged |
 | disabled | 50% | unchanged |
-| reduced motion | tokens | tokens (no literal durations) |
+| reduced motion | tokens | tokens: the plate jumps |
 
 **Crispness.** The track's 1px edge was an inset `box-shadow` spread, which does not snap to
 device pixels under `zoom` or a fractional position; it is now `outline: 1px` with
@@ -238,6 +238,7 @@ Unselected items press at 7.5% black in light (as firm as the muted label allows
 - 2026-10-03 · all even (owner) → items floor at `radius-floor` 4 (was the smallest control's corner, now 6); the sm track at 24 is 6 (was 5) (`segmented.css:66`).
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-segmented` makes the track a pill, items concentric (`segmented.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover and press land at once and fade over `fast`; the chosen option is raised at once while the old one fades; the track edge is an inset outline (was a box-shadow spread, which does not snap); a sliding thumb is an open question (`segmented.css`; "Motion and interaction, 2026-10-07").
+- 2026-10-24 · owner: subtle motion as the default (bencho.dev) → the selected plate slides on `base` ease-in-out (`data-plate`; at rest identical to the per-option plate, checked to the pixel in headless Edge); arrivals on Feedback's `hover-in`.
 - 2026-10-12 · owner adopted the product UI rules (docs/PRODUCT_UI.md, rule 4: every icon-only control names itself in an Area Tooltip) → an `iconOnly` Segmented wraps each option in a Tooltip (below, `describes={false}`, since the label is already its name) → `primitives.tsx`; the gallery's grid / list switch.
 - 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → the track paints `bg-component`, the control fill, which steps from the ground it sits on (layers.css), instead of `bg-subtle`, the recessed layer, which equals the page at layer contrast 0: at 95 + 0 the track and the white thumb were both the page and only the 1.3:1 ring showed (`captures/layers-sweep-2026-10-16/segmented-light-95-0.png`). Light 100 + 4 is the same #f7f7f7; dark is the rest fill (L 0.20 floor, about #2c on a #12 card), back near the #28 groove this spec measured, where Layers had left #0b.
 - 2026-10-18 · Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: Area today") → under a Material a disabled selected item kept the material (the disabled rule in material.css lost on specificity to the plain parts' painter); it now drops the material and keeps its own `shadow-control` lift (`--_m-rest`). Checked in the app, light and dark, Glass and Tactile.

@@ -137,6 +137,17 @@ function LoopingSwitch() {
   return <Switch label="Label" checked={on} onChange={() => {}} />;
 }
 
+/** A Button pressed on its own every 1.4s and held for a moment, so Feedback's press arrival and give play (lang-press). */
+function LoopingPress({ icon }: { icon?: ReactNode } = {}) {
+  const [down, setDown] = useState(false);
+  useEffect(() => {
+    let release: ReturnType<typeof setTimeout>;
+    const timer = setInterval(() => { setDown(true); release = setTimeout(() => setDown(false), 280); }, 1400);
+    return () => { clearInterval(timer); clearTimeout(release); };
+  }, []);
+  return icon ? <Button iconOnly aria-label="Example" icon={icon} className={down ? "lang-press" : undefined} /> : <Button className={down ? "lang-press" : undefined}>Button</Button>;
+}
+
 const three = [{ value: "one", label: "One" }, { value: "two", label: "Two" }, { value: "three", label: "Three" }];
 const Note = ({ children, className }: { children?: ReactNode; className?: string }) => (
   <Card size="sm" className={className ?? "lang-card"}><CardContent>
@@ -295,6 +306,7 @@ const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
   density: { scale: 1.25, subject: RowsSurface },
   motion: { scale: 1.5, subject: LoopingSwitch },
   easing: { scale: 1.5, subject: LoopingSwitch },
+  feedback: { scale: 1.5, subject: LoopingPress },
   surface: { scale: 1.5, subject: CardSurface },
   stroke: { scale: 1.5, subject: CardWithField },
   "shadow-rest": { scale: 1.25, subject: CardSurface },
@@ -427,6 +439,8 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
     case "motion":
     case "easing":
       return [FILL.control, <LoopingSwitch />];
+    case "feedback":
+      return [FILL.control, <LoopingPress />];
     case "pills":
       // A field and a segmented track are wide controls; the rest are single small ones.
       return [preset === "field" || preset === "segmented" ? FILL.wide : FILL.control, <div className="lang-row"><Pill shape={preset ?? "button"} /></div>];
@@ -446,4 +460,4 @@ export function StateDrawing({ axis }: { axis: string }) {
 }
 
 /** The same fit for the Theme tab's Setup views (theme-setup.tsx): one zoom per group, by its largest drawing. */
-export { Fit as Scaled, FILL, LoopingSwitch };
+export { Fit as Scaled, FILL, LoopingPress, LoopingSwitch };

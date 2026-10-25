@@ -88,9 +88,9 @@
   }
   /* Motion (docs/MOTION.md, "Hover plate"): the plate lands at once and fades out on fast. */
   @media (hover: hover) {
-    .area-pagination__page:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; }
+    .area-pagination__page:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); }
   }
-  .area-pagination__page:active { background-color: var(--area-bg-component-pressed); transition-duration: 0s; }
+  .area-pagination__page:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
   /* The current page is the selected option: the active plate and the default ink, and the plate
      stays under the pointer (shared state paint). Untitled UI paints its current page with a
      plate too; shadcn outlines it, Primer fills it with the accent. */
@@ -98,7 +98,7 @@
     background-color: var(--area-bg-component-active);
     color: var(--area-fg-default);
     cursor: default;
-    transition-duration: 0s;
+    transition-duration: var(--area-hover-in);
   }
   .area-pagination__page:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);

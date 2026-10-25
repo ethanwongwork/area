@@ -28,6 +28,10 @@
 import { type AxisDefinition, tokens } from "./schema.ts";
 
 const CURVES = {
+  // Subtle (owner, 2026-10-24: "subtle, clean", after bencho.dev; docs/research/motion-subtle-2026-10-24/systems.md): the
+  // out curve is bencho's and Base UI's quint-like (0.22, 1, 0.36, 1), a gentler start than Standard's expo-out (40% of
+  // the way in the first tenth of the time, not 49%), so a surface eases in rather than snapping; the rest is Standard's.
+  subtle: { out: "cubic-bezier(0.22, 1, 0.36, 1)", inOut: "cubic-bezier(0.65, 0, 0.35, 1)", in: "cubic-bezier(0.4, 0, 1, 1)", drawer: "cubic-bezier(0.32, 0.72, 0, 1)" },
   standard: { out: "cubic-bezier(0.16, 1, 0.3, 1)", inOut: "cubic-bezier(0.65, 0, 0.35, 1)", in: "cubic-bezier(0.4, 0, 1, 1)", drawer: "cubic-bezier(0.32, 0.72, 0, 1)" },
   snappy: { out: "cubic-bezier(0.19, 1, 0.22, 1)", inOut: "cubic-bezier(0.6, 0, 0.2, 1)", in: "cubic-bezier(0.6, 0, 0.8, 0.6)", drawer: "cubic-bezier(0.19, 1, 0.22, 1)" },
   gentle: { out: "cubic-bezier(0.33, 1, 0.68, 1)", inOut: "cubic-bezier(0.33, 0, 0.67, 1)", in: "cubic-bezier(0.5, 0, 1, 1)", drawer: "cubic-bezier(0.33, 1, 0.68, 1)" },
@@ -36,6 +40,7 @@ const CURVES = {
 export type EasingId = keyof typeof CURVES;
 
 const LABELS: Record<EasingId, [string, string]> = {
+  subtle: ["Subtle", "Eases into place with a gentle start; nothing snaps (bencho, Base UI)."],
   standard: ["Standard", "Today's curves: a quick start that settles (ChatGPT, Figma)."],
   snappy: ["Snappy", "Gets there sooner and stops harder (Linear, Primer)."],
   gentle: ["Gentle", "Eases in and out evenly (Primer, Fluent)."],
@@ -45,8 +50,8 @@ const LABELS: Record<EasingId, [string, string]> = {
 export const EASING_AXIS: AxisDefinition = {
   id: "easing",
   label: "Easing",
-  description: "The shape of every transition: Standard, Snappy, Gentle or Spring. Motion sets how long; this sets how.",
-  defaultPreset: "standard",
+  description: "The shape of every transition: Subtle, Standard, Snappy, Gentle or Spring. Motion sets how long; this sets how.",
+  defaultPreset: "subtle",
   namespaces: ["--area-ease-"],
   presets: (Object.keys(CURVES) as EasingId[]).map(id => ({
     id,

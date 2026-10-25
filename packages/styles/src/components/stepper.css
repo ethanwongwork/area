@@ -79,9 +79,9 @@
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
   @media (hover: hover) {
-    .area-stepper-step__button:hover::before { background-color: var(--area-bg-component-hover); transition-duration: 0s; }
+    .area-stepper-step__button:hover::before { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); }
   }
-  .area-stepper-step__button:active::before { background-color: var(--area-bg-component-pressed); transition-duration: 0s; }
+  .area-stepper-step__button:active::before { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
   .area-stepper-step__button:focus-visible { outline: none; }
   .area-stepper-step__button:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 

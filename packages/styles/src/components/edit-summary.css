@@ -79,9 +79,9 @@
     background-color: var(--_row-plate);
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
-  @media (hover: hover) { .area-edit-summary__file:hover { --_row-plate: var(--area-bg-component-hover); transition-duration: 0s; } }
+  @media (hover: hover) { .area-edit-summary__file:hover { --_row-plate: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
   .area-edit-summary__file:focus-within { --_row-plate: var(--area-bg-component-hover); transition-duration: 0s; }
-  .area-edit-summary__file:has(> .area-edit-summary__name:active) { --_row-plate: var(--area-bg-component-pressed); transition-duration: 0s; } /* Menu's pressed fill (Shared state paint) */
+  .area-edit-summary__file:has(> .area-edit-summary__name:active) { --_row-plate: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); } /* Menu's pressed fill (Shared state paint) */
   /* Row actions change ink, not plate (Nav's and Board's rule, cohesion test): the row already shows the pointer, so
      Undo and Keep are muted ghost buttons whose hover and press are the default ink. A plate of their own would be the
      row's grey again, so their hover could not be seen. */
@@ -125,7 +125,7 @@
       border-radius: inherit;
       background: linear-gradient(var(--_row-plate), var(--_row-plate)), var(--area-bg-surface);
     }
-    .area-edit-summary__file:hover > .area-edit-summary__actions { opacity: 1; transition-duration: 0s; }
+    .area-edit-summary__file:hover > .area-edit-summary__actions { opacity: 1; transition-duration: var(--area-hover-in); }
   }
   .area-edit-summary__file:focus-within > .area-edit-summary__actions { opacity: 1; transition-duration: 0s; }
   @media (hover: none) {

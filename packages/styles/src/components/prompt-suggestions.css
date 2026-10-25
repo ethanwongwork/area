@@ -57,8 +57,9 @@
   /* Motion (docs/MOTION.md, "Hover plate", "Press", "Focus ring"; Button's rule): the plate arrives
      at once and fades out over the base rule's duration-fast. Hover is read from the row, so the
      dismiss keeps the row's plate on while the pointer is over it. */
-  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item { transition-duration: 0s; } }
-  .area-prompt-suggestions__item:is(:active, :focus-visible) { transition-duration: 0s; }
+  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item { transition-duration: var(--area-hover-in); } }
+  .area-prompt-suggestions__item:active { transition-duration: var(--area-press-in); }
+  .area-prompt-suggestions__item:focus-visible { transition-duration: 0s; }
   .area-prompt-suggestions__item:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
   /* The icon sits in a control-sized square 8 in, so its centre lines up with the composer's
    * leading action above (both 24 from the edge). */
@@ -100,5 +101,5 @@
      which showed the plate 100ms before its dismiss. */
   .area-prompt-suggestions__dismiss { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
   .area-prompt-suggestions__row:focus-within > .area-prompt-suggestions__dismiss { transition-duration: 0s; }
-  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__dismiss { transition-duration: 0s; } }
+  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__dismiss { transition-duration: var(--area-hover-in); } }
 }

@@ -47,6 +47,7 @@ The review page and its saved marks are in `docs/research/area-figures-2026-10-2
 | `rules.md` | The rules. A figure that breaks one isn't finished. |
 | `concepts.md` | From a setting to a figure; the screens. |
 | `engine/abstract.css` | Bars and Shapes, forced states, the pointer, ghost thumbs. |
+| `engine/markup.js` | `wrapText`, `blankImages`, `figureMarkup`: words as span.tx and images as blanks, shared with the app's Setup stage (`apps/desktop/src/setup-screen.tsx`). |
 | `engine/stage.js` | `AFS.stage`: frames markup at a fidelity under a scope, holds states, scales it, places the pointer and ghosts. |
 | `figures/compositions.jsx` | `COMPOSITIONS`: grids of 4 to 6 similarly sized components, each showing one thing. Add one per theme setting: 4 to 6 parts 200 wide in `Frame`, no containers. |
 | `figures/index.jsx` | `KINDS` (the gallery's kinds of UI), `SHOW` (the few families shown as a grid, a pair or another specimen), `VIGNETTES`, `SETTINGS`; `render()` renders screens, gallery, settings. |
@@ -72,7 +73,9 @@ The review page and its saved marks are in `docs/research/area-figures-2026-10-2
 4. **Hand over.** Rebuild the review page (`docs/research/area-figures-2026-10-24/build.mjs`) and republish it to
    the same file path. Say what was added and anything not checked.
 
-The app's own setting pictures are `apps/desktop/src/choice-figures.tsx`. Porting a kept
+The app's Setup stage uses this engine for its product screen (`apps/desktop/src/setup-screen.tsx`; the build copies
+`engine/abstract.css` to `dist/styles/figures.css`), so a change to the engine shows there too. The app's own setting
+pictures are `apps/desktop/src/choice-figures.tsx`. Porting a kept
 figure there is app work that follows the owner's picks.
 
 ## What goes wrong

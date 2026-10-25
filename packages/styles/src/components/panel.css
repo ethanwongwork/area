@@ -271,7 +271,7 @@
   .area-panel--sm .area-panel__chevron svg { --_chevron: var(--area-icon-xs); --_glyph-cut: var(--area-type-icon-xs-cut); }
   /* Revealed at once on hover or focus, faded out on fast (MOTION.md, "Hover plate"). */
   .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; transition-duration: 0s; }
-  @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; transition-duration: 0s; } }
+  @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; transition-duration: var(--area-hover-in); } }
   @media (hover: none) { .area-panel__chevron { opacity: 1; } }
   .area-panel__summary { display: flex; align-items: center; gap: var(--area-ui-cluster); flex-shrink: 0; color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
   /* The rows join the section's own column, so its 8px rhythm is unchanged when open. */

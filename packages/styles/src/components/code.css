@@ -330,7 +330,7 @@
     transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
   }
   @media (hover: hover) {
-    .area-code-block__linenumber:hover { text-decoration-color: currentColor; transition-duration: 0s; }
+    .area-code-block__linenumber:hover { text-decoration-color: currentColor; transition-duration: var(--area-hover-in); }
   }
 
   .area-code-block__linenumber:focus-visible {
@@ -517,7 +517,7 @@
 
   /* The label keeps its ink under the pointer and takes an underline, as line links do. */
   @media (hover: hover) {
-    .area-code-block__toggle:hover { text-decoration-color: currentColor; transition-duration: 0s; }
+    .area-code-block__toggle:hover { text-decoration-color: currentColor; transition-duration: var(--area-hover-in); }
   }
 
   /*

@@ -55,8 +55,8 @@
     transition-property: background-color;
     user-select: none;
   }
-  @media (hover: hover) { .area-alignment-picker__cell:hover { transition-duration: 0s; } }
-  .area-alignment-picker__cell:is(:active, :has(input:checked)) { transition-duration: 0s; }
+  @media (hover: hover) { .area-alignment-picker__cell:hover { transition-duration: var(--area-hover-in); } }
+  .area-alignment-picker__cell:is(:active, :has(input:checked)) { transition-duration: var(--area-press-in); }
   .area-alignment-picker__cell > input {
     position: absolute;
     inset: 0;

@@ -15,6 +15,7 @@ export const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const repo = resolve(root, "..", "..");
 export const dist = join(root, "dist");
 export const areaCss = join(repo, "packages/styles/dist/area.css");
+const figureCss = join(repo, ".claude/skills/area-illustration/engine/abstract.css");
 const STATIC = ["index.html", "studio.css", "theme.js"];
 // The demos' sample images (David Tee's photo, the chip images). They still sit in the archived site's public folder.
 const images = join(repo, "apps/docs/public/images");
@@ -27,6 +28,9 @@ export function copyStatic() {
   for (const file of STATIC) copyFileSync(join(root, "src", file), join(dist, file));
   // studio.css imports its parts from src/styles (cursor-audit-2026-10-22.md item 11).
   cpSync(join(root, "src/styles"), join(dist, "styles"), { recursive: true });
+  // The figure engine (Bars, Shapes, held states) is the area-illustration skill's, shared, not forked: Setup's stage
+  // draws its product screen with it (src/setup-screen.tsx).
+  copyFileSync(figureCss, join(dist, "styles/figures.css"));
   copyFileSync(areaCss, join(dist, "area.css"));
   cpSync(images, join(dist, "images"), { recursive: true });
 }

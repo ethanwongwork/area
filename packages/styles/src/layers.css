@@ -300,7 +300,7 @@
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
-    [data-area-motion], [data-area-easing], [data-area-ui], [data-area-contrast]
+    [data-area-motion], [data-area-easing], [data-area-feedback], [data-area-ui], [data-area-contrast]
     ) {
       --area-bg-component: var(--area-bg-component-raised);
       --area-bg-component-hover: var(--area-bg-component-raised-hover);
@@ -325,7 +325,7 @@
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
-    [data-area-motion], [data-area-easing], [data-area-ui], [data-area-contrast]
+    [data-area-motion], [data-area-easing], [data-area-feedback], [data-area-ui], [data-area-contrast]
     ) {
       --area-bg-component: var(--area-bg-component-page);
       --area-bg-component-hover: var(--area-bg-component-page-hover);
@@ -350,7 +350,7 @@
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
-    [data-area-motion], [data-area-easing], [data-area-ui], [data-area-contrast]
+    [data-area-motion], [data-area-easing], [data-area-feedback], [data-area-ui], [data-area-contrast]
     ) {
       --area-bg-component: var(--area-bg-component-card);
       --area-bg-component-hover: var(--area-bg-component-card-hover);
@@ -375,7 +375,7 @@
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
-    [data-area-motion], [data-area-easing], [data-area-ui], [data-area-contrast]
+    [data-area-motion], [data-area-easing], [data-area-feedback], [data-area-ui], [data-area-contrast]
     ) {
       --area-bg-component: var(--area-bg-component-tile);
       --area-bg-component-hover: var(--area-bg-component-tile-hover);
@@ -401,7 +401,7 @@
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
-    [data-area-motion], [data-area-easing], [data-area-ui], [data-area-contrast]
+    [data-area-motion], [data-area-easing], [data-area-feedback], [data-area-ui], [data-area-contrast]
     ) {
       --area-bg-component: var(--area-bg-component-recessed);
       --area-bg-component-hover: var(--area-bg-component-recessed-hover);

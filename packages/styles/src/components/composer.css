@@ -51,7 +51,7 @@
   .area-composer--stacked { gap: var(--area-ui-cluster); }
 
  /* The Input hover step (audit S7a). */
-  @media (hover: hover) { .area-composer:hover:not(:focus-within, [data-disabled]) { border-color: var(--area-input-edge-hover); transition-duration: 0s; } }
+  @media (hover: hover) { .area-composer:hover:not(:focus-within, [data-disabled]) { border-color: var(--area-input-edge-hover); transition-duration: var(--area-hover-in); } }
   .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); box-shadow: var(--area-shadow-resting), 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); transition-duration: 0s; }
   /* A text field shows disabled with Textarea's field paint, not opacity (cohesion audit), so the
      actions keep Button's own 50% instead of compounding to about 30%. */

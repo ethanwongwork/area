@@ -15,6 +15,7 @@ import { ACCENT_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "./color.ts";
 import { ACTION_AXIS, SELECTION_AXIS } from "./emphasis.ts";
 import { MOTION_AXIS } from "./motion.ts";
 import { EASING_AXIS } from "./easing.ts";
+import { FEEDBACK_AXIS } from "./feedback.ts";
 import { RADIUS_AXIS } from "./radius.ts";
 import { REST_SHADOW_AXIS, SURFACE_AXIS } from "./surface.ts";
 import { ELEVATION_AXIS } from "./elevation.ts";
@@ -65,6 +66,8 @@ export const AXES: AxisDefinition[] = [
   ...STATE_AXES,
   MOTION_AXIS,
   EASING_AXIS,
+  // How a control answers the pointer (2026-10-24): hover and press arrival, and the give under a press.
+  FEEDBACK_AXIS,
 ];
 
 /**
@@ -84,7 +87,7 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
   { heading: "Stroke", settings: ["surface", "stroke"] },
   { heading: "Shadow", settings: ["elevation", "shadow-resting", "shadow-field", "shadow-rest", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] },
   { heading: "States", settings: ["fill-hover", "stroke-hover", "shadow-hover", "fill-selected", "selected-stroke", "selected-tint", "fill-pressed", "focus-ring", "danger-hover"] },
-  { heading: "Effects", settings: ["motion", "easing"] },
+  { heading: "Effects", settings: ["motion", "easing", "feedback"] },
 ];
 
 /** The scoped settings that are not axes: `data-area-contrast` (styles, docs/CONTRAST.md) and `data-area-pills` (pills.ts). */

@@ -58,8 +58,8 @@
     margin-inline-end: calc(var(--_plate-in) - var(--_card-column));
   }
   .area-plan__chevron::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: max(var(--area-radius-min), calc(var(--area-radius-small) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_plate-in) - var(--area-radius-small)) * var(--area-radius-concentric))); transition: var(--area-transition); }
-  @media (hover: hover) { .area-plan__head:hover .area-plan__chevron::before { background: var(--area-bg-hover); transition-duration: 0s; } }
-  .area-plan__head:active .area-plan__chevron::before { background: var(--area-bg-pressed); transition-duration: 0s; }
+  @media (hover: hover) { .area-plan__head:hover .area-plan__chevron::before { background: var(--area-bg-hover); transition-duration: var(--area-hover-in); } }
+  .area-plan__head:active .area-plan__chevron::before { background: var(--area-bg-pressed); transition-duration: var(--area-press-in); }
   .area-plan__items {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

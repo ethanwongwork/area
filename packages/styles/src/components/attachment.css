@@ -102,10 +102,10 @@
     box-shadow: inset 0 0 0 var(--area-border-width) var(--_glass-edge);
     transition: background var(--area-duration-fast) var(--area-ease-out);
   }
-  @media (hover: hover) { .area-attachment__remove:hover { --_remove-tint: var(--_glass-hover); } .area-attachment__remove:hover::before { transition-duration: 0s; } }
+  @media (hover: hover) { .area-attachment__remove:hover { --_remove-tint: var(--_glass-hover); } .area-attachment__remove:hover::before { transition-duration: var(--area-hover-in); } }
   .area-attachment__remove:active { --_remove-tint: var(--_glass-press); }
   .area-attachment__remove > svg { position: relative; inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
-  @media (hover: hover) { .area-attachment:hover > .area-attachment__remove { opacity: 1; transition-duration: 0s; } }
+  @media (hover: hover) { .area-attachment:hover > .area-attachment__remove { opacity: 1; transition-duration: var(--area-hover-in); } }
   .area-attachment:focus-within > .area-attachment__remove { opacity: 1; transition-duration: 0s; }
   @media (hover: none) { .area-attachment__remove { opacity: 1; } }
   .area-attachment__remove:focus-visible { outline: none; }

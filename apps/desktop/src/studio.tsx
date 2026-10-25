@@ -117,6 +117,16 @@ function switchInstantly(element: HTMLElement | null) {
   requestAnimationFrame(() => requestAnimationFrame(() => element.removeAttribute("data-area-switching")));
 }
 
+/** A value that follows `value` once it has stopped changing for `wait` ms (the first value at once). */
+function useSettled<T>(value: T, wait: number): T {
+  const [settled, setSettled] = useState(value);
+  useEffect(() => {
+    const timer = setTimeout(() => setSettled(value), wait);
+    return () => clearTimeout(timer);
+  }, [value, wait]);
+  return settled;
+}
+
 /** The Electron shell on macOS (main.tsx sets data-platform, after the imports run, so this is read at render). */
 const isMac = () => typeof document !== "undefined" && document.documentElement.dataset.platform === "darwin";
 
@@ -213,20 +223,28 @@ export function Studio() {
   // The app is drawn in the choices it offers (owner, 2026-10-22: "make sure the electron ui is a reflection of the
   // actual choices"): the Titlebar, Sidebar and Inspector take every Inspector setting and the Material on <html>, type and
   // density included (owner, same day). Only committed choices: a hover preview repaints the Canvas alone.
+  // The chrome takes a choice once it settles (owner, 2026-10-24: "the smoothness of the sliders is not very smooth"):
+  // restyling the whole document costs about 300ms, so doing it on every step of a drag froze the slider. The Canvas
+  // shows each step at once; the chrome follows 160ms after the last one.
   const appliedPicks = useRef<string[]>([]);
+  const chrome = useSettled(useMemo(() => ({ canvas, material }), [canvas, material]), 160);
   useLayoutEffect(() => {
     const root = document.documentElement;
-    const picks = canvasAttributes(canvas, material);
+    const picks = canvasAttributes(chrome.canvas, chrome.material);
     switchInstantly(root);
     for (const name of appliedPicks.current) if (!(name in picks) || picks[name as keyof typeof picks] === undefined) root.removeAttribute(name);
     for (const [name, value] of Object.entries(picks)) if (value !== undefined) root.setAttribute(name, value);
     appliedPicks.current = Object.keys(picks);
-    // The window's own ground (seen while it resizes) is the page's, as the chosen ground paints it.
-    window.areaDesktop?.setGround?.(paintedHex(getComputedStyle(document.body).backgroundColor));
-    // The traffic lights stay centred on the Titlebar, which grows with type and density (39 at 13 Compact, 53 at 14/32).
-    const bar = document.querySelector(".studio-titlebar")?.getBoundingClientRect().height;
-    if (bar) window.areaDesktop?.setTitlebar?.(bar);
-  }, [canvas, material, theme]);
+    // Read back on the next frame, so the restyle is the browser's own rather than forced here.
+    const frame = requestAnimationFrame(() => {
+      // The window's own ground (seen while it resizes) is the page's, as the chosen ground paints it.
+      window.areaDesktop?.setGround?.(paintedHex(getComputedStyle(document.body).backgroundColor));
+      // The traffic lights stay centred on the Titlebar, which grows with type and density (39 at 13 Compact, 53 at 14/32).
+      const bar = document.querySelector(".studio-titlebar")?.getBoundingClientRect().height;
+      if (bar) window.areaDesktop?.setTitlebar?.(bar);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [chrome, theme]);
 
   // Shortcuts, as the Tooltips name them: ⌘K focuses search; ⌘B and ⌥⌘B show and hide the Sidebar
   // and the Inspector (Cursor's and VS Code's primary and secondary side bars); ⌘[ and ⌘] go back
@@ -436,7 +454,7 @@ export interface WorkspaceProps {
 
 /** The Inspector's settings and the Material as the attributes a scope takes (the Canvas's body, or a preview's). */
 export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof materialAttributes>[0]): Record<string, string | undefined> {
-  return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-pills": shown.pills, ...materialAttributes(material) };
+  return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
 }
 
 /*

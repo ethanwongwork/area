@@ -35,7 +35,7 @@
     transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
   }
   @media (hover: hover) {
-    .area-link:hover { text-decoration-color: var(--_line-hover); transition-duration: 0s; }
+    .area-link:hover { text-decoration-color: var(--_line-hover); transition-duration: var(--area-hover-in); }
   }
   .area-link:focus-visible {
     text-decoration-color: var(--_line-hover);

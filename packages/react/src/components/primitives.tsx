@@ -1872,9 +1872,34 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
     onValueChange?.(next, event);
     onSelect?.(next);
   };
+  // One plate slides to the chosen option (docs/MOTION.md, "Tabs / Segmented indicator"; owner, 2026-10-24: subtle
+  // motion): the track measures the selected option and paints the plate behind it (`data-plate`), so it moves rather
+  // than jumping. Until it has measured (and in static markup) each option paints its own plate, as before.
+  const track = useRef<HTMLDivElement | null>(null);
+  const selectedValue = entry && entry.value === value ? entry.value : undefined;
+  useLayoutEffect(() => {
+    const host = track.current;
+    if (!host) return;
+    const place = () => {
+      const button = selectedValue === undefined ? undefined : buttons.current.get(selectedValue);
+      if (!button) { host.removeAttribute("data-plate"); return; }
+      const outer = host.getBoundingClientRect(), inner = button.getBoundingClientRect();
+      // Offsets in the track's own pixels, whatever scale or zoom it is drawn at.
+      const laidOut = parseFloat(getComputedStyle(host).width);
+      const factor = laidOut ? outer.width / laidOut : 1;
+      host.style.setProperty("--_plate-x", `${(inner.left - outer.left) / factor - host.clientLeft}px`);
+      host.style.setProperty("--_plate-w", `${inner.width / factor}px`);
+      host.setAttribute("data-plate", "");
+    };
+    place();
+    const observer = typeof ResizeObserver === "function" ? new ResizeObserver(place) : null;
+    observer?.observe(host);
+    for (const button of buttons.current.values()) observer?.observe(button);
+    return () => observer?.disconnect();
+  }, [selectedValue, options]);
   return (
     <div
-      ref={ref}
+      ref={node => { track.current = node; assignRef(ref, node); }}
       role="radiogroup"
       aria-label={rest["aria-label"] ?? label}
       aria-disabled={disabled || undefined}

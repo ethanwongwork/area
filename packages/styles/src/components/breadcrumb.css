@@ -24,9 +24,9 @@
   .area-breadcrumb__link::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-control-xs); background: transparent; transition: var(--area-transition); pointer-events: none; }
   /* Motion (docs/MOTION.md, "Hover plate"; docs/specs/breadcrumb.md, "Motion and interaction,
      2026-10-07"): the plate lands at once and fades out on fast; the ring never transitions. */
-  @media (hover: hover) { .area-breadcrumb__link:hover::before { background: var(--area-bg-component-hover); transition-duration: 0s; } }
+  @media (hover: hover) { .area-breadcrumb__link:hover::before { background: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
   /* Pressed, a step past hover (layers.css, "Pressed"). */
-  .area-breadcrumb__link:active::before { background: var(--area-bg-component-pressed); transition-duration: 0s; }
+  .area-breadcrumb__link:active::before { background: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
   /* The ring follows the plate, not the text box (audit S11b). */
   .area-breadcrumb__link:focus-visible { outline: none; }
   .area-breadcrumb__link:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
@@ -46,9 +46,9 @@
   /* With hidden pages to list, the marker is a menu button and takes the link's plate and ring (audit D-19). */
   button.area-breadcrumb__ellipsis { position: relative; isolation: isolate; padding: 0; border: 0; background: none; font: inherit; cursor: pointer; border-radius: var(--area-radius-control-xs); }
   button.area-breadcrumb__ellipsis::before { content: ""; position: absolute; inset: calc(-1 * var(--area-space-2)) calc(-1 * var(--area-space-6)); z-index: -1; border-radius: var(--area-radius-control-xs); background: transparent; transition: var(--area-transition); pointer-events: none; }
-  @media (hover: hover) { button.area-breadcrumb__ellipsis:hover::before { background: var(--area-bg-component-hover); transition-duration: 0s; } }
-  button.area-breadcrumb__ellipsis:active::before { background: var(--area-bg-component-pressed); transition-duration: 0s; }
-  button.area-breadcrumb__ellipsis[aria-expanded="true"]::before { background: var(--area-bg-component-hover); transition-duration: 0s; }
+  @media (hover: hover) { button.area-breadcrumb__ellipsis:hover::before { background: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  button.area-breadcrumb__ellipsis:active::before { background: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
+  button.area-breadcrumb__ellipsis[aria-expanded="true"]::before { background: var(--area-bg-component-hover); transition-duration: var(--area-press-in); }
   button.area-breadcrumb__ellipsis:focus-visible { outline: none; }
   button.area-breadcrumb__ellipsis:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   a.area-menu__item { text-decoration: none; }

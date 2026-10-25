@@ -57,7 +57,7 @@
   .area-property-list__handle svg { flex-shrink: 0; inline-size: var(--area-icon-sm); min-inline-size: var(--area-icon-sm); max-inline-size: none; block-size: var(--area-icon-sm); overflow: visible; }
   /* Revealed at once on hover, focus or drag, faded out on fast (MOTION.md, "Hover plate"). */
   .area-property-list__handle:focus-visible, .area-property-list__item[data-dragging] > .area-property-list__handle { opacity: 1; transition-duration: 0s; }
-  @media (hover: hover) { .area-property-list__item:hover > .area-property-list__handle { opacity: 1; transition-duration: 0s; } }
+  @media (hover: hover) { .area-property-list__item:hover > .area-property-list__handle { opacity: 1; transition-duration: var(--area-hover-in); } }
   @media (hover: none) { .area-property-list__handle { opacity: 1; } }
   .area-property-list__handle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-property-list[data-dragging] { cursor: grabbing; }

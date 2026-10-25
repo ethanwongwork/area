@@ -77,7 +77,7 @@
   .area-step__chevron:dir(rtl) { transform: rotate(90deg); }
   .area-step[data-open] > .area-step__row > .area-step__chevron { transform: none; }
   /* Hover-to-reveal: in at once, out on fast (MOTION.md, Hover). */
-  @media (hover: hover) { .area-step__row:hover > .area-step__chevron { opacity: 1; transition-duration: 0s, var(--area-duration-fast); } }
+  @media (hover: hover) { .area-step__row:hover > .area-step__chevron { opacity: 1; transition-duration: var(--area-hover-in), var(--area-duration-fast); } }
   @media (hover: none) { .area-step__chevron { opacity: 1; } }
 
   /* The body: what went in and came out, 4 under the line (Cursor's content gap 4), on a rail: a 1px rule with the

@@ -153,6 +153,13 @@
     background-color: var(--_bg-active);
     background-image: var(--_wash-active);
   }
+  /* The give under a pointer press (Feedback), by size; never for a key (Space on a focused button is :active too, and
+     the keyboard is never kept waiting) or a menu trigger, whose menu opens from it. */
+  .area-button { --_give: var(--area-feedback-scale); }
+  .area-button--sm, .area-button--icon-only { --_give: var(--area-feedback-scale-sm); }
+  .area-button--lg { --_give: var(--area-feedback-scale-lg); }
+  .area-button--full-width { --_give: var(--area-feedback-scale-wide); }
+  .area-button:active:not(:disabled, [data-disabled], [data-loading], :focus-visible, [aria-haspopup]) { scale: var(--_give); }
 
   /* A menu trigger keeps the pressed plate while its menu is open, as Model picker did alone
      (audit G-12). A selected toggle keeps its own fill. */
@@ -163,16 +170,16 @@
 
   /*
    * Motion (docs/MOTION.md, recipes "Hover plate", "Press", "Selected"; docs/specs/button.md,
-   * "Motion and interaction, 2026-10-07"). Feedback lands at once and only fades on the way out:
-   * the base rule's `--area-transition` (colours over duration-fast, ease-out) is the leave, and
-   * every state that paints sets 0s for its arrival (ChatGPT 0s; Linear 0s in, 150 out). Colours
-   * only: no press scale, no transform at rest. The focus ring is an outline, which is never
-   * transitioned, so it appears and leaves with the key.
+   * "Motion and interaction"). The base rule's `--area-transition` (colours and scale over duration-fast, ease-out) is
+   * the leave; each state sets its arrival on the Feedback setting (axes/feedback.ts, 2026-10-24): hover fades in over
+   * `hover-in`, a press lands in `press-in` and the button gives a little (`feedback-scale`, 0.97 at Subtle; a
+   * full-width button the wide give, 0.985), resting at scale 1. Feedback Off is the old behaviour: 0s, no give. The
+   * focus ring is an outline, which is never transitioned, so it appears and leaves with the key.
    */
   @media (hover: hover) {
-    .area-button:hover { transition-duration: 0s; }
+    .area-button:hover { transition-duration: var(--area-hover-in); }
   }
-  .area-button:is(:active, [data-selected], [aria-expanded="true"]) { transition-duration: 0s; }
+  .area-button:is(:active, [data-selected], [aria-expanded="true"]) { transition-duration: var(--area-press-in); }
 
   .area-button:focus-visible {
     box-shadow: var(--_shadow);

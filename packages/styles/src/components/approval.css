@@ -71,7 +71,7 @@
     cursor: pointer;
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
-  @media (hover: hover) { .area-approval__option:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; } }
+  @media (hover: hover) { .area-approval__option:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
   .area-approval__option:is(:focus-visible, :has(> .area-approval__field:focus-visible)) {
     background-color: var(--area-bg-component-hover);
     outline: var(--area-focus-width) solid var(--area-focus-color);

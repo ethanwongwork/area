@@ -56,6 +56,8 @@
 /* Forced states: each component's own hover, press, focus and lift paint, held still (as studio.css lang-state-*). */
 .st-hover.area-button { background-color: var(--_bg-hover); background-image: var(--_wash-hover); border-color: var(--_border-hover); }
 .st-hover.area-nav__item { background-color: var(--area-bg-component-hover); }
+/* A nav item with trailing content sits in a row that paints the plate (nav.css), so the row holds the hover. */
+.area-nav__row:has(> .st-hover.area-nav__item) { background: var(--area-bg-component-hover); }
 .st-press.area-button { background-color: var(--_bg-active); background-image: var(--_wash-active); }
 .st-press.area-menu__item { background-color: var(--area-bg-component-pressed); }
 .st-press.area-menu__item--danger { background-color: var(--_danger-pressed); }
