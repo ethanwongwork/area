@@ -104,6 +104,7 @@ export default {
       ["Do", "Link every ancestor with BreadcrumbLink and end with BreadcrumbPage, the current page, which is not a link."],
       ["Do", "Collapse a long path with BreadcrumbEllipsis and pass the hidden pages as items, so the ellipsis opens a Menu of them."],
       ["Do", "Put a BreadcrumbSeparator between items; it is hidden from assistive tech and mirrors in right-to-left text."],
+      ["Do", "Set nowrap where the trail must stay on one line, as in a bar of one fixed height; the current page is cut with an ellipsis first."],
       ["Do", "Keep the default name \"Breadcrumb\", or pass aria-label in your product's language."],
       ["Don't", "Make the current page a link. It is announced with aria-current and has no hover plate."],
       ["Don't", "Leave out items when the hidden pages matter: without them the ellipsis is only a decorative mark."],
@@ -112,7 +113,7 @@ export default {
     // Spec: Anatomy, Decisions; breadcrumb.css.
     parts: {
       root: "The nav landmark, in the muted ink.",
-      list: "The ordered list of items; it wraps between items on a narrow screen.",
+      list: "The ordered list of items; it wraps between items on a narrow screen, or stays on one line with nowrap.",
       item: "One list item: a link, the current page, or the ellipsis.",
       link: "An ancestor's anchor. Its hover plate and focus ring are painted outside its box, so the trail stays flush with the content it labels.",
       page: "The current page, in the default ink; plain text, not a link.",

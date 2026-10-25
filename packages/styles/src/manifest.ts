@@ -216,6 +216,7 @@ export const breadcrumb = {
   block: "area-breadcrumb",
   description: "Shows the current page within a hierarchy of links.",
   variants: {},
+  booleans: ["nowrap"], // one line in a fixed-height bar, the page cut first (2026-10-25)
   elements: ["list", "item", "link", "page", "separator", "chevron", "ellipsis"],
   defaults: {},
 } as const satisfies ComponentManifest;

@@ -24,6 +24,7 @@ marker and the current page. It is not a tab bar (sibling views) or a menu.
 | composition | text trail | Ancestors and the current page | Notion page header; Untitled "text" |
 | composition | collapsed (…) | Long paths | Untitled; Area already supports `BreadcrumbEllipsis` |
 | composition | icons | A leading glyph per item | Untitled leading home icon |
+| layout | `nowrap` (one line) | A trail in a bar of one fixed height, where a second line would break the bar; the ancestors keep their width and the current page is cut with an ellipsis first | Notion's top-bar path stays on one line; Area's desktop Canvas bar (2026-10-25) |
 
 Excluded: Untitled's "button" style (28px bordered items) and "text with line" container;
 no target product uses them. A slash separator (Notion) is recorded, not added.
@@ -163,3 +164,4 @@ Links and the ellipsis press at `bg-component-pressed`, one step past selected (
 - 2026-10-03 · radius audit D7 (owner) → the hover plate (24 tall, 20 compact) takes the control curve, `radius-control-xs`: 5, compact 4 (was `radius-small` 6 / 4; Notion measures 6) (`breadcrumb.css`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · all even (owner) → the 24px plate reads the 24px control corner, now 6 (Notion's 6); compact 20 → 4.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → link and ellipsis plates land at once and fade out on fast.
+- 2026-10-25 · the desktop app's Canvas bar put a trail in a bar of one fixed height, where it wrapped to a second line at 1024 wide → `nowrap` (manifest boolean, `Breadcrumb nowrap`): no wrapping, the ancestors `flex: none`, the current page cut with an ellipsis first (it has no hover plate to clip) → `breadcrumb.css`, a One line tile; Breadcrumb back to In review.

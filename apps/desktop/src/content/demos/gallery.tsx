@@ -39,6 +39,18 @@ export const GalleryBreadcrumbIcons = () => (
     <BreadcrumbItem><BreadcrumbPage><DocumentIcon /> Item two</BreadcrumbPage></BreadcrumbItem>
   </BreadcrumbList></Breadcrumb>
 );
+// One line in a narrow bar: the ancestors keep their width and the current page is cut first.
+export const GalleryBreadcrumbNowrap = () => (
+  <div style={{ inlineSize: 220 }}>
+    <Breadcrumb nowrap><BreadcrumbList>
+      <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-nowrap">Item one</BreadcrumbLink></BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-nowrap">Item two</BreadcrumbLink></BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem><BreadcrumbPage>Item three, a longer page name</BreadcrumbPage></BreadcrumbItem>
+    </BreadcrumbList></Breadcrumb>
+  </div>
+);
 export const GalleryAlert = () => (
   <Alert icon={<InfoIcon />} title="Title">Body text</Alert>
 );

@@ -4,10 +4,14 @@ import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Menu } from "./primitives.tsx";
 
-export const Breadcrumb = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(function Breadcrumb(
-  { className, "aria-label": ariaLabel = "Breadcrumb", ...rest }, ref,
+export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
+  /** Keeps the trail on one line, as in a bar of one fixed height: the ancestors keep their width and the current page is cut with an ellipsis first. */
+  nowrap?: boolean;
+}
+export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(function Breadcrumb(
+  { className, nowrap, "aria-label": ariaLabel = "Breadcrumb", ...rest }, ref,
 ) {
-  return <nav ref={ref} aria-label={ariaLabel} className={cx("area-breadcrumb", className)} {...rest} />;
+  return <nav ref={ref} aria-label={ariaLabel} className={cx("area-breadcrumb", nowrap && "area-breadcrumb--nowrap", className)} {...rest} />;
 });
 
 export const BreadcrumbList = forwardRef<HTMLOListElement, HTMLAttributes<HTMLOListElement>>(function BreadcrumbList(
