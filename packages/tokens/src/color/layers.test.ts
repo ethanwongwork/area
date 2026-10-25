@@ -14,6 +14,7 @@ import { type Rgb, SRGB, clampRgb, oklabToRgb, parseHex, rgbToOklab, toHex } fro
 import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
 import { ACCENT_HUES } from "./generate.ts";
 import { resolveTheme, scaleFor } from "../semantic/resolve.ts";
+import { DARK_WASH, darkWashAlphas } from "../emit/base.ts";
 
 const THEMES = ["light", "dark"] as const;
 const groundsOf = (t: "light" | "dark") => t === "light" ? GROUND_LIGHT_STEPS : GROUND_DARK_STEPS;
@@ -163,13 +164,19 @@ describe("layers: inks with a hue follow the ground", () => {
     const t = resolveTheme({ theme: "light", neutral: "neutral", accent: String(hue), accentStrength, statusColours: "match" }).tokens;
     for (const { token, darken } of HUED_INKS) inks[darken].add(t[token]!);
   }
-  it("light: vivid and tonal inks keep 4.5:1 on every page, and are unchanged on white", () => {
+  it("light: vivid and tonal inks keep 4.5:1 on every page and the grounds on it, and are unchanged on white", () => {
     const problems: string[] = [];
     for (const g of GROUND_LIGHT_STEPS) for (const n of LAYER_STEPS) {
-      const m = layerLightness("light", g, n), page = layerHex("light", m.page, { chroma: 0, hue: 0 });
-      if (g === 100 && (m.vividDarken !== 0 || m.tonalDarken !== 0)) problems.push(`${g}/${n}: darkens on white`);
-      for (const [kind, d] of [["vivid", m.vividDarken], ["tonal", m.tonalDarken]] as const)
-        for (const ink of inks[kind]) if (wcagContrastHex(mixOklab(ink, "black", d), page) < 4.5) problems.push(`${g}/${n}: ${kind} ${ink} on ${page}`);
+      // On the page and on the deepest ground text sits on, the recessed layer or a card at every Card tone.
+      for (const tone of ["auto", ...CARD_TONE_STEPS] as CardTone[]) {
+        const m = layerLightness("light", g, n, undefined, tone);
+        if (g === 100 && tone === "auto" && (m.vividDarken !== 0 || m.tonalDarken !== 0)) problems.push(`${g}/${n}: darkens on white`);
+        // Tonal inks on the deepest ground text sits on, vivid ones on the page or a darker Card tone (VIVID_ROLES).
+        for (const [kind, d, ground] of [["vivid", m.vividDarken, Math.min(m.page, m.card)], ["tonal", m.tonalDarken, Math.min(m.recessed, m.card, m.tile)]] as const) {
+          const bg = layerHex("light", ground, { chroma: 0, hue: 0 });
+          for (const ink of inks[kind]) if (wcagContrastHex(mixOklab(ink, "black", d), bg) < 4.5) problems.push(`${g}/${n} tone ${tone}: ${kind} ${ink} on ${bg}`);
+        }
+      }
     }
     expect(problems).toEqual([]);
   });
@@ -178,10 +185,11 @@ describe("layers: inks with a hue follow the ground", () => {
   it("light: vivid and tonal inks keep 4.5:1 on every tinted page", () => {
     const problems: string[] = [];
     for (const g of GROUND_LIGHT_STEPS) for (const n of LAYER_STEPS) for (let hue = 0; hue < 360; hue += 15) for (const step of [1, 2, 4, 8, 12, 16]) {
-      const m = layerLightness("light", g, n), page = layerHex("light", m.page, { chroma: step * TINT_STEP, hue });
-      const darken = { vivid: tintedDarken(m.page, step * TINT_STEP, VIVID_Y), tonal: tintedDarken(m.page, step * TINT_STEP, TONAL_Y) };
-      for (const [kind, d] of [["vivid", darken.vivid], ["tonal", darken.tonal]] as const)
-        for (const ink of inks[kind]) if (wcagContrastHex(mixOklab(ink, "black", d), page) < 4.5) problems.push(`${g}/${n} hue ${hue} tint ${step}: ${kind} ${ink} on ${page}`);
+      const m = layerLightness("light", g, n), grounds = { vivid: m.page, tonal: Math.min(m.recessed, m.card, m.tile) };
+      for (const kind of ["vivid", "tonal"] as const) {
+        const bg = layerHex("light", grounds[kind], { chroma: step * TINT_STEP, hue }), d = tintedDarken(grounds[kind], step * TINT_STEP, kind === "vivid" ? VIVID_Y : TONAL_Y);
+        for (const ink of inks[kind]) if (wcagContrastHex(mixOklab(ink, "black", d), bg) < 4.5) problems.push(`${g}/${n} hue ${hue} tint ${step}: ${kind} ${ink} on ${bg}`);
+      }
     }
     expect(problems.slice(0, 20)).toEqual([]);
   }, 60_000);
@@ -236,6 +244,26 @@ describe("layers: the state fills keep their order and read apart at every setti
   });
 });
 
+// The dark translucent washes (emit/base.ts DARK_WASH): hover, selected and pressed in order at every setting, every
+// Pressed step its own wash, under the cap, and the defaults as they were (theme review 2026-10-24: capped one by one, at
+// Hover 3 and 4 every Selected and Pressed step equalled hover). Hover 3 and 4 share the hover stop: the cap leaves no room.
+describe("layers: the dark washes keep their order at every setting", () => {
+  it("dark", () => {
+    const problems: string[] = [];
+    for (const h of [1, 2, 3, 4]) for (const sel of [0, 1, 2, 3, 4]) for (const p of [1, 2, 3, 4]) {
+      const w = darkWashAlphas(h, sel, p), id = `${h}/${sel}/${p}`;
+      if (sel > 0 && w.selected - w.hover < 0.02 - 1e-9) problems.push(`${id}: selected ${w.selected.toFixed(3)} reads as hover ${w.hover.toFixed(3)}`);
+      // Pressed moves 0.425% a step by design (owner, 2026-10-21); here only its order is held.
+      if (w.pressed - w.selected < 0.002) problems.push(`${id}: press ${w.pressed.toFixed(4)} on selected ${w.selected.toFixed(4)}`);
+      if (w.pressed > DARK_WASH.max + 1e-9) problems.push(`${id}: pressed ${w.pressed.toFixed(3)} past the cap`);
+      if (p > 1 && w.pressed - darkWashAlphas(h, sel, p - 1).pressed < 0.002) problems.push(`${id}: pressed step ${p} reads as ${p - 1}`);
+    }
+    const d = darkWashAlphas(2, 1, 4);
+    expect([d.hover, d.selected, d.pressed].map(x => Number(x.toFixed(4)))).toEqual([0.14, 0.19, 0.207]);
+    expect(problems).toEqual([]);
+  });
+});
+
 // Pressed (styles/layers.css): the selected fill moved 12% (light) or 14% (dark) toward the body ink, stopped where muted text
 // keeps 4.6:1. The inks are solved with PRESS_ROOM to spare on the deepest (light) or lightest (dark) ground, so on every
 // ground, at every fill step, card tone and Layers setting, the firmest press moves at least that far past selected (dark:
@@ -251,8 +279,10 @@ describe("layers: a press has room on every ground", () => {
       for (const ground of ["page", "raised", "recessed", "card", "tile"] as const) {
         const selected = m.fill[ground][2];
         const pressed = theme === "light" ? Math.max(selected - 0.12 * (selected - body), bound) : Math.min(selected + 0.14 * (body - selected), bound);
-        const room = theme === "light" ? PRESS_ROOM.light : Math.min(PRESS_ROOM.dark, whiteLimit - selected);
+        // Dark fills stop where white text keeps 4.6:1 pressed (DARK_FILL_CEILING, 2026-10-23), so the room is always there.
+        const room = theme === "light" ? PRESS_ROOM.light : PRESS_ROOM.dark;
         if (Math.abs(pressed - selected) < room - 1e-6) problems.push(`${tone} ${f.hover}/${f.selected} ${g}/${n} ${ground}: press ${(pressed - selected).toFixed(4)}`);
+        if (theme === "dark" && selected + PRESS_ROOM.dark > whiteLimit + 1e-6) problems.push(`${tone} ${f.hover}/${f.selected} ${g}/${n} ${ground}: selected ${selected.toFixed(4)} leaves white text no press`);
       }
     }
     expect(problems).toEqual([]);

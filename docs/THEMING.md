@@ -10,16 +10,22 @@ on any ancestor changes every component inside it. The rules every setting follo
 
 Each is `data-area-<id>` on any element (in React, a `Theme` value). Missing settings
 inherit; an explicit setting starts a local scope. The registry
-(`packages/tokens/src/axes/registry.ts`) defines 30 axes. Most are one number named after
+(`packages/tokens/src/axes/registry.ts`) defines 44 axes. Most are one number named after
 what it measures.
 
 The registry is also the source of every setting's name and place (owner, 2026-10-19: "i want the axises to be the
 source of truth"). `SETTING_GROUPS` puts each axis and the two scoped settings (Contrast, Pills) under one heading
-(Color, Size, Shape, Stroke, Shadow, Effects) in order; each axis's `label` is its whole name (Mode, Stroke width,
+(Page, Accent, Where it paints, Size, Shape, Stroke, Shadow, States, Effects; in palette order since 2026-10-24) in order; each axis's `label` is its whole name (Mode, Stroke width,
 Floating shadow …), and `settingLabel` drops the heading's word under its heading (Width, Floating …). The app's
 Inspector and Theme tab both read them from `@area/tokens/config`. A preset's `label` is its value, with a range's
 named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carries "(Default)" (owner, 2026-10-20).
 `defaultPreset` alone says which is the default, and the Theme tab marks it.
+
+**How the Inspector shows them** (owner, 2026-10-24, docs/research/theme-review-2026-10-23/controls-plan.md): an ordered
+setting is a bar, Slider's field variant, with its name and its value inside, dragged from any point; named choices are a
+Segmented; a setting with an Auto, System or Accent beside its range shows those with Custom, and the bar under them while
+Custom is on. Values read in their unit (60%, 8px, 210ms, 215°, White), never a step number; the registry's preset ids are
+unchanged, so saved settings and attributes still read. Mode pairs show the one for the mode the app is in.
 
 **Colour**
 
@@ -88,18 +94,18 @@ outside both roles.
 
 Eleven controls, each with one effect and no named looks. `DEPTH_LEVERS` in
 `@area/tokens/config` lists them in the Inspector's order, with the state settings below. The app shows them under two
-headings, **Stroke** and **Shadow**:
+headings, **Stroke** and **Shadow**, and the states under **States**:
 
 | Setting | Inspector label | Values (default) | What it sets |
 |---|---|---|---|
 | `surface` | Stroke › Width | `0` (Flat), `0.5`, `1` (default), `1.5`, `2` px | The frame of cards, panels and floating surfaces (`frame-width`, read as `border-width`) |
-| `stroke` | Stroke › Strength | `0` (None) … `8` in half steps (since 2026-10-22), `4` (default) | How dark every stroke is, its distance from its ground; a style, where Contrast is the accessibility layer |
-| `shadow-rest` | Stroke › Rest shadow | `0` (None, default) … `8` | `shadow-edge`, a subtle edge round the same surfaces, with the line or instead of it |
+| `stroke` | Stroke › Edge contrast | `0` (None) … `8` in half steps (since 2026-10-22), `4` (default) | How dark every stroke is, its distance from its ground; a style, where Contrast is the accessibility layer |
+| `shadow-rest` | Shadow › Edge | `0` (None, default) … `8` | `shadow-edge`, a subtle edge round the same surfaces, with the line or instead of it |
 | `elevation` | Shadow › Floating | `0` (Flat) … `8`, `3` (default) | The Menu's shadow strength in percent: tooltip, float and modal roles |
 | `shadow-resting` | Shadow › Resting | `0` … `8`, `3` (default) | Cards, panels and raised thumbs at rest: one tight layer, `0 1px 2px -1px`, 8% at 3 (ChatGPT's sm) |
-| `shadow-hover` | Shadow › Hover | `0` … `8`, `3` (default) | A hovered card or tile's lift (`shadow-lift`): `0 2px 4px -1px`, 8% at 3 (ChatGPT's md). At 0 the hover steps the edge instead |
+| `shadow-hover` | States › Hover lift | `0` … `8`, `3` (default) | A hovered card or tile's lift (`shadow-lift`): `0 2px 4px -1px`, 8% at 3 (ChatGPT's md). At 0 the hover steps the edge instead |
 | `shadow-field` | Shadow › Fields | `0` (default) … `8` | Outline fields, select triggers, outline and soft Buttons. Soft fields stay flat |
-| `shadow-size` | Shadow › Size | `0` … `8`, `4` (default) | How far every shadow reaches (offset and blur × n/4) |
+| `shadow-size` | Shadow › Reach | `0` … `8`, `4` (default) | How far every shadow reaches (offset and blur × n/4) |
 | `shadow-softness` | Shadow › Softness | `0` (Crisp) … `8` (Smooth), `2` (default) | The number of layers and how tightly they sit |
 | `shadow-light` | Shadow › Light | `0` (Flat, default) … `4` | A lip under each lifted edge and a highlight inside its top |
 | `shadow-color` | Shadow › Colour | `black` (default), `warm`, `cool` | The light theme's shadow tint. Dark stays black |
@@ -125,14 +131,14 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 
 | Setting | Inspector label | Values (default) | What it sets |
 |---|---|---|---|
-| `stroke-hover` | Stroke › Hover | `0` (None) … `4`, `2` (default) | How far a control's edge darkens under the pointer (`edge-control-hover`), equal steps |
-| `selected-stroke` | Stroke › Selected | `1`, `2` (default), `3` px | A selected card's, tile's or choice card's edge, drawn inside (`selected-width`) |
-| `focus-ring` | Stroke › Focus ring | `hug` (default), `gap`, `halo`, `inset`, `bold` | Where the keyboard ring sits: `focus-width`, `focus-offset` (controls), `focus-gap` (containers and text) and the fields' ring, recolour and halo switches |
-| `fill-hover` | Fill › Hover | `1` … `4`, `2` (default) | The hover plate under rows and ghost controls, opaque and translucent (`bg-component-hover`, `bg-hover`) |
-| `fill-selected` | Fill › Selected | `0` (Same as hover) … `4`, `1` (default) | How far past hover the selected plate sits (`bg-component-active`, `bg-active`) |
-| `fill-pressed` | Fill › Pressed | `1` … `4`, `4` (default) | Quarters of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1, which is always at least the press room past selected |
-| `danger-hover` | Fill › Danger hover | `tint` (default), `neutral` | A destructive row's hover, highlight and pressed plate (Menu, Context menu): the row's own plate turned to the danger hue at the same lightness, or the grey plate every row takes (`row-danger-tint`, 1 or 0) |
-| `selected-tint` | Fill › Selected tint | `none` (default), `tint`, `neutral` | A selected container's fill under its stroke: nothing, the accent's faint surface (half strength in dark), or the row's selected wash (`selected-tint`) |
+| `stroke-hover` | States › Hover edge | `0` (None) … `4`, `2` (default) | How far a control's edge darkens under the pointer (`edge-control-hover`), equal steps |
+| `selected-stroke` | States › Selected edge | `1`, `2` (default), `3` px | A selected card's, tile's or choice card's edge, drawn inside (`selected-width`) |
+| `focus-ring` | States › Focus ring | `hug` (default), `gap`, `halo`, `inset`, `bold` | Where the keyboard ring sits: `focus-width`, `focus-offset` (controls), `focus-gap` (containers and text) and the fields' ring, recolour and halo switches |
+| `fill-hover` | States › Hover fill | `1` … `4`, `2` (default) | The hover plate under rows and ghost controls, opaque and translucent (`bg-component-hover`, `bg-hover`) |
+| `fill-selected` | States › Selected fill | `0` (Same as hover) … `4`, `1` (default) | How far past hover the selected plate sits (`bg-component-active`, `bg-active`) |
+| `fill-pressed` | States › Pressed fill | `1` … `4`, `4` (default) | Quarters of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1, which is always at least the press room past selected |
+| `danger-hover` | States › Danger hover | `tint` (default), `neutral` | A destructive row's hover, highlight and pressed plate (Menu, Context menu): the row's own plate turned to the danger hue at the same lightness, or the grey plate every row takes (`row-danger-tint`, 1 or 0) |
+| `selected-tint` | States › Selected tint | `none` (default), `tint`, `neutral` | A selected container's fill under its stroke: nothing, the accent's faint surface (half strength in dark), or the row's selected wash (`selected-tint`) |
 
 - Hover, selected and pressed are built on each other, so their order holds at every combination (`color/layers.ts`
   `FILL_STEPS`, checked against the CSS in `layers.test.ts`). Inks are solved against the deepest ground's selected fill
@@ -140,6 +146,9 @@ Selected and focus share a colour and differ by placement: the selected edge ins
   that read), so a press shows on every ground: it had equalled selected on recessed surfaces in light at Layers 4 to 8
   and on raised ones in dark from 16 + 8. At the defaults muted text is #646464 (was #666666) and the page's firmest press
   L 0.913 (was 0.925). A rule, not a setting: a press that cannot show is not a viable look.
+- The dark translucent washes (`bg-hover`, `bg-active`, `bg-pressed`, for plates over a ground a component can't know)
+  stop where muted text still reads: hover at 18.3%, selected at 20.3%, pressed at 22% (`DARK_WASH`, emit/base.ts), so
+  selected stays a step past hover and every press shows at every Fill setting (2026-10-24); Hover 3 and 4 share the stop.
 - Contrast More still lifts the hover edge to its 3:1 stroke, and a field's ring always draws under it.
 
 **Motion**
@@ -195,6 +204,9 @@ Selected and focus share a colour and differ by placement: the selected edge ins
   animates. Setting the theme before first paint needs neither.
 - **Re-emission.** Derived values are re-emitted on every element that carries a setting.
   A derivation resolved only at the root would freeze the wrong inputs for descendants.
+- **Grounds survive a scope.** A setting scope inside a region (a sidebar, a card, a menu, a `data-area-ground`) keeps
+  that region's control fills: each ground re-points them on the setting scopes inside it, the nearest ground winning
+  (`styles/layers.css`, 2026-10-23).
 - **Tokens, not layout.** A scope selects tokens, not layout or component behaviour. Custom
   HTML must consume the right foreground, background and type roles itself.
 - **Text restarts at a Type scope.** An element below the page root that carries `data-area-type` sets its text to
@@ -260,7 +272,8 @@ seams or come from `palette.json`. A parked token is not a promise of use.
 
 - **Required browser features.** The colour scope model requires CSS `light-dark()` and
   `color-scheme`, and the accent's paint relative colour syntax (`color(from …)`, `oklch(from …)`; Chrome 119, Safari
-  18, Firefox 128) inside `color-mix()`; there is no fallback.
+  18, Firefox 128) inside `color-mix()`, and `@scope` (Chrome 118, Safari 17.4, Firefox 146) so a setting scope inside a
+  region keeps the region's control fills; there is no fallback.
 - **Size.** Each accent preset writes 60 colours per mode plus its Solid steps; the 72 hues bring `axes.css` to about
   790 KB (about 80 KB gzipped).
 - **Saved settings migrate.** The app restores older saved Canvas settings: the `ui`

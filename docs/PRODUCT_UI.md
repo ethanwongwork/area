@@ -149,37 +149,23 @@ Zoom is Zoom control's stepper (− Auto +):
 **Theme tab** (Language 2026-10-19 to 20; owner, 2026-10-20: "i want to change language back to theme"). The Canvas
 header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
 
-- **Setup** (the default; `src/pages/theme-setup.tsx`, owner 2026-10-20, rebuilt 2026-10-21 after a product finder's
-  flow, Tesla's design page and an Appearance picker, [research](research/onboarding-setup-2026-10-21.md)):
-  - **The setup's own UI never changes as picks are made**: the Canvas body restates the defaults over the app's
-    picks (`Workspace canvasPicks={false}`); only the drawings take them (`canvasAttributes`). The same holds for
-    Browse. The chrome around it follows the picks (rule 18); the body stays at the defaults (owner, reconfirmed
-    2026-10-22).
-  - **The visual** fills the left: the header's view, Bento (product cards after the owner's references), Desktop (the
-    analytics dashboard) or Mobile (a phone's Today), at true scale where it fits, over the picks so far, showing the
-    choice under the pointer or keyboard focus; a state setting's choice draws its state. Ground and Layers draw the
-    **layer map** instead (`src/layer-map.tsx`; owner, 2026-10-22: "make those combinations extremely clear"): a window
-    drawn from the layer roles, each region tagged with its name, its layer and the colour it paints (window bar,
-    header, page and inspector take the page; the side panel is recessed; cards and menus are raised; a field or nav row
-    is a fill a step from its layer), and the tones in order under it.
-  - **Light and dark are separate steps** (owner, 2026-10-22: "i shouldnt be choosing both at the same time"): Color
-    asks light's Tint, Ground, Layers and Card tone; Dark mode, the step after it, asks dark's, drawn in dark. Tint hue and Text tint
-    are shared and asked in Color.
-  - **Page colour** opens Color and Dark mode (`src/page-colour.ts`; owner, 2026-10-22: "they pick the exact shade they
-    want"): one colour sets that mode's Ground, Tint strength and Tint hue, snapped to their steps, and says what it
-    snapped to. It is a shortcut to the settings, never a setting of its own.
-  - **The panel** at the right holds the open category's settings, one section each (its name and question, then its
-    choices), with Back, Use defaults and Continue between categories at its foot. A pick applies at once.
-  - **In a narrow Canvas** (under 816, a 400 visual beside the 400 panel; 2026-10-23) the visual sits over the panel,
-    the Canvas's width and the one-column setup's height (`clamp(200px, 36vh, 420px)`), and the panel scrolls under it.
-    In a 1024 window the Sidebar and Inspector leave the Canvas about 470 to 530, where the visual beside the panel was
-    20 to 80 wide; at 1440 the two stay side by side.
-  - **The choices** are kept apart from the visual (owner: "separate the choices from the visual"): choice cards (Radio
-    and Checkbox `variant="card" layout="preview"`) each showing the option as a mini UI (colour, grounds, layers,
-    emphasis, contrast, density) or one simple mark at true size on a page plate (corners, lines, lifts, plates, rings,
-    "Aa", a pill, motion), and the accent as a row of its own colours (Color swatch picker); `src/choice-visuals.tsx`.
-  - **The Sidebar** is a vertical Stepper of the categories: the open one lists its settings with what each is set to,
-    the others how many of theirs changed; All is the start and the summary of picks, with Copy picks.
+- **Setup** (the default; `src/pages/theme-setup.tsx`; rebuilt 2026-10-24 after a product finder the owner sent: "i want
+  to really try to build this experience with the options or sliders on the bottom for customization"):
+  - **The stage** fills the Canvas: the header's view (Bento, Desktop or Mobile) in the theme so far, with the rest of the
+    library faint round it, every piece re-drawn as an answer moves. The header also chooses the mode the stage shows, apart from the app's own (owner, 2026-10-24: "keep Setup's own Light/Dark switch separate from the app's mode"), so a light page can be set while the app is dark; the Inspector shows the app's mode.
+  - **The dock** floats at the stage's foot, one question at a time: Back and Reset, the question, how far along (3 of
+    39); one control; Skip (the chapter) and Continue. **Quick** asks the twelve that change the most (the page, its greys,
+    the accent, its saturation and where it shows, corners, text size, room, layers, edges, lift, motion); **Full** asks
+    about every setting, chapter by chapter (Page, Accent, Shape and size, Edges and depth, States, Motion, Accessibility,
+    Dark mode), skipping a question the answers so far make moot (Button shade while the accent shows nowhere, Text tint
+    while the greys are neutral). A light/dark pair is asked in light in its chapter and again in Dark mode, the stage
+    turned to it (owner, 2026-10-24: "shouldnt there be more than 12 questions?"). Each control is the Inspector's own
+    row at a larger size (`src/inspector-rows.tsx`), or choices drawn as cards sharing the dock's width, or swatches.
+  - **Setup and the Inspector are two ways into the same settings** (the Canvas's): every answer is an Inspector row and
+    reads there at once; what Setup does not ask keeps its default. The summary lists the answers and hands over to the
+    Inspector (Fine-tune), with Copy theme and Start over.
+  - **The setup's own UI never changes as picks are made**: the Canvas body restates the defaults over the app's picks
+    (`Workspace canvasPicks={false}`); only the stage takes them. The chrome around it follows the picks (rule 18).
 - **Browse** lists the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
   wide.
 - **Containers.** Asset card is the Components tab's container only; every other tab's tiles are the plain container
@@ -200,12 +186,14 @@ chosen view holds across tabs and launches. A tab with nothing for a view leaves
 out.
 
 - **Theme** (Language 2026-10-19 to 20; the tab and the Inspector use one word): the
-  Canvas settings under the registry's headings (`SETTING_GROUPS`: Color, Size, Shape,
-  Stroke, Shadow, Fill, Effects, then Material), only those that change this tab's specimens. Ground and Layers show
-  the app's mode's own pair (Light ground and Light layers in light, the dark pair in dark; owner, 2026-10-22), the
-  Titlebar's switch choosing which. An option names its value
-  and, at a range's end, what that end is ("0 (Flat)", "100 (White)"); none says "(Default)" (owner, 2026-10-20:
-  "i dont like seeing (default)"). The Theme tab is where the default is marked.
+  Canvas settings under the registry's headings (`SETTING_GROUPS`: Page, Accent, Where it paints, Size, Shape,
+  Stroke, Shadow, States, Effects, then Material), only those that change this tab's specimens. A light/dark pair
+  (Lightness, Grey tint, Layer contrast, Card shade, Button depth) shows the app's mode's own (owner, 2026-10-22), the
+  Titlebar's switch choosing which. An ordered setting is a bar (Slider `variant="field"`, owner 2026-10-24), its name
+  and value inside; named choices are a Segmented beside the label, or under it from three options; a setting with Auto,
+  System or Accent shows those with Custom and the bar under them. Values read in their unit ("60%", "8px", "210ms",
+  "White"), never a step number; none says "(Default)" (owner, 2026-10-20: "i dont like seeing (default)"). The Theme
+  tab is where the default is marked.
 - **Design**: what is chosen, at its narrowest: a Canvas item, else the Sidebar's row, else
   the tab's overview. It shows, in order:
   1. the tab's display settings;

@@ -1,6 +1,31 @@
 # Handoff
 
 ## Current state (2026-10-24)
+- **Theme review, Inspector bars and Setup as a finder: PR #159 (`claude/theme-color-review-29db0d`), merged
+  2026-10-24.** Next: the owner starts a new theme-creation session for Setup with the Hairline session's figures.
+  - *Setup* (owner, a mouse-finder reference): a stage (the view in the theme so far, the library faint round it) and a
+    floating dock: one question, one control (the Inspector's row at lg, cards, swatches), Continue. Quick (12) or Full
+    (42 by chapter, moot ones skipped, Skip chapter, Dark mode re-asks the pairs); the summary hands over to the
+    Inspector. Setup's stage mode stays apart from the app's (owner). Open: page and accent colour fields (dropped).
+    Figures from `claude/hairline-area-visuals-00cda9` (area-illustration skill, `figures/index.jsx` SETTINGS = best
+    figure per setting; merged PR #158) map onto three seams in `pages/theme-setup.tsx`: the stage (`SetupDrawing`), choice-card
+    pictures (`ChoicePreview`) and the faint scatter (`SCATTER`); they must move into apps/desktop first.
+  - *Inspector* (owner, a settings-panel reference): Slider `variant="field"` (label and value inside a field-height
+    bar) and `origin` (fill from a neutral value; Temperature); Slider In review. `inspector-rows.tsx` is shared by
+    Inspector, Setup and the review page (https://claude.ai/artifact/XbbMMBCfHriS8vZV9ARiaV, `round2`). Ordered settings
+    are bars in units, named choices Segmented, Greys = Temperature + Tint colour, Card shade halves, Contrast quarters.
+    Headings Page, Accent, Where it paints, Size, Shape, Stroke, Shadow, States, Effects; labels renamed in the
+    registry, preset ids unchanged. Next (docs/research/theme-review-2026-10-23/controls-plan.md): finer 0–100 scales,
+    Tint by hue room, every corner px, id renames with aliases, then the colour rules approved on the Axis review page
+    (collection `verdicts`).
+  - *Theme review* (owner: "no visual errors due to all the combinations"): rendered sweeps of all 119 families × 12
+    combinations and 30 random all-setting combinations × light/dark (docs/research/theme-review-2026-10-23). Fixed: a
+    setting scope inside a ground reset its fills (`@scope` per ground), Selected tint in inner scopes, pressed fill
+    scopes, dark fills past white text's limit (`DARK_FILL_CEILING`), tonal/vivid inks on deep grounds, Label tint on the
+    press, Code block and Box model inks, dark wash order (`DARK_WASH`), gallery fit clipping labelled demos. Defaults
+    unchanged (token probe identical). Open for the owner: keycaps in accent Buttons, hued text on state fills, edges on
+    grey grounds, Selection Accent at low strength. `claude/color-cards-refinement-2c56b7` edits layers.ts/.css: its
+    frame grounds need `@scope` too.
 - **Area figures, `claude/hairline-area-visuals-00cda9` (owner 2026-10-24, eleven rounds; merged to main by PR).** Area's
   own illustration style for theme visuals; next, per the owner, a new session combines it with a new theme creation
   process. Start at `docs/research/area-figures-2026-10-24/README.md` ("Pick up here": captures, each setting's figure,

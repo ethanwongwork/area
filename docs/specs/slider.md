@@ -39,11 +39,12 @@ sliders.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | sm, md (default), lg | Row height follows the control tier | Untitled one size |
-| variant | rail (default), track, bar | Track: a pill as tall as the knob, the fill under it. Bar: the track is the control's full height and corner, its thumb the fill's end with a grip (owner 2026-10-21) | Track: Figma's image adjustment sliders (`figma--adjustment-slider`). Bar: the owner's "Rate your driver" reference; Material 3 Expressive's tall track (unverified) |
+| variant | rail (default), track, bar, field | Track: a pill as tall as the knob, the fill under it. Bar: the track is the control's full height and corner, its thumb the fill's end with a grip (owner 2026-10-21). Field: a field-height bar with the label at its start and the value at its end inside it, the fill a plate behind them, dragged from any point, no grip; horizontal only, no step marks or end labels (owner 2026-10-24) | Track: Figma's image adjustment sliders (`figma--adjustment-slider`). Bar: the owner's "Rate your driver" reference; Material 3 Expressive's tall track (unverified). Field: the owner's settings-panel reference ("Bounce 100", "Stagger 45ms", "Corner 28px"), a screenshot; no live capture |
 | labelPosition | inline (default), top | Label and readout above the rail | Area composition (owner-confirmed) |
 | orientation | horizontal (default), vertical | Vertical tool panels | Area composition (owner-confirmed) |
 | composition | readout, step marks | Owner-confirmed (above) | Area compositions |
 | content | end labels (startLabel, endLabel) under the track; horizontal only | Owner 2026-10-21 ("Low" … "High") | The owner's Intensity reference; macOS and iOS settings sliders |
+| content | origin (a value in the range) | Owner 2026-10-24: the Inspector's Temperature bar, Cool … Neutral … Warm; the fill runs between the origin and the value, so the neutral middle is an empty bar | Figma's and Lightroom's temperature and exposure sliders fill from their centre (unverified) |
 | content | buffered (0 to the value's units) | Owner 2026-10-21: media rows (music card) show how far the source has loaded | YouTube, Spotify, Apple Music; Video player's loaded part |
 | SliderRange | two handles on one rail, optional number fields; sm, md, lg; variant rail, track, bar | Audit C-12 A (owner): the range with inputs, promoted to a component | Figma's and Notion's range filters (below) |
 
@@ -287,3 +288,17 @@ eye (background tab).
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-24
+
+- **What changed:** a new `field` treatment: a bar the height of a field, with the setting's name at its start and its
+  value at its end inside it, and a soft grey fill behind them that you drag from anywhere. It is for lists of settings,
+  and the Inspector's theme settings move onto it.
+- **Why:** your settings-panel reference ("Bounce 100", "Corner 28px"); its height, corner and side insets are Area's
+  field tier's, so it lines up with a field or Button beside it.
+- **Decisions:** trough `bg-component` (the soft field fill), fill `fill-track` (the off-track grey, one step past it),
+  hover `fill-toggle-hover`; label and value in the body ink, which reads on both (the muted ink does not clear 4.5:1 on
+  the fill). Sides: the inset contract's `(height − cap) / 2`, at least half the corner. Open: whether the fill should
+  take the accent at Selection Accent (the reference is neutral, and an accent plate behind text needs its own step).
+- **Origin (same day):** a range with a neutral middle (Temperature, Cool to Warm) now fills from that middle to the value,
+  either way, so Neutral is an empty bar; you asked for it after the round-2 controls page. Any variant takes it.

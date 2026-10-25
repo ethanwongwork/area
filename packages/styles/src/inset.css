@@ -8,7 +8,7 @@
 @layer area.components {
   .area-button, .area-input, .area-number-field, .area-chip, .area-select, .area-custom-select__trigger, .area-date-picker__trigger,
   .area-segmented__item, .area-nav__item, .area-nav__label,
-  .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-panel__bar {
+  .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-panel__bar, .area-slider--field {
     --_box-height: var(--_height);
     --_box-border: var(--area-stroke-width);
     /* The text's inline content box is its cap height. The cap unit works without text-box
@@ -52,6 +52,13 @@
    * as Figma's header buttons sit at 208 with every section and row action. */
   .area-panel__bar:has(> .area-button:last-child) { --_box-end: calc(var(--_box-height) - var(--_inset) * 2); }
   .area-button { --_box-border: var(--area-stroke-width); }
+  /* A field slider has no edge; its sides clear its own corner, as a field's do (below). */
+  .area-slider--field {
+    --_box-border: 0px;
+    --_field-corner: var(--_track-radius);
+    padding-inline-start: max(var(--_inset-start), round(nearest, calc(var(--_field-corner) / 2), 1px));
+    padding-inline-end: max(var(--_inset-end), round(nearest, calc(var(--_field-corner) / 2), 1px));
+  }
   .area-chip { --_box-icon: var(--_dot); }
   .area-segmented__item { --_box-height: var(--_item); }
   .area-nav__item, .area-nav__label, .area-menu__item, .area-menu__label {

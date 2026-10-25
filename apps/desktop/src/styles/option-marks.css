@@ -18,3 +18,12 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
 .studio-mark--host > .studio-mark__swatch { outline-color: var(--_host-ring) }
 .studio-mark--curve { inline-size: 100%; block-size: 100%; overflow: visible; }
 .studio-mark--curve path { fill: none; stroke: currentColor; stroke-width: var(--area-weight-icon, 1.125px); stroke-linecap: round; }
+
+/* Inspector rows (src/inspector-rows.tsx). A row that changes nothing under the other settings is dimmed, still usable, with
+   the reason under it in the description's size and ink (owner, 2026-10-24: "some of the axises i cant tell what im even
+   updating"). A bar's swatch (Button shade) sits before its name, as an option's mark sits before its label. */
+.studio-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-4); }
+.studio-row--inactive > :not(.studio-row__note) { opacity: var(--area-opacity-disabled); }
+.studio-row__note { margin: 0; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
+.studio-row__label { display: inline-flex; align-items: center; gap: var(--area-space-6); min-inline-size: 0; }
+.studio-row__label > .studio-mark { inline-size: var(--area-space-16); block-size: var(--area-space-16); }

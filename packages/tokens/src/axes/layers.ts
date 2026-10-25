@@ -22,7 +22,7 @@ import {
 
 export const GROUND_LIGHT_AXIS: AxisDefinition = {
   id: "ground-light",
-  label: "Light ground",
+  label: "Light page lightness",
   description: "The light page's lightness, 100 (white) to 90.",
   defaultPreset: String(DEFAULT_GROUND_LIGHT),
   namespaces: ["--area-ground-light:"],
@@ -36,7 +36,7 @@ export const GROUND_LIGHT_AXIS: AxisDefinition = {
 
 export const GROUND_DARK_AXIS: AxisDefinition = {
   id: "ground-dark",
-  label: "Dark ground",
+  label: "Dark page lightness",
   description: "The dark page's lightness, 0 (black) to 24.",
   defaultPreset: String(DEFAULT_GROUND_DARK),
   namespaces: ["--area-ground-dark:"],
@@ -50,7 +50,7 @@ export const GROUND_DARK_AXIS: AxisDefinition = {
 
 const layersAxis = (theme: "light" | "dark"): AxisDefinition => ({
   id: `layers-${theme}`,
-  label: theme === "light" ? "Light layers" : "Dark layers",
+  label: theme === "light" ? "Light layer contrast" : "Dark layer contrast",
   description: `In ${theme}: how far cards, menus and sidebars sit from the page, and controls from their ground, 0 (Flat) to 8.`,
   defaultPreset: String(DEFAULT_LAYERS),
   namespaces: [`--area-layers-${theme}:`],

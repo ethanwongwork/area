@@ -53,7 +53,7 @@ const numbered = (n: number, zero: string, write: (i: number) => Record<string, 
 
 /** Stroke strength in half steps since 2026-10-22 (owner: "can the stroke strength options be more granular?"), 0 to 8: each
  * whole step keeps its value, so a saved 3 is the same 3. */
-export const STROKE_AXIS = control("stroke", "Stroke strength", "How dark every stroke is: its distance from its ground, 0 (none) to 8 in half steps", "4", ["stroke-strength"],
+export const STROKE_AXIS = control("stroke", "Edge contrast", "How dark every stroke is: its distance from its ground, 0 (none) to 8 in half steps", "4", ["stroke-strength"],
   range(16).map(i => { const n = i / 2; return { id: String(n), label: n === 0 ? "0 (None)" : String(n), tokens: { "stroke-strength": n / 4 } }; }));
 
 export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting shadow", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8: one tight layer, 3 is 8% (ChatGPT's sm)", "3", ["shadow-resting-step"],
@@ -61,13 +61,13 @@ export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting shadow", "
 
 /** Hover shadow (owner, 2026-10-21): how much a hovered card or tile lifts, its own scale (it rode Floating shadow before),
  * one tight layer like the rest shadow, 3 the owner's pick (ChatGPT's md, `0 2px 4px -1px` at 8%). */
-export const SHADOW_HOVER_AXIS = control("shadow-hover", "Hover shadow", "How much a hovered card or tile lifts, 0 (none) to 8: one tight layer, 3 is 8% (ChatGPT's md)", "3", ["shadow-hover-step"],
+export const SHADOW_HOVER_AXIS = control("shadow-hover", "Hover lift", "How much a hovered card or tile lifts, 0 (none) to 8: one tight layer, 3 is 8% (ChatGPT's md)", "3", ["shadow-hover-step"],
   numbered(8, "None", i => ({ "shadow-hover-step": i })));
 
 export const SHADOW_FIELD_AXIS = control("shadow-field", "Field shadow", "How much fields, select triggers, outline and soft buttons lift, 0 (none) to 8, in % as Shadow", "0", ["shadow-field-step"],
   numbered(8, "None", i => ({ "shadow-field-step": i })));
 
-export const SHADOW_SIZE_AXIS = control("shadow-size", "Shadow size", "How far every shadow reaches, its offset and blur, 0 (touching) to 8", "4", ["shadow-size"],
+export const SHADOW_SIZE_AXIS = control("shadow-size", "Shadow reach", "How far every shadow reaches, its offset and blur, 0 (touching) to 8", "4", ["shadow-size"],
   numbered(8, "Touching", i => ({ "shadow-size": i / 4 })));
 
 /**

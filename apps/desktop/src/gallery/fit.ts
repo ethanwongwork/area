@@ -94,7 +94,7 @@ interface Tile {
  * indeterminate Progress bar sliding along its track) counts only as far as the clip. Measured
  * in the stage's own (unscaled) pixels.
  */
-function extent(stage: HTMLElement): Box {
+function extent(stage: HTMLElement, withText = false): Box {
   let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
   const clips = new Map<Element, boolean>();
   // The outermost ancestor inside the stage that clips this node, if any.
@@ -115,9 +115,32 @@ function extent(stage: HTMLElement): Box {
     left = Math.min(left, rect.left); top = Math.min(top, rect.top);
     right = Math.max(right, rect.right); bottom = Math.max(bottom, rect.bottom);
   }
+  // A demo's own text paints too (Skeleton's row labels, "Display"): left out of the scale, a row of label and specimen
+  // was scaled for the specimen alone and clipped at both ends of a tile under about 360px (theme review 2026-10-24). It
+  // counts for the scale only: whether a specimen stretches is still read from its Area elements.
+  const walker = withText ? document.createTreeWalker(stage, NodeFilter.SHOW_TEXT) : null;
+  const range = document.createRange();
+  for (let text = walker?.nextNode(); walker && text; text = walker.nextNode()) {
+    // Text inside an Area element is measured with it; only a demo's own (outside every one, within the stage) is added.
+    const parent = text.parentElement;
+    const owner = parent?.closest('.area-sr-only, svg, [class*="area-"], :popover-open, dialog:modal');
+    if (!text.textContent?.trim() || !parent || (owner && stage.contains(owner))) continue;
+    range.selectNodeContents(text);
+    const clip = clipOf(text as unknown as Element)?.getBoundingClientRect();
+    for (const own of range.getClientRects()) {
+      if (own.width < 1 || own.height < 1) continue;
+      const rect = clip ?? own;
+      left = Math.min(left, rect.left); top = Math.min(top, rect.top);
+      right = Math.max(right, rect.right); bottom = Math.max(bottom, rect.bottom);
+    }
+  }
   if (!Number.isFinite(left)) return { w: 0, h: 0 };
   const scale = Number(stage.style.scale) || 1;
-  return { w: (right - left) / scale, h: (bottom - top) / scale };
+  if (!withText) return { w: (right - left) / scale, h: (bottom - top) / scale };
+  // For the scale, the extent as the stage shrinks it: about its centre, so a specimen that sits off centre in a wider
+  // stage (Skeleton's list, left-aligned in 760) needs twice its farther half (it lost 40px on the left before).
+  const box = stage.getBoundingClientRect(), cx = (box.left + box.right) / 2, cy = (box.top + box.bottom) / 2;
+  return { w: 2 * Math.max(cx - left, right - cx) / scale, h: 2 * Math.max(cy - top, bottom - cy) / scale };
 }
 
 /*
@@ -283,7 +306,7 @@ export function fitTiles(canvas: HTMLElement): () => void {
     const rooms = batch.map(entry => roomOf(entry.view));
     // A fluid specimen fills its tile at any zoom: laid out at the room over the zoom, then scaled.
     batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(layoutWidth(entry, rooms[index]!.w, exact ?? entry.group) * (exact ? 1 : entry.widen))}px`; });
-    const scales = batch.map((entry, index) => exact ?? fit(rooms[index]!, extent(entry.stage), entry.group));
+    const scales = batch.map((entry, index) => exact ?? fit(rooms[index]!, extent(entry.stage, true), entry.group));
     batch.forEach((entry, index) => { entry.stage.style.scale = scales[index]!.toFixed(3); });
   };
   rescale(tiles);

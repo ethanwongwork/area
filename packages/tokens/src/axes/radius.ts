@@ -43,7 +43,7 @@ const describe = (id: string, button: number, surface: number) =>
 
 export const RADIUS_AXIS: AxisDefinition = {
   id: "radius",
-  label: "Radius",
+  label: "Corner",
   description: "One corner setting, from Sharp to Pill: controls scale with their height, surfaces and nested shapes follow.",
   defaultPreset: "8",
   namespaces: [

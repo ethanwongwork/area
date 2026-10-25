@@ -183,7 +183,7 @@ function neutralTokens(t: Theme, neutral: string): TokenMap {
 
 export const NEUTRAL_AXIS: AxisDefinition = {
   id: "neutral",
-  label: "Neutral",
+  label: "Grey",
   description: "The grey the whole interface is built from.",
   defaultPreset: DEFAULT_SELECTION.neutral,
   namespaces: [

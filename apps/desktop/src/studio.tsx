@@ -451,7 +451,10 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
   // as a hairline contact sheet in compact), radius, surface, elevation and the Edge and Depth levers, motion and pills.
   // A tab that keeps its own UI at the defaults restates them, since <html> now carries the choices.
-  const axes = canvasPicks ? { ...canvasScope, ...canvasAttributes(studio.shown.canvas, studio.shown.material) } : { ...canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT), ...SETUP_SCALE, ...canvasScope };
+  // System Contrast writes no attribute, so a tab at the defaults states the OS's level itself; else it would inherit the
+  // pick <html> carries.
+  const systemContrast = typeof matchMedia === "function" && matchMedia("(prefers-contrast: more)").matches ? "8" : "0";
+  const axes = canvasPicks ? { ...canvasScope, ...canvasAttributes(studio.shown.canvas, studio.shown.material) } : { ...canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT), "data-area-contrast": systemContrast, ...SETUP_SCALE, ...canvasScope };
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
   const signature = JSON.stringify(axes);

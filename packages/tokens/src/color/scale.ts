@@ -21,7 +21,7 @@ import { apcaMagnitude, relativeLuminance, wcagContrastHex } from "./contrast.ts
 import { TONAL_Y } from "./layers.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
 import PALETTE from "./palette.json" with { type: "json" };
-import { ACCENT_STRENGTHS, SOLID_STEPS, type SolidStep, familyFor, withStrength } from "./generate.ts";
+import { ACCENT_STRENGTHS, SOLID_STEPS, type SolidStep, familyFor, mixOklab, withStrength } from "./generate.ts";
 
 export type Theme = "light" | "dark";
 export type ScaleKind = "neutral" | "chromatic";
@@ -151,6 +151,9 @@ const SOLID_CONTRAST_TARGET = 4.6;
  * not body copy, which is what a control label is.
  */
 const SOLID_APCA_TARGET = 61;
+
+/** A pressed accent Button: its hover moved this far toward black in OKLab (button.css `--_solid-active`). */
+const SOLID_PRESS = 0.1;
 
 export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
   const family = familyFor(spec.id);
@@ -430,8 +433,9 @@ function solidAt(steps: readonly ScaleStep[], step: SolidStep, fg: "#ffffff" | "
 /**
  * Label tint's end (axes/accent.ts, owner 2026-10-23: "the foreground being a lighter version of that color with some
  * slight hue, while still being accessible"): the most coloured rung on the label's side (the light end for a white
- * label, the dark end for black) that still carries the label's contract on the fill and its hover at every Accent
- * strength, the fill and the label quieted together. Null where no rung does (a bright fill white only just clears, as
+ * label, the dark end for black) that still carries the label's contract on the fill, its hover and its press (the hover
+ * 10% toward black in OKLab, button.css) at every Accent strength, the fill and the label quieted together (the press
+ * joined 2026-10-23: a lime label at 4 in dark measured 4.21:1 pressed). Null where no rung does (a bright fill white only just clears, as
  * blue's 500 at 4.66:1): the label stays as it is. Label tint mixes the label toward this rung in quarters.
  */
 function tintedLabel(steps: readonly ScaleStep[], fill: Level, hover: Level, fg: "#ffffff" | "#000000"): Level | null {
@@ -439,10 +443,11 @@ function tintedLabel(steps: readonly ScaleStep[], fill: Level, hover: Level, fg:
   const order = fg === "#ffffff" ? steps : [...steps].reverse();
   let found: Level | null = null;
   for (const step of order) {
-    const clears = ACCENT_STRENGTHS.every(strength => [fill, hover].every(level => {
-      const ink = withStrength(step.hex, strength), ground = withStrength(byLevel.get(level)!, strength);
-      return wcagContrastHex(ink, ground) >= SOLID_CONTRAST_TARGET && apcaMagnitude(ink, ground) >= SOLID_APCA_TARGET;
-    }));
+    const clears = ACCENT_STRENGTHS.every(strength => {
+      const ink = withStrength(step.hex, strength), quiet = (level: Level) => withStrength(byLevel.get(level)!, strength);
+      return [quiet(fill), quiet(hover), mixOklab(quiet(hover), "#000000", SOLID_PRESS)].every(ground =>
+        wcagContrastHex(ink, ground) >= SOLID_CONTRAST_TARGET && apcaMagnitude(ink, ground) >= SOLID_APCA_TARGET);
+    });
     if (!clears) break;
     found = step.level;
   }

@@ -16,7 +16,8 @@ import { MATERIAL_BUNDLES, MATERIAL_LEVERS, MATERIAL_STROKE_STYLES, MATERIAL_SWI
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { materialValue, type MaterialState } from "./material.ts";
 import { choiceFigure, FIGURED } from "./choice-figures.tsx";
-import { materialMark, optionMark } from "./option-marks.tsx";
+import { materialMark } from "./option-marks.tsx";
+import { ROW_OF, SettingRow, type RowContext } from "./inspector-rows.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
 
@@ -62,7 +63,7 @@ export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-
         const shown = (group.settings as readonly Axis[]).filter(axis => axes.includes(axis) && inTheme(axis));
         return shown.length ? (
           <PanelSection key={group.heading} heading={group.heading} actions={group.heading === first ? <ViewSwitch view={view} onChange={setView} /> : undefined}>
-            {shown.map(axis => <Setting key={axis} axis={axis} />)}
+            {(drawn => shown.map(axis => <Setting key={axis} axis={axis} drawn={drawn} />))(new Set<string>())}
           </PanelSection>
         ) : null;
       })}
@@ -73,40 +74,23 @@ export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-
 }
 
 /**
- * One setting, its label beside its control (owner, 2026-10-11); fields are soft, as Figma's. A list's options draw what
- * they set (src/option-marks.tsx), and the option the pointer or the arrows are on previews on the Canvas until the list
- * closes (owner, 2026-10-18; docs/research/settings-pickers-2026-10-18). A set previews the highlighted part toggled.
+ * One setting's row (src/inspector-rows.tsx): its control chosen for what it sets, the Canvas following as it moves, and a
+ * list's option previewing while the pointer or the arrows are on it (owner, 2026-10-18). A combined row (Greys) draws once,
+ * at the first setting it stands for.
  */
-function Setting({ axis }: { axis: Axis }) {
-  const { canvas, material, setCanvas, previewCanvas } = useStudio();
+function Setting({ axis, drawn }: { axis: Axis; drawn: Set<string> }) {
+  const { canvas, material, setCanvas, previewCanvas, theme } = useStudio();
   const view = useContext(ViewContext);
-  const control = GALLERY_CONTROLS.find(entry => entry.axis === axis)!;
-  const value = canvas[axis];
-  const layout = layoutOf(view, axis, control.items.length);
-  const items = control.items.map(item => ({ value: item.value, label: item.label, icon: optionMark(axis, item.value, canvas) ?? undefined,
-    preview: layout === "grid" ? choiceFigure(axis, item.value, canvas, material) : undefined }));
-  return (
-    <Field label={control.label} orientation="horizontal">
-      {control.kind === "chips" ? (
-        // A set (several on at once) is a multi-select dropdown (owner, 2026-10-14; was a group of
-        // toggle Chips): its rows toggle and the list stays open.
-        <CustomSelect multiple size="sm" variant="soft" fullWidth layout={layout} aria-label={control.label} placeholder="None"
-          items={items} values={value.split(" ").filter(Boolean)} onValuesChange={next => setCanvas(axis, next.join(" "))}
-          onHighlightChange={part => {
-            if (part === null) return previewCanvas(axis, null);
-            const on = value.split(" ").filter(Boolean);
-            const toggled = on.includes(part) ? on.filter(name => name !== part) : [...on, part];
-            previewCanvas(axis, control.items.map(item => item.value).filter(name => toggled.includes(name)).join(" "));
-          }} />
-      ) : control.kind === "select" ? (
-        <CustomSelect size="sm" variant="soft" fullWidth layout={layout} aria-label={control.label} title={control.hint}
-          items={items} value={value} onValueChange={next => setCanvas(axis, next)} onHighlightChange={next => previewCanvas(axis, next)} />
-      ) : (
-        // Two or three words in a 256 Inspector: a swatch would truncate them, so segments stay text.
-        <Segmented size="sm" fullWidth items={[...control.items]} value={value} onValueChange={next => setCanvas(axis, next)} />
-      )}
-    </Field>
-  );
+  const row = ROW_OF[axis];
+  if (row) { if (drawn.has(row)) return null; drawn.add(row); }
+  const context: RowContext = {
+    values: canvas, mode: theme,
+    set: changes => { for (const [name, value] of Object.entries(changes)) setCanvas(name as Axis, value); },
+    preview: (name, value) => previewCanvas(name as Axis, value),
+    layout: (name, count) => layoutOf(view, name, count),
+    figure: (name, value) => choiceFigure(name as Axis, value, canvas, material),
+  };
+  return <SettingRow axis={axis} context={context} />;
 }
 
 /**

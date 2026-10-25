@@ -37,7 +37,7 @@ export const TINT_HUE_AXIS: AxisDefinition = {
 
 const strengthAxis = (theme: "light" | "dark"): AxisDefinition => ({
   id: `tint-${theme}`,
-  label: theme === "light" ? "Light tint" : "Dark tint",
+  label: theme === "light" ? "Light grey tint" : "Dark grey tint",
   description: `In ${theme}: how strongly the grays take the tint's hue. Auto follows Neutral; 0 (None) to 16.`,
   defaultPreset: "auto",
   namespaces: [`--area-tint-${theme}-auto:`, `--area-tint-chroma-${theme}:`],
@@ -45,7 +45,7 @@ const strengthAxis = (theme: "light" | "dark"): AxisDefinition => ({
     { id: "auto", label: "Auto", description: "The Neutral setting's own strength.", tokens: tokens({ [`tint-${theme}-auto`]: 1, [`tint-chroma-${theme}`]: 0 }) },
     ...TINT_STEPS.map(step => ({
       id: String(step), label: step === 0 ? "0 (None)" : String(step),
-      description: step === 0 ? "Untinted grays." : `Tint ${step} of 8: OKLCH chroma ${(step * TINT_STEP).toFixed(3)}.`,
+      description: step === 0 ? "Untinted grays." : `Tint ${step} of ${TINT_STEPS[TINT_STEPS.length - 1]}: OKLCH chroma ${(step * TINT_STEP).toFixed(3)}.`,
       tokens: tokens({ [`tint-${theme}-auto`]: 0, [`tint-chroma-${theme}`]: Number((step * TINT_STEP).toFixed(4)) }),
     })),
   ],
