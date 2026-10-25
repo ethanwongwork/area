@@ -8,7 +8,7 @@
     (42 by chapter, moot ones skipped, Skip chapter, Dark mode re-asks the pairs); the summary hands over to the
     Inspector. Setup's stage mode stays apart from the app's (owner). Open: page and accent colour fields (dropped).
     Figures from `claude/hairline-area-visuals-00cda9` (area-illustration skill, `figures/index.jsx` SETTINGS = best
-    figure per setting) map onto three seams in `pages/theme-setup.tsx`: the stage (`SetupDrawing`), choice-card
+    figure per setting; merged PR #158) map onto three seams in `pages/theme-setup.tsx`: the stage (`SetupDrawing`), choice-card
     pictures (`ChoicePreview`) and the faint scatter (`SCATTER`); they must move into apps/desktop first.
   - *Inspector* (owner, a settings-panel reference): Slider `variant="field"` (label and value inside a field-height
     bar) and `origin` (fill from a neutral value; Temperature); Slider In review. `inspector-rows.tsx` is shared by
@@ -26,6 +26,14 @@
     unchanged (token probe identical). Open for the owner: keycaps in accent Buttons, hued text on state fills, edges on
     grey grounds, Selection Accent at low strength. `claude/color-cards-refinement-2c56b7` edits layers.ts/.css: its
     frame grounds need `@scope` too.
+- **Area figures, `claude/hairline-area-visuals-00cda9` (owner 2026-10-24, eleven rounds; merged to main by PR).** Area's
+  own illustration style for theme visuals; next, per the owner, a new session combines it with a new theme creation
+  process. Start at `docs/research/area-figures-2026-10-24/README.md` ("Pick up here": captures, each setting's figure,
+  the proposed port into the Theme tab's option cards, open items). Skill `.claude/skills/area-illustration`: real
+  components rendered to markup, every word a light shape, numbers as digits, field text overlaid, figures scaled
+  with CSS zoom so strokes draw at exactly 1px; 14 desktop + 6 iPhone screens, 16 vignettes, 5 compositions (one per
+  setting), all 119 families, 46 settings on screens. Review https://claude.ai/artifact/V1qnJfnVQ8Y1WhkUAFNgkt. The
+  app is unchanged (`choice-figures.tsx` still draws the Theme tab's figures).
 - **PR, `claude/nice-swirles-989844` (owner 2026-10-23: "a user wants to choose like 2-3 colors overall").** Any palette
   from a page colour and an accent. Accent takes the eleven or any hue in 5° (`color/generate.ts`: the palette's ladder
   between the two nearest families; named accents paint as before, checked pixel for pixel). New settings
