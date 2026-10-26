@@ -2,7 +2,7 @@
 import { MiniUI } from "../../choice-visuals.tsx";
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
-import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverStep, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
+import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Label, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverStep, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
 import { AddIcon, AlignBottomIcon, AlignCenterIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowDownIcon, ArrowUpIcon, AspectRatioIcon, AutoLayoutIcon, BoldIcon, CalendarIcon, ChatIcon, CheckIcon, ChevronDownIcon, ClockIcon, CodeIcon, CopyIcon, CornerIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeOffIcon, FlipIcon, FlipVerticalIcon, FlowFreeIcon, FlowIcon, FlowVerticalIcon, FlowWrapIcon, FolderFilledIcon, FolderIcon, FrameIcon, GlobeIcon, GridIcon, HistoryIcon, InfoIcon, ItalicIcon, KanbanIcon, LayersIcon, LinkIcon, ListIcon, MenuIcon, MoreHorizontalIcon, OpacityIcon, OpenIcon, PaintbrushIcon, PaletteIcon, PanelLeftIcon, PencilIcon, PenToolIcon, PeopleIcon, PersonIcon, PlayIcon, PointerIcon, RectangleIcon, RefreshIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, StrikethroughIcon, SubtractIcon, SunIcon, TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon, TextIcon, ThumbsDownIcon, ThumbsUpIcon, TokenIcon, TrashIcon, UnderlineIcon, VolumeIcon, WarningIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
@@ -1807,6 +1807,22 @@ export const GallerySliderFieldList = () => (
     <Slider variant="field" label="Label" min={0} max={300} step={30} defaultValue={210} readout={value => `${value}ms`} />
   </div>
 );
+/* A field bar with its number beside it (owner, 2026-10-25: "something like this with an input at the end"): drag the bar,
+   or type an exact value; one value between them. A composition: Label, Slider field and NumberField, no new prop. */
+export const GallerySliderFieldInput = () => {
+  const [value, setValue] = useState(60);
+  const id = useId();
+  return (
+    <div style={{ display: "grid", gap: "var(--area-ui-stack)", inlineSize: "100%" }}>
+      <Label htmlFor={id}>Label</Label>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) var(--area-space-80)", gap: "var(--area-space-8)" }}>
+        <Slider id={id} variant="field" readout={false} value={value} onValueChange={setValue} aria-valuetext={`${value}%`} />
+        <NumberField aria-label="Label value" variant="soft" min={0} max={100} unit="%" steppers={false} value={value}
+          onValueChange={next => { if (next !== null) setValue(next); }} />
+      </div>
+    </div>
+  );
+};
 export const GallerySliderRangeTrack = () => <SliderRange variant="track" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
 export const GallerySliderRangeBar = () => <SliderRange variant="bar" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
 export const GallerySliderBuffered = () => <Slider aria-label="Position" defaultValue={40} buffered={65} />;

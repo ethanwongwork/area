@@ -10,10 +10,11 @@
  * name). A row that changes nothing under the other settings is dimmed and says why (controls.ts `inactive`).
  * Pure over its values, so the Inspector (canvas-settings.tsx) and the controls review page draw the same rows.
  */
-import type { ReactNode } from "react";
-import { CustomSelect, Field, Segmented, Slider } from "@area/react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import TOKENS from "@area/tokens/tokens.json";
+import { CustomSelect, Field, Segmented, Slider, type SliderProps } from "@area/react";
 import { GALLERY_CONTROLS, greysTinted, type GalleryControl } from "./gallery/controls.ts";
-import { optionMark } from "./option-marks.tsx";
+import { colourMark, optionMark } from "./option-marks.tsx";
 import type { CanvasAxes } from "./studio.tsx";
 
 export type Values = Readonly<Record<string, string>>;
@@ -27,8 +28,40 @@ export interface RowContext {
   /** How a list lays its options out, and a figure per option in the grid (canvas-settings.tsx). */
   layout?: (axis: string, count: number) => "grid" | "list";
   figure?: (axis: string, value: string) => ReactNode;
+  /** The Canvas's brand declarations while Brand is on (src/brand.ts): Accent then sets only the brand's Shade and Saturation. */
+  brand?: Readonly<Record<string, string>>;
   /** The controls' size: the Inspector's `sm` by default, larger where a row stands alone (Setup's dock). */
   size?: "sm" | "md" | "lg";
+}
+
+/*
+ * A setting's bar (owner, 2026-10-25: "they arent very smooth to move"). A setting restyles the whole app, a few hundred
+ * milliseconds a time (traced in headless Edge: three to six style recalculations of 3,000 to 5,000 elements), so a drag
+ * that set every step it crossed froze the bar between steps. Now the bar and its readout follow every step, and the
+ * setting lands when the pointer lets go (Slider `onValueCommit`), when it holds still for REST ms mid-drag, and at once
+ * from the keyboard. Stillness is the pointer's, not the value's: at an ordinary drag a 10-step bar crosses a step about
+ * every 130ms, so a pause between steps (tried at 120ms) landed nearly every one. A release or a key lands EASE ms later,
+ * once the fill has eased onto its step, which the restyle would otherwise freeze mid-way. The Canvas and the chrome take
+ * the value it lands on together, in one restyle (studio.tsx).
+ */
+const REST = 300; /* pick: a held pointer, well past the gap between two steps of a drag */
+const EASE = 150; /* the fill's ease onto a step: `fast` at the default Speed, 140ms */
+function SettingBar({ value, onSet, ...props }: Omit<SliderProps, "value" | "onValueChange" | "onValueCommit"> & { value: number; onSet: (value: number) => void }) {
+  const [draft, setDraft] = useState<number | null>(null);
+  const pending = useRef<number | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const apply = useRef(onSet);
+  apply.current = onSet;
+  useEffect(() => () => clearTimeout(timer.current), []);
+  // The setting and the end of the draft in one render, so the bar never shows the old value between them.
+  const land = (next: number) => { clearTimeout(timer.current); pending.current = null; apply.current(next); setDraft(null); };
+  const wait = () => { clearTimeout(timer.current); timer.current = setTimeout(() => { if (pending.current !== null) land(pending.current); }, REST); };
+  return (
+    <Slider variant="field" {...props} value={draft ?? value}
+      onValueCommit={next => { pending.current = next; clearTimeout(timer.current); timer.current = setTimeout(() => land(next), EASE); }}
+      onValueChange={next => { setDraft(next); pending.current = next; wait(); }}
+      onPointerMove={event => { if (pending.current !== null && event.buttons) wait(); }} />
+  );
 }
 
 const controlOf = (axis: string) => GALLERY_CONTROLS.find(entry => entry.axis === axis)!;
@@ -43,8 +76,10 @@ export function hueName(hue: number): string {
 }
 const hueLabel = (value: string) => `${hueName(Number(value))} · ${value}°`;
 
-/** The settings a combined row stands for; the Inspector draws the row once, at the first of them. */
-export const ROW_OF: Readonly<Record<string, string>> = { neutral: "greys", "tint-hue": "greys", "tint-light": "greys", "tint-dark": "greys" };
+/** The settings a combined row stands for; the Inspector draws the row once, at the first of them. A row asked for one of
+ * Accent's alone (Setup's exact value) is that setting's own. */
+export const ROW_OF: Readonly<Record<string, string>> = { neutral: "greys", "tint-hue": "greys", "tint-light": "greys", "tint-dark": "greys",
+  accent: "accent", "solid-light": "accent", "solid-dark": "accent", "accent-strength": "accent" };
 
 /** One row: the setting's own control, or the combined row it belongs to. */
 export function SettingRow({ axis, context }: { axis: string; context: RowContext }) {
@@ -103,9 +138,9 @@ function Bar({ control, value, put, context, label }: { control: GalleryControl;
   // Button shade shows the button it sets, so the bar reads as the colour it picks.
   const swatch = /^solid-/.test(control.axis) ? optionMark(control.axis as never, scale[index]!, context.values as CanvasAxes) : null;
   const slider = (
-    <Slider variant="field" size={context.size ?? "sm"} title={control.hint} min={0} max={scale.length - 1} step={1} value={index}
+    <SettingBar size={context.size ?? "sm"} title={control.hint} min={0} max={scale.length - 1} step={1} value={index}
       label={label ?? <span className="studio-row__label">{swatch}{named.length ? control.barLabel ?? control.label : control.label}</span>}
-      readout={(at: number) => say(control, scale[at]!)} onValueChange={at => put(scale[at]!)} />
+      readout={(at: number) => say(control, scale[at]!)} onSet={at => put(scale[at]!)} />
   );
   if (!named.length) return slider;
   return (
@@ -151,30 +186,65 @@ function GreysRow({ context }: { context: RowContext }) {
   return (
     <>
       <Dim reason={tint === "none" ? null : "Off while a tint colour is on"}>
-        <Slider variant="field" size={context.size ?? "sm"} label="Temperature" title="How cool (blue) or warm (yellow) every grey is: pages, cards, edges and text"
+        <SettingBar size={context.size ?? "sm"} label="Temperature" title="How cool (blue) or warm (yellow) every grey is: pages, cards, edges and text"
           min={-8} max={8} step={1} origin={0} value={tint === "none" ? t : 0}
           readout={(at: number) => at === 0 ? "Neutral" : `${at < 0 ? "Cool" : "Warm"} ${Math.round(Math.abs(at) / 8 * 100)}%`}
-          onValueChange={temperature} />
+          onSet={temperature} />
       </Dim>
       <Field label="Tint colour" orientation="horizontal" title="Lean every grey toward a colour instead of cool or warm">
         <CustomSelect size={context.size ?? "sm"} variant="soft" fullWidth aria-label="Tint colour" value={tint} onValueChange={tintColour}
           items={[{ value: "none", label: "None" }, ...TINTS.map(([value, label]) => ({ value, label, icon: swatchOf(value) })), { value: CUSTOM, label: "Custom", icon: tint === CUSTOM ? swatchOf(hue) : undefined }]} />
       </Field>
       {tint === CUSTOM ? (
-        <Slider variant="field" size={context.size ?? "sm"} label="Hue" min={0} max={71} step={1} value={Math.max(0, hues.indexOf(hue))}
-          readout={(at: number) => hueLabel(hues[at]!)} onValueChange={at => set({ "tint-hue": hues[at]! })} />
+        <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={71} step={1} value={Math.max(0, hues.indexOf(hue))}
+          readout={(at: number) => hueLabel(hues[at]!)} onSet={at => set({ "tint-hue": hues[at]! })} />
       ) : null}
       {tint !== "none" ? (
-        <Slider variant="field" size={context.size ?? "sm"} label="Amount" title="How much of the colour the greys take: 0% is plain grey"
+        <SettingBar size={context.size ?? "sm"} label="Amount" title="How much of the colour the greys take: 0% is plain grey"
           min={0} max={16} step={1} value={amountAt} readout={(at: number) => at === 0 ? "None" : `${Math.round(at / 16 * 100)}%`}
-          onValueChange={at => set({ "tint-light": steps[at]!, "tint-dark": steps[at]! })} />
+          onSet={at => set({ "tint-light": steps[at]!, "tint-dark": steps[at]! })} />
       ) : null}
     </>
   );
 }
 
+/*
+ * A colour's shades, lightest to deepest (owner, 2026-10-25: "choose just a basic color first … then from there choose how
+ * dark or saturated or light i want it to be"; then "let the accent's label flip between black and white with the shade").
+ * Shade (axes/accent.ts, Solid) offers 200 to 850 and Auto, the colour's vivid shade; each step carries black or white,
+ * whichever reads on it, and where neither does (a mid blue) it lands on the nearest step that carries the colour's own
+ * label (scale.ts `solidAt`), so several steps can draw one shade. The bar offers each shade once, ordered by lightness,
+ * with Auto where its lightness puts it.
+ */
+type AccentPreset = { id: string; tokens: Record<string, string>; darkTokens?: Record<string, string> };
+const AXIS_PRESETS = TOKENS.axes as unknown as Array<{ id: string; presets: AccentPreset[] }>;
+const ACCENT_PRESETS = AXIS_PRESETS.find(axis => axis.id === "accent")!.presets;
+const SOLID_STEPS = AXIS_PRESETS.find(axis => axis.id === "solid-light")!.presets.map(preset => preset.id).filter(id => /^\d+$/.test(id));
+/** A hex colour's relative luminance, to order shades light to deep. */
+const luminance = (hex: string) => {
+  const channel = (at: number) => { const c = parseInt(hex.slice(at, at + 2), 16) / 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  return 0.2126 * channel(1) + 0.7152 * channel(3) + 0.0722 * channel(5);
+};
+/** One mode's side of a brand declaration (`light-dark(a, b)` or one colour for both). */
+const sideOf = (value: string | undefined, mode: "light" | "dark") => {
+  const pair = value ? /^light-dark\((#[0-9a-f]{6}), (#[0-9a-f]{6})\)$/i.exec(value) : null;
+  return pair ? pair[mode === "light" ? 1 : 2]! : value;
+};
+function shadesOf(accent: string, mode: "light" | "dark", brand?: Readonly<Record<string, string>>) {
+  const preset = ACCENT_PRESETS.find(entry => entry.id === accent);
+  const paint = (mode === "dark" ? preset?.darkTokens : undefined) ?? preset?.tokens ?? {};
+  const read = (name: string) => brand ? sideOf(brand[name], mode) : paint[name];
+  const hex = (step: string) => read(step === "auto" ? "--area-accent-solid-full" : `--area-accent-solid-${step}-full`) ?? "#000000";
+  // Each step stands for the first value that draws the same shade, Auto before any step.
+  const first = new Map<string, string>();
+  for (const step of ["auto", ...SOLID_STEPS]) if (!first.has(hex(step))) first.set(hex(step), step);
+  const scale = [...first.values()].sort((a, b) => luminance(hex(b)) - luminance(hex(a)));
+  return { scale, of: (step: string) => first.get(hex(step)) ?? "auto", hex };
+}
+
 /** Accent (owner, 2026-10-24: "maybe this should just be a dropdown or an actual color picker?"): the palette's eleven as
- * swatches, and Custom for any other hue, by name and degree, on a bar. */
+ * swatches, and Custom for any other hue, by name and degree, on a bar; then its Shade and Saturation under it (owner,
+ * 2026-10-25), so a colour is picked first and then made deeper or quieter. */
 function AccentRow({ context }: { context: RowContext }) {
   const { values, set } = context;
   const control = controlOf("accent");
@@ -183,6 +253,8 @@ function AccentRow({ context }: { context: RowContext }) {
   const named = control.items.filter(item => !/^\d+$/.test(item.value));
   const hues = control.items.filter(item => /^\d+$/.test(item.value)).map(item => item.value).sort((a, b) => Number(a) - Number(b));
   const layout = context.layout?.("accent", named.length + 1) ?? "list";
+  // A brand is its own colour (brand-settings.tsx): only its Shade and Saturation stay here.
+  if (context.brand) return <><ShadeRow accent={value} context={context} /><SettingRow axis="accent-strength" context={context} /></>;
   return (
     <>
       <Field label={control.label} orientation="horizontal" title={control.hint}>
@@ -193,9 +265,32 @@ function AccentRow({ context }: { context: RowContext }) {
             { value: CUSTOM, label: "Custom", icon: custom ? optionMark("accent", value, values as CanvasAxes) ?? undefined : undefined }]} />
       </Field>
       {custom ? (
-        <Slider variant="field" size={context.size ?? "sm"} label="Hue" min={0} max={hues.length - 1} step={1} value={Math.max(0, hues.indexOf(value))}
-          readout={(at: number) => hueLabel(hues[at]!)} onValueChange={at => set({ accent: hues[at]! })} />
+        <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={hues.length - 1} step={1} value={Math.max(0, hues.indexOf(value))}
+          readout={(at: number) => hueLabel(hues[at]!)} onSet={at => set({ accent: hues[at]! })} />
       ) : null}
+      <ShadeRow accent={value} context={context} />
+      <SettingRow axis="accent-strength" context={context} />
     </>
+  );
+}
+
+/** The accent's Shade in the mode shown: a bar from its vivid shade to its deepest, or a note where it has only one. */
+function ShadeRow({ accent, context }: { accent: string; context: RowContext }) {
+  const axis = `solid-${context.mode}` as const;
+  const control = controlOf(axis);
+  const { scale, of, hex } = shadesOf(accent, context.mode, context.brand);
+  const index = Math.max(0, scale.indexOf(of(context.values[axis] ?? "auto")));
+  // Read from the vivid shade (a brand's: its nearest readable shade): lighter before it, deeper after it, the ends by name.
+  const vivid = scale.indexOf("auto");
+  const say = (at: number) => at === vivid ? context.brand ? "Brand" : "Vivid" : at === 0 ? "Lightest" : at === scale.length - 1 ? "Deepest"
+    : at < vivid ? `${Math.round(((vivid - at) / vivid) * 100)}% lighter` : `${Math.round(((at - vivid) / (scale.length - 1 - vivid)) * 100)}% deeper`;
+  const name = context.brand ? "The brand" : /^\d+$/.test(accent) ? hueName(Number(accent)) : accent[0]!.toUpperCase() + accent.slice(1);
+  const reason = control.inactive?.(context.values, context.mode) ?? (scale.length < 2 ? `${name} has one shade that keeps its label readable` : null);
+  return (
+    <Dim reason={reason}>
+      <SettingBar size={context.size ?? "sm"} title={control.hint} min={0} max={Math.max(1, scale.length - 1)} step={1} value={index} disabled={scale.length < 2}
+        label={<span className="studio-row__label">{context.brand ? colourMark(hex(scale[index]!)) : optionMark(axis as never, scale[index]!, context.values as CanvasAxes)}{control.label}</span>}
+        readout={(at: number) => say(at)} onSet={at => context.set({ [axis]: scale[at]! })} />
+    </Dim>
   );
 }

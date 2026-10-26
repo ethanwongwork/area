@@ -132,7 +132,11 @@ Respect motion preferences without removing the meaning of loading/progress stat
 ## Verification
 
 Run `npm test` and `node packages/tokens/src/contrast/report.ts` for token/color/focus/state
-changes. The report exits nonzero for failures. `npm run build` does not run this gate.
+changes. Brand themes (`semantic/brand.ts`) can take any colour, so `contrast/brand.test.ts`
+samples them: the reference brands, edge colours (near grey, white, black, neon) and 500
+seeded brands over hue, chroma and lightness, every assertion plus `BRAND_ASSERTIONS` (the
+accent pairings on secondary and tertiary, each supporting tone's label, brand-surface text)
+in both modes, and 60 of them at Saturation 30, Shade 200 and 850, and fixed status. The report exits nonzero for failures. `npm run build` does not run this gate.
 Check rendered paint and keyboard-triggered focus in the app (Inspector › Theme › Contrast at
 Standard, Medium and More), plus the component's real interactions. Validate the actual foreground/background/edge combinations
 introduced by a change, including nested themes and relevant contrast preferences.

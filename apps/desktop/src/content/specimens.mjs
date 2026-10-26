@@ -968,6 +968,7 @@ function gallerySpecimenTable() {
       { id: "variant-bar", title: "Variant / bar", demo: "GallerySliderBar" },
       { id: "variant-field", title: "Variant / field", demo: "GallerySliderField" },
       { id: "field-list", title: "Composition / field list", demo: "GallerySliderFieldList" },
+      { id: "field-input", title: "Composition / field with input", demo: "GallerySliderFieldInput" },
       { id: "origin", title: "Content / origin", demo: "GallerySliderOrigin" },
       { id: "selection-neutral", title: "Selection / neutral", demo: "GallerySliderNeutral" },
       { id: "range-track", title: "Variant / range, track", demo: "GallerySliderRangeTrack" },

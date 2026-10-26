@@ -92,8 +92,8 @@ const ACCENT_HUE: Record<string, number> = Object.fromEntries(((TOKENS.axes as u
   .map(preset => [preset.id, Number(preset.tokens["--area-accent-hue"] ?? preset.id)]));
 const order = (value: string) => value === "pill" ? Infinity : /^-?\d+(\.\d+)?$/.test(value) ? Number(value) : ACCENT_HUE[value] ?? 0;
 const title = (value: string) => value[0]!.toUpperCase() + value.slice(1);
-/** A Solid step as a depth: the palette's 400 (lightest) to 850 (deepest). */
-const depth = (value: string) => value === "400" ? "Lightest" : value === "850" ? "Deepest" : percent(String(Number(value) - 400), 450);
+/** A Solid step as a depth: the palette's 200 (lightest, since the label flips with the shade, 2026-10-25) to 850 (deepest). */
+const depth = (value: string) => value === "200" ? "Lightest" : value === "850" ? "Deepest" : percent(String(Number(value) - 200), 650);
 
 
 export const GALLERY_CONTROLS: readonly GalleryControl[] = ([

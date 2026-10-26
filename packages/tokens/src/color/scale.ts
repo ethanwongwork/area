@@ -51,6 +51,13 @@ export interface ScaleSpec {
   solidForeground?: "light" | "dark";
   /** A generated family's light-end chroma trim (color/generate.ts: its neighbours' `CHROMA_TRIM`, mixed). */
   trim?: number;
+  /**
+   * A family given directly rather than read from the palette by `id`: a brand colour's family (color/brand.ts), which
+   * never enters palette.json or the shared scale cache.
+   */
+  family?: Readonly<Record<string, PaletteRung>>;
+  /** A rung kept exactly as the family gives it, past every trim, lift and cap: the brand colour itself. */
+  exact?: Level;
 }
 
 export interface StepContrast {
@@ -131,7 +138,8 @@ export interface BuiltScale {
    * cannot clear on, at every Accent strength, moves toward the label's side to the first that can. Chromatic only; a
    * neutral's steps are its own solid.
    */
-  solidSteps: Record<SolidStep, { level: Level; hover: Level; label: Level | null }>;
+  /** Each Solid step: its fill and hover, the label it carries (black or white, `fg`) and Label tint's end on it. */
+  solidSteps: Record<SolidStep, { level: Level; hover: Level; label: Level | null; fg: "#ffffff" | "#000000" }>;
   /** Label tint's end (axes/accent.ts) on this theme's own solid: see `tintedLabel`. */
   labelTint: Level | null;
   vivid: VividChoice;
@@ -156,7 +164,7 @@ const SOLID_APCA_TARGET = 61;
 const SOLID_PRESS = 0.1;
 
 export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
-  const family = familyFor(spec.id);
+  const family = spec.family ?? familyFor(spec.id);
   if (!family) {
     throw new Error(
       `"${spec.id}" is not a family in the vendored palette. Known: ${Object.keys(FAMILIES).join(", ")}`,
@@ -191,7 +199,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
         )
       : Math.min(rung.oklch.C * trimFactor, maxChromaAt(lightness, hue, SRGB), familyPeakChroma);
 
-    if (rotation === 0 && lightness === rung.oklch.L && chroma === rung.oklch.C) {
+    if (level === spec.exact || (rotation === 0 && lightness === rung.oklch.L && chroma === rung.oklch.C)) {
       const oklch: Oklch = { L: rung.oklch.L, C: rung.oklch.C, h: rung.oklch.H };
       return { level, oklch, hex: rung.hex, oklchCss: toOklchCss(oklch), contrast: stepContrast(rung.hex) };
     }
@@ -221,9 +229,9 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
     : chooseSolid(steps, familyPeakLevel, spec.solidForeground ?? "light");
   const solidHex = steps.find((x) => x.level === solid.level[theme])!.hex;
   const solidSteps = Object.fromEntries(SOLID_STEPS.map(step => {
-    if (spec.kind === "neutral") return [step, { level: solid.level[theme], hover: solid.hover[theme], label: null }];
+    if (spec.kind === "neutral") return [step, { level: solid.level[theme], hover: solid.hover[theme], label: null, fg: solid.foreground }];
     const at = solidAt(steps, step, solid.foreground, theme);
-    return [step, { ...at, label: tintedLabel(steps, at.level, at.hover, solid.foreground) }];
+    return [step, { ...at, label: tintedLabel(steps, at.level, at.hover, at.fg) }];
   })) as BuiltScale["solidSteps"];
   const labelTint = spec.kind === "neutral" ? null : tintedLabel(steps, solid.level[theme], solid.hover[theme], solid.foreground);
   const stroke: StrokeChoice = {
@@ -411,23 +419,30 @@ function chooseSolid(
 }
 
 /**
- * A Solid step (axes/accent.ts): the rung itself when its label clears at every Accent strength, else the first rung
- * toward the label's side that does (darker for white, lighter for black). Its hover follows `chooseSolid`'s rule: away
- * from the page (darker in light, lighter in dark) when the label still clears there, else the other way.
+ * A Solid step (axes/accent.ts): the rung itself, carrying whichever label clears on it at every Accent strength, the
+ * accent's own (`fg`) first (owner, 2026-10-25: "let the accent's label flip between black and white with the shade, so
+ * Shade runs from light to deep for every colour"). Where neither does, a mid-tone, the first rung toward the own label's
+ * side that carries it (darker for white, lighter for black), as every step did before the flip, when a light blue under
+ * a white label slid to 550 and every orange to its one shade. Its hover follows `chooseSolid`'s rule for that label:
+ * away from the page (darker in light, lighter in dark) when the label still clears there, else the other way.
  */
-function solidAt(steps: readonly ScaleStep[], step: SolidStep, fg: "#ffffff" | "#000000", theme: Theme): { level: Level; hover: Level } {
-  const passes = (hex: string) => ACCENT_STRENGTHS.every(strength => {
+function solidAt(steps: readonly ScaleStep[], step: SolidStep, own: "#ffffff" | "#000000", theme: Theme): { level: Level; hover: Level; fg: "#ffffff" | "#000000" } {
+  const passes = (hex: string, fg: string) => ACCENT_STRENGTHS.every(strength => {
     const paint = withStrength(hex, strength);
     return wcagContrastHex(fg, paint) >= SOLID_CONTRAST_TARGET && apcaMagnitude(fg, paint) >= SOLID_APCA_TARGET;
   });
-  const direction = fg === "#ffffff" ? 1 : -1;
+  const other = own === "#ffffff" ? "#000000" : "#ffffff";
   const start = steps.findIndex(s => s.level === step);
-  let index = start;
-  while (index >= 0 && index < steps.length && !passes(steps[index]!.hex)) index += direction;
-  if (index < 0 || index >= steps.length) index = start;
+  let index = start, fg: "#ffffff" | "#000000" = own;
+  if (!passes(steps[start]!.hex, own) && passes(steps[start]!.hex, other)) fg = other;
+  else {
+    const direction = own === "#ffffff" ? 1 : -1;
+    while (index >= 0 && index < steps.length && !passes(steps[index]!.hex, own)) index += direction;
+    if (index < 0 || index >= steps.length) index = start;
+  }
   const at = (i: number) => steps[Math.min(steps.length - 1, Math.max(0, i))]!;
   const away = theme === "light" ? index + 1 : index - 1, back = theme === "light" ? index - 1 : index + 1;
-  return { level: steps[index]!.level, hover: passes(at(away).hex) ? at(away).level : at(back).level };
+  return { level: steps[index]!.level, hover: passes(at(away).hex, fg) ? at(away).level : at(back).level, fg };
 }
 
 /**

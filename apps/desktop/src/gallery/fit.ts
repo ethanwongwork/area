@@ -85,6 +85,8 @@ interface Tile {
   hug?: number;
   /** For a fluid specimen: its layout width over the view's room at MAX. */
   widen: number;
+  /** In a waterfall (an Asset card that hugs): the view takes the scaled specimen's height. */
+  hugs: boolean;
 }
 
 /*
@@ -193,17 +195,49 @@ function truncates(stage: HTMLElement) {
   return false;
 }
 
+/*
+ * Waterfall (owner, 2026-10-25: "hugging the height of components (so taller components may have slightly taller
+ * containers) … the margins/padding around the component will be more even overall"): a card that hugs (Asset card's
+ * hug aspect) is as tall as its specimen at its scale, plus the view's padding and HUG_ROOM above and below, so every
+ * specimen has the same room over and under it; the scale is the zoom's as in a fixed card, never larger. Between
+ * HUG_MIN and HUG_MAX of the card's width (picks): a Badge's card is not a sliver, and a Calendar's no taller than 4:5,
+ * where it shrinks to fit as it would in a fixed card. The grid then drops each card into the shortest column (placeWaterfall).
+ */
+const HUG_ROOM = 16; /* pick: 28 from the view's edge with its 12 padding, Compass's measured 28 */
+const HUG_MIN = 0.5;
+const HUG_MAX = 1.25;
+
 /* The scale that fits a specimen in its room, never above the canvas's zoom. */
 const fit = (room: Box, size: Box, max: number) => Math.min(max, room.w / Math.max(1, size.w), room.h / Math.max(1, size.h));
 
 
-/** The room a tile's view gives its specimen now. */
-function roomOf(view: HTMLElement): Box {
+/** The room a tile's view gives its specimen now; a hugging view's height is the most it may grow to. */
+function roomOf(view: HTMLElement, hugs = false): Box & { outer: number; padBlock: number } {
   const style = getComputedStyle(view);
+  const padBlock = parseFloat(style.paddingBlockStart) + parseFloat(style.paddingBlockEnd);
   return {
     w: view.clientWidth - parseFloat(style.paddingInlineStart) - parseFloat(style.paddingInlineEnd),
-    h: view.clientHeight - parseFloat(style.paddingBlockStart) - parseFloat(style.paddingBlockEnd),
+    h: hugs ? view.clientWidth * HUG_MAX - padBlock - HUG_ROOM * 2 : view.clientHeight - padBlock,
+    outer: view.clientWidth,
+    padBlock,
   };
+}
+
+/*
+ * The waterfall's columns: rows of 1px with no row gap, each card spanning its height and the gap, so the grid's
+ * auto-placement drops it into the first column with room, in reading order (the Asset grid's waterfall, which
+ * positions its cards absolutely, is a List box; the Canvas's cards are not).
+ */
+function placeWaterfall(tiles: Tile[]) {
+  const items = tiles.flatMap(entry => {
+    const item = entry.tile.closest<HTMLElement>(".studio-grid--waterfall > *");
+    return item ? [item] : [];
+  });
+  const grids = new Set(items.map(item => item.parentElement!));
+  const gaps = new Map([...grids].map(grid => [grid, parseFloat(getComputedStyle(grid).columnGap) || 0]));
+  const heights = items.map(item => item.getBoundingClientRect().height);
+  items.forEach((item, index) => { item.style.gridRowEnd = `span ${Math.ceil(heights[index]! + gaps.get(item.parentElement!)!)}`; });
+  for (const grid of grids) grid.setAttribute("data-placed", "");
 }
 
 /** Fits every tile in the canvas and keeps fitting them as they resize; returns the cleanup. */
@@ -216,8 +250,15 @@ export function fitTiles(canvas: HTMLElement): () => void {
     natural: 0,
     group: MAX,
     widen: 1,
+    hugs: Boolean(tile.parentElement?.classList.contains("area-asset-card--hug")),
   }));
   if (!tiles.length) return () => {};
+  // A fixed card after a waterfall keeps none of its sizes.
+  for (const entry of tiles) {
+    entry.view.style.blockSize = "";
+    entry.tile.closest<HTMLElement>(".studio-grid > *")?.style.removeProperty("grid-row-end");
+    entry.tile.closest(".studio-grid")?.removeAttribute("data-placed");
+  }
   // The app's zoom, read once: Fit, or an exact scale.
   const zoomAttr = canvas.closest("[data-zoom]")?.getAttribute("data-zoom") ?? "auto";
   const exact = zoomAttr === "auto" || zoomAttr === "fit" ? undefined : Number(zoomAttr) || MAX;
@@ -303,11 +344,23 @@ export function fitTiles(canvas: HTMLElement): () => void {
     const batch = [...new Set(list)];
     // Read every room, write fluid widths, then read every extent and write every scale: two
     // layouts, however many tiles changed.
-    const rooms = batch.map(entry => roomOf(entry.view));
+    const rooms = batch.map(entry => roomOf(entry.view, entry.hugs));
     // A fluid specimen fills its tile at any zoom: laid out at the room over the zoom, then scaled.
     batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(layoutWidth(entry, rooms[index]!.w, exact ?? entry.group) * (exact ? 1 : entry.widen))}px`; });
-    const scales = batch.map((entry, index) => exact ?? fit(rooms[index]!, extent(entry.stage, true), entry.group));
+    const extents = batch.map(entry => extent(entry.stage, true));
+    const scales = batch.map((entry, index) => exact ?? fit(rooms[index]!, extents[index]!, entry.group));
     batch.forEach((entry, index) => { entry.stage.style.scale = scales[index]!.toFixed(3); });
+    // A waterfall's view hugs its specimen at that scale, then the cards are placed.
+    const hugging = batch.filter(entry => entry.hugs);
+    if (!hugging.length) return;
+    batch.forEach((entry, index) => {
+      if (!entry.hugs) return;
+      const room = rooms[index]!;
+      const width = room.outer;
+      const tall = extents[index]!.h * scales[index]! + room.padBlock + HUG_ROOM * 2;
+      entry.view.style.blockSize = `${Math.round(Math.min(width * HUG_MAX, Math.max(width * HUG_MIN, tall)))}px`;
+    });
+    placeWaterfall(hugging);
   };
   rescale(tiles);
   canvas.setAttribute("data-fitted", "");

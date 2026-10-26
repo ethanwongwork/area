@@ -35,19 +35,26 @@ export function tonalStroke(ink: string, theme: Theme, hover: boolean): string {
   // take enough of the readable ink to give every light tonal stroke a shared minimum
   // chroma. The ceiling remains enforced by stroke.test.ts.
   const minimumChroma = theme === "light" ? (hover ? 0.06 : 0.025) : 0;
+  // The first mix that clears the contrast floor, whatever its chroma: a near-grey ink (a brand's warm grey,
+  // color/brand.ts, 2026-10-26) never reaches the chroma minimum, and its outline is then the quietest that still
+  // clears the floor, a grey of its own hue. The palette's inks always reach the minimum first.
+  let floor: string | undefined;
   for (let opacity = 1; opacity <= 255; opacity++) {
     const alpha = opacity / 255;
     const rgb = foreground.map((value, channel) => value * alpha + background[channel]! * (1 - alpha)) as Rgb;
     const hex = toHex(rgb);
     const chroma = labToLch(rgbToOklab(parseHex(hex), SRGB)).C;
-    if (
-      wcagContrastHex(hex, ground) >= ratio &&
-      apcaMagnitude(hex, ground) >= apca &&
-      chroma >= minimumChroma
-    ) {
-      cache.set(key, hex);
-      return hex;
+    if (wcagContrastHex(hex, ground) >= ratio && apcaMagnitude(hex, ground) >= apca) {
+      floor ??= hex;
+      if (chroma >= minimumChroma) {
+        cache.set(key, hex);
+        return hex;
+      }
     }
+  }
+  if (floor) {
+    cache.set(key, floor);
+    return floor;
   }
   throw new Error(`No tonal stroke can clear its contrast floor: ${ink}, ${theme}, hover=${hover}`);
 }

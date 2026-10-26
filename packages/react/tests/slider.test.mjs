@@ -109,11 +109,15 @@ test("field carries its label and value inside the bar and shows the value by de
 test("origin fills from a neutral middle to the value, either way, and is absent unless given", () => {
   const warm = render({ variant: "field", label: "Temperature", min: -8, max: 8, origin: 0, defaultValue: 4 });
   assert.match(warm, /data-origin=""/);
-  assert.match(warm, /--_lo:0\.5;--_hi:0\.75/);
+  // React gives the origin and the value as ratios; the CSS orders them into the fill's two ends (2026-10-25), so the
+  // ends follow the registered ratio as it eases.
+  assert.match(warm, /--_slider-ratio:0\.75;--_origin:0\.5/);
   const cool = render({ variant: "field", label: "Temperature", min: -8, max: 8, origin: 0, defaultValue: -8 });
-  assert.match(cool, /--_lo:0;--_hi:0\.5/);
-  assert.match(render({ variant: "field", label: "Temperature", min: -8, max: 8, origin: 0, defaultValue: 0 }), /--_lo:0\.5;--_hi:0\.5/, "at the origin the bar is empty");
-  assert.doesNotMatch(render({ variant: "field", label: "Label", defaultValue: 40 }), /data-origin|--_lo/);
+  assert.match(cool, /--_slider-ratio:0;--_origin:0\.5/);
+  assert.match(render({ variant: "field", label: "Temperature", min: -8, max: 8, origin: 0, defaultValue: 0 }), /--_slider-ratio:0\.5;--_origin:0\.5/, "at the origin the bar is empty");
+  assert.doesNotMatch(render({ variant: "field", label: "Label", defaultValue: 40 }), /data-origin|--_origin/);
   const css = readFileSync(new URL("../../styles/dist/area.css", import.meta.url), "utf8");
+  assert.match(css, /\.area-slider \{ --_lo: 0; --_hi: var\(--_slider-ratio\); \}/);
+  assert.match(css, /\.area-slider\[data-origin\] \{ --_lo: min\(var\(--_origin\), var\(--_slider-ratio\)\); --_hi: max\(var\(--_origin\), var\(--_slider-ratio\)\); \}/);
   assert.match(css, /\.area-slider\[data-origin\] \.area-slider__control \{[^}]*--_rail: linear-gradient\(var\(--_fill-dir, to right\), var\(--_track-fill\) 0 var\(--_from\), var\(--_fill\) 0 var\(--_to\)/);
 });

@@ -43,7 +43,7 @@ unchanged, so saved settings and attributes still read. Mode pairs show the one 
 | `accent-strength` | `100` (Full, default) … `30` (Dusty) in tens, one for both modes | How much of its own colour the accent keeps: every accent colour mixes in OKLab toward the gray of its own luminance, so hue holds and contrast stays within 0.09:1; the solvers walk at every strength, so each step clears at each (docs/research/palette-customization-2026-10-23) |
 | `label-tint` | `0` (None, default) … `4` (Full), one for both modes | How much of the accent's hue the label on an accent solid takes: a quarter a step from its measured black or white toward the most coloured rung that still clears 4.6:1 and APCA 61 on the Solid step's fill and hover at every strength (`tintedLabel`, scale.ts). A navy button at 2 has a pale blue label; on a bright fill no rung clears and the label stays white |
 | `status-colours` | `fixed` (default), `match` | Danger, warning, caution, success, info and discovery as the palette draws them, or quieted to the Accent strength by the same mix, so a dusty palette has dusty statuses. Their hues never move, and tag colours (pink, gray, brown) stay |
-| `solid-light`, `solid-dark` | `auto` (default: the accent's own solid) or `400` … `850` | The accent step solid fills (accent Buttons, checked marks) sit on, per mode: a navy button is blue at 750. A step whose label cannot clear moves toward the label's side to the first that can, so no step fails; the label keeps the hue's own colour. Dark's Auto stays the solver's own step whatever light picks (a navy fill measures 1.66:1 on the near-black page) |
+| `solid-light`, `solid-dark` | `auto` (default: the accent's own solid) or `200` … `850` | The accent step solid fills (accent Buttons, checked marks) sit on, per mode: a navy button is blue at 750. Each step carries black or white, whichever stays readable on it at every Accent strength, so the label flips with the shade (2026-10-25: light blue at 200 under black, deep orange at 750 under white); where neither does (a mid blue, 250 to 450) the step moves toward the accent's own label's side to the first that carries it. Auto keeps the accent's own label. Dark's Auto stays the solver's own step whatever light picks (a navy fill measures 1.66:1 on the near-black page). The Inspector calls it **Shade**, under the colour and over Saturation: a bar of the colour's distinct shades, lightest to deepest, with Auto (Vivid) where its lightness puts it; the Accent menu draws every colour at its vivid shade |
 | `action` | `neutral` (default), `accent` | Whether committing actions (solid Buttons) paint the accent |
 | `selection` | `neutral` (default since 2026-10-25; Accent 2026-10-22 to 25), `accent` | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards), the focus ring and selected text paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |
 | `ground-light` | `100` (White, default) … `90` | The light page's OKLCH lightness, in 1% steps |
@@ -253,6 +253,41 @@ Selected and focus share a colour and differ by placement: the selected edge ins
   checks cannot certify arbitrary custom themes.
 - **Share reusable roles.** A reusable role belongs in the token package, not duplicated as
   literals across components ([Governance](GOVERNANCE.md#5-keep-it-lean)).
+
+## Brand (engine, 2026-10-26)
+
+Up to three exact brand colours (`semantic/brand.ts`, `resolveBrandTheme`; plan and research:
+`docs/research/brand-palette-2026-10-26`). Area's palette stays the default: with no brand,
+every existing token is unchanged. The engine and the default tokens, the runtime, the CSS
+command and React's `Theme` are built; the Inspector comes next.
+
+**Using a brand.** A brand writes what a palette accent writes, the accent's and the status
+tones' full-strength inputs, plus the brand's own roles, as `light-dark()` pairs, and declares
+again the 374 derivations that read them, so every setting (Shade, Saturation, Label tint,
+Contrast, Selection) keeps working over it in CSS.
+
+- React: `const brand = useMemo(() => brandDeclarations({ primary: "#00b65c", secondary: "#a785fe" }), [])`
+  from `@area/tokens/brand`, then `<Theme brand={brand}>`. `Theme` takes the declarations
+  already computed, so a product without a brand never loads the solver.
+- CSS only: `npx area-tokens brand --primary "#00b65c" --secondary "#a785fe" > brand.css`, then
+  `data-area-brand` on the element (or `--selector`). The rule sits in `area.axes`, after the
+  axes' own, so a brand on the same element as `data-area-accent` wins.
+- In the app: Inspector → Brand (`apps/desktop/src/brand-settings.tsx`), on the Canvas only.
+- Cost: about 60ms to work out a new brand (both modes; the first in a page about 170ms, while
+  the palette's scales warm), then cached; about 600 declarations, 155 kB of CSS text.
+
+- **Accent** on the primary's own family, the brand colour exactly on one rung. Its button is
+  the readable shade nearest the brand (`nearestShade`), which Shade and Saturation move from.
+- **Status colours** harmonised: each turned toward the primary by half the hue difference,
+  at most 15°, at the primary's intensity, never under 45% of the palette's. `fixed` and
+  `match` remain.
+- **New tokens**, defined with no brand too:
+
+| Tokens | With a brand | With no brand |
+|---|---|---|
+| `secondary-*`, `tertiary-*` (the accent's tonal block: surfaces, borders, solid, `fg-*`, `fg-on-*`, indicator) | The secondary and tertiary families, each with its nearest readable button | The accent's values (aliases) |
+| `support-1` … `support-8`, `-strong`, `fg-on-support-*` | Eight hues stepped round the wheel from the primary, at its intensity: a soft tone (200 light, 850 dark) and a strong one (700, 300), each moved until its label reads as text | The palette's red, orange, yellow, green, teal, blue, purple and pink |
+| `bg-brand-page`, `bg-brand-ground`, `fg-on-brand-ground` | The primary family's 25 (light) or 975 (dark), and its 900 with its label | `bg-page`, `bg-inverse`, `fg-on-inverse` |
 
 ## System tokens outside the axes
 

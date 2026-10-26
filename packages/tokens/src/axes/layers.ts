@@ -57,7 +57,8 @@ const layersAxis = (theme: "light" | "dark"): AxisDefinition => ({
   presets: LAYER_STEPS.map(step => ({
     id: String(step),
     label: step === 0 ? "0 (Flat)" : String(step),
-    description: step === 0 ? "One tone: frames alone set layers apart; controls still step from their ground." : step === DEFAULT_LAYERS ? "Area's layer contrast." : `Layer contrast ${step} of 8.`,
+    // The default is 0 (Flat) since 2026-10-26, so 0's own words come first; widened, so a default moved off 0 is named again.
+    description: step === 0 ? "One tone: frames alone set layers apart; controls still step from their ground." : (step as number) === DEFAULT_LAYERS ? "Area's layer contrast." : `Layer contrast ${step} of 8.`,
     tokens: tokens({ [`layers-${theme}`]: String(step) }),
   })),
 });

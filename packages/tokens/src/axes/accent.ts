@@ -9,8 +9,9 @@
  *                    (color/generate.ts `withStrength`), so hue holds and contrast stays within 0.09:1; the solvers walk at
  *                    every strength, so each solved step clears at each.
  *   solid-light      the accent step solid fills sit on in light: Auto (the solver's own, the palette's peak step that
- *   solid-dark       carries its label) or 400 to 850. A step whose label cannot clear moves toward the label's side to
- *                    the first that can (scale.ts `solidAt`), so a step never fails. Chosen per mode: a navy fill on the
+ *   solid-dark       carries its label) or 200 to 850. A step carries black or white, whichever clears on it (2026-10-25,
+ *                    owner: "let the accent's label flip … so Shade runs from light to deep for every colour"); where
+ *                    neither does, it moves toward its own label's side to the first that can (scale.ts `solidAt`). Chosen per mode: a navy fill on the
  *                    near-black page measures 1.66:1, so dark's Auto stays the solver's own step whatever light picks.
  *
  * Each writes numbers only; emit/base.ts derives the accent's paint from them and the accent's `-full` tokens, live.
@@ -35,8 +36,10 @@ export const ACCENT_STRENGTH_AXIS: AxisDefinition = {
 
 const solidAxis = (theme: "light" | "dark"): AxisDefinition => ({
   id: `solid-${theme}`,
-  label: theme === "light" ? "Light button shade" : "Dark button shade",
-  description: `In ${theme}: the accent step solid fills (accent buttons, checked marks) sit on. Auto, or 400 (lighter) to 850 (deeper).`,
+  // Named for what it sets, the accent's shade, beside its colour and Saturation (owner, 2026-10-25: "choose just a basic
+  // color first … then from there choose how dark or saturated or light"); was "Button shade".
+  label: theme === "light" ? "Light shade" : "Dark shade",
+  description: `In ${theme}: the accent step solid fills (accent buttons, checked marks) sit on. Auto, or 200 (lightest) to 850 (deepest); the label turns black or white to stay readable.`,
   defaultPreset: "auto",
   namespaces: [`--area-solid-${theme}-`],
   presets: [
@@ -44,7 +47,7 @@ const solidAxis = (theme: "light" | "dark"): AxisDefinition => ({
     ...SOLID_STEPS.map(pick => ({
       id: String(pick),
       label: String(pick),
-      description: `The accent's ${pick} step, or the nearest that carries its label.`,
+      description: `The accent's ${pick} step under a black or white label, whichever reads, or the nearest step that carries its own.`,
       tokens: tokens(Object.fromEntries(SOLID_STEPS.map(step => [`solid-${theme}-${step}`, step === pick ? 1 : 0]))),
     })),
   ],
@@ -85,10 +88,11 @@ const LUMA = `calc(${LUMINANCE[0]} * r + ${LUMINANCE[1]} * g + ${LUMINANCE[2]} *
 export const atStrength = (colour: string, strength = v("strength-accent")) =>
   `color-mix(in oklab, ${colour} calc(${strength} * 1%), color(from ${colour} srgb-linear ${LUMA} ${LUMA} ${LUMA}))`;
 
-/** The Solid step's colour of one kind (the fill or its hover) in one mode: Auto's, or the one step whose switch is on. */
-const solidChain = (theme: "light" | "dark", kind: "solid" | "solid-hover" | "label") => SOLID_STEPS.reduce(
+/** The Solid step's colour of one kind (the fill, its hover, its label or Label tint's end) in one mode: Auto's, or the
+ * one step whose switch is on. */
+const solidChain = (theme: "light" | "dark", kind: "solid" | "solid-hover" | "label" | "on") => SOLID_STEPS.reduce(
   (paint, step) => `color-mix(in srgb, ${paint}, ${v(`accent-${kind}-${step}-full`)} calc(${v(`solid-${theme}-${step}`)} * 100%))`,
-  v(`accent-${kind}-full`),
+  kind === "on" ? v("fg-on-accent-full") : v(`accent-${kind}-full`),
 );
 
 /** The accent's public paint: every `-full` token at the strength; the solid and its hover at the Solid step first. */
@@ -98,10 +102,12 @@ export function accentDerived(): Record<string, string> {
     out[`--area-accent-${kind}-pick`] = `light-dark(${solidChain("light", kind)}, ${solidChain("dark", kind)})`;
     out[`--area-accent-${kind}`] = atStrength(v(`accent-${kind}-pick`));
   }
-  // The label: the measured black or white, mixed toward Label tint's end on the Solid step's fill, a quarter a step.
+  // The label: the Solid step's black or white (Auto's is the accent's own; a step's flips with its shade, 2026-10-25),
+  // mixed toward Label tint's end on that fill, a quarter a step.
+  out["--area-accent-on-pick"] = `light-dark(${solidChain("light", "on")}, ${solidChain("dark", "on")})`;
   out["--area-accent-label-pick"] = `light-dark(${solidChain("light", "label")}, ${solidChain("dark", "label")})`;
-  out["--area-fg-on-accent"] = `color-mix(in oklab, ${v("fg-on-accent-full")}, ${atStrength(v("accent-label-pick"))} calc(${v("label-tint")} * 25%))`;
-  const own = /^--area-(accent-(solid|solid-hover|label)(-\d+)?-full|fg-on-accent-full)$/;
+  out["--area-fg-on-accent"] = `color-mix(in oklab, ${v("accent-on-pick")}, ${atStrength(v("accent-label-pick"))} calc(${v("label-tint")} * 25%))`;
+  const own = /^--area-(accent-(solid|solid-hover|label|on)(-\d+)?-full|fg-on-accent-full)$/;
   for (const name of Object.keys(ACCENT_AXIS.presets[0]!.tokens)) {
     if (!name.endsWith("-full") || own.test(name)) continue;
     const base = name.slice("--area-".length, -"-full".length);
