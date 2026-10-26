@@ -242,7 +242,7 @@ out.
   Canvas settings under the registry's headings (`SETTING_GROUPS`: Page, Accent, Where it paints, Size, Shape,
   Stroke, Shadow, States, Effects, then Material), only those that change this tab's specimens. A light/dark pair
   (Lightness, Grey tint, Layer contrast, Card shade, Button depth) shows the app's mode's own (owner, 2026-10-22), the
-  Titlebar's switch choosing which. An ordered setting is a bar (Slider `variant="field"`, owner 2026-10-24), its name
+  Titlebar's switch choosing which. An ordered setting is a bar (Slider `labelPosition="inside"`, owner 2026-10-24; was `variant="field"`), its name
   and value inside; named choices are a Segmented beside the label, or under it from three options; a setting with Auto,
   System or Accent shows those with Custom and the bar under them. Values read in their unit ("60%", "8px", "210ms",
   "White"), never a step number; none says "(Default)" (owner, 2026-10-20: "i dont like seeing (default)"). The Theme

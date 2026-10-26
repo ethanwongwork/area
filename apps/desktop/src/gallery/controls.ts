@@ -30,7 +30,7 @@ export interface GalleryControl {
   items: ReadonlyArray<{ value: string; label: string }>;
   defaultValue: string;
   /**
-   * A bar (owner, 2026-10-24: "i like the 0 to 100 scale, as well as binary toggles"): Slider's field variant over the
+   * A bar (owner, 2026-10-24: "i like the 0 to 100 scale, as well as binary toggles"): Slider's bar with its label inside, over the
    * values in `scale`, in order, its readout the value's label. `named` are the choices off the scale (Auto, Accent,
    * System), a Segmented with Custom beside them; the bar shows while the value is on the scale, and Custom picks `custom`.
    */

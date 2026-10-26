@@ -1,6 +1,14 @@
 # Handoff
 
 ## Current state (2026-10-26)
+- **Slider: motion, three looks, label inside (owner 2026-10-26), branch `claude/slider-component-refinement-ec1559`,
+  uncommitted, rebased onto main at 5f15f7e8 (PR #165's field mark and Inspector `SettingBar` kept as `labelPosition="inside"`; `onValueCommit` kept).** The rail, fill and thumb are drawn over the native input (slider.css): every change but a drag eases on
+  `fast` (`--_slider-ratio`), a drag follows 1:1 (`data-dragging`), a press lifts the knob (`data-pressed`, Feedback),
+  hover fades; SliderRange eases too. `variant="field"` is folded into `bar` + `labelPosition="inside"` (deprecated alias,
+  GOVERNANCE), its fill's end rounded as the bar's, with a 2px grip inside the fill's end and 3px step dots inside any bar (owner's Path panel reference);
+  inside sides clear the grip. Budget reference's "No limit" = composition tile (bar + soft toggle Button). Tiles regrouped,
+  one look each. Checked in Chromium and Electron captures light/dark; not checked: RTL, vertical, Firefox/Safari, the
+  material lab. `test:desktop` still fails as on main (pages/brand.tsx).
 - **Area's defaults chosen and applied (owner 2026-10-25), branch `claude/elated-tu-968fa3`, uncommitted.** On the
   defaults review (https://claude.ai/artifact/Nhy8FtHpYR4nMkRLUUqpWP; docs/research/defaults-2026-10-25/) the owner
   decided all twelve groups: Type 13 (was 14), Corner 10 (was 8), Layer contrast 0, Flat, both modes (was 4), Selection

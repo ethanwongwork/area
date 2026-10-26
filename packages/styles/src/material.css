@@ -167,14 +167,13 @@
     background-image: var(--_m-image);
     box-shadow: var(--_m-ring), var(--_m-shadow), var(--_field-lift, 0 0 0 0 transparent);
   }
-  /* The Slider's parts are pseudo-elements, which read their own group's tokens directly. The material lies over the
-     Slider's own paint (slider.css: the knob, and `--_rail`, the track's fill to the value), never in place of it: an
-     image alone left the track blank (found in the Materials lab, 2026-10-18). The bar's thumb is the fill's own end
-     with its grip, not a raised part, so it takes no material. */
-  [data-area-material] .area-slider:not(.area-slider--bar) .area-slider__control::-webkit-slider-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
-  [data-area-material] .area-slider:not(.area-slider--bar) .area-slider__control::-moz-range-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
-  [data-area-material] .area-slider__control::-webkit-slider-runnable-track { background-image: var(--area-material-wells-image), var(--_rail); box-shadow: var(--area-material-wells-shadow); }
-  [data-area-material] .area-slider__control::-moz-range-track { background-image: var(--area-material-wells-image), var(--_rail); box-shadow: var(--area-material-wells-shadow); }
+  /* The Slider's drawn parts (slider.css: the knob, and the rail with its fill). The material lies over the Slider's own
+     paint, never in place of it: an image alone left the track blank (found in the Materials lab, 2026-10-18), so the
+     well's image sits on the rail's top layer, over the fill. The bar's thumb is the fill's own end with its grip, not
+     a raised part, so it takes no material. */
+  [data-area-material] .area-slider:not(.area-slider--bar) .area-slider__thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
+  [data-area-material] .area-slider__rail { box-shadow: var(--area-material-wells-shadow); }
+  [data-area-material] .area-slider__rail::after { content: ""; position: absolute; z-index: 3; inset: 0; background-image: var(--area-material-wells-image); }
 
   /* Surfaces, overlays and chrome: see-through down to the reading floor, the material over the fill. */
   [data-area-material] :is(

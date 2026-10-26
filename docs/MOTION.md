@@ -74,7 +74,7 @@ It sets how a control answers the pointer, on top of Speed and Easing: hover's a
 | Subtle (default) | 0.65 × fast (≈91ms) | 0.65 × fast (≈91ms) | 0.96 · 0.97 · 0.975 · 0.985 | bencho 0.96 / 0.985 in 90ms; Linear's site 0.97; Raycast 0.98; Emil Kowalski 0.97 |
 | Pronounced | 1.15 × fast (≈160ms) | 0.65 × fast | 0.94 · 0.95 · 0.96 · 0.975 | bencho's 160ms hover plates |
 
-Never given: inputs, Switch, Checkbox, Radio, Slider, Tabs, Segmented options, menu triggers (`aria-haspopup`), a key
+Never given: inputs, Switch, Checkbox, Radio, Slider (its knob lifts instead, Recipes), Tabs, Segmented options, menu triggers (`aria-haspopup`), a key
 press (`:focus-visible`), disabled and loading controls. Given: Button (by size; full width the wide amount), Chip
 (small), choice cards and linked Cards (wide). Library-wide the give stays at or under 4% (Geist, Radix Themes and
 shadcn don't scale at all).
@@ -92,7 +92,8 @@ shadcn don't scale at all).
 | Chevron rotation | `fast` ease-out | `fast` | `rotate` | one rule for every chevron that turns (Accordion, Tree view, Nav, Split button). A select trigger's chevron stays still (native Select, ChatGPT, Notion) |
 | Switch thumb | `base` ease-in-out | same | `translate` (whole pixels) | track colour on the same clock; never animate `left` / `inset`. The 2px press-stretch may change the thumb's `inline-size` on the same clock (a `scale` would distort the pill ends) |
 | Tabs / Segmented indicator | `base` ease-in-out | same | `translate` + `inline-size` of one indicator | Segmented slides one plate since 2026-10-24 (`data-plate`, docs/specs/segmented.md); Tabs still mark each tab (open) |
-| Slider thumb and fill | 1:1 | `fast` ease-out onto the step (field) | `--_slider-ratio` | track the pointer exactly while dragging (Apple, Radix, Material 3; research 2026-10-24); a stepped range glides (Slider `glide`, owner 2026-10-24: "not very smooth in between their options"): the fill follows the pointer between steps while the value lands on whole steps, and settles onto the step at release or on a key step. A press alone eases the fill to the pointer; the field's fill fades on hover (`fast`). A host whose change is costly applies it in `onValueCommit` (release, key step) or once the pointer rests, never on every step of a drag (the Inspector's bars, 2026-10-25) |
+| Slider thumb and fill | `fast` ease-out | same | `--_slider-ratio` (registered), the thumb by `translate` | the thumb and fill are drawn over the native input (owner 2026-10-26), so every change that is not a drag eases: a click on the track, a key step, a controlled change, the settle onto a step. A drag follows the pointer exactly once it moves (`data-dragging`; Apple, Radix, Material 3); a stepped range glides between steps (`glide`). A host whose change is costly applies it in `onValueCommit` (release, key step) or once the pointer rests, never on every step of a drag (the Inspector's bars, 2026-10-25) |
+| Slider press | `press-in` ease-out | `fast` ease-out | `scale` to `1 + (1 − feedback-scale) × 4` (1.12 at Subtle) | the knob is picked up, so it grows rather than gives; the bar lifts its grip; pointer only, 1 at Off |
 | Popover, menu, select list, combobox list, hover card, date panel | `base` ease-out | `fast` ease-out | `opacity` + `scale` from 0.97 | `transform-origin` at the trigger (overlay.ts writes it); `@starting-style` for the enter; exit by `allow-discrete` on `display`/`overlay` |
 | Context menu | `fast` ease-out | `fast` | `opacity` + `scale` from 0.97 | origin at the pointer |
 | Tooltip | `fast` ease-out after the open delay | instant | `opacity` + `scale` 0.97 | open delay 500–700ms; once one tooltip is open, neighbours open at once (skip window ~300ms) |

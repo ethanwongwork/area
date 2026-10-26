@@ -739,25 +739,31 @@ export const PanelStack = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(functi
 /* --- Slider --------------------------------------------------------------- */
 
 /*
- * The fill is a percentage the component computes from min/max/value and hands to the CSS
- * as `--_pct`. Controlled or not, it is derived from the same numbers the input already
- * carries, so the paint cannot disagree with the value -- and because it is a ratio rather
- * than a length it survives a density change without recomputing.
+ * The native range input carries the behaviour; the rail, fill and thumb are drawn beside it (slider.css). The drawing
+ * reads one ratio the component computes from min/max/value (`--_slider-ratio`, with `--_pct` beside it). Controlled or
+ * not, it is derived from the same numbers the input already carries, so the paint cannot disagree with the value -- and
+ * because it is a ratio rather than a length it survives a density change without recomputing. The CSS eases it, except
+ * while the pointer drags (`data-dragging`), when the drawing follows the pointer exactly.
  */
 export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
   size?: VariantProps<typeof MANIFESTS.slider>["size"];
   /**
-   * The track's treatment. `rail` (default): a thin rail and a round knob. `track`: a pill as tall as the knob,
-   * the fill running under it (Figma's adjustment slider). `bar`: the track is the control's full height and
-   * corner, its fill ending in a grip. `field`: a field-height bar with the label at its start and the value at its end
-   * inside it, the fill a plate behind them, dragged from any point; it shows the value unless `readout` is false.
-   * Horizontal only, without step marks or end labels.
+   * The track's treatment, by thickness. `rail` (default): a thin rail and a round knob. `track`: a pill as tall as the
+   * knob, the fill running under it (Figma's adjustment slider). `bar`: the track is the control's full height and
+   * corner, its fill ending in a grip; with `labelPosition="inside"` it carries its label and value inside it.
+   * `field` is the bar with its label inside.
+   * @deprecated `variant="field"`: use `labelPosition="inside"` (owner 2026-10-26: the variants consolidated).
    */
   variant?: "rail" | "track" | "bar" | "field";
   /** Visible label for the range. */
   label?: ReactNode;
-  /** Places the label and readout above opposite ends of the track. */
-  labelPosition?: "inline" | "top";
+  /**
+   * Where the label and readout sit. `inline` (default): either side of the track. `top`: above opposite ends of it.
+   * `inside`: inside a bar, the label at its start and the value at its end, the fill a neutral plate behind them with a
+   * thin grip at its end, dragged from any point; it shows the value unless `readout` is false. Inside makes the slider a
+   * bar, horizontal, without end labels.
+   */
+  labelPosition?: "inline" | "top" | "inside";
   /** Changes the visual axis while retaining native range keyboard semantics. */
   orientation?: "horizontal" | "vertical";
   /** Draws a marker at each interior step of a discrete track. */
@@ -832,9 +838,9 @@ function normalizeSliderValue(
 export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(function Slider(
   {
     size,
-    variant = "rail",
+    variant: variantProp = "rail",
     label,
-    labelPosition = "inline",
+    labelPosition: labelPositionProp = "inline",
     orientation = "horizontal",
     stepMarks,
     startLabel,
@@ -860,6 +866,10 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
 ) {
   const input = useRef<HTMLInputElement>(null);
   useImperativeHandle(ref, () => input.current!, []);
+  // `field` was the bar with its label inside (owner 2026-10-26: "consolidate"); it stays one release as an alias.
+  const inside = labelPositionProp === "inside" || variantProp === "field";
+  const variant = inside ? "bar" : variantProp as Exclude<SliderProps["variant"], "field">;
+  const labelPosition = inside ? "inside" : labelPositionProp;
   const initialValue = normalizeSliderValue(defaultValue, min, max, step);
   const [localValue, setLocalValue] = useState(initialValue);
   const current = value === undefined
@@ -877,10 +887,12 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
   const glides = (glide ?? true) && interval > 0 && (upper - lower) / interval <= 60;
   const [dragged, setDragged] = useState<number | null>(null);
   const emitted = useRef<number | null>(null);
-  // A press, and whether the pointer has moved since (data-dragging): a press alone eases the fill to the pointer, a drag
-  // follows it. On release the value it landed on is committed, if it changed.
+  // A pointer press (`data-pressed`: the knob lifts) becomes a drag once the pointer moves (`data-dragging`: the drawing
+  // stops easing and follows it). A click on the track is a press without a drag, so the thumb eases to the click. On
+  // release the value it landed on is committed, if it changed.
   const [pressed, setPressed] = useState(false);
-  const [moving, setMoving] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const pressedAt = useRef({ x: 0, y: 0 });
   // Read by the input handler, which the native control fires right after pointerdown, before React re-renders.
   const pressing = useRef(false);
   const atPress = useRef(0);
@@ -889,14 +901,18 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
   commit.current = onValueCommit;
   useEffect(() => {
     if (!pressed) return;
+    const move = (event: PointerEvent) => {
+      if (Math.hypot(event.clientX - pressedAt.current.x, event.clientY - pressedAt.current.y) > 2) setDragging(true);
+    };
     const end = () => {
       pressing.current = false;
-      setPressed(false); setMoving(false); setDragged(null); emitted.current = null;
+      setPressed(false); setDragging(false); setDragged(null); emitted.current = null;
       if (latest.current !== atPress.current) commit.current?.(latest.current);
     };
+    addEventListener("pointermove", move);
     addEventListener("pointerup", end);
     addEventListener("pointercancel", end);
-    return () => { removeEventListener("pointerup", end); removeEventListener("pointercancel", end); };
+    return () => { removeEventListener("pointermove", move); removeEventListener("pointerup", end); removeEventListener("pointercancel", end); };
   }, [pressed]);
   const shown = dragged ?? current;
   latest.current = current;
@@ -922,8 +938,9 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
     }
   }, [defaultValue, localValue, max, min, step, value]);
 
-  // A field slider carries its value inside the bar, so it shows one unless told not to.
-  const shownReadout = readout === undefined && variant === "field" ? true : readout;
+  // A slider with its label inside carries its value inside the bar too, so it shows one unless told not to.
+  const shownReadout = readout === undefined && inside ? true : readout;
+  const vertical = orientation === "vertical" && !inside;
   const renderedReadout = typeof shownReadout === "function"
     ? shownReadout(current)
     : shownReadout === true
@@ -935,11 +952,11 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
       className={sliderVariants({
         size,
         variant: variant === "rail" ? undefined : variant,
-        labelPosition: labelPosition === "top" ? "top" : undefined,
-        orientation: orientation === "vertical" && variant !== "field" ? "vertical" : undefined,
+        labelPosition: labelPosition === "inline" ? undefined : labelPosition,
+        orientation: vertical ? "vertical" : undefined,
       }, className)}
-      // `--_slider-ratio` lets the CSS end the fill at the thumb's centre, which sits inset by half the thumb. While a glide
-      // drags, the fill follows the pointer, not the step.
+      // `--_slider-ratio` places the thumb and ends the fill (at the thumb's centre, which sits inset by half the thumb).
+      // While a glide drags, the drawing follows the pointer, not the step.
       style={{
         ["--_pct" as string]: `${painted}%`,
         ["--_slider-ratio" as string]: painted / 100,
@@ -950,10 +967,11 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(originRatio === undefined ? {} : { "data-origin": "" })}
       {...(glides ? { "data-glide": "" } : {})}
-      {...(moving ? { "data-dragging": "" } : {})}
+      {...(pressed ? { "data-pressed": "" } : {})}
+      {...(dragging ? { "data-dragging": "" } : {})}
     >
       {label ? <span className="area-slider__label">{label}</span> : null}
-      {markCount > 0 ? <span className="area-slider__marks" aria-hidden="true">{Array.from({ length: markCount }, (_, index) => <i key={index} style={{ ["--_mark" as string]: `${((index + 1) / (markCount + 1)) * 100}%` }} />)}</span> : null}
+      <span className="area-slider__track">
       <input
         {...rest}
         // The visible readout ("60%", "1.25×") is what a screen reader should say too (audit C-10).
@@ -986,13 +1004,10 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
           if (disabled || event.button !== 0) return;
           atPress.current = current;
           pressing.current = true;
+          pressedAt.current = { x: event.clientX, y: event.clientY };
           setPressed(true);
           // A glide follows the pointer from the press: the native control drags continuously ("any") meanwhile.
           if (glides) { emitted.current = current; setDragged(current); }
-        }}
-        onPointerMove={event => {
-          rest.onPointerMove?.(event);
-          if (pressing.current && !moving) setMoving(true);
         }}
         onInput={event => {
           onInput?.(event);
@@ -1014,10 +1029,17 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
           if (!pressing.current) onValueCommit?.(raw);
         }}
       />
+      <span className="area-slider__rail" aria-hidden="true">
+        {bufferedRatio === undefined || originRatio !== undefined ? null : <span className="area-slider__buffer" />}
+        <span className="area-slider__fill" />
+      </span>
+      {markCount > 0 ? <span className="area-slider__marks" aria-hidden="true">{Array.from({ length: markCount }, (_, index) => <i key={index} style={{ ["--_mark" as string]: `${((index + 1) / (markCount + 1)) * 100}%` }} />)}</span> : null}
+      <span className="area-slider__thumb" aria-hidden="true" />
+      </span>
       {shownReadout === false || shownReadout === undefined ? null : (
         <span className="area-slider__value" aria-hidden="true">{renderedReadout}</span>
       )}
-      {startLabel != null || endLabel != null ? (
+      {!inside && (startLabel != null || endLabel != null) ? (
         <span className="area-slider__ends" aria-hidden="true">
           <span className="area-slider__end">{startLabel}</span>
           <span className="area-slider__end">{endLabel}</span>
