@@ -230,7 +230,8 @@ describe("layers: inks with a hue follow the ground", () => {
   });
 });
 
-describe("layers: the defaults are Area as it was", () => {
+// Layers 4 was the default until the defaults review (2026-10-25), which made Flat (0) the default; 4 still draws Area as it was.
+describe("layers: Layers 4 is Area as it was", () => {
   // Muted text is #646464, not #666666, since 2026-10-23: it is solved on the recessed selected fill pressed by PRESS_ROOM,
   // so a sidebar row's press shows (it equalled selected at the defaults).
   it("light 100 + 4 reproduces the light theme", () => {

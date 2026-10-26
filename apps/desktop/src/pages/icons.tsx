@@ -14,6 +14,7 @@ import * as IN_REVIEW from "@area/icons/review";
 import { CopyIcon, DownloadIcon, StarFilledIcon, StarIcon } from "@area/icons";
 import { CopyButton, standaloneSvg } from "../copy.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { Specimen } from "../specimen-scope.tsx";
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -120,7 +121,8 @@ function IconCell({ entry, style, size }: { entry: Entry; style: Mode; size: num
         // An option of the sheet's ListBox: selected by a press or, as the keys move, by focus.
         <ListBoxItem value={entry.name} textValue={titleCase(entry.name)} className="studio-icons__cell" data-icon={entry.name} data-key={entry.name}
           data-name={titleCase(entry.name)} aria-label={titleCase(entry.name)}>
-          <Glyph size={size} aria-hidden="true" />
+          {/* The glyph is the specimen: it takes the Inspector's settings, its cell stays the app's (specimen-scope.tsx). */}
+          <Specimen as="span" className="studio-icons__specimen"><Glyph size={size} aria-hidden="true" /></Specimen>
         </ListBoxItem>
       }>
       {open ? <>
@@ -256,7 +258,7 @@ export function IconsPage() {
                       const Glyph = style === "filled" ? entry.Filled : entry.Icon;
                       return (
                         <tr key={name} data-selected={name === icon?.name ? "" : undefined}>
-                          <TableCell fit><span className="studio-icons__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></span></TableCell>
+                          <TableCell fit><Specimen as="span" className="studio-icons__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></Specimen></TableCell>
                           <td><TableLink href={`#icons`} onClick={event => { event.preventDefault(); choose(name); }}><Code>{name}</Code></TableLink></td>
                           <td><span className="studio-muted">{entry.keyline}</span></td>
                           <td>{statusOf(name) ? <StatusBadge name={name} /> : <span className="studio-muted">—</span>}</td>

@@ -1,10 +1,10 @@
 import { createContext, use } from "react";
 
 /**
- * The app's own scale: the Inspector's chosen type and density (owner, 2026-10-22: "when i change from compact to default
- * the ui in the electron doesnt change"; it was fixed at type 13, Compact from 2026-10-12). On <html> (src/studio.tsx),
- * and on app chrome drawn inside the Canvas (section titles, tile heads, the Canvas header's controls), which follow the
- * committed choice and never a hover preview of one.
+ * The app's own scale: Area's default type and density (owner, 2026-10-25: Inspector changes don't change the app's UI;
+ * from 2026-10-22 it followed the Inspector's choice, and before that it was fixed at type 13, Compact). On <html>
+ * (src/studio.tsx), and on app chrome drawn inside the Canvas (section titles, tile heads, the Canvas header's controls),
+ * so that chrome keeps the app's scale while the Canvas takes the Inspector's.
  */
 export type AppScale = { "data-area-type": string; "data-area-density": string };
 

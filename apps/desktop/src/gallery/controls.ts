@@ -124,8 +124,8 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   // Increased contrast (docs/CONTRAST.md): a scoped setting, not an axis. System writes no attribute, so the OS decides.
   bar("contrast", value => percent(value, 8), { hint: "Stronger edges, focus and state; System follows the OS", named: { system: "System" }, custom: "4", barLabel: "Level" }),
   // Size: whole px for text (half px blurs), density by name.
-  { axis: "type", kind: "segmented", label: label("type"), defaultValue: "14", items: ["12", "13", "14", "15", "16"].map(value => ({ value, label: value })) },
-  { axis: "density", kind: "segmented", label: label("density"), hint: "28 up to type 14, 36 from type 13", defaultValue: "32", items: [
+  { axis: "type", kind: "segmented", label: label("type"), defaultValue: DEFAULT_AXES.type, items: ["12", "13", "14", "15", "16"].map(value => ({ value, label: value })) },
+  { axis: "density", kind: "segmented", label: label("density"), hint: "28 up to type 14, 36 from type 13", defaultValue: DEFAULT_AXES.density, items: [
     { value: "28", label: "Compact" }, { value: "32", label: "Default" }, { value: "36", label: "Comfy" },
   ] },
   // Shape: the medium Button's corner in px, Pill past the last.

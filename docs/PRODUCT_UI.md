@@ -71,17 +71,23 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     multi-select Custom select, and dropdowns hug their rows (`--area-menu-min-inline-size`).
 17. **Information is tables wherever it can be**: facts, props, classes, states, keys, ARIA
     and a spec's tables and dated lists. Prose stays prose only where it has no rows.
-18. **The app is drawn in the choices it offers** (owner, 2026-10-22: "make sure the electron ui is a reflection of
-    the actual choices"). `<html>` carries every committed Inspector setting and the Material, type and density
-    included (owner, same day: "when i change from compact to default the ui in the electron doesnt change"), so the
-    Titlebar, Sidebar, Inspector, the app's chrome inside the Canvas (`appScale()`, `src/app-scale.ts`), the window's
-    ground and its traffic lights (centred on the Titlebar) follow them (`src/studio.tsx`). A hover preview repaints the
-    Canvas alone. The Theme tab's own body is the one exception (Setup, below).
+18. **The app is drawn in Area's shipped defaults** (owner, 2026-10-25: "choose it once and then set it and any further
+    customization through the theme page doesnt impact the ui of the electron app"). `<html>` carries every registry
+    default and the default Material, so the Titlebar, Sidebar, Inspector, the app's chrome inside the Canvas
+    (`appScale()`, `src/app-scale.ts`), the panel widths, the window's ground and its traffic lights (centred on the
+    Titlebar) change only when a default does (`src/studio.tsx`). So does everything on the Canvas that is the app's:
+    its body, the cards, section titles, the header and the Stage's frame (owner, 2026-10-26: "the actual components
+    themselves that sit inside the containers would be the only things that update with the controls"). The
+    Inspector's settings, and hover previews of them, reach only what holds a specimen: a tile's view, the Stage's view,
+    a colour card (the card is the colour), a type sample and an icon glyph, through one scope of the settings moved
+    from the defaults (`src/specimen-scope.tsx`). The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
+    2026-10-22 to 25 the app took every committed Inspector setting instead. The Theme tab's own body stays at the
+    Setup scale (Setup, below).
 
 ## The app's layout
 
 How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at type 13, Compact,
-the scale the layout was measured at; the app now takes the chosen type and density (rule 18).
+the scale the layout was measured at; the app now takes the default type and density (rule 18).
 
 **Shared line and insets.**
 

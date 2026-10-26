@@ -34,7 +34,8 @@ export const GROUND_DARK_STEPS = [0, 8, 12, 14, 16, 18, 20, 22, 24] as const;
 export const LAYER_STEPS = [0, 2, 4, 6, 8] as const;
 export const DEFAULT_GROUND_LIGHT = 100;
 export const DEFAULT_GROUND_DARK = 8;
-export const DEFAULT_LAYERS = 4;
+/** Flat by default (owner, defaults review 2026-10-25; was 4): frames set layers apart, controls still step from their ground. */
+export const DEFAULT_LAYERS = 0;
 
 /**
  * Tint (axes/tint.ts, owner 2026-10-22): a hue in 5° steps, a strength per mode in steps of 0.005 OKLCH chroma, and the
