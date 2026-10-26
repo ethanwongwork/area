@@ -163,6 +163,7 @@ docs never restate it.
 - Token, replaced by `<Code swatch>`;
 - MenuSearch, replaced by a Combobox or a Command palette;
 - the `--area-ease-spring` easing, with no replacement.
+- Slider `variant="field"`, replaced by `labelPosition="inside"` (the bar with its label inside; 2026-10-26).
 
 Renamed props keep a deprecated alias for one release, for example `options` → `items`,
 `onRemove` / `onClose` → `onDismiss`, and a `label` that named a group → `aria-label`.

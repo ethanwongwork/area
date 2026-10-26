@@ -139,7 +139,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Round 68 (2026-10-22): the text-pair rule (a line joins its title) reopens Dialog, Confirm dialog, Drawer, Popover,
 // Alert, Toast, Empty state, Checkbox and Radio; Token row's text moves onto the ramp.
 // Round 69 (2026-10-22): Selection defaults to the accent (option B), so every family whose default paints Selection reopens.
-export const REVIEW_COMPONENTS = new Set(['slider', 'breadcrumb']); // breadcrumb: reopened 2026-10-25, nowrap // reopened 2026-10-24: the field variant (owner's settings-panel reference)
+export const REVIEW_COMPONENTS = new Set(['slider', 'breadcrumb']); // breadcrumb: reopened 2026-10-25, nowrap // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

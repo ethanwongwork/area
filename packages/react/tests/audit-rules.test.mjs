@@ -136,7 +136,7 @@ test('a removable chip keeps ref and props on one control, style on the chip; Ch
 test('SliderRange is a component: two named native ranges, distinct field names, size and form name (audit C-12)', async () => {
   const { SliderRange } = await import('../dist/modules/index.js');
   const html = renderToString(h(SliderRange, { defaultValue: [20, 60], size: 'sm', name: 'price' }));
-  assert.match(html, /^<div class="area-slider-range area-slider-range--sm" style="--_range-start:20%;--_range-end:60%;--_range-start-ratio:0.2;--_range-end-ratio:0.6"/);
+  assert.match(html, /^<div class="area-slider-range area-slider-range--sm" style="--_slider-range-start:0.2;--_slider-range-end:0.6"/);
   assert.equal((html.match(/type="range"/g) ?? []).length, 2);
   assert.equal((html.match(/name="price"/g) ?? []).length, 2);
   assert.match(html, /aria-label="Minimum value"/);

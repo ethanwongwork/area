@@ -1,7 +1,7 @@
 /**
  * The Inspector's setting rows, one control each, chosen per setting (owner, 2026-10-24: "make your best judgement on what
  * would be the best control for this axis, a dropdown, a toggle switch, a segmented control, a slider"):
- *   a bar (Slider variant="field") for an ordered range with enough steps to drag: lightness, contrast, shadows, corners;
+ *   a bar (Slider labelPosition="inside") for an ordered range with enough steps to drag: lightness, contrast, shadows, corners;
  *   a Segmented for two to five short names: mode, density, focus ring;
  *   a dropdown for a longer or wordier list, each option drawing what it sets: accent colours, easing, pills;
  *   a choice with Custom, the bar under it, where a setting has an Auto beside its range.
@@ -57,7 +57,7 @@ function SettingBar({ value, onSet, ...props }: Omit<SliderProps, "value" | "onV
   const land = (next: number) => { clearTimeout(timer.current); pending.current = null; apply.current(next); setDraft(null); };
   const wait = () => { clearTimeout(timer.current); timer.current = setTimeout(() => { if (pending.current !== null) land(pending.current); }, REST); };
   return (
-    <Slider variant="field" {...props} value={draft ?? value}
+    <Slider labelPosition="inside" {...props} value={draft ?? value}
       onValueCommit={next => { pending.current = next; clearTimeout(timer.current); timer.current = setTimeout(() => land(next), EASE); }}
       onValueChange={next => { setDraft(next); pending.current = next; wait(); }}
       onPointerMove={event => { if (pending.current !== null && event.buttons) wait(); }} />
