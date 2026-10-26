@@ -217,8 +217,11 @@
   }
 
   /* Origin (owner 2026-10-24, the Temperature bar: Cool … Neutral … Warm): a range with a neutral middle fills from that
-     value to the thumb, either side of it, so Neutral is an empty bar and each way grows out from it. The host gives the two
-     ends as ratios (`--_lo`, `--_hi`) and marks the slider `data-origin`; the buffered stretch is not drawn with it. */
+     value to the thumb, either side of it, so Neutral is an empty bar and each way grows out from it. The host gives the
+     origin as a ratio (`--_origin`) and marks the slider `data-origin`; the two ends are the origin and the value in order,
+     worked out here from the registered ratio, so they ease with it. The buffered stretch is not drawn with it. */
+  .area-slider { --_lo: 0; --_hi: var(--_slider-ratio); }
+  .area-slider[data-origin] { --_lo: min(var(--_origin), var(--_slider-ratio)); --_hi: max(var(--_origin), var(--_slider-ratio)); }
   .area-slider[data-origin] .area-slider__control {
     --_from: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_lo));
     --_to: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_hi));
@@ -425,8 +428,22 @@
    * them, so a list of them reads as a list of settings and any point of the bar drags it. Geometry is the field's own:
    * the tier's height and corner, the inset contract's sides (inset.css), no edge. The trough is the soft field fill
    * (`bg-component`) and the fill the off-track grey one step past it (`fill-track`, hover `fill-toggle-hover`), neutral
-   * as the reference; label and value take the body ink, which reads on both. No grip: the fill's end is the value.
-   * Horizontal only; step marks and end labels belong to the other variants.
+   * as the reference; label and value take the body ink, which reads on both. Horizontal only; step marks and end labels
+   * belong to the other variants.
+   *
+   * The trough is the bar's own ground and the fill its own layer (owner, 2026-10-25: "they arent very smooth to move and
+   * it doesnt seem like any animation … is implemented"; was a gradient on the native track, which can neither ease its
+   * colour nor carry a mark): the plate is the whole bar clipped to the stretch between `--_lo` and `--_hi`, so it keeps
+   * the bar's corners where it meets the bar's ends and a straight edge at the value, and its colour fades on hover. A
+   * press eases the fill to the pointer, a key step or the release eases it onto the step (`--_slider-ratio` on `fast`,
+   * ease-out), and a drag follows the pointer (`data-dragging`).
+   *
+   * The mark (owner, 2026-10-25, two references: a line at the fill's end, "should the sliders have an indicator?"): a
+   * 2-wide rounded line a third of the bar tall, 4 inside the fill's end, so the bar shows where its value is and that it
+   * drags. At either end of the range it is hidden, since an empty or a full bar shows the value and there the mark sat 4
+   * from the label's or the value's text and read as a text cursor (checked in the Inspector, 2026-10-25); it shows again
+   * as soon as the value leaves the end. Its ink is the step tick's at rest and the muted ink under the pointer, while it
+   * drags and with focus. Was none: "the fill's end is the value" (2026-10-24).
    */
   .area-slider.area-slider--field {
     --_track: var(--_height);
@@ -439,17 +456,60 @@
     --_thumb-edge: 0px;
     --_thumb-shadow: none;
     --_thumb-paint: transparent;
+    --_mark-inset: var(--area-space-4); /* pick: the reference's grip sits a few px inside the fill's end */
+    --_mark-width: var(--area-space-2); /* pick */
+    --_mark-length: round(nearest, calc(var(--_height) / 3), 2px); /* pick: 10 / 10 / 14 at sm, md, lg Compact */
+    --_mark-ink: var(--area-edge-control-strong);
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     column-gap: var(--_gap);
     isolation: isolate;
+    border-radius: var(--_track-radius);
+    background-color: var(--_track-fill);
   }
-  .area-slider--field > .area-slider__control { position: absolute; z-index: 0; inset: 0; inline-size: 100%; cursor: ew-resize; }
-  /* A glide (Slider `glide`, owner 2026-10-24: "not very smooth in between their options"): while the pointer drags,
-     the fill follows it (React paints the pointer's place); otherwise a change of step, a key or the release, eases
-     the fill to the step on fast, ease-out. A field has no thumb to jump ahead of it. */
-  .area-slider--field[data-glide]:not([data-dragging]) { transition: --_slider-ratio var(--area-duration-fast) var(--area-ease-out); }
+  .area-slider--field::before,
+  .area-slider--field::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .area-slider--field::before {
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--_fill);
+    clip-path: inset(0 calc(100% * (1 - var(--_hi))) 0 calc(100% * var(--_lo)));
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  /* Right to left the fill runs from the right edge; the mark is placed by its inline start, so it follows. */
+  .area-slider--field:dir(rtl)::before { clip-path: inset(0 calc(100% * var(--_lo)) 0 calc(100% * (1 - var(--_hi)))); }
+  /* The mark at the value's end of the fill, inside it: before the value when the fill runs up to it, after it when an
+     origin fill runs down to it (`--_side`, the sign of value − origin), centred on an empty origin bar; never past the
+     bar's insets; on whole pixels (MOTION.md, crispness). */
+  .area-slider--field::after {
+    --_side: sign(var(--_slider-ratio) - var(--_origin, 0));
+    inset-block: 0;
+    inset-inline-start: clamp(var(--_mark-inset),
+      round(nearest, calc(100% * var(--_slider-ratio) - var(--_mark-width) / 2 - var(--_side) * (var(--_mark-inset) + var(--_mark-width) / 2)), 1px),
+      100% - var(--_mark-inset) - var(--_mark-width));
+    inline-size: var(--_mark-width);
+    block-size: var(--_mark-length);
+    margin-block: auto;
+    border-radius: var(--area-radius-full);
+    background-color: var(--_mark-ink);
+    /* 0 at the range's two ends, 1 a hundredth in from either. */
+    opacity: clamp(0, min(var(--_slider-ratio), 1 - var(--_slider-ratio)) * 100, 1);
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-slider--field > .area-slider__control { position: absolute; z-index: 0; inset: 0; inline-size: 100%; cursor: ew-resize; --_rail: transparent; }
+  .area-slider--field:not([data-dragging]) { transition: --_slider-ratio var(--area-duration-fast) var(--area-ease-out); }
+  @media (hover: hover) {
+    .area-slider--field:not([data-disabled]):hover { --_fill: var(--_fill-hover); --_mark-ink: var(--area-fg-muted); }
+  }
+  .area-slider--field:is([data-dragging], :has(> .area-slider__control:focus-visible)) { --_fill: var(--_fill-hover); --_mark-ink: var(--area-fg-muted); }
+  /* An instant change while it drags: the fill and mark follow the pointer, not a fade behind it. */
+  .area-slider--field[data-dragging]::before, .area-slider--field[data-dragging]::after { transition-duration: 0s; }
   .area-slider--field[data-disabled] > .area-slider__control { cursor: not-allowed; }
   .area-slider--field > .area-slider__label,
   .area-slider--field > .area-slider__value { position: relative; z-index: 1; pointer-events: none; color: var(--area-fg-default); }
@@ -463,6 +523,11 @@
   }
   .area-slider--field .area-slider__control:focus-visible::-webkit-slider-thumb { outline: none; }
   .area-slider--field .area-slider__control:focus-visible::-moz-range-thumb { outline: none; }
+  @media (forced-colors: active) {
+    .area-slider--field { border: var(--area-stroke-width) solid CanvasText; }
+    .area-slider--field::before { forced-color-adjust: none; background-color: Highlight; }
+    .area-slider--field::after { forced-color-adjust: none; background-color: HighlightText; }
+  }
   /* The ticks need a lane under a full-height bar. */
   .area-slider--bar:has(> .area-slider__marks) { block-size: auto; padding-block-end: var(--area-space-8); }
 

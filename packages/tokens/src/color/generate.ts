@@ -22,7 +22,8 @@ import { maxChromaAt } from "./gamut.ts";
 import { CHROMA_TRIM, LEVELS } from "./curves.ts";
 import type { ScaleSpec } from "./scale.ts";
 
-interface PaletteRung { hex: string; oklch: { L: number; C: number; H: number } }
+/** One rung of a palette family: its hex and OKLCH, as palette.json writes it. */
+export interface PaletteRung { hex: string; oklch: { L: number; C: number; H: number } }
 const FAMILIES = PALETTE.families as unknown as Record<string, Record<string, PaletteRung>>;
 
 /** The named families the generator reads, with the label their solid carries (presets.ts `solidForeground`). */
@@ -137,10 +138,12 @@ export const LABEL_TINT_STEPS = [0, 1, 2, 3, 4] as const;
 
 /**
  * Solid (axes/accent.ts): the accent step solid fills sit on, per mode. Auto is the solver's own step (`chooseSolid`);
- * a step from 400 to 850 is that step, moved toward the label's side until the label clears (scale.ts `solidAt`), so a
- * step a hue cannot carry its label on draws the nearest one that can.
+ * a step from 200 to 850 is that step under whichever label clears on it, black or white, or where neither does the
+ * nearest step toward the accent's own label's side that carries it (scale.ts `solidAt`). From 200 since 2026-10-25
+ * (owner: "Shade runs from light to deep for every colour"): 200 is the lightest step every hue carries black on at every
+ * strength; 400 was the lightest when the label never flipped.
  */
-export const SOLID_STEPS = [400, 450, 500, 550, 600, 650, 700, 750, 800, 850] as const;
+export const SOLID_STEPS = [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850] as const;
 export type SolidStep = (typeof SOLID_STEPS)[number];
 export type SolidPick = SolidStep | "auto";
 

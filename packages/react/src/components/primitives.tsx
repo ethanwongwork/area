@@ -784,6 +784,12 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   /** Called with the normalized native value and the input event, for every input event. */
   onValueChange?: (value: number, event: FormEvent<HTMLInputElement>) => void;
   /**
+   * Called once a change is final: when the pointer lets go (with the value it landed on, if it changed), and on every
+   * keyboard step. A host whose change is costly (a setting that restyles the app) applies it here, or when
+   * `onValueChange` pauses, and keeps the slider responsive while it drags (Radix's and Base UI's `onValueCommitted`).
+   */
+  onValueCommit?: (value: number) => void;
+  /**
    * A stepped range glides (owner, 2026-10-24: "the sliders are not very smooth in between their options"): while the
    * pointer drags, the track follows it continuously and the value lands on whole steps (`onValueChange` fires when the
    * step changes); on release the fill settles onto the step. On by default for a range of 60 steps or fewer; `false`
@@ -837,6 +843,7 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
     origin,
     readout,
     onValueChange,
+    onValueCommit,
     glide,
     onInput,
     className,
@@ -863,21 +870,36 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
   const bufferedRatio = buffered === undefined || upper <= lower
     ? undefined
     : Math.min(1, Math.max(0, (finiteNumber(buffered, lower) - lower) / (upper - lower)));
-  // An origin inside the range: the fill's two ends as ratios, the origin's and the value's in order.
+  // An origin inside the range, as a ratio: the CSS puts the fill between it and the value, either way, so it eases too.
   const originRatio = origin === undefined || upper <= lower ? undefined : Math.min(1, Math.max(0, (finiteNumber(origin, lower) - lower) / (upper - lower)));
   const interval = step === "any" ? 0 : finiteNumber(step, 1);
   // The glide: the pointer's exact place on the track while it drags (null otherwise).
   const glides = (glide ?? true) && interval > 0 && (upper - lower) / interval <= 60;
   const [dragged, setDragged] = useState<number | null>(null);
   const emitted = useRef<number | null>(null);
+  // A press, and whether the pointer has moved since (data-dragging): a press alone eases the fill to the pointer, a drag
+  // follows it. On release the value it landed on is committed, if it changed.
+  const [pressed, setPressed] = useState(false);
+  const [moving, setMoving] = useState(false);
+  // Read by the input handler, which the native control fires right after pointerdown, before React re-renders.
+  const pressing = useRef(false);
+  const atPress = useRef(0);
+  const latest = useRef(0);
+  const commit = useRef(onValueCommit);
+  commit.current = onValueCommit;
   useEffect(() => {
-    if (dragged === null) return;
-    const end = () => { setDragged(null); emitted.current = null; };
+    if (!pressed) return;
+    const end = () => {
+      pressing.current = false;
+      setPressed(false); setMoving(false); setDragged(null); emitted.current = null;
+      if (latest.current !== atPress.current) commit.current?.(latest.current);
+    };
     addEventListener("pointerup", end);
     addEventListener("pointercancel", end);
     return () => { removeEventListener("pointerup", end); removeEventListener("pointercancel", end); };
-  }, [dragged === null]);
+  }, [pressed]);
   const shown = dragged ?? current;
+  latest.current = current;
   const painted = upper > lower ? ((shown - lower) / (upper - lower)) * 100 : 0;
   const markCount = stepMarks && interval > 0
     ? Math.min(24, Math.max(0, Math.round((upper - lower) / interval) - 1))
@@ -922,13 +944,13 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
         ["--_pct" as string]: `${painted}%`,
         ["--_slider-ratio" as string]: painted / 100,
         ...(bufferedRatio === undefined ? {} : { ["--_buffered" as string]: bufferedRatio }),
-        ...(originRatio === undefined ? {} : { ["--_lo" as string]: Math.min(originRatio, painted / 100), ["--_hi" as string]: Math.max(originRatio, painted / 100) }),
+        ...(originRatio === undefined ? {} : { ["--_origin" as string]: originRatio }),
         ...style,
       }}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(originRatio === undefined ? {} : { "data-origin": "" })}
       {...(glides ? { "data-glide": "" } : {})}
-      {...(dragged !== null ? { "data-dragging": "" } : {})}
+      {...(moving ? { "data-dragging": "" } : {})}
     >
       {label ? <span className="area-slider__label">{label}</span> : null}
       {markCount > 0 ? <span className="area-slider__marks" aria-hidden="true">{Array.from({ length: markCount }, (_, index) => <i key={index} style={{ ["--_mark" as string]: `${((index + 1) / (markCount + 1)) * 100}%` }} />)}</span> : null}
@@ -961,8 +983,16 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
         }}
         onPointerDown={event => {
           rest.onPointerDown?.(event);
+          if (disabled || event.button !== 0) return;
+          atPress.current = current;
+          pressing.current = true;
+          setPressed(true);
           // A glide follows the pointer from the press: the native control drags continuously ("any") meanwhile.
-          if (glides && !disabled && event.button === 0) { emitted.current = current; setDragged(current); }
+          if (glides) { emitted.current = current; setDragged(current); }
+        }}
+        onPointerMove={event => {
+          rest.onPointerMove?.(event);
+          if (pressing.current && !moving) setMoving(true);
         }}
         onInput={event => {
           onInput?.(event);
@@ -972,12 +1002,16 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
             const nextValue = normalizeSliderValue(raw, min, max, step);
             if (nextValue === emitted.current) return;
             emitted.current = nextValue;
+            latest.current = nextValue;
             if (value === undefined) setLocalValue(nextValue);
             onValueChange?.(nextValue, event);
             return;
           }
+          latest.current = raw;
           if (value === undefined) setLocalValue(raw);
           onValueChange?.(raw, event);
+          // A key step (or any change without a press) is final at once; a press commits when it lets go.
+          if (!pressing.current) onValueCommit?.(raw);
         }}
       />
       {shownReadout === false || shownReadout === undefined ? null : (

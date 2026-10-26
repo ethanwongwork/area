@@ -23,8 +23,8 @@
  */
 import { Component, createElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import * as AreaReact from "@area/react";
-import { Badge, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, Count, EmptyState, Kbd, Link, PanelSection, SectionHeading, Select, Table, TableCell, TableLink, Tabs, Tooltip, ZoomControl, type TreeViewNode } from "@area/react";
-import { ArrowLeftIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, GridIcon, OpenIcon, ResetIcon } from "@area/icons";
+import { Badge, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, Count, EmptyState, Kbd, Link, Menu, MenuItem, MenuLabel, MenuSeparator, PanelSection, SectionHeading, Table, TableCell, TableLink, Tabs, Tooltip, ZoomControl, type TreeViewNode } from "@area/react";
+import { ArrowLeftIcon, CardsIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, GridIcon, OpenIcon, ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
 import SNIPPETS from "virtual:demo-snippets";
 import { CopyButton } from "../copy.tsx";
@@ -45,27 +45,24 @@ import { SpecimenBox } from "../specimen-box.tsx";
 import { CodeWell, Selection } from "../inspector.tsx";
 import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
 import { appScale } from "../app-scale.ts";
-import { CanvasSection, Tile, TileGrid, type CardLook } from "../tile.tsx";
+import { CanvasSection, GALLERY_LOOK, Tile, TileGrid, type CardLook } from "../tile.tsx";
 
 /*
- * The Container menu's card looks (owner, 2026-10-22: "different placements of the text, inside the card, outside the
- * card"; then "no divider lines across, no roomy version. maybe just a basic container would work, maybe try playing with
- * the fill and stroke"). Each is a combination of Asset card's axes, not a style of its own: the name above or below,
- * framed (a frame inside the card) or basic (one surface) or no card at rest, a gray or white fill, an edge or none.
+ * The Cards menu (owner, 2026-10-25: "there should just be 1 style of container, so the options for that menu should be
+ * container, no container, then, waterfall/hugging the height of components … or fixed height containers"). Two
+ * choices, each on its own: whether the card is drawn, and its height. The one container is Basic, the name and Copy on
+ * hover (GALLERY_LOOK, the look Typography's and Imagery's cards share); No container draws none at rest, its edge on
+ * hover. It was nine looks, 2026-10-22 to 2026-10-25 (framed, the name above or below, a white fill, no stroke).
+ *   fixed      every card 5:4, the component centred in it
+ *   waterfall  each card hugs its component at its scale, the same room above and below every one, and drops into
+ *              the shortest column (src/gallery/fit.ts, hug): a taller component gets a taller card, never a bigger
+ *              component
  */
-const CARD_LOOKS = {
-  framed: { label: "Framed", look: { container: "framed", caption: "above", fill: "recessed", borderless: false } },
-  "framed-below": { label: "Name below", look: { container: "framed", caption: "below", fill: "recessed", borderless: false } },
-  basic: { label: "Basic", look: { container: "basic", caption: "above", fill: "recessed", borderless: false } },
-  "basic-below": { label: "Basic, name below", look: { container: "basic", caption: "below", fill: "recessed", borderless: false } },
-  "basic-hover": { label: "Basic, name on hover", look: { container: "basic", caption: "overlay", fill: "recessed", borderless: false } },
-  "basic-white": { label: "Basic, white", look: { container: "basic", caption: "above", fill: "raised", borderless: false } },
-  "basic-fill": { label: "Basic, no stroke", look: { container: "basic", caption: "above", fill: "recessed", borderless: true } },
-  containerless: { label: "Containerless", look: { container: "containerless", caption: "above", fill: "recessed", borderless: false } },
-  "containerless-below": { label: "Containerless, name below", look: { container: "containerless", caption: "below", fill: "recessed", borderless: false } },
-} as const satisfies Record<string, { label: string; look: CardLook }>;
-type CardLookId = keyof typeof CARD_LOOKS;
-const CARD_LOOK_IDS = Object.keys(CARD_LOOKS) as CardLookId[];
+const CONTAINERS = [{ value: "container", label: "Container" }, { value: "none", label: "No container" }] as const;
+const HEIGHTS = [{ value: "fixed", label: "Fixed height", description: "Every card one height" }, { value: "waterfall", label: "Waterfall", description: "Each card hugs its component" }] as const;
+type CardContainer = (typeof CONTAINERS)[number]["value"];
+type CardHeight = (typeof HEIGHTS)[number]["value"];
+const lookOf = (container: CardContainer): CardLook => container === "none" ? { ...GALLERY_LOOK, container: "containerless" } : GALLERY_LOOK;
 import { Properties, Stage, useStageKeys } from "../stage.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { ChromeButton, SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
@@ -251,9 +248,9 @@ function useFit(ref: { current: HTMLElement | null }, key: unknown, enabled = tr
  * IntersectionObserver on the Canvas body, as far ahead as the window is tall), holding their room with empty cards
  * until then, and fits its own tiles (src/gallery/fit.ts); the first open draws a few screens, not the library.
  */
-function Overview({ groups, visit, open, onToggle, onOpen, zoom, look }: {
+function Overview({ groups, visit, open, onToggle, onOpen, zoom, look, waterfall }: {
   groups: Array<[string, Family[]]>; visit?: string; open: string[]; onToggle: (slug: string) => void;
-  onOpen: (key: string, from?: Element | null) => void; zoom: string; look: CardLook;
+  onOpen: (key: string, from?: Element | null) => void; zoom: string; look: CardLook; waterfall: boolean;
 }) {
   // The arrangement's groups keep their order but draw no title of their own: a group's title over a family's read as
   // two headings of one tier stacked 12 apart. The Sidebar names the groups, and each family's status follows its title.
@@ -261,15 +258,15 @@ function Overview({ groups, visit, open, onToggle, onOpen, zoom, look }: {
     <div className="studio-sections" {...zoomScope(zoom)}>
       {groups.flatMap(([, list]) => list).map(entry => (
         <FamilySection key={entry.slug} family={entry} open={open.includes(entry.slug)} onToggle={() => onToggle(entry.slug)}
-          visit={visit} onOpen={onOpen} zoom={zoom} look={look} />
+          visit={visit} onOpen={onOpen} zoom={zoom} look={look} waterfall={waterfall} />
       ))}
     </div>
   );
 }
 
 /** One family in the Overview: its name, status and tile count over one row of its tiles, or all of them in groups. */
-function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look }: {
-  family: Family; open: boolean; onToggle: () => void; visit?: string; onOpen: (key: string, from?: Element | null) => void; zoom: string; look: CardLook;
+function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, waterfall }: {
+  family: Family; open: boolean; onToggle: () => void; visit?: string; onOpen: (key: string, from?: Element | null) => void; zoom: string; look: CardLook; waterfall: boolean;
 }) {
   const tiles = TILES.get(family.slug)!;
   const status = statusOf(family);
@@ -299,9 +296,9 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look }: {
     observer.observe(grid);
     return () => observer.disconnect();
   }, [near, open]);
-  useFit(body, `${family.slug}:${open}:${columns}:${zoom}:${near}`, near);
+  useFit(body, `${family.slug}:${open}:${columns}:${zoom}:${near}:${waterfall}`, near);
   const card = (entry: Tile) => (
-    <Tile key={entry.id} container="asset" id={`variant-${family.slug}-${entry.id}`} span="wide" stage="fit" card look={look} openOnClick
+    <Tile key={entry.id} container="asset" id={`variant-${family.slug}-${entry.id}`} span="wide" stage="fit" card look={look} aspect={waterfall ? "hug" : undefined} openOnClick
       aria-label={`${family.name}: ${entry.label}`} data-key={family.slug} data-name={family.name} label={entry.value}
       selected={here && entry.id === visitTile} onOpen={() => onOpen(`${family.slug}/${entry.id}`, document.getElementById(`variant-${family.slug}-${entry.id}`))}
       actions={<CopyCode code={SNIPPETS[entry.demo]} name={`${family.name} ${entry.label}`} />}>
@@ -320,10 +317,10 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look }: {
         {open ? groupsOf(tiles).map(([group, list]) => (
           <div key={group} className="studio-overview__group">
             <p className="studio-overview__group-label" {...appScale()}>{group} <span className="studio-muted studio-tabular">{list.length}</span></p>
-            <TileGrid span="wide" cards>{near ? list.map(card) : ghosts(list.length)}</TileGrid>
+            <TileGrid span="wide" cards waterfall={waterfall}>{near ? list.map(card) : ghosts(list.length)}</TileGrid>
           </div>
         )) : (
-          <TileGrid span="wide" cards>{near ? tiles.slice(0, columns).map(card) : ghosts(Math.min(columns, tiles.length))}</TileGrid>
+          <TileGrid span="wide" cards waterfall={waterfall}>{near ? tiles.slice(0, columns).map(card) : ghosts(Math.min(columns, tiles.length))}</TileGrid>
         )}
       </div>
       {more || open ? (
@@ -425,13 +422,11 @@ export function ComponentsPage() {
   // and "2" meant at most 100% and 200%.
   // A new key again (2026-10-18): the old "fit" was today's Auto.
   const [zoom, setZoom] = useViewOption<Zoom>("components-zoom", "auto", ZOOMS);
-  // Container (owner, 2026-10-19: "i want the containerless design to be tested on components first"; 2026-10-22:
-  // "explore different asset card styles and add them as options to the dropdown … different placements of the text,
-  // inside the card, outside the card, different paddings, layering"): how the tiles are drawn, each Asset card's axes.
-  // Basic with the name and Copy shown on hover by default (owner, 2026-10-24: "the text and copy button can be hidden on
-  // hover for everything"), the look Typography's and Imagery's cards share (tile.tsx, GALLERY_LOOK).
-  const [container, setContainer] = useViewOption<CardLookId>("components-card", "basic-hover", CARD_LOOK_IDS);
-  const look = CARD_LOOKS[container].look;
+  // The Cards menu (CONTAINERS, HEIGHTS): the card drawn or not, fixed or hugging its component. New keys: the old
+  // "components-card" held one of nine looks.
+  const [container, setContainer] = useViewOption<CardContainer>("components-container", "container", CONTAINERS.map(choice => choice.value));
+  const [height, setHeight] = useViewOption<CardHeight>("components-height", "fixed", HEIGHTS.map(choice => choice.value));
+  const look = lookOf(container);
   const [status, setStatus] = useViewOption<"all" | Status>("components-status", "all", ["all", "complete", "review", "unrefined"]);
   // A family's tab (src/family-tabs.tsx), kept from family to family, so Next reads the next family's Documentation.
   const [familyTab, setFamilyTab] = useViewOption<FamilyTab>("components-family-tab", "overview", FAMILY_TAB_IDS);
@@ -585,11 +580,22 @@ export function ComponentsPage() {
       onValueChange={next => setZoom(String(next))} />
   );
 
-  // How the tiles are drawn, after the zoom (PRODUCT_UI rule 14: zoom, style, size).
-  const containerControl = (
-    <Select size="sm" variant="soft" aria-label="Container" value={container} onChange={event => setContainer(event.currentTarget.value as CardLookId)}>
-      {CARD_LOOK_IDS.map(id => <option key={id} value={id}>{CARD_LOOKS[id].label}</option>)}
-    </Select>
+  // How the cards are drawn, after the zoom (PRODUCT_UI rule 14: zoom, style, size): an icon menu as Sort and group is,
+  // its choices kept open so the cards change behind it.
+  const cardsSummary = `${CONTAINERS.find(choice => choice.value === container)!.label}, ${HEIGHTS.find(choice => choice.value === height)!.label.toLowerCase()}`;
+  const cardsControl = (
+    <Menu aria-label="Cards" align="end" tooltip={<>Cards · {cardsSummary}</>}
+      trigger={<Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={<CardsIcon />} aria-label="Cards" />}>
+      <MenuLabel>Container</MenuLabel>
+      {CONTAINERS.map(choice => (
+        <MenuItem key={choice.value} keepOpen radio checked={container === choice.value} onClick={() => setContainer(choice.value)}>{choice.label}</MenuItem>
+      ))}
+      <MenuSeparator />
+      <MenuLabel>Height</MenuLabel>
+      {HEIGHTS.map(choice => (
+        <MenuItem key={choice.value} keepOpen radio checked={height === choice.value} description={choice.description} onClick={() => setHeight(choice.value)}>{choice.label}</MenuItem>
+      ))}
+    </Menu>
   );
 
   return (
@@ -624,13 +630,26 @@ export function ComponentsPage() {
             </BreadcrumbList>
           </Breadcrumb>
         </div>
-      ) : selectedFamily && selectedTile && mode === "grid" ? (
-        // Back to the tile just left (the Overview's "you were here"), as Escape does.
-        <Tooltip side="bottom" trigger={
-          <Button variant="ghost" tone="neutral" size="sm" icon={<ArrowLeftIcon />} aria-keyshortcuts="Escape"
-            onClick={() => open(selected!, document.getElementById(`variant-${selected!.split("/").join("-")}`))}>Back to {selectedFamily.name}</Button>
-        }>{selectedFamily.name}, {selectedTile.label} <Kbd keys={["Esc"]} size="sm" /></Tooltip>
-      ) : undefined}
+      ) : (
+        // Where this is in the Overview too (owner, 2026-10-25: "put some text in the top left, a breadcrumb"), so the bar
+        // reads the same on both levels: the tab, then the level, where a tile adds its family and its name. Components
+        // scrolls back to the top. Then the way back to the tile just left (the Overview's "you were here"), as Escape.
+        <div className="studio-canvas__lead">
+          <Breadcrumb nowrap className="studio-canvas__crumbs" aria-label="Where this is" {...appScale()}>
+            <BreadcrumbList>
+              <BreadcrumbItem><BreadcrumbLink href="#components" onClick={event => { event.preventDefault(); canvas.current?.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }}>Components</BreadcrumbLink></BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem><BreadcrumbPage>{mode === "list" ? "List" : "Overview"}</BreadcrumbPage></BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          {selectedFamily && selectedTile && mode === "grid" ? (
+            <Tooltip side="bottom" trigger={
+              <Button variant="ghost" tone="neutral" size="sm" icon={<ArrowLeftIcon />} aria-keyshortcuts="Escape"
+                onClick={() => open(selected!, document.getElementById(`variant-${selected!.split("/").join("-")}`))}>Back to {selectedFamily.name}</Button>
+            }>{selectedFamily.name}, {selectedTile.label} <Kbd keys={["Esc"]} size="sm" /></Tooltip>
+          ) : null}
+        </div>
+      )}
       canvasTitle={family ? `${family.name}, ${stageLabel}` : "Overview"}
       canvasActions={family ? (
         <ViewControls>
@@ -646,7 +665,7 @@ export function ComponentsPage() {
             options={[{ value: "all", label: "All statuses" }, { value: "complete", label: "Complete" }, { value: "review", label: "In review" }, { value: "unrefined", label: "Unrefined" }]} />
           <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={GROUPS} directions={DIRECTIONS[arrangement.sort]} />
           {mode === "grid" ? zoomControl : null}
-          {mode === "grid" ? containerControl : null}
+          {mode === "grid" ? cardsControl : null}
           <ViewSwitch value={mode} onChange={setMode} />
         </ViewControls>
       )}
@@ -674,7 +693,7 @@ export function ComponentsPage() {
       ) : (
         <PinMenu pins={pins} label="Component">
           <Overview groups={groups.map(([label, list]) => [label, list.filter(entry => status === "all" || statusOf(entry) === status)])}
-            visit={selected} open={expanded} onToggle={toggleSection} onOpen={open} zoom={zoom} look={look} />
+            visit={selected} open={expanded} onToggle={toggleSection} onOpen={open} zoom={zoom} look={look} waterfall={height === "waterfall"} />
         </PinMenu>
       ) : <EmptyState title="No components" description={`Nothing matches “${query}”.`} />}
       inspector={{

@@ -26,4 +26,7 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
 .studio-row--inactive > :not(.studio-row__note) { opacity: var(--area-opacity-disabled); }
 .studio-row__note { margin: 0; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
 .studio-row__label { display: inline-flex; align-items: center; gap: var(--area-space-6); min-inline-size: 0; }
+/* Brand (brand-settings.tsx): a colour's exact hex with its picker beside it; the picker's head names it beside Remove. */
+.studio-brand__colour { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--area-space-4); align-items: center; }
+.studio-brand__head { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); }
 .studio-row__label > .studio-mark { inline-size: var(--area-space-16); block-size: var(--area-space-16); }

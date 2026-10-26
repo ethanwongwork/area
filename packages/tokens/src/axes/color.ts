@@ -13,41 +13,11 @@ import { type AxisDefinition, type AxisPreset, type TokenMap, tokens } from "./s
 import { CHROMATIC_SCALES, MUTED_SCALES, NEUTRAL_SCALES, SCALE_DESCRIPTIONS, STATUS_TONES } from "../color/presets.ts";
 import { type Theme } from "../color/scale.ts";
 import { type ResolvedTheme, DEFAULT_SELECTION, resolveTheme } from "../semantic/resolve.ts";
-import { SEMANTIC_ALIASES, type Alias } from "../semantic/aliases.ts";
 import { LAYER_COLOR_TOKENS, castOf, tintRoom } from "../color/layers.ts";
-import { ACCENT_HUES, SOLID_STEPS } from "../color/generate.ts";
+import { ACCENT_HUES } from "../color/generate.ts";
 import { scaleFor } from "../semantic/resolve.ts";
-
-/** Semantic tokens whose alias points at a given role. */
-function tokensForRole(theme: ResolvedTheme, role: string): Record<string, string> {
-  const out: Record<string, string> = {};
-  for (const [name, alias] of Object.entries(SEMANTIC_ALIASES) as Array<[string, Alias]>) {
-    // A literal belongs to the axis whose role it names (the neutral scrim); others are skipped.
-    if (alias.role !== role) continue;
-    // A vivid or tonal ink is written as its rung; the Layers model derives `fg-<role>-vivid` and `fg-<role>` from it, so
-    // it follows the ground (color/layers.ts HUED_INKS).
-    // A tonal stroke is written as its rung too; base.ts moves it with the Contrast level.
-    out[alias.kind === "vivid" || alias.kind === "tonalForeground" || alias.kind === "stroke" || alias.kind === "strokeHover" ? `${name}-rung` : name] = theme.tokens[name]!;
-  }
-  return out;
-}
-
-/**
- * A scale's full primitive ramp: every level, its translucent twin, and the foreground the
- * scale measured against its own solid fill.
- *
- * Keyed by ordinal rung, not array position. A level identifies a palette step; it is not
- * a measured lightness and it does not change when theme polarity changes.
- */
-function primitiveRamp(theme: ResolvedTheme, scaleId: string, as = scaleId): Record<string, string> {
-  // A family by id, or the accent role's own scale (a named family or a hue's generated one).
-  const scale = theme.scales[scaleId] ?? theme.roles[scaleId as keyof ResolvedTheme["roles"]]!;
-  const out: Record<string, string> = {};
-  for (const step of scale.steps) out[`${as}-${step.level}`] = step.hex;
-  for (const alpha of scale.alphas) out[`${as}-a${alpha.level}`] = alpha.hex8;
-  out[`${as}-contrast`] = scale.contrast.hex;
-  return out;
-}
+// The role inputs a theme writes, shared with a brand's (emit/brand.ts).
+import { ACCENT_LABEL_TOKENS, accentInputs, primitiveRamp, tokensForRole, toneInputs } from "../semantic/inputs.ts";
 
 function themeFor(t: Theme, accent: string, neutral: string): ResolvedTheme {
   return resolveTheme({ theme: t, accent, neutral });
@@ -86,14 +56,8 @@ function themePreset(t: Theme): AxisPreset {
     Object.assign(ramps, primitiveRamp(resolved, spec.id));
   }
 
-  const fixedTones: Record<string, string> = {};
-  // pink and gray are the tag tones (owner 2026-10-06; docs/specs/tag.md).
-  for (const role of ["danger", "warning", "caution", "success", "info", "discovery", "pink", "gray", "brown"]) {
-    // A status tone's colours are written at full strength (`-full`); emit/base.ts derives the public ones with Status
-    // colours (axes/accent.ts), which can quiet them with the accent. Its label never quiets; tag tones stay as they are.
-    for (const [name, value] of Object.entries(tokensForRole(resolved, role)))
-      fixedTones[STATUS_TONES.includes(role) && !name.startsWith("fg-on-") ? `${name}-full` : name] = value;
-  }
+  // The status and tag tones (semantic/inputs.ts `toneInputs`; pink and gray are the tag tones, owner 2026-10-06).
+  const fixedTones = toneInputs(resolved);
 
   return {
     id: t,
@@ -211,31 +175,11 @@ export const NEUTRAL_AXIS: AxisDefinition = {
  * accent's hue, which Tint hue's Accent value reads.
  */
 function accentTokens(t: Theme, accent: string): TokenMap {
-  const resolved = themeFor(t, accent, DEFAULT_SELECTION.neutral);
-  const own = { ...primitiveRamp(resolved, "accent"), ...tokensForRole(resolved, "accent") };
-  const out: Record<string, string> = {};
-  for (const [name, value] of Object.entries(own)) out[ACCENT_LABEL_TOKENS.has(name) ? name : `${name}-full`] = value;
-  const scale = resolved.roles.accent;
-  const hexAt = (level: number) => scale.steps.find(step => step.level === level)!.hex;
-  // Label tint's end on each solid: its tinted rung, or the label itself where none clears (scale.ts tintedLabel).
-  const label = scale.contrast.hex, tinted = (level: number | null) => level === null ? label : hexAt(level);
-  out["accent-label-full"] = tinted(scale.labelTint);
-  for (const step of SOLID_STEPS) {
-    out[`accent-solid-${step}-full`] = hexAt(scale.solidSteps[step].level);
-    out[`accent-solid-hover-${step}-full`] = hexAt(scale.solidSteps[step].hover);
-    out[`accent-label-${step}-full`] = tinted(scale.solidSteps[step].label);
-  }
-  const hue = Number(scale.steps.find(step => step.level === 500)!.oklch.h.toFixed(2));
-  out["accent-hue"] = String(hue);
-  // Its room under sRGB (color/layers.ts tintRoom), for Tint hue's Accent value.
-  out["accent-room-white"] = String(tintRoom(hue).white);
-  out["accent-room-black"] = String(tintRoom(hue).black);
-  return tokens(out);
+  return tokens(accentInputs(themeFor(t, accent, DEFAULT_SELECTION.neutral)));
 }
 
-/** The accent's measured label (black or white), written as it is: Accent strength never quiets it. `fg-on-accent` is
- * derived from it with Label tint (axes/accent.ts), so the axis writes that one as `fg-on-accent-full`. */
-export const ACCENT_LABEL_TOKENS: ReadonlySet<string> = new Set(["accent-contrast"]);
+/** The accent's measured label tokens (semantic/inputs.ts), which Accent strength never quiets. */
+export { ACCENT_LABEL_TOKENS };
 
 export const ACCENT_AXIS: AxisDefinition = {
   id: "accent",

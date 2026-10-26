@@ -17,6 +17,8 @@ import { DEPTH_LEVER_AXES, GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { materialValue, type MaterialState } from "./material.ts";
 import { choiceFigure, FIGURED } from "./choice-figures.tsx";
 import { materialMark } from "./option-marks.tsx";
+import { BrandSettings } from "./brand-settings.tsx";
+import { brandStyle } from "./brand.ts";
 import { ROW_OF, SettingRow, type RowContext } from "./inspector-rows.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
@@ -56,16 +58,20 @@ export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-
   const inTheme = (axis: Axis) => !/^(ground|layers|tint|card-tone|solid)-(light|dark)$/.test(axis) || axis.endsWith(`-${theme}`);
   const [view, setViewState] = useState<View>(() => readStored<View>("inspector-list-view", "grid"));
   const setView = (next: View) => { setViewState(next); writeStored("inspector-list-view", next); };
+  // Brand sits before Accent wherever the accent shows (brand-settings.tsx): the palette or your own colours, then the
+  // accent's Shade and Saturation, which apply to either.
+  const showBrand = axes.includes("accent");
   const first = GROUPS.find(group => (group.settings as readonly Axis[]).some(axis => axes.includes(axis) && inTheme(axis)))?.heading;
   return (
     <ViewContext.Provider value={view}>
       {GROUPS.map(group => {
         const shown = (group.settings as readonly Axis[]).filter(axis => axes.includes(axis) && inTheme(axis));
-        return shown.length ? (
+        return shown.length ? [
+          showBrand && group.heading === "Accent" ? <BrandSettings key="brand" /> : null,
           <PanelSection key={group.heading} heading={group.heading} actions={group.heading === first ? <ViewSwitch view={view} onChange={setView} /> : undefined}>
             {(drawn => shown.map(axis => <Setting key={axis} axis={axis} drawn={drawn} />))(new Set<string>())}
-          </PanelSection>
-        ) : null;
+          </PanelSection>,
+        ] : null;
       })}
       {showMaterial ? <MaterialSettings /> : null}
       {children ? <PanelSection heading="Display">{children}</PanelSection> : null}
@@ -79,12 +85,12 @@ export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-
  * at the first setting it stands for.
  */
 function Setting({ axis, drawn }: { axis: Axis; drawn: Set<string> }) {
-  const { canvas, material, setCanvas, previewCanvas, theme } = useStudio();
+  const { canvas, material, setCanvas, previewCanvas, theme, brand } = useStudio();
   const view = useContext(ViewContext);
   const row = ROW_OF[axis];
   if (row) { if (drawn.has(row)) return null; drawn.add(row); }
   const context: RowContext = {
-    values: canvas, mode: theme,
+    values: canvas, mode: theme, brand: brandStyle(brand),
     set: changes => { for (const [name, value] of Object.entries(changes)) setCanvas(name as Axis, value); },
     preview: (name, value) => previewCanvas(name as Axis, value),
     layout: (name, count) => layoutOf(view, name, count),

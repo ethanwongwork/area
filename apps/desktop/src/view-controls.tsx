@@ -4,8 +4,8 @@
  * Canvas's header as Notion and Figma put a view's options. Each tab keeps its own choices.
  */
 import { useState, type ReactNode } from "react";
-import { Segmented, Select } from "@area/react";
-import { GridIcon, LayoutDashboardIcon, ListIcon } from "@area/icons";
+import { Button, Menu, MenuItem, Segmented } from "@area/react";
+import { ChevronDownIcon, GridIcon, LayoutDashboardIcon, ListIcon } from "@area/icons";
 import { readStored, writeStored } from "./storage.ts";
 import { appScale } from "./app-scale.ts";
 
@@ -36,12 +36,21 @@ export function ViewSwitch<M extends string = ViewMode>({ value, onChange, water
   );
 }
 
-/** One filter: a small Select whose options name what they show ("All statuses", "In review"). */
+/**
+ * One filter: a ghost menu button that reads its choice ("All statuses", "In review") and opens its options (owner,
+ * 2026-10-25: "make them more consistent, clean them up"). It was a soft Select, the header's one filled box beside ghost
+ * controls, and a long choice ran under its chevron. Now every control in the header is ghost: the filters' text
+ * buttons, the icon menus, the zoom stepper; the grid / list switch alone has a track.
+ */
 export function ViewFilter<T extends string>({ label, value, onChange, options }: { label: string; value: T; onChange: (value: T) => void; options: ReadonlyArray<{ value: T; label: string }> }) {
+  const current = options.find(option => option.value === value)?.label ?? "";
   return (
-    <Select size="sm" variant="soft" aria-label={label} value={value} onChange={event => onChange(event.currentTarget.value as T)}>
-      {options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
-    </Select>
+    <Menu aria-label={label} align="end" tooltip={label}
+      trigger={<Button variant="ghost" tone="neutral" size="sm" trailingIcon={<ChevronDownIcon />} aria-label={`${label}: ${current}`}>{current}</Button>}>
+      {options.map(option => (
+        <MenuItem key={option.value} radio checked={option.value === value} onClick={() => onChange(option.value)}>{option.label}</MenuItem>
+      ))}
+    </Menu>
   );
 }
 

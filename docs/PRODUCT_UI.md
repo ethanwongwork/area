@@ -80,7 +80,7 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     themselves that sit inside the containers would be the only things that update with the controls"). The
     Inspector's settings, and hover previews of them, reach only what holds a specimen: a tile's view, the Stage's view,
     a colour card (the card is the colour), a type sample and an icon glyph, through one scope of the settings moved
-    from the defaults (`src/specimen-scope.tsx`). The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
+    from the defaults (`src/specimen-scope.tsx`); a brand (Inspector → Brand, `src/brand.ts`) reaches the same holders. The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
     2026-10-22 to 25 the app took every committed Inspector setting instead. The Theme tab's own body stays at the
     Setup scale (Setup, below).
 
@@ -93,7 +93,7 @@ the scale the layout was measured at; the app now takes the default type and den
 
 - There is no title over the Canvas or the Inspector; the Sidebar's selected row names what
   the Canvas shows.
-  A tile on the Components Stage carries its path at the bar's start instead (Breadcrumb `nowrap`, owner 2026-10-24: "breadcrumbs can be used to help with layer management").
+  The Components bar carries its path at its start instead (Breadcrumb `nowrap`, owner 2026-10-24: "breadcrumbs can be used to help with layer management"; 2026-10-25, the Overview too: "put some text in the top left, a breadcrumb"): Components / Overview (or List), and on a tile Components / its family / its name.
 - The Canvas header's controls, the Sidebar's first row and the Inspector's first heading
   share one line. The Sidebar and Inspector are 14 in on all sides.
 - **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4): the Titlebar keeps its
@@ -117,13 +117,18 @@ the scale the layout was measured at; the app now takes the default type and den
 - A bar's controls sit as far from the side as from the top and the rule: 7, 24 tall
   (owner, 2026-10-18; Figma's panel tabs: 8 and 8).
 
-**Canvas header**, at its end, in this order:
+**Canvas header**, at its end, in this order, every control ghost but the grid / list switch's track (owner,
+2026-10-25: "make them more consistent, clean them up"):
 
-1. filters;
-2. Sort and group (rule 7);
-3. how things are drawn (zoom, style, size). On Components the style is the Container menu: Asset card's container,
-   caption, fill and edge in eight looks (Framed, the default; Name below; Basic; Basic, name below; Basic, white; Basic,
-   no stroke; Containerless; Containerless, name below; owner, 2026-10-22);
+1. filters: each a ghost menu button that reads its choice ("All statuses ⌄") and opens its options (was a soft Select,
+   the bar's one filled box, a long choice running under its chevron);
+2. Sort and group (rule 7), an icon menu;
+3. how things are drawn (zoom, style, size). On Components the style is the Cards menu, an icon menu of two
+   independent choices (owner, 2026-10-25: "there should just be 1 style of container"): **Container** (Basic, the
+   name and Copy on hover, the default) or **No container**; and **Fixed height** (5:4, the default) or **Waterfall**,
+   each card hugging its component at its scale with 28 above and below it, between half and 5:4 of its width, dropped
+   into the shortest column (`src/gallery/fit.ts`). A taller component gets a taller card, never a larger scale. It was
+   nine looks (Framed, Name below, Basic, white, no stroke, Containerless…; 2026-10-22 to 2026-10-25);
 4. the grid / list switch.
 
 Zoom is Zoom control's stepper (− Auto +):

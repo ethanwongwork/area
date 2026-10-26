@@ -26,6 +26,11 @@ NumberField and Input (range with inputs), ColorPicker channel sliders, Segmente
   dot is gone), step ticks sit under the rail, the top layout spans the row; new `variant` `track` (Figma's
   adjustment slider) and `bar` (the reference), on Slider and SliderRange.
 
+- 2026-10-25 (owner: "they arent very smooth to move and it doesnt seem like any animation … is implemented? should the
+  sliders have an indicator?", with two references: a glass settings panel whose fills end in a line, and an Audio panel
+  whose bars end in a grip beside a number box, "something like this with an input at the end"): the field bar gets a
+  mark at its value, its fill eases on a press, a key and a release and fades on hover, Slider gains `onValueCommit`, and
+  the bar with a number field is a composition (Label, Slider field, NumberField), not a prop.
 - 2026-10-21 (owner: "build proposals 1–4"): `startLabel` / `endLabel` name the track's ends under it in the description's text and ink, aria-hidden; the slider becomes a grid so they sit under the control's column, and the ticks keep to the control's grid area (a bar's tick lane sits between it and the labels). Hidden when vertical.
 
 ## Job and boundaries
@@ -39,12 +44,13 @@ sliders.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | sm, md (default), lg | Row height follows the control tier | Untitled one size |
-| variant | rail (default), track, bar, field | Track: a pill as tall as the knob, the fill under it. Bar: the track is the control's full height and corner, its thumb the fill's end with a grip (owner 2026-10-21). Field: a field-height bar with the label at its start and the value at its end inside it, the fill a plate behind them, dragged from any point, no grip; horizontal only, no step marks or end labels (owner 2026-10-24) | Track: Figma's image adjustment sliders (`figma--adjustment-slider`). Bar: the owner's "Rate your driver" reference; Material 3 Expressive's tall track (unverified). Field: the owner's settings-panel reference ("Bounce 100", "Stagger 45ms", "Corner 28px"), a screenshot; no live capture |
+| variant | rail (default), track, bar, field | Track: a pill as tall as the knob, the fill under it. Bar: the track is the control's full height and corner, its thumb the fill's end with a grip (owner 2026-10-21). Field: a field-height bar with the label at its start and the value at its end inside it, the fill a plate behind them, dragged from any point, a 2-wide line inside the fill's end marking the value (owner 2026-10-25; no grip until then); horizontal only, no step marks or end labels (owner 2026-10-24) | Track: Figma's image adjustment sliders (`figma--adjustment-slider`). Bar: the owner's "Rate your driver" reference; Material 3 Expressive's tall track (unverified). Field: the owner's settings-panel reference ("Bounce 100", "Stagger 45ms", "Corner 28px"), a screenshot; no live capture. Its mark: the owner's two references of 2026-10-25 (a line at each fill's end; a grip inside the fill's end), screenshots |
 | labelPosition | inline (default), top | Label and readout above the rail | Area composition (owner-confirmed) |
 | orientation | horizontal (default), vertical | Vertical tool panels | Area composition (owner-confirmed) |
 | composition | readout, step marks | Owner-confirmed (above) | Area compositions |
 | content | end labels (startLabel, endLabel) under the track; horizontal only | Owner 2026-10-21 ("Low" … "High") | The owner's Intensity reference; macOS and iOS settings sliders |
 | content | origin (a value in the range) | Owner 2026-10-24: the Inspector's Temperature bar, Cool … Neutral … Warm; the fill runs between the origin and the value, so the neutral middle is an empty bar | Figma's and Lightroom's temperature and exposure sliders fill from their centre (unverified) |
+| composition | field with a number field: Label over a field bar (readout off) and a NumberField on one value | Owner 2026-10-25: "something like this with an input at the end"; the range-with-inputs pattern on one value, so no prop | The owner's Audio panel reference (Volume, Scale: a bar and a "100%" box), a screenshot |
 | content | buffered (0 to the value's units) | Owner 2026-10-21: media rows (music card) show how far the source has loaded | YouTube, Spotify, Apple Music; Video player's loaded part |
 | SliderRange | two handles on one rail, optional number fields; sm, md, lg; variant rail, track, bar | Audit C-12 A (owner): the range with inputs, promoted to a component | Figma's and Notion's range filters (below) |
 
@@ -114,6 +120,7 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | track variant | track = thumb 16 / 16 / 20, `bg-component` | `figma--adjustment-slider`: 16 track, 16 thumb, #f5 (`bg-component` #f7 is the nearest role; Segmented's trough) | — |
 | buffered | `fill-toggle-hover` on the rail (#d0 light, #4e dark), `fill-track` on the track and bar troughs; ends at the thumb-inset position of `buffered`, hidden behind the fill | Owner 2026-10-21; one step over each trough in both themes (probed in headless Edge) | Video player paints its loaded part as ink at 35% because it sits on footage |
 | bar variant | track = tier height, `radius-control-*`; thumb the fill's end, one glyph wide; grip 4 × glyph, `fg-on-selection` | Owner's reference (bar with an inner grip, beside a same-height button); peers Button and Input for height and corner | Grip length and thumb width are the glyph ladder, not read off the reference |
+| field mark | 2 × a third of the bar (10 / 10 / 14 at sm, md, lg Compact), round, 4 inside the fill's end (centred on an empty origin bar; hidden at the range's two ends, where it read as a text cursor beside the label or value), whole pixels; `edge-control-strong` at rest, `fg-muted` on hover, drag and focus | Owner 2026-10-25, two references (a line at each fill's end; a grip inside it) | Picks, not read off the references (screenshots). Was none |
 | thumb · shadow | `shadow-1` | In-flow control; Radix classic and shadcn shadow the thumb | Untitled `shadow-md`; Figma a 3-layer lift |
 | hover | **the fill darkens (and the bar's thumb, the fill's end); the rail and knob keep their colour** | Fluent: colour on the thumb and fill only (`useSliderStyles.styles.ts L76-83`); Radix, Base UI: no hover change | Was the rail darkening too. Correction (2026-09-27 survey): antd does darken its rail on hover (`slider/style/index.ts:489-492`); Radix, Fluent and Base UI do not, so the choice stands on the majority |
 | step marks | **1 × 4 ticks, 2px under the rail**, `edge-control-strong` (slider.css `.area-slider__marks i`); the bar adds an 8px lane under itself | Owner 2026-10-21 ("B"); Base UI 1 × 8 below | Were 1 × 10 behind the rail, 3px showing above and below, hidden under the fill and thumb. The reference puts its ticks above; below keeps clear of a top label |
@@ -125,7 +132,7 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover | `--_fill` becomes `selection-solid-hover` on the control, so the fill (and the bar's thumb) darkens; the rail and knob keep their paint; ink fixed | not captured (pseudo-elements) |
+| hover | `--_fill` becomes `selection-solid-hover` on the control, so the fill (and the bar's thumb) darkens; the rail and knob keep their paint; ink fixed. Field: on the bar, the fill fades to `fill-toggle-hover` (`fast`) and the mark to `fg-muted`, also while it drags or holds focus | not captured (pseudo-elements) |
 | focus-visible | focus outline on the knob; on the bar, on the whole bar at its corner | not captured |
 | disabled | 50% | `area--disabled` |
 
@@ -133,7 +140,8 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 
 Native `input type="range"`: keyboard, value and announcements are the browser's. The fill is
 `--_pct` and `--_slider-ratio` (0 to 1; registered as a number, so a glide can ease it) set by React from the normalized value, or the pointer's place while a glide drags, kept in sync on input and form reset
-(primitives.tsx:713); `onValueChange(value, event)` passes the input event. Shift+arrow moves
+(primitives.tsx:713); `onValueChange(value, event)` passes the input event, and `onValueCommit(value)` the final value:
+on release (if it changed since the press) and on every key step, for a host whose change is costly. Shift+arrow moves
 ten steps (Carbon, MUI; audit C-31 A, owner 2026-09-30), following the reading direction in
 RTL; the native control takes the value and fires its own input event (primitives.tsx:813-820). The readout is `aria-hidden` (the input announces the value).
 Vertical uses `writing-mode: vertical-lr; direction: rtl`. Right to left: the browser already
@@ -303,3 +311,31 @@ eye (background tab).
 - **Origin (same day):** a range with a neutral middle (Temperature, Cool to Warm) now fills from that middle to the value,
   either way, so Neutral is an empty bar; you asked for it after the round-2 controls page. Any variant takes it.
 - 2026-10-24 · owner: "the sliders are not very smooth in between their options" → `glide` (on by default for a range of 60 steps or fewer): while the pointer drags, the native control runs continuously (`step="any"`) and the fill follows it, `onValueChange` fires only when the step changes, and the value stays whole steps; on release, a key step or any change the field variant's fill eases onto the step (`--_slider-ratio` on `fast` ease-out, `data-glide`, `data-dragging`). Rail, track and bar keep their native thumb, which lands on the step at release. Checked in headless Edge: the fill moved 0.07 → 0.53 continuously while the value stepped 40% → 70%, then settled on 4/7. The ratio was renamed from `--_ratio` when it was registered, so no other family's private name is retyped (cohesion test "a registered custom property has a name no other family uses").
+
+## Review note, 2026-10-25
+
+- **What changed:** the field bar (the Inspector's settings) now marks its value with a short line inside the end of its
+  fill, as both of your references do. Its fill is its own layer, so it eases to where you click, to each key step and
+  onto the step when you let go (140ms at the default Speed), follows the pointer while you drag, and fades a step darker
+  on hover. A new gallery tile, "Composition / field with input", puts a number box after the bar on the same value.
+  The Inspector's bars no longer restyle the app on every step you cross: the bar and its value follow the pointer, and
+  the setting lands when you let go or hold still.
+- **Why:** dragging a setting froze the bar. Applying one step restyles the whole app (traced in headless Edge: three to
+  six style recalculations of 3,000 to 5,000 elements, 200 to 450ms a step), so a one-second drag of Lightness took
+  nine seconds to play out. With the setting landing on release, the same drag runs in two seconds with no frame over
+  50ms. The fill could not ease or fade before because it was a gradient on the native track.
+- **Decisions:** the mark is 2 wide and a third of the bar tall (10 / 10 / 14), 4 inside the fill's end, in the step
+  tick's ink at rest and the muted ink on hover, drag and focus; on an origin bar it sits inside the fill on whichever side
+  the value is. The trailing input is a composition, since
+  NumberField already has units, steppers and its own commit. The cost of a restyle itself is a token-architecture
+  matter (about a hundred setting scopes each re-emit the token set) and is left as a follow-up.
+- **Ends:** at 0% and 100% the mark sat 4px from the label or value text ("|Label tint", "White|") and read as a text
+  cursor, so it hides at the range's two ends, where an empty or full bar shows the value; it is back a hundredth in.
+  Your first reference keeps its line at 0; it has more room between the line and the label than a field does.
+- 2026-10-25 · owner: sliders not smooth, no animation, an indicator?, a trailing input → field bar: trough on the bar,
+  fill a `::before` clipped between `--_lo` and `--_hi` (now worked out from the registered `--_slider-ratio` and
+  `--_origin`, so origin fills ease too), the mark an `::after`, `data-dragging` only once the pointer moves after a press
+  (a press alone eases); `onValueCommit` (release, key step); the Inspector's `SettingBar` (inspector-rows.tsx) lands a
+  setting on release, after 300ms of a still pointer, or 150ms after a key, once the fill has settled; tile
+  `field-input` (slider.css, primitives.tsx, inspector-rows.tsx, gallery.tsx, specimens.mjs, actions.mjs) → headless
+  Edge: Lightness drag 9.3s → 2.0s, worst frame 400 → 50ms; a click eases 0.6 → 0.2 in 140ms on whole pixels.

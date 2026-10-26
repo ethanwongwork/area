@@ -92,7 +92,7 @@ export interface TileProps {
   stageScope?: Record<string, string>;
   /** The stage is shown, not used: its content is inert. */
   inert?: boolean;
-  /** How an Asset card tile is drawn (the Components tab's Container menu): Asset card's container, caption, fill, edge. */
+  /** How an Asset card tile is drawn (the Components tab's Cards menu): Asset card's container, caption, fill, edge. */
   look?: CardLook;
   /** A card (owner, 2026-10-14, after Compass's gallery): a square frame, the specimen in a wider margin. */
   card?: boolean;
@@ -227,11 +227,12 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
 
 /**
  * A grid of one span: unit or wide tiles on the shared unit. `cards`: square tiles on their own columns, at least
- * `min` wide (260 by default, at most four across), growing and shrinking with the zoom.
+ * `min` wide (260 by default, at most four across), growing and shrinking with the zoom. `waterfall`: cards that hug
+ * their specimens, each dropped into the shortest column (src/gallery/fit.ts places them).
  */
-export function TileGrid({ span, cards, min, className, children }: { span: TileSpan; cards?: boolean; min?: number; className?: string; children: ReactNode }) {
+export function TileGrid({ span, cards, waterfall, min, className, children }: { span: TileSpan; cards?: boolean; waterfall?: boolean; min?: number; className?: string; children: ReactNode }) {
   return (
-    <div className={`studio-grid studio-grid--${span}${cards ? " studio-grid--cards" : ""}${className ? ` ${className}` : ""}`}
+    <div className={`studio-grid studio-grid--${span}${cards ? " studio-grid--cards" : ""}${waterfall ? " studio-grid--waterfall" : ""}${className ? ` ${className}` : ""}`}
       style={min ? ({ "--_card-min": `${min}px` } as CSSProperties) : undefined}>{children}</div>
   );
 }

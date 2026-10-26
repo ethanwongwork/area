@@ -34,6 +34,9 @@ const swatch = (color: string, scope: Record<string, string | undefined>) => (
   </span>
 );
 
+/** A literal colour as a mark: a brand's slot or shade, which no palette option paints (src/brand-settings.tsx). */
+export const colourMark = (color: string) => swatch(color, {});
+
 /** The glyph's 16 box: stroke at the icon weight, in the row's ink (option-marks.css). */
 const Svg = ({ children }: { children: ReactNode }) => <svg className="studio-mark" viewBox="0 0 16 16" aria-hidden="true">{children}</svg>;
 /** The square every frame glyph draws, at an ink share (1 is the row's ink). */
@@ -114,7 +117,10 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
   const n = Number(value);
   switch (axis) {
     case "neutral": return swatch("var(--area-neutral-500)", { "data-area-neutral": value });
-    case "accent": return swatch("var(--area-accent-solid)", { "data-area-accent": value, "data-area-accent-strength": canvas["accent-strength"] });
+    // A colour at its own vivid shade and full saturation (owner, 2026-10-25: "why are the colors here so dark"): the menu
+    // names a colour, and Shade and Saturation under it set how it is drawn. It took the Canvas's own (a saved 750 drew
+    // every colour navy-deep).
+    case "accent": return swatch("var(--area-accent-solid)", { "data-area-accent": value, "data-area-accent-strength": "100", "data-area-solid-light": "auto", "data-area-solid-dark": "auto" });
     // Accent strength and Solid (axes/accent.ts): the accent's solid at the option, on the Canvas's accent.
     case "accent-strength": return swatch("var(--area-accent-solid)", { "data-area-accent": canvas.accent, "data-area-accent-strength": value });
     // Label tint: the label itself, on the Canvas's accent and Light solid; Status colours: the danger fill at the strength.

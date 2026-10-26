@@ -17,6 +17,7 @@ import { type GroundEdge, contrastMix, layerCss, onGround, rawEdge, strokeEdge, 
 import { depthDerived } from "../axes/depth.ts";
 import { accentDerived, statusDerived } from "../axes/accent.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
+import { brandDefaultCss } from "../semantic/brand.ts";
 
 /** 4px base with 2px, 6px and 10px half-steps for tight control interiors. */
 export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96] as const;
@@ -159,6 +160,9 @@ function derivedOnPage(): Record<string, string> {
     ...accentDerived(),
     // The status tones' colours (axes/accent.ts Status colours): full, or quieted with the accent.
     ...statusDerived(),
+    // The brand roles where no brand is set (semantic/brand.ts, 2026-10-26): secondary and tertiary as the accent, the brand
+    // surfaces as the page and the inverse ground. A brand (phase 2) writes its own over them.
+    ...brandDefaultCss().derived,
     // Presentation aliases choose existing palette endpoints. A preference is not a color
     // axis: it changes emphasis while every axis keeps its own namespaces.
     // Each mixes from its edge at standard contrast (rawEdge), by the level, as every border-* does (color/layers.ts), so a

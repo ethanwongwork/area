@@ -58,6 +58,11 @@ An axis never reaches into another axis's namespace.
   `light-dark()`, so polarity resolves where the colour is used.
 - `color/layers.ts` derives grounds, control fills, edges and inks live from the Layers
   settings.
+- `color/brand.ts` builds a brand's families from exact colours (its own family, harmonised
+  status families, the supporting palette); `semantic/brand.ts` resolves a brand theme
+  (`resolveBrandTheme`) and the new roles (secondary, tertiary, `support-1`…`8`, brand
+  surfaces). With no brand the theme is `resolveTheme`'s, token for token; brand families
+  never enter `palette.json` (2026-10-26, docs/research/brand-palette-2026-10-26).
 - `contrast/assertions.ts` is the gate: 243 pairings that `npm test` checks, with an empty
   exceptions list.
 
@@ -67,9 +72,11 @@ An axis never reaches into another axis's namespace.
 |---|---|
 | `css/properties.css` | `@property` registrations, for leaf tokens only. Derived tokens and colour pairs are never registered, or inheritance would freeze them. |
 | `css/tokens.css` | Every default under `:where(:root)` in `@layer area.tokens` |
-| `css/axes.css` | One rule per preset in `@layer area.axes`. `derivedTokens()` is re-stated on every element that carries an axis attribute, because a custom property resolves where it is declared. |
+| `css/axes.css` | One rule per preset in `@layer area.axes`. Each derived token is re-stated on every element that carries an axis attribute feeding one of its inputs, because a custom property resolves where it is declared (`emit/rederive.ts`, since 2026-10-25: one rule per set of attributes, so an element restates a token at most once). A derived token that reads or is a token some stylesheet or inline style overrides (`OVERRIDABLE`) is re-stated at every axis attribute, as all were before. |
 | `tokens.json`, `tokens.d.ts` | The token table and types (the app's Color tab reads the JSON) |
 | `config.js` | `AXIS_PRESETS`, `DEFAULT_AXES`, `mergeAxes`, `themeAttributes`, `DEPTH_LEVERS`, `MATERIAL_*`: DOM-free helpers the app's Inspector and React's `Theme` use |
+| `brand.js`, `brand.d.ts` | `@area/tokens/brand` (2026-10-26): `brandDeclarations`, `brandCss`, `brandInfo`, bundled by esbuild from `src/brand-entry.ts` with the derivations a brand restates embedded as data (`emit/brand-derived.ts`), so it never loads the axes. The build prints its size: 205.7 kB minified, 29.8 kB gzipped |
+| `cli.js` | The `area-tokens` command: `area-tokens brand --primary <hex> [--secondary] [--tertiary] [--status] [--selector] > brand.css` |
 
 ## Styles (`packages/styles`)
 

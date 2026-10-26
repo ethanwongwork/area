@@ -5,7 +5,7 @@
   "sideEffects": [
     "**/*.css"
   ],
-  "description": "Area design tokens \u2014 OKLCH scale generator, axis registry, and CSS emitter.",
+  "description": "Area design tokens — OKLCH scale generator, axis registry, and CSS emitter.",
   "exports": {
     ".": {
       "types": "./dist/config.d.ts",
@@ -23,6 +23,11 @@
     },
     "./types": {
       "types": "./dist/tokens.d.ts"
+    },
+    "./brand": {
+      "types": "./dist/brand.d.ts",
+      "import": "./dist/brand.js",
+      "default": "./dist/brand.js"
     }
   },
   "files": [
@@ -41,5 +46,8 @@
     "typescript": "^5.7.0",
     "vitest": "^5.0.0",
     "apca-w3": "0.1.9"
+  },
+  "bin": {
+    "area-tokens": "./dist/cli.js"
   }
 }

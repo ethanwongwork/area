@@ -36,12 +36,14 @@ it('keeps inherited shadow recipes responsive to theme boundaries',()=>{
   expect(emitTokens()).toContain('--area-shadow-color: light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.2));');
 });
 
-it('re-emits contrast presentation aliases at every axis and preference boundary',()=>{
+// Since 2026-10-25 each derivation is restated where an axis that feeds it is set, and rederive.test.ts checks that for
+// every axis; the contrast presentation aliases are restated wherever they can change, and none is registered.
+it('re-emits contrast presentation aliases wherever an axis that feeds them is set',()=>{
   const css=emitAxes();
-  const boundary=css.slice(css.lastIndexOf('[data-area-theme],'));
-  for(const axis of ['theme','neutral','accent','ui','radius','surface','motion','contrast']) expect(boundary).toContain(`[data-area-${axis}]`);
-  for(const name of Object.keys(derivedTokens()).filter(k=>k.startsWith('--area-edge-')||k.startsWith('--area-fill-toggle')||k.startsWith('--area-token-'))) {
-    expect(boundary).toContain(`${name}:`);
+  const block=css.slice(css.indexOf('Re-derive cross-axis values'),css.indexOf('Re-derive material paints'));
+  for(const [name,value] of Object.entries(derivedTokens()).filter(([k])=>k.startsWith('--area-edge-')||k.startsWith('--area-fill-toggle')||k.startsWith('--area-token-'))) {
+    // A constant (transparent) reads nothing a scope can change, so the root's value holds everywhere.
+    if(value.includes('var(')) expect(block).toContain(`${name}:`);
     expect(REGISTERED_PROPERTIES.some(p=>p.name===name)).toBe(false);
   }
 });
