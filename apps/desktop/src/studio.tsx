@@ -26,6 +26,7 @@ import { MaterialsPage } from "./pages/materials.tsx";
 import { ImageryPage } from "./pages/imagery.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
+import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES } from "@area/tokens/config";
 import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
@@ -220,14 +221,15 @@ export function Studio() {
     window.areaDesktop?.setTheme(theme);
   }, [theme]);
 
-  // The app is drawn in the choices it offers (owner, 2026-10-22: "make sure the electron ui is a reflection of the
-  // actual choices"): the Titlebar, Sidebar and Inspector take every Inspector setting and the Material on <html>, type and
-  // density included (owner, same day). Only committed choices: a hover preview repaints the Canvas alone.
+  // The app is drawn in Area's shipped defaults (owner, 2026-10-25: "choose it once and then set it and any further
+  // customization through the theme page doesnt impact the ui of the electron app"; was every committed Inspector setting
+  // from 2026-10-22): <html> carries the defaults, so the Titlebar, Sidebar and Inspector change only when a default does,
+  // and the Inspector's settings paint the Canvas alone.
   // The chrome takes a choice once it settles (owner, 2026-10-24: "the smoothness of the sliders is not very smooth"):
   // restyling the whole document costs about 300ms, so doing it on every step of a drag froze the slider. The Canvas
   // shows each step at once; the chrome follows 160ms after the last one.
   const appliedPicks = useRef<string[]>([]);
-  const chrome = useSettled(useMemo(() => ({ canvas, material }), [canvas, material]), 160);
+  const chrome = useSettled(useMemo(() => ({ canvas: CANVAS_DEFAULTS, material: MATERIAL_DEFAULT }), []), 160);
   useLayoutEffect(() => {
     const root = document.documentElement;
     const picks = canvasAttributes(chrome.canvas, chrome.material);
@@ -273,8 +275,8 @@ export function Studio() {
     return next;
   });
 
-  // The app's chrome inside the Canvas (tile heads, section titles) at the committed type and density (src/app-scale.ts).
-  const scale = useMemo<AppScale>(() => ({ "data-area-type": canvas.type, "data-area-density": canvas.density }), [canvas.type, canvas.density]);
+  // The app's chrome inside the Canvas (tile heads, section titles) at the default type and density (src/app-scale.ts).
+  const scale = useMemo<AppScale>(() => ({ "data-area-type": CANVAS_DEFAULTS.type, "data-area-density": CANVAS_DEFAULTS.density }), []);
   const state = useMemo<StudioState>(() => ({
     query,
     theme,
@@ -462,6 +464,8 @@ export interface WorkspaceProps {
 export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof materialAttributes>[0]): Record<string, string | undefined> {
   return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
 }
+/** The shipped defaults as attributes: what <html> and the Canvas body carry (PRODUCT_UI.md, rule 18). */
+const DEFAULT_ATTRIBUTES = canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT);
 
 /*
  * Three columns under the Titlebar, without titles (owner, 2026-10-14, after Framer and Figma):
@@ -472,18 +476,19 @@ export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof 
 export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
   const studio = useStudio();
   const showSidebar = panels && studio.sidebar, showInspector = panels && studio.inspector;
-  const sidebarWidth = usePanelWidth("sidebar", studio.canvas.type, studio.canvas.density);
-  const inspectorWidth = usePanelWidth("inspector", studio.canvas.type, studio.canvas.density);
-  // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
-  // as a hairline contact sheet in compact), radius, surface, elevation and the Edge and Depth levers, motion and pills.
-  // A tab that keeps its own UI at the defaults restates them, since <html> now carries the choices.
-  // System Contrast writes no attribute, so a tab at the defaults states the OS's level itself; else it would inherit the
-  // pick <html> carries.
+  const sidebarWidth = usePanelWidth("sidebar", CANVAS_DEFAULTS.type, CANVAS_DEFAULTS.density);
+  const inspectorWidth = usePanelWidth("inspector", CANVAS_DEFAULTS.type, CANVAS_DEFAULTS.density);
+  // The body, its cards, titles and header are app UI, at the shipped defaults; only the specimens inside take the
+  // Inspector's settings and the Material (owner, 2026-10-26: "the actual components themselves that sit inside the
+  // containers would be the only things that update with the controls"), through the scope the tiles, the Stage and the
+  // samples read (src/specimen-scope.tsx). A tab that keeps its previews to itself (the Theme tab) gives its specimens no
+  // scope and restates the Setup scale; System Contrast writes no attribute, so it states the OS's level itself.
   const systemContrast = typeof matchMedia === "function" && matchMedia("(prefers-contrast: more)").matches ? "8" : "0";
-  const axes = canvasPicks ? { ...canvasScope, ...canvasAttributes(studio.shown.canvas, studio.shown.material) } : { ...canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT), "data-area-contrast": systemContrast, ...SETUP_SCALE, ...canvasScope };
+  const axes = canvasPicks ? { ...canvasScope, ...DEFAULT_ATTRIBUTES } : { ...DEFAULT_ATTRIBUTES, "data-area-contrast": systemContrast, ...SETUP_SCALE, ...canvasScope };
+  const specimens = useMemo(() => canvasPicks ? movedFrom(canvasAttributes(studio.shown.canvas, studio.shown.material), DEFAULT_ATTRIBUTES) : {}, [canvasPicks, studio.shown]);
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
-  const signature = JSON.stringify(axes);
+  const signature = JSON.stringify([axes, specimens]);
   const painted = useRef(signature);
   useLayoutEffect(() => {
     if (painted.current === signature) return;
@@ -502,7 +507,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
       ) : null}
       <main ref={main} className="studio-canvas" aria-label={canvasTitle}>
         <header className="studio-canvas__bar">{canvasLead}{canvasActions}</header>
-        <div ref={canvasRef} className="studio-canvas__body" {...axes}>{canvas}</div>
+        <div ref={canvasRef} className="studio-canvas__body" {...axes}><SpecimenScopeContext.Provider value={specimens}>{canvas}</SpecimenScopeContext.Provider></div>
       </main>
       {showInspector ? (
         <div className="studio-inspector">

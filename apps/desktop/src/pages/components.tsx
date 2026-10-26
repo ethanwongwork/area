@@ -395,7 +395,8 @@ function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
     {purpose ? <p className="studio-lede" {...appScale()}>{purpose}</p> : null}
     <Tabs className="studio-family-tabs" size="sm" aria-label={`${family.name} views`} value={tab} onValueChange={next => onTab(next as FamilyTab)}
       items={FAMILY_TABS.map(entry => ({ id: entry.id, label: entry.label }))} {...appScale()}>
-      <div className="studio-family-tabs__panel" {...(tab === "overview" ? { "data-area-type": canvas.type, "data-area-density": canvas.density } : {})}>
+      {/* The tabs' panel is the app's; the specimens inside take the Inspector's settings (specimen-scope.tsx). */}
+      <div className="studio-family-tabs__panel">
         {tab === "overview" ? overview
           : tab === "documentation" ? <DocumentationTab family={info} onOpenFamily={onOpenFamily} familyName={familyName} />
           : tab === "api" ? <ApiTab family={info} />

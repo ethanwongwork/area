@@ -16,9 +16,9 @@ it('derives all runtime presets and defaults from the registry',async()=>{
 it('inherits omitted choices, validates inputs, and does not mutate its parent',async()=>{
   const {mergeAxes,themeAttributes}=await runtime();
   const parent=mergeAxes(undefined,{theme:'dark',accent:'green',neutral:'warm'});
-  const child=mergeAxes(parent,{type:'13',density:'28',theme:undefined});
-  expect(child).toMatchObject({theme:'dark',accent:'green',neutral:'warm',type:'13',density:'28'});
-  expect(parent.type).toBe('14');
+  const child=mergeAxes(parent,{type:'14',density:'28',theme:undefined});
+  expect(child).toMatchObject({theme:'dark',accent:'green',neutral:'warm',type:'14',density:'28'});
+  expect(parent.type).toBe('13');
   expect(parent.density).toBe('32');
   // The former UI scale is a shorthand for a type size and a density; an explicit axis wins.
   expect(mergeAxes(parent,{ui:'compact'})).toMatchObject({type:'12',density:'28'});

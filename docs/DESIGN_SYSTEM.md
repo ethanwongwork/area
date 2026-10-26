@@ -102,8 +102,8 @@ Each role is its neutral endpoint mixed toward the accent by the setting's 0/1 s
 Selection too (`focus-color`, owner 2026-10-22), so two settings decide every use of colour: Action for what you press,
 Selection for state, the selected edge and focus. Both on Neutral is an entirely neutral look; nothing else reads the
 accent. Status colours (danger, success, warning, info) and category colours (a tag's or badge's hue) are their own
-scales and never the accent. At the defaults (Action Neutral, Selection Accent) the accent appears in state marks,
-selected edges and the focus ring; everything you press to commit is neutral.
+scales and never the accent. At the defaults (Action Neutral, Selection Neutral since 2026-10-25) the look is entirely
+neutral; Selection Accent puts the accent in state marks, selected edges and the focus ring, Action Accent on commits.
 
 **Ink and weight.**
 
@@ -160,7 +160,7 @@ own step.
   Accent (the default), the neutral solid at Neutral (`stroke-selected`, `focus-color`). They differ by placement, as the ARIA Authoring Practices require: selection is an edge drawn inside
   the container, focus a ring on or outside it.
 - **A selected edge and the mark inside it are one colour** (owner, 2026-10-22, option B): `stroke-selected` is a
-  Selection role, the accent's indicator rung at Selection Accent (the default) and the neutral solid at Neutral. Focus
+  Selection role, the accent's indicator rung at Selection Accent and the neutral solid at Neutral (the default since 2026-10-25). Focus
   follows the same setting. No component picks its own selection or focus colour; the setting decides for all of them.
 - **A selected container** (Card, Asset card, a choice card, a containerless image) draws its edge inside at
   `selected-width` (Selected stroke, 2px by default, ChatGPT's tile): its own line in `stroke-selected`, topped up by
@@ -409,7 +409,7 @@ and `emit/base.ts`; never copy a table into a component
   its label as the hit area without enlarging the glyph. Contained controls share their
   width token alone and inside a Field. Full width is explicit.
 
-**Radius is one setting**: 0 (Sharp), 2, 4, 6, 8 (default), 10, 12, 14 or pill, the medium
+**Radius is one setting**: 0 (Sharp), 2, 4, 6, 8, 10 (default since 2026-10-25; was 8), 12, 14 or pill, the medium
 Button's corner ([audit](research/radius-audit-2026-10-03.md)).
 
 - **Shapes on the height ladder** take `max(radius-min, round(down, height × radius-factor, 2px))`:

@@ -16,6 +16,7 @@
     gap: var(--area-space-2);
     margin-inline: calc((var(--_cell) - var(--_size)) / -2);
   }
+  .studio-icons__specimen { display: contents; }
   .studio-icons__glyph { display: grid; place-items: center; color: var(--area-fg-default); }
   .studio-icons__glyph svg { display: block; }
   .studio-icons__cell {

@@ -1,6 +1,13 @@
 # Handoff
 
-## Current state (2026-10-24)
+## Current state (2026-10-26)
+- **Area's defaults chosen and applied (owner 2026-10-25), branch `claude/elated-tu-968fa3`, uncommitted.** On the
+  defaults review (https://claude.ai/artifact/Nhy8FtHpYR4nMkRLUUqpWP; docs/research/defaults-2026-10-25/) the owner
+  decided all twelve groups: Type 13 (was 14), Corner 10 (was 8), Layer contrast 0, Flat, both modes (was 4), Selection
+  Neutral (was Accent); the rest kept. Also (owner): the app's own UI is drawn in the shipped defaults and the Inspector
+  paints only the Canvas (PRODUCT_UI rule 18 reversed; `studio.tsx` chrome, `appScale`, panel widths read
+  `CANVAS_DEFAULTS`). Build, tests, contrast report, React suites and a full gallery sweep green at the new defaults.
+  The canvas-header session's uncommitted `studio.tsx` rewrite will conflict on the chrome block (a few lines).
 - **Components: Overview and Single, variants in the tree (owner 2026-10-25), branch
   `claude/component-card-copy-isolated-view-0d9970`, uncommitted, main merged at a16397fe.** All is now the Overview
   (every family a section of its tiles, one row until Show all, drawn as it nears the view); a card opens the tile alone

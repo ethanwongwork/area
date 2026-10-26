@@ -9,8 +9,8 @@
  * - Selection: what shows state, checked, on, selected, current, and a filled value.
  *
  * Four combinations follow: both neutral, both accent, accent leading (actions in colour, controls calm) and neutral
- * leading (neutral actions, coloured state), the default since 2026-10-22 (owner, option B: Selection defaults to the
- * accent, and a selected container's edge follows Selection, so everything selected is one colour).
+ * leading (neutral actions, coloured state). Both neutral is the default since 2026-10-25 (owner, the defaults review;
+ * neutral leading from 2026-10-22). A selected container's edge follows Selection, so everything selected is one colour.
  *
  * Each axis writes one unitless switch, 0 or 1. The role colours themselves are cross-axis
  * derivations in `emit/base.ts` (a color-mix between the neutral and accent endpoints), so
@@ -46,5 +46,4 @@ export const SELECTION_AXIS = roleAxis(
   "The colour of state: checked, on, selected, current and filled values, selected edges and the focus ring.",
   "State, selected edges and focus in the neutral ink.",
   "State, selected edges and focus in the accent.",
-  "accent",
 );

@@ -17,6 +17,7 @@ import { Button, CodeBlock, Field, Input, PanelSection, Segmented, Select, Switc
 import { highlight } from "./content/highlight.mjs";
 import type { Config, Playground, PlaygroundControl, PropValue } from "./content/playgrounds.tsx";
 import { appScale } from "./app-scale.ts";
+import { specimenScope } from "./specimen-scope.tsx";
 
 /** The narrowest the Stage is dragged to: a phone's 320 less the Canvas's margins. */
 const MIN_WIDTH = 288; /* pick */
@@ -88,7 +89,7 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
         <span className="gallery-tile__label">{label}</span>
         {narrowed ? <span className="gallery-tile__value">{shown} px</span> : null}
       </div>
-      <div className="studio-stage__view" data-zoom={zoom}>
+      <div className="studio-stage__view" data-zoom={zoom} {...specimenScope()}>
         <div key={replays} className="studio-stage__content">{children}</div>
       </div>
       <div className="studio-stage__handle" role="separator" aria-orientation="vertical" aria-label="Stage width"

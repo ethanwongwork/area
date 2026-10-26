@@ -39,13 +39,13 @@ const STEPS: ReadonlyArray<readonly [string, number, number]> = [
 const describe = (id: string, button: number, surface: number) =>
   id === "0" ? "Sharp: square corners everywhere."
     : id === "pill" ? "Every control is a pill; surfaces stay finite at 24, as round as their pill rows allow."
-      : `${button}px on a medium Button, ${surface}px on surfaces${id === "8" ? " (default)" : ""}.`;
+      : `${button}px on a medium Button, ${surface}px on surfaces${id === "10" ? " (default)" : ""}.`;
 
 export const RADIUS_AXIS: AxisDefinition = {
   id: "radius",
   label: "Corner",
   description: "One corner setting, from Sharp to Pill: controls scale with their height, surfaces and nested shapes follow.",
-  defaultPreset: "8",
+  defaultPreset: "10",
   namespaces: [
     "--area-radius-factor",
     "--area-radius-min",

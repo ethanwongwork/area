@@ -14,3 +14,5 @@ export const COMBOS = {
 };
 COMBOS.grey = { "ground-light": "91", "layers-light": "8", "ground-dark": "24", "layers-dark": "8", action: "accent", selection: "accent", "selected-tint": "neutral", "card-tone-light": "-4", "card-tone-dark": "4" };
 COMBOS.grey0 = { "ground-light": "90", "layers-light": "0", "ground-dark": "20", "layers-dark": "8", accent: "green", action: "accent", selection: "accent", "fill-hover": "4", "fill-selected": "4" };
+// The defaults before the defaults review (2026-10-25, docs/research/defaults-2026-10-25/), to compare the new ones with.
+COMBOS.old = { type: "14", radius: "8", "layers-light": "4", "layers-dark": "4", selection: "accent" };

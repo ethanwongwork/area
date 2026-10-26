@@ -15,6 +15,7 @@ import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { appScale } from "../app-scale.ts";
+import { Specimen } from "../specimen-scope.tsx";
 import { CanvasSection, Tile, TileGrid, type CardLook } from "../tile.tsx";
 
 /* Type cards keep the name below (owner, 2026-10-24); the other galleries show it on hover (tile.tsx, GALLERY_LOOK). */
@@ -142,9 +143,9 @@ export function TypographyPage() {
                 <span>{label}</span>
                 <span className="studio-tabular">{metrics(view, type ?? density)}</span>
               </div>
-              <div {...(type ? { "data-area-type": type } : {})}>
+              <Specimen {...(type ? { "data-area-type": type } : {})}>
                 <span className="studio-type__sample" style={roleStyle(view, w)}>{sample || SAMPLE}</span>
-              </div>
+              </Specimen>
             </section>
           ))}
         </div>
