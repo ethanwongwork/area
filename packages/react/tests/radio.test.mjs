@@ -65,3 +65,34 @@ test("RadioGroup selects one native value and allows individual name and disable
     assert.doesNotMatch(inputs[1], /disabled=|checked=/);
   }
 });
+
+test("Radio soft list puts its meta at the end, after the label", () => {
+  const html = renderToString(h(Radio, { variant: "soft", layout: "list", label: "Essentials", caption: "The choices that change the most", meta: "14 questions" }));
+  assert.match(html, /class="area-radio area-radio--soft area-radio--list area-radio--md"/);
+  assert.match(html, /area-choice-label__title">Essentials[^]*<span class="area-radio__meta">14 questions<\/span><\/label>/);
+  // No meta, no element; layout only with a variant.
+  assert.doesNotMatch(renderToString(h(Radio, { label: "One" })), /__meta/);
+  assert.doesNotMatch(renderToString(h(Radio, { label: "One", layout: "list" })), /--list/);
+});
+
+test('a read-only RadioGroup is a radiogroup named by its legend, with aria-readonly and the readonly hook', () => {
+  const html = renderToString(h(RadioGroup, { label: 'Answer', readOnly: true, value: 'a' }, h(Radio, { value: 'a', label: 'Item one', variant: 'soft', layout: 'list' })));
+  assert.match(html, /<fieldset[^>]*role="radiogroup"[^>]*aria-readonly="true"[^>]*aria-labelledby="([^"]+)"[^>]*data-readonly=""/);
+  const id = html.match(/aria-labelledby="([^"]+)"/)[1];
+  assert.match(html, new RegExp(`<legend class="area-radio-group__legend" id="${id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`));
+  assert.match(html, /<input[^>]*checked=""/);
+  // Not read-only: a plain fieldset, no radiogroup role.
+  assert.doesNotMatch(renderToString(h(RadioGroup, { label: 'Answer', value: 'a' }, h(Radio, { value: 'a', label: 'Item one' }))), /role="radiogroup"/);
+});
+
+// Owner 2026-10-26, picture answers: "fix the text and radio alignment of the cards". inset.css sets the label and meta
+// down to the control's centre, so a media card's row must align to its start: centring the items too dropped the text.
+test("media cards keep a list row's alignment and draw the picture in a concentric 8px mat", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const css = await readFile(new URL("../../styles/src/components/choice.css", import.meta.url), "utf8");
+  const block = css.slice(css.indexOf("Media: a picture choice"), css.indexOf("A group of previews or media cards"));
+  assert.match(block, /\.area-radio--media-row\) \{[^}]*align-items: start;/);
+  assert.doesNotMatch(block, /align-items: center/);
+  assert.match(block, /--_media-mat: var\(--area-space-8\)/);
+  assert.match(block, /border-radius: max\(var\(--area-radius-min\), calc\(var\(--area-radius-container\) - var\(--_media-mat\) \* var\(--area-radius-concentric\)\)\)/);
+});

@@ -4,8 +4,8 @@
  * the system's placeholder copy. Specs: docs/specs/{step,edit-summary,approval,plan,turn-notice}.md.
  */
 import { useState } from "react";
-import { Approval, Button, CodeBlock, Diff, EditSummary, EditSummaryFile, Plan, Reasoning, Step, StepGroup, TurnNotice, type DiffHunk, type EditFileState } from "@area/react";
-import { DocumentIcon } from "@area/icons";
+import { Approval, Badge, Button, CodeBlock, Diff, EditSummary, EditSummaryFile, Plan, Reasoning, Step, StepGroup, TurnNotice, type DiffHunk, type EditFileState } from "@area/react";
+import { AgentIcon, DocumentIcon } from "@area/icons";
 
 const frame = { inlineSize: 280 };
 
@@ -112,6 +112,28 @@ export const GalleryPlanCancelled = () => (
     <Plan items={[planItems[0]!, { id: "2", label: "Item two", status: "cancelled" }, { ...planItems[2]!, status: "current" }, planItems[3]!]} />
   </div>
 );
+
+// A plan's progress as a bar under its head (owner 2026-10-25): one bar for the whole plan, or a segment per item, the
+// items then phases with their own counts and the current one's ring filling.
+export const GalleryPlanBar = () => <div style={frame}><Plan items={planItems} bar="single" defaultOpen={false} /></div>;
+const phases = [
+  { id: "1", label: "Item one", status: "done" as const, meta: "3 of 3" },
+  { id: "2", label: "Item two", status: "current" as const, progress: 0.5, meta: "2 of 4" },
+  { id: "3", label: "Item three", status: "pending" as const, meta: "0 of 2" },
+  { id: "4", label: "Item four", status: "pending" as const, meta: "0 of 3" },
+];
+export const GalleryPlanSegmented = () => <div style={frame}><Plan items={phases} bar="segmented" count="5 of 12" /></div>;
+// The whole tracker in one container (owner 2026-10-25, an agent run's timeline): marks on a rail, each item's values
+// as chips after its words, the current item's own steps in an inset box.
+const railItems = [
+  { id: "1", label: "Item one", status: "done" as const, detail: <><Badge size="sm" variant="outline">Value</Badge><Badge size="sm" variant="outline">Value</Badge></> },
+  { id: "2", label: "Item two", status: "current" as const, progress: 0.5, meta: "1 of 2", items: [
+    { id: "2a", label: "Step one", status: "done" as const, meta: "Value" },
+    { id: "2b", label: "Step two", status: "current" as const },
+  ] },
+  { id: "3", label: "Item three", status: "pending" as const },
+];
+export const GalleryPlanRail = () => <div style={frame}><Plan items={railItems} rail bar="segmented" icon={<AgentIcon />} title="Title" count="3 of 6" /></div>;
 
 // ---- Turn notice ----
 export const GalleryTurnNotice = () => <div style={frame}><TurnNotice status="stopped">Body text</TurnNotice></div>;

@@ -212,3 +212,8 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   round face's edge is, filled, a badge with the mark cut out (smile-plus, Fluent's emoji_add).
   maximize and minimize are expand's and collapse's arrows. Spelled letters (spell-check) keep
   geometric widths and a standard gap between letters; a B's lower bowl is larger than its upper.
+- **Standalone person and dashed rings (2026-10-26, delegated):** the owner found Description list's icons unbalanced;
+  the standalone person is enlarged to the median (head r 3.5, body 11 wide, circle keyline) while person-* keep their
+  figure, and dashed rings keep 8 dashes with a one-line gap between them (22.3° dashes). Docs: icons.md, "Optical pass,
+  2026-10-26".
+

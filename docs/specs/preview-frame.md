@@ -1,5 +1,7 @@
 # Preview frame spec
 
+**Deprecated 2026-10-26** (owner 2026-10-26: "Fold Preview frame into Asset card: add the wide aspect, a checker fill and an unnamed containerless frame, move the Inspector to it, and deprecate Preview frame"). Use Asset card, containerless with no name: the frame alone (`aspect` square, landscape or wide; `fill="checker"`; `color`). The component and its classes stay so existing markup keeps working; nothing in the app uses it.
+
 **Captures:** `docs/research/captures/preview-frame/`
 **Peers:** Box model (the inspector's other well: the same ground, line and corner), Asset row (the same well at 40 in a
 row), Color swatch (the checker and the swatch ring), Card's media well (a recessed surface in a card), Panel (the
@@ -193,6 +195,8 @@ density in a screenshot (corner and inset tokens re-derive), Electron (only the 
   hovers are drawn for a white surface and fade on grey, so a component previews on the surface it's made for.
 
 ## Feedback log
+
+- 2026-10-26 · owner 2026-10-26: "Fold Preview frame into Asset card: add the wide aspect, a checker fill and an unnamed containerless frame, move the Inspector to it, and deprecate Preview frame" → deprecated; the Inspector moved to Asset card.
 
 - 2026-10-13 · built from the Figma Assets captures.
 - 2026-10-13 · round 22: approved, no notes.

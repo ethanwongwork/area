@@ -65,3 +65,21 @@ test('an element in a group cell is an inert, scaled thumbnail', () => {
   assert.doesNotMatch(html, /area-asset-card__thumb"[^>]*><img/);
 });
 
+
+test('with no name or controls an asset card has no head: containerless, the frame alone (Preview frame, folded in)', () => {
+  const frame = render(h(AssetCard, { container: 'containerless', role: 'img', 'aria-label': 'Search', media: h('svg') }));
+  assert.doesNotMatch(frame, /area-asset-card__head/);
+  assert.match(frame, /^<div role="img" aria-label="Search" class="area-asset-card area-asset-card--asset area-asset-card--containerless[^"]*"|class="area-asset-card[^"]*area-asset-card--containerless[^"]*"[^>]*role="img"/);
+  assert.match(frame, /area-asset-card__frame/);
+  // A name alone, or controls alone, keeps the head.
+  assert.match(render(h(AssetCard, { name: 'Search', media: h('svg') })), /area-asset-card__head/);
+  assert.match(render(h(AssetCard, { actions: h('button', null, 'Copy'), media: h('svg') })), /area-asset-card__head/);
+});
+
+test('an asset card takes the wide aspect and the checker fill; a colour on the checker keeps its value', () => {
+  const html = render(h(AssetCard, { container: 'containerless', aspect: 'wide', fill: 'checker', color: 'rgb(37 99 235 / 0.4)' }));
+  assert.match(html, /area-asset-card--wide/);
+  assert.match(html, /area-asset-card--checker/);
+  assert.match(html, /area-asset-card--color/);
+  assert.match(html, /--_asset-color:rgb\(37 99 235 \/ 0.4\)/);
+});

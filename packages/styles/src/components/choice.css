@@ -101,7 +101,9 @@
      are too. A chosen card keeps the 1px edge and darkens it to the checked colour (owner,
      2026-09-28: darker, not thicker; was a 2px edge from the owner references). */
   .area-checkbox--card,
-  .area-radio--card {
+  .area-radio--card,
+  .area-checkbox--soft,
+  .area-radio--soft {
     --_card-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense) - var(--area-stroke-width)); /* spec: 12 to the content, compact 8, border counted once (shadcn 11) */
     --_card-edge: var(--area-edge-control); /* spec: shadcn ≈ #e3; was border-decorative #f3 */
     --_card-edge-hover: var(--area-edge-control-hover);
@@ -110,16 +112,18 @@
     padding: var(--_card-inset);
     border: var(--area-stroke-width) solid var(--_card-edge); /* required: the chosen edge is state (audit H-3) */
     border-radius: var(--area-radius-container);
-    background-color: var(--area-bg-surface);
     transition: var(--area-transition);
   }
+  /* The card's own ground; soft paints a control fill instead (below). */
+  .area-checkbox--card,
+  .area-radio--card { background-color: var(--area-bg-surface); }
   /* Double class: Radio's base rule centres its row, a card aligns to the first line. */
-  .area-checkbox.area-checkbox--card,
-  .area-radio.area-radio--card { align-items: flex-start; }
-  .area-checkbox--card > .area-choice-label,
-  .area-radio--card > .area-choice-label { flex: 1 1 auto; min-inline-size: 0; }
-  .area-checkbox--card > .area-checkbox__control,
-  .area-radio--card > .area-radio__control { order: 1; }
+  .area-checkbox.area-checkbox--card, .area-checkbox.area-checkbox--soft,
+  .area-radio.area-radio--card, .area-radio.area-radio--soft { align-items: flex-start; }
+  :is(.area-checkbox--card, .area-checkbox--soft) > .area-choice-label,
+  :is(.area-radio--card, .area-radio--soft) > .area-choice-label { flex: 1 1 auto; min-inline-size: 0; }
+  :is(.area-checkbox--card, .area-checkbox--soft) > .area-checkbox__control,
+  :is(.area-radio--card, .area-radio--soft) > .area-radio__control { order: 1; }
   @media (hover: hover) { .area-checkbox--card:hover:not([data-disabled]),
   .area-radio--card:hover:not([data-disabled]) { border-color: var(--_card-edge-hover); } }
   /* A chosen card takes the selected stroke, as every selected container (axes/states.ts; owner 2026-10-21, ChatGPT's
@@ -132,18 +136,72 @@
   }
   /* The card is the focus target the eye follows: one ring, on the card (audit C-13; the glyph
      drew a second). */
-  .area-checkbox--card:has(> .area-checkbox__control:focus-visible),
-  .area-radio--card:has(> .area-radio__control:focus-visible) {
+  :is(.area-checkbox--card, .area-checkbox--soft):has(> .area-checkbox__control:focus-visible),
+  :is(.area-radio--card, .area-radio--soft):has(> .area-radio__control:focus-visible) {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-gap);
   }
+
+  /*
+   * Soft (owner 2026-10-25: "build the filled option rows"; Notion Calendar's settings options, a proposal card's
+   * choices): the card's shape and inset painted as a control fill with no edge, the hover fill under the pointer, and
+   * the chosen one drawing the card's selected edge and tint (2026-10-26; was a step darker). The control keeps the
+   * checked colour.
+   */
+  .area-checkbox--soft,
+  .area-radio--soft {
+    --_card-edge: transparent;
+    --_card-edge-hover: transparent;
+    background-color: var(--area-bg-component);
+  }
+  @media (hover: hover) { .area-checkbox--soft:hover:not([data-disabled], :has(> .area-checkbox__control:checked)),
+  .area-radio--soft:hover:not([data-disabled], :has(> .area-radio__control:checked)) { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  /* The chosen one: the control fill a step darker (Notion Calendar's darker grey) under the card's Selected tint layer,
+     so it follows the Selected fill setting as a chosen card does; the control carries the selection colour. (The
+     selection surface was tried: at Accent it painted dark mode's rows a heavy navy band.) */
+  /* Chosen: the card's selected edge and tint on the soft fill (owner 2026-10-26: "is this selected style correct or
+     should it be a different stroke style?"), so both option styles follow the Selected stroke and Selected tint settings
+     as one rule. Was one fill step darker (bg-component-active), which only the dot told apart. */
+  .area-checkbox--soft:has(> .area-checkbox__control:checked),
+  .area-radio--soft:has(> .area-radio__control:checked) {
+    border-color: var(--area-stroke-selected);
+    box-shadow: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-stroke-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint);
+  }
+  @media (forced-colors: active) { .area-checkbox--soft, .area-radio--soft { border-color: CanvasText; } }
+
+  /* Meta: a short value at the option's end (what the choice comes to: "11:24 AM", "14 questions"), muted and
+     tabular, 12 from the label; inset.css trims it to its cap and sets it down as the label is, so the control, the
+     label's first line and the meta share one centre. */
+  .area-checkbox__meta,
+  .area-radio__meta {
+    flex: none;
+    padding-inline-start: var(--area-space-12);
+    color: var(--area-fg-muted);
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* List: the control first, then the text, then meta (a settings list's options; Notion Calendar). */
+  .area-checkbox--card.area-checkbox--list > .area-checkbox__control, .area-checkbox--soft.area-checkbox--list > .area-checkbox__control,
+  .area-radio--card.area-radio--list > .area-radio__control, .area-radio--soft.area-radio--list > .area-radio__control { order: -1; }
+  /* Read-only (RadioGroup readOnly): a value shown, not a choice being made (Setup's past answers; owner 2026-10-26, "plain
+     answers"): the chosen card or soft row keeps its rest edge and fill and the control's dot says which; no selected
+     edge or tint. */
+  .area-radio-group[data-readonly] :is(.area-radio--card, .area-radio--soft):has(> .area-radio__control:checked) { border-color: var(--_card-edge); box-shadow: none; }
+  .area-checkbox--list, .area-radio--list { --_layout: list; }
+  /* In a card or soft row the control is the row's leading mark, so the text follows it at the row gap (12, compact 8),
+     the same as the card's inset before it and Menu's and Plan's icon-to-label gap (owner 2026-10-26: "the gaps
+     horizontally between the text and components doesnt look right or balanced"; was the bare label gap, 6). */
+  :is(.area-checkbox--card, .area-checkbox--soft, .area-radio--card, .area-radio--soft):is(.area-checkbox--list, .area-radio--list, .area-checkbox--media, .area-radio--media, .area-checkbox--media-row, .area-radio--media-row) { --_gap: var(--area-gap-row); }
 
   /* Layout: row (default) keeps visual, text and control on one line; tile stacks a larger
      visual above the label with the control in the top-end corner (owner reference 1). */
   /* Explicit for manifest parity: row is the base card layout. */
   .area-checkbox--row, .area-radio--row { --_layout: row; }
-  .area-checkbox--card.area-checkbox--tile,
-  .area-radio--card.area-radio--tile {
+  .area-checkbox--card.area-checkbox--tile, .area-checkbox--soft.area-checkbox--tile,
+  .area-radio--card.area-radio--tile, .area-radio--soft.area-radio--tile {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: start;
@@ -169,17 +227,23 @@
    * (the native input stays, so the keyboard and the accessible name are the control's). A card with no visual is a
    * text choice: its label centred, as tall as a control (a typeface set in itself, a size).
    */
-  .area-checkbox--card.area-checkbox--preview,
-  .area-radio--card.area-radio--preview {
+  .area-checkbox--card.area-checkbox--preview, .area-checkbox--soft.area-checkbox--preview,
+  .area-radio--card.area-radio--preview, .area-radio--soft.area-radio--preview {
     position: relative;
     display: grid;
     justify-items: center;
     align-content: center;
-    row-gap: var(--area-space-8); /* spec: Radix RadioCards' space-2; the label 8 under its preview */
+    --_media-mat: var(--area-space-8); /* spec: the picture 8 from the card's outer edge, as Media (was 4: round 73, the
+       selected stroke is drawn inside and left 2 clear; 8 leaves 6) */
+    row-gap: var(--_card-inset); /* spec: the label at the card's inset under its picture as above the card's foot (was 8, Radix's space-2, under a picture at the inset) */
     min-block-size: var(--area-control-lg);
-    --_card-edge: transparent; /* spec: the reference's soft card: a fill, no edge at rest */
-    background-color: var(--area-bg-subtle);
     text-align: center;
+  }
+  /* A card preview is the reference's soft card: a fill, no edge at rest (a soft preview keeps soft's own fill). */
+  .area-checkbox--card.area-checkbox--preview,
+  .area-radio--card.area-radio--preview {
+    --_card-edge: transparent; /* spec */
+    background-color: var(--area-bg-subtle);
   }
   .area-checkbox--preview > .area-checkbox__visual,
   .area-radio--preview > .area-radio__visual {
@@ -192,6 +256,16 @@
     overflow: hidden;
     color: var(--area-fg-default);
   }
+  /* A card's preview sits in an 8px mat of the card's ground, its corners concentric with the card's (owner 2026-10-26:
+     "i want the illustration to sit directly on the card not cropped in a frame, or if there is a frame the corners
+     should be rounded"; at the 12 inset a concentric corner came to 2px, a crop's square). As Media's picture. */
+  :is(.area-checkbox--card, .area-checkbox--soft).area-checkbox--preview > .area-checkbox__visual,
+  :is(.area-radio--card, .area-radio--soft).area-radio--preview > .area-radio__visual {
+    justify-self: stretch;
+    inline-size: auto;
+    margin: calc(var(--_media-mat) - var(--_card-inset) - var(--area-stroke-width)) calc(var(--_media-mat) - var(--_card-inset) - var(--area-stroke-width)) 0;
+    border-radius: max(var(--area-radius-min), calc(var(--area-radius-container) - var(--_media-mat) * var(--area-radius-concentric)));
+  }
   .area-checkbox--preview > .area-choice-label,
   .area-radio--preview > .area-choice-label { justify-items: center; }
   /* The card shows the choice; the input stays for the keyboard and assistive tech, out of sight. */
@@ -203,9 +277,72 @@
     opacity: 0;
     pointer-events: none;
   }
-  /* A group of previews lays them on equal columns of at least `--area-choice-min` (104 by default). */
-  .area-radio-group__options:has(> .area-radio--preview),
-  .area-checkbox-group__options:has(> .area-checkbox--preview) {
+  /*
+   * Media: a picture choice shown with its answer row (owner, 2026-10-26, Setup's answered picture questions: "i want the
+   * illustration to sit directly on the card not cropped in a frame, or if there is a frame the corners should be
+   * rounded"; GitHub's Appearance cards, a picture over a radio and its name). The picture sits on the card's own ground
+   * in an 8px mat, its corners concentric with the card's (the card's corner less the mat). `media` puts it above the
+   * list row (control, label, meta); `media-row` puts it at the row's start, the row centred beside it (owner
+   * 2026-10-26, "i like all the inset ones": a third, a half, a row). Run to the edge, a white picture on a white page
+   * lost the card's top (tried 2026-10-26); the mat keeps the card's fill round it, so the card reads on any ground,
+   * with no edge. The row keeps a list row's alignment: the control, the label's first line and meta share one centre
+   * (inset.css sets the text down to the control); centring the row's items as well dropped the text 1.5px.
+   */
+  :is(.area-checkbox--card, .area-checkbox--soft):is(.area-checkbox--media, .area-checkbox--media-row),
+  :is(.area-radio--card, .area-radio--soft):is(.area-radio--media, .area-radio--media-row) {
+    --_media-mat: var(--area-space-8); /* spec: 8 from the card's outer edge: 6 clear inside the 2px selected stroke, which
+       is drawn inside (owner, round 73: "the margins between the image and the outside become super small"; was 4) */
+    --_media-out: calc(var(--_media-mat) - var(--_card-inset) - var(--area-stroke-width)); /* the content edge back out to the mat */
+    display: grid;
+    align-items: start;
+    column-gap: var(--_gap);
+  }
+  .area-checkbox--media, .area-radio--media {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "visual visual visual" "control label meta";
+    row-gap: var(--_card-inset); /* spec: the row sits at the card's inset above as below */
+  }
+  /* Media row: the picture a share of the card (`--area-choice-media`, 32% by default: at Setup's column a picture as
+     large as a third-wide card's), the row centred on it; any ratio, the card as tall as its picture. */
+  .area-checkbox--media-row, .area-radio--media-row {
+    grid-template-columns: var(--area-choice-media, 32%) auto minmax(0, 1fr) auto; /* public hook */
+    grid-template-rows: 1fr auto 1fr;
+    grid-template-areas: "visual . . ." "visual control label meta" "visual . . .";
+  }
+  :is(.area-checkbox--media, .area-checkbox--media-row) > .area-checkbox__visual,
+  :is(.area-radio--media, .area-radio--media-row) > .area-radio__visual {
+    grid-area: visual;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    inline-size: auto;
+    block-size: auto;
+    aspect-ratio: var(--area-choice-ratio, 4 / 3);
+    overflow: hidden;
+    border-radius: max(var(--area-radius-min), calc(var(--area-radius-container) - var(--_media-mat) * var(--area-radius-concentric)));
+    color: var(--area-fg-default);
+  }
+  :is(.area-checkbox--media > .area-checkbox__visual, .area-radio--media > .area-radio__visual) {
+    margin: var(--_media-out) var(--_media-out) 0;
+  }
+  /* The row follows the picture at the card's inset, as it follows the card's edge. */
+  :is(.area-checkbox--media-row > .area-checkbox__visual, .area-radio--media-row > .area-radio__visual) {
+    margin: var(--_media-out) calc(var(--_card-inset) - var(--_gap)) var(--_media-out) var(--_media-out);
+  }
+  :is(.area-checkbox--media, .area-checkbox--media-row) > .area-checkbox__control, :is(.area-radio--media, .area-radio--media-row) > .area-radio__control { grid-area: control; }
+  :is(.area-checkbox--media, .area-checkbox--media-row) > .area-choice-label, :is(.area-radio--media, .area-radio--media-row) > .area-choice-label { grid-area: label; }
+  :is(.area-checkbox--media, .area-checkbox--media-row) > .area-checkbox__meta, :is(.area-radio--media, .area-radio--media-row) > .area-radio__meta { grid-area: meta; padding-inline-start: 0; }
+  /* A photo or video fills its frame at any ratio, cropped to cover; `--area-choice-ratio: auto` keeps its own. */
+  :is(.area-checkbox--preview, .area-checkbox--media, .area-checkbox--media-row) > .area-checkbox__visual > :is(img, video, picture),
+  :is(.area-radio--preview, .area-radio--media, .area-radio--media-row) > .area-radio__visual > :is(img, video, picture) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* A group of previews or media cards lays them on equal columns of at least `--area-choice-min` (104 by default). */
+  .area-radio-group__options:has(> :is(.area-radio--preview, .area-radio--media)),
+  .area-checkbox-group__options:has(> :is(.area-checkbox--preview, .area-checkbox--media)) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(var(--area-choice-min, 104px), 1fr)); /* public hook */
     align-items: stretch;
@@ -457,7 +594,12 @@
     align-items: stretch;
     gap: var(--area-space-8);
   }
-  :is(.area-checkbox-group--horizontal, .area-radio-group--horizontal) > * > :is(.area-checkbox--card, .area-radio--card) {
+  /* Soft options stretch as cards do and sit 4 apart: filled rows read as one list (Notion Calendar's options 4 apart). */
+  :is(.area-checkbox-group__options, .area-radio-group__options):has(> :is(.area-checkbox--soft, .area-radio--soft)) {
+    align-items: stretch;
+    gap: var(--area-space-4);
+  }
+  :is(.area-checkbox-group--horizontal, .area-radio-group--horizontal) > * > :is(.area-checkbox--card, .area-radio--card, .area-checkbox--soft, .area-radio--soft) {
     flex: 1 1 0;
     min-inline-size: 0;
   }

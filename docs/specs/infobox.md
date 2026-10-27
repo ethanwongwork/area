@@ -1,10 +1,19 @@
-# Infobox spec
+# Infobox spec (removed 2026-10-26)
+
+Removed from the library (owner, round 73: "i thought this was removed?", after retiring it in round 72). A
+subject's summary is a Card with a Description list (Description list's "Composition / summary" tile). Kept as history.
 
 **Captures:** computed-style readouts below (Wikipedia, en.wikipedia.org/wiki/Lisa_Su)
 **Peers:** Card, Description list, Figure
 
 ## Owner decisions
 
+- 2026-10-26 (round 72, rethink): "is this component even necessary? i kinda dont really like it and dont think it
+  provides much value. please justify it." Retired: deprecated, its job kept as a composition, a Card whose header
+  carries the subject (picture, title, description, one action) and whose content is a Description list (Description
+  list's "Composition / a subject's summary" tile). Its parts were Card's header and Description list's rows; only
+  Wikipedia shipped it, and ChatGPT and Figma have nothing like it. The stacked layout (label above value) is not carried
+  over until a use needs it.
 - 2026-10-17: "build whatever you recommend in the order you recommend", after the Wikipedia survey (docs/COMPONENTS.md,
   "From Wikipedia"). Order: Reference list, Table of contents, Figure, Infobox, Inline list, Abbreviation, Hatnote, Navbox.
 - 2026-10-19 (review page, docs pass): the lead image takes the container corner (`radius-container`), the standalone-image rule Figure and Asset card follow.
@@ -166,3 +175,25 @@ lift, as Card does: the soft edge at 0, transparent while a frame is drawn. Chec
 - **Your other questions** (is it necessary, what other systems do) are answered in
   `docs/research/text-gaps-2026-10-22/infobox.md`: design systems ship only the rows, not a titled box, so Infobox
   could become Description list in a Card. That would change the approved Description list, so it waits for you.
+
+## Lines (current, 2026-10-25)
+
+The rule between sections is `border-decorative` (the lightest line), framed or not. Was `border-divider` unframed. This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
+## Feedback log
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → The rule between sections is `border-decorative` (the lightest line), framed or not. Was `border-divider` unframed.
+
+## Review note, 2026-10-26
+
+- **What changed:** The line between sections is the lightest grey, #f3 (was #e2).
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light. You approved each one on the dividers comparison page.
+
+## Review note, 2026-10-26 (removed)
+
+- **What changed:** Infobox is removed: its CSS, React component, manifest entry, demos and gallery page are gone. A subject's summary is now a Card with the subject in its header and a
+  Description list in its content (tile "Composition / summary" under Description list).
+- **Why:** you asked whether it was necessary. It was built from Wikipedia alone, and its parts already exist: Card's
+  header (picture, title, description, action) and Description list's rows, columns and frame.
+

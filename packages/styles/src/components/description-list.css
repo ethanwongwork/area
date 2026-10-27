@@ -1,9 +1,12 @@
 /* ---------------------------------------------------------------------------
  * Description list
  *
- * Labelled values: a term and its value per row (docs/specs/description-list.md). columns is
- * Notion's page properties (a 160 term column, a muted term with an optional 16 icon, the value
- * after it; rows 34 tall, 4 apart). justified is ChatGPT's settings card (term at the start,
+ * Labelled values: a term and its value per row (docs/specs/description-list.md). columns is a
+ * read-only list of facts: a muted term (with an optional 16 icon) in a column as wide as its
+ * longest term, the value 12 after it, rows as tall as their text and 8 apart (owner 2026-10-26,
+ * round 73: "why is the padding so small, why is the gaps between lines so large, what is the gaps
+ * between the labels and the text"; it was Notion's editable properties: a 160 column, rows 34
+ * tall and 4 apart, every cell inset 6 for a hover plate it never drew). justified is ChatGPT's settings card (term at the start,
  * value at the end, rows 12 / 16 padded, dividers inset by the row's side padding). divided
  * draws those rules; framed puts the list in Table's frame.
  * ------------------------------------------------------------------------- */
@@ -74,7 +77,25 @@
   /* spec: ChatGPT's term 14/20 500 in the default ink, its value at the end. */
   .area-description-list--justified .area-description-list__term { inline-size: auto; flex: 0 1 auto; padding-inline: 0; color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
   .area-description-list--justified .area-description-list__value { flex: 0 1 auto; margin: 0; padding-inline: 0; text-align: end; }
-  .area-description-list--columns { --_pad-block: 0px; }
+  /* --- columns: the facts list -------------------------------------------- */
+  /* One grid for every row (rows are subgrids), so all values line up: the term column fits the longest term, up to
+     --area-description-list-term (40% by default), the value the gap row (12, compact 8) after it; rows 8 apart (ui
+     cluster, compact 6), no cell inset, so the text sits on the list's own edges. */
+  .area-description-list--columns {
+    --_row: auto;
+    --_row-gap: var(--area-ui-cluster);
+    --_inset: 0px;
+    --_pad-block: 0px;
+    display: grid;
+    grid-template-columns: fit-content(var(--area-description-list-term, 40%)) minmax(0, 1fr);
+    column-gap: var(--area-gap-row);
+    row-gap: var(--_row-gap);
+  }
+  .area-description-list--columns > .area-description-list__item { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: start; }
+  .area-description-list--columns .area-description-list__term { inline-size: auto; }
+  .area-description-list--columns .area-description-list__value { margin: 0; }
+  /* Divided columns: twice the gap, the rule in its middle. */
+  .area-description-list--columns.area-description-list--divided { --_row-gap: calc(2 * var(--area-ui-cluster)); }
 
   /* --- divided and framed --------------------------------------------------- */
   /* spec: ChatGPT's 1px rule under each row but the last, inset by the row's side padding (Table's divider role). */
@@ -94,12 +115,11 @@
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
   }
-  /* Framed columns keep ChatGPT's card inset for the text: 12 from the top (5 + the row's 7 above a 20 line) and
-     16 from the side (10 + the term's 6). */
+  /* Framed columns keep ChatGPT's card inset for the text: 12 from the top and 16 from the side. */
   /* The frame's stroke is counted once (inset.css; spacing audit 2026-10-17: the text and rules sat 17 in, not ChatGPT's 16
      from the card's outer edge). */
   .area-description-list--framed.area-description-list--justified { --_inset: calc(var(--area-space-16) - var(--area-stroke-width)); }
-  .area-description-list--framed.area-description-list--columns { padding: calc(5px - var(--area-stroke-width)) calc(10px - var(--area-stroke-width)); /* spec */ }
+  .area-description-list--framed.area-description-list--columns { padding: calc(var(--area-space-12) - var(--area-stroke-width)) calc(var(--area-space-16) - var(--area-stroke-width)); /* spec: ChatGPT's card inset */ }
 
   /* --- show more ------------------------------------------------------------- */
   /* The "Show N more" button after a list with visibleCount (docs/research/show-more-survey.md): a row of the list's
@@ -125,6 +145,7 @@
     cursor: pointer;
     user-select: none;
   }
+  .area-description-list--columns + .area-description-list__more { --_term-inset: 0px; min-block-size: var(--area-ui-leading); margin-block-start: var(--area-ui-cluster); } /* a row of the list's rhythm */
   .area-description-list--justified + .area-description-list__more { --_term-inset: var(--area-space-16); margin-block-start: 0; min-block-size: calc(var(--area-ui-leading) + var(--area-space-24)); }
   .area-description-list__more > .area-description-list__icon > svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
   .area-description-list__more[aria-expanded="true"] > .area-description-list__icon > svg { rotate: 180deg; }

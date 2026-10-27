@@ -6,7 +6,7 @@
  * Primer; docs/research/articles-rethink-2026-10-17/inline-list-navbox.md). Type follows the footers' hierarchy (owner,
  * round 34: "reevaluate the text styles and make sure hierarchy and proper type alignment is correct"): Vercel, Linear,
  * Apple, MDN and Docusaurus set the group heading in the strongest ink and the links dimmer.
- *   title    the surface title (title-xs, strong): Card's, Dialog's and Infobox's title
+ *   title    the surface title (title-xs, strong): Card's and Dialog's title
  *   heading  UI text, strong, default ink (Linear 13 / 510 primary; Vercel 14 / 500 gray-1000)
  *   links    UI text, regular, muted, underlined on hover (Linear tertiary, Vercel gray-900): Link muted standalone
  * Title, headings and links start on one edge; no element is inset.
@@ -15,7 +15,7 @@
   .area-link-groups {
     display: flex;
     flex-direction: column;
-    /* spec: the title 12 above the groups, as Infobox's header above its sections. */
+    /* spec: the title 12 above the groups (as Infobox's header sat above its sections, until it was removed 2026-10-26). */
     gap: var(--area-space-12);
     min-inline-size: 0;
     color: var(--area-fg-default);

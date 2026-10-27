@@ -142,11 +142,11 @@ export default {
     instead: [
       ["Records that share columns, to compare across rows", ["table"], "A description list describes one subject; a Table lines many up."],
       ["Properties a reader edits in place, with controls in each row", ["property-list"], "Description list shows values; Property list hosts the controls."],
-      ["A subject's summary with a title and media, beside an article", ["infobox"], "Infobox adds a title, media and sections around its facts."],
+      ["A subject's summary with a title and media", ["card"], "Put the list in a Card's content, the subject in its header (the summary composition tile)."],
     ],
     // Spec: Variants, Show more, Behavior and accessibility; source: DescriptionList.tsx JSDoc.
     practices: [
-      ["Do", "Use columns for a page's properties, with terms in a fixed column, and justified for settings-style facts with the value at the row's end."],
+      ["Do", "Use columns for a subject's facts, the values lined up after the longest term, and justified for settings-style facts with the value at the row's end."],
       ["Do", "Keep terms short nouns (Status, Owner); the value can be text, a Badge, a person or a Link."],
       ["Do", "Set visibleCount on long lists so only the first rows show, with a Show more button after them."],
       ["Do", "Use divided and framed together when the list stands alone, as a settings card."],
@@ -157,7 +157,7 @@ export default {
     parts: {
       root: "A native dl: layout places terms in a column or at the row's start, divided rules the rows, framed draws Table's frame.",
       item: "One row: a div grouping a term with its value. Rows past visibleCount stay in the document, hidden, so order holds.",
-      term: "The dt, in the muted ink; it wraps inside its column.",
+      term: "The dt, in the muted ink; its column fits the longest term (at most 40%, --area-description-list-term), and a longer term wraps.",
       icon: "A 16 decorative icon before the term; the Show more button puts its chevron here, so its label lines up with the term names.",
       value: "The dd, in the default ink; any content, wrapping when long.",
       more: "The Show more button after the list, outside the dl and below any frame.",
@@ -315,6 +315,7 @@ export default {
       ["Do", "Use one card per asset, anything that stands alone: an image, a component, a colour, a type style, an icon, a setting's option or a group of them."],
       ["Do", "Pick the kind by what you pass: an image URL covers the frame; color paints it; group fills a 2×2 mosaic; any other element sits centred on the frame's surface at its own size."],
       ["Do", "Keep the head to the name and its controls: Copy for what is used (a component's code, a colour's value, a type role, an icon), More for what is managed (an image, a group)."],
+      ["Do", "For an inspector's preview of the one selected thing, use the frame alone: containerless with no name or controls, wide for a colour, fill=\"checker\" when it has transparency, and aria-label with role=\"img\"."],
       ["Do", "Give a setting's option its own scope on the whole card (data-area-theme=\"dark\"), so the card and its frame change together."],
       ["Do", "Pass components and designs to a group as elements: each cell shows a scaled-down image of it, inert."],
       ["Do", "Put a small ghost More or Copy button in actions; it ends on the frame's side. Give each its own label."],
@@ -586,46 +587,6 @@ export default {
     ],
   },
 
-  infobox: {
-    // Spec: Job and boundaries, Round 34.
-    instead: [
-      ["Editing a subject's properties in place", ["property-list"], "Infobox shows facts; Property list hosts controls."],
-      ["Labelled values with no title or media", ["description-list"], "A Description list is the plain list of terms and values."],
-      ["An image with its caption", ["figure"], "A caption belongs to a Figure, not to Infobox's media."],
-      ["One piece of content as a linked surface", ["card"], "Card presents and links an item; Infobox summarises a subject beside its article."],
-    ],
-    // Spec: Round 34 to 36; source: Infobox.tsx JSDoc.
-    practices: [
-      ["Do", "Put it beside or above the article it sums up, with the subject's name as title and a short role or description as subtitle."],
-      ["Do", "Group facts into InfoboxSections with short headings; use InfoboxRows for a run without one."],
-      ["Do", "Use stacked when the column is narrow, so each label sits above its value."],
-      ["Do", "Set framed when the box stands on its own; unframed, it fills its column."],
-      ["Do", "Keep action to one ghost sm icon Button, such as Edit, and give it a label."],
-      ["Don't", "Put a caption under the media; use a Figure for that."],
-      ["Don't", "Use it as a form: values are shown, not edited."],
-    ],
-    // Spec: Round 35; source: Infobox.tsx.
-    parts: {
-      root: "An aside named by its title: the header, then sections of rows; framed puts it in Card's frame.",
-      header: "The media above the title row.",
-      media: "An image or an Avatar above the title, 8 above it; give an img its alt.",
-      "title-row": "The heading group with the action at its end.",
-      "heading-group": "The title over its subtitle.",
-      title: "The subject's name in the strong surface title, as a Card's or Dialog's.",
-      subtitle: "A muted line under the title: a role or a short description.",
-      action: "One control at the end of the title row.",
-      section: "A run of rows, 12 from the next with a divider between.",
-      heading: "The section's title in strong UI text, 6 above its rows.",
-      rows: "The dl holding a section's rows, 4 apart.",
-      row: "One label and its value: side by side, the label column as wide as the longest label, or stacked.",
-      label: "What the value is, in the muted UI text.",
-      value: "The fact, in the default UI text.",
-    },
-    aria: [
-      ["aria-label", "On the aside, from title when it is text, unless you pass your own."],
-      ["alt", "Required on an img in media."],
-    ],
-  },
 
   "inline-list": {
     // Spec: Job and boundaries.

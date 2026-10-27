@@ -174,7 +174,17 @@ recipe for every modal.
 
 Hint buttons press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover) (they pressed with the hover). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md). *Superseded in round 70: the hints are static text with no states.*
 
+## Lines (current, 2026-10-25)
+
+No rule above the footer's key hints. The rule under the search field stays (`border-decorative`): a field over its results, two kinds of thing. This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
+Spacing without the footer rule (2026-10-26): the hints sit 12 under the last row and 12 above the edge (padding-block-start: the column less the list's inset; was 16 and 12).
+
 ## Feedback log
+
+- 2026-10-26 · owner: "the spacing/gaps for the components without the divider now look a bit off, can you refine them and make sure the spacing is intentional" → Spacing without the footer rule (2026-10-26): the hints sit 12 under the last row and 12 above the edge (padding-block-start: the column less the list's inset; was 16 and 12). Rule: DESIGN_SYSTEM.md, Lines, "Space replaces the line".
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → No rule above the footer's key hints. The rule under the search field stays (`border-decorative`): a field over its results, two kinds of thing.
 
 - 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (command-palette.css:42); rows and the search row take the density token `--area-gap-row` (12, labels at 36; command-palette.css:28, :56); quiet keys render in the UI font 12/16 400, and Escape is written "Esc" (kbd.css:89-102).
 - 2026-09-30 · audit D-23 (owner pick A) → kept the list model (12 corner, 32 rows) rather than ChatGPT's and Notion's larger palette (corner 16–20, rows 36–48).
@@ -219,3 +229,9 @@ Hint buttons press at `bg-component-pressed`, one step past selected (Notion pre
   (or the field's clear) to close, so clickable arrows only duplicated the list; as hints they read as one quiet line
   of help, which is what they are. In 2026-09 you had said the hints "still don't do anything", which made them
   buttons; without a plate or hover they no longer look like controls, so that expectation doesn't arise.
+
+## Review note, 2026-10-26
+
+- **What changed:** No line above the key hints. The line under the search field stays.
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light. You approved each one on the dividers comparison page.

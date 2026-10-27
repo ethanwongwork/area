@@ -86,7 +86,7 @@ export default {
     // Spec: Anatomy, Second pass; source: ColorPicker.tsx.
     parts: {
       root: "The group: the floating surface (or plain), ten rows wide; owns the value, the model, the view and form reset.",
-      header: "An optional row above the editor for a title, tabs or a close action, divided from it by a rule.",
+      header: "An optional row above the editor for a title, tabs or a close action; the editor follows with no rule between.",
       body: "The editor's column: the view switcher, the contrast row, the area or grid, the controls row and the value row.",
       views: "A small full-width Segmented that switches between spectrum, grid and sliders; shown only with more than one view.",
       contrast: "The contrast row: the pair swatch, the ratio and a pass or fail mark with the level.",
@@ -117,7 +117,7 @@ export default {
       "text-field": "The hex or CSS field: keeps a draft while typing and commits on Enter or blur; Escape restores.",
       opacity: "The opacity percentage field; absent without alpha and in the CSS model, whose text carries alpha.",
       note: "A status line when an OKLCH value is outside sRGB and the nearest colour with less chroma is shown.",
-      swatches: "Opt-in (swatches, onAddSwatch): the saved colours under a rule, a heading and a Color swatch picker at the row's size, nine to a row.",
+      swatches: "Opt-in (swatches, onAddSwatch): the saved colours under their heading, with a Color swatch picker at the row's size, nine to a row.",
       heading: "The saved colours' label and, with onAddSwatch, the save button.",
     },
     // Source: ColorPicker.tsx areaKey(), DraftInput; native range inputs.
@@ -316,10 +316,10 @@ export default {
     parts: {
       root: "The surface, 240 wide by default (--area-panel-inline-size), with its edge, corner and resting shadow; flush drops them.",
       resize: "With resizable, the separator on one edge: drag it, or focus it and use the arrow keys.",
-      bar: "The header row: the title and an action at its end, with a rule beneath unless bareBar.",
+      bar: "The header row: the title and an action at its end; no rule beneath it (bareBar is the default now and deprecated).",
       title: "The panel's title, a heading (h2 by default) that names the panel region.",
       body: "A Scroll area between the bar and the footer, holding the sections and rows, inset on every side.",
-      section: "A group of rows, divided from the next by a full-width rule.",
+      section: "A group of rows; the next section's heading and an inset of space separate it, with no rule.",
       heading: "The section's heading row: its text and, at the end, its actions.",
       "heading-text": "The section's heading element (h3 by default).",
       actions: "Icon buttons at the end of a section heading, such as add or visibility.",
@@ -333,7 +333,7 @@ export default {
       "row-controls": "The row's control columns: one control spans both, two share them equally.",
       "row-action": "The trailing square for one icon button.",
       stack: "A PanelStack: a label above a control that needs the whole width.",
-      footer: "Pinned below the body, outside its scroll, with a rule above unless bareFooter.",
+      footer: "Pinned below the body, outside its scroll, with no rule above it (bareFooter is the default now and deprecated).",
     },
     // Source: primitives.tsx (data-collapsed, data-resizable, data-resizing).
     states: {
@@ -455,7 +455,9 @@ export default {
 
   "preview-frame": {
     // Spec: Job and boundaries.
+    // Deprecated 2026-10-26 (owner): folded into Asset card.
     instead: [
+      ["Any new preview of a selection", ["asset-card"], "Deprecated: Asset card, containerless with no name, is the frame alone (aspect wide, fill checker, color). Preview frame stays so existing markup keeps working."],
       ["A picture in a card, cropped to cover", ["card"], "Card's media crops to fill; Preview frame shows the whole asset."],
       ["A thumbnail in a list row", ["asset-row"], "Asset row's preview identifies an asset; the frame shows it large."],
       ["A colour mark at text size", ["color-swatch"], "Color swatch sits inline; the frame fills an inspector's column."],
@@ -466,6 +468,7 @@ export default {
       ["Do", "Pick the aspect for the content: square for an icon or component, landscape for a layout, wide for a colour."],
       ["Do", "Use ground=\"checker\" for an asset with transparency, and subtle for a grey well that matches Box model."],
       ["Do", "Give it a label when its content isn't already named; an img with its own alt needs none."],
+      ["Don't", "Use it in new work: it is deprecated. Use Asset card, containerless with no name."],
       ["Don't", "Expect small content to be enlarged: images are contained and only scaled down, and an icon keeps its own size."],
       ["Don't", "Use it as an image viewer or a selectable tile: it has no zoom, pan, hover or selection."],
     ],

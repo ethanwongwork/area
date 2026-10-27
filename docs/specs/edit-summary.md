@@ -5,6 +5,8 @@
 
 ## Owner decisions
 
+- 2026-10-26 (round 73): the head title stays regular beside the 500-weight Undo all / Keep all ("Keep the chat card
+  head titles regular; it's intentional"), as Plan's, Queue's and Code block's heads.
 - 2026-10-18: "start Phase 2 … Edit summary and diff".
 
 ## Job and boundaries
@@ -42,6 +44,9 @@ and `aria-label` wins.
 cursor  card: radius 12, 1px stroke-secondary, editor fill; header padding 8 gap 6 (+ divider); rows padding 4/6 radius 6 hover bg-tertiary
         edit: 30 header, filename + +N (git added) −N (git removed); chevron opens an inline diff (radius 6)
         diff: 3px indicator strip, inserted / removed line fills, collapsed regions 12px on bg-tertiary
+        (2026-10-26, EditToolCallView minimalContent) the opened diff is a box: margin-top 4, 1px stroke-secondary all
+        round, radius-base 6, overflow hidden, bg-editor; line numbers padding 4 / 4, tertiary ink; line content padding
+        8; the separator ("N unchanged lines") sans, font-size-sm, text-tertiary, padding 4 / 8, on bg-tertiary
 codex   "• Edited 2 files (+6 -1)", per file "└ path (+1 -1)", numbered +/- lines with green / red fills
 ```
 
@@ -56,10 +61,10 @@ area-edit-summary            card: card edge at stroke-width, container corner, 
                              chevron) + actions (Undo, Keep) or the settled status ("Kept" / "Undone")
     area-edit-summary__diff  under its row when open, 4 above and below (the list's row gap included)
       area-diff
-area-diff                    mono, Code block sm's type; card edge, row corner, code fill; horizontal scroll, focusable
+area-diff                    mono, Code block sm's type; Code block's frame (card edge, code ground), its edges on the text line (12 in), corner nested and floored (4); horizontal scroll, focusable
   area-diff__lines           one grid: old number, new number, marker 8, text; gap 4
   area-diff__line            subgrid row; added / removed tint
-  area-diff__fold            "12 unchanged lines", sans, muted on the recessed fill, from where the numbers start
+  area-diff__fold            "12 unchanged lines", sans (Cursor's), muted on the recessed band, from where the numbers start
 ```
 
 ## Decisions
@@ -69,7 +74,7 @@ area-diff                    mono, Code block sm's type; card edge, row corner, 
 | card edge, fill | border-card at stroke-width, no shadow; bg-surface | cursor (one card shape) + Code block | a required frame (round 49) |
 | type | text-sm across the card; sm buttons | Cursor cards 13 under a 14 reply | round 49: the card mixed four sizes |
 | card corner | radius-container | Code block md (peer) | Cursor's 12 is its card radius; Area's card corner role |
-| head | min height control-sm + 2 × inset, inset (row − control-sm) / 2, never under 4; title 12 in (list 4 + row inset 8); gap 8; seam at stroke-width in `border-decorative`, Code block's header seam (round 56; was `border-divider`, darker than the frame) | Code block's header (stable height with or without actions); Cursor card header 0 12 | rounds 49 and 52 |
+| head | min height control-sm + 2 × inset, inset (row − control-sm) / 2, never under 4; title 12 in (list 4 + row inset 8); gap 8; no seam under it (2026-10-25; was `border-decorative` from round 56, Code block's header seam) | Code block's header (stable height with or without actions); Cursor card header 0 12 | rounds 49 and 52 |
 | list / row | list padding 4, ui-row-gap between rows; Menu rows: ui-row tall, row inset, radius-row, gap-row (12, compact 8) | Menu (peer: `--_menu-gap`, surface.css); cursor rows radius 6 | round 49; audit 2026-10-19 (was gap 8 at every density) |
 | row plate | bg-component-hover on hover / focus, bg-component-pressed while the name is pressed | Menu rows (Shared state paint) | round 51; audit 2026-10-19 (was bg-component-active, the selected fill) |
 | row actions | muted ghost buttons, default ink on hover and press, no plate of their own; over the row's end on the row's plate (pointer), in flow on touch | Nav's and Board's row-action rule | round 51 |
@@ -109,6 +114,12 @@ React tests (`packages/react/tests/agent-chat.test.mjs`, 9), the full React suit
 
 ## Feedback log
 
+- 2026-10-25 · owner: "Drop the line on Edit summary, Queue and Plan too, and tighten the bar Plan's spacing as shown"
+  (after Code block's header lost its rule; comparison page https://claude.ai/artifact/914gYc7RXYaRuK8mk2erRb) → no
+  seam under the head. Measured head middle to first row middle against the row pitch: Plan and Queue 1.1, Edit
+  summary 1.2, Cursor's to-do tray 1.0 (its stylesheet: header 28, body padding 8, no border), so no spacing change
+  except Plan's open bar (below).
+
 - 2026-10-18 · built for Phase 2 of the Inspector chat.
 - 2026-10-19 · browser check: head cut the title at 228 → head wraps; file name cut by hidden actions → actions overlay on hover (pointer), in flow on touch; empty number columns for unnumbered edits → dropped; number columns took spare width → text column is 1fr; frame and divider moved to stroke-width (no shadow under the card: a required line, cohesion test).
 
@@ -135,7 +146,7 @@ The agent chat's shared rules (all five families):
 | Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
-| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
+| Card head | one row tall, no rule under it (2026-10-25); a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
 | Card rows | Menu rows: row height, row inset, row corner, row plate (pressed: bg-component-pressed), Menu's row gap `gap-row` (12, compact 8) so a label after the icon slot lands on the list column, and `ui-row-gap` (2, compact 0) between rows | Menu (`--_menu-gap`, surface.css) |
 | What a line opens | 4 under the line, on a 1px rail with its content 12 in | Cursor content gap 4; Claude Code's rail at 12 |
 | Backplates | one: the row plate under the pointer or focus | Menu |
@@ -219,3 +230,18 @@ buttons keep their own corner.
 - **Why:** you asked for the gap between nav items to stay the same and not disappear at Compact. ChatGPT's and
   Notion's sidebars put their rows 1px apart, so `ui-row-gap` is now 1px at every type size and density, for every
   family that stacks rows. The focus colour is your pick on the state page (2026-10-21).
+
+## Review note, 2026-10-26
+
+- **What changed:**
+  - No line under the head (2026-10-25). The first file starts right under the title and counts.
+  - A file's diff sits 4 below its row in a bordered box whose edges are on the card's text line, under the title and
+    file names (option C, as Cursor's opened edit). It was a bordered box 4 inside the card's edge.
+  - Added and removed lines take the diff's own tints, the solid status colours mixed into the ground (a clear pink
+    and green in light, about a quarter-strength red and green in dark), not the status surfaces.
+  - The folded-lines row keeps the sans, as Cursor's does.
+- **Why:** you dropped the line under Code block's header, then asked for Edit summary, Queue and Plan to match. In
+  rounds 72 and 73 you found the box's margins tight, asked whether its edges should align to the text, and could not
+  tell the red rows from the green. Cursor, read from its app on 2026-10-26, puts the diff in a box on the text
+  (margin 4, 1px stroke, radius 6, the editor's ground, sans separator); you picked that over edge to edge (A) and a
+  grey box (B). The status surfaces were near white in light and near solid in dark, so the diff has its own tints.

@@ -280,7 +280,17 @@ rules. The one deliberate difference is the palette cell, which uses the thumb's
 - **Why:** you said the slider circle's outer stroke looked odd; it was see-through, so it showed darker over the colour
   and grey over the panel, changing colour around the circle.
 
+## Lines (current, 2026-10-25)
+
+No rule under the header and none above the saved colours: the area starts a rhythm under the title, and the saved colours start at their heading. Were `border-decorative` (an inset shadow inside the header's 40; a top border on the swatches). This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
+Spacing without the rules (2026-10-26, owner: "make sure the spacing is intentional"): under a header the area starts 16 below the title (the side inset; was 27), and the saved colours' label sits two rhythms (24, compact 16) under the controls (was about 40).
+
 ## Feedback log
+
+- 2026-10-26 · owner: "the spacing/gaps for the components without the divider now look a bit off, can you refine them and make sure the spacing is intentional" → Spacing without the rules (2026-10-26, owner: "make sure the spacing is intentional"): under a header the area starts 16 below the title (the side inset; was 27), and the saved colours' label sits two rhythms (24, compact 16) under the controls (was about 40). Rule: DESIGN_SYSTEM.md, Lines, "Space replaces the line".
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → No rule under the header and none above the saved colours: the area starts a rhythm under the title, and the saved colours start at their heading. Were `border-decorative` (an inset shadow inside the header's 40; a top border on the swatches).
 
 - 2026-09-26 · owner: more controls, a grid swatch picker like iOS, OKLCH, robust selection →
   views, palette grid, channel sliders, OKLCH, contrast band, preview, save → tests (OKLCH
@@ -335,3 +345,9 @@ rules. The one deliberate difference is the palette cell, which uses the thumb's
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-26
+
+- **What changed:** No line under the header, and none above the saved colours.
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light. You approved each one on the dividers comparison page.

@@ -1,6 +1,85 @@
 # Handoff
 
 ## Current state (2026-10-26)
+- **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,
+  panel, plan, queue, separator, shortcut-list (r72), radio, checkbox (r73). Infobox REMOVED (code, styles, manifest,
+  demos, page, test). Round 73 notes page https://claude.ai/artifact/2Lg4zR9oKdhf8XaT7vCVex: Edit summary diff: option C
+  (owner pick, Cursor's): bordered box on the text line, own pink/green tints, sans fold; File upload buttons concentric 4 (hover-only); Description list kept (owner); columns spacing reworked: rows 8 apart, no inset, label column fits (≤40%), value 12 after. Icons person (larger, median) and circle-dashed family (longer dashes) redrawn 2026-10-26, kept approved (review icons leave the main export); summary card parts in CardContent. Picture
+  slot mat 8; gallery picture tiles use an image placeholder.
+- **Picture answers (owner 2026-10-26, page https://claude.ai/artifact/GCcZyYciSsd9hooqBYhSLK v2):** Radio/Checkbox
+  `layout="media"` and `"media-row"` (picture in a 4px mat, concentric corners; the row aligned to its start, so the
+  control, name and meta share one centre); preview cards take the same mat. Setup's header switches picture answers
+  between third (default), half and row (`view:theme-setup-answers`).
+- **Option rows and review (owner 2026-10-26):** a chosen soft row draws the card's selected edge and tint; list rows
+  put the text 12 after the control; RadioGroup `readOnly` (radiogroup + aria-readonly, no selected edge) for Setup's
+  answers. Divider-free spacing rule in DESIGN_SYSTEM.md Lines ("Space replaces the line"). Review: round 72 on
+  KSG5sYR4 (v108), Setup as live parts (`--screens` takes HTML). Before copy: scratchpad/before at a16397fe.
+- **Asset card corners (owner 2026-10-26):** every inner corner concentric (measured, Radius 0–pill × Stroke 0–2); the app's corner and inset hooks no longer reach the gallery specimens (canvas.css tile stage).
+- **Preview frame folded into Asset card (owner 2026-10-26):** Asset card `name` optional (no head without it and
+  actions; containerless = the frame alone, edge at rest, container corner), `aspect="wide"`, `fill="checker"`. The
+  Inspector's Preview (inspector.tsx) is that card. PreviewFrame stays as deprecated code; Asset card back in review.
+- **Dividers (owner 2026-10-26, page https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE):** no lines between a head,
+  foot or section and its content (Color picker, Code block Show more, Panel bar/sections/footer, Command palette footer,
+  Setup, Typography rows); Shortcut list `divided` opt-in; separators and Infobox at `border-decorative`. Rule in
+  DESIGN_SYSTEM.md Lines + cohesion test; nine families back in review. Notes: docs/research/dividers-2026-10-25.
+- **No header rules (owner, compared on https://claude.ai/artifact/914gYc7RXYaRuK8mk2erRb):** Code block, Edit summary,
+  Queue and Plan draw no line under their head; Code block's code starts right under its header (28), Plan's open bar
+  keeps 8 under it (was 16 above a rule). Code block, Edit summary and Queue back in review (Plan already was).
+- **Setup's whole flow (owner: "build the whole chat/onboarding flow"):** the welcome asks "What are you making?"
+  (picks the preview screen), then the pace; the finish ends on the theme as an `html` Code block of the changed
+  `data-area-*` attributes and Prompt suggestions chips (Fine-tune, components, Every detail). Notes in
+  setup-chat-2026-10-25 README, round 4.
+- **Plan steps box, round 2 (owner's five timeline references; research in progress-tracker README "Round 2"):** an
+  item's steps sit in a recessed box again (text column to row edge, padding 4 0, radius-list, `.area-plan__steps` in
+  layers.css's recessed lists), muted and 2 shorter each side; done and cancelled are drawn rings with Checkbox's tick
+  or a cross (no glyph); the rail stops 4 short of each ring. React 567/567.
+- **Owner follow-ups:** Plan's steps have no container (rows under the item, marks on its text column, even 33/36 rhythm); an
+  answer's colour swatch sits in Radio's visual slot so it centres with the radio and meta. The swatch is the
+  Inspector's own mark (`optionMark` → Area's Color swatch, 16 square, the real accent token), not an app circle; Setup's
+  chapter glyphs are gone (headings, review table, tracker head): the Inspector names groups in words, and the glyphs
+  were generic stand-ins, not one specific icon per category. Plan keeps its `icon` prop.
+- **Option rows (owner: "build the filled option rows ... into Radio's card"):** Radio and Checkbox gain `variant="soft"`
+  (control fill, no edge, selection surface when chosen; groups 4 apart), `layout="list"` (control first) and `meta`
+  (trimmed to its cap, centred with the control, inset.css); both reopened to In review. Setup's welcome choice and every
+  answered question are soft list rows (an answer reopens its question); the reply bubbles and `activate` are gone. Plan's
+  steps box: padding 4, `radius-list`.
+- **Plan tracker spacing (owner: "Apply the proposed spacing"):** a Plan with a bar or a rail sits 16 in, title 14 from
+  the top, bar 12 under the title and 16 above the bottom, rail rows 4 apart; the plain tray keeps 12 with Edit summary
+  and Queue. Next idea from the owner's references (Notion Calendar settings rows, a proposal card's vote rows): filled
+  option rows with the control first and a trailing value; Radio card has no trailing slot or control-first row yet.
+- **Component review round 71 (collection `components71`) on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG:** Plan
+  (3 changed, 3 new tiles; Before = main at a16397f) and a "Setup chat" family of 8 screens (light and dark), added by
+  the generator's new `--screens <dir>` flag (PNG tiles plus a README with a Review note). The archived docs build fails
+  on Node 26 (app modules import `tokens.json` without `with { type: "json" }`); built with a loader hook that adds the
+  attribute (`NODE_OPTIONS="--import <register.mjs>"`, a `load` hook setting `importAttributes.type = "json"` for
+  `.json` URLs). Read verdicts with ArtifactData before acting.
+- **Chat refinement pass:** answered questions carry Default / a blue Changed badge at the end; the choice hint's
+  Default is a Badge; Exact value folds behind a chevron; recap heads sit 12 over their tables; the review is a Table
+  sm with chapter glyphs and Changed counts in the info ink.
+- **Plan as a progress tracker, same branch (owner 2026-10-25: "a collapsible and expandable container ... that shows
+  overall progress and added detail"), uncommitted; Plan reopened to In review.** Research:
+  docs/research/progress-tracker-2026-10-25/README.md (Cursor todo tray and segmented bar, Codex "Step 4 / 5" pill,
+  Claude's todo rail, GitHub/Primer ProgressBar and sub-issue ring, Linear's ring-with-pie). Intake: not a new family;
+  Plan gains `bar` (single | segmented: Progress sm segments 2 apart, one progressbar for the plan, stays folded),
+  `PlanItem.meta`, `PlanItem.progress` (the ring) and `count`. Tiles Bar / single, Bar / segmented; spec, docs entry,
+  React test updated. Setup's pinned progress is a folded segmented Plan. Done items with meta (phases) are not
+  struck (owner). Open: naming the current item in the folded head (Cursor does).
+  Density pass (owner: "detailed, dense, and visually balanced"; Claude's Context panel, Linear's activity): Plan's head
+  reads title, chevron, count at the end over the items' meta; Setup's chapter heads carry a glyph and their numbers at
+  the end (Changed in the info ink); recaps are Table sm with no header row on one fixed column grid (setting muted 40%,
+  choice with its swatch, Changed badge); replies drop the screen thumbnail for an inline swatch; chapters 32 apart.
+  One container (owner: "the whole progress data tracker to be in 1 container", an agent-run timeline): Plan gains `rail`,
+  `icon`, item `detail` (chips) and item `items` (steps in an inset box, a recessed ground in layers.css); Setup's tracker
+  is one rail Plan: chapter glyph in the head, chapters on the rail with answers as Badges (changed ones info), the
+  current chapter's questions inset with their answers; it scrolls inside at 50vh.
+- **Setup's chat, `claude/left-panel-chat-design-fd13fa` (owner 2026-10-25: tables, chat responses, "a normal chat
+  experience"; the question "directly in the chat, aligned with the tables ... not inside its own container", after
+  Craft), uncommitted.** Research: docs/research/setup-chat-2026-10-25/README.md (ChatGPT and Claude prose 16/24, tables
+  a step below at 14). Progress is a framed container pinned over the thread; the question is a 20/28 title, its line and
+  numbered choice cards on the thread's edges (1–9 pick, Enter continues); replies carry a picture of the pick; a chapter
+  not being asked folds into a Table recap; the review is a Table of chapters. Charts tried in round 1 were removed at the
+  owner's word. Chat column 440–600. `npm run test:desktop` fails on main too (plain-tile test reads a missing
+  `pages/brand.tsx`).
 - **Slider: motion, three looks, label inside (owner 2026-10-26), branch `claude/slider-component-refinement-ec1559`,
   uncommitted, rebased onto main at 5f15f7e8 (PR #165's field mark and Inspector `SettingBar` kept as `labelPosition="inside"`; `onValueCommit` kept).** The rail, fill and thumb are drawn over the native input (slider.css): every change but a drag eases on
   `fast` (`--_slider-ratio`), a drag follows 1:1 (`data-dragging`), a press lifts the knob (`data-pressed`, Feedback),

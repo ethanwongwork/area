@@ -24,7 +24,7 @@ order.
 
 | Slot | Area | Basis |
 |---|---|---|
-| card | the agent card: Code block's frame, text-sm, one-row head with a rule when open, Menu rows | Plan, Edit summary (peers); Cursor tray rows 13/18, radius 6 |
+| card | the agent card: Code block's frame, text-sm, one-row head with no rule under it (2026-10-25), Menu rows | Plan, Edit summary (peers); Cursor tray rows 13/18, radius 6 |
 | rows | an `ol` with Menu's list padding 4 and ui-row-gap between rows; each row ui-row tall, row inset, row corner, Menu's row gap (gap-row: 12, compact 8); the row plate on hover and focus | Menu (peer) |
 | sending | the text at 60% opacity (`--_sending-opacity`), a Spinner sm in the 16 slot | Codex sending opacity-60 |
 | chevron | closed points along the reading direction (−90°, +90° in RTL), down when open, turns on `fast`; Accordion's hover plate | Plan (peer) |
@@ -33,6 +33,12 @@ order.
 | paused | not a prop or state of Queue: the app passes `title` ("N queued, paused") after the person stops a run, until the next send (`apps/desktop/src/chat/chat.tsx`, `session.queuePaused`) | Codex "Queue paused because you interrupted" |
 
 ## Feedback log
+
+- 2026-10-25 · owner: "Drop the line on Edit summary, Queue and Plan too, and tighten the bar Plan's spacing as shown"
+  (after Code block's header lost its rule; comparison page https://claude.ai/artifact/914gYc7RXYaRuK8mk2erRb) → no
+  seam under the head. Measured head middle to first row middle against the row pitch: Plan and Queue 1.1, Edit
+  summary 1.2, Cursor's to-do tray 1.0 (its stylesheet: header 28, body padding 8, no border), so no spacing change
+  except Plan's open bar (below).
 
 - 2026-10-19 · built. Browser check: a queued message goes when the run finishes; Send now's tooltip first described
   Steer (Cursor's other action) and was corrected.
@@ -98,3 +104,10 @@ summary's row buttons (the row's corner less their inset).
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-25
+
+- **What changed:** The open Queue has no line under its head. The messages start right under "2 queued".
+- **Why:** you dropped the line under Code block's header, then asked for Edit summary, Queue and Plan to match. The
+  first message already sits about a row under the head (Cursor's queue and to-do trays draw no line either), so the
+  spacing stays.

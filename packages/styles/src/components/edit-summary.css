@@ -12,7 +12,7 @@
  *   column  everything starts 12 in: the list's 4 (Menu's) plus the row inset 8, so the head's title and the rows' text
  *           share one edge (Cursor's card header 0 12).
  *   head    one row tall (ui-row); a trailing button sits as far from the end as from the top, (row − control) / 2, as
- *           Code block's header copy does; a rule under it when rows follow.
+ *           Code block's header copy does; no rule under it (2026-10-25).
  *   rows    Menu rows: ui-row tall, the row inset, the row corner, the row plate.
  * ------------------------------------------------------------------------- */
 @layer area.components {
@@ -48,7 +48,9 @@
     min-block-size: calc(var(--area-control-sm) + 2 * var(--_card-end));
     padding-block: var(--_card-end);
     padding-inline: var(--_card-column) var(--_card-end);
-    border-block-end: var(--area-stroke-width) solid var(--area-border-decorative); /* a seam inside the card: Code block's header seam, never darker than the frame (DESIGN_SYSTEM.md, "A rule inside a container is never darker than the container's edge"; owner, round 55) */
+    /* No seam under it (owner 2026-10-25: "Drop the line on Edit summary, Queue and Plan too", after Code block's header
+       lost its rule; Cursor's to-do tray has none): the first file sits 1.2 rows under the head's middle, which is
+       separation enough. Was border-decorative, round 55. */
   }
   .area-edit-summary__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* The counts read as one figure: 4 apart, a line's gap (Step). */
@@ -137,13 +139,17 @@
   .area-edit-summary__file[data-undone] .area-edit-summary__name > span:first-child { text-decoration: line-through; color: var(--area-fg-muted); }
   /* A file's diff under its row: 4 below it (a line's body gap, Step), the list's row break included, as wide as the
      row's plate. */
-  .area-edit-summary__diff { min-inline-size: 0; padding-block: calc(var(--area-space-4) - var(--area-ui-row-gap)); }
+  /* The diff under its file, 4 below the row, in a bordered box whose edges sit on the card's text line (12 in: the
+     list's 4 and the row inset), as Cursor's opened edit (owner, round 73: "Use option C ... a bordered box with its
+     edges on the text, like Cursor"; Cursor's EditToolCallView: margin-top 4, a 1px stroke, radius 6, the editor's
+     ground). Was edge to edge on the card (round 73's A) and a recessed well (round 72). */
+  .area-edit-summary__diff { min-inline-size: 0; margin-inline: var(--area-ui-row-inset); padding-block: calc(var(--area-space-4) - var(--area-ui-row-gap)); }
 
   /* ---- Diff ---- */
   /* Code block sm's metrics and diff paint (code.css: the Inspector's code well), so Area draws one diff: its type and
      leading, its insets, its number start, its + / − marker in the vivid inks and its tints. Numbers, marker and text
-     are columns of one grid (rows are subgrids), so every line's columns line up. Its corner is the row's, concentric
-     with the card's list (12 − 4 = 8). */
+     are columns of one grid (rows are subgrids), so every line's columns line up. Code block's frame: the card edge on
+     the code ground; its corner nests in the card's (the card's corner less the 12 it sits in, floored). */
   .area-diff {
     --_diff-size: var(--area-text-xs-size); /* spec: Code block sm */
     --_diff-leading: calc(var(--area-leading-18) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Code block sm, 18; compact 16 */
@@ -153,7 +159,7 @@
     margin: 0;
     overflow-x: auto;
     border: var(--area-stroke-width) solid var(--area-border-card); /* Code block's frame */
-    border-radius: var(--area-radius-row);
+    border-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) - var(--area-space-4) - var(--area-ui-row-inset)));
     background-color: var(--area-bg-code);
     color: var(--area-fg-default);
     font-family: var(--area-font-mono);
@@ -172,23 +178,29 @@
   }
   .area-diff__lines:not(:has(.area-diff__number)) { grid-template-columns: var(--area-space-8) minmax(max-content, 1fr); }
   .area-diff__line { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
-  .area-diff__line > :first-child { padding-inline-start: var(--area-space-4); } /* spec: Code block sm number start 4 */
+  .area-diff__line > :first-child { padding-inline-start: var(--area-space-4); } /* spec: Code block sm number start 4; Cursor's line-number padding 4 */
   .area-diff__number { color: var(--area-fg-muted); text-align: end; font-variant-numeric: tabular-nums; user-select: none; }
   .area-diff__marker { text-align: center; font-weight: var(--area-weight-strong); user-select: none; }
   .area-diff__text { padding-inline-end: var(--_diff-inline); white-space: pre; }
-  .area-diff__line--added { background-color: var(--area-success-surface); }
-  .area-diff__line--removed { background-color: var(--area-danger-surface); }
+  /* A diff's own tints, the solid status colours mixed into the ground (GitHub's #e6ffec / #ffebe9 in light, about a
+     quarter in dark): the status surfaces were near white in light, so added and removed read alike, and near solid in
+     dark (owner, round 73: "i cant make out the difference between the red and green rows"). */
+  .area-diff__line--added { background-color: light-dark(color-mix(in oklab, var(--area-success-solid) 14%, transparent), color-mix(in oklab, var(--area-success-solid) 24%, transparent)); /* spec */ }
+  .area-diff__line--removed { background-color: light-dark(color-mix(in oklab, var(--area-danger-solid) 12%, transparent), color-mix(in oklab, var(--area-danger-solid) 24%, transparent)); /* spec */ }
   .area-diff__line--added > .area-diff__marker { color: var(--area-fg-success-vivid); }
   .area-diff__line--removed > .area-diff__marker { color: var(--area-fg-danger-vivid); }
-  /* A fold: the unchanged run between hunks, one line on the recessed fill, starting where the numbers do. */
+  /* A fold: the unchanged run between hunks, one muted line in the interface sans on the recessed band, starting where
+     the numbers do (Cursor's separator: sans, the small size, tertiary ink on bg-tertiary; owner's pick, option C, after
+     a round in the mono). */
   .area-diff__fold {
     grid-column: 1 / -1;
-    padding-inline: var(--area-space-4) var(--_diff-inline); /* spec: Code block sm number start 4 */
+    padding-inline: var(--area-space-4) var(--_diff-inline); /* where the numbers start */
     background-color: var(--area-bg-subtle);
     color: var(--area-fg-muted);
     font-family: var(--area-font-sans);
   }
   @media (forced-colors: active) {
+    .area-diff { border: var(--area-stroke-width) solid CanvasText; }
     .area-diff__line--added > .area-diff__marker, .area-diff__line--removed > .area-diff__marker { color: CanvasText; }
   }
 }

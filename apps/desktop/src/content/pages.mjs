@@ -58,11 +58,14 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "plan", name: "Plan", manifest: "plan", imports: "Plan",
-    api: [["items", "{ id, label, status: done | current | pending | cancelled }", "—"], ["title", "the head's name", "\"Plan\""], ["open / defaultOpen / onOpenChange", "folds to its head", "— / true / —"]],
+    api: [["items", "{ id, label, status: done | current | pending | cancelled, progress?: 0–1, meta?, detail?, items? }", "—"], ["title", "the head's name", "\"Plan\""], ["count", "the head's count", "\"N of M\""], ["bar", "single | segmented: a bar under the head", "—"], ["rail", "marks joined by a line, a timeline", "false"], ["icon", "a 16 glyph before the title", "—"], ["open / defaultOpen / onOpenChange", "folds to its head", "— / true / —"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryPlan", note: "Done, now, next and a count, above the composer (Cursor's todo tray, Codex's plan update)."},
       {id: "folded", title: "Folded", demo: "GalleryPlanFolded"},
       {id: "cancelled", title: "Cancelled item", demo: "GalleryPlanCancelled"},
+      {id: "bar", title: "Bar", demo: "GalleryPlanBar", note: "Folded, the bar keeps the progress in view (GitHub's milestone bar, Primer ProgressBar small)."},
+      {id: "segmented", title: "Segmented", demo: "GalleryPlanSegmented", note: "Items as phases, a segment each, with their own counts (Cursor's plan phases, GitHub's segmented ProgressBar)."},
+      {id: "rail", title: "Rail", demo: "GalleryPlanRail", note: "The whole tracker in one container: marks on a rail, values as chips, the current item's steps in an inset box (an agent run's timeline)."},
     ],
   },
   {
@@ -461,21 +464,6 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
-    slug: "infobox", name: "Infobox", exportName: "Infobox", manifest: "infobox",
-    imports: "Infobox, InfoboxSection, InfoboxRow, InfoboxRows",
-    api: [
-      ["title / subtitle", "ReactNode", "—"],
-      ["media", "ReactNode (an image or an Avatar)", "—"],
-      ["action", "ReactNode (one icon Button at the end of the title row)", "—"],
-      ["layout", "columns | stacked", "columns"],
-      ["framed", "boolean (Card's frame)", "false"],
-      ["InfoboxSection title; InfoboxRow label", "ReactNode", "—"],
-    ],
-    examples: [
-      { id: "default", title: "Default", note: "A start-aligned header in the surface title role, then sections of dense label and value rows.", demo: "GalleryInfobox" },
-    ],
-  },
-  {
     slug: "inline-list", name: "Inline list", exportName: "InlineList", manifest: "inlineList",
     imports: "InlineList",
     api: [["separator", "dot | rule | none", "dot"]],
@@ -547,6 +535,7 @@ export const COMPONENT_PAGES = [
     imports: "ShortcutList, ShortcutListItem",
     api: [
       ["title / titleAs", "ReactNode (names the group) / \"h2\"…\"h6\" | \"p\"", "— / h3"],
+      ["divided", "boolean: a rule under each row but the last", "false"],
       ["quiet", "boolean, deprecated and ignored: every key is a keycap", "false"],
       ["ShortcutListItem.label", "ReactNode (what the shortcut does)", "—"],
       ["ShortcutListItem.keys", "string[] (one chord) | string[][] (alternatives)", "—"],
@@ -554,6 +543,7 @@ export const COMPONENT_PAGES = [
     ],
     examples: [
       { id: "default", title: "Default", note: "One row per command: what it does, then its keys at the end as Kbd keycaps. Several lists stack 32 apart.", demo: "GalleryShortcutList" },
+      { id: "divided", title: "Divided", note: "A rule under each row but the last, in the lightest line, as ChatGPT's sheet. Off by default: the rows' height separates them.", demo: "GalleryShortcutListDivided" },
       { id: "dialog", title: "In a dialog", note: "A Keyboard shortcuts sheet, as ChatGPT's (cmd+/) and Figma's Help › Keyboard shortcuts.", demo: "GalleryShortcutListDialog" },
       { id: "alternates", title: "Alternatives and sequences", note: "keys as a list of chords for alternatives (read with \"or\"); shortcut for a KbdGroup pressed in sequence.", demo: "GalleryShortcutListAlternates" },
     ],
@@ -723,7 +713,7 @@ export const COMPONENT_PAGES = [
     slug: "asset-card", name: "Asset card", exportName: "AssetCard", manifest: "assetCard",
     imports: "AssetCard, AssetGrid, AssetGridItem",
     api: [
-      ["name", "the asset's name in the head, one line", "—"],
+      ["name", "the asset's name in the head, one line; leave it out (and actions) for no head: containerless, the frame alone, an inspector's preview", "—"],
       ["actions", "controls at the head's end, nothing else there: Copy for what is used (a component, a colour, a type style, an icon), More for what is managed (an image, a group); their side and corner on the frame's", "—"],
       ["meta", "deprecated and ignored: a detail goes in the asset itself or behind Copy", "—"],
       ["media / mediaAlt", "an image URL (it covers the frame, cropped) or any element, centred on the frame's surface / the image's text alternative", "— / \"\""],
@@ -732,7 +722,8 @@ export const COMPONENT_PAGES = [
       ["selected", "the card's edge in the selection colour (an AssetGrid sets it)", "false"],
       ["interactive", "the card is a control outside an AssetGrid: hover lifts, focus rings, aria-pressed / aria-selected show as selected", "false"],
       ["container", "framed: the card · containerless: no card at rest, the head and asset in the same places; a component's frame shows its edge on hover and selection, an image or group is its own surface and the states ring it", "\"framed\""],
-      ["aspect / mediaRatio", "square, or hug: the card as tall as its head and asset / an image's width over height, so it holds its shape before it loads", "\"square\" / —"],
+      ["aspect / mediaRatio", "square, landscape (5:4), wide (2:1), or hug: the card as tall as its head and asset / an image's width over height, so it holds its shape before it loads", "\"square\" / —"],
+      ["fill", "recessed: the card in the tile tone · raised: the surface · checker: the frame on a transparency checker, a colour over it so its alpha shows", "\"recessed\""],
       ["children / frameProps / headProps", "the frame's own content in place of media / attributes for the frame / for the head (captionProps is a deprecated alias; caption is deprecated and ignored)", "— / — / —"],
       ["AssetGrid: value / onValueChange / onOpen", "the selected card; Enter or a double click opens", "— / — / —"],
       ["AssetGrid: layout / container", "grid: square cards in rows · waterfall: cards hug their assets in columns, each into the shortest / every card's container", "\"grid\" / \"framed\""],
@@ -753,6 +744,9 @@ export const COMPONENT_PAGES = [
       { id: "state-containerless-selected", title: "Containerless, selected", note: "A component's frame shows the selected edge.", demo: "GalleryAssetCardContainerlessSelected" },
       { id: "state-containerless-image-selected", title: "Containerless image, selected", note: "A ring in the selection colour round the image.", demo: "GalleryAssetCardContainerlessImageSelected" },
       { id: "caption-below", title: "Name below", note: "The head under the frame, the card's inset above it.", demo: "GalleryAssetCardCaptionBelow" },
+      { id: "aspect-wide", title: "Wide", note: "A 2:1 frame, for a colour or a banner.", demo: "GalleryAssetCardWide" },
+      { id: "fill-checker", title: "Checker", note: "The frame on a transparency checker, the colour over it so its alpha shows.", demo: "GalleryAssetCardChecker" },
+      { id: "content-frame", title: "Frame alone", note: "Containerless with no name or controls: the frame alone, filling its column, as an inspector's preview of the selection (Preview frame, folded in). Name it with aria-label and role=img.", demo: "GalleryAssetCardFrame" },
       { id: "container-basic", title: "Basic", note: "One surface: the head and the asset on the card's fill, no frame of its own.", demo: "GalleryAssetCardBasic" },
       { id: "fill-raised", title: "Raised", note: "The card in the surface, white in light.", demo: "GalleryAssetCardRaised" },
       { id: "borderless", title: "Borderless", note: "No edge at rest; hover and selection still draw theirs.", demo: "GalleryAssetCardBorderless" },
@@ -837,10 +831,10 @@ export const COMPONENT_PAGES = [
       ["layout", "\"columns\" (a term column, Notion's properties) | \"justified\" (term at the start, value at the end, ChatGPT's settings)", "columns"],
       ["divided / framed", "boolean (a rule between rows) / boolean (Table's frame)", "—"],
       ["DescriptionListItem", "term (ReactNode), icon (16px, decorative), children (the value), and native div props", "—"],
-      ["--area-description-list-term", "CSS length: the term column's width (columns)", "160px"],
+      ["--area-description-list-term", "CSS length: the widest the term column grows; it fits the longest term (columns)", "40%"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "A dl of term and value pairs. Terms sit in a 160px column in the muted ink, with an optional icon; values follow in the default ink and wrap.", demo: "GalleryDescriptionList" },
+      { id: "default", title: "Default", note: "A dl of term and value pairs. Terms sit in a column as wide as the longest one, in the muted ink, with an optional icon; values follow 12 after it in the default ink and wrap. Rows are 8 apart.", demo: "GalleryDescriptionList" },
       { id: "framed", title: "Framed", note: "layout=\"justified\" with divided and framed: facts in a settings page, each value at the row's end.", demo: "GalleryDescriptionListFramed" },
       { id: "rich", title: "Rich values", note: "A value can be any content: a Badge, a person, a Link.", demo: "GalleryDescriptionListRich" },
     ],
@@ -1446,7 +1440,9 @@ export const COMPONENT_PAGES = [
     imports: "Checkbox, CheckboxGroup",
     manifest: "checkbox",
     api: [
-      ["variant", '"card"', "—"],
+      ["variant", '"card" | "soft"', "—"],
+      ["layout", '"row" | "list" | "tile" | "preview" | "media" | "media-row" (with a variant)', '"row"'],
+      ["meta", "ReactNode: a short value at the end", "—"],
       ["size", '"md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
       ["caption / description", "ReactNode", "—"],
@@ -1478,11 +1474,14 @@ export const COMPONENT_PAGES = [
     imports: "Radio, RadioGroup",
     manifest: "radio",
     api: [
+      ["variant", '"card" | "soft"', "—"],
+      ["layout", '"row" | "list" | "tile" | "preview" | "media" | "media-row" (with a variant)', '"row"'],
+      ["meta", "ReactNode: a short value at the end", "—"],
       ["size", '"md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
       ["name", "string", "—"],
       ["description", "ReactNode", "—"],
-      ["RadioGroup", "label, name, value/defaultValue, onValueChange, orientation, description, error", "—"],
+      ["RadioGroup", "label, name, value/defaultValue, onValueChange, orientation, description, error, readOnly (a value shown, not chosen here: no selected edge; radiogroup with aria-readonly)", "—"],
     ],
     examples: [
       { id: "default", title: "Default", demo: "RadioDefault" },

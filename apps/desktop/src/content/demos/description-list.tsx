@@ -1,9 +1,9 @@
 /** Description list gallery specimens: one variant per tile. docs/specs/description-list.md. */
-import { Avatar, Badge, DescriptionList, DescriptionListItem, Link } from "@area/react";
-import { CalendarIcon, CircleDashedIcon, ClockIcon, FolderIcon, PersonIcon, TagIcon } from "@area/icons";
+import { Avatar, Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, DescriptionList, DescriptionListItem, Link } from "@area/react";
+import { CalendarIcon, CircleDashedIcon, ClockIcon, FolderIcon, MoreHorizontalIcon, PersonIcon, TagIcon } from "@area/icons";
 
 /* A page's properties (Notion's columns) and an account's facts (ChatGPT's settings card). */
-const page = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" };
+const page = { inlineSize: "calc(var(--area-space-96) * 4)", flex: "none" }; /* a fixed width: the tile's flex row would shrink a grid list to its narrowest */
 
 export const GalleryDescriptionList = () => (
   <DescriptionList style={page}>
@@ -61,3 +61,27 @@ export const GalleryDescriptionListShowMore = () => (
     <DescriptionListItem term="Label" icon={<ClockIcon />}>2 hours ago</DescriptionListItem>
   </DescriptionList>
 );
+
+/* A subject's summary (the job Infobox did until it was removed, owner 2026-10-26): a Card whose header carries the
+   subject (a picture, a title, a description, one action) and whose content is its facts. */
+export const GalleryDescriptionListSummary = () => (
+  <Card style={{ inlineSize: "calc(var(--area-space-96) * 3)", maxInlineSize: "100%" }}>
+    {/* Card's text parts sit in its content, the text inset from the edge (16; was straight in the card at its 8 media
+        inset, owner 2026-10-26: "the padding on this card is too small"); the list follows the header at the content's
+        block gap, its terms on the header's line. */}
+    <CardContent>
+      <CardHeader action={<Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="More options" icon={<MoreHorizontalIcon />} />}>
+        <span style={{ display: "flex", alignItems: "center", gap: "var(--area-space-12)" }}>
+          <Avatar size="lg" src="images/david-tee.jpg" fallback="DT" alt="" />
+          <span style={{ display: "grid", gap: "var(--area-space-2)" }}><CardTitle>David Tee</CardTitle><CardDescription>Description</CardDescription></span>
+        </span>
+      </CardHeader>
+      <DescriptionList>
+        <DescriptionListItem term="Label">Value</DescriptionListItem>
+        <DescriptionListItem term="Label">October 14, 2026</DescriptionListItem>
+        <DescriptionListItem term="Label"><Link variant="standalone" href="#gallery-description-list-summary">Link</Link></DescriptionListItem>
+      </DescriptionList>
+    </CardContent>
+  </Card>
+);
+

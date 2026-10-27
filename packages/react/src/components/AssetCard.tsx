@@ -14,8 +14,10 @@ import { ListBox, ListBoxItem, type ListBoxProps, type ListBoxItemProps } from "
 type PartProps = HTMLAttributes<HTMLDivElement> & Record<`data-${string}`, string | undefined>;
 
 export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "color"> {
-  /** The asset's name, in the head: one line, then an ellipsis. */
-  name: ReactNode;
+  /** The asset's name, in the head: one line, then an ellipsis. Leave it out, with no `actions`, for no head: the frame
+   *  alone (containerless: an inspector's preview of the selection, filling its column; name it with `aria-label` and
+   *  `role="img"` when what it shows has no name of its own). */
+  name?: ReactNode;
   /**
    * @deprecated The head's end holds controls only (owner, round 58). Put a detail in the asset itself (a type sample's
    * line) or behind a control (a Copy button that copies the value). Ignored.
@@ -52,13 +54,14 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
   container?: "framed" | "basic" | "containerless";
   /** above (the default): the head, its name and controls, over the frame. below: under it. */
   caption?: "above" | "below" | "overlay";
-  /** recessed (the default): the card in bg-subtle. raised: the surface, white in light. */
-  fill?: "recessed" | "raised";
+  /** recessed (the default): the card in bg-subtle. raised: the surface, white in light. checker: the card recessed and
+   *  the frame on a transparency checker, a colour painted over it so its alpha shows. */
+  fill?: "recessed" | "raised" | "checker";
   /** No edge at rest; hover and selection still draw theirs. */
   borderless?: boolean;
   /** square (the default): the frame is 1:1, or an image's own ratio, and the card adds its head. landscape: the same at
-   * 5:4. hug: a component's frame takes its own height. */
-  aspect?: "square" | "landscape" | "hug";
+   * 5:4. wide: 2:1, for a colour or a banner. hug: a component's frame takes its own height. */
+  aspect?: "square" | "landscape" | "hug" | "wide";
   /** An image's width over its height, so it holds its shape before it loads (a waterfall's cards). */
   mediaRatio?: number;
   /** The frame's content as the host lays it out, in place of `media` (an app's specimen stage). */
@@ -87,10 +90,12 @@ export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardPro
   return (
     <div ref={ref} className={assetCardVariants({ layout, container, caption, fill, aspect, interactive, borderless }, className)} data-selected={selected ? "" : undefined}
       style={layout === "color" ? { ...style, "--_asset-color": color } as CSSProperties : style} {...rest}>
-      <div className={join(assetCardVariants.element("head"), headClass)} {...headRest}>
-        <span className={assetCardVariants.element("name")}>{name}</span>
-        {actions ? <div className={assetCardVariants.element("actions")}>{actions}</div> : null}
-      </div>
+      {name != null || actions ? (
+        <div className={join(assetCardVariants.element("head"), headClass)} {...headRest}>
+          {name != null ? <span className={assetCardVariants.element("name")}>{name}</span> : null}
+          {actions ? <div className={assetCardVariants.element("actions")}>{actions}</div> : null}
+        </div>
+      ) : null}
       {/* A frame paints the page tone, so a component inside steps its fills from the page and a raised one lifts from it
           (layers.css); a basic card's frame paints nothing, so it declares the card's own ground (the tile tone, or raised);
           a containerless one, none, the page's ground under it. */}

@@ -253,7 +253,13 @@ The section toggle is not selectable. See [interaction polish](../research/inter
 - **What changed:** Its resting shadow is one tight layer, `0 1px 2px -1px` at 8% (ChatGPT's sm), instead of a soft two-layer haze at 1.5%.
 - **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill) (Rest shadow d). Nothing else on it changed.
 
+## Lines (current, 2026-10-25)
+
+No rule under the bar, between sections or above the footer: the bar's height, a section's inset of space and the next heading separate them (Notion's settings; was Figma's rule midway, `border-decorative`). `bareBar` and `bareFooter` are the default now and deprecated; they stay accepted. A flush resizable panel keeps its edge (a region edge, not a divider). This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
 ## Feedback log
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → No rule under the bar, between sections or above the footer: the bar's height, a section's inset of space and the next heading separate them (Notion's settings; was Figma's rule midway, `border-decorative`). `bareBar` and `bareFooter` are the default now and deprecated; they stay accepted. A flush resizable panel keeps its edge (a region edge, not a divider).
 
 - 2026-09-26 · cohesion audit → no change; `shadow-2` confirmed as an in-flow region, outside
   the floating-lift group → `area--*` captures.
@@ -356,3 +362,9 @@ The section toggle is not selectable. See [interaction polish](../research/inter
 - **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
 - **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
   on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.
+
+## Review note, 2026-10-26
+
+- **What changed:** No lines under the header bar, between sections or above the footer. The app's Inspector uses Panel, so its section lines went too.
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light. You approved each one on the dividers comparison page.

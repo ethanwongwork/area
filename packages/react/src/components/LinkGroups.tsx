@@ -21,7 +21,7 @@ export const LinkGroups = /* @__PURE__ */ forwardRef<HTMLElement, LinkGroupsProp
 ) {
   const id = useId();
   const Heading = `h${level ?? 2}` as "h2";
-  // aria-label wins over the title, as Infobox's and Table of contents' names (DESIGN_SYSTEM.md, Names).
+  // aria-label wins over the title, as Table of contents' name (DESIGN_SYSTEM.md, Names).
   return (
     <nav ref={ref} className={linkGroupsVariants({ divided }, className)} aria-labelledby={title && !ariaLabel ? `${id}-title` : undefined} aria-label={ariaLabel} {...rest}>
       {title ? <Heading className={linkGroupsVariants.element("title")} id={`${id}-title`}>{title}</Heading> : null}

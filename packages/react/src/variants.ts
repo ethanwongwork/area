@@ -169,7 +169,6 @@ export const presenceVariants = /* @__PURE__ */ createVariants(manifests.presenc
 export const referenceListVariants = /* @__PURE__ */ createVariants(manifests.referenceList);
 export const tableOfContentsVariants = /* @__PURE__ */ createVariants(manifests.tableOfContents);
 export const figureVariants = /* @__PURE__ */ createVariants(manifests.figure);
-export const infoboxVariants = /* @__PURE__ */ createVariants(manifests.infobox);
 export const inlineListVariants = /* @__PURE__ */ createVariants(manifests.inlineList);
 export const abbreviationVariants = /* @__PURE__ */ createVariants(manifests.abbreviation);
 export const hatnoteVariants = /* @__PURE__ */ createVariants(manifests.hatnote);

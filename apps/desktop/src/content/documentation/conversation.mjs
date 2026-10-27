@@ -172,7 +172,7 @@ export default {
     // Spec: Decisions, Round 51/52; manifest elements.
     parts: {
       root: "The agent card: a section with Code block's frame, at the card's text size, named by its head.",
-      head: "A button a row tall that folds the list; a rule under it while open.",
+      head: "A button a row tall that folds the list; the messages follow it with no rule between.",
       title: "\"N queued\" by default, in the muted ink; cut short on one line.",
       chevron: "Points down while open, turns when folded; Accordion's hover plate behind it.",
       items: "The ordered list (ol) of waiting messages, in the order they will send; hidden while folded.",
@@ -424,7 +424,7 @@ export default {
     // Spec: Anatomy, Cleanup pass, Round 52; manifest elements.
     parts: {
       root: "The agent card: a section with Code block's frame at the card's text size, named by its title.",
-      head: "One row: the title, the turn's counts, and Undo all and Keep all at the end; a rule under it.",
+      head: "One row: the title, the turn's counts, and Undo all and Keep all at the end; the files follow it with no rule between.",
       title: "The count of files changed.",
       counts: "+N −N with tabular numbers; read as \"N added, N removed\".",
       added: "+N in the success ink.",
@@ -507,7 +507,7 @@ export default {
   plan: {
     // Spec: Job and boundaries; peers.
     instead: [
-      ["A process the person moves through", ["stepper"], "Stepper is the person's progress; a Plan is the agent's, and the agent sets the states."],
+      ["Steps the person moves between", ["stepper"], "Stepper's markers take the person to a step; a Plan reports how far a plan has got, whoever sets its states."],
       ["A checklist the person ticks", ["checkbox"], "Plan items are not controls; the agent marks them."],
       ["What the agent already did", ["step"], "Steps record actions in the transcript; Plan shows what is done, now and next."],
       ["Messages waiting to be sent", ["queue"], "Queue holds the person's messages; Plan holds the agent's tasks."],
@@ -518,24 +518,35 @@ export default {
       ["Do", "Keep one item current at a time: it is the one with the Spinner, in the default ink."],
       ["Do", "Mark an item cancelled when the agent drops it, rather than removing it."],
       ["Do", "Let it fold to its head when space is short: the count keeps the progress on one line."],
+      ["Do", "Add a bar when the plan is long or folds most of the time: single for a list of tasks, segmented when the items are phases with their own counts."],
+      ["Do", "Give an item meta for its own count (\"2 of 4\") and a current item progress, so its segment and its ring fill together."],
+      ["Do", "Pass count when the items are phases of a larger count (\"9 of 14\" questions in 8 chapters)."],
+      ["Do", "Use rail when items carry detail or steps of their own, so the whole tracker reads as one timeline in one container."],
+      ["Don't", "Nest steps more than one level: an item's steps take no steps of their own."],
       ["Don't", "Make items clickable: the plan reports the agent's progress, it isn't a checklist."],
       ["Don't", "Leave it in the transcript after the run; it rides above the composer while the agent works."],
     ],
     // Spec: Anatomy, Cleanup pass, Round 52; manifest elements.
     parts: {
       root: "The agent card: a section with Code block's frame at the card's text size, named by its title.",
-      head: "A button a row tall: the title, the count and the chevron; a rule under it while open.",
+      head: "A button a row tall: the title, the chevron beside it, and the count at the end over the items' meta; the items follow it with no rule between.",
+      icon: "With icon: a 16 glyph before the title in the muted ink.",
       title: "\"Plan\" by default.",
-      count: "\"N of M\": the done items of all items.",
+      count: "\"N of M\": the done items of all items, or the count given.",
       chevron: "Points down while open, turns when folded; Accordion's hover plate behind it.",
+      bar: "With bar: Progress sm's track 12 under the title's line and 16 above the bottom when folded and 8 above the items when open, staying when folded. A plan with a bar or a rail sits 16 in from its edge (the plain tray 12).",
+      segment: "One Progress per item when segmented (one in all when single), 2 apart, filled by the item's share.",
       items: "An ordered list of the plan's items; hidden while folded.",
-      item: "A Menu row: done and cancelled are struck and muted, current in the default ink, pending muted.",
-      mark: "A 16 slot: a check when done, a Spinner when current, a ring when pending, a cross when cancelled.",
+      item: "A Menu row: done and cancelled are struck and muted (with meta, a phase, muted but not struck), current in the default ink, pending muted.",
+      mark: "A 16 slot holding one ring: alone when pending, with a tick when done, with a cross when cancelled; a current item shows a Spinner, or with progress the ring filling as a pie in the bar's fill.",
       text: "The item's words, followed by its status for assistive tech.",
+      meta: "An item's trailing value, muted and tabular at the row's end: its own count, a date.",
+      detail: "Values after the item's words on its line, usually Badges, 8 after the words and 4 apart; they wrap under the words when narrow.",
+      steps: "An item's own steps in a recessed box under its words, from its text column to the row's edge: denser rows, muted unless current, their values on the plan's meta column. Only an open item has one.",
     },
     // Manifest state; source: data-open.
     states: {
-      open: "The items show under the head and the chevron points down; folded, only the head and count are left. Open by default.",
+      open: "The items show under the head and the chevron points down; folded, only the head, the count and any bar are left. Open by default.",
     },
     keyboard: [
       ["Tab", "Moves to the head."],
@@ -544,6 +555,7 @@ export default {
     aria: [
       ["aria-expanded, aria-controls", "On the head, from open, pointing at the list."],
       ["aria-labelledby", "On the section and the list, from the title."],
+      ["role=\"progressbar\"", "On the bar, named by the title, valued 0 to 100 by the whole plan, with the count as its text; the segments are hidden from assistive tech."],
     ],
   },
 

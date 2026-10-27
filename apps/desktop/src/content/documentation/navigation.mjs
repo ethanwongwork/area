@@ -392,7 +392,7 @@ export default {
       text: "The row's label.",
       description: "Muted text after the label, such as a page's parent; it truncates first.",
       empty: "Shown when nothing matches: emptyText, \"No results\" by default.",
-      footer: "Key hints under the list, or your own footer; footer={false} removes it.",
+      footer: "Key hints under the list, with no rule above them, or your own footer; footer={false} removes it.",
       hint: "One static hint: a key and what it does (Move, Open, Close); not a control.",
       keys: "The keycaps of one hint, 2 apart (↑ ↓).",
     },

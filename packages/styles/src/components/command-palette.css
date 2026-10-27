@@ -164,7 +164,10 @@
     /* The keycaps start on the rows' icon column, and the footer keeps that inset above and below (12 + 16 + 12 = the
        40 the plated hints made; owner, 2026-09-28: "is this spacing at the bottom correct?"). */
     padding: var(--_column);
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    /* The hints sit as far under the last row as above the palette's edge (12): the list's own bottom inset counts
+     (owner 2026-10-26: "the spacing/gaps for the components without the divider now look a bit off ... make sure the spacing is intentional"; DESIGN_SYSTEM.md, Lines: space replaces the line; was 16 above, 12 below). */
+    padding-block-start: calc(var(--_column) - var(--_list-inset));
+    /* no rule above it (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; docs/research/dividers-2026-10-25); the search keeps its rule: a field over its results */
     color: var(--area-fg-muted);
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);

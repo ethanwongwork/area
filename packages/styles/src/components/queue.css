@@ -7,7 +7,7 @@
  * (docs/specs/queue.md; composer-additions.md, D).
  *
  * It is the agent card (edit-summary.css, plan.css): Code block's frame, text-sm, a head one row tall with its text 12
- * in and a rule under it when open, and the items as Menu rows with the row plate.
+ * in and no rule under it (2026-10-25), and the items as Menu rows with the row plate.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-queue {
@@ -40,9 +40,9 @@
     text-align: start;
     cursor: pointer;
   }
-  /* Open, the head is a row plus its rule, so the rule never eats into the row (round 52: it centred the chevron's
-     plate half a pixel high). */
-  .area-queue[data-open] > .area-queue__head { min-block-size: calc(var(--area-ui-row) + var(--area-stroke-width)); border-block-end: var(--area-stroke-width) solid var(--area-border-decorative); } /* a seam inside the card: Code block's header seam, never darker than the frame (DESIGN_SYSTEM.md, "A rule inside a container is never darker than the container's edge"; owner, round 55) */
+  /* Open, no seam under the head (owner 2026-10-25: "Drop the line on Edit summary, Queue and Plan too", after Code
+     block's header lost its rule; Cursor's queue and to-do trays have none): the first message sits 1.1 rows under the
+     head's middle. Was a row plus a border-decorative rule (round 55). */
   .area-queue__head:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); border-radius: inherit; }
   /* "2 queued", in the muted ink (Cursor's header "N Queued", tone muted). */
   .area-queue__title { min-inline-size: 0; overflow: hidden; color: var(--area-fg-muted); text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }

@@ -1,17 +1,22 @@
 # Plan spec
 
-**Captures:** none yet; evidence in `docs/research/inspector-chat-2026-10-18/`.
-**Peers:** Stepper (a process the person moves through), Spinner, Checkbox (the drawn box), Step
+**Captures:** none yet; evidence in `docs/research/inspector-chat-2026-10-18/` and
+`docs/research/progress-tracker-2026-10-25/` (the bar, item meta and the ring).
+**Peers:** Stepper (steps the person moves between), Progress (the bar's segments), Spinner, Checkbox (the drawn box), Step
 
 ## Owner decisions
 
 - 2026-10-18: "start Phase 2 … Plan tray".
+- 2026-10-25: "a collapsible and expandable container ... very simple tho, that shows overall progress and added detail.
+  will need to build this component" (references: an onboarding plan, a roadmap card, Codex's step pill). Intake: Plan
+  is the job; it gains a bar, item meta, a ring for a part-done item and a count override.
 
 ## Job and boundaries
 
-The agent's plan for the run, above the composer: what is done, what it is doing now, what is next, with a count
-("2 of 4"). It folds to its head. Not a Stepper (a person's process with steps they visit), not a checklist the person
-ticks (the agent sets the states).
+A plan's progress: what is done, what is happening now, what is next, with a count ("2 of 4") and, optionally, a bar
+that stays when it folds to its head. An agent's plan for the run above the composer, or a person's plan (Setup's
+chapters, an onboarding plan). Not a Stepper (markers that take the person to a step), not a checklist the person ticks
+(the plan's owner sets the states).
 
 ## Variants
 
@@ -19,6 +24,13 @@ ticks (the agent sets the states).
 |---|---|---|---|
 | item status | done, current, pending, cancelled | cancelled: an item the agent dropped stays, struck, with a cross (round 49) | Cursor `todo-list.js` (in progress, pending, done struck; cancelled todos); Codex ✔ / □; Claude Code todos |
 | open | open, folded | the tray folds | Cursor tray, Claude Code todos |
+| bar | none (default), single, segmented | a bar under the head that stays folded: the whole plan's share, or a segment per item filled by its share (2026-10-25) | Cursor ProgressBar (4 high, segments 2 apart); Primer segmented ProgressBar (2 apart); GitHub milestone bar |
+| item meta | any short value | an item's own count or date at the row's end | GitHub "9 of 12"; the references' phase counts; Cursor plan phases |
+| rail | off, on | the marks joined by a line, a timeline, for items with detail or steps (owner 2026-10-25: "the whole progress data tracker ... in 1 container", an agent run's timeline) | the agent-run reference (rail, chips, inset findings); Claude's todo rail |
+| item detail | any inline values | what an item acted on or decided, after its words: chips | the agent-run reference ("Updating time range: [7:00 AM – 8:30 AM]") |
+| item steps | one level of items | an item's own steps in a recessed box under its words, one step quieter and denser than items (2026-10-25: boxed, unboxed, boxed again after the agent panel reference) | the agent panel's results box; Run Details' sub-lines; Cursor's plan phases |
+| icon | a 16 glyph | before the title: what the plan is about, or its state | the agent-run reference ("Analyzing…" with its spinner) |
+| item progress | 0–1 on a current item | its segment fills that far; its mark is the ring filling as a pie | Linear's in-progress ring; GitHub's sub-issue ring; Codex's donut |
 
 ## Sources
 
@@ -27,18 +39,35 @@ ticks (the agent sets the states).
 | cursor | todo tray | `todo-list.js`: gap 10, 14/22, icon slot 14×22; in progress primary, pending quaternary, done struck quaternary; container radius 8 bg-quaternary; header 28, padding 0 12. `Tray.stylex.js`: bg-elevated, radius 12 |
 | codex | plan update | TUI `plan_update_with_note_and_wrapping_snapshot.snap`: "• Updated Plan · 1/4 complete", ✔ / □ |
 | claude-code | todos | `index.css` `.todoList{gap:4px}`, `.todoItem{gap:8px}` |
+| cursor-bar | ProgressBar, segmented | stylex root: height spacing-1 (4), radius xs (2), track stroke-secondary; segmented: gap spacing-0-5 (2), segment radius 1, `flex-grow` by value; fill bg-accent |
+| cursor-tray | todo tray head (2026-10-25) | 28 tall (spacing-7), padding 0 12, gap 8; title 14/22 secondary; count tertiary; body 8 16; folded label `${inProgressTodo.content}` or `${n} of ${m} To-dos Completed` |
+| primer | ProgressBar | `ProgressBar.module.css`: small 5, default 8, large 10, radius 3, items 2 apart; each item `role="progressbar"` |
+| linear | status marks | 14 SVG: a 12 ring, stroke 1.5, an inner pie r 3.5 for how far (todo empty, in progress half, in review three-quarters) |
 
 ## Anatomy
 
 ```
 area-plan                 the agent card: card edge at stroke-width, container corner, bg-surface; text-sm
-  area-plan__head         button (aria-expanded): title, count, chevron; ui-row tall, padding 0 12 (the card column);
-                          a rule under it while open; the chevron's hover plate as far from the end as from the top
+  area-plan--rail         the marks joined by a 1px line in the divider ink, 4 short of each ring; beside a steps box
+  area-plan__head         button (aria-expanded): icon (with icon), title, chevron beside it, count at the end on the meta column; ui-row
+                          tall, padding 0 12 (the card column);
+                          no rule under it (2026-10-25); the chevron's hover
+                          plate as far from the end as from the top
+  area-plan__bar          with bar: role=progressbar for the whole plan; padding 0 12 12 (the card column); stays folded
+    area-plan__segment    a Progress sm (4), one per item (segmented) or one in all (single), 2 apart, aria-hidden
   area-plan__items        ol, padding 4 (Menu's list), ui-row-gap between rows
     area-plan__item       a Menu row that may wrap: first line centred in a row, 16 mark slot + text, gap-row;
                           area-plan__item--done | --current | --pending | --cancelled
-      area-plan__mark     done: check glyph; current: Spinner; pending: a drawn ring; cancelled: a cross
+      area-plan__mark     one 12 ring in the 16 slot: pending the ring; done the ring and Checkbox's tick (muted);
+                          cancelled the ring and a cross; current: Spinner;
+                          area-plan__mark--ring: a current item with progress, the ring filling as a pie
       area-plan__text     the words, then the status for assistive tech
+      area-plan__detail   with detail: inside the text, 8 after the words, its values 4 apart, wrapping when narrow
+      area-plan__meta     with meta: muted, tabular, at the row's end, 8 from the text
+      area-plan__steps    with items: an ol in a box from the item's text column to the item row's edge, 8 under the
+                          words and 4 more than a row's end above the next item; recessed ground (layers.css), padding
+                          4 0, radius-list; its rows keep their 8 inset (marks 8 in, meta on the plan's meta column),
+                          2 shorter each side (29 apart under items 36), muted unless current
 ```
 
 ## Decisions
@@ -46,19 +75,27 @@ area-plan                 the agent card: card edge at stroke-width, container c
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
 | frame, fill, corner | border-card at stroke-width, bg-surface, radius-container | Code block (the agent card) | round 49: one card for Edit summary, Plan and Queue (was a recessed bg-subtle tray with no edge) |
-| head | ui-row tall (28 at Compact), padding 0 12; open, a row plus its rule at stroke-width | cursor header 28, padding 0 12 | round 52: the rule never eats into the row |
+| head | ui-row tall (28 at Compact), padding 0 12; no rule under it | cursor header 28, padding 0 12, no border | owner 2026-10-25 (was a row plus its rule at stroke-width, round 52) |
 | list, items | list padding 4; items are Menu rows (padding-block (ui-row − leading) / 2, row inset), ui-row-gap apart | Menu (peer) | round 49 (were 4 apart on a 22 line); audit 2026-10-19 added Menu's ui-row-gap |
 | mark slot / gap | 16 square, gap-row (12, compact 8) | Menu's row gap; Area's icon slot | the text lands on the list column at every density (audit 2026-10-19; was 8 everywhere, Claude Code's item gap) |
 | current | default ink, Spinner sm | cursor (in progress primary) | — |
 | pending | muted ink, a 1px ring on the control hover edge | cursor quaternary; codex □; peer: Checkbox's rest edge | the control edge vanished on the Plan's subtle fill (L 0.913 on 0.976, browser check 2026-10-19) |
-| done | muted ink, struck through, check glyph | cursor done struck; codex ✔ | — |
-| cancelled | muted ink, struck through, a cross | cursor cancelled todos | round 49 |
+| done | muted ink, struck through; the 12 ring and Checkbox's tick (1.25 line) in the muted ink; with meta (a phase), not struck | cursor done struck, `check-circle`; codex ✔; the references' phases (a check and "Completed") | owner 2026-10-25: a strike on a phase reads as removed; one mark silhouette (was a bare check glyph) |
+| cancelled | muted ink, struck through, the ring and a cross; with meta, not struck | cursor cancelled todos, `x-circle` | round 49; owner 2026-10-25 |
+| steps box | from the item's text column to the item row's edge; recessed (bg-subtle), radius-list, padding 4 0; 8 under the item's line, 4 extra below; rows 2 shorter each side, muted unless current | the agent panel reference (box on the label column, results 30 apart under steps 38, ~8 padding) | owner 2026-10-25: containers back "as long as the padding, alignment and visual balance is right" |
+| tracker room | with a bar or a rail: column 16 (list padding 8 + row inset), head 8 taller (title 14 from the top), bar 12 under the title's line and 16 above the bottom, rail rows 4 apart; the plain tray keeps 12 | Card's 16 text inset; Claude's Context panel (8 text to bar) | owner 2026-10-25: "the padding/margins for the timeline and also the gap between the text and the indicators looks too small" (measured 12 / 7 / 6 / 12, unbalanced) |
+| bar | padding 6 column column folded, 6 column 8 open (the first item 1.1 rows under it); Progress sm (4) segments 2 apart, the selection fill on the track; no rule under it | cursor-bar 4 / 2; primer 2 apart | one bar per plan; Progress is the peer, so the segments are Progress |
+| ring | the pending ring (icon-sm − 4) in the selection fill, a conic pie inside it (icon-sm − 8) to the item's share | linear (ring + inner pie) | the mark and its segment read as one value, in one fill |
+| meta | muted, tabular, margin-inline-start auto, 8 from the text | cursor tray count (tertiary); GitHub's count | — |
 | chevron | 12 glyph, closed points along the reading direction (−90°, +90° in RTL), down when open, turns on `fast` | Accordion, Tree view | audit 2026-10-19 added the RTL mirror |
 
 ## Behavior and accessibility
 
 The head is a button with `aria-expanded`; the list is an `ol` named by the title; each item states its status in
-visually hidden text ("Done", "In progress", "Not started", "Cancelled"), not by mark alone. The Spinner follows Motion 0 and reduced
+visually hidden text ("Done", "In progress", "Not started", "Cancelled"), not by mark alone. With a bar, one
+`role="progressbar"` names itself by the title, values the whole plan 0–100 (single: done of all; segmented: the mean of
+the items' shares) and says the count as `aria-valuetext`; the segments are hidden, so eight phases are not eight bars
+(Primer gives each segment a role; GitHub hides its milestone bar beside its text). The Spinner follows Motion 0 and reduced
 motion.
 
 ## Visual pass
@@ -70,6 +107,41 @@ Seen in the browser preview on 2026-10-19: above the composer while the recorded
 React tests (`packages/react/tests/agent-chat.test.mjs`, 9), the full React suite (495), manifest parity, contracts, app typecheck, playgrounds. In the browser preview (4420), 2026-10-19.
 
 ## Feedback log
+
+- 2026-10-25 · owner: "Drop the line on Edit summary, Queue and Plan too, and tighten the bar Plan's spacing as shown"
+  (after Code block's header lost its rule; comparison page https://claude.ai/artifact/914gYc7RXYaRuK8mk2erRb) → no
+  seam under the head. Measured head middle to first row middle against the row pitch: Plan and Queue 1.1, Edit
+  summary 1.2, Cursor's to-do tray 1.0 (its stylesheet: header 28, body padding 8, no border), so no spacing change
+  except Plan's open bar (below).
+  Plan's open bar keeps 8 under it (was 16 above a rule; 1.3 rows to the first item, now 1.1).
+
+- 2026-10-25 · owner (five agent-timeline references; "i dont mind adding containers back into the tracker as long as
+  the padding, alignment and visual balance is right") → research round 2 (progress-tracker README): a box belongs to
+  payload, an open step's results, or groups with their own head, never to a plain row. Built: the steps box again
+  (on the item's text column, to the row's edge, recessed, padding 4 0, list corner), steps muted and 2 shorter each
+  side, done and cancelled as rings with a tick or cross (one mark family), the rail 4 short of each ring.
+
+- 2026-10-25 · owner: "a collapsible and expandable container ... that shows overall progress and added detail" → bar
+  (single, segmented), item meta and progress (the ring), count; reopened to In review. Gallery tiles Bar / single and
+  Bar / segmented; React test for the bar's one value and hidden segments. Setup's pinned progress is a Plan.
+- 2026-10-25 · owner: "maybe there is no need for a container here" → the steps lose the inset box (no fill, edge or
+  padding; out of layers.css's recessed lists): rows under the item's words, marks on its text column, 33 apart, the
+  next item 36 on as the rail's rows are.
+- 2026-10-25 · owner: "theres too much padding in the gray container, and the corner radius looks too sharp" → the
+  steps box takes Menu's list padding 4 at every room (was the tracker's 8) and the list corner `radius-list` (the
+  row corner plus 4; was the card corner less 8).
+- 2026-10-25 · owner: "Apply the proposed spacing to Plan (16 inset, 12 title to bar, 16 under, rail rows 4 apart)" →
+  applied to the tracker forms (a bar or a rail); the plain to-do tray keeps the agent card's 12 with Edit summary and
+  Queue.
+- 2026-10-25 · owner: "i want the whole progress data tracker to be in 1 container. i basically like this design" (an
+  agent run: a head with its state, steps on a rail, values as chips, nested findings in inset boxes) → `rail`, `icon`,
+  item `detail` and item `items` (one level, in an inset box declared as a recessed ground); an item with detail or
+  steps is not struck. Tile Rail; React test. Setup's tracker is one rail Plan.
+- 2026-10-25 · owner: "keep refining the details, alignment, type size, information density" (Claude's Context
+  panel, an agent timeline, Codex's status, Linear's activity) → the head reads title, chevron, then the count at the
+  end, so the head's count and the items' meta form one column (was title, count, chevron at the end).
+- 2026-10-25 · owner: "drop the strike-through when an item has meta (phases), keep it for plain to-dos" → done and
+  cancelled items with meta keep their mark and muted ink, unstruck.
 
 - 2026-10-18 · built for Phase 2 of the Inspector chat.
 - 2026-10-19 · browser check: pending ring faint (L 0.913 on 0.976) → control hover edge (Checkbox's rest edge); chevron sized.
@@ -94,7 +166,7 @@ The agent chat's shared rules (all five families):
 | Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
-| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
+| Card head | one row tall, no rule under it (2026-10-25); a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
 | Card rows | Menu rows: row height, row inset, row corner, row plate (pressed: bg-component-pressed), Menu's row gap `gap-row` (12, compact 8) so a label after the icon slot lands on the list column, and `ui-row-gap` (2, compact 0) between rows | Menu (`--_menu-gap`, surface.css) |
 | What a line opens | 4 under the line, on a 1px rail with its content 12 in | Cursor content gap 4; Claude Code's rail at 12 |
 | Backplates | one: the row plate under the pointer or focus | Menu |
@@ -111,7 +183,8 @@ plan" plays that part; a folded head that names the current item — no product 
 
 ## Open questions
 
-- Should the folded head name what it is doing now ("Plan · Edit button.css") instead of only the count?
+- Should the folded head name what it is doing now ("Plan · Edit button.css") instead of only the count? Cursor's tray
+  does (bundle 3.27: `${inProgressTodo.content}, ${n} of ${m}`).
 
 ## Review note, 2026-10-19 (round 50)
 
@@ -177,3 +250,27 @@ chevron moves out with it (its 12 column was the cause). Queue's head shares the
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-25
+
+- **What changed:** Plan can now be a whole progress tracker in one container.
+  - A bar under the head stays when it folds: one bar, or a segment per item.
+  - Each item can carry its own count at the row's end ("2 of 4"), values as chips after its words, and its own steps
+    in a recessed box under its words: the box starts at the item's words, the steps are muted and closer together
+    than items, and their values end on the same edge as the items' counts.
+  - Done is now a ring with a tick, cancelled a ring with a cross, so every mark is the same circle. It was a bare
+    check. The rail stops 4 short of each ring and runs on beside a steps box.
+  - `rail` joins the marks with a line, a timeline. `icon` puts a glyph before the title. `count` sets the head's
+    count.
+  - A current item with a known share shows a ring filling, and its segment of the bar fills with it.
+  - The head reads title, chevron, then the count at the end, in line with the items' counts. It was title, count,
+    chevron.
+  - Done items with a count, chips or steps (phases) are not struck through; plain to-dos still are.
+- **Why:** you asked for a simple collapsible tracker of overall progress with detail on demand, then for "the whole
+  progress data tracker ... in 1 container" like the agent-run timeline. Cursor, Codex, GitHub and Linear all keep a
+  one-line summary with a bar or ring that opens to the items
+  (docs/research/progress-tracker-2026-10-25). The box came back after your five timeline references: there, a box
+  holds only an open step's results, and the agent panel's sits on the label column with tighter rows inside.
+- **Also changed (later the same day):** no line under the head or the bar. With a bar, the open plan keeps 8 under the
+  bar instead of 16, so the first item sits as close to the bar as rows sit to each other. You asked for Edit summary,
+  Queue and Plan to match Code block, after comparing them with and without the line.

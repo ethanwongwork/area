@@ -74,9 +74,9 @@ term and value; rules inset 16. Framed columns: frame padding 5 / 10 so text sit
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| columns · term column | 160, padding 6, muted 14/20 (the UI type), 16 icon 6 before the name | Notion | Notion draws its 16 icon in an 18 box (name at 30); Area keeps square 16 icon boxes (inset.css), name at 28 |
-| columns · value | text at 174, default ink | Notion | — |
-| columns · row | 34 = the UI row + 2 (26 compact), 4 apart = 2 × the row gap (0 compact) | Notion 34 / 4 | Compact steps with the UI row tokens |
+| columns · term column | fits the longest term up to 40% (`--area-description-list-term`), no inset, muted 14/20 (the UI type), 16 icon 6 before the name | Infobox's fit-content column (removed); round 73 | Notion's 160 column and 6 cell inset served editable cells with hover plates; Area's list is read-only facts |
+| columns · value | 12 after the term column (gap row; compact 8), default ink, all values in one column | Area's gap row; Infobox's 12 | was Notion's 174 |
+| columns · row | as tall as its text, 8 apart (ui-cluster; compact 6); divided 16 with the rule in the middle | Area's set spacing (items 8 apart) | was Notion's 34 rows 4 apart (owner, round 73: "why is the gaps between lines so large") |
 | justified · row | padding 12 / 16, 24 between, term 14/20 500 default ink, value at the end 14/20 | ChatGPT | ChatGPT's values mix 14/20 and 16/24; Area keeps the UI type |
 | divided · rule | 1px `border-divider`, inset by the row's side padding | ChatGPT (inset 16); peer Table's row rule | — |
 | framed · frame | Table's frame: `border-divider`, `radius-container`, `bg-surface` | Peer Table | ChatGPT's corner 16 and rgb(252) fill; Area's standalone data frame is Table's |
@@ -184,3 +184,18 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 ## Spacing audit (2026-10-17)
 
 Framed insets: the frame's stroke is counted once, so text and rules sit 16 from the frame's outer edge, ChatGPT's measured 16 (capture-compare measures from the shell's border box); both layouts sat 17. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+
+## Review note, 2026-10-26
+
+- **What changed:** the columns layout's spacing. Rows are as tall as their text and 8 apart (6 at compact; 16 when
+  divided), labels and values start on the list's edge (no 6 inset), and the label column fits the longest label (up
+  to 40%) with every value 12 after it. A framed columns list keeps ChatGPT's card inset (12 / 16). A new tile,
+  "Composition / summary": a Card whose header carries the subject and whose body is a Description list (Infobox's
+  job; Infobox is removed), its header and list inside CardContent so its text sits 16 from the card's edge (it sat
+  at 8 straight in the card; owner: "the padding on this card is too small"). The default tile's person and dashed
+  circle icons were redrawn for optical balance (icons.md, "Optical pass, 2026-10-26"). The justified layout is unchanged.
+- **Why:** you kept the component but asked why the padding was so small, why the gaps between lines were so large,
+  and what the gap between labels and values was. All three were Notion's editable properties copied exactly: 34-tall
+  cells 4 apart, the text 6 inside a hover plate Area never draws, and a fixed 160 label column (about 130 of empty
+  space after "Label"). Area's list shows facts, so it now takes Area's set spacing.
+

@@ -293,6 +293,7 @@ export default {
       ["Do", "Put related options in a CheckboxGroup, which owns the legend, the group description and group validation."],
       ["Do", "Use indeterminate on a parent whose children are only partly checked."],
       ["Do", "Use the card variant for a contained option in a list or grid: row for one line, tile for a visual above the label."],
+      ["Do", "Use variant=\"soft\" layout=\"list\" for a settings list of options: filled rows, the control first, meta for what each comes to."],
       ["Do", "Mark a single required option with invalid; put errors about the whole set on CheckboxGroup."],
       ["Don't", "Use a Checkbox for a setting that applies immediately; use Switch."],
       ["Don't", "Use indeterminate as a third choice; it only shows that a parent's children are partly checked."],
@@ -302,6 +303,7 @@ export default {
       root: "The label: the whole row is the hit area, with the box, an optional visual and the label text whose first line centres on the box.",
       control: "The native checkbox, drawn as a square box with a check, or a dash when indeterminate.",
       visual: "An optional decorative icon beside the box, in muted ink; above the label in a tile card.",
+      meta: "With meta: a short value at the option's end, muted and tabular, on the label's first line.",
     },
     // Spec: States.
     states: {
@@ -334,7 +336,13 @@ export default {
       ["Do", "Give the group a visible label; it becomes the fieldset's legend."],
       ["Do", "Use vertical for settings stacks and horizontal for a short inline choice."],
       ["Do", "Use card layout=\"preview\" when each option is best shown as itself (a theme, a layout, a typeface): pass its picture as leadingVisual; the label stays the name."],
+      ["Do", "Use layout=\"media\" when a picture choice also needs its row (the radio, the name, meta), as a chosen picture shown as an answer: the picture in an 8px mat, the row under it."],
+      ["Do", "Use layout=\"media-row\" for the same card in a full-width list: the picture at the row's start (--area-choice-media sets its share, 32%), the row centred beside it."],
+      ["Do", "Set --area-choice-ratio to the picture's ratio (16 / 10, 4 / 3, 1, 3 / 4); a photo or video covers its frame, and auto keeps the image's own ratio."],
+      ["Do", "Use variant=\"soft\" layout=\"list\" for a settings list of options (Notion Calendar's): filled rows 4 apart, the control first and the text 12 after it, the chosen one drawing the selected edge, and meta for what each comes to (\"11:24 AM\")."],
+      ["Do", "Use readOnly on the group to show a value chosen elsewhere (a past answer in a conversation): the chosen row keeps its dot and fill without the selected edge, and the group is a radiogroup with aria-readonly."],
       ["Do", "Report a problem with the choice through the group's error, which marks every option."],
+      ["Don't", "Put a long description in meta; it is one short value. Use the caption."],
       ["Don't", "Use a single Radio on its own; once chosen it can't be cleared. Use a Checkbox."],
       ["Don't", "Give a Radio its own name inside a RadioGroup; it overrides the group's shared name and splits the set."],
     ],
@@ -343,6 +351,7 @@ export default {
       root: "The label: the whole row is the hit area, with the circle, an optional visual and the label text whose first line centres on the circle.",
       control: "The native radio, drawn as a circle; a centred dot appears when it is chosen.",
       visual: "An optional decorative icon beside the circle, in muted ink.",
+      meta: "With meta: a short value at the option's end, muted and tabular, centred on the label's first line with the circle.",
     },
     // Spec: States.
     states: {

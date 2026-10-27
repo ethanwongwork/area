@@ -126,8 +126,55 @@ test("a Plan counts what is done and says each item's state", () => {
   assert.match(html, /area-plan__item--current[^]*, In progress/);
   assert.match(html, /area-plan__item--pending[^]*, Not started/);
   const cancelled = renderToString(h(Plan, { items: [{ id: "1", label: "One", status: "cancelled" }] }));
-  assert.match(cancelled, /area-plan__item--cancelled[^]*data-area-glyph="dismiss"[^]*, Cancelled/);
+  assert.match(cancelled, /area-plan__item--cancelled[^]*, Cancelled/);
+  // Done, cancelled and not started are rings drawn in CSS (one mark family); only a current item without a share spins.
+  assert.doesNotMatch(html + cancelled, /area-plan__mark[^>]*>(<!-- -->)?<svg/);
+  assert.match(html, /area-plan__item--current"><span class="area-plan__mark"[^>]*><span [^>]*area-spinner/);
   assert.match(renderToString(h(Plan, { items: [], defaultOpen: false })), /aria-expanded="false"[^]*hidden=""/);
+});
+
+test("a Plan's bar is one progress bar for the whole plan; its segments and items show each share", () => {
+  const items = [
+    { id: "1", label: "One", status: "done", meta: "3 of 3" },
+    { id: "2", label: "Two", status: "current", progress: 0.5, meta: "2 of 4" },
+    { id: "3", label: "Three", status: "pending" },
+    { id: "4", label: "Four", status: "pending" },
+  ];
+  assert.doesNotMatch(renderToString(h(Plan, { items })), /area-plan__bar/);
+  const single = renderToString(h(Plan, { items, bar: "single" }));
+  assert.match(single, /class="area-plan area-plan--single"/);
+  assert.match(single, /class="area-plan__bar" role="progressbar"[^>]*aria-valuenow="25"[^>]*aria-valuetext="1 of 4"/);
+  assert.equal(single.match(/area-plan__segment/g).length, 1);
+  const segmented = renderToString(h(Plan, { items, bar: "segmented", count: "5 of 12", defaultOpen: false }));
+  assert.match(segmented, /<span class="area-plan__count">5 of 12<\/span>/);
+  // (1 + 0.5 + 0 + 0) / 4: the segments' mean.
+  assert.match(segmented, /aria-valuenow="38"/);
+  assert.equal(segmented.match(/area-plan__segment/g).length, 4);
+  assert.equal(segmented.match(/role="progressbar"/g).length, 5, "the bar plus four hidden segments");
+  assert.equal(segmented.match(/aria-hidden="true" role="progressbar"|role="progressbar"[^>]*aria-hidden="true"/g).length, 4);
+  // The bar stays when folded; the list hides.
+  assert.match(segmented, /area-plan__bar[^]*hidden=""/);
+  assert.match(segmented, /area-plan__mark area-plan__mark--ring" aria-hidden="true" style="--_plan-item-progress:0.5"/);
+  assert.match(segmented, /<span class="area-plan__meta">2 of 4<\/span>/);
+  assert.doesNotMatch(segmented, /area-plan__item--current[^]*area-spinner[^]*area-plan__item--pending/);
+});
+
+test("a Plan on a rail holds its items' detail and the current item's steps in one container", () => {
+  const html = renderToString(h(Plan, { rail: true, title: "Title", icon: h("svg", { "data-test": "icon" }), items: [
+    { id: "1", label: "One", status: "done", detail: h("span", { className: "chip" }, "Value") },
+    { id: "2", label: "Two", status: "current", progress: 0.5, items: [
+      { id: "2a", label: "Step one", status: "done", meta: "Value", items: [{ id: "x", label: "Too deep", status: "pending" }] },
+      { id: "2b", label: "Step two", status: "pending" },
+    ] },
+  ] }));
+  assert.match(html, /class="area-plan area-plan--none area-plan--rail"/);
+  assert.match(html, /<span class="area-plan__icon" aria-hidden="true"><svg data-test="icon"><\/svg><\/span><span id="[^"]+" class="area-plan__title">Title/);
+  // Detail sits in the item's words, before its status for assistive tech.
+  assert.match(html, /One<span class="area-plan__detail"><span class="chip">Value<\/span><\/span><span class="area-sr-only">, Done/);
+  // One level of steps, in an ordered list inside the current item.
+  assert.match(html, /area-plan__item--current[^]*<ol class="area-plan__steps"><li class="area-plan__item area-plan__item--done">[^]*Step one[^]*Value[^]*Step two/);
+  assert.equal(html.match(/area-plan__steps/g).length, 1);
+  assert.doesNotMatch(html, /Too deep/);
 });
 
 test("a Turn notice is a status, or an alert when the turn failed", () => {

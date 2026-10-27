@@ -1,5 +1,6 @@
-// PreviewFrame: the well at the head of an inspector that shows the selected item: an icon large, an image contained
-// whole, or a colour filling it. Spec: docs/specs/preview-frame.md.
+// PreviewFrame (deprecated 2026-10-26): the well at the head of an inspector that shows the selected item. Folded into
+// AssetCard: a containerless AssetCard with no name is the frame alone (aspect square, landscape or wide; fill checker for
+// transparency; color to paint it). Kept so existing markup keeps working. Spec: docs/specs/preview-frame.md.
 import { forwardRef } from "react";
 import type { CSSProperties, HTMLAttributes } from "react";
 import { previewFrameVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -17,6 +18,7 @@ export interface PreviewFrameProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   label?: string;
 }
 
+/** @deprecated Use `<AssetCard container="containerless">` with no `name`: the frame alone (owner, 2026-10-26). */
 export const PreviewFrame = /* @__PURE__ */ forwardRef<HTMLDivElement, PreviewFrameProps>(function PreviewFrame(
   { aspect, ground, color, label, className, style, children, ...rest }, ref,
 ) {

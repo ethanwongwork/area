@@ -72,3 +72,12 @@ test("CheckboxGroup success and warning retain validation descriptions", () => {
     assert.match(html, /area-checkbox-group__validation" id="[^"]+">Selection saved/);
   }
 });
+
+test("Checkbox soft list puts its meta at the end, after the label", () => {
+  const html = renderToString(h(Checkbox, { variant: "soft", layout: "list", label: "Essentials", caption: "The choices that change the most", meta: "14 questions" }));
+  assert.match(html, /class="area-checkbox area-checkbox--soft area-checkbox--list area-checkbox--md"/);
+  assert.match(html, /area-choice-label__title">Essentials[^]*<span class="area-checkbox__meta">14 questions<\/span><\/label>/);
+  // No meta, no element; layout only with a variant.
+  assert.doesNotMatch(renderToString(h(Checkbox, { label: "One" })), /__meta/);
+  assert.doesNotMatch(renderToString(h(Checkbox, { label: "One", layout: "list" })), /--list/);
+});

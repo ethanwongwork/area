@@ -72,10 +72,11 @@ actions (Card), a framed preview of a page at its own size (Preview frame).
 | container | framed (default): the card · containerless: no card at rest (no fill, edge or shadow), the head and the frame in the same places; a component's frame shows the hovered edge on hover and the selected edge when selected; an image or group is its own surface and selection rings it (2, `stroke-selected`) | Owner 2026-10-19 (main): containerless views | Pinterest, Cosmos |
 | caption | above (default): the head over the frame · below: the head under it, the card's inset above the frame · overlay: the frame fills the card and the name shows on it as a plate at its bottom start (the raised surface, control-sm tall, a pill, `shadow-control`, padded as far across as its height leaves over the cap, so the name keeps the card's name inset both ways), fading in on hover, shown for focus and where nothing hovers (owner 2026-10-24: "have names/titles appear on hover"; Bencho's block gallery: a white 94% pill 14 in) | Owner 2026-10-22: "different placements of the text, inside the card, outside the card" | Spline's file grid (name under the asset) |
 | container (basic) | basic: one surface, the head and the asset on the card's fill, no inset, no frame of its own and no divider; Card's corner | Owner 2026-10-22: "no divider lines across … maybe just a basic container would work" | A gallery's tile (the owner's references) |
-| fill | recessed (default): bg-subtle · raised: bg-surface, white in light; the frame of a basic card declares the same ground | Owner 2026-10-22: "playing with the fill and stroke" | — |
+| fill | recessed (default): bg-subtle · raised: bg-surface, white in light · checker: the frame on Color swatch's transparency checker (8 cells, 16% ink on the frame tone), a colour painted over it so its alpha shows (Preview frame's, folded in 2026-10-26; Zeplin's and Figma's export previews); the frame of a basic card declares the same ground | Owner 2026-10-22: "playing with the fill and stroke" | — |
 | borderless | off · on: no edge at rest, its width kept; hover and selection still draw | Owner 2026-10-22: "playing with the fill and stroke" | — |
-| aspect | square (default) · landscape: the frame 5:4, an image at its own ratio · hug: the card as tall as its head and its asset at its width (an image at `mediaRatio`, a group and a colour square) | Owner 2026-10-19 (main): "a waterfall view that hugs the size of assets"; landscape owner 2026-10-22: "update the aspect ratio of the asset cards" | Pinterest's board; landscape: a gallery's media, 195 × 158 (the owner's reference, 2026-10-22) |
+| aspect | square (default) · landscape: the frame 5:4, an image at its own ratio · wide: the frame 2:1, for a colour or a banner (Preview frame's, folded in 2026-10-26) · hug: the card as tall as its head and its asset at its width (an image at `mediaRatio`, a group and a colour square) | Owner 2026-10-19 (main): "a waterfall view that hugs the size of assets"; landscape owner 2026-10-22: "update the aspect ratio of the asset cards" | Pinterest's board; landscape: a gallery's media, 195 × 158 (the owner's reference, 2026-10-22) |
 | grid layout | grid (default): square cards in rows · waterfall: hugging cards in columns of the least width, each into the shortest column in reading order | Owner 2026-10-19 (main) | Pinterest's board, Cosmos, Savee |
+| content (no head) | no `name` and no `actions`: no head. Containerless, the card is its frame alone: no inset, the frame filling its column at its aspect, its edge (`border-divider` at `stroke-width`) shown at rest and the container corner, since nothing carries it; framed or basic, the card's inset on all four sides | owner 2026-10-26: "Fold Preview frame into Asset card: add the wide aspect, a checker fill and an unnamed containerless frame, move the Inspector to it, and deprecate Preview frame": Preview frame folded in; the app's Inspector previews | Figma's and Penpot's asset tiles; Polaris Thumbnail |
 
 `layout` is derived from the content, never passed. The extended kinds are elements, so they need no axis: a type
 style (its sample, size and leading as `meta`), an icon (the glyph at a native size), a setting's option (drawn
@@ -216,6 +217,19 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
   lists the frame among the required lines.
 
 ## Feedback log
+
+- 2026-10-26 · owner: "can you make sure that the inset corner for the layers is accurately applied" → measured every
+  tile (frame and group cells) against the card's corner less the gap at each corner where both gaps match, at Radius
+  12, 0, 4, 8 and pill and Stroke 0, 1 and 2. Three fixes:
+  - **The app's hooks leaked into the specimens:** `--area-asset-card-corner` and `--area-asset-card-name-inset`, set
+    on the Canvas for the gallery's own tiles, reached the Asset cards drawn in them. The gallery showed the app's 16
+    corner and 16 inset, and a group's cells fell to the 2 floor. The tile stage resets both (canvas.css).
+  - **Basic:** the frame (invisible, but it clips an image) takes the concentric corner, not 0.
+  - **The frame alone:** takes the card's corner. Also, the edge always counts in the frame's corner; only the inset
+    follows `radius-concentric`, so a card held at a corner at Square keeps its frame on its inner curve.
+  Now every corner is concentric at every combination measured.
+
+- 2026-10-26 · owner 2026-10-26: "Fold Preview frame into Asset card: add the wide aspect, a checker fill and an unnamed containerless frame, move the Inspector to it, and deprecate Preview frame" → `name` optional (no head without it and controls), `aspect="wide"` (2:1), `fill="checker"`; the frame alone keeps its edge at rest and takes the container corner. The Inspector's preview (Icons, Color, Typography, Imagery, Theme) is this card. Tiles Aspect / wide, Fill / checker, Content / frame alone; React tests.
 
 - 2026-10-21 · owner: "is the stroke on the inside frame and outside container the same? i think they should be the same
   or more consistent" → they were not: the card took Card's `border-card` (#ee light, 1.16:1 on the page) and the frame
@@ -373,3 +387,26 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
   outranks the rule hiding them.
 - **Why:** the owner asked what had happened to the Copy button on the component cards. It was still there, named
   and clickable, but invisible since overlay became the Components default (PR #160).
+
+## Review note, 2026-10-26
+
+- **What changed:** Asset card took over Preview frame's job:
+  - With no name and no controls, it has no head. Containerless, it is the frame alone: it fills its column and keeps
+    its edge at rest.
+  - A wide 2:1 shape.
+  - A checker fill, which shows transparency under a colour.
+  - The Inspector's preview at the top of Icons, Color, Typography, Imagery and Theme now uses it.
+- **Why:** you chose to fold Preview frame into Asset card. They drew the same frame twice, and Preview frame had one
+  use.
+- **Differences from Preview frame:**
+  - Landscape is Asset card's 5:4, not 4:3.
+  - The edge is the frame's own (`border-divider`), not Card's lighter one.
+  - Content sits 12 in, as every asset does.
+
+## Review note, 2026-10-26 (corners)
+
+- **What changed:** the inner frame's corner now follows the card's at every corner and stroke setting. The gallery
+  shows Asset card as it ships: its own corner and its 4 inset. Before, it took the app's 16, so a group's cells sat 16
+  in with near-square corners.
+- **Why:** you asked to make sure the inset corner is applied accurately. Measuring every tile found the app's corner
+  hook leaking into the specimens, a basic card's square frame, and the frame alone rounder than its card.

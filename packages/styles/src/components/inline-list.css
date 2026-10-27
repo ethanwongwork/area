@@ -34,7 +34,7 @@
     content: "";
     inline-size: var(--area-stroke-width);
     block-size: 1em;
-    background-color: var(--area-border-divider);
+    background-color: var(--area-border-decorative); /* the lightest line, border-decorative (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; "dividers that are inset to have a very light subtle stroke by default"). Was border-divider */
   }
   /* spec: GitHub's metadata row, 16 between items. */
   .area-inline-list--none { column-gap: var(--area-space-16); }
