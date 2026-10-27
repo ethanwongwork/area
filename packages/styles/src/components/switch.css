@@ -164,6 +164,12 @@
   .area-switch--start .area-switch__loading,
   .area-switch--full-width .area-switch__loading { order: -1; }
   .area-switch--full-width { display: flex; inline-size: 100%; }
+  /* A panel's switch row (owner 2026-10-27) is a settings row: a small control's height, as the fields beside it (a
+     row is its control's height, field.css; an md track, 18 to 20, sits inside it), its track and label on the row's
+     centre, and its label in the muted ink of a horizontal Field's label (field.css), so the row's name reads as every
+     other row's. */
+  .area-panel .area-switch--full-width:not(:has(.area-switch__description)) { min-block-size: var(--area-control-sm); align-items: center; }
+  .area-panel .area-switch--full-width .area-switch__label { color: var(--area-fg-muted); }
   .area-switch--full-width .area-switch__text { order: -2; flex: 1; }
 
   /* Reduced motion and data-area-motion="0" zero every duration token (emit/css.ts), so the

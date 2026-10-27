@@ -1,6 +1,17 @@
 # Handoff
 
-## Current state (2026-10-26)
+## Current state (2026-10-27)
+- **Inspector rows and sliders, branch `claude/project-status-electron-5fd266` (owner 2026-10-27):** every setting bar
+  is one row: name in the label column, the label-inside bar without text, a soft value field 4–5ch wide (worded values
+  show a signed number: Temperature -25, Shade +57; Hue 200°). Slider gains `gradient` (Temperature, Shade, Hue troughs);
+  bars of 3–12 steps show step dots. Label-inside bar: empty at min, no grip at either end. Field gains `labelAction`
+  (dimmed rows' reasons are Toggletips, no captions) and `orientation="auto"` (beside if it fits, else under).
+  Panel rows are their control's height, 8 apart; a panel's Switch row is muted and 26 tall (Brand colours switch md).
+  Segmented's track lost its ring (soft fields' edge under More). Headings: "Where it paints" → Emphasis; Status colours
+  → Status. Segmented, Switch, Field back in review (with Slider). Sheets in docs/research/*-2026-10-27.png.
+- **Next, after `claude/component-interaction-visual-polish-e45c8f` lands (owner: wait for it):** build Stroke › Frames
+  and Stroke › Controls from docs/research/control-edges-2026-10-27/README.md (open decisions listed there). Both
+  sessions edit `component-status.mjs`, `primitives.tsx` (different components) and `toggletip.md`.
 - **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,
   panel, plan, queue, separator, shortcut-list (r72), radio, checkbox (r73). Infobox REMOVED (code, styles, manifest,
   demos, page, test). Round 73 notes page https://claude.ai/artifact/2Lg4zR9oKdhf8XaT7vCVex: Edit summary diff: option C

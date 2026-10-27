@@ -117,7 +117,7 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   bar("solid-light", value => depth(value), { hint: "How light or deep accent buttons and checked marks are; their label always stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
   bar("solid-dark", value => depth(value), { hint: "How light or deep accent buttons and checked marks are; their label always stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
   bar("label-tint", value => percent(value, 4), { hint: "How much of the accent's colour the text on an accent button takes; it stays readable" }),
-  // Where it paints: the accent on buttons and on selection, the status tones, and the accessibility level.
+  // Emphasis: the accent on buttons and on selection, the status tones, and the accessibility level.
   { axis: "action", kind: "segmented", label: label("action"), hint: "The colour of primary buttons", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: label("selection"), hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "status-colours", kind: "segmented", label: label("status-colours"), hint: "Red, amber, green and blue messages and badges: in their full colour, or muted to the accent's Saturation", defaultValue: DEFAULT_AXES["status-colours"], items: [{ value: "fixed", label: "Vivid" }, { value: "match", label: "Muted" }] },

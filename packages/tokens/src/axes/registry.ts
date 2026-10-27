@@ -82,7 +82,9 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
   { heading: "Page", settings: ["theme", "ground-light", "ground-dark", "neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark"] },
   // The colour, then how deep and how saturated it is (owner, 2026-10-25), then its label.
   { heading: "Accent", settings: ["accent", "solid-light", "solid-dark", "accent-strength", "label-tint"] },
-  { heading: "Where it paints", settings: ["action", "selection", "status-colours", "contrast"] },
+  // Emphasis (owner 2026-10-27: "avoid long phrases like where it paints"; was "Where it paints"): how strongly things
+  // stand out, the accent on buttons and selection, the status tones, and contrast.
+  { heading: "Emphasis", settings: ["action", "selection", "status-colours", "contrast"] },
   { heading: "Size", settings: ["type", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },
   { heading: "Stroke", settings: ["surface", "stroke"] },

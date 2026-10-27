@@ -27,6 +27,17 @@
     color: var(--area-fg-default);
   }
 
+  /* The label and its action (`labelAction`, a Toggletip) side by side, the action 4 after the label's text, both on
+     the label's line (owner 2026-10-27). The head takes the label's place in every layout. */
+  .area-field__head {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    min-inline-size: 0;
+  }
+  /* The label keeps to one line and ends in an ellipsis before it wraps, so the action stays right after its text. */
+  .area-field__head > .area-field__label { display: block; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
   /* Marked aria-hidden in the markup; the accessible name carries `required` instead. */
   .area-field__required {
     color: var(--area-field-error-color);
@@ -73,7 +84,8 @@
   .area-field__validation[data-tone="warning"] { color: var(--area-fg-warning-vivid); }
 
   /* Keep instructions and validation readable; the child control owns disabled paint. */
-  .area-field[data-disabled] > .area-field__label {
+  .area-field[data-disabled] > .area-field__label,
+  .area-field[data-disabled] > .area-field__head > .area-field__label {
     color: var(--area-fg-muted);
   }
 
@@ -92,17 +104,46 @@
     max-inline-size: 100%;
   }
 
+  /*
+   * Auto (owner 2026-10-27: "can there be more logic around that, not just when a segmented control has too many
+   * options"): beside the label while the control fits beside it at its natural width (max-content), under it when it
+   * does not. A wrapping row, so the choice follows the panel's width, the type size and the control's content, with no
+   * script. Beside, the label takes the horizontal row's column, so auto and horizontal rows share one control edge; under,
+   * the control takes the whole row, a vertical Field's stack gap below the label. Messages sit under the control.
+   */
+  .area-field--auto {
+    --_label-share: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--area-ui-cluster);
+    row-gap: var(--area-ui-stack);
+  }
+  .area-field--auto > :is(.area-field__label, .area-field__head) { flex: 0 0 var(--_label-share); font-weight: var(--area-weight-regular); color: var(--area-fg-muted); }
+  .area-field--auto > .area-field__head > .area-field__label { color: var(--area-fg-muted); }
+  .area-field--auto > :not(.area-field__label, .area-field__head, .area-field__description, .area-field__validation, .area-field__error, .area-field__count) { flex: 1 1 0; min-inline-size: max-content; }
+  .area-field--auto > :is(.area-field__description, .area-field__validation, .area-field__error, .area-field__count) { flex: 0 0 100%; }
+  .area-panel .area-field--auto {
+    --_label-share: calc((100% - var(--area-ui-cluster)) * 0.4);
+    min-block-size: var(--area-control-sm);
+  }
+
   /* Panels are the deliberate full-row exception: their control edges align. */
   .area-panel .area-field--horizontal,
   .area-panel .area-field--inline {
     --_columns: minmax(0, 1fr) minmax(0, 1.5fr);
 
     inline-size: auto;
-    min-block-size: var(--_row);
+    /* A row is as tall as its control (owner 2026-10-27: "rows 8 apart"): the panel's gap is then the space between
+       controls, 8, as Figma's inspector (24 fields in 32 rows). A row of text alone keeps a small control's height. Was
+       the panel's md row (30), which left sm controls 12 apart. */
+    min-block-size: var(--area-control-sm);
   }
 
   .area-field--horizontal > .area-field__label,
-  .area-field--inline > .area-field__label {
+  .area-field--inline > .area-field__label,
+  :is(.area-field--horizontal, .area-field--inline) > .area-field__head > .area-field__label {
     font-weight: var(--area-weight-regular);
     color: var(--area-fg-muted);
   }

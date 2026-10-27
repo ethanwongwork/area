@@ -33,6 +33,12 @@ interface FieldControlProps extends AriaAttributes {
 
 export interface FieldProps extends Div {
   label?: ReactNode;
+  /**
+   * Beside the label, after it: a Toggletip that explains the setting, or another small action. It sits outside the
+   * `<label>`, so its name never joins the control's (owner 2026-10-27; Fluent's InfoLabel, the Toggletip spec's open
+   * question 1).
+   */
+  labelAction?: ReactNode;
   description?: ReactNode;
   /**
    * A validation message, painted by `validationStatus`. Without a status it is an error (sets
@@ -46,6 +52,11 @@ export interface FieldProps extends Div {
   disabled?: boolean;
   /** Explicitly overrides the generated control id. */
   htmlFor?: string;
+  /**
+   * `vertical` (default): the label over the control. `horizontal`: beside it. `auto`: beside it while the control fits
+   * the control column at its natural width, under it when it does not, so a row reflows with the panel's width, the
+   * type size and the control's content, never with its value (owner 2026-10-27).
+   */
   orientation?: FieldOrientation;
   /** Visually hides the label while keeping it as the control's accessible name. */
   visuallyHiddenLabel?: boolean;
@@ -81,6 +92,7 @@ export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(func
     error,
     required,
     disabled,
+    labelAction,
     htmlFor,
     orientation,
     visuallyHiddenLabel,
@@ -150,7 +162,19 @@ export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(func
       {...(disabled ? { "data-disabled": "" } : {})}
       {...rest}
     >
-      {hasContent(label) ? (
+      {hasContent(label) && hasContent(labelAction) ? (
+        <span className="area-field__head">
+          <label
+            id={labelId}
+            className={cx("area-field__label", visuallyHiddenLabel && "area-sr-only")}
+            htmlFor={controlId}
+          >
+            {label}
+            {required ? <span className="area-field__required" aria-hidden="true">*</span> : null}
+          </label>
+          {labelAction}
+        </span>
+      ) : hasContent(label) ? (
         <label
           id={labelId}
           className={cx("area-field__label", visuallyHiddenLabel && "area-sr-only")}
