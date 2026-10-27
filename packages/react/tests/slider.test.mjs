@@ -158,3 +158,15 @@ test("origin fills from a neutral middle to the value, either way, and is absent
   assert.match(css, /--_lo: min\(var\(--_origin\), var\(--_slider-ratio\)\)/);
   assert.match(css, /--_hi: max\(var\(--_origin\), var\(--_slider-ratio\)\)/);
 });
+
+// Gradient (owner 2026-10-27, the Inspector's Temperature, Shade and Hue): the trough is the range's own colours.
+test("a gradient paints the trough, drops the fill and keeps the grip at both ends", () => {
+  const html = render({ "aria-label": "Temperature", labelPosition: "inside", min: -8, max: 8, value: 0, gradient: "linear-gradient(to right, blue, white, yellow)" });
+  assert.match(html, /data-gradient=""/);
+  assert.match(html, /--_gradient:linear-gradient\(to right, blue, white, yellow\)/);
+  assert.doesNotMatch(render({ "aria-label": "Plain", value: 0 }), /data-gradient/);
+  const css = readFileSync(new URL("../../styles/src/components/slider.css", import.meta.url), "utf8");
+  assert.match(css, /\.area-slider\[data-gradient\] \.area-slider__rail \{ background-image: var\(--_gradient\); \}/);
+  assert.match(css, /\.area-slider\[data-gradient\] :is\(\.area-slider__fill, \.area-slider__buffer, \.area-slider__marks\) \{ display: none; \}/);
+  assert.match(css, /\.area-slider--bar\[data-gradient\] \.area-slider__thumb::before \{\s*opacity: 1;/);
+});

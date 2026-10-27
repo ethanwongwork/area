@@ -15,7 +15,7 @@ what it measures.
 
 The registry is also the source of every setting's name and place (owner, 2026-10-19: "i want the axises to be the
 source of truth"). `SETTING_GROUPS` puts each axis and the two scoped settings (Contrast, Pills) under one heading
-(Page, Accent, Where it paints, Size, Shape, Stroke, Shadow, States, Effects; in palette order since 2026-10-24) in order; each axis's `label` is its whole name (Mode, Stroke width,
+(Page, Accent, Emphasis, Size, Shape, Stroke, Shadow, States, Effects; in palette order since 2026-10-24) in order; each axis's `label` is its whole name (Mode, Stroke width,
 Floating shadow …), and `settingLabel` drops the heading's word under its heading (Width, Floating …). The app's
 Inspector and Theme tab both read them from `@area/tokens/config`. A preset's `label` is its value, with a range's
 named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carries "(Default)" (owner, 2026-10-20).

@@ -10,10 +10,12 @@
  * concentric inside it: inner = outer - inset (audit S4). Both follow the tier and the
  * radius axis, so the control stays correct under every density and radius combination.
  *
- * The track's edge is an inset outline rather than a border, so the 1px does not
- * participate in layout -- the items sit flush against the padding box and the track
- * height is exactly the tier's height. An outline snaps to device pixels where a box-shadow
- * spread does not (docs/MOTION.md, "Crispness" 3; was an inset 1px box-shadow).
+ * The track is a trough: the control fill and no edge, as the soft fields, the slider's bar and
+ * the switch's track (owner 2026-10-27: "why segmented controls have a stroke around the
+ * container while inputs and others do not"; was a 1px border-decorative ring). Under More
+ * contrast it takes the soft fields' edge. The edge is an inset outline rather than a border,
+ * so the 1px does not participate in layout and snaps to device pixels (docs/MOTION.md,
+ * "Crispness" 3).
  *
  * **A size tier is the OUTER height, as it is on every other control.** It used to name
  * the item instead, which made the track a tier taller than its own class said: an `xs`
@@ -53,8 +55,8 @@
        layer (bg-subtle, the old paint) equals the page at layer contrast 0 and left only the ring (Layers sweep
        2026-10-16). Light 100 + 4 is the same #f7f7f7; dark is the rest fill, near the #28 groove the spec measured. */
     background-color: var(--area-bg-component);
-    outline: var(--area-border-width) solid var(--area-border-decorative);
-    outline-offset: calc(-1 * var(--area-border-width));
+    outline: var(--area-stroke-width) solid var(--area-input-edge-soft);
+    outline-offset: calc(-1 * var(--area-stroke-width));
     /* Concentric with the track, but never sharper than radius-floor, 4 (radius audit 2026-10-03:
        a compact sm track left its items 2; Figma's nested segments keep 3-5), capped against the
        item's own height. The option and the sliding plate share it. */

@@ -197,9 +197,9 @@ compared side by side in Claude in Chrome with the live products (captures only)
 
 ## Open questions
 
-1. **Field label slot.** A Toggletip inside Field's `<label>` would put "More information" into the input's name.
-   Fluent ships InfoLabel (label and button as siblings). Recommendation: add a `labelAction` (or `info`) slot to
-   Field that renders after the `<label>`, in a later change (Field is Complete, so it would reopen it).
+1. **Field label slot.** Resolved 2026-10-27 (owner: "hide the captions behind a small info button with tooltip"):
+   Field's `labelAction` renders after the `<label>` in `.area-field__head`, as Fluent's InfoLabel; the Inspector's
+   dimmed rows carry their reason there.
 2. **Mark: info or help by default?** Three references lead with info (ChatGPT, Fluent, Carbon), three with help
    (Notion, Untitled UI, Spectrum's default). Recommendation: info, the component's job is explaining.
 3. **Ink.** `stroke-control` (#838383) is between ChatGPT's #8f8f8f and the muted text (#666). Notion is lighter
