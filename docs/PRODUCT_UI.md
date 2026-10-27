@@ -71,22 +71,29 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     multi-select Custom select, and dropdowns hug their rows (`--area-menu-min-inline-size`).
 17. **Information is tables wherever it can be**: facts, props, classes, states, keys, ARIA
     and a spec's tables and dated lists. Prose stays prose only where it has no rows.
-18. **The app is drawn in the choices it offers** (owner, 2026-10-22: "make sure the electron ui is a reflection of
-    the actual choices"). `<html>` carries every committed Inspector setting and the Material, type and density
-    included (owner, same day: "when i change from compact to default the ui in the electron doesnt change"), so the
-    Titlebar, Sidebar, Inspector, the app's chrome inside the Canvas (`appScale()`, `src/app-scale.ts`), the window's
-    ground and its traffic lights (centred on the Titlebar) follow them (`src/studio.tsx`). A hover preview repaints the
-    Canvas alone. The Theme tab's own body is the one exception (Setup, below).
+18. **The app is drawn in Area's shipped defaults** (owner, 2026-10-25: "choose it once and then set it and any further
+    customization through the theme page doesnt impact the ui of the electron app"). `<html>` carries every registry
+    default and the default Material, so the Titlebar, Sidebar, Inspector, the app's chrome inside the Canvas
+    (`appScale()`, `src/app-scale.ts`), the panel widths, the window's ground and its traffic lights (centred on the
+    Titlebar) change only when a default does (`src/studio.tsx`). So does everything on the Canvas that is the app's:
+    its body, the cards, section titles, the header and the Stage's frame (owner, 2026-10-26: "the actual components
+    themselves that sit inside the containers would be the only things that update with the controls"). The
+    Inspector's settings, and hover previews of them, reach only what holds a specimen: a tile's view, the Stage's view,
+    a colour card (the card is the colour), a type sample and an icon glyph, through one scope of the settings moved
+    from the defaults (`src/specimen-scope.tsx`); a brand (Inspector → Brand, `src/brand.ts`) reaches the same holders. The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
+    2026-10-22 to 25 the app took every committed Inspector setting instead. The Theme tab's own body stays at the
+    Setup scale (Setup, below).
 
 ## The app's layout
 
 How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at type 13, Compact,
-the scale the layout was measured at; the app now takes the chosen type and density (rule 18).
+the scale the layout was measured at; the app now takes the default type and density (rule 18).
 
 **Shared line and insets.**
 
 - There is no title over the Canvas or the Inspector; the Sidebar's selected row names what
   the Canvas shows.
+  The Components bar carries its path at its start instead (Breadcrumb `nowrap`, owner 2026-10-24: "breadcrumbs can be used to help with layer management"; 2026-10-25, the Overview too: "put some text in the top left, a breadcrumb"): Components / Overview (or List), and on a tile Components / its family / its name.
 - The Canvas header's controls, the Sidebar's first row and the Inspector's first heading
   share one line. The Sidebar and Inspector are 14 in on all sides.
 - **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4): the Titlebar keeps its
@@ -110,13 +117,18 @@ the scale the layout was measured at; the app now takes the chosen type and dens
 - A bar's controls sit as far from the side as from the top and the rule: 7, 24 tall
   (owner, 2026-10-18; Figma's panel tabs: 8 and 8).
 
-**Canvas header**, at its end, in this order:
+**Canvas header**, at its end, in this order, every control ghost but the grid / list switch's track (owner,
+2026-10-25: "make them more consistent, clean them up"):
 
-1. filters;
-2. Sort and group (rule 7);
-3. how things are drawn (zoom, style, size). On Components the style is the Container menu: Asset card's container,
-   caption, fill and edge in eight looks (Framed, the default; Name below; Basic; Basic, name below; Basic, white; Basic,
-   no stroke; Containerless; Containerless, name below; owner, 2026-10-22);
+1. filters: each a ghost menu button that reads its choice ("All statuses ⌄") and opens its options (was a soft Select,
+   the bar's one filled box, a long choice running under its chevron);
+2. Sort and group (rule 7), an icon menu;
+3. how things are drawn (zoom, style, size). On Components the style is the Cards menu, an icon menu of two
+   independent choices (owner, 2026-10-25: "there should just be 1 style of container"): **Container** (Basic, the
+   name and Copy on hover, the default) or **No container**; and **Fixed height** (5:4, the default) or **Waterfall**,
+   each card hugging its component at its scale with 28 above and below it, between half and 5:4 of its width, dropped
+   into the shortest column (`src/gallery/fit.ts`). A taller component gets a taller card, never a larger scale. It was
+   nine looks (Framed, Name below, Basic, white, no stroke, Containerless…; 2026-10-22 to 2026-10-25);
 4. the grid / list switch.
 
 Zoom is Zoom control's stepper (− Auto +):
@@ -130,15 +142,31 @@ Zoom is Zoom control's stepper (− Auto +):
 
 **Components tab.**
 
-- All shows one card per family, its default specimen; a click opens the family.
+- **Overview and Single** (owner, 2026-10-25; `docs/research/isolated-view-2026-10-24/variations.md` §10). All is the
+  Overview: every family in the Sidebar's order, a section each (its title, tile count and status badge 12 over its
+  cards, sections 40 apart), one row of its tiles until "Show all N" (a text control 12 under the cards, on their edge)
+  opens every tile in its groups (a group's name 8 over its row, groups 24 apart). Sections draw their cards as they near
+  the view, holding their room with empty cards until then. The arrangement's groups set the order but draw no title
+  (the Sidebar names them). A card opens that tile alone (Single: the family page on Preview, the Stage at real size);
+  Escape, ⌘↑, ⌘[, the Overview button or the breadcrumb's first step go back to the Overview at the family left, its
+  section open and the tile selected, with "Back to <family>" at the bar's start, which Escape also does. Opening grows
+  the Stage from the card on `slow`; leaving shrinks it into its card on `moderate` (ease-in-out; Motion 0 and reduced
+  motion skip both). In the Overview a family's Sidebar row scrolls to its section; a variant's row opens it.
+- **Variants in the Sidebar** (owner, 2026-10-25: "legitimate standalone design items"): a family's row opens to its
+  Default tile and a branch per group (Variants, Sizes, States …) of its tiles, named by value. Those branches start
+  closed; the tile on the Stage opens its family and group. Pinned rows are shortcuts with no rows under them.
+- **The bar on a tile**: the Overview button (Grid, its Tooltip with Esc), then the path, Area's Breadcrumb `nowrap`
+  (Components › family › tile), its first letter 12 from the button's glyph; then Replay, zoom and previous / next,
+  which walk every tile in the Sidebar's order. The bar's start and its controls stay at least 12 apart; the path's
+  page is cut first.
 - Specimens sit in square cards at least 360 wide, 8 apart, the specimen 24 in. The title
   and a Copy code button sit at the frame's top.
 - Every tab's tiles are Asset cards, always square, with the name, a value and controls in
   the frame's first row (owner, 2026-10-19, a trial).
 - A family's page opens with its purpose in plain text (the manifest's description), 24 over its tabs, as a
   documentation page opens; the tab bar stands 24 off its panel. It is Area Tabs (`src/family-tabs.tsx`):
-  - **Overview**: the Stage, its code, then the tiles, one section per group (Default, Variants, Sizes …), each its
-    heading over its own row of cards;
+  - **Preview** (was Overview; 2026-10-25): the Stage and its code, one tile alone; the family's other tiles are in
+    the Sidebar, the bar's previous / next and the Overview;
   - **Documentation**: usage, from `content/documentation/` and the spec;
   - **API**: props from JSDoc, classes, parts, states and CSS properties;
   - **Code**: React source, stylesheet, manifest and every demo;
@@ -214,7 +242,7 @@ out.
   Canvas settings under the registry's headings (`SETTING_GROUPS`: Page, Accent, Where it paints, Size, Shape,
   Stroke, Shadow, States, Effects, then Material), only those that change this tab's specimens. A light/dark pair
   (Lightness, Grey tint, Layer contrast, Card shade, Button depth) shows the app's mode's own (owner, 2026-10-22), the
-  Titlebar's switch choosing which. An ordered setting is a bar (Slider `variant="field"`, owner 2026-10-24), its name
+  Titlebar's switch choosing which. An ordered setting is a bar (Slider `labelPosition="inside"`, owner 2026-10-24; was `variant="field"`), its name
   and value inside; named choices are a Segmented beside the label, or under it from three options; a setting with Auto,
   System or Accent shows those with Custom and the bar under them. Values read in their unit ("60%", "8px", "210ms",
   "White"), never a step number; none says "(Default)" (owner, 2026-10-20: "i dont like seeing (default)"). The Theme

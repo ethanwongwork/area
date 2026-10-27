@@ -46,6 +46,11 @@ export const SliderRange = forwardRef<HTMLDivElement, SliderRangeProps>(function
   const startInput = useRef<HTMLInputElement>(null);
   const endInput = useRef<HTMLInputElement>(null);
   const active = useRef<Handle | null>(null);
+  // The handle the pointer holds (`data-pressed`: its knob lifts) and whether it has moved (`data-dragging`: the drawing
+  // follows the pointer instead of easing). A click on the rail eases the nearer handle to it.
+  const [pressed, setPressed] = useState<Handle | null>(null);
+  const [dragging, setDragging] = useState(false);
+  const pressedAt = useRef(0);
 
   const commit = (next: SliderRangeValue) => {
     if (next[0] === range[0] && next[1] === range[1]) return;
@@ -70,8 +75,10 @@ export const SliderRange = forwardRef<HTMLDivElement, SliderRangeProps>(function
     const ratio = clamp((rtl ? bounds.right - clientX : clientX - bounds.left) / bounds.width, 0, 1);
     return clamp(Math.round((min + ratio * (max - min)) / step) * step, min, max);
   };
+  const release = () => { active.current = null; setPressed(null); setDragging(false); };
   const move = (clientX: number, handle = active.current) => {
     if (!handle) return;
+    if (!dragging && Math.abs(clientX - pressedAt.current) > 2) setDragging(true);
     if (handle === "start") setStart(valueAt(clientX));
     else setEnd(valueAt(clientX));
   };
@@ -80,13 +87,14 @@ export const SliderRange = forwardRef<HTMLDivElement, SliderRangeProps>(function
     const next = valueAt(event.clientX);
     const handle: Handle = Math.abs(next - range[0]) <= Math.abs(next - range[1]) ? "start" : "end";
     active.current = handle;
+    pressedAt.current = event.clientX;
+    setPressed(handle);
     event.currentTarget.setPointerCapture(event.pointerId);
     (handle === "start" ? startInput : endInput).current?.focus({ preventScroll: true });
     move(event.clientX, handle);
   };
 
   const ratio = (n: number) => max === min ? 0 : (n - min) / (max - min);
-  const pct = (n: number) => `${ratio(n) * 100}%`;
   const field = (label: string, current: number, lower: number, upper: number, set: (n: number) => void) => inputs
     ? <Input className="area-slider-range__input" size={size} aria-label={`${label} value`} type="number" min={lower} max={upper} step={step}
       value={current} disabled={disabled} onChange={event => set(event.currentTarget.valueAsNumber)} />
@@ -94,16 +102,17 @@ export const SliderRange = forwardRef<HTMLDivElement, SliderRangeProps>(function
 
   return <div ref={ref} {...rest} className={sliderRangeVariants({ size, variant: variant === "rail" ? undefined : variant }, className)}
     data-overlap={range[0] === range[1] ? "" : undefined} data-disabled={disabled ? "" : undefined}
-    style={{ ...style, "--_range-start": pct(range[0]), "--_range-end": pct(range[1]),
-      "--_range-start-ratio": ratio(range[0]), "--_range-end-ratio": ratio(range[1]) } as CSSProperties}>
+    data-pressed={pressed ?? undefined} data-dragging={dragging ? "" : undefined}
+    // The two ends as ratios, registered in slider.css so the fill eases between them as the thumbs do.
+    style={{ ...style, "--_slider-range-start": ratio(range[0]), "--_slider-range-end": ratio(range[1]) } as CSSProperties}>
     {field(minLabel, range[0], min, range[1], setStart)}
     <div ref={track} className="area-slider-range__track"
       onPointerDown={begin}
       // Keep focus on the handle the pointer chose: the rail's own mousedown would blur it.
       onMouseDown={event => event.preventDefault()}
       onPointerMove={event => move(event.clientX)}
-      onPointerUp={() => { active.current = null; }}
-      onPointerCancel={() => { active.current = null; }}>
+      onPointerUp={release}
+      onPointerCancel={release}>
       <Slider ref={startInput} size={size} variant={variant} aria-label={minLabel} min={min} max={max} step={step} value={range[0]} name={name} form={form}
         disabled={disabled} onValueChange={setStart} className="area-slider-range__start" />
       <Slider ref={endInput} size={size} variant={variant} aria-label={maxLabel} min={min} max={max} step={step} value={range[1]} name={name} form={form}

@@ -216,6 +216,7 @@ export const breadcrumb = {
   block: "area-breadcrumb",
   description: "Shows the current page within a hierarchy of links.",
   variants: {},
+  booleans: ["nowrap"], // one line in a fixed-height bar, the page cut first (2026-10-25)
   elements: ["list", "item", "link", "page", "separator", "chevron", "ellipsis"],
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -408,8 +409,8 @@ export const sliderRange = {
   block: "area-slider-range",
   description: "Picks a range with two handles on one rail, with optional number fields.",
   variants: { size: ["sm", "md", "lg"], variant: ["track", "bar"] },
-  states: ["overlap", "disabled"],
-  elements: ["track", "input", "end"],
+  states: ["overlap", "disabled", "pressed", "dragging"],
+  elements: ["track", "input", "start", "end"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -418,12 +419,12 @@ export const slider = {
   description: "Picks a value from an ordered range.",
   variants: {
     size: ["sm", "md", "lg"],
-    variant: ["track", "bar", "field"],
-    labelPosition: ["top"],
+    variant: ["track", "bar"],
+    labelPosition: ["top", "inside"],
     orientation: ["vertical"],
   },
-  states: ["disabled", "hover", "focus-visible"],
-  elements: ["label", "control", "value", "marks", "ends", "end"],
+  states: ["disabled", "hover", "focus-visible", "pressed", "dragging"],
+  elements: ["label", "track", "control", "rail", "fill", "buffer", "thumb", "value", "marks", "ends", "end"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 

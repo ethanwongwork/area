@@ -398,7 +398,12 @@ export const SliderSteps = () => <Slider aria-label="Label" min={0.5} max={2} st
 
 export const SliderWithLabel = () => <Slider label="Label" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
 
-export const SliderLabelOnly = () => <Slider label="Label" labelPosition="top" defaultValue={50} />;
+export const SliderInside = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-8)", inlineSize: "100%" }}>
+    <Slider labelPosition="inside" label="Label" defaultValue={60} readout={value => `${value}%`} />
+    <Slider labelPosition="inside" label="Label" min={0} max={6} step={1} defaultValue={2} stepMarks />
+  </div>
+);
 
 export const SliderStepMarks = () => <Slider aria-label="Label" min={0} max={5} step={1} defaultValue={1} stepMarks />;
 

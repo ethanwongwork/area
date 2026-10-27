@@ -378,6 +378,16 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
 - **Why:** the owner: "the images inside the groups can align to the text and have gaps that match the margins",
   images with "their own unique height, and the top of each image row always aligns", and "maybe everything can be 8px".
 
+## Review note, 2026-10-24 (overlay controls fix)
+
+- **What changed:** with `caption="overlay"` the corner controls (the Components cards' Copy) now show with the name
+  on hover and focus; before, they stayed invisible. With `caption="below"` on a touch screen they now show at rest, as
+  documented. The rule that hides the controls is a plain selector list instead of `.area-asset-card:is(…)`, which had
+  outranked the rules that show them. A cohesion test checks that every rule showing the head or the controls
+  outranks the rule hiding them.
+- **Why:** the owner asked what had happened to the Copy button on the component cards. It was still there, named
+  and clickable, but invisible since overlay became the Components default (PR #160).
+
 ## Review note, 2026-10-26
 
 - **What changed:** Asset card took over Preview frame's job:

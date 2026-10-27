@@ -7,7 +7,7 @@
  */
 import { type BuiltScale, type Theme, WHITE, buildScale } from "../color/scale.ts";
 import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES, ROLE_SCALES, STATUS_TONES } from "../color/presets.ts";
-import { type Role, type ScaleLookup, resolveAliases } from "./aliases.ts";
+import { type Role, type ScaleLookup, type ScaleView, resolveAliases } from "./aliases.ts";
 import { DEFAULT_LAYER_SELECTION, type LayerSelection, castOf, layerTokens } from "../color/layers.ts";
 import { ACCENT_HUES, DEFAULT_ACCENT_STRENGTH, type SolidPick, generatedSpec, hueScaleId, mixOklab, withStrength } from "../color/generate.ts";
 import { SEMANTIC_ALIASES } from "./aliases.ts";
@@ -55,8 +55,7 @@ export function scaleFor(id: string, theme: Theme): BuiltScale {
 }
 
 export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
-  const { theme, neutral, accent } = selection;
-
+  const { neutral, accent } = selection;
   if (!NEUTRAL_SCALES.some((s) => s.id === neutral)) {
     throw new Error(`"${neutral}" is not a neutral scale.`);
   }
@@ -64,42 +63,33 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
   if (!CHROMATIC_SCALES.some((s) => s.id === accentScale) && !ACCENT_HUES.some(hue => hueScaleId(hue) === accentScale)) {
     throw new Error(`"${accent}" is not a chromatic scale or an accent hue.`);
   }
+  return resolveWithRoles(selection, {});
+}
 
+/**
+ * A theme with some roles drawn from scales given here rather than from the palette: a brand's accent and harmonised
+ * status families (semantic/brand.ts). Every other step is `resolveTheme`'s, so with nothing given the two agree token
+ * for token.
+ */
+export function resolveWithRoles(selection: ThemeSelection, given: Partial<Record<Role, BuiltScale>>): ResolvedTheme {
+  const { theme, neutral, accent } = selection;
   const scales = Object.fromEntries(ALL_SCALES.map((s) => [s.id, scaleFor(s.id, theme)]));
 
   const roles: Record<Role, BuiltScale> = {
-    neutral: scaleFor(neutral, theme),
-    accent: scaleFor(accentScale, theme),
-    danger: scaleFor(ROLE_SCALES.danger, theme),
-    warning: scaleFor(ROLE_SCALES.warning, theme),
-    caution: scaleFor(ROLE_SCALES.caution, theme),
-    success: scaleFor(ROLE_SCALES.success, theme),
-    info: scaleFor(ROLE_SCALES.info, theme),
-    discovery: scaleFor(ROLE_SCALES.discovery, theme),
-    pink: scaleFor(ROLE_SCALES.pink, theme),
-    gray: scaleFor(ROLE_SCALES.gray, theme),
-    brown: scaleFor(ROLE_SCALES.brown, theme),
+    neutral: given.neutral ?? scaleFor(neutral, theme),
+    accent: given.accent ?? scaleFor(accentScaleId(accent), theme),
+    danger: given.danger ?? scaleFor(ROLE_SCALES.danger, theme),
+    warning: given.warning ?? scaleFor(ROLE_SCALES.warning, theme),
+    caution: given.caution ?? scaleFor(ROLE_SCALES.caution, theme),
+    success: given.success ?? scaleFor(ROLE_SCALES.success, theme),
+    info: given.info ?? scaleFor(ROLE_SCALES.info, theme),
+    discovery: given.discovery ?? scaleFor(ROLE_SCALES.discovery, theme),
+    pink: given.pink ?? scaleFor(ROLE_SCALES.pink, theme),
+    gray: given.gray ?? scaleFor(ROLE_SCALES.gray, theme),
+    brown: given.brown ?? scaleFor(ROLE_SCALES.brown, theme),
   };
 
-  // Keyed by level rather than by position, so a semantic entry says which *colour* it
-  // wants and cannot silently follow an index if the ladder ever gains or loses a rung.
-  const lookup = Object.fromEntries(
-    Object.entries(roles).map(([role, scale]) => [
-      role,
-      {
-        byLevel: {
-          ...Object.fromEntries(scale.steps.map((s) => [s.level, s.hex])),
-          white: WHITE,
-        },
-        alphaByLevel: Object.fromEntries(scale.alphas.map((a) => [a.level, a.hex8])),
-        solid: { level: scale.solid.level, hover: scale.solid.hover },
-        stroke: scale.stroke,
-        vivid: scale.vivid,
-        tonal: scale.tonal,
-        contrast: { hex: scale.contrast.hex },
-      },
-    ]),
-  ) as unknown as ScaleLookup;
+  const lookup = lookupOf(roles);
 
   // The page, layers, control fills, edges and inks come from the Layers model (color/layers.ts), tinted by this
   // neutral's own cast, so the gate checks what ships.
@@ -112,6 +102,24 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
     if (alias.role && STATUS_TONES.includes(alias.role) && !name.startsWith("fg-on-")) resolvedTokens[name] = withStrength(resolvedTokens[name]!, selection.accentStrength ?? DEFAULT_ACCENT_STRENGTH);
   return { ...selection, theme, neutral, accent, scales, roles, tokens: resolvedTokens };
 }
+
+/**
+ * What the aliases read from each role's scale. Keyed by level rather than by position, so a semantic entry says which
+ * *colour* it wants and cannot silently follow an index if the ladder ever gains or loses a rung.
+ */
+export function viewOf(scale: BuiltScale): ScaleView {
+  return {
+    byLevel: { ...Object.fromEntries(scale.steps.map((s) => [s.level, s.hex])), white: WHITE },
+    alphaByLevel: Object.fromEntries(scale.alphas.map((a) => [a.level, a.hex8])),
+    solid: { level: scale.solid.level, hover: scale.solid.hover },
+    stroke: scale.stroke,
+    vivid: scale.vivid,
+    tonal: scale.tonal,
+    contrast: { hex: scale.contrast.hex },
+  } as ScaleView;
+}
+export const lookupOf = (roles: Record<Role, BuiltScale>): ScaleLookup =>
+  Object.fromEntries(Object.entries(roles).map(([role, scale]) => [role, viewOf(scale)])) as unknown as ScaleLookup;
 
 /** An accent setting's scale: a hue's generated family ("260" → "hue-260"), or the named family itself. */
 export function accentScaleId(accent: string): string {
@@ -138,10 +146,13 @@ function accentPaint(scale: BuiltScale, theme: Theme, tokens: Record<string, str
     if (alias.role !== "accent" || ACCENT_LABELS.has(name)) continue;
     out[name] = withStrength(out[name] ?? tokens[name]!, strength);
   }
-  // Label tint: the measured label mixed toward the Solid step's tinted label, at the strength.
+  // The label: Auto's is the accent's own; a Solid step's is the black or white it carries (it flips with the shade,
+  // 2026-10-25). Label tint mixes it toward the step's tinted label, at the strength.
+  const label = pick === "auto" ? tokens["fg-on-accent"]! : scale.solidSteps[pick].fg;
+  if (pick !== "auto") out["fg-on-accent"] = label;
   const tint = selection.labelTint ?? 0;
   const end = pick === "auto" ? scale.labelTint : scale.solidSteps[pick].label;
-  if (tint > 0 && end !== null) out["fg-on-accent"] = mixOklab(tokens["fg-on-accent"]!, withStrength(hexAt(end), strength), tint / 4);
+  if (tint > 0 && end !== null) out["fg-on-accent"] = mixOklab(label, withStrength(hexAt(end), strength), tint / 4);
   return out;
 }
 

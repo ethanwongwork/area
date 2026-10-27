@@ -21,6 +21,12 @@ Inspector and Theme tab both read them from `@area/tokens/config`. A preset's `l
 named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carries "(Default)" (owner, 2026-10-20).
 `defaultPreset` alone says which is the default, and the Theme tab marks it.
 
+**The defaults** were chosen by the owner on the defaults review (2026-10-25, docs/research/defaults-2026-10-25/), one
+group at a time on real components in light and dark. Four moved: Type 13 (was 14), Corner 10 (was 8), Layer contrast
+0, Flat, in both modes (was 4), and Selection Neutral (was Accent); every other setting kept its default. The app's own
+UI is drawn in the defaults, cards and Canvas included, and the Inspector's settings reach only the specimens inside
+them ([Product UI](PRODUCT_UI.md), rule 18).
+
 **How the Inspector shows them** (owner, 2026-10-24, docs/research/theme-review-2026-10-23/controls-plan.md): an ordered
 setting is a bar, Slider's field variant, with its name and its value inside, dragged from any point; named choices are a
 Segmented; a setting with an Auto, System or Accent beside its range shows those with Custom, and the bar under them while
@@ -37,16 +43,16 @@ unchanged, so saved settings and attributes still read. Mode pairs show the one 
 | `accent-strength` | `100` (Full, default) … `30` (Dusty) in tens, one for both modes | How much of its own colour the accent keeps: every accent colour mixes in OKLab toward the gray of its own luminance, so hue holds and contrast stays within 0.09:1; the solvers walk at every strength, so each step clears at each (docs/research/palette-customization-2026-10-23) |
 | `label-tint` | `0` (None, default) … `4` (Full), one for both modes | How much of the accent's hue the label on an accent solid takes: a quarter a step from its measured black or white toward the most coloured rung that still clears 4.6:1 and APCA 61 on the Solid step's fill and hover at every strength (`tintedLabel`, scale.ts). A navy button at 2 has a pale blue label; on a bright fill no rung clears and the label stays white |
 | `status-colours` | `fixed` (default), `match` | Danger, warning, caution, success, info and discovery as the palette draws them, or quieted to the Accent strength by the same mix, so a dusty palette has dusty statuses. Their hues never move, and tag colours (pink, gray, brown) stay |
-| `solid-light`, `solid-dark` | `auto` (default: the accent's own solid) or `400` … `850` | The accent step solid fills (accent Buttons, checked marks) sit on, per mode: a navy button is blue at 750. A step whose label cannot clear moves toward the label's side to the first that can, so no step fails; the label keeps the hue's own colour. Dark's Auto stays the solver's own step whatever light picks (a navy fill measures 1.66:1 on the near-black page) |
+| `solid-light`, `solid-dark` | `auto` (default: the accent's own solid) or `200` … `850` | The accent step solid fills (accent Buttons, checked marks) sit on, per mode: a navy button is blue at 750. Each step carries black or white, whichever stays readable on it at every Accent strength, so the label flips with the shade (2026-10-25: light blue at 200 under black, deep orange at 750 under white); where neither does (a mid blue, 250 to 450) the step moves toward the accent's own label's side to the first that carries it. Auto keeps the accent's own label. Dark's Auto stays the solver's own step whatever light picks (a navy fill measures 1.66:1 on the near-black page). The Inspector calls it **Shade**, under the colour and over Saturation: a bar of the colour's distinct shades, lightest to deepest, with Auto (Vivid) where its lightness puts it; the Accent menu draws every colour at its vivid shade |
 | `action` | `neutral` (default), `accent` | Whether committing actions (solid Buttons) paint the accent |
-| `selection` | `neutral`, `accent` (default since 2026-10-22) | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards), the focus ring and selected text paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |
+| `selection` | `neutral` (default since 2026-10-25; Accent 2026-10-22 to 25), `accent` | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards), the focus ring and selected text paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |
 | `ground-light` | `100` (White, default) … `90` | The light page's OKLCH lightness, in 1% steps |
 | `ground-dark` | `0` (Black), `8` (default, #020202), `12` … `24` | The dark page's lightness |
 | `tint-hue` | `auto` (default: the Neutral setting's own hue), `accent` (the accent's hue), `0` … `355` in 5° steps | The hue the grays lean toward, one for both modes |
 | `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `16`, each step 0.005 of OKLCH chroma (to 16 since 2026-10-23, for a butter-yellow page) | How strongly the grays take the hue, per mode. A step past what sRGB can show at a hue and lightness is held at that room (`tintRoom`, two slopes under the gamut), not clipped, so steps past it draw the same colour; clipping moved luminance and hue (a blue tint at 8 on a 97 page painted cyan). Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable") |
 | `ink-tint` | `0` (None) … `4` (Full) in quarters, `2` (default) | How much of the tint body and muted text take. Text also moves 0.25 × the strength away from its ground, so it keeps 4.5:1 on every hue (`INK_MARGIN`, docs/research/custom-neutral-2026-10-22/) |
 | `card-tone-light`, `card-tone-dark` | `auto` (default: each container's own tone, a Card raised, an Asset card recessed), `-4` (darker) … `0` (the page) … `+4` (lighter), a light step 0.012 L, a dark one 0.03 | Cards and asset cards against the page, per mode; their controls step from it and text is solved against the darkest (light) or lightest (dark) card, so every step reads (`layers.test.ts`, "every card tone is usable"). Menus, popovers and dialogs stay raised. An Asset card's inner frame stays the page tone, and takes the recessed tone where its card is the page's (0, or clamped at white or black), so it always reads apart |
-| `layers-light`, `layers-dark` | `0` (Flat), `2`, `4` (default), `6`, `8` (five steps since 2026-10-22; was every whole number) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
+| `layers-light`, `layers-dark` | `0` (Flat, default since 2026-10-25; was 4), `2`, `4`, `6`, `8` (five steps since 2026-10-22; was every whole number) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
 
 The action and selection settings combine:
 
@@ -74,9 +80,9 @@ outside both roles.
 
 | Setting | Values (default) | What it sets |
 |---|---|---|
-| `type` | `12` … `16`, `14` (default) | The base UI text size. Every type role follows: small text is 2 under (never under 10), reading text and titles 2 over. Also the icon stroke, the check box and toggle size, and which densities are allowed (Compact up to 14, Comfortable from 13). |
+| `type` | `12` … `16`, `13` (default since 2026-10-25; was 14) | The base UI text size. Every type role follows: small text is 2 under (never under 10), reading text and titles 2 over. Also the icon stroke, the check box and toggle size, and which densities are allowed (Compact up to 14, Comfortable from 13). |
 | `density` | `28` (Compact), `32` (default), `36` (Comfortable) | The room around text, named by the medium Button's height at type 14. It sets control heights (the text line plus twice the room, never under 24), rows (the text line plus twice the room, never under 5 a side: 28 at type 13 Compact, owner 2026-10-22), gaps, layout steps and surface insets. |
-| `radius` | `0` (Sharp), `2`, `4`, `6`, `8` (default), `10`, `12`, `14`, `pill` | The medium Button's corner. Every corner derives from it ([Size and shape](DESIGN_SYSTEM.md#size-and-shape)) |
+| `radius` | `0` (Sharp), `2`, `4`, `6`, `8`, `10` (default since 2026-10-25; was 8), `12`, `14`, `pill` | The medium Button's corner. Every corner derives from it ([Size and shape](DESIGN_SYSTEM.md#size-and-shape)) |
 
 - `data-area-ui` is shorthand, not an axis: `compact` is type 12 with density 28,
   `default` is type 14 with 32. An explicit `type` or `density` on the same element wins.
@@ -126,7 +132,7 @@ headings, **Stroke** and **Shadow**, and the states under **States**:
 The owner's picks on the state page are the defaults; every other option branches from them. The selected edge
 (`stroke-selected`) and the focus ring (`focus-color`) are Selection roles (2026-10-22): the accent's indicator rung
 (`accent-indicator`: the lightest step of the accent that keeps 3:1 on every ground, fill and tinted surface, #0160d9
-light, #79aeff dark for blue) at Selection Accent, the default, and the neutral solid (#282828 / #f3f3f3) at Neutral.
+light, #79aeff dark for blue) at Selection Accent, and the neutral solid (#282828 / #f3f3f3) at Neutral, the default.
 Selected and focus share a colour and differ by placement: the selected edge inside, the focus ring on or outside.
 
 | Setting | Inspector label | Values (default) | What it sets |
@@ -247,6 +253,41 @@ Selected and focus share a colour and differ by placement: the selected edge ins
   checks cannot certify arbitrary custom themes.
 - **Share reusable roles.** A reusable role belongs in the token package, not duplicated as
   literals across components ([Governance](GOVERNANCE.md#5-keep-it-lean)).
+
+## Brand (engine, 2026-10-26)
+
+Up to three exact brand colours (`semantic/brand.ts`, `resolveBrandTheme`; plan and research:
+`docs/research/brand-palette-2026-10-26`). Area's palette stays the default: with no brand,
+every existing token is unchanged. The engine and the default tokens, the runtime, the CSS
+command and React's `Theme` are built; the Inspector comes next.
+
+**Using a brand.** A brand writes what a palette accent writes, the accent's and the status
+tones' full-strength inputs, plus the brand's own roles, as `light-dark()` pairs, and declares
+again the 374 derivations that read them, so every setting (Shade, Saturation, Label tint,
+Contrast, Selection) keeps working over it in CSS.
+
+- React: `const brand = useMemo(() => brandDeclarations({ primary: "#00b65c", secondary: "#a785fe" }), [])`
+  from `@area/tokens/brand`, then `<Theme brand={brand}>`. `Theme` takes the declarations
+  already computed, so a product without a brand never loads the solver.
+- CSS only: `npx area-tokens brand --primary "#00b65c" --secondary "#a785fe" > brand.css`, then
+  `data-area-brand` on the element (or `--selector`). The rule sits in `area.axes`, after the
+  axes' own, so a brand on the same element as `data-area-accent` wins.
+- In the app: Inspector → Brand (`apps/desktop/src/brand-settings.tsx`), on the Canvas only.
+- Cost: about 60ms to work out a new brand (both modes; the first in a page about 170ms, while
+  the palette's scales warm), then cached; about 600 declarations, 155 kB of CSS text.
+
+- **Accent** on the primary's own family, the brand colour exactly on one rung. Its button is
+  the readable shade nearest the brand (`nearestShade`), which Shade and Saturation move from.
+- **Status colours** harmonised: each turned toward the primary by half the hue difference,
+  at most 15°, at the primary's intensity, never under 45% of the palette's. `fixed` and
+  `match` remain.
+- **New tokens**, defined with no brand too:
+
+| Tokens | With a brand | With no brand |
+|---|---|---|
+| `secondary-*`, `tertiary-*` (the accent's tonal block: surfaces, borders, solid, `fg-*`, `fg-on-*`, indicator) | The secondary and tertiary families, each with its nearest readable button | The accent's values (aliases) |
+| `support-1` … `support-8`, `-strong`, `fg-on-support-*` | Eight hues stepped round the wheel from the primary, at its intensity: a soft tone (200 light, 850 dark) and a strong one (700, 300), each moved until its label reads as text | The palette's red, orange, yellow, green, teal, blue, purple and pink |
+| `bg-brand-page`, `bg-brand-ground`, `fg-on-brand-ground` | The primary family's 25 (light) or 975 (dark), and its 900 with its label | `bg-page`, `bg-inverse`, `fg-on-inverse` |
 
 ## System tokens outside the axes
 

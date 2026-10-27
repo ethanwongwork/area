@@ -22,15 +22,19 @@
 import type { CSSProperties, ReactNode } from "react";
 import { AssetCard, AssetGridItem, ListBoxItem, SectionHeading } from "@area/react";
 import { appScale } from "./app-scale.ts";
-import { useStudio } from "./studio.tsx";
+import { specimenScope } from "./specimen-scope.tsx";
+import { CANVAS_DEFAULTS } from "./studio.tsx";
 
 /**
  * The look the Canvas's Asset cards hold whatever the Inspector previews (owner, 2026-10-24: "the style should be -1 card
  * color, 2 stroke strength, no rest shadow", for the gallery cards only), as they hold their corner: Card tone −1 in both
- * modes, Stroke 2, Rest shadow 0, set as the card's own setting scope. The specimen inside takes the Canvas's values back
- * (`specimenScope`), so a component still shows the settings being previewed.
+ * modes, Stroke 2, Rest shadow 0, set as the card's own setting scope. The specimen inside takes the defaults back and
+ * the Inspector's settings over them (`specimenScope`, src/specimen-scope.tsx), so a component shows the settings being
+ * previewed while its card stays the app's.
  */
 export const CARD_SCOPE = { "data-area-card-tone-light": "-1", "data-area-card-tone-dark": "-1", "data-area-stroke": "2", "data-area-shadow-rest": "0" } as const;
+/** CARD_SCOPE's settings at the defaults, which a card's specimen starts from (a function: studio.tsx imports this file). */
+const cardRestored = () => ({ "data-area-card-tone-light": CANVAS_DEFAULTS["card-tone-light"], "data-area-card-tone-dark": CANVAS_DEFAULTS["card-tone-dark"], "data-area-stroke": CANVAS_DEFAULTS.stroke, "data-area-shadow-rest": CANVAS_DEFAULTS["shadow-rest"] });
 
 export type TileSpan = "unit" | "wide";
 /**
@@ -88,7 +92,7 @@ export interface TileProps {
   stageScope?: Record<string, string>;
   /** The stage is shown, not used: its content is inert. */
   inert?: boolean;
-  /** How an Asset card tile is drawn (the Components tab's Container menu): Asset card's container, caption, fill, edge. */
+  /** How an Asset card tile is drawn (the Components tab's Cards menu): Asset card's container, caption, fill, edge. */
   look?: CardLook;
   /** A card (owner, 2026-10-14, after Compass's gallery): a square frame, the specimen in a wider margin. */
   card?: boolean;
@@ -121,15 +125,16 @@ export function Tile(props: TileProps) {
  * selection stay the List box's and the box draws the states: the edge steps on hover, the selected edge, the ring.
  */
 function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+  const specimen = { ...specimenScope(), ...stageScope };
   const view = stage === "none" ? null : stage === "fit"
-    ? <div className="gallery-tile__view" {...stageScope}><div className="gallery-tile__stage">{children}</div></div>
-    : <div className="gallery-tile__view" inert={inert || undefined} {...stageScope}>{children}</div>;
+    ? <div className="gallery-tile__view" {...specimen}><div className="gallery-tile__stage">{children}</div></div>
+    : <div className="gallery-tile__view" inert={inert || undefined} {...specimen}>{children}</div>;
   const box = (
     <div className="gallery-tile gallery-tile--plain" data-span={span} data-stage={stage} data-layout={card ? "card" : undefined}
       data-painted={paint ? "" : undefined} data-scoped={scope ? "" : undefined}
       // The ground the box paints, so a specimen's control fills step from it (styles layers.css).
       data-area-ground={paint ? undefined : "raised"}
-      style={paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined} {...scope}>
+      style={paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined} {...(paint ? specimen : {})} {...scope}>
       {/* The name is the app's chrome, at the app's scale whatever the Canvas previews. */}
       <div className="gallery-tile__head" {...appScale()}>
         <span className="gallery-tile__label">{label}</span>
@@ -173,11 +178,10 @@ function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card
 
 /** Area's Asset card (Components). */
 function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card, aspect, look, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
-  const { shown: { canvas } } = useStudio();
-  const specimenScope = { "data-area-card-tone-light": canvas["card-tone-light"], "data-area-card-tone-dark": canvas["card-tone-dark"], "data-area-stroke": canvas.stroke, "data-area-shadow-rest": canvas["shadow-rest"], ...stageScope };
+  const specimen = { ...cardRestored(), ...specimenScope(), ...stageScope };
   const view = stage === "none" ? null : stage === "fit"
-    ? <div className="gallery-tile__view" {...specimenScope}><div className="gallery-tile__stage">{children}</div></div>
-    : <div className="gallery-tile__view" inert={inert || undefined} {...specimenScope}>{children}</div>;
+    ? <div className="gallery-tile__view" {...specimen}><div className="gallery-tile__stage">{children}</div></div>
+    : <div className="gallery-tile__view" inert={inert || undefined} {...specimen}>{children}</div>;
   // The frame: the app's own class and modes on Asset card's frame. The ground it declares (the frame tone, a basic card's
   // own fill, or recessed when scoped) lets the specimen's control fills step from the frame, not the Canvas (layers.css).
   const frameProps = {
@@ -189,6 +193,8 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
     "data-scoped": scope ? "" : undefined,
     "data-area-ground": paint || look?.container === "containerless" ? undefined : scope ? "recessed" : look?.container === "basic" ? (look.fill === "raised" ? "raised" : "tile") : look?.fill === "raised" ? "frame-raised" : "frame",
     style: paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined,
+    // A painted frame is the specimen itself (a colour card), so it takes the Inspector's settings.
+    ...(paint ? specimen : {}),
     ...scope,
   } as Record<string, string | undefined> & { className: string; style?: CSSProperties };
   // The caption is the app's chrome, at the app's scale whatever the Canvas previews.
@@ -221,11 +227,12 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
 
 /**
  * A grid of one span: unit or wide tiles on the shared unit. `cards`: square tiles on their own columns, at least
- * `min` wide (260 by default, at most four across), growing and shrinking with the zoom.
+ * `min` wide (260 by default, at most four across), growing and shrinking with the zoom. `waterfall`: cards that hug
+ * their specimens, each dropped into the shortest column (src/gallery/fit.ts places them).
  */
-export function TileGrid({ span, cards, min, className, children }: { span: TileSpan; cards?: boolean; min?: number; className?: string; children: ReactNode }) {
+export function TileGrid({ span, cards, waterfall, min, className, children }: { span: TileSpan; cards?: boolean; waterfall?: boolean; min?: number; className?: string; children: ReactNode }) {
   return (
-    <div className={`studio-grid studio-grid--${span}${cards ? " studio-grid--cards" : ""}${className ? ` ${className}` : ""}`}
+    <div className={`studio-grid studio-grid--${span}${cards ? " studio-grid--cards" : ""}${waterfall ? " studio-grid--waterfall" : ""}${className ? ` ${className}` : ""}`}
       style={min ? ({ "--_card-min": `${min}px` } as CSSProperties) : undefined}>{children}</div>
   );
 }

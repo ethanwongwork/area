@@ -80,7 +80,8 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
   // In palette order (owner, 2026-10-24, the axis review): the page and its greys, the accent, then where the accent
   // paints; the interaction states under one heading, so one state's settings sit together.
   { heading: "Page", settings: ["theme", "ground-light", "ground-dark", "neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark"] },
-  { heading: "Accent", settings: ["accent", "accent-strength", "solid-light", "solid-dark", "label-tint"] },
+  // The colour, then how deep and how saturated it is (owner, 2026-10-25), then its label.
+  { heading: "Accent", settings: ["accent", "solid-light", "solid-dark", "accent-strength", "label-tint"] },
   { heading: "Where it paints", settings: ["action", "selection", "status-colours", "contrast"] },
   { heading: "Size", settings: ["type", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },

@@ -164,6 +164,7 @@ docs never restate it.
 - MenuSearch, replaced by a Combobox or a Command palette;
 - Preview frame, replaced by a containerless Asset card with no name (2026-10-26);
 - the `--area-ease-spring` easing, with no replacement.
+- Slider `variant="field"`, replaced by `labelPosition="inside"` (the bar with its label inside; 2026-10-26).
 
 Renamed props keep a deprecated alias for one release, for example `options` → `items`,
 `onRemove` / `onClose` → `onDismiss`, and a `label` that named a group → `aria-label`.

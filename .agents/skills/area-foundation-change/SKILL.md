@@ -58,8 +58,11 @@ Then carry it through:
 ## Rules that break silently
 
 - **Re-emit derivations.** A custom property resolves where it is declared. `css.ts`
-  restates `derivedTokens()` on every element that carries a setting; keep a new
-  derivation inside that set.
+  restates each derivation in `derivedTokens()` on every element that carries a setting
+  feeding one of its inputs (`emit/rederive.ts`); keep a new derivation inside that set.
+  A token a stylesheet or a React inline style sets outside the axes goes in `OVERRIDABLE`
+  (rederive.ts), or derivations reading it go stale below the override;
+  `rederive.test.ts` fails until it is listed.
 - **Never `@property`-register a derived token or a light/dark pair.** Registration
   resolves it early and freezes inheritance. Register leaf numbers only.
 - **Keep namespaces disjoint.** The build's axis integrity check fails on a collision or a

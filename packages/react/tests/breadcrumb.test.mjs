@@ -30,3 +30,9 @@ test("a collapsed trail with hidden pages is a menu button of links (audit D-19)
   assert.match(html, /<a role="menuitem" href="\/two" class="area-menu__item">/);
   assert.match(renderToString(h(BreadcrumbEllipsis)), /^<span role="img" aria-label="More pages" class="area-breadcrumb__ellipsis">…<\/span>$/);
 });
+
+test("nowrap keeps the trail on one line (2026-10-25)", () => {
+  const html = renderToString(h(Breadcrumb, { nowrap: true }, h(BreadcrumbList, null, h(BreadcrumbItem, null, h(BreadcrumbPage, null, "Reports")))));
+  assert.match(html, /<nav[^>]*class="area-breadcrumb area-breadcrumb--nowrap"/);
+  assert.doesNotMatch(renderToString(h(Breadcrumb)), /area-breadcrumb--nowrap/);
+});

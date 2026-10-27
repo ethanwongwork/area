@@ -30,7 +30,7 @@ export interface GalleryControl {
   items: ReadonlyArray<{ value: string; label: string }>;
   defaultValue: string;
   /**
-   * A bar (owner, 2026-10-24: "i like the 0 to 100 scale, as well as binary toggles"): Slider's field variant over the
+   * A bar (owner, 2026-10-24: "i like the 0 to 100 scale, as well as binary toggles"): Slider's bar with its label inside, over the
    * values in `scale`, in order, its readout the value's label. `named` are the choices off the scale (Auto, Accent,
    * System), a Segmented with Custom beside them; the bar shows while the value is on the scale, and Custom picks `custom`.
    */
@@ -92,8 +92,8 @@ const ACCENT_HUE: Record<string, number> = Object.fromEntries(((TOKENS.axes as u
   .map(preset => [preset.id, Number(preset.tokens["--area-accent-hue"] ?? preset.id)]));
 const order = (value: string) => value === "pill" ? Infinity : /^-?\d+(\.\d+)?$/.test(value) ? Number(value) : ACCENT_HUE[value] ?? 0;
 const title = (value: string) => value[0]!.toUpperCase() + value.slice(1);
-/** A Solid step as a depth: the palette's 400 (lightest) to 850 (deepest). */
-const depth = (value: string) => value === "400" ? "Lightest" : value === "850" ? "Deepest" : percent(String(Number(value) - 400), 450);
+/** A Solid step as a depth: the palette's 200 (lightest, since the label flips with the shade, 2026-10-25) to 850 (deepest). */
+const depth = (value: string) => value === "200" ? "Lightest" : value === "850" ? "Deepest" : percent(String(Number(value) - 200), 650);
 
 
 export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
@@ -124,8 +124,8 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   // Increased contrast (docs/CONTRAST.md): a scoped setting, not an axis. System writes no attribute, so the OS decides.
   bar("contrast", value => percent(value, 8), { hint: "Stronger edges, focus and state; System follows the OS", named: { system: "System" }, custom: "4", barLabel: "Level" }),
   // Size: whole px for text (half px blurs), density by name.
-  { axis: "type", kind: "segmented", label: label("type"), defaultValue: "14", items: ["12", "13", "14", "15", "16"].map(value => ({ value, label: value })) },
-  { axis: "density", kind: "segmented", label: label("density"), hint: "28 up to type 14, 36 from type 13", defaultValue: "32", items: [
+  { axis: "type", kind: "segmented", label: label("type"), defaultValue: DEFAULT_AXES.type, items: ["12", "13", "14", "15", "16"].map(value => ({ value, label: value })) },
+  { axis: "density", kind: "segmented", label: label("density"), hint: "28 up to type 14, 36 from type 13", defaultValue: DEFAULT_AXES.density, items: [
     { value: "28", label: "Compact" }, { value: "32", label: "Default" }, { value: "36", label: "Comfy" },
   ] },
   // Shape: the medium Button's corner in px, Pill past the last.

@@ -1,6 +1,6 @@
 # Handoff
 
-## Current state (2026-10-25)
+## Current state (2026-10-26)
 - **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,
   panel, plan, queue, separator, shortcut-list (r72), radio, checkbox (r73). Infobox REMOVED (code, styles, manifest,
   demos, page, test). Round 73 notes page https://claude.ai/artifact/2Lg4zR9oKdhf8XaT7vCVex: Edit summary diff: option C
@@ -80,6 +80,30 @@
   not being asked folds into a Table recap; the review is a Table of chapters. Charts tried in round 1 were removed at the
   owner's word. Chat column 440–600. `npm run test:desktop` fails on main too (plain-tile test reads a missing
   `pages/brand.tsx`).
+- **Slider: motion, three looks, label inside (owner 2026-10-26), branch `claude/slider-component-refinement-ec1559`,
+  uncommitted, rebased onto main at 5f15f7e8 (PR #165's field mark and Inspector `SettingBar` kept as `labelPosition="inside"`; `onValueCommit` kept).** The rail, fill and thumb are drawn over the native input (slider.css): every change but a drag eases on
+  `fast` (`--_slider-ratio`), a drag follows 1:1 (`data-dragging`), a press lifts the knob (`data-pressed`, Feedback),
+  hover fades; SliderRange eases too. `variant="field"` is folded into `bar` + `labelPosition="inside"` (deprecated alias,
+  GOVERNANCE), its fill's end rounded as the bar's, with a 2px grip inside the fill's end and 3px step dots inside any bar (owner's Path panel reference);
+  inside sides clear the grip. Budget reference's "No limit" = composition tile (bar + soft toggle Button). Tiles regrouped,
+  one look each. Checked in Chromium and Electron captures light/dark; not checked: RTL, vertical, Firefox/Safari, the
+  material lab. `test:desktop` still fails as on main (pages/brand.tsx).
+- **Area's defaults chosen and applied (owner 2026-10-25), branch `claude/elated-tu-968fa3`, uncommitted.** On the
+  defaults review (https://claude.ai/artifact/Nhy8FtHpYR4nMkRLUUqpWP; docs/research/defaults-2026-10-25/) the owner
+  decided all twelve groups: Type 13 (was 14), Corner 10 (was 8), Layer contrast 0, Flat, both modes (was 4), Selection
+  Neutral (was Accent); the rest kept. Also (owner): the app's own UI is drawn in the shipped defaults and the Inspector
+  paints only the Canvas (PRODUCT_UI rule 18 reversed; `studio.tsx` chrome, `appScale`, panel widths read
+  `CANVAS_DEFAULTS`). Build, tests, contrast report, React suites and a full gallery sweep green at the new defaults.
+  The canvas-header session's uncommitted `studio.tsx` rewrite will conflict on the chrome block (a few lines).
+- **Components: Overview and Single, variants in the tree (owner 2026-10-25), branch
+  `claude/component-card-copy-isolated-view-0d9970`, uncommitted, main merged at a16397fe.** All is now the Overview
+  (every family a section of its tiles, one row until Show all, drawn as it nears the view); a card opens the tile alone
+  (family tab Preview, was Overview), growing from the card; Esc / the Overview button / the breadcrumb go back, the
+  Stage shrinking into its card, the section open and the tile selected, "Back to …" and Esc return. Variants are rows
+  under each family in the Sidebar (Tree view branches, `SidebarTree reveal`). New Breadcrumb `nowrap` (Breadcrumb back
+  to In review). Also: overlay cards' Copy now shows on hover (Asset card selector, cohesion test). Research and the
+  owner's picks: docs/research/isolated-view-2026-10-24/. Known: `test:desktop` fails on main too (reads the renamed
+  pages/brand.tsx). Not built: projects / Designs, explorations, the new statuses, systems.
 - **Setup as a chat (owner 2026-10-24, after IDE / Codex / Cube references: "a 2 panel view ... a vertically scrolling chat
   like experience ... visuals on the right").** No Sidebar or Inspector in Setup (Workspace `panels`); questions arrive as
   messages with choices inline, answers stay as reply bubbles that reopen (Done returns to the latest), chapters as

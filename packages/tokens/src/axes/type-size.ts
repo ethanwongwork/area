@@ -86,7 +86,7 @@ export const TYPE_AXIS: AxisDefinition = {
   id: "type",
   label: "Type size",
   description: "The base interface text size, 12 to 16; every type role, mark and icon follows it.",
-  defaultPreset: "14",
+  defaultPreset: "13",
   namespaces: ["--area-font-", "--area-text-", "--area-title-", "--area-display-", "--area-weight-", "--area-type-"],
   presets: TYPE_SIZES.map(base => ({
     id: String(base),

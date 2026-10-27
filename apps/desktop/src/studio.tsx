@@ -12,7 +12,7 @@
  * one divider between the Titlebar and the panels and one between each panel. Each tab is a
  * page (src/pages/) that fills the three panels through <Workspace>.
  */
-import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
+import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useInsertionEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, SearchField, Titlebar, Tooltip, TreeView, type TreeViewNode } from "@area/react";
 import { MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./gallery/controls.ts";
@@ -26,9 +26,11 @@ import { MaterialsPage } from "./pages/materials.tsx";
 import { ImageryPage } from "./pages/imagery.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
+import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES } from "@area/tokens/config";
 import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
+import { restoreBrand, useBrandSheet, type BrandState } from "./brand.ts";
 
 /* Text-only tabs (owner, 2026-10-11: no icons in the Titlebar's tabs). */
 export const TABS = [
@@ -108,23 +110,20 @@ function paintedHex(color: string): string {
 }
 
 /**
- * A theme or setting change lands at once (MOTION.md, "Theme / density change"): `data-area-switching` (base.css) stops
- * every transition on `element` for the frame that repaints it, then lets hover and state motion run again.
+ * A theme or setting change lands at once (MOTION.md, "Theme / density change"). Called where a change is written; once
+ * the commit has written all of them (a microtask, before the frame), it styles the document once, as the frame would
+ * have, and finishes every transition that started, so colours jump rather than fade. It set `data-area-switching`
+ * (base.css) for two frames on each scope until 2026-10-25, and taking it off restyled the scope a second time: 130 to
+ * 210ms a setting, twice (traced in headless Edge).
  */
-function switchInstantly(element: HTMLElement | null) {
-  if (!element) return;
-  element.setAttribute("data-area-switching", "");
-  requestAnimationFrame(() => requestAnimationFrame(() => element.removeAttribute("data-area-switching")));
-}
-
-/** A value that follows `value` once it has stopped changing for `wait` ms (the first value at once). */
-function useSettled<T>(value: T, wait: number): T {
-  const [settled, setSettled] = useState(value);
-  useEffect(() => {
-    const timer = setTimeout(() => setSettled(value), wait);
-    return () => clearTimeout(timer);
-  }, [value, wait]);
-  return settled;
+let switching = false;
+function switchInstantly() {
+  if (switching) return;
+  switching = true;
+  queueMicrotask(() => {
+    switching = false;
+    for (const animation of document.getAnimations()) if (animation instanceof CSSTransition) animation.finish();
+  });
 }
 
 /** The Electron shell on macOS (main.tsx sets data-platform, after the imports run, so this is read at render). */
@@ -165,6 +164,9 @@ interface StudioState {
   previewMaterial: (state: MaterialState | null) => void;
   /** What the Canvas paints: the saved settings with any preview over them. */
   shown: { canvas: CanvasAxes; material: MaterialState };
+  /** The Canvas's brand (src/brand.ts): off, Area's palette, or up to three exact colours. */
+  brand: BrandState;
+  setBrand: (patch: Partial<BrandState>) => void;
   item?: string;
   /** Go to an item. `replace` swaps the current history entry (a Stage's tile) instead of adding one. */
   select: (item: string, options?: { replace?: boolean }) => void;
@@ -192,6 +194,7 @@ export function Studio() {
   const [query, setQuery] = useState("");
   const [canvas, setCanvasState] = useState<CanvasAxes>(() => restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})));
   const [material, setMaterialState] = useState<MaterialState>(() => restoreMaterial(readStored("material", null)));
+  const [brand, setBrandState] = useState<BrandState>(() => restoreBrand(readStored("brand", null)));
   const [panels, setPanels] = useState(() => readStored("panels", { sidebar: true, inspector: true }));
   const [inspectorView, setInspectorViewState] = useState<InspectorView>(() => {
     const saved = readStored<string>("inspectorView", "theme");
@@ -213,28 +216,30 @@ export function Studio() {
   // restyle re-resolves everything before the next paint.
   useLayoutEffect(() => {
     const root = document.documentElement;
-    switchInstantly(root);
     root.setAttribute("data-area-theme", theme);
     root.style.display = "none"; void root.offsetHeight; root.style.display = "";
+    switchInstantly();
     writeStored("theme", theme);
     window.areaDesktop?.setTheme(theme);
   }, [theme]);
 
-  // The app is drawn in the choices it offers (owner, 2026-10-22: "make sure the electron ui is a reflection of the
-  // actual choices"): the Titlebar, Sidebar and Inspector take every Inspector setting and the Material on <html>, type and
-  // density included (owner, same day). Only committed choices: a hover preview repaints the Canvas alone.
-  // The chrome takes a choice once it settles (owner, 2026-10-24: "the smoothness of the sliders is not very smooth"):
-  // restyling the whole document costs about 300ms, so doing it on every step of a drag froze the slider. The Canvas
-  // shows each step at once; the chrome follows 160ms after the last one.
+  // The app is drawn in Area's shipped defaults (owner, 2026-10-25: "choose it once and then set it and any further
+  // customization through the theme page doesnt impact the ui of the electron app"; was every committed Inspector setting
+  // from 2026-10-22): <html> carries the defaults, so the Titlebar, Sidebar and Inspector change only when a default does,
+  // and the Inspector's settings paint the specimens alone (src/specimen-scope.tsx).
   const appliedPicks = useRef<string[]>([]);
-  const chrome = useSettled(useMemo(() => ({ canvas, material }), [canvas, material]), 160);
-  useLayoutEffect(() => {
+  const chrome = useMemo(() => ({ canvas: CANVAS_DEFAULTS, material: MATERIAL_DEFAULT }), []);
+  // Written as an insertion effect, which runs before every layout effect of the commit, so the first layout read in the
+  // commit (a Segmented measuring its thumb) finds <html> styled.
+  useInsertionEffect(() => {
     const root = document.documentElement;
     const picks = canvasAttributes(chrome.canvas, chrome.material);
-    switchInstantly(root);
     for (const name of appliedPicks.current) if (!(name in picks) || picks[name as keyof typeof picks] === undefined) root.removeAttribute(name);
     for (const [name, value] of Object.entries(picks)) if (value !== undefined) root.setAttribute(name, value);
     appliedPicks.current = Object.keys(picks);
+    switchInstantly();
+  }, [chrome]);
+  useLayoutEffect(() => {
     // Read back on the next frame, so the restyle is the browser's own rather than forced here.
     const frame = requestAnimationFrame(() => {
       // The window's own ground (seen while it resizes) is the page's, as the chosen ground paints it.
@@ -273,8 +278,8 @@ export function Studio() {
     return next;
   });
 
-  // The app's chrome inside the Canvas (tile heads, section titles) at the committed type and density (src/app-scale.ts).
-  const scale = useMemo<AppScale>(() => ({ "data-area-type": canvas.type, "data-area-density": canvas.density }), [canvas.type, canvas.density]);
+  // The app's chrome inside the Canvas (tile heads, section titles) at the default type and density (src/app-scale.ts).
+  const scale = useMemo<AppScale>(() => ({ "data-area-type": CANVAS_DEFAULTS.type, "data-area-density": CANVAS_DEFAULTS.density }), []);
   const state = useMemo<StudioState>(() => ({
     query,
     theme,
@@ -308,6 +313,12 @@ export function Studio() {
     }),
     previewMaterial: setPreviewedMaterial,
     shown: { canvas: { ...canvas, ...previewAxes }, material: previewedMaterial ?? material },
+    brand,
+    setBrand: patch => setBrandState(current => {
+      const next = { ...current, ...patch };
+      writeStored("brand", next);
+      return next;
+    }),
     item,
     select: (next, options) => go(tab, next, options?.replace),
     sidebar: panels.sidebar,
@@ -320,7 +331,7 @@ export function Studio() {
       writeStored("panels", next);
       return next;
     }),
-  }), [query, theme, canvas, material, previewAxes, previewedMaterial, item, tab, go, panels, inspectorView]);
+  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, item, tab, go, panels, inspectorView]);
 
   const current = TABS.find(entry => entry.id === tab)!;
   return (
@@ -462,6 +473,8 @@ export interface WorkspaceProps {
 export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof materialAttributes>[0]): Record<string, string | undefined> {
   return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
 }
+/** The shipped defaults as attributes: what <html> and the Canvas body carry (PRODUCT_UI.md, rule 18). */
+const DEFAULT_ATTRIBUTES = canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT);
 
 /*
  * Three columns under the Titlebar, without titles (owner, 2026-10-14, after Framer and Figma):
@@ -472,23 +485,28 @@ export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof 
 export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
   const studio = useStudio();
   const showSidebar = panels && studio.sidebar, showInspector = panels && studio.inspector;
-  const sidebarWidth = usePanelWidth("sidebar", studio.canvas.type, studio.canvas.density);
-  const inspectorWidth = usePanelWidth("inspector", studio.canvas.type, studio.canvas.density);
-  // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
-  // as a hairline contact sheet in compact), radius, surface, elevation and the Edge and Depth levers, motion and pills.
-  // A tab that keeps its own UI at the defaults restates them, since <html> now carries the choices.
-  // System Contrast writes no attribute, so a tab at the defaults states the OS's level itself; else it would inherit the
-  // pick <html> carries.
+  const sidebarWidth = usePanelWidth("sidebar", CANVAS_DEFAULTS.type, CANVAS_DEFAULTS.density);
+  const inspectorWidth = usePanelWidth("inspector", CANVAS_DEFAULTS.type, CANVAS_DEFAULTS.density);
+  // The body, its cards, titles and header are app UI, at the shipped defaults; only the specimens inside take the
+  // Inspector's settings and the Material (owner, 2026-10-26: "the actual components themselves that sit inside the
+  // containers would be the only things that update with the controls"), through the scope the tiles, the Stage and the
+  // samples read (src/specimen-scope.tsx). A tab that keeps its previews to itself (the Theme tab) gives its specimens no
+  // scope and restates the Setup scale; System Contrast writes no attribute, so it states the OS's level itself.
   const systemContrast = typeof matchMedia === "function" && matchMedia("(prefers-contrast: more)").matches ? "8" : "0";
-  const axes = canvasPicks ? { ...canvasScope, ...canvasAttributes(studio.shown.canvas, studio.shown.material) } : { ...canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT), "data-area-contrast": systemContrast, ...SETUP_SCALE, ...canvasScope };
+  const axes = canvasPicks ? { ...canvasScope, ...DEFAULT_ATTRIBUTES } : { ...DEFAULT_ATTRIBUTES, "data-area-contrast": systemContrast, ...SETUP_SCALE, ...canvasScope };
+  // A brand (src/brand.ts) reaches the specimens with the settings: they carry data-area-brand, and its one rule is in the
+  // document's head while Brand is on, so the body, cards and titles keep Area's palette.
+  const brand = canvasPicks && studio.brand.on ? studio.brand : null;
+  useBrandSheet(brand);
+  const specimens = useMemo(() => canvasPicks ? { ...movedFrom(canvasAttributes(studio.shown.canvas, studio.shown.material), DEFAULT_ATTRIBUTES), ...(brand ? { "data-area-brand": "" } : {}) } : {}, [canvasPicks, studio.shown, brand]);
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
-  const signature = JSON.stringify(axes);
+  const signature = JSON.stringify([axes, specimens, brand]);
   const painted = useRef(signature);
   useLayoutEffect(() => {
     if (painted.current === signature) return;
     painted.current = signature;
-    switchInstantly(main.current);
+    switchInstantly();
   }, [signature]);
   return (
     <div className="studio-workspace" data-sidebar={showSidebar ? "" : undefined} data-inspector={showInspector ? "" : undefined}>
@@ -502,7 +520,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
       ) : null}
       <main ref={main} className="studio-canvas" aria-label={canvasTitle}>
         <header className="studio-canvas__bar">{canvasLead}{canvasActions}</header>
-        <div ref={canvasRef} className="studio-canvas__body" {...axes}>{canvas}</div>
+        <div ref={canvasRef} className="studio-canvas__body" {...axes}><SpecimenScopeContext.Provider value={specimens}>{canvas}</SpecimenScopeContext.Provider></div>
       </main>
       {showInspector ? (
         <div className="studio-inspector">
@@ -597,25 +615,35 @@ export function SidebarList({ children }: { children: ReactNode }) {
  * Canvas as a Nav row did; a branch only opens and closes. Every branch starts open, and stays as it is set while the tab
  * is open. A pinnable row's id is `key:<key>` and a row under Pinned `pin:<key>` (organize.tsx, PinMenu); without
  * `onSelect` a row selects its key, the prefix dropped.
+ *
+ * A row may hold rows of its own (owner, 2026-10-25: a component's variants "should live under the tree view … as
+ * legitimate standalone design items"). Those branches start closed, and `reveal` opens the ones that hold what the
+ * Canvas shows, so the current row is always in view; an `axis:` row only opens and closes, as a group does.
  */
 export interface SidebarTreeGroup { id: string; label: string; items: TreeViewNode[] }
-export function SidebarTree({ tab, label, count, groups, current, onSelect }: {
-  tab: TabId; label: string; count: number; groups: SidebarTreeGroup[]; current?: string; onSelect?: (id: string) => void;
+export function SidebarTree({ tab, label, count, groups, current, reveal, onSelect }: {
+  tab: TabId; label: string; count: number; groups: SidebarTreeGroup[]; current?: string; reveal?: string[]; onSelect?: (id: string) => void;
 }) {
   const { select } = useStudio();
   const branches = groups.filter(group => group.items.length).map(group => `group:${group.id}`);
   const [closed, setClosed] = useState<string[]>([]);
+  // Nested branches the person opened, and those `reveal` opened for them.
+  const [opened, setOpened] = useState<string[]>(reveal ?? []);
+  const revealKey = (reveal ?? []).join("|");
+  useEffect(() => { if (reveal?.length) setOpened(open => [...new Set([...open, ...reveal])]); }, [revealKey]);
   const items: TreeViewNode[] = [
     { id: "all", label: "All", trailing: <Count count={count} max={9999} /> },
     ...groups.filter(group => group.items.length).map(group => ({ id: `group:${group.id}`, label: group.label, trailing: <Count count={group.items.length} max={9999} />, children: group.items })),
   ];
   const now = current ?? "all";
+  const toggle = (id: string) => setOpened(open => open.includes(id) ? open.filter(entry => entry !== id) : [...open, id]);
   return (
     <TreeView aria-label={label} className="studio-sidebar__tree" items={items} currentId={now} selectedIds={[now]}
-      expandedIds={branches.filter(id => !closed.includes(id))}
-      onExpandedChange={ids => setClosed(branches.filter(id => !ids.includes(id)))}
+      expandedIds={[...branches.filter(id => !closed.includes(id)), ...opened]}
+      onExpandedChange={ids => { setClosed(branches.filter(id => !ids.includes(id))); setOpened(ids.filter(id => !id.startsWith("group:"))); }}
       onActivate={id => {
         if (id.startsWith("group:")) { setClosed(open => open.includes(id) ? open.filter(entry => entry !== id) : [...open, id]); return; }
+        if (id.startsWith("axis:")) { toggle(id); return; }
         if (id === "all") select(""); else if (onSelect) onSelect(id); else select(id.replace(/^(key|pin):/, ""));
       }}
       data-tab={tab} />

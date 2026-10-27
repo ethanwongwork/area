@@ -21,6 +21,8 @@ import { FEEDBACK_NONE } from "../axes/feedback.ts";
 import { MATERIAL_ATTRIBUTES, materialDefaults, materialDerived, materialRules } from "../axes/material.ts";
 
 import { colorPairs } from "./colors.ts";
+import { rederivationRules } from "./rederive.ts";
+import { brandDefaultCss } from "../semantic/brand.ts";
 
 const INDENT = "  ";
 
@@ -106,7 +108,7 @@ export function emitTokens(): string {
     ),
     "",
     "@layer area.tokens {",
-    rule(":where(:root)", { "color-scheme": "light", ...baseTokens(), ...pillDefaults(), ...materialDefaults(), ...defaults, ...derivedTokens(), ...materialDerived() }),
+    rule(":where(:root)", { "color-scheme": "light", ...baseTokens(), ...pillDefaults(), ...materialDefaults(), ...defaults, ...brandDefaultCss().fixed, ...derivedTokens(), ...materialDerived() }),
     "}",
     "",
   ];
@@ -194,10 +196,25 @@ export function emitAxes(): string {
   // would get a 28px control with a 6px radius derived from 32. Repeating the derivations on
   // any element that carries an axis attribute makes them resolve against that element's own
   // values, which is exactly where they need to change and nowhere else.
-  const axisBearing = [...AXES.map((a) => `[${attributeFor(a)}]`), "[data-area-ui]", "[data-area-contrast]"].join(",\n" + INDENT);
+  //
+  // Each derivation is restated only by the attributes whose axes set one of its inputs (rederive.ts, 2026-10-25), in one
+  // rule per set of attributes, so an element restates a token at most once and only the ones its own axes change.
+  const keysOf = (axis: AxisDefinition) => new Set(axis.presets.flatMap(preset => Object.keys(axisColors(axis, preset.tokens, preset.darkTokens))));
+  const axisKeys = new Map(AXES.map(axis => [axis.id, keysOf(axis)]));
+  const triggers: Array<readonly [string, ReadonlySet<string>]> = [
+    ...AXES.map(axis => [attributeFor(axis), axisKeys.get(axis.id)!] as const),
+    ["data-area-ui", new Set([...axisKeys.get("type")!, ...axisKeys.get("density")!])],
+    ["data-area-contrast", new Set(["--area-contrast-more"])],
+  ];
+  // Pills and Material set tokens on attributes that do not restate derivations, so a derivation reading one is restated
+  // everywhere, as before.
+  const elsewhere = [
+    ...PILL_SHAPES.map(shape => `--area-pill-${shape.id}`),
+    ...materialRules().flatMap(([, map]) => Object.keys(map)),
+  ];
   out.push("");
-  out.push(`${INDENT}/* Re-derive cross-axis values wherever an axis is redeclared. */`);
-  out.push(rule(axisBearing, derivedTokens()));
+  out.push(`${INDENT}/* Re-derive cross-axis values wherever an axis that feeds them is redeclared. */`);
+  for (const [selectors, map] of rederivationRules(derivedTokens(), triggers, elsewhere)) out.push(rule(selectors.join(",\n" + INDENT), map));
 
   // Material's paints read only its own inputs and the accent's solid, so they re-derive only where one of those is set.
   out.push("");

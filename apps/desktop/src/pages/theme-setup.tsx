@@ -519,7 +519,7 @@ function QuestionControl(props: ControlProps) {
           <Switch size="lg" label={control.label} checked={on} onCheckedChange={checked => put(checked ? control.on : control.off)} />
           {on ? (
             <div className="setup-control__bar">
-              <Slider variant="field" size="lg" label="How much" min={0} max={scale.length - 1} step={1} value={at}
+              <Slider labelPosition="inside" size="lg" label="How much" min={0} max={scale.length - 1} step={1} value={at}
                 readout={(index: number) => say(control.axis, scale[index]!)} onValueChange={index => put(scale[index]!)} />
               <div className="setup-control__ends"><span>{control.low}</span><span>{control.high}</span></div>
             </div>
@@ -638,7 +638,7 @@ function SliderControl(props: ControlProps & { axis: Axis; also: Axis[]; low: st
   const put = (next: string) => set(Object.fromEntries([axis, ...also].map(entry => [entry, next])));
   return (
     <div className="setup-control">
-      <Slider variant="field" size="lg" label={control.label} min={0} max={scale.length - 1} step={1} value={at}
+      <Slider labelPosition="inside" size="lg" label={control.label} min={0} max={scale.length - 1} step={1} value={at}
         readout={(index: number) => scale.includes(value) || index !== at ? say(axis, scale[index]!) : say(axis, value)} onValueChange={index => put(scale[index]!)} />
       <div className="setup-control__ends"><span>{low}</span><span>{high}</span></div>
       {marks.length ? (
@@ -664,7 +664,7 @@ function AccentControl(props: ControlProps & { visual: Visual }) {
       <Segmented size="md" fullWidth aria-label="Accent source" items={[{ value: "named", label: "Palette" }, { value: "custom", label: "Any hue" }]} value={custom ? "custom" : "named"}
         onValueChange={next => set({ accent: next === "custom" ? "200" : "blue" })} />
       {custom ? (
-        <Slider variant="field" size="lg" label="Hue" min={0} max={HUES.length - 1} step={1} value={Math.max(0, HUES.indexOf(values.accent))}
+        <Slider labelPosition="inside" size="lg" label="Hue" min={0} max={HUES.length - 1} step={1} value={Math.max(0, HUES.indexOf(values.accent))}
           readout={(at: number) => `${hueName(Number(HUES[at]))} · ${HUES[at]}°`} onValueChange={at => set({ accent: HUES[at]! })} />
       ) : (
         <ColorSwatchPicker label="Accent" size="lg" layout="row" value={accentHex(values.accent)}
@@ -687,7 +687,7 @@ function TintControl(props: ControlProps & { visual: Visual }) {
       <ColorSwatchPicker label="Tint colour" size="lg" layout="row" value={named ? hueSwatch(named[0]) : ""}
         items={TINTS.map(([value, label]) => ({ value: hueSwatch(value), label }))}
         onValueChange={colour => { const entry = TINTS.find(([value]) => hueSwatch(value) === colour); if (entry) set({ "tint-hue": entry[0] }); }} />
-      <Slider variant="field" size="lg" label="Hue" min={0} max={HUES.length - 1} step={1} value={Math.max(0, HUES.indexOf(hue))}
+      <Slider labelPosition="inside" size="lg" label="Hue" min={0} max={HUES.length - 1} step={1} value={Math.max(0, HUES.indexOf(hue))}
         readout={(at: number) => `${hueName(Number(HUES[at]))} · ${HUES[at]}°`} onValueChange={at => set({ "tint-hue": HUES[at]! })} />
     </div>
   );

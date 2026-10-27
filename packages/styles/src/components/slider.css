@@ -1,22 +1,29 @@
 /* ---------------------------------------------------------------------------
  * Slider
  *
- * A native <input type="range"> with its painting replaced. The input stays in the DOM
- * and keeps its keyboard behaviour, its value semantics and its screen-reader output;
- * `appearance: none` removes only the chrome, exactly as the choice controls do.
+ * A native <input type="range"> for the behaviour, with the picture drawn beside it. The input stays in the DOM, on
+ * top and transparent, and keeps its keyboard behaviour, its value semantics, its pointer mapping and its screen-reader
+ * output. The rail, its fill and the thumb are drawn as elements under it (owner 2026-10-26: "making it smoother, more
+ * interactive, and applying motion specifically for this interaction"): a native thumb jumps wherever the value goes
+ * and cannot be animated, so a click on the track, a key step and the release onto a step all landed at once.
  *
- * The one thing a range input cannot express in CSS is how far along it is, so the fill
- * is a gradient whose stop reads `--_pct`. The host sets that -- server-rendered for the
- * initial value, updated on input -- which is a percentage rather than a length, so it
- * carries no geometry of its own and survives a density change unchanged.
+ * The drawing reads one number, `--_slider-ratio` (0 to 1), which the host sets from the value (or the pointer's place
+ * while a glide drags). It is registered, so it eases: every change that is not a drag (a click on the track, a key, a
+ * controlled update, the settle onto a step) travels on `fast` ease-out, and while the pointer drags the drawing follows
+ * it exactly (`data-dragging`). Positions are shares of the track's own size (`cqi`), so the thumb moves by `translate`
+ * and nothing is laid out again as it travels. The native thumb is kept, invisible and the drawn thumb's size, so the
+ * input maps the pointer to the value exactly where the drawn thumb sits.
  *
  * A slider is for an ordered ramp that has a direction: radius, opacity, a gap. For an
  * unordered set use Segmented or Chip, where the options are named rather than implied
  * by position.
  * ------------------------------------------------------------------------- */
-/* The fill's place as a number, registered so a glide can ease it (it inherits into the control's track). Its name is
-   the slider's own: a registered property applies to every element, so a shared private name would retype others. */
+/* The fill's place as a number, registered so it can ease (it inherits into the drawing). Its name is the slider's
+   own: a registered property applies to every element, so a shared private name would retype others. */
 @property --_slider-ratio { syntax: "<number>"; inherits: true; initial-value: 0; }
+/* SliderRange's two ends, registered for the same reason: its fill eases between them. */
+@property --_slider-range-start { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_slider-range-end { syntax: "<number>"; inherits: true; initial-value: 1; }
 
 @layer area.components {
   .area-slider {
@@ -34,9 +41,6 @@
        Switch and Progress (Figma rails #e6, ChatGPT off track ≈ #e6); was fill-toggle at 80%, ≈ #dd. A fill, so
        Contrast leaves it (2026-10-18: under More the rail was the 3:1 stroke and an accent fill read 1.2:1 on it). */
     --_track-fill: var(--area-fill-track);
-    /* spec: hover darkens the fill, never the rail (Fluent: colour on the thumb and fill only;
-       Radix and Base UI: no hover change). */
-    --_track-fill-hover: var(--_track-fill);
     /* spec (owner 2026-10-21): the buffered stretch (media loaded ahead of the playhead) is one step stronger than the
        rail: the off-track grey's next step, #d0 light, #4e dark. Video player's loaded part is the same idea on footage. */
     --_buffer-fill: var(--area-fill-toggle-hover);
@@ -46,6 +50,12 @@
        stands off the fill instead of reading as a hole in it. Was the surface with a fill-colour dot, which read
        as a selected Radio on the rail. */
     --_knob: light-dark(var(--area-bg-surface), var(--area-bg-component-active));
+    /* How far the fill reaches past the thumb's start: its centre (the knob covers the end), or its far edge when the
+       thumb is a grip drawn inside the fill (the label-inside bar). */
+    --_reach: 0.5;
+    /* A pointer press lifts the knob: four times the Feedback setting's medium give, so 1.12 at Subtle, 1.2 at
+       Pronounced and 1 at Off (MOTION.md, Feedback). The give shrinks a button under the finger; a thumb is picked up. */
+    --_lift: calc(1 + (1 - var(--area-feedback-scale)) * 4);
     --_pct: 0%;
     --_vertical-length: var(--area-input-inline-size);
 
@@ -55,15 +65,150 @@
     gap: var(--_gap);
     inline-size: 100%;
     block-size: var(--_height);
+    /* Everything that is not a drag eases onto the value; a drag follows the pointer exactly (below). */
+    transition: --_slider-ratio var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-slider[data-dragging] { transition: none; }
+
+  /* --- The track: the input and the drawing over the same box ----------------------------------------------- */
+
+  /*
+   * The track takes the control's place in every layout (inline label, label above, end labels, vertical). It is the
+   * full height of the tier, so the pointer target matches every other control on the row, and it is a size container,
+   * so the drawing places itself in shares of it.
+   */
+  .area-slider__track {
+    position: relative;
+    isolation: isolate;
+    container-type: size;
+    flex: 1;
+    min-inline-size: 0;
+    block-size: var(--_height);
+    --_dir: 1;
+    --_travel: calc(100cqi - var(--_thumb));
+  }
+  .area-slider__track:dir(rtl) { --_dir: -1; }
+
+  .area-slider__control {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    appearance: none;
+    margin: 0;
+    background: transparent;
+    cursor: inherit;
+    outline: none;
+  }
+  /* The native parts stay, unpainted: the track for its thickness, the thumb at the drawn thumb's size, so the pointer
+     maps to the value where the drawing puts it. WebKit gives the thumb no automatic centring (hence the margin). */
+  .area-slider__control::-webkit-slider-runnable-track { block-size: var(--_track); background: transparent; }
+  .area-slider__control::-moz-range-track { block-size: var(--_track); background: transparent; }
+  .area-slider__control::-webkit-slider-thumb {
+    appearance: none;
+    inline-size: var(--_thumb);
+    block-size: var(--_thumb-block, var(--_thumb));
+    margin-block-start: calc((var(--_track) - var(--_thumb-block, var(--_thumb))) / 2);
+    border: 0;
+    background: transparent;
+  }
+  .area-slider__control::-moz-range-thumb {
+    appearance: none;
+    inline-size: var(--_thumb);
+    block-size: var(--_thumb-block, var(--_thumb));
+    border: 0;
+    background: transparent;
   }
 
-  /* Step marks sit under the rail, a 1 × 4 tick 2px below its edge (owner 2026-10-21, "B"; Base UI draws its
-     ticks below). They were 3px stubs behind the rail, hidden wherever the fill or the thumb covered them.
-     Crispness (docs/MOTION.md, 2026-10-07): each tick starts on a whole pixel, rounded from its share of the
-     thumb's travel. */
+  /* The rail: the trough, centred by layout (docs/MOTION.md, Crispness 1), clipping its fill and buffered stretch. */
+  .area-slider__rail {
+    position: absolute;
+    inset: 0;
+    block-size: var(--_track);
+    margin-block: auto;
+    overflow: hidden;
+    border-radius: var(--_track-radius, var(--area-radius-full));
+    background-color: var(--_track-fill);
+    pointer-events: none;
+  }
+  /* The fill runs from the start to the thumb's centre (its far edge for the label-inside bar); the buffered stretch to
+     its own place, behind the fill. Hover fades the fill's colour in on `hover-in` and out on `fast`. */
+  .area-slider__fill, .area-slider__buffer {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+  }
+  .area-slider__fill {
+    z-index: 2;
+    inline-size: calc(var(--_thumb) * var(--_reach) + var(--_travel) * var(--_slider-ratio));
+    background-color: var(--_fill);
+    transition: background-color var(--_fade, var(--area-duration-fast)) var(--area-ease-out);
+  }
+  .area-slider__buffer {
+    z-index: 1;
+    inline-size: calc(var(--_thumb) / 2 + var(--_travel) * var(--_buffered, 0));
+    background-color: var(--_buffer-fill);
+  }
+
+  /* Origin (owner 2026-10-24, the Temperature bar: Cool … Neutral … Warm): a range with a neutral middle fills from that
+     value to the thumb, either side of it, so Neutral is an empty bar and each way grows out from it. The host gives
+     the origin as a ratio (`--_origin`) and the two ends follow the easing ratio; the buffered stretch is not drawn. */
+  .area-slider[data-origin] .area-slider__fill {
+    --_lo: min(var(--_origin), var(--_slider-ratio));
+    --_hi: max(var(--_origin), var(--_slider-ratio));
+    inset-inline-start: calc(var(--_thumb) / 2 + var(--_travel) * var(--_lo));
+    inline-size: calc(var(--_travel) * (var(--_hi) - var(--_lo)));
+  }
+
+  /*
+   * The thumb: round by identity, like the switch thumb (a handle that is not a circle reads as a segment of the
+   * track rather than as the thing you drag); it does not follow the radius axis. It travels by `translate`, on whole
+   * pixels. A pointer press lifts it on `press-in` and it settles back on `fast`; a key press never does.
+   */
+  .area-slider__thumb {
+    position: absolute;
+    z-index: 3;
+    inset-block: 0;
+    inset-inline-start: 0;
+    box-sizing: border-box;
+    inline-size: var(--_thumb);
+    block-size: var(--_thumb-block, var(--_thumb));
+    margin-block: auto;
+    border: var(--_thumb-edge, var(--area-stroke-width)) solid var(--_thumb-border);
+    border-radius: var(--_thumb-radius, var(--area-radius-full));
+    background-color: var(--_thumb-paint, var(--_knob));
+    box-shadow: var(--_thumb-shadow, var(--area-shadow-control));
+    translate: round(nearest, calc(var(--_dir) * var(--_travel) * var(--_slider-ratio)), 1px) 0;
+    pointer-events: none;
+    transition:
+      background-color var(--_fade, var(--area-duration-fast)) var(--area-ease-out),
+      box-shadow var(--area-duration-fast) var(--area-ease-out),
+      scale var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-slider[data-pressed]:not([data-disabled]) .area-slider__thumb {
+    scale: var(--_lift);
+    transition-duration: var(--_fade, var(--area-duration-fast)), var(--area-press-in), var(--area-press-in);
+  }
+
+  /* The ring alone, as every other control (audit C-13), on the knob; it never fades in. */
+  .area-slider__control:focus-visible ~ .area-slider__thumb {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+
+  /* Hover darkens the fill (and the bar's thumb, which is the fill's end); the rail and knob keep their colour
+     (Fluent: colour on the thumb and fill only; Radix and Base UI: no hover change). It arrives on `hover-in`. */
+  @media (hover: hover) {
+    .area-slider:not([data-disabled]) .area-slider__track:hover { --_fill: var(--_fill-hover); --_fade: var(--area-hover-in); }
+  }
+
+  /* Step marks sit under the rail, a 1 × 4 tick 2px below its edge (owner 2026-10-21, "B"; Base UI draws its ticks
+     below). Crispness (docs/MOTION.md, 2026-10-07): each tick starts on a whole pixel, rounded from its share of the
+     thumb's travel. A full-height bar draws them as dots inside it instead (below). */
   .area-slider__marks {
     position: absolute;
-    z-index: 0;
+    z-index: 1;
     inset: 0 calc(var(--_thumb) / 2);
     pointer-events: none;
   }
@@ -76,6 +221,8 @@
     background: var(--area-edge-control-strong);
   }
 
+  /* --- Layouts ---------------------------------------------------------------------------------------------- */
+
   /* The label and readout above take the row's full width, so a top-labelled slider lines up with the sliders
      around it (owner 2026-10-21, "B"; was capped at the input width plus a readout, which left it narrower). */
   .area-slider--top {
@@ -87,27 +234,249 @@
   }
   .area-slider--top .area-slider__label { grid-area: 1 / 1; }
   .area-slider--top .area-slider__value { grid-area: 1 / 2; }
-  .area-slider--top .area-slider__control { grid-area: 2 / 1 / 3 / 3; inline-size: 100%; }
-  /* An absolutely placed child of a grid takes its grid area as the containing block: the ticks keep to the control's
-     row and column whatever sits above or below it. */
-  .area-slider--top > .area-slider__marks { grid-area: 2 / 1 / 3 / 3; inset-inline: calc(var(--_thumb) / 2); inset-block: 0; }
+  .area-slider--top .area-slider__track { grid-area: 2 / 1 / 3 / 3; inline-size: 100%; }
 
+  /* Vertical: the input turns (writing mode), and the drawing fills from the bottom in either reading direction. */
   .area-slider--vertical {
     flex-direction: column;
     inline-size: var(--_height);
     block-size: var(--_vertical-length);
   }
-  .area-slider--vertical .area-slider__control {
-    flex: none;
+  .area-slider--vertical .area-slider__track {
+    flex: 1;
     inline-size: 100%;
-    block-size: var(--_height);
-    writing-mode: vertical-lr;
-    direction: rtl;
+    block-size: auto;
+    --_dir: 1;
+    --_travel: calc(100cqb - var(--_thumb));
+  }
+  .area-slider--vertical .area-slider__control { writing-mode: vertical-lr; direction: rtl; }
+  .area-slider--vertical .area-slider__rail { inline-size: var(--_track); block-size: auto; margin-block: 0; margin-inline: auto; }
+  .area-slider--vertical :is(.area-slider__fill, .area-slider__buffer) { inset-block: auto 0; inset-inline: 0; inline-size: auto; }
+  .area-slider--vertical .area-slider__fill { block-size: calc(var(--_thumb) * var(--_reach) + var(--_travel) * var(--_slider-ratio)); }
+  .area-slider--vertical .area-slider__buffer { block-size: calc(var(--_thumb) / 2 + var(--_travel) * var(--_buffered, 0)); }
+  .area-slider--vertical[data-origin] .area-slider__fill {
+    inset-block: auto calc(var(--_thumb) / 2 + var(--_travel) * var(--_lo));
+    block-size: calc(var(--_travel) * (var(--_hi) - var(--_lo)));
+  }
+  .area-slider--vertical .area-slider__thumb {
+    inset-block: auto 0;
+    inset-inline: 0;
+    inline-size: var(--_thumb-block, var(--_thumb));
+    block-size: var(--_thumb);
+    margin-block: 0;
+    margin-inline: auto;
+    translate: 0 round(nearest, calc(-1 * var(--_travel) * var(--_slider-ratio)), 1px);
   }
   .area-slider--vertical .area-slider__marks { display: none; }
 
+  /*
+   * The readout is a value, not a label, so it takes the muted foreground and tabular
+   * figures -- without them the row twitches sideways as the digits change width. Its
+   * width is four figures: a content measure rather than a design decision, which is why
+   * it is in `ch` and not on the spacing ramp.
+   */
+  .area-slider__value {
+    flex-shrink: 0;
+    min-inline-size: 4ch;
+    text-align: end;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    font-variant-numeric: tabular-nums;
+    color: var(--area-fg-muted);
+    user-select: none;
+  }
+
+  .area-slider__label {
+    flex-shrink: 0;
+    color: var(--area-fg-default);
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    white-space: nowrap;
+  }
+
+  /*
+   * End labels (owner 2026-10-21, the Intensity reference): the track's two ends named under it, "Low" … "High", as
+   * macOS and iOS settings sliders. In the description's text and ink (Field), each under its end of the track, so a
+   * slider with them is a grid: the control row, then the ends under the track's column. Hidden when vertical.
+   */
+  .area-slider__ends {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--area-space-8);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    color: var(--area-fg-muted);
+    white-space: nowrap;
+    user-select: none;
+  }
+  .area-slider__end { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  .area-slider:has(> .area-slider__ends):not(.area-slider--top, .area-slider--vertical) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--_gap);
+    row-gap: var(--area-space-2);
+    block-size: auto;
+  }
+  .area-slider:has(> .area-slider__ends):not(.area-slider--top, .area-slider--vertical) > .area-slider__track { grid-area: 1 / 1; }
+  .area-slider:has(> .area-slider__ends):not(.area-slider--top, .area-slider--vertical) > .area-slider__value { grid-area: 1 / 2; }
+  .area-slider:has(> .area-slider__ends):not(.area-slider--top, .area-slider--vertical) > .area-slider__ends { grid-area: 2 / 1; }
+  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) > .area-slider__label { grid-area: 1 / 1; }
+  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) > .area-slider__track { grid-area: 1 / 2; }
+  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) > .area-slider__value { grid-area: 1 / 3; }
+  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) > .area-slider__ends { grid-area: 2 / 2; }
+  .area-slider--top > .area-slider__ends { grid-area: 3 / 1 / 4 / 3; }
+  .area-slider--top:has(> .area-slider__ends) { grid-template-rows: auto var(--_height) auto; }
+  .area-slider--vertical > .area-slider__ends { display: none; }
+
+  .area-slider[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--area-opacity-disabled);
+  }
+
+  /* --- Sizes -------------------------------------------------------------- */
+
+  .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-space-16); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_bar-radius: var(--area-radius-control-sm); }
+  .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-space-16); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); --_bar-radius: var(--area-radius-control-md); }
+  .area-slider--lg { --_height: var(--area-control-lg); --_thumb: var(--area-space-20); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_bar-radius: var(--area-radius-control-lg); }
+
+  /* --- Variants ------------------------------------------------------------ */
+
+  /*
+   * Track (owner 2026-10-21, "C"): Figma's adjustment slider (figma--adjustment-slider): a pill as tall as the
+   * thumb, the fill running under the knob to its centre. The trough is Segmented's (`bg-component`), Figma's
+   * #f5 on white. After the sizes, so the track follows the thumb ladder: 16 / 16 / 20.
+   */
+  .area-slider.area-slider--track {
+    --_track: var(--_thumb);
+    --_track-fill: var(--area-bg-component);
+    --_buffer-fill: var(--area-fill-track); /* one step over the lighter trough: the rail grey */
+  }
+
+  /*
+   * Bar (owner 2026-10-21, the "Rate your driver" reference): the track is the control itself, the tier's height
+   * and corner, so it lines up with a Button or field beside it. The thumb is the fill's rounded end, one glyph
+   * wide (16 / 16 / 20), with a pill grip in the fill's ink: 4 wide and one glyph long. The grip is round by
+   * identity, like the knob; the bar and the fill's end follow the radius setting. A pointer press lengthens nothing:
+   * the grip lifts as the knob does.
+   */
+  .area-slider.area-slider--bar {
+    --_track: var(--_height);
+    --_track-fill: var(--area-bg-component);
+    --_buffer-fill: var(--area-fill-track);
+    --_track-radius: var(--_bar-radius, var(--area-radius-control-md));
+    --_thumb-block: var(--_track);
+    --_thumb-radius: min(var(--_track-radius), var(--_thumb) / 2);
+    --_thumb-edge: 0px;
+    --_thumb-shadow: none;
+    --_grip-inline: var(--area-space-4);
+    --_grip-block: var(--_thumb);
+    --_grip-ink: var(--area-fg-on-selection);
+  }
+  /* The bar's thumb is the fill's end: its paint reads the fill where the thumb is, so hover reaches it. */
+  .area-slider--bar:not(.area-slider--inside) .area-slider__thumb { --_thumb-paint: var(--_fill); }
+  .area-slider--bar .area-slider__thumb::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    inline-size: var(--_grip-inline);
+    block-size: var(--_grip-block);
+    margin: auto;
+    border-radius: var(--area-radius-full);
+    background-color: var(--_grip-ink);
+  }
+  .area-slider--bar.area-slider--vertical .area-slider__thumb::before { inline-size: var(--_grip-block); block-size: var(--_grip-inline); }
+  /* The knob is the fill's end, so it lifts its grip, not itself: a scaled end would stand off the bar's edges. */
+  .area-slider--bar[data-pressed]:not([data-disabled]) .area-slider__thumb { scale: none; }
+  .area-slider--bar .area-slider__thumb::before { transition: scale var(--area-duration-fast) var(--area-ease-out), background-color var(--_fade, var(--area-duration-fast)) var(--area-ease-out); }
+  .area-slider--bar[data-pressed]:not([data-disabled]) .area-slider__thumb::before { scale: var(--_lift); transition-duration: var(--area-press-in); }
+  /* The whole bar takes the focus ring, as a field does; a ring round the grip alone read as a stray circle. */
+  .area-slider--bar .area-slider__control:focus-visible ~ .area-slider__thumb { outline: none; }
+  .area-slider--bar .area-slider__control:focus-visible ~ .area-slider__rail {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+  /* A full-height bar draws its steps as dots inside it (owner 2026-10-26, the Path panel reference: "the subtle
+     dots"), centred on the bar, under the fill: a dot at or before the value is covered by it. */
+  .area-slider--bar .area-slider__marks i {
+    /* spec (the Path panel reference): dots ≈ 2.5px, about 2:1 on the trough; 3px, each on a whole pixel. */
+    --_dot: 3px; /* spec */
+    inset-block-start: round(down, calc((var(--_height) - var(--_dot)) / 2), 1px);
+    inset-inline-start: round(nearest, calc(var(--_mark) - var(--_dot) / 2), 1px);
+    inline-size: var(--_dot);
+    block-size: var(--_dot);
+    border-radius: var(--area-radius-full);
+    background: var(--area-edge-control-strong);
+  }
+
+  /*
+   * Label inside (owner 2026-10-24, the settings panel reference: "Bounce 100", "Stagger 45ms", "Corner 28px"; refined
+   * 2026-10-26 from the Path panel reference): a bar with its label at the start and its value at the end inside it, the
+   * fill a plate behind them, so a list of them reads as a list of settings and any point of the bar drags it. It was
+   * the `field` variant; it is the bar with its label placed inside (owner 2026-10-26, "consolidate"). Geometry is the
+   * field's own: the tier's height and corner, the inset contract's sides (inset.css), no edge. The trough is the soft
+   * field fill (`bg-component`) and the fill the off-track grey one step past it (`fill-track`, hover
+   * `fill-toggle-hover`), neutral as the references, since text sits on it; label and value take the body ink, which
+   * reads on both. The thumb is a thin grip line at the fill's end, inside it (the fill reaches the thumb's far edge).
+   * Horizontal only; no end labels.
+   */
+  .area-slider.area-slider--inside {
+    --_track: var(--_height);
+    --_track-fill: var(--area-bg-component);
+    --_fill: var(--area-fill-track);
+    --_fill-hover: var(--area-fill-toggle-hover);
+    --_track-radius: var(--_bar-radius, var(--area-radius-control-md));
+    --_reach: 1;
+    --_thumb-block: var(--_track);
+    --_thumb-edge: 0px;
+    --_thumb-shadow: none;
+    --_thumb-paint: transparent;
+    /* spec (the Path panel reference): a 2px line about three eighths of the bar's height, in a mid grey; here the
+       stroke ladder's 2 and the glyph's 12 / 12 / 16, in the strong control edge, which reads on the fill. */
+    --_grip-inline: var(--area-space-2);
+    --_grip-block: calc(var(--_thumb) - var(--area-space-4));
+    --_grip-ink: var(--area-edge-control-strong);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--_gap);
+  }
+  /* Every bar's fill ends rounded with its line inside (owner 2026-10-26, "consistent"): the accent bar's end is its
+     rounded thumb; here the fill itself takes the thumb's corner at its far end. From an origin, only the thumb's end
+     rounds and reaches past the line, the origin's side stays straight. */
+  .area-slider--inside .area-slider__fill {
+    border-start-end-radius: var(--_thumb-radius);
+    border-end-end-radius: var(--_thumb-radius);
+  }
+  .area-slider--inside[data-origin] .area-slider__fill {
+    --_up: clamp(0, (var(--_slider-ratio) - var(--_origin)) * 10000, 1);
+    --_down: clamp(0, (var(--_origin) - var(--_slider-ratio)) * 10000, 1);
+    inset-inline-start: calc(var(--_thumb) / 2 * (1 - var(--_down)) + var(--_travel) * var(--_lo));
+    inline-size: calc(var(--_travel) * (var(--_hi) - var(--_lo)) + var(--_thumb) / 2 * (var(--_up) + var(--_down)));
+    border-start-start-radius: calc(var(--_down) * var(--_thumb-radius));
+    border-end-start-radius: calc(var(--_down) * var(--_thumb-radius));
+    border-start-end-radius: calc(var(--_up) * var(--_thumb-radius));
+    border-end-end-radius: calc(var(--_up) * var(--_thumb-radius));
+  }
+  /* The grip line darkens under the pointer, while it drags and with focus, so the bar shows it is held (main, 2026-10-25:
+     the value's mark took the muted ink then). */
+  @media (hover: hover) {
+    .area-slider--inside:not([data-disabled]) .area-slider__track:hover { --_grip-ink: var(--area-fg-muted); }
+  }
+  .area-slider--inside:is([data-dragging], :has(.area-slider__control:focus-visible)) { --_grip-ink: var(--area-fg-muted); }
+  .area-slider--inside > .area-slider__track { position: absolute; z-index: 0; inset: 0; inline-size: 100%; block-size: 100%; }
+  .area-slider--inside .area-slider__control { cursor: ew-resize; }
+  .area-slider--inside[data-disabled] .area-slider__control { cursor: not-allowed; }
+  .area-slider--inside > .area-slider__label,
+  .area-slider--inside > .area-slider__value { position: relative; z-index: 1; pointer-events: none; color: var(--area-fg-default); }
+  .area-slider--inside > .area-slider__label { grid-column: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  .area-slider--inside > .area-slider__value { grid-column: 2; min-inline-size: 0; }
+  .area-slider--inside > .area-slider__ends { display: none; }
+
   /* SliderRange (audit C-12): two native range inputs on one rail. The fill is the Selection
-     role, so a theme's accent reaches it; the rail's height follows the size tier. */
+     role, so a theme's accent reaches it; the rail's height follows the size tier. Each handle is a Slider whose own
+     rail is hidden; the range draws one rail and the fill between the two thumbs' centres, easing with them. */
   .area-slider-range {
     --_range-fill: var(--area-selection-solid);
     --_range-track-fill: var(--area-fill-track); /* spec (audit S5): as the single rail */
@@ -115,12 +484,18 @@
     --_range-thumb: var(--area-space-16);
     --_range-rail: var(--area-space-4);
     --_range-radius: var(--area-radius-full);
+    --_range-fill-radius: var(--_range-radius);
     display: grid;
     grid-template-columns: max-content minmax(var(--area-space-80), 1fr) max-content;
     align-items: center;
     gap: var(--area-ui-cluster);
     inline-size: 100%;
+    transition:
+      --_slider-range-start var(--area-duration-fast) var(--area-ease-out),
+      --_slider-range-end var(--area-duration-fast) var(--area-ease-out);
   }
+  .area-slider-range[data-dragging],
+  .area-slider-range[data-dragging] .area-slider { transition: none; }
   /* Without its number fields (`inputs={false}`) the rail takes the whole row; it sat in the first, content-sized column
      and collapsed to its two thumbs (Theme setup's bento, 2026-10-21). */
   .area-slider-range__track:only-child { grid-column: 1 / -1; }
@@ -151,18 +526,23 @@
     content: "";
     position: absolute;
     z-index: 1;
-    inset-inline-start: var(--_range-start);
+    inset-inline-start: calc(var(--_range-thumb) / 2 + (100% - var(--_range-thumb)) * var(--_slider-range-start));
     inset-block: 0;
-    inline-size: calc(var(--_range-end) - var(--_range-start));
+    inline-size: calc((100% - var(--_range-thumb)) * (var(--_slider-range-end) - var(--_slider-range-start)));
     block-size: var(--_range-rail);
     margin-block: auto;
-    border-radius: var(--_range-radius);
+    border-radius: var(--_range-fill-radius);
     background: var(--_range-fill);
   }
   .area-slider-range .area-slider { position: absolute; z-index: 2; inset: 0; }
-  .area-slider-range .area-slider__control { position: absolute; inset: 0; inline-size: 100%; pointer-events: none; }
-  .area-slider-range .area-slider__control::-webkit-slider-runnable-track { background: transparent; }
-  .area-slider-range .area-slider__control::-moz-range-track { background: transparent; }
+  .area-slider-range .area-slider__track { position: absolute; inset: 0; block-size: 100%; }
+  .area-slider-range .area-slider__control { pointer-events: none; }
+  .area-slider-range .area-slider__rail { display: none; }
+  .area-slider-range[data-pressed="start"] .area-slider-range__start .area-slider__thumb,
+  .area-slider-range[data-pressed="end"] .area-slider-range__end .area-slider__thumb { scale: var(--_lift); transition-duration: var(--area-duration-fast), var(--area-press-in), var(--area-press-in); }
+  .area-slider-range.area-slider-range--bar[data-pressed] .area-slider__thumb { scale: none; }
+  .area-slider-range.area-slider-range--bar[data-pressed="start"] .area-slider-range__start .area-slider__thumb::before,
+  .area-slider-range.area-slider-range--bar[data-pressed="end"] .area-slider-range__end .area-slider__thumb::before { scale: var(--_lift); transition-duration: var(--area-press-in); }
   .area-slider-range .area-slider-range__input {
     /* Three digits and the Input's own side insets (inset.css: (height - cap) / 2, whole pixels). */
     inline-size: calc(3ch + round(nearest, calc((var(--area-control-md) - 1cap) / 2 - var(--area-stroke-width)), 1px) * 2 + var(--area-stroke-width) * 2);
@@ -175,309 +555,17 @@
 
   /* A collapsed range has one value and therefore one visible indicator. The focused end
      handle remains visible so its native keyboard focus is never hidden. */
-  /* One engine's pseudo-element per rule: a selector list mixing -webkit- and -moz- is
-     invalid as a whole in each engine, so neither applied. */
-  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control::-webkit-slider-thumb { opacity: 0; }
-  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control::-moz-range-thumb { opacity: 0; }
-  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible::-webkit-slider-thumb { opacity: 1; }
-  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible::-moz-range-thumb { opacity: 1; }
+  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__thumb { opacity: 0; }
+  .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible ~ .area-slider__thumb { opacity: 1; }
 
-
-  .area-slider[data-disabled] {
-    cursor: not-allowed;
-    opacity: var(--area-opacity-disabled);
-  }
-
-  /*
-   * The control is the full height of its tier rather than the height of its track, so
-   * the pointer target matches every other control on the row. The track is painted as
-   * the input's own background and the thumb is centred on it.
-   *
-   * The fill ends at the thumb's centre: the host gives `--_slider-ratio` (0 to 1) beside `--_pct`, and the stop is
-   * the thumb's half plus that share of its travel. Without `--_slider-ratio` the stop falls back to `--_pct`, which
-   * a 4px rail hides under its thumb but a full-height track (variant track, bar) does not.
-   *
-   * `--_buffered` (0 to 1, set from the `buffered` prop) paints a second stretch after the fill, to the same thumb-inset
-   * position; without it the stretch has no width.
-   */
-  .area-slider__control {
-    --_stop: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_slider-ratio));
-    --_buffer-stop: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_buffered));
-    --_rail: linear-gradient(var(--_fill-dir, to right), var(--_fill) 0 var(--_stop, var(--_pct)), var(--_buffer-fill) 0 var(--_buffer-stop, 0%), var(--_track-fill) 0 100%);
-    position: relative;
-    z-index: 1;
-    appearance: none;
-    flex: 1;
-    min-inline-size: 0;
-    margin: 0;
-    block-size: var(--_height);
-    background: transparent;
-    cursor: inherit;
-    outline: none;
-  }
-
-  /* Origin (owner 2026-10-24, the Temperature bar: Cool … Neutral … Warm): a range with a neutral middle fills from that
-     value to the thumb, either side of it, so Neutral is an empty bar and each way grows out from it. The host gives the two
-     ends as ratios (`--_lo`, `--_hi`) and marks the slider `data-origin`; the buffered stretch is not drawn with it. */
-  .area-slider[data-origin] .area-slider__control {
-    --_from: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_lo));
-    --_to: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--_hi));
-    --_rail: linear-gradient(var(--_fill-dir, to right), var(--_track-fill) 0 var(--_from), var(--_fill) 0 var(--_to), var(--_track-fill) 0 100%);
-  }
-
-  /* Right-to-left: the browser already places the thumb from the right, so only the fill turns
-     round. :dir() matches a dir on the input itself or on an ancestor; mirroring the track with
-     scale put Chromium's thumb back on the left (audit C-11, checked live). */
-  .area-slider__control:dir(rtl) { --_fill-dir: to left; }
-  /* After the RTL rule: a vertical slider fills from the bottom in either direction. */
-  .area-slider--vertical .area-slider__control { --_fill-dir: to top; }
-
-  /* Hover darkens the fill (and the bar's thumb, which is the fill's end); the rail keeps its colour. Variants
-     read these properties, so one rule covers every track, vertical included. */
-  @media (hover: hover) {
-    .area-slider__control:hover:not(:disabled) { --_fill: var(--_fill-hover); --_track-fill: var(--_track-fill-hover); }
-  }
-
-  .area-slider__control::-webkit-slider-runnable-track {
-    block-size: var(--_track);
-    border-radius: var(--_track-radius, var(--area-radius-full));
-    background: var(--_rail);
-  }
-
-  .area-slider__control::-moz-range-track {
-    block-size: var(--_track);
-    border-radius: var(--_track-radius, var(--area-radius-full));
-    background: var(--_rail);
-  }
-
-  /*
-   * Round by identity, like the switch thumb: a slider handle that is not a circle reads
-   * as a segment of the track rather than as the thing you drag. It does not follow the
-   * radius axis. The bar variant swaps it for the fill's own end (below).
-   *
-   * WebKit gives the thumb no automatic centring, so it is offset by half the difference
-   * between the thumb and the track. Firefox centres it, which is why the -moz rule has
-   * no margin.
-   */
-  .area-slider__control::-webkit-slider-thumb {
-    appearance: none;
-    box-sizing: border-box;
-    inline-size: var(--_thumb);
-    block-size: var(--_thumb-block, var(--_thumb));
-    margin-block-start: calc((var(--_track) - var(--_thumb-block, var(--_thumb))) / 2);
-    border: var(--_thumb-edge, var(--area-stroke-width)) solid var(--_thumb-border);
-    border-radius: var(--_thumb-radius, var(--area-radius-full));
-    background: var(--_thumb-paint, var(--_knob));
-    box-shadow: var(--_thumb-shadow, var(--area-shadow-control));
-    transition: var(--area-transition);
-  }
-
-  .area-slider__control::-moz-range-thumb {
-    appearance: none;
-    box-sizing: border-box;
-    inline-size: var(--_thumb);
-    block-size: var(--_thumb-block, var(--_thumb));
-    border: var(--_thumb-edge, var(--area-stroke-width)) solid var(--_thumb-border);
-    border-radius: var(--_thumb-radius, var(--area-radius-full));
-    background: var(--_thumb-paint, var(--_knob));
-    box-shadow: var(--_thumb-shadow, var(--area-shadow-control));
-    transition: var(--area-transition);
-  }
-
-  /* The ring alone, as every other control (audit C-13; the thumb edge no longer recolours). */
-  .area-slider__control:focus-visible::-webkit-slider-thumb {
-    outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
-  }
-  .area-slider__control:focus-visible::-moz-range-thumb {
-    outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
-  }
-
-  /*
-   * The readout is a value, not a label, so it takes the muted foreground and tabular
-   * figures -- without them the row twitches sideways as the digits change width. Its
-   * width is four figures: a content measure rather than a design decision, which is why
-   * it is in `ch` and not on the spacing ramp.
-   */
-  .area-slider__value {
-    flex-shrink: 0;
-    min-inline-size: 4ch;
-    text-align: end;
-    font-size: var(--_text);
-    line-height: var(--_leading);
-    font-variant-numeric: tabular-nums;
-    color: var(--area-fg-muted);
-    user-select: none;
-  }
-
-  .area-slider__label {
-    flex-shrink: 0;
-    color: var(--area-fg-default);
-    font-size: var(--_text);
-    line-height: var(--_leading);
-    white-space: nowrap;
-  }
-
-  /*
-   * End labels (owner 2026-10-21, the Intensity reference): the track's two ends named under it, "Low" … "High", as
-   * macOS and iOS settings sliders. In the description's text and ink (Field), each under its end of the track, so a
-   * slider with them is a grid: the control row, then the ends under the control's column. Hidden when vertical.
-   */
-  .area-slider__ends {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--area-space-8);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
-    color: var(--area-fg-muted);
-    white-space: nowrap;
-    user-select: none;
-  }
-  .area-slider__end { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
-  .area-slider:has(> .area-slider__ends):not(.area-slider--top, .area-slider--vertical) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    column-gap: var(--_gap);
-    row-gap: var(--area-space-2);
-    block-size: auto;
-  }
-  .area-slider:has(> .area-slider__ends):not(.area-slider--top, .area-slider--vertical) > .area-slider__control { grid-area: 1 / 1; }
-  .area-slider:has(> .area-slider__ends):not(.area-slider--top, .area-slider--vertical) > .area-slider__value { grid-area: 1 / 2; }
-  .area-slider:has(> .area-slider__ends):not(.area-slider--top, .area-slider--vertical) > .area-slider__ends { grid-area: 2 / 1; }
-  .area-slider:has(> .area-slider__ends):not(.area-slider--top, .area-slider--vertical) > .area-slider__marks { grid-area: 1 / 1; inset-block: 0; }
-  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) { grid-template-columns: auto minmax(0, 1fr) auto; }
-  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) > .area-slider__label { grid-area: 1 / 1; }
-  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) > .area-slider__control { grid-area: 1 / 2; }
-  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) > .area-slider__value { grid-area: 1 / 3; }
-  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) > .area-slider__ends { grid-area: 2 / 2; }
-  .area-slider:has(> .area-slider__ends):has(> .area-slider__label):not(.area-slider--top, .area-slider--vertical) > .area-slider__marks { grid-area: 1 / 2; }
-  /* A full-height bar's ticks need a lane under it: before the end labels when there are some, else under the bar. */
-  .area-slider--bar:has(> .area-slider__marks) > .area-slider__ends { margin-block-start: var(--area-space-8); }
-  .area-slider--bar:has(> .area-slider__marks):has(> .area-slider__ends) { padding-block-end: 0; }
-  .area-slider--top > .area-slider__ends { grid-area: 3 / 1 / 4 / 3; }
-  .area-slider--top:has(> .area-slider__ends) { grid-template-rows: auto var(--_height) auto; }
-  .area-slider--vertical > .area-slider__ends { display: none; }
-
-  /* --- Sizes -------------------------------------------------------------- */
-
-  .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-space-16); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_bar-radius: var(--area-radius-control-sm); }
-  .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-space-16); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); --_bar-radius: var(--area-radius-control-md); }
-  .area-slider--lg { --_height: var(--area-control-lg); --_thumb: var(--area-space-20); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_bar-radius: var(--area-radius-control-lg); }
-
-  /* --- Variants ------------------------------------------------------------ */
-
-  /*
-   * Track (owner 2026-10-21, "C"): Figma's adjustment slider (figma--adjustment-slider): a pill as tall as the
-   * thumb, the fill running under the knob to its centre. The trough is Segmented's (`bg-component`), Figma's
-   * #f5 on white. After the sizes, so the track follows the thumb ladder: 16 / 16 / 20.
-   */
-  .area-slider.area-slider--track {
-    --_track: var(--_thumb);
-    --_track-fill: var(--area-bg-component);
-    --_buffer-fill: var(--area-fill-track); /* one step over the lighter trough: the rail grey */
-  }
-
-  /*
-   * Bar (owner 2026-10-21, the "Rate your driver" reference): the track is the control itself, the tier's height
-   * and corner, so it lines up with a Button or field beside it. The thumb is the fill's rounded end, one glyph
-   * wide (16 / 16 / 20), with a pill grip in the fill's ink: 4 wide and one glyph long. The grip is round by
-   * identity, like the knob; the bar and the fill's end follow the radius setting.
-   */
-  .area-slider.area-slider--bar {
-    --_track: var(--_height);
-    --_track-fill: var(--area-bg-component);
-    --_buffer-fill: var(--area-fill-track);
-    --_track-radius: var(--_bar-radius, var(--area-radius-control-md));
-    --_thumb-block: var(--_track);
-    --_thumb-radius: min(var(--_track-radius), var(--_thumb) / 2);
-    --_thumb-edge: 0px;
-    --_thumb-shadow: none;
-    --_grip: var(--_thumb);
-    --_grip-ink: var(--area-fg-on-selection);
-  }
-  .area-slider--bar .area-slider__control {
-    --_thumb-paint:
-      radial-gradient(circle at 50% calc(50% - var(--_grip) / 2 + 2px), var(--_grip-ink) 0 2px, transparent 2px),
-      radial-gradient(circle at 50% calc(50% + var(--_grip) / 2 - 2px), var(--_grip-ink) 0 2px, transparent 2px),
-      linear-gradient(var(--_grip-ink), var(--_grip-ink)) center / var(--area-space-4) calc(var(--_grip) - 4px) no-repeat,
-      var(--_fill);
-  }
-  .area-slider--bar.area-slider--vertical .area-slider__control {
-    --_thumb-paint:
-      radial-gradient(circle at calc(50% - var(--_grip) / 2 + 2px) 50%, var(--_grip-ink) 0 2px, transparent 2px),
-      radial-gradient(circle at calc(50% + var(--_grip) / 2 - 2px) 50%, var(--_grip-ink) 0 2px, transparent 2px),
-      linear-gradient(var(--_grip-ink), var(--_grip-ink)) center / calc(var(--_grip) - 4px) var(--area-space-4) no-repeat,
-      var(--_fill);
-  }
-  /* The whole bar takes the focus ring, as a field does; a ring round the grip alone read as a stray circle. */
-  .area-slider--bar .area-slider__control:focus-visible {
-    border-radius: var(--_track-radius);
-    outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
-  }
-  .area-slider--bar .area-slider__control:focus-visible::-webkit-slider-thumb { outline: none; }
-  .area-slider--bar .area-slider__control:focus-visible::-moz-range-thumb { outline: none; }
-  /*
-   * Field (owner 2026-10-24, the settings panel reference: "Bounce 100", "Stagger 45ms", "Corner 28px"): the whole control
-   * is a field-height bar with its label at the start and its value at the end inside it, and the fill is a plate behind
-   * them, so a list of them reads as a list of settings and any point of the bar drags it. Geometry is the field's own:
-   * the tier's height and corner, the inset contract's sides (inset.css), no edge. The trough is the soft field fill
-   * (`bg-component`) and the fill the off-track grey one step past it (`fill-track`, hover `fill-toggle-hover`), neutral
-   * as the reference; label and value take the body ink, which reads on both. No grip: the fill's end is the value.
-   * Horizontal only; step marks and end labels belong to the other variants.
-   */
-  .area-slider.area-slider--field {
-    --_track: var(--_height);
-    --_track-fill: var(--area-bg-component);
-    --_fill: var(--area-fill-track);
-    --_fill-hover: var(--area-fill-toggle-hover);
-    --_track-radius: var(--_bar-radius, var(--area-radius-control-md));
-    --_thumb: 0px;
-    --_thumb-block: var(--_track);
-    --_thumb-edge: 0px;
-    --_thumb-shadow: none;
-    --_thumb-paint: transparent;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    column-gap: var(--_gap);
-    isolation: isolate;
-  }
-  .area-slider--field > .area-slider__control { position: absolute; z-index: 0; inset: 0; inline-size: 100%; cursor: ew-resize; }
-  /* A glide (Slider `glide`, owner 2026-10-24: "not very smooth in between their options"): while the pointer drags,
-     the fill follows it (React paints the pointer's place); otherwise a change of step, a key or the release, eases
-     the fill to the step on fast, ease-out. A field has no thumb to jump ahead of it. */
-  .area-slider--field[data-glide]:not([data-dragging]) { transition: --_slider-ratio var(--area-duration-fast) var(--area-ease-out); }
-  .area-slider--field[data-disabled] > .area-slider__control { cursor: not-allowed; }
-  .area-slider--field > .area-slider__label,
-  .area-slider--field > .area-slider__value { position: relative; z-index: 1; pointer-events: none; color: var(--area-fg-default); }
-  .area-slider--field > .area-slider__label { grid-column: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
-  .area-slider--field > .area-slider__value { grid-column: 2; min-inline-size: 0; }
-  .area-slider--field > :is(.area-slider__marks, .area-slider__ends) { display: none; }
-  .area-slider--field .area-slider__control:focus-visible {
-    border-radius: var(--_track-radius);
-    outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
-  }
-  .area-slider--field .area-slider__control:focus-visible::-webkit-slider-thumb { outline: none; }
-  .area-slider--field .area-slider__control:focus-visible::-moz-range-thumb { outline: none; }
-  /* The ticks need a lane under a full-height bar. */
-  .area-slider--bar:has(> .area-slider__marks) { block-size: auto; padding-block-end: var(--area-space-8); }
-
-  /* SliderRange's variants: the same troughs, and the fill runs between the two thumbs' centres from their ratios. */
-  .area-slider-range.area-slider-range--track { --_range-rail: var(--_range-thumb); --_range-track-fill: var(--area-bg-component); }
+  /* SliderRange's variants: the same troughs; the fill's ends are square, under the thumbs. */
+  .area-slider-range.area-slider-range--track { --_range-rail: var(--_range-thumb); --_range-track-fill: var(--area-bg-component); --_range-fill-radius: 0; }
   .area-slider-range.area-slider-range--bar {
     --_range-rail: var(--_range-height);
     --_range-track-fill: var(--area-bg-component);
     --_range-radius: var(--area-radius-control-md);
+    --_range-fill-radius: 0;
   }
   .area-slider-range--bar.area-slider-range--sm { --_range-radius: var(--area-radius-control-sm); }
   .area-slider-range--bar.area-slider-range--lg { --_range-radius: var(--area-radius-control-lg); }
-  .area-slider-range:is(.area-slider-range--track, .area-slider-range--bar) .area-slider-range__track::before {
-    inset-inline-start: calc(var(--_range-thumb) / 2 + (100% - var(--_range-thumb)) * var(--_range-start-ratio));
-    inline-size: calc((100% - var(--_range-thumb)) * (var(--_range-end-ratio) - var(--_range-start-ratio)));
-    border-radius: 0;
-  }
 }

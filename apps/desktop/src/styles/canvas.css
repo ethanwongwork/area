@@ -7,6 +7,9 @@
   .studio-canvas {
     /* Its spacing is the layout values' (app.css, .studio: --_canvas-*). */
     display: grid;
+    /* One column the Canvas's own width: an auto column grew to the bar's widest content and pushed its end off the
+       Canvas, where the path at its start should give way first. */
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
     min-inline-size: 0;
     min-block-size: 0;
@@ -46,6 +49,9 @@
        the Canvas, as Notion's and ChatGPT's top bars carry none. The rule's width stays as clear space, so the controls
        keep their line with the Sidebar's first row and the Inspector's first heading. */
     border-block-end: var(--area-border-width) solid transparent;
+    /* The bar's start (a way out, a path) and its controls stay at least 12 apart, as everything drawn in it; the path
+       is cut first (2026-10-25: at 1024 the path ran into the first control). */
+    gap: var(--area-space-12);
   }
   /* Everything drawn is 12 apart, as in the Titlebar: a field's edge, a track, an icon
      (studio-bar-icon). */
@@ -55,7 +61,9 @@
     display: flex;
     align-items: center;
     gap: var(--area-space-12);
-    min-inline-size: 0;
+    /* The controls keep their width and the path at the bar's start gives way (2026-10-25: the Overview's breadcrumb
+       pushed the grid / list switch off the Canvas at 1024). */
+    flex: none;
     margin-inline-start: auto;
     white-space: nowrap;
   }
@@ -190,6 +198,11 @@
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
   }
   .gallery-tile[data-layout="card"] > .gallery-tile__view { padding: var(--area-space-12); }
+  /* Waterfall (Components' Cards menu, src/gallery/fit.ts): each card its own height, tops in a row aligned until fit.ts
+     has measured them; then rows of 1px and no row gap, each card spanning its height and the gap (placeWaterfall), so
+     it drops into the first column with room. */
+  .studio-grid--waterfall { align-items: start; }
+  .studio-grid--waterfall[data-placed] { grid-auto-rows: 1px; row-gap: 0; }
   /* Fields take the card's width (Fields' public width hooks; their 256 is a form's measure), as
      Compass's text field fills its card, so a field shows at its size group's scale like a Button
      (src/gallery/fit.ts). */
@@ -241,6 +254,27 @@
   [data-stage="flow"] > .gallery-tile__view { align-content: start; }
   .studio-tile-error { margin: 0; color: var(--area-fg-danger); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
 
+
+  /* --- The Overview and a tile's path (src/pages/components.tsx) ------------ */
+
+  /* The Canvas bar's start on a tile: the Overview button, then the path to the tile (Area's Breadcrumb), its glyph 12
+     from the path's first letter as everything drawn in the bar is 12 apart (the button's box is wider than its glyph by
+     the small control less the small icon); the path gives way first when the bar is narrow. */
+  .studio-canvas__lead { display: flex; align-items: center; gap: calc(var(--area-space-12) - (var(--area-control-sm) - var(--area-icon-sm)) / 2); min-inline-size: 0; }
+  /* Cut where the controls begin, past the focus ring's reach, rather than run under them. */
+  .studio-canvas__crumbs { min-inline-size: 0; overflow: clip; overflow-clip-margin: var(--area-space-4); }
+  /* A family's section: its title 12 over its cards (the feed's heading space), its groups when open 24 apart, a
+     group's name 8 over its row (a lede's spacing), and Show all 12 under the cards (a heading's space). */
+  .studio-overview__body { display: grid; gap: var(--area-space-24); min-inline-size: 0; } /* pick: between a heading's 12 and a section's 40 */
+  .studio-overview__group { display: grid; gap: var(--area-space-8); min-inline-size: 0; }
+  .studio-overview__group-label { margin: 0; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
+  .studio-overview__more { display: flex; margin-block-start: var(--area-space-12); }
+  /* Show all: the feed's copy (13/18, muted, trimmed to cap and baseline), no plate, the title link's underline on hover. */
+  .studio-overview__toggle { appearance: none; padding: 0; border: 0; background: none; color: var(--area-fg-muted); font: inherit; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; cursor: pointer; }
+  /* The family's status follows its count on the title's line. */
+  .studio-overview__status { display: inline-flex; vertical-align: middle; margin-inline-start: var(--area-space-4); }
+  /* A section not yet drawn holds its room with empty cards of the cards' own shape (Asset card landscape, 5:4). */
+  .studio-overview__ghost { aspect-ratio: 5 / 4; border-radius: var(--_tile-radius); background: var(--area-bg-subtle); }
 
   /* --- A family's tabs (src/family-tabs.tsx) -------------------------------- */
 

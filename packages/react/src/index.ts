@@ -17,7 +17,7 @@ export { SliderRange, type SliderRangeProps, type SliderRangeValue } from "./com
 export { Input, InputAction, type InputProps, type InputActionProps } from "./components/Input.tsx";
 export { NumberField, type NumberFieldProps } from "./components/NumberField.tsx";
 export { InputGroup, InputGroupText, type InputGroupProps, type InputGroupTextProps } from "./components/InputGroup.tsx";
-export { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis, type BreadcrumbEllipsisProps, type BreadcrumbSeparatorProps } from "./components/Breadcrumb.tsx";
+export { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis, type BreadcrumbProps, type BreadcrumbEllipsisProps, type BreadcrumbSeparatorProps } from "./components/Breadcrumb.tsx";
 export { Toolbar, ToolbarItem, ToolbarGroup, ToolbarSeparator, ToolbarOverflow, type ToolbarProps, type ToolbarItemProps, type ToolbarGroupProps, type ToolbarOverflowProps } from "./components/Toolbar.tsx";
 export { AlignmentPicker, ALIGNMENT_POSITIONS, type AlignmentPickerProps, type AlignmentPosition } from "./components/AlignmentPicker.tsx";
 export { ColorSwatch, type ColorSwatchProps } from "./components/ColorSwatch.tsx";

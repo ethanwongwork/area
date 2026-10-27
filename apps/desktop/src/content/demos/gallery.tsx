@@ -1,7 +1,7 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
-import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverStep, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
+import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Label, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverStep, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, useToaster, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
 import { AddIcon, AlignBottomIcon, AlignCenterIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowDownIcon, ArrowUpIcon, AspectRatioIcon, AutoLayoutIcon, BoldIcon, CalendarIcon, ChatIcon, CheckIcon, ChevronDownIcon, ClockIcon, CodeIcon, CopyIcon, CornerIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeOffIcon, FlipIcon, FlipVerticalIcon, FlowFreeIcon, FlowIcon, FlowVerticalIcon, FlowWrapIcon, FolderFilledIcon, FolderIcon, FrameIcon, GlobeIcon, GridIcon, HistoryIcon, ImageIcon, InfoIcon, ItalicIcon, KanbanIcon, LayersIcon, LinkIcon, ListIcon, MenuIcon, MoreHorizontalIcon, OpacityIcon, OpenIcon, PaintbrushIcon, PaletteIcon, PanelLeftIcon, PencilIcon, PenToolIcon, PeopleIcon, PersonIcon, PlayIcon, PointerIcon, RectangleIcon, RefreshIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, StrikethroughIcon, SubtractIcon, SunIcon, TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon, TextIcon, ThumbsDownIcon, ThumbsUpIcon, TokenIcon, TrashIcon, UnderlineIcon, VolumeIcon, WarningIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
@@ -37,6 +37,18 @@ export const GalleryBreadcrumbIcons = () => (
     <BreadcrumbSeparator />
     <BreadcrumbItem><BreadcrumbPage><DocumentIcon /> Item two</BreadcrumbPage></BreadcrumbItem>
   </BreadcrumbList></Breadcrumb>
+);
+// One line in a narrow bar: the ancestors keep their width and the current page is cut first.
+export const GalleryBreadcrumbNowrap = () => (
+  <div style={{ inlineSize: 220 }}>
+    <Breadcrumb nowrap><BreadcrumbList>
+      <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-nowrap">Item one</BreadcrumbLink></BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-nowrap">Item two</BreadcrumbLink></BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem><BreadcrumbPage>Item three, a longer page name</BreadcrumbPage></BreadcrumbItem>
+    </BreadcrumbList></Breadcrumb>
+  </div>
 );
 export const GalleryAlert = () => (
   <Alert icon={<InfoIcon />} title="Title">Body text</Alert>
@@ -1847,22 +1859,53 @@ export const GallerySliderLarge = () => <Slider aria-label="Label" size="lg" def
 export const GallerySliderTrack = () => <Slider variant="track" aria-label="Label" defaultValue={60} readout={value => `${value}%`} />;
 export const GallerySliderBar = () => <Slider variant="bar" aria-label="Label" defaultValue={60} readout={value => `${value}%`} />;
 /* A range with a neutral middle fills out from it (origin, owner 2026-10-24: the Temperature bar). */
-export const GallerySliderOrigin = () => <Slider variant="field" label="Label" min={-50} max={50} origin={0} defaultValue={25} readout={value => value === 0 ? "0" : `${value > 0 ? "+" : "−"}${Math.abs(value)}`} />;
-export const GallerySliderField = () => <Slider variant="field" label="Label" defaultValue={60} readout={value => `${value}%`} />;
-/* A list of settings, as the owner's settings panel reference (2026-10-24): each row a field slider in its own unit. */
-export const GallerySliderFieldList = () => (
+export const GallerySliderOrigin = () => <Slider labelPosition="inside" label="Label" min={-50} max={50} origin={0} defaultValue={25} readout={value => value === 0 ? "0" : `${value > 0 ? "+" : "−"}${Math.abs(value)}`} />;
+export const GallerySliderInside = () => <Slider labelPosition="inside" label="Label" defaultValue={60} readout={value => `${value}%`} />;
+/* A list of settings, as the owner's settings panel and Path panel references (2026-10-24, 2026-10-26): each row a bar with
+   its label inside, in its own unit; a short stepped range shows its steps as dots. */
+export const GallerySliderSettingsList = () => (
   <div style={{ display: "grid", gap: "var(--area-space-8)", inlineSize: "100%" }}>
-    <Slider variant="field" label="Label" defaultValue={60} readout={value => `${value}%`} />
-    <Slider variant="field" label="Label" min={0} max={16} defaultValue={8} readout={value => `${value}px`} />
-    <Slider variant="field" label="Label" min={0} max={300} step={30} defaultValue={210} readout={value => `${value}ms`} />
+    <Slider labelPosition="inside" label="Label" min={0} max={6} step={1} defaultValue={2} stepMarks />
+    <Slider labelPosition="inside" label="Label" min={0} max={16} defaultValue={8} readout={value => `${value}px`} />
+    <Slider labelPosition="inside" label="Label" min={0} max={300} step={30} defaultValue={210} readout={value => `${value}ms`} />
   </div>
 );
+/* An option past the range at the slider's end (the owner's budget reference, 2026-10-26: "No limit" beside a bar): a soft
+   toggle Button at the slider's size, after it, a cluster's gap away. Pressing it takes the whole range (the bar fills);
+   moving the slider lets it go. A composition, not a slot: inside the slider's label the button's text would join the
+   slider's accessible name. */
+export const GallerySliderWithOption = () => {
+  const [value, setValue] = useState(60);
+  const [option, setOption] = useState(false);
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", alignItems: "center", gap: "var(--area-ui-cluster)", inlineSize: "100%" }}>
+      <Slider variant="bar" aria-label="Label" value={option ? 100 : value} onValueChange={next => { setOption(false); setValue(next); }} readout={current => `${current}%`} />
+      <Button variant="soft" selected={option} onSelectedChange={setOption}>Option one</Button>
+    </div>
+  );
+};
+export const GallerySliderStepDots = () => <Slider variant="bar" aria-label="Label" min={0} max={6} step={1} defaultValue={2} stepMarks readout />;
+/* A label-inside bar with its number beside it (owner, 2026-10-25: "something like this with an input at the end"): drag the bar,
+   or type an exact value; one value between them. A composition: Label, a Slider bar and NumberField, no new prop. */
+export const GallerySliderWithInput = () => {
+  const [value, setValue] = useState(60);
+  const id = useId();
+  return (
+    <div style={{ display: "grid", gap: "var(--area-ui-stack)", inlineSize: "100%" }}>
+      <Label htmlFor={id}>Label</Label>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) var(--area-space-80)", gap: "var(--area-space-8)" }}>
+        <Slider id={id} labelPosition="inside" readout={false} value={value} onValueChange={setValue} aria-valuetext={`${value}%`} />
+        <NumberField aria-label="Label value" variant="soft" min={0} max={100} unit="%" steppers={false} value={value}
+          onValueChange={next => { if (next !== null) setValue(next); }} />
+      </div>
+    </div>
+  );
+};
 export const GallerySliderRangeTrack = () => <SliderRange variant="track" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
 export const GallerySliderRangeBar = () => <SliderRange variant="bar" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
 export const GallerySliderBuffered = () => <Slider aria-label="Position" defaultValue={40} buffered={65} />;
 export const GallerySliderNeutral = () => <SelectionNeutral><Slider aria-label="Label" defaultValue={65} readout={value => `${value}%`} /></SelectionNeutral>;
 export const GallerySliderWithLabel = () => <Slider label="Label" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
-export const GallerySliderLabelOnly = () => <Slider label="Label" labelPosition="top" defaultValue={50} />;
 export const GallerySliderSteps = () => <Slider aria-label="Label" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
 export const GallerySliderStepMarks = () => <Slider aria-label="Label" min={0} max={5} step={1} defaultValue={1} stepMarks />;
 export const GallerySliderVertical = () => <Slider aria-label="Label" orientation="vertical" defaultValue={50} />;
