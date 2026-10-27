@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToStaticMarkup as render } from "react-dom/server";
-import { VideoPlayer, Abbreviation, Figure, Hatnote, Infobox, InfoboxRow, InfoboxSection, InlineList, LinkGroups, LinkGroup, ReferenceList, ReferenceListItem, TableOfContents } from "../dist/modules/index.js";
+import { VideoPlayer, Abbreviation, Figure, Hatnote, InlineList, LinkGroups, LinkGroup, ReferenceList, ReferenceListItem, TableOfContents } from "../dist/modules/index.js";
 
 test("a reference list is ChatGPT's sources: publisher, linked title and what it covers, set apart by em dashes; numbered notes link back", () => {
   const html = render(h(ReferenceList, { title: "Sources" }, h(ReferenceListItem, { source: "Epson", title: "Report", href: "https://x.test", description: "durability" })));
@@ -28,14 +28,6 @@ test("a table of contents is a marker Nav of links to the headings, the current 
 test("a figure wraps its media and caption", () => {
   const html = render(h(Figure, { caption: "Cap" }, h("img", { src: "x.jpg", alt: "X" })));
   assert.equal(html.replace(/^<link [^>]*>/, ""), '<figure class="area-figure"><div class="area-figure__media"><img src="x.jpg" alt="X"/></div><figcaption class="area-figure__caption">Cap</figcaption></figure>');
-});
-
-test("an infobox is a named aside: a header, then sections of label and value rows", () => {
-  const html = render(h(Infobox, { title: "David Tee", subtitle: "Designer", media: h("img", { alt: "" }) }, h(InfoboxSection, { title: "Details" }, h(InfoboxRow, { label: "Born" }, "1988"))));
-  assert.match(html, /^<aside class="area-infobox area-infobox--columns" aria-label="David Tee"><div class="area-infobox__header"><div class="area-infobox__media"><img alt=""\/><\/div><div class="area-infobox__title-row"><div class="area-infobox__heading-group"><div class="area-infobox__title">David Tee<\/div><div class="area-infobox__subtitle">Designer<\/div><\/div><\/div><\/div>/);
-  assert.match(render(h(Infobox, { title: "X", layout: "stacked", action: h("button", null, "a") })), /class="area-infobox area-infobox--stacked".*<div class="area-infobox__action"><button>a<\/button><\/div>/);
-  assert.match(html, /<section class="area-infobox__section"><div class="area-infobox__heading">Details<\/div><dl class="area-infobox__rows"><div class="area-infobox__row"><dt class="area-infobox__label">Born<\/dt><dd class="area-infobox__value">1988<\/dd><\/div><\/dl><\/section>/);
-  assert.match(render(h(Infobox, { title: "X", framed: true })), /class="area-infobox area-infobox--columns area-infobox--framed"/);
 });
 
 test("an inline list keeps its list role and puts each child in an item", () => {

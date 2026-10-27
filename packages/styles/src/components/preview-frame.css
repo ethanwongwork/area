@@ -1,5 +1,9 @@
 /* ---------------------------------------------------------------------------
- * Preview frame
+ * Preview frame (deprecated 2026-10-26)
+ *
+ * Folded into Asset card: a containerless Asset card with no name is the frame alone (asset-card.css, "The frame
+ * alone"), with aspect wide and fill checker. These rules stay so existing markup keeps working; new work uses
+ * Asset card.
  *
  * The frame at the head of an inspector that shows the one selected thing: an icon large, an image or vector
  * contained whole, or a colour filling it. The column's width at a fixed aspect, the content centred and never

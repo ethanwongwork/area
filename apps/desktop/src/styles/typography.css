@@ -29,8 +29,8 @@
    * below): "Aa" in the style, its name and metrics under it.
    */
   .studio-type-rows { display: grid; }
-  .studio-type-row { display: grid; gap: var(--area-space-8); padding-block: var(--area-space-16); border-block-start: var(--area-border-width) solid var(--area-border-divider); } /* was the 14 margin */
-  .studio-type-row:first-child { padding-block-start: 0; border-block-start: 0; }
+  .studio-type-row { display: grid; gap: var(--area-space-8); padding-block: var(--area-space-16); } /* was the 14 margin; no rule between rows since 2026-10-25 (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional") */
+  .studio-type-row:first-child { padding-block-start: 0; }
   .studio-type-row__head {
     display: flex;
     justify-content: space-between;

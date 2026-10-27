@@ -162,6 +162,7 @@ docs never restate it.
 
 - Token, replaced by `<Code swatch>`;
 - MenuSearch, replaced by a Combobox or a Command palette;
+- Preview frame, replaced by a containerless Asset card with no name (2026-10-26);
 - the `--area-ease-spring` easing, with no replacement.
 
 Renamed props keep a deprecated alias for one release, for example `options` → `items`,

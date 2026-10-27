@@ -55,7 +55,9 @@
     /* spec: Card's corner, the container corner plus the inset (16 at the default; the designs' 16). */
     --_corner: var(--area-asset-card-corner, max(var(--area-radius-floor), calc(var(--area-radius-container) + var(--_inset) * var(--area-radius-concentric))));
     /* Concentric: the card's corner less what lies between the two outlines, the edge and the inset (16 − 1 − 4 = 11). */
-    --_frame-corner: max(var(--area-radius-min), calc(var(--_corner) - (var(--_edge) + var(--_inset)) * var(--area-radius-concentric)));
+    /* The edge always counts, it is physical; the inset counts where corners are concentric (radius-concentric, 0 at
+       Square): 2026-10-26, a card held at a corner by the hook kept its frame 1 rounder than its inner curve at Square. */
+    --_frame-corner: max(var(--area-radius-min), calc(var(--_corner) - var(--_edge) - var(--_inset) * var(--area-radius-concentric)));
     /* The head's own padding, the designs' 4, apart from the frame's inset, so a basic card (no inset) keeps its head. */
     --_head-pad: var(--area-space-4);
     --_head: calc(var(--area-control-sm) + 2 * var(--_head-pad)); /* spec: the designs' 33 inside the edge */
@@ -331,7 +333,8 @@
      head over or under it with nothing between; its corner is Card's, with no frame inside to be concentric with. The
      head's controls end 4 in, where the card no longer pads them (the head rule, with no inset). */
   .area-asset-card--basic { --_inset: 0px; padding: 0; }
-  .area-asset-card--basic > .area-asset-card__frame { border-width: 0; border-radius: 0; background-color: transparent; }
+  /* Its corner stays concentric (the card's less its edge), so what fills it (an image) is cut on the card's own curve. */
+  .area-asset-card--basic > .area-asset-card__frame { border-width: 0; border-radius: var(--_frame-corner); background-color: transparent; }
   /* Fill: raised, the surface (white in light) for the whole card; recessed, the default, the tile tone (Card tone). */
   .area-asset-card--recessed {}
   .area-asset-card--raised { background-color: var(--area-bg-surface); }
@@ -341,10 +344,45 @@
   .area-asset-card--borderless { border-color: transparent; }
   /* Landscape: 5:4 for every kind but an image (spec: owner 2026-10-22; the reference gallery's media 195 x 158). */
   .area-asset-card--landscape:not(.area-asset-card--image) > .area-asset-card__frame { aspect-ratio: 5 / 4; } /* spec */
+  /* Wide: 2:1 for every kind but an image, a colour or a short banner (Preview frame's wide, folded in 2026-10-26: the
+     app's colour Inspector). */
+  .area-asset-card--wide:not(.area-asset-card--image) > .area-asset-card__frame { aspect-ratio: 2; } /* spec */
   .area-asset-card--framed {}
   /* Hug: the card follows its content's height at its width; an image keeps its own ratio, a group and a colour stay
      square, a component takes its own height and the room around it. */
   .area-asset-card--hug.area-asset-card--asset > .area-asset-card__frame { aspect-ratio: auto; }
+
+  /* Checker: the frame shows transparency under the asset, Color swatch's checker (its ink through a 2 x 2 pixel mask)
+     at a fixed cell, so a frame of any width shows whole cells from its corner; a colour paints over it, so its alpha
+     shows (Preview frame's checker and paint, folded in 2026-10-26; Zeplin's and Figma's export previews). The card
+     keeps its own fill; the checker is the frame's. */
+  .area-asset-card--checker > .area-asset-card__frame {
+    --_checker-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h1v1H0zM1 1h1v1H1z'/%3E%3C/svg%3E"); /* spec */
+    --_checker-ink: color-mix(in srgb, var(--area-fg-default) 16%, var(--area-bg-frame)); /* spec: Color swatch's, on the frame's own tone */
+    --_checker-cell: var(--area-space-8); /* spec: Figma 10.67; Area's nearest step */
+    isolation: isolate;
+    background-color: var(--area-bg-frame); /* the frame's tone under the checker, so a colour's own background never shows */
+  }
+  .area-asset-card--checker > .area-asset-card__frame::before,
+  .area-asset-card--checker.area-asset-card--color > .area-asset-card__frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .area-asset-card--checker > .area-asset-card__frame::before { background: var(--_checker-ink); mask: var(--_checker-tile) 0 0 / calc(var(--_checker-cell) * 2) auto repeat; }
+  /* The colour over the checker (painted after it), not under it as the frame's own background would be. */
+  .area-asset-card--checker.area-asset-card--color > .area-asset-card__frame::after { background: var(--_asset-color); }
+  .area-asset-card--checker {} /* the card keeps the recessed fill (the tile tone) */
+
+  /* The frame alone: a containerless card with no name and no controls has no head, so it is its frame, filling its
+     column at its aspect, as an inspector's preview of the selection (Preview frame, folded in 2026-10-26). With no card
+     around it to carry it, it keeps its edge at rest, and takes the container corner (it is the outermost shape). */
+  .area-asset-card--containerless:not(:has(> .area-asset-card__head)) { padding: 0; border-width: 0; --_corner: var(--area-asset-card-corner, var(--area-radius-container)); --_frame-corner: var(--_corner); }
+  .area-asset-card--containerless:not(:has(> .area-asset-card__head)):not(.area-asset-card--color, .area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame { border-color: var(--area-border-divider); }
+  /* Framed or basic with no head: the card's inset on all four sides. */
+  .area-asset-card:not(.area-asset-card--containerless):not(:has(> .area-asset-card__head)) { padding-block-start: var(--_inset); }
 
   /* Containerless: no card at rest. A component's frame keeps its box, its edge clear until hover (the hovered edge) or
      selection (the selected edge); an image or a group is its own surface: no frame edge, the states ring it. */

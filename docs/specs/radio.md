@@ -7,6 +7,8 @@ sets), ColorSwatchPicker and AlignmentPicker (radio-semantics pickers), Switch
 
 ## Owner decisions
 
+- 2026-10-25: "Build the filled option rows (control first, trailing value, selected fill) into Radio's card and use
+  them for Setup's text questions and answers" → `variant="soft"`, `layout="list"`, `meta`.
 - 2026-09-26: **Neutral by default, accent by override** (DESIGN_SYSTEM.md, "Color and
   focus"). The checked face is `neutral-solid` with an `fg-on-neutral` dot; `tone="accent"`
   opts into the accent. Recorded with the Alignment
@@ -27,7 +29,10 @@ Checkbox.
 |---|---|---|---|
 | size | md (default), lg (sm removed 2026-09-28); the box follows the type size (2026-10-14) | Label type follows the tier | Untitled sm 16 / md 20 |
 | variant | `card`: a contained, full-width option with the control at the end, as Checkbox's card (owner 2026-09-28) | Owner references (plan and registration pickers); shadcn Choice Card | gallery `card`, `card-tile` |
-| layout (card) | row (default): visual, text and control on one line; tile: visual above the label, control in the top-end corner; preview: the visual centred as the option's own picture, the label centred under it, no control drawn, the card a soft ground (2026-10-21). Read only with `variant="card"` (forms.tsx:318) | Owner reference 1; the owner's Appearance picker; Radix RadioCards | gallery `card`, `card-tile`, `card-preview` |
+| layout (card) | row (default): visual, text and control on one line; tile: visual above the label, control in the top-end corner; preview: the visual centred as the option's own picture, the label centred under it, no control drawn, the card a soft ground (2026-10-21), its picture in an 8px mat with concentric corners (2026-10-26); media: the picture in the same mat with the list row (control, label, meta) under it at the card's inset; media-row: the picture at the row's start (`--area-choice-media`, 32%), the row centred beside it (2026-10-26). Any `--area-choice-ratio`; a photo or video covers its frame, `auto` keeps a photo's own ratio. Read with a variant (card or soft) (forms.tsx:318) | Owner reference 1; the owner's Appearance picker; Radix RadioCards | gallery `card`, `card-tile`, `card-preview`, `media`, `media-row` |
+| variant | `soft` (2026-10-25): the card's shape and inset painted as a control fill (`bg-component`) with no edge, the hover fill under the pointer, the chosen one the control fill a step darker (`bg-component-active`) under the card's Selected tint layer; options in a group stretch and sit 4 apart (the selection surface was tried first: a heavy navy band in dark at Accent) | Owner: "build the filled option rows (control first, trailing value, selected fill)"; Notion Calendar's settings options (rows 4 apart, the chosen one darker), a proposal card's options | gallery `soft`, `soft-caption` |
+| layout | `list` (2026-10-25): the control first, then the text, then meta; read with either variant | Notion Calendar (radio first) | gallery `soft` |
+| composition | `meta` (2026-10-25): a short value at the option's end, muted and tabular, trimmed to its cap and centred on the label's first line with the control (inset.css) | Notion Calendar ("11:24 AM"), the proposal card's counts | gallery `soft` |
 | state | checked, disabled; group invalid | Native states; RadioGroup `error` | Untitled: checked, disabled |
 | orientation (group) | vertical (default), horizontal | Settings stacks vs inline choices | Untitled group gap 16 |
 | composition | description (`caption` is an alias), `leadingVisual` | Option caption; decorative context beside the text | Untitled label + hint |
@@ -176,6 +181,14 @@ selection with a real keyboard.
 
 ## Feedback log
 
+- 2026-10-26 · owner (Setup's answered questions now carried the blue edge): "Plain answers" → RadioGroup `readOnly`: a value shown, not chosen here. The chosen card or soft row keeps its rest edge and fill (the dot says which), the group ignores changes and becomes `role="radiogroup"` with `aria-readonly` and `aria-labelledby` its legend; hook `data-readonly`. Setup's answers use it.
+
+- 2026-10-26 · owner: "is this selected style correct or should it be a different stroke style?" and "the gaps horizontally between the text and components doesnt look right or balanced" → a chosen soft option draws the card's selected edge and tint (`stroke-selected` at `selected-width`, `selected-tint`) on its rest fill, so soft and card follow the Selected stroke and Selected tint settings as one rule (was one fill step darker, bg-component-active); in a card or soft list row the text follows the control at the row gap (`gap-row`, 12, compact 8; was the label gap, 6), equal to the card's inset before the control.
+
+- 2026-10-25 · owner (Notion Calendar's settings options, a proposal card's options) → soft, list and meta; the
+  control keeps its first-line rule (a 2px nudge was tried and removed: it put the control under the trimmed title's
+  centre). Setup's welcome choice and its answered questions use them.
+
 - 2026-10-21 · owner, the Theme setup's choices: "i want to separate the choices from the visual ... they should be
   consistent, cohesive, simple visuals that convey the choice well ... research and look into choice card ui, maybe the
   cards can have centered text" and an Appearance picker reference (soft grey cards, a centred window, the label under
@@ -233,3 +246,42 @@ Group rhythm: as Checkbox group, the description and validation sit `ui-stack` (
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-25
+
+- **What changed:** Radio has filled option rows: `variant="soft"` paints the option as a soft fill with no edge,
+  the chosen one filled darker; `layout="list"` puts the control first; `meta` adds a short value at the end ("14
+  questions · 3 min"), centred on the label's first line with the control. Soft options in a group sit 4 apart.
+- **Why:** you asked for filled option rows like Notion Calendar's settings and the proposal card's choices, for
+  Setup's text questions and answers.
+
+## Review note, 2026-10-26
+
+- **What changed:**
+  - A chosen soft row draws the selection edge, as the bordered card does, instead of going one shade darker. In list
+    rows the text sits 12 after the control, the same as the space before it.
+  - A read-only group (`readOnly`) shows a chosen value without the selected edge: Setup's past answers.
+  - Two new layouts for a picture with its row (control, name, meta): `media` puts the picture above the row (tiles
+    "Layout / media"), `media-row` puts it at the start of a full-width row (tile "Layout / media row").
+  - Preview and media pictures sit in an 8px mat of the card's fill, their corners the card's less the mat (4 at Soft);
+    a preview's label now sits at the card's inset under its picture (was 8).
+  - In media cards the control, the name and meta share one centre. Any picture ratio works; a photo or video is
+    cropped to fill its frame.
+- **Why:** you asked whether the selected style should be a stroke, and the gap between the control and the text
+  looked unbalanced (12 before the control, 6 after it). For Setup's picture answers you asked for cards consistent
+  with the text answers, the picture "directly on the card not cropped in a frame, or if there is a frame the corners
+  should be rounded", then for all three inset options (a third, a half, a row) and the text and radio alignment
+  fixed. At the old 12 inset a matching corner came to 2px, which read as a crop; run to the card's edge, a white
+  picture merged with the white page; the mat avoids both without a line.
+- **Round 72 and 73 notes (owner):** equal padding round the illustrations, then smaller with a little padding, then
+  no frame, then "the padding/spacing/alignment and scale of the visual doesnt really make alot of sense ... can you
+  rethink them?" The rule now has two kinds of picture:
+  - A picture with its own ground (Setup's screens, a photo) fills the picture slot, 8px inside the card's edge, its
+    corners the card's less the 8. The 8 leaves 6 clear inside the 2px selected stroke, which is drawn inside so a
+    chosen card keeps its size (owner, round 73; was 4, which left 2).
+  - An illustration with no ground (the gallery's window, a component) has no frame: it sits at the card's own inset
+    on its outer sides (12, compact 8), the label or row follows it at that same inset, and its width is what the card
+    leaves. Every gap round it is the card's inset; nothing is scaled by eye.
+  For now the gallery's picture tiles show an image placeholder (owner: "just use an image placeholder for now to
+  better asses the visuals"): Card media's flat fill with an image glyph, two steps from the soft card's fill (neutral
+  150 in light, 800 in dark), filling the slot as a photo would. Radio and Checkbox share every rule.

@@ -116,11 +116,16 @@ interface ChoiceProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"
 }
 
 export interface CheckboxProps extends ChoiceProps {
-  /** A contained, full-width option with its control at the end. It preserves native Checkbox behavior. */
+  /** A contained, full-width option: `card` (an edge, its control at the end) or `soft` (a fill and no edge, the chosen
+   * one filled darker: a settings list's options, Notion Calendar's). It preserves native Checkbox behavior. */
   variant?: VariantProps<typeof MANIFESTS.checkbox>["variant"];
-  /** Card layout: `row` (visual, text, control on one line), `tile` (visual above the label, control in the corner) or
-   * `preview` (the visual centred as the choice's own picture, the label centred under it, no control drawn). */
+  /** Card layout: `row` (visual, text, control on one line), `list` (the control first, then the text, then meta: a list
+   * of options), `tile` (visual above the label, control in the corner) or `preview` (the visual centred as the choice's
+   * own picture, the label centred under it, no control drawn) `media` (the picture in an 8px mat, a list row under
+   * it) or `media-row` (the picture at the row's start, the row centred beside it; `--area-choice-media` sets its share). */
   layout?: VariantProps<typeof MANIFESTS.checkbox>["layout"];
+  /** A short value at the option's end, muted and tabular: what the choice comes to ("11:24 AM", "14 questions"). */
+  meta?: ReactNode;
   /** Decorative context beside the mark. The visible label must still name the option. */
   leadingVisual?: ReactNode;
   /** Alias for description when the copy is presented as an option caption. */
@@ -134,7 +139,7 @@ export interface CheckboxProps extends ChoiceProps {
 }
 
 export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { variant, layout, size, label, description, caption, leadingVisual, invalid, indeterminate = false, onCheckedChange, onChange, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
+  { variant, layout, size, label, description, caption, leadingVisual, meta, invalid, indeterminate = false, onCheckedChange, onChange, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
   ref,
 ) {
   const resolvedCaption = caption ?? description;
@@ -153,7 +158,7 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
 
   return (
     <label
-      className={checkboxVariants({ variant, layout: variant === "card" ? layout : undefined, size }, className)}
+      className={checkboxVariants({ variant, layout: variant ? layout : undefined, size }, className)}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(invalidState ? { "data-invalid": "" } : {})}
     >
@@ -176,6 +181,7 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
           {resolvedCaption ? <span className="area-choice-label__description" id={descriptionId}>{resolvedCaption}</span> : null}
         </span>
       ) : null}
+      {meta != null ? <span className="area-checkbox__meta">{meta}</span> : null}
     </label>
   );
 });
@@ -247,10 +253,16 @@ export interface RadioGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSe
   defaultValue?: string;
   onValueChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
   orientation?: VariantProps<typeof MANIFESTS.radioGroup>["orientation"];
+  /**
+   * Shows a value that isn't chosen here (a past answer in a conversation, a setting set elsewhere): the chosen option
+   * keeps its control's dot and the row's fill, without the selected edge or tint, and the group ignores changes. The
+   * group becomes a radiogroup with aria-readonly, named by its legend.
+   */
+  readOnly?: boolean;
 }
 
 export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioGroupProps>(function RadioGroup(
-  { children, label, description, error, name, value, defaultValue, onValueChange, orientation, className, disabled, "aria-describedby": describedBy, ...rest },
+  { children, label, description, error, name, value, defaultValue, onValueChange, orientation, readOnly, className, disabled, "aria-describedby": describedBy, ...rest },
   ref,
 ) {
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
@@ -262,7 +274,9 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
   const groupName = name ?? generatedName;
   const selectedValue = value ?? uncontrolledValue;
   const resolvedDescription = [describedBy, description ? descriptionId : undefined, error ? errorId : undefined].filter(Boolean).join(" ") || undefined;
+  const legendId = useId();
   const change = (event: ChangeEvent<HTMLInputElement>) => {
+    if (readOnly) return;
     if (value === undefined) setUncontrolledValue(event.target.value);
     onValueChange?.(event.target.value, event);
   };
@@ -285,9 +299,10 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
       aria-describedby={resolvedDescription}
       aria-invalid={error ? true : undefined}
       {...(error ? { "data-invalid": "" } : {})}
+      {...(readOnly ? { role: "radiogroup", "aria-readonly": true, "aria-labelledby": legendId, "data-readonly": "" } : {})}
       {...rest}
     >
-      <legend className="area-radio-group__legend">{label}</legend>
+      <legend className="area-radio-group__legend" id={readOnly ? legendId : undefined}>{label}</legend>
       {description ? <span className="area-radio-group__description" id={descriptionId}>{description}</span> : null}
       <div className="area-radio-group__options">
         <RadioGroupContext.Provider value={{ name: groupName, value: selectedValue, disabled, onChange: change }}>
@@ -300,7 +315,7 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
 });
 
 export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(function Radio(
-  { variant, layout, size, label, description, caption, leadingVisual, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
+  { variant, layout, size, label, description, caption, leadingVisual, meta, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
   ref,
 ) {
   const group = useContext(RadioGroupContext);
@@ -316,7 +331,7 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
   };
 
   return (
-    <label className={radioVariants({ variant, layout: variant === "card" ? layout : undefined, size }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}>
+    <label className={radioVariants({ variant, layout: variant ? layout : undefined, size }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}>
       <input
         ref={ref}
         type="radio"
@@ -337,16 +352,19 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
           {resolvedCaption ? <span className="area-choice-label__description" id={descriptionId}>{resolvedCaption}</span> : null}
         </span>
       ) : null}
+      {meta != null ? <span className="area-radio__meta">{meta}</span> : null}
     </label>
   );
 });
 export { Switch, type SwitchProps } from "./Switch.tsx";
 
 export type RadioProps = Omit<ChoiceProps, "size"> & {
-  /** A contained, full-width option with its control at the end. */
+  /** A contained, full-width option: `card` (an edge) or `soft` (a fill, the chosen one darker), as Checkbox. */
   variant?: VariantProps<typeof MANIFESTS.radio>["variant"];
-  /** Card layout: `row`, `tile` or `preview`, as Checkbox. */
+  /** Card layout: `row`, `list` (the control first), `tile`, `preview`, `media` or `media-row`, as Checkbox. */
   layout?: VariantProps<typeof MANIFESTS.radio>["layout"];
+  /** A short value at the option's end, as Checkbox. */
+  meta?: ReactNode;
   /** Decorative context beside the text. The visible label must still name the option. */
   leadingVisual?: ReactNode;
   /** Alias for description, as Checkbox. */

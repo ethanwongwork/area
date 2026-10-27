@@ -509,7 +509,7 @@ export default {
     // Spec: Anatomy; manifest elements (long list, internal grid parts described briefly).
     parts: {
       root: "The framed block: owns the edge, corner, code ground and clipping.",
-      header: "The row above the code with the title, language and actions, and a rule under it.",
+      header: "The row above the code with the title, language and actions; the code starts under it with no rule between.",
       title: "The filename, in mono.",
       language: "The language as a passive label.",
       languages: "The language switcher: a Select, or tabs with languageTabs.",
@@ -567,7 +567,7 @@ export default {
       root: "A section for one group; it adds no side inset, so names line up with the surface's title.",
       title: "The group's name in muted ink, as a heading (h3 by default).",
       items: "The description list holding the rows.",
-      item: "One row: what the shortcut does at the start, its keys at the end, a divider under all but the last.",
+      item: "One row: what the shortcut does at the start, its keys at the end; with divided, a light rule under all but the last.",
       label: "What the shortcut does.",
       keys: "The chord as Kbd keycaps; alternatives sit side by side.",
     },

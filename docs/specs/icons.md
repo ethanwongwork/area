@@ -5341,3 +5341,19 @@ Decision: the curve keeps size^0.45 to 24 and continues at Fluent's slope, size^
 The 2026-10-06 concern (gaps growing while the line thins) is smaller at this slope: at 48 the line is 17% under a
 whole scale (the size^0.45 curve continued would have been 32%). Icons rendered by CSS size without `size` keep the
 token line scaled with the box; File page and File tile set their glyph line from this curve.
+
+## Optical pass, 2026-10-26 (Description list's icons)
+
+Owner, seeing circle-dashed, person, calendar and folder stacked at 16 in Description list: "these icons dont look very
+optically balanced". The audit (`generate.mjs --check --audit`, median size 11.27, density 0.41) found the standalone
+person 9% small (its family's marks bring person-* to −2…+4%) and circle-dashed's ink 59% under the median.
+- **person:** head r 3.5 at (8, 5) over a body 2.5–13.5 × 10.5–14 with r 3.5 shoulders, the circle keyline (was head
+  r 3 over a 10-wide body, vertical keyline). Size 11.24 (−0%). A 3.25 head would put the circle's extremes off the
+  half-pixel grid. The person-* family keeps its figure.
+- **circle-dashed, circle-check-dashed, circle-dot-dashed:** the same 8 dashes on the axes, lengthened until the gap
+  between them is one line (1.125, the overlap cut): 22.3° dashes, ink +27%. A dashed ring stays the lightest outline
+  (−48%) by nature. person-dashed keeps its own dashes.
+- **calendar** (+12% density from its five dots) and **folder** (−12%) are within the audit's range and unchanged.
+The four stay approved in batches.json, because a review icon leaves the package's main entry (`@area/icons/review`) and
+person is imported across the app; the redraws are on the owner's review page instead.
+

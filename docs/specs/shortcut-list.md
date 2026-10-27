@@ -133,7 +133,17 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 - **Why:** It was next on the list after Search field. The rows follow ChatGPT's keyboard shortcuts dialog and Figma's
   shortcuts panel; the keys are Area's Kbd keycaps, and the names line up with the dialog's title.
 
+## Lines (current, 2026-10-25)
+
+`divided` (boolean, off by default): a rule under each row but the last, in `border-decorative`. Without it the rows' height separates them. Was always on, in `border-divider`. Tile Divided. This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
+Spacing without rules (2026-10-26): rows take the plain UI row (32, compact 28); `divided` keeps the 36 around its rules.
+
 ## Feedback log
+
+- 2026-10-26 · owner: "the spacing/gaps for the components without the divider now look a bit off, can you refine them and make sure the spacing is intentional" → Spacing without rules (2026-10-26): rows take the plain UI row (32, compact 28); `divided` keeps the 36 around its rules. Rule: DESIGN_SYSTEM.md, Lines, "Space replaces the line".
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → `divided` (boolean, off by default): a rule under each row but the last, in `border-decorative`. Without it the rows' height separates them. Was always on, in `border-divider`. Tile Divided.
 
 - 2026-10-10 · owner: "proceed with your suggestions and keep building" → Shortcut list from ChatGPT's Keyboard shortcuts
   dialog and Figma's Help › Keyboard shortcuts; 5 gallery tiles, in review.
@@ -145,3 +155,9 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 
 - **What changed:** the `quiet` option no longer sets keys as text: every list shows keycaps, and the quiet tile is gone.
 - **Why:** your note that every Kbd should have its backplate, for one look everywhere (docs/specs/kbd.md, "When a key has a backplate").
+
+## Review note, 2026-10-26
+
+- **What changed:** Rows have no line by default. `divided` turns a light line back on (new Divided tile).
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light. You approved each one on the dividers comparison page.

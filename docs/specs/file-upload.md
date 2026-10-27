@@ -233,7 +233,13 @@ Resolved 2026-10-09 (owner: "go with your recommendations"):
 - **Why:** It follows Link, which you asked to underline "very natural and close to the text" (link.md, "Close
   underline").
 
+## Lines (current, 2026-10-25)
+
+The item's separator between size and status paints `border-decorative` (#f3). Was `border-subtle`, darker than every other separator. This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
 ## Feedback log
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → The item's separator between size and status paints `border-decorative` (#f3). Was `border-subtle`, darker than every other separator.
 
 - 2026-10-09 · owner: "move on to the next component" → File upload built from Untitled UI and Area's parts; owner declined a
   ChatGPT test upload → 8 captures, gallery tiles, in review.
@@ -256,3 +262,15 @@ Resolved 2026-10-09 (owner: "go with your recommendations"):
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-26
+
+- **What changed:**
+  - The line between size and status is the lightest grey, #f3 (it was darker than every other separator).
+  - The file item's Remove and Retry buttons take a corner of 4: the item's 12 corner less the 8 they sit in from its
+    edge, so their curve runs parallel to the item's (they kept the small button's own 6).
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light (approved on the dividers page). In round 72 you asked whether the padding and corner pair is correct. The
+  item's pair (12 corner, 16 padding) is Untitled UI's and stands; the file icon sits 16 in, past the 12 curve, so it
+  keeps the 40 control's corner, as content does. The buttons sit 8 in, inside the curve, so their corners must be
+  concentric (Edit summary's rule).

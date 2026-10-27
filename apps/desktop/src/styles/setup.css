@@ -7,43 +7,82 @@
      and the visuals beside it, one rule between them. */
   .studio-canvas__body:has(> .setup) { padding: 0; overflow: hidden; }
   .setup { container-type: inline-size; block-size: 100%; }
-  .setup__layout { --_chat: clamp(400px, 36cqi, 520px); display: grid; grid-template-columns: var(--_chat) minmax(0, 1fr); block-size: 100%; min-block-size: 560px; } /* pick: a reading column, two cards of 180 to 230 */
+  .setup__layout { --_chat: clamp(440px, 40cqi, 600px); display: grid; grid-template-columns: var(--_chat) minmax(0, 1fr); block-size: 100%; min-block-size: 560px; } /* pick: a reading column (Claude's bubble measure 472 + 32 a side), two cards of 190 to 260 */
   /* A narrow Canvas stacks them, the visuals first. */
   @container (max-width: 760px) { .setup__layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(320px, 46vh) minmax(0, 1fr); } .setup-stage { grid-row: 1; } .setup-chat { border-inline-end: 0; border-block-start: var(--area-stroke-width) solid var(--area-border-divider); } } /* pick */
 
-  /* The chat: the thread scrolls, the dock stays at its foot. */
-  .setup-chat { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-block-size: 0; border-inline-end: var(--area-stroke-width) solid var(--area-border-divider); background: var(--area-bg-page); }
-  .setup-chat__thread { position: relative; display: grid; align-content: start; gap: var(--area-space-32); min-block-size: 0; overflow: auto; padding: var(--area-space-32) var(--area-space-32) 0; scrollbar-gutter: stable; } /* the Canvas's 32 margin */
+  /* The chat: progress held at the top, the thread scrolling under it, the dock at its foot. */
+  .setup-chat { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-block-size: 0; border-inline-end: var(--area-stroke-width) solid var(--area-border-divider); background: var(--area-bg-page); }
+  .setup-chat__thread { position: relative; display: grid; align-content: start; gap: var(--area-space-32); min-block-size: 0; overflow: auto; padding: var(--area-space-32) var(--area-space-32) 0; scrollbar-gutter: stable; } /* the Canvas's 32 margin; chapters 32 apart */
+  /* With progress held over it, the thread fades out in its top 24 rather than cutting under the container's edge. */
+  .setup-chat:has(> .setup-chat__progress) > .setup-chat__thread { padding-block-start: var(--area-space-24); mask-image: linear-gradient(to bottom, transparent, #000 var(--area-space-24)); } /* pick */
   /* Room under the last turn so the question being asked can scroll to the top of the chat. */
   .setup-chat__end { block-size: 40vh; } /* pick */
-  /* A turn: the question as Setup's message, then the choices or the person's reply. The question's text introduces its
-     choices, so it sits one ladder step further from them than they sit from each other (DESIGN_SYSTEM.md, Text pairs). */
+  /*
+   * The chat (owner, 2026-10-25: "larger, more consistent ui ... more information organized into tables"; then
+   * "focus less on the data vis, just ... tables, chat responses ... a normal chat experience"; docs/research/setup-chat-2026-10-25). Every turn has one shape: the assistant's
+   * words at the reading size, 16/24 (ChatGPT's and Claude's chat prose; Message's own), the question and its choices in
+   * the thread on its edges, the person's reply at the end with its pick pictured above it; a finished chapter is a table.
+   * Everything shares the thread's two edges. The ladder: parts of a turn 12 apart, turns 24, chapters 32.
+   */
+  .setup-chat__section { display: grid; gap: var(--area-space-24); }
+  .setup-chat__section:not(:has(> .setup-chat__chapter-lede)) { gap: var(--area-space-12); } /* a recap: its head 12 over its table, a panel section's step (Claude's Context panel) */
   .setup-chat__turn { display: grid; gap: var(--area-space-12); animation: setup-turn-in var(--area-duration-slow) var(--area-ease-out) both; }
-  .setup-chat__question { margin: 0; font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); font-weight: var(--area-weight-strong); text-wrap: balance; }
-  .setup-chat__lede { margin: var(--area-space-4) 0 0; color: var(--area-fg-muted); text-wrap: pretty; }
-  .setup-chat__answer-area { display: grid; gap: var(--area-space-12); margin-block-start: var(--area-space-4); animation: setup-turn-in var(--area-duration-slow) var(--area-ease-out) both; }
-  /* The person's reply: their answer as a bubble at the end, which reopens its question. */
-  .setup-chat__reply { display: grid; cursor: pointer; outline: none; }
-  .setup-chat__reply:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); border-radius: var(--area-radius-container); }
-  @media (hover: hover) { .setup-chat__reply:hover { opacity: 0.8; transition: opacity var(--area-hover-in) var(--area-ease-out); } } /* pick */
-  /* A chapter opens with its name and what it decides, over a rule. */
-  .setup-chat__chapter { display: grid; gap: var(--area-space-2); padding-block-start: var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
-  .setup-chat__turn:first-child .setup-chat__chapter, .setup-chat__turn:nth-child(2) > .setup-chat__chapter { border-block-start: 0; padding-block-start: 0; }
-  .setup-chat__chapter-name { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-strong); }
-  .setup-chat__chapter-lede { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
-  .setup-chat__summary { margin-block-start: var(--area-space-4); }
-  .setup-chat__dock { border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
+  /* Two questions in one turn (the welcome's) sit as a chapter's turns do, 24 apart; so do the finish's steps: what came
+     of it, how to use it, what next. A message and what it introduces stay 12 apart. */
+  .setup-chat__turn > :is(.setup-ask, .setup-answer) + :is(.setup-ask, .setup-answer),
+  .setup-chat__finish > .setup-recap + *,
+  .setup-chat__finish > .setup-chat__next { margin-block-start: var(--area-space-12); }
+  .setup-chat__section > .setup-chat__chapter-lede { margin: calc(-1 * var(--area-space-20)) 0 0; } /* the lede hangs under its chapter's name, 4 below it */
+  .setup-chat__lead { font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); letter-spacing: var(--area-title-sm-tracking); font-weight: var(--area-weight-strong); text-wrap: balance; }
+  .setup-chat__lead + p { margin-block-start: var(--area-space-8); color: var(--area-fg-muted); text-wrap: pretty; } /* a lead and its sentence are a pair (DESIGN_SYSTEM.md, Text pairs) */
+  /* An answered question recedes; the answer under it carries the turn. */
+  /* An answered question: the question a step below the prose, its answer the chosen option row 8 under it. */
+  .setup-answer { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); } /* one column the thread's width, so an answer's share (a third, a half) is of the column */
+  /* A picture answer: the chosen card at the width of one of three across the column (the question's cards are two
+     across), so it reads as the picked option without taking the question's room; its name, then Default or Changed. */
+  .setup-answer--third > .setup-choices { inline-size: calc((100% - 2 * var(--area-space-8)) / 3); min-inline-size: 160px; } /* a third of the column, the question's cards' grid */
+  .setup-answer--half > .setup-choices { inline-size: calc((100% - var(--area-space-8)) / 2); } /* the question's own card size */
+  .setup-chat__asked { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); } /* a step below the prose: it only says which question the row answers */
+  /* A chapter opens with its name and where it stands, over a rule. */
+  /* A chapter's head, as a panel section's (Claude's Context panel): its name, its numbers at the end; 14/20 throughout, so the chat's structure reads a step below its prose (16/24). */
+  .setup-chat__chapter { display: flex; align-items: center; gap: var(--area-space-8); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  .setup-chat__chapter-count { margin-inline-start: auto; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .setup-chat__chapter-changed { color: var(--area-fg-info); } /* the Changed badge's ink, so the count and the rows agree */
+  .setup-chat__chapter-name { font-weight: var(--area-weight-strong); }
+  .setup-chat__chapter-count, .setup-chat__chapter-lede { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+
+  /* The question, in the thread on its edges (owner, 2026-10-25: "not inside its own container", after Craft's step): its
+     title and what it decides as a pair, the choices 16 under them, the keys that answer it last. */
+  .setup-ask { display: grid; gap: var(--area-space-16); animation: setup-turn-in var(--area-duration-slow) var(--area-ease-out) both; }
+  .setup-ask__head { display: grid; gap: var(--area-space-8); }
+  .setup-ask__question { margin: 0; font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); letter-spacing: var(--area-title-sm-tracking); font-weight: var(--area-weight-strong); text-wrap: balance; }
+  .setup-ask__lede { margin: 0; color: var(--area-fg-muted); text-wrap: pretty; }
+  .setup-ask__body { display: grid; gap: var(--area-space-12); }
+  .setup-ask__keys { display: flex; flex-wrap: wrap; gap: var(--area-space-4) var(--area-space-16); margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  .setup-ask__keys > span { display: inline-flex; align-items: center; gap: var(--area-space-4); }
+  .setup-numbered { display: inline-flex; align-items: center; gap: var(--area-space-8); }
+
+  /* A finished chapter's answers: Table's own frame and rows, the status last and as narrow as it is. */
+  /* Recap rows: the setting in the muted ink, the choice in the default ink after its swatch (the Inspector's mark), Default muted at the end. */
+  .setup-recap__setting, .setup-recap__default { color: var(--area-fg-muted); }
+  /* One grid for every recap, so the choices start on one line down the whole thread: setting 40%, status 88, the choice the rest. */
+  .setup-recap { table-layout: fixed; }
+  .setup-recap--review { table-layout: auto; }
+  .setup-recap .setup-recap__setting { inline-size: 40%; } /* pick */
+  .setup-recap td:last-child { inline-size: 88px; text-align: end; } /* pick: a Changed badge and its inset */
+  .setup-recap__choice { display: flex; align-items: center; gap: var(--area-space-6); }
+  /* The Inspector's option mark fills its box; here the box is the swatch's own 16, as in the Inspector's rows. */
+  .setup-recap__choice > .studio-mark { inline-size: var(--area-space-16); block-size: var(--area-space-16); }
+  .setup-recap__hidden { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+  /* The dock: no rule above it, nor between chapters (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"): the thread's 32 and each chapter's head separate them. */
   @keyframes setup-turn-in { from { opacity: 0; translate: 0 8px; } }
   .setup-foot { display: flex; align-items: center; gap: var(--area-space-8); padding: var(--area-space-12) var(--area-space-16); }
   .setup-foot__grow { flex: 1; }
 
-  /* Progress: one bar per chapter on the path, filled by how far through it the person is; where they are and how long is left. */
-  .setup-progress { display: grid; grid-template-columns: minmax(0, 1fr) auto; row-gap: var(--area-space-8); padding: var(--area-space-12) var(--area-space-16) 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
-  .setup-progress__chapters { grid-column: 1 / -1; display: flex; gap: var(--area-space-4); }
-  .setup-progress__chapter { flex: 1; block-size: 4px; border-radius: 2px; background: linear-gradient(to right, var(--area-fg-default) calc(var(--setup-progress-fill, 0) * 100%), var(--area-bg-component) 0); transition: --setup-progress-fill var(--area-duration-slow) var(--area-ease-out); } /* pick: a 4px track */
-  .setup-progress__chapter[data-current] { background: linear-gradient(to right, var(--area-fg-default) calc(var(--setup-progress-fill, 0) * 100%), var(--area-bg-component-active) 0); }
-  .setup-progress__label { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
-  .setup-progress__time { font-variant-numeric: tabular-nums; }
+  /* Progress: a Plan held over the thread on its edges, folded to its head and its bar (a segment per chapter); it opens to the chapters with their counts. */
+  .setup-chat__progress { margin: var(--area-space-16) var(--area-space-32) 0; max-block-size: 50vh; overflow-y: auto; overscroll-behavior: contain; border-radius: var(--area-radius-container); } /* pick: opened, the tracker takes at most half the chat's height and scrolls inside */
 
   /* A step: the question, what it changes, the choices, an aside. Text that introduces the choices sits one step further
      from them than they sit from each other (DESIGN_SYSTEM.md, Text pairs). */
@@ -60,8 +99,8 @@
   .setup-choices__line { display: contents; }
   .setup-choices__hint { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--area-space-6); min-block-size: var(--area-text-sm-leading); margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
   .setup-choices__name { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
-  .setup-choices__default { padding-inline: 6px; border-radius: 999px; background: var(--area-bg-component); color: var(--area-fg-muted); } /* pick */
-  .setup-picture { position: relative; display: block; inline-size: 100%; block-size: 100%; overflow: hidden; border-radius: var(--area-radius-small); }
+  .setup-picture { position: relative; display: block; inline-size: 100%; block-size: 100%; overflow: hidden; border-radius: inherit; } /* a card's frame gives the corner */
+  .setup-picture:is(.setup-picture--large, .setup-picture--stage) { border-radius: var(--area-radius-small); }
   .setup-picture--large { aspect-ratio: 16 / 9; block-size: auto; box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-card); }
   /* Motion: a real Switch flipping on its own at the choice's speed and curve, the curve drawn over it for Easing. */
   .setup-picture--motion { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8%; background: var(--area-bg-page); }
@@ -80,17 +119,14 @@
   .setup-control__answer { margin: 0; color: var(--area-fg-muted); }
   /* The exact value, folded under the cards. */
   .setup-fine { margin-block-start: var(--area-space-4); }
-  .setup-fine__summary { color: var(--area-fg-muted); cursor: pointer; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  /* The exact value folds behind a chevron, as Plan's head and the chapter heads do (was the browser's triangle). */
+  .setup-fine__summary { display: inline-flex; align-items: center; gap: var(--area-space-4); color: var(--area-fg-muted); cursor: pointer; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); list-style: none; }
+  .setup-fine__summary::-webkit-details-marker { display: none; }
+  .setup-fine__summary > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); transform: rotate(-90deg); transition: transform var(--area-duration-fast) var(--area-ease-out); }
+  .setup-fine__summary:dir(rtl) > svg { transform: rotate(90deg); }
+  .setup-fine[open] > .setup-fine__summary > svg { transform: none; }
+  @media (hover: hover) { .setup-fine__summary:hover { color: var(--area-fg-default); } }
   .setup-fine__body { display: grid; gap: var(--area-space-8); padding-block-start: var(--area-space-12); }
-
-  /* The welcome's outline and a chapter's questions: numbered rows, the count or the answer at the end. */
-
-  /* The review: every answer by chapter, each name a way back to its question. */
-  .setup-review__rows { display: grid; margin: 0; }
-  .setup-review__row { display: flex; justify-content: space-between; gap: var(--area-space-12); padding-block: var(--area-space-4); }
-  .setup-review__row dd { display: flex; gap: var(--area-space-8); margin: 0; text-align: end; }
-  .setup-review__default { color: var(--area-fg-muted); }
-  .setup-review__changed { font-weight: var(--area-weight-strong); }
 
   /* The stage: the product screen fitted whole on the page's ground, the parts a step changes marked over it. */
   /* The visuals: a bar over the view and one under it, the view between on a plain ground a step off any page the window
@@ -119,8 +155,6 @@
    * crossfades a pick or a preview (setup-screen.tsx, crossfade) and marks the parts a step changes. All of it runs on
    * the app's own Speed and Easing, so it stops with them under reduced motion.
    */
-  /* Its own name: a registered property applies everywhere, and components use `--_fill` for colours. */
-  @property --setup-progress-fill { syntax: "<number>"; inherits: false; initial-value: 0; }
   @keyframes setup-fade { from { opacity: 0; } }
   .setup-choices__line > * { animation: setup-fade var(--area-duration-base) var(--area-ease-out) both; }
   .ss-frame--ghost { pointer-events: none; }
@@ -247,13 +281,6 @@
   .cv-mini__field { display: block; block-size: var(--area-control-xs); border-radius: var(--area-radius-control-xs); border: var(--area-stroke-width) solid var(--area-edge-control); background: var(--area-input-bg, var(--area-bg-surface)); }
   .cv-mini__menu { display: grid; gap: 2px; inline-size: 96px; padding: 4px; border-radius: var(--area-radius-small); background: var(--area-bg-surface); border: var(--area-border-width) solid var(--area-border-float); box-shadow: var(--area-shadow-float); } /* pick */
   .cv-mini__menu > i { display: block; block-size: 10px; border-radius: var(--area-radius-row); } /* pick */
-  /* Choice previews (Radio and Checkbox `layout="preview"`): a mini UI at a fixed size, scaled to its card's frame. */
-  .demo-preview { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
-  .demo-preview > .cv-mini, .demo-preview > span > .cv-mini { zoom: 0.42; } /* pick */
-  .demo-preview--split { grid-template-columns: 1fr 1fr; overflow: hidden; }
-  .demo-preview--split > span { display: grid; place-items: center; overflow: hidden; }
-
-
   /* --- Layer map (src/layer-map.tsx) --------------------------------------------- */
   /* A window drawn only from the Layers roles, each region tagged with its name, layer and painted colour (owner,
      2026-10-22: "make those combinations extremely clear"). Laid out at 520, the stage's narrow column, and scaled whole to it; no

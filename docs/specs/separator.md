@@ -138,7 +138,13 @@ Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness
 
 Separator is static: a 1px background block, no motion, no transform. Nothing changed.
 
+## Lines (current, 2026-10-25)
+
+Separator paints `border-decorative` (#f3), the lightest line, at every orientation and inset. Was `border-divider` (#e2). This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
 ## Feedback log
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → Separator paints `border-decorative` (#f3), the lightest line, at every orientation and inset. Was `border-divider` (#e2).
 
 - 2026-09-26 · cohesion audit → no change; spec written; colour gap to products recorded →
   captures above.
@@ -159,3 +165,9 @@ Separator is static: a 1px background block, no motion, no transform. Nothing ch
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → static, no change.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the line is `stroke-width` thick (was a literal 1px); Menu separators are `border-width` (were a literal 1px) and Toolbar separators `border-width` (were `stroke-width`): seams inside a container ride the Surface axis with the container's frame (display.css, surface.css, toolbar.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "merge it, then continue working" → all-axis sweep of Surface 0 at Elevation 0 (90 families, light and dark): the two framed demos draw their frame at `stroke-width` (standing alone, no shadow), so they stay at Surface 0.
+
+## Review note, 2026-10-26
+
+- **What changed:** Separator is the lightest grey, #f3 (was #e2).
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light. You approved each one on the dividers comparison page.

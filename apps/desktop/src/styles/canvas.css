@@ -222,6 +222,11 @@
   }
   .gallery-tile[data-layout="card"][data-stage="fit"] > .gallery-tile__view { padding: var(--area-space-12); }
   .gallery-tile__stage {
+    /* The tile's own corner and name inset are the app's (above); the component drawn in the tile is Area's as it ships,
+       so the hooks stop here (2026-10-26: they reached the Asset card specimens, which showed the app's 16 corner and
+       16 inset, and a group's cells fell to the 2 floor). */
+    --area-asset-card-corner: initial;
+    --area-asset-card-name-inset: initial;
     position: relative;
     display: flex;
     align-items: center;

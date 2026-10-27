@@ -5,12 +5,17 @@
  *
  *   npm run build:docs                      # the current gallery (apps/docs/dist)
  *   node apps/docs/scripts/component-review.mjs [--before <dist of an earlier build>] [--before-label <text>]
- *     [--unapproved] [--round <slug,slug>] [--out <dir>]
+ *     [--unapproved] [--round <slug,slug>] [--out <dir>] [--screens <dir>]
  *
  * --before points at the dist of an earlier build (a worktree of the commit to compare against,
  * built with npm run build && npm run build:docs); its tiles and stylesheet become the Before view, and every
  * specimen is rendered in both builds to tell which variants look different (review-diff.mjs). Each family leads
  * with its spec's latest "Review note" section: what changed and why, in plain words.
+ * --screens <dir> adds a family of app screens to the round (owner 2026-10-25: "launch a component review artifact so i can
+ * look at all the latest designs", where a design is a composed screen rather than a gallery family): every PNG, or HTML
+ * file of the screen's parts rendered with Area's components, in the folder becomes a tile, in name order, labelled from its name ("02-tracker-open.png" → "Tracker open"), and the
+ * folder's README.md (a "## Review note, <date>" section and anything after it) is the family's note. Its slug and name
+ * come from the README's first heading ("# Setup chat {setup-chat}").
  * The output folder holds the page, data.js, both stylesheets, the demo bundles that hydrate the
  * specimens, and the images they use. Publish the page with those files beside it.
  */
@@ -162,6 +167,26 @@ const changes = beforeDist ? visualChanges({ dist, beforeDist, tiles: compared.f
 for (const f of families) for (const t of f.tiles) t.change = changes[`${f.slug}/${t.id}`] ?? (beforeDist && t.before != null ? { state: "unknown", modes: [] } : { state: "new", modes: [] });
 for (const f of families) f.round = roundSlugs ? roundSlugs.includes(f.slug) : f.status === "review" || (Boolean(beforeDist) && f.tiles.some(t => t.change.state !== "unchanged"));
 
+// App screens as a family of their own (--screens): each tile is an image, or an HTML file of the screen's parts rendered
+// with Area's components (owner 2026-10-26: "can these components just be isolated?"), new in this round.
+const screensDir = arg("--screens") && resolve(arg("--screens"));
+const screens = screensDir ? readdirSync(screensDir).filter(file => /\.(png|html)$/.test(file)).sort() : [];
+if (screensDir) {
+  const readme = existsSync(join(screensDir, "README.md")) ? readFileSync(join(screensDir, "README.md"), "utf8") : "# Screens {screens}";
+  const [, title = "Screens", slug = "screens"] = readme.match(/^#\s+(.+?)\s*\{([a-z0-9-]+)\}/m) ?? [];
+  const note = sections(readme).find(section => /^Review note/i.test(section.title));
+  const label = file => file.replace(/\.(png|html)$/, "").replace(/^\d+-/, "").replace(/-/g, " ").replace(/^./, c => c.toUpperCase());
+  families.unshift({
+    slug, name: title, status: "review", summary: note ? markdown(note.text) : "", summaryTitle: note?.title ?? "",
+    changes: "", questions: "", refs: "", log: "", changed: true, round: true,
+    tiles: screens.map(file => ({
+      id: `${slug}-${file.replace(/\.(png|html)$/, "")}`, label: label(file), before: null, change: { state: "new", modes: [] },
+      html: file.endsWith(".html") ? readFileSync(join(screensDir, file), "utf8")
+        : `<img src="images/screens/${file}" alt="${esc(label(file))}" style="display:block;inline-size:820px;max-inline-size:100%;block-size:auto;border-radius:8px">`,
+    })),
+  });
+}
+
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 // --before-label names the Before build on the page, e.g. "main at 6f89678 (2026-10-08)".
@@ -173,6 +198,8 @@ const clients = readFileSync(join(dist, "index.html"), "utf8").match(/src="\.\/(
 for (const file of clients) cpSync(join(dist, file), join(out, file));
 mkdirSync(join(out, "images"));
 for (const file of readdirSync(join(dist, "images"))) cpSync(join(dist, "images", file), join(out, "images", file));
+const screenImages = screens.filter(file => file.endsWith(".png"));
+if (screenImages.length) { mkdirSync(join(out, "images/screens")); for (const file of screenImages) cpSync(join(screensDir, file), join(out, "images/screens", file)); }
 const page = readFileSync(join(root, "src/component-review.html"), "utf8").replace("<!--CLIENTS-->", clients.map(f => `<script type="module" src="${f}"></script>`).join("\n"));
 writeFileSync(join(out, "component-review.html"), page);
 const count = state => families.reduce((n, f) => n + f.tiles.filter(t => t.change.state === state).length, 0);

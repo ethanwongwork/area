@@ -115,14 +115,13 @@
     padding-inline: var(--_bar-start, var(--_side-start)) var(--_bar-end, var(--_side-end));
     font-size: var(--_panel-title-text);
     line-height: var(--_panel-title-leading);
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    /* No rule under it (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; docs/research/dividers-2026-10-25): the bar's own height and the first
+       section's inset separate it. Was border-decorative. */
   }
 
   /*
-   * A bar that *names* the panel rather than heading it needs no rule under it: a wordmark
-   * and its toggle are the panel's identity, and a hairline there reads as a section
-   * boundary between the name and the thing named. A bar that heads a list of controls
-   * keeps its rule, which is why this is opt-in rather than the default.
+   * bare-bar: no rule under the bar. The default since 2026-10-25, kept so markup that sets it keeps working
+   * (deprecated).
    */
   .area-panel--bare-bar > .area-panel__bar {
     border-block-end: 0;
@@ -193,12 +192,13 @@
     /* spec (batch 8, figma--section-auto-layout): the rule sits midway, one inset below the last field
        and one inset above the next title's cap (Figma 16 / 16.5). */
     padding-block-end: var(--_inset);
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    /* No rule between sections (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; docs/research/dividers-2026-10-25): a section ends one inset
+       below its last field and the next heading's row gap follows, so headings and space separate them (Notion). Was
+       border-decorative, midway (Figma). */
   }
 
   .area-panel__section:last-child {
     padding-block-end: 0;
-    border-block-end: 0;
   }
 
   .area-panel__heading {
@@ -343,12 +343,11 @@
   .area-panel__footer {
     flex-shrink: 0;
     padding: var(--_side) var(--_side-end) var(--_side) var(--_side-start);
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    /* No rule above it (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; docs/research/dividers-2026-10-25). Was border-decorative. */
   }
   /*
-   * A footer that continues the body rather than closing it (a chat's composer; owner, 2026-10-18, the Inspector's
-   * Chat view): no rule above it, as Cursor's, Claude Code's and ChatGPT's composers draw none
-   * (docs/research/inspector-chat-2026-10-18).
+   * bare-footer: no rule above the footer (a chat's composer, owner 2026-10-18). The default since 2026-10-25, kept so
+   * markup that sets it keeps working (deprecated).
    */
   .area-panel--bare-footer > .area-panel__footer { border-block-start: 0; }
 

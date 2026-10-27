@@ -114,7 +114,6 @@ export { Presence, type PresenceProps } from "./components/Presence.tsx";
 export { ReferenceList, ReferenceListItem, referenceListVariants, type ReferenceListProps, type ReferenceListItemProps } from "./components/ReferenceList.tsx";
 export { TableOfContents, tableOfContentsVariants, type TableOfContentsProps, type TableOfContentsItem } from "./components/TableOfContents.tsx";
 export { Figure, figureVariants, type FigureProps } from "./components/Figure.tsx";
-export { Infobox, InfoboxSection, InfoboxRow, InfoboxRows, infoboxVariants, type InfoboxProps, type InfoboxSectionProps, type InfoboxRowProps } from "./components/Infobox.tsx";
 export { InlineList, inlineListVariants, type InlineListProps } from "./components/InlineList.tsx";
 export { Abbreviation, abbreviationVariants, type AbbreviationProps } from "./components/Abbreviation.tsx";
 export { Hatnote, hatnoteVariants } from "./components/Hatnote.tsx";

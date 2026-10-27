@@ -96,3 +96,17 @@ new tile shows the link blue.
 
 - **What changed:** the list's items take the body size of the canvas (16 at Type 14, was 13), as in an article's byline.
 - **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.
+
+## Lines (current, 2026-10-25)
+
+`separator="rule"` paints `border-decorative` (#f3). Was `border-divider` (#e2). This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
+## Feedback log
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → `separator="rule"` paints `border-decorative` (#f3). Was `border-divider` (#e2).
+
+## Review note, 2026-10-26
+
+- **What changed:** The rule between items is the lightest grey, #f3 (was #e2).
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light. You approved each one on the dividers comparison page.

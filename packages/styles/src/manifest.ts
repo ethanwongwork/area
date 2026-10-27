@@ -351,9 +351,11 @@ export const select = {
 export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
-  variants: { variant: ["card"], layout: ["row", "tile", "preview"], size: ["md", "lg"] },
+  // soft and list (owner 2026-10-25, Notion Calendar's settings rows, a proposal card's options): a filled option with
+  // its control first and a value at its end.
+  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "media", "media-row"], size: ["md", "lg"] },
   states: ["checked", "indeterminate", "disabled", "invalid"],
-  elements: ["control", "visual"],
+  elements: ["control", "visual", "meta"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -369,9 +371,9 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { variant: ["card"], layout: ["row", "tile", "preview"], size: ["md", "lg"] },
+  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "media", "media-row"], size: ["md", "lg"] },
   states: ["disabled"],
-  elements: ["control", "visual"],
+  elements: ["control", "visual", "meta"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -379,7 +381,9 @@ export const radioGroup = {
   block: "area-radio-group",
   description: "Groups mutually exclusive Radio options under one label.",
   variants: { orientation: ["vertical", "horizontal"] },
-  states: ["disabled", "invalid"],
+  // readonly: a value shown, not chosen here (owner 2026-10-26: Setup's past answers): the chosen option drops its
+  // selected edge and tint.
+  states: ["disabled", "invalid", "readonly"],
   elements: ["legend", "description", "options", "validation"],
   defaults: { orientation: "vertical" },
 } as const satisfies ComponentManifest;
@@ -524,12 +528,16 @@ export const approval = {
 } as const satisfies ComponentManifest;
 
 export const plan = {
-  block: "area-plan", description: "An agent's plan for the run: what is done, what it is doing, what is next; folds to its head.",
-  variants: {},
+  block: "area-plan", description: "A plan's progress: what is done, what is happening now, what is next, with its count and an optional bar; folds to its head.",
+  // bar: a bar under the head that stays when folded, one for the whole plan or one segment per item (owner 2026-10-25,
+  // progress trackers: GitHub's segmented ProgressBar, Cursor's segmented bar, Linear's project bar).
+  variants: { bar: ["none", "single", "segmented"] },
+  // rail: the marks joined by a line, a timeline whose items carry detail and steps (owner 2026-10-25, the agent run).
+  booleans: ["rail"],
   states: ["open"],
-  elements: ["head", "title", "count", "chevron", "items", "item", "mark", "text"],
-  elementModifiers: { item: ["done", "current", "pending", "cancelled"] },
-  defaults: {},
+  elements: ["head", "icon", "title", "count", "chevron", "bar", "segment", "items", "item", "mark", "text", "detail", "meta", "steps"],
+  elementModifiers: { item: ["done", "current", "pending", "cancelled"], mark: ["ring"] },
+  defaults: { bar: "none" },
 } as const satisfies ComponentManifest;
 
 export const turnNotice = {
@@ -1115,8 +1123,8 @@ export const fileGrid = {
 
 export const assetCard = {
   block: "area-asset-card",
-  description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio; an element, a colour, or a group as a 2×2 mosaic); framed, basic or containerless, its name above, below or over the asset on hover, recessed or raised, square, landscape or hugging its asset.",
-  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below", "overlay"], fill: ["recessed", "raised"], aspect: ["square", "landscape", "hug"] },
+  description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio; an element, a colour, or a group as a 2×2 mosaic); framed, basic or containerless, its name above, below or over the asset on hover, recessed or raised or on a transparency checker, square, landscape, wide or hugging its asset; with no name or controls and containerless, the frame alone (an inspector's preview).",
+  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below", "overlay"], fill: ["recessed", "raised", "checker"], aspect: ["square", "landscape", "hug", "wide"] },
   booleans: ["interactive", "borderless"],
   states: ["selected"],
   elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb"],
@@ -1141,7 +1149,7 @@ export const assetRow = {
 
 export const previewFrame = {
   block: "area-preview-frame",
-  description: "Shows the selected item at the head of an inspector: an icon, an image or a colour, centred in a frame.",
+  description: "Deprecated: use Asset card, containerless with no name. Shows the selected item at the head of an inspector: an icon, an image or a colour, centred in a frame.",
   variants: { aspect: ["square", "landscape", "wide"], ground: ["surface", "subtle", "checker"] },
   elements: ["paint"],
   defaults: { aspect: "square", ground: "surface" },
@@ -1220,7 +1228,9 @@ export const shortcutList = {
   block: "area-shortcut-list",
   description: "Lists keyboard shortcuts: what each does, and its keys at the end.",
   variants: {},
-  booleans: ["quiet"], // deprecated and ignored (owner 2026-10-22: every key is a keycap)
+  // quiet: deprecated and ignored (owner 2026-10-22: every key is a keycap). divided: a rule under each row but the last,
+  // off by default (owner 2026-10-25: dividers only where intentional).
+  booleans: ["quiet", "divided"],
   elements: ["title", "items", "item", "label", "keys"],
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -1255,15 +1265,6 @@ export const figure = {
   variants: {},
   elements: ["media", "caption"],
   defaults: {},
-} as const satisfies ComponentManifest;
-
-export const infobox = {
-  block: "area-infobox",
-  description: "Summarises a subject: a title, optional media, and labelled facts in sections.",
-  variants: { layout: ["columns", "stacked"] },
-  booleans: ["framed"],
-  elements: ["header", "media", "title-row", "heading-group", "title", "subtitle", "action", "section", "heading", "rows", "row", "label", "value"],
-  defaults: { layout: "columns" },
 } as const satisfies ComponentManifest;
 
 export const inlineList = {
@@ -1442,7 +1443,6 @@ export const MANIFESTS = {
   referenceList,
   tableOfContents,
   figure,
-  infobox,
   inlineList,
   abbreviation,
   hatnote,

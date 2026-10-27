@@ -253,7 +253,13 @@ specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
 
 Rows press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). A row with actions showed no press at all: the row's hover rule outranked its press rule; the press is restated after it. Item text is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
 
+## Lines (current, 2026-10-25)
+
+Nav's separator paints `border-decorative` (#f3). Was `border-divider` (#e2). This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
 ## Feedback log
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → Nav's separator paints `border-decorative` (#f3). Was `border-divider` (#e2).
 
 - 2026-09-26 · cohesion audit → hover `bg-component` → `bg-component-hover`, current
   `bg-component-hover` → `-active`, marker accent → `fg-default` (accent via `tone`), disabled
@@ -312,3 +318,9 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-26
+
+- **What changed:** The separator is the lightest grey, #f3 (was #e2).
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light. You approved each one on the dividers comparison page.

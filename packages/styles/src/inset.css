@@ -282,6 +282,8 @@
     .area-choice-label__title { text-box: trim-start cap alphabetic; }
     .area-choice-label__description { text-box: trim-end cap alphabetic; }
     .area-choice-label__title:only-child, .area-choice-label__description:only-child { text-box-trim: trim-both; }
+    /* An option's meta sits on the label's first line: trimmed to its cap and set down as the label is (2026-10-25). */
+    .area-checkbox__meta, .area-radio__meta { text-box: trim-both cap alphabetic; margin-block-start: max(0px, calc((var(--_size) - 1cap) / 2)); }
   }
   .area-alert__icon, .area-toast__icon { display: inline-flex; align-items: center; justify-content: center; }
   .area-alert__icon > svg, .area-toast__icon > svg { display: block; inline-size: 100%; block-size: 100%; }

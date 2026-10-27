@@ -11,7 +11,7 @@
  *   CodeWell   Code: a snippet in Code block's inspector well, highlighted as the Stage's is
  */
 import type { ReactNode, Ref } from "react";
-import { CodeBlock, PanelSection, PreviewFrame } from "@area/react";
+import { AssetCard, CodeBlock, PanelSection } from "@area/react";
 // @ts-expect-error — the highlighter is authored in JavaScript.
 import { highlight } from "./content/highlight.mjs";
 
@@ -29,10 +29,10 @@ export function Selection({ preview, children }: { preview?: ReactNode; children
 }
 
 /**
- * The selection's preview: Area's PreviewFrame (docs/specs/preview-frame.md), square for a figure
- * (an icon, a type role), wide when painted in the colour it shows, landscape for a setting's
- * sample. `scope` puts data-area-* on the frame, so its ground and what it holds take the setting
- * it shows.
+ * The selection's preview: Area's Asset card as the frame alone (containerless, no name; docs/specs/asset-card.md, after
+ * Preview frame was folded in, owner 2026-10-26), square for a figure (an icon, a type role), wide when painted in the
+ * colour it shows (on the transparency checker, so its alpha shows), landscape for a setting's sample. `scope` puts
+ * data-area-* on the card, so its frame and what it holds take the setting it shows.
  */
 export function Preview({ shape = "square", paint, scope, label, ref, children }: {
   shape?: "square" | "landscape" | "wide";
@@ -42,10 +42,13 @@ export function Preview({ shape = "square", paint, scope, label, ref, children }
   ref?: Ref<HTMLDivElement>;
   children?: ReactNode;
 }) {
+  // A colour alone paints the frame over the checker; behind other content (an image loading) it is the frame's ground.
+  const colour = paint !== undefined && children == null;
   return (
-    <PreviewFrame ref={ref} className="studio-inspector-preview" aspect={shape} color={paint} label={label} {...scope}>
-      {children}
-    </PreviewFrame>
+    <AssetCard ref={ref} className="studio-inspector-preview" container="containerless" aspect={shape}
+      fill={colour ? "checker" : undefined} color={colour ? paint : undefined} media={colour ? undefined : children}
+      frameProps={paint !== undefined && !colour ? { style: { backgroundColor: paint } } : undefined}
+      role={label ? "img" : undefined} aria-label={label} {...scope} />
   );
 }
 

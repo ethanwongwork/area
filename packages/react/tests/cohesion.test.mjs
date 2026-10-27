@@ -167,7 +167,7 @@ test('every surface takes its depth from its elevation role', () => {
     const leads = slotted.includes(block) ? /^var\(--_m-layers, 0 0 0 0 transparent\), var\(--area-shadow-edge\),/ : /^var\(--area-shadow-edge\),/;
     assert.match(paints(block), leads, `${block} does not lead with the Surface axis's edge`);
   }
-  for (const block of ['.area-panel', '.area-board-card', '.area-infobox--framed']) {
+  for (const block of ['.area-panel', '.area-board-card']) {
     assert.match(paints(block), /^var\(--area-shadow-edge\),/, `${block} does not lead with the Surface axis's edge`);
   }
   assert.match(ruleFor('.area-card')?.body ?? '', /box-shadow:\s*var\(--_card-ring\), var\(--_m-layers, 0 0 0 0 transparent\), var\(--area-shadow-edge\), var\(--_card-lift\)/, 'Card does not lead with its ring, the material slot and the Surface axis\'s edge');
@@ -327,7 +327,7 @@ test('a line under its title joins it, and a label column fits its labels (DESIG
   const titleGaps = [...css.matchAll(/--_title-gap:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.ok(titleGaps.length >= 5, `expected the title-gap slots, found ${titleGaps.length}`);
   for (const gap of titleGaps) assert.equal(gap, '0px', `a title and its line sit apart again: --_title-gap ${gap}`);
-  for (const heading of ['.area-dialog__heading', '.area-drawer__heading', '.area-infobox__heading-group']) {
+  for (const heading of ['.area-dialog__heading', '.area-drawer__heading']) {
     assert.match(ruleFor(heading)?.body ?? '', /(^|[;\s])gap:\s*0\s*;/, `${heading} should join its title and description`);
   }
   const groups = rules.find(rule => rule.selector.includes('.area-checkbox-group__description') && /margin-block-start/.test(rule.body));
@@ -338,7 +338,6 @@ test('a line under its title joins it, and a label column fits its labels (DESIG
     assert.match(body, /gap:\s*var\(--area-ui-cluster\)/, `${set}: options 8 apart`);
     assert.match(body, /margin-block-start:\s*var\(--area-gap-row\)/, `${set}: the legend one step further (12) than the options are apart`);
   }
-  assert.match(ruleFor('.area-infobox')?.body ?? '', /--_label-column:\s*fit-content\(/, 'Infobox\'s label column should fit its labels');
 });
 
 test('every Kbd is a keycap: nothing unboxes it (owner 2026-10-22)', () => {
@@ -614,4 +613,33 @@ test('a registered custom property has a name no other family uses', () => {
       assert.deepEqual(users, [], `${file.name} registers ${name}, which ${users.join(', ')} also use${users.length === 1 ? 's' : ''}`);
     }
   }
+});
+
+test('dividers only where intended, and a divider is the lightest line (owner 2026-10-25)', () => {
+  // "id prefer to not use dividers in general unless its very necessary and intentional. i also prefer dividers that are
+  // inset to have a very light subtle stroke by default" (docs/research/dividers-2026-10-25). A head, a foot or a section
+  // inside a container draws no line: space and its own heading separate it.
+  const unruled = [
+    '.area-code-block__header', '.area-code-block__toggle', '.area-edit-summary__head', '.area-color-picker__header',
+    '.area-color-picker__swatches', '.area-panel__bar', '.area-panel__section', '.area-panel__footer', '.area-command-palette__footer',
+  ];
+  for (const part of unruled) {
+    for (const { selector, body } of rules) {
+      if (!selector.split(',').some(one => one.trim().endsWith(part))) continue;
+      assert.doesNotMatch(body, /(border-block-(start|end)|border-(top|bottom))\s*:\s*[^;]*solid|box-shadow\s*:\s*inset 0 calc/, `${selector} draws a line`);
+    }
+  }
+  for (const head of ['.area-plan[data-open] > .area-plan__head', '.area-queue[data-open] > .area-queue__head', '.area-plan[data-open] > .area-plan__bar']) {
+    assert.doesNotMatch(ruleFor(head)?.body ?? '', /border-block-end\s*:\s*[^;]*solid/, `${head} draws a line`);
+  }
+  // Separators and the dividers that stay paint the lightest line; a stronger one is opt-in (Table rows carry data).
+  const lightest = {
+    '.area-separator': /background-color:\s*var\(--area-border-decorative\)/,
+    '.area-nav__separator': /background-color:\s*var\(--area-border-decorative\)/,
+    '.area-inline-list--rule > .area-inline-list__item:not(:last-child)::after': /background-color:\s*var\(--area-border-decorative\)/,
+    '.area-file-upload-item__separator': /background-color:\s*var\(--area-border-decorative\)/,
+    '.area-shortcut-list--divided .area-shortcut-list__item:not(:last-child)': /border-block-end:[^;]*var\(--area-border-decorative\)/,
+  };
+  for (const [selector, paint] of Object.entries(lightest)) assert.match(ruleFor(selector)?.body ?? '', paint, `${selector} is not the lightest line`);
+  assert.equal(rules.some(({ selector, body }) => selector === '.area-shortcut-list__item:not(:last-child)' && /border/.test(body)), false, 'Shortcut list rows are ruled by default');
 });

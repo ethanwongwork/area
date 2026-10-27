@@ -10,6 +10,14 @@ export const GalleryShortcutList = () => (
     <ShortcutListItem label="Item three" keys={["cmd", "\\"]} />
   </ShortcutList>
 );
+/* Divided: a rule under each row but the last, as ChatGPT's sheet. */
+export const GalleryShortcutListDivided = () => (
+  <ShortcutList style={sheet} title="Title" divided>
+    <ShortcutListItem label="Item one" keys={["cmd", "K"]} />
+    <ShortcutListItem label="Item two" keys={["cmd", "N"]} />
+    <ShortcutListItem label="Item three" keys={["cmd", "\\"]} />
+  </ShortcutList>
+);
 /* No title: a list inside a Popover or a Panel that names it already. */
 export const GalleryShortcutListUntitled = () => (
   <ShortcutList style={sheet} aria-label="Label">

@@ -1,9 +1,8 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
-import { MiniUI } from "../../choice-visuals.tsx";
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
 import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverStep, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
-import { AddIcon, AlignBottomIcon, AlignCenterIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowDownIcon, ArrowUpIcon, AspectRatioIcon, AutoLayoutIcon, BoldIcon, CalendarIcon, ChatIcon, CheckIcon, ChevronDownIcon, ClockIcon, CodeIcon, CopyIcon, CornerIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeOffIcon, FlipIcon, FlipVerticalIcon, FlowFreeIcon, FlowIcon, FlowVerticalIcon, FlowWrapIcon, FolderFilledIcon, FolderIcon, FrameIcon, GlobeIcon, GridIcon, HistoryIcon, InfoIcon, ItalicIcon, KanbanIcon, LayersIcon, LinkIcon, ListIcon, MenuIcon, MoreHorizontalIcon, OpacityIcon, OpenIcon, PaintbrushIcon, PaletteIcon, PanelLeftIcon, PencilIcon, PenToolIcon, PeopleIcon, PersonIcon, PlayIcon, PointerIcon, RectangleIcon, RefreshIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, StrikethroughIcon, SubtractIcon, SunIcon, TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon, TextIcon, ThumbsDownIcon, ThumbsUpIcon, TokenIcon, TrashIcon, UnderlineIcon, VolumeIcon, WarningIcon } from "@area/icons";
+import { AddIcon, AlignBottomIcon, AlignCenterIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowDownIcon, ArrowUpIcon, AspectRatioIcon, AutoLayoutIcon, BoldIcon, CalendarIcon, ChatIcon, CheckIcon, ChevronDownIcon, ClockIcon, CodeIcon, CopyIcon, CornerIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeOffIcon, FlipIcon, FlipVerticalIcon, FlowFreeIcon, FlowIcon, FlowVerticalIcon, FlowWrapIcon, FolderFilledIcon, FolderIcon, FrameIcon, GlobeIcon, GridIcon, HistoryIcon, ImageIcon, InfoIcon, ItalicIcon, KanbanIcon, LayersIcon, LinkIcon, ListIcon, MenuIcon, MoreHorizontalIcon, OpacityIcon, OpenIcon, PaintbrushIcon, PaletteIcon, PanelLeftIcon, PencilIcon, PenToolIcon, PeopleIcon, PersonIcon, PlayIcon, PointerIcon, RectangleIcon, RefreshIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, StrikethroughIcon, SubtractIcon, SunIcon, TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon, TextIcon, ThumbsDownIcon, ThumbsUpIcon, TokenIcon, TrashIcon, UnderlineIcon, VolumeIcon, WarningIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
 
@@ -516,7 +515,41 @@ export const GalleryCheckboxCard = () => (
     <Checkbox variant="card" label="Item two" caption="Description" leadingVisual={<DocumentIcon />} />
   </CheckboxGroup>
 );
+export const GalleryCheckboxSoft = () => (
+  <CheckboxGroup label="Label" style={{ inlineSize: "360px" }}>
+    <Checkbox variant="soft" layout="list" label="Item one" meta="Value" defaultChecked />
+    <Checkbox variant="soft" layout="list" label="Item two" meta="Value" />
+    <Checkbox variant="soft" layout="list" label="Item three" meta="Value" />
+  </CheckboxGroup>
+);
 /* Text choices: no picture, the label centred and set as itself. */
+/**
+ * The picture demos' image (owner 2026-10-26: "if u just use an image placeholder for now to better asses the visuals"):
+ * Card media's empty placeholder, a flat fill with an image glyph in the middle, standing in for a photo: two steps
+ * from the soft card's fill each way (neutral 150 in light, where Card's own 25 vanished on the grey card; 800 in dark).
+ * It fills the picture slot as a picture with its own ground does (8px inside the card's edge, its corners the card's less the 8).
+ * Inline paint from Area's tokens, so it renders wherever area.css does (the review page included).
+ */
+function DemoImage() {
+  return (
+    <span aria-hidden="true" style={{ display: "grid", placeItems: "center", inlineSize: "100%", blockSize: "100%", background: "light-dark(var(--area-neutral-150), var(--area-neutral-800))", color: "var(--area-fg-muted)" }}>
+      <ImageIcon size={20} />
+    </span>
+  );
+}
+
+export const GalleryCheckboxCardMedia = () => (
+  <CheckboxGroup label="Label" style={{ inlineSize: "420px", "--area-choice-ratio": "16 / 10", "--area-choice-min": "160px" } as CSSProperties}>
+    <Checkbox variant="soft" layout="media" label="Light" meta="Default" defaultChecked leadingVisual={<DemoImage />} />
+    <Checkbox variant="soft" layout="media" label="Dark" leadingVisual={<DemoImage />} />
+  </CheckboxGroup>
+);
+export const GalleryCheckboxCardMediaRow = () => (
+  <CheckboxGroup label="Label" style={{ inlineSize: "420px", "--area-choice-ratio": "16 / 10" } as CSSProperties}>
+    <Checkbox variant="soft" layout="media-row" label="Light" meta="Default" defaultChecked leadingVisual={<DemoImage />} />
+    <Checkbox variant="soft" layout="media-row" label="Dark" leadingVisual={<DemoImage />} />
+  </CheckboxGroup>
+);
 export const GalleryCheckboxCardPreview = () => (
   <CheckboxGroup label="Label" style={{ inlineSize: "420px" }}>
     <Checkbox variant="card" layout="preview" label="Option one" defaultChecked />
@@ -1643,6 +1676,21 @@ export const GalleryRadioCard = () => (
     <Radio variant="card" value="enterprise" label="Option three" caption="Description" leadingVisual={<TokenIcon />} />
   </RadioGroup>
 );
+/* Soft option rows (owner 2026-10-25, Notion Calendar's settings options): a fill and no edge, the control first, what
+   each choice comes to at the end; the chosen one filled darker. */
+export const GalleryRadioSoft = () => (
+  <RadioGroup label="Label" name="gallery-radio-soft" defaultValue="one" style={{ inlineSize: "360px" }}>
+    <Radio variant="soft" layout="list" value="one" label="Option one" meta="Value" />
+    <Radio variant="soft" layout="list" value="two" label="Option two" meta="Value" />
+    <Radio variant="soft" layout="list" value="three" label="Option three" meta="Value" />
+  </RadioGroup>
+);
+export const GalleryRadioSoftCaption = () => (
+  <RadioGroup label="Label" name="gallery-radio-soft-caption" defaultValue="one" style={{ inlineSize: "360px" }}>
+    <Radio variant="soft" layout="list" value="one" label="Option one" caption="Description" meta="Value" />
+    <Radio variant="soft" layout="list" value="two" label="Option two" caption="Description" meta="Value" />
+  </RadioGroup>
+);
 export const GalleryRadioCardTile = () => (
   <RadioGroup label="Layout" name="gallery-radio-card-tile" defaultValue="grid" style={{ inlineSize: "520px" }}>
     <Radio variant="card" layout="tile" value="list" label="List" leadingVisual={<ListIcon size={20} />} />
@@ -1652,10 +1700,24 @@ export const GalleryRadioCardTile = () => (
 );
 /* Each option shown as what it does: a small window in its own theme, the label centred, the card the indicator. */
 export const GalleryRadioCardPreview = () => (
-  <RadioGroup label="Label" name="gallery-radio-card-preview" defaultValue="light" style={{ inlineSize: "420px" }}>
-    <Radio variant="card" layout="preview" value="light" label="Light" leadingVisual={<span className="demo-preview" data-area-theme="light"><MiniUI /></span>} />
-    <Radio variant="card" layout="preview" value="dark" label="Dark" leadingVisual={<span className="demo-preview" data-area-theme="dark"><MiniUI /></span>} />
-    <Radio variant="card" layout="preview" value="system" label="System" leadingVisual={<span className="demo-preview demo-preview--split"><span data-area-theme="light"><MiniUI /></span><span data-area-theme="dark"><MiniUI /></span></span>} />
+  <RadioGroup label="Label" name="gallery-radio-card-preview" defaultValue="light" style={{ inlineSize: "420px", "--area-choice-ratio": "16 / 10" } as CSSProperties}>
+    <Radio variant="card" layout="preview" value="light" label="Light" leadingVisual={<DemoImage />} />
+    <Radio variant="card" layout="preview" value="dark" label="Dark" leadingVisual={<DemoImage />} />
+    <Radio variant="card" layout="preview" value="system" label="System" leadingVisual={<DemoImage />} />
+  </RadioGroup>
+);
+/* A picture choice with its row (Setup's answered picture questions): the picture in an 8px mat, the radio, name and meta under it. */
+export const GalleryRadioCardMedia = () => (
+  <RadioGroup label="Label" name="gallery-radio-card-media" defaultValue="light" style={{ inlineSize: "420px", "--area-choice-ratio": "16 / 10", "--area-choice-min": "160px" } as CSSProperties}>
+    <Radio variant="soft" layout="media" value="light" label="Light" meta="Default" leadingVisual={<DemoImage />} />
+    <Radio variant="soft" layout="media" value="dark" label="Dark" leadingVisual={<DemoImage />} />
+  </RadioGroup>
+);
+/* The same picture at the row's start, the row centred beside it. */
+export const GalleryRadioCardMediaRow = () => (
+  <RadioGroup label="Label" name="gallery-radio-card-media-row" defaultValue="light" style={{ inlineSize: "420px", "--area-choice-ratio": "16 / 10" } as CSSProperties}>
+    <Radio variant="soft" layout="media-row" value="light" label="Light" meta="Default" leadingVisual={<DemoImage />} />
+    <Radio variant="soft" layout="media-row" value="dark" label="Dark" leadingVisual={<DemoImage />} />
   </RadioGroup>
 );
 export const GalleryRadio = () => (

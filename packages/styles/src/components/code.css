@@ -24,9 +24,14 @@
    * The file header. A filename on the leading edge, the language beside it, and the copy
    * action pushed to the trailing edge.
    *
-   * The row is at least a control tier tall (with its 4px block padding it measures 37), so
-   * the icon button inside it lands on the same rhythm as a toolbar and the hairline under it
-   * sits at a stable height whether or not the block has a language or actions.
+   * The row is at least a control tier tall (with its 4px block padding it measures 36), so
+   * the icon button inside it lands on the same rhythm as a toolbar whether or not the block
+   * has a language or actions.
+   *
+   * No rule under it (owner 2026-10-25, an agent timeline's JSON block: "i like the code block
+   * without the separator between the title and the actual code"; ChatGPT's header has none):
+   * the title is the code's label on the same ground, so the code follows it at a line and a
+   * half rather than past a seam (below).
    */
   .area-code-block__header {
     text-align: start;
@@ -36,7 +41,6 @@
     min-block-size: var(--_code-bar);
     padding-block: var(--_code-header-block);
     padding-inline: var(--_code-start); /* 12, compact 8: the code column (compact pass) */
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
     font-size: var(--_code-ui-size);
     line-height: var(--_code-ui-leading);
   }
@@ -244,6 +248,11 @@
     inset-inline-end: var(--_code-copy-end);
     z-index: 1;
   }
+
+  /* Under a header the code starts at once: the header's own half row already sits between the title's line and the
+     first line of code, so they are 28 apart (36 / 2 + 20 / 2), 1.4 lines (the reference's JSON label to its first line:
+     1.4 of its 18 pitch; sm 17 + 9 over 18). The block's inset stays below the last line. */
+  .area-code-block__header + .area-code-block__body > .area-code-block__pre { padding-block-start: 0; }
 
   /* The first line keeps clear of the control that floats over it. */
   .area-code-block > .area-code-block__actions ~ .area-code-block__body
@@ -501,8 +510,7 @@
     inline-size: 100%;
     block-size: var(--_code-bar);
     padding: 0;
-    border: 0;
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    border: 0; /* no rule above it (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; docs/research/dividers-2026-10-25): the fade marks the cut */
     background-color: var(--area-bg-code);
     color: var(--area-fg-muted);
     font-family: inherit;

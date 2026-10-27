@@ -77,6 +77,13 @@ export const GalleryAssetCardContainerlessImageSelected = () => (
   <AssetCard style={card} container="containerless" selected media="images/david-tee.jpg" name="David Tee" />
 );
 /* Landscape: the frame 5:4 instead of square, as the Components gallery shows four across. */
+/* Wide: a 2:1 frame, for a colour or a banner. */
+export const GalleryAssetCardWide = () => <AssetCard style={card} aspect="wide" color="#2563EB" name="blue/500" actions={copy("#2563EB", "#2563EB")} />;
+/* Checker: the frame on a transparency checker, the colour over it so its alpha shows. */
+export const GalleryAssetCardChecker = () => <AssetCard style={card} fill="checker" color="rgb(37 99 235 / 0.4)" name="blue/500 at 40%" actions={copy("rgb(37 99 235 / 0.4)", "blue/500 at 40%")} />;
+/* The frame alone (Preview frame, folded in): containerless with no name or controls, filling its column, as an
+   inspector's preview of the selection; named for assistive technology by aria-label. */
+export const GalleryAssetCardFrame = () => <AssetCard style={card} container="containerless" media={<SearchIcon width={48} height={48} />} role="img" aria-label="Search" />;
 export const GalleryAssetCardLandscape = () => <AssetCard style={card} aspect="landscape" media={<Button>Button</Button>} name="Button" />;
 /* Name below: the head under the frame, the card's inset above it. */
 export const GalleryAssetCardCaptionBelow = () => <AssetCard style={card} caption="below" media={<Button>Button</Button>} name="Button" />;

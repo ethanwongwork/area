@@ -61,21 +61,22 @@ editor inspector (Dev Mode, where code is shown, was not opened).
 ```
 area   div.area-code-block  `stroke-width` `border-card` edge, corner concentric with the header's copy (11; sm 10, compact 9),
                             bg-code (white), overflow hidden
-  header   min 32 (37 with the 28 copy), padding 4/12 (compact 4/8), gap `ui-cluster` (8, compact 6),
-           bottom rule (border-decorative); UI type
+  header   min 32 (36 with the 28 copy), padding 4/12 (compact 4/8), gap `ui-cluster` (8, compact 6),
+           no rule under it (2026-10-25); UI type
     title     Geist Mono 400, fg-default;  language  14/20 fg-muted
     tabs      Tabs sm (`area-tabs area-tabs--sm`, audit G-6 A): Tabs' indicator, hover and inset focus
     actions   margin-inline-start auto, gap 4, ends 4 from the edge; copy = CopyButton (Button ghost neutral sm 28)
-  body > pre   padding 12 block (compact 8), 14/20 mono;  code > line (grid: 32px gutter | text)
+  body > pre   padding 12 block (compact 8), none on top under a header, 14/20 mono;  code > line (grid: 32px gutter | text)
     gutter    padding 6 / 12 (compact 6 / 8), tabular numbers, fg-muted, user-select none
     text      16px end inset (compact 12); unnumbered: 12px start inset (compact 8)
   toggle   32 tall (64 with the fade when collapsed), top rule (border-decorative), 400, not selectable
 ```
 
-Inset equations: header 4 + 28 copy + 4 + 1 rule = 37 (measured 37). Without a header the
+Inset equations: header 4 + 28 copy + 4 = 36 (measured 36; 37 with the rule before 2026-10-25); the title's line
+to the first line of code 36 / 2 + 20 / 2 = 28 (measured 418 + 36 = 454, the first line's top). Without a header the
 copy floats on line 1: top = 12 + (20 − 28) / 2 = 8, plus 1 border = 9 (`code.css:177-178, 239-244`),
 so its midline (23) meets the first line's (13 + 10). Collapsed pre: 8 × 20 + 2 × 12 = 184
-(`code.css:482-485`); shell 1 + 37 + 184 + 1 = 223 (measured).
+(`code.css:482-485`); shell 1 + 37 + 184 + 1 = 223 (measured before 2026-10-25; now 1 + 36 + 172 + 1).
 
 ## Measurements
 
@@ -105,7 +106,7 @@ ground; batch 22 moved syntax to the 500 rungs, see Decisions). Tabs (`area--lan
 | shell radius / edge / ground | **the copy's corner + its inset + the border: 6 + 4 + 1 = 11** at both densities, times `radius-concentric` (square at Sharp), as the small size (owner, 2026-10-22: "the corner inset here is incorrect"; was `radius-container` 12 since radius audit D1, a corner 1 rounder than concentric with the copy). References put the corner on their inner controls: GitHub Docs (Primer) 6 with no header, Vercel Geist 8 around a 28 / radius 6 copy button, shadcn docs 18 around 28 / radius 8 buttons 8 in, ChatGPT 24 around 36 round buttons 7 in (measured 2026-10-02, computed style). Was Card md's 24 (audit G-27 A), which only fits ChatGPT's larger header; Card's edge, `border-card` (O5, 2026-10-12; was `light-dark(neutral-100, neutral-750)` #ee) (`code.css:210`), `bg-code`: the page white in light (dark: neutral 800) | Peers: Card media, Panel, Alert; owner 2026-09-28 (lighter ground, more vibrant syntax); audit S7a (owner 2026-09-30): a block standing alone takes Card's edge | Ground was #fafafa (neutral 25); edge was `border-decorative` #f3 |
 | header | min `control-md` 32, padding 4/12, compact 4/8 (`code.css:31-42`); the trailing action ends 4 from the edge (`code.css:46-48`) | Toolbar rhythm; equal insets (owner 2026-10-01) | — |
 | shell · stroke width | **`stroke-width`** (since the 2026-10-12 consistency pass): a standalone block with no shadow keeps its frame under Elevated, as Table and Composer; the small size's corner counts the same width | Strokes (DESIGN_SYSTEM.md) | Was `border-width` |
-| rules (header, flush top, toggle) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 230, 499`); since audit S7a they sit one step lighter than the #ee edge | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
+| rules (flush top, toggle; the header's until 2026-10-25) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 230, 499`); since audit S7a they sit one step lighter than the #ee edge | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
 | code · face | `font-family: inherit` (`code.css:273`) | Owner (prior): one monospace | `<code>` reset to the browser's monospace |
 | tabs | **Tabs sm**: its indicator, hover, inset focus and forced-colours rule (primitives.tsx:2008-2012) | Audit G-6 A (owner 2026-09-30): one tab language | Was a Code block tab: 28 tall, radius-small, mono, hover plate `bg-component-hover` |
 | line number · hover | **underline, ink fixed**: 1 stroke at Link's 0.08em offset (`code.css:324-330`) | Shared rule; a link marks itself with an underline | Was muted → default ink |
@@ -258,7 +259,19 @@ hidden by the growing edge.
 
 The collapse toggle is not selectable; line-number and toggle underlines take Link's offset (0.25em). See [interaction polish](../research/interaction-polish-2026-10-16.md).
 
+## Lines (current, 2026-10-25)
+
+No rule above Show more / Hide code: the fade over the last lines marks the cut. Was `border-decorative`. (The header lost its rule earlier the same day.) This supersedes any older line value below (owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25)).
+
 ## Feedback log
+
+- 2026-10-25 · owner 2026-10-25: "Build everything as proposed on the dividers page, removing the footer line but keeping the line under the Command palette's search" (comparison https://claude.ai/artifact/3Fc3sXEgfKJmHEf2arA9hE; docs/research/dividers-2026-10-25) → No rule above Show more / Hide code: the fade over the last lines marks the cut. Was `border-decorative`. (The header lost its rule earlier the same day.)
+
+- 2026-10-25 · owner (an agent timeline's JSON block): "is this code block a variant? i like the code block without
+  the separator between the title and the actual code. can you update it?" → not a variant: a titled block. The header
+  loses its rule at every size (ChatGPT's header has none), and the code under a header starts with no top inset, so
+  the title's line and the first line are 28 apart (1.4 lines; the reference's 1.4; sm 26 over 18). Edit summary,
+  Queue and Plan keep the seam under their fold heads (a button over rows, not a label over its code).
 
 - 2026-09-26 · cohesion audit → tabs, line numbers and the show / hide toggle keep their ink
   on hover (plate or underline); linked-line rail `fg-default` (was accent) →
@@ -323,3 +336,17 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-25
+
+- **What changed:** A titled Code block has no line under its header. The code starts right under the title (28 from
+  the title's line to the first line of code, was 41 past the line). Blocks without a title are unchanged.
+- **Why:** you liked the agent timeline's JSON block, where the label sits over its code on one ground. ChatGPT's code
+  header has no rule either. The space between the title and the code shrank with it, because the rule was what
+  justified the gap.
+
+## Review note, 2026-10-26
+
+- **What changed:** No line above Show more.
+- **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
+  light. You approved each one on the dividers comparison page.

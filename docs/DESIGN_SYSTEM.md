@@ -311,7 +311,7 @@ line ([audit](research/consistency-audit-2026-10-12.md)).
   - cutouts between overlapping marks (Avatar group, Indicator anchor);
   - seams inside joined controls (Button group, Split button, Input group, Color field);
   - standalone dividers (Separator, Nav separators, the Tabs track, Table rows, Description
-    list, Accordion, Shortcut list);
+    list, Accordion's divided items, Shortcut list's divided rows);
   - frames with no shadow to carry them (Table, Description list, Code block, File upload,
     Asset card's inner frame), and Composer's frame.
 - `border-width` follows Stroke width, and is 1px again under increased contrast. It draws:
@@ -323,10 +323,10 @@ line ([audit](research/consistency-audit-2026-10-12.md)).
 
 | Role | Light | For |
 |---|---|---|
-| `border-decorative` | #f3 | Seams inside a container (Panel, Code block, Command palette and Color picker rules, Menu and Toolbar separators); edges of filled shapes |
+| `border-decorative` | #f3 | Every divider by default: Separator, Menu, Toolbar and Nav separators, Inline list's rule, File upload's separator, Shortcut list's divided rows, the Command palette's search rule; edges of filled shapes |
 | `border-float` | #ee (dark #4b) | Every floating frame |
 | `border-card` | #ee | Standalone surfaces: Card, Composer, Code block |
-| `border-divider`, `edge-control` | #e2 | Standalone rules; control and field edges; off tracks; the Table frame and Asset card's inner frame |
+| `border-divider`, `edge-control` | #e2 | Lines that carry data (Table rows) and opt-in dividers that ask for weight (Accordion divided, Link groups divided, Description list divided); control and field edges; off tracks; the Table frame and Asset card's inner frame |
 | `edge-control-hover` | #d4 | Control edges on hover. At rest: Checkbox and Radio, Tree view's check, Slider and Color picker thumbs, Calendar tiles |
 | `edge-control-strong` | #b4 | A Checkbox, Radio or selected Chip under the pointer |
 | `stroke-control` | #83 | Calendar's today ring, Breadcrumb separators |
@@ -334,8 +334,25 @@ line ([audit](research/consistency-audit-2026-10-12.md)).
 - **A rule inside a container is never darker than the container's edge.** The exception is
   seams inside joined controls (soft Button group, Split button): they are control edges and
   keep `edge-control`.
-- **A divider that stands alone** sits a step darker than a seam, because it has no fill or
-  shadow to help it.
+- **Draw a divider only where it is needed and intended** (owner, 2026-10-25: "id prefer to
+  not use dividers in general unless its very necessary and intentional"). A head, foot or
+  section inside a container draws no line: space and its own heading separate it (Code
+  block, Edit summary, Queue, Plan, Panel, Color picker, the Command palette's footer). A
+  line stays where two different kinds of thing meet (a search field over its results) or
+  where rows carry data (Table), and as an option the author turns on (`divided`).
+- **Space replaces the line** (owner, 2026-10-26: "make sure the spacing is intentional"). Where a line comes out, the
+  space is set from the container's own measures, never left as the two paddings the line sat between:
+  - a header sits as far above its content as the content sits from the container's side (Color picker: 16);
+  - a group that follows another sits one step further than the parts inside sit apart (Color picker's saved colours: two
+    rhythms, 24; Panel sections: an inset and the heading's air, about 31 to the next title);
+  - a footer sits as far under the last row as above the edge (Command palette: 12 and 12);
+  - rows without rules take the plain UI row; the extra room ruled rows carry is for the rule (Shortcut list: 32, 36
+    divided).
+- **A divider is the lightest line**, `border-decorative`, unless it carries data or is an
+  opt-in that asks for weight (owner: "dividers that are inset to have a very light subtle
+  stroke by default"). Increased contrast still firms every line. Was: a standalone divider
+  sat a step darker than a seam. Enforced by `cohesion.test.mjs` ("dividers only where
+  intended").
 - **Control and state edges read the `edge-*` roles**, which strengthen under increased
   contrast, never the raw `border-*` rungs. Supplementary lines (Box model layers, a
   disabled field's `border-faint`) may use the raw rungs.
@@ -369,12 +386,11 @@ and `emit/base.ts`; never copy a table into a component
     no gap between their line boxes: title baseline to description cap is about 12 for a 16 title over 14 text and
     10 for 14 over 14 (Figma and Notion 11.5). A 12/16 line has 2 less leading, so it sits 2 below (10.5 under a 14
     title), as a choice's description does. Card, Dialog, Drawer, Popover, Alert, Toast, Empty state,
-    Infobox, choices and their groups, Switch and Approval all follow it;
+    choices and their groups, Switch and Approval all follow it;
   - a label above its one control: `ui-stack` (6), Field's gap, so the label's baseline sits 11 above the control's edge;
   - a text group (a title or legend, with or without its description) above a **set** it introduces (options, rows,
     links, a list) stands one step further from it than the set's items stand from each other, on Area's ladder
-    2 · 4 · 6 · 8 · 12 · 16 · 24: options 8 apart take 12 (`gap-row`, Stack's group), links 4 apart take 8, Infobox
-    rows 4 apart take 6. So the space inside the text group < the space between items < the space from the text to
+    2 · 4 · 6 · 8 · 12 · 16 · 24: options 8 apart take 12 (`gap-row`, Stack's group), links 4 apart take 8. So the space inside the text group < the space between items < the space from the text to
     the items, and the heading reads as belonging to everything below it, not only the first item. Panel's heading is
     itself a row with Figma's 8 above and below, so it keeps its row rhythm;
   - a label beside its value: the label column is as wide as the longest label (shared by the rows, up to 40%), and
@@ -427,6 +443,10 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   distance from the edge, scaled by `radius-concentric` (0 at Sharp). This covers Composer,
   Message, Prompt suggestions, Toolbar and the Segmented track. A button set into a corner
   takes that corner less its inset.
+- **A picture in a choice card is one of two kinds** (owner 2026-10-26, Radio and Checkbox `preview`, `media`,
+  `media-row`). A picture with its own ground (a screen, a photo) fills the picture slot, 8px inside the card's edge,
+  its corner the card's less the 8 (6 clear inside a chosen card's 2px stroke, which is drawn inside). An illustration with no ground (a window, a component) has no frame: the card's
+  inset on its outer sides, the card's content after it at that same inset, its size what the card leaves.
 - **Nested radius** is `max(min(radius-floor, own corner), outer − inset)`, where
   `radius-floor` is min(4, setting). Only Sharp is square anywhere. Insets are the padding;
   a surface's 1px border is left out.
