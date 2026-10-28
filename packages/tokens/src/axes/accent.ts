@@ -128,7 +128,8 @@ export function accentDerived(): Record<string, string> {
  */
 export const STATUS_COLOURS_AXIS: AxisDefinition = {
   id: "status-colours",
-  label: "Status colours",
+  // "Status" (owner 2026-10-27: "avoid long phrases"; was "Status colours", which wrapped beside its info button).
+  label: "Status",
   description: "Danger, warning, success and info as the palette draws them, or quieted to the Accent strength. Their hues never move.",
   defaultPreset: "fixed",
   namespaces: ["--area-status-match:"],

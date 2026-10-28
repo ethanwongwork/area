@@ -434,6 +434,7 @@ export default {
       ["Do", "Turn on stepMarks for a short discrete range so each stop is visible."],
       ["Do", "Pass buffered for media playback, in the same units as the value, so the loaded stretch shows ahead of the playhead."],
       ["Do", "Keep the rail in dense panels and inspectors. Use track where the slider is a main control, as Figma's image adjustments, and bar where it is the one control in its row and pairs with a Button or field of the same height."],
+      ["Do", "Pass gradient for a range whose values are colours, a temperature, a colour's shades or a hue, so the trough shows each value where the bar puts it."],
       ["Do", "Put the label inside a bar (labelPosition inside) for a list of settings, one per row, each with its label and value inside it, as a theme or tool panel; it shows its value unless readout is false, and stepMarks show as dots."],
       ["Do", "Put an option that goes past the range, such as no limit, after the slider as a soft toggle Button at the slider's size; moving the slider releases it."],
       ["Do", "Pass origin for a range with a neutral middle, such as cool to warm, so the fill grows from it either way and is empty there."],

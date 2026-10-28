@@ -53,10 +53,11 @@ sliders.
 | variant | rail (default), track, bar | Three looks by thickness. Track: a pill as tall as the knob, the fill under it. Bar: the track is the control's full height and corner, its thumb the fill's end with a grip (owner 2026-10-21). `field` is a deprecated alias of `bar` + `labelPosition="inside"` (owner 2026-10-26, "consolidate") | Track: Figma's image adjustment sliders (`figma--adjustment-slider`). Bar: the owner's "Rate your driver" reference; Material 3 Expressive's tall track (unverified) |
 | labelPosition | inline (default), top, inside | Top: label and readout above the rail. Inside: a bar with the label at its start and the value at its end inside it, the fill a neutral plate behind them with a thin grip line inside its end, dragged from any point; step marks as dots; horizontal only, no end labels (owner 2026-10-24 as `field`; folded into bar 2026-10-26) | Top: Area composition (owner-confirmed). Inside: the owner's settings-panel reference ("Bounce 100", "Stagger 45ms", "Corner 28px") and the Path panel reference (Width with dots, Radius 347), screenshots; no live capture |
 | composition | an option at the end ("No limit") | A soft toggle Button at the slider's size after it, a cluster's gap away; not a slot, since the slider's root is its label (owner 2026-10-26) | The owner's budget reference (a mouse finder's "What's your budget?": a blue bar, "No limit" plate the bar's height) |
-| composition | a value input at the end | A NumberField on the same value after a label-inside bar, to type an exact value (owner 2026-10-25, "something like this with an input at the end"); NumberField keeps its units and commit | The owner's Audio panel reference (bars ending in a grip beside a number box), a screenshot |
+| composition | a value input at the end | A NumberField on the same value after a label-inside bar, to type an exact value (owner 2026-10-25, "something like this with an input at the end"); NumberField keeps its units and commit. A number in a unit (an end may be a short name, "Flat"): a soft Input 4 or 5 characters wide that lands a typed name or number on its step, the name in the label column (owner 2026-10-27, "Keep the Input layout", then "smaller in width"); a value in words ("Cool 25%", "57% deeper") shows its number signed from its middle ("-25", "+57") with the words as its announced value, the bar's `gradient` saying which way is which (owner 2026-10-27: first the words as text under the name, then "i dont like the slider below the label for just some of them ... more consistent") | The owner's Audio panel reference (bars ending in a grip beside a number box), a screenshot |
 | orientation | horizontal (default), vertical | Vertical tool panels | Area composition (owner-confirmed) |
 | composition | readout, step marks | Owner-confirmed (above) | Area compositions |
 | content | end labels (startLabel, endLabel) under the track; horizontal only | Owner 2026-10-21 ("Low" … "High") | The owner's Intensity reference; macOS and iOS settings sliders |
+| content | gradient (a CSS image) | A range whose values are colours paints them along the trough; no fill, the grip a light line with a dark edge, kept at both ends; no step marks (owner 2026-10-27: "make the slider background itself be colored like a gradient") | The Inspector's Temperature (cool, grey, warm), Shade (the accent's shades) and Hue; ColorPicker's channel tracks, Figma's and Lightroom's temperature sliders (unverified) |
 | content | origin (a value in the range) | Owner 2026-10-24: the Inspector's Temperature bar, Cool … Neutral … Warm; the fill runs between the origin and the value, so the neutral middle is an empty bar | Figma's and Lightroom's temperature and exposure sliders fill from their centre (unverified) |
 | composition | field with a number field: Label over a field bar (readout off) and a NumberField on one value | Owner 2026-10-25: "something like this with an input at the end"; the range-with-inputs pattern on one value, so no prop | The owner's Audio panel reference (Volume, Scale: a bar and a "100%" box), a screenshot |
 | content | buffered (0 to the value's units) | Owner 2026-10-21: media rows (music card) show how far the source has loaded | YouTube, Spotify, Apple Music; Video player's loaded part |
@@ -140,6 +141,8 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | hover | **the fill fades darker (and the bar's thumb, the fill's end) on `hover-in`, back on `fast`; the rail and knob keep their colour** | Fluent: colour on the thumb and fill only (`useSliderStyles.styles.ts L76-83`); Radix, Base UI: no hover change | Was the rail darkening too. Correction (2026-09-27 survey): antd does darken its rail on hover (`slider/style/index.ts:489-492`); Radix, Fluent and Base UI do not, so the choice stands on the majority |
 | step marks | **1 × 4 ticks, 2px under the rail or track**, `edge-control-strong`; **on a bar, 3 × 3 dots centred inside it** (the reference's ≈ 2.5px, on whole pixels), the same grey, under the fill | Ticks: owner 2026-10-21 ("B"); Base UI 1 × 8 below. Dots: owner 2026-10-26 ("the subtle dots", the Path panel and dark settings references) | The bar had an 8px tick lane under itself; dots keep a bar one row tall |
 | inside · grip | **2 × (thumb − 4): 12 / 12 / 16, `edge-control-strong`, at the thumb's centre; the fill reaches the thumb's far edge** | The Path panel reference: a 2px mid-grey line ≈ three eighths of the bar's height, inside the fill's end | Was no grip (`field`, 2026-10-24); the stroke ladder's 2 and the glyph ladder less 4 |
+| inside · ends | **at the minimum the bar is empty (no fill stub) and at either end the grip is gone**; the lane (inset.css: half the thumb, half the grip and 4, 13 at sm and md) still keeps a grip one step from an end off the text | Owner 2026-10-27 ("fix these sliders, the internal spacing"): the 16 stub and grip 4 before the label at 0, and the grip 4 after the value at 100%, read as text cursors | Each end is a step of the easing ratio, so the stub arrives as the fill leaves 0 |
+| inside · in a panel | **a bar row is the bar's height**, as every panel row is its control's (field.css, owner 2026-10-27: "rows 8 apart"), so bars, fields and switches sit the panel's 8 apart | Owner 2026-10-27 ("the heights of the sliders and the other controls are the same"): bars, Segmented and dropdowns were all 26; bar rows were 26 among 30 rows. First the bars took the 30 row (a margin), then every row took its control's height | Figma's inspector: 24 fields 8 apart |
 | bar end | **every bar's fill ends rounded with its line inside**: the accent bar's end is its rounded thumb; the label-inside bar's fill takes the same corner, `min(bar corner, thumb / 2)`, at its far end. From an origin the fill reaches the thumb's far edge on whichever side it is and only that end rounds; the origin's side stays straight | Owner 2026-10-26 ("should the track always be rounded at the end with a line indicator? id prefer that to be consistent") | The Path panel reference's fill ends square; consistency with the accent bar wins |
 | readout | 14/20 `fg-muted`, tabular, 4ch | Area value text role | — |
 | label gap | control to readout 6 at sm, md and lg, the density tokens (slider.css:22, :41, :299-301); compact sm 4. SliderRange's row keeps 8 (slider.css:98) | Peer: Button (audit S14) | Was 4 / 8 / 8; the range row had read `gap-md` and was pinned to 8 so it did not move |
@@ -413,3 +416,28 @@ in ≈120ms with a decelerating curve; a press sets `data-pressed` and the knob 
   "No limit" after a bar.
 - **Why:** you asked for a smoother, more interactive slider with motion for this interaction, and clearer variants; the
   grip and dots follow the Path panel reference you liked, and the option follows your budget reference.
+
+## Review note, 2026-10-27
+
+- Owner: "can you fix these sliders, the internal spacing? i also want to explore seeing the text on the outside/sides, and
+  having a separate input for the number thats on the side, not inside the slider. i also want to make sure the heights of
+  the sliders and the other controls are the same."
+- Fixed in the component: the label-inside bar's ends (`inside · ends`) and its row pitch in a panel (`inside · in a
+  panel`).
+- Exploration, app only, switched in the Inspector's first heading (Inside / Sides / Input, `inspector-bar-layout`):
+  Sides puts the name in the row's label column, as every other row's, and the value as text after the bar; Input puts the
+  value in a soft Input that takes a typed value (a readout's name, or a number landing on the nearest step). Both are
+  compositions (Field, the label-inside bar without its text, Input), as the 2026-10-25 decision on a value input made
+  it. Sheet: `docs/research/slider-bar-layouts-2026-10-27.png` (Inspector in Electron, light and dark). Decided (owner,
+  same day): "Keep the Input layout: label in the left column, bar, then the value field. Remove the switch and make it
+  the only layout." The switch is gone; every setting bar (Inspector, Setup's fine-tune) is that row.
+
+## Review note, 2026-10-27 (gradient, dots, one row)
+
+- Owner: "for temperature, and shade, can you make the slider background itself be colored like a gradient? also i dont
+  like the text just outside of the large slider. i dont like the slider below the label for just some of them, id
+  prefer it to be more consistent. i liked the little notches or indicators in these sliders" (a dark settings panel:
+  Label 537, Weight 400 with dots, Slant 0 with dots, Theme System).
+- Slider gains `gradient` (above). The Inspector's bars are all one row with a value field; Temperature, Shade and both
+  Hue bars take gradients and signed or degree numbers; bars of 3 to 12 steps draw their step dots (`stepMarks`), which
+  the fill covers up to the value, as the reference's.

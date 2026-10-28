@@ -239,11 +239,17 @@ chosen view holds across tabs and launches. A tab with nothing for a view leaves
 out.
 
 - **Theme** (Language 2026-10-19 to 20; the tab and the Inspector use one word): the
-  Canvas settings under the registry's headings (`SETTING_GROUPS`: Page, Accent, Where it paints, Size, Shape,
+  Canvas settings under the registry's headings (`SETTING_GROUPS`: Page, Accent, Emphasis, Size, Shape,
   Stroke, Shadow, States, Effects, then Material), only those that change this tab's specimens. A light/dark pair
   (Lightness, Grey tint, Layer contrast, Card shade, Button depth) shows the app's mode's own (owner, 2026-10-22), the
-  Titlebar's switch choosing which. An ordered setting is a bar (Slider `labelPosition="inside"`, owner 2026-10-24; was `variant="field"`), its name
-  and value inside; named choices are a Segmented beside the label, or under it from three options; a setting with Auto,
+  Titlebar's switch choosing which. An ordered setting is a bar row (owner 2026-10-27, "Keep the Input layout"; was the name and value inside the bar,
+  owner 2026-10-24): its name in the label column, the label-inside bar without its text, then its value in a soft
+  Input that takes a typed value. Rows are their controls' height, 8 apart; sections are separated by space alone (about
+  32 from the last control to the next title's cap); a dimmed row's reason sits behind an info button
+  (Toggletip, Field's `labelAction`) after its name, never as a caption (owner 2026-10-27); headings are one word. A row is beside its
+  name while its control fits there at its natural width and under it otherwise (Field `auto`); every bar is one row
+  with a value field 4 or 5 characters wide; a value in words shows its number there (Temperature -25, Shade +57) and a
+  colour range paints its trough (Slider `gradient`); a bar of 3 to 12 steps shows its steps as dots (owner 2026-10-27); named choices are a Segmented beside the label, or under it from three options; a setting with Auto,
   System or Accent shows those with Custom and the bar under them. Values read in their unit ("60%", "8px", "210ms",
   "White"), never a step number; none says "(Default)" (owner, 2026-10-20: "i dont like seeing (default)"). The Theme
   tab is where the default is marked.

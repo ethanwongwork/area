@@ -6,7 +6,7 @@
  * out a brand (about 60ms) and restyles the Canvas. Under Primary, the button the brand draws: its nearest readable shade.
  */
 import { useEffect, useRef, useState } from "react";
-import { Button, ColorField, ColorPicker, Field, hexToHsv, hsvToHex, PanelSection, Popover, Segmented, Switch } from "@area/react";
+import { Button, ColorField, ColorPicker, Field, hexToHsv, hsvToHex, PanelSection, Popover, Segmented, Switch, Toggletip } from "@area/react";
 import { AddIcon, ColorIcon } from "@area/icons";
 import { brandSlots, type BrandState } from "./brand.ts";
 import { useStudio } from "./studio.tsx";
@@ -26,7 +26,9 @@ export function BrandSettings() {
   const info = brand.on ? brandSlots(brand, theme)?.primary ?? null : null;
   return (
     <PanelSection heading="Brand">
-      <Switch size="sm" labelPosition="start" fullWidth label="Brand colours" checked={brand.on} onCheckedChange={on => setBrand({ on })}
+      {/* md (owner 2026-10-27, "is the toggle the correct size?"): sm drew a 26 × 14 track at the app's scale, smaller than
+          ChatGPT's 32 × 20 and Notion's 30 × 18 settings switches; md is 30 × 18, in the same 26 row and 13 label. */}
+      <Switch size="md" labelPosition="start" fullWidth label="Brand colours" checked={brand.on} onCheckedChange={on => setBrand({ on })}
         title="Paint the Canvas from your own colours instead of Area's palette" />
       {brand.on ? <>
         {SLOTS.map(([slot, label], at) => [brand[slot] === null ? (
@@ -35,12 +37,12 @@ export function BrandSettings() {
           </Field>
         ) : (
           <BrandColour key={slot} label={label} value={brand[slot]!} set={hex => setBrand({ [slot]: hex })}
-            remove={slot === "primary" ? undefined : () => setBrand({ [slot]: null })} />
-        ), slot === "primary" && info ? (
-          <p key="button" className="studio-row__note">{info.button === brand.primary
-            ? `Buttons use it exactly, with a ${info.label === "#000000" ? "black" : "white"} label.`
-            : `Buttons use ${info.button.toUpperCase()}, its nearest shade a ${info.label === "#000000" ? "black" : "white"} label reads on.`}</p>
-        ) : null])}
+            remove={slot === "primary" ? undefined : () => setBrand({ [slot]: null })}
+            // What buttons paint from it, behind an info button beside its name (owner 2026-10-27; was a caption).
+            note={slot === "primary" && info ? (info.button === brand.primary
+              ? `Buttons use it exactly, with a ${info.label === "#000000" ? "black" : "white"} label.`
+              : `Buttons use ${info.button.toUpperCase()}, its nearest shade a ${info.label === "#000000" ? "black" : "white"} label reads on.`) : undefined} />
+        )])}
         <Field label="Status hues" orientation="horizontal" title="Danger, warning, success and info: turned toward the brand, or Area's own">
           <Segmented size="sm" fullWidth value={brand.status} onValueChange={status => setBrand({ status: status as BrandState["status"] })}
             items={[{ value: "harmonised", label: "Brand's" }, { value: "own", label: "Area's" }]} />
@@ -51,7 +53,7 @@ export function BrandSettings() {
 }
 
 /** One slot: its hex, exact, and a picker beside it whose colour lands when let go. */
-function BrandColour({ label, value, set, remove }: { label: string; value: string; set: (hex: string) => void; remove?: () => void }) {
+function BrandColour({ label, value, set, remove, note }: { label: string; value: string; set: (hex: string) => void; remove?: () => void; note?: string }) {
   const [draft, setDraft] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const field = useRef<HTMLDivElement>(null);
@@ -68,7 +70,7 @@ function BrandColour({ label, value, set, remove }: { label: string; value: stri
   };
   const shown = draft ?? value;
   return (
-    <Field label={label} orientation="horizontal">
+    <Field label={label} orientation="horizontal" labelAction={note ? <Toggletip content={note} label={`How buttons use the ${label.toLowerCase()} colour`} /> : undefined}>
       <div ref={field} className="studio-brand__colour">
         <ColorField size="sm" variant="soft" fullWidth aria-label={label} value={shown.toUpperCase()} onValueChange={hex => { pending.current = hex; land(); }} />
         <Popover open={open} onOpenChange={next => { setOpen(next); if (!next) land(); }} anchor={field} align="end" aria-label={`${label} colour`}

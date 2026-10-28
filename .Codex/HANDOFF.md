@@ -1,6 +1,17 @@
 # Handoff
 
-## Current state (2026-10-26)
+## Current state (2026-10-27)
+- **Inspector rows and sliders, branch `claude/project-status-electron-5fd266` (owner 2026-10-27):** every setting bar
+  is one row: name in the label column, the label-inside bar without text, a soft value field 4–5ch wide (worded values
+  show a signed number: Temperature -25, Shade +57; Hue 200°). Slider gains `gradient` (Temperature, Shade, Hue troughs);
+  bars of 3–12 steps show step dots. Label-inside bar: empty at min, no grip at either end. Field gains `labelAction`
+  (dimmed rows' reasons are Toggletips, no captions) and `orientation="auto"` (beside if it fits, else under).
+  Panel rows are their control's height, 8 apart; a panel's Switch row is muted and 26 tall (Brand colours switch md).
+  Segmented's track lost its ring (soft fields' edge under More). Headings: "Where it paints" → Emphasis; Status colours
+  → Status. Segmented, Switch, Field back in review (with Slider). Sheets in docs/research/*-2026-10-27.png.
+- **Next, after `claude/component-interaction-visual-polish-e45c8f` lands (owner: wait for it):** build Stroke › Frames
+  and Stroke › Controls from docs/research/control-edges-2026-10-27/README.md (open decisions listed there). Both
+  sessions edit `component-status.mjs`, `primitives.tsx` (different components) and `toggletip.md`.
 - **Positions (owner 2026-10-26: "a slider that adjusts to every possible percentage"), PR from branch
   claude/color-lightness-slider-604a73:** Layer contrast, Card shade (±100), Text tint, Grey tint strength, Label tint and
   the Hover/Selected/Pressed fills (Hover and Pressed from 25) take every whole number 0–100; dark page every whole % 0–24;

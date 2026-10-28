@@ -155,6 +155,9 @@ Textarea is already `round()`ed; no transforms. Open question: none.
 
 ## Feedback log
 
+- 2026-10-27 · owner: "seems like there is somewhat of a balance of inputs/controls below the label and some all in the same row. can there be more logic around that" → `orientation="auto"`: a wrapping row, the control beside its label while it fits there at its natural width (max-content), under it when not; in a Panel the label keeps the horizontal row's 40% column. It follows the panel's width, the type size and the control's content, never its value. The Inspector's Segmented rows use it (Type's five sizes now fit beside; Density, Selected tint, Focus ring and Feedback go under).
+- 2026-10-27 · owner: "hide the captions behind a small info button with tooltip" → `labelAction`: a slot after the `<label>`, label and action in `.area-field__head` (flex, 4 apart), so a Toggletip's name stays out of the control's (Toggletip spec, open question 1). The Inspector's dimmed rows use it.
+- 2026-10-27 · owner: "rows 8 apart" → a horizontal Field in a panel is as tall as its control (floor `control-sm`), so the panel's 8 gap is the space between controls, as Figma's inspector; was the panel's md row (30), which left the Inspector's sm controls 12 apart (field.css). Back in review.
 - 2026-09-26 · cohesion audit → no change (6px label-to-control gap confirmed against Untitled
   UI) → `area--default`, `area--description-error`.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → Field unchanged;

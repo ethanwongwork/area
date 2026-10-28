@@ -105,7 +105,7 @@ tab keeps its 50% ink and gains an rgb(245) plate (`tabs/figma--panel-tab--hover
 | track · inset / gap | 2 / 2 (`segmented.css:32, 42`) | Figma toolbar mode switch 2 / 2 | ChatGPT's thumb fills the track; Figma's view toggle has no inset |
 | track · radius | per-tier control radius as Button: 6 sm, 8 md, 10 lg (`segmented.css:50`, `:160-162`); a pill when `data-area-pills` lists `segmented` (owner 2026-10-04) | Audit S4 (owner): the track is the control | Was item radius + inset (10 at md). ChatGPT is a pill; Area keeps the pill for Chip by default |
 | item · radius | concentric inside the track: track radius − 2 inset, floored at `radius-floor` 4: 4 sm, 6 md, 8 lg (`segmented.css:71`; owner 2026-10-03) | Radius rule; Figma 5 / 3 is concentric too | Was `radius-control` 8 at md |
-| track · paint | `bg-component` #f7f7f7 (the control fill, stepping from its ground; was `bg-subtle` until 2026-10-16) + a 1px `border-decorative` #f3 inset outline (`segmented.css:55-57`) | ChatGPT 3% ink (about rgb 248); Figma rgb(245) | The ring adds definition on white |
+| track · paint | `bg-component` #f7f7f7 (the control fill, stepping from its ground; was `bg-subtle` until 2026-10-16), **no edge**: a trough, as the soft fields, Slider's bar and Switch's track; under More contrast the soft fields' edge (`input-edge-soft`, a 1px inset outline) | ChatGPT 3% ink (about rgb 248); Figma rgb(245); neither rings its track | Was a 1px `border-decorative` ring ("adds definition on white"), the only edge in the Inspector's rows beside soft fields of the same fill and corner (owner 2026-10-27, removed) |
 | selected · paint | `light-dark(bg-surface, bg-component-active)` + 1px `edge-selected` (#e2 standard) + `shadow-control` (`segmented.css:111-118`): white in light; in dark a #3f thumb on the #28 groove (measured live) | Figma view toggle: white + 1px rgb(230) ring; ChatGPT and Figma mode switch: white + soft shadow | Area carries both the hairline and a light shadow. In dark the surface rung (#1d) sat below the groove and read sunken, so the thumb takes the active fill (audit S15a) |
 | icon → label gap | 6 at sm, md and lg, the density tokens (`segmented.css:36, :64, :160-162`); compact sm 4 | Peer: Button (audit S14) | Was 4 / 8 / 8 |
 | icon-only item | square, item height (`segmented.css:30, 144-147`) | Owner (prior decision); Figma square cells (24 and 28) | — |
@@ -217,6 +217,7 @@ Unselected items press at 7.5% black in light (as firm as the muted label allows
 
 ## Feedback log
 
+- 2026-10-27 · owner: "why segmented controls have a stroke around the container while inputs and others do not, is that intentional?" → it was Segmented's own ("the ring adds definition on white"), not the panel's; removed: the track is fill only, as every trough, and takes the soft fields' edge under More contrast (segmented.css). Selected plate keeps its edge and shadow. Back in review.
 - 2026-09-26 · cohesion audit → one 500 weight for every option (was 400 / 500 selected) →
   `baseline/chatgpt--segmented--rest`; 8 Area captures.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → unselected ink
