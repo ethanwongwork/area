@@ -97,6 +97,8 @@ export const DEFAULT_PAGE: Readonly<Record<"light" | "dark", Oklch>>;
 export function solvePage(theme: "light" | "dark", pick: Oklch): PageSolve;
 /** The most chroma a page of lightness l and hue h can show. */
 export function reachableChroma(theme: "light" | "dark", l: number, h: number): number;
+/** The chroma a tint (hue, strength as OKLCH chroma) paints on a page of lightness l. */
+export function paintedChroma(theme: "light" | "dark", l: number, tint: { hue: number; chroma: number }): number;
 export function parseColour(input: ColourInput): Oklch;
 export function isColour(value: string): boolean;
 export function formatOklch(colour: Oklch): string;

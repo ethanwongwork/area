@@ -15,7 +15,9 @@ import TOKENS from "@area/tokens/tokens.json";
 import { CustomSelect, Field, Input, Segmented, Slider, Toggletip, type FieldProps, type SliderProps } from "@area/react";
 import { GALLERY_CONTROLS, greysTinted, type GalleryControl } from "./gallery/controls.ts";
 import { colourMark, optionMark } from "./option-marks.tsx";
-import type { CanvasAxes } from "./studio.tsx";
+import { PageColourRow } from "./page-colour.tsx";
+import { PAGE_AXES, type ColoursState } from "./colours.ts";
+import { useStudio, type CanvasAxes } from "./studio.tsx";
 
 export type Values = Readonly<Record<string, string>>;
 export interface RowContext {
@@ -182,11 +184,17 @@ export const ROW_OF: Readonly<Record<string, string>> = { neutral: "greys", "tin
 
 /** One row: the setting's own control, or the combined row it belongs to. */
 export function SettingRow({ axis, context }: { axis: string; context: RowContext }) {
+  const { colours } = useStudio();
   if (ROW_OF[axis] === "greys") return <GreysRow context={context} />;
   if (axis === "accent") return <AccentRow context={context} />;
   const control = controlOf(axis);
-  return <Dim reason={control.inactive?.(context.values, context.mode) ?? null}><Row control={control} context={context} /></Dim>;
+  return <Dim reason={pickedReason(colours, axis, context.mode) ?? control.inactive?.(context.values, context.mode) ?? null}><Row control={control} context={context} /></Dim>;
 }
+
+/** A page setting a picked page colour stands in for (src/colours.ts): what it shows is not what the page paints. */
+const PICKED = "The page colour sets this now; moving it hands the page back to this setting";
+const pickedReason = (picks: ColoursState, axis: string, mode: "light" | "dark") =>
+  picks[mode] !== null && axis !== "neutral" && PAGE_AXES[mode].includes(axis) ? PICKED : null;
 
 /*
  * A row that has no effect under the other settings (owner, 2026-10-24: "some of the axises i cant tell what im even
@@ -304,6 +312,7 @@ function temperatureOf(values: Values, mode: "light" | "dark"): number {
 }
 function GreysRow({ context }: { context: RowContext }) {
   const { values, mode, set } = context;
+  const { colours } = useStudio();
   const hue = values["tint-hue"] ?? "auto";
   const tint = hue === "auto" ? "none" : hue === "accent" ? "accent" : TINTS.some(([value]) => value === hue) ? hue : CUSTOM;
   const t = temperatureOf(values, mode);
@@ -319,6 +328,9 @@ function GreysRow({ context }: { context: RowContext }) {
   const hues = Array.from({ length: 360 }, (_, hue) => String(hue));
   return (
     <>
+      {/* The page as one exact colour (2026-10-27): above the greys' settings it stands in for. */}
+      <PageColourRow size={context.size ?? "sm"} />
+      <Dim reason={colours[mode] !== null ? PICKED : null}>
       <Dim reason={tint === "none" ? null : "Off while a tint colour is on"}>
         <SettingBar size={context.size ?? "sm"} label="Temperature" title="How cool (blue) or warm (yellow) every grey is: pages, cards, edges and text"
           min={-100} max={100} step={1} origin={0} value={tint === "none" ? t : 0}
@@ -339,6 +351,7 @@ function GreysRow({ context }: { context: RowContext }) {
           min={0} max={100} step={1} value={amountAt} readout={(at: number) => at === 0 ? "None" : `${at}%`}
           onSet={at => set({ "tint-light": String(at), "tint-dark": String(at) })} />
       ) : null}
+      </Dim>
     </>
   );
 }

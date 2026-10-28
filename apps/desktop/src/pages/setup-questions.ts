@@ -12,12 +12,15 @@
  *   slider    one large bar over an ordered setting, its marks named; the stage is its picture
  *   toggle    on or off, with a bar for how much when on
  *   accent, tint, pills   the three that need their own: swatches and any hue; several shapes at once
+ *   page      a mode's page as one exact colour (2026-10-27): Area's Color picker over the colours Area paints, with
+ *             Neutral, Cool and Warm as starting points
  *
  * Every choice writes Inspector settings (`set`), so an answer reads there at once. A question is asked only while it can
  * change something (`when`), in the mode it belongs to (`mode`); Essentials asks the ones marked `essential`.
  */
 import type { CanvasAxes } from "../studio.tsx";
 import { greysTinted } from "../gallery/controls.ts";
+import { pickTinted, type ColoursState } from "../colours.ts";
 import type { Hold, Region } from "../setup-screen.tsx";
 
 export type Axis = keyof CanvasAxes;
@@ -46,9 +49,10 @@ export type Control =
   | { kind: "toggle"; axis: Axis; also?: Axis[]; label: string; off: string; on: string; low: string; high: string; visual?: Visual }
   | { kind: "accent"; visual: Visual }
   | { kind: "tint"; visual: Visual }
+  | { kind: "page"; mode: Mode }
   | { kind: "pills" };
 
-export type ChapterId = "page" | "accent" | "size" | "shape" | "lines" | "depth" | "states" | "motion" | "access" | "dark";
+export type ChapterId = "colours" | "page" | "accent" | "size" | "shape" | "lines" | "depth" | "states" | "motion" | "access" | "dark";
 export interface Chapter {
   id: ChapterId;
   title: string;
@@ -81,14 +85,19 @@ export interface Question {
   /** A setting elsewhere that changes what this question shows, said under it with a way to undo it, or null. */
   context?: (values: Values) => { note: string; action: string; set: Partial<Record<Axis, string>> } | null;
   mode?: Mode;
-  when?: (values: Values) => boolean;
+  /** `colours`: the exact page colours picked (src/colours.ts), which stand in for a mode's page settings. */
+  when?: (values: Values, colours: ColoursState) => boolean;
 }
 
 export const CHAPTERS: readonly Chapter[] = [
+  // Colours first (owner, 2026-10-27, the exact colours plan: "Every later question applies these colours; the dark page
+  // pick moves up from the Dark mode chapter").
+  { id: "colours", title: "Colours", focus: [],
+    lede: "Your page in light and in dark, and your accent: the colours every later answer applies." },
   { id: "page", title: "Page", focus: ["sidebar", "stats", "list"],
-    lede: "The ground everything sits on: its brightness, its greys, its layers." },
+    lede: "How text and layers sit on your page." },
   { id: "accent", title: "Accent", focus: ["primary", "checks", "switch", "tabs"],
-    lede: "One colour for your product's voice, and where it may appear." },
+    lede: "Where your accent appears, and how vivid and deep it is." },
   { id: "size", title: "Text and room", focus: ["text", "sidebar", "list"],
     lede: "How large text is and how much room controls get." },
   { id: "shape", title: "Shape", focus: ["stats", "field", "primary"],
@@ -122,7 +131,6 @@ const fillShade = (values: Values) => values["solid-light"] === "auto" ? null
   : { note: `Accent fills are set to a fixed shade (${Number(values["solid-light"]) >= 650 ? "deep" : Number(values["solid-light"]) <= 500 ? "light" : "medium"}), so they look different from the swatch.`, action: "Match the swatch", set: { "solid-light": "auto" } };
 /** The parts an accent solid fills: accent buttons, checked boxes and switches. */
 const solidParts = (values: Values): Region[] => [...(values.action === "accent" ? ["primary", "action"] as Region[] : []), ...(values.selection === "accent" ? ["checks", "switch"] as Region[] : [])];
-const numericHue = (value: string) => /^\d+$/.test(value);
 
 const solid = one("solid-light"), darkSolid = one("solid-dark");
 /**
@@ -130,8 +138,6 @@ const solid = one("solid-light"), darkSolid = one("solid-dark");
  * possible percentage ... rather than larger buckets of lighter, darker, neutral"); the stage is the picture, and the
  * names the cards had are marks to start from. Card shade's Auto is a mark off the bar.
  */
-/** Grey tint strength's marks: Tint 2, 4, 8 and 16 as they were, 2 at its nearest position (12.5). */
-const TINT_MARKS = [{ value: "13", label: "Hint" }, { value: "25", label: "Light" }, { value: "50", label: "Clear" }, { value: "100", label: "Strong" }];
 const LAYER_MARKS = [{ value: "0", label: "Flat" }, { value: "25", label: "Subtle" }, { value: "50", label: "Clear" }, { value: "75", label: "Strong" }, { value: "100", label: "Bold" }];
 const CARD_MARKS = [{ value: "auto", label: "Auto" }, { value: "-50", label: "Darker" }, { value: "0", label: "Match" }, { value: "50", label: "Lighter" }];
 const type = one("type"), density = one("density"), radius = one("radius"), surface = one("surface"), elevation = one("elevation");
@@ -141,49 +147,36 @@ const focusRing = one("focus-ring"), danger = one("danger-hover"), motion = one(
 const feedback = one("feedback");
 const shadowColour = one("shadow-color"), status = one("status-colours");
 
-/** The greys at a temperature: Neutral's own ramp, or Cool's or Warm's, with no tint of another colour. */
-const greys = (neutral: string, hue = "auto", strength = "auto"): Partial<Record<Axis, string>> =>
-  ({ neutral, "tint-hue": hue, "tint-light": strength, "tint-dark": strength });
-
 export const QUESTIONS: readonly Question[] = [
+  // ——— Colours ———
+  // Each page is one exact colour (2026-10-27): its brightness, the greys' hue and how far they lean, all in one pick, so
+  // the Page brightness slider, Greys, Tint colour and Grey strength questions folded into it.
+  {
+    id: "light-page", chapter: "colours", name: "Light page", essential: true, mode: "light", axes: ["ground-light", "neutral", "tint-hue", "tint-light"], focus: [],
+    question: "What colour is your page?",
+    description: "Every grey, edge and text colour is worked out from it.",
+    note: "Only colours Area can paint are offered: a page's colour fades out toward white.",
+    control: { kind: "page", mode: "light" },
+  },
+  {
+    id: "dark-page", chapter: "colours", name: "Dark page", essential: true, mode: "dark", axes: ["ground-dark", "neutral", "tint-hue-dark", "tint-dark"], focus: [],
+    question: "What colour is your page in dark mode?",
+    description: "True black, a near black or a coloured dark.",
+    note: "Only colours Area can paint are offered: a page's colour fades out toward black.",
+    control: { kind: "page", mode: "dark" },
+  },
+  // The accent's own pick follows (phase 4); until then the palette's accents and any hue.
+  {
+    id: "accent", chapter: "colours", name: "Accent", essential: true, axes: ["accent"], focus: accentParts, context: fillShade,
+    question: "Which colour is your accent?",
+    description: "The colour for actions, selection and focus.",
+    note: "Contrast is solved for every hue.",
+    control: { kind: "accent", visual: crop("form", 0.5) },
+  },
   // ——— Page ———
   {
-    id: "page", chapter: "page", name: "Page", essential: true, mode: "light", axes: ["ground-light"], focus: [],
-    question: "How bright should the page be?",
-    description: "The ground behind everything.",
-    note: "Text contrast holds at every brightness.",
-    control: { kind: "slider", axis: "ground-light", low: "Grey", high: "White",
-      marks: [{ value: "90", label: "Deep grey" }, { value: "93", label: "Grey" }, { value: "96", label: "Soft" }, { value: "98", label: "Paper" }, { value: "100", label: "White" }] },
-  },
-  {
-    id: "greys", chapter: "page", name: "Greys", essential: true, axes: ["neutral", "tint-hue", "tint-light", "tint-dark"], focus: [],
-    question: "What temperature should the greys be?",
-    description: "Every grey on screen comes from one family.",
-    control: { kind: "cards", visual: crop("sidebar", 0.55), choices: [
-      { label: "Neutral", caption: "Pure grey.", set: greys("neutral") },
-      { label: "Cool", caption: "A breath of blue.", set: greys("cool") },
-      { label: "Warm", caption: "A breath of yellow.", set: greys("warm") },
-      { label: "Accent", caption: "Greys lean toward the accent.", set: greys("neutral", "accent", "25") },
-      { label: "A colour", caption: "Pick any hue next.", set: greys("neutral", "255", "25") },
-    ] },
-  },
-  {
-    id: "tint-colour", chapter: "page", name: "Tint colour", axes: ["tint-hue"], focus: ["sidebar", "stats"],
-    when: values => numericHue(values["tint-hue"]),
-    question: "Which colour should the greys lean toward?",
-    description: "The hue every grey takes a little of.",
-    control: { kind: "tint", visual: crop("sidebar", 0.55) },
-  },
-  {
-    id: "grey-strength", chapter: "page", name: "Grey strength", axes: ["tint-light", "tint-dark"], focus: [],
-    when: values => greysTinted(values, "light"),
-    question: "How strongly should the greys lean?",
-    description: "How much of the colour the greys take.",
-    control: { kind: "slider", axis: "tint-light", also: ["tint-dark"], low: "Barely", high: "Strongly", marks: TINT_MARKS },
-  },
-  {
     id: "text-tint", chapter: "page", name: "Text tint", axes: ["ink-tint"], focus: ["text", "list"], fidelity: "real",
-    when: values => greysTinted(values, "light"),
+    when: (values, colours) => greysTinted(values, "light") || pickTinted(colours.light),
     question: "Should text be tinted too?",
     description: "Your greys lean toward a colour; body and muted text can lean the same way, or stay plain grey.",
     control: { kind: "slider", axis: "ink-tint", low: "Plain grey", high: "As tinted as the greys",
@@ -202,13 +195,6 @@ export const QUESTIONS: readonly Question[] = [
     control: { kind: "slider", axis: "card-tone-light", low: "Darker", high: "Lighter", marks: CARD_MARKS },
   },
   // ——— Accent ———
-  {
-    id: "accent", chapter: "accent", name: "Accent", essential: true, axes: ["accent"], focus: accentParts, context: fillShade,
-    question: "Which colour is your accent?",
-    description: "The colour for actions, selection and focus.",
-    note: "Contrast is solved for every hue.",
-    control: { kind: "accent", visual: crop("form", 0.5) },
-  },
   {
     id: "where", chapter: "accent", name: "Accent use", essential: true, axes: ["action", "selection"], focus: ["primary", "action", "checks", "switch", "segmented", "tabs"],
     question: "Where should the accent appear?",
@@ -530,13 +516,6 @@ export const QUESTIONS: readonly Question[] = [
   },
   // ——— Dark mode ———
   {
-    id: "dark-page", chapter: "dark", name: "Dark page", essential: true, mode: "dark", axes: ["ground-dark"], focus: [],
-    question: "How dark should the page be in dark mode?",
-    description: "True black, or a little lighter.",
-    control: { kind: "slider", axis: "ground-dark", low: "Black", high: "Lighter",
-      marks: [{ value: "0", label: "Black" }, { value: "8", label: "Near black" }, { value: "14", label: "Graphite" }, { value: "20", label: "Charcoal" }, { value: "24", label: "Slate" }] },
-  },
-  {
     id: "dark-layers", chapter: "dark", name: "Dark layers", mode: "dark", axes: ["layers-dark"], focus: ["sidebar", "stats", "form"],
     question: "How clearly should regions separate in dark mode?",
     description: "Dark pages often need a bigger step.",
@@ -559,13 +538,6 @@ export const QUESTIONS: readonly Question[] = [
       darkSolid("600", "Medium", "The palette's middle."),
       darkSolid("750", "Deep", "Recedes into the page."),
     ] },
-  },
-  {
-    id: "dark-grey-strength", chapter: "dark", name: "Dark grey strength", mode: "dark", axes: ["tint-dark"], focus: ["sidebar", "stats"],
-    when: values => greysTinted(values, "dark"),
-    question: "In dark mode, how strongly should the greys lean?",
-    description: "A tint reads stronger on a dark page.",
-    control: { kind: "slider", axis: "tint-dark", low: "Barely", high: "Strongly", marks: TINT_MARKS },
   },
 ];
 

@@ -7,12 +7,13 @@
 // command-palette, combobox, tooltip, dialog, code-block, panel, color-picker, checkbox, radio,
 // chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
 export const COMPLETE_COMPONENTS = new Set([
-  'asset-card', 'code-block', 'color-picker', 'command-palette', 'inline-list', 'nav', 'panel', 'plan', 'queue', 'separator', 'shortcut-list', // round 72 approved (owner, 2026-10-26)
+  'asset-card', 'code-block', 'command-palette', 'inline-list', 'nav', 'panel', 'plan', 'queue', 'separator', 'shortcut-list', // round 72 approved (owner, 2026-10-26)
   'radio', 'checkbox', // round 73 approved (owner, 2026-10-26)
   'edit-summary', 'file-upload', 'description-list', // round 74 approved (owner, 2026-10-26). infobox: removed 2026-10-26 (owner, round 73).
   // plan: reopened 2026-10-25 (owner: a progress tracker; bar, item meta, the ring), back in review.
   // radio, checkbox: reopened 2026-10-25 (owner: soft option rows, layout list, meta), back in review.
   'color-swatch', 'color-swatch-picker', 'count', 'editable-text', 'input', 'list-box', 'menu', 'meter', 'progress', 'reference-list', 'search-field', 'spinner', 'table', 'table-of-contents', 'tabs', 'time-field', 'timeline', 'tree-view', // round 69 approved by the owner in chat (2026-10-22)
+  // color-picker: reopened 2026-10-27 (exact colours: the gamut mode, an exact OKLCH pick inside a region), back in review.
   // color-picker, panel, command-palette, shortcut-list, infobox, separator, nav, inline-list, file-upload: reopened 2026-10-26 (owner: dividers only where intended, the rest lightest).
   // code-block, edit-summary, queue: reopened 2026-10-25 (owner: no rule under the header or head), back in review.
   'alignment-picker', 'attachment', 'avatar', 'calendar', 'chip', 'popover', 'stepper', // rounds 69-70 approved (2026-10-22)

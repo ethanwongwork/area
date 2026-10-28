@@ -108,6 +108,9 @@ export function parseColour(input: ColourInput): Oklch {
 }
 export const isColour = (value: string): boolean => { try { parseColour(value); return true; } catch { return false; } };
 
+/** The chroma a tint (hue and strength) paints on a page of lightness `L`: faded toward white or black, held in its room. */
+export const paintedChroma = (theme: Mode, L: number, tint: { hue: number; chroma: number }) => castChroma(theme, L, tint);
+
 /** A pick as CSS text, as the app saves it: `oklch(0.9634 0.012 255)`. */
 export const formatOklch = ({ l, c, h }: Oklch) => `oklch(${round(l, 4)} ${round(c, 6)} ${round(h, 1)})`;
 /** The hex a pick paints, for a swatch. */

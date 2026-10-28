@@ -289,8 +289,9 @@ https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2). Colours stop being presets a
 numbers: Area derives every grey from the page picks and the accent's shades from the brand
 engine, and the application settings (Layer contrast, Card shade, the fills, Text tint, Shade,
 Saturation, Label tint) apply over whatever was picked. Built so far: the tokens (`@area/tokens/colours`),
-the `data-area-colours` scope, React's `colours`, `area-tokens colours`, Setup's code and the app's
-saved picks; Setup's Colours stage and the Inspector's pickers come next.
+the `data-area-colours` scope, React's `colours`, `area-tokens colours`, Setup's code, the app's
+saved picks, Setup's Colours stage and the Inspector's page colour; the accent as one exact pick
+comes next.
 
 **What a page pick writes.** A pick solves into the numbers the Layers model already reads
 (`color/colours.ts`, `solvePage`): its lightness as `--area-ground-light` (any value 0.90 to
@@ -326,6 +327,14 @@ the most that shows, as a strong tint is held at its room.
   and a tint the page can't show stay settings), so nothing on screen moves. Writing one of a
   mode's page settings in the Inspector hands that mode back to the settings. Setup's code
   leaves out the page attributes a pick stands in for and adds the colour rule.
+- **Picking a page** (Setup's Colours stage, first: light page, dark page, accent; the Inspector's
+  Page colour, for the mode the app is in): Area's Color picker in its gamut mode, lightness up
+  and chroma across at the hue, painted only where `reachableChroma` reaches, so it offers only
+  colours Area paints. Neutral, Cool and Warm sit under it as starting points: each sets that
+  grey family exactly (the Neutral setting at its own tint), keeping the page's lightness, and
+  drops the picks. Setup's page brightness, Greys, Tint colour, Grey strength and Dark page
+  questions folded into the pickers; in the Inspector the page settings a pick stands in for are
+  dimmed with the reason, and moving one hands the page back to the settings.
 - `data-area-colours` restates every derivation that reads a page input (the stylesheet's
   re-derivation rules, `emit/css.ts`), so a subtree can carry its own colours.
 - The accent goes through the brand engine exactly as `brandDeclarations({ primary })` does.

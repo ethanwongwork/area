@@ -48,6 +48,7 @@ are Figma features outside this component (see Excluded).
 | state | `model`: `oklch` | Perceptual editing; CSS Color 4 | Owner request |
 | state | `disabled` | — | Peers |
 | variant | `surface` (default), `plain` | `surface` is the floating plate; `plain` drops background, edge and lift for a picker inside a Popover or Panel (audit S17) | Calendar and Toolbar use the same `surface` / `plain` pair |
+| composition | `gamut` (+ `oklch`, `defaultOklch`, `onOklchChange`) | An exact OKLCH pick limited to what a region allows: the area is lightness × chroma at the hue, painted only where `reach` reaches, so every point offered can be used (owner, 2026-10-27: exact page colours, "the picker shows only what can be reached") | oklch.com's L × C plane at a hue with its gamut edge; Area's Setup page colours |
 
 Excluded: Figma's paint-type row (Solid, Gradient, Pattern, Image, Video, Shader) and blend
 mode and contrast buttons. Selecting a non-solid paint would change the owner's file, so
@@ -351,3 +352,8 @@ Spacing without the rules (2026-10-26, owner: "make sure the spacing is intentio
 - **What changed:** No line under the header, and none above the saved colours.
 - **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
   light. You approved each one on the dividers comparison page.
+
+## Review note, 2026-10-27 (gamut)
+
+- **Gamut** (exact colours plan, https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2, decided 2026-10-27): `gamut={{ lightness: [min, max], chroma, reach? }}` turns the picker into an exact OKLCH picker. The area is chroma (across, 0 to `chroma`) by lightness (up, `min` to `max`) at the hue on an OKLCH hue track; a canvas (128 square, scaled) paints the colours `reach(l, h)` allows (sRGB's own by default) and leaves the rest clear, the edge covered in proportion so it stays a line at any size. A pointer or key past the reach is held at it. The value row is exact L (%, two places), C (four) and H (°, one); `oklch` / `defaultOklch` in, `onOklchChange` out, `onValueChange` the nearest hex; the form value is `oklch(L C h)`. Views, models, opacity, contrast, preview and the eyedropper don't apply. Its own code path (`GamutPicker`), so the spectrum picker is unchanged. No new measured values: the area, thumb, tracks and fields are the spectrum picker's.
+- Used by Setup's Colours stage for the light and dark page (`apps/desktop/src/pages/theme-setup.tsx`, `reach` = `@area/tokens/colours` `reachableChroma`). Back in review.

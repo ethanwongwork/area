@@ -16,7 +16,7 @@
  * the visuals and the choices' pictures take the picks.
  */
 import { AddIcon, ArrowLeftIcon, ChevronDownIcon, InfoIcon, ResetIcon } from "@area/icons";
-import { Badge, Button, Checkbox, CheckboxGroup, CodeBlock, ColorSwatchPicker, Kbd, Message, Plan, PromptSuggestions, Radio, RadioGroup, Segmented, Select, Slider, Switch, Table, TableCell, TableHeaderCell, TableLink, ZoomControl } from "@area/react";
+import { Badge, Button, Checkbox, CheckboxGroup, CodeBlock, ColorSwatch, ColorSwatchPicker, Kbd, Message, Plan, PromptSuggestions, Radio, RadioGroup, Segmented, Select, Slider, Switch, Table, TableCell, TableHeaderCell, TableLink, ZoomControl } from "@area/react";
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { LoopingPress } from "../abstract.tsx";
 import { optionMark } from "../option-marks.tsx";
@@ -26,7 +26,9 @@ import { GALLERY_CONTROLS } from "../gallery/controls.ts";
 import { hueName, SettingRow } from "../inspector-rows.tsx";
 import { REGION_LABEL, SCREENS, ScreenFigure, type Region, type RegionBox, type ScreenId } from "../setup-screen.tsx";
 import { canvasAttributes, CANVAS_DEFAULTS, useStudio, Workspace, type CanvasAxes } from "../studio.tsx";
-import { coloursCode, hasColours } from "../colours.ts";
+import { coloursCode, hasColours, type ColoursState } from "../colours.ts";
+import { oklchHex, parseColour } from "@area/tokens/colours";
+import { PagePicker, pageAnswer, pageHex } from "../page-colour.tsx";
 import { AXES } from "../tokens.ts";
 import { useViewOption, ViewControls, ViewFilter } from "../view-controls.tsx";
 import { CHAPTERS, minutesFor, QUESTIONS, type Axis, type Choice, type Question, type Values, type Visual } from "./setup-questions.ts";
@@ -67,18 +69,21 @@ const TINTS: ReadonlyArray<[string, string]> = [["30", "Red"], ["55", "Orange"],
 const hueSwatch = (hue: string) => `oklch(0.66 0.14 ${hue})`;
 
 /** What a question is set to, in its own words: the choice it matches, else the setting's value. */
-function answerOf(question: Question, values: Values): string {
+function answerOf(question: Question, values: Values, picks: ColoursState): string {
   const control = question.control;
   if (control.kind === "cards") { const choice = control.choices.find(entry => matches(values, entry.set)); if (choice) return choice.label; }
   if (control.kind === "accent") return /^\d+$/.test(values.accent) ? `${hueName(Number(values.accent))} · ${values.accent}°` : say("accent", values.accent);
   if (control.kind === "tint") return `${hueName(Number(values["tint-hue"]))} · ${values["tint-hue"]}°`;
+  if (control.kind === "page") return pageAnswer(control.mode, values, picks);
   if (control.kind === "pills") { const count = values.pills.split(" ").filter(Boolean).length; return count ? `${count} parts` : "None"; }
   if (control.kind === "toggle") return values[control.axis] === control.off ? "Off" : say(control.axis, values[control.axis]);
   const axis = question.axes[0]!;
   return say(axis, values[axis]);
 }
 const focusOf = (question: Question, values: Values): Region[] => typeof question.focus === "function" ? question.focus(values) : question.focus;
-const atDefault = (question: Question, values: Values) => question.axes.every(axis => values[axis] === defaultOf(axis));
+/** At Area's default: every setting it writes, and for a page question no pick (`picks`, src/colours.ts). */
+const atDefault = (question: Question, values: Values, picks: ColoursState) => question.axes.every(axis => values[axis] === defaultOf(axis))
+  && !(question.control.kind === "page" && picks[question.control.mode]);
 export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupProps) {
   const { item, select, canvas, setCanvas, shown, setInspectorView, showInspector, colours: studioColours } = useStudio();
   const [path, setPath] = useViewOption<Path>("theme-setup-path", "essentials", ["essentials", "complete"]);
@@ -92,7 +97,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   const values = canvas as Values;
 
   // The questions on this path that can change something under the answers so far.
-  const asked = QUESTIONS.filter(question => (path === "complete" || question.essential) && (!question.when || question.when(values)));
+  const asked = QUESTIONS.filter(question => (path === "complete" || question.essential) && (!question.when || question.when(values, studioColours)));
   // Where the conversation is: the welcome (""), a question, or the review. A question the answers have made moot gives
   // way to the next one asked.
   const lost = item && item !== "review" && !asked.some(entry => entry.id === item) ? QUESTIONS.findIndex(entry => entry.id === item) : -1;
@@ -130,7 +135,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
     const attributes = canvasAttributes({ ...drawn.canvas, ...extra } as typeof drawn.canvas, drawn.material) as Record<string, string | undefined>;
     return { ...attributes, ...(hasColours(drawn.colours) ? { "data-area-colours": "" } : {}), "data-area-theme": stageMode };
   };
-  const answered = asked.filter(entry => !atDefault(entry, values)).length;
+  const answered = asked.filter(entry => !atDefault(entry, values, studioColours)).length;
   const changed = SETTINGS.filter(entry => entry.id !== "theme" && (values as Record<string, string>)[entry.id] !== undefined && (values as Record<string, string>)[entry.id] !== defaultOf(entry.id as Axis)).length;
   const fineTune = () => { setInspectorView("theme"); showInspector(); onBrowse(); };
   const restart = () => set(Object.fromEntries(Object.entries(CANVAS_DEFAULTS)) as Changes);
@@ -148,7 +153,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
     host.scrollTo({ top: target.offsetTop - 24, behavior: still ? "auto" : "smooth" });
   }, [item, path]);
 
-  const paths = { essentials: QUESTIONS.filter(entry => entry.essential && (!entry.when || entry.when(values))).length, complete: QUESTIONS.filter(entry => !entry.when || entry.when(values)).length };
+  const paths = { essentials: QUESTIONS.filter(entry => entry.essential && (!entry.when || entry.when(values, studioColours))).length, complete: QUESTIONS.filter(entry => !entry.when || entry.when(values, studioColours)).length };
   const pathLabel = (choice: Path) => `${choice === "essentials" ? "Essentials" : "Every detail"} · ${paths[choice]} questions`;
 
   // Keys, as an ask card in a chat takes them (Claude's and Codex's numbered choices): a digit picks that choice, Enter
@@ -236,10 +241,10 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
             // A picture question answers with its chosen picture card, smaller (owner, 2026-10-26: "show answered picture
             // questions as the chosen picture card at a smaller size").
             <PictureAnswer question={entry} values={values} mode={stageMode} set={set} scopeOf={scopeOf} onPreview={setPreview}
-              choice={pictureOf(entry, values)!} changed={!atDefault(entry, values)} layout={answers} onChange={() => go(index)} />
+              choice={pictureOf(entry, values)!} changed={!atDefault(entry, values, studioColours)} layout={answers} onChange={() => go(index)} />
           ) : (
-            <Answer question={entry.question} label={answerOf(entry, values)} visual={swatchOf(entry, values)}
-              meta={atDefault(entry, values) ? "Default" : <Badge size="sm" tone="info">Changed</Badge>} onChange={() => go(index)} />
+            <Answer question={entry.question} label={answerOf(entry, values, studioColours)} visual={swatchOf(entry, values, studioColours)}
+              meta={atDefault(entry, values, studioColours) ? "Default" : <Badge size="sm" tone="info">Changed</Badge>} onChange={() => go(index)} />
           )}
         </>}
       </div>
@@ -249,7 +254,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   const sections = CHAPTERS.map(section => ({ section, rows: reached.filter(entry => entry.chapter === section.id) })).filter(({ rows }) => rows.length);
   const story = sections.map(({ section, rows }) => {
     const current = section.id === question?.chapter;
-    const differ = rows.filter(row => !atDefault(row, values)).length;
+    const differ = rows.filter(row => !atDefault(row, values, studioColours)).length;
     // A chapter's head, as a panel section's (Claude's Context panel): its name and its numbers at the end in the quieter
     // ink; the current chapter's count is where the person is in it. No glyph (owner, 2026-10-25: "is it cleaner without
     // an icon"): the Inspector's groups are named in words alone, and Area has no specific icon for every chapter.
@@ -275,8 +280,8 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
             {rows.map(row => (
               <tr key={row.id}>
                 <td className="setup-recap__setting"><TableLink href={`#theme/${row.id}`} onClick={event => { event.preventDefault(); go(asked.indexOf(row)); }}>{row.name}</TableLink></td>
-                <td><span className="setup-recap__choice">{swatchOf(row, values)}{answerOf(row, values)}</span></td>
-                <TableCell fit>{atDefault(row, values) ? <span className="setup-recap__default">Default</span> : <Badge size="sm" tone="info">Changed</Badge>}</TableCell>
+                <td><span className="setup-recap__choice">{swatchOf(row, values, studioColours)}{answerOf(row, values, studioColours)}</span></td>
+                <TableCell fit>{atDefault(row, values, studioColours) ? <span className="setup-recap__default">Default</span> : <Badge size="sm" tone="info">Changed</Badge>}</TableCell>
               </tr>
             ))}
           </tbody>
@@ -296,7 +301,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
     && (values as Record<string, string>)[entry.id] !== undefined && (values as Record<string, string>)[entry.id] !== defaultOf(entry.id as Axis));
   const lines = [...(hasColours(picked) ? ["data-area-colours"] : []), ...themed.map(entry => attributeOf(entry, (values as Record<string, string>)[entry.id]!))];
   const themeCode = (lines.length ? `<html\n${lines.map(line => `  ${line}`).join("\n")}\n>` : "<html>") + (hasColours(picked) ? `\n\n${coloursCode(picked)}` : "");
-  const extra = QUESTIONS.find(entry => !entry.essential && (!entry.when || entry.when(values)));
+  const extra = QUESTIONS.find(entry => !entry.essential && (!entry.when || entry.when(values, studioColours)));
   const nextSteps = [
     { id: "fine-tune", label: "Fine-tune every setting in the Inspector" },
     { id: "components", label: "See every component in your theme" },
@@ -318,7 +323,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
         <tbody>
           {chapters.map(entry => {
             const rows = asked.filter(row => row.chapter === entry.id);
-            const differ = rows.filter(row => !atDefault(row, values)).length;
+            const differ = rows.filter(row => !atDefault(row, values, studioColours)).length;
             // A count that differs in the Changed badge's ink.
             return <tr key={entry.id}><td>{entry.title}</td><TableCell numeric className="setup-recap__default">{rows.length}</TableCell><TableCell numeric className={differ ? "setup-chat__chapter-changed" : "setup-recap__default"}>{differ}</TableCell></tr>;
           })}
@@ -359,12 +364,12 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
             meta: `${status === "done" ? rows.length : behind} of ${rows.length}`,
             // A finished chapter's answers as chips, the changed ones in the info tone; the current chapter's are its steps.
             detail: status === "done" && answered.length ? answered.map(row => (
-              <Badge key={row.id} size="sm" variant="outline" tone={atDefault(row, values) ? "neutral" : "info"}>{answerOf(row, values)}</Badge>
+              <Badge key={row.id} size="sm" variant="outline" tone={atDefault(row, values, studioColours) ? "neutral" : "info"}>{answerOf(row, values, studioColours)}</Badge>
             )) : undefined,
             items: status === "current" ? rows.map(row => {
               const index = asked.indexOf(row);
               return { id: row.id, label: row.name, status: index < at ? "done" as const : index === at ? "current" as const : "pending" as const,
-                progress: index === at ? 0 : undefined, meta: index < at ? answerOf(row, values) : undefined };
+                progress: index === at ? 0 : undefined, meta: index < at ? answerOf(row, values, studioColours) : undefined };
             }) : undefined,
           };
         })} />
@@ -387,7 +392,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
           <Button size="lg" onClick={fineTune}>Fine-tune</Button>
         </> : <>
           <Button variant="ghost" tone="neutral" iconOnly aria-label="Back" icon={<ArrowLeftIcon />} onClick={back} />
-          <Button variant="ghost" tone="neutral" icon={<ResetIcon />} disabled={!question || atDefault(question, values)} onClick={() => question && set(Object.fromEntries(question.axes.map(axis => [axis, defaultOf(axis)])))}>Default</Button>
+          <Button variant="ghost" tone="neutral" icon={<ResetIcon />} disabled={!question || atDefault(question, values, studioColours)} onClick={() => question && set(Object.fromEntries(question.axes.map(axis => [axis, defaultOf(axis)])))}>Default</Button>
           <span className="setup-foot__grow" />
           {path === "complete" && asked[at + 1]?.chapter === question?.chapter ? <Button variant="ghost" tone="neutral" onClick={skipChapter}>Skip chapter</Button> : null}
           {/* A reopened answer returns to where the conversation had reached, as an edited message does. */}
@@ -539,7 +544,20 @@ function QuestionControl(props: ControlProps) {
     case "accent": return <AccentControl {...props} visual={control.visual} />;
     case "tint": return <TintControl {...props} visual={control.visual} />;
     case "pills": return <PillCards {...props} />;
+    case "page": return <PageControl {...props} pageMode={control.mode} />;
   }
+}
+
+/** A mode's page as one exact colour (src/page-colour.tsx), its colour in words under it. */
+function PageControl({ values, set, pageMode }: ControlProps & { pageMode: Mode }) {
+  const { colours: picks, setColours } = useStudio();
+  const pick = picks[pageMode];
+  return (
+    <div className="setup-control">
+      <PagePicker mode={pageMode} values={values} picks={picks} set={set} onPick={colour => setColours({ [pageMode]: colour })} />
+      <p className="setup-control__answer">{pageAnswer(pageMode, values, picks)}{pick ? ` · ${oklchHex(parseColour(pick))}` : ""}</p>
+    </div>
+  );
 }
 
 /**
@@ -751,10 +769,11 @@ function Numbered({ at, children }: { at: number; children: ReactNode }) {
  * real token under the answer's scope, so the chat shows the colour the Inspector and the Canvas do. Before its words in
  * a recap row; in the answer row's visual slot.
  */
-function swatchOf(question: Question, values: Values): ReactNode {
+function swatchOf(question: Question, values: Values, picks: ColoursState): ReactNode {
   const kind = question.control.kind;
   if (kind === "accent") return optionMark("accent", values.accent, values as CanvasAxes);
   if (kind === "tint") return optionMark("tint-hue", values["tint-hue"], values as CanvasAxes);
+  if (question.control.kind === "page") return <ColorSwatch size="sm" color={pageHex(question.control.mode, values, picks)} aria-hidden="true" />;
   return null;
 }
 

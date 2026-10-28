@@ -28,9 +28,11 @@ export const PAGE_AXES: Readonly<Record<Mode, readonly string[]>> = {
 /** A pick as it is saved: the colour the page paints, as `oklch(L C h)` (held inside what can show). */
 export const normalise = (mode: Mode, colour: string) => formatOklch(solvePage(mode, parseColour(colour)).painted);
 
-/** The Neutral setting's own cast hue, per mode (its Auto tint hue). */
-const neutralHue = (neutral: string, mode: Mode) => Number((TOKENS.axes as unknown as Array<{ id: string; presets: Array<{ id: string; tokens?: Record<string, string> }> }>)
-  .find(axis => axis.id === "neutral")?.presets.find(preset => preset.id === neutral)?.tokens?.[`--area-neutral-hue-${mode}`] ?? 0);
+/** The Neutral setting's own cast, per mode: its Auto tint hue and strength. */
+const neutralToken = (neutral: string, name: string) => Number((TOKENS.axes as unknown as Array<{ id: string; presets: Array<{ id: string; tokens?: Record<string, string> }> }>)
+  .find(axis => axis.id === "neutral")?.presets.find(preset => preset.id === neutral)?.tokens?.[`--area-${name}`] ?? 0);
+const neutralHue = (neutral: string, mode: Mode) => neutralToken(neutral, `neutral-hue-${mode}`);
+export const neutralCast = (neutral: string, mode: Mode) => ({ hue: neutralHue(neutral, mode), chroma: neutralToken(neutral, `neutral-chroma-${mode}`) });
 
 /** The pick a mode's page and tint presets paint, or null where no pick reproduces them (they stay as settings). */
 export function presetColour(canvas: CanvasAxes, mode: Mode): string | null {
@@ -68,6 +70,8 @@ export function shownColours(colours: ColoursState, preview: Readonly<Record<str
 }
 
 export const hasColours = (colours: ColoursState) => colours.light !== null || colours.dark !== null;
+/** Whether a pick leans toward a hue at all (a grey page's text has no tint to take). */
+export const pickTinted = (colour: string | null) => colour !== null && parseColour(colour).c > 0;
 const pageOf = (colours: ColoursState) => ({ ...(colours.light ? { light: colours.light } : {}), ...(colours.dark ? { dark: colours.dark } : {}) });
 
 /** The picks' rule, `[data-area-colours]` in the axes layer, after the axes' own so it wins where a scope carries both. */

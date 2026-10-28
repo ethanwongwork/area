@@ -16,10 +16,10 @@
 import DERIVED from "area:brand-derived";
 import { type BrandOptions } from "./emit/brand.ts";
 import { type Colours, colourCssWith, colourDeclarationsWith } from "./emit/colours.ts";
-import { type ColourInput, type Mode, type Oklch, type PageColours, type PageSolve, DEFAULT_PAGE, PAGE_RANGE, formatOklch, isColour, oklchHex, pageDeclarations, parseColour, presetPick, reachableChroma, solvePage } from "./color/colours.ts";
+import { type ColourInput, type Mode, type Oklch, type PageColours, type PageSolve, DEFAULT_PAGE, PAGE_RANGE, formatOklch, isColour, oklchHex, pageDeclarations, paintedChroma, parseColour, presetPick, reachableChroma, solvePage } from "./color/colours.ts";
 
 export type { ColourInput, Colours, Oklch, PageColours, PageSolve };
-export { DEFAULT_PAGE, PAGE_RANGE, formatOklch, isColour, oklchHex, pageDeclarations, parseColour, presetPick, reachableChroma, solvePage };
+export { DEFAULT_PAGE, PAGE_RANGE, formatOklch, isColour, oklchHex, pageDeclarations, paintedChroma, parseColour, presetPick, reachableChroma, solvePage };
 
 export function colourDeclarations(colours: Colours, options: BrandOptions = {}): Record<string, string> {
   return colourDeclarationsWith(DERIVED, colours, options);
