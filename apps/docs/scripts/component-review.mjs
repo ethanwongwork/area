@@ -5,7 +5,7 @@
  *
  *   npm run build:docs                      # the current gallery (apps/docs/dist)
  *   node apps/docs/scripts/component-review.mjs [--before <dist of an earlier build>] [--before-label <text>]
- *     [--unapproved] [--round <slug,slug>] [--out <dir>] [--screens <dir>]
+ *     [--unapproved] [--round <slug,slug>] [--out <dir>] [--screens <dir>] [--colours <note.md>]
  *
  * --before points at the dist of an earlier build (a worktree of the commit to compare against,
  * built with npm run build && npm run build:docs); its tiles and stylesheet become the Before view, and every
@@ -16,6 +16,10 @@
  * file of the screen's parts rendered with Area's components, in the folder becomes a tile, in name order, labelled from its name ("02-tracker-open.png" → "Tracker open"), and the
  * folder's README.md (a "## Review note, <date>" section and anything after it) is the family's note. Its slug and name
  * come from the README's first heading ("# Setup chat {setup-chat}").
+ * --colours <note.md> reviews a change of colour settings rather than of components (exact colours, 2026-10-27): every
+ * family is in the round, the page's Colours switch shows every variant Before (the Before build, at presets) beside After
+ * (this build, at exact picks from @area/tokens/colours), and the note leads every family whose specimens look the same
+ * at the defaults (a family with its own change keeps its spec's note).
  * The output folder holds the page, data.js, both stylesheets, the demo bundles that hydrate the
  * specimens, and the images they use. Publish the page with those files beside it.
  */
@@ -161,11 +165,17 @@ const families = [...now.values()].filter(f => !onlyOpen || status(f.slug) !== "
 // --round <slug,slug> names them instead, when Before also differs in work already approved; then only those families
 // are compared (every specimen in every mode outgrew the headless page's time budget, 2026-10-19), and the rest show
 // as not compared.
+const coloursNote = arg("--colours") && readFileSync(resolve(arg("--colours")), "utf8");
 const roundSlugs = arg("--round")?.split(",");
 const compared = roundSlugs ? families.filter(f => roundSlugs.includes(f.slug)) : families;
 const changes = beforeDist ? visualChanges({ dist, beforeDist, tiles: compared.flatMap(f => f.tiles.map(t => ({ key: `${f.slug}/${t.id}`, now: t.html, before: t.before }))) }) : {};
 for (const f of families) for (const t of f.tiles) t.change = changes[`${f.slug}/${t.id}`] ?? (beforeDist && t.before != null ? { state: "unknown", modes: [] } : { state: "new", modes: [] });
 for (const f of families) f.round = roundSlugs ? roundSlugs.includes(f.slug) : f.status === "review" || (Boolean(beforeDist) && f.tiles.some(t => t.change.state !== "unchanged"));
+// A colours review: every family, the note leading each whose specimens are unchanged at the defaults.
+if (coloursNote) for (const f of families) {
+  f.round = true;
+  if (f.tiles.every(t => t.change.state === "unchanged")) Object.assign(f, { summary: markdown(sections(coloursNote).find(s => /^Review note/i.test(s.title))?.text ?? coloursNote), summaryTitle: "Review note" });
+}
 
 // App screens as a family of their own (--screens): each tile is an image, or an HTML file of the screen's parts rendered
 // with Area's components (owner 2026-10-26: "can these components just be isolated?"), new in this round.
@@ -190,7 +200,7 @@ if (screensDir) {
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 // --before-label names the Before build on the page, e.g. "main at 6f89678 (2026-10-08)".
-const review = { before: arg("--before-label") ?? (beforeDist ? "the earlier build" : null) };
+const review = { before: arg("--before-label") ?? (beforeDist ? "the earlier build" : null), colours: coloursNote ? await colourScenarios() : null };
 writeFileSync(join(out, "data.js"), `window.REVIEW = ${JSON.stringify(review)};\nwindow.FAMILIES = ${JSON.stringify(families).replaceAll("</script", "<\\/script")};\n`);
 cpSync(join(dist, "area.css"), join(out, "area.css"));
 if (beforeDist) cpSync(join(beforeDist, "area.css"), join(out, "area-before.css"));
@@ -206,3 +216,27 @@ const count = state => families.reduce((n, f) => n + f.tiles.filter(t => t.chang
 console.log(`component review: ${families.length} families, ${families.reduce((n, f) => n + f.tiles.length, 0)} specimens (${count("changed")} changed, ${count("new")} new, ${count("unchanged")} unchanged) -> ${out}`);
 const missing = families.filter(f => !f.summary).map(f => f.slug);
 if (missing.length) console.warn(`no "Review note" section in: ${missing.join(", ")} (docs/specs/<slug>.md)`);
+
+/*
+ * The colours review's scenarios (--colours): what each side of a tile carries. Before is the Before build, which knows
+ * only attributes; After is this build with the same attributes plus exact picks as a `[data-area-colours]` rule from
+ * @area/tokens/colours (the same code products use), scoped to the scenario.
+ *
+ *   presets  a tinted page set by presets, Before as presets and After as the picks they convert to: nothing should move
+ *   exact    colours no preset reaches (a page at L 96.34, a coloured dark page, an exact accent), Before at the nearest
+ *            presets
+ */
+async function colourScenarios() {
+  const { colourCss, presetPick, formatOklch } = await import(join(repo, "packages/tokens/dist/colours.js"));
+  const page = (mode, step, hue, position) => formatOklch(presetPick(mode, step, { hue, position }));
+  const presetAttrs = { groundLight: "96", tintHue: "255", tintLight: "15", groundDark: "18", tintDark: "50" };
+  const accentAttrs = { accent: "blue", action: "accent", selection: "accent" };
+  const scenario = (id, label, title, before, colours) => ({ id, label, title, before, after: before,
+    css: colourCss(colours, { selector: `.area-scope[data-review-colours="${id}"]` }) });
+  return [
+    scenario("presets", "Preset → pick", "Before: a 96 page tinted blue 15 (dark 18, tint 50) as presets. After: the same as exact picks. Nothing should move.",
+      presetAttrs, { page: { light: page("light", 96, 255, 15), dark: page("dark", 18, 255, 50) } }),
+    scenario("exact", "Exact pick", "After: light page oklch(0.9634 0.012 255), dark page #101418, accent #2f5bd3 exact, buttons and selection in the accent. Before: the nearest presets.",
+      { ...presetAttrs, groundDark: "12", tintDark: "13", ...accentAttrs }, { page: { light: "oklch(0.9634 0.012 255)", dark: "#101418" }, accent: "#2f5bd3" }),
+  ];
+}
