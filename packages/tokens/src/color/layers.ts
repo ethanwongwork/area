@@ -296,7 +296,10 @@ const inkOn = (theme: "light" | "dark", bg: number, ratio: number) => theme === 
   : Math.cbrt(Math.min(1, ratio * (bg ** 3 + 0.05) - 0.05));
 
 export function layerLightness(theme: "light" | "dark", groundStep: number, n: number, fillSel: FillSelection = DEFAULT_FILL, cardTone: CardTone = "auto"): LayerLightness {
-  const g = groundLightness(theme, groundStep);
+  return layerLightnessAt(theme, groundLightness(theme, groundStep), n, fillSel, cardTone);
+}
+/** The same, on a page of any lightness `g` (a picked page colour, color/colours.ts), not only a whole step. */
+export function layerLightnessAt(theme: "light" | "dark", g: number, n: number, fillSel: FillSelection = DEFAULT_FILL, cardTone: CardTone = "auto"): LayerLightness {
   const FM = fillMultiples(fillSel);
   const s = CONTROL_STEP[theme].base + CONTROL_STEP[theme].perStep * n;
   if (theme === "light") {
@@ -384,11 +387,14 @@ export function tintRoom(hue: number): { white: number; black: number } {
   return out;
 }
 
-function castChroma(theme: "light" | "dark", L: number, cast: Cast) {
-  const fade = theme === "light" ? Math.min(1, Math.max(0, (1 - L) / CAST_FADE.light)) : Math.min(1, Math.max(0, L / CAST_FADE.dark));
+/** How much of the cast shows at lightness L: none at white (light) or black (dark), all of it CAST_FADE away. */
+export const castFade = (theme: "light" | "dark", L: number) =>
+  theme === "light" ? Math.min(1, Math.max(0, (1 - L) / CAST_FADE.light)) : Math.min(1, Math.max(0, L / CAST_FADE.dark));
+/** The chroma a cast paints at lightness L: faded, and held inside its hue's room. */
+export function castChroma(theme: "light" | "dark", L: number, cast: Cast) {
   if (cast.chroma === 0) return 0;
   const room = tintRoom(cast.hue);
-  return Math.min(cast.chroma * fade, room.white * (1 - L), room.black * L);
+  return Math.min(cast.chroma * castFade(theme, L), room.white * (1 - L), room.black * L);
 }
 export function layerHex(theme: "light" | "dark", L: number, cast: Cast): string {
   const L01 = clamp01(L);
@@ -522,35 +528,51 @@ export function layerLightnessCss(): Record<string, string> {
 
 /**
  * The tint each mode draws in (axes/tint.ts): each tint setting at Auto takes the Neutral setting's own cast, else its
- * own value. The switches are 0 or 1, so each is one of the two, never a blend.
+ * own value. The switches are 0 or 1, so each is one of the two, never a blend. Tint hue is one setting per mode since
+ * 2026-10-27 (the exact colours plan: a light and a dark page can lean toward different hues); dark's "Same as light"
+ * (`tint-hue-dark-same`, the default) takes light's setting whole, Auto, Accent or a hue, so a page that sets only Tint hue
+ * draws as it always did.
  */
-function castCss(): Record<string, string> {
+export function castCss(): Record<string, string> {
   const pick = (auto: string, neutral: string, own: string) => `calc(${v(auto)} * ${v(neutral)} + (1 - ${v(auto)}) * ${v(own)})`;
-  // Tint hue's own value: a hue, or the accent's (its Accent value, 2026-10-23: grays that lean toward the brand colour).
-  const hue = `calc((1 - ${v("tint-hue-accent")}) * ${v("tint-hue")} + ${v("tint-hue-accent")} * ${v("accent-hue")})`;
-  const pickHue = (neutral: string) => `calc(${v("tint-hue-auto")} * ${v(neutral)} + (1 - ${v("tint-hue-auto")}) * ${hue})`;
-  // Each mode's room (tintRoom): the Neutral setting's for its own hue at Auto, else Tint hue's or the accent's.
-  const pickRoom = (side: "white" | "black", theme: "light" | "dark") =>
-    `calc(${v("tint-hue-auto")} * ${v(`neutral-room-${side}-${theme}`)} + (1 - ${v("tint-hue-auto")}) * ((1 - ${v("tint-hue-accent")}) * ${v(`tint-room-${side}`)} + ${v("tint-hue-accent")} * ${v(`accent-room-${side}`)}))`;
-  return {
-    "cast-room-white-light": pickRoom("white", "light"),
-    "cast-room-black-light": pickRoom("black", "light"),
-    "cast-room-white-dark": pickRoom("white", "dark"),
-    "cast-room-black-dark": pickRoom("black", "dark"),
-    "cast-hue-light": pickHue("neutral-hue-light"),
-    "cast-hue-dark": pickHue("neutral-hue-dark"),
-    "cast-chroma-light": pick("tint-light-auto", "neutral-chroma-light", "tint-chroma-light"),
-    "cast-chroma-dark": pick("tint-dark-auto", "neutral-chroma-dark", "tint-chroma-dark"),
+  // Each mode's Tint hue setting: light's own, dark's own or (Same as light) light's.
+  const same = v("tint-hue-dark-same");
+  const setting = (theme: "light" | "dark", name: "auto" | "accent" | "hue" | "room-white" | "room-black") => {
+    const light = name === "hue" ? v("tint-hue") : name.startsWith("room") ? v(`tint-${name}`) : v(`tint-hue-${name}`);
+    if (theme === "light") return light;
+    const dark = name === "hue" ? v("tint-hue-dark") : name.startsWith("room") ? v(`tint-${name}-dark`) : v(`tint-hue-dark-${name}`);
+    return `calc(${same} * ${light} + (1 - ${same}) * ${dark})`;
   };
+  const out: Record<string, string> = {};
+  for (const theme of ["light", "dark"] as const) {
+    const auto = theme === "light" ? v("tint-hue-auto") : v("cast-dark-auto"), accent = theme === "light" ? v("tint-hue-accent") : v("cast-dark-accent");
+    if (theme === "dark") Object.assign(out, {
+      "cast-dark-auto": setting("dark", "auto"), "cast-dark-accent": setting("dark", "accent"), "cast-dark-hue-own": setting("dark", "hue"),
+      "cast-dark-room-white-own": setting("dark", "room-white"), "cast-dark-room-black-own": setting("dark", "room-black"),
+    });
+    const own = (name: "hue" | "room-white" | "room-black") => theme === "light" ? setting("light", name) : v(`cast-dark-${name}-own`);
+    // Tint hue's own value: a hue, or the accent's (its Accent value, 2026-10-23: grays that lean toward the brand colour).
+    const hue = `calc((1 - ${accent}) * ${own("hue")} + ${accent} * ${v("accent-hue")})`;
+    out[`cast-hue-${theme}`] = `calc(${auto} * ${v(`neutral-hue-${theme}`)} + (1 - ${auto}) * ${hue})`;
+    // Each mode's room (tintRoom): the Neutral setting's for its own hue at Auto, else Tint hue's or the accent's.
+    for (const side of ["white", "black"] as const)
+      out[`cast-room-${side}-${theme}`] = `calc(${auto} * ${v(`neutral-room-${side}-${theme}`)} + (1 - ${auto}) * ((1 - ${accent}) * ${own(`room-${side}`)} + ${accent} * ${v(`accent-room-${side}`)}))`;
+  }
+  out["cast-chroma-light"] = pick("tint-light-auto", "neutral-chroma-light", "tint-chroma-light");
+  out["cast-chroma-dark"] = pick("tint-dark-auto", "neutral-chroma-dark", "tint-chroma-dark");
+  return out;
+}
+
+/** The chroma a cast paints at lightness `L` (castChroma as CSS): `share` of the mode's cast, faded toward white (light)
+ * or black (dark), and held inside the hue's room (tintRoom). */
+export function castChromaCss(theme: "light" | "dark", L: string, share = "1"): string {
+  const fade = theme === "light" ? `clamp(0, (1 - ${L}) / ${num(CAST_FADE.light)}, 1)` : `clamp(0, ${L} / ${num(CAST_FADE.dark)}, 1)`;
+  return `min(calc(${v(`cast-chroma-${theme}`)} * ${share} * ${fade}), calc(${v(`cast-room-white-${theme}`)} * (1 - ${L})), calc(${v(`cast-room-black-${theme}`)} * ${L}))`;
 }
 
 /** `light-dark(oklch(...), oklch(...))` for a role, tinted by the mode's cast (`share` of it: text takes Text tint's). */
 function color(light: string, dark: string, share = "1"): string {
-  // The tint, faded toward white (light) or black (dark), and held inside the hue's room (tintRoom).
-  const room = (L: string, theme: "light" | "dark") => `calc(${v(`cast-room-white-${theme}`)} * (1 - ${L})), calc(${v(`cast-room-black-${theme}`)} * ${L})`;
-  const cl = `min(calc(${v("cast-chroma-light")} * ${share} * clamp(0, (1 - ${light}) / ${num(CAST_FADE.light)}, 1)), ${room(light, "light")})`;
-  const cd = `min(calc(${v("cast-chroma-dark")} * ${share} * clamp(0, ${dark} / ${num(CAST_FADE.dark)}, 1)), ${room(dark, "dark")})`;
-  return `light-dark(oklch(${light} ${cl} ${v("cast-hue-light")}), oklch(${dark} ${cd} ${v("cast-hue-dark")}))`;
+  return `light-dark(oklch(${light} ${castChromaCss("light", light, share)} ${v("cast-hue-light")}), oklch(${dark} ${castChromaCss("dark", dark, share)} ${v("cast-hue-dark")}))`;
 }
 /** A text ink (inkHex as CSS): Text tint's share of the cast, moved INK_MARGIN × the strength away from its ground. */
 function inkColor(light: string, dark: string): string {

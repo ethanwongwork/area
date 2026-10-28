@@ -177,7 +177,7 @@ const hueLabel = (value: string) => `${hueName(Number(value))} · ${value}°`;
 
 /** The settings a combined row stands for; the Inspector draws the row once, at the first of them. A row asked for one of
  * Accent's alone (Setup's exact value) is that setting's own. */
-export const ROW_OF: Readonly<Record<string, string>> = { neutral: "greys", "tint-hue": "greys", "tint-light": "greys", "tint-dark": "greys",
+export const ROW_OF: Readonly<Record<string, string>> = { neutral: "greys", "tint-hue": "greys", "tint-hue-dark": "greys", "tint-light": "greys", "tint-dark": "greys",
   accent: "accent", "solid-light": "accent", "solid-dark": "accent", "accent-strength": "accent", "label-tint": "accent" };
 
 /** One row: the setting's own control, or the combined row it belongs to. */
@@ -308,13 +308,13 @@ function GreysRow({ context }: { context: RowContext }) {
   const tint = hue === "auto" ? "none" : hue === "accent" ? "accent" : TINTS.some(([value]) => value === hue) ? hue : CUSTOM;
   const t = temperatureOf(values, mode);
   const temperature = (next: number) => next === 0
-    ? set({ neutral: "neutral", "tint-hue": "auto", "tint-light": "auto", "tint-dark": "auto" })
-    : set({ neutral: next < 0 ? "cool" : "warm", "tint-hue": "auto", "tint-light": String(Math.abs(next)), "tint-dark": String(Math.abs(next)) });
+    ? set({ neutral: "neutral", "tint-hue": "auto", "tint-hue-dark": "same", "tint-light": "auto", "tint-dark": "auto" })
+    : set({ neutral: next < 0 ? "cool" : "warm", "tint-hue": "auto", "tint-hue-dark": "same", "tint-light": String(Math.abs(next)), "tint-dark": String(Math.abs(next)) });
   const amount = values[`tint-${mode}`] ?? "auto";
   const amountAt = amount === "auto" ? 25 : Number(amount);
   const tintColour = (next: string) => next === "none"
-    ? set({ "tint-hue": "auto", "tint-light": "auto", "tint-dark": "auto" })
-    : set({ neutral: "neutral", "tint-hue": next === CUSTOM ? (/^\d+$/.test(hue) ? hue : "200") : next, "tint-light": String(amountAt), "tint-dark": String(amountAt) });
+    ? set({ "tint-hue": "auto", "tint-hue-dark": "same", "tint-light": "auto", "tint-dark": "auto" })
+    : set({ neutral: "neutral", "tint-hue-dark": "same", "tint-hue": next === CUSTOM ? (/^\d+$/.test(hue) ? hue : "200") : next, "tint-light": String(amountAt), "tint-dark": String(amountAt) });
   const swatchOf = (value: string) => optionMark("tint-hue", value, values as CanvasAxes) ?? undefined;
   const hues = Array.from({ length: 360 }, (_, hue) => String(hue));
   return (
@@ -332,7 +332,7 @@ function GreysRow({ context }: { context: RowContext }) {
       </RowField>
       {tint === CUSTOM ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={359} step={1} value={Math.max(0, hues.indexOf(hue))}
-          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ "tint-hue": hues[at]! })} />
+          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ "tint-hue": hues[at]!, "tint-hue-dark": "same" })} />
       ) : null}
       {tint !== "none" ? (
         <SettingBar size={context.size ?? "sm"} label="Amount" title="How much of the colour the greys take: 0% is plain grey"

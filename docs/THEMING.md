@@ -48,12 +48,12 @@ Theme's Browse draws the quarters. `layers.test.ts` ("every position is usable",
 walks every pair of Layer contrast and Card shade positions on every ground, Text tint and Grey tint at every position,
 every fill position against the others' marks, and the shipped CSS; the accent gate measures every Label tint position.
 The fills' minimum steps hold at the marks: Selected 1 to 24 sits between the hover plate (0) and the first mark. Page
-lightness stays in whole percents here (11 of the 34 greys a screen shows from 90 to 100); exact page colours, and an
-exact accent through the brand engine, are the colour step that follows (owner, 2026-10-27).
+lightness stays in whole percents here (11 of the 34 greys a screen shows from 90 to 100); an exact page colour reaches
+all 34 (Exact colours, below).
 
 **Tint hue at 1°** (2026-10-26): every hue from 0 to 359, all in axes.css (five numbers a hue; 4 KB gzipped for the 288
-more); the 5° hues walk every strength and Text tint share, every degree the strengths 4, 8 and 16 ("every tint is
-usable"). The accent stays in 5° steps: each accent hue's ladder is about 6 KB, so 1° would add about 190 KB gzipped to
+more); every degree takes the strengths 4, 8 and 16, the 30° hues every strength and Text tint share ("every tint is
+usable"), and every page a pick can paint walks every degree (Exact colours; the 5° loop it replaced went with it). The accent stays in 5° steps: each accent hue's ladder is about 6 KB, so 1° would add about 190 KB gzipped to
 every product, and an exact accent comes with the colour step instead. The Inspector's **Temperature** is one bar from Cool 100 through Neutral to Warm 100: it writes Cool's or Warm's
 ramp and that strength in both modes (it had eight steps, the first Auto); Auto, their own strength, shows at its position
 in the mode shown (4 in light, 15 in dark).
@@ -73,8 +73,9 @@ in the mode shown (4 in light, 15 in dark).
 | `selection` | `neutral` (default since 2026-10-25; Accent 2026-10-22 to 25), `accent` | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards), the focus ring and selected text paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |
 | `ground-light` | `100` (White, default) … `90` | The light page's OKLCH lightness, in 1% steps |
 | `ground-dark` | `0` (Black) … `24` in 1% steps, `8` (default, #020202) | The dark page's lightness; below 12 a step barely shows, and the layers' floor (L 0.12) arrives over Layer contrast's first 12 positions |
-| `tint-hue` | `auto` (default: the Neutral setting's own hue), `accent` (the accent's hue), `0` … `359`, every degree (5° steps until 2026-10-26) | The hue the grays lean toward, one for both modes |
-| `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `100`, every whole number, 100 is OKLCH chroma 0.08 (0 to 16 in steps of 0.005 until 2026-10-26; to 0.08 since 2026-10-23, for a butter-yellow page) | How strongly the grays take the hue, per mode. A step past what sRGB can show at a hue and lightness is held at that room (`tintRoom`, two slopes under the gamut), not clipped, so steps past it draw the same colour; clipping moved luminance and hue (a blue tint at 8 on a 97 page painted cyan). Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable") |
+| `tint-hue` | `auto` (default: the Neutral setting's own hue), `accent` (the accent's hue), `0` … `359`, every degree (5° steps until 2026-10-26) | The hue the grays lean toward in light, and in dark while `tint-hue-dark` is `same` (one hue for both modes until 2026-10-27) |
+| `tint-hue-dark` | `same` (default: whatever `tint-hue` is, Auto, Accent or a hue), `auto`, `accent`, `0` … `359` | The hue the dark grays lean toward, so a light and a dark page can lean different ways (exact colours plan, 2026-10-27). At `same` a page that sets only `tint-hue` draws as it always did |
+| `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `100`, every whole number, 100 is OKLCH chroma 0.08 (0 to 16 in steps of 0.005 until 2026-10-26; to 0.08 since 2026-10-23, for a butter-yellow page) | How strongly the grays take the hue, per mode. A step past what sRGB can show at a hue and lightness is held at that room (`tintRoom`, two slopes under the gamut), not clipped, so steps past it draw the same colour; clipping moved luminance and hue (a blue tint at 8 on a 97 page painted cyan). Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable"; every page a pick can paint, `colours.test.ts`) |
 | `ink-tint` | `0` (None) … `100` (Full), every whole number, `50` (default; `0` … `4` in quarters until 2026-10-26) | How much of the tint body and muted text take. Text also moves 0.25 × the strength away from its ground, so it keeps 4.5:1 on every hue (`INK_MARGIN`, docs/research/custom-neutral-2026-10-22/) |
 | `card-tone-light`, `card-tone-dark` | `auto` (default: each container's own tone, a Card raised, an Asset card recessed), `-100` (darker) … `0` (the page) … `+100` (lighter), every whole number (−4 to +4 in half steps until 2026-10-26); 100 is 0.048 L in light, 0.12 in dark | Cards and asset cards against the page, per mode; their controls step from it and text is solved against the darkest (light) or lightest (dark) card, so every position reads (`layers.test.ts`, "every card tone is usable", "every position is usable"). Menus, popovers and dialogs stay raised. An Asset card's inner frame stays the page tone, and takes the recessed tone where its card is within 0.005 L of the page (0, clamped at white or black, or a position that small) and the recessed tone is farther from it, so it reads apart as far as the layers allow |
 | `layers-light`, `layers-dark` | `0` (Flat, default since 2026-10-25) … `100`, every whole number (five steps, 0 to 8, from 2026-10-22 to 26; 50 is the old 4) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
@@ -278,6 +279,53 @@ Selected and focus share a colour and differ by placement: the selected edge ins
   checks cannot certify arbitrary custom themes.
 - **Share reusable roles.** A reusable role belongs in the token package, not duplicated as
   literals across components ([Governance](GOVERNANCE.md#5-keep-it-lean)).
+
+## Exact colours (2026-10-27)
+
+The page in light and in dark as one exact colour each, and the accent as one more (plan:
+https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2). Colours stop being presets and become
+numbers: Area derives every grey from the page picks and the accent's shades from the brand
+engine, and the application settings (Layer contrast, Card shade, the fills, Text tint, Shade,
+Saturation, Label tint) apply over whatever was picked. Built so far: the tokens (`@area/tokens/colours`)
+and the `data-area-colours` scope; the React prop, the command, Setup's stage and the
+Inspector's pickers come next.
+
+**What a page pick writes.** A pick solves into the numbers the Layers model already reads
+(`color/colours.ts`, `solvePage`): its lightness as `--area-ground-light` (any value 0.90 to
+1.00, to four decimals) or `--area-ground-dark` (0 to 0.24), its hue as Tint hue (Auto,
+Accent and Same as light off), the hue's room, and the tint strength that paints its chroma
+(the cast's fade toward white and black inverted). A light page's tint fades out above L 0.976
+and is gone at white, so the most chroma a page can show narrows to nothing there; it is also
+capped at Tint 100 (0.08) and the hue's room (`reachableChroma`). A pick past either is held at
+the most that shows, as a strong tint is held at its room.
+
+- **Exact for the page, not one to one.** Where the room or the fade binds, many strengths
+  paint the same page; the solve takes the least. A preset past that (a white page with a tint,
+  a tint past its hue's room) has no pick that reproduces it, so it stays a preset (`presetPick`).
+- **Two ways to write a page colour.** Attributes for the shipped values, variables for exact
+  picks. If both are set, the picks win (inline variables beat attribute rules, and a colour
+  rule comes after the presets). Use one or the other.
+
+**Using picks.**
+
+- Runtime: `colourDeclarations({ page: { light: "oklch(0.9634 0.012 255)", dark: "#101418" }, accent: "#2f5bd3" })`
+  from `@area/tokens/colours`, set as inline variables on an element carrying `data-area-colours`,
+  or `colourCss(colours)` for the same as a `[data-area-colours]` rule in `area.axes`. A colour
+  is `oklch(L C h)` (L a number or a percentage) or a hex. `pageInfo(page)` returns what each
+  pick solved to and the colour it paints.
+- `data-area-colours` restates every derivation that reads a page input (the stylesheet's
+  re-derivation rules, `emit/css.ts`), so a subtree can carry its own colours.
+- The accent goes through the brand engine exactly as `brandDeclarations({ primary })` does.
+- Cost: the page part is about 3 kB gzipped; the accent loads the brand engine (about 30 kB).
+
+**What the tests walk** (`colours.test.ts`; the guarantee is that Area's colour rules hold
+everywhere a pick can land): every one of the 34 greys a screen shows from L 0.90 to 1.00
+reached exactly and checked at every Layer contrast position, every lightness between to the
+fourth decimal at the marks; every degree of hue × chroma in 0.002 steps up to what the page
+shows × lightness in 0.5% steps, in both modes, at the Layer contrast marks with Text tint at
+0, 50 and 100; a coarser grid (30°, 2.5%, half and all of the chroma) at every position of
+Layer contrast, Card shade, Text tint and the Hover and Selected fills; the hued inks on every
+picked light page; and the CSS against the model for a sample of picks.
 
 ## Brand (engine, 2026-10-26)
 

@@ -15,7 +15,7 @@ export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "sh
 export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "tint-hue" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | "feedback" | DepthLever;
+  axis: "theme" | "neutral" | "tint-hue" | "tint-hue-dark" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | "feedback" | DepthLever;
   /**
    * Named choices are a Segmented (Apple and Primer cap segments at 5-7); an ordered range is a bar, Slider's field
    * variant with its exact value inside it (owner, 2026-10-24), which answers the stepped Slider's old fault of reading as
@@ -112,6 +112,9 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   { axis: "neutral", kind: "segmented", label: label("neutral"), hint: "The grey every surface, edge and text is drawn in", defaultValue: DEFAULT_AXES.neutral, items: AXIS_PRESETS.neutral.map(value => ({ value, label: title(value) })) },
   bar("tint-hue", value => `${value}°`, { hint: "The hue the greys lean toward: the Grey setting's own, the accent's, or any hue", named: { auto: "Grey", accent: "Accent" }, custom: "60", barLabel: "Hue",
     marks: AXIS_PRESETS["tint-hue"].filter(value => /^\d+$/.test(value) && Number(value) % 5 === 0) }),
+  // Dark's own hue (2026-10-27, the exact colours plan): Same as light by default, so one hue still sets both.
+  bar("tint-hue-dark", value => `${value}°`, { hint: "The hue the dark greys lean toward: light's, the Grey setting's own, the accent's, or any hue", named: { same: "Same as light", auto: "Grey", accent: "Accent" }, custom: "60", barLabel: "Hue",
+    marks: AXIS_PRESETS["tint-hue-dark"].filter(value => /^\d+$/.test(value) && Number(value) % 5 === 0) }),
   bar("tint-light", value => `${value}%`, { hint: "In light: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "25", barLabel: "Strength", marks: QUARTERS }),
   bar("tint-dark", value => `${value}%`, { hint: "In dark: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "25", barLabel: "Strength", marks: QUARTERS }),
   bar("ink-tint", value => `${value}%`, { hint: "How much of the greys' colour body and muted text take", marks: QUARTERS }),

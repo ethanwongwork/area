@@ -133,6 +133,8 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     case "tint-hue": return value === "auto" ? swatch("var(--area-neutral-500)", neutral)
       : value === "accent" ? swatch("var(--area-accent-solid)", { "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"] })
       : swatch(`oklch(0.72 0.12 ${value})`, {});
+    // Dark's own hue: Same as light draws light's.
+    case "tint-hue-dark": return value === "same" ? optionMark("tint-hue", canvas["tint-hue"], canvas) : optionMark("tint-hue", value, canvas);
     case "ink-tint": return swatch("var(--area-fg-muted)", { ...neutral, "data-area-tint-hue": canvas["tint-hue"], "data-area-tint-light": canvas["tint-light"], "data-area-ink-tint": value });
     case "action": return swatch("var(--area-action-solid)", { ...neutral, "data-area-accent": canvas.accent, "data-area-action": value });
     case "selection": return swatch("var(--area-selection-solid)", { ...neutral, "data-area-accent": canvas.accent, "data-area-selection": value });

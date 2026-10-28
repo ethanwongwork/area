@@ -170,7 +170,7 @@
   [data-area-ground],
   :where([data-area-theme], [data-area-neutral], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed],
-    [data-area-tint-hue], [data-area-tint-light], [data-area-tint-dark], [data-area-ink-tint], [data-area-accent],
+    [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark], [data-area-ink-tint], [data-area-accent],
     [data-area-card-tone-light], [data-area-card-tone-dark]) {
     --area-bg-component-pressed: light-dark(
       color-mix(in oklab, var(--area-bg-component-active),
@@ -290,7 +290,7 @@
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
     .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, [data-area-ground="raised"]) {
     :where(
-    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-light], [data-area-tint-dark],
+    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
     [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
@@ -315,7 +315,7 @@
   }
   @scope (.area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, [data-area-ground="page"]) {
     :where(
-    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-light], [data-area-tint-dark],
+    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
     [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
@@ -340,7 +340,7 @@
   }
   @scope (.area-card, [data-area-ground="card"]) {
     :where(
-    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-light], [data-area-tint-dark],
+    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
     [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
@@ -365,7 +365,7 @@
   }
   @scope (.area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), [data-area-ground="tile"]) {
     :where(
-    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-light], [data-area-tint-dark],
+    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
     [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
@@ -391,7 +391,7 @@
   @scope (.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps,
     [data-area-ground="recessed"]) {
     :where(
-    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-light], [data-area-tint-dark],
+    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
     [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],

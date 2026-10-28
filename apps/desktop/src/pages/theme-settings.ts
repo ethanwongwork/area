@@ -27,6 +27,7 @@ export const ALSO: Record<string, Record<string, string>> = {
   neutral: { "data-area-layers-light": "100", "data-area-layers-dark": "100" },
   // Tint: a hue shows at a strength, a strength on a hue, and Text tint on both at their strongest (axes/tint.ts).
   "tint-hue": { "data-area-tint-light": "38", "data-area-tint-dark": "38" },
+  "tint-hue-dark": { "data-area-tint-dark": "38" },
   "tint-light": { "data-area-tint-hue": "70" },
   "tint-dark": { "data-area-tint-hue": "70" },
   "ink-tint": { "data-area-tint-hue": "70", "data-area-tint-light": "50", "data-area-tint-dark": "50" },
@@ -54,7 +55,8 @@ export const HELD: Record<string, string> = {
   "label-tint": "Action at Accent and Solid at 750, so the label has room to take the hue.",
   "status-colours": "Accent strength at 50, so Match shows.",
   neutral: "Layers at 8, so the greys are large enough for the tint to show.",
-  "tint-hue": "Tint strength at 6, so each hue shows.",
+  "tint-hue": "Grey tint at 38, so each hue shows.",
+  "tint-hue-dark": "Dark grey tint at 38, so each hue shows.",
   "tint-light": "Tint hue at 70°, so each strength shows.",
   "tint-dark": "Tint hue at 70°, so each strength shows.",
   "ink-tint": "Tint hue at 70° and strength 8, so the text's share shows.",
@@ -82,9 +84,14 @@ export type Mode = "light" | "dark";
 export const MIN = 200; /* pick */
 // Ground, Layers, Tint strength, Card tone and Solid exist once per theme; Shadow light's "-light" is not a theme (it hid in Dark until 2026-10-19).
 export const PER_THEME = /^(ground|layers|tint|card-tone|solid)-(light|dark)$/;
-export const inMode = (id: string, mode: Mode) => !PER_THEME.test(id) || id.endsWith(`-${mode}`);
+/** Tint hue is light's and Dark tint hue dark's (2026-10-27): a pair whose light member has no suffix. */
+const HUE_PAIR: Readonly<Record<Mode, string>> = { light: "tint-hue", dark: "tint-hue-dark" };
+/** The theme a setting belongs to, or null for one that applies to both. */
+export const modeOfSetting = (id: string): Mode | null =>
+  PER_THEME.test(id) ? (id.endsWith("-dark") ? "dark" : "light") : id === HUE_PAIR.light ? "light" : id === HUE_PAIR.dark ? "dark" : null;
+export const inMode = (id: string, mode: Mode) => { const own = modeOfSetting(id); return own === null || own === mode; };
 /** The same setting in the other theme ("ground-dark" for "ground-light"). */
-export const pairOf = (id: string, mode: Mode) => PER_THEME.test(id) ? id.replace(/-(light|dark)$/, `-${mode}`) : id;
+export const pairOf = (id: string, mode: Mode) => PER_THEME.test(id) ? id.replace(/-(light|dark)$/, `-${mode}`) : id === HUE_PAIR.light || id === HUE_PAIR.dark ? HUE_PAIR[mode] : id;
 
 /*
  * The settings: the Inspector's own list (src/gallery/controls.ts), its labels, options, order and defaults, so Theme
@@ -143,4 +150,4 @@ export const attributeOf = (setting: Setting, preset?: string) => setting.id ===
 export const tileLabel = (label: string, detail?: string) =>
   !detail ? label : label.endsWith(")") ? `${label.slice(0, -1)}, ${detail})` : `${label} (${detail})`;
 /** The light or dark theme a setting is drawn in: its own for the per-theme settings, else the page's. */
-export const themeOf = (id: string, mode: Mode): Mode => PER_THEME.test(id) ? (id.endsWith("-dark") ? "dark" : "light") : mode;
+export const themeOf = (id: string, mode: Mode): Mode => modeOfSetting(id) ?? mode;

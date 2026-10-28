@@ -71,8 +71,38 @@ export function brandCss(brand: Brand, options?: BrandOptions & { selector?: str
 export function brandInfo(brand: Brand): { light: BrandInfo; dark: BrandInfo };
 export function isBrandColour(value: string): boolean;
 `);
-const minified = await bundle("brand-entry.ts", { write: false, minify: true, platform: "neutral" }) as unknown as { outputFiles: Array<{ contents: Uint8Array }> };
-const bytes = minified.outputFiles[0]!.contents;
-console.log(`  brand.js minified ${(bytes.length / 1024).toFixed(1)} kB, gzipped ${(gzipSync(bytes).length / 1024).toFixed(1)} kB; ${Object.keys(derived).length} derivations restated`);
+// Exact colours (`@area/tokens/colours`, 2026-10-27): the pages' solver and the accent through the brand engine.
+await bundle("colours-entry.ts", { outfile: join(dist, "colours.js"), platform: "neutral" });
+write("colours.d.ts", `/** @area/tokens/colours: exact page and accent colours at runtime (docs: THEMING.md, Exact colours). */
+import type { BrandOptions } from "./brand.js";
+export interface Oklch { l: number; c: number; h: number }
+/** oklch(L C h) (L a number or a percentage), a hex, or numbers. */
+export type ColourInput = string | Oklch;
+export interface PageColours { light?: ColourInput; dark?: ColourInput }
+export interface Colours { page?: PageColours; accent?: ColourInput }
+export interface PageSolve { lightness: number; hue: number; strength: number; room: { white: number; black: number }; painted: Oklch }
+/** "--area-*" name to value: an inline style on an element with data-area-colours, or React Theme's "colours" prop. */
+export function colourDeclarations(colours: Colours, options?: BrandOptions): Record<string, string>;
+/** The same as one rule in the axes layer, on [data-area-colours] unless "selector" says otherwise. */
+export function colourCss(colours: Colours, options?: BrandOptions & { selector?: string }): string;
+/** What each page pick solved to and the colour it paints. */
+export function pageInfo(page: PageColours): { light?: PageSolve; dark?: PageSolve };
+export function solvePage(theme: "light" | "dark", pick: Oklch): PageSolve;
+/** The most chroma a page of lightness l and hue h can show. */
+export function reachableChroma(theme: "light" | "dark", l: number, h: number): number;
+export function parseColour(input: ColourInput): Oklch;
+export function isColour(value: string): boolean;
+export function formatOklch(colour: Oklch): string;
+export function oklchHex(colour: Oklch): string;
+`);
+const size = async (entry: string, stdin?: string) => {
+  const out = await (stdin
+    ? build({ stdin: { contents: stdin, resolveDir: here, loader: "ts" }, bundle: true, format: "esm", write: false, minify: true, platform: "neutral", logLevel: "silent", plugins: [embedDerived as never] })
+    : bundle(entry, { write: false, minify: true, platform: "neutral" })) as unknown as { outputFiles: Array<{ contents: Uint8Array }> };
+  const bytes = out.outputFiles[0]!.contents;
+  return `minified ${(bytes.length / 1024).toFixed(1)} kB, gzipped ${(gzipSync(bytes).length / 1024).toFixed(1)} kB`;
+};
+console.log(`  brand.js ${await size("brand-entry.ts")}; ${Object.keys(derived).length} derivations restated`);
+console.log(`  colours.js ${await size("colours-entry.ts")}; its page part alone ${await size("", `export { pageDeclarations } from "./color/colours.ts";`)}`);
 
 console.log("");

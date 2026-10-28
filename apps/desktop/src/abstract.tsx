@@ -398,6 +398,7 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
       )];
     case "neutral":
     case "tint-hue":
+    case "tint-hue-dark":
     case "tint-light":
     case "tint-dark":
     case "ink-tint":
