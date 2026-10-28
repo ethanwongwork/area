@@ -7,7 +7,7 @@
  * name with one effect, and every value keeps the indicators at 3:1 (CONTRAST.md).
  */
 import { type AxisDefinition, PREFIX, tokens } from "./schema.ts";
-import { FILL_STEPS } from "../color/layers.ts";
+import { FILL_STEPS, fillPosition, fillStepAt } from "../color/layers.ts";
 
 /**
  * Focus ring: where the keyboard ring sits. Colour is the accent's indicator rung (semantic/aliases.ts), shared with the
@@ -137,23 +137,25 @@ export const HOVER_STROKE_AXIS: AxisDefinition = {
  * owner's firmer press (2026-10-21, ChatGPT's 12%, as far as muted text keeps 4.6:1; was 3% past selected).
  */
 const fillAxis = (id: string, label: string, description: string, key: keyof typeof FILL_STEPS, zero: string | null, say: (i: number) => string): AxisDefinition => {
+  // Every position from the floor to 100 (2026-10-26; whole steps 0 to 4 before, so 2 is now 50): the token stays a step,
+  // a quarter of 100 each, which every formula reads (emit/base.ts, color/layers.ts, styles/layers.css).
   const { min, max, default: fallback } = FILL_STEPS[key];
   return {
-    id, label, description, defaultPreset: String(fallback),
+    id, label, description, defaultPreset: String(fillPosition(fallback)),
     namespaces: [`${PREFIX}${id}-step:`],
-    presets: Array.from({ length: max - min + 1 }, (_, k) => min + k).map(i => ({
-      id: String(i),
-      label: i === 0 && zero ? `0 (${zero})` : String(i),
-      description: say(i),
-      tokens: tokens({ [`${id}-step`]: i }),
+    presets: Array.from({ length: fillPosition(max) - fillPosition(min) + 1 }, (_, k) => fillPosition(min) + k).map(position => ({
+      id: String(position),
+      label: position === 0 && zero ? `0 (${zero})` : String(position),
+      description: say(fillStepAt(position)),
+      tokens: tokens({ [`${id}-step`]: fillStepAt(position) }),
     })),
   };
 };
-export const FILL_HOVER_AXIS = fillAxis("fill-hover", "Hover fill", "How dark the plate under a hovered row or ghost control is, 1 (faintest) to 4.", "hover", null,
-  i => `Hover plate ${i} of 4 (2 is about 5% black over white).`);
-export const FILL_SELECTED_AXIS = fillAxis("fill-selected", "Selected fill", "How much firmer a selected row's plate is than hover, 0 (the same) to 4.", "selected", "Same as hover",
-  i => i === 0 ? "A selected row takes the hover plate (Notion, ChatGPT); its check or ink carries selection." : `Selected sits ${i} step${i === 1 ? "" : "s"} past hover.`);
-export const FILL_PRESSED_AXIS = fillAxis("fill-pressed", "Pressed fill", "How much firmer the plate is while pressed, 1 to 4: quarters of the way from selected to the firmest press.", "pressed", null,
-  i => i === 4 ? "The firmest press muted text allows: ChatGPT's 12% where it can be." : `${i} quarter${i === 1 ? "" : "s"} of the way to the firmest press.`);
+export const FILL_HOVER_AXIS = fillAxis("fill-hover", "Hover fill", "How dark the plate under a hovered row or ghost control is, 25 (faintest) to 100.", "hover", null,
+  i => `Hover plate ${i * 25} of 100 (50 is about 5% black over white).`);
+export const FILL_SELECTED_AXIS = fillAxis("fill-selected", "Selected fill", "How much firmer a selected row's plate is than hover, 0 (the same) to 100.", "selected", "Same as hover",
+  i => i === 0 ? "A selected row takes the hover plate (Notion, ChatGPT); its check or ink carries selection." : `Selected sits ${i * 25} of 100 past hover.`);
+export const FILL_PRESSED_AXIS = fillAxis("fill-pressed", "Pressed fill", "How much firmer the plate is while pressed, 25 to 100: the share of the way from selected to the firmest press.", "pressed", null,
+  i => i === 4 ? "The firmest press muted text allows: ChatGPT's 12% where it can be." : `${i * 25}% of the way to the firmest press.`);
 
 export const STATE_AXES: readonly AxisDefinition[] = [FOCUS_RING_AXIS, HOVER_STROKE_AXIS, SELECTED_STROKE_AXIS, SELECTED_TINT_AXIS, FILL_HOVER_AXIS, FILL_SELECTED_AXIS, FILL_PRESSED_AXIS, DANGER_HOVER_AXIS];

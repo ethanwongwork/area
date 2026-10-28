@@ -4,12 +4,14 @@
  * color shade for the surface"; then "the key with this design system is i want everything to be part of a series of
  * choices"). Research and every hue and strength checked: docs/research/custom-neutral-2026-10-22/.
  *
- *   tint-hue    Auto (the default: the Neutral setting's own hue), Accent (the accent's hue, 2026-10-23) or 0 to 355 in
- *               5° steps, one hue for both modes
- *   tint-light  Auto (the Neutral setting's strength) or 0 (none) to 16 in light, each step 0.005 of OKLCH chroma (16 since
- *               2026-10-23, for a butter-yellow page; past a hue's room a step clips to the most sRGB shows)
+ *   tint-hue    Auto (the default: the Neutral setting's own hue), Accent (the accent's hue, 2026-10-23) or 0 to 359,
+ *               every degree (5° steps until 2026-10-26; five numbers a hue, so all 360 ship in axes.css), one for both modes
+ *   tint-light  Auto (the Neutral setting's strength) or 0 (none) to 100 in light, every whole number, 100 OKLCH chroma 0.08
+ *               (0 to 16 in steps of 0.005 until 2026-10-26, so 8 is now 50; 0.08 since 2026-10-23, for a butter-yellow
+ *               page; past a hue's room a position holds at the most sRGB shows)
  *   tint-dark   the same in dark; light and dark are chosen apart, as Ground and Layers are
- *   ink-tint    Text tint: how much of the tint body and muted text take, 0 (none) to 4 (full) in quarters; 2 the default
+ *   ink-tint    Text tint: how much of the tint body and muted text take, every whole percent from 0 (none) to 100 (full);
+ *               50 the default (0 to 4 in quarters until 2026-10-26, so 2 is now 50)
  *
  * Each writes numbers only; color/layers.ts derives the effective hue and strength per mode (`cast-*`) in CSS, so a
  * subtree that sets its own tint re-derives. At Auto every surface is Neutral's, Cool's or Warm's exactly; their text takes
@@ -17,7 +19,7 @@
  * the strength away from its ground (INK_MARGIN), the margin that keeps every hue at 4.5:1 to the top step and beyond.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
-import { TINT_HUES, TINT_STEP, TINT_STEPS, INK_TINT_STEPS, DEFAULT_INK_TINT, tintRoom } from "../color/layers.ts";
+import { TINT_HUES, POSITIONS, DEFAULT_INK_TINT, inkShareAt, inkTintPosition, tintChromaAt, tintRoom } from "../color/layers.ts";
 
 /** A hue's room under sRGB (layers.ts tintRoom), which holds a strong tint inside the gamut; 9 where no hue of its own. */
 const room = (hue?: number) => hue === undefined ? { "tint-room-white": 9, "tint-room-black": 9 } : { "tint-room-white": tintRoom(hue).white, "tint-room-black": tintRoom(hue).black };
@@ -25,7 +27,7 @@ const room = (hue?: number) => hue === undefined ? { "tint-room-white": 9, "tint
 export const TINT_HUE_AXIS: AxisDefinition = {
   id: "tint-hue",
   label: "Tint hue",
-  description: "The hue of the grays: Auto follows Neutral, Accent the accent's hue, or any hue in 5° steps.",
+  description: "The hue of the grays: Auto follows Neutral, Accent the accent's hue, or any hue, every degree.",
   defaultPreset: "auto",
   namespaces: ["--area-tint-hue-auto:", "--area-tint-hue:", "--area-tint-hue-accent:", "--area-tint-room-white:", "--area-tint-room-black:"],
   presets: [
@@ -38,15 +40,15 @@ export const TINT_HUE_AXIS: AxisDefinition = {
 const strengthAxis = (theme: "light" | "dark"): AxisDefinition => ({
   id: `tint-${theme}`,
   label: theme === "light" ? "Light grey tint" : "Dark grey tint",
-  description: `In ${theme}: how strongly the grays take the tint's hue. Auto follows Neutral; 0 (None) to 16.`,
+  description: `In ${theme}: how strongly the grays take the tint's hue. Auto follows Neutral; 0 (None) to 100.`,
   defaultPreset: "auto",
   namespaces: [`--area-tint-${theme}-auto:`, `--area-tint-chroma-${theme}:`],
   presets: [
     { id: "auto", label: "Auto", description: "The Neutral setting's own strength.", tokens: tokens({ [`tint-${theme}-auto`]: 1, [`tint-chroma-${theme}`]: 0 }) },
-    ...TINT_STEPS.map(step => ({
-      id: String(step), label: step === 0 ? "0 (None)" : String(step),
-      description: step === 0 ? "Untinted grays." : `Tint ${step} of ${TINT_STEPS[TINT_STEPS.length - 1]}: OKLCH chroma ${(step * TINT_STEP).toFixed(3)}.`,
-      tokens: tokens({ [`tint-${theme}-auto`]: 0, [`tint-chroma-${theme}`]: Number((step * TINT_STEP).toFixed(4)) }),
+    ...POSITIONS.map(position => ({
+      id: String(position), label: position === 0 ? "0 (None)" : String(position),
+      description: position === 0 ? "Untinted grays." : `Tint ${position} of 100: OKLCH chroma ${tintChromaAt(position).toFixed(4)}.`,
+      tokens: tokens({ [`tint-${theme}-auto`]: 0, [`tint-chroma-${theme}`]: tintChromaAt(position) }),
     })),
   ],
 });
@@ -56,12 +58,12 @@ export const TINT_DARK_AXIS = strengthAxis("dark");
 export const INK_TINT_AXIS: AxisDefinition = {
   id: "ink-tint",
   label: "Text tint",
-  description: "How much of the tint body and muted text take, 0 (None) to 4 (Full).",
-  defaultPreset: String(DEFAULT_INK_TINT),
+  description: "How much of the tint body and muted text take, 0 (None) to 100 (Full).",
+  defaultPreset: String(inkTintPosition(DEFAULT_INK_TINT)),
   namespaces: ["--area-ink-tint:"],
-  presets: INK_TINT_STEPS.map(step => ({
-    id: String(step), label: step === 0 ? "0 (None)" : step === 4 ? "4 (Full)" : String(step),
-    description: step === 0 ? "Neutral text on tinted surfaces." : step === 4 ? "Text as tinted as the surfaces." : `Text takes ${step * 25}% of the tint.`,
-    tokens: tokens({ "ink-tint": step / 4 }),
+  presets: POSITIONS.map(position => ({
+    id: String(position), label: position === 0 ? "0 (None)" : position === 100 ? "100 (Full)" : String(position),
+    description: position === 0 ? "Neutral text on tinted surfaces." : position === 100 ? "Text as tinted as the surfaces." : `Text takes ${position}% of the tint.`,
+    tokens: tokens({ "ink-tint": inkShareAt(position) }),
   })),
 };

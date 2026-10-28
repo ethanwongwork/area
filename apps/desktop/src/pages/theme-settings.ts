@@ -24,12 +24,12 @@ export const ALSO: Record<string, Record<string, string>> = {
   // Label tint shows on a deep solid (a bright one leaves no room); Status colours on a quieted accent.
   "label-tint": { "data-area-action": "accent", "data-area-solid-light": "750", "data-area-solid-dark": "750" },
   "status-colours": { "data-area-accent-strength": "50" },
-  neutral: { "data-area-layers-light": "8", "data-area-layers-dark": "8" },
+  neutral: { "data-area-layers-light": "100", "data-area-layers-dark": "100" },
   // Tint: a hue shows at a strength, a strength on a hue, and Text tint on both at their strongest (axes/tint.ts).
-  "tint-hue": { "data-area-tint-light": "6", "data-area-tint-dark": "6" },
+  "tint-hue": { "data-area-tint-light": "38", "data-area-tint-dark": "38" },
   "tint-light": { "data-area-tint-hue": "70" },
   "tint-dark": { "data-area-tint-hue": "70" },
-  "ink-tint": { "data-area-tint-hue": "70", "data-area-tint-light": "8", "data-area-tint-dark": "8" },
+  "ink-tint": { "data-area-tint-hue": "70", "data-area-tint-light": "50", "data-area-tint-dark": "50" },
   surface: NO_SHADOW,
   stroke: NO_SHADOW,
   // A preset's own attribute is written last (scopeOf), so it wins over NO_SHADOW's 0.
@@ -117,7 +117,8 @@ export const SETTINGS: Setting[] = SETTING_GROUPS.flatMap(group => group.setting
     title: oneTheme(REGISTRY[id]?.label ?? control.label),
     name: REGISTRY[id]?.label ?? control.label,
     description: REGISTRY[id]?.description ?? control.hint ?? "",
-    presets: control.items.map(item => ({ id: item.value, label: item.label })),
+    // A setting with every position draws its marks (controls.ts `marks`), not 101 tiles.
+    presets: control.items.filter(item => !control.marks || control.marks.includes(item.value)).map(item => ({ id: item.value, label: item.label })),
     defaults: control.kind === "chips" ? control.defaultValue.split(" ") : [control.defaultValue],
   };
 }));

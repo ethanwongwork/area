@@ -503,9 +503,10 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   fill (an image well, a dot, a control's own card) is exempted there with its reason.
 - **An inner frame always reads apart from its card** (2026-10-23). Asset card's frame is
   the page tone, the ground components are drawn for, unless the card around it is the
-  page tone too (Card tone 0, a step clamped at white or black, or a raised card on a white
-  page): then it takes the recessed tone (`bg-frame`, `bg-frame-raised`; `color/layers.ts`
-  `FRAME_SAME`). It is never a third tone, and its controls step from it (the `frame` and
+  page tone too (within 0.005 L: Card shade 0 or a position that small, a step clamped at
+  white or black, or a raised card on a white page): then it takes the recessed tone if that
+  is farther from the card (`bg-frame`, `bg-frame-raised`; `color/layers.ts` `FRAME_SAME`,
+  since 2026-10-26 when Card shade and Layer contrast took every position). It is never a third tone, and its controls step from it (the `frame` and
   `frame-raised` grounds). At Layers 0 every tone is one and the edges set it apart.
 - Dark mode is near-black by default: the page is #020202, cards #121212 and sidebars
   #0b0b0b.

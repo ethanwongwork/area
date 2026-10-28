@@ -159,13 +159,23 @@ function Bar({ control, value, put, context, label }: { control: GalleryControl;
  * more color?"): one temperature bar from Cool to Warm through Neutral, and, for any other colour, a tint colour by name
  * with how much of it. Temperature writes Neutral (its cool or warm ramp) and the tint strength on that ramp's own hue in
  * both modes; a tint colour writes Tint hue and the strength in both modes. Dark follows light (axis review, mode pairs).
+ * Strength is a position, 0 to 100 (2026-10-26), and both bars take every one: Temperature runs from Cool 100 through
+ * Neutral to Warm 100 (it had eight steps, Auto then Tint 2 to 16), writing that strength in both modes on Cool's or Warm's
+ * own hue. Auto, Cool's and Warm's own strength (Setup's Cool and Warm), sits at its position in the mode shown: 4 in light,
+ * 15 in dark.
  */
-const TEMPERATURE = ["auto", "2", "3", "4", "6", "8", "12", "16"] as const;
 const TINTS: ReadonlyArray<[string, string]> = [["accent", "Accent"], ["30", "Red"], ["55", "Orange"], ["95", "Yellow"], ["145", "Green"], ["185", "Teal"], ["255", "Blue"], ["300", "Purple"], ["350", "Pink"]];
+/** A Neutral setting's own strength in one mode, as a position (its cast's chroma over Tint 100's, 0.08). */
+const ownStrength = (neutral: string, mode: "light" | "dark") => {
+  const tokens = (TOKENS.axes as unknown as Array<{ id: string; presets: Array<{ id: string; tokens?: Record<string, string> }> }>)
+    .find(axis => axis.id === "neutral")?.presets.find(preset => preset.id === neutral)?.tokens;
+  return Math.round(Number(tokens?.[`--area-neutral-chroma-${mode}`] ?? 0) / 0.0008);
+};
 function temperatureOf(values: Values, mode: "light" | "dark"): number {
   if (values.neutral === "neutral") return 0;
-  const level = Math.max(1, TEMPERATURE.indexOf((values[`tint-${mode}`] ?? "auto") as (typeof TEMPERATURE)[number]) + 1);
-  return values.neutral === "cool" ? -level : level;
+  const strength = values[`tint-${mode}`] ?? "auto";
+  const at = Math.max(1, strength === "auto" ? ownStrength(values.neutral ?? "neutral", mode) : Number(strength));
+  return values.neutral === "cool" ? -at : at;
 }
 function GreysRow({ context }: { context: RowContext }) {
   const { values, mode, set } = context;
@@ -174,21 +184,20 @@ function GreysRow({ context }: { context: RowContext }) {
   const t = temperatureOf(values, mode);
   const temperature = (next: number) => next === 0
     ? set({ neutral: "neutral", "tint-hue": "auto", "tint-light": "auto", "tint-dark": "auto" })
-    : set({ neutral: next < 0 ? "cool" : "warm", "tint-hue": "auto", "tint-light": TEMPERATURE[Math.abs(next) - 1]!, "tint-dark": TEMPERATURE[Math.abs(next) - 1]! });
+    : set({ neutral: next < 0 ? "cool" : "warm", "tint-hue": "auto", "tint-light": String(Math.abs(next)), "tint-dark": String(Math.abs(next)) });
   const amount = values[`tint-${mode}`] ?? "auto";
-  const steps = Array.from({ length: 17 }, (_, step) => String(step));
-  const amountAt = Math.max(0, steps.indexOf(amount === "auto" ? "4" : amount));
+  const amountAt = amount === "auto" ? 25 : Number(amount);
   const tintColour = (next: string) => next === "none"
     ? set({ "tint-hue": "auto", "tint-light": "auto", "tint-dark": "auto" })
-    : set({ neutral: "neutral", "tint-hue": next === CUSTOM ? (/^\d+$/.test(hue) ? hue : "200") : next, "tint-light": steps[amountAt]!, "tint-dark": steps[amountAt]! });
+    : set({ neutral: "neutral", "tint-hue": next === CUSTOM ? (/^\d+$/.test(hue) ? hue : "200") : next, "tint-light": String(amountAt), "tint-dark": String(amountAt) });
   const swatchOf = (value: string) => optionMark("tint-hue", value, values as CanvasAxes) ?? undefined;
-  const hues = Array.from({ length: 72 }, (_, step) => String(step * 5));
+  const hues = Array.from({ length: 360 }, (_, hue) => String(hue));
   return (
     <>
       <Dim reason={tint === "none" ? null : "Off while a tint colour is on"}>
         <SettingBar size={context.size ?? "sm"} label="Temperature" title="How cool (blue) or warm (yellow) every grey is: pages, cards, edges and text"
-          min={-8} max={8} step={1} origin={0} value={tint === "none" ? t : 0}
-          readout={(at: number) => at === 0 ? "Neutral" : `${at < 0 ? "Cool" : "Warm"} ${Math.round(Math.abs(at) / 8 * 100)}%`}
+          min={-100} max={100} step={1} origin={0} value={tint === "none" ? t : 0}
+          readout={(at: number) => at === 0 ? "Neutral" : `${at < 0 ? "Cool" : "Warm"} ${Math.abs(at)}%`}
           onSet={temperature} />
       </Dim>
       <Field label="Tint colour" orientation="horizontal" title="Lean every grey toward a colour instead of cool or warm">
@@ -196,13 +205,13 @@ function GreysRow({ context }: { context: RowContext }) {
           items={[{ value: "none", label: "None" }, ...TINTS.map(([value, label]) => ({ value, label, icon: swatchOf(value) })), { value: CUSTOM, label: "Custom", icon: tint === CUSTOM ? swatchOf(hue) : undefined }]} />
       </Field>
       {tint === CUSTOM ? (
-        <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={71} step={1} value={Math.max(0, hues.indexOf(hue))}
+        <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={359} step={1} value={Math.max(0, hues.indexOf(hue))}
           readout={(at: number) => hueLabel(hues[at]!)} onSet={at => set({ "tint-hue": hues[at]! })} />
       ) : null}
       {tint !== "none" ? (
         <SettingBar size={context.size ?? "sm"} label="Amount" title="How much of the colour the greys take: 0% is plain grey"
-          min={0} max={16} step={1} value={amountAt} readout={(at: number) => at === 0 ? "None" : `${Math.round(at / 16 * 100)}%`}
-          onSet={at => set({ "tint-light": steps[at]!, "tint-dark": steps[at]! })} />
+          min={0} max={100} step={1} value={amountAt} readout={(at: number) => at === 0 ? "None" : `${at}%`}
+          onSet={at => set({ "tint-light": String(at), "tint-dark": String(at) })} />
       ) : null}
     </>
   );
