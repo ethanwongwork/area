@@ -31,7 +31,32 @@ them ([Product UI](PRODUCT_UI.md), rule 18).
 setting is a bar, Slider's field variant, with its name and its value inside, dragged from any point; named choices are a
 Segmented; a setting with an Auto, System or Accent beside its range shows those with Custom, and the bar under them while
 Custom is on. Values read in their unit (60%, 8px, 210ms, 215°, White), never a step number; the registry's preset ids are
-unchanged, so saved settings and attributes still read. Mode pairs show the one for the mode the app is in.
+unchanged, so saved settings and attributes still read, except where a setting became positions (below). Mode pairs show
+the one for the mode the app is in.
+
+**Positions** (owner, 2026-10-26: "a slider that adjusts to every possible percentage maybe to the ones place only ...
+rather than creating preset levels and percentage values that have huge steps between them"): Layer contrast, Card shade,
+Text tint, Grey tint strength, Label tint and the Hover, Selected and Pressed fills take every whole number from 0 to 100
+(Card shade −100 to +100; Hover and Pressed from 25, their old 1, so a plate always shows), each a share of the model's
+own range; the dark page every whole percent from 0 to 24; Tint hue every whole degree. Each value is still one static
+preset (a number-only preset is about 66 bytes; these add 8 KB gzipped to axes.css), so a theme is still
+`data-area-layers-light="37"` and the contrast gate still reads literals. Old steps are whole positions and draw exactly
+as before (Layers 4 is 50, Card tone −1 is −25, Text tint, Label tint and fills ×25, Grey tint 8 is 50), except Grey
+tint's odd and even-not-by-four steps, which land at the nearest position (Tint 2 is 13, under 0.0004 chroma off); a
+Canvas saved before converts once (`restoreCanvas`). Setup asks them as one slider each with the old names as marks;
+Theme's Browse draws the quarters. `layers.test.ts` ("every position is usable", "every grey tint and fill position")
+walks every pair of Layer contrast and Card shade positions on every ground, Text tint and Grey tint at every position,
+every fill position against the others' marks, and the shipped CSS; the accent gate measures every Label tint position.
+The fills' minimum steps hold at the marks: Selected 1 to 24 sits between the hover plate (0) and the first mark. Page
+lightness stays in whole percents here (11 of the 34 greys a screen shows from 90 to 100); exact page colours, and an
+exact accent through the brand engine, are the colour step that follows (owner, 2026-10-27).
+
+**Tint hue at 1°** (2026-10-26): every hue from 0 to 359, all in axes.css (five numbers a hue; 4 KB gzipped for the 288
+more); the 5° hues walk every strength and Text tint share, every degree the strengths 4, 8 and 16 ("every tint is
+usable"). The accent stays in 5° steps: each accent hue's ladder is about 6 KB, so 1° would add about 190 KB gzipped to
+every product, and an exact accent comes with the colour step instead. The Inspector's **Temperature** is one bar from Cool 100 through Neutral to Warm 100: it writes Cool's or Warm's
+ramp and that strength in both modes (it had eight steps, the first Auto); Auto, their own strength, shows at its position
+in the mode shown (4 in light, 15 in dark).
 
 **Colour**
 
@@ -41,18 +66,18 @@ unchanged, so saved settings and attributes still read. Mode pairs show the one 
 | `neutral` | `neutral` (default), `cool`, `warm` | The grey cast of every neutral role |
 | `accent` | The palette's 11 (`blue`, default) or any hue `0` … `355` in 5° steps | The chosen colour. State marks, selected edges, the focus ring and selected text take it while Selection is Accent; solid actions while Action is Accent. A hue draws the palette's ladder between its two nearest families (`color/generate.ts`), so at a family's own hue the result is the family, and every solved step (solid, indicator, tonal ink) is solved again for it |
 | `accent-strength` | `100` (Full, default) … `30` (Dusty) in tens, one for both modes | How much of its own colour the accent keeps: every accent colour mixes in OKLab toward the gray of its own luminance, so hue holds and contrast stays within 0.09:1; the solvers walk at every strength, so each step clears at each (docs/research/palette-customization-2026-10-23) |
-| `label-tint` | `0` (None, default) … `4` (Full), one for both modes | How much of the accent's hue the label on an accent solid takes: a quarter a step from its measured black or white toward the most coloured rung that still clears 4.6:1 and APCA 61 on the Solid step's fill and hover at every strength (`tintedLabel`, scale.ts). A navy button at 2 has a pale blue label; on a bright fill no rung clears and the label stays white |
+| `label-tint` | `0` (None, default) … `100` (Full), every whole number, one for both modes (0 to 4 until 2026-10-26) | How much of the accent's hue the label on an accent solid takes: a share of the way from its measured black or white toward the most coloured rung that still clears 4.6:1 and APCA 61 on the Solid step's fill and hover at every strength (`tintedLabel`, scale.ts). A navy button at 50 has a pale blue label; on a bright fill no rung clears and the label stays white |
 | `status-colours` | `fixed` (default), `match` | Danger, warning, caution, success, info and discovery as the palette draws them, or quieted to the Accent strength by the same mix, so a dusty palette has dusty statuses. Their hues never move, and tag colours (pink, gray, brown) stay |
 | `solid-light`, `solid-dark` | `auto` (default: the accent's own solid) or `200` … `850` | The accent step solid fills (accent Buttons, checked marks) sit on, per mode: a navy button is blue at 750. Each step carries black or white, whichever stays readable on it at every Accent strength, so the label flips with the shade (2026-10-25: light blue at 200 under black, deep orange at 750 under white); where neither does (a mid blue, 250 to 450) the step moves toward the accent's own label's side to the first that carries it. Auto keeps the accent's own label. Dark's Auto stays the solver's own step whatever light picks (a navy fill measures 1.66:1 on the near-black page). The Inspector calls it **Shade**, under the colour and over Saturation: a bar of the colour's distinct shades, lightest to deepest, with Auto (Vivid) where its lightness puts it; the Accent menu draws every colour at its vivid shade |
 | `action` | `neutral` (default), `accent` | Whether committing actions (solid Buttons) paint the accent |
 | `selection` | `neutral` (default since 2026-10-25; Accent 2026-10-22 to 25), `accent` | Whether state marks (checked, on, selected, current, filled), selected edges (Card, Asset card, choice cards), the focus ring and selected text paint the accent. With Action, Neutral here gives an entirely neutral look. One setting, so a selected card and the mark inside it are always one colour (docs/research/selection-colour-2026-10-22) |
 | `ground-light` | `100` (White, default) … `90` | The light page's OKLCH lightness, in 1% steps |
-| `ground-dark` | `0` (Black), `8` (default, #020202), `12` … `24` | The dark page's lightness |
-| `tint-hue` | `auto` (default: the Neutral setting's own hue), `accent` (the accent's hue), `0` … `355` in 5° steps | The hue the grays lean toward, one for both modes |
-| `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `16`, each step 0.005 of OKLCH chroma (to 16 since 2026-10-23, for a butter-yellow page) | How strongly the grays take the hue, per mode. A step past what sRGB can show at a hue and lightness is held at that room (`tintRoom`, two slopes under the gamut), not clipped, so steps past it draw the same colour; clipping moved luminance and hue (a blue tint at 8 on a 97 page painted cyan). Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable") |
-| `ink-tint` | `0` (None) … `4` (Full) in quarters, `2` (default) | How much of the tint body and muted text take. Text also moves 0.25 × the strength away from its ground, so it keeps 4.5:1 on every hue (`INK_MARGIN`, docs/research/custom-neutral-2026-10-22/) |
-| `card-tone-light`, `card-tone-dark` | `auto` (default: each container's own tone, a Card raised, an Asset card recessed), `-4` (darker) … `0` (the page) … `+4` (lighter), a light step 0.012 L, a dark one 0.03 | Cards and asset cards against the page, per mode; their controls step from it and text is solved against the darkest (light) or lightest (dark) card, so every step reads (`layers.test.ts`, "every card tone is usable"). Menus, popovers and dialogs stay raised. An Asset card's inner frame stays the page tone, and takes the recessed tone where its card is the page's (0, or clamped at white or black), so it always reads apart |
-| `layers-light`, `layers-dark` | `0` (Flat, default since 2026-10-25; was 4), `2`, `4`, `6`, `8` (five steps since 2026-10-22; was every whole number) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
+| `ground-dark` | `0` (Black) … `24` in 1% steps, `8` (default, #020202) | The dark page's lightness; below 12 a step barely shows, and the layers' floor (L 0.12) arrives over Layer contrast's first 12 positions |
+| `tint-hue` | `auto` (default: the Neutral setting's own hue), `accent` (the accent's hue), `0` … `359`, every degree (5° steps until 2026-10-26) | The hue the grays lean toward, one for both modes |
+| `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `100`, every whole number, 100 is OKLCH chroma 0.08 (0 to 16 in steps of 0.005 until 2026-10-26; to 0.08 since 2026-10-23, for a butter-yellow page) | How strongly the grays take the hue, per mode. A step past what sRGB can show at a hue and lightness is held at that room (`tintRoom`, two slopes under the gamut), not clipped, so steps past it draw the same colour; clipping moved luminance and hue (a blue tint at 8 on a 97 page painted cyan). Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable") |
+| `ink-tint` | `0` (None) … `100` (Full), every whole number, `50` (default; `0` … `4` in quarters until 2026-10-26) | How much of the tint body and muted text take. Text also moves 0.25 × the strength away from its ground, so it keeps 4.5:1 on every hue (`INK_MARGIN`, docs/research/custom-neutral-2026-10-22/) |
+| `card-tone-light`, `card-tone-dark` | `auto` (default: each container's own tone, a Card raised, an Asset card recessed), `-100` (darker) … `0` (the page) … `+100` (lighter), every whole number (−4 to +4 in half steps until 2026-10-26); 100 is 0.048 L in light, 0.12 in dark | Cards and asset cards against the page, per mode; their controls step from it and text is solved against the darkest (light) or lightest (dark) card, so every position reads (`layers.test.ts`, "every card tone is usable", "every position is usable"). Menus, popovers and dialogs stay raised. An Asset card's inner frame stays the page tone, and takes the recessed tone where its card is within 0.005 L of the page (0, clamped at white or black, or a position that small) and the recessed tone is farther from it, so it reads apart as far as the layers allow |
+| `layers-light`, `layers-dark` | `0` (Flat, default since 2026-10-25) … `100`, every whole number (five steps, 0 to 8, from 2026-10-22 to 26; 50 is the old 4) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
 
 The action and selection settings combine:
 
@@ -140,9 +165,9 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 | `stroke-hover` | States › Hover edge | `0` (None) … `4`, `2` (default) | How far a control's edge darkens under the pointer (`edge-control-hover`), equal steps |
 | `selected-stroke` | States › Selected edge | `1`, `2` (default), `3` px | A selected card's, tile's or choice card's edge, drawn inside (`selected-width`) |
 | `focus-ring` | States › Focus ring | `hug` (default), `gap`, `halo`, `inset`, `bold` | Where the keyboard ring sits: `focus-width`, `focus-offset` (controls), `focus-gap` (containers and text) and the fields' ring, recolour and halo switches |
-| `fill-hover` | States › Hover fill | `1` … `4`, `2` (default) | The hover plate under rows and ghost controls, opaque and translucent (`bg-component-hover`, `bg-hover`) |
-| `fill-selected` | States › Selected fill | `0` (Same as hover) … `4`, `1` (default) | How far past hover the selected plate sits (`bg-component-active`, `bg-active`) |
-| `fill-pressed` | States › Pressed fill | `1` … `4`, `4` (default) | Quarters of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1, which is always at least the press room past selected |
+| `fill-hover` | States › Hover fill | `25` … `100`, `50` (default; 1 to 4 until 2026-10-26) | The hover plate under rows and ghost controls, opaque and translucent (`bg-component-hover`, `bg-hover`) |
+| `fill-selected` | States › Selected fill | `0` (Same as hover) … `100`, `25` (default; 0 to 4 until 2026-10-26) | How far past hover the selected plate sits (`bg-component-active`, `bg-active`) |
+| `fill-pressed` | States › Pressed fill | `25` … `100`, `100` (default; 1 to 4 until 2026-10-26) | The share of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1, which is always at least the press room past selected |
 | `danger-hover` | States › Danger hover | `tint` (default), `neutral` | A destructive row's hover, highlight and pressed plate (Menu, Context menu): the row's own plate turned to the danger hue at the same lightness, or the grey plate every row takes (`row-danger-tint`, 1 or 0) |
 | `selected-tint` | States › Selected tint | `none` (default), `tint`, `neutral` | A selected container's fill under its stroke: nothing, the accent's faint surface (half strength in dark), or the row's selected wash (`selected-tint`) |
 

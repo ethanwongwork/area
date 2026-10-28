@@ -66,10 +66,16 @@ export const CANVAS_DEFAULTS = Object.fromEntries(
  * otherwise leave its Select blank and match no preset. Keys no control reads are dropped. A Canvas
  * from before the type / density split (`ui`: compact or default) restores as its two settings, and
  * a density saved by name (compact, default, comfortable) as its number. One Layers contrast saved before it
- * split by theme (2026-10-17) restores as both, and an odd Layers step from before the five steps rounds up.
+ * split by theme (2026-10-17) restores as both. A Canvas saved before positions (no `positions` mark, 2026-10-26) has
+ * Layer contrast 0 to 8, Card shade −4 to +4, Text tint, Label tint and the state fills 0 to 4, and Grey tint 0 to 16;
+ * each restores as its position on 0–100.
  */
-function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: string }): CanvasAxes {
-  const { ui, layers, ...rest } = saved;
+/** Marks a saved Canvas whose Layer contrast, Card shade and Text tint are positions (0–100), so restoreCanvas converts only
+ * the ones saved before. */
+const CANVAS_POSITIONS = 1;
+const saveCanvas = (canvas: CanvasAxes) => writeStored("canvas", { ...canvas, positions: CANVAS_POSITIONS });
+function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: string; positions?: number }): CanvasAxes {
+  const { ui, layers, positions, ...rest } = saved;
   const legacy: Partial<CanvasAxes> = {
     ...(ui === "compact" ? { type: "12", density: "28" } : ui === "default" ? { type: "14", density: "32" } : {}),
     ...(typeof layers === "string" ? { "layers-light": layers, "layers-dark": layers } : {}),
@@ -80,10 +86,18 @@ function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: stri
   // Contrast has nine levels since 2026-10-22: Standard, Medium and More restore as 0, 4 and 8.
   const contrastNamed: Record<string, string> = { standard: "0", medium: "4", more: "8" };
   if (typeof merged.contrast === "string" && merged.contrast in contrastNamed) merged.contrast = contrastNamed[merged.contrast];
-  // Layers has five steps since 2026-10-22 (0, 2, 4, 6, 8): a saved odd step rounds up to the next one, not the default.
-  for (const axis of ["layers-light", "layers-dark"]) {
-    const step = Number(merged[axis]);
-    if (typeof merged[axis] === "string" && Number.isInteger(step) && step % 2 === 1) merged[axis] = String(Math.min(8, step + 1));
+  // Positions (2026-10-26): a step saved before them is its share of the old range, on 0–100 (Layers 4 is 50, Card shade −1
+  // is −25, Text tint 2 is 50, Grey tint 1 is 6), rounded away from 0 at a half, as the marks are (@area/tokens
+  // color/layers.ts `positionOf`).
+  if (positions !== CANVAS_POSITIONS) {
+    const scaled = (axis: string, per: number) => {
+      const step = Number(merged[axis]);
+      if (typeof merged[axis] === "string" && merged[axis] !== "" && Number.isFinite(step)) merged[axis] = String(Math.sign(step) * Math.round(Math.abs(step) * per));
+    };
+    for (const axis of ["layers-light", "layers-dark"]) scaled(axis, 100 / 8);
+    for (const axis of ["card-tone-light", "card-tone-dark"]) scaled(axis, 100 / 4);
+    for (const axis of ["ink-tint", "label-tint", "fill-hover", "fill-selected", "fill-pressed"]) scaled(axis, 25);
+    for (const axis of ["tint-light", "tint-dark"]) scaled(axis, 100 / 16);
   }
   const canvas = { ...CANVAS_DEFAULTS };
   for (const control of GALLERY_CONTROLS) {
@@ -286,7 +300,7 @@ export function Studio() {
     canvas,
     setCanvas: (axis, value) => setCanvasState(current => {
       const next = { ...current, [axis]: value };
-      writeStored("canvas", next);
+      saveCanvas(next);
       return next;
     }),
     material,
@@ -297,7 +311,7 @@ export function Studio() {
       const layers = MATERIAL_BUNDLES[bundle]?.layers ?? {};
       if (Object.keys(layers).length) setCanvasState(current => {
         const merged = { ...current, ...layers };
-        writeStored("canvas", merged);
+        saveCanvas(merged);
         return merged;
       });
     },

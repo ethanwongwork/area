@@ -27,10 +27,11 @@ import { findCusp, maxChromaAt } from "./gamut.ts";
 
 /** Light grounds, 100 (white) to 90, as OKLCH lightness. */
 export const GROUND_LIGHT_STEPS = [100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90] as const;
-/** Dark grounds: 0 (black), 8 (Area's near-black, #020202), then 12 to 24. Below 12 a 1% step doesn't show. */
-export const GROUND_DARK_STEPS = [0, 8, 12, 14, 16, 18, 20, 22, 24] as const;
-/** Five steps (owner, 2026-10-22: "maybe 5 would do"; was 0 to 8 in ones): Flat, the default 4 and the strongest 8 keep
- * their values, so each number still means the same distance. */
+/** Dark grounds: every whole percent, 0 (black) to 24; 8 is Area's near-black, #020202. Below 12 a 1% step barely shows on a
+ * screen (it was 0, 8, then 12 to 24 in twos until 2026-10-26, when every setting took every whole number). */
+export const GROUND_DARK_STEPS = Array.from({ length: 25 }, (_, i) => i);
+/** Layer contrast in the model's units, 0 to 8: the five marks the Setup names (owner, 2026-10-22: "maybe 5 would do") and
+ * the grid the combination tests walk. The setting itself is a position, 0 to 100 (`layersAt`). */
 export const LAYER_STEPS = [0, 2, 4, 6, 8] as const;
 export const DEFAULT_GROUND_LIGHT = 100;
 export const DEFAULT_GROUND_DARK = 8;
@@ -38,16 +39,17 @@ export const DEFAULT_GROUND_DARK = 8;
 export const DEFAULT_LAYERS = 0;
 
 /**
- * Tint (axes/tint.ts, owner 2026-10-22): a hue in 5° steps, a strength per mode in steps of 0.005 OKLCH chroma, and the
+ * Tint (axes/tint.ts, owner 2026-10-22): a hue, every degree since 2026-10-26 (5° steps before), a strength per mode in steps of 0.005 OKLCH chroma, and the
  * share of it text takes, in quarters. Auto, each tint setting's default, follows the Neutral setting's own cast.
  * Strength runs to 16 (0.08) since 2026-10-23 (a butter-yellow page needs 0.03 to 0.08: docs/research/
  * palette-customization-2026-10-23). 8 (0.04) is what every hue shows from a 95 page down; yellow has three times that
  * room, blue a third of it on a 98 page, so a step past a hue's room clips to the most sRGB shows there
  * (docs/research/custom-neutral-2026-10-22/gamut.ts). The text margin was swept to 0.08 on every hue.
  */
-export const TINT_HUES = Array.from({ length: 72 }, (_, i) => i * 5);
+export const TINT_HUES = Array.from({ length: 360 }, (_, i) => i);
 export const TINT_STEP = 0.005;
 export const TINT_STEPS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] as const;
+/** Text tint's share in quarters: the marks and the test grid. The setting is a position, 0 to 100 (`inkShareAt`). */
 export const INK_TINT_STEPS = [0, 1, 2, 3, 4] as const;
 export const DEFAULT_INK_TINT = 2;
 /**
@@ -67,15 +69,59 @@ export const INK_MARGIN = 0.25;
  * do not show). Two tones read it: `card` (Card, Auto = raised) and `tile` (Asset card, Auto = recessed).
  */
 // Half steps since 2026-10-24 (owner, the controls review: "can you add more granularity?"): 0.006 L in light, 0.015 in dark.
+// Since 2026-10-26 these are the marks and the test grid; the setting is a position, −100 to +100 (`cardToneAt`).
 export const CARD_TONE_STEPS = [-4, -3.5, -3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4] as const;
+
+/**
+ * Positions (owner, 2026-10-26: "a slider that adjusts to every possible percentage maybe to the ones place only ... rather
+ * than creating preset levels and percentage values that have huge steps between them"): Layer contrast, Card shade, Text
+ * tint, Grey tint strength, Label tint and the three state fills take every whole number from 0 to 100 (Card shade −100 to
+ * +100), each a share of the model's own range, so 100 is the strongest step the model had (Layers 4 is 50, Card tone −1
+ * is −25, Text tint 2 of 4 is 50, Tint 8 of 16 is 50, Hover fill 2 of 4 is 50). The model keeps its units; only the
+ * settings changed. A fill that must show keeps its floor: Hover and Pressed start at 25 (their old 1). Grey tint's odd
+ * steps fall between positions (Tint 1 is 6.25) and restore at the nearest, under 0.0004 of chroma off. layers.test.ts
+ * walks every position.
+ */
+export const POSITIONS = Array.from({ length: 101 }, (_, i) => i);
+export const SIGNED_POSITIONS = Array.from({ length: 201 }, (_, i) => i - 100);
+const at = (position: number, range: number) => Number((position * range / 100).toFixed(6));
+/** Layer contrast at a position: 0 to 8. */
+export const layersAt = (position: number) => at(position, 8);
+/** Card tone at a position: −4 to +4. */
+export const cardToneAt = (position: number) => at(position, 4);
+/** Text tint's share at a position: 0 to 1. */
+export const inkShareAt = (position: number) => at(position, 1);
+/** Grey tint strength at a position: OKLCH chroma 0 to 0.08 (Tint 16). */
+export const tintChromaAt = (position: number) => at(position, TINT_STEP * 16);
+/** A state fill's step at a position: 0 to 4 (FILL_STEPS); hover and pressed from 25 (1). */
+export const fillStepAt = (position: number) => at(position, 4);
+/** A position from a step on a range of `range`, the half away from 0, as every mark rounds. */
+export const positionOf = (step: number, range: number) => Math.sign(step) * Math.round(Math.abs(step) * 100 / range);
+/** A position from the model's units, for the marks and for values saved before positions. */
+export const layersPosition = (n: number) => positionOf(n, 8);
+export const cardTonePosition = (step: number) => positionOf(step, 4);
+export const inkTintPosition = (quarters: number) => positionOf(quarters, 4);
+export const tintPosition = (step: number) => positionOf(step, 16);
+export const fillPosition = (step: number) => positionOf(step, 4);
 /**
  * An Asset card's frame (owner, 2026-10-23: "the color on the inside frame of the asset cards is different from the outside
  * card material"): the page tone, the ground components are drawn for, unless the card around it is the page tone too (Card
- * tone 0, a step clamped at white or black, or a raised card on a white page), where it takes the recessed tone, so the
- * frame always reads apart from its card. Two grounds: `frame` in a tile-toned card, `frameRaised` in a raised one. Two
- * lightnesses closer than FRAME_SAME are the same tone (Card tone's smallest step is 0.006).
+ * tone 0, a step clamped at white or black, or a raised card on a white page), where it takes the recessed tone if that is
+ * farther from the card, so the frame always reads apart from its card as far as the layers allow. Two grounds: `frame` in
+ * a tile-toned card, `frameRaised` in a raised one. Two lightnesses closer than FRAME_SAME are the same tone: under the
+ * smallest Card tone step there was (0.006, a half step in light) since Card shade and Layer contrast take every position
+ * (2026-10-26), where a card 0.0005 off the page would otherwise keep a page-tone frame no eye could tell from it; and
+ * "farther" since then too, as an Auto Asset card is the recessed tone, under FRAME_SAME from the page at the lowest Layer
+ * contrast positions. The CSS goes from one to the other over FRAME_EDGE.
  */
-export const FRAME_SAME = 0.0001;
+export const FRAME_SAME = 0.005;
+export const FRAME_EDGE = 0.0001;
+/** The frame in a card of lightness `card`: the page, or the recessed tone where the card is the page's and the recessed
+ * tone sits farther from it. */
+const frameFor = (page: number, recessed: number) => (card: number) => {
+  const fromPage = Math.abs(card - page);
+  return fromPage < FRAME_SAME && Math.abs(card - recessed) > fromPage ? recessed : page;
+};
 export const CARD_TONE_UNIT = { light: 0.012, dark: 0.03 } as const;
 export type CardTone = number | "auto";
 
@@ -172,9 +218,12 @@ export const MARK_SHADE = 0.954;
 /** The soft mark under the pointer (`bg-mark-hover`, 10.7% black: an interactive soft Badge, "+N more"). Its plate is
  * the ground's sRGB channels × 0.893, composited exactly (a constant lightness factor missed by a hair on some grays).
  * Muted is solved on it over the page, aiming 4.5 on white, where #666666 already clears it (4.52:1 as hex), rising
- * to the model's 4.6 from a 98 page down, the margin rounded hexes need (state sweep 2026-10-17: 4.19:1 at 90 + 0). */
+ * to the model's 4.6, the margin rounded hexes need (state sweep 2026-10-17: 4.19:1 at 90 + 0), by L 0.996. It rose over
+ * 0.02 (to a 98 page) until Card shade took every position (2026-10-26): a card 0.002 to 0.006 under white rounds to
+ * #fefefe or #fdfdfd while the ink, aimed a hair over 4.5, rounds lighter, 4.47:1. */
 export const MARK_HOVER_KEEP = 0.893;
-export const markHoverTarget = (page: number) => 4.5 + Math.min(INK_TARGET.text - 4.5, (1 - page) * 5);
+export const MARK_HOVER_RAMP = 25;
+export const markHoverTarget = (page: number) => 4.5 + Math.min(INK_TARGET.text - 4.5, (1 - page) * MARK_HOVER_RAMP);
 /** A gray's OKLCH lightness after a black wash that keeps `keep` of each sRGB channel (gamma 2.4, no linear toe above
  * L 0.2). */
 export const washedLightness = (L: number, keep: number) => Math.cbrt((((1.055 * (L ** 3) ** (1 / 2.4) - 0.055) * keep + 0.055) / 1.055) ** 2.4);
@@ -254,7 +303,7 @@ export function layerLightness(theme: "light" | "dark", groundStep: number, n: n
     const page = g, raised = Math.min(1, g + Math.min(1 - g, LAYER_PER_STEP.light.raised * n)), recessed = g - LAYER_PER_STEP.light.recessed * n;
     const explicit = cardTone === "auto" ? undefined : clamp01(page + cardTone * CARD_TONE_UNIT.light);
     const card = explicit ?? raised, tile = explicit ?? recessed;
-    const frameIn = (x: number) => Math.abs(x - page) < FRAME_SAME ? recessed : page, frame = frameIn(tile), frameRaised = frameIn(raised);
+    const frameIn = frameFor(page, recessed), frame = frameIn(tile), frameRaised = frameIn(raised);
     const fills = (x: number) => FM.light.map(m => x - m * s) as [number, number, number];
     const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile), frame: fills(frame), frameRaised: fills(frameRaised) };
     const edge = Object.fromEntries(Object.entries(EDGE_OFFSET.light).map(([k, d]) => [k, page - d])) as LayerLightness["edge"];
@@ -272,11 +321,13 @@ export function layerLightness(theme: "light" | "dark", groundStep: number, n: n
     };
     return { page, raised, recessed, card, tile, frame, frameRaised, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(Math.min(page, card), VIVID_Y), tonalDarken: darkenFor(deepest, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
   }
-  const lift = n > 0 && g < DARK_LAYER_FLOOR ? DARK_LAYER_FLOOR - g : 0;
+  // The floor arrives over the first whole step of Layer contrast (positions 0 to 12), as the CSS has it, so a position
+  // past Flat doesn't jump a black page's layers to 0.12 at once.
+  const lift = Math.max(0, DARK_LAYER_FLOOR - g) * Math.min(1, n);
   const page = g, raised = g + lift + LAYER_PER_STEP.dark.raised * n, recessed = g + lift + LAYER_PER_STEP.dark.recessed * n;
   const explicit = cardTone === "auto" ? undefined : clamp01(page + cardTone * CARD_TONE_UNIT.dark);
   const card = explicit ?? raised, tile = explicit ?? recessed;
-  const frameIn = (x: number) => Math.abs(x - page) < FRAME_SAME ? recessed : page, frame = frameIn(tile), frameRaised = frameIn(raised);
+  const frameIn = frameFor(page, recessed), frame = frameIn(tile), frameRaised = frameIn(raised);
   const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR), t = Math.min(s, Math.max(0, (DARK_FILL_CEILING - rest) / FM.dark[2])); return FM.dark.map(m => rest + m * t) as [number, number, number]; };
   const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile), frame: fills(frame), frameRaised: fills(frameRaised) };
   // The lightest surface text sits on: the raised layer, or a card lighter than it (Card tone).
@@ -430,12 +481,14 @@ export function layerLightnessCss(): Record<string, string> {
     "layer-dark-card": `calc(${v("card-tone-dark-auto")} * ${v("layer-dark-raised")} + (1 - ${v("card-tone-dark-auto")}) * ${v("layer-dark-card-step")})`,
     "layer-dark-tile": `calc(${v("card-tone-dark-auto")} * ${v("layer-dark-recessed")} + (1 - ${v("card-tone-dark-auto")}) * ${v("layer-dark-card-step")})`,
   };
-  // An Asset card's frame: the page, or the recessed tone where the card is the page's (FRAME_SAME: `same` is 1 there, 0
-  // once the two are FRAME_SAME apart).
+  // An Asset card's frame: the page, or the recessed tone where the card is the page's and the recessed tone is farther
+  // from it (frameFor): `same` is 1 under FRAME_SAME and `farther` 1 past the page's distance, each over FRAME_EDGE.
   for (const theme of ["light", "dark"] as const) for (const [name, card] of [["frame", "tile"], ["frame-raised", "raised"]] as const) {
-    const page = v(`layer-${theme}-page`), other = v(`layer-${theme}-${card}`);
-    const same = `(1 - clamp(0, max(${other} - ${page}, ${page} - ${other}) / ${num(FRAME_SAME)}, 1))`;
-    out[`layer-${theme}-${name}`] = `calc(${page} + (${v(`layer-${theme}-recessed`)} - ${page}) * ${same})`;
+    const page = v(`layer-${theme}-page`), other = v(`layer-${theme}-${card}`), recessed = v(`layer-${theme}-recessed`);
+    const fromPage = `max(${other} - ${page}, ${page} - ${other})`, fromRecessed = `max(${other} - ${recessed}, ${recessed} - ${other})`;
+    const same = `clamp(0, (${num(FRAME_SAME)} - ${fromPage}) / ${num(FRAME_EDGE)}, 1)`;
+    const farther = `clamp(0, (${fromRecessed} - ${fromPage}) / ${num(FRAME_EDGE)}, 1)`;
+    out[`layer-${theme}-${name}`] = `calc(${page} + (${recessed} - ${page}) * ${same} * ${farther})`;
   }
   for (const ground of ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised"]) lm.forEach((m, i) => {
     out[`layer-light-${ground}-fill-${i}`] = lf(v(`layer-light-${ground}`), m);
@@ -454,7 +507,7 @@ export function layerLightnessCss(): Record<string, string> {
   const deepest = `min(${v("layer-light-recessed")}, ${v("layer-light-card")}, ${v("layer-light-tile")})`, markGround = `min(${v("layer-light-page")}, ${v("layer-light-card")})`;
   Object.assign(out, {
     "layer-light-body": inkLight(firmestLight, INK_TARGET.text, INK_TODAY.light.body),
-    "layer-light-muted": `min(${inkLight(firmestLight, INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLight(`calc(${num(MARK_SHADE)} * ${deepest})`, INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLightCss(`pow(pow(calc((calc(1.055 * pow(pow(${markGround}, 3), ${num(1 / 2.4)}) - 0.055) * ${num(MARK_HOVER_KEEP)} + 0.055) / 1.055), 2.4), ${num(1 / 3)})`, `calc(4.5 + min(${num(INK_TARGET.text - 4.5)}, calc((1 - ${markGround}) * 5)))`, INK_TODAY.light.muted)})`,
+    "layer-light-muted": `min(${inkLight(firmestLight, INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLight(`calc(${num(MARK_SHADE)} * ${deepest})`, INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLightCss(`pow(pow(calc((calc(1.055 * pow(pow(${markGround}, 3), ${num(1 / 2.4)}) - 0.055) * ${num(MARK_HOVER_KEEP)} + 0.055) / 1.055), 2.4), ${num(1 / 3)})`, `calc(4.5 + min(${num(INK_TARGET.text - 4.5)}, calc((1 - ${markGround}) * ${MARK_HOVER_RAMP})))`, INK_TODAY.light.muted)})`,
     "layer-light-edge": inkLight(deep(0), INK_TARGET.edge, INK_TODAY.light.edge),
     "layer-dark-body": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.body),
     "layer-dark-muted": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.muted),

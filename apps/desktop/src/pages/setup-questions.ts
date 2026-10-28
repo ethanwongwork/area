@@ -124,14 +124,22 @@ const fillShade = (values: Values) => values["solid-light"] === "auto" ? null
 const solidParts = (values: Values): Region[] => [...(values.action === "accent" ? ["primary", "action"] as Region[] : []), ...(values.selection === "accent" ? ["checks", "switch"] as Region[] : [])];
 const numericHue = (value: string) => /^\d+$/.test(value);
 
-const page = one("ground-light"), layers = one("layers-light"), cardTone = one("card-tone-light"), solid = one("solid-light");
-const darkPage = one("ground-dark"), darkLayers = one("layers-dark"), darkCards = one("card-tone-dark"), darkSolid = one("solid-dark");
+const solid = one("solid-light"), darkSolid = one("solid-dark");
+/**
+ * The Page chapter's lightness settings are sliders over every position (owner, 2026-10-26: "a slider that adjusts to every
+ * possible percentage ... rather than larger buckets of lighter, darker, neutral"); the stage is the picture, and the
+ * names the cards had are marks to start from. Card shade's Auto is a mark off the bar.
+ */
+/** Grey tint strength's marks: Tint 2, 4, 8 and 16 as they were, 2 at its nearest position (12.5). */
+const TINT_MARKS = [{ value: "13", label: "Hint" }, { value: "25", label: "Light" }, { value: "50", label: "Clear" }, { value: "100", label: "Strong" }];
+const LAYER_MARKS = [{ value: "0", label: "Flat" }, { value: "25", label: "Subtle" }, { value: "50", label: "Clear" }, { value: "75", label: "Strong" }, { value: "100", label: "Bold" }];
+const CARD_MARKS = [{ value: "auto", label: "Auto" }, { value: "-50", label: "Darker" }, { value: "0", label: "Match" }, { value: "50", label: "Lighter" }];
 const type = one("type"), density = one("density"), radius = one("radius"), surface = one("surface"), elevation = one("elevation");
-const resting = one("shadow-resting"), hoverFill = one("fill-hover"), strokeHover = one("stroke-hover"), hoverLift = one("shadow-hover");
-const selectedFill = one("fill-selected"), selectedEdge = one("selected-stroke"), selectedTint = one("selected-tint"), pressed = one("fill-pressed");
+const resting = one("shadow-resting"), strokeHover = one("stroke-hover"), hoverLift = one("shadow-hover");
+const selectedEdge = one("selected-stroke"), selectedTint = one("selected-tint");
 const focusRing = one("focus-ring"), danger = one("danger-hover"), motion = one("motion"), easing = one("easing"), contrast = one("contrast");
 const feedback = one("feedback");
-const shadowColour = one("shadow-color"), status = one("status-colours"), inkTint = one("ink-tint");
+const shadowColour = one("shadow-color"), status = one("status-colours");
 
 /** The greys at a temperature: Neutral's own ramp, or Cool's or Warm's, with no tint of another colour. */
 const greys = (neutral: string, hue = "auto", strength = "auto"): Partial<Record<Axis, string>> =>
@@ -144,13 +152,8 @@ export const QUESTIONS: readonly Question[] = [
     question: "How bright should the page be?",
     description: "The ground behind everything.",
     note: "Text contrast holds at every brightness.",
-    control: { kind: "cards", fine: "ground-light", visual: crop("stats", 0.5), choices: [
-      page("100", "White", "Crisp and familiar; edges and layers separate."),
-      page("98", "Paper", "A hair below white, softer on the eyes."),
-      page("96", "Soft", "White cards begin to stand forward."),
-      page("93", "Grey", "A clear grey page; surfaces lift off it."),
-      page("90", "Deep grey", "The darkest light page."),
-    ] },
+    control: { kind: "slider", axis: "ground-light", low: "Grey", high: "White",
+      marks: [{ value: "90", label: "Deep grey" }, { value: "93", label: "Grey" }, { value: "96", label: "Soft" }, { value: "98", label: "Paper" }, { value: "100", label: "White" }] },
   },
   {
     id: "greys", chapter: "page", name: "Greys", essential: true, axes: ["neutral", "tint-hue", "tint-light", "tint-dark"], focus: [],
@@ -160,8 +163,8 @@ export const QUESTIONS: readonly Question[] = [
       { label: "Neutral", caption: "Pure grey.", set: greys("neutral") },
       { label: "Cool", caption: "A breath of blue.", set: greys("cool") },
       { label: "Warm", caption: "A breath of yellow.", set: greys("warm") },
-      { label: "Accent", caption: "Greys lean toward the accent.", set: greys("neutral", "accent", "4") },
-      { label: "A colour", caption: "Pick any hue next.", set: greys("neutral", "255", "4") },
+      { label: "Accent", caption: "Greys lean toward the accent.", set: greys("neutral", "accent", "25") },
+      { label: "A colour", caption: "Pick any hue next.", set: greys("neutral", "255", "25") },
     ] },
   },
   {
@@ -176,42 +179,27 @@ export const QUESTIONS: readonly Question[] = [
     when: values => greysTinted(values, "light"),
     question: "How strongly should the greys lean?",
     description: "How much of the colour the greys take.",
-    control: { kind: "slider", axis: "tint-light", also: ["tint-dark"], low: "Barely", high: "Strongly",
-      marks: [{ value: "2", label: "Hint" }, { value: "4", label: "Light" }, { value: "8", label: "Clear" }, { value: "16", label: "Strong" }] },
+    control: { kind: "slider", axis: "tint-light", also: ["tint-dark"], low: "Barely", high: "Strongly", marks: TINT_MARKS },
   },
   {
     id: "text-tint", chapter: "page", name: "Text tint", axes: ["ink-tint"], focus: ["text", "list"], fidelity: "real",
     when: values => greysTinted(values, "light"),
     question: "Should text be tinted too?",
     description: "Your greys lean toward a colour; body and muted text can lean the same way, or stay plain grey.",
-    control: { kind: "cards", visual: crop("list", 0.9, { fidelity: "real" }), choices: [
-      inkTint("0", "Plain", "Text stays neutral grey."),
-      inkTint("2", "Tinted", "Text takes half the greys' colour."),
-      inkTint("4", "Full", "Text takes all of it."),
-    ] },
+    control: { kind: "slider", axis: "ink-tint", low: "Plain grey", high: "As tinted as the greys",
+      marks: [{ value: "0", label: "Plain" }, { value: "50", label: "Tinted" }, { value: "100", label: "Full" }] },
   },
   {
     id: "layers", chapter: "page", name: "Layers", essential: true, mode: "light", axes: ["layers-light"], focus: ["sidebar", "stats", "form"],
     question: "How clearly should regions separate?",
     description: "How far sidebars, cards and fills step from the page.",
-    control: { kind: "cards", visual: crop("sidebar", 0.5), choices: [
-      layers("0", "Flat", "One plane; edges alone separate."),
-      layers("2", "Subtle", "Regions differ by a breath."),
-      layers("4", "Clear", "Easy to scan, still quiet."),
-      layers("6", "Strong", "Sidebars and fills read at a glance."),
-      layers("8", "Bold", "The most contrast between regions."),
-    ] },
+    control: { kind: "slider", axis: "layers-light", low: "One plane", high: "Most contrast", marks: LAYER_MARKS },
   },
   {
     id: "cards", chapter: "page", name: "Card shade", mode: "light", axes: ["card-tone-light"], focus: ["stats", "list", "form"],
     question: "Should cards match the page?",
     description: "A card's fill against the page.",
-    control: { kind: "cards", fine: "card-tone-light", visual: crop("stats", 0.6), choices: [
-      cardTone("auto", "Auto", "Area decides from the page."),
-      cardTone("0", "Match", "Cards share the page's colour."),
-      cardTone("2", "Lighter", "Cards sit a step above the page."),
-      cardTone("-2", "Darker", "Cards sit a step into the page."),
-    ] },
+    control: { kind: "slider", axis: "card-tone-light", low: "Darker", high: "Lighter", marks: CARD_MARKS },
   },
   // ——— Accent ———
   {
@@ -258,7 +246,7 @@ export const QUESTIONS: readonly Question[] = [
     when: values => values.action === "accent",
     question: "Should button labels take a little colour?",
     description: "Labels on accent buttons can lean toward the button's hue.",
-    control: { kind: "toggle", axis: "label-tint", label: "Tint button labels", off: "0", on: "2", low: "A little", high: "Fully",
+    control: { kind: "toggle", axis: "label-tint", label: "Tint button labels", off: "0", on: "50", low: "A little", high: "Fully",
       visual: crop("action", 1.5, { fidelity: "real" }) },
   },
   {
@@ -411,12 +399,8 @@ export const QUESTIONS: readonly Question[] = [
     id: "hover", chapter: "states", name: "Hover", axes: ["fill-hover"], focus: ["nav-hover", "menu-row"], hold: ["hover", "menu"],
     question: "How strong should hover be?",
     description: "The plate under a row the pointer is over.",
-    control: { kind: "cards", visual: crop("nav-hover", 1, { hold: ["hover"] }), choices: [
-      hoverFill("1", "Faint", "A whisper of a plate."),
-      hoverFill("2", "Medium", "Clear but quiet."),
-      hoverFill("3", "Firm", "Clearly there."),
-      hoverFill("4", "Strong", "Unmistakable."),
-    ] },
+    control: { kind: "slider", axis: "fill-hover", low: "Faint", high: "Strong",
+      marks: [{ value: "25", label: "Faint" }, { value: "50", label: "Medium" }, { value: "75", label: "Firm" }, { value: "100", label: "Strong" }] },
   },
   {
     id: "hover-edge", chapter: "states", name: "Hover edge", axes: ["stroke-hover"], focus: ["field"], hold: ["hover-edge"],
@@ -444,12 +428,8 @@ export const QUESTIONS: readonly Question[] = [
     id: "selected", chapter: "states", name: "Selected row", axes: ["fill-selected"], focus: ["nav-current"],
     question: "How firm should the current row be?",
     description: "The plate under the current page or row.",
-    control: { kind: "cards", visual: crop("nav-current", 1), choices: [
-      selectedFill("0", "As hover", "Selected looks like hover."),
-      selectedFill("1", "Firmer", "A step past hover."),
-      selectedFill("2", "Firm", "Easy to spot."),
-      selectedFill("4", "Firmest", "Impossible to miss."),
-    ] },
+    control: { kind: "slider", axis: "fill-selected", low: "As hover", high: "Firmest",
+      marks: [{ value: "0", label: "As hover" }, { value: "25", label: "Firmer" }, { value: "50", label: "Firm" }, { value: "100", label: "Firmest" }] },
   },
   {
     id: "selected-edge", chapter: "states", name: "Selected edge", axes: ["selected-stroke"], focus: ["stat-selected"], hold: ["selected"],
@@ -475,12 +455,8 @@ export const QUESTIONS: readonly Question[] = [
     id: "pressed", chapter: "states", name: "Press", axes: ["fill-pressed"], focus: ["button"], hold: ["press"],
     question: "How firm should a press be?",
     description: "How far a button darkens while held.",
-    control: { kind: "cards", visual: crop("button", 1.6, { hold: ["press"] }), choices: [
-      pressed("1", "Light", "A quick, light touch."),
-      pressed("2", "Medium", "A clear step past hover."),
-      pressed("3", "Firm", "Pressed in."),
-      pressed("4", "Firmest", "Unmistakable."),
-    ] },
+    control: { kind: "slider", axis: "fill-pressed", low: "Light", high: "Firmest",
+      marks: [{ value: "25", label: "Light" }, { value: "50", label: "Medium" }, { value: "75", label: "Firm" }, { value: "100", label: "Firmest" }] },
   },
   {
     id: "focus", chapter: "states", name: "Focus ring", axes: ["focus-ring"], focus: ["field"], hold: ["focus"],
@@ -557,36 +533,20 @@ export const QUESTIONS: readonly Question[] = [
     id: "dark-page", chapter: "dark", name: "Dark page", essential: true, mode: "dark", axes: ["ground-dark"], focus: [],
     question: "How dark should the page be in dark mode?",
     description: "True black, or a little lighter.",
-    control: { kind: "cards", fine: "ground-dark", visual: crop("stats", 0.5), choices: [
-      darkPage("0", "Black", "True black, the most contrast."),
-      darkPage("8", "Near black", "Deep, with room to layer."),
-      darkPage("14", "Graphite", "Soft and deep."),
-      darkPage("20", "Charcoal", "A lighter dark page."),
-      darkPage("24", "Slate", "The lightest dark page."),
-    ] },
+    control: { kind: "slider", axis: "ground-dark", low: "Black", high: "Lighter",
+      marks: [{ value: "0", label: "Black" }, { value: "8", label: "Near black" }, { value: "14", label: "Graphite" }, { value: "20", label: "Charcoal" }, { value: "24", label: "Slate" }] },
   },
   {
     id: "dark-layers", chapter: "dark", name: "Dark layers", mode: "dark", axes: ["layers-dark"], focus: ["sidebar", "stats", "form"],
     question: "How clearly should regions separate in dark mode?",
     description: "Dark pages often need a bigger step.",
-    control: { kind: "cards", visual: crop("sidebar", 0.5), choices: [
-      darkLayers("0", "Flat", "One plane; edges alone separate."),
-      darkLayers("2", "Subtle", "Regions differ by a breath."),
-      darkLayers("4", "Clear", "Easy to scan, still quiet."),
-      darkLayers("6", "Strong", "Sidebars and fills read at a glance."),
-      darkLayers("8", "Bold", "The most contrast between regions."),
-    ] },
+    control: { kind: "slider", axis: "layers-dark", low: "One plane", high: "Most contrast", marks: LAYER_MARKS },
   },
   {
     id: "dark-cards", chapter: "dark", name: "Dark card shade", mode: "dark", axes: ["card-tone-dark"], focus: ["stats", "list", "form"],
     question: "In dark mode, should cards match the page?",
     description: "A card's fill against the dark page.",
-    control: { kind: "cards", fine: "card-tone-dark", visual: crop("stats", 0.6), choices: [
-      darkCards("auto", "Auto", "A step lighter than the page."),
-      darkCards("0", "Match", "Cards share the page's colour."),
-      darkCards("2", "Lighter", "Cards sit a step above the page."),
-      darkCards("-2", "Darker", "Cards sit a step into the page."),
-    ] },
+    control: { kind: "slider", axis: "card-tone-dark", low: "Darker", high: "Lighter", marks: CARD_MARKS },
   },
   {
     id: "dark-fill-shade", chapter: "dark", name: "Dark fill shade", mode: "dark", axes: ["solid-dark"], focus: solidParts,
@@ -605,8 +565,7 @@ export const QUESTIONS: readonly Question[] = [
     when: values => greysTinted(values, "dark"),
     question: "In dark mode, how strongly should the greys lean?",
     description: "A tint reads stronger on a dark page.",
-    control: { kind: "slider", axis: "tint-dark", low: "Barely", high: "Strongly",
-      marks: [{ value: "2", label: "Hint" }, { value: "4", label: "Light" }, { value: "8", label: "Clear" }, { value: "16", label: "Strong" }] },
+    control: { kind: "slider", axis: "tint-dark", low: "Barely", high: "Strongly", marks: TINT_MARKS },
   },
 ];
 

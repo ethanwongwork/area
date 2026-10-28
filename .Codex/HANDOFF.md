@@ -12,6 +12,19 @@
 - **Next, after `claude/component-interaction-visual-polish-e45c8f` lands (owner: wait for it):** build Stroke › Frames
   and Stroke › Controls from docs/research/control-edges-2026-10-27/README.md (open decisions listed there). Both
   sessions edit `component-status.mjs`, `primitives.tsx` (different components) and `toggletip.md`.
+- **Positions (owner 2026-10-26: "a slider that adjusts to every possible percentage"), PR from branch
+  claude/color-lightness-slider-604a73:** Layer contrast, Card shade (±100), Text tint, Grey tint strength, Label tint and
+  the Hover/Selected/Pressed fills (Hover and Pressed from 25) take every whole number 0–100; dark page every whole % 0–24;
+  Tint hue every degree; Inspector Temperature one bar, Cool 100 … Neutral … Warm 100. Old steps are positions (×12.5
+  Layers, ×25 Card/Text/Label/fills, ×6.25 Grey tint, rounded); saved Canvases convert once (`restoreCanvas`). Setup: Page
+  chapter, dark twins, Grey strength and the three fills are sliders with marks; Browse draws quarters (`marks`). Walking
+  positions fixed: hovered-mark text near white (MARK_HOVER_RAMP), dark layer floor ramp in the model, Asset card frame
+  (FRAME_SAME 0.005, farther tone). Accent stays 5° (a 1° opt-in sheet was built, then withdrawn, owner 2026-10-27).
+- **Next: exact colours (owner decided 2026-10-27; plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a Colours
+  stage first in Setup (light page, dark page, accent as exact OKLCH picks written as variables, `data-area-colours`
+  scope, `colourDeclarations`, `area-tokens colours`); Tint hue split light/dark (dark follows light); one accent pick
+  via the brand engine (merges Brand colours); Cool/Warm kept as ramps, shown as picker starting points; page tests
+  become grids (34 greys exhaustive). Accent open item: the solid flips its label between 35° and 40°.
 - **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,
   panel, plan, queue, separator, shortcut-list (r72), radio, checkbox (r73). Infobox REMOVED (code, styles, manifest,
   demos, page, test). Round 73 notes page https://claude.ai/artifact/2Lg4zR9oKdhf8XaT7vCVex: Edit summary diff: option C

@@ -14,8 +14,8 @@ export const AREA_CSS = join(REPO, "packages/styles/dist/area.css");
 /** Area's settings at their defaults, as the scope attributes the CSS reads. */
 export const DEFAULTS = {
   "data-area-type": "14", "data-area-density": "32", "data-area-neutral": "neutral", "data-area-tint-hue": "auto",
-  "data-area-tint-light": "auto", "data-area-tint-dark": "auto", "data-area-ink-tint": "2", "data-area-accent": "blue",
-  "data-area-ground-light": "100", "data-area-ground-dark": "8", "data-area-layers-light": "4", "data-area-layers-dark": "4",
+  "data-area-tint-light": "auto", "data-area-tint-dark": "auto", "data-area-ink-tint": "50", "data-area-accent": "blue",
+  "data-area-ground-light": "100", "data-area-ground-dark": "8", "data-area-layers-light": "50", "data-area-layers-dark": "50",
   "data-area-card-tone-light": "auto", "data-area-card-tone-dark": "auto", "data-area-action": "neutral",
   "data-area-selection": "accent", "data-area-radius": "8", "data-area-surface": "1", "data-area-stroke": "4",
   "data-area-selected-stroke": "2", "data-area-focus-ring": "hug", "data-area-motion": "210", "data-area-easing": "standard",
