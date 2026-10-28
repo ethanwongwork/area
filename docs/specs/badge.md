@@ -674,3 +674,10 @@ Optical centre: the label sits a quarter of the cap–x-height gap above the cap
 - **Why:** You saw the text centring differ between two badges. The cause was a fractional offset (4.21 + a cap of
   8.4 at 12px) that the plate and the glyphs rounded to pixels separately. In the gallery's 90% Auto zoom a few still
   differ by half a pixel, since zoom makes any whole pixel fractional again.
+
+## Review note, 2026-10-27 (round 79)
+
+- **What changed:** the gallery's Modern tone tiles and the Tone Matrix's modern row carry the dot, so each tone shows;
+  the component is unchanged. The Documentation entry says to give a modern Badge a dot or an icon when its tone matters.
+- **Why:** owner, round 76 (approved): without an add-on all eight Modern tone tiles read as the same plate, because
+  modern colours only its add-on.

@@ -124,3 +124,8 @@ Grid options press at `bg-component-pressed`, one step past selected (Notion pre
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** A chosen option's check fades and grows in as Menu's does, instead of appearing at once.
+- **Why:** One rule for a check in a list. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

@@ -200,3 +200,8 @@ same start; the rule says they belong to the line above. It stays one rule for e
 
 - **What changed:** The chevron appears at once under the pointer (it faded in) and still fades out; the closed chevron mirrors in right-to-left text.
 - **Why:** MOTION.md: hover enters instantly and leaves on fast, as Queue's and Edit summary's reveals do.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** A step's input and output, a group's steps and Reasoning's summary ease open and shut (Accordion's recipe: open over slow, close over moderate, ease-in-out).
+- **Why:** They snapped while Accordion and Code block eased. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

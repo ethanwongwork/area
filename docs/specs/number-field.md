@@ -215,3 +215,8 @@ Steppers press at `bg-component-pressed`, one step past selected (Notion presses
   slot holds a small picker after the number, such as Figma's "360 Fill".
 - **Why:** your Insert and auto-layout panel references; Spectrum, Carbon and Google Docs set counts this way, and
   Figma's width and height fields carry their sizing mode inside the field.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** The hover edge eases in on Feedback's hover clock, as Input's.
+- **Why:** One hover clock for every field. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

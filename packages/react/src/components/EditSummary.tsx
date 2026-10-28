@@ -66,7 +66,8 @@ export const EditSummaryFile = forwardRef<HTMLDivElement, EditSummaryFileProps>(
           </span>
         ) : <span className="area-edit-summary__status">{state === "kept" ? "Kept" : "Undone"}</span>}
       </div>
-      {diff && open ? <div id={diffId} className="area-edit-summary__diff">{diff}</div> : null}
+      {/* Kept in the tree while closed, so aria-controls names it and its close eases (accordion.css, disclosure bodies). */}
+      {diff ? <div id={diffId} className="area-edit-summary__diff" hidden={!open}>{diff}</div> : null}
     </>
   );
 });

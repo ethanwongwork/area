@@ -350,3 +350,14 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 - **What changed:** No line above Show more.
 - **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
   light. You approved each one on the dividers comparison page.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** The language tabs' bar slides like Tabs'; the code (or its tab panel) shows a ring around the block when focused by keyboard.
+- **Why:** The code is focusable so a keyboard can scroll it, but focusing it showed nothing. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+## Review note, 2026-10-27 (round 77)
+
+- **What changed:** the language tabs sit 4 further from the filename, and a focused language tab's ring stands clear of
+  its label (Tabs' round 77 change).
+- **Why:** the new ring reaches 6 before the label; at the head's 8 gap it would have crossed the filename.

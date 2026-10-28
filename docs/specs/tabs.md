@@ -117,7 +117,7 @@ Area (node trees): md 32px tall, 20px apart, selected ink rgb(40, 40, 40), rest 
 | hover | pending indicator `border-hover` #b4b4b4 / #585858; ink fixed | Foreground fixed on hover; Figma panel tab keeps 50% ink on hover | Figma paints a #f5 plate; Untitled hovers to the selected paint |
 | pressed | indicator `fg-muted` | Earlier Area value | — |
 | track | 1px **`border-divider`** #e2e2e2 / #333333 at `stroke-width`, painted at the bottom of the list's content box; **the indicator lies on it** | Second pass divider role; Radix and Primer inset 1px, Material and Ant under the indicator; owner 2026-10-21 | Was a border under the list, outside the scrolling list's clip, so the indicator stacked above it as a second line |
-| focus | 2px `focus-color` inset (offset −2), radius min(8, 0.4 × height) | Untitled 2px inset focus | — |
+| focus | 2px `focus-color` ring the tab's full height, standing `--_focus-room` beside the label: (height − leading) / 2, 4 sm, 6 md, 10 lg; radius min(8, 0.4 × height); the bar lies along its bottom edge. Vertical: from a focus gap past the rail to the tab's end, which gains the room. The list pads its start by the ring's reach and takes it back with a negative margin, so the first ring is not clipped; the panel's ring takes the same room round its content | Owner round 75 (2026-10-27): "is the focus state correct it looks kinda funny" | Was Untitled's 2px inset outline, which assumes a padded tab: on Area's unpadded tab it cut the label's first and last letters |
 | disabled | 50% | Audit disabled rule; Untitled 50% | — |
 | icon, gap | icon tier per size; icon-to-label gap 6 at sm, md and lg (`--_tab-item-gap`, navigation.css:16, :38, :79-81); compact sm 4 | Area icon and gap tiers; peer Button (audit S14) | Was 4 (sm) / 8 (md, lg) |
 | vertical | list gap 4, text start 10, rail 2px inset 4, panel top 6 | Owner (vertical orientation) | — |
@@ -136,7 +136,7 @@ Settled in the third pass (kept; [cohesion audit](../research/cohesion-audit.md#
 | rest | `fg-muted`, no indicator | `area--default` tabs 2–3; Notion rest rgb(161, 158, 153) |
 | hover | indicator `border-hover`; ink fixed | `navigation.css:66-69`; `figma--panel-tab--hover` (ink fixed) |
 | pressed | indicator `fg-muted` | `navigation.css:70-73` |
-| focus-visible | 2px inset outline | `navigation.css:102-107` |
+| focus-visible | 2px ring standing the room clear of the label | `navigation.css`, `.area-tabs__tab:focus-visible::before` |
 | selected (`data-selected`, `aria-selected`) | `fg-default` at 500, indicator `fg-selection`; the width does not change | `area--default` tab 1; `notion--tabs-underline` node 3; headless Edge 2026-10-21: tab widths 56.89 / 57.69 / 67.14 whichever is selected, label box 2.5 + 27 unchanged |
 | disabled | opacity 0.5, `not-allowed`; skipped by arrow keys | `area--disabled` |
 
@@ -185,9 +185,26 @@ Contract: `docs/MOTION.md`. Verified on `/tabs.html` by switching `data-selected
 
 Crispness: the indicator is 2px at the tab's bottom edge, no transform.
 
-Open question: a sliding indicator (one element moving by `translate` and width on `base`
-ease-in-out; Figma, Linear and Primer slide, Notion does not). Recommendation: try it as an
-opt-in after the owner sees it, since it changes the component's structure.
+Open question (settled 2026-10-26, below): a sliding indicator (one element moving by `translate` and width on `base`
+ease-in-out; Figma, Linear and Primer slide, Notion does not).
+
+## Sliding indicator, 2026-10-26
+
+Owner, after the Slider pass: "do the same high level and detailed pass specifically on the interaction and visual
+appearance of each component". The selected bar is now one part that slides and resizes to the chosen tab, as
+Segmented's plate has since 2026-10-24, instead of the old tab's bar fading out while the new one appeared.
+
+- **How:** `useTabIndicator` (primitives.tsx) measures the selected tab's box in the list's own pixels (whatever scale
+  the gallery draws it at, from the list's scrolled origin) and writes `--_ind-x`, `-y`, `-w`, `-h` and
+  `data-indicator` on the list; a ResizeObserver re-measures on a label, size or density change. The list's `::after`
+  draws the bar (navigation.css): 2 tall at the tab's bottom edge, the tab's width; vertical, 2 wide at the start side,
+  4 short of each end, as the per-tab bar. The selected tab's own bar clears; hover and press marks stay per tab.
+- **Motion:** `translate`, `inline-size` and `block-size` on `duration-base` with `ease-in-out` (MOTION.md, "Tabs /
+  Segmented indicator": something visible moving across the screen). Fluent, Material, Spectrum 2, Ant and Base UI
+  slide in 150–300ms; 210 at the default Speed. Speed 0 and reduced motion jump.
+- **Fallback:** static markup (SSR, before the first layout) and a tab that is not laid out keep the per-tab bar, so the
+  first paint never misses the indicator. Code block's language tabs share the hook.
+- **Forced colours:** the list's bar is Highlight; the tab's own stays clear.
 
 ## Verification
 
@@ -207,6 +224,8 @@ Tab labels are not selectable. See [interaction polish](../research/interaction-
   tabs too), and the track painted inside the list so the indicator lies on it (navigation.css, primitives.tsx,
   manifest.ts, DESIGN_SYSTEM.md). Open: a sliding indicator (Fluent, Material, Spectrum 2, Ant, Base UI slide 150–300ms).
 
+- 2026-10-26 · owner: the Slider's motion and detail pass on every component → one sliding indicator (`data-indicator`,
+  `useTabIndicator`), Code block's language tabs too; the open question of 2026-10-07 and 2026-10-21 settled. Back in review.
 - 2026-09-26 · cohesion audit → no change (neutral underline, fixed ink confirmed) → 7 Area captures.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → track
   `border-decorative` → `border-divider`; lg tile added; open question on tab padding and
@@ -241,3 +260,16 @@ Tab labels are not selectable. See [interaction polish](../research/interaction-
 - **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
 - **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
   on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** The selected bar is now one part that slides and resizes to the tab you choose; the focused panel shows a ring around its content.
+- **Why:** Segmented's plate already slid, while Tabs faded one bar out and another in; the panel was in the tab order with no ring. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+## Review note, 2026-10-27 (round 77)
+
+- **What changed:** a focused tab's ring now stands clear of its label on every side (6 at md) instead of being drawn
+  inside the tab, where it cut through the first and last letters; the panel's ring stands the same distance from its
+  content (it was 2, hugging the text). Code block's language tabs sit 4 further from the filename so their ring clears it.
+- **Why:** your note that the focus state looked funny. Untitled's inset ring assumes a tab with side padding; Area's
+  tab is its label alone. Tabs and the panel do not move.

@@ -1,6 +1,47 @@
 # Handoff
 
 ## Current state (2026-10-26)
+- **Interaction and detail pass, `claude/component-interaction-visual-polish-e45c8f` (owner: the Slider's motion and
+  detail pass on every component), uncommitted.** Measured all 118 families in headless Edge (forced hover, press and
+  focus; true-scale geometry); notes and the re-runnable scripts in docs/research/interaction-pass-2026-10-26/. Changes:
+  Tabs and Code block's language tabs slide one indicator (`useTabIndicator`, `data-indicator`); Step, Plan, Queue and
+  Edit summary bodies take Accordion's height recipe (accordion.css; Edit summary keeps a closed diff `hidden`); field
+  hover edges on `hover-in` (Input, Textarea, Number field, Select, Input group); list checks are Menu's small mark
+  (List box, Combobox, Custom select, Tag picker); Color picker's knobs lift on press as the Slider's; Empty state and
+  Toggletip glyphs round the half compact step to native cuts (cohesion test); focus rings for Code block's code and the
+  Tabs panel. 17 Complete families reopened to In review (component-status.mjs). Segmented, Slider, Switch and Field
+  left alone: the `project-status-electron` session has them open.
+  Then the by-eye visual pass (owner: "beginning with Button, Input, Menu, Tabs, Card and Dialog, with before and after
+  pictures"): every tile on the Stage at 2x, light and dark; four changes: Input's file button is the field's action
+  plate; a string Menu shortcut splits its modifiers into keycaps (`shortcutKeys`); Card's thumbnail text centres on the
+  thumbnail; the Dialog demos drop `inline-size: 100%` (480 on the Stage). Pixel diff: only those 7 tiles changed.
+  Review round 75 https://claude.ai/artifact/GHVzuznddswJviGqaUSyW4 (collection `verdicts`, one doc per item; read
+  before acting).
+  Round 76 (owner: "continue ... next families in the Sidebar's order"): Abbreviation through Badge, 161 tiles, Stage
+  2x light and dark plus geometry.mjs. Two changes, both Asset card: a group's element cells draw the frame's tone and
+  edge (asset-card.css; image cells stay edgeless, round 59); the app's tile hooks (corner, name inset, grid gap) now stop
+  at the Stage's view as well as a tile's stage (canvas.css; the Stage had shown cells 16 in at 2px corners). Asset card
+  reopened. Open question: give Badge's Modern tone tiles their dot (tone shows only on an add-on). Review round 76
+  https://claude.ai/artifact/KfTnQG1v72KbZRWoumjFsH (`verdicts`). Next families: Badge group onward (Button, Card done).
+  main has moved (PR #168: Field, Segmented, Slider, Switch, primitives.tsx): sync before committing.
+  Round 75 verdicts (owner, 2026-10-27): 7 approved → those families Complete again (component-status.mjs); tabs and
+  menu-shortcut need changes; color-knob unanswered. Round 77 https://claude.ai/artifact/1onkM1APdH5tk3K23HnxHf fixes
+  both: the Tabs ring stands `--_focus-room` ((height − leading) / 2) clear of the label, full height, the list padding
+  its start by the reach with a negative margin; the panel's ring the same room; Code block's languages 4 further from
+  the filename (navigation.css, code.css, forced-colors.css). Kbd: inline padding at least 4 beside the glyph, corner =
+  height × radius-factor to the nearest px (kbd.css); Kbd and Menu reopened. Round 76 had no saved verdicts yet.
+  Round 77 verdicts: tabs-focus approved (tabs, code-block Complete); keycaps "1 px less" → round 78: sides 3 (spec literal).
+  Round 78 https://claude.ai/artifact/7QcEb58UUcGU7yQ7oF5VWT (verdicts).
+  Round 76 verdicts: asset-stage and badge-modern approved; asset-group (element cells' edge) unanswered, so asset-card
+  stays in review. Round 79 https://claude.ai/artifact/3E3AB8qpUFU4d7EQLbpGAi: Modern tone tiles carry the dot (demos/badge.tsx
+  galleryBadge + Tone Matrix; playgrounds.tsx badge tiles keyed modern-<tone>); Badge docs Do line.
+  Later verdicts: asset-group and color-knob approved (asset-card, color-picker Complete); round 78 kbd-padding and
+  round 79 badge-modern-dot approved (kbd, menu Complete). Rounds 75-79 fully answered; nothing open from them.
+  Round 80 (owner: "continue the visual pass from Badge group"): Badge group to Citation, 117 tiles + geometry. Two fixes:
+  BadgeGroup auto-fit restored the closed popover with its transition, so hidden badges flashed and the ResizeObserver
+  looped (BadgeGroup.tsx: restore with transition:none, flush); Breadcrumb's collapsed "…" is Glyph more (Breadcrumb.tsx).
+  Both approved 2026-10-28: Badge group Complete; Breadcrumb stays in review for its nowrap layout (no verdict yet). Page https://claude.ai/artifact/18hz7hePnjJqoNG1vfHyH8. Next families: Code onward (Code block done).
+
 - **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,
   panel, plan, queue, separator, shortcut-list (r72), radio, checkbox (r73). Infobox REMOVED (code, styles, manifest,
   demos, page, test). Round 73 notes page https://claude.ai/artifact/2Lg4zR9oKdhf8XaT7vCVex: Edit summary diff: option C

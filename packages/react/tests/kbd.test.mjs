@@ -30,3 +30,14 @@ test("KbdGroup preserves chord order, spoken names and native span props", () =>
   assert.match(renderToString(h(Kbd, { keys: ["k"], variant: "quiet" })), /area-kbd--default/);
   assert.match(renderToString(h(Kbd, { keys: ["k"], appearance: "quiet" })), /area-kbd--default/);
 });
+
+// Owner, round 75 ("padding seems a bit tight around the letters and symbols, maybe the corner radius is slightly too
+// round?"): the sides take at least 3 beside the glyph's box (round 77: 4 was a pixel too much), and the corner is the keycap's height times the Radius factor.
+test('a keycap keeps 4 beside its glyphs and takes its corner from its own height', async () => {
+  const { readFileSync } = await import('node:fs');
+  const css = readFileSync(new URL('../../styles/src/components/kbd.css', import.meta.url), 'utf8');
+  assert.match(css, /--_padding-inline: max\(var\(--_padding\), calc\(3px - var\(--area-stroke-width\)\)\);/, 'round 77: 3 beside the glyph box');
+  assert.match(css, /padding: var\(--_padding\) var\(--_padding-inline\);/);
+  assert.match(css, /round\(nearest, calc\(var\(--_height\) \* var\(--area-radius-factor\)\), 1px\)/, 'height × factor, as every control');
+  assert.doesNotMatch(css, /calc\(24px \* var\(--area-radius-factor\)\)/, 'no fixed 24 box for every size');
+});

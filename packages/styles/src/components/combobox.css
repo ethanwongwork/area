@@ -28,7 +28,9 @@
   /* Options are Menu rows. A value picker shows its value with the check alone, as Select and
      Custom select; the plate only means highlight (custom-select.md Q3, owner 2026-10-08; was the
      active plate and the check, audit S13 C). */
-  .area-combobox__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
+  /* Unchosen, the check is Menu's small mark at rest (surface.css): it fades and grows in when chosen, rather than
+     popping (2026-10-26, the interaction pass; it was visibility: hidden). */
+  .area-combobox__option[aria-selected="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   .area-combobox__description { margin-inline-start: auto; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); white-space: nowrap; }
   .area-combobox__description + .area-menu__check { margin-inline-start: var(--area-space-8); }
 

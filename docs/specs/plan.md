@@ -274,3 +274,8 @@ chevron moves out with it (its 12 column was the cause). Queue's head shares the
 - **Also changed (later the same day):** no line under the head or the bar. With a bar, the open plan keeps 8 under the
   bar instead of 16, so the first item sits as close to the bar as rows sit to each other. You asked for Edit summary,
   Queue and Plan to match Code block, after comparing them with and without the line.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** The items ease open and shut with the head's chevron, on Accordion's recipe.
+- **Why:** They snapped while Accordion eased. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

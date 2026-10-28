@@ -1637,6 +1637,15 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
   keepOpen?: boolean;
 }
 
+/** A string shortcut's keys: each leading modifier glyph on its own, then the rest as written ("⌘⇧P" → ⌘, ⇧, P). */
+const MODIFIER_GLYPHS = "⌘⇧⌥⌃";
+function shortcutKeys(text: string) {
+  const keys: string[] = [];
+  let rest = text;
+  while (rest.length > 1 && MODIFIER_GLYPHS.includes(rest[0]!)) { keys.push(rest[0]!); rest = rest.slice(1); }
+  return rest ? [...keys, rest] : keys;
+}
+
 export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemProps>(function MenuItem(
   { tone, shortcut, disabled, checked, radio, indicator = "check", description, icon, keepOpen, className, children, ...rest },
   ref,
@@ -1657,10 +1666,12 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
       {icon ? <span className="area-menu__icon" aria-hidden="true">{icon}</span> : null}
       {description ? <span className="area-menu__lines"><span className="area-menu__text">{children}</span><span className="area-menu__description">{description}</span></span>
         : icon || typeof children === "string" || typeof children === "number" ? <span className="area-menu__text">{children}</span> : children}
-      {/* Every key is a keycap (owner, 2026-10-22): a string shortcut ("⌘L") is set verbatim in the small keycap, as a
-          Kbd passed in. The row hides a Kbd's spoken chord anyway; the item carries aria-keyshortcuts. */}
+      {/* Every key is a keycap (owner, 2026-10-22): a string shortcut is set in the small keycaps, its leading modifier
+          glyphs each their own key and the rest verbatim ("⌘L" → ⌘ · L), as a Kbd passed in draws it (visual pass
+          2026-10-26: "⌘L" set as one cap beside Kbd's "⌘ K" read as two spacings in one menu). The row hides a Kbd's
+          spoken chord anyway; the item carries aria-keyshortcuts. */}
       {shortcut ? <span className="area-menu__shortcut">{typeof shortcut === "string"
-        ? <span className="area-kbd area-kbd--sm area-kbd--default"><kbd className="area-kbd__key">{shortcut}</kbd></span> : shortcut}</span> : null}
+        ? <span className="area-kbd area-kbd--sm area-kbd--default">{shortcutKeys(shortcut).map((key, i) => <kbd key={i} className="area-kbd__key">{key}</kbd>)}</span> : shortcut}</span> : null}
       {checkable && indicator === "switch" ? (
         <span className="area-switch area-switch--sm area-menu__toggle" aria-hidden="true">
           <span className="area-switch__track" data-checked={checked ? "" : undefined}><span className="area-switch__thumb" /></span>
@@ -1707,6 +1718,39 @@ export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(func
 
 /* --- Tabs ----------------------------------------------------------------- */
 
+/*
+ * One indicator slides to the chosen tab (docs/MOTION.md, "Tabs / Segmented indicator"; Segmented's plate since
+ * 2026-10-24, Radix's and Primer's underline): the list measures the selected tab and draws the bar under it
+ * (`data-indicator`, `--_ind-x` / `-y` / `-w` / `-h`, the tab's box in the list's own layout pixels), so a change
+ * moves the bar rather than fading one out and another in. Until it has measured (and in static markup) each tab draws its
+ * own bar, as before.
+ */
+function useTabIndicator(list: { current: HTMLElement | null }, buttons: { current: Map<string, HTMLButtonElement> }, selected: string | undefined, key: unknown) {
+  useLayoutEffect(() => {
+    const host = list.current;
+    if (!host) return;
+    const place = () => {
+      const tab = selected === undefined ? undefined : buttons.current.get(selected);
+      if (!tab || tab.offsetParent !== host) { host.removeAttribute("data-indicator"); return; }
+      // The tab's exact box (its width is fractional with the text), in the list's own pixels whatever scale or zoom
+      // it is drawn at, from the list's scrolled origin.
+      const outer = host.getBoundingClientRect(), inner = tab.getBoundingClientRect();
+      const laidOut = host.offsetWidth;
+      const factor = laidOut ? outer.width / laidOut : 1;
+      host.style.setProperty("--_ind-x", `${(inner.left - outer.left) / factor - host.clientLeft + host.scrollLeft}px`);
+      host.style.setProperty("--_ind-y", `${(inner.top - outer.top) / factor - host.clientTop + host.scrollTop}px`);
+      host.style.setProperty("--_ind-w", `${inner.width / factor}px`);
+      host.style.setProperty("--_ind-h", `${inner.height / factor}px`);
+      host.setAttribute("data-indicator", "");
+    };
+    place();
+    const observer = typeof ResizeObserver === "function" ? new ResizeObserver(place) : null;
+    observer?.observe(host);
+    for (const tab of buttons.current.values()) observer?.observe(tab);
+    return () => observer?.disconnect();
+  }, [selected, key]);
+}
+
 export interface TabsProps extends Omit<Div, "defaultValue"> {
   /** Tab labels, in order. */
   /** The tabs. Collections are `items` everywhere (audit H-14). */
@@ -1736,13 +1780,15 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
   const candidate = controlledValue ?? localValue;
   const value = tabs.find(tab => tab.id === candidate && !tab.disabled)?.id ?? tabs.find(tab => !tab.disabled)?.id;
   const buttons = useRef(new Map<string, HTMLButtonElement>());
+  const list = useRef<HTMLDivElement>(null);
+  useTabIndicator(list, buttons, value, tabs);
   const select = (next: string, event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>) => {
     if (controlledValue === undefined) setLocalValue(next);
     onValueChange?.(next, event);
   };
   return (
     <div ref={ref} className={tabsVariants({ size, track, orientation: orientation === "vertical" ? orientation : undefined }, className)} {...rest}>
-      <div className="area-tabs__list" role="tablist" aria-label={ariaLabel ?? label ?? "Views"} aria-orientation={orientation}>
+      <div ref={list} className="area-tabs__list" role="tablist" aria-label={ariaLabel ?? label ?? "Views"} aria-orientation={orientation}>
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -2169,10 +2215,12 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
   const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
   const source = useRef<HTMLElement>(null);
   const tabButtons = useRef(new Map<string, HTMLButtonElement>());
+  const tabList = useRef<HTMLDivElement>(null);
   const [localLanguage, setLocalLanguage] = useState(() => value ?? languages?.[0]);
   const [collapsed, setCollapsed] = useState(Boolean(defaultCollapsed));
 
   const activeLanguage = value ?? localLanguage ?? languages?.[0];
+  useTabIndicator(tabList, tabButtons, languageTabs ? activeLanguage : undefined, languages);
   const highlighted = parseLineNumbers(highlightLines);
   const lines = (html ?? code ?? "").split("\n");
 
@@ -2199,7 +2247,7 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
       // The language switcher is Tabs sm (audit G-6 A, owner 2026-09-30): one tab language, its
       // indicator, hover, inset focus and forced-colours rule; the code body is the tab panel.
       <div className="area-tabs area-tabs--sm area-code-block__languages">
-        <div className="area-tabs__list" role="tablist" aria-label={languageLabel}>
+        <div ref={tabList} className="area-tabs__list" role="tablist" aria-label={languageLabel}>
         {languages.map((item, index) => {
           const selected = item === activeLanguage;
           return (

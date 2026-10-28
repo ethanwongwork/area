@@ -57,3 +57,11 @@ test("Menu preserves a caller-provided surface id when a trigger is supplied", (
   assert.match(html.match(/<div[^>]*role="menu"[^>]*>/)[0], / id="actions-menu"/);
   assert.match(html.match(/<button[^>]*>/)[0], /aria-controls="actions-menu"/);
 });
+
+test("a string shortcut sets each leading modifier in its own keycap, the rest as written (2026-10-26)", () => {
+  const keys = shortcut => [...renderToString(h(MenuItem, { shortcut }, "Item")).matchAll(/<kbd class="area-kbd__key">([^<]*)<\/kbd>/g)].map(m => m[1]);
+  assert.deepEqual(keys("⌘L"), ["⌘", "L"]);
+  assert.deepEqual(keys("⌘⇧P"), ["⌘", "⇧", "P"]);
+  assert.deepEqual(keys("Del"), ["Del"]);
+  assert.deepEqual(keys("⇧"), ["⇧"]);
+});

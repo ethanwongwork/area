@@ -222,3 +222,8 @@ changed. Checked in the app (light and dark, None, Glass and Glow).
 
 Owner decision (2026-10-18): "Keep the Toggletip note as a Tooltip: no Material." The note is a Tooltip, inverse, and
 takes no Material under any bundle, as Tooltip.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** At the app's type 13 the mark is 12, a native size, instead of 14.
+- **Why:** The compact step is in halves at type 13, which put the mark between native cuts. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

@@ -160,7 +160,10 @@
      from the media in a horizontal card. */
   .area-card--thumbnail { --_card-columns: calc(var(--area-space-80) + var(--area-space-4)) minmax(0, 1fr); }
   .area-card--thumbnail > .area-card__media { aspect-ratio: 1; }
-  .area-card--thumbnail > .area-card__content { justify-content: start; }
+  /* The text centres on the thumbnail (visual pass 2026-10-26): a title and a line sat at its top with half its height
+     empty below, where a list row (Menu's described rows, Notion's link previews, Asset row) centres a short text on its
+     picture. Text taller than the thumbnail fills the row from the top as before. */
+  .area-card--thumbnail > .area-card__content { justify-content: center; }
   /* Media behind the text, inset like any media, with a readability gradient over it. */
   .area-card--immersive {
     --_card-padding: 0px;

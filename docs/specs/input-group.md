@@ -210,3 +210,8 @@ width still follows its text's advance (fractional by nature, the divider is pix
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-field` makes the group a pill (`input-group.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once; the text segment inset rounded to whole pixels (`input-group.css`). See "Motion and interaction, 2026-10-07".
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft group's edge is `input-edge-soft`, as Input's.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** The hover edge eases in on Feedback's hover clock, as Input's.
+- **Why:** One hover clock for every field. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

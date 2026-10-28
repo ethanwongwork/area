@@ -85,7 +85,7 @@
   }
   @media (hover: hover) {
     .area-textarea:hover:not(:disabled, :read-only):not(:focus) {
-      --_t-paint: 0s;
+      --_t-paint: var(--area-hover-in);
       border-color: var(--_border-hover);
     }
   }

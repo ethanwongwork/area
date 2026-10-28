@@ -72,7 +72,8 @@ test("a file's diff opens from defaultOpen, or from a controlled open", () => {
   const controlled = renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, diff, open: true, defaultOpen: false, onOpenChange: () => {} }));
   assert.match(controlled, /data-open=""/);
   assert.match(controlled, /aria-expanded="true"/);
-  assert.doesNotMatch(renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, diff, open: false, defaultOpen: true })), /area-edit-summary__diff/);
+  // A closed diff stays in the tree, hidden, so aria-controls names it and its close eases (2026-10-26).
+  assert.match(renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, diff, open: false, defaultOpen: true })), /class="area-edit-summary__diff" hidden=""/);
 });
 
 test("a Diff draws numbers, markers and folds, says which lines changed, and takes focus", () => {

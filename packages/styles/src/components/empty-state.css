@@ -27,9 +27,13 @@
     --_tile-radius: var(--area-radius-control-xl);
     /* Glyph sizes and strokes take only the compact step (clamped at 0): icons and their stroke follow
        the type size on their own (axes/type-size.ts), so a roomier step must not grow or thin them. */
-    --_glyph: calc(24px - 4px * clamp(0, var(--area-ui-dense), 1)); /* spec */
+    /* The compact step is in halves (0.5 at the app's type 13), so it rounds up to a whole step: the glyph is always a
+       native cut, 24 or 20, never a 22 between them (2026-10-26, the detail pass; crispness rule 4), and 20 keeps the
+       12 around it in the smaller tile. */
+    --_glyph-step: round(up, clamp(0, var(--area-ui-dense), 1), 1);
+    --_glyph: calc(24px - 4px * var(--_glyph-step)); /* spec */
     /* The glyph's line for a 24 slot (1.2 × the 16 line), 20 in compact (base.css size curve). */
-    --_glyph-line: calc(var(--area-weight-icon) * (0.8 + 0.0846 * clamp(0, var(--area-ui-dense), 1)));
+    --_glyph-line: calc(var(--area-weight-icon) * (0.8 + 0.0846 * var(--_glyph-step)));
     /* spec: ChatGPT 16 under the tile, 8 between title and line, 16 above the actions. */
     --_media-gap: var(--area-space-16);
     --_title-gap: 0px; /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 8 after ChatGPT's empty state, baseline to cap 20) */
@@ -47,8 +51,9 @@
     /* spec: File upload's 40 tile with a 20 glyph (shadcn's 40 icon tile); 32 / 16 in compact. */
     --_tile: var(--area-control-lg);
     --_tile-radius: var(--area-radius-control-lg);
-    --_glyph: calc(20px - 4px * clamp(0, var(--area-ui-dense), 1)); /* spec */
-    --_glyph-line: calc(var(--area-weight-icon) * (0.8846 + 0.1154 * clamp(0, var(--area-ui-dense), 1)));
+    --_glyph-step: round(up, clamp(0, var(--area-ui-dense), 1), 1); /* a native 20 or 16, as md */
+    --_glyph: calc(20px - 4px * var(--_glyph-step)); /* spec */
+    --_glyph-line: calc(var(--area-weight-icon) * (0.8846 + 0.1154 * var(--_glyph-step)));
     /* spec: Notion 12 under the icon, 2 between title and line, 8 above the action. */
     --_media-gap: var(--area-space-12);
     --_title-gap: 0px; /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 2 after Notion) */

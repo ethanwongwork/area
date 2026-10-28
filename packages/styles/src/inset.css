@@ -194,6 +194,8 @@
    * icon slot; the outer Input reserves the action's larger box, keeping both inset layers
    * optically centered instead of letting a glyph touch its hit target. */
   .area-input:has(> .area-input__action:last-child) { --_box-end: var(--_action); }
+  /* A file field leads with the action's plate (input.css), measured by its own box like the trailing action. */
+  .area-input:has(> .area-input__control[type="file"]:first-child) { --_box-start: var(--_action); }
   /* Combobox's toggle is the field's chevron: its square action moves in so the glyph inside it
      ends at the chevron inset, as Select's and Custom select's (the plate keeps its size). */
   .area-combobox > .area-input:has(> .area-input__action:last-child) {

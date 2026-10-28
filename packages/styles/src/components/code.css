@@ -75,6 +75,10 @@
     gap: var(--area-space-2);
     min-inline-size: 0;
   }
+  /* Language tabs: a focused tab's ring reaches its room plus its width before the label (navigation.css); the room
+     again keeps it clear of the filename, 6 at the defaults (round 77: it crossed the filename's last letter). Only the
+     tabs: the room is the Tabs' own, and a picker inside some other Tabs would inherit it. */
+  .area-tabs.area-code-block__languages { margin-inline-start: var(--_focus-room); }
 
   /*
    * The picker is chrome inside the header rather than a form control on a page, so it
@@ -551,6 +555,14 @@
   }
 
   /* Copy feedback is CopyButton's (copy-button.css): the check enters as a small mark. */
+
+  /* The code is in the tab order so a keyboard can scroll it (the scrolling pre, or the language tab panel; audit
+     G-21), but it showed no ring when focused (2026-10-26, the interaction pass: measured across every family). The
+     ring goes around the whole block, Diff's and Board card's rule for a focused region: its frame is what moves. */
+  .area-code-block:has(> .area-code-block__body:focus-visible, > .area-code-block__body > .area-code-block__pre:focus-visible) {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-gap);
+  }
 
   .area-code-block__toggle:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);

@@ -158,4 +158,39 @@
   }
 
   .area-accordion { display: flex; flex-direction: column; min-inline-size: 0; }
+
+  /* Every other disclosure body opens on the same recipe (owner 2026-10-26: the Slider's motion on every component;
+     they snapped open and shut while Accordion and Code block eased): a Step's input and output, a Step group's steps
+     and Reasoning's summary; Plan's and Queue's items; an Edit summary file's diff. Those hide with `hidden`
+     (display: none), so the open eases from a starting style and display is held for the whole close; their own
+     gap to the line above (a margin or the list's padding) grows and shrinks with them, so nothing jumps at either end.
+     Tree view and Panel sections stay instant, as Figma's layers and panels and Finder's outline. */
+  @supports (interpolate-size: allow-keywords) {
+    :is(.area-step__body, .area-plan__items, .area-queue__items, .area-edit-summary__diff) {
+      interpolate-size: allow-keywords;
+      transition-property: block-size, margin-block-start, padding-block-start, padding-block-end, opacity, display, overflow;
+      transition-duration: var(--area-duration-slow), var(--area-duration-slow), var(--area-duration-slow), var(--area-duration-slow), var(--area-duration-slow), var(--area-duration-slow), 0s;
+      transition-delay: 0s, 0s, 0s, 0s, 0s, 0s, var(--area-duration-slow);
+      transition-timing-function: var(--area-ease-in-out);
+      transition-behavior: allow-discrete;
+    }
+    :is(.area-step__body, .area-plan__items, .area-queue__items, .area-edit-summary__diff)[hidden] {
+      block-size: 0;
+      margin-block-start: 0;
+      padding-block: 0;
+      opacity: 0;
+      overflow: clip;
+      transition-duration: var(--area-duration-moderate), var(--area-duration-moderate), var(--area-duration-moderate), var(--area-duration-moderate), var(--area-duration-moderate), var(--area-duration-moderate), 0s;
+      transition-delay: 0s;
+    }
+    @starting-style {
+      :is(.area-step__body, .area-plan__items, .area-queue__items, .area-edit-summary__diff):not([hidden]) {
+        block-size: 0;
+        margin-block-start: 0;
+        padding-block: 0;
+        opacity: 0;
+        overflow: clip;
+      }
+    }
+  }
 }

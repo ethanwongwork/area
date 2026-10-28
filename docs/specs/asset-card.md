@@ -123,7 +123,7 @@ Inset equations (the designs at 300, edge 1; Area at the default):
 | frame · edge, fill | 1px #eee–#f0f0f0; component: white | `border-divider` at `stroke-width` (light #e2e2e2, 1.21:1 on the card's #f7f7f7, 1.30:1 on the frame's white; dark #333, 1.56:1, as before); `bg-page` (2026-10-22; was `bg-surface`) | DESIGN_SYSTEM Strokes: a frame with no shadow, as Table's; owner 2026-10-21 ("too thin": the design's #eee was 1.08:1 on Area's recessed card, which is darker than the design's #fafafa) |
 | image | covers the frame (cropped) | `object-fit: cover` | Image container |
 | specimen room | — (centred) | 12 (pick) | — |
-| group · cells | 143 × 128, 4 apart, corner 11, no edge | 2 × 2, gap = inset (4) = margin to the card's edge (the frame gives up its edge's width), corner = frame corner | Group container; owner round 59 |
+| group · cells | 143 × 128, 4 apart, corner 11, no edge | 2 × 2, gap = inset (4) = margin to the card's edge (the frame gives up its edge's width), corner = frame corner; the frame's tone; an element cell draws the frame's edge (`stroke-width`, `border-divider`, inset), an image cell none, a containerless card's cells none at rest | Group container; owner round 59 (images); visual pass 2026-10-27 (element cells) |
 | group · element cell | — | a thumbnail: laid out at twice the cell (about its own card's frame), scaled to half, inert | owner round 57: "image versions that are scaled down when that image is a thumbnail in a group" |
 | setting · scope | — | the option's own scope on the whole card (e.g. `data-area-theme="dark"`), so the card and its frame paint that option's grounds together: the frame always the page tone inside the card's recessed fill (light: white on #f7f7f7; dark: #020202 on #0b0b0b) | owner round 57: "it doesnt always have to be white"; 2026-10-21: "the frame color and card color dont seem to always update together" (the frame alone was scoped, a dark frame on a light card) |
 | head · end | — | controls only: Copy for what is used (component code, colour value, type role, icon name), More for what is managed (image, group); `meta` deprecated and ignored | owner round 58: "it should always be controls, maybe a copy button?" |
@@ -198,6 +198,16 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
   same (#333, 1.56:1), so only light changes. Every app tile uses this card, so every tile's frame changes too.
 
 ## Visual pass
+
+2026-10-27 (desktop app, the Stage at 100%, 2x, light and dark): all 27 tiles. In a group, a cell holding a
+component or a card thumbnail was white with no edge on the card's tone, so the thumbnail floated loose and the 2 × 2 read
+as two images and two stray marks; the cell had kept `bg-surface` when the frame moved to `bg-frame` (2026-10-22). Now a
+cell takes the frame's tone and an element cell the frame's edge, as a single component's frame has; image cells keep no
+edge (round 59). On the Stage, every Asset card took the app's own tile hooks (`--area-asset-card-corner` 16,
+`--area-asset-card-name-inset` 16, `--area-asset-grid-gap` 8): the 2026-10-26 reset stopped them at a gallery tile's
+stage but not at the Stage, so the Stage showed a group's cells 16 in at the 2 floor (measured: inset 16, cell corner 2;
+now 4 and 15 at the default Radius). The reset now covers both holders and the grid gap (apps/desktop canvas.css). The
+rest unchanged.
 
 - 2026-10-21 · in the app, headless Edge 3× (light, dark) and a measured matrix: the card fill (`bg-subtle`, recessed)
   against the frame fill (`bg-surface`, raised) at light ground 100/95/90 and dark ground 0/8/16/24, each at Layers 0, 4
@@ -410,3 +420,12 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
   in with near-square corners.
 - **Why:** you asked to make sure the inset corner is applied accurately. Measuring every tile found the app's corner
   hook leaking into the specimens, a basic card's square frame, and the frame alone rounder than its card.
+
+## Review note, 2026-10-27 (visual pass)
+
+- **What changed:** in a group, a cell that holds a component or a card now has the light edge a component's frame
+  has on its own card, and the frame's tone; image cells are unchanged, with no edge.
+- **Why:** white on the card's near-white tone with no edge, the thumbnails floated loose and the four cells stopped
+  reading as one 2 × 2; each element cell is its own card's frame shrunk, so it draws that frame.
+- **Also:** the Stage now shows Asset card as it ships, 4 in with its own corner. It still took the app's tile corner
+  and 16 inset, which the gallery tiles stopped taking on 2026-10-26, and an Asset grid the app's 8 gap for its 12.

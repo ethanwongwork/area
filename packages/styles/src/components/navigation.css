@@ -22,6 +22,7 @@
   }
 
   .area-tabs__list {
+    position: relative;
     display: flex;
     gap: var(--_tab-gap);
     border-block-end: 0;
@@ -133,12 +134,70 @@
     background-color: var(--area-fg-selection);
   }
 
-  .area-tabs__tab:focus-visible {
+  /*
+   * The sliding indicator (docs/MOTION.md, "Tabs / Segmented indicator"; owner 2026-10-26: the slider's motion on every
+   * component). Once React has measured the chosen tab (`data-indicator`; `--_ind-x`, `-y`, `-w`, `-h`, the tab's box
+   * in the list's own pixels), the list draws the selected bar as one part that moves and resizes to
+   * the next tab on base with ease-in-out, the move of something visible across the screen (Segmented's plate; Radix,
+   * Primer and Material slide theirs). The tab's own bar then paints only the hover and press marks. Physical offsets:
+   * the tab's left edge in either direction. Before measuring, and in static markup, the tab draws it.
+   */
+  .area-tabs__list[data-indicator]::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    inline-size: var(--_ind-w);
+    block-size: var(--area-space-2);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-fg-selection);
+    translate: var(--_ind-x) calc(var(--_ind-y) + var(--_ind-h) - var(--area-space-2));
+    pointer-events: none;
+    transition:
+      translate var(--area-duration-base) var(--area-ease-in-out),
+      inline-size var(--area-duration-base) var(--area-ease-in-out),
+      block-size var(--area-duration-base) var(--area-ease-in-out);
+  }
+  .area-tabs--vertical .area-tabs__list[data-indicator]::after {
+    inline-size: var(--area-space-2);
+    block-size: calc(var(--_ind-h) - var(--area-space-4) * 2);
+    translate: var(--_ind-x) calc(var(--_ind-y) + var(--area-space-4));
+  }
+  .area-tabs--vertical .area-tabs__list[data-indicator]:dir(rtl)::after {
+    translate: calc(var(--_ind-x) + var(--_ind-w) - var(--area-space-2)) calc(var(--_ind-y) + var(--area-space-4));
+  }
+  .area-tabs__list[data-indicator] > .area-tabs__tab[data-selected]::after { background-color: transparent; }
+
+  /* Focus (owner, round 75: "is the focus state correct it looks kinda funny"). The ring was Untitled's inset outline,
+     which assumes a padded tab; Area's tab is its label alone, so the ring cut through the label's first and last letters
+     and the bar's rounded ends showed under its corners. The ring now runs the tab's full height and stands `--_focus-room`
+     clear of the label at each side: the room the tab leaves above and below its line, (height − leading) / 2 (4 at sm,
+     6 at md, 10 at lg at the defaults), so the label sits in even room and the reach grows with the size. A ring and the
+     bar never cross, the bar lying along the ring's bottom edge. The list keeps room for the first tab's ring inside its
+     own scroller (below). */
+  .area-tabs { --_focus-room: max(0px, calc((var(--_tab-height) - var(--_tab-leading)) / 2)); }
+  .area-tabs__tab:focus-visible { outline: none; }
+  .area-tabs__tab:focus-visible::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline: calc(-1 * (var(--_focus-room) + var(--area-focus-width)));
+    border: var(--area-focus-width) solid var(--area-focus-color);
     /* Capped against this tier's own height; see button.css. */
     border-radius: min(var(--area-radius-control), max(var(--area-radius-min), round(down, calc(var(--_tab-height) * var(--area-radius-factor)), 2px)));
-    outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: calc(-1 * var(--area-focus-width));
+    pointer-events: none;
   }
+  /* The list scrolls, so it clips: the first tab's ring needs room at the start. The room is padding drawn back by a
+     negative margin, so the labels stay on the content's edge; it lies before the start, where nothing scrolls to, so it
+     adds no scrolling to a parent. (A list with an attachment already pads all round.) */
+  .area-tabs:not(.area-tabs--vertical) > .area-tabs__list:not(:has(> .area-indicator-anchor)) {
+    padding-inline-start: calc(var(--_focus-room) + var(--area-focus-width));
+    margin-inline-start: calc(-1 * (var(--_focus-room) + var(--area-focus-width)));
+  }
+  /* Vertical: the ring starts a focus gap past the rail, so the bar stays outside it, and ends at the tab's end, which
+     gains the room (the list sits that much closer to the panel, so the panel does not move). */
+  .area-tabs--vertical .area-tabs__tab { padding-inline-end: var(--_focus-room); }
+  .area-tabs--vertical .area-tabs__tab:focus-visible::before { inset-inline: calc(var(--area-space-2) + var(--area-focus-gap)) 0; }
+  .area-tabs--vertical { gap: calc(var(--area-inset-surface-md) - var(--_focus-room)); }
 
   .area-tabs__tab[data-disabled] {
     cursor: not-allowed;
@@ -148,6 +207,21 @@
   .area-tabs__panel {
     padding-block-start: var(--area-inset-surface-md); /* 16, compact 12 */
   }
+  /* A panel is in the tab order (WAI-ARIA tabs, so a keyboard reaches content with nothing focusable in it) and showed
+     no ring when focused (2026-10-26, the interaction pass). The ring stands the tab's `--_focus-room` clear of the
+     content on every side, as the tab's ring does round its label (round 75: at the focus gap, 2, it hugged the text,
+     which starts flush at the panel's edge). Its top sits in the panel's own top inset, so it stays clear of the bar. */
+  .area-tabs__panel { position: relative; }
+  .area-tabs__panel:focus-visible { outline: none; }
+  .area-tabs__panel:focus-visible::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--area-inset-surface-md) - var(--_focus-room) - var(--area-focus-width)) calc(-1 * (var(--_focus-room) + var(--area-focus-width))) calc(-1 * (var(--_focus-room) + var(--area-focus-width)));
+    border: var(--area-focus-width) solid var(--area-focus-color);
+    border-radius: var(--area-radius-control-xs);
+    pointer-events: none;
+  }
+  .area-tabs--vertical .area-tabs__panel:focus-visible::before { inset-block-start: calc(var(--area-space-6) - var(--_focus-room) - var(--area-focus-width)); }
 
   /* --- Table -------------------------------------------------------------- */
   /* Body cells align to their first line; headers center labels and controls.
@@ -357,8 +431,8 @@
     cursor: pointer;
     outline: none;
     /* Motion (docs/MOTION.md, 2026-10-07; as Input): edge, fill and ink (--_t-paint) and the focus
-       halo (--_t-halo) fade out on fast; hover, focus, tones and disabled set 0s so they land at once
-       (the halo used to fade in over 100ms, lagging the keyboard). */
+       halo (--_t-halo) fade out on fast; focus, tones and disabled set 0s so they land at once (the halo used to
+       fade in over 100ms, lagging the keyboard); hover arrives on Feedback's hover-in (2026-10-26). */
     --_t-paint: var(--area-duration-fast);
     --_t-halo: var(--area-duration-fast);
     transition-property: background-color, border-color, color, box-shadow;
@@ -385,7 +459,7 @@
   }
 
   .area-select--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-select:hover:not(:disabled):not(:focus) { --_t-paint: 0s; border-color: var(--_border-hover); } }
+  @media (hover: hover) { .area-select:hover:not(:disabled):not(:focus) { --_t-paint: var(--area-hover-in); border-color: var(--_border-hover); } }
 
   .area-select:focus {
     --_t-paint: 0s;

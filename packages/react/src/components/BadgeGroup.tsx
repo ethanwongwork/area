@@ -54,6 +54,11 @@ export const BadgeGroup = forwardRef<HTMLDivElement, BadgeGroupProps>(function B
       const saved = panel.style.cssText;
       panel.style.cssText = "all:unset;display:flex;position:fixed;visibility:hidden;inline-size:max-content;max-inline-size:none";
       const widths = Array.from(host.querySelectorAll<HTMLElement>(".area-badge-group__item")).map(el => el.getBoundingClientRect().width);
+      // Back to the closed style without its transition: the popover's own close transition (opacity, display) ran
+      // from the measured style, so the hidden badges showed and faded over the group, and while they showed their
+      // size had changed, so the observer measured again and the flash looped (visual pass, 2026-10-27).
+      panel.style.cssText = `${saved};transition:none`;
+      panel.getBoundingClientRect();
       panel.style.cssText = saved;
       const gap = parseFloat(getComputedStyle(host).columnGap) || 0;
       const available = host.clientWidth;
