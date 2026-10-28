@@ -264,6 +264,8 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 - `useTheme()` returns the effective selection.
 - Context crosses React portals, but CSS inheritance does not. Wrap portal content in
   another Theme to recreate the scope where it mounts.
+- `brand` and `colours` take the declarations `@area/tokens/brand` and `@area/tokens/colours`
+  work out, set inline and marked `data-area-brand` / `data-area-colours` (Brand, Exact colours).
 - Theme does not manage overlay focus, positioning or dismissal.
 - When mounting into a host themed by CSS alone, pass that host's selection to the root
   Theme explicitly.
@@ -286,9 +288,9 @@ The page in light and in dark as one exact colour each, and the accent as one mo
 https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2). Colours stop being presets and become
 numbers: Area derives every grey from the page picks and the accent's shades from the brand
 engine, and the application settings (Layer contrast, Card shade, the fills, Text tint, Shade,
-Saturation, Label tint) apply over whatever was picked. Built so far: the tokens (`@area/tokens/colours`)
-and the `data-area-colours` scope; the React prop, the command, Setup's stage and the
-Inspector's pickers come next.
+Saturation, Label tint) apply over whatever was picked. Built so far: the tokens (`@area/tokens/colours`),
+the `data-area-colours` scope, React's `colours`, `area-tokens colours`, Setup's code and the app's
+saved picks; Setup's Colours stage and the Inspector's pickers come next.
 
 **What a page pick writes.** A pick solves into the numbers the Layers model already reads
 (`color/colours.ts`, `solvePage`): its lightness as `--area-ground-light` (any value 0.90 to
@@ -313,6 +315,17 @@ the most that shows, as a strong tint is held at its room.
   or `colourCss(colours)` for the same as a `[data-area-colours]` rule in `area.axes`. A colour
   is `oklch(L C h)` (L a number or a percentage) or a hex. `pageInfo(page)` returns what each
   pick solved to and the colour it paints.
+- React: `const colours = useMemo(() => colourDeclarations({ page: { light: "oklch(0.9634 0.012 255)" } }), [])`,
+  then `<Theme colours={colours}>`, which sets them inline and marks the scope `data-area-colours`.
+  It takes the declarations already computed, as `brand` does.
+- CSS only: `npx area-tokens colours --page-light "oklch(0.9634 0.012 255)" --page-dark "#101418" --accent "#2f5bd3" > colours.css`
+  (`--status` and `--selector` as for `brand`), then `data-area-colours` on the element.
+- In the app: the picks are saved as colours (`apps/desktop/src/colours.ts`) and checked when it
+  loads. A Canvas saved before them converts once: each mode's page and tint presets become the
+  pick that paints them where one does (Cool's and Warm's own casts, a tint following the accent
+  and a tint the page can't show stay settings), so nothing on screen moves. Writing one of a
+  mode's page settings in the Inspector hands that mode back to the settings. Setup's code
+  leaves out the page attributes a pick stands in for and adds the colour rule.
 - `data-area-colours` restates every derivation that reads a page input (the stylesheet's
   re-derivation rules, `emit/css.ts`), so a subtree can carry its own colours.
 - The accent goes through the brand engine exactly as `brandDeclarations({ primary })` does.

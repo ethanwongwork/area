@@ -26,6 +26,7 @@ import { GALLERY_CONTROLS } from "../gallery/controls.ts";
 import { hueName, SettingRow } from "../inspector-rows.tsx";
 import { REGION_LABEL, SCREENS, ScreenFigure, type Region, type RegionBox, type ScreenId } from "../setup-screen.tsx";
 import { canvasAttributes, CANVAS_DEFAULTS, useStudio, Workspace, type CanvasAxes } from "../studio.tsx";
+import { coloursCode, hasColours } from "../colours.ts";
 import { AXES } from "../tokens.ts";
 import { useViewOption, ViewControls, ViewFilter } from "../view-controls.tsx";
 import { CHAPTERS, minutesFor, QUESTIONS, type Axis, type Choice, type Question, type Values, type Visual } from "./setup-questions.ts";
@@ -79,7 +80,7 @@ function answerOf(question: Question, values: Values): string {
 const focusOf = (question: Question, values: Values): Region[] => typeof question.focus === "function" ? question.focus(values) : question.focus;
 const atDefault = (question: Question, values: Values) => question.axes.every(axis => values[axis] === defaultOf(axis));
 export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupProps) {
-  const { item, select, canvas, setCanvas, shown, setInspectorView, showInspector } = useStudio();
+  const { item, select, canvas, setCanvas, shown, setInspectorView, showInspector, colours: studioColours } = useStudio();
   const [path, setPath] = useViewOption<Path>("theme-setup-path", "essentials", ["essentials", "complete"]);
   // The product the visuals draw; the welcome's first question sets it, the stage's menu changes it later.
   const [screen, setScreen] = useViewOption<ScreenId>("theme-setup-screen", "workspace", Object.keys(SCREENS) as ScreenId[]);
@@ -127,7 +128,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   const drawn = useThrottled(shown, 180);
   const scopeOf = (extra: Changes = {}) => {
     const attributes = canvasAttributes({ ...drawn.canvas, ...extra } as typeof drawn.canvas, drawn.material) as Record<string, string | undefined>;
-    return { ...attributes, "data-area-theme": stageMode };
+    return { ...attributes, ...(hasColours(drawn.colours) ? { "data-area-colours": "" } : {}), "data-area-theme": stageMode };
   };
   const answered = asked.filter(entry => !atDefault(entry, values)).length;
   const changed = SETTINGS.filter(entry => entry.id !== "theme" && (values as Record<string, string>)[entry.id] !== undefined && (values as Record<string, string>)[entry.id] !== defaultOf(entry.id as Axis)).length;
@@ -286,11 +287,15 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   // The finish (owner, 2026-10-25: "build the whole chat/onboarding flow"): what came of it as a table, the theme itself
   // as code to take away (a Code block labelled by its language, its copy in its header; the agent timeline's JSON block), and what to do
   // next as suggestions, as a chat ends on its follow-ups.
-  const themed = SETTINGS.filter(entry => entry.id !== "theme" && !(entry.id === "contrast" && values.contrast === "system")
+  // Exact page colours (2026-10-27) are a second part: `data-area-colours` and one rule of variables, which stand in for
+  // the page settings of each mode picked, so those attributes are left out (the plan: "use one or the other").
+  const picked = studioColours, pickedOut = (id: string) =>
+    (picked.light !== null && (id === "ground-light" || id === "tint-light")) || (picked.dark !== null && (id === "ground-dark" || id === "tint-dark" || id === "tint-hue-dark"))
+    || (id === "tint-hue" && picked.light !== null && (picked.dark !== null || values["tint-hue-dark"] !== "same"));
+  const themed = SETTINGS.filter(entry => entry.id !== "theme" && !(entry.id === "contrast" && values.contrast === "system") && !pickedOut(entry.id)
     && (values as Record<string, string>)[entry.id] !== undefined && (values as Record<string, string>)[entry.id] !== defaultOf(entry.id as Axis));
-  const themeCode = themed.length
-    ? `<html\n${themed.map(entry => `  ${attributeOf(entry, (values as Record<string, string>)[entry.id]!)}`).join("\n")}\n>`
-    : "<html>";
+  const lines = [...(hasColours(picked) ? ["data-area-colours"] : []), ...themed.map(entry => attributeOf(entry, (values as Record<string, string>)[entry.id]!))];
+  const themeCode = (lines.length ? `<html\n${lines.map(line => `  ${line}`).join("\n")}\n>` : "<html>") + (hasColours(picked) ? `\n\n${coloursCode(picked)}` : "");
   const extra = QUESTIONS.find(entry => !entry.essential && (!entry.when || entry.when(values)));
   const nextSteps = [
     { id: "fine-tune", label: "Fine-tune every setting in the Inspector" },
@@ -320,7 +325,9 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
         </tbody>
       </Table>
       <Message author="assistant" authorName="Setup">
-        <p>{themed.length
+        <p>{hasColours(picked)
+          ? `To use it, load Area's stylesheet, put ${lines.length === 1 ? "this attribute" : `these ${lines.length} attributes`} on your page's root and add the colour rule after Area's stylesheet. Anything left out stays at Area's default.`
+          : themed.length
           ? `To use it, load Area's stylesheet and put ${themed.length === 1 ? "this attribute" : `these ${themed.length} attributes`} on your page's root. Anything left out stays at Area's default.`
           : "Every setting is Area's default, so your page needs only Area's stylesheet: no attributes."}</p>
       </Message>

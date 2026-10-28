@@ -87,6 +87,13 @@ export function colourDeclarations(colours: Colours, options?: BrandOptions): Re
 export function colourCss(colours: Colours, options?: BrandOptions & { selector?: string }): string;
 /** What each page pick solved to and the colour it paints. */
 export function pageInfo(page: PageColours): { light?: PageSolve; dark?: PageSolve };
+/** The pages' declarations alone. */
+export function pageDeclarations(page: PageColours): Record<string, string>;
+/** The pick a page preset (a ground step and a tint hue and position) paints, or null where no pick reproduces it. */
+export function presetPick(theme: "light" | "dark", groundStep: number, tint: { hue: number; position: number } | null): Oklch | null;
+/** Each mode's page lightness range, and its default page. */
+export const PAGE_RANGE: Readonly<Record<"light" | "dark", readonly [number, number]>>;
+export const DEFAULT_PAGE: Readonly<Record<"light" | "dark", Oklch>>;
 export function solvePage(theme: "light" | "dark", pick: Oklch): PageSolve;
 /** The most chroma a page of lightness l and hue h can show. */
 export function reachableChroma(theme: "light" | "dark", l: number, h: number): number;

@@ -10,14 +10,16 @@
  *                                `Theme`'s `colours`
  *   colourCss(colours)           the same as a `[data-area-colours]` rule (or `selector`)
  *   pageInfo(page)               what each page pick solved to and the colour it paints
+ *   pageDeclarations(page)       the pages' declarations alone, without loading the brand engine's work
+ *   presetPick(mode, step, tint) the pick a page preset paints, or null where none reproduces it (saved settings)
  */
 import DERIVED from "area:brand-derived";
 import { type BrandOptions } from "./emit/brand.ts";
 import { type Colours, colourCssWith, colourDeclarationsWith } from "./emit/colours.ts";
-import { type ColourInput, type Mode, type Oklch, type PageColours, type PageSolve, formatOklch, isColour, oklchHex, parseColour, reachableChroma, solvePage } from "./color/colours.ts";
+import { type ColourInput, type Mode, type Oklch, type PageColours, type PageSolve, DEFAULT_PAGE, PAGE_RANGE, formatOklch, isColour, oklchHex, pageDeclarations, parseColour, presetPick, reachableChroma, solvePage } from "./color/colours.ts";
 
 export type { ColourInput, Colours, Oklch, PageColours, PageSolve };
-export { formatOklch, isColour, oklchHex, parseColour, reachableChroma, solvePage };
+export { DEFAULT_PAGE, PAGE_RANGE, formatOklch, isColour, oklchHex, pageDeclarations, parseColour, presetPick, reachableChroma, solvePage };
 
 export function colourDeclarations(colours: Colours, options: BrandOptions = {}): Record<string, string> {
   return colourDeclarationsWith(DERIVED, colours, options);

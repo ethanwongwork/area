@@ -22,16 +22,24 @@ export interface ThemeProps extends HTMLAttributes<HTMLDivElement> {
    * `const brand = useMemo(() => brandDeclarations({ primary: "#00b65c" }), [])`.
    */
   brand?: Readonly<Record<string, string>>;
+  /**
+   * Exact colours (2026-10-27): the light and dark page and the accent, each one exact colour, as the custom properties
+   * `colourDeclarations` from `@area/tokens/colours` works out, set on this scope and marked `data-area-colours`, so every
+   * grey derives from the picked pages while the other settings still apply over them. Taken already computed, as `brand`
+   * is: `const colours = useMemo(() => colourDeclarations({ page: { light: "oklch(0.9634 0.012 255)" } }), [])`.
+   */
+  colours?: Readonly<Record<string, string>>;
 }
 /** Complete attribute boundary, including when mounted through a React portal. */
 export const Theme = /* @__PURE__ */ forwardRef<HTMLDivElement, ThemeProps>(function Theme(
-  {value, pills, brand, style, children, ...props}, ref,
+  {value, pills, brand, colours, style, children, ...props}, ref,
 ) {
   const parent=useContext(ThemeContext);
   const selection=useMemo(()=>mergeAxes(parent,value),[parent,value]);
   return <ThemeContext.Provider value={selection}>
     <div {...props} {...themeAttributes(selection)} data-area-pills={pills ? pillsAttribute(pills) : undefined}
-      data-area-brand={brand ? "" : undefined} style={brand ? { ...brand, ...style } : style} ref={ref}>{children}</div>
+      data-area-brand={brand ? "" : undefined} data-area-colours={colours ? "" : undefined}
+      style={brand || colours ? { ...brand, ...colours, ...style } : style} ref={ref}>{children}</div>
   </ThemeContext.Provider>;
 });
 
