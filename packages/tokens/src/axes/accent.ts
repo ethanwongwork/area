@@ -60,8 +60,9 @@ export const SOLID_DARK_AXIS = solidAxis("dark");
  * Label tint (owner, 2026-10-23: "if i choose a dark navy as the accent i can also toggle on the foreground being a lighter
  * version of that color with some slight hue, while still being accessible"): how far the label on an accent solid moves
  * from its measured black or white toward the most coloured rung that still carries it (scale.ts `tintedLabel`), 0 (None)
- * to 100, every whole number (0 to 4 in quarters until 2026-10-26, so 2 is now 50), one for both modes as Text tint is. Every step sits between two colours that clear the label's
- * contract, and the gate checks each (contrast/accents.test.ts). On a bright fill no rung clears, and the label stays.
+ * to 100, every whole number (0 to 4 in quarters until 2026-10-26, so 2 is now 50), one for both modes as Text tint is.
+ * Every position sits between two colours that clear the label's contract, and the gate checks each (contrast/accent-gate.ts).
+ * On a bright fill no rung clears, and the label stays.
  */
 export const LABEL_TINT_AXIS: AxisDefinition = {
   id: "label-tint",
