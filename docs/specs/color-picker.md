@@ -351,3 +351,8 @@ Spacing without the rules (2026-10-26, owner: "make sure the spacing is intentio
 - **What changed:** No line under the header, and none above the saved colours.
 - **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
   light. You approved each one on the dividers comparison page.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** Pressing a knob (the area's, hue, opacity or a channel bar's) picks it up, as the Slider's: it grows by the Feedback setting (1.12 at Subtle, none at Off) and settles back; it still follows the pointer exactly.
+- **Why:** The Slider's knob lifts and these are the same part. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

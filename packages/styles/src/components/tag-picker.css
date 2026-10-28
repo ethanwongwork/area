@@ -155,7 +155,9 @@
   .area-tag-picker__hint { flex: none; }
   /* A tag in a row keeps its own size; the row's check marks the chosen ones. */
   .area-tag-picker__option > .area-tag { flex: none; max-inline-size: 100%; }
-  .area-tag-picker__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
+  /* Unchosen, the check is Menu's small mark at rest (surface.css): it fades and grows in when chosen, rather than
+     popping (2026-10-26, the interaction pass; it was visibility: hidden). */
+  .area-tag-picker__option[aria-selected="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   /* "Create" names the action in the row's ink, then shows the tag it would make. */
   .area-tag-picker__create { gap: var(--area-space-6); }
   .area-tag-picker__empty {

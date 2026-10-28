@@ -29,7 +29,7 @@ export const BadgeToneMatrix = () => (
         <BadgeGroup>
           {(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const).map(tone => false
             ? <Badge key={tone} as="a" href="#api" variant={variant} tone={tone}>{tone}</Badge>
-            : <Badge key={tone} variant={variant} tone={tone}>{tone}</Badge>)}
+            : <Badge key={tone} variant={variant} tone={tone} dot={variant === "modern"}>{tone}</Badge>)}
         </BadgeGroup>
       </section>
     ))}
@@ -146,9 +146,11 @@ export const BadgeAuditControls = () => {
 const galleryTones = ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const;
 const galleryVariants = ["soft", "solid", "outline", "color", "modern"] as const;
 const galleryName = (value: string) => value[0]!.toUpperCase() + value.slice(1);
+// Modern colours only its add-on (a dot or an icon), so its tone tiles carry the dot; without it all eight read as the
+// same plate (owner, round 76: approved).
 const galleryBadge = (variant: typeof galleryVariants[number], tone: typeof galleryTones[number]) => () => false
   ? <Badge as="a" href="#api" variant={variant} tone={tone}>{tone}</Badge>
-  : <Badge variant={variant} tone={tone}>{tone}</Badge>;
+  : <Badge variant={variant} tone={tone} dot={variant === "modern"}>{tone}</Badge>;
 const galleryDotBadge = (variant: "soft" | "outline", tone: typeof galleryTones[number]) => () => <Badge dot variant={variant} tone={tone}>{tone}</Badge>;
 const galleryPlacement = (placement: "top-end" | "top-start" | "bottom-end" | "bottom-start") => () => <IndicatorAnchor placement={placement} indicator={<Indicator count={3} />}><Button aria-label={`${placement}, 3 unread`}>{placement}</Button></IndicatorAnchor>;
 

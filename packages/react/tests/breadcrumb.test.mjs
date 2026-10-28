@@ -28,7 +28,9 @@ test("a collapsed trail with hidden pages is a menu button of links (audit D-19)
   const html = renderToString(h(BreadcrumbEllipsis, { items: [{ label: "Item two", href: "/two" }] }));
   assert.match(html, /<button type="button" aria-label="More pages" class="area-breadcrumb__ellipsis"[^>]*aria-haspopup="menu" aria-expanded="false"/);
   assert.match(html, /<a role="menuitem" href="\/two" class="area-menu__item">/);
-  assert.match(renderToString(h(BreadcrumbEllipsis)), /^<span role="img" aria-label="More pages" class="area-breadcrumb__ellipsis">…<\/span>$/);
+  // Area's More glyph, as Pagination's gap (visual pass, 2026-10-27: the typed "…" sat on the baseline).
+  assert.match(renderToString(h(BreadcrumbEllipsis)), /^<span role="img" aria-label="More pages" class="area-breadcrumb__ellipsis"><svg[^>]*>/);
+  assert.doesNotMatch(renderToString(h(BreadcrumbEllipsis)), /…/);
 });
 
 test("nowrap keeps the trail on one line (2026-10-25)", () => {

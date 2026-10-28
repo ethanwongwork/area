@@ -12,6 +12,7 @@ export default {
     practices: [
       ["Do", "Use soft, the default, for status and metadata; outline for quiet labels beside dense text; solid for a state that must read at a glance."],
       ["Do", "Pick the tone for meaning (success, warning, danger) and the variant for emphasis; the two are independent."],
+      ["Do", "Give a modern Badge a dot or an icon when its tone matters: modern keeps a neutral plate and colours only that add-on."],
       ["Do", "Give a dotOnly or iconOnly Badge an aria-label; it has no visible text, and the component throws without one."],
       ["Do", "Put the meaning in the label: an avatar, flag or icon is decorative and hidden from assistive tech."],
       ["Do", "Set truncate for labels that can run long; plain-text labels keep the full text in title."],

@@ -36,7 +36,7 @@
   .area-input-group--md { --_group-height: var(--area-control-md); --_group-radius: var(--area-radius-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); }
   .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-radius: var(--area-radius-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); }
   .area-input-group--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])) { --_t-paint: 0s; border-color: var(--area-input-edge-hover); } }
+  @media (hover: hover) { .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])) { --_t-paint: var(--area-hover-in); border-color: var(--area-input-edge-hover); } }
   /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
   .area-input-group:is([aria-disabled="true"], :has([data-success], [data-warning], [aria-invalid="true"], [data-invalid], > :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)) { --_t-paint: 0s; }
   /* Disabled uses field paint, like Input: the disabled fill, a faint edge and disabled ink. */

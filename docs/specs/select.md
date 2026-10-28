@@ -266,3 +266,8 @@ Gap: Select sets `gap: var(--_gap)`, its size's tier (6 at md; 4 at Compact 13).
 - **Why:** you asked that hover colours come from rules, not one-off fixes. The rule is now written (DESIGN_SYSTEM.md,
   Layers: a component that paints a ground declares it in layers.css) and enforced by a test; this family painted a
   raised ground without declaring it.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** The hover edge eases in on Feedback's hover clock, as Input's.
+- **Why:** One hover clock for every field. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

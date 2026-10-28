@@ -1,6 +1,20 @@
 # Handoff
 
-## Current state (2026-10-27)
+## Current state (2026-10-28)
+- **Interaction and visual pass, rounds 75–80, branch `claude/component-interaction-visual-polish-e45c8f` (owner: the
+  Slider's motion and detail pass on every component, then a by-eye visual pass in the Sidebar's order), PR open, every
+  item owner-approved.** Interaction pass (docs/research/interaction-pass-2026-10-26/, re-runnable scripts): Tabs and
+  Code block slide one indicator (`useTabIndicator`); Step, Plan, Queue, Edit summary bodies ease open; field hovers on
+  `hover-in`; list checks are Menu's small mark; Color picker's knob lifts; Empty state and Toggletip glyphs at native
+  cuts. Visual pass, Stage at 2x light and dark, plus geometry.mjs: Input's file button; Menu text shortcuts split into
+  keycaps (`shortcutKeys`); Card thumbnail text centred; Dialog demos at 480; Asset card group cells draw their frame and
+  the app's tile hooks stop at the Stage (canvas.css); Tabs focus rings stand `--_focus-room` clear; Kbd sides 3, corner
+  = height × radius factor; Badge Modern tone tiles carry the dot; BadgeGroup auto-fit no longer flickers (restore the
+  closed popover with `transition:none`); Breadcrumb's collapsed marker is the More glyph. Review pages: rounds 75–80
+  (https://claude.ai/artifact/GHVzuznddswJviGqaUSyW4, KfTnQG1v72KbZRWoumjFsH, 1onkM1APdH5tk3K23HnxHf,
+  7QcEb58UUcGU7yQ7oF5VWT, 3E3AB8qpUFU4d7EQLbpGAi, 18hz7hePnjJqoNG1vfHyH8). Families visited: Abbreviation to Citation in the
+  Sidebar's order, plus Button, Input, Menu, Tabs, Card, Dialog. Next: Code onward (Code block done). Breadcrumb stays in
+  review for its nowrap layout (no verdict yet).
 - **Inspector rows and sliders, branch `claude/project-status-electron-5fd266` (owner 2026-10-27):** every setting bar
   is one row: name in the label column, the label-inside bar without text, a soft value field 4–5ch wide (worded values
   show a signed number: Temperature -25, Shade +57; Hue 200°). Slider gains `gradient` (Temperature, Shade, Hue troughs);

@@ -111,3 +111,8 @@ summary's row buttons (the row's corner less their inset).
 - **Why:** you dropped the line under Code block's header, then asked for Edit summary, Queue and Plan to match. The
   first message already sits about a row under the head (Cursor's queue and to-do trays draw no line either), so the
   spacing stays.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** The queued messages ease open and shut with the head's chevron, on Accordion's recipe.
+- **Why:** They snapped while Accordion eased. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

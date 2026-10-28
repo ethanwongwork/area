@@ -171,7 +171,9 @@
   /* The chosen value shows the check alone, as Select and Combobox: every product list measured
      (Notion, ChatGPT) marks it so; the plate only means highlight (Q3, owner 2026-10-08; was the
      active plate and the check, audit S13 C). */
-  .area-custom-select__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
+  /* Unchosen, the check is Menu's small mark at rest (surface.css): it fades and grows in when chosen, rather than
+     popping (2026-10-26, the interaction pass; it was visibility: hidden). */
+  .area-custom-select__option[aria-selected="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   .area-custom-select__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
   /* spec: Notion's access menu rules its sections off (1px, 12 in; captures/custom-select/
      notion--member-access-menu--open--light); Menu's separator, between groups only. */

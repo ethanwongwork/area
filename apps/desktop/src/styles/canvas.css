@@ -234,12 +234,17 @@
     padding: var(--area-space-24) var(--area-space-32); /* spec: the docs gallery's stage margin (fit.ts reads it) */
   }
   .gallery-tile[data-layout="card"][data-stage="fit"] > .gallery-tile__view { padding: var(--area-space-12); }
-  .gallery-tile__stage {
-    /* The tile's own corner and name inset are the app's (above); the component drawn in the tile is Area's as it ships,
-       so the hooks stop here (2026-10-26: they reached the Asset card specimens, which showed the app's 16 corner and
-       16 inset, and a group's cells fell to the 2 floor). */
+  /* The tile's own corner, name inset and grid gap are the app's (above); the component drawn in a tile or on the Stage
+     is Area's as it ships, so the hooks stop at every specimen's holder (2026-10-26: they reached the Asset card
+     specimens, which showed the app's 16 corner and 16 inset, and a group's cells fell to the 2 floor; 2026-10-27: the
+     Stage still took them, and an Asset grid the app's 8 gap for its 12). */
+  .gallery-tile__stage,
+  .studio-stage__view {
     --area-asset-card-corner: initial;
     --area-asset-card-name-inset: initial;
+    --area-asset-grid-gap: initial;
+  }
+  .gallery-tile__stage {
     position: relative;
     display: flex;
     align-items: center;

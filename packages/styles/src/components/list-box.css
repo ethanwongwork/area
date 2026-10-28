@@ -24,7 +24,9 @@
   .area-list-box__heading {}
   .area-list-box__section { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); min-inline-size: 0; }
   .area-list-box__options { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
-  .area-list-box__item[aria-selected="false"] > .area-menu__check { visibility: hidden; }
+  /* Unchosen, the check is Menu's small mark at rest (surface.css): it fades and grows in when chosen, rather than
+     popping (2026-10-26, the interaction pass; it was visibility: hidden). */
+  .area-list-box__item[aria-selected="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
 
   /* Options straight inside the box flow in its grid; sections (Area's, or a caller's own) stack and grid their options. */
   .area-list-box--grid:has(> .area-list-box__item) { display: grid; grid-template-columns: repeat(auto-fill, var(--area-list-box-item)); gap: var(--area-space-2); }

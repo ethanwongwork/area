@@ -207,8 +207,15 @@
     min-block-size: 0;
     overflow: hidden;
     border-radius: var(--_frame-corner); /* spec: the group design, every cell at the frame's 11 */
-    background-color: var(--area-bg-surface);
+    /* The frame's tone (it was bg-surface, left behind when the frame moved to bg-frame, 2026-10-22). */
+    background-color: var(--area-bg-frame);
   }
+  /* A cell holding an element is its own card's frame shrunk to the cell, so it draws that frame's edge (visual pass,
+     2026-10-27: white on the card's tone with no edge, a component or a card thumbnail floated loose and the 2 × 2 read
+     as two images and two stray marks). Images keep no edge (owner, round 59: "dont put any strokes around them"); a
+     containerless card's frame shows no edge at rest, and neither do its cells. Inset, so the cell keeps its size. */
+  .area-asset-card__cell:has(> .area-asset-card__thumb) { box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-divider); }
+  .area-asset-card--containerless .area-asset-card__cell { box-shadow: none; }
   .area-asset-card__cell > img { display: block; inline-size: 100%; block-size: 100%; min-block-size: 0; object-fit: cover; }
   /* Anything else in a cell is a thumbnail of it, not the live thing at full size (owner, round 57: "components, and any
      designs in general, to use image versions that are scaled down when that image is a thumbnail in a group"): it is
