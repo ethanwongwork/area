@@ -18,4 +18,5 @@ https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (decisions in `components75`).
   this family looks exactly as it did.
 - **How to check:** Colours › **Preset → pick** shows a tinted page set the old way (Before) beside the same page as a pick
   (After); the two should match. **Exact pick** shows colours no preset reached (a page at 96.34%, a blue-black dark page, an
-  exact accent on buttons and selection) beside the nearest presets. Switch Theme to see dark.
+  exact accent as Selection: checks, switches, selected edges and focus; Action stays neutral, so buttons keep their
+  default fill) beside the nearest presets. Switch Theme to see dark.

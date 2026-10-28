@@ -230,13 +230,15 @@ async function colourScenarios() {
   const { colourCss, presetPick, formatOklch } = await import(join(repo, "packages/tokens/dist/colours.js"));
   const page = (mode, step, hue, position) => formatOklch(presetPick(mode, step, { hue, position }));
   const presetAttrs = { groundLight: "96", tintHue: "255", tintLight: "15", groundDark: "18", tintDark: "50" };
-  const accentAttrs = { accent: "blue", action: "accent", selection: "accent" };
+  // Components paint roles, never the accent: Action stays neutral (buttons keep their default fill) and Selection takes
+  // the accent, so the exact accent shows on checks, switches, selected edges and focus
+  const accentAttrs = { accent: "blue", selection: "accent" };
   const scenario = (id, label, title, before, colours) => ({ id, label, title, before, after: before,
     css: colourCss(colours, { selector: `.area-scope[data-review-colours="${id}"]` }) });
   return [
     scenario("presets", "Preset → pick", "Before: a 96 page tinted blue 15 (dark 18, tint 50) as presets. After: the same as exact picks. Nothing should move.",
       presetAttrs, { page: { light: page("light", 96, 255, 15), dark: page("dark", 18, 255, 50) } }),
-    scenario("exact", "Exact pick", "After: light page oklch(0.9634 0.012 255), dark page #101418, accent #2f5bd3 exact, buttons and selection in the accent. Before: the nearest presets.",
+    scenario("exact", "Exact pick", "After: light page oklch(0.9634 0.012 255), dark page #101418, accent #2f5bd3 exact as Selection (checks, switches, selected edges, focus); Action stays neutral, so buttons keep their default fill. Before: the nearest presets.",
       { ...presetAttrs, groundDark: "12", tintDark: "13", ...accentAttrs }, { page: { light: "oklch(0.9634 0.012 255)", dark: "#101418" }, accent: "#2f5bd3" }),
   ];
 }
