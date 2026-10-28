@@ -79,7 +79,7 @@ export interface Oklch { l: number; c: number; h: number }
 /** oklch(L C h) (L a number or a percentage), a hex, or numbers. */
 export type ColourInput = string | Oklch;
 export interface PageColours { light?: ColourInput; dark?: ColourInput }
-export interface Colours { page?: PageColours; accent?: ColourInput }
+export interface Colours { page?: PageColours; accent?: ColourInput; secondary?: ColourInput; tertiary?: ColourInput }
 export interface PageSolve { lightness: number; hue: number; strength: number; room: { white: number; black: number }; painted: Oklch }
 /** "--area-*" name to value: an inline style on an element with data-area-colours, or React Theme's "colours" prop. */
 export function colourDeclarations(colours: Colours, options?: BrandOptions): Record<string, string>;

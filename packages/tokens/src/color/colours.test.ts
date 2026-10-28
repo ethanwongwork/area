@@ -241,6 +241,11 @@ describe("colours: declarations and the scope", () => {
     expect(d["--area-accent-hue"]).toBeDefined();
     expect(Object.keys(d).some(name => name.startsWith("--area-ground"))).toBe(false);
   });
+  it("an accent's secondary and tertiary write what a brand's do", () => {
+    const d = colourDeclarationsWith(derived, { accent: "#2f5bd3", secondary: "#a785fe", tertiary: "oklch(0.62 0.2 30)" });
+    expect(Object.keys(d).some(name => name.startsWith("--area-secondary-"))).toBe(true);
+    expect(Object.keys(d).some(name => name.startsWith("--area-tertiary-"))).toBe(true);
+  });
   it("as a rule in the axes layer, on [data-area-colours]", () => {
     const css = colourCssWith(derived, { page: { light: "oklch(0.97 0.01 60)" } });
     expect(css).toMatch(/@layer area\.axes \{\n {2}\[data-area-colours\] \{/);

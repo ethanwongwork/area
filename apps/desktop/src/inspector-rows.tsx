@@ -16,6 +16,7 @@ import { CustomSelect, Field, Input, Segmented, Slider, Toggletip, type FieldPro
 import { GALLERY_CONTROLS, greysTinted, type GalleryControl } from "./gallery/controls.ts";
 import { colourMark, optionMark } from "./option-marks.tsx";
 import { PageColourRow } from "./page-colour.tsx";
+import { BrandRows } from "./brand-settings.tsx";
 import { PAGE_AXES, type ColoursState } from "./colours.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
 
@@ -168,6 +169,8 @@ function ValueField({ shown, min, max, readout, name, size = "sm", disabled, onS
 const controlOf = (axis: string) => GALLERY_CONTROLS.find(entry => entry.axis === axis)!;
 const say = (control: GalleryControl, value: string) => control.items.find(item => item.value === value)?.label ?? value;
 const CUSTOM = "custom";
+/** The Accent row's exact colour (the brand engine, src/brand.ts). */
+const EXACT = "exact";
 
 /** A hue's everyday name (OKLCH hues: red about 30°, yellow 95°, green 145°, blue 255°). */
 export function hueName(hue: number): string {
@@ -400,19 +403,27 @@ function AccentRow({ context }: { context: RowContext }) {
   const custom = /^\d+$/.test(value);
   const named = control.items.filter(item => !/^\d+$/.test(item.value));
   const hues = control.items.filter(item => /^\d+$/.test(item.value)).map(item => item.value).sort((a, b) => Number(a) - Number(b));
-  const layout = context.layout?.("accent", named.length + 1) ?? "list";
-  // A brand is its own colour (brand-settings.tsx): only its Shade and Saturation stay here.
-  if (context.brand) return <><SettingRow axis="accent-strength" context={context} /><AccentPaintRows accent={value} context={context} /></>;
+  const layout = context.layout?.("accent", named.length + 2) ?? "list";
+  // One accent control (exact colours plan, phase 4, 2026-10-27): a palette accent, any 5° hue, or one exact colour through
+  // the brand engine (src/brand.ts), which merged the Brand colours switch. Shade, Saturation and Label tint follow either.
+  const { brand, setBrand } = useStudio();
+  const exact = brand.on;
+  const choose = (next: string) => {
+    if (next === EXACT) { setBrand({ on: true }); return; }
+    if (exact) setBrand({ on: false });
+    set({ accent: next === CUSTOM ? (custom ? value : "200") : next });
+  };
   return (
     <>
       <RowField label={control.label} orientation="horizontal" title={control.hint}>
-        <CustomSelect size={context.size ?? "sm"} variant="soft" fullWidth layout={layout} aria-label={control.label} value={custom ? CUSTOM : value}
-          onValueChange={next => set({ accent: next === CUSTOM ? (custom ? value : "200") : next })} onHighlightChange={next => context.preview?.("accent", next === CUSTOM ? null : next)}
+        <CustomSelect size={context.size ?? "sm"} variant="soft" fullWidth layout={layout} aria-label={control.label} value={exact ? EXACT : custom ? CUSTOM : value}
+          onValueChange={choose} onHighlightChange={next => context.preview?.("accent", next === CUSTOM || next === EXACT ? null : next)}
           items={[...named.map(item => ({ value: item.value, label: item.label, icon: optionMark("accent", item.value, values as CanvasAxes) ?? undefined,
             preview: layout === "grid" ? context.figure?.("accent", item.value) : undefined })),
-            { value: CUSTOM, label: "Custom", icon: custom ? optionMark("accent", value, values as CanvasAxes) ?? undefined : undefined }]} />
+            { value: CUSTOM, label: "Any hue", icon: custom ? optionMark("accent", value, values as CanvasAxes) ?? undefined : undefined },
+            { value: EXACT, label: "Exact colour", icon: colourMark(brand.primary) }]} />
       </RowField>
-      {custom ? (
+      {exact ? <BrandRows /> : custom ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={hues.length - 1} step={1} value={Math.max(0, hues.indexOf(value))}
           readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ accent: hues[at]! })} />
       ) : null}

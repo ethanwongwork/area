@@ -20,11 +20,17 @@
   chapter, dark twins, Grey strength and the three fills are sliders with marks; Browse draws quarters (`marks`). Walking
   positions fixed: hovered-mark text near white (MARK_HOVER_RAMP), dark layer floor ramp in the model, Asset card frame
   (FRAME_SAME 0.005, farther tone). Accent stays 5° (a 1° opt-in sheet was built, then withdrawn, owner 2026-10-27).
-- **Next: exact colours (owner decided 2026-10-27; plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a Colours
-  stage first in Setup (light page, dark page, accent as exact OKLCH picks written as variables, `data-area-colours`
-  scope, `colourDeclarations`, `area-tokens colours`); Tint hue split light/dark (dark follows light); one accent pick
-  via the brand engine (merges Brand colours); Cool/Warm kept as ramps, shown as picker starting points; page tests
-  become grids (34 greys exhaustive). Accent open item: the solid flips its label between 35° and 40°.
+- **Exact colours, branch `claude/gifted-matsumoto-12dc07` on top of the positions PR (#169), phases 1-4 committed, no
+  PR yet (plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a page pick (OKLCH) solves into ground, tint hue,
+  room and strength (`packages/tokens/src/color/colours.ts`, CAST_FADE inverted, held at Tint 100 and the hue's room);
+  `@area/tokens/colours` (`colourDeclarations`, `colourCss`, `pageInfo`, `presetPick`; page part 3 kB gzipped);
+  `data-area-colours` restates the derivations; Tint hue split (`tint-hue-dark`, default Same as light); React `Theme`
+  `colours`; `area-tokens colours`; the app saves picks (`apps/desktop/src/colours.ts`, old presets convert once where a
+  pick reproduces them); Setup opens with a Colours chapter (light page, dark page, accent); Color picker gains a gamut
+  mode (back in review); Inspector Page colour row; the accent's Exact colour merged the Brand colours switch. Tests:
+  `colours.test.ts` (34 greys, dense pick grid both modes, coarse grid at every position, CSS vs model); token suite
+  ~60s (was ~110s). Not done: the review page (each family before/after, plan step 5); the Theme tab's Browse view
+  still shows the attribute settings; the accent open item (solid flips its label between 35° and 40°) untouched.
 - **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,
   panel, plan, queue, separator, shortcut-list (r72), radio, checkbox (r73). Infobox REMOVED (code, styles, manifest,
   demos, page, test). Round 73 notes page https://claude.ai/artifact/2Lg4zR9oKdhf8XaT7vCVex: Edit summary diff: option C

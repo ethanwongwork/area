@@ -14,6 +14,9 @@ export interface Colours {
   page?: PageColours;
   /** The accent: one colour for both modes (dark is solved from it). */
   accent?: ColourInput;
+  /** A brand's second and third colours, with the accent (`brandDeclarations`' secondary and tertiary). */
+  secondary?: ColourInput;
+  tertiary?: ColourInput;
 }
 
 /** The accent as the brand engine takes it: a hex, the nearest one in sRGB for an OKLCH colour. */
@@ -23,7 +26,11 @@ export const accentHex = (accent: ColourInput) =>
 /** The declarations for picked colours: the accent's (with the derivations it restates), then the pages'. */
 export function colourDeclarationsWith(derived: Readonly<Record<string, string>>, colours: Colours, options: BrandOptions = {}): Record<string, string> {
   return {
-    ...(colours.accent !== undefined ? brandDeclarationsWith(derived, { primary: accentHex(colours.accent) }, options) : {}),
+    ...(colours.accent !== undefined ? brandDeclarationsWith(derived, {
+      primary: accentHex(colours.accent),
+      ...(colours.secondary !== undefined ? { secondary: accentHex(colours.secondary) } : {}),
+      ...(colours.tertiary !== undefined ? { tertiary: accentHex(colours.tertiary) } : {}),
+    }, options) : {}),
     ...(colours.page ? pageDeclarations(colours.page) : {}),
   };
 }
@@ -34,6 +41,8 @@ export function colourCssWith(derived: Readonly<Record<string, string>>, colours
   const named = [
     ...(["light", "dark"] as const).filter(m => colours.page?.[m] !== undefined).map(m => `${m} page ${formatOklch(solvePage(m, parseColour(colours.page![m]!)).painted)}`),
     ...(colours.accent !== undefined ? [`accent ${accentHex(colours.accent)}`] : []),
+    ...(colours.accent !== undefined && colours.secondary !== undefined ? [`secondary ${accentHex(colours.secondary)}`] : []),
+    ...(colours.accent !== undefined && colours.tertiary !== undefined ? [`tertiary ${accentHex(colours.tertiary)}`] : []),
   ];
   return `/* Area colours: ${named.join(", ")} */\n@layer area.axes {\n  ${options.selector ?? "[data-area-colours]"} {\n${body}\n  }\n}\n`;
 }

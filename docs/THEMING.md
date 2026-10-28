@@ -290,8 +290,8 @@ numbers: Area derives every grey from the page picks and the accent's shades fro
 engine, and the application settings (Layer contrast, Card shade, the fills, Text tint, Shade,
 Saturation, Label tint) apply over whatever was picked. Built so far: the tokens (`@area/tokens/colours`),
 the `data-area-colours` scope, React's `colours`, `area-tokens colours`, Setup's code, the app's
-saved picks, Setup's Colours stage and the Inspector's page colour; the accent as one exact pick
-comes next.
+saved picks, Setup's Colours stage, the Inspector's page colour, and the accent as one exact pick
+(phase 4). The review page with each family before and after is still to come.
 
 **What a page pick writes.** A pick solves into the numbers the Layers model already reads
 (`color/colours.ts`, `solvePage`): its lightness as `--area-ground-light` (any value 0.90 to
@@ -337,7 +337,16 @@ the most that shows, as a strong tint is held at its room.
   dimmed with the reason, and moving one hands the page back to the settings.
 - `data-area-colours` restates every derivation that reads a page input (the stylesheet's
   re-derivation rules, `emit/css.ts`), so a subtree can carry its own colours.
-- The accent goes through the brand engine exactly as `brandDeclarations({ primary })` does.
+- The accent goes through the brand engine exactly as `brandDeclarations({ primary })` does
+  (`secondary` and `tertiary` ride with it). It is one pick for both modes: dark is solved from
+  it, and Dark shade adjusts it.
+- **Picking the accent** (one control since 2026-10-27, merging the Brand colours switch): the
+  Inspector's Accent row and Setup's accent question offer the palette's accents, any 5° hue, or
+  **Exact colour**, Area's Color picker through the brand engine. Exact colour's colour, its
+  Secondary and Tertiary and Status hues sit under the row; Saturation, Shade and Label tint
+  follow either. The 1° accent hue sheet stays withdrawn: an exact accent is this pick. Setup's
+  code for an exact accent links `colours.css` and gives the `area-tokens colours` command that
+  writes it (about 600 declarations, too many to read inline).
 - Cost: the page part is about 3 kB gzipped; the accent loads the brand engine (about 30 kB).
 
 **What the tests walk** (`colours.test.ts`; the guarantee is that Area's colour rules hold
@@ -367,7 +376,8 @@ Contrast, Selection) keeps working over it in CSS.
 - CSS only: `npx area-tokens brand --primary "#00b65c" --secondary "#a785fe" > brand.css`, then
   `data-area-brand` on the element (or `--selector`). The rule sits in `area.axes`, after the
   axes' own, so a brand on the same element as `data-area-accent` wins.
-- In the app: Inspector → Brand (`apps/desktop/src/brand-settings.tsx`), on the Canvas only.
+- In the app: Inspector → Accent → Exact colour (`apps/desktop/src/brand-settings.tsx`, the rows under the Accent row
+  since 2026-10-27; it was its own Brand section with a switch), on the Canvas only.
 - Cost: about 60ms to work out a new brand (both modes; the first in a page about 170ms, while
   the palette's scales warm), then cached; about 600 declarations, 155 kB of CSS text.
 
