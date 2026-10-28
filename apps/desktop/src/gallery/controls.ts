@@ -40,6 +40,11 @@ export interface GalleryControl {
   /** A bar under its named choices names what it sets, in a word (Hue, Strength), since the row above names the setting. */
   barLabel?: string;
   /**
+   * The values a gallery draws where it can't draw every one (Theme's Browse, one tile a value): a setting that takes every
+   * position of 0–100 (owner, 2026-10-26) shows its quarters and its named choices, as its steps were before.
+   */
+  marks?: readonly string[];
+  /**
    * Why the setting changes nothing under the others, or null (owner, 2026-10-24: "some of the axises i cant tell what im
    * even updating"): the Inspector dims the row and says so, as Button shade while Buttons and Selection are Neutral.
    */
@@ -76,7 +81,7 @@ const label = (axis: string) => settingLabel((SETTINGS[axis]?.label ?? axis).rep
 const percent = (value: string, steps: number) => `${Math.round((Number(value) / steps) * 100)}%`;
 const signedPercent = (value: string, steps: number) => Number(value) === 0 ? "Page" : `${Number(value) > 0 ? "+" : "−"}${Math.round((Math.abs(Number(value)) / steps) * 100)}%`;
 /** A bar over a number axis's presets, low to high, each labelled by `say`; `named` are the presets off the scale. */
-function bar(axis: GalleryControl["axis"], say: (value: string) => string, options: { hint?: string; named?: Record<string, string>; custom?: string; barLabel?: string; defaultValue?: string } = {}): GalleryControl {
+function bar(axis: GalleryControl["axis"], say: (value: string) => string, options: { hint?: string; named?: Record<string, string>; custom?: string; barLabel?: string; defaultValue?: string; marks?: readonly string[] } = {}): GalleryControl {
   const all = axis === "contrast" ? ["system", ...Array.from({ length: 33 }, (_, quarter) => String(quarter / 4))] : [...AXIS_PRESETS[axis as keyof typeof AXIS_PRESETS] as readonly string[]];
   const named = options.named ?? {};
   const scale = all.filter(value => !(value in named)).sort((a, b) => order(a) - order(b));
@@ -85,6 +90,7 @@ function bar(axis: GalleryControl["axis"], say: (value: string) => string, optio
     defaultValue: options.defaultValue ?? (axis === "contrast" ? "system" : DEFAULT_AXES[axis as keyof typeof DEFAULT_AXES] as string),
     items: [...Object.entries(named).map(([value, text]) => ({ value, label: text })), ...scale.map(value => ({ value, label: say(value) }))],
     scale, named: Object.entries(named).map(([value, text]) => ({ value, label: text })), custom: options.custom, barLabel: options.barLabel,
+    marks: options.marks ? [...Object.keys(named), ...options.marks] : undefined,
   };
 }
 /** Where a preset sits on its bar: a number, a hue for a named accent, and Pill past every corner. */
@@ -92,6 +98,8 @@ const ACCENT_HUE: Record<string, number> = Object.fromEntries(((TOKENS.axes as u
   .map(preset => [preset.id, Number(preset.tokens["--area-accent-hue"] ?? preset.id)]));
 const order = (value: string) => value === "pill" ? Infinity : /^-?\d+(\.\d+)?$/.test(value) ? Number(value) : ACCENT_HUE[value] ?? 0;
 const title = (value: string) => value[0]!.toUpperCase() + value.slice(1);
+/** A position setting's marks: its quarters (Card shade's from −100). */
+const QUARTERS = ["0", "25", "50", "75", "100"], SIGNED_QUARTERS = ["-100", "-75", "-50", "-25", "0", "25", "50", "75", "100"];
 /** A Solid step as a depth: the palette's 200 (lightest, since the label flips with the shade, 2026-10-25) to 850 (deepest). */
 const depth = (value: string) => value === "200" ? "Lightest" : value === "850" ? "Deepest" : percent(String(Number(value) - 200), 650);
 
@@ -100,24 +108,25 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   // Page: the mode, the page and its greys, how far layers and cards sit from it. A light/dark pair shows in its own mode.
   { axis: "theme", kind: "segmented", label: label("theme"), defaultValue: "light", items: [{ value: "light", label: "Light" }, { value: "dark", label: "Dark" }] },
   bar("ground-light", value => value === "100" ? "White" : `${value}%`, { hint: "The light page's lightness" }),
-  bar("ground-dark", value => value === "0" ? "Black" : `${value}%`, { hint: "The dark page's lightness" }),
+  bar("ground-dark", value => value === "0" ? "Black" : `${value}%`, { hint: "The dark page's lightness", marks: ["0", "8", "12", "14", "16", "18", "20", "22", "24"] }),
   { axis: "neutral", kind: "segmented", label: label("neutral"), hint: "The grey every surface, edge and text is drawn in", defaultValue: DEFAULT_AXES.neutral, items: AXIS_PRESETS.neutral.map(value => ({ value, label: title(value) })) },
-  bar("tint-hue", value => `${value}°`, { hint: "The hue the greys lean toward: the Grey setting's own, the accent's, or any hue", named: { auto: "Grey", accent: "Accent" }, custom: "60", barLabel: "Hue" }),
-  bar("tint-light", value => percent(value, 16), { hint: "In light: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "4", barLabel: "Strength" }),
-  bar("tint-dark", value => percent(value, 16), { hint: "In dark: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "4", barLabel: "Strength" }),
-  bar("ink-tint", value => percent(value, 4), { hint: "How much of the greys' colour body and muted text take" }),
-  bar("layers-light", value => value === "0" ? "Flat" : percent(value, 8), { hint: "In light: how far cards, menus, sidebars and control fills sit from the page" }),
-  bar("layers-dark", value => value === "0" ? "Flat" : percent(value, 8), { hint: "In dark: how far cards, menus, sidebars and control fills sit from the page" }),
-  bar("card-tone-light", value => signedPercent(value, 4), { hint: "In light: cards against the page, darker or lighter", named: { auto: "Auto" }, custom: "0", barLabel: "Shade" }),
-  bar("card-tone-dark", value => signedPercent(value, 4), { hint: "In dark: cards against the page, darker or lighter", named: { auto: "Auto" }, custom: "0", barLabel: "Shade" }),
+  bar("tint-hue", value => `${value}°`, { hint: "The hue the greys lean toward: the Grey setting's own, the accent's, or any hue", named: { auto: "Grey", accent: "Accent" }, custom: "60", barLabel: "Hue",
+    marks: AXIS_PRESETS["tint-hue"].filter(value => /^\d+$/.test(value) && Number(value) % 5 === 0) }),
+  bar("tint-light", value => `${value}%`, { hint: "In light: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "25", barLabel: "Strength", marks: QUARTERS }),
+  bar("tint-dark", value => `${value}%`, { hint: "In dark: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "25", barLabel: "Strength", marks: QUARTERS }),
+  bar("ink-tint", value => `${value}%`, { hint: "How much of the greys' colour body and muted text take", marks: QUARTERS }),
+  bar("layers-light", value => value === "0" ? "Flat" : `${value}%`, { hint: "In light: how far cards, menus, sidebars and control fills sit from the page", marks: QUARTERS }),
+  bar("layers-dark", value => value === "0" ? "Flat" : `${value}%`, { hint: "In dark: how far cards, menus, sidebars and control fills sit from the page", marks: QUARTERS }),
+  bar("card-tone-light", value => signedPercent(value, 100), { hint: "In light: cards against the page, darker or lighter", named: { auto: "Auto" }, custom: "0", barLabel: "Shade", marks: SIGNED_QUARTERS }),
+  bar("card-tone-dark", value => signedPercent(value, 100), { hint: "In dark: cards against the page, darker or lighter", named: { auto: "Auto" }, custom: "0", barLabel: "Shade", marks: SIGNED_QUARTERS }),
   // Accent: one hue bar through the palette's eleven (each at its own hue) and every 5°, then how much colour it keeps,
   // how deep its buttons sit and how much of it their label takes.
   bar("accent", value => /^\d+$/.test(value) ? `${value}°` : title(value), { hint: "The accent's hue: the palette's eleven by name, any other in 5° steps" }),
   bar("accent-strength", value => `${value}%`, { hint: "How much of its own colour the accent keeps; hue and contrast hold" }),
   bar("solid-light", value => depth(value), { hint: "How light or deep accent buttons and checked marks are; their label always stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
   bar("solid-dark", value => depth(value), { hint: "How light or deep accent buttons and checked marks are; their label always stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
-  bar("label-tint", value => percent(value, 4), { hint: "How much of the accent's colour the text on an accent button takes; it stays readable" }),
-  // Where it paints: the accent on buttons and on selection, the status tones, and the accessibility level.
+  bar("label-tint", value => `${value}%`, { hint: "How much of the accent's colour the text on an accent button takes; it stays readable", marks: QUARTERS }),
+  // Emphasis: the accent on buttons and on selection, the status tones, and the accessibility level.
   { axis: "action", kind: "segmented", label: label("action"), hint: "The colour of primary buttons", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: label("selection"), hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "status-colours", kind: "segmented", label: label("status-colours"), hint: "Red, amber, green and blue messages and badges: in their full colour, or muted to the accent's Saturation", defaultValue: DEFAULT_AXES["status-colours"], items: [{ value: "fixed", label: "Vivid" }, { value: "match", label: "Muted" }] },
@@ -143,13 +152,13 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   bar("shadow-light", value => percent(value, 4), { hint: "A lip under each lifted edge and a highlight inside its top" }),
   { axis: "shadow-color", kind: "segmented", label: label("shadow-color"), hint: "The light theme's shadow tint; dark stays black", defaultValue: DEFAULT_AXES["shadow-color"], items: AXIS_PRESETS["shadow-color"].map(value => ({ value, label: title(value) })) },
   // States: hover, selected and pressed, then focus and the destructive row.
-  bar("fill-hover", value => percent(value, 4), { hint: "The plate under a hovered row or ghost control" }),
+  bar("fill-hover", value => `${value}%`, { hint: "The plate under a hovered row or ghost control", marks: QUARTERS.slice(1) }),
   bar("stroke-hover", value => percent(value, 4), { hint: "How far a control's edge darkens under the pointer" }),
   bar("shadow-hover", value => percent(value, 8), { hint: "How much a hovered card or tile lifts" }),
-  bar("fill-selected", value => value === "0" ? "As hover" : percent(value, 4), { hint: "How much firmer a selected row's plate is than hover" }),
+  bar("fill-selected", value => value === "0" ? "As hover" : `${value}%`, { hint: "How much firmer a selected row's plate is than hover", marks: QUARTERS }),
   { axis: "selected-stroke", kind: "segmented", label: label("selected-stroke"), hint: "A selected card's or tile's edge, drawn inside", defaultValue: DEFAULT_AXES["selected-stroke"], items: AXIS_PRESETS["selected-stroke"].map(value => ({ value, label: `${value}px` })) },
   { axis: "selected-tint", kind: "segmented", label: label("selected-tint"), hint: "A selected card's fill under its edge", defaultValue: DEFAULT_AXES["selected-tint"], items: [{ value: "none", label: "None" }, { value: "tint", label: "Accent" }, { value: "neutral", label: "Grey" }] },
-  bar("fill-pressed", value => percent(value, 4), { hint: "How far a press moves past selected" }),
+  bar("fill-pressed", value => `${value}%`, { hint: "How far a press moves past selected", marks: QUARTERS.slice(1) }),
   { axis: "focus-ring", kind: "segmented", label: label("focus-ring"), hint: "Where the keyboard ring sits", defaultValue: DEFAULT_AXES["focus-ring"], items: AXIS_PRESETS["focus-ring"].map(value => ({ value, label: title(value) })) },
   { axis: "danger-hover", kind: "segmented", label: label("danger-hover"), hint: "A destructive row's hover plate", defaultValue: DEFAULT_AXES["danger-hover"], items: [{ value: "tint", label: "Red" }, { value: "neutral", label: "Grey" }] },
   // Effects: the Menu's open in ms, and the shape of every transition.

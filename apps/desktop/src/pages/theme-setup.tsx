@@ -59,6 +59,8 @@ const isDefaultChoice = (choice: Choice) => Object.entries(choice.set).every(([a
 const accentHex = (id: string) => AXES.find(axis => axis.id === "accent")?.presets.find(preset => preset.id === id)?.tokens["--area-accent-500-full"] ?? id;
 const NAMED_ACCENTS = (controlOf("accent")?.items ?? []).filter(item => !/^\d+$/.test(item.value));
 const HUES = Array.from({ length: 72 }, (_, step) => String(step * 5));
+/** Tint hue's every degree (2026-10-26). */
+const TINT_HUES = Array.from({ length: 360 }, (_, hue) => String(hue));
 /** Tint colours to start from, by hue (inspector-rows.tsx's TINTS without Accent), drawn at a mid lightness. */
 const TINTS: ReadonlyArray<[string, string]> = [["30", "Red"], ["55", "Orange"], ["95", "Yellow"], ["145", "Green"], ["185", "Teal"], ["255", "Blue"], ["300", "Purple"], ["350", "Pink"]];
 const hueSwatch = (hue: string) => `oklch(0.66 0.14 ${hue})`;
@@ -687,8 +689,8 @@ function TintControl(props: ControlProps & { visual: Visual }) {
       <ColorSwatchPicker label="Tint colour" size="lg" layout="row" value={named ? hueSwatch(named[0]) : ""}
         items={TINTS.map(([value, label]) => ({ value: hueSwatch(value), label }))}
         onValueChange={colour => { const entry = TINTS.find(([value]) => hueSwatch(value) === colour); if (entry) set({ "tint-hue": entry[0] }); }} />
-      <Slider labelPosition="inside" size="lg" label="Hue" min={0} max={HUES.length - 1} step={1} value={Math.max(0, HUES.indexOf(hue))}
-        readout={(at: number) => `${hueName(Number(HUES[at]))} · ${HUES[at]}°`} onValueChange={at => set({ "tint-hue": HUES[at]! })} />
+      <Slider labelPosition="inside" size="lg" label="Hue" min={0} max={TINT_HUES.length - 1} step={1} value={Math.max(0, TINT_HUES.indexOf(hue))}
+        readout={(at: number) => `${hueName(Number(TINT_HUES[at]))} · ${TINT_HUES[at]}°`} onValueChange={at => set({ "tint-hue": TINT_HUES[at]! })} />
     </div>
   );
 }

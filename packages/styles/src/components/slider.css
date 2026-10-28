@@ -449,6 +449,17 @@
     border-start-end-radius: var(--_thumb-radius);
     border-end-end-radius: var(--_thumb-radius);
   }
+  /* The ends (owner 2026-10-27, "fix ... the internal spacing"): at its minimum the bar is empty, and at either end the
+     grip is gone, since an empty bar has no fill to end and a full one ends at the bar's own edge. The stub and grip at
+     0 sat 4px before the label, and the grip 4px after the value at the maximum, each reading as a text cursor. The
+     lane (inset.css) still keeps a grip one step from either end clear of the text. Each switch is a step of the easing
+     ratio, so the stub arrives as the fill leaves 0. */
+  .area-slider--inside {
+    --_off-min: clamp(0, var(--_slider-ratio) * 1000, 1);
+    --_off-max: clamp(0, (1 - var(--_slider-ratio)) * 1000, 1);
+  }
+  .area-slider--inside:not([data-origin]) .area-slider__fill { inline-size: calc(var(--_thumb) * var(--_reach) * var(--_off-min) + var(--_travel) * var(--_slider-ratio)); }
+  .area-slider--inside .area-slider__thumb::before { opacity: min(var(--_off-min), var(--_off-max)); }
   .area-slider--inside[data-origin] .area-slider__fill {
     --_up: clamp(0, (var(--_slider-ratio) - var(--_origin)) * 10000, 1);
     --_down: clamp(0, (var(--_origin) - var(--_slider-ratio)) * 10000, 1);
@@ -473,6 +484,28 @@
   .area-slider--inside > .area-slider__label { grid-column: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
   .area-slider--inside > .area-slider__value { grid-column: 2; min-inline-size: 0; }
   .area-slider--inside > .area-slider__ends { display: none; }
+
+  /*
+   * Gradient (owner 2026-10-27, the Inspector's Temperature, Shade and Hue): the trough is the range's own colours, given
+   * as an image (`--_gradient`) over the trough's fill, so a colour shows where the bar would put it. The fill and the
+   * buffered stretch are not drawn, since the gradient already shows every value; the grip stays at both ends, as there
+   * is no fill end to show the value; and it is a light line with a dark edge, which reads on any colour (ColorPicker's
+   * thumbs read the same way). Step marks are not drawn over a gradient.
+   */
+  .area-slider[data-gradient] .area-slider__rail { background-image: var(--_gradient); }
+  .area-slider[data-gradient] :is(.area-slider__fill, .area-slider__buffer, .area-slider__marks) { display: none; }
+  .area-slider[data-gradient] {
+    --_grip-ink: light-dark(var(--area-bg-surface), var(--area-fg-default));
+    --_knob: var(--area-bg-surface);
+  }
+  .area-slider--bar[data-gradient] .area-slider__thumb::before {
+    opacity: 1;
+    box-shadow: 0 0 0 var(--area-stroke-width) color-mix(in srgb, transparent, var(--area-fg-default) 45%);
+  }
+  @media (hover: hover) {
+    .area-slider--inside[data-gradient]:not([data-disabled]) .area-slider__track:hover { --_grip-ink: light-dark(var(--area-bg-surface), var(--area-fg-default)); }
+  }
+  .area-slider--inside[data-gradient]:is([data-dragging], :has(.area-slider__control:focus-visible)) { --_grip-ink: light-dark(var(--area-bg-surface), var(--area-fg-default)); }
 
   /* SliderRange (audit C-12): two native range inputs on one rail. The fill is the Selection
      role, so a theme's accent reaches it; the rail's height follows the size tier. Each handle is a Slider whose own

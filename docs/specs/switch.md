@@ -213,6 +213,8 @@ pointer press.
 
 ## Feedback log
 
+- 2026-10-27 · owner: "is the toggle the correct size?" → in a panel a switch row is a small control tall (26 at the app's scale) at any switch size; the Inspector's Brand colours switch is md, 30 × 18 (Notion's 30 × 18; ChatGPT 32 × 20), where sm drew 26 × 14, smaller than both.
+- 2026-10-27 · owner: "fine tune the spacing ... of everything in this panel" → a full-width switch row in a panel, without a description, is a settings row: as tall as a control of its size (26 at sm), centred, its label in a horizontal Field label's muted ink (was the body ink, the one bright row name in the Inspector) (switch.css). Back in review.
 - 2026-09-28 · owner approved batch 14 → Complete.
 
 - 2026-09-28 · owner: lighten the off track → `--_off` = `edge-control` (#e2, contrast-more mix

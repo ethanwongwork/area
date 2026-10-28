@@ -47,6 +47,11 @@ values below are read from pixels, not estimated. Figma's file browser (the 2026
   tone 0, a step clamped at white, or the raised fill on a white page), where it takes the recessed tone (`bg-frame`,
   `bg-frame-raised`, color/layers.ts `FRAME_SAME`); the frame and frame-raised grounds point its controls and edges at
   it. Auto and every non-zero step are unchanged. Containerless cards follow the same rule.
+- 2026-10-26: Card shade and Layer contrast take every position of 0–100 (owner: "a slider that adjusts to every possible
+  percentage") → a card counts as the page tone within 0.005 L (`FRAME_SAME`, was 0.0001, under the smallest half step
+  there was), and the frame takes the recessed tone there only if it is farther from the card than the page, so an Auto
+  Asset card at the lowest Layer contrast positions (itself the recessed tone) keeps the page-tone frame. Every Card shade
+  step and Layers step before is unchanged (`layers.test.ts`).
 
 ## Job and boundaries
 

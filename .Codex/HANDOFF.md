@@ -1,47 +1,44 @@
 # Handoff
 
-## Current state (2026-10-26)
-- **Interaction and detail pass, `claude/component-interaction-visual-polish-e45c8f` (owner: the Slider's motion and
-  detail pass on every component), uncommitted.** Measured all 118 families in headless Edge (forced hover, press and
-  focus; true-scale geometry); notes and the re-runnable scripts in docs/research/interaction-pass-2026-10-26/. Changes:
-  Tabs and Code block's language tabs slide one indicator (`useTabIndicator`, `data-indicator`); Step, Plan, Queue and
-  Edit summary bodies take Accordion's height recipe (accordion.css; Edit summary keeps a closed diff `hidden`); field
-  hover edges on `hover-in` (Input, Textarea, Number field, Select, Input group); list checks are Menu's small mark
-  (List box, Combobox, Custom select, Tag picker); Color picker's knobs lift on press as the Slider's; Empty state and
-  Toggletip glyphs round the half compact step to native cuts (cohesion test); focus rings for Code block's code and the
-  Tabs panel. 17 Complete families reopened to In review (component-status.mjs). Segmented, Slider, Switch and Field
-  left alone: the `project-status-electron` session has them open.
-  Then the by-eye visual pass (owner: "beginning with Button, Input, Menu, Tabs, Card and Dialog, with before and after
-  pictures"): every tile on the Stage at 2x, light and dark; four changes: Input's file button is the field's action
-  plate; a string Menu shortcut splits its modifiers into keycaps (`shortcutKeys`); Card's thumbnail text centres on the
-  thumbnail; the Dialog demos drop `inline-size: 100%` (480 on the Stage). Pixel diff: only those 7 tiles changed.
-  Review round 75 https://claude.ai/artifact/GHVzuznddswJviGqaUSyW4 (collection `verdicts`, one doc per item; read
-  before acting).
-  Round 76 (owner: "continue ... next families in the Sidebar's order"): Abbreviation through Badge, 161 tiles, Stage
-  2x light and dark plus geometry.mjs. Two changes, both Asset card: a group's element cells draw the frame's tone and
-  edge (asset-card.css; image cells stay edgeless, round 59); the app's tile hooks (corner, name inset, grid gap) now stop
-  at the Stage's view as well as a tile's stage (canvas.css; the Stage had shown cells 16 in at 2px corners). Asset card
-  reopened. Open question: give Badge's Modern tone tiles their dot (tone shows only on an add-on). Review round 76
-  https://claude.ai/artifact/KfTnQG1v72KbZRWoumjFsH (`verdicts`). Next families: Badge group onward (Button, Card done).
-  main has moved (PR #168: Field, Segmented, Slider, Switch, primitives.tsx): sync before committing.
-  Round 75 verdicts (owner, 2026-10-27): 7 approved → those families Complete again (component-status.mjs); tabs and
-  menu-shortcut need changes; color-knob unanswered. Round 77 https://claude.ai/artifact/1onkM1APdH5tk3K23HnxHf fixes
-  both: the Tabs ring stands `--_focus-room` ((height − leading) / 2) clear of the label, full height, the list padding
-  its start by the reach with a negative margin; the panel's ring the same room; Code block's languages 4 further from
-  the filename (navigation.css, code.css, forced-colors.css). Kbd: inline padding at least 4 beside the glyph, corner =
-  height × radius-factor to the nearest px (kbd.css); Kbd and Menu reopened. Round 76 had no saved verdicts yet.
-  Round 77 verdicts: tabs-focus approved (tabs, code-block Complete); keycaps "1 px less" → round 78: sides 3 (spec literal).
-  Round 78 https://claude.ai/artifact/7QcEb58UUcGU7yQ7oF5VWT (verdicts).
-  Round 76 verdicts: asset-stage and badge-modern approved; asset-group (element cells' edge) unanswered, so asset-card
-  stays in review. Round 79 https://claude.ai/artifact/3E3AB8qpUFU4d7EQLbpGAi: Modern tone tiles carry the dot (demos/badge.tsx
-  galleryBadge + Tone Matrix; playgrounds.tsx badge tiles keyed modern-<tone>); Badge docs Do line.
-  Later verdicts: asset-group and color-knob approved (asset-card, color-picker Complete); round 78 kbd-padding and
-  round 79 badge-modern-dot approved (kbd, menu Complete). Rounds 75-79 fully answered; nothing open from them.
-  Round 80 (owner: "continue the visual pass from Badge group"): Badge group to Citation, 117 tiles + geometry. Two fixes:
-  BadgeGroup auto-fit restored the closed popover with its transition, so hidden badges flashed and the ResizeObserver
-  looped (BadgeGroup.tsx: restore with transition:none, flush); Breadcrumb's collapsed "…" is Glyph more (Breadcrumb.tsx).
-  Both approved 2026-10-28: Badge group Complete; Breadcrumb stays in review for its nowrap layout (no verdict yet). Page https://claude.ai/artifact/18hz7hePnjJqoNG1vfHyH8. Next families: Code onward (Code block done).
-
+## Current state (2026-10-28)
+- **Interaction and visual pass, rounds 75–80, branch `claude/component-interaction-visual-polish-e45c8f` (owner: the
+  Slider's motion and detail pass on every component, then a by-eye visual pass in the Sidebar's order), PR open, every
+  item owner-approved.** Interaction pass (docs/research/interaction-pass-2026-10-26/, re-runnable scripts): Tabs and
+  Code block slide one indicator (`useTabIndicator`); Step, Plan, Queue, Edit summary bodies ease open; field hovers on
+  `hover-in`; list checks are Menu's small mark; Color picker's knob lifts; Empty state and Toggletip glyphs at native
+  cuts. Visual pass, Stage at 2x light and dark, plus geometry.mjs: Input's file button; Menu text shortcuts split into
+  keycaps (`shortcutKeys`); Card thumbnail text centred; Dialog demos at 480; Asset card group cells draw their frame and
+  the app's tile hooks stop at the Stage (canvas.css); Tabs focus rings stand `--_focus-room` clear; Kbd sides 3, corner
+  = height × radius factor; Badge Modern tone tiles carry the dot; BadgeGroup auto-fit no longer flickers (restore the
+  closed popover with `transition:none`); Breadcrumb's collapsed marker is the More glyph. Review pages: rounds 75–80
+  (https://claude.ai/artifact/GHVzuznddswJviGqaUSyW4, KfTnQG1v72KbZRWoumjFsH, 1onkM1APdH5tk3K23HnxHf,
+  7QcEb58UUcGU7yQ7oF5VWT, 3E3AB8qpUFU4d7EQLbpGAi, 18hz7hePnjJqoNG1vfHyH8). Families visited: Abbreviation to Citation in the
+  Sidebar's order, plus Button, Input, Menu, Tabs, Card, Dialog. Next: Code onward (Code block done). Breadcrumb stays in
+  review for its nowrap layout (no verdict yet).
+- **Inspector rows and sliders, branch `claude/project-status-electron-5fd266` (owner 2026-10-27):** every setting bar
+  is one row: name in the label column, the label-inside bar without text, a soft value field 4–5ch wide (worded values
+  show a signed number: Temperature -25, Shade +57; Hue 200°). Slider gains `gradient` (Temperature, Shade, Hue troughs);
+  bars of 3–12 steps show step dots. Label-inside bar: empty at min, no grip at either end. Field gains `labelAction`
+  (dimmed rows' reasons are Toggletips, no captions) and `orientation="auto"` (beside if it fits, else under).
+  Panel rows are their control's height, 8 apart; a panel's Switch row is muted and 26 tall (Brand colours switch md).
+  Segmented's track lost its ring (soft fields' edge under More). Headings: "Where it paints" → Emphasis; Status colours
+  → Status. Segmented, Switch, Field back in review (with Slider). Sheets in docs/research/*-2026-10-27.png.
+- **Next, after `claude/component-interaction-visual-polish-e45c8f` lands (owner: wait for it):** build Stroke › Frames
+  and Stroke › Controls from docs/research/control-edges-2026-10-27/README.md (open decisions listed there). Both
+  sessions edit `component-status.mjs`, `primitives.tsx` (different components) and `toggletip.md`.
+- **Positions (owner 2026-10-26: "a slider that adjusts to every possible percentage"), PR from branch
+  claude/color-lightness-slider-604a73:** Layer contrast, Card shade (±100), Text tint, Grey tint strength, Label tint and
+  the Hover/Selected/Pressed fills (Hover and Pressed from 25) take every whole number 0–100; dark page every whole % 0–24;
+  Tint hue every degree; Inspector Temperature one bar, Cool 100 … Neutral … Warm 100. Old steps are positions (×12.5
+  Layers, ×25 Card/Text/Label/fills, ×6.25 Grey tint, rounded); saved Canvases convert once (`restoreCanvas`). Setup: Page
+  chapter, dark twins, Grey strength and the three fills are sliders with marks; Browse draws quarters (`marks`). Walking
+  positions fixed: hovered-mark text near white (MARK_HOVER_RAMP), dark layer floor ramp in the model, Asset card frame
+  (FRAME_SAME 0.005, farther tone). Accent stays 5° (a 1° opt-in sheet was built, then withdrawn, owner 2026-10-27).
+- **Next: exact colours (owner decided 2026-10-27; plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a Colours
+  stage first in Setup (light page, dark page, accent as exact OKLCH picks written as variables, `data-area-colours`
+  scope, `colourDeclarations`, `area-tokens colours`); Tint hue split light/dark (dark follows light); one accent pick
+  via the brand engine (merges Brand colours); Cool/Warm kept as ramps, shown as picker starting points; page tests
+  become grids (34 greys exhaustive). Accent open item: the solid flips its label between 35° and 40°.
 - **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,
   panel, plan, queue, separator, shortcut-list (r72), radio, checkbox (r73). Infobox REMOVED (code, styles, manifest,
   demos, page, test). Round 73 notes page https://claude.ai/artifact/2Lg4zR9oKdhf8XaT7vCVex: Edit summary diff: option C

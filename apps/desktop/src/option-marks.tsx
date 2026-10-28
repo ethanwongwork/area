@@ -154,9 +154,9 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
       if (value === "auto") return <Dashed />;
       return (
         <Svg>
-          {n > 0 ? <path fillRule="evenodd" d="M3.5 3H12.5A2 2 0 0 1 14.5 5V11A2 2 0 0 1 12.5 13H3.5A2 2 0 0 1 1.5 11V5A2 2 0 0 1 3.5 3Z M5.75 5.5H10.25A1.25 1.25 0 0 1 11.5 6.75V9.25A1.25 1.25 0 0 1 10.25 10.5H5.75A1.25 1.25 0 0 1 4.5 9.25V6.75A1.25 1.25 0 0 1 5.75 5.5Z" fill="currentColor" fillOpacity={n * 0.09} stroke="none" /> : null}
+          {n > 0 ? <path fillRule="evenodd" d="M3.5 3H12.5A2 2 0 0 1 14.5 5V11A2 2 0 0 1 12.5 13H3.5A2 2 0 0 1 1.5 11V5A2 2 0 0 1 3.5 3Z M5.75 5.5H10.25A1.25 1.25 0 0 1 11.5 6.75V9.25A1.25 1.25 0 0 1 10.25 10.5H5.75A1.25 1.25 0 0 1 4.5 9.25V6.75A1.25 1.25 0 0 1 5.75 5.5Z" fill="currentColor" fillOpacity={n * 0.0036} stroke="none" /> : null}
           <rect x="1.5" y="3" width="13" height="10" rx="2" />
-          <rect x="4.5" y="5.5" width="7" height="5" rx="1.25" fill="currentColor" fillOpacity={n < 0 ? -n * 0.09 : 0} strokeOpacity={0.6} />
+          <rect x="4.5" y="5.5" width="7" height="5" rx="1.25" fill="currentColor" fillOpacity={n < 0 ? -n * 0.0036 : 0} strokeOpacity={0.6} />
         </Svg>
       );
     }

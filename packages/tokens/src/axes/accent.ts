@@ -17,7 +17,8 @@
  * Each writes numbers only; emit/base.ts derives the accent's paint from them and the accent's `-full` tokens, live.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
-import { ACCENT_STRENGTHS, DEFAULT_ACCENT_STRENGTH, LABEL_TINT_STEPS, LUMINANCE, SOLID_STEPS } from "../color/generate.ts";
+import { ACCENT_STRENGTHS, DEFAULT_ACCENT_STRENGTH, LUMINANCE, SOLID_STEPS } from "../color/generate.ts";
+import { POSITIONS } from "../color/layers.ts";
 import { ACCENT_AXIS, THEME_AXIS } from "./color.ts";
 
 export const ACCENT_STRENGTH_AXIS: AxisDefinition = {
@@ -59,20 +60,22 @@ export const SOLID_DARK_AXIS = solidAxis("dark");
  * Label tint (owner, 2026-10-23: "if i choose a dark navy as the accent i can also toggle on the foreground being a lighter
  * version of that color with some slight hue, while still being accessible"): how far the label on an accent solid moves
  * from its measured black or white toward the most coloured rung that still carries it (scale.ts `tintedLabel`), 0 (None)
- * to 4 in quarters, one for both modes as Text tint is. Every step sits between two colours that clear the label's
- * contract, and the gate checks each (contrast/accents.test.ts). On a bright fill no rung clears, and the label stays.
+ * to 100, every whole number (0 to 4 in quarters until 2026-10-26, so 2 is now 50), one for both modes as Text tint is.
+ * Every position sits between two colours that clear the label's contract, and the gate checks each (contrast/accent-gate.ts).
+ * On a bright fill no rung clears, and the label stays.
  */
 export const LABEL_TINT_AXIS: AxisDefinition = {
   id: "label-tint",
   label: "Label tint",
-  description: "How much of the accent's own hue the label on an accent button takes, 0 (None) to 4 (Full); every step stays readable.",
+  description: "How much of the accent's own hue the label on an accent button takes, 0 (None) to 100 (Full); every position stays readable.",
   defaultPreset: "0",
   namespaces: ["--area-label-tint:"],
-  presets: LABEL_TINT_STEPS.map(step => ({
-    id: String(step),
-    label: step === 0 ? "0 (None)" : step === 4 ? "4 (Full)" : String(step),
-    description: step === 0 ? "The measured black or white." : step === 4 ? "The most coloured label that stays readable on the fill." : `${step * 25}% of the way to the most coloured readable label.`,
-    tokens: tokens({ "label-tint": step }),
+  // The token stays in quarters (emit/base.ts mixes `label-tint * 25%`), so a position writes a quarter's share of it.
+  presets: POSITIONS.map(position => ({
+    id: String(position),
+    label: position === 0 ? "0 (None)" : position === 100 ? "100 (Full)" : String(position),
+    description: position === 0 ? "The measured black or white." : position === 100 ? "The most coloured label that stays readable on the fill." : `${position}% of the way to the most coloured readable label.`,
+    tokens: tokens({ "label-tint": position / 25 }),
   })),
 };
 
@@ -126,7 +129,8 @@ export function accentDerived(): Record<string, string> {
  */
 export const STATUS_COLOURS_AXIS: AxisDefinition = {
   id: "status-colours",
-  label: "Status colours",
+  // "Status" (owner 2026-10-27: "avoid long phrases"; was "Status colours", which wrapped beside its info button).
+  label: "Status",
   description: "Danger, warning, success and info as the palette draws them, or quieted to the Accent strength. Their hues never move.",
   defaultPreset: "fixed",
   namespaces: ["--area-status-match:"],

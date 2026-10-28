@@ -7,7 +7,8 @@ import { describe, expect, it } from "vitest";
 import {
   DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, HUED_INKS, LAYER_STEPS, VIVID_ROLES, castOf, DEFAULT_FILL, FILL_STEPS, type FillSelection, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
   DEFAULT_INK_TINT, INK_TINT_STEPS, TINT_HUES, TINT_STEP, TINT_STEPS, inkHex, CARD_TONE_STEPS, type CardTone, tintedDarken, TONAL_Y, VIVID_Y,
-  EDGE_OFFSET, PRESS_ROOM, edgeShift, FRAME_SAME,
+  EDGE_OFFSET, PRESS_ROOM, edgeShift, FRAME_SAME, POSITIONS, SIGNED_POSITIONS, layersAt, cardToneAt, inkShareAt,
+  layersPosition, cardTonePosition, inkTintPosition, DEFAULT_LAYERS, tintChromaAt, tintPosition, fillStepAt, fillPosition,
 } from "./layers.ts";
 import { wcagContrastHex } from "./contrast.ts";
 import { type Rgb, SRGB, clampRgb, oklabToRgb, parseHex, rgbToOklab, toHex } from "./oklab.ts";
@@ -38,11 +39,12 @@ function alphaOver(hex: string, alpha: number, ground: string): string {
   return toHex(f.map((c, i) => c * alpha + g[i]! * (1 - alpha)) as Rgb);
 }
 
-/** Every check the gate runs, for one mode at one tint and one text share, over every ground and Layers step. */
-function problemsFor(theme: "light" | "dark", cast: { chroma: number; hue: number }, share = DEFAULT_INK_TINT / 4, cardTone: CardTone = "auto"): string[] {
+/** Every check the gate runs, for one mode at one tint and one text share, over every ground and Layers step (or the
+ * Layers values given). */
+function problemsFor(theme: "light" | "dark", cast: { chroma: number; hue: number }, share = DEFAULT_INK_TINT / 4, cardTone: CardTone = "auto", layers: readonly number[] = LAYER_STEPS, fills: FillSelection = DEFAULT_FILL): string[] {
     const problems: string[] = [];
-    for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
-      const m = layerLightness(theme, g, n, DEFAULT_FILL, cardTone), hx = (L: number) => layerHex(theme, L, cast), at = `${g}/${n}`;
+    for (const g of groundsOf(theme)) for (const n of layers) {
+      const m = layerLightness(theme, g, n, fills, cardTone), hx = (L: number) => layerHex(theme, L, cast), at = `${g}/${n}`;
       const ink = (L: number) => inkHex(theme, L, cast, share);
       const body = ink(m.ink.body), muted = ink(m.ink.muted), edge = hx(m.ink.edge), mm = MIN[theme];
       for (const [name, ground] of [["page", m.page], ["raised", m.raised], ["recessed", m.recessed], ["card", m.card], ["tile", m.tile]] as const) {
@@ -56,8 +58,10 @@ function problemsFor(theme: "light" | "dark", cast: { chroma: number; hue: numbe
         if (wcagContrastHex(body, hx(selected)) < 4.5) problems.push(`${at}: body on ${name} selected`);
         for (const bg of [ground, rest]) if (wcagContrastHex(edge, hx(bg)) < 3) problems.push(`${at}: control edge on ${name}`);
         if (Math.abs(rest - ground) < mm.fill) problems.push(`${at}: ${name} field`);
-        if (Math.abs(hover - rest) < mm.hover) problems.push(`${at}: ${name} hover`);
-        if (Math.abs(selected - ground) < mm.selected) problems.push(`${at}: ${name} selected`);
+        // The smallest steps a state shows are the defaults' (the fill settings choose fainter or firmer plates on purpose;
+        // their order and reading apart are "the state fills keep their order").
+        if (fills === DEFAULT_FILL && Math.abs(hover - rest) < mm.hover) problems.push(`${at}: ${name} hover`);
+        if (fills === DEFAULT_FILL && Math.abs(selected - ground) < mm.selected) problems.push(`${at}: ${name} selected`);
         if (theme === "dark" && rest < DARK_FILL_FLOOR - 1e-9) problems.push(`${at}: ${name} field under the dark floor`);
       }
       if (Math.abs(m.edge.card - m.page) < mm.frame) problems.push(`${at}: card frame`);
@@ -72,19 +76,29 @@ describe("layers: every combination is usable", () => {
   });
 });
 
-// Tint (axes/tint.ts, 2026-10-22): every hue in its 5° steps at every strength 1 to 16 (16 since 2026-10-23, each held
+// Tint (axes/tint.ts, 2026-10-22): every 5° hue at every strength 1 to 16 (16 since 2026-10-23, each held
 // inside its hue's room: tintRoom), at every Text tint share, in both
 // modes, through every check above, at every ground and Layers step (docs/research/custom-neutral-2026-10-22/).
 describe("layers: every tint is usable", () => {
   for (const theme of THEMES) it(`${theme}: every hue, strength and text share`, () => {
     const problems: string[] = [];
-    for (const hue of TINT_HUES) for (const step of TINT_STEPS) for (const share of INK_TINT_STEPS) {
+    for (const hue of TINT_HUES.filter(h => h % 5 === 0)) for (const step of TINT_STEPS) for (const share of INK_TINT_STEPS) {
       if (step === 0) continue;
       const found = problemsFor(theme, { hue, chroma: step * TINT_STEP }, share / 4);
       if (found.length) problems.push(`hue ${hue}, tint ${step}, text ${share}: ${found[0]} (+${found.length - 1})`);
     }
     expect(problems).toEqual([]);
   }, 60_000);
+  // Every degree since 2026-10-26: each hue at the strengths a hue's room bounds (4, 8, 16), at the text shares' ends and
+  // middle; the 5° hues walk every strength and share above.
+  for (const theme of THEMES) it(`${theme}: every hue, every degree`, () => {
+    const problems: string[] = [];
+    for (const hue of TINT_HUES) for (const step of [4, 8, 16]) for (const share of [0, 2, 4]) {
+      const found = problemsFor(theme, { hue, chroma: step * TINT_STEP }, share / 4);
+      if (found.length) problems.push(`hue ${hue}, tint ${step}, text ${share}: ${found[0]} (+${found.length - 1})`);
+    }
+    expect(problems.slice(0, 20)).toEqual([]);
+  }, 120_000);
   it("an untinted gray is unchanged by the text rule", () => {
     for (const share of INK_TINT_STEPS) expect(inkHex("light", 0.5, { hue: 0, chroma: 0 }, share / 4)).toBe(layerHex("light", 0.5, { hue: 0, chroma: 0 }));
   });
@@ -331,5 +345,158 @@ describe("layers: edges keep their contrast on every ground", () => {
       }
     }
     expect(problems).toEqual([]);
+  });
+});
+
+// Positions (2026-10-26, owner: "a slider that adjusts to every possible percentage maybe to the ones place only"): Layer
+// contrast, Card shade and Text tint take every whole number of 0–100 (Card shade ±100). The grids above walk the marks; here
+// every pair of Layer contrast and Card shade positions on every ground goes through every check, each with every neutral
+// against the other's marks, Text tint at every position, and the shipped CSS at every position. A tone can turn back along
+// a setting (a raised fill on a gray page climbs to white, then steps down), so the walk is every position, not the ends.
+describe("layers: every position is usable", () => {
+  const LAYERS = POSITIONS.map(layersAt), TONES = SIGNED_POSITIONS.map(cardToneAt);
+  const MARK_TONES: CardTone[] = ["auto", -4, 0, 4];
+  it("the marks are whole positions and the old steps land on them", () => {
+    expect(LAYER_STEPS.map(layersPosition)).toEqual([0, 25, 50, 75, 100]);
+    expect(CARD_TONE_STEPS.map(cardTonePosition)).toEqual([-100, -88, -75, -63, -50, -38, -25, -13, 0, 13, 25, 38, 50, 63, 75, 88, 100]);
+    expect(INK_TINT_STEPS.map(inkTintPosition)).toEqual([0, 25, 50, 75, 100]);
+    for (const step of LAYER_STEPS) expect(layersAt(layersPosition(step))).toBe(step);
+    for (const step of INK_TINT_STEPS) expect(inkShareAt(inkTintPosition(step))).toBe(step / 4);
+    expect(layersPosition(DEFAULT_LAYERS)).toBe(0);
+  });
+  for (const theme of THEMES) {
+    it(`${theme}: every Layer contrast position, in every neutral, at the Card shade marks`, () => {
+      const problems: string[] = [];
+      for (const tone of MARK_TONES) for (const { id, cast } of casts) {
+        const found = problemsFor(theme, cast[theme], DEFAULT_INK_TINT / 4, tone, LAYERS);
+        if (found.length) problems.push(`card ${tone}, ${id}: ${found[0]} (+${found.length - 1})`);
+      }
+      expect(problems).toEqual([]);
+    }, 60_000);
+    it(`${theme}: every Card shade position, in every neutral, at the Layer contrast marks`, () => {
+      const problems: string[] = [];
+      for (const tone of TONES) for (const { id, cast } of casts) {
+        const found = problemsFor(theme, cast[theme], DEFAULT_INK_TINT / 4, tone);
+        if (found.length) problems.push(`card ${tone}, ${id}: ${found[0]} (+${found.length - 1})`);
+      }
+      expect(problems).toEqual([]);
+    }, 60_000);
+    it(`${theme}: every pair of Layer contrast and Card shade positions, on every ground`, () => {
+      const problems: string[] = [];
+      for (const tone of TONES) {
+        const found = problemsFor(theme, casts[0]!.cast[theme], DEFAULT_INK_TINT / 4, tone, LAYERS);
+        if (found.length) problems.push(`card ${tone}: ${found[0]} (+${found.length - 1})`);
+      }
+      expect(problems).toEqual([]);
+    }, 300_000);
+    it(`${theme}: every Text tint position, on every 30° hue at the strongest tints`, () => {
+      const problems: string[] = [];
+      for (const position of POSITIONS) for (const hue of TINT_HUES.filter(h => h % 30 === 0)) for (const tint of [8, 16]) {
+        const found = problemsFor(theme, { hue, chroma: tint * TINT_STEP }, inkShareAt(position));
+        if (found.length) problems.push(`text ${position}, hue ${hue}, tint ${tint}: ${found[0]} (+${found.length - 1})`);
+      }
+      expect(problems).toEqual([]);
+    }, 60_000);
+    it(`${theme}: an Asset card's frame reads apart at every position`, () => {
+      const problems: string[] = [];
+      const check = (g: number, n: number, tone: CardTone) => {
+        const m = layerLightness(theme, g, n, DEFAULT_FILL, tone);
+        for (const [frame, card, name] of [[m.frame, m.tile, "frame"], [m.frameRaised, m.raised, "raised frame"]] as const) {
+          if (frame !== m.page && frame !== m.recessed) problems.push(`${tone} ${g}/${n}: ${name} is a third tone`);
+          // The frame sits FRAME_SAME from its card, or where neither tone is that far, as far as the layers go.
+          const room = Math.min(FRAME_SAME, Math.max(Math.abs(m.page - card), Math.abs(m.recessed - card)));
+          if (Math.abs(frame - card) < room - 1e-9) problems.push(`${tone} ${g}/${n}: ${name} is ${Math.abs(frame - card).toFixed(5)} from its card`);
+        }
+      };
+      for (const g of groundsOf(theme)) {
+        for (const n of LAYERS) for (const tone of MARK_TONES) check(g, n, tone);
+        for (const tone of TONES) for (const n of LAYER_STEPS) check(g, n, tone);
+      }
+      expect(problems).toEqual([]);
+    });
+    it(`${theme}: the shipped CSS computes what the model does at every position`, () => {
+      const grounds = [groundsOf(theme)[0]!, theme === "light" ? 100 : 8, groundsOf(theme).at(-1)!];
+      const keys = ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised", "page-fill-2", "card-fill-0", "body", "muted", "edge"] as const;
+      const model = (m: ReturnType<typeof layerLightness>): Record<(typeof keys)[number], number> => ({ page: m.page, raised: m.raised, recessed: m.recessed, card: m.card, tile: m.tile, frame: m.frame, "frame-raised": m.frameRaised, "page-fill-2": m.fill.page[2], "card-fill-0": m.fill.card[0], body: m.ink.body, muted: m.ink.muted, edge: m.ink.edge });
+      const compare = (g: number, n: number, tone: CardTone) => {
+        const m = model(layerLightness(theme, g, n, DEFAULT_FILL, tone)), c = cssLightness(theme, g, n, DEFAULT_FILL, tone);
+        for (const k of keys) expect(c[`layer-${theme}-${k}`], `${theme} ${g}/${n} card ${tone} ${k}`).toBeCloseTo(m[k], 6);
+      };
+      for (const g of grounds) {
+        for (const n of LAYERS) for (const tone of MARK_TONES) compare(g, n, tone);
+        for (const tone of TONES) for (const n of [0, 4, 8]) compare(g, n, tone);
+      }
+    }, 60_000);
+  }
+});
+
+// Grey tint strength and the state fills as positions (2026-10-26). Tint: every position on every 30° hue at every Text
+// tint quarter (the 5° hues at the marks are "every tint is usable"). Fills: every Hover position at every Selected mark
+// and every Selected position at every Hover mark, through every check, the order, the press's room and the dark washes.
+// The minimum steps between neighbouring fills hold at the marks (25, 50, 75, 100); between Selected 0 (the hover plate)
+// and 25 a selected row moves from the hover plate toward the first mark, never behind hover.
+describe("layers: every grey tint and fill position is usable", () => {
+  const HOVERS = POSITIONS.filter(p => p >= fillPosition(FILL_STEPS.hover.min)).map(fillStepAt);
+  const SELECTEDS = POSITIONS.map(fillStepAt), PRESSES = POSITIONS.filter(p => p >= fillPosition(FILL_STEPS.pressed.min)).map(fillStepAt);
+  const COMBOS: FillSelection[] = [
+    ...HOVERS.flatMap(hover => [0, 1, 2, 3, 4].map(selected => ({ hover, selected }))),
+    ...[1, 2, 3, 4].flatMap(hover => SELECTEDS.map(selected => ({ hover, selected }))),
+  ];
+  it("the marks are whole positions", () => {
+    expect([4, 8, 12, 16].map(tintPosition)).toEqual([25, 50, 75, 100]);
+    expect(tintChromaAt(50)).toBe(8 * TINT_STEP);
+    expect([0, 1, 2, 3, 4].map(fillPosition)).toEqual([0, 25, 50, 75, 100]);
+    for (const step of [0, 1, 2, 3, 4]) expect(fillStepAt(fillPosition(step))).toBe(step);
+  });
+  for (const theme of THEMES) {
+    it(`${theme}: every grey tint position`, () => {
+      const problems: string[] = [];
+      for (const position of POSITIONS) for (const hue of TINT_HUES.filter(h => h % 30 === 0)) for (const share of INK_TINT_STEPS) {
+        if (position === 0) continue;
+        const found = problemsFor(theme, { hue, chroma: tintChromaAt(position) }, share / 4);
+        if (found.length) problems.push(`hue ${hue}, tint ${position}, text ${share}: ${found[0]} (+${found.length - 1})`);
+      }
+      expect(problems.slice(0, 20)).toEqual([]);
+    }, 120_000);
+    it(`${theme}: every fill position reads, in order, with room to press`, () => {
+      const problems: string[] = [];
+      for (const f of COMBOS) {
+        const found = problemsFor(theme, { hue: 0, chroma: 0 }, DEFAULT_INK_TINT / 4, "auto", LAYER_STEPS, f);
+        if (found.length) problems.push(`fill ${f.hover}/${f.selected}: ${found[0]} (+${found.length - 1})`);
+        for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
+          const m = layerLightness(theme, g, n, f), sign = theme === "light" ? -1 : 1;
+          for (const ground of ["page", "raised", "recessed"] as const) {
+            const [rest, hover, selected] = m.fill[ground];
+            if (sign * (hover - rest) < -1e-9) problems.push(`${g}/${n} ${f.hover}/${f.selected} ${ground}: hover behind rest`);
+            if (sign * (selected - hover) < -1e-9) problems.push(`${g}/${n} ${f.hover}/${f.selected} ${ground}: selected behind hover`);
+            if (Number.isInteger(f.selected) && f.selected > 0 && Math.abs(selected - hover) < 0.008) problems.push(`${g}/${n} ${f.hover}/${f.selected} ${ground}: selected reads as hover`);
+            // The firmest press keeps PRESS_ROOM past selected, as "a press has room on every ground" measures it.
+            const muted = m.ink.muted ** 3, bound = theme === "light" ? Math.cbrt(4.6 * (muted + 0.05) - 0.05) : Math.cbrt(Math.max(0, (muted + 0.05) / 4.6 - 0.05));
+            const press = theme === "light" ? Math.max(selected - 0.12 * (selected - m.ink.body), bound) : Math.min(selected + 0.14 * (m.ink.body - selected), bound);
+            if (Math.abs(press - selected) < PRESS_ROOM[theme] - 1e-6) problems.push(`${g}/${n} ${f.hover}/${f.selected} ${ground}: press ${(press - selected).toFixed(4)}`);
+          }
+        }
+      }
+      expect(problems.slice(0, 20)).toEqual([]);
+    }, 120_000);
+  }
+  for (const theme of THEMES) it(`${theme}: the shipped CSS computes every fill position as the model does`, () => {
+    const grounds = [groundsOf(theme)[0]!, groundsOf(theme).at(-1)!];
+    const combos = [...HOVERS.map(hover => ({ hover, selected: 1 })), ...SELECTEDS.map(selected => ({ hover: 2, selected }))];
+    for (const f of combos) for (const g of grounds) for (const n of [0, 4, 8]) {
+      const m = layerLightness(theme, g, n, f), c = cssLightness(theme, g, n, f), p = `layer-${theme}-`;
+      for (const [k, x] of [["page-fill-1", m.fill.page[1]], ["page-fill-2", m.fill.page[2]], ["raised-fill-2", m.fill.raised[2]], ["recessed-fill-1", m.fill.recessed[1]], ["body", m.ink.body], ["muted", m.ink.muted]] as Array<[string, number]>)
+        expect(c[p + k], `${theme} ${g}/${n} fill ${f.hover}/${f.selected} ${k}`).toBeCloseTo(x, 6);
+    }
+  }, 120_000);
+  it("dark: the washes keep their order at every position", () => {
+    const problems: string[] = [];
+    for (const h of HOVERS) for (const sel of SELECTEDS) for (const p of PRESSES) {
+      const w = darkWashAlphas(h, sel, p), id = `${h}/${sel}/${p}`;
+      if (w.selected < w.hover - 1e-9) problems.push(`${id}: selected behind hover`);
+      if (w.pressed - w.selected < 0.002 * Math.min(1, p) - 1e-9) problems.push(`${id}: press ${w.pressed.toFixed(4)} on selected ${w.selected.toFixed(4)}`);
+      if (w.pressed > DARK_WASH.max + 1e-9) problems.push(`${id}: pressed past the cap`);
+    }
+    expect(problems.slice(0, 20)).toEqual([]);
   });
 });

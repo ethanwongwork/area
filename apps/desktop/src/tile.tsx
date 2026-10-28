@@ -32,7 +32,7 @@ import { CANVAS_DEFAULTS } from "./studio.tsx";
  * the Inspector's settings over them (`specimenScope`, src/specimen-scope.tsx), so a component shows the settings being
  * previewed while its card stays the app's.
  */
-export const CARD_SCOPE = { "data-area-card-tone-light": "-1", "data-area-card-tone-dark": "-1", "data-area-stroke": "2", "data-area-shadow-rest": "0" } as const;
+export const CARD_SCOPE = { "data-area-card-tone-light": "-25", "data-area-card-tone-dark": "-25", "data-area-stroke": "2", "data-area-shadow-rest": "0" } as const;
 /** CARD_SCOPE's settings at the defaults, which a card's specimen starts from (a function: studio.tsx imports this file). */
 const cardRestored = () => ({ "data-area-card-tone-light": CANVAS_DEFAULTS["card-tone-light"], "data-area-card-tone-dark": CANVAS_DEFAULTS["card-tone-dark"], "data-area-stroke": CANVAS_DEFAULTS.stroke, "data-area-shadow-rest": CANVAS_DEFAULTS["shadow-rest"] });
 

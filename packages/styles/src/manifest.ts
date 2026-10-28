@@ -143,10 +143,10 @@ export const colorField = {
 export const field = {
   block: "area-field",
   description: "Labels and describes one form control, including its validation message.",
-  variants: { orientation: ["vertical", "horizontal"] },
+  variants: { orientation: ["vertical", "horizontal", "auto"] },
   booleans: ["inline"],
   states: ["disabled"],
-  elements: ["label", "required", "description", "count", "validation", "error"],
+  elements: ["head", "label", "required", "description", "count", "validation", "error"],
   defaults: { orientation: "vertical" },
 } as const satisfies ComponentManifest;
 

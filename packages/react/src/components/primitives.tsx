@@ -783,6 +783,13 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
    */
   origin?: number;
   /**
+   * A CSS image painted along the trough, for a range whose values are colours: a temperature from cool to warm, a
+   * colour's shades, a hue (owner 2026-10-27: "make the slider background itself be colored like a gradient"). The fill
+   * is not drawn, so the trough shows the whole range, and the thumb's grip takes a light line with a dark edge, which
+   * reads on any colour. `linear-gradient(to right, …)`, start to end; it is drawn as given in either reading direction.
+   */
+  gradient?: string;
+  /**
    * Rendered after the track. `true` shows the normalized numeric value; a function can
    * format that live value. A React node remains supported for fully custom content.
    */
@@ -847,6 +854,7 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
     endLabel,
     buffered,
     origin,
+    gradient,
     readout,
     onValueChange,
     onValueCommit,
@@ -962,10 +970,12 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
         ["--_slider-ratio" as string]: painted / 100,
         ...(bufferedRatio === undefined ? {} : { ["--_buffered" as string]: bufferedRatio }),
         ...(originRatio === undefined ? {} : { ["--_origin" as string]: originRatio }),
+        ...(gradient ? { ["--_gradient" as string]: gradient } : {}),
         ...style,
       }}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(originRatio === undefined ? {} : { "data-origin": "" })}
+      {...(gradient ? { "data-gradient": "" } : {})}
       {...(glides ? { "data-glide": "" } : {})}
       {...(pressed ? { "data-pressed": "" } : {})}
       {...(dragging ? { "data-dragging": "" } : {})}
