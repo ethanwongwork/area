@@ -2,7 +2,7 @@
 
 ## Current state (2026-10-28)
 - **Setup as a compact chat panel, branch `claude/theme-onboarding-chat-panel-2ce3b7` (owner 2026-10-28: "a more compact
-  chat panel, just like cursor, claude, chatgpt ... make sure all components are built for it"), uncommitted.** Setup's
+  chat panel, just like cursor, claude, chatgpt ... make sure all components are built for it"), PR #172.** Setup's
   left side is a resizable Panel (320–560, default 400, `widths["setup-chat"]`) at the app's own scale, built as the
   Inspector's Chat view: Message prose, each chapter's answers as a framed justified Description list (an answer
   reopens its question, marked), the Plan tray over the question, and the question docked in the composer's place as
