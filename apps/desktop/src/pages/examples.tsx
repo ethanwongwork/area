@@ -7,6 +7,7 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection } from "@area/react";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { hrefOf } from "../places.ts";
 import { Tile, TileGrid } from "../tile.tsx";
 import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -18,7 +19,7 @@ import { MobileScreen } from "../content/examples/mobile.tsx";
 import { SettingsScreen } from "../content/examples/settings.tsx";
 import { HairlineScreen } from "../content/examples/hairline.tsx";
 
-const EXAMPLES = [
+export const EXAMPLES = [
   {
     id: "analytics",
     label: "Analytics dashboard",
@@ -77,10 +78,10 @@ export function ExamplesPage() {
     <Workspace
       sidebar={<SidebarList>{
         <Nav aria-label="Testing">
-          <SidebarAll tab="testing" count={shown.length} current={!example} />
+          <SidebarAll count={shown.length} current={!example} />
           <NavGroup label="Screens">
             {shown.map(entry => (
-              <NavItem key={entry.id} href={`#testing/${entry.id}`} current={entry.id === example?.id}
+              <NavItem key={entry.id} href={hrefOf({ page: "patterns", item: entry.id })} current={entry.id === example?.id}
                 onClick={event => { event.preventDefault(); select(entry.id); }}
                 trailing={<Count count={entry.families.length} />}>
                 {entry.label}

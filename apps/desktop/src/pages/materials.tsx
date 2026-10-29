@@ -32,6 +32,7 @@ import {
   materialGrainImage,
 } from "@area/tokens/config";
 import { SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { hrefOf } from "../places.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
 import { matches } from "../search.ts";
@@ -224,7 +225,7 @@ export function MaterialsPage() {
         <Nav aria-label="Materials">
           <NavGroup label="Bundles">
             {shown.map(id => (
-              <NavItem key={id} href={`#materials/${id}`} current={id === bundle}
+              <NavItem key={id} href={hrefOf({ page: "materials", item: id })} current={id === bundle}
                 onClick={event => { event.preventDefault(); select(id); }}
                 trailing={same(drafts[id]!, shipped(id)) ? undefined : <Badge size="sm" variant="soft">Edited</Badge>}>
                 {MATERIAL_BUNDLES[id]!.label}
@@ -377,9 +378,9 @@ function Specimens({ role }: { role: string }) {
       <div className="lab-specimens">
         <Nav aria-label="Nav sample" className="lab-nav">
           <NavGroup>
-            <NavItem href="#materials" current onClick={event => event.preventDefault()}>Item one</NavItem>
-            <NavItem href="#materials" onClick={event => event.preventDefault()}>Item two</NavItem>
-            <NavItem href="#materials" onClick={event => event.preventDefault()}>Item three</NavItem>
+            <NavItem href={hrefOf({ page: "materials" })} current onClick={event => event.preventDefault()}>Item one</NavItem>
+            <NavItem href={hrefOf({ page: "materials" })} onClick={event => event.preventDefault()}>Item two</NavItem>
+            <NavItem href={hrefOf({ page: "materials" })} onClick={event => event.preventDefault()}>Item three</NavItem>
           </NavGroup>
         </Nav>
         <Menu aria-label="Menu sample">

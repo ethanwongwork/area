@@ -14,6 +14,7 @@ import * as IN_REVIEW from "@area/icons/review";
 import { CopyIcon, DownloadIcon, StarFilledIcon, StarIcon } from "@area/icons";
 import { CopyButton, standaloneSvg } from "../copy.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { hrefOf } from "../places.ts";
 import { Specimen } from "../specimen-scope.tsx";
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
@@ -210,7 +211,7 @@ export function IconsPage() {
         {/* A tree (studio.tsx, SidebarTree): Pinned icons (`pin:` rows, which the context menu unpins and which choose the
             icon), then the categories in the Canvas's order (product UI rule 7): A to Z under Name, reversed under
             descending; the curated order otherwise. */}
-        <SidebarTree tab="icons" label="Icon categories" count={listed.reduce((sum, section) => sum + section.shown.length, 0)} current={view?.slug}
+        <SidebarTree label="Icon categories" count={listed.reduce((sum, section) => sum + section.shown.length, 0)} current={view?.slug}
           onSelect={id => id.startsWith("pin:") ? choose(id.slice(4)) : select(id)}
           groups={[
             { id: "pinned", label: "Pinned", items: pinned.map(name => {
@@ -259,7 +260,7 @@ export function IconsPage() {
                       return (
                         <tr key={name} data-selected={name === icon?.name ? "" : undefined}>
                           <TableCell fit><Specimen as="span" className="studio-icons__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></Specimen></TableCell>
-                          <td><TableLink href={`#icons`} onClick={event => { event.preventDefault(); choose(name); }}><Code>{name}</Code></TableLink></td>
+                          <td><TableLink href={hrefOf({ page: "icons" })} onClick={event => { event.preventDefault(); choose(name); }}><Code>{name}</Code></TableLink></td>
                           <td><span className="studio-muted">{entry.keyline}</span></td>
                           <td>{statusOf(name) ? <StatusBadge name={name} /> : <span className="studio-muted">—</span>}</td>
                         </tr>

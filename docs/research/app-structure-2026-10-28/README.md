@@ -2,7 +2,8 @@
 
 The Electron app's information architecture, as the owner confirmed it on 2026-10-28, and the phased plan to build it.
 Review page: https://claude.ai/artifact/4nvLA9RLBaY2RZ1PedrcFn (model, Cursor measurements, composer, plan).
-Nothing in this plan is built yet. The Theme header fix that came out of the same review is built (PRODUCT_UI.md, Setup).
+Phase 1 is built (2026-10-28, branch `claude/phase-1-new-navigation-1c3738`; "As built" under Phase 1). The Theme header
+fix that came out of the same review is built too (PRODUCT_UI.md, Setup).
 
 ## The confirmed model
 
@@ -98,6 +99,32 @@ Nothing is left open before Phase 1.
   they exist.
 - **Docs and checks**: PRODUCT_UI.md's layout sections rewritten; a routing test in `test:desktop` (every old hash
   lands where the table says); `check:app-css`, playgrounds, typecheck; the app in light and dark.
+
+**As built (2026-10-28).** Every item above, with these differences, each for the owner to confirm in the app:
+
+- **Foundations' pages are the registry's groups.** Color, Typography and Icons, then one page per `SETTING_GROUPS` heading
+  (Page, Accent, Emphasis, Size, Shape, Stroke, Shadow, States, Effects), since the registry names settings and headings
+  (owner, 2026-10-19), rather than the plan's Shape, Space, Depth, Motion and Material, which would have regrouped them.
+  There is no Material page: Material is not in Browse's settings; it stays in the Inspector, and its bundles in Labs.
+- **Every page with a list takes the Sidebar over**, not only Components and Icons: Color, Typography, Patterns, the
+  Library and Labs too, one rule. Foundations, its group pages and Themes keep the nav.
+- **The nav's third level** (Area › Foundations › its pages) needed Nav to indent a nested group inside another: built in
+  Nav (nav.css, spec history 2026-10-28).
+- **Brand colours**: the Brand section and its switch were already gone (folded into Accent's Exact colour, 2026-10-27),
+  so nothing was renamed Brand colours. The last "Brand" words in the Inspector now say what they are: Status hues
+  Matched / Area's (was Brand's / Area's), the shade bar's mark Exact (was Brand).
+- **Tabs** follow Claude Code's browser tabs (owner, 2026-10-29): they hug their names, the close shows on hover, focus and the current tab, and
+  New tab (+, ⌘T) opens search into a new tab; inactive tabs are grey (Nav's horizontal rest ink). They are named by what
+  they hold (Area, Library, Materials), so two tabs on Area read alike. The Library button
+  opens the Library tab, or switches to it. Back and forward walk the tab's own history (not the window's). The scroll
+  of a tab's Canvas is not kept yet when switching tabs.
+- **Tabs at their edges** (sheet https://claude.ai/artifact/1RWLR2gyESHHwxNKJ4XpsZ, 2026-10-29): 120 to 170 wide; the close
+  keeps no space and lands over the name's end, which fades (owner: Figma's way); too many tabs scroll, the current kept
+  in view. Tab keys in the app menu (⌘T, ⌘⇧T, ⌘W, ⌃Tab, ⌘1–9; ⌘W had closed the window) and a Tooltip with the full name on
+  cut tabs, 2026-10-29. Open: a soft edge where the strip is cut (Cursor shades it); later, drag to reorder, a tab's
+  context menu, a tab's own scroll kept; Home as a fixed first tab in Phase 2; tab groups not before Projects.
+- **Search** is Command palette over every place; each list's filter moved into its takeover.
+- **New theme** has no way back in its own panel: Back, the tabs or ⌘K leave it.
 
 ### Phase 2. Home and several brands
 

@@ -1545,6 +1545,16 @@ export const GalleryNavRevealActions = () => (
     ))}
   </Nav>
 );
+/* Closable tabs: a horizontal row with a close action, shown on hover, focus and the current tab, as the desktop app's
+   open tabs and Cursor's and Figma's file tabs (2026-10-29). */
+export const GalleryNavTabs = () => (
+  <Nav orientation="horizontal" aria-label="Label">
+    {["Item one", "Item two", "Item three"].map((page, index) => (
+      <NavItem key={page} href="#gallery-nav-tabs" current={index === 0} icon={<DocumentIcon />} revealActions
+        actions={<Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<DismissIcon />} aria-label={`Close ${page}`} />}>{page}</NavItem>
+    ))}
+  </Nav>
+);
 export const GalleryNavExpandable = () => {
   const [open, setOpen] = useState(false);
   const id = useId();

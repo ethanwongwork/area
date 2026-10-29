@@ -41,9 +41,9 @@ export function BrandRows() {
               ? `Buttons use it exactly, with a ${info.label === "#000000" ? "black" : "white"} label.`
               : `Buttons use ${info.button.toUpperCase()}, its nearest shade a ${info.label === "#000000" ? "black" : "white"} label reads on.`) : undefined} />
         )])}
-        <Field label="Status hues" orientation="horizontal" title="Danger, warning, success and info: turned toward the brand, or Area's own">
+        <Field label="Status hues" orientation="horizontal" title="Danger, warning, success and info: turned toward the exact colours, or Area's own">
           <Segmented size="sm" fullWidth value={brand.status} onValueChange={status => setBrand({ status: status as BrandState["status"] })}
-            items={[{ value: "harmonised", label: "Brand's" }, { value: "own", label: "Area's" }]} />
+            items={[{ value: "harmonised", label: "Matched" }, { value: "own", label: "Area's" }]} />
         </Field>
       </> : null}
     </>

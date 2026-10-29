@@ -89,6 +89,38 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at type 13, Compact,
 the scale the layout was measured at; the app now takes the default type and density (rule 18).
 
+**Places, tabs and the nav** (app structure Phase 1, 2026-10-28; the plan and the owner's model in
+`docs/research/app-structure-2026-10-28/README.md`; the shell is variation A, Cursor's nav with Figma's tabs).
+
+- **Places** (`src/places.ts`): every view is a place with a hash. The Area brand's sections are Themes
+  (`#brand/area/themes`; New theme, `…/themes/new`, is the Setup chat), Foundations (`…/foundations`: every setting, then
+  Color, Typography, Icons and one page per setting group, named by the registry's `SETTING_GROUPS`), Components and
+  Patterns (Testing's screens); the Library (`#library`, Imagery renamed) and Labs (`#labs/materials`, out of the nav,
+  reached by search). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
+  Components, `#typography`, `#color`, `#icons` → Foundations, `#testing` → Patterns, `#imagery` → Library, `#materials` →
+  Labs (`tests/places.test.ts`). Home, Projects, Explore and more brands come in later phases and are left out until then
+  (rule 16).
+- **Titlebar**: the Sidebar's toggle, Back and Forward (⌘[ ⌘], the tab's own history), then the open tabs; at its end
+  Search (⌘K), the Library, the Inspector's toggle and light / dark. Tabs work as a browser's, after Claude Code's browser
+  (owner, 2026-10-29): each holds one thing (the Area brand, the Library, a lab) with its type icon and name, 120 to 170
+  wide, hugging its name in between; its close shows on hover, focus and the current tab (always on touch; Tree view's
+  rule) over the name's end, which fades under it (Figma's file tabs, owner 2026-10-29), and is gone while it is the last
+  tab; past the bar's room the tabs scroll (a wheel turns them), the current one kept in view and the bar's end on screen;
+  a cut name shows whole in a Tooltip, and the close names itself in one (with ⌘W on the current tab). The app menu
+  (electron/main.cjs) holds the tab keys, as a browser's: ⌘T new tab, ⌘⇧T reopen the last closed (where it stood), ⌘W
+  close the tab (the last one stays until Home exists; ⌘⇧W closes the window), ⌃Tab and ⌃⇧Tab next and previous,
+  ⌘1–8 that tab, ⌘9 the last; a middle click closes one. New tab (+, ⌘T)
+  follows them and opens search, whose choice opens in a new tab (there is no Home until Phase 2). Each tab keeps its own place, Sidebar and history. The open tabs and
+  their places reopen at launch (the old saved tab migrated once).
+- **Search** (`src/search-palette.tsx`): the Titlebar's field opens Command palette over every place, component, setting,
+  scale, type role, icon category and pattern, and icons by name from two letters; a choice opens in the current tab.
+- **The Sidebar's nav** (`src/app-nav.tsx`): Library, then Brands, the Area brand expanded to its sections (Themes,
+  Foundations, Components, Patterns), Foundations expanded to its pages while one is shown; each a chevron that closes it.
+  A click opens in the current tab, ⌘-click in a new one.
+- **Takeover**: a page with a list of its own (Components, Color, Typography, Icons, Patterns, Library, Materials) shows
+  it in the Sidebar's place, under a back row ("← Area") and the list's filter (it was the Titlebar's search). The back row
+  shows the nav again and leaves the Canvas where it is; opening the page from the nav shows its list again.
+
 **Shared line and insets.**
 
 - There is no title over the Canvas or the Inspector; the Sidebar's selected row names what
@@ -140,7 +172,7 @@ Zoom is Zoom control's stepper (− Auto +):
 - **Exact steps** are 50, 75, 80, 90, 100, 110, 125, 150, 175 and 200%. − and + step through
   them, starting from 100% on Auto or Fit. The menu lists Auto, Fit and these, nothing else.
 
-**Components tab.**
+**Components** (Area › Components; the Components tab until 2026-10-28).
 
 - **Overview and Single** (owner, 2026-10-25; `docs/research/isolated-view-2026-10-24/variations.md` §10). All is the
   Overview: every family in the Sidebar's order, a section each (its title, tile count and status badge 12 over its
@@ -174,19 +206,21 @@ Zoom is Zoom control's stepper (− Auto +):
 
   Properties stay in the Inspector, on Overview only.
 
-**Theme tab** (Language 2026-10-19 to 20; owner, 2026-10-20: "i want to change language back to theme"). The Canvas
-header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
+**Themes and Foundations** (the Theme tab until 2026-10-28, Language 2026-10-19 to 20; `src/pages/theme.tsx`,
+`src/pages/themes.tsx`). Themes lists the brand's themes (one, Default, drawn as Setup's product screen in it); its
+header's New theme opens Setup. Foundations is Browse (below), all settings or one group's. The Setup / Browse switch is
+gone: Setup's Fine-tune opens Foundations.
 
-- **Setup** (the default; `src/pages/theme-setup.tsx`, questions in `src/pages/setup-questions.ts`; a questionnaire since
+- **Setup** (New theme; `src/pages/theme-setup.tsx`, questions in `src/pages/setup-questions.ts`; a questionnaire since
   2026-10-24, a conversation in two panels since the same day: "a 2 panel view with 1 side being a vertically scrolling
   chat like experience ... and then visuals on the right side"; "dont need all these panels open"):
   - **No Sidebar or Inspector** (Workspace `panels={false}`; the saved panels are untouched, so other tabs keep theirs).
     Since 2026-10-28 the chat is a Panel in the Sidebar's place (Workspace `lead`), at the app's scale as the Inspector's
     Chat view, resizable (320 to 560, 400 by default), and the stage is the Canvas (owner, 2026-10-28: "a more compact
     chat panel, just like cursor, claude, chatgpt"; "fix the header on the theme page"). The Canvas header holds the
-    stage's controls: Screen or Component and the screen at its start; Setup / Browse, Real or Wireframe and Light or
+    stage's controls: Screen or Component and the screen at its start; Real or Wireframe and Light or
     Dark at its end, Browse's order. The chat's bar ("Theme setup", Start over, Fine-tune in the Inspector) sits on the
-    header's line; there is no row of its own for Setup / Browse.
+    header's line.
   - **The chat** (left), built as the Inspector's Chat view: Messages for what Setup says, each chapter's answers in a
     framed, justified Description list (an answer reopens its question, marked as the current one; Done returns to
     where the conversation had reached), and the review with Copy theme. The composer's place at the foot holds the
@@ -215,7 +249,7 @@ header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
   - **Setup and the Inspector are two ways into the same settings**: every answer is an Inspector setting; what Setup
     does not ask keeps its default. Setup's own UI never changes as picks are made (`Workspace canvasPicks={false}`);
     only the visuals and the choices' pictures take them.
-- **Browse** lists the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
+- **Browse** (Foundations, and each setting group's page) lists the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
   wide.
 - **Containers.** Asset card is the Components tab's container only; every other tab's tiles are the plain container
   (`src/tile.tsx`, PlainTile): the stripe fill, Card's light edge at stroke-width, no shadow, the name in the first row,

@@ -9,9 +9,11 @@ components and accurate specs matter more than speed.
 
 - **The app is the source of truth** (owner, 2026-10-12). `apps/desktop` (Electron) is
   built only from Area and judged only in the app. Its regions are:
-  - **Titlebar:** the tabs Theme, Components, Typography, Icons, Color, Testing, Imagery
-    and Materials; search; toggles; light / dark.
-  - **Sidebar, Canvas** and **Inspector** (Theme, Design, Code, Chat).
+  - **Titlebar:** back and forward, the open tabs (the Area brand, the Library, a lab), search
+    (⌘K, every place), the Library, toggles, light / dark.
+  - **Sidebar** (the nav: Library, then the Area brand's Themes, Foundations, Components and
+    Patterns; a page's own list takes it over), **Canvas** and **Inspector** (Theme, Design,
+    Code, Chat). Places and old links: `apps/desktop/src/places.ts`.
   - The app's own UI takes the Inspector's settings, type and density included (owner, 2026-10-22); its layout was
     measured at type 13, Compact. Its UI follows `docs/PRODUCT_UI.md`.
   - `apps/docs` is archived: don't extend it or check work there.
