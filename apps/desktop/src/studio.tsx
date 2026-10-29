@@ -451,8 +451,15 @@ function usePanelWidth(panel: keyof typeof WIDTHS, type: string, density: string
 export interface WorkspaceProps {
   /** The tab's list, in a <SidebarList>. The Sidebar has no title bar (owner, 2026-10-11). */
   sidebar: ReactNode;
-  /** At the start of the Canvas bar: the way back from a nested view (a family's Stage). */
+  /** At the start of the Canvas bar: the way back from a nested view (a family's Stage), or what the Canvas shows. */
   canvasLead?: ReactNode;
+  /**
+   * A region the tab draws itself in the Sidebar's place, at the app's scale like the Inspector, shown whatever the
+   * Sidebar toggle says: Theme setup's chat (a Panel of its own). Its bar sits on the line the Canvas header shares, so
+   * the Canvas header holds the view's controls and no row of its own is added (owner, 2026-10-28: "fix the header on the
+   * theme page").
+   */
+  lead?: ReactNode;
   /** What the Canvas shows (a family, "All icons"): the region's accessible name, not drawn
       (owner, 2026-10-14: no titles over the Canvas or the Inspector, as Framer and Figma). */
   canvasTitle: string;
@@ -496,7 +503,7 @@ const DEFAULT_ATTRIBUTES = canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT);
  * Inspector's first heading sit on one line. Every region insets its content by Panel's 14
  * (src/studio.css).
  */
-export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
+export function Workspace({ sidebar, lead, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
   const studio = useStudio();
   const showSidebar = panels && studio.sidebar, showInspector = panels && studio.inspector;
   const sidebarWidth = usePanelWidth("sidebar", CANVAS_DEFAULTS.type, CANVAS_DEFAULTS.density);
@@ -523,11 +530,11 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
     switchInstantly();
   }, [signature]);
   return (
-    <div className="studio-workspace" data-sidebar={showSidebar ? "" : undefined} data-inspector={showInspector ? "" : undefined}>
+    <div className="studio-workspace" data-sidebar={lead || showSidebar ? "" : undefined} data-inspector={showInspector ? "" : undefined}>
       {/* The Sidebar is chrome on a recessed ground (owner, 2026-10-22; cursor-audit-2026-10-22.md item 4), as the
           Testing screens' sidebars: the Panel is a chrome region painting the fill styles/app.css names (panel.css) and
           declares the recessed ground, so its row plates step from what is under them (layers.css). */}
-      {showSidebar ? (
+      {lead ? <div className="studio-lead">{lead}</div> : showSidebar ? (
         <div className="studio-sidebar">
           <Panel flush resizable="end" aria-label="Sidebar" data-area-chrome="" data-area-ground="recessed" {...sidebarWidth}>{sidebar}</Panel>
         </div>

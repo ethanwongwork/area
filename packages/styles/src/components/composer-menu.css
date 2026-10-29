@@ -39,7 +39,8 @@
   }
   .area-composer-menu__path > bdi { unicode-bidi: plaintext; }
   /* Nothing matches: one muted row at the text inset, as every list's empty row (Combobox, Command palette;
-     DESIGN_SYSTEM.md, List rows): the cap centred in the row's square (inset.css). */
+     DESIGN_SYSTEM.md, List rows): the cap centred in the row's square (inset.css), in the rows' type, as Combobox's,
+     so the menu keeps its size when the last match goes (chat set review 2026-10-28: it took the composer's text-md). */
   .area-composer-menu__empty {
     display: flex;
     align-items: center;
@@ -47,5 +48,7 @@
     margin: 0;
     padding-inline: calc((var(--area-ui-row) - 1cap) / 2);
     color: var(--area-fg-muted);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
   }
 }

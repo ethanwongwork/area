@@ -117,6 +117,25 @@ test("an Approval numbers its choices, focuses the first only when asked and off
   assert.match(html, /area-approval__hint/);
 });
 
+test("an Approval asks a question: descriptions, the answer given, head actions and a footer", () => {
+  const html = renderToString(h(Approval, {
+    title: "Which?", items: [{ value: "a", label: "A", description: "What A comes to" }, { value: "b", label: "B" }], value: "a",
+    onChoose: () => {}, dismissLabel: "skip", actions: h("span", { id: "pager" }, "1 of 2"), footer: h("button", { id: "go" }, "Continue"),
+  }));
+  // The description is a line under the label that describes the button; only the chosen row is current.
+  const described = html.match(/aria-describedby="([^"]+)"/)[1];
+  assert.match(html, new RegExp(`<span id="${described}" class="area-approval__option-description">What A comes to</span>`));
+  assert.equal((html.match(/aria-current="true"/g) ?? []).length, 1);
+  assert.match(html, /aria-current="true" data-selected=""/);
+  // Every row keeps the check's column when an answer is given.
+  assert.equal((html.match(/class="area-approval__check"/g) ?? []).length, 2);
+  assert.match(html, /<div class="area-approval__actions"><span id="pager">1 of 2<\/span><\/div>/);
+  assert.match(html, /<p class="area-approval__hint">[^]*?<\/span> to skip<\/p><div class="area-approval__footer"><button id="go">Continue<\/button><\/div>/);
+  // Without value, no check column; without items or a field, no options group.
+  assert.doesNotMatch(renderToString(h(Approval, { title: "T", items: [{ value: "a", label: "A" }], onChoose: () => {} })), /area-approval__check/);
+  assert.doesNotMatch(renderToString(h(Approval, { title: "T", items: [], onChoose: () => {} }, "detail")), /area-approval__options/);
+});
+
 test("a Plan counts what is done and says each item's state", () => {
   const html = renderToString(h(Plan, { items: [
     { id: "1", label: "One", status: "done" }, { id: "2", label: "Two", status: "current" }, { id: "3", label: "Three", status: "pending" },

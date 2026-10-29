@@ -47,5 +47,8 @@
     overflow: hidden;
   }
   /* The Panel's insets: 14 a side, the body's foot 14, the footer 14 all round (panel.css). */
-  .studio-chat-frame__body { overflow-y: auto; padding: var(--_studio-inset) var(--_studio-inset) 0; }
+  /* No padding above the scroller's content: the conversation's head sticks to the top, and turns scrolled under it
+     showed through the padding above it. The first block keeps the inset as a margin, which a stuck head ignores. */
+  .studio-chat-frame__body { overflow-y: auto; padding: 0 var(--_studio-inset); }
+  .studio-chat-frame__body > :first-child { margin-block-start: var(--_studio-inset); }
   .studio-chat-frame__foot { padding: var(--_studio-inset); }

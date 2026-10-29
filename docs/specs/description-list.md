@@ -53,7 +53,8 @@ area  dl.area-description-list.area-description-list--{columns,justified}[.--div
 
 Insets, columns: term column 160 (padding 6, icon 16, 6 to the name: name at 28); value text at 160 + 8 + 6 = 174
 (Notion: cell 4 after the column, plate 4 in, text 6 in); rows 34, 4 apart. Justified: row padding 12 / 16, 24 between
-term and value; rules inset 16. Framed columns: frame padding 5 / 10 so text sits 12 / 16 from the frame, as ChatGPT's.
+term and value; rules inset 16. Framed, the text sits 12 inside the frame (13 from its outer edge), the agent chat's
+card column; framed columns keep ChatGPT's 12 from the top.
 
 ## Measurements
 
@@ -77,7 +78,7 @@ term and value; rules inset 16. Framed columns: frame padding 5 / 10 so text sit
 | columns · term column | fits the longest term up to 40% (`--area-description-list-term`), no inset, muted 14/20 (the UI type), 16 icon 6 before the name | Infobox's fit-content column (removed); round 73 | Notion's 160 column and 6 cell inset served editable cells with hover plates; Area's list is read-only facts |
 | columns · value | 12 after the term column (gap row; compact 8), default ink, all values in one column | Area's gap row; Infobox's 12 | was Notion's 174 |
 | columns · row | as tall as its text, 8 apart (ui-cluster; compact 6); divided 16 with the rule in the middle | Area's set spacing (items 8 apart) | was Notion's 34 rows 4 apart (owner, round 73: "why is the gaps between lines so large") |
-| justified · row | padding 12 / 16, 24 between, term 14/20 500 default ink, value at the end 14/20 | ChatGPT | ChatGPT's values mix 14/20 and 16/24; Area keeps the UI type |
+| justified · row | padding 12 / 16 (framed: 12 / 12 inside the frame, the card column), 24 between, term 14/20 500 default ink, value at the end 14/20 | ChatGPT | ChatGPT's values mix 14/20 and 16/24; Area keeps the UI type. Framed, the side is the agent chat's card column (owner 2026-10-28, chat set review: "move them to 13 anyway"; it was ChatGPT's 16) |
 | divided · rule | 1px `border-divider`, inset by the row's side padding | ChatGPT (inset 16); peer Table's row rule | — |
 | framed · frame | Table's frame: `border-divider`, `radius-container`, `bg-surface` | Peer Table | ChatGPT's corner 16 and rgb(252) fill; Area's standalone data frame is Table's |
 | semantics | `dl` > `div` > `dt` + `dd` | HTML; Ant, Chakra | — |
@@ -179,6 +180,10 @@ button below the frame (the `dl` carries the frame).
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the divided rules and the framed edge are at `stroke-width`, Table's (were `border-width`) (description-list.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, review round 21 (components21): approved with the open questions' recommendations ("go with your recs"), no change → Complete in `component-status.mjs`.
 
+- 2026-10-28 · chat set review (https://claude.ai/artifact/3ZRgoiUPiX6kkQxgt1MJTw): in Theme setup the framed answers' text
+  sat at 16 beside the progress Plan (17) and the question card (15); owner: "move them to 13 anyway" → framed, the
+  text is 12 inside the frame (13 from the outer edge), the card column of Plan, Edit summary and Queue. In review.
+
 Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").
 
 ## Spacing audit (2026-10-17)
@@ -199,3 +204,9 @@ Framed insets: the frame's stroke is counted once, so text and rules sit 16 from
   cells 4 apart, the text 6 inside a hover plate Area never draws, and a fixed 160 label column (about 130 of empty
   space after "Label"). Area's list shows facts, so it now takes Area's set spacing.
 
+## Review note, 2026-10-28 (chat set review)
+
+- **What changed:** A framed list's text now starts 13 from the frame's outer edge, on both layouts (it was ChatGPT's 16).
+  Its rules inset with it. Framed columns keep 12 from the top.
+- **Why:** Beside the agent chat's boxes, Plan, Edit summary and Queue at 13, the framed list started 3px further in;
+  Theme setup stacks them. You chose one card column, "move them to 13 anyway". Every framed list in the app moves.

@@ -149,12 +149,11 @@
   }
   .area-plan__segment { flex: 1 1 0; min-inline-size: 0; }
   .area-plan--none > .area-plan__bar { display: none; } /* plain markup: no bar without a value */
-  /* A tracker (a bar or a rail) gets a Card's room (owner 2026-10-25: "the padding/margins for the timeline and also the
-     gap between the text and the indicators looks too small"): its column 16 from the edge (Menu's list padding 8 + the
-     row inset; Card's text inset), the title 14 from the top (the head 8 taller), the bar 12 under the title's line and
-     16 above the card's bottom, rail rows 4 apart. The plain to-do tray keeps the agent card's 12 with Edit summary and
-     Queue. */
-  .area-plan:is(.area-plan--single, .area-plan--segmented, .area-plan--rail) { --_card-list: var(--area-space-8); }
+  /* A tracker (a bar or a rail) gets more room above (owner 2026-10-25: "the padding/margins for the timeline and also the
+     gap between the text and the indicators looks too small"): the title 14 from the top (the head 8 taller), the bar 12
+     under the title's line, rail rows 4 apart. Its column is the agent card's 12, with Edit summary, Queue and the plain
+     Plan (owner 2026-10-28, chat set review: it was 16, Card's, and in a chat column the boxes' text missed each other by
+     1-3px; "move them to 13 anyway"). */
   .area-plan:is(.area-plan--single, .area-plan--segmented) > .area-plan__head { padding-block-start: var(--area-space-8); }
   .area-plan:is(.area-plan--single, .area-plan--segmented) > .area-plan__head { min-block-size: calc(var(--area-ui-row) + var(--area-space-8)); }
   .area-plan--rail > .area-plan__items { gap: var(--area-space-4); }
