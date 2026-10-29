@@ -49,11 +49,14 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "approval", name: "Approval", manifest: "approval", imports: "Approval",
-    api: [["title / description", "what it wants to do, and why", "—"], ["items / onChoose", "numbered choices; 1–9 choose, arrows move (options: deprecated alias)", "—"], ["children", "the thing itself: a command, a Diff", "—"], ["onInstead / insteadPlaceholder", "a field to say what to do instead; Enter sends", "— / \"Tell it what to do instead\""], ["onDismiss", "Escape; the last item by default", "—"], ["autoFocus", "focus the first choice when it appears (where it takes the composer's place)", "false"]],
+    api: [["title / description", "what it wants to do, and why", "—"], ["items / onChoose", "numbered choices; 1–9 choose, arrows move (options: deprecated alias)", "—"], ["children", "the thing itself: a command, a Diff", "—"], ["onInstead / insteadPlaceholder", "a field to say what to do instead; Enter sends", "— / \"Tell it what to do instead\""], ["onDismiss", "Escape; the last item by default", "—"], ["autoFocus", "focus the first choice when it appears (where it takes the composer's place)", "false"], ["items[].description", "what a choice comes to, a line under it", "—"], ["value", "the answer already given: its row chosen, with a check", "—"], ["onActiveChange", "the choice under the pointer or focus (a preview)", "—"], ["actions", "the head's end: a compact Pagination among several questions, a close", "—"], ["footer / dismissLabel", "the hint row's end (Back, Skip, Continue) / what Esc does in the hint", "— / \"cancel\""]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryApproval", note: "It takes the composer's place, in the Composer's shell; choices are Menu rows with a number (Claude Code's prompt, Codex's approvals)."},
       {id: "detail", title: "Detail", demo: "GalleryApprovalDetail"},
       {id: "instead", title: "Instead", demo: "GalleryApprovalInstead"},
+      {id: "descriptions", title: "Descriptions", demo: "GalleryApprovalDescriptions", note: "A question rather than a permission (Claude Code's AskUserQuestion): each choice says what it comes to, Menu's row with a note."},
+      {id: "answered", title: "Answered", demo: "GalleryApprovalAnswered", note: "Asked again, the answer given is Menu's selected row with its check."},
+      {id: "questions", title: "Questions", demo: "GalleryApprovalQuestions", note: "Among several questions: a compact Pagination in the head, the way on (Skip, Continue) at the end of the hint's row."},
     ],
   },
   {

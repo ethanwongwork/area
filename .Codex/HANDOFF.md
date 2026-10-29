@@ -1,6 +1,33 @@
 # Handoff
 
 ## Current state (2026-10-28)
+- **Setup as a compact chat panel, branch `claude/theme-onboarding-chat-panel-2ce3b7` (owner 2026-10-28: "a more compact
+  chat panel, just like cursor, claude, chatgpt ... make sure all components are built for it"), PR #172.** Setup's
+  left side is a resizable Panel (320–560, default 400, `widths["setup-chat"]`) at the app's own scale, built as the
+  Inspector's Chat view: Message prose, each chapter's answers as a framed justified Description list (an answer
+  reopens its question, marked), the Plan tray over the question, and the question docked in the composer's place as
+  an **Approval** (Claude Code's AskUserQuestion): numbered rows with descriptions, the given answer marked, a compact
+  Pagination in the head, Use the default / Skip chapter / Continue in the foot; the final card is "What next?".
+  Hover or focus on a row previews on the stage. Card questions lose their pictures (the stage is the picture); bar
+  questions with named marks show the marks as rows (exact positions: Fine-tune → Inspector). Approval gains
+  `items[].description`, `value`, `onActiveChange`, `actions`, `footer`, `dismissLabel` (spec, docs entry, 3 tiles,
+  test) and is back In review. Testing › Chat frames: the sticky head no longer shows turns above it. Checks: React
+  593/593, docs, parity, app-css, playgrounds, typecheck; `test:desktop` 11/12 (the known brand.tsx failure on main).
+  Chat set review page (every chat tile + composed screens, guides, measurements): https://claude.ai/artifact/3ZRgoiUPiX6kkQxgt1MJTw
+  (builder in the session scratchpad, not the repo). From it (owner: "move them to 13 anyway"): Plan bar/rail and the
+  framed Description list put their text on the agent card column (12 in, 13 from the outer edge; were 16 / 15), and
+  Composer menu's "No matches" takes the rows' text-sm. Plan, Description list, Composer menu back In review. Kept by
+  the owner: Composer menu's label on Menu's icon column (14), Diff's sans fold (option C).
+  Theme header fixed: Workspace gained `lead` (a region in the Sidebar's place at the app's scale); Setup's chat is the
+  lead (its bar on the 47 header line, density 32 now, was Setup's 28), the stage is the Canvas, its controls in the Canvas
+  header (Screen/Component + screen; Setup/Browse, Real/Wireframe, Light/Dark); no extra row. PRODUCT_UI.md Setup updated.
+  App structure proposal (owner asked to re-evaluate the IA; nothing built): https://claude.ai/artifact/4nvLA9RLBaY2RZ1PedrcFn
+  (System / Projects / Collections / Library, Home then drill in; themes inside a system; Cursor's agent window measured
+  from its bundle: bars 40, sidebar 260, rows 28, 14 glyphs, composer radius 20 / text 13 in). Owner confirmed the model
+  the same day (Workspace: several Brands, Projects, Library of boards; public Explore; Area system = Starter + parts
+  catalog); phased build plan in docs/research/app-structure-2026-10-28/README.md. Shell chosen: variation A on
+  https://claude.ai/artifact/Fb9YBdJ3B1oVqhvEZQgPKL (Cursor-style nav, Figma tabs, takeover panels); reopen the last
+  place with its tabs; Inspector's Brand section → Brand colours. Nothing open: Phase 1 is next (own session and PR).
 - **Interaction and visual pass, rounds 75–80, branch `claude/component-interaction-visual-polish-e45c8f` (owner: the
   Slider's motion and detail pass on every component, then a by-eye visual pass in the Sidebar's order), PR open, every
   item owner-approved.** Interaction pass (docs/research/interaction-pass-2026-10-26/, re-runnable scripts): Tabs and

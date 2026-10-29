@@ -180,36 +180,32 @@ header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
 - **Setup** (the default; `src/pages/theme-setup.tsx`, questions in `src/pages/setup-questions.ts`; a questionnaire since
   2026-10-24, a conversation in two panels since the same day: "a 2 panel view with 1 side being a vertically scrolling
   chat like experience ... and then visuals on the right side"; "dont need all these panels open"):
-  - **No Sidebar or Inspector** (Workspace `panels={false}`; the saved panels are untouched, so other tabs keep theirs),
-    and no cards: the Setup fills the Canvas edge to edge as two sections, one rule between them (owner, 2026-10-24:
-    "not sure about using panels, when the design system visual language just uses sections ... fill the canvas space").
-    The header holds Setup / Browse. The chat is drawn at the default scale (type 14, Default room), not the app's
-    compact chrome, so a choice card's inset is 12 (choice.css), not 8.
-  - **The chat** (left, a reading column): a welcome that chooses the path (Essentials, 14 questions, or Every detail);
-    then each question arrives as Setup's message (the question and one sentence) with its choices inline; once
-    answered it stays in the thread as the person's reply bubble, which reopens the question when selected (Done returns
-    to where the conversation had reached). Chapters open with a divider (name and a line). The question being asked
-    scrolls to the top. The dock at the foot holds progress by chapter and time left, Back, Default, Skip chapter and
-    Continue; the review lists every answer (changes in bold) with Copy theme and Fine-tune (Browse with the Inspector).
-  - **Controls**, kept to pictures (owner, 2026-10-24: "less text overall, more simple and visual choice based"): choice
-    cards are a picture and a one- or two-word name; what the choice under the pointer (or the picked one) is for, and
-    whether it is the default, is one line under them. A picture is a close-up of the product screen under that choice,
-    drawn as shapes alone (bars where the text is the question, real text where its colour is), at one scale for every
-    choice; a small part is shown whole with the screen round it veiled in the page colour. Other controls: a large bar
-    with named presets that glides between steps, a toggle with a bar for how much, swatches and a hue bar, checkable
-    cards (pills), a Switch moving at the speed and curve. An exact value folds under the cards. A setting elsewhere
-    that changes what a question shows is said under it with a way to undo it (Fill shade under Accent and Saturation).
-  - **The visuals** (right): a bar over the view and one under it, the view on a plain ground a step off any page (no
-    backdrop, no shadow; the window's own edge is its outline). The top bar chooses what is shown, Screen or Component,
+  - **No Sidebar or Inspector** (Workspace `panels={false}`; the saved panels are untouched, so other tabs keep theirs).
+    Since 2026-10-28 the chat is a Panel in the Sidebar's place (Workspace `lead`), at the app's scale as the Inspector's
+    Chat view, resizable (320 to 560, 400 by default), and the stage is the Canvas (owner, 2026-10-28: "a more compact
+    chat panel, just like cursor, claude, chatgpt"; "fix the header on the theme page"). The Canvas header holds the
+    stage's controls: Screen or Component and the screen at its start; Setup / Browse, Real or Wireframe and Light or
+    Dark at its end, Browse's order. The chat's bar ("Theme setup", Start over, Fine-tune in the Inspector) sits on the
+    header's line; there is no row of its own for Setup / Browse.
+  - **The chat** (left), built as the Inspector's Chat view: Messages for what Setup says, each chapter's answers in a
+    framed, justified Description list (an answer reopens its question, marked as the current one; Done returns to
+    where the conversation had reached), and the review with Copy theme. The composer's place at the foot holds the
+    progress (Plan, a segmented rail by chapter) over the question, an Approval: numbered choices with a line each, the
+    given answer checked, "N of M" in its head, Use the default, Skip chapter and Continue in its foot. 1–9 choose,
+    Enter continues; a choice under the pointer or focus is previewed on the stage.
+  - **Controls**: choices are the Approval's rows, words only, since the stage draws each choice (owner, 2026-10-28,
+    the chat panel); a scale with named marks asks by its marks, and an exact value is set in the
+    Inspector (Fine-tune). Swatches, a hue bar, a toggle and checkable pills sit in the card's detail.
+  - **The visuals** (right, the Canvas): the view and a bar under it, on a plain ground a step off any page (no
+    backdrop, no shadow; the window's own edge is its outline). The Canvas header chooses what is shown, Screen or Component,
     which product screen (Workspace, Analytics, Settings, Phone; `SCREENS` in `src/setup-screen.tsx`), Real or Wireframe
-    (words as bars), and Light or Dark; the bottom bar names what is shown and holds the zoom (Zoom control, a stepper;
+    (words as bars), and Light or Dark; the bar under the view names what is shown and holds the zoom (Zoom control, a stepper;
     Fit returns to the fitted size; a zoom centres on the part the question changes). The Workspace is a real, detailed
     product screen (an issue tracker: projects, issues with statuses, a New issue form, a More menu) drawn as an Area
     figure under the theme so far and the mode the question belongs to; it alone marks the parts a question changes
     (dashed rings settling to a trace) and holds the states it is about, with the pointer where it would be. Component
     shows the question's part alone, whole and large, the screen round it hidden. A choice under the pointer is drawn
-    before it is picked ("Previewing …"). A narrow Canvas stacks the visuals above the chat.
-  - **Motion** (owner, 2026-10-24: "subtle, clean"): a new turn and a reopened question's choices rise 8px and fade in;
+    before it is picked ("Previewing …").   - **Motion** (owner, 2026-10-24: "subtle, clean"): a new turn and a reopened question's choices rise 8px and fade in;
     the thread scrolls smoothly to the question; the hint under the cards fades as it changes; the progress fills; the
     visuals crossfade a pick or a hover preview. While a bar is dragged the visuals repaint at most every 180ms; the
     chrome takes the setting 160ms after the drag ends. All of it runs on the app's own Speed and Easing.

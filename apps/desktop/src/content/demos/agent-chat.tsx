@@ -4,7 +4,7 @@
  * the system's placeholder copy. Specs: docs/specs/{step,edit-summary,approval,plan,turn-notice}.md.
  */
 import { useState } from "react";
-import { Approval, Badge, Button, CodeBlock, Diff, EditSummary, EditSummaryFile, Plan, Reasoning, Step, StepGroup, TurnNotice, type DiffHunk, type EditFileState } from "@area/react";
+import { Approval, Badge, Button, CodeBlock, Diff, EditSummary, EditSummaryFile, Pagination, Plan, Reasoning, Step, StepGroup, TurnNotice, type DiffHunk, type EditFileState } from "@area/react";
 import { AgentIcon, DocumentIcon } from "@area/icons";
 
 const frame = { inlineSize: 280 };
@@ -94,6 +94,30 @@ export const GalleryApprovalDetail = () => (
     </Approval>
   </div>
 );
+// A question (Claude Code's AskUserQuestion): each choice says what it comes to; asked again, the answer given is marked;
+// among several questions, where it is sits in the head and the way on in the foot.
+const described = [
+  { value: "one", label: "Option one", description: "Description" },
+  { value: "two", label: "Option two", description: "Description" },
+  { value: "three", label: "Option three", description: "Description" },
+];
+export const GalleryApprovalDescriptions = () => (
+  <div style={frame}><Approval title="Title" description="Description" items={described} onChoose={() => {}} /></div>
+);
+export const GalleryApprovalAnswered = () => {
+  const [value, setValue] = useState("two");
+  return <div style={frame}><Approval title="Title" description="Description" items={options} value={value} onChoose={setValue} /></div>;
+};
+export const GalleryApprovalQuestions = () => {
+  const [page, setPage] = useState(2);
+  return (
+    <div style={frame}>
+      <Approval title="Title" items={options} onChoose={() => setPage(next => Math.min(4, next + 1))} dismissLabel="skip"
+        actions={<Pagination layout="compact" size="sm" pageCount={4} page={page} onPageChange={setPage} labels={{ nav: "Questions", status: (at, count) => <>{at} of {count}</> }} />}
+        footer={<Button size="sm" variant="ghost" tone="neutral" onClick={() => setPage(next => Math.min(4, next + 1))}>Skip</Button>} />
+    </div>
+  );
+};
 export const GalleryApprovalInstead = () => (
   <div style={frame}><Approval title="Title" description="Description" items={options} onChoose={() => {}} onInstead={() => {}} insteadPlaceholder="Placeholder" /></div>
 );

@@ -126,6 +126,7 @@
      rgb(249,248,247) on a white page with a hairline at its edge). A Material makes it see-through (material.css). */
   .studio-sidebar { --area-chrome-fill: var(--area-bg-subtle); }
   .studio-sidebar,
+  .studio-lead,
   .studio-inspector {
     display: grid;
     grid-template-rows: minmax(0, 1fr);

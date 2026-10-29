@@ -525,7 +525,10 @@ export const diff = {
 export const approval = {
   block: "area-approval", description: "An agent asks before it acts: what and why, the thing itself, numbered choices with their scope, and a field to say what to do instead.",
   variants: {},
-  elements: ["head", "title", "description", "detail", "options", "option", "key", "label", "instead", "field", "hint"],
+  // The question card's parts (owner 2026-10-28, Setup as a chat panel; Claude Code's AskUserQuestion): the head's
+  // actions, an option's description and check, the foot's footer.
+  elements: ["head", "heading", "title", "description", "actions", "detail", "options", "option", "key", "lines", "label", "option-description", "check", "instead", "field", "foot", "hint", "footer"],
+  states: ["selected"], // an option's, as Menu's rows (data-selected: the answer given)
   defaults: {},
 } as const satisfies ComponentManifest;
 

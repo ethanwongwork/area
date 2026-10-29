@@ -10,12 +10,12 @@ export const COMPLETE_COMPONENTS = new Set([
   // Reopened 2026-10-26 (owner: the Slider's motion and detail pass on every component; docs/research/interaction-pass-2026-10-26):
   'color-picker', // round 75 approved (owner, 2026-10-27: the knob lifts); its Gamut mode approved on the exact-colours review (owner, 2026-10-28)
   'tabs', 'code-block', // round 77 approved (owner, 2026-10-27: the focus rings with room)
-  'step', 'plan', 'queue', 'edit-summary', 'list-box', 'combobox', 'tag-picker', 'input', 'textarea', 'number-field',
+  'step', 'queue', 'edit-summary', 'list-box', 'combobox', 'tag-picker', 'input', 'textarea', 'number-field',
   'select', 'input-group', 'empty-state', 'toggletip', // round 75 approved (owner, 2026-10-27)
   'asset-card', // round 76 approved (owner, 2026-10-27: group element cells draw their frame; the Stage as it ships)
   'command-palette', 'inline-list', 'nav', 'panel', 'separator', 'shortcut-list', // round 72 approved (owner, 2026-10-26; asset-card too)
   'radio', 'checkbox', // round 73 approved (owner, 2026-10-26)
-  'file-upload', 'description-list', // round 74 approved (owner, 2026-10-26). infobox: removed 2026-10-26 (owner, round 73).
+  'file-upload', // round 74 approved (owner, 2026-10-26; description-list too). infobox: removed 2026-10-26 (owner, round 73).
   // plan: reopened 2026-10-25 (owner: a progress tracker; bar, item meta, the ring), back in review.
   // radio, checkbox: reopened 2026-10-25 (owner: soft option rows, layout list, meta), back in review.
   'color-swatch', 'color-swatch-picker', 'count', 'editable-text', 'meter', 'progress', 'reference-list', 'search-field', 'spinner', 'table', 'table-of-contents', 'time-field', 'timeline', 'tree-view', // round 69 approved by the owner in chat (2026-10-22)
@@ -23,7 +23,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // code-block, edit-summary, queue: reopened 2026-10-25 (owner: no rule under the header or head), back in review.
   'alignment-picker', 'attachment', 'avatar', 'calendar', 'chip', 'popover', 'stepper', // rounds 69-70 approved (2026-10-22)
   'kbd', 'menu', // round 78 approved (owner, 2026-10-27: keycap sides 3, corner by height)
-  'dialog', 'confirm-dialog', 'drawer', 'alert', 'toast', 'token-row', 'approval', // round 68 approved (2026-10-22; kbd too)
+  'dialog', 'confirm-dialog', 'drawer', 'alert', 'toast', 'token-row', // round 68 approved (2026-10-22; kbd too); approval: reopened 2026-10-28 (question card for Setup's chat panel)
   // asset-card: reopened 2026-10-26 (owner: Preview frame folded in: wide, checker, the frame alone), back in review.
   // segmented, switch, field: reopened 2026-10-27 (owner, the Inspector's spacing: the track loses its ring; a panel's
   // switch row is its control's height with a muted label; a panel row is its control's height), back in review.
@@ -37,7 +37,7 @@ export const COMPLETE_COMPONENTS = new Set([
   'file-image', 'file-page', 'video-player',
   // Round 56, 2026-10-19 (owner approved, components56).
   'color-field', 'file-tile',   // Round 55, 2026-10-19 (owner approved on the review page, components55): the design-system audit's changes.
-  'composer-menu', 'folder', // plan, queue: reopened in round 56 (head seam).
+  'folder', // plan, queue: reopened in round 56 (head seam). composer-menu: reopened 2026-10-28 (chat set review).
   // Round 50, 2026-10-19 (owner approved on the review page): the chat additions and three agent chat families.
   'timestamp', 'turn-notice', // composer-menu, queue: reopened 2026-10-19 (design-system audit).
   // Round 52, 2026-10-19 (owner approved): the rest of the agent chat set.
@@ -100,7 +100,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-12 on the review page, round 21 (components21): the consistency pass (badge's dismiss ring at 0 is the
   // owner's own pick, O1), Board's hover and corners, Description list's show more; open questions on the recommendations.
   // board: reopened 2026-10-16 (Layers sweep, round 30).
-  'description-list',   // Approved 2026-10-13 on the review page, round 23 (components23), after the round-22 approval and the tile surface.
+  // description-list: approved 2026-10-13, round 23 (components23); reopened 2026-10-28 (chat set review: framed text on the card column).
   'preview-frame',
   // Approved 2026-10-13 on the review page, round 24 (components24).
   'password-field', 'otp-field',
@@ -151,7 +151,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Round 68 (2026-10-22): the text-pair rule (a line joins its title) reopens Dialog, Confirm dialog, Drawer, Popover,
 // Alert, Toast, Empty state, Checkbox and Radio; Token row's text moves onto the ramp.
 // Round 69 (2026-10-22): Selection defaults to the accent (option B), so every family whose default paints Selection reopens.
-export const REVIEW_COMPONENTS = new Set(['slider', 'breadcrumb', 'segmented', 'switch', 'field']); // breadcrumb: reopened 2026-10-25, nowrap; its round 80 ellipsis approved 2026-10-28, nowrap still awaits a verdict // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots
+export const REVIEW_COMPONENTS = new Set(['slider', 'breadcrumb', 'segmented', 'switch', 'field', 'approval', 'plan', 'description-list', 'composer-menu']); // plan, description-list, composer-menu: reopened 2026-10-28, the chat set review (the card column at 13; the empty row in the rows' type) // approval: reopened 2026-10-28, the question card (Setup's chat panel) // breadcrumb: reopened 2026-10-25, nowrap; its round 80 ellipsis approved 2026-10-28, nowrap still awaits a verdict // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
