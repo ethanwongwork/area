@@ -19,7 +19,7 @@
  * the visuals take the picks.
  */
 import { AddIcon, ChatAddIcon, InfoIcon, MoonIcon, OptionsIcon, ResetIcon, SunIcon } from "@area/icons";
-import { Approval, Badge, Button, Checkbox, CheckboxGroup, CodeBlock, ColorSwatchPicker, DescriptionList, DescriptionListItem, Message, Pagination, Panel, Plan, ScrollToLatest, Segmented, Select, Slider, Switch, Tooltip, ZoomControl, type ApprovalOption } from "@area/react";
+import { Approval, Badge, Button, Checkbox, CheckboxGroup, CodeBlock, ColorPicker, ColorSwatch, ColorSwatchPicker, DescriptionList, DescriptionListItem, Message, Pagination, Panel, Plan, ScrollToLatest, Segmented, Select, Slider, Switch, Tooltip, ZoomControl, type ApprovalOption } from "@area/react";
 import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { LoopingPress } from "../abstract.tsx";
 import { appScale } from "../app-scale.ts";
@@ -30,6 +30,10 @@ import { GALLERY_CONTROLS } from "../gallery/controls.ts";
 import { hueName } from "../inspector-rows.tsx";
 import { REGION_LABEL, SCREENS, ScreenFigure, type Region, type RegionBox, type ScreenId } from "../setup-screen.tsx";
 import { canvasAttributes, CANVAS_DEFAULTS, useStudio, Workspace, type CanvasAxes } from "../studio.tsx";
+import { coloursCode, hasColours, type ColoursState } from "../colours.ts";
+import { useBrandSheet } from "../brand.ts";
+import { oklchHex, parseColour } from "@area/tokens/colours";
+import { PagePicker, pageAnswer, pageHex } from "../page-colour.tsx";
 import { AXES } from "../tokens.ts";
 import { useViewOption, ViewControls } from "../view-controls.tsx";
 import { readStored, writeStored } from "../storage.ts";
@@ -71,20 +75,30 @@ const TINTS: ReadonlyArray<[string, string]> = [["30", "Red"], ["55", "Orange"],
 const hueSwatch = (hue: string) => `oklch(0.66 0.14 ${hue})`;
 
 /** What a question is set to, in its own words: the choice it matches, else the setting's value. */
-function answerOf(question: Question, values: Values): string {
+function answerOf(question: Question, values: Values, picks: Picks): string {
   const control = question.control;
   if (control.kind === "cards") { const choice = control.choices.find(entry => matches(values, entry.set)); if (choice) return choice.label; }
+  if (control.kind === "accent" && picks.accent) return `Exact · ${picks.accent.toUpperCase()}`;
   if (control.kind === "accent") return /^\d+$/.test(values.accent) ? `${hueName(Number(values.accent))} · ${values.accent}°` : say("accent", values.accent);
   if (control.kind === "tint") return `${hueName(Number(values["tint-hue"]))} · ${values["tint-hue"]}°`;
+  if (control.kind === "page") return pageAnswer(control.mode, values, picks);
   if (control.kind === "pills") { const count = values.pills.split(" ").filter(Boolean).length; return count ? `${count} parts` : "None"; }
   if (control.kind === "toggle") return values[control.axis] === control.off ? "Off" : say(control.axis, values[control.axis]);
   const axis = question.axes[0]!;
   return say(axis, values[axis]);
 }
 const focusOf = (question: Question, values: Values): Region[] => typeof question.focus === "function" ? question.focus(values) : question.focus;
-const atDefault = (question: Question, values: Values) => question.axes.every(axis => values[axis] === defaultOf(axis));
+/** The exact colours picked: each page (src/colours.ts) and the accent, an exact colour through the brand engine while
+ * Brand is on (src/brand.ts), else null. */
+type Picks = ColoursState & { accent: string | null };
+/** At Area's default: every setting it writes, and for a page question no pick (`picks`, src/colours.ts). */
+const atDefault = (question: Question, values: Values, picks: Picks) => question.axes.every(axis => values[axis] === defaultOf(axis))
+  && !(question.control.kind === "page" && picks[question.control.mode]) && !(question.control.kind === "accent" && picks.accent);
 export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupProps) {
-  const { item, select, canvas, setCanvas, shown, setInspectorView, showInspector } = useStudio();
+  const { item, select, canvas, setCanvas, shown, setInspectorView, showInspector, colours, brand, setBrand } = useStudio();
+  const studioColours: Picks = { ...colours, accent: brand.on ? brand.primary : null };
+  // An exact accent paints the stage as it paints the Canvas: its one rule in the head, data-area-brand on the scopes.
+  useBrandSheet(brand.on ? brand : null);
   const [path, setPath] = useViewOption<Path>("theme-setup-path", "essentials", ["essentials", "complete"]);
   // The product the visuals draw; the welcome's first question sets it, the stage's menu changes it later.
   const [screen, setScreen] = useViewOption<ScreenId>("theme-setup-screen", "workspace", Object.keys(SCREENS) as ScreenId[]);
@@ -93,7 +107,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   const values = canvas as Values;
 
   // The questions on this path that can change something under the answers so far.
-  const asked = QUESTIONS.filter(question => (path === "complete" || question.essential) && (!question.when || question.when(values)));
+  const asked = QUESTIONS.filter(question => (path === "complete" || question.essential) && (!question.when || question.when(values, studioColours)));
   // Where the conversation is: the welcome (""), a question, or the review. A question the answers have made moot gives
   // way to the next one asked.
   const lost = item && item !== "review" && !asked.some(entry => entry.id === item) ? QUESTIONS.findIndex(entry => entry.id === item) : -1;
@@ -129,9 +143,9 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   const drawn = useThrottled(shown, 180);
   const scopeOf = (extra: Changes = {}) => {
     const attributes = canvasAttributes({ ...drawn.canvas, ...extra } as typeof drawn.canvas, drawn.material) as Record<string, string | undefined>;
-    return { ...attributes, "data-area-theme": stageMode };
+    return { ...attributes, ...(hasColours(drawn.colours) ? { "data-area-colours": "" } : {}), ...(brand.on ? { "data-area-brand": "" } : {}), "data-area-theme": stageMode };
   };
-  const answeredCount = asked.filter(entry => !atDefault(entry, values)).length;
+  const answeredCount = asked.filter(entry => !atDefault(entry, values, studioColours)).length;
   const changed = SETTINGS.filter(entry => entry.id !== "theme" && (values as Record<string, string>)[entry.id] !== undefined && (values as Record<string, string>)[entry.id] !== defaultOf(entry.id as Axis)).length;
   const fineTune = () => { setInspectorView("theme"); showInspector(); onBrowse(); };
   const restart = () => set(Object.fromEntries(Object.entries(CANVAS_DEFAULTS)) as Changes);
@@ -139,14 +153,26 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   // The thread: the Panel's scrolling body.
   const thread = useRef<HTMLDivElement>(null);
 
-  const paths = { essentials: QUESTIONS.filter(entry => entry.essential && (!entry.when || entry.when(values))).length, complete: QUESTIONS.filter(entry => !entry.when || entry.when(values)).length };
+  const paths = { essentials: QUESTIONS.filter(entry => entry.essential && (!entry.when || entry.when(values, studioColours))).length, complete: QUESTIONS.filter(entry => !entry.when || entry.when(values, studioColours)).length };
 
-  const themed = SETTINGS.filter(entry => entry.id !== "theme" && !(entry.id === "contrast" && values.contrast === "system")
+  // Exact page colours (2026-10-27) are a second part: `data-area-colours` and one rule of variables, which stand in for
+  // the page settings of each mode picked, so those attributes are left out (the plan: "use one or the other").
+  const picked = studioColours, pickedOut = (id: string) =>
+    (picked.light !== null && (id === "ground-light" || id === "tint-light")) || (picked.dark !== null && (id === "ground-dark" || id === "tint-dark" || id === "tint-hue-dark"))
+    || (id === "tint-hue" && picked.light !== null && (picked.dark !== null || values["tint-hue-dark"] !== "same"));
+  const themed = SETTINGS.filter(entry => entry.id !== "theme" && !(entry.id === "contrast" && values.contrast === "system") && !pickedOut(entry.id)
     && (values as Record<string, string>)[entry.id] !== undefined && (values as Record<string, string>)[entry.id] !== defaultOf(entry.id as Axis));
-  const themeCode = themed.length
-    ? `<html\n${themed.map(entry => `  ${attributeOf(entry, (values as Record<string, string>)[entry.id]!)}`).join("\n")}\n>`
-    : "<html>";
-  const extra = QUESTIONS.find(entry => !entry.essential && (!entry.when || entry.when(values)));
+  const anyPick = hasColours(picked) || picked.accent !== null;
+  const lines = [...(anyPick ? ["data-area-colours"] : []), ...themed.map(entry => attributeOf(entry, (values as Record<string, string>)[entry.id]!))];
+  // An exact accent restates about 600 derivations (THEMING.md, Brand), too long to read here: the theme then links the
+  // colour rule `area-tokens colours` writes, and the command that writes it follows.
+  const command = picked.accent === null ? null : ["npx area-tokens colours",
+    ...(picked.light ? [`--page-light "${picked.light}"`] : []), ...(picked.dark ? [`--page-dark "${picked.dark}"`] : []),
+    `--accent "${picked.accent}"`, ...(brand.secondary ? [`--secondary "${brand.secondary}"`] : []), ...(brand.tertiary ? [`--tertiary "${brand.tertiary}"`] : []),
+    ...(brand.status === "own" ? ["--status fixed"] : []), "> colours.css"].join(" \\\n  ");
+  const themeCode = (lines.length ? `<html\n${lines.map(line => `  ${line}`).join("\n")}\n>` : "<html>")
+    + (command ? `\n\n<link rel="stylesheet" href="colours.css">` : hasColours(picked) ? `\n\n${coloursCode(picked)}` : "");
+  const extra = QUESTIONS.find(entry => !entry.essential && (!entry.when || entry.when(values, studioColours)));
   const nextSteps = [
     { id: "fine-tune", label: "Fine-tune every setting in the Inspector" },
     { id: "components", label: "See every component in your theme" },
@@ -183,7 +209,10 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   }, [item, path, opening, reach]);
   // Back to where the conversation had reached, as an edited message returns to the end of the thread.
   const settle = () => { setPreview(null); if (at >= 0 && at < reach) go(reach); else go(at + 1); };
-  const resetQuestion = question && !atDefault(question, values) ? () => set(Object.fromEntries(question.axes.map(axis => [axis, defaultOf(axis)]))) : undefined;
+  const resetQuestion = question && !atDefault(question, values, studioColours) ? () => {
+    if (question.control.kind === "accent") setBrand({ on: false });
+    set(Object.fromEntries(question.axes.map(axis => [axis, defaultOf(axis)])));
+  } : undefined;
   const lastQuestion = at + 1 >= asked.length;
 
   // The question card: one shape for the welcome, every question and the way on at the end.
@@ -215,7 +244,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
       value: choice, label: choice === "essentials" ? "Essentials" : "Every detail",
       description: `${choice === "essentials" ? "The choices that change the most" : "Every setting, chapter by chapter"} · ${paths[choice]} questions, about ${minutesFor(paths[choice])} min`,
     })),
-    value: path, choose: choice => { setPath(choice as Path); select(QUESTIONS.find(entry => (choice === "complete" || entry.essential) && (!entry.when || entry.when(values)))?.id ?? "review"); },
+    value: path, choose: choice => { setPath(choice as Path); select(QUESTIONS.find(entry => (choice === "complete" || entry.essential) && (!entry.when || entry.when(values, studioColours)))?.id ?? "review"); },
     detail: changed ? <p className="setup-step__note"><InfoIcon /><span>Starting from your {changed} changed settings. <button type="button" className="setup__link" onClick={restart}>Start from the defaults</button></span></p> : undefined,
     position: { at: 1, count: 2, go: n => setOpening(n as 0 | 1), label: "Welcome questions" },
     footer: <Button size="sm" onClick={next}>Start</Button>,
@@ -333,8 +362,8 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
           <Fragment key={section.id}>
             <Message author="assistant" authorName="Setup"><p><strong>{section.title}.</strong> {section.lede}</p></Message>
             {done.length ? answerList(`${section.title} answers`, done.map(row => ({
-              id: row.id, term: row.name, answer: answerOf(row, values), visual: swatchOf(row, values),
-              changed: !atDefault(row, values), current: asked.indexOf(row) === at, open: () => go(asked.indexOf(row)),
+              id: row.id, term: row.name, answer: answerOf(row, values, studioColours), visual: swatchOf(row, values, studioColours),
+              changed: !atDefault(row, values, studioColours), current: asked.indexOf(row) === at, open: () => go(asked.indexOf(row)),
             }))) : null}
           </Fragment>
         );
@@ -342,11 +371,16 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
       {reviewing || reach >= asked.length ? <>
         <Message author="assistant" authorName="Setup">
           <p><strong>Here's your design system.</strong> {answeredCount ? `${answeredCount} of your ${asked.length} answers differ from Area's defaults` : `All ${asked.length} answers are Area's defaults`}{changed > answeredCount ? `, ${changed} settings in all` : ""}. Select any answer above to change it.</p>
-          <p>{themed.length
+          <p>{command
+            ? `To use it, load Area's stylesheet, put ${lines.length === 1 ? "this attribute" : `these ${lines.length} attributes`} on your page's root and link the colour rule after it; the command under the theme writes that rule. Anything left out stays at Area's default.`
+            : hasColours(picked)
+            ? `To use it, load Area's stylesheet, put ${lines.length === 1 ? "this attribute" : `these ${lines.length} attributes`} on your page's root and add the colour rule after Area's stylesheet. Anything left out stays at Area's default.`
+            : themed.length
             ? `To use it, load Area's stylesheet and put ${themed.length === 1 ? "this attribute" : `these ${themed.length} attributes`} on your page's root. Anything left out stays at Area's default.`
             : "Every setting is Area's default, so your page needs only Area's stylesheet: no attributes."}</p>
           {/* The theme to take away: a Code block labelled by its language, its copy in its header. */}
           <CodeBlock size="sm" language="html" lineNumbers={false} copyable copyLabel="Copy theme" html={highlight(themeCode)} />
+          {command ? <CodeBlock size="sm" language="bash" lineNumbers={false} copyable copyLabel="Copy command" code={command} /> : null}
         </Message>
       </> : null}
     </div>
@@ -368,7 +402,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
           items: status === "current" ? rows.map(row => {
             const index = asked.indexOf(row);
             return { id: row.id, label: row.name, status: index < at ? "done" as const : index === at ? "current" as const : "pending" as const,
-              progress: index === at ? 0 : undefined, meta: index < at ? answerOf(row, values) : undefined };
+              progress: index === at ? 0 : undefined, meta: index < at ? answerOf(row, values, studioColours) : undefined };
           }) : undefined,
         };
       })} />
@@ -534,6 +568,7 @@ function QuestionControl(props: ControlProps) {
     case "accent": return <AccentControl {...props} />;
     case "tint": return <TintControl {...props} />;
     case "pills": return <PillCards {...props} />;
+    case "page": return <PageControl {...props} pageMode={control.mode} />;
   }
 }
 
@@ -604,14 +639,47 @@ function SliderControl(props: ControlProps & { axis: Axis; also: Axis[]; low: st
 }
 
 /** Accent: the palette's eleven as large swatches, or any hue on a bar. */
-function AccentControl(props: ControlProps) {
-  const { values, set } = props;
-  const custom = /^\d+$/.test(values.accent);
+/** A mode's page as one exact colour (src/page-colour.tsx), its colour in words under it. */
+function PageControl({ values, set, pageMode }: ControlProps & { pageMode: Mode }) {
+  const { colours: picks, setColours } = useStudio();
+  const pick = picks[pageMode];
   return (
     <div className="setup-control">
-      <Segmented size="sm" fullWidth aria-label="Accent source" items={[{ value: "named", label: "Palette" }, { value: "custom", label: "Any hue" }]} value={custom ? "custom" : "named"}
-        onValueChange={next => set({ accent: next === "custom" ? "200" : "blue" })} />
-      {custom ? (
+      <PagePicker mode={pageMode} values={values} picks={picks} set={set} onPick={colour => setColours({ [pageMode]: colour })} />
+      <p className="setup-control__answer">{pageAnswer(pageMode, values, picks)}{pick ? ` · ${oklchHex(parseColour(pick))}` : ""}</p>
+    </div>
+  );
+}
+
+/**
+ * Accent: the palette's eleven as swatches, any hue on a bar, or one exact colour (exact colours plan, phase 4,
+ * 2026-10-27): Area's Color picker, through the brand engine (src/brand.ts) as the Inspector's Exact colour; dark is solved
+ * from it. A colour lands when the pointer lifts or rests REST ms, since each works out a brand (about 60ms).
+ */
+const REST = 300; /* pick: as Brand colours' picker (brand-settings.tsx) */
+function AccentControl(props: ControlProps) {
+  const { values, set } = props;
+  const { brand, setBrand } = useStudio();
+  const custom = /^\d+$/.test(values.accent);
+  const source = brand.on ? "exact" : custom ? "custom" : "named";
+  const pending = useRef<string | null>(null), timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const land = () => { clearTimeout(timer.current); if (pending.current) setBrand({ primary: pending.current.toLowerCase() }); pending.current = null; };
+  const choose = (next: string) => {
+    if (next === "exact") { setBrand({ on: true }); return; }
+    setBrand({ on: false });
+    set({ accent: next === "custom" ? "200" : "blue" });
+  };
+  return (
+    <div className="setup-control">
+      <Segmented size="sm" fullWidth aria-label="Accent source" value={source} onValueChange={choose}
+        items={[{ value: "named", label: "Palette" }, { value: "custom", label: "Any hue" }, { value: "exact", label: "Exact colour" }]} />
+      {source === "exact" ? (
+        <div onPointerUp={land}>
+          <ColorPicker variant="plain" label="Accent" alpha={false} defaultModel="oklch" eyedropper value={brand.primary.toUpperCase()}
+            onValueChange={hex => { pending.current = hex; clearTimeout(timer.current); timer.current = setTimeout(land, REST); }} />
+        </div>
+      ) : custom ? (
         <Slider labelPosition="inside" label="Hue" min={0} max={HUES.length - 1} step={1} value={Math.max(0, HUES.indexOf(values.accent))}
           readout={(at: number) => `${hueName(Number(HUES[at]))} · ${HUES[at]}°`} onValueChange={at => set({ accent: HUES[at]! })} />
       ) : (
@@ -619,7 +687,7 @@ function AccentControl(props: ControlProps) {
           items={NAMED_ACCENTS.map(item => ({ value: accentHex(item.value), label: item.label }))}
           onValueChange={hex => { const item = NAMED_ACCENTS.find(entry => accentHex(entry.value) === hex); if (item) set({ accent: item.value }); }} />
       )}
-      <p className="setup-control__answer">{custom ? `${hueName(Number(values.accent))} · ${values.accent}°` : say("accent", values.accent)}</p>
+      <p className="setup-control__answer">{source === "exact" ? `Exact · ${brand.primary.toUpperCase()}` : custom ? `${hueName(Number(values.accent))} · ${values.accent}°` : say("accent", values.accent)}</p>
     </div>
   );
 }
@@ -659,9 +727,11 @@ function PillCards(props: ControlProps) {
  * real token under the answer's scope, so the chat shows the colour the Inspector and the Canvas do. Before its words in
  * a recap row; in the answer row's visual slot.
  */
-function swatchOf(question: Question, values: Values): ReactNode {
+function swatchOf(question: Question, values: Values, picks: Picks): ReactNode {
   const kind = question.control.kind;
+  if (kind === "accent" && picks.accent) return <ColorSwatch size="sm" color={picks.accent} aria-hidden="true" />;
   if (kind === "accent") return optionMark("accent", values.accent, values as CanvasAxes);
   if (kind === "tint") return optionMark("tint-hue", values["tint-hue"], values as CanvasAxes);
+  if (question.control.kind === "page") return <ColorSwatch size="sm" color={pageHex(question.control.mode, values, picks)} aria-hidden="true" />;
   return null;
 }

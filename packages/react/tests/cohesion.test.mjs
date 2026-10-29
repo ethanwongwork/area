@@ -494,7 +494,7 @@ test('the pressed fill is re-derived on every ground and every setting scope', (
   assert.match(pressed, /\[data-area-ground\]/);
   // The press mixes toward the body ink (Tint, Text tint, and the accent's hue at Tint hue Accent) and stops at muted,
   // which is solved on the deepest ground, a card's at Card tone (2026-10-23 theme review).
-  for (const setting of ['theme', 'neutral', 'ground-light', 'ground-dark', 'layers-light', 'layers-dark', 'fill-hover', 'fill-selected', 'fill-pressed', 'tint-hue', 'tint-light', 'tint-dark', 'ink-tint', 'accent', 'card-tone-light', 'card-tone-dark']) {
+  for (const setting of ['theme', 'neutral', 'ground-light', 'ground-dark', 'layers-light', 'layers-dark', 'fill-hover', 'fill-selected', 'fill-pressed', 'tint-hue', 'tint-hue-dark', 'colours', 'tint-light', 'tint-dark', 'ink-tint', 'accent', 'card-tone-light', 'card-tone-dark']) {
     assert.ok(pressed.includes(`[data-area-${setting}]`), `a scope setting ${setting} keeps its parent's pressed fill`);
   }
 });
@@ -514,7 +514,7 @@ test('a setting scope inside a ground keeps the ground\'s fills', async () => {
   const open = part => /^:where\(.*\)$/.test(part) ? split(part.slice(7, -1)) : [part];
   for (const scope of scopes) {
     const settings = split(scope.settings);
-    for (const id of [...Object.keys(AXIS_PRESETS), 'ui', 'contrast']) assert.ok(settings.includes(`[data-area-${id}]`), `${scope.ground}: a scope setting ${id} inside it falls back to the page's fills`);
+    for (const id of [...Object.keys(AXIS_PRESETS), 'ui', 'contrast', 'colours']) assert.ok(settings.includes(`[data-area-${id}]`), `${scope.ground}: a scope setting ${id} inside it falls back to the page's fills`);
     const roots = split(scope.root);
     const pointers = rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${scope.ground})`) && !/^:where\(\s*\[data-area-/.test(rule.selector))
       .flatMap(rule => split(rule.selector).flatMap(open)).filter(part => part !== '.area-select::picker(select)');

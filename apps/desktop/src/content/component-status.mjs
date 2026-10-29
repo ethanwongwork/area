@@ -8,7 +8,7 @@
 // chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
 export const COMPLETE_COMPONENTS = new Set([
   // Reopened 2026-10-26 (owner: the Slider's motion and detail pass on every component; docs/research/interaction-pass-2026-10-26):
-  'color-picker', // round 75 approved (owner, 2026-10-27: the knob lifts)
+  'color-picker', // round 75 approved (owner, 2026-10-27: the knob lifts); its Gamut mode approved on the exact-colours review (owner, 2026-10-28)
   'tabs', 'code-block', // round 77 approved (owner, 2026-10-27: the focus rings with room)
   'step', 'queue', 'edit-summary', 'list-box', 'combobox', 'tag-picker', 'input', 'textarea', 'number-field',
   'select', 'input-group', 'empty-state', 'toggletip', // round 75 approved (owner, 2026-10-27)

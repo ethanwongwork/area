@@ -43,6 +43,7 @@ function gallerySpecimenTable() {
       { id: "view-sliders", title: "Sliders", demo: "GalleryColorPickerSliders" },
       { id: "contrast", title: "Contrast", demo: "GalleryColorPickerContrast" },
       { id: "preview", title: "Preview", demo: "GalleryColorPickerPreview" },
+      { id: "gamut", title: "Gamut", demo: "GalleryColorPickerGamut" },
       { id: "model-oklch", title: "OKLCH", demo: "GalleryColorPickerModelOklch" },
       { id: "header", title: "Header", demo: "GalleryColorPickerHeader" },
       { id: "model-rgb", title: "RGB", demo: "GalleryColorPickerModelRgb" },

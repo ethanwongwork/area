@@ -104,8 +104,9 @@ export const alignmentPicker = {
 export const colorPicker = {
   block: "area-color-picker",
   variants: { variant: ["surface", "plain"] }, defaults: { variant: "surface" },
-  description: "Edits a color like Figma's fill picker, with spectrum, grid and slider views, six color models, a contrast check, a before/after preview and saved swatches.",
-  elements: ["header", "body", "views", "contrast", "contrast-pair", "contrast-ratio", "contrast-unit", "contrast-level", "area", "band", "band-region", "band-edge", "thumb", "channel", "grid", "controls", "tracks", "channel-row", "channel-label", "slider", "hue", "alpha", "preview", "preview-new", "preview-original", "values", "model", "fields", "text-field", "opacity", "note", "swatches", "heading"],
+  description: "Edits a color like Figma's fill picker, with spectrum, grid and slider views, six color models, a contrast check, a before/after preview and saved swatches; or picks an exact OKLCH colour inside a gamut.",
+  elementModifiers: { area: ["gamut"] },
+  elements: ["header", "body", "views", "contrast", "contrast-pair", "contrast-ratio", "contrast-unit", "contrast-level", "area", "plane", "band", "band-region", "band-edge", "thumb", "channel", "grid", "controls", "tracks", "channel-row", "channel-label", "slider", "hue", "alpha", "preview", "preview-new", "preview-original", "values", "model", "fields", "text-field", "opacity", "note", "swatches", "heading"],
 } as const satisfies ComponentManifest;
 
 export const calendar = {

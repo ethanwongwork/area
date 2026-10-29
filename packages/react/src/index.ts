@@ -106,7 +106,7 @@ export { Plan, type PlanProps, type PlanItem } from "./components/Plan.tsx";
 export { TurnNotice, type TurnNoticeProps, type TurnNoticeStatus } from "./components/TurnNotice.tsx";
 export { Attachment, ComposerMenu, Queue, Timestamp, formatTimestamp, TIMESTAMP_GAP, type AttachmentProps, type ComposerMenuProps, type ComposerMenuItem, type ComposerMenuGroup, type QueueProps, type QueueItem, type TimestampProps } from "./components/ComposerParts.tsx";
 
-export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps, type ColorModel, type ColorView } from "./components/ColorPicker.tsx";
+export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps, type ColorModel, type ColorView, type ColorGamut, type OklchValue } from "./components/ColorPicker.tsx";
 export { AREA_COLOR_GRID } from "./components/color-grid.ts";
 export { Calendar, type CalendarProps, type CalendarRange } from "./components/Calendar.tsx";
 
