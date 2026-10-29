@@ -6,17 +6,19 @@
  * Theme: the system's settings, the registry's axes (@area/tokens axes/registry.ts) and its two scoped settings,
  * under the headings the Inspector shows them (Color, Size,
  * Shape, Stroke, Shadow, Effects; SETTING_GROUPS), each named as the registry names it (owner, 2026-10-19: "i want the
- * axises to be the source of truth and to show each of those visually"). One setting per Sidebar row. The Canvas
+ * axises to be the source of truth and to show each of those visually"). Foundations shows them all, and each heading is
+ * a page of its own under it in the nav (src/app-nav.tsx; a setting's own row in the Sidebar until 2026-10-28). The Canvas
  * shows each axis as a row of its presets, every preset a tile scoped to it (data-area-<axis>)
  * holding the same abstract illustration (src/abstract.tsx), so a setting is seen by what it does.
  * The Inspector shows the preset chosen on the Canvas (its sample and attribute to copy), else the
- * Sidebar's setting (what it controls, its attribute, presets and default), else every setting.
+ * setting the place names (what it controls, its attribute, presets and default), else every setting.
  */
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import { CopyIcon, MoonIcon, SunIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
-import { Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink } from "@area/react";
-import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { Code, EmptyState, PanelSection, Segmented, Table, TableLink } from "@area/react";
+import { useStudio, Workspace } from "../studio.tsx";
+import { groupSlug, hrefOf } from "../places.ts";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
@@ -31,26 +33,25 @@ import {
 import { ThemeSetup } from "./theme-setup.tsx";
 
 /**
- * Two ways through the settings, chosen first in the Canvas header (owner, 2026-10-20): Setup, one question per setting
- * with every option drawn (theme-setup.tsx), and Browse, every setting's values side by side. Setup is the default.
- * The previewed theme is shared, so Setup's Mode step is Browse's Light / Dark switch.
+ * Two ways through the settings (owner, 2026-10-20; places since 2026-10-28, docs/research/app-structure-2026-10-28): New
+ * theme, one question per setting with every option drawn (theme-setup.tsx), under Themes; and Foundations, every
+ * setting's values side by side (Browse until then), or one setting group's. The previewed theme is shared, so Setup's
+ * Mode step is Foundations' Light / Dark switch.
  */
 type Flow = "setup" | "browse";
-export function ThemePage() {
-  const [flow, setFlow] = useViewOption<Flow>("theme-flow", "setup", ["setup", "browse"]);
+export function ThemePage({ flow }: { flow: Flow }) {
+  const { place, navigate } = useStudio();
   const [mode, setMode] = useViewOption<Mode>("theme-mode", "light", ["light", "dark"]);
-  const flowSwitch = (
-    <Segmented size="sm" aria-label="Theme view" value={flow} onValueChange={next => setFlow(next as Flow)}
-      items={[{ value: "setup", label: "Setup" }, { value: "browse", label: "Browse" }]} />
-  );
+  const group = place.page === "settings" ? SETTING_GROUPS.find(entry => groupSlug(entry.heading) === place.group)?.heading : undefined;
   return flow === "setup"
-    ? <ThemeSetup mode={mode} setMode={setMode} flowSwitch={flowSwitch} onBrowse={() => setFlow("browse")} />
-    : <ThemeBrowse mode={mode} setMode={setMode} flowSwitch={flowSwitch} />;
+    ? <ThemeSetup mode={mode} setMode={setMode} onBrowse={() => navigate({ page: "foundations" })} />
+    : <ThemeBrowse mode={mode} setMode={setMode} heading={group} />;
 }
 
-function ThemeBrowse({ mode, setMode, flowSwitch }: { mode: Mode; setMode: (mode: Mode) => void; flowSwitch: ReactNode }) {
-  const { query, item, select } = useStudio();
-  const shown = SETTINGS.filter(setting => inMode(setting.id, mode) && matches(query, setting.label, setting.id, setting.description));
+/** Foundations' settings: every setting, or one group's (`heading`, a page of Foundations). */
+function ThemeBrowse({ mode, setMode, heading }: { mode: Mode; setMode: (mode: Mode) => void; heading?: string }) {
+  const { query, item } = useStudio();
+  const shown = SETTINGS.filter(setting => (!heading || setting.heading === heading) && inMode(setting.id, mode) && matches(query, setting.label, setting.id, setting.description));
   // The Sidebar's choice (All, or one setting) and the Inspector's: one preset of one setting
   // ("<axis>:<preset>"), chosen on the Canvas, until the Sidebar's choice changes. A setting of the other theme
   // (an old link to Dark ground while previewing Light) shows its pair.
@@ -78,31 +79,11 @@ function ThemeBrowse({ mode, setMode, flowSwitch }: { mode: Mode; setMode: (mode
   );
   return (
     <Workspace
-      sidebar={<SidebarList>{
-        <Nav aria-label="Settings">
-          <SidebarAll tab="theme" count={shown.length} current={!view} />
-          {SETTING_GROUPS.map(group => {
-            const rows = shown.filter(entry => entry.heading === group.heading);
-            return rows.length ? (
-              <NavGroup key={group.heading} label={group.heading}>
-                {rows.map(entry => (
-                  <NavItem key={entry.id} href={`#theme/${entry.id}`} current={entry.id === view?.id}
-                    onClick={event => { event.preventDefault(); select(entry.id); }}
-                    trailing={<Count count={entry.presets.length} />}>
-                    {entry.label}
-                  </NavItem>
-                ))}
-              </NavGroup>
-            ) : null;
-          })}
-        </Nav>
-      }</SidebarList>}
-      canvasTitle={view ? view.title : "All settings"}
+      canvasTitle={view ? view.title : heading ?? "All settings"}
       // The page's own cards and words stay at the app's defaults; each drawing takes its preset in the previewed theme.
       canvasPicks={false}
       canvasActions={
         <ViewControls>
-          {flowSwitch}
           <ViewFilter label="Values" value={presets} onChange={setPresets} options={[{ value: "all", label: "All values" }, { value: "default", label: "Defaults only" }]} />
           <Segmented size="sm" aria-label="Preview theme" value={mode} onValueChange={next => setMode(next as Mode)}
             items={[{ value: "light", label: "Light", icon: <SunIcon /> }, { value: "dark", label: "Dark", icon: <MoonIcon /> }]} />
@@ -119,7 +100,7 @@ function ThemeBrowse({ mode, setMode, flowSwitch }: { mode: Mode; setMode: (mode
             <tbody>
               {onCanvas.flatMap(entry => presetsOf(entry).map(preset => (
                 <tr key={`${entry.id}-${preset.id}`} data-selected={selected === `${entry.id}:${preset.id}` ? "" : undefined}>
-                  <td><TableLink href={`#theme/${entry.id}`} onClick={event => { event.preventDefault(); setSelected(`${entry.id}:${preset.id}`); }}>{entry.title}</TableLink></td>
+                  <td><TableLink href={hrefOf({ page: "settings", group: groupSlug(entry.heading), item: entry.id })} onClick={event => { event.preventDefault(); setSelected(`${entry.id}:${preset.id}`); }}>{entry.title}</TableLink></td>
                   <td>{preset.label}</td>
                   <td><Code>{attributeOf(entry, preset.id)}</Code></td>
                   <td>{isDefault(entry, preset.id) ? "Default" : <span className="studio-muted">—</span>}</td>

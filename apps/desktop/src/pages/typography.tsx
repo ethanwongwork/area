@@ -14,6 +14,7 @@ import { Code, CopyButton as AreaCopyButton, EmptyState, Field, ListBox, PanelSe
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { hrefOf } from "../places.ts";
 import { appScale } from "../app-scale.ts";
 import { Specimen } from "../specimen-scope.tsx";
 import { CanvasSection, Tile, TileGrid, type CardLook } from "../tile.tsx";
@@ -114,7 +115,7 @@ export function TypographyPage() {
   return (
     <Workspace
       sidebar={<SidebarList>
-        <SidebarTree tab="typography" label="Type roles" count={shown.length} current={view?.id}
+        <SidebarTree label="Type roles" count={shown.length} current={view?.id}
           groups={sections.map(group => ({ id: group.id, label: group.label,
             items: shown.filter(entry => (group.groups as readonly string[]).includes(entry.group)).map(entry => ({ id: entry.id, label: entry.name })) }))} />
       </SidebarList>}
@@ -200,7 +201,7 @@ export function TypographyPage() {
                             <td>
                               <span className="studio-type__examples">
                                 {shownWeights.map(w => (
-                                  <TableLink key={w.id} href={`#typography/${entry.id}`} className="studio-type__example" style={roleStyle(entry, w.id)}
+                                  <TableLink key={w.id} href={hrefOf({ page: "typography", item: entry.id })} className="studio-type__example" style={roleStyle(entry, w.id)}
                                     onClick={event => { event.preventDefault(); setSelected(`${w.id}:${entry.id}`); }}>
                                     {entry.name}
                                   </TableLink>

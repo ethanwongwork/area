@@ -9,7 +9,10 @@ interface AreaDesktop {
   setTitlebar?(height: number): void;
   /** Shows a file of the Brand library (a path inside it, "originals/<id>.jpg") in Finder. */
   revealBrand?(path: string): void;
+  /** The app menu's tab commands (electron/main.cjs): ⌘T, ⌘⇧T, ⌘W, ⌃Tab, ⌃⇧Tab, ⌘1–9. Returns the unsubscribe. */
+  onCommand?(listener: (command: TabCommand, index?: number) => void): () => void;
 }
+type TabCommand = "new-tab" | "reopen-tab" | "close-tab" | "next-tab" | "previous-tab" | "tab";
 interface Window { areaDesktop?: AreaDesktop }
 
 

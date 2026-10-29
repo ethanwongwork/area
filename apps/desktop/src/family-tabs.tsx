@@ -16,6 +16,7 @@
 import { Fragment, type ReactNode } from "react";
 import { Badge, Code, CodeBlock, Kbd, Link, ScrollArea, SectionHeading, Table, TableCell, TableLink } from "@area/react";
 import SOURCES from "virtual:component-sources";
+import { hrefOf } from "./places.ts";
 // @ts-expect-error — the documentation content is authored in JavaScript.
 import { DOCUMENTATION } from "./content/documentation.mjs";
 // @ts-expect-error — the highlighter is authored in JavaScript.
@@ -324,7 +325,7 @@ export function DocumentationTab({ family, onOpenFamily, familyName }: {
   const job = sections.get("Job and boundaries");
   const behaviour = sections.get("Behavior and accessibility");
   const familyLink = (slug: string) => familyName(slug)
-    ? <TableLink key={slug} href={`#components/${slug}`} onClick={event => { event.preventDefault(); onOpenFamily(slug); }}>{familyName(slug)}</TableLink>
+    ? <TableLink key={slug} href={hrefOf({ page: "components", item: slug })} onClick={event => { event.preventDefault(); onOpenFamily(slug); }}>{familyName(slug)}</TableLink>
     : <span key={slug}>{words(slug)}</span>;
   const states = manifest?.states ?? [];
   return (

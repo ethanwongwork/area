@@ -13,6 +13,7 @@ import { Code, ColorSwatch, CopyButton as AreaCopyButton, ListBox, EmptyState, P
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { hrefOf } from "../places.ts";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -217,7 +218,7 @@ export function ColorPage() {
   return (
     <Workspace
       sidebar={<SidebarList>
-        <SidebarTree tab="color" label="Scales" count={shown.length} current={view?.id}
+        <SidebarTree label="Scales" count={shown.length} current={view?.id}
           groups={groups.map(([label, list]) => ({ id: label.toLowerCase(), label,
             items: list.map(entry => ({ id: entry.id, label: title(entry.id), icon: <ColorSwatch size="sm" color={`var(--area-${entry.id}-500)`} aria-hidden="true" /> })) }))} />
       </SidebarList>}
@@ -249,7 +250,7 @@ export function ColorPage() {
                         {steps.map(item => (
                           <tr key={item.level} data-selected={isSelected(item.level) ? "" : undefined}>
                             <td>
-                              <TableLink href={`#color/${entry.id}`} className="studio-step" onClick={event => { event.preventDefault(); pick(item.level); }}>
+                              <TableLink href={hrefOf({ page: "color", item: entry.id })} className="studio-step" onClick={event => { event.preventDefault(); pick(item.level); }}>
                                 <ColorSwatch size="sm" color={`var(--area-${entry.id}-${item.level})`} aria-hidden="true" />
                                 {item.level}
                               </TableLink>

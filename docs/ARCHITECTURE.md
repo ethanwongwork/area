@@ -73,7 +73,7 @@ An axis never reaches into another axis's namespace.
 | `css/properties.css` | `@property` registrations, for leaf tokens only. Derived tokens and colour pairs are never registered, or inheritance would freeze them. |
 | `css/tokens.css` | Every default under `:where(:root)` in `@layer area.tokens` |
 | `css/axes.css` | One rule per preset in `@layer area.axes`. Each derived token is re-stated on every element that carries an axis attribute feeding one of its inputs, because a custom property resolves where it is declared (`emit/rederive.ts`, since 2026-10-25: one rule per set of attributes, so an element restates a token at most once). A derived token that reads or is a token some stylesheet or inline style overrides (`OVERRIDABLE`) is re-stated at every axis attribute, as all were before. |
-| `tokens.json`, `tokens.d.ts` | The token table and types (the app's Color tab reads the JSON) |
+| `tokens.json`, `tokens.d.ts` | The token table and types (the app's Foundations › Color reads the JSON) |
 | `config.js` | `AXIS_PRESETS`, `DEFAULT_AXES`, `mergeAxes`, `themeAttributes`, `DEPTH_LEVERS`, `MATERIAL_*`: DOM-free helpers the app's Inspector and React's `Theme` use |
 | `brand.js`, `brand.d.ts` | `@area/tokens/brand` (2026-10-26): `brandDeclarations`, `brandCss`, `brandInfo`, bundled by esbuild from `src/brand-entry.ts` with the derivations a brand restates embedded as data (`emit/brand-derived.ts`), so it never loads the axes. The build prints its size: 205.7 kB minified, 29.8 kB gzipped |
 | `cli.js` | The `area-tokens` command: `area-tokens brand --primary <hex> [--secondary] [--tertiary] [--status] [--selector] > brand.css` |
@@ -260,9 +260,11 @@ provides two virtual modules:
 
 **Regions.**
 
-- `src/studio.tsx` holds the Titlebar tabs: Theme, Components, Typography, Icons, Color,
-  Testing, Brand, Materials.
-- `src/pages/*.tsx` fill the Sidebar, Canvas and Inspector for each tab.
+- `src/places.ts` names every place (`#brand/area/components/…`, `#library/…`, `#labs/…`) and
+  redirects the old tabs' links; `src/studio.tsx` holds the open tabs, their history and the
+  Titlebar; `src/app-nav.tsx` the Sidebar's nav, the tabs and the takeover; `src/search-palette.tsx`
+  the ⌘K search.
+- `src/pages/*.tsx` fill the Sidebar (a page's own list), Canvas and Inspector for each place.
 - The Inspector's Theme view writes `data-area-*` from `src/gallery/controls.ts` onto the
   Canvas only. The app chrome stays at type 13, Compact (`src/app-scale.ts`).
 - `src/gallery/fit.ts` scales each tile's specimen to its card; it never upscales.

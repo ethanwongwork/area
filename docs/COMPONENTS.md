@@ -57,6 +57,7 @@ before it is built.
 
 | Candidate | Job | Likely answer | Missing |
 |---|---|---|---|
+| Tab groups | Named or split groups of open tabs (Chrome's groups, Figma's split and pinned tabs) | Desktop app shell, not a component yet | Many open tabs in real use: wait for Projects (Phase 4) or a split view (owner's question, 2026-10-29) |
 | Chart | Lines, bars, areas in Area's tokens | New family | Product captures. The Testing tab's dashboard draws its chart as an SVG meanwhile |
 | Action tile | An action with its icon over its label, in an equal-width grid | Component, or a Card / Toggle group composition | Captures in two more products (seen in Cursor's icon card and Figma's new-file tiles) |
 | DataGrid, TreeGrid | Editable, resizable, virtualized rows | New family on Table | Editing, selection and virtualization contracts |

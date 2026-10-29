@@ -11,7 +11,7 @@
  * quits, for checking the window without looking at it (--theme=dark, --hash=icons/arrows,
  * --store='{"canvas":{"ui":"compact"}}' for saved settings, --width=1024 for a narrow window).
  */
-const { app, BrowserWindow, ipcMain, nativeTheme, net, protocol, session, shell } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, nativeTheme, net, protocol, session, shell } = require("electron");
 const { existsSync, watch, writeFileSync } = require("node:fs");
 const { join, normalize, sep } = require("node:path");
 const { pathToFileURL } = require("node:url");
@@ -125,8 +125,41 @@ ipcMain.on("area:titlebar", (event, height) => {
   BrowserWindow.fromWebContents(event.sender)?.setWindowButtonPosition({ x: 13, y: Math.floor((bar - 14) / 2) });
 });
 
+/*
+ * The app's menu: the standard menus, with the tab commands a browser's tabs have (owner, 2026-10-29: "⌘W closes the tab
+ * (plus ⌘⇧T, ⌃Tab, ⌘1–9)"). Without it Electron's default menu took ⌘W and closed the whole window. Each command goes to
+ * the focused window's page (preload.cjs onCommand); ⌘1 to ⌘8 open that tab and ⌘9 the last, as Chrome's do.
+ */
+function tabMenu() {
+  const send = (command, index) => (_item, window) => (window ?? BrowserWindow.getFocusedWindow())?.webContents.send("area:command", command, index);
+  const mac = process.platform === "darwin";
+  return Menu.buildFromTemplate([
+    ...(mac ? [{ role: "appMenu" }] : []),
+    { label: "File", submenu: [
+      { label: "New Tab", accelerator: "CmdOrCtrl+T", click: send("new-tab") },
+      { label: "Reopen Closed Tab", accelerator: "CmdOrCtrl+Shift+T", click: send("reopen-tab") },
+      { type: "separator" },
+      { label: "Close Tab", accelerator: "CmdOrCtrl+W", click: send("close-tab") },
+      { label: "Close Window", accelerator: "CmdOrCtrl+Shift+W", role: "close" },
+    ] },
+    { role: "editMenu" },
+    { role: "viewMenu" },
+    { label: "Window", submenu: [
+      { role: "minimize" },
+      { role: "zoom" },
+      { type: "separator" },
+      { label: "Show Next Tab", accelerator: "Ctrl+Tab", click: send("next-tab") },
+      { label: "Show Previous Tab", accelerator: "Ctrl+Shift+Tab", click: send("previous-tab") },
+      // ⌘1–9 work without crowding the menu, as Chrome's do.
+      ...Array.from({ length: 9 }, (_, at) => ({ label: at === 8 ? "Last Tab" : `Tab ${at + 1}`, accelerator: `CmdOrCtrl+${at + 1}`, click: send("tab", at + 1), visible: false, acceleratorWorksWhenHidden: true })),
+      ...(mac ? [{ type: "separator" }, { role: "front" }] : []),
+    ] },
+  ]);
+}
+
 app.setName("Area");
 app.whenReady().then(() => {
+  Menu.setApplicationMenu(tabMenu());
   protocol.handle("area-brand", serveBrand);
   session.fromPartition("capture").protocol.handle("area-brand", serveBrand);
   createWindow();

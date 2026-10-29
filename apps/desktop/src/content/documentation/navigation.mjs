@@ -14,13 +14,14 @@ export default {
       ["Do", "Use vertical with labelled NavGroups for a sidebar, and horizontal for a few top-level routes; a horizontal Nav scrolls rather than wraps."],
       ["Do", "Put row commands in actions, beside the link; set revealActions to show them only on hover or focus, without moving the text."],
       ["Do", "Use selection=\"marker\" for a quiet outline, where a filled plate on the current row would be too heavy."],
-      ["Do", "Use NavGroup nested for an expandable item's children, so they step in one Tree view level."],
+      ["Do", "Use NavGroup nested for an expandable item's children, so they step in one Tree view level; a nested group inside another steps in a level more."],
+      ["Do", "For open documents (an editor's or a browser's tabs), use a horizontal Nav whose rows carry a close in actions with revealActions: it shows on hover, focus and the current tab, over the name's end, which fades."],
       ["Don't", "Group a horizontal Nav: a group label needs a line of its own."],
       ["Don't", "Nest a button inside a NavItem's link. Row actions are siblings of the link, in actions."],
     ],
     // Spec: Anatomy, Decisions; source: Nav.tsx.
     parts: {
-      root: "The nav landmark: a sidebar column (inside a Panel it takes the panel's width), or, horizontal, a row that scrolls instead of wrapping.",
+      root: "The nav landmark: a sidebar column (inside a Panel it takes the panel's width), or, horizontal, a row that scrolls instead of wrapping, its items muted at rest and full strength when current.",
       group: "A run of items. With a label it is a group named by that label; nested, its rows step in one Tree view level and keep full-width plates.",
       label: "A group's heading: a row-height title in the muted ink, quieter than the items. It is not interactive.",
       item: "The link row: owns the row height, the hover, pressed and current plates, the focus ring and the disabled dimming.",
@@ -29,7 +30,7 @@ export default {
       trailing: "End-of-row annotation: a count, a shortcut or a status dot, in the muted ink even on the current row.",
       separator: "A rule between runs of items; a vertical hairline in a horizontal Nav.",
       row: "Wraps an item and its actions so both share one plate; the actions sit beside the link, never inside it.",
-      actions: "The row's own buttons, inset from its plate; under the pointer only their ink darkens. With revealActions they show on hover or focus, always on touch.",
+      actions: "The row's own buttons, 4 in from its plate on every side; under the pointer only their ink darkens. With revealActions they show on hover or focus, always on touch; a horizontal row's also while current, over its text.",
     },
     // Native links; source: Nav.tsx (disabled items leave the Tab order).
     keyboard: [

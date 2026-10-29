@@ -449,7 +449,7 @@ function AccentPaintRows({ accent, context }: { accent: string; context: RowCont
 function shadeReason(accent: string, context: RowContext) {
   const control = controlOf(`solid-${context.mode}`);
   const { scale } = shadesOf(accent, context.mode, context.brand);
-  const name = context.brand ? "The brand" : /^\d+$/.test(accent) ? hueName(Number(accent)) : accent[0]!.toUpperCase() + accent.slice(1);
+  const name = context.brand ? "The exact colour" : /^\d+$/.test(accent) ? hueName(Number(accent)) : accent[0]!.toUpperCase() + accent.slice(1);
   return control.inactive?.(context.values, context.mode) ?? (scale.length < 2 ? `${name} has one shade that keeps its label readable` : null);
 }
 
@@ -461,7 +461,7 @@ function ShadeBar({ accent, context }: { accent: string; context: RowContext }) 
   const index = Math.max(0, scale.indexOf(of(context.values[axis] ?? "auto")));
   // Read from the vivid shade (a brand's: its nearest readable shade): lighter before it, deeper after it, the ends by name.
   const vivid = scale.indexOf("auto");
-  const say = (at: number) => at === vivid ? context.brand ? "Brand" : "Vivid" : at === 0 ? "Lightest" : at === scale.length - 1 ? "Deepest"
+  const say = (at: number) => at === vivid ? context.brand ? "Exact" : "Vivid" : at === 0 ? "Lightest" : at === scale.length - 1 ? "Deepest"
     : at < vivid ? `${Math.round(((vivid - at) / vivid) * 100)}% lighter` : `${Math.round(((at - vivid) / (scale.length - 1 - vivid)) * 100)}% deeper`;
   return (
     <SettingBar size={context.size ?? "sm"} title={control.hint} min={0} max={Math.max(1, scale.length - 1)} step={1} value={index} disabled={scale.length < 2}

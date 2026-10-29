@@ -1,6 +1,25 @@
 # Handoff
 
 ## Current state (2026-10-28)
+- **App structure Phase 1, the new navigation, branch `claude/phase-1-new-navigation-1c3738`, uncommitted (owner
+  2026-10-28: "Phase 1 of the new navigation should start in a fresh session").** Places (`apps/desktop/src/places.ts`:
+  `#brand/area/themes|foundations|components|patterns`, `#library`, `#labs/materials`; old links redirect,
+  `tests/places.test.ts`); Titlebar: back / forward (per-tab history), browser-like tabs (Area, Library, Materials; saved
+  and reopened), ⌘K search over every place (Command palette), the Library button; Sidebar: the nav (`src/app-nav.tsx`:
+  Library, Brands › Area › Themes, Foundations › Color … Effects, Components, Patterns; ⌘-click opens a tab), a page with a
+  list takes it over under "← Area" and its filter. New Themes page (Default drawn as Setup's screen; New theme opens
+  Setup); Foundations = Browse, a page per registry group. Nav: a nested group inside another indents a level more (nav.css,
+  spec). Inspector "Brand" words → Exact / Matched. Differences from the plan for the owner to confirm: the plan's README,
+  Phase 1 "As built". Checks: typecheck, test:desktop 16/16 (fixed the stale brand.tsx entry), React 597/597, app-css,
+  playgrounds, docs, manifest parity; looked at in Electron light and dark. Next: owner review, then commit and PR.
+  2026-10-29, owner's notes ("the floating tab component from claude codes browser"): tabs hug their names, close on
+  hover / focus / the current tab (4 in on every side, Titlebar sets Nav's row height), + / ⌘T open search into a new tab; Nav horizontal items rest in `fg-muted` (Inspector views too) and a
+  horizontal row with actions spaces as a closable tab (icon gap-md 5, xs close); Nav reopened with a Horizontal /
+  closable tabs tile; approved, then reopened the same day: the close lands over the name's end and fades it (Figma's way,
+  owner), tabs 120 to 170, too many scroll; approved, Nav Complete. Edge cases: https://claude.ai/artifact/1RWLR2gyESHHwxNKJ4XpsZ. Tab keys in an
+  app menu (electron/main.cjs: ⌘T, ⌘⇧T, ⌘W close tab, ⌘⇧W window, ⌃Tab, ⌘1–9; tested by clicking each item in a throwaway
+  profile) and a full-name Tooltip on cut tabs; the close names itself (⌘W). Before/after: https://claude.ai/artifact/Jt3DeSrHcKpaH7M1rjEGs4 (builder and crop.py in the
+  session scratchpad).
 - **Setup as a compact chat panel, branch `claude/theme-onboarding-chat-panel-2ce3b7` (owner 2026-10-28: "a more compact
   chat panel, just like cursor, claude, chatgpt ... make sure all components are built for it"), PR #172.** Setup's
   left side is a resizable Panel (320–560, default 400, `widths["setup-chat"]`) at the app's own scale, built as the
@@ -27,7 +46,7 @@
   the same day (Workspace: several Brands, Projects, Library of boards; public Explore; Area system = Starter + parts
   catalog); phased build plan in docs/research/app-structure-2026-10-28/README.md. Shell chosen: variation A on
   https://claude.ai/artifact/Fb9YBdJ3B1oVqhvEZQgPKL (Cursor-style nav, Figma tabs, takeover panels); reopen the last
-  place with its tabs; Inspector's Brand section → Brand colours. Nothing open: Phase 1 is next (own session and PR).
+  place with its tabs; Inspector's Brand section → Brand colours. Phase 1 built (above).
 - **Interaction and visual pass, rounds 75–80, branch `claude/component-interaction-visual-polish-e45c8f` (owner: the
   Slider's motion and detail pass on every component, then a by-eye visual pass in the Sidebar's order), PR open, every
   item owner-approved.** Interaction pass (docs/research/interaction-pass-2026-10-26/, re-runnable scripts): Tabs and

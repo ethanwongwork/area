@@ -82,3 +82,6 @@
   /* Feedback's drawing (abstract.tsx, LoopingPress): the Button's own press paint and give, held for a moment by class,
      arriving on the press clock as a real press does. */
   .lang-press { background-color: var(--_bg-active); background-image: var(--_wash-active); scale: var(--_give, var(--area-feedback-scale)); transition-duration: var(--area-press-in); }
+
+  /* A theme's card on Themes (src/pages/themes.tsx): Setup's product screen in the theme, whole, at its 16:10. */
+  .ss-frame.studio-theme-card { block-size: auto; aspect-ratio: 1024 / 640; /* spec: setup-screen.tsx SCREEN */ border-radius: var(--area-radius-small); }

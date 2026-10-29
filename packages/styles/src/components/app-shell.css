@@ -85,10 +85,16 @@
     gap: var(--area-ui-cluster); /* spec: 8, compact 6 */
     margin-inline-start: auto;
   }
-  /* A Nav in the bar is a row of controls: the small control's height and corner, as the Buttons beside it. */
+  /* A Nav in the bar is a row of controls: the small control's height and corner, as the Buttons beside it. A row with
+     actions (a closable tab) takes both too, so its plate has the item's corner and its action stays 4 in on every
+     side (Nav's --_nav-row-height and --_nav-row-radius). */
+  .area-titlebar .area-nav--horizontal {
+    --_nav-row-height: var(--area-control-sm);
+    --_nav-row-radius: min(var(--area-radius-control-sm), max(var(--area-radius-min), round(down, calc(var(--area-control-sm) * var(--area-radius-factor)), 2px)));
+  }
   .area-titlebar .area-nav--horizontal .area-nav__item {
-    block-size: var(--area-control-sm);
-    border-radius: min(var(--area-radius-control-sm), max(var(--area-radius-min), round(down, calc(var(--area-control-sm) * var(--area-radius-factor)), 2px)));
+    block-size: var(--_nav-row-height);
+    border-radius: var(--_nav-row-radius);
   }
 
   .area-section-heading { display: grid; gap: var(--area-space-8); min-inline-size: 0; }

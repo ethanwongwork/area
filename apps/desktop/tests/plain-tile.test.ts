@@ -33,7 +33,7 @@ test("its states read the state settings: the hover edge, the selected edge and 
 });
 
 test("Asset card is the Components tab's container only", () => {
-  const pages = ["brand", "color", "examples", "theme", "theme-setup"].map(page => readFileSync(new URL(`../src/pages/${page}.tsx`, import.meta.url), "utf8"));
+  const pages = ["color", "examples", "theme", "theme-setup", "themes"].map(page => readFileSync(new URL(`../src/pages/${page}.tsx`, import.meta.url), "utf8"));
   for (const source of pages) {
     assert.doesNotMatch(source, /<AssetCard\b|<AssetGridItem\b|container="asset"/);
   }

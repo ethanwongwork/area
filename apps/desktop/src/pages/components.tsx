@@ -66,6 +66,7 @@ const lookOf = (container: CardContainer): CardLook => container === "none" ? { 
 import { Properties, Stage, useStageKeys } from "../stage.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { ChromeButton, SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { hrefOf } from "../places.ts";
 import { matches } from "../search.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
 
@@ -76,7 +77,7 @@ interface Tile { id: string; name: string; group: string; value: string; label: 
 /* The family's manifest (packages/styles/src/manifest.ts): its sentence, block, axes, defaults, parts and states. */
 interface ManifestLike { block: string; description: string; variants: Record<string, readonly string[]>; defaults: Record<string, string>; elements?: readonly string[]; states?: readonly string[]; stateAttributes?: Record<string, string> }
 
-const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly).sort((a, b) => a.name.localeCompare(b.name));
+export const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly).sort((a, b) => a.name.localeCompare(b.name));
 const STATUS_LABEL = { complete: "Complete", review: "In review", unrefined: "Unrefined" } as const;
 const STATUS_TONE = { complete: "success", review: "caution", unrefined: "neutral" } as const;
 type Status = keyof typeof STATUS_LABEL;
@@ -311,7 +312,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
   return (
     <section ref={section} className="studio-section" id={`family-${family.slug}`} aria-labelledby={`family-${family.slug}-title`}>
       <SectionTitle id={`family-${family.slug}-title`}
-        title={<a href={`#components/${family.slug}`} className="studio-section__link" onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</a>}
+        title={<a href={hrefOf({ page: "components", item: family.slug })} className="studio-section__link" onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</a>}
         count={tiles.length} badge={<Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>} />
       <div ref={body} className="studio-overview__body" data-fit="">
         {open ? groupsOf(tiles).map(([group, list]) => (
@@ -603,7 +604,7 @@ export function ComponentsPage() {
       sidebar={
         <SidebarList>
           <PinMenu pins={pins} label="Components">
-            <SidebarTree tab="components" label="Components" count={shown.length} onSelect={onTree}
+            <SidebarTree label="Components" count={shown.length} onSelect={onTree}
               current={family ? (stageTile && variantRows(family) ? `tile:${family.slug}/${stageTile.id}` : `key:${family.slug}`) : toc ? `key:${toc}` : undefined}
               reveal={family ? revealOf(family, stageTile) : undefined}
               groups={[
@@ -622,9 +623,9 @@ export function ComponentsPage() {
           }>Overview <Kbd keys={["Esc"]} size="sm" /></Tooltip>
           <Breadcrumb nowrap className="studio-canvas__crumbs" aria-label="Where this is" {...appScale()}>
             <BreadcrumbList>
-              <BreadcrumbItem><BreadcrumbLink href="#components" onClick={event => { event.preventDefault(); back(); }}>Components</BreadcrumbLink></BreadcrumbItem>
+              <BreadcrumbItem><BreadcrumbLink href={hrefOf({ page: "components" })} onClick={event => { event.preventDefault(); back(); }}>Components</BreadcrumbLink></BreadcrumbItem>
               <BreadcrumbSeparator />
-              <BreadcrumbItem><BreadcrumbLink href={`#components/${family.slug}`} onClick={event => { event.preventDefault(); select(family.slug); }}>{family.name}</BreadcrumbLink></BreadcrumbItem>
+              <BreadcrumbItem><BreadcrumbLink href={hrefOf({ page: "components", item: family.slug })} onClick={event => { event.preventDefault(); select(family.slug); }}>{family.name}</BreadcrumbLink></BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem><BreadcrumbPage>{stageLabel}</BreadcrumbPage></BreadcrumbItem>
             </BreadcrumbList>
@@ -637,7 +638,7 @@ export function ComponentsPage() {
         <div className="studio-canvas__lead">
           <Breadcrumb nowrap className="studio-canvas__crumbs" aria-label="Where this is" {...appScale()}>
             <BreadcrumbList>
-              <BreadcrumbItem><BreadcrumbLink href="#components" onClick={event => { event.preventDefault(); canvas.current?.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }}>Components</BreadcrumbLink></BreadcrumbItem>
+              <BreadcrumbItem><BreadcrumbLink href={hrefOf({ page: "components" })} onClick={event => { event.preventDefault(); canvas.current?.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }}>Components</BreadcrumbLink></BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem><BreadcrumbPage>{mode === "list" ? "List" : "Overview"}</BreadcrumbPage></BreadcrumbItem>
             </BreadcrumbList>
@@ -682,7 +683,7 @@ export function ComponentsPage() {
             <tbody>
               {onCanvas.map(entry => (
                 <tr key={entry.slug}>
-                  <td><TableLink href={`#components/${entry.slug}`} onClick={event => { event.preventDefault(); select(entry.slug); }}>{entry.name}</TableLink></td>
+                  <td><TableLink href={hrefOf({ page: "components", item: entry.slug })} onClick={event => { event.preventDefault(); select(entry.slug); }}>{entry.name}</TableLink></td>
                   <td><Badge size="sm" tone={STATUS_TONE[statusOf(entry)]} variant="soft">{STATUS_LABEL[statusOf(entry)]}</Badge></td>
                   <TableCell numeric>{TILES.get(entry.slug)!.length}</TableCell>
                   <td>{entry.imports ?? entry.exportName ? <Code>{entry.imports ?? entry.exportName}</Code> : <span className="studio-muted">—</span>}</td>

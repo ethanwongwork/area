@@ -174,6 +174,7 @@ function gallerySpecimenTable() {
       { id: "counts", title: "Counts", demo: "GalleryNavCounts" },
       { id: "marker", title: "Selection marker", demo: "GalleryNavMarker" },
       { id: "horizontal", title: "Horizontal", demo: "GalleryNavHorizontal" },
+      { id: "horizontal-tabs", title: "Horizontal / closable tabs", demo: "GalleryNavTabs" },
       { id: "actions", title: "Actions", demo: "GalleryNavActions" },
       { id: "behavior-reveal-actions", title: "Behavior / actions on hover", demo: "GalleryNavRevealActions" },
       { id: "expandable", title: "Expandable", demo: "GalleryNavExpandable" },

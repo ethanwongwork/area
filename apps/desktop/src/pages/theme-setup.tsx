@@ -12,7 +12,7 @@
  *   visuals the product screen (setup-screen.tsx) in the theme so far, alone on a backdrop that stands off any page; the
  *           parts a question changes are marked, and a choice under the pointer is drawn before it is picked
  *
- * The Sidebar and the Inspector are left out (Workspace `panels={false}`); Fine-tune hands over to Browse and the Inspector.
+ * The Sidebar and the Inspector are left out (Workspace `panels={false}`); Fine-tune hands over to Foundations and the Inspector.
  * Pacing: Essentials asks the fourteen that change the most; Every detail asks every setting, chapter by chapter in the
  * order a system is built (setup-questions.ts), skipping what the answers so far make moot, and any chapter on request.
  * Every answer is an Inspector setting. Setup's own UI stays at the app's defaults (Workspace `canvasPicks={false}`); only
@@ -43,9 +43,7 @@ import { attributeOf, SETTINGS, type Mode } from "./theme-settings.ts";
 export interface ThemeSetupProps {
   mode: Mode;
   setMode: (mode: Mode) => void;
-  /** The Setup / Browse switch, first in the Canvas header. */
-  flowSwitch: ReactNode;
-  /** Hands over to Browse, the Inspector open on Theme (Fine-tune). */
+  /** Hands over to Foundations, the Inspector open on Theme (Fine-tune). */
   onBrowse: () => void;
 }
 
@@ -94,8 +92,8 @@ type Picks = ColoursState & { accent: string | null };
 /** At Area's default: every setting it writes, and for a page question no pick (`picks`, src/colours.ts). */
 const atDefault = (question: Question, values: Values, picks: Picks) => question.axes.every(axis => values[axis] === defaultOf(axis))
   && !(question.control.kind === "page" && picks[question.control.mode]) && !(question.control.kind === "accent" && picks.accent);
-export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupProps) {
-  const { item, select, canvas, setCanvas, shown, setInspectorView, showInspector, colours, brand, setBrand } = useStudio();
+export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
+  const { item, select, navigate, canvas, setCanvas, shown, setInspectorView, showInspector, colours, brand, setBrand } = useStudio();
   const studioColours: Picks = { ...colours, accent: brand.on ? brand.primary : null };
   // An exact accent paints the stage as it paints the Canvas: its one rule in the head, data-area-brand on the scopes.
   useBrandSheet(brand.on ? brand : null);
@@ -180,7 +178,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   ];
   const takeStep = (id: string) => {
     if (id === "fine-tune") fineTune();
-    else if (id === "components") location.hash = "components";
+    else if (id === "components") navigate({ page: "components" });
     else if (id === "every-detail" && extra) { setPath("complete"); select(extra.id); }
   };
   const chapters = CHAPTERS.filter(entry => asked.some(row => row.chapter === entry.id));
@@ -443,7 +441,7 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   const part: Region = visual?.kind === "crop" ? visual.region : (question && focusOf(question, values)[0]) || "form";
   const fidelity = drawing === "wireframe" ? "bars" : "real";
   const view = show === "part" ? { region: part, zoom: scale ?? 2.5 } : scale ? { scale, focus: question ? focusOf(question, values)[0] : undefined } : {};
-  // What the stage shows, at the Canvas header's start; how it is drawn, at its end after Setup / Browse, as Browse's
+  // What the stage shows, at the Canvas header's start; how it is drawn, at its end, as Foundations'
   // header (owner, 2026-10-28: "fix the header on the theme page": the switch had a row of its own over the chat and
   // the stage, whose own bar sat 9 lower than the chat's).
   const scale13 = appScale();
@@ -492,7 +490,6 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
       canvasPicks={false}
       canvasLead={stageLead}
       canvasActions={<ViewControls>
-        {flowSwitch}
         <Segmented size="sm" aria-label="Drawing" value={drawing} onValueChange={next => setDrawing(next as "real" | "wireframe")}
           items={[{ value: "real", label: "Real" }, { value: "wireframe", label: "Wireframe" }]} />
         <Segmented size="sm" aria-label="Preview mode" value={mode} onValueChange={next => setMode(next as Mode)}
