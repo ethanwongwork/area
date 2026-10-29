@@ -122,7 +122,7 @@ light and dark, 2026-09-27. Distances from the card's outer edge.
 | well row (sm, nested) | 16.3 / 16.3 | — | 6 / 6 / 6 (bottom) | — | row 44 tall, 18.3 from the host's edge |
 | weather, stat (170) | 18.3 / 18.3 | 18.3 | icon on the text edge | — | value at 101 |
 | horizontal | 18.3 from top; 18.3 after the media | — | — | on the inset after the media | 8 8, 40% |
-| compact | 18.3; 18.3 after the thumbnail | — | — | — | 84 × 84 at 8 8 |
+| compact | 18.3 after the thumbnail; the text centred on it (taller text from 18.3) | — | — | — | 84 × 84 at 8 8 |
 | immersive, corner action | text 18.3 from start and bottom | 18.3 | — | Button 16 from the corner | inset 8, r 8 |
 | bleed | 18.3 / 18.3 | — | — | 8 / 8 | 1 1 (flush inside the border), r 15 |
 | sm / lg | 16.3 / 16.3; 22.3 / 22.3 | — | — | 6 / 6; 12 / 12 | inset 6 / 12 |
@@ -163,7 +163,7 @@ no change in any of 30 nodes (hidden window).
 | default size | md for every tile and template; a card nested in a card is one size down | Owner | Weather and stat were sm, news, plan and feature lg |
 | vertical media | 16:9 | Every system's default card image | Demos set aspect ratios inline (16:9, 2:1) |
 | immersive media | inset like any media, gradient over it | Owner (only bleed meets the edge) | Was edge to edge |
-| compact text | the text inset from the thumbnail | Horizontal's rule | Was 8 from the thumbnail |
+| compact text | the text inset from the thumbnail, centred on it | Horizontal's rule; a list row centres short text on its picture (Menu's described rows, Asset row) | Was 8 from the thumbnail; top-aligned until 2026-10-26 |
 | value (CardValue) | `title-lg` (32/40, −0.02em), 400, tabular figures, every size; as a widget's last figure (at most one line after it) it sits at the bottom of a taller card | Apple widgets set the figure well above the text, low in the widget | Replaces an inline style in the weather and stat templates |
 | header action icon | a bare icon is 16px, `fg-muted`, like list markers | CardList markers | — |
 | well | contents stack at full width, centred on the block axis, gap = card inset, padded by the content pad onto the text column | Nested cards in the owner's references | Was padded by the text inset |
@@ -194,6 +194,11 @@ users see the actions. `@media (hover: none)` keeps them visible on touch.
 | Panel, Dialog, Popover | radius | 12 / 16 / 12 | 22 / 24 / 28 | Card holds a Button; containers use the container role (DESIGN_SYSTEM, audit S3b) |
 
 ## Visual pass
+
+2026-10-26 (desktop app, the Stage at 100%, 2x, light and dark): all 24 tiles. The thumbnail card's title and line
+sat at the top of an 84 thumbnail with half of it empty below → the text centres on the thumbnail (surface.css). The
+selected ring was compared with Radio and Checkbox cards: the same Selected stroke and tint settings, no change. The
+rest unchanged.
 
 Consistency pass, 2026-09-27: every tile measured in the built-in browser; templates, carousel,
 well, immersive and horizontal inspected side by side in Claude in Chrome, light and dark.
@@ -362,3 +367,10 @@ Edge and Depth (axes/depth.ts; owner: "go with your recommendations … finalize
 theming"): a linked card's hover lift is `--area-shadow-lift` (main, 2026-10-19: Fluent's shadow8 at half the float's strength; the float shadow it took first was "too drastic"), set by Floating (Elevation).
 At Elevation 0 the edge steps instead. The gallery tiles take the same role (apps/desktop/src/studio.css). The resting
 lift is `shadow-resting` at Rest shadow, its own number since the nine controls (3 by default, as before).
+
+## Review note, 2026-10-26 (visual pass)
+
+- **What changed:** In the thumbnail layout, the title and description now sit centred beside the thumbnail instead
+  of at its top.
+- **Why:** With a short title and one line, half the thumbnail's height was empty below the text, which read as
+  unfinished; a list row centres a short text on its picture.

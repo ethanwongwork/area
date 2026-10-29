@@ -245,3 +245,8 @@ buttons keep their own corner.
   tell the red rows from the green. Cursor, read from its app on 2026-10-26, puts the diff in a box on the text
   (margin 4, 1px stroke, radius 6, the editor's ground, sans separator); you picked that over edge to edge (A) and a
   grey box (B). The status surfaces were near white in light and near solid in dark, so the diff has its own tints.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** A file's diff eases open and shut on Accordion's recipe; a closed diff stays in the page, hidden, so the file's name points at it.
+- **Why:** It snapped, and while closed the name's aria-controls pointed at nothing. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

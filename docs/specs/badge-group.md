@@ -121,6 +121,12 @@ fragments: pass badges as direct children or an array.
 
 ## Visual pass
 
+2026-10-27 (desktop app, the Stage at 100%, 2x): the Auto tile flashed its hidden badges over the visible ones. Auto-fit
+measures the hidden badges by giving the closed popover a visible style for a moment; restoring the closed style ran
+the popover's close transition (opacity, display), so they showed and faded, and the size change re-fired the
+ResizeObserver, so it looped every few hundred milliseconds. The restore now runs with the transition off
+(BadgeGroup.tsx); the popover stays at display none with no running animations, and opens and closes as before.
+
 Pass reviews were removed at the owner's request; the family is inspected in the grouped
 gallery. The earlier before/after review showed the "+N" with the row outlined to show its
 height (28 → 20), and the overflow content before and after (two lines → one). Gallery
@@ -174,3 +180,9 @@ overflow (they are measured and re-rendered; a reflow animation would lag the re
   Popover. Back to In review.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the overflow trigger takes Badge's hover recipe; popover motion is the shared overlay's; no change here.
 - 2026-10-14 · all-axis audit → `visibleCount="auto"` measured hidden badges inside the overflow popover, whose text styles made them 1.5px narrower than in the group at type 12 / Compact; the fitted count flipped between two answers until React stopped it ("Maximum update depth exceeded"). The measuring pass now unsets the popover's styles (`all: unset`), so every badge measures in the group's context → BadgeGroup.tsx.
+
+## Review note, 2026-10-27 (round 80)
+
+- **What changed:** an Auto badge group no longer flickers: the badges it hides stay hidden until you open "+2".
+- **Why:** measuring the hidden badges set off the overflow popover's close fade each time, and the fade itself made the
+  group measure again, so the hidden badges kept flashing over the visible ones.

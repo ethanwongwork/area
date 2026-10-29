@@ -1,6 +1,20 @@
 # Handoff
 
-## Current state (2026-10-27)
+## Current state (2026-10-28)
+- **Interaction and visual pass, rounds 75–80, branch `claude/component-interaction-visual-polish-e45c8f` (owner: the
+  Slider's motion and detail pass on every component, then a by-eye visual pass in the Sidebar's order), PR open, every
+  item owner-approved.** Interaction pass (docs/research/interaction-pass-2026-10-26/, re-runnable scripts): Tabs and
+  Code block slide one indicator (`useTabIndicator`); Step, Plan, Queue, Edit summary bodies ease open; field hovers on
+  `hover-in`; list checks are Menu's small mark; Color picker's knob lifts; Empty state and Toggletip glyphs at native
+  cuts. Visual pass, Stage at 2x light and dark, plus geometry.mjs: Input's file button; Menu text shortcuts split into
+  keycaps (`shortcutKeys`); Card thumbnail text centred; Dialog demos at 480; Asset card group cells draw their frame and
+  the app's tile hooks stop at the Stage (canvas.css); Tabs focus rings stand `--_focus-room` clear; Kbd sides 3, corner
+  = height × radius factor; Badge Modern tone tiles carry the dot; BadgeGroup auto-fit no longer flickers (restore the
+  closed popover with `transition:none`); Breadcrumb's collapsed marker is the More glyph. Review pages: rounds 75–80
+  (https://claude.ai/artifact/GHVzuznddswJviGqaUSyW4, KfTnQG1v72KbZRWoumjFsH, 1onkM1APdH5tk3K23HnxHf,
+  7QcEb58UUcGU7yQ7oF5VWT, 3E3AB8qpUFU4d7EQLbpGAi, 18hz7hePnjJqoNG1vfHyH8). Families visited: Abbreviation to Citation in the
+  Sidebar's order, plus Button, Input, Menu, Tabs, Card, Dialog. Next: Code onward (Code block done). Breadcrumb stays in
+  review for its nowrap layout (no verdict yet).
 - **Inspector rows and sliders, branch `claude/project-status-electron-5fd266` (owner 2026-10-27):** every setting bar
   is one row: name in the label column, the label-inside bar without text, a soft value field 4–5ch wide (worded values
   show a signed number: Temperature -25, Shade +57; Hue 200°). Slider gains `gradient` (Temperature, Shade, Hue troughs);
@@ -20,18 +34,19 @@
   chapter, dark twins, Grey strength and the three fills are sliders with marks; Browse draws quarters (`marks`). Walking
   positions fixed: hovered-mark text near white (MARK_HOVER_RAMP), dark layer floor ramp in the model, Asset card frame
   (FRAME_SAME 0.005, farther tone). Accent stays 5° (a 1° opt-in sheet was built, then withdrawn, owner 2026-10-27).
-- **Exact colours, branch `claude/gifted-matsumoto-12dc07` on top of the positions PR (#169), phases 1-4 committed, no
-  PR yet (plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a page pick (OKLCH) solves into ground, tint hue,
+- **Exact colours, branch `claude/gifted-matsumoto-12dc07`, phases 1-4, synced with main after #170, owner-approved
+  2026-10-28 (plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a page pick (OKLCH) solves into ground, tint hue,
   room and strength (`packages/tokens/src/color/colours.ts`, CAST_FADE inverted, held at Tint 100 and the hue's room);
   `@area/tokens/colours` (`colourDeclarations`, `colourCss`, `pageInfo`, `presetPick`; page part 3 kB gzipped);
   `data-area-colours` restates the derivations; Tint hue split (`tint-hue-dark`, default Same as light); React `Theme`
   `colours`; `area-tokens colours`; the app saves picks (`apps/desktop/src/colours.ts`, old presets convert once where a
   pick reproduces them); Setup opens with a Colours chapter (light page, dark page, accent); Color picker gains a gamut
-  mode (back in review); Inspector Page colour row; the accent's Exact colour merged the Brand colours switch. Tests:
+  mode (Complete); Inspector Page colour row; the accent's Exact colour merged the Brand colours switch. Tests:
   `colours.test.ts` (34 greys, dense pick grid both modes, coarse grid at every position, CSS vs model); token suite
-  ~60s (was ~110s). Review round 75 on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (collection `components75`):
+  ~60s (was ~110s). Review round 75 on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG, all approved by the owner 2026-10-28 (not the
+  visual pass's own round 75):
   `component-review.mjs --colours` adds a Colours switch (Defaults / Preset → pick / Exact pick) comparing every variant,
-  Before at main faadea6a; at the defaults 1189 of 1190 variants unchanged, Color picker's Gamut tile new. Built with a
+  Before at main faadea6a; Exact pick keeps Action neutral (owner: Layer contrast stays Flat there too); at the defaults 1189 of 1190 variants unchanged, Color picker's Gamut tile new. Built with a
   JSON import hook for Node 26 (docs/research/exact-colours-2026-10-28/review-note.md says how). Not done: the Theme
   tab's Browse view still shows the attribute settings; the accent open item (solid flips its label between 35° and 40°).
 - **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,

@@ -107,7 +107,7 @@ hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 a
 | gap | **6** at sm, md and lg (`gap-sm/md/lg`, `input.css:18`, `:234-236`); also the file button's end margin (`input.css:138`); compact sm 4 | Notion 6 at 28, Figma 6 at 32 | ChatGPT 8 at 36. Was 8 (sm 4) until audit S14 |
 | action · box | field height − 8: 20 / 24 / 32 (`input.css:19`), corner field radius − 4, concentric (md 24 box, 4 ring, radius 4, measured); hover `bg-component-hover`, pressed `bg-component-active`; on soft fields the translucent `bg-hover` / `bg-active` (`input.css:206-211`); disabled: `fg-disabled` ink, no hover, not-allowed cursor (audit B-8) | Audit B-7 B + C (owner); row-plate rule; NumberField steppers | Was a fixed 24 with `radius-small` 6; the opaque #f3 all but vanished on the #f7 soft fill |
 | action · hint | a real Tooltip on the shared engine (`AnchoredTooltip`: `popover="manual"`, 500ms delay, bottom side, end-aligned, 4 from the action); describes the button only when `aria-label` names it (`describes`) | Peer: [Tooltip](tooltip.md); second pass item 17; audit S16 (owner 2026-09-30) | Was a second tooltip style, then a CSS-revealed absolute span (`input.css`, removed); was announced twice |
-| file button · label | `fg-default`, 500 (`input.css:141`) | Owner: neutral by default | Was `fg-accent` |
+| file button | the field's action plate at rest: `--_action` tall (the field less a 4px ring), the action's concentric corner, `bg-component` (the soft wash on a soft field), hover and press one and two steps up; label `fg-default` 500 at a Button's inset for that height; the field's start inset measures it (inset.css) | Native pickers, shadcn and Untitled UI set the action apart; B-33: 500 on a fill | Was a bare 400 label in the field's ink (visual pass 2026-10-26); before that `fg-accent` |
 | placeholder | `fg-placeholder` #646464 | UUI neutral-500; contrast | Notion's resting search text rgb(161,158,153) is 2.6:1 on white; kept (third pass): the contrast floor wins |
 
 ## States
@@ -145,6 +145,12 @@ follow `dir`.
 
 The gallery shows Input's tiles in named groups, one variant per tile. The action plate and hint appear only under the pointer; the file button label is
 a pseudo-element and is not in `area--file`.
+
+2026-10-26 (desktop app, the Stage at 100%, 2x, light and dark; the owner's request after the Slider pass): every
+tile read at true scale. The file field read as one string ("Choose File No file chosen": a bare 400 label in the
+field's own ink) → the button is the field's action plate at rest (Decisions, file button). The affix tiles looked
+as if `+1` and `USD` sat lower than the value: measured, same 13px and baselines within 0.1px, so no change. The
+rest unchanged.
 
 2026-09-28 (batch 12, Claude in Chrome): beside Notion's sidebar search field (32, corner 8,
 0.56px 11% warm edge, ⌘K keycap 6.9 from the top and 6.6 from the end), Notion's Share invite
@@ -266,3 +272,15 @@ Action buttons press at `bg-component-pressed`, one step past selected (Notion p
 - **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
 - **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
   on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** The hover edge eases in on Feedback's hover clock (about 91ms) instead of landing at once; focus and validation still land at once.
+- **Why:** Five fields landed it at once and six eased it in, side by side in the Inspector. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+## Review note, 2026-10-26 (visual pass)
+
+- **What changed:** In a file field, "Choose File" is now a small soft button inside the field, 4 from its edge, with
+  the field's concentric corner; it was plain text in the same ink as "No file chosen".
+- **Why:** The two read as one sentence with nothing marking the action. Native pickers, shadcn and Untitled UI all
+  set the button apart; Area's own rule puts a 500 label on a fill.

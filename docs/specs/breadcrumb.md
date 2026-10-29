@@ -103,6 +103,10 @@ Without items it stays a decorative `role="img"` span named "More pages" (Breadc
 
 ## Visual pass
 
+2026-10-27 (desktop app, the Stage at 100%, 2x, light and dark): the collapsed marker was a typed "…" in a 16 box, so
+its dots sat on the text's baseline, below the chevrons' centre. It is Area's More glyph now, as Pagination's gap is
+(Breadcrumb.tsx).
+
 Pass reviews were removed at the owner's request; the family is inspected in the grouped
 gallery. The earlier before/after review compared the current page and separators at 1× and
 3×. Measured after: page rgb(40, 40, 40) at 400, separators rgb(131, 131, 131), 6.3px from
@@ -165,3 +169,9 @@ Links and the ellipsis press at `bg-component-pressed`, one step past selected (
 - 2026-10-03 · all even (owner) → the 24px plate reads the 24px control corner, now 6 (Notion's 6); compact 20 → 4.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → link and ellipsis plates land at once and fade out on fast.
 - 2026-10-25 · the desktop app's Canvas bar put a trail in a bar of one fixed height, where it wrapped to a second line at 1024 wide → `nowrap` (manifest boolean, `Breadcrumb nowrap`): no wrapping, the ancestors `flex: none`, the current page cut with an ellipsis first (it has no hover plate to clip) → `breadcrumb.css`, a One line tile; Breadcrumb back to In review.
+
+## Review note, 2026-10-27 (round 80)
+
+- **What changed:** the collapsed "…" between crumbs is Area's More glyph, centred like the chevrons beside it.
+- **Why:** the typed ellipsis sat on the text's baseline, lower than the separators; Pagination already draws its gap
+  with the More glyph.

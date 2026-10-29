@@ -133,6 +133,11 @@ SplitButton's menu uses the same handler.
 
 ## Visual pass
 
+2026-10-26 (desktop app, the Stage at 100%, 2x, light and dark): a string shortcut ("⌘L" on the icons tile) was one
+keycap, a Kbd's ("⌘", "K") one per key 2 apart, so one menu could show both spacings → a string's leading modifier
+glyphs each take their own keycap and the rest stays as written (primitives.tsx `shortcutKeys`; menu.test.mjs). The
+rest unchanged in both themes.
+
 2026-09-27, Claude in Chrome, side by side with Notion's page menu (read only, opened and
 dismissed) beside the gallery's Content / icons tile: same anatomy (leading icons on one column,
 muted shortcuts at the end, inset rules between groups, the floating lift). Notion's rows are
@@ -310,3 +315,22 @@ computes the same fill, image, frost, stroke and box-shadow as a plain Menu.
   starts; the old formula put it at 0.362).
 - **Why:** the press room (THEMING.md, Interaction states) deepened the light press to L 0.913, and the state sweep found
   the red at 4.39:1 pressed (#cd073c on #e2e2e2). The muted ink is #646464 at the defaults, was #666666.
+
+## Review note, 2026-10-26 (visual pass)
+
+- **What changed:** A shortcut written as text ("⌘L") now draws ⌘ and L as two keycaps, the way a shortcut written
+  as keys already did ("⌘ K"). Text with no modifier ("Del", "F2") is unchanged.
+- **Why:** The icons tile's ⌘L was one cap while the shortcuts tile's ⌘ K was two, so the same chord looked spaced
+  two ways; your rule is that every key is a keycap.
+
+## Review note, 2026-10-27 (round 77)
+
+- **What changed:** a shortcut's keycaps keep 4 beside their glyphs and take a 4 corner on the menu row's 14 keycap
+  (were 2 and 5). The change is Kbd's, so every keycap follows (Approval, Command palette, Shortcut list, Search, Button).
+- **Why:** your round 75 note: "padding seems a bit tight around the letters and symbols, maybe the corner radius is
+  slightly too round?"
+
+## Review note, 2026-10-27 (round 78)
+
+- **What changed:** a shortcut keycap's sides are 3 (round 77 made them 4); see Kbd's round 78 note.
+- **Why:** your note that 4 was a pixel too much.

@@ -102,9 +102,10 @@ padding 0 6, 14/18 600, white 25%; Figma's panel key: 32 × 31, 1px rgba(255,255
 | weight | **500** on a filled keycap (`kbd.css:39`); **400** when quiet (`kbd.css:101`) | Notion 500; weight policy (a label on a fill); a quiet key has no fill | Was 400. Quiet was 500 until audit S12a |
 | fill / edge | **`bg-component-active` #eeeeee, no visible edge** (`kbd.css:30-32`, `79-83`) | Notion 7% warm fill, no border (about rgb 240) | Was `bg-component-hover` #f3 with a 1px `border-subtle` #d4 ring |
 | ink | **`fg-muted` rgb(102)** (`kbd.css:33, 82`) | Notion muted rgb(142, 139, 134) | Was `fg-default` |
-| radius | **`radius-control-sm` 6** at every size and in every host (`kbd.css`, `--_radius`; owner rule) | Owner 2026-09-28 (4 read too sharp); ChatGPT 8 on 18 | Notion 4, Untitled 4, Figma's panel 2 |
-| radius in a Button | **the keycap's own 6** | Owner 2026-09-28; Notion keeps its 4 inside an 8px field (not concentric) | The concentric corner came to 2 at every Button size |
-| radius in a Tooltip | own 6 (the concentric Tooltip rule removed) | Owner rule | — |
+| radius | **the keycap's height × the Radius factor**, to the nearest pixel, capped 2 short of a pill until Pill (`kbd.css`, `--_radius`): 6 on an 18 or a 20, 5 on a 16, 4 on a 14 at the default Radius | Owner round 75 (2026-10-27): "maybe the corner radius is slightly too round?"; every control's corner rule (base.ts); the size-dependent corner the 2026-09-28 rule allowed, never 2 | Was 24 × factor at every size (6), so a 14 menu keycap took 5, a third of its height |
+| side padding | **at least 3 beside the glyph's box** (`--_padding-inline`, border counted once; md keeps its 3 + 1) | Owner rounds 75 and 77 (2026-10-27): 2 was tight, 4 a pixel too much; measured caps 7.75 on the 14, ink 1 inside its box | Was the block padding on every side (1 + 1 on a 14) |
+| radius in a Button | **the keycap's own** (6 at md) | Owner 2026-09-28; Notion keeps its 4 inside an 8px field (not concentric) | The concentric corner came to 2 at every Button size |
+| radius in a Tooltip | its own (the concentric Tooltip rule removed) | Owner rule | — |
 | in an Input suffix | nested box: end inset = block inset (8 in a 32 field with the small keycap; `inset.css`) | Notion's search field ⌘K; same rule as Button | — |
 | quiet | renders like a string shortcut: transparent, no padding or min width, UI font 12/16 400, `fg-muted` (`kbd.css:89-102`); automatic in Menu items; a danger menu row's Kbd takes the row ink (`kbd.css:104`) | Notion menu shortcut plain 12px muted; Figma menu shortcut plain 11px at 70% | Owner audit S12a. Was the keyboard face at 500, 12 or 11 when small |
 | on-color | `currentColor` 14% plate, no edge, inherited ink; a Kbd in a Tooltip, any Button or a menu row adapts on its own (`kbd.css:108-116`, :130-135; audit A-15: on-emphasis merged, it had the same CSS) | ChatGPT translucent white 25% chip | Lighter plate |
@@ -290,3 +291,19 @@ the keycap read as touching its words.
 - **Why:** your note, "i prefer having kbd with backplate everywhere ... the look and consistency". Round 52 had
   dropped the plate in rows (the row is its own plate; Notion and Figma write menu shortcuts as text); that trade-off
   is now on the side of one look.
+
+## Review note, 2026-10-27 (round 77)
+
+- **What changed:** a keycap keeps at least 4 beside its glyphs (the sides were the same 1 or 2 as the top on a small
+  keycap), and its corner follows its height: 4 on the 14 in a menu row (was 5), 5 on a 16, 6 on an 18 or a 20 as before.
+- **Why:** your note on the menu shortcut: the letters and symbols sat tight against the plate and the corner read too
+  round. Notion's hint keeps 4 at the sides; height × the Radius factor is the rule every control's corner follows.
+
+## Review note, 2026-10-27 (round 78)
+
+- **What changed:** the sides are 3 inside the plate (were 4 in round 77, 2 before), so a 14 or 16 keycap is 2
+  narrower; the corner and the 18 / 20 keycaps are unchanged.
+- **Why:** your note: "maybe a bit too much extra padding, maybe 1 px less on either side? or does it make more sense to
+  do it in 2px increments." Measured at the 14 keycap (11px 500 system-ui): caps 7.75 tall, so 3.1 above and below; a
+  glyph's ink starts about 1 inside its box. 2px steps give only 2 (ink 3, tight) or 4 (ink 5); 3 puts the ink about 4
+  from the side, one more than above. A literal `/* spec */` value, below the layout scale's 2px steps on purpose.

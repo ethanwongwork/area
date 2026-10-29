@@ -43,7 +43,7 @@
   .area-number-field--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-number-field--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
   .area-number-field--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-number-field:hover:not([data-disabled], [data-read-only]):not(:focus-within) { --_t-paint: 0s; border-color: var(--_border-hover); } }
+  @media (hover: hover) { .area-number-field:hover:not([data-disabled], [data-read-only]):not(:focus-within) { --_t-paint: var(--area-hover-in); border-color: var(--_border-hover); } }
   /* Tones set slots and the one focus rule reads them, as Input, Textarea and Select (audit B-28). */
   .area-number-field:focus-within {
     --_t-paint: 0s;

@@ -237,3 +237,8 @@ None.
 ## Spacing audit (2026-10-17)
 
 Fixed 2026-10-23 (owner: "make sure all inset corner radius pairings are not broken"): tags in the field take the nested-corner rule, the field's corner less their inset, floored at min(radius-floor, their own) and rounded to even (`--_field-corner`, `--_tag-inset` on the picker; Tag's `--_corner`, tag-picker.css): 4 at every size by default (lg was 6 in the field's 10 at 7 in), 8 at Radius 14, pills in a pill field; the remove button follows the tag's corner. Was open: at lg the md Tags kept their own radius 6. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** A chosen row's check fades and grows in as Menu's does.
+- **Why:** One rule for a check in a list. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

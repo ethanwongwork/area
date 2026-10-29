@@ -153,6 +153,10 @@ the duration to 0, so it is instant, and `prefers-reduced-motion` drops the scal
 
 ## Visual pass
 
+2026-10-26 (desktop app, the Stage at 100%, 2x): the gallery's Dialog demos set `inline-size: 100%`, a leftover from
+the first gallery, so the Stage ("at its real size") drew a one-field dialog about 670 wide → the demos drop it and
+show the 480 the dialog opens at (gallery.tsx). The component is unchanged.
+
 2026-09-28 (batch 17, gallery): 480 preferred (502 in the tile), corner 16, a 32 close 8 from the
 top and side (concentric: 8 + 8), title and footer buttons on the 16 inset. Beside ChatGPT's
 dialogs on file (`chatgpt--shortcuts-dialog`: 600 wide, corner 16, #fcfcfc, a 4/8 lift;
@@ -256,3 +260,10 @@ Open questions: none new.
 
 - **What changed:** the description sits directly under the title: title baseline to description cap 12, was 16 (a 4 gap).
 - **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs". Confirm dialog and Drawer share it.
+
+## Review note, 2026-10-26 (visual pass)
+
+- **What changed:** The Dialog tiles now show the dialog at the width it really opens at, 480, instead of stretched
+  across the whole Stage. The component itself is unchanged.
+- **Why:** The demos still carried a full-width style from the first gallery, so the Stage's "real size" view showed
+  a dialog much wider than any you would ship.

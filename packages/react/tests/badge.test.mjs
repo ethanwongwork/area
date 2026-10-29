@@ -77,3 +77,11 @@ test('Indicator keeps the full count accessible while capping its displayed valu
   assert.match(html, />99\+</);
   for (const status of ['online','offline','busy','away']) assert.match(render(h(Indicator,{status})), new RegExp(`aria-label="${status === "online" ? "available" : status}"`));
 });
+
+// Visual pass 2026-10-27: auto-fit restores the closed overflow popover with its transition off, so measuring never
+// runs the close transition (it showed the hidden badges over the group and the observer looped on it).
+test('BadgeGroup auto-fit restores the closed popover without a transition', async () => {
+  const { readFileSync } = await import('node:fs');
+  const src = readFileSync(new URL('../src/components/BadgeGroup.tsx', import.meta.url), 'utf8');
+  assert.match(src, /panel\.style\.cssText = `\$\{saved\};transition:none`;\s*panel\.getBoundingClientRect\(\);\s*panel\.style\.cssText = saved;/);
+});

@@ -338,6 +338,17 @@
   @supports (left: round(nearest, 50%, 1px)) {
     .area-color-picker__thumb { left: round(nearest, var(--_saturation), 1px); top: round(nearest, var(--_brightness), 1px); }
   }
+  /* A pointer press picks the knob up, as the Slider's (slider.css, `--_lift`; owner 2026-10-26: the Slider's motion on
+     every component): four times Feedback's medium give, 1.12 at Subtle and 1 at Off, arriving on `press-in` and
+     settling on `fast`. The knob still follows the pointer 1:1; only its size eases. A range's :active is a pointer
+     press (a key never activates it), so a key step never lifts. At rest it is scale 1 on whole pixels. */
+  .area-color-picker { --_lift: calc(1 + (1 - var(--area-feedback-scale)) * 4); }
+  .area-color-picker__thumb { transition: scale var(--area-duration-fast) var(--area-ease-out); }
+  .area-color-picker:not([aria-disabled="true"]) .area-color-picker__area:active > .area-color-picker__thumb { scale: var(--_lift); transition-duration: var(--area-press-in); }
+  .area-color-picker__slider::-webkit-slider-thumb { transition: scale var(--area-duration-fast) var(--area-ease-out); }
+  .area-color-picker__slider:enabled:active::-webkit-slider-thumb { scale: var(--_lift); transition-duration: var(--area-press-in); }
+  .area-color-picker__slider::-moz-range-thumb { transition: scale var(--area-duration-fast) var(--area-ease-out); }
+  .area-color-picker__slider:enabled:active::-moz-range-thumb { scale: var(--_lift); transition-duration: var(--area-press-in); }
   .area-color-picker__channel { position: absolute; inline-size: 1px; block-size: 1px; margin: 0; opacity: 0; pointer-events: none; }
   .area-color-picker__area:has(:focus-visible) > .area-color-picker__thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-color-picker__slider:focus-visible::-webkit-slider-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }

@@ -150,3 +150,8 @@ commit with a filtered list (rows held while closing).
   hugs the field. In the open list, rows sit 1px apart (were 2px at the default size).
 - **Why:** your picks on the state page (2026-10-21), now the defaults of the state settings, and your note that the
   gap between rows should hold at every density (ChatGPT and Notion put rows 1px apart).
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** A chosen option's check fades and grows in as Menu's does.
+- **Why:** One rule for a check in a list. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

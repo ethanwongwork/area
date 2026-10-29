@@ -402,3 +402,8 @@ The trigger's label is not selectable. See [interaction polish](../research/inte
 - 2026-10-23 · owner: "Go with the exaggerated glyphs, the 20 new marks and the grid menu as default … component intake
   for the Custom select grid layout, then build it" → `layout="grid"` and the option `preview` slot (Intake above);
   the desktop Inspector opens its visual settings as grids. Back in review.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** A chosen option's check fades and grows in as Menu's does.
+- **Why:** One rule for a check in a list. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).

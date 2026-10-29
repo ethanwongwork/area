@@ -353,7 +353,12 @@ Spacing without the rules (2026-10-26, owner: "make sure the spacing is intentio
 - **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
   light. You approved each one on the dividers comparison page.
 
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** Pressing a knob (the area's, hue, opacity or a channel bar's) picks it up, as the Slider's: it grows by the Feedback setting (1.12 at Subtle, none at Off) and settles back; it still follows the pointer exactly.
+- **Why:** The Slider's knob lifts and these are the same part. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
 ## Review note, 2026-10-27 (gamut)
 
 - **Gamut** (exact colours plan, https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2, decided 2026-10-27): `gamut={{ lightness: [min, max], chroma, reach? }}` turns the picker into an exact OKLCH picker. The area is chroma (across, 0 to `chroma`) by lightness (up, `min` to `max`) at the hue on an OKLCH hue track; a canvas (128 square, scaled) paints the colours `reach(l, h)` allows (sRGB's own by default) and leaves the rest clear, the edge covered in proportion so it stays a line at any size. A pointer or key past the reach is held at it. The value row is exact L (%, two places), C (four) and H (°, one); `oklch` / `defaultOklch` in, `onOklchChange` out, `onValueChange` the nearest hex; the form value is `oklch(L C h)`. Views, models, opacity, contrast, preview and the eyedropper don't apply. Its own code path (`GamutPicker`), so the spectrum picker is unchanged. No new measured values: the area, thumb, tracks and fields are the spectrum picker's.
-- Used by Setup's Colours stage for the light and dark page (`apps/desktop/src/pages/theme-setup.tsx`, `reach` = `@area/tokens/colours` `reachableChroma`). Back in review.
+- Used by Setup's Colours stage for the light and dark page (`apps/desktop/src/pages/theme-setup.tsx`, `reach` = `@area/tokens/colours` `reachableChroma`). Approved by the owner on the exact-colours review, 2026-10-28 (https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG, every family).

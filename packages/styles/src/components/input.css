@@ -50,9 +50,10 @@
     --_field-lift: var(--area-shadow-field);
     box-shadow: var(--_field-lift);
     /* Motion (docs/MOTION.md, 2026-10-07): the edge, fill and ink (--_t-paint) and the focus halo
-       (--_t-halo) fade out on fast; the states below set 0s, so hover, focus and a validation tone
-       appear at once (a focus halo that fades in lags the keyboard). The halo keeps its fade into
-       hover, so a field left while hovered still lets go of its focus softly. */
+       (--_t-halo) fade out on fast; focus and a validation tone set 0s and appear at once (a focus halo that fades
+       in lags the keyboard). Hover arrives on Feedback's hover-in, as every other field's edge (Custom select, Date
+       picker, Tag picker, OTP, Composer; 2026-10-26: Input, Textarea, Number field, Select and Input group landed it
+       at once). The halo keeps its fade into hover, so a field left while hovered still lets go of its focus softly. */
     --_t-paint: var(--area-duration-fast);
     --_t-halo: var(--area-duration-fast);
     transition-property: background-color, border-color, color, box-shadow;
@@ -76,7 +77,7 @@
   .area-input--monospace { font-family: var(--area-font-mono); }
   @media (hover: hover) {
     .area-input:hover:not([data-disabled], [data-read-only]):not(:focus-within) {
-      --_t-paint: 0s;
+      --_t-paint: var(--area-hover-in);
       border-color: var(--_border-hover);
     }
   }
@@ -172,17 +173,36 @@
   /* Every slot takes the disabled ink, icons and the action included (audit B-10). */
   .area-input[data-disabled] :is(.area-input__icon, .area-input__action-button) { color: var(--area-fg-disabled); }
 
+  /*
+   * The file button is the field's action plate at rest (visual pass 2026-10-26): the action's box (the field less a
+   * 4px ring, `--_action`), its concentric corner, the soft Button's fill, a Button's label inset for that height and,
+   * on a fill, the 500 label (audit B-33's own rule). It was a bare 400 label in the field's ink, so "Choose File No
+   * file chosen" read as one string with nothing marking the action (native pickers, shadcn's file input and Untitled
+   * UI's all set the action apart). The field's start inset measures the plate (inset.css), so it sits 4 from the edge.
+   */
   .area-input__control::file-selector-button {
+    box-sizing: border-box;
+    block-size: var(--_action);
     margin-inline-end: var(--_gap);
-    padding: 0;
+    padding: 0 max(0px, round(nearest, calc((var(--_action) - 1cap) / 2), 1px));
     border: 0;
-    background: transparent;
+    border-radius: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_action) * var(--area-radius-factor)), 2px))), calc(var(--_field-shape) - var(--area-space-4)));
+    background-color: var(--area-bg-component);
     /* Neutral by default, like every other action label (DESIGN_SYSTEM.md). */
     color: var(--area-fg-default);
     font: inherit;
-    /* 400: 500 is for labels on fills, and this one is transparent (audit B-33, as Code block's toggle). */
-    font-weight: var(--area-weight-regular);
+    font-weight: var(--area-weight-strong);
     cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) {
+    .area-input:not([data-disabled]) .area-input__control::file-selector-button:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); }
+  }
+  .area-input:not([data-disabled]) .area-input__control::file-selector-button:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
+  /* On the soft field's fill the plate is the wash steps, as the action's there. */
+  .area-input--soft .area-input__control::file-selector-button { background-color: var(--area-bg-hover); }
+  @media (hover: hover) {
+    .area-input--soft:not([data-disabled]) .area-input__control::file-selector-button:hover { background-color: var(--area-bg-pressed); }
   }
 
   .area-input[data-disabled] .area-input__control::file-selector-button {

@@ -13,16 +13,23 @@
        transparent border twice. Reading the mark role lets compact shorten it (compact pass). */
     --_height: var(--_min);
     --_padding: calc((var(--_height) - var(--area-size-10)) / 2 - var(--area-stroke-width));
+    /* The sides take at least 3 beside the glyph's box, counting the 1px border once. Measured at the menu's 14 keycap
+       (11px 500 system-ui): the caps are 7.75 tall, so 3.1 above and below them, and a glyph's ink starts about 1 inside
+       its box, so 3 at the sides puts the ink about 4 from the edge, a pixel more than above, as sides read best. The even
+       padding gave 2 (ink 3, tight: owner, round 75); Notion's 4 gave ink 5 (owner, round 77: "maybe a bit too much extra
+       padding, maybe 1 px less on either side?"). Below the 2px ladder on purpose: its 2 and 4 are those two. md keeps its
+       3 + 1. */
+    --_padding-inline: max(var(--_padding), calc(3px - var(--area-stroke-width))); /* spec */
     --_font: var(--area-text-xs-size);
     --_leading: var(--area-size-10);
-    /* spec: 6 at every size and in every host (owner 2026-09-28: "keep 6px for everything as a
-       rule"; 4 read too sharp, a concentric 2 far too sharp). */
-    /* 6 at the default as the corner of a 24px box, so it scales with the radius setting like every
-       corner (2 ... 6 ... 10, a pill at Pill, where the browser's half-height clamp takes it); the
-       same at both densities (radius audit D4). It stops 2px short of a pill until Pill, as a Menu's
-       rows do (base.ts radius-list-row): at 14 a 16 compact key took 10 and read as a capsule (radius
-       audit, 2026-10-18). */
-    --_radius: max(var(--area-radius-min), min(round(down, calc(24px * var(--area-radius-factor)), 2px), calc(var(--_height) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
+    /* It scales with the Radius setting like every corner and stops 2px short of a pill until Pill, as a Menu's rows
+       do (base.ts radius-list-row; radius audit, 2026-10-18: a 16 compact key had taken a capsule's corner). */
+    /* Owner, round 75 ("maybe the corner radius is slightly too round?"): the corner is the keycap's own height times
+       the Radius factor, the rule every control's corner follows (base.ts), to the nearest pixel: 6 on an 18 or a 20 (the
+       owner's 6, kept at md), 5 on a 16, 4 on a 14 at the default Radius, about three tenths of the height at every size. It was 24 ×
+       factor for every keycap, capped 2 short of a pill, so a 14 took 5, a third of it and nearly a capsule. Never 2 at
+       the shipped Radius settings above Sharp (2 read far too sharp, 2026-09-28; that rule allowed a corner by size). */
+    --_radius: max(var(--area-radius-min), min(round(nearest, calc(var(--_height) * var(--area-radius-factor)), 1px), calc(var(--_height) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
 
     display: inline-flex;
     align-items: center;
@@ -30,7 +37,7 @@
     gap: var(--area-keyboard-gap);
     min-inline-size: var(--_min);
     block-size: var(--_height);
-    padding: var(--_padding);
+    padding: var(--_padding) var(--_padding-inline);
 
     /* A filled keycap with no drawn edge, as Notion's shortcut hints are (7% warm fill, 500
        muted ink). The 1px transparent border keeps the box a whole number. */

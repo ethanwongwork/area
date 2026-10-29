@@ -83,3 +83,26 @@ test('an asset card takes the wide aspect and the checker fill; a colour on the 
   assert.match(html, /area-asset-card--color/);
   assert.match(html, /--_asset-color:rgb\(37 99 235 \/ 0.4\)/);
 });
+
+// Visual pass 2026-10-27: a group's cell is the frame's tone, and a cell holding an element draws the frame's edge (it
+// was white with no edge, so a thumbnail floated loose in the 2 × 2); image cells keep none (owner, round 59).
+test('a group cell holding an element draws its frame, an image cell does not', async () => {
+  const { readFileSync } = await import('node:fs');
+  const css = readFileSync(new URL('../../styles/src/components/asset-card.css', import.meta.url), 'utf8');
+  const cell = css.match(/\.area-asset-card__cell \{[^}]*\}/)[0];
+  assert.match(cell, /background-color: var\(--area-bg-frame\)/, 'the frame tone');
+  assert.match(css, /\.area-asset-card__cell:has\(> \.area-asset-card__thumb\) \{ box-shadow: inset 0 0 0 var\(--area-stroke-width\) var\(--area-border-divider\); \}/, "the frame's edge, inset");
+  assert.match(css, /\.area-asset-card--containerless \.area-asset-card__cell \{ box-shadow: none; \}/, 'no edge at rest when containerless');
+  const html = render(h(AssetCard, { name: 'Group one', group: ['a.png', h('button', null, 'Button')] }));
+  assert.match(html, /area-asset-card__cell"><img[^>]*><\/span>/, 'an image cell has no thumb');
+});
+
+// Visual pass 2026-10-27: the app's own tile hooks stop at every specimen's holder, the Stage's view as well as a tile's
+// stage, so the Stage draws Asset card as it ships (it took the app's 16 corner and inset, and the grid the app's 8 gap).
+test("the app's Asset card hooks stop at the tile stage and the Stage", async () => {
+  const { readFileSync } = await import('node:fs');
+  const canvas = readFileSync(new URL('../../../apps/desktop/src/styles/canvas.css', import.meta.url), 'utf8');
+  const reset = canvas.match(/\.gallery-tile__stage,\s*\.studio-stage__view \{[^}]*\}/);
+  assert.ok(reset, 'one reset for both specimen holders');
+  for (const hook of ['--area-asset-card-corner', '--area-asset-card-name-inset', '--area-asset-grid-gap']) assert.match(reset[0], new RegExp(`${hook}: initial;`));
+});

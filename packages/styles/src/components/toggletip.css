@@ -10,8 +10,11 @@
     /* spec: the box is the line it sits in (14/20 → 20; compact 12/16 → 16), so a label with the
        button keeps its height (Fluent's 24 box overhangs a 20 line by 2 each side). */
     --_box: var(--area-ui-leading);
-    /* spec: a 16 mark beside 14/20 text (Notion, Fluent md, Carbon, Untitled UI); compact 12, as sm. */
-    --_icon: calc(var(--area-icon-sm) - var(--area-space-4) * clamp(0, var(--area-ui-dense), 1));
+    /* spec: a 16 mark beside 14/20 text (Notion, Fluent md, Carbon, Untitled UI); compact 12, as sm. The compact step
+       is in halves (0.5 at the app's type 13), so it rounds up to a whole step: a native 16 or 12, never a 14 between
+       them (2026-10-26, the detail pass; crispness rule 4; Empty state's glyph the same). */
+    --_icon-step: round(up, clamp(0, var(--area-ui-dense), 1), 1);
+    --_icon: calc(var(--area-icon-sm) - var(--area-space-4) * var(--_icon-step));
 
     position: relative;
     display: inline-grid;
@@ -39,7 +42,7 @@
 
   .area-toggletip--md {
     --_box: var(--area-ui-leading);
-    --_icon: calc(var(--area-icon-sm) - var(--area-space-4) * clamp(0, var(--area-ui-dense), 1));
+    --_icon: calc(var(--area-icon-sm) - var(--area-space-4) * var(--_icon-step));
   }
 
   /* spec: beside a 12/16 caption, a 12 mark in a 16 box (ChatGPT's 12 mark; Fluent sm 12 in 20). */
@@ -50,7 +53,7 @@
 
   .area-toggletip > svg { inline-size: var(--_icon); block-size: var(--_icon); }
   /* The md mark is drawn at 16 and shown at 12 in compact: keep the 12px line of the size curve (base.css). */
-  .area-toggletip--md > svg path { stroke-width: calc(var(--area-weight-icon) * (1 + 0.1715 * clamp(0, var(--area-ui-dense), 1))); }
+  .area-toggletip--md > svg path { stroke-width: calc(var(--area-weight-icon) * (1 + 0.1715 * var(--_icon-step))); }
 
   /* Hover: the neutral ghost Button's plate (bg-component-hover, the row plate), the ink fixed
      (ChatGPT, Fluent and Untitled darken the ink instead; Spectrum plates). Pressed and pinned keep

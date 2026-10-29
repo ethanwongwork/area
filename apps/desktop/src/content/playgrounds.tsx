@@ -109,6 +109,8 @@ export const PLAYGROUNDS: Record<string, Playground> = {
     name: "Badge",
     component: Badge as ComponentType<Record<string, unknown>>,
     controls: controlsOf(MANIFESTS.badge, { choices: ["variant", "tone", "size"], switches: ["dot", "pill"], text: { children: "Badge" } }),
+    // Modern colours only its add-on, so its tone tiles open with the dot, as the gallery draws them (owner, round 76).
+    tiles: Object.fromEntries(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"].map(tone => [`modern-${tone}`, { variant: "modern", tone, dot: true }])),
   },
   button: {
     name: "Button",

@@ -55,8 +55,10 @@ export interface BreadcrumbEllipsisProps extends HTMLAttributes<HTMLElement> {
 export const BreadcrumbEllipsis = forwardRef<HTMLElement, BreadcrumbEllipsisProps>(function BreadcrumbEllipsis(
   { className, items, "aria-label": ariaLabel = "More pages", ...rest }, ref,
 ) {
-  if (!items?.length) return <span ref={ref as Ref<HTMLSpanElement>} role="img" aria-label={ariaLabel} className={cx("area-breadcrumb__ellipsis", className)} {...rest}>…</span>;
-  const trigger = <button ref={ref as Ref<HTMLButtonElement>} type="button" aria-label={ariaLabel} className={cx("area-breadcrumb__ellipsis", className)} {...rest}>…</button>;
+  // The marker is Area's More glyph, as Pagination's gap is (visual pass, 2026-10-27: a typed "…" sat on the text's
+  // baseline, below the chevrons' centre).
+  if (!items?.length) return <span ref={ref as Ref<HTMLSpanElement>} role="img" aria-label={ariaLabel} className={cx("area-breadcrumb__ellipsis", className)} {...rest}><Glyph name="more" /></span>;
+  const trigger = <button ref={ref as Ref<HTMLButtonElement>} type="button" aria-label={ariaLabel} className={cx("area-breadcrumb__ellipsis", className)} {...rest}><Glyph name="more" /></button>;
   // Rows are links, so a page opens like any other crumb (middle-click, a new tab, the router's own anchor).
   return <Menu trigger={trigger}>{items.map((item, index) => <a key={`${index}:${item.href}`} role="menuitem" href={item.href} className="area-menu__item"><span className="area-menu__text">{item.label}</span></a>)}</Menu>;
 });

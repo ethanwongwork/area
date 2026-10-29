@@ -690,3 +690,17 @@ test('a revealed control\'s showing rules outrank the rule that hides it (2026-1
   }
   assert.ok(checked >= 5, `only ${checked} showing rules checked`);
 });
+
+test('an icon size derived from the compact step lands on a native cut (2026-10-26: Empty state 22, Toggletip 14 at type 13)', () => {
+  // `--area-ui-dense` is in halves (0.5 at the app's type 13), so `x − 4px × ui-dense` drew glyphs between the native
+  // sizes (MOTION.md crispness rule 4). A glyph or icon size that reads it must round the step to a whole one first.
+  for (const { selector, body } of rules) {
+    for (const [, prop, value] of body.matchAll(/(--_(?:glyph|icon)[\w-]*)\s*:\s*([^;]+)/g)) {
+      if (!/ui-dense/.test(value) || /line|gap|cut/.test(prop)) continue;
+      assert.match(value, /round\(/, `${selector} ${prop} reads ui-dense without rounding it to a whole step`);
+    }
+  }
+  // Every disclosure body opens on Accordion's height recipe (2026-10-26).
+  const body = rules.find(rule => rule.selector.startsWith(':is(.area-step__body, .area-plan__items, .area-queue__items, .area-edit-summary__diff)') && /interpolate-size/.test(rule.body));
+  assert.ok(body, 'the disclosure bodies share the height recipe (accordion.css)');
+});

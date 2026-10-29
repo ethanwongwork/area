@@ -776,12 +776,11 @@ export const CodeBlockFlush = () => <CodeBlock flush code={'export default value
 
 export const GalleryDialog = () => (
   <Dialog role="group" aria-modal={undefined} title="Title" description="Description"
-    footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>}
-    style={{ inlineSize: "100%" }} />
+    footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>} />
 );
-export const GalleryDialogNoClose = () => <Dialog role="group" aria-modal={undefined} showCloseButton={false} title="Title" description="Description" footer={<Button>Action</Button>} style={{ inlineSize: "100%" }} />;
-export const GalleryDialogForm = () => <Dialog role="group" aria-modal={undefined} title="Title" description="Description" style={{ inlineSize: "100%" }} footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>}><Field label="Label"><Input fullWidth placeholder="Placeholder" /></Field></Dialog>;
-export const GalleryDialogScrollable = () => <Dialog role="group" aria-modal={undefined} title="Title" description="Description" footer={<Button>Action</Button>} style={{ inlineSize: "100%", maxBlockSize: "calc(var(--area-space-96) * 3)" }}><div style={{ display: "grid", gap: "var(--area-space-12)" }}>{Array.from({ length: 8 }, (_, index) => <p key={index} style={{ margin: 0 }}>Body text {index + 1}</p>)}</div></Dialog>;
+export const GalleryDialogNoClose = () => <Dialog role="group" aria-modal={undefined} showCloseButton={false} title="Title" description="Description" footer={<Button>Action</Button>} />;
+export const GalleryDialogForm = () => <Dialog role="group" aria-modal={undefined} title="Title" description="Description" footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>}><Field label="Label"><Input fullWidth placeholder="Placeholder" /></Field></Dialog>;
+export const GalleryDialogScrollable = () => <Dialog role="group" aria-modal={undefined} title="Title" description="Description" footer={<Button>Action</Button>} style={{ maxBlockSize: "calc(var(--area-space-96) * 3)" }}><div style={{ display: "grid", gap: "var(--area-space-12)" }}>{Array.from({ length: 8 }, (_, index) => <p key={index} style={{ margin: 0 }}>Body text {index + 1}</p>)}</div></Dialog>;
 /* Footer actions close the enclosing native dialog; an app would act first. */
 const closeDialog = (event: MouseEvent<HTMLButtonElement>) => event.currentTarget.closest("dialog")?.close();
 /* Modal: the trigger opens a native modal dialog; the close, Escape or a click on the scrim closes it. */

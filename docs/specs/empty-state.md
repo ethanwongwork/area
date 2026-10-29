@@ -191,3 +191,8 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
 
 - **What changed:** the description sits directly under the title at both sizes: 12 at md (was 20, an 8 gap after ChatGPT's empty state), 10 at sm (was 12, a 2 gap).
 - **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs". ChatGPT's empty state keeps 8; one rule across the system won over that single reference, so say if Empty state should be the exception.
+
+## Review note, 2026-10-26 (interaction pass)
+
+- **What changed:** At the app's type 13 the glyph is 20 (md) and 16 (sm), native sizes, instead of 22 and 18.
+- **Why:** The compact step is in halves at type 13, which put the glyph between native cuts, slightly soft. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
