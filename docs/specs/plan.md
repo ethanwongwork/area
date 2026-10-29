@@ -279,3 +279,11 @@ chevron moves out with it (its 12 column was the cause). Queue's head shares the
 
 - **What changed:** The items ease open and shut with the head's chevron, on Accordion's recipe.
 - **Why:** They snapped while Accordion eased. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+## Review note, 2026-10-29 (round 85)
+
+- **What changed:** a cancelled item shows its ring with a cross, as specified, in light and dark; done items keep the
+  tick. A cohesion test checks the cross's rule outranks the shared tick rule.
+- **Why:** the cross's rule was one class lighter than the rule that draws the tick for done and cancelled items, so
+  the tick won and a cancelled item looked done (only its hidden "Cancelled" text told them apart).
+- **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.

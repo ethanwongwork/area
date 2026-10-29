@@ -1220,15 +1220,17 @@ export const GalleryMessageLong = () => (
 
 /*
  * Scroll to latest (docs/specs/scroll-to-latest.md): scroll the conversation up and the round
- * button appears 24 above the composer; it returns to the newest message.
+ * button appears 24 above the composer; it returns to the newest message. Five turns, so the tile opens
+ * more than the 200 threshold from the end and shows the button at rest (round 86: three turns ended 130
+ * from the end at the app's type 13, so the button never showed).
  */
 export const GalleryScrollToLatest = () => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   return <div style={{ display: "grid", gridTemplateRows: "minmax(0, 1fr) auto", gap: "var(--area-space-16)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%", blockSize: "calc(var(--area-space-96) * 4)" }}>
     <div ref={scrollRef} style={{ overflowY: "auto", display: "grid", gap: "var(--area-space-24)", alignContent: "start" }}>
-      {["Item one", "Item two", "Item three"].map((question, index) => <div key={question} style={{ display: "grid", gap: "var(--area-space-24)" }}>
+      {["Item one", "Item two", "Item three", "Item four", "Item five"].map((question, index, all) => <div key={question} style={{ display: "grid", gap: "var(--area-space-24)" }}>
         <Message author="user">{question}</Message>
-        <Message author="assistant" authorName="Assistant" actions={index === 2 ? assistantActions : undefined}>
+        <Message author="assistant" authorName="Assistant" actions={index === all.length - 1 ? assistantActions : undefined}>
           <p>Body text</p>
           <p>Body text</p>
         </Message>
@@ -1928,11 +1930,16 @@ export const GallerySpinnerNeutral = () => <SelectionNeutral><Spinner /></Select
 export const GallerySpinnerButton = () => <Button loading>Button</Button>;
 export const GallerySpinnerBadge = () => <Badge icon={<Spinner />} tone="neutral">Badge</Badge>;
 export const GallerySpinnerInput = () => <Input aria-label="Label" placeholder="Placeholder" loading loaderPosition="trailing" />;
+/* A region loading in place of its content: the spinner 12 over a title with its line joined under it, the line muted,
+   as Empty state sm lays out its text (DESIGN_SYSTEM.md, "Text pairs"; round 87: the line sat 12 under the title in
+   the default ink). */
 export const GallerySpinnerEmpty = () => (
   <div style={{ display: "grid", justifyItems: "center", gap: "var(--area-space-12)", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)", textAlign: "center" }}>
     <Spinner label="Loading" />
-    <span style={{ fontWeight: "var(--area-weight-strong)" }}>Title</span>
-    <span>Description</span>
+    <div style={{ display: "grid" }}>
+      <span style={{ fontWeight: "var(--area-weight-strong)" }}>Title</span>
+      <span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-sm-size)", lineHeight: "var(--area-text-sm-leading)" }}>Description</span>
+    </div>
   </div>
 );
 

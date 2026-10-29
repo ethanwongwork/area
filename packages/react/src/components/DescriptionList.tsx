@@ -84,7 +84,7 @@ export const DescriptionListItem = forwardRef<HTMLDivElement, DescriptionListIte
     <div ref={ref} className={cx(descriptionListVariants.element("item"), className)} {...rest}>
       <dt className={descriptionListVariants.element("term")}>
         {icon ? <span className={descriptionListVariants.element("icon")} aria-hidden="true">{icon}</span> : null}
-        {term}
+        <span className={descriptionListVariants.element("label")}>{term}</span>
       </dt>
       <dd className={descriptionListVariants.element("value")}>{children}</dd>
     </div>

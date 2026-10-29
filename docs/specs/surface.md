@@ -134,3 +134,9 @@ their screens are the evidence for the rules, not for an API.
   divider on Stack yet, no extra step for soft inside soft.
 - **Why:** you said to go with the recommendations and make sure the design is correct; this was the one place a
   Surface did not follow the system's settings.
+
+## Review note, 2026-10-29 (visual pass, rounds 85–89: a question)
+
+- **Question:** at Layers 0 (Flat, the default) a soft Surface's fill is the recessed layer, equal to the page, so the
+  well is invisible and its row looks inset under nothing. Show it at Flat, or keep Flat flat?
+- **Answer:** keep Flat flat (owner, 2026-10-29). A soft well shows once Layers is above 0. No change.

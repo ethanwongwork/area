@@ -91,7 +91,12 @@
     column-gap: var(--area-gap-row);
     row-gap: var(--_row-gap);
   }
-  .area-description-list--columns > .area-description-list__item { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: start; }
+  /* The term sits on the value's first line (DESIGN_SYSTEM.md, Optical insets: multiline content aligns to the first
+     line), by baseline, so a value whose first line is taller than the text (a person's avatar beside the name) keeps its
+     name level with the term; it sat on the value's top, 4 above the name (round 82). The term's baseline is its
+     label's, never its icon's. */
+  .area-description-list--columns > .area-description-list__item { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: first baseline; }
+  .area-description-list__label { align-self: baseline; min-inline-size: 0; }
   .area-description-list--columns .area-description-list__term { inline-size: auto; }
   .area-description-list--columns .area-description-list__value { margin: 0; }
   /* Divided columns: twice the gap, the rule in its middle. */

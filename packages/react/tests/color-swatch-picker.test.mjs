@@ -21,3 +21,16 @@ test("ColorSwatchPicker renders labeled native choices and a selected form value
   assert.match(html, /<input[^>]*disabled=""[^>]*aria-label="Ochre"/);
   assert.deepEqual(MANIFESTS.colorSwatchPicker.variants, { size: ["sm", "md", "lg"], layout: ["grid", "row", "palette"] });
 });
+
+// color.css: the palette's ring is a layer over its cells (round 81); as the grid's outline the positioned swatches
+// covered it and a white cell lost its corner on a white page. Selected and focused cells stay above it.
+test("the palette ring paints over the cells, under the selected and focused cell", async () => {
+  const { readFileSync } = await import("node:fs");
+  const css = readFileSync(new URL("../../styles/src/components/color.css", import.meta.url), "utf8");
+  const ring = css.match(/\.area-color-swatch-picker--palette::after \{([^}]*)\}/)?.[1] ?? "";
+  assert.match(ring, /z-index: 1;/);
+  assert.match(ring, /box-shadow: inset 0 0 0 var\(--area-stroke-width\) var\(--area-token-swatch-ring\)/);
+  assert.doesNotMatch(css.match(/\.area-color-swatch-picker--palette \{([^}]*)\}/)[1], /outline:/);
+  assert.match(css, /__cell:has\(input:checked\) \{ z-index: 2;/);
+  assert.match(css, /__cell:has\(input:focus-visible\) \{[^}]*z-index: 3;/);
+});

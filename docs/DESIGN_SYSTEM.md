@@ -74,6 +74,13 @@ them:
   mix; they never rotate toward it, so danger never reads as warning.
 - **Tonal inks stay under the gray-page bound.** A light tonal ink is no brighter than `TONAL_Y` (teal's #00766a, the
   brightest named one), the luminance the Layers model darkens hued inks for on a gray page.
+- **Dark soft tones are quiet** (owner, 2026-10-28, docs/research/dark-soft-tones-2026-10-28). In dark a tone's soft
+  surfaces (`<tone>-surface`, `-hover`, `-active`, and `-border-subtle`) are the neutral control fill of the same state
+  (`bg-component`, `-hover`, `-pressed`: L 0.277 / 0.321 / 0.368) in the tone's hue at chroma 0.05 / 0.06 / 0.07
+  (`DARK_TONAL_CHROMA`, `color/scale.ts` `chooseTonalPair`), never a palette rung: ChatGPT, Notion and Figma all sit at
+  chroma 0.04–0.07 there, and the rungs carried up to 0.15 and read almost solid. A soft Button in a tone is the neutral
+  soft Button with colour in it. The ink is gated on the rungs and on the paint, so every named family keeps its ink;
+  light still paints its rungs.
 
 **Tone means meaning; treatment means emphasis.**
 
@@ -516,7 +523,9 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
 `packages/styles/src/inset.css` is the shared implementation.
 
 - **Icons use full square slots**, not path bounds. All text uses one cap-to-baseline
-  reference, with room for accents and descenders. Never nudge a glyph or a word.
+  reference, with room for accents and descenders. Never nudge a glyph or a word. Every text
+  slot in a centred row takes that reference, the second text too (a description, a step
+  count): one trimmed and one not part their baselines by a fraction of a pixel.
 - **Outer inset is `(H − B) / 2`** for backplate height H and edge-item reference height B.
   CSS padding subtracts the border once. Calculate leading and trailing ends separately:
   `outer inset = border + shell padding + slot inset`.

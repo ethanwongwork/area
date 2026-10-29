@@ -185,3 +185,13 @@ starts at y 328.07. That is Dialog's, reported to the lead rather than changed h
 
 - **What changed:** the description sits directly under the title: 12 from the title's baseline to the description's cap, was 16.
 - **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs".
+
+## Review note, 2026-10-28 (dark soft tones)
+
+- **What changed:** the danger action's soft plate in dark are quieter: each tone's soft surface is the neutral control fill of the same state in the
+  tone's hue at chroma 0.05 / 0.06 / 0.07 (danger rest #3d1d1f, was #820022). Inks and light are unchanged; the ink
+  reads better (Delete's label 7.34:1 → 10.38:1).
+- **Why:** ChatGPT, Notion and Figma paint dark soft tones at chroma 0.04–0.07; Area's palette rungs carried up to 0.15
+  and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
+  docs/research/dark-soft-tones-2026-10-28).
+- **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).

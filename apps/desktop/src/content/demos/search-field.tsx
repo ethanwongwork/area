@@ -1,6 +1,6 @@
 /** Search field gallery specimens: one variant per tile. docs/specs/search-field.md. */
 import { useState } from "react";
-import { SearchField } from "@area/react";
+import { Nav, NavItem, SearchField } from "@area/react";
 
 export const GallerySearchField = () => <SearchField aria-label="Search" />;
 /* With a query: the clear action ends the field. */
@@ -16,17 +16,19 @@ export const GallerySearchFieldDisabled = () => <SearchField aria-label="Search"
 
 const PAGES = ["Item one", "Item two", "Item three", "Item four", "Item five", "Item six"];
 
-/* Filters a list as you type; Escape or the clear action brings every row back. */
+/* Filters a list as you type; Escape or the clear action brings every row back. The rows are Nav's (round 86: they
+   were bare list items with no row height or plates). The empty line takes a row's inset and height in the muted ink. */
 export const GallerySearchFieldFilter = () => {
   const [query, setQuery] = useState("");
   const matches = PAGES.filter(page => page.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase()));
   return (
     <div style={{ display: "grid", gap: "var(--area-space-8)", inlineSize: "var(--area-input-inline-size)", maxInlineSize: "100%" }}>
       <SearchField aria-label="Search" placeholder="Search" value={query} onValueChange={setQuery} aria-controls="search-field-demo-results" />
-      <ul id="search-field-demo-results" aria-live="polite" style={{ margin: 0, padding: 0, listStyle: "none", color: "var(--area-fg-default)", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)" }}>
-        {matches.length ? matches.map(page => <li key={page} style={{ paddingInline: "var(--area-space-8)" }}>{page}</li>)
-          : <li style={{ paddingInline: "var(--area-space-8)", color: "var(--area-fg-muted)" }}>No results</li>}
-      </ul>
+      <div id="search-field-demo-results" aria-live="polite">
+        {matches.length
+          ? <Nav aria-label="Results" style={{ inlineSize: "100%" }}>{matches.map(page => <NavItem key={page} href="#search-field-demo-results">{page}</NavItem>)}</Nav>
+          : <p style={{ margin: 0, paddingInline: "var(--area-ui-row-inset)", color: "var(--area-fg-muted)", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-row)" }}>No results</p>}
+      </div>
     </div>
   );
 };

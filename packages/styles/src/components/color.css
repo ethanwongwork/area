@@ -168,10 +168,21 @@
     grid-template-columns: repeat(var(--_columns), minmax(0, 1fr));
     gap: 0;
     inline-size: 100%;
+    position: relative;
     border-radius: var(--area-radius-control-sm);
     overflow: clip;
-    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring); /* the swatch ring, round the whole grid */
-    outline-offset: calc(var(--area-stroke-width) * -1);
+  }
+  /* The swatch ring, round the whole grid, on a layer over the cells: as the grid's own outline it was painted under
+     them (each swatch is positioned), so a white cell lost its corner on a white page (round 81). The selected and
+     focused cells stay above it. */
+  .area-color-swatch-picker--palette::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
+    pointer-events: none;
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell { inline-size: auto; block-size: auto; aspect-ratio: 1; border-radius: 0; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell > .area-color-swatch {
@@ -192,7 +203,7 @@
       transition-duration: var(--area-hover-in);
     }
   }
-  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 1; background: none; box-shadow: none; }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 2; background: none; box-shadow: none; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) > .area-color-swatch {
     --_radius: var(--area-radius-min); /* spec: iOS's lightly rounded outline; 2, so the colour's corners barely move */
     --_inner-radius: var(--_radius);
@@ -200,7 +211,7 @@
     box-shadow: 0 0 0 1px #fff, inset 0 0 0 1px #fff, inset 0 0 0 2px rgb(0 0 0 / 0.15); /* spec: iOS white, 10% of the cell */
     transition-duration: var(--area-hover-in);
   }
-  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:focus-visible) { outline-offset: calc(var(--area-focus-width) * -1); z-index: 2; }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:focus-visible) { outline-offset: calc(var(--area-focus-width) * -1); z-index: 3; }
 
   .area-color-field {
     --_color-field-width: calc(var(--area-space-96) + var(--area-space-48));

@@ -44,7 +44,7 @@ chatgpt  body 768 × 52, radius 26, no border; shadow 0 0 0 1px 4%, 0 2px 8px 4%
   actions 36px round, ghost ink rgb(143); voice/send 36px round
 area     shell, padding 8 (7 + 1 border), radius 16, Card's edge (#ee), no resting shadow
   entry  flex, gap 8: leading actions, textarea, trailing actions, 32px send Button (radius 8; `submitPill` makes it round)
-  input  16/24, 4px block padding (32px row)
+  input  16/24, 4px block padding (32px row); 8 inline, none at the start after a leading action (inline layout)
 ```
 
 ## Decisions
@@ -60,10 +60,11 @@ area     shell, padding 8 (7 + 1 border), radius 16, Card's edge (#ee), no resti
 | loading | `loading` prop (`busy` is a deprecated alias): textarea stays editable and focused, Enter doesn't send, `aria-busy` on the root; the send slot becomes a Stop Button (same solid neutral icon-only Button, `aria-label` from `stopLabel`, default "Stop", calls `onStop`, disabled without `onStop`). No composer-wide cursor or `data-busy` hook | Audit S18 (owner 2026-09-30); ChatGPT keeps the field editable and swaps send for stop | Was `busy`: textarea disabled, `cursor: progress`, send disabled |
 | loading · stop glyph | Area pilot `stop` (11 × 11 square, radius 2; `area-icons-pilot/stop.svg`), drawn filled (the solid role) | Not captured, pending a capture: ChatGPT's stop state needs a sent message | — |
 | actions · gap | **8** | ChatGPT 8 | Was 4 |
+| input · start after a leading action | **0**: the gap alone, so the text sits the gap after the + (7 at type 13) | ChatGPT column-gap 8 between the action and the input | Round 81: with the input's own 8 as well the text sat 15 after the button and 22 from the + glyph; now the glyph is 14 from the shell's edge and 14 from the text. Stacked keeps the 8 (its text sits over the footer's + glyph) |
 | actions · size | 32 | Peer: Button md | ChatGPT 36; Area's control scale is 28 / 32 / 40 |
 | shell · width | `min(100%, var(--area-composer-inline-size, 480))`, 480 = `space-96` × 5 (composer.css:13); the public hook also sets Prompt suggestions' width | Audit S17: one measure for the composer column | — |
 | shell · height (inline) | 48 | 32px actions + 8px insets | ChatGPT 52 (36px actions) |
-| shell · radius | 16 = send Button radius (8) + inset (8), concentric | owner 2026-09-26 (option B) | ChatGPT is a pill (26 on 52 = 18 + 8, also concentric with its round button); `submitPill` reproduces it |
+| shell · radius | **Card's corner**, term for term: the container corner + the inset's share (18 in the app's scale, 20 at type 16), never past half the one-line height; the actions concentric inside (shell less the inset: 11 on a 30 send) | owner 2026-10-29 (see Expansion) | Was 20 (the surface corner + 4, actions 13: rounder than every other Button of their height), and before that 15/16, the send's corner + the inset (owner 2026-09-26, option B). ChatGPT is a pill (26 on 52); `submitPill` reproduces it |
 | placeholder | `input-placeholder` (fg-muted 102) | Peer: Input (Complete) | ChatGPT rgb(143) |
 | textarea · auto-grow | refits on text and on width changes | Bug fix | The height was only fitted on text changes. A composer that first laid out narrow (or sat in a resized panel) kept an inflated height: the gallery inline tile measured 176px empty |
 
@@ -81,6 +82,11 @@ Measured: at 134px wide the empty inline composer grows as its placeholder wraps
 to 480px it returns to 48px.
 
 ## Visual pass
+
+2026-10-28 (round 81; desktop app, the Stage at 100%, 2x, light and dark): the inline and pill composers' text sat
+15 after the + button (the entry's 7 gap plus the input's 8), 22 from the + glyph, against ChatGPT's 8 after its
+36 button. The input drops its start padding after a leading action (composer.css); the + glyph is now as far from
+the text as from the shell's edge (14). Stacked, prefilled, disabled and context composers are unchanged.
 
 Pass review container (`GalleryReviewComposer`): before and after at 1× and 3×. Measured
 after: inline 480 × 48, stacked 480 × 116, border rgb(243), shadow 0 2px 8px, text 16/24
@@ -170,3 +176,61 @@ The Composer gains three things for an agent chat (evidence: docs/research/inspe
 
 - **What changed:** Its resting shadow is one tight layer, `0 1px 2px -1px` at 8% (ChatGPT's sm), instead of a soft two-layer haze at 1.5%.
 - **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill) (Rest shadow d). Keyboard focus is the brighter indicator blue (#0160d9, was #004cb0), as everywhere since the state settings.
+
+## Review note, 2026-10-28 (round 81)
+
+- **What changed:** in the one-line composer the text starts closer to the + button: 7px after it, was 15.
+- **Why:** ChatGPT's text follows its + by the gap alone; Area added the text box's own 8px on top, which left a
+  wide hole after the +. The + now sits as far from the text as from the composer's edge.
+- **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.
+
+## Expansion, 2026-10-29
+
+Owner, 2026-10-29, with screenshots of Cursor's Agents window, the Claude app's reply composer and Codex: "expand the
+design and capabilities of the composer, looking at more slots, a mic button, attachments, additional settings".
+Intake and evidence: [docs/research/composer-expansion-2026-10-29/](../research/composer-expansion-2026-10-29/README.md).
+
+| Slot · part | Area value | Basis |
+|---|---|---|
+| `header` | a row above the shell, outside it: its items `space-2` apart, starting at the shell's inset (`ui-cluster`) so a ghost trigger's plate lines up with the shell's actions; `ui-cluster` above the shell | Cursor's "Code ▾ This Mac ▾": 8 above the composer, 28 selectors (evidence.md, 5) |
+| `footer` | a row under the shell, outside it: `space-2` apart, `ui-cluster` below the shell (8, 6 compact), from the shell's inset | the Claude app's chin: 8 under the shell, 6 compact, 12px secondary text (evidence.md, 7) |
+| `ComposerNote` | the footer's quiet line: `text-xs`, `fg-muted`, centred in the space left, one line with an ellipsis | the Claude app's "Claude is AI and can make mistakes." |
+| group | with either row, the root is `area-composer-group` (className and the rest land on it); it takes the width hook and the shell fills it. Without them the shell is the root, as before | — |
+| shell · corner | Card's corner, term for term (`--_card-radius`: the container corner plus the inset's share; 18 in the app's scale), never past half the one-line height (a pill at Pill), square at Sharp; every action in the shell (send included) and the context row's Attachments take the shell less the inset (11 on a 30 send), plus the Pills setting; a round send (`submitPill`) still makes a pill composer. Approval takes the same corner. Cohesion tests keep the Composer on Card's and Approval on the Composer's. First built as the surface corner + 4 (20, actions 13), approved, then changed on the owner's question "are they slightly too round?": its buttons were rounder than every other Button of their height (8) | owner, 2026-10-29: "i prefer cursors but want it to still be rounded not pill/circular, but pretty round"; Cursor's prompt input 20 (`--prompt-input-border-radius:20px`, the glass bundle) around a round 24 send. Was option B (2026-09-26): the send's own corner + the inset, 16 (15 at type 13) |
+| `ComposerMic` | ghost neutral icon-only toggle Button (md, or sm in a footer): `mic` at rest, `waveform` on the selected plate while on; one name ("Dictate") with `aria-pressed` | Cursor, Claude and Codex all set a mic before send or in the footer |
+| `ComposerAttach` | ghost neutral icon-only Button with `add`, opening a hidden file input (`accept`, `multiple`) | every reference's + |
+| `onFiles` | files dropped on the shell or pasted into the field; while files are over it the shell takes File upload's drop paint (`selection-edge` on `bg-component-hover`), counted across child enters and leaves; pasted text stays the field's | every reference takes dropped and pasted files |
+| Model picker `efforts` | the effort after the name, a word space apart: the name in `fg-default`, the effort in `fg-muted`; an Effort group (Menu label, radio rows) under the models, no divider | Codex: the name in the default ink, a space, the effort tertiary; the Claude app and Claude Code: the effort muted after the name (evidence.md, 2) |
+| Prompt suggestions `shortcut` | a Kbd after the label (chips) or at the row's end (list) | Cursor's "Plan New Idea ⇧Tab" |
+| mode chip | composition: Tag (`tone`, `icon`, `onRemove`) in the leading actions | Cursor's "Multitask ×" |
+| permission | composition: a Menu trigger with an icon (Model picker with `triggerProps.icon`) | Codex's "Approve for me" and the Claude app's "Manual" are both dropdowns (evidence.md, 3) |
+
+New gallery tiles: Slot / header, footer; Content / dictation; State / dictating, dropping files; Content / model and
+effort; Composition / agent (Cursor's shape), reply (the Claude app's), combined (parts of each). Model picker: Content /
+effort. Prompt suggestions: Content / shortcut. A `tray` slot (Codex's strip tucked under the shell) was built and
+removed on review (owner, 2026-10-29: "i dont like the codex tray stylistically, i dont think it goes with area"); the
+footer row holds what it held.
+
+## Review note, 2026-10-29 (expansion)
+
+- **What changed:** the composer can hold a row of selectors above it, a tray of project and files tucked under it,
+  and a row of tools with a quiet note below it; it takes files dropped or pasted onto it; it has a dictation button and
+  a + that opens the file picker. The model picker can show an effort ("Option one Medium"), and a suggestion can show
+  its shortcut. Existing composers are unchanged.
+- **Why:** you asked for more slots, a mic, attachments and settings, with Cursor's, the Claude app's and Codex's
+  composers as references; each part follows what they do, built from Area's Button, Tag, Model picker and Kbd.
+- **Verdict:** changes (owner, 2026-10-29): "which composition is being built? i prefer cursors but want it to still be
+  rounded not pill/circular, but pretty round. also want to see how you can take parts of each version and combine them,
+  i dont like the codex tray stylistically, i dont think it goes with area". Applied: the shell's corner moved to the
+  surface ladder (20 at the default, Cursor's; the send and actions concentric, 12 to 13, not round), the tray removed,
+  the Codex composition replaced by a combined one. In review.
+- **Verdict:** approved (owner, 2026-10-29, the Composer expansion review page, round 2); Complete.
+
+## Review note, 2026-10-29 (Card's corner)
+
+- **What changed:** the composer takes Card's corner, 18 in the app's scale (was 20), and its send and actions 11 (was
+  13). Approval follows. The pill composer is unchanged.
+- **Why:** you asked whether the corners fit the system. Measured at the defaults, the shell's 20 sat a step above Card
+  and Surface (18), but its buttons were 13 against 8 on every other 30px Button and Input, and the one-line composer
+  read close to a pill. A surface standing alone on the page already takes Card's edge, so it takes Card's corner.
+- **Verdict (Card's corner):** approved (owner, 2026-10-29, the Composer expansion review page, round 3); Complete.

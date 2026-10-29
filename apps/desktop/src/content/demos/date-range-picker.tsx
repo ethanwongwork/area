@@ -27,9 +27,9 @@ export const GalleryDateRangePickerPresets = () => (
 export const GalleryDateRangePickerTwoMonths = () => (
   <div style={frame}><DateRangePicker fullWidth aria-label="Dates" icon={<CalendarIcon />} today={today} visibleMonths={2} defaultValue={{ start: "2026-10-28", end: "2026-11-03" }} /></div>
 );
-/* A property value: plain text until hovered (Date picker's ghost). */
+/* A property value: plain text until hovered (Date picker's ghost, at its size: sm, as Custom select's). */
 export const GalleryDateRangePickerGhost = () => (
-  <DateRangePicker variant="ghost" aria-label="Dates" today={today} defaultValue={week} />
+  <DateRangePicker variant="ghost" size="sm" aria-label="Dates" today={today} defaultValue={week} />
 );
 export const GalleryDateRangePickerDisabled = () => (
   <div style={frame}><DateRangePicker fullWidth aria-label="Dates" icon={<CalendarIcon />} today={today} disabled defaultValue={week} /></div>

@@ -60,12 +60,18 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 | search row | 48 tall, 16/24 text; the glyph on the rows' icon column (13 from the edge), the typed text on their text column (41), `--area-gap-row` after the glyph (command-palette.css:56), rule under it | list pass | Notion puts its field 12 in |
 | rows | Menu rows (32, 8 radius, 5% wash), icon 16, 12 gap (`--area-gap-row`, command-palette.css:28; labels at 36) | menu.md | Notion's 36 rows and 20 icons belong to its larger scale |
 | group headings | Menu's label rows: a row tall, the rows' size at 500, muted (Nav's label, 2026-10-22), on the icon column; groups 2 apart like rows | list pass: one list model; Menu labels 12/16 (2026-09-27) | Notion 12/14.4 medium; ChatGPT 14/20 regular |
-| description | muted, after the label | Notion (a page's parent) | — |
+| description | muted, after the label, trimmed to its cap like the label so the two share a baseline (inset.css) | Notion (a page's parent) | Round 81: centred on its own line box it sat 0.6px above the label's baseline |
 | empty state | one quiet row, 32 tall, muted, at the text-only inset (32 − 1cap) / 2 — the Combobox row (command-palette.css:97-105) | audit D-24 A (owner 2026-09-30): one empty-state row everywhere | Was a centred 96 block |
 | shortcut | Kbd small, quiet, at the end; renders like Menu's string shortcut (UI font 12/16 400, muted, unboxed; kbd.css:89-102) | Kbd; Menu | Was the keyboard face at 500 until audit S12a |
 | footer | key hints (↑ ↓ Move, ⏎ Open, Esc Close) as static text: small keycaps one ui-cluster from their words, ↑ and ↓ 2 apart, 16 between hints (compact 12), the keycaps on the rows' icon column, the footer padded by that column (12) all round | Raycast, Linear, VS Code quick open, Spotlight | owner round 68: static, not buttons (they were buttons from 2026-09-28) |
 
 ## Visual pass
+
+2026-10-28 (round 81; desktop app, the Stage at 100%, 2x, light and dark): a row's description sat 0.6px above the
+label's baseline. The label is trimmed to its cap (inset.css) and the description wasn't, so centring the two boxes
+parted their baselines. The description joins the text-slot trim; a sweep of every family's tiles for text side by
+side in a centred row found one more (Popover's step count), fixed the same way. The empty row's inset (2.4 past the
+group labels' column) was checked and kept: it is the text-only row inset (audit D-24), and no row shows beside it.
 
 2026-09-28 (batch 18), live in Claude in Chrome, opened with ⌘K and closed with Escape:
 
@@ -235,3 +241,11 @@ Spacing without the footer rule (2026-10-26): the hints sit 12 under the last ro
 - **What changed:** No line above the key hints. The line under the search field stays.
 - **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
   light. You approved each one on the dividers comparison page.
+
+## Review note, 2026-10-28 (round 81)
+
+- **What changed:** a row's grey description now sits on the same line as its label; it was a fraction of a pixel
+  higher.
+- **Why:** the label's box is cut to its capital letters and the description's wasn't, so centring the two set the
+  description slightly high. Both are cut the same way now.
+- **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.

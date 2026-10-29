@@ -47,7 +47,7 @@ the name unchanged.
 ```
 area  dl.area-description-list.area-description-list--{columns,justified}[.--divided][.--framed]
         div.__item (row)
-          dt.__term (span.__icon[aria-hidden] + text)
+          dt.__term (span.__icon[aria-hidden] + span.__label)
           dd.__value
 ```
 
@@ -75,6 +75,7 @@ term and value; rules inset 16. Framed columns: frame padding 5 / 10 so text sit
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | columns · term column | fits the longest term up to 40% (`--area-description-list-term`), no inset, muted 14/20 (the UI type), 16 icon 6 before the name | Infobox's fit-content column (removed); round 73 | Notion's 160 column and 6 cell inset served editable cells with hover plates; Area's list is read-only facts |
+| columns · row alignment | the term on the value's first line, by baseline; the term's baseline is its label's (`__label`), never its icon's | DESIGN_SYSTEM.md, Optical insets (first-line alignment) | round 82: the rows aligned to the top, so a person value (a 26 avatar beside the name) left the term 4 above the name |
 | columns · value | 12 after the term column (gap row; compact 8), default ink, all values in one column | Area's gap row; Infobox's 12 | was Notion's 174 |
 | columns · row | as tall as its text, 8 apart (ui-cluster; compact 6); divided 16 with the rule in the middle | Area's set spacing (items 8 apart) | was Notion's 34 rows 4 apart (owner, round 73: "why is the gaps between lines so large") |
 | justified · row | padding 12 / 16, 24 between, term 14/20 500 default ink, value at the end 14/20 | ChatGPT | ChatGPT's values mix 14/20 and 16/24; Area keeps the UI type |
@@ -198,4 +199,14 @@ Framed insets: the frame's stroke is counted once, so text and rules sit 16 from
   and what the gap between labels and values was. All three were Notion's editable properties copied exactly: 34-tall
   cells 4 apart, the text 6 inside a hover plate Area never draws, and a fixed 160 label column (about 130 of empty
   space after "Label"). Area's list shows facts, so it now takes Area's set spacing.
+
+## Review note, 2026-10-28 (round 82)
+
+- **What changed:** in the columns layout a term sits on its value's first line, by baseline: beside a person (an
+  avatar with the name) the term and its icon are level with the name, 4 lower than before. Rows of plain text,
+  badges and links don't move. The term's text is now its own part, `__label`, so the baseline is the text's, not the
+  icon's.
+- **Why:** the rows aligned their cells to the top, so a value taller than a line (the avatar is 26) pulled its text
+  below the term. The system rule is that content aligns to the first line.
+- **Verdict:** approved (owner, 2026-10-29, review page round 82); Complete.
 

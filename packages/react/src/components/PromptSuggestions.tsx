@@ -3,6 +3,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { promptSuggestionsVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
+import { Kbd } from "./primitives.tsx";
 /** The empty collection, one reference so effects keyed on it stay still. */
 const NO_ITEMS: never[] = [];
 
@@ -11,6 +12,8 @@ export interface PromptSuggestion {
   /** The prompt, shown on one line (truncated) and used as the button's name. */
   label: string;
   icon?: ReactNode;
+  /** The keys that choose it, shown as a keycap after the label (Cursor's "Plan New Idea ⇧Tab"): `["Shift", "Tab"]`. */
+  shortcut?: string[];
 }
 
 export interface PromptSuggestionsProps extends Omit<HTMLAttributes<HTMLUListElement>, "onSelect"> {
@@ -36,7 +39,7 @@ export const PromptSuggestions = forwardRef<HTMLUListElement, PromptSuggestionsP
   if (layout === "chips") {
     return <ul ref={ref} aria-label={label} className={promptSuggestionsVariants({ layout }, className)} {...rest}>
       {suggestions.map(suggestion => <li key={suggestion.id} className="area-prompt-suggestions__row">
-        <Button variant="outline" tone="neutral" icon={suggestion.icon} onClick={() => onSelect?.(suggestion)}>{suggestion.label}</Button>
+        <Button variant="outline" tone="neutral" icon={suggestion.icon} onClick={() => onSelect?.(suggestion)}>{suggestion.label}{suggestion.shortcut ? <Kbd keys={suggestion.shortcut} /> : null}</Button>
       </li>)}
     </ul>;
   }
@@ -45,6 +48,7 @@ export const PromptSuggestions = forwardRef<HTMLUListElement, PromptSuggestionsP
       <button type="button" className="area-prompt-suggestions__item" onClick={() => onSelect?.(suggestion)}>
         {suggestion.icon ? <span className="area-prompt-suggestions__icon" aria-hidden="true">{suggestion.icon}</span> : null}
         <span className="area-prompt-suggestions__text">{suggestion.label}</span>
+        {suggestion.shortcut ? <Kbd className="area-prompt-suggestions__shortcut" keys={suggestion.shortcut} /> : null}
       </button>
       {onDismiss ? <span className="area-prompt-suggestions__dismiss">
         <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`Dismiss “${suggestion.label}”`}

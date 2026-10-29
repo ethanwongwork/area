@@ -51,7 +51,10 @@ for both sides, and repeat in light and dark.
 
 - **Balance:** equal-looking space on all sides of the content. Text is judged by
   cap height and baseline, icons by their square viewport. Leading and trailing slots
-  are judged separately.
+  are judged separately. Texts side by side in a row (a label and its description, a
+  step count beside a Button) share one baseline: compare the bottoms of their first
+  glyphs' range boxes, since a marker element dropped into a flex container lands at its
+  top, not on the baseline.
 - **Hierarchy:** primary content reads first, then secondary information, then actions.
   Selected, focus, invalid and disabled stay recognizable, and foreground stays fixed on
   hover.

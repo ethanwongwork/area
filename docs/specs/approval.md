@@ -207,3 +207,13 @@ the foot the keycap ends 16 and the hint's baseline 20 from it, so top and foot 
 
 - **What changed:** the choice numbers (1, 2, 3) are small keycaps instead of muted numbers at the label's size; they still sit in the row's icon slot.
 - **Why:** your note that every Kbd should have its backplate, for one look everywhere (docs/specs/kbd.md, "When a key has a backplate").
+
+## Review note, 2026-10-29 (the Composer's corner)
+
+- **What changed:** its corner follows the Composer's new one, term for term: the surface corner one step up its
+  ladder (20, was 16 at type 16 and 15 in the app's scale). A cohesion test keeps the two equal.
+- **Why:** Approval takes the Composer's place until it is answered, so a different corner would jump when it appears.
+  The Composer's corner moved on your review of its expansion ("pretty round", Cursor's 20).
+- **Verdict:** approved (owner, 2026-10-29, the Composer expansion review page, round 2); Complete.
+- **2026-10-29, later:** the Composer moved to Card's corner (18 in the app's scale), so Approval did too.
+- **Verdict (Card's corner):** approved (owner, 2026-10-29, the Composer expansion review page, round 3); Complete.

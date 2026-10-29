@@ -12,4 +12,8 @@
   /* While open the trigger shows the pressed plate every menu trigger takes (button.css; audit
      G-12; ChatGPT's 5% wash was this trigger's alone). It never shrinks in the composer row. */
   .area-model-picker__trigger { flex: none; }
+  /* With an effort the name takes the default ink and the effort the muted one after it, so the two read apart (Claude's
+     "Opus 5.5 Medium", Codex's "6 Astra Light"); alone the name keeps the ghost trigger's quiet ink. */
+  .area-model-picker__name { color: var(--area-fg-default); }
+  .area-model-picker__effort { color: var(--area-fg-muted); }
 }

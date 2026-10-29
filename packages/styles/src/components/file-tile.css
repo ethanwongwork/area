@@ -32,6 +32,9 @@
     font-size: var(--area-ui-size); /* spec: Asset card's name, the app's UI text (Finder 12 at its 13 system text) */
     line-height: var(--area-ui-leading);
     text-align: center;
+    /* One grid column wide wherever it stands (figure + 24 each side, as the grid's column), so a long name wraps to
+       its two lines instead of running on (round 83: a tile outside a grid ran its name on one line). */
+    max-inline-size: calc(var(--_figure) + 2 * var(--area-space-24)); /* spec: the grid's column, pick */
   }
   .area-file-tile--sm { --_figure: 48px; } /* spec: Folder sm */
   .area-file-tile--md { --_figure: 64px; } /* spec: Finder iconSize 64 */
@@ -103,7 +106,7 @@
   /* Every tile starts at the top of its row, so figures line up whether a name takes one line or two (ListBox's
      grid centres its cells; this rule is as specific and comes with the block's own class to win). */
   .area-file-grid.area-list-box--grid .area-file-grid__item { place-items: start stretch; }
-  .area-file-grid__item > .area-file-tile { inline-size: 100%; }
+  .area-file-grid__item > .area-file-tile { inline-size: 100%; max-inline-size: none; } /* the cell sets the width */
   /* A drag over a folder's tile opens its Folder (folder.css draws the open state). Hover changes only the plate
      (PRODUCT_UI rule 2): nothing in the figure moves. */
   .area-file-grid__item[data-drop-target] {}

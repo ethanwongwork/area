@@ -53,13 +53,17 @@ export default {
       ["Do", "Pass onQueue in an agent chat so Enter during a run queues the draft for a Queue instead of doing nothing."],
       ["Do", "Put context chips (Chip input) and Attachments in context, and a Composer menu in menu, so they share the composer's width."],
       ["Do", "Pass a ModelPicker as mode and attach-style actions as leadingActions; disabled disables every nested action too."],
+      ["Do", "Put where the message runs in header, and tools with a ComposerNote in footer; they share the composer's width and line up with its shell."],
+      ["Do", "Pass onFiles so files dropped on the composer or pasted into it arrive as files, and pair it with a ComposerAttach for picking."],
+      ["Do", "Give a ModelPicker efforts when the model has a reasoning level; the effort shows muted after the name."],
+      ["Don't", "Build dictation as a plain Button: ComposerMic is a toggle, so it keeps one name and reports its state with aria-pressed."],
       ["Don't", "Turn off submitOnEnter just to allow new lines: Shift+Enter already adds one, and with it off only Cmd+Enter or Ctrl+Enter sends."],
       ["Don't", "Wrap it in a Field or give it a visible label: label names the field for assistive tech only."],
       ["Don't", "Disable the composer while a reply streams; use loading, so the next prompt can be drafted."],
     ],
     // Spec: Anatomy, Decisions, Chat additions; manifest elements.
     parts: {
-      root: "The shell: Card's edge, a corner concentric with the send Button, the composer's width and its inset.",
+      root: "The shell: Card's edge and Card's corner (its actions concentric inside it), the composer's width and its inset.",
       context: "A row inside the shell above the field for context chips and Attachments; it wraps on the composer's gap.",
       entry: "The row that holds the field, and in the inline layout the leading and trailing actions beside it.",
       input: "A native textarea at the body size; it grows with its text up to five rows, then scrolls.",
@@ -67,10 +71,14 @@ export default {
       extras: "The inline layout's trailing slot for your own actions, between the mode and the send Button.",
       footer: "The stacked layout's row under the field: leading actions and mode at the start, trailing actions and send at the end.",
       submit: "The send Button: solid neutral, icon-only; unavailable while the field is empty, and Stop while loading.",
+      mic: "ComposerMic: a ghost icon-only toggle Button, the mic at rest and the waveform on the selected plate while on.",
+      attach: "ComposerAttach: the ghost + Button that opens the file picker.",
+      file: "ComposerAttach's hidden file input; the chosen files go to its onFiles.",
     },
     // Spec: Decisions (disabled).
     states: {
       disabled: "Field paint at full opacity, the text and placeholder in the disabled ink; the field and every action are disabled.",
+      dragging: "Files are dragged over a composer with onFiles: the selection edge on the row plate, File upload's drop paint, until they leave or drop.",
     },
     // Source: Composer.tsx keyDown, submit.
     keyboard: [
@@ -81,6 +89,7 @@ export default {
     ],
     aria: [
       ["aria-busy", "On the root while loading."],
+      ["aria-pressed", "On ComposerMic: true while dictating; its name (label, \"Dictate\") stays the same."],
       ["aria-label", "On the send Button (submitLabel, \"Send message\") and on Stop (stopLabel, \"Stop\")."],
       ["for", "A visually hidden label, from label (\"Message\"), names the textarea; inputProps.id wins over the generated id."],
     ],
@@ -219,7 +228,8 @@ export default {
       row: "One list item, holding the suggestion and its dismiss.",
       item: "The suggestion button: the composer's height and corner, muted text, Menu's row plate on hover and press.",
       icon: "An optional icon centred under the composer's leading action.",
-      text: "The prompt on one line, cut short with an ellipsis; it is the button's name.",
+      text: "The prompt on one line, starting under the composer's placeholder, cut short with an ellipsis; it is the button's name.",
+      shortcut: "The keys that choose it (items' shortcut), a keycap at the row's end, or after the label in a chip.",
       dismiss: "A small ghost icon Button at the row's end, shown on hover and focus (always on touch).",
     },
     // Source: native buttons.
@@ -252,6 +262,8 @@ export default {
     parts: {
       root: "A wrapper around the trigger and its Menu, which ends under the trigger and flips above near the page's end.",
       trigger: "A ghost neutral Button with the current model's name and a trailing chevron; it holds its pressed plate while open.",
+      name: "With an effort, the model's name in the default ink.",
+      effort: "How hard the model works, muted after its name (\"Option one Medium\"); chosen in its own Effort group under the models.",
     },
     // Source: Menu trigger path (Overlays.tsx AnchoredMenu) and ModelPicker.tsx JSDoc.
     keyboard: [

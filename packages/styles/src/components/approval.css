@@ -14,12 +14,11 @@
   .area-approval {
     /* The Composer's shell (composer.css), which this replaces until it is answered. */
     --_approval-inset: var(--area-ui-cluster); /* the Composer's inset: 8, compact 6 */
-    /* The Composer's corner, term for term (composer.css): its send button's corner plus the inset, concentric. Pill
-       buttons make a pill composer, so they make a pill approval; the inset joins the corner unless the setting is
-       Sharp, and a pill keeps it. */
-    --_approval-button-radius: calc(min(var(--area-radius-control-md), max(var(--area-radius-min), round(down, calc(var(--area-control-md) * var(--area-radius-factor)), 2px))) + var(--area-pill-button) * var(--area-radius-full));
-    --_approval-concentric: max(var(--area-radius-concentric), var(--area-pill-button));
-    --_approval-radius: calc(var(--_approval-button-radius) + var(--_approval-inset) * var(--_approval-concentric));
+    /* The Composer's corner, term for term (composer.css, 2026-10-29): Card's corner, never past half the composer's
+       one-line height, square at Sharp (a cohesion test keeps the two equal). */
+    --_approval-height: calc(var(--area-control-md) + 2 * var(--_approval-inset));
+    --_approval-term: calc((var(--_approval-inset) - var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)) * var(--area-radius-concentric));
+    --_approval-radius: min(calc(var(--_approval-height) / 2), max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_approval-term), var(--area-radius-container)))));
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--area-ui-cluster);
