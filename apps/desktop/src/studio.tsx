@@ -3,18 +3,18 @@
  *
  * Four named regions, so updates can point at one (owner, 2026-10-10):
  *
- *   Titlebar   the header across the top: the six tabs, search, layout toggles, light / dark
- *   Sidebar    the left panel: what the current tab holds, as a list
+ *   Titlebar   the header across the top: back and forward, the open tabs, search, layout toggles, light / dark
+ *   Sidebar    the left panel: the nav (src/app-nav.tsx), or the page's own list taking it over
  *   Canvas     the centre: the selected thing at full size
  *   Inspector  the right panel: canvas settings and facts about the selection
  *
  * Built from Area's own components at the compact UI scale (dense tools: Cursor, Notion), with
- * one divider between the Titlebar and the panels and one between each panel. Each tab is a
- * page (src/pages/) that fills the three panels through <Workspace>.
+ * one divider between the Titlebar and the panels and one between each panel. Each place
+ * (src/places.ts) is a page (src/pages/) that fills the three panels through <Workspace>.
  */
 import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useInsertionEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
-import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, SearchField, Titlebar, Tooltip, TreeView, type TreeViewNode } from "@area/react";
-import { MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
+import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, Titlebar, Tooltip, TreeView, type TreeViewNode } from "@area/react";
+import { ArrowLeftIcon, ArrowRightIcon, LibraryIcon, MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./gallery/controls.ts";
 import { ComponentsPage } from "./pages/components.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
@@ -28,30 +28,20 @@ import { readStored, writeStored } from "./storage.ts";
 import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
-import { MATERIAL_BUNDLES } from "@area/tokens/config";
+import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
+import { groupSlug, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, START, type Place } from "./places.ts";
+import { AppNav, AppTabs, Takeover } from "./app-nav.tsx";
+import { SearchEverything, type SearchFor } from "./search-palette.tsx";
+import { ThemesPage } from "./pages/themes.tsx";
 import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 import { restoreBrand, useBrandSheet, type BrandState } from "./brand.ts";
+import { PAGE_AXES, hasColours, restoreColours, shownColours, useColoursSheet, type ColoursState } from "./colours.ts";
 
-/* Text-only tabs (owner, 2026-10-11: no icons in the Titlebar's tabs). */
-export const TABS = [
-  /* Theme: the system's settings, the registry's axes, and the Setup flow through them (owner, 2026-10-20: "i want to
-     change language back to theme"; Language 2026-10-19 to 20, #language links still open it). */
-  { id: "theme", label: "Theme" },
-  { id: "components", label: "Components" },
-  { id: "typography", label: "Typography" },
-  { id: "icons", label: "Icons" },
-  { id: "color", label: "Color" },
-  /* Whole screens built from Area, to test the defaults and every setting (owner, 2026-10-17; "Examples" until the owner
-     renamed it the same day). */
-  { id: "testing", label: "Testing" },
-  /* Images in folders, browsed with Area's file explorer components (owner, 2026-10-18, as Brand; renamed 2026-10-24: "dont
-     associate them just with brand. rename brand to imagery"; #brand links still open it). */
-  { id: "imagery", label: "Imagery" },
-  /* A temporary lab for tuning the Material setting's bundles (owner, 2026-10-18); it goes when they are settled. */
-  { id: "materials", label: "Materials" },
-] as const;
-export type TabId = (typeof TABS)[number]["id"];
 type Theme = "light" | "dark";
+
+/** A setting's group, as its page's slug (#theme/radius → Foundations › Shape). */
+const SETTING_GROUP = new Map(SETTING_GROUPS.flatMap(group => group.settings.map(id => [id, groupSlug(group.heading)] as const)));
+const groupOf = (setting: string) => SETTING_GROUP.get(setting);
 
 /** The Canvas's own theme settings (the Inspector writes them): the colour settings, the Layers (light and dark ground, layer
  * contrast), contrast, type size, density, radius, surface, elevation,
@@ -144,21 +134,36 @@ function switchInstantly() {
 const isMac = () => typeof document !== "undefined" && document.documentElement.dataset.platform === "darwin";
 
 /*
- * Location: #<tab>/<item>, so a selection survives a reload and can be linked. The item is the
- * page's own key (a component's slug, an icon's name, a scale, a type role) and may have parts of
- * its own: Components opens a family's Stage on one tile as <slug>/<tile>.
+ * Location: a place (src/places.ts), so a selection survives a reload and can be linked. The item is the page's own key
+ * (a component's slug, an icon's name, a scale, a type role) and may have parts of its own: Components opens a family's
+ * Stage on one tile as <slug>/<tile>.
+ *
+ * Tabs work as a browser's (Phase 0, owner 2026-10-28): each open tab holds one thing (the Area brand, the Library, a
+ * lab) and keeps its own place, its Sidebar (the nav or the page's own list) and its history, which back and forward
+ * (⌘[ and ⌘]) walk. The hash mirrors the current tab's place; the tabs and their places are saved and reopen at launch.
  */
-function readLocation(): { tab: TabId; item?: string } {
-  const [hash, ...item] = decodeURIComponent(location.hash.slice(1)).split("/");
-  // Testing was the Examples tab until 2026-10-17, Theme the Language tab 2026-10-19 to 20: an old link or saved tab opens it.
-  const renamed = (id?: string) => id === "examples" ? "testing" : id === "language" ? "theme" : id === "brand" ? "imagery" : id;
-  const known = TABS.find(entry => entry.id === renamed(hash));
-  const stored = TABS.find(entry => entry.id === renamed(readStored<string>("tab", "components")));
-  return known ? { tab: known.id, item: item.join("/") || undefined } : { tab: stored?.id ?? "components" };
+interface OpenTab { id: string; place: Place; panel: "nav" | "page"; back: Place[]; forward: Place[] }
+interface Tabs { list: OpenTab[]; current: string }
+
+function openTabs(): Tabs {
+  const saved = restoreTabs(readStored("tabs", null), readStored("tab", null), groupOf);
+  const list: OpenTab[] = saved.tabs.map(tab => ({ id: tab.id, place: parsePlace(tab.hash)!, panel: tab.panel, back: [], forward: [] }));
+  // A link the app was opened with (electron --hash=, a reload) opens in the current tab.
+  const launched = location.hash ? resolve(location.hash, groupOf) : null;
+  if (launched) {
+    const at = list.findIndex(tab => tab.id === saved.current);
+    list[at] = { ...list[at]!, place: launched, panel: launched.page === list[at]!.place.page ? list[at]!.panel : LIST_PAGES.has(launched.page) ? "page" : "nav" };
+  }
+  return { list, current: saved.current };
 }
+const newTabId = () => `t${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+/** How a place is opened: in the current tab (the default) or a new one, as a new step of its history or in place of it. */
+export interface NavigateOptions { newTab?: boolean; replace?: boolean; panel?: "nav" | "page" }
 
 interface StudioState {
   query: string;
+  setQuery: (query: string) => void;
   /** The app's mode (the Titlebar's switch): which theme's Ground and Layers the Inspector sets. */
   theme: Theme;
   canvas: CanvasAxes;
@@ -177,13 +182,23 @@ interface StudioState {
   /** The Material a list is on (a bundle, or one lever moved), or `null`. */
   previewMaterial: (state: MaterialState | null) => void;
   /** What the Canvas paints: the saved settings with any preview over them. */
-  shown: { canvas: CanvasAxes; material: MaterialState };
-  /** The Canvas's brand (src/brand.ts): off, Area's palette, or up to three exact colours. */
+  shown: { canvas: CanvasAxes; material: MaterialState; colours: ColoursState };
+  /** The Canvas's exact page colours (src/colours.ts): a pick per mode, or none where the page settings decide. */
+  colours: ColoursState;
+  setColours: (patch: Partial<ColoursState>) => void;
+  /** The Canvas's exact accent (src/brand.ts): off, Area's palette, or up to three exact colours. */
   brand: BrandState;
   setBrand: (patch: Partial<BrandState>) => void;
+  /** Where the current tab is. */
+  place: Place;
+  /** Open a place (src/places.ts). */
+  navigate: (place: Place, options?: NavigateOptions) => void;
   item?: string;
-  /** Go to an item. `replace` swaps the current history entry (a Stage's tile) instead of adding one. */
+  /** Go to an item on the current page. `replace` swaps the current history entry (a Stage's tile) instead of adding one. */
   select: (item: string, options?: { replace?: boolean }) => void;
+  /** The current tab's Sidebar: the nav, or the page's own list taking the panel over (a page with one). */
+  panel: "nav" | "page";
+  setPanel: (panel: "nav" | "page") => void;
   sidebar: boolean;
   inspector: boolean;
   /** The Inspector's view (Theme, Design or Code), kept across tabs and launches. */
@@ -202,13 +217,19 @@ export const useStudio = () => {
 const prefersDark = () => typeof matchMedia === "function" && matchMedia("(prefers-color-scheme: dark)").matches;
 
 export function Studio() {
-  const [{ tab, item }, setLocation] = useState(readLocation);
+  const [tabs, setTabs] = useState<Tabs>(openTabs);
+  const tab = tabs.list.find(entry => entry.id === tabs.current) ?? tabs.list[0]!;
+  const { place } = tab;
+  const item = place.item;
   // src/theme.js has already set the theme before first paint; start from it.
   const [theme, setTheme] = useState<Theme>(() => (document.documentElement.getAttribute("data-area-theme") ?? (prefersDark() ? "dark" : "light")) === "dark" ? "dark" : "light");
   const [query, setQuery] = useState("");
   const [canvas, setCanvasState] = useState<CanvasAxes>(() => restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})));
   const [material, setMaterialState] = useState<MaterialState>(() => restoreMaterial(readStored("material", null)));
   const [brand, setBrandState] = useState<BrandState>(() => restoreBrand(readStored("brand", null)));
+  // Picks saved as colours; a Canvas saved before them converts its page presets once (src/colours.ts).
+  const [colours, setColoursState] = useState<ColoursState>(() => restoreColours(readStored("colours", null), restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})), CANVAS_DEFAULTS));
+  useEffect(() => writeStored("colours", colours), [colours]);
   const [panels, setPanels] = useState(() => readStored("panels", { sidebar: true, inspector: true }));
   const [inspectorView, setInspectorViewState] = useState<InspectorView>(() => {
     const saved = readStored<string>("inspectorView", "theme");
@@ -216,14 +237,98 @@ export function Studio() {
   });
   const [previewAxes, setPreviewAxes] = useState<Partial<CanvasAxes>>({});
   const [previewedMaterial, setPreviewedMaterial] = useState<MaterialState | null>(null);
-  const search = useRef<HTMLInputElement>(null);
+  const [searching, setSearching] = useState<SearchFor>(null);
 
+  // The tabs and each one's place are saved (replacing the old Titlebar's saved tab), and the hash shows the current place.
   useEffect(() => {
-    const onHash = () => setLocation(readLocation());
+    writeStored("tabs", { tabs: tabs.list.map(entry => ({ id: entry.id, hash: hrefOf(entry.place), panel: entry.panel })), current: tab.id });
+    const hash = hrefOf(place);
+    if (location.hash !== hash) history.replaceState(null, "", hash);
+  }, [tabs, tab.id, place]);
+
+  /** Changes the current tab, or opens a new one. */
+  const navigate = useCallback((next: Place, options: NavigateOptions = {}) => {
+    setTabs(current => {
+      const open = current.list.find(entry => entry.id === current.current) ?? current.list[0]!;
+      const samePage = next.page === open.place.page && next.group === open.place.group;
+      const panel = options.panel ?? (samePage && !options.newTab ? open.panel : LIST_PAGES.has(next.page) ? "page" : "nav");
+      if (options.newTab) {
+        const added: OpenTab = { id: newTabId(), place: next, panel, back: [], forward: [] };
+        const at = current.list.indexOf(open);
+        return { list: [...current.list.slice(0, at + 1), added, ...current.list.slice(at + 1)], current: added.id };
+      }
+      if (hrefOf(next) === hrefOf(open.place) && panel === open.panel) return current;
+      const changed: OpenTab = options.replace || hrefOf(next) === hrefOf(open.place)
+        ? { ...open, place: next, panel }
+        : { ...open, place: next, panel, back: [...open.back, open.place].slice(-100), forward: [] };
+      return { ...current, list: current.list.map(entry => entry === open ? changed : entry) };
+    });
+  }, []);
+  // A different page starts unfiltered, as a tab change did.
+  const pageKey = `${place.page}/${place.group ?? ""}`;
+  useEffect(() => setQuery(""), [pageKey, tab.id]);
+  /** Back (−1) or forward (+1) through the current tab's places. */
+  const step = useCallback((by: -1 | 1) => setTabs(current => {
+    const open = current.list.find(entry => entry.id === current.current) ?? current.list[0]!;
+    const from = by < 0 ? open.back : open.forward;
+    if (!from.length) return current;
+    const to = from[from.length - 1]!;
+    const samePage = to.page === open.place.page && to.group === open.place.group;
+    const changed: OpenTab = by < 0
+      ? { ...open, place: to, back: from.slice(0, -1), forward: [...open.forward, open.place], panel: samePage ? open.panel : LIST_PAGES.has(to.page) ? "page" : "nav" }
+      : { ...open, place: to, forward: from.slice(0, -1), back: [...open.back, open.place], panel: samePage ? open.panel : LIST_PAGES.has(to.page) ? "page" : "nav" };
+    return { ...current, list: current.list.map(entry => entry === open ? changed : entry) };
+  }), []);
+  const selectTab = useCallback((id: string) => setTabs(current => current.list.some(entry => entry.id === id) ? { ...current, current: id } : current), []);
+  /** Tabs closed this session, newest last, with where each stood: ⌘⇧T reopens them in turn. */
+  const closed = useRef<Array<{ tab: OpenTab; at: number }>>([]);
+  /** Closes a tab; the one after it (or before, at the end) takes its place. The last tab stays open. */
+  const closeTab = useCallback((id: string) => setTabs(current => {
+    if (current.list.length < 2) return current;
+    const at = current.list.findIndex(entry => entry.id === id);
+    if (at < 0) return current;
+    closed.current = [...closed.current.filter(entry => entry.tab.id !== id), { tab: current.list[at]!, at }].slice(-20);
+    const list = current.list.filter(entry => entry.id !== id);
+    return { list, current: current.current === id ? list[Math.min(at, list.length - 1)]!.id : current.current };
+  }), []);
+  /*
+   * The tab commands (the app menu's, electron/main.cjs, and the same keys in a browser where it lets them through): ⌘T
+   * new tab (search), ⌘⇧T reopen the last closed tab where it stood, ⌘W close the current tab (the last one stays: no Home
+   * to fall back to until Phase 2), ⌃Tab and ⌃⇧Tab the next and previous tab, ⌘1–8 that tab and ⌘9 the last.
+   */
+  const runTabCommand = useCallback((command: TabCommand, index?: number) => {
+    if (command === "new-tab") { setSearching("new"); return; }
+    if (command === "close-tab") { closeTab(tabsRef.current.current); return; }
+    setTabs(current => {
+      const at = current.list.findIndex(entry => entry.id === current.current);
+      if (command === "reopen-tab") {
+        const last = closed.current.pop();
+        if (!last) return current;
+        const tab = { ...last.tab, id: current.list.some(entry => entry.id === last.tab.id) ? newTabId() : last.tab.id };
+        const list = [...current.list.slice(0, last.at), tab, ...current.list.slice(last.at)];
+        return { list, current: tab.id };
+      }
+      const to = command === "next-tab" ? (at + 1) % current.list.length
+        : command === "previous-tab" ? (at - 1 + current.list.length) % current.list.length
+        : index === 9 ? current.list.length - 1 : (index ?? 1) - 1;
+      const target = current.list[to];
+      return target && target.id !== current.current ? { ...current, current: target.id } : current;
+    });
+  }, [closeTab]);
+  const tabsRef = useRef(tabs);
+  tabsRef.current = tabs;
+  useEffect(() => window.areaDesktop?.onCommand?.(runTabCommand), [runTabCommand]);
+
+  // A link followed natively (an old #components/button in a page's text, a hand-typed hash) opens in the current tab; a
+  // hash that names no place (an example screen's own "#settings") changes nothing.
+  useEffect(() => {
+    const onHash = () => {
+      const next = resolve(location.hash, groupOf);
+      if (next) navigate(next);
+    };
     addEventListener("hashchange", onHash);
     return () => removeEventListener("hashchange", onHash);
-  }, []);
-  useEffect(() => writeStored("tab", tab), [tab]);
+  }, [navigate]);
 
   // The theme is the whole app's, Titlebar included. Area's colours are light-dark() pairs, and
   // Chromium can keep a cached colour when color-scheme flips (docs/THEMING.md): one synchronous
@@ -265,27 +370,22 @@ export function Studio() {
     return () => cancelAnimationFrame(frame);
   }, [chrome, theme]);
 
-  // Shortcuts, as the Tooltips name them: ⌘K focuses search; ⌘B and ⌥⌘B show and hide the Sidebar
-  // and the Inspector (Cursor's and VS Code's primary and secondary side bars); ⌘[ and ⌘] go back
-  // and forward through what the Canvas showed (Finder, Safari, Cursor).
+  // Shortcuts, as the Tooltips name them: ⌘B and ⌥⌘B show and hide the Sidebar and the Inspector (Cursor's and VS Code's
+  // primary and secondary side bars); ⌘[ and ⌘] go back and forward through the tab's places (Finder, Safari, Cursor).
+  // ⌘K opens search (src/search-palette.tsx), ⌘T search for a new tab (a browser's new tab).
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (!(event.metaKey || event.ctrlKey) || event.shiftKey) return;
-      const key = event.code === "KeyK" ? "k" : event.code === "KeyB" ? "b" : event.code === "BracketLeft" ? "[" : event.code === "BracketRight" ? "]" : "";
-      if (key === "k" && !event.altKey) { event.preventDefault(); search.current?.focus(); search.current?.select(); }
+      const key = event.code === "KeyB" ? "b" : event.code === "BracketLeft" ? "[" : event.code === "BracketRight" ? "]" : event.code === "KeyT" ? "t" : "";
+      // In Electron the app menu takes ⌘T, ⌘W, ⌘1–9 and ⌃Tab (runTabCommand); a browser keeps most of them for itself.
+      if (key === "t" && !event.altKey) { event.preventDefault(); runTabCommand("new-tab"); }
       else if (key === "b") { event.preventDefault(); togglePanel(event.altKey ? "inspector" : "sidebar"); }
-      else if ((key === "[" || key === "]") && !event.altKey) { event.preventDefault(); if (key === "[") history.back(); else history.forward(); }
+      else if ((key === "[" || key === "]") && !event.altKey) { event.preventDefault(); step(key === "[" ? -1 : 1); }
     };
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
-  }, []);
+  }, [step, runTabCommand]);
 
-  const go = useCallback((next: TabId, nextItem?: string, replace = false) => {
-    // Each part is encoded on its own, so a Stage reads #components/button/size-small.
-    const hash = `#${next}${nextItem ? `/${nextItem.split("/").map(encodeURIComponent).join("/")}` : ""}`;
-    if (location.hash !== hash) history[replace ? "replaceState" : "pushState"](null, "", hash);
-    setLocation({ tab: next, item: nextItem || undefined });
-  }, []);
   const togglePanel = (panel: "sidebar" | "inspector") => setPanels(current => {
     const next = { ...current, [panel]: !current[panel] };
     writeStored("panels", next);
@@ -296,13 +396,19 @@ export function Studio() {
   const scale = useMemo<AppScale>(() => ({ "data-area-type": CANVAS_DEFAULTS.type, "data-area-density": CANVAS_DEFAULTS.density }), []);
   const state = useMemo<StudioState>(() => ({
     query,
+    setQuery,
     theme,
     canvas,
-    setCanvas: (axis, value) => setCanvasState(current => {
-      const next = { ...current, [axis]: value };
-      saveCanvas(next);
-      return next;
-    }),
+    setCanvas: (axis, value) => {
+      // A page setting written hands its mode's page back to the settings: the pick would hide it.
+      const dropped = (["light", "dark"] as const).filter(mode => colours[mode] !== null && PAGE_AXES[mode].includes(axis));
+      if (dropped.length) setColoursState(current => ({ ...current, ...Object.fromEntries(dropped.map(mode => [mode, null])) }));
+      setCanvasState(current => {
+        const next = { ...current, [axis]: value };
+        saveCanvas(next);
+        return next;
+      });
+    },
     material,
     setMaterialBundle: bundle => {
       const next = { bundle, overrides: {} };
@@ -326,15 +432,21 @@ export function Studio() {
       return current[axis] === value ? current : { ...current, [axis]: value };
     }),
     previewMaterial: setPreviewedMaterial,
-    shown: { canvas: { ...canvas, ...previewAxes }, material: previewedMaterial ?? material },
+    shown: { canvas: { ...canvas, ...previewAxes }, material: previewedMaterial ?? material, colours: shownColours(colours, previewAxes) },
+    colours,
+    setColours: patch => setColoursState(current => ({ ...current, ...patch })),
     brand,
     setBrand: patch => setBrandState(current => {
       const next = { ...current, ...patch };
       writeStored("brand", next);
       return next;
     }),
+    place,
+    navigate,
     item,
-    select: (next, options) => go(tab, next, options?.replace),
+    select: (next, options) => navigate({ ...place, item: next || undefined }, { replace: options?.replace }),
+    panel: tab.panel,
+    setPanel: next => navigate(place, { panel: next, replace: true }),
     sidebar: panels.sidebar,
     inspector: panels.inspector,
     inspectorView,
@@ -345,9 +457,11 @@ export function Studio() {
       writeStored("panels", next);
       return next;
     }),
-  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, item, tab, go, panels, inspectorView]);
+  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, colours, item, place, navigate, tab.panel, panels, inspectorView]);
+  // The picks' one rule is in the head while there are any; the scopes that carry the settings carry data-area-colours.
+  useColoursSheet(state.shown.colours);
 
-  const current = TABS.find(entry => entry.id === tab)!;
+  const library = tabs.list.find(entry => entry.place.page === "library");
   return (
     <StudioContext.Provider value={state}>
     <AppScaleContext.Provider value={scale}>
@@ -355,10 +469,13 @@ export function Studio() {
       <ChatProvider selection={selectionLabel(item)}>
       <ChatShortcut />
       <div className="studio">
-        {/* Area's Titlebar (app-shell.css): Panel's bar, the drag region, clear of macOS's traffic lights. */}
+        {/* Area's Titlebar (app-shell.css): Panel's bar, the drag region, clear of macOS's traffic lights. Its start: the
+            Sidebar's toggle, back and forward, then the open tabs; its end: search, the Library, the Inspector's toggle
+            and light / dark (Phase 0, variation A). */}
         <Titlebar className="studio-titlebar" windowControls={isMac() ? "macos" : undefined} end={<>
-          <SearchField ref={search} size="sm" variant="soft" className="studio-titlebar__search" value={query} onValueChange={setQuery}
-            placeholder={`Search ${current.label.toLowerCase()}`} aria-label={`Search ${current.label.toLowerCase()}`} shortcut={["⌘", "K"]} />
+          <SearchEverything open={searching} onOpenChange={setSearching} />
+          <ChromeButton label="Library" icon={<LibraryIcon />}
+            onClick={() => library ? selectTab(library.id) : navigate({ page: "library" }, { newTab: true })} />
           {/* Shown panels draw their side filled, as Cursor's layout toggles do. Each names itself
               in an Area Tooltip with its shortcut, not the browser's title. */}
           <ChromeButton label={panels.inspector ? "Hide inspector" : "Show inspector"} keys={["⌥", "⌘", "B"]} shortcut="Alt+Meta+B"
@@ -370,22 +487,22 @@ export function Studio() {
               lights (Cursor's icon tool and IDE); the Inspector's stays at the end, over it. */}
           <ChromeButton label={panels.sidebar ? "Hide sidebar" : "Show sidebar"} keys={["⌘", "B"]} shortcut="Meta+B"
             icon={panels.sidebar ? <PanelLeftFilledIcon /> : <PanelLeftIcon />} onClick={() => togglePanel("sidebar")} />
-          <Nav orientation="horizontal" aria-label="Gallery" className="studio-titlebar__tabs">
-            {TABS.map(entry => (
-              <NavItem key={entry.id} href={`#${entry.id}`} current={entry.id === tab}
-                onClick={event => { event.preventDefault(); setQuery(""); go(entry.id); }}>
-                {entry.label}
-              </NavItem>
-            ))}
-          </Nav>
+          <ChromeButton label="Back" keys={["⌘", "["]} shortcut="Meta+BracketLeft" icon={<ArrowLeftIcon />} disabled={!tab.back.length} onClick={() => step(-1)} />
+          <ChromeButton label="Forward" keys={["⌘", "]"]} shortcut="Meta+BracketRight" icon={<ArrowRightIcon />} disabled={!tab.forward.length} onClick={() => step(1)} />
+          <AppTabs tabs={tabs.list} current={tab.id} onSelect={selectTab} onClose={closeTab} onNew={() => setSearching("new")} />
         </Titlebar>
-        {tab === "theme" ? <ThemePage /> :
-          tab === "components" ? <ComponentsPage /> :
-          tab === "typography" ? <TypographyPage /> :
-          tab === "icons" ? <IconsPage /> :
-          tab === "testing" ? <ExamplesPage /> :
-          tab === "materials" ? <MaterialsPage /> :
-          tab === "imagery" ? <ImageryPage /> : <ColorPage />}
+        {/* Keyed by tab, so a tab opens on its own page's state rather than the last tab's. */}
+        <Fragment key={tab.id}>{
+          place.page === "themes" ? <ThemesPage /> :
+          place.page === "theme-setup" ? <ThemePage flow="setup" /> :
+          place.page === "foundations" || place.page === "settings" ? <ThemePage flow="browse" /> :
+          place.page === "components" ? <ComponentsPage /> :
+          place.page === "typography" ? <TypographyPage /> :
+          place.page === "icons" ? <IconsPage /> :
+          place.page === "patterns" ? <ExamplesPage /> :
+          place.page === "materials" ? <MaterialsPage /> :
+          place.page === "library" ? <ImageryPage /> : <ColorPage />
+        }</Fragment>
       </div>
       </ChatProvider>
     </AppScaleContext.Provider>
@@ -397,12 +514,12 @@ export function Studio() {
  * An icon Button in the app's chrome (Titlebar, Inspector headings): ghost, neutral, small, named
  * by its label, which an Area Tooltip shows below it with the shortcut, if any.
  */
-export function ChromeButton({ label, icon, keys, shortcut, onClick, pressed, tabIndex }: { label: string; icon: ReactNode; keys?: string[]; shortcut?: string; onClick: () => void; pressed?: boolean; tabIndex?: number }) {
+export function ChromeButton({ label, icon, keys, shortcut, onClick, pressed, disabled, tabIndex }: { label: string; icon: ReactNode; keys?: string[]; shortcut?: string; onClick: () => void; pressed?: boolean; disabled?: boolean; tabIndex?: number }) {
   // The tooltip repeats the name, so it only shows; the shortcut reaches assistive tech as
   // aria-keyshortcuts ("Meta+B").
   return (
     <Tooltip side="bottom" describes={false} trigger={
-      <Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={icon} aria-label={label} aria-pressed={pressed} aria-keyshortcuts={shortcut} tabIndex={tabIndex} onClick={onClick} />
+      <Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={icon} aria-label={label} aria-pressed={pressed} aria-keyshortcuts={shortcut} disabled={disabled} tabIndex={tabIndex} onClick={onClick} />
     }>
       {label}{keys ? <> <Kbd keys={keys} size="sm" /></> : null}
     </Tooltip>
@@ -449,10 +566,20 @@ function usePanelWidth(panel: keyof typeof WIDTHS, type: string, density: string
 }
 
 export interface WorkspaceProps {
-  /** The tab's list, in a <SidebarList>. The Sidebar has no title bar (owner, 2026-10-11). */
-  sidebar: ReactNode;
-  /** At the start of the Canvas bar: the way back from a nested view (a family's Stage). */
+  /**
+   * The page's own list, in a <SidebarList>: it takes the Sidebar over, under a back row to the nav and a filter (Phase 0's
+   * takeover). A page without one leaves it out, and the Sidebar shows the nav (src/app-nav.tsx).
+   */
+  sidebar?: ReactNode;
+  /** At the start of the Canvas bar: the way back from a nested view (a family's Stage), or what the Canvas shows. */
   canvasLead?: ReactNode;
+  /**
+   * A region the tab draws itself in the Sidebar's place, at the app's scale like the Inspector, shown whatever the
+   * Sidebar toggle says: Theme setup's chat (a Panel of its own). Its bar sits on the line the Canvas header shares, so
+   * the Canvas header holds the view's controls and no row of its own is added (owner, 2026-10-28: "fix the header on the
+   * theme page").
+   */
+  lead?: ReactNode;
   /** What the Canvas shows (a family, "All icons"): the region's accessible name, not drawn
       (owner, 2026-10-14: no titles over the Canvas or the Inspector, as Framer and Figma). */
   canvasTitle: string;
@@ -485,7 +612,7 @@ export interface WorkspaceProps {
 
 /** The Inspector's settings and the Material as the attributes a scope takes (the Canvas's body, or a preview's). */
 export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof materialAttributes>[0]): Record<string, string | undefined> {
-  return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
+  return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-hue-dark": shown["tint-hue-dark"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
 }
 /** The shipped defaults as attributes: what <html> and the Canvas body carry (PRODUCT_UI.md, rule 18). */
 const DEFAULT_ATTRIBUTES = canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT);
@@ -496,7 +623,7 @@ const DEFAULT_ATTRIBUTES = canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT);
  * Inspector's first heading sit on one line. Every region insets its content by Panel's 14
  * (src/studio.css).
  */
-export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
+export function Workspace({ sidebar, lead, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
   const studio = useStudio();
   const showSidebar = panels && studio.sidebar, showInspector = panels && studio.inspector;
   const sidebarWidth = usePanelWidth("sidebar", CANVAS_DEFAULTS.type, CANVAS_DEFAULTS.density);
@@ -512,7 +639,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   // document's head while Brand is on, so the body, cards and titles keep Area's palette.
   const brand = canvasPicks && studio.brand.on ? studio.brand : null;
   useBrandSheet(brand);
-  const specimens = useMemo(() => canvasPicks ? { ...movedFrom(canvasAttributes(studio.shown.canvas, studio.shown.material), DEFAULT_ATTRIBUTES), ...(brand ? { "data-area-brand": "" } : {}) } : {}, [canvasPicks, studio.shown, brand]);
+  const specimens = useMemo(() => canvasPicks ? { ...movedFrom(canvasAttributes(studio.shown.canvas, studio.shown.material), DEFAULT_ATTRIBUTES), ...(brand ? { "data-area-brand": "" } : {}), ...(hasColours(studio.shown.colours) ? { "data-area-colours": "" } : {}) } : {}, [canvasPicks, studio.shown, brand]);
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
   const signature = JSON.stringify([axes, specimens, brand]);
@@ -523,13 +650,15 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
     switchInstantly();
   }, [signature]);
   return (
-    <div className="studio-workspace" data-sidebar={showSidebar ? "" : undefined} data-inspector={showInspector ? "" : undefined}>
+    <div className="studio-workspace" data-sidebar={lead || showSidebar ? "" : undefined} data-inspector={showInspector ? "" : undefined}>
       {/* The Sidebar is chrome on a recessed ground (owner, 2026-10-22; cursor-audit-2026-10-22.md item 4), as the
           Testing screens' sidebars: the Panel is a chrome region painting the fill styles/app.css names (panel.css) and
           declares the recessed ground, so its row plates step from what is under them (layers.css). */}
-      {showSidebar ? (
+      {lead ? <div className="studio-lead">{lead}</div> : showSidebar ? (
         <div className="studio-sidebar">
-          <Panel flush resizable="end" aria-label="Sidebar" data-area-chrome="" data-area-ground="recessed" {...sidebarWidth}>{sidebar}</Panel>
+          <Panel flush resizable="end" aria-label="Sidebar" data-area-chrome="" data-area-ground="recessed" {...sidebarWidth}>
+            {sidebar && studio.panel === "page" ? <Takeover>{sidebar}</Takeover> : <AppNav />}
+          </Panel>
         </div>
       ) : null}
       <main ref={main} className="studio-canvas" aria-label={canvasTitle}>
@@ -626,7 +755,7 @@ export function SidebarList({ children }: { children: ReactNode }) {
 /**
  * The Sidebar as a tree (owner, 2026-10-24: "can you make the left nav more like a tree?"): All, then each group a branch
  * that opens and closes, its rows under it, on Area's Tree view (one Tab stop, the arrows, typeahead). A row narrows the
- * Canvas as a Nav row did; a branch only opens and closes. Every branch starts open, and stays as it is set while the tab
+ * Canvas as a Nav row did; a branch only opens and closes. Every branch starts open, and stays as it is set while the page
  * is open. A pinnable row's id is `key:<key>` and a row under Pinned `pin:<key>` (organize.tsx, PinMenu); without
  * `onSelect` a row selects its key, the prefix dropped.
  *
@@ -635,8 +764,8 @@ export function SidebarList({ children }: { children: ReactNode }) {
  * Canvas shows, so the current row is always in view; an `axis:` row only opens and closes, as a group does.
  */
 export interface SidebarTreeGroup { id: string; label: string; items: TreeViewNode[] }
-export function SidebarTree({ tab, label, count, groups, current, reveal, onSelect }: {
-  tab: TabId; label: string; count: number; groups: SidebarTreeGroup[]; current?: string; reveal?: string[]; onSelect?: (id: string) => void;
+export function SidebarTree({ label, count, groups, current, reveal, onSelect }: {
+  label: string; count: number; groups: SidebarTreeGroup[]; current?: string; reveal?: string[]; onSelect?: (id: string) => void;
 }) {
   const { select } = useStudio();
   const branches = groups.filter(group => group.items.length).map(group => `group:${group.id}`);
@@ -659,20 +788,19 @@ export function SidebarTree({ tab, label, count, groups, current, reveal, onSele
         if (id.startsWith("group:")) { setClosed(open => open.includes(id) ? open.filter(entry => entry !== id) : [...open, id]); return; }
         if (id.startsWith("axis:")) { toggle(id); return; }
         if (id === "all") select(""); else if (onSelect) onSelect(id); else select(id.replace(/^(key|pin):/, ""));
-      }}
-      data-tab={tab} />
+      }} />
   );
 }
 
 /**
- * The Sidebar's first row on every tab: All, the whole tab on the Canvas (the default). The rows
+ * The first row of a page's list: All, the whole page on the Canvas (the default). The rows
  * under it narrow the Canvas to one family, category, scale, role or setting.
  */
-export function SidebarAll({ tab, count, current }: { tab: TabId; count: number; current: boolean }) {
-  const { select } = useStudio();
+export function SidebarAll({ count, current }: { count: number; current: boolean }) {
+  const { place, select } = useStudio();
   return (
     <NavGroup>
-      <NavItem href={`#${tab}`} current={current} onClick={event => { event.preventDefault(); select(""); }} trailing={<Count count={count} max={9999} />}>All</NavItem>
+      <NavItem href={hrefOf({ ...place, item: undefined })} current={current} onClick={event => { event.preventDefault(); select(""); }} trailing={<Count count={count} max={9999} />}>All</NavItem>
     </NavGroup>
   );
 }

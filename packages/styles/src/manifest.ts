@@ -104,8 +104,9 @@ export const alignmentPicker = {
 export const colorPicker = {
   block: "area-color-picker",
   variants: { variant: ["surface", "plain"] }, defaults: { variant: "surface" },
-  description: "Edits a color like Figma's fill picker, with spectrum, grid and slider views, six color models, a contrast check, a before/after preview and saved swatches.",
-  elements: ["header", "body", "views", "contrast", "contrast-pair", "contrast-ratio", "contrast-unit", "contrast-level", "area", "band", "band-region", "band-edge", "thumb", "channel", "grid", "controls", "tracks", "channel-row", "channel-label", "slider", "hue", "alpha", "preview", "preview-new", "preview-original", "values", "model", "fields", "text-field", "opacity", "note", "swatches", "heading"],
+  description: "Edits a color like Figma's fill picker, with spectrum, grid and slider views, six color models, a contrast check, a before/after preview and saved swatches; or picks an exact OKLCH colour inside a gamut.",
+  elementModifiers: { area: ["gamut"] },
+  elements: ["header", "body", "views", "contrast", "contrast-pair", "contrast-ratio", "contrast-unit", "contrast-level", "area", "plane", "band", "band-region", "band-edge", "thumb", "channel", "grid", "controls", "tracks", "channel-row", "channel-label", "slider", "hue", "alpha", "preview", "preview-new", "preview-original", "values", "model", "fields", "text-field", "opacity", "note", "swatches", "heading"],
 } as const satisfies ComponentManifest;
 
 export const calendar = {
@@ -532,7 +533,10 @@ export const diff = {
 export const approval = {
   block: "area-approval", description: "An agent asks before it acts: what and why, the thing itself, numbered choices with their scope, and a field to say what to do instead.",
   variants: {},
-  elements: ["head", "title", "description", "detail", "options", "option", "key", "label", "instead", "field", "hint"],
+  // The question card's parts (owner 2026-10-28, Setup as a chat panel; Claude Code's AskUserQuestion): the head's
+  // actions, an option's description and check, the foot's footer.
+  elements: ["head", "heading", "title", "description", "actions", "detail", "options", "option", "key", "lines", "label", "option-description", "check", "instead", "field", "foot", "hint", "footer"],
+  states: ["selected"], // an option's, as Menu's rows (data-selected: the answer given)
   defaults: {},
 } as const satisfies ComponentManifest;
 

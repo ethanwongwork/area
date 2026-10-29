@@ -121,12 +121,14 @@ ${/* Each specimen in its own whole-pixel slot: in a stacked page a tile added o
 ${tiles.map((t, i) => `<div class="c area-scope" style="inset-block-start:${i * 3000}px" data-key="${t.key}" data-area-theme="light" data-area-type="14">${t.html}</div>`).join("\n")}
 <pre id="out"></pre><script>${MEASURE}</script></body></html>`);
   try {
+    // Signed out (2026-10-28): a fresh Edge profile signs itself into the Mac's Microsoft account within seconds and syncs
+    // its extensions unless msImplicitSignin, sync and extensions are off (--guest would too, but then prints no DOM).
     // A profile of its own: on the default one a headless Edge can hand the page to an Edge already running and print
     // nothing (2026-10-19), so each run is a fresh browser.
     const profile = mkdtempSync(join(tmpdir(), "area-review-diff-"));
     let dom, log;
     try {
-      const run = spawnSync(browser, ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=800,1000", "--virtual-time-budget=30000", `--user-data-dir=${profile}`, "--dump-dom", `file://${page}`], { encoding: "utf8", maxBuffer: 1 << 28, timeout: 180000, stdio: ["ignore", "pipe", "pipe"] });
+      const run = spawnSync(browser, ["--headless=new", "--disable-features=msImplicitSignin", "--disable-sync", "--disable-extensions", "--no-first-run", "--disable-gpu", "--hide-scrollbars", "--window-size=800,1000", "--virtual-time-budget=30000", `--user-data-dir=${profile}`, "--dump-dom", `file://${page}`], { encoding: "utf8", maxBuffer: 1 << 28, timeout: 180000, stdio: ["ignore", "pipe", "pipe"] });
       dom = run.stdout ?? "";
       log = [run.error?.message, run.signal && `signal ${run.signal}`, ...(run.stderr ?? "").split("\n").filter(l => /fail|error/i.test(l) && !/gpu|CVDisplay|Crashpad|task_policy/.test(l)).slice(-3)].filter(Boolean).join("; ");
     } finally { rmSync(profile, { recursive: true, force: true }); }

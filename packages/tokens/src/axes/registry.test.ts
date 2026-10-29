@@ -27,7 +27,7 @@ describe("axis registry", () => {
         // Interaction states, 2026-10-21 (axes/states.ts, depth.ts).
         "focus-ring", "stroke-hover", "selected-stroke", "selected-tint", "fill-hover", "fill-selected", "fill-pressed", "shadow-hover",
         // Tint, 2026-10-22 (axes/tint.ts).
-        "tint-hue", "tint-light", "tint-dark", "ink-tint",
+        "tint-hue", "tint-hue-dark", "tint-light", "tint-dark", "ink-tint",
         // Card tone, 2026-10-22 (axes/card-tone.ts).
         "card-tone-light", "card-tone-dark",
         // Any accent colour, 2026-10-23 (axes/accent.ts).

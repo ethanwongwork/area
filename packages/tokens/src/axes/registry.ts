@@ -24,7 +24,7 @@ import { STATE_AXES } from "./states.ts";
 import { DENSITY_AXIS } from "./density.ts";
 import { TYPE_AXIS } from "./type-size.ts";
 import { GROUND_DARK_AXIS, GROUND_LIGHT_AXIS, LAYERS_DARK_AXIS, LAYERS_LIGHT_AXIS } from "./layers.ts";
-import { INK_TINT_AXIS, TINT_DARK_AXIS, TINT_HUE_AXIS, TINT_LIGHT_AXIS } from "./tint.ts";
+import { INK_TINT_AXIS, TINT_DARK_AXIS, TINT_HUE_AXIS, TINT_HUE_DARK_AXIS, TINT_LIGHT_AXIS } from "./tint.ts";
 import { CARD_TONE_DARK_AXIS, CARD_TONE_LIGHT_AXIS } from "./card-tone.ts";
 import { ACCENT_STRENGTH_AXIS, LABEL_TINT_AXIS, SOLID_DARK_AXIS, SOLID_LIGHT_AXIS, STATUS_COLOURS_AXIS } from "./accent.ts";
 
@@ -33,6 +33,7 @@ export const AXES: AxisDefinition[] = [
   NEUTRAL_AXIS,
   // The grays' hue and strength and the text's share of it (2026-10-22): Auto follows Neutral.
   TINT_HUE_AXIS,
+  TINT_HUE_DARK_AXIS,
   TINT_LIGHT_AXIS,
   TINT_DARK_AXIS,
   INK_TINT_AXIS,
@@ -79,7 +80,7 @@ export const AXES: AxisDefinition[] = [
 export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly string[] }> = [
   // In palette order (owner, 2026-10-24, the axis review): the page and its greys, the accent, then where the accent
   // paints; the interaction states under one heading, so one state's settings sit together.
-  { heading: "Page", settings: ["theme", "ground-light", "ground-dark", "neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark"] },
+  { heading: "Page", settings: ["theme", "ground-light", "ground-dark", "neutral", "tint-hue", "tint-hue-dark", "tint-light", "tint-dark", "ink-tint", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark"] },
   // The colour, then how deep and how saturated it is (owner, 2026-10-25), then its label.
   { heading: "Accent", settings: ["accent", "solid-light", "solid-dark", "accent-strength", "label-tint"] },
   // Emphasis (owner 2026-10-27: "avoid long phrases like where it paints"; was "Where it paints"): how strongly things

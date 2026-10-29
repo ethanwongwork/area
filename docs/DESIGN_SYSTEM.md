@@ -543,7 +543,11 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
 
 - **Components draw Area's own icons** through `Glyph` (`packages/react/src/components/Glyph.tsx`)
   at 12, 16, 20 or 24, with 12px and 10px cuts where they exist.
-  - Strokes follow `--area-weight-icon` per size (`base.css`).
+  - Strokes follow `--area-weight-icon` per size (`base.css`). A glyph or `@area/icons` icon at its default size fills
+    its component's icon slot, which is 20 from type 15; there its line is the token line × `--area-type-icon-line`
+    (0.8846, the size curve at 20), never the 16 drawing's line scaled with the box. An icon given a `size` keeps the
+    curve for that size; a component that sets its own icon line sets `--area-type-icon-line: 1` beside it (File tile,
+    File page).
   - Never shrink a 16 drawing to 12 with CSS.
   - Icons are drawn in `packages/icons/sources` and generated, never hand-edited in
     `glyphs.ts`. Process: [icon spec](specs/icons.md) and the `area-icon-construction` skill.

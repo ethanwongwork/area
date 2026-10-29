@@ -3,40 +3,47 @@
  * vertically scrolling chat like experience that reads like a simple questionaire ... and then visuals on the right side";
  * "dont need all these panels open").
  *
- *   chat    the questions as a thread: each arrives as a message with what it changes and its choices inline (cards that
- *           picture each choice, a bar, a toggle, swatches); once answered it stays as the person's reply, which reopens
- *           the question when selected; chapters are dividers; the dock at the foot holds progress, Back and Continue
+ *   chat    a compact chat panel (owner, 2026-10-28: "a more compact chat panel, just like cursor, claude, chatgpt"),
+ *           built as the Inspector's Chat view is: a resizable Panel at the app's own scale, the conversation in its body,
+ *           the question docked at its foot in the composer's place (Approval, as Claude Code asks: numbered choices,
+ *           each with what it comes to, its place among the questions, the way on). The thread holds the assistant's
+ *           words and each chapter's answers as one framed list; selecting an answer asks its question again. The
+ *           progress rides over the question as a run's plan rides over the composer.
  *   visuals the product screen (setup-screen.tsx) in the theme so far, alone on a backdrop that stands off any page; the
  *           parts a question changes are marked, and a choice under the pointer is drawn before it is picked
  *
- * The Sidebar and the Inspector are left out (Workspace `panels={false}`); Fine-tune hands over to Browse and the Inspector.
+ * The Sidebar and the Inspector are left out (Workspace `panels={false}`); Fine-tune hands over to Foundations and the Inspector.
  * Pacing: Essentials asks the fourteen that change the most; Every detail asks every setting, chapter by chapter in the
  * order a system is built (setup-questions.ts), skipping what the answers so far make moot, and any chapter on request.
  * Every answer is an Inspector setting. Setup's own UI stays at the app's defaults (Workspace `canvasPicks={false}`); only
- * the visuals and the choices' pictures take the picks.
+ * the visuals take the picks.
  */
-import { AddIcon, ArrowLeftIcon, ChevronDownIcon, InfoIcon, ResetIcon } from "@area/icons";
-import { Badge, Button, Checkbox, CheckboxGroup, CodeBlock, ColorSwatchPicker, Kbd, Message, Plan, PromptSuggestions, Radio, RadioGroup, Segmented, Select, Slider, Switch, Table, TableCell, TableHeaderCell, TableLink, ZoomControl } from "@area/react";
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { AddIcon, ChatAddIcon, InfoIcon, MoonIcon, OptionsIcon, ResetIcon, SunIcon } from "@area/icons";
+import { Approval, Badge, Button, Checkbox, CheckboxGroup, CodeBlock, ColorPicker, ColorSwatch, ColorSwatchPicker, DescriptionList, DescriptionListItem, Message, Pagination, Panel, Plan, ScrollToLatest, Segmented, Select, Slider, Switch, Tooltip, ZoomControl, type ApprovalOption } from "@area/react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { LoopingPress } from "../abstract.tsx";
+import { appScale } from "../app-scale.ts";
 import { optionMark } from "../option-marks.tsx";
 // @ts-expect-error — the highlighter is authored in JavaScript.
 import { highlight } from "../content/highlight.mjs";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
-import { hueName, SettingRow } from "../inspector-rows.tsx";
+import { hueName } from "../inspector-rows.tsx";
 import { REGION_LABEL, SCREENS, ScreenFigure, type Region, type RegionBox, type ScreenId } from "../setup-screen.tsx";
 import { canvasAttributes, CANVAS_DEFAULTS, useStudio, Workspace, type CanvasAxes } from "../studio.tsx";
+import { coloursCode, hasColours, type ColoursState } from "../colours.ts";
+import { useBrandSheet } from "../brand.ts";
+import { oklchHex, parseColour } from "@area/tokens/colours";
+import { PagePicker, pageAnswer, pageHex } from "../page-colour.tsx";
 import { AXES } from "../tokens.ts";
-import { useViewOption, ViewControls, ViewFilter } from "../view-controls.tsx";
+import { useViewOption, ViewControls } from "../view-controls.tsx";
+import { readStored, writeStored } from "../storage.ts";
 import { CHAPTERS, minutesFor, QUESTIONS, type Axis, type Choice, type Question, type Values, type Visual } from "./setup-questions.ts";
 import { attributeOf, SETTINGS, type Mode } from "./theme-settings.ts";
 
 export interface ThemeSetupProps {
   mode: Mode;
   setMode: (mode: Mode) => void;
-  /** The Setup / Browse switch, first in the Canvas header. */
-  flowSwitch: ReactNode;
-  /** Hands over to Browse, the Inspector open on Theme (Fine-tune). */
+  /** Hands over to Foundations, the Inspector open on Theme (Fine-tune). */
   onBrowse: () => void;
 }
 
@@ -66,32 +73,39 @@ const TINTS: ReadonlyArray<[string, string]> = [["30", "Red"], ["55", "Orange"],
 const hueSwatch = (hue: string) => `oklch(0.66 0.14 ${hue})`;
 
 /** What a question is set to, in its own words: the choice it matches, else the setting's value. */
-function answerOf(question: Question, values: Values): string {
+function answerOf(question: Question, values: Values, picks: Picks): string {
   const control = question.control;
   if (control.kind === "cards") { const choice = control.choices.find(entry => matches(values, entry.set)); if (choice) return choice.label; }
+  if (control.kind === "accent" && picks.accent) return `Exact · ${picks.accent.toUpperCase()}`;
   if (control.kind === "accent") return /^\d+$/.test(values.accent) ? `${hueName(Number(values.accent))} · ${values.accent}°` : say("accent", values.accent);
   if (control.kind === "tint") return `${hueName(Number(values["tint-hue"]))} · ${values["tint-hue"]}°`;
+  if (control.kind === "page") return pageAnswer(control.mode, values, picks);
   if (control.kind === "pills") { const count = values.pills.split(" ").filter(Boolean).length; return count ? `${count} parts` : "None"; }
   if (control.kind === "toggle") return values[control.axis] === control.off ? "Off" : say(control.axis, values[control.axis]);
   const axis = question.axes[0]!;
   return say(axis, values[axis]);
 }
 const focusOf = (question: Question, values: Values): Region[] => typeof question.focus === "function" ? question.focus(values) : question.focus;
-const atDefault = (question: Question, values: Values) => question.axes.every(axis => values[axis] === defaultOf(axis));
-export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupProps) {
-  const { item, select, canvas, setCanvas, shown, setInspectorView, showInspector } = useStudio();
+/** The exact colours picked: each page (src/colours.ts) and the accent, an exact colour through the brand engine while
+ * Brand is on (src/brand.ts), else null. */
+type Picks = ColoursState & { accent: string | null };
+/** At Area's default: every setting it writes, and for a page question no pick (`picks`, src/colours.ts). */
+const atDefault = (question: Question, values: Values, picks: Picks) => question.axes.every(axis => values[axis] === defaultOf(axis))
+  && !(question.control.kind === "page" && picks[question.control.mode]) && !(question.control.kind === "accent" && picks.accent);
+export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
+  const { item, select, navigate, canvas, setCanvas, shown, setInspectorView, showInspector, colours, brand, setBrand } = useStudio();
+  const studioColours: Picks = { ...colours, accent: brand.on ? brand.primary : null };
+  // An exact accent paints the stage as it paints the Canvas: its one rule in the head, data-area-brand on the scopes.
+  useBrandSheet(brand.on ? brand : null);
   const [path, setPath] = useViewOption<Path>("theme-setup-path", "essentials", ["essentials", "complete"]);
   // The product the visuals draw; the welcome's first question sets it, the stage's menu changes it later.
   const [screen, setScreen] = useViewOption<ScreenId>("theme-setup-screen", "workspace", Object.keys(SCREENS) as ScreenId[]);
-  // How an answered picture question shows (owner, 2026-10-26: "i like all the inset ones, a b and c ... can you build
-  // all 3?"): the picture card a third or half of the column wide, or a full-width row with the picture at its start.
-  const [answers, setAnswers] = useViewOption<PictureLayout>("theme-setup-answers", "third", ["third", "half", "row"]);
   // A choice under the pointer, drawn on the visuals before it is picked (the finder's preview).
   const [preview, setPreview] = useState<{ set: Changes; label: string } | null>(null);
   const values = canvas as Values;
 
   // The questions on this path that can change something under the answers so far.
-  const asked = QUESTIONS.filter(question => (path === "complete" || question.essential) && (!question.when || question.when(values)));
+  const asked = QUESTIONS.filter(question => (path === "complete" || question.essential) && (!question.when || question.when(values, studioColours)));
   // Where the conversation is: the welcome (""), a question, or the review. A question the answers have made moot gives
   // way to the next one asked.
   const lost = item && item !== "review" && !asked.some(entry => entry.id === item) ? QUESTIONS.findIndex(entry => entry.id === item) : -1;
@@ -127,171 +141,36 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   const drawn = useThrottled(shown, 180);
   const scopeOf = (extra: Changes = {}) => {
     const attributes = canvasAttributes({ ...drawn.canvas, ...extra } as typeof drawn.canvas, drawn.material) as Record<string, string | undefined>;
-    return { ...attributes, "data-area-theme": stageMode };
+    return { ...attributes, ...(hasColours(drawn.colours) ? { "data-area-colours": "" } : {}), ...(brand.on ? { "data-area-brand": "" } : {}), "data-area-theme": stageMode };
   };
-  const answered = asked.filter(entry => !atDefault(entry, values)).length;
+  const answeredCount = asked.filter(entry => !atDefault(entry, values, studioColours)).length;
   const changed = SETTINGS.filter(entry => entry.id !== "theme" && (values as Record<string, string>)[entry.id] !== undefined && (values as Record<string, string>)[entry.id] !== defaultOf(entry.id as Axis)).length;
   const fineTune = () => { setInspectorView("theme"); showInspector(); onBrowse(); };
   const restart = () => set(Object.fromEntries(Object.entries(CANVAS_DEFAULTS)) as Changes);
 
-  // The thread follows the conversation: the question being asked scrolls to the top of the chat, smoothly unless the
-  // person has asked for reduced motion (the app's own Speed decides, as everywhere in Setup).
+  // The thread: the Panel's scrolling body.
   const thread = useRef<HTMLDivElement>(null);
-  const mounted = useRef(false);
-  useLayoutEffect(() => {
-    const host = thread.current;
-    const target = host?.querySelector<HTMLElement>("[data-current]");
-    if (!host || !target) return;
-    const still = !mounted.current || !(parseFloat(getComputedStyle(host).getPropertyValue("--area-duration-base")) > 0);
-    mounted.current = true;
-    host.scrollTo({ top: target.offsetTop - 24, behavior: still ? "auto" : "smooth" });
-  }, [item, path]);
 
-  const paths = { essentials: QUESTIONS.filter(entry => entry.essential && (!entry.when || entry.when(values))).length, complete: QUESTIONS.filter(entry => !entry.when || entry.when(values)).length };
-  const pathLabel = (choice: Path) => `${choice === "essentials" ? "Essentials" : "Every detail"} · ${paths[choice]} questions`;
+  const paths = { essentials: QUESTIONS.filter(entry => entry.essential && (!entry.when || entry.when(values, studioColours))).length, complete: QUESTIONS.filter(entry => !entry.when || entry.when(values, studioColours)).length };
 
-  // Keys, as an ask card in a chat takes them (Claude's and Codex's numbered choices): a digit picks that choice, Enter
-  // goes on. Typing in a field and a focused control's own keys come first.
-  const keysRef = useRef<(event: globalThis.KeyboardEvent) => void>(() => {});
-  keysRef.current = event => {
-    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || event.repeat) return;
-    const target = event.target as HTMLElement;
-    if (target.closest("input:not([type=radio]):not([type=checkbox]), textarea, select, [contenteditable=true], [role=dialog], [role=menu], [role=listbox]")) return;
-    if (/^[1-9]$/.test(event.key)) {
-      const n = Number(event.key) - 1;
-      if (at < 0) { const choice = (["essentials", "complete"] as const)[n]; if (choice) { event.preventDefault(); setPath(choice); } return; }
-      const control = question?.control;
-      if (control?.kind === "cards" && control.choices[n]) { event.preventDefault(); setPreview(null); set(control.choices[n]!.set); }
-      return;
-    }
-    if (event.key === "Enter" && !target.closest("button, a, [role=button], [role=tab]") && !reviewing) {
-      event.preventDefault();
-      if (at >= 0 && at < reach) go(reach); else next();
-    }
-  };
-  useEffect(() => {
-    const listen = (event: globalThis.KeyboardEvent) => keysRef.current(event);
-    addEventListener("keydown", listen);
-    return () => removeEventListener("keydown", listen);
-  }, []);
-
-  // ——— The chat ———
-  // One shape for every turn (owner, 2026-10-25: "larger, more consistent ui ... more information organized into tables";
-  // then "the question cards ... shown directly in the chat, aligned with the tables ... not inside its own container",
-  // after Craft's stepped calculator; docs/research/setup-chat-2026-10-25): the question as a title in the thread with its
-  // choices under it on the thread's own edges, numbered so a key picks them; the answer as the person's reply, its colour
-  // swatched where it is one; a finished chapter folded into a table of its answers.
-  const welcome = (
-    <div className="setup-chat__turn" data-current={at < 0 ? "" : undefined} key="welcome">
-      <Message author="assistant" authorName="Setup">
-        <p className="setup-chat__lead">Let's build your design system.</p>
-        <p>Pick what looks right; the screen on the right shows each choice before you make it. Every answer is a setting you can fine-tune later.</p>
-      </Message>
-      {/* What it is for first (an onboarding's first question in Linear, Notion and Framer: what are you making), so the
-          screen on the right is the person's kind of product before any setting is asked. It changes the visuals only. */}
-      {at < 0 ? (
-        <Ask question="What are you making?" lede="The screen on the right becomes one like it." keys={0} hint={false}>
-          <RadioGroup label="What are you making" className="setup-choices setup-options" value={screen} onValueChange={choice => setScreen(choice as ScreenId)}>
-            {MAKING.map(entry => <Radio key={entry.screen} variant="soft" layout="list" value={entry.screen} label={entry.label} caption={entry.caption} />)}
-          </RadioGroup>
-        </Ask>
-      ) : (
-        <Answer question="What are you making?" label={MAKING.find(entry => entry.screen === screen)?.label ?? SCREENS[screen].label} meta="Preview only" onChange={() => go(-1)} />
-      )}
-      {at < 0 ? (
-        <Ask question="How thorough should we be?" keys={2}>
-          {/* Text choices as option rows (owner, 2026-10-25, Notion Calendar's settings and a proposal card's options): the
-              control first, the words, what the choice comes to at the end; the chosen one filled. */}
-          <RadioGroup label="How thorough" className="setup-choices setup-options" value={path} onValueChange={choice => setPath(choice as Path)}>
-            <Radio variant="soft" layout="list" value="essentials" label="Essentials" caption="The choices that change the most" meta={`${paths.essentials} questions · ${minutesFor(paths.essentials)} min`} />
-            <Radio variant="soft" layout="list" value="complete" label="Every detail" caption="Every setting, chapter by chapter" meta={`${paths.complete} questions · ${minutesFor(paths.complete)} min`} />
-          </RadioGroup>
-          {changed ? (
-            <p className="setup-step__note"><InfoIcon /><span>Starting from your {changed} changed settings. <button type="button" className="setup__link" onClick={restart}>Start from the defaults</button></span></p>
-          ) : null}
-        </Ask>
-      ) : (
-        <Answer question="How thorough should we be?" label={path === "essentials" ? "Essentials" : "Every detail"} meta={`${paths[path]} questions`} onChange={() => go(-1)} />
-      )}
-    </div>
-  );
-  const chapters = CHAPTERS.filter(entry => asked.some(row => row.chapter === entry.id));
-  const chaptersAsked = chapters.map(entry => entry.id);
-  const reached = asked.slice(0, Math.min(shownUpTo, asked.length - 1) + 1);
-  const turnOf = (entry: Question) => {
-    const index = asked.indexOf(entry);
-    const current = index === at;
-    const context = current ? entry.context?.(values) : null;
-    return (
-      <div key={entry.id} className="setup-chat__turn" data-current={current ? "" : undefined}>
-        {current ? <>
-          <Ask question={entry.question} lede={entry.description} keys={entry.control.kind === "cards" ? entry.control.choices.length : 0}>
-            <QuestionControl question={entry} values={values} mode={stageMode} set={set} scopeOf={scopeOf} onPreview={setPreview} />
-            {entry.note ? <p className="setup-step__note"><InfoIcon /><span>{entry.note}</span></p> : null}
-            {context ? <p className="setup-step__note setup-step__note--context"><InfoIcon /><span>{context.note} <button type="button" className="setup__link" onClick={() => set(context.set)}>{context.action}</button></span></p> : null}
-          </Ask>
-        </> : <>
-          {pictureOf(entry, values) ? (
-            // A picture question answers with its chosen picture card, smaller (owner, 2026-10-26: "show answered picture
-            // questions as the chosen picture card at a smaller size").
-            <PictureAnswer question={entry} values={values} mode={stageMode} set={set} scopeOf={scopeOf} onPreview={setPreview}
-              choice={pictureOf(entry, values)!} changed={!atDefault(entry, values)} layout={answers} onChange={() => go(index)} />
-          ) : (
-            <Answer question={entry.question} label={answerOf(entry, values)} visual={swatchOf(entry, values)}
-              meta={atDefault(entry, values) ? "Default" : <Badge size="sm" tone="info">Changed</Badge>} onChange={() => go(index)} />
-          )}
-        </>}
-      </div>
-    );
-  };
-  // The thread by chapter: the chapter being asked as turns, every other chapter reached as its recap.
-  const sections = CHAPTERS.map(section => ({ section, rows: reached.filter(entry => entry.chapter === section.id) })).filter(({ rows }) => rows.length);
-  const story = sections.map(({ section, rows }) => {
-    const current = section.id === question?.chapter;
-    const differ = rows.filter(row => !atDefault(row, values)).length;
-    // A chapter's head, as a panel section's (Claude's Context panel): its name and its numbers at the end in the quieter
-    // ink; the current chapter's count is where the person is in it. No glyph (owner, 2026-10-25: "is it cleaner without
-    // an icon"): the Inspector's groups are named in words alone, and Area has no specific icon for every chapter.
-    const heading = (
-      <div className="setup-chat__chapter">
-        <span className="setup-chat__chapter-name">{section.title}</span>
-        <span className="setup-chat__chapter-count">
-          {current ? `${rows.findIndex(row => row.id === question?.id) + 1} of ${asked.filter(row => row.chapter === section.id).length}` : `${rows.length} ${rows.length === 1 ? "answer" : "answers"}`}
-          {!current && differ ? <> · <span className="setup-chat__chapter-changed">{differ} changed</span></> : null}
-        </span>
-      </div>
-    );
-    if (current) {
-      return <div key={section.id} className="setup-chat__section">{heading}<p className="setup-chat__chapter-lede">{section.lede}</p>{rows.map(turnOf)}</div>;
-    }
-    return (
-      <div key={section.id} className="setup-chat__section setup-chat__turn">
-        {heading}
-        {/* Dense rows, no header row (the chapter's head names them): the setting in the quiet ink, the choice in the
-            default ink with its colour where it is one, and Changed as a badge where it differs. */}
-        <Table size="sm" aria-label={`${section.title} answers`} interactive className="setup-recap">
-          <tbody>
-            {rows.map(row => (
-              <tr key={row.id}>
-                <td className="setup-recap__setting"><TableLink href={`#theme/${row.id}`} onClick={event => { event.preventDefault(); go(asked.indexOf(row)); }}>{row.name}</TableLink></td>
-                <td><span className="setup-recap__choice">{swatchOf(row, values)}{answerOf(row, values)}</span></td>
-                <TableCell fit>{atDefault(row, values) ? <span className="setup-recap__default">Default</span> : <Badge size="sm" tone="info">Changed</Badge>}</TableCell>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-    );
-  });
-  // The finish (owner, 2026-10-25: "build the whole chat/onboarding flow"): what came of it as a table, the theme itself
-  // as code to take away (a Code block labelled by its language, its copy in its header; the agent timeline's JSON block), and what to do
-  // next as suggestions, as a chat ends on its follow-ups.
-  const themed = SETTINGS.filter(entry => entry.id !== "theme" && !(entry.id === "contrast" && values.contrast === "system")
+  // Exact page colours (2026-10-27) are a second part: `data-area-colours` and one rule of variables, which stand in for
+  // the page settings of each mode picked, so those attributes are left out (the plan: "use one or the other").
+  const picked = studioColours, pickedOut = (id: string) =>
+    (picked.light !== null && (id === "ground-light" || id === "tint-light")) || (picked.dark !== null && (id === "ground-dark" || id === "tint-dark" || id === "tint-hue-dark"))
+    || (id === "tint-hue" && picked.light !== null && (picked.dark !== null || values["tint-hue-dark"] !== "same"));
+  const themed = SETTINGS.filter(entry => entry.id !== "theme" && !(entry.id === "contrast" && values.contrast === "system") && !pickedOut(entry.id)
     && (values as Record<string, string>)[entry.id] !== undefined && (values as Record<string, string>)[entry.id] !== defaultOf(entry.id as Axis));
-  const themeCode = themed.length
-    ? `<html\n${themed.map(entry => `  ${attributeOf(entry, (values as Record<string, string>)[entry.id]!)}`).join("\n")}\n>`
-    : "<html>";
-  const extra = QUESTIONS.find(entry => !entry.essential && (!entry.when || entry.when(values)));
+  const anyPick = hasColours(picked) || picked.accent !== null;
+  const lines = [...(anyPick ? ["data-area-colours"] : []), ...themed.map(entry => attributeOf(entry, (values as Record<string, string>)[entry.id]!))];
+  // An exact accent restates about 600 derivations (THEMING.md, Brand), too long to read here: the theme then links the
+  // colour rule `area-tokens colours` writes, and the command that writes it follows.
+  const command = picked.accent === null ? null : ["npx area-tokens colours",
+    ...(picked.light ? [`--page-light "${picked.light}"`] : []), ...(picked.dark ? [`--page-dark "${picked.dark}"`] : []),
+    `--accent "${picked.accent}"`, ...(brand.secondary ? [`--secondary "${brand.secondary}"`] : []), ...(brand.tertiary ? [`--tertiary "${brand.tertiary}"`] : []),
+    ...(brand.status === "own" ? ["--status fixed"] : []), "> colours.css"].join(" \\\n  ");
+  const themeCode = (lines.length ? `<html\n${lines.map(line => `  ${line}`).join("\n")}\n>` : "<html>")
+    + (command ? `\n\n<link rel="stylesheet" href="colours.css">` : hasColours(picked) ? `\n\n${coloursCode(picked)}` : "");
+  const extra = QUESTIONS.find(entry => !entry.essential && (!entry.when || entry.when(values, studioColours)));
   const nextSteps = [
     { id: "fine-tune", label: "Fine-tune every setting in the Inspector" },
     { id: "components", label: "See every component in your theme" },
@@ -299,96 +178,253 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   ];
   const takeStep = (id: string) => {
     if (id === "fine-tune") fineTune();
-    else if (id === "components") location.hash = "components";
+    else if (id === "components") navigate({ page: "components" });
     else if (id === "every-detail" && extra) { setPath("complete"); select(extra.id); }
   };
-  const review = reviewing || reach >= asked.length ? (
-    <div className="setup-chat__turn setup-chat__finish" data-current={reviewing ? "" : undefined} key="review">
-      <Message author="assistant" authorName="Setup">
-        <p className="setup-chat__lead">Here's your design system.</p>
-        <p>{answered ? `${answered} of your ${asked.length} answers differ from Area's defaults` : `All ${asked.length} answers are Area's defaults`}{changed > answered ? `, ${changed} settings in all` : ""}. Select any answer above to change it.</p>
-      </Message>
-      <Table size="sm" aria-label="Answers by chapter" className="setup-recap setup-recap--review">
-        <thead><tr><TableHeaderCell>Chapter</TableHeaderCell><TableHeaderCell numeric>Questions</TableHeaderCell><TableHeaderCell numeric>Changed</TableHeaderCell></tr></thead>
-        <tbody>
-          {chapters.map(entry => {
-            const rows = asked.filter(row => row.chapter === entry.id);
-            const differ = rows.filter(row => !atDefault(row, values)).length;
-            // A count that differs in the Changed badge's ink.
-            return <tr key={entry.id}><td>{entry.title}</td><TableCell numeric className="setup-recap__default">{rows.length}</TableCell><TableCell numeric className={differ ? "setup-chat__chapter-changed" : "setup-recap__default"}>{differ}</TableCell></tr>;
-          })}
-        </tbody>
-      </Table>
-      <Message author="assistant" authorName="Setup">
-        <p>{themed.length
-          ? `To use it, load Area's stylesheet and put ${themed.length === 1 ? "this attribute" : `these ${themed.length} attributes`} on your page's root. Anything left out stays at Area's default.`
-          : "Every setting is Area's default, so your page needs only Area's stylesheet: no attributes."}</p>
-      </Message>
-      <CodeBlock language="html" lineNumbers={false} copyable copyLabel="Copy theme" html={highlight(themeCode)} />
-      <div className="setup-chat__next"><PromptSuggestions layout="chips" label="What next" items={nextSteps} onSelect={step => takeStep(step.id)} /></div>
-    </div>
-  ) : null;
+  const chapters = CHAPTERS.filter(entry => asked.some(row => row.chapter === entry.id));
+  // ——— The chat ———
+  // A chat panel, as Cursor's, Claude's and ChatGPT's agent panels are (owner, 2026-10-28: "in the form of a more compact
+  // chat panel, just like cursor, claude, chatgpt"): a Panel at the app's own scale with the conversation in its body
+  // and the question docked at its foot in the composer's place, as Claude Code asks (Approval: numbered choices, each
+  // with what it comes to, where it is among the questions in its head, the way on in its foot). The thread keeps the
+  // assistant's words and, under each chapter, the answers given so far as one framed list (Claude's answered-questions
+  // block); selecting an answer asks its question again with that answer marked.
+  //
+  // Where the welcome is: what they are making, then how thorough.
+  const [opening, setOpening] = useState<0 | 1>(0);
+  const startOver = () => { setPreview(null); setOpening(0); setReach(-1); select(""); };
+  // The thread follows the conversation, as a chat follows its newest line: a new chapter or answer scrolls the end into
+  // view; a reopened answer scrolls to its row. Smoothly unless the app's Speed is off (as everywhere in Setup).
+  const mounted = useRef(false);
+  useLayoutEffect(() => {
+    const host = thread.current;
+    if (!host) return;
+    const behavior = !mounted.current || !(parseFloat(getComputedStyle(host).getPropertyValue("--area-duration-base")) > 0) ? "auto" : "smooth";
+    mounted.current = true;
+    const current = at >= 0 && at < reach ? host.querySelector<HTMLElement>("[data-current]") : null;
+    if (current) current.scrollIntoView({ block: "nearest", behavior });
+    else host.scrollTo({ top: host.scrollHeight, behavior });
+  }, [item, path, opening, reach]);
+  // Back to where the conversation had reached, as an edited message returns to the end of the thread.
+  const settle = () => { setPreview(null); if (at >= 0 && at < reach) go(reach); else go(at + 1); };
+  const resetQuestion = question && !atDefault(question, values, studioColours) ? () => {
+    if (question.control.kind === "accent") setBrand({ on: false });
+    set(Object.fromEntries(question.axes.map(axis => [axis, defaultOf(axis)])));
+  } : undefined;
+  const lastQuestion = at + 1 >= asked.length;
 
-  // Where the conversation stands, held at the top of the chat while the thread scrolls under it (owner, 2026-10-25: "the
-  // progress can be its own sticky container on top of the chat"; then "a collapsible and expandable container ... that
-  // shows overall progress and added detail"): a Plan folded to its head and its bar, a segment per chapter, opening to
-  // the chapters on a rail.
-  const progress = at >= 0 ? (
-    <div className="setup-chat__progress">
-      {/* The whole tracker in one container (owner, 2026-10-25: "i want the whole progress data tracker to be in 1
-          container", after an agent run's timeline): the chapter and how far along in the head, a segment per chapter,
-          and, opened, the chapters on a rail with their answers as chips; the chapter being asked holds its questions
-          in an inset box. */}
-      <Plan title={reviewing ? "Answered" : chapter!.title} bar="segmented" rail defaultOpen={false}
-        count={reviewing ? `${asked.length} of ${asked.length}` : `${minutesFor(asked.length - at)} min left · ${at + 1} of ${asked.length}`}
-        items={chapters.map(entry => {
-          const rows = asked.filter(row => row.chapter === entry.id);
-          const behind = rows.filter(row => asked.indexOf(row) < at).length;
-          const status = reviewing || behind === rows.length ? "done" as const : entry.id === chapter?.id ? "current" as const : "pending" as const;
-          const answered = rows.filter(row => reviewing || asked.indexOf(row) < at);
-          return {
-            id: entry.id, label: entry.title, status,
-            progress: status === "current" ? behind / rows.length : undefined,
-            meta: `${status === "done" ? rows.length : behind} of ${rows.length}`,
-            // A finished chapter's answers as chips, the changed ones in the info tone; the current chapter's are its steps.
-            detail: status === "done" && answered.length ? answered.map(row => (
-              <Badge key={row.id} size="sm" variant="outline" tone={atDefault(row, values) ? "neutral" : "info"}>{answerOf(row, values)}</Badge>
-            )) : undefined,
-            items: status === "current" ? rows.map(row => {
-              const index = asked.indexOf(row);
-              return { id: row.id, label: row.name, status: index < at ? "done" as const : index === at ? "current" as const : "pending" as const,
-                progress: index === at ? 0 : undefined, meta: index < at ? answerOf(row, values) : undefined };
-            }) : undefined,
-          };
-        })} />
-    </div>
-  ) : null;
+  // The question card: one shape for the welcome, every question and the way on at the end.
+  interface Card {
+    id: string;
+    title: ReactNode;
+    description?: ReactNode;
+    items: ApprovalOption[];
+    value?: string;
+    choose: (value: string) => void;
+    preview?: (value: string | undefined) => void;
+    detail?: ReactNode;
+    position?: { at: number; count: number; go: (at: number) => void; label: string };
+    footer?: ReactNode;
+    dismiss: { label: string; run: () => void };
+  }
+  const isDefaultLabel = (label: ReactNode, isDefault: boolean) => isDefault ? <span className="setup-option">{label}<Badge size="sm">Default</Badge></span> : label;
+  const card: Card = at < 0 ? (opening === 0 ? {
+    // What it is for first (an onboarding's first question in Linear, Notion and Framer: what are you making), so the
+    // screen beside the chat is the person's kind of product before any setting is asked. It changes the visuals only.
+    id: "making", title: "What are you making?", description: "The screen beside this chat becomes one like it.",
+    items: MAKING.map(entry => ({ value: entry.screen, label: entry.label, description: entry.caption })),
+    value: screen, choose: choice => { setScreen(choice as ScreenId); setOpening(1); },
+    position: { at: 0, count: 2, go: n => setOpening(n as 0 | 1), label: "Welcome questions" },
+    dismiss: { label: "skip", run: () => setOpening(1) },
+  } : {
+    id: "pace", title: "How thorough should we be?",
+    items: (["essentials", "complete"] as const).map(choice => ({
+      value: choice, label: choice === "essentials" ? "Essentials" : "Every detail",
+      description: `${choice === "essentials" ? "The choices that change the most" : "Every setting, chapter by chapter"} · ${paths[choice]} questions, about ${minutesFor(paths[choice])} min`,
+    })),
+    value: path, choose: choice => { setPath(choice as Path); select(QUESTIONS.find(entry => (choice === "complete" || entry.essential) && (!entry.when || entry.when(values, studioColours)))?.id ?? "review"); },
+    detail: changed ? <p className="setup-step__note"><InfoIcon /><span>Starting from your {changed} changed settings. <button type="button" className="setup__link" onClick={restart}>Start from the defaults</button></span></p> : undefined,
+    position: { at: 1, count: 2, go: n => setOpening(n as 0 | 1), label: "Welcome questions" },
+    footer: <Button size="sm" onClick={next}>Start</Button>,
+    dismiss: { label: "go back", run: () => setOpening(0) },
+  }) : reviewing ? {
+    // The way on at the end, as a chat ends on its follow-ups: numbered, as every other answer here.
+    id: "next", title: "What next?",
+    items: nextSteps.map(step => ({ value: step.id, label: step.label })),
+    choose: takeStep,
+    dismiss: { label: "go back", run: back },
+  } : cardOf(question!);
 
-  // The dock: the way on.
-  const dock = (
-    <div className="setup-chat__dock">
-      <div className="setup-foot">
-        {at < 0 ? <>
-          <Button variant="ghost" tone="neutral" onClick={fineTune}>Open the Inspector</Button>
-          <span className="setup-foot__grow" />
-          <Button size="lg" onClick={next}>Start</Button>
-        </> : reviewing ? <>
-          {/* The theme's copy is in its Code block and Every detail in the suggestions, so the dock keeps the way back
-              and the one way on. */}
-          <Button variant="ghost" tone="neutral" iconOnly aria-label="Back" icon={<ArrowLeftIcon />} onClick={back} />
-          <span className="setup-foot__grow" />
-          <Button size="lg" onClick={fineTune}>Fine-tune</Button>
-        </> : <>
-          <Button variant="ghost" tone="neutral" iconOnly aria-label="Back" icon={<ArrowLeftIcon />} onClick={back} />
-          <Button variant="ghost" tone="neutral" icon={<ResetIcon />} disabled={!question || atDefault(question, values)} onClick={() => question && set(Object.fromEntries(question.axes.map(axis => [axis, defaultOf(axis)])))}>Default</Button>
-          <span className="setup-foot__grow" />
-          {path === "complete" && asked[at + 1]?.chapter === question?.chapter ? <Button variant="ghost" tone="neutral" onClick={skipChapter}>Skip chapter</Button> : null}
-          {/* A reopened answer returns to where the conversation had reached, as an edited message does. */}
-          {at < reach ? <Button size="lg" onClick={() => go(reach)}>Done</Button> : <Button size="lg" onClick={next}>{at + 1 >= asked.length ? "Review" : "Continue"}</Button>}
-        </>}
-      </div>
+  function cardOf(entry: Question): Card {
+    const control = entry.control;
+    const context = entry.context?.(values);
+    const notes = <>
+      {entry.note ? <p className="setup-step__note"><InfoIcon /><span>{entry.note}</span></p> : null}
+      {context ? <p className="setup-step__note setup-step__note--context"><InfoIcon /><span>{context.note} <button type="button" className="setup__link" onClick={() => set(context.set)}>{context.action}</button></span></p> : null}
+    </>;
+    const base = {
+      id: entry.id, title: entry.question, description: entry.description,
+      position: { at, count: asked.length, go, label: "Questions" },
+      footer: <>
+        {resetQuestion ? <Tooltip side="top" describes={false} trigger={<Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<ResetIcon />} aria-label="Use the default" onClick={resetQuestion} />}>Use the default</Tooltip> : null}
+        {path === "complete" && asked[at + 1]?.chapter === entry.chapter ? <Button size="sm" variant="ghost" tone="neutral" onClick={skipChapter}>Skip chapter</Button> : null}
+        <Button size="sm" onClick={settle}>{at < reach ? "Done" : lastQuestion ? "Review" : "Continue"}</Button>
+      </>,
+      dismiss: { label: "skip", run: settle },
+    };
+    if (control.kind === "cards") {
+      // Choices as rows, each with what it is for; the one under the pointer or focus is drawn on the stage first.
+      const selected = control.choices.findIndex(choice => matches(values, choice.set));
+      return {
+        ...base,
+        items: control.choices.map((choice, index) => ({ value: String(index), label: isDefaultLabel(choice.label, isDefaultChoice(choice)), description: choice.caption })),
+        value: String(selected),
+        choose: choice => { setPreview(null); set(control.choices[Number(choice)]!.set); settle(); },
+        preview: choice => setPreview(choice === undefined || Number(choice) === selected ? null : { set: control.choices[Number(choice)]!.set, label: control.choices[Number(choice)]!.label }),
+        // The exact value is the Inspector's (Fine-tune in the panel's bar); the card holds the choices and their notes.
+        detail: entry.note || context ? notes : undefined,
+      };
+    }
+    if (control.kind === "slider" && control.marks?.length) {
+      // A bar's named marks are its choices, as a question card's rows; any position between is the Inspector's bar.
+      const axes = [control.axis, ...(control.also ?? [])];
+      const put = (value: string) => Object.fromEntries(axes.map(axis => [axis, value])) as Changes;
+      const mark = control.marks.find(entry => entry.value === values[control.axis]);
+      return {
+        ...base,
+        items: control.marks.map(entry => ({ value: entry.value, label: isDefaultLabel(entry.label, defaultOf(control.axis) === entry.value) })),
+        value: mark?.value ?? "",
+        choose: value => { setPreview(null); set(put(value)); settle(); },
+        preview: value => setPreview(value === undefined || value === values[control.axis] ? null : { set: put(value), label: control.marks!.find(entry => entry.value === value)?.label ?? value }),
+        detail: entry.note || context ? notes : undefined,
+      };
+    }
+    return {
+      ...base, items: [], choose: () => {},
+      detail: <><QuestionControl question={entry} values={values} mode={stageMode} set={set} scopeOf={scopeOf} onPreview={setPreview} />{notes}</>,
+    };
+  }
+
+  // Keys, as the card takes them when nothing else has focus (Claude Code's numbered choices): a digit picks that choice,
+  // Enter goes on. Typing in a field and a focused control's own keys come first; inside the card, the card answers.
+  const keysRef = useRef<(event: globalThis.KeyboardEvent) => void>(() => {});
+  keysRef.current = event => {
+    if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey || event.repeat) return;
+    const target = event.target as HTMLElement;
+    if (target.closest("input:not([type=radio]):not([type=checkbox]), textarea, select, [contenteditable=true], [role=dialog], [role=menu], [role=listbox], .area-approval")) return;
+    if (/^[1-9]$/.test(event.key)) {
+      const item = card.items[Number(event.key) - 1];
+      if (item) { event.preventDefault(); card.choose(item.value); }
+      return;
+    }
+    if (event.key === "Enter" && !target.closest("button, a, [role=button], [role=tab]") && at >= 0 && !reviewing) { event.preventDefault(); settle(); }
+  };
+  useEffect(() => {
+    const listen = (event: globalThis.KeyboardEvent) => keysRef.current(event);
+    addEventListener("keydown", listen);
+    return () => removeEventListener("keydown", listen);
+  }, []);
+
+  // The thread: the assistant's words, and under each chapter the answers given so far.
+  const welcomeAnswered = at >= 0 || reach >= 0;
+  // Every question before the furthest one asked, the one being asked again among them (marked); all of them at the end.
+  const answered = (entry: Question) => asked.indexOf(entry) < Math.max(reach, at) || reviewing;
+  const answerList = (label: string, rows: ReadonlyArray<{ id: string; term: ReactNode; answer: ReactNode; visual?: ReactNode; changed?: boolean; current?: boolean; open: () => void }>) => (
+    // Claude's answered-questions block: framed, the question's name at the start in the quiet ink, the answer at the end
+    // (justified, ChatGPT's settings rows), Changed in the info tone where it differs from Area's default.
+    <DescriptionList layout="justified" framed aria-label={label} className="setup-answers">
+      {rows.map(row => (
+        <DescriptionListItem key={row.id} term={row.term} data-current={row.current ? "" : undefined}>
+          <button type="button" className="setup-answers__answer" onClick={row.open} aria-description="Select to change">
+            {row.visual}<span className="setup-answers__text">{row.answer}</span>
+            {row.changed ? <Badge size="sm" tone="info">Changed</Badge> : null}
+          </button>
+        </DescriptionListItem>
+      ))}
+    </DescriptionList>
+  );
+  const sections = CHAPTERS.map(section => ({ section, rows: asked.filter(entry => entry.chapter === section.id) }))
+    .filter(({ rows }) => rows.some(row => asked.indexOf(row) <= Math.max(reach, at)));
+  const transcript = (
+    <div className="setup-chat__transcript" aria-live="polite">
+      <Message author="assistant" authorName="Setup">
+        <p><strong>Let's build your design system.</strong> Pick what looks right below; the screen beside this chat shows each choice before you make it. Every answer is a setting you can fine-tune later.</p>
+      </Message>
+      {welcomeAnswered ? answerList("Welcome answers", [
+        { id: "making", term: "Making", answer: MAKING.find(entry => entry.screen === screen)?.label ?? SCREENS[screen].label, open: () => { setOpening(0); go(-1); } },
+        { id: "pace", term: "Pace", answer: `${path === "essentials" ? "Essentials" : "Every detail"} · ${paths[path]} questions`, open: () => { setOpening(1); go(-1); } },
+      ]) : null}
+      {sections.map(({ section, rows }) => {
+        const done = rows.filter(answered);
+        return (
+          <Fragment key={section.id}>
+            <Message author="assistant" authorName="Setup"><p><strong>{section.title}.</strong> {section.lede}</p></Message>
+            {done.length ? answerList(`${section.title} answers`, done.map(row => ({
+              id: row.id, term: row.name, answer: answerOf(row, values, studioColours), visual: swatchOf(row, values, studioColours),
+              changed: !atDefault(row, values, studioColours), current: asked.indexOf(row) === at, open: () => go(asked.indexOf(row)),
+            }))) : null}
+          </Fragment>
+        );
+      })}
+      {reviewing || reach >= asked.length ? <>
+        <Message author="assistant" authorName="Setup">
+          <p><strong>Here's your design system.</strong> {answeredCount ? `${answeredCount} of your ${asked.length} answers differ from Area's defaults` : `All ${asked.length} answers are Area's defaults`}{changed > answeredCount ? `, ${changed} settings in all` : ""}. Select any answer above to change it.</p>
+          <p>{command
+            ? `To use it, load Area's stylesheet, put ${lines.length === 1 ? "this attribute" : `these ${lines.length} attributes`} on your page's root and link the colour rule after it; the command under the theme writes that rule. Anything left out stays at Area's default.`
+            : hasColours(picked)
+            ? `To use it, load Area's stylesheet, put ${lines.length === 1 ? "this attribute" : `these ${lines.length} attributes`} on your page's root and add the colour rule after Area's stylesheet. Anything left out stays at Area's default.`
+            : themed.length
+            ? `To use it, load Area's stylesheet and put ${themed.length === 1 ? "this attribute" : `these ${themed.length} attributes`} on your page's root. Anything left out stays at Area's default.`
+            : "Every setting is Area's default, so your page needs only Area's stylesheet: no attributes."}</p>
+          {/* The theme to take away: a Code block labelled by its language, its copy in its header. */}
+          <CodeBlock size="sm" language="html" lineNumbers={false} copyable copyLabel="Copy theme" html={highlight(themeCode)} />
+          {command ? <CodeBlock size="sm" language="bash" lineNumbers={false} copyable copyLabel="Copy command" code={command} /> : null}
+        </Message>
+      </> : null}
     </div>
   );
+
+  // Where the conversation stands, riding over the question as a run's plan rides over the composer (Cursor's tray): a
+  // Plan folded to its head and a segment per chapter, opening to the chapters on a rail.
+  const progress = at >= 0 ? (
+    <Plan className="setup-chat__progress" title={reviewing ? "Answered" : chapter!.title} bar="segmented" rail defaultOpen={false}
+      count={reviewing ? `${asked.length} of ${asked.length}` : `${at + 1} of ${asked.length} · ${minutesFor(asked.length - at)} min left`}
+      items={chapters.map(entry => {
+        const rows = asked.filter(row => row.chapter === entry.id);
+        const behind = rows.filter(row => asked.indexOf(row) < at).length;
+        const status = reviewing || behind === rows.length ? "done" as const : entry.id === chapter?.id ? "current" as const : "pending" as const;
+        return {
+          id: entry.id, label: entry.title, status,
+          progress: status === "current" ? behind / rows.length : undefined,
+          meta: `${status === "done" ? rows.length : behind} of ${rows.length}`,
+          items: status === "current" ? rows.map(row => {
+            const index = asked.indexOf(row);
+            return { id: row.id, label: row.name, status: index < at ? "done" as const : index === at ? "current" as const : "pending" as const,
+              progress: index === at ? 0 : undefined, meta: index < at ? answerOf(row, values, studioColours) : undefined };
+          }) : undefined,
+        };
+      })} />
+  ) : null;
+
+  // The foot: Scroll to latest over it, the progress, then the question in the composer's place.
+  const dock = (
+    <div className="setup-chat__dock">
+      <ScrollToLatest scrollRef={thread} />
+      {progress}
+      <Approval key={card.id} title={card.title} description={card.description} items={card.items} value={card.value}
+        onChoose={card.choose} onActiveChange={card.preview} onDismiss={card.dismiss.run} dismissLabel={card.dismiss.label} footer={card.footer}
+        actions={card.position ? (
+          <Pagination layout="compact" size="sm" pageCount={card.position.count} page={card.position.at + 1}
+            onPageChange={page => card.position!.go(page - 1)}
+            labels={{ nav: card.position.label, previous: "Previous question", next: "Next question", status: (page, count) => <>{page} of {count}</> }} />
+        ) : undefined}>
+        {card.detail ? <div className="setup-card__detail">{card.detail}</div> : null}
+      </Approval>
+    </div>
+  );
+
+  // The panel's width, kept as the Sidebar's and the Inspector's are.
+  const [chatWidth] = useState(() => { const saved = Number(readStored<Record<string, number>>("widths", {})["setup-chat"]); return saved >= 320 && saved <= 560 ? saved : 400; });
 
   // ——— The visuals ———
   // What the visuals show (owner, 2026-10-24: "controls ... that allow you to change views, zoom in and out, change to a
@@ -405,21 +441,23 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
   const part: Region = visual?.kind === "crop" ? visual.region : (question && focusOf(question, values)[0]) || "form";
   const fidelity = drawing === "wireframe" ? "bars" : "real";
   const view = show === "part" ? { region: part, zoom: scale ?? 2.5 } : scale ? { scale, focus: question ? focusOf(question, values)[0] : undefined } : {};
+  // What the stage shows, at the Canvas header's start; how it is drawn, at its end, as Foundations'
+  // header (owner, 2026-10-28: "fix the header on the theme page": the switch had a row of its own over the chat and
+  // the stage, whose own bar sat 9 lower than the chat's).
+  const scale13 = appScale();
+  const stageLead = (
+    <div role="group" aria-label="What the preview shows" className="setup-stage__lead" {...scale13}>
+      <Segmented size="sm" aria-label="Show" value={show} onValueChange={next => { setShow(next as "screen" | "part"); setScale(null); }}
+        items={[{ value: "screen", label: "Screen" }, { value: "part", label: "Component" }]} />
+      {show === "screen" ? (
+        <Select size="sm" aria-label="Product" value={screen} onChange={event => { setScreen(event.currentTarget.value as ScreenId); setScale(null); }}>
+          {(Object.keys(SCREENS) as ScreenId[]).map(id => <option key={id} value={id}>{SCREENS[id].label}</option>)}
+        </Select>
+      ) : null}
+    </div>
+  );
   const stage = (
     <section className="setup-stage" aria-label="Preview">
-      <div className="setup-stage__bar">
-        <Segmented size="sm" aria-label="Show" value={show} onValueChange={next => { setShow(next as "screen" | "part"); setScale(null); }}
-          items={[{ value: "screen", label: "Screen" }, { value: "part", label: "Component" }]} />
-        {show === "screen" ? (
-          <Select size="sm" aria-label="Product" value={screen} onChange={event => { setScreen(event.currentTarget.value as ScreenId); setScale(null); }}>
-            {(Object.keys(SCREENS) as ScreenId[]).map(id => <option key={id} value={id}>{SCREENS[id].label}</option>)}
-          </Select>
-        ) : null}
-        <span className="setup-foot__grow" />
-        <Segmented size="sm" aria-label="Drawing" value={drawing} onValueChange={next => setDrawing(next as "real" | "wireframe")}
-          items={[{ value: "real", label: "Real" }, { value: "wireframe", label: "Wireframe" }]} />
-        <Segmented size="sm" aria-label="Preview mode" value={mode} onValueChange={next => setMode(next as Mode)} items={[{ value: "light", label: "Light" }, { value: "dark", label: "Dark" }]} />
-      </div>
       <div className="setup-stage__view">
         {show === "part" && visual && visual.kind !== "crop" ? (
           <div className="setup-stage__part"><Picture question={question!} values={values} mode={stageMode} set={set} scopeOf={scopeOf} onPreview={setPreview} visual={visual} changes={preview?.set} className="setup-picture--stage" /></div>
@@ -447,32 +485,30 @@ export function ThemeSetup({ mode, setMode, flowSwitch, onBrowse }: ThemeSetupPr
       panels={false}
       sidebar={null}
       canvasTitle={question ? question.name : reviewing ? "Your design system" : "Build your design system"}
+      // Setup's own UI stays at the app's defaults (type 13, Compact), as the Inspector's chat does; only the stage and
+      // the choices' previews take the picks.
       canvasPicks={false}
-      // The chat is read, so it takes the default scale (type 14, Default room), not the app's compact chrome: a choice
-      // card's inset is 12 there (choice.css), 8 at compact.
-      canvasScope={{ "data-area-type": "14", "data-area-density": "32" }}
-      canvasActions={
-        <ViewControls>
-          <ViewFilter label="Picture answers" value={answers} onChange={setAnswers}
-            options={[{ value: "third", label: "Answers: third" }, { value: "half", label: "Answers: half" }, { value: "row", label: "Answers: row" }]} />
-          {flowSwitch}
-        </ViewControls>
+      canvasLead={stageLead}
+      canvasActions={<ViewControls>
+        <Segmented size="sm" aria-label="Drawing" value={drawing} onValueChange={next => setDrawing(next as "real" | "wireframe")}
+          items={[{ value: "real", label: "Real" }, { value: "wireframe", label: "Wireframe" }]} />
+        <Segmented size="sm" aria-label="Preview mode" value={mode} onValueChange={next => setMode(next as Mode)}
+          items={[{ value: "light", label: "Light", icon: <SunIcon /> }, { value: "dark", label: "Dark", icon: <MoonIcon /> }]} />
+      </ViewControls>}
+      // The chat in the Sidebar's place, at the app's scale as the Inspector's Chat view, its bar on the header's line.
+      lead={
+        <Panel flush bareBar bareFooter resizable="end" className="setup-chat" title="Theme setup" titleLevel={2}
+          defaultWidth={chatWidth} minWidth={320} maxWidth={560}
+          onWidthChange={width => writeStored("widths", { ...readStored<Record<string, number>>("widths", {}), "setup-chat": Math.round(width) })}
+          viewportRef={thread} footer={dock}
+          action={<span className="setup-chat__actions">
+            <Tooltip side="bottom" describes={false} trigger={<Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ChatAddIcon />} aria-label="Start over" disabled={at < 0 && opening === 0 && reach < 0} onClick={startOver} />}>Start over</Tooltip>
+            <Tooltip side="bottom" describes={false} trigger={<Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<OptionsIcon />} aria-label="Fine-tune in the Inspector" onClick={fineTune} />}>Fine-tune in the Inspector</Tooltip>
+          </span>}>
+          {transcript}
+        </Panel>
       }
-      canvas={
-        <div className="setup"><div className="setup__layout">
-          <section className="setup-chat" aria-label="Setup">
-            {progress}
-            <div className="setup-chat__thread" ref={thread}>
-              {welcome}
-              {at >= 0 || reach >= 0 ? story : null}
-              {review}
-              <div className="setup-chat__end" aria-hidden="true" />
-            </div>
-            {dock}
-          </section>
-          {stage}
-        </div></div>
-      }
+      canvas={stage}
       inspector={{}}
     />
   );
@@ -505,11 +541,9 @@ function QuestionControl(props: ControlProps) {
   const { question, values, set } = props;
   const control = question.control;
   switch (control.kind) {
-    case "cards": return <>
-      <ChoiceCards {...props} choices={control.choices} visual={control.visual} />
-      {control.fine ? <Fine {...props} axis={control.fine} /> : null}
-    </>;
-    case "slider": return <SliderControl {...props} axis={control.axis} also={control.also ?? []} low={control.low} high={control.high} marks={control.marks ?? []} />;
+    // A card question's choices are the question card's rows (cardOf).
+    case "cards": return null;
+    case "slider": return <SliderControl {...props} axis={control.axis} also={control.also ?? []} low={control.low} high={control.high} />;
     case "toggle": {
       const on = values[control.axis] !== control.off;
       const scale = (controlOf(control.axis)?.scale ?? []).filter(value => value !== control.off);
@@ -517,11 +551,10 @@ function QuestionControl(props: ControlProps) {
       const put = (value: string) => set(Object.fromEntries([control.axis, ...(control.also ?? [])].map(axis => [axis, value])));
       return (
         <div className="setup-control">
-          {control.visual ? <Picture {...props} visual={control.visual} className="setup-picture--large" /> : null}
-          <Switch size="lg" label={control.label} checked={on} onCheckedChange={checked => put(checked ? control.on : control.off)} />
+          <Switch label={control.label} checked={on} onCheckedChange={checked => put(checked ? control.on : control.off)} />
           {on ? (
             <div className="setup-control__bar">
-              <Slider labelPosition="inside" size="lg" label="How much" min={0} max={scale.length - 1} step={1} value={at}
+              <Slider labelPosition="inside" label="How much" min={0} max={scale.length - 1} step={1} value={at}
                 readout={(index: number) => say(control.axis, scale[index]!)} onValueChange={index => put(scale[index]!)} />
               <div className="setup-control__ends"><span>{control.low}</span><span>{control.high}</span></div>
             </div>
@@ -529,47 +562,11 @@ function QuestionControl(props: ControlProps) {
         </div>
       );
     }
-    case "accent": return <AccentControl {...props} visual={control.visual} />;
-    case "tint": return <TintControl {...props} visual={control.visual} />;
+    case "accent": return <AccentControl {...props} />;
+    case "tint": return <TintControl {...props} />;
     case "pills": return <PillCards {...props} />;
+    case "page": return <PageControl {...props} pageMode={control.mode} />;
   }
-}
-
-/**
- * Choices as cards (owner, 2026-10-24: "make the choice cards less busy overall, less text overall, more simple and
- * visual choice based"): each card is its picture under that choice and a one- or two-word name, nothing else. What a
- * choice is for, and whether it is Area's default, is one line under the cards, for the choice under the pointer or the
- * one picked, so the words are read once rather than on every card. The choice under the pointer is drawn on the stage
- * before it is picked.
- */
-function ChoiceCards({ question, values, set, scopeOf, onPreview, choices, visual, mode }: ControlProps & { choices: Choice[]; visual: Visual }) {
-  const selected = choices.findIndex(choice => matches(values, choice.set));
-  const [hovered, setHovered] = useState<number | null>(null);
-  const hover = (at: number | null) => {
-    if (hovered === at) return;
-    setHovered(at);
-    onPreview(at === null || at === selected ? null : { set: choices[at]!.set, label: choices[at]!.label });
-  };
-  const shown = choices[hovered ?? selected];
-  // Two columns of pictures; three choices take a wide row each, so none leaves a hole and each picture shows more.
-  const columns = choices.length === 3 ? 1 : 2;
-  return (
-    <div className="setup-choices__group">
-      <RadioGroup label={question.name} className="setup-choices" value={selected >= 0 ? String(selected) : ""}
-        style={{ "--area-choice-ratio": columns === 1 ? "5 / 2" : visual.kind === "crop" && visual.region === "form" ? "4 / 3" : "16 / 10", "--area-choice-min": `calc((100% - ${columns - 1} * var(--area-space-8)) / ${columns} - 0.5px)` } as CSSProperties}
-        onValueChange={next => { onPreview(null); setHovered(null); set(choices[Number(next)]!.set); }}
-        onPointerOver={event => { const input = (event.target as HTMLElement).closest(".area-radio")?.querySelector<HTMLInputElement>(":scope > .area-radio__control"); hover(input ? Number(input.value) : null); }}
-        onPointerLeave={() => hover(null)}>
-        {choices.map((choice, at) => (
-          <Radio key={choice.label} variant="card" layout="preview" value={String(at)} label={<Numbered at={at}>{choice.label}</Numbered>}
-            leadingVisual={<Picture question={question} values={values} mode={mode} set={set} scopeOf={scopeOf} onPreview={onPreview} visual={visual} changes={choice.set} />} />
-        ))}
-      </RadioGroup>
-      <p className="setup-choices__hint" aria-live="polite">
-        {shown ? <span className="setup-choices__line" key={shown.label}><span className="setup-choices__name">{shown.label}</span>{shown.caption}{isDefaultChoice(shown) ? <Badge size="sm">Default</Badge> : null}</span> : "\u00a0"}
-      </p>
-    </div>
-  );
 }
 
 /** A choice's picture: the question's close-up of the screen under the choice, or the speed and curve as they move. */
@@ -620,19 +617,10 @@ function easeOf(text: string): (x: number) => number {
   return x => { let lo = 0, hi = 1; for (let i = 0; i < 30; i++) { const mid = (lo + hi) / 2; if (bezier(mid, x1, x2) < x) lo = mid; else hi = mid; } return bezier((lo + hi) / 2, y1, y2); };
 }
 
-/** The exact value under the cards: the Inspector's own row for the setting. */
-function Fine({ axis, values, mode, set }: ControlProps & { axis: Axis }) {
-  return (
-    <details className="setup-fine">
-      <summary className="setup-fine__summary"><ChevronDownIcon aria-hidden="true" />Exact value · {say(axis, values[axis])}</summary>
-      <div className="setup-fine__body"><SettingRow axis={axis} context={{ values, mode, size: "md", set: changes => set(changes as Changes) }} /></div>
-    </details>
-  );
-}
-
-/** One large bar over an ordered setting, its named marks under it; the stage beside it is its picture. */
-function SliderControl(props: ControlProps & { axis: Axis; also: Axis[]; low: string; high: string; marks: Array<{ value: string; label: string }> }) {
-  const { axis, also, low, high, marks, values, set } = props;
+/** A bar over an ordered setting, its ends named under it; its named marks are the question card's rows, and the stage
+beside the chat is its picture. */
+function SliderControl(props: ControlProps & { axis: Axis; also: Axis[]; low: string; high: string }) {
+  const { axis, also, low, high, values, set } = props;
   const control = controlOf(axis)!;
   const scale = control.scale ?? [];
   const value = values[axis];
@@ -640,103 +628,95 @@ function SliderControl(props: ControlProps & { axis: Axis; also: Axis[]; low: st
   const put = (next: string) => set(Object.fromEntries([axis, ...also].map(entry => [entry, next])));
   return (
     <div className="setup-control">
-      <Slider labelPosition="inside" size="lg" label={control.label} min={0} max={scale.length - 1} step={1} value={at}
+      <Slider labelPosition="inside" label={control.label} min={0} max={scale.length - 1} step={1} value={at}
         readout={(index: number) => scale.includes(value) || index !== at ? say(axis, scale[index]!) : say(axis, value)} onValueChange={index => put(scale[index]!)} />
       <div className="setup-control__ends"><span>{low}</span><span>{high}</span></div>
-      {marks.length ? (
-        <div className="setup-control__marks" role="group" aria-label="Presets">
-          {marks.map(mark => (
-            <Button key={mark.value} size="sm" variant={value === mark.value ? "soft" : "ghost"} tone="neutral" aria-pressed={value === mark.value} onClick={() => put(mark.value)}>
-              {mark.label}
-            </Button>
-          ))}
-        </div>
-      ) : null}
     </div>
   );
 }
 
 /** Accent: the palette's eleven as large swatches, or any hue on a bar. */
-function AccentControl(props: ControlProps & { visual: Visual }) {
-  const { values, set, visual } = props;
-  const custom = /^\d+$/.test(values.accent);
+/** A mode's page as one exact colour (src/page-colour.tsx), its colour in words under it. */
+function PageControl({ values, set, pageMode }: ControlProps & { pageMode: Mode }) {
+  const { colours: picks, setColours } = useStudio();
+  const pick = picks[pageMode];
   return (
     <div className="setup-control">
-      <Picture {...props} visual={visual} className="setup-picture--large" />
-      <Segmented size="md" fullWidth aria-label="Accent source" items={[{ value: "named", label: "Palette" }, { value: "custom", label: "Any hue" }]} value={custom ? "custom" : "named"}
-        onValueChange={next => set({ accent: next === "custom" ? "200" : "blue" })} />
-      {custom ? (
-        <Slider labelPosition="inside" size="lg" label="Hue" min={0} max={HUES.length - 1} step={1} value={Math.max(0, HUES.indexOf(values.accent))}
+      <PagePicker mode={pageMode} values={values} picks={picks} set={set} onPick={colour => setColours({ [pageMode]: colour })} />
+      <p className="setup-control__answer">{pageAnswer(pageMode, values, picks)}{pick ? ` · ${oklchHex(parseColour(pick))}` : ""}</p>
+    </div>
+  );
+}
+
+/**
+ * Accent: the palette's eleven as swatches, any hue on a bar, or one exact colour (exact colours plan, phase 4,
+ * 2026-10-27): Area's Color picker, through the brand engine (src/brand.ts) as the Inspector's Exact colour; dark is solved
+ * from it. A colour lands when the pointer lifts or rests REST ms, since each works out a brand (about 60ms).
+ */
+const REST = 300; /* pick: as Brand colours' picker (brand-settings.tsx) */
+function AccentControl(props: ControlProps) {
+  const { values, set } = props;
+  const { brand, setBrand } = useStudio();
+  const custom = /^\d+$/.test(values.accent);
+  const source = brand.on ? "exact" : custom ? "custom" : "named";
+  const pending = useRef<string | null>(null), timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const land = () => { clearTimeout(timer.current); if (pending.current) setBrand({ primary: pending.current.toLowerCase() }); pending.current = null; };
+  const choose = (next: string) => {
+    if (next === "exact") { setBrand({ on: true }); return; }
+    setBrand({ on: false });
+    set({ accent: next === "custom" ? "200" : "blue" });
+  };
+  return (
+    <div className="setup-control">
+      <Segmented size="sm" fullWidth aria-label="Accent source" value={source} onValueChange={choose}
+        items={[{ value: "named", label: "Palette" }, { value: "custom", label: "Any hue" }, { value: "exact", label: "Exact colour" }]} />
+      {source === "exact" ? (
+        <div onPointerUp={land}>
+          <ColorPicker variant="plain" label="Accent" alpha={false} defaultModel="oklch" eyedropper value={brand.primary.toUpperCase()}
+            onValueChange={hex => { pending.current = hex; clearTimeout(timer.current); timer.current = setTimeout(land, REST); }} />
+        </div>
+      ) : custom ? (
+        <Slider labelPosition="inside" label="Hue" min={0} max={HUES.length - 1} step={1} value={Math.max(0, HUES.indexOf(values.accent))}
           readout={(at: number) => `${hueName(Number(HUES[at]))} · ${HUES[at]}°`} onValueChange={at => set({ accent: HUES[at]! })} />
       ) : (
-        <ColorSwatchPicker label="Accent" size="lg" layout="row" value={accentHex(values.accent)}
+        <ColorSwatchPicker label="Accent" layout="row" value={accentHex(values.accent)}
           items={NAMED_ACCENTS.map(item => ({ value: accentHex(item.value), label: item.label }))}
           onValueChange={hex => { const item = NAMED_ACCENTS.find(entry => accentHex(entry.value) === hex); if (item) set({ accent: item.value }); }} />
       )}
-      <p className="setup-control__answer">{custom ? `${hueName(Number(values.accent))} · ${values.accent}°` : say("accent", values.accent)}</p>
+      <p className="setup-control__answer">{source === "exact" ? `Exact · ${brand.primary.toUpperCase()}` : custom ? `${hueName(Number(values.accent))} · ${values.accent}°` : say("accent", values.accent)}</p>
     </div>
   );
 }
 
 /** The greys' tint colour: a few hues to start from, and any hue on a bar. */
-function TintControl(props: ControlProps & { visual: Visual }) {
-  const { values, set, visual } = props;
+function TintControl(props: ControlProps) {
+  const { values, set } = props;
   const hue = values["tint-hue"];
   const named = TINTS.find(([value]) => value === hue);
   return (
     <div className="setup-control">
-      <Picture {...props} visual={visual} className="setup-picture--large" />
-      <ColorSwatchPicker label="Tint colour" size="lg" layout="row" value={named ? hueSwatch(named[0]) : ""}
+      <ColorSwatchPicker label="Tint colour" layout="row" value={named ? hueSwatch(named[0]) : ""}
         items={TINTS.map(([value, label]) => ({ value: hueSwatch(value), label }))}
         onValueChange={colour => { const entry = TINTS.find(([value]) => hueSwatch(value) === colour); if (entry) set({ "tint-hue": entry[0] }); }} />
-      <Slider labelPosition="inside" size="lg" label="Hue" min={0} max={TINT_HUES.length - 1} step={1} value={Math.max(0, TINT_HUES.indexOf(hue))}
+      <Slider labelPosition="inside" label="Hue" min={0} max={TINT_HUES.length - 1} step={1} value={Math.max(0, TINT_HUES.indexOf(hue))}
         readout={(at: number) => `${hueName(Number(TINT_HUES[at]))} · ${TINT_HUES[at]}°`} onValueChange={at => set({ "tint-hue": TINT_HUES[at]! })} />
     </div>
   );
 }
 
-/** Pills: every part that can go fully round, each pictured round, checked when it is. */
-const PILL_PART: Record<string, Region> = { button: "primary", field: "field", segmented: "segmented", chip: "chips", badge: "badges", count: "count", switch: "switch", avatar: "avatar" };
+/** Pills: every part that can go fully round, checked when it is, two columns in the question card; the stage beside
+the chat shows them. */
 function PillCards(props: ControlProps) {
-  const { values, set, scopeOf } = props;
+  const { values, set } = props;
   const items = controlOf("pills")?.items ?? [];
   const on = values.pills.split(" ").filter(Boolean);
   const toggle = (part: string) => set({ pills: items.map(entry => entry.value).filter(name => name === part ? !on.includes(name) : on.includes(name)).join(" ") });
   return (
-    <CheckboxGroup label="Pills" className="setup-choices" style={{ "--area-choice-ratio": "16 / 10", "--area-choice-min": "calc((100% - 2 * var(--area-space-8)) / 3 - 0.5px)" } as CSSProperties}>
-      {items.map(item => (
-        <Checkbox key={item.value} variant="card" layout="preview" label={item.label} checked={on.includes(item.value)} onCheckedChange={() => toggle(item.value)}
-          leadingVisual={<ScreenFigure className="setup-picture" fidelity="shapes" scope={scopeOf({ pills: item.value })} view={{ region: PILL_PART[item.value] ?? "primary", zoom: 1.4 }} />} />
-      ))}
+    <CheckboxGroup label="Pills" className="setup-pills">
+      {items.map(item => <Checkbox key={item.value} label={item.label} checked={on.includes(item.value)} onCheckedChange={() => toggle(item.value)} />)}
     </CheckboxGroup>
   );
-}
-
-/**
- * The question being asked, in the thread itself (owner, 2026-10-25: "shown directly in the chat, aligned with the tables
- * and other containers, not inside its own container"; Craft's step: a title, a line, the choice cards): the question as
- * a title, what it decides under it, its choices on the thread's edges, and the keys that answer it.
- */
-/** A question in the thread. Its key line is said once per turn: a turn that asks two (the welcome's) gives it to the last. */
-function Ask({ question, lede, keys, hint = true, children }: { question: ReactNode; lede?: ReactNode; keys: number; hint?: boolean; children: ReactNode }) {
-  return (
-    <section className="setup-ask" aria-label="Question">
-      <header className="setup-ask__head">
-        <h3 className="setup-ask__question">{question}</h3>
-        {lede ? <p className="setup-ask__lede">{lede}</p> : null}
-      </header>
-      <div className="setup-ask__body">{children}</div>
-      {hint ? <p className="setup-ask__keys" aria-hidden="true">
-        {keys > 1 ? <span><Kbd size="sm" keys={["1"]} /><span>–</span><Kbd size="sm" keys={[String(keys)]} /> to choose</span> : null}
-        <span><Kbd size="sm" keys={["enter"]} /> to continue</span>
-      </p> : null}
-    </section>
-  );
-}
-
-/** A choice's name after its number, the key that picks it. */
-function Numbered({ at, children }: { at: number; children: ReactNode }) {
-  return <span className="setup-numbered"><Kbd size="sm" keys={[String(at + 1)]} aria-hidden="true" /><span>{children}</span></span>;
 }
 
 /**
@@ -744,54 +724,11 @@ function Numbered({ at, children }: { at: number; children: ReactNode }) {
  * real token under the answer's scope, so the chat shows the colour the Inspector and the Canvas do. Before its words in
  * a recap row; in the answer row's visual slot.
  */
-function swatchOf(question: Question, values: Values): ReactNode {
+function swatchOf(question: Question, values: Values, picks: Picks): ReactNode {
   const kind = question.control.kind;
+  if (kind === "accent" && picks.accent) return <ColorSwatch size="sm" color={picks.accent} aria-hidden="true" />;
   if (kind === "accent") return optionMark("accent", values.accent, values as CanvasAxes);
   if (kind === "tint") return optionMark("tint-hue", values["tint-hue"], values as CanvasAxes);
+  if (question.control.kind === "page") return <ColorSwatch size="sm" color={pageHex(question.control.mode, values, picks)} aria-hidden="true" />;
   return null;
-}
-
-/**
- * An answered question (owner, 2026-10-25: option rows "for Setup's text questions and answers", after a proposal card
- * whose chosen option stays filled): the question a step below the prose, then the answer as the chosen option row,
- * its colour swatched in the visual slot, its status at the end. Selecting it reopens the question.
- */
-/** The chosen choice of a picture question (cards with a picture), or null for any other answer. */
-function pictureOf(question: Question, values: Values): Choice | null {
-  const control = question.control;
-  if (control.kind !== "cards" || !control.visual) return null;
-  return control.choices.find(choice => matches(values, choice.set)) ?? null;
-}
-
-type PictureLayout = "third" | "half" | "row";
-
-/** A picture question's answer (owner, 2026-10-26: "consistent with the rest of the answer cards", the picture "directly
- * on the card"): the text answer's soft row, read-only, with the chosen picture in the card's mat, above the row (a third
- * or half of the column wide, Radio's media layout) or at its start (full width, media-row); selecting it reopens the
- * question, as a text answer does. */
-function PictureAnswer({ question, choice, changed, layout, onChange, ...props }: ControlProps & { choice: Choice; changed: boolean; layout: PictureLayout; onChange: () => void }) {
-  const visual = (question.control as Extract<Question["control"], { kind: "cards" }>).visual!;
-  return (
-    <div className={`setup-answer setup-answer--picture setup-answer--${layout}`}>
-      <p className="setup-chat__asked">{question.question}</p>
-      <RadioGroup label={question.question} className="setup-choices" value="answer" readOnly
-        style={{ "--area-choice-ratio": visual.kind === "crop" && visual.region === "form" ? "4 / 3" : "16 / 10", "--area-choice-min": "100%" } as CSSProperties}>
-        <Radio variant="soft" layout={layout === "row" ? "media-row" : "media"} value="answer" onClick={onChange} aria-description="Select to change" label={choice.label}
-          meta={changed ? <Badge size="sm" tone="info">Changed</Badge> : "Default"}
-          leadingVisual={<Picture question={question} {...props} visual={visual} changes={choice.set} />} />
-      </RadioGroup>
-    </div>
-  );
-}
-
-function Answer({ question, label, visual, meta, onChange }: { question: string; label: ReactNode; visual?: ReactNode; meta: ReactNode; onChange: () => void }) {
-  return (
-    <div className="setup-answer">
-      <p className="setup-chat__asked">{question}</p>
-      <RadioGroup label={question} className="setup-choices setup-options" value="answer" readOnly>
-        {/* A colour answer's swatch in Radio's visual slot, the control's box, so it centres with the control and meta. */}
-        <Radio variant="soft" layout="list" value="answer" label={label} leadingVisual={visual ?? undefined} meta={meta} onClick={onChange} aria-description="Select to change" />
-      </RadioGroup>
-    </div>
-  );
 }

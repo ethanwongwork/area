@@ -2,9 +2,9 @@
 // sources (gen-pilot-icons --only --emit) into a private cache folder, so nothing shared is written.
 // Each row: outline and filled at 16 / 24 / 32 / 48 through the real size curve, then both at 96px over
 // the 16px grid. --before adds the session's starting drawing above each icon (BEFORE_TSX, default
-// apps/docs/.cache/before-2026-10-07.tsx); --slivers runs the sliver and island check on the emitted
+// packages/icons/.cache/before.tsx); --slivers runs the sliver and island check on the emitted
 // icons at 16 and 48. Any argument ending in .svg (a Fluent cut in node_modules/@fluentui/svg-icons/icons,
-// a reference in apps/docs/.cache/refs, a candidate in your scratchpad) is drawn as a reference row at
+// a reference in packages/icons/.cache/refs, a candidate in your scratchpad) is drawn as a reference row at
 // the same sizes, below the icons, for looking only.
 //   node docs/research/icon-review/2026-10-07/look.mjs out.png name,name… [ref.svg …] [--before] [--slivers]
 import { build } from "esbuild"; import { writeFileSync, mkdtempSync, existsSync, rmSync } from "node:fs";
@@ -15,11 +15,11 @@ const items = rest.flatMap(a => a.split(",")).filter(Boolean);
 const refs = items.filter(a => a.endsWith(".svg")).map(f => resolve(f)), names = items.filter(a => !a.endsWith(".svg"));
 for (const f of refs) if (!existsSync(f)) { console.log("missing reference " + f); process.exit(1); }
 if (!out || !items.length) { console.log("usage: look.mjs out.png name,name… [--before] [--slivers]"); process.exit(1); }
-const root = process.cwd(), cache = mkdtempSync(root + "/apps/docs/.cache/look-");
-const BEFORE = process.env.BEFORE_TSX || root + "/apps/docs/.cache/before-2026-10-07.tsx";
+const root = process.cwd(), cache = mkdtempSync(root + "/packages/icons/.cache/look-");
+const BEFORE = process.env.BEFORE_TSX || root + "/packages/icons/.cache/before.tsx";
 try {
   if (!names.length) writeFileSync(cache + "/p.tsx", "export const PILOT_ICONS = [];");
-  else { const lint = (() => { try { return execFileSync("node", ["apps/docs/scripts/gen-pilot-icons.mjs", "--only", names.join(","), "--emit", cache + "/p.tsx"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }); }
+  else { const lint = (() => { try { return execFileSync("node", ["packages/icons/scripts/generate.mjs", "--only", names.join(","), "--emit", cache + "/p.tsx"], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] }); }
     catch (e) { return (e.stdout || "") + (e.stderr || ""); } })();
   console.log(lint.trim()); }
   if (!existsSync(cache + "/p.tsx")) { console.log("lint failed: no render (fix the source and run again)"); process.exit(1); }

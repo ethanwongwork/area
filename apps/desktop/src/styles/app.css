@@ -71,6 +71,9 @@
     --_card-inset: var(--area-space-16); /* pick */
     --_tile-inset: var(--area-space-12);
     display: grid;
+    /* One column the window's width: without it the column sizes to the Titlebar's content, and a long row of tabs (a
+       horizontal Nav is max-content wide) pushed the bar's end off the window (2026-10-29, 12 tabs). */
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
     block-size: 100vh;
     overflow: hidden;
@@ -99,7 +102,16 @@
      places them in this 39 bar, so they end at 67. The Sidebar toggle's box starts 16 after them, its icon 20
      (Cursor's agents window: about 21 to the icon), and the last button ends as far from the other
      edge as the lights start from theirs, 13 (owner, 2026-10-12: lights flush, as Cursor's). */
-  .studio-titlebar__tabs { flex: 0 1 auto; min-inline-size: 0; }
+  /* The open tabs (src/app-nav.tsx, AppTabs), as Claude Code's browser's (owner, 2026-10-29): each hugs its name, at most
+     170 with its close (Phase 0), the name cut with an ellipsis past that; New tab follows them, 4 after, as the tabs are
+     apart. The close is the row's nested square, 4 in. */
+  .studio-titlebar__tabs { display: flex; flex: 0 1 auto; align-items: center; gap: var(--area-space-4); /* spec: New tab's glyph 11.5 after the last plate (Claude Code's browser ≈ 12) */ min-inline-size: 0; }
+  .studio-titlebar__nav { min-inline-size: 0; }
+  /* 120 to 170 (Phase 0): the close lands over the name's end (Nav's revealed actions keep no slot), so a tab is at
+     least wide enough that it never covers a short name (start 8, icon 16, gap 5, about 61 of name, then the close's 26);
+     a long name fades under it at 170. Past the bar's room the tabs scroll, as a horizontal Nav does, the current one
+     kept in view and a wheel's vertical turn scrolling them (AppTabs). */
+  .studio-tab { min-inline-size: 120px; max-inline-size: 170px; /* spec: Phase 0, 120 to 170 */ }
   /* Search: wide enough for "Search components" and the ⌘K hint (Cursor's command centre
      reads as a field, not a button). */
   .studio-titlebar__search { inline-size: calc(var(--area-space-96) * 2 + var(--area-space-48)); /* pick: 240 */ }
@@ -126,6 +138,7 @@
      rgb(249,248,247) on a white page with a hairline at its edge). A Material makes it see-through (material.css). */
   .studio-sidebar { --area-chrome-fill: var(--area-bg-subtle); }
   .studio-sidebar,
+  .studio-lead,
   .studio-inspector {
     display: grid;
     grid-template-rows: minmax(0, 1fr);
@@ -143,6 +156,11 @@
     padding-block-start: calc((var(--_studio-bar) - var(--area-border-width) - var(--area-ui-row)) / 2);
     margin-block-end: calc(var(--area-ui-row-inset) * -1);
   }
+  /* A page's list taking the Sidebar over (src/app-nav.tsx, Takeover): the back row on the shared line, the filter 8 under
+     it, then the page's list 8 under that, its first row no longer on the line. */
+  .studio-takeover > .studio-sidebar__list:first-child { display: grid; gap: var(--area-space-8); margin-block-end: var(--area-space-8); }
+  .studio-takeover > .studio-sidebar__list + .studio-sidebar__list { padding-block-start: 0; }
+  .studio-takeover__filter { margin-inline: var(--area-ui-row-inset); }
 
 
   /* The Inspector's selection (src/inspector.tsx): Area's PreviewFrame, then the copy actions two

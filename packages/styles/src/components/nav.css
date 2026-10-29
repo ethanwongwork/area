@@ -74,6 +74,10 @@
   .area-nav__group--nested {
     --_nav-indent: calc(var(--area-icon-md) + 6px); /* spec */
   }
+  /* A nested run inside a nested run steps in once more, a level each, as Tree view's levels do (the desktop app's nav:
+     a brand › Foundations › its pages, 2026-10-28). */
+  .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + 6px) * 2); /* spec */ }
+  .area-nav__group--nested .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + 6px) * 3); /* spec */ }
   .area-nav__group + .area-nav__group--nested { margin-block-start: 0; }
 
   /*
@@ -121,11 +125,24 @@
     user-select: none;
   }
 
-  /* Horizontal items hug their label instead of filling the axis. */
+  /* Horizontal items hug their label instead of filling the axis. At rest they are muted and the current one is full
+     strength (owner, 2026-10-29: "make inactive horizontal Nav items grey"; Claude Code's browser tabs rgb(82) beside
+     rgb(11), Figma's file tabs, Chrome's): a row of plates reads its current item by ink as well as plate. Hover changes
+     only the plate. Vertical rows keep the default ink (ChatGPT's sidebar). */
   .area-nav--horizontal .area-nav__item {
     flex: 0 0 auto;
     inline-size: max-content;
+    color: var(--area-fg-muted);
   }
+  /* A horizontal row with actions is a closable tab (the desktop app's open tabs; Claude Code's browser, Cursor's and
+     Figma's file tabs, 2026-10-29). Its icon keeps the horizontal item's control gap (gap-md, as Button, Segmented and
+     Tabs): a tab is a control in a row, with no label column to share, so gap-row (a list's column) read too wide (owner,
+     2026-10-29). The name ends 8 before the action's plate, the 8 the icon stands in from the start; the action draws the
+     xs icon, as Tag's, Badge's and Attachment's removes do (a container's close, Dialog's and Drawer's, keeps md), in the
+     row's ink (full strength on the current tab). */
+  .area-nav--horizontal .area-nav__row > .area-nav__item { padding-inline-end: calc(var(--area-space-8) - var(--area-space-2)); /* spec: 8 to the action, less the row's 2 gap */ }
+  .area-nav--horizontal .area-nav__actions > .area-button { --_icon: var(--area-icon-xs); }
+  .area-nav--horizontal .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) .area-nav__actions .area-button.area-button--ghost { --_fg: var(--area-fg-default); }
 
   /* A horizontal destination with no end annotation is a compact plate, not a left-aligned
    * list row. Centre its single content run; annotated controls retain the end slot. */
@@ -271,13 +288,16 @@
        20 in 36, 8 in; shadcn's Sidebar: 20 in 32 (owner, review round 27: "should the actions backplate be smaller?
        so the margins are a bit larger"; docs/research/inset-actions-2026-10-16.md). */
     --_nav-action-inset: var(--area-space-4); /* spec */
-    --_nav-action: calc(var(--area-ui-row) - var(--_nav-action-inset) * 2); /* spec */
+    /* The row's own height and corner: a row's, unless a container sets its items smaller (Titlebar: the small control,
+       app-shell.css), so the action stays 4 in on every side of the plate it sits in (owner, 2026-10-29: "make sure
+       that the inset spacing around the close button is the same distance to the backplate"). */
+    --_nav-action: calc(var(--_nav-row-height, var(--area-ui-row)) - var(--_nav-action-inset) * 2); /* spec */
     display: flex;
     align-items: center;
     min-inline-size: 0;
     gap: var(--area-space-2);
     padding-inline-end: var(--_nav-action-inset);
-    border-radius: var(--area-radius-row);
+    border-radius: var(--_nav-row-radius, var(--area-radius-row));
     transition: var(--area-transition);
   }
   @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current]:not([aria-current="false"]))):hover { background: var(--area-bg-component-hover); } }
@@ -291,9 +311,11 @@
   .area-nav__row:has(> .area-nav__item:active:not([data-disabled])):active { background: var(--area-bg-component-pressed); }
 
   .area-nav__row > .area-nav__item { flex: 1; }
+  /* A horizontal row hugs its item and never shrinks, as a horizontal item does: past its room the Nav scrolls. */
+  .area-nav--horizontal .area-nav__row { flex: 0 0 auto; }
   .area-nav__actions { display: flex; align-items: center; gap: var(--area-space-2); flex-shrink: 0; }
   /* Concentric with the row plate: its radius less the actions' inset. */
-  .area-nav__actions > .area-button { --_height: var(--_nav-action); --_radius: max(var(--area-radius-floor), calc(var(--area-radius-row) - var(--_nav-action-inset))); }
+  .area-nav__actions > .area-button { --_height: var(--_nav-action); --_radius: max(var(--area-radius-floor), calc(var(--_nav-row-radius, var(--area-radius-row)) - var(--_nav-action-inset))); }
   /*
    * A ghost action on the row changes its ink, not a plate: muted at rest, the default ink under the pointer and
    * while pressed (owner, review round 27: "some other design systems for small controls like this just do a color
@@ -320,7 +342,32 @@
     .area-nav__row--reveal > .area-nav__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
     .area-nav__row--reveal:not(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { pointer-events: none; }
     .area-nav__row--reveal:is(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { opacity: 1; transition-duration: 0s; }
+    /* A horizontal row keeps its actions while it is current, as Tree view's selected row does (owner, 2026-10-29):
+       the open tab always shows its close, as Cursor's (opacity 1 on .tab.active, workbench.desktop.main.css, 3.27.22)
+       and Figma's (display on .isTabActive, desktop_shell.css) file tabs do. A vertical row hides them, so its count
+       keeps its place. */
+    .area-nav--horizontal .area-nav__row--reveal:has(> .area-nav__item[aria-current]:not([aria-current="false"])) > .area-nav__actions { opacity: 1; pointer-events: auto; transition-duration: 0s; }
+    .area-nav--horizontal .area-nav__row--reveal:is(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup]), :has(> .area-nav__item[aria-current]:not([aria-current="false"]))) > .area-nav__item > .area-nav__text { mask-image: var(--_nav-cover-mask); }
   }
+  /*
+   * A horizontal row's revealed actions keep no slot of their own: the name runs to the plate's end, and the actions
+   * land over it, the name fading out under them (owner, 2026-10-29: "i like how figma shows the full text or as much of
+   * the text as possible, then on hover the dismiss goes over the text"; Figma's file tabs, Cursor's tab-fade-hider).
+   * The row's width never changes. The name fills the item, so the fade sits at the plate's end however short the name;
+   * the visible name ends 4 before the action's plate, and fades over the 8 before that.
+   */
+  .area-nav--horizontal .area-nav__row--reveal {
+    position: relative;
+    padding-inline-end: 0;
+    --_nav-cover: calc(var(--_nav-action) + var(--_nav-action-inset) * 2 - var(--area-space-8)); /* spec: the action, 4 each side, less the item's 8 end */
+    --_nav-cover-mask: linear-gradient(to left, transparent var(--_nav-cover), #000 calc(var(--_nav-cover) + var(--area-space-8)));
+  }
+  .area-nav--horizontal .area-nav__row--reveal:dir(rtl) { --_nav-cover-mask: linear-gradient(to right, transparent var(--_nav-cover), #000 calc(var(--_nav-cover) + var(--area-space-8))); }
+  .area-nav--horizontal .area-nav__row--reveal > .area-nav__item { justify-content: flex-start; padding-inline-end: var(--area-space-8); }
+  .area-nav--horizontal .area-nav__row--reveal > .area-nav__item > .area-nav__text { flex: 1 1 auto; }
+  .area-nav--horizontal .area-nav__row--reveal > .area-nav__actions { position: absolute; inset-block: 0; inset-inline-end: var(--_nav-action-inset); }
+  /* Without hover the actions always show, so the name always fades under them. */
+  @media not (hover: hover) { .area-nav--horizontal .area-nav__row--reveal > .area-nav__item > .area-nav__text { mask-image: var(--_nav-cover-mask); } }
   /*
    * Over a trailing annotation (a count), revealed actions take its place instead of keeping a slot beside it (owner,
    * 2026-10-22, review of docs/research/cursor-audit-2026-10-22.md item 9: "build it"; product UI rule 2's exception):

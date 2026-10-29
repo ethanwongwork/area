@@ -1547,6 +1547,16 @@ export const GalleryNavRevealActions = () => (
     ))}
   </Nav>
 );
+/* Closable tabs: a horizontal row with a close action, shown on hover, focus and the current tab, as the desktop app's
+   open tabs and Cursor's and Figma's file tabs (2026-10-29). */
+export const GalleryNavTabs = () => (
+  <Nav orientation="horizontal" aria-label="Label">
+    {["Item one", "Item two", "Item three"].map((page, index) => (
+      <NavItem key={page} href="#gallery-nav-tabs" current={index === 0} icon={<DocumentIcon />} revealActions
+        actions={<Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<DismissIcon />} aria-label={`Close ${page}`} />}>{page}</NavItem>
+    ))}
+  </Nav>
+);
 export const GalleryNavExpandable = () => {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -2175,6 +2185,8 @@ export const GalleryColorPickerSliders = () => <ColorPicker label="Fill" default
 export const GalleryColorPickerModelOklch = () => <ColorPicker label="Fill" defaultValue="#01AA4E" defaultModel="oklch" />;
 export const GalleryColorPickerContrast = () => <ColorPicker label="Text" defaultValue="#5C5DFE" contrast={{ background: "#FFFFFF", level: "AA" }} />;
 export const GalleryColorPickerPreview = () => <ColorPicker label="Fill" defaultValue="#EA7401" preview />;
+/** Inside a gamut (exact colours, 2026-10-27): a light page from L 90 to 100, only the colours sRGB shows at Tint 100. */
+export const GalleryColorPickerGamut = () => <ColorPicker label="Page" gamut={{ lightness: [0.9, 1], chroma: 0.08 }} defaultOklch={{ l: 0.96, c: 0.012, h: 255 }} />;
 export const GalleryColorPickerHeader = () => {
   const [open, setOpen] = useState(true);
   return open

@@ -49,11 +49,14 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "approval", name: "Approval", manifest: "approval", imports: "Approval",
-    api: [["title / description", "what it wants to do, and why", "—"], ["items / onChoose", "numbered choices; 1–9 choose, arrows move (options: deprecated alias)", "—"], ["children", "the thing itself: a command, a Diff", "—"], ["onInstead / insteadPlaceholder", "a field to say what to do instead; Enter sends", "— / \"Tell it what to do instead\""], ["onDismiss", "Escape; the last item by default", "—"], ["autoFocus", "focus the first choice when it appears (where it takes the composer's place)", "false"]],
+    api: [["title / description", "what it wants to do, and why", "—"], ["items / onChoose", "numbered choices; 1–9 choose, arrows move (options: deprecated alias)", "—"], ["children", "the thing itself: a command, a Diff", "—"], ["onInstead / insteadPlaceholder", "a field to say what to do instead; Enter sends", "— / \"Tell it what to do instead\""], ["onDismiss", "Escape; the last item by default", "—"], ["autoFocus", "focus the first choice when it appears (where it takes the composer's place)", "false"], ["items[].description", "what a choice comes to, a line under it", "—"], ["value", "the answer already given: its row chosen, with a check", "—"], ["onActiveChange", "the choice under the pointer or focus (a preview)", "—"], ["actions", "the head's end: a compact Pagination among several questions, a close", "—"], ["footer / dismissLabel", "the hint row's end (Back, Skip, Continue) / what Esc does in the hint", "— / \"cancel\""]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryApproval", note: "It takes the composer's place, in the Composer's shell; choices are Menu rows with a number (Claude Code's prompt, Codex's approvals)."},
       {id: "detail", title: "Detail", demo: "GalleryApprovalDetail"},
       {id: "instead", title: "Instead", demo: "GalleryApprovalInstead"},
+      {id: "descriptions", title: "Descriptions", demo: "GalleryApprovalDescriptions", note: "A question rather than a permission (Claude Code's AskUserQuestion): each choice says what it comes to, Menu's row with a note."},
+      {id: "answered", title: "Answered", demo: "GalleryApprovalAnswered", note: "Asked again, the answer given is Menu's selected row with its check."},
+      {id: "questions", title: "Questions", demo: "GalleryApprovalQuestions", note: "Among several questions: a compact Pagination in the head, the way on (Skip, Continue) at the end of the hint's row."},
     ],
   },
   {
@@ -156,7 +159,7 @@ export const COMPONENT_PAGES = [
 
   {
     slug: "color-picker", name: "Color picker", exportName: "ColorPicker", manifest: "colorPicker",
-    api: [["variant", '"surface" | "plain" (plain drops the floating plate inside a Popover or Panel)', '"surface"'], ["value / defaultValue", "hex color (#RRGGBB or #RRGGBBAA)", '"#8D4DF3"'], ["onValueChange", "(hex) => void", "—"], ["alpha", "boolean: opacity track and percentage", "true"], ["model / defaultModel / onModelChange", '"hex" | "rgb" | "css" | "hsl" | "hsb" | "oklch"', '"hex"'], ["eyedropper", "boolean; shown where the EyeDropper API exists", "true"], ["header", "ReactNode row above the editor", "—"], ["swatches / swatchesLabel / onAddSwatch", "ColorSwatchOption[], string, (hex) => void", '[], "Saved colors"'], ["label / name / disabled", "group name (fallback when no aria-label; an aria-label names the group and every inner control) and form state", '"Color" / — / false']],
+    api: [["variant", '"surface" | "plain" (plain drops the floating plate inside a Popover or Panel)', '"surface"'], ["value / defaultValue", "hex color (#RRGGBB or #RRGGBBAA)", '"#8D4DF3"'], ["onValueChange", "(hex) => void", "—"], ["alpha", "boolean: opacity track and percentage", "true"], ["model / defaultModel / onModelChange", '"hex" | "rgb" | "css" | "hsl" | "hsb" | "oklch"', '"hex"'], ["eyedropper", "boolean; shown where the EyeDropper API exists", "true"], ["header", "ReactNode row above the editor", "—"], ["swatches / swatchesLabel / onAddSwatch", "ColorSwatchOption[], string, (hex) => void", '[], "Saved colors"'], ["label / name / disabled", "group name (fallback when no aria-label; an aria-label names the group and every inner control) and form state", '"Color" / — / false'], ["gamut", "{ lightness: [min, max], chroma, reach?: (l, h) => number }: an exact OKLCH picker, lightness × chroma at the hue, drawn only where reach allows (sRGB's by default)", "—"], ["oklch / defaultOklch / onOklchChange", "{ l, c, h } with gamut: the exact value (onValueChange still gets the nearest hex)", "—"]],
     examples: [
       {id: "default", title: "Fill", note: "Figma's fill picker: drag the area or focus it and use the arrows (Left/Right saturation, Up/Down brightness, Shift for 10). Hue, opacity and the value row stay synchronized.", demo: "GalleryColorPicker"},
       {id: "swatches", title: "Saved colors", note: "Opt-in: swatches lists saved colors under the editor, and onAddSwatch adds the save button. Swatches use Area family 500 values; user colors do not change with the theme.", demo: "GalleryColorPickerSwatches"},
@@ -166,6 +169,7 @@ export const COMPONENT_PAGES = [
       {id: "model-css", title: "CSS", note: "One text field accepts hex, rgb() and hsl(), with alpha.", demo: "GalleryColorPickerModelCss"},
       {id: "opaque", title: "Opaque", note: "Without alpha the opacity track and percentage are removed and values stay six-digit.", demo: "GalleryColorPickerOpaque"},
       {id: "disabled", title: "Disabled", demo: "GalleryColorPickerDisabled"}, {id: "plain", title: "Plain", note: "No floating plate, for a picker inside a Popover or Panel that already draws one.", demo: "GalleryColorPickerPlain"},
+      {id: "gamut", title: "Gamut", note: "With gamut, an exact OKLCH picker: lightness up, chroma across at the hue on the track, painted only where the region reaches, so every point is a colour the product will paint (Setup's page colours). A point past the reach is held at it; the value row is exact L, C and H.", demo: "GalleryColorPickerGamut"},
     ],
   },
   {

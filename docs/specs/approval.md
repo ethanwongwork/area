@@ -7,6 +7,8 @@
 ## Owner decisions
 
 - 2026-10-18: the agent asks before every edit and command (decision 3 of the plan, "go with your recommendations").
+- 2026-10-28: Setup becomes "a more compact chat panel, just like cursor, claude, chatgpt" and its question asks in the
+  composer's place, so Approval also asks questions (Claude Code's AskUserQuestion is the same card).
 
 ## Job and boundaries
 
@@ -15,6 +17,10 @@ with their scope (once, for the session, always; no), plus a field to tell it wh
 composer's place until answered, so the question is where the person is already looking. Not a Dialog (it does not
 block the app), not a Menu (it is a decision, not a list of commands).
 
+It also asks a question (Claude Code asks both kinds in the same card): each choice says what it comes to, an answer
+already given is marked when the question is asked again, and among several questions the card says where it is and
+offers the way on. Not a RadioGroup: a choice answers at once, as a permission does, and the keys are the same.
+
 ## Variants
 
 | Axis | Value | Justification | Where |
@@ -22,6 +28,11 @@ block the app), not a Menu (it is a decision, not a list of commands).
 | items | 2 to 4, numbered | yes / scope / no | Claude Code ("Yes", "Yes, allow all edits this session", "Yes, and don't ask again", "No"); Codex (y / p / esc) |
 | instead | on, off | "tell Claude what to do instead" | Claude Code last option; Codex "No, and tell Codex what to do differently" |
 | detail | none, any (a command in Code block sm, a Diff) | — | Claude Code editable command; Codex "$ cmd" |
+| items[].description | none, a line | what a choice comes to | Claude Code AskUserQuestion options (label over a muted description) |
+| value | none, the answer given | a question asked again | Claude desktop's question card marks the answered option; Menu's selected row |
+| actions | none, any (a compact Pagination sm, a close) | several questions in one card | Claude desktop's "‹ 3 of 4 ›" and close in the card's head |
+| footer | none, any (Skip, Continue) | the way on when the answer is not a choice | Claude desktop's Skip on the last row; Cursor's Skip / Run |
+| dismissLabel | "cancel", any verb | what Esc does in the hint | "Esc to cancel" (Claude Code); "Esc to skip" for a question |
 
 The choices are `items` (a collection is `items`, Governance § 4); `options` stays as a deprecated alias for one
 release.
@@ -38,15 +49,22 @@ release.
 
 ```
 area-approval                 the Composer's shell: its edge, corner, field fill and inset; text-md; gap ui-cluster
-  area-approval__head         the title and description, one block on the row inset; its first line sits in a row
-    area-approval__title      strong
-    area-approval__description  text-sm muted
+  area-approval__head         the heading and the actions on one row, on the row inset; its first line sits in a row
+    area-approval__heading    the title and description, one block
+      area-approval__title    strong
+      area-approval__description  text-sm muted
+    area-approval__actions    slot at the end, a row tall, centred on the title's line; last plate on the trailing offset
   area-approval__detail       slot (Code block sm, Diff)
   area-approval__options      rows, ui-row-gap apart (Menu's: 2, compact 0)
-    area-approval__option     button: `area-approval__key` (quiet Kbd number, icon slot) + `area-approval__label`,
-                              gap-row apart; the row plate on hover and focus, the pressed fill while pressed
+    area-approval__option     button: `area-approval__key` (Kbd sm number, icon slot) + `area-approval__label`,
+                              gap-row apart; the row plate on hover and focus, the pressed fill while pressed;
+                              with a description, `area-approval__lines` holds the label over
+                              `area-approval__option-description` (text-sm muted), the row 6 above and below;
+                              with `value`, `area-approval__check` at the end (chosen: data-selected, aria-current)
     area-approval__instead    the last option row (a label), its field `area-approval__field` the row's text
-  area-approval__hint         the last row, text-sm muted: filled Kbd Esc + "to cancel"
+  area-approval__foot         the last row, ui-row tall, on the row inset
+    area-approval__hint       text-sm muted: filled Kbd Esc + "to cancel" (dismissLabel)
+    area-approval__footer     slot at the end (Skip, Continue), last plate on the trailing offset
 ```
 
 ## Decisions
@@ -62,11 +80,18 @@ area-approval                 the Composer's shell: its edge, corner, field fill
 | number | quiet Kbd sm in the icon slot (icon-sm wide, centred), the label's size, muted, unboxed | claude-code `shortcutNum` (label size, .6); Codex "1." | round 51 |
 | instead | the last numbered row, its field unfilled | Claude Code (last option is free text) | a filled field added a third grey (cleanup pass 2026-10-19) |
 | hint | the card's last row: ui-row tall, centred, text-sm muted; Esc a filled Kbd sm, ui-cluster from the words | claude-code "Esc to cancel"; Kbd's rule (a key named in a sentence is filled) | rounds 52 and 53 |
+| option description | text-sm muted under the label; the row grows with 6 above and below; the key on the label's line, the check centred | peer: Menu's row with a note (model-picker.md: 6 / 6, check centred); inset.css first-line alignment | the card's own description type, so a choice's note and the question's read alike |
+| chosen row | Menu's selected fill (bg-component-active), at once, outranking hover; no pressed fill; check icon-md in fg-selection, the other rows' check at rest (opacity 0, scale 0.6) | peer: Menu `[data-selected]`, `.area-menu__check` | one selected paint for every list (Shared state paint) |
+| actions, footer | a row tall; last plate (row − control-sm) / 2 from the card's end, never under 4 (the row inset given back); 4 between controls | the agent chat's card head rule (Cleanup pass) | a trailing plate lines up with Code block's and Plan's |
 
 ## Behavior and accessibility
 
 A `section` named by its title through `aria-labelledby` (a named region); the options sit in a `role="group"` also
-labelled by the title (`Approval.tsx`, the options `div`). Options are buttons; ArrowUp / ArrowDown move focus among
+labelled by the title (`Approval.tsx`, the options `div`), left out when there are no items and no field. A choice's
+description describes its button (`aria-describedby`); the answer given is `aria-current="true"`. `onActiveChange`
+reports the choice under the pointer, else the one with focus, and undefined once neither is on a choice (the
+preview's end). A control in the detail or the footer keeps its own arrows and typing; the digits still choose unless
+it takes text. Options are buttons; ArrowUp / ArrowDown move focus among
 them and the field, wrapping; digits 1–9 choose; the digit after the last option focuses the field; Escape calls
 `onDismiss`, or chooses the last option when there is none; Enter in the field sends it. For 500 ms after it appears,
 Enter, Space, Escape and the digits answer nothing and a keyboard click on a choice is ignored (pointer clicks are not). With `autoFocus` the first option takes
@@ -84,6 +109,8 @@ React tests (`packages/react/tests/agent-chat.test.mjs`, 9), the full React suit
 
 ## Feedback log
 
+- 2026-10-28 · owner: Setup as "a more compact chat panel, just like cursor, claude, chatgpt" → the question card
+  (descriptions, value, actions, footer, dismissLabel, onActiveChange); reopened to In review.
 - 2026-10-18 · built for Phase 2 of the Inspector chat.
 - 2026-10-19 · browser check: tiles stole focus → `autoFocus` opt-in; option names read "1Yes" → Kbd hidden, `aria-keyshortcuts`.
 
@@ -207,6 +234,15 @@ the foot the keycap ends 16 and the hint's baseline 20 from it, so top and foot 
 
 - **What changed:** the choice numbers (1, 2, 3) are small keycaps instead of muted numbers at the label's size; they still sit in the row's icon slot.
 - **Why:** your note that every Kbd should have its backplate, for one look everywhere (docs/specs/kbd.md, "When a key has a backplate").
+
+## Review note, 2026-10-28 (question card)
+
+- **What changed:** Approval can ask a question as well as a permission, as Claude Code does in the same card: each
+  choice can carry a line saying what it comes to; an answer already given is marked with Menu's selected row and a
+  check; the head can hold where it is among several questions (a compact Pagination) and the last row can hold the
+  way on (Skip, Continue); "Esc to …" says what Escape does. The choice under the pointer or focus is reported, so a
+  page can preview it. Nothing changes for an approval that uses none of these.
+- **Why:** Setup is now a chat panel whose questions sit in the composer's place, and Area had no question card.
 
 ## Review note, 2026-10-29 (the Composer's corner)
 

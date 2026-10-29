@@ -15,7 +15,10 @@ import TOKENS from "@area/tokens/tokens.json";
 import { CustomSelect, Field, Input, Segmented, Slider, Toggletip, type FieldProps, type SliderProps } from "@area/react";
 import { GALLERY_CONTROLS, greysTinted, type GalleryControl } from "./gallery/controls.ts";
 import { colourMark, optionMark } from "./option-marks.tsx";
-import type { CanvasAxes } from "./studio.tsx";
+import { PageColourRow } from "./page-colour.tsx";
+import { BrandRows } from "./brand-settings.tsx";
+import { PAGE_AXES, type ColoursState } from "./colours.ts";
+import { useStudio, type CanvasAxes } from "./studio.tsx";
 
 export type Values = Readonly<Record<string, string>>;
 export interface RowContext {
@@ -166,6 +169,8 @@ function ValueField({ shown, min, max, readout, name, size = "sm", disabled, onS
 const controlOf = (axis: string) => GALLERY_CONTROLS.find(entry => entry.axis === axis)!;
 const say = (control: GalleryControl, value: string) => control.items.find(item => item.value === value)?.label ?? value;
 const CUSTOM = "custom";
+/** The Accent row's exact colour (the brand engine, src/brand.ts). */
+const EXACT = "exact";
 
 /** A hue's everyday name (OKLCH hues: red about 30°, yellow 95°, green 145°, blue 255°). */
 export function hueName(hue: number): string {
@@ -177,16 +182,22 @@ const hueLabel = (value: string) => `${hueName(Number(value))} · ${value}°`;
 
 /** The settings a combined row stands for; the Inspector draws the row once, at the first of them. A row asked for one of
  * Accent's alone (Setup's exact value) is that setting's own. */
-export const ROW_OF: Readonly<Record<string, string>> = { neutral: "greys", "tint-hue": "greys", "tint-light": "greys", "tint-dark": "greys",
+export const ROW_OF: Readonly<Record<string, string>> = { neutral: "greys", "tint-hue": "greys", "tint-hue-dark": "greys", "tint-light": "greys", "tint-dark": "greys",
   accent: "accent", "solid-light": "accent", "solid-dark": "accent", "accent-strength": "accent", "label-tint": "accent" };
 
 /** One row: the setting's own control, or the combined row it belongs to. */
 export function SettingRow({ axis, context }: { axis: string; context: RowContext }) {
+  const { colours } = useStudio();
   if (ROW_OF[axis] === "greys") return <GreysRow context={context} />;
   if (axis === "accent") return <AccentRow context={context} />;
   const control = controlOf(axis);
-  return <Dim reason={control.inactive?.(context.values, context.mode) ?? null}><Row control={control} context={context} /></Dim>;
+  return <Dim reason={pickedReason(colours, axis, context.mode) ?? control.inactive?.(context.values, context.mode) ?? null}><Row control={control} context={context} /></Dim>;
 }
+
+/** A page setting a picked page colour stands in for (src/colours.ts): what it shows is not what the page paints. */
+const PICKED = "The page colour sets this now; moving it hands the page back to this setting";
+const pickedReason = (picks: ColoursState, axis: string, mode: "light" | "dark") =>
+  picks[mode] !== null && axis !== "neutral" && PAGE_AXES[mode].includes(axis) ? PICKED : null;
 
 /*
  * A row that has no effect under the other settings (owner, 2026-10-24: "some of the axises i cant tell what im even
@@ -304,21 +315,25 @@ function temperatureOf(values: Values, mode: "light" | "dark"): number {
 }
 function GreysRow({ context }: { context: RowContext }) {
   const { values, mode, set } = context;
+  const { colours } = useStudio();
   const hue = values["tint-hue"] ?? "auto";
   const tint = hue === "auto" ? "none" : hue === "accent" ? "accent" : TINTS.some(([value]) => value === hue) ? hue : CUSTOM;
   const t = temperatureOf(values, mode);
   const temperature = (next: number) => next === 0
-    ? set({ neutral: "neutral", "tint-hue": "auto", "tint-light": "auto", "tint-dark": "auto" })
-    : set({ neutral: next < 0 ? "cool" : "warm", "tint-hue": "auto", "tint-light": String(Math.abs(next)), "tint-dark": String(Math.abs(next)) });
+    ? set({ neutral: "neutral", "tint-hue": "auto", "tint-hue-dark": "same", "tint-light": "auto", "tint-dark": "auto" })
+    : set({ neutral: next < 0 ? "cool" : "warm", "tint-hue": "auto", "tint-hue-dark": "same", "tint-light": String(Math.abs(next)), "tint-dark": String(Math.abs(next)) });
   const amount = values[`tint-${mode}`] ?? "auto";
   const amountAt = amount === "auto" ? 25 : Number(amount);
   const tintColour = (next: string) => next === "none"
-    ? set({ "tint-hue": "auto", "tint-light": "auto", "tint-dark": "auto" })
-    : set({ neutral: "neutral", "tint-hue": next === CUSTOM ? (/^\d+$/.test(hue) ? hue : "200") : next, "tint-light": String(amountAt), "tint-dark": String(amountAt) });
+    ? set({ "tint-hue": "auto", "tint-hue-dark": "same", "tint-light": "auto", "tint-dark": "auto" })
+    : set({ neutral: "neutral", "tint-hue-dark": "same", "tint-hue": next === CUSTOM ? (/^\d+$/.test(hue) ? hue : "200") : next, "tint-light": String(amountAt), "tint-dark": String(amountAt) });
   const swatchOf = (value: string) => optionMark("tint-hue", value, values as CanvasAxes) ?? undefined;
   const hues = Array.from({ length: 360 }, (_, hue) => String(hue));
   return (
     <>
+      {/* The page as one exact colour (2026-10-27): above the greys' settings it stands in for. */}
+      <PageColourRow size={context.size ?? "sm"} />
+      <Dim reason={colours[mode] !== null ? PICKED : null}>
       <Dim reason={tint === "none" ? null : "Off while a tint colour is on"}>
         <SettingBar size={context.size ?? "sm"} label="Temperature" title="How cool (blue) or warm (yellow) every grey is: pages, cards, edges and text"
           min={-100} max={100} step={1} origin={0} value={tint === "none" ? t : 0}
@@ -332,13 +347,14 @@ function GreysRow({ context }: { context: RowContext }) {
       </RowField>
       {tint === CUSTOM ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={359} step={1} value={Math.max(0, hues.indexOf(hue))}
-          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ "tint-hue": hues[at]! })} />
+          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ "tint-hue": hues[at]!, "tint-hue-dark": "same" })} />
       ) : null}
       {tint !== "none" ? (
         <SettingBar size={context.size ?? "sm"} label="Amount" title="How much of the colour the greys take: 0% is plain grey"
           min={0} max={100} step={1} value={amountAt} readout={(at: number) => at === 0 ? "None" : `${at}%`}
           onSet={at => set({ "tint-light": String(at), "tint-dark": String(at) })} />
       ) : null}
+      </Dim>
     </>
   );
 }
@@ -387,19 +403,27 @@ function AccentRow({ context }: { context: RowContext }) {
   const custom = /^\d+$/.test(value);
   const named = control.items.filter(item => !/^\d+$/.test(item.value));
   const hues = control.items.filter(item => /^\d+$/.test(item.value)).map(item => item.value).sort((a, b) => Number(a) - Number(b));
-  const layout = context.layout?.("accent", named.length + 1) ?? "list";
-  // A brand is its own colour (brand-settings.tsx): only its Shade and Saturation stay here.
-  if (context.brand) return <><SettingRow axis="accent-strength" context={context} /><AccentPaintRows accent={value} context={context} /></>;
+  const layout = context.layout?.("accent", named.length + 2) ?? "list";
+  // One accent control (exact colours plan, phase 4, 2026-10-27): a palette accent, any 5° hue, or one exact colour through
+  // the brand engine (src/brand.ts), which merged the Brand colours switch. Shade, Saturation and Label tint follow either.
+  const { brand, setBrand } = useStudio();
+  const exact = brand.on;
+  const choose = (next: string) => {
+    if (next === EXACT) { setBrand({ on: true }); return; }
+    if (exact) setBrand({ on: false });
+    set({ accent: next === CUSTOM ? (custom ? value : "200") : next });
+  };
   return (
     <>
       <RowField label={control.label} orientation="horizontal" title={control.hint}>
-        <CustomSelect size={context.size ?? "sm"} variant="soft" fullWidth layout={layout} aria-label={control.label} value={custom ? CUSTOM : value}
-          onValueChange={next => set({ accent: next === CUSTOM ? (custom ? value : "200") : next })} onHighlightChange={next => context.preview?.("accent", next === CUSTOM ? null : next)}
+        <CustomSelect size={context.size ?? "sm"} variant="soft" fullWidth layout={layout} aria-label={control.label} value={exact ? EXACT : custom ? CUSTOM : value}
+          onValueChange={choose} onHighlightChange={next => context.preview?.("accent", next === CUSTOM || next === EXACT ? null : next)}
           items={[...named.map(item => ({ value: item.value, label: item.label, icon: optionMark("accent", item.value, values as CanvasAxes) ?? undefined,
             preview: layout === "grid" ? context.figure?.("accent", item.value) : undefined })),
-            { value: CUSTOM, label: "Custom", icon: custom ? optionMark("accent", value, values as CanvasAxes) ?? undefined : undefined }]} />
+            { value: CUSTOM, label: "Any hue", icon: custom ? optionMark("accent", value, values as CanvasAxes) ?? undefined : undefined },
+            { value: EXACT, label: "Exact colour", icon: colourMark(brand.primary) }]} />
       </RowField>
-      {custom ? (
+      {exact ? <BrandRows /> : custom ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={hues.length - 1} step={1} value={Math.max(0, hues.indexOf(value))}
           readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ accent: hues[at]! })} />
       ) : null}
@@ -425,7 +449,7 @@ function AccentPaintRows({ accent, context }: { accent: string; context: RowCont
 function shadeReason(accent: string, context: RowContext) {
   const control = controlOf(`solid-${context.mode}`);
   const { scale } = shadesOf(accent, context.mode, context.brand);
-  const name = context.brand ? "The brand" : /^\d+$/.test(accent) ? hueName(Number(accent)) : accent[0]!.toUpperCase() + accent.slice(1);
+  const name = context.brand ? "The exact colour" : /^\d+$/.test(accent) ? hueName(Number(accent)) : accent[0]!.toUpperCase() + accent.slice(1);
   return control.inactive?.(context.values, context.mode) ?? (scale.length < 2 ? `${name} has one shade that keeps its label readable` : null);
 }
 
@@ -437,7 +461,7 @@ function ShadeBar({ accent, context }: { accent: string; context: RowContext }) 
   const index = Math.max(0, scale.indexOf(of(context.values[axis] ?? "auto")));
   // Read from the vivid shade (a brand's: its nearest readable shade): lighter before it, deeper after it, the ends by name.
   const vivid = scale.indexOf("auto");
-  const say = (at: number) => at === vivid ? context.brand ? "Brand" : "Vivid" : at === 0 ? "Lightest" : at === scale.length - 1 ? "Deepest"
+  const say = (at: number) => at === vivid ? context.brand ? "Exact" : "Vivid" : at === 0 ? "Lightest" : at === scale.length - 1 ? "Deepest"
     : at < vivid ? `${Math.round(((vivid - at) / vivid) * 100)}% lighter` : `${Math.round(((at - vivid) / (scale.length - 1 - vivid)) * 100)}% deeper`;
   return (
     <SettingBar size={context.size ?? "sm"} title={control.hint} min={0} max={Math.max(1, scale.length - 1)} step={1} value={index} disabled={scale.length < 2}

@@ -120,11 +120,12 @@
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
   }
-  /* Framed columns keep ChatGPT's card inset for the text: 12 from the top and 16 from the side. */
-  /* The frame's stroke is counted once (inset.css; spacing audit 2026-10-17: the text and rules sat 17 in, not ChatGPT's 16
-     from the card's outer edge). */
-  .area-description-list--framed.area-description-list--justified { --_inset: calc(var(--area-space-16) - var(--area-stroke-width)); }
-  .area-description-list--framed.area-description-list--columns { padding: calc(var(--area-space-12) - var(--area-stroke-width)) calc(var(--area-space-16) - var(--area-stroke-width)); /* spec: ChatGPT's card inset */ }
+  /* Framed, the text is 12 inside the frame, the card column the agent chat's boxes share (Plan, Edit summary, Queue:
+     Menu's list padding 4 + the row inset 8), so a framed list beside them in a chat starts its text on theirs (owner
+     2026-10-28, chat set review: it was ChatGPT's 16 from the outer edge; "move them to 13 anyway"). Framed columns keep
+     ChatGPT's 12 from the top. */
+  .area-description-list--framed.area-description-list--justified { --_inset: var(--area-space-12); /* spec: the card column */ }
+  .area-description-list--framed.area-description-list--columns { padding: calc(var(--area-space-12) - var(--area-stroke-width)) var(--area-space-12); /* spec: ChatGPT's 12 top; the card column */ }
 
   /* --- show more ------------------------------------------------------------- */
   /* The "Show N more" button after a list with visibleCount (docs/research/show-more-survey.md): a row of the list's

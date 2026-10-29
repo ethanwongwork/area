@@ -52,7 +52,7 @@
   }
   /* A bare glyph (use File page for a file's figure): half the square, its line Area's required line as a non-scaling
      stroke, the weight File page and Folder draw at. */
-  .area-file-tile__figure > svg { inline-size: 50%; block-size: 50%; color: var(--area-fg-muted); --area-weight-icon: var(--area-stroke-width); }
+  .area-file-tile__figure > svg { inline-size: 50%; block-size: 50%; color: var(--area-fg-muted); --area-weight-icon: var(--area-stroke-width); --area-type-icon-line: 1; }
   .area-file-tile__figure > svg :is(path, circle, ellipse, line, polyline, polygon, rect) { vector-effect: non-scaling-stroke; }
   /* An image is contained in the square, its own shape kept, with the swatch ring (Asset row's preview). */
   .area-file-tile__figure > img {

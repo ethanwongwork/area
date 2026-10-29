@@ -83,7 +83,7 @@ area-plan                 the agent card: card edge at stroke-width, container c
 | done | muted ink, struck through; the 12 ring and Checkbox's tick (1.25 line) in the muted ink; with meta (a phase), not struck | cursor done struck, `check-circle`; codex ✔; the references' phases (a check and "Completed") | owner 2026-10-25: a strike on a phase reads as removed; one mark silhouette (was a bare check glyph) |
 | cancelled | muted ink, struck through, the ring and a cross; with meta, not struck | cursor cancelled todos, `x-circle` | round 49; owner 2026-10-25 |
 | steps box | from the item's text column to the item row's edge; recessed (bg-subtle), radius-list, padding 4 0; 8 under the item's line, 4 extra below; rows 2 shorter each side, muted unless current | the agent panel reference (box on the label column, results 30 apart under steps 38, ~8 padding) | owner 2026-10-25: containers back "as long as the padding, alignment and visual balance is right" |
-| tracker room | with a bar or a rail: column 16 (list padding 8 + row inset), head 8 taller (title 14 from the top), bar 12 under the title's line and 16 above the bottom, rail rows 4 apart; the plain tray keeps 12 | Card's 16 text inset; Claude's Context panel (8 text to bar) | owner 2026-10-25: "the padding/margins for the timeline and also the gap between the text and the indicators looks too small" (measured 12 / 7 / 6 / 12, unbalanced) |
+| tracker room | with a bar or a rail: the agent card column (12 in, 13 from the outer edge, as the plain tray), head 8 taller (title 14 from the top), bar 12 under the title's line and 12 above the bottom, rail rows 4 apart | Claude's Context panel (8 text to bar); the agent chat's card column | owner 2026-10-25: "the padding/margins for the timeline and also the gap between the text and the indicators looks too small" (measured 12 / 7 / 6 / 12, unbalanced); owner 2026-10-28, chat set review: the column back to 12 ("move them to 13 anyway"), so the boxes in a chat start their text on one edge (it was Card's 16) |
 | bar | padding 6 column column folded, 6 column 8 open (the first item 1.1 rows under it); Progress sm (4) segments 2 apart, the selection fill on the track; no rule under it | cursor-bar 4 / 2; primer 2 apart | one bar per plan; Progress is the peer, so the segments are Progress |
 | ring | the pending ring (icon-sm − 4) in the selection fill, a conic pie inside it (icon-sm − 8) to the item's share | linear (ring + inner pie) | the mark and its segment read as one value, in one fill |
 | meta | muted, tabular, margin-inline-start auto, 8 from the text | cursor tray count (tertiary); GitHub's count | — |
@@ -108,6 +108,10 @@ React tests (`packages/react/tests/agent-chat.test.mjs`, 9), the full React suit
 
 ## Feedback log
 
+- 2026-10-28 · chat set review (https://claude.ai/artifact/3ZRgoiUPiX6kkQxgt1MJTw): in Theme setup the progress Plan's
+  text sat at 17, the answers' framed list at 16 and the question card at 15; owner: "move them to 13 anyway" → a bar
+  or rail Plan keeps the agent card column (list padding 4, as the plain tray), its bar 12 above the bottom. The head
+  stays 8 taller. In review.
 - 2026-10-25 · owner: "Drop the line on Edit summary, Queue and Plan too, and tighten the bar Plan's spacing as shown"
   (after Code block's header lost its rule; comparison page https://claude.ai/artifact/914gYc7RXYaRuK8mk2erRb) → no
   seam under the head. Measured head middle to first row middle against the row pitch: Plan and Queue 1.1, Edit
@@ -279,6 +283,14 @@ chevron moves out with it (its 12 column was the cause). Queue's head shares the
 
 - **What changed:** The items ease open and shut with the head's chevron, on Accordion's recipe.
 - **Why:** They snapped while Accordion eased. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+## Review note, 2026-10-28 (chat set review)
+
+- **What changed:** A Plan with a bar or a rail puts its text 12 inside the frame, as the plain Plan, Edit summary and
+  Queue do (it was 16, a Card's room). The bar sits 12 above the bottom (was 16). The head keeps its extra 8 above the
+  title.
+- **Why:** In a chat column the boxes' text started 1–3px apart: Theme setup stacked the progress Plan (17), the framed
+  answers (16) and the question card (15). You chose one card column, "move them to 13 anyway".
 
 ## Review note, 2026-10-29 (round 85)
 

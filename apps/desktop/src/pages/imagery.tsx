@@ -26,6 +26,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { AssetGrid, AssetGridItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, GridIcon, OpenIcon } from "@area/icons";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { hrefOf } from "../places.ts";
 import { CanvasSection, CARD_SCOPE } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewSwitch } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -123,10 +124,10 @@ export function ImageryPage() {
   const trail = (
     <Breadcrumb aria-label="Location" className="studio-imagery__trail">
       <BreadcrumbList>
-        <BreadcrumbItem>{folder || opened ? <BreadcrumbLink href="#imagery" onClick={event => { event.preventDefault(); select(""); }}>Imagery</BreadcrumbLink> : <BreadcrumbPage>Imagery</BreadcrumbPage>}</BreadcrumbItem>
+        <BreadcrumbItem>{folder || opened ? <BreadcrumbLink href={hrefOf({ page: "library" })} onClick={event => { event.preventDefault(); select(""); }}>Library</BreadcrumbLink> : <BreadcrumbPage>Library</BreadcrumbPage>}</BreadcrumbItem>
         {folder ? <>
           <BreadcrumbSeparator />
-          <BreadcrumbItem>{opened ? <BreadcrumbLink href={`#imagery/${folder.id}`} onClick={event => { event.preventDefault(); closeViewer(); }}>{folder.name}</BreadcrumbLink> : <BreadcrumbPage>{folder.name}</BreadcrumbPage>}</BreadcrumbItem>
+          <BreadcrumbItem>{opened ? <BreadcrumbLink href={hrefOf({ page: "library", item: folder.id })} onClick={event => { event.preventDefault(); closeViewer(); }}>{folder.name}</BreadcrumbLink> : <BreadcrumbPage>{folder.name}</BreadcrumbPage>}</BreadcrumbItem>
         </> : null}
         {opened ? <><BreadcrumbSeparator /><BreadcrumbItem><BreadcrumbPage>{nameOf(opened)}</BreadcrumbPage></BreadcrumbItem></> : null}
       </BreadcrumbList>
@@ -140,7 +141,7 @@ export function ImageryPage() {
         {entries.map(entry => (
           <tr key={entry.id} data-selected={entry.id === chosen ? "" : undefined} onClick={() => setChosen(entry.id)} onDoubleClick={() => openImage(entry)}>
             <TableCell fit><img className="studio-imagery__row-thumb" src={url(entry.thumb)} alt="" loading="lazy" decoding="async" /></TableCell>
-            <td><a href={`#imagery/${entry.folder}/${entry.id}`} onClick={event => { event.preventDefault(); openImage(entry); }}>{nameOf(entry)}</a></td>
+            <td><a href={hrefOf({ page: "library", item: `${entry.folder}/${entry.id}` })} onClick={event => { event.preventDefault(); openImage(entry); }}>{nameOf(entry)}</a></td>
             <td><span className="studio-muted">{entry.source || "—"}</span></td>
             <td><span className="studio-muted">{entry.width} × {entry.height}</span></td>
           </tr>
@@ -191,14 +192,14 @@ export function ImageryPage() {
   return (
     <Workspace
       sidebar={<SidebarList>
-        <SidebarTree tab="imagery" label="Image groups" count={total} current={folder?.id} onSelect={openFolder}
+        <SidebarTree label="Image groups" count={total} current={folder?.id} onSelect={openFolder}
           groups={[{ id: "groups", label: "Groups", items: folders.map(entry => ({ id: entry.id, label: entry.name, icon: <GridIcon />, trailing: <span className="studio-muted studio-imagery__count">{byFolder.get(entry.id)?.length ?? 0}</span> })) }]} />
       </SidebarList>}
       canvasLead={opened ? <>
-        <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ArrowLeftIcon />} aria-label={`Back to ${folder?.name ?? "Imagery"}`} onClick={closeViewer} />
+        <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ArrowLeftIcon />} aria-label={`Back to ${folder?.name ?? "Library"}`} onClick={closeViewer} />
         {trail}
       </> : trail}
-      canvasTitle={opened ? nameOf(opened) : folder?.name ?? "Imagery"}
+      canvasTitle={opened ? nameOf(opened) : folder?.name ?? "Library"}
       canvasRef={canvas}
       canvasActions={
         <ViewControls>

@@ -92,3 +92,22 @@ test('the palette grid is the Area palette in a contiguous radio grid', () => {
   assert.match(html, /area-color-swatch-picker--palette/);
   assert.equal((html.match(/type="radio"/g) || []).length, 110);
 });
+// The gamut picker (exact colours, 2026-10-27): lightness × chroma at a hue inside a region, an exact OKLCH value.
+test('a gamut picker offers lightness and chroma at a hue, exact fields and one form value', () => {
+  const html = renderToString(h(ColorPicker, {label: 'Page', name: 'page', gamut: {lightness: [0.9, 1], chroma: 0.08}, oklch: {l: 0.9634, c: 0.012, h: 255}}));
+  for (const label of ['lightness and chroma', 'hue', 'lightness', 'chroma']) assert.ok(html.includes(`aria-label="Page ${label}"`), label);
+  assert.match(html, /area-color-picker__area--gamut/);
+  assert.match(html, /<canvas[^>]*class="area-color-picker__plane"/);
+  assert.match(html, /aria-valuetext="Lightness 96.34%, chroma 0.012"/);
+  assert.match(html, /type="hidden" name="page" value="oklch\(0.9634 0.012 255\)"/);
+  // No spectrum, model menu, opacity or eyedropper: the value is the exact colour.
+  for (const label of ['saturation and brightness', 'color model', 'opacity']) assert.ok(!html.includes(`aria-label="Page ${label}"`), label);
+});
+test('a gamut picker holds a value past its region at the nearest it offers', () => {
+  const reach = (l) => 0.05 * (1 - l) / 0.1;
+  const html = renderToString(h(ColorPicker, {label: 'Page', name: 'page', gamut: {lightness: [0.9, 1], chroma: 0.08, reach}, oklch: {l: 1.2, c: 0.3, h: 370}}));
+  // Lightness held at the top (1), where the region has no chroma; the hue wraps.
+  assert.match(html, /value="oklch\(1 0 10\)"/);
+  const mid = renderToString(h(ColorPicker, {label: 'Page', name: 'page', gamut: {lightness: [0.9, 1], chroma: 0.08, reach}, oklch: {l: 0.95, c: 0.3, h: 30}}));
+  assert.match(mid, /value="oklch\(0.95 0.025 30\)"/);
+});

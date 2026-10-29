@@ -1,7 +1,7 @@
 # Handoff
 
-## Current state (2026-10-28)
-- **Visual pass round 81, branch `claude/component-interaction-visual-polish-e45c8f` (2026-10-28, uncommitted; owner: continue
+## Current state (2026-10-29)
+- **Visual pass round 81, branch `claude/component-interaction-visual-polish-e45c8f` (2026-10-28, committed in ce9c60a1, merged with main 2026-10-29; owner: continue
   from Code, same before/after format):** Code to Context menu on the Stage at 2x, light and dark, plus a baseline sweep of
   every family's 1,190 tiles. Changes: Color swatch picker's palette ring is an `::after` layer over the cells (the grid's
   outline was painted under them); Composer's input drops its start padding after a leading action (text 7 after the +,
@@ -10,13 +10,13 @@
   approved by the owner 2026-10-28 (review page https://claude.ai/artifact/WjbJNkrmcKwxMGuJiXzx5b, `verdicts`, no
   notes); the four families are Complete again. The owner said yes to the dark soft tones question (dark soft surfaces
   at lightness 0.30–0.38 read near solid): built, see the next bullet. Visual pass resumes at Copy button.
-- **Visual pass round 82 (2026-10-28, uncommitted):** Copy button, Count, Custom select, Date picker, Date range
+- **Visual pass round 82 (2026-10-28, committed in ce9c60a1, merged with main 2026-10-29):** Copy button, Count, Custom select, Date picker, Date range
   picker, Description list, Drawer, Edit summary and Editable text on the Stage at 2x, light and dark, plus the geometry
   audit (only sr-only text and Edit summary's by-design hover overlay). Changes: Description list's columns rows align
   by first baseline, the term's text a new `__label` part (a person value left the term 4 above the name); Edit
   summary's head counts 4 after the title (was 8, the rows' gap is 4); Date range picker's ghost tile sm (demo only,
   invisible at rest). Both approved 2026-10-29 (review page https://claude.ai/artifact/9GfrAq1fjTw2YDJ3xGfRNW), Complete.
-- **Visual pass round 83 (2026-10-29, uncommitted):** Empty state, Field, Figure, File image, File page, File tile, File
+- **Visual pass round 83 (2026-10-29, committed in ce9c60a1, merged with main 2026-10-29):** Empty state, Field, Figure, File image, File page, File tile, File
   upload, Folder, Hatnote and Hover card (opened by hover) on the Stage at 2x, light and dark, plus the geometry audit
   (only sr-only text and File page's 30 glyph, by spec). Changes: a File tile outside a grid is at most one column wide
   (figure + 48), so a long name wraps to two lines; an invalid File upload zone's hint takes `field-error-color`. Both
@@ -25,13 +25,13 @@
   Message, Meter and Model picker on the Stage at 2x, light and dark, the geometry audit (sr-only text only) and hover
   on List box, Input group's action, Model picker and Link. Nothing to fix; no review page. Icon pilot (docs-only, no
   tiles), Input, Kbd and Menu were skipped as visited or not a Stage family. 
-- **Visual pass round 85 (2026-10-29, uncommitted):** Nav, Number field, OTP field, Pagination, Panel, Password field,
+- **Visual pass round 85 (2026-10-29, committed in ce9c60a1, merged with main 2026-10-29):** Nav, Number field, OTP field, Pagination, Panel, Password field,
   Plan, Preview frame, Progress and Prompt suggestions (Popover and Radio visited), Stage at 2x light and dark, geometry
   audit (sr-only text, Prompt suggestions' by-design dismiss over its row). Changes: Prompt suggestions read the
   composer's inset, action and gap (the prompt was 8 right of the placeholder since round 81's Composer change); Plan's
   cancelled cross outranks the shared tick rule (a cancelled item drew the done tick). Two cohesion tests. Plan and
   Prompt suggestions in review.
-- **Visual pass rounds 86–89 (2026-10-29, uncommitted; the end of the Sidebar):** Property list to Zoom control, 38
+- **Visual pass rounds 86–89 (2026-10-29, committed in ce9c60a1, merged with main 2026-10-29; the end of the Sidebar):** Property list to Zoom control, 38
   families (Radio, Tabs, Slider visited), Stage at 2x light and dark plus the geometry audit (sr-only text and Step's
   intended long-value ellipsis only). Changes: a Spinner in a Badge's slot takes the slot's size and ink (display.css,
   as Button's); Video player's time keeps the space before the slash (a flex item dropped it); demos: Search field's
@@ -42,7 +42,7 @@
   One review page covers rounds 85–89: https://claude.ai/artifact/MwygstHkZPu7FGEsnt9KTj (`verdicts`; ids per family, q-soft-well the question; "Approve every fix" skips q-). The Sidebar pass is complete after it. Verdicts 2026-10-29: Plan, Prompt suggestions, Search field, Scroll
   to latest and Spinner approved (Complete); Surface keeps Flat flat (no change); Video player asked "pill shaped or
   just rounded corners?" — its bar's groups now take `radius-control-md` plus the Pills setting (in review).
-- **Composer expansion (2026-10-29, uncommitted; owner asked with Cursor, Claude app and Codex screenshots):**
+- **Composer expansion (2026-10-29, committed in ce9c60a1, merged with main 2026-10-29; owner asked with Cursor, Claude app and Codex screenshots):**
   `header` and `footer` slots (a group root, `area-composer-group`, only when used), `onFiles` (drop and paste, File
   upload's drop paint), parts `ComposerMic` (dictation toggle), `ComposerAttach` (file picker), `ComposerNote`; Model
   picker `efforts` (the effort muted after the name, an Effort group); Prompt suggestions `shortcut` (a Kbd); glyphs `mic`
@@ -54,14 +54,67 @@
   matches (cohesion test); the `tray` slot removed; a combined composition replaces Codex's. Round 2 approved
   2026-10-29 (https://claude.ai/artifact/CFjuxCzL9Pvph3nP1qBdUM). Then, on "are they slightly too round?", the corner
   became Card's, term for term (18 in the app, actions 11; was 20 / 13); owner chose it in chat and approved it
-  on round 3 of the same page; Composer and Approval Complete. Do not launch Electron from this worktree: it predates app structure
-  Phase 1 (PR #174's session asked; the owner wants no window with the old UI). Sync with main first.
-- **Dark soft tones, built (2026-10-28, uncommitted; owner picked A, every family approved):** in dark a tone's soft
+  on round 3 of the same page; Composer and Approval Complete. Until the 2026-10-29 merge this worktree predated app
+  structure Phase 1, so its window showed the old UI (PR #174's session asked for none); the merge brings Phase 1 (PR
+  #173), so a window from here shows the new structure.
+- **Dark soft tones, built (2026-10-28, committed in ce9c60a1, merged with main 2026-10-29; owner picked A, every family approved):** in dark a tone's soft
   surfaces are the neutral control fill of the same state in the tone's hue at chroma 0.05 / 0.06 / 0.07
   (`DARK_TONAL_CHROMA` in `color/curves.ts`, derived in `scale.ts` `chooseTonalPair` as `TonalChoice.paint`). Inks,
   the focus ring and light are unchanged. Rule in DESIGN_SYSTEM.md Colour; notes and checks in
   `docs/research/dark-soft-tones-2026-10-28/README.md`; review notes in the seven specs (Alert, Badge, Button, Chip,
   Code block, Confirm dialog, Box model). Review page https://claude.ai/artifact/ASWB3h6XR8xR9752gr6fbs.
+- **Icon review against Cursor (2026-10-29, branch `claude/icon-visual-design-review-4f986c`, uncommitted).** Review page
+  https://claude.ai/artifact/35czAepgpMBmeDCbMh5vU2 (picks in db `verdicts`). Applied: expand / collapse (+ maximize /
+  minimize) drawing B, plane redrawn top-down (`docs/research/icon-review/2026-10-29/plane.py`), Reference list's `return`
+  12px cut, review tools repointed to `packages/icons`; P1: the 20 icon slot from type 15 with a default-size icon's
+  line on the size curve (type axis `type-icon-line`, 1.33px at 15, 1.42 at 16; types 12–14 unchanged). Nothing open.
+  Spec: icons.md "Review against Cursor, 2026-10-29" and "The 20 slot's line".
+- **App structure Phase 1, the new navigation, branch `claude/phase-1-new-navigation-1c3738`, PR #173 (owner
+  2026-10-28: "Phase 1 of the new navigation should start in a fresh session").** Places (`apps/desktop/src/places.ts`:
+  `#brand/area/themes|foundations|components|patterns`, `#library`, `#labs/materials`; old links redirect,
+  `tests/places.test.ts`); Titlebar: back / forward (per-tab history), browser-like tabs (Area, Library, Materials; saved
+  and reopened), ⌘K search over every place (Command palette), the Library button; Sidebar: the nav (`src/app-nav.tsx`:
+  Library, Brands › Area › Themes, Foundations › Color … Effects, Components, Patterns; ⌘-click opens a tab), a page with a
+  list takes it over under "← Area" and its filter. New Themes page (Default drawn as Setup's screen; New theme opens
+  Setup); Foundations = Browse, a page per registry group. Nav: a nested group inside another indents a level more (nav.css,
+  spec). Inspector "Brand" words → Exact / Matched. Differences from the plan for the owner to confirm: the plan's README,
+  Phase 1 "As built". Checks: typecheck, test:desktop 16/16 (fixed the stale brand.tsx entry), React 597/597, app-css,
+  playgrounds, docs, manifest parity; looked at in Electron light and dark. Next: merge PR #173; then Phase 2 (Home, a fixed Home tab, several brands) in its own session.
+  2026-10-29, owner's notes ("the floating tab component from claude codes browser"): tabs hug their names, close on
+  hover / focus / the current tab (4 in on every side, Titlebar sets Nav's row height), + / ⌘T open search into a new tab; Nav horizontal items rest in `fg-muted` (Inspector views too) and a
+  horizontal row with actions spaces as a closable tab (icon gap-md 5, xs close); Nav reopened with a Horizontal /
+  closable tabs tile; approved, then reopened the same day: the close lands over the name's end and fades it (Figma's way,
+  owner), tabs 120 to 170, too many scroll; approved, Nav Complete. Edge cases: https://claude.ai/artifact/1RWLR2gyESHHwxNKJ4XpsZ. Tab keys in an
+  app menu (electron/main.cjs: ⌘T, ⌘⇧T, ⌘W close tab, ⌘⇧W window, ⌃Tab, ⌘1–9; tested by clicking each item in a throwaway
+  profile) and a full-name Tooltip on cut tabs; the close names itself (⌘W). Before/after: https://claude.ai/artifact/Jt3DeSrHcKpaH7M1rjEGs4 (builder and crop.py in the
+  session scratchpad).
+- **Setup as a compact chat panel, branch `claude/theme-onboarding-chat-panel-2ce3b7` (owner 2026-10-28: "a more compact
+  chat panel, just like cursor, claude, chatgpt ... make sure all components are built for it"), PR #172.** Setup's
+  left side is a resizable Panel (320–560, default 400, `widths["setup-chat"]`) at the app's own scale, built as the
+  Inspector's Chat view: Message prose, each chapter's answers as a framed justified Description list (an answer
+  reopens its question, marked), the Plan tray over the question, and the question docked in the composer's place as
+  an **Approval** (Claude Code's AskUserQuestion): numbered rows with descriptions, the given answer marked, a compact
+  Pagination in the head, Use the default / Skip chapter / Continue in the foot; the final card is "What next?".
+  Hover or focus on a row previews on the stage. Card questions lose their pictures (the stage is the picture); bar
+  questions with named marks show the marks as rows (exact positions: Fine-tune → Inspector). Approval gains
+  `items[].description`, `value`, `onActiveChange`, `actions`, `footer`, `dismissLabel` (spec, docs entry, 3 tiles,
+  test) and is back In review. Testing › Chat frames: the sticky head no longer shows turns above it. Checks: React
+  593/593, docs, parity, app-css, playgrounds, typecheck; `test:desktop` 11/12 (the known brand.tsx failure on main).
+  Chat set review page (every chat tile + composed screens, guides, measurements): https://claude.ai/artifact/3ZRgoiUPiX6kkQxgt1MJTw
+  (builder in the session scratchpad, not the repo). From it (owner: "move them to 13 anyway"): Plan bar/rail and the
+  framed Description list put their text on the agent card column (12 in, 13 from the outer edge; were 16 / 15), and
+  Composer menu's "No matches" takes the rows' text-sm. Plan, Description list, Composer menu back In review. Kept by
+  the owner: Composer menu's label on Menu's icon column (14), Diff's sans fold (option C).
+  Theme header fixed: Workspace gained `lead` (a region in the Sidebar's place at the app's scale); Setup's chat is the
+  lead (its bar on the 47 header line, density 32 now, was Setup's 28), the stage is the Canvas, its controls in the Canvas
+  header (Screen/Component + screen; Setup/Browse, Real/Wireframe, Light/Dark); no extra row. PRODUCT_UI.md Setup updated.
+  App structure proposal (owner asked to re-evaluate the IA; nothing built): https://claude.ai/artifact/4nvLA9RLBaY2RZ1PedrcFn
+  (System / Projects / Collections / Library, Home then drill in; themes inside a system; Cursor's agent window measured
+  from its bundle: bars 40, sidebar 260, rows 28, 14 glyphs, composer radius 20 / text 13 in). Owner confirmed the model
+  the same day (Workspace: several Brands, Projects, Library of boards; public Explore; Area system = Starter + parts
+  catalog); phased build plan in docs/research/app-structure-2026-10-28/README.md. Shell chosen: variation A on
+  https://claude.ai/artifact/Fb9YBdJ3B1oVqhvEZQgPKL (Cursor-style nav, Figma tabs, takeover panels); reopen the last
+  place with its tabs; Inspector's Brand section → Brand colours. Phase 1 built (above).
 - **Interaction and visual pass, rounds 75–80, merged PR #170 (a7112fc7; owner: the Slider's motion and detail pass on
   every component, then a by-eye visual pass in the Sidebar's order), every item owner-approved.** Interaction pass (docs/research/interaction-pass-2026-10-26/, re-runnable scripts): Tabs and
   Code block slide one indicator (`useTabIndicator`); Step, Plan, Queue, Edit summary bodies ease open; field hovers on
@@ -94,11 +147,21 @@
   chapter, dark twins, Grey strength and the three fills are sliders with marks; Browse draws quarters (`marks`). Walking
   positions fixed: hovered-mark text near white (MARK_HOVER_RAMP), dark layer floor ramp in the model, Asset card frame
   (FRAME_SAME 0.005, farther tone). Accent stays 5° (a 1° opt-in sheet was built, then withdrawn, owner 2026-10-27).
-- **Next: exact colours (owner decided 2026-10-27; plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a Colours
-  stage first in Setup (light page, dark page, accent as exact OKLCH picks written as variables, `data-area-colours`
-  scope, `colourDeclarations`, `area-tokens colours`); Tint hue split light/dark (dark follows light); one accent pick
-  via the brand engine (merges Brand colours); Cool/Warm kept as ramps, shown as picker starting points; page tests
-  become grids (34 greys exhaustive). Accent open item: the solid flips its label between 35° and 40°.
+- **Exact colours, branch `claude/gifted-matsumoto-12dc07`, phases 1-4, synced with main after #170, owner-approved
+  2026-10-28 (plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a page pick (OKLCH) solves into ground, tint hue,
+  room and strength (`packages/tokens/src/color/colours.ts`, CAST_FADE inverted, held at Tint 100 and the hue's room);
+  `@area/tokens/colours` (`colourDeclarations`, `colourCss`, `pageInfo`, `presetPick`; page part 3 kB gzipped);
+  `data-area-colours` restates the derivations; Tint hue split (`tint-hue-dark`, default Same as light); React `Theme`
+  `colours`; `area-tokens colours`; the app saves picks (`apps/desktop/src/colours.ts`, old presets convert once where a
+  pick reproduces them); Setup opens with a Colours chapter (light page, dark page, accent); Color picker gains a gamut
+  mode (Complete); Inspector Page colour row; the accent's Exact colour merged the Brand colours switch. Tests:
+  `colours.test.ts` (34 greys, dense pick grid both modes, coarse grid at every position, CSS vs model); token suite
+  ~60s (was ~110s). Review round 75 on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG, all approved by the owner 2026-10-28 (not the
+  visual pass's own round 75):
+  `component-review.mjs --colours` adds a Colours switch (Defaults / Preset → pick / Exact pick) comparing every variant,
+  Before at main faadea6a; Exact pick keeps Action neutral (owner: Layer contrast stays Flat there too); at the defaults 1189 of 1190 variants unchanged, Color picker's Gamut tile new. Built with a
+  JSON import hook for Node 26 (docs/research/exact-colours-2026-10-28/review-note.md says how). Not done: the Theme
+  tab's Browse view still shows the attribute settings; the accent open item (solid flips its label between 35° and 40°).
 - **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,
   panel, plan, queue, separator, shortcut-list (r72), radio, checkbox (r73). Infobox REMOVED (code, styles, manifest,
   demos, page, test). Round 73 notes page https://claude.ai/artifact/2Lg4zR9oKdhf8XaT7vCVex: Edit summary diff: option C

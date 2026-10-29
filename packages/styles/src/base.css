@@ -38,9 +38,11 @@
   [data-area-switching], [data-area-switching] *, [data-area-switching] ::before, [data-area-switching] ::after { transition: none !important; }
 
   /* Area-drawn component glyphs (packages/react Glyph, docs/specs/icons.md): stroked on a
-     16px grid, the line set by the typeface's icon weight and scaling with the slot. */
+     16px grid, the line set by the typeface's icon weight and scaling with the slot. A glyph at its default size fills
+     its component's icon slot, so where the type axis makes that slot 20 (types 15 and 16) its line takes the size
+     curve's ratio (--area-type-icon-line, 0.8846) instead of growing with the drawing. */
   [data-area-glyph] path {
-    stroke-width: var(--area-weight-icon);
+    stroke-width: calc(var(--area-weight-icon) * var(--area-type-icon-line, 1));
   }
 
   /* Size curve: the line grows with size^0.45 (Cursor: 1.25px at 16, 1.5px at 24), so in
