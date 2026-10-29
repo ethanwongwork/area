@@ -1,18 +1,19 @@
 /**
- * The Inspector's Brand section (owner, 2026-10-26; docs/research/brand-palette-2026-10-26/PLAN.md, phase 3): off, the
- * Canvas keeps Area's palette; on, up to three exact colours (src/brand.ts). Each colour is a hex field, typed exactly, with
+ * The accent as exact colours (owner, 2026-10-26; docs/research/brand-palette-2026-10-26/PLAN.md, phase 3): Area's palette,
+ * or up to three exact colours (src/brand.ts). Since 2026-10-27 (exact colours plan, phase 4) these are the Accent row's own
+ * (inspector-rows.tsx): its "Exact colour" choice turns them on, a palette accent off; there is no Brand colours switch. Each colour is a hex field, typed exactly, with
  * a picker beside it. A colour lands on the Canvas when it is let go: a typed hex on Enter or blur, a picker drag when the
  * pointer lifts or holds still for REST ms, and whatever is pending when the picker closes, because each new colour works
  * out a brand (about 60ms) and restyles the Canvas. Under Primary, the button the brand draws: its nearest readable shade.
  */
 import { useEffect, useRef, useState } from "react";
-import { Button, ColorField, ColorPicker, Field, hexToHsv, hsvToHex, PanelSection, Popover, Segmented, Switch, Toggletip } from "@area/react";
+import { Button, ColorField, ColorPicker, Field, hexToHsv, hsvToHex, Popover, Segmented, Toggletip } from "@area/react";
 import { AddIcon, ColorIcon } from "@area/icons";
 import { brandSlots, type BrandState } from "./brand.ts";
 import { useStudio } from "./studio.tsx";
 
 type Slot = "primary" | "secondary" | "tertiary";
-const SLOTS: ReadonlyArray<[Slot, string]> = [["primary", "Primary"], ["secondary", "Secondary"], ["tertiary", "Tertiary"]];
+const SLOTS: ReadonlyArray<[Slot, string]> = [["primary", "Colour"], ["secondary", "Secondary"], ["tertiary", "Tertiary"]];
 const REST = 300; /* pick: as a setting's bar (inspector-rows.tsx), a held pointer well past a drag's pace */
 
 /** A colour for a slot just added: the primary turned a third of the way round the wheel, at its own strength. */
@@ -21,15 +22,12 @@ function offset(primary: string, turns: number) {
   return hsvToHex((h + 360 * turns) % 360, s, v).toLowerCase();
 }
 
-export function BrandSettings() {
+/** The exact accent's rows, under the Accent row while it is an exact colour: the colours, then which status hues. */
+export function BrandRows() {
   const { brand, setBrand, theme } = useStudio();
   const info = brand.on ? brandSlots(brand, theme)?.primary ?? null : null;
   return (
-    <PanelSection heading="Brand">
-      {/* md (owner 2026-10-27, "is the toggle the correct size?"): sm drew a 26 × 14 track at the app's scale, smaller than
-          ChatGPT's 32 × 20 and Notion's 30 × 18 settings switches; md is 30 × 18, in the same 26 row and 13 label. */}
-      <Switch size="md" labelPosition="start" fullWidth label="Brand colours" checked={brand.on} onCheckedChange={on => setBrand({ on })}
-        title="Paint the Canvas from your own colours instead of Area's palette" />
+    <>
       {brand.on ? <>
         {SLOTS.map(([slot, label], at) => [brand[slot] === null ? (
           <Field key={slot} label={label} orientation="horizontal">
@@ -48,7 +46,7 @@ export function BrandSettings() {
             items={[{ value: "harmonised", label: "Brand's" }, { value: "own", label: "Area's" }]} />
         </Field>
       </> : null}
-    </PanelSection>
+    </>
   );
 }
 

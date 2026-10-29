@@ -34,11 +34,21 @@
   chapter, dark twins, Grey strength and the three fills are sliders with marks; Browse draws quarters (`marks`). Walking
   positions fixed: hovered-mark text near white (MARK_HOVER_RAMP), dark layer floor ramp in the model, Asset card frame
   (FRAME_SAME 0.005, farther tone). Accent stays 5° (a 1° opt-in sheet was built, then withdrawn, owner 2026-10-27).
-- **Next: exact colours (owner decided 2026-10-27; plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a Colours
-  stage first in Setup (light page, dark page, accent as exact OKLCH picks written as variables, `data-area-colours`
-  scope, `colourDeclarations`, `area-tokens colours`); Tint hue split light/dark (dark follows light); one accent pick
-  via the brand engine (merges Brand colours); Cool/Warm kept as ramps, shown as picker starting points; page tests
-  become grids (34 greys exhaustive). Accent open item: the solid flips its label between 35° and 40°.
+- **Exact colours, branch `claude/gifted-matsumoto-12dc07`, phases 1-4, synced with main after #170, owner-approved
+  2026-10-28 (plan doc https://claude.ai/artifact/K4rswTACDiMB31nd4nzWz2):** a page pick (OKLCH) solves into ground, tint hue,
+  room and strength (`packages/tokens/src/color/colours.ts`, CAST_FADE inverted, held at Tint 100 and the hue's room);
+  `@area/tokens/colours` (`colourDeclarations`, `colourCss`, `pageInfo`, `presetPick`; page part 3 kB gzipped);
+  `data-area-colours` restates the derivations; Tint hue split (`tint-hue-dark`, default Same as light); React `Theme`
+  `colours`; `area-tokens colours`; the app saves picks (`apps/desktop/src/colours.ts`, old presets convert once where a
+  pick reproduces them); Setup opens with a Colours chapter (light page, dark page, accent); Color picker gains a gamut
+  mode (Complete); Inspector Page colour row; the accent's Exact colour merged the Brand colours switch. Tests:
+  `colours.test.ts` (34 greys, dense pick grid both modes, coarse grid at every position, CSS vs model); token suite
+  ~60s (was ~110s). Review round 75 on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG, all approved by the owner 2026-10-28 (not the
+  visual pass's own round 75):
+  `component-review.mjs --colours` adds a Colours switch (Defaults / Preset → pick / Exact pick) comparing every variant,
+  Before at main faadea6a; Exact pick keeps Action neutral (owner: Layer contrast stays Flat there too); at the defaults 1189 of 1190 variants unchanged, Color picker's Gamut tile new. Built with a
+  JSON import hook for Node 26 (docs/research/exact-colours-2026-10-28/review-note.md says how). Not done: the Theme
+  tab's Browse view still shows the attribute settings; the accent open item (solid flips its label between 35° and 40°).
 - **Rounds 72-73 (owner 2026-10-26):** Complete: asset-card, code-block, color-picker, command-palette, inline-list, nav,
   panel, plan, queue, separator, shortcut-list (r72), radio, checkbox (r73). Infobox REMOVED (code, styles, manifest,
   demos, page, test). Round 73 notes page https://claude.ai/artifact/2Lg4zR9oKdhf8XaT7vCVex: Edit summary diff: option C

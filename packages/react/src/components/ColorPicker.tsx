@@ -10,7 +10,7 @@ import { Select } from "./forms.tsx";
 import { Segmented } from "./primitives.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { AREA_COLOR_GRID } from "./color-grid.ts";
-import { clamp, contrastBand, contrastRatio, hslToHsv, hsvToRgb, oklchToRgb, rgbToHsl, rgbToHsv, rgbToOklch, type Rgb } from "./color-math.ts";
+import { clamp, contrastBand, contrastRatio, hslToHsv, hsvToRgb, inSrgb, oklchToRgb, rgbToHsl, rgbToHsv, rgbToOklch, type Rgb } from "./color-math.ts";
 import { colorPickerVariants, MANIFESTS, type VariantProps } from "../variants.ts";
 
 const byte = (n: number) => Math.round(clamp(n, 0, 255)).toString(16).padStart(2, "0").toUpperCase();
@@ -128,15 +128,43 @@ export interface ColorPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   swatches?: readonly ColorSwatchOption[];
   swatchesLabel?: string;
   onAddSwatch?: (value: string) => void;
+  /**
+   * Pick in OKLCH inside a region (2026-10-27, exact colours): the area is lightness (up) by chroma (right) at the hue on
+   * the track, drawn only where `reach` allows, so every point offered is a colour the product will paint. The value is
+   * exact: `oklch` / `defaultOklch` in, `onOklchChange` out (`onValueChange` still gets the nearest hex). Views, models,
+   * opacity, contrast and the eyedropper don't apply.
+   */
+  gamut?: ColorGamut;
+  oklch?: OklchValue;
+  defaultOklch?: OklchValue;
+  onOklchChange?: (value: OklchValue, event?: SyntheticEvent) => void;
+}
+
+/** An exact OKLCH colour: lightness 0-1, chroma, hue in degrees. */
+export interface OklchValue { l: number; c: number; h: number }
+/** The region a gamut picker offers. */
+export interface ColorGamut {
+  /** Lightness at the area's bottom and top. */
+  lightness: readonly [number, number];
+  /** Chroma at the area's right edge. */
+  chroma: number;
+  /** The most chroma offered at a lightness and hue; sRGB's own limit when left out. */
+  reach?: (l: number, h: number) => number;
 }
 
 /** Figma-style color editor with spectrum, grid and slider views, six color models, a
- * contrast check, a before/after preview and saved swatches. */
-export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function ColorPicker(
+ * contrast check, a before/after preview and saved swatches; or, with `gamut`, an exact OKLCH
+ * picker over the colours a region allows. */
+export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function ColorPicker(props, ref) {
+  return props.gamut ? <GamutPicker {...props} gamut={props.gamut} ref={ref} /> : <SpectrumPicker {...props} ref={ref} />;
+});
+
+const SpectrumPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function SpectrumPicker(
   { variant, label = "Color", value, defaultValue = "#8D4DF3", onValueChange, name, disabled, alpha = true,
     model: modelProp, defaultModel = "hex", onModelChange, views = ["spectrum"], view: viewProp, defaultView, onViewChange,
     grid = AREA_COLOR_GRID, contrast, preview, eyedropper = true, header,
-    swatches = [], swatchesLabel = "Saved colors", onAddSwatch, className, style, ...rest }, ref,
+    swatches = [], swatchesLabel = "Saved colors", onAddSwatch, className, style,
+    gamut: _gamut, oklch: _oklch, defaultOklch: _defaultOklch, onOklchChange: _onOklchChange, ...rest }, ref,
 ) {
   // A consumer's aria-label names the group and its parts; `label` is the fallback (audit S17, F-19).
   const groupName = (rest as { "aria-label"?: string })["aria-label"] ?? label;
@@ -378,5 +406,130 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
         onValueChange={(next, event) => { const picked = normalizeHexColor(next); if (picked) emit(hexToHsv(picked), false, event); }} />}
     </div>}
     {name && <input type="hidden" name={name} value={color} disabled={disabled} />}
+  </div>;
+});
+
+/** sRGB's own reach: the most chroma in gamut at a lightness and hue. */
+function srgbReach(l: number, h: number): number {
+  let low = 0, high = 0.4;
+  for (let i = 0; i < 20; i++) { const mid = (low + high) / 2; if (inSrgb([l, mid, h])) low = mid; else high = mid; }
+  return low;
+}
+const round = (n: number, places: number) => Number(n.toFixed(places));
+/** Lightness and chroma to four places (a screen shows no finer step), hue to a tenth of a degree. */
+const tidy = ({ l, c, h }: OklchValue): OklchValue => ({ l: round(l, 4), c: round(c, 4), h: round(((h % 360) + 360) % 360, 1) });
+const hexOf = ({ l, c, h }: OklchValue) => `#${oklchToRgb([l, c, h]).rgb.map(byte).join("")}`;
+/** The area's resolution in canvas pixels: smooth enough under the browser's own scaling, cheap to repaint as the hue moves. */
+const PLANE = 128;
+
+/**
+ * The gamut picker: lightness × chroma at a hue, painted only where the region reaches, with the hue on a track and the
+ * value as three exact fields. A point past the reach is held at it, so the thumb never leaves what can be painted.
+ */
+const GamutPicker = forwardRef<HTMLDivElement, ColorPickerProps & { gamut: ColorGamut }>(function GamutPicker(
+  { variant, label = "Color", gamut, oklch, defaultOklch, onOklchChange, onValueChange, name, disabled, header,
+    swatches = [], swatchesLabel = "Saved colors", className, style,
+    value: _value, defaultValue: _defaultValue, alpha: _alpha, model: _model, defaultModel: _defaultModel, onModelChange: _onModelChange,
+    views: _views, view: _view, defaultView: _defaultView, onViewChange: _onViewChange, grid: _grid, contrast: _contrast, preview: _preview,
+    eyedropper: _eyedropper, onAddSwatch: _onAddSwatch, ...rest }, ref,
+) {
+  const groupName = (rest as { "aria-label"?: string })["aria-label"] ?? label;
+  const [low, high] = gamut.lightness;
+  const reach = gamut.reach ?? srgbReach;
+  const hold = (next: OklchValue): OklchValue => {
+    const l = clamp(next.l, low, high), h = ((next.h % 360) + 360) % 360;
+    return tidy({ l, h, c: clamp(next.c, 0, Math.min(gamut.chroma, Math.floor(reach(l, h) * 1e4) / 1e4)) });
+  };
+  const [local, setLocal] = useState<OklchValue>(() => hold(defaultOklch ?? { l: high, c: 0, h: 0 }));
+  const color = oklch ? hold(oklch) : local;
+  const canvas = useRef<HTMLCanvasElement | null>(null);
+
+  function emit(next: OklchValue, event?: SyntheticEvent) {
+    if (disabled) return;
+    const held = hold(next);
+    if (!oklch) setLocal(held);
+    if (held.l === color.l && held.c === color.c && held.h === color.h) return;
+    onOklchChange?.(held, event);
+    onValueChange?.(hexOf(held), event);
+  }
+
+  // The plane at the hue: each row's reach worked out once, every point past it left clear.
+  useEffect(() => {
+    const context = canvas.current?.getContext("2d");
+    if (!context) return;
+    const image = context.createImageData(PLANE, PLANE);
+    for (let y = 0; y < PLANE; y++) {
+      const l = high - (y + 0.5) / PLANE * (high - low), most = reach(l, color.h);
+      for (let x = 0; x < PLANE; x++) {
+        // The reach's edge is covered in proportion, so the boundary stays a line however far the canvas is scaled.
+        const c = (x + 0.5) / PLANE * gamut.chroma, cover = clamp((most - c) / (gamut.chroma / PLANE) + 0.5, 0, 1);
+        if (cover === 0) continue;
+        const [r, g, b] = oklchToRgb([l, Math.min(c, most), color.h]).rgb, at = (y * PLANE + x) * 4;
+        image.data[at] = r; image.data[at + 1] = g; image.data[at + 2] = b; image.data[at + 3] = Math.round(cover * 255);
+      }
+    }
+    context.putImageData(image, 0, 0);
+  }, [color.h, low, high, gamut.chroma, reach]);
+
+  function point(event: PointerEvent<HTMLDivElement>) {
+    const box = event.currentTarget.getBoundingClientRect();
+    const x = clamp((event.clientX - box.left) / box.width, 0, 1), y = clamp((event.clientY - box.top) / box.height, 0, 1);
+    emit({ l: high - y * (high - low), c: x * gamut.chroma, h: color.h }, event);
+  }
+  // Left/Right move chroma a hundredth of the area, Up/Down lightness; Shift moves ten times as far.
+  function areaKey(event: KeyboardEvent<HTMLInputElement>) {
+    const step = event.shiftKey ? 10 : 1;
+    const delta: Record<string, [number, number]> = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowDown: [0, -step], ArrowUp: [0, step], PageDown: [0, -10], PageUp: [0, 10] };
+    const move = delta[event.key];
+    if (!move) return;
+    event.preventDefault();
+    emit({ l: color.l + move[1] / 100 * (high - low), c: color.c + move[0] / 100 * gamut.chroma, h: color.h }, event);
+  }
+
+  const hex = hexOf(color);
+  const rootStyle = {
+    "--_saturation": `${color.c / gamut.chroma * 100}%`, "--_brightness": `${(high - color.l) / (high - low) * 100}%`, "--_swatch-color": hex,
+    // The hue track's colours, at a lightness and chroma where every hue shows.
+    "--_ok-l": 0.75, "--_ok-c": 0.12, "--_ok-h": color.h,
+    ...style,
+  } as CSSProperties;
+  const field = (id: string, name: string, n: number, max: number, digits: number, unit: string | undefined, set: (n: number) => OklchValue) => (
+    <NumberField key={id} size="sm" variant="soft" aria-label={`${groupName} ${name}`} min={0} max={max} step={1 / 10 ** digits}
+      fractionDigits={digits} unit={unit} value={n} disabled={disabled} onValueCommit={next => { if (next !== null) emit(set(next)); }} />
+  );
+
+  return <div {...rest} ref={ref} role="group" aria-label={groupName} aria-disabled={disabled || undefined}
+    className={colorPickerVariants({ variant }, className)} style={rootStyle} data-gamut="">
+    {header && <div className="area-color-picker__header">{header}</div>}
+    <div className="area-color-picker__body">
+      <div className="area-color-picker__area area-color-picker__area--gamut" dir="ltr"
+        onPointerDown={event => { if (disabled || event.button !== 0) return; event.currentTarget.setPointerCapture(event.pointerId); event.currentTarget.querySelector("input")?.focus(); point(event); }}
+        onPointerMove={event => { if (!disabled && event.currentTarget.hasPointerCapture(event.pointerId)) point(event); }}>
+        <canvas ref={canvas} className="area-color-picker__plane" width={PLANE} height={PLANE} aria-hidden="true" />
+        <span className="area-color-picker__thumb" aria-hidden="true" />
+        <input className="area-color-picker__channel" type="range" aria-roledescription="2D slider" aria-label={`${groupName} lightness and chroma`}
+          aria-valuetext={`Lightness ${round(color.l * 100, 2)}%, chroma ${color.c}`} min={0} max={100} value={Math.round(color.c / gamut.chroma * 100)} disabled={disabled}
+          onKeyDown={areaKey} onChange={event => emit({ ...color, c: +event.target.value / 100 * gamut.chroma }, event)} />
+      </div>
+      <div className="area-color-picker__controls">
+        <div className="area-color-picker__tracks" dir="ltr">
+          <input className="area-color-picker__slider" data-channel="ok-h" type="range" aria-label={`${groupName} hue`} min={0} max={359.9} step={0.1}
+            value={color.h} disabled={disabled} onChange={event => emit({ ...color, h: +event.target.value }, event)} />
+        </div>
+      </div>
+      <div className="area-color-picker__values">
+        <InputGroup className="area-color-picker__fields" variant="soft" size="sm" data-model="oklch">
+          {field("l", "lightness", round(color.l * 100, 2), 100, 2, "%", n => ({ ...color, l: n / 100 }))}
+          {field("c", "chroma", color.c, gamut.chroma, 4, undefined, n => ({ ...color, c: n }))}
+          {field("h", "hue", color.h, 360, 1, "°", n => ({ ...color, h: n }))}
+        </InputGroup>
+      </div>
+    </div>
+    {swatches.length > 0 && <div className="area-color-picker__swatches">
+      <div className="area-color-picker__heading"><span>{swatchesLabel}</span></div>
+      <ColorSwatchPicker label={`${groupName} ${swatchesLabel.toLowerCase()}`} size="md" columns={9} items={swatches} value={hex} disabled={disabled}
+        onValueChange={(next, event) => { const picked = normalizeHexColor(next); if (picked) { const [l, c, h] = rgbToOklch(hexToRgb(picked), color.h); emit({ l, c, h }, event); } }} />
+    </div>}
+    {name && <input type="hidden" name={name} value={`oklch(${color.l} ${color.c} ${color.h})`} disabled={disabled} />}
   </div>;
 });

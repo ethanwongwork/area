@@ -31,6 +31,7 @@ import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } f
 import { MATERIAL_BUNDLES } from "@area/tokens/config";
 import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 import { restoreBrand, useBrandSheet, type BrandState } from "./brand.ts";
+import { PAGE_AXES, hasColours, restoreColours, shownColours, useColoursSheet, type ColoursState } from "./colours.ts";
 
 /* Text-only tabs (owner, 2026-10-11: no icons in the Titlebar's tabs). */
 export const TABS = [
@@ -177,7 +178,10 @@ interface StudioState {
   /** The Material a list is on (a bundle, or one lever moved), or `null`. */
   previewMaterial: (state: MaterialState | null) => void;
   /** What the Canvas paints: the saved settings with any preview over them. */
-  shown: { canvas: CanvasAxes; material: MaterialState };
+  shown: { canvas: CanvasAxes; material: MaterialState; colours: ColoursState };
+  /** The Canvas's exact page colours (src/colours.ts): a pick per mode, or none where the page settings decide. */
+  colours: ColoursState;
+  setColours: (patch: Partial<ColoursState>) => void;
   /** The Canvas's brand (src/brand.ts): off, Area's palette, or up to three exact colours. */
   brand: BrandState;
   setBrand: (patch: Partial<BrandState>) => void;
@@ -209,6 +213,9 @@ export function Studio() {
   const [canvas, setCanvasState] = useState<CanvasAxes>(() => restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})));
   const [material, setMaterialState] = useState<MaterialState>(() => restoreMaterial(readStored("material", null)));
   const [brand, setBrandState] = useState<BrandState>(() => restoreBrand(readStored("brand", null)));
+  // Picks saved as colours; a Canvas saved before them converts its page presets once (src/colours.ts).
+  const [colours, setColoursState] = useState<ColoursState>(() => restoreColours(readStored("colours", null), restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})), CANVAS_DEFAULTS));
+  useEffect(() => writeStored("colours", colours), [colours]);
   const [panels, setPanels] = useState(() => readStored("panels", { sidebar: true, inspector: true }));
   const [inspectorView, setInspectorViewState] = useState<InspectorView>(() => {
     const saved = readStored<string>("inspectorView", "theme");
@@ -298,11 +305,16 @@ export function Studio() {
     query,
     theme,
     canvas,
-    setCanvas: (axis, value) => setCanvasState(current => {
-      const next = { ...current, [axis]: value };
-      saveCanvas(next);
-      return next;
-    }),
+    setCanvas: (axis, value) => {
+      // A page setting written hands its mode's page back to the settings: the pick would hide it.
+      const dropped = (["light", "dark"] as const).filter(mode => colours[mode] !== null && PAGE_AXES[mode].includes(axis));
+      if (dropped.length) setColoursState(current => ({ ...current, ...Object.fromEntries(dropped.map(mode => [mode, null])) }));
+      setCanvasState(current => {
+        const next = { ...current, [axis]: value };
+        saveCanvas(next);
+        return next;
+      });
+    },
     material,
     setMaterialBundle: bundle => {
       const next = { bundle, overrides: {} };
@@ -326,7 +338,9 @@ export function Studio() {
       return current[axis] === value ? current : { ...current, [axis]: value };
     }),
     previewMaterial: setPreviewedMaterial,
-    shown: { canvas: { ...canvas, ...previewAxes }, material: previewedMaterial ?? material },
+    shown: { canvas: { ...canvas, ...previewAxes }, material: previewedMaterial ?? material, colours: shownColours(colours, previewAxes) },
+    colours,
+    setColours: patch => setColoursState(current => ({ ...current, ...patch })),
     brand,
     setBrand: patch => setBrandState(current => {
       const next = { ...current, ...patch };
@@ -345,7 +359,9 @@ export function Studio() {
       writeStored("panels", next);
       return next;
     }),
-  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, item, tab, go, panels, inspectorView]);
+  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, colours, item, tab, go, panels, inspectorView]);
+  // The picks' one rule is in the head while there are any; the scopes that carry the settings carry data-area-colours.
+  useColoursSheet(state.shown.colours);
 
   const current = TABS.find(entry => entry.id === tab)!;
   return (
@@ -485,7 +501,7 @@ export interface WorkspaceProps {
 
 /** The Inspector's settings and the Material as the attributes a scope takes (the Canvas's body, or a preview's). */
 export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof materialAttributes>[0]): Record<string, string | undefined> {
-  return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
+  return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-hue-dark": shown["tint-hue-dark"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
 }
 /** The shipped defaults as attributes: what <html> and the Canvas body carry (PRODUCT_UI.md, rule 18). */
 const DEFAULT_ATTRIBUTES = canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT);
@@ -512,7 +528,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   // document's head while Brand is on, so the body, cards and titles keep Area's palette.
   const brand = canvasPicks && studio.brand.on ? studio.brand : null;
   useBrandSheet(brand);
-  const specimens = useMemo(() => canvasPicks ? { ...movedFrom(canvasAttributes(studio.shown.canvas, studio.shown.material), DEFAULT_ATTRIBUTES), ...(brand ? { "data-area-brand": "" } : {}) } : {}, [canvasPicks, studio.shown, brand]);
+  const specimens = useMemo(() => canvasPicks ? { ...movedFrom(canvasAttributes(studio.shown.canvas, studio.shown.material), DEFAULT_ATTRIBUTES), ...(brand ? { "data-area-brand": "" } : {}), ...(hasColours(studio.shown.colours) ? { "data-area-colours": "" } : {}) } : {}, [canvasPicks, studio.shown, brand]);
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
   const signature = JSON.stringify([axes, specimens, brand]);

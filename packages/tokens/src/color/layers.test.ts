@@ -11,64 +11,11 @@ import {
   layersPosition, cardTonePosition, inkTintPosition, DEFAULT_LAYERS, tintChromaAt, tintPosition, fillStepAt, fillPosition,
 } from "./layers.ts";
 import { wcagContrastHex } from "./contrast.ts";
-import { type Rgb, SRGB, clampRgb, oklabToRgb, parseHex, rgbToOklab, toHex } from "./oklab.ts";
 import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
 import { ACCENT_HUES } from "./generate.ts";
-import { resolveTheme, scaleFor } from "../semantic/resolve.ts";
+import { resolveTheme } from "../semantic/resolve.ts";
 import { DARK_WASH, darkWashAlphas } from "../emit/base.ts";
-
-const THEMES = ["light", "dark"] as const;
-const groundsOf = (t: "light" | "dark") => t === "light" ? GROUND_LIGHT_STEPS : GROUND_DARK_STEPS;
-/** The smallest steps Area ships today that read: light 0.012 (a sidebar's 50 to its hover 75), dark 0.04. */
-const MIN = { light: { fill: 0.017, hover: 0.009, selected: 0.035, frame: 0.03 }, dark: { fill: 0.035, hover: 0.035, selected: 0.07, frame: 0.06 } };
-const casts = NEUTRAL_SCALES.map(spec => ({ id: spec.id, cast: castOf(scaleFor(spec.id, "light").steps.find(s => s.level === 50)!.hex, scaleFor(spec.id, "dark").steps.find(s => s.level === 900)!.hex) }));
-
-/** base.ts `bg-mark` composited over a ground: 6% black in light, 10% white in dark. */
-function markOver(theme: "light" | "dark", hex: string, keep = theme === "light" ? 0.94 : 0.9): string {
-  const over = (c: number) => theme === "light" ? c * keep : c * keep + (1 - keep);
-  return toHex(parseHex(hex).map(over) as Rgb);
-}
-/** Mix toward black (d > 0) or white in OKLab, as CSS color-mix(in oklab, …) does. */
-function mixOklab(hex: string, toward: "black" | "white", t: number): string {
-  const { L, a, b } = rgbToOklab(parseHex(hex), SRGB), end = toward === "black" ? 0 : 1;
-  return toHex(clampRgb(oklabToRgb({ L: L * (1 - t) + end * t, a: a * (1 - t), b: b * (1 - t) }, SRGB)));
-}
-/** A colour at alpha over an opaque ground, in sRGB, as the browser composites. */
-function alphaOver(hex: string, alpha: number, ground: string): string {
-  const f = parseHex(hex), g = parseHex(ground);
-  return toHex(f.map((c, i) => c * alpha + g[i]! * (1 - alpha)) as Rgb);
-}
-
-/** Every check the gate runs, for one mode at one tint and one text share, over every ground and Layers step (or the
- * Layers values given). */
-function problemsFor(theme: "light" | "dark", cast: { chroma: number; hue: number }, share = DEFAULT_INK_TINT / 4, cardTone: CardTone = "auto", layers: readonly number[] = LAYER_STEPS, fills: FillSelection = DEFAULT_FILL): string[] {
-    const problems: string[] = [];
-    for (const g of groundsOf(theme)) for (const n of layers) {
-      const m = layerLightness(theme, g, n, fills, cardTone), hx = (L: number) => layerHex(theme, L, cast), at = `${g}/${n}`;
-      const ink = (L: number) => inkHex(theme, L, cast, share);
-      const body = ink(m.ink.body), muted = ink(m.ink.muted), edge = hx(m.ink.edge), mm = MIN[theme];
-      for (const [name, ground] of [["page", m.page], ["raised", m.raised], ["recessed", m.recessed], ["card", m.card], ["tile", m.tile]] as const) {
-        const [rest, hover, selected] = m.fill[name];
-        for (const [what, bg] of [[name, ground], [`${name} field`, rest], [`${name} hover`, hover], [`${name} selected`, selected]] as const)
-          if (wcagContrastHex(muted, hx(bg)) < 4.5) problems.push(`${at}: muted on ${what}`);
-        // Soft Badge and Count: muted on the soft-mark plate (base.ts bg-mark) laid over the ground.
-        if (wcagContrastHex(muted, markOver(theme, hx(ground))) < 4.5) problems.push(`${at}: muted on a mark on ${name}`);
-        // An interactive soft Badge under the pointer (bg-mark-hover, 10.7% black) on the page and on layers.
-        if (theme === "light" && name !== "recessed" && name !== "tile" && wcagContrastHex(muted, markOver(theme, hx(ground), 0.893)) < 4.5) problems.push(`${at}: muted on a hovered mark on ${name}`);
-        if (wcagContrastHex(body, hx(selected)) < 4.5) problems.push(`${at}: body on ${name} selected`);
-        for (const bg of [ground, rest]) if (wcagContrastHex(edge, hx(bg)) < 3) problems.push(`${at}: control edge on ${name}`);
-        if (Math.abs(rest - ground) < mm.fill) problems.push(`${at}: ${name} field`);
-        // The smallest steps a state shows are the defaults' (the fill settings choose fainter or firmer plates on purpose;
-        // their order and reading apart are "the state fills keep their order").
-        if (fills === DEFAULT_FILL && Math.abs(hover - rest) < mm.hover) problems.push(`${at}: ${name} hover`);
-        if (fills === DEFAULT_FILL && Math.abs(selected - ground) < mm.selected) problems.push(`${at}: ${name} selected`);
-        if (theme === "dark" && rest < DARK_FILL_FLOOR - 1e-9) problems.push(`${at}: ${name} field under the dark floor`);
-      }
-      if (Math.abs(m.edge.card - m.page) < mm.frame) problems.push(`${at}: card frame`);
-      if (Math.abs(m.edge.float - m.raised) < mm.frame) problems.push(`${at}: menu frame`);
-    }
-    return problems;
-}
+import { THEMES, groundsOf, MIN, casts, mixOklab, alphaOver, problemsFor, cssLightness } from "./layer-checks.ts";
 
 describe("layers: every combination is usable", () => {
   for (const theme of THEMES) for (const { id, cast } of casts) it(`${theme}, ${id}: text reads, controls and frames show`, () => {
@@ -76,21 +23,15 @@ describe("layers: every combination is usable", () => {
   });
 });
 
-// Tint (axes/tint.ts, 2026-10-22): every 5° hue at every strength 1 to 16 (16 since 2026-10-23, each held
-// inside its hue's room: tintRoom), at every Text tint share, in both
-// modes, through every check above, at every ground and Layers step (docs/research/custom-neutral-2026-10-22/).
+// Tint (axes/tint.ts, 2026-10-22): every hue and strength, held inside its hue's room (tintRoom), at every Text tint share,
+// in both modes, through every check above, at every ground and Layers step (docs/research/custom-neutral-2026-10-22/).
+// The 5° hues at every strength 1 to 16 and every quarter of text went with exact colours (2026-10-27): a picked page
+// walks every degree at every chroma it can show, denser than they were (colours.test.ts), and the strengths a page can't
+// show, which only the attributes reach, are walked here, every position on every 30° hue at every share and every degree
+// at the room-bound strengths.
 describe("layers: every tint is usable", () => {
-  for (const theme of THEMES) it(`${theme}: every hue, strength and text share`, () => {
-    const problems: string[] = [];
-    for (const hue of TINT_HUES.filter(h => h % 5 === 0)) for (const step of TINT_STEPS) for (const share of INK_TINT_STEPS) {
-      if (step === 0) continue;
-      const found = problemsFor(theme, { hue, chroma: step * TINT_STEP }, share / 4);
-      if (found.length) problems.push(`hue ${hue}, tint ${step}, text ${share}: ${found[0]} (+${found.length - 1})`);
-    }
-    expect(problems).toEqual([]);
-  }, 60_000);
   // Every degree since 2026-10-26: each hue at the strengths a hue's room bounds (4, 8, 16), at the text shares' ends and
-  // middle; the 5° hues walk every strength and share above.
+  // middle; "every grey tint position" below walks every strength and share on the 30° hues.
   for (const theme of THEMES) it(`${theme}: every hue, every degree`, () => {
     const problems: string[] = [];
     for (const hue of TINT_HUES) for (const step of [4, 8, 16]) for (const share of [0, 2, 4]) {
@@ -103,23 +44,6 @@ describe("layers: every tint is usable", () => {
     for (const share of INK_TINT_STEPS) expect(inkHex("light", 0.5, { hue: 0, chroma: 0 }, share / 4)).toBe(layerHex("light", 0.5, { hue: 0, chroma: 0 }));
   });
 });
-
-/** A small evaluator for the CSS math layers.ts writes: calc, min, max, clamp, pow and var() over the settings. */
-function evaluate(expr: string, vars: Record<string, number>): number {
-  const js = expr
-    .replace(/var\(--area-([a-z0-9-]+)\)/g, (_, name) => { if (!(name in vars)) throw new Error(`unknown var ${name}`); return `(${vars[name]})`; })
-    .replace(/\bcalc\(/g, "(").replace(/\bpow\(/g, "Math.pow(").replace(/\bmin\(/g, "Math.min(").replace(/\bmax\(/g, "Math.max(")
-    .replace(/\bclamp\(/g, "((a,x,b)=>Math.min(b,Math.max(a,x)))(");
-  return Function(`"use strict"; return (${js});`)() as number;
-}
-function cssLightness(theme: "light" | "dark", g: number, n: number, f: FillSelection = DEFAULT_FILL, tone: CardTone = "auto") {
-  const auto = tone === "auto" ? 1 : 0, k = tone === "auto" ? 0 : tone;
-  const css = layerLightnessCss(), vars: Record<string, number> = { "cast-chroma-light": 0, "ground-light": theme === "light" ? groundLightness("light", g) : 1, "ground-dark": theme === "dark" ? groundLightness("dark", g) : 0, "layers-light": theme === "light" ? n : 8 - n, "layers-dark": theme === "dark" ? n : 8 - n, "fill-hover-step": f.hover, "fill-selected-step": f.selected,
-    "card-tone-light-auto": theme === "light" ? auto : 1, "card-tone-light": theme === "light" ? k : 0, "card-tone-dark-auto": theme === "dark" ? auto : 1, "card-tone-dark": theme === "dark" ? k : 0 };
-  // Resolve in dependency order: keep going until every helper is known.
-  for (let pass = 0; pass < 6; pass++) for (const [k, e] of Object.entries(css)) if (!(k in vars)) { try { vars[k] = evaluate(e, vars); } catch { /* a later pass */ } }
-  return vars;
-}
 
 // Every fill setting combination (axes/states.ts): hover 1–5 × selected 0–4, on every ground and Layers step.
 const FILL_COMBOS: FillSelection[] = [];

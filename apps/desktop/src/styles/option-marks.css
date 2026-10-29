@@ -34,5 +34,9 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
 .studio-bar__field--md, .studio-bar__field--lg { inline-size: calc(var(--_value-ch, 4) * 1ch + var(--area-space-20)); }
 /* Brand (brand-settings.tsx): a colour's exact hex with its picker beside it; the picker's head names it beside Remove. */
 .studio-brand__colour { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--area-space-4); align-items: center; }
+/* The Inspector's page colour (src/page-colour.tsx): its swatch and words, then the picker in a Popover. */
+.studio-page-colour { display: flex; align-items: center; gap: var(--area-space-6); min-inline-size: 0; }
+.studio-page-colour > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.studio-page-colour__picker { display: grid; gap: var(--area-space-8); }
 .studio-brand__head { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); }
 .studio-row__label > .studio-mark { inline-size: var(--area-space-16); block-size: var(--area-space-16); }

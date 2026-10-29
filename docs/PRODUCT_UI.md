@@ -80,7 +80,7 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     themselves that sit inside the containers would be the only things that update with the controls"). The
     Inspector's settings, and hover previews of them, reach only what holds a specimen: a tile's view, the Stage's view,
     a colour card (the card is the colour), a type sample and an icon glyph, through one scope of the settings moved
-    from the defaults (`src/specimen-scope.tsx`); a brand (Inspector → Brand, `src/brand.ts`) reaches the same holders. The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
+    from the defaults (`src/specimen-scope.tsx`); a brand (Inspector → Accent → Exact colour, `src/brand.ts`) and exact page colours (Inspector → Page colour, `src/colours.ts`) reach the same holders. The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
     2026-10-22 to 25 the app took every committed Inspector setting instead. The Theme tab's own body stays at the
     Setup scale (Setup, below).
 

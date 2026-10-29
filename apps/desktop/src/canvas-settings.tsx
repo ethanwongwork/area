@@ -17,10 +17,10 @@ import { DEPTH_LEVER_AXES, GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { materialValue, type MaterialState } from "./material.ts";
 import { choiceFigure, FIGURED } from "./choice-figures.tsx";
 import { materialMark } from "./option-marks.tsx";
-import { BrandSettings } from "./brand-settings.tsx";
 import { brandStyle } from "./brand.ts";
 import { ROW_OF, SettingRow, type RowContext } from "./inspector-rows.tsx";
 import { readStored, writeStored } from "./storage.ts";
+import { inMode } from "./pages/theme-settings.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
 
 type Axis = keyof CanvasAxes;
@@ -39,7 +39,7 @@ const GROUPS = SETTING_GROUPS;
 type View = "grid" | "list";
 const ViewContext = createContext<View>("grid");
 /** Colours open as a grid of swatches at any length; other settings as figures when they have one and fit four rows. */
-const SWATCHES = new Set<string>(["accent", "tint-hue"]);
+const SWATCHES = new Set<string>(["accent", "tint-hue", "tint-hue-dark"]);
 const GRID_MOST = 12;
 const layoutOf = (view: View, axis: string, count: number) =>
   view === "grid" && (SWATCHES.has(axis) || (FIGURED.has(axis) && count <= GRID_MOST)) ? "grid" as const : "list" as const;
@@ -48,26 +48,22 @@ function ViewSwitch({ view, onChange }: { view: View; onChange: (view: View) => 
     items={[{ value: "grid", label: "Grid", icon: <GridIcon /> }, { value: "list", label: "List", icon: <ListIcon /> }]} />;
 }
 
-export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-light", "tint-dark", "ink-tint", "accent", "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "feedback", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
+export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-hue-dark", "tint-light", "tint-dark", "ink-tint", "accent", "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "feedback", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
   // Material shows with every setting: a tab that narrows its settings shows no surfaces a material paints.
   const showMaterial = material ?? axes.length === GALLERY_CONTROLS.length - 1;
   // Ground, Layers, Tint strength and Card tone exist once per theme; the Inspector sets the mode the app is in (owner, 2026-10-22: "separate the
   // dark mode choice from the light mode, i shouldnt be choosing both at the same time"), the Titlebar's switch choosing
   // which, so light's pair shows in Light and dark's in Dark.
   const { theme } = useStudio();
-  const inTheme = (axis: Axis) => !/^(ground|layers|tint|card-tone|solid)-(light|dark)$/.test(axis) || axis.endsWith(`-${theme}`);
+  const inTheme = (axis: Axis) => inMode(axis, theme);
   const [view, setViewState] = useState<View>(() => readStored<View>("inspector-list-view", "grid"));
   const setView = (next: View) => { setViewState(next); writeStored("inspector-list-view", next); };
-  // Brand sits before Accent wherever the accent shows (brand-settings.tsx): the palette or your own colours, then the
-  // accent's Shade and Saturation, which apply to either.
-  const showBrand = axes.includes("accent");
   const first = GROUPS.find(group => (group.settings as readonly Axis[]).some(axis => axes.includes(axis) && inTheme(axis)))?.heading;
   return (
     <ViewContext.Provider value={view}>
       {GROUPS.map(group => {
         const shown = (group.settings as readonly Axis[]).filter(axis => axes.includes(axis) && inTheme(axis));
         return shown.length ? [
-          showBrand && group.heading === "Accent" ? <BrandSettings key="brand" /> : null,
           <PanelSection key={group.heading} heading={group.heading} actions={group.heading === first ? <ViewSwitch view={view} onChange={setView} /> : undefined}>
             {(drawn => shown.map(axis => <Setting key={axis} axis={axis} drawn={drawn} />))(new Set<string>())}
           </PanelSection>,

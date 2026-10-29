@@ -23,6 +23,7 @@ import { MATERIAL_ATTRIBUTES, materialDefaults, materialDerived, materialRules }
 import { colorPairs } from "./colors.ts";
 import { rederivationRules } from "./rederive.ts";
 import { brandDefaultCss } from "../semantic/brand.ts";
+import { PAGE_INPUTS } from "../color/colours.ts";
 
 const INDENT = "  ";
 
@@ -205,6 +206,9 @@ export function emitAxes(): string {
     ...AXES.map(axis => [attributeFor(axis), axisKeys.get(axis.id)!] as const),
     ["data-area-ui", new Set([...axisKeys.get("type")!, ...axisKeys.get("density")!])],
     ["data-area-contrast", new Set(["--area-contrast-more"])],
+    // Exact colours (color/colours.ts, 2026-10-27): a scope that sets picked page colours as variables restates what
+    // reads them, as an axis attribute does.
+    ["data-area-colours", new Set(PAGE_INPUTS.map(name => `--area-${name}`))],
   ];
   // Pills and Material set tokens on attributes that do not restate derivations, so a derivation reading one is restated
   // everywhere, as before.
