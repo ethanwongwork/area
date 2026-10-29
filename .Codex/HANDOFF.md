@@ -1,7 +1,7 @@
 # Handoff
 
 ## Current state (2026-10-28)
-- **App structure Phase 1, the new navigation, branch `claude/phase-1-new-navigation-1c3738`, uncommitted (owner
+- **App structure Phase 1, the new navigation, branch `claude/phase-1-new-navigation-1c3738`, PR #173 (owner
   2026-10-28: "Phase 1 of the new navigation should start in a fresh session").** Places (`apps/desktop/src/places.ts`:
   `#brand/area/themes|foundations|components|patterns`, `#library`, `#labs/materials`; old links redirect,
   `tests/places.test.ts`); Titlebar: back / forward (per-tab history), browser-like tabs (Area, Library, Materials; saved
@@ -11,7 +11,7 @@
   Setup); Foundations = Browse, a page per registry group. Nav: a nested group inside another indents a level more (nav.css,
   spec). Inspector "Brand" words → Exact / Matched. Differences from the plan for the owner to confirm: the plan's README,
   Phase 1 "As built". Checks: typecheck, test:desktop 16/16 (fixed the stale brand.tsx entry), React 597/597, app-css,
-  playgrounds, docs, manifest parity; looked at in Electron light and dark. Next: owner review, then commit and PR.
+  playgrounds, docs, manifest parity; looked at in Electron light and dark. Next: merge PR #173; then Phase 2 (Home, a fixed Home tab, several brands) in its own session.
   2026-10-29, owner's notes ("the floating tab component from claude codes browser"): tabs hug their names, close on
   hover / focus / the current tab (4 in on every side, Titlebar sets Nav's row height), + / ⌘T open search into a new tab; Nav horizontal items rest in `fg-muted` (Inspector views too) and a
   horizontal row with actions spaces as a closable tab (icon gap-md 5, xs close); Nav reopened with a Horizontal /
