@@ -9,10 +9,15 @@ interface AreaDesktop {
   setTitlebar?(height: number): void;
   /** Shows a file of the Brand library (a path inside it, "originals/<id>.jpg") in Finder. */
   revealBrand?(path: string): void;
-  /** The app menu's tab commands (electron/main.cjs): ⌘T, ⌘⇧T, ⌘W, ⌃Tab, ⌃⇧Tab, ⌘1–9. Returns the unsubscribe. */
+  /**
+   * The workspace's brands, one brand.json each in Application Support/Area/Brands (src/brands.ts). `read` answers every
+   * file's contents at launch, or null in a capture (the page keeps its brands in its own storage then).
+   */
+  brands?: { read(): unknown[] | null; write(id: string, text: string): void; trash(id: string): void };
+  /** The app menu's tab commands (electron/main.cjs): ⌘T, ⌘⇧T, ⌘⇧H, ⌘W, ⌃Tab, ⌃⇧Tab, ⌘1–9. Returns the unsubscribe. */
   onCommand?(listener: (command: TabCommand, index?: number) => void): () => void;
 }
-type TabCommand = "new-tab" | "reopen-tab" | "close-tab" | "next-tab" | "previous-tab" | "tab";
+type TabCommand = "new-tab" | "reopen-tab" | "close-tab" | "next-tab" | "previous-tab" | "tab" | "home";
 interface Window { areaDesktop?: AreaDesktop }
 
 

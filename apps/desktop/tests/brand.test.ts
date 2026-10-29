@@ -26,6 +26,6 @@ test("Brand off writes nothing; on, the engine's declarations with the status ch
 test("the brand reaches the specimens' scope only, never the Canvas body or <html>", () => {
   const studio = readFileSync(new URL("../src/studio.tsx", import.meta.url), "utf8");
   assert.match(studio, /const specimens = useMemo\(\(\) => canvasPicks \? \{[^\n]*"data-area-brand": ""/);
-  assert.match(studio, /className="studio-canvas__body" \{\.\.\.axes\}><SpecimenScopeContext\.Provider value=\{specimens\}>/);
+  assert.match(studio, /className="studio-canvas__body" \{\.\.\.axes\}(?: onClick=\{keepSpecimenLinks\})?><SpecimenScopeContext\.Provider value=\{specimens\}>/);
   assert.doesNotMatch(studio, /documentElement[^\n]*brand/);
 });

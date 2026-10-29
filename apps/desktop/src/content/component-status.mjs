@@ -14,7 +14,8 @@ export const COMPLETE_COMPONENTS = new Set([
   'select', 'input-group', 'empty-state', 'toggletip', // round 75 approved (owner, 2026-10-27)
   'asset-card', // round 76 approved (owner, 2026-10-27: group element cells draw their frame; the Stage as it ships)
   'command-palette', 'inline-list', 'panel', 'separator', 'shortcut-list', // round 72 approved (owner, 2026-10-26; asset-card too)
-  'nav', // 2026-10-29: horizontal rest ink muted; closable tabs, the close over the name's end (Figma's way), rows that never shrink. Approved (owner: "keep Figma's close, 120 to 170 tabs and scrolling overflow; mark Nav complete")
+  // nav: approved 2026-10-29 (closable tabs, Figma's close, 120 to 170, scrolling overflow); reopened the same day for the
+  // icon-only item (app structure Phase 2's Home tab), back in review.
   'radio', 'checkbox', // round 73 approved (owner, 2026-10-26)
   'file-upload', // round 74 approved (owner, 2026-10-26; description-list too). infobox: removed 2026-10-26 (owner, round 73).
   // plan: reopened 2026-10-25 (owner: a progress tracker; bar, item meta, the ring), back in review.

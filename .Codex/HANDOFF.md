@@ -1,6 +1,18 @@
 # Handoff
 
-## Current state (2026-10-28)
+## Current state (2026-10-29)
+- **App structure Phase 2, Home and several brands, branch `claude/serene-maxwell-905675` (started from the Phase 1
+  session).** Home (`#home`, `src/pages/home.tsx`: Brands, New brand from the Area Starter / Describe it (Setup chat) /
+  Import stub, Boards, Recent) in a fixed first Home tab (Nav's new icon-only item, Figma's file browser tab; ⌘⇧H; ⌘1 =
+  first tab after Home; the last tab closes to Home; + still opens search). Brands on disk (`src/brands.ts`,
+  `~/Library/Application Support/Area/Brands/<id>/brand.json`, electron/main.cjs; Trash on delete; Area can't be deleted);
+  `useStudio()`'s canvas / material / colours / brand are the open brand's chosen theme; the old localStorage settings
+  migrate once into Area's Default. Themes: several per brand (Use, New theme). Specimen hash links no longer navigate
+  (an example's `#home`, a demo's `#library`). Nav back in review (icon-only item). Decisions for the owner: the plan's
+  Phase 2 "As built". Checks: typecheck, test:desktop 19/19, React 597/597, app-css, playgrounds, docs, contracts; Electron
+  captures light and dark; flows tested in the browser preview; the disk store's handlers tested with a stand-in Electron.
+  Not done: the owner's own Electron wasn't relaunched (another session's window was open), so the real migration of the
+  owner's settings runs at the next launch of this build.
 - **App structure Phase 1, the new navigation, branch `claude/phase-1-new-navigation-1c3738`, PR #173 (owner
   2026-10-28: "Phase 1 of the new navigation should start in a fresh session").** Places (`apps/desktop/src/places.ts`:
   `#brand/area/themes|foundations|components|patterns`, `#library`, `#labs/materials`; old links redirect,

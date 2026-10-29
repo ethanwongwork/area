@@ -172,6 +172,8 @@
   .studio-inspector-color { display: inline-flex; align-items: center; gap: var(--area-space-6); min-inline-size: 0; }
   .studio-inspector-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-8); }
   .studio-inspector-actions > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  /* New brand's and Rename's form (src/pages/home.tsx): the name, then how it starts, a field's gap apart (Dialog's form). */
+  .studio-home__form { display: grid; gap: var(--area-space-16); /* pick: Form's field gap */ }
 
   /* A step's semantic tokens (src/pages/color.tsx), one to a line. */
   .studio-used-by { display: grid; gap: var(--area-space-2); }

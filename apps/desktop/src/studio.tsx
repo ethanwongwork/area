@@ -12,7 +12,7 @@
  * one divider between the Titlebar and the panels and one between each panel. Each place
  * (src/places.ts) is a page (src/pages/) that fills the three panels through <Workspace>.
  */
-import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useInsertionEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
+import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useInsertionEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode, type Ref } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, Titlebar, Tooltip, TreeView, type TreeViewNode } from "@area/react";
 import { ArrowLeftIcon, ArrowRightIcon, LibraryIcon, MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./gallery/controls.ts";
@@ -29,13 +29,15 @@ import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
-import { groupSlug, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, START, type Place } from "./places.ts";
+import { groupSlug, HOME_TAB, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, setBrands, tabHolds, tabKind, type Place } from "./places.ts";
 import { AppNav, AppTabs, Takeover } from "./app-nav.tsx";
 import { SearchEverything, type SearchFor } from "./search-palette.tsx";
 import { ThemesPage } from "./pages/themes.tsx";
+import { HomePage } from "./pages/home.tsx";
 import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 import { restoreBrand, useBrandSheet, type BrandState } from "./brand.ts";
 import { PAGE_AXES, hasColours, restoreColours, shownColours, useColoursSheet, type ColoursState } from "./colours.ts";
+import { activeTheme, AREA_ID, brandFile, loadBrands, newTheme, starterBrand, withTheme, type Brand, type BrandOrigin, type BrandTheme, type Restorers } from "./brands.ts";
 
 type Theme = "light" | "dark";
 
@@ -63,7 +65,8 @@ export const CANVAS_DEFAULTS = Object.fromEntries(
 /** Marks a saved Canvas whose Layer contrast, Card shade and Text tint are positions (0–100), so restoreCanvas converts only
  * the ones saved before. */
 const CANVAS_POSITIONS = 1;
-const saveCanvas = (canvas: CanvasAxes) => writeStored("canvas", { ...canvas, positions: CANVAS_POSITIONS });
+/** A theme's Canvas as its brand file holds it: marked as positions. */
+const markCanvas = (canvas: CanvasAxes) => ({ ...canvas, positions: CANVAS_POSITIONS });
 function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: string; positions?: number }): CanvasAxes {
   const { ui, layers, positions, ...rest } = saved;
   const legacy: Partial<CanvasAxes> = {
@@ -102,6 +105,36 @@ function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: stri
   return canvas;
 }
 
+/** How a brand's themes are checked on the way in (src/brands.ts): as the app restored its own saved settings. */
+const RESTORE: Restorers = {
+  canvas: saved => restoreCanvas((saved && typeof saved === "object" ? saved : {}) as Partial<CanvasAxes>),
+  material: restoreMaterial,
+  colours: (saved, canvas) => restoreColours(saved, canvas, CANVAS_DEFAULTS),
+  accent: restoreBrand,
+};
+
+/*
+ * The brands' store: Electron's (one brand.json each in Application Support/Area/Brands, electron/main.cjs), or this
+ * browser's own storage in the preview and a capture. Read once at launch; with no Area brand saved, the settings the app
+ * kept before brands (localStorage canvas, material, colours, brand) become its Default theme, once, and are written at
+ * once. Those old keys are left as they were and no longer read.
+ */
+const disk = () => typeof window !== "undefined" ? window.areaDesktop?.brands : undefined;
+function openBrands(): Brand[] {
+  const files = disk()?.read() ?? readStored<unknown[]>("brands", []);
+  const { brands, migrated } = loadBrands(Array.isArray(files) ? files : [],
+    () => ({ canvas: readStored("canvas", {}), material: readStored("material", null), colours: readStored("colours", null), brand: readStored("brand", null) }), RESTORE);
+  if (migrated) saveBrands(brands, [migrated.id]);
+  setBrands(brands);
+  return brands;
+}
+const fileText = (brand: Brand) => JSON.stringify(brandFile(brand, markCanvas), null, 2);
+/** Writes the brands named by `ids` (all of them in this browser's storage, which keeps one list). */
+function saveBrands(brands: readonly Brand[], ids: readonly string[]) {
+  const store = disk();
+  if (store) for (const brand of brands) { if (ids.includes(brand.id)) store.write(brand.id, fileText(brand)); }
+  else writeStored("brands", brands.map(brand => brandFile(brand, markCanvas)));
+}
 
 /** A computed colour (rgb(), color(srgb …), oklab …) as #rrggbb, read from one painted pixel. */
 function paintedHex(color: string): string {
@@ -145,18 +178,34 @@ const isMac = () => typeof document !== "undefined" && document.documentElement.
 interface OpenTab { id: string; place: Place; panel: "nav" | "page"; back: Place[]; forward: Place[] }
 interface Tabs { list: OpenTab[]; current: string }
 
+/** The Home tab: always first, always on Home (src/places.ts, HOME_TAB). */
+const homeTab = (): OpenTab => ({ id: HOME_TAB, place: { page: "home" }, panel: "nav", back: [], forward: [] });
+
 function openTabs(): Tabs {
   const saved = restoreTabs(readStored("tabs", null), readStored("tab", null), groupOf);
-  const list: OpenTab[] = saved.tabs.map(tab => ({ id: tab.id, place: parsePlace(tab.hash)!, panel: tab.panel, back: [], forward: [] }));
-  // A link the app was opened with (electron --hash=, a reload) opens in the current tab.
+  const list: OpenTab[] = [homeTab(), ...saved.tabs.map(tab => ({ id: tab.id, place: parsePlace(tab.hash)!, panel: tab.panel, back: [], forward: [] }))];
+  // A link the app was opened with (electron --hash=, a reload) opens in the current tab; on Home, in a tab of its own.
   const launched = location.hash ? resolve(location.hash, groupOf) : null;
+  if (launched?.page === "home") return { list, current: HOME_TAB };
   if (launched) {
     const at = list.findIndex(tab => tab.id === saved.current);
+    if (at <= 0) {
+      const added: OpenTab = { id: newTabId(), place: launched, panel: LIST_PAGES.has(launched.page) ? "page" : "nav", back: [], forward: [] };
+      return { list: [...list, added], current: added.id };
+    }
     list[at] = { ...list[at]!, place: launched, panel: launched.page === list[at]!.place.page ? list[at]!.panel : LIST_PAGES.has(launched.page) ? "page" : "nav" };
   }
   return { list, current: saved.current };
 }
 const newTabId = () => `t${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+
+/** A place visited, for Home's Recent: its hash and when, newest first, one entry a place, at most 24. */
+export interface Visit { hash: string; at: number }
+function rememberPlace(place: Place) {
+  const hash = hrefOf(place);
+  const visits = readStored<Visit[]>("recent", []);
+  writeStored("recent", [{ hash, at: Date.now() }, ...(Array.isArray(visits) ? visits : []).filter(visit => visit && visit.hash !== hash)].slice(0, 24));
+}
 
 /** How a place is opened: in the current tab (the default) or a new one, as a new step of its history or in place of it. */
 export interface NavigateOptions { newTab?: boolean; replace?: boolean; panel?: "nav" | "page" }
@@ -189,6 +238,24 @@ interface StudioState {
   /** The Canvas's exact accent (src/brand.ts): off, Area's palette, or up to three exact colours. */
   brand: BrandState;
   setBrand: (patch: Partial<BrandState>) => void;
+  /** The workspace's brands (src/brands.ts), Area first. */
+  brands: readonly Brand[];
+  /**
+   * The open brand: the current tab's, or on Home, the Library or a lab the last one a tab showed. Its chosen theme is what
+   * `canvas`, `material`, `colours` and `brand` are, what the Inspector's Theme view edits and every page paints in.
+   */
+  openBrand: Brand;
+  /** The open brand's chosen theme. */
+  openTheme: BrandTheme;
+  /** A new brand from the Area Starter (or a described one, which the Setup chat then makes): saved, not yet opened. */
+  createBrand: (name: string, origin: BrandOrigin) => Brand;
+  renameBrand: (id: string, name: string) => void;
+  /** Moves a brand's folder to the Trash and closes its tabs. The Area brand stays. */
+  deleteBrand: (id: string) => void;
+  /** Makes one of the open brand's themes its chosen one. */
+  chooseTheme: (id: string) => void;
+  /** Adds a theme to the open brand at Area's shipped values and chooses it. */
+  addTheme: () => BrandTheme;
   /** Where the current tab is. */
   place: Place;
   /** Open a place (src/places.ts). */
@@ -217,19 +284,45 @@ export const useStudio = () => {
 const prefersDark = () => typeof matchMedia === "function" && matchMedia("(prefers-color-scheme: dark)").matches;
 
 export function Studio() {
+  // The brands first: the saved tabs' places name them.
+  const [brands, setBrandList] = useState<Brand[]>(openBrands);
+  setBrands(brands);
   const [tabs, setTabs] = useState<Tabs>(openTabs);
   const tab = tabs.list.find(entry => entry.id === tabs.current) ?? tabs.list[0]!;
   const { place } = tab;
   const item = place.item;
+  // The open brand: the current tab's, else the last a tab showed (Home, the Library and labs paint in it).
+  const lastBrand = useRef(AREA_ID);
+  if (tabKind(place) === "brand") lastBrand.current = place.brand ?? AREA_ID;
+  const openBrand = brands.find(entry => entry.id === lastBrand.current) ?? brands[0]!;
+  const openTheme = activeTheme(openBrand);
+  const { canvas, material, colours, accent: brand } = openTheme;
+  // A brand changed is written a moment later (a slider's drag writes once), each brand to its own file.
+  const changed = useRef(new Set<string>());
+  const written = useRef(brands);
+  useEffect(() => {
+    for (const entry of brands) if (!written.current.includes(entry)) changed.current.add(entry.id);
+    // A brand deleted: its folder is in the Trash already; this browser's one list is written again without it.
+    for (const entry of written.current) if (!brands.some(other => other.id === entry.id)) changed.current.add(entry.id);
+    written.current = brands;
+    if (!changed.current.size) return;
+    const timer = setTimeout(() => { saveBrands(brands, [...changed.current]); changed.current.clear(); }, 250);
+    return () => clearTimeout(timer);
+  }, [brands]);
+  // Written before the window closes, so a change in the last moment is kept.
+  useEffect(() => {
+    const flush = () => { if (changed.current.size) { saveBrands(written.current, [...changed.current]); changed.current.clear(); } };
+    addEventListener("pagehide", flush);
+    return () => removeEventListener("pagehide", flush);
+  }, []);
+  /** Changes the open brand's chosen theme. */
+  const updateTheme = useCallback((change: (theme: BrandTheme) => BrandTheme) => {
+    const id = lastBrand.current;
+    setBrandList(list => list.map(entry => entry.id === id ? withTheme(entry, change) : entry));
+  }, []);
   // src/theme.js has already set the theme before first paint; start from it.
   const [theme, setTheme] = useState<Theme>(() => (document.documentElement.getAttribute("data-area-theme") ?? (prefersDark() ? "dark" : "light")) === "dark" ? "dark" : "light");
   const [query, setQuery] = useState("");
-  const [canvas, setCanvasState] = useState<CanvasAxes>(() => restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})));
-  const [material, setMaterialState] = useState<MaterialState>(() => restoreMaterial(readStored("material", null)));
-  const [brand, setBrandState] = useState<BrandState>(() => restoreBrand(readStored("brand", null)));
-  // Picks saved as colours; a Canvas saved before them converts its page presets once (src/colours.ts).
-  const [colours, setColoursState] = useState<ColoursState>(() => restoreColours(readStored("colours", null), restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})), CANVAS_DEFAULTS));
-  useEffect(() => writeStored("colours", colours), [colours]);
   const [panels, setPanels] = useState(() => readStored("panels", { sidebar: true, inspector: true }));
   const [inspectorView, setInspectorViewState] = useState<InspectorView>(() => {
     const saved = readStored<string>("inspectorView", "theme");
@@ -241,20 +334,38 @@ export function Studio() {
 
   // The tabs and each one's place are saved (replacing the old Titlebar's saved tab), and the hash shows the current place.
   useEffect(() => {
-    writeStored("tabs", { tabs: tabs.list.map(entry => ({ id: entry.id, hash: hrefOf(entry.place), panel: entry.panel })), current: tab.id });
+    writeStored("tabs", { tabs: tabs.list.filter(entry => entry.id !== HOME_TAB).map(entry => ({ id: entry.id, hash: hrefOf(entry.place), panel: entry.panel })), current: tab.id });
     const hash = hrefOf(place);
     if (location.hash !== hash) history.replaceState(null, "", hash);
   }, [tabs, tab.id, place]);
+  // Home's Recent: the places visited, newest first (src/pages/home.tsx).
+  useEffect(() => { if (place.page !== "home") rememberPlace(place); }, [place]);
 
   /** Changes the current tab, or opens a new one. */
-  const navigate = useCallback((next: Place, options: NavigateOptions = {}) => {
+  const navigate = useCallback((to: Place, options: NavigateOptions = {}) => {
     setTabs(current => {
       const open = current.list.find(entry => entry.id === current.current) ?? current.list[0]!;
+      // Home is its own tab, whatever opens it; what is chosen on it changes there.
+      if (to.page === "home") return navigateIn({ ...current, current: HOME_TAB }, current.list[0]!, to, { ...options, newTab: false });
+      // A brand's page without a brand is the current tab's brand's (a page's own links), else the open one's.
+      const next: Place = tabKind(to) === "brand" && !to.brand ? { ...to, brand: tabKind(open.place) === "brand" ? open.place.brand ?? AREA_ID : lastBrand.current } : to;
+      // From Home a place opens in the tab already holding its brand, Library or lab, else a new tab (Figma's file browser).
+      if (open.id === HOME_TAB && next.page !== "home" && !options.newTab) {
+        const holder = current.list.find(entry => entry.id !== HOME_TAB && tabHolds(entry.place) === tabHolds(next));
+        if (!holder) return navigateIn(current, open, next, { ...options, newTab: true });
+        return navigateIn({ ...current, current: holder.id }, holder, next, options);
+      }
+      return navigateIn(current, open, next, options);
+    });
+  }, []);
+  /** Opens `next` in `open`, or in a new tab after it. */
+  const navigateIn = (current: Tabs, open: OpenTab, next: Place, options: NavigateOptions): Tabs => {
       const samePage = next.page === open.place.page && next.group === open.place.group;
       const panel = options.panel ?? (samePage && !options.newTab ? open.panel : LIST_PAGES.has(next.page) ? "page" : "nav");
       if (options.newTab) {
         const added: OpenTab = { id: newTabId(), place: next, panel, back: [], forward: [] };
-        const at = current.list.indexOf(open);
+        // Next to the tab it came from; from Home, at the end (Figma's file browser).
+        const at = open.id === HOME_TAB ? current.list.length - 1 : current.list.indexOf(open);
         return { list: [...current.list.slice(0, at + 1), added, ...current.list.slice(at + 1)], current: added.id };
       }
       if (hrefOf(next) === hrefOf(open.place) && panel === open.panel) return current;
@@ -262,8 +373,7 @@ export function Studio() {
         ? { ...open, place: next, panel }
         : { ...open, place: next, panel, back: [...open.back, open.place].slice(-100), forward: [] };
       return { ...current, list: current.list.map(entry => entry === open ? changed : entry) };
-    });
-  }, []);
+  };
   // A different page starts unfiltered, as a tab change did.
   const pageKey = `${place.page}/${place.group ?? ""}`;
   useEffect(() => setQuery(""), [pageKey, tab.id]);
@@ -282,23 +392,24 @@ export function Studio() {
   const selectTab = useCallback((id: string) => setTabs(current => current.list.some(entry => entry.id === id) ? { ...current, current: id } : current), []);
   /** Tabs closed this session, newest last, with where each stood: ⌘⇧T reopens them in turn. */
   const closed = useRef<Array<{ tab: OpenTab; at: number }>>([]);
-  /** Closes a tab; the one after it (or before, at the end) takes its place. The last tab stays open. */
+  /** Closes a tab; the one after it (or before, at the end) takes its place, Home once none is left. Home never closes. */
   const closeTab = useCallback((id: string) => setTabs(current => {
-    if (current.list.length < 2) return current;
     const at = current.list.findIndex(entry => entry.id === id);
-    if (at < 0) return current;
+    if (at <= 0 || id === HOME_TAB) return current;
     closed.current = [...closed.current.filter(entry => entry.tab.id !== id), { tab: current.list[at]!, at }].slice(-20);
     const list = current.list.filter(entry => entry.id !== id);
     return { list, current: current.current === id ? list[Math.min(at, list.length - 1)]!.id : current.current };
   }), []);
   /*
    * The tab commands (the app menu's, electron/main.cjs, and the same keys in a browser where it lets them through): ⌘T
-   * new tab (search), ⌘⇧T reopen the last closed tab where it stood, ⌘W close the current tab (the last one stays: no Home
-   * to fall back to until Phase 2), ⌃Tab and ⌃⇧Tab the next and previous tab, ⌘1–8 that tab and ⌘9 the last.
+   * new tab (search), ⌘⇧T reopen the last closed tab where it stood, ⌘⇧H Home, ⌘W close the current tab (Home stays),
+   * ⌃Tab and ⌃⇧Tab the next and previous tab (Home among them), ⌘1–8 that tab after Home and ⌘9 the last, as a browser
+   * numbers its tabs and Figma its file tabs after the fixed Home tab.
    */
   const runTabCommand = useCallback((command: TabCommand, index?: number) => {
     if (command === "new-tab") { setSearching("new"); return; }
     if (command === "close-tab") { closeTab(tabsRef.current.current); return; }
+    if (command === "home") { setTabs(current => current.current === HOME_TAB ? current : { ...current, current: HOME_TAB }); return; }
     setTabs(current => {
       const at = current.list.findIndex(entry => entry.id === current.current);
       if (command === "reopen-tab") {
@@ -310,13 +421,16 @@ export function Studio() {
       }
       const to = command === "next-tab" ? (at + 1) % current.list.length
         : command === "previous-tab" ? (at - 1 + current.list.length) % current.list.length
-        : index === 9 ? current.list.length - 1 : (index ?? 1) - 1;
+        : index === 9 ? current.list.length - 1 : (index ?? 1);
       const target = current.list[to];
       return target && target.id !== current.current ? { ...current, current: target.id } : current;
     });
   }, [closeTab]);
   const tabsRef = useRef(tabs);
   tabsRef.current = tabs;
+  // The brands as last rendered, so a brand made and opened in one handler is already known to the places.
+  const brandsRef = useRef(brands);
+  brandsRef.current = brands;
   useEffect(() => window.areaDesktop?.onCommand?.(runTabCommand), [runTabCommand]);
 
   // A link followed natively (an old #components/button in a page's text, a hand-typed hash) opens in the current tab; a
@@ -375,6 +489,7 @@ export function Studio() {
   // ⌘K opens search (src/search-palette.tsx), ⌘T search for a new tab (a browser's new tab).
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.shiftKey && !event.altKey && event.code === "KeyH") { event.preventDefault(); runTabCommand("home"); return; }
       if (!(event.metaKey || event.ctrlKey) || event.shiftKey) return;
       const key = event.code === "KeyB" ? "b" : event.code === "BracketLeft" ? "[" : event.code === "BracketRight" ? "]" : event.code === "KeyT" ? "t" : "";
       // In Electron the app menu takes ⌘T, ⌘W, ⌘1–9 and ⌃Tab (runTabCommand); a browser keeps most of them for itself.
@@ -399,33 +514,20 @@ export function Studio() {
     setQuery,
     theme,
     canvas,
-    setCanvas: (axis, value) => {
+    setCanvas: (axis, value) => updateTheme(current => {
       // A page setting written hands its mode's page back to the settings: the pick would hide it.
-      const dropped = (["light", "dark"] as const).filter(mode => colours[mode] !== null && PAGE_AXES[mode].includes(axis));
-      if (dropped.length) setColoursState(current => ({ ...current, ...Object.fromEntries(dropped.map(mode => [mode, null])) }));
-      setCanvasState(current => {
-        const next = { ...current, [axis]: value };
-        saveCanvas(next);
-        return next;
-      });
-    },
+      const dropped = (["light", "dark"] as const).filter(mode => current.colours[mode] !== null && PAGE_AXES[mode].includes(axis));
+      return { ...current, canvas: { ...current.canvas, [axis]: value }, colours: dropped.length ? { ...current.colours, ...Object.fromEntries(dropped.map(mode => [mode, null])) } : current.colours };
+    }),
     material,
-    setMaterialBundle: bundle => {
-      const next = { bundle, overrides: {} };
-      writeStored("material", next);
-      setMaterialState(next);
+    setMaterialBundle: bundle => updateTheme(current => {
+      // Loading a bundle applies the Layers settings it is drawn for (Soft's gray, flat page).
       const layers = MATERIAL_BUNDLES[bundle]?.layers ?? {};
-      if (Object.keys(layers).length) setCanvasState(current => {
-        const merged = { ...current, ...layers };
-        saveCanvas(merged);
-        return merged;
-      });
-    },
-    setMaterialValue: (key, value) => setMaterialState(current => {
-      const { [key]: _, ...rest } = current.overrides;
-      const next = { ...current, overrides: value === bundleValue(current.bundle, key) ? rest : { ...rest, [key]: value } };
-      writeStored("material", next);
-      return next;
+      return { ...current, material: { bundle, overrides: {} }, canvas: Object.keys(layers).length ? { ...current.canvas, ...layers } : current.canvas };
+    }),
+    setMaterialValue: (key, value) => updateTheme(current => {
+      const { [key]: _, ...rest } = current.material.overrides;
+      return { ...current, material: { ...current.material, overrides: value === bundleValue(current.material.bundle, key) ? rest : { ...rest, [key]: value } } };
     }),
     previewCanvas: (axis, value) => setPreviewAxes(current => {
       if (value === null) { if (!(axis in current)) return current; const { [axis]: _, ...rest } = current; return rest; }
@@ -434,13 +536,37 @@ export function Studio() {
     previewMaterial: setPreviewedMaterial,
     shown: { canvas: { ...canvas, ...previewAxes }, material: previewedMaterial ?? material, colours: shownColours(colours, previewAxes) },
     colours,
-    setColours: patch => setColoursState(current => ({ ...current, ...patch })),
+    setColours: patch => updateTheme(current => ({ ...current, colours: { ...current.colours, ...patch } })),
     brand,
-    setBrand: patch => setBrandState(current => {
-      const next = { ...current, ...patch };
-      writeStored("brand", next);
-      return next;
-    }),
+    setBrand: patch => updateTheme(current => ({ ...current, accent: { ...current.accent, ...patch } })),
+    brands,
+    openBrand,
+    openTheme,
+    createBrand: (name, origin) => {
+      const made = starterBrand(name, brandsRef.current.map(entry => entry.id), RESTORE, origin);
+      brandsRef.current = [...brandsRef.current, made];
+      setBrands(brandsRef.current);
+      setBrandList(list => [...list, made]);
+      return made;
+    },
+    renameBrand: (id, name) => { if (name.trim()) setBrandList(list => list.map(entry => entry.id === id ? { ...entry, name: name.trim() } : entry)); },
+    deleteBrand: id => {
+      if (id === AREA_ID) return;
+      disk()?.trash(id);
+      setTabs(current => {
+        const list = current.list.filter(entry => tabHolds(entry.place) !== `brand:${id}`);
+        return { list, current: list.some(entry => entry.id === current.current) ? current.current : HOME_TAB };
+      });
+      if (lastBrand.current === id) lastBrand.current = AREA_ID;
+      setBrandList(list => list.filter(entry => entry.id !== id));
+    },
+    chooseTheme: id => { const brandId = lastBrand.current; setBrandList(list => list.map(entry => entry.id === brandId && entry.themes.some(theme => theme.id === id) ? { ...entry, theme: id } : entry)); },
+    addTheme: () => {
+      const made = newTheme(openBrand, RESTORE);
+      const brandId = openBrand.id;
+      setBrandList(list => list.map(entry => entry.id === brandId ? { ...entry, themes: [...entry.themes, made], theme: made.id } : entry));
+      return made;
+    },
     place,
     navigate,
     item,
@@ -457,7 +583,7 @@ export function Studio() {
       writeStored("panels", next);
       return next;
     }),
-  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, colours, item, place, navigate, tab.panel, panels, inspectorView]);
+  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, colours, brands, openBrand, openTheme, updateTheme, item, place, navigate, tab.panel, panels, inspectorView]);
   // The picks' one rule is in the head while there are any; the scopes that carry the settings carry data-area-colours.
   useColoursSheet(state.shown.colours);
 
@@ -493,6 +619,7 @@ export function Studio() {
         </Titlebar>
         {/* Keyed by tab, so a tab opens on its own page's state rather than the last tab's. */}
         <Fragment key={tab.id}>{
+          place.page === "home" ? <HomePage /> :
           place.page === "themes" ? <ThemesPage /> :
           place.page === "theme-setup" ? <ThemePage flow="setup" /> :
           place.page === "foundations" || place.page === "settings" ? <ThemePage flow="browse" /> :
@@ -617,6 +744,15 @@ export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof 
 /** The shipped defaults as attributes: what <html> and the Canvas body carry (PRODUCT_UI.md, rule 18). */
 const DEFAULT_ATTRIBUTES = canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT);
 
+/**
+ * A specimen's own in-page links stay in the specimen: an example screen's "#home" or "#settings", a demo's "#library". The
+ * app's own links in the Canvas and the Inspector handle their clicks (and prevent the browser's); a hash link whose click
+ * nothing handled is a specimen's, and following it would open Home or the Library (Home's hash is "#home" since Phase 2).
+ */
+function keepSpecimenLinks(event: ReactMouseEvent<HTMLElement>) {
+  if (!event.defaultPrevented && event.target instanceof Element && event.target.closest("a[href^='#']")) event.preventDefault();
+}
+
 /*
  * Three columns under the Titlebar, without titles (owner, 2026-10-14, after Framer and Figma):
  * the Canvas has a header for its view options, and its controls, the Sidebar's first row and the
@@ -663,10 +799,10 @@ export function Workspace({ sidebar, lead, canvasLead, canvasTitle, canvasAction
       ) : null}
       <main ref={main} className="studio-canvas" aria-label={canvasTitle}>
         <header className="studio-canvas__bar">{canvasLead}{canvasActions}</header>
-        <div ref={canvasRef} className="studio-canvas__body" {...axes}><SpecimenScopeContext.Provider value={specimens}>{canvas}</SpecimenScopeContext.Provider></div>
+        <div ref={canvasRef} className="studio-canvas__body" {...axes} onClick={keepSpecimenLinks}><SpecimenScopeContext.Provider value={specimens}>{canvas}</SpecimenScopeContext.Provider></div>
       </main>
       {showInspector ? (
-        <div className="studio-inspector">
+        <div className="studio-inspector" onClick={keepSpecimenLinks}>
           {isViews(inspector) ? <InspectorPanel views={inspector} width={inspectorWidth} />
             : <Panel flush bareBar resizable="start" aria-label="Inspector" {...inspectorWidth}>{inspector}</Panel>}
         </div>

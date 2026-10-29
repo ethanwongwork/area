@@ -2,7 +2,8 @@
 
 The Electron app's information architecture, as the owner confirmed it on 2026-10-28, and the phased plan to build it.
 Review page: https://claude.ai/artifact/4nvLA9RLBaY2RZ1PedrcFn (model, Cursor measurements, composer, plan).
-Phase 1 is built (2026-10-28, branch `claude/phase-1-new-navigation-1c3738`; "As built" under Phase 1). The Theme header
+Phase 1 is built (2026-10-28, branch `claude/phase-1-new-navigation-1c3738`, PR #173; "As built" under Phase 1). Phase 2 is
+built (2026-10-29, branch `claude/serene-maxwell-905675`; "As built" under Phase 2). The Theme header
 fix that came out of the same review is built too (PRODUCT_UI.md, Setup).
 
 ## The confirmed model
@@ -122,7 +123,7 @@ Nothing is left open before Phase 1.
   keeps no space and lands over the name's end, which fades (owner: Figma's way); too many tabs scroll, the current kept
   in view. Tab keys in the app menu (⌘T, ⌘⇧T, ⌘W, ⌃Tab, ⌘1–9; ⌘W had closed the window) and a Tooltip with the full name on
   cut tabs, 2026-10-29. Open: a soft edge where the strip is cut (Cursor shades it); later, drag to reorder, a tab's
-  context menu, a tab's own scroll kept; Home as a fixed first tab in Phase 2; tab groups not before Projects.
+  context menu, a tab's own scroll kept; tab groups not before Projects. Home as a fixed first tab: built in Phase 2.
 - **Search** is Command palette over every place; each list's filter moved into its takeover.
 - **New theme** has no way back in its own panel: Back, the tabs or ⌘K leave it.
 
@@ -138,6 +139,38 @@ Nothing is left open before Phase 1.
 - **More brands in the nav**: each a row under Brands, opened in a tab (Phase 0). Each brand's Components, Patterns
   and Foundations render Area's parts in that brand's theme: the parts catalog. A brand with its own imported
   components comes with import, later.
+
+**As built (2026-10-29).** Every item above, with these decisions and differences, each for the owner to confirm in the app:
+
+- **The Home tab** is Nav's new icon-only item (a square plate, the icon centred; Figma's `tab--fileBrowserTab`, 40 by
+  38), always first, never closed and always on Home. Every other tab closes, the last one too, leaving Home. From Home a
+  place opens in the tab already holding its brand (or the Library, a lab), else a new tab at the end (Figma's file
+  browser); Home from any tab switches to the Home tab. **⌘1** stays the first tab after Home, ⌘1–8 count the tabs after
+  it, ⌘9 the last; **⌘⇧H** is Home (Finder's Go › Home), in the app menu. **New tab** (+, ⌘T) still opens search into a
+  new tab: Home is always one click away, and a new tab on Home would be a second Home. With nothing saved the app opens on
+  Home alone.
+- **The brand file** (`src/brands.ts`): `{ version, id, name, origin, created, theme, themes: [{ id, name, canvas,
+  material, colours, accent }] }`; `accent` is Brand colours (the exact accent), `colours` the exact page colours, `theme`
+  the chosen one. Every value is checked on the way in by the app's own restore functions, so a hand-edited or older file
+  opens. Writes go through a temporary file and a rename; a deleted brand's folder goes to the Trash (`shell.trashItem`),
+  and the Area brand can't be deleted. A capture neither reads nor writes the folder; the browser preview keeps its brands
+  in its own storage.
+- **The settings move**: `useStudio()` keeps its names (`canvas`, `material`, `colours`, `brand`), now the open brand's
+  chosen theme, so no page changed to read it. The open brand is the current tab's, or on Home, the Library and Labs the
+  last one a tab showed. The one-time migration runs when no Area brand is on disk: the saved `canvas`, `material`,
+  `colours` and `brand` become its Default theme (a Canvas from before positions or picks converts on the way, as before);
+  the old localStorage keys are left and no longer read.
+- **Several themes** per brand on Themes: double-click or Use chooses one; New theme adds one at Area's values and opens
+  the Setup chat on it. Rename and delete a theme are not built.
+- **Home**: Brands (Setup's screen in each brand's theme, as Themes' cards), New brand (three cards: Area Starter, Describe
+  it, Import marked Later; one dialog with the name and the three as card radios), Boards (the Library's groups as Imagery's
+  group cards), Recent (the last 8 places opened, a Table). The Inspector shows the chosen brand with Open, Rename and
+  Delete. A card shows a brand's exact colours only for the open brand: those are one rule in the document's head.
+- **Links**: `#home` is a place, so an example screen's own `#home` link would have opened it. The Workspace now keeps
+  every specimen's in-page link in the specimen (a hash link's click in the Canvas or the Inspector that nothing handled is
+  prevented), which also stops a demo's `#library` link opening the Library, as it did in Phase 1.
+- **Not yet**: Projects (Home's Recent shows places, not projects), Explore, a brand's Overview, Visuals, Voice and Agent
+  kit sections, renaming or deleting a theme, import.
 
 ### Phase 3. The Library and brand Visuals
 

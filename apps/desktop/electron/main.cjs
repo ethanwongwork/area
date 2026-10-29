@@ -12,7 +12,7 @@
  * --store='{"canvas":{"ui":"compact"}}' for saved settings, --width=1024 for a narrow window).
  */
 const { app, BrowserWindow, ipcMain, Menu, nativeTheme, net, protocol, session, shell } = require("electron");
-const { existsSync, watch, writeFileSync } = require("node:fs");
+const { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, watch, writeFileSync } = require("node:fs");
 const { join, normalize, sep } = require("node:path");
 const { pathToFileURL } = require("node:url");
 
@@ -107,6 +107,43 @@ ipcMain.on("area:brand-reveal", (_event, path) => {
   if (file.startsWith(brandFolder() + sep) && existsSync(file)) shell.showItemInFolder(file);
 });
 
+/*
+ * The workspace's brands (src/brands.ts; app structure Phase 2): one folder each in the app's own data,
+ * ~/Library/Application Support/Area/Brands/<id>/brand.json, never in the repository. The page reads them all once at launch
+ * (sync, so its first render has them), writes a brand when it changes (to a temporary file, then renamed over the old
+ * one, so a crash never leaves half a file), and moves a deleted brand's folder to the Trash, where it can be put back. A
+ * capture never reads or writes them: it answers null, and the page keeps its brands in the capture's own storage.
+ */
+const brandsFolder = () => join(app.getPath("userData"), "Brands");
+const brandId = id => typeof id === "string" && /^[a-z0-9-]{1,64}$/.test(id) ? id : null;
+ipcMain.on("area:brands-read", event => {
+  if (capture) { event.returnValue = null; return; }
+  const root = brandsFolder();
+  const brands = [];
+  try {
+    for (const entry of readdirSync(root, { withFileTypes: true })) {
+      if (!entry.isDirectory() || !brandId(entry.name)) continue;
+      try { brands.push(JSON.parse(readFileSync(join(root, entry.name, "brand.json"), "utf8"))); } catch {}
+    }
+  } catch {}
+  event.returnValue = brands;
+});
+ipcMain.on("area:brand-write", (_event, id, text) => {
+  if (capture || !brandId(id) || typeof text !== "string") return;
+  try { JSON.parse(text); } catch { return; }
+  const folder = join(brandsFolder(), id);
+  try {
+    mkdirSync(folder, { recursive: true });
+    const file = join(folder, "brand.json");
+    writeFileSync(`${file}.tmp`, text);
+    renameSync(`${file}.tmp`, file);
+  } catch (error) { console.error(`[brands] ${id}: ${error}`); }
+});
+ipcMain.on("area:brand-trash", (_event, id) => {
+  const folder = brandId(id) && id !== "area" ? join(brandsFolder(), id) : null;
+  if (!capture && folder && existsSync(folder)) shell.trashItem(folder).catch(error => console.error(`[brands] ${id}: ${error}`));
+});
+
 ipcMain.on("area:theme", (event, theme) => {
   nativeTheme.themeSource = theme === "dark" ? "dark" : "light";
   BrowserWindow.fromWebContents(event.sender)?.setBackgroundColor(GROUND[nativeTheme.themeSource]);
@@ -138,6 +175,8 @@ function tabMenu() {
     { label: "File", submenu: [
       { label: "New Tab", accelerator: "CmdOrCtrl+T", click: send("new-tab") },
       { label: "Reopen Closed Tab", accelerator: "CmdOrCtrl+Shift+T", click: send("reopen-tab") },
+      // Home, the fixed first tab (Finder's Go › Home is ⌘⇧H).
+      { label: "Home", accelerator: "CmdOrCtrl+Shift+H", click: send("home") },
       { type: "separator" },
       { label: "Close Tab", accelerator: "CmdOrCtrl+W", click: send("close-tab") },
       { label: "Close Window", accelerator: "CmdOrCtrl+Shift+W", role: "close" },
@@ -150,7 +189,7 @@ function tabMenu() {
       { type: "separator" },
       { label: "Show Next Tab", accelerator: "Ctrl+Tab", click: send("next-tab") },
       { label: "Show Previous Tab", accelerator: "Ctrl+Shift+Tab", click: send("previous-tab") },
-      // ⌘1–9 work without crowding the menu, as Chrome's do.
+      // ⌘1–9 work without crowding the menu, as Chrome's do; they count the tabs after Home, which is ⌘⇧H.
       ...Array.from({ length: 9 }, (_, at) => ({ label: at === 8 ? "Last Tab" : `Tab ${at + 1}`, accelerator: `CmdOrCtrl+${at + 1}`, click: send("tab", at + 1), visible: false, acceleratorWorksWhenHidden: true })),
       ...(mac ? [{ type: "separator" }, { role: "front" }] : []),
     ] },
