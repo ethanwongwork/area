@@ -29,7 +29,7 @@ import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
-import { groupSlug, HOME_TAB, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, setBrands, tabHolds, tabKind, type Place } from "./places.ts";
+import { groupSlug, HOME_TAB, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, setSystems, tabHolds, tabKind, type Place } from "./places.ts";
 import { AppNav, AppTabs, Takeover } from "./app-nav.tsx";
 import { SearchEverything, type SearchFor } from "./search-palette.tsx";
 import { ThemesPage } from "./pages/themes.tsx";
@@ -37,7 +37,7 @@ import { HomePage } from "./pages/home.tsx";
 import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 import { restoreBrand, useBrandSheet, type BrandState } from "./brand.ts";
 import { PAGE_AXES, hasColours, restoreColours, shownColours, useColoursSheet, type ColoursState } from "./colours.ts";
-import { activeTheme, AREA_ID, brandFile, loadBrands, newTheme, starterBrand, withTheme, type Brand, type BrandOrigin, type BrandTheme, type Restorers } from "./brands.ts";
+import { activeTheme, AREA_ID, systemFile, loadSystems, newTheme, starterSystem, withTheme, type System, type SystemOrigin, type SystemTheme, type Restorers } from "./systems.ts";
 
 type Theme = "light" | "dark";
 
@@ -65,7 +65,7 @@ export const CANVAS_DEFAULTS = Object.fromEntries(
 /** Marks a saved Canvas whose Layer contrast, Card shade and Text tint are positions (0–100), so restoreCanvas converts only
  * the ones saved before. */
 const CANVAS_POSITIONS = 1;
-/** A theme's Canvas as its brand file holds it: marked as positions. */
+/** A theme's Canvas as its system file holds it: marked as positions. */
 const markCanvas = (canvas: CanvasAxes) => ({ ...canvas, positions: CANVAS_POSITIONS });
 function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: string; positions?: number }): CanvasAxes {
   const { ui, layers, positions, ...rest } = saved;
@@ -105,7 +105,7 @@ function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: stri
   return canvas;
 }
 
-/** How a brand's themes are checked on the way in (src/brands.ts): as the app restored its own saved settings. */
+/** How a system's themes are checked on the way in (src/systems.ts): as the app restored its own saved settings. */
 const RESTORE: Restorers = {
   canvas: saved => restoreCanvas((saved && typeof saved === "object" ? saved : {}) as Partial<CanvasAxes>),
   material: restoreMaterial,
@@ -114,26 +114,27 @@ const RESTORE: Restorers = {
 };
 
 /*
- * The brands' store: Electron's (one brand.json each in Application Support/Area/Brands, electron/main.cjs), or this
- * browser's own storage in the preview and a capture. Read once at launch; with no Area brand saved, the settings the app
- * kept before brands (localStorage canvas, material, colours, brand) become its Default theme, once, and are written at
+ * The systems' store: Electron's (one system.json each in Application Support/Area/Systems, electron/main.cjs), or this
+ * browser's own storage in the preview and a capture (`systems`; `brands` until 2026-10-29). Read once at launch; with no
+ * Area system saved, the settings the app kept before systems (localStorage canvas, material, colours, brand) become its
+ * Default theme, once, and are written at
  * once. Those old keys are left as they were and no longer read.
  */
-const disk = () => typeof window !== "undefined" ? window.areaDesktop?.brands : undefined;
-function openBrands(): Brand[] {
-  const files = disk()?.read() ?? readStored<unknown[]>("brands", []);
-  const { brands, migrated } = loadBrands(Array.isArray(files) ? files : [],
+const disk = () => typeof window !== "undefined" ? window.areaDesktop?.systems : undefined;
+function openSystems(): System[] {
+  const files = disk()?.read() ?? readStored<unknown[]>("systems", readStored<unknown[]>("brands", []));
+  const { systems, migrated } = loadSystems(Array.isArray(files) ? files : [],
     () => ({ canvas: readStored("canvas", {}), material: readStored("material", null), colours: readStored("colours", null), brand: readStored("brand", null) }), RESTORE);
-  if (migrated) saveBrands(brands, [migrated.id]);
-  setBrands(brands);
-  return brands;
+  if (migrated) saveSystems(systems, [migrated.id]);
+  setSystems(systems);
+  return systems;
 }
-const fileText = (brand: Brand) => JSON.stringify(brandFile(brand, markCanvas), null, 2);
-/** Writes the brands named by `ids` (all of them in this browser's storage, which keeps one list). */
-function saveBrands(brands: readonly Brand[], ids: readonly string[]) {
+const fileText = (system: System) => JSON.stringify(systemFile(system, markCanvas), null, 2);
+/** Writes the systems named by `ids` (all of them in this browser's storage, which keeps one list). */
+function saveSystems(systems: readonly System[], ids: readonly string[]) {
   const store = disk();
-  if (store) for (const brand of brands) { if (ids.includes(brand.id)) store.write(brand.id, fileText(brand)); }
-  else writeStored("brands", brands.map(brand => brandFile(brand, markCanvas)));
+  if (store) for (const system of systems) { if (ids.includes(system.id)) store.write(system.id, fileText(system)); }
+  else writeStored("systems", systems.map(system => systemFile(system, markCanvas)));
 }
 
 /** A computed colour (rgb(), color(srgb …), oklab …) as #rrggbb, read from one painted pixel. */
@@ -171,7 +172,7 @@ const isMac = () => typeof document !== "undefined" && document.documentElement.
  * (a component's slug, an icon's name, a scale, a type role) and may have parts of its own: Components opens a family's
  * Stage on one tile as <slug>/<tile>.
  *
- * Tabs work as a browser's (Phase 0, owner 2026-10-28): each open tab holds one thing (the Area brand, the Library, a
+ * Tabs work as a browser's (Phase 0, owner 2026-10-28): each open tab holds one thing (a system, the Library, a
  * lab) and keeps its own place, its Sidebar (the nav or the page's own list) and its history, which back and forward
  * (⌘[ and ⌘]) walk. The hash mirrors the current tab's place; the tabs and their places are saved and reopen at launch.
  */
@@ -238,24 +239,24 @@ interface StudioState {
   /** The Canvas's exact accent (src/brand.ts): off, Area's palette, or up to three exact colours. */
   brand: BrandState;
   setBrand: (patch: Partial<BrandState>) => void;
-  /** The workspace's brands (src/brands.ts), Area first. */
-  brands: readonly Brand[];
+  /** The workspace's systems (src/systems.ts), Area first. */
+  systems: readonly System[];
   /**
-   * The open brand: the current tab's, or on Home, the Library or a lab the last one a tab showed. Its chosen theme is what
+   * The open system: the current tab's, or on Home, the Library or a lab the last one a tab showed. Its chosen theme is what
    * `canvas`, `material`, `colours` and `brand` are, what the Inspector's Theme view edits and every page paints in.
    */
-  openBrand: Brand;
-  /** The open brand's chosen theme. */
-  openTheme: BrandTheme;
-  /** A new brand from the Area Starter (or a described one, which the Setup chat then makes): saved, not yet opened. */
-  createBrand: (name: string, origin: BrandOrigin) => Brand;
-  renameBrand: (id: string, name: string) => void;
-  /** Moves a brand's folder to the Trash and closes its tabs. The Area brand stays. */
-  deleteBrand: (id: string) => void;
-  /** Makes one of the open brand's themes its chosen one. */
+  openSystem: System;
+  /** The open system's chosen theme. */
+  openTheme: SystemTheme;
+  /** A new system from the Area Starter (or a described one, which the Setup chat then makes): saved, not yet opened. */
+  createSystem: (name: string, origin: SystemOrigin) => System;
+  renameSystem: (id: string, name: string) => void;
+  /** Moves a system's folder to the Trash and closes its tabs. The Area system stays. */
+  deleteSystem: (id: string) => void;
+  /** Makes one of the open system's themes its chosen one. */
   chooseTheme: (id: string) => void;
-  /** Adds a theme to the open brand at Area's shipped values and chooses it. */
-  addTheme: () => BrandTheme;
+  /** Adds a theme to the open system at Area's shipped values and chooses it. */
+  addTheme: () => SystemTheme;
   /** Where the current tab is. */
   place: Place;
   /** Open a place (src/places.ts). */
@@ -284,41 +285,41 @@ export const useStudio = () => {
 const prefersDark = () => typeof matchMedia === "function" && matchMedia("(prefers-color-scheme: dark)").matches;
 
 export function Studio() {
-  // The brands first: the saved tabs' places name them.
-  const [brands, setBrandList] = useState<Brand[]>(openBrands);
-  setBrands(brands);
+  // The systems first: the saved tabs' places name them.
+  const [systems, setSystemList] = useState<System[]>(openSystems);
+  setSystems(systems);
   const [tabs, setTabs] = useState<Tabs>(openTabs);
   const tab = tabs.list.find(entry => entry.id === tabs.current) ?? tabs.list[0]!;
   const { place } = tab;
   const item = place.item;
-  // The open brand: the current tab's, else the last a tab showed (Home, the Library and labs paint in it).
-  const lastBrand = useRef(AREA_ID);
-  if (tabKind(place) === "brand") lastBrand.current = place.brand ?? AREA_ID;
-  const openBrand = brands.find(entry => entry.id === lastBrand.current) ?? brands[0]!;
-  const openTheme = activeTheme(openBrand);
+  // The open system: the current tab's, else the last a tab showed (Home, the Library and labs paint in it).
+  const lastSystem = useRef(AREA_ID);
+  if (tabKind(place) === "system") lastSystem.current = place.system ?? AREA_ID;
+  const openSystem = systems.find(entry => entry.id === lastSystem.current) ?? systems[0]!;
+  const openTheme = activeTheme(openSystem);
   const { canvas, material, colours, accent: brand } = openTheme;
-  // A brand changed is written a moment later (a slider's drag writes once), each brand to its own file.
+  // A system changed is written a moment later (a slider's drag writes once), each system to its own file.
   const changed = useRef(new Set<string>());
-  const written = useRef(brands);
+  const written = useRef(systems);
   useEffect(() => {
-    for (const entry of brands) if (!written.current.includes(entry)) changed.current.add(entry.id);
-    // A brand deleted: its folder is in the Trash already; this browser's one list is written again without it.
-    for (const entry of written.current) if (!brands.some(other => other.id === entry.id)) changed.current.add(entry.id);
-    written.current = brands;
+    for (const entry of systems) if (!written.current.includes(entry)) changed.current.add(entry.id);
+    // A system deleted: its folder is in the Trash already; this browser's one list is written again without it.
+    for (const entry of written.current) if (!systems.some(other => other.id === entry.id)) changed.current.add(entry.id);
+    written.current = systems;
     if (!changed.current.size) return;
-    const timer = setTimeout(() => { saveBrands(brands, [...changed.current]); changed.current.clear(); }, 250);
+    const timer = setTimeout(() => { saveSystems(systems, [...changed.current]); changed.current.clear(); }, 250);
     return () => clearTimeout(timer);
-  }, [brands]);
+  }, [systems]);
   // Written before the window closes, so a change in the last moment is kept.
   useEffect(() => {
-    const flush = () => { if (changed.current.size) { saveBrands(written.current, [...changed.current]); changed.current.clear(); } };
+    const flush = () => { if (changed.current.size) { saveSystems(written.current, [...changed.current]); changed.current.clear(); } };
     addEventListener("pagehide", flush);
     return () => removeEventListener("pagehide", flush);
   }, []);
-  /** Changes the open brand's chosen theme. */
-  const updateTheme = useCallback((change: (theme: BrandTheme) => BrandTheme) => {
-    const id = lastBrand.current;
-    setBrandList(list => list.map(entry => entry.id === id ? withTheme(entry, change) : entry));
+  /** Changes the open system's chosen theme. */
+  const updateTheme = useCallback((change: (theme: SystemTheme) => SystemTheme) => {
+    const id = lastSystem.current;
+    setSystemList(list => list.map(entry => entry.id === id ? withTheme(entry, change) : entry));
   }, []);
   // src/theme.js has already set the theme before first paint; start from it.
   const [theme, setTheme] = useState<Theme>(() => (document.documentElement.getAttribute("data-area-theme") ?? (prefersDark() ? "dark" : "light")) === "dark" ? "dark" : "light");
@@ -347,9 +348,9 @@ export function Studio() {
       const open = current.list.find(entry => entry.id === current.current) ?? current.list[0]!;
       // Home is its own tab, whatever opens it; what is chosen on it changes there.
       if (to.page === "home") return navigateIn({ ...current, current: HOME_TAB }, current.list[0]!, to, { ...options, newTab: false });
-      // A brand's page without a brand is the current tab's brand's (a page's own links), else the open one's.
-      const next: Place = tabKind(to) === "brand" && !to.brand ? { ...to, brand: tabKind(open.place) === "brand" ? open.place.brand ?? AREA_ID : lastBrand.current } : to;
-      // From Home a place opens in the tab already holding its brand, Library or lab, else a new tab (Figma's file browser).
+      // A system's page without a system is the current tab's system's (a page's own links), else the open one's.
+      const next: Place = tabKind(to) === "system" && !to.system ? { ...to, system: tabKind(open.place) === "system" ? open.place.system ?? AREA_ID : lastSystem.current } : to;
+      // From Home a place opens in the tab already holding its system, Library or lab, else a new tab (Figma's file browser).
       if (open.id === HOME_TAB && next.page !== "home" && !options.newTab) {
         const holder = current.list.find(entry => entry.id !== HOME_TAB && tabHolds(entry.place) === tabHolds(next));
         if (!holder) return navigateIn(current, open, next, { ...options, newTab: true });
@@ -428,9 +429,9 @@ export function Studio() {
   }, [closeTab]);
   const tabsRef = useRef(tabs);
   tabsRef.current = tabs;
-  // The brands as last rendered, so a brand made and opened in one handler is already known to the places.
-  const brandsRef = useRef(brands);
-  brandsRef.current = brands;
+  // The systems as last rendered, so a system made and opened in one handler is already known to the places.
+  const systemsRef = useRef(systems);
+  systemsRef.current = systems;
   useEffect(() => window.areaDesktop?.onCommand?.(runTabCommand), [runTabCommand]);
 
   // A link followed natively (an old #components/button in a page's text, a hand-typed hash) opens in the current tab; a
@@ -539,32 +540,32 @@ export function Studio() {
     setColours: patch => updateTheme(current => ({ ...current, colours: { ...current.colours, ...patch } })),
     brand,
     setBrand: patch => updateTheme(current => ({ ...current, accent: { ...current.accent, ...patch } })),
-    brands,
-    openBrand,
+    systems,
+    openSystem,
     openTheme,
-    createBrand: (name, origin) => {
-      const made = starterBrand(name, brandsRef.current.map(entry => entry.id), RESTORE, origin);
-      brandsRef.current = [...brandsRef.current, made];
-      setBrands(brandsRef.current);
-      setBrandList(list => [...list, made]);
+    createSystem: (name, origin) => {
+      const made = starterSystem(name, systemsRef.current.map(entry => entry.id), RESTORE, origin);
+      systemsRef.current = [...systemsRef.current, made];
+      setSystems(systemsRef.current);
+      setSystemList(list => [...list, made]);
       return made;
     },
-    renameBrand: (id, name) => { if (name.trim()) setBrandList(list => list.map(entry => entry.id === id ? { ...entry, name: name.trim() } : entry)); },
-    deleteBrand: id => {
+    renameSystem: (id, name) => { if (name.trim()) setSystemList(list => list.map(entry => entry.id === id ? { ...entry, name: name.trim() } : entry)); },
+    deleteSystem: id => {
       if (id === AREA_ID) return;
       disk()?.trash(id);
       setTabs(current => {
-        const list = current.list.filter(entry => tabHolds(entry.place) !== `brand:${id}`);
+        const list = current.list.filter(entry => tabHolds(entry.place) !== `system:${id}`);
         return { list, current: list.some(entry => entry.id === current.current) ? current.current : HOME_TAB };
       });
-      if (lastBrand.current === id) lastBrand.current = AREA_ID;
-      setBrandList(list => list.filter(entry => entry.id !== id));
+      if (lastSystem.current === id) lastSystem.current = AREA_ID;
+      setSystemList(list => list.filter(entry => entry.id !== id));
     },
-    chooseTheme: id => { const brandId = lastBrand.current; setBrandList(list => list.map(entry => entry.id === brandId && entry.themes.some(theme => theme.id === id) ? { ...entry, theme: id } : entry)); },
+    chooseTheme: id => { const systemId = lastSystem.current; setSystemList(list => list.map(entry => entry.id === systemId && entry.themes.some(theme => theme.id === id) ? { ...entry, theme: id } : entry)); },
     addTheme: () => {
-      const made = newTheme(openBrand, RESTORE);
-      const brandId = openBrand.id;
-      setBrandList(list => list.map(entry => entry.id === brandId ? { ...entry, themes: [...entry.themes, made], theme: made.id } : entry));
+      const made = newTheme(openSystem, RESTORE);
+      const systemId = openSystem.id;
+      setSystemList(list => list.map(entry => entry.id === systemId ? { ...entry, themes: [...entry.themes, made], theme: made.id } : entry));
       return made;
     },
     place,
@@ -583,7 +584,7 @@ export function Studio() {
       writeStored("panels", next);
       return next;
     }),
-  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, colours, brands, openBrand, openTheme, updateTheme, item, place, navigate, tab.panel, panels, inspectorView]);
+  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, colours, systems, openSystem, openTheme, updateTheme, item, place, navigate, tab.panel, panels, inspectorView]);
   // The picks' one rule is in the head while there are any; the scopes that carry the settings carry data-area-colours.
   useColoursSheet(state.shown.colours);
 

@@ -2,26 +2,26 @@
  * The app's navigation (docs/research/app-structure-2026-10-28/README.md; the shell is variation A, owner 2026-10-28):
  *
  *   AppTabs   the Titlebar's open tabs, as a browser's: Home first (icon only, never closed: Figma's file browser tab),
- *             then one per open brand, Library or lab, its type icon, name and close, then New tab (owner, 2026-10-29:
+ *             then one per open system, Library or lab, its type icon, name and close, then New tab (owner, 2026-10-29:
  *             "i like the floating tab component from claude codes browser")
- *   AppNav    the Sidebar's nav: Home and the Library, then Brands, each brand a row, the open one expanded to its sections
+ *   AppNav    the Sidebar's nav: Home and the Library, then Systems, each system a row, the open one expanded to its sections
  *             (Cursor's agents window nav); a click opens in the current tab, ⌘-click in a new one
  *   Takeover  a page's own list in the Sidebar's place (Components' families, Icons' categories, the Library's groups),
  *             under a back row to the nav and a filter
  *
  * Explore, Projects and Boards come with the phases that build them; until then they are left out (product UI rule 16),
- * as is the person's row. New brand is the Brands section's last row (Home's New brand).
+ * as is the person's row. New system is the Systems section's last row (Home's New system).
  */
 import { Fragment, useEffect, useId, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, SearchField, Tooltip } from "@area/react";
 import { AddIcon, ArrowLeftIcon, ChevronDownIcon, DismissIcon, FlaskIcon, HomeIcon, LibraryIcon, PaletteIcon } from "@area/icons";
 import { SETTING_GROUPS } from "@area/tokens/config";
-import { brandName, groupSlug, HOME_TAB, hrefOf, LIST_PAGES, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
+import { systemName, groupSlug, HOME_TAB, hrefOf, LIST_PAGES, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
 import { ChromeButton, SidebarList, useStudio } from "./studio.tsx";
 import { FAMILIES } from "./pages/components.tsx";
 import { EXAMPLES } from "./pages/examples.tsx";
 
-const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, brand: <PaletteIcon />, library: <LibraryIcon />, labs: <FlaskIcon /> };
+const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <PaletteIcon />, library: <LibraryIcon />, labs: <FlaskIcon /> };
 
 /** Foundations' pages: Color, Typography and Icons, then one per setting group, named as the registry names it. */
 export const FOUNDATIONS: ReadonlyArray<{ place: Place; label: string }> = [
@@ -112,12 +112,12 @@ function Expander({ open, label, controls, onToggle }: { open: boolean; label: s
 }
 
 export function AppNav() {
-  const { place, navigate, brands, openBrand } = useStudio();
-  // The open brand starts open while a tab on it is shown, Foundations while one of its pages is; a chevron closes either,
-  // and opens any other brand.
-  const onBrand = tabKind(place) === "brand";
-  const [opened, setOpened] = useState<ReadonlySet<string>>(() => new Set(onBrand ? [openBrand.id] : []));
-  useEffect(() => { if (onBrand) setOpened(open => open.has(openBrand.id) ? open : new Set([...open, openBrand.id])); }, [onBrand, openBrand.id]);
+  const { place, navigate, systems, openSystem } = useStudio();
+  // The open system starts open while a tab on it is shown, Foundations while one of its pages is; a chevron closes either,
+  // and opens any other system.
+  const onSystem = tabKind(place) === "system";
+  const [opened, setOpened] = useState<ReadonlySet<string>>(() => new Set(onSystem ? [openSystem.id] : []));
+  useEffect(() => { if (onSystem) setOpened(open => open.has(openSystem.id) ? open : new Set([...open, openSystem.id])); }, [onSystem, openSystem.id]);
   const [foundationsOpen, setFoundationsOpen] = useState(() => IN_FOUNDATIONS.has(place.page));
   const ids = useId();
   const open = (target: Place) => (event: MouseEvent<HTMLAnchorElement>) => {
@@ -125,7 +125,7 @@ export function AppNav() {
     // A page with its own list opens it in the Sidebar's place (the takeover); ⌘-click opens a new tab.
     navigate(target, { newTab: event.metaKey || event.ctrlKey, panel: LIST_PAGES.has(target.page) ? "page" : "nav" });
   };
-  const here = (target: Place) => onBrand && (place.brand ?? "area") === target.brand && samePage(target, place);
+  const here = (target: Place) => onSystem && (place.system ?? "area") === target.system && samePage(target, place);
   const row = (target: Place, label: string, trailing?: ReactNode, actions?: ReactNode) => (
     <NavItem key={label} href={hrefOf(target)} current={here(target)} onClick={open(target)} trailing={trailing} actions={actions}>{label}</NavItem>
   );
@@ -136,21 +136,21 @@ export function AppNav() {
           <NavItem href={hrefOf({ page: "home" })} icon={<HomeIcon />} current={place.page === "home"} onClick={open({ page: "home" })}>Home</NavItem>
           <NavItem href={hrefOf({ page: "library" })} icon={<LibraryIcon />} current={place.page === "library"} onClick={open({ page: "library" })}>Library</NavItem>
         </NavGroup>
-        <NavGroup label="Brands">
-          {brands.map(brand => {
-            const shown = opened.has(brand.id);
-            const sections = `${ids}-${brand.id}`, foundations = `${ids}-${brand.id}-foundations`;
-            const toggle = () => setOpened(open => { const next = new Set(open); if (next.has(brand.id)) next.delete(brand.id); else next.add(brand.id); return next; });
-            const at = (target: Place): Place => ({ ...target, brand: brand.id });
+        <NavGroup label="Systems">
+          {systems.map(system => {
+            const shown = opened.has(system.id);
+            const sections = `${ids}-${system.id}`, foundations = `${ids}-${system.id}-foundations`;
+            const toggle = () => setOpened(open => { const next = new Set(open); if (next.has(system.id)) next.delete(system.id); else next.add(system.id); return next; });
+            const at = (target: Place): Place => ({ ...target, system: system.id });
             return (
-              <Fragment key={brand.id}>
-                <NavItem href={hrefOf(at({ page: "themes" }))} icon={TAB_ICONS.brand} onClick={open(at({ page: "themes" }))}
-                  actions={<Expander open={shown} label={`${brand.name}'s sections`} controls={sections} onToggle={toggle} />}>
-                  {brand.name}
+              <Fragment key={system.id}>
+                <NavItem href={hrefOf(at({ page: "themes" }))} icon={TAB_ICONS.system} onClick={open(at({ page: "themes" }))}
+                  actions={<Expander open={shown} label={`${system.name}'s sections`} controls={sections} onToggle={toggle} />}>
+                  {system.name}
                 </NavItem>
                 <div id={sections} hidden={!shown}>
                   <NavGroup nested>
-                    {row(at({ page: "themes" }), "Themes", <Count count={brand.themes.length} />)}
+                    {row(at({ page: "themes" }), "Themes", <Count count={system.themes.length} />)}
                     {row(at({ page: "foundations" }), "Foundations", undefined,
                       <Expander open={foundationsOpen} label="Foundations' pages" controls={foundations} onToggle={() => setFoundationsOpen(!foundationsOpen)} />)}
                     <div id={foundations} hidden={!foundationsOpen}>
@@ -163,7 +163,7 @@ export function AppNav() {
               </Fragment>
             );
           })}
-          <NavItem href={hrefOf({ page: "home", item: "new" })} icon={<AddIcon />} onClick={open({ page: "home", item: "new" })}>New brand</NavItem>
+          <NavItem href={hrefOf({ page: "home", item: "new" })} icon={<AddIcon />} onClick={open({ page: "home", item: "new" })}>New system</NavItem>
         </NavGroup>
       </Nav>
     </SidebarList>
@@ -176,7 +176,7 @@ export function AppNav() {
  */
 export function Takeover({ children }: { children: ReactNode }) {
   const { place, setPanel, query, setQuery } = useStudio();
-  const back = tabKind(place) === "brand" ? brandName(place.brand) : "Workspace";
+  const back = tabKind(place) === "system" ? systemName(place.system) : "Workspace";
   const listed = LISTED[place.page] ?? placeLabel(place).toLowerCase();
   return (
     <div className="studio-takeover">

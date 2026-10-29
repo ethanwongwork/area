@@ -108,40 +108,53 @@ ipcMain.on("area:brand-reveal", (_event, path) => {
 });
 
 /*
- * The workspace's brands (src/brands.ts; app structure Phase 2): one folder each in the app's own data,
- * ~/Library/Application Support/Area/Brands/<id>/brand.json, never in the repository. The page reads them all once at launch
- * (sync, so its first render has them), writes a brand when it changes (to a temporary file, then renamed over the old
- * one, so a crash never leaves half a file), and moves a deleted brand's folder to the Trash, where it can be put back. A
- * capture never reads or writes them: it answers null, and the page keeps its brands in the capture's own storage.
+ * The workspace's systems (src/systems.ts; app structure Phase 2): one folder each in the app's own data,
+ * ~/Library/Application Support/Area/Systems/<id>/system.json, never in the repository. The page reads them all once at
+ * launch (sync, so its first render has them), writes a system when it changes (to a temporary file, then renamed over the
+ * old one, so a crash never leaves half a file), and moves a deleted system's folder to the Trash, where it can be put back.
+ * A capture never reads or writes them: it answers null, and the page keeps its systems in the capture's own storage.
+ * Systems were brands until 2026-10-29 (Brands/<id>/brand.json): the first read moves that folder and its files over, once.
  */
-const brandsFolder = () => join(app.getPath("userData"), "Brands");
-const brandId = id => typeof id === "string" && /^[a-z0-9-]{1,64}$/.test(id) ? id : null;
-ipcMain.on("area:brands-read", event => {
+const systemsFolder = () => join(app.getPath("userData"), "Systems");
+const systemId = id => typeof id === "string" && /^[a-z0-9-]{1,64}$/.test(id) ? id : null;
+function moveBrands() {
+  const old = join(app.getPath("userData"), "Brands");
+  if (existsSync(systemsFolder()) || !existsSync(old)) return;
+  try {
+    renameSync(old, systemsFolder());
+    for (const entry of readdirSync(systemsFolder(), { withFileTypes: true })) {
+      const from = join(systemsFolder(), entry.name, "brand.json"), to = join(systemsFolder(), entry.name, "system.json");
+      if (entry.isDirectory() && existsSync(from) && !existsSync(to)) renameSync(from, to);
+    }
+  } catch (error) { console.error(`[systems] moving Brands: ${error}`); }
+}
+ipcMain.on("area:systems-read", event => {
   if (capture) { event.returnValue = null; return; }
-  const root = brandsFolder();
-  const brands = [];
+  moveBrands();
+  const root = systemsFolder();
+  const systems = [];
   try {
     for (const entry of readdirSync(root, { withFileTypes: true })) {
-      if (!entry.isDirectory() || !brandId(entry.name)) continue;
-      try { brands.push(JSON.parse(readFileSync(join(root, entry.name, "brand.json"), "utf8"))); } catch {}
+      if (!entry.isDirectory() || !systemId(entry.name)) continue;
+      try { systems.push(JSON.parse(readFileSync(join(root, entry.name, "system.json"), "utf8"))); } catch {}
     }
   } catch {}
-  event.returnValue = brands;
+  event.returnValue = systems;
 });
-ipcMain.on("area:brand-write", (_event, id, text) => {
-  if (capture || !brandId(id) || typeof text !== "string") return;
+ipcMain.on("area:system-write", (_event, id, text) => {
+  if (capture || !systemId(id) || typeof text !== "string") return;
   try { JSON.parse(text); } catch { return; }
-  const folder = join(brandsFolder(), id);
+  const folder = join(systemsFolder(), id);
   try {
     mkdirSync(folder, { recursive: true });
-    const file = join(folder, "brand.json");
+    const file = join(folder, "system.json");
     writeFileSync(`${file}.tmp`, text);
     renameSync(`${file}.tmp`, file);
-  } catch (error) { console.error(`[brands] ${id}: ${error}`); }
+  } catch (error) { console.error(`[systems] ${id}: ${error}`); }
 });
-ipcMain.on("area:brand-trash", (_event, id) => {
-  const folder = brandId(id) && id !== "area" ? join(brandsFolder(), id) : null;
-  if (!capture && folder && existsSync(folder)) shell.trashItem(folder).catch(error => console.error(`[brands] ${id}: ${error}`));
+ipcMain.on("area:system-trash", (_event, id) => {
+  const folder = systemId(id) && id !== "area" ? join(systemsFolder(), id) : null;
+  if (!capture && folder && existsSync(folder)) shell.trashItem(folder).catch(error => console.error(`[systems] ${id}: ${error}`));
 });
 
 ipcMain.on("area:theme", (event, theme) => {

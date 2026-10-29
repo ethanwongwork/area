@@ -6,6 +6,17 @@ Phase 1 is built (2026-10-28, branch `claude/phase-1-new-navigation-1c3738`, PR 
 built (2026-10-29, branch `claude/serene-maxwell-905675`; "As built" under Phase 2). The Theme header
 fix that came out of the same review is built too (PRODUCT_UI.md, Setup).
 
+## Systems, not brands (owner, 2026-10-29)
+
+The owner renamed Brand to **System** after Phase 2 was built ("i dont like the term brand"): a system is the look and the
+rules a product is built with (its themes, foundations, Area's parts drawn in them, patterns, visuals, voice, agent kit),
+and a project is something made with one system. Below, every current and future section says System; Phase 1's "As
+built" keeps the words it was built with. In the app: `#system/<id>/…` (old `#brand/…` links and saved tabs redirect),
+`src/systems.ts`, `~/Library/Application Support/Area/Systems/<id>/system.json` (the Phase 2 build's `Brands` folder moves
+over once). Updated IA with rough wireframes of every page, the nav and its takeovers:
+https://claude.ai/artifact/Py4TnuPQvUckDVKQG3MsRf (also draws a system's Overview page and a project's Theme view that
+only picks a system and theme, both for the owner to confirm).
+
 ## The confirmed model
 
 Owner answers, 2026-10-28:
@@ -13,43 +24,43 @@ Owner answers, 2026-10-28:
 ```
 Area
 ├─ Workspace (private, or shared with a team)
-│  ├─ Brands (several)       a brand: Overview, Themes, Foundations, Components, Patterns, Visuals, Voice and
+│  ├─ Systems (several)       a system: Overview, Themes, Foundations, Components, Patterns, Visuals, Voice and
 │  │                          guidelines, Agent kit
-│  ├─ Projects               live, coded UI on one brand; exploring → in review → shipped → archived
+│  ├─ Projects               live, coded UI on one system; exploring → in review → shipped → archived
 │  └─ Library                every file uploaded or saved; items stored once, on any number of boards (folders optional)
 └─ Explore (public)         published projects (a live, clickable prototype), boards, systems; the Area Starter
 ```
 
 - **Workspace + Explore.** Everything is private until published. Saving from Explore puts a reference in the Library.
-- **Several brands per workspace.** Each project picks one; the Library is shared across them.
+- **Several systems per workspace.** Each project picks one; the Library is shared across them.
 - **Library**, Are.na's model: an item is stored once and sits on any number of boards. It accepts any file:
   images, video, audio, documents, fonts, SVG, Lottie, 3D, links (captured), code, Figma frames, palettes, notes, agent
   skills, Area's measured captures. Each item records its source (uploaded, captured, generated through MCP, saved from
   Explore), licence and credit, tags and colours.
-- **Brand visuals are promoted from the Library**: an approved visual with versions and usage rules, still linked to
+- **System visuals are promoted from the Library**: an approved visual with versions and usage rules, still linked to
   the item. Each visual records how it is made: in code (re-renders with the theme), uploaded, or generated (keeps its
   prompt).
 - **Area's own system** is the Area Starter in Explore, forked to start from scratch, and a parts catalog that renders in
-  the user's brand. It never has a permanent place in a company's workspace.
-- **A published project** gives viewers a live, clickable prototype. Not chosen (so not planned): view in my brand,
+  the user's system. It never has a permanent place in a company's workspace.
+- **A published project** gives viewers a live, clickable prototype. Not chosen (so not planned): view in my system,
   remix, case-study pages.
 - **Profiles** later, not in the first version.
 
-The brief's zones map onto it: System → Brand, Product and Lab → Projects (shipped and exploring states),
+The brief's zones map onto it: System → Systems, Product and Lab → Projects (shipped and exploring states),
 Library → Explore and the Area Starter.
 
 ## Where today's tabs go
 
 | Today | Becomes |
 |---|---|
-| Theme · Setup | New brand (Home) and New theme (Brand → Themes); the chat panel carries over |
-| Theme · Browse | Brand → Foundations, a page per setting group |
-| Components | Brand → Components |
-| Typography, Color, Icons | Brand → Foundations |
-| Testing | Brand → Patterns |
-| Imagery | Library (references) and Brand → Visuals (promoted) |
+| Theme · Setup | New system (Home) and New theme (System → Themes); the chat panel carries over |
+| Theme · Browse | System → Foundations, a page per setting group |
+| Components | System → Components |
+| Typography, Color, Icons | System → Foundations |
+| Testing | System → Patterns |
+| Imagery | Library (references) and System → Visuals (promoted) |
 | Materials | Labs, hidden (⌘K, Settings) |
-| Inspector: Theme · Design · Code · Chat | Theme edits the open brand's theme; Chat on every page |
+| Inspector: Theme · Design · Code · Chat | Theme edits the open system's theme; Chat on every page |
 | Inspector → Brand (exact colours, `src/brand.ts`) | Brand colours, part of a theme |
 
 ## Build plan
@@ -63,14 +74,14 @@ Settled by the owner, 2026-10-28, picking variation A on the shell canvas
 (https://claude.ai/artifact/Fb9YBdJ3B1oVqhvEZQgPKL):
 
 - **Layout:** Cursor-style universal left nav, Figma-style tabs on top, and takeover panels. Tabs work as a browser's:
-  ⌂ Home first, then one tab per open brand, project, board or design (type icon, name, ×; 120 to 170 wide); a click in
+  ⌂ Home first, then one tab per open system, project, board or design (type icon, name, ×; 120 to 170 wide); a click in
   the nav opens in the current tab, ⌘-click in a new one; each tab keeps its own left panel, scroll and selection. The
   top bar's end holds search (⌘K), the Library panel, the Inspector toggle and light and dark.
-- **The sidebar:** the nav (New, Home, Library, Explore; then Brands, Projects and Boards sections, each with a +; the
-  person's row at the foot). The open brand expands to its sections (Overview, Themes, Foundations, Components,
+- **The sidebar:** the nav (New, Home, Library, Explore; then Systems, Projects and Boards sections, each with a +; the
+  person's row at the foot). The open system expands to its sections (Overview, Themes, Foundations, Components,
   Patterns, Visuals, Voice and guidelines, Agent kit). Long lists (Components' families, Icons' categories, a Library's
   boards) and a design's Pages and Layers take the panel over, under a back row ("‹ Northwind").
-- **The open brand** is named by its expanded row in the nav and by its tab; no separate switcher.
+- **The open system** is named by its expanded row in the nav and by its tab; no separate switcher.
 
 - **Opening** (owner, 2026-10-28): Area reopens the last place with its tabs restored; Home is one click away (the
   Home tab).
@@ -127,52 +138,52 @@ Nothing is left open before Phase 1.
 - **Search** is Command palette over every place; each list's filter moved into its takeover.
 - **New theme** has no way back in its own panel: Back, the tabs or ⌘K leave it.
 
-### Phase 2. Home and several brands
+### Phase 2. Home and several systems
 
-- **A brand on disk**, as Imagery's library is: `~/Library/Application Support/Area/Brands/<id>/brand.json` (name,
-  origin, themes; a theme is today's Canvas settings, Material and brand colours). Never in the repository.
-- **Settings become the open brand's theme.** Today's global Canvas settings (`useStudio().canvas`, localStorage) move
-  into the active theme; the current saved values become the Area brand's Default theme. The largest change in the
+- **A system on disk**, as Imagery's library is: `~/Library/Application Support/Area/Systems/<id>/system.json` (name,
+  origin, themes; a theme is today's Canvas settings, Material and system colours). Never in the repository.
+- **Settings become the open system's theme.** Today's global Canvas settings (`useStudio().canvas`, localStorage) move
+  into the active theme; the current saved values become the Area system's Default theme. The largest change in the
   plan: every page reads the active theme.
-- **Home**: brands, recent projects, boards; New brand from the Area Starter (a fork of its values), from an import
+- **Home**: systems, recent projects, boards; New system from the Area Starter (a fork of its values), from an import
   (a stub until import exists), or by describing it (the Setup chat).
-- **More brands in the nav**: each a row under Brands, opened in a tab (Phase 0). Each brand's Components, Patterns
-  and Foundations render Area's parts in that brand's theme: the parts catalog. A brand with its own imported
+- **More systems in the nav**: each a row under Systems, opened in a tab (Phase 0). Each system's Components, Patterns
+  and Foundations render Area's parts in that system's theme: the parts catalog. A system with its own imported
   components comes with import, later.
 
 **As built (2026-10-29).** Every item above, with these decisions and differences, each for the owner to confirm in the app:
 
 - **The Home tab** is Nav's new icon-only item (a square plate, the icon centred; Figma's `tab--fileBrowserTab`, 40 by
   38), always first, never closed and always on Home. Every other tab closes, the last one too, leaving Home. From Home a
-  place opens in the tab already holding its brand (or the Library, a lab), else a new tab at the end (Figma's file
+  place opens in the tab already holding its system (or the Library, a lab), else a new tab at the end (Figma's file
   browser); Home from any tab switches to the Home tab. **⌘1** stays the first tab after Home, ⌘1–8 count the tabs after
   it, ⌘9 the last; **⌘⇧H** is Home (Finder's Go › Home), in the app menu. **New tab** (+, ⌘T) still opens search into a
   new tab: Home is always one click away, and a new tab on Home would be a second Home. With nothing saved the app opens on
   Home alone.
-- **The brand file** (`src/brands.ts`): `{ version, id, name, origin, created, theme, themes: [{ id, name, canvas,
-  material, colours, accent }] }`; `accent` is Brand colours (the exact accent), `colours` the exact page colours, `theme`
+- **The system file** (`src/systems.ts`): `{ version, id, name, origin, created, theme, themes: [{ id, name, canvas,
+  material, colours, accent }] }`; `accent` is the exact accent (Brand colours until 2026-10-27), `colours` the exact page colours, `theme`
   the chosen one. Every value is checked on the way in by the app's own restore functions, so a hand-edited or older file
-  opens. Writes go through a temporary file and a rename; a deleted brand's folder goes to the Trash (`shell.trashItem`),
-  and the Area brand can't be deleted. A capture neither reads nor writes the folder; the browser preview keeps its brands
+  opens. Writes go through a temporary file and a rename; a deleted system's folder goes to the Trash (`shell.trashItem`),
+  and the Area system can't be deleted. A capture neither reads nor writes the folder; the browser preview keeps its systems
   in its own storage.
-- **The settings move**: `useStudio()` keeps its names (`canvas`, `material`, `colours`, `brand`), now the open brand's
-  chosen theme, so no page changed to read it. The open brand is the current tab's, or on Home, the Library and Labs the
-  last one a tab showed. The one-time migration runs when no Area brand is on disk: the saved `canvas`, `material`,
+- **The settings move**: `useStudio()` keeps its names (`canvas`, `material`, `colours`, `brand`), now the open system's
+  chosen theme, so no page changed to read it. The open system is the current tab's, or on Home, the Library and Labs the
+  last one a tab showed. The one-time migration runs when no Area system is on disk: the saved `canvas`, `material`,
   `colours` and `brand` become its Default theme (a Canvas from before positions or picks converts on the way, as before);
   the old localStorage keys are left and no longer read.
-- **Several themes** per brand on Themes: double-click or Use chooses one; New theme adds one at Area's values and opens
+- **Several themes** per system on Themes: double-click or Use chooses one; New theme adds one at Area's values and opens
   the Setup chat on it. Rename and delete a theme are not built.
-- **Home**: Brands (Setup's screen in each brand's theme, as Themes' cards), New brand (three cards: Area Starter, Describe
+- **Home**: Systems (Setup's screen in each system's theme, as Themes' cards), New system (three cards: Area Starter, Describe
   it, Import marked Later; one dialog with the name and the three as card radios), Boards (the Library's groups as Imagery's
-  group cards), Recent (the last 8 places opened, a Table). The Inspector shows the chosen brand with Open, Rename and
-  Delete. A card shows a brand's exact colours only for the open brand: those are one rule in the document's head.
+  group cards), Recent (the last 8 places opened, a Table). The Inspector shows the chosen system with Open, Rename and
+  Delete. A card shows a system's exact colours only for the open system: those are one rule in the document's head.
 - **Links**: `#home` is a place, so an example screen's own `#home` link would have opened it. The Workspace now keeps
   every specimen's in-page link in the specimen (a hash link's click in the Canvas or the Inspector that nothing handled is
   prevented), which also stops a demo's `#library` link opening the Library, as it did in Phase 1.
-- **Not yet**: Projects (Home's Recent shows places, not projects), Explore, a brand's Overview, Visuals, Voice and Agent
+- **Not yet**: Projects (Home's Recent shows places, not projects), Explore, a system's Overview, Visuals, Voice and Agent
   kit sections, renaming or deleting a theme, import.
 
-### Phase 3. The Library and brand Visuals
+### Phase 3. The Library and system Visuals
 
 - **Items and boards.** Imagery's store (`library.json`, `originals/`, `thumbs/`, `electron/main.cjs`) grows to items
   of any type with metadata (type, source, licence, credit, tags, colours, dates) and boards that hold references.
@@ -181,12 +192,12 @@ Nothing is left open before Phase 1.
   file into the library folder.
 - **Viewing**: a board as a grid, waterfall or list; one item in a viewer per type (image, video, PDF, font specimen,
   SVG, text and markdown, skill files); search, tags, similar colours.
-- **Promote to brand** → Brand → Visuals: approved visuals with versions, usage notes and how each is made (code,
+- **Promote to system** → System → Visuals: approved visuals with versions, usage notes and how each is made (code,
   uploaded, generated).
 
 ### Phase 4. Projects
 
-- **A project**: a brand and theme, screens, states (exploring, in review, shipped, archived), references to Library
+- **A project**: a system and theme, screens, states (exploring, in review, shipped, archived), references to Library
   items. The Northwind screens (`src/setup-screen.tsx`, Testing) become a sample project.
 - **Viewing**: screens as a grid, one screen large, a click-through prototype from the screens' own links.
 - **Making screens**: through Chat and code first (the agent writes screens from Area's components); visual editing

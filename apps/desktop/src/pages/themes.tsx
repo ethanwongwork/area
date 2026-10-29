@@ -1,7 +1,7 @@
 /**
- * Themes, a brand's first section (docs/research/app-structure-2026-10-28, Phases 1 and 2): the open brand's themes, each
- * its settings, Material and exact colours (src/brands.ts). The theme the brand uses is what the Inspector's Theme view
- * edits and every page of the brand paints in; opening another theme (a double-click, or Use in the Inspector) makes it the
+ * Themes, a system's first section (docs/research/app-structure-2026-10-28, Phases 1 and 2): the open system's themes, each
+ * its settings, Material and exact colours (src/systems.ts). The theme the system uses is what the Inspector's Theme view
+ * edits and every page of the system paints in; opening another theme (a double-click, or Use in the Inspector) makes it the
  * one used. New theme adds one at Area's values and opens the Setup chat on it (theme-setup.tsx), which writes it.
  *
  * Each card draws Setup's product screen (setup-screen.tsx) in its theme, so a theme is seen by what it does. Exact colours
@@ -16,18 +16,18 @@ import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { ScreenFigure } from "../setup-screen.tsx";
 import { hasColours } from "../colours.ts";
-import type { BrandTheme } from "../brands.ts";
+import type { SystemTheme } from "../systems.ts";
 
 /** A theme card is wide enough to read the screen in it: the feed's 300 card (PRODUCT_UI.md, the Canvas feed). */
 const THEME_MIN = 300; /* pick */
 
 export function ThemesPage() {
-  const { item, select, navigate, shown, brand, theme, openBrand, openTheme, chooseTheme, addTheme } = useStudio();
-  const chosen = openBrand.themes.find(entry => entry.id === item) ?? null;
-  const scopeOf = (entry: BrandTheme) => entry === openTheme
+  const { item, select, navigate, shown, brand, theme, openSystem, openTheme, chooseTheme, addTheme } = useStudio();
+  const chosen = openSystem.themes.find(entry => entry.id === item) ?? null;
+  const scopeOf = (entry: SystemTheme) => entry === openTheme
     ? { ...canvasAttributes(shown.canvas, shown.material), ...(hasColours(shown.colours) ? { "data-area-colours": "" } : {}), ...(brand.on ? { "data-area-brand": "" } : {}), "data-area-theme": theme }
     : { ...canvasAttributes(entry.canvas, entry.material), "data-area-theme": theme };
-  const changedOf = (entry: BrandTheme) => (Object.keys(CANVAS_DEFAULTS) as Array<keyof typeof CANVAS_DEFAULTS>).filter(axis => entry.canvas[axis] !== CANVAS_DEFAULTS[axis]).length;
+  const changedOf = (entry: SystemTheme) => (Object.keys(CANVAS_DEFAULTS) as Array<keyof typeof CANVAS_DEFAULTS>).filter(axis => entry.canvas[axis] !== CANVAS_DEFAULTS[axis]).length;
   // The new theme is the one used, so the Setup chat writes it.
   const newTheme = () => { addTheme(); navigate({ page: "theme-setup" }); };
   return (
@@ -40,9 +40,9 @@ export function ThemesPage() {
       }
       canvas={
         <div className="studio-sections">
-          <CanvasSection id="themes" title="Themes" count={openBrand.themes.length} lede={`${openBrand.name} uses ${openTheme.name}. Each theme is the brand's settings, Material and exact colours; New theme makes one in a chat.`}>
+          <CanvasSection id="themes" title="Themes" count={openSystem.themes.length} lede={`${openSystem.name} uses ${openTheme.name}. Each theme is the system's settings, Material and exact colours; New theme makes one in a chat.`}>
             <TileGrid span="wide" cards min={THEME_MIN}>
-              {openBrand.themes.map(entry => (
+              {openSystem.themes.map(entry => (
                 <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name} value={entry === openTheme ? "In use" : undefined}
                   selected={chosen?.id === entry.id} onSelect={() => select(entry.id, { replace: true })}
                   onOpen={() => { if (entry === openTheme) navigate({ page: "foundations" }); else chooseTheme(entry.id); }}>
@@ -73,7 +73,7 @@ export function ThemesPage() {
         </>) : (
           <PanelSection heading="Themes">
             <Facts label="Theme" items={[
-              ["Themes", openBrand.themes.length],
+              ["Themes", openSystem.themes.length],
               ["In use", openTheme.name],
               ["Edited in", "Inspector › Theme, or New theme"],
             ]} />

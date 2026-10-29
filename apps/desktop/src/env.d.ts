@@ -10,10 +10,10 @@ interface AreaDesktop {
   /** Shows a file of the Brand library (a path inside it, "originals/<id>.jpg") in Finder. */
   revealBrand?(path: string): void;
   /**
-   * The workspace's brands, one brand.json each in Application Support/Area/Brands (src/brands.ts). `read` answers every
-   * file's contents at launch, or null in a capture (the page keeps its brands in its own storage then).
+   * The workspace's systems, one system.json each in Application Support/Area/Systems (src/systems.ts). `read` answers
+   * every file's contents at launch, or null in a capture (the page keeps its systems in its own storage then).
    */
-  brands?: { read(): unknown[] | null; write(id: string, text: string): void; trash(id: string): void };
+  systems?: { read(): unknown[] | null; write(id: string, text: string): void; trash(id: string): void };
   /** The app menu's tab commands (electron/main.cjs): ⌘T, ⌘⇧T, ⌘⇧H, ⌘W, ⌃Tab, ⌃⇧Tab, ⌘1–9. Returns the unsubscribe. */
   onCommand?(listener: (command: TabCommand, index?: number) => void): () => void;
 }
