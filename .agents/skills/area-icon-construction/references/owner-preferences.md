@@ -217,3 +217,10 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   figure, and dashed rings keep 8 dashes with a one-line gap between them (22.3° dashes). Docs: icons.md, "Optical pass,
   2026-10-26".
 
+- **Review against Cursor (owner, 2026-10-29; spec "Review against Cursor, 2026-10-29"):** Cursor's icons can be measured
+  from its installed font (`/Applications/Cursor.app/Contents/Resources/app/out/media/cursor-icons-16.woff2`, glyph names
+  in its cmap): render them for comparison only, at 14px against Area's 16 (the size Cursor sets them beside text), and
+  never commit or trace them. Kept by the owner: the icon line follows the type (1.045 at type 13), "detail first" (base
+  icons carry their content where Cursor's are bare), gauge's semicircle. Changed: expand / collapse (and their maximize
+  / minimize aliases) take 3.5 heads with the shafts to a standard gap at the centre; the plane is a top-down airliner on
+  the rising diagonal (the side view is retired). A 12px cut follows use: Reference list's `return` has one.

@@ -3,8 +3,8 @@ import { build } from "esbuild"; import { writeFileSync, readFileSync } from "no
 // SLIVER_SIZE=48 renders through the size prop (the size curve) instead of the 16px drawing enlarged.
 const SIZE = process.env.SLIVER_SIZE ? `size: ${Number(process.env.SLIVER_SIZE)}, ` : "";
 // LOOK_CACHE and PILOT_TSX (absolute) let parallel sessions check their own emitted icons (2026-10-07).
-const cache = process.env.LOOK_CACHE || process.cwd() + "/apps/docs/.cache", only = process.argv[2]?.split(",");
-writeFileSync(cache + "/sl.tsx", `import { createElement as h } from "react"; import { renderToStaticMarkup } from "react-dom/server"; import { PILOT_ICONS } from "${process.env.PILOT_TSX || "../src/pilot-icons.tsx"}";
+const cache = process.env.LOOK_CACHE || process.cwd() + "/packages/icons/.cache", only = process.argv[2]?.split(",");
+writeFileSync(cache + "/sl.tsx", `import { createElement as h } from "react"; import { renderToStaticMarkup } from "react-dom/server"; import { PILOT_ICONS } from "${process.env.PILOT_TSX || process.cwd() + "/apps/docs/src/pilot-icons.tsx"}";
 export const all = PILOT_ICONS.filter(p => !p.derivedFrom).map(p => ({ name: p.name, o: renderToStaticMarkup(h(p.Icon, { weight: 1.125, ${SIZE}width: 128, height: 128 })), f: renderToStaticMarkup(h(p.Filled, { weight: 1.125, ${SIZE}width: 128, height: 128 })) }));`);
 await build({ entryPoints: [cache + "/sl.tsx"], bundle: true, format: "esm", platform: "node", outfile: cache + "/sl.out.mjs", external: ["react", "react-dom", "react-dom/server"], jsx: "automatic", logLevel: "error" });
 let { all } = await import(cache + "/sl.out.mjs?" + Date.now());

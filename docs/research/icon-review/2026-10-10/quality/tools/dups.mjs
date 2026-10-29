@@ -1,5 +1,5 @@
 // Find outline strokes drawn twice: two outline-drawn elements sharing a segment.
-// Usage: node docs/research/icon-review/2026-10-10/quality/tools/dups.mjs apps/docs/assets/area-icons-pilot [name,name…]
+// Usage: node docs/research/icon-review/2026-10-10/quality/tools/dups.mjs packages/icons/sources [name,name…]
 // A stroke drawn twice in the outline reads darker at 1× (flag-off 2026-10-07, mic-off 2026-10-10). Edges shared by two
 // closed shapes (panels, video, headphones) also show; those are a generator-level question, not per-icon defects.
 import { readFileSync, readdirSync } from "node:fs";

@@ -7,7 +7,7 @@
 //            "radial" (calendar-check's, copy-check's and spell-check's checks).
 //   node docs/research/icon-review/2026-10-07/geometry-audit.mjs [name,name…]
 import { readdirSync, readFileSync } from "node:fs";
-const DIR = "apps/docs/assets/area-icons-pilot", W = 1.125, JOIN = 0.1;
+const DIR = "packages/icons/sources", W = 1.125, JOIN = 0.1;
 const GAPS = [[0.875, 1.125], [1.125, 1.75], [1.75, 2.0]], OPEN = 2.5;
 const only = process.argv[2]?.split(",");
 

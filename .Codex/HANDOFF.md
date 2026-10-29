@@ -1,6 +1,12 @@
 # Handoff
 
 ## Current state (2026-10-28)
+- **Icon review against Cursor (2026-10-29, branch `claude/icon-visual-design-review-4f986c`, uncommitted).** Review page
+  https://claude.ai/artifact/35czAepgpMBmeDCbMh5vU2 (picks in db `verdicts`). Applied: expand / collapse (+ maximize /
+  minimize) drawing B, plane redrawn top-down (`docs/research/icon-review/2026-10-29/plane.py`), Reference list's `return`
+  12px cut, review tools repointed to `packages/icons`; P1: the 20 icon slot from type 15 with a default-size icon's
+  line on the size curve (type axis `type-icon-line`, 1.33px at 15, 1.42 at 16; types 12–14 unchanged). Nothing open.
+  Spec: icons.md "Review against Cursor, 2026-10-29" and "The 20 slot's line".
 - **App structure Phase 1, the new navigation, branch `claude/phase-1-new-navigation-1c3738`, PR #173 (owner
   2026-10-28: "Phase 1 of the new navigation should start in a fresh session").** Places (`apps/desktop/src/places.ts`:
   `#brand/area/themes|foundations|components|patterns`, `#library`, `#labs/materials`; old links redirect,

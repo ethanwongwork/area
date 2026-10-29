@@ -1,7 +1,3 @@
-<svg data-set="area-pilot" data-keyline="horizontal" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M11.25 5.5L6.914 5.5A1 1 0 0 1 6.207 5.207L4.146 3.146A0.5 0.5 0 0 0 3.793 3L3 3A0.5 0.5 0 0 0 2.5 3.5L2.5 9A1 1 0 0 0 3.5 10L11.25 10A2.25 2.25 0 0 0 11.25 5.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="solid" d="M11 10L8.146 12.854A0.5 0.5 0 0 1 7.793 13L6.694 13A0.5 0.5 0 0 1 6.219 12.342L7 10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="hole" cx="6.25" cy="7.75" r="0.75" fill="currentColor"/>
-<circle data-filled="hole" cx="8.75" cy="7.75" r="0.75" fill="currentColor"/>
-<circle data-filled="hole" cx="11.25" cy="7.75" r="0.75" fill="currentColor"/>
+<svg data-set="area-pilot" data-keyline="square" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path data-filled="solid" d="M13.587 4.806L13.328 5.596A0.5 0.5 0 0 1 13.206 5.794L11.994 7.006A0.5 0.5 0 0 0 11.857 7.452L12.88 12.874A0.4 0.4 0 0 1 12.769 13.231L12.513 13.487A0.4 0.4 0 0 1 11.862 13.362L10.286 9.684A0.5 0.5 0 0 0 9.473 9.527L7.966 11.034A0.5 0.5 0 0 0 7.832 11.498L8.275 13.461A0.4 0.4 0 0 1 8.168 13.832L7.783 14.217A0.4 0.4 0 0 1 7.217 14.217L2.283 9.283A0.4 0.4 0 0 1 2.283 8.717L2.668 8.332A0.4 0.4 0 0 1 3.039 8.225L5.002 8.668A0.5 0.5 0 0 0 5.466 8.534L6.973 7.027A0.5 0.5 0 0 0 6.816 6.214L3.138 4.638A0.4 0.4 0 0 1 3.013 3.987L3.269 3.731A0.4 0.4 0 0 1 3.626 3.62L9.048 4.643A0.5 0.5 0 0 0 9.494 4.506L10.706 3.294A0.5 0.5 0 0 1 10.904 3.172L11.694 2.913A1.5 1.5 0 0 1 13.587 4.806Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
