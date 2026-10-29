@@ -5357,3 +5357,66 @@ person 9% small (its family's marks bring person-* to −2…+4%) and circle-das
 The four stay approved in batches.json, because a review icon leaves the package's main entry (`@area/icons/review`) and
 person is imported across the app; the redraws are on the owner's review page instead.
 
+
+## Review against Cursor, 2026-10-29
+
+Owner: "take another look at all the icons again … optically balanced, how they look at all sizes and next to text, how
+they compare to cursors icons, and … the overall visual design language". Review page with the evidence and the owner's
+picks: https://claude.ai/artifact/35czAepgpMBmeDCbMh5vU2 (db collection `verdicts`, P1–P8).
+
+- **Method:** every icon (outline and filled, built `dist/svg/16`) and 577 of Cursor 3.27's glyphs, read from its own
+  icon font (`Cursor.app/…/out/media/cursor-icons-16.woff2`: 300 units to 16px, a 24-unit line, 1.28px at 16), rendered
+  the same way at 96px and at 1×; Lucide and Phosphor from the 16 Oct balance pass's `measure.json`. Cursor's glyphs were
+  rendered for comparison only and are not in the repository. Cursor sets its 16-grid font at 14px in its Agents
+  sidebar, menus and composer (`.agent-sidebar-cell-icon i.codicon { font-size: 14px }`), where it draws the same ink
+  as Area's 16: median apparent size 11.41 against 11.34, line 1.12 against 1.045 at type 13.
+- **Balance:** within ±8% of the median size Area 71%, Cursor 64%; within ±20% of the median density 81% / 78%. Icons
+  more than 10% from every reference that draws the concept: 18, of which the size outliers below changed and the rest
+  were kept with the 16 Oct reasons (wand, eye-off, terminal, the type letters, ruler, password, settings).
+- **Owner's picks (2026-10-29):**
+
+| | Pick | Done |
+|---|---|---|
+| P1 | the 20 icon slot from type 15, its line on the size curve (owner's second pick, after the sheet `docs/research/icon-review/2026-10-29/p1-type-15-16.png`) | Done: see "The 20 slot's line" below |
+| P2 | keep the icon line on the type (1.045 at 13) | Unchanged |
+| P3 | 12px cuts for content icons shown at 12 | The 2026-10-13 measurement already covers the app's 12px slots; the slots added since show marks with cuts, except Reference list's `return`, now cut |
+| P4 | keep "detail first" (Cursor's bases are bare) | Unchanged |
+| P5 | expand and collapse, candidate B | Redrawn |
+| P6 | keep gauge's semicircle | Unchanged |
+| P7 | redraw plane top-down | Redrawn |
+| P8 | repoint the review tools | Done |
+
+| name | change | size (median 1.00) |
+|---|---|---|
+| expand, maximize | 3.5 heads (`M10 2.5H13.5V6`), the shafts brought in to a standard gap at the centre (inner ends 9.061, 6.939 and 6.939, 9.061 on x + y = 16: 3 between centre-lines, ink 1.88) | 0.78 → 0.82 |
+| collapse, minimize | 3.5 heads at the same inner corners (`M9.5 3V6.5H13`) | 0.75 → 0.80 |
+| plane | top-down airliner on the rising diagonal, nose top right (Cursor, Lucide and Phosphor draw it so; the side view read as a bus at 16): one closed outline, a 3.54-wide body (2.41 inside), swept wings and tailplane, nose r 1.5, root corners r 0.5, tips r 0.4; built upright and turned 45° so the body sides, wing tips and tailplane tips are constant-x lines, solved onto the lattice (x + y = 14, 19, 7, 26, 11, 22: the axis on x + y = 16.5, 0.25 off centre by the lattice rule) and the tail's trailing edge on x − y = −7. Ink box 12.62 square at 7.91, 8.59 with the ink's mass at 8.23, 8.27 (the nose and wings are the heavy end). Solid when filled. Generator: `docs/research/icon-review/2026-10-29/plane.py 1.165` | 0.87 → 1.00 |
+
+- **return's 12px cut** (`sources/12/return.svg`): the 16px drawing at 12 put the bar and the hook on quarter pixels;
+  the cut is the square 8 frame (2.5–9.5), the bar on 7.5, the hook r 2 into a stem on 9.5 and a 2px head through pixel
+  centres. Glyph's `return` at size 12 (Reference list's backlink) draws it below type 16.
+- **The redraws stay approved** in batches.json (the owner picked them; a review icon leaves `@area/icons`' main entry),
+  as the 2026-10-26 pass did; plane's drawing is new and is on the review page for the owner.
+- **Tools:** `look.mjs`, `geometry-audit.mjs`, `slivers.mjs`, `sizes.mjs` and `dups.mjs` read and write under
+  `packages/icons` (`.cache`, `sources`, `scripts/generate.mjs`) instead of the archived `apps/docs` paths, which no
+  longer existed in a fresh worktree. They still import the generated `apps/docs/src/pilot-icons.tsx`, which
+  `generate.mjs` writes.
+- **Found, not changed:** the app's tab close (`app-nav.tsx`, a `DismissIcon` without `size` in Nav's 12px action slot)
+  draws the 16px drawing at 0.78px; `size={12}` would give it the 12 line. PR #174 is editing that file.
+
+### The 20 slot's line (P1, 2026-10-29)
+
+Owner, after the sheet: "use the 20 icon slot from type 15, with the 20 slot's line on the size curve (1.33 at type 15,
+1.42 at type 16)". Components size their icons by CSS from the type axis's tier tokens (`--area-icon-sm/md/lg`), and an
+icon at its default size strokes the token line in its 16 drawing's units, so a 20 box scaled the line too: type 16
+drew 1.61px (not the curve's 1.42), and moving type 15 to 20 alone would have drawn 1.51.
+
+- **Type axis** (`axes/type-size.ts`): `type-icon` is 20 from 15 (was from 16); new `type-icon-line`, 1 up to 14 and
+  0.8846 at 15 and 16 (the curve's (20 / 16)^-0.55, the factor `size={20}` already applies).
+- **Default-size icons read it:** `@area/icons`' `sw` with no `size` strokes `calc(var(--area-weight-icon) *
+  var(--area-type-icon-line, 1))` (generate.mjs), and Glyph's default rule does the same (`base.css`). An icon with an
+  explicit `size`, the xs slot (size 12, the 12px factor and cuts) and strokes outside icons (Presence's ring, Empty
+  state's large glyph, the app's option marks) keep the token line. Toggletip's md glyph multiplies by it; File tile and
+  File page, which set their own icon line, set it to 1 (`--area-type-icon-line` joins `OVERRIDABLE`).
+- **Result:** default-size icons draw 1.33px at type 15 (slot 20, was 16 at 1.21) and 1.42 at 16 (was 1.61). Types 12–14,
+  the app's type 13 included, are unchanged.

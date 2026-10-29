@@ -23,7 +23,10 @@
  *                           optical-size axis): 10 +0.01em, 11 +0.0075, 12 +0.005, 13 +0.0025
  *   icon stroke             follows the text stem, 1.125px at 14
  *   check box / toggle      4 inside the UI line (never under 14); a toggle 4 taller than that
- *   icons                   the 16 cut, the 20 cut at 16
+ *   icons                   the 16 slot, the 20 slot from 15 (owner, 2026-10-29: at 15 a 16 icon read 1.06× the cap
+ *                           height, under the 1.15–1.35 every other row and Cursor sit at); a default-size icon in the
+ *                           20 slot draws the size curve's line, the token line × type-icon-line (0.8846, as a
+ *                           size={20} icon), not the 16px drawing scaled whole (1.51px at 15, 1.61 at 16 before)
  *
  * The axis also bounds density (`type-level-*`): Compact stops at 14 (at 15 and 16 its spacing
  * is Default's at 14 with larger text) and Comfortable starts at 13 (12px text floats in its
@@ -72,7 +75,10 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
     "type-leading": `${LEADING[base]}px`,
     "type-small-leading": `${LEADING[small]}px`,
     "type-reading-leading": `${LEADING[reading]}px`,
-    "type-icon": `${base >= 16 ? 20 : 16}px`,
+    "type-icon": `${base >= 15 ? 20 : 16}px`,
+    // The line ratio for an icon drawn at its default size in the icon slot: 1 in the 16 slot, the size curve's
+    // (20 / 16)^-0.55 in the 20 slot. Icons with an explicit size, the xs slot and other strokes keep the token line.
+    "type-icon-line": base >= 15 ? "0.8846" : "1",
     "type-icon-xs": `${base >= 16 ? 16 : 12}px`,
     // 1 where the xs icon slot is 12px, so component glyphs draw their 12px cuts there (docs/specs/icons.md, "12px cuts").
     "type-icon-xs-cut": base >= 16 ? "0" : "1",
