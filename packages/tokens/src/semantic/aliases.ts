@@ -67,6 +67,7 @@ const alphaAt = (role: Role, slot: Slot): Alias => ({ kind: "alphaSlot", role, s
 const solid = (role: Role): Alias => ({ kind: "solid", role });
 const solidHover = (role: Role): Alias => ({ kind: "solidHover", role });
 const tonalSurface = (role: Role, state: "rest" | "hover" | "active"): Alias => ({ kind: "tonalSurface", role, state });
+const TONAL_STATES = ["rest", "hover", "active"] as const;
 const tonalForeground = (role: Role): Alias => ({ kind: "tonalForeground", role });
 const stroke = (role: Role): Alias => ({ kind: "stroke", role });
 const strokeHover = (role: Role): Alias => ({ kind: "strokeHover", role });
@@ -282,6 +283,7 @@ export interface ScaleView {
     surface: { light: Level; dark: Level };
     surfaceHover: { light: Level; dark: Level };
     surfaceActive: { light: Level; dark: Level };
+    paint: { light: readonly [string, string, string]; dark: readonly [string, string, string] };
   };
   contrast: { hex: string };
 }
@@ -318,10 +320,8 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.level[theme]]!;
     case "solidHover":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].solid.hover[theme]]!;
-    case "tonalSurface": {
-      const key = aliasValue.state === "rest" ? "surface" : aliasValue.state === "hover" ? "surfaceHover" : "surfaceActive";
-      return scales[aliasValue.role].byLevel[scales[aliasValue.role].tonal[key][theme]]!;
-    }
+    case "tonalSurface":
+      return scales[aliasValue.role].tonal.paint[theme][TONAL_STATES.indexOf(aliasValue.state)]!;
     case "tonalForeground":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].tonal.foreground[theme]]!;
     case "stroke":
@@ -352,6 +352,8 @@ function indicatorLevel(role: Role, scales: ScaleLookup, theme: Theme): Level {
   const view = scales[role], neutral = scales.neutral;
   const grounds = [INVERSION.page, INVERSION.surface, INVERSION.subtle, INVERSION.component, INVERSION.componentHover, INVERSION.componentActive]
     .map(slot => neutral.byLevel[slot[theme]]!);
+  // Measured on the tints' rungs: in dark they are lighter than what paints (scale.ts chooseTonalPair), so a ring that
+  // clears on them clears on the paint, and the reviewed ring holds (2026-10-28).
   const tints = Object.values(scales).flatMap(s => [s.tonal.surface, s.tonal.surfaceHover, s.tonal.surfaceActive].map(level => s.byLevel[level[theme]]!));
   const start = LEVELS.indexOf(500 as Level), direction = theme === "light" ? 1 : -1;
   // The accent's own tints quiet with it at every Accent strength (color/generate.ts); the grounds and other tones' tints stay.
@@ -379,8 +381,10 @@ export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme)
     case "solidHover":
       return scales[aliasValue.role].solid.hover[theme];
     case "tonalSurface": {
-      const key = aliasValue.state === "rest" ? "surface" : aliasValue.state === "hover" ? "surfaceHover" : "surfaceActive";
-      return scales[aliasValue.role].tonal[key][theme];
+      // A derived dark surface (scale.ts chooseTonalPair) is not a numbered palette rung.
+      const view = scales[aliasValue.role], key = aliasValue.state === "rest" ? "surface" : aliasValue.state === "hover" ? "surfaceHover" : "surfaceActive";
+      const level = view.tonal[key][theme];
+      return view.byLevel[level] === view.tonal.paint[theme][TONAL_STATES.indexOf(aliasValue.state)] ? level : null;
     }
     case "tonalForeground":
       return scales[aliasValue.role].tonal.foreground[theme];

@@ -200,3 +200,9 @@ Resolved 2026-10-10 (owner: "proceed with your suggestions"); kept for the recor
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-29 (visual pass, rounds 86–89: Filtering demo)
+
+- **What changed:** the results under the field are Nav rows (plates, row height, the row inset), and "No results" takes a row's inset and height in the muted ink. The field is unchanged.
+- **Why:** the demo drew the results as bare list items with inline styles: no row height or plates, 18 apart, 8 in. Demos are made of real components.
+- **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.

@@ -259,7 +259,7 @@ export const descriptionList = {
   description: "Lists labelled values: a term and its value per row.",
   variants: { layout: ["columns", "justified"] },
   booleans: ["divided", "framed"],
-  elements: ["item", "term", "icon", "value", "more", "more-label"],
+  elements: ["item", "term", "icon", "label", "value", "more", "more-label"],
   defaults: { layout: "columns" },
 } as const satisfies ComponentManifest;
 
@@ -318,10 +318,18 @@ export const composer = {
   block: "area-composer",
   description: "Writes and submits a message with optional action slots.",
   variants: { layout: ["inline", "stacked"] },
-  states: ["disabled"],
-  elements: ["context", "entry", "input", "actions", "extras", "footer", "submit"],
+  states: ["disabled", "dragging"],
+  elements: ["context", "entry", "input", "actions", "extras", "footer", "submit", "mic", "attach", "file"],
   elementModifiers: { actions: ["leading", "trailing"] },
   defaults: { layout: "inline" },
+} as const satisfies ComponentManifest;
+
+export const composerGroup = {
+  block: "area-composer-group",
+  description: "A Composer with rows around its shell: a header above, a footer below.",
+  variants: {},
+  elements: ["header", "footer", "note"],
+  defaults: {},
 } as const satisfies ComponentManifest;
 
 export const textarea = {
@@ -684,9 +692,9 @@ export const propertyList = {
 
 export const modelPicker = {
   block: "area-model-picker",
-  description: "Chooses the model a message is sent with, from inside the composer.",
+  description: "Chooses the model a message is sent with, and how hard it works, from inside the composer.",
   variants: {},
-  elements: ["trigger"],
+  elements: ["trigger", "name", "effort"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -712,7 +720,7 @@ export const promptSuggestions = {
   block: "area-prompt-suggestions",
   description: "Starter prompts under an empty composer.",
   variants: { layout: ["list", "chips"] },
-  elements: ["row", "item", "icon", "text", "dismiss"],
+  elements: ["row", "item", "icon", "text", "shortcut", "dismiss"],
   defaults: { layout: "list" },
 } as const satisfies ComponentManifest;
 
@@ -1372,6 +1380,7 @@ export const MANIFESTS = {
   pagination,
   treeView,
   composer,
+  composerGroup,
   textarea,
   select,
   checkbox,

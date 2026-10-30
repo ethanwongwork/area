@@ -87,3 +87,4 @@ Open questions: none.
 - 2026-10-01 · audit D-12 → the menu is named by its `aria-label` (`label`, default "Model"), which now wins over the trigger's labelledby → ModelPicker.tsx:48, primitives.tsx:1125.
 - 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change. The Verification run above predates it and used product model names.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no change: trigger and menu motion inherited from Button and Menu, verified (enter 150 from the trigger, whole-pixel rest).
+- **Verdict (effort):** approved (owner, 2026-10-29, the Composer expansion review page); Complete.

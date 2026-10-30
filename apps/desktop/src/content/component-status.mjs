@@ -6,6 +6,11 @@
 // Re-confirmed 2026-10-02 after the compact evidence audit (PR 37): menu, nav, tree-view,
 // command-palette, combobox, tooltip, dialog, code-block, panel, color-picker, checkbox, radio,
 // chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
+// Visual pass rounds 81–89 and the Composer expansion (branch claude/component-interaction-visual-polish-e45c8f,
+// 2026-10-28/29): every family they reopened was approved back to Complete (Command palette, Color swatch picker,
+// Popover, Composer, Description list, Edit summary, File tile, File upload, Plan, Prompt suggestions, Search field,
+// Scroll to latest, Spinner, Video player, Model picker, Approval). Plan, Description list and Approval are in review
+// again for main's chat set review (merged 2026-10-29).
 export const COMPLETE_COMPONENTS = new Set([
   // Reopened 2026-10-26 (owner: the Slider's motion and detail pass on every component; docs/research/interaction-pass-2026-10-26):
   'color-picker', // round 75 approved (owner, 2026-10-27: the knob lifts); its Gamut mode approved on the exact-colours review (owner, 2026-10-28)

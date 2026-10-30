@@ -403,3 +403,13 @@ Solid presses one step past hover in the same direction (`--_solid-active`: neut
   tone's paint. The app's colour cards use it for Copy.
 - **Why:** the owner: "copy added to color?". A ghost button's neutral ink and plates are made for the page, not for a
   colour; Badge already had `onColor` for the same case.
+
+## Review note, 2026-10-28 (dark soft tones)
+
+- **What changed:** soft buttons in a tone in dark (danger, info, success, warning, caution, discovery) are quieter: each tone's soft surface is the neutral control fill of the same state in the
+  tone's hue at chroma 0.05 / 0.06 / 0.07 (danger rest #3d1d1f, was #820022). Inks and light are unchanged; the ink
+  reads better (Delete's label 7.34:1 → 10.38:1).
+- **Why:** ChatGPT, Notion and Figma paint dark soft tones at chroma 0.04–0.07; Area's palette rungs carried up to 0.15
+  and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
+  docs/research/dark-soft-tones-2026-10-28).
+- **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).

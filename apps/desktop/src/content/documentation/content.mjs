@@ -159,6 +159,7 @@ export default {
       item: "One row: a div grouping a term with its value. Rows past visibleCount stay in the document, hidden, so order holds.",
       term: "The dt, in the muted ink; its column fits the longest term (at most 40%, --area-description-list-term), and a longer term wraps.",
       icon: "A 16 decorative icon before the term; the Show more button puts its chevron here, so its label lines up with the term names.",
+      label: "The term's text. Its baseline is the row's: a term sits on its value's first line, level with a person's name beside an avatar.",
       value: "The dd, in the default ink; any content, wrapping when long.",
       more: "The Show more button after the list, outside the dl and below any frame.",
       "more-label": "The button's text: \"Show 3 more\" while rows are hidden, \"Show less\" once every row shows.",
@@ -482,7 +483,7 @@ export default {
     ],
     // Spec: Anatomy, Coherence pass; source: FileTile.tsx.
     parts: {
-      root: "One item: the figure over its text in a centred column; in a FileGrid it sits on the row plates of its option.",
+      root: "One item: the figure over its text in a centred column, at most a grid column wide (the figure plus 24 each side); in a FileGrid it sits on the row plates of its option and takes the cell's width.",
       figure: "The square that holds a Folder, a File page, a glyph or a contained image; sm 48, md 64 or lg 96.",
       text: "The name over the detail line, 8 under the figure.",
       name: "The item's name in the app's strong UI text; up to two lines, then an ellipsis.",

@@ -142,6 +142,15 @@ function gallerySpecimenTable() {
       { id: "loading", title: "State / loading", demo: "GalleryComposerLoading" },
       { id: "pill", title: "Send / pill", demo: "GalleryComposerPill" },
       { id: "composition-context", title: "Composition / context row", demo: "GalleryComposerContext" },
+      { id: "slot-header", title: "Slot / header", demo: "GalleryComposerHeader" },
+      { id: "slot-footer", title: "Slot / footer", demo: "GalleryComposerFooter" },
+      { id: "content-mic", title: "Content / dictation", demo: "GalleryComposerMic" },
+      { id: "state-dictating", title: "State / dictating", demo: "GalleryComposerMicOn" },
+      { id: "state-dragging", title: "State / dropping files", demo: "GalleryComposerDrop" },
+      { id: "content-effort", title: "Content / model and effort", demo: "GalleryComposerEffort" },
+      { id: "composition-agent", title: "Composition / agent", demo: "GalleryComposerAgent" },
+      { id: "composition-reply", title: "Composition / reply", demo: "GalleryComposerReply" },
+      { id: "composition-combined", title: "Composition / combined", demo: "GalleryComposerCombined" },
     ],
     "code-block": [
       { id: "default", title: "Default", demo: "CodeBlockDefault" },
@@ -185,6 +194,7 @@ function gallerySpecimenTable() {
     "model-picker": [
       { id: "composer", title: "In the composer", demo: "GalleryModelPicker" },
       { id: "heading", title: "With a heading and a disabled row", demo: "GalleryModelPickerHeading" },
+      { id: "content-effort", title: "Content / effort", demo: "GalleryModelPickerEffort" },
     ],
     "scroll-to-latest": [
       { id: "default", title: "In a conversation", demo: "GalleryScrollToLatest" },
@@ -199,6 +209,7 @@ function gallerySpecimenTable() {
       { id: "default", title: "List (default)", demo: "GalleryPromptSuggestions" },
       { id: "chips", title: "Layout / chips", demo: "GalleryPromptSuggestionsChips" },
       { id: "plain", title: "List without icons or dismiss", demo: "GalleryPromptSuggestionsPlain" },
+      { id: "content-shortcut", title: "Content / shortcut", demo: "GalleryPromptSuggestionsShortcut" },
     ],
     "hover-card": [
       { id: "person", title: "Person", demo: "GalleryHoverCard" },

@@ -248,7 +248,7 @@ test('required lines never ride the Surface axis', () => {
     ['.area-color-swatch', 'outline'],
     ['.area-chip__swatch', 'outline'],
     ['.area-code__swatch, .area-token__swatch', 'box-shadow'],
-    ['.area-color-swatch-picker--palette', 'outline'],
+    ['.area-color-swatch-picker--palette::after', 'box-shadow'],
     ['.area-avatar-group__item > .area-avatar, .area-avatar-group__overflow', '--_group-ring'],
     ['.area-separator--horizontal', 'block-size'],
     ['.area-nav__separator', 'block-size'],
@@ -703,4 +703,71 @@ test('an icon size derived from the compact step lands on a native cut (2026-10-
   // Every disclosure body opens on Accordion's height recipe (2026-10-26).
   const body = rules.find(rule => rule.selector.startsWith(':is(.area-step__body, .area-plan__items, .area-queue__items, .area-edit-summary__diff)') && /interpolate-size/.test(rule.body));
   assert.ok(body, 'the disclosure bodies share the height recipe (accordion.css)');
+});
+
+// inset.css, the text-slot trim: a second text beside a trimmed one in a centred row is trimmed too, or the two
+// baselines part by half the leading's rounding (0.6px at type 13; round 81 swept every family's rows for it).
+test('a row\'s second text is trimmed like the label beside it', () => {
+  const trim = rules.find(rule => rule.selector.split(',').map(s => s.trim()).includes('.area-menu__text') && /text-box:\s*trim-both cap alphabetic/.test(rule.body));
+  assert.ok(trim, 'the text-slot trim rule is missing');
+  const slots = trim.selector.split(',').map(s => s.trim());
+  for (const second of ['.area-command-palette__description', '.area-popover__step']) {
+    assert.ok(slots.includes(second), `${second} sits beside a trimmed label and is not trimmed`);
+  }
+});
+
+// prompt-suggestions.css: a suggestion's prompt starts under the composer's placeholder and its icon under the leading
+// action, so the row reads the composer's own inset, action and gap (round 85: round 81 dropped the field's 8 after the
+// leading action and the suggestions kept it, 8 to the right).
+test('prompt suggestions line up with the composer above them', () => {
+  const composer = rules.find(rule => /--_composer-inset\s*:/.test(rule.body))?.body ?? '';
+  const read = (body, prop) => body.match(new RegExp(`(?:^|[;\\s])${prop}\\s*:\\s*([^;]+)`))?.[1].trim();
+  const item = ruleFor('.area-prompt-suggestions__item')?.body ?? '';
+  const icon = ruleFor('.area-prompt-suggestions__icon')?.body ?? '';
+  assert.equal(read(item, 'gap'), read(composer, '--_composer-gap'), 'the icon-to-prompt gap is not the composer\'s gap');
+  assert.equal(read(item, 'padding-inline')?.split(' ')[0], read(composer, '--_composer-inset'), 'the row inset is not the composer\'s inset');
+  assert.equal(read(icon, 'flex')?.split(' ').at(-1), read(composer, '--_composer-action'), 'the icon slot is not the composer\'s action');
+});
+
+// plan.css: a cancelled item's cross replaces the done tick, so its rule must not lose to the shared tick rule
+// (round 85: one class lighter, a cancelled item drew the tick).
+test('a cancelled plan item draws its cross, not the done tick', () => {
+  // Class count, an :is() list counting as its one heaviest argument (all single classes here).
+  const specificity = selector => (selector.replace(/:is\([^)]*\)/g, '.is').match(/\.[\w-]+/g) ?? []).length;
+  const tick = rules.find(rule => rule.selector.includes('.area-plan__item--done, .area-plan__item--cancelled') && rule.selector.endsWith('> .area-plan__mark::after') && /--_tick/.test(rule.body));
+  const cross = rules.find(rule => /--cancelled\b[^,]*> \.area-plan__mark::after$/.test(rule.selector) && !rule.selector.includes('--done') && /--_tick/.test(rule.body));
+  assert.ok(tick && cross, 'the tick and cross rules are missing');
+  assert.ok(specificity(cross.selector) >= specificity(tick.selector) && rules.indexOf(cross) > rules.indexOf(tick), `${cross.selector} loses to ${tick.selector}`);
+});
+
+// display.css: a Spinner set in a host's icon slot takes that slot's size and the host's ink, as an icon would (round 87:
+// a Badge's 16 spinner overflowed its 12 slot).
+test('a spinner in a button or badge fills the host\'s icon box', () => {
+  for (const host of ['.area-button', '.area-badge']) {
+    const body = ruleFor(`${host} .area-spinner`)?.body ?? '';
+    assert.match(body, /--_size:\s*var\(--_icon\)/, `${host} does not size its spinner to its icon box`);
+    assert.match(body, /--_indicator:\s*currentColor/, `${host}'s spinner does not take its ink`);
+  }
+});
+
+// composer.css / approval.css: Approval takes the Composer's place until it is answered, so it takes the Composer's
+// corner term for term (2026-10-29: the composer's corner moved to the surface ladder; Approval had copied the old one).
+test('Approval keeps the Composer\'s corner', () => {
+  const read = (selector, prop) => rules.find(rule => rule.selector === selector && new RegExp(`${prop}\\s*:`).test(rule.body))?.body.match(new RegExp(`${prop}\\s*:\\s*([^;]+)`))?.[1].trim();
+  const norm = value => value?.replace(/--_(composer|approval)-/g, '--_x-').replace(/\s+/g, ' ');
+  assert.ok(read('.area-composer', '--_composer-corner'), 'the composer corner is missing');
+  assert.equal(norm(read('.area-approval', '--_approval-radius')), norm(read('.area-composer', '--_composer-corner')));
+  assert.equal(norm(read('.area-approval', '--_approval-height')), norm(read('.area-composer', '--_composer-height')).replace('var(--_x-action)', 'var(--area-control-md)'));
+  assert.equal(norm(read('.area-approval', '--_approval-term')), norm(read('.area-composer', '--_composer-term')));
+});
+
+// composer.css / surface.css: a surface standing alone on the page takes Card's edge (audit S7a) and Card's corner
+// (owner 2026-10-29: the composer's first rounder corner made its buttons rounder than every other Button).
+test('the Composer takes Card\'s corner', () => {
+  const read = (selector, prop) => rules.find(rule => rule.selector === selector && new RegExp(`${prop}\\s*:`).test(rule.body))?.body.match(new RegExp(`${prop}\\s*:\\s*([^;]+)`))?.[1].trim();
+  const norm = value => value?.replace(/--_(composer|card)-(term|inset)/g, '--_x-$2').replace(/--_(composer-corner|card-radius)/g, '--_x-r').replace(/\s+/g, ' ');
+  const card = read('.area-card', '--_card-radius'), composer = read('.area-composer', '--_composer-corner');
+  assert.ok(card && composer, 'the corners are missing');
+  assert.ok(norm(composer).includes(norm(card)), `${composer} does not take ${card}`);
+  assert.equal(norm(read('.area-composer', '--_composer-term')), norm(read('.area-card', '--_card-term')));
 });

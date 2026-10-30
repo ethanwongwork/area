@@ -74,7 +74,7 @@ area-diff                    mono, Code block sm's type; Code block's frame (car
 | card edge, fill | border-card at stroke-width, no shadow; bg-surface | cursor (one card shape) + Code block | a required frame (round 49) |
 | type | text-sm across the card; sm buttons | Cursor cards 13 under a 14 reply | round 49: the card mixed four sizes |
 | card corner | radius-container | Code block md (peer) | Cursor's 12 is its card radius; Area's card corner role |
-| head | min height control-sm + 2 × inset, inset (row − control-sm) / 2, never under 4; title 12 in (list 4 + row inset 8); gap 8; no seam under it (2026-10-25; was `border-decorative` from round 56, Code block's header seam) | Code block's header (stable height with or without actions); Cursor card header 0 12 | rounds 49 and 52 |
+| head | min height control-sm + 2 × inset, inset (row − control-sm) / 2, never under 4; title 12 in (list 4 + row inset 8); gap 4, the rows' name-to-counts gap (round 82; was 8); no seam under it (2026-10-25; was `border-decorative` from round 56, Code block's header seam) | Code block's header (stable height with or without actions); Cursor card header 0 12 | rounds 49 and 52 |
 | list / row | list padding 4, ui-row-gap between rows; Menu rows: ui-row tall, row inset, radius-row, gap-row (12, compact 8) | Menu (peer: `--_menu-gap`, surface.css); cursor rows radius 6 | round 49; audit 2026-10-19 (was gap 8 at every density) |
 | row plate | bg-component-hover on hover / focus, bg-component-pressed while the name is pressed | Menu rows (Shared state paint) | round 51; audit 2026-10-19 (was bg-component-active, the selected fill) |
 | row actions | muted ghost buttons, default ink on hover and press, no plate of their own; over the row's end on the row's plate (pointer), in flow on touch | Nav's and Board's row-action rule | round 51 |
@@ -250,3 +250,11 @@ buttons keep their own corner.
 
 - **What changed:** A file's diff eases open and shut on Accordion's recipe; a closed diff stays in the page, hidden, so the file's name points at it.
 - **Why:** It snapped, and while closed the name's aria-controls pointed at nothing. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+## Review note, 2026-10-28 (round 82)
+
+- **What changed:** the head's counts sit 4 after the title, the gap a file row has between its name and its counts
+  (was 8). Undo all and Keep all stay at the end.
+- **Why:** side by side, "Title  +3 −1" read looser than "Item one +2 −1" under it; one card, one name-to-counts gap.
+- **Verdict:** approved (owner, 2026-10-29, review page round 82); Complete.
+

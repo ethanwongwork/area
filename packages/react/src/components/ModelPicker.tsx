@@ -29,6 +29,16 @@ export interface ModelPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   label?: string;
   /** An optional heading over the rows. */
   heading?: ReactNode;
+  /**
+   * How hard the model works ("Light", "Medium", "High"): shown muted after the model's name on the trigger ("Opus 5.5
+   * Medium", Codex's "6 Astra Light"), chosen in an Effort group under the models.
+   */
+  efforts?: ModelOption[];
+  effort?: string;
+  defaultEffort?: string;
+  onEffortChange?: (effort: string, event: MouseEvent<HTMLButtonElement>) => void;
+  /** Names the effort group ("Effort"). */
+  effortLabel?: string;
   size?: "sm" | "md" | "lg";
 }
 
@@ -39,7 +49,8 @@ export interface ModelPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "
  * Escape and Tab to close, and focus back on the trigger after a choice.
  */
 export const ModelPicker = forwardRef<HTMLDivElement, ModelPickerProps>(function ModelPicker(
-  { items, models: legacyModels, value, defaultValue, onValueChange, triggerProps, label = "Model", heading, size = "md", className, ...rest }, ref,
+  { items, models: legacyModels, value, defaultValue, onValueChange, triggerProps, label = "Model", heading, size = "md",
+    efforts, effort: effortProp, defaultEffort, onEffortChange, effortLabel = "Effort", className, ...rest }, ref,
 ) {
   const models = items ?? legacyModels ?? NO_ITEMS;
   const [own, setOwn] = useState(defaultValue ?? models[0]?.value);
@@ -50,15 +61,26 @@ export const ModelPicker = forwardRef<HTMLDivElement, ModelPickerProps>(function
     if (value === undefined) setOwn(next);
     onValueChange?.(next, event);
   };
+  const [ownEffort, setOwnEffort] = useState(defaultEffort ?? efforts?.[0]?.value);
+  const currentEffort = efforts?.find(option => option.value === (effortProp ?? ownEffort));
+  const chooseEffort = (next: string, event: MouseEvent<HTMLButtonElement>) => {
+    if (effortProp === undefined) setOwnEffort(next);
+    onEffortChange?.(next, event);
+  };
   return <div ref={ref} className={modelPickerVariants({}, className)} {...rest}>
     <Menu aria-label={label} align="end"
       trigger={<Button {...triggerProps} className={["area-model-picker__trigger", triggerProps?.className].filter(Boolean).join(" ")} variant="ghost" tone="neutral" size={size}
-        aria-label={`${label}: ${currentModel?.label ?? ""}`} trailingIcon={<Glyph name="chevron-down" />}>
-        {currentModel?.label}
+        aria-label={`${label}: ${currentModel?.label ?? ""}${currentEffort ? `, ${currentEffort.label}` : ""}`} trailingIcon={<Glyph name="chevron-down" />}>
+        {currentEffort ? <><span className={modelPickerVariants.element("name")}>{currentModel?.label}</span>{" "}<span className={modelPickerVariants.element("effort")}>{currentEffort.label}</span></> : currentModel?.label}
       </Button>}>
       {heading ? <MenuLabel>{heading}</MenuLabel> : null}
       {models.map(model => <MenuItem key={model.value} radio checked={model.value === current}
         description={model.description} disabled={model.disabled} onClick={event => choose(model.value, event)}>{model.label}</MenuItem>)}
+      {efforts?.length ? <>
+        <MenuLabel>{effortLabel}</MenuLabel>
+        {efforts.map(option => <MenuItem key={option.value} radio checked={option.value === currentEffort?.value}
+          description={option.description} disabled={option.disabled} onClick={event => chooseEffort(option.value, event)}>{option.label}</MenuItem>)}
+      </> : null}
     </Menu>
   </div>;
 });

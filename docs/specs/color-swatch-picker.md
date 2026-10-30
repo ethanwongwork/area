@@ -63,7 +63,7 @@ area   div.area-color-swatch-picker[role=radiogroup]  inline-grid, repeat(column
     input  input[type=radio]  covers the cell, opacity 0
     swatch span.area-color-swatch  cell − 8, aria-hidden
 palette  grid of minmax(0, 1fr) columns, full width, gap 0, radius-control-sm, clip; the swatch ring
-         (`token-swatch-ring` at stroke-width) drawn inside round the whole grid
+         (`token-swatch-ring` at stroke-width) on a layer over the cells, round the whole grid
   cell     square (aspect-ratio 1), radius 0; its swatch fills it, square, no ring of its own
 ```
 
@@ -76,7 +76,7 @@ From the capture nodes:
 
 | property | area · default (grid, md) | area · row (md) | area · sizes (sm) | area · layout-palette |
 |---|---|---|---|---|
-| shell | 188 × 60, 6 columns, gap 4 | 156 × 28, inline-flex, gap 4 | 80 × 24, gap 4 | full width, gap 0, radius 6, outline 1px rgba(0, 0, 0, 0.1) |
+| shell | 188 × 60, 6 columns, gap 4 | 156 × 28, inline-flex, gap 4 | 80 × 24, gap 4 | full width, gap 0, radius 6, a 1px rgba(0, 0, 0, 0.1) ring on a layer over the cells |
 | cell | 28 × 28, radius 9px | 28 × 28, radius 9px | 24 × 24, radius 8px | square, radius 0 |
 | swatch | 20 × 20 at 4, radius 5px | 20 × 20 at 4 | 16 × 16 at 4, radius 4px | fills the cell |
 | checked cell | — | node 7: fill rgb(255, 255, 255), `rgb(40, 40, 40) 0 0 0 2px inset` | node 1, same ring | — |
@@ -130,6 +130,11 @@ returns to `defaultValue` or nothing (`ColorSwatchPicker.tsx`, the form `reset` 
 | AlignmentPicker | picker cell ladder | (control + icon) / 2: 22 (min 20) / 24 / 28, bars (`alignment-picker.css:15-17`) | `control-xs/sm/md` 24 / 28 / 32, plate + ring (`color.css:83-85`) | differs by design (audit F-31 A, owner 2026-09-30): two ladders kept |
 
 ## Visual pass
+
+2026-10-28 (round 81; desktop app, the Stage at 100%, 2x, light and dark): the palette's ring round the whole grid
+didn't show. It was the grid's own outline, and the swatches are positioned, so they painted over it; the white cell
+(light) and the black cell (dark) lost their corner and edge against the page. The ring is now a layer over the cells
+(`::after`, z 1, an inset box-shadow at stroke-width); the selected cell (z 2) and the focused cell (z 3) stay above it.
 
 2026-09-28, Claude in Chrome (batch 10): Figma's "On this page" swatches (16px chits in 24px cells,
 radius 20%, a 2px 10% black inner edge drawn only on light chits such as #FAFAFA and #F5F5F5) beside
@@ -247,3 +252,11 @@ changes instant)? Recommendation: keep the 100ms fade; it is short enough not to
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-28 (round 81)
+
+- **What changed:** the palette's thin outline shows again, so its white corner cell (light) and black corner cell
+  (dark) keep their edge.
+- **Why:** the outline was drawn under the colour cells, so it never showed; it now sits over them, under the selected
+  and focused cells.
+- **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.

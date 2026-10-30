@@ -43,8 +43,8 @@ dismiss   36 × 36, radius 8, icon 20, ending 4 in from the row
 | row | 48 tall (16/24 text, 12 above and below); compact **40** (14/20, 10 above and below), the compact composer's height, radius 16 (the composer's corner), 2 apart | ChatGPT 52 on 26 leading, radius 8, no gap | radius pass: the rows are the composer's height and column, so a washed row echoes its corner; 2 apart is Menu's rule so neighbouring hover plates never touch |
 | ink | muted, fixed on hover and focus | ChatGPT 143 muted; foreground fixed on hover (AGENTS.md) | ChatGPT lifts the ink to default (#0d) on hover (`chatgpt--suggestion-row--hover`); Area's rule keeps the foreground fixed, the wash carries the state |
 | hover | Menu's row plate, `bg-component-hover` | Menu; ChatGPT washes the row 5% black (captured 2026-09-28) | — |
-| icon | 16 icon centred in a 32 square 8 in: centre 24 from the edge, under the composer's leading action | ChatGPT's icons align under its "+" | Area icons are 16 |
-| text | 8 after the icon slot | ChatGPT 8 | — |
+| icon | 16 icon centred in the composer's action square (`control-md`), the composer's inset in (`ui-cluster`, 8; 7 at the app's type 13): centred under the composer's leading action | ChatGPT's icons align under its "+" | Area icons are 16; round 85 took the inset from the composer (was a fixed 8, 1 off in compact) |
+| text | the composer's gap after the icon slot (`ui-cluster`), so the prompt starts under the placeholder | ChatGPT 8 | round 85: was 16 (8 gap + the field's old 8 inset); round 81 dropped that inset from Composer, which left the prompt 8 right of the placeholder |
 | dismiss | ghost small icon Button (28, radius 6, Area glyph) 8 in, shown on hover and focus (always on touch); the row end reserves 28 + 8 | Audit S9 / G-18 (owner 2026-09-30): the close recipe for rectangular shapes. ChatGPT 36 | Was a 32 md Button |
 
 ## Visual pass
@@ -111,3 +111,14 @@ were confirmed in the served CSSOM (a pointer hover cannot be driven in a backgr
 ## Interaction polish, 2026-10-16
 
 The press never showed: the row's hover rule outranked `item:active`. It is now read through the row and paints `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
+## Review note, 2026-10-29 (round 85)
+
+- **What changed:** a suggestion's prompt starts exactly under the composer's placeholder again, and its icon sits
+  exactly under the composer's +. The row reads the composer's own inset, action size and gap; a cohesion test keeps
+  them together.
+- **Why:** round 81 put the composer's text straight after the + (the gap alone separates them), but the suggestions
+  still added the old 8 text inset, so in the app's scale the prompt sat 8 right of the placeholder and the icon 1
+  right of the +.
+- **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.
+- **Verdict (shortcut):** approved (owner, 2026-10-29, the Composer expansion review page); Complete.

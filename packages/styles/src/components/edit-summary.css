@@ -41,7 +41,9 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    column-gap: var(--area-space-8);
+    /* The title's counts follow it a line's gap away, as a file's counts follow its name (round 82; was 8, so the head
+       read "Title  +3" beside the rows' "Item one +2"). Undo all and Keep all are pushed to the end by their own margin. */
+    column-gap: var(--area-space-4);
     min-inline-size: 0;
     /* As tall as its buttons and their inset whether or not they are there, so Keep all does not shift the card (Code
        block's header: "a stable height whether or not the block has actions"). */

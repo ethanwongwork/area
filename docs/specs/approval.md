@@ -243,3 +243,13 @@ the foot the keycap ends 16 and the hint's baseline 20 from it, so top and foot 
   way on (Skip, Continue); "Esc to …" says what Escape does. The choice under the pointer or focus is reported, so a
   page can preview it. Nothing changes for an approval that uses none of these.
 - **Why:** Setup is now a chat panel whose questions sit in the composer's place, and Area had no question card.
+
+## Review note, 2026-10-29 (the Composer's corner)
+
+- **What changed:** its corner follows the Composer's new one, term for term: the surface corner one step up its
+  ladder (20, was 16 at type 16 and 15 in the app's scale). A cohesion test keeps the two equal.
+- **Why:** Approval takes the Composer's place until it is answered, so a different corner would jump when it appears.
+  The Composer's corner moved on your review of its expansion ("pretty round", Cursor's 20).
+- **Verdict:** approved (owner, 2026-10-29, the Composer expansion review page, round 2); Complete.
+- **2026-10-29, later:** the Composer moved to Card's corner (18 in the app's scale), so Approval did too.
+- **Verdict (Card's corner):** approved (owner, 2026-10-29, the Composer expansion review page, round 3); Complete.
