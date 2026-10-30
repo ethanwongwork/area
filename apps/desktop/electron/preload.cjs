@@ -1,5 +1,5 @@
 // The page's only bridge to Electron: the platform (for the Titlebar inset), the theme and its page ground, showing a Brand
-// file in Finder, and the app menu's tab commands.
+// file in Finder, the app menu's tab commands, and the workspace's systems (read once, written on change, moved to the Trash).
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("areaDesktop", {
@@ -8,6 +8,11 @@ contextBridge.exposeInMainWorld("areaDesktop", {
   setGround: color => ipcRenderer.send("area:ground", String(color)),
   setTitlebar: height => ipcRenderer.send("area:titlebar", Number(height)),
   revealBrand: path => ipcRenderer.send("area:brand-reveal", String(path)),
+  systems: {
+    read: () => ipcRenderer.sendSync("area:systems-read"),
+    write: (id, text) => ipcRenderer.send("area:system-write", String(id), String(text)),
+    trash: id => ipcRenderer.send("area:system-trash", String(id)),
+  },
   onCommand: listener => {
     const relay = (_event, command, index) => listener(String(command), typeof index === "number" ? index : undefined);
     ipcRenderer.on("area:command", relay);

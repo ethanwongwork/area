@@ -80,7 +80,7 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     themselves that sit inside the containers would be the only things that update with the controls"). The
     Inspector's settings, and hover previews of them, reach only what holds a specimen: a tile's view, the Stage's view,
     a colour card (the card is the colour), a type sample and an icon glyph, through one scope of the settings moved
-    from the defaults (`src/specimen-scope.tsx`); a brand (Inspector → Accent → Exact colour, `src/brand.ts`) and exact page colours (Inspector → Page colour, `src/colours.ts`) reach the same holders. The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
+    from the defaults (`src/specimen-scope.tsx`); an exact accent (Inspector → Accent → Exact colour, `src/brand.ts`) and exact page colours (Inspector → Page colour, `src/colours.ts`) reach the same holders. The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
     2026-10-22 to 25 the app took every committed Inspector setting instead. The Theme tab's own body stays at the
     Setup scale (Setup, below).
 
@@ -89,36 +89,61 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at type 13, Compact,
 the scale the layout was measured at; the app now takes the default type and density (rule 18).
 
-**Places, tabs and the nav** (app structure Phase 1, 2026-10-28; the plan and the owner's model in
+**Places, tabs and the nav** (app structure Phases 1 and 2, 2026-10-28 and 29; the plan and the owner's model in
 `docs/research/app-structure-2026-10-28/README.md`; the shell is variation A, Cursor's nav with Figma's tabs).
 
-- **Places** (`src/places.ts`): every view is a place with a hash. The Area brand's sections are Themes
-  (`#brand/area/themes`; New theme, `…/themes/new`, is the Setup chat), Foundations (`…/foundations`: every setting, then
+- **Places** (`src/places.ts`): every view is a place with a hash. Home is `#home` (`#home/<system>` with a system chosen,
+  `#home/new` for New system). A system's sections are Themes
+  (`#system/<system>/themes`; New theme, `…/themes/new`, is the Setup chat), Foundations (`…/foundations`: every setting, then
   Color, Typography, Icons and one page per setting group, named by the registry's `SETTING_GROUPS`), Components and
   Patterns (Testing's screens); the Library (`#library`, Imagery renamed) and Labs (`#labs/materials`, out of the nav,
   reached by search). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
   Components, `#typography`, `#color`, `#icons` → Foundations, `#testing` → Patterns, `#imagery` → Library, `#materials` →
-  Labs (`tests/places.test.ts`). Home, Projects, Explore and more brands come in later phases and are left out until then
-  (rule 16).
+  Labs; old links are the Area system's, and `#brand/…` links from before the rename open their `#system/…` place
+  (`tests/places.test.ts`). A hash naming a system the workspace doesn't have is no
+  place. A specimen's own in-page links (an example screen's `#home`, a demo's `#library`) stay in the specimen: the
+  Workspace prevents a hash link's click in the Canvas and the Inspector that nothing else handled. Projects and Explore
+  come in later phases and are left out until then (rule 16).
+- **Systems** (`src/systems.ts`, Phase 2; brands until the owner renamed them, 2026-10-29: a system is the look and the
+  rules a product is built with): several, each `~/Library/Application Support/Area/Systems/<id>/system.json` (never in
+  the repository; electron/main.cjs reads them all at launch and writes one when it changes, a quarter second after;
+  a deleted system's folder goes to the Trash; the `Brands` folder of the build before the rename moves over once; the browser preview and a capture keep them in their own storage). A system
+  has themes; a theme is the Inspector's Theme settings, the Material, the exact page colours and the exact accent. **The
+  open system** is the current tab's, or on Home, the Library and Labs the last one a tab showed; its chosen theme is what
+  `useStudio()`'s `canvas`, `material`, `colours` and `brand` are, what the Inspector's Theme view edits and what every
+  page paints its specimens in. The settings saved before systems (localStorage `canvas`, `material`, `colours`, `brand`)
+  became the Area system's Default theme once, at the first launch with no Area system on disk; the old keys are no longer
+  read. The Area system can't be deleted.
+- **Home** (`src/pages/home.tsx`): the feed of the workspace: Systems (each drawn as Setup's screen in its chosen theme; a
+  double-click opens it), New system (from the Area Starter: Area's values; Describe it: the system is made and its first
+  theme's Setup chat opens; Import: a stub, marked Later), Boards (the Library's groups) and Recent (the last 8 places
+  opened). The Inspector's Design view shows the chosen system with Open, Rename and Delete; Home has no Theme view. Themes
+  lists the open system's themes: double-click or Use chooses one, New theme adds one at Area's values and opens Setup on it.
 - **Titlebar**: the Sidebar's toggle, Back and Forward (⌘[ ⌘], the tab's own history), then the open tabs; at its end
-  Search (⌘K), the Library, the Inspector's toggle and light / dark. Tabs work as a browser's, after Claude Code's browser
-  (owner, 2026-10-29): each holds one thing (the Area brand, the Library, a lab) with its type icon and name, 120 to 170
+  Search (⌘K), the Library, the Inspector's toggle and light / dark. **Home is the first tab**, always: its icon alone in
+  Nav's square icon-only item (Figma's file browser tab), never closed, always on Home, named in a Tooltip with ⌘⇧H. From
+  Home a system, board or place opens in the tab already holding that system (or the Library, a lab), else in a new tab at
+  the end; Home from any tab (the nav's row, ⌘⇧H, search) switches to the Home tab. Tabs work as a browser's, after Claude Code's browser
+  (owner, 2026-10-29): each holds one thing (a system, the Library, a lab) with its type icon and name, 120 to 170
   wide, hugging its name in between; its close shows on hover, focus and the current tab (always on touch; Tree view's
-  rule) over the name's end, which fades under it (Figma's file tabs, owner 2026-10-29), and is gone while it is the last
-  tab; past the bar's room the tabs scroll (a wheel turns them), the current one kept in view and the bar's end on screen;
+  rule) over the name's end, which fades under it (Figma's file tabs, owner 2026-10-29); the last tab closes too, leaving
+  Home; past the bar's room the tabs scroll (a wheel turns them), the current one kept in view and the bar's end on screen;
   a cut name shows whole in a Tooltip, and the close names itself in one (with ⌘W on the current tab). The app menu
-  (electron/main.cjs) holds the tab keys, as a browser's: ⌘T new tab, ⌘⇧T reopen the last closed (where it stood), ⌘W
-  close the tab (the last one stays until Home exists; ⌘⇧W closes the window), ⌃Tab and ⌃⇧Tab next and previous,
-  ⌘1–8 that tab, ⌘9 the last; a middle click closes one. New tab (+, ⌘T)
-  follows them and opens search, whose choice opens in a new tab (there is no Home until Phase 2). Each tab keeps its own place, Sidebar and history. The open tabs and
-  their places reopen at launch (the old saved tab migrated once).
+  (electron/main.cjs) holds the tab keys, as a browser's: ⌘T new tab, ⌘⇧T reopen the last closed (where it stood), ⌘⇧H
+  Home (Finder's Go › Home), ⌘W close the tab (Home stays; ⌘⇧W closes the window), ⌃Tab and ⌃⇧Tab next and previous
+  (Home among them), ⌘1–8 the tabs after Home (⌘1 the first after it, as Figma numbers its file tabs past the fixed Home
+  tab), ⌘9 the last; a middle click closes one. New tab (+, ⌘T) follows them and opens search, whose choice opens in a
+  new tab: Home is already the fixed first tab, so a new tab opening it would be a second Home (2026-10-29). Each tab
+  keeps its own place, Sidebar and history. The open tabs and their places reopen at launch, after Home (the old saved
+  tab migrated once); with none saved the app opens on Home.
 - **Search** (`src/search-palette.tsx`): the Titlebar's field opens Command palette over every place, component, setting,
   scale, type role, icon category and pattern, and icons by name from two letters; a choice opens in the current tab.
-- **The Sidebar's nav** (`src/app-nav.tsx`): Library, then Brands, the Area brand expanded to its sections (Themes,
-  Foundations, Components, Patterns), Foundations expanded to its pages while one is shown; each a chevron that closes it.
-  A click opens in the current tab, ⌘-click in a new one.
+- **The Sidebar's nav** (`src/app-nav.tsx`): Home and the Library, then Systems, a row each, the open system expanded to
+  its sections (Themes, Foundations, Components, Patterns) while a tab on it is shown, Foundations expanded to its pages
+  while one is shown; each a chevron that opens or closes it; New system last (Home's New system dialog). A click opens in
+  the current tab (from Home, in the system's tab or a new one), ⌘-click in a new one.
 - **Takeover**: a page with a list of its own (Components, Color, Typography, Icons, Patterns, Library, Materials) shows
-  it in the Sidebar's place, under a back row ("← Area") and the list's filter (it was the Titlebar's search). The back row
+  it in the Sidebar's place, under a back row ("← Area", the system's name) and the list's filter (it was the Titlebar's search). The back row
   shows the nav again and leaves the Canvas where it is; opening the page from the nav shows its list again.
 
 **Shared line and insets.**
@@ -207,7 +232,7 @@ Zoom is Zoom control's stepper (− Auto +):
   Properties stay in the Inspector, on Overview only.
 
 **Themes and Foundations** (the Theme tab until 2026-10-28, Language 2026-10-19 to 20; `src/pages/theme.tsx`,
-`src/pages/themes.tsx`). Themes lists the brand's themes (one, Default, drawn as Setup's product screen in it); its
+`src/pages/themes.tsx`). Themes lists the system's themes (one, Default, drawn as Setup's product screen in it); its
 header's New theme opens Setup. Foundations is Browse (below), all settings or one group's. The Setup / Browse switch is
 gone: Setup's Fine-tune opens Foundations.
 

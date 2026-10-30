@@ -34,16 +34,16 @@ import { Facts } from "../facts.tsx";
 import { Preview, Selection } from "../inspector.tsx";
 import { matches } from "../search.ts";
 
-interface BrandFolder { id: string; name: string; description: string }
-interface BrandItem {
+export interface BrandFolder { id: string; name: string; description: string }
+export interface BrandItem {
   id: string; order: number; folder: string; title: string; alt: string; source: string; link: string; color: string;
   width: number; height: number; file: string; thumb: string; kind: string; pin: string; video?: string;
 }
-interface Library { name: string; source: string; fetched: string; folders: BrandFolder[]; items: BrandItem[] }
+export interface Library { name: string; source: string; fetched: string; folders: BrandFolder[]; items: BrandItem[] }
 
 /** Where the library is served: Electron's protocol, or the dev server's route in a browser. */
 const BASE = typeof window !== "undefined" && window.areaDesktop ? "area-brand://library/" : "/__brand/";
-const url = (path: string) => BASE + path;
+export const url = (path: string) => BASE + path;
 /* A pin's title, else Pinterest's description of it ("A poster with …"), else where it came from. */
 const nameOf = (item: BrandItem) => item.title || (item.alt ? item.alt[0]!.toUpperCase() + item.alt.slice(1) : "") || item.source || "Untitled";
 const kindLabel = (item: BrandItem) => item.kind === "jpeg" ? "JPG" : item.kind.toUpperCase();
@@ -55,7 +55,8 @@ const SIZES = { small: 144, medium: 192, large: 288 } as const; /* pick */
 type Size = keyof typeof SIZES;
 type Mode = "grid" | "waterfall" | "list";
 
-function useLibrary() {
+/** The Library's file (library.json), read once; Home shows its groups as boards. */
+export function useLibrary() {
   const [state, setState] = useState<{ library?: Library; error?: string }>({});
   useEffect(() => {
     let live = true;

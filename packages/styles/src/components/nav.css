@@ -150,6 +150,17 @@
     justify-content: center;
   }
 
+  /* An item with an icon and no name is a square plate, the icon centred (the desktop app's Home tab: Figma's file browser
+     tab, `tab--fileBrowserTab`, 40 by 38, the icon alone in secondary ink, full while current; Figma also inks it on hover,
+     where Area changes only the plate). The item's name is its aria-label; Area's square icon boxes make it the row's
+     height wide (2026-10-29). */
+  .area-nav__item:not(:has(> .area-nav__text)) {
+    justify-content: center;
+    padding-inline: 0;
+    aspect-ratio: 1;
+  }
+  .area-nav--horizontal .area-nav__item:not(:has(> .area-nav__text)) { inline-size: auto; }
+
   /* Row plates: the component hover fill, then the active fill for the current page. Menu,
      Tree view, Table and Select use the same pair. */
   @media (hover: hover) {

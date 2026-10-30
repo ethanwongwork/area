@@ -1,26 +1,27 @@
 /**
  * The app's navigation (docs/research/app-structure-2026-10-28/README.md; the shell is variation A, owner 2026-10-28):
  *
- *   AppTabs   the Titlebar's open tabs, as a browser's: one per open brand, Library or lab, its type icon, name and close,
- *             then New tab (owner, 2026-10-29: "i like the floating tab component from claude codes browser")
- *   AppNav    the Sidebar's nav: the Library, then Brands, the open brand expanded to its sections (Cursor's agents window
- *             nav); a click opens in the current tab, ⌘-click in a new one
+ *   AppTabs   the Titlebar's open tabs, as a browser's: Home first (icon only, never closed: Figma's file browser tab),
+ *             then one per open system, Library or lab, its type icon, name and close, then New tab (owner, 2026-10-29:
+ *             "i like the floating tab component from claude codes browser")
+ *   AppNav    the Sidebar's nav: Home and the Library, then Systems, each system a row, the open one expanded to its sections
+ *             (Cursor's agents window nav); a click opens in the current tab, ⌘-click in a new one
  *   Takeover  a page's own list in the Sidebar's place (Components' families, Icons' categories, the Library's groups),
  *             under a back row to the nav and a filter
  *
- * Home, Explore, New, Projects and Boards come with the phases that build them; until then they are left out (product UI
- * rule 16), as are the sections' + buttons and the person's row.
+ * Explore, Projects and Boards come with the phases that build them; until then they are left out (product UI rule 16),
+ * as is the person's row. New system is the Systems section's last row (Home's New system).
  */
-import { useEffect, useId, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { Fragment, useEffect, useId, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, SearchField, Tooltip } from "@area/react";
-import { AddIcon, ArrowLeftIcon, ChevronDownIcon, DismissIcon, FlaskIcon, LibraryIcon, PaletteIcon } from "@area/icons";
+import { AddIcon, ArrowLeftIcon, ChevronDownIcon, DismissIcon, FlaskIcon, HomeIcon, LibraryIcon, PaletteIcon } from "@area/icons";
 import { SETTING_GROUPS } from "@area/tokens/config";
-import { BRAND, groupSlug, hrefOf, LIST_PAGES, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
+import { systemName, groupSlug, HOME_TAB, hrefOf, LIST_PAGES, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
 import { ChromeButton, SidebarList, useStudio } from "./studio.tsx";
 import { FAMILIES } from "./pages/components.tsx";
 import { EXAMPLES } from "./pages/examples.tsx";
 
-const TAB_ICONS: Record<TabKind, ReactNode> = { brand: <PaletteIcon />, library: <LibraryIcon />, labs: <FlaskIcon /> };
+const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <PaletteIcon />, library: <LibraryIcon />, labs: <FlaskIcon /> };
 
 /** Foundations' pages: Color, Typography and Icons, then one per setting group, named as the registry names it. */
 export const FOUNDATIONS: ReadonlyArray<{ place: Place; label: string }> = [
@@ -34,7 +35,7 @@ const IN_FOUNDATIONS: ReadonlySet<PageId> = new Set(["foundations", "settings", 
 /** A place's name: its section, Foundations page or lab. */
 export function placeLabel(place: Place): string {
   if (place.page === "settings") return FOUNDATIONS.find(entry => entry.place.group === place.group)?.label ?? "Foundations";
-  return ({ themes: "Themes", "theme-setup": "New theme", foundations: "Foundations", color: "Color", typography: "Typography", icons: "Icons",
+  return ({ home: "Home", themes: "Themes", "theme-setup": "New theme", foundations: "Foundations", color: "Color", typography: "Typography", icons: "Icons",
     components: "Components", patterns: "Patterns", library: "Library", materials: "Materials" } as Record<PageId, string>)[place.page];
 }
 /** What a page's list holds, for its filter's placeholder. */
@@ -70,27 +71,36 @@ export function AppTabs({ tabs, current, onSelect, onClose, onNew }: {
       onWheel={event => { if (nav.current && Math.abs(event.deltaY) > Math.abs(event.deltaX)) nav.current.scrollLeft += event.deltaY; }}>
       {tabs.map(tab => {
         const name = tabName(tab.place);
-        // The last tab has no close: there is no Home to fall back to until Phase 2.
-        const close = tabs.length > 1 ? () => onClose(tab.id) : undefined;
+        // Home, always first: its icon alone in a square plate, never closed (Figma's file browser tab, 40 wide, the
+        // icon centred). It names itself in a Tooltip with ⌘⇧H.
+        if (tab.id === HOME_TAB) return (
+          <Tooltip key={tab.id} side="bottom" describes={false} trigger={
+            <NavItem data-tab={tab.id} href={hrefOf(tab.place)} current={tab.id === current} icon={TAB_ICONS.home} aria-label="Home" aria-keyshortcuts="Meta+Shift+H"
+              onClick={event => { event.preventDefault(); onSelect(tab.id); }} />
+          }>Home <Kbd keys={["⌘", "⇧", "H"]} size="sm" /></Tooltip>
+        );
+        // Every other tab closes, the last one too: Home is then the tab left.
+        const close = () => onClose(tab.id);
         return (
           <Tooltip key={tab.id} side="bottom" describes={false} open={named === tab.id} onOpenChange={next => setNamed(next && isCut(tab.id) ? tab.id : null)} trigger={
           <NavItem className="studio-tab" data-tab={tab.id} href={hrefOf(tab.place)} current={tab.id === current} icon={TAB_ICONS[tabKind(tab.place)]}
             onClick={event => { event.preventDefault(); onSelect(tab.id); }}
             // A middle click closes a tab, as a browser's. The close shows on the current tab, on hover and on focus, and
             // always on touch (Nav revealActions; Tree view's rule, Cursor's and Figma's file tabs), over the name's end.
-            onAuxClick={event => { if (event.button === 1 && close) { event.preventDefault(); close(); } }}
+            onAuxClick={event => { if (event.button === 1) { event.preventDefault(); close(); } }}
             // The close names itself in a Tooltip (product UI rule 4), with ⌘W on the current tab; it stays out of the Tab
             // order (one stop a tab), and ⌘W closes from the keyboard.
-            revealActions actions={close ? <Tooltip side="bottom" describes={false} trigger={
+            revealActions actions={<Tooltip side="bottom" describes={false} trigger={
               <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<DismissIcon />} aria-label={`Close ${name}`} aria-keyshortcuts={tab.id === current ? "Meta+W" : undefined} tabIndex={-1} onClick={close} />
-            }>Close tab{tab.id === current ? <> <Kbd keys={["⌘", "W"]} size="sm" /></> : null}</Tooltip> : undefined}>
+            }>Close tab{tab.id === current ? <> <Kbd keys={["⌘", "W"]} size="sm" /></> : null}</Tooltip>}>
             {name}
           </NavItem>
           }>{name}</Tooltip>
         );
       })}
     </Nav>
-    {/* There is no Home to open until Phase 2, so a new tab starts at search: the choice opens in it (Arc's new tab). */}
+    {/* A new tab starts at search: the choice opens in it (Arc's new tab). Home is the fixed first tab, so a new tab
+        opening Home would be a second one (2026-10-29). */}
     <ChromeButton label="New tab" keys={["⌘", "T"]} shortcut="Meta+T" icon={<AddIcon />} onClick={onNew} />
     </div>
   );
@@ -102,42 +112,58 @@ function Expander({ open, label, controls, onToggle }: { open: boolean; label: s
 }
 
 export function AppNav() {
-  const { place, navigate } = useStudio();
-  // The open brand and Foundations start open while what the Canvas shows is in them; a chevron closes either.
-  const [brandOpen, setBrandOpen] = useState(true);
+  const { place, navigate, systems, openSystem } = useStudio();
+  // The open system starts open while a tab on it is shown, Foundations while one of its pages is; a chevron closes either,
+  // and opens any other system.
+  const onSystem = tabKind(place) === "system";
+  const [opened, setOpened] = useState<ReadonlySet<string>>(() => new Set(onSystem ? [openSystem.id] : []));
+  useEffect(() => { if (onSystem) setOpened(open => open.has(openSystem.id) ? open : new Set([...open, openSystem.id])); }, [onSystem, openSystem.id]);
   const [foundationsOpen, setFoundationsOpen] = useState(() => IN_FOUNDATIONS.has(place.page));
-  const brandId = useId(), foundationsId = useId();
+  const ids = useId();
   const open = (target: Place) => (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     // A page with its own list opens it in the Sidebar's place (the takeover); ⌘-click opens a new tab.
     navigate(target, { newTab: event.metaKey || event.ctrlKey, panel: LIST_PAGES.has(target.page) ? "page" : "nav" });
   };
+  const here = (target: Place) => onSystem && (place.system ?? "area") === target.system && samePage(target, place);
   const row = (target: Place, label: string, trailing?: ReactNode, actions?: ReactNode) => (
-    <NavItem key={label} href={hrefOf(target)} current={samePage(target, place)} onClick={open(target)} trailing={trailing} actions={actions}>{label}</NavItem>
+    <NavItem key={label} href={hrefOf(target)} current={here(target)} onClick={open(target)} trailing={trailing} actions={actions}>{label}</NavItem>
   );
   return (
     <SidebarList>
       <Nav aria-label="Workspace">
         <NavGroup>
+          <NavItem href={hrefOf({ page: "home" })} icon={<HomeIcon />} current={place.page === "home"} onClick={open({ page: "home" })}>Home</NavItem>
           <NavItem href={hrefOf({ page: "library" })} icon={<LibraryIcon />} current={place.page === "library"} onClick={open({ page: "library" })}>Library</NavItem>
         </NavGroup>
-        <NavGroup label="Brands">
-          <NavItem href={hrefOf({ page: "themes" })} icon={TAB_ICONS.brand} onClick={open({ page: "themes" })}
-            actions={<Expander open={brandOpen} label={`${BRAND.name}'s sections`} controls={brandId} onToggle={() => setBrandOpen(!brandOpen)} />}>
-            {BRAND.name}
-          </NavItem>
-          <div id={brandId} hidden={!brandOpen}>
-            <NavGroup nested>
-              {row({ page: "themes" }, "Themes", <Count count={1} />)}
-              {row({ page: "foundations" }, "Foundations", undefined,
-                <Expander open={foundationsOpen} label="Foundations' pages" controls={foundationsId} onToggle={() => setFoundationsOpen(!foundationsOpen)} />)}
-              <div id={foundationsId} hidden={!foundationsOpen}>
-                <NavGroup nested>{FOUNDATIONS.map(entry => row(entry.place, entry.label))}</NavGroup>
-              </div>
-              {row({ page: "components" }, "Components", <Count count={FAMILIES.length} max={9999} />)}
-              {row({ page: "patterns" }, "Patterns", <Count count={EXAMPLES.length} />)}
-            </NavGroup>
-          </div>
+        <NavGroup label="Systems">
+          {systems.map(system => {
+            const shown = opened.has(system.id);
+            const sections = `${ids}-${system.id}`, foundations = `${ids}-${system.id}-foundations`;
+            const toggle = () => setOpened(open => { const next = new Set(open); if (next.has(system.id)) next.delete(system.id); else next.add(system.id); return next; });
+            const at = (target: Place): Place => ({ ...target, system: system.id });
+            return (
+              <Fragment key={system.id}>
+                <NavItem href={hrefOf(at({ page: "themes" }))} icon={TAB_ICONS.system} onClick={open(at({ page: "themes" }))}
+                  actions={<Expander open={shown} label={`${system.name}'s sections`} controls={sections} onToggle={toggle} />}>
+                  {system.name}
+                </NavItem>
+                <div id={sections} hidden={!shown}>
+                  <NavGroup nested>
+                    {row(at({ page: "themes" }), "Themes", <Count count={system.themes.length} />)}
+                    {row(at({ page: "foundations" }), "Foundations", undefined,
+                      <Expander open={foundationsOpen} label="Foundations' pages" controls={foundations} onToggle={() => setFoundationsOpen(!foundationsOpen)} />)}
+                    <div id={foundations} hidden={!foundationsOpen}>
+                      <NavGroup nested>{FOUNDATIONS.map(entry => row(at(entry.place), entry.label))}</NavGroup>
+                    </div>
+                    {row(at({ page: "components" }), "Components", <Count count={FAMILIES.length} max={9999} />)}
+                    {row(at({ page: "patterns" }), "Patterns", <Count count={EXAMPLES.length} />)}
+                  </NavGroup>
+                </div>
+              </Fragment>
+            );
+          })}
+          <NavItem href={hrefOf({ page: "home", item: "new" })} icon={<AddIcon />} onClick={open({ page: "home", item: "new" })}>New system</NavItem>
         </NavGroup>
       </Nav>
     </SidebarList>
@@ -150,7 +176,7 @@ export function AppNav() {
  */
 export function Takeover({ children }: { children: ReactNode }) {
   const { place, setPanel, query, setQuery } = useStudio();
-  const back = tabKind(place) === "brand" ? BRAND.name : "Workspace";
+  const back = tabKind(place) === "system" ? systemName(place.system) : "Workspace";
   const listed = LISTED[place.page] ?? placeLabel(place).toLowerCase();
   return (
     <div className="studio-takeover">

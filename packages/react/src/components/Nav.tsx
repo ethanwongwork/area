@@ -55,7 +55,8 @@ export const NavGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, NavGroupProps
 export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> {
   /** Marks the page this item points at as the one being viewed. */
   current?: boolean;
-  /** Leading icon. Sized by the slot, never by itself. */
+  /** Leading icon. Sized by the slot, never by itself. With no children the item is the icon alone, a square plate,
+   * named by its `aria-label` (the desktop app's Home tab). */
   icon?: ReactNode;
   /** Pushed to the end of the row: a count, a shortcut, a status dot. */
   trailing?: ReactNode;
@@ -93,7 +94,7 @@ export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProp
           {icon}
         </span>
       ) : null}
-      <span className="area-nav__text">{children}</span>
+      {icon && (children === undefined || children === null || children === false) ? null : <span className="area-nav__text">{children}</span>}
       {trailing ? <span className="area-nav__trailing">{trailing}</span> : null}
     </a>
   );
