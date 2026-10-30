@@ -266,6 +266,9 @@
      spinner on a neutral solid button was the fill's own colour and disappeared. It fills the
      tier's icon box (12/16/20 in compact sm/default/lg) rather than a fixed 16. */
   .area-button .area-spinner { --_indicator: currentColor; --_size: var(--_icon); }
+  /* A Badge's icon slot takes the same rule (round 87: its 16 spinner overflowed the 12 slot onto the badge's edge and
+     the label, and painted the selection colour in a toned badge). */
+  .area-badge .area-spinner { --_indicator: currentColor; --_size: var(--_icon); }
 
   /* Determinate (docs/specs/spinner.md, "Value"): the same ring with the arc stopped at the value, drawn as SVG
      because its length changes. The mask ring and turning arc give way to it. 12 o'clock, clockwise, as Cursor's

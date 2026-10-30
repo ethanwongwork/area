@@ -159,7 +159,7 @@ and `…/area--content-uploading--rest--light.json` (row).
 | zone · padding / gap / corner | 16 / 24, 12, `radius-surface` (12) | Untitled UI 16 / 24, 12, 12 | — |
 | zone · edge | 1px `input-edge`, `input-edge-hover` on hover | Untitled's 1px ring; peer Input (a field that takes a value) | The field's edge rather than Untitled's lighter ring, so a zone beside a field matches it |
 | zone · dragging | `selection-edge` and the row plate `bg-component-hover` | Shared state paint (selection role; row plate) | Untitled's dropping style not read |
-| zone · invalid | `input-invalid-color` edge | Peer Input | — |
+| zone · invalid | `input-invalid-color` edge; the hint in `field-error-color` (round 83) | Peer Input; peer Field (its error message) | — |
 | zone · icon tile | 40 (`control-lg`), corner `radius-control-lg`, field edge, 20 glyph muted | Untitled 40 tile, 20 glyph | Corner 10 (a 40 control's) rather than 8 |
 | action | Link (inline, `action` ink) at weight 500, on a button | Peer Link; Untitled's emphasised link | Untitled's brand purple at 600; Area's Action role, its strong weight |
 | hint | 12/16 muted (Area's caption) | Untitled 12/18 | Area's caption leading |
@@ -274,3 +274,11 @@ The item's separator between size and status paints `border-decorative` (#f3). W
   item's pair (12 corner, 16 padding) is Untitled UI's and stands; the file icon sits 16 in, past the 12 curve, so it
   keeps the 40 control's corner, as content does. The buttons sit 8 in, inside the curve, so their corners must be
   concentric (Edit summary's rule).
+
+## Review note, 2026-10-29 (round 83)
+
+- **What changed:** an invalid zone's line under the prompt (its hint, where the demo says "Error message") takes the
+  field's error ink, Field's error message colour, in light and dark. The edge and everything else are unchanged.
+- **Why:** it stayed the muted hint grey beside a red edge, so the reason a file was rejected read as a hint. Field
+  and the file row's error status both say why in the error ink.
+- **Verdict:** approved (owner, 2026-10-29, review page round 83); Complete.

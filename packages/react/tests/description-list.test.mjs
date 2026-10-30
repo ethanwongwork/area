@@ -7,7 +7,7 @@ import { DescriptionList, DescriptionListItem } from "../dist/modules/index.js";
 test("a dl of div rows, each a dt term (with its icon hidden) and a dd value", () => {
   const html = render(h(DescriptionList, null, h(DescriptionListItem, { term: "Owner", icon: h("svg") }, "David Tee")));
   assert.equal(html, '<dl class="area-description-list area-description-list--columns"><div class="area-description-list__item">'
-    + '<dt class="area-description-list__term"><span class="area-description-list__icon" aria-hidden="true"><svg></svg></span>Owner</dt>'
+    + '<dt class="area-description-list__term"><span class="area-description-list__icon" aria-hidden="true"><svg></svg></span><span class="area-description-list__label">Owner</span></dt>'
     + '<dd class="area-description-list__value">David Tee</dd></div></dl>');
 });
 

@@ -218,3 +218,9 @@ own; the evidence below came from that family's research
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-29 (visual pass, rounds 86–89: a spinner in a badge, the empty text pair)
+
+- **What changed:** a Spinner in a Badge's icon slot takes the slot's size (12 at md) and the badge's ink, as a Spinner in a Button already did; a cohesion test covers both hosts. The empty tile's description now joins its title, muted, at the body size, as Empty state's.
+- **Why:** in the badge the 16 spinner overflowed the 12 slot onto the badge's edge and almost touched the label, and painted the selection colour in a toned badge. The empty tile set the description 12 under its title in the default ink, against the text-pair rule.
+- **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.

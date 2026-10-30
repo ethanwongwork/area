@@ -125,6 +125,9 @@ page's Default example now uses the real header slots instead of ad-hoc markup.
 
 ## Visual pass
 
+2026-10-28 (round 81, from Command palette's sweep): the teaching footer's step count ("1 of 3") sat 0.6px off the
+Button labels' baseline beside it; it joins the text-slot trim (inset.css), as the labels are.
+
 2026-09-28, Claude in Chrome (batch 7): Notion's Share popover open beside the gallery's field
 popover, both zoomed. Same white surface, 1px ring and two-layer lift (Area's lift is Notion's);
 Notion's corner reads about 10 against Area's 12 (the container role). No change. The zoom held
@@ -219,3 +222,10 @@ Open questions: none new.
   (`current`, `total`): UI text in the muted ink, with figures of one width so the footer doesn't shift between steps.
 - **Why:** your round 68 note, "is it supposed to just say 1? is it 1/5 steps?". The number was the step without its
   total, so it didn't say what it counted. Tours write both (Atlassian's spotlight, Notion's onboarding: "1 of 3").
+
+## Review note, 2026-10-28 (round 81)
+
+- **What changed:** the teaching footer's "1 of 3" sits on the same line as the button labels beside it.
+- **Why:** the same fix as Command palette's descriptions: text beside a button label is cut to its capitals as the
+  label is, so their baselines meet.
+- **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.

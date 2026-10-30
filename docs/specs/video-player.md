@@ -362,3 +362,14 @@ The scrim (the bar's fade) is removed with its part. `floating` (QuickTime's pan
 
 - **What changed:** The round play button before the first play is round again, at its own size.
 - **Why:** You flagged the default tile's play button: the new bar's pill rule also caught the round play (it shares the glass), squashing it to a control's height. The pill rule now applies only inside the controls.
+
+## Review note, 2026-10-29 (visual pass, rounds 86–89: the time's space)
+
+- **What changed:** the time pill reads "0:01 / 0:07" with a space either side of the slash.
+- **Why:** the duration is a flex item in the pill, and a flex item drops its leading space, so it read "0:01/ 0:07".
+- **Verdict:** changes (owner, 2026-10-29): "should these be pill shaped or just rounded corners?" Answered with rounded
+  corners: the bar's groups (play, mute, the time, the end group) took `radius-full` always, while the floating panel
+  takes the control corner and every Button follows Radius and turns pill only under the Pills setting. They now take
+  `radius-control-md` plus the Pills setting (`--area-pill-button`); the round play before the first play stays a circle
+  (its shape role). In review.
+- **Verdict (rounded corners):** approved (owner, 2026-10-29, the Composer expansion review page); Complete.

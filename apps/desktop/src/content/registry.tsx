@@ -25,6 +25,7 @@ import * as counts from "./demos/count.tsx";
 import * as accordions from "./demos/accordion.tsx";
 import * as agentChat from "./demos/agent-chat.tsx";
 import * as composerAdditions from "./demos/composer-additions.tsx";
+import * as composerExpansion from "./demos/composer-expansion.tsx";
 import * as customSelects from "./demos/custom-select.tsx";
 import * as tags from "./demos/tag.tsx";
 import * as tagPickers from "./demos/tag-picker.tsx";
@@ -74,7 +75,7 @@ import * as linkGroups from "./demos/link-groups.tsx";
 import * as videoPlayers from "./demos/video-player.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, agentChat, composerAdditions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, copyButtons, fileExplorer, listBoxes, appShell, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes, referenceLists, tablesOfContents, figures, inlineLists, abbreviations, hatnotes, linkGroups, videoPlayers, assetCards, surfaces, stacks };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, agentChat, composerAdditions, composerExpansion, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, copyButtons, fileExplorer, listBoxes, appShell, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes, referenceLists, tablesOfContents, figures, inlineLists, abbreviations, hatnotes, linkGroups, videoPlayers, assetCards, surfaces, stacks };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -101,6 +102,7 @@ export const SOURCES = {
   accordions: "demos/accordion.tsx",
   agentChat: "demos/agent-chat.tsx",
   composerAdditions: "demos/composer-additions.tsx",
+  composerExpansion: "demos/composer-expansion.tsx",
   customSelects: "demos/custom-select.tsx",
   tags: "demos/tag.tsx",
   tagPickers: "demos/tag-picker.tsx",

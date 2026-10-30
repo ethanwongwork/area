@@ -74,3 +74,12 @@ test("Composer merges a native inputProps className onto the textarea", () => {
   const input = html.match(/<textarea[^>]*>/)[0];
   assert.ok(input.match(/class="([^"]+)"/)[1].split(" ").includes("custom-input"));
 });
+
+// composer.css: after a leading action the gap alone separates the text (ChatGPT's column-gap 8, spec Anatomy; round 81).
+test("an inline Composer's text follows its leading action by the gap alone", async () => {
+  const { readFileSync } = await import("node:fs");
+  const css = readFileSync(new URL("../../styles/src/components/composer.css", import.meta.url), "utf8");
+  assert.match(css, /\.area-composer__actions--leading ~ \.area-composer__input \{ padding-inline-start: 0; \}/);
+  const html = renderToString(h(Composer, { leadingActions: h("button", { type: "button" }, "+") }));
+  assert.ok(html.indexOf("area-composer__actions--leading") < html.indexOf("<textarea"), "the leading slot precedes the textarea");
+});

@@ -246,6 +246,16 @@ export const DARK_LIGHTNESS_LIFT: Partial<Record<Level, number>> = {
  * ladder darkens. Rung 600 takes the boundary without an additional ceiling; 975 remains
  * the vendored near-black endpoint.
  */
+/**
+ * Chroma of a tone's soft surfaces in dark: rest, hover, pressed (owner, 2026-10-28, option A on the dark soft tones
+ * review page). Each sits at the lightness of the neutral control fill of the same state (INVERSION.component,
+ * componentHover, componentActive) in the tone's hue, so a soft Button in a tone is the neutral soft Button with
+ * colour in it. ChatGPT (Apps SDK soft fills over #0d0d0d), Notion (`--c-*BacSec`) and Figma (`--ramp-pale-*`) all
+ * land at chroma 0.04-0.07, median 0.049; the palette's own dark rungs carried 0.07-0.15 and read almost solid
+ * (docs/research/dark-soft-tones-2026-10-28/).
+ */
+export const DARK_TONAL_CHROMA = [0.05, 0.06, 0.07] as const;
+
 export const DARK_CHROMA_CAP: Partial<Record<Level, number>> = {
   650: 0.52,
   700: 0.46,

@@ -16,7 +16,7 @@
  */
 import { type Oklch, SRGB, parseHex, toHex, toOklchCss } from "./oklab.ts";
 import { gamutMap, maxChromaAt } from "./gamut.ts";
-import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, type Level, type Ramp, CHROMA_TRIM, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight } from "./curves.ts";
+import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, DARK_TONAL_CHROMA, type Level, type Ramp, CHROMA_TRIM, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight } from "./curves.ts";
 import { apcaMagnitude, relativeLuminance, wcagContrastHex } from "./contrast.ts";
 import { TONAL_Y } from "./layers.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
@@ -105,10 +105,15 @@ export interface VividChoice {
 export interface TonalChoice {
   /** Most chromatic foreground that clears the supported tonal and neutral grounds. */
   foreground: { light: Level; dark: Level };
-  /** The most chromatic accessible base/hover/active surface sequence for that ink. */
+  /**
+   * The most chromatic accessible base/hover/active surface sequence for that ink. In dark these rungs only gate the ink:
+   * what paints is derived (`paint`, chooseTonalPair).
+   */
   surface: { light: Level; dark: Level };
   surfaceHover: { light: Level; dark: Level };
   surfaceActive: { light: Level; dark: Level };
+  /** What the rest, hover and pressed surfaces paint, per theme. */
+  paint: { light: readonly [string, string, string]; dark: readonly [string, string, string] };
 }
 
 export interface StrokeChoice {
@@ -293,24 +298,41 @@ const TONAL_SURFACE_SEQUENCES: Record<Theme, readonly (readonly [Level, Level, L
  * known, the base/hover/active sequence with the greatest combined chroma wins. This is
  * deliberately pair-aware: a slightly quieter ground may admit substantially more colour
  * in the text, while every selected combination still clears AA and the dark APCA floor.
+ *
+ * In dark the chosen rungs no longer paint (owner, 2026-10-28): the surfaces are the neutral control fills' lightness
+ * in the family's hue at DARK_TONAL_CHROMA (curves.ts), quieter and darker than any rung sequence here. The ink is
+ * still chosen against the rungs as well as the paint: for every named family the rungs are the lighter, stricter
+ * ground, so the ink stays the one that was reviewed, and a dark, grey brand whose rungs sit below the paint takes a
+ * lighter ink rather than failing on it.
  */
 function chooseTonalPair(steps: readonly ScaleStep[], kind: ScaleKind): TonalChoice {
+  const controls = [INVERSION.component, INVERSION.componentHover, INVERSION.componentActive];
+  const byLevel = new Map(steps.map(step => [step.level, step]));
+  const hexes = (levels: readonly Level[]) => levels.map(level => byLevel.get(level)!.hex) as unknown as readonly [string, string, string];
   if (kind === "neutral") {
+    const levels = { light: controls.map(slot => slot.light as Level), dark: controls.map(slot => slot.dark as Level) };
     return {
       foreground: { light: INVERSION.textTonal.light as Level, dark: INVERSION.textTonal.dark as Level },
-      surface: { light: INVERSION.component.light as Level, dark: INVERSION.component.dark as Level },
-      surfaceHover: { light: INVERSION.componentHover.light as Level, dark: INVERSION.componentHover.dark as Level },
-      surfaceActive: { light: INVERSION.componentActive.light as Level, dark: INVERSION.componentActive.dark as Level },
+      surface: { light: levels.light[0]!, dark: levels.dark[0]! },
+      surfaceHover: { light: levels.light[1]!, dark: levels.dark[1]! },
+      surfaceActive: { light: levels.light[2]!, dark: levels.dark[2]! },
+      paint: { light: hexes(levels.light), dark: hexes(levels.dark) },
     };
   }
 
-  const byLevel = new Map(steps.map(step => [step.level, step]));
-  const picked = {} as Record<Theme, { foreground: Level; surfaces: readonly [Level, Level, Level] }>;
+  // Dark paint: the neutral control fill's lightness at each state, in this family's hue there, at DARK_TONAL_CHROMA.
+  const darkPaint = controls.map((slot, i) => {
+    const level = slot.dark as Level;
+    const neutral = FAMILIES.neutral![String(level)]!.oklch;
+    return toHex(gamutMap({ L: neutral.L, C: DARK_TONAL_CHROMA[i]!, h: byLevel.get(level)!.oklch.h }, SRGB).rgb);
+  }) as unknown as readonly [string, string, string];
+
+  const picked = {} as Record<Theme, { foreground: Level; surfaces: readonly [Level, Level, Level]; paint: readonly [string, string, string] }>;
   for (const theme of ["light", "dark"] as const) {
     const ambient = [INVERSION.page, INVERSION.surface, INVERSION.subtle].map(slot => groundHex(slot[theme]));
     let best: { foreground: ScaleStep; surfaces: readonly [Level, Level, Level]; surfaceChroma: number } | undefined;
     for (const surfaces of TONAL_SURFACE_SEQUENCES[theme]) {
-      const grounds = [...ambient, ...surfaces.map(level => byLevel.get(level)!.hex)];
+      const grounds = [...ambient, ...hexes(surfaces), ...(theme === "dark" ? darkPaint : [])];
       for (const foreground of steps) {
         // At every Accent strength (color/generate.ts): the ink and its tints quiet together; the neutral grounds stay. In
         // light the ink is also no brighter than TONAL_Y, the bound the Layers model darkens hued inks by on a gray page
@@ -328,7 +350,7 @@ function chooseTonalPair(steps: readonly ScaleStep[], kind: ScaleKind): TonalCho
       }
     }
     if (!best) throw new Error(`No accessible tonal foreground/surface pairing for ${theme}.`);
-    picked[theme] = { foreground: best.foreground.level, surfaces: best.surfaces };
+    picked[theme] = { foreground: best.foreground.level, surfaces: best.surfaces, paint: theme === "dark" ? darkPaint : hexes(best.surfaces) };
   }
 
   return {
@@ -336,6 +358,7 @@ function chooseTonalPair(steps: readonly ScaleStep[], kind: ScaleKind): TonalCho
     surface: { light: picked.light.surfaces[0], dark: picked.dark.surfaces[0] },
     surfaceHover: { light: picked.light.surfaces[1], dark: picked.dark.surfaces[1] },
     surfaceActive: { light: picked.light.surfaces[2], dark: picked.dark.surfaces[2] },
+    paint: { light: picked.light.paint, dark: picked.dark.paint },
   };
 }
 

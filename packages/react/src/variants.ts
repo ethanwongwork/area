@@ -103,6 +103,7 @@ export const toggletipVariants = /* @__PURE__ */ createVariants(manifests.toggle
 export const paginationVariants = /* @__PURE__ */ createVariants(manifests.pagination);
 export const treeViewVariants = /* @__PURE__ */ createVariants(manifests.treeView);
 export const composerVariants = /* @__PURE__ */ createVariants(manifests.composer);
+export const composerGroupVariants = /* @__PURE__ */ createVariants(manifests.composerGroup);
 export const indicatorAnchorVariants = /* @__PURE__ */ createVariants(manifests.indicatorAnchor);
 export const badgeGroupVariants = /* @__PURE__ */ createVariants(manifests.badgeGroup);
 export const badgeVariants = /* @__PURE__ */ createVariants(manifests.badge);

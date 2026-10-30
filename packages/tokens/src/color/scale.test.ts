@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
 import { type Theme, WHITE, assertScale, buildScale } from "./scale.ts";
-import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, INVERSION, LEVELS } from "./curves.ts";
+import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, DARK_TONAL_CHROMA, INVERSION, LEVELS } from "./curves.ts";
 import { maxChromaAt } from "./gamut.ts";
 import { SRGB } from "./oklab.ts";
-import { parseHex } from "./oklab.ts";
+import { labToLch, parseHex, rgbToOklab } from "./oklab.ts";
 import { APCA, WCAG, apcaMagnitude, wcagContrastHex } from "./contrast.ts";
 import PALETTE from "./palette.json" with { type: "json" };
 
@@ -323,6 +323,25 @@ describe("chroma across families", () => {
           .map(surfaceLevels => surfaceLevels.reduce((sum, level) => sum + byLevel.get(level)!.oklch.C, 0)));
         expect(selectedSurfaceChroma, `${spec.id}/${theme} surfaces`).toBeCloseTo(bestSurfaceChroma, 9);
       }
+    }
+  });
+
+  // Owner, 2026-10-28 (dark soft tones, option A): a dark tonal surface is the neutral control fill of its state with
+  // the tone's hue at DARK_TONAL_CHROMA, never a palette rung; light still paints its rungs.
+  it("paints dark tonal surfaces at the neutral control lightness and the quiet chroma", () => {
+    const controls = [INVERSION.component, INVERSION.componentHover, INVERSION.componentActive];
+    const neutralL = controls.map(slot => PALETTE.families.neutral[String(slot.dark) as "800"].oklch.L);
+    for (const spec of CHROMATIC_SCALES) {
+      const scale = buildScale(spec, "dark");
+      const light = buildScale(spec, "light");
+      scale.tonal.paint.dark.forEach((hex, i) => {
+        const lch = labToLch(rgbToOklab(parseHex(hex), SRGB));
+        expect(lch.L, `${spec.id} L ${i}`).toBeCloseTo(neutralL[i]!, 2);
+        expect(lch.C, `${spec.id} C ${i}`).toBeCloseTo(DARK_TONAL_CHROMA[i]!, 2);
+      });
+      const rungs = [light.tonal.surface.light, light.tonal.surfaceHover.light, light.tonal.surfaceActive.light]
+        .map(level => light.steps.find(step => step.level === level)!.hex);
+      expect(light.tonal.paint.light).toEqual(rungs);
     }
   });
 });

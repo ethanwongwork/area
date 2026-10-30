@@ -1,6 +1,73 @@
 # Handoff
 
-## Current state (2026-10-28)
+## Current state (2026-10-29)
+- **PR #176 (2026-10-29/30): rounds 81–89, dark soft tones and the Composer expansion, with main merged.** CI fixes it
+  carries, which also make main's CI green again (red since #173): the docs' pilot icons regenerated for #175's
+  `--area-type-icon-line` (icon tests), and the exhaustive layers model test given 60s like its sibling (it timed out
+  on the CI runner). Every family it touched is Complete; Plan, Description list, Approval and Composer menu stay In
+  review for main's chat set review. The visual pass has covered the whole Sidebar; nothing is open from it.
+- **Visual pass round 81, branch `claude/component-interaction-visual-polish-e45c8f` (2026-10-28, committed in ce9c60a1, merged with main 2026-10-29; owner: continue
+  from Code, same before/after format):** Code to Context menu on the Stage at 2x, light and dark, plus a baseline sweep of
+  every family's 1,190 tiles. Changes: Color swatch picker's palette ring is an `::after` layer over the cells (the grid's
+  outline was painted under them); Composer's input drops its start padding after a leading action (text 7 after the +,
+  was 15); Command palette's description and Popover's step count join inset.css's text-slot trim (0.6px baseline
+  split), rule in DESIGN_SYSTEM.md Optical insets, cohesion test; Code's `treatments` tile titled Subtle. All five
+  approved by the owner 2026-10-28 (review page https://claude.ai/artifact/WjbJNkrmcKwxMGuJiXzx5b, `verdicts`, no
+  notes); the four families are Complete again. The owner said yes to the dark soft tones question (dark soft surfaces
+  at lightness 0.30–0.38 read near solid): built, see the next bullet. Visual pass resumes at Copy button.
+- **Visual pass round 82 (2026-10-28, committed in ce9c60a1, merged with main 2026-10-29):** Copy button, Count, Custom select, Date picker, Date range
+  picker, Description list, Drawer, Edit summary and Editable text on the Stage at 2x, light and dark, plus the geometry
+  audit (only sr-only text and Edit summary's by-design hover overlay). Changes: Description list's columns rows align
+  by first baseline, the term's text a new `__label` part (a person value left the term 4 above the name); Edit
+  summary's head counts 4 after the title (was 8, the rows' gap is 4); Date range picker's ghost tile sm (demo only,
+  invisible at rest). Both approved 2026-10-29 (review page https://claude.ai/artifact/9GfrAq1fjTw2YDJ3xGfRNW), Complete.
+- **Visual pass round 83 (2026-10-29, committed in ce9c60a1, merged with main 2026-10-29):** Empty state, Field, Figure, File image, File page, File tile, File
+  upload, Folder, Hatnote and Hover card (opened by hover) on the Stage at 2x, light and dark, plus the geometry audit
+  (only sr-only text and File page's 30 glyph, by spec). Changes: a File tile outside a grid is at most one column wide
+  (figure + 48), so a long name wraps to two lines; an invalid File upload zone's hint takes `field-error-color`. Both
+  approved 2026-10-29 (review page https://claude.ai/artifact/8bnAvWgmS4iJ9NMqPDFTXw), Complete.
+- **Visual pass round 84 (2026-10-29, no changes):** Indicator, Inline list, Input group, Link, Link groups, List box,
+  Message, Meter and Model picker on the Stage at 2x, light and dark, the geometry audit (sr-only text only) and hover
+  on List box, Input group's action, Model picker and Link. Nothing to fix; no review page. Icon pilot (docs-only, no
+  tiles), Input, Kbd and Menu were skipped as visited or not a Stage family. 
+- **Visual pass round 85 (2026-10-29, committed in ce9c60a1, merged with main 2026-10-29):** Nav, Number field, OTP field, Pagination, Panel, Password field,
+  Plan, Preview frame, Progress and Prompt suggestions (Popover and Radio visited), Stage at 2x light and dark, geometry
+  audit (sr-only text, Prompt suggestions' by-design dismiss over its row). Changes: Prompt suggestions read the
+  composer's inset, action and gap (the prompt was 8 right of the placeholder since round 81's Composer change); Plan's
+  cancelled cross outranks the shared tick rule (a cancelled item drew the done tick). Two cohesion tests. Plan and
+  Prompt suggestions in review.
+- **Visual pass rounds 86–89 (2026-10-29, committed in ce9c60a1, merged with main 2026-10-29; the end of the Sidebar):** Property list to Zoom control, 38
+  families (Radio, Tabs, Slider visited), Stage at 2x light and dark plus the geometry audit (sr-only text and Step's
+  intended long-value ellipsis only). Changes: a Spinner in a Badge's slot takes the slot's size and ink (display.css,
+  as Button's); Video player's time keeps the space before the slash (a flex item dropped it); demos: Search field's
+  results are Nav rows, Scroll to latest has five turns so its button shows, Spinner's empty tile pairs its text.
+  Search field, Scroll to latest, Spinner and Video player in review. Left as is, for the owner: a soft Surface well is
+  invisible at Layers 0 (Flat), so the in-card and in-panel tiles' rows look inset under nothing; an input's text sits up
+  to a device pixel off the text beside it when the field lands on a fractional pixel (Chromium snaps form controls).
+  One review page covers rounds 85–89: https://claude.ai/artifact/MwygstHkZPu7FGEsnt9KTj (`verdicts`; ids per family, q-soft-well the question; "Approve every fix" skips q-). The Sidebar pass is complete after it. Verdicts 2026-10-29: Plan, Prompt suggestions, Search field, Scroll
+  to latest and Spinner approved (Complete); Surface keeps Flat flat (no change); Video player asked "pill shaped or
+  just rounded corners?" — its bar's groups now take `radius-control-md` plus the Pills setting (in review).
+- **Composer expansion (2026-10-29, committed in ce9c60a1, merged with main 2026-10-29; owner asked with Cursor, Claude app and Codex screenshots):**
+  `header` and `footer` slots (a group root, `area-composer-group`, only when used), `onFiles` (drop and paste, File
+  upload's drop paint), parts `ComposerMic` (dictation toggle), `ComposerAttach` (file picker), `ComposerNote`; Model
+  picker `efforts` (the effort muted after the name, an Effort group); Prompt suggestions `shortcut` (a Kbd); glyphs `mic`
+  and `waveform` added to the component set (generate.mjs). Evidence from the installed bundles:
+  docs/research/composer-expansion-2026-10-29/ (README intake, evidence.md). Review 1: Model picker, Prompt suggestions,
+  Video player approved (Complete); Composer changes ("i prefer cursors but … rounded not pill/circular, but pretty
+  round"; combine parts; the Codex tray "doesnt go with area"): the shell's corner is now the surface corner + one ladder
+  step (20; was the send's corner + inset, 15/16), actions and context Attachments concentric (shell − inset), Approval
+  matches (cohesion test); the `tray` slot removed; a combined composition replaces Codex's. Round 2 approved
+  2026-10-29 (https://claude.ai/artifact/CFjuxCzL9Pvph3nP1qBdUM). Then, on "are they slightly too round?", the corner
+  became Card's, term for term (18 in the app, actions 11; was 20 / 13); owner chose it in chat and approved it
+  on round 3 of the same page; Composer and Approval Complete. Until the 2026-10-29 merge this worktree predated app
+  structure Phase 1, so its window showed the old UI (PR #174's session asked for none); the merge brings Phase 1 (PR
+  #173), so a window from here shows the new structure.
+- **Dark soft tones, built (2026-10-28, committed in ce9c60a1, merged with main 2026-10-29; owner picked A, every family approved):** in dark a tone's soft
+  surfaces are the neutral control fill of the same state in the tone's hue at chroma 0.05 / 0.06 / 0.07
+  (`DARK_TONAL_CHROMA` in `color/curves.ts`, derived in `scale.ts` `chooseTonalPair` as `TonalChoice.paint`). Inks,
+  the focus ring and light are unchanged. Rule in DESIGN_SYSTEM.md Colour; notes and checks in
+  `docs/research/dark-soft-tones-2026-10-28/README.md`; review notes in the seven specs (Alert, Badge, Button, Chip,
+  Code block, Confirm dialog, Box model). Review page https://claude.ai/artifact/ASWB3h6XR8xR9752gr6fbs.
 - **Icon review against Cursor (2026-10-29, branch `claude/icon-visual-design-review-4f986c`, uncommitted).** Review page
   https://claude.ai/artifact/35czAepgpMBmeDCbMh5vU2 (picks in db `verdicts`). Applied: expand / collapse (+ maximize /
   minimize) drawing B, plane redrawn top-down (`docs/research/icon-review/2026-10-29/plane.py`), Reference list's `return`
@@ -53,9 +120,8 @@
   catalog); phased build plan in docs/research/app-structure-2026-10-28/README.md. Shell chosen: variation A on
   https://claude.ai/artifact/Fb9YBdJ3B1oVqhvEZQgPKL (Cursor-style nav, Figma tabs, takeover panels); reopen the last
   place with its tabs; Inspector's Brand section → Brand colours. Phase 1 built (above).
-- **Interaction and visual pass, rounds 75–80, branch `claude/component-interaction-visual-polish-e45c8f` (owner: the
-  Slider's motion and detail pass on every component, then a by-eye visual pass in the Sidebar's order), PR open, every
-  item owner-approved.** Interaction pass (docs/research/interaction-pass-2026-10-26/, re-runnable scripts): Tabs and
+- **Interaction and visual pass, rounds 75–80, merged PR #170 (a7112fc7; owner: the Slider's motion and detail pass on
+  every component, then a by-eye visual pass in the Sidebar's order), every item owner-approved.** Interaction pass (docs/research/interaction-pass-2026-10-26/, re-runnable scripts): Tabs and
   Code block slide one indicator (`useTabIndicator`); Step, Plan, Queue, Edit summary bodies ease open; field hovers on
   `hover-in`; list checks are Menu's small mark; Color picker's knob lifts; Empty state and Toggletip glyphs at native
   cuts. Visual pass, Stage at 2x light and dark, plus geometry.mjs: Input's file button; Menu text shortcuts split into
@@ -65,8 +131,8 @@
   closed popover with `transition:none`); Breadcrumb's collapsed marker is the More glyph. Review pages: rounds 75–80
   (https://claude.ai/artifact/GHVzuznddswJviGqaUSyW4, KfTnQG1v72KbZRWoumjFsH, 1onkM1APdH5tk3K23HnxHf,
   7QcEb58UUcGU7yQ7oF5VWT, 3E3AB8qpUFU4d7EQLbpGAi, 18hz7hePnjJqoNG1vfHyH8). Families visited: Abbreviation to Citation in the
-  Sidebar's order, plus Button, Input, Menu, Tabs, Card, Dialog. Next: Code onward (Code block done). Breadcrumb stays in
-  review for its nowrap layout (no verdict yet).
+  Sidebar's order, plus Button, Input, Menu, Tabs, Card, Dialog. Breadcrumb stays in review for its nowrap layout (no
+  verdict yet).
 - **Inspector rows and sliders, branch `claude/project-status-electron-5fd266` (owner 2026-10-27):** every setting bar
   is one row: name in the label column, the label-inside bar without text, a soft value field 4–5ch wide (worded values
   show a signed number: Temperature -25, Shade +57; Hue 200°). Slider gains `gradient` (Temperature, Shade, Hue troughs);
