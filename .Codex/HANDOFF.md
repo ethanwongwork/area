@@ -1,6 +1,11 @@
 # Handoff
 
 ## Current state (2026-10-29)
+- **PR #176 (2026-10-29/30): rounds 81–89, dark soft tones and the Composer expansion, with main merged.** CI fixes it
+  carries, which also make main's CI green again (red since #173): the docs' pilot icons regenerated for #175's
+  `--area-type-icon-line` (icon tests), and the exhaustive layers model test given 60s like its sibling (it timed out
+  on the CI runner). Every family it touched is Complete; Plan, Description list, Approval and Composer menu stay In
+  review for main's chat set review. The visual pass has covered the whole Sidebar; nothing is open from it.
 - **Visual pass round 81, branch `claude/component-interaction-visual-polish-e45c8f` (2026-10-28, committed in ce9c60a1, merged with main 2026-10-29; owner: continue
   from Code, same before/after format):** Code to Context menu on the Stage at 2x, light and dark, plus a baseline sweep of
   every family's 1,190 tiles. Changes: Color swatch picker's palette ring is an `::after` layer over the cells (the grid's
