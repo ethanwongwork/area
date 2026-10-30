@@ -21,7 +21,7 @@
  */
 import type { CSSProperties, ReactNode } from "react";
 import { AssetCard, AssetGridItem, ListBoxItem, SectionHeading } from "@area/react";
-import { appScale } from "./app-scale.ts";
+import { feedScale, feedScaleWithin } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
 import { CANVAS_DEFAULTS } from "./studio.tsx";
 
@@ -136,7 +136,7 @@ function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card
       data-area-ground={paint ? undefined : "raised"}
       style={paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined} {...(paint ? specimen : {})} {...scope}>
       {/* The name is the app's chrome, at the app's scale whatever the Canvas previews. */}
-      <div className="gallery-tile__head" {...appScale()}>
+      <div className="gallery-tile__head" {...feedScaleWithin({ ...(paint ? specimen : {}), ...scope })}>
         <span className="gallery-tile__label">{label}</span>
         {value != null ? <span className="gallery-tile__value">{value}</span> : null}
         {actions}
@@ -198,7 +198,9 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
     ...scope,
   } as Record<string, string | undefined> & { className: string; style?: CSSProperties };
   // The caption is the app's chrome, at the app's scale whatever the Canvas previews.
-  const captionProps = { className: "gallery-tile__caption", ...appScale() };
+  // The frame may set type or density, and the caption may sit inside it (overlay) or under it: it is measured against
+  // the frame, so a frame with a scale of its own always gets the caption's stated.
+  const captionProps = { className: "gallery-tile__caption", ...feedScaleWithin(frameProps) };
   const shared = { ...CARD_SCOPE, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, name: label, meta: value, actions, frameProps, captionProps,
     container: look?.container, caption: look?.caption, fill: look?.fill, borderless: look?.borderless,
     // A card's frame is 5:4, the gallery four across (owner, 2026-10-22; Asset card's landscape aspect).
@@ -249,7 +251,7 @@ export function CanvasSection({ id, title, count, lede, role, children }: { id: 
   return (
     <section className="studio-section" id={id} role={role} aria-labelledby={title ? `${id}-title` : undefined}>
       {/* Area's SectionHeading (app-shell.css): the strong title trimmed to its cap, the muted lede 8 under it. */}
-      {title ? <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede} {...appScale()}
+      {title ? <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede} {...feedScale()}
         title={count === undefined ? title : <>{title} <span className="studio-muted studio-tabular">{count}</span></>} /> : null}
       {children}
     </section>
