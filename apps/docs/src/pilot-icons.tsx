@@ -25,6 +25,9 @@ export const sw = (weight: number | undefined, size: number | undefined, ratio =
   if (weight !== undefined) return weight * k;
   // The token line at 12 is the xs icon slot's (16px at type 16): the 12px factor applies where the slot is 12.
   if (size === 12) return `calc(var(--area-weight-icon) * ${ratio.toFixed(4)} * (1 + ${(sizeFactor12 - 1).toFixed(4)} * var(--_glyph-cut, var(--area-type-icon-xs-cut, 1))))`;
+  // An icon at its default size fills its component's icon slot: the type axis's --area-type-icon-line puts the line on
+  // the size curve where that slot is 20 (types 15 and 16), so a 16px drawing scaled to 20 doesn't scale its line too.
+  if (size === undefined) return `calc(var(--area-weight-icon) * ${k === 1 ? "" : k.toFixed(4) + " * "}var(--area-type-icon-line, 1))`;
   return k === 1 ? "var(--area-weight-icon)" : `calc(var(--area-weight-icon) * ${k.toFixed(4)})`;
 };
 const sizeFactor12 = sizeFactor(12);
