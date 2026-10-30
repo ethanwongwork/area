@@ -174,6 +174,16 @@
   .studio-inspector-actions > :last-child:nth-child(odd) { grid-column: 1 / -1; }
   /* New brand's and Rename's form (src/pages/home.tsx): the name, then how it starts, a field's gap apart (Dialog's form). */
   .studio-home__form { display: grid; gap: var(--area-space-16); /* pick: Form's field gap */ }
+  /* Publish's dialog (src/publish.tsx, src/pages/project.tsx): Live beside Publishing, then the changes, the kind and the
+     note, a field's gap apart as the form above. Live and Publishing are two tiles, 8 apart (the cards' gap). */
+  .studio-publish { display: grid; gap: var(--area-space-16); /* pick: Form's field gap */ }
+  .studio-publish__pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-8); }
+  /* Discard sits at the footer's start, away from Publish (a destructive action apart from the confirming one). */
+  .studio-publish__discard { margin-inline-end: auto; }
+  /* A second group of the Canvas bar's controls (Publish after a page's own) follows the first, 12 apart. */
+  .studio-canvas__actions + .studio-canvas__actions { margin-inline-start: 0; }
+  /* An image layer on a project's page (src/pages/project.tsx): the whole image, at most the tile's width. */
+  .studio-layer__image { display: block; max-inline-size: 100%; max-block-size: 100%; object-fit: contain; border-radius: var(--area-radius-sm); }
 
   /* A step's semantic tokens (src/pages/color.tsx), one to a line. */
   .studio-used-by { display: grid; gap: var(--area-space-2); }

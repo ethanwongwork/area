@@ -1,6 +1,18 @@
 # Handoff
 
 ## Current state (2026-10-29)
+- **Projects and publishing, the IA of 2026-10-29, branch `claude/ia-brainstorm-47487c` (uncommitted).** From the IA
+  brainstorm (write-up revision 3, https://claude.ai/artifact/TRWJYDWrxVaxCTvtJNxwD5) and the owner's tab rule ("tabs can
+  be libraries or projects … the tab itself … will always just be the project itself"). Tabs hold one project, system,
+  Inspiration or lab and never change what they hold; the Sidebar is the tab's own tree (workspace in Home's tab, a
+  system's sections + History, a project's Overview / Pages and layers / Explorations / Versions). Systems are edited in
+  place and published (`releases`; Live / Working + Publish with before and after, changed values, Fixes / Adds / Needs
+  work, note; History with Restore). Projects in `Projects/<id>/project.json` use a system as published; explorations
+  publish themes into it. The Library page is Inspiration (`#library` redirects). Docs: app-structure README section
+  "Projects and publishing", PRODUCT_UI.md places, AGENTS.md Start. Checks: typecheck, test:desktop (25, new
+  tests/projects.test.ts), app build, playgrounds, app-css; driven in the browser preview light and dark (create project,
+  add screen and image layers, exploration, publish to Area, in-place edit, Live, Publish, History). Not built: products,
+  approval, the conflict view, Start a project from a system, Explore. Checked in the browser preview, light and dark; in Electron only Home captured.
 - **App structure Phase 2, Home and several systems, branch `claude/serene-maxwell-905675`, PR #174 (started from the
   Phase 1 session).** Home (`#home`, `src/pages/home.tsx`: Systems, Projects later, New system from the Area Starter /
   Describe it (Setup chat) / Import stub, Boards, Recent) in a fixed first Home tab (Nav's new icon-only item, Figma's file

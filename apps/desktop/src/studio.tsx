@@ -14,7 +14,7 @@
  */
 import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useInsertionEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode, type Ref } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, Titlebar, Tooltip, TreeView, type TreeViewNode } from "@area/react";
-import { ArrowLeftIcon, ArrowRightIcon, LibraryIcon, MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
+import { ArrowLeftIcon, ArrowRightIcon, ImagesIcon, MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./gallery/controls.ts";
 import { ComponentsPage } from "./pages/components.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
@@ -24,12 +24,15 @@ import { ThemePage } from "./pages/theme.tsx";
 import { ExamplesPage } from "./pages/examples.tsx";
 import { MaterialsPage } from "./pages/materials.tsx";
 import { ImageryPage } from "./pages/imagery.tsx";
+import { HistoryPage } from "./pages/history.tsx";
+import { ExplorationPage, ProjectOverview, ProjectPageView, VersionsPage } from "./pages/project.tsx";
+import { PublishControls } from "./publish.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
-import { groupSlug, HOME_TAB, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, setSystems, tabHolds, tabKind, type Place } from "./places.ts";
+import { groupSlug, HOME_TAB, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, setProjects, setSystems, tabHolds, tabKind, type Place } from "./places.ts";
 import { AppNav, AppTabs, Takeover } from "./app-nav.tsx";
 import { SearchEverything, type SearchFor } from "./search-palette.tsx";
 import { ThemesPage } from "./pages/themes.tsx";
@@ -37,7 +40,8 @@ import { HomePage } from "./pages/home.tsx";
 import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 import { restoreBrand, useBrandSheet, type BrandState } from "./brand.ts";
 import { PAGE_AXES, hasColours, restoreColours, shownColours, useColoursSheet, type ColoursState } from "./colours.ts";
-import { activeTheme, AREA_ID, systemFile, loadSystems, newTheme, starterSystem, withTheme, type System, type SystemOrigin, type SystemTheme, type Restorers } from "./systems.ts";
+import { activeTheme, AREA_ID, asLive, changesOf, systemFile, loadSystems, newTheme, publish, publishTheme, revertTo, starterSystem, withTheme, type Change, type ReleaseKind, type System, type SystemOrigin, type SystemTheme, type Restorers } from "./systems.ts";
+import { loadProjects, newProject, projectFile, type Project } from "./projects.ts";
 
 type Theme = "light" | "dark";
 
@@ -135,6 +139,44 @@ function saveSystems(systems: readonly System[], ids: readonly string[]) {
   const store = disk();
   if (store) for (const system of systems) { if (ids.includes(system.id)) store.write(system.id, fileText(system)); }
   else writeStored("systems", systems.map(system => systemFile(system, markCanvas)));
+}
+
+/** The projects (src/projects.ts), as the systems: Application Support in Electron, this browser's storage otherwise. */
+const projectDisk = () => typeof window !== "undefined" ? window.areaDesktop?.projects : undefined;
+function openProjects(): Project[] {
+  const files = projectDisk()?.read() ?? readStored<unknown[]>("projects", []);
+  const projects = loadProjects(Array.isArray(files) ? files : [], RESTORE);
+  setProjects(projects);
+  return projects;
+}
+/** Writes the projects named by `ids` (all of them in this browser's storage, which keeps one list). */
+function saveProjects(projects: readonly Project[], ids: readonly string[]) {
+  const store = projectDisk();
+  if (store) for (const project of projects) { if (ids.includes(project.id)) store.write(project.id, JSON.stringify(projectFile(project, markCanvas), null, 2)); }
+  else writeStored("projects", projects.map(project => projectFile(project, markCanvas)));
+}
+
+/**
+ * Writes what changed in a list of systems or projects a moment later (a slider's drag writes once), each to its own
+ * file, and before the window closes, so a change in the last moment is kept.
+ */
+function useWrites<T extends { id: string }>(list: readonly T[], save: (list: readonly T[], ids: readonly string[]) => void) {
+  const changed = useRef(new Set<string>());
+  const written = useRef(list);
+  useEffect(() => {
+    for (const entry of list) if (!written.current.includes(entry)) changed.current.add(entry.id);
+    // One deleted: its folder is in the Trash already; this browser's one list is written again without it.
+    for (const entry of written.current) if (!list.some(other => other.id === entry.id)) changed.current.add(entry.id);
+    written.current = list;
+    if (!changed.current.size) return;
+    const timer = setTimeout(() => { save(list, [...changed.current]); changed.current.clear(); }, 250);
+    return () => clearTimeout(timer);
+  }, [list]);
+  useEffect(() => {
+    const flush = () => { if (changed.current.size) { save(written.current, [...changed.current]); changed.current.clear(); } };
+    addEventListener("pagehide", flush);
+    return () => removeEventListener("pagehide", flush);
+  }, []);
 }
 
 /** A computed colour (rgb(), color(srgb …), oklab …) as #rrggbb, read from one painted pixel. */
@@ -253,6 +295,32 @@ interface StudioState {
   renameSystem: (id: string, name: string) => void;
   /** Moves a system's folder to the Trash and closes its tabs. The Area system stays. */
   deleteSystem: (id: string) => void;
+  /**
+   * The open system's working copy (what its owners edit in place). `openSystem` is it, or its Live release where the tab
+   * shows Live: a project's tab always (a project uses what the Library publishes), a system's tab when Live is chosen.
+   */
+  workingSystem: System;
+  /** Whether the tab shows its system as published rather than its working copy. */
+  live: boolean;
+  /** A system tab's switch between Live and Working; editing anything switches back to Working. */
+  setLive: (live: boolean) => void;
+  /** What the open system's working copy changed since Live. */
+  changes: Change[];
+  /** Publishes the open system's working copy as its next version. */
+  publishSystem: (kind: Exclude<ReleaseKind, "first">, note: string) => void;
+  /** Sets the open system's working copy back to Live, or to an earlier version. */
+  revertSystem: (version?: string) => void;
+  /** The workspace's projects (src/projects.ts), oldest first. */
+  projects: readonly Project[];
+  /** The current tab's project, or null in any other tab. */
+  openProject: Project | null;
+  createProject: (name: string, system: string, theme: string) => Project;
+  /** Changes a project (its pages, layers, explorations or versions). */
+  updateProject: (id: string, change: (project: Project) => Project) => void;
+  /** Moves a project's folder to the Trash and closes its tabs. */
+  deleteProject: (id: string) => void;
+  /** Publishes one of the open project's explorations to its system: in place of the theme it came from, or as a new one. */
+  publishExploration: (id: string, replaces: boolean, kind: Exclude<ReleaseKind, "first">, note: string) => void;
   /** Makes one of the open system's themes its chosen one. */
   chooseTheme: (id: string) => void;
   /** Adds a theme to the open system at Area's shipped values and chooses it. */
@@ -288,39 +356,48 @@ export function Studio() {
   // The systems first: the saved tabs' places name them.
   const [systems, setSystemList] = useState<System[]>(openSystems);
   setSystems(systems);
+  const [projects, setProjectList] = useState<Project[]>(openProjects);
+  setProjects(projects);
   const [tabs, setTabs] = useState<Tabs>(openTabs);
   const tab = tabs.list.find(entry => entry.id === tabs.current) ?? tabs.list[0]!;
   const { place } = tab;
   const item = place.item;
-  // The open system: the current tab's, else the last a tab showed (Home, the Library and labs paint in it).
+  // The open system: the current tab's, a project tab's system, else the last a tab showed (Home, Inspiration and labs
+  // paint in it).
+  const openProject = tabKind(place) === "project" ? projects.find(entry => entry.id === place.project) ?? null : null;
   const lastSystem = useRef(AREA_ID);
   if (tabKind(place) === "system") lastSystem.current = place.system ?? AREA_ID;
-  const openSystem = systems.find(entry => entry.id === lastSystem.current) ?? systems[0]!;
-  const openTheme = activeTheme(openSystem);
+  if (openProject) lastSystem.current = openProject.system;
+  const workingSystem = systems.find(entry => entry.id === lastSystem.current) ?? systems[0]!;
+  // Systems shown Live in their tabs. A project always sees its system as published.
+  const [liveViews, setLiveViews] = useState<ReadonlySet<string>>(() => new Set());
+  const live = Boolean(openProject) || (tabKind(place) === "system" && liveViews.has(workingSystem.id));
+  const openSystem = useMemo(() => live ? asLive(workingSystem) : workingSystem, [live, workingSystem]);
+  const exploration = openProject && place.page === "exploration" ? openProject.explorations.find(entry => entry.id === item) ?? null : null;
+  const openTheme = exploration?.theme
+    ?? (openProject ? openSystem.themes.find(entry => entry.id === openProject.theme) ?? activeTheme(openSystem) : activeTheme(openSystem));
   const { canvas, material, colours, accent: brand } = openTheme;
-  // A system changed is written a moment later (a slider's drag writes once), each system to its own file.
-  const changed = useRef(new Set<string>());
-  const written = useRef(systems);
-  useEffect(() => {
-    for (const entry of systems) if (!written.current.includes(entry)) changed.current.add(entry.id);
-    // A system deleted: its folder is in the Trash already; this browser's one list is written again without it.
-    for (const entry of written.current) if (!systems.some(other => other.id === entry.id)) changed.current.add(entry.id);
-    written.current = systems;
-    if (!changed.current.size) return;
-    const timer = setTimeout(() => { saveSystems(systems, [...changed.current]); changed.current.clear(); }, 250);
-    return () => clearTimeout(timer);
-  }, [systems]);
-  // Written before the window closes, so a change in the last moment is kept.
-  useEffect(() => {
-    const flush = () => { if (changed.current.size) { saveSystems(written.current, [...changed.current]); changed.current.clear(); } };
-    addEventListener("pagehide", flush);
-    return () => removeEventListener("pagehide", flush);
-  }, []);
-  /** Changes the open system's chosen theme. */
+  const changes = useMemo(() => changesOf(workingSystem), [workingSystem]);
+  useWrites(systems, saveSystems);
+  useWrites(projects, saveProjects);
+  // What the Inspector's Theme view edits: an exploration in its project's tab, else the open system's working copy (a
+  // project's other pages edit nothing: they show the system as published).
+  const editing = useRef({ system: workingSystem.id, project: openProject?.id, exploration: exploration?.id, live });
+  editing.current = { system: workingSystem.id, project: openProject?.id, exploration: exploration?.id, live };
+  /** Leaves Live for the working copy: editing a system shown Live edits what will be published next. */
+  const toWorking = useCallback((id: string) => setLiveViews(views => { if (!views.has(id)) return views; const next = new Set(views); next.delete(id); return next; }), []);
+  /** Changes the edited theme. */
   const updateTheme = useCallback((change: (theme: SystemTheme) => SystemTheme) => {
-    const id = lastSystem.current;
-    setSystemList(list => list.map(entry => entry.id === id ? withTheme(entry, change) : entry));
-  }, []);
+    const at = editing.current;
+    if (at.exploration) {
+      setProjectList(list => list.map(project => project.id !== at.project ? project
+        : { ...project, explorations: project.explorations.map(entry => entry.id === at.exploration ? { ...entry, theme: change(entry.theme) } : entry) }));
+      return;
+    }
+    if (at.project) return;
+    if (at.live) toWorking(at.system);
+    setSystemList(list => list.map(entry => entry.id === at.system ? withTheme(entry, change) : entry));
+  }, [toWorking]);
   // src/theme.js has already set the theme before first paint; start from it.
   const [theme, setTheme] = useState<Theme>(() => (document.documentElement.getAttribute("data-area-theme") ?? (prefersDark() ? "dark" : "light")) === "dark" ? "dark" : "light");
   const [query, setQuery] = useState("");
@@ -348,10 +425,13 @@ export function Studio() {
       const open = current.list.find(entry => entry.id === current.current) ?? current.list[0]!;
       // Home is its own tab, whatever opens it; what is chosen on it changes there.
       if (to.page === "home") return navigateIn({ ...current, current: HOME_TAB }, current.list[0]!, to, { ...options, newTab: false });
-      // A system's page without a system is the current tab's system's (a page's own links), else the open one's.
-      const next: Place = tabKind(to) === "system" && !to.system ? { ...to, system: tabKind(open.place) === "system" ? open.place.system ?? AREA_ID : lastSystem.current } : to;
-      // From Home a place opens in the tab already holding its system, Library or lab, else a new tab (Figma's file browser).
-      if (open.id === HOME_TAB && next.page !== "home" && !options.newTab) {
+      // A system's page without a system is the current tab's system's (a page's own links; a project's system in its
+      // tab), else the open one's; a project's page without a project is the current tab's project's.
+      const next: Place = tabKind(to) === "system" && !to.system ? { ...to, system: tabKind(open.place) === "system" ? open.place.system ?? AREA_ID : lastSystem.current }
+        : tabKind(to) === "project" && !to.project ? { ...to, project: open.place.project } : to;
+      // A tab never changes what it holds (owner, 2026-10-29: "the tab itself … will always just be the project itself"):
+      // a place in another system, project or Inspiration opens in the tab already holding it, else a new tab.
+      if (!options.newTab && tabHolds(next) !== tabHolds(open.place)) {
         const holder = current.list.find(entry => entry.id !== HOME_TAB && tabHolds(entry.place) === tabHolds(next));
         if (!holder) return navigateIn(current, open, next, { ...options, newTab: true });
         return navigateIn({ ...current, current: holder.id }, holder, next, options);
@@ -432,6 +512,8 @@ export function Studio() {
   // The systems as last rendered, so a system made and opened in one handler is already known to the places.
   const systemsRef = useRef(systems);
   systemsRef.current = systems;
+  const projectsRef = useRef(projects);
+  projectsRef.current = projects;
   useEffect(() => window.areaDesktop?.onCommand?.(runTabCommand), [runTabCommand]);
 
   // A link followed natively (an old #components/button in a page's text, a hand-typed hash) opens in the current tab; a
@@ -543,6 +625,60 @@ export function Studio() {
     systems,
     openSystem,
     openTheme,
+    workingSystem,
+    live,
+    setLive: on => setLiveViews(views => {
+      const id = workingSystem.id;
+      if (views.has(id) === on) return views;
+      const next = new Set(views);
+      if (on) next.add(id); else next.delete(id);
+      return next;
+    }),
+    changes,
+    publishSystem: (kind, note) => {
+      const id = workingSystem.id;
+      toWorking(id);
+      setSystemList(list => list.map(entry => entry.id === id ? publish(entry, kind, note) : entry));
+    },
+    revertSystem: version => {
+      const id = workingSystem.id;
+      toWorking(id);
+      setSystemList(list => list.map(entry => entry.id === id ? revertTo(entry, version) : entry));
+    },
+    projects,
+    openProject,
+    createProject: (name, system, theme) => {
+      const made = newProject(name, system, theme, projectsRef.current.map(entry => entry.id));
+      projectsRef.current = [...projectsRef.current, made];
+      setProjects(projectsRef.current);
+      setProjectList(list => [...list, made]);
+      return made;
+    },
+    updateProject: (id, change) => setProjectList(list => list.map(entry => entry.id === id ? change(entry) : entry)),
+    deleteProject: id => {
+      projectDisk()?.trash(id);
+      setTabs(current => {
+        const list = current.list.filter(entry => tabHolds(entry.place) !== `project:${id}`);
+        return { list, current: list.some(entry => entry.id === current.current) ? current.current : HOME_TAB };
+      });
+      setProjectList(list => list.filter(entry => entry.id !== id));
+    },
+    publishExploration: (id, replaces, kind, note) => {
+      const project = openProject;
+      const chosen = project?.explorations.find(entry => entry.id === id);
+      const system = project && systems.find(entry => entry.id === project.system);
+      if (!project || !chosen || !system) return;
+      const from = system.themes.find(entry => entry.id === chosen.from);
+      const taken = new Set(system.themes.map(entry => entry.id));
+      let themeId = `${project.id}-${chosen.id}`, n = 2;
+      while (!replaces && taken.has(themeId)) themeId = `${project.id}-${chosen.id}-${n++}`;
+      const theme = replaces && from ? { ...chosen.theme, id: from.id, name: from.name } : { ...chosen.theme, id: themeId, name: chosen.name };
+      const published = publishTheme(system, theme, replaces && from ? from.id : null, kind, note, project.name);
+      const version = published.releases[published.releases.length - 1]!.version;
+      setSystemList(list => list.map(entry => entry.id === system.id ? published : entry));
+      setProjectList(list => list.map(entry => entry.id !== project.id ? entry
+        : { ...entry, explorations: entry.explorations.map(other => other.id === id ? { ...other, published: version } : other) }));
+    },
     createSystem: (name, origin) => {
       const made = starterSystem(name, systemsRef.current.map(entry => entry.id), RESTORE, origin);
       systemsRef.current = [...systemsRef.current, made];
@@ -561,10 +697,17 @@ export function Studio() {
       if (lastSystem.current === id) lastSystem.current = AREA_ID;
       setSystemList(list => list.filter(entry => entry.id !== id));
     },
-    chooseTheme: id => { const systemId = lastSystem.current; setSystemList(list => list.map(entry => entry.id === systemId && entry.themes.some(theme => theme.id === id) ? { ...entry, theme: id } : entry)); },
+    chooseTheme: id => {
+      const systemId = lastSystem.current;
+      // A theme only Live has (one removed from the working copy) can't be chosen to edit.
+      if (!workingSystem.themes.some(theme => theme.id === id)) return;
+      toWorking(systemId);
+      setSystemList(list => list.map(entry => entry.id === systemId && entry.themes.some(theme => theme.id === id) ? { ...entry, theme: id } : entry));
+    },
     addTheme: () => {
-      const made = newTheme(openSystem, RESTORE);
-      const systemId = openSystem.id;
+      const made = newTheme(workingSystem, RESTORE);
+      const systemId = workingSystem.id;
+      toWorking(systemId);
       setSystemList(list => list.map(entry => entry.id === systemId ? { ...entry, themes: [...entry.themes, made], theme: made.id } : entry));
       return made;
     },
@@ -584,11 +727,11 @@ export function Studio() {
       writeStored("panels", next);
       return next;
     }),
-  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, colours, systems, openSystem, openTheme, updateTheme, item, place, navigate, tab.panel, panels, inspectorView]);
+  }), [query, theme, canvas, material, previewAxes, previewedMaterial, brand, colours, systems, openSystem, openTheme, workingSystem, live, changes, projects, openProject, toWorking, updateTheme, item, place, navigate, tab.panel, panels, inspectorView]);
   // The picks' one rule is in the head while there are any; the scopes that carry the settings carry data-area-colours.
   useColoursSheet(state.shown.colours);
 
-  const library = tabs.list.find(entry => entry.place.page === "library");
+  const inspiration = tabs.list.find(entry => entry.place.page === "inspiration");
   return (
     <StudioContext.Provider value={state}>
     <AppScaleContext.Provider value={scale}>
@@ -601,8 +744,8 @@ export function Studio() {
             and light / dark (Phase 0, variation A). */}
         <Titlebar className="studio-titlebar" windowControls={isMac() ? "macos" : undefined} end={<>
           <SearchEverything open={searching} onOpenChange={setSearching} />
-          <ChromeButton label="Library" icon={<LibraryIcon />}
-            onClick={() => library ? selectTab(library.id) : navigate({ page: "library" }, { newTab: true })} />
+          <ChromeButton label="Inspiration" icon={<ImagesIcon />}
+            onClick={() => inspiration ? selectTab(inspiration.id) : navigate({ page: "inspiration" }, { newTab: true })} />
           {/* Shown panels draw their side filled, as Cursor's layout toggles do. Each names itself
               in an Area Tooltip with its shortcut, not the browser's title. */}
           <ChromeButton label={panels.inspector ? "Hide inspector" : "Show inspector"} keys={["⌥", "⌘", "B"]} shortcut="Alt+Meta+B"
@@ -628,8 +771,13 @@ export function Studio() {
           place.page === "typography" ? <TypographyPage /> :
           place.page === "icons" ? <IconsPage /> :
           place.page === "patterns" ? <ExamplesPage /> :
+          place.page === "history" ? <HistoryPage /> :
+          place.page === "project" ? <ProjectOverview /> :
+          place.page === "project-page" ? <ProjectPageView /> :
+          place.page === "exploration" ? <ExplorationPage /> :
+          place.page === "versions" ? <VersionsPage /> :
           place.page === "materials" ? <MaterialsPage /> :
-          place.page === "library" ? <ImageryPage /> : <ColorPage />
+          place.page === "inspiration" ? <ImageryPage /> : <ColorPage />
         }</Fragment>
       </div>
       </ChatProvider>
@@ -799,7 +947,7 @@ export function Workspace({ sidebar, lead, canvasLead, canvasTitle, canvasAction
         </div>
       ) : null}
       <main ref={main} className="studio-canvas" aria-label={canvasTitle}>
-        <header className="studio-canvas__bar">{canvasLead}{canvasActions}</header>
+        <header className="studio-canvas__bar">{canvasLead}{canvasActions}<PublishControls /></header>
         <div ref={canvasRef} className="studio-canvas__body" {...axes} onClick={keepSpecimenLinks}><SpecimenScopeContext.Provider value={specimens}>{canvas}</SpecimenScopeContext.Provider></div>
       </main>
       {showInspector ? (

@@ -133,7 +133,7 @@ export function ExamplesPage() {
  * A screen's thumbnail: laid out at its own width (1200) and zoomed to the tile's, so its top reads as the screen does
  * and the rest crops at the tile's foot (it was a fixed 0.42, wider than a plain tile's view).
  */
-function WidthZoom({ children }: { children: ReactNode }) {
+export function WidthZoom({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState(0.4);
   useLayoutEffect(() => {

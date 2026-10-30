@@ -9,13 +9,16 @@ components and accurate specs matter more than speed.
 
 - **The app is the source of truth** (owner, 2026-10-12). `apps/desktop` (Electron) is
   built only from Area and judged only in the app. Its regions are:
-  - **Titlebar:** back and forward, the open tabs (Home first and fixed, then a system, the Library,
-    a lab), search (⌘K, every place), the Library, toggles, light / dark.
-  - **Sidebar** (the nav: Home, Library, then Systems, the open system's Themes, Foundations,
-    Components and Patterns; a page's own list takes it over), **Canvas** and **Inspector**
-    (Theme, Design, Code, Chat). Places and old links: `apps/desktop/src/places.ts`; systems
-    (called brands until 2026-10-29) and their themes (the Inspector's settings are the open
-    system's theme): `apps/desktop/src/systems.ts`.
+  - **Titlebar:** back and forward, the open tabs (Home first and fixed, then one per project,
+    system, Inspiration or lab; a tab never changes what it holds), search (⌘K, every place),
+    Inspiration, toggles, light / dark.
+  - **Sidebar** (the tab's own nav: in Home's tab Home, Projects and the Library; in a system's
+    tab its Themes, Foundations, Components, Patterns and History; in a project's tab its
+    Overview, Pages and layers, Explorations and Versions; a page's own list takes it over),
+    **Canvas** and **Inspector** (Theme, Design, Code, Chat). Places and old links:
+    `apps/desktop/src/places.ts`; systems (called brands until 2026-10-29), their themes and
+    published versions (the Inspector's settings are the open system's working copy):
+    `apps/desktop/src/systems.ts`; projects: `apps/desktop/src/projects.ts`.
   - The app's own UI takes the Inspector's settings, type and density included (owner, 2026-10-22); its layout was
     measured at type 13, Compact. Its UI follows `docs/PRODUCT_UI.md`.
   - `apps/docs` is archived: don't extend it or check work there.

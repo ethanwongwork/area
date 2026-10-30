@@ -89,18 +89,20 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at type 13, Compact,
 the scale the layout was measured at; the app now takes the default type and density (rule 18).
 
-**Places, tabs and the nav** (app structure Phases 1 and 2, 2026-10-28 and 29; the plan and the owner's model in
-`docs/research/app-structure-2026-10-28/README.md`; the shell is variation A, Cursor's nav with Figma's tabs).
+**Places, tabs and the nav** (app structure Phases 1 and 2, 2026-10-28 and 29, and the IA of 2026-10-29: projects and
+publishing; the plan and the owner's model in `docs/research/app-structure-2026-10-28/README.md`; the shell is variation A,
+Cursor's nav with Figma's tabs).
 
 - **Places** (`src/places.ts`): every view is a place with a hash. Home is `#home` (`#home/<system>` with a system chosen,
   `#home/new` for New system). A system's sections are Themes
   (`#system/<system>/themes`; New theme, `…/themes/new`, is the Setup chat), Foundations (`…/foundations`: every setting, then
   Color, Typography, Icons and one page per setting group, named by the registry's `SETTING_GROUPS`), Components and
-  Patterns (Testing's screens); the Library (`#library`, Imagery renamed) and Labs (`#labs/materials`, out of the nav,
-  reached by search). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
-  Components, `#typography`, `#color`, `#icons` → Foundations, `#testing` → Patterns, `#imagery` → Library, `#materials` →
-  Labs; old links are the Area system's, and `#brand/…` links from before the rename open their `#system/…` place
-  (`tests/places.test.ts`). A hash naming a system the workspace doesn't have is no
+  Patterns (Testing's screens) and History (`…/history/<version>`); a project's Overview (`#project/<project>`), pages
+  (`…/pages/<page>/<layer>`), explorations (`…/explorations/<id>`) and Versions (`…/versions/<id>`); Inspiration
+  (`#inspiration`, Imagery, then the Library page, renamed) and Labs (`#labs/materials`, out of the nav, reached by search). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
+  Components, `#typography`, `#color`, `#icons` → Foundations, `#testing` → Patterns, `#imagery` and `#library` →
+  Inspiration, `#materials` → Labs; old links are the Area system's, and `#brand/…` links from before the rename open their `#system/…` place
+  (`tests/places.test.ts`). A hash naming a system or project the workspace doesn't have is no
   place. A specimen's own in-page links (an example screen's `#home`, a demo's `#library`) stay in the specimen: the
   Workspace prevents a hash link's click in the Canvas and the Inspector that nothing else handled. Projects and Explore
   come in later phases and are left out until then (rule 16).
@@ -111,20 +113,37 @@ the scale the layout was measured at; the app now takes the default type and den
   has themes; a theme is the Inspector's Theme settings, the Material, the exact page colours and the exact accent. **The
   open system** is the current tab's, or on Home, the Library and Labs the last one a tab showed; its chosen theme is what
   `useStudio()`'s `canvas`, `material`, `colours` and `brand` are, what the Inspector's Theme view edits and what every
-  page paints its specimens in. The settings saved before systems (localStorage `canvas`, `material`, `colours`, `brand`)
+  page paints its specimens in. **A system is edited in place and published** (owner, 2026-10-29: "one place"): its themes
+  are the working copy, and its releases (`releases`, never empty; a file from before them starts with one) hold what was
+  published, each a version, a kind (Fixes, Adds, Needs work in products: patch, minor, major), a note, a date and the
+  project it came from. While the working copy differs from the last release, a system tab's Canvas bar ends in a Live /
+  Working switch and Publish (`src/publish.tsx`); Publish's dialog shows Live beside Publishing for the theme in use, every
+  changed value in a table, the kind (proposed from the changes) and a note drafted from them, and Discard changes. Live
+  shows the system as published; editing anything switches back to Working. History lists every publish, newest first,
+  beside the version before it, with Restore (the working copy becomes that version, published again as a new one). The settings saved before systems (localStorage `canvas`, `material`, `colours`, `brand`)
   became the Area system's Default theme once, at the first launch with no Area system on disk; the old keys are no longer
   read. The Area system can't be deleted.
-- **Home** (`src/pages/home.tsx`): the feed of the workspace: Systems (each drawn as Setup's screen in its chosen theme; a
+- **Projects** (`src/projects.ts`, `src/pages/project.tsx`; the IA of 2026-10-29): where new things and big changes are
+  made. Each is `~/Library/Application Support/Area/Projects/<id>/project.json` (as systems), and uses one theme of one
+  system as published (a project never sees a system's unpublished working copy). It holds pages (boards of layers: the
+  system's Patterns screens and Inspiration's images, in order), explorations (a theme tried from one of the system's,
+  edited in the Inspector's Theme view, published into the system as an update to the theme it came from or as a new
+  theme, solo users straight away) and versions (named copies of the pages and explorations, restored from the
+  Inspector). Nothing else on a project's pages edits the system: they have no Theme view.
+- **Home** (`src/pages/home.tsx`): the feed of the workspace: Projects (each drawn in the theme it uses; New project:
+  a name, a system and a theme), Systems (each drawn as Setup's screen in its chosen theme; a
   double-click opens it), New system (from the Area Starter: Area's values; Describe it: the system is made and its first
-  theme's Setup chat opens; Import: a stub, marked Later), Boards (the Library's groups) and Recent (the last 8 places
+  theme's Setup chat opens; Import: a stub, marked Later), Inspiration (its groups, as boards) and Recent (the last 8 places
   opened). The Inspector's Design view shows the chosen system with Open, Rename and Delete; Home has no Theme view. Themes
   lists the open system's themes: double-click or Use chooses one, New theme adds one at Area's values and opens Setup on it.
 - **Titlebar**: the Sidebar's toggle, Back and Forward (⌘[ ⌘], the tab's own history), then the open tabs; at its end
-  Search (⌘K), the Library, the Inspector's toggle and light / dark. **Home is the first tab**, always: its icon alone in
+  Search (⌘K), Inspiration, the Inspector's toggle and light / dark. **Home is the first tab**, always: its icon alone in
   Nav's square icon-only item (Figma's file browser tab), never closed, always on Home, named in a Tooltip with ⌘⇧H. From
   Home a system, board or place opens in the tab already holding that system (or the Library, a lab), else in a new tab at
   the end; Home from any tab (the nav's row, ⌘⇧H, search) switches to the Home tab. Tabs work as a browser's, after Claude Code's browser
-  (owner, 2026-10-29): each holds one thing (a system, the Library, a lab) with its type icon and name, 120 to 170
+  (owner, 2026-10-29): each holds one thing (a project, a system, Inspiration, a lab) with its type icon and name, and
+  never changes what it holds ("the tab itself … will always just be the project itself": a place in another project or
+  system opens in the tab holding it, else a new one), 120 to 170
   wide, hugging its name in between; its close shows on hover, focus and the current tab (always on touch; Tree view's
   rule) over the name's end, which fades under it (Figma's file tabs, owner 2026-10-29); the last tab closes too, leaving
   Home; past the bar's room the tabs scroll (a wheel turns them), the current one kept in view and the bar's end on screen;
@@ -138,10 +157,13 @@ the scale the layout was measured at; the app now takes the default type and den
   tab migrated once); with none saved the app opens on Home.
 - **Search** (`src/search-palette.tsx`): the Titlebar's field opens Command palette over every place, component, setting,
   scale, type role, icon category and pattern, and icons by name from two letters; a choice opens in the current tab.
-- **The Sidebar's nav** (`src/app-nav.tsx`): Home and the Library, then Systems, a row each, the open system expanded to
-  its sections (Themes, Foundations, Components, Patterns) while a tab on it is shown, Foundations expanded to its pages
-  while one is shown; each a chevron that opens or closes it; New system last (Home's New system dialog). A click opens in
-  the current tab (from Home, in the system's tab or a new one), ⌘-click in a new one.
+- **The Sidebar's nav** (`src/app-nav.tsx`) is the tab's own (owner, 2026-10-29: "within each project there are a bunch
+  of things in it … accessed through the left nav"). Home's tab (and Inspiration's and a lab's): Home, then Projects (a
+  row each, New project last) and the Library (each system, Inspiration, New system last). A system's tab: a back row to
+  Home, then the system's sections (Themes, Foundations with a chevron to its pages, Components, Patterns, History, which
+  says how many changes are unpublished). A project's tab: a back row to Home, then Overview, Pages (each a chevron to its
+  layers; New page), Explorations (each with the version it published; New exploration) and Versions. A click opens in
+  the tab holding what it names, ⌘-click in a new one.
 - **Takeover**: a page with a list of its own (Components, Color, Typography, Icons, Patterns, Library, Materials) shows
   it in the Sidebar's place, under a back row ("← Area", the system's name) and the list's filter (it was the Titlebar's search). The back row
   shows the nav again and leaves the Canvas where it is; opening the page from the nav shows its list again.
