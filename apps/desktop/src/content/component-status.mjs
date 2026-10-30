@@ -72,7 +72,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
   // code-block: reopened 2026-10-12 for size sm; approved again on the review page, round 12 (components12); reopened
   // 2026-10-16 (Layers sweep, round 30).
-  'box-field', // breadcrumb: reopened 2026-10-25 for `nowrap` (the Canvas bar's trail).
+  'box-field', 'breadcrumb', // breadcrumb: nowrap approved (owner, 2026-10-30; reopened 2026-10-25 for the Canvas bar's trail, its round 80 ellipsis approved 2026-10-28).
   'button', 'button-group',
   // code and color-swatch reopened 2026-10-12 for the translucent swatch ring (owner: "yes apply the swatch fix").
   'composer',
@@ -157,7 +157,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Round 68 (2026-10-22): the text-pair rule (a line joins its title) reopens Dialog, Confirm dialog, Drawer, Popover,
 // Alert, Toast, Empty state, Checkbox and Radio; Token row's text moves onto the ramp.
 // Round 69 (2026-10-22): Selection defaults to the accent (option B), so every family whose default paints Selection reopens.
-export const REVIEW_COMPONENTS = new Set(['slider', 'breadcrumb', 'segmented', 'switch', 'field', 'approval', 'plan', 'description-list', 'composer-menu']); // plan, description-list, composer-menu: reopened 2026-10-28, the chat set review (the card column at 13; the empty row in the rows' type) // approval: reopened 2026-10-28, the question card (Setup's chat panel) // breadcrumb: reopened 2026-10-25, nowrap; its round 80 ellipsis approved 2026-10-28, nowrap still awaits a verdict // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots
+export const REVIEW_COMPONENTS = new Set(['slider', 'segmented', 'switch', 'field', 'approval', 'plan', 'description-list', 'composer-menu']); // plan, description-list, composer-menu: reopened 2026-10-28, the chat set review (the card column at 13; the empty row in the rows' type) // approval: reopened 2026-10-28, the question card (Setup's chat panel) // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

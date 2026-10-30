@@ -175,3 +175,8 @@ Links and the ellipsis press at `bg-component-pressed`, one step past selected (
 - **What changed:** the collapsed "…" between crumbs is Area's More glyph, centred like the chevrons beside it.
 - **Why:** the typed ellipsis sat on the text's baseline, lower than the separators; Pagination already draws its gap
   with the More glyph.
+
+## Verdict, 2026-10-30 (nowrap)
+
+- **Approved** by the owner in chat: `nowrap` (one line in a bar of fixed height, the Canvas bar's trail; reopened
+  2026-10-25). With the round 80 ellipsis approved 2026-10-28, Breadcrumb is Complete.
