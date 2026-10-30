@@ -2,11 +2,11 @@
 // curve (the `size` prop), so the sheet shows what a product renders at each size.
 // From the repository root, after `npm run icons:pilot`:
 //   node docs/research/icon-review/2026-10-02/sizes.mjs out.png name…
-import { build } from "esbuild"; import { writeFileSync } from "node:fs"; import { execFileSync } from "node:child_process";
+import { build } from "esbuild"; import { writeFileSync, mkdirSync } from "node:fs"; import { execFileSync } from "node:child_process";
 const [out, ...names] = process.argv.slice(2);
 const SIZES = [16, 24, 32, 48];
-const cache = process.cwd() + "/apps/docs/.cache";
-writeFileSync(cache + "/sz.tsx", `import { createElement as h } from "react"; import { renderToStaticMarkup } from "react-dom/server"; import { PILOT_ICONS } from "../src/pilot-icons.tsx";
+const cache = process.cwd() + "/packages/icons/.cache"; mkdirSync(cache, { recursive: true });
+writeFileSync(cache + "/sz.tsx", `import { createElement as h } from "react"; import { renderToStaticMarkup } from "react-dom/server"; import { PILOT_ICONS } from "${process.cwd()}/apps/docs/src/pilot-icons.tsx";
 const g = n => { const p = PILOT_ICONS.find(p => p.name === n); if (!p) throw new Error("no icon " + n); return p; };
 const sizes = ${JSON.stringify(SIZES)};
 const set = C => h("span", { className: "c" }, ...sizes.map(s => h(C, { size: s })));
