@@ -108,7 +108,9 @@ describe("layers: the shipped CSS computes what the model does", () => {
       ];
       for (const [k, x] of pairs) expect(c[p + k], `${theme} ${g}/${n} fill ${f.hover}/${f.selected} card ${tone} ${k}`).toBeCloseTo(x, 6);
     }
-  });
+    // Exhaustive (every ground, layer step, fill combination and card tone): about 1s here, past vitest's 5s default on
+    // a CI runner (it timed out in dark on main and on #176), so it takes the 60s its every-position sibling has.
+  }, 60_000);
 });
 
 describe("layers: inks with a hue follow the ground", () => {

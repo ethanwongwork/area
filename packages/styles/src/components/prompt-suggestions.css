@@ -20,9 +20,11 @@
   .area-prompt-suggestions__item {
     display: flex;
     align-items: center;
-    /* The prompt starts under the composer's placeholder: 8 shell + 32 action + 8 gap + 8 field
-       inset = 56, so 16 after the 32 icon slot that sits 8 in (audit G-16; was 8, which put it at 48). */
-    gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12: compact's placeholder is at 6 + 28 + 6 + 8 = 48 */
+    /* The prompt starts under the composer's placeholder, the icon under its leading action: the composer's inset, its
+       action, then its gap (composer.css: `--_composer-inset`, `--_composer-action`, `--_composer-gap`), 48 at type 16
+       and 44 in the app's compact scale. Round 81's Composer change dropped the field's own 8 after the leading action,
+       so the old 8 + 32 + 8 + 8 left the prompt 8 right of the placeholder (round 85; audit G-16). */
+    gap: var(--area-ui-cluster); /* the composer's gap */
     flex: 1;
     min-inline-size: 0;
     /* spec: the composer's height: 16/24 text and 12 above and below (ChatGPT 52 on 26 leading).
@@ -30,8 +32,9 @@
        follow-up composer 42, dense list rows 28-36; cursor-desktop.md, 2026-10-02). */
     min-block-size: calc(var(--area-text-md-leading) + (var(--area-space-12) - var(--area-space-2) * var(--area-ui-dense)) * 2);
     padding-block: 0;
-    /* spec: 8 in, like ChatGPT; the end leaves room for the dismiss, a small Button 8 in (audit G-18). */
-    padding-inline: var(--area-space-8) calc(var(--area-control-sm) + var(--area-space-8));
+    /* spec: the composer's inset, 8 like ChatGPT (6 compact); the end leaves room for the dismiss, a small Button 8 in
+       (audit G-18). */
+    padding-inline: var(--area-ui-cluster) calc(var(--area-control-sm) + var(--area-space-8));
     border: 0;
     /* A suggestion is a row: the row corner, as Menu and Nav rows and ChatGPT's suggestion rows (8)
        (audit G-17 A, owner 2026-09-30; was the composer's 16). */
@@ -46,7 +49,7 @@
     transition: var(--area-transition);
     user-select: none;
   }
-  .area-prompt-suggestions__row:not(:has(.area-prompt-suggestions__dismiss)) > .area-prompt-suggestions__item { padding-inline-end: var(--area-space-8); }
+  .area-prompt-suggestions__row:not(:has(.area-prompt-suggestions__dismiss)) > .area-prompt-suggestions__item { padding-inline-end: var(--area-ui-cluster); } /* the start's inset */
   /* spec: hover and focus lay Menu's row plate under the prompt; the ink stays fixed, as on
      every hovered control. */
   @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item { background-color: var(--area-bg-component-hover); } }
@@ -72,6 +75,8 @@
   }
   .area-prompt-suggestions__icon > :is(svg, img) { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-prompt-suggestions__text { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* The keys that choose it, at the row's end (Menu's shortcut column). */
+  .area-prompt-suggestions__shortcut { margin-inline-start: auto; }
   /* spec: the dismiss ends 8 in from the row, shown on hover and focus; a ghost small Button,
      the close recipe for rectangular shapes (audit S9, G-18; ChatGPT 36 square at 728 of 768). */
   .area-prompt-suggestions__dismiss {

@@ -496,7 +496,7 @@ export default {
       ["Do", "Put the types and size allowed in hint; it also describes the upload button."],
       ["Do", "Show each file as a FileUploadItem in a FileUploadList, reporting progress, then complete or an error with retry."],
       ["Do", "Set name when a form should submit the chosen files."],
-      ["Do", "Set invalid to give the zone the field's error edge when a choice fails your validation."],
+      ["Do", "Set invalid to give the zone the field's error edge when a choice fails your validation, and say why in hint: it takes the error ink."],
       ["Don't", "Expect it to upload: you send the files and report each one's progress."],
       ["Don't", "Rely on drag and drop alone: the zone's button is how keyboard and screen-reader users choose files."],
     ],
@@ -513,7 +513,7 @@ export default {
     // Spec: States; source: FileUpload.tsx.
     states: {
       dragging: "Files are over the zone: its edge takes the selection colour and a plate fills it.",
-      invalid: "The edge turns the field's invalid colour, and the button carries aria-invalid.",
+      invalid: "The edge turns the field's invalid colour, the hint takes the field's error ink, and the button carries aria-invalid.",
       disabled: "The zone dims; the picker doesn't open and drops are ignored.",
     },
     // Source: FileUpload.tsx (a native button; the input is out of the Tab order).

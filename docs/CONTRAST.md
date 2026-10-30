@@ -110,7 +110,8 @@ Composer keeps the quiet neutral edge (`composer-focus-color`). Invalid inputs r
 
 **The indicator rung** (owner, 2026-10-21: "the vibrant blue"). `focus-color` and `stroke-selected` are the accent's
 lightest step from 500 that keeps WCAG 3:1 and APCA 45 on every neutral ground and fill (page to pressed) and 3:1 on
-every tone's tinted surfaces, solved at alias time (`semantic/aliases.ts` `indicatorLevel`). For blue that is 550,
+every tone's tinted surfaces' rungs, solved at alias time (`semantic/aliases.ts` `indicatorLevel`; in dark those rungs are
+lighter than the derived tints that paint, so a ring that clears on them clears on the paint). For blue that is 550,
 #0160d9, in light (500, #006df5, is 2.66:1 on the info tint's pressed fill) and #79aeff in dark (APCA on the near-black
 page). ChatGPT's #3a83f7 is 3.64:1 on white but 2.94:1 on the light pressed fill (#e7e7e7), and APCA 38 on the dark page.
 

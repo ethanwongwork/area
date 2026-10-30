@@ -84,3 +84,9 @@ Material slot beside its lift, `var(--_m-layers, 0 0 0 0 transparent), var(--are
 recessed) and writes the box-shadow of every other painted Button, not this one. Under a Material the lift stays at rest
 and pressed; with no Material the slot adds only a transparent layer, so the look is unchanged. Checked in the app
 (light and dark, None, Glass and Glow).
+
+## Review note, 2026-10-29 (visual pass, rounds 86–89: the demo shows the button)
+
+- **What changed:** the demo has five turns, so it opens more than the 200 threshold from the end and the button shows at rest, 24 above the composer. The component is unchanged.
+- **Why:** with three turns the conversation ended 130 from the end at the app's type 13, under the threshold, so the tile never showed the button it demonstrates.
+- **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.

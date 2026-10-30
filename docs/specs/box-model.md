@@ -208,3 +208,13 @@ None open. (Round 10's two were accepted; square rings replaced the 32 margin ro
 - 2026-10-14 · all-axis audit → spacing values take `fg-info`, the info text role (were `info-solid`, a fill: 4.35:1 on `bg-subtle` in light, 3.16:1 in dark, under 4.5 for 11–12px text) → box-model.css.
 - 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → inks follow the grounds they sit on. Info's spacing values on the margin's recessed ground darken just enough for 4.6:1 as it deepens (fg-info, luminance 0.134; 3.63:1 at 90 + 8 before, none at the defaults); in dark the neutral padding's labels and values take Code block's marked-line lift for its 6.7% wash (past a raised L 0.225; 4.04:1 at dark 24 + 8 before); in light the Layers model's muted ink, now solved on the soft mark, holds on it (4.27:1 at 95 + 0 before). Labels, corners and values read a private `--_ink`.
 - 2026-10-23 · theme review (owner: "make sure ... there are no visual errors due to all the combinations") → the neutral padding is the selected wash (`bg-active`), which the Hover and Selected fill settings deepen (15.6% at both 4); its light inks now darken by as much as Code block's marked line does for the wash's growth past the default 7% (4.48:1 at 90 + 0 with both at 4 before; none at the defaults) → box-model.css.
+
+## Review note, 2026-10-28 (dark soft tones)
+
+- **What changed:** the info margin and spacing plates in dark are quieter: each tone's soft surface is the neutral control fill of the same state in the
+  tone's hue at chroma 0.05 / 0.06 / 0.07 (danger rest #3d1d1f, was #820022). Inks and light are unchanged; the ink
+  reads better (Delete's label 7.34:1 → 10.38:1).
+- **Why:** ChatGPT, Notion and Figma paint dark soft tones at chroma 0.04–0.07; Area's palette rungs carried up to 0.15
+  and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
+  docs/research/dark-soft-tones-2026-10-28).
+- **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).

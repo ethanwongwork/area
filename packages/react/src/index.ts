@@ -75,7 +75,7 @@ export { ScrollArea, type ScrollAreaProps } from "./components/ScrollArea.tsx";
 export { Link, linkVariants, type LinkProps } from "./components/Link.tsx";
 export { Toggletip, type ToggletipProps } from "./components/Toggletip.tsx";
 export { Pagination, paginationRange, type PaginationProps, type PaginationLabels, type PaginationItem } from "./components/Pagination.tsx";
-export { Composer, type ComposerProps } from "./components/Composer.tsx";
+export { Composer, ComposerAttach, ComposerMic, ComposerNote, type ComposerAttachProps, type ComposerMicProps, type ComposerProps } from "./components/Composer.tsx";
 export { Field, Label, type FieldProps, type LabelProps } from "./components/Field.tsx";
 export {
   Nav,

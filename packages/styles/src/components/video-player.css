@@ -245,10 +245,15 @@
   .area-video-player--bar .area-video-player__group--end { gap: 0; }
   /* Only the controls' pills: the round play before the first play shares the glass, not the pill (round 56: "fix the
      play button on default", it was squashed to a control's height). */
-  .area-video-player--bar .area-video-player__controls .area-video-player__surface { display: flex; align-items: center; flex: none; block-size: var(--area-control-md); border-radius: var(--area-radius-full); }
-  .area-video-player--bar .area-video-player__controls .area-video-player__surface .area-button { border-radius: var(--area-radius-full); }
+  /* The groups take a control's corner, as the floating panel and every Button do, and turn to pills with the Pills
+     setting (owner, rounds 85–89: "should these be pill shaped or just rounded corners?"; they were always pills). The
+     buttons inside are the groups' height, so their own shape is the same corner. */
+  .area-video-player--bar .area-video-player__controls .area-video-player__surface { display: flex; align-items: center; flex: none; block-size: var(--area-control-md); border-radius: calc(var(--area-radius-control-md) + var(--area-pill-button) * var(--area-radius-full)); }
   /* The time: the pill's text, as far in as the pill is round (YouTube 12 on its 40). */
   .area-video-player--bar .area-video-player__clock.area-video-player__surface { padding-inline: var(--area-space-12); color: var(--area-fg-default); }
+  /* The duration is a flex item in the time pill, which drops its leading space, so it keeps its spaces (round 89: the
+     pill read "0:01/ 0:07"). */
+  .area-video-player__duration { white-space: pre; }
   .area-video-player--bar .area-video-player__duration { color: var(--area-fg-muted); }
   @container (max-inline-size: 400px) {
     .area-video-player--bar .area-video-player__volume > .area-video-player__range,

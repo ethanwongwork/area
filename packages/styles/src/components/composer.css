@@ -18,14 +18,18 @@
     --_composer-edge: var(--area-composer-edge); /* the card edge, strong under increased contrast */
     border: var(--area-stroke-width) solid var(--_composer-edge);
     /*
-     * spec (composer.md, owner 2026-09-26: option B): concentric with the send Button -- its own
-     * radius (Button md, capped as Button caps it) plus the inset, 8 + 8 = 16. A pill send button
-     * makes a pill composer (below), so ChatGPT's shape is one Button option away.
+     * spec (owner, 2026-10-29): Card's corner, term for term (surface.css `--_card-radius`), as a surface standing alone
+     * on the page takes Card's edge (audit S7a): the container corner plus the inset's share (18 in the app's scale, 20
+     * at type 16), never past half the one-line height, so Pill makes a pill; square at Sharp. Its actions sit
+     * concentric inside it, the shell less the inset (11 on a 30 send). The owner asked for Cursor's roundness, "rounded
+     * not pill/circular, but pretty round" (Cursor's prompt input is 20); the first answer, the surface corner + 4 (20,
+     * actions 13), made the composer's buttons rounder than every other Button of their height (8), so it takes Card's.
+     * Was option B (2026-09-26): the send's own corner plus the inset, 8 + 8 = 16 (15 at type 13).
      */
-    --_composer-button-radius: calc(min(var(--area-radius-control-md), max(var(--area-radius-min), round(down, calc(var(--_composer-action) * var(--area-radius-factor)), 2px))) + var(--area-pill-button) * var(--area-radius-full)); /* pill buttons make a pill composer */
-    /* The inset joins the corner unless the setting is Sharp; a pill send button keeps it (composer-pill read 16 at 0). */
-    --_composer-concentric: max(var(--area-radius-concentric), var(--area-pill-button));
-    border-radius: calc(var(--_composer-button-radius) + var(--_composer-inset) * var(--_composer-concentric));
+    --_composer-term: calc((var(--_composer-inset) - var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)) * var(--area-radius-concentric));
+    --_composer-corner: min(calc(var(--_composer-height) / 2), max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_composer-term), var(--area-radius-container)))));
+    --_composer-action-radius: max(var(--area-radius-min), calc(var(--_composer-corner) - var(--_composer-inset) * var(--area-radius-concentric)));
+    border-radius: var(--_composer-corner);
     background: var(--area-input-bg);
     /* The Elevation axis's resting role (owner, 2026-10-14, "go with your recs"; was none, owner 2026-09-26):
        the composer is the one control that rests on the page as an object, and ChatGPT lifts its own (0 2 8 at
@@ -66,6 +70,10 @@
     color: inherit; font-family: inherit; font-size: var(--_composer-text); line-height: var(--_composer-leading);
     resize: none; overflow-y: auto;
   }
+  /* After a leading action the gap alone separates the text, as ChatGPT's column-gap 8 does (spec, Anatomy): the
+     + glyph then sits as far from the text as from the shell's edge. With the input's own 8 as well the text sat 15
+     after the button (round 81). The stacked input keeps its 8, on the footer's + glyph. */
+  .area-composer__actions--leading ~ .area-composer__input { padding-inline-start: 0; }
   .area-composer--stacked .area-composer__input { min-block-size: calc(var(--_composer-leading) * 2 + var(--area-space-12)); }
   .area-composer__input { max-block-size: calc(var(--area-control-md) * 5); }
   /* Native fit to the text, within the min and max above; follows font and density changes at
@@ -80,10 +88,68 @@
   .area-composer__extras { display: contents; }
   .area-composer__footer { justify-content: space-between; }
   .area-composer__actions > .area-button { flex: none; }
-  /* The send action is an Area Button (solid neutral, icon-only, md); it keeps its own shape and states. */
-  .area-composer:has(.area-composer__submit.area-button--pill) { --_composer-button-radius: calc(var(--_composer-action) / 2); --_composer-concentric: 1; }
+  /* The send and every action in the shell take its concentric corner (a pill under the Pills setting, as Button does);
+     `rounded` keeps a Button's own. Attachments in the context row, at the same inset, take it too. */
+  .area-composer__actions > .area-button:not(.area-button--rounded) { --_shape: calc(var(--_composer-action-radius) + var(--_button-pill) * var(--area-radius-full)); }
+  .area-composer .area-attachment { --_attachment-radius: var(--_composer-action-radius); }
+  /* A round send (`submitPill`, ChatGPT's) makes a pill composer. */
+  .area-composer:has(.area-composer__submit.area-button--pill) { --_composer-corner: calc(var(--_composer-height) / 2); }
   /* A pill composer's other actions are pills too: set into the shell's round ends at the inset, their concentric corner
      is the shell's less the inset, a pill (ChatGPT's + and tools). At 8 the leading button sat square in a round end
      (corner audit 2026-10-23). `rounded` still opts one out. */
   .area-composer:has(.area-composer__submit.area-button--pill) .area-composer__actions > .area-button:not(.area-button--rounded) { --_button-pill: 1; }
+
+  /* --- Files: dropped or pasted (onFiles), picked (ComposerAttach) ---------------------------------------------- */
+  /* Files over the shell: File upload's drop paint, the selection edge on the row plate, until they leave or drop. */
+  .area-composer[data-dragging] { border-color: var(--area-selection-edge); background-color: var(--area-bg-component-hover); transition-duration: 0s; }
+  .area-composer__file { display: none; }
+  .area-composer__mic, .area-composer__attach { flex: none; }
+
+  /* --- The group: rows around the shell (header, footer) ------------------------------------------------------- */
+  /* The shell's inset, restated where its rows can read it. */
+  .area-composer-group {
+    --_g-inset: var(--area-ui-cluster);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* The composer's measure moves to the group; the shell fills it. */
+    inline-size: min(100%, var(--area-composer-inline-size, calc(var(--area-space-96) * 5)));
+    min-inline-size: 0;
+  }
+  .area-composer-group > .area-composer { inline-size: 100%; }
+
+  /* Header: a row of quiet selectors over the shell, its buttons starting where the shell's actions do (the inset), the
+     composer's gap above the shell. */
+  .area-composer-group__header {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-2);
+    min-inline-size: 0;
+    padding-inline: var(--_g-inset);
+    margin-block-end: var(--area-ui-cluster);
+  }
+
+  /* Footer: a row under the shell, outside it: small tools, a centred quiet note, then the model and modes at the end. */
+  .area-composer-group__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-2);
+    min-inline-size: 0;
+    padding-inline: var(--_g-inset);
+    /* The Claude app's chin: 8 under the shell, 6 compact (evidence.md, 7). */
+    margin-block-start: var(--area-ui-cluster);
+  }
+  .area-composer-group__note {
+    flex: 1;
+    min-inline-size: 0;
+    margin: 0;
+    overflow: hidden;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
+

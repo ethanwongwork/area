@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
-import type { ChangeEvent, HTMLAttributes, KeyboardEvent, ReactNode, TextareaHTMLAttributes } from "react";
-import { composerVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
-import { Button } from "./Button.tsx";
+import type { ChangeEvent, ClipboardEvent, DragEvent, HTMLAttributes, KeyboardEvent, ReactNode, TextareaHTMLAttributes } from "react";
+import { composerGroupVariants, composerVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
+import { Button, type ButtonProps } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 
 export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "onSubmit" | "defaultValue"> {
@@ -46,6 +46,18 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
   context?: ReactNode;
   /** A ComposerMenu (the @ and / suggestions), drawn above the composer at its width. */
   menu?: ReactNode;
+  /**
+   * A row above the shell, outside it: where the message runs (Cursor's "Code ▾  This Mac ▾"). With `footer`, the
+   * root becomes a group holding the rows around the shell; `className` and the rest land on the group.
+   */
+  header?: ReactNode;
+  /** A row under the shell, outside it: tools, a ComposerNote, the model (Claude's reply composer). */
+  footer?: ReactNode;
+  /**
+   * Files dropped on the composer or pasted into it. While files are dragged over, the shell takes File upload's
+   * drop paint. Pair it with a ComposerAttach for picking.
+   */
+  onFiles?: (files: File[], event: DragEvent<HTMLDivElement> | ClipboardEvent<HTMLTextAreaElement>) => void;
   inputProps?: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "defaultValue" | "onChange" | "onKeyDown" | "rows" | "disabled" | "placeholder" | "maxLength">;
   onInputKeyDown?: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
 }
@@ -55,9 +67,32 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
   { layout = "inline", value, defaultValue = "", onValueChange, onSubmit,
     placeholder = "Write a message…", label = "Message", disabled, loading: loadingProp, busy, onStop, onQueue, stopLabel = "Stop", maxLength,
     leadingActions, trailingActions, mode, submitLabel = "Send message", submitPill, submitOnEnter = true, context, menu, inputProps, onInputKeyDown,
-    className, ...rest }, ref,
+    header, footer, onFiles, className, ...rest }, ref,
 ) {
   const loading = loadingProp ?? busy;
+  // Files over the shell: counted, since dragenter and dragleave fire for every child crossed.
+  const [dragging, setDragging] = useState(0);
+  const hasFiles = (event: DragEvent) => Array.from(event.dataTransfer?.types ?? []).includes("Files");
+  const drop = onFiles && !disabled ? {
+    onDragEnter: (event: DragEvent<HTMLDivElement>) => { if (hasFiles(event)) { event.preventDefault(); setDragging(count => count + 1); } },
+    onDragOver: (event: DragEvent<HTMLDivElement>) => { if (hasFiles(event)) { event.preventDefault(); event.dataTransfer.dropEffect = "copy"; } },
+    onDragLeave: (event: DragEvent<HTMLDivElement>) => { if (hasFiles(event)) setDragging(count => Math.max(0, count - 1)); },
+    onDrop: (event: DragEvent<HTMLDivElement>) => {
+      if (!hasFiles(event)) return;
+      event.preventDefault(); setDragging(0);
+      const files = Array.from(event.dataTransfer.files);
+      if (files.length) onFiles(files, event);
+    },
+  } : {};
+  // Pasted files go to onFiles; pasted text stays the textarea's.
+  const paste = (event: ClipboardEvent<HTMLTextAreaElement>) => {
+    inputProps?.onPaste?.(event);
+    if (event.defaultPrevented || !onFiles || disabled) return;
+    const files = Array.from(event.clipboardData?.files ?? []);
+    if (!files.length) return;
+    event.preventDefault();
+    onFiles(files, event);
+  };
   const [ownValue, setOwnValue] = useState(defaultValue);
   const text = value === undefined ? ownValue : value;
   const id = useId();
@@ -125,7 +160,9 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
       aria-label={stopLabel} disabled={!onStop} onClick={onStop} icon={<Glyph name="stop" />} />
     : <Button className="area-composer__submit" variant="solid" tone="neutral" size="md" iconOnly pill={submitPill}
       aria-label={submitLabel} disabled={disabled || loading || !text.trim()} onClick={submit} icon={<Glyph name="arrow-up" />} />;
-  return <div {...rest} className={composerVariants({ layout }, className)} data-disabled={disabled ? "" : undefined} aria-busy={loading || undefined}>
+  const grouped = Boolean(header || footer);
+  const shell = <div {...(grouped ? {} : rest)} {...drop} className={composerVariants({ layout }, grouped ? undefined : className)}
+    data-disabled={disabled ? "" : undefined} data-dragging={dragging ? "" : (rest as Record<string, unknown>)["data-dragging"] as string | undefined} aria-busy={loading || undefined}>
     {menu}
     {context ? <div className="area-composer__context">{context}</div> : null}
     <div className="area-composer__entry">
@@ -133,7 +170,7 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
       {layout === "inline" && leadingActions && <fieldset disabled={disabled} className="area-composer__actions area-composer__actions--leading">{leadingActions}</fieldset>}
       <label htmlFor={inputId} className="area-sr-only">{label}</label>
       <textarea {...inputProps} id={inputId} ref={element => { inputRef.current = element; if (typeof ref === "function") ref(element); else if (ref) ref.current = element; }} className={cx("area-composer__input", inputProps?.className)} rows={layout === "inline" ? 1 : 2} value={text}
-        onChange={change} onKeyDown={keyDown} placeholder={placeholder} disabled={disabled} maxLength={maxLength} />
+        onChange={change} onKeyDown={keyDown} onPaste={paste} placeholder={placeholder} disabled={disabled} maxLength={maxLength} />
       {layout === "inline" && <fieldset disabled={disabled} className="area-composer__actions area-composer__actions--trailing">
         {mode}<span className="area-composer__extras">{trailingActions}</span>
         {sendButton}
@@ -146,4 +183,61 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
       </fieldset>
     </div>}
   </div>;
+  if (!grouped) return shell;
+  const group = composerGroupVariants;
+  return <div {...rest} className={group({}, className)}>
+    {header ? <div className={group.element("header")}>{header}</div> : null}
+    {shell}
+    {footer ? <div className={group.element("footer")}>{footer}</div> : null}
+  </div>;
+});
+
+export interface ComposerMicProps extends Omit<ButtonProps, "icon" | "iconOnly" | "variant" | "tone" | "children"> {
+  /** Names the button: "Dictate". Its name stays the same while on; `aria-pressed` says it is on. */
+  label?: string;
+}
+
+/**
+ * Dictation in the composer: a ghost icon-only toggle Button, the mic at rest and the waveform while on (it is a toggle,
+ * so `selected` / `onSelectedChange`). The app does the listening and writes into the composer's value.
+ */
+export const ComposerMic = forwardRef<HTMLButtonElement, ComposerMicProps>(function ComposerMic(
+  { label = "Dictate", selected, defaultSelected, onSelectedChange, size = "md", className, ...rest }, ref,
+) {
+  const [own, setOwn] = useState(Boolean(defaultSelected));
+  const on = selected ?? own;
+  return <Button {...rest} ref={ref} className={cx("area-composer__mic", className)} variant="ghost" tone="neutral" size={size} iconOnly
+    selected={on} onSelectedChange={next => { if (selected === undefined) setOwn(next); onSelectedChange?.(next); }}
+    aria-label={label} icon={<Glyph name={on ? "waveform" : "mic"} />} />;
+});
+
+export interface ComposerAttachProps extends Omit<ButtonProps, "icon" | "iconOnly" | "variant" | "tone" | "children" | "onClick"> {
+  /** The chosen files. */
+  onFiles?: (files: File[]) => void;
+  /** The file types offered (the input's `accept`). */
+  accept?: string;
+  /** More than one file at a time; on by default. */
+  multiple?: boolean;
+  /** Names the button: "Add files". */
+  label?: string;
+}
+
+/** The composer's +: a ghost icon-only Button that opens the file picker and hands the chosen files to `onFiles`. */
+export const ComposerAttach = forwardRef<HTMLButtonElement, ComposerAttachProps>(function ComposerAttach(
+  { onFiles, accept, multiple = true, label = "Add files", size = "md", className, disabled, ...rest }, ref,
+) {
+  const input = useRef<HTMLInputElement | null>(null);
+  return <>
+    <Button {...rest} ref={ref} className={cx("area-composer__attach", className)} variant="ghost" tone="neutral" size={size} iconOnly
+      disabled={disabled} aria-label={label} icon={<Glyph name="add" />} onClick={() => input.current?.click()} />
+    <input ref={input} className="area-composer__file" type="file" accept={accept} multiple={multiple} hidden tabIndex={-1} aria-hidden="true"
+      onChange={event => { const files = Array.from(event.target.files ?? []); if (files.length) onFiles?.(files); event.target.value = ""; }} />
+  </>;
+});
+
+/** A quiet line under the composer, in its footer ("Claude is AI and can make mistakes."). */
+export const ComposerNote = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(function ComposerNote(
+  { className, ...rest }, ref,
+) {
+  return <p {...rest} ref={ref} className={cx(composerGroupVariants.element("note"), className)} />;
 });

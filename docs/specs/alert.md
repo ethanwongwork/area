@@ -303,3 +303,13 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 - **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
 - **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
   on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.
+
+## Review note, 2026-10-28 (dark soft tones)
+
+- **What changed:** the danger, info, success and warning alerts' tinted plates in dark are quieter: each tone's soft surface is the neutral control fill of the same state in the
+  tone's hue at chroma 0.05 / 0.06 / 0.07 (danger rest #3d1d1f, was #820022). Inks and light are unchanged; the ink
+  reads better (Delete's label 7.34:1 → 10.38:1).
+- **Why:** ChatGPT, Notion and Figma paint dark soft tones at chroma 0.04–0.07; Area's palette rungs carried up to 0.15
+  and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
+  docs/research/dark-soft-tones-2026-10-28).
+- **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).

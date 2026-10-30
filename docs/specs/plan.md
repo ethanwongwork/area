@@ -291,3 +291,11 @@ chevron moves out with it (its 12 column was the cause). Queue's head shares the
   title.
 - **Why:** In a chat column the boxes' text started 1–3px apart: Theme setup stacked the progress Plan (17), the framed
   answers (16) and the question card (15). You chose one card column, "move them to 13 anyway".
+
+## Review note, 2026-10-29 (round 85)
+
+- **What changed:** a cancelled item shows its ring with a cross, as specified, in light and dark; done items keep the
+  tick. A cohesion test checks the cross's rule outranks the shared tick rule.
+- **Why:** the cross's rule was one class lighter than the rule that draws the tick for done and cancelled items, so
+  the tick won and a cancelled item looked done (only its hidden "Cancelled" text told them apart).
+- **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.

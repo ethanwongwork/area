@@ -115,3 +115,9 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
   6 gallery tiles, in review.
 - 2026-10-10 · owner: "go with your recommendations" → open questions 1–2 resolved as recommended; no change.
 - 2026-10-11 · owner, review round 7: approved.
+
+## Review note, 2026-10-28 (round 82)
+
+- **What changed:** the ghost tile is sm, as Date picker's and Custom select's ghost tiles (a property value). No
+  change at rest (a ghost field has no chrome and sm keeps the text size); its hover plate is 4 shorter. Demo only.
+

@@ -232,11 +232,13 @@
   .area-nav--marker .area-nav__group--nested .area-nav__item { padding-inline-start: calc(var(--area-space-16) + var(--_nav-indent)); }
 
   /* Trim only text slots, never SVGs or containers holding controls (Tag's label joined 2026-10-17: centred by its
-   * line box, its cap sat 1px low at type 13; spacing audit). Symmetric
-   * safety padding lets accents/descenders paint even in an ellipsized label. */
+   * line box, its cap sat 1px low at type 13; spacing audit). A second text beside a trimmed one in a centred row
+   * is trimmed too: Command palette's description and Popover's step count, centred on their line box, sat 0.6px off
+   * the label's baseline (round 81; every family's rows swept for it). Symmetric safety padding lets
+   * accents/descenders paint even in an ellipsized label. */
   .area-button__label, .area-chip__label, .area-badge__label, .area-tag__label, .area-citation__label,
   .area-segmented__label, .area-tabs__label, .area-code__label, .area-token__label,
-  .area-nav__text, .area-menu__text, .area-input__affix,
+  .area-nav__text, .area-menu__text, .area-input__affix, .area-command-palette__description, .area-popover__step,
   .area-avatar > span:not(.area-avatar__icon),
   .area-nav__label > span, .area-menu__label > span {
     text-box: trim-both cap alphabetic;

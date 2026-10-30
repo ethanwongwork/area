@@ -23,7 +23,7 @@ optionally with a colour swatch. It is not a keyboard shortcut (Kbd), a status l
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | — | default | Inline reference on a page | Gallery `default`, `prose`, `table` |
-| subtle | boolean | Quieter derived reference | Gallery `treatments` (#f7f7f7 since the audit fix) |
+| subtle | boolean | Quieter derived reference | Gallery `treatments`, titled Subtle since round 81 (#f7f7f7 since the audit fix) |
 | on-color | boolean | On a coloured ground, ink inherited | Gallery `on-color` |
 | swatch | boolean | A token that resolves to a colour | Gallery `swatch` |
 
@@ -118,6 +118,10 @@ no Code-specific rule; the border keeps the box visible.
 
 ## Visual pass
 
+2026-10-28 (round 81; desktop app, the Stage at 100%, 2x, light and dark): every tile beside its peers (Kbd in
+the table, Token's swatch). No geometry change. The `treatments` tile showed one treatment, the subtle one, under the
+title "Surface treatments"; it is now titled Subtle (pages.mjs; the id stays, so links hold).
+
 The gallery shows Code in Default and Content (treatments, on-color, swatch, prose, table)
 groups.
 
@@ -201,3 +205,9 @@ owner's pick, so it waits for a yes.
 
 - **What changed:** inline code is a set fraction of the text around it, so it follows the canvas's body size (14 at Type 14, was 12).
 - **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.
+
+## Review note, 2026-10-28 (round 81)
+
+- **What changed:** the "Surface treatments" tile is now called Subtle, with a note that it has no fill.
+- **Why:** it shows one Code, the subtle one; the old title promised several.
+- **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.

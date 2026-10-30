@@ -361,3 +361,13 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 - **What changed:** the language tabs sit 4 further from the filename, and a focused language tab's ring stands clear of
   its label (Tabs' round 77 change).
 - **Why:** the new ring reaches 6 before the label; at the head's 8 gap it would have crossed the filename.
+
+## Review note, 2026-10-28 (dark soft tones)
+
+- **What changed:** added and removed diff lines' plates in dark are quieter: each tone's soft surface is the neutral control fill of the same state in the
+  tone's hue at chroma 0.05 / 0.06 / 0.07 (danger rest #3d1d1f, was #820022). Inks and light are unchanged; the ink
+  reads better (Delete's label 7.34:1 → 10.38:1).
+- **Why:** ChatGPT, Notion and Figma paint dark soft tones at chroma 0.04–0.07; Area's palette rungs carried up to 0.15
+  and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
+  docs/research/dark-soft-tones-2026-10-28).
+- **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
