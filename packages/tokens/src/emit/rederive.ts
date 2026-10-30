@@ -38,7 +38,7 @@ export const OVERRIDABLE: readonly string[] = [
   "--area-select-inline-size", "--area-selection-band", "--area-selection-band-hover", "--area-selection-edge",
   "--area-selection-surface", "--area-selection-surface-hover", "--area-switch-color", "--area-switch-color-hover",
   "--area-textarea-edge", "--area-textarea-edge-hover", "--area-textarea-edge-soft", "--area-token-edge",
-  "--area-weight-icon",
+  "--area-type-icon-line", "--area-weight-icon",
 ];
 
 /** The `--area-*` tokens a value reads. */

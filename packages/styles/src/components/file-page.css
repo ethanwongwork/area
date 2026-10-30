@@ -95,7 +95,7 @@
     block-size: round(nearest, calc(var(--_size) * 0.32), 2px);
     color: var(--_ink);
   }
-  .area-file-page__icon > svg { inline-size: 100%; block-size: 100%; --area-weight-icon: var(--_edge); }
+  .area-file-page__icon > svg { inline-size: 100%; block-size: 100%; --area-weight-icon: var(--_edge); --area-type-icon-line: 1; }
   .area-file-page__icon > svg :is(path, circle, ellipse, line, polyline, polygon, rect) { vector-effect: non-scaling-stroke; }
   /* The extension, in exactly Folder's count type (font, size, weight, leading, trim; no tracking): cap height ≈ 9% of the
      box, regular, about 22 L under the page (Finder: cap 8–9% of the icon, regular). */
