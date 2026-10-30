@@ -25,7 +25,7 @@ import { ExamplesPage } from "./pages/examples.tsx";
 import { MaterialsPage } from "./pages/materials.tsx";
 import { ImageryPage } from "./pages/imagery.tsx";
 import { readStored, writeStored } from "./storage.ts";
-import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
+import { AppScaleContext, InheritedScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
@@ -592,6 +592,8 @@ export function Studio() {
   return (
     <StudioContext.Provider value={state}>
     <AppScaleContext.Provider value={scale}>
+    {/* <html> carries the app's scale (the chrome's defaults), so chrome outside the Canvas body states none of its own. */}
+    <InheritedScaleContext.Provider value={scale}>
       {/* The conversation outlives tabs and views; the Canvas's selection rides along as its context chip. */}
       <ChatProvider selection={selectionLabel(item)}>
       <ChatShortcut />
@@ -633,6 +635,7 @@ export function Studio() {
         }</Fragment>
       </div>
       </ChatProvider>
+    </InheritedScaleContext.Provider>
     </AppScaleContext.Provider>
     </StudioContext.Provider>
   );
@@ -777,6 +780,8 @@ export function Workspace({ sidebar, lead, canvasLead, canvasTitle, canvasAction
   const brand = canvasPicks && studio.brand.on ? studio.brand : null;
   useBrandSheet(brand);
   const specimens = useMemo(() => canvasPicks ? { ...movedFrom(canvasAttributes(studio.shown.canvas, studio.shown.material), DEFAULT_ATTRIBUTES), ...(brand ? { "data-area-brand": "" } : {}), ...(hasColours(studio.shown.colours) ? { "data-area-colours": "" } : {}) } : {}, [canvasPicks, studio.shown, brand]);
+  // The scale the Canvas body sets, which the chrome drawn in it inherits (src/app-scale.ts).
+  const bodyScale = useMemo<AppScale>(() => ({ "data-area-type": axes["data-area-type"]!, "data-area-density": axes["data-area-density"]! }), [axes["data-area-type"], axes["data-area-density"]]);
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
   const signature = JSON.stringify([axes, specimens, brand]);
@@ -800,7 +805,7 @@ export function Workspace({ sidebar, lead, canvasLead, canvasTitle, canvasAction
       ) : null}
       <main ref={main} className="studio-canvas" aria-label={canvasTitle}>
         <header className="studio-canvas__bar">{canvasLead}{canvasActions}</header>
-        <div ref={canvasRef} className="studio-canvas__body" {...axes} onClick={keepSpecimenLinks}><SpecimenScopeContext.Provider value={specimens}>{canvas}</SpecimenScopeContext.Provider></div>
+        <div ref={canvasRef} className="studio-canvas__body" {...axes} onClick={keepSpecimenLinks}><SpecimenScopeContext.Provider value={specimens}><InheritedScaleContext.Provider value={bodyScale}>{canvas}</InheritedScaleContext.Provider></SpecimenScopeContext.Provider></div>
       </main>
       {showInspector ? (
         <div className="studio-inspector" onClick={keepSpecimenLinks}>

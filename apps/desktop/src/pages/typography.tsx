@@ -15,7 +15,7 @@ import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
-import { appScale } from "../app-scale.ts";
+import { feedScale } from "../app-scale.ts";
 import { Specimen } from "../specimen-scope.tsx";
 import { CanvasSection, Tile, TileGrid, type CardLook } from "../tile.tsx";
 
@@ -140,7 +140,7 @@ export function TypographyPage() {
             ...TYPE_SIZES.map(type => [weight, type, `Type ${type}`] as const),
           ] as ReadonlyArray<readonly ["regular" | "strong", string | undefined, string]>).filter(([w, type]) => type || weights === "all" || weights === w).map(([w, type, label]) => (
             <section key={label} className="studio-type-row" aria-label={label}>
-              <div className="studio-type-row__head" {...appScale()}>
+              <div className="studio-type-row__head" {...feedScale()}>
                 <span>{label}</span>
                 <span className="studio-tabular">{metrics(view, type ?? density)}</span>
               </div>
