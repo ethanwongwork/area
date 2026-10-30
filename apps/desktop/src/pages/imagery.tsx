@@ -45,7 +45,7 @@ export interface Library { name: string; source: string; fetched: string; folder
 const BASE = typeof window !== "undefined" && window.areaDesktop ? "area-brand://library/" : "/__brand/";
 export const url = (path: string) => BASE + path;
 /* A pin's title, else Pinterest's description of it ("A poster with …"), else where it came from. */
-const nameOf = (item: BrandItem) => item.title || (item.alt ? item.alt[0]!.toUpperCase() + item.alt.slice(1) : "") || item.source || "Untitled";
+export const nameOf = (item: BrandItem) => item.title || (item.alt ? item.alt[0]!.toUpperCase() + item.alt.slice(1) : "") || item.source || "Untitled";
 const kindLabel = (item: BrandItem) => item.kind === "jpeg" ? "JPG" : item.kind.toUpperCase();
 
 /* Card sizes: a column's least width (the Asset grid's --area-asset-card-size). Medium is the default, four across a 1440
@@ -125,10 +125,10 @@ export function ImageryPage() {
   const trail = (
     <Breadcrumb aria-label="Location" className="studio-imagery__trail">
       <BreadcrumbList>
-        <BreadcrumbItem>{folder || opened ? <BreadcrumbLink href={hrefOf({ page: "library" })} onClick={event => { event.preventDefault(); select(""); }}>Library</BreadcrumbLink> : <BreadcrumbPage>Library</BreadcrumbPage>}</BreadcrumbItem>
+        <BreadcrumbItem>{folder || opened ? <BreadcrumbLink href={hrefOf({ page: "inspiration" })} onClick={event => { event.preventDefault(); select(""); }}>Inspiration</BreadcrumbLink> : <BreadcrumbPage>Inspiration</BreadcrumbPage>}</BreadcrumbItem>
         {folder ? <>
           <BreadcrumbSeparator />
-          <BreadcrumbItem>{opened ? <BreadcrumbLink href={hrefOf({ page: "library", item: folder.id })} onClick={event => { event.preventDefault(); closeViewer(); }}>{folder.name}</BreadcrumbLink> : <BreadcrumbPage>{folder.name}</BreadcrumbPage>}</BreadcrumbItem>
+          <BreadcrumbItem>{opened ? <BreadcrumbLink href={hrefOf({ page: "inspiration", item: folder.id })} onClick={event => { event.preventDefault(); closeViewer(); }}>{folder.name}</BreadcrumbLink> : <BreadcrumbPage>{folder.name}</BreadcrumbPage>}</BreadcrumbItem>
         </> : null}
         {opened ? <><BreadcrumbSeparator /><BreadcrumbItem><BreadcrumbPage>{nameOf(opened)}</BreadcrumbPage></BreadcrumbItem></> : null}
       </BreadcrumbList>
@@ -142,7 +142,7 @@ export function ImageryPage() {
         {entries.map(entry => (
           <tr key={entry.id} data-selected={entry.id === chosen ? "" : undefined} onClick={() => setChosen(entry.id)} onDoubleClick={() => openImage(entry)}>
             <TableCell fit><img className="studio-imagery__row-thumb" src={url(entry.thumb)} alt="" loading="lazy" decoding="async" /></TableCell>
-            <td><a href={hrefOf({ page: "library", item: `${entry.folder}/${entry.id}` })} onClick={event => { event.preventDefault(); openImage(entry); }}>{nameOf(entry)}</a></td>
+            <td><a href={hrefOf({ page: "inspiration", item: `${entry.folder}/${entry.id}` })} onClick={event => { event.preventDefault(); openImage(entry); }}>{nameOf(entry)}</a></td>
             <td><span className="studio-muted">{entry.source || "—"}</span></td>
             <td><span className="studio-muted">{entry.width} × {entry.height}</span></td>
           </tr>
@@ -197,10 +197,10 @@ export function ImageryPage() {
           groups={[{ id: "groups", label: "Groups", items: folders.map(entry => ({ id: entry.id, label: entry.name, icon: <GridIcon />, trailing: <span className="studio-muted studio-imagery__count">{byFolder.get(entry.id)?.length ?? 0}</span> })) }]} />
       </SidebarList>}
       canvasLead={opened ? <>
-        <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ArrowLeftIcon />} aria-label={`Back to ${folder?.name ?? "Library"}`} onClick={closeViewer} />
+        <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ArrowLeftIcon />} aria-label={`Back to ${folder?.name ?? "Inspiration"}`} onClick={closeViewer} />
         {trail}
       </> : trail}
-      canvasTitle={opened ? nameOf(opened) : folder?.name ?? "Library"}
+      canvasTitle={opened ? nameOf(opened) : folder?.name ?? "Inspiration"}
       canvasRef={canvas}
       canvasActions={
         <ViewControls>
@@ -243,8 +243,8 @@ export function ImageryPage() {
               </PanelSection>
             </>
           ) : library ? (
-            <PanelSection heading={chosenFolder ?? folder ? "Group" : "Library"}>
-              <Facts label="Library" items={chosenFolder ?? folder ? [
+            <PanelSection heading={chosenFolder ?? folder ? "Group" : "Inspiration"}>
+              <Facts label="Inspiration" items={chosenFolder ?? folder ? [
                 ["Name", (chosenFolder ?? folder)!.name],
                 ["Assets", byFolder.get((chosenFolder ?? folder)!.id)?.length ?? 0],
                 ["Holds", (chosenFolder ?? folder)!.description],

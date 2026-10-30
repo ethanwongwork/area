@@ -3,7 +3,8 @@
 The Electron app's information architecture, as the owner confirmed it on 2026-10-28, and the phased plan to build it.
 Review page: https://claude.ai/artifact/4nvLA9RLBaY2RZ1PedrcFn (model, Cursor measurements, composer, plan).
 Phase 1 is built (2026-10-28, branch `claude/phase-1-new-navigation-1c3738`, PR #173; "As built" under Phase 1). Phase 2 is
-built (2026-10-29, branch `claude/serene-maxwell-905675`; "As built" under Phase 2). The Theme header
+built (2026-10-29, branch `claude/serene-maxwell-905675`; "As built" under Phase 2). Projects and publishing, the IA of
+2026-10-29, are built next (the section after this one). The Theme header
 fix that came out of the same review is built too (PRODUCT_UI.md, Setup).
 
 ## Systems, not brands (owner, 2026-10-29)
@@ -16,6 +17,38 @@ built" keeps the words it was built with. In the app: `#system/<id>/…` (old `#
 over once). Updated IA with rough wireframes of every page, the nav and its takeovers:
 https://claude.ai/artifact/Py4TnuPQvUckDVKQG3MsRf (also draws a system's Overview page and a project's Theme view that
 only picks a system and theme, both for the owner to confirm).
+
+## Projects and publishing: the IA of 2026-10-29 (built)
+
+The owner's brainstorm of 2026-10-29 replaced the Library-as-boards and the separate Projects and Explore phases' shape
+with one model (write-up: https://claude.ai/artifact/TRWJYDWrxVaxCTvtJNxwD5, revision 3, "one place"): **make in
+Projects, edit and publish in the Library, share in Explore.** The Library is what's live (systems, products,
+inspiration); its owners edit each item in place and publish when ready; projects are for new things and big changes.
+Then (owner): "tabs can be libraries or projects, within each project there are a bunch of things in it (layers, pages,
+explorations, versions), so those will be accessed through the left nav, but the tab itself in the canvas will always
+just be the project itself".
+
+As built (2026-10-29/30, branch `claude/ia-brainstorm-47487c`):
+
+- **Tabs** hold one thing each, a project, a system, Inspiration or a lab, and never change what they hold: a place in
+  another opens in the tab holding it, or a new tab (`src/studio.tsx` `navigate`, `src/places.ts` `tabHolds`).
+- **The Sidebar is the tab's own** (`src/app-nav.tsx`): Home's tab shows the workspace (Home, Projects, the Library); a
+  system's tab its sections and History; a project's tab its Overview, Pages and their layers, Explorations and Versions;
+  each under a back row to Home.
+- **Systems publish** (`src/systems.ts`, `src/publish.tsx`, `src/pages/history.tsx`): the themes are the working copy and
+  `releases` hold what was published; Live / Working and Publish (before and after, the changed values, the kind as
+  Fixes / Adds / Needs work in products, a note) while there are changes; History with Restore. A system file from before
+  publishing starts with its current themes as v1.0.
+- **Projects** (`src/projects.ts`, `src/pages/project.tsx`, `Projects/<id>/project.json`): a project uses one theme of one
+  system as published; pages hold layers (the system's Patterns screens, Inspiration's images); explorations are themes
+  tried from the system's and published into it (as an update to their theme or a new one); versions are named copies.
+- **Inspiration** is the old Library page (Imagery's groups; `#inspiration`, `#library` redirects); the Titlebar's
+  Library button opens it.
+
+Not built yet: products (a project's screens published as a product's live screens), approval when a second person
+joins, the "changed since you started" view when a project's exploration and the system's working copy both change one
+theme (publishing an exploration replaces that theme in the working copy), Start a project from a system item, Share
+and Explore, components or visuals as layers, and drawing or editing inside a layer.
 
 ## The confirmed model
 

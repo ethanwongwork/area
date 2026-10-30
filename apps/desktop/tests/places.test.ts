@@ -5,7 +5,7 @@
 // Area system's Default once, and a #brand/… link from before the rename opens its #system/… place.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { systemName, HOME_TAB, hrefOf, parsePlace, redirect, resolve, restoreTabs, setSystems, tabHolds, tabName, type Place } from "../src/places.ts";
+import { systemName, HOME_TAB, hrefOf, parsePlace, redirect, resolve, restoreTabs, setProjects, setSystems, tabHolds, tabName, type Place } from "../src/places.ts";
 import { activeTheme, systemFile, systemSlug, loadSystems, newTheme, readSystem, starterSystem, withTheme, type Restorers } from "../src/systems.ts";
 
 const AREA_ONLY = [{ id: "area", name: "Area" }];
@@ -30,10 +30,13 @@ test("every old tab's link redirects to its place", () => {
     ["#testing", "#system/area/patterns"],
     ["#testing/analytics", "#system/area/patterns/analytics"],
     ["#examples/chat", "#system/area/patterns/chat"],
-    ["#imagery", "#library"],
-    ["#imagery/folder-1/image-2", "#library/folder-1/image-2"],
-    ["#brand", "#library"],
-    ["#brand/folder-1", "#library/folder-1"],
+    // Imagery, then the Library page, is Inspiration since 2026-10-29.
+    ["#imagery", "#inspiration"],
+    ["#imagery/folder-1/image-2", "#inspiration/folder-1/image-2"],
+    ["#library", "#inspiration"],
+    ["#library/folder-1/image-2", "#inspiration/folder-1/image-2"],
+    ["#brand", "#inspiration"],
+    ["#brand/folder-1", "#inspiration/folder-1"],
     // Systems were brands until 2026-10-29.
     ["#brand/area/themes", "#system/area/themes"],
     ["#brand/area/components/button/size-sm", "#system/area/components/button/size-sm"],
@@ -50,6 +53,7 @@ test("every old tab's link redirects to its place", () => {
 
 test("a place's hash reads back as the same place", () => {
   setSystems([...AREA_ONLY, { id: "northwind", name: "Northwind" }]);
+  setProjects([{ id: "launch", name: "Spring launch" }]);
   const places: Place[] = [
     { page: "home" }, { page: "home", item: "northwind" },
     { page: "themes", system: "area" }, { page: "theme-setup", system: "area" }, { page: "foundations", system: "area" },
@@ -57,7 +61,9 @@ test("a place's hash reads back as the same place", () => {
     { page: "color", system: "area", item: "blue" }, { page: "typography", system: "area" }, { page: "icons", system: "area", item: "arrows" },
     { page: "components", system: "area", item: "button/size-sm" }, { page: "patterns", system: "area", item: "analytics" },
     { page: "themes", system: "northwind", item: "theme-2" }, { page: "components", system: "northwind", item: "button" },
-    { page: "library", item: "a b/c" }, { page: "materials", item: "glass" },
+    { page: "inspiration", item: "a b/c" }, { page: "materials", item: "glass" }, { page: "history", system: "area", item: "1.2" },
+    { page: "project", project: "launch" }, { page: "project-page", project: "launch", item: "page-1/layer-2" },
+    { page: "exploration", project: "launch", item: "exploration-1" }, { page: "versions", project: "launch" }, { page: "versions", project: "launch", item: "version-1" },
   ];
   for (const place of places) {
     const hash = hrefOf(place);
@@ -69,12 +75,13 @@ test("a place's hash reads back as the same place", () => {
   // A system's place without a system is the Area system's, as old links are.
   assert.equal(hrefOf({ page: "components", item: "button" }), "#system/area/components/button");
   setSystems(AREA_ONLY);
+  setProjects([]);
 });
 
 test("hashes that are not places are left alone", () => {
   // Example screens link to their own sections (the Workspace keeps their "#home" from opening Home); a system this
   // workspace doesn't have is no place.
-  for (const hash of ["#settings", "#overview", "#gallery-nav-icons", "#system/northwind/themes", "#brand/northwind/themes", ""]) {
+  for (const hash of ["#settings", "#overview", "#gallery-nav-icons", "#system/northwind/themes", "#brand/northwind/themes", "#project/gone", ""]) {
     assert.equal(resolve(hash, groupOf), null, hash);
   }
   assert.deepEqual(parsePlace("#home"), { page: "home", item: undefined });
@@ -90,25 +97,39 @@ test("a second system is a place once the workspace has it, and tabs are named b
   assert.equal(tabName({ page: "home" }), "Home");
   assert.equal(tabHolds(place), "system:northwind");
   assert.equal(tabHolds({ page: "components" }), "system:area");
-  assert.notEqual(tabHolds(place), tabHolds({ page: "library" }));
+  assert.notEqual(tabHolds(place), tabHolds({ page: "inspiration" }));
   // An old link is still the Area system's; a link from before the rename keeps its system.
   assert.equal(hrefOf(resolve("#brand/northwind/patterns/chat", groupOf)!), "#system/northwind/patterns/chat");
   assert.equal(hrefOf(resolve("#components/button", groupOf)!), "#system/area/components/button");
   setSystems(AREA_ONLY);
 });
 
+test("a tab holds one project or Library item: everything inside it is the same tab", () => {
+  setProjects([{ id: "launch", name: "Spring launch" }]);
+  const overview: Place = { page: "project", project: "launch" };
+  for (const inside of [{ page: "project-page", project: "launch", item: "page-1/layer-1" }, { page: "exploration", project: "launch", item: "exploration-1" }, { page: "versions", project: "launch" }] as Place[]) {
+    assert.equal(tabHolds(inside), tabHolds(overview));
+    assert.equal(tabName(inside), "Spring launch");
+  }
+  assert.equal(tabHolds(overview), "project:launch");
+  assert.notEqual(tabHolds(overview), tabHolds({ page: "themes", system: "area" }));
+  assert.equal(tabHolds({ page: "history", system: "area" }), tabHolds({ page: "components", system: "area" }));
+  assert.equal(tabName({ page: "inspiration", item: "folder-1" }), "Inspiration");
+  setProjects([]);
+});
+
 test("the saved tab migrates once; saved tabs restore after Home", () => {
-  assert.deepEqual(restoreTabs(undefined, "imagery"), { tabs: [{ id: "t1", hash: "#library", panel: "page" }], current: "t1" });
+  assert.deepEqual(restoreTabs(undefined, "imagery"), { tabs: [{ id: "t1", hash: "#inspiration", panel: "page" }], current: "t1" });
   assert.deepEqual(restoreTabs(undefined, "theme"), { tabs: [{ id: "t1", hash: "#system/area/themes", panel: "nav" }], current: "t1" });
   // Nothing saved: Home alone.
   assert.deepEqual(restoreTabs(undefined, undefined), { tabs: [], current: HOME_TAB });
   // A tab saved before the rename (#brand/area/…) opens on its #system/ place.
   const saved = { tabs: [{ id: "a", hash: "#library/x", panel: "nav" }, { id: "b", hash: "#nowhere", panel: "page" }, { id: "c", hash: "#brand/area/patterns", panel: "page" }], current: "c" };
-  assert.deepEqual(restoreTabs(saved, "components"), { tabs: [{ id: "a", hash: "#library/x", panel: "nav" }, { id: "c", hash: "#system/area/patterns", panel: "page" }], current: "c" });
+  assert.deepEqual(restoreTabs(saved, "components"), { tabs: [{ id: "a", hash: "#inspiration/x", panel: "nav" }, { id: "c", hash: "#system/area/patterns", panel: "page" }], current: "c" });
   assert.equal(restoreTabs({ tabs: [{ id: "a", hash: "#library", panel: "nav" }], current: "gone" }, null).current, "a");
   // Home is never saved as a tab of its own; the current tab may be Home; every tab closed is Home alone.
   assert.deepEqual(restoreTabs({ tabs: [{ id: "h", hash: "#home", panel: "nav" }, { id: "a", hash: "#library", panel: "nav" }], current: HOME_TAB }, null),
-    { tabs: [{ id: "a", hash: "#library", panel: "nav" }], current: HOME_TAB });
+    { tabs: [{ id: "a", hash: "#inspiration", panel: "nav" }], current: HOME_TAB });
   assert.deepEqual(restoreTabs({ tabs: [], current: HOME_TAB }, "components"), { tabs: [], current: HOME_TAB });
   // A deleted system's tab is gone.
   assert.deepEqual(restoreTabs({ tabs: [{ id: "n", hash: "#system/northwind/themes", panel: "nav" }], current: "n" }, null), { tabs: [], current: HOME_TAB });

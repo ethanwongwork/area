@@ -2,26 +2,31 @@
  * The app's navigation (docs/research/app-structure-2026-10-28/README.md; the shell is variation A, owner 2026-10-28):
  *
  *   AppTabs   the Titlebar's open tabs, as a browser's: Home first (icon only, never closed: Figma's file browser tab),
- *             then one per open system, Library or lab, its type icon, name and close, then New tab (owner, 2026-10-29:
- *             "i like the floating tab component from claude codes browser")
- *   AppNav    the Sidebar's nav: Home and the Library, then Systems, each system a row, the open one expanded to its sections
- *             (Cursor's agents window nav); a click opens in the current tab, ⌘-click in a new one
+ *             then one per open project, Library item (a system, Inspiration) or lab, its type icon, name and close, then
+ *             New tab (owner, 2026-10-29: "i like the floating tab component from claude codes browser")
+ *   AppNav    the Sidebar's nav, the tab's own (owner, 2026-10-29: "tabs can be libraries or projects … those will be
+ *             accessed through the left nav, but the tab itself … will always just be the project itself"): in Home's tab
+ *             the workspace (Home, then Projects and the Library, a row each); in a system's tab its sections, in a
+ *             project's its overview, pages and their layers, explorations and versions, each under a back row to Home.
+ *             A click opens in the tab holding what it names (this one, or another), ⌘-click in a new one
  *   Takeover  a page's own list in the Sidebar's place (Components' families, Icons' categories, the Library's groups),
  *             under a back row to the nav and a filter
  *
- * Explore, Projects and Boards come with the phases that build them; until then they are left out (product UI rule 16),
- * as is the person's row. New system is the Systems section's last row (Home's New system).
+ * Explore comes with the phase that builds it; until then it is left out (product UI rule 16), as is the person's row.
+ * New project and New system are their sections' last rows (Home's dialogs).
  */
 import { Fragment, useEffect, useId, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, SearchField, Tooltip } from "@area/react";
-import { AddIcon, ArrowLeftIcon, ChevronDownIcon, DismissIcon, FlaskIcon, HomeIcon, LibraryIcon, PaletteIcon } from "@area/icons";
+import { AddIcon, ArrowLeftIcon, ChevronDownIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, ImageIcon, ImagesIcon, LayoutIcon, PaletteIcon } from "@area/icons";
 import { SETTING_GROUPS } from "@area/tokens/config";
-import { systemName, groupSlug, HOME_TAB, hrefOf, LIST_PAGES, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
+import { systemName, groupSlug, HOME_TAB, hrefOf, LIST_PAGES, projectName, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
+import { addExploration, addPage } from "./projects.ts";
+import { activeTheme } from "./systems.ts";
 import { ChromeButton, SidebarList, useStudio } from "./studio.tsx";
 import { FAMILIES } from "./pages/components.tsx";
 import { EXAMPLES } from "./pages/examples.tsx";
 
-const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <PaletteIcon />, library: <LibraryIcon />, labs: <FlaskIcon /> };
+const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <PaletteIcon />, project: <FolderIcon />, inspiration: <ImagesIcon />, labs: <FlaskIcon /> };
 
 /** Foundations' pages: Color, Typography and Icons, then one per setting group, named as the registry names it. */
 export const FOUNDATIONS: ReadonlyArray<{ place: Place; label: string }> = [
@@ -36,11 +41,12 @@ const IN_FOUNDATIONS: ReadonlySet<PageId> = new Set(["foundations", "settings", 
 export function placeLabel(place: Place): string {
   if (place.page === "settings") return FOUNDATIONS.find(entry => entry.place.group === place.group)?.label ?? "Foundations";
   return ({ home: "Home", themes: "Themes", "theme-setup": "New theme", foundations: "Foundations", color: "Color", typography: "Typography", icons: "Icons",
-    components: "Components", patterns: "Patterns", library: "Library", materials: "Materials" } as Record<PageId, string>)[place.page];
+    components: "Components", patterns: "Patterns", history: "History", inspiration: "Inspiration", materials: "Materials",
+    project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions" } as Record<PageId, string>)[place.page];
 }
 /** What a page's list holds, for its filter's placeholder. */
 const LISTED: Partial<Record<PageId, string>> = { color: "scales", typography: "roles", icons: "icons", components: "components",
-  patterns: "patterns", library: "images", materials: "bundles" };
+  patterns: "patterns", inspiration: "images", materials: "bundles" };
 
 /** Same page (a setting group's page is its group), whatever is chosen on it. New theme is under Themes. */
 const samePage = (a: Place, b: Place) => (a.page === "theme-setup" ? "themes" : a.page) === (b.page === "theme-setup" ? "themes" : b.page) && a.group === b.group;
@@ -111,59 +117,167 @@ function Expander({ open, label, controls, onToggle }: { open: boolean; label: s
   return <Button size="sm" variant="ghost" iconOnly icon={<ChevronDownIcon />} aria-label={label} aria-expanded={open} aria-controls={controls} onClick={onToggle} />;
 }
 
+/** The Sidebar's nav for the current tab: the workspace in Home's tab (and Inspiration's and a lab's), else the tab's tree. */
 export function AppNav() {
-  const { place, navigate, systems, openSystem } = useStudio();
-  // The open system starts open while a tab on it is shown, Foundations while one of its pages is; a chevron closes either,
-  // and opens any other system.
-  const onSystem = tabKind(place) === "system";
-  const [opened, setOpened] = useState<ReadonlySet<string>>(() => new Set(onSystem ? [openSystem.id] : []));
-  useEffect(() => { if (onSystem) setOpened(open => open.has(openSystem.id) ? open : new Set([...open, openSystem.id])); }, [onSystem, openSystem.id]);
-  const [foundationsOpen, setFoundationsOpen] = useState(() => IN_FOUNDATIONS.has(place.page));
-  const ids = useId();
-  const open = (target: Place) => (event: MouseEvent<HTMLAnchorElement>) => {
+  const { place } = useStudio();
+  const kind = tabKind(place);
+  return kind === "system" ? <SystemNav /> : kind === "project" ? <ProjectNav /> : <WorkspaceNav />;
+}
+
+/** Opens a place from a nav row: in the tab holding it (src/studio.tsx `navigate`), ⌘-click in a new one. */
+function useOpen() {
+  const { navigate } = useStudio();
+  return (target: Place) => (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    // A page with its own list opens it in the Sidebar's place (the takeover); ⌘-click opens a new tab.
+    // A page with its own list opens it in the Sidebar's place (the takeover).
     navigate(target, { newTab: event.metaKey || event.ctrlKey, panel: LIST_PAGES.has(target.page) ? "page" : "nav" });
   };
-  const here = (target: Place) => onSystem && (place.system ?? "area") === target.system && samePage(target, place);
-  const row = (target: Place, label: string, trailing?: ReactNode, actions?: ReactNode) => (
-    <NavItem key={label} href={hrefOf(target)} current={here(target)} onClick={open(target)} trailing={trailing} actions={actions}>{label}</NavItem>
+}
+
+/** The first row of a tab's tree: back to the workspace, in Home's tab. */
+function BackHome() {
+  const open = useOpen();
+  return (
+    <NavGroup>
+      <NavItem href={hrefOf({ page: "home" })} icon={<ArrowLeftIcon />} onClick={open({ page: "home" })}>Home</NavItem>
+    </NavGroup>
   );
+}
+
+/** The workspace: Home, then the projects and the Library (each system, and Inspiration), each opening in its own tab. */
+function WorkspaceNav() {
+  const { place, systems, projects } = useStudio();
+  const open = useOpen();
   return (
     <SidebarList>
       <Nav aria-label="Workspace">
         <NavGroup>
           <NavItem href={hrefOf({ page: "home" })} icon={<HomeIcon />} current={place.page === "home"} onClick={open({ page: "home" })}>Home</NavItem>
-          <NavItem href={hrefOf({ page: "library" })} icon={<LibraryIcon />} current={place.page === "library"} onClick={open({ page: "library" })}>Library</NavItem>
         </NavGroup>
-        <NavGroup label="Systems">
-          {systems.map(system => {
-            const shown = opened.has(system.id);
-            const sections = `${ids}-${system.id}`, foundations = `${ids}-${system.id}-foundations`;
-            const toggle = () => setOpened(open => { const next = new Set(open); if (next.has(system.id)) next.delete(system.id); else next.add(system.id); return next; });
-            const at = (target: Place): Place => ({ ...target, system: system.id });
+        <NavGroup label="Projects">
+          {projects.map(project => (
+            <NavItem key={project.id} href={hrefOf({ page: "project", project: project.id })} icon={TAB_ICONS.project} onClick={open({ page: "project", project: project.id })}>
+              {project.name}
+            </NavItem>
+          ))}
+          <NavItem href={hrefOf({ page: "home", item: "new-project" })} icon={<AddIcon />} onClick={open({ page: "home", item: "new-project" })}>New project</NavItem>
+        </NavGroup>
+        <NavGroup label="Library">
+          {systems.map(system => (
+            <NavItem key={system.id} href={hrefOf({ page: "themes", system: system.id })} icon={TAB_ICONS.system} onClick={open({ page: "themes", system: system.id })}>{system.name}</NavItem>
+          ))}
+          <NavItem href={hrefOf({ page: "inspiration" })} icon={TAB_ICONS.inspiration} current={place.page === "inspiration"} onClick={open({ page: "inspiration" })}>Inspiration</NavItem>
+          <NavItem href={hrefOf({ page: "home", item: "new" })} icon={<AddIcon />} onClick={open({ page: "home", item: "new" })}>New system</NavItem>
+        </NavGroup>
+      </Nav>
+    </SidebarList>
+  );
+}
+
+/** A system's tab: its sections, Foundations expandable to its pages, then its History. */
+function SystemNav() {
+  const { place, openSystem, workingSystem, changes } = useStudio();
+  const open = useOpen();
+  const [foundationsOpen, setFoundationsOpen] = useState(() => IN_FOUNDATIONS.has(place.page));
+  const foundations = useId();
+  const at = (target: Place): Place => ({ ...target, system: workingSystem.id });
+  const row = (target: Place, label: string, trailing?: ReactNode, actions?: ReactNode) => (
+    <NavItem key={label} href={hrefOf(at(target))} current={samePage(target, place)} onClick={open(at(target))} trailing={trailing} actions={actions}>{label}</NavItem>
+  );
+  return (
+    <SidebarList>
+      <Nav aria-label={workingSystem.name}>
+        <BackHome />
+        <NavGroup label={workingSystem.name}>
+          {row({ page: "themes" }, "Themes", <Count count={openSystem.themes.length} />)}
+          {row({ page: "foundations" }, "Foundations", undefined,
+            <Expander open={foundationsOpen} label="Foundations' pages" controls={foundations} onToggle={() => setFoundationsOpen(!foundationsOpen)} />)}
+          <div id={foundations} hidden={!foundationsOpen}>
+            <NavGroup nested>{FOUNDATIONS.map(entry => row(entry.place, entry.label))}</NavGroup>
+          </div>
+          {row({ page: "components" }, "Components", <Count count={FAMILIES.length} max={9999} />)}
+          {row({ page: "patterns" }, "Patterns", <Count count={EXAMPLES.length} />)}
+          {/* History counts the publishes; while the working copy has changes, it says how many are waiting. */}
+          {row({ page: "history" }, "History", changes.length ? <span className="studio-muted">{changes.length} unpublished</span> : <Count count={workingSystem.releases.length} />)}
+        </NavGroup>
+      </Nav>
+    </SidebarList>
+  );
+}
+
+/** A project's tab: its overview, its pages (each opening to its layers), its explorations and its versions. */
+function ProjectNav() {
+  const { place, openProject, openSystem, updateProject, navigate } = useStudio();
+  const open = useOpen();
+  const ids = useId();
+  const [pageId, layerId] = place.page === "project-page" ? (place.item ?? "").split("/") : [];
+  // Every page with layers starts open; a chevron closes it.
+  const [closed, setClosed] = useState<ReadonlySet<string>>(() => new Set());
+  if (!openProject) return <WorkspaceNav />;
+  const project = openProject.id;
+  const newPage = () => {
+    const made = addPage(openProject);
+    updateProject(project, () => made.project);
+    navigate({ page: "project-page", project, item: made.page.id });
+  };
+  // An exploration starts from the theme the project uses, as published.
+  const newExploration = () => {
+    const from = openSystem.themes.find(entry => entry.id === openProject.theme) ?? activeTheme(openSystem);
+    const made = addExploration(openProject, from);
+    updateProject(project, () => made.project);
+    navigate({ page: "exploration", project, item: made.exploration.id });
+  };
+  const toggle = (id: string) => setClosed(current => { const next = new Set(current); if (next.has(id)) next.delete(id); else next.add(id); return next; });
+  return (
+    <SidebarList>
+      <Nav aria-label={openProject.name}>
+        <BackHome />
+        <NavGroup label={openProject.name}>
+          <NavItem href={hrefOf({ page: "project", project })} icon={<LayoutIcon />} current={place.page === "project"} onClick={open({ page: "project", project })}>Overview</NavItem>
+        </NavGroup>
+        <NavGroup label="Pages">
+          {openProject.pages.map(page => {
+            const shown = !closed.has(page.id) && page.layers.length > 0;
+            const layers = `${ids}-${page.id}`;
             return (
-              <Fragment key={system.id}>
-                <NavItem href={hrefOf(at({ page: "themes" }))} icon={TAB_ICONS.system} onClick={open(at({ page: "themes" }))}
-                  actions={<Expander open={shown} label={`${system.name}'s sections`} controls={sections} onToggle={toggle} />}>
-                  {system.name}
+              <Fragment key={page.id}>
+                <NavItem href={hrefOf({ page: "project-page", project, item: page.id })} icon={<DocumentIcon />}
+                  current={pageId === page.id && !layerId} onClick={open({ page: "project-page", project, item: page.id })}
+                  trailing={page.layers.length ? <Count count={page.layers.length} /> : undefined}
+                  actions={page.layers.length ? <Expander open={shown} label={`${page.name}'s layers`} controls={layers} onToggle={() => toggle(page.id)} /> : undefined}>
+                  {page.name}
                 </NavItem>
-                <div id={sections} hidden={!shown}>
+                <div id={layers} hidden={!shown}>
                   <NavGroup nested>
-                    {row(at({ page: "themes" }), "Themes", <Count count={system.themes.length} />)}
-                    {row(at({ page: "foundations" }), "Foundations", undefined,
-                      <Expander open={foundationsOpen} label="Foundations' pages" controls={foundations} onToggle={() => setFoundationsOpen(!foundationsOpen)} />)}
-                    <div id={foundations} hidden={!foundationsOpen}>
-                      <NavGroup nested>{FOUNDATIONS.map(entry => row(at(entry.place), entry.label))}</NavGroup>
-                    </div>
-                    {row(at({ page: "components" }), "Components", <Count count={FAMILIES.length} max={9999} />)}
-                    {row(at({ page: "patterns" }), "Patterns", <Count count={EXAMPLES.length} />)}
+                    {page.layers.map(layer => (
+                      <NavItem key={layer.id} href={hrefOf({ page: "project-page", project, item: `${page.id}/${layer.id}` })}
+                        icon={layer.kind === "image" ? <ImageIcon /> : <LayoutIcon />}
+                        current={pageId === page.id && layerId === layer.id} onClick={open({ page: "project-page", project, item: `${page.id}/${layer.id}` })}>
+                        {layer.name}
+                      </NavItem>
+                    ))}
                   </NavGroup>
                 </div>
               </Fragment>
             );
           })}
-          <NavItem href={hrefOf({ page: "home", item: "new" })} icon={<AddIcon />} onClick={open({ page: "home", item: "new" })}>New system</NavItem>
+          <NavItem href={hrefOf({ page: "project", project })} icon={<AddIcon />} onClick={event => { event.preventDefault(); newPage(); }}>New page</NavItem>
+        </NavGroup>
+        <NavGroup label="Explorations">
+          {openProject.explorations.map(entry => (
+            <NavItem key={entry.id} href={hrefOf({ page: "exploration", project, item: entry.id })} icon={<GitBranchIcon />}
+              current={place.page === "exploration" && place.item === entry.id} onClick={open({ page: "exploration", project, item: entry.id })}
+              trailing={entry.published ? <span className="studio-muted">v{entry.published}</span> : undefined}>
+              {entry.name}
+            </NavItem>
+          ))}
+          <NavItem href={hrefOf({ page: "project", project })} icon={<AddIcon />} onClick={event => { event.preventDefault(); newExploration(); }}>New exploration</NavItem>
+        </NavGroup>
+        <NavGroup>
+          <NavItem href={hrefOf({ page: "versions", project })} icon={<HistoryIcon />} current={place.page === "versions"} onClick={open({ page: "versions", project })}
+            trailing={<Count count={openProject.versions.length} />}>
+            Versions
+          </NavItem>
         </NavGroup>
       </Nav>
     </SidebarList>
@@ -176,7 +290,7 @@ export function AppNav() {
  */
 export function Takeover({ children }: { children: ReactNode }) {
   const { place, setPanel, query, setQuery } = useStudio();
-  const back = tabKind(place) === "system" ? systemName(place.system) : "Workspace";
+  const back = tabKind(place) === "system" ? systemName(place.system) : tabKind(place) === "project" ? projectName(place.project) : "Workspace";
   const listed = LISTED[place.page] ?? placeLabel(place).toLowerCase();
   return (
     <div className="studio-takeover">

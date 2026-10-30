@@ -14,6 +14,8 @@ interface AreaDesktop {
    * every file's contents at launch, or null in a capture (the page keeps its systems in its own storage then).
    */
   systems?: { read(): unknown[] | null; write(id: string, text: string): void; trash(id: string): void };
+  /** The workspace's projects, one project.json each in Application Support/Area/Projects (src/projects.ts), as `systems`. */
+  projects?: { read(): unknown[] | null; write(id: string, text: string): void; trash(id: string): void };
   /** The app menu's tab commands (electron/main.cjs): ⌘T, ⌘⇧T, ⌘⇧H, ⌘W, ⌃Tab, ⌃⇧Tab, ⌘1–9. Returns the unsubscribe. */
   onCommand?(listener: (command: TabCommand, index?: number) => void): () => void;
 }

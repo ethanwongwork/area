@@ -157,6 +157,39 @@ ipcMain.on("area:system-trash", (_event, id) => {
   if (!capture && folder && existsSync(folder)) shell.trashItem(folder).catch(error => console.error(`[systems] ${id}: ${error}`));
 });
 
+/*
+ * The workspace's projects (src/projects.ts; the IA of 2026-10-29): as the systems, one folder each,
+ * ~/Library/Application Support/Area/Projects/<id>/project.json, read once at launch, written on change (a temporary file
+ * renamed over the old one), and moved to the Trash when deleted. A capture never reads or writes them.
+ */
+const projectsFolder = () => join(app.getPath("userData"), "Projects");
+ipcMain.on("area:projects-read", event => {
+  if (capture) { event.returnValue = null; return; }
+  const projects = [];
+  try {
+    for (const entry of readdirSync(projectsFolder(), { withFileTypes: true })) {
+      if (!entry.isDirectory() || !systemId(entry.name)) continue;
+      try { projects.push(JSON.parse(readFileSync(join(projectsFolder(), entry.name, "project.json"), "utf8"))); } catch {}
+    }
+  } catch {}
+  event.returnValue = projects;
+});
+ipcMain.on("area:project-write", (_event, id, text) => {
+  if (capture || !systemId(id) || typeof text !== "string") return;
+  try { JSON.parse(text); } catch { return; }
+  const folder = join(projectsFolder(), id);
+  try {
+    mkdirSync(folder, { recursive: true });
+    const file = join(folder, "project.json");
+    writeFileSync(`${file}.tmp`, text);
+    renameSync(`${file}.tmp`, file);
+  } catch (error) { console.error(`[projects] ${id}: ${error}`); }
+});
+ipcMain.on("area:project-trash", (_event, id) => {
+  const folder = systemId(id) ? join(projectsFolder(), id) : null;
+  if (!capture && folder && existsSync(folder)) shell.trashItem(folder).catch(error => console.error(`[projects] ${id}: ${error}`));
+});
+
 ipcMain.on("area:theme", (event, theme) => {
   nativeTheme.themeSource = theme === "dark" ? "dark" : "light";
   BrowserWindow.fromWebContents(event.sender)?.setBackgroundColor(GROUND[nativeTheme.themeSource]);

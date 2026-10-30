@@ -1,7 +1,7 @@
 /**
  * Search everything (⌘K): the Titlebar's field opens Area's Command palette over every place and what it holds (Phase 1:
  * "⌘K across every place"), as Cursor's and Figma's quick open do. Systems and places first, then components, settings, scales, type
- * roles, icon categories and patterns; icons by name once two letters are typed (808 rows would be noise unasked). A
+ * roles, icon categories and patterns, and each project; icons by name once two letters are typed (808 rows would be noise unasked). A
  * choice opens in the current tab, or, opened from New tab (+, ⌘T), in a new one. Each page's own list is filtered in the Sidebar (src/app-nav.tsx, Takeover).
  */
 import { useMemo, useState } from "react";
@@ -23,10 +23,11 @@ const categoryOf = (category: string | null) => ICON_CATEGORIES.find(entry => en
 /** A system's own place, described by the open system's name when shown (a choice opens it in that system). */
 const OPEN_SYSTEM = "";
 const ENTRIES: ReadonlyArray<{ place: Place; label: string; description: string; group: string; keywords?: string[] }> = [
-  { place: { page: "home" }, label: "Home", description: "Workspace", group: "Places", keywords: ["systems", "boards", "recent"] },
+  { place: { page: "home" }, label: "Home", description: "Workspace", group: "Places", keywords: ["projects", "systems", "boards", "recent"] },
   ...([{ page: "themes" }, { page: "theme-setup" }, { page: "foundations" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
   ...FOUNDATIONS.map(entry => ({ place: entry.place, label: entry.label, description: "Foundations", group: "Places" })),
-  ...([{ page: "components" }, { page: "patterns" }, { page: "library" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: place.page === "library" ? "Workspace" : OPEN_SYSTEM, group: "Places" })),
+  ...([{ page: "components" }, { page: "patterns" }, { page: "history" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
+  { place: { page: "inspiration" }, label: "Inspiration", description: "Library", group: "Places", keywords: ["library", "images", "boards", "imagery"] },
   { place: { page: "materials" }, label: "Materials", description: "Labs", group: "Places", keywords: ["lab", "material bundles"] },
   ...FAMILIES.map(family => ({ place: { page: "components" as const, item: family.slug }, label: family.name, description: "Component", group: "Components" })),
   ...SETTINGS.map(setting => ({ place: { page: "settings" as const, group: groupSlug(setting.heading), item: setting.id }, label: setting.title, description: setting.heading, group: "Settings", keywords: [setting.label, setting.id] })),
@@ -43,17 +44,18 @@ const ICONS = ICON_META.filter(icon => !icon.aliasOf).map(icon => ({
 export type SearchFor = "here" | "new" | null;
 
 export function SearchEverything({ open, onOpenChange }: { open: SearchFor; onOpenChange: (open: SearchFor) => void }) {
-  const { navigate, systems, openSystem } = useStudio();
+  const { navigate, systems, projects, openSystem } = useStudio();
   const [query, setQuery] = useState("");
   const show = (start = "") => { setQuery(start); onOpenChange("here"); };
   // Each system opens on its Themes; a system's own places open in the open system.
   const items = useMemo<CommandItem[]>(() => [
+    ...projects.map(project => ({ place: { page: "project", project: project.id } as Place, label: project.name, description: "Project", group: "Projects", keywords: ["project"] })),
     ...systems.map(system => ({ place: { page: "themes", system: system.id } as Place, label: system.name, description: "System", group: "Systems", keywords: ["system"] })),
     ...ENTRIES, ...(query.trim().length >= 2 ? ICONS : []),
   ].map((entry, at) => ({
     id: `${at}:${hrefOf(entry.place)}`, label: entry.label, description: entry.description === OPEN_SYSTEM ? openSystem.name : entry.description, group: entry.group, keywords: entry.keywords,
     onSelect: () => navigate(entry.place, { newTab: open === "new" }),
-  })), [navigate, open, query.trim().length >= 2, systems, openSystem.name]);
+  })), [navigate, open, query.trim().length >= 2, systems, projects, openSystem.name]);
   return (
     <>
       {/* The field only opens the palette: a click, Enter, or the first letter typed (which the palette's field takes). */}
