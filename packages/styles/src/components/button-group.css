@@ -19,7 +19,7 @@
    * alignment groups: three 29px buttons across an 88px column). */
   .area-button-group--full-width { display: flex; inline-size: 100%; }
   .area-button-group--full-width > * { flex: 1 1 0; min-inline-size: 0; }
-  .area-button-group--soft { --_group-bg: var(--area-bg-component); --_group-edge: transparent; }
+  .area-button-group--soft { --_group-bg: var(--area-bg-component); --_group-edge: var(--area-edge-buttons); }
   .area-button-group--outline { --_group-bg: var(--area-bg-surface); --_group-edge: var(--area-edge-control); }
   .area-button-group--sm { --_group-height: var(--area-control-sm); --_group-icon: var(--area-icon-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-radius: var(--area-radius-control-sm); }
   .area-button-group--md { --_group-height: var(--area-control-md); --_group-icon: var(--area-icon-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-radius: var(--area-radius-control-md); }

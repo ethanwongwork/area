@@ -49,7 +49,7 @@
   .area-calendar--surface {
     padding: calc(var(--_inset) - var(--area-border-width) - var(--_day-inset));
     padding-block-start: calc(var(--_inset) - var(--area-border-width));
-    border: var(--area-border-width) solid var(--area-border-float);
+    border: var(--area-border-width) solid var(--area-edge-floating);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */

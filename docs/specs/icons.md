@@ -5357,6 +5357,10 @@ person 9% small (its family's marks bring person-* to −2…+4%) and circle-das
 The four stay approved in batches.json, because a review icon leaves the package's main entry (`@area/icons/review`) and
 person is imported across the app; the redraws are on the owner's review page instead.
 
+- **person, 2026-10-30 (owner: "the icon for person looks too big", in Settings' nav beside palette and swatch-book):**
+  head back to r 3 at (8, 5) over a 10-wide body, 3–13 × 10.5–14 with r 3.5 shoulders; the circle keyline and the
+  foot at 14 kept. Ink 11.12 × 13.12, centred on 8, 8 (the r 3.5 head had put it at 7.75). Size 10.51 (−7%), the gear's
+  −5%; the r 3.5 head read largest in a list of 16px marks though the hull median said otherwise.
 
 ## Review against Cursor, 2026-10-29
 

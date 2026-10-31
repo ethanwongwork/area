@@ -91,7 +91,7 @@ test('a group cell holding an element draws its frame, an image cell does not', 
   const css = readFileSync(new URL('../../styles/src/components/asset-card.css', import.meta.url), 'utf8');
   const cell = css.match(/\.area-asset-card__cell \{[^}]*\}/)[0];
   assert.match(cell, /background-color: var\(--area-bg-frame\)/, 'the frame tone');
-  assert.match(css, /\.area-asset-card__cell:has\(> \.area-asset-card__thumb\) \{ box-shadow: inset 0 0 0 var\(--area-stroke-width\) var\(--area-border-divider\); \}/, "the frame's edge, inset");
+  assert.match(css, /\.area-asset-card__cell:has\(> \.area-asset-card__thumb\) \{ box-shadow: inset 0 0 0 var\(--area-stroke-width\) var\(--area-edge-media\); \}/, "the frame's edge, inset, the Media stroke group's");
   assert.match(css, /\.area-asset-card--containerless \.area-asset-card__cell \{ box-shadow: none; \}/, 'no edge at rest when containerless');
   const html = render(h(AssetCard, { name: 'Group one', group: ['a.png', h('button', null, 'Button')] }));
   assert.match(html, /area-asset-card__cell"><img[^>]*><\/span>/, 'an image cell has no thumb');

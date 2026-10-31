@@ -78,7 +78,7 @@
     max-inline-size: 100%;
     flex-shrink: 0;
 
-    border: var(--area-border-width) solid var(--area-border-decorative);
+    border: var(--area-border-width) solid var(--area-edge-regions);
     border-radius: var(--_panel-corner);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -385,8 +385,8 @@
    */
   .area-panel[data-resizable] { position: relative; }
   /* Docked, the seam it keeps is the edge it resizes from (Figma, Notion: a rule on that edge). */
-  .area-panel--flush:has(> .area-panel__resize[data-edge="start"]) { border-inline-start: var(--area-border-width) solid var(--area-border-decorative); }
-  .area-panel--flush:has(> .area-panel__resize[data-edge="end"]) { border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+  .area-panel--flush:has(> .area-panel__resize[data-edge="start"]) { border-inline-start: var(--area-border-width) solid var(--area-edge-regions); }
+  .area-panel--flush:has(> .area-panel__resize[data-edge="end"]) { border-inline-end: var(--area-border-width) solid var(--area-edge-regions); }
   /* The seam is counted once (inset.css): its side's content sits the inset from the outside, as the
      other side's does (owner, 2026-10-12: a docked Sidebar's rows sat 14 from the window and 15 from
      the outside of their seam). */

@@ -18,7 +18,7 @@
     --_sending-opacity: 0.6; /* spec: Codex sending opacity-60 */
     min-inline-size: 0;
     overflow: hidden;
-    border: var(--area-stroke-width) solid var(--area-border-card); /* no shadow under it: a required frame */
+    border: var(--area-stroke-width) solid var(--area-edge-blocks); /* no shadow under it: a required frame */
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);

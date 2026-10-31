@@ -72,7 +72,7 @@
     --_bg: var(--area-bg-component);
     --_bg-hover: var(--area-bg-component-hover);
     --_bg-active: var(--area-bg-component-active);
-    --_border: transparent;
+    --_border: var(--area-edge-buttons);
     --_border-hover: transparent;
   }
 

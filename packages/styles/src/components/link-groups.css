@@ -22,7 +22,7 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
-  .area-link-groups--divided { padding-block-start: var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
+  .area-link-groups--divided { padding-block-start: var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-edge-dividers); }
   .area-link-groups__title {
     margin: 0;
     font-size: var(--area-title-xs-size);

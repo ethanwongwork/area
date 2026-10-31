@@ -131,6 +131,9 @@
     border-radius: var(--_track-radius, var(--area-radius-full));
     background-color: var(--_track-fill);
     pointer-events: none;
+    /* The Tracks stroke group's edge, inside the trough (axes/stroke-groups.ts, 2026-10-30). */
+    outline: var(--area-stroke-width) solid var(--area-edge-tracks);
+    outline-offset: calc(-1 * var(--area-stroke-width));
   }
   /* The fill runs from the start to the thumb's centre (its far edge for the label-inside bar); the buffered stretch to
      its own place, behind the fill. Hover fades the fill's colour in on `hover-in` and out on `fast`. */

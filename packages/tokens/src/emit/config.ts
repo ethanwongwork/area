@@ -3,6 +3,7 @@ import { PILL_SHAPES, DEFAULT_PILLS } from '../axes/pills.ts';
 import { UI_SHORTHAND } from '../axes/ui-scale.ts';
 import { DEPTH_AXES } from '../axes/depth.ts';
 import { STATE_AXES } from '../axes/states.ts';
+import { STROKE_GROUPS, STROKE_GROUP_STEP } from '../axes/stroke-groups.ts';
 import { DEFAULT_MATERIAL, GRAIN_OPACITY_PER_STEP, GRAIN_TILE, MATERIAL_BUNDLES, MATERIAL_LEVERS, MATERIAL_ROLES, MATERIAL_STROKE_STYLES, MATERIAL_SWITCHES, MATERIAL_TARGETS, leverSteps } from '../axes/material.ts';
 
 /** Small, DOM-free public configuration helpers generated from the actual registry. */
@@ -79,6 +80,10 @@ export function materialGrainImage(step) {
 /** Edge and Depth (axes/depth.ts, surface.ts) and the interaction states (axes/states.ts): each an axis (data-area-<axis>), in the Inspector's order. */
 export const DEPTH_LEVERS = Object.freeze(${JSON.stringify(depthLevers)});
 
+/** The stroke groups (axes/stroke-groups.ts): each an axis, data-area-stroke-<id>, 0 to 8 in half steps of 2.5% of the text colour. */
+export const STROKE_GROUPS = Object.freeze(${JSON.stringify(STROKE_GROUPS)});
+export const STROKE_GROUP_STEP = ${STROKE_GROUP_STEP};
+
 /** The settings under their headings (axes/registry.ts), as the Inspector and the Theme tab show them. */
 export const SETTING_GROUPS = Object.freeze(${JSON.stringify(SETTING_GROUPS)});
 /** Every setting's name and sentence: the axes' (registry labels) and the scoped settings' (Contrast, Pills). */
@@ -127,6 +132,9 @@ export declare const MATERIAL_TARGETS: Readonly<Record<string, readonly string[]
 export declare function materialGrainImage(step: number): string;
 export declare const MATERIAL_BUNDLES: Readonly<Record<string, MaterialBundleInfo>>;
 export declare const DEFAULT_MATERIAL: string;
+export interface StrokeGroupInfo { id: string; label: string; hint: string; amount: number }
+export declare const STROKE_GROUPS: readonly StrokeGroupInfo[];
+export declare const STROKE_GROUP_STEP: number;
 export interface DepthLeverInfo { axis: string; label: string; hint: string; defaultValue: string; options: ReadonlyArray<{ value: string; label: string }> }
 export declare const DEPTH_LEVERS: readonly DepthLeverInfo[];
 export declare const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly string[] }>;

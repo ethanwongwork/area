@@ -296,7 +296,7 @@
      inside a Popover or Panel draws no second frame or shadow (audit F-20). */
   .area-color-picker, .area-color-picker--surface {
     --_picker-bg: var(--area-bg-surface);
-    --_picker-edge: var(--area-border-float);
+    --_picker-edge: var(--area-edge-floating);
     /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
     --_picker-lift: var(--area-shadow-edge), var(--area-shadow-float);
   }

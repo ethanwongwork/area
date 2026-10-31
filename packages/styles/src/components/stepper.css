@@ -141,7 +141,7 @@
     block-size: var(--_line);
     margin-block-start: calc((var(--_marker) - var(--_line)) / 2);
     margin-inline: var(--_gap);
-    background: var(--area-border-divider); /* spec: Timeline's line */
+    background: var(--area-edge-dividers); /* spec: Timeline's line */
   }
 
   /* An open step's content: under the text, in line with the title (the marker and the text gap in), 8 below it, the
@@ -167,7 +167,7 @@
     inset-block: calc(var(--_marker) + var(--_line-gap)) var(--_line-gap);
     inset-inline-start: calc((var(--_marker) - var(--_line)) / 2);
     inline-size: var(--_line);
-    background: var(--area-border-divider); /* spec: Timeline's line */
+    background: var(--area-edge-dividers); /* spec: Timeline's line */
   }
 
   @media (forced-colors: active) {

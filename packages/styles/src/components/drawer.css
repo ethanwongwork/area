@@ -62,7 +62,7 @@
        a uniform 15 left the three flush sides at 15). */
     padding: var(--_drawer-outer);
     padding-inline-start: var(--_drawer-inset);
-    border: 0 solid var(--area-border-float);
+    border: 0 solid var(--area-edge-floating);
     border-inline-start-width: var(--area-border-width);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);

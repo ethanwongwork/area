@@ -855,7 +855,7 @@ export const card = {
     size: ["sm", "md", "lg"],
   },
   elements: ["title", "description", "value", "content", "header", "heading", "header-action", "footer", "media", "overlay", "list", "link", "action", "carousel"],
-  elementModifiers: { media: ["well", "bleed"], overlay: ["top-start", "top-end", "bottom-start", "bottom-end", "reveal"] },
+  elementModifiers: { media: ["well", "bleed"], overlay: ["top-start", "top-end", "bottom-start", "bottom-end", "reveal"], footer: ["spread"] },
   states: ["selected"],
   defaults: { layout: "vertical", size: "md" },
 } as const satisfies ComponentManifest;

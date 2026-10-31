@@ -84,9 +84,10 @@ test('every surface takes its depth from its elevation role', () => {
   assert.match(float, /var\(--area-elevation\) \/ 100 \* 1 \* var\(--area-shadow-slot-2-a\)/, 'the float key is not the Menu\'s shadow at Depth %');
   assert.match(float, /var\(--area-shadow-size\) \* 8px \* var\(--area-shadow-slot-2-t\)/, 'the float key lost its 8px offset');
   assert.match(float, /rgb\(0 0 0 \/ min\(0\.9, calc\(var\(--area-elevation\) \/ 100 \* 1 \* var\(--area-shadow-slot-2-a\) \* 2\)\)\)/, 'dark shadows are not twice the light alpha');
-  // Resting and lift are one tight layer each (axes/depth.ts TIGHT, owner 2026-10-21): ChatGPT's sm and md, 8% at step 3.
+  // Resting and lift are one tight layer each (axes/depth.ts TIGHT, owner 2026-10-21). Resting is a small contact shadow,
+  // 4% at step 3 (owner 2026-10-30: "even more subtle/small"; was ChatGPT's sm at 8%); lift is ChatGPT's md, 8% at step 3.
   const resting = root.match(/--area-shadow-resting:\s*([^;]+);/)[1];
-  assert.match(resting, /0 calc\(var\(--area-shadow-size\) \* 1px\) calc\(var\(--area-shadow-size\) \* 2px\) calc\(var\(--area-shadow-size\) \* -1px\) light-dark\(oklch\(.*?\/ calc\(var\(--area-shadow-resting-step\) \/ 100 \* 2\.6667\)\)/, 'the resting role is not 0 1px 2px -1px at Resting shadow');
+  assert.match(resting, /0 calc\(var\(--area-shadow-size\) \* 0\.5px\) calc\(var\(--area-shadow-size\) \* 1\.5px\) calc\(var\(--area-shadow-size\) \* -0\.5px\) light-dark\(oklch\(.*?\/ calc\(var\(--area-shadow-resting-step\) \/ 100 \* 1\.3333\)\)/, 'the resting role is not 0 0.5px 1.5px -0.5px at Resting shadow');
   const lift = root.match(/--area-shadow-lift:\s*([^;]+);/)[1];
   assert.match(lift, /0 calc\(var\(--area-shadow-size\) \* 2px\) calc\(var\(--area-shadow-size\) \* 4px\) calc\(var\(--area-shadow-size\) \* -1px\) light-dark\(oklch\(.*?\/ calc\(var\(--area-shadow-hover-step\) \/ 100 \* 2\.6667\)\)/, 'the lift role is not 0 2px 4px -1px at Hover shadow');
   assert.equal(leaf('shadow-hover-step'), '3', 'Hover shadow is not 3 by default');
@@ -270,13 +271,13 @@ test('required lines never ride the Surface axis', () => {
 });
 
 test('every floating surface draws the floating frame', () => {
-  // border-float: neutral 100 in light (Notion's popover ring; it carries the separation the minimal lift no longer
-  // does), neutral 650 in dark, so a floating surface stays distinct over another surface (DESIGN_SYSTEM.md, "Size and shape").
+  // The Floating stroke group's edge (axes/stroke-groups.ts, 2026-10-30; was border-float, neutral 100 / 650), so every
+  // floating surface takes one amount and stays distinct over another surface (DESIGN_SYSTEM.md, "Strokes").
   for (const selector of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-command-palette', '.area-select::picker(select)']) {
-    const rule = rules.find(r => r.selector === selector && /var\(--area-border-float\)/.test(r.body));
-    assert.ok(rule, `${selector} does not draw border-float`);
+    const rule = rules.find(r => r.selector === selector && /var\(--area-edge-floating\)/.test(r.body));
+    assert.ok(rule, `${selector} does not draw the Floating group's edge`);
   }
-  assert.match(ruleFor('.area-color-picker, .area-color-picker--surface')?.body ?? '', /--_picker-edge:\s*var\(--area-border-float\)/);
+  assert.match(ruleFor('.area-color-picker, .area-color-picker--surface')?.body ?? '', /--_picker-edge:\s*var\(--area-edge-floating\)/);
 });
 
 test('row actions change ink, not plate: Nav, Board cards, Edit summary files and Queue rows', () => {
@@ -364,13 +365,15 @@ test('every Kbd is a keycap: nothing unboxes it (owner 2026-10-22)', () => {
 
 test('soft fields draw a boundary under increased contrast', () => {
   // CONTRAST.md: under increased contrast a required boundary targets 3:1. A soft field's fill alone read 1.07:1,
-  // so its resting edge is `input-edge-soft`: none at standard contrast, the strong control edge at more (2026-10-15).
+  // so its resting edge is `input-edge-soft`: the Fields group's amount at standard contrast, the strong control edge at more.
   const soft = ['.area-input--soft', '.area-number-field--soft', '.area-otp-field--soft', '.area-select--soft', '.area-custom-select--soft',
     '.area-date-picker--soft', '.area-tag-picker--soft'];
   for (const block of soft) assert.match(ruleFor(block)?.body ?? '', /--_border:\s*var\(--area-input-edge-soft\)/, `${block} has no edge under increased contrast`);
   assert.match(ruleFor('.area-textarea--soft')?.body ?? '', /--_border:\s*var\(--area-textarea-edge-soft\)/, 'Textarea soft has no edge under increased contrast');
   assert.match(ruleFor('.area-input-group--soft')?.body ?? '', /border-color:\s*var\(--area-input-edge-soft\)/, 'Input group soft has no edge under increased contrast');
-  assert.match(css, /--area-input-edge-soft:\s*color-mix\(in srgb, transparent, var\(--area-edge-control\) calc\(var\(--area-contrast-more\) \* 100%\)\)/, 'input-edge-soft lost its contrast switch');
+  // Since 2026-10-30 the edge is the Fields stroke group's (axes/stroke-groups.ts), which carries the contrast switch.
+  assert.match(css, /--area-input-edge-soft:\s*var\(--area-edge-fields\)/, 'input-edge-soft is not the Fields group\'s edge');
+  assert.match(css, /--area-edge-fields:\s*color-mix\(in srgb, color-mix\(in srgb, var\(--area-fg-default\)[^;]*transparent\), var\(--area-stroke-control\) calc\(var\(--area-contrast-more\) \* 100%\)\)/, 'the Fields edge lost its contrast switch');
   // Composer is a field too: its card-edge frame turns to the strong control stroke under increased contrast.
   assert.match(ruleFor('.area-composer')?.body ?? '', /--_composer-edge:\s*var\(--area-composer-edge\)/, 'Composer has no strong edge under increased contrast');
 });
@@ -646,15 +649,16 @@ test('dividers only where intended, and a divider is the lightest line (owner 20
   for (const head of ['.area-plan[data-open] > .area-plan__head', '.area-queue[data-open] > .area-queue__head', '.area-plan[data-open] > .area-plan__bar']) {
     assert.doesNotMatch(ruleFor(head)?.body ?? '', /border-block-end\s*:\s*[^;]*solid/, `${head} draws a line`);
   }
-  // Separators and the dividers that stay paint the lightest line; a stronger one is opt-in (Table rows carry data).
+  // Separators and the dividers that stay paint the Dividers stroke group's line (axes/stroke-groups.ts, 2026-10-30; was
+  // the lightest rung, border-decorative), so every divider takes one amount.
   const lightest = {
-    '.area-separator': /background-color:\s*var\(--area-border-decorative\)/,
-    '.area-nav__separator': /background-color:\s*var\(--area-border-decorative\)/,
-    '.area-inline-list--rule > .area-inline-list__item:not(:last-child)::after': /background-color:\s*var\(--area-border-decorative\)/,
-    '.area-file-upload-item__separator': /background-color:\s*var\(--area-border-decorative\)/,
-    '.area-shortcut-list--divided .area-shortcut-list__item:not(:last-child)': /border-block-end:[^;]*var\(--area-border-decorative\)/,
+    '.area-separator': /background-color:\s*var\(--area-edge-dividers\)/,
+    '.area-nav__separator': /background-color:\s*var\(--area-edge-dividers\)/,
+    '.area-inline-list--rule > .area-inline-list__item:not(:last-child)::after': /background-color:\s*var\(--area-edge-dividers\)/,
+    '.area-file-upload-item__separator': /background-color:\s*var\(--area-edge-dividers\)/,
+    '.area-shortcut-list--divided .area-shortcut-list__item:not(:last-child)': /border-block-end:[^;]*var\(--area-edge-dividers\)/,
   };
-  for (const [selector, paint] of Object.entries(lightest)) assert.match(ruleFor(selector)?.body ?? '', paint, `${selector} is not the lightest line`);
+  for (const [selector, paint] of Object.entries(lightest)) assert.match(ruleFor(selector)?.body ?? '', paint, `${selector} is not the Dividers group's line`);
   assert.equal(rules.some(({ selector, body }) => selector === '.area-shortcut-list__item:not(:last-child)' && /border/.test(body)), false, 'Shortcut list rows are ruled by default');
 });
 
@@ -811,4 +815,37 @@ test('a panel\'s Fields and facts share its label column', () => {
   const facts = read('.area-panel .area-description-list--columns:not(.area-description-list--framed)', 'grid-template-columns');
   assert.ok(facts?.startsWith('var(--_panel-label)'), `facts in a panel take ${facts}`);
   assert.equal(read('.area-panel .area-description-list--columns:not(.area-description-list--framed)', 'column-gap'), 'var(--area-ui-cluster)');
+});
+
+test('every Card slot sits on the card\'s one space: CardContent adds no padding and media steps back out (owner 2026-10-30)', () => {
+  const body = selector => rules.find(rule => rule.selector === selector)?.body ?? '';
+  assert.match(body('.area-card'), /padding:\s*var\(--_card-padding\)/, 'Card is not padded by its space');
+  assert.match(body('.area-card'), /--_card-padding:\s*calc\(var\(--_card-space\) - var\(--_card-border\)\)/, 'Card\'s padding is not its space less the border');
+  assert.doesNotMatch(body('.area-card__content'), /padding/, 'CardContent pads its slots, so a slot outside it sits elsewhere');
+  assert.match(body('.area-card__content'), /gap:\s*var\(--_card-gap\)/, 'CardContent spaces its blocks apart from the card\'s section gap');
+  assert.ok(rules.some(rule => /> \.area-card__media:not\(\.area-card__media--bleed\)$/.test(rule.selector) && /margin-inline:\s*calc\(-1 \* var\(--_card-pull\)\)/.test(rule.body)), 'inset media does not step back out to the media inset');
+});
+
+test('every stroke group\'s members draw its edge, and the groups are the only edges they draw (owner 2026-10-30)', () => {
+  // axes/stroke-groups.ts: twelve groups, each an amount of the text colour over the ground; a member that kept its old
+  // rung would ignore its group's setting. One representative rule per member, as the stylesheet writes it.
+  const members = {
+    cards: [['.area-card', /--_card-edge:\s*var\(--area-edge-cards\)/], ['.area-attachment', /--_attachment-edge:\s*var\(--area-edge-cards\)/]],
+    blocks: [['.area-code-block', /border:[^;]*var\(--area-edge-blocks\)/], ['.area-table-wrapper', /border:[^;]*var\(--area-edge-blocks\)/]],
+    callouts: [['.area-alert', /--_border:\s*var\(--area-edge-callouts\)/]],
+    floating: [['.area-popover, .area-menu', /border:[^;]*var\(--area-edge-floating\)/], ['.area-dialog', /border:[^;]*var\(--area-edge-floating\)/], ['.area-toast', /border:[^;]*var\(--area-edge-floating\)/]],
+    regions: [['.area-panel', /border:[^;]*var\(--area-edge-regions\)/]],
+    dividers: [['.area-separator', /background-color:\s*var\(--area-edge-dividers\)/], ['.area-menu__separator', /background-color:\s*var\(--area-edge-dividers\)/], ['.area-table th, .area-table td, .area-table__cell', /border-block-end:[^;]*var\(--area-edge-dividers\)/]],
+    buttons: [['.area-button--soft', /--_border:\s*var\(--area-edge-buttons\)/], ['.area-segmented', /outline:[^;]*var\(--area-edge-buttons\)/], ['.area-toggle-group--soft', /outline:[^;]*var\(--area-edge-buttons\)/]],
+    tracks: [['.area-slider__rail', /outline:[^;]*var\(--area-edge-tracks\)/], ['.area-progress', /outline:[^;]*var\(--area-edge-tracks\)/]],
+    tags: [['.area-count--soft', /box-shadow:[^;]*var\(--area-edge-tags\)/], ['.area-kbd', /border:[^;]*var\(--area-edge-tags\)/]],
+    media: [['.area-avatar', /outline:[^;]*var\(--area-edge-media\)/]],
+  };
+  for (const [group, list] of Object.entries(members)) for (const [selector, paint] of list) {
+    assert.ok(rules.some(rule => rule.selector === selector && paint.test(rule.body)), `${selector} does not draw the ${group} group's edge`);
+  }
+  // Soft fields and swatches reach their groups through their own roles.
+  assert.match(css, /--area-input-edge-soft:\s*var\(--area-edge-fields\)/, 'a soft field\'s edge is not the Fields group\'s');
+  assert.match(css, /--area-token-swatch-ring:\s*var\(--area-edge-media\)/, 'a swatch\'s ring is not the Media group\'s');
+  assert.match(css, /\.area-checkbox--soft,\s*\.area-radio--soft\s*\{[^}]*--_card-edge:\s*var\(--area-edge-options\)/, 'a soft option row does not draw the Options group\'s edge');
 });

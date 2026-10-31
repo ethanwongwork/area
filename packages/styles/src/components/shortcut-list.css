@@ -55,7 +55,7 @@
   /* Divided: a rule under each row but the last, the row's full width (ChatGPT's sheet), in the lightest line. Off by
      default (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"):
      the rows are a row apart, which separates them. Was always on, in border-divider. */
-  .area-shortcut-list--divided .area-shortcut-list__item:not(:last-child) { border-block-end: var(--area-stroke-width) solid var(--area-border-decorative); }
+  .area-shortcut-list--divided .area-shortcut-list__item:not(:last-child) { border-block-end: var(--area-stroke-width) solid var(--area-edge-dividers); }
 
   /* spec: ChatGPT's command name, 14/20 400 in the default ink. */
   .area-shortcut-list__label { min-inline-size: 0; margin: 0; overflow-wrap: anywhere; }

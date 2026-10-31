@@ -173,7 +173,7 @@
     --_on-solid: var(--area-fg-on-inverse); --_tone-fg: var(--area-fg-on-inverse);
     --_line: var(--area-bg-inverse); --_line-hover: var(--area-bg-inverse);
   }
-  .area-badge--soft { --_bg: var(--_surface); --_bg-hover: var(--_surface-hover); --_fg: var(--_tone-fg); }
+  .area-badge--soft { --_border: var(--area-edge-tags); --_border-hover: var(--area-edge-tags); --_bg: var(--_surface); --_bg-hover: var(--_surface-hover); --_fg: var(--_tone-fg); }
   .area-badge--solid { --_bg: var(--_solid); --_bg-hover: var(--_solid-hover); --_fg: var(--_on-solid); --_dot-color: var(--_on-solid); }
   .area-badge--outline { --_bg: transparent; --_bg-hover: var(--_surface); --_fg: var(--_tone-fg); --_border: var(--_line); --_border-hover: var(--_line-hover); }
   /* Transparent inverse treatments use inverse ink (the background endpoint). */

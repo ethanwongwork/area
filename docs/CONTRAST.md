@@ -52,9 +52,13 @@ measurements are in Git history (`archive/docs/batches/V01/`, removed after comm
   a control or focus indicator ([Strokes](DESIGN_SYSTEM.md#strokes)).
 - `edge-control`, `edge-control-hover`, `edge-selected`, `edge-accent`, `fill-toggle`:
   presentation roles selecting quiet or strong endpoints according to contrast preference.
-  `input-edge-soft` (a soft field's resting edge: none, or the strong edge) and `composer-edge` (Composer's
-  frame: the card edge, or the strong stroke) follow the same switch, so every field reaches 3:1 under increased
-  contrast (boundary sweep, 2026-10-15).
+  `input-edge-soft` (a soft field's resting edge: the Fields stroke group's, or the strong edge) and `composer-edge`
+  (Composer's frame: the card edge, or the strong stroke) follow the same switch, so every field reaches 3:1 under
+  increased contrast (boundary sweep, 2026-10-15).
+- `edge-<group>` (the twelve stroke groups, axes/stroke-groups.ts, 2026-10-30): a decorative amount of the text colour
+  at standard contrast, which a group may set to 0; the level takes each one the rest of the way to `stroke-control`
+  (3:1), so More restores every group's edge whatever its amount. A required boundary never rides a group (the fixed
+  list in DESIGN_SYSTEM.md, "Strokes").
 
 Contrast is a level, `--area-contrast-more` from 0 to 1, in nine steps since 2026-10-22 (owner: "i want more
 granularity in those options"): `data-area-contrast="0"` (Standard) to `"8"` (More), an eighth a step. The names

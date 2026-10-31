@@ -237,6 +237,10 @@ export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(functi
   return <div ref={ref} className={cardVariants({ layout, size }, className)} data-selected={selected ? "" : undefined} {...rest} />;
 });
 
+/**
+ * Groups blocks that belong together. Optional: every slot (CardHeader, CardTitle, CardDescription, CardList, CardFooter)
+ * sits on the card's space and section gap whether it is in CardContent or straight in the Card.
+ */
 export const CardContent = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardContent({ className, ...rest }, ref) {
   return <div ref={ref} className={cx("area-card__content", className)} {...rest} />;
 });
@@ -330,8 +334,14 @@ export const CardCarousel = /* @__PURE__ */ forwardRef<HTMLUListElement, HTMLAtt
   return <ul ref={ref} tabIndex={tabIndex} className={cx("area-card__carousel", className)} {...rest} />;
 });
 
-export const CardFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardFooter({ className, ...rest }, ref) {
-  return <div ref={ref} className={cx("area-card__footer", className)} {...rest} />;
+export interface CardFooterProps extends Div {
+  /** Push the first and last children to the two ends (a person and a value), as Stack's `spread`. */
+  spread?: boolean;
+}
+
+/** A row at the bottom of the card, on the card's space; it drops to the bottom of a taller card. */
+export const CardFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, CardFooterProps>(function CardFooter({ spread, className, ...rest }, ref) {
+  return <div ref={ref} className={cx("area-card__footer", spread && "area-card__footer--spread", className)} {...rest} />;
 });
 
 /* --- Separator ------------------------------------------------------------ */

@@ -16,7 +16,7 @@
     --_card-column: calc(var(--_card-list) + var(--area-ui-row-inset)); /* 12 */
     min-inline-size: 0;
     overflow: hidden;
-    border: var(--area-stroke-width) solid var(--area-border-card); /* no shadow under it: a required frame */
+    border: var(--area-stroke-width) solid var(--area-edge-blocks); /* no shadow under it: a required frame */
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -221,7 +221,7 @@
     inset-block-start: calc(var(--_rail-pad) + var(--area-text-sm-leading) / 2 + var(--_rail-off));
     inset-block-end: calc(-1 * (var(--area-space-4) + var(--_rail-pad) + var(--area-text-sm-leading) / 2 - var(--_rail-off))); /* the rail's 4 between rows */
     inline-size: var(--area-stroke-width);
-    background: var(--area-border-divider);
+    background: var(--area-edge-dividers);
   }
   @media (forced-colors: active) { .area-plan--rail > .area-plan__items > .area-plan__item:not(:last-child)::before { background: CanvasText; } }
 }

@@ -41,7 +41,7 @@
 
     /* A filled keycap with no drawn edge, as Notion's shortcut hints are (7% warm fill, 500
        muted ink). The 1px transparent border keeps the box a whole number. */
-    border: var(--area-stroke-width) solid transparent;
+    border: var(--area-stroke-width) solid var(--area-edge-tags);
     border-radius: var(--_radius);
     /* The mark fill, translucent as Badge's and Count's (round 51, 2026-10-19): an opaque grey matched the row plate
        it sat on (a pressed row's is the same grey), so the keycap vanished on hover and press; a translucent fill

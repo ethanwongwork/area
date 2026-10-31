@@ -326,7 +326,33 @@ line ([audit](research/consistency-audit-2026-10-12.md)).
   - the seams inside them;
   - the edges of filled shapes (Alert, inline Code, the Segmented and Toggle group tracks).
 
-**Colour, lightest to firmest:**
+**Colour by group (owner, 2026-10-30).** A stroke's colour is its group's, one of twelve by what the stroke does
+(`axes/stroke-groups.ts`; Inspector › Stroke, each 0 to 8). A step is 2.5% of the text colour over whatever is under the
+stroke, mixed in sRGB, so a group keeps its distance on every ground, light or dark; Edge contrast is the master (4 leaves
+the amounts as set), and Contrast takes every group the rest of the way to the 3:1 control stroke. Defaults are the
+owner's picks:
+
+| Group | Amount | Members |
+|---|---|---|
+| Cards | 4 (10%) | Card, Surface, Asset card, Attachment, Board card, Preview frame |
+| Blocks | 5 (12.5%) | Code block, Table's frame, Description list framed, Plan, Queue, Edit summary |
+| Callouts | 4 | Alert |
+| Floating | 5 | Menu, Popover, Hover card, Toast, Dialog, Drawer, Command palette, Calendar and Color picker surfaces, the Select picker, floating Toolbar and Titlebar |
+| Regions | 3 (7.5%) | Panel, the Titlebar's rule |
+| Dividers | 3 | Separator, Menu, Nav, Toolbar and File upload separators, Table rows and column rules, Tabs track, Accordion, Description list divided, Link groups, Shortcut list, Inline list, Tree view guides, Timeline, Stepper and Step lines, Plan's rail, the Command palette's search rule, a flush Code block's rule |
+| Fields | 5 | Soft Input, Select, Custom select, Number field, Textarea, Date picker, Tag picker, OTP, Input group (`input-edge-soft`) |
+| Buttons | 3 | Soft Button, soft Button group, soft Split button, soft Toggle group, the Segmented track |
+| Options | 4 | Choice cards and soft choice rows (Radio, Checkbox) |
+| Tracks | 3 | Slider rail, Switch's off track, Progress, Meter (a segmented Meter has none) |
+| Tags | 3 | Soft Badge, soft Count, Tag, Kbd |
+| Media | 2 (5%) | Avatar, swatch rings (`token-swatch-ring`), Asset card's inner frame and group cells |
+
+Fixed, in no group: outline Button, Badge and Chip, outline fields, solid fills, ghost and toolbar buttons, rows, unchecked
+Checkbox and Radio boxes, focus rings, selected edges, field state and disabled edges, inline Code, Composer. A soft Code
+block stays fill only. Width still follows the job (above); a group sets only colour. The rungs below remain for the
+roles outside the groups.
+
+**Colour, lightest to firmest (the rungs outside the groups):**
 
 | Role | Light | For |
 |---|---|---|

@@ -74,7 +74,7 @@
     inline-size: min(calc(100vw - var(--area-space-32)), 600px); /* spec */
     max-block-size: min(700px, calc(100vh - 77px - var(--area-space-16))); /* spec: Notion 700 */
     overflow: hidden;
-    border: var(--area-border-width) solid var(--area-border-float);
+    border: var(--area-border-width) solid var(--area-edge-floating);
     border-radius: var(--_palette-radius);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -96,7 +96,7 @@
     /* The search icon on the rows' icon column, the typed text on their text column (Menu's 12 gap). */
     padding-inline: var(--_column);
     gap: var(--area-gap-row); /* Menu's icon-to-label gap (audit S11a) */
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-end: var(--area-border-width) solid var(--area-edge-dividers);
   }
   .area-command-palette__search-icon {
     display: inline-flex;

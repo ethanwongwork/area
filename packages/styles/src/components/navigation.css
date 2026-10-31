@@ -103,7 +103,7 @@
    * the tabs when an attachment pads the list.
    */
   .area-tabs--track .area-tabs__list {
-    background: linear-gradient(var(--area-border-divider), var(--area-border-divider)) left bottom / 100% var(--area-stroke-width) no-repeat content-box;
+    background: linear-gradient(var(--area-edge-dividers), var(--area-border-divider)) left bottom / 100% var(--area-stroke-width) no-repeat content-box;
   }
   /* The vertical track sits on the indicator's side, the start, as horizontal tabs put both at the
      bottom (audit D-21; was the end, opposite the rail). */
@@ -232,7 +232,7 @@
     /* spec: a table stands alone on the page like a Card, and its edge is never lighter than
        the row rules inside it, so both take the divider role. */
     /* A required frame: it keeps its edge under Borderless (audit S10). */
-    border: var(--area-stroke-width) solid var(--area-border-divider);
+    border: var(--area-stroke-width) solid var(--area-edge-blocks);
     /* The surface corner, never deeper than 1.5 x the cells' side inset (owner, 2026-10-12: a
        compact table put 8px-inset cells under an 18 corner). Bites only at the roundest settings. */
     border-radius: min(var(--area-radius-container), max(var(--area-radius-floor), round(down, calc((var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)) * 1.5), 2px)));
@@ -265,7 +265,7 @@
     text-align: start;
     vertical-align: top;
     /* Row rules are standalone dividers, `stroke-width` like the frame, so they stay under Borderless too. */
-    border-block-end: var(--area-stroke-width) solid var(--area-border-divider);
+    border-block-end: var(--area-stroke-width) solid var(--area-edge-dividers);
     overflow-wrap: break-word;
   }
 
@@ -332,7 +332,7 @@
   .area-table--md { --_cell-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); }
   .area-table--lg { --_cell-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); }
   .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
-  .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-stroke-width) solid var(--area-border-divider); }
+  .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-stroke-width) solid var(--area-edge-dividers); }
 
   /*
    * Flush: the table sits on its surface without a frame (Geist's type table, Cursor's icon sheet;
@@ -552,7 +552,7 @@
       padding: var(--area-space-4);
       /* The floating frame, as Menu's and Popover's (consistency pass 2026-10-12; was `border-decorative`, which in
          dark is the #282828 seam rather than the #4b4b4b frame every other floating surface draws). */
-      border: var(--area-border-width) solid var(--area-border-float);
+      border: var(--area-border-width) solid var(--area-edge-floating);
       /* The field's corner, as every list opened from a field (surface.css, "A list opened from a field"): options at the
          select's corner, the picker 4 rounder (owner, 2026-10-23). */
       --area-radius-list-row: max(0px, min(calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height, var(--area-control-md)) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full)), calc(var(--area-ui-row) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));

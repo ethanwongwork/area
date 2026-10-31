@@ -121,7 +121,7 @@
 
   /* --- divided and framed --------------------------------------------------- */
   /* spec: ChatGPT's 1px rule under each row but the last, inset by the row's side padding (Table's divider role). */
-  .area-description-list--divided { --_divider: var(--area-border-divider); }
+  .area-description-list--divided { --_divider: var(--area-edge-dividers); }
   .area-description-list--divided > .area-description-list__item:not(:last-child)::after {
     content: "";
     position: absolute;
@@ -133,7 +133,7 @@
   }
   /* The frame: Table's (divider edge at `stroke-width`, container corner, surface), as ChatGPT's settings card. */
   .area-description-list--framed {
-    border: var(--area-stroke-width) solid var(--area-border-divider);
+    border: var(--area-stroke-width) solid var(--area-edge-blocks);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
   }

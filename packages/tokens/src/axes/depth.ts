@@ -56,7 +56,7 @@ const numbered = (n: number, zero: string, write: (i: number) => Record<string, 
 export const STROKE_AXIS = control("stroke", "Edge contrast", "How dark every stroke is: its distance from its ground, 0 (none) to 8 in half steps", "4", ["stroke-strength"],
   range(16).map(i => { const n = i / 2; return { id: String(n), label: n === 0 ? "0 (None)" : String(n), tokens: { "stroke-strength": n / 4 } }; }));
 
-export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting shadow", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8: one tight layer, 3 is 8% (ChatGPT's sm)", "3", ["shadow-resting-step"],
+export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting shadow", "How much cards and panels lift at rest, 0 (none) to 8: one small contact layer, 3 is 4%", "3", ["shadow-resting-step"],
   numbered(8, "None", i => ({ "shadow-resting-step": i })));
 
 /** Hover shadow (owner, 2026-10-21): how much a hovered card or tile lifts, its own scale (it rode Floating shadow before),
@@ -136,12 +136,14 @@ const ROLES = {
  * The tight roles (owner, 2026-10-21: "faint, low spread shadows"; picks on the state page): one layer whose spread is
  * pulled in under its edge, so it reads as a soft edge rather than a haze. [y, blur, spread] at Shadow size 4, and the
  * strength per step (3 is 8%, ChatGPT's sm and md). Softness shapes the floating roles only; these stay one layer.
- *   resting  a card, panel or raised thumb at rest: ChatGPT's sm, `0 1px 2px -1px` (was 0 0 2 + 0 2 4 at 1.5%)
+ *   resting  a card or panel at rest: a contact shadow, `0 0.5px 1.5px -0.5px`, 3 is 4% (owner, 2026-10-30: "the rest
+ *            shadows currently are way too strong, they should be even more subtle/small"; was ChatGPT's sm, `0 1px 2px
+ *            -1px` at 8%, and before that 0 0 2 + 0 2 4 at 1.5%). Raised thumbs take the control role on the same step.
  *   lift     a hovered card or tile: ChatGPT's md, `0 2px 4px -1px`, by the Hover shadow setting (was Floating's)
  * `rimWeight` keeps the dark rim where it was (Floating's and Resting's old weights), so dark edges stay as quiet.
  */
 const TIGHT = {
-  resting: { geometry: [1, 2, -1], weight: 8 / 3, rimWeight: 0.5, step: "shadow-resting-step" },
+  resting: { geometry: [0.5, 1.5, -0.5], weight: 4 / 3, rimWeight: 0.5, step: "shadow-resting-step" },
   lift: { geometry: [2, 4, -1], weight: 8 / 3, rimWeight: 0.5, step: "shadow-hover-step" },
 } as const;
 export const SHADOW_ROLES = [...Object.keys(ROLES), ...Object.keys(TIGHT)] as ReadonlyArray<keyof typeof ROLES | keyof typeof TIGHT>;

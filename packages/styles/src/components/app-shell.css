@@ -34,7 +34,7 @@
     --_titlebar-rule: var(--area-border-width);
     block-size: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--_titlebar-rule));
     padding-inline: var(--_titlebar-start) var(--_titlebar-end);
-    border-block-end: var(--_titlebar-rule) solid var(--area-border-decorative);
+    border-block-end: var(--_titlebar-rule) solid var(--area-edge-regions);
     background: var(--area-bg-page);
     user-select: none;
     -webkit-app-region: drag;
@@ -90,7 +90,7 @@
     margin: var(--_titlebar-inset) var(--_titlebar-inset) 0;
     border-radius: min(calc(var(--area-radius-control-sm) + var(--_titlebar-inset) * var(--area-radius-concentric)), calc(var(--area-control-sm) / 2 + var(--_titlebar-inset)));
     background: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-border-float), var(--area-shadow-float);
+    box-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-edge-floating), var(--area-shadow-float);
   }
   .area-titlebar--floating.area-titlebar--macos { --_titlebar-start: var(--_titlebar-inset); --_titlebar-end: var(--_titlebar-inset); margin-inline-start: calc(67px + var(--_titlebar-inset)); } /* spec: the lights end at 67 */
   .area-titlebar__end {

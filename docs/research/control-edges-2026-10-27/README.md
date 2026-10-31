@@ -109,3 +109,64 @@ colour without a new width. Open: every group, or only `cards` and `feedback`; a
 4. `blocks`: moving Code block and Table onto the frame means Width 0 removes their edge too (unless Contrast More).
 5. Frame colour Accent: which groups, and its dark value.
 6. Every family in either set goes back to In review once built.
+
+## Review, 2026-10-30
+
+Owner: "make the stroke review page first: real components flat / frames only / frames + control edges, with the open
+decisions, then build what I pick." Scene: the app's Testing › Stroke groups (review)
+(`apps/desktop/src/content/examples/stroke-groups.tsx`), one cell per group, the groups switched by the scene's own
+prototype rules (`data-proto-frames`, `data-proto-edges`) until the sets are built. Captures: `shoot.mjs` (headless Edge,
+guest profile, 2x) of Today, Flat, Frames only, Frames + control edges, and the last at Edge contrast 2 and 6, light and
+dark. Review page: https://claude.ai/artifact/EMR6Enr65EhJVq17SZonSx (db collection `verdicts`, one doc per decision:
+`look`, `frame-<group>`, `edge-<group>`, `darkness`, `split-darkness`, `names`, `switch`, `blocks`, `accent`, `dark-rim`,
+`never`; each `{ choice, note, at }`).
+
+Corrections to "What exists today" found while building the scene: Chip and the Switch's off track already draw the
+control edge (`edge-control`); soft buttons draw a fainter one (`surface-hover`). In dark, with frames off, cards, menus
+and the dialog keep a faint rim from the dark shadow edge (decision `dark-rim`).
+
+## Groups by role, with amounts (round 2, 2026-10-30)
+
+Owner: "add even more granularity to the groups of strokes … similar to … pill shapes … if there are ways to group
+components that would make sense to have strokes while some shouldnt … find groups of components to apply strokes and
+amounts of edge contrast to." Round 1's on/off sets are replaced on the same review page
+(https://claude.ai/artifact/EMR6Enr65EhJVq17SZonSx, version 2) by twelve groups, each with an amount 0 (none) to 8 on one
+ladder: a step is 2.5% of `fg-default` over `bg-page`, mixed in sRGB as Cursor and Claude mix theirs (4 = 10%, 8 = 20%).
+
+| Group | Members | Today light / dark | Cursor | Claude | Recommended |
+|---|---|---|---|---|---|
+| Cards | Card, Asset card, File tile, Attachment, Board card, Surface | 3.2 / 8.3 | 8% (3.2) | 10% ring (4) | 3.5 |
+| Blocks | Code block, Table's frame, Preview frame | 3.2–5.4 / 8.3 | 12% (4.8) | 10%; code 20% at 0.5px | 4 |
+| Callouts | Alert, Turn notice, Hatnote | 2.2 / 6.4 | none found | toned edge on warning, danger | 2 |
+| Floating | Menu, Popover, Hover card, Toast, Dialog, Drawer, Command palette, pickers | 3.2 / 12.4 | 12% ring + shadow | 10% ring + shadow | 4 |
+| Regions | Panel, Sidebar and Inspector seams, Titlebar rule, docked Toolbar | 2.2 / 6.4 | 7.5–8% | 6–10% | 3 |
+| Dividers | Separator, menu separators, table rows, Description list and Accordion rows | 0–5.4 / 0–8.3 | 4–8% | 5–10% | 2 |
+| Fields | soft Input, Select, Combobox, Number field, Textarea, Date picker, Tag picker, OTP, Input group | 0 / 0 | 8% rest | 10% inset | 3.5 |
+| Buttons and toggles | soft Button, Button group, Split button, Toggle group, Segmented | 0–2.2 / 0–6.4 | none | none (light secondary 10%) | 0 |
+| Options | soft Radio and Checkbox rows, choice cards | 0 / 0 | n/a | n/a | 3.5 |
+| Tracks | Slider, Switch off track, Progress, Meter | 0–5.4 / 0–8.3 | none | none | 0 |
+| Tags | soft Badge, Count, Tag, Kbd | 0 / 0 | none | none | 0 |
+| Media | Avatar, Color swatch, image thumbnails | 0–4.8 / 0–4.2 | 4% (one avatar) | none | 2 |
+
+Chip moves to the fixed set (its edge is its shape, like outline Button and Badge). Reference values: read from Cursor's
+`workbench.glass.main.js` stroke recipes (base at 4/8/12/20%) and theme JSON, and Claude's `ion-dist` CSS (`--cds-border`
+10%, strong 20%), 2026-10-30. Finding: Area's dark strokes are about twice the references' (a dark card edge ≈21%, a
+menu rim ≈31%, against 10–12%). The page's scene is `StrokeLab` in `stroke-groups.tsx`, exported with `dump.mjs` and
+painted live over Area's built stylesheet; picks are `verdicts/amount-<group>` `{ value (null = today), note }` and
+`verdicts/<grouping|master|modes|width>` `{ choice, note }`.
+
+## Built (2026-10-30)
+
+From the owner's picks (the Defined preset; build the twelve groups, Edge contrast as master, one amount for light and
+dark, one width). Tokens: `axes/stroke-groups.ts` (twelve registry axes `stroke-<group>`, 0–8 in half steps, step token
+`--area-stroke-<group>-step`; derived `--area-edge-<group>` in emit/base.ts, a translucent sRGB mix of `fg-default` at
+amount × 2.5% × `stroke-strength`, then the Contrast level's share to `stroke-control`). `input-edge-soft` and
+`token-swatch-ring` read the Fields and Media edges. Components: every member listed in DESIGN_SYSTEM.md, "Strokes";
+troughs without a border (Slider rail, Progress, Meter) draw the Tracks edge as an inside outline, Avatar the Media
+edge the same way, Count and Tag as an inset ring. Plan, Queue and Edit summary went to Blocks (frames of content in a
+conversation), not Cards. App: Inspector › Stroke and Settings › Theme › Stroke list the twelve under Width and Edge
+contrast (readouts in %), each with a Foundations picture (its own members, `StrokeLab only`); Testing › Stroke groups
+shows every group at the Canvas's settings. Cohesion test: every group's members draw its edge. Verified: Cards 0 leaves
+Fields and Floating at 12.5%; Edge contrast 8 doubles them; Contrast 8 takes every edge to the 3:1 stroke.
+Not done: Families were not reopened one by one (the rule is system-wide); the dark shadow rim on floating and resting
+surfaces still draws beside the Floating and Cards edges.

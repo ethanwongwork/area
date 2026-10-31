@@ -16,7 +16,7 @@
     --_aspect: 1; /* spec: Figma and Penpot asset tiles, square */
     --_inset: var(--area-space-12); /* spec: Figma 6 at radius 5, Penpot 8 at 8: about the corner */
     --_ground: var(--area-bg-surface); /* spec: the gallery tile's ground (owner, 2026-10-13) */
-    --_edge: var(--area-border-card); /* spec: the gallery tile's and Card's edge (neutral 100, dark 750) */
+    --_edge: var(--area-edge-cards); /* spec: the gallery tile's and Card's edge (neutral 100, dark 750) */
     position: relative;
     isolation: isolate;
     display: grid;

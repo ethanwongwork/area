@@ -9,6 +9,8 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-tag {
+    /* The Tags stroke group's edge, drawn inside so the tag keeps its size (axes/stroke-groups.ts, 2026-10-30). */
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-tags);
     /* spec: 20, Notion's tag (notion--tag-removable--rest--light), the mark ladder's md. */
     --_height: var(--area-mark-label-md);
     /* The icon box: at most the plate less 4, as Badge's (12 at 20 and 24, 10 in Compact's 14), where the icon and the

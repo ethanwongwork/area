@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { Badge, BadgeGroup, Button, Card, CardCarousel, CardContent, CardDescription, CardFooter, CardHeader, CardLink, CardList, CardMedia, CardOverlay, CardTitle, CardValue, Slider, Toolbar, ToolbarItem } from "@area/react";
-import { AddIcon, ArrowRightIcon, ArrowUpRightIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon, MoreHorizontalIcon, PauseFilledIcon, SkipBackFilledIcon, SkipForwardFilledIcon, SunIcon, TrendingUpIcon } from "@area/icons";
+import { Avatar, Badge, BadgeGroup, Button, Card, CardCarousel, CardContent, CardDescription, CardFooter, CardHeader, CardLink, CardList, CardMedia, CardOverlay, CardTitle, CardValue, Separator, Slider, Stack, Toolbar, ToolbarItem } from "@area/react";
+import { AddIcon, ArrowRightIcon, ArrowUpRightIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon, MoreHorizontalIcon, PauseFilledIcon, SkipBackFilledIcon, SkipForwardFilledIcon, SparkleIcon, SunIcon, TrendingUpIcon, FlagIcon } from "@area/icons";
 
 /*
  * Every card here is the default size (md) unless its tile shows a size, with inset media
  * (16:9 in a vertical card) unless its tile shows bleed. Widths are demo framing: 300 for a
- * vertical card, 600 for a horizontal one, 170 square for a widget (Apple's small widget).
+ * vertical card, 600 for a horizontal one, 180 square for a widget (Apple's small widget, 170, plus the card's wider space).
  */
 const vertical = { inlineSize: 300 };
 const horizontal = { inlineSize: 600 };
-const widget = { inlineSize: 170, blockSize: 170 };
+const widget = { inlineSize: 180, blockSize: 180 };
 
 /* --- Layout ---------------------------------------------------------------- */
 
@@ -247,9 +247,10 @@ export const CardLinkedActions = () => (
 
 /*
  * --- Templates ---------------------------------------------------------------
- * Compositions of the slots above and other components, not variants. Each is the default
- * size and follows one order: media, header (title with description, an action on the right),
- * value, body blocks, footer controls.
+ * Compositions of the slots above and other components, not variants. Each is the default size and follows one order:
+ * media, header (title with description, an action on the right), value, body blocks, footer. The slots go straight in
+ * the Card: every one sits on the card's space and section gap, so no template sets a padding or a gap of its own
+ * (owner, 2026-10-30: "consistent, generic, simple, and modular layouts").
  */
 
 export const CardTemplateVideo = () => (
@@ -257,76 +258,94 @@ export const CardTemplateVideo = () => (
     <CardMedia aria-hidden="true">
       <CardOverlay placement="bottom-end"><Badge variant="solid" tone="inverse">12:04</Badge></CardOverlay>
     </CardMedia>
-    <CardContent>
-      <CardHeader action={<Button variant="ghost" iconOnly aria-label="More" icon={<MoreHorizontalIcon />} />}>
-        <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
-        <CardDescription>Description · 2 days ago</CardDescription>
-      </CardHeader>
-    </CardContent>
+    <CardHeader action={<Button variant="ghost" iconOnly aria-label="More" icon={<MoreHorizontalIcon />} />}>
+      <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
+      <CardDescription>Description, 2 days ago</CardDescription>
+    </CardHeader>
   </Card>
 );
 
 export const CardTemplateMusic = () => (
   <Card style={vertical}>
     <CardMedia aria-hidden="true" />
-    <CardContent>
-      <CardHeader action={<Button variant="ghost" iconOnly aria-label="Like" icon={<HeartIcon />} />}>
-        <CardTitle>Title</CardTitle>
-        <CardDescription>Description</CardDescription>
-      </CardHeader>
-      <Slider size="sm" aria-label="Position" defaultValue={40} buffered={65} />
-      <CardFooter>
-        <Toolbar aria-label="Playback">
-          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Previous" icon={<SkipBackFilledIcon />} /></ToolbarItem>
-          <ToolbarItem><Button pill iconOnly aria-label="Pause" icon={<PauseFilledIcon />} /></ToolbarItem>
-          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Next" icon={<SkipForwardFilledIcon />} /></ToolbarItem>
-        </Toolbar>
-      </CardFooter>
-    </CardContent>
+    <CardHeader action={<Button variant="ghost" iconOnly aria-label="Like" icon={<HeartIcon />} />}>
+      <CardTitle>Title</CardTitle>
+      <CardDescription>Description</CardDescription>
+    </CardHeader>
+    <Slider size="sm" aria-label="Position" defaultValue={40} buffered={65} />
+    <CardFooter>
+      <Toolbar aria-label="Playback">
+        <ToolbarItem><Button variant="ghost" iconOnly aria-label="Previous" icon={<SkipBackFilledIcon />} /></ToolbarItem>
+        <ToolbarItem><Button pill iconOnly aria-label="Pause" icon={<PauseFilledIcon />} /></ToolbarItem>
+        <ToolbarItem><Button variant="ghost" iconOnly aria-label="Next" icon={<SkipForwardFilledIcon />} /></ToolbarItem>
+      </Toolbar>
+    </CardFooter>
+  </Card>
+);
+
+/* A task (the owner's reference, 2026-10-30): a header with a status Badge, tags, a rule, then who and how far. */
+export const CardTemplateTask = () => (
+  <Card style={vertical}>
+    <CardHeader action={<Badge variant="soft" tone="warning" icon={<FlagIcon />}>Label</Badge>}>
+      <CardTitle>Title</CardTitle>
+      <CardDescription>Description</CardDescription>
+    </CardHeader>
+    <BadgeGroup><Badge variant="outline">Label</Badge><Badge variant="outline">Label</Badge></BadgeGroup>
+    <Separator />
+    <CardFooter spread>
+      <Stack orientation="horizontal" gap="related"><Avatar size="sm" src="images/david-tee.jpg" fallback="DT" alt="" />David Tee</Stack>
+      <CardDescription>Value</CardDescription>
+    </CardFooter>
   </Card>
 );
 
 export const CardTemplateWeather = () => (
   <Card style={widget}>
-    <CardContent>
-      <CardHeader action={<SunIcon />}>
-        <CardTitle>Title</CardTitle>
-      </CardHeader>
-      <CardValue>21°</CardValue>
-      <CardDescription>Description</CardDescription>
-    </CardContent>
+    <CardHeader action={<SunIcon />}>
+      <CardTitle>Title</CardTitle>
+    </CardHeader>
+    <CardValue>21°</CardValue>
+    <CardDescription>Description</CardDescription>
   </Card>
 );
 
 export const CardTemplateStat = () => (
   <Card style={widget}>
-    <CardContent>
-      <CardHeader action={<TrendingUpIcon />}>
-        <CardTitle>Label</CardTitle>
-      </CardHeader>
-      <CardValue>309.5</CardValue>
-      <CardDescription>+1.9% · Description</CardDescription>
-    </CardContent>
+    <CardHeader action={<TrendingUpIcon />}>
+      <CardTitle>Label</CardTitle>
+    </CardHeader>
+    <CardValue>309.5</CardValue>
+    <CardDescription>+1.9%, Description</CardDescription>
+  </Card>
+);
+
+/* A prompt or shortcut (the owner's reference, 2026-10-30): a title at the top, a label and a mark at the foot. */
+export const CardTemplatePrompt = () => (
+  <Card style={{ inlineSize: 300, blockSize: 180 }}>
+    <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
+    <CardFooter spread>
+      <span>Label</span>
+      <SparkleIcon />
+    </CardFooter>
   </Card>
 );
 
 export const CardTemplatePlan = () => (
   <Card style={vertical}>
-    <CardContent>
-      <CardHeader action={<Badge variant="outline" tone="info">Label</Badge>}>
-        <CardTitle>Title</CardTitle>
-      </CardHeader>
-      <CardValue>$20</CardValue>
-      <CardDescription>Description</CardDescription>
-      <CardList>
-        <li><CheckIcon />Item one</li>
-        <li><CheckIcon />Item two</li>
-      </CardList>
-      <CardFooter><Button fullWidth>Action</Button></CardFooter>
-    </CardContent>
+    <CardHeader action={<Badge variant="outline" tone="info">Label</Badge>}>
+      <CardTitle>Title</CardTitle>
+    </CardHeader>
+    <CardValue>$20</CardValue>
+    <CardDescription>Description</CardDescription>
+    <CardList>
+      <li><CheckIcon />Item one</li>
+      <li><CheckIcon />Item two</li>
+    </CardList>
+    <CardFooter><Button fullWidth>Action</Button></CardFooter>
   </Card>
 );
 
+/* Beside media the text needs CardContent to make one column; the rest of the card's slots are the same. */
 export const CardTemplateFeature = () => (
   <Card layout="horizontal" style={horizontal}>
     <CardMedia well>{["Item one", "Item two"].map(wellRow)}</CardMedia>
