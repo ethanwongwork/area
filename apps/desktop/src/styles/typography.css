@@ -54,3 +54,15 @@
     min-inline-size: 0;
   }
   .studio-type-card__sample { overflow: hidden; white-space: nowrap; text-box: trim-both cap alphabetic; }
+
+  /* --- Typefaces (src/pages/typefaces.tsx) ------------------------------------- */
+
+  /* A display face over a plain body: the title in the face, the body in Area's text face at the reading size, joined as
+     a title and its lede are (DESIGN_SYSTEM.md, Text pairs: the reading line joins the title above it). */
+  .studio-typeface-pair { display: grid; gap: var(--area-space-12); max-inline-size: 64ch; }
+  .studio-typeface-pair__title { overflow-wrap: anywhere; }
+  .studio-typeface-pair__body { margin: 0; color: var(--area-fg-muted); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-prose-leading); }
+  /* A style's sample in the Styles table: the reading size, on one line. */
+  .studio-typeface-style { font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading); white-space: nowrap; }
+  /* The Inspector's character: the preview's size for a glyph (icons draw at 128 there). */
+  .studio-typeface-preview { font-size: calc(var(--area-space-96) + var(--area-space-32)); line-height: 1; white-space: pre; }

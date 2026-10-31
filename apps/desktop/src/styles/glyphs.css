@@ -1,0 +1,74 @@
+  /* --- Glyph sheets (src/glyph-sheet.tsx): Icons' wall and a typeface's Glyphs tab -------------------------- */
+
+  /* A sheet: label-free cells (Lucide, Primer, Font Book's repertoire), the name in the hover window and the
+     Inspector. A cell is twice the glyph, never less than the glyph plus 32 (the icon browser's rule). Glyphs
+     sit straight on the Canvas's surface, no container (owner, 2026-10-12, after Cursor's icon gallery): a glyph
+     is its own figure, so a frame round a sheet only adds a second edge. The cells' plates hang into the margin
+     by the cell's own inset, so the first glyph's centre, not its plate, sets the column (as a Nav row's text,
+     not its plate, sets the Sidebar's). */
+  .studio-glyphs { --_cell: max(calc(var(--_size) * 2), calc(var(--_size) + var(--area-space-32))); --area-list-box-item: var(--_cell); }
+  /* Cells keep their own width and the spare room goes between the columns, so the first and last
+     glyphs sit exactly one hang from the edges at every Canvas width. */
+  .studio-glyphs__sheet {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--_cell));
+    justify-content: space-between;
+    gap: var(--area-space-2);
+    margin-inline: calc((var(--_cell) - var(--_size)) / -2);
+  }
+  .studio-glyphs__specimen { display: contents; }
+  .studio-glyphs__glyph { display: grid; place-items: center; color: var(--area-fg-default); }
+  .studio-glyphs__glyph svg { display: block; }
+  .studio-glyphs__cell {
+    display: grid;
+    place-items: center;
+    min-block-size: var(--_cell);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--area-radius-row);
+    background: transparent;
+    color: var(--area-fg-default);
+    cursor: default;
+  }
+  .studio-glyphs__cell svg { display: block; flex: none; }
+  /* A character in its face: the glyph set at the sheet's size on a one-em line, so the cell centres the em,
+     not the font's own ascent and descent (Font Book's repertoire). */
+  .studio-glyphs__char { display: block; font-size: var(--_size); line-height: 1; white-space: pre; font-feature-settings: normal; }
+  /* The row plates' pair (DESIGN_SYSTEM.md, "Shared state paint"): hover, then press and selected
+     a step firmer; in at once, out on `fast` (docs/MOTION.md). */
+  .studio-glyphs__cell { transition: var(--area-transition); }
+  @media (hover: hover) { .studio-glyphs__cell:hover { background: var(--area-bg-component-hover); transition-duration: 0s; } }
+  .studio-glyphs__cell:is(:active, [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
+  .studio-glyphs__cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+  /*
+   * The hover window (GlyphCell): an Area Hover card 256 wide. Name and its meta on one line, the glyph
+   * large on the card's own surface, then the actions. Insets and gaps are Popover's own (surface.css): 12 in
+   * from the edge, the md surface inset between its parts (16, 12 in compact) and the cluster gap between the
+   * actions, as Popover's body. It sits in the Canvas body, so it draws at the Canvas's type and density.
+   */
+  .studio-glyph-card {
+    --area-popover-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-64)); /* pick: 256, the Inspector's width */
+    /* In the gallery cards' shape (owner, 2026-10-24: "can the icon hover card be updated to match the style of the canvas
+       asset cards?"): their corner and their 16 from the edge to the name, through Popover's public hooks. */
+    --area-popover-corner: var(--_tile-radius);
+    --area-popover-inset: var(--_card-inset);
+  }
+  .studio-glyph-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--area-space-8); min-inline-size: 0; }
+  /* The name as an Asset card's: the UI text, regular (was the mono). */
+  .studio-glyph-card__name { min-inline-size: 0; overflow: hidden; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-overflow: ellipsis; white-space: nowrap; }
+  /* The meta is the card's secondary line at the UI size, as Popover's description (owner,
+     2026-10-17: the xs step read too small beside the name). */
+  .studio-glyph-card__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .studio-glyph-card__preview { display: grid; place-items: center; block-size: calc(var(--area-space-96) + var(--area-space-48)); color: var(--area-fg-default); }
+  .studio-glyph-card__preview svg { display: block; }
+  .studio-glyph-card__preview .studio-glyphs__char { font-size: var(--area-space-96); }
+  /* A character's Unicode line under the preview (Font Book's popover): its code point and its name, muted, wrapping. */
+  .studio-glyph-card__unicode { display: flex; gap: var(--area-space-8); color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .studio-glyph-card__unicode > :first-child { flex: none; font-variant-numeric: tabular-nums; }
+  /* The name's cap sits on the 12 inset like the sides, as Popover's header title does
+     (surface.css): the head gives back the leading above the cap. */
+  @supports (text-box: trim-both cap alphabetic) {
+    .studio-glyph-card > .studio-glyph-card__head:first-child { margin-block-start: round(nearest, calc((1cap - 1lh) / 2), 1px); }
+  }
+  .studio-glyph-card__actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-cluster); }

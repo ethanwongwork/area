@@ -246,6 +246,77 @@ ipcMain.on("area:titlebar", (event, height) => {
 });
 
 /*
+ * Licensed typefaces installed on this Mac (src/pages/typefaces.tsx; docs/research/typefaces-2026-10-31): the page asks
+ * for catalogue faces by the family names to look for ([{ id, names }]), and gets back what each matching file says
+ * about itself, measured as the generator measures the faces Area ships (scripts/typeface-facts.cjs): characters,
+ * axes, features, metrics, tuning, its styles and glyph names. Never the files: Area only draws a licensed face by its
+ * installed family name. Read once per launch, on the first ask; nothing in a capture.
+ */
+let fontFiles = null;
+function installedFontFiles() {
+  if (fontFiles) return fontFiles;
+  const fontkit = require("fontkit");
+  const folders = [join(app.getPath("home"), "Library/Fonts"), "/Library/Fonts"];
+  fontFiles = [];
+  for (const folder of folders) {
+    let names = [];
+    try { names = readdirSync(folder); } catch { continue; }
+    for (const name of names.filter(file => /\.(otf|ttf|ttc)$/i.test(file))) {
+      try {
+        const opened = fontkit.openSync(join(folder, name));
+        for (const font of opened.fonts ?? [opened]) {
+          const families = [font.getName("preferredFamily"), font.familyName].filter(Boolean).map(String);
+          fontFiles.push({ font, families, style: String(font.getName("preferredSubfamily") ?? font.subfamilyName ?? ""), weight: font["OS/2"]?.usWeightClass ?? 400, italic: Boolean(font["OS/2"]?.fsSelection?.italic) || font.italicAngle !== 0 });
+        }
+      } catch (error) { console.error(`[fonts] ${name}: ${error.message}`); }
+    }
+  }
+  return fontFiles;
+}
+
+ipcMain.handle("area:fonts-installed", (_event, wanted) => {
+  if (capture || !Array.isArray(wanted)) return null;
+  const { measure, staticWeights, stem, axesOf, instancesOf, ranges, names } = require("../scripts/typeface-facts.cjs");
+  const files = installedFontFiles();
+  const out = {};
+  for (const { id, names: looking } of wanted) {
+    if (typeof id !== "string" || !Array.isArray(looking)) continue;
+    const family = looking.map(String).find(name => files.some(file => file.families.includes(name)));
+    if (!family) continue;
+    const matches = files.filter(file => file.families.includes(family));
+    // The regular: roman, nearest 400.
+    const regular = [...matches].sort((a, b) => Number(a.italic) - Number(b.italic) || Math.abs(a.weight - 400) - Math.abs(b.weight - 400))[0];
+    try {
+      const { metrics, tuning } = measure(regular.font);
+      // A static family's strong and emphasis: measured across its roman weights, as the generator does.
+      if (!regular.font.variationAxes?.wght) {
+        const stems = {};
+        for (const file of matches.filter(entry => !entry.italic)) {
+          const x = file.font.glyphForCodePoint(120);
+          const s = x?.id ? stem(file.font, x.bbox.maxY) : null;
+          if (s && !(file.weight in stems)) stems[file.weight] = s;
+        }
+        Object.assign(tuning, staticWeights(stems));
+      }
+      const codePoints = [...new Set(matches.filter(file => !file.italic).flatMap(file => file.font.characterSet))];
+      const glyphNames = {};
+      for (const cp of codePoints.slice(0, 4000)) { const glyph = regular.font.glyphForCodePoint(cp); if (glyph?.name) glyphNames[cp.toString(16).toUpperCase()] = glyph.name; }
+      const styles = [...new Map(matches.map(file => {
+        const axes = file.font.variationAxes ?? {};
+        const weight = axes.wght ? `${axes.wght.min} ${axes.wght.max}` : String(file.weight);
+        return [`${weight}|${file.italic}`, { weight, style: file.italic ? "italic" : "normal", name: file.style }];
+      })).values()];
+      out[id] = {
+        family, names: names(regular.font), styles, axes: axesOf(regular.font), instances: instancesOf(regular.font),
+        features: [...new Set(matches.flatMap(file => file.font.availableFeatures ?? []))].sort(),
+        characters: codePoints.filter(cp => cp > 0x1f && cp !== 0x7f).length, ranges: ranges(codePoints), metrics, tuning, files: matches.length, glyphNames,
+      };
+    } catch (error) { console.error(`[fonts] ${family}: ${error.message}`); }
+  }
+  return out;
+});
+
+/*
  * The app's menu: the standard menus, with the tab commands a browser's tabs have (owner, 2026-10-29: "⌘W closes the tab
  * (plus ⌘⇧T, ⌃Tab, ⌘1–9)"). Without it Electron's default menu took ⌘W and closed the whole window. Each command goes to
  * the focused window's page (preload.cjs onCommand); ⌘1 to ⌘8 open that tab and ⌘9 the last, as Chrome's do.

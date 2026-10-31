@@ -52,7 +52,7 @@ export function placeLabel(place: Place): string {
     project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions" } as Record<PageId, string>)[place.page];
 }
 /** What a page's list holds, for its filter's placeholder. */
-const LISTED: Partial<Record<PageId, string>> = { color: "scales", typography: "roles", icons: "icons", components: "components",
+const LISTED: Partial<Record<PageId, string>> = { color: "scales", typography: "typefaces and roles", icons: "icons", components: "components",
   patterns: "patterns", inspiration: "images", materials: "bundles", tests: "tests" };
 
 /** Same section, whatever is chosen on it. New theme, and an old Foundations link, are under Themes. */

@@ -9,7 +9,16 @@
   Settings › Appearance › Panels, Sectioned or Floating (p5; `--area-edge-regions` now OVERRIDABLE). p1 (icon view
   buttons) no; p6 (segmented Meter) already existed. Checks: build, typecheck, npm test, contrast, React, desktop, docs,
   app-css, playgrounds; looked at in Electron light and dark.
-- **Interaction pass, branch `claude/electron-ui-interaction-pass-11beed` (uncommitted, 2026-10-31).** Owner: "fix the
+- **Typeface library in Typography, branch `claude/open-source-web-fonts-5529c2` (in a PR, 2026-10-31).** Research and
+  the owner's picks: `docs/research/typefaces-2026-10-31/` (specimen artifact 42NXMyi3…, `verdicts`). Typography's Sidebar
+  lists 107 faces (Text, Display, Code, Licensed) above the roles; a face opens at `…/typography/face/<id>/<tab>` with
+  Specimen, Glyphs, About (tables) and Code. Icons and Glyphs share `src/glyph-sheet.tsx`. Facts: `node
+  apps/desktop/scripts/typefaces.mjs` (run after changing the catalogue or a font package); installed licensed faces via
+  `area:fonts-installed` (facts only, never files). Checks: typecheck, desktop 28, docs, app-css; checked live in Electron
+  (Söhne trial glyphs, hover card, Inspector, arrows, Satoshi not installed) and in captures, light and dark. Next: the
+  font-switching settings and the approved ramp changes (emphasis 600, Geist 1.9.0 italic, display-xs, step-down, Title
+  weight).
+- **Interaction pass, branch `claude/electron-ui-interaction-pass-11beed` (merged PR #186, 2026-10-31).** Owner: "fix the
   responsiveness ... content in the middle screen to scale up and down", tooltips "glitch and get stuck", breadcrumb
   horizontal spacing, a full UI and interaction pass documented as skills. Done: the feed fills the Canvas (no 1236
   measure) and Auto scales specimens with their card (fit.ts AUTO_VIEW, 0.7 at 277, up to 1:1); the Canvas bar's start

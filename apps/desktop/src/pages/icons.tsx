@@ -6,13 +6,14 @@
  * @area/icons/meta), else the Sidebar's category, else the set. Icons, categories and batches come from
  * @area/icons; the SVG export and CopyButton are ../copy.tsx.
  */
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
-import { Badge, Button, Code, Count, EmptyState, HoverCard, ListBox, ListBoxItem, PanelSection, Segmented, Select, Table, TableCell, TableLink } from "@area/react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement } from "react";
+import { Badge, Button, Code, Count, EmptyState, PanelSection, Segmented, Select, Table, TableCell, TableLink } from "@area/react";
 import { batches as ICON_BATCHES, categories as ICON_CATEGORIES, icons as ICON_META } from "@area/icons/meta";
 import * as APPROVED from "@area/icons";
 import * as IN_REVIEW from "@area/icons/review";
 import { CopyIcon, DownloadIcon, StarFilledIcon, StarIcon } from "@area/icons";
 import { CopyButton, standaloneSvg } from "../copy.tsx";
+import { GlyphCell, GlyphGrid, GlyphSheet } from "../glyph-sheet.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
 import { Specimen } from "../specimen-scope.tsx";
@@ -85,59 +86,33 @@ function download(svg: string, name: string) {
   setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
-/**
- * The icon hover window (owner, 2026-10-12, after Cursor's icon gallery): resting on a cell opens
- * an Area Hover card under it with the icon's name and category, the icon large, and Copy SVG over
- * Download, stacked across the card at Button's default size (owner, 2026-10-17: stack them, drop one
- * copy). Copy name went: the name is printed on the card, and the Inspector keeps Copy name and
- * Copy import. The download says "Download" (its neighbour names the format). Its rows are built
- * only while it is open, so a sheet of hundreds of cells carries one empty surface each.
- */
 /*
- * The Canvas's icons. In the grid they are one ListBox (docs/specs/list-box.md): a single Tab stop, the arrows move
- * across the sheets in reading order and to the nearest icon above or below, typing jumps to a name, and selection
- * follows focus so the Inspector shows what the keys are on. Sections are its groups. The list view is a Table.
+ * The Canvas's icons: the shared glyph sheet (src/glyph-sheet.tsx), which a typeface's Glyphs tab uses too. The hover
+ * window (owner, 2026-10-12, after Cursor's icon gallery): the icon's name and category, the icon large, and Copy SVG
+ * over Download, stacked across the card at Button's default size (owner, 2026-10-17: stack them, drop one copy). Copy
+ * name went: the name is printed on the card, and the Inspector keeps Copy name and Copy import. The download says
+ * "Download" (its neighbour names the format).
  */
-function Sheet({ grid, value, onChoose, size, children }: { grid: boolean; value: string | null; onChoose: (name: string) => void; size: number; children: ReactNode }) {
-  const style = { "--_size": `${size}px` } as CSSProperties;
-  return grid
-    ? <ListBox layout="grid" aria-label="Icons" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-icons studio-sections" style={style}>{children}</ListBox>
-    : <div className="studio-icons studio-sections" style={style}>{children}</div>;
-}
-
 function IconCell({ entry, style, size }: { entry: Entry; style: Mode; size: number }) {
-  const [open, setOpen] = useState(false);
-  const preview = useRef<HTMLDivElement>(null);
+  const preview = useRef<HTMLSpanElement>(null);
   const Glyph = style === "filled" ? entry.Filled : entry.Icon;
   const svg = () => {
     const node = preview.current?.querySelector("svg");
     return node ? standaloneSvg(node, entry.name) : "";
   };
-  const category = CATEGORY_OF.get(entry.name);
   return (
-    // Pointer only: the arrows sweep the sheet, and the Inspector already shows the card's name and actions for the
-    // option the keys are on (the List box's selection follows focus).
-    <HoverCard side="bottom" align="center" delay={500} openOnFocus={false} open={open} onOpenChange={setOpen} className="studio-icon-card" aria-label={titleCase(entry.name)}
-      trigger={
-        // An option of the sheet's ListBox: selected by a press or, as the keys move, by focus.
-        <ListBoxItem value={entry.name} textValue={titleCase(entry.name)} className="studio-icons__cell" data-icon={entry.name} data-key={entry.name}
-          data-name={titleCase(entry.name)} aria-label={titleCase(entry.name)}>
-          {/* The glyph is the specimen: it takes the Inspector's settings, its cell stays the app's (specimen-scope.tsx). */}
-          <Specimen as="span" className="studio-icons__specimen"><Glyph size={size} aria-hidden="true" /></Specimen>
-        </ListBoxItem>
-      }>
-      {open ? <>
-        <div className="studio-icon-card__head">
-          <span className="studio-icon-card__name">{entry.name}</span>
-          {category ? <span className="studio-icon-card__meta">{category.name}</span> : null}
-        </div>
-        <div className="studio-icon-card__preview" ref={preview}><Glyph size={CARD_PREVIEW} aria-hidden="true" /></div>
-        <div className="studio-icon-card__actions">
+    <GlyphCell value={entry.name} label={titleCase(entry.name)} data={{ "data-icon": entry.name }}
+      card={() => ({
+        name: entry.name,
+        meta: CATEGORY_OF.get(entry.name)?.name,
+        preview: <span ref={preview} className="studio-glyphs__specimen"><Glyph size={CARD_PREVIEW} aria-hidden="true" /></span>,
+        actions: <>
           <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth size="md" value={() => svg()} />
           <Button variant="outline" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), entry.name)}>Download</Button>
-        </div>
-      </> : null}
-    </HoverCard>
+        </>,
+      })}>
+      <Glyph size={size} aria-hidden="true" />
+    </GlyphCell>
   );
 }
 
@@ -244,7 +219,7 @@ export function IconsPage() {
       }
       canvas={total ? (
         <PinMenu pins={pins} label="Icon">
-        <Sheet grid={mode !== "list"} value={icon?.name ?? null} onChoose={choose} size={size}>
+        <GlyphSheet grid={mode !== "list"} label="Icons" value={icon?.name ?? null} onChoose={choose} size={size}>
           {onCanvas.map(section => (
             <CanvasSection key={section.slug} role={mode === "list" ? undefined : "group"} id={`icons-${section.slug}`} title={view || onCanvas.length === 1 ? undefined : section.name} count={section.shown.length}>
               {mode === "list" ? (
@@ -259,7 +234,7 @@ export function IconsPage() {
                       const Glyph = style === "filled" ? entry.Filled : entry.Icon;
                       return (
                         <tr key={name} data-selected={name === icon?.name ? "" : undefined}>
-                          <TableCell fit><Specimen as="span" className="studio-icons__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></Specimen></TableCell>
+                          <TableCell fit><Specimen as="span" className="studio-glyphs__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></Specimen></TableCell>
                           <td><TableLink href={hrefOf({ page: "icons" })} onClick={event => { event.preventDefault(); choose(name); }}><Code>{name}</Code></TableLink></td>
                           <td><span className="studio-muted">{entry.keyline}</span></td>
                           <td>{statusOf(name) ? <StatusBadge name={name} /> : <span className="studio-muted">—</span>}</td>
@@ -271,16 +246,16 @@ export function IconsPage() {
               ) : (
                 // Grid: label-free cells straight on the Canvas's surface, no container (owner,
                 // 2026-10-12, after Cursor's icon gallery); names in the hover window and the Inspector.
-                <div className="studio-icons__sheet">
+                <GlyphGrid>
                   {section.shown.map(name => {
                     const entry = BY_NAME.get(name);
                     return entry ? <IconCell key={name} entry={entry} style={style} size={size} /> : null;
                   })}
-                </div>
+                </GlyphGrid>
               )}
             </CanvasSection>
           ))}
-        </Sheet>
+        </GlyphSheet>
         </PinMenu>
       ) : <EmptyState title="No icons" description={`Nothing matches “${query}”.`} />}
       inspector={{

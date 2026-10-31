@@ -1,0 +1,1614 @@
+[
+ {
+  "from": "node_modules/geist/dist/fonts/geist-sans/Geist-Italic[wght].woff2",
+  "to": "fonts/geist/Geist-Italic[wght].woff2"
+ },
+ {
+  "from": "node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2",
+  "to": "fonts/geist/Geist-Variable.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-cyrillic-ext-standard-normal.woff2",
+  "to": "fonts/inter/inter-cyrillic-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-cyrillic-standard-normal.woff2",
+  "to": "fonts/inter/inter-cyrillic-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-greek-ext-standard-normal.woff2",
+  "to": "fonts/inter/inter-greek-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-greek-standard-normal.woff2",
+  "to": "fonts/inter/inter-greek-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-vietnamese-standard-normal.woff2",
+  "to": "fonts/inter/inter-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-latin-ext-standard-normal.woff2",
+  "to": "fonts/inter/inter-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-latin-standard-normal.woff2",
+  "to": "fonts/inter/inter-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-cyrillic-ext-standard-italic.woff2",
+  "to": "fonts/inter/inter-cyrillic-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-cyrillic-standard-italic.woff2",
+  "to": "fonts/inter/inter-cyrillic-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-greek-ext-standard-italic.woff2",
+  "to": "fonts/inter/inter-greek-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-greek-standard-italic.woff2",
+  "to": "fonts/inter/inter-greek-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-vietnamese-standard-italic.woff2",
+  "to": "fonts/inter/inter-vietnamese-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-latin-ext-standard-italic.woff2",
+  "to": "fonts/inter/inter-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/inter/files/inter-latin-standard-italic.woff2",
+  "to": "fonts/inter/inter-latin-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-standard-normal.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-cyrillic-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-cyrillic-standard-normal.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-cyrillic-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-greek-standard-normal.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-greek-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-vietnamese-standard-normal.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-ext-standard-normal.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-standard-normal.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-standard-italic.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-cyrillic-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-cyrillic-standard-italic.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-cyrillic-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-greek-standard-italic.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-greek-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-vietnamese-standard-italic.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-vietnamese-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-ext-standard-italic.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-standard-italic.woff2",
+  "to": "fonts/ibm-plex-sans/ibm-plex-sans-latin-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-cyrillic-ext-wght-normal.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-cyrillic-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-cyrillic-wght-normal.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-cyrillic-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-greek-ext-wght-normal.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-greek-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-greek-wght-normal.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-greek-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-vietnamese-wght-normal.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-latin-ext-wght-normal.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-cyrillic-ext-wght-italic.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-cyrillic-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-cyrillic-wght-italic.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-cyrillic-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-greek-ext-wght-italic.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-greek-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-greek-wght-italic.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-greek-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-vietnamese-wght-italic.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-vietnamese-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-latin-ext-wght-italic.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-italic.woff2",
+  "to": "fonts/source-sans-3/source-sans-3-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/public-sans/files/public-sans-vietnamese-wght-normal.woff2",
+  "to": "fonts/public-sans/public-sans-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/public-sans/files/public-sans-latin-ext-wght-normal.woff2",
+  "to": "fonts/public-sans/public-sans-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/public-sans/files/public-sans-latin-wght-normal.woff2",
+  "to": "fonts/public-sans/public-sans-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/public-sans/files/public-sans-vietnamese-wght-italic.woff2",
+  "to": "fonts/public-sans/public-sans-vietnamese-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/public-sans/files/public-sans-latin-ext-wght-italic.woff2",
+  "to": "fonts/public-sans/public-sans-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/public-sans/files/public-sans-latin-wght-italic.woff2",
+  "to": "fonts/public-sans/public-sans-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-ext-standard-normal.woff2",
+  "to": "fonts/dm-sans/dm-sans-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-standard-normal.woff2",
+  "to": "fonts/dm-sans/dm-sans-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-ext-standard-italic.woff2",
+  "to": "fonts/dm-sans/dm-sans-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-standard-italic.woff2",
+  "to": "fonts/dm-sans/dm-sans-latin-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/mona-sans/files/mona-sans-vietnamese-standard-normal.woff2",
+  "to": "fonts/mona-sans/mona-sans-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/mona-sans/files/mona-sans-latin-ext-standard-normal.woff2",
+  "to": "fonts/mona-sans/mona-sans-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/mona-sans/files/mona-sans-latin-standard-normal.woff2",
+  "to": "fonts/mona-sans/mona-sans-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/mona-sans/files/mona-sans-vietnamese-standard-italic.woff2",
+  "to": "fonts/mona-sans/mona-sans-vietnamese-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/mona-sans/files/mona-sans-latin-ext-standard-italic.woff2",
+  "to": "fonts/mona-sans/mona-sans-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/mona-sans/files/mona-sans-latin-standard-italic.woff2",
+  "to": "fonts/mona-sans/mona-sans-latin-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-canadian-aboriginal-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-canadian-aboriginal-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-cherokee-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-cherokee-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-math-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-math-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-nushu-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-nushu-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-symbols-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-symbols-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-syriac-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-syriac-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-tifinagh-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-tifinagh-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-vietnamese-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-vietnamese-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-latin-ext-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-latin-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-flex/files/google-sans-flex-latin-full-normal.woff2",
+  "to": "fonts/google-sans-flex/google-sans-flex-latin-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2",
+  "to": "fonts/atkinson-hyperlegible-next/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-normal.woff2",
+  "to": "fonts/atkinson-hyperlegible-next/atkinson-hyperlegible-next-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-ext-wght-italic.woff2",
+  "to": "fonts/atkinson-hyperlegible-next/atkinson-hyperlegible-next-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-italic.woff2",
+  "to": "fonts/atkinson-hyperlegible-next/atkinson-hyperlegible-next-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-cyrillic-ext-standard-normal.woff2",
+  "to": "fonts/noto-sans/noto-sans-cyrillic-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-cyrillic-standard-normal.woff2",
+  "to": "fonts/noto-sans/noto-sans-cyrillic-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-devanagari-standard-normal.woff2",
+  "to": "fonts/noto-sans/noto-sans-devanagari-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-greek-ext-standard-normal.woff2",
+  "to": "fonts/noto-sans/noto-sans-greek-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-greek-standard-normal.woff2",
+  "to": "fonts/noto-sans/noto-sans-greek-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-vietnamese-standard-normal.woff2",
+  "to": "fonts/noto-sans/noto-sans-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-latin-ext-standard-normal.woff2",
+  "to": "fonts/noto-sans/noto-sans-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-latin-standard-normal.woff2",
+  "to": "fonts/noto-sans/noto-sans-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-cyrillic-ext-standard-italic.woff2",
+  "to": "fonts/noto-sans/noto-sans-cyrillic-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-cyrillic-standard-italic.woff2",
+  "to": "fonts/noto-sans/noto-sans-cyrillic-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-devanagari-standard-italic.woff2",
+  "to": "fonts/noto-sans/noto-sans-devanagari-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-greek-ext-standard-italic.woff2",
+  "to": "fonts/noto-sans/noto-sans-greek-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-greek-standard-italic.woff2",
+  "to": "fonts/noto-sans/noto-sans-greek-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-vietnamese-standard-italic.woff2",
+  "to": "fonts/noto-sans/noto-sans-vietnamese-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-latin-ext-standard-italic.woff2",
+  "to": "fonts/noto-sans/noto-sans-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/noto-sans/files/noto-sans-latin-standard-italic.woff2",
+  "to": "fonts/noto-sans/noto-sans-latin-standard-italic.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/ronzino/Ronzino-Bold.woff2",
+  "to": "fonts/ronzino/Ronzino-Bold.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/ronzino/Ronzino-BoldOblique.woff2",
+  "to": "fonts/ronzino/Ronzino-BoldOblique.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/ronzino/Ronzino-Medium.woff2",
+  "to": "fonts/ronzino/Ronzino-Medium.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/ronzino/Ronzino-MediumOblique.woff2",
+  "to": "fonts/ronzino/Ronzino-MediumOblique.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/ronzino/Ronzino-Oblique.woff2",
+  "to": "fonts/ronzino/Ronzino-Oblique.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/ronzino/Ronzino-Regular.woff2",
+  "to": "fonts/ronzino/Ronzino-Regular.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo/files/chivo-vietnamese-wght-normal.woff2",
+  "to": "fonts/chivo/chivo-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo/files/chivo-latin-ext-wght-normal.woff2",
+  "to": "fonts/chivo/chivo-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo/files/chivo-latin-wght-normal.woff2",
+  "to": "fonts/chivo/chivo-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo/files/chivo-vietnamese-wght-italic.woff2",
+  "to": "fonts/chivo/chivo-vietnamese-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo/files/chivo-latin-ext-wght-italic.woff2",
+  "to": "fonts/chivo/chivo-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo/files/chivo-latin-wght-italic.woff2",
+  "to": "fonts/chivo/chivo-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/reddit-sans/files/reddit-sans-vietnamese-wght-normal.woff2",
+  "to": "fonts/reddit-sans/reddit-sans-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/reddit-sans/files/reddit-sans-latin-ext-wght-normal.woff2",
+  "to": "fonts/reddit-sans/reddit-sans-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/reddit-sans/files/reddit-sans-latin-wght-normal.woff2",
+  "to": "fonts/reddit-sans/reddit-sans-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/reddit-sans/files/reddit-sans-vietnamese-wght-italic.woff2",
+  "to": "fonts/reddit-sans/reddit-sans-vietnamese-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/reddit-sans/files/reddit-sans-latin-ext-wght-italic.woff2",
+  "to": "fonts/reddit-sans/reddit-sans-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/reddit-sans/files/reddit-sans-latin-wght-italic.woff2",
+  "to": "fonts/reddit-sans/reddit-sans-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/sono/files/sono-vietnamese-full-normal.woff2",
+  "to": "fonts/sono/sono-vietnamese-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/sono/files/sono-latin-ext-full-normal.woff2",
+  "to": "fonts/sono/sono-latin-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/sono/files/sono-latin-full-normal.woff2",
+  "to": "fonts/sono/sono-latin-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/recursive/files/recursive-cyrillic-ext-full-normal.woff2",
+  "to": "fonts/recursive/recursive-cyrillic-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/recursive/files/recursive-vietnamese-full-normal.woff2",
+  "to": "fonts/recursive/recursive-vietnamese-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/recursive/files/recursive-latin-ext-full-normal.woff2",
+  "to": "fonts/recursive/recursive-latin-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/recursive/files/recursive-latin-full-normal.woff2",
+  "to": "fonts/recursive/recursive-latin-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/geist/dist/fonts/geist-serif/GeistSerifVF.woff2",
+  "to": "fonts/geist-serif/GeistSerifVF.woff2"
+ },
+ {
+  "from": "node_modules/geist/dist/fonts/geist-pixel/GeistPixelVF.woff2",
+  "to": "fonts/geist-pixel/GeistPixelVF.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-ext-400-italic.woff2",
+  "to": "fonts/instrument-serif/instrument-serif-latin-ext-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2",
+  "to": "fonts/instrument-serif/instrument-serif-latin-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-ext-400-normal.woff2",
+  "to": "fonts/instrument-serif/instrument-serif-latin-ext-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2",
+  "to": "fonts/instrument-serif/instrument-serif-latin-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/newsreader/files/newsreader-vietnamese-standard-normal.woff2",
+  "to": "fonts/newsreader/newsreader-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/newsreader/files/newsreader-latin-ext-standard-normal.woff2",
+  "to": "fonts/newsreader/newsreader-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/newsreader/files/newsreader-latin-standard-normal.woff2",
+  "to": "fonts/newsreader/newsreader-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/newsreader/files/newsreader-vietnamese-standard-italic.woff2",
+  "to": "fonts/newsreader/newsreader-vietnamese-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/newsreader/files/newsreader-latin-ext-standard-italic.woff2",
+  "to": "fonts/newsreader/newsreader-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/newsreader/files/newsreader-latin-standard-italic.woff2",
+  "to": "fonts/newsreader/newsreader-latin-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/fraunces/files/fraunces-vietnamese-full-normal.woff2",
+  "to": "fonts/fraunces/fraunces-vietnamese-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/fraunces/files/fraunces-latin-ext-full-normal.woff2",
+  "to": "fonts/fraunces/fraunces-latin-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2",
+  "to": "fonts/fraunces/fraunces-latin-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/fraunces/files/fraunces-vietnamese-full-italic.woff2",
+  "to": "fonts/fraunces/fraunces-vietnamese-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/fraunces/files/fraunces-latin-ext-full-italic.woff2",
+  "to": "fonts/fraunces/fraunces-latin-ext-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-italic.woff2",
+  "to": "fonts/fraunces/fraunces-latin-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-ext-standard-normal.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-cyrillic-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-standard-normal.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-cyrillic-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-greek-standard-normal.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-greek-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-vietnamese-standard-normal.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-ext-standard-normal.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-standard-normal.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-ext-standard-italic.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-cyrillic-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-cyrillic-standard-italic.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-cyrillic-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-greek-standard-italic.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-greek-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-vietnamese-standard-italic.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-vietnamese-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-ext-standard-italic.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/source-serif-4/files/source-serif-4-latin-standard-italic.woff2",
+  "to": "fonts/source-serif-4/source-serif-4-latin-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-cyrillic-ext-standard-normal.woff2",
+  "to": "fonts/playfair/playfair-cyrillic-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-cyrillic-standard-normal.woff2",
+  "to": "fonts/playfair/playfair-cyrillic-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-vietnamese-standard-normal.woff2",
+  "to": "fonts/playfair/playfair-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-latin-ext-standard-normal.woff2",
+  "to": "fonts/playfair/playfair-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-latin-standard-normal.woff2",
+  "to": "fonts/playfair/playfair-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-cyrillic-ext-standard-italic.woff2",
+  "to": "fonts/playfair/playfair-cyrillic-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-cyrillic-standard-italic.woff2",
+  "to": "fonts/playfair/playfair-cyrillic-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-vietnamese-standard-italic.woff2",
+  "to": "fonts/playfair/playfair-vietnamese-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-latin-ext-standard-italic.woff2",
+  "to": "fonts/playfair/playfair-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/playfair/files/playfair-latin-standard-italic.woff2",
+  "to": "fonts/playfair/playfair-latin-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/young-serif/files/young-serif-latin-ext-400-normal.woff2",
+  "to": "fonts/young-serif/young-serif-latin-ext-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/young-serif/files/young-serif-latin-400-normal.woff2",
+  "to": "fonts/young-serif/young-serif-latin-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-vietnamese-standard-normal.woff2",
+  "to": "fonts/bricolage-grotesque/bricolage-grotesque-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-ext-standard-normal.woff2",
+  "to": "fonts/bricolage-grotesque/bricolage-grotesque-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-standard-normal.woff2",
+  "to": "fonts/bricolage-grotesque/bricolage-grotesque-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-vietnamese-wght-normal.woff2",
+  "to": "fonts/space-grotesk/space-grotesk-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2",
+  "to": "fonts/space-grotesk/space-grotesk-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
+  "to": "fonts/space-grotesk/space-grotesk-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/redaction/files/redaction-latin-400-italic.woff2",
+  "to": "fonts/redaction/redaction-latin-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/redaction/files/redaction-latin-400-normal.woff2",
+  "to": "fonts/redaction/redaction-latin-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/redaction/files/redaction-latin-700-italic.woff2",
+  "to": "fonts/redaction/redaction-latin-700-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/redaction/files/redaction-latin-700-normal.woff2",
+  "to": "fonts/redaction/redaction-latin-700-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/hedvig-letters-serif/files/hedvig-letters-serif-math-standard-normal.woff2",
+  "to": "fonts/hedvig-letters-serif/hedvig-letters-serif-math-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/hedvig-letters-serif/files/hedvig-letters-serif-symbols-standard-normal.woff2",
+  "to": "fonts/hedvig-letters-serif/hedvig-letters-serif-symbols-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/hedvig-letters-serif/files/hedvig-letters-serif-latin-ext-standard-normal.woff2",
+  "to": "fonts/hedvig-letters-serif/hedvig-letters-serif-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/hedvig-letters-serif/files/hedvig-letters-serif-latin-standard-normal.woff2",
+  "to": "fonts/hedvig-letters-serif/hedvig-letters-serif-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-cyrillic-ext-full-normal.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-cyrillic-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-cyrillic-full-normal.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-cyrillic-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-vietnamese-full-normal.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-vietnamese-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-latin-ext-full-normal.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-latin-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-latin-full-normal.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-latin-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-cyrillic-ext-full-italic.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-cyrillic-ext-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-cyrillic-full-italic.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-cyrillic-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-vietnamese-full-italic.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-vietnamese-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-latin-ext-full-italic.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-latin-ext-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/roboto-serif/files/roboto-serif-latin-full-italic.woff2",
+  "to": "fonts/roboto-serif/roboto-serif-latin-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-cyrillic-ext-wght-normal.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-cyrillic-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-cyrillic-wght-normal.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-cyrillic-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-greek-wght-normal.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-greek-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-vietnamese-wght-normal.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-latin-ext-wght-normal.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-latin-wght-normal.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-cyrillic-ext-wght-italic.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-cyrillic-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-cyrillic-wght-italic.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-cyrillic-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-greek-wght-italic.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-greek-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-vietnamese-wght-italic.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-vietnamese-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-latin-ext-wght-italic.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/brygada-1918/files/brygada-1918-latin-wght-italic.woff2",
+  "to": "fonts/brygada-1918/brygada-1918-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-cyrillic-ext-standard-normal.woff2",
+  "to": "fonts/piazzolla/piazzolla-cyrillic-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-cyrillic-standard-normal.woff2",
+  "to": "fonts/piazzolla/piazzolla-cyrillic-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-greek-ext-standard-normal.woff2",
+  "to": "fonts/piazzolla/piazzolla-greek-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-greek-standard-normal.woff2",
+  "to": "fonts/piazzolla/piazzolla-greek-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-vietnamese-standard-normal.woff2",
+  "to": "fonts/piazzolla/piazzolla-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-latin-ext-standard-normal.woff2",
+  "to": "fonts/piazzolla/piazzolla-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-latin-standard-normal.woff2",
+  "to": "fonts/piazzolla/piazzolla-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-cyrillic-ext-standard-italic.woff2",
+  "to": "fonts/piazzolla/piazzolla-cyrillic-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-cyrillic-standard-italic.woff2",
+  "to": "fonts/piazzolla/piazzolla-cyrillic-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-greek-ext-standard-italic.woff2",
+  "to": "fonts/piazzolla/piazzolla-greek-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-greek-standard-italic.woff2",
+  "to": "fonts/piazzolla/piazzolla-greek-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-vietnamese-standard-italic.woff2",
+  "to": "fonts/piazzolla/piazzolla-vietnamese-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-latin-ext-standard-italic.woff2",
+  "to": "fonts/piazzolla/piazzolla-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/piazzolla/files/piazzolla-latin-standard-italic.woff2",
+  "to": "fonts/piazzolla/piazzolla-latin-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-cyrillic-ext-wght-normal.woff2",
+  "to": "fonts/cormorant/cormorant-cyrillic-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-cyrillic-wght-normal.woff2",
+  "to": "fonts/cormorant/cormorant-cyrillic-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-vietnamese-wght-normal.woff2",
+  "to": "fonts/cormorant/cormorant-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-latin-ext-wght-normal.woff2",
+  "to": "fonts/cormorant/cormorant-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-latin-wght-normal.woff2",
+  "to": "fonts/cormorant/cormorant-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-cyrillic-ext-wght-italic.woff2",
+  "to": "fonts/cormorant/cormorant-cyrillic-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-cyrillic-wght-italic.woff2",
+  "to": "fonts/cormorant/cormorant-cyrillic-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-vietnamese-wght-italic.woff2",
+  "to": "fonts/cormorant/cormorant-vietnamese-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-latin-ext-wght-italic.woff2",
+  "to": "fonts/cormorant/cormorant-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/cormorant/files/cormorant-latin-wght-italic.woff2",
+  "to": "fonts/cormorant/cormorant-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/geologica/files/geologica-cyrillic-ext-full-normal.woff2",
+  "to": "fonts/geologica/geologica-cyrillic-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/geologica/files/geologica-cyrillic-full-normal.woff2",
+  "to": "fonts/geologica/geologica-cyrillic-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/geologica/files/geologica-greek-full-normal.woff2",
+  "to": "fonts/geologica/geologica-greek-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/geologica/files/geologica-vietnamese-full-normal.woff2",
+  "to": "fonts/geologica/geologica-vietnamese-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/geologica/files/geologica-latin-ext-full-normal.woff2",
+  "to": "fonts/geologica/geologica-latin-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/geologica/files/geologica-latin-full-normal.woff2",
+  "to": "fonts/geologica/geologica-latin-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/syne/files/syne-greek-wght-normal.woff2",
+  "to": "fonts/syne/syne-greek-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/syne/files/syne-latin-ext-wght-normal.woff2",
+  "to": "fonts/syne/syne-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/syne/files/syne-latin-wght-normal.woff2",
+  "to": "fonts/syne/syne-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-ext-wght-normal.woff2",
+  "to": "fonts/schibsted-grotesk/schibsted-grotesk-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2",
+  "to": "fonts/schibsted-grotesk/schibsted-grotesk-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-ext-wght-italic.woff2",
+  "to": "fonts/schibsted-grotesk/schibsted-grotesk-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-italic.woff2",
+  "to": "fonts/schibsted-grotesk/schibsted-grotesk-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/familjen-grotesk/files/familjen-grotesk-vietnamese-wght-normal.woff2",
+  "to": "fonts/familjen-grotesk/familjen-grotesk-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/familjen-grotesk/files/familjen-grotesk-latin-ext-wght-normal.woff2",
+  "to": "fonts/familjen-grotesk/familjen-grotesk-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/familjen-grotesk/files/familjen-grotesk-latin-wght-normal.woff2",
+  "to": "fonts/familjen-grotesk/familjen-grotesk-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/familjen-grotesk/files/familjen-grotesk-vietnamese-wght-italic.woff2",
+  "to": "fonts/familjen-grotesk/familjen-grotesk-vietnamese-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/familjen-grotesk/files/familjen-grotesk-latin-ext-wght-italic.woff2",
+  "to": "fonts/familjen-grotesk/familjen-grotesk-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/familjen-grotesk/files/familjen-grotesk-latin-wght-italic.woff2",
+  "to": "fonts/familjen-grotesk/familjen-grotesk-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/anybody/files/anybody-vietnamese-standard-normal.woff2",
+  "to": "fonts/anybody/anybody-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/anybody/files/anybody-latin-ext-standard-normal.woff2",
+  "to": "fonts/anybody/anybody-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/anybody/files/anybody-latin-standard-normal.woff2",
+  "to": "fonts/anybody/anybody-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/anybody/files/anybody-vietnamese-standard-italic.woff2",
+  "to": "fonts/anybody/anybody-vietnamese-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/anybody/files/anybody-latin-ext-standard-italic.woff2",
+  "to": "fonts/anybody/anybody-latin-ext-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/anybody/files/anybody-latin-standard-italic.woff2",
+  "to": "fonts/anybody/anybody-latin-standard-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/big-shoulders/files/big-shoulders-vietnamese-standard-normal.woff2",
+  "to": "fonts/big-shoulders/big-shoulders-vietnamese-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/big-shoulders/files/big-shoulders-latin-ext-standard-normal.woff2",
+  "to": "fonts/big-shoulders/big-shoulders-latin-ext-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/big-shoulders/files/big-shoulders-latin-standard-normal.woff2",
+  "to": "fonts/big-shoulders/big-shoulders-latin-standard-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/unbounded/files/unbounded-cyrillic-ext-wght-normal.woff2",
+  "to": "fonts/unbounded/unbounded-cyrillic-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/unbounded/files/unbounded-cyrillic-wght-normal.woff2",
+  "to": "fonts/unbounded/unbounded-cyrillic-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/unbounded/files/unbounded-vietnamese-wght-normal.woff2",
+  "to": "fonts/unbounded/unbounded-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/unbounded/files/unbounded-latin-ext-wght-normal.woff2",
+  "to": "fonts/unbounded/unbounded-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2",
+  "to": "fonts/unbounded/unbounded-latin-wght-normal.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/le-murmure/LeMurmure-Regular.woff2",
+  "to": "fonts/le-murmure/LeMurmure-Regular.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/basteleur/Basteleur-Bold.woff2",
+  "to": "fonts/basteleur/Basteleur-Bold.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/basteleur/Basteleur-Moonlight.woff2",
+  "to": "fonts/basteleur/Basteleur-Moonlight.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/apfel-grotezk/ApfelGrotezk-Brukt.woff2",
+  "to": "fonts/apfel-grotezk/ApfelGrotezk-Brukt.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/apfel-grotezk/ApfelGrotezk-Fett.woff2",
+  "to": "fonts/apfel-grotezk/ApfelGrotezk-Fett.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/apfel-grotezk/ApfelGrotezk-Mittel.woff2",
+  "to": "fonts/apfel-grotezk/ApfelGrotezk-Mittel.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/apfel-grotezk/ApfelGrotezk-Regular.woff2",
+  "to": "fonts/apfel-grotezk/ApfelGrotezk-Regular.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/apfel-grotezk/ApfelGrotezk-Satt.woff2",
+  "to": "fonts/apfel-grotezk/ApfelGrotezk-Satt.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/absans/Absans-Regular.woff2",
+  "to": "fonts/absans/Absans-Regular.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/bluu-next/bluunext-bold-webfont.woff2",
+  "to": "fonts/bluu-next/bluunext-bold-webfont.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/bluu-next/bluunext-bolditalic-webfont.woff2",
+  "to": "fonts/bluu-next/bluunext-bolditalic-webfont.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/bluu-next/bluunext-titling.woff2",
+  "to": "fonts/bluu-next/bluunext-titling.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/happy-times/happy-times-NG_bold_master_web.woff2",
+  "to": "fonts/happy-times/happy-times-NG_bold_master_web.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/happy-times/happy-times-NG_italic_master_web.woff2",
+  "to": "fonts/happy-times/happy-times-NG_italic_master_web.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/happy-times/happy-times-NG_regular_master_web.woff2",
+  "to": "fonts/happy-times/happy-times-NG_regular_master_web.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/sporting-grotesque/SportingGrotesque-Bold.otf",
+  "to": "fonts/sporting-grotesque/SportingGrotesque-Bold.otf"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/sporting-grotesque/SportingGrotesque-Regular.otf",
+  "to": "fonts/sporting-grotesque/SportingGrotesque-Regular.otf"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/compagnon/Compagnon-Bold.woff2",
+  "to": "fonts/compagnon/Compagnon-Bold.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/compagnon/Compagnon-Italic.woff2",
+  "to": "fonts/compagnon/Compagnon-Italic.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/compagnon/Compagnon-Light.woff2",
+  "to": "fonts/compagnon/Compagnon-Light.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/compagnon/Compagnon-Medium.woff2",
+  "to": "fonts/compagnon/Compagnon-Medium.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/compagnon/Compagnon-Roman.woff2",
+  "to": "fonts/compagnon/Compagnon-Roman.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/bagnard/Bagnard.otf",
+  "to": "fonts/bagnard/Bagnard.otf"
+ },
+ {
+  "from": "node_modules/geist/dist/fonts/geist-mono/GeistMono-Italic[wght].woff2",
+  "to": "fonts/geist-mono/GeistMono-Italic[wght].woff2"
+ },
+ {
+  "from": "node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2",
+  "to": "fonts/geist-mono/GeistMono-Variable.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-cyrillic-ext-wght-normal.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-cyrillic-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-cyrillic-wght-normal.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-cyrillic-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-greek-wght-normal.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-greek-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-vietnamese-wght-normal.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-ext-wght-normal.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-cyrillic-ext-wght-italic.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-cyrillic-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-cyrillic-wght-italic.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-cyrillic-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-greek-wght-italic.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-greek-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-vietnamese-wght-italic.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-vietnamese-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-ext-wght-italic.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-italic.woff2",
+  "to": "fonts/jetbrains-mono/jetbrains-mono-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-100-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-100-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-100-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-100-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-100-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-100-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-100-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-100-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-100-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-100-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-100-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-100-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-100-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-100-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-100-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-100-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-100-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-100-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-100-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-100-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-200-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-200-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-200-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-200-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-200-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-200-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-200-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-200-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-200-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-200-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-200-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-200-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-200-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-200-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-200-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-200-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-200-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-200-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-200-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-300-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-300-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-300-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-300-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-300-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-300-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-300-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-300-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-300-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-300-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-300-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-300-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-300-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-300-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-300-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-300-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-300-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-300-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-300-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-300-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-500-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-500-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-500-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-500-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-500-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-500-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-500-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-500-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-500-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-500-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-600-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-600-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-600-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-600-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-600-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-600-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-600-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-600-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-600-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-600-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-600-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-600-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-600-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-600-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-600-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-600-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-600-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-600-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-700-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-700-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-700-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-700-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-700-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-700-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-700-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-700-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-700-italic.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-700-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-700-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-ext-700-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-700-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-cyrillic-700-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-700-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-vietnamese-700-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-700-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-ext-700-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-700-normal.woff2",
+  "to": "fonts/ibm-plex-mono/ibm-plex-mono-latin-700-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-adlam-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-adlam-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-canadian-aboriginal-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-canadian-aboriginal-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-cherokee-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-cherokee-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-math-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-math-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-old-permic-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-old-permic-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-symbols-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-symbols-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-symbols2-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-symbols2-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-syriac-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-syriac-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-vietnamese-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-vietnamese-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-latin-ext-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-latin-ext-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-latin-full-normal.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-latin-full-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-adlam-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-adlam-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-canadian-aboriginal-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-canadian-aboriginal-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-cherokee-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-cherokee-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-math-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-math-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-old-permic-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-old-permic-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-symbols-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-symbols-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-symbols2-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-symbols2-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-syriac-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-syriac-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-vietnamese-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-vietnamese-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-latin-ext-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-latin-ext-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/google-sans-code/files/google-sans-code-latin-full-italic.woff2",
+  "to": "fonts/google-sans-code/google-sans-code-latin-full-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-ext-wght-normal.woff2",
+  "to": "fonts/atkinson-hyperlegible-mono/atkinson-hyperlegible-mono-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-wght-normal.woff2",
+  "to": "fonts/atkinson-hyperlegible-mono/atkinson-hyperlegible-mono-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-ext-wght-italic.woff2",
+  "to": "fonts/atkinson-hyperlegible-mono/atkinson-hyperlegible-mono-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-wght-italic.woff2",
+  "to": "fonts/atkinson-hyperlegible-mono/atkinson-hyperlegible-mono-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo-mono/files/chivo-mono-vietnamese-wght-normal.woff2",
+  "to": "fonts/chivo-mono/chivo-mono-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo-mono/files/chivo-mono-latin-ext-wght-normal.woff2",
+  "to": "fonts/chivo-mono/chivo-mono-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo-mono/files/chivo-mono-latin-wght-normal.woff2",
+  "to": "fonts/chivo-mono/chivo-mono-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo-mono/files/chivo-mono-vietnamese-wght-italic.woff2",
+  "to": "fonts/chivo-mono/chivo-mono-vietnamese-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo-mono/files/chivo-mono-latin-ext-wght-italic.woff2",
+  "to": "fonts/chivo-mono/chivo-mono-latin-ext-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/chivo-mono/files/chivo-mono-latin-wght-italic.woff2",
+  "to": "fonts/chivo-mono/chivo-mono-latin-wght-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/reddit-mono/files/reddit-mono-vietnamese-wght-normal.woff2",
+  "to": "fonts/reddit-mono/reddit-mono-vietnamese-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/reddit-mono/files/reddit-mono-latin-ext-wght-normal.woff2",
+  "to": "fonts/reddit-mono/reddit-mono-latin-ext-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource-variable/reddit-mono/files/reddit-mono-latin-wght-normal.woff2",
+  "to": "fonts/reddit-mono/reddit-mono-latin-wght-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-vietnamese-400-italic.woff2",
+  "to": "fonts/space-mono/space-mono-vietnamese-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-latin-ext-400-italic.woff2",
+  "to": "fonts/space-mono/space-mono-latin-ext-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-latin-400-italic.woff2",
+  "to": "fonts/space-mono/space-mono-latin-400-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-vietnamese-400-normal.woff2",
+  "to": "fonts/space-mono/space-mono-vietnamese-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-latin-ext-400-normal.woff2",
+  "to": "fonts/space-mono/space-mono-latin-ext-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-latin-400-normal.woff2",
+  "to": "fonts/space-mono/space-mono-latin-400-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-vietnamese-700-italic.woff2",
+  "to": "fonts/space-mono/space-mono-vietnamese-700-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-latin-ext-700-italic.woff2",
+  "to": "fonts/space-mono/space-mono-latin-ext-700-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-latin-700-italic.woff2",
+  "to": "fonts/space-mono/space-mono-latin-700-italic.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-vietnamese-700-normal.woff2",
+  "to": "fonts/space-mono/space-mono-vietnamese-700-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-latin-ext-700-normal.woff2",
+  "to": "fonts/space-mono/space-mono-latin-ext-700-normal.woff2"
+ },
+ {
+  "from": "node_modules/@fontsource/space-mono/files/space-mono-latin-700-normal.woff2",
+  "to": "fonts/space-mono/space-mono-latin-700-normal.woff2"
+ },
+ {
+  "from": "apps/desktop/assets/fonts/sligoil/SligoilVF.woff2",
+  "to": "fonts/sligoil/SligoilVF.woff2"
+ }
+]

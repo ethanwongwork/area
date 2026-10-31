@@ -142,8 +142,9 @@ Cursor's nav with Figma's tabs).
 - **Places** (`src/places.ts`): every view is a place with a hash. Home is `#home` (`#home/<system>` with a system chosen,
   `#home/new` for New system). A system's sections are Themes
   (`#system/<system>/themes`; New theme, `…/themes/new`, is the Setup chat; its Playground edits every setting, and
-  `…/themes/settings/<group>/<setting>` opens it on one), Colors (`…/colors/<scale>`), Typography (`…/typography/<role>`),
-  Icons (`…/icons/<category>`), Components,
+  `…/themes/settings/<group>/<setting>` opens it on one), Colors (`…/colors/<scale>`), Typography (`…/typography/<role>`; a typeface
+  is `…/typography/face/<face>/<tab>`, its tabs Specimen, Glyphs, About and Code, since 2026-10-31), Icons
+  (`…/icons/<category>`; Icons' wall and a typeface's Glyphs are one glyph sheet, `src/glyph-sheet.tsx`), Components,
   Patterns (the system's screens; a screen that tries something out is a test, in Labs › Tests, since 2026-10-31) and History (`…/history/<version>`); a project's Overview (`#project/<project>`), pages
   (`…/pages/<page>/<layer>`), explorations (`…/explorations/<id>`) and Versions (`…/versions/<id>`); Inspiration
   (`#inspiration`, Imagery, then the Library page, renamed) and Labs (`#labs/materials`, `#labs/tests`, out of the nav, reached by search; each its own tab). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
