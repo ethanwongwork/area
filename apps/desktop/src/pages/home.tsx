@@ -16,7 +16,7 @@ import { canvasAttributes, useStudio, Workspace, type Visit } from "../studio.ts
 import { CanvasSection, CARD_SCOPE, Tile, TileGrid } from "../tile.tsx";
 import { ViewControls } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
-import { ScreenFigure } from "../setup-screen.tsx";
+import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
 import { hasColours } from "../colours.ts";
 import { activeTheme, asLive, liveOf, ORIGIN_LABEL, versionName, type System, type SystemOrigin } from "../systems.ts";
 import type { Project } from "../projects.ts";
@@ -127,7 +127,7 @@ export function HomePage() {
                   <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name}
                     value={`${systemName(entry.system)}, ${entry.pages.length} ${entry.pages.length === 1 ? "page" : "pages"}`}
                     selected={chosenProject?.id === entry.id} onSelect={() => select(entry.id, { replace: true })} onOpen={() => navigate({ page: "project", project: entry.id })}>
-                    <ScreenFigure className="studio-theme-card" scope={projectScope(entry)} />
+                    <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={projectScope(entry)} />
                   </Tile>
                 ))}
               </TileGrid>
@@ -141,7 +141,7 @@ export function HomePage() {
               {systems.map(entry => (
                 <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name} value={`${entry.themes.length} ${entry.themes.length === 1 ? "theme" : "themes"}, ${activeTheme(entry).name} in use`}
                   selected={chosen?.id === entry.id} onSelect={() => select(entry.id, { replace: true })} onOpen={() => open(entry)}>
-                  <ScreenFigure className="studio-theme-card" scope={scopeOf(entry)} />
+                  <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={scopeOf(entry)} />
                 </Tile>
               ))}
             </TileGrid>

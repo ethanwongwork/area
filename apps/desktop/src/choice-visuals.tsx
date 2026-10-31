@@ -16,6 +16,8 @@
  */
 import type { ReactNode } from "react";
 import { Abstract, Scaled } from "./abstract.tsx";
+import { SHOWCASE, ScreenFigure } from "./setup-screen.tsx";
+import { SettingSpecimen } from "./setting-preview.tsx";
 
 export type ChoiceKind = "mini" | "swatch" | "mark";
 const MINI = new Set(["theme", "neutral", "tint-light", "tint-dark", "ink-tint", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "density"]);
@@ -95,8 +97,19 @@ function Mark({ axis, preset }: { axis: string; preset: string }): ReactNode {
   return <span className="cv-mark" aria-hidden="true">{axis === "pills" ? <Abstract axis="pills" preset={preset} whole /> : <Glyph axis={axis} />}</span>;
 }
 
-/** One choice's picture on its card. */
-export function ChoicePreview({ axis, preset }: { axis: string; preset: string }): ReactNode {
+/**
+ * One choice's picture on its card, real UI only for now (owner, 2026-10-30: "stop using the abstract illustrations for now
+ * and just use real ui and components"): a setting that changes how a whole screen reads draws the Workspace showcase
+ * (setup-screen.tsx), and the rest the real component the setting changes, the Playground's first tile for it
+ * (setting-preview.tsx), fitted to the card. The mini window and the glyphs stay below for when the figures return.
+ */
+export function ChoicePreview({ axis }: { axis: string; preset: string }): ReactNode {
+  return kindOf(axis) === "mini"
+    ? <ScreenFigure className="cv-screen" hold={SHOWCASE} scope={{}} />
+    : <Scaled fill={0.84} max={1} group={`choice-${axis}`}><SettingSpecimen setting={axis} /></Scaled>;
+}
+/** The figures' picture, kept for when they return (setup-screen.tsx FIGURES). */
+export function ChoiceFigure({ axis, preset }: { axis: string; preset: string }): ReactNode {
   return kindOf(axis) === "mini"
     ? <Scaled fill={0.84} max={1} group="choice-mini"><MiniUI /></Scaled>
     : <Mark axis={axis} preset={preset} />;

@@ -1,42 +1,35 @@
 /**
- * Setup's product screen (owner, 2026-10-24: "for now the main large visual should just be 1 simplified product screen.
- * i will add examples to it as the rest of it is built"): one desktop app window built only from Area's components, drawn
- * as an Area figure (the area-illustration skill: every word a light bar, numbers as digits, strokes at exactly 1px), in
- * the theme so far. It holds every part a theme question changes, each marked as a region so a question can point at it
- * and an option card can show it close up:
+ * The product screens the theme is seen on, drawn in it and scaled to their frame, real UI only for now (FIGURES): the
+ * Workspace (content/examples/workspace.tsx; owner, 2026-10-30: "make it a 1920x 1080 screen and scale it down ... just make
+ * it a generic app ui"), and the Testing tab's screens. The Workspace marks each part a theme question changes as a region,
+ * so a question can point at it and an option card can show it close up:
  *
- *   sidebar     the recessed side: a workspace row, the current page, a hovered row with its count, a group
- *   header      the title, a More button that opens the menu, an outline Button and the primary Action
- *   tabs        the page's views
- *   text        the page heading and its description
- *   stats       three cards; the middle one selected and the last one lifting under the pointer, when held
- *   list        a card of rows: checkboxes, status badges, avatars
- *   form        a card: a field, a segmented control, a switch, chips, a slider and the primary Action
- *   menu        the More menu, open when held, with a destructive row
+ *   sidebar     nav (a current row, a hovered row with its count, Search with its keys), team spaces, recents, the plan
+ *   header      the page's name, a More button that opens the menu, an outline Button and the primary Action
+ *   text        the greeting and its line
+ *   stats       three quick-action cards; the middle one selected and the last one lifting under the pointer, when held
+ *   tabs, list  the tasks' views and their table: checkboxes, status badges, owners
+ *   form        the details panel: a field, a select, a segmented control, chips, switches, option rows, a slider and the
+ *               primary Action
+ *   menu        the More menu, open when held, with a destructive row; the toast after New task, when held
  *
- * The screen is rendered once per set of held states to static markup (react-dom/server) and drawn by the skill's
- * engine (styles/figures.css, copied from engine/abstract.css; words by engine/markup.js), so it is the same drawing as
- * the skill's screens. The theme reaches it as attributes on the frame, so an answer repaints it without re-rendering.
- * It is shown, not used: inert and hidden from assistive tech.
+ * As a showcase (SHOWCASE) the menu and the toast show, so every setting changes something on the screen. The screen is
+ * rendered once per set of held states to static markup (react-dom/server) and, while FIGURES is on, drawn by the
+ * area-illustration skill's engine (styles/figures.css; words by engine/markup.js). The theme reaches it as attributes on
+ * the frame, so a change repaints it without re-rendering. It is shown, not used: inert and hidden from assistive tech.
  */
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import {
-  Avatar, Badge, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Card, CardContent,
-  CardTitle, Checkbox, Chip, Count, Field, Input, MenuItem, MenuSeparator, Nav, NavGroup, NavItem, Segmented, Slider, Surface, Switch, Tabs,
-} from "@area/react";
-import {
-  AddIcon, CalendarIcon, CopyIcon, DocumentIcon, FolderIcon, HomeIcon, InboxIcon, LayersIcon, MoreHorizontalIcon, PanelLeftIcon, PencilIcon,
-  SearchIcon, SettingsIcon, ShareIcon, TrashIcon,
-} from "@area/icons";
+import { WorkspaceScreen } from "./content/examples/workspace.tsx";
 import { blankImages, figureMarkup } from "../../../.claude/skills/area-illustration/engine/markup.js";
 import { AnalyticsDashboard } from "./content/examples/analytics.tsx";
 import { AreaAppScreen } from "./content/examples/area-app.tsx";
 import { MobileScreen } from "./content/examples/mobile.tsx";
 import { SettingsScreen } from "./content/examples/settings.tsx";
 
-/** The screen's true size: a desktop window at 16:10. */
-export const SCREEN = { w: 1024, h: 640 } as const;
+/** The Workspace's true size: a 1920 × 1080 display (owner, 2026-10-30: "make it a 1920x 1080 screen and scale it down";
+    was a 1024 × 640 window), shown scaled down as a screenshot is. */
+export const SCREEN = { w: 1920, h: 1080 } as const;
 
 /** The parts a question can point at. */
 export type Region =
@@ -58,128 +51,14 @@ export const REGION_LABEL: Record<Region, string> = {
  * where it would be: a hovered sidebar row and menu row, a pressed outline button, a focused or hovered field, a lifted
  * card, the open menu, a hovered destructive row, the middle card selected.
  */
-export type Hold = "hover" | "press" | "focus" | "hover-edge" | "lift" | "menu" | "danger" | "selected";
-
-const ROWS: ReadonlyArray<{ name: string; status: string; tone: "success" | "warning" | "danger" | "info"; who: string; checked?: boolean }> = [
-  { name: "Update the pricing page", status: "Done", tone: "success", who: "DT", checked: true },
-  { name: "Fix the mobile navigation", status: "In review", tone: "warning", who: "DE" },
-  { name: "Broken image on the blog", status: "Blocked", tone: "danger", who: "EN" },
-  { name: "Write the launch email", status: "Planned", tone: "info", who: "MK" },
-];
-const TEAMS: Record<string, string> = { DT: "David Tee", DE: "Design team", EN: "Engineering team", MK: "Marketing team" };
-const STATS: ReadonlyArray<[string, string]> = [["Open issues", "128"], ["Progress", "86%"], ["Due this week", "12"]];
-const priority = [{ value: "low", label: "Low" }, { value: "medium", label: "Medium" }, { value: "high", label: "High" }];
-/** A region round a component whose own attributes reach its input, not its box (Switch, Slider, a pair of Chips). */
-const R = ({ id, children, inline }: { id: Region; children: ReactNode; inline?: boolean }) =>
-  <div data-region={id} className={inline ? "ss-region ss-region--inline" : "ss-region"}>{children}</div>;
-
-function ProductScreen({ hold }: { hold: ReadonlySet<Hold> }) {
-  const on = (state: Hold) => hold.has(state);
-  const pointer = (state: Hold) => on(state) ? { "data-af-pointer": "" } : {};
-  return (
-    <Surface className="ss-window" data-region="screen">
-      <div className="ss-window__bar"><span className="ss-lights"><i /><i /><i /></span><span className="ss-window__title">Northwind</span><span /></div>
-      <div className="ss-app">
-        {/* The side, on the recessed fill as the skill's screens draw it (figures/screens.css). */}
-        <aside className="ss-side" data-region="sidebar">
-          <div className="ss-side__ws">
-            <Avatar size="sm" shape="square" fallback="N" aria-label="Northwind" />
-            <span className="ss-strong ss-grow">Northwind</span>
-            <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="Sidebar" icon={<PanelLeftIcon />} />
-          </div>
-          <Nav aria-label="Primary">
-            <NavItem href="#" icon={<HomeIcon />} current data-region="nav-current">Projects</NavItem>
-            <NavItem href="#" icon={<InboxIcon />} className={on("hover") ? "st-hover" : undefined} {...pointer("hover")} data-region="nav-hover"
-              trailing={<Count count={3} variant="soft" data-region="count" />}>Inbox</NavItem>
-            <NavItem href="#" icon={<SearchIcon />}>Search</NavItem>
-          </Nav>
-          <Nav aria-label="Group">
-            <NavGroup label="Teams">
-              <NavItem href="#" icon={<DocumentIcon />}>Design</NavItem>
-              <NavItem href="#" icon={<LayersIcon />}>Engineering</NavItem>
-              <NavItem href="#" icon={<CalendarIcon />}>Marketing</NavItem>
-              <NavItem href="#" icon={<FolderIcon />}>Support</NavItem>
-            </NavGroup>
-          </Nav>
-          <span className="ss-grow" />
-          <div className="ss-side__foot">
-            <Avatar size="sm" fallback="DT" aria-label="David Tee" />
-            <span className="ss-grow ss-stack0"><span className="ss-strong">David Tee</span><span className="ss-muted">Admin</span></span>
-            <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="Settings" icon={<SettingsIcon />} />
-          </div>
-        </aside>
-        <main className="ss-main">
-          <header className="ss-head" data-region="header">
-            <Breadcrumb><BreadcrumbList>
-              <BreadcrumbItem><BreadcrumbLink href="#">Projects</BreadcrumbLink></BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem><BreadcrumbPage>Website relaunch</BreadcrumbPage></BreadcrumbItem>
-            </BreadcrumbList></Breadcrumb>
-            <span className="ss-grow" />
-            <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="More" icon={<MoreHorizontalIcon />} data-region="more" />
-            <Button size="sm" variant="outline" tone="neutral" icon={<ShareIcon />} className={on("press") ? "st-press" : undefined} {...pointer("press")} data-region="button">Share</Button>
-            <Button size="sm" icon={<AddIcon />} data-region="primary">New issue</Button>
-          </header>
-          <div className="ss-tabs"><Tabs data-region="tabs" size="sm" aria-label="Views" defaultValue="one" items={[{ id: "one", label: "Overview" }, { id: "two", label: "Issues" }, { id: "three", label: "Timeline" }]} /></div>
-          <div className="ss-body">
-            <div className="ss-intro" data-region="text">
-              <span className="ss-heading">Website relaunch</span>
-              <span className="ss-body-text">Ship the new marketing site and docs before the October launch.</span>
-            </div>
-            <div className="ss-stats" data-region="stats">
-              {STATS.map(([name, value], at) => (
-                <Card key={value} size="sm" selected={at === 1 && on("selected")} className={at === 2 && on("lift") ? "st-lift" : undefined} {...(at === 2 ? pointer("lift") : {})}
-                  data-region={at === 1 ? "stat-selected" : at === 2 ? "stat-hover" : "stat"}><CardContent>
-                  <span className="ss-muted">{name}</span>
-                  <span className="ss-value">{value}</span>
-                </CardContent></Card>
-              ))}
-            </div>
-            <div className="ss-grid">
-              <Card size="sm" data-region="list"><CardContent>
-                <CardTitle>Recent issues</CardTitle>
-                <div className="ss-rows">
-                  {ROWS.map(row => (
-                    <div key={row.name} className="ss-row">
-                      <span className="ss-cell" data-region={row.checked ? "checks" : undefined}><Checkbox aria-label={row.name} defaultChecked={row.checked} /></span>
-                      <span className="ss-grow">{row.name}</span>
-                      <Badge tone={row.tone} data-region={row.checked ? "badges status" : "status"}>{row.status}</Badge>
-                      <Avatar size="sm" fallback={row.who} aria-label={TEAMS[row.who]} data-region={row.checked ? "avatar" : undefined} />
-                    </div>
-                  ))}
-                </div>
-              </CardContent></Card>
-              <Card size="sm" data-region="form"><CardContent>
-                <CardTitle>New issue</CardTitle>
-                <Field label="Title"><Input size="sm" fullWidth placeholder="What needs doing?" data-region="field"
-                  className={on("focus") ? "st-focus-field" : on("hover-edge") ? "st-hover-field" : undefined} {...pointer("hover-edge")} /></Field>
-                <Segmented size="sm" fullWidth aria-label="Priority" defaultValue="medium" items={priority} data-region="segmented" />
-                <div className="ss-line">
-                  <R id="switch" inline><Switch label="Notify team" defaultChecked /></R>
-                  <R id="chips" inline><Chip size="sm">Design</Chip><Chip size="sm">Web</Chip></R>
-                </div>
-                <R id="slider"><Slider aria-label="Estimate" defaultValue={60} /></R>
-                <Button size="sm" fullWidth data-region="action">Create issue</Button>
-              </CardContent></Card>
-            </div>
-          </div>
-          {/* The More menu, open when a question holds it. */}
-          {on("menu") || on("danger") ? (
-            <div className="ss-menu" data-region="menu">
-              <div className="area-menu" role="menu" aria-label="More">
-                <MenuItem icon={<CopyIcon />} data-region="menu-row" data-highlighted={on("menu") && !on("danger") ? "" : undefined}>Duplicate</MenuItem>
-                <MenuItem icon={<PencilIcon />}>Rename</MenuItem>
-                <MenuItem icon={<ShareIcon />}>Move to…</MenuItem>
-                <MenuSeparator />
-                <MenuItem icon={<TrashIcon />} tone="danger" data-region="menu-danger" data-highlighted={on("danger") ? "" : undefined} {...pointer("danger")}>Delete</MenuItem>
-              </div>
-            </div>
-          ) : null}
-        </main>
-      </div>
-    </Surface>
-  );
-}
+export type Hold = "hover" | "press" | "focus" | "hover-edge" | "lift" | "menu" | "danger" | "selected" | "toast";
+/**
+ * The Workspace as a showcase (owner, 2026-10-30: "a vague/general example that can be used to show all the design system
+ * changes at once"): the floating layer shown too, the More menu open with a row under the pointer, so every setting has
+ * something on the screen it changes (theme cards, the Playground). The toast left it on 2026-10-31 (owner: "is the task
+ * created popup in the right place/necessary?"): the menu already shows the floating edge and shadow.
+ */
+export const SHOWCASE: readonly Hold[] = ["menu"];
 
 /**
  * The product screens the visuals can show (owner, 2026-10-24: "change to a different product ui"): the Workspace, which
@@ -187,7 +66,7 @@ function ProductScreen({ hold }: { hold: ReadonlySet<Hold> }) {
  * at their own widths. Only the Workspace points at the parts a question changes.
  */
 export const SCREENS = {
-  workspace: { label: "Workspace", node: (hold: ReadonlySet<Hold>) => <ProductScreen hold={hold} /> },
+  workspace: { label: "Workspace", node: (hold: ReadonlySet<Hold>) => <WorkspaceScreen hold={hold} /> },
   analytics: { label: "Analytics", node: () => <div className="ss-example"><AnalyticsDashboard /></div> },
   settings: { label: "Settings", node: () => <div className="ss-example"><SettingsScreen /></div> },
   phone: { label: "Phone", node: () => <MobileScreen /> },
@@ -235,8 +114,8 @@ export interface ScreenFigureProps {
   /** The theme: data-area-* attributes for the frame. */
   scope: Record<string, string | undefined>;
   hold?: readonly Hold[];
-  /** Bars (words as shapes) by default; Shapes (words gone) for a close-up that should show the change alone; Real
-      where the text's colour is the question. */
+  /** Real by default (and always while FIGURES is off); Bars (words as shapes); Shapes (words gone) for a close-up that
+      should show the change alone. */
   fidelity?: "shapes" | "bars" | "real";
   view?: FigureView;
   /** Regions to measure in the frame's coordinates (the stage points at them). */
@@ -253,9 +132,28 @@ export interface ScreenFigureProps {
 
 /**
  * The screen in a frame: fitted whole (the stage), or a region close up at one zoom for every option of a question, so
- * the options compare (an option card). Strokes stay at exactly 1px at any zoom (figures.css, .af-zoom).
+ * the options compare (an option card). A Bars or Shapes drawing holds its strokes at 1px at any zoom (figures.css,
+ * .af-zoom); a real screen keeps the theme's widths and scales them with it, as a screenshot (`TRUE_STROKES`).
  */
-export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity = "bars", view = {}, measure, onMeasure, crossfade, onFit, isolate, className }: ScreenFigureProps) {
+/**
+ * Real UI only, for now (owner, 2026-10-30: "i want to stop using the abstract illustrations for now and just use real ui
+ * and components"): every figure draws its components with their real text, whatever fidelity a caller asks for. Set it
+ * true to bring the Area figures (words as bars or shapes) back.
+ */
+export const FIGURES = false;
+
+/*
+ * A real screen is a screenshot of the theme (owner 2026-10-31: "confirm that the strokes as they appear are correctly
+ * reflecting the actual theme? they seem quite dark"): its strokes keep the theme's widths and shrink with the screen. The
+ * figure engine (figures.css, .af-zoom) holds every stroke at 1px on screen at any zoom, right for a drawing of bars, but
+ * on a real screen drawn at 0.45 it made a card's 1px edge 2.2px in the screen's own units, about twice as heavy beside the
+ * type and fills as the theme draws it (and six times on a 0.15 choice card). Below a device pixel the browser still
+ * draws a hairline, so an edge never vanishes. Inline, as the engine is unlayered and outranks the app's layer.
+ */
+const TRUE_STROKES = { "--area-stroke-width": "inherit", "--area-border-width": "inherit" } as CSSProperties;
+
+export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity: asked = "real", view = {}, measure, onMeasure, crossfade, onFit, isolate, className }: ScreenFigureProps) {
+  const fidelity = FIGURES ? asked : "real";
   const frame = useRef<HTMLDivElement>(null), place = useRef<HTMLDivElement>(null), zoom = useRef<HTMLDivElement>(null), veilRef = useRef<HTMLSpanElement>(null);
   const html = markupOf(screen, hold, fidelity !== "real");
   // The crossfade: before the new choices paint, a copy of the drawing under the old ones is laid over it and fades out
@@ -378,7 +276,7 @@ export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity 
   }, [html, signature, size.w, size.h, region, regionZoom, scale, focusOn, fidelity, measure?.join(" ")]);
   return (
     <div ref={frame} className={`ss-frame af-${fidelity}${className ? ` ${className}` : ""}`} inert aria-hidden="true" {...scope}>
-      <div ref={place} className="ss-frame__place"><div ref={zoom} className="af-zoom" dangerouslySetInnerHTML={{ __html: html }} /></div>
+      <div ref={place} className="ss-frame__place"><div ref={zoom} className="af-zoom" style={fidelity === "real" ? TRUE_STROKES : undefined} dangerouslySetInnerHTML={{ __html: html }} /></div>
       <span ref={veilRef} className={isolate ? "ss-frame__veil ss-frame__veil--solid" : "ss-frame__veil"} hidden />
     </div>
   );

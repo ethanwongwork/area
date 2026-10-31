@@ -9,8 +9,8 @@
  *             the workspace (Home, then Projects and the Library, a row each); in a system's tab its sections, in a
  *             project's its overview, pages and their layers, explorations and versions, each under a back row to Home.
  *             A click opens in the tab holding what it names (this one, or another), ⌘-click in a new one
- *   Takeover  a page's own list in the Sidebar's place (Components' families, Icons' categories, the Library's groups),
- *             under a back row to the nav and a filter
+ *   PageList  a page's own list under the nav (Components' families, Icons' categories, the Library's groups), under
+ *             its filter; the nav stays (2026-10-30; was a takeover of the Sidebar under a back row)
  *
  * Explore comes with the phase that builds it; until then it is left out (product UI rule 16), as is the person's row.
  * New project and New system are their sections' last rows (Home's dialogs).
@@ -18,8 +18,7 @@
 import { Fragment, useEffect, useId, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, SearchField, Tooltip } from "@area/react";
 import { AddIcon, ArrowLeftIcon, ChevronDownIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, ImageIcon, ImagesIcon, LayoutIcon, PaletteIcon } from "@area/icons";
-import { SETTING_GROUPS } from "@area/tokens/config";
-import { systemName, groupSlug, HOME_TAB, hrefOf, LIST_PAGES, projectName, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
+import { systemName, HOME_TAB, hrefOf, LIST_PAGES, projectName, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
 import { addExploration, addPage } from "./projects.ts";
 import { activeTheme, versionName } from "./systems.ts";
 import { ChromeButton, SidebarList, useStudio } from "./studio.tsx";
@@ -28,19 +27,27 @@ import { EXAMPLES } from "./pages/examples.tsx";
 
 const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <PaletteIcon />, project: <FolderIcon />, inspiration: <ImagesIcon />, labs: <FlaskIcon /> };
 
-/** Foundations' pages: Color, Typography and Icons, then one per setting group, named as the registry names it. */
-export const FOUNDATIONS: ReadonlyArray<{ place: Place; label: string }> = [
-  { place: { page: "color" }, label: "Color" },
+/**
+ * A system's sections, one row each and one click away (owner, 2026-10-30: "foundations is not very well organized ... the
+ * actual nav items are too hidden behind multiple clicks. i want to simplify the design system overall. each system is one
+ * thing with components, colors, typography, icons, patterns, etc underneath it"). Foundations and its setting-group pages
+ * are gone: a theme's settings are edited on Themes (its Playground), so an old Foundations link opens Themes, on the
+ * setting it named.
+ */
+export const SYSTEM_SECTIONS: ReadonlyArray<{ place: Place; label: string }> = [
+  { place: { page: "themes" }, label: "Themes" },
+  { place: { page: "color" }, label: "Colors" },
   { place: { page: "typography" }, label: "Typography" },
   { place: { page: "icons" }, label: "Icons" },
-  ...SETTING_GROUPS.map(group => ({ place: { page: "settings" as const, group: groupSlug(group.heading) }, label: group.heading })),
+  { place: { page: "components" }, label: "Components" },
+  { place: { page: "patterns" }, label: "Patterns" },
+  { place: { page: "history" }, label: "History" },
 ];
-const IN_FOUNDATIONS: ReadonlySet<PageId> = new Set(["foundations", "settings", "color", "typography", "icons"]);
 
-/** A place's name: its section, Foundations page or lab. */
+/** A place's name: its section or lab. */
 export function placeLabel(place: Place): string {
-  if (place.page === "settings") return FOUNDATIONS.find(entry => entry.place.group === place.group)?.label ?? "Foundations";
-  return ({ home: "Home", themes: "Themes", "theme-setup": "New theme", foundations: "Foundations", color: "Color", typography: "Typography", icons: "Icons",
+  if (place.page === "settings" || place.page === "foundations") return "Themes";
+  return ({ home: "Home", themes: "Themes", "theme-setup": "New theme", color: "Colors", typography: "Typography", icons: "Icons",
     components: "Components", patterns: "Patterns", history: "History", inspiration: "Inspiration", materials: "Materials",
     project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions" } as Record<PageId, string>)[place.page];
 }
@@ -48,8 +55,9 @@ export function placeLabel(place: Place): string {
 const LISTED: Partial<Record<PageId, string>> = { color: "scales", typography: "roles", icons: "icons", components: "components",
   patterns: "patterns", inspiration: "images", materials: "bundles" };
 
-/** Same page (a setting group's page is its group), whatever is chosen on it. New theme is under Themes. */
-const samePage = (a: Place, b: Place) => (a.page === "theme-setup" ? "themes" : a.page) === (b.page === "theme-setup" ? "themes" : b.page) && a.group === b.group;
+/** Same section, whatever is chosen on it. New theme, and an old Foundations link, are under Themes. */
+const sectionOf = (place: Place) => place.page === "theme-setup" || place.page === "foundations" || place.page === "settings" ? "themes" : place.page;
+const samePage = (a: Place, b: Place) => sectionOf(a) === sectionOf(b);
 
 export function AppTabs({ tabs, current, onSelect, onClose, onNew }: {
   tabs: ReadonlyArray<{ id: string; place: Place }>; current: string; onSelect: (id: string) => void; onClose: (id: string) => void; onNew: () => void;
@@ -174,12 +182,10 @@ function WorkspaceNav() {
   );
 }
 
-/** A system's tab: its sections, Foundations expandable to its pages, then its History. */
+/** A system's tab: its sections, one row each (SYSTEM_SECTIONS), Themes first and History last. */
 function SystemNav() {
   const { place, openSystem, workingSystem, changes } = useStudio();
   const open = useOpen();
-  const [foundationsOpen, setFoundationsOpen] = useState(() => IN_FOUNDATIONS.has(place.page));
-  const foundations = useId();
   const at = (target: Place): Place => ({ ...target, system: workingSystem.id });
   const row = (target: Place, label: string, trailing?: ReactNode, actions?: ReactNode) => (
     <NavItem key={label} href={hrefOf(at(target))} current={samePage(target, place)} onClick={open(at(target))} trailing={trailing} actions={actions}>{label}</NavItem>
@@ -190,11 +196,9 @@ function SystemNav() {
         <BackHome />
         <NavGroup label={workingSystem.name}>
           {row({ page: "themes" }, "Themes", <Count count={openSystem.themes.length} />)}
-          {row({ page: "foundations" }, "Foundations", undefined,
-            <Expander open={foundationsOpen} label="Foundations' pages" controls={foundations} onToggle={() => setFoundationsOpen(!foundationsOpen)} />)}
-          <div id={foundations} hidden={!foundationsOpen}>
-            <NavGroup nested>{FOUNDATIONS.map(entry => row(entry.place, entry.label))}</NavGroup>
-          </div>
+          {row({ page: "color" }, "Colors")}
+          {row({ page: "typography" }, "Typography")}
+          {row({ page: "icons" }, "Icons")}
           {row({ page: "components" }, "Components", <Count count={FAMILIES.length} max={9999} />)}
           {row({ page: "patterns" }, "Patterns", <Count count={EXAMPLES.length} />)}
           {/* History counts the publishes; while the working copy has changes, it says how many are waiting. */}
@@ -285,19 +289,17 @@ function ProjectNav() {
 }
 
 /**
- * A page's list in the Sidebar's place (Figma's and Cursor's drill-in): a back row to the nav ("‹ Area"), the list's
- * filter (it was the Titlebar's search, which now searches every place), then the list. The Canvas stays where it is.
+ * A page's list under the nav (owner, 2026-10-30: "the nav is laggy and the actual nav items are too hidden behind multiple
+ * clicks"; was a Takeover, which replaced the nav and needed a Back row before any other section): the tab's nav
+ * stays at the Sidebar's top, one click to every section, and the open section's list follows it under its filter, as
+ * Figma's pages sit above its layers.
  */
-export function Takeover({ children }: { children: ReactNode }) {
-  const { place, setPanel, query, setQuery } = useStudio();
-  const back = tabKind(place) === "system" ? systemName(place.system) : tabKind(place) === "project" ? projectName(place.project) : "Workspace";
+export function PageList({ children }: { children: ReactNode }) {
+  const { place, query, setQuery } = useStudio();
   const listed = LISTED[place.page] ?? placeLabel(place).toLowerCase();
   return (
-    <div className="studio-takeover">
+    <div className="studio-page-list">
       <SidebarList>
-        <Nav aria-label={placeLabel(place)}>
-          <NavItem href={hrefOf(place)} icon={<ArrowLeftIcon />} onClick={event => { event.preventDefault(); setPanel("nav"); }}>{back}</NavItem>
-        </Nav>
         <SearchField size="sm" variant="soft" fullWidth className="studio-takeover__filter" value={query} onValueChange={setQuery}
           placeholder={`Filter ${listed}`} aria-label={`Filter ${listed}`} />
       </SidebarList>
@@ -305,3 +307,4 @@ export function Takeover({ children }: { children: ReactNode }) {
     </div>
   );
 }
+

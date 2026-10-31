@@ -8,7 +8,7 @@ import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection } from "@area/react";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
-import { Tile, TileGrid } from "../tile.tsx";
+import { Tile, TileGrid, WhenVisible } from "../tile.tsx";
 import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { matches } from "../search.ts";
@@ -19,6 +19,8 @@ import { MobileScreen } from "../content/examples/mobile.tsx";
 import { SettingsScreen } from "../content/examples/settings.tsx";
 import { HairlineScreen } from "../content/examples/hairline.tsx";
 import { StrokeGroupsScreen } from "../content/examples/stroke-groups.tsx";
+import { WorkspaceScreen } from "../content/examples/workspace.tsx";
+import { SHOWCASE } from "../setup-screen.tsx";
 
 export const EXAMPLES = [
   {
@@ -70,6 +72,14 @@ export const EXAMPLES = [
     Screen: HairlineScreen,
   },
   {
+    id: "workspace",
+    label: "Workspace",
+    description: "The showcase every theme is seen on (2026-10-30): a generic desktop app at 1920 × 1080, with its menu open and its toast showing.",
+    families: ["Panel", "Nav", "Card", "Alert", "Table", "Badge", "Avatar", "Composer", "Field", "Select", "Segmented", "Slider", "Chip", "Switch", "Radio", "Menu", "Toast", "Meter", "Kbd", "Count", "Tabs"],
+    gaps: ["The window's lights are app CSS: Area has no window-controls part."],
+    Screen: () => <WorkspaceScreen hold={new Set(SHOWCASE)} />,
+  },
+  {
     id: "stroke-groups",
     label: "Stroke groups",
     description: "Every stroke group (Inspector › Stroke), each group's members in one cell at the Canvas's settings (2026-10-30).",
@@ -108,7 +118,8 @@ export function ExamplesPage() {
         <TileGrid span="wide">
           {shown.map(entry => (
             <Tile key={entry.id} span="wide" stage="center" inert card label={entry.label} openOnClick onOpen={() => select(entry.id)}>
-              <WidthZoom><div className="ex-thumb" aria-hidden="true"><entry.Screen /></div></WidthZoom>
+              {/* A whole screen per tile: each draws as it nears the view (tile.tsx WhenVisible). */}
+              <WhenVisible estimate={320}><WidthZoom><div className="ex-thumb" aria-hidden="true"><entry.Screen /></div></WidthZoom></WhenVisible>
             </Tile>
           ))}
         </TileGrid>

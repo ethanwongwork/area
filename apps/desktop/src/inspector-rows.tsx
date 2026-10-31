@@ -12,13 +12,14 @@
  */
 import { cloneElement, createContext, useContext, useEffect, useRef, useState, type PointerEvent, type ReactElement, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
-import { CustomSelect, Field, Input, Segmented, Slider, Toggletip, type FieldProps, type SliderProps } from "@area/react";
+import { Button, CustomSelect, Field, Input, Segmented, Slider, Toggletip, type FieldProps, type SliderProps } from "@area/react";
+import { ResetIcon } from "@area/icons";
 import { GALLERY_CONTROLS, greysTinted, type GalleryControl } from "./gallery/controls.ts";
 import { colourMark, optionMark } from "./option-marks.tsx";
 import { PageColourRow, pageColour } from "./page-colour.tsx";
 import { BrandRows } from "./brand-settings.tsx";
 import { PAGE_AXES, type ColoursState } from "./colours.ts";
-import { useStudio, type CanvasAxes } from "./studio.tsx";
+import { CANVAS_DEFAULTS, useStudio, type CanvasAxes } from "./studio.tsx";
 
 export type Values = Readonly<Record<string, string>>;
 export interface RowContext {
@@ -51,6 +52,32 @@ export interface RowContext {
  */
 export const RowFrame = createContext<"field" | "settings">("field");
 
+/**
+ * A row's Reset (owner, 2026-10-30: "add reset buttons for all the controls to the default"): the setting back to Area's
+ * shipped default (gallery/controls.ts `defaultValue`, the Canvas's defaults). It shows only while the row differs from it,
+ * as a small icon button after the row's name, so the controls keep one width down the column. `setting` names what the
+ * row sets (`data-setting` on the row), which the theme page's Playground follows (src/pages/themes.tsx).
+ */
+export interface Reset { setting: string; changed: boolean; reset: () => void }
+const RowReset = createContext<Reset | null>(null);
+/** The settings a row stands for, reset together, read against the defaults. */
+export function resetOf(setting: string, axes: readonly string[], context: RowContext): Reset {
+  return {
+    setting,
+    changed: axes.some(axis => (context.values[axis] ?? CANVAS_DEFAULTS[axis as keyof CanvasAxes]) !== CANVAS_DEFAULTS[axis as keyof CanvasAxes]),
+    reset: () => context.set(Object.fromEntries(axes.map(axis => [axis, CANVAS_DEFAULTS[axis as keyof CanvasAxes]]))),
+  };
+}
+export function Resets({ value, children }: { value: Reset | null; children: ReactNode }) {
+  return <RowReset.Provider value={value}>{children}</RowReset.Provider>;
+}
+/** The Reset button: an icon, named for the setting it resets. */
+export function ResetButton({ reset, name }: { reset: Reset; name?: string }) {
+  if (!reset.changed) return null;
+  const words = `Reset ${name ?? "this setting"} to default`;
+  return <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<ResetIcon />} aria-label={words} title={words} onClick={reset.reset} />;
+}
+
 /*
  * A setting's bar (owner, 2026-10-25: "they arent very smooth to move"). A setting restyles the whole app, a few hundred
  * milliseconds a time (traced in headless Edge: three to six style recalculations of 3,000 to 5,000 elements), so a drag
@@ -72,7 +99,8 @@ const EASE = 150; /* the fill's ease onto a step: `fast` at the default Speed, 1
  * and state to the bar's input, the first element it holds, so the label names the bar and the field names itself.
  *
  * Every bar is one row (owner, 2026-10-27: "i dont like the slider below the label for just some of them, id prefer it
- * to be more consistent"), and every value is a field, 4 or 5 characters wide (owner: "smaller in width"). A value in
+ * to be more consistent"), and every value is a field, 5 characters wide (owner: "smaller in width"; one width for every bar
+ * since 2026-10-30, FIELD_CH). A value in
  * words ("Cool 25%", "57% deeper") shows its number in the field (`short`), signed from its middle, and the bar's own
  * colours say which way is which (`gradient`, owner: "make the slider background itself be colored like a gradient");
  * the words stay the bar's announced value. A short discrete range draws its steps as dots (owner: "i liked the little
@@ -80,8 +108,10 @@ const EASE = 150; /* the fill's ease onto a step: `fast` at the default Speed, 1
  */
 /** A text's width in `ch` of the app's sans, near enough to size a field: tabular digits are 1, narrow letters less. */
 const chOf = (text: string) => [...text].reduce((sum, char) => sum + (/[ilIjtf.,·°' 1]/.test(char) ? 0.6 : /[mwMW%]/.test(char) ? 1.2 : 1), 0);
-/** The field's width for a bar's values: 4 characters, or 5 where one needs it ("210ms"). */
-const fieldCh = (texts: string[]) => Math.max(...texts.map(chOf)) <= 4.4 ? 4 : 5;
+/** The field's width: 5 characters for every bar, the longest any bar needs ("12.5%", "210ms"), so the values and the bars
+ * before them line up down a column of rows (owner, 2026-10-30: "can you also make these input widths the same?"; was 4, or
+ * 5 where a bar needed it). */
+const FIELD_CH = 5;
 const stepsOf = (min: number, max: number) => Array.from({ length: Math.max(0, max - min) + 1 }, (_, at) => min + at);
 /** A gradient through colours spaced evenly from start to end. */
 const through = (colours: string[]) => `linear-gradient(to right, ${colours.join(", ")})`;
@@ -99,8 +129,10 @@ type SettingBarProps = Omit<SliderProps, "value" | "onValueChange" | "onValueCom
   short?: (value: number) => string;
   /** The setting's name in words, for the value field's accessible name where `label` draws a mark beside it. */
   name?: string;
+  /** The row's Reset, when not the setting's own (`false`: none on this row). */
+  reset?: Reset | false;
 };
-function SettingBar({ value, onSet, label, readout, short, title, name, ...props }: SettingBarProps) {
+function SettingBar({ value, onSet, label, readout, short, title, name, reset, ...props }: SettingBarProps) {
   const [draft, setDraft] = useState<number | null>(null);
   const pending = useRef<number | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -120,9 +152,9 @@ function SettingBar({ value, onSet, label, readout, short, title, name, ...props
   const text = short ?? ((at: number) => String(readout(at)));
   const steps = stepsOf(min, max).length;
   return (
-    <RowField label={label} name={name} orientation="horizontal" title={title}>
+    <RowField label={label} name={name} orientation="horizontal" title={title} reset={reset}>
       <BarRow bar={{ ...bar, stepMarks: props.stepMarks ?? (!props.gradient && steps >= 3 && steps <= 12) }} shown={draft ?? value}
-        readout={readout} text={text} ch={fieldCh(stepsOf(min, max).map(text))} name={name ?? (typeof label === "string" ? label : undefined)} onSet={land} />
+        readout={readout} text={text} ch={FIELD_CH} name={name ?? (typeof label === "string" ? label : undefined)} onSet={land} />
     </RowField>
   );
 }
@@ -196,6 +228,8 @@ const hueLabel = (value: string) => `${hueName(Number(value))} ${value}°`;
 
 /** The settings a combined row stands for; the Inspector draws the row once, at the first of them. A row asked for one of
  * Accent's alone (Setup's exact value) is that setting's own. */
+/** The settings Greys sets together (Temperature, or a tint color and its amount). */
+const GREYS = ["neutral", "tint-hue", "tint-hue-dark", "tint-light", "tint-dark"];
 export const ROW_OF: Readonly<Record<string, string>> = { neutral: "greys", "tint-hue": "greys", "tint-hue-dark": "greys", "tint-light": "greys", "tint-dark": "greys",
   accent: "accent", "solid-light": "accent", "solid-dark": "accent", "accent-strength": "accent", "label-tint": "accent" };
 
@@ -208,10 +242,14 @@ export function SettingRow({ axis, context }: { axis: string; context: RowContex
   // color, which the greys' rows stand in for, so they are left out while it is picked (owner, 2026-10-30: "the page and
   // accent controls are a bit confusing … not sure what page color means").
   if (axis === `ground-${context.mode}` && context.exact !== false) return <PageRows context={context} />;
-  if (ROW_OF[axis] === "greys") return colours[context.mode] !== null ? null : <GreysRow context={context} />;
+  if (ROW_OF[axis] === "greys") return colours[context.mode] !== null ? null : <Resets value={resetOf("neutral", GREYS, context)}><GreysRow context={context} /></Resets>;
   if (axis === "accent") return <AccentRow context={context} />;
   const control = controlOf(axis);
-  return <Dim reason={pickedReason(colours, axis, context.mode) ?? control.inactive?.(context.values, context.mode) ?? null}><Row control={control} context={context} /></Dim>;
+  return (
+    <Resets value={resetOf(axis, [axis], context)}>
+      <Dim reason={pickedReason(colours, axis, context.mode) ?? control.inactive?.(context.values, context.mode) ?? null}><Row control={control} context={context} /></Dim>
+    </Resets>
+  );
 }
 
 /** A page setting a picked page colour stands in for (src/colours.ts): what it shows is not what the page paints. */
@@ -231,16 +269,22 @@ function Dim({ reason, children }: { reason: string | null; children: ReactNode 
 }
 
 /** A row's Field: an inactive row's name and control dimmed, its reason in a Toggletip after the name. */
-export function RowField({ label, name, children, ...props }: FieldProps & { name?: string }) {
+export function RowField({ label, name, reset: own, children, ...props }: FieldProps & { name?: string; reset?: Reset | false }) {
   const reason = useContext(Inactive);
   const frame = useContext(RowFrame);
+  // `false` keeps the row's setting (for the preview) and leaves its Reset to the row it belongs under.
+  const inherited = useContext(RowReset);
+  const reset = own === false ? null : own ?? inherited;
+  const setting = (own || inherited)?.setting;
+  const words = name ?? (typeof label === "string" ? label : undefined);
+  const button = reset ? <ResetButton reset={reset} name={words} /> : null;
   if (frame === "settings") {
     const { title, orientation: _, ...field } = props;
     return (
-      <div className="studio-settings__row" data-disabled={reason ? "" : undefined}>
+      <div className="studio-settings__row" data-disabled={reason ? "" : undefined} data-setting={setting}>
         <div className="studio-settings__text">
-          {/* The Field names the control; the visible name is its echo. */}
-          <span className="studio-settings__label" aria-hidden="true">{label}</span>
+          {/* The Field names the control; the visible name is its echo. Reset follows it. */}
+          <span className="studio-settings__name"><span className="studio-settings__label" aria-hidden="true">{label}</span>{button}</span>
           {reason ?? title ? <span className="studio-settings__description">{reason ?? title}</span> : null}
         </div>
         <div className="studio-settings__control">
@@ -250,11 +294,10 @@ export function RowField({ label, name, children, ...props }: FieldProps & { nam
       </div>
     );
   }
-  if (!reason) return <Field label={label} {...props}>{children}</Field>;
-  const words = name ?? (typeof label === "string" ? label : undefined);
+  if (!reason) return <Field label={label} {...props} data-setting={setting} labelAction={button ? <>{props.labelAction}{button}</> : props.labelAction}>{children}</Field>;
   return (
-    <Field {...props} label={<span className="studio-row__dim">{label}</span>}
-      labelAction={<Toggletip content={reason} label={words ? `Why ${words} has no effect` : undefined} />}>
+    <Field {...props} data-setting={setting} label={<span className="studio-row__dim">{label}</span>}
+      labelAction={<><Toggletip content={reason} label={words ? `Why ${words} has no effect` : undefined} />{button}</>}>
       <Dimmed>{children as ReactElement}</Dimmed>
     </Field>
   );
@@ -313,7 +356,9 @@ function Bar({ control, value, put, context, label }: { control: GalleryControl;
       name={named.length ? control.barLabel ?? control.label : control.label}
       readout={(at: number) => say(control, scale[at]!)} onSet={at => put(scale[at]!)}
       // A step whose name is longer than the field ("Same as hover") shows its number there; the name stays its reading.
-      short={scale.some(step => chOf(say(control, step)) > 5.5) && scale.every(step => /^\d+$/.test(step)) ? (at: number) => scale[at]! : undefined} />
+      short={scale.some(step => chOf(say(control, step)) > 5.5) && scale.every(step => /^\d+$/.test(step)) ? (at: number) => scale[at]! : undefined}
+      // Under its choices (Auto, Custom) the bar is the same setting: its Reset is the choices' row's.
+      reset={named.length ? false : undefined} />
   );
   if (!named.length) return slider;
   return (
@@ -362,11 +407,13 @@ function PageRows({ context }: { context: RowContext }) {
   const choose = (next: string) => setColours({ [mode]: next === "exact" ? pageColour(mode, values as CanvasAxes, colours) : null });
   return (
     <>
-      <RowField label="Page color" orientation="horizontal" title="The background everything sits on: adjusted with the settings below, or one exact color">
+      <RowField label="Page color" orientation="horizontal" title="The background everything sits on: adjusted with the settings below, or one exact color"
+        reset={{ setting: `ground-${mode}`, changed: exact, reset: () => choose("adjust") }}>
         <Segmented size={context.size ?? "sm"} fullWidth aria-label="Page color" value={exact ? "exact" : "adjust"} onValueChange={choose}
           items={[{ value: "adjust", label: "Adjust" }, { value: "exact", label: "Exact" }]} />
       </RowField>
-      {exact ? <PageColourRow size={context.size ?? "sm"} /> : <Row control={controlOf(`ground-${mode}`)} context={context} />}
+      {exact ? <Resets value={{ setting: `ground-${mode}`, changed: false, reset: () => undefined }}><PageColourRow size={context.size ?? "sm"} /></Resets>
+        : <Resets value={resetOf(`ground-${mode}`, [`ground-${mode}`], context)}><Row control={controlOf(`ground-${mode}`)} context={context} /></Resets>}
     </>
   );
 }
@@ -393,20 +440,20 @@ function GreysRow({ context }: { context: RowContext }) {
           min={-100} max={100} step={1} origin={0} value={tint === "none" ? t : 0}
           readout={(at: number) => at === 0 ? "Neutral" : `${at < 0 ? "Cool" : "Warm"} ${Math.abs(at)}%`}
           short={(at: number) => at === 0 ? "0" : `${at < 0 ? "-" : "+"}${Math.abs(at)}`} gradient={TEMPERATURE_GRADIENT}
-          onSet={temperature} />
+          onSet={temperature} reset={tint === "none" ? undefined : false} />
       </Dim>
-      <RowField label="Tint color" orientation="horizontal" title="Lean every grey toward a color instead of cool or warm">
+      <RowField label="Tint color" orientation="horizontal" title="Lean every grey toward a color instead of cool or warm" reset={tint === "none" ? false : undefined}>
         <CustomSelect size={context.size ?? "sm"} variant="soft" fullWidth aria-label="Tint color" value={tint} onValueChange={tintColour}
           items={[{ value: "none", label: "None" }, ...TINTS.map(([value, label]) => ({ value, label, icon: swatchOf(value) })), { value: CUSTOM, label: "Custom", icon: tint === CUSTOM ? swatchOf(hue) : undefined }]} />
       </RowField>
       {tint === CUSTOM ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={359} step={1} value={Math.max(0, hues.indexOf(hue))}
-          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ "tint-hue": hues[at]!, "tint-hue-dark": "same" })} />
+          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ "tint-hue": hues[at]!, "tint-hue-dark": "same" })} reset={false} />
       ) : null}
       {tint !== "none" ? (
         <SettingBar size={context.size ?? "sm"} label="Amount" title="How much of the color the greys take: 0% is plain grey"
           min={0} max={100} step={1} value={amountAt} readout={(at: number) => at === 0 ? "None" : `${at}%`}
-          onSet={at => set({ "tint-light": String(at), "tint-dark": String(at) })} />
+          onSet={at => set({ "tint-light": String(at), "tint-dark": String(at) })} reset={false} />
       ) : null}
     </>
   );
@@ -468,9 +515,11 @@ function AccentRow({ context }: { context: RowContext }) {
     if (!offered && next === EXACT) return;
     set({ accent: next === CUSTOM ? (custom ? value : "200") : next });
   };
+  const own = resetOf("accent", ["accent"], context);
+  const reset: Reset = { ...own, changed: own.changed || exact, reset: () => { if (exact) setBrand({ on: false }); own.reset(); } };
   return (
     <>
-      <RowField label={control.label} orientation="horizontal" title={control.hint}>
+      <RowField label={control.label} orientation="horizontal" title={control.hint} reset={reset}>
         <CustomSelect size={context.size ?? "sm"} variant="soft" fullWidth layout={layout} aria-label={control.label} value={exact ? EXACT : custom ? CUSTOM : value}
           onValueChange={choose} onHighlightChange={next => context.preview?.("accent", next === CUSTOM || next === EXACT ? null : next)}
           items={[...named.map(item => ({ value: item.value, label: item.label, icon: optionMark("accent", item.value, values as CanvasAxes) ?? undefined,
@@ -478,9 +527,9 @@ function AccentRow({ context }: { context: RowContext }) {
             { value: CUSTOM, label: "Any hue", icon: custom ? optionMark("accent", value, values as CanvasAxes) ?? undefined : undefined },
             ...(offered ? [{ value: EXACT, label: "Exact color", icon: colourMark(brand.primary) }] : [])]} />
       </RowField>
-      {exact ? <BrandRows /> : custom ? (
+      {exact ? <Resets value={{ ...reset, changed: false }}><BrandRows /></Resets> : custom ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={hues.length - 1} step={1} value={Math.max(0, hues.indexOf(value))}
-          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ accent: hues[at]! })} />
+          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ accent: hues[at]! })} reset={false} />
       ) : null}
       <SettingRow axis="accent-strength" context={context} />
       <AccentPaintRows accent={value} context={context} />
@@ -494,8 +543,8 @@ function AccentPaintRows({ accent, context }: { accent: string; context: RowCont
   const tint = controlOf("label-tint");
   return (
     <>
-      <Dim reason={shadeReason(accent, context)}><ShadeBar accent={accent} context={context} /></Dim>
-      <Dim reason={tint.inactive?.(context.values, context.mode) ?? null}><Row control={tint} context={context} /></Dim>
+      <Resets value={resetOf(`solid-${context.mode}`, [`solid-${context.mode}`], context)}><Dim reason={shadeReason(accent, context)}><ShadeBar accent={accent} context={context} /></Dim></Resets>
+      <Resets value={resetOf("label-tint", ["label-tint"], context)}><Dim reason={tint.inactive?.(context.values, context.mode) ?? null}><Row control={tint} context={context} /></Dim></Resets>
     </>
   );
 }

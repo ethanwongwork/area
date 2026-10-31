@@ -32,8 +32,7 @@
      what it names rather than floating between two sections. */
   .studio-sections { display: grid; gap: var(--_canvas-section); }
   .studio-section { scroll-margin-block-start: var(--_canvas-margin); }
-  /* The header: the Titlebar's height (39 with its rule), its controls a whole 24 with 7 above, below and at
-     the sides, and the rule under them, so they centre on the line the Sidebar's first row
+  /* The header: a small control with 5 above and below and 7 at the sides (36 at type 13), so they centre on the line the Sidebar's first row
      and the Inspector's first heading share. No title (owner, 2026-10-14): the Sidebar's selected
      row names what is shown. The controls run from the end, as Notion and Figma put a view's
      options, in rule 14's order. */
@@ -45,15 +44,17 @@
     /* Its controls sit as far from the sides as from the top and the rule, (bar − rule − small control) / 2, 7 at the
        app's scale, as the Titlebar's and the Inspector's bar (owner, 2026-10-18: "these controls are not evenly inset,
        theres too much space horizontally"; was the Canvas's 14 margin). */
-    padding-inline: calc((var(--_studio-bar) - var(--area-border-width) - var(--area-control-sm)) / 2);
+    /* The sides keep the tab row's 7 (2026-10-31), so the two rows' ends line up. */
+    padding-inline: calc((var(--_studio-head) - var(--area-control-sm)) / 2);
     /* No rule under it (owner, 2026-10-22, "use the option"; cursor-audit-2026-10-22.md item 4): the header belongs to
-       the Canvas, as Notion's and ChatGPT's top bars carry none. The rule's width stays as clear space, so the controls
-       keep their line with the Sidebar's first row and the Inspector's first heading. */
-    border-block-end: var(--area-border-width) solid transparent;
+       the Canvas, as Notion's and ChatGPT's top bars carry none; nor clear space for one (2026-10-31). */
     /* The bar's start (a way out, a path) and its controls stay at least 12 apart, as everything drawn in it; the path
        is cut first (2026-10-25: at 1024 the path ran into the first control). */
     gap: var(--area-space-12);
   }
+  /* The header's start (view-controls.tsx ViewLead): what the Canvas shows, as ghost menus 4 apart, so their plates read
+     as one group, as Figma's toolbar menus sit; the end's controls follow after the space between. */
+  .studio-canvas__lead { display: flex; align-items: center; gap: var(--area-space-4); min-inline-size: 0; }
   /* Everything drawn is 12 apart, as in the Titlebar: a field's edge, a track, an icon
      (studio-bar-icon). */
   .studio-canvas__actions {

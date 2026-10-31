@@ -1,6 +1,76 @@
 # Handoff
 
 ## Current state (2026-10-30)
+- **Option rows are bars, branch `claude/electron-ui-settings-refine-175e56` (uncommitted, 2026-10-30).** Owner: "are these
+  option rows supposed to be pill shaped?" No: a row or list Radio / Checkbox `card` or `soft` option took
+  `radius-container` (16 / 20), a pill on a 34 row. Now the ladder's corner for its one-line height (`--_card-line`: inset
+  and edge twice plus the control box), ≤ surface, half the line at Pill; tile / preview / media keep the surface corner
+  (choice.css; DESIGN_SYSTEM.md Radius "Option rows are bars"; specs; cohesion test). Radio and Checkbox back In review.
+  Settings audited against #182: every registry setting reaches Appearance and Theme (no gaps). Checks: React 623,
+  contracts, desktop 28, docs, app-css, playgrounds, typecheck; Electron captures light and dark; relaunched from here.
+- **Theme Playground, Reset, one value width, same branch (uncommitted, 2026-10-30).** A system's Themes opens on a
+  Playground view (Canvas header: Playground / Themes, 1× / 2×): the Inspector row last pressed or focused (`data-setting`
+  on every RowField) names the setting, the Canvas shows the components it changes in bento tiles as the component review
+  page draws them (src/setting-preview.tsx `TILES`, every SETTING_GROUPS setting mapped; states painted via abstract.tsx
+  `SettingSubject`). Every row has a Reset to Area's default while changed (inspector-rows.tsx `Reset`, `resetOf`; Material
+  rows to the bundle), after the name in Settings and in Field's labelAction in the Inspector. Bar value fields are all 5ch
+  (`FIELD_CH`). A preview panel in Settings was built then taken out (owner: "too overcomplicated for the settings"); Settings
+  keeps its screen preview. PRODUCT_UI.md rule 22. Not yet: a test that TILES covers new settings.
+- **Real UI only; the Workspace showcase, same branch (uncommitted, 2026-10-30).** `ScreenFigure` draws real components and
+  text whatever fidelity is asked (`FIGURES = false` in setup-screen.tsx; Setup's Wireframe switch hidden while off).
+  The Workspace gained a warning Alert (in place of the heading that repeated the breadcrumb; `text` region), a Progress in
+  the Progress card, ⌘K on Search, a framed baseline Table for Recent issues (`list`), Notifications option rows, and a
+  `toast` hold; `SHOWCASE` (menu + toast) on theme, system, project and Publish cards and the Playground, which opens on
+  the whole screen and puts a touched setting's tiles above it. Choice cards: Workspace for whole-screen settings, the real
+  component otherwise (`ChoicePreview`; glyphs kept as `ChoiceFigure`). PRODUCT_UI.md rule 23. Open: at type 16 +
+  Comfortable the fixed 1024×640 window clips its bottom; Foundations still draws abstract.tsx.
+- **Generic 1920 × 1080 Workspace; flat system nav; nav lag, same branch (uncommitted, 2026-10-30).** Owner: Northwind
+  "looks fake", too big; "make it a 1920x 1080 screen and scale it down", "dont name it anything". New
+  `content/examples/workspace.tsx` (sidebar with nav, teams, recents, plan card; greeting, composer, quick-action cards,
+  callout, tasks table, recent files; details panel with fields, chips, switches, option rows, slider; menu and toast when
+  held), every Setup region kept; SCREEN 1920 × 1080, frames 16:9 with a rim. Owner: "foundations is not very well
+  organized, the nav is laggy and the actual nav items are too hidden" → a system's nav is Themes, Colors, Typography,
+  Icons, Components, Patterns, History (`SYSTEM_SECTIONS`); Foundations and its group pages retired (old links open
+  Themes, a setting link its Playground); a page's list sits under the nav (`PageList`; Takeover gone). Lag measured in
+  Electron, click to paint: Colors 2.5 s → 0.15 s, Patterns 2.5 s → 0.33 s (`WhenVisible`), Themes 0.51 → 0.33 s;
+  Components still ~0.5 s (its 118-row tree). AGENTS.md and PRODUCT_UI.md updated.
+- **Workspace refined, same branch (uncommitted, 2026-10-31).** Owner: spacing, type, rhythm, menu alignment, composer at the
+  bottom middle, no name in the greeting, a fuller right panel. Now three regions each with its own 40 header (sidebar and
+  details are docked Panels with window bars and their seams; the main header matches); main column 720, 40 under the
+  header, sections 32 apart, headings 12 over their blocks; composer docked 16 above the foot on the column (Composer's
+  width hook); More last in the header, its menu 4 under it with ends aligned; toast 12 above the composer; greeting
+  "Good afternoon". Details panel 360: Properties (label and control rows), Labels, Subtasks, Tools (full-width switch
+  rows), Notifications, Activity, one rule apart, Save changes pinned in the footer. Measured at 1:1 with
+  area-ui-review's layout-audit in Electron (Patterns › Workspace renders it live). Open: Priority truncates to "Med…"
+  at type 16; the audit's remaining leads are inside components (table cells, badges).
+  Then (2026-10-31, owner's review): greeting title to line 12 baseline-to-cap (was 8; the joined range's top for a title
+  twice Section heading's size); composer actions at its own action size (control md), so Add, Attach, the text and Send
+  share one centre (measured 1146 each; small buttons sat 2 low); the toast left SHOWCASE (the menu shows the floating
+  layer; a hold still shows it); Tasks' view tabs moved under its title (on one line no alignment matched their text's
+  baseline: −2.6 to +4.5 measured).
+  Then (2026-10-31, owner: "style the right panel to be more like the area inspector theme panel, with more sliders, more
+  inputs, no checkboxes"; "is that really the best place to put a banner?"; "instead of the free plan thing ... add an upsell
+  card popover"): Details is now the Inspector's rows: Properties, Progress (bars with value fields, the Inspector's
+  `studio-bar`; Estimate a NumberField in h), Appearance (ColorField, Opacity bar, Cover Segmented), Labels, Notifications
+  (Segmented, Select, switch rows), Sharing; no checkboxes, radios or description list. Fits the panel exactly at the
+  defaults (content 986 of 986); scrolls at type 16 Comfortable, where Priority's "Medium" still truncates. The column's
+  info Alert is gone; the sidebar's Free plan card became an upsell Popover (media of tool tiles, title, close,
+  description, Upgrade) above the person.
+  Then (2026-10-31, owner): the popover is a feature announcement (Automations, New badge, a real Weekly summary card in
+  the media, Try it), composed as Area's image popover (gallery.tsx GalleryPopoverImage): header first, close at the
+  corner (7 from top and end, icon on the 12 inset), description joined to the title (0 between lines; was 14 as a
+  separate block). Real screens (ScreenFigure fidelity real) keep the theme's stroke widths and scale them (setup-screen.tsx
+  `TRUE_STROKES`); the figure engine's 1px-at-any-zoom hold had drawn the Playground's 0.45 screen with 2.2px edges.
+  Then (2026-10-31, owner): the info banner is back, first in the column above the greeting (Connect, dismiss). Themes
+  opens on a Screen view (src/screen-viewer.tsx, a trial for viewing a project's screens): the Workspace alone on a grey
+  ground, fitted, zoomed by stepper, menu or pinch, scrolled past the view with its centre kept; the header holds Screen
+  / Close-up (the Playground tiles) / Themes, then mode (Light, Dark, Both), ground (Grey, White, Black, Checkerboard) and
+  zoom (menu: held states, window frame). Choices kept per person (view: options).
+  Then (2026-10-31, owner, Claude's browser pane; "still too tall"): the Canvas's second row (`--_studio-bar`, app.css)
+  is control-sm + 10 (36 at type 13; was 47), sides 7, no clear rule; Sidebar first row follows (centre 58). Inspector's
+  first heading stays at 63 (Panel's body inset; no public hook), the one line that no longer meets. Themes' header:
+  View, mode and ground as ghost menus at the start (view-controls.tsx ViewLead; ViewFilter now takes option icons and
+  `align`), zoom or New theme at the end.
 - **Card rebuilt, resting shadow, stroke groups review, settings icons, branch `claude/theme-appearance-stroke-work-766611`
   (uncommitted, 2026-10-30).** Card: one space on the card for every slot (sm 16, md 20, lg 24; compact 4 less), media
   steps out to its inset, one section gap (12 / 16 / 20), CardContent optional (no padding), vertical cards a flex column

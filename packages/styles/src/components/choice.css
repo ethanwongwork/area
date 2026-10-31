@@ -111,8 +111,20 @@
     inline-size: 100%;
     padding: var(--_card-inset);
     border: var(--area-stroke-width) solid var(--_card-edge); /* required: the chosen edge is state (audit H-3) */
-    border-radius: var(--area-radius-container);
+    /* A row or list option is a one-line bar (DESIGN_SYSTEM.md, Radius, "Bars and keycaps"): its corner is the height
+       ladder's for its one-line height, the inset and edge twice plus the control's box (the label is trimmed to its cap,
+       inset.css, so the box sets the line), no rounder than a surface. So a 34 row is 10 at corner 10 and 12 at 12, a
+       30 compact row 8 and 10, and a pill only at Pill (owner 2026-10-30: "are these option rows supposed
+       to be pill shaped?"; was the surface corner, 16 or 20 on a 34 row). A caption makes the row taller, not rounder.
+       Tile, preview and media are pictures in a card and keep the surface corner (below). */
+    --_card-line: calc(2 * (var(--_card-inset) + var(--area-stroke-width)) + var(--_size));
+    /* The ladder's even pixels, or half the line at Pill (the last term is 0 or less below Pill), so an odd half stays round. */
+    --_card-corner: min(var(--area-radius-container), max(var(--area-radius-min), round(down, calc(var(--_card-line) * var(--area-radius-factor)), 2px), calc(var(--_card-line) / 2 - (0.5 - var(--area-radius-factor)) * 1000px)));
+    border-radius: var(--_card-corner);
     transition: var(--area-transition);
+  }
+  :is(.area-checkbox--card, .area-checkbox--soft, .area-radio--card, .area-radio--soft):is(.area-checkbox--tile, .area-radio--tile, .area-checkbox--preview, .area-radio--preview, .area-checkbox--media, .area-radio--media, .area-checkbox--media-row, .area-radio--media-row) {
+    --_card-corner: var(--area-radius-container);
   }
   /* The card's own ground; soft paints a control fill instead (below). */
   .area-checkbox--card,

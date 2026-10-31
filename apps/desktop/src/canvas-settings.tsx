@@ -14,11 +14,11 @@ import { CustomSelect, PanelSection, Segmented } from "@area/react";
 import { GridIcon, ListIcon } from "@area/icons";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, MATERIAL_STROKE_STYLES, MATERIAL_SWITCHES, SETTING_GROUPS } from "@area/tokens/config";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS } from "./gallery/controls.ts";
-import { materialValue, type MaterialState } from "./material.ts";
+import { bundleValue, MATERIAL_DEFAULT, materialValue, type MaterialState } from "./material.ts";
 import { choiceFigure, FIGURED } from "./choice-figures.tsx";
 import { materialMark } from "./option-marks.tsx";
 import { brandStyle } from "./brand.ts";
-import { ROW_OF, RowField, SettingRow, type RowContext } from "./inspector-rows.tsx";
+import { ROW_OF, RowField, SettingRow, type Reset, type RowContext } from "./inspector-rows.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { inMode } from "./pages/theme-settings.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
@@ -130,11 +130,14 @@ export function MaterialRows({ canvas, material, onBundle, onValue, previewCanva
   const previewValue = (key: string) => (next: string | null) =>
     previewMaterial?.(next === null ? null : { ...material, overrides: { ...material.overrides, [key]: next } } satisfies MaterialState);
   const bundle = MATERIAL_BUNDLES[material.bundle]!;
+  // Each row's Reset: the bundle back to the default Material, a lever or switch back to its bundle's own value.
+  const resetValue = (key: string): Reset => ({ setting: "material", changed: key in material.overrides, reset: () => onValue(key, bundleValue(material.bundle, key)) });
   const named = (key: string, value: string, label: string) =>
     material.bundle !== "none" && String(bundle.levers[key] ?? 0) === value && value !== "0" ? `${label} (${bundle.label})` : label;
   return (
     <>
-      <RowField label="Material" orientation="horizontal" title="A surface treatment the panels and cards share: glass, grain, a stroke">
+      <RowField label="Material" orientation="horizontal" title="A surface treatment the panels and cards share: glass, grain, a stroke"
+        reset={{ setting: "material", changed: material.bundle !== MATERIAL_DEFAULT.bundle || Object.keys(material.overrides).length > 0, reset: () => onBundle(MATERIAL_DEFAULT.bundle) }}>
         <CustomSelect size="sm" variant="soft" fullWidth layout={bundleLayout} aria-label="Material" value={material.bundle}
           items={Object.entries(MATERIAL_BUNDLES).map(([id, entry]) => ({ value: id, label: entry.label, icon: materialMark("bundle", id),
             preview: bundleLayout === "grid" ? choiceFigure("material", id, canvas, material) : undefined }))}
@@ -144,7 +147,7 @@ export function MaterialRows({ canvas, material, onBundle, onValue, previewCanva
         const value = materialValue(material, lever.id);
         const on = value !== "0";
         return [
-          <RowField key={lever.id} label={lever.label} orientation="horizontal" title={lever.hint}>
+          <RowField key={lever.id} label={lever.label} orientation="horizontal" title={lever.hint} reset={resetValue(lever.id)}>
             <CustomSelect size="sm" variant="soft" fullWidth aria-label={lever.label} value={value}
               items={lever.steps.map(step => {
                 const text = lever.id === "angle" ? `${step}°${step === 0 ? " (Top)" : ""}` : step === 0 ? "0 (Off)" : String(step);
@@ -153,7 +156,7 @@ export function MaterialRows({ canvas, material, onBundle, onValue, previewCanva
               onValueChange={next => onValue(lever.id, next)} onHighlightChange={previewValue(lever.id)} />
           </RowField>,
           ...(on && lever.id !== "angle" ? MATERIAL_SWITCHES.filter(toggle => toggle.lever === lever.id).map(toggle => (
-            <RowField key={toggle.id} label={toggle.label} orientation="horizontal">
+            <RowField key={toggle.id} label={toggle.label} orientation="horizontal" reset={resetValue(toggle.id)}>
               {toggle.options.length === 2 ? (
                 <Segmented size="sm" fullWidth items={toggle.options.map(o => ({ value: o.value, label: o.label }))}
                   value={materialValue(material, toggle.id)} onValueChange={next => onValue(toggle.id, next)} />
@@ -165,7 +168,7 @@ export function MaterialRows({ canvas, material, onBundle, onValue, previewCanva
             </RowField>
           )) : []),
           ...(on && lever.id === "stroke" ? [
-            <RowField key="stroke-style" label="Stroke style" orientation="horizontal">
+            <RowField key="stroke-style" label="Stroke style" orientation="horizontal" reset={resetValue("stroke-style")}>
               <CustomSelect multiple size="sm" variant="soft" fullWidth aria-label="Stroke style" placeholder="None"
                 items={MATERIAL_STROKE_STYLES.map(style => ({ value: style.id, label: style.label }))}
                 values={materialValue(material, "stroke-style").split(" ").filter(Boolean)}

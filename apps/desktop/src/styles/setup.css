@@ -93,7 +93,7 @@
   .ss-frame--ghost { pointer-events: none; }
 
   /* --- Setup's product screen (src/setup-screen.tsx) ----------------------------- */
-  /* Arrangement only: every paint is the components' own (figures/screens.css's shell, at 1024 × 640). The frame takes
+  /* Arrangement only: every paint is the components' own (the Workspace, at 1920 × 1080). The frame takes
      the theme; nothing in it transitions, so a picture shows the choice, not its way there. */
   .ss-frame { --af-ink: 20%; position: relative; display: block; overflow: hidden; inline-size: 100%; block-size: 100%; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); text-align: start; pointer-events: none; }
   .ss-frame * { transition: none !important; }
@@ -104,36 +104,62 @@
   .ss-frame__veil[hidden] { display: none; }
   .ss-frame__veil--solid { box-shadow: 0 0 0 100vmax var(--area-bg-page); }
   .ss-frame .af-zoom > * { position: relative; }
-  .ss-window { position: relative; display: grid; grid-template-rows: 28px minmax(0, 1fr); inline-size: 1024px; block-size: 640px; padding: 0; overflow: hidden; border: 1px solid var(--area-border); background: var(--area-bg-page); }
-  .ss-window__bar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 10px; background: var(--area-bg-subtle); border-block-end: var(--area-border-width) solid var(--area-border-divider); }
-  .ss-window__title { color: var(--area-fg-muted); font-size: var(--area-text-xs-size, 12px); line-height: var(--area-text-xs-leading, 16px); }
-  .ss-lights { display: flex; gap: 6px; }
-  .ss-lights i { inline-size: 10px; block-size: 10px; border-radius: 50%; background: var(--area-border); }
-  .ss-app { position: relative; display: grid; grid-template-columns: 208px minmax(0, 1fr); min-block-size: 0; }
-  .ss-side { display: flex; flex-direction: column; gap: 12px; min-block-size: 0; padding: 8px; overflow: hidden; background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-divider); }
-  .ss-side__ws, .ss-side__foot { display: flex; align-items: center; gap: 8px; padding: 2px var(--area-ui-row-inset); }
-  .ss-main { position: relative; display: flex; flex-direction: column; min-inline-size: 0; min-block-size: 0; overflow: hidden; }
-  .ss-head { display: flex; align-items: center; gap: 4px; min-block-size: 48px; padding: 0 16px; }
-  .ss-tabs { padding: 0 16px; border-block-end: var(--area-border-width) solid var(--area-border-divider); }
-  .ss-body { display: grid; align-content: start; gap: 16px; padding: 20px; min-block-size: 0; overflow: hidden; }
-  .ss-intro { display: grid; gap: 4px; justify-self: start; }
-  .ss-heading { font-size: calc(var(--area-text-md-size) * 1.45); line-height: 1.25; font-weight: 600; }
+  /*
+   * The Workspace (content/examples/workspace.tsx): a 1920 × 1080 desktop app at true size, scaled down as a screenshot is
+   * (owner, 2026-10-30). Arrangement only; every paint is the components' own (Panel, Nav, Card, Table, Composer …).
+   * Three regions, each with its own header on the window's top line, all one height: the panels' window bar (control-sm
+   * + 14, its controls 7 from its edges), which the main header takes too. The sidebar 272 and the details panel 360 (its value column fits Low, Medium, High and a bar with its value field) are
+   * docked Panels (their insets are Panel's); one rule where regions meet, the panels' own. The main column is 720,
+   * centred, 40 under the header; its sections 32 apart (a section's heading 12 over its block, the feed's heading gap),
+   * groups 12. The composer docks 16 above the window's foot on the same column.
+   */
+  .ws-window { --ws-bar: calc(var(--area-control-sm) + var(--area-space-16) - var(--area-space-2)); position: relative; display: grid; grid-template-columns: 272px minmax(0, 1fr) 360px; inline-size: 1920px; block-size: 1080px; overflow: hidden; background: var(--area-bg-page); color: var(--area-fg-default); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .ws-window > .ws-side, .ws-window > .ws-details { --area-panel-inline-size: 100%; block-size: 1080px; min-block-size: 0; }
+  .ws-side__groups { display: grid; gap: var(--area-space-16); }
+  .ws-side__foot { display: grid; gap: var(--area-space-12); }
+  /* The feature popover takes the footer's width (Popover's public width hook); its picture, the feature's own card,
+     centred in the media's frame, 12 from its sides (a card on a well: the media inset). */
+  .ws-upsell { --area-popover-inline-size: 100%; }
+  .ws-upsell__feature { display: grid; align-content: center; block-size: 100%; padding-inline: var(--area-space-12); box-sizing: border-box; }
+  .ws-person { display: flex; align-items: center; gap: var(--area-space-8); padding-inline: var(--area-ui-row-inset); }
+  .ss-lights { display: flex; gap: var(--area-space-8); margin-inline-end: var(--area-space-12); }
+  .ss-lights i { inline-size: 12px; block-size: 12px; border-radius: 50%; background: var(--area-border); }
+
+  .ws-main { position: relative; display: grid; grid-template-rows: var(--ws-bar) minmax(0, 1fr) auto; min-inline-size: 0; min-block-size: 0; }
+  /* The main header: the page's name at the region's 14, its controls at the bar's even 7, as the app's Titlebar. */
+  .ws-head { display: flex; align-items: center; gap: var(--area-space-8); padding-inline: calc(var(--area-space-12) + var(--area-space-2)) calc((var(--ws-bar) - var(--area-control-sm)) / 2); }
+  .ws-head__title { font-weight: var(--area-weight-strong); }
+  .ws-body { min-block-size: 0; overflow: hidden; padding: var(--area-space-40) var(--area-space-24) var(--area-space-24); }
+  .ws-column, .ws-dock__column { inline-size: 100%; max-inline-size: 720px; margin-inline: auto; }
+  .ws-dock__column { --area-composer-inline-size: 100%; } /* Composer's public width hook: the column's width */
+  .ws-column { display: grid; gap: var(--area-space-32); }
+  /* A title and its own line, joined: 12 from the title's baseline to the line's cap, the top of the joined range (10 to
+     12; area-ui-compose › spacing.md), as the title is twice the size Section heading's 8 is set for (owner 2026-10-31:
+     "the space between good afternoon and the next line seems quite small"; was 8). */
+  .ws-intro { display: grid; gap: var(--area-space-12); }
+  .ws-title { font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); letter-spacing: var(--area-title-md-tracking); font-weight: var(--area-weight-strong); text-box: trim-both cap alphabetic; }
+  .ws-lede { color: var(--area-fg-muted); text-box: trim-both cap alphabetic; }
+  .ws-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--area-space-12); }
+  .ws-card-icon { display: inline-flex; margin-block-end: var(--area-space-8); color: var(--area-fg-muted); }
+  .ws-section { display: grid; gap: var(--area-space-12); min-inline-size: 0; }
+  /* A table's views and the table, one block: the tabs, then the table a related step under them. */
+  .ws-views { display: grid; gap: var(--area-space-8); min-inline-size: 0; }
+  .ws-files { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--area-space-12); }
+  .ws-owner { display: inline-flex; align-items: center; gap: var(--area-space-8); }
+  .ws-muted { color: var(--area-fg-muted); }
+  .ws-dock { position: relative; padding: 0 var(--area-space-24) var(--area-space-16); }
+  /* The More menu: 4 under its button (the bar's even inset under a small control), its end on the button's end. */
+  .ws-menu { position: absolute; inset-block-start: calc((var(--ws-bar) + var(--area-control-sm)) / 2 + var(--area-space-4)); inset-inline-end: calc((var(--ws-bar) - var(--area-control-sm)) / 2); z-index: 3; inline-size: 220px; }
+  /* The toast at the region's end, 12 above the composer (the dock's top), never over it. */
+  .ws-toast { position: absolute; inset-block-end: calc(100% + var(--area-space-12)); inset-inline-end: var(--area-space-24); z-index: 3; }
   .ss-body-text { color: var(--area-fg-muted); }
-  .ss-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-  .ss-value { display: block; margin-block-start: 6px; font-size: calc(var(--area-text-md-size) * 1.6); line-height: 1.15; font-weight: 600; font-variant-numeric: tabular-nums; }
-  .ss-grid { display: grid; grid-template-columns: minmax(0, 1fr) 272px; gap: 12px; align-items: start; }
-  .ss-rows { display: grid; margin-block-start: 8px; }
-  .ss-row { display: flex; align-items: center; gap: 12px; min-block-size: var(--area-ui-row); border-block-end: var(--area-border-width) solid var(--area-border-divider); }
-  .ss-row:last-child { border-block-end: 0; }
+  .ss-cell-fit { inline-size: 1%; white-space: nowrap; }
   .ss-cell { display: inline-flex; }
-  .ss-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .ss-region { display: grid; min-inline-size: 0; }
   .ss-region--inline { display: inline-flex; align-items: center; gap: 6px; }
-  .ss-menu { position: absolute; inset-block-start: 44px; inset-inline-end: 146px; z-index: 3; inline-size: 200px; }
   .ss-strong { font-weight: var(--area-weight-strong, 500); }
   .ss-muted { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
   .ss-grow { flex: 1 1 0; min-inline-size: 0; }
-  .ss-stack0 { display: flex; flex-direction: column; }
   /* Card content lays out from an app element, never by restyling CardContent (product UI rule 13). */
 
   /*
@@ -258,3 +284,5 @@
   .lm-swatch--fill { background: var(--area-bg-component); }
   /* A setting elsewhere that changes what a question shows, set apart so it reads as a heads-up. */
   .setup-step__note--context { padding: var(--area-space-8) var(--area-space-12); border-radius: var(--area-radius-small); background: var(--area-bg-component); color: var(--area-fg-default); }
+  /* A choice card's whole-screen picture (choice-visuals.tsx): the Workspace showcase filling the card's frame. */
+  .ss-frame.cv-screen { inline-size: 100%; block-size: 100%; }

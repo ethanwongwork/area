@@ -19,7 +19,7 @@ import { CanvasSection, CARD_SCOPE, Tile, TileGrid } from "../tile.tsx";
 import { ViewControls } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { ScreenFigure } from "../setup-screen.tsx";
+import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
 import { hasColours } from "../colours.ts";
 import { hrefOf, systemName } from "../places.ts";
 import { EXAMPLES, WidthZoom } from "./examples.tsx";
@@ -300,7 +300,7 @@ export function ExplorationPage() {
                 </Tile>
               ) : null}
               <Tile span="wide" stage="fit" inert label={exploration.name} value={exploration.published ? `Published in ${versionName(systemName(project.system), exploration.published)}` : "Not published"}>
-                <ScreenFigure className="studio-theme-card" scope={scope} />
+                <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={scope} />
               </Tile>
             </TileGrid>
           </CanvasSection>

@@ -59,7 +59,7 @@ Shared with Checkbox (choice.css). Differences:
 control  input.area-radio__control  radius-full (choice.css:161-163)
   ::after  dot, --_dot (6 / 8) centred on the border box, radius-full (choice.css:206-211, 455, 461)
 visual   span.area-radio__visual  `leadingVisual`, aria-hidden, fg-muted (20px, fg-default in a tile)
-card     label.area-radio--card  1px edge-control, radius-container, bg-surface, inset 12 (compact 8)
+card     label.area-radio--card  1px edge-control, row/list: the ladder's corner for its one-line height (≤ radius-container), tile/preview/media: radius-container, bg-surface, inset 12 (compact 8)
          to the content, border counted once; control moved to the end (choice.css:104-159)
 ```
 
@@ -96,7 +96,7 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 | shadow, focus, hover | as Checkbox | Peer consistency | — |
 | label gap | 6 at md and lg, the density tokens, as Checkbox (choice.css:12, :469, :475) | Peer: Checkbox, Button (audit S14) | Was 8 |
 | group spacing | options `ui-stack` (6, compact 4) below the legend, `ui-cluster` (8, compact 6) between rows, horizontal columns 16 (compact 12); description and validation `ui-stack` from what is above (choice.css:323-342, 420) | Untitled horizontal gap 16; Field's gaps (audit C-27 A; spacing audit 2026-10-17) | Options were 12 below the legend; validation was 12 |
-| card | 1px `edge-control`, hover `edge-control-hover`, chosen edge `stroke-selected` at `selected-width` (Selected stroke, 2; was 1px, darker not thicker), drawn inside, over `selected-tint`; `radius-container`; inset 12, compact 8; cards in a group 8 apart, tiles in equal columns at least 144 wide (choice.css:99-159, 384-398) | Owner references 2026-09-28; shadcn Choice Card | — |
+| card | 1px `edge-control`, hover `edge-control-hover`, chosen edge `stroke-selected` at `selected-width` (Selected stroke, 2; was 1px, darker not thicker), drawn inside, over `selected-tint`; row and list the ladder's corner for the one-line height, no rounder than `radius-container`, tile, preview and media `radius-container`; inset 12, compact 8; cards in a group 8 apart, tiles in equal columns at least 144 wide (choice.css:99-159, 384-398) | Owner references 2026-09-28; shadcn Choice Card | — |
 | disabled | `opacity-disabled` (50%) on the label; a disabled group dims once as a whole, legend included, and its options do not dim again (choice.css:33-37, 344-346) | Audit rule; Untitled 50%; audit C-27 A | Not doubled |
 
 ## States
@@ -180,6 +180,8 @@ selection with a real keyboard.
 - **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill): ChatGPT's 2px selected tile. This replaces 2026-09-28's "darker, not thicker".
 
 ## Feedback log
+
+- 2026-10-30 · owner: "are these option rows supposed to be pill shaped?" (Stroke groups, Option rows and cards, at corner 12) → no: a row or list `card` or `soft` option is a one-line bar, so its corner is the height ladder's for its one-line height (`--_card-line`: inset and edge twice plus the control's box, since the label is trimmed to its cap), capped at `radius-container`, half the line at Pill: 34 → 10 at corner 10, 12 at 12, 14 at 14, 17 at Pill; 30 (compact) → 8, 10, 12, 15. It took `radius-container` (16 at 10, 20 at 12), a full pill on a 34 row. Tile, preview, media and media-row keep `radius-container` (their pictures' mats are computed from it). DESIGN_SYSTEM.md Radius, "Option rows are bars"; cohesion test.
 
 - 2026-10-26 · owner (Setup's answered questions now carried the blue edge): "Plain answers" → RadioGroup `readOnly`: a value shown, not chosen here. The chosen card or soft row keeps its rest edge and fill (the dot says which), the group ignores changes and becomes `role="radiogroup"` with `aria-readonly` and `aria-labelledby` its legend; hook `data-readonly`. Setup's answers use it.
 
