@@ -6,7 +6,7 @@ import { CodeBlock, MANIFESTS } from "../dist/modules/index.js";
 
 // packages/styles/src/manifest.ts:645-648; packages/react/src/components/primitives.tsx:1681-1742: header, semantic code, boolean hooks and live copy feedback.
 test("CodeBlock renders named actions, header, code rows and native root props", () => {
-  const html = renderToString(h(CodeBlock, { code: "one\n<b>", title: "example.ts", language: "ts", id: "sample", className: "custom", "aria-label": "Example", "aria-describedby": "help", flush: true, wrap: true, lineNumbers: false, copyLabel: "Copy example", actions: h("button", { "aria-label": "Run example", disabled: true }, "Run") }));
+  const html = renderToString(h(CodeBlock, { code: "one\n<b>", title: "example.ts", language: "ts", id: "sample", className: "custom", "aria-label": "Example", "aria-describedby": "help", flush: true, wrap: true, lineNumbers: false, revealActions: true, copyLabel: "Copy example", actions: h("button", { "aria-label": "Run example", disabled: true }, "Run") }));
   const root = html.match(/<div[^>]*>/)[0];
   for (const attr of ['id="sample"', 'aria-label="Example"', 'aria-describedby="help"']) assert.ok(root.includes(attr));
   assert.match(root, /class="[^"]* custom"/);
@@ -80,4 +80,17 @@ test("CodeBlock supports trusted pre-highlighted lines and plain excerpts withou
 test("with language tabs and linked lines, the tab panel stays in the Tab order so a keyboard can scroll the code", () => {
   const html = renderToString(h(CodeBlock, { code: "one", languages: ["ts", "js"], languageTabs: true, linkLines: true }));
   assert.match(html, /role="tabpanel"[^>]*tabindex="0"/);
+});
+
+// Inspector panel study (owner 2026-10-30): soft, a command's prompt kept out of the copied text, a set excerpt length.
+test("CodeBlock's soft variant, prompt and collapsed line count", () => {
+  const html = renderToString(h(CodeBlock, { code: "npm install\n  --save", prompt: "$", variant: "soft", lineNumbers: false, collapsible: true, defaultCollapsed: true, collapsedLines: 5 }));
+  const root = html.match(/<div[^>]*>/)[0];
+  assert.match(root, /area-code-block--soft/);
+  assert.match(root, /--area-code-block-lines:5/);
+  // One prompt per line, hidden from assistive tech, outside the text cell the copy reads.
+  assert.equal((html.match(/<span class="area-code-block__prompt" aria-hidden="true">\$<\/span><span class="area-code-block__text">/g) ?? []).length, 2);
+  assert.throws(() => renderToString(h(CodeBlock, { code: "x", collapsedLines: 0 })), RangeError);
+  // Without a variant the block keeps its frame.
+  assert.match(renderToString(h(CodeBlock, { code: "x" })), /area-code-block--outline/);
 });

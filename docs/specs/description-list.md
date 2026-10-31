@@ -8,6 +8,8 @@
 - 2026-10-10: "go with your recommendations, keep building" after Toggle group → Description list. Editable inline text
   came first on the gap list but needs its edit mode captured in the products, which is unsafe while Chrome's window is
   hidden; it waits for a session with the window in front.
+- 2026-10-30 (Inspector panel study, docs/research/inspector-panel-2026-10-30, picks "One Inspector grid: Build" and
+  "Fact rows: packed, 26"): in a Panel the columns layout takes the panel's label column and packs its rows.
 
 ## Job and boundaries
 
@@ -24,6 +26,7 @@ file's details). It is a native `<dl>`. Not a PropertyList (Figma's fill and eff
 | divided | boolean | A rule between rows | ChatGPT's settings card |
 | framed | boolean | The list stands alone in a frame | ChatGPT's settings card |
 | content | icon on the term; any value (text, Badge, person, Link) | Notion's property icons; rich values | Notion |
+| composition | in a Panel (context, no prop) | One value column with the panel's Fields | Claude's and Cursor's key/value rows; Area's Inspector |
 
 Excluded: a stacked layout (term above value: Chakra DataList vertical, Spectrum LabeledValue; no product shows it), Ant
 Descriptions' multi-column grid and bordered table look, Notion's hover plates and click-to-edit (static here).
@@ -79,6 +82,7 @@ card column; framed columns keep ChatGPT's 12 from the top.
 | columns · row alignment | the term on the value's first line, by baseline; the term's baseline is its label's (`__label`), never its icon's | DESIGN_SYSTEM.md, Optical insets (first-line alignment) | round 82: the rows aligned to the top, so a person value (a 26 avatar beside the name) left the term 4 above the name |
 | columns · value | 12 after the term column (gap row; compact 8), default ink, all values in one column | Area's gap row; Infobox's 12 | was Notion's 174 |
 | columns · row | as tall as its text, 8 apart (ui-cluster; compact 6); divided 16 with the rule in the middle | Area's set spacing (items 8 apart) | was Notion's 34 rows 4 apart (owner, round 73: "why is the gaps between lines so large") |
+| columns · in a Panel | the term column is the panel's label column (`--_panel-label`, 40% of the row less the cluster gap: 95 in a 272 panel), the value the cluster gap after it, where a Field's control starts; rows a small control tall (`control-sm`, text 4 above and below in compact) and touching; tabular numbers; terms wrap between words; a framed list keeps its fitted column | Claude Code's key/value rows (min 26, no gap, value column fixed), Cursor's tray (28, 1 apart, tabular values); owner pick "packed, 26" | The fitted column put values at 95, 104 and 123 in one Inspector, beside controls at 116 |
 | justified · row | padding 12 / 16 (framed: 12 / 12 inside the frame, the card column), 24 between, term 14/20 500 default ink, value at the end 14/20 | ChatGPT | ChatGPT's values mix 14/20 and 16/24; Area keeps the UI type. Framed, the side is the agent chat's card column (owner 2026-10-28, chat set review: "move them to 13 anyway"; it was ChatGPT's 16) |
 | divided · rule | 1px `border-divider`, inset by the row's side padding | ChatGPT (inset 16); peer Table's row rule | — |
 | framed · frame | Table's frame: `border-divider`, `radius-container`, `bg-surface` | Peer Table | ChatGPT's corner 16 and rgb(252) fill; Area's standalone data frame is Table's |
@@ -221,3 +225,12 @@ Framed insets: the frame's stroke is counted once, so text and rules sit 16 from
 - **Why:** the rows aligned their cells to the top, so a value taller than a line (the avatar is 26) pulled its text
   below the term. The system rule is that content aligns to the first line.
 - **Verdict:** approved (owner, 2026-10-29, review page round 82); Complete.
+
+## Review note, 2026-10-30 (Inspector grid)
+
+- **What changed:** inside a Panel, a columns list puts its values where the panel's Fields put their controls (116 in
+  the app's 272 Inspector) and its rows are 26 tall with no gap, numbers tabular. Outside a Panel, and framed, nothing
+  changes. New tile: Composition / in panel. The app's Inspector facts are this list now (they were a framed Table).
+- **Why:** you picked "One Inspector grid" and "packed, 26" on the Inspector panel study
+  (https://claude.ai/artifact/WmGzS6vuoRKesKcRuhp6hj): values started in four places in one Inspector.
+- **Verdict:** in review.

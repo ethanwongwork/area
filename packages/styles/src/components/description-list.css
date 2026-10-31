@@ -99,6 +99,23 @@
   .area-description-list__label { align-self: baseline; min-inline-size: 0; }
   .area-description-list--columns .area-description-list__term { inline-size: auto; }
   .area-description-list--columns .area-description-list__value { margin: 0; }
+  /* In a panel (owner, 2026-10-30, docs/research/inspector-panel-2026-10-30, "One Inspector grid", facts packed): the
+     terms take the panel's label column and the values start the cluster gap after it, where its Fields' controls start
+     (panel.css, --_panel-label), so facts and controls share one value edge. Rows are a small control tall (26 in
+     compact: the text with 4 above and below) and touch, as Claude's key/value rows (min 26, no gap) and Cursor's tray
+     (28, 1 apart); a list of values reads as one block beside the controls' 8 gaps. Numbers are tabular, so counts line
+     up. A framed list is its own object and keeps its fitted column. */
+  .area-panel .area-description-list--columns:not(.area-description-list--framed) {
+    --_row-gap: 0px;
+    grid-template-columns: var(--_panel-label) minmax(0, 1fr);
+    column-gap: var(--area-ui-cluster);
+    font-variant-numeric: tabular-nums;
+  }
+  .area-panel .area-description-list--columns:not(.area-description-list--framed) > .area-description-list__item {
+    padding-block: calc((var(--area-control-sm) - var(--area-ui-leading)) / 2);
+  }
+  /* A term wraps between words, never inside one. */
+  .area-panel .area-description-list--columns:not(.area-description-list--framed) .area-description-list__term { overflow-wrap: normal; }
   /* Divided columns: twice the gap, the rule in its middle. */
   .area-description-list--columns.area-description-list--divided { --_row-gap: calc(2 * var(--area-ui-cluster)); }
 

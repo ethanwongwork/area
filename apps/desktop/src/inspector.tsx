@@ -6,9 +6,11 @@
  *
  *   Selection  Design: the chosen thing's preview, if the Canvas does not already show it at size, and its
  *              actions; Code: its copy actions, two to a row
- *   Facts      one Table (src/facts.tsx), its rows in one order: Design, what it is and its values, status,
- *              purpose, source; Code, how to reach it (name, token, import, class)
- *   CodeWell   Code: a snippet in Code block's inspector well, highlighted as the Stage's is
+ *   Facts      one Description list on the panel's label column (src/facts.tsx), its rows in one order: Design,
+ *              what it is and its values, status, source, then its purpose as a note; Code, how to reach it (name,
+ *              token, import, class)
+ *   CodeWell   Code: a snippet in Code block's soft inspector well, highlighted as the Stage's is; a command with
+ *              its prompt
  */
 import type { ReactNode, Ref } from "react";
 import { AssetCard, CodeBlock, PanelSection } from "@area/react";
@@ -53,9 +55,20 @@ export function Preview({ shape = "square", paint, scope, label, ref, children }
 }
 
 /**
- * A snippet in the Inspector's code well (Code block `sm`), highlighted as the Stage's code is, with its copy control.
- * Lines scroll sideways, as Dev Mode's do, so markup never breaks mid-tag; `wrap` is for one long line (an import).
+ * A snippet in the Inspector's code well (owner, 2026-10-30, docs/research/inspector-panel-2026-10-30, "Code in the
+ * Inspector"): Code block `sm` in the soft look, a fill with no edge as the panel's fields, highlighted as the Stage's
+ * code is. The section's heading names it, so it has no language header; its copy shows while it is hovered or focused,
+ * at 4/4 as Cursor's. Lines scroll sideways, as Dev Mode's do, so markup never breaks mid-tag, and a cut line fades at
+ * the edge; `wrap` is for one long line (an import). Past LONG lines it opens as its first EXCERPT, with Show code.
+ * `prompt` makes it a command ("$"), wrapped and left as typed. `language` adds the header, for code in a message.
  */
-export function CodeWell({ code, language = "tsx", wrap }: { code: string; language?: string; wrap?: boolean }) {
-  return <CodeBlock size="sm" lineNumbers={false} language={language} html={highlight(code)} wrap={wrap} />;
+const LONG = 8; /* pick: Code block's own excerpt, so a block that fits it never collapses */
+const EXCERPT = 5; /* spec: Cursor's shell output preview, 5 lines */
+/** A well's line count past LONG, for its section's count (it opens as an excerpt); otherwise undefined. */
+export const longLines = (code: string) => { const lines = code.split("\n").length; return lines > LONG ? lines : undefined; };
+export function CodeWell({ code, language, wrap, prompt }: { code: string; language?: string; wrap?: boolean; prompt?: string }) {
+  const long = longLines(code) !== undefined;
+  return <CodeBlock size="sm" variant="soft" lineNumbers={false} revealActions={!language} language={language}
+    {...(prompt ? { code, prompt, wrap: true } : { html: highlight(code), wrap })}
+    collapsible={long} defaultCollapsed={long} collapsedLines={long ? EXCERPT : undefined} />;
 }

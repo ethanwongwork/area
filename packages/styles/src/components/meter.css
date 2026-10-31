@@ -34,4 +34,63 @@
   .area-meter--warning { --_meter-fill: var(--area-warning-solid); }
   .area-meter--danger { --_meter-fill: var(--area-danger-solid); }
   .area-meter > .area-meter__track { --_progress-fill: var(--_meter-fill); }
+
+  /* --- segmented: a stacked meter ------------------------------------------- */
+  /*
+   * Parts of one measure side by side on the bar, each named in a legend under it (owner 2026-10-30, Inspector panel
+   * study, docs/research/inspector-panel-2026-10-30: Claude's Context card and Cursor's usage tray). The colours are a
+   * fixed categorical order of palette steps, assigned by a part's place, never its size, so a part keeps its colour
+   * when the others change. Chosen by snapping the dataviz reference order (blue, orange, aqua, yellow, magenta, green,
+   * violet, red) to the nearest palette step by lightness, then validated (dataviz validate_palette.js): light on white
+   * passes the lightness band, chroma floor, adjacent CVD separation (worst 13.9) and the normal-vision floor (22.7);
+   * yellow and pink sit under 3:1 on white, which the legend's labels relieve. Dark on near-black passes every check
+   * (worst CVD 11.7, normal 18.1) with yellow and red one step darker than their nearest match, which left the band.
+   */
+  .area-meter--segmented {
+    --_meter-1: light-dark(var(--area-blue-500), var(--area-blue-400)); /* spec */
+    --_meter-2: light-dark(var(--area-orange-500), var(--area-orange-550)); /* spec */
+    --_meter-3: light-dark(var(--area-teal-500), var(--area-teal-550)); /* spec */
+    --_meter-4: light-dark(var(--area-yellow-450), var(--area-yellow-550)); /* spec */
+    --_meter-5: light-dark(var(--area-pink-300), var(--area-pink-450)); /* spec */
+    --_meter-6: light-dark(var(--area-green-600), var(--area-green-600)); /* spec */
+    --_meter-7: light-dark(var(--area-purple-550), var(--area-purple-350)); /* spec */
+    --_meter-8: light-dark(var(--area-red-450), var(--area-red-400)); /* spec */
+  }
+  /* The track is the parts in a row, 2 apart so the ground shows between them (dataviz: a surface gap separates
+     stacked segments, never a stroke); its own fill draws only what is left of the range. Its pill rounds the outer
+     ends; the inner ends stay square, so a short part is a block, not a dot. */
+  .area-meter--segmented > .area-meter__track { display: flex; gap: var(--area-space-2); /* spec: dataviz 2px surface gap */ background-color: transparent; }
+  .area-meter__segment,
+  .area-meter__rest { flex: 0 1 0; min-inline-size: var(--area-space-2); block-size: 100%; }
+  .area-meter__rest { background-color: var(--_progress-track, var(--area-fill-track)); }
+  :is(.area-meter__segment, .area-meter__swatch)[data-slot="1"] { background-color: var(--_meter-1); }
+  :is(.area-meter__segment, .area-meter__swatch)[data-slot="2"] { background-color: var(--_meter-2); }
+  :is(.area-meter__segment, .area-meter__swatch)[data-slot="3"] { background-color: var(--_meter-3); }
+  :is(.area-meter__segment, .area-meter__swatch)[data-slot="4"] { background-color: var(--_meter-4); }
+  :is(.area-meter__segment, .area-meter__swatch)[data-slot="5"] { background-color: var(--_meter-5); }
+  :is(.area-meter__segment, .area-meter__swatch)[data-slot="6"] { background-color: var(--_meter-6); }
+  :is(.area-meter__segment, .area-meter__swatch)[data-slot="7"] { background-color: var(--_meter-7); }
+  :is(.area-meter__segment, .area-meter__swatch)[data-slot="8"] { background-color: var(--_meter-8); }
+  /*
+   * The legend: a row per part, a small control tall and touching (a facts list's rows in a panel), the swatch in a
+   * 12 slot (Claude's 10 swatch, radius 2, in a 12 slot; legend rows 24), the label in the default ink, then its value
+   * and share muted and tabular, the share in a column wide enough for "100%" so the values line up (Claude's 44).
+   * Text takes the text inks, never the part's colour (dataviz).
+   */
+  .area-meter__legend { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+  .area-meter__item {
+    display: grid;
+    grid-template-columns: var(--area-space-12) minmax(0, 1fr) auto 5ch; /* spec: Claude's 12 slot; 5ch holds "100%" */
+    align-items: center;
+    column-gap: var(--area-ui-cluster);
+    min-block-size: var(--area-control-sm);
+  }
+  .area-meter__swatch { justify-self: center; inline-size: var(--area-space-10); block-size: var(--area-space-10); border-radius: var(--area-space-2); /* spec: Claude 10, radius 2 */ }
+  .area-meter__item-label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-meter__item-value,
+  .area-meter__item-share { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; text-align: end; }
+  /* Forced colours flatten every part to one ink; the gaps still show where parts meet and the legend names them. */
+  @media (forced-colors: active) {
+    .area-meter__segment, .area-meter__swatch { background-color: CanvasText; }
+  }
 }

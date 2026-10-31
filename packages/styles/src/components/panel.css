@@ -50,6 +50,12 @@
     --_panel-label-leading: var(--area-text-sm-leading);
     --_panel-title-text: var(--area-text-md-size);
     --_panel-title-leading: var(--area-text-md-leading);
+    /* spec (owner, 2026-10-30, docs/research/inspector-panel-2026-10-30, "One Inspector grid"): the panel's one label
+       column, 40% of a row less the cluster gap (95 in a 272 panel), published so every row that pairs a name with a
+       value (Field, Description list) starts its value on one edge. It resolves where it is used, so 100% is that row's
+       own width. Before, Field took 40% and each facts list fitted its longest term: values started at 95, 104, 116 or
+       123 in one Inspector. Claude's and Cursor's key/value rows keep one value column the same way. */
+    --_panel-label: calc((100% - var(--area-ui-cluster)) * 0.4);
     --_row: var(--area-control-md);
     /*
      * The bar's height, published so a docked panel's bar and whatever sits beside it can
@@ -273,6 +279,26 @@
   .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; transition-duration: 0s; }
   @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; transition-duration: var(--area-hover-in); } }
   @media (hover: none) { .area-panel__chevron { opacity: 1; } }
+  /*
+   * A section's count (owner, 2026-10-30, docs/research/inspector-panel-2026-10-30, "Section headings carry more"):
+   * muted tabular text a space after the heading, as a Canvas section's (docs/PRODUCT_UI.md rule 9), so a heading says
+   * how much it holds before its rows are read (Claude's rail cards and Cursor's trays carry a count or value there).
+   */
+  .area-panel__count { color: var(--area-fg-muted); font-weight: var(--area-weight-regular); font-variant-numeric: tabular-nums; }
+  /* The space before it, kept (a heading row is flex, which drops a space between its items) and read in its name. */
+  .area-panel__count::before { content: " "; white-space: pre; }
+  /*
+   * Revealed actions (PanelSection revealActions): Nav's rule (nav.css, NavItem revealActions) on a section, the hover
+   * being the section's, as VS Code's pane headers show their actions on pane hover. Hidden until the section is hovered
+   * or holds focus, they land at once and leave on `fast`; one that is on (pressed: a pin) or has its menu open stays. A
+   * touch screen always shows them. They keep their place, so the heading never reflows.
+   */
+  @media (hover: hover) {
+    .area-panel__section--reveal > .area-panel__heading > .area-panel__actions > * { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+    .area-panel__section--reveal:not(:hover, :focus-within) > .area-panel__heading > .area-panel__actions > :not([aria-pressed="true"], [aria-expanded="true"], :has([aria-pressed="true"], [aria-expanded="true"])) { pointer-events: none; }
+    .area-panel__section--reveal:is(:hover, :focus-within) > .area-panel__heading > .area-panel__actions > *,
+    .area-panel__section--reveal > .area-panel__heading > .area-panel__actions > :is([aria-pressed="true"], [aria-expanded="true"], :has([aria-pressed="true"], [aria-expanded="true"])) { opacity: 1; transition-duration: 0s; }
+  }
   .area-panel__summary { display: flex; align-items: center; gap: var(--area-ui-cluster); flex-shrink: 0; color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
   /* The rows join the section's own column, so its 8px rhythm is unchanged when open. */
   .area-panel__rows:not([hidden]) { display: contents; }

@@ -195,6 +195,10 @@
     line-height: var(--area-text-sm-leading);
   }
   .studio-muted { color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
+  /* A literal in a facts value (a class name, its modifiers): the code face at the Inspector wells' 12, on the row's
+     line, wrapping anywhere, without inline Code's chip, which broke in two over a long name (owner, 2026-10-30,
+     docs/research/inspector-panel-2026-10-30, "Code in the Inspector"). */
+  .studio-mono { font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); overflow-wrap: anywhere; }
   /* A page's opening sentence (a family's purpose): a subtitle, as a section's (the feed's one size, 13/18, muted), at a
      reading measure, trimmed to cap and baseline so
      the Canvas's margin and the 24 to the tabs measure to its ink. */

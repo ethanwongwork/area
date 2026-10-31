@@ -348,7 +348,7 @@ function StepCode({ scale, step, token }: { scale: string; step: ScaleStep; toke
         <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth value={() => `var(${token})`} />
         <CopyButton label="Copy hex" icon={<CopyIcon />} fullWidth value={() => step.hex} />
       </Selection>
-      <PanelSection heading="CSS"><CodeWell language="css" code={`background-color: var(${token});`} /></PanelSection>
+      <PanelSection heading="CSS"><CodeWell code={`background-color: var(${token});`} /></PanelSection>
       <PanelSection heading="Token">
         <Facts label="Token" items={[
           ["Token", <Code>{token}</Code>],

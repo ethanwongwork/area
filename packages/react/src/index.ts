@@ -39,9 +39,9 @@ export { ConfirmDialog, type ConfirmDialogProps } from "./components/ConfirmDial
 export { Drawer, type DrawerProps } from "./components/Drawer.tsx";
 export { BoxField, type BoxFieldProps, type BoxValue } from "./components/BoxField.tsx";
 export { PropertyList, PropertyListItem, type PropertyListProps, type PropertyListItemProps } from "./components/PropertyList.tsx";
-export { TreeView, type TreeViewProps, type TreeViewNode } from "./components/TreeView.tsx";
+export { TreeView, type TreeViewProps, type TreeViewNode, type TreeViewStatus } from "./components/TreeView.tsx";
 export { FileUpload, FileUploadList, FileUploadItem, fileMatchesAccept, formatFileSize, type FileUploadProps, type FileUploadItemProps, type FileRejection } from "./components/FileUpload.tsx";
-export { Meter, type MeterProps } from "./components/Meter.tsx";
+export { Meter, METER_SEGMENT_LIMIT, type MeterProps, type MeterSegment } from "./components/Meter.tsx";
 export { SearchField, type SearchFieldProps } from "./components/SearchField.tsx";
 export { Board, BoardColumn, BoardCard, type BoardColumnProps, type BoardCardProps } from "./components/Board.tsx";
 export { ZoomControl, type ZoomControlProps } from "./components/ZoomControl.tsx";

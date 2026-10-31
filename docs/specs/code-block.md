@@ -38,6 +38,10 @@ itself; the consumer passes pre-highlighted `html` or plain `code`.
 | linkLines | boolean | Shareable line references via `:target` | Gallery `linked` |
 | wrap / collapsed / flush | booleans | Fixed measures, long samples, embedding | Gallery `wrap`, `collapsed`, Layout / flush |
 | size | md (default), sm | md is the page block; sm is the inspector's code well beside Box model | Gallery `size-sm`, `size-sm-titled`; Figma Dev Mode's code |
+| variant | outline (default), soft | soft is the soft fields' fill with no edge, for code in a panel whose fields are soft | Gallery `variant-soft`; the app's Inspector wells |
+| prompt | string | A command's prompt (`$`), muted, not selectable, out of the copy | Gallery `content-prompt`; Claude Code's and Cursor's command blocks |
+| revealActions | boolean | The floating copy shows on hover or focus only | Gallery `behavior-reveal-actions`; Cursor's code blocks |
+| collapsedLines | number (default 8) | A shorter excerpt when collapsed | Gallery `collapsed-lines`; Cursor's shell output (5) |
 
 ## Sources
 
@@ -371,3 +375,24 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
   and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
   docs/research/dark-soft-tones-2026-10-28).
 - **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
+
+## Review note, 2026-10-30 (code in the Inspector)
+
+- **What changed:**
+  - `variant="soft"`: the soft fields' fill with no edge (the edge keeps its width, transparent; the strong edge under
+    increased contrast), so insets and the concentric corner don't move.
+  - `prompt`: a muted, unselectable prompt before a command, outside the copied text, every line keeping its column
+    so a wrapped command hangs (prompt at 8, the command at 21 in sm compact).
+  - `revealActions`: the floating copy shows on hover or focus (at once; leaves on `fast`; always on touch), on the
+    code's ground, and the first line no longer reserves a gap for it.
+  - `collapsedLines`: the collapsed excerpt's line count (default 8, as before).
+  - Every block that scrolls sideways fades its cut line over the last 16 at the end edge, following the scroll, gone
+    at the end; nothing changes where nothing overflows (scroll-driven, `@supports (animation-timeline: scroll())`).
+  - Four tiles: Variant / soft, Content / prompt, Behavior / reveal actions, Collapsed / five lines. The app's
+    Inspector wells are soft, headerless and reveal their copy; the Copy code and Copy import buttons over them went.
+- **Why:** your pick "Code in the Inspector: Build" on the Inspector panel study
+  (https://claude.ai/artifact/WmGzS6vuoRKesKcRuhp6hj; values in docs/research/inspector-panel-2026-10-30/cursor.md and
+  claude-code.md).
+- **Not as proposed:** the corner stays concentric with the copy (11.5 in the Inspector at the defaults, the copy's 8
+  plus its inset), the round 11 rule, rather than the page's proposed 8.
+- **Verdict:** in review.

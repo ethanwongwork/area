@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToString as render } from "react-dom/server";
-import { Meter } from "../dist/modules/index.js";
+import { Meter, METER_SEGMENT_LIMIT } from "../dist/modules/index.js";
 
 test("a meter named by its label and described by its line, with the percentage as its value", () => {
   const html = render(h(Meter, { label: "Storage", description: "1.2 of 5 GB used", value: 24 }));
@@ -18,4 +18,20 @@ test("the value is clamped and scaled to min and max; a ReactNode value text is 
   assert.match(html, /class="area-meter area-meter--danger"/);
   assert.match(html, /--_progress-value:100/);
   assert.doesNotMatch(render(h(Meter, { value: 5, valueText: null, "aria-label": "x" })), /area-meter__header/);
+});
+
+// Segments (owner 2026-10-30): a group named by the label, parts in fixed slots, empty parts kept in place but not drawn.
+test("Meter segments: a labelled group, a legend of the parts above 0, colours by place", () => {
+  const html = render(h(Meter, { label: "Changes", segments: [{ label: "Page", value: 3 }, { label: "Accent", value: 0 }, { label: "Size", value: 1 }] }));
+  assert.match(html, /^<div role="group" aria-labelledby="[^"]+" class="area-meter area-meter--neutral area-meter--segmented"/);
+  assert.doesNotMatch(html, /role="meter"/);
+  assert.equal((html.match(/class="area-meter__segment"/g) ?? []).length, 2);
+  assert.match(html, /area-meter__segment" data-slot="3"/);
+  assert.equal((html.match(/<li class="area-meter__item">/g) ?? []).length, 2);
+  assert.match(html, /area-meter__item-share">75%</);
+  assert.match(html, /area-meter__value">4</);
+  const limited = render(h(Meter, { label: "Use", max: 10, segments: [{ label: "A", value: 4 }] }));
+  assert.match(limited, /area-meter__rest/);
+  assert.match(limited, /area-meter__value">40%</);
+  assert.throws(() => render(h(Meter, { segments: Array.from({ length: METER_SEGMENT_LIMIT + 1 }, (_, i) => ({ label: String(i), value: 1 })) })), RangeError);
 });

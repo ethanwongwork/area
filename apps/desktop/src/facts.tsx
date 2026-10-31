@@ -1,29 +1,30 @@
 /**
- * The Inspector's information as an Area Table (owner, 2026-10-11: facts as Tables; 2026-10-12: styled
- * as the real Table component, not a look-alike): term / value rows in Table's frame and rules.
+ * The Inspector's information as Area's Description list (owner, 2026-10-30, docs/research/inspector-panel-2026-10-30,
+ * "One Inspector grid"; it was a Table, owner 2026-10-11/12): term / value rows on the panel's own label column, so a
+ * fact's value starts where a Field's control does, rows packed at a small control's height, no frame and no rules.
  *
- * Terms are plain cells, not row headers: Table's header cell paints the subtle header ground and
- * keeps the rule under the last row, both meant for a column header.
+ * Prose (what something is for, a note) is not a value: it reads as a muted paragraph under the list, at the panel's
+ * width, rather than wrapping down a narrow value column (a tile's note took seven lines there).
  */
 import type { ReactNode } from "react";
-import { Table, TableCell } from "@area/react";
+import { DescriptionList, DescriptionListItem } from "@area/react";
 
 export type Fact = readonly [term: ReactNode, value: ReactNode];
 
-export function Facts({ items, label }: { items: ReadonlyArray<Fact | null | false | undefined>; label: string }) {
+export function Facts({ items, label, note }: {
+  items: ReadonlyArray<Fact | null | false | undefined>;
+  label: string;
+  /** A sentence or two about the thing, under the list. */
+  note?: ReactNode;
+}) {
   return (
-    // Flush: rows on the panel's own column, no frame round them, as Figma's and Framer's
-    // inspectors draw their properties (owner, 2026-10-14).
-    <Table size="md" aria-label={label}>
-      <tbody>
+    <>
+      <DescriptionList layout="columns" aria-label={label}>
         {items.filter((item): item is Fact => Boolean(item)).map(([term, value], index) => (
-          <tr key={index}>
-            {/* Table's shrink-to-fit cell: the term column is as wide as its longest term. */}
-            <TableCell fit><span className="studio-muted">{term}</span></TableCell>
-            <td>{value}</td>
-          </tr>
+          <DescriptionListItem key={index} term={term}>{value}</DescriptionListItem>
         ))}
-      </tbody>
-    </Table>
+      </DescriptionList>
+      {note ? <p className="studio-inspector-note">{note}</p> : null}
+    </>
   );
 }
