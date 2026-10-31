@@ -28,7 +28,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // shared with Description list; and the window bar and even bar insets, the three-panel shell), in review.
   // nav: approved 2026-10-29 (closable tabs, Figma's close, 120 to 170, scrolling overflow); reopened the same day for the
   // icon-only item (app structure Phase 2's Home tab), back in review.
-  'radio', 'checkbox', // round 73 approved (owner, 2026-10-26)
+  // radio, checkbox: round 73 approved (owner, 2026-10-26); reopened 2026-10-30, a row option's corner follows its height.
   'file-upload', // round 74 approved (owner, 2026-10-26; description-list too). infobox: removed 2026-10-26 (owner, round 73).
   // plan: reopened 2026-10-25 (owner: a progress tracker; bar, item meta, the ring), back in review.
   // radio, checkbox: reopened 2026-10-25 (owner: soft option rows, layout list, meta), back in review.
@@ -165,7 +165,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Round 68 (2026-10-22): the text-pair rule (a line joins its title) reopens Dialog, Confirm dialog, Drawer, Popover,
 // Alert, Toast, Empty state, Checkbox and Radio; Token row's text moves onto the ramp.
 // Round 69 (2026-10-22): Selection defaults to the accent (option B), so every family whose default paints Selection reopens.
-export const REVIEW_COMPONENTS = new Set(['card', 'slider', 'segmented', 'switch', 'field', 'approval', 'plan', 'description-list', 'composer-menu', 'message', 'badge', 'panel', 'titlebar']); // card: reopened 2026-10-30, one space for every slot (owner: "the padding is always wrong") // panel, titlebar: reopened 2026-10-30, the window bar / size sm (the three-panel shell's 40 headers) // badge: reopened 2026-10-30, the icon gap floor (docs/specs/badge.md) // message: reopened 2026-10-30, prose lines and text flow (docs/research/vertical-rhythm-2026-10-30) // plan, description-list, composer-menu: reopened 2026-10-28, the chat set review (the card column at 13; the empty row in the rows' type) // approval: reopened 2026-10-28, the question card (Setup's chat panel) // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots
+export const REVIEW_COMPONENTS = new Set(['card', 'slider', 'segmented', 'switch', 'field', 'approval', 'plan', 'description-list', 'composer-menu', 'message', 'badge', 'panel', 'titlebar', 'radio', 'checkbox']); // radio, checkbox: reopened 2026-10-30, a one-line card or soft row takes the height ladder's corner, not the surface's (owner: "are these option rows supposed to be pill shaped?") // card: reopened 2026-10-30, one space for every slot (owner: "the padding is always wrong") // panel, titlebar: reopened 2026-10-30, the window bar / size sm (the three-panel shell's 40 headers) // badge: reopened 2026-10-30, the icon gap floor (docs/specs/badge.md) // message: reopened 2026-10-30, prose lines and text flow (docs/research/vertical-rhythm-2026-10-30) // plan, description-list, composer-menu: reopened 2026-10-28, the chat set review (the card column at 13; the empty row in the rows' type) // approval: reopened 2026-10-28, the question card (Setup's chat panel) // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

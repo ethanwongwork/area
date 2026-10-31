@@ -84,4 +84,99 @@
   .lang-press { background-color: var(--_bg-active); background-image: var(--_wash-active); scale: var(--_give, var(--area-feedback-scale)); transition-duration: var(--area-press-in); }
 
   /* A theme's card on Themes (src/pages/themes.tsx): Setup's product screen in the theme, whole, at its 16:10. */
-  .ss-frame.studio-theme-card { block-size: auto; aspect-ratio: 1024 / 640; /* spec: setup-screen.tsx SCREEN */ border-radius: var(--area-radius-small); }
+  .ss-frame.studio-theme-card { block-size: auto; aspect-ratio: 1920 / 1080; /* spec: setup-screen.tsx SCREEN */ border-radius: var(--area-radius-small); border: var(--area-border-width) solid var(--area-border-decorative); } /* the window's rim at display size, so a dark screen keeps its edge on a dark Canvas */
+
+  /* --- Playground (src/pages/themes.tsx, src/setting-preview.tsx) -----------------------------------------------------
+   * The theme being edited, one setting at a time (owner, 2026-10-30: "the 1x 2x zoom level of detail of real components
+   * that i would get from the component review artifacts ... each in their own container like a bento style"): the
+   * setting's name and what it does, then bento tiles as the component review page draws them: the component's name over
+   * its own canvas on the theme's page, 24 round the specimen (16 at 2×), the specimen zoomed at 2× (CSS zoom: text and
+   * lines drawn at the zoom, not scaled), tiles 8 apart. A tile whose component fills a width (a card, a menu, a track)
+   * spans two columns. */
+  .studio-playground { display: grid; gap: var(--area-space-16); }
+  .studio-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--area-space-96) * 2 + var(--area-space-48))), 1fr));
+    grid-auto-flow: dense;
+    gap: var(--area-space-8);
+    color: var(--area-fg-default);
+  }
+  .studio-preview[data-zoom="2"] { grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--area-space-96) * 4)), 1fr)); }
+  .studio-preview__tile {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-inline-size: 0;
+    margin: 0;
+    overflow: clip;
+    border: var(--area-border-width) solid var(--area-border-decorative);
+    border-radius: var(--_tile-radius);
+    background: var(--area-bg-page);
+  }
+  .studio-preview__tile[data-wide] { grid-column: span 2; }
+  .studio-preview[data-zoom="2"] .studio-preview__tile[data-wide] { grid-column: auto; }
+  .studio-preview__name {
+    padding: var(--area-space-6) var(--area-space-12);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+  }
+  .studio-preview__canvas { display: grid; place-items: safe center; min-block-size: calc(var(--area-space-96) * 1.5); padding: var(--area-space-24); overflow: auto; }
+  /* Fields at a field's width in a form (Input's public hook), so one fits its tile at 2×; Nav fills its tile's width. */
+  .studio-preview__specimen { --area-nav-inline-size: 100%; --area-input-inline-size: calc(var(--area-space-96) + var(--area-space-64)); }
+  .studio-preview[data-zoom="2"] .studio-preview__specimen { zoom: 2; }
+  .studio-preview[data-zoom="2"] .studio-preview__canvas { padding: var(--area-space-16); min-block-size: calc(var(--area-space-96) * 2); }
+  /* A wrapper that only listens (the Themes page's Inspector, which tells the Playground which row was touched). */
+  .studio-contents { display: contents; }
+
+/* --- The screen viewer (src/screen-viewer.tsx; owner 2026-10-31: "centered by itself with a gray background frame thats
+ * zoomable") --------------------------------------------------------------------------------------------------------
+ * The Canvas body is the viewer's: no padding, its own scroller. The ground is Setup's stage grey by default, or the
+ * person's White, Black or a checkerboard; the screen sits centred on it, 48 from its edges when fitted, and scrolls when
+ * zoomed past the view. Two screens (Light and Dark) sit 32 apart. The window frame is the viewer's, not the theme's: a
+ * corner of 12 at the screen's scale (a desktop window's) and a lift that reads on every ground. */
+.studio-canvas__body:has(> .studio-viewer) { padding: 0; overflow: hidden; }
+.studio-viewer {
+  --_ground: color-mix(in srgb, var(--area-fg-default) 6%, var(--area-bg-page)); /* pick: Setup's stage, about #f0f0f0 light, #161616 dark */
+  --_rim: color-mix(in srgb, var(--area-fg-default) 12%, transparent); /* pick: the app's ink, so it reads on the grey in light and dark */
+  block-size: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: var(--_ground);
+}
+.studio-viewer[data-ground="white"] { --_ground: #ffffff; --_rim: color-mix(in srgb, #000 10%, transparent); } /* pick */
+.studio-viewer[data-ground="black"] { --_ground: #000000; --_rim: color-mix(in srgb, #fff 14%, transparent); } /* pick */
+.studio-viewer[data-ground="checker"] {
+  --_ground: #ffffff; /* pick */
+  --_rim: color-mix(in srgb, #000 10%, transparent); /* pick */
+  background: repeating-conic-gradient(#ebebeb 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px; /* pick: an image editor's transparency grid */
+}
+.studio-viewer__canvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: max-content;
+  block-size: max-content;
+  min-inline-size: 100%;
+  min-block-size: 100%;
+}
+.studio-viewer__canvas[data-direction="column"] { flex-direction: column; }
+.studio-viewer__screen { position: relative; flex: none; }
+.studio-viewer__screen[data-frame="window"] {
+  border-radius: calc(12px * var(--_viewer-scale, 1)); /* pick */
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--_rim), 0 12px 40px color-mix(in srgb, #000 12%, transparent); /* pick */
+}
+/* A ground's swatch in its menu: a 12 dot with a hairline, so White reads on a white list. */
+.studio-viewer__swatch {
+  display: inline-block;
+  inline-size: 12px;
+  block-size: 12px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--area-fg-default) 16%, transparent); /* pick */
+  background: color-mix(in srgb, var(--area-fg-default) 6%, var(--area-bg-page));
+}
+.studio-viewer__swatch[data-ground="white"] { background: #ffffff; }
+.studio-viewer__swatch[data-ground="black"] { background: #000000; }
+.studio-viewer__swatch[data-ground="checker"] { background: repeating-conic-gradient(#d6d6d6 0% 25%, #ffffff 0% 50%) 0 0 / 6px 6px; }

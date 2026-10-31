@@ -19,7 +19,7 @@
  * The frame keeps the docs gallery's class names (gallery-tile, __view, __stage), so the shared fit
  * (src/gallery/fit.ts) still finds component specimens.
  */
-import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { AssetCard, AssetGridItem, ListBoxItem, SectionHeading } from "@area/react";
 import { appScale } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
@@ -256,4 +256,22 @@ export function CanvasSection({ id, title, count, lede, role, children }: { id: 
       {children}
     </section>
   );
+}
+
+/**
+ * Renders its content once it nears the view (600 above or below), with a placeholder of `estimate` until then, and keeps
+ * it after (owner, 2026-10-30: "the nav is laggy"). A page of many heavy parts (Colors' hundreds of step cards, Patterns'
+ * whole screens) drew all of them before its first paint, 2.5 seconds after a click; now it draws what is in view.
+ */
+export function WhenVisible({ estimate, children }: { estimate: number; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const element = ref.current;
+    if (seen || !element) return;
+    const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { setSeen(true); observer.disconnect(); } }, { rootMargin: "600px 0px" });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [seen]);
+  return seen ? <>{children}</> : <div ref={ref} style={{ minBlockSize: estimate }} aria-hidden="true" />;
 }

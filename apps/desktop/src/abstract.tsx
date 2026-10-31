@@ -476,3 +476,17 @@ export function StateDrawing({ axis }: { axis: string }) {
 
 /** The same fit for the Theme tab's Setup views (theme-setup.tsx): one zoom per group, by its largest drawing. */
 export { Fit as Scaled, FILL, LoopingPress, LoopingSwitch };
+
+/**
+ * A setting's subject at its own size, live (Settings' preview, src/setting-preview.tsx; owner, 2026-10-30: "a small ui, a
+ * card, or something that is zoomed in and has zoom controls, almost like a mini preview"): the close-up's component, or the
+ * drawing a setting without one shows, unscaled, so the preview's zoom is the only magnification. Pills shows every shape
+ * the setting can make a pill; the Material shows a card with a field, the surface its treatment lands on.
+ */
+export function SettingSubject({ axis, preset }: { axis: string; preset?: string }) {
+  const closeUp = CLOSE_UPS[axis];
+  if (closeUp) return <closeUp.subject />;
+  if (axis === "pills") return <div className="lang-row lang-row--wrap">{["button", "chip", "badge", "count", "switch", "avatar"].map(shape => <Pill key={shape} shape={shape} />)}</div>;
+  if (axis === "material") return <CardWithField />;
+  return <>{drawing(axis, preset)[1]}</>;
+}

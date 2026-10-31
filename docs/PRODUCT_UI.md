@@ -100,6 +100,28 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     and descriptions, and the Documentation entries. Code names keep theirs (`colours.ts`, `data-area-status-colours`,
     the `area-tokens colours` command), as renaming them is an API change.
 
+22. **A setting is edited where its effect is seen** (owner, 2026-10-30: "the 1x 2x zoom level of detail of real components
+    that i would get from the component review artifacts ... each in their own container like a bento style"; "focus on the
+    actual theme playground/creation/editing experience"). A system's Themes opens on its Screen view (below); its Close-up
+    view is the Playground: the Inspector row last pressed or focused names the setting, and the Canvas shows the
+    components it changes, one per bento tile at 1× or 2×, live (src/setting-preview.tsx). The Screen view (owner,
+    2026-10-31, a trial of how a project's screens are viewed; src/screen-viewer.tsx) puts the Workspace alone on a grey
+    ground, fitted or zoomed (stepper, menu, or a pinch), scrolled past the view; the Canvas header's start holds the view
+    and its mode (Light, Dark, Light and dark side by side or stacked) and ground (Grey, White, Black, Checkerboard) as
+    ghost menus, its end the zoom, whose menu toggles the held states and the window frame. Every setting row carries a Reset to Area's default while it differs from it, after its
+    name, and every bar's value field is one width (5 characters), so a column of rows lines up. Settings keeps its screen
+    preview only.
+
+23. **Real UI only, for now** (owner, 2026-10-30: "i want to stop using the abstract illustrations for now and just use real
+    ui and components"). Every product screen draws its components with their real text (`setup-screen.tsx` `FIGURES`
+    off; the Area figures' bars and shapes return by turning it on), and a choice card shows the Workspace or the real
+    component its setting changes (`choice-visuals.tsx` `ChoicePreview`; the glyphs are kept as `ChoiceFigure`). The general
+    example is the **Workspace** ("Northwind › Website relaunch"): one issue tracker screen that every setting changes,
+    shown as a showcase (`SHOWCASE`: its menu open and its toast showing) on theme, system and project cards, Publish,
+    Setup and the Playground. The Workspace is a 1920 × 1080 desktop app (`content/examples/workspace.tsx`; owner,
+    2026-10-30: "the northwind ui looks terrible. it looks fake ... make it a 1920x 1080 screen and scale it down"; "dont
+    name it anything, just use generic copy"): sidebar, main column and details panel, no product or workspace name.
+
 ## The app's layout
 
 How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at type 13, Compact,
@@ -111,12 +133,12 @@ Cursor's nav with Figma's tabs).
 
 - **Places** (`src/places.ts`): every view is a place with a hash. Home is `#home` (`#home/<system>` with a system chosen,
   `#home/new` for New system). A system's sections are Themes
-  (`#system/<system>/themes`; New theme, `…/themes/new`, is the Setup chat), Foundations (`…/foundations`: every setting, then
-  Color, Typography, Icons and one page per setting group, named by the registry's `SETTING_GROUPS`), Components and
+  (`#system/<system>/themes`; New theme, `…/themes/new`, is the Setup chat; its Playground edits every setting), Colors,
+  Typography, Icons, Components and
   Patterns (Testing's screens) and History (`…/history/<version>`); a project's Overview (`#project/<project>`), pages
   (`…/pages/<page>/<layer>`), explorations (`…/explorations/<id>`) and Versions (`…/versions/<id>`); Inspiration
   (`#inspiration`, Imagery, then the Library page, renamed) and Labs (`#labs/materials`, out of the nav, reached by search). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
-  Components, `#typography`, `#color`, `#icons` → Foundations, `#testing` → Patterns, `#imagery` and `#library` →
+  Components, `#typography`, `#color`, `#icons` → their sections, `…/foundations` and its group pages → Themes (2026-10-30), `#testing` → Patterns, `#imagery` and `#library` →
   Inspiration, `#materials` → Labs; old links are the Area system's, and `#brand/…` links from before the rename open their `#system/…` place
   (`tests/places.test.ts`). A hash naming a system or project the workspace doesn't have is no
   place. A specimen's own in-page links (an example screen's `#home`, a demo's `#library`) stay in the specimen: the
@@ -211,8 +233,12 @@ Cursor's nav with Figma's tabs).
 - **The Sidebar's nav** (`src/app-nav.tsx`) is the tab's own (owner, 2026-10-29: "within each project there are a bunch
   of things in it … accessed through the left nav"). Home's tab (and Inspiration's and a lab's): Home, then Projects (a
   row each, New project last) and the Library (each system, Inspiration, New system last). A system's tab: a back row to
-  Home, then the system's sections (Themes, Foundations with a chevron to its pages, Components, Patterns, History, which
-  says how many changes are unpublished). A project's tab: a back row to Home, then Overview, Pages (each a chevron to its
+  Home, then the system's sections, one row each (owner, 2026-10-30: "each system is one thing with components, colors,
+  typography, icons, patterns, etc underneath it"): Themes, Colors, Typography, Icons, Components, Patterns, History (which
+  says how many changes are unpublished). A section with its own list (Colors' scales, Icons' categories, Components'
+  families, Patterns' screens) shows it under the nav, after one rule and its filter (`PageList`), so every section stays
+  one click away; it replaced the nav until 2026-10-30. A page of many heavy parts draws them as they near the view
+  (`tile.tsx` `WhenVisible`): Colors and Patterns had held a click 2.5 seconds. A project's tab: a back row to Home, then Overview, Pages (each a chevron to its
   layers; New page), Explorations (each with the version it published; New exploration) and Versions. A click opens in
   the tab holding what it names, ⌘-click in a new one.
 - **Takeover**: a page with a list of its own (Components, Color, Typography, Icons, Patterns, Library, Materials) shows
@@ -224,8 +250,14 @@ Cursor's nav with Figma's tabs).
 - There is no title over the Canvas or the Inspector; the Sidebar's selected row names what
   the Canvas shows.
   The Components bar carries its path at its start instead (Breadcrumb `nowrap`, owner 2026-10-24: "breadcrumbs can be used to help with layer management"; 2026-10-25, the Overview too: "put some text in the top left, a breadcrumb"): Components / Overview (or List), and on a tile Components / its family / its name.
-- The Canvas header's controls, the Sidebar's first row and the Inspector's first heading
-  share one line. The Sidebar and Inspector are 14 in on all sides.
+- The Canvas's second row (its view options, under the tabs) is a small control with 5 above and below and the tab
+  row's 7 at the sides: 36 at type 13, its controls 12 under the tabs, its last control ending under the tab row's last
+  (owner, 2026-10-31, Claude's browser pane: "the second row of controls below feel like part of the tabs bar", then "it
+  still looks too tall"; measured there a 24 field in a 34 row, 11 under the tabs; was 47, then 40). What the Canvas
+  shows sits at its start as ghost menus (view-controls.tsx ViewLead and ViewFilter: "i dont like that theyre all right
+  aligned. maybe use more dropdowns"), how it is shown (zoom, layout, New theme) at its end. Its controls and the
+  Sidebar's first row share one line (58); the Inspector's first heading, set by Panel's own body inset, sits 5 under it
+  (63). The Sidebar and Inspector are 14 in on all sides.
 - **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4; the Titlebar's rule went
   with it, 2026-10-30): no header and no bar carries a rule (Notion's and ChatGPT's top bars), and the Sidebar sits on
   the chrome's recessed ground (`data-area-chrome`, the subtle step, as Notion's sidebar), its seam the Panel's edge.
@@ -304,10 +336,10 @@ Zoom is Zoom control's stepper (− Auto +):
 
   Properties stay in the Inspector, on Overview only.
 
-**Themes and Foundations** (the Theme tab until 2026-10-28, Language 2026-10-19 to 20; `src/pages/theme.tsx`,
-`src/pages/themes.tsx`). Themes lists the system's themes (one, Default, drawn as Setup's product screen in it); its
-header's New theme opens Setup. Foundations is Browse (below), all settings or one group's. The Setup / Browse switch is
-gone: Setup's Fine-tune opens Foundations.
+**Themes** (the Theme tab until 2026-10-28, Language 2026-10-19 to 20; `src/pages/themes.tsx`, Setup in
+`src/pages/theme.tsx`). Themes opens on its Screen view (rule 22), with Close-up (the Playground) and the Themes cards a
+switch away; its header's New
+theme opens Setup, and Setup's Fine-tune opens Themes. Foundations (Browse, below) was retired on 2026-10-30.
 
 - **Setup** (New theme; `src/pages/theme-setup.tsx`, questions in `src/pages/setup-questions.ts`; a questionnaire since
   2026-10-24, a conversation in two panels since the same day: "a 2 panel view with 1 side being a vertically scrolling
@@ -347,7 +379,7 @@ gone: Setup's Fine-tune opens Foundations.
   - **Setup and the Inspector are two ways into the same settings**: every answer is an Inspector setting; what Setup
     does not ask keeps its default. Setup's own UI never changes as picks are made (`Workspace canvasPicks={false}`);
     only the visuals and the choices' pictures take them.
-- **Browse** (Foundations, and each setting group's page) lists the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
+- **Browse** (retired 2026-10-30, with Foundations; kept here as the record) listed the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
   wide.
 - **Containers.** Asset card is the Components tab's container only; every other tab's tiles are the plain container
   (`src/tile.tsx`, PlainTile): the stripe fill, Card's light edge at stroke-width, no shadow, the name in the first row,

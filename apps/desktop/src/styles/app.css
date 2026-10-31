@@ -41,12 +41,15 @@
     /* Chrome: one inset for every region (Panel's 14), one rule, one bar height. */
     --_studio-inset: calc(var(--area-space-16) - var(--area-space-2)); /* spec: Panel's 14 */
     --_studio-rule: var(--area-border-width) solid var(--area-border-decorative);
-    /* The Titlebar's height is Panel's bar (panel.css --_bar: a md row, the panel gap above and
-       below, and the rule), so it matches a Panel's bar at either density. */
-    --_studio-bar: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--area-border-width));
     /* The regions' headers on the window's top line (owner, 2026-10-30, Cursor's 40): Panel's window bar and Titlebar sm,
-       the small control 7 from their top and bottom. The bar under them (the Canvas's view options) keeps --_studio-bar. */
+       the small control 7 from their top and bottom. */
     --_studio-head: calc(var(--area-control-sm) + var(--area-space-16) - var(--area-space-2));
+    /* The bar under the Canvas's tabs (its view options): a small control 5 from its top and foot, the inset of the
+       address row under the tabs in Claude's browser pane (owner, 2026-10-31: "it looks really tall compared to the top
+       tab bar ... the second row of controls below feel like part of the tabs bar", then "it still looks too tall";
+       measured there a 24 field in a 34 row, 11 under the tabs). 36 at type 13, its controls 12 under the tabs. It was
+       Panel's bar, a md row with the panel gap and a rule: 47, its controls 17 under the tabs; then the tab row's 40. */
+    --_studio-bar: calc(var(--area-control-sm) + var(--area-space-10));
     /* The Canvas is a feed (owner, 2026-10-22: "margins larger than the gaps ... a consistent feed style ...
        documentation style that is simple, repeatable, consistent"; after a component docs page and Primer's
        UnderlineNav page). One column of sections, each a heading (and lede) over one block: a grid of cards, a Stage,
@@ -198,17 +201,22 @@
      edge it is resized from), so nothing here adds a second line beside them. */
   /* The Sidebar has no bar. Its rows hang their plates into the inset by the row's own inset
      (panel.css), 6 from the sides. The first row centres on the line the Canvas header's controls and
-     the Inspector's first heading share: half of what the bar leaves around a row, 5 at the app's 28
-     rows (6 at the 26 rows before 2026-10-22), whatever the row's height (studio.tsx, SidebarList).
+     the Inspector's first heading share: half of what the bar leaves around a row, 4 at the app's 28
+     rows under the 36 bar (2026-10-31), whatever the row's height (studio.tsx, SidebarList).
      The Panel body's 14 at the foot gives back the 8. */
   .studio-sidebar__list {
-    padding-block-start: calc((var(--_studio-bar) - var(--area-border-width) - var(--area-ui-row)) / 2);
+    padding-block-start: calc((var(--_studio-bar) - var(--area-ui-row)) / 2);
     margin-block-end: calc(var(--area-ui-row-inset) * -1);
   }
   /* A page's list taking the Sidebar over (src/app-nav.tsx, Takeover): the back row on the shared line, the filter 8 under
      it, then the page's list 8 under that, its first row no longer on the line. */
   .studio-takeover > .studio-sidebar__list:first-child { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); margin-block-end: var(--area-space-12); }
   .studio-takeover > .studio-sidebar__list + .studio-sidebar__list { padding-block-start: 0; }
+  /* A page's list under the nav (app-nav.tsx PageList): one rule from the nav, then its filter and its rows, as the
+     takeover drew them. */
+  .studio-page-list { margin-block-start: var(--area-space-8); border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+  .studio-page-list > .studio-sidebar__list:first-child { display: grid; grid-template-columns: minmax(0, 1fr); margin-block-end: var(--area-space-4); }
+  .studio-page-list > .studio-sidebar__list + .studio-sidebar__list { padding-block-start: 0; }
   /* The filter spans the row plates exactly (Cursor's search over its settings rows): the rows hang their plates the row
      inset into the Sidebar's margin, so it does too. It was inset by it instead, starting 16 right of the plates and
      ending 8 past its list, which scrolled a narrow Sidebar sideways (2026-10-30). One column that may shrink, so nothing

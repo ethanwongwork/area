@@ -96,9 +96,14 @@
 /* Its caption at the rows' size. */
 .studio-settings__preview > .studio-settings__description { margin: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
 /* The screen in a window's proportion, as a theme's card draws it (theme.css). */
-.ss-frame.studio-settings__screen { block-size: auto; aspect-ratio: 1024 / 640; border-radius: var(--_tile-radius); }
+.ss-frame.studio-settings__screen { block-size: auto; aspect-ratio: 1920 / 1080; border-radius: var(--_tile-radius); }
 @container (inline-size < 960px) {
   .studio-settings-split { grid-template-columns: minmax(0, calc(var(--area-space-96) * 8)); }
   .studio-settings__preview { position: static; padding-block-end: 0; }
   .studio-settings-split > .studio-settings__preview { order: -1; }
 }
+
+/* A row's name and its Reset (src/inspector-rows.tsx, owner 2026-10-30: "add reset buttons for all the controls"): the
+   button follows the name, centred on its line; the line keeps the text's height, so a row is as tall with it as without,
+   and the controls keep one width down the column. */
+.studio-settings__name { display: flex; align-items: center; gap: var(--area-space-4); block-size: var(--area-text-sm-leading); min-inline-size: 0; }

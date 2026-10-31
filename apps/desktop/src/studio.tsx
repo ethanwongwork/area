@@ -34,7 +34,7 @@ import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
 import { groupSlug, HOME_TAB, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, setProjects, setSystems, tabHolds, tabKind, type Place } from "./places.ts";
-import { AppNav, AppTabs, Takeover } from "./app-nav.tsx";
+import { AppNav, AppTabs, PageList } from "./app-nav.tsx";
 import { SearchEverything, type SearchFor } from "./search-palette.tsx";
 import { ThemesPage } from "./pages/themes.tsx";
 import { HomePage } from "./pages/home.tsx";
@@ -835,7 +835,8 @@ export function Studio() {
           place.page === "home" ? <HomePage /> :
           place.page === "themes" ? <ThemesPage /> :
           place.page === "theme-setup" ? <ThemePage flow="setup" /> :
-          place.page === "foundations" || place.page === "settings" ? <ThemePage flow="browse" /> :
+          // Foundations is gone (2026-10-30); its old links open Themes, on the setting they named.
+          place.page === "foundations" || place.page === "settings" ? <ThemesPage /> :
           place.page === "components" ? <ComponentsPage /> :
           place.page === "typography" ? <TypographyPage /> :
           place.page === "icons" ? <IconsPage /> :
@@ -1049,7 +1050,8 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
               <span className="studio-head__group">{shell.history}</span>
             </>}
             bareFooter footer={<ProfileFoot />}>
-            {nav ?? (sidebar && studio.panel === "page" ? <Takeover>{sidebar}</Takeover> : <AppNav />)}
+            {/* The nav always, then the page's own list under it (app-nav.tsx PageList; the Takeover replaced the nav). */}
+            {nav ?? (sidebar ? <><AppNav /><PageList>{sidebar}</PageList></> : <AppNav />)}
           </Panel>
         </div>
       ) : null}

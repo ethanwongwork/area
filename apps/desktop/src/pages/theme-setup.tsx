@@ -28,7 +28,7 @@ import { optionMark } from "../option-marks.tsx";
 import { highlight } from "../content/highlight.mjs";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
 import { hueName } from "../inspector-rows.tsx";
-import { REGION_LABEL, SCREENS, ScreenFigure, type Region, type RegionBox, type ScreenId } from "../setup-screen.tsx";
+import { FIGURES, REGION_LABEL, SCREENS, ScreenFigure, type Region, type RegionBox, type ScreenId } from "../setup-screen.tsx";
 import { canvasAttributes, CANVAS_DEFAULTS, useStudio, Workspace, type CanvasAxes } from "../studio.tsx";
 import { coloursCode, hasColours, type ColoursState } from "../colours.ts";
 import { useBrandSheet } from "../brand.ts";
@@ -490,8 +490,9 @@ export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
       canvasPicks={false}
       canvasLead={stageLead}
       canvasActions={<ViewControls>
-        <Segmented size="sm" aria-label="Drawing" value={drawing} onValueChange={next => setDrawing(next as "real" | "wireframe")}
-          items={[{ value: "real", label: "Real" }, { value: "wireframe", label: "Wireframe" }]} />
+        {/* Wireframe returns with the Area figures (setup-screen.tsx FIGURES); while they are off, every drawing is real. */}
+        {FIGURES ? <Segmented size="sm" aria-label="Drawing" value={drawing} onValueChange={next => setDrawing(next as "real" | "wireframe")}
+          items={[{ value: "real", label: "Real" }, { value: "wireframe", label: "Wireframe" }]} /> : null}
         <Segmented size="sm" aria-label="Preview mode" value={mode} onValueChange={next => setMode(next as Mode)}
           items={[{ value: "light", label: "Light", icon: <SunIcon /> }, { value: "dark", label: "Dark", icon: <MoonIcon /> }]} />
       </ViewControls>}

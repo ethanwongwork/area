@@ -10,7 +10,7 @@ import { SearchIcon } from "@area/icons";
 import { categories as ICON_CATEGORIES, icons as ICON_META } from "@area/icons/meta";
 import { ChromeButton, useStudio } from "./studio.tsx";
 import { hrefOf, type Place } from "./places.ts";
-import { FOUNDATIONS, placeLabel } from "./app-nav.tsx";
+import { SYSTEM_SECTIONS, placeLabel } from "./app-nav.tsx";
 import { FAMILIES } from "./pages/components.tsx";
 import { EXAMPLES } from "./pages/examples.tsx";
 import { SETTINGS } from "./pages/theme-settings.ts";
@@ -25,8 +25,8 @@ const categoryOf = (category: string | null) => ICON_CATEGORIES.find(entry => en
 const OPEN_SYSTEM = "";
 const ENTRIES: ReadonlyArray<{ place: Place; label: string; description: string; group: string; keywords?: string[] }> = [
   { place: { page: "home" }, label: "Home", description: "Workspace", group: "Places", keywords: ["projects", "systems", "boards", "recent"] },
-  ...([{ page: "themes" }, { page: "theme-setup" }, { page: "foundations" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
-  ...FOUNDATIONS.map(entry => ({ place: entry.place, label: entry.label, description: "Foundations", group: "Places" })),
+  ...([{ page: "theme-setup" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
+  ...SYSTEM_SECTIONS.map(entry => ({ place: entry.place, label: entry.label, description: OPEN_SYSTEM, group: "Places" })),
   ...([{ page: "components" }, { page: "patterns" }, { page: "history" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
   { place: { page: "inspiration" }, label: "Inspiration", description: "Library", group: "Places", keywords: ["library", "images", "boards", "imagery"] },
   { place: { page: "materials" }, label: "Materials", description: "Labs", group: "Places", keywords: ["lab", "material bundles"] },
