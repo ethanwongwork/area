@@ -57,7 +57,7 @@ sliders.
 | orientation | horizontal (default), vertical | Vertical tool panels | Area composition (owner-confirmed) |
 | composition | readout, step marks | Owner-confirmed (above) | Area compositions |
 | content | end labels (startLabel, endLabel) under the track; horizontal only | Owner 2026-10-21 ("Low" … "High") | The owner's Intensity reference; macOS and iOS settings sliders |
-| content | gradient (a CSS image) | A range whose values are colours paints them along the trough; no fill, the grip a light line with a dark edge, kept at both ends; no step marks (owner 2026-10-27: "make the slider background itself be colored like a gradient") | The Inspector's Temperature (cool, grey, warm), Shade (the accent's shades) and Hue; ColorPicker's channel tracks, Figma's and Lightroom's temperature sliders (unverified) |
+| content | gradient (a CSS image) | A range whose values are colours: the fill shows them at full strength up to the value, the rest of the trough shows them under the trough's fill at 80% (light) / 70% (dark), no edge; the grip is the bars' white pill; no step marks (owner 2026-10-27: "make the slider background itself be colored like a gradient"; 2026-10-31: the Intensity reference, "solid pills", "maybe always white") | The Inspector's Temperature (cool, grey, warm), Shade (the accent's shades) and Hue; ColorPicker's channel tracks, Figma's and Lightroom's temperature sliders (unverified) |
 | content | origin (a value in the range) | Owner 2026-10-24: the Inspector's Temperature bar, Cool … Neutral … Warm; the fill runs between the origin and the value, so the neutral middle is an empty bar | Figma's and Lightroom's temperature and exposure sliders fill from their centre (unverified) |
 | composition | field with a number field: Label over a field bar (readout off) and a NumberField on one value | Owner 2026-10-25: "something like this with an input at the end"; the range-with-inputs pattern on one value, so no prop | The owner's Audio panel reference (Volume, Scale: a bar and a "100%" box), a screenshot |
 | content | buffered (0 to the value's units) | Owner 2026-10-21: media rows (music card) show how far the source has loaded | YouTube, Spotify, Apple Music; Video player's loaded part |
@@ -96,10 +96,14 @@ area    label.area-slider  flex, align center, block --_height (tier), gap --_ga
 track   ::track  16 / 16 / 20 (the thumb), bg-component; ::thumb as above, sitting inside the track
 bar     rail  the tier height, radius-control-sm/md/lg, bg-component
         thumb 16 / 16 / 20 wide × tier tall, the fill colour, corner min(bar radius, 8 / 8 / 10);
-              ::before grip 4 × 16 / 16 / 20 pill, fg-on-selection; focus ring on the whole bar (the rail)
+              ::before grip = the thumb end inset 4: (thumb − 8) × (bar − 8), corner max(0, end corner − 4),
+              fg-on-selection; focus ring on the whole bar (the rail)
+        gradient  rail: wash over the colours, no edge; fill: the colours placed by the rail, reach 1, end rounded;
+              thumb unpainted; grip #fff + 0 0.5px 1px 10% shadow, no stroke
 inside  bar + the label and value over it (z 1), the track absolute inset 0; fill fill-track, reaching the thumb's
         far edge, its end rounded as the bar's (min(bar corner, thumb / 2)); from an origin only the thumb's end
-        rounds; thumb unpainted, ::before grip 2 × 12 / 12 / 16, edge-control-strong
+        rounds; at the minimum the thumb's end, at the origin the thumb's end round both sides; thumb unpainted, the bar's
+        grip in #fff with its shadow, always shown
 figma adjustment  track 120×16 #f5 radius-full, 8 end padding; fill #0d99ff 16 tall from the origin;
                   thumb 16 white, 1px 20% black ring + 3-layer lift; origin dot 4×4; hit 24
   value  span 14/20 muted (12/16 at sm), tabular, min 4ch (aria-hidden)
@@ -133,15 +137,15 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | fill · end | the thumb's centre: `thumb/2 + (100% − thumb) × --_slider-ratio` (slider.css `--_stop`), `--_pct` when no ratio is given | Figma's fill runs under its knob | Was `--_pct` of the whole rail, up to half a thumb off; hidden by a 4px rail, visible on a full-height track |
 | track variant | track = thumb 16 / 16 / 20, `bg-component` | `figma--adjustment-slider`: 16 track, 16 thumb, #f5 (`bg-component` #f7 is the nearest role; Segmented's trough) | — |
 | buffered | `fill-toggle-hover` on the rail (#d0 light, #4e dark), `fill-track` on the track and bar troughs; ends at the thumb-inset position of `buffered`, hidden behind the fill | Owner 2026-10-21; one step over each trough in both themes (probed in headless Edge) | Video player paints its loaded part as ink at 35% because it sits on footage |
-| bar variant | track = tier height, `radius-control-*`; thumb the fill's end, one glyph wide; grip 4 × glyph, `fg-on-selection` | Owner's reference (bar with an inner grip, beside a same-height button); peers Button and Input for height and corner | Grip length and thumb width are the glyph ladder, not read off the reference |
+| bar variant | track = tier height, `radius-control-*`; thumb the fill's end, one glyph wide; **grip = the thumb end inset 4 on every side**: 8 × (bar − 8) at sm and md, 12 at lg, corner the end's less 4 (a pill in a round end, square in a square bar); `fg-on-selection` on the accent bar, #fff on the label-inside bar and colours | Owner's reference (bar with an inner grip, beside a same-height button); owner 2026-10-31 ("bigger and match the track", then "consistently sized and so that the pill actually matches the inset corner of the track", "always white") | Thumb width is the glyph ladder; the grip was 4 × 16 in every bar until 2026-10-31. The accent bar keeps the selection's label ink: white on every fill but dark neutral's light one |
 | field mark | 2 × a third of the bar (10 / 10 / 14 at sm, md, lg Compact), round, 4 inside the fill's end (centred on an empty origin bar; hidden at the range's two ends, where it read as a text cursor beside the label or value), whole pixels; `edge-control-strong` at rest, `fg-muted` on hover, drag and focus | Owner 2026-10-25, two references (a line at each fill's end; a grip inside it) | Picks, not read off the references (screenshots). Was none |
 | thumb · shadow | `shadow-1` | In-flow control; Radix classic and shadcn shadow the thumb | Untitled `shadow-md`; Figma a 3-layer lift |
 | motion | **the drawing eases onto every change that is not a drag** (`--_slider-ratio` registered, `fast` ease-out ≈140ms at Speed 210); a drag follows the pointer exactly (`data-dragging` once the pointer moves 2px past the press) | Owner 2026-10-26; MOTION.md: track the pointer 1:1 (Apple, Radix, Material 3), a click or key lands on a short ease-out (Figma's and Linear's sliders animate a click-jump; unverified) | A native thumb cannot be animated, so the thumb and fill are drawn; the input keeps behaviour and accessibility |
 | press | **the knob lifts to `1 + (1 − feedback-scale) × 4`**: 1.12 at Subtle, 1.2 at Pronounced, 1 at Off and under reduced motion; on `press-in`, back on `fast`. The bar lifts its grip, not its end | Owner 2026-10-26 ("more interactive"); Material 3's thumb answers a press, iOS's knob grows under the finger (unverified) | MOTION.md's give shrinks a button under the finger; a thumb is picked up, so it grows by four times the same factor |
 | hover | **the fill fades darker (and the bar's thumb, the fill's end) on `hover-in`, back on `fast`; the rail and knob keep their colour** | Fluent: colour on the thumb and fill only (`useSliderStyles.styles.ts L76-83`); Radix, Base UI: no hover change | Was the rail darkening too. Correction (2026-09-27 survey): antd does darken its rail on hover (`slider/style/index.ts:489-492`); Radix, Fluent and Base UI do not, so the choice stands on the majority |
-| step marks | **1 × 4 ticks, 2px under the rail or track**, `edge-control-strong`; **on a bar, 3 × 3 dots centred inside it** (the reference's ≈ 2.5px, on whole pixels), the same grey, under the fill | Ticks: owner 2026-10-21 ("B"); Base UI 1 × 8 below. Dots: owner 2026-10-26 ("the subtle dots", the Path panel and dark settings references) | The bar had an 8px tick lane under itself; dots keep a bar one row tall |
-| inside · grip | **2 × (thumb − 4): 12 / 12 / 16, `edge-control-strong`, at the thumb's centre; the fill reaches the thumb's far edge** | The Path panel reference: a 2px mid-grey line ≈ three eighths of the bar's height, inside the fill's end | Was no grip (`field`, 2026-10-24); the stroke ladder's 2 and the glyph ladder less 4 |
-| inside · ends | **at the minimum the bar is empty (no fill stub) and at either end the grip is gone**; the lane (inset.css: half the thumb, half the grip and 4, 13 at sm and md) still keeps a grip one step from an end off the text | Owner 2026-10-27 ("fix these sliders, the internal spacing"): the 16 stub and grip 4 before the label at 0, and the grip 4 after the value at 100%, read as text cursors | Each end is a step of the easing ratio, so the stub arrives as the fill leaves 0 |
+| step marks | **1 × 4 ticks, 2px under the rail or track, inner steps only**, `edge-control-strong`; **on a bar, 3 × 3 dots at every value, both ends included, each exactly on its value** (not rounded to a whole pixel), the same grey, under the fill; with the value inside, the last dot is left to the text | Ticks: owner 2026-10-21 ("B"); Base UI 1 × 8 below. Dots: owner 2026-10-26 ("the subtle dots"); 2026-10-31 ("the dots should correspond to real values": the Width bar's three inner dots and its fill's end between two of them read as uneven; rounding left gaps of 18 and 19) | Even spacing over 1× crispness, as the icon set's marks |
+| inside · grip | **the bar's grip, #fff, with a 0 0.5px 1px 10% shadow, no stroke** (toned down the same day: "tone down or remove the dropshadow"; with none the pill vanished on Temperature's near-white middle) (owner 2026-10-31: "always visible, maybe always white") | Was a 2 × 12 `edge-control-strong` line (the Path panel reference, 2026-10-26) | White reads on the neutral plate in both themes; the shadow keeps its shape on the light plate |
+| inside · ends | **the fill always reaches the thumb's far edge, so at the minimum it is the thumb's end and at an origin the thumb's end rounded both sides; the grip is always shown**; the lane (inset.css: half the thumb, half the grip and 4, 16 at sm and md) keeps the grip off the label and value | Owner 2026-10-31 ("always visible"); reverses 2026-10-27, when the bar was empty at 0 and the grip hid at either end, where a grey line read as a text cursor beside the text | — |
 | inside · in a panel | **a bar row is the bar's height**, as every panel row is its control's (field.css, owner 2026-10-27: "rows 8 apart"), so bars, fields and switches sit the panel's 8 apart | Owner 2026-10-27 ("the heights of the sliders and the other controls are the same"): bars, Segmented and dropdowns were all 26; bar rows were 26 among 30 rows. First the bars took the 30 row (a margin), then every row took its control's height | Figma's inspector: 24 fields 8 apart |
 | bar end | **every bar's fill ends rounded with its line inside**: the accent bar's end is its rounded thumb; the label-inside bar's fill takes the same corner, `min(bar corner, thumb / 2)`, at its far end. From an origin the fill reaches the thumb's far edge on whichever side it is and only that end rounds; the origin's side stays straight | Owner 2026-10-26 ("should the track always be rounded at the end with a line indicator? id prefer that to be consistent") | The Path panel reference's fill ends square; consistency with the accent bar wins |
 | readout | 14/20 `fg-muted`, tabular, 4ch | Area value text role | — |
@@ -441,3 +445,43 @@ in ≈120ms with a decelerating curve; a press sets `data-pressed` and the knob 
 - Slider gains `gradient` (above). The Inspector's bars are all one row with a value field; Temperature, Shade and both
   Hue bars take gradients and signed or degree numbers; bars of 3 to 12 steps draw their step dots (`stepMarks`), which
   the fill covers up to the value, as the reference's.
+
+## Review note, 2026-10-31 (bar grip, colour bars, ends)
+
+- Owner: "i dont like the current size of the pill indicator on the large slider, i think it should be bigger and match
+  the track. i also dont like the visual treatment of the colored gradient sliders. maybe theres a better way to show
+  the color, and color the tab? like this image reference?" (the Intensity bar: a fill from light to deep blue ending in
+  a blue grip, Low … High ticks under it), "the ones in the inspector just look very washed out, not very smooth", "at
+  full strength slider, the indicator should still be visible". Mid-session: "i dont like the outline visual for the
+  sliders, i prefer solid pills or less complicated strokes ... i would prefer solid color or slightly transparent".
+- **What changed:** the bar's grip runs the bar's height less 4 each side (22 in a 30 bar; was 16 in every bar). Colour
+  bars draw their colours as the fill up to the value, the rest of the bar faint under the trough's own fill, and on a
+  bar the thumb is a solid tab in the value's colour (deeper in light, lighter in dark), with no ring and no edge on the
+  bar. The bar variant no longer paints its accent end over the colours. A label-inside bar with no text inside keeps
+  its grip at both ends. The Inspector's Hue bars show each hue's real accent (its 500 shade, every 5°), Temperature
+  is stronger (Cool 248° and Warm 80° at chroma 0.11 to 0.13), and every gradient blends in OKLab. New tile: Content /
+  color gradient.
+- **Tried and dropped** (headless captures, scratch): the gradient across the whole trough with a ringed tab (the tab
+  read as a hollow ring on its own colour); the reference's plain trough with only the fill coloured (a hue bar showed
+  half a spectrum and nothing ahead); a white tab (lost on the near-white Temperature middle); the colours inset to the
+  thumb's travel with end caps (seams in Chromium).
+- **Decided (owner, same day, after a side-by-side of both):** "Keep the Tracks edge on slider troughs." Neutral
+  troughs keep the Tracks stroke (Stroke › Tracks, 3), shared with Switch, Progress and Meter; without it an empty light
+  trough nearly vanished on a light card and the bars no longer matched the edged fields beside them. Colour bars keep
+  no edge.
+
+## Review note, 2026-10-31 (one pill, dots on values)
+
+- Owner: "can you make the pill shape always visible, maybe always white? and also consistently sized and so that the
+  pill actually matches the inset corner of the track? also the dots should correspond to real values, for the stroke
+  width the dots dont look to be evenly spread to reflect the values".
+- **What changed:** every bar's grip is one pill: the fill's rounded end inset 4 on every side, its corner the end's
+  corner less 4, so it nests in the end as the end nests in the bar (8 × 22 in a 30 bar). It is white on the neutral
+  plate and on colours (the colour tab above is gone) and always shown: the fill keeps its end at the minimum and at an
+  origin. Step dots on a bar mark every value, both ends included, each placed exactly; a stepped range of more than 25
+  steps draws none (it drew 24 marks at no value's place).
+- **Why the Width bar looked uneven:** its five values (0, 0.5, 1, 1.5, 2) were evenly placed, but only the three inner
+  dots were drawn, so the end gaps differed from the inner ones; the fill's end ran half a thumb past the value, between
+  two dots; and whole-pixel rounding left gaps of 18 and 19.
+- **Exception kept:** the accent bar's grip is the selection's label ink, which is dark on dark mode's light neutral
+  fill, where white would not show.

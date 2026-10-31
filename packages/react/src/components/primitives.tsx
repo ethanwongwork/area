@@ -783,7 +783,7 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   /**
    * Where the label and readout sit. `inline` (default): either side of the track. `top`: above opposite ends of it.
    * `inside`: inside a bar, the label at its start and the value at its end, the fill a neutral plate behind them with a
-   * thin grip at its end, dragged from any point; it shows the value unless `readout` is false. Inside makes the slider a
+   * white pill in its end, dragged from any point; it shows the value unless `readout` is false. Inside makes the slider a
    * bar, horizontal, without end labels.
    */
   labelPosition?: "inline" | "top" | "inside";
@@ -806,10 +806,11 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
    */
   origin?: number;
   /**
-   * A CSS image painted along the trough, for a range whose values are colours: a temperature from cool to warm, a
-   * colour's shades, a hue (owner 2026-10-27: "make the slider background itself be colored like a gradient"). The fill
-   * is not drawn, so the trough shows the whole range, and the thumb's grip takes a light line with a dark edge, which
-   * reads on any colour. `linear-gradient(to right, …)`, start to end; it is drawn as given in either reading direction.
+   * A CSS image painted along the bar, for a range whose values are colours: a temperature from cool to warm, a colour's
+   * shades, a hue (owner 2026-10-27: "make the slider background itself be colored like a gradient"). The fill shows the
+   * colours at full strength up to the value and the rest of the trough shows them faintly; on a bar the thumb is a
+   * white pill, as on every bar (owner 2026-10-31). `linear-gradient(to right in oklab, …)`, start to end, edge
+   * to edge; it is drawn as given in either reading direction. Horizontal only.
    */
   gradient?: string;
   /**
@@ -948,9 +949,9 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
   const shown = dragged ?? current;
   latest.current = current;
   const painted = upper > lower ? ((shown - lower) / (upper - lower)) * 100 : 0;
-  const markCount = stepMarks && interval > 0
-    ? Math.min(24, Math.max(0, Math.round((upper - lower) / interval) - 1))
-    : 0;
+  // One mark per value, the two ends included (a bar draws them all as dots; a rail's ticks leave the ends to the rail).
+  const markSteps = stepMarks && interval > 0 ? Math.round((upper - lower) / interval) : 0;
+  const markCount = markSteps >= 2 && markSteps <= 25 ? markSteps + 1 : 0;
 
   useEffect(() => {
     const form = input.current?.form;
@@ -1066,7 +1067,7 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
         {bufferedRatio === undefined || originRatio !== undefined ? null : <span className="area-slider__buffer" />}
         <span className="area-slider__fill" />
       </span>
-      {markCount > 0 ? <span className="area-slider__marks" aria-hidden="true">{Array.from({ length: markCount }, (_, index) => <i key={index} style={{ ["--_mark" as string]: `${((index + 1) / (markCount + 1)) * 100}%` }} />)}</span> : null}
+      {markCount > 0 ? <span className="area-slider__marks" aria-hidden="true">{Array.from({ length: markCount }, (_, index) => <i key={index} style={{ ["--_mark" as string]: `${(index / (markCount - 1)) * 100}%` }} />)}</span> : null}
       <span className="area-slider__thumb" aria-hidden="true" />
       </span>
       {shownReadout === false || shownReadout === undefined ? null : (

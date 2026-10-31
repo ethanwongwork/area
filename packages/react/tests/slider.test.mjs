@@ -45,10 +45,16 @@ test("supports label and orientation compositions", () => {
   assert.equal(MANIFESTS.slider.variants.tone, undefined);
 });
 
-test("renders interior marks only for an explicit discrete range", () => {
+// Owner 2026-10-31 ("the dots should correspond to real values"): a mark at every value, the ends included, each exactly
+// on its value; a rail's ticks hide the two ends, which the rail itself marks.
+test("renders a mark at every value of an explicit discrete range", () => {
   const html = render({ min: 0, max: 5, step: 1, defaultValue: 1, stepMarks: true });
   assert.match(html, /area-slider__marks/);
-  assert.equal((html.match(/--_mark/g) ?? []).length, 4);
+  assert.deepEqual([...html.matchAll(/--_mark:([\d.]+)%/g)].map(match => Number(match[1])), [0, 20, 40, 60, 80, 100]);
+  assert.doesNotMatch(render({ min: 0, max: 100, step: 1, stepMarks: true }), /area-slider__marks/, "too many steps to mark");
+  const css = readFileSync(new URL("../../styles/src/components/slider.css", import.meta.url), "utf8");
+  assert.match(css, /\.area-slider:not\(\.area-slider--bar\) \.area-slider__marks i:is\(:first-child, :last-child\) \{ display: none; \}/);
+  assert.match(css, /inset-inline-start: calc\(var\(--_mark\) - var\(--_dot\) \/ 2\);/, "dots sit exactly on their values");
 });
 
 test("rail is the default; track and bar are variants on Slider and SliderRange", () => {
@@ -132,7 +138,7 @@ test("the rail, fill and thumb are drawn after the input, inside the track, hidd
 
 test("a bar draws its step marks as dots inside it", () => {
   const html = render({ variant: "bar", min: 0, max: 5, step: 1, defaultValue: 1, stepMarks: true });
-  assert.equal((html.match(/--_mark/g) ?? []).length, 4);
+  assert.equal((html.match(/--_mark/g) ?? []).length, 6);
   const css = readFileSync(new URL("../../styles/dist/area.css", import.meta.url), "utf8");
   assert.match(css, /\.area-slider--bar \.area-slider__marks i \{[^}]*border-radius: var\(--area-radius-full\)/);
 });
@@ -140,8 +146,9 @@ test("a bar draws its step marks as dots inside it", () => {
 // Owner 2026-10-26 ("consistent"): every bar ends rounded with its line inside; the label-inside bar rounds its fill.
 test("every bar's fill ends rounded with its line inside, and from an origin only the thumb's end rounds", () => {
   const css = readFileSync(new URL("../../styles/dist/area.css", import.meta.url), "utf8");
-  assert.match(css, /\.area-slider--inside \.area-slider__fill \{\s*border-start-end-radius: var\(--_thumb-radius\);\s*border-end-end-radius: var\(--_thumb-radius\);/);
-  assert.match(css, /\.area-slider--inside\[data-origin\] \.area-slider__fill \{[^}]*border-start-start-radius: calc\(var\(--_down\) \* var\(--_thumb-radius\)\)/);
+  // The label-inside bar and a colour bar share the fill's geometry (slider.css, `--_fill-start` / `--_fill-size`).
+  assert.match(css, /:is\(\.area-slider--inside, \.area-slider--bar\[data-gradient\]\) \.area-slider__fill \{[^}]*border-start-end-radius: var\(--_thumb-radius\);\s*border-end-end-radius: var\(--_thumb-radius\);/);
+  assert.match(css, /:is\(\.area-slider--inside, \.area-slider--bar\[data-gradient\]\)\[data-origin\] \.area-slider__fill \{[^}]*border-start-start-radius: calc\(\(var\(--_down\) \+ var\(--_at-origin\)\) \* var\(--_thumb-radius\)\)/, "the origin's side rounds only at the origin itself");
   assert.match(css, /--_thumb-radius: min\(var\(--_track-radius\), var\(--_thumb\) \/ 2\)/, "both bars share the end's corner");
 });
 
@@ -159,14 +166,32 @@ test("origin fills from a neutral middle to the value, either way, and is absent
   assert.match(css, /--_hi: max\(var\(--_origin\), var\(--_slider-ratio\)\)/);
 });
 
-// Gradient (owner 2026-10-27, the Inspector's Temperature, Shade and Hue): the trough is the range's own colours.
-test("a gradient paints the trough, drops the fill and keeps the grip at both ends", () => {
+// Gradient (owner 2026-10-27, the Inspector's Temperature, Shade and Hue; redrawn 2026-10-31): the fill shows the
+// range's colours up to the value, the trough shows them faintly, no edge; the grip is the bars' white pill.
+test("a gradient fills with the colours and washes the trough", () => {
   const html = render({ "aria-label": "Temperature", labelPosition: "inside", min: -8, max: 8, value: 0, gradient: "linear-gradient(to right, blue, white, yellow)" });
   assert.match(html, /data-gradient=""/);
   assert.match(html, /--_gradient:linear-gradient\(to right, blue, white, yellow\)/);
   assert.doesNotMatch(render({ "aria-label": "Plain", value: 0 }), /data-gradient/);
   const css = readFileSync(new URL("../../styles/src/components/slider.css", import.meta.url), "utf8");
-  assert.match(css, /\.area-slider\[data-gradient\] \.area-slider__rail \{ background-image: var\(--_gradient\); \}/);
-  assert.match(css, /\.area-slider\[data-gradient\] :is\(\.area-slider__fill, \.area-slider__buffer, \.area-slider__marks\) \{ display: none; \}/);
-  assert.match(css, /\.area-slider--bar\[data-gradient\] \.area-slider__thumb::before \{\s*opacity: 1;/);
+  const rail = css.match(/\.area-slider\[data-gradient\] \.area-slider__rail \{[^}]*\}/)?.[0] ?? "";
+  assert.match(rail, /background-image: linear-gradient\(var\(--_wash\), var\(--_wash\)\), var\(--_gradient\)/, "the trough's colours sit under the wash");
+  assert.match(rail, /outline: none/, "no edge over the colours");
+  assert.match(css, /\.area-slider\[data-gradient\] :is\(\.area-slider__buffer, \.area-slider__marks\) \{ display: none; \}/);
+  const fill = css.match(/\.area-slider--bar\[data-gradient\] \.area-slider__fill \{[^}]*\}/)?.[0] ?? "";
+  assert.match(fill, /background-size: 100cqi 100%/, "the fill paints the colours placed by the rail, not stretched over itself");
+});
+
+// Owner 2026-10-31 ("bigger and match the track", then "consistently sized ... matches the inset corner of the track",
+// "always visible, maybe always white"): every bar's grip is its thumb end inset by 4, its corner the end's less 4.
+test("every bar's grip is the fill's end inset by 4, white on a neutral plate or colours, always shown", () => {
+  const css = readFileSync(new URL("../../styles/src/components/slider.css", import.meta.url), "utf8");
+  const rule = css.match(/\.area-slider\.area-slider--bar \{[^}]*\}/)?.[0] ?? "";
+  assert.match(rule, /--_grip-inline: calc\(var\(--_thumb\) - var\(--_grip-inset\) \* 2\)/);
+  assert.match(rule, /--_grip-block: calc\(var\(--_track\) - var\(--_grip-inset\) \* 2\)/);
+  assert.match(rule, /--_grip-radius: max\(0px, var\(--_thumb-radius\) - var\(--_grip-inset\)\)/);
+  const inside = css.match(/\.area-slider\.area-slider--inside \{[^}]*\}/)?.[0] ?? "";
+  assert.doesNotMatch(inside, /--_grip-(inline|block)/, "the label-inside bar's grip is the bar's own");
+  assert.match(css, /\.area-slider:is\(\.area-slider--inside, \.area-slider--bar\[data-gradient\]\) \{\s*--_grip-ink: #fff;/);
+  assert.doesNotMatch(css, /--_grip-at-(min|max)|--_off-(min|max)/, "the grip never hides at an end");
 });

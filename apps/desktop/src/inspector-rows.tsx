@@ -95,7 +95,7 @@ const EASE = 150; /* the fill's ease onto a step: `fast` at the default Speed, 1
  * A bar's row (owner, 2026-10-27: "Keep the Input layout: label in the left column, bar, then the value field"; picked
  * over the name and value inside the bar, and the value as plain text, in docs/research/slider-bar-layouts-2026-10-27.png):
  * the name in the row's label column, as every other row's, then the bar, then its value in a field that takes a typed
- * value. The bar is the label-inside look without its text, the neutral plate and grip line. Field hands its id, label
+ * value. The bar is the label-inside look without its text, the neutral plate and its white pill. Field hands its id, label
  * and state to the bar's input, the first element it holds, so the label names the bar and the field names itself.
  *
  * Every bar is one row (owner, 2026-10-27: "i dont like the slider below the label for just some of them, id prefer it
@@ -113,12 +113,21 @@ const chOf = (text: string) => [...text].reduce((sum, char) => sum + (/[ilIjtf.,
  * 5 where a bar needed it). */
 const FIELD_CH = 5;
 const stepsOf = (min: number, max: number) => Array.from({ length: Math.max(0, max - min) + 1 }, (_, at) => min + at);
-/** A gradient through colours spaced evenly from start to end. */
-const through = (colours: string[]) => `linear-gradient(to right, ${colours.join(", ")})`;
-/** Hues in OKLCH at the accent's own lightness and a calm chroma, every 30°. */
-const HUE_GRADIENT = through(Array.from({ length: 13 }, (_, at) => `light-dark(oklch(0.72 0.13 ${at * 30}), oklch(0.6 0.12 ${at * 30}))`));
-/** Cool blue through the trough's own grey to warm yellow, light enough to sit behind the bar's grip. */
-const TEMPERATURE_GRADIENT = through(["light-dark(oklch(0.86 0.07 250), oklch(0.36 0.07 250))", "var(--area-bg-component)", "light-dark(oklch(0.9 0.08 90), oklch(0.38 0.06 90))"]);
+/** A gradient through colours spaced evenly from start to end, blended in OKLab (owner 2026-10-31: the bars looked "very
+ * washed out, not very smooth"; sRGB blending greys the middle of two colours and bands between far-apart stops). */
+const through = (colours: string[]) => `linear-gradient(to right in oklab, ${colours.join(", ")})`;
+/** The accent each hue makes, its vivid shade (500), every 5° as the accent offers them, each at its hue's place on a bar
+ * whose last step is the hue `last` (355 for the accent's 5° steps, 359 for a tint's degrees). */
+const hueGradient = (last: number) => {
+  const presets = (TOKENS.axes as unknown as Array<{ id: string; presets: Array<{ id: string; tokens: Record<string, string> }> }>)
+    .find(axis => axis.id === "accent")!.presets;
+  const stops = Array.from({ length: 72 }, (_, at) => at * 5).map(hue =>
+    `${presets.find(preset => preset.id === String(hue))?.tokens["--area-accent-500-full"] ?? "transparent"} ${(hue / last * 100).toFixed(2)}%`);
+  return through(stops);
+};
+/** Cool blue through the trough's own grey to warm yellow: the hues the greys lean to (Cool 248°, Warm 68°), strong
+ * enough to name the direction at a glance, light in light and deep in dark. */
+const TEMPERATURE_GRADIENT = through(["light-dark(oklch(0.76 0.11 248), oklch(0.52 0.11 248))", "var(--area-bg-component)", "light-dark(oklch(0.86 0.13 80), oklch(0.62 0.12 80))"]);
 const hueShort = (value: string) => `${value}°`;
 
 type SettingBarProps = Omit<SliderProps, "value" | "onValueChange" | "onValueCommit" | "readout"> & {
@@ -448,7 +457,7 @@ function GreysRow({ context }: { context: RowContext }) {
       </RowField>
       {tint === CUSTOM ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={359} step={1} value={Math.max(0, hues.indexOf(hue))}
-          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ "tint-hue": hues[at]!, "tint-hue-dark": "same" })} reset={false} />
+          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={hueGradient(359)} onSet={at => set({ "tint-hue": hues[at]!, "tint-hue-dark": "same" })} reset={false} />
       ) : null}
       {tint !== "none" ? (
         <SettingBar size={context.size ?? "sm"} label="Amount" title="How much of the color the greys take: 0% is plain grey"
@@ -529,7 +538,7 @@ function AccentRow({ context }: { context: RowContext }) {
       </RowField>
       {exact ? <Resets value={{ ...reset, changed: false }}><BrandRows /></Resets> : custom ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={hues.length - 1} step={1} value={Math.max(0, hues.indexOf(value))}
-          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ accent: hues[at]! })} reset={false} />
+          readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={hueGradient(Number(hues[hues.length - 1]))} onSet={at => set({ accent: hues[at]! })} reset={false} />
       ) : null}
       <SettingRow axis="accent-strength" context={context} />
       <AccentPaintRows accent={value} context={context} />
