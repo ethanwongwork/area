@@ -44,8 +44,11 @@ export type TileSpan = "unit" | "wide";
  *   center  centred (an icon, a setting's sample, a type specimen)
  *   flow    the content's own height, from the start (a type sample, an icon sheet)
  *   none    no stage: the frame is the visual (a swatch)
+ *   screen  a product screen (ScreenFigure) as the frame's whole visual: the view takes the screen's 16:9 and the screen
+ *           fills it, edge to edge inside the tile's inset, as a file's thumbnail (2026-10-31: in a square fit stage it
+ *           sat in a 24 / 32 margin and half the tile's height was empty, on Home, Themes, History and a project)
  */
-export type TileStage = "fit" | "center" | "flow" | "none";
+export type TileStage = "fit" | "center" | "flow" | "none" | "screen";
 
 /** An Asset card tile's look: its container, where its name sits, its fill and whether it has an edge (Asset card's axes). */
 export interface CardLook { container: "framed" | "basic" | "containerless"; caption: "above" | "below" | "overlay"; fill: "recessed" | "raised"; borderless: boolean }
@@ -153,7 +156,9 @@ function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card
   // or Space selects, its state as aria-pressed (product UI rule 5).
   if (inert && onSelect) {
     return (
-      <article {...shared} role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect}
+      // A double-click opens it, as a double-click opens what a click selects everywhere else (Home's systems and projects,
+      // Themes' themes; 2026-10-31: this branch dropped `onOpen`, so a double-click only selected).
+      <article {...shared} role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect} onDoubleClick={onOpen}
         onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>
         {box}
       </article>
@@ -212,7 +217,7 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
   // Tab stop that Enter or Space selects, its state as aria-pressed (product UI rule 5).
   if (inert && onSelect) {
     return (
-      <AssetCard {...shared} className="gallery-asset" interactive role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect}
+      <AssetCard {...shared} className="gallery-asset" interactive role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect} onDoubleClick={onOpen}
         onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>
         {view}
       </AssetCard>

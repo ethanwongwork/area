@@ -44,3 +44,29 @@ test("Tooltip preserves a caller-provided surface id with a trigger", () => {
   assert.match(surface, / id="caller-surface"/);
   assert.match(html.match(/<button[^>]*>/)[0], /aria-describedby="caller-surface"/);
 });
+
+// packages/react/src/components/Overlays.tsx (AnchoredTooltip) and surface.css (`[data-passthrough]`); docs/specs/tooltip.md,
+// 2026-10-31: a name-only tooltip lets the pointer through, so it never covers and catches the next control in a bar.
+test("Tooltip that repeats its trigger's name lets the pointer through; one that describes stays hoverable", () => {
+  const named = renderToString(h(Tooltip, { describes: false, trigger: h("button", { "aria-label": "Search" }) }, "Search"));
+  assert.match(named.match(/<div role="tooltip"[^>]*>/)[0], /data-passthrough=""/);
+  const describing = renderToString(h(Tooltip, { trigger: h("button", null, "Save") }, "Saves to the Library"));
+  assert.doesNotMatch(describing.match(/<div role="tooltip"[^>]*>/)[0], /data-passthrough/);
+});
+
+test("Tooltip's passthrough is styled: no pointer events on a name-only surface", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const css = await readFile(new URL("../../styles/src/components/surface.css", import.meta.url), "utf8");
+  assert.match(css, /\.area-tooltip\[popover\]\[data-passthrough\]\s*\{\s*pointer-events:\s*none;/);
+});
+
+// Overlays.tsx: while open, a pointer move off the trigger and tooltip, the pointer leaving the window, the window's blur
+// and a hidden page close it; a focus that only returns to the window shows nothing (2026-10-31, "tooltips ... get stuck").
+test("Tooltip closes on every sign the pointer or window has gone, and ignores a returning focus", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const source = await readFile(new URL("../src/components/Overlays.tsx", import.meta.url), "utf8");
+  const body = source.slice(source.indexOf("export function AnchoredTooltip"), source.indexOf("/* --- Toggletip"));
+  for (const listener of ['addEventListener("pointermove"', 'addEventListener("mouseout"', 'addEventListener("blur"', 'addEventListener("visibilitychange"']) assert.ok(body.includes(listener), listener);
+  assert.match(body, /returning === event\.currentTarget/);
+  assert.match(body, /expanded\(event\.currentTarget/);
+});

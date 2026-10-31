@@ -1,6 +1,5 @@
 /* Imagery (src/pages/imagery.tsx): images in folders, on Area's Asset grid. */
 .studio-imagery { display: grid; align-content: start; min-block-size: 100%; }
-.studio-imagery__trail { min-inline-size: 0; margin-inline-end: auto; }
 .studio-imagery__loading { display: grid; place-items: center; min-block-size: 50vh; }
 .studio-imagery__count { font-variant-numeric: tabular-nums; }
 /* The viewer: the image as large as the Canvas allows, never upscaled past its own pixels. */

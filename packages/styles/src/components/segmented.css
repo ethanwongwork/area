@@ -184,9 +184,14 @@
    *
    * Opt-in, and named as Button names it, because a segmented control on its own should
    * still be the width of its options.
+   *
+   * Equal columns of a grid rather than flex items (2026-10-31: Selected tint's "Accent" read "Acc…" in the Inspector):
+   * a flex row's natural width is the sum of its labels, so a row that fitted that sum split it equally and cut the
+   * longest label. A grid of 1fr columns is naturally as wide as its longest label times the count, so an auto Field
+   * puts the control under its label before any label is cut; squeezed below that, labels still end in an ellipsis.
    */
-  .area-segmented--full-width { display: flex; }
-  .area-segmented--full-width .area-segmented__item { flex: 1; min-inline-size: 0; }
+  .area-segmented--full-width { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); }
+  .area-segmented--full-width .area-segmented__item { min-inline-size: 0; }
 
   .area-segmented--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
   .area-segmented--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }

@@ -27,7 +27,7 @@ const ENTRIES: ReadonlyArray<{ place: Place; label: string; description: string;
   { place: { page: "home" }, label: "Home", description: "Workspace", group: "Places", keywords: ["projects", "systems", "boards", "recent"] },
   ...([{ page: "theme-setup" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
   ...SYSTEM_SECTIONS.map(entry => ({ place: entry.place, label: entry.label, description: OPEN_SYSTEM, group: "Places" })),
-  ...([{ page: "components" }, { page: "patterns" }, { page: "history" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
+  // Components, Patterns and History are system sections since the flat nav (2026-10-30); they were listed again here.
   { place: { page: "inspiration" }, label: "Inspiration", description: "Library", group: "Places", keywords: ["library", "images", "boards", "imagery"] },
   { place: { page: "materials" }, label: "Materials", description: "Labs", group: "Places", keywords: ["lab", "material bundles"] },
   ...FAMILIES.map(family => ({ place: { page: "components" as const, item: family.slug }, label: family.name, description: "Component", group: "Components" })),

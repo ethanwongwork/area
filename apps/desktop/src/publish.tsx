@@ -66,11 +66,11 @@ export function BeforeAfter({ before, after, empty, mode }: {
   return (
     <div className="studio-publish__pair">
       {before ? (
-        <Tile span="wide" stage="fit" inert label={before.label} value={before.value}><ThemeScreen theme={before.theme} mode={mode} /></Tile>
+        <Tile span="wide" stage="screen" inert label={before.label} value={before.value}><ThemeScreen theme={before.theme} mode={mode} /></Tile>
       ) : (
         <Tile span="wide" stage="center" inert label="Nothing before" value=""><p className="studio-muted">{empty}</p></Tile>
       )}
-      <Tile span="wide" stage="fit" inert label={after.label} value={after.value}><ThemeScreen theme={after.theme} mode={mode} /></Tile>
+      <Tile span="wide" stage="screen" inert label={after.label} value={after.value}><ThemeScreen theme={after.theme} mode={mode} /></Tile>
     </div>
   );
 }

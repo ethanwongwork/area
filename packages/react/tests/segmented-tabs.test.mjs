@@ -1,4 +1,5 @@
 import { test } from "node:test";
+import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToString } from "react-dom/server";
@@ -71,4 +72,12 @@ test('a focused tab and panel ring their content with room', async () => {
   const panel = css.match(/\.area-tabs__panel:focus-visible::before \{[^}]*\}/)[0];
   assert.match(panel, /var\(--_focus-room\)/);
   assert.match(css, /margin-inline-start: calc\(-1 \* \(var\(--_focus-room\) \+ var\(--area-focus-width\)\)\);/, 'the first ring has room in the scroller');
+});
+
+test("a full-width segmented shares equal columns its longest option sets, so no label is cut while it fits (2026-10-31)", () => {
+  const css = readFileSync(new URL("../../styles/src/components/segmented.css", import.meta.url), "utf8");
+  const rule = css.match(/\.area-segmented--full-width \{([^}]*)\}/)?.[1] ?? "";
+  // Flex items at flex: 1 made the natural width the sum of the labels, then cut the longest when split equally.
+  assert.match(rule, /display: grid/);
+  assert.match(rule, /grid-auto-columns: minmax\(0, 1fr\)/);
 });

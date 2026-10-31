@@ -75,12 +75,12 @@ export function HistoryPage() {
                 lede={`${RELEASE_KIND_LABEL[release.kind]}, published ${dateOf(release.at)}${release.from ? ` from ${release.from}` : ""}${release === live ? "; live now" : ""}. ${release.note || "No note."}`}>
                 <TileGrid span="wide" cards min={RELEASE_MIN}>
                   {before ? (
-                    <Tile span="wide" stage="fit" inert label={`Before, ${versionName(workingSystem.name, before.version)}`} value={inUse(before).name}
+                    <Tile span="wide" stage="screen" inert label={`Before, ${versionName(workingSystem.name, before.version)}`} value={inUse(before).name}
                       selected={false} onSelect={() => select(release.version, { replace: true })}>
                       <ThemeScreen theme={inUse(before)} mode={theme} />
                     </Tile>
                   ) : null}
-                  <Tile span="wide" stage="fit" inert label={versionName(workingSystem.name, release.version)} value={inUse(release).name}
+                  <Tile span="wide" stage="screen" inert label={versionName(workingSystem.name, release.version)} value={inUse(release).name}
                     selected={chosen === release} onSelect={() => select(release.version, { replace: true })}>
                     <ThemeScreen theme={inUse(release)} mode={theme} />
                   </Tile>

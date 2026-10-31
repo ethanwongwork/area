@@ -25,6 +25,11 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
    A bar's swatch (Button shade) sits before its name, as an option's mark sits before its label. */
 .studio-row__dim { min-inline-size: 0; opacity: var(--area-opacity-disabled); }
 .studio-row__label { display: inline-flex; align-items: center; gap: var(--area-space-6); min-inline-size: 0; }
+/* A changed row's Reset (inspector-rows.tsx `WithReset`) before its control, in the control's column, a group's 4 from it;
+   the control takes the rest (a bar's slider narrows, its value field keeps its width). No minimum of its own, so an auto
+   Field still reads the control's natural width (field.css) and puts it under the name when it does not fit. */
+.studio-row__control { display: flex; align-items: center; gap: var(--area-space-4); }
+.studio-row__control > :last-child { flex: 1 1 0; min-inline-size: 0; }
 /* A setting's bar (inspector-rows.tsx, owner 2026-10-27: "Keep the Input layout"): its name in the row's label column, the
    bar, then its value in a soft field a cluster's gap after it. */
 .studio-bar { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--area-ui-cluster); min-inline-size: 0; }
