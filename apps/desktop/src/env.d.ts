@@ -16,6 +16,11 @@ interface AreaDesktop {
   systems?: { read(): unknown[] | null; write(id: string, text: string): void; trash(id: string): void };
   /** The workspace's projects, one project.json each in Application Support/Area/Projects (src/projects.ts), as `systems`. */
   projects?: { read(): unknown[] | null; write(id: string, text: string): void; trash(id: string): void };
+  /**
+   * Licensed typefaces installed on this Mac (electron/main.cjs, "area:fonts-installed"): for each catalogue face, the
+   * first of its family names found, and what the files say (src/pages/typefaces.tsx, InstalledFacts). Null in a capture.
+   */
+  installedFonts?(wanted: Array<{ id: string; names: string[] }>): Promise<Record<string, unknown> | null>;
   /** The app menu's tab commands (electron/main.cjs): ⌘T, ⌘⇧T, ⌘⇧H, ⌘W, ⌃Tab, ⌃⇧Tab, ⌘1–9. Returns the unsubscribe. */
   onCommand?(listener: (command: TabCommand, index?: number) => void): () => void;
 }

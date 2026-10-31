@@ -1,71 +1,7 @@
   /* --- Icons --------------------------------------------------------------- */
 
-  /* A category's sheet: label-free cells (Lucide, Primer), the name in the hover window and the
-     Inspector. A cell is twice the icon, never less than the icon plus 32 (the icon browser's rule).
-     Icons sit straight on the Canvas's surface, no container (owner, 2026-10-12, after Cursor's icon
-     gallery): an icon is its own figure, so a frame round a sheet only adds a second edge. The
-     cells' plates hang into the margin by the cell's own inset, so the first icon's centre, not its
-     plate, sets the column (as a Nav row's text, not its plate, sets the Sidebar's). */
-  .studio-icons { --_cell: max(calc(var(--_size) * 2), calc(var(--_size) + var(--area-space-32))); --area-list-box-item: var(--_cell); }
-  /* Cells keep their own width and the spare room goes between the columns, so the first and last
-     icons sit exactly one hang from the edges at every Canvas width. */
-  .studio-icons__sheet {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, var(--_cell));
-    justify-content: space-between;
-    gap: var(--area-space-2);
-    margin-inline: calc((var(--_cell) - var(--_size)) / -2);
-  }
-  .studio-icons__specimen { display: contents; }
-  .studio-icons__glyph { display: grid; place-items: center; color: var(--area-fg-default); }
-  .studio-icons__glyph svg { display: block; }
-  .studio-icons__cell {
-    display: grid;
-    place-items: center;
-    min-block-size: var(--_cell);
-    margin: 0;
-    padding: 0;
-    border: 0;
-    border-radius: var(--area-radius-row);
-    background: transparent;
-    color: var(--area-fg-default);
-    cursor: default;
-  }
-  .studio-icons__cell svg { display: block; flex: none; }
-  /* The row plates' pair (DESIGN_SYSTEM.md, "Shared state paint"): hover, then press and selected
-     a step firmer; in at once, out on `fast` (docs/MOTION.md). */
-  .studio-icons__cell { transition: var(--area-transition); }
-  @media (hover: hover) { .studio-icons__cell:hover { background: var(--area-bg-component-hover); transition-duration: 0s; } }
-  .studio-icons__cell:is(:active, [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
-  .studio-icons__cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
-  /*
-   * The hover window (src/pages/icons.tsx, IconCell): an Area Hover card 256 wide. Name and
-   * category on one line, the icon at 96 on the card's own surface, then Copy SVG over Download.
-   * Insets and gaps are Popover's own (surface.css): 12 in from the edge, the md surface inset
-   * between its parts (16, 12 in compact) and the cluster gap between the actions, as Popover's
-   * body. It sits in the Canvas body, so it draws at the Canvas's type and density.
-   */
-  .studio-icon-card {
-    --area-popover-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-64)); /* pick: 256, the Inspector's width */
-    /* In the gallery cards' shape (owner, 2026-10-24: "can the icon hover card be updated to match the style of the canvas
-       asset cards?"): their corner and their 16 from the edge to the name, through Popover's public hooks. */
-    --area-popover-corner: var(--_tile-radius);
-    --area-popover-inset: var(--_card-inset);
-  }
-  .studio-icon-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--area-space-8); min-inline-size: 0; }
-  /* The name as an Asset card's: the UI text, regular (was the mono). */
-  .studio-icon-card__name { min-inline-size: 0; overflow: hidden; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-overflow: ellipsis; white-space: nowrap; }
-  /* The category is the card's secondary line at the UI size, as Popover's description (owner,
-     2026-10-17: the xs step read too small beside the name). */
-  .studio-icon-card__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
-  .studio-icon-card__preview { display: grid; place-items: center; block-size: calc(var(--area-space-96) + var(--area-space-48)); color: var(--area-fg-default); }
-  .studio-icon-card__preview svg { display: block; }
-  /* The name's cap sits on the 12 inset like the sides, as Popover's header title does
-     (surface.css): the head gives back the leading above the cap. */
-  @supports (text-box: trim-both cap alphabetic) {
-    .studio-icon-card > .studio-icon-card__head:first-child { margin-block-start: round(nearest, calc((1cap - 1lh) / 2), 1px); }
-  }
-  .studio-icon-card__actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-cluster); }
+  /* The wall, its cells and the hover window are the shared glyph sheet's (styles/glyphs.css, src/glyph-sheet.tsx),
+     which a typeface's Glyphs tab uses too. */
 
   /* The Inspector's preview (PreviewFrame) sits 8 above the action under it. */
   .studio-inspector-preview { margin-block-end: var(--area-space-8); }

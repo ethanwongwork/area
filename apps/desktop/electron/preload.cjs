@@ -18,6 +18,8 @@ contextBridge.exposeInMainWorld("areaDesktop", {
     write: (id, text) => ipcRenderer.send("area:project-write", String(id), String(text)),
     trash: id => ipcRenderer.send("area:project-trash", String(id)),
   },
+  // Licensed typefaces installed on the Mac: facts about each match, never the files (electron/main.cjs).
+  installedFonts: wanted => ipcRenderer.invoke("area:fonts-installed", wanted),
   onCommand: listener => {
     const relay = (_event, command, index) => listener(String(command), typeof index === "number" ? index : undefined);
     ipcRenderer.on("area:command", relay);

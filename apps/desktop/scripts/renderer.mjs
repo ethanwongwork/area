@@ -5,7 +5,7 @@
  * Demos name images relative to the page ("images/david-tee.jpg"): Electron loads it from file://, where
  * "/images" is the disk's root.
  */
-import { copyFileSync, cpSync, existsSync, mkdirSync } from "node:fs";
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { demoFiles, extractSnippets } from "./snippets.mjs";
@@ -33,6 +33,20 @@ export function copyStatic() {
   copyFileSync(figureCss, join(dist, "styles/figures.css"));
   copyFileSync(areaCss, join(dist, "area.css"));
   cpSync(images, join(dist, "images"), { recursive: true });
+  copyFonts();
+}
+
+/** The typeface library's font files (src/content/typefaces/generated/files.json, scripts/typefaces.mjs) into dist/fonts,
+ *  where styles/typefaces.css points. Copied once: a file already there is the same file. */
+function copyFonts() {
+  const list = join(root, "src/content/typefaces/generated/files.json");
+  if (!existsSync(list)) return;
+  for (const { from, to } of JSON.parse(readFileSync(list, "utf8"))) {
+    const target = join(dist, to);
+    if (existsSync(target)) continue;
+    mkdirSync(dirname(target), { recursive: true });
+    copyFileSync(join(repo, from), target);
+  }
 }
 
 export const options = ({ production }) => ({
