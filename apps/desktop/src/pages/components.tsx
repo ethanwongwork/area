@@ -30,6 +30,8 @@ import SNIPPETS from "virtual:demo-snippets";
 // @ts-expect-error — the gallery's page content and status registry are authored in JavaScript.
 import { COMPONENT_PAGES } from "../content/pages.mjs";
 // @ts-expect-error — as above.
+import { DOCUMENTATION_GROUPS } from "../content/documentation.mjs";
+// @ts-expect-error — as above.
 import { componentStatus } from "../content/component-status.mjs";
 // @ts-expect-error — as above.
 import { componentSpecimens, demoWrapper } from "../content/specimens.mjs";
@@ -213,12 +215,24 @@ function CopyCode({ code, name }: { code?: string; name: string }) {
   );
 }
 
-/* Sort and group (src/organize.tsx). The default is the Sidebar as it was: A to Z, In review first. */
+/* Sort and group (src/organize.tsx). The default is A to Z by kind (2026-10-31; In review first until then): what a family is
+   for, not where its review stands, as a system's library is browsed. */
 const SORTS = [{ value: "name", label: "Name" }, { value: "status", label: "Status" }, { value: "tiles", label: "Tile count" }] as const;
-const GROUPS = [{ value: "review", label: "In review first" }, { value: "status", label: "Status" }, { value: "letter", label: "First letter" }, { value: "none", label: "None" }] as const;
+const GROUPS = [{ value: "kind", label: "Kind" }, { value: "review", label: "In review first" }, { value: "status", label: "Status" }, { value: "letter", label: "First letter" }, { value: "none", label: "None" }] as const;
 type Sort = (typeof SORTS)[number]["value"];
 type Group = (typeof GROUPS)[number]["value"];
 const STATUS_ORDER: Status[] = ["complete", "review", "unrefined"];
+/* A family's kind: the Documentation file its entry is in (src/content/documentation/, docs/COMPONENTS.md › Library), in that order. */
+type Kind = "actions" | "fields" | "pickers" | "navigation" | "status" | "content" | "conversation";
+const KIND_LABEL: Record<Kind, string> = {
+  actions: "Actions and choices", fields: "Fields and text entry", pickers: "Pickers and inspector parts", navigation: "Navigation, menus and overlays",
+  status: "Status and feedback", content: "Surfaces and content", conversation: "Conversation",
+};
+const KIND_ORDER = [...Object.values(KIND_LABEL), "Other"];
+const kindOf = (family: Family) => {
+  const kind = (Object.keys(KIND_LABEL) as Kind[]).find(key => family.slug in (DOCUMENTATION_GROUPS as Record<Kind, object>)[key]);
+  return kind ? KIND_LABEL[kind] : "Other";
+};
 const DIRECTIONS: Record<Sort, readonly [string, string]> = {
   name: ["A to Z", "Z to A"],
   status: ["Complete first", "Unrefined first"],
@@ -357,7 +371,7 @@ function FamilyPreview({ family, tiles, tile, config, onChange, zoom, replays }:
   const label = config && playground ? onStage?.label ?? "Custom" : tile.label;
   return (
     <div className="studio-sections" {...zoomScope(zoom)}>
-      <CanvasSection id="family-preview" title="Preview" lede="At its real size, with its code. The Inspector sets its properties.">
+      <CanvasSection id="family-preview" title="Preview" lede={playground ? "At its real size, with its code. The Inspector sets its properties." : "At its real size, with its code."}>
         <Stage zoom={zoom} replays={replays} label={label}
           code={config && playground ? configCode(playground, config) : SNIPPETS[tile.demo]}>
           <TileBoundary>{config && playground ? renderConfig(playground, config, onChange) : <Demo name={tile.demo} />}</TileBoundary>
@@ -448,12 +462,13 @@ export function ComponentsPage() {
   const [replays, setReplays] = useState(0);
   const config = playground && stageTile ? (edit?.key === stageKey ? edit.config : tileConfig(playground, stageTile.name)) : null;
 
-  const arrangement = useArrangement<Sort, Group>("components", { sort: "name", descending: false, group: "review" }, SORTS, GROUPS);
+  const arrangement = useArrangement<Sort, Group>("components", { sort: "name", descending: false, group: "kind" }, SORTS, GROUPS);
   const pins = usePins("components");
   const sorted = arrangement.sort === "name" ? sortBy(shown, entry => entry.name, arrangement.descending)
     : arrangement.sort === "status" ? sortBy(sortBy(shown, entry => entry.name), entry => STATUS_ORDER.indexOf(statusOf(entry)), arrangement.descending)
     : sortBy(sortBy(shown, entry => entry.name), entry => TILES.get(entry.slug)!.length, arrangement.descending);
-  const groups: Array<[string, Family[]]> = arrangement.group === "review"
+  const groups: Array<[string, Family[]]> = arrangement.group === "kind" ? groupBy(sorted, kindOf, KIND_ORDER)
+    : arrangement.group === "review"
     ? [["In review", sorted.filter(entry => statusOf(entry) === "review")], ["Components", sorted.filter(entry => statusOf(entry) !== "review")]]
     : arrangement.group === "status" ? groupBy(sorted, entry => STATUS_LABEL[statusOf(entry)], (arrangement.descending && arrangement.sort === "status" ? [...STATUS_ORDER].reverse() : STATUS_ORDER).map(name => STATUS_LABEL[name]))
     : arrangement.group === "letter" ? groupBy(sorted, entry => entry.name[0]!.toUpperCase())

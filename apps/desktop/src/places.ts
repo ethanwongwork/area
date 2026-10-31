@@ -6,17 +6,17 @@
  *                                            system or project, "new" for New system, "new-project" for New project
  *   #system/<system>/themes/<theme>            the system's themes
  *   #system/<system>/themes/new/<question>     a new theme, made in the Setup chat
- *   #system/<system>/foundations               every setting, as Browse showed them
- *   #system/<system>/foundations/<page>/<item> Color, Typography, Icons, or one setting group (Page, Accent, … Effects)
+ *   #system/<system>/themes/settings/<group>/<item>  Themes on one setting (its group: Page, Accent, … Effects)
+ *   #system/<system>/colors/<item>             the color scales (and typography/<role>, icons/<category>)
  *   #system/<system>/components/<item>         a family, or a family's tile (<slug>/<tile>)
- *   #system/<system>/patterns/<item>           Testing's screens
+ *   #system/<system>/patterns/<item>           the system's screens
  *   #system/<system>/history/<version>         the system's publishes, newest first
  *   #project/<project>/<item>                  a project's overview (the IA of 2026-10-29: projects make new things)
  *   #project/<project>/pages/<page>/<layer>    one of its pages, and a layer on it
  *   #project/<project>/explorations/<id>       an exploration: a theme tried on the project's system
  *   #project/<project>/versions/<id>           its saved versions
  *   #inspiration/<item>                      Imagery's groups and images (<group>/<image>; the Library page until 2026-10-29)
- *   #labs/<lab>/<item>                       labs out of the nav (Materials)
+ *   #labs/<lab>/<item>                       labs out of the nav (Materials, Tests)
  *
  * A system is one of the workspace's (src/systems.ts) and a project one of its projects (src/projects.ts): the app names
  * them with `setSystems` and `setProjects`, and a hash naming another is no place. Old links (#components/button, #theme, #imagery, #brand/area/… …) are the Area system's and redirect
@@ -27,7 +27,7 @@
 /** A page: what draws the Canvas (and the Sidebar's list, if it has one). */
 export type PageId =
   | "home" | "themes" | "theme-setup" | "foundations" | "settings" | "color" | "typography" | "icons"
-  | "components" | "patterns" | "history" | "inspiration" | "materials"
+  | "components" | "patterns" | "history" | "inspiration" | "materials" | "tests"
   | "project" | "project-page" | "exploration" | "versions";
 
 export interface Place {
@@ -60,12 +60,17 @@ export const PROJECT_PAGES: ReadonlySet<PageId> = new Set(["project", "project-p
 const AREA = "area";
 
 /** The pages with a list of their own: in the Sidebar it takes the panel over, under a back row (Phase 0's takeover). */
-export const LIST_PAGES: ReadonlySet<PageId> = new Set(["color", "typography", "icons", "components", "patterns", "inspiration", "materials"]);
+export const LIST_PAGES: ReadonlySet<PageId> = new Set(["color", "typography", "icons", "components", "patterns", "inspiration", "materials", "tests"]);
 
-/** A system's sections that exist (Overview, Visuals, Voice and guidelines and Agent kit come later). */
-const SECTIONS = ["themes", "foundations", "components", "patterns", "history"];
-/** Foundations' own pages, before the setting groups (which come from the registry's SETTING_GROUPS). */
+/** A system's sections, as their hashes say them (Foundations until 2026-10-31 held Colors, Typography and Icons). */
+const SECTIONS = ["themes", "colors", "typography", "icons", "components", "patterns", "history"];
+/** Foundations' own pages, which old /foundations/<page> links name before the setting groups. */
 const FOUNDATION_PAGES = ["color", "typography", "icons"] as const;
+
+/** Patterns' screens that moved to Labs › Tests (2026-10-31; src/pages/examples.tsx TESTS): their old links follow. */
+const MOVED_TO_TESTS = new Set(["hairline", "stroke-groups"]);
+const patternsPlace = (system: string, item: string | undefined): Place =>
+  item && MOVED_TO_TESTS.has(item.split("/")[0]!) ? { page: "tests", item } : { page: "patterns", system, item };
 
 /** A setting group's heading as its slug ("Shape" → "shape"). */
 export const groupSlug = (heading: string) => heading.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -79,9 +84,10 @@ export function hrefOf(place: Place): string {
     case "home": return `#home${encode(place.item)}`;
     case "themes": return `${system}/themes${encode(place.item)}`;
     case "theme-setup": return `${system}/themes/new${encode(place.item)}`;
-    case "foundations": return `${system}/foundations`;
-    case "settings": return `${system}/foundations/${place.group ?? ""}${encode(place.item)}`;
-    case "color": case "typography": case "icons": return `${system}/foundations/${place.page}${encode(place.item)}`;
+    case "foundations": return `${system}/themes/settings`;
+    case "settings": return `${system}/themes/settings/${place.group ?? ""}${encode(place.item)}`;
+    case "color": return `${system}/colors${encode(place.item)}`;
+    case "typography": case "icons": return `${system}/${place.page}${encode(place.item)}`;
     case "components": return `${system}/components${encode(place.item)}`;
     case "patterns": return `${system}/patterns${encode(place.item)}`;
     case "history": return `${system}/history${encode(place.item)}`;
@@ -91,6 +97,7 @@ export function hrefOf(place: Place): string {
     case "exploration": return `#project/${place.project ?? ""}/explorations${encode(place.item)}`;
     case "versions": return `#project/${place.project ?? ""}/versions${encode(place.item)}`;
     case "materials": return `#labs/materials${encode(place.item)}`;
+    case "tests": return `#labs/tests${encode(place.item)}`;
   }
 }
 
@@ -109,7 +116,15 @@ export function parsePlace(hash: string): Place | null {
   if (root === "system") {
     const [system, section, ...more] = parts;
     if (!system || !knownSystem(system)) return null;
-    if (section === "themes") return more[0] === "new" ? { page: "theme-setup", system, item: rest(more.slice(1)) } : { page: "themes", system, item: rest(more) };
+    if (section === "themes") {
+      if (more[0] === "new") return { page: "theme-setup", system, item: rest(more.slice(1)) };
+      if (more[0] !== "settings") return { page: "themes", system, item: rest(more) };
+      const [, group, ...item] = more;
+      return group ? { page: "settings", system, group, item: rest(item) } : { page: "foundations", system };
+    }
+    if (section === "colors") return { page: "color", system, item: rest(more) };
+    if (section === "typography" || section === "icons") return { page: section, system, item: rest(more) };
+    // An old link: Foundations held Colors, Typography, Icons and the setting groups until 2026-10-31.
     if (section === "foundations") {
       const [page, ...item] = more;
       if (!page) return { page: "foundations", system };
@@ -117,7 +132,7 @@ export function parsePlace(hash: string): Place | null {
       return { page: "settings", system, group: page, item: rest(item) };
     }
     if (section === "components") return { page: "components", system, item: rest(more) };
-    if (section === "patterns") return { page: "patterns", system, item: rest(more) };
+    if (section === "patterns") return patternsPlace(system, rest(more));
     if (section === "history") return { page: "history", system, item: rest(more) };
     if (!section) return { page: "themes", system };
     return null;
@@ -132,12 +147,13 @@ export function parsePlace(hash: string): Place | null {
   }
   if (root === "inspiration") return { page: "inspiration", item: rest(parts) };
   if (root === "labs" && parts[0] === "materials") return { page: "materials", item: rest(parts.slice(1)) };
+  if (root === "labs" && parts[0] === "tests") return { page: "tests", item: rest(parts.slice(1)) };
   return null;
 }
 
 /**
  * Where an old link goes (the Titlebar's tabs until 2026-10-28, and their own older names): Theme → Themes (a setting's
- * link to its group's page), Components → Components, Typography, Color and Icons → Foundations, Testing → Patterns,
+ * link to its group's page), Components → Components, Typography, Color and Icons → their sections, Testing → Patterns,
  * Imagery and the Library page → Inspiration, Materials → Labs. `groupOf` names a setting's group (its slug), so `#theme/radius` lands on Shape.
  */
 export function redirect(hash: string, groupOf?: (setting: string) => string | undefined): Place | null {
@@ -154,7 +170,7 @@ export function redirect(hash: string, groupOf?: (setting: string) => string | u
     case "color": return { page: "color", system: AREA, item };
     case "icons": return { page: "icons", system: AREA, item };
     // Testing was the Examples tab until 2026-10-17.
-    case "testing": case "examples": return { page: "patterns", system: AREA, item };
+    case "testing": case "examples": return patternsPlace(AREA, item);
     // Imagery was the Brand tab 2026-10-18 to 24 (#brand/<group>/<image>), then the Library, and Inspiration since the
     // Library became what's live (2026-10-29). Systems were brands until 2026-10-29 (#brand/<system>/<section>/…): the
     // same place under #system/, or none for a system this app doesn't have.
@@ -180,16 +196,16 @@ export function resolve(hash: string, groupOf?: (setting: string) => string | un
  */
 export type TabKind = "home" | "system" | "project" | "inspiration" | "labs";
 export const tabKind = (place: Place): TabKind =>
-  place.page === "home" ? "home" : place.page === "inspiration" ? "inspiration" : place.page === "materials" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
+  place.page === "home" ? "home" : place.page === "inspiration" ? "inspiration" : place.page === "materials" || place.page === "tests" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
 export const tabName = (place: Place): string => {
   const kind = tabKind(place);
   return kind === "system" ? systemName(place.system) : kind === "project" ? projectName(place.project)
-    : ({ home: "Home", inspiration: "Inspiration", labs: "Materials" } as const)[kind];
+    : kind === "labs" ? (place.page === "tests" ? "Tests" : "Materials") : ({ home: "Home", inspiration: "Inspiration" } as const)[kind];
 };
 /** What a tab holds, as a key: two places in one system or project are in the same tab. */
 export const tabHolds = (place: Place): string => {
   const kind = tabKind(place);
-  return kind === "system" ? `system:${place.system ?? AREA}` : kind === "project" ? `project:${place.project ?? ""}` : kind;
+  return kind === "system" ? `system:${place.system ?? AREA}` : kind === "project" ? `project:${place.project ?? ""}` : kind === "labs" ? `labs:${place.page}` : kind;
 };
 
 /**

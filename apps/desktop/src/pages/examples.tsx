@@ -1,6 +1,7 @@
 /**
- * Testing (the Examples tab until 2026-10-17): whole screens built only from Area, to test the system the way a product would use it (owner,
- * 2026-10-17). The Sidebar lists the examples; the Canvas shows the chosen one at full size, inside the Canvas's
+ * Patterns (Testing before the places, the Examples tab until 2026-10-17): whole screens built only from Area, to test the system the way a
+ * product would use it (owner, 2026-10-17). A screen that tries something out (a trial package, a bench of one setting) is a
+ * test, in Labs › Tests, not a pattern (2026-10-31): a project adds patterns only. The Sidebar lists the examples; the Canvas shows the chosen one at full size, inside the Canvas's
  * settings, so every Inspector setting (colour, Layers, type, density, radius, surface, elevation, motion) reaches it;
  * All shows each example as a tile. The Inspector holds every Canvas setting, then the example's facts.
  */
@@ -66,6 +67,7 @@ export const EXAMPLES = [
   {
     id: "hairline",
     label: "Hairline empty states (trial)",
+    test: true,
     description: "Lucas Marques's isometric line figures (@lucasmarkes/hairline 0.5.1, MIT) above Empty states, themed with Area's tokens; each answers the pointer (2026-10-24).",
     families: ["Empty state", "Button", "Segmented"],
     gaps: ["Empty state has no figure slot: its icon slot holds a 16 glyph, so the figure sits above it.", "The figures are a third-party package on trial, not part of Area."],
@@ -82,6 +84,7 @@ export const EXAMPLES = [
   {
     id: "stroke-groups",
     label: "Stroke groups",
+    test: true,
     description: "Every stroke group (Inspector › Stroke), each group's members in one cell at the Canvas's settings (2026-10-30).",
     families: ["Card", "Panel", "Menu", "Popover", "Dialog", "Alert", "Toast", "Code block", "Table", "Input", "Select", "Button", "Segmented", "Slider", "Switch", "Progress", "Radio", "Badge", "Chip", "Count", "Kbd", "Avatar"],
     gaps: [],
@@ -89,18 +92,28 @@ export const EXAMPLES = [
   },
 ] as const;
 
-export function ExamplesPage() {
+type Example = typeof EXAMPLES[number];
+const isTest = (entry: Example) => "test" in entry && entry.test;
+/** The system's screens: what Patterns lists and a project adds. */
+export const PATTERNS = EXAMPLES.filter(entry => !isTest(entry));
+/** The screens that try something out: Labs › Tests. */
+export const TESTS = EXAMPLES.filter(isTest);
+
+/** Patterns, or with `lab` the Tests lab: the same page over its own screens. */
+export function ExamplesPage({ lab = false }: { lab?: boolean }) {
   const { query, item, select } = useStudio();
-  const shown = EXAMPLES.filter(entry => matches(query, entry.label, entry.description, ...entry.families));
-  const example = EXAMPLES.find(entry => entry.id === item);
+  const list = lab ? TESTS : PATTERNS;
+  const page = lab ? "tests" as const : "patterns" as const;
+  const shown = list.filter(entry => matches(query, entry.label, entry.description, ...entry.families));
+  const example = list.find(entry => entry.id === item);
   return (
     <Workspace
       sidebar={<SidebarList>{
-        <Nav aria-label="Testing">
+        <Nav aria-label={lab ? "Tests" : "Patterns"}>
           <SidebarAll count={shown.length} current={!example} />
           <NavGroup label="Screens">
             {shown.map(entry => (
-              <NavItem key={entry.id} href={hrefOf({ page: "patterns", item: entry.id })} current={entry.id === example?.id}
+              <NavItem key={entry.id} href={hrefOf({ page, item: entry.id })} current={entry.id === example?.id}
                 onClick={event => { event.preventDefault(); select(entry.id); }}
                 trailing={<Count count={entry.families.length} />}>
                 {entry.label}
@@ -109,11 +122,11 @@ export function ExamplesPage() {
           </NavGroup>
         </Nav>
       }</SidebarList>}
-      canvasTitle={example ? example.label : "All tests"}
+      canvasTitle={example ? example.label : lab ? "All tests" : "All patterns"}
       canvas={example ? (
         <div className="ex-canvas"><example.Screen /></div>
       ) : !shown.length ? (
-        <EmptyState title="Nothing to test" description={`Nothing matches “${query}”.`} />
+        <EmptyState title={lab ? "No tests" : "No patterns"} description={`Nothing matches “${query}”.`} />
       ) : (
         <TileGrid span="wide">
           {shown.map(entry => (
@@ -127,14 +140,16 @@ export function ExamplesPage() {
       inspector={{
         theme: <CanvasSettings />,
         design: (
-          <PanelSection heading={example ? "Screen" : "Testing"}>
-            <Facts label={example ? "Screen" : "Testing"} items={example ? [
+          <PanelSection heading={example ? "Screen" : lab ? "Tests" : "Patterns"}>
+            <Facts label={example ? "Screen" : lab ? "Tests" : "Patterns"} items={example ? [
               ["Screen", example.label],
               ["Families", `${example.families.length}: ${example.families.join(", ")}`],
               ["Not from Area", example.gaps.join(" ")],
             ] : [
-              ["Screens", EXAMPLES.length],
-            ]} note={example ? example.description : "Whole screens built only from Area, to test the defaults and every setting the way a product would."} />
+              ["Screens", list.length],
+            ]} note={example ? example.description : lab
+              ? "Screens that try something out: a trial package, or one setting's every member side by side. Projects don't add them."
+              : "Whole screens built only from Area, to see the defaults and every setting the way a product would."} />
           </PanelSection>
         ),
         code: example ? (

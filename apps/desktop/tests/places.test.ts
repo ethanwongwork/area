@@ -17,19 +17,22 @@ test("every old tab's link redirects to its place", () => {
   const cases: Array<[string, string]> = [
     ["#theme", "#system/area/themes"],
     ["#language", "#system/area/themes"],
-    ["#theme/radius", "#system/area/foundations/shape/radius"],
-    ["#theme/unknown-setting", "#system/area/foundations"],
+    ["#theme/radius", "#system/area/themes/settings/shape/radius"],
+    ["#theme/unknown-setting", "#system/area/themes/settings"],
     ["#components", "#system/area/components"],
     ["#components/button", "#system/area/components/button"],
     ["#components/button/size-sm", "#system/area/components/button/size-sm"],
-    ["#typography", "#system/area/foundations/typography"],
-    ["#typography/heading-1", "#system/area/foundations/typography/heading-1"],
-    ["#color/blue", "#system/area/foundations/color/blue"],
-    ["#icons", "#system/area/foundations/icons"],
-    ["#icons/navigation", "#system/area/foundations/icons/navigation"],
+    ["#typography", "#system/area/typography"],
+    ["#typography/heading-1", "#system/area/typography/heading-1"],
+    ["#color/blue", "#system/area/colors/blue"],
+    ["#icons", "#system/area/icons"],
+    ["#icons/navigation", "#system/area/icons/navigation"],
     ["#testing", "#system/area/patterns"],
     ["#testing/analytics", "#system/area/patterns/analytics"],
     ["#examples/chat", "#system/area/patterns/chat"],
+    // A screen that tries something out is in Labs › Tests since 2026-10-31.
+    ["#testing/hairline", "#labs/tests/hairline"],
+    ["#system/area/patterns/stroke-groups", "#labs/tests/stroke-groups"],
     // Imagery, then the Library page, is Inspiration since 2026-10-29.
     ["#imagery", "#inspiration"],
     ["#imagery/folder-1/image-2", "#inspiration/folder-1/image-2"],
@@ -40,7 +43,11 @@ test("every old tab's link redirects to its place", () => {
     // Systems were brands until 2026-10-29.
     ["#brand/area/themes", "#system/area/themes"],
     ["#brand/area/components/button/size-sm", "#system/area/components/button/size-sm"],
-    ["#brand/area/foundations/shape/radius", "#system/area/foundations/shape/radius"],
+    ["#brand/area/foundations/shape/radius", "#system/area/themes/settings/shape/radius"],
+    // Foundations held Colors, Typography, Icons and the setting groups until 2026-10-31.
+    ["#system/area/foundations", "#system/area/themes/settings"],
+    ["#system/area/foundations/color/blue", "#system/area/colors/blue"],
+    ["#system/area/foundations/typography/heading-1", "#system/area/typography/heading-1"],
     ["#materials", "#labs/materials"],
     ["#materials/glass", "#labs/materials/glass"],
   ];
@@ -61,7 +68,7 @@ test("a place's hash reads back as the same place", () => {
     { page: "color", system: "area", item: "blue" }, { page: "typography", system: "area" }, { page: "icons", system: "area", item: "arrows" },
     { page: "components", system: "area", item: "button/size-sm" }, { page: "patterns", system: "area", item: "analytics" },
     { page: "themes", system: "northwind", item: "theme-2" }, { page: "components", system: "northwind", item: "button" },
-    { page: "inspiration", item: "a b/c" }, { page: "materials", item: "glass" }, { page: "history", system: "area", item: "1.2" },
+    { page: "inspiration", item: "a b/c" }, { page: "materials", item: "glass" }, { page: "tests", item: "hairline" }, { page: "history", system: "area", item: "1.2" },
     { page: "project", project: "launch" }, { page: "project-page", project: "launch", item: "page-1/layer-2" },
     { page: "exploration", project: "launch", item: "exploration-1" }, { page: "versions", project: "launch" }, { page: "versions", project: "launch", item: "version-1" },
   ];
