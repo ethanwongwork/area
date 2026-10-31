@@ -268,7 +268,7 @@ export function Markdown({ text, idPrefix }: { text: string; idPrefix: string })
  * One Area Table: a header row and body rows; `fit` columns shrink to their longest entry. A table wider than the Canvas
  * (a spec's evidence table) scrolls in Area's Scroll area rather than widening the page.
  */
-function DataTable({ label, head, rows, fit = [] }: { label: string; head: ReactNode[]; rows: ReactNode[][]; fit?: number[] }) {
+export function DataTable({ label, head, rows, fit = [] }: { label: string; head: ReactNode[]; rows: ReactNode[][]; fit?: number[] }) {
   return (
     <ScrollArea type="hover" className="studio-table-scroll" viewportProps={{ className: "studio-table-scroll__viewport" }}>
     <Table size="md" aria-label={label}>
@@ -284,7 +284,7 @@ function DataTable({ label, head, rows, fit = [] }: { label: string; head: React
 }
 
 /** Term / value rows (the Inspector's facts, on the Canvas). */
-function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, ReactNode] | null | false | undefined> }) {
+export function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, ReactNode] | null | false | undefined> }) {
   return (
     <Table size="md" aria-label={label}>
       <tbody>
@@ -302,7 +302,7 @@ function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, Rea
  * count when the block is a collection (a table's rows, a grid's cards), never on facts, code or prose; and a subtitle,
  * one sentence saying what the block holds.
  */
-function Section({ id, title, count, lede, children }: { id: string; title: string; count?: number; lede?: ReactNode; children: ReactNode }) {
+export function Section({ id, title, count, lede, children }: { id: string; title: string; count?: number; lede?: ReactNode; children: ReactNode }) {
   return (
     <section className="studio-section" id={id} aria-labelledby={`${id}-title`} {...appScale()}>
       <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede}

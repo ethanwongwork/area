@@ -1,6 +1,15 @@
 # Handoff
 
-## Current state (2026-10-30)
+## Current state (2026-10-31)
+- **Typeface library in Typography, branch `claude/open-source-web-fonts-5529c2` (uncommitted, 2026-10-31).** Research and
+  the owner's picks: `docs/research/typefaces-2026-10-31/` (specimen artifact 42NXMyi3…, `verdicts`). Typography's Sidebar
+  lists 107 faces (Text, Display, Code, Licensed) above the roles; a face opens at `…/typography/face/<id>/<tab>` with
+  Specimen, Glyphs, About (tables) and Code. Icons and Glyphs share `src/glyph-sheet.tsx`. Facts: `node
+  apps/desktop/scripts/typefaces.mjs` (run after changing the catalogue or a font package); installed licensed faces via
+  `area:fonts-installed` (facts only, never files). Checks: typecheck, desktop 28, docs, app-css; checked live in Electron
+  (Söhne trial glyphs, hover card, Inspector, arrows, Satoshi not installed) and in captures, light and dark. Next: the
+  font-switching settings and the approved ramp changes (emphasis 600, Geist 1.9.0 italic, display-xs, step-down, Title
+  weight).
 - **Option rows are bars, branch `claude/electron-ui-settings-refine-175e56` (uncommitted, 2026-10-30).** Owner: "are these
   option rows supposed to be pill shaped?" No: a row or list Radio / Checkbox `card` or `soft` option took
   `radius-container` (16 / 20), a pill on a 34 row. Now the ladder's corner for its one-line height (`--_card-line`: inset
