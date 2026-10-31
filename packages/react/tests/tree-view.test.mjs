@@ -29,3 +29,15 @@ test("rows rest in body ink, chevrons mirror in RTL, and selection outranks hove
   assert.match(css, /\[aria-expanded="false"\]:dir\(rtl\) \.area-tree-view__chevron svg \{ rotate: 90deg; \}/);
   assert.match(css, /\.area-tree-view \[role="treeitem"\]:hover:not\(\[data-disabled\], \[aria-current="page"\], \[aria-selected="true"\]\)/);
 });
+
+// File-tree density (owner 2026-10-30): size and guides on the root, a status letter that reads as its word.
+test("TreeView size sm, guides and a row's status", () => {
+  const html = renderToString(h(TreeView, { "aria-label": "Files", size: "sm", guides: true, items: [
+    { id: "a", label: "One", status: "added" }, { id: "m", label: "Two", status: "modified" }, { id: "d", label: "Three", status: "removed" },
+  ] }));
+  assert.match(html, /class="area-tree-view area-tree-view--navigation area-tree-view--sm area-tree-view--guides"/);
+  for (const [status, letter, word] of [["added", "A", "Added"], ["modified", "M", "Modified"], ["removed", "D", "Removed"]]) {
+    assert.match(html, new RegExp(`<span class="area-tree-view__status" data-status="${status}"><span aria-hidden="true">${letter}</span><span class="area-sr-only">${word}</span></span>`));
+  }
+  assert.doesNotMatch(renderToString(h(TreeView, { "aria-label": "Files", items: [{ id: "x", label: "X" }] })), /area-tree-view__status|--guides/);
+});

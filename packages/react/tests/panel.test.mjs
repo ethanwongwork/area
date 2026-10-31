@@ -68,3 +68,15 @@ test("PanelSection renders both controlled and initial disclosure states", () =>
     assert.match(html, /<\/button><\/h3><span class="area-panel__actions"><button aria-label="Add fill"/);
   }
 });
+
+// Inspector panel study (owner 2026-10-30): a section's count is part of its heading; revealActions marks the section.
+test("PanelSection count sits in the heading, and revealActions needs actions", () => {
+  const plain = renderToString(h(PanelSection, { heading: "Snapshots", count: 3 }, "rows"));
+  assert.match(plain, /<h3 class="area-panel__heading">Snapshots<span class="area-panel__count">3<\/span><\/h3>/);
+  const revealed = renderToString(h(PanelSection, { heading: "Tile", revealActions: true, actions: h("button", { "aria-label": "Pin" }) }, "rows"));
+  assert.match(revealed, /class="area-panel__section area-panel__section--reveal"/);
+  const bare = renderToString(h(PanelSection, { heading: "Tile", revealActions: true }, "rows"));
+  assert.doesNotMatch(bare, /--reveal/);
+  const collapsible = renderToString(h(PanelSection, { heading: "Code", collapsible: true, count: "12 lines" }, "rows"));
+  assert.match(collapsible, /<span class="area-panel__toggle-text">Code<span class="area-panel__count">12 lines<\/span><\/span>/);
+});

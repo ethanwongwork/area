@@ -104,7 +104,7 @@ export function SpecimenBox({ watch }: { watch: string }) {
       </PanelSection>
       <PanelSection heading="Style">
         <Facts label="Style" items={[
-          ["Class", <Code>.{box.name}</Code>],
+          ["Class", <span className="studio-mono">.{box.name}</span>],
           ["Type", box.font],
           ["Ink", swatch(box.color)],
           ["Fill", swatch(box.background)],

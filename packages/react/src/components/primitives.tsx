@@ -658,27 +658,38 @@ export interface PanelSectionProps extends Div {
   onOpenChange?: (open: boolean) => void;
   /** Shown in the heading while collapsed (Figma: selection colors as chips and a count). */
   summary?: ReactNode;
+  /** How many things the section holds, muted beside its heading ("3", "12 lines"). */
+  count?: ReactNode;
+  /**
+   * The heading's actions show while the section is hovered or holds focus (always on touch); an action that is on
+   * (`aria-pressed="true"`) or has its menu open stays.
+   */
+  revealActions?: boolean;
   /** The heading's level in the page outline. Defaults to 3 (a panel titled by an h2 region). */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
 }
 
 export const PanelSection = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelSectionProps>(function PanelSection(
-  { heading, actions, collapsible, open: openProp, defaultOpen = true, onOpenChange, summary, headingLevel = 3, className, children, ...rest },
+  { heading, actions, collapsible, open: openProp, defaultOpen = true, onOpenChange, summary, count, revealActions, headingLevel = 3, className, children, ...rest },
   ref,
 ) {
   const id = useId();
   const H = `h${headingLevel}` as "h3";
+  // The count is part of the heading's text, a space after it (panel.css draws the space, which a flex heading would
+  // drop), as a Canvas section's (product UI rule 9).
+  const tally = count != null && count !== false ? <span className="area-panel__count">{count}</span> : null;
+  const sectionClass = cx("area-panel__section", Boolean(revealActions && actions) && "area-panel__section--reveal", className);
   const [openState, setOpenState] = useState(defaultOpen);
   const open = openProp ?? openState;
   if (collapsible && heading) {
     const toggle = () => { const next = !open; if (openProp === undefined) setOpenState(next); onOpenChange?.(next); };
     return (
-      <section ref={ref} className={cx("area-panel__section", className)} data-collapsed={open ? undefined : ""} {...rest}>
+      <section ref={ref} className={sectionClass} data-collapsed={open ? undefined : ""} {...rest}>
         <div className="area-panel__heading">
           <H className="area-panel__heading-text">
             <button type="button" className="area-panel__toggle" aria-expanded={open} aria-controls={`${id}-rows`} onClick={toggle}>
               <span className="area-panel__chevron" aria-hidden="true"><Glyph name="chevron-down" size={12} /></span>
-              <span className="area-panel__toggle-text">{heading}</span>
+              <span className="area-panel__toggle-text">{heading}{tally}</span>
               {!open && summary ? <span className="area-panel__summary">{summary}</span> : null}
             </button>
           </H>
@@ -689,13 +700,13 @@ export const PanelSection = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelSect
     );
   }
   return (
-    <section ref={ref} className={cx("area-panel__section", className)} {...rest}>
+    <section ref={ref} className={sectionClass} {...rest}>
       {heading && actions ? (
         <div className="area-panel__heading">
-          <H className="area-panel__heading-text">{heading}</H>
+          <H className="area-panel__heading-text">{heading}{tally}</H>
           <span className="area-panel__actions">{actions}</span>
         </div>
-      ) : heading ? <H className="area-panel__heading">{heading}</H> : null}
+      ) : heading ? <H className="area-panel__heading">{heading}{tally}</H> : null}
       {children}
     </section>
   );
@@ -2178,6 +2189,17 @@ export interface CodeBlockProps extends Omit<Div, "title"> {
   collapsible?: boolean;
   /** Starts collapsed. Only meaningful with `collapsible`. */
   defaultCollapsed?: boolean;
+  /** How many lines a collapsed block shows. Default 8. */
+  collapsedLines?: number;
+  /**
+   * A prompt shown before the first line, muted and left out of the copy, for a command (`"$"`). Continued lines hang
+   * under the command's first character.
+   */
+  prompt?: string;
+  /** `soft` is a fill with no edge, the soft fields' look, for code in a panel whose fields are soft. */
+  variant?: "outline" | "soft";
+  /** The floating copy and actions show only while the block is hovered or holds focus (always on touch). */
+  revealActions?: boolean;
   /** Built-in copy control. On by default. */
   copyable?: boolean;
   copyLabel?: string;
@@ -2211,6 +2233,10 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
     linkLines,
     collapsible,
     defaultCollapsed,
+    collapsedLines,
+    prompt,
+    variant,
+    revealActions,
     copyable = true,
     copyLabel = "Copy code",
     languageLabel = "Language",
@@ -2218,10 +2244,12 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
     html,
     code,
     className,
+    style,
     ...rest
   },
   ref,
 ) {
+  if (collapsedLines !== undefined && (!Number.isFinite(collapsedLines) || collapsedLines < 1)) throw new RangeError("CodeBlock: collapsedLines must be a finite number of at least 1.");
   // A fragment has to be a plain token, so punctuation from useId is dropped rather than
   // escaped; uniqueness survives because nothing else about the id changes.
   const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
@@ -2332,7 +2360,8 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
     : {};
 
   return (
-    <div ref={ref} className={codeBlockVariants({ size, flush, wrap, unnumbered: !lineNumbers }, className)} {...(collapsed ? { "data-collapsed": "" } : {})} {...rest}>
+    <div ref={ref} className={codeBlockVariants({ size, variant, flush, wrap, unnumbered: !lineNumbers, revealActions }, className)} {...(collapsed ? { "data-collapsed": "" } : {})}
+      style={collapsedLines === undefined ? style : { ...style, ["--area-code-block-lines" as string]: Math.floor(collapsedLines) }} {...rest}>
       {header}
       <div className="area-code-block__body" {...panel}>
         {/* Without the tab panel, the scrolling block itself takes focus so a keyboard can scroll it (audit G-21). */}
@@ -2362,6 +2391,8 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
                       : lineNumbers ? <span className="area-code-block__linenumber" aria-hidden="true">{number}</span> : null}
                   </span>
                 ) : null}
+                  {/* Outside the text cell, so the copy (which reads the text cells) leaves it out. */}
+                  {prompt ? <span className="area-code-block__prompt" aria-hidden="true">{prompt}</span> : null}
                   {html
                     ? <span className="area-code-block__text" dangerouslySetInnerHTML={{ __html: text }} />
                     : <span className="area-code-block__text">{text}</span>}

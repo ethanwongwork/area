@@ -1,5 +1,5 @@
 /** Description list gallery specimens: one variant per tile. docs/specs/description-list.md. */
-import { Avatar, Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, DescriptionList, DescriptionListItem, Link } from "@area/react";
+import { Avatar, Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, DescriptionList, DescriptionListItem, Field, Link, Panel, PanelSection, Segmented } from "@area/react";
 import { CalendarIcon, CircleDashedIcon, ClockIcon, FolderIcon, MoreHorizontalIcon, PersonIcon, TagIcon } from "@area/icons";
 
 /* A page's properties (Notion's columns) and an account's facts (ChatGPT's settings card). */
@@ -85,3 +85,19 @@ export const GalleryDescriptionListSummary = () => (
   </Card>
 );
 
+
+/* In a Panel (an inspector): the terms take the panel's label column, so the values start where its Fields' controls
+   start, and the rows pack at a small control's height (owner 2026-10-30, docs/research/inspector-panel-2026-10-30,
+   "One Inspector grid"). */
+export const GalleryDescriptionListInPanel = () => (
+  <Panel title="Label">
+    <PanelSection heading="Label">
+      <Field label="Label" orientation="auto"><Segmented size="sm" defaultValue="a" items={[{ value: "a", label: "Value" }, { value: "b", label: "Value" }]} /></Field>
+      <DescriptionList>
+        <DescriptionListItem term="Label">Value</DescriptionListItem>
+        <DescriptionListItem term="Label">David Tee</DescriptionListItem>
+        <DescriptionListItem term="Label">October 14, 2026</DescriptionListItem>
+      </DescriptionList>
+    </PanelSection>
+  </Panel>
+);

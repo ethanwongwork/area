@@ -14,18 +14,25 @@
 export const COMPLETE_COMPONENTS = new Set([
   // Reopened 2026-10-26 (owner: the Slider's motion and detail pass on every component; docs/research/interaction-pass-2026-10-26):
   'color-picker', // round 75 approved (owner, 2026-10-27: the knob lifts); its Gamut mode approved on the exact-colours review (owner, 2026-10-28)
-  'tabs', 'code-block', // round 77 approved (owner, 2026-10-27: the focus rings with room)
+  'tabs', // round 77 approved (owner, 2026-10-27: the focus rings with room); code-block reopened 2026-10-30 (owner pick
+  // "Code in the Inspector": soft, prompt, revealActions, collapsedLines, the end fade), in review.
   'step', 'queue', 'edit-summary', 'list-box', 'combobox', 'tag-picker', 'input', 'textarea', 'number-field',
   'select', 'input-group', 'empty-state', 'toggletip', // round 75 approved (owner, 2026-10-27)
   'asset-card', // round 76 approved (owner, 2026-10-27: group element cells draw their frame; the Stage as it ships)
-  'command-palette', 'inline-list', 'separator', 'shortcut-list', // round 72 approved (owner, 2026-10-26; asset-card too). panel: reopened 2026-10-30 (window bar).
+  'command-palette', 'inline-list', 'separator', 'shortcut-list', // round 72 approved (owner, 2026-10-26; asset-card too)
+  // tree-view: reopened 2026-10-30 (owner pick "A file-tree density", docs/research/inspector-panel-2026-10-30: size sm,
+  // guides, status), in review.
+  // meter: reopened 2026-10-30 (owner pick "A stacked meter", docs/research/inspector-panel-2026-10-30: segments and a
+  // legend), in review.
+  // panel: reopened 2026-10-30 (owner pick "One Inspector grid", docs/research/inspector-panel-2026-10-30: one label column
+  // shared with Description list; and the window bar and even bar insets, the three-panel shell), in review.
   // nav: approved 2026-10-29 (closable tabs, Figma's close, 120 to 170, scrolling overflow); reopened the same day for the
   // icon-only item (app structure Phase 2's Home tab), back in review.
   'radio', 'checkbox', // round 73 approved (owner, 2026-10-26)
   'file-upload', // round 74 approved (owner, 2026-10-26; description-list too). infobox: removed 2026-10-26 (owner, round 73).
   // plan: reopened 2026-10-25 (owner: a progress tracker; bar, item meta, the ring), back in review.
   // radio, checkbox: reopened 2026-10-25 (owner: soft option rows, layout list, meta), back in review.
-  'color-swatch', 'color-swatch-picker', 'count', 'editable-text', 'meter', 'progress', 'reference-list', 'search-field', 'spinner', 'table', 'table-of-contents', 'time-field', 'timeline', 'tree-view', // round 69 approved by the owner in chat (2026-10-22)
+  'color-swatch', 'color-swatch-picker', 'count', 'editable-text', 'progress', 'reference-list', 'search-field', 'spinner', 'table', 'table-of-contents', 'time-field', 'timeline', // round 69 approved by the owner in chat (2026-10-22)
   // color-picker, panel, command-palette, shortcut-list, infobox, separator, nav, inline-list, file-upload: reopened 2026-10-26 (owner: dividers only where intended, the rest lightest).
   // code-block, edit-summary, queue: reopened 2026-10-25 (owner: no rule under the header or head), back in review.
   'alignment-picker', 'attachment', 'avatar', 'calendar', 'chip', 'popover', 'stepper', // rounds 69-70 approved (2026-10-22)

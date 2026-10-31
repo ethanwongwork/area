@@ -50,7 +50,44 @@
   rewritten, AGENTS.md Start updated, tests/app-look.test.ts. On the owner's machine Area's Default is 13/32 with corner 12
   (was 10 at the defaults). Also built: Badge's icon gap floor 4 (In review). Artifact prototype:
   https://claude.ai/artifact/13nEjv8rCm2eHZyYDnHXoM (status badges, kinds of thing; tabs no status; Sidebar icon badges).
-- **Projects and publishing, the IA of 2026-10-29, branch `claude/ia-brainstorm-47487c`, merged PR #179.** From the IA
+- **Inspector panel research, 2026-10-30, branch `claude/inspector-panel-design-aa85f9` (uncommitted, research only).**
+  The owner asked for a flexible Inspector with tight, consistent spacing, after Cursor's and Claude Code's panels, file
+  trees and code containers. In `docs/research/inspector-panel-2026-10-30/`: README (Area measured, findings, six
+  proposals), `cursor.md` and `claude-code.md` (values read from each installed bundle, cited). Key finding: values
+  start at 95, 104, 116 or 123 depending on the view, because Facts Tables fit their own term column. Review page with
+  mockups and picks: https://claude.ai/artifact/WmGzS6vuoRKesKcRuhp6hj (`verdicts`: p1–p6 build/later/no + note, q1–q3
+  choice + note). Owner's picks (2026-10-30): build p1, p2, p3, p5, p6; no to p4 (stacked panes); q1 packed, q2 keep
+  13/500, q3 flat. **p1 built (uncommitted):** Panel publishes `--_panel-label`; Field `auto` and Description list
+  columns in a Panel read it (values at 116 in the app's 272 Inspector, 103 in a 240 Panel), facts rows 26 packed,
+  tabular; the app's `Facts` is a Description list with prose as a `note`; tile Composition / in panel; Panel back in
+  review; cohesion test. Checks: styles build, cohesion + family tests, typecheck, check:docs, check:playgrounds,
+  check:app-css, test:desktop; browser preview light and dark. Electron not relaunched (another session's was open).
+  **p2 built (uncommitted):** Code block `variant` outline/soft, `prompt`, `revealActions`, `collapsedLines`, and an end
+  fade on every sideways-scrolling block (scroll-driven); four tiles; the app's CodeWell is soft, headerless, copy on
+  hover, 5-line excerpt past 8; Copy code / Copy import and Typography's Copy CSS buttons removed; class names plain
+  mono (`.studio-mono`); the library's Code view splits Install (`$`) and Import. Code block back in review. Corner kept
+  concentric (11.5), not the page's 8. Checks: React suite 614/614, cohesion, typecheck, docs, playgrounds, app-css,
+  test:desktop; headless captures light and dark.
+  **p3 built (uncommitted):** PanelSection `count` (muted tabular beside the heading, its space drawn by
+  `.area-panel__count::before` because the heading row is flex) and `revealActions` (on section hover or focus; a
+  pressed action or open menu stays). App: Tile/Family Open and Pin reveal, a long Code sample's heading says "N
+  lines", Snapshots counts. Count beside the title per rule 9, not at the row's end as mocked; group labels not built
+  (no use yet; ask the owner). Panel tiles Content / count, Behavior / reveal actions. Checks as for p2, React 615/615.
+  **p5 built (uncommitted):** Meter `segments` (≤8 `{label,value}`, a ninth throws; 0 parts keep their slot, not
+  drawn or listed), 2px surface gaps, `max` shows the rest; legend rows 26 (swatch 10 in 12, label default, value and
+  share muted tabular, 5ch share); root `role="group"` (meter children are presentational). Colours: palette steps
+  snapped to the dataviz reference order, validated light (on white) and dark (on black) with its script. History's
+  Inspector: "Unpublished N" meter by Theme heading (Page…Shadow, Other). Tiles Content / segments, segments with a
+  limit; Meter in review. Checks: React 616, npm test 27,921, docs, playgrounds, app-css, test:desktop.
+  **p6 built (uncommitted):** Tree view `size="sm"` (rows control-sm, 12 chevron, gap 4, indent 16 so columns hold),
+  `guides` (1px border-decorative under open branches, on hover or focus), node `status` (A/M/D in success, warning,
+  danger ink, read as the word); row paints now background-color. History's Inspector lists unpublished changes as a
+  sm tree with guides (theme A/D/M, its settings M with the new value). Tiles Size / sm, Guides, Content / status;
+  Project files tile uses status. Not built (no use): +N −N, compact folders, group labels (p3). All six picks done
+  except p4 (owner: no). Tree view, Panel, Description list, Code block, Meter in review. Checks: React 617, docs,
+  playgrounds, app-css, test:desktop, typecheck; headless captures light and dark. Nothing committed; Electron not
+  relaunched (another session's window was open).
+- **Projects and publishing, the IA of 2026-10-29, branch `claude/ia-brainstorm-47487c` (uncommitted).** From the IA
   brainstorm (write-up revision 3, https://claude.ai/artifact/TRWJYDWrxVaxCTvtJNxwD5) and the owner's tab rule ("tabs can
   be libraries or projects … the tab itself … will always just be the project itself"). Tabs hold one project, system,
   Inspiration or lab and never change what they hold; the Sidebar is the tab's own tree (workspace in Home's tab, a

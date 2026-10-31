@@ -18,7 +18,14 @@ export interface TreeViewNode {
    */
   actions?: ReactNode;
   disabled?: boolean;
+  /**
+   * How the item changed, as a letter at the row's end in its tone (Added A, Modified M, Removed D, git's), also read
+   * out as the word. For a file tree or a list of changes.
+   */
+  status?: TreeViewStatus;
 }
+export type TreeViewStatus = "added" | "modified" | "removed";
+const STATUS_MARK: Record<TreeViewStatus, [letter: string, word: string]> = { added: ["A", "Added"], modified: ["M", "Modified"], removed: ["D", "Removed"] };
 export interface TreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
   items: TreeViewNode[];
   /** Navigation activates a row; checkbox mode toggles its checked state. */
@@ -31,6 +38,10 @@ export interface TreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, "onS
   onSelectedChange?: (ids: string[], event: SyntheticEvent) => void;
   onActivate?: (id: string) => void;
   currentId?: string;
+  /** `sm` is the file tree's density: rows a small control tall, a 12 chevron, a 16 indent per level. */
+  size?: VariantProps<typeof MANIFESTS.treeView>["size"];
+  /** Indent lines under each open branch, shown while the tree is hovered or holds focus. */
+  guides?: boolean;
 }
 
 type VisibleNode = { node: TreeViewNode; depth: number; parentId?: string; position: number; count: number };
@@ -44,7 +55,7 @@ function flatten(items: TreeViewNode[], expanded: Set<string>, depth = 1, parent
 /** A single-tab-stop hierarchical list. Arrow keys navigate; Space activates or checks. */
 export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeView(
   { items, selectionMode = "navigation", expandedIds, defaultExpandedIds = [], onExpandedChange,
-    selectedIds, defaultSelectedIds = [], onSelectedChange, onActivate, currentId,
+    selectedIds, defaultSelectedIds = [], onSelectedChange, onActivate, currentId, size, guides,
     className, onKeyDown, ...rest }, ref,
 ) {
   const [ownExpanded, setOwnExpanded] = useState(defaultExpandedIds);
@@ -124,7 +135,7 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
     event.preventDefault();
     if (next) focusItem(next);
   };
-  return <div {...rest} ref={element => { root.current = element; if (typeof ref === "function") ref(element); else if (ref) ref.current = element; }} role="tree" className={treeViewVariants({ selectionMode }, className)} onKeyDown={handleKeyDown}>
+  return <div {...rest} ref={element => { root.current = element; if (typeof ref === "function") ref(element); else if (ref) ref.current = element; }} role="tree" className={treeViewVariants({ selectionMode, size, guides }, className)} onKeyDown={handleKeyDown}>
     {visible.map(({ node, depth, position, count }) => {
       const branch = Boolean(node.children?.length);
       const open = expanded.has(node.id);
@@ -137,13 +148,14 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
         style={{ "--_tree-depth": depth - 1 } as React.CSSProperties}
         onFocus={() => setFocused(node.id)} onClick={event => { if (!node.disabled) { focusItem(node.id); activate(node.id, event); } }}>
         <span className="area-tree-view__chevron" aria-hidden="true" onClick={event => { if (!branch || node.disabled) return; event.stopPropagation(); setExpansion(node.id, !open, event); focusItem(node.id); }}>
-          {branch && <Glyph name="chevron-down" />}
+          {branch && <Glyph name="chevron-down" size={size === "sm" ? 12 : 16} />}
         </span>
         {/* The mark is always drawn and shown by aria-checked, so it can fade both ways (MOTION.md). */}
         {selectionMode === "checkbox" && <span className="area-tree-view__check" aria-hidden="true"><Glyph name="check-inset" /></span>}
         {node.icon && <span className="area-tree-view__icon" aria-hidden="true">{node.icon}</span>}
         <span className="area-tree-view__label">{node.label}</span>
         {node.trailing && <span className="area-tree-view__trailing">{node.trailing}</span>}
+        {node.status && <span className="area-tree-view__status" data-status={node.status}><span aria-hidden="true">{STATUS_MARK[node.status][0]}</span><span className="area-sr-only">{STATUS_MARK[node.status][1]}</span></span>}
         {node.actions && <span className="area-tree-view__actions" onClick={event => event.stopPropagation()}>{node.actions}</span>}
       </div>;
     })}

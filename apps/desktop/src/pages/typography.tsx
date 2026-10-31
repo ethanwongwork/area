@@ -261,10 +261,9 @@ export function TypographyPage() {
         code: role ? (
           <>
             <Selection>
-              <CopyButton label="Copy CSS" icon={<CopyIcon />} fullWidth value={() => roleCss(role)} />
               <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth value={() => `var(--area-${role.id}-size)`} />
             </Selection>
-            <PanelSection heading="CSS"><CodeWell code={roleCss(role)} language="css" /></PanelSection>
+            <PanelSection heading="CSS"><CodeWell code={roleCss(role)} /></PanelSection>
             <PanelSection heading="Tokens">
               <Facts label="Tokens" items={[
                 ["Size", <Code>--area-{role.id}-size</Code>],

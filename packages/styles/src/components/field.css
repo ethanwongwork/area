@@ -125,7 +125,8 @@
   .area-field--auto > :not(.area-field__label, .area-field__head, .area-field__description, .area-field__validation, .area-field__error, .area-field__count) { flex: 1 1 0; min-inline-size: max-content; }
   .area-field--auto > :is(.area-field__description, .area-field__validation, .area-field__error, .area-field__count) { flex: 0 0 100%; }
   .area-panel .area-field--auto {
-    --_label-share: calc((100% - var(--area-ui-cluster)) * 0.4);
+    /* The panel's label column (panel.css), shared with its facts lists. */
+    --_label-share: var(--_panel-label);
     min-block-size: var(--area-control-sm);
   }
 

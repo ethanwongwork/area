@@ -110,13 +110,11 @@ export function ExamplesPage() {
           <PanelSection heading={example ? "Screen" : "Testing"}>
             <Facts label={example ? "Screen" : "Testing"} items={example ? [
               ["Screen", example.label],
-              ["Shows", example.description],
               ["Families", `${example.families.length}: ${example.families.join(", ")}`],
               ["Not from Area", example.gaps.join(" ")],
             ] : [
               ["Screens", EXAMPLES.length],
-              ["Purpose", "Whole screens built only from Area, to test the defaults and every setting the way a product would."],
-            ]} />
+            ]} note={example ? example.description : "Whole screens built only from Area, to test the defaults and every setting the way a product would."} />
           </PanelSection>
         ),
         code: example ? (

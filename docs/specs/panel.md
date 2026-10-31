@@ -44,6 +44,8 @@ Popover float over the page. A panel stays beside its subject.
 | flush | boolean | Docked to an edge: no radius, border or elevation, `bg-page` | Gallery Layout / flush; docs site right rail; Figma's docked inspector |
 | bare-bar | boolean | A bar that names the panel carries no rule | Gallery Layout / bare bar; docs site sidebar |
 | composition | sections, heading, stack, footer | Grouping and a pinned action | Gallery `default`, `sections`, `footer` |
+| section count | `count` on PanelSection | How much a section holds, before its rows are read | Gallery `content-count`; Claude's rail cards, Cursor's trays |
+| section revealActions | boolean on PanelSection | Occasional heading actions shown on hover or focus | Gallery `behavior-reveal-actions`; VS Code's pane headers |
 
 Panel insets (sm 12, md 16) and gaps (sm 8, md 12) are fixed spacing, not the gutter or gap
 ramps. The compact pass steps them down one rung (insets read `inset-surface-sm/md`, 12 / 16 →
@@ -389,4 +391,25 @@ No rule under the bar, between sections or above the footer: the bar's height, a
 - **Why:** owner, 2026-10-30: "fix the inset padding in the header, there shouldnt be so much excess room on the sides of
   the buttons, it should be equal". The even rule (2026-10-18) was already the documented one; the cascade undid it.
 - **Checks:** cohesion test "a bar of controls is inset as far from its sides as from its top".
+
+## Review note, 2026-10-30 (Inspector grid)
+
+- **What changed:** Panel publishes one label column, `--_panel-label` (40% of a row less the cluster gap, 95 in a 272
+  panel). A Field (`auto`) and a Description list (columns) inside a panel both read it, so a control and a fact's value
+  start on one edge. Field's share was the same value written in field.css; now it is one rule.
+- **Why:** the Inspector panel study (docs/research/inspector-panel-2026-10-30; owner pick "One Inspector grid:
+  Build"): values started at 95, 104, 116 or 123 depending on the view.
+- **Verdict:** in review.
+
+## Review note, 2026-10-30 (section headings)
+
+- **What changed:** PanelSection takes `count`: muted tabular text a space after the heading, part of its name, as a
+  Canvas section's (PRODUCT_UI rule 9). `revealActions`: the heading's actions show while the section is hovered or
+  holds focus (at once; leave on `fast`; always on touch); one that is pressed (a pin that is on) or has its menu open
+  stays. Two tiles: Content / count, Behavior / reveal actions. In the app, the Tile and Family heading's Open and Pin
+  reveal (Pin stays while on); a long Code sample's heading says its length ("12 lines"); Snapshots counts.
+- **Why:** your pick "Section headings carry more: Build" on the Inspector panel study.
+- **Not as proposed:** the count sits beside the heading, not at the row's end (rule 9: a count beside a title is
+  muted text; one at a row's end is Count), so the actions don't take its place. Group labels inside a section are not
+  built: nothing in the Inspector holds groups yet (GOVERNANCE, keep it lean); they wait for the first view that does.
 - **Verdict:** in review.

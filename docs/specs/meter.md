@@ -21,9 +21,11 @@ state), not a Slider (it is not set by the user), not a chart.
 | tone | neutral (default), warning, danger | A value that means trouble (near or at a limit) | Spectrum Meter informative / notice / negative; ChatGPT's is neutral |
 | size | sm, md (default), lg | Progress's bar thickness 4 / 6 / 8 | ChatGPT 6; Figma's usage card 10 |
 | content | label, description, value text, each optional | ChatGPT: label, then description and value on one line; Figma: label, value, caption | ChatGPT, Figma |
+| segments | up to eight parts of one measure, with a legend | Where a measure is made of parts (usage by kind, changes by group) | Claude's Context card, Cursor's usage tray; Gallery `content-segments`, `content-segments-limit`; the app's History Inspector |
 
-Excluded: a circular meter (no product use found), segmented meters (Spectrum `variant="segmented"`), thresholds that
-switch the tone automatically (the consumer sets `tone`, so the text can say why).
+Excluded: a circular meter (no product use found), Spectrum's `variant="segmented"` (equal steps of one value, not
+parts), thresholds that switch the tone automatically (the consumer sets `tone`, so the text can say why). A ninth part
+folds into Other (dataviz: never a generated ninth hue).
 
 ## Sources
 
@@ -152,3 +154,21 @@ the value now ends the label's row.
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-30 (segments)
+
+- **What changed:** `segments` (at most eight `{ label, value }`) draws the parts side by side on the bar, 2 apart so
+  the ground shows between them (dataviz: a surface gap, never a stroke), the outer ends rounded by the track; with
+  `max` above their sum the rest of the track shows what is left. A legend under the bar lists every part above 0: a
+  10 swatch in a 12 slot, the label in the default ink, the value and its share muted and tabular, the share in a 5ch
+  column; rows a small control tall (26 in compact) and touching, as facts in a panel. The root is a group named by the
+  label (a meter's children are presentational, which would hide the legend). The default value text is the parts'
+  total, or the percentage with `max`. Colours: a fixed order of palette steps snapped to the dataviz reference order
+  and validated with its script (light on white: worst adjacent CVD 13.9, normal 22.7, yellow and pink under 3:1, so
+  the legend's labels carry them; dark on near-black: every check passes, worst CVD 11.7, normal 18.1). A part keeps
+  its colour by its place, so callers pass every part, 0 when empty. Two tiles. The app's History Inspector shows the
+  unpublished changes by Theme heading (Page, Accent, Emphasis, Size, Shape, Stroke, Shadow, Other).
+- **Why:** your pick "A stacked meter: Build" on the Inspector panel study (docs/research/inspector-panel-2026-10-30).
+- **Not as proposed:** 2 between parts (the dataviz rule), not Claude's 1; inner ends square, not rounded 1; colours
+  from Area's palette steps, not the brand's supporting colours (those are only soft and strong tones today).
+- **Verdict:** in review.

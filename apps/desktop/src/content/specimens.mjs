@@ -60,6 +60,9 @@ function gallerySpecimenTable() {
       { id: "filled-folders", title: "Filled folders", demo: "GalleryTreeViewFilledFolders" },
       { id: "layers", title: "Layers with row controls", demo: "GalleryTreeViewLayers" },
       { id: "disabled", title: "Disabled row", demo: "GalleryTreeViewDisabled" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryTreeViewSm" },
+      { id: "guides", title: "Guides", demo: "GalleryTreeViewGuides" },
+      { id: "content-status", title: "Content / status", demo: "GalleryTreeViewStatus" },
     ],
     "color-swatch-picker": [
       { id: "default", title: "Default", demo: "GalleryColorSwatchPicker" },
@@ -166,6 +169,10 @@ function gallerySpecimenTable() {
       { id: "collapsed", title: "Collapsed", demo: "CodeBlockCollapsed" },
       { id: "size-sm", title: "Size / sm", demo: "CodeBlockSmall" },
       { id: "size-sm-titled", title: "Size / sm with filename", demo: "CodeBlockSmallTitled" },
+      { id: "variant-soft", title: "Variant / soft", demo: "CodeBlockSoft" },
+      { id: "content-prompt", title: "Content / prompt", demo: "CodeBlockPrompt" },
+      { id: "behavior-reveal-actions", title: "Behavior / reveal actions", demo: "CodeBlockRevealActions" },
+      { id: "collapsed-lines", title: "Collapsed / five lines", demo: "CodeBlockCollapsedLines" },
     ],
     dialog: [
       { id: "default", title: "Default", demo: "GalleryDialog" },
@@ -294,6 +301,8 @@ function gallerySpecimenTable() {
       { id: "size-lg", title: "Size / lg", demo: "GalleryMeterLg" },
       { id: "content-label-only", title: "Content / label and value", demo: "GalleryMeterLabelOnly" },
       { id: "content-bare", title: "Content / bar only", demo: "GalleryMeterBare" },
+      { id: "content-segments", title: "Content / segments", demo: "GalleryMeterSegments" },
+      { id: "content-segments-limit", title: "Content / segments with a limit", demo: "GalleryMeterSegmentsLimit" },
     ],
     "search-field": [
       { id: "default", title: "Default", demo: "GallerySearchField" },
@@ -571,6 +580,7 @@ function gallerySpecimenTable() {
       { id: "content-rich", title: "Content / rich values", demo: "GalleryDescriptionListRich" },
       { id: "behavior-show-more", title: "Behavior / show more", demo: "GalleryDescriptionListShowMore" },
       { id: "composition-summary", title: "Composition / summary", demo: "GalleryDescriptionListSummary" },
+      { id: "composition-in-panel", title: "Composition / in panel", demo: "GalleryDescriptionListInPanel" },
     ],
     "toggle-group": [
       { id: "default", title: "Default", demo: "GalleryToggleGroup" },
@@ -701,6 +711,8 @@ function gallerySpecimenTable() {
       { id: "flush", title: "Flush", demo: "GalleryPanelFlush" },
       { id: "bare-bar", title: "Bare bar", demo: "GalleryPanelBareBar" },
       { id: "collapsible", title: "Collapsible sections", demo: "GalleryPanelCollapsible" },
+      { id: "content-count", title: "Content / count", demo: "GalleryPanelCount" },
+      { id: "behavior-reveal-actions", title: "Behavior / reveal actions", demo: "GalleryPanelRevealActions" },
       { id: "resizable", title: "Resizable / inspector", demo: "GalleryPanelResizable" },
       { id: "resizable-sidebar", title: "Resizable / sidebar", demo: "GalleryPanelResizableSidebar" },
       { id: "figma", title: "Recipe / Figma properties panel", demo: "GalleryPanelFigma" },

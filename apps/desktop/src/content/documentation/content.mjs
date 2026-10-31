@@ -150,6 +150,8 @@ export default {
       ["Do", "Keep terms short nouns (Status, Owner); the value can be text, a Badge, a person or a Link."],
       ["Do", "Set visibleCount on long lists so only the first rows show, with a Show more button after them."],
       ["Do", "Use divided and framed together when the list stands alone, as a settings card."],
+      ["Do", "Put a subject's facts straight in a Panel section, unframed: the terms take the panel's label column, so the values line up with its Fields' controls, and the rows pack at a small control's height."],
+      ["Don't", "Put a paragraph in a value: a sentence about the subject goes under the list, at the full width."],
       ["Don't", "Put an editable control in place of a value unless the value is a field; the list shows values, it is not a form."],
       ["Don't", "Give the term icon meaning of its own: it is decorative and hidden from assistive tech."],
     ],
@@ -157,7 +159,7 @@ export default {
     parts: {
       root: "A native dl: layout places terms in a column or at the row's start, divided rules the rows, framed draws Table's frame.",
       item: "One row: a div grouping a term with its value. Rows past visibleCount stay in the document, hidden, so order holds.",
-      term: "The dt, in the muted ink; its column fits the longest term (at most 40%, --area-description-list-term), and a longer term wraps.",
+      term: "The dt, in the muted ink; its column fits the longest term (at most 40%, --area-description-list-term), and a longer term wraps. In a Panel it is the panel's label column.",
       icon: "A 16 decorative icon before the term; the Show more button puts its chevron here, so its label lines up with the term names.",
       label: "The term's text. Its baseline is the row's: a term sits on its value's first line, level with a person's name beside an avatar.",
       value: "The dd, in the default ink; any content, wrapping when long.",

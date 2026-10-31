@@ -250,7 +250,9 @@ export const meter = {
   block: "area-meter",
   description: "Shows a value within a known range, such as usage against a limit.",
   variants: { tone: ["neutral", "warning", "danger"] },
-  elements: ["header", "label", "value", "track", "description"],
+  // segmented: parts of the measure on the bar, named in a legend (owner 2026-10-30, docs/research/inspector-panel-2026-10-30).
+  booleans: ["segmented"],
+  elements: ["header", "label", "value", "track", "segment", "rest", "legend", "item", "swatch", "item-label", "item-value", "item-share", "description"],
   defaults: { tone: "neutral" },
 } as const satisfies ComponentManifest;
 
@@ -309,9 +311,11 @@ export const pagination = {
 export const treeView = {
   block: "area-tree-view",
   description: "Navigates or selects items in an expandable hierarchy.",
-  variants: { selectionMode: ["navigation", "checkbox"] },
-  elements: ["chevron", "check", "icon", "label", "trailing", "actions"],
-  defaults: { selectionMode: "navigation" },
+  // sm: the file tree's density; guides: indent lines on hover (owner 2026-10-30, docs/research/inspector-panel-2026-10-30).
+  variants: { selectionMode: ["navigation", "checkbox"], size: ["sm", "md"] },
+  booleans: ["guides"],
+  elements: ["chevron", "check", "icon", "label", "trailing", "status", "actions"],
+  defaults: { selectionMode: "navigation", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const composer = {
@@ -677,7 +681,9 @@ export const panel = {
   variants: { size: ["sm", "md"] },
   booleans: ["flush", "bare-bar", "bare-footer", "action-column", "window-bar"],
   states: ["collapsed", "resizable", "resizing"],
-  elements: ["resize", "bar", "title", "body", "section", "heading", "heading-text", "actions", "toggle", "toggle-text", "chevron", "summary", "rows", "row", "row-label", "row-controls", "row-action", "stack", "footer"],
+  elements: ["resize", "bar", "title", "body", "section", "heading", "heading-text", "count", "actions", "toggle", "toggle-text", "chevron", "summary", "rows", "row", "row-label", "row-controls", "row-action", "stack", "footer"],
+  // reveal: the heading's actions show on hover or focus (owner 2026-10-30, docs/research/inspector-panel-2026-10-30).
+  elementModifiers: { section: ["reveal"] },
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -971,12 +977,13 @@ export const codeBlock = {
   block: "area-code-block",
   description: "Shows a block of code with an optional file header, numbered lines and a copy action.",
   // sm is the inspector's code well (Figma Dev Mode); md the page block.
-  variants: { size: ["sm", "md"] },
-  booleans: ["flush", "wrap", "unnumbered"],
+  // soft: the soft fields' fill with no edge, for code in a panel (owner 2026-10-30, docs/research/inspector-panel-2026-10-30).
+  variants: { size: ["sm", "md"], variant: ["outline", "soft"] },
+  booleans: ["flush", "wrap", "unnumbered", "reveal-actions"],
   states: ["collapsed"],
-  elements: ["header", "title", "language", "languages", "select", "actions", "body", "pre", "code", "line", "gutter", "linenumber", "marker", "text", "toggle"],
+  elements: ["header", "title", "language", "languages", "select", "actions", "body", "pre", "code", "line", "gutter", "linenumber", "marker", "prompt", "text", "toggle"],
   elementModifiers: { line: ["highlighted", "added", "removed"] },
-  defaults: { size: "md" },
+  defaults: { size: "md", variant: "outline" },
 } as const satisfies ComponentManifest;
 
 export const nav = {

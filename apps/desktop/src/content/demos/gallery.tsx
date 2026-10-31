@@ -762,6 +762,40 @@ export const CodeBlockSmall = () => (
   />
 );
 
+/* soft: a fill with no edge, for code in a panel whose fields are soft (owner 2026-10-30, docs/research/inspector-panel-2026-10-30). */
+export const CodeBlockSoft = () => (
+  <CodeBlock
+    size="sm"
+    variant="soft"
+    lineNumbers={false}
+    style={{ inlineSize: 240 }}
+    html={highlight('display: flex;\npadding: 6px 12px;\nalign-items: center;\ngap: 8px;\nborder-radius: 8px;')}
+  />
+);
+
+/* A command: the prompt is muted, can't be selected and stays out of the copy; a wrapped line hangs under the command. */
+export const CodeBlockPrompt = () => (
+  <CodeBlock size="sm" variant="soft" lineNumbers={false} prompt="$" wrap style={{ inlineSize: 240 }} code="npm install @area/react @area/styles @area/icons" />
+);
+
+/* The copy shows while the block is hovered or holds focus (Cursor's code blocks). */
+export const CodeBlockRevealActions = () => (
+  <CodeBlock size="sm" variant="soft" lineNumbers={false} revealActions style={{ inlineSize: 240 }}
+    html={highlight('import { Button } from "@area/react";')} wrap />
+);
+
+/* Collapsed to five lines rather than eight (Cursor's shell output preview). */
+export const CodeBlockCollapsedLines = () => (
+  <CodeBlock
+    collapsible
+    defaultCollapsed
+    collapsedLines={5}
+    lineNumbers={false}
+    style={{ inlineSize: "100%" }}
+    html={highlight('import { Button } from "@area/react";\n\nexport function Example() {\n  return (\n    <div>\n      <Button>Button</Button>\n      <Button variant="soft">Button</Button>\n    </div>\n  );\n}')}
+  />
+);
+
 export const CodeBlockSmallTitled = () => (
   <CodeBlock
     size="sm"
@@ -1623,6 +1657,27 @@ export const GalleryPanelSections = () => (
     </PanelSection>
   </Panel>
 );
+/* A section's count, muted beside its heading (owner 2026-10-30, docs/research/inspector-panel-2026-10-30). */
+export const GalleryPanelCount = () => (
+  <Panel title="Label">
+    <PanelSection heading="Label" count={3}>
+      <PanelRow label="Label"><Input fullWidth variant="soft" aria-label="Label" defaultValue="Value" /></PanelRow>
+      <PanelRow label="Label"><Input fullWidth variant="soft" aria-label="Label" defaultValue="Value" /></PanelRow>
+      <PanelRow label="Label"><Input fullWidth variant="soft" aria-label="Label" defaultValue="Value" /></PanelRow>
+    </PanelSection>
+  </Panel>
+);
+/* The heading's actions show while the section is hovered or focused; Visible is on, so it stays (pressed). */
+export const GalleryPanelRevealActions = () => (
+  <Panel title="Label">
+    <PanelSection heading="Label" revealActions actions={<>
+      {inspectorButton("Add item", <AddIcon />)}
+      <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="Visible" aria-pressed icon={<EyeIcon />} />
+    </>}>
+      <PanelRow label="Label"><Input fullWidth variant="soft" aria-label="Label" defaultValue="Value" /></PanelRow>
+    </PanelSection>
+  </Panel>
+);
 export const GalleryPanelFooter = () => {
   const [effects, setEffects] = useState(2);
   return <Panel title="Effects" style={{ blockSize: 360 }}
@@ -2079,8 +2134,8 @@ export const SegmentedFullWidth = () => (
 const fileTree = [
   { id: "src", label: "Folder one", icon: <FolderIcon />, children: [
     { id: "components", label: "Folder two", icon: <FolderIcon />, children: [
-      { id: "avatar", label: "File one", icon: <DocumentIcon />, trailing: "A" },
-      { id: "button", label: "File two", icon: <DocumentIcon />, trailing: "M" },
+      { id: "avatar", label: "File one", icon: <DocumentIcon />, status: "added" as const },
+      { id: "button", label: "File two", icon: <DocumentIcon />, status: "modified" as const },
     ] },
     { id: "index", label: "File three", icon: <DocumentIcon /> },
   ] },
@@ -2101,6 +2156,17 @@ export const GalleryTreeViewFiles = () => {
   const [current, setCurrent] = useState("button");
   return <TreeView aria-label="Label" items={fileTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
 };
+/* The file tree's density: rows a small control tall, a 12 chevron, 16 a level (owner 2026-10-30, docs/research/inspector-panel-2026-10-30). */
+export const GalleryTreeViewSm = () => <TreeView size="sm" aria-label="Label" items={fileTree} defaultExpandedIds={["src", "components"]} defaultSelectedIds={["button"]} />;
+/* Indent lines under each open branch, shown while the tree is hovered or holds focus. */
+export const GalleryTreeViewGuides = () => <TreeView size="sm" guides aria-label="Label" items={fileTree} defaultExpandedIds={["src", "components"]} defaultSelectedIds={["button"]} />;
+/* Each row's change as git's letter in its tone, read out as the word: added, modified, removed. */
+const statusTree = [
+  { id: "one", label: "File one", icon: <DocumentIcon />, status: "added" as const },
+  { id: "two", label: "File two", icon: <DocumentIcon />, status: "modified" as const },
+  { id: "three", label: "File three", icon: <DocumentIcon />, status: "removed" as const },
+];
+export const GalleryTreeViewStatus = () => <TreeView size="sm" aria-label="Label" items={statusTree} />;
 /* Folders as filled glyphs in one hue (owner, pass 2). */
 const blueFolder = <FolderFilledIcon style={{ color: "var(--area-fg-info)" }} />;
 const filledTree = [
