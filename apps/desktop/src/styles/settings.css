@@ -1,0 +1,51 @@
+/* --- Settings (src/pages/settings.tsx; owner, 2026-10-30, Cursor's settings) ------------------------------------------
+ * The section in one centred column at a reading measure: its title, then groups, each a title and lede (SectionHeading)
+ * over a box of rows. A row is a title and its one-line description, the control at its end; rows part by a hairline, the
+ * box is a recessed plate, as Cursor's grouped rows. Spacing on the Canvas's ladder: rows 12 in, groups 32 apart (between
+ * the feed's 40 sections and its 12 heading). */
+.studio-settings {
+  display: grid;
+  gap: var(--area-space-32);
+  max-inline-size: calc(var(--area-space-96) * 8);
+  margin-inline: auto;
+  padding-block: var(--area-space-24) var(--area-space-48);
+}
+.studio-settings__title {
+  margin: 0;
+  font-size: var(--area-title-sm-size);
+  line-height: var(--area-title-sm-leading);
+  letter-spacing: var(--area-title-sm-tracking);
+  font-weight: var(--area-weight-strong);
+  text-box: trim-both cap alphabetic;
+}
+.studio-settings__group { display: grid; gap: var(--_canvas-heading); }
+.studio-settings__rows {
+  border: var(--area-border-width) solid var(--area-border-decorative);
+  border-radius: var(--_tile-radius);
+  background: var(--area-bg-subtle);
+}
+.studio-settings__row {
+  display: flex;
+  align-items: center;
+  gap: var(--area-space-16);
+  padding: var(--_tile-inset) var(--area-space-16);
+}
+.studio-settings__row + .studio-settings__row { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+.studio-settings__text { display: grid; flex: 1; min-inline-size: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+.studio-settings__label { color: var(--area-fg-default); }
+.studio-settings__description { color: var(--area-fg-muted); }
+/* The control column: one width for every row (the Inspector's floor at the app's scale, about 280 at type 13), so the
+   controls line up at the row's end; Segmented, dropdowns and bars fill it, a switch sits at its end. */
+.studio-settings__control {
+  flex: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  inline-size: min(calc(var(--area-space-96) * 3 - var(--area-space-16)), 45%);
+  --area-input-inline-size: 100%;
+}
+/* A control that fills (a framed Field, a full-width Segmented, dropdown or field) takes the column; a switch or a button
+   keeps its own width at the column's end, as Cursor's. */
+.studio-settings__control > :is(.studio-settings__field, [class*="--full-width"]) { flex: 1 1 auto; min-inline-size: 0; }
+.studio-settings__row[data-disabled] .studio-settings__control { opacity: 0.55; }
+.studio-settings__row[data-disabled] .studio-settings__text { opacity: 0.55; }

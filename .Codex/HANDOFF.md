@@ -1,7 +1,31 @@
 # Handoff
 
-## Current state (2026-10-29)
-- **Projects and publishing, the IA of 2026-10-29, branch `claude/ia-brainstorm-47487c` (uncommitted).** From the IA
+## Current state (2026-10-30)
+- **Prose lines and text flow, branch `claude/app-status-ui-flow-add234` (uncommitted).** From a vertical rhythm audit
+  against Cursor 3.27 and Claude 3.6556 (https://claude.ai/artifact/Ai15EUzS46xKra4ZqjzMsj; evidence and derivations in
+  `docs/research/vertical-rhythm-2026-10-30/`). Type axis: `text-sm|md-prose-leading` (1.5 × size on the 2px ramp: 13/20,
+  15/24) and `text-sm|md-prose-gap` (12 / 16 / 20). Message: 15/24 at type 13 (was 15/22), blocks the prose gap apart, a
+  heading the gap + 8 above and 8 below, a list 8 under its lead-in; back In review. The app's chat: new exchange 24,
+  message → reply 12. Rules in DESIGN_SYSTEM.md (Prose lines, Text that flows) and area-ui-compose spacing.md; cohesion
+  test. Checks: tokens, React 613, desktop 25, typecheck, docs, app-css, playgrounds, contracts; measured in the app, light
+  and dark. Also this session, artifacts only (no app change): status labels with progress marks and a three-header
+  (Cursor) shell, https://claude.ai/artifact/13nEjv8rCm2eHZyYDnHXoM. Open for the owner: the three-header shell in the
+  app; Nav and Custom select are reopened but in no status list (show Unrefined); saved duplicate tabs from before #179
+  aren't merged on restore; PRODUCT_UI.md line 108 and AGENTS.md (app takes the Inspector's settings) are stale.
+- **Three-panel shell, Settings and the app following its system, built 2026-10-30 (uncommitted, this branch).** No
+  Titlebar: the Sidebar's Panel bar (macOS lights' room, toggle at 83, search icon, back / forward), the Canvas's plain
+  Titlebar (tabs, Inspiration, light / dark; takes a hidden panel's toggle), the Inspector's bar (views, toggle); a drag strip
+  under them (`.studio-drag`). Profile + Settings (⌘,, app menu Settings…) at the Sidebar's foot; Settings
+  (`src/pages/settings.tsx`) opens over the tab in Cursor's layout: General (name), Appearance (Mode System / Light / Dark;
+  Follow a system, System, Theme, Open; the app's own type, density, corner, accent, buttons, selection). The app is drawn
+  in `chrome` (`src/app-look.ts`: the followed system's theme as published, else own settings; saved `appLook`), which
+  `<html>`, appScale, panel widths, the specimen scope and tiles' cardRestored now read; Appearance maps every Theme
+  setting and Material (the Inspector's rows in a Settings frame, `RowFrame`; exact colours left to the system's Theme
+  view); headers 40 (Panel `windowBar`, Titlebar `size="sm"`, both In review); takeover filters span the row plates; PRODUCT_UI.md rules 12 and 18
+  rewritten, AGENTS.md Start updated, tests/app-look.test.ts. On the owner's machine Area's Default is 13/32 with corner 12
+  (was 10 at the defaults). Also built: Badge's icon gap floor 4 (In review). Artifact prototype:
+  https://claude.ai/artifact/13nEjv8rCm2eHZyYDnHXoM (status badges, kinds of thing; tabs no status; Sidebar icon badges).
+- **Projects and publishing, the IA of 2026-10-29, branch `claude/ia-brainstorm-47487c`, merged PR #179.** From the IA
   brainstorm (write-up revision 3, https://claude.ai/artifact/TRWJYDWrxVaxCTvtJNxwD5) and the owner's tab rule ("tabs can
   be libraries or projects … the tab itself … will always just be the project itself"). Tabs hold one project, system,
   Inspiration or lab and never change what they hold; the Sidebar is the tab's own tree (workspace in Home's tab, a
@@ -12,7 +36,7 @@
   "Projects and publishing", PRODUCT_UI.md places, AGENTS.md Start. Checks: typecheck, test:desktop (25, new
   tests/projects.test.ts), app build, playgrounds, app-css; driven in the browser preview light and dark (create project,
   add screen and image layers, exploration, publish to Area, in-place edit, Live, Publish, History). Not built: products,
-  approval, the conflict view, Start a project from a system, Explore. Checked in the browser preview, light and dark; in Electron only Home captured.
+  approval, the conflict view, Start a project from a system, Explore. Checked in the browser preview, light and dark; in Electron only Home captured. Merged as PR #179 (fe1f5634) 2026-10-30.
 - **App structure Phase 2, Home and several systems, branch `claude/serene-maxwell-905675`, PR #174 (started from the
   Phase 1 session).** Home (`#home`, `src/pages/home.tsx`: Systems, Projects later, New system from the Area Starter /
   Describe it (Setup chat) / Import stub, Boards, Recent) in a fixed first Home tab (Nav's new icon-only item, Figma's file

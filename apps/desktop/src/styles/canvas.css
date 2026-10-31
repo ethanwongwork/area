@@ -10,7 +10,8 @@
     /* One column the Canvas's own width: an auto column grew to the bar's widest content and pushed its end off the
        Canvas, where the path at its start should give way first. */
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
+    /* Its header (the open tabs), its bar (the view's options), its body. */
+    grid-template-rows: auto auto minmax(0, 1fr);
     min-inline-size: 0;
     min-block-size: 0;
     background: var(--area-bg-page);

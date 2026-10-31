@@ -368,3 +368,13 @@ No rule under the bar, between sections or above the footer: the bar's height, a
 - **What changed:** No lines under the header bar, between sections or above the footer. The app's Inspector uses Panel, so its section lines went too.
 - **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
   light. You approved each one on the dividers comparison page.
+
+### 2026-10-30 · Window bar
+
+- **What changed:** `windowBar` (`area-panel--window-bar`): the bar is one of an app's region headers on the window's top
+  line, the small control 7 from its top and bottom, no hairline: 40 at type 13 / 32 (was the md bar, 47), 38 at 13 / 28. The
+  body keeps the panel's size.
+- **Why:** owner, 2026-10-30, the desktop app's three-panel shell: "the header should be shorter in height, matching cursor"
+  (Cursor's agents window bars are 40, read from its bundle; inspector-chat-2026-10-18/cursor.md). Titlebar `size="sm"` is the
+  same height, so the headers on one line agree.
+- **Verdict:** in review.

@@ -439,6 +439,11 @@
     --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
   }
   .area-panel--md { --_inset: calc(var(--area-space-16) - var(--area-space-2)); --_row: var(--area-control-md); }
+  /* window-bar: the bar is on a window's top line, one of an app's region headers (owner, 2026-10-30: "the header should
+     be shorter in height, matching cursor"): the small control 7 from its top and bottom, as a bar's controls sit 7 from
+     its side, and no hairline. 40 at type 13 / 32, Cursor's agents window (its bars 40); 38 at 13 / 28. The body keeps
+     the panel's size. Titlebar size sm is the same height, so the headers on one line agree. */
+  .area-panel--window-bar { --_bar: calc(var(--area-control-sm) + var(--area-space-16) - var(--area-space-2)); }
 }
 
 @layer area.components {

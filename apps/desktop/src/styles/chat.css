@@ -16,16 +16,22 @@
     background-color: var(--area-bg-page);
   }
   .studio-chat__title { flex: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--area-fg-muted); }
-  /* Turns 16 apart, as Codex's items (16) and Cursor's blocks (16). */
-  .studio-chat__transcript { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-16); padding-block-end: var(--area-space-8); }
+  /* Turns follow the rings (DESIGN_SYSTEM.md, Text that flows; docs/research/vertical-rhythm-2026-10-30): a new
+     exchange starts one ring out (24, the section role), the person's message joins its reply one step inside the prose
+     gap (12, the group role), and anything else (a notice) is the prose gap apart (16). A time over a message joins it (8). */
+  .studio-chat__transcript { display: grid; grid-template-columns: minmax(0, 1fr); padding-block-end: var(--area-space-8); }
+  .studio-chat__transcript > * + * { margin-block-start: var(--area-text-md-prose-gap); }
+  .studio-chat__transcript > * + :is(.studio-chat__turn--user, .studio-chat__stamp) { margin-block-start: var(--area-space-24); }
+  .studio-chat__transcript > .studio-chat__stamp + .studio-chat__turn--user { margin-block-start: var(--area-space-8); }
+  .studio-chat__transcript > .studio-chat__turn--user + .studio-chat__turn--assistant { margin-block-start: var(--area-space-12); }
   /* A run of steps (Step, Step group, Reasoning) sits 4 apart, one group (Codex 4, Cursor 4); Message keeps its 16
      around the group. */
   .studio-chat__steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-4); min-inline-size: 0; }
   /* The composer: the context chip over it; Scroll to latest rises above it (scroll-to-latest.css). */
   .studio-chat__composer { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); }
 
-  /* Markdown in a reply (src/chat/markdown.tsx). Each block is a direct child of Message's content, which sets the 16
-     between blocks, so these reset only their inline sides. Headings take the message's size, strong, as a narrow panel wants;
+  /* Markdown in a reply (src/chat/markdown.tsx). Each block is a direct child of Message's content, which spaces the
+     blocks (the prose gap; a heading's space above, a list's lead-in), so these reset only their inline sides. Headings take the message's size, strong, as a narrow panel wants;
      lists indent 2em (Cursor's and Claude Code's 2em), items 4 apart; a quote is a 3px rule (Cursor's). */
   .studio-md__heading { margin-inline: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
   .studio-md__list { margin-inline: 0; padding-inline-start: 2em; /* spec: Cursor, Claude Code 2em */ }

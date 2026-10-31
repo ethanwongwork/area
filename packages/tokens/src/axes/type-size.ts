@@ -19,6 +19,10 @@
  *                           ratio from 12 to 16, as Apple's Dynamic Type scales every style; they were held at 20 / 24 /
  *                           32 with display one rung down below 14): at 12 17 / 21 / 27 and 48 / 62, at 16 23 / 27 / 37
  *                           and 64 / 82; 14 is unchanged
+ *   prose leading           text that runs past two lines (a chat reply, documentation): the first value on the 2px
+ *                           leading ramp at or above 1.5 × the size, WCAG 1.4.8's line spacing (owner, 2026-10-30;
+ *                           docs/research/vertical-rhythm-2026-10-30): 12/18, 13/20, 14/22, 15/24, 16/24. Its paragraph
+ *                           gap is about two-thirds of that line on the spacing ramp: 12, 16 or 20. UI text keeps LEADING
  *   tracking                small text loosens a hair (Geist is drawn for 0 at UI sizes and has no
  *                           optical-size axis): 10 +0.01em, 11 +0.0075, 12 +0.005, 13 +0.0025
  *   icon stroke             follows the text stem, 1.125px at 14
@@ -44,6 +48,13 @@ const TRACKING: Record<number, string> = { 10: "0.01em", 11: "0.0075em", 12: "0.
 const tracking = (size: number) => TRACKING[size] ?? "0em";
 const size = (px: number) => `var(--area-size-${px})`;
 const leading = (px: number) => `var(--area-leading-${LEADING[px]})`;
+/** Prose leading for a size: the first 2px step at or above 1.5 × the size (WCAG 1.4.8). */
+export const proseLeading = (px: number) => Math.ceil((px * 1.5) / 2) * 2;
+/** A prose paragraph gap: the spacing-ramp step nearest two-thirds of its prose line (13.3 → 12, 16 → 16, 18.7 → 20). */
+export const proseGap = (px: number) => {
+  const target = (proseLeading(px) * 2) / 3;
+  return [12, 16, 20].reduce((best, step) => Math.abs(step - target) < Math.abs(best - target) ? step : best);
+};
 
 /** Every value the axis writes for one base size. Exported for the docs' type tables. */
 export function typeSizeTokens(base: TypeSize): Record<string, string> {
@@ -64,6 +75,8 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
     "text-xs-size": size(small), "text-xs-leading": leading(small), "text-xs-tracking": tracking(small),
     "text-sm-size": size(base), "text-sm-leading": leading(base), "text-sm-tracking": tracking(base),
     "text-md-size": size(reading), "text-md-leading": leading(reading), "text-md-tracking": "0em",
+    "text-sm-prose-leading": `var(--area-leading-${proseLeading(base)})`, "text-sm-prose-gap": `var(--area-space-${proseGap(base)})`,
+    "text-md-prose-leading": `var(--area-leading-${proseLeading(reading)})`, "text-md-prose-gap": `var(--area-space-${proseGap(reading)})`,
     "title-xs-size": size(reading), "title-xs-leading": leading(reading), "title-xs-tracking": "0em",
     "title-sm-size": size(titleSm[0]), "title-sm-leading": `var(--area-leading-${titleSm[1]})`, "title-sm-tracking": "-0.01em",
     "title-md-size": size(titleMd[0]), "title-md-leading": `var(--area-leading-${titleMd[1]})`, "title-md-tracking": "-0.015em",

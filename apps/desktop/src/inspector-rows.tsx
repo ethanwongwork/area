@@ -35,7 +35,21 @@ export interface RowContext {
   brand?: Readonly<Record<string, string>>;
   /** The controls' size: the Inspector's `sm` by default, larger where a row stands alone (Setup's dock). */
   size?: "sm" | "md" | "lg";
+  /**
+   * Whether the rows offer the open system's exact colours (Page colour, Accent → Exact colour; src/colours.ts, src/brand.ts),
+   * which act on the open theme through its colour engine. Settings' rows set the app's own look, which has none, so they
+   * leave them out (false). True by default.
+   */
+  exact?: boolean;
 }
+
+/**
+ * How a row is framed: an Inspector Field (the label beside the control, the default), or a Settings row (owner,
+ * 2026-10-30: "the area design system theme controls (all of them) mapped to a settings page" in Cursor's layout): the
+ * name over a one-line description (the setting's hint, or why it has no effect now) at the start, the control at the end.
+ * The control keeps its Field, its label hidden, so it is named and described as in the Inspector.
+ */
+export const RowFrame = createContext<"field" | "settings">("field");
 
 /*
  * A setting's bar (owner, 2026-10-25: "they arent very smooth to move"). A setting restyles the whole app, a few hundred
@@ -187,7 +201,9 @@ export const ROW_OF: Readonly<Record<string, string>> = { neutral: "greys", "tin
 
 /** One row: the setting's own control, or the combined row it belongs to. */
 export function SettingRow({ axis, context }: { axis: string; context: RowContext }) {
-  const { colours } = useStudio();
+  const { colours: open } = useStudio();
+  // Without exact colours, nothing is picked (src/colours.ts): every page setting is what the page paints.
+  const colours = context.exact === false ? { light: null, dark: null } : open;
   if (ROW_OF[axis] === "greys") return <GreysRow context={context} />;
   if (axis === "accent") return <AccentRow context={context} />;
   const control = controlOf(axis);
@@ -211,8 +227,25 @@ function Dim({ reason, children }: { reason: string | null; children: ReactNode 
 }
 
 /** A row's Field: an inactive row's name and control dimmed, its reason in a Toggletip after the name. */
-function RowField({ label, name, children, ...props }: FieldProps & { name?: string }) {
+export function RowField({ label, name, children, ...props }: FieldProps & { name?: string }) {
   const reason = useContext(Inactive);
+  const frame = useContext(RowFrame);
+  if (frame === "settings") {
+    const { title, orientation: _, ...field } = props;
+    return (
+      <div className="studio-settings__row" data-disabled={reason ? "" : undefined}>
+        <div className="studio-settings__text">
+          {/* The Field names the control; the visible name is its echo. */}
+          <span className="studio-settings__label" aria-hidden="true">{label}</span>
+          {reason ?? title ? <span className="studio-settings__description">{reason ?? title}</span> : null}
+        </div>
+        <div className="studio-settings__control">
+          {/* A stacked Field, its label hidden: the control alone, filling the column. */}
+          <Field className="studio-settings__field" label={label} visuallyHiddenLabel {...field}>{children}</Field>
+        </div>
+      </div>
+    );
+  }
   if (!reason) return <Field label={label} {...props}>{children}</Field>;
   const words = name ?? (typeof label === "string" ? label : undefined);
   return (
@@ -315,7 +348,8 @@ function temperatureOf(values: Values, mode: "light" | "dark"): number {
 }
 function GreysRow({ context }: { context: RowContext }) {
   const { values, mode, set } = context;
-  const { colours } = useStudio();
+  const { colours: open } = useStudio();
+  const colours = context.exact === false ? { light: null, dark: null } : open;
   const hue = values["tint-hue"] ?? "auto";
   const tint = hue === "auto" ? "none" : hue === "accent" ? "accent" : TINTS.some(([value]) => value === hue) ? hue : CUSTOM;
   const t = temperatureOf(values, mode);
@@ -332,7 +366,7 @@ function GreysRow({ context }: { context: RowContext }) {
   return (
     <>
       {/* The page as one exact colour (2026-10-27): above the greys' settings it stands in for. */}
-      <PageColourRow size={context.size ?? "sm"} />
+      {context.exact === false ? null : <PageColourRow size={context.size ?? "sm"} />}
       <Dim reason={colours[mode] !== null ? PICKED : null}>
       <Dim reason={tint === "none" ? null : "Off while a tint colour is on"}>
         <SettingBar size={context.size ?? "sm"} label="Temperature" title="How cool (blue) or warm (yellow) every grey is: pages, cards, edges and text"
@@ -407,10 +441,12 @@ function AccentRow({ context }: { context: RowContext }) {
   // One accent control (exact colours plan, phase 4, 2026-10-27): a palette accent, any 5° hue, or one exact colour through
   // the brand engine (src/brand.ts), which merged the Brand colours switch. Shade, Saturation and Label tint follow either.
   const { brand, setBrand } = useStudio();
-  const exact = brand.on;
+  const offered = context.exact !== false;
+  const exact = offered && brand.on;
   const choose = (next: string) => {
     if (next === EXACT) { setBrand({ on: true }); return; }
     if (exact) setBrand({ on: false });
+    if (!offered && next === EXACT) return;
     set({ accent: next === CUSTOM ? (custom ? value : "200") : next });
   };
   return (
@@ -421,7 +457,7 @@ function AccentRow({ context }: { context: RowContext }) {
           items={[...named.map(item => ({ value: item.value, label: item.label, icon: optionMark("accent", item.value, values as CanvasAxes) ?? undefined,
             preview: layout === "grid" ? context.figure?.("accent", item.value) : undefined })),
             { value: CUSTOM, label: "Any hue", icon: custom ? optionMark("accent", value, values as CanvasAxes) ?? undefined : undefined },
-            { value: EXACT, label: "Exact colour", icon: colourMark(brand.primary) }]} />
+            ...(offered ? [{ value: EXACT, label: "Exact colour", icon: colourMark(brand.primary) }] : [])]} />
       </RowField>
       {exact ? <BrandRows /> : custom ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={hues.length - 1} step={1} value={Math.max(0, hues.indexOf(value))}

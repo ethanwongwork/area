@@ -19,7 +19,7 @@ interface AreaDesktop {
   /** The app menu's tab commands (electron/main.cjs): ⌘T, ⌘⇧T, ⌘⇧H, ⌘W, ⌃Tab, ⌃⇧Tab, ⌘1–9. Returns the unsubscribe. */
   onCommand?(listener: (command: TabCommand, index?: number) => void): () => void;
 }
-type TabCommand = "new-tab" | "reopen-tab" | "close-tab" | "next-tab" | "previous-tab" | "tab" | "home";
+type TabCommand = "new-tab" | "reopen-tab" | "close-tab" | "next-tab" | "previous-tab" | "tab" | "home" | "settings";
 interface Window { areaDesktop?: AreaDesktop }
 
 

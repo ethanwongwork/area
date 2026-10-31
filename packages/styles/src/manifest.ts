@@ -675,7 +675,7 @@ export const panel = {
   block: "area-panel",
   description: "A titled surface of rows that act on something beside it.",
   variants: { size: ["sm", "md"] },
-  booleans: ["flush", "bare-bar", "bare-footer", "action-column"],
+  booleans: ["flush", "bare-bar", "bare-footer", "action-column", "window-bar"],
   states: ["collapsed", "resizable", "resizing"],
   elements: ["resize", "bar", "title", "body", "section", "heading", "heading-text", "actions", "toggle", "toggle-text", "chevron", "summary", "rows", "row", "row-label", "row-controls", "row-action", "stack", "footer"],
   defaults: { size: "md" },
@@ -1076,10 +1076,10 @@ export const listBox = {
 export const titlebar = {
   block: "area-titlebar",
   description: "A window's top bar: Panel's bar height and rule, the drag region of a frameless window; plain drops the rule, floating is a raised plate.",
-  variants: { variant: ["ruled", "plain", "floating"] },
+  variants: { variant: ["ruled", "plain", "floating"], size: ["sm", "md"] },
   booleans: ["macos"],
   elements: ["end"],
-  defaults: { variant: "ruled" },
+  defaults: { variant: "ruled", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const sectionHeading = {

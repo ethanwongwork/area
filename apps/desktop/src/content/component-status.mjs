@@ -18,7 +18,7 @@ export const COMPLETE_COMPONENTS = new Set([
   'step', 'queue', 'edit-summary', 'list-box', 'combobox', 'tag-picker', 'input', 'textarea', 'number-field',
   'select', 'input-group', 'empty-state', 'toggletip', // round 75 approved (owner, 2026-10-27)
   'asset-card', // round 76 approved (owner, 2026-10-27: group element cells draw their frame; the Stage as it ships)
-  'command-palette', 'inline-list', 'panel', 'separator', 'shortcut-list', // round 72 approved (owner, 2026-10-26; asset-card too)
+  'command-palette', 'inline-list', 'separator', 'shortcut-list', // round 72 approved (owner, 2026-10-26; asset-card too). panel: reopened 2026-10-30 (window bar).
   // nav: approved 2026-10-29 (closable tabs, Figma's close, 120 to 170, scrolling overflow); reopened the same day for the
   // icon-only item (app structure Phase 2's Home tab), back in review.
   'radio', 'checkbox', // round 73 approved (owner, 2026-10-26)
@@ -67,7 +67,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 15: group gap 6 / 8; slider was already approved).
   'badge-group', // round 80 approved (owner, 2026-10-28: the auto-fit flicker fixed)
   // Approved 2026-09-28 (batches 17-19; dialog, tooltip and composer were already approved).
-  'message', 'prompt-suggestions', // hover-card: reopened 2026-10-17 (round 31).
+  'prompt-suggestions', // hover-card: reopened 2026-10-17 (round 31). message: reopened 2026-10-30 (prose lines and text flow).
   // Approved 2026-09-28 (batch 16 again after the 16 column; batch 20).
   'model-picker', 'scroll-to-latest',
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
@@ -118,9 +118,9 @@ export const COMPLETE_COMPONENTS = new Set([
     // Approved 2026-10-16 on the review page, round 27 (components27).
   'copy-button', 'context-menu', 'section-heading',
   // Approved 2026-10-16 on the review page, round 28 (components28).
-  'badge', 'card',
+  'card', // badge: reopened 2026-10-30 (icon gap floor 4).
   // Approved 2026-10-16 on the review page, round 29 (components29).
-  'titlebar',
+  // titlebar: reopened 2026-10-30 (size sm).
   // Approved 2026-10-17 on the review page, round 30 (components30), after the Layers sweep; board needs changes.
   'toggle-group', 'box-model', 'tag',
   // Approved 2026-10-17 on the review page, round 31 (components31); hover-card: "rethink the content/source".
@@ -158,7 +158,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Round 68 (2026-10-22): the text-pair rule (a line joins its title) reopens Dialog, Confirm dialog, Drawer, Popover,
 // Alert, Toast, Empty state, Checkbox and Radio; Token row's text moves onto the ramp.
 // Round 69 (2026-10-22): Selection defaults to the accent (option B), so every family whose default paints Selection reopens.
-export const REVIEW_COMPONENTS = new Set(['slider', 'segmented', 'switch', 'field', 'approval', 'plan', 'description-list', 'composer-menu']); // plan, description-list, composer-menu: reopened 2026-10-28, the chat set review (the card column at 13; the empty row in the rows' type) // approval: reopened 2026-10-28, the question card (Setup's chat panel) // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots
+export const REVIEW_COMPONENTS = new Set(['slider', 'segmented', 'switch', 'field', 'approval', 'plan', 'description-list', 'composer-menu', 'message', 'badge', 'panel', 'titlebar']); // panel, titlebar: reopened 2026-10-30, the window bar / size sm (the three-panel shell's 40 headers) // badge: reopened 2026-10-30, the icon gap floor (docs/specs/badge.md) // message: reopened 2026-10-30, prose lines and text flow (docs/research/vertical-rhythm-2026-10-30) // plan, description-list, composer-menu: reopened 2026-10-28, the chat set review (the card column at 13; the empty row in the rows' type) // approval: reopened 2026-10-28, the question card (Setup's chat panel) // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

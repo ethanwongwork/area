@@ -5,9 +5,10 @@
  * choice opens in the current tab, or, opened from New tab (+, ⌘T), in a new one. Each page's own list is filtered in the Sidebar (src/app-nav.tsx, Takeover).
  */
 import { useMemo, useState } from "react";
-import { CommandPalette, SearchField, type CommandItem } from "@area/react";
+import { CommandPalette, type CommandItem } from "@area/react";
+import { SearchIcon } from "@area/icons";
 import { categories as ICON_CATEGORIES, icons as ICON_META } from "@area/icons/meta";
-import { useStudio } from "./studio.tsx";
+import { ChromeButton, useStudio } from "./studio.tsx";
 import { hrefOf, type Place } from "./places.ts";
 import { FOUNDATIONS, placeLabel } from "./app-nav.tsx";
 import { FAMILIES } from "./pages/components.tsx";
@@ -58,14 +59,8 @@ export function SearchEverything({ open, onOpenChange }: { open: SearchFor; onOp
   })), [navigate, open, query.trim().length >= 2, systems, projects, openSystem.name]);
   return (
     <>
-      {/* The field only opens the palette: a click, Enter, or the first letter typed (which the palette's field takes). */}
-      <SearchField size="sm" variant="soft" className="studio-titlebar__search" readOnly value="" placeholder="Search" aria-label="Search everything"
-        aria-haspopup="dialog" shortcut={["⌘", "K"]} onClick={() => show()}
-        onKeyDown={event => {
-          if (event.metaKey || event.ctrlKey || event.altKey) return;
-          if (event.key.length === 1 && event.key !== " ") { event.preventDefault(); show(event.key); }
-          else if (event.key === "Enter" || event.key === " " || event.key === "ArrowDown") { event.preventDefault(); show(); }
-        }} />
+      {/* An icon in the Sidebar's header opens the palette (Cursor's sidebar search; a field in the Titlebar until 2026-10-30). */}
+      <ChromeButton label="Search" keys={["⌘", "K"]} shortcut="Meta+K" icon={<SearchIcon />} onClick={() => show()} />
       <CommandPalette items={items} open={open !== null} onOpenChange={next => { onOpenChange(next ? open ?? "here" : null); if (!next) setQuery(""); }} hotkey="mod+k"
         query={query} onQueryChange={setQuery} aria-label={open === "new" ? "Open in a new tab" : "Search everything"}
         placeholder={open === "new" ? "Open in a new tab: a place, component, setting, icon…" : "Search places, components, settings, icons…"}

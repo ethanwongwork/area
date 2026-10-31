@@ -9,9 +9,11 @@ components and accurate specs matter more than speed.
 
 - **The app is the source of truth** (owner, 2026-10-12). `apps/desktop` (Electron) is
   built only from Area and judged only in the app. Its regions are:
-  - **Titlebar:** back and forward, the open tabs (Home first and fixed, then one per project,
-    system, Inspiration or lab; a tab never changes what it holds), search (⌘K, every place),
-    Inspiration, toggles, light / dark.
+  - **Three regions, each with its own header** (owner, 2026-10-30; no Titlebar across the window): the
+    Sidebar's holds the window controls' room, its toggle, search (⌘K, every place) and back and forward;
+    the Canvas's the open tabs (Home first and fixed, then one per project, system, Inspiration or lab; a
+    tab never changes what it holds), Inspiration and light / dark; the Inspector's its views and toggle.
+    The profile and Settings (⌘,) sit at the Sidebar's foot.
   - **Sidebar** (the tab's own nav: in Home's tab Home, Projects and the Library; in a system's
     tab its Themes, Foundations, Components, Patterns and History; in a project's tab its
     Overview, Pages and layers, Explorations and Versions; a page's own list takes it over),
@@ -19,8 +21,9 @@ components and accurate specs matter more than speed.
     `apps/desktop/src/places.ts`; systems (called brands until 2026-10-29), their themes and
     published versions (the Inspector's settings are the open system's working copy):
     `apps/desktop/src/systems.ts`; projects: `apps/desktop/src/projects.ts`.
-  - The app's own UI takes the Inspector's settings, type and density included (owner, 2026-10-22); its layout was
-    measured at type 13, Compact. Its UI follows `docs/PRODUCT_UI.md`.
+  - The app's own UI is drawn in its chosen system's published theme (owner, 2026-10-30; Settings ›
+    Appearance, `apps/desktop/src/app-look.ts`); the Inspector's settings reach only the specimens. Its
+    layout was measured at type 13, Compact. Its UI follows `docs/PRODUCT_UI.md`.
   - `apps/docs` is archived: don't extend it or check work there.
 - **One session at a time.** Before starting, check `origin/main` and open pull requests,
   so you don't build what another session has. When resuming, read `.Codex/HANDOFF.md`

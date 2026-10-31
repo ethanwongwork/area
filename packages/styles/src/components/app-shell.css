@@ -53,6 +53,14 @@
   }
   .area-titlebar:not(.area-titlebar--floating, .area-titlebar--macos):has(> :first-child:is(button, a, .area-button)) { --_titlebar-start: var(--_titlebar-even); }
   .area-titlebar--macos { --_titlebar-start: 83px; } /* spec: Cursor's traffic lights, 13 + 54 + 16 */
+  /* md (the default): Panel's md bar, as the base rule. */
+  .area-titlebar--md:not(.area-titlebar--floating) { block-size: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--_titlebar-rule)); }
+  /* sm: a region's header on the window's top line (owner, 2026-10-30, Cursor's 40): the small control 7 from its top and
+     bottom and its end, as Panel's window bar. md is Panel's md bar. */
+  .area-titlebar--sm:not(.area-titlebar--floating) {
+    --_titlebar-even: calc((var(--area-space-16) - var(--area-space-2)) / 2);
+    block-size: calc(var(--area-control-sm) + var(--area-space-16) - var(--area-space-2) + var(--_titlebar-rule));
+  }
   /*
    * Variants (owner, review round 28: "is there always just an underline? is there a floating title bar variant with
    * a backplate?"; picked both, 2026-10-16).

@@ -94,3 +94,11 @@ end controls (and its start control, when the bar starts with one and has no tra
 side as from the top and the rule: (height − rule − small control) / 2, 7 at the app's scale (was Panel's 14, and 13
 beside macOS's lights). A bar that starts with its title keeps the title on Panel's 14 column; the lights' 83 stays.
 Figma's panel tabs measure 8 and 8. (app-shell.css)
+
+### 2026-10-30 · Titlebar size sm
+
+- **What changed:** Titlebar `size` (`sm` | `md`, default `md`, Panel's md bar as before). `sm` is a region's header on the
+  window's top line: the small control 7 from its top, bottom and end, 40 at type 13 / 32, as Panel's `windowBar`.
+- **Why:** owner, 2026-10-30, the desktop app's three-panel shell (no bar across the window; each region its own header,
+  Cursor's 40).
+- **Verdict:** in review.

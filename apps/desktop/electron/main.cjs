@@ -217,7 +217,20 @@ function tabMenu() {
   const send = (command, index) => (_item, window) => (window ?? BrowserWindow.getFocusedWindow())?.webContents.send("area:command", command, index);
   const mac = process.platform === "darwin";
   return Menu.buildFromTemplate([
-    ...(mac ? [{ role: "appMenu" }] : []),
+    // The app menu, with Settings… (⌘,) where every Mac app has it: it opens Settings over the current tab (src/pages/settings.tsx).
+    ...(mac ? [{ label: app.name, submenu: [
+      { role: "about" },
+      { type: "separator" },
+      { label: "Settings…", accelerator: "CmdOrCtrl+,", click: send("settings") },
+      { type: "separator" },
+      { role: "services" },
+      { type: "separator" },
+      { role: "hide" },
+      { role: "hideOthers" },
+      { role: "unhide" },
+      { type: "separator" },
+      { role: "quit" },
+    ] }] : [{ label: "Settings", submenu: [{ label: "Settings…", accelerator: "CmdOrCtrl+,", click: send("settings") }] }]),
     { label: "File", submenu: [
       { label: "New Tab", accelerator: "CmdOrCtrl+T", click: send("new-tab") },
       { label: "Reopen Closed Tab", accelerator: "CmdOrCtrl+Shift+T", click: send("reopen-tab") },

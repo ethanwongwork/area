@@ -380,9 +380,18 @@ and the default density (28 Compact, 36 Comfortable). Read the ramps in `axes/de
 and `emit/base.ts`; never copy a table into a component
 ([research](research/ui-size-scale-2026-10-12.md)).
 
-- **The type ramp** is six sizes with one leading each on the 4px grid: 12/16, 14/20,
-  16/24, then titles 20/28, 24/32, 32/40 at type 14 ([type spec](specs/typography.md)).
-  Small text is the base minus 2, and never under 10.
+- **The type ramp** is six sizes with one leading each: 12/16, 14/20, 16/24, then titles 20/28, 24/32, 32/40 at
+  type 14, on the 4px grid there and on the 2px leading ramp at other types (13/18 and 15/22 at type 13;
+  `LEADING` in `axes/type-size.ts`, [type spec](specs/typography.md)). Small text is the base minus 2, and never
+  under 10. These leadings are **UI lines**: a label, a row, a cell, a title, a description of one or two lines. They
+  run tight (1.38 to 1.5) so rows stay compact.
+- **Prose lines** (owner, 2026-10-30; `docs/research/vertical-rhythm-2026-10-30`). Prose that runs past two lines,
+  where the eye has to find the next line (a chat turn, documentation and spec prose), takes the prose leading: the first
+  value on the 2px leading ramp at or above 1.5 × the size, the line spacing WCAG 1.4.8 asks of paragraphs and 1.4.12
+  requires text to survive. 12/18, 13/20, 14/22, 15/24, 16/24 (`text-sm-prose-leading`, `text-md-prose-leading`; the
+  type axis, `proseLeading` in `axes/type-size.ts`). Message uses it: at type 13 a turn is 15/24 (was 15/22). Parts set in
+  prose keep their UI lines and state them (Step, Plan, Edit summary, Turn notice, a table); `cohesion.test.mjs` checks
+  both. "Reading" stays text-md's name, the size; prose is the line.
 - **Every scope restarts at the body role.** Below the page root, an element with its own Type sets `text-md` for
   text set straight in it (THEMING.md, CSS inheritance). A component that holds free text states its own role
   (Card and Surface use `text-sm`); inline parts (Link, Code, Abbreviation) inherit the text they sit in. A part that
@@ -406,6 +415,23 @@ and `emit/base.ts`; never copy a table into a component
   - a text group to the block after it (a list, actions, a footer): the container's block gap (Card's 12).
   Weight and ink follow the part, not the family: a title that names a surface or section is strong (500); the name
   of an item or control (a choice, a step, a row, a file) is regular (400); supporting lines are muted and regular.
+  A joined pair is never tighter than the lines inside it: at 13/18 over 13/18 the join is 8.8 baseline to cap (Section
+  heading 8, with its trimmed boxes), the same as the lede's own lines, so the title reads as the pair's first line.
+- **Text that flows** (owner, 2026-10-30; `docs/research/vertical-rhythm-2026-10-30`). Prose is spaced by the same
+  ladder as everything else, each gap larger than the space inside it (Message, `message.css`; the app's chat,
+  `styles/chat.css`):
+  - **blocks** (paragraphs, a group of steps, a table, a card) are the prose gap apart, about two-thirds of a prose line
+    on the spacing ramp (`text-*-prose-gap`): 16 at 15/24, 12 at 13/20, 20 at 18/28 (baseline to baseline 1.6 to 1.7
+    lines, past WCAG 1.4.8's paragraph spacing);
+  - **a heading carries its space above** (spacing.md): the prose gap plus 8 above it (24 at 15/24) and 8 below, at the
+    body size and strong, so it joins what it introduces;
+  - **a list** is a set its lead-in sentence introduces (Text pairs): items 4 apart, the lead-in one step further (8), and
+    the prose gap after the list;
+  - **a conversation** follows the rings: a reply's blocks the prose gap apart; the person's message to its reply one
+    step closer (12, the group role); a new exchange one ring out (24, the section role); a time over a message joins it
+    (8). Steps inside a group stay 4 apart.
+  Space is compared on one basis, baseline to cap: a gap quoted between line boxes (another product's 2px) is that gap
+  plus the lines' own leading, about 9 at 13/18.
 - **Shared controls use the same tier's icon, text and gap tokens.**
 - **Icon-to-label gap:**
   - 6 at sm, md and lg; 4 at xs and compact;

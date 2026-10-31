@@ -23,6 +23,21 @@ describe("type size (docs/research/ui-size-scale-2026-10-12.md)", () => {
     }
   });
 
+  it("opens prose to 1.5 lines on the leading ramp, paragraphs two-thirds of a line apart (2026-10-30)", () => {
+    const pair = (base: (typeof TYPE_SIZES)[number], role: "sm" | "md") => {
+      const t = typeSizeTokens(base);
+      return `${px(t[`text-${role}-size`]!)}/${px(t[`text-${role}-prose-leading`]!)} ${px(t[`text-${role}-prose-gap`]!)}`;
+    };
+    expect(TYPE_SIZES.map(base => pair(base, "sm"))).toEqual(["12/18 12", "13/20 12", "14/22 16", "15/24 16", "16/24 16"]);
+    expect(TYPE_SIZES.map(base => pair(base, "md"))).toEqual(["14/22 16", "15/24 16", "16/24 16", "17/26 16", "18/28 20"]);
+    // Never tighter than the UI line, and at least WCAG 1.4.8's 1.5.
+    for (const base of TYPE_SIZES) for (const role of ["sm", "md"] as const) {
+      const t = typeSizeTokens(base);
+      expect(px(t[`text-${role}-prose-leading`]!)).toBeGreaterThanOrEqual(px(t[`text-${role}-leading`]!));
+      expect(px(t[`text-${role}-prose-leading`]!) / px(t[`text-${role}-size`]!)).toBeGreaterThanOrEqual(1.5);
+    }
+  });
+
   it("puts icons in the 20 slot from 15, its line on the size curve (owner, 2026-10-29)", () => {
     expect(TYPE_SIZES.map(base => typeSizeTokens(base)["type-icon"])).toEqual(["16px", "16px", "16px", "20px", "20px"]);
     expect(TYPE_SIZES.map(base => typeSizeTokens(base)["type-icon-line"])).toEqual(["1", "1", "1", "0.8846", "0.8846"]);

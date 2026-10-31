@@ -15,7 +15,10 @@
     min-inline-size: 0;
     color: var(--area-fg-default);
     font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    /* Prose lines, 1.5 × the size on the leading ramp (15/24 at type 13; was the UI line, 15/22): a turn runs past two
+       lines. Parts set in a turn (Step, Plan, a code block, a table) keep their own UI lines (DESIGN_SYSTEM.md, Prose
+       lines; docs/research/vertical-rhythm-2026-10-30). */
+    line-height: var(--area-text-md-prose-leading);
   }
   /* spec (message.md, measured 2026-09-28): the user's actions sit 4 below the bubble, ChatGPT's;
      the assistant's keep 12 under the prose (audit G-25). */
@@ -36,10 +39,17 @@
     white-space: pre-wrap;
   }
 
-  /* spec: the assistant's prose runs the column, paragraphs 16 apart (ChatGPT 16). */
+  /* spec: the assistant's prose runs the column, its blocks the prose gap apart (two-thirds of a prose line: 16 at
+     15/24). The text flows on Area's ladder (DESIGN_SYSTEM.md, Text that flows): a heading carries its space above (the
+     gap plus 8) and joins what follows (8); a list joins the sentence that leads into it (8, one step past its items'
+     4) and the next block is the gap after it. */
   .area-message__content { min-inline-size: 0; overflow-wrap: anywhere; }
   .area-message__content > * { margin-block: 0; }
-  .area-message__content > * + * { margin-block-start: var(--area-space-16); }
+  .area-message__content > * + * { margin-block-start: var(--area-text-md-prose-gap); }
+  .area-message__content > :is(h1, h2, h3, h4, h5, h6):not(:first-child) { margin-block-start: calc(var(--area-text-md-prose-gap) + var(--area-space-8)); }
+  .area-message__content > :is(h1, h2, h3, h4, h5, h6) + *,
+  .area-message__content > * + :is(ul, ol) { margin-block-start: var(--area-space-8); }
+  .area-message__content :is(ul, ol) > li + li { margin-block-start: var(--area-space-4); }
 
   /* spec: 32 icon buttons with no gap, muted (ChatGPT 143 on 13 ink). The buttons' plates line
    * up with the turn: the assistant's first plate starts on the text edge, the person's last
