@@ -143,7 +143,7 @@ invalid control with a dashed Mark edge; not verified in a forced-colours browse
 | Slider | thumb edge | `edge-control-hover` #d4 (slider.css:34) | edge #d4d4d4 | match (audit S5) |
 | Switch | row type | 14/20 label, 12/16 description | same | match |
 | Table | selection column | Checkbox md | — | Table composes this component |
-| Card | contained surface | 24 corner, 16 to the text column, `#ee` edge with the card halo (surface.css:33-90) | card variant: `radius-container` 12 corner, 12 to the content, `edge-control` #e2 edge, no shadow (choice.css:99-110) | differs by design (audit C-20 A, owner 2026-09-30): a choice card is a control-tier option in a list or grid, its edge is the field edge that darkens when chosen; Card is a content surface with a lift |
+| Card | contained surface | 24 corner, 16 to the text column, `#ee` edge with the card halo (surface.css:33-90) | card variant: the ladder's corner for its one-line height (row, list; ≤ `radius-container`), `radius-container` for tile and preview, 12 to the content, `edge-control` #e2 edge, no shadow (choice.css:99-110) | differs by design (audit C-20 A, owner 2026-09-30): a choice card is a control-tier option in a list or grid, its edge is the field edge that darkens when chosen; Card is a content surface with a lift |
 
 ## Visual pass
 
@@ -214,6 +214,8 @@ Chromium snaps box edges and masks to device pixels, so the marks stay on the gr
 - **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill).
 
 ## Feedback log
+
+- 2026-10-30 · owner: "are these option rows supposed to be pill shaped?" (Stroke groups, Option rows and cards, at corner 12) → no: a row or list `card` or `soft` option is a one-line bar, so its corner is the height ladder's for its one-line height (`--_card-line`: inset and edge twice plus the control's box, since the label is trimmed to its cap), capped at `radius-container`, half the line at Pill: 34 → 10 at corner 10, 12 at 12, 14 at 14, 17 at Pill; 30 (compact) → 8, 10, 12, 15. It took `radius-container` (16 at 10, 20 at 12), a full pill on a 34 row. Tile, preview, media and media-row keep `radius-container` (their pictures' mats are computed from it). DESIGN_SYSTEM.md Radius, "Option rows are bars"; cohesion test.
 
 - 2026-10-26 · owner: "is this selected style correct or should it be a different stroke style?" and "the gaps horizontally between the text and components doesnt look right or balanced" → a chosen soft option draws the card's selected edge and tint (`stroke-selected` at `selected-width`, `selected-tint`) on its rest fill, so soft and card follow the Selected stroke and Selected tint settings as one rule (was one fill step darker, bg-component-active); in a card or soft list row the text follows the control at the row gap (`gap-row`, 12, compact 8; was the label gap, 6), equal to the card's inset before the control.
 

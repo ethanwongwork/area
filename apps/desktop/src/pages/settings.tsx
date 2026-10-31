@@ -33,13 +33,13 @@ import { chromeOf } from "../app-look.ts";
 import { tabKind } from "../places.ts";
 import { CANVAS_DEFAULTS, canvasAttributes, SidebarList, useStudio, Workspace, type CanvasAxes, type Mode } from "../studio.tsx";
 import { MATERIAL_DEFAULT, bundleValue, type MaterialState } from "../material.ts";
-import { ROW_OF, RowFrame, SettingRow, type RowContext } from "../inspector-rows.tsx";
+import { ResetButton, resetOf, ROW_OF, RowFrame, SettingRow, type Reset, type RowContext } from "../inspector-rows.tsx";
+import { ScreenFigure, SCREENS, type ScreenId } from "../setup-screen.tsx";
+import { readStored, writeStored } from "../storage.ts";
 import { MaterialRows } from "../canvas-settings.tsx";
 import { ChoicePreview, ratioOf } from "../choice-visuals.tsx";
-import { ScreenFigure, SCREENS, type ScreenId } from "../setup-screen.tsx";
 import { hasColours } from "../colours.ts";
 import { useBrandSheet } from "../brand.ts";
-import { readStored, writeStored } from "../storage.ts";
 import { PublishDialog } from "../publish.tsx";
 import { brandStyle } from "../brand.ts";
 import { inMode } from "./theme-settings.ts";
@@ -132,11 +132,11 @@ const GROUPS: Record<string, { section: SettingsSection; title?: string; lede?: 
 };
 
 /** One row: its name over a one-line description, the control at the end; a wide row (pictures) takes the line under them. */
-function SettingsRow({ label, description, wide, children }: { label: string; description?: string; wide?: boolean; children: ReactNode }) {
+function SettingsRow({ label, description, wide, reset, children }: { label: string; description?: string; wide?: boolean; reset?: Reset; children: ReactNode }) {
   return (
-    <div className="studio-settings__row" data-wide={wide ? "" : undefined}>
+    <div className="studio-settings__row" data-wide={wide ? "" : undefined} data-setting={reset?.setting}>
       <div className="studio-settings__text">
-        <span className="studio-settings__label">{label}</span>
+        <span className="studio-settings__name"><span className="studio-settings__label">{label}</span>{reset ? <ResetButton reset={reset} name={label} /> : null}</span>
         {description ? <span className="studio-settings__description">{description}</span> : null}
       </div>
       <div className="studio-settings__control">{children}</div>
@@ -309,7 +309,7 @@ function PictureRow({ axis, look }: { axis: string; look: Look }) {
   const control = GALLERY_CONTROLS.find(entry => entry.axis === axis)!;
   const value = look.values[axis as keyof CanvasAxes];
   return (
-    <SettingsRow label={control.label} description={control.hint} wide>
+    <SettingsRow label={control.label} description={control.hint} wide reset={resetOf(axis, [axis], look.context)}>
       <Pictures label={control.label} value={value} onChange={next => look.context.set({ [axis]: next })} ratio={ratioOf(axis)} min={axis === "radius" ? 64 : undefined}
         options={control.items.map(item => ({ value: item.value, label: item.label.replace(/ \(Default\)$/, ""),
           picture: <span className="studio-settings__scope" {...canvasAttributes({ ...look.values, [axis]: item.value }, look.material)}><ChoicePreview axis={axis} preset={item.value} /></span> }))} />
@@ -341,7 +341,8 @@ function ModePicture({ mode, values, material }: { mode: Mode; values: CanvasAxe
 /**
  * The theme being edited on a product screen, live: every setting, its Material, exact page colors and an exact accent,
  * and a hover preview of a list's option, as the Inspector's specimens take them (src/studio.tsx `shown`). The screen is
- * the person's pick, remembered; the mode is the one the rows edit.
+ * the person's pick, remembered; the mode is the one the rows edit. A setting's components up close are the theme
+ * page's Playground (src/pages/themes.tsx).
  */
 function ThemePreview() {
   const { shown, theme, brand, workingSystem } = useStudio();

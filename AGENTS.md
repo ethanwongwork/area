@@ -15,8 +15,9 @@ components and accurate specs matter more than speed.
     tab never changes what it holds), Inspiration and light / dark; the Inspector's its views and toggle.
     The profile and Settings (⌘,) sit at the Sidebar's foot.
   - **Sidebar** (the tab's own nav: in Home's tab Home, Projects and the Library; in a system's
-    tab its Themes, Foundations, Components, Patterns and History; in a project's tab its
-    Overview, Pages and layers, Explorations and Versions; a page's own list takes it over),
+    tab its Themes, Colors, Typography, Icons, Components, Patterns and History, one row each (owner,
+    2026-10-30); in a project's tab its Overview, Pages and layers, Explorations and Versions; a page's
+    own list sits under the nav, never in place of it),
     **Canvas** and **Inspector** (Theme, Design, Code, Chat). Places and old links:
     `apps/desktop/src/places.ts`; systems (called brands until 2026-10-29), their themes and
     published versions (the Inspector's settings are the open system's working copy):

@@ -13,7 +13,7 @@ import { useState, type FormEvent } from "react";
 import { Button, ConfirmDialog, Dialog, Field, Input, Radio, RadioGroup, Segmented, Table, TableCell, TableHeaderCell } from "@area/react";
 import { canvasAttributes, useStudio } from "./studio.tsx";
 import { ViewControls } from "./view-controls.tsx";
-import { ScreenFigure } from "./setup-screen.tsx";
+import { SHOWCASE, ScreenFigure } from "./setup-screen.tsx";
 import { Tile } from "./tile.tsx";
 import { GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { tabKind } from "./places.ts";
@@ -77,7 +77,7 @@ export function BeforeAfter({ before, after, empty, mode }: {
 
 /** A theme's screen, as Themes and Home draw it, in the app's light or dark. */
 export function ThemeScreen({ theme, mode }: { theme: SystemTheme; mode: "light" | "dark" }) {
-  return <ScreenFigure className="studio-theme-card" scope={{ ...canvasAttributes(theme.canvas, theme.material), "data-area-theme": mode }} />;
+  return <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={{ ...canvasAttributes(theme.canvas, theme.material), "data-area-theme": mode }} />;
 }
 
 /** The end of a system tab's Canvas bar: Live / Working and Publish, while the working copy has changes. */

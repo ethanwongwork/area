@@ -849,3 +849,14 @@ test('every stroke group\'s members draw its edge, and the groups are the only e
   assert.match(css, /--area-token-swatch-ring:\s*var\(--area-edge-media\)/, 'a swatch\'s ring is not the Media group\'s');
   assert.match(css, /\.area-checkbox--soft,\s*\.area-radio--soft\s*\{[^}]*--_card-edge:\s*var\(--area-edge-options\)/, 'a soft option row does not draw the Options group\'s edge');
 });
+
+test('a one-line option row takes the height ladder corner, pictures in a card the surface corner', () => {
+  // DESIGN_SYSTEM.md, Radius, "Option rows are bars" (owner 2026-10-30): a row or list card / soft option is a bar, so it
+  // reaches a pill only at Pill; on the surface corner a 34 row was a pill at corner 12.
+  const base = rules.find(rule => rule.selector.startsWith('.area-checkbox--card, .area-radio--card, .area-checkbox--soft, .area-radio--soft') && /border-radius/.test(rule.body))?.body ?? '';
+  assert.match(base, /border-radius:\s*var\(--_card-corner\)/, 'card and soft options draw --_card-corner');
+  assert.match(base, /--_card-line:\s*calc\(2 \* \(var\(--_card-inset\) \+ var\(--area-stroke-width\)\) \+ var\(--_size\)\)/, 'the one-line height is the inset and edge twice plus the control box');
+  assert.match(base, /--_card-corner:\s*min\(var\(--area-radius-container\),.*var\(--_card-line\) \* var\(--area-radius-factor\)/, 'the corner is the ladder on the one-line height, capped at the surface');
+  const pictures = rules.find(rule => /area-radio--preview/.test(rule.selector) && /--_card-corner:\s*var\(--area-radius-container\)/.test(rule.body));
+  assert.ok(pictures && /area-radio--tile/.test(pictures.selector) && /area-radio--media-row/.test(pictures.selector), 'tile, preview and media options keep the surface corner');
+});

@@ -525,6 +525,11 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   `radius-list` on the list (`surface.css`, `navigation.css`).
 - **Bars and keycaps.** A one-line bar (Alert banner, Toast) and Tooltip take the large
   control corner. Multiline ones are surfaces. Kbd is a 24px box's corner at every size.
+- **Option rows are bars.** A Radio or Checkbox `card` or `soft` option in the row or list layout takes the
+  ladder's corner for its one-line height (inset and edge twice, plus the control's box), never rounder than a
+  surface, and a pill only at Pill: a 34 row is 10 at corner 10, 12 at 12 (owner 2026-10-30; it took the surface
+  corner, so 16 or 20 made a 34 row a pill). A caption makes it taller, not rounder. Tile, preview and media options
+  are pictures in a card and keep the surface corner.
 - **Pills are a set** (`data-area-pills`), not a radius.
   - By default Badge, Chip, Count, Switch and Avatar are pills, and Button, fields and
     Segmented follow the radius.
