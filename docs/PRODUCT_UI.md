@@ -179,7 +179,9 @@ Cursor's nav with Figma's tabs).
   the rest are plain controls ("some simplified visual illustrations … but for the most part just simple controls").
   Search finds rows in every section, headed by their section.
   Theme has a **live preview** beside its rows (owner, 2026-10-30: "add a screen to the right of the theme canvas in
-  settings to preview all the changes live"): a product screen (Workspace, Analytics, Settings or Phone, remembered) drawn
+  settings to preview all the changes live"): the Area app itself by default (owner, 2026-10-30: "a variation of the area
+  electron app itself"; `content/examples/area-app.tsx`, its Sidebar, tabs, component tiles and Inspector), or a product
+  screen (Workspace, Analytics, Settings or Phone; the pick remembered), drawn
   in the theme being edited, in the mode the rows edit, exact colors and hover previews included, held in view while the
   rows scroll; on a Canvas under 960 it sits above them. **Page color** leads the Page section (owner, 2026-10-30: "not
   sure what page color means"), in the Inspector too: Adjust (Lightness, then Temperature and Tint) or Exact (one picked

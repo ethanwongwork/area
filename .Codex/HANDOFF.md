@@ -18,6 +18,8 @@
   says "color" (198 strings, TypeScript-parsed so code names stay; PRODUCT_UI rule 21). Settings › Theme has a sticky
   live preview (`ThemePreview`, ScreenFigure with the open theme's scope, screen remembered), stacked under 960.
   Open: the app says "grey", not "gray".
+  The preview's default screen is the Area app itself (`content/examples/area-app.tsx`, SCREENS `area`, also offered in
+  Setup's screen list).
 - **Even header insets, 2026-10-30 (uncommitted).** Each header's end controls sit as far from the side as from the top
   (7 at every scale on the window bars): Panel's controls-only bar applies `--_bar-start` / `--_bar-end` itself (inset.css
   had put 19 back at the Inspector's end), a window bar's even room no longer subtracts a rule, Titlebar starts tabs (a

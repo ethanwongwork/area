@@ -86,3 +86,24 @@
     border-radius: var(--area-radius-container);
   }
   .ex-hl__figure { inline-size: min(100%, 240px); }
+/* Area (content/examples/area-app.tsx): the desktop app itself, its three regions at the sample screens' window size
+   (setup-screen.tsx SCREEN, 1024 × 640). The panels, headers, rows and tiles are Area's; this only lays them out. */
+.ex-area { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; inline-size: 1024px; block-size: 640px; overflow: hidden; background: var(--area-bg-page); }
+.ex-area__side, .ex-area__inspector { block-size: 100%; min-block-size: 0; }
+.ex-area__group { display: flex; align-items: center; gap: var(--area-space-4); }
+.ex-area__lights { display: flex; gap: 8px; inline-size: 60px; } /* pick: the window's three lights, as the app leaves room for them */
+.ex-area__lights i { inline-size: 12px; block-size: 12px; border-radius: 50%; background: var(--area-border-decorative); }
+.ex-area__list { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); }
+.ex-area__profile { display: flex; align-items: center; gap: var(--area-space-8); padding: var(--area-space-8) var(--area-space-12); }
+.ex-area__grow { flex: 1 1 0; min-inline-size: 0; }
+.ex-area__canvas { display: grid; grid-template-rows: auto auto minmax(0, 1fr); min-inline-size: 0; overflow: hidden; }
+.ex-area__bar { display: flex; align-items: center; gap: var(--area-space-8); padding: var(--area-space-8) var(--area-space-16); }
+.ex-area__body { display: grid; align-content: start; gap: var(--area-space-24); padding: var(--area-space-8) var(--area-space-16) var(--area-space-16); overflow: hidden; }
+.ex-area__section { display: grid; gap: var(--area-space-12); }
+.ex-area__heading { display: flex; align-items: center; gap: var(--area-space-6); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-strong); }
+.ex-area__count { color: var(--area-fg-muted); font-weight: var(--area-weight-regular); font-variant-numeric: tabular-nums; }
+.ex-area__tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--area-space-12); }
+.ex-area__tile { display: grid; gap: var(--area-space-8); }
+.ex-area__stage { display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; min-block-size: 96px; } /* pick: the tile's stage, a specimen centred with room round it */
+.ex-area__name { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+.ex-area__pair { display: flex; align-items: center; gap: var(--area-space-12); }

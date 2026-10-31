@@ -344,8 +344,8 @@ function ModePicture({ mode, values, material }: { mode: Mode; values: CanvasAxe
 function ThemePreview() {
   const { shown, theme, brand, workingSystem } = useStudio();
   const [screen, setScreenState] = useState<ScreenId>(() => {
-    const saved = readStored<string>("settings-preview-screen", "workspace");
-    return saved in SCREENS ? saved as ScreenId : "workspace";
+    const saved = readStored<string>("settings-preview-screen", "area");
+    return saved in SCREENS ? saved as ScreenId : "area";
   });
   const setScreen = (next: ScreenId) => { setScreenState(next); writeStored("settings-preview-screen", next); };
   // An exact accent's rule is in the head while it shows (src/brand.ts); the page picks' rule always is (studio.tsx).
@@ -357,7 +357,8 @@ function ThemePreview() {
   return (
     <aside className="studio-settings__preview" aria-label={`Preview of ${activeTheme(workingSystem).name}`}>
       <Select size="sm" variant="soft" fullWidth aria-label="Preview screen" value={screen} onChange={event => setScreen(event.currentTarget.value as ScreenId)}>
-        {(Object.keys(SCREENS) as ScreenId[]).map(id => <option key={id} value={id}>{SCREENS[id].label}</option>)}
+        {/* The app itself first: a theme on the app it is made in (owner, 2026-10-30), then the product screens. */}
+        {(["area", ...(Object.keys(SCREENS) as ScreenId[]).filter(id => id !== "area")] as ScreenId[]).map(id => <option key={id} value={id}>{SCREENS[id].label}</option>)}
       </Select>
       <ScreenFigure className="studio-settings__screen" screen={screen} scope={scope} fidelity="real" crossfade />
       <p className="studio-settings__description">{activeTheme(workingSystem).name} in {theme === "light" ? "light" : "dark"}, as you change it. Switch light and dark from the header.</p>
