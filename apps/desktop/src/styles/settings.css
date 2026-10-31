@@ -43,6 +43,9 @@
   align-items: center;
   inline-size: min(calc(var(--area-space-96) * 3 - var(--area-space-16)), 45%);
   --area-input-inline-size: 100%;
+  /* A value written as text (Page colour's "Grey 100%") reads at the rows' size, as the controls' own text. */
+  font-size: var(--area-text-sm-size);
+  line-height: var(--area-text-sm-leading);
 }
 /* A control that fills (a framed Field, a full-width Segmented, dropdown or field) takes the column; a switch or a button
    keeps its own width at the column's end, as Cursor's. */
@@ -66,3 +69,36 @@
 .studio-settings__split { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); inline-size: 100%; block-size: 100%; }
 .studio-settings__split > * { grid-area: 1 / 1; }
 .studio-settings__split > :last-child { clip-path: inset(0 0 0 50%); }
+
+/* Theme's live preview (owner, 2026-10-30: "a screen to the right of the theme canvas in settings to preview all the changes
+   live"): the rows' column at its reading width, the preview beside it filling the rest up to a screen's comfortable size,
+   held in view while the rows scroll, 32 apart as the groups are. On a Canvas too narrow for both, the preview sits above
+   the rows and scrolls with them. */
+.studio-settings-host { container-type: inline-size; }
+.studio-settings-split {
+  display: grid;
+  /* The rows reach their reading width first; the preview takes the rest, at least a screen you can read (368), up to six
+     columns. Below 560 + 32 + 368 the preview goes above the rows. */
+  grid-template-columns: minmax(calc(var(--area-space-96) * 6 - var(--area-space-16)), calc(var(--area-space-96) * 8)) minmax(calc(var(--area-space-96) * 4 - var(--area-space-16)), 1fr);
+  max-inline-size: calc(var(--area-space-96) * 14 + var(--area-space-32));
+  margin-inline: auto;
+  align-items: start;
+  column-gap: var(--area-space-32);
+}
+.studio-settings-split > .studio-settings { margin-inline: 0; inline-size: 100%; }
+.studio-settings__preview {
+  position: sticky;
+  inset-block-start: 0;
+  display: grid;
+  gap: var(--area-space-12);
+  padding-block: var(--area-space-24);
+}
+/* Its caption at the rows' size. */
+.studio-settings__preview > .studio-settings__description { margin: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+/* The screen in a window's proportion, as a theme's card draws it (theme.css). */
+.ss-frame.studio-settings__screen { block-size: auto; aspect-ratio: 1024 / 640; border-radius: var(--_tile-radius); }
+@container (inline-size < 960px) {
+  .studio-settings-split { grid-template-columns: minmax(0, calc(var(--area-space-96) * 8)); }
+  .studio-settings__preview { position: static; padding-block-end: 0; }
+  .studio-settings-split > .studio-settings__preview { order: -1; }
+}

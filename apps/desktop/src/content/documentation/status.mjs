@@ -12,7 +12,7 @@ export default {
     practices: [
       ["Do", "Use soft, the default, for status and metadata; outline for quiet labels beside dense text; solid for a state that must read at a glance."],
       ["Do", "Pick the tone for meaning (success, warning, danger) and the variant for emphasis; the two are independent."],
-      ["Do", "Give a modern Badge a dot or an icon when its tone matters: modern keeps a neutral plate and colours only that add-on."],
+      ["Do", "Give a modern Badge a dot or an icon when its tone matters: modern keeps a neutral plate and colors only that add-on."],
       ["Do", "Give a dotOnly or iconOnly Badge an aria-label; it has no visible text, and the component throws without one."],
       ["Do", "Put the meaning in the label: an avatar, flag or icon is decorative and hidden from assistive tech."],
       ["Do", "Set truncate for labels that can run long; plain-text labels keep the full text in title."],
@@ -23,7 +23,7 @@ export default {
     // Spec: Anatomy (the area block); manifest elements.
     parts: {
       root: "A span, or a native link with as=\"a\": owns the height, the pill or radius corner, the fill and border, and the text gutters.",
-      dot: "A small coloured disc before the label, in the tone's ink. dotOnly draws the dot alone.",
+      dot: "A small colored disc before the label, in the tone's ink. dotOnly draws the dot alone.",
       "leading-icon": "An icon before the label, centred in the Badge's rounded end. Decorative.",
       label: "The text, cap-centred on the plate; with truncate it ends in an ellipsis.",
       "trailing-icon": "An icon after the label. Decorative.",
@@ -92,7 +92,7 @@ export default {
       ["Do", "Use plain by default; use soft where the row's hover or selected fill would swallow plain ink."],
       ["Do", "Pass label with the words the owner lacks (\"unread\"), so a screen reader hears \"Inbox 3 unread\"."],
       ["Do", "Set showZero={false} where a zero says nothing; a zero Count then renders nothing."],
-      ["Don't", "Colour a Count to warn. It has no tones; use Indicator or Badge for urgency."],
+      ["Don't", "Color a Count to warn. It has no tones; use Indicator or Badge for urgency."],
       ["Don't", "Use a Count on its own. It means nothing without the label it counts for."],
     ],
     // Spec: Anatomy.
@@ -126,7 +126,7 @@ export default {
     // Spec: States, Motion; indicator.css hooks.
     states: {
       processing: "A pulse rings out from the mark; it stops under reduced motion and when motion is off.",
-      border: "A ring of the surface colour around the mark, cutting it out from the owner it overlaps.",
+      border: "A ring of the surface color around the mark, cutting it out from the owner it overlaps.",
     },
     aria: [
       ["role=\"img\", aria-label", "On a standalone dot or count: label, or \"N notifications\", \"New activity\" or \"Processing\" by default."],
@@ -250,7 +250,7 @@ export default {
     // Spec: Behavior and accessibility; Toaster.tsx JSDoc.
     practices: [
       ["Do", "Wrap the app in a Toaster and call useToaster().show(); it announces each toast, even the first."],
-      ["Do", "Use the tone for the outcome; it colours the icon, and danger interrupts a screen reader."],
+      ["Do", "Use the tone for the outcome; it colors the icon, and danger interrupts a screen reader."],
       ["Do", "Add an action (such as Undo) when the outcome can be reversed; a toast with an action stays until dismissed."],
       ["Do", "Pass announcement when the message or title isn't plain text, so a screen reader hears something useful."],
       ["Do", "Keep the F8 hotkey, or set hotkey to another key; it moves focus to the toasts and is part of the region's name."],
@@ -260,7 +260,7 @@ export default {
     // Spec: Behavior and accessibility; manifest elements.
     parts: {
       root: "The floating surface: owns the inset, the corner, the lift and the frame.",
-      icon: "An optional icon on the first line, coloured by the tone. Decorative.",
+      icon: "An optional icon on the first line, colored by the tone. Decorative.",
       content: "Holds the title and description, and is the live region of a standalone Toast.",
       title: "A strong first line.",
       description: "The message, in muted ink under a title.",
@@ -298,8 +298,8 @@ export default {
       ["Don't", "Use Progress for a short wait inside a control; use Spinner."],
     ],
     parts: {
-      root: "The rail: full width, owns the thickness, the pill ends and the rail colour.",
-      bar: "The fill in the Selection colour; it moves to the value with a short ease.",
+      root: "The rail: full width, owns the thickness, the pill ends and the rail color.",
+      bar: "The fill in the Selection color; it moves to the value with a short ease.",
     },
     states: {
       indeterminate: "No value: a segment travels along the rail. It stops under reduced motion and when motion is off.",
@@ -386,7 +386,7 @@ export default {
       ["Do", "Say what the number means in valueText (\"1.2 of 5 GB\") or description (\"Resets in 4 days\")."],
       ["Do", "Set tone to warning or danger when the value means trouble, and say so in the text as well."],
       ["Do", "Pass valueText as a string when you can; that is what a screen reader announces."],
-      ["Don't", "Rely on the tone alone; colour is not read."],
+      ["Don't", "Rely on the tone alone; color is not read."],
       ["Don't", "Expect the tone to change on its own at a threshold; you set it, so the text can say why."],
     ],
     // Spec: Anatomy.
@@ -395,7 +395,7 @@ export default {
       header: "The row holding the label at the start and the value at the end.",
       label: "What is measured; it names the meter.",
       value: "The value as shown, the percentage by default; hidden from assistive tech, which reads the meter's own value.",
-      track: "Progress's bar, filled to the share of the range in the tone's colour.",
+      track: "Progress's bar, filled to the share of the range in the tone's color.",
       description: "A line under the bar that says what the number means.",
     },
     aria: [
@@ -454,7 +454,7 @@ export default {
       ["Don't", "Use separators to space sections; spacing is the container's job."],
     ],
     parts: {
-      root: "The rule: one line thick in the divider colour, horizontal or vertical, with optional margin.",
+      root: "The rule: one line thick in the divider color, horizontal or vertical, with optional margin.",
     },
     aria: [
       ["role=\"separator\", aria-orientation", "By default; aria-orientation follows orientation."],
@@ -472,9 +472,9 @@ export default {
     // Spec: Owner decisions, Variants, Feedback log; primitives.tsx Code and Token.
     practices: [
       ["Do", "Mark identifiers, commands, file names and token names inside prose or table cells."],
-      ["Do", "Pass swatch with a token's var() so the colour follows the theme; a hex shows a fixed colour."],
+      ["Do", "Pass swatch with a token's var() so the color follows the theme; a hex shows a fixed color."],
       ["Do", "Use subtle for a quieter, derived reference beside a primary one."],
-      ["Do", "Set onColor on a coloured ground; it takes the surrounding ink."],
+      ["Do", "Set onColor on a colored ground; it takes the surrounding ink."],
       ["Do", "Use <Code swatch> for design tokens. Token is deprecated in its favour and renders the same."],
       ["Don't", "Size Code yourself; it follows the surrounding text."],
       ["Don't", "Use it for keyboard keys or for code longer than a line."],
@@ -482,7 +482,7 @@ export default {
     // Spec: Anatomy (area).
     parts: {
       root: "A native code element: inline, with a thin edge, padding and a small corner; both ends survive a line wrap.",
-      swatch: "A square of the token's colour before the label, with a faint ring. Decorative.",
+      swatch: "A square of the token's color before the label, with a faint ring. Decorative.",
       label: "The name beside a swatch; long names end in an ellipsis.",
     },
     aria: [

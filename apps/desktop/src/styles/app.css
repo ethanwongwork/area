@@ -172,9 +172,9 @@
      the window's edge (13 + the lights' 54 + 16, Cursor's; app-shell.css --macos). */
   .studio-head__lights {
     flex: none;
-    /* The bar starts its controls at Panel's 14 (measured at every type and density); the room makes up the rest, less the
-       group's 4 gap: 83 − 14 − 4. */
-    inline-size: calc(83px - (var(--area-space-16) - var(--area-space-2)) - var(--area-space-4)); /* spec: 65 */
+    /* The window bar starts its controls at its even inset, 7 at every type and density (Panel's window-bar: the small
+       control plus 14); the room makes up the rest to the toggle at 83, less the group's 4 gap: 83 − 7 − 4. */
+    inline-size: calc(83px - (var(--area-space-16) - var(--area-space-2)) / 2 - var(--area-space-4)); /* spec: 72 */
   }
 
   /* --- The profile at the Sidebar's foot (owner, 2026-10-30: "a profile and setting control to the bottom left") ---- */

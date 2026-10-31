@@ -79,9 +79,9 @@ export default {
     // Spec: States.
     states: {
       disabled: "Field paint with disabled ink on the text, icons, affixes and action; no opacity, and not focusable.",
-      invalid: "The edge and focus halo take the danger colour, kept on focus; the input gets aria-invalid.",
-      success: "The edge and halo take the success colour, held through focus.",
-      warning: "The edge and halo take the warning colour, held through focus.",
+      invalid: "The edge and focus halo take the danger color, kept on focus; the input gets aria-invalid.",
+      success: "The edge and halo take the success color, held through focus.",
+      warning: "The edge and halo take the warning color, held through focus.",
       "read-only": "Keeps the variant's rest paint with no hover edge and a default cursor; the value stays focusable and copyable.",
       loading: "A Spinner fills an icon slot (the leading one when there is a leading icon); aria-busy is set and the field stays editable.",
     },
@@ -105,7 +105,7 @@ export default {
       ["One value with a unit or symbol", ["input"], "Input's prefix and suffix hold static text in a single field."],
       ["One number named by a letter or icon", ["number-field"], "Number field's scrub handle shows the letter and drags the value."],
       ["Padding or corner radius as four parts", ["box-field"], "Box field links the parts and splits them with a toggle."],
-      ["A hex colour with its opacity", ["color-field"], "Color field with alpha builds this group and keeps one hex value."],
+      ["A hex color with its opacity", ["color-field"], "Color field with alpha builds this group and keeps one hex value."],
     ],
     // Spec: Behavior and accessibility; pages.mjs example notes.
     practices: [
@@ -247,9 +247,9 @@ export default {
     },
     // Spec: States.
     states: {
-      invalid: "The edge and focus halo take the danger colour; aria-invalid is set.",
-      success: "The edge and halo take the success colour.",
-      warning: "The edge and halo take the warning colour.",
+      invalid: "The edge and focus halo take the danger color; aria-invalid is set.",
+      success: "The edge and halo take the success color.",
+      warning: "The edge and halo take the warning color.",
       disabled: "Field paint with disabled ink and no resize handle; not focusable and not submitted.",
       "read-only": "Keeps the variant's rest paint with no hover edge; focusable, copyable and submitted.",
     },
@@ -284,9 +284,9 @@ export default {
     },
     // Spec: States.
     states: {
-      invalid: "The edge and focus halo take the danger colour; aria-invalid is set.",
-      success: "The edge and halo take the success colour, held through focus.",
-      warning: "The edge and halo take the warning colour, held through focus.",
+      invalid: "The edge and focus halo take the danger color; aria-invalid is set.",
+      success: "The edge and halo take the success color, held through focus.",
+      warning: "The edge and halo take the warning color, held through focus.",
       disabled: "Field paint with disabled ink and chevron; no opacity. Also inherited from an Input group or Field.",
     },
     // Spec: Behavior and accessibility (native keys).
@@ -314,7 +314,7 @@ export default {
       ["Do", "Use ghost for an inline value with no chrome until hovered, as a property in a row."],
       ["Do", "Set name to submit the chosen value through a hidden input; the label is never submitted."],
       ["Do", "Use onHighlightChange to preview an option while the pointer or arrows are on it; it never chooses."],
-      ["Do", "Use layout grid when each choice is best seen as a picture (a setting's look, a colour); give options a preview, or an icon for a swatch grid."],
+      ["Do", "Use layout grid when each choice is best seen as a picture (a setting's look, a color); give options a preview, or an icon for a swatch grid."],
       ["Don't", "Use the grid for long ramps of numbers or plain words; the list reads them faster and its icons carry the order."],
       ["Don't", "Use it for plain-text options in a form; Select is native and lighter."],
       ["Don't", "Use it for a long list people would rather search; use Combobox."],
@@ -490,7 +490,7 @@ export default {
     },
     // Spec: States.
     states: {
-      open: "data-open is set; the field takes the focus edge colour, and ghost holds its pressed plate.",
+      open: "data-open is set; the field takes the focus edge color, and ghost holds its pressed plate.",
       disabled: "Select's disabled paint; the panel never opens.",
       invalid: "The danger edge, with aria-invalid on the field.",
     },
@@ -750,8 +750,8 @@ export default {
   "color-field": {
     // Spec: Job and boundaries.
     instead: [
-      ["Choosing among fixed colours", ["color-swatch-picker"], "Color swatch picker offers a set of swatches as choices."],
-      ["Editing by area, tracks and channels", ["color-picker"], "Color picker edits the colour visually."],
+      ["Choosing among fixed colors", ["color-swatch-picker"], "Color swatch picker offers a set of swatches as choices."],
+      ["Editing by area, tracks and channels", ["color-picker"], "Color picker edits the color visually."],
     ],
     // Spec: Job and boundaries, Variants, Behavior; source: ColorField.tsx JSDoc.
     practices: [
@@ -759,12 +759,12 @@ export default {
       ["Do", "Set alpha where opacity is edited too, as in an inspector's fill row."],
       ["Do", "Name the hex with a Field label or aria-label, and set opacityLabel when Opacity isn't the right word."],
       ["Do", "Use soft in inspector rows, alongside the other soft fields."],
-      ["Don't", "Use it to pick from a fixed set of colours; use Color swatch picker."],
+      ["Don't", "Use it to pick from a fixed set of colors; use Color swatch picker."],
       ["Don't", "Expect a change on every key: drafts stay visible and commit on Enter or blur."],
     ],
     // Spec: Anatomy.
     parts: {
-      root: "Input's shell with the colour swatch in the leading slot and the hex in tabular numerals; with alpha, an Input group shell around hex and opacity.",
+      root: "Input's shell with the color swatch in the leading slot and the hex in tabular numerals; with alpha, an Input group shell around hex and opacity.",
       opacity: "With alpha, a Number field for 0 to 100% beside the hex, ruled apart and named by opacityLabel.",
     },
     // Source: ColorField.tsx handleKeyDown; NumberField.

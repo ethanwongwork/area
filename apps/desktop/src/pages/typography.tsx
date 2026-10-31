@@ -30,7 +30,7 @@ import { matches } from "../search.ts";
 import { DEFAULT_TYPE, TYPE_ROLES, TYPE_SIZES, type TypeRole } from "../tokens.ts";
 import { readStored, writeStored } from "../storage.ts";
 
-const SAMPLE = "Every component, icon and colour in one place.";
+const SAMPLE = "Every component, icon and color in one place.";
 
 const GROUPS = [
   { id: "headings", label: "Headings", lede: "Introduce pages, sections and surfaces. Surface titles follow the type size; larger headings hold theirs.", groups: ["display", "title"] },
@@ -64,7 +64,7 @@ const roleStyle = (role: TypeRole, weight: "regular" | "strong") => ({
 
 const metrics = (role: TypeRole, type: string) => {
   const { size, leading, tracking } = role.metrics[type]!;
-  return `${size} / ${leading}${tracking && tracking !== "0em" ? ` · ${tracking}` : ""}`;
+  return `${size} / ${leading}${tracking && tracking !== "0em" ? `, ${tracking}` : ""}`;
 };
 /** Tracking as read: 0 for none, else the token's em value. */
 const trackingOf = (role: TypeRole, type: string) => { const value = role.metrics[type]!.tracking; return !value || value === "0em" ? "0" : value; };
@@ -73,7 +73,7 @@ const measures = (role: TypeRole, type: string, weights: readonly (typeof WEIGHT
   ["Size", `${role.metrics[type]!.size}`],
   ["Line height", `${role.metrics[type]!.leading}`],
   ["Tracking", trackingOf(role, type)],
-  ["Weight", weights.map(entry => entry.value).join(" · ")],
+  ["Weight", weights.map(entry => entry.value).join(", ")],
 ] as const;
 
 /*
@@ -211,7 +211,7 @@ export function TypographyPage() {
                             <td><span className="studio-tabular">{entry.metrics[density]!.size}</span></td>
                             <td><span className="studio-tabular">{entry.metrics[density]!.leading}</span></td>
                             <td><span className="studio-tabular">{trackingOf(entry, density)}</span></td>
-                            <td><span className="studio-tabular studio-nowrap">{shownWeights.map(w => w.value).join(" · ")}</span></td>
+                            <td><span className="studio-tabular studio-nowrap">{shownWeights.map(w => w.value).join(", ")}</span></td>
                           </tr>
                         ))}
                       </tbody>
@@ -251,7 +251,7 @@ export function TypographyPage() {
                   ["Roles", TYPE_ROLES.length],
                   ["Headings", TYPE_ROLES.filter(entry => entry.group !== "text").length],
                   ["Copy", TYPE_ROLES.filter(entry => entry.group === "text").length],
-                  ["Weights", WEIGHTS.map(entry => `${entry.id === "regular" ? "Regular" : "Strong"} ${entry.value}`).join(" · ")],
+                  ["Weights", WEIGHTS.map(entry => `${entry.id === "regular" ? "Regular" : "Strong"} ${entry.value}`).join(", ")],
                   ["Density", "Copy steps down a size in compact; headings hold."],
                 ]} />
               </PanelSection>

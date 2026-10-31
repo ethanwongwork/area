@@ -14,7 +14,7 @@ import { S19, S20, S21, S23, S24, S25, S26, S27 } from "./abstract/scenes-c.tsx"
 
 export interface BoardPiece { id: string; title: string; Piece: () => ReactNode; gaps: string[]; wide?: boolean }
 export const ABSTRACT_BOARD: BoardPiece[] = [
-  { id: "01", title: "Typography panel", Piece: S01, gaps: ["The case choice (AA · Aa · aa) is a field shell: a Segmented would add the track and thumb the shot does not have.", "The colour well is a swatch bar in a field shell; ColorField always shows its hex."] },
+  { id: "01", title: "Typography panel", Piece: S01, gaps: ["The case choice (AA · Aa · aa) is a field shell: a Segmented would add the track and thumb the shot does not have.", "The color well is a swatch bar in a field shell; ColorField always shows its hex."] },
   { id: "02", title: "Chat sidebar", Piece: S02, gaps: [] },
   { id: "03", title: "Auto layout", Piece: S03, gaps: ["Fill and Hug are static suffixes: a size field has no resizing menu.", "The padding diagram is drawn (badges on a box); Box model is a read-out, not an editor."] },
   { id: "04", title: "Delivery card", Piece: S04, gaps: ["The parcel and conveyor are drawn for the scene: Area has no illustration set.", "The clock action is placed on the media by the scene; Card has no media-action slot."] },
@@ -25,7 +25,7 @@ export const ABSTRACT_BOARD: BoardPiece[] = [
   { id: "09", title: "Pagination set", Piece: S09, gaps: ["The pill tracks are composed from pill buttons: Pagination draws no track of its own."] },
   { id: "10", title: "Box model", Piece: S10, gaps: ["Drawn from Area's tokens and badges: Box model's own read-out labels its rings and uses one measuring tone.", "Pink for the vertical margins comes from Area's pink ramp; Area's measuring tone is the info blue alone."] },
   { id: "11", title: "Corner radius", Piece: S11, gaps: ["The corner preview (the shape with each radius as a disc) is drawn: Area has no corner editor.", "Mixed, with its icon on the selection tint, is a field shell rather than a Select."] },
-  { id: "12", title: "Appearance dialog", Piece: S12, gaps: ["The gold restates Area's surface roles inside the dialog: Area has no hue-tinted ground or material colour.", "Theme previews are drawn windows: there is no theme-preview radio card."] },
+  { id: "12", title: "Appearance dialog", Piece: S12, gaps: ["The gold restates Area's surface roles inside the dialog: Area has no hue-tinted ground or material color.", "Theme previews are drawn windows: there is no theme-preview radio card."] },
   { id: "13", title: "Location card", Piece: S13, gaps: ["The map is drawn from the shot's traced coastline: Area has no map.", "The frosted caption band is a scene effect (a backdrop blur), not a Card part."] },
   { id: "14", title: "Note menu", Piece: S14, gaps: ["The glass bar and menu are painted by the scene: Material's glass reaches Area's own surfaces, not a free panel over a photo.", "Rows with a trailing icon are composed: MenuItem puts its icon first and its shortcut slot holds text."] },
   { id: "15", title: "Week and events", Piece: S15, gaps: ["No week strip: weekday letters, date buttons and event dots are composed.", "No agenda list: the events are drawn rows."] },

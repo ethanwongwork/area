@@ -378,3 +378,15 @@ No rule under the bar, between sections or above the footer: the bar's height, a
   (Cursor's agents window bars are 40, read from its bundle; inspector-chat-2026-10-18/cursor.md). Titlebar `size="sm"` is the
   same height, so the headers on one line agree.
 - **Verdict:** in review.
+
+### 2026-10-30 · Even sides on a bar of controls
+
+- **What changed:** a bar of controls alone (no title) applies its even padding itself, `padding-inline: var(--_bar-start)
+  var(--_bar-end)`, so each end control sits as far from its side as from the top: 7 at every side of a window bar (6 at
+  type 13 / 28). A window bar's even room is the bar less the control alone (it subtracted a rule it doesn't draw: 6.5
+  beside 7). Before, the shared inset (inset.css) put its text inset back at any side without a seam rule: the desktop
+  Inspector's toggle sat 19 from its end, its views 6.5 from the seam.
+- **Why:** owner, 2026-10-30: "fix the inset padding in the header, there shouldnt be so much excess room on the sides of
+  the buttons, it should be equal". The even rule (2026-10-18) was already the documented one; the cascade undid it.
+- **Checks:** cohesion test "a bar of controls is inset as far from its sides as from its top".
+- **Verdict:** in review.

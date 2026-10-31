@@ -38,7 +38,7 @@ const ENTRIES: ReadonlyArray<{ place: Place; label: string; description: string;
   ...EXAMPLES.map(example => ({ place: { page: "patterns" as const, item: example.id }, label: example.label, description: "Pattern", group: "Patterns" })),
 ];
 const ICONS = ICON_META.filter(icon => !icon.aliasOf).map(icon => ({
-  place: { page: "icons" as const, item: categoryOf(icon.category)?.slug }, label: title(icon.name), description: `Icon · ${categoryOf(icon.category)?.name ?? "Uncategorised"}`, group: "Icons", keywords: [icon.name, ...icon.keywords],
+  place: { page: "icons" as const, item: categoryOf(icon.category)?.slug }, label: title(icon.name), description: `Icon in ${categoryOf(icon.category)?.name ?? "Uncategorised"}`, group: "Icons", keywords: [icon.name, ...icon.keywords],
 }));
 
 /** Where search is open for: the current tab, a new one (New tab), or closed. */

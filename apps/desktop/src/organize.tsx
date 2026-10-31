@@ -83,7 +83,7 @@ export function ArrangeMenu<S extends string, G extends string>({ arrangement, s
   const sortLabel = sorts.find(choice => choice.value === arrangement.sort)?.label ?? "";
   const summary = `${sortLabel}, ${directions[arrangement.descending ? 1 : 0]}`;
   return (
-    <Menu aria-label="Sort and group" align="end" tooltip={<>Sort and group · {summary}</>}
+    <Menu aria-label="Sort and group" align="end" tooltip={<>Sort and group: {summary}</>}
       trigger={<Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={<SortIcon />} aria-label="Sort and group" />}>
       <MenuLabel>Sort by</MenuLabel>
       {sorts.map(choice => (

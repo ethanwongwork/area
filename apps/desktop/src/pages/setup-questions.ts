@@ -92,8 +92,8 @@ export interface Question {
 export const CHAPTERS: readonly Chapter[] = [
   // Colours first (owner, 2026-10-27, the exact colours plan: "Every later question applies these colours; the dark page
   // pick moves up from the Dark mode chapter").
-  { id: "colours", title: "Colours", focus: [],
-    lede: "Your page in light and in dark, and your accent: the colours every later answer applies." },
+  { id: "colours", title: "Colors", focus: [],
+    lede: "Your page in light and in dark, and your accent: the colors every later answer applies." },
   { id: "page", title: "Page", focus: ["sidebar", "stats", "list"],
     lede: "How text and layers sit on your page." },
   { id: "accent", title: "Accent", focus: ["primary", "checks", "switch", "tabs"],
@@ -153,23 +153,23 @@ export const QUESTIONS: readonly Question[] = [
   // the Page brightness slider, Greys, Tint colour and Grey strength questions folded into it.
   {
     id: "light-page", chapter: "colours", name: "Light page", essential: true, mode: "light", axes: ["ground-light", "neutral", "tint-hue", "tint-light"], focus: [],
-    question: "What colour is your page?",
-    description: "Every grey, edge and text colour is worked out from it.",
-    note: "Only colours Area can paint are offered: a page's colour fades out toward white.",
+    question: "What color is your page?",
+    description: "Every grey, edge and text color is worked out from it.",
+    note: "Only colors Area can paint are offered: a page's color fades out toward white.",
     control: { kind: "page", mode: "light" },
   },
   {
     id: "dark-page", chapter: "colours", name: "Dark page", essential: true, mode: "dark", axes: ["ground-dark", "neutral", "tint-hue-dark", "tint-dark"], focus: [],
-    question: "What colour is your page in dark mode?",
-    description: "True black, a near black or a coloured dark.",
-    note: "Only colours Area can paint are offered: a page's colour fades out toward black.",
+    question: "What color is your page in dark mode?",
+    description: "True black, a near black or a colored dark.",
+    note: "Only colors Area can paint are offered: a page's color fades out toward black.",
     control: { kind: "page", mode: "dark" },
   },
   // The accent's own pick follows (phase 4); until then the palette's accents and any hue.
   {
     id: "accent", chapter: "colours", name: "Accent", essential: true, axes: ["accent"], focus: accentParts, context: fillShade,
-    question: "Which colour is your accent?",
-    description: "The colour for actions, selection and focus.",
+    question: "Which color is your accent?",
+    description: "The color for actions, selection and focus.",
     note: "Contrast is solved for every hue.",
     control: { kind: "accent", visual: crop("form", 0.5) },
   },
@@ -178,7 +178,7 @@ export const QUESTIONS: readonly Question[] = [
     id: "text-tint", chapter: "page", name: "Text tint", axes: ["ink-tint"], focus: ["text", "list"], fidelity: "real",
     when: (values, colours) => greysTinted(values, "light") || pickTinted(colours.light),
     question: "Should text be tinted too?",
-    description: "Your greys lean toward a colour; body and muted text can lean the same way, or stay plain grey.",
+    description: "Your greys lean toward a color; body and muted text can lean the same way, or stay plain grey.",
     control: { kind: "slider", axis: "ink-tint", low: "Plain grey", high: "As tinted as the greys",
       marks: [{ value: "0", label: "Plain" }, { value: "50", label: "Tinted" }, { value: "100", label: "Full" }] },
   },
@@ -200,17 +200,17 @@ export const QUESTIONS: readonly Question[] = [
     question: "Where should the accent appear?",
     description: "Buttons and selection can each take it or stay neutral.",
     control: { kind: "cards", visual: crop("form", 0.5), choices: [
-      { label: "Nowhere", caption: "Monochrome; colour only for status.", set: { action: "neutral", selection: "neutral" } },
-      { label: "Selection", caption: "Checks and switches in colour.", set: { action: "neutral", selection: "accent" } },
-      { label: "Buttons", caption: "Primary buttons in colour.", set: { action: "accent", selection: "neutral" } },
-      { label: "Both", caption: "Buttons and selection in colour.", set: { action: "accent", selection: "accent" } },
+      { label: "Nowhere", caption: "Monochrome; color only for status.", set: { action: "neutral", selection: "neutral" } },
+      { label: "Selection", caption: "Checks and switches in color.", set: { action: "neutral", selection: "accent" } },
+      { label: "Buttons", caption: "Primary buttons in color.", set: { action: "accent", selection: "neutral" } },
+      { label: "Both", caption: "Buttons and selection in color.", set: { action: "accent", selection: "accent" } },
     ] },
   },
   {
     id: "saturation", chapter: "accent", name: "Saturation", essential: true, axes: ["accent-strength"], focus: accentParts, context: fillShade,
     when: accentShows,
     question: "How vivid should the accent be?",
-    description: "How much colour the accent keeps.",
+    description: "How much color the accent keeps.",
     control: { kind: "slider", axis: "accent-strength", low: "Muted", high: "Vivid",
       marks: [{ value: "30", label: "Dusty" }, { value: "50", label: "Soft" }, { value: "70", label: "Calm" }, { value: "100", label: "Vivid" }] },
   },
@@ -230,15 +230,15 @@ export const QUESTIONS: readonly Question[] = [
   {
     id: "label-tint", chapter: "accent", name: "Label tint", axes: ["label-tint"], focus: ["action"], fidelity: "real",
     when: values => values.action === "accent",
-    question: "Should button labels take a little colour?",
+    question: "Should button labels take a little color?",
     description: "Labels on accent buttons can lean toward the button's hue.",
     control: { kind: "toggle", axis: "label-tint", label: "Tint button labels", off: "0", on: "50", low: "A little", high: "Fully",
       visual: crop("action", 1.5, { fidelity: "real" }) },
   },
   {
-    id: "status", chapter: "accent", name: "Status colours", axes: ["status-colours"], focus: ["badges", "list"],
+    id: "status", chapter: "accent", name: "Status colors", axes: ["status-colours"], focus: ["badges", "list"],
     when: values => values["accent-strength"] !== "100",
-    question: "Should status colours quiet down too?",
+    question: "Should status colors quiet down too?",
     description: "Red, amber and green can stay vivid or quiet down too.",
     control: { kind: "cards", visual: crop("status", 1.6), choices: [
       status("fixed", "Vivid", "Warnings always stand out."),
@@ -370,9 +370,9 @@ export const QUESTIONS: readonly Question[] = [
       visual: crop("menu", 0.6, { hold: ["menu"] }) },
   },
   {
-    id: "shadow-colour", chapter: "depth", name: "Shadow colour", mode: "light", axes: ["shadow-color"], focus: ["menu", "stats"], hold: ["menu"],
+    id: "shadow-colour", chapter: "depth", name: "Shadow color", mode: "light", axes: ["shadow-color"], focus: ["menu", "stats"], hold: ["menu"],
     when: values => values.elevation !== "0" || values["shadow-resting"] !== "0",
-    question: "What colour should shadows be?",
+    question: "What color should shadows be?",
     description: "Dark mode's shadows stay black.",
     control: { kind: "cards", visual: crop("menu", 0.6, { hold: ["menu"] }), choices: [
       shadowColour("black", "Black", "Neutral, works with everything."),
@@ -451,7 +451,7 @@ export const QUESTIONS: readonly Question[] = [
     control: { kind: "cards", visual: crop("field", 1.4, { hold: ["focus"] }), choices: [
       focusRing("hug", "Hug", "Hugs each control."),
       focusRing("gap", "Gap", "Sits 2px off everything."),
-      focusRing("halo", "Halo", "Fields glow in the ring's colour."),
+      focusRing("halo", "Halo", "Fields glow in the ring's color."),
       focusRing("inset", "Inset", "Drawn inside; nothing outside moves."),
       focusRing("bold", "Bold", "A 3px ring for keyboard-first products."),
     ] },
@@ -497,7 +497,7 @@ export const QUESTIONS: readonly Question[] = [
     question: "How should controls answer a press?",
     description: "Hover can fade in and a press can give a little.",
     control: { kind: "cards", visual: { kind: "press" }, choices: [
-      feedback("off", "Off", "Still; colour changes alone."),
+      feedback("off", "Off", "Still; color changes alone."),
       feedback("subtle", "Subtle", "A soft fade and a slight give."),
       feedback("pronounced", "Pronounced", "A fuller give you can feel."),
     ] },

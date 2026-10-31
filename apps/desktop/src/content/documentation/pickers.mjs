@@ -3,47 +3,47 @@ export default {
   "color-swatch": {
     // Spec: Job and boundaries, Peers.
     instead: [
-      ["Letting someone choose one colour from a set", ["color-swatch-picker"], "Color swatch only displays; the picker adds radios, a selection ring and arrow keys."],
-      ["Letting someone type or edit a colour", ["color-field", "color-picker"], "Color field is the hex field for inspector rows; Color picker is the full editor."],
-      ["Naming a design token with its colour", ["token-row", "code"], "Code's swatch and Token row carry the token's name beside the colour."],
+      ["Letting someone choose one color from a set", ["color-swatch-picker"], "Color swatch only displays; the picker adds radios, a selection ring and arrow keys."],
+      ["Letting someone type or edit a color", ["color-field", "color-picker"], "Color field is the hex field for inspector rows; Color picker is the full editor."],
+      ["Naming a design token with its color", ["token-row", "code"], "Code's swatch and Token row carry the token's name beside the color."],
     ],
     // Spec: Variants, Owner decisions, Behavior and accessibility; source: ColorSwatch.tsx.
     practices: [
       ["Do", "Use sm in a field's leading icon slot, and md or lg where the swatch stands alone."],
-      ["Do", "Put it in a menu row's or Custom select's icon slot to show what an option paints: there it is 14 in the 16 box (Figma's colour-row chit), so it reads the size of the glyphs beside it."],
-      ["Do", "Pass any CSS colour string; a translucent colour shows over the checker, so its alpha is visible."],
+      ["Do", "Put it in a menu row's or Custom select's icon slot to show what an option paints: there it is 14 in the 16 box (Figma's color-row chit), so it reads the size of the glyphs beside it."],
+      ["Do", "Pass any CSS color string; a translucent color shows over the checker, so its alpha is visible."],
       ["Do", "Give it a contextual aria-label (\"Brand primary\") when the default \"Color <value>\" says less than its context."],
-      ["Do", "Set aria-hidden when a neighbouring label already names the colour, as Color field and Color swatch picker do."],
+      ["Do", "Set aria-hidden when a neighbouring label already names the color, as Color field and Color swatch picker do."],
       ["Don't", "Use a swatch as a button or toggle: it has no hover, focus or selected state. Use Color swatch picker."],
-      ["Don't", "Expect the colour to follow the theme: it is document data and stays as given; only the checker follows the theme."],
+      ["Don't", "Expect the color to follow the theme: it is document data and stays as given; only the checker follows the theme."],
     ],
     // Spec: Anatomy and Decisions (edge, checker, radius).
     parts: {
-      root: "The swatch: owns its size (sm, md, lg; the icon box less 2 in a menu or Custom select icon slot), the corner at a fifth of its side, the checker under the colour and the translucent ring over it.",
+      root: "The swatch: owns its size (sm, md, lg; the icon box less 2 in a menu or Custom select icon slot), the corner at a fifth of its side, the checker under the color and the translucent ring over it.",
     },
     // Spec: Behavior and accessibility; source: ColorSwatch.tsx.
     aria: [
       ["role=\"img\"", "Always: the swatch is one image."],
       ["aria-label", "\"Color <value>\" by default; pass your own name where the context gives one."],
-      ["aria-hidden", "Pass it when a neighbouring label already names the colour."],
+      ["aria-hidden", "Pass it when a neighbouring label already names the color."],
     ],
   },
 
   "color-swatch-picker": {
     // Spec: Job and boundaries.
     instead: [
-      ["Showing a colour without choosing it", ["color-swatch"], "Color swatch is the passive preview this picker draws in each cell."],
-      ["Editing any colour freely", ["color-picker", "color-field"], "This picker chooses only among the colours you give it."],
-      ["Choosing one option that isn't a colour", ["radio", "segmented", "list-box"], "They name their options with text; this one shows them as colours."],
+      ["Showing a color without choosing it", ["color-swatch"], "Color swatch is the passive preview this picker draws in each cell."],
+      ["Editing any color freely", ["color-picker", "color-field"], "This picker chooses only among the colors you give it."],
+      ["Choosing one option that isn't a color", ["radio", "segmented", "list-box"], "They name their options with text; this one shows them as colors."],
     ],
     // Spec: Variants, Owner decisions, Behavior and accessibility; source: ColorSwatchPicker.tsx JSDoc.
     practices: [
-      ["Do", "Give every item a human-readable label (\"Blue\"): it is the colour's only accessible name."],
-      ["Do", "Name the group with label, and set name so a form submits the chosen colour."],
+      ["Do", "Give every item a human-readable label (\"Blue\"): it is the color's only accessible name."],
+      ["Do", "Name the group with label, and set name so a form submits the chosen color."],
       ["Do", "Use grid with columns for a palette, row for a short wrapping set, and palette for a contiguous grid that fills its width."],
-      ["Do", "Set value or defaultValue when a colour must start chosen; with neither, nothing is chosen, so required can fail."],
+      ["Do", "Set value or defaultValue when a color must start chosen; with neither, nothing is chosen, so required can fail."],
       ["Don't", "Repeat a value: each value is both the submitted value and the swatch's paint, and must be unique."],
-      ["Don't", "Use colours that change with the theme for items: swatches are document colour data."],
+      ["Don't", "Use colors that change with the theme for items: swatches are document color data."],
     ],
     // Spec: Anatomy.
     parts: {
@@ -52,11 +52,11 @@ export default {
     },
     // Source: ColorSwatchPicker.tsx move(); native radio.
     keyboard: [
-      ["Tab", "Moves focus into the group, to the checked colour (a native radio group)."],
-      ["Left or Right", "Moves to the previous or next enabled colour and selects it, wrapping; mirrored in RTL."],
+      ["Tab", "Moves focus into the group, to the checked color (a native radio group)."],
+      ["Left or Right", "Moves to the previous or next enabled color and selects it, wrapping; mirrored in RTL."],
       ["Up or Down", "In grid and palette, moves to the row above or below in the same column and selects it, wrapping; in row, steps like Left and Right."],
-      ["Home or End", "Selects the first or last enabled colour."],
-      ["Space", "Selects the focused colour."],
+      ["Home or End", "Selects the first or last enabled color."],
+      ["Space", "Selects the focused color."],
     ],
     aria: [
       ["role=\"radiogroup\"", "On the root, named by aria-label, else label."],
@@ -68,21 +68,21 @@ export default {
   "color-picker": {
     // Spec: Job and boundaries.
     instead: [
-      ["A single colour value in an inspector row", ["color-field"], "Color field is the one-line hex and opacity field; the picker is the full editor."],
-      ["Choosing among a fixed set of colours", ["color-swatch-picker"], "A fixed, labelled set needs only radios, not an editor."],
-      ["Showing a colour without editing it", ["color-swatch"], "Color swatch is the passive preview."],
+      ["A single color value in an inspector row", ["color-field"], "Color field is the one-line hex and opacity field; the picker is the full editor."],
+      ["Choosing among a fixed set of colors", ["color-swatch-picker"], "A fixed, labelled set needs only radios, not an editor."],
+      ["Showing a color without editing it", ["color-swatch"], "Color swatch is the passive preview."],
     ],
     // Spec: Variants, Second pass, Decisions, Excluded; source: ColorPicker.tsx JSDoc.
     practices: [
-      ["Do", "Name it with aria-label or label (\"Fill colour\"): the name prefixes every inner control, as \"Fill colour hue\"."],
+      ["Do", "Name it with aria-label or label (\"Fill color\"): the name prefixes every inner control, as \"Fill color hue\"."],
       ["Do", "Use variant=\"plain\" inside a Popover or Panel that already draws the surface; surface is for a picker standing alone."],
-      ["Do", "Set alpha={false} for colours that cannot be translucent, such as a theme colour; values then stay six-digit."],
+      ["Do", "Set alpha={false} for colors that cannot be translucent, such as a theme color; values then stay six-digit."],
       ["Do", "Offer several views (spectrum, grid, sliders) when people choose in different ways; more than one adds a switcher."],
-      ["Do", "Pass contrast with the background a text colour will sit on, so the ratio and the failing band show while choosing."],
-      ["Do", "Pass gamut where only some colours are allowed (a page colour, a theme's range): the area then offers exactly those, and the value is an exact OKLCH colour."],
-      ["Do", "Leave saved colours off unless people reuse colours; pass swatches to show them and onAddSwatch to let people save the current colour (its button disables once that colour is saved)."],
+      ["Do", "Pass contrast with the background a text color will sit on, so the ratio and the failing band show while choosing."],
+      ["Do", "Pass gamut where only some colors are allowed (a page color, a theme's range): the area then offers exactly those, and the value is an exact OKLCH color."],
+      ["Do", "Leave saved colors off unless people reuse colors; pass swatches to show them and onAddSwatch to let people save the current color (its button disables once that color is saved)."],
       ["Don't", "Rely on the eyedropper: it shows only where the browser has the EyeDropper API."],
-      ["Don't", "Use it for gradients, images or blend modes: it edits one solid colour, and those need their own editors."],
+      ["Don't", "Use it for gradients, images or blend modes: it edits one solid color, and those need their own editors."],
     ],
     // Spec: Anatomy, Second pass; source: ColorPicker.tsx.
     parts: {
@@ -91,16 +91,16 @@ export default {
       body: "The editor's column: the view switcher, the contrast row, the area or grid, the controls row and the value row.",
       views: "A small full-width Segmented that switches between spectrum, grid and sliders; shown only with more than one view.",
       contrast: "The contrast row: the pair swatch, the ratio and a pass or fail mark with the level.",
-      "contrast-pair": "The current colour over the background it is checked against.",
+      "contrast-pair": "The current color over the background it is checked against.",
       "contrast-ratio": "The ratio as n.nn : 1; a status named with the ratio, the background and pass or fail.",
       "contrast-unit": "The \" : 1\" after the ratio's number.",
-      "contrast-level": "A check or a cross with AA or AAA, in the danger ink when the colour fails.",
+      "contrast-level": "A check or a cross with AA or AAA, in the danger ink when the color fails.",
       area: "The spectrum: saturation across, brightness up. Drag it, or focus it and use the arrows; it stays left to right in every script. With gamut (area--gamut): chroma across, lightness up, at the hue on the track.",
-      plane: "With gamut, the canvas the area paints: the colours the region reaches, clear past them, the edge covered in proportion.",
+      plane: "With gamut, the canvas the area paints: the colors the region reaches, clear past them, the edge covered in proportion.",
       band: "With contrast set, the region of the area that fails, dotted between two edges.",
       "band-region": "The dotted fill of the failing region.",
       "band-edge": "The two lines that bound the failing region; either can be absent.",
-      thumb: "The current-value marker on the area and the tracks: a white ring around the colour.",
+      thumb: "The current-value marker on the area and the tracks: a white ring around the color.",
       channel: "The area's hidden range input: its one Tab stop, a 2D slider for the keys and assistive technology.",
       grid: "The grid view: a contiguous palette (Color swatch picker), the Area palette by default.",
       controls: "The row under the area: the eyedropper, the tracks and the preview.",
@@ -110,17 +110,17 @@ export default {
       alpha: "The opacity track over the checker; absent without alpha.",
       "channel-row": "In sliders view, one channel: its letter and its track.",
       "channel-label": "The channel's letter (R, G, B…); hidden from assistive technology, since the track is named.",
-      preview: "With preview, the new colour over the original.",
-      "preview-new": "The new colour, an image named \"New <hex>\".",
-      "preview-original": "The original colour, a button that restores it; disabled while the colour is unchanged.",
+      preview: "With preview, the new color over the original.",
+      "preview-new": "The new color, an image named \"New <hex>\".",
+      "preview-original": "The original color, a button that restores it; disabled while the color is unchanged.",
       values: "The value row: the model select, then the fields.",
       model: "A small soft Select of Hex, RGB, CSS, HSL, HSB and OKLCH.",
       fields: "The joined soft fields for the current model, with opacity at the end.",
       "text-field": "The hex or CSS field: keeps a draft while typing and commits on Enter or blur; Escape restores.",
       opacity: "The opacity percentage field; absent without alpha and in the CSS model, whose text carries alpha.",
-      note: "A status line when an OKLCH value is outside sRGB and the nearest colour with less chroma is shown.",
-      swatches: "Opt-in (swatches, onAddSwatch): the saved colours under their heading, with a Color swatch picker at the row's size, nine to a row.",
-      heading: "The saved colours' label and, with onAddSwatch, the save button.",
+      note: "A status line when an OKLCH value is outside sRGB and the nearest color with less chroma is shown.",
+      swatches: "Opt-in (swatches, onAddSwatch): the saved colors under their heading, with a Color swatch picker at the row's size, nine to a row.",
+      heading: "The saved colors' label and, with onAddSwatch, the save button.",
     },
     // Source: ColorPicker.tsx areaKey(), DraftInput; native range inputs.
     keyboard: [
@@ -328,7 +328,7 @@ export default {
       toggle: "In a collapsible section, the heading's disclosure button.",
       "toggle-text": "The heading's text inside the toggle.",
       chevron: "The toggle's chevron in the side inset; shown on hover or focus, turned while collapsed.",
-      summary: "Shown in the heading while the section is collapsed, such as colour chips and a count.",
+      summary: "Shown in the heading while the section is collapsed, such as color chips and a count.",
       rows: "A collapsible section's rows, hidden while it is collapsed.",
       row: "A PanelRow: a caption above one or two equal control columns, and an optional trailing action square.",
       "row-label": "A row's caption, muted; give two to caption each column.",
@@ -400,7 +400,7 @@ export default {
     ],
     // Spec: Variants, Decisions, Excluded; source: TokenRow.tsx JSDoc.
     practices: [
-      ["Do", "Pass swatch for a colour token; other tokens (spacing, radius, numbers) are the plain token."],
+      ["Do", "Pass swatch for a color token; other tokens (spacing, radius, numbers) are the plain token."],
       ["Do", "Show the resolved value when a developer will copy it."],
       ["Do", "Set copyable when a click should copy; copyText overrides what is copied (else the value, else the name)."],
       ["Do", "Use outline to keep only the token's edge, without its fill."],
@@ -462,12 +462,12 @@ export default {
       ["Any new preview of a selection", ["asset-card"], "Deprecated: Asset card, containerless with no name, is the frame alone (aspect wide, fill checker, color). Preview frame stays so existing markup keeps working."],
       ["A picture in a card, cropped to cover", ["card"], "Card's media crops to fill; Preview frame shows the whole asset."],
       ["A thumbnail in a list row", ["asset-row"], "Asset row's preview identifies an asset; the frame shows it large."],
-      ["A colour mark at text size", ["color-swatch"], "Color swatch sits inline; the frame fills an inspector's column."],
+      ["A color mark at text size", ["color-swatch"], "Color swatch sits inline; the frame fills an inspector's column."],
     ],
     // Spec: Variants, Excluded, Decisions (content fit), Behavior and accessibility.
     practices: [
-      ["Do", "Put it at the head of an inspector for the one selected thing: an icon, an image or a colour."],
-      ["Do", "Pick the aspect for the content: square for an icon or component, landscape for a layout, wide for a colour."],
+      ["Do", "Put it at the head of an inspector for the one selected thing: an icon, an image or a color."],
+      ["Do", "Pick the aspect for the content: square for an icon or component, landscape for a layout, wide for a color."],
       ["Do", "Use ground=\"checker\" for an asset with transparency, and subtle for a grey well that matches Box model."],
       ["Do", "Give it a label when its content isn't already named; an img with its own alt needs none."],
       ["Don't", "Use it in new work: it is deprecated. Use Asset card, containerless with no name."],
@@ -477,7 +477,7 @@ export default {
     // Spec: Anatomy, Decisions; source: PreviewFrame.tsx.
     parts: {
       root: "The frame: fills its column at a fixed aspect, rounded at the container corner, with its content centred and inset.",
-      paint: "With color, the layer that fills the frame with that colour, over the checker so its alpha shows.",
+      paint: "With color, the layer that fills the frame with that color, over the checker so its alpha shows.",
     },
     aria: [
       ["role=\"img\", aria-label", "With label: the frame is one image named by it, and its content is presentational."],
@@ -512,8 +512,8 @@ export default {
     },
     // Spec: States; source: FileUpload.tsx.
     states: {
-      dragging: "Files are over the zone: its edge takes the selection colour and a plate fills it.",
-      invalid: "The edge turns the field's invalid colour, the hint takes the field's error ink, and the button carries aria-invalid.",
+      dragging: "Files are over the zone: its edge takes the selection color and a plate fills it.",
+      invalid: "The edge turns the field's invalid color, the hint takes the field's error ink, and the button carries aria-invalid.",
       disabled: "The zone dims; the picker doesn't open and drops are ignored.",
     },
     // Source: FileUpload.tsx (a native button; the input is out of the Tab order).

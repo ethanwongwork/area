@@ -12,6 +12,22 @@
   (Cursor) shell, https://claude.ai/artifact/13nEjv8rCm2eHZyYDnHXoM. Open for the owner: the three-header shell in the
   app; Nav and Custom select are reopened but in no status list (show Unrefined); saved duplicate tabs from before #179
   aren't merged on restore; PRODUCT_UI.md line 108 and AGENTS.md (app takes the Inspector's settings) are stale.
+- **Clearer Page and Accent, "color", Theme preview, 2026-10-30 (uncommitted).** Page color leads the Page section
+  (Inspector and Settings): Adjust (Lightness, Temperature, Tint) or Exact (`PageRows` in inspector-rows.tsx; picking
+  Exact starts from the page now, `pageColour`); Page and Accent hints rewritten to say what they paint. Visible copy
+  says "color" (198 strings, TypeScript-parsed so code names stay; PRODUCT_UI rule 21). Settings › Theme has a sticky
+  live preview (`ThemePreview`, ScreenFigure with the open theme's scope, screen remembered), stacked under 960.
+  Open: the app says "grey", not "gray".
+- **Even header insets, 2026-10-30 (uncommitted).** Each header's end controls sit as far from the side as from the top
+  (7 at every scale on the window bars): Panel's controls-only bar applies `--_bar-start` / `--_bar-end` itself (inset.css
+  had put 19 back at the Inspector's end), a window bar's even room no longer subtracts a rule, Titlebar starts tabs (a
+  Nav, or a strip holding one) at the even inset (was 14). Lights spacer 72 keeps the Sidebar toggle at 83. Cohesion test
+  added; panel.md and app-shell.md logged; Panel and Titlebar stay In review.
+- **Versions named like models, no middle dots, 2026-10-30 (uncommitted).** `versionName` (`src/systems.ts`) says a
+  version as "Area 1.0" everywhere (pickers, History, publish dialogs, project facts, Explorations nav); no "v". Middle
+  dots gone from the app's copy (commas, › for paths, a space before a unit); PRODUCT_UI.md rules 19 and 20. Publish's
+  Kind is Radio `soft` `list` with the version as meta; Page colour and the exact accent rows use `RowField`, so they
+  are Settings rows in Settings › Theme. Component demos' example copy (Asset row "SVG · 24 × 24") left as is.
 - **Settings: Appearance and Theme apart, built 2026-10-30 (uncommitted, this branch).** From the owner's preview pick
   (https://claude.ai/artifact/Hrzat6VNUQ2C9sHcLZ6ZBp, control-at-the-end rows). `src/pages/settings.tsx`: General,
   Appearance (Mode cards; Drawn in A system / Its own look; own look shows every setting + Material), Theme (open system:

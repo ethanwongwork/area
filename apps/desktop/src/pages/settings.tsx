@@ -18,13 +18,17 @@
  * Both draw every setting with the Inspector's own rows (src/inspector-rows.tsx) in a Settings frame, so a setting is the
  * same control in all three places. Mode, Density and Corner are pictures (Radio's preview cards, each choice drawn in its
  * own scope by src/choice-visuals.tsx); the rest are plain controls. Only settings that work are shown (product UI rule 16).
+ *
+ * Theme has a live preview beside its rows (owner, 2026-10-30: "add a screen to the right of the theme canvas in settings to
+ * preview all the changes live"): a product screen drawn in the theme being edited, in the mode the rows edit, held in view
+ * while the rows scroll; on a narrow Canvas it sits above them.
  */
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { Badge, Button, Input, Nav, NavGroup, NavItem, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading } from "@area/react";
 import { ArrowLeftIcon, PaletteIcon, PersonIcon, SwatchBookIcon } from "@area/icons";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, SETTING_GROUPS } from "@area/tokens/config";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
-import { activeTheme, asLive, liveOf, AREA_ID } from "../systems.ts";
+import { activeTheme, asLive, liveOf, versionName, AREA_ID } from "../systems.ts";
 import { chromeOf } from "../app-look.ts";
 import { tabKind } from "../places.ts";
 import { CANVAS_DEFAULTS, canvasAttributes, SidebarList, useStudio, Workspace, type CanvasAxes, type Mode } from "../studio.tsx";
@@ -32,6 +36,10 @@ import { MATERIAL_DEFAULT, bundleValue, type MaterialState } from "../material.t
 import { ROW_OF, RowFrame, SettingRow, type RowContext } from "../inspector-rows.tsx";
 import { MaterialRows } from "../canvas-settings.tsx";
 import { ChoicePreview, ratioOf } from "../choice-visuals.tsx";
+import { ScreenFigure, SCREENS, type ScreenId } from "../setup-screen.tsx";
+import { hasColours } from "../colours.ts";
+import { useBrandSheet } from "../brand.ts";
+import { readStored, writeStored } from "../storage.ts";
 import { PublishDialog } from "../publish.tsx";
 import { brandStyle } from "../brand.ts";
 import { inMode } from "./theme-settings.ts";
@@ -84,7 +92,9 @@ export function SettingsPage({ section, onSection }: { section: SettingsSection;
           </SidebarList>
         </div>
       }
-      canvas={
+      canvas={(rows => !needle && section === "theme" && themeLook
+        ? <div className="studio-settings-host"><div className="studio-settings-split">{rows}<ThemePreview /></div></div>
+        : rows)(
         <div className="studio-settings">
           {needle ? <h1 className="studio-settings__title">Results for “{query.trim()}”</h1> : section === "theme" ? <ThemeTitle /> : (
             <h1 className="studio-settings__title">{SECTIONS.find(entry => entry.id === section)!.label}</h1>
@@ -93,7 +103,7 @@ export function SettingsPage({ section, onSection }: { section: SettingsSection;
             const heading = GROUPS[group];
             return (
               <section key={group} className="studio-settings__group" aria-label={heading?.title}>
-                {heading?.title ? <SectionHeading className="studio-section-heading" title={needle ? `${SECTION_NAME[heading.section]} · ${heading.title}` : heading.title} lede={needle ? undefined : heading.lede} /> : null}
+                {heading?.title ? <SectionHeading className="studio-section-heading" title={needle ? `${SECTION_NAME[heading.section]} › ${heading.title}` : heading.title} lede={needle ? undefined : heading.lede} /> : null}
                 <div className="studio-settings__rows">
                   {shown.filter(row => row.group === group).map(row => (
                     <SettingsRow key={row.label} label={row.label} description={row.description} wide={row.wide}>{row.control}</SettingsRow>
@@ -105,7 +115,7 @@ export function SettingsPage({ section, onSection }: { section: SettingsSection;
           {appLook && (needle || section === "appearance") ? <ThemeGroups look={appLook} needle={needle} prefix={needle ? "Appearance" : undefined} /> : null}
           {themeLook && (needle || section === "theme") ? <ThemeGroups look={themeLook} needle={needle} prefix={needle ? "Theme" : undefined} /> : null}
         </div>
-      }
+      )}
     />
   );
 }
@@ -144,7 +154,7 @@ function ThemeTitle() {
         <div className="studio-settings__actions">
           {changes.length
             ? <Badge size="sm" variant="soft" tone="warning">{changes.length} unpublished {changes.length === 1 ? "change" : "changes"}</Badge>
-            : <Badge size="sm" variant="soft" tone="success">Live · v{liveOf(workingSystem).version}</Badge>}
+            : <Badge size="sm" variant="soft" tone="success">Live</Badge>}
           <Button size="sm" disabled={!changes.length} onClick={() => setPublishing(true)}>Publish</Button>
         </div>
       ) : null}
@@ -178,21 +188,21 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
   const following: Row[] = appLook.follow ? [
     { section: "appearance", group: "look", label: "System", description: "Each project picks its own; this one draws the app.",
       control: <Select size="sm" variant="soft" fullWidth aria-label="System" value={followed.id} onChange={event => setAppLook({ ...appLook, system: event.currentTarget.value, theme: undefined })}>
-        {systems.map(entry => <option key={entry.id} value={entry.id}>{entry.name} · v{liveOf(entry).version}</option>)}
+        {systems.map(entry => <option key={entry.id} value={entry.id}>{versionName(entry.name, liveOf(entry).version)}</option>)}
       </Select> },
     { section: "appearance", group: "look", label: "Theme", description: `One of ${followed.name}'s published themes.`,
       control: <Select size="sm" variant="soft" fullWidth aria-label="Theme" value={look.theme ?? ""} onChange={event => setAppLook({ ...appLook, theme: event.currentTarget.value })}>
         {published.themes.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
       </Select> },
     { section: "appearance", group: "look", label: "Its settings",
-      description: `Type ${said("type", chrome.canvas.type)} · ${said("density", chrome.canvas.density)} density · ${said("radius", chrome.canvas.radius)} corner · ${said("accent", chrome.canvas.accent)} accent`,
+      description: `Type ${said("type", chrome.canvas.type)}, ${said("density", chrome.canvas.density).toLowerCase()} density, ${said("radius", chrome.canvas.radius).toLowerCase()} corner, ${said("accent", chrome.canvas.accent).toLowerCase()} accent`,
       control: <Button size="sm" variant="soft" tone="neutral" onClick={() => editSystem(followed.id)}>Edit in Theme</Button> },
   ] : [];
   const editable = tabKind(place) !== "project";
   const theme: Row[] = [
     { section: "theme", group: "editing", label: "System", description: "The system whose theme you are editing.",
       control: <Select size="sm" variant="soft" fullWidth aria-label="Editing system" value={workingSystem.id} onChange={event => editSystem(event.currentTarget.value)}>
-        {systems.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
+        {systems.map(entry => <option key={entry.id} value={entry.id}>{versionName(entry.name, liveOf(entry).version)}</option>)}
       </Select> },
     editable ? { section: "theme", group: "editing", label: "Theme", description: "Changes stay unpublished until you publish them.",
       control: <Select size="sm" variant="soft" fullWidth aria-label="Editing theme" value={activeTheme(workingSystem).id} onChange={event => studio.chooseTheme(event.currentTarget.value)}>
@@ -269,7 +279,7 @@ function ThemeGroups({ look, needle, prefix }: { look: Look; needle: string; pre
     return { heading: group.heading, rows };
   }).filter(group => group.rows.length);
   const material = matches(`material ${MATERIAL_LEVERS.map(lever => lever.label).join(" ")}`);
-  const title = (heading: string) => prefix ? `${prefix} · ${heading}` : heading;
+  const title = (heading: string) => prefix ? `${prefix} › ${heading}` : heading;
   return (
     <RowFrame.Provider value="settings">
       {groups.map((group, at) => (
@@ -324,4 +334,33 @@ function ModePicture({ mode, values, material }: { mode: Mode; values: CanvasAxe
     <span className="studio-settings__scope" {...canvasAttributes(values, material)} data-area-theme={theme}><ChoicePreview axis="theme" preset={theme} /></span>
   );
   return mode === "system" ? <span className="studio-settings__split">{window("light")}{window("dark")}</span> : window(mode);
+}
+
+/**
+ * The theme being edited on a product screen, live: every setting, its Material, exact page colors and an exact accent,
+ * and a hover preview of a list's option, as the Inspector's specimens take them (src/studio.tsx `shown`). The screen is
+ * the person's pick, remembered; the mode is the one the rows edit.
+ */
+function ThemePreview() {
+  const { shown, theme, brand, workingSystem } = useStudio();
+  const [screen, setScreenState] = useState<ScreenId>(() => {
+    const saved = readStored<string>("settings-preview-screen", "workspace");
+    return saved in SCREENS ? saved as ScreenId : "workspace";
+  });
+  const setScreen = (next: ScreenId) => { setScreenState(next); writeStored("settings-preview-screen", next); };
+  // An exact accent's rule is in the head while it shows (src/brand.ts); the page picks' rule always is (studio.tsx).
+  useBrandSheet(brand.on ? brand : null);
+  const scope = {
+    ...canvasAttributes(shown.canvas, shown.material), "data-area-theme": theme,
+    ...(brand.on ? { "data-area-brand": "" } : {}), ...(hasColours(shown.colours) ? { "data-area-colours": "" } : {}),
+  };
+  return (
+    <aside className="studio-settings__preview" aria-label={`Preview of ${activeTheme(workingSystem).name}`}>
+      <Select size="sm" variant="soft" fullWidth aria-label="Preview screen" value={screen} onChange={event => setScreen(event.currentTarget.value as ScreenId)}>
+        {(Object.keys(SCREENS) as ScreenId[]).map(id => <option key={id} value={id}>{SCREENS[id].label}</option>)}
+      </Select>
+      <ScreenFigure className="studio-settings__screen" screen={screen} scope={scope} fidelity="real" crossfade />
+      <p className="studio-settings__description">{activeTheme(workingSystem).name} in {theme === "light" ? "light" : "dark"}, as you change it. Switch light and dark from the header.</p>
+    </aside>
+  );
 }

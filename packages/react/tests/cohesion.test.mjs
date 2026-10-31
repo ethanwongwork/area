@@ -785,3 +785,18 @@ test('the Composer takes Card\'s corner', () => {
   assert.ok(norm(composer).includes(norm(card)), `${composer} does not take ${card}`);
   assert.equal(norm(read('.area-composer', '--_composer-term')), norm(read('.area-card', '--_card-term')));
 });
+
+// panel.css / app-shell.css (owner 2026-10-30: "there shouldnt be so much excess room on the sides of the buttons, it
+// should be equal"): a bar of controls holds them as far from its sides as from its top. Panel's controls-only bar applies
+// its even padding itself, so the shared inset (inset.css) can't put its text inset back at a side with no seam rule; a
+// window bar, with no rule, is even to the control alone; a Titlebar that starts with tabs (a Nav, or a strip holding one)
+// starts at the even inset too.
+test('a bar of controls is inset as far from its sides as from its top', () => {
+  const body = selector => rules.find(rule => rule.selector === selector)?.body ?? '';
+  assert.match(body('.area-panel__bar:not(:has(> .area-panel__title))'), /padding-inline:\s*var\(--_bar-start\)\s+var\(--_bar-end\)/);
+  assert.match(body('.area-panel--window-bar > .area-panel__bar'), /--_bar-even:\s*calc\(\(var\(--_bar\) - var\(--area-control-sm\)\) \/ 2\)/);
+  const start = rules.find(rule => rule.selector.startsWith('.area-titlebar:not(.area-titlebar--floating, .area-titlebar--macos)') && /--_titlebar-start:\s*var\(--_titlebar-even\)/.test(rule.body));
+  assert.ok(start, 'the Titlebar has no even start');
+  assert.match(start.selector, /\.area-nav/);
+  assert.match(start.selector, /> :first-child > :first-child/);
+});

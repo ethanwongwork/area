@@ -15,7 +15,7 @@ import TOKENS from "@area/tokens/tokens.json";
 import { CustomSelect, Field, Input, Segmented, Slider, Toggletip, type FieldProps, type SliderProps } from "@area/react";
 import { GALLERY_CONTROLS, greysTinted, type GalleryControl } from "./gallery/controls.ts";
 import { colourMark, optionMark } from "./option-marks.tsx";
-import { PageColourRow } from "./page-colour.tsx";
+import { PageColourRow, pageColour } from "./page-colour.tsx";
 import { BrandRows } from "./brand-settings.tsx";
 import { PAGE_AXES, type ColoursState } from "./colours.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
@@ -192,7 +192,7 @@ export function hueName(hue: number): string {
     [195, "Teal"], [215, "Cyan"], [245, "Sky"], [272, "Blue"], [292, "Indigo"], [315, "Purple"], [340, "Magenta"], [360, "Pink"]];
   return names.find(([bound]) => hue < bound)?.[1] ?? "Pink";
 }
-const hueLabel = (value: string) => `${hueName(Number(value))} · ${value}°`;
+const hueLabel = (value: string) => `${hueName(Number(value))} ${value}°`;
 
 /** The settings a combined row stands for; the Inspector draws the row once, at the first of them. A row asked for one of
  * Accent's alone (Setup's exact value) is that setting's own. */
@@ -204,14 +204,18 @@ export function SettingRow({ axis, context }: { axis: string; context: RowContex
   const { colours: open } = useStudio();
   // Without exact colours, nothing is picked (src/colours.ts): every page setting is what the page paints.
   const colours = context.exact === false ? { light: null, dark: null } : open;
-  if (ROW_OF[axis] === "greys") return <GreysRow context={context} />;
+  // The page's lightness leads the Page section with how its color is set (src/page-colour.tsx): adjusted, or one exact
+  // color, which the greys' rows stand in for, so they are left out while it is picked (owner, 2026-10-30: "the page and
+  // accent controls are a bit confusing … not sure what page color means").
+  if (axis === `ground-${context.mode}` && context.exact !== false) return <PageRows context={context} />;
+  if (ROW_OF[axis] === "greys") return colours[context.mode] !== null ? null : <GreysRow context={context} />;
   if (axis === "accent") return <AccentRow context={context} />;
   const control = controlOf(axis);
   return <Dim reason={pickedReason(colours, axis, context.mode) ?? control.inactive?.(context.values, context.mode) ?? null}><Row control={control} context={context} /></Dim>;
 }
 
 /** A page setting a picked page colour stands in for (src/colours.ts): what it shows is not what the page paints. */
-const PICKED = "The page colour sets this now; moving it hands the page back to this setting";
+const PICKED = "The exact page color sets this now; moving it hands the page back to this setting";
 const pickedReason = (picks: ColoursState, axis: string, mode: "light" | "dark") =>
   picks[mode] !== null && axis !== "neutral" && PAGE_AXES[mode].includes(axis) ? PICKED : null;
 
@@ -346,10 +350,29 @@ function temperatureOf(values: Values, mode: "light" | "dark"): number {
   const at = Math.max(1, strength === "auto" ? ownStrength(values.neutral ?? "neutral", mode) : Number(strength));
   return values.neutral === "cool" ? -at : at;
 }
+/**
+ * How the page's color is set, then its one control: Adjust (its lightness here, the greys' temperature and tint after)
+ * or Exact color (one picked color the greys, edges and text are worked out from; the adjusting rows are left out). Moving
+ * to Exact starts from the color the page has now, so nothing jumps; moving back hands the page to its settings.
+ */
+function PageRows({ context }: { context: RowContext }) {
+  const { colours, setColours } = useStudio();
+  const { mode, values } = context;
+  const exact = colours[mode] !== null;
+  const choose = (next: string) => setColours({ [mode]: next === "exact" ? pageColour(mode, values as CanvasAxes, colours) : null });
+  return (
+    <>
+      <RowField label="Page color" orientation="horizontal" title="The background everything sits on: adjusted with the settings below, or one exact color">
+        <Segmented size={context.size ?? "sm"} fullWidth aria-label="Page color" value={exact ? "exact" : "adjust"} onValueChange={choose}
+          items={[{ value: "adjust", label: "Adjust" }, { value: "exact", label: "Exact" }]} />
+      </RowField>
+      {exact ? <PageColourRow size={context.size ?? "sm"} /> : <Row control={controlOf(`ground-${mode}`)} context={context} />}
+    </>
+  );
+}
+
 function GreysRow({ context }: { context: RowContext }) {
   const { values, mode, set } = context;
-  const { colours: open } = useStudio();
-  const colours = context.exact === false ? { light: null, dark: null } : open;
   const hue = values["tint-hue"] ?? "auto";
   const tint = hue === "auto" ? "none" : hue === "accent" ? "accent" : TINTS.some(([value]) => value === hue) ? hue : CUSTOM;
   const t = temperatureOf(values, mode);
@@ -365,18 +388,15 @@ function GreysRow({ context }: { context: RowContext }) {
   const hues = Array.from({ length: 360 }, (_, hue) => String(hue));
   return (
     <>
-      {/* The page as one exact colour (2026-10-27): above the greys' settings it stands in for. */}
-      {context.exact === false ? null : <PageColourRow size={context.size ?? "sm"} />}
-      <Dim reason={colours[mode] !== null ? PICKED : null}>
-      <Dim reason={tint === "none" ? null : "Off while a tint colour is on"}>
+      <Dim reason={tint === "none" ? null : "Off while a tint color is on"}>
         <SettingBar size={context.size ?? "sm"} label="Temperature" title="How cool (blue) or warm (yellow) every grey is: pages, cards, edges and text"
           min={-100} max={100} step={1} origin={0} value={tint === "none" ? t : 0}
           readout={(at: number) => at === 0 ? "Neutral" : `${at < 0 ? "Cool" : "Warm"} ${Math.abs(at)}%`}
           short={(at: number) => at === 0 ? "0" : `${at < 0 ? "-" : "+"}${Math.abs(at)}`} gradient={TEMPERATURE_GRADIENT}
           onSet={temperature} />
       </Dim>
-      <RowField label="Tint colour" orientation="horizontal" title="Lean every grey toward a colour instead of cool or warm">
-        <CustomSelect size={context.size ?? "sm"} variant="soft" fullWidth aria-label="Tint colour" value={tint} onValueChange={tintColour}
+      <RowField label="Tint color" orientation="horizontal" title="Lean every grey toward a color instead of cool or warm">
+        <CustomSelect size={context.size ?? "sm"} variant="soft" fullWidth aria-label="Tint color" value={tint} onValueChange={tintColour}
           items={[{ value: "none", label: "None" }, ...TINTS.map(([value, label]) => ({ value, label, icon: swatchOf(value) })), { value: CUSTOM, label: "Custom", icon: tint === CUSTOM ? swatchOf(hue) : undefined }]} />
       </RowField>
       {tint === CUSTOM ? (
@@ -384,11 +404,10 @@ function GreysRow({ context }: { context: RowContext }) {
           readout={(at: number) => hueLabel(hues[at]!)} short={(at: number) => hueShort(hues[at]!)} gradient={HUE_GRADIENT} onSet={at => set({ "tint-hue": hues[at]!, "tint-hue-dark": "same" })} />
       ) : null}
       {tint !== "none" ? (
-        <SettingBar size={context.size ?? "sm"} label="Amount" title="How much of the colour the greys take: 0% is plain grey"
+        <SettingBar size={context.size ?? "sm"} label="Amount" title="How much of the color the greys take: 0% is plain grey"
           min={0} max={100} step={1} value={amountAt} readout={(at: number) => at === 0 ? "None" : `${at}%`}
           onSet={at => set({ "tint-light": String(at), "tint-dark": String(at) })} />
       ) : null}
-      </Dim>
     </>
   );
 }
@@ -457,7 +476,7 @@ function AccentRow({ context }: { context: RowContext }) {
           items={[...named.map(item => ({ value: item.value, label: item.label, icon: optionMark("accent", item.value, values as CanvasAxes) ?? undefined,
             preview: layout === "grid" ? context.figure?.("accent", item.value) : undefined })),
             { value: CUSTOM, label: "Any hue", icon: custom ? optionMark("accent", value, values as CanvasAxes) ?? undefined : undefined },
-            ...(offered ? [{ value: EXACT, label: "Exact colour", icon: colourMark(brand.primary) }] : [])]} />
+            ...(offered ? [{ value: EXACT, label: "Exact color", icon: colourMark(brand.primary) }] : [])]} />
       </RowField>
       {exact ? <BrandRows /> : custom ? (
         <SettingBar size={context.size ?? "sm"} label="Hue" min={0} max={hues.length - 1} step={1} value={Math.max(0, hues.indexOf(value))}
@@ -485,7 +504,7 @@ function AccentPaintRows({ accent, context }: { accent: string; context: RowCont
 function shadeReason(accent: string, context: RowContext) {
   const control = controlOf(`solid-${context.mode}`);
   const { scale } = shadesOf(accent, context.mode, context.brand);
-  const name = context.brand ? "The exact colour" : /^\d+$/.test(accent) ? hueName(Number(accent)) : accent[0]!.toUpperCase() + accent.slice(1);
+  const name = context.brand ? "The exact color" : /^\d+$/.test(accent) ? hueName(Number(accent)) : accent[0]!.toUpperCase() + accent.slice(1);
   return control.inactive?.(context.values, context.mode) ?? (scale.length < 2 ? `${name} has one shade that keeps its label readable` : null);
 }
 

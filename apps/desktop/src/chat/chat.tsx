@@ -68,7 +68,7 @@ export function ChatScope({ session, selection, children }: { session: ChatSessi
 
 /** A Canvas item's path as words: "button/size-small" → "Button · Size small". */
 export const selectionLabel = (item?: string) => item
-  ? item.split("/").filter(Boolean).map(part => { const words = decodeURIComponent(part).replace(/[-_]+/g, " "); return words[0]!.toUpperCase() + words.slice(1); }).join(" · ")
+  ? item.split("/").filter(Boolean).map(part => { const words = decodeURIComponent(part).replace(/[-_]+/g, " "); return words[0]!.toUpperCase() + words.slice(1); }).join(" › ")
   : undefined;
 
 // ---- The transcript --------------------------------------------------------------------------------------------
@@ -398,7 +398,7 @@ function ChatFrame({ width, recording }: { width: number; recording: (typeof REC
   const session = useChatSession(recording);
   const scroller = useRef<HTMLDivElement | null>(null);
   return (
-    <ChatScope session={session} selection="Button · Default">
+    <ChatScope session={session} selection="Button › Default">
       <figure className="studio-chat-frame" style={{ inlineSize: `${width}px` }}>
         <figcaption className="studio-chat-frame__label">{width} wide</figcaption>
         <div className="studio-chat-frame__panel">

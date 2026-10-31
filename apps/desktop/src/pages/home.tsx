@@ -18,7 +18,7 @@ import { ViewControls } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { ScreenFigure } from "../setup-screen.tsx";
 import { hasColours } from "../colours.ts";
-import { activeTheme, asLive, liveOf, ORIGIN_LABEL, type System, type SystemOrigin } from "../systems.ts";
+import { activeTheme, asLive, liveOf, ORIGIN_LABEL, versionName, type System, type SystemOrigin } from "../systems.ts";
 import type { Project } from "../projects.ts";
 import { projectName, systemName, hrefOf, resolve, tabKind, type Place } from "../places.ts";
 import { placeLabel } from "../app-nav.tsx";
@@ -125,7 +125,7 @@ export function HomePage() {
               <TileGrid span="wide" cards min={SYSTEM_MIN}>
                 {projects.map(entry => (
                   <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name}
-                    value={`${systemName(entry.system)} · ${entry.pages.length} ${entry.pages.length === 1 ? "page" : "pages"}`}
+                    value={`${systemName(entry.system)}, ${entry.pages.length} ${entry.pages.length === 1 ? "page" : "pages"}`}
                     selected={chosenProject?.id === entry.id} onSelect={() => select(entry.id, { replace: true })} onOpen={() => navigate({ page: "project", project: entry.id })}>
                     <ScreenFigure className="studio-theme-card" scope={projectScope(entry)} />
                   </Tile>
@@ -139,7 +139,7 @@ export function HomePage() {
           <CanvasSection id="home-systems" title="Systems" count={systems.length} lede="The Library's systems: the look and the rules a product is built with, each edited in place and published.">
             <TileGrid span="wide" cards min={SYSTEM_MIN}>
               {systems.map(entry => (
-                <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name} value={`${entry.themes.length} ${entry.themes.length === 1 ? "theme" : "themes"} · ${activeTheme(entry).name}`}
+                <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name} value={`${entry.themes.length} ${entry.themes.length === 1 ? "theme" : "themes"}, ${activeTheme(entry).name} in use`}
                   selected={chosen?.id === entry.id} onSelect={() => select(entry.id, { replace: true })} onOpen={() => open(entry)}>
                   <ScreenFigure className="studio-theme-card" scope={scopeOf(entry)} />
                 </Tile>
@@ -228,7 +228,7 @@ export function HomePage() {
             <Facts label="System" items={[
               ["Themes", chosen.themes.length],
               ["Uses", activeTheme(chosen).name],
-              ["Live", `v${liveOf(chosen).version}`],
+              ["Live", versionName(chosen.name, liveOf(chosen).version)],
               ["Began from", ORIGIN_LABEL[chosen.origin]],
               ["Made", new Date(chosen.created).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })],
               ["Saved in", `Systems/${chosen.id}/system.json`],
@@ -284,7 +284,7 @@ function NewProject({ systems, onCancel, onCreate }: { systems: readonly System[
         <Field label="Name"><Input ref={field} fullWidth placeholder="Untitled project" value={name} onChange={event => setName(event.target.value)} /></Field>
         <Field label="System">
           <Select fullWidth value={system.id} onChange={event => { const next = asLive(systems.find(entry => entry.id === event.currentTarget.value) ?? systems[0]!); setSystemId(next.id); setThemeId(activeTheme(next).id); }}>
-            {systems.map(entry => <option key={entry.id} value={entry.id}>{entry.name} · v{liveOf(entry).version}</option>)}
+            {systems.map(entry => <option key={entry.id} value={entry.id}>{versionName(entry.name, liveOf(entry).version)}</option>)}
           </Select>
         </Field>
         <Field label="Theme">

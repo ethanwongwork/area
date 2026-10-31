@@ -102,3 +102,12 @@ Figma's panel tabs measure 8 and 8. (app-shell.css)
 - **Why:** owner, 2026-10-30, the desktop app's three-panel shell (no bar across the window; each region its own header,
   Cursor's 40).
 - **Verdict:** in review.
+
+### 2026-10-30 · Tabs first start at the even inset
+
+- **What changed:** a Titlebar whose first child is a row of controls (a button, a link, a Nav of tabs, a Segmented or a
+  toolbar), or a wrapper that starts with one (a scrolling strip of tabs), starts at the even inset, 7 at size sm (was
+  Panel's 14, kept for a bar that starts with its title).
+- **Why:** owner, 2026-10-30: the desktop Canvas header's tabs started 14 in, beside 7 at its end: "it should be equal".
+- **Checks:** cohesion test "a bar of controls is inset as far from its sides as from its top".
+- **Verdict:** in review.

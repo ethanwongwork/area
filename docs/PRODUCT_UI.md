@@ -87,6 +87,18 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     2026-10-25 to 30 the app was drawn in those shipped defaults; from 2026-10-22 to 25 it took every committed Inspector
     setting. The Theme tab's own body stays at the
     Setup scale (Setup, below).
+19. **A version is said as a model is named: the system's name, then its number** (owner, 2026-10-30: "dont use the dots
+    · or v1.0 … just put the number after the name? like area 1.0? might want to think of systems almost like ai
+    models"): "Area 1.0", "Area 1.1" (Adds), "Area 2.0" (Needs work in products), "Area 1.0.1" (Fixes), through
+    `versionName` (`src/systems.ts`), in pickers, titles, facts, dialogs and buttons. Never "v1.0", and never a number
+    without its system's name beside it. A state beside a version is its own element (a Live Badge, a Radio's meta),
+    not a suffix.
+20. **No middle dot (·) in the app's copy.** Two facts in one line are joined by a comma ("2 themes, Default in use"), a
+    path by › ("Appearance › Shape"), a value and its unit by a space ("Blue 220°"); facts that stand apart are separate
+    elements. (Component demos' example copy, such as Asset row's "SVG · 24 × 24", follows its component's spec.)
+21. **The app's copy is spelled "color"** (owner, 2026-10-30: "use color not colour"): every visible string, setting names
+    and descriptions, and the Documentation entries. Code names keep theirs (`colours.ts`, `data-area-status-colours`,
+    the `area-tokens colours` command), as renaming them is an API change.
 
 ## The app's layout
 
@@ -166,6 +178,13 @@ Cursor's nav with Figma's tabs).
   pictures, every choice a card (Radio `soft` `preview`, the choice drawn in its own scope by `src/choice-visuals.tsx`);
   the rest are plain controls ("some simplified visual illustrations … but for the most part just simple controls").
   Search finds rows in every section, headed by their section.
+  Theme has a **live preview** beside its rows (owner, 2026-10-30: "add a screen to the right of the theme canvas in
+  settings to preview all the changes live"): a product screen (Workspace, Analytics, Settings or Phone, remembered) drawn
+  in the theme being edited, in the mode the rows edit, exact colors and hover previews included, held in view while the
+  rows scroll; on a Canvas under 960 it sits above them. **Page color** leads the Page section (owner, 2026-10-30: "not
+  sure what page color means"), in the Inspector too: Adjust (Lightness, then Temperature and Tint) or Exact (one picked
+  color the greys, edges and text are worked out from; the adjusting rows are left out, not dimmed). Each Page and
+  Accent row's description says what it paints (`gallery/controls.ts` hints).
 - **Tabs**: **Home is the first tab**, always: its icon alone in
   Nav's square icon-only item (Figma's file browser tab), never closed, always on Home, named in a Tooltip with ⌘⇧H. From
   Home a system, board or place opens in the tab already holding that system (or the Library, a lab), else in a new tab at

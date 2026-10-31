@@ -237,7 +237,7 @@ export function ImageryPage() {
                   selected.source ? ["Source", selected.source] : null,
                   ["Size", `${selected.width} × ${selected.height}`],
                   ["Format", kindLabel(selected)],
-                  ["Colour", <span className="studio-imagery__colour"><ColorSwatch color={selected.color} size="sm" aria-hidden="true" /><Code>{selected.color}</Code></span>],
+                  ["Color", <span className="studio-imagery__colour"><ColorSwatch color={selected.color} size="sm" aria-hidden="true" /><Code>{selected.color}</Code></span>],
                   selected.alt && selected.title ? ["Description", selected.alt] : null,
                 ]} />
               </PanelSection>

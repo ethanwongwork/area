@@ -27,7 +27,7 @@ import { NameDialog } from "./home.tsx";
 import { nameOf, url, useLibrary } from "./imagery.tsx";
 import { BeforeAfter, KINDS, ThemeScreen } from "../publish.tsx";
 import { addExploration, addLayer, addPage, restoreVersion, saveVersion, type Layer, type Project } from "../projects.ts";
-import { activeTheme, liveOf, nextVersion, RELEASE_KIND_LABEL, type ReleaseKind } from "../systems.ts";
+import { activeTheme, liveOf, nextVersion, RELEASE_KIND_LABEL, versionName, type ReleaseKind } from "../systems.ts";
 
 /** An exploration's card is the feed's 300 card, as a theme's. */
 const CARD_MIN = 300; /* pick */
@@ -66,8 +66,8 @@ function ProjectFacts({ project }: { project: Project }) {
   return (
     <PanelSection heading={project.name}>
       <Facts label="Project" items={[
-        ["Uses", `${systemName(project.system)} · ${used?.name ?? "a theme no longer published"}`],
-        ["Version", `v${liveOf(openSystem).version}, as published`],
+        ["Uses", `${systemName(project.system)} › ${used?.name ?? "a theme no longer published"}`],
+        ["Version", `${versionName(systemName(project.system), liveOf(openSystem).version)}, as published`],
         ["Pages", project.pages.length],
         ["Explorations", project.explorations.length],
         ["Versions", project.versions.length],
@@ -143,7 +143,7 @@ export function ProjectOverview() {
             {project.explorations.length ? (
               <TileGrid span="wide" cards min={CARD_MIN}>
                 {project.explorations.map(entry => (
-                  <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name} value={entry.published ? `Published in v${entry.published}` : "Not published"}
+                  <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name} value={entry.published ? `Published in ${versionName(systemName(project.system), entry.published)}` : "Not published"}
                     onSelect={() => navigate({ page: "exploration", item: entry.id })} onOpen={() => navigate({ page: "exploration", item: entry.id })}>
                     <ThemeScreen theme={entry.theme} mode={theme} />
                   </Tile>
@@ -292,14 +292,14 @@ export function ExplorationPage() {
       canvas={<>
         <div className="studio-sections">
           <CanvasSection id="exploration" title={exploration.name}
-            lede={`From ${from?.name ?? "a theme"} in ${systemName(project.system)} v${liveOf(openSystem).version}. Change it in the Inspector's Theme view; nothing in ${systemName(project.system)} changes until you publish.`}>
+            lede={`From ${from?.name ?? "a theme"} in ${versionName(systemName(project.system), liveOf(openSystem).version)}. Change it in the Inspector's Theme view; nothing in ${systemName(project.system)} changes until you publish.`}>
             <TileGrid span="wide" cards min={CARD_MIN}>
               {from ? (
-                <Tile span="wide" stage="fit" inert label={`${from.name} · Live`} value={`v${liveOf(openSystem).version}`}>
+                <Tile span="wide" stage="fit" inert label={from.name} value={`Live in ${versionName(systemName(project.system), liveOf(openSystem).version)}`}>
                   <ThemeScreen theme={from} mode={theme} />
                 </Tile>
               ) : null}
-              <Tile span="wide" stage="fit" inert label={exploration.name} value={exploration.published ? `Published in v${exploration.published}` : "Not published"}>
+              <Tile span="wide" stage="fit" inert label={exploration.name} value={exploration.published ? `Published in ${versionName(systemName(project.system), exploration.published)}` : "Not published"}>
                 <ScreenFigure className="studio-theme-card" scope={scope} />
               </Tile>
             </TileGrid>
@@ -336,7 +336,7 @@ export function ExplorationPage() {
           <PanelSection heading={exploration.name}>
             <Facts label="Exploration" items={[
               ["From", `${systemName(project.system)} › ${from?.name ?? "a theme no longer published"}`],
-              ["Published", exploration.published ? `v${exploration.published}` : "Not yet"],
+              ["Published", exploration.published ? versionName(systemName(project.system), exploration.published) : "Not yet"],
               ["Edited in", "Inspector › Theme"],
             ]} />
           </PanelSection>
@@ -361,18 +361,18 @@ function PublishExploration({ onClose }: { onClose: () => void }) {
   if (!openProject || !exploration) return null;
   const submit = (event?: FormEvent) => { event?.preventDefault(); publishExploration(exploration.id, replaces && Boolean(from), kind, note); onClose(); };
   return (
-    <Dialog open onOpenChange={next => { if (!next) onClose(); }} title={`Publish to ${system} v${version}`}
+    <Dialog open onOpenChange={next => { if (!next) onClose(); }} title={`Publish ${versionName(system, version)}`}
       description={`Everyone using ${system} gets it, and it goes in ${system}'s History from ${openProject.name}. Unpublished changes in ${system} stay unpublished.`}
-      footer={<><Button variant="ghost" tone="neutral" onClick={onClose}>Cancel</Button><Button onClick={() => submit()}>Publish v{version}</Button></>}>
+      footer={<><Button variant="ghost" tone="neutral" onClick={onClose}>Cancel</Button><Button onClick={() => submit()}>Publish {versionName(system, version)}</Button></>}>
       <form className="studio-publish" onSubmit={submit}>
-        <BeforeAfter before={from && replaces ? { label: `Live · v${live.version}`, value: from.name, theme: from } : null}
-          after={{ label: `Publishing · v${version}`, value: replaces && from ? from.name : exploration.name, theme: exploration.theme }} empty="A new theme replaces nothing." mode={theme} />
+        <BeforeAfter before={from && replaces ? { label: `Live in ${versionName(system, live.version)}`, value: from.name, theme: from } : null}
+          after={{ label: `Publishing as ${versionName(system, version)}`, value: replaces && from ? from.name : exploration.name, theme: exploration.theme }} empty="A new theme replaces nothing." mode={theme} />
         <RadioGroup label="Publish as" value={replaces ? "update" : "new"} onValueChange={value => { const update = value === "update"; setReplaces(update); setKind(update ? "fixes" : "adds"); }}>
           <Radio value="update" disabled={!from} label={from ? `An update to ${from.name}` : "An update"} description={from ? `${from.name} takes the exploration's values.` : "The theme it came from is no longer published."} />
           <Radio value="new" label={`A new theme, ${exploration.name}`} description={`${system} gets a theme beside the others.`} />
         </RadioGroup>
         <RadioGroup label="Kind" value={kind} onValueChange={value => setKind(value as Exclude<ReleaseKind, "first">)}>
-          {choices.map(entry => <Radio key={entry.value} value={entry.value} label={`${RELEASE_KIND_LABEL[entry.value]} · v${nextVersion(live.version, entry.value)}`} description={entry.description} />)}
+          {choices.map(entry => <Radio key={entry.value} variant="soft" layout="list" value={entry.value} label={RELEASE_KIND_LABEL[entry.value]} meta={versionName(system, nextVersion(live.version, entry.value))} description={entry.description} />)}
         </RadioGroup>
         <Field label="Note"><Input fullWidth value={note} onChange={event => setNote(event.target.value)} /></Field>
       </form>

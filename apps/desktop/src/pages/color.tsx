@@ -138,7 +138,7 @@ function oklchShort(value: string) {
  */
 function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: string | null; onChoose: (value: string) => void; children: ReactNode }) {
   return grid
-    ? <ListBox layout="grid" aria-label="Colour steps" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-sections">{children}</ListBox>
+    ? <ListBox layout="grid" aria-label="Color steps" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-sections">{children}</ListBox>
     : <div className="studio-sections">{children}</div>;
 }
 
@@ -229,7 +229,7 @@ export function ColorPage() {
           {mode === "list" ? null : <ViewFilter label="Card text" value={ink} onChange={setInk} options={INKS} />}
           {mode === "list" ? null : <ViewFilter label="Copy format" value={copyFormat} onChange={setCopyFormat} options={COPY_FORMATS} />}
           {view ? null : <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={GROUPS}
-            directions={arrangement.sort === "name" ? ["A to Z", "Z to A"] : arrangement.sort === "chroma" ? ["Greyest first", "Most colourful first"] : ["First to last", "Last to first"]} />}
+            directions={arrangement.sort === "name" ? ["A to Z", "Z to A"] : arrangement.sort === "chroma" ? ["Greyest first", "Most colorful first"] : ["First to last", "Last to first"]} />}
           <ViewSwitch value={mode} onChange={setMode} />
         </ViewControls>
       }
@@ -258,7 +258,7 @@ export function ColorPage() {
                             <td><Code>--area-{entry.id}-{item.level}</Code></td>
                             <td><Code>{item.hex}</Code></td>
                             <td><Code>{item.oklch}</Code></td>
-                            <td><span className="studio-muted">{item.contrast.fg === "#ffffff" ? "White" : "Black"} · {item.contrast.ratio.toFixed(2)}:1 {item.contrast.grade}</span></td>
+                            <td><span className="studio-muted">{item.contrast.fg === "#ffffff" ? "White" : "Black"}, {item.contrast.ratio.toFixed(2)}:1 {item.contrast.grade}</span></td>
                           </tr>
                         ))}
                       </tbody>
@@ -298,7 +298,7 @@ export function ColorPage() {
                 ["Neutrals", SCALES.filter(entry => NEUTRALS.has(entry.id)).map(entry => title(entry.id)).join(", ")],
                 ["Hues", SCALES.filter(entry => !NEUTRALS.has(entry.id)).length],
                 ["Steps", `${SCALES[0]!.steps.length} a scale`],
-                ["Defaults", `Neutral: ${title(defaultPreset("neutral"))} · Accent: ${title(defaultPreset("accent"))}`],
+                ["Defaults", `Neutral: ${title(defaultPreset("neutral"))}, Accent: ${title(defaultPreset("accent"))}`],
               ]} />
             </PanelSection>
           ),
@@ -325,8 +325,8 @@ function StepDesign({ step, token, description, paintedAs }: { step: ScaleStep; 
           ["RGB", <Code>{rgbOf(step.hex).join(" ")}</Code>],
           ["OKLCH", <Code>{step.oklch}</Code>],
           ["Text", step.contrast.fg === "#ffffff" ? "White" : "Black"],
-          ["On white", <span className="studio-tabular">{contrastWith(step.hex, "#ffffff").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#ffffff"))}</span>],
-          ["On black", <span className="studio-tabular">{contrastWith(step.hex, "#000000").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#000000"))}</span>],
+          ["On white", <span className="studio-tabular">{contrastWith(step.hex, "#ffffff").toFixed(2)}:1, {grade(contrastWith(step.hex, "#ffffff"))}</span>],
+          ["On black", <span className="studio-tabular">{contrastWith(step.hex, "#000000").toFixed(2)}:1, {grade(contrastWith(step.hex, "#000000"))}</span>],
           description ? ["Scale", description] : null,
         ]} />
       </PanelSection>
@@ -339,7 +339,7 @@ function StepCode({ scale, step, token }: { scale: string; step: ScaleStep; toke
   const uses = usedBy(scale, step.level);
   const used: ReactNode = uses.length ? (
     <span className="studio-used-by">
-      {uses.map(use => <span key={use.name}><Code>{use.name}</Code> <span className="studio-muted">{use.modes}{use.when ? ` · when ${use.when}` : ""}</span></span>)}
+      {uses.map(use => <span key={use.name}><Code>{use.name}</Code> <span className="studio-muted">{use.modes}{use.when ? `, when ${use.when}` : ""}</span></span>)}
     </span>
   ) : <span className="studio-muted">No semantic token</span>;
   return (

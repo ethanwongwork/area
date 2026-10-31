@@ -27,7 +27,7 @@ import { FILL_STEPS, fillPosition, fillStepAt } from "../color/layers.ts";
 const FOCUS_RING = {
   hug: { label: "Hug", description: "Hugs controls and sits 2px off cards and text, as ChatGPT.", width: "2px", offset: "0px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
   gap: { label: "Gap", description: "Sits 2px off everything, controls included (Atlassian, Polaris).", width: "2px", offset: "2px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
-  halo: { label: "Halo", description: "Fields take the ring's colour on their edge and a soft halo; other controls as Hug.", width: "2px", offset: "0px", gap: "2px", ring: 0, recolor: 1, halo: 1 },
+  halo: { label: "Halo", description: "Fields take the ring's color on their edge and a soft halo; other controls as Hug.", width: "2px", offset: "0px", gap: "2px", ring: 0, recolor: 1, halo: 1 },
   inset: { label: "Inset", description: "Drawn inside each control's edge, so nothing outside it changes (Primer, Radix).", width: "2px", offset: "-2px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
   bold: { label: "Bold", description: "A 3px ring, 2px off everything, for keyboard-first products (Material).", width: "3px", offset: "2px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
 } as const;
@@ -61,8 +61,8 @@ export const SELECTED_STROKE_AXIS: AxisDefinition = {
   defaultPreset: "2",
   namespaces: [`${PREFIX}selected-width:`],
   presets: [
-    { id: "1", label: "1", description: "A 1px edge in the selection colour.", tokens: tokens({ "selected-width": "1px" }) },
-    { id: "2", label: "2", description: "A 2px edge in the selection colour, as ChatGPT's selected tiles.", tokens: tokens({ "selected-width": "2px" }) },
+    { id: "1", label: "1", description: "A 1px edge in the selection color.", tokens: tokens({ "selected-width": "1px" }) },
+    { id: "2", label: "2", description: "A 2px edge in the selection color, as ChatGPT's selected tiles.", tokens: tokens({ "selected-width": "2px" }) },
     { id: "3", label: "3", description: "A 3px edge, for selection that has to read at a glance.", tokens: tokens({ "selected-width": "3px" }) },
   ],
 };

@@ -51,7 +51,13 @@
     --_titlebar-even: calc((var(--area-control-md) - var(--area-control-sm)) / 2 + var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense));
     --_titlebar-end: var(--_titlebar-even);
   }
-  .area-titlebar:not(.area-titlebar--floating, .area-titlebar--macos):has(> :first-child:is(button, a, .area-button)) { --_titlebar-start: var(--_titlebar-even); }
+  /* A row of controls first (a button, a link, tabs in a Nav, a Segmented or a toolbar), or a wrapper that starts with
+     one (a scrolling strip of tabs), starts at the even inset too (owner, 2026-10-30: the Canvas's tabs started 14 in,
+     beside 7 at the end). */
+  .area-titlebar:not(.area-titlebar--floating, .area-titlebar--macos):is(
+    :has(> :first-child:is(button, a, .area-button, .area-nav, .area-segmented, [role="toolbar"])),
+    :has(> :first-child > :first-child:is(button, a, .area-button, .area-nav, .area-segmented, [role="toolbar"]))
+  ) { --_titlebar-start: var(--_titlebar-even); }
   .area-titlebar--macos { --_titlebar-start: 83px; } /* spec: Cursor's traffic lights, 13 + 54 + 16 */
   /* md (the default): Panel's md bar, as the base rule. */
   .area-titlebar--md:not(.area-titlebar--floating) { block-size: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--_titlebar-rule)); }

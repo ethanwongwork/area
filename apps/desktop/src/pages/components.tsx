@@ -108,7 +108,7 @@ function tilesOf(family: Family): Tile[] {
 const GROUP_LEDES: Record<string, string> = {
   Default: "The component as it ships.",
   Variants: "Its visual treatments and shapes.",
-  Tones: "The same component in each semantic colour.",
+  Tones: "The same component in each semantic color.",
   Sizes: "Each size, smallest first.",
   Layout: "Arrangements of its parts.",
   Content: "What it holds: text, icons and media.",
@@ -585,7 +585,7 @@ export function ComponentsPage() {
   // its choices kept open so the cards change behind it.
   const cardsSummary = `${CONTAINERS.find(choice => choice.value === container)!.label}, ${HEIGHTS.find(choice => choice.value === height)!.label.toLowerCase()}`;
   const cardsControl = (
-    <Menu aria-label="Cards" align="end" tooltip={<>Cards · {cardsSummary}</>}
+    <Menu aria-label="Cards" align="end" tooltip={<>Cards: {cardsSummary}</>}
       trigger={<Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={<CardsIcon />} aria-label="Cards" />}>
       <MenuLabel>Container</MenuLabel>
       {CONTAINERS.map(choice => (
@@ -768,7 +768,7 @@ function FamilyDesign({ family, tile, pinned, onPin, onOpen }: {
         tile.note ? ["Note", tile.note] : null,
         ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
       ] : [
-        manifest && Object.keys(manifest.variants).length ? ["Variants", Object.entries(manifest.variants).map(([axis, values]) => `${axis} ${values.length}`).join(" · ")] : null,
+        manifest && Object.keys(manifest.variants).length ? ["Variants", Object.entries(manifest.variants).map(([axis, values]) => `${axis} ${values.length}`).join(", ")] : null,
         manifest && Object.keys(manifest.defaults).length ? ["Defaults", Object.values(manifest.defaults).join(", ")] : null,
         ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
         ["Tiles", TILES.get(family.slug)!.length],
