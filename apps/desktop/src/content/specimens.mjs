@@ -1017,6 +1017,7 @@ function gallerySpecimenTable() {
       { id: "step-dots", title: "Content / step dots", demo: "GallerySliderStepDots" },
       { id: "steps", title: "Content / fractional steps", demo: "GallerySliderSteps" },
       { id: "origin", title: "Content / origin", demo: "GallerySliderOrigin" },
+      { id: "gradient", title: "Content / color gradient", demo: "GallerySliderGradient" },
       { id: "end-labels", title: "Content / end labels", demo: "SliderEndLabels" },
       { id: "buffered", title: "Content / buffered", demo: "GallerySliderBuffered" },
       { id: "bare", title: "Content / without readout", demo: "GallerySliderBare" },

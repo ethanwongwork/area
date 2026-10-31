@@ -1539,6 +1539,7 @@ export const COMPONENT_PAGES = [
       ["startLabel / endLabel", "ReactNode (under the track's ends; horizontal only)", "—"],
       ["buffered", "number (between min and max)", "—"],
       ["origin", "number (the value the fill grows from)", "min"],
+      ["gradient", "string, a CSS image (the range's colors: the fill shows them, faint past the value)", "—"],
       ["glide", "boolean (a stepped range follows the pointer between steps)", "true up to 60 steps"],
       ["min", "number", "0"],
       ["max", "number", "100"],
@@ -1557,7 +1558,7 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "SliderDefault" },
       { id: "variants", title: "Rail, track and bar", note: "Three looks by thickness. The rail is the default. Track is a pill as tall as the knob, as Figma's adjustment sliders; bar makes the track the control itself, its fill ending in a grip.", demo: "SliderVariants" },
-      { id: "inside", title: "Label inside", note: "A bar that carries its label and value, the fill a neutral plate behind them with a thin grip at its end; for a list of settings. Steps show as dots.", demo: "SliderInside" },
+      { id: "inside", title: "Label inside", note: "A bar that carries its label and value, the fill a neutral plate behind them with a white pill in its end; for a list of settings. Steps show as dots.", demo: "SliderInside" },
       { id: "tones", title: "Selection role", note: "The fill is the Selection role: the accent by default, the neutral ink when a theme sets selection to neutral (second slider).", demo: "SliderTones" },
       { id: "label", title: "Label and value above", demo: "SliderWithLabel" },
       { id: "steps", title: "Steps and formatting", note: "The fill and optional formatter use the same normalized native value, including fractional steps.", demo: "SliderSteps" },

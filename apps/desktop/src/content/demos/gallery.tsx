@@ -1961,7 +1961,19 @@ export const GallerySliderWithOption = () => {
     </div>
   );
 };
-export const GallerySliderStepDots = () => <Slider variant="bar" aria-label="Label" min={0} max={6} step={1} defaultValue={2} stepMarks readout />;
+/* A range whose values are colours (`gradient`): a hue, a temperature from cool through grey to warm, a colour's shades.
+   The fill shows the colours up to the value, faint past it, and the grip is the bars' white pill (owner 2026-10-31). */
+export const GallerySliderGradient = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-8)", inlineSize: "100%" }}>
+    <Slider variant="bar" aria-label="Label" min={0} max={360} defaultValue={210}
+      gradient={`linear-gradient(to right in oklch longer hue, oklch(0.66 0.17 0), oklch(0.66 0.17 360))`} />
+    <Slider variant="bar" aria-label="Label" min={-100} max={100} origin={0} defaultValue={-45}
+      gradient="linear-gradient(to right in oklab, oklch(0.78 0.1 250), var(--area-bg-component), oklch(0.86 0.12 85))" />
+    <Slider variant="bar" aria-label="Label" min={0} max={100} defaultValue={70}
+      gradient="linear-gradient(to right in oklab, oklch(0.9 0.06 255), oklch(0.6 0.18 255), oklch(0.3 0.1 255))" />
+  </div>
+);
+export const GallerySliderStepDots =() => <Slider variant="bar" aria-label="Label" min={0} max={6} step={1} defaultValue={2} stepMarks readout />;
 /* A label-inside bar with its number beside it (owner, 2026-10-25: "something like this with an input at the end"): drag the bar,
    or type an exact value; one value between them. A composition: Label, a Slider bar and NumberField, no new prop. */
 export const GallerySliderWithInput = () => {

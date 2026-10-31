@@ -360,9 +360,12 @@
   /*
    * Bar (owner 2026-10-21, the "Rate your driver" reference): the track is the control itself, the tier's height
    * and corner, so it lines up with a Button or field beside it. The thumb is the fill's rounded end, one glyph
-   * wide (16 / 16 / 20), with a pill grip in the fill's ink: 4 wide and one glyph long. The grip is round by
-   * identity, like the knob; the bar and the fill's end follow the radius setting. A pointer press lengthens nothing:
-   * the grip lifts as the knob does.
+   * wide (16 / 16 / 20), and its grip is that end inset by 4 on every side (owner 2026-10-31: "bigger and match the
+   * track", then "consistently sized and so that the pill actually matches the inset corner of the track"): 8 wide at
+   * sm and md and 12 at lg, the bar's height less 8 tall (22 in a 30 bar), its corner the end's corner less 4, so it
+   * nests in the fill's end the way the end nests in the bar, a pill wherever the end is round and square in a square
+   * bar. It was a 4 × 16 pill in every bar. Its centre is the thumb's, the value's place, as the step dots' are. The bar
+   * and the fill's end follow the radius setting. A pointer press lengthens nothing: the grip lifts as the knob does.
    */
   .area-slider.area-slider--bar {
     --_track: var(--_height);
@@ -373,8 +376,10 @@
     --_thumb-radius: min(var(--_track-radius), var(--_thumb) / 2);
     --_thumb-edge: 0px;
     --_thumb-shadow: none;
-    --_grip-inline: var(--area-space-4);
-    --_grip-block: var(--_thumb);
+    --_grip-inset: var(--area-space-4);
+    --_grip-inline: calc(var(--_thumb) - var(--_grip-inset) * 2);
+    --_grip-block: calc(var(--_track) - var(--_grip-inset) * 2);
+    --_grip-radius: max(0px, var(--_thumb-radius) - var(--_grip-inset));
     --_grip-ink: var(--area-fg-on-selection);
   }
   /* The bar's thumb is the fill's end: its paint reads the fill where the thumb is, so hover reaches it. */
@@ -386,8 +391,9 @@
     inline-size: var(--_grip-inline);
     block-size: var(--_grip-block);
     margin: auto;
-    border-radius: var(--area-radius-full);
+    border-radius: var(--_grip-radius);
     background-color: var(--_grip-ink);
+    box-shadow: var(--_grip-shadow, none);
   }
   .area-slider--bar.area-slider--vertical .area-slider__thumb::before { inline-size: var(--_grip-block); block-size: var(--_grip-inline); }
   /* The knob is the fill's end, so it lifts its grip, not itself: a scaled end would stand off the bar's edges. */
@@ -401,17 +407,26 @@
     outline-offset: var(--area-focus-offset);
   }
   /* A full-height bar draws its steps as dots inside it (owner 2026-10-26, the Path panel reference: "the subtle
-     dots"), centred on the bar, under the fill: a dot at or before the value is covered by it. */
+     dots"), centred on the bar, under the fill: a dot at or before the value is covered by it. Every value has one, the
+     two ends included (owner 2026-10-31: "the dots should correspond to real values"; with only the inner steps drawn,
+     the end dots' gaps to the bar's edges read as uneven spacing), and each sits exactly on its value's place, not
+     rounded to a whole pixel: rounding left gaps of 18 and 19, or 7 and 8, which read as uneven (even spacing over 1×
+     crispness, as the icon set's marks). */
   .area-slider--bar .area-slider__marks i {
-    /* spec (the Path panel reference): dots ≈ 2.5px, about 2:1 on the trough; 3px, each on a whole pixel. */
+    /* spec (the Path panel reference): dots ≈ 2.5px, about 2:1 on the trough; 3px. */
     --_dot: 3px; /* spec */
     inset-block-start: round(down, calc((var(--_height) - var(--_dot)) / 2), 1px);
-    inset-inline-start: round(nearest, calc(var(--_mark) - var(--_dot) / 2), 1px);
+    inset-inline-start: calc(var(--_mark) - var(--_dot) / 2);
     inline-size: var(--_dot);
     block-size: var(--_dot);
     border-radius: var(--area-radius-full);
     background: var(--area-edge-control-strong);
   }
+  /* Ticks under a rail or track mark the inner steps only; the ends are the rail's own. */
+  .area-slider:not(.area-slider--bar) .area-slider__marks i:is(:first-child, :last-child) { display: none; }
+  /* With its value inside, a bar leaves the last dot to the value's text, which sits over that end; the first is always
+     under the fill's end. */
+  .area-slider--inside:has(> .area-slider__value) .area-slider__marks i:last-child { display: none; }
 
   /*
    * Label inside (owner 2026-10-24, the settings panel reference: "Bounce 100", "Stagger 45ms", "Corner 28px"; refined
@@ -421,7 +436,7 @@
    * field's own: the tier's height and corner, the inset contract's sides (inset.css), no edge. The trough is the soft
    * field fill (`bg-component`) and the fill the off-track grey one step past it (`fill-track`, hover
    * `fill-toggle-hover`), neutral as the references, since text sits on it; label and value take the body ink, which
-   * reads on both. The thumb is a thin grip line at the fill's end, inside it (the fill reaches the thumb's far edge).
+   * reads on both. The thumb is the bar's white pill in the fill's end (the fill reaches the thumb's far edge).
    * Horizontal only; no end labels.
    */
   .area-slider.area-slider--inside {
@@ -435,50 +450,48 @@
     --_thumb-edge: 0px;
     --_thumb-shadow: none;
     --_thumb-paint: transparent;
-    /* spec (the Path panel reference): a 2px line about three eighths of the bar's height, in a mid grey; here the
-       stroke ladder's 2 and the glyph's 12 / 12 / 16, in the strong control edge, which reads on the fill. */
-    --_grip-inline: var(--area-space-2);
-    --_grip-block: calc(var(--_thumb) - var(--area-space-4));
-    --_grip-ink: var(--area-edge-control-strong);
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     column-gap: var(--_gap);
   }
-  /* Every bar's fill ends rounded with its line inside (owner 2026-10-26, "consistent"): the accent bar's end is its
-     rounded thumb; here the fill itself takes the thumb's corner at its far end. From an origin, only the thumb's end
-     rounds and reaches past the line, the origin's side stays straight. */
-  .area-slider--inside .area-slider__fill {
+  /* The grip on a neutral plate or on colours is white (owner 2026-10-31: "can you make the pill shape always visible,
+     maybe always white?"; was a 2px grey line here and a tab in the value's colour on colours), #fff in both themes as
+     ColorPicker's ring, with a faint shadow under it and no stroke, so it keeps its shape on the lightest plates and
+     colours. The accent bar's grip keeps the selection's label ink, white on every fill but a light one. */
+  .area-slider:is(.area-slider--inside, .area-slider--bar[data-gradient]) {
+    --_grip-ink: #fff; /* spec: ColorPicker's thumb ring */
+    /* spec (owner 2026-10-31: "tone down or remove the dropshadow"): half a pixel down at 10%, the least that keeps the
+       pill on Temperature's near-white middle, where with none it vanished; was 0 1px 2px at 20%. No hairline. */
+    --_grip-shadow: 0 0.5px 1px rgb(0 0 0 / 0.1); /* spec */
+  }
+  /* Every bar's fill ends rounded with its grip inside (owner 2026-10-26, "consistent"): the accent bar's end is its
+     rounded thumb; here the fill itself takes the thumb's corner at its far end, reaching the thumb's far edge, so the
+     grip always sits in it, at the minimum too (owner 2026-10-31: "always visible"; from 2026-10-27 the bar was empty
+     at 0 and the grip hid at either end, where it read as a text cursor beside the label or value as a grey line). A
+     colour bar (gradient, below) draws its fill the same way. The fill's start and length are named (`--_fill-start`,
+     `--_fill-size`) so a colour bar can place its colours by them. */
+  :is(.area-slider--inside, .area-slider--bar[data-gradient]) .area-slider__fill {
+    --_fill-start: 0px;
+    --_fill-size: calc(var(--_thumb) * var(--_reach) + var(--_travel) * var(--_slider-ratio));
+    inset-inline-start: var(--_fill-start);
+    inline-size: var(--_fill-size);
     border-start-end-radius: var(--_thumb-radius);
     border-end-end-radius: var(--_thumb-radius);
   }
-  /* The ends (owner 2026-10-27, "fix ... the internal spacing"): at its minimum the bar is empty, and at either end the
-     grip is gone, since an empty bar has no fill to end and a full one ends at the bar's own edge. The stub and grip at
-     0 sat 4px before the label, and the grip 4px after the value at the maximum, each reading as a text cursor. The
-     lane (inset.css) still keeps a grip one step from either end clear of the text. Each switch is a step of the easing
-     ratio, so the stub arrives as the fill leaves 0. */
-  .area-slider--inside {
-    --_off-min: clamp(0, var(--_slider-ratio) * 1000, 1);
-    --_off-max: clamp(0, (1 - var(--_slider-ratio)) * 1000, 1);
-  }
-  .area-slider--inside:not([data-origin]) .area-slider__fill { inline-size: calc(var(--_thumb) * var(--_reach) * var(--_off-min) + var(--_travel) * var(--_slider-ratio)); }
-  .area-slider--inside .area-slider__thumb::before { opacity: min(var(--_off-min), var(--_off-max)); }
-  .area-slider--inside[data-origin] .area-slider__fill {
+  /* From an origin the fill runs from it to the thumb's far edge on whichever side the value is, and only that end
+     rounds. At the origin itself it is the thumb's own end, round on both sides, so the grip has a plate there too. */
+  :is(.area-slider--inside, .area-slider--bar[data-gradient])[data-origin] .area-slider__fill {
     --_up: clamp(0, (var(--_slider-ratio) - var(--_origin)) * 10000, 1);
     --_down: clamp(0, (var(--_origin) - var(--_slider-ratio)) * 10000, 1);
-    inset-inline-start: calc(var(--_thumb) / 2 * (1 - var(--_down)) + var(--_travel) * var(--_lo));
-    inline-size: calc(var(--_travel) * (var(--_hi) - var(--_lo)) + var(--_thumb) / 2 * (var(--_up) + var(--_down)));
-    border-start-start-radius: calc(var(--_down) * var(--_thumb-radius));
-    border-end-start-radius: calc(var(--_down) * var(--_thumb-radius));
-    border-start-end-radius: calc(var(--_up) * var(--_thumb-radius));
-    border-end-end-radius: calc(var(--_up) * var(--_thumb-radius));
+    --_at-origin: calc((1 - var(--_up)) * (1 - var(--_down)));
+    --_fill-start: calc(var(--_thumb) / 2 * (1 - var(--_down)) + var(--_travel) * var(--_lo) - var(--_thumb) / 2 * var(--_at-origin));
+    --_fill-size: calc(var(--_travel) * (var(--_hi) - var(--_lo)) + var(--_thumb) / 2 * (var(--_up) + var(--_down)) + var(--_thumb) * var(--_at-origin));
+    border-start-start-radius: calc((var(--_down) + var(--_at-origin)) * var(--_thumb-radius));
+    border-end-start-radius: calc((var(--_down) + var(--_at-origin)) * var(--_thumb-radius));
+    border-start-end-radius: calc((var(--_up) + var(--_at-origin)) * var(--_thumb-radius));
+    border-end-end-radius: calc((var(--_up) + var(--_at-origin)) * var(--_thumb-radius));
   }
-  /* The grip line darkens under the pointer, while it drags and with focus, so the bar shows it is held (main, 2026-10-25:
-     the value's mark took the muted ink then). */
-  @media (hover: hover) {
-    .area-slider--inside:not([data-disabled]) .area-slider__track:hover { --_grip-ink: var(--area-fg-muted); }
-  }
-  .area-slider--inside:is([data-dragging], :has(.area-slider__control:focus-visible)) { --_grip-ink: var(--area-fg-muted); }
   .area-slider--inside > .area-slider__track { position: absolute; z-index: 0; inset: 0; inline-size: 100%; block-size: 100%; }
   .area-slider--inside .area-slider__control { cursor: ew-resize; }
   .area-slider--inside[data-disabled] .area-slider__control { cursor: not-allowed; }
@@ -489,26 +502,44 @@
   .area-slider--inside > .area-slider__ends { display: none; }
 
   /*
-   * Gradient (owner 2026-10-27, the Inspector's Temperature, Shade and Hue): the trough is the range's own colours, given
-   * as an image (`--_gradient`) over the trough's fill, so a colour shows where the bar would put it. The fill and the
-   * buffered stretch are not drawn, since the gradient already shows every value; the grip stays at both ends, as there
-   * is no fill end to show the value; and it is a light line with a dark edge, which reads on any colour (ColorPicker's
-   * thumbs read the same way). Step marks are not drawn over a gradient.
+   * Gradient (owner 2026-10-27, the Inspector's Temperature, Shade and Hue; redrawn 2026-10-31: "maybe theres a better
+   * way to show the color, and color the tab? like this image reference", the Intensity bar whose fill runs from a light
+   * to a deep blue and ends in a blue grip): the range's own colours, given as an image (`--_gradient`). The fill shows
+   * them at full strength up to the value, and the rest of the trough shows the same colours faintly, the trough's own
+   * fill laid over them (80% in light, 70% in dark, where the trough is darker than the colours), so every colour is in
+   * view and the value still reads as an amount, as every other bar's. Was the gradient across the whole trough at full
+   * strength with no fill: the value showed only by a thin grip, and the bars' colours were kept pale so the grip read.
+   *
+   * The colours run the bar's full length, and the fill and the tab paint the same image placed by the rail, not
+   * stretched over themselves, so a colour never moves as the fill grows and the tab is always the colour under it.
+   * (Inset to the thumb's travel, as ColorPicker's channel tracks, the half thumb at each end needed caps that showed
+   * seams in Chromium.) Horizontal only; the buffered stretch and step marks are not drawn over colours.
    */
-  .area-slider[data-gradient] .area-slider__rail { background-image: var(--_gradient); }
-  .area-slider[data-gradient] :is(.area-slider__fill, .area-slider__buffer, .area-slider__marks) { display: none; }
   .area-slider[data-gradient] {
-    --_grip-ink: light-dark(var(--area-bg-surface), var(--area-fg-default));
     --_knob: var(--area-bg-surface);
+    /* spec (2026-10-31, headless captures of the colour tile at 70, 80 and none): the wash over the unfilled colours. */
+    --_wash: light-dark(color-mix(in srgb, var(--_track-fill) 80%, transparent), color-mix(in srgb, var(--_track-fill) 70%, transparent)); /* spec */
   }
-  .area-slider--bar[data-gradient] .area-slider__thumb::before {
-    opacity: 1;
-    box-shadow: 0 0 0 var(--area-stroke-width) color-mix(in srgb, transparent, var(--area-fg-default) 45%);
+  /* No edge over colours (owner 2026-10-31: "i dont like the outline visual ... it looks like theres 2 layers of strokes"):
+     the colours are their own edge, as ColorPicker's channel tracks. */
+  .area-slider[data-gradient] .area-slider__rail {
+    outline: none;
+    background-image: linear-gradient(var(--_wash), var(--_wash)), var(--_gradient);
   }
-  @media (hover: hover) {
-    .area-slider--inside[data-gradient]:not([data-disabled]) .area-slider__track:hover { --_grip-ink: light-dark(var(--area-bg-surface), var(--area-fg-default)); }
+  .area-slider[data-gradient] :is(.area-slider__buffer, .area-slider__marks) { display: none; }
+  .area-slider--bar[data-gradient] {
+    --_reach: 1;
   }
-  .area-slider--inside[data-gradient]:is([data-dragging], :has(.area-slider__control:focus-visible)) { --_grip-ink: light-dark(var(--area-bg-surface), var(--area-fg-default)); }
+  .area-slider--bar[data-gradient] .area-slider__fill {
+    /* The fill's left edge on the rail, in either reading direction (`--_dir`, the track's): its start, or in RTL the
+       rail's far side less its start and length. */
+    --_fill-left: calc((1 + var(--_dir)) / 2 * var(--_fill-start) + (1 - var(--_dir)) / 2 * (100cqi - var(--_fill-start) - var(--_fill-size)));
+    background: var(--_gradient) no-repeat;
+    background-size: 100cqi 100%;
+    background-position: calc(-1 * var(--_fill-left)) 0;
+  }
+  /* The bar's thumb end over colours is unpainted: the fill ends rounded itself, its grip the white pill above. */
+  .area-slider--bar[data-gradient] .area-slider__thumb { --_thumb-paint: transparent; }
 
   /* SliderRange (audit C-12): two native range inputs on one rail. The fill is the Selection
      role, so a theme's accent reaches it; the rail's height follows the size tier. Each handle is a Slider whose own
