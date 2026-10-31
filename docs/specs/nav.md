@@ -77,7 +77,7 @@ figma    sidebar row 224 × 28, padding 0/4, radius 5; 24px icon box, gap 8, tex
   page   button 224 × 24, radius 5; text at 8, 11px; current 550, rest 400
 area     nav.area-nav flex column, gap 2, 240 wide
   item   a.area-nav__item 32px, radius 8, gap 12 (gap-row; horizontal 6), fg-default (marker variant fg-muted); aria-current draws current
-    icon 16px (.area-nav__icon); text truncates; trailing fg-muted
+    icon 16px (.area-nav__icon); text one line, a vertical row's fading out over its last 24 (2026-10-31); trailing fg-muted
   row    .area-nav__row: item + .area-nav__actions (28px buttons), one shared plate
   label  .area-nav__label 32px, fg-muted
 ```
@@ -354,4 +354,14 @@ Nav's separator paints `border-decorative` (#f3). Was `border-divider` (#e2). Th
 - **What changed:** a Nav item with an icon and no label is now a square plate with the icon centred (it was a plate
   with an empty label slot). Nothing else changed.
 - **Why:** the desktop app's Home is a fixed first tab, icon only, as Figma's file browser tab (app structure Phase 2).
+- **Verdict:** awaiting the owner.
+
+## Review note, 2026-10-31 (vertical names fade)
+
+- **What changed:** a vertical row's cut name fades out over its last 24 instead of ending in an ellipsis. The name
+  fills the row up to its trailing part, so a name that fits ends before the fade. Horizontal rows (tabs) are
+  unchanged. Tree view's label follows the same rule.
+- **Why:** the owner's pick p4 (yes) on the Claude Code audit (docs/research/claude-code-ui-audit-2026-10-31.md):
+  Claude Code's session list fades a cut name over 24 before its trailing marks (`--df-hover-mask`, desktop 4.4212),
+  as Area's tabs already fade under their close.
 - **Verdict:** awaiting the owner.

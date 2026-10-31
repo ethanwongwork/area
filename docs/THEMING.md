@@ -130,7 +130,7 @@ headings, **Stroke** and **Shadow**, and the states under **States**:
 
 | Setting | Inspector label | Values (default) | What it sets |
 |---|---|---|---|
-| `surface` | Stroke › Width | `0` (Flat), `0.5`, `1` (default), `1.5`, `2` px | The frame of cards, panels and floating surfaces (`frame-width`, read as `border-width`) |
+| `surface` | Stroke › Width | `0` (Flat), `hairline`, `0.5`, `1` (default), `1.5`, `2` px | The frame of cards, panels and floating surfaces (`frame-width`, read as `border-width`). Hairline is one device pixel (`--area-device-pixel`: 1px at 1x, 0.5px at 2x, a third at 3x; owner 2026-10-31, after Claude Code's ring hairline) |
 | `stroke` | Stroke › Edge contrast | `0` (None) … `8` in half steps (since 2026-10-22), `4` (default) | How dark every stroke is, its distance from its ground; a style, where Contrast is the accessibility layer |
 | `stroke-cards` … `stroke-media` | Stroke › Cards, Blocks, Callouts, Floating, Regions, Dividers, Fields, Buttons, Options, Tracks, Tags, Media | `0` (None) … `8` in half steps; defaults 4, 5, 4, 5, 3, 3, 5, 3, 4, 3, 3, 2 (the owner's picks, 2026-10-30) | Each group's stroke: its amount × 2.5% of the text colour over the ground, times Edge contrast / 4; Contrast takes it on to the 3:1 stroke. Members: DESIGN_SYSTEM.md, "Strokes" (axes/stroke-groups.ts) |
 | `shadow-rest` | Shadow › Edge | `0` (None, default) … `8` | `shadow-edge`, a subtle edge round the same surfaces, with the line or instead of it |

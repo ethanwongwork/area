@@ -71,7 +71,7 @@ notion   a[treeitem] 30px, radius 6, ink rgb(95, 94, 89)
 area     div[treeitem] 32px, radius 8, padding-start 8 + depth × 22 (20 at pass 1)
   chevron  16px slot (Area chevron glyph), 20px hover plate, 24px pointer target outside it
   icon     16px, 6px after the chevron slot
-  label    6px after the icon; ellipsis
+  label    6px after the icon; a cut label fades out over its last 24 (2026-10-31; was an ellipsis)
   actions  end of row; controls shown on hover, focus and selection
 
 Columns (pass 3), from the row edge: 8, 30, 52, 74, … (start 8, step 22). Depth n puts its
@@ -256,3 +256,10 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
   rows are 26 (a small control at the defaults), not 24. Not built, waiting for a use: +N −N counts at the row's end
   (Edit summary's) and compacted single-child folders (a label the caller writes, "src / pages").
 - **Verdict:** in review.
+
+## Review note, 2026-10-31 (labels fade)
+
+- **What changed:** a cut label fades out over its last 24 instead of ending in an ellipsis, as a vertical Nav row's
+  name now does; the label fills the row up to its trailing part.
+- **Why:** the owner's pick p4 on the Claude Code audit (docs/research/claude-code-ui-audit-2026-10-31.md).
+- **Verdict:** awaiting the owner.

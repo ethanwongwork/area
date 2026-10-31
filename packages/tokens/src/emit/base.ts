@@ -67,6 +67,10 @@ export const Z_LAYERS = {
 export function baseTokens(): Record<string, string> {
   // The focus ring's width and offsets belong to the Focus ring setting (axes/states.ts).
   const out: Record<string, string> = { "--area-contrast-more": "0", "--area-stroke-width": "1px", "--area-input-inline-size": "16rem" };
+  // One device pixel (css.ts restates it per screen density: 0.5px at 2x, a third at 3x), the Hairline Stroke width
+  // (axes/surface.ts; owner, 2026-10-31, pick p3 of docs/research/claude-code-ui-audit-2026-10-31.md). A leaf, so it
+  // inherits through setting scopes.
+  out["--area-device-pixel"] = "1px";
   // How far the ground under an edge sits past the page (light) or the raised layer (dark): 0 here; styles/layers.css sets
   // it on every ground (color/layers.ts GROUND_EDGES). Not derived, so it inherits through setting scopes.
   out["--area-edge-shift-light"] = "0";

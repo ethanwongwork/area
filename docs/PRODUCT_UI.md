@@ -274,6 +274,15 @@ Cursor's nav with Figma's tabs).
   first step, 120), then the end's groups wrap onto rows of their own under it, at the end, 4 apart, each control whole;
   nothing runs under the Inspector (owner, 2026-10-31: "fix the responsiveness"; at a 1000 window with both panels the
   path was cut to nothing and Live, Working and Publish ran off the Canvas). One row is unchanged.
+- **Floating panels** (owner, 2026-10-31, pick p5 of `docs/research/claude-code-ui-audit-2026-10-31.md`, after Claude
+  Code's two shells): Settings › Appearance › Panels is Sectioned (the default: the regions side by side, their seams the
+  dividers) or Floating (the window is the Sidebar's ground; the Canvas and the Inspector float on it 8 from the window's
+  edges and 8 apart, the Inspector a floating Panel and the Canvas drawn with the same tokens; the Sidebar loses its seam;
+  every region starts 8 down so the headers keep one line, and the traffic lights centre on them). Saved with the app's
+  look (`src/app-look.ts` `panels`), whatever system draws the app.
+- **The Inspector's Theme groups fold** (owner, 2026-10-31, pick p2, after Claude Code's side panel): each group's heading
+  is a disclosure (PanelSection `collapsible`); a closed group says on its heading row what it holds, "Default" or "N
+  changed" from Area's defaults (Material its bundle), and which groups are closed is remembered for every tab.
 - **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4; the Titlebar's rule went
   with it, 2026-10-30): no header and no bar carries a rule (Notion's and ChatGPT's top bars), and the Sidebar sits on
   the chrome's recessed ground (`data-area-chrome`, the subtle step, as Notion's sidebar), its seam the Panel's edge.

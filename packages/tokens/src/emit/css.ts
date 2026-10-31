@@ -185,6 +185,14 @@ export function emitAxes(): string {
   out.push(rule('[data-area-contrast="more"]', { "--area-contrast-more": "1" }));
   out.push(rule('[data-area-contrast="medium"]', { "--area-contrast-more": "0.5" }));
   out.push(rule('[data-area-contrast="standard"]', { "--area-contrast-more": "0" }));
+  // One device pixel, per screen density, as Claude Code's ring hairline (--cds-ring-hairline, desktop 4.4212): the
+  // Hairline Stroke width reads it.
+  out.push('@media (resolution >= 2x) {');
+  out.push(rule(':where(:root)', { "--area-device-pixel": "0.5px" }));
+  out.push('}');
+  out.push('@media (resolution >= 3x) {');
+  out.push(rule(':where(:root)', { "--area-device-pixel": "calc(1px / 3)" }));
+  out.push('}');
   out.push('@media (prefers-contrast: more) {');
   out.push(rule(':root:not([data-area-contrast])', { "--area-contrast-more": "1", ...derivedTokens() }));
   out.push('}');

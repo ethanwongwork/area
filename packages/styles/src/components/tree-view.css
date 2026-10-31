@@ -94,7 +94,14 @@
   .area-tree-view__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-active); }
   .area-tree-view__icon { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
   /* spec: the label follows the row's even 6px gap; its own inset is 0 (pass 3). */
-  .area-tree-view__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-inline-start: var(--_tree-label-inset); }
+  /* A cut label fades out over its last 24 instead of an ellipsis, as a vertical Nav row's (nav.css; owner, 2026-10-31,
+     pick p4): the label fills the row to its trailing part, so one that fits ends before the fade. */
+  .area-tree-view__label {
+    --_tree-fade: var(--area-space-24); /* spec: Claude Code's sidebar name fade, 24 */
+    flex: 1 1 auto; overflow: hidden; text-overflow: clip; white-space: nowrap; padding-inline-start: var(--_tree-label-inset);
+    mask-image: linear-gradient(to left, transparent, #000 var(--_tree-fade));
+  }
+  .area-tree-view__label:dir(rtl) { mask-image: linear-gradient(to right, transparent, #000 var(--_tree-fade)); }
   .area-tree-view__trailing { margin-inline-start: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
   /*
    * Row controls at the end (Figma's lock and visibility). Hidden until the row is hovered,

@@ -18,7 +18,15 @@ export interface AppLook {
   own: Record<string, string>;
   /** The app's own Material (src/material.ts), with `own`; the default Material when unset. */
   material?: unknown;
+  /**
+   * How the regions sit in the window, whatever the app is drawn in (owner, 2026-10-31, pick p5 of
+   * docs/research/claude-code-ui-audit-2026-10-31.md, after Claude Code's two shells): sectioned, side by side with seams
+   * (the default), or floating, the Canvas and the Inspector as Panels on the Sidebar's ground.
+   */
+  panels?: AppPanels;
 }
+
+export type AppPanels = "sectioned" | "floating";
 
 /** The look the app starts in: Area's chosen theme, as published. */
 export const followArea = (own: Record<string, string>): AppLook => ({ follow: true, system: AREA_ID, own });
@@ -30,6 +38,7 @@ export function restoreAppLook(saved: unknown, defaults: Record<string, string>)
   if (value.own && typeof value.own === "object") for (const [axis, setting] of Object.entries(value.own)) if (axis in defaults && typeof setting === "string") own[axis] = setting;
   return {
     ...(value.material && typeof value.material === "object" ? { material: value.material } : {}),
+    ...(value.panels === "floating" ? { panels: "floating" as const } : {}),
     follow: value.follow !== false,
     system: typeof value.system === "string" && value.system ? value.system : AREA_ID,
     theme: typeof value.theme === "string" && value.theme ? value.theme : undefined,

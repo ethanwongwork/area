@@ -146,7 +146,7 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   bar("radius", value => value === "pill" ? "Pill" : `${value}px`, { hint: "The medium Button's corner; every corner scales from it" }),
   { axis: "pills", kind: "chips", label: label("pills"), hint: "On: a pill. Off: follows Corner.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : title(value) })) },
   // Stroke and Shadow: lengths in px, strengths as a share of the strongest.
-  bar("surface", value => `${value}px`, { hint: "The line round cards, panels and floating surfaces" }),
+  bar("surface", value => `${value}px`, { hint: "The line round cards, panels and floating surfaces; Hairline is one device pixel at any screen density", named: { hairline: "Hairline" }, custom: "1", barLabel: "Pixels" }),
   bar("stroke", value => percent(value, 8), { hint: "How dark every edge is against its ground: the master over the groups below" }),
   // Each group's amount (axes/stroke-groups.ts): steps of 2.5% of the text colour, 0 none, 4 is 10%, 8 is 20%.
   ...STROKE_GROUPS.map(group => bar(`stroke-${group.id}` as GalleryControl["axis"], value => value === "0" ? "None" : `${Number(value) * 2.5}%`, { hint: group.hint })),

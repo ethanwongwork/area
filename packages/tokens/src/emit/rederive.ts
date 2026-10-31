@@ -25,7 +25,7 @@ export const OVERRIDABLE: readonly string[] = [
   "--area-border", "--area-border-card", "--area-border-decorative", "--area-border-divider", "--area-border-faint",
   "--area-border-float", "--area-border-hover", "--area-border-subtle", "--area-border-width", "--area-button-text",
   "--area-choice-min", "--area-choice-ratio", "--area-chrome-bg", "--area-chrome-fill", "--area-composer-edge",
-  "--area-composer-focus-color", "--area-edge-control", "--area-edge-control-hover", "--area-edge-control-strong",
+  "--area-composer-focus-color", "--area-edge-control", "--area-edge-control-hover", "--area-edge-control-strong", "--area-edge-regions",
   "--area-edge-selected", "--area-edge-shift-dark", "--area-edge-shift-light", "--area-fg-default",
   "--area-fg-muted", "--area-fg-on-action", "--area-fg-on-neutral", "--area-file-tile-figure", "--area-fill-toggle",
   "--area-fill-toggle-hover", "--area-fill-track", "--area-fill-track-hover", "--area-folder-size",
