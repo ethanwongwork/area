@@ -64,7 +64,9 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 13. **App CSS styles only app classes.** When a product needs a component to do something it
     cannot, fix the component (with a spec note) or record a gap; never override `.area-*`.
 14. **The Canvas's header sets how things are shown; the Inspector, what is chosen** (owner,
-    2026-10-12 and 2026-10-14). The layout that follows from it is below.
+    2026-10-12 and 2026-10-14). The layout that follows from it is below. The Inspector's views keep one order, Theme,
+    Design, Code, Chat: every page has Design (what is chosen, else the page), Theme where the Canvas draws in the open
+    theme, Code where what is chosen is code; a page without the view last chosen shows Design (2026-10-31).
 15. **Nothing is chosen until the person chooses it.** A tab opens on its overview, and the
     choice clears when the Sidebar's row changes.
 16. **A control that does not apply to the current view is left out**; the order of the rest
@@ -139,12 +141,13 @@ Cursor's nav with Figma's tabs).
 
 - **Places** (`src/places.ts`): every view is a place with a hash. Home is `#home` (`#home/<system>` with a system chosen,
   `#home/new` for New system). A system's sections are Themes
-  (`#system/<system>/themes`; New theme, `…/themes/new`, is the Setup chat; its Playground edits every setting), Colors,
-  Typography, Icons, Components and
-  Patterns (Testing's screens) and History (`…/history/<version>`); a project's Overview (`#project/<project>`), pages
+  (`#system/<system>/themes`; New theme, `…/themes/new`, is the Setup chat; its Playground edits every setting, and
+  `…/themes/settings/<group>/<setting>` opens it on one), Colors (`…/colors/<scale>`), Typography (`…/typography/<role>`),
+  Icons (`…/icons/<category>`), Components,
+  Patterns (the system's screens; a screen that tries something out is a test, in Labs › Tests, since 2026-10-31) and History (`…/history/<version>`); a project's Overview (`#project/<project>`), pages
   (`…/pages/<page>/<layer>`), explorations (`…/explorations/<id>`) and Versions (`…/versions/<id>`); Inspiration
-  (`#inspiration`, Imagery, then the Library page, renamed) and Labs (`#labs/materials`, out of the nav, reached by search). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
-  Components, `#typography`, `#color`, `#icons` → their sections, `…/foundations` and its group pages → Themes (2026-10-30), `#testing` → Patterns, `#imagery` and `#library` →
+  (`#inspiration`, Imagery, then the Library page, renamed) and Labs (`#labs/materials`, `#labs/tests`, out of the nav, reached by search; each its own tab). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
+  Components, `#typography`, `#color`, `#icons` → their sections, `…/foundations` and its group pages → Themes (2026-10-30), `…/foundations/color|typography|icons` → their sections (2026-10-31), `#testing` → Patterns (a moved screen → Tests), `#imagery` and `#library` →
   Inspiration, `#materials` → Labs; old links are the Area system's, and `#brand/…` links from before the rename open their `#system/…` place
   (`tests/places.test.ts`). A hash naming a system or project the workspace doesn't have is no
   place. A specimen's own in-page links (an example screen's `#home`, a demo's `#library`) stay in the specimen: the

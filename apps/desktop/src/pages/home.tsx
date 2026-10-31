@@ -24,6 +24,11 @@ import { projectName, systemName, hrefOf, resolve, tabKind, type Place } from ".
 import { placeLabel } from "../app-nav.tsx";
 import { readStored } from "../storage.ts";
 import { url, useLibrary } from "./imagery.tsx";
+import { FAMILIES } from "./components.tsx";
+import { EXAMPLES } from "./examples.tsx";
+import { SETTINGS } from "./theme-settings.ts";
+import { TYPE_ROLES } from "../tokens.ts";
+import { categories as ICON_CATEGORIES } from "@area/icons/meta";
 
 /** A system card is the feed's 300 card, wide enough to read the screen in it (PRODUCT_UI.md, the Canvas feed), as Themes'. */
 const SYSTEM_MIN = 300; /* pick */
@@ -50,10 +55,23 @@ function ago(at: number, now: number): string {
   return days === 1 ? "Yesterday" : `${days} days ago`;
 }
 
+/** What a place has chosen, by its name where the app has one ("state-selected" → "Selected state"), else its id in words. */
+function itemLabel(place: Place): string | undefined {
+  const id = place.item?.split("/")[0];
+  if (!id) return undefined;
+  const named = place.page === "components" ? FAMILIES.find(family => family.slug === id)?.name
+    : place.page === "patterns" || place.page === "tests" ? EXAMPLES.find(example => example.id === id)?.label
+    : place.page === "settings" ? SETTINGS.find(setting => setting.id === id)?.title
+    : place.page === "typography" ? TYPE_ROLES.find(role => role.id === id)?.name
+    : place.page === "icons" ? ICON_CATEGORIES.find(category => category.slug === id)?.name
+    : undefined;
+  return named ?? id.replace(/-/g, " ").replace(/^./, letter => letter.toUpperCase());
+}
+
 /** A place's name for Recent: where it is (the system, the Library) and what (its section, the item). */
 function visitLabel(place: Place): string {
   const where = tabKind(place) === "system" ? systemName(place.system) : tabKind(place) === "project" ? projectName(place.project) : null;
-  return [where, placeLabel(place), place.item?.split("/").at(-1)].filter(Boolean).join(" › ");
+  return [where, placeLabel(place), itemLabel(place)].filter(Boolean).join(" › ");
 }
 
 export function HomePage() {

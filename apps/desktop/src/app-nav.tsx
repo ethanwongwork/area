@@ -23,7 +23,7 @@ import { addExploration, addPage } from "./projects.ts";
 import { activeTheme, versionName } from "./systems.ts";
 import { ChromeButton, SidebarList, useStudio } from "./studio.tsx";
 import { FAMILIES } from "./pages/components.tsx";
-import { EXAMPLES } from "./pages/examples.tsx";
+import { PATTERNS } from "./pages/examples.tsx";
 
 const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <PaletteIcon />, project: <FolderIcon />, inspiration: <ImagesIcon />, labs: <FlaskIcon /> };
 
@@ -48,12 +48,12 @@ export const SYSTEM_SECTIONS: ReadonlyArray<{ place: Place; label: string }> = [
 export function placeLabel(place: Place): string {
   if (place.page === "settings" || place.page === "foundations") return "Themes";
   return ({ home: "Home", themes: "Themes", "theme-setup": "New theme", color: "Colors", typography: "Typography", icons: "Icons",
-    components: "Components", patterns: "Patterns", history: "History", inspiration: "Inspiration", materials: "Materials",
+    components: "Components", patterns: "Patterns", history: "History", inspiration: "Inspiration", materials: "Materials", tests: "Tests",
     project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions" } as Record<PageId, string>)[place.page];
 }
 /** What a page's list holds, for its filter's placeholder. */
 const LISTED: Partial<Record<PageId, string>> = { color: "scales", typography: "roles", icons: "icons", components: "components",
-  patterns: "patterns", inspiration: "images", materials: "bundles" };
+  patterns: "patterns", inspiration: "images", materials: "bundles", tests: "tests" };
 
 /** Same section, whatever is chosen on it. New theme, and an old Foundations link, are under Themes. */
 const sectionOf = (place: Place) => place.page === "theme-setup" || place.page === "foundations" || place.page === "settings" ? "themes" : place.page;
@@ -200,7 +200,7 @@ function SystemNav() {
           {row({ page: "typography" }, "Typography")}
           {row({ page: "icons" }, "Icons")}
           {row({ page: "components" }, "Components", <Count count={FAMILIES.length} max={9999} />)}
-          {row({ page: "patterns" }, "Patterns", <Count count={EXAMPLES.length} />)}
+          {row({ page: "patterns" }, "Patterns", <Count count={PATTERNS.length} />)}
           {/* History counts the publishes; while the working copy has changes, it says how many are waiting. */}
           {row({ page: "history" }, "History", changes.length ? <span className="studio-muted">{changes.length} unpublished</span> : <Count count={workingSystem.releases.length} />)}
         </NavGroup>

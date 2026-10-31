@@ -12,13 +12,19 @@ import { ChromeButton, useStudio } from "./studio.tsx";
 import { hrefOf, type Place } from "./places.ts";
 import { SYSTEM_SECTIONS, placeLabel } from "./app-nav.tsx";
 import { FAMILIES } from "./pages/components.tsx";
-import { EXAMPLES } from "./pages/examples.tsx";
-import { SETTINGS } from "./pages/theme-settings.ts";
+import { PATTERNS, TESTS } from "./pages/examples.tsx";
+import { modeOfSetting, SETTINGS } from "./pages/theme-settings.ts";
 import { groupSlug } from "./places.ts";
 import { SCALES, TYPE_ROLES } from "./tokens.ts";
 
 const title = (id: string) => id.replace(/-/g, " ").replace(/^./, letter => letter.toUpperCase());
 const categoryOf = (category: string | null) => ICON_CATEGORIES.find(entry => entry.slug === category || entry.name === category);
+
+/** A setting's group, and its theme when it is one of a light and dark pair (Page lightness is each theme's own). */
+const settingWhere = (setting: { id: string; heading: string }) => {
+  const mode = modeOfSetting(setting.id);
+  return mode ? `${setting.heading}, ${mode === "light" ? "Light" : "Dark"}` : setting.heading;
+};
 
 /** Every place and item, as palette rows (without their action, which needs the studio). */
 /** A system's own place, described by the open system's name when shown (a choice opens it in that system). */
@@ -27,15 +33,16 @@ const ENTRIES: ReadonlyArray<{ place: Place; label: string; description: string;
   { place: { page: "home" }, label: "Home", description: "Workspace", group: "Places", keywords: ["projects", "systems", "boards", "recent"] },
   ...([{ page: "theme-setup" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
   ...SYSTEM_SECTIONS.map(entry => ({ place: entry.place, label: entry.label, description: OPEN_SYSTEM, group: "Places" })),
-  // Components, Patterns and History are system sections since the flat nav (2026-10-30); they were listed again here.
   { place: { page: "inspiration" }, label: "Inspiration", description: "Library", group: "Places", keywords: ["library", "images", "boards", "imagery"] },
   { place: { page: "materials" }, label: "Materials", description: "Labs", group: "Places", keywords: ["lab", "material bundles"] },
+  { place: { page: "tests" }, label: "Tests", description: "Labs", group: "Places", keywords: ["lab", "trial", "testing"] },
   ...FAMILIES.map(family => ({ place: { page: "components" as const, item: family.slug }, label: family.name, description: "Component", group: "Components" })),
-  ...SETTINGS.map(setting => ({ place: { page: "settings" as const, group: groupSlug(setting.heading), item: setting.id }, label: setting.title, description: setting.heading, group: "Settings", keywords: [setting.label, setting.id] })),
+  ...SETTINGS.map(setting => ({ place: { page: "settings" as const, group: groupSlug(setting.heading), item: setting.id }, label: setting.title, description: settingWhere(setting), group: "Settings", keywords: [setting.label, setting.id] })),
   ...SCALES.map(scale => ({ place: { page: "color" as const, item: scale.id }, label: title(scale.id), description: "Color scale", group: "Color" })),
   ...TYPE_ROLES.map(role => ({ place: { page: "typography" as const, item: role.id }, label: role.name, description: "Type role", group: "Typography" })),
   ...ICON_CATEGORIES.map(category => ({ place: { page: "icons" as const, item: category.slug }, label: category.name, description: "Icon category", group: "Icons" })),
-  ...EXAMPLES.map(example => ({ place: { page: "patterns" as const, item: example.id }, label: example.label, description: "Pattern", group: "Patterns" })),
+  ...PATTERNS.map(example => ({ place: { page: "patterns" as const, item: example.id }, label: example.label, description: "Pattern", group: "Patterns" })),
+  ...TESTS.map(example => ({ place: { page: "tests" as const, item: example.id }, label: example.label, description: "Test", group: "Labs" })),
 ];
 const ICONS = ICON_META.filter(icon => !icon.aliasOf).map(icon => ({
   place: { page: "icons" as const, item: categoryOf(icon.category)?.slug }, label: title(icon.name), description: `Icon in ${categoryOf(icon.category)?.name ?? "Uncategorised"}`, group: "Icons", keywords: [icon.name, ...icon.keywords],

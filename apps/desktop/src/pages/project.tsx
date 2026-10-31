@@ -22,7 +22,7 @@ import { CanvasSettings } from "../canvas-settings.tsx";
 import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
 import { hasColours } from "../colours.ts";
 import { hrefOf, systemName } from "../places.ts";
-import { EXAMPLES, WidthZoom } from "./examples.tsx";
+import { EXAMPLES, PATTERNS, WidthZoom } from "./examples.tsx";
 import { NameDialog } from "./home.tsx";
 import { nameOf, url, useLibrary } from "./imagery.tsx";
 import { BeforeAfter, KINDS, ThemeScreen } from "../publish.tsx";
@@ -214,7 +214,7 @@ export function ProjectPageView() {
         <ViewControls>
           <Menu aria-label="Add screen" align="end" tooltip="Add one of the system's screens"
             trigger={<Button variant="ghost" tone="neutral" size="sm" icon={<AddIcon />} trailingIcon={<ChevronDownIcon />}>Add screen</Button>}>
-            {EXAMPLES.map(example => <MenuItem key={example.id} onClick={() => add("screen", example.id, example.label)}>{example.label}</MenuItem>)}
+            {PATTERNS.map(example => <MenuItem key={example.id} onClick={() => add("screen", example.id, example.label)}>{example.label}</MenuItem>)}
           </Menu>
           <Button size="sm" variant="ghost" tone="neutral" icon={<AddIcon />} disabled={!images.length} onClick={() => setPicking(true)}>Add image</Button>
         </ViewControls>
@@ -304,9 +304,9 @@ export function ExplorationPage() {
               </Tile>
             </TileGrid>
           </CanvasSection>
-          <CanvasSection id="exploration-screens" title="On the system's screens" count={EXAMPLES.length - 2} lede="The system's patterns, in the exploration.">
+          <CanvasSection id="exploration-screens" title="On the system's screens" count={PATTERNS.length - 2} lede="The system's patterns, in the exploration.">
             <TileGrid span="wide">
-              {EXAMPLES.filter(entry => entry.id !== "chat" && entry.id !== "abstract-board").map(entry => (
+              {PATTERNS.filter(entry => entry.id !== "chat" && entry.id !== "abstract-board").map(entry => (
                 <Tile key={entry.id} span="wide" stage="center" inert card label={entry.label}>
                   <WidthZoom><div className="ex-thumb" aria-hidden="true"><entry.Screen /></div></WidthZoom>
                 </Tile>
