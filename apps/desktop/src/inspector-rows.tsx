@@ -55,7 +55,8 @@ export const RowFrame = createContext<"field" | "settings">("field");
 /**
  * A row's Reset (owner, 2026-10-30: "add reset buttons for all the controls to the default"): the setting back to Area's
  * shipped default (gallery/controls.ts `defaultValue`, the Canvas's defaults). It shows only while the row differs from it,
- * as a small icon button after the row's name, so the controls keep one width down the column. `setting` names what the
+ * as a small icon button before the row's control, which gives up its width (`WithReset`; was after the row's name, which
+ * clipped long names); on the Settings page, after the name. `setting` names what the
  * row sets (`data-setting` on the row), which the theme page's Playground follows (src/pages/themes.tsx).
  */
 export interface Reset { setting: string; changed: boolean; reset: () => void }
@@ -303,17 +304,28 @@ export function RowField({ label, name, reset: own, children, ...props }: FieldP
       </div>
     );
   }
-  if (!reason) return <Field label={label} {...props} data-setting={setting} labelAction={button ? <>{props.labelAction}{button}</> : props.labelAction}>{children}</Field>;
+  const control = reason ? <Dimmed>{children as ReactElement}</Dimmed> : children as ReactElement;
+  const shown = button && reset?.changed ? <WithReset button={button}>{control}</WithReset> : control;
+  if (!reason) return <Field label={label} {...props} data-setting={setting}>{shown}</Field>;
   return (
     <Field {...props} data-setting={setting} label={<span className="studio-row__dim">{label}</span>}
-      labelAction={<><Toggletip content={reason} label={words ? `Why ${words} has no effect` : undefined} />{button}</>}>
-      <Dimmed>{children as ReactElement}</Dimmed>
+      labelAction={<Toggletip content={reason} label={words ? `Why ${words} has no effect` : undefined} />}>
+      {shown}
     </Field>
   );
 }
 /** The control, dimmed: Field's id, label and state go on to the control inside. */
 function Dimmed({ children, ...field }: { children: ReactElement } & Record<string, unknown>) {
   return <div className="studio-row__dim">{cloneElement(children, field)}</div>;
+}
+/**
+ * A changed row's Reset before its control, in the control's column (owner, 2026-10-31: "move the reset button and displace
+ * part of the input or slider"): the control gives up the button's width, so the name keeps the label column whole (after
+ * its name, "Shade" with its swatch and info needed 117 of the column's 104, and nine names clipped). The Reset is never
+ * dimmed. Field's id, label and state go on to the control inside.
+ */
+function WithReset({ button, children, ...field }: { button: ReactNode; children: ReactElement } & Record<string, unknown>) {
+  return <div className="studio-row__control">{button}{cloneElement(children, field)}</div>;
 }
 
 function Row({ control, context }: { control: GalleryControl; context: RowContext }) {

@@ -1727,6 +1727,11 @@
   .area-tooltip[popover] { --_bridge: var(--area-space-4); }
   .area-tooltip--arrow[popover] { --_bridge: var(--area-space-8); }
   .area-tooltip[popover]::before { content: ""; position: absolute; }
+  /* A tooltip that only repeats its trigger's name (`describes={false}`: an icon button's label) lets the pointer through
+     and closes as the pointer leaves the trigger, as macOS's, Cursor's and Figma's do, so it never sits over the next
+     control in a bar, catching the pointer meant for it (2026-10-31, the desktop app's headers). One that describes
+     keeps the hoverable bridge above. */
+  .area-tooltip[popover][data-passthrough] { pointer-events: none; }
   .area-tooltip[popover][data-side="top"]::before { inset: 100% 0 auto; block-size: var(--_bridge); }
   .area-tooltip[popover][data-side="bottom"]::before { inset: auto 0 100%; block-size: var(--_bridge); }
   .area-tooltip[popover][data-side="left"]::before { inset: 0 auto 0 100%; inline-size: var(--_bridge); }

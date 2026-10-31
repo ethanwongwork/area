@@ -115,6 +115,16 @@ With a trigger: closed, delayed open (500ms), open, closing. See [overlay behavi
 colours draw a 1px `CanvasText` edge, since the fill and shadow are dropped (forced-colors.css:72,
 audit E-10); RTL follows the logical properties in `surface.css`.
 Hover intent is shared with Hover card through `useHoverIntent` (overlay.ts:108-145): a mouse or pen opens after the delay, touch never (a tap activates the trigger); keyboard focus (`:focus-visible`) opens at once; blur closes at once; Escape is one handler in the capture phase on `window` that consumes the event, so the Popover or modal Dialog underneath stays open (audit E-18 A, owner 2026-09-30; Tooltip used to open for the mouse only).
+While open, a tooltip also closes on anything that says the pointer or the window has gone (Overlays.tsx, AnchoredTooltip;
+2026-10-31): a pointer move anywhere but the trigger and the tooltip (unless the keyboard focused the trigger), the
+pointer leaving the window, the window's blur and the page being hidden. The trigger's own pointerleave misses a trigger
+that moves or is disabled under a still pointer (a panel toggle, Back after the last step), a pointer that crosses a window
+drag region (Electron's headers) and one that leaves the window from the trigger's edge. Focus that only returns with the
+window (after ⌘Tab it matches `:focus-visible`) shows nothing, and a trigger whose menu or popover is open
+(`aria-expanded="true"`) shows no tooltip over it.
+A tooltip that repeats its trigger's name (`describes={false}`) lets the pointer through (`data-passthrough`,
+`pointer-events: none`) and closes as the pointer leaves the trigger, as macOS's, Cursor's and Figma's do; a tooltip that
+describes keeps the hoverable bridge (WCAG 1.4.13).
 
 ## Peers and consistency
 
@@ -198,3 +208,4 @@ Open questions:
 - 2026-10-03 · radius audit D3 (owner) → compact takes the large control corner too, 24 → 8 (was the sm corner, 4); default 10 unchanged, so the tooltip is rounder than a control at both densities (`surface.css`, `--_tooltip-radius`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → open fades and grows from 0.97 on `fast`; skip-window follow-ons and the close are instant (`data-instant`); the skip window starts only from a shown tooltip; arrow centre rounded (`surface.css`, `Overlays.tsx`).
 - 2026-10-12 · product UI rule 4 (docs/PRODUCT_UI.md) → `describes` prop (default true): false when the tooltip repeats the trigger's accessible name, so it shows without being announced twice → `primitives.tsx` (AnchoredTooltip already had it).
+- 2026-10-31 · owner: "the tooltips start to glitch and get stuck" (desktop app headers) → closes on a pointer move off the trigger and tooltip, the pointer leaving the window, window blur and a hidden page; a returning window focus and an expanded trigger show nothing; a name-only tooltip (`describes={false}`) lets the pointer through (`data-passthrough`) so it never covers and catches the next control → Overlays.tsx (AnchoredTooltip), surface.css, tooltip.test.mjs.

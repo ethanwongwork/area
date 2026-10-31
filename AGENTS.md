@@ -53,6 +53,7 @@ components and accurate specs matter more than speed.
 | `area-illustration` | Area figures in the screens' style: real components with words as light bars; screens, vignettes, a gallery of every family, settings on screens |
 | `area-ui-compose` | Composing screens and layouts from Area: shell, panels, spacing, feeds, grids, shelves, media, copy, screen recipes |
 | `area-ui-review` | Measuring and checking a composed screen's spacing, regions and copy (`scripts/layout-audit.js`) |
+| `area-interaction-pass` | Testing the app in motion and its interaction patterns: responsive Canvas, bars, tooltips, breadcrumbs, tiles, menus, tabs (`scripts/cdp.mjs` drives Electron) |
 | `checkpoint` | A requested checkpoint or handoff |
 
 ## Work

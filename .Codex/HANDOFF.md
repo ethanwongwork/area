@@ -1,6 +1,25 @@
 # Handoff
 
-## Current state (2026-10-30)
+## Current state (2026-10-31)
+- **Interaction pass, branch `claude/electron-ui-interaction-pass-11beed` (uncommitted, 2026-10-31).** Owner: "fix the
+  responsiveness ... content in the middle screen to scale up and down", tooltips "glitch and get stuck", breadcrumb
+  horizontal spacing, a full UI and interaction pass documented as skills. Done: the feed fills the Canvas (no 1236
+  measure) and Auto scales specimens with their card (fit.ts AUTO_VIEW, 0.7 at 277, up to 1:1); the Canvas bar's start
+  gives way, then its groups wrap at the end (never under the Inspector; tested at 960); screen tiles are 16:9 and filled
+  (`Tile stage="screen"`: Home, Themes, History, a project, Publish); inert tiles open on double-click (Home's system did
+  nothing); Tooltip closes on pointer moves off it, window leave, blur and hidden page, ignores a returning window focus
+  and an expanded trigger, and a name-only tooltip lets the pointer through (Overlays.tsx, surface.css, tooltip spec,
+  tooltip.test.mjs +3); the path starts on the feed's 16, its plate no longer clipped, 4 from the Overview button's;
+  Inspiration's trail and viewer buttons use the same Breadcrumb and ChromeButtons; Search listed Components, Patterns and
+  History twice. New skill `area-interaction-pass` (patterns + scripts/cdp.mjs to drive Electron). PRODUCT_UI.md updated.
+  Checks: typecheck, all React suites, app-css, docs, playgrounds, desktop. Second round (owner: window "doesnt open to the
+  full width"; the open items): the window opens on the display's work area, then where it was left (main.cjs `window.json`;
+  PRODUCT_UI.md "The window"); a full-width Segmented is equal grid columns (Selected tint read "Acc…"; segmented spec,
+  segmented-tabs test); a real app switch (osascript activate) closes a focused tooltip and the return doesn't reopen it
+  (skill updated). A changed Inspector row's Reset moved from after its name to before its control, which narrows
+  (owner: "displace part of the input or slider"; nine names clipped; `WithReset`, option-marks.css, row-reset test). Colors / Typography /
+  Icons / Patterns / History bars have no path while Components shows "Components › Overview" at its root (recommend a
+  one-step path naming the section everywhere). Real pointer moves need Accessibility permission (drag strip unverified).
 - **Option rows are bars, branch `claude/electron-ui-settings-refine-175e56` (uncommitted, 2026-10-30).** Owner: "are these
   option rows supposed to be pill shaped?" No: a row or list Radio / Checkbox `card` or `soft` option took
   `radius-container` (16 / 20), a pill on a 34 row. Now the ladder's corner for its one-line height (`--_card-line`: inset

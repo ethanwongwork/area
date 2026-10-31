@@ -110,8 +110,9 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     2026-10-31, a trial of how a project's screens are viewed; src/screen-viewer.tsx) puts the Workspace alone on a grey
     ground, fitted or zoomed (stepper, menu, or a pinch), scrolled past the view; the Canvas header's start holds the view
     and its mode (Light, Dark, Light and dark side by side or stacked) and ground (Grey, White, Black, Checkerboard) as
-    ghost menus, its end the zoom, whose menu toggles the held states and the window frame. Every setting row carries a Reset to Area's default while it differs from it, after its
-    name, and every bar's value field is one width (5 characters), so a column of rows lines up. Settings keeps its screen
+    ghost menus, its end the zoom, whose menu toggles the held states and the window frame. Every setting row carries a Reset to Area's default while it differs from it, before its
+    control, which gives up the button's width (owner, 2026-10-31: "move the reset button and displace part of the input or
+    slider"; after the name it clipped nine long names), and every bar's value field is one width (5 characters), so a column of rows lines up. Settings keeps its screen
     preview only.
 
 23. **Real UI only, for now** (owner, 2026-10-30: "i want to stop using the abstract illustrations for now and just use real
@@ -128,6 +129,11 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 
 How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at type 13, Compact,
 the scale the layout was measured at; the app now takes its chosen system's type and density (rule 18).
+
+**The window** (`electron/main.cjs`, owner 2026-10-31: "doesnt open to the full width of the screen"; was a fixed 1440 ×
+900): it first opens on the whole work area of the display under the pointer (the screen less the menu bar and Dock: 1512 ×
+884 on a 14-inch MacBook Pro), then where it was last left (`window.json` in the app's data folder, zoomed or not), unless
+that place is off every display. At least 960 × 600. A `--capture` keeps 1440 × 900 (or `--width`) so its frames compare.
 
 **Places, tabs and the nav** (app structure Phases 1 and 2, 2026-10-28 and 29, and the IA of 2026-10-29: projects and
 publishing; the plan and the owner's model in `docs/research/app-structure-2026-10-28/README.md`; the shell is variation A,
@@ -252,7 +258,11 @@ Cursor's nav with Figma's tabs).
 
 - There is no title over the Canvas or the Inspector; the Sidebar's selected row names what
   the Canvas shows.
-  The Components bar carries its path at its start instead (Breadcrumb `nowrap`, owner 2026-10-24: "breadcrumbs can be used to help with layer management"; 2026-10-25, the Overview too: "put some text in the top left, a breadcrumb"): Components / Overview (or List), and on a tile Components / its family / its name.
+  The Components bar carries its path at its start instead (Breadcrumb `nowrap`, owner 2026-10-24: "breadcrumbs can be used to help with layer management"; 2026-10-25, the Overview too: "put some text in the top left, a breadcrumb"): Components / Overview (or List), and on a tile Components / its family / its name. Inspiration's
+  trail is the same Breadcrumb (`studio-canvas__crumbs`, one line, the app's scale). A path that opens the bar starts on
+  the feed's margin (16), over the first section's title, its links' plates inside the bar's 7; after the Overview button
+  the two plates stand 4 apart (owner, 2026-10-31: "the breadcrumb spacing on the horizontal side doesnt look right"; it
+  had started on the bar's 7, 9 left of the titles, its first plate cut by the clip).
 - The Canvas's second row (its view options, under the tabs) is a small control with 5 above and below and the tab
   row's 7 at the sides: 36 at type 13, its controls 12 under the tabs, its last control ending under the tab row's last
   (owner, 2026-10-31, Claude's browser pane: "the second row of controls below feel like part of the tabs bar", then "it
@@ -260,17 +270,24 @@ Cursor's nav with Figma's tabs).
   shows sits at its start as ghost menus (view-controls.tsx ViewLead and ViewFilter: "i dont like that theyre all right
   aligned. maybe use more dropdowns"), how it is shown (zoom, layout, New theme) at its end. Its controls and the
   Sidebar's first row share one line (58); the Inspector's first heading, set by Panel's own body inset, sits 5 under it
-  (63). The Sidebar and Inspector are 14 in on all sides.
+  (63). The Sidebar and Inspector are 14 in on all sides. **Narrow**, the start gives way first (a path shortens to its
+  first step, 120), then the end's groups wrap onto rows of their own under it, at the end, 4 apart, each control whole;
+  nothing runs under the Inspector (owner, 2026-10-31: "fix the responsiveness"; at a 1000 window with both panels the
+  path was cut to nothing and Live, Working and Publish ran off the Canvas). One row is unchanged.
 - **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4; the Titlebar's rule went
   with it, 2026-10-30): no header and no bar carries a rule (Notion's and ChatGPT's top bars), and the Sidebar sits on
   the chrome's recessed ground (`data-area-chrome`, the subtle step, as Notion's sidebar), its seam the Panel's edge.
 - **Rows are 28** at type 13 Compact (owner, 2026-10-22, item 2: rows keep at least 5 above and below their
   text; Cursor's and Figma's 28).
 - **The Canvas is a feed** (owner, 2026-10-22: "margins larger than the gaps … a consistent feed style … documentation
-  style that is simple, repeatable, consistent"). One column of sections, at most 1236 wide (four 300 cards) and centred; each section
+  style that is simple, repeatable, consistent"). One column of sections the Canvas's width at every window size (owner, 2026-10-31: "i want the content in the middle
+  screen to scale up and down"; it was at most 1236 and centred from 2026-10-22, so a hidden panel's room became empty
+  margins); each section
   is a heading (and a muted lede) over one block: a grid of cards, the Stage, plain text, a Table or a Code block.
   Spacings grow outward: cards 8 apart (colour's swatch sheet 4; owner, 2026-10-24: "maybe everything can be 8px?"; was 12), at least 260 wide (277 to 300 in a 1440 window), at most four across (owner, 2026-10-22: "more like a gallery", "280 to 300 px
-  width … 4 columns across not more"), a heading 12 over its block, sections 40 apart, the Canvas margin 16, each
+  width … 4 columns across not more"); past four the cards grow with the Canvas and, at Auto, their specimens with them,
+  0.7 at a 277 card and up to 1:1 (`gallery/fit.ts`, AUTO_VIEW); a product screen's tile is the screen's 16:9, filled
+  (`Tile stage="screen"`), not a square with the screen in its middle; a heading 12 over its block, sections 40 apart, the Canvas margin 16, each
   measured to what is drawn: a frame's edge, a text's cap or baseline (titles, ledes and prose are trimmed; a Table
   measures to its frame, as a card does).
 - **One voice for the feed's text** (owner, 2026-10-22: "make the copy, titles, and subtitles to be more consistent and
@@ -321,7 +338,7 @@ Zoom is Zoom control's stepper (− Auto +):
   Default tile and a branch per group (Variants, Sizes, States …) of its tiles, named by value. Those branches start
   closed; the tile on the Stage opens its family and group. Pinned rows are shortcuts with no rows under them.
 - **The bar on a tile**: the Overview button (Grid, its Tooltip with Esc), then the path, Area's Breadcrumb `nowrap`
-  (Components › family › tile), its first letter 12 from the button's glyph; then Replay, zoom and previous / next,
+  (Components › family › tile), its plate 4 from the button's (its first letter 14 from the glyph); then Replay, zoom and previous / next,
   which walk every tile in the Sidebar's order. The bar's start and its controls stay at least 12 apart; the path's
   page is cut first.
 - Specimens sit in square cards at least 360 wide, 8 apart, the specimen 24 in. The title
