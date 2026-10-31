@@ -1,6 +1,55 @@
 # Handoff
 
-## Current state (2026-10-29)
+## Current state (2026-10-30)
+- **Prose lines and text flow, branch `claude/app-status-ui-flow-add234` (uncommitted).** From a vertical rhythm audit
+  against Cursor 3.27 and Claude 3.6556 (https://claude.ai/artifact/Ai15EUzS46xKra4ZqjzMsj; evidence and derivations in
+  `docs/research/vertical-rhythm-2026-10-30/`). Type axis: `text-sm|md-prose-leading` (1.5 × size on the 2px ramp: 13/20,
+  15/24) and `text-sm|md-prose-gap` (12 / 16 / 20). Message: 15/24 at type 13 (was 15/22), blocks the prose gap apart, a
+  heading the gap + 8 above and 8 below, a list 8 under its lead-in; back In review. The app's chat: new exchange 24,
+  message → reply 12. Rules in DESIGN_SYSTEM.md (Prose lines, Text that flows) and area-ui-compose spacing.md; cohesion
+  test. Checks: tokens, React 613, desktop 25, typecheck, docs, app-css, playgrounds, contracts; measured in the app, light
+  and dark. Also this session, artifacts only (no app change): status labels with progress marks and a three-header
+  (Cursor) shell, https://claude.ai/artifact/13nEjv8rCm2eHZyYDnHXoM. Open for the owner: the three-header shell in the
+  app; Nav and Custom select are reopened but in no status list (show Unrefined); saved duplicate tabs from before #179
+  aren't merged on restore; PRODUCT_UI.md line 108 and AGENTS.md (app takes the Inspector's settings) are stale.
+- **Clearer Page and Accent, "color", Theme preview, 2026-10-30 (uncommitted).** Page color leads the Page section
+  (Inspector and Settings): Adjust (Lightness, Temperature, Tint) or Exact (`PageRows` in inspector-rows.tsx; picking
+  Exact starts from the page now, `pageColour`); Page and Accent hints rewritten to say what they paint. Visible copy
+  says "color" (198 strings, TypeScript-parsed so code names stay; PRODUCT_UI rule 21). Settings › Theme has a sticky
+  live preview (`ThemePreview`, ScreenFigure with the open theme's scope, screen remembered), stacked under 960.
+  Open: the app says "grey", not "gray".
+  The preview's default screen is the Area app itself (`content/examples/area-app.tsx`, SCREENS `area`, also offered in
+  Setup's screen list).
+- **Even header insets, 2026-10-30 (uncommitted).** Each header's end controls sit as far from the side as from the top
+  (7 at every scale on the window bars): Panel's controls-only bar applies `--_bar-start` / `--_bar-end` itself (inset.css
+  had put 19 back at the Inspector's end), a window bar's even room no longer subtracts a rule, Titlebar starts tabs (a
+  Nav, or a strip holding one) at the even inset (was 14). Lights spacer 72 keeps the Sidebar toggle at 83. Cohesion test
+  added; panel.md and app-shell.md logged; Panel and Titlebar stay In review.
+- **Versions named like models, no middle dots, 2026-10-30 (uncommitted).** `versionName` (`src/systems.ts`) says a
+  version as "Area 1.0" everywhere (pickers, History, publish dialogs, project facts, Explorations nav); no "v". Middle
+  dots gone from the app's copy (commas, › for paths, a space before a unit); PRODUCT_UI.md rules 19 and 20. Publish's
+  Kind is Radio `soft` `list` with the version as meta; Page colour and the exact accent rows use `RowField`, so they
+  are Settings rows in Settings › Theme. Component demos' example copy (Asset row "SVG · 24 × 24") left as is.
+- **Settings: Appearance and Theme apart, built 2026-10-30 (uncommitted, this branch).** From the owner's preview pick
+  (https://claude.ai/artifact/Hrzat6VNUQ2C9sHcLZ6ZBp, control-at-the-end rows). `src/pages/settings.tsx`: General,
+  Appearance (Mode cards; Drawn in A system / Its own look; own look shows every setting + Material), Theme (open system:
+  System, Theme, Live badge or N unpublished changes + Publish via `PublishDialog`, now exported; every setting incl.
+  exact colours; a project's tab offers only Open). Mode, Density and Corner are Radio `soft` `preview` cards with
+  `ChoicePreview` in each choice's scope (`settings.css`: wide rows, `unsafe center` scope, System's split). Electron
+  captures take `--run='<js>'` (main.cjs) to open Settings. Checked in the browser preview and Electron, light and dark.
+- **Three-panel shell, Settings and the app following its system, built 2026-10-30 (uncommitted, this branch).** No
+  Titlebar: the Sidebar's Panel bar (macOS lights' room, toggle at 83, search icon, back / forward), the Canvas's plain
+  Titlebar (tabs, Inspiration, light / dark; takes a hidden panel's toggle), the Inspector's bar (views, toggle); a drag strip
+  under them (`.studio-drag`). Profile + Settings (⌘,, app menu Settings…) at the Sidebar's foot; Settings
+  (`src/pages/settings.tsx`) opens over the tab in Cursor's layout: General (name), Appearance (Mode System / Light / Dark;
+  Follow a system, System, Theme, Open; the app's own type, density, corner, accent, buttons, selection). The app is drawn
+  in `chrome` (`src/app-look.ts`: the followed system's theme as published, else own settings; saved `appLook`), which
+  `<html>`, appScale, panel widths, the specimen scope and tiles' cardRestored now read; Appearance maps every Theme
+  setting and Material (the Inspector's rows in a Settings frame, `RowFrame`; exact colours left to the system's Theme
+  view); headers 40 (Panel `windowBar`, Titlebar `size="sm"`, both In review); takeover filters span the row plates; PRODUCT_UI.md rules 12 and 18
+  rewritten, AGENTS.md Start updated, tests/app-look.test.ts. On the owner's machine Area's Default is 13/32 with corner 12
+  (was 10 at the defaults). Also built: Badge's icon gap floor 4 (In review). Artifact prototype:
+  https://claude.ai/artifact/13nEjv8rCm2eHZyYDnHXoM (status badges, kinds of thing; tabs no status; Sidebar icon badges).
 - **Inspector panel research, 2026-10-30, branch `claude/inspector-panel-design-aa85f9` (uncommitted, research only).**
   The owner asked for a flexible Inspector with tight, consistent spacing, after Cursor's and Claude Code's panels, file
   trees and code containers. In `docs/research/inspector-panel-2026-10-30/`: README (Area measured, findings, six
@@ -49,7 +98,7 @@
   "Projects and publishing", PRODUCT_UI.md places, AGENTS.md Start. Checks: typecheck, test:desktop (25, new
   tests/projects.test.ts), app build, playgrounds, app-css; driven in the browser preview light and dark (create project,
   add screen and image layers, exploration, publish to Area, in-place edit, Live, Publish, History). Not built: products,
-  approval, the conflict view, Start a project from a system, Explore. Checked in the browser preview, light and dark; in Electron only Home captured.
+  approval, the conflict view, Start a project from a system, Explore. Checked in the browser preview, light and dark; in Electron only Home captured. Merged as PR #179 (fe1f5634) 2026-10-30.
 - **App structure Phase 2, Home and several systems, branch `claude/serene-maxwell-905675`, PR #174 (started from the
   Phase 1 session).** Home (`#home`, `src/pages/home.tsx`: Systems, Projects later, New system from the Area Starter /
   Describe it (Setup chat) / Import stub, Boards, Recent) in a fixed first Home tab (Nav's new icon-only item, Figma's file

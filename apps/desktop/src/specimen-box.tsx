@@ -43,7 +43,7 @@ function measure(): Measured | null {
     border, padding,
     radius: [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius].map(value => round(px(value))) as unknown as Sides,
     width: round(width), height: round(height), sizing: style.boxSizing,
-    font: `${round(px(style.fontSize))} / ${round(px(style.lineHeight)) || style.lineHeight} · ${style.fontWeight}`,
+    font: `${round(px(style.fontSize))} / ${round(px(style.lineHeight)) || style.lineHeight}, weight ${style.fontWeight}`,
     color: style.color, background: style.backgroundColor, edge: border.some(Boolean) ? style.borderTopColor : "",
     shadow: painted(style.boxShadow),
   };

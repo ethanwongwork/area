@@ -145,7 +145,7 @@ function ThemeBrowse({ mode, setMode, heading }: { mode: Mode; setMode: (mode: M
           <PanelSection heading={preset ? "Value" : "Setting"}>
             <Facts label={preset ? "Value" : "Setting"} items={preset ? [
               ["Attribute", <Code>{attributeOf(axis, preset.id)}</Code>],
-              ["Setting", `${axis.heading} · ${axis.label}`],
+              ["Setting", `${axis.heading} › ${axis.label}`],
               ["Default", isDefault(axis, preset.id) ? "Yes" : `No, ${defaultLabel(axis)}`],
               ["Controls", axis.description],
               writes(axis, preset.id).length ? ["Writes", <Writes tokens={writes(axis, preset.id)} />] : null,

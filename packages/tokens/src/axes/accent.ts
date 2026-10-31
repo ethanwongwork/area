@@ -24,13 +24,13 @@ import { ACCENT_AXIS, THEME_AXIS } from "./color.ts";
 export const ACCENT_STRENGTH_AXIS: AxisDefinition = {
   id: "accent-strength",
   label: "Saturation",
-  description: "How much of its own colour the accent keeps, 100 (the palette) to 30 (dusty). Hue and contrast hold.",
+  description: "How much of its own color the accent keeps, 100 (the palette) to 30 (dusty). Hue and contrast hold.",
   defaultPreset: String(DEFAULT_ACCENT_STRENGTH),
   namespaces: ["--area-strength-accent:"],
   presets: ACCENT_STRENGTHS.map(strength => ({
     id: String(strength),
     label: strength === 100 ? "100 (Full)" : strength === 30 ? "30 (Dusty)" : String(strength),
-    description: strength === 100 ? "The accent as the palette draws it." : `${strength}% of the accent's colour, toward the gray of its own lightness.`,
+    description: strength === 100 ? "The accent as the palette draws it." : `${strength}% of the accent's color, toward the gray of its own lightness.`,
     tokens: tokens({ "strength-accent": strength }),
   })),
 };
@@ -74,7 +74,7 @@ export const LABEL_TINT_AXIS: AxisDefinition = {
   presets: POSITIONS.map(position => ({
     id: String(position),
     label: position === 0 ? "0 (None)" : position === 100 ? "100 (Full)" : String(position),
-    description: position === 0 ? "The measured black or white." : position === 100 ? "The most coloured label that stays readable on the fill." : `${position}% of the way to the most coloured readable label.`,
+    description: position === 0 ? "The measured black or white." : position === 100 ? "The most colored label that stays readable on the fill." : `${position}% of the way to the most colored readable label.`,
     tokens: tokens({ "label-tint": position / 25 }),
   })),
 };
@@ -135,8 +135,8 @@ export const STATUS_COLOURS_AXIS: AxisDefinition = {
   defaultPreset: "fixed",
   namespaces: ["--area-status-match:"],
   presets: [
-    { id: "fixed", label: "Fixed", description: "Status colours as the palette draws them, whatever the accent.", tokens: tokens({ "status-match": 0 }) },
-    { id: "match", label: "Match strength", description: "Status colours quieted to the Accent strength; their hues stay.", tokens: tokens({ "status-match": 1 }) },
+    { id: "fixed", label: "Fixed", description: "Status colors as the palette draws them, whatever the accent.", tokens: tokens({ "status-match": 0 }) },
+    { id: "match", label: "Match strength", description: "Status colors quieted to the Accent strength; their hues stay.", tokens: tokens({ "status-match": 1 }) },
   ],
 };
 

@@ -531,6 +531,8 @@ export interface PanelProps extends Omit<Div, "title"> {
   flush?: boolean;
   /** The bar names the panel rather than heading it, so it carries no rule under it. */
   bareBar?: boolean;
+  /** The bar is on a window's top line, one of an app's region headers: the small control 7 from its top and bottom. */
+  windowBar?: boolean;
   /** The footer continues the body (a chat's composer), so it carries no rule above it. */
   bareFooter?: boolean;
   /** The body's scrolling element (Scroll area's viewport): for following a conversation to its end. */
@@ -558,7 +560,7 @@ export interface PanelProps extends Omit<Div, "title"> {
 const RESIZE_STEP = 8, RESIZE_STEP_LARGE = 32;
 
 export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(function Panel(
-  { size, title, titleLevel = 2, action, footer, flush, bareBar, bareFooter, viewportRef, actionColumn, resizable, width, defaultWidth, onWidthChange, minWidth = 240, maxWidth = 500,
+  { size, title, titleLevel = 2, action, footer, flush, bareBar, bareFooter, windowBar, viewportRef, actionColumn, resizable, width, defaultWidth, onWidthChange, minWidth = 240, maxWidth = 500,
     className, children, style, id, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
@@ -626,7 +628,7 @@ export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(func
   return (
     <div ref={node => { root.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
       id={resizable ? panelId : id} role={ariaLabel || labelledByTitle ? "region" : undefined} aria-label={ariaLabel}
-      aria-labelledby={labelledByTitle ? titleId : undefined} className={panelVariants({ size, flush, bareBar, bareFooter, actionColumn }, className)}
+      aria-labelledby={labelledByTitle ? titleId : undefined} className={panelVariants({ size, flush, bareBar, bareFooter, actionColumn, windowBar }, className)}
       data-resizable={resizable ? "" : undefined} data-resizing={resizing ? "" : undefined}
       style={current != null && resizable ? { ...style, "--area-panel-inline-size": `${current}px` } as CSSProperties : style} {...rest}>
       {handle}

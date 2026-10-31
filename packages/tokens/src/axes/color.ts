@@ -184,7 +184,7 @@ export { ACCENT_LABEL_TOKENS };
 export const ACCENT_AXIS: AxisDefinition = {
   id: "accent",
   label: "Accent",
-  description: "The accent colour: one of the palette's eleven, or any hue in 5° steps. Drives selection, focus and accent actions.",
+  description: "The accent color: one of the palette's eleven, or any hue in 5° steps. Drives selection, focus and accent actions.",
   defaultPreset: DEFAULT_SELECTION.accent,
   namespaces: ["--area-accent-", "--area-fg-accent", "--area-fg-on-accent"],
   presets: [

@@ -340,6 +340,20 @@ test('a line under its title joins it, and a label column fits its labels (DESIG
   }
 });
 
+test('prose runs on prose lines and flows on the ladder; parts set in it keep their UI lines (DESIGN_SYSTEM.md, "Prose lines")', () => {
+  // 2026-10-30, docs/research/vertical-rhythm-2026-10-30: a turn's prose was 15/22 with its blocks evenly 16 apart.
+  assert.match(ruleFor('.area-message')?.body ?? '', /line-height:\s*var\(--area-text-md-prose-leading\)/, 'Message sets its prose on the prose line');
+  assert.match(ruleFor('.area-message__content > * + *')?.body ?? '', /margin-block-start:\s*var\(--area-text-md-prose-gap\)/, 'blocks the prose gap apart');
+  const heading = rules.find(rule => rule.selector.startsWith('.area-message__content > :is(h1') && rule.selector.includes(':not(:first-child)'));
+  assert.match(heading?.body ?? '', /calc\(var\(--area-text-md-prose-gap\) \+ var\(--area-space-8\)\)/, 'a heading carries its space above');
+  const joins = rules.find(rule => rule.selector.includes('> :is(h1, h2, h3, h4, h5, h6) + *') && rule.selector.includes('> * + :is(ul, ol)'));
+  assert.match(joins?.body ?? '', /margin-block-start:\s*var\(--area-space-8\)/, 'a heading and a list join what they introduce');
+  // A part that sits in a turn states its own line, so it never inherits the prose line.
+  for (const part of ['.area-step', '.area-plan', '.area-edit-summary', '.area-turn-notice']) {
+    assert.ok(rules.some(rule => rule.selector.split(',').map(s => s.trim()).includes(part) && /line-height:/.test(rule.body)), `${part} should set its own line height`);
+  }
+});
+
 test('every Kbd is a keycap: nothing unboxes it (owner 2026-10-22)', () => {
   // "i prefer having kbd with backplate everywhere it shows up in all components". Menus, the Command palette, Approval,
   // Shortcut list and a Search trigger used to strip the plate (`--quiet`, `.area-menu__item .area-kbd`).
@@ -770,6 +784,21 @@ test('the Composer takes Card\'s corner', () => {
   assert.ok(card && composer, 'the corners are missing');
   assert.ok(norm(composer).includes(norm(card)), `${composer} does not take ${card}`);
   assert.equal(norm(read('.area-composer', '--_composer-term')), norm(read('.area-card', '--_card-term')));
+});
+
+// panel.css / app-shell.css (owner 2026-10-30: "there shouldnt be so much excess room on the sides of the buttons, it
+// should be equal"): a bar of controls holds them as far from its sides as from its top. Panel's controls-only bar applies
+// its even padding itself, so the shared inset (inset.css) can't put its text inset back at a side with no seam rule; a
+// window bar, with no rule, is even to the control alone; a Titlebar that starts with tabs (a Nav, or a strip holding one)
+// starts at the even inset too.
+test('a bar of controls is inset as far from its sides as from its top', () => {
+  const body = selector => rules.find(rule => rule.selector === selector)?.body ?? '';
+  assert.match(body('.area-panel__bar:not(:has(> .area-panel__title))'), /padding-inline:\s*var\(--_bar-start\)\s+var\(--_bar-end\)/);
+  assert.match(body('.area-panel--window-bar > .area-panel__bar'), /--_bar-even:\s*calc\(\(var\(--_bar\) - var\(--area-control-sm\)\) \/ 2\)/);
+  const start = rules.find(rule => rule.selector.startsWith('.area-titlebar:not(.area-titlebar--floating, .area-titlebar--macos)') && /--_titlebar-start:\s*var\(--_titlebar-even\)/.test(rule.body));
+  assert.ok(start, 'the Titlebar has no even start');
+  assert.match(start.selector, /\.area-nav/);
+  assert.match(start.selector, /> :first-child > :first-child/);
 });
 
 // panel.css / field.css / description-list.css: one label column per panel (owner 2026-10-30, "One Inspector grid",

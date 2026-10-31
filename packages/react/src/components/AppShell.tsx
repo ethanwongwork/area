@@ -10,16 +10,19 @@ export interface TitlebarProps extends HTMLAttributes<HTMLElement> {
   /** Clears the platform's own window controls: "macos" leaves room for the traffic lights where Cursor puts them
    * (Electron `titleBarStyle: "hiddenInset"`, `trafficLightPosition: { x: 13, y: 12 }`). */
   windowControls?: "macos";
+  /** md (the default): Panel's md bar. sm: a region's header on the window's top line, the small control 7 from its top
+   *  and bottom, as Panel's `windowBar`. */
+  size?: "sm" | "md";
   /** Pushed to the bar's end: search, panel toggles, the theme. */
   end?: ReactNode;
 }
 
 /** A window's top bar: Panel's bar height and rule, the drag region of a frameless window, its controls pressable. */
 export const Titlebar = /* @__PURE__ */ forwardRef<HTMLElement, TitlebarProps>(function Titlebar(
-  { variant = "ruled", windowControls, end, className, children, ...rest }, ref,
+  { variant = "ruled", size = "md", windowControls, end, className, children, ...rest }, ref,
 ) {
   return (
-    <header ref={ref} className={cx("area-titlebar", `area-titlebar--${variant}`, windowControls === "macos" && "area-titlebar--macos", className)} {...rest}>
+    <header ref={ref} className={cx("area-titlebar", `area-titlebar--${variant}`, size === "sm" && "area-titlebar--sm", windowControls === "macos" && "area-titlebar--macos", className)} {...rest}>
       {children}
       {end ? <div className="area-titlebar__end">{end}</div> : null}
     </header>

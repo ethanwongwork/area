@@ -7,13 +7,14 @@
  * out a brand (about 60ms) and restyles the Canvas. Under Primary, the button the brand draws: its nearest readable shade.
  */
 import { useEffect, useRef, useState } from "react";
-import { Button, ColorField, ColorPicker, Field, hexToHsv, hsvToHex, Popover, Segmented, Toggletip } from "@area/react";
+import { Button, ColorField, ColorPicker, hexToHsv, hsvToHex, Popover, Segmented, Toggletip } from "@area/react";
 import { AddIcon, ColorIcon } from "@area/icons";
 import { brandSlots, type BrandState } from "./brand.ts";
 import { useStudio } from "./studio.tsx";
+import { RowField } from "./inspector-rows.tsx";
 
 type Slot = "primary" | "secondary" | "tertiary";
-const SLOTS: ReadonlyArray<[Slot, string]> = [["primary", "Colour"], ["secondary", "Secondary"], ["tertiary", "Tertiary"]];
+const SLOTS: ReadonlyArray<[Slot, string]> = [["primary", "Color"], ["secondary", "Secondary"], ["tertiary", "Tertiary"]];
 const REST = 300; /* pick: as a setting's bar (inspector-rows.tsx), a held pointer well past a drag's pace */
 
 /** A colour for a slot just added: the primary turned a third of the way round the wheel, at its own strength. */
@@ -30,9 +31,9 @@ export function BrandRows() {
     <>
       {brand.on ? <>
         {SLOTS.map(([slot, label], at) => [brand[slot] === null ? (
-          <Field key={slot} label={label} orientation="horizontal">
+          <RowField key={slot} label={label} orientation="horizontal">
             <Button size="sm" variant="soft" fullWidth icon={<AddIcon />} onClick={() => setBrand({ [slot]: offset(brand.primary, at / 3) })}>Add</Button>
-          </Field>
+          </RowField>
         ) : (
           <BrandColour key={slot} label={label} value={brand[slot]!} set={hex => setBrand({ [slot]: hex })}
             remove={slot === "primary" ? undefined : () => setBrand({ [slot]: null })}
@@ -41,10 +42,10 @@ export function BrandRows() {
               ? `Buttons use it exactly, with a ${info.label === "#000000" ? "black" : "white"} label.`
               : `Buttons use ${info.button.toUpperCase()}, its nearest shade a ${info.label === "#000000" ? "black" : "white"} label reads on.`) : undefined} />
         )])}
-        <Field label="Status hues" orientation="horizontal" title="Danger, warning, success and info: turned toward the exact colours, or Area's own">
+        <RowField label="Status hues" orientation="horizontal" title="Danger, warning, success and info: turned toward the exact colors, or Area's own">
           <Segmented size="sm" fullWidth value={brand.status} onValueChange={status => setBrand({ status: status as BrandState["status"] })}
             items={[{ value: "harmonised", label: "Matched" }, { value: "own", label: "Area's" }]} />
-        </Field>
+        </RowField>
       </> : null}
     </>
   );
@@ -68,11 +69,11 @@ function BrandColour({ label, value, set, remove, note }: { label: string; value
   };
   const shown = draft ?? value;
   return (
-    <Field label={label} orientation="horizontal" labelAction={note ? <Toggletip content={note} label={`How buttons use the ${label.toLowerCase()} colour`} /> : undefined}>
+    <RowField label={label} orientation="horizontal" labelAction={note ? <Toggletip content={note} label={`How buttons use the ${label.toLowerCase()} color`} /> : undefined}>
       <div ref={field} className="studio-brand__colour">
         <ColorField size="sm" variant="soft" fullWidth aria-label={label} value={shown.toUpperCase()} onValueChange={hex => { pending.current = hex; land(); }} />
-        <Popover open={open} onOpenChange={next => { setOpen(next); if (!next) land(); }} anchor={field} align="end" aria-label={`${label} colour`}
-          trigger={<Button size="sm" variant="ghost" iconOnly aria-label={`Pick the ${label.toLowerCase()} colour`} icon={<ColorIcon />} />}>
+        <Popover open={open} onOpenChange={next => { setOpen(next); if (!next) land(); }} anchor={field} align="end" aria-label={`${label} color`}
+          trigger={<Button size="sm" variant="ghost" iconOnly aria-label={`Pick the ${label.toLowerCase()} color`} icon={<ColorIcon />} />}>
           <div onPointerUp={land}>
             <ColorPicker variant="plain" label={label} alpha={false} views={["spectrum", "sliders"]} defaultModel="oklch" eyedropper value={shown.toUpperCase()}
               header={remove ? <div className="studio-brand__head"><span>{label}</span><Button size="sm" variant="ghost" onClick={() => { setOpen(false); pending.current = null; setDraft(null); remove(); }}>Remove</Button></div> : undefined}
@@ -85,6 +86,6 @@ function BrandColour({ label, value, set, remove, note }: { label: string; value
           </div>
         </Popover>
       </div>
-    </Field>
+    </RowField>
   );
 }

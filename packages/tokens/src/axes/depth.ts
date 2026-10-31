@@ -108,7 +108,7 @@ export const SHADOW_LIGHT_AXIS = control("shadow-light", "Shadow light", "Light 
   numbered(4, "Flat", i => ({ "shadow-lip": LIP[i]!, "shadow-highlight-light": HIGHLIGHT[i]![0], "shadow-highlight-dark": HIGHLIGHT[i]![1] })));
 
 /** Shadow colour: the light theme's shadow as OKLCH (Comeau's warm ink, Stripe's cool blue); dark stays black. */
-export const SHADOW_COLOR_AXIS = control("shadow-color", "Shadow colour", "The light theme's shadow colour; dark shadows stay black", "black", ["shadow-tint-"], [
+export const SHADOW_COLOR_AXIS = control("shadow-color", "Shadow color", "The light theme's shadow color; dark shadows stay black", "black", ["shadow-tint-"], [
   { id: "black", label: "Black", tokens: { "shadow-tint-l": 0, "shadow-tint-c": 0, "shadow-tint-h": 0 } },
   { id: "warm", label: "Warm", tokens: { "shadow-tint-l": 0.25, "shadow-tint-c": 0.02, "shadow-tint-h": 60 } },
   { id: "cool", label: "Cool", tokens: { "shadow-tint-l": 0.3, "shadow-tint-c": 0.08, "shadow-tint-h": 255 } },

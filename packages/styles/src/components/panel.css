@@ -407,6 +407,10 @@
     --_bar-even: calc((var(--_bar) - var(--area-border-width) - var(--area-control-sm)) / 2);
     --_bar-start: calc(var(--_bar-even) - var(--_inset) + var(--_side-start));
     --_bar-end: calc(var(--_bar-even) - var(--_inset) + var(--_side-end));
+    /* Applied here, not through the shared inset (inset.css), whose text inset otherwise wins at a side with no seam rule
+       (owner, 2026-10-30: "there shouldnt be so much excess room on the sides of the buttons, it should be equal"; the
+       Inspector's toggle sat 19 from its end, its views 6). */
+    padding-inline: var(--_bar-start) var(--_bar-end);
   }
   /* A Nav in the bar is a row of controls: the small control's height and corner, as the Titlebar's tabs. */
   .area-panel__bar .area-nav--horizontal .area-nav__item {
@@ -465,6 +469,14 @@
     --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
   }
   .area-panel--md { --_inset: calc(var(--area-space-16) - var(--area-space-2)); --_row: var(--area-control-md); }
+  /* window-bar: the bar is on a window's top line, one of an app's region headers (owner, 2026-10-30: "the header should
+     be shorter in height, matching cursor"): the small control 7 from its top and bottom, as a bar's controls sit 7 from
+     its side, and no hairline. 40 at type 13 / 32, Cursor's agents window (its bars 40); 38 at 13 / 28. The body keeps
+     the panel's size. Titlebar size sm is the same height, so the headers on one line agree. */
+  .area-panel--window-bar { --_bar: calc(var(--area-control-sm) + var(--area-space-16) - var(--area-space-2)); }
+  /* It draws no rule, so its controls' even room is the bar less the control alone: 7 at every side (it was 6.5 beside
+     7 above and below). */
+  .area-panel--window-bar > .area-panel__bar { --_bar-even: calc((var(--_bar) - var(--area-control-sm)) / 2); }
 }
 
 @layer area.components {

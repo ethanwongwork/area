@@ -1,0 +1,104 @@
+/* --- Settings (src/pages/settings.tsx; owner, 2026-10-30, Cursor's settings) ------------------------------------------
+ * The section in one centred column at a reading measure: its title, then groups, each a title and lede (SectionHeading)
+ * over a box of rows. A row is a title and its one-line description, the control at its end; rows part by a hairline, the
+ * box is a recessed plate, as Cursor's grouped rows. Spacing on the Canvas's ladder: rows 12 in, groups 32 apart (between
+ * the feed's 40 sections and its 12 heading). */
+.studio-settings {
+  display: grid;
+  gap: var(--area-space-32);
+  max-inline-size: calc(var(--area-space-96) * 8);
+  margin-inline: auto;
+  padding-block: var(--area-space-24) var(--area-space-48);
+}
+.studio-settings__title {
+  margin: 0;
+  font-size: var(--area-title-sm-size);
+  line-height: var(--area-title-sm-leading);
+  letter-spacing: var(--area-title-sm-tracking);
+  font-weight: var(--area-weight-strong);
+  text-box: trim-both cap alphabetic;
+}
+.studio-settings__group { display: grid; gap: var(--_canvas-heading); }
+.studio-settings__rows {
+  border: var(--area-border-width) solid var(--area-border-decorative);
+  border-radius: var(--_tile-radius);
+  background: var(--area-bg-subtle);
+}
+.studio-settings__row {
+  display: flex;
+  align-items: center;
+  gap: var(--area-space-16);
+  padding: var(--_tile-inset) var(--area-space-16);
+}
+.studio-settings__row + .studio-settings__row { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+.studio-settings__text { display: grid; flex: 1; min-inline-size: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+.studio-settings__label { color: var(--area-fg-default); }
+.studio-settings__description { color: var(--area-fg-muted); }
+/* The control column: one width for every row (the Inspector's floor at the app's scale, about 280 at type 13), so the
+   controls line up at the row's end; Segmented, dropdowns and bars fill it, a switch sits at its end. */
+.studio-settings__control {
+  flex: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  inline-size: min(calc(var(--area-space-96) * 3 - var(--area-space-16)), 45%);
+  --area-input-inline-size: 100%;
+  /* A value written as text (Page colour's "Grey 100%") reads at the rows' size, as the controls' own text. */
+  font-size: var(--area-text-sm-size);
+  line-height: var(--area-text-sm-leading);
+}
+/* A control that fills (a framed Field, a full-width Segmented, dropdown or field) takes the column; a switch or a button
+   keeps its own width at the column's end, as Cursor's. */
+.studio-settings__control > :is(.studio-settings__field, [class*="--full-width"]) { flex: 1 1 auto; min-inline-size: 0; }
+.studio-settings__row[data-disabled] .studio-settings__control { opacity: 0.55; }
+.studio-settings__row[data-disabled] .studio-settings__text { opacity: 0.55; }
+
+/* Theme's title carries where the open system stands (Live, or its changes) and Publish at its end. */
+.studio-settings__head { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-16); }
+.studio-settings__actions { display: flex; align-items: center; gap: var(--area-space-8); }
+
+/* A row of pictures (Mode, Density, Corner): the name and description, then the cards on the line under them, across the
+   row, at the row's own gap. Radio's preview group lays the cards on equal columns (--area-choice-min, its public hook). */
+.studio-settings__row[data-wide] { flex-wrap: wrap; row-gap: var(--_tile-inset); }
+.studio-settings__row[data-wide] > .studio-settings__text { flex-basis: 100%; }
+.studio-settings__row[data-wide] > .studio-settings__control { inline-size: 100%; justify-content: flex-start; }
+.studio-settings__pictures { flex: 1 1 auto; min-inline-size: 0; }
+/* A choice's picture in its own scope: the option's settings over the look's, filling the card's frame. */
+.studio-settings__scope { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: unsafe center; inline-size: 100%; block-size: 100%; }
+/* System: light's window on the left half, dark's on the right, one frame. */
+.studio-settings__split { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); inline-size: 100%; block-size: 100%; }
+.studio-settings__split > * { grid-area: 1 / 1; }
+.studio-settings__split > :last-child { clip-path: inset(0 0 0 50%); }
+
+/* Theme's live preview (owner, 2026-10-30: "a screen to the right of the theme canvas in settings to preview all the changes
+   live"): the rows' column at its reading width, the preview beside it filling the rest up to a screen's comfortable size,
+   held in view while the rows scroll, 32 apart as the groups are. On a Canvas too narrow for both, the preview sits above
+   the rows and scrolls with them. */
+.studio-settings-host { container-type: inline-size; }
+.studio-settings-split {
+  display: grid;
+  /* The rows reach their reading width first; the preview takes the rest, at least a screen you can read (368), up to six
+     columns. Below 560 + 32 + 368 the preview goes above the rows. */
+  grid-template-columns: minmax(calc(var(--area-space-96) * 6 - var(--area-space-16)), calc(var(--area-space-96) * 8)) minmax(calc(var(--area-space-96) * 4 - var(--area-space-16)), 1fr);
+  max-inline-size: calc(var(--area-space-96) * 14 + var(--area-space-32));
+  margin-inline: auto;
+  align-items: start;
+  column-gap: var(--area-space-32);
+}
+.studio-settings-split > .studio-settings { margin-inline: 0; inline-size: 100%; }
+.studio-settings__preview {
+  position: sticky;
+  inset-block-start: 0;
+  display: grid;
+  gap: var(--area-space-12);
+  padding-block: var(--area-space-24);
+}
+/* Its caption at the rows' size. */
+.studio-settings__preview > .studio-settings__description { margin: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+/* The screen in a window's proportion, as a theme's card draws it (theme.css). */
+.ss-frame.studio-settings__screen { block-size: auto; aspect-ratio: 1024 / 640; border-radius: var(--_tile-radius); }
+@container (inline-size < 960px) {
+  .studio-settings-split { grid-template-columns: minmax(0, calc(var(--area-space-96) * 8)); }
+  .studio-settings__preview { position: static; padding-block-end: 0; }
+  .studio-settings-split > .studio-settings__preview { order: -1; }
+}

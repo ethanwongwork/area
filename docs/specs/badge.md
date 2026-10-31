@@ -452,7 +452,7 @@ by `node scripts/validate-badge.mjs`. Pass-1 Area captures are in `before/`.
 | text · vertical position | cap centred (cap-height box) | `inset.css` rule | Better centred than Untitled's line box |
 | dot · slot / disc / start / gap | 8 / 6 / 4·6·8 / 4·4·6 | Owner (6px disc); start equals the slot's vertical inset | Notion paints an 8px dot with a 5px gap |
 | icon · slot / inset | 12 at sm; 16 at md, lg; inset (height − slot) / 2 = 2 / 2 / 4 | Owner (16px Fluent at md and above); sm uses native 12px cuts | Callers pass 12px artwork at sm; no current composition uses sm with an icon |
-| icon · gap | 2 / 4 / 4 | Untitled (sm gap-0.5, md gap-1) | — |
+| icon · gap | **4 at every size** (was 2 / 4 / 4 at type 14, 1 / 3 / 4 at 13) | DESIGN_SYSTEM.md Icon-to-label gap (4 at xs and compact); Untitled sm gap-0.5, md gap-1 | owner, 2026-10-30: a status mark touched its word in the sm plate |
 | media, dismiss · box | 12 at sm; 16 at md, lg | Untitled 16 (md); sm follows the icon slot | — |
 | media · start / gap | 2 / 2 / 4; gap 4 / 4 / 6 | Equal inset, as for icons | Pass 1 used 3px at the 20px size |
 | dismiss · gap to text | **2 at every size** | Untitled `gap-0.5` (badges.tsx L346–L351) | The dismiss box holds 2px of air around its 12px glyph, so the visible gap is 4px. A dismissible badge uses the 2px gap for every pair of items |
@@ -691,3 +691,13 @@ Optical centre: the label sits a quarter of the cap–x-height gap above the cap
   and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
   docs/research/dark-soft-tones-2026-10-28).
 - **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
+
+### 2026-10-30 · Icon gap floor
+
+- **What changed:** a leading or trailing icon keeps 4 from the label at every size (`--_gap` set to `space-4` when an icon
+  slot is present, icon-only badges excepted); dots, media and the dismiss keep their gaps. At type 13 the gap was 1 / 3 / 4
+  (sm / md / lg), 2 / 4 / 4 at type 14.
+- **Why:** the status badges (Soft + icon with a progress mark; https://claude.ai/artifact/13nEjv8rCm2eHZyYDnHXoM): at sm the
+  mark sat 1px from its word. DESIGN_SYSTEM.md's icon-to-label gap is 4 at its smallest (xs and compact); the height-derived
+  gap went under it. The 12px icon slot (review round 8) is unchanged.
+- **Verdict:** in review.

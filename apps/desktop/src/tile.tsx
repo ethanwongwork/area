@@ -23,7 +23,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { AssetCard, AssetGridItem, ListBoxItem, SectionHeading } from "@area/react";
 import { appScale } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
-import { CANVAS_DEFAULTS } from "./studio.tsx";
+import { useStudio, type CanvasAxes } from "./studio.tsx";
 
 /**
  * The look the Canvas's Asset cards hold whatever the Inspector previews (owner, 2026-10-24: "the style should be -1 card
@@ -33,8 +33,9 @@ import { CANVAS_DEFAULTS } from "./studio.tsx";
  * previewed while its card stays the app's.
  */
 export const CARD_SCOPE = { "data-area-card-tone-light": "-25", "data-area-card-tone-dark": "-25", "data-area-stroke": "2", "data-area-shadow-rest": "0" } as const;
-/** CARD_SCOPE's settings at the defaults, which a card's specimen starts from (a function: studio.tsx imports this file). */
-const cardRestored = () => ({ "data-area-card-tone-light": CANVAS_DEFAULTS["card-tone-light"], "data-area-card-tone-dark": CANVAS_DEFAULTS["card-tone-dark"], "data-area-stroke": CANVAS_DEFAULTS.stroke, "data-area-shadow-rest": CANVAS_DEFAULTS["shadow-rest"] });
+/** CARD_SCOPE's settings as the app is drawn (its look, src/app-look.ts), which a card's specimen starts from; the specimen's
+ *  scope then writes only what the open theme moves from the app's look. */
+const cardRestored = (chrome: CanvasAxes) => ({ "data-area-card-tone-light": chrome["card-tone-light"], "data-area-card-tone-dark": chrome["card-tone-dark"], "data-area-stroke": chrome.stroke, "data-area-shadow-rest": chrome["shadow-rest"] });
 
 export type TileSpan = "unit" | "wide";
 /**
@@ -178,7 +179,8 @@ function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card
 
 /** Area's Asset card (Components). */
 function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card, aspect, look, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
-  const specimen = { ...cardRestored(), ...specimenScope(), ...stageScope };
+  const { chrome } = useStudio();
+  const specimen = { ...cardRestored(chrome.canvas), ...specimenScope(), ...stageScope };
   const view = stage === "none" ? null : stage === "fit"
     ? <div className="gallery-tile__view" {...specimen}><div className="gallery-tile__stage">{children}</div></div>
     : <div className="gallery-tile__view" inert={inert || undefined} {...specimen}>{children}</div>;

@@ -31,6 +31,7 @@ import {
 } from "@area/icons";
 import { blankImages, figureMarkup } from "../../../.claude/skills/area-illustration/engine/markup.js";
 import { AnalyticsDashboard } from "./content/examples/analytics.tsx";
+import { AreaAppScreen } from "./content/examples/area-app.tsx";
 import { MobileScreen } from "./content/examples/mobile.tsx";
 import { SettingsScreen } from "./content/examples/settings.tsx";
 
@@ -190,6 +191,8 @@ export const SCREENS = {
   analytics: { label: "Analytics", node: () => <div className="ss-example"><AnalyticsDashboard /></div> },
   settings: { label: "Settings", node: () => <div className="ss-example"><SettingsScreen /></div> },
   phone: { label: "Phone", node: () => <MobileScreen /> },
+  // The app itself (owner, 2026-10-30: "a variation of the area electron app"), Settings › Theme's preview by default.
+  area: { label: "Area", node: () => <AreaAppScreen /> },
 } as const;
 export type ScreenId = keyof typeof SCREENS;
 

@@ -36,7 +36,7 @@ export const S01 = () => {
           <Select variant="soft" aria-label="Font" defaultValue="inter"><option value="inter">Inter</option></Select>
           <NumberField variant="soft" fullWidth aria-label="Size" defaultValue={12} unit="px" />
           <Select variant="soft" aria-label="Weight" defaultValue="regular"><option value="regular">Regular</option></Select>
-          <div className="sc-field" aria-label="Colour"><ColorSwatch color="#8a8a8a" aria-hidden="true" className="sc-swatch-bar" /></div>
+          <div className="sc-field" aria-label="Color"><ColorSwatch color="#8a8a8a" aria-hidden="true" className="sc-swatch-bar" /></div>
         </div>
         <div className="sc-grid" style={{ gridTemplateColumns: "80px 80px 80px" }}>
           <NumberField variant="soft" fullWidth aria-label="Line height" defaultValue={16} scrub={<ArrowUpDownIcon />} />

@@ -76,9 +76,9 @@ const hueSwatch = (hue: string) => `oklch(0.66 0.14 ${hue})`;
 function answerOf(question: Question, values: Values, picks: Picks): string {
   const control = question.control;
   if (control.kind === "cards") { const choice = control.choices.find(entry => matches(values, entry.set)); if (choice) return choice.label; }
-  if (control.kind === "accent" && picks.accent) return `Exact · ${picks.accent.toUpperCase()}`;
-  if (control.kind === "accent") return /^\d+$/.test(values.accent) ? `${hueName(Number(values.accent))} · ${values.accent}°` : say("accent", values.accent);
-  if (control.kind === "tint") return `${hueName(Number(values["tint-hue"]))} · ${values["tint-hue"]}°`;
+  if (control.kind === "accent" && picks.accent) return `Exact ${picks.accent.toUpperCase()}`;
+  if (control.kind === "accent") return /^\d+$/.test(values.accent) ? `${hueName(Number(values.accent))} ${values.accent}°` : say("accent", values.accent);
+  if (control.kind === "tint") return `${hueName(Number(values["tint-hue"]))} ${values["tint-hue"]}°`;
   if (control.kind === "page") return pageAnswer(control.mode, values, picks);
   if (control.kind === "pills") { const count = values.pills.split(" ").filter(Boolean).length; return count ? `${count} parts` : "None"; }
   if (control.kind === "toggle") return values[control.axis] === control.off ? "Off" : say(control.axis, values[control.axis]);
@@ -240,7 +240,7 @@ export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
     id: "pace", title: "How thorough should we be?",
     items: (["essentials", "complete"] as const).map(choice => ({
       value: choice, label: choice === "essentials" ? "Essentials" : "Every detail",
-      description: `${choice === "essentials" ? "The choices that change the most" : "Every setting, chapter by chapter"} · ${paths[choice]} questions, about ${minutesFor(paths[choice])} min`,
+      description: `${choice === "essentials" ? "The choices that change the most" : "Every setting, chapter by chapter"}, ${paths[choice]} questions, about ${minutesFor(paths[choice])} min`,
     })),
     value: path, choose: choice => { setPath(choice as Path); select(QUESTIONS.find(entry => (choice === "complete" || entry.essential) && (!entry.when || entry.when(values, studioColours)))?.id ?? "review"); },
     detail: changed ? <p className="setup-step__note"><InfoIcon /><span>Starting from your {changed} changed settings. <button type="button" className="setup__link" onClick={restart}>Start from the defaults</button></span></p> : undefined,
@@ -352,7 +352,7 @@ export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
       </Message>
       {welcomeAnswered ? answerList("Welcome answers", [
         { id: "making", term: "Making", answer: MAKING.find(entry => entry.screen === screen)?.label ?? SCREENS[screen].label, open: () => { setOpening(0); go(-1); } },
-        { id: "pace", term: "Pace", answer: `${path === "essentials" ? "Essentials" : "Every detail"} · ${paths[path]} questions`, open: () => { setOpening(1); go(-1); } },
+        { id: "pace", term: "Pace", answer: `${path === "essentials" ? "Essentials" : "Every detail"}, ${paths[path]} questions`, open: () => { setOpening(1); go(-1); } },
       ]) : null}
       {sections.map(({ section, rows }) => {
         const done = rows.filter(answered);
@@ -370,9 +370,9 @@ export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
         <Message author="assistant" authorName="Setup">
           <p><strong>Here's your design system.</strong> {answeredCount ? `${answeredCount} of your ${asked.length} answers differ from Area's defaults` : `All ${asked.length} answers are Area's defaults`}{changed > answeredCount ? `, ${changed} settings in all` : ""}. Select any answer above to change it.</p>
           <p>{command
-            ? `To use it, load Area's stylesheet, put ${lines.length === 1 ? "this attribute" : `these ${lines.length} attributes`} on your page's root and link the colour rule after it; the command under the theme writes that rule. Anything left out stays at Area's default.`
+            ? `To use it, load Area's stylesheet, put ${lines.length === 1 ? "this attribute" : `these ${lines.length} attributes`} on your page's root and link the color rule after it; the command under the theme writes that rule. Anything left out stays at Area's default.`
             : hasColours(picked)
-            ? `To use it, load Area's stylesheet, put ${lines.length === 1 ? "this attribute" : `these ${lines.length} attributes`} on your page's root and add the colour rule after Area's stylesheet. Anything left out stays at Area's default.`
+            ? `To use it, load Area's stylesheet, put ${lines.length === 1 ? "this attribute" : `these ${lines.length} attributes`} on your page's root and add the color rule after Area's stylesheet. Anything left out stays at Area's default.`
             : themed.length
             ? `To use it, load Area's stylesheet and put ${themed.length === 1 ? "this attribute" : `these ${themed.length} attributes`} on your page's root. Anything left out stays at Area's default.`
             : "Every setting is Area's default, so your page needs only Area's stylesheet: no attributes."}</p>
@@ -388,7 +388,7 @@ export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
   // Plan folded to its head and a segment per chapter, opening to the chapters on a rail.
   const progress = at >= 0 ? (
     <Plan className="setup-chat__progress" title={reviewing ? "Answered" : chapter!.title} bar="segmented" rail defaultOpen={false}
-      count={reviewing ? `${asked.length} of ${asked.length}` : `${at + 1} of ${asked.length} · ${minutesFor(asked.length - at)} min left`}
+      count={reviewing ? `${asked.length} of ${asked.length}` : `${at + 1} of ${asked.length}, ${minutesFor(asked.length - at)} min left`}
       items={chapters.map(entry => {
         const rows = asked.filter(row => row.chapter === entry.id);
         const behind = rows.filter(row => asked.indexOf(row) < at).length;
@@ -473,7 +473,7 @@ export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
         {preview ? <span className="setup-stage__preview">Previewing {preview.label}</span> : null}
       </div>
       <div className="setup-stage__bar setup-stage__bar--foot">
-        <span className="setup-stage__caption">{show === "part" ? `${REGION_LABEL[part]}, on its own` : `${SCREENS[screen].label}${screen === "workspace" && focus.length ? " · marked: what this question changes" : ""}`}</span>
+        <span className="setup-stage__caption">{show === "part" ? `${REGION_LABEL[part]}, on its own` : `${SCREENS[screen].label}${screen === "workspace" && focus.length ? ", marked: what this question changes" : ""}`}</span>
         <span className="setup-foot__grow" />
         <ZoomControl stepper size="sm" value={scale ?? fitted} min={0.25} max={4} onValueChange={next => setScale(next)} onZoomToFit={() => setScale(null)} aria-label="Zoom" />
       </div>
@@ -643,7 +643,7 @@ function PageControl({ values, set, pageMode }: ControlProps & { pageMode: Mode 
   return (
     <div className="setup-control">
       <PagePicker mode={pageMode} values={values} picks={picks} set={set} onPick={colour => setColours({ [pageMode]: colour })} />
-      <p className="setup-control__answer">{pageAnswer(pageMode, values, picks)}{pick ? ` · ${oklchHex(parseColour(pick))}` : ""}</p>
+      <p className="setup-control__answer">{pageAnswer(pageMode, values, picks)}{pick ? `, ${oklchHex(parseColour(pick))}` : ""}</p>
     </div>
   );
 }
@@ -670,7 +670,7 @@ function AccentControl(props: ControlProps) {
   return (
     <div className="setup-control">
       <Segmented size="sm" fullWidth aria-label="Accent source" value={source} onValueChange={choose}
-        items={[{ value: "named", label: "Palette" }, { value: "custom", label: "Any hue" }, { value: "exact", label: "Exact colour" }]} />
+        items={[{ value: "named", label: "Palette" }, { value: "custom", label: "Any hue" }, { value: "exact", label: "Exact color" }]} />
       {source === "exact" ? (
         <div onPointerUp={land}>
           <ColorPicker variant="plain" label="Accent" alpha={false} defaultModel="oklch" eyedropper value={brand.primary.toUpperCase()}
@@ -678,13 +678,13 @@ function AccentControl(props: ControlProps) {
         </div>
       ) : custom ? (
         <Slider labelPosition="inside" label="Hue" min={0} max={HUES.length - 1} step={1} value={Math.max(0, HUES.indexOf(values.accent))}
-          readout={(at: number) => `${hueName(Number(HUES[at]))} · ${HUES[at]}°`} onValueChange={at => set({ accent: HUES[at]! })} />
+          readout={(at: number) => `${hueName(Number(HUES[at]))} ${HUES[at]}°`} onValueChange={at => set({ accent: HUES[at]! })} />
       ) : (
         <ColorSwatchPicker label="Accent" layout="row" value={accentHex(values.accent)}
           items={NAMED_ACCENTS.map(item => ({ value: accentHex(item.value), label: item.label }))}
           onValueChange={hex => { const item = NAMED_ACCENTS.find(entry => accentHex(entry.value) === hex); if (item) set({ accent: item.value }); }} />
       )}
-      <p className="setup-control__answer">{source === "exact" ? `Exact · ${brand.primary.toUpperCase()}` : custom ? `${hueName(Number(values.accent))} · ${values.accent}°` : say("accent", values.accent)}</p>
+      <p className="setup-control__answer">{source === "exact" ? `Exact ${brand.primary.toUpperCase()}` : custom ? `${hueName(Number(values.accent))} ${values.accent}°` : say("accent", values.accent)}</p>
     </div>
   );
 }
@@ -696,11 +696,11 @@ function TintControl(props: ControlProps) {
   const named = TINTS.find(([value]) => value === hue);
   return (
     <div className="setup-control">
-      <ColorSwatchPicker label="Tint colour" layout="row" value={named ? hueSwatch(named[0]) : ""}
+      <ColorSwatchPicker label="Tint color" layout="row" value={named ? hueSwatch(named[0]) : ""}
         items={TINTS.map(([value, label]) => ({ value: hueSwatch(value), label }))}
         onValueChange={colour => { const entry = TINTS.find(([value]) => hueSwatch(value) === colour); if (entry) set({ "tint-hue": entry[0] }); }} />
       <Slider labelPosition="inside" label="Hue" min={0} max={TINT_HUES.length - 1} step={1} value={Math.max(0, TINT_HUES.indexOf(hue))}
-        readout={(at: number) => `${hueName(Number(TINT_HUES[at]))} · ${TINT_HUES[at]}°`} onValueChange={at => set({ "tint-hue": TINT_HUES[at]! })} />
+        readout={(at: number) => `${hueName(Number(TINT_HUES[at]))} ${TINT_HUES[at]}°`} onValueChange={at => set({ "tint-hue": TINT_HUES[at]! })} />
     </div>
   );
 }

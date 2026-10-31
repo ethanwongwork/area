@@ -107,8 +107,8 @@ const depth = (value: string) => value === "200" ? "Lightest" : value === "850" 
 export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   // Page: the mode, the page and its greys, how far layers and cards sit from it. A light/dark pair shows in its own mode.
   { axis: "theme", kind: "segmented", label: label("theme"), defaultValue: "light", items: [{ value: "light", label: "Light" }, { value: "dark", label: "Dark" }] },
-  bar("ground-light", value => value === "100" ? "White" : `${value}%`, { hint: "The light page's lightness" }),
-  bar("ground-dark", value => value === "0" ? "Black" : `${value}%`, { hint: "The dark page's lightness", marks: ["0", "8", "12", "14", "16", "18", "20", "22", "24"] }),
+  bar("ground-light", value => value === "100" ? "White" : `${value}%`, { hint: "How light the page is, from grey up to white" }),
+  bar("ground-dark", value => value === "0" ? "Black" : `${value}%`, { hint: "How dark the page is, from black up to grey", marks: ["0", "8", "12", "14", "16", "18", "20", "22", "24"] }),
   { axis: "neutral", kind: "segmented", label: label("neutral"), hint: "The grey every surface, edge and text is drawn in", defaultValue: DEFAULT_AXES.neutral, items: AXIS_PRESETS.neutral.map(value => ({ value, label: title(value) })) },
   bar("tint-hue", value => `${value}°`, { hint: "The hue the greys lean toward: the Grey setting's own, the accent's, or any hue", named: { auto: "Grey", accent: "Accent" }, custom: "60", barLabel: "Hue",
     marks: AXIS_PRESETS["tint-hue"].filter(value => /^\d+$/.test(value) && Number(value) % 5 === 0) }),
@@ -117,22 +117,22 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
     marks: AXIS_PRESETS["tint-hue-dark"].filter(value => /^\d+$/.test(value) && Number(value) % 5 === 0) }),
   bar("tint-light", value => `${value}%`, { hint: "In light: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "25", barLabel: "Strength", marks: QUARTERS }),
   bar("tint-dark", value => `${value}%`, { hint: "In dark: how strongly the greys take the hue", named: { auto: "Auto" }, custom: "25", barLabel: "Strength", marks: QUARTERS }),
-  bar("ink-tint", value => `${value}%`, { hint: "How much of the greys' colour body and muted text take", marks: QUARTERS }),
+  bar("ink-tint", value => `${value}%`, { hint: "How much of the greys' color shows in body and muted text", marks: QUARTERS }),
   bar("layers-light", value => value === "0" ? "Flat" : `${value}%`, { hint: "In light: how far cards, menus, sidebars and control fills sit from the page", marks: QUARTERS }),
   bar("layers-dark", value => value === "0" ? "Flat" : `${value}%`, { hint: "In dark: how far cards, menus, sidebars and control fills sit from the page", marks: QUARTERS }),
   bar("card-tone-light", value => signedPercent(value, 100), { hint: "In light: cards against the page, darker or lighter", named: { auto: "Auto" }, custom: "0", barLabel: "Shade", marks: SIGNED_QUARTERS }),
   bar("card-tone-dark", value => signedPercent(value, 100), { hint: "In dark: cards against the page, darker or lighter", named: { auto: "Auto" }, custom: "0", barLabel: "Shade", marks: SIGNED_QUARTERS }),
   // Accent: one hue bar through the palette's eleven (each at its own hue) and every 5°, then how much colour it keeps,
   // how deep its buttons sit and how much of it their label takes.
-  bar("accent", value => /^\d+$/.test(value) ? `${value}°` : title(value), { hint: "The accent's hue: the palette's eleven by name, any other in 5° steps" }),
-  bar("accent-strength", value => `${value}%`, { hint: "How much of its own colour the accent keeps; hue and contrast hold" }),
-  bar("solid-light", value => depth(value), { hint: "How light or deep accent buttons and checked marks are; their label always stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
-  bar("solid-dark", value => depth(value), { hint: "How light or deep accent buttons and checked marks are; their label always stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
-  bar("label-tint", value => `${value}%`, { hint: "How much of the accent's colour the text on an accent button takes; it stays readable", marks: QUARTERS }),
+  bar("accent", value => /^\d+$/.test(value) ? `${value}°` : title(value), { hint: "Your brand color: buttons and selection use it when Emphasis sets them to Accent" }),
+  bar("accent-strength", value => `${value}%`, { hint: "How vivid the accent is: 100% is its full color, lower is greyer" }),
+  bar("solid-light", value => depth(value), { hint: "Lighter or deeper versions of the accent for buttons and checked marks; their label stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
+  bar("solid-dark", value => depth(value), { hint: "Lighter or deeper versions of the accent for buttons and checked marks; their label stays readable", named: { auto: "Auto" }, custom: "600", barLabel: "Depth" }),
+  bar("label-tint", value => `${value}%`, { hint: "How much of the accent shows in the text on an accent button; it stays readable", marks: QUARTERS }),
   // Emphasis: the accent on buttons and on selection, the status tones, and the accessibility level.
-  { axis: "action", kind: "segmented", label: label("action"), hint: "The colour of primary buttons", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
-  { axis: "selection", kind: "segmented", label: label("selection"), hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
-  { axis: "status-colours", kind: "segmented", label: label("status-colours"), hint: "Red, amber, green and blue messages and badges: in their full colour, or muted to the accent's Saturation", defaultValue: DEFAULT_AXES["status-colours"], items: [{ value: "fixed", label: "Vivid" }, { value: "match", label: "Muted" }] },
+  { axis: "action", kind: "segmented", label: label("action"), hint: "Whether primary buttons are grey or the accent", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
+  { axis: "selection", kind: "segmented", label: label("selection"), hint: "Whether checked, selected and current things are grey or the accent", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
+  { axis: "status-colours", kind: "segmented", label: label("status-colours"), hint: "Red, amber, green and blue messages and badges: in full color, or muted to the accent's Saturation", defaultValue: DEFAULT_AXES["status-colours"], items: [{ value: "fixed", label: "Vivid" }, { value: "match", label: "Muted" }] },
   // Increased contrast (docs/CONTRAST.md): a scoped setting, not an axis. System writes no attribute, so the OS decides.
   bar("contrast", value => percent(value, 8), { hint: "Stronger edges, focus and state; System follows the OS", named: { system: "System" }, custom: "4", barLabel: "Level" }),
   // Size: whole px for text (half px blurs), density by name.

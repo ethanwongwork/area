@@ -21,7 +21,7 @@ import { AddIcon, ArrowLeftIcon, ChevronDownIcon, DismissIcon, DocumentIcon, Fla
 import { SETTING_GROUPS } from "@area/tokens/config";
 import { systemName, groupSlug, HOME_TAB, hrefOf, LIST_PAGES, projectName, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
 import { addExploration, addPage } from "./projects.ts";
-import { activeTheme } from "./systems.ts";
+import { activeTheme, versionName } from "./systems.ts";
 import { ChromeButton, SidebarList, useStudio } from "./studio.tsx";
 import { FAMILIES } from "./pages/components.tsx";
 import { EXAMPLES } from "./pages/examples.tsx";
@@ -267,7 +267,7 @@ function ProjectNav() {
           {openProject.explorations.map(entry => (
             <NavItem key={entry.id} href={hrefOf({ page: "exploration", project, item: entry.id })} icon={<GitBranchIcon />}
               current={place.page === "exploration" && place.item === entry.id} onClick={open({ page: "exploration", project, item: entry.id })}
-              trailing={entry.published ? <span className="studio-muted">v{entry.published}</span> : undefined}>
+              trailing={entry.published ? <span className="studio-muted">{versionName(systemName(openProject.system), entry.published)}</span> : undefined}>
               {entry.name}
             </NavItem>
           ))}

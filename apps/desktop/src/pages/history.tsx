@@ -13,7 +13,7 @@ import { useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { Facts } from "../facts.tsx";
 import { changeLabel, changeValue, ThemeScreen } from "../publish.tsx";
-import { liveOf, RELEASE_KIND_LABEL, type Change, type Release } from "../systems.ts";
+import { liveOf, RELEASE_KIND_LABEL, versionName, type Change, type Release } from "../systems.ts";
 
 /** A release's card is the feed's 300 card, as a theme's. */
 const RELEASE_MIN = 300; /* pick */
@@ -71,16 +71,16 @@ export function HistoryPage() {
             const at = releases.indexOf(release);
             const before = at > 0 ? releases[at - 1]! : null;
             return (
-              <CanvasSection key={release.version} id={`release-${release.version}`} title={`v${release.version} · ${RELEASE_KIND_LABEL[release.kind]}`}
-                lede={`${dateOf(release.at)}${release.from ? ` · from ${release.from}` : ""}${release === live ? " · Live" : ""}. ${release.note || "No note."}`}>
+              <CanvasSection key={release.version} id={`release-${release.version}`} title={versionName(workingSystem.name, release.version)}
+                lede={`${RELEASE_KIND_LABEL[release.kind]}, published ${dateOf(release.at)}${release.from ? ` from ${release.from}` : ""}${release === live ? "; live now" : ""}. ${release.note || "No note."}`}>
                 <TileGrid span="wide" cards min={RELEASE_MIN}>
                   {before ? (
-                    <Tile span="wide" stage="fit" inert label={`Before · v${before.version}`} value={inUse(before).name}
+                    <Tile span="wide" stage="fit" inert label={`Before, ${versionName(workingSystem.name, before.version)}`} value={inUse(before).name}
                       selected={false} onSelect={() => select(release.version, { replace: true })}>
                       <ThemeScreen theme={inUse(before)} mode={theme} />
                     </Tile>
                   ) : null}
-                  <Tile span="wide" stage="fit" inert label={`v${release.version}`} value={inUse(release).name}
+                  <Tile span="wide" stage="fit" inert label={versionName(workingSystem.name, release.version)} value={inUse(release).name}
                     selected={chosen === release} onSelect={() => select(release.version, { replace: true })}>
                     <ThemeScreen theme={inUse(release)} mode={theme} />
                   </Tile>
@@ -90,8 +90,8 @@ export function HistoryPage() {
           })}
         </div>
         {chosen && restoring ? (
-          <ConfirmDialog open title={`Restore v${chosen.version}?`} confirmLabel="Restore"
-            description={`The working copy becomes v${chosen.version}, ready to publish as the next version. ${changes.length ? `Its ${changes.length} unpublished ${changes.length === 1 ? "change is" : "changes are"} replaced.` : "Nothing published changes until you publish."}`}
+          <ConfirmDialog open title={`Restore ${versionName(workingSystem.name, chosen.version)}?`} confirmLabel="Restore"
+            description={`The working copy becomes ${versionName(workingSystem.name, chosen.version)}, ready to publish as the next version. ${changes.length ? `Its ${changes.length} unpublished ${changes.length === 1 ? "change is" : "changes are"} replaced.` : "Nothing published changes until you publish."}`}
             onOpenChange={next => { if (!next) setRestoring(false); }} onConfirm={() => { revertSystem(chosen.version); setRestoring(false); }} />
         ) : null}
       </>}
@@ -104,7 +104,7 @@ export function HistoryPage() {
               </div>
             </PanelSection>
           ) : null}
-          <PanelSection heading={`v${chosen.version}`}>
+          <PanelSection heading={versionName(workingSystem.name, chosen.version)}>
             <Facts label="Version" items={[
               ["Kind", RELEASE_KIND_LABEL[chosen.kind]],
               ["Published", dateOf(chosen.at)],
@@ -117,7 +117,7 @@ export function HistoryPage() {
           <>
             <PanelSection heading="History">
               <Facts label="History" items={[
-                ["Live", `v${live.version}`],
+                ["Live", versionName(workingSystem.name, live.version)],
                 ["Publishes", releases.length],
                 changes.length ? null : ["Unpublished", "None"],
               ]} />

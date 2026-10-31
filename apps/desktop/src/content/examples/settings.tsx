@@ -56,8 +56,8 @@ export function SettingsScreen() {
         <main className="ex-main ex-set">
           <SectionHeading level={2} title="Appearance" lede="Change how the app looks and feels on this device." />
           <Separator />
-          <Row label="Brand colour" description="Select or customise your brand colour.">
-            <ColorSwatchPicker label="Brand colour" size="md" layout="row" defaultValue="#2563EB" items={SWATCHES} />
+          <Row label="Brand color" description="Select or customise your brand color.">
+            <ColorSwatchPicker label="Brand color" size="md" layout="row" defaultValue="#2563EB" items={SWATCHES} />
           </Row>
           <Separator />
           <Row label="Interface theme" description="Select or customise your interface theme.">

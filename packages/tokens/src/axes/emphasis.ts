@@ -35,7 +35,7 @@ function roleAxis(id: "action" | "selection", label: string, description: string
 export const ACTION_AXIS = roleAxis(
   "action",
   "Buttons",
-  "The colour of what you press to commit: solid Buttons, Split button, send.",
+  "The color of what you press to commit: solid Buttons, Split button, send.",
   "Solid actions in the neutral ink.",
   "Solid actions in the accent.",
 );
@@ -43,7 +43,7 @@ export const ACTION_AXIS = roleAxis(
 export const SELECTION_AXIS = roleAxis(
   "selection",
   "Selection",
-  "The colour of state: checked, on, selected, current and filled values, selected edges and the focus ring.",
+  "The color of state: checked, on, selected, current and filled values, selected edges and the focus ring.",
   "State, selected edges and focus in the neutral ink.",
   "State, selected edges and focus in the accent.",
 );

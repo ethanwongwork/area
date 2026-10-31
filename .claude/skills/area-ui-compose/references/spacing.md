@@ -21,6 +21,19 @@ Values are Default / Compact (the app runs Compact). Tokens are in `packages/tok
 | Region inset | a panel's edge to its rows | the app's 14 | `Panel` |
 | Feed | a documentation or gallery feed | cards 12 (at least 260 wide, at most four across), heading 12, sections 40, margin 16, measure 1236 | the app's Canvas (`app.css` `--_canvas-*`) |
 
+Prose (text past two lines: a chat turn, documentation) runs on its own ladder, set out in `docs/DESIGN_SYSTEM.md` ›
+Size and shape › Prose lines and Text that flows (owner, 2026-10-30; Message and the app's chat use it):
+
+| Role (prose) | Separates | At 15/24 (`text-md`, type 13) | At 13/20 (`text-sm`) | Token |
+|---|---|---|---|---|
+| Line | lines of one paragraph | 24 | 20 | `text-*-prose-leading` |
+| List item | items of one list | 4 | 4 | `space-4` |
+| Lead-in | a sentence (or a heading) and what it introduces | 8 | 8 | `space-8` |
+| Block | paragraphs, a reply's blocks, after a list | 16 | 12 | `text-*-prose-gap` |
+| Reply | the person's message and its reply | 12 | 12 | `space-12` |
+| Above a heading | the text before a heading | 24 | 20 | the block gap + `space-8` |
+| Exchange | one exchange of a conversation and the next | 24 | 24 | `space-24` |
+
 The spacing ramp is fixed: 0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96 (`--area-space-*`). Region
 margins and section gaps a screen sets itself come from this ramp.
 
@@ -72,3 +85,9 @@ the margin reads as an edge, not as space. Use it only for a layer container (`s
 ## Checking
 
 Run `area-ui-review` (its `scripts/layout-audit.js` reads insets and gaps to ink and flags each rule above).
+
+Compare text gaps on one basis, baseline to cap. A product's CSS gives gaps between line boxes; add the lines' own
+leading before comparing (at 13/18 two lines with no gap between their boxes are already 8.8 apart, so another
+product's "2 apart" is 10.8 against a trimmed Area gap). A gap between two text blocks smaller than the space between
+the lines inside them makes the blocks collide (2026-10-30: a section subtitle 4 under its title, against its own 8.8
+lines).

@@ -279,7 +279,7 @@ function Columns({ bundle, variants, themes, backdrop, children }: { bundle: str
     <div className="lab-columns">
       {themes.flatMap(theme => variants.map(variant => (
         <div key={`${theme}-${variant.label}`} className="lab-column" data-area-theme={theme} {...layers}>
-          <div className="lab-column__label">{theme === "light" ? "Light" : "Dark"} · {variant.label}</div>
+          <div className="lab-column__label">{theme === "light" ? "Light" : "Dark"}, {variant.label}</div>
           <div className="lab-scope" data-area-material={bundle} style={variant.style}>
             {backdrop === "page" ? null : <Backdrop kind={backdrop} />}
             <div className="lab-scope__content">{children}</div>
@@ -529,7 +529,7 @@ function Readings({ bundle, variants, themes }: { bundle: string; variants: Vari
       <section className="lab-group" aria-label="Readings">
         <header className="lab-group__head">
           <span className="lab-group__title">Readings</span>
-          <span className="lab-group__parts">The least contrast of body and muted ink on each see-through part, over each backdrop's darkest and lightest colour (blur only averages between them). Body needs 4.5, muted 4.5 at text size; the material's gradient and sheen layers are not counted.</span>
+          <span className="lab-group__parts">The least contrast of body and muted ink on each see-through part, over each backdrop's darkest and lightest color (blur only averages between them). Body needs 4.5, muted 4.5 at text size; the material's gradient and sheen layers are not counted.</span>
         </header>
         <Table aria-label="Contrast readings" className="lab-table">
           <thead>

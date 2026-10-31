@@ -35,7 +35,7 @@ export const TINT_HUE_AXIS: AxisDefinition = {
   namespaces: ["--area-tint-hue-auto:", "--area-tint-hue:", "--area-tint-hue-accent:", "--area-tint-room-white:", "--area-tint-room-black:"],
   presets: [
     { id: "auto", label: "Auto", description: "The Neutral setting's own hue.", tokens: tokens({ "tint-hue-auto": 1, "tint-hue": 0, "tint-hue-accent": 0, ...room() }) },
-    { id: "accent", label: "Accent", description: "The accent's own hue: grays that lean toward the brand colour.", tokens: tokens({ "tint-hue-auto": 0, "tint-hue": 0, "tint-hue-accent": 1, ...room() }) },
+    { id: "accent", label: "Accent", description: "The accent's own hue: grays that lean toward the brand color.", tokens: tokens({ "tint-hue-auto": 0, "tint-hue": 0, "tint-hue-accent": 1, ...room() }) },
     ...TINT_HUES.map(hue => ({ id: String(hue), label: `${hue}°`, description: `The grays at hue ${hue}°.`, tokens: tokens({ "tint-hue-auto": 0, "tint-hue": hue, "tint-hue-accent": 0, ...room(hue) }) })),
   ],
 };

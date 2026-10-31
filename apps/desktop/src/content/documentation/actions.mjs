@@ -12,7 +12,7 @@ export default {
     practices: [
       ["Do", "Use solid for the strongest action in a view, and soft or outline for secondary actions."],
       ["Do", "Use ghost for quiet actions in toolbars, headers and message actions."],
-      ["Do", "Set onColor on a Button that sits on a painted colour (a colour card): it takes the colour's ink, with plates of that ink, as Badge's onColor."],
+      ["Do", "Set onColor on a Button that sits on a painted color (a color card): it takes the color's ink, with plates of that ink, as Badge's onColor."],
       ["Do", "Give an icon-only Button an aria-label: it is its only name."],
       ["Do", "Set loading while an action is pending: the Button keeps focus and ignores clicks, so a submit isn't sent twice."],
       ["Do", "Show a shortcut with a Kbd as the last child: it sits one gap after the label, and set aria-keyshortcuts when the page binds the key."],
@@ -307,7 +307,7 @@ export default {
     },
     // Spec: States.
     states: {
-      checked: "The box fills with the selection colour and the check scales in.",
+      checked: "The box fills with the selection color and the check scales in.",
       indeterminate: "The box fills and shows a dash instead of the check, for a partial selection.",
       disabled: "The whole option dims to half and ignores input; native disabled.",
       invalid: "The edge and label turn danger; a checked invalid box becomes one danger fill.",
@@ -384,13 +384,13 @@ export default {
       ["Do", "Set loading while the change is being saved; further changes are blocked until it ends."],
       ["Do", "Use readOnly to show a setting the user can't change here at full strength, and disabled when it doesn't apply."],
       ["Don't", "Make the user press Save after flipping a Switch; use a Checkbox in that form."],
-      ["Don't", "Use tone for a custom on colour; it is ignored. Set --area-switch-color instead."],
+      ["Don't", "Use tone for a custom on color; it is ignored. Set --area-switch-color instead."],
     ],
     // Spec: Anatomy.
     parts: {
       root: "The label: the whole row is the hit area, with the track centred on the label's first line.",
       control: "The native checkbox with the switch role, invisible over the whole label; it takes focus and input.",
-      track: "The pill the thumb slides along: the rail's grey when off, the selection colour when on.",
+      track: "The pill the thumb slides along: the rail's grey when off, the selection color when on.",
       thumb: "The raised circle that slides to the end when on and stretches while pressed.",
       text: "Holds the label and the description, beside the track.",
       label: "The setting's name; it names the switch.",
@@ -399,7 +399,7 @@ export default {
     },
     // Spec: States.
     states: {
-      checked: "The track fills with the on colour and the thumb slides to the end.",
+      checked: "The track fills with the on color and the thumb slides to the end.",
       disabled: "Dims to half with a not-allowed cursor and ignores input.",
       "read-only": "Keeps full paint with no hover; clicks and keys don't change it.",
       loading: "A Spinner follows the track, changes are blocked and the cursor shows progress.",
@@ -424,7 +424,7 @@ export default {
     // Spec: Job and boundaries.
     instead: [
       ["Named options with no order", ["segmented", "chip"], "Segmented for a few in one track, Chips for a set that wraps."],
-      ["A colour channel (hue, alpha)", ["color-picker"], "Color picker draws its own channel sliders."],
+      ["A color channel (hue, alpha)", ["color-picker"], "Color picker draws its own channel sliders."],
     ],
     // Spec: Variants, Behavior and accessibility; source: Slider JSDoc (primitives.tsx).
     practices: [
@@ -434,7 +434,7 @@ export default {
       ["Do", "Turn on stepMarks for a short discrete range so each stop is visible."],
       ["Do", "Pass buffered for media playback, in the same units as the value, so the loaded stretch shows ahead of the playhead."],
       ["Do", "Keep the rail in dense panels and inspectors. Use track where the slider is a main control, as Figma's image adjustments, and bar where it is the one control in its row and pairs with a Button or field of the same height."],
-      ["Do", "Pass gradient for a range whose values are colours, a temperature, a colour's shades or a hue, so the trough shows each value where the bar puts it."],
+      ["Do", "Pass gradient for a range whose values are colors, a temperature, a color's shades or a hue, so the trough shows each value where the bar puts it."],
       ["Do", "Put the label inside a bar (labelPosition inside) for a list of settings, one per row, each with its label and value inside it, as a theme or tool panel; it shows its value unless readout is false, and stepMarks show as dots."],
       ["Do", "Put an option that goes past the range, such as no limit, after the slider as a soft toggle Button at the slider's size; moving the slider releases it."],
       ["Do", "Pass origin for a range with a neutral middle, such as cool to warm, so the fill grows from it either way and is empty there."],
@@ -505,7 +505,7 @@ export default {
     // Spec: Anatomy; source: Chip, ChipLink.
     parts: {
       root: "The chip: a button, or a wrapper when removable. It owns the control height, the edge, the pill corner, the fill and focus.",
-      swatch: "A colour dot before the label; with swatchOnly it is the whole chip, which goes square.",
+      swatch: "A color dot before the label; with swatchOnly it is the whole chip, which goes square.",
       icon: "A leading icon in muted ink.",
       "trailing-icon": "A ChipLink's outgoing-link icon after the label, with the icon treatment.",
       avatar: "A person or entity visual, usually an Avatar, before the label.",
@@ -537,7 +537,7 @@ export default {
     // Spec: Job and boundaries.
     instead: [
       ["A choice along one axis (left, centre, right)", ["segmented"], "Segmented lays a one-dimensional choice out in one track."],
-      ["A grid of colours or other options", ["color-swatch-picker"], "Alignment picker only holds the nine physical positions."],
+      ["A grid of colors or other options", ["color-swatch-picker"], "Alignment picker only holds the nine physical positions."],
     ],
     // Spec: Job and boundaries, Variants, Behavior and accessibility; source: AlignmentPicker.tsx.
     practices: [
@@ -658,7 +658,7 @@ export default {
     practices: [
       ["Do", "Use inline in running text, where the underline always shows, and standalone for links on their own, such as Learn more."],
       ["Do", "Leave ink as inherit so the link takes the text's own ink and size; use muted for secondary links in metadata and footers."],
-      ["Do", "Use action or blue when links must stand out from the text, and a hue only to name a colour, never a status."],
+      ["Do", "Use action or blue when links must stand out from the text, and a hue only to name a color, never a status."],
       ["Do", "Set external for another site: it opens a new tab, shows the external mark and says so to assistive tech."],
       ["Do", "Use linkVariants to give a router's own anchor the same classes."],
       ["Don't", "Use a Link to run an action; use a Button."],

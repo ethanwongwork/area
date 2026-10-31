@@ -1,6 +1,7 @@
 /*
- * The app's layout: Titlebar over Sidebar | Canvas | Inspector. The Titlebar is ruled; the Sidebar sits on the chrome's
- * recessed ground beside the Canvas, and the Canvas header and the Inspector's bar carry no rule (owner, 2026-10-22).
+ * The app's layout: Sidebar | Canvas | Inspector, each with its own header on the window's top line (owner, 2026-10-30;
+ * a ruled Titlebar spanned them until then). The Sidebar sits on the chrome's recessed ground beside the Canvas, and no
+ * header carries a rule (owner, 2026-10-22); the panels' seams are the dividers.
  *
  * One inset and one stroke throughout. Every region insets its content by Panel's 14 (its spec: 14
  * at both densities), on every side, measured to what is drawn: a control's box, a text's cap or
@@ -43,6 +44,9 @@
     /* The Titlebar's height is Panel's bar (panel.css --_bar: a md row, the panel gap above and
        below, and the rule), so it matches a Panel's bar at either density. */
     --_studio-bar: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--area-border-width));
+    /* The regions' headers on the window's top line (owner, 2026-10-30, Cursor's 40): Panel's window bar and Titlebar sm,
+       the small control 7 from their top and bottom. The bar under them (the Canvas's view options) keeps --_studio-bar. */
+    --_studio-head: calc(var(--area-control-sm) + var(--area-space-16) - var(--area-space-2));
     /* The Canvas is a feed (owner, 2026-10-22: "margins larger than the gaps ... a consistent feed style ...
        documentation style that is simple, repeatable, consistent"; after a component docs page and Primer's
        UnderlineNav page). One column of sections, each a heading (and lede) over one block: a grid of cards, a Stage,
@@ -71,10 +75,12 @@
     --_card-inset: var(--area-space-16); /* pick */
     --_tile-inset: var(--area-space-12);
     display: grid;
-    /* One column the window's width: without it the column sizes to the Titlebar's content, and a long row of tabs (a
-       horizontal Nav is max-content wide) pushed the bar's end off the window (2026-10-29, 12 tabs). */
+    /* One column the window's width: without it the column sizes to its content, and a long row of tabs (a horizontal Nav
+       is max-content wide) pushed the header's end off the window (2026-10-29, 12 tabs). One row: each region has its own
+       header (owner, 2026-10-30; the Titlebar was a row of its own). */
+    position: relative;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
     block-size: 100vh;
     overflow: hidden;
     background: var(--area-bg-page);
@@ -114,7 +120,6 @@
   .studio-tab { min-inline-size: 120px; max-inline-size: 170px; /* spec: Phase 0, 120 to 170 */ }
   /* Search: wide enough for "Search components" and the ⌘K hint (Cursor's command centre
      reads as a field, not a button). */
-  .studio-titlebar__search { inline-size: calc(var(--area-space-96) * 2 + var(--area-space-48)); /* pick: 240 */ }
   /* The Canvas header's ghost icon buttons are placed by their icon, as Popover's header close is (surface.css): each
      gives back its plate's padding on both sides, so the header's gaps measure what is drawn. The Titlebar spaces its
      controls itself, box to box (app-shell.css, review round 27). */
@@ -144,6 +149,50 @@
     grid-template-rows: minmax(0, 1fr);
     min-block-size: 0;
   }
+  /* A lead (Setup's chat) is a Panel of its own; its header row sits over it, the lead's seam carried up beside it. */
+  .studio-lead { grid-template-rows: auto minmax(0, 1fr); }
+  .studio-head--lead { border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+
+  /* --- The regions' headers (owner, 2026-10-30, after Cursor: "3 distinct parts each with their own header") -----------
+   * Each region's header is on the window's top line: the Sidebar's and the Inspector's are their Panels' bars, the
+   * Canvas's (and a lead's) a plain Titlebar, all Panel's bar height. A header's controls sit in groups at its two ends. */
+  .studio-head__group { display: flex; align-items: center; gap: var(--area-space-4); min-inline-size: 0; }
+  /* The window's drag region in Electron: a strip the headers' height under them (the Titlebar was one until then); every
+     control in it is a hole, so it presses and the space around it drags. The plain Titlebars are drag regions of their own. */
+  .studio-drag {
+    position: absolute;
+    inset: 0 0 auto;
+    block-size: var(--_studio-head);
+    pointer-events: none;
+    -webkit-app-region: drag;
+    app-region: drag;
+  }
+  .studio :is(a, button, input, select, textarea, [role="separator"], [role="tab"], [tabindex]) { -webkit-app-region: no-drag; app-region: no-drag; }
+  /* macOS: the Sidebar's header leaves the traffic lights their room, so its toggle starts where the Titlebar's did, 83 from
+     the window's edge (13 + the lights' 54 + 16, Cursor's; app-shell.css --macos). */
+  .studio-head__lights {
+    flex: none;
+    /* The window bar starts its controls at its even inset, 7 at every type and density (Panel's window-bar: the small
+       control plus 14); the room makes up the rest to the toggle at 83, less the group's 4 gap: 83 − 7 − 4. */
+    inline-size: calc(83px - (var(--area-space-16) - var(--area-space-2)) / 2 - var(--area-space-4)); /* spec: 72 */
+  }
+
+  /* --- The profile at the Sidebar's foot (owner, 2026-10-30: "a profile and setting control to the bottom left") ---- */
+  .studio-profile {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    min-inline-size: 0;
+  }
+  .studio-profile__name {
+    flex: 1;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
   /* The dividers: one hairline on each panel's inner edge. */
   /* The dividers between the panels are the Panels' own seams (a flush, resizable Panel keeps the
      edge it is resized from), so nothing here adds a second line beside them. */
@@ -158,9 +207,13 @@
   }
   /* A page's list taking the Sidebar over (src/app-nav.tsx, Takeover): the back row on the shared line, the filter 8 under
      it, then the page's list 8 under that, its first row no longer on the line. */
-  .studio-takeover > .studio-sidebar__list:first-child { display: grid; gap: var(--area-space-8); margin-block-end: var(--area-space-8); }
+  .studio-takeover > .studio-sidebar__list:first-child { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); margin-block-end: var(--area-space-12); }
   .studio-takeover > .studio-sidebar__list + .studio-sidebar__list { padding-block-start: 0; }
-  .studio-takeover__filter { margin-inline: var(--area-ui-row-inset); }
+  /* The filter spans the row plates exactly (Cursor's search over its settings rows): the rows hang their plates the row
+     inset into the Sidebar's margin, so it does too. It was inset by it instead, starting 16 right of the plates and
+     ending 8 past its list, which scrolled a narrow Sidebar sideways (2026-10-30). One column that may shrink, so nothing
+     in a takeover's head widens the Sidebar. */
+  .studio-takeover__filter { inline-size: calc(100% + var(--area-ui-row-inset) * 2); max-inline-size: none; margin-inline: calc(var(--area-ui-row-inset) * -1); }
 
 
   /* The Inspector's selection (src/inspector.tsx): Area's PreviewFrame, then the copy actions two

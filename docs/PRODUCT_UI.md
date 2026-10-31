@@ -58,8 +58,9 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     row plates (rule 3) and hang them into the margin so the figure, not its plate, sets the
     column; lists are the default framed Table (owner, 2026-10-22: "i want to use this table", replacing
     `Table flush`), and rows mixing text sizes align on their first baseline (`Table baseline`). Details open in a hover window (Hover card) or the Inspector.
-12. **Each panel's toggle sits at its own side** of the Titlebar: the Sidebar's first, after the
-    window controls; the Inspector's at the end.
+12. **Each panel's toggle sits at its own side**, in its own header: the Sidebar's first in the Sidebar's header, after the
+    window controls; the Inspector's at the end of the Inspector's. A hidden panel's toggle moves to the Canvas header's
+    same side.
 13. **App CSS styles only app classes.** When a product needs a component to do something it
     cannot, fix the component (with a spec note) or record a gap; never override `.area-*`.
 14. **The Canvas's header sets how things are shown; the Inspector, what is chosen** (owner,
@@ -71,23 +72,38 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     multi-select Custom select, and dropdowns hug their rows (`--area-menu-min-inline-size`).
 17. **Information is tables wherever it can be**: facts, props, classes, states, keys, ARIA
     and a spec's tables and dated lists. Prose stays prose only where it has no rows.
-18. **The app is drawn in Area's shipped defaults** (owner, 2026-10-25: "choose it once and then set it and any further
-    customization through the theme page doesnt impact the ui of the electron app"). `<html>` carries every registry
-    default and the default Material, so the Titlebar, Sidebar, Inspector, the app's chrome inside the Canvas
-    (`appScale()`, `src/app-scale.ts`), the panel widths, the window's ground and its traffic lights (centred on the
-    Titlebar) change only when a default does (`src/studio.tsx`). So does everything on the Canvas that is the app's:
+18. **The app is drawn in its chosen system** (owner, 2026-10-30: "it should follow the chosen system, which can be updated
+    in a settings page like cursors"; `src/app-look.ts`). By default it follows Area's chosen theme as published; Settings ›
+    Appearance picks another system and theme, or draws the app in a look of its own (every Theme setting and Material,
+    apart from any system); Settings › Theme edits the open system's theme. A system's unpublished working copy never reaches the app, as it never
+    reaches a project. `<html>` carries that look, so the Sidebar, the Inspector, the headers, the app's chrome inside the
+    Canvas (`appScale()`, `src/app-scale.ts`), the panel widths, the window's ground and its traffic lights (centred on the
+    headers' line) change when it is published or chosen (`src/studio.tsx`). So does everything on the Canvas that is the app's:
     its body, the cards, section titles, the header and the Stage's frame (owner, 2026-10-26: "the actual components
     themselves that sit inside the containers would be the only things that update with the controls"). The
     Inspector's settings, and hover previews of them, reach only what holds a specimen: a tile's view, the Stage's view,
     a colour card (the card is the colour), a type sample and an icon glyph, through one scope of the settings moved
-    from the defaults (`src/specimen-scope.tsx`); an exact accent (Inspector → Accent → Exact colour, `src/brand.ts`) and exact page colours (Inspector → Page colour, `src/colours.ts`) reach the same holders. The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
-    2026-10-22 to 25 the app took every committed Inspector setting instead. The Theme tab's own body stays at the
+    from the app's look (`src/specimen-scope.tsx`); an exact accent (Inspector → Accent → Exact colour, `src/brand.ts`) and exact page colours (Inspector → Page colour, `src/colours.ts`) reach the same holders. The defaults were chosen on the defaults review (docs/research/defaults-2026-10-25/). From
+    2026-10-25 to 30 the app was drawn in those shipped defaults; from 2026-10-22 to 25 it took every committed Inspector
+    setting. The Theme tab's own body stays at the
     Setup scale (Setup, below).
+19. **A version is said as a model is named: the system's name, then its number** (owner, 2026-10-30: "dont use the dots
+    · or v1.0 … just put the number after the name? like area 1.0? might want to think of systems almost like ai
+    models"): "Area 1.0", "Area 1.1" (Adds), "Area 2.0" (Needs work in products), "Area 1.0.1" (Fixes), through
+    `versionName` (`src/systems.ts`), in pickers, titles, facts, dialogs and buttons. Never "v1.0", and never a number
+    without its system's name beside it. A state beside a version is its own element (a Live Badge, a Radio's meta),
+    not a suffix.
+20. **No middle dot (·) in the app's copy.** Two facts in one line are joined by a comma ("2 themes, Default in use"), a
+    path by › ("Appearance › Shape"), a value and its unit by a space ("Blue 220°"); facts that stand apart are separate
+    elements. (Component demos' example copy, such as Asset row's "SVG · 24 × 24", follows its component's spec.)
+21. **The app's copy is spelled "color"** (owner, 2026-10-30: "use color not colour"): every visible string, setting names
+    and descriptions, and the Documentation entries. Code names keep theirs (`colours.ts`, `data-area-status-colours`,
+    the `area-tokens colours` command), as renaming them is an API change.
 
 ## The app's layout
 
 How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at type 13, Compact,
-the scale the layout was measured at; the app now takes the default type and density (rule 18).
+the scale the layout was measured at; the app now takes its chosen system's type and density (rule 18).
 
 **Places, tabs and the nav** (app structure Phases 1 and 2, 2026-10-28 and 29, and the IA of 2026-10-29: projects and
 publishing; the plan and the owner's model in `docs/research/app-structure-2026-10-28/README.md`; the shell is variation A,
@@ -136,8 +152,42 @@ Cursor's nav with Figma's tabs).
   theme's Setup chat opens; Import: a stub, marked Later), Inspiration (its groups, as boards) and Recent (the last 8 places
   opened). The Inspector's Design view shows the chosen system with Open, Rename and Delete; Home has no Theme view. Themes
   lists the open system's themes: double-click or Use chooses one, New theme adds one at Area's values and opens Setup on it.
-- **Titlebar**: the Sidebar's toggle, Back and Forward (⌘[ ⌘], the tab's own history), then the open tabs; at its end
-  Search (⌘K), Inspiration, the Inspector's toggle and light / dark. **Home is the first tab**, always: its icon alone in
+- **Headers** (owner, 2026-10-30, after Cursor: "the full sectioning of the ui into 3 distinct parts each with their own
+  header"; a Titlebar spanned the window from 2026-10-10): each region has its own header on the window's top line, 40 at
+  type 13 (Cursor's; the small control 7 from its top and bottom: Panel `windowBar`, Titlebar `size="sm"`), with no rule; the panels' seams are the dividers. **Sidebar**: its Panel's bar, the macOS traffic
+  lights' room (the toggle 83 from the window's edge, Cursor's), the Sidebar's toggle and Search (⌘K), then Back and
+  Forward (⌘[ ⌘], the tab's own history) at its end. **Canvas**: a plain Titlebar, the open tabs, then Inspiration and
+  light / dark at its end; with the Sidebar hidden it starts with the lights' room, the toggle, Search and Back and
+  Forward, and with the Inspector hidden it ends with that toggle. **Inspector**: its Panel's bar, its views, then its
+  toggle. A lead (Setup's chat) has a header row of its own over it, with Search and Back and Forward. A strip under the
+  headers is the window's drag region in Electron, every control in it a hole (`app.css`, `.studio-drag`).
+- **Profile and Settings** (owner, 2026-10-30: "a profile and setting control to the bottom left … like claude and
+  cursor"): the Sidebar's foot holds the person's avatar and name and Settings (⌘,; the app menu's Settings… in
+  Electron). Settings (`src/pages/settings.tsx`) opens over the current tab in Cursor's layout: the Sidebar becomes its
+  sections (General, Appearance, Theme) under Back and a search, the Canvas holds the section's groups of rows (a title
+  and its description, the control at the end, in a recessed box), and there is no Inspector. Back, Esc or opening any
+  place closes it. Only settings that work are shown (rule 16). **Appearance and Theme are apart** (owner, 2026-10-30:
+  "theme is theme and appearance is for the actual electron ui? both would show the same level of customization"):
+  Appearance is the app's own look (Mode; Drawn in A system, with its System, Theme and an Edit in Theme row, or Its own
+  look, which shows every Theme setting and Material apart from any system); Theme is the open system's theme as its
+  Inspector edits it (System and Theme pickers, Live or its unpublished changes and Publish in the title, every Theme
+  setting with the exact colours, and Material). A project's tab shows its system as published, so Theme there offers
+  only Open, the system's own tab. Both draw a setting with the Inspector's own rows in a Settings frame
+  (`inspector-rows.tsx` `RowFrame`), so a setting is one control in all three places (owner, 2026-10-30: "the area
+  design system theme controls (all of them) mapped to a settings page like that"). Mode, Density and Corner are
+  pictures, every choice a card (Radio `soft` `preview`, the choice drawn in its own scope by `src/choice-visuals.tsx`);
+  the rest are plain controls ("some simplified visual illustrations … but for the most part just simple controls").
+  Search finds rows in every section, headed by their section.
+  Theme has a **live preview** beside its rows (owner, 2026-10-30: "add a screen to the right of the theme canvas in
+  settings to preview all the changes live"): the Area app itself by default (owner, 2026-10-30: "a variation of the area
+  electron app itself"; `content/examples/area-app.tsx`, its Sidebar, tabs, component tiles and Inspector), or a product
+  screen (Workspace, Analytics, Settings or Phone; the pick remembered), drawn
+  in the theme being edited, in the mode the rows edit, exact colors and hover previews included, held in view while the
+  rows scroll; on a Canvas under 960 it sits above them. **Page color** leads the Page section (owner, 2026-10-30: "not
+  sure what page color means"), in the Inspector too: Adjust (Lightness, then Temperature and Tint) or Exact (one picked
+  color the greys, edges and text are worked out from; the adjusting rows are left out, not dimmed). Each Page and
+  Accent row's description says what it paints (`gallery/controls.ts` hints).
+- **Tabs**: **Home is the first tab**, always: its icon alone in
   Nav's square icon-only item (Figma's file browser tab), never closed, always on Home, named in a Tooltip with ⌘⇧H. From
   Home a system, board or place opens in the tab already holding that system (or the Library, a lab), else in a new tab at
   the end; Home from any tab (the nav's row, ⌘⇧H, search) switches to the Home tab. Tabs work as a browser's, after Claude Code's browser
@@ -155,7 +205,8 @@ Cursor's nav with Figma's tabs).
   new tab: Home is already the fixed first tab, so a new tab opening it would be a second Home (2026-10-29). Each tab
   keeps its own place, Sidebar and history. The open tabs and their places reopen at launch, after Home (the old saved
   tab migrated once); with none saved the app opens on Home.
-- **Search** (`src/search-palette.tsx`): the Titlebar's field opens Command palette over every place, component, setting,
+- **Search** (`src/search-palette.tsx`): the Sidebar header's Search (an icon, Cursor's; the Titlebar's field until
+  2026-10-30) opens Command palette over every place, component, setting,
   scale, type role, icon category and pattern, and icons by name from two letters; a choice opens in the current tab.
 - **The Sidebar's nav** (`src/app-nav.tsx`) is the tab's own (owner, 2026-10-29: "within each project there are a bunch
   of things in it … accessed through the left nav"). Home's tab (and Inspiration's and a lab's): Home, then Projects (a
@@ -175,8 +226,8 @@ Cursor's nav with Figma's tabs).
   The Components bar carries its path at its start instead (Breadcrumb `nowrap`, owner 2026-10-24: "breadcrumbs can be used to help with layer management"; 2026-10-25, the Overview too: "put some text in the top left, a breadcrumb"): Components / Overview (or List), and on a tile Components / its family / its name.
 - The Canvas header's controls, the Sidebar's first row and the Inspector's first heading
   share one line. The Sidebar and Inspector are 14 in on all sides.
-- **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4): the Titlebar keeps its
-  rule; the Canvas header and the Inspector's bar carry none (Notion's and ChatGPT's top bars), and the Sidebar sits on
+- **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4; the Titlebar's rule went
+  with it, 2026-10-30): no header and no bar carries a rule (Notion's and ChatGPT's top bars), and the Sidebar sits on
   the chrome's recessed ground (`data-area-chrome`, the subtle step, as Notion's sidebar), its seam the Panel's edge.
 - **Rows are 28** at type 13 Compact (owner, 2026-10-22, item 2: rows keep at least 5 above and below their
   text; Cursor's and Figma's 28).

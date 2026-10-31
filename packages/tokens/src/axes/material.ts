@@ -55,12 +55,12 @@ export const leverSteps = (lever: MaterialLever): readonly number[] => lever ===
 export const MATERIAL_SWITCHES = [
   { id: "gradient-shape", label: "Gradient shape", lever: "gradient", options: [["linear", "Linear", []], ["radial", "Radial", ["gradient-radial"]]] },
   { id: "gradient-centre", label: "Gradient centre", lever: "gradient", options: [["light", "Toward light", []], ["middle", "Middle", ["gradient-centre"]], ["away", "Away", ["gradient-away"]]] },
-  { id: "gradient-color", label: "Gradient colour", lever: "gradient", options: [["tone", "Tone", []], ["accent", "Accent", ["gradient-accent"]]] },
+  { id: "gradient-color", label: "Gradient color", lever: "gradient", options: [["tone", "Tone", []], ["accent", "Accent", ["gradient-accent"]]] },
   { id: "sheen-shape", label: "Sheen shape", lever: "sheen", options: [["soft", "Soft", []], ["band", "Band", ["sheen-band"]]] },
   // How see-through a part may go depends on what it holds (28-recipes): text 4.5:1 over any backdrop, accent icons 3:1.
   { id: "holds", label: "Holds", lever: "transparency", options: [["text", "Text", []], ["icons", "Icons", ["holds-icons"]], ["nothing", "Nothing", ["holds-none"]]] },
   // A ring takes the part's own colour, darker (Tone), or black (Neutral, the board's dark button).
-  { id: "ring", label: "Ring colour", lever: "stroke", options: [["tone", "Tone", []], ["neutral", "Neutral", ["stroke-neutral"]]] },
+  { id: "ring", label: "Ring color", lever: "stroke", options: [["tone", "Tone", []], ["neutral", "Neutral", ["stroke-neutral"]]] },
 ] as const satisfies ReadonlyArray<{ id: string; label: string; lever: MaterialLever; options: ReadonlyArray<readonly [string, string, readonly string[]]> }>;
 export type MaterialSwitch = (typeof MATERIAL_SWITCHES)[number]["id"];
 

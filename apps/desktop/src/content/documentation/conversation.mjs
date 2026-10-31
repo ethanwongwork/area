@@ -431,7 +431,7 @@ export default {
       ["Do", "Control a file's diff with open and onOpenChange when the app must open it (a review that walks the files); defaultOpen otherwise."],
       ["Do", "Set title to the count (\"Edited 2 files\"); without it the head says \"Edited files\"."],
       ["Don't", "Use it as a review tool for staging or commits; it keeps or undoes one turn's edits."],
-      ["Don't", "Signal a change by colour alone: keep the +N −N and the diff's + and − markers."],
+      ["Don't", "Signal a change by color alone: keep the +N −N and the diff's + and − markers."],
     ],
     // Spec: Anatomy, Cleanup pass, Round 52; manifest elements.
     parts: {
@@ -598,7 +598,7 @@ export default {
       ["Do", "Pass a ghost sm Retry Button as action on an error, so the person can try again from the line."],
       ["Do", "Place it at the end of the turn it describes, in the turn's column."],
       ["Don't", "Use it for a turn that finished normally: it marks endings other than finishing."],
-      ["Don't", "Add your own icon or colour to the text: status sets the glyph and the error ink. kind still works for one release."],
+      ["Don't", "Add your own icon or color to the text: status sets the glyph and the error ink. kind still works for one release."],
     ],
     // Spec: Decisions, Cleanup pass; manifest elements.
     parts: {

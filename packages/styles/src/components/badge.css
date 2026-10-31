@@ -71,6 +71,11 @@
     inline-size: var(--_icon); block-size: var(--_icon);
   }
   .area-badge__leading-icon > svg, .area-badge__trailing-icon > svg { inline-size: 100%; block-size: 100%; }
+  /* An icon and its label are never closer than the icon-to-label gap's floor, 4 (DESIGN_SYSTEM.md, Icon-to-label gap:
+     4 at xs and compact). The height-derived gap gave 1 / 3 / 4 at type 13 (2 / 4 / 4 at 14): a status mark touched its
+     word in the sm plate (owner, 2026-10-30, the status badges: "isolate and fix the size/spacing"). Dots keep theirs:
+     the dot's 8 box already holds 1 of air. */
+  .area-badge:has(> :is(.area-badge__leading-icon, .area-badge__trailing-icon)):not(.area-badge--icon-only) { --_gap: var(--area-space-4); }
   .area-badge__dot { display: grid; place-items: center; inline-size: var(--area-space-8); block-size: var(--area-space-8); flex-shrink: 0; }
   .area-badge__dot::before { content: ""; inline-size: var(--area-space-6); block-size: var(--area-space-6); border-radius: var(--area-radius-full); background: var(--_dot-color); }
   .area-badge--neutral {

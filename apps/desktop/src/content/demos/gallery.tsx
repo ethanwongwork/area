@@ -425,7 +425,7 @@ export const GalleryColorSwatchInSlot = () => (
       <MenuItem radio checked icon={slotSwatch("blue-500")}>Blue</MenuItem>
       <MenuItem radio icon={slotSwatch("green-600")}>Green</MenuItem>
       <MenuSeparator />
-      <MenuItem icon={<AddIcon />}>Add colour</MenuItem>
+      <MenuItem icon={<AddIcon />}>Add color</MenuItem>
     </Menu>
   </div>
 );

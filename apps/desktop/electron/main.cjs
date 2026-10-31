@@ -9,7 +9,8 @@
  * controls' line at 19. Was 14, 13 for the 41 bar at type 12.
  * --dev reloads the window when the renderer rebuilds; --capture=<file.png> saves one frame and
  * quits, for checking the window without looking at it (--theme=dark, --hash=icons/arrows,
- * --store='{"canvas":{"ui":"compact"}}' for saved settings, --width=1024 for a narrow window).
+ * --store='{"canvas":{"ui":"compact"}}' for saved settings, --width=1024 for a narrow window, --run='<js>' to act
+ * on the page first, as opening Settings, which no hash names).
  */
 const { app, BrowserWindow, ipcMain, Menu, nativeTheme, net, protocol, session, shell } = require("electron");
 const { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, watch, writeFileSync } = require("node:fs");
@@ -24,6 +25,8 @@ const hashArg = process.argv.find(arg => arg.startsWith("--hash="))?.slice("--ha
 /* --store=<json>: saved settings for a capture, e.g. {"canvas":{"ui":"compact"}}. */
 const storeArg = process.argv.find(arg => arg.startsWith("--store="))?.slice("--store=".length);
 /* --width=<px>: the window's width for a capture (the setup's narrow Canvas was found in a 1024 window, 2026-10-23). */
+/* --run=<js>: run in the page once it has rendered, before the frame is saved (an awaited expression). */
+const runArg = process.argv.find(arg => arg.startsWith("--run="))?.slice("--run=".length);
 const widthArg = Number(process.argv.find(arg => arg.startsWith("--width="))?.slice("--width=".length)) || 0;
 /* Neutral 975 and white: the app's page ground in each theme, so a resize never shows a flash. */
 const GROUND = { dark: "#020202", light: "#ffffff" };
@@ -71,6 +74,7 @@ function createWindow() {
         if (ready) break;
         await new Promise(resolve => setTimeout(resolve, 100));
       }
+      if (runArg) await window.webContents.executeJavaScript(`(async () => { ${runArg} })()`).catch(error => console.error(`[capture] --run: ${error}`));
       await new Promise(resolve => setTimeout(resolve, 800));
       const image = await window.webContents.capturePage();
       writeFileSync(capture, image.toPNG());
@@ -217,7 +221,20 @@ function tabMenu() {
   const send = (command, index) => (_item, window) => (window ?? BrowserWindow.getFocusedWindow())?.webContents.send("area:command", command, index);
   const mac = process.platform === "darwin";
   return Menu.buildFromTemplate([
-    ...(mac ? [{ role: "appMenu" }] : []),
+    // The app menu, with Settings… (⌘,) where every Mac app has it: it opens Settings over the current tab (src/pages/settings.tsx).
+    ...(mac ? [{ label: app.name, submenu: [
+      { role: "about" },
+      { type: "separator" },
+      { label: "Settings…", accelerator: "CmdOrCtrl+,", click: send("settings") },
+      { type: "separator" },
+      { role: "services" },
+      { type: "separator" },
+      { role: "hide" },
+      { role: "hideOthers" },
+      { role: "unhide" },
+      { type: "separator" },
+      { role: "quit" },
+    ] }] : [{ label: "Settings", submenu: [{ label: "Settings…", accelerator: "CmdOrCtrl+,", click: send("settings") }] }]),
     { label: "File", submenu: [
       { label: "New Tab", accelerator: "CmdOrCtrl+T", click: send("new-tab") },
       { label: "Reopen Closed Tab", accelerator: "CmdOrCtrl+Shift+T", click: send("reopen-tab") },

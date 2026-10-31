@@ -40,7 +40,7 @@ export function ThemesPage() {
       }
       canvas={
         <div className="studio-sections">
-          <CanvasSection id="themes" title="Themes" count={openSystem.themes.length} lede={`${openSystem.name} uses ${openTheme.name}. Each theme is the system's settings, Material and exact colours; New theme makes one in a chat.`}>
+          <CanvasSection id="themes" title="Themes" count={openSystem.themes.length} lede={`${openSystem.name} uses ${openTheme.name}. Each theme is the system's settings, Material and exact colors; New theme makes one in a chat.`}>
             <TileGrid span="wide" cards min={THEME_MIN}>
               {openSystem.themes.map(entry => (
                 <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name} value={entry === openTheme ? "In use" : undefined}

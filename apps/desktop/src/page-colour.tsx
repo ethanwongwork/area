@@ -6,11 +6,11 @@
  * setting, its own tint), not picks. The picks themselves are src/colours.ts.
  */
 import { useEffect, useRef, useState } from "react";
-import { Button, ColorPicker, ColorSwatch, ColorSwatchPicker, Field, Popover } from "@area/react";
+import { Button, ColorPicker, ColorSwatch, ColorSwatchPicker, Popover } from "@area/react";
 import { ColorIcon } from "@area/icons";
 import { DEFAULT_PAGE, PAGE_RANGE, formatOklch, oklchHex, paintedChroma, parseColour, reachableChroma, type Oklch } from "@area/tokens/colours";
 import { neutralCast, presetColour, type ColoursState, type Mode } from "./colours.ts";
-import { hueName } from "./inspector-rows.tsx";
+import { hueName, RowField } from "./inspector-rows.tsx";
 import { SCALES } from "./tokens.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
 
@@ -37,9 +37,11 @@ export function pageNow(mode: Mode, values: Readonly<CanvasAxes>, picks: Colours
 export function pageAnswer(mode: Mode, values: Readonly<CanvasAxes>, picks: ColoursState): string {
   if (!picks[mode] && values.neutral !== "neutral") return `${values.neutral === "cool" ? "Cool" : "Warm"} greys`;
   const { l, c, h } = pageNow(mode, values, picks);
-  return `${c < 0.001 ? "Grey" : hueName(h)} · ${Number((l * 100).toFixed(2))}%`;
+  return `${c < 0.001 ? "Grey" : hueName(h)} ${Number((l * 100).toFixed(2))}%`;
 }
 export const pageHex = (mode: Mode, values: Readonly<CanvasAxes>, picks: ColoursState) => oklchHex(pageNow(mode, values, picks));
+/** The page now as a pick: where Exact color starts, so choosing it changes nothing until a color is picked. */
+export const pageColour = (mode: Mode, values: Readonly<CanvasAxes>, picks: ColoursState) => formatOklch(pageNow(mode, values, picks));
 
 /** The picker and the grey families to start from. `onPick` takes each colour as it is chosen. */
 export function PagePicker({ mode, values, picks, onPick, set, swatchSize = "lg" }: {
@@ -78,14 +80,14 @@ export function PageColourRow({ size = "sm" }: { size?: "sm" | "md" | "lg" }) {
   const land = () => { clearTimeout(timer.current); if (pending.current !== null) setColours({ [theme]: pending.current }); pending.current = null; setDraft(null); };
   const picks = draft === null ? colours : { ...colours, [theme]: draft };
   return (
-    <Field label="Page colour" orientation="horizontal" title="The page's exact colour: every grey, edge and text colour is worked out from it">
+    <RowField label="Color" orientation="horizontal" title="The page's exact color: every grey, edge and text color is worked out from it">
       <div ref={field} className="studio-brand__colour">
         <span className="studio-page-colour">
           <ColorSwatch size="sm" color={pageHex(theme, canvas, picks)} aria-hidden="true" />
           <span>{pageAnswer(theme, canvas, picks)}</span>
         </span>
-        <Popover open={open} onOpenChange={next => { setOpen(next); if (!next) land(); }} anchor={field} align="end" aria-label={`${theme === "light" ? "Light" : "Dark"} page colour`}
-          trigger={<Button size={size} variant="ghost" iconOnly aria-label={`Pick the ${theme} page colour`} icon={<ColorIcon />} />}>
+        <Popover open={open} onOpenChange={next => { setOpen(next); if (!next) land(); }} anchor={field} align="end" aria-label={`${theme === "light" ? "Light" : "Dark"} page color`}
+          trigger={<Button size={size} variant="ghost" iconOnly aria-label={`Pick the ${theme} page color`} icon={<ColorIcon />} />}>
           <div className="studio-page-colour__picker" onPointerUp={land}>
             <PagePicker mode={theme} values={canvas} picks={picks} swatchSize="md"
               onPick={colour => { setDraft(colour); pending.current = colour; clearTimeout(timer.current); timer.current = setTimeout(land, REST); }}
@@ -93,6 +95,6 @@ export function PageColourRow({ size = "sm" }: { size?: "sm" | "md" | "lg" }) {
           </div>
         </Popover>
       </div>
-    </Field>
+    </RowField>
   );
 }

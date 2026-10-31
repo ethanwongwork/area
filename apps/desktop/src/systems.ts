@@ -166,6 +166,12 @@ export function firstRelease(themes: SystemTheme[], theme: string, at: string, n
 
 /** The system's Live release: its latest. */
 export const liveOf = (system: System): Release => system.releases[system.releases.length - 1]!;
+/**
+ * A version as it is said: the system's name, then its number, as a model is named ("Area 1.1", as "Opus 4.1"; owner,
+ * 2026-10-30: "just put the number after the name … think of systems almost like ai models"). Never "v1.1", never a lone
+ * number where the system isn't named beside it.
+ */
+export const versionName = (name: string, version: string) => `${name} ${version}`;
 
 /** The system as everyone else sees it: its Live release's themes (the theme in use stays the working one when Live has it). */
 export function asLive(system: System): System {

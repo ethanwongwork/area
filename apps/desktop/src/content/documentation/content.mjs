@@ -228,7 +228,7 @@ export default {
     // Spec: Job and boundaries, Round 8, Behavior and accessibility; source: Board.tsx JSDoc.
     practices: [
       ["Do", "Group items by one value, such as status or owner, with one column per value."],
-      ["Do", "Keep columns neutral unless the value has a colour; color tints the column, its count, its cards' edge and its add row together."],
+      ["Do", "Keep columns neutral unless the value has a color; color tints the column, its count, its cards' edge and its add row together."],
       ["Do", "Give every card a title and an href: the title is the link that opens the item, and its hit area covers the card."],
       ["Do", "Pass count when the group holds more items than it shows."],
       ["Do", "Name each icon-only Button you put in a column's actions or a card's actions."],
@@ -237,14 +237,14 @@ export default {
     ],
     // Spec: Anatomy, Round 8, Review note round 31; source: Board.tsx.
     parts: {
-      root: "One column: a section named by its title, tinted in its colour, with a header over its cards and an optional footer.",
+      root: "One column: a section named by its title, tinted in its color, with a header over its cards and an optional footer.",
       header: "The column's top row: the title, the count and the actions.",
       title: "The group's name in plain text; it names the section.",
-      count: "A small soft Badge with the number of items; in a coloured column it takes the colour.",
+      count: "A small soft Badge with the number of items; in a colored column it takes the color.",
       actions: "Buttons at the header's end, such as add and more.",
       cards: "The list of BoardCards; each card's title links to its item and its own actions appear on hover or focus.",
       footer: "The row under the cards: the Add new row when you pass onAdd, or your own footer in its place.",
-      add: "The Add new button: full width, start-aligned, a card's size, muted in neutral and in the colour's ink otherwise.",
+      add: "The Add new button: full width, start-aligned, a card's size, muted in neutral and in the color's ink otherwise.",
       "add-icon": "The add glyph before the Add new label, hidden from assistive tech.",
     },
     // Spec: Behavior and accessibility; source: native anchors and buttons.
@@ -315,10 +315,10 @@ export default {
     ],
     // Spec: Variants, Behavior and accessibility, Feedback log; source: AssetCard.tsx JSDoc.
     practices: [
-      ["Do", "Use one card per asset, anything that stands alone: an image, a component, a colour, a type style, an icon, a setting's option or a group of them."],
+      ["Do", "Use one card per asset, anything that stands alone: an image, a component, a color, a type style, an icon, a setting's option or a group of them."],
       ["Do", "Pick the kind by what you pass: an image URL covers the frame; color paints it; group fills a 2×2 mosaic; any other element sits centred on the frame's surface at its own size."],
-      ["Do", "Keep the head to the name and its controls: Copy for what is used (a component's code, a colour's value, a type role, an icon), More for what is managed (an image, a group)."],
-      ["Do", "For an inspector's preview of the one selected thing, use the frame alone: containerless with no name or controls, wide for a colour, fill=\"checker\" when it has transparency, and aria-label with role=\"img\"."],
+      ["Do", "Keep the head to the name and its controls: Copy for what is used (a component's code, a color's value, a type role, an icon), More for what is managed (an image, a group)."],
+      ["Do", "For an inspector's preview of the one selected thing, use the frame alone: containerless with no name or controls, wide for a color, fill=\"checker\" when it has transparency, and aria-label with role=\"img\"."],
       ["Do", "Give a setting's option its own scope on the whole card (data-area-theme=\"dark\"), so the card and its frame change together."],
       ["Do", "Pass components and designs to a group as elements: each cell shows a scaled-down image of it, inert."],
       ["Do", "Put a small ghost More or Copy button in actions; it ends on the frame's side. Give each its own label."],
@@ -340,7 +340,7 @@ export default {
       head: "The top row, a small control plus 4 above and below: the name at the start, the controls at the end, nothing else.",
       name: "The asset's name in the UI text, regular; one line, then an ellipsis. Its cap sits centred, as far in as the head is tall less its cap.",
       actions: "Controls at the head's end, centred on it, their side on the frame's side and their corner the frame's, concentric with the card.",
-      frame: "The asset's place, 4 in on three sides, its corner the card's less the edge and the inset (11 at the default); the surface with a divider edge that stays at every Stroke width, or the colour itself with the swatch ring.",
+      frame: "The asset's place, 4 in on three sides, its corner the card's less the edge and the inset (11 at the default); the surface with a divider edge that stays at every Stroke width, or the color itself with the swatch ring.",
       media: "The asset: an image covering the frame, cropped, or any element centred at its own size.",
       mosaic: "A group's 2×2 grid of its first four assets, 4 apart, filling the frame's place; hidden from assistive tech.",
       cell: "One asset in the mosaic, cropped to its cell at the frame's corner; fewer than four leave cells as the card's ground.",
@@ -348,7 +348,7 @@ export default {
     },
     // Spec: States; source: AssetCardProps.selected.
     states: {
-      selected: "The card's edge turns the selection colour; an AssetGrid sets it from its value.",
+      selected: "The card's edge turns the selection color; an AssetGrid sets it from its value.",
     },
     // Source: AssetGrid key handler and ListBox grid.
     keyboard: [
@@ -529,7 +529,7 @@ export default {
       media: "The native video, letterboxed on black; a click plays or pauses, a double click toggles full screen except in minimal.",
       start: "The round play button shown before the first play; in minimal it stays as the only control.",
       controls: "The controls, shown after the first play: the bar's track over its row of pills, or the floating panel's two rows.",
-      transport: "A row of buttons: the bar's pills (play, volume and the time at the start, the rest at the end), or the floating panel's top row (sound, back · play · forward, the rest).",
+      transport: "A row of buttons: the bar's pills (play, volume and the time at the start, the rest at the end), or the floating panel's top row (sound; back, play and forward; the rest).",
       group: "One of the transport's clusters: start and end in the bar, start, center and end in the floating panel.",
       timeline: "The floating panel's second row: the elapsed time, the track and the time remaining.",
       clock: "The time in muted tabular figures: elapsed at the start, remaining at the end.",

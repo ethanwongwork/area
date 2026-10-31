@@ -17,7 +17,7 @@ import { ScreenFigure } from "./setup-screen.tsx";
 import { Tile } from "./tile.tsx";
 import { GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { tabKind } from "./places.ts";
-import { activeTheme, asLive, liveOf, nextVersion, proposedKind, RELEASE_KIND_LABEL, type Change, type ReleaseKind, type SystemTheme } from "./systems.ts";
+import { activeTheme, asLive, liveOf, nextVersion, proposedKind, RELEASE_KIND_LABEL, versionName, type Change, type ReleaseKind, type SystemTheme } from "./systems.ts";
 
 type Kind = Exclude<ReleaseKind, "first">;
 export const KINDS: ReadonlyArray<{ value: Kind; description: string }> = [
@@ -27,7 +27,7 @@ export const KINDS: ReadonlyArray<{ value: Kind; description: string }> = [
 ];
 
 const CONTROL = new Map(GALLERY_CONTROLS.map(control => [control.axis, control] as const));
-const VALUE_NAMES: Record<string, string> = { material: "Material", colours: "Exact page colours", accent: "Exact accent" };
+const VALUE_NAMES: Record<string, string> = { material: "Material", colours: "Exact page colors", accent: "Exact accent" };
 
 /** A change's setting, as the Inspector names it. */
 export function changeLabel(change: Change): string {
@@ -98,7 +98,7 @@ export function PublishControls() {
   );
 }
 
-function PublishDialog({ onClose }: { onClose: () => void }) {
+export function PublishDialog({ onClose }: { onClose: () => void }) {
   const { workingSystem, changes, publishSystem, revertSystem, theme } = useStudio();
   const proposed = proposedKind(changes);
   const [kind, setKind] = useState<Kind>(proposed);
@@ -111,19 +111,19 @@ function PublishDialog({ onClose }: { onClose: () => void }) {
   const submit = (event?: FormEvent) => { event?.preventDefault(); publishSystem(kind, note || draftNote(changes)); onClose(); };
   if (discarding) return (
     <ConfirmDialog open title="Discard changes?" tone="danger" confirmLabel="Discard changes"
-      description={`${workingSystem.name} goes back to v${live.version}, as everyone else sees it. The ${changes.length} unpublished ${changes.length === 1 ? "change is" : "changes are"} lost.`}
+      description={`${workingSystem.name} goes back to ${versionName(workingSystem.name, live.version)}, as everyone else sees it. The ${changes.length} unpublished ${changes.length === 1 ? "change is" : "changes are"} lost.`}
       onOpenChange={next => { if (!next) setDiscarding(false); }} onConfirm={() => { revertSystem(); onClose(); }} />
   );
   return (
-    <Dialog open onOpenChange={next => { if (!next) onClose(); }} title={`Publish ${workingSystem.name} v${version}`}
-      description={`Everyone using ${workingSystem.name} and every project on it gets v${version}. It goes in History with this note.`}
+    <Dialog open onOpenChange={next => { if (!next) onClose(); }} title={`Publish ${versionName(workingSystem.name, version)}`}
+      description={`Everyone using ${workingSystem.name} and every project on it gets ${versionName(workingSystem.name, version)}. It goes in History with this note.`}
       footer={<>
         <Button variant="ghost" tone="danger" className="studio-publish__discard" onClick={() => setDiscarding(true)}>Discard changes</Button>
         <Button variant="ghost" tone="neutral" onClick={onClose}>Cancel</Button>
-        <Button onClick={() => submit()}>Publish v{version}</Button>
+        <Button onClick={() => submit()}>Publish {versionName(workingSystem.name, version)}</Button>
       </>}>
       <form className="studio-publish" onSubmit={submit}>
-        <BeforeAfter before={was ? { label: `Live · v${live.version}`, value: was.name, theme: was } : null} after={{ label: `Publishing · v${version}`, value: now.name, theme: now }} empty={`${now.name} is new.`} mode={theme} />
+        <BeforeAfter before={was ? { label: `Live in ${versionName(workingSystem.name, live.version)}`, value: was.name, theme: was } : null} after={{ label: `Publishing as ${versionName(workingSystem.name, version)}`, value: now.name, theme: now }} empty={`${now.name} is new.`} mode={theme} />
         <Table aria-label="Changes">
           <thead><tr><TableHeaderCell>Theme</TableHeaderCell><TableHeaderCell>Setting</TableHeaderCell><TableHeaderCell>Live</TableHeaderCell><TableHeaderCell>Publishing</TableHeaderCell></tr></thead>
           <tbody>
@@ -139,7 +139,7 @@ function PublishDialog({ onClose }: { onClose: () => void }) {
         </Table>
         <RadioGroup label="Kind" value={kind} onValueChange={value => setKind(value as Kind)}>
           {KINDS.map(entry => (
-            <Radio key={entry.value} value={entry.value} label={`${RELEASE_KIND_LABEL[entry.value]} · v${nextVersion(live.version, entry.value)}`}
+            <Radio key={entry.value} variant="soft" layout="list" value={entry.value} label={RELEASE_KIND_LABEL[entry.value]} meta={versionName(workingSystem.name, nextVersion(live.version, entry.value))}
               description={entry.value === proposed ? `${entry.description} Proposed from the changes.` : entry.description} />
           ))}
         </RadioGroup>

@@ -68,7 +68,7 @@ export function ChatScope({ session, selection, children }: { session: ChatSessi
 
 /** A Canvas item's path as words: "button/size-small" → "Button · Size small". */
 export const selectionLabel = (item?: string) => item
-  ? item.split("/").filter(Boolean).map(part => { const words = decodeURIComponent(part).replace(/[-_]+/g, " "); return words[0]!.toUpperCase() + words.slice(1); }).join(" · ")
+  ? item.split("/").filter(Boolean).map(part => { const words = decodeURIComponent(part).replace(/[-_]+/g, " "); return words[0]!.toUpperCase() + words.slice(1); }).join(" › ")
   : undefined;
 
 // ---- The transcript --------------------------------------------------------------------------------------------
@@ -180,10 +180,10 @@ function TurnEdits({ turn }: { turn: Extract<Turn, { author: "assistant" }> }) {
 }
 
 function TurnView({ turn }: { turn: Turn }) {
-  if (turn.author === "user") return <Message author="user">{turn.text}</Message>;
+  if (turn.author === "user") return <Message author="user" className="studio-chat__turn studio-chat__turn--user">{turn.text}</Message>;
   const text = plainText(turn);
   return (
-    <Message author="assistant" authorName="Claude" streaming={!turn.done}
+    <Message author="assistant" authorName="Claude" streaming={!turn.done} className="studio-chat__turn studio-chat__turn--assistant"
       actions={turn.done && text ? (
         <MessageActions>
           <CopyButton value={text} label="Copy reply" variant="ghost" tone="neutral" size="sm" iconOnly />
@@ -241,7 +241,7 @@ export function ChatTranscript({ scroller }: { scroller: RefObject<HTMLElement |
           const before = lastActivity(session.turns, index);
           const stamp = turn.author === "user" && (before === undefined ? Date.now() - turn.at > TIMESTAMP_GAP : turn.at - before > TIMESTAMP_GAP);
           return <Fragment key={turn.id}>
-            {stamp && turn.author === "user" ? <Timestamp dateTime={new Date(turn.at)}>{formatTimestamp(new Date(turn.at))}</Timestamp> : null}
+            {stamp && turn.author === "user" ? <Timestamp className="studio-chat__stamp" dateTime={new Date(turn.at)}>{formatTimestamp(new Date(turn.at))}</Timestamp> : null}
             <TurnView turn={turn} />
           </Fragment>;
         })}
@@ -398,7 +398,7 @@ function ChatFrame({ width, recording }: { width: number; recording: (typeof REC
   const session = useChatSession(recording);
   const scroller = useRef<HTMLDivElement | null>(null);
   return (
-    <ChatScope session={session} selection="Button · Default">
+    <ChatScope session={session} selection="Button › Default">
       <figure className="studio-chat-frame" style={{ inlineSize: `${width}px` }}>
         <figcaption className="studio-chat-frame__label">{width} wide</figcaption>
         <div className="studio-chat-frame__panel">
