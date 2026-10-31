@@ -847,6 +847,7 @@ export function Studio() {
           place.page === "exploration" ? <ExplorationPage /> :
           place.page === "versions" ? <VersionsPage /> :
           place.page === "materials" ? <MaterialsPage /> :
+          place.page === "tests" ? <ExamplesPage lab /> :
           place.page === "inspiration" ? <ImageryPage /> : <ColorPage />
         }</Fragment>
         </ShellContext.Provider>
@@ -950,9 +951,10 @@ export interface WorkspaceProps {
   canvasActions?: ReactNode;
   canvas: ReactNode;
   /**
-   * The Inspector: its three views (InspectorViews), or one body with no views (a lab tab). A page leaves out a view it
-   * has nothing for, and the shell leaves out its tab (rule 14: a control that does not apply is left out). Left out, the
-   * page has no Inspector and no toggle for one (Settings).
+   * The Inspector: its three views (InspectorViews), or one body with no views (a lab tab). Every page has Design (what is
+   * chosen, else the page itself); Theme where the Canvas draws in the open theme; Code where what is chosen is code. A page
+   * leaves out a view it has nothing for, and the shell leaves out its tab (rule 14: a control that does not apply is left
+   * out). Left out, the page has no Inspector and no toggle for one (Settings).
    */
   inspector?: ReactNode | InspectorViews;
   /** The Sidebar's own nav in place of the tab's (Settings' sections). */
@@ -1098,8 +1100,9 @@ const isViews = (value: ReactNode | InspectorViews): value is InspectorViews =>
 function InspectorPanel({ views, width, end }: { views: InspectorViews; width: ReturnType<typeof usePanelWidth>; end: ReactNode }) {
   const { inspectorView, setInspectorView } = useStudio();
   const offered = INSPECTOR_VIEWS.filter(entry => entry.id === "chat" || (views[entry.id] != null && views[entry.id] !== false));
-  // A tab without the chosen view shows its first; the choice itself is kept for the tabs that have it.
-  const shown = offered.find(entry => entry.id === inspectorView) ?? offered[0];
+  // A page without the chosen view shows Design (2026-10-31; its first until then, so Code on a family became Theme on
+  // Themes); the choice itself is kept for the pages that have it.
+  const shown = offered.find(entry => entry.id === inspectorView) ?? offered.find(entry => entry.id === "design") ?? offered[0];
   const chat = shown?.id === "chat";
   // The Chat view's transcript scrolls in the Panel's own body, which it follows to the newest line.
   const scroller = useRef<HTMLDivElement | null>(null);
