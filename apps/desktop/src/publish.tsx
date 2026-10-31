@@ -98,7 +98,7 @@ export function PublishControls() {
   );
 }
 
-function PublishDialog({ onClose }: { onClose: () => void }) {
+export function PublishDialog({ onClose }: { onClose: () => void }) {
   const { workingSystem, changes, publishSystem, revertSystem, theme } = useStudio();
   const proposed = proposedKind(changes);
   const [kind, setKind] = useState<Kind>(proposed);

@@ -49,3 +49,20 @@
 .studio-settings__control > :is(.studio-settings__field, [class*="--full-width"]) { flex: 1 1 auto; min-inline-size: 0; }
 .studio-settings__row[data-disabled] .studio-settings__control { opacity: 0.55; }
 .studio-settings__row[data-disabled] .studio-settings__text { opacity: 0.55; }
+
+/* Theme's title carries where the open system stands (Live, or its changes) and Publish at its end. */
+.studio-settings__head { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-16); }
+.studio-settings__actions { display: flex; align-items: center; gap: var(--area-space-8); }
+
+/* A row of pictures (Mode, Density, Corner): the name and description, then the cards on the line under them, across the
+   row, at the row's own gap. Radio's preview group lays the cards on equal columns (--area-choice-min, its public hook). */
+.studio-settings__row[data-wide] { flex-wrap: wrap; row-gap: var(--_tile-inset); }
+.studio-settings__row[data-wide] > .studio-settings__text { flex-basis: 100%; }
+.studio-settings__row[data-wide] > .studio-settings__control { inline-size: 100%; justify-content: flex-start; }
+.studio-settings__pictures { flex: 1 1 auto; min-inline-size: 0; }
+/* A choice's picture in its own scope: the option's settings over the look's, filling the card's frame. */
+.studio-settings__scope { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: unsafe center; inline-size: 100%; block-size: 100%; }
+/* System: light's window on the left half, dark's on the right, one frame. */
+.studio-settings__split { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); inline-size: 100%; block-size: 100%; }
+.studio-settings__split > * { grid-area: 1 / 1; }
+.studio-settings__split > :last-child { clip-path: inset(0 0 0 50%); }

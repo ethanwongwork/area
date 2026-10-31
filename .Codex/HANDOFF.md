@@ -12,6 +12,13 @@
   (Cursor) shell, https://claude.ai/artifact/13nEjv8rCm2eHZyYDnHXoM. Open for the owner: the three-header shell in the
   app; Nav and Custom select are reopened but in no status list (show Unrefined); saved duplicate tabs from before #179
   aren't merged on restore; PRODUCT_UI.md line 108 and AGENTS.md (app takes the Inspector's settings) are stale.
+- **Settings: Appearance and Theme apart, built 2026-10-30 (uncommitted, this branch).** From the owner's preview pick
+  (https://claude.ai/artifact/Hrzat6VNUQ2C9sHcLZ6ZBp, control-at-the-end rows). `src/pages/settings.tsx`: General,
+  Appearance (Mode cards; Drawn in A system / Its own look; own look shows every setting + Material), Theme (open system:
+  System, Theme, Live badge or N unpublished changes + Publish via `PublishDialog`, now exported; every setting incl.
+  exact colours; a project's tab offers only Open). Mode, Density and Corner are Radio `soft` `preview` cards with
+  `ChoicePreview` in each choice's scope (`settings.css`: wide rows, `unsafe center` scope, System's split). Electron
+  captures take `--run='<js>'` (main.cjs) to open Settings. Checked in the browser preview and Electron, light and dark.
 - **Three-panel shell, Settings and the app following its system, built 2026-10-30 (uncommitted, this branch).** No
   Titlebar: the Sidebar's Panel bar (macOS lights' room, toggle at 83, search icon, back / forward), the Canvas's plain
   Titlebar (tabs, Inspiration, light / dark; takes a hidden panel's toggle), the Inspector's bar (views, toggle); a drag strip

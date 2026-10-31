@@ -74,8 +74,8 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     and a spec's tables and dated lists. Prose stays prose only where it has no rows.
 18. **The app is drawn in its chosen system** (owner, 2026-10-30: "it should follow the chosen system, which can be updated
     in a settings page like cursors"; `src/app-look.ts`). By default it follows Area's chosen theme as published; Settings ›
-    Appearance picks another system and theme, or turns Follow a system off and gives the app settings of its own (type,
-    density, corner, accent, buttons, selection). A system's unpublished working copy never reaches the app, as it never
+    Appearance picks another system and theme, or draws the app in a look of its own (every Theme setting and Material,
+    apart from any system); Settings › Theme edits the open system's theme. A system's unpublished working copy never reaches the app, as it never
     reaches a project. `<html>` carries that look, so the Sidebar, the Inspector, the headers, the app's chrome inside the
     Canvas (`appScale()`, `src/app-scale.ts`), the panel widths, the window's ground and its traffic lights (centred on the
     headers' line) change when it is published or chosen (`src/studio.tsx`). So does everything on the Canvas that is the app's:
@@ -152,14 +152,20 @@ Cursor's nav with Figma's tabs).
 - **Profile and Settings** (owner, 2026-10-30: "a profile and setting control to the bottom left … like claude and
   cursor"): the Sidebar's foot holds the person's avatar and name and Settings (⌘,; the app menu's Settings… in
   Electron). Settings (`src/pages/settings.tsx`) opens over the current tab in Cursor's layout: the Sidebar becomes its
-  sections (General, Appearance) under Back and a search, the Canvas holds the section's groups of rows (a title and its
-  description, the control at the end, in a recessed box), and there is no Inspector. Back, Esc or opening any place
-  closes it. Only settings that work are shown (rule 16). Appearance holds Mode, the system the app follows, then every
-  Theme setting under the registry's headings (Page to Effects) and Material, as the app's own look (owner, 2026-10-30:
-  "the area design system theme controls (all of them) mapped to a settings page like that"): drawn by the Inspector's
-  own rows in a Settings frame (`inspector-rows.tsx` `RowFrame`), so a setting is one control in both places; changing
-  one stops following the system. The open system's exact colours (Page colour, Accent's Exact colour) stay in its
-  Theme view.
+  sections (General, Appearance, Theme) under Back and a search, the Canvas holds the section's groups of rows (a title
+  and its description, the control at the end, in a recessed box), and there is no Inspector. Back, Esc or opening any
+  place closes it. Only settings that work are shown (rule 16). **Appearance and Theme are apart** (owner, 2026-10-30:
+  "theme is theme and appearance is for the actual electron ui? both would show the same level of customization"):
+  Appearance is the app's own look (Mode; Drawn in A system, with its System, Theme and an Edit in Theme row, or Its own
+  look, which shows every Theme setting and Material apart from any system); Theme is the open system's theme as its
+  Inspector edits it (System and Theme pickers, Live or its unpublished changes and Publish in the title, every Theme
+  setting with the exact colours, and Material). A project's tab shows its system as published, so Theme there offers
+  only Open, the system's own tab. Both draw a setting with the Inspector's own rows in a Settings frame
+  (`inspector-rows.tsx` `RowFrame`), so a setting is one control in all three places (owner, 2026-10-30: "the area
+  design system theme controls (all of them) mapped to a settings page like that"). Mode, Density and Corner are
+  pictures, every choice a card (Radio `soft` `preview`, the choice drawn in its own scope by `src/choice-visuals.tsx`);
+  the rest are plain controls ("some simplified visual illustrations … but for the most part just simple controls").
+  Search finds rows in every section, headed by their section.
 - **Tabs**: **Home is the first tab**, always: its icon alone in
   Nav's square icon-only item (Figma's file browser tab), never closed, always on Home, named in a Tooltip with ⌘⇧H. From
   Home a system, board or place opens in the tab already holding that system (or the Library, a lab), else in a new tab at

@@ -5,36 +5,45 @@
  * under a back row and a search, the Canvas holds the section's groups of rows (a title and its description, the control
  * at the end), and there is no Inspector. Back, Esc or opening any place closes it.
  *
- *   General     your name, as the Sidebar's foot shows it
- *   Appearance  Mode; the system and theme the app is drawn in, as published (src/app-look.ts); then every Theme setting
- *               the Inspector has (owner, 2026-10-30: "the area design system theme controls (all of them) mapped to a
- *               settings page like that"), under the registry's headings, and Material, as the app's own look: shown as
- *               the followed theme sets them, and changing one stops following. Drawn by the Inspector's own rows
- *               (src/inspector-rows.tsx) in a Settings frame, so a setting is the same control in both places. The open
- *               system's exact colours (Page colour, Accent's Exact colour) stay in its Theme view: they act on that theme.
+ * Appearance and Theme are apart (owner, 2026-10-30: "theme is theme and appearance is for the actual electron ui? both
+ * would show the same level of customization"; preview https://claude.ai/artifact/Hrzat6VNUQ2C9sHcLZ6ZBp):
  *
- * Only settings that work are shown (product UI rule 16).
+ *   General     your name, as the Sidebar's foot shows it
+ *   Appearance  the app's own look: Mode, then what the app is drawn in, a system's theme as published (src/app-look.ts)
+ *               or a look of its own, which then shows every Theme setting and Material, apart from any system
+ *   Theme       the open system's theme, as its Inspector edits it: which system and theme, Live or its unpublished
+ *               changes and Publish (src/publish.tsx), then every Theme setting and Material, the exact colours included.
+ *               A project's tab shows its system as published, so Theme there opens the system's own tab
+ *
+ * Both draw every setting with the Inspector's own rows (src/inspector-rows.tsx) in a Settings frame, so a setting is the
+ * same control in all three places. Mode, Density and Corner are pictures (Radio's preview cards, each choice drawn in its
+ * own scope by src/choice-visuals.tsx); the rest are plain controls. Only settings that work are shown (product UI rule 16).
  */
-import { useEffect, useState, type ReactNode } from "react";
-import { Button, Input, Nav, NavGroup, NavItem, SearchField, Segmented, Select, SectionHeading, Switch } from "@area/react";
-import { ArrowLeftIcon, PaletteIcon, PersonIcon } from "@area/icons";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { Badge, Button, Input, Nav, NavGroup, NavItem, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading } from "@area/react";
+import { ArrowLeftIcon, PaletteIcon, PersonIcon, SwatchBookIcon } from "@area/icons";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, SETTING_GROUPS } from "@area/tokens/config";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
-import { asLive } from "../systems.ts";
+import { activeTheme, asLive, liveOf, AREA_ID } from "../systems.ts";
 import { chromeOf } from "../app-look.ts";
-import { CANVAS_DEFAULTS, SidebarList, useStudio, Workspace, type CanvasAxes, type Mode } from "../studio.tsx";
+import { tabKind } from "../places.ts";
+import { CANVAS_DEFAULTS, canvasAttributes, SidebarList, useStudio, Workspace, type CanvasAxes, type Mode } from "../studio.tsx";
 import { MATERIAL_DEFAULT, bundleValue, type MaterialState } from "../material.ts";
 import { ROW_OF, RowFrame, SettingRow, type RowContext } from "../inspector-rows.tsx";
 import { MaterialRows } from "../canvas-settings.tsx";
+import { ChoicePreview, ratioOf } from "../choice-visuals.tsx";
+import { PublishDialog } from "../publish.tsx";
+import { brandStyle } from "../brand.ts";
 import { inMode } from "./theme-settings.ts";
 
-export type SettingsSection = "general" | "appearance";
+export type SettingsSection = "general" | "appearance" | "theme";
 const SECTIONS: ReadonlyArray<{ id: SettingsSection; label: string; icon: ReactNode }> = [
   { id: "general", label: "General", icon: <PersonIcon /> },
   { id: "appearance", label: "Appearance", icon: <PaletteIcon /> },
+  { id: "theme", label: "Theme", icon: <SwatchBookIcon /> },
 ];
 
-interface Row { section: SettingsSection; group: string; label: string; description: string; control: ReactNode; disabled?: boolean }
+interface Row { section: SettingsSection; group: string; label: string; description: string; control: ReactNode; wide?: boolean }
 
 export function SettingsPage({ section, onSection }: { section: SettingsSection; onSection: (section: SettingsSection | null) => void }) {
   const studio = useStudio();
@@ -45,10 +54,12 @@ export function SettingsPage({ section, onSection }: { section: SettingsSection;
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
   }, [onSection]);
-  const rows = useRows();
+  const rows = useRows(onSection);
   const needle = query.trim().toLowerCase();
   const shown = needle ? rows.filter(row => `${row.group} ${row.label} ${row.description}`.toLowerCase().includes(needle)) : rows.filter(row => row.section === section);
   const groups = [...new Set(shown.map(row => row.group))];
+  const appLook = useAppLook();
+  const themeLook = useThemeLook();
   return (
     <Workspace
       canvasTitle="Settings"
@@ -75,85 +86,177 @@ export function SettingsPage({ section, onSection }: { section: SettingsSection;
       }
       canvas={
         <div className="studio-settings">
-          <h1 className="studio-settings__title">{needle ? `Results for “${query.trim()}”` : SECTIONS.find(entry => entry.id === section)!.label}</h1>
-          {groups.length || (section === "appearance" || needle) ? groups.map(group => {
-            const own = shown.filter(row => row.group === group);
+          {needle ? <h1 className="studio-settings__title">Results for “{query.trim()}”</h1> : section === "theme" ? <ThemeTitle /> : (
+            <h1 className="studio-settings__title">{SECTIONS.find(entry => entry.id === section)!.label}</h1>
+          )}
+          {groups.map(group => {
             const heading = GROUPS[group];
             return (
               <section key={group} className="studio-settings__group" aria-label={heading?.title}>
-                {heading?.title ? <SectionHeading className="studio-section-heading" title={heading.title} lede={heading.lede?.(studio)} /> : null}
+                {heading?.title ? <SectionHeading className="studio-section-heading" title={needle ? `${SECTION_NAME[heading.section]} · ${heading.title}` : heading.title} lede={needle ? undefined : heading.lede} /> : null}
                 <div className="studio-settings__rows">
-                  {own.map(row => (
-                    <div key={row.label} className="studio-settings__row" data-disabled={row.disabled ? "" : undefined}>
-                      <div className="studio-settings__text">
-                        <span className="studio-settings__label">{row.label}</span>
-                        <span className="studio-settings__description">{row.description}</span>
-                      </div>
-                      <div className="studio-settings__control">{row.control}</div>
-                    </div>
+                  {shown.filter(row => row.group === group).map(row => (
+                    <SettingsRow key={row.label} label={row.label} description={row.description} wide={row.wide}>{row.control}</SettingsRow>
                   ))}
                 </div>
               </section>
             );
-          }) : null}
-          {needle || section === "appearance" ? <ThemeGroups needle={needle} /> : null}
+          })}
+          {appLook && (needle || section === "appearance") ? <ThemeGroups look={appLook} needle={needle} prefix={needle ? "Appearance" : undefined} /> : null}
+          {themeLook && (needle || section === "theme") ? <ThemeGroups look={themeLook} needle={needle} prefix={needle ? "Theme" : undefined} /> : null}
         </div>
       }
     />
   );
 }
 
+const SECTION_NAME: Record<SettingsSection, string> = { general: "General", appearance: "Appearance", theme: "Theme" };
 /** Each group's heading; the first group of a section has none. */
-const GROUPS: Record<string, { title?: string; lede?: (studio: ReturnType<typeof useStudio>) => string }> = {
-  profile: {},
-  mode: {},
-  interface: { title: "Interface", lede: () => "The app is drawn in one of your systems, as that system is published. Edit the system to change the app." },
+const GROUPS: Record<string, { section: SettingsSection; title?: string; lede?: string }> = {
+  profile: { section: "general" },
+  mode: { section: "appearance" },
+  look: { section: "appearance", title: "The app's look", lede: "The app is drawn in one of your systems as it is published, or in a look of its own." },
+  editing: { section: "theme" },
 };
 
-function useRows(): Row[] {
+/** One row: its name over a one-line description, the control at the end; a wide row (pictures) takes the line under them. */
+function SettingsRow({ label, description, wide, children }: { label: string; description?: string; wide?: boolean; children: ReactNode }) {
+  return (
+    <div className="studio-settings__row" data-wide={wide ? "" : undefined}>
+      <div className="studio-settings__text">
+        <span className="studio-settings__label">{label}</span>
+        {description ? <span className="studio-settings__description">{description}</span> : null}
+      </div>
+      <div className="studio-settings__control">{children}</div>
+    </div>
+  );
+}
+
+/** Theme's title, with where the open system stands: Live, or its unpublished changes and Publish (src/publish.tsx). */
+function ThemeTitle() {
+  const { workingSystem, changes, place } = useStudio();
+  const [publishing, setPublishing] = useState(false);
+  const editable = tabKind(place) !== "project";
+  return (
+    <div className="studio-settings__head">
+      <h1 className="studio-settings__title">Theme</h1>
+      {editable ? (
+        <div className="studio-settings__actions">
+          {changes.length
+            ? <Badge size="sm" variant="soft" tone="warning">{changes.length} unpublished {changes.length === 1 ? "change" : "changes"}</Badge>
+            : <Badge size="sm" variant="soft" tone="success">Live · v{liveOf(workingSystem).version}</Badge>}
+          <Button size="sm" disabled={!changes.length} onClick={() => setPublishing(true)}>Publish</Button>
+        </div>
+      ) : null}
+      {publishing ? <PublishDialog onClose={() => setPublishing(false)} /> : null}
+    </div>
+  );
+}
+
+/** A setting's value as the Inspector names it, without the default's mark ("13", "Compact", "10px"). */
+const said = (axis: string, value: string) => (GALLERY_CONTROLS.find(entry => entry.axis === axis)?.items.find(item => item.value === value)?.label ?? value).replace(/ \(Default\)$/, "");
+
+function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
   const studio = useStudio();
-  const { appLook, setAppLook, systems, chrome, navigate } = studio;
+  const { appLook, setAppLook, systems, chrome, navigate, workingSystem, place } = studio;
   const look = chromeOf(appLook, systems, MATERIAL_DEFAULT);
   const followed = look.system ?? systems[0]!;
   const published = asLive(followed);
+  // Theme edits the open system; another system opens in its own tab under Settings, which stays on Theme.
+  const editSystem = (id: string) => {
+    if (id === workingSystem.id && tabKind(place) !== "project") return onSection("theme");
+    navigate({ page: "themes", system: id });
+    onSection("theme");
+  };
+  const mode: Row = { section: "appearance", group: "mode", label: "Mode", description: "Light, dark, or as your Mac is set.", wide: true,
+    control: <Pictures label="Mode" value={studio.mode} onChange={value => studio.setMode(value as Mode)}
+      options={(["system", "light", "dark"] as const).map(value => ({ value, label: value === "system" ? "System" : value === "light" ? "Light" : "Dark", picture: <ModePicture mode={value} values={chrome.canvas} material={chrome.material} /> }))} /> };
+  const drawn: Row = { section: "appearance", group: "look", label: "Drawn in", description: "A system's published theme, or settings only the app uses.",
+    control: <Segmented size="sm" fullWidth aria-label="Drawn in" value={appLook.follow ? "system" : "own"}
+      onValueChange={value => setAppLook(value === "own" ? { ...appLook, follow: false, own: { ...chrome.canvas }, material: chrome.material } : { ...appLook, follow: true })}
+      items={[{ value: "system", label: "A system" }, { value: "own", label: "Its own look" }]} /> };
+  const following: Row[] = appLook.follow ? [
+    { section: "appearance", group: "look", label: "System", description: "Each project picks its own; this one draws the app.",
+      control: <Select size="sm" variant="soft" fullWidth aria-label="System" value={followed.id} onChange={event => setAppLook({ ...appLook, system: event.currentTarget.value, theme: undefined })}>
+        {systems.map(entry => <option key={entry.id} value={entry.id}>{entry.name} · v{liveOf(entry).version}</option>)}
+      </Select> },
+    { section: "appearance", group: "look", label: "Theme", description: `One of ${followed.name}'s published themes.`,
+      control: <Select size="sm" variant="soft" fullWidth aria-label="Theme" value={look.theme ?? ""} onChange={event => setAppLook({ ...appLook, theme: event.currentTarget.value })}>
+        {published.themes.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
+      </Select> },
+    { section: "appearance", group: "look", label: "Its settings",
+      description: `Type ${said("type", chrome.canvas.type)} · ${said("density", chrome.canvas.density)} density · ${said("radius", chrome.canvas.radius)} corner · ${said("accent", chrome.canvas.accent)} accent`,
+      control: <Button size="sm" variant="soft" tone="neutral" onClick={() => editSystem(followed.id)}>Edit in Theme</Button> },
+  ] : [];
+  const editable = tabKind(place) !== "project";
+  const theme: Row[] = [
+    { section: "theme", group: "editing", label: "System", description: "The system whose theme you are editing.",
+      control: <Select size="sm" variant="soft" fullWidth aria-label="Editing system" value={workingSystem.id} onChange={event => editSystem(event.currentTarget.value)}>
+        {systems.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
+      </Select> },
+    editable ? { section: "theme", group: "editing", label: "Theme", description: "Changes stay unpublished until you publish them.",
+      control: <Select size="sm" variant="soft" fullWidth aria-label="Editing theme" value={activeTheme(workingSystem).id} onChange={event => studio.chooseTheme(event.currentTarget.value)}>
+        {workingSystem.themes.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
+      </Select> }
+      : { section: "theme", group: "editing", label: `Edit ${workingSystem.name}`, description: "This project uses it as published; its themes are edited in its own tab.",
+        control: <Button size="sm" variant="soft" tone="neutral" onClick={() => editSystem(workingSystem.id)}>Open {workingSystem.name}</Button> },
+  ];
   return [
     { section: "general", group: "profile", label: "Name", description: "As the Sidebar's foot shows it.",
       control: <Input size="sm" variant="soft" fullWidth aria-label="Name" value={studio.profileName} onChange={event => studio.setProfileName(event.currentTarget.value)} /> },
-    { section: "appearance", group: "mode", label: "Mode", description: "Light, dark, or as your Mac is set.",
-      control: <Segmented size="sm" fullWidth aria-label="Mode" value={studio.mode} onValueChange={value => studio.setMode(value as Mode)}
-        items={[{ value: "system", label: "System" }, { value: "light", label: "Light" }, { value: "dark", label: "Dark" }]} /> },
-    { section: "appearance", group: "interface", label: "Follow a system", description: "Off: give the app settings of its own, below.",
-      control: <Switch aria-label="Follow a system" checked={appLook.follow}
-        onChange={() => setAppLook(appLook.follow ? { ...appLook, follow: false, own: { ...chrome.canvas } } : { ...appLook, follow: true })} /> },
-    { section: "appearance", group: "interface", label: "System", description: "Each project picks its own; this one draws the app.", disabled: !appLook.follow,
-      control: <Select size="sm" variant="soft" fullWidth aria-label="System" value={followed.id} disabled={!appLook.follow}
-        onChange={event => setAppLook({ ...appLook, system: event.currentTarget.value, theme: undefined })}>
-        {systems.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
-      </Select> },
-    { section: "appearance", group: "interface", label: "Theme", description: `One of ${followed.name}'s published themes.`, disabled: !appLook.follow,
-      control: <Select size="sm" variant="soft" fullWidth aria-label="Theme" value={look.theme ?? ""} disabled={!appLook.follow}
-        onChange={event => setAppLook({ ...appLook, theme: event.currentTarget.value })}>
-        {published.themes.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
-      </Select> },
-    { section: "appearance", group: "interface", label: `Edit ${followed.name}`, description: "Change its theme in the Library and publish it; the app follows.", disabled: !appLook.follow,
-      control: <Button size="sm" variant="soft" tone="neutral" disabled={!appLook.follow} onClick={() => navigate({ page: "themes", system: followed.id })}>Open {followed.name}</Button> },
+    mode, drawn, ...following, ...theme,
   ];
 }
 
-/**
- * Every Theme setting, as the app's own look: the registry's groups and their settings in the Inspector's order (Page,
- * Accent, Emphasis, Size, Shape, Stroke, Shadow, States, Effects), then Material. Light's and dark's pairs show in the mode
- * the app is in, as in the Inspector. A row shows what the app is drawn in; changing it gives the app that look as its own,
- * apart from the system (Follow a system off).
- */
-function ThemeGroups({ needle }: { needle: string }) {
-  const studio = useStudio();
-  const { appLook, setAppLook, chrome, theme } = studio;
+/** A look the theme groups set: its values and Material, and how each is written. */
+interface Look {
+  values: CanvasAxes;
+  material: MaterialState;
+  context: RowContext;
+  onBundle: (bundle: string) => void;
+  onValue: (key: string, value: string) => void;
+  lede: string;
+}
+
+/** Appearance's own look, while the app has one (Drawn in › Its own look). */
+function useAppLook(): Look | null {
+  const { appLook, setAppLook, chrome, theme } = useStudio();
+  if (appLook.follow) return null;
   const own = (canvas: Record<string, string>, material: MaterialState) => setAppLook({ ...appLook, follow: false, own: canvas, material });
-  const context: RowContext = {
-    values: chrome.canvas, mode: theme, exact: false, layout: () => "list",
-    set: changes => own({ ...chrome.canvas, ...changes }, chrome.material),
+  return {
+    values: chrome.canvas, material: chrome.material, lede: "The app's own look, apart from any system.",
+    context: { values: chrome.canvas, mode: theme, exact: false, layout: () => "list", set: changes => own({ ...chrome.canvas, ...changes }, chrome.material) },
+    onBundle: bundle => own({ ...chrome.canvas, ...(MATERIAL_BUNDLES[bundle]?.layers ?? {}) }, { bundle, overrides: {} }),
+    onValue: (key, value) => {
+      const { [key]: _, ...rest } = chrome.material.overrides;
+      own(chrome.canvas, { ...chrome.material, overrides: value === bundleValue(chrome.material.bundle, key) ? rest : { ...rest, [key]: value } });
+    },
   };
+}
+
+/** Theme's look: the open system's theme as the Inspector edits it; none in a project's tab, which shows it as published. */
+function useThemeLook(): Look | null {
+  const { canvas, material, setCanvas, setMaterialBundle, setMaterialValue, theme, brand, place, appLook, workingSystem } = useStudio();
+  if (tabKind(place) === "project") return null;
+  const followed = appLook.follow && (appLook.system || AREA_ID) === workingSystem.id;
+  return {
+    values: canvas, material,
+    lede: followed ? `The app is drawn in ${workingSystem.name}: it changes when you publish.` : `Changes stay in ${workingSystem.name}'s working copy until you publish them.`,
+    context: { values: canvas, mode: theme, brand: brandStyle(brand), layout: () => "list", set: changes => { for (const [name, value] of Object.entries(changes)) setCanvas(name as keyof CanvasAxes, value); } },
+    onBundle: setMaterialBundle, onValue: setMaterialValue,
+  };
+}
+
+/** Settings drawn as pictures: Density and Corner (Mode is Appearance's own). */
+const PICTURED = new Set(["density", "radius"]);
+
+/**
+ * Every Theme setting of a look: the registry's groups and their settings in the Inspector's order (Page, Accent, Emphasis,
+ * Size, Shape, Stroke, Shadow, States, Effects), then Material. Light's and dark's pairs show in the mode the app is in, as
+ * in the Inspector.
+ */
+function ThemeGroups({ look, needle, prefix }: { look: Look; needle: string; prefix?: string }) {
+  const { theme } = useStudio();
   const matches = (words: string) => !needle || words.toLowerCase().includes(needle);
   const groups = SETTING_GROUPS.map(group => {
     const axes = (group.settings as readonly string[]).filter(axis => axis in CANVAS_DEFAULTS && inMode(axis, theme)).filter(axis => {
@@ -166,32 +269,59 @@ function ThemeGroups({ needle }: { needle: string }) {
     return { heading: group.heading, rows };
   }).filter(group => group.rows.length);
   const material = matches(`material ${MATERIAL_LEVERS.map(lever => lever.label).join(" ")}`);
-  const followed = chromeOf(appLook, studio.systems, MATERIAL_DEFAULT).system;
-  const lede = appLook.follow && followed ? `Shown as ${followed.name} sets them. Changing one gives the app its own look, apart from the system.` : "The app's own look, apart from any system.";
+  const title = (heading: string) => prefix ? `${prefix} · ${heading}` : heading;
   return (
     <RowFrame.Provider value="settings">
       {groups.map((group, at) => (
-        <section key={group.heading} className="studio-settings__group" aria-label={group.heading}>
-          <SectionHeading className="studio-section-heading" title={group.heading} lede={at === 0 && !needle ? lede : undefined} />
+        <section key={group.heading} className="studio-settings__group" aria-label={title(group.heading)}>
+          <SectionHeading className="studio-section-heading" title={title(group.heading)} lede={at === 0 && !needle ? look.lede : undefined} />
           <div className="studio-settings__rows">
-            {group.rows.map(axis => <SettingRow key={axis} axis={axis} context={context} />)}
+            {group.rows.map(axis => PICTURED.has(axis) ? <PictureRow key={axis} axis={axis} look={look} /> : <SettingRow key={axis} axis={axis} context={look.context} />)}
           </div>
         </section>
       ))}
       {material ? (
-        <section className="studio-settings__group" aria-label="Material">
-          <SectionHeading className="studio-section-heading" title="Material" />
+        <section className="studio-settings__group" aria-label={title("Material")}>
+          <SectionHeading className="studio-section-heading" title={title("Material")} />
           <div className="studio-settings__rows">
-            <MaterialRows canvas={chrome.canvas} material={chrome.material}
-              onBundle={bundle => own({ ...chrome.canvas, ...(MATERIAL_BUNDLES[bundle]?.layers ?? {}) }, { bundle, overrides: {} })}
-              onValue={(key, value) => {
-                const { [key]: _, ...rest } = chrome.material.overrides;
-                own(chrome.canvas, { ...chrome.material, overrides: value === bundleValue(chrome.material.bundle, key) ? rest : { ...rest, [key]: value } });
-              }} />
+            <MaterialRows canvas={look.values} material={look.material} onBundle={look.onBundle} onValue={look.onValue} />
           </div>
         </section>
       ) : null}
-      {needle && !groups.length && !material ? <p className="studio-muted">No theme setting matches “{needle}”.</p> : null}
     </RowFrame.Provider>
   );
+}
+
+/** A setting whose every choice is a picture of it, drawn in that choice's own scope over the look's other settings. */
+function PictureRow({ axis, look }: { axis: string; look: Look }) {
+  const control = GALLERY_CONTROLS.find(entry => entry.axis === axis)!;
+  const value = look.values[axis as keyof CanvasAxes];
+  return (
+    <SettingsRow label={control.label} description={control.hint} wide>
+      <Pictures label={control.label} value={value} onChange={next => look.context.set({ [axis]: next })} ratio={ratioOf(axis)} min={axis === "radius" ? 64 : undefined}
+        options={control.items.map(item => ({ value: item.value, label: item.label.replace(/ \(Default\)$/, ""),
+          picture: <span className="studio-settings__scope" {...canvasAttributes({ ...look.values, [axis]: item.value }, look.material)}><ChoicePreview axis={axis} preset={item.value} /></span> }))} />
+    </SettingsRow>
+  );
+}
+
+/**
+ * Choices as pictures (Untitled UI's interface theme, macOS Appearance): Radio's soft preview cards (a control fill, so they read on the rows' plate), the picture centred, the
+ * name under it, the chosen card's selected stroke the mark. The row names the group, so its legend is for assistive tech.
+ */
+function Pictures({ label, value, onChange, options, ratio, min }: { label: string; value: string; onChange: (value: string) => void; options: ReadonlyArray<{ value: string; label: string; picture: ReactNode }>; ratio?: string; min?: number }) {
+  const style = { "--area-choice-min": `${min ?? 112}px`, ...(ratio ? { "--area-choice-ratio": ratio } : {}) } as CSSProperties;
+  return (
+    <RadioGroup label={<span className="area-sr-only">{label}</span>} orientation="horizontal" value={value} onValueChange={onChange} className="studio-settings__pictures" style={style}>
+      {options.map(option => <Radio key={option.value} variant="soft" layout="preview" value={option.value} label={option.label} leadingVisual={option.picture} />)}
+    </RadioGroup>
+  );
+}
+
+/** Mode: the app's window in light or dark, in the app's look; System shows both, halved. */
+function ModePicture({ mode, values, material }: { mode: Mode; values: CanvasAxes; material: MaterialState }) {
+  const window = (theme: "light" | "dark") => (
+    <span className="studio-settings__scope" {...canvasAttributes(values, material)} data-area-theme={theme}><ChoicePreview axis="theme" preset={theme} /></span>
+  );
+  return mode === "system" ? <span className="studio-settings__split">{window("light")}{window("dark")}</span> : window(mode);
 }
