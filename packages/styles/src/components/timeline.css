@@ -55,7 +55,7 @@
     inset-block: calc(var(--_marker) / 2 + var(--_mark) / 2 + var(--_line-gap)) calc(var(--_marker) / -2 + var(--_mark) / 2 + var(--_line-gap));
     inset-inline-start: calc((var(--_marker) - var(--_line)) / 2);
     inline-size: var(--_line);
-    background: var(--area-border-divider); /* spec: Figma rgb(230, 230, 230) */
+    background: var(--area-edge-dividers); /* spec: Figma rgb(230, 230, 230) */
   }
 
   .area-timeline-item__marker {

@@ -261,7 +261,8 @@
     --area-fill-track-hover: light-dark(oklab(from var(--area-fill-track-hover-page) calc(l - var(--area-edge-shift-light)) a b), oklab(from var(--area-fill-track-hover-page) calc(l + var(--area-edge-shift-dark)) a b));
     --area-input-edge: var(--area-edge-control);
     --area-input-edge-hover: var(--area-edge-control-hover);
-    --area-input-edge-soft: color-mix(in srgb, transparent, var(--area-edge-control) calc(var(--area-contrast-more) * 100%));
+    /* A soft field's edge: the Fields stroke group's, translucent, so it keeps its distance on any ground (2026-10-30). */
+    --area-input-edge-soft: var(--area-edge-fields);
     --area-textarea-edge: var(--area-input-edge);
     --area-textarea-edge-hover: var(--area-input-edge-hover);
     --area-textarea-edge-soft: var(--area-input-edge-soft);
@@ -296,7 +297,8 @@
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
-    [data-area-stroke], [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
+    [data-area-stroke], [data-area-stroke-cards], [data-area-stroke-blocks], [data-area-stroke-callouts], [data-area-stroke-floating], [data-area-stroke-regions], [data-area-stroke-dividers], [data-area-stroke-fields], [data-area-stroke-buttons], [data-area-stroke-options], [data-area-stroke-tracks], [data-area-stroke-tags], [data-area-stroke-media],
+    [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
@@ -321,7 +323,8 @@
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
-    [data-area-stroke], [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
+    [data-area-stroke], [data-area-stroke-cards], [data-area-stroke-blocks], [data-area-stroke-callouts], [data-area-stroke-floating], [data-area-stroke-regions], [data-area-stroke-dividers], [data-area-stroke-fields], [data-area-stroke-buttons], [data-area-stroke-options], [data-area-stroke-tracks], [data-area-stroke-tags], [data-area-stroke-media],
+    [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
@@ -346,7 +349,8 @@
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
-    [data-area-stroke], [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
+    [data-area-stroke], [data-area-stroke-cards], [data-area-stroke-blocks], [data-area-stroke-callouts], [data-area-stroke-floating], [data-area-stroke-regions], [data-area-stroke-dividers], [data-area-stroke-fields], [data-area-stroke-buttons], [data-area-stroke-options], [data-area-stroke-tracks], [data-area-stroke-tags], [data-area-stroke-media],
+    [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
@@ -371,7 +375,8 @@
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
-    [data-area-stroke], [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
+    [data-area-stroke], [data-area-stroke-cards], [data-area-stroke-blocks], [data-area-stroke-callouts], [data-area-stroke-floating], [data-area-stroke-regions], [data-area-stroke-dividers], [data-area-stroke-fields], [data-area-stroke-buttons], [data-area-stroke-options], [data-area-stroke-tracks], [data-area-stroke-tags], [data-area-stroke-media],
+    [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
@@ -397,7 +402,8 @@
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
-    [data-area-stroke], [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
+    [data-area-stroke], [data-area-stroke-cards], [data-area-stroke-blocks], [data-area-stroke-callouts], [data-area-stroke-floating], [data-area-stroke-regions], [data-area-stroke-dividers], [data-area-stroke-fields], [data-area-stroke-buttons], [data-area-stroke-options], [data-area-stroke-tracks], [data-area-stroke-tags], [data-area-stroke-media],
+    [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
     [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
     [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
     [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],

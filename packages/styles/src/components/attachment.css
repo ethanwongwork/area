@@ -13,7 +13,7 @@
     /* Concentric with the Composer that holds it: the composer's corner less its inset is its send button's corner
        (composer.css), Codex's rule (composer radius − inset, less 4 in its own scale). */
     --_attachment-radius: min(var(--area-radius-control-md), max(var(--area-radius-min), round(down, calc(var(--area-control-md) * var(--area-radius-factor)), 2px)));
-    --_attachment-edge: var(--area-border-card);
+    --_attachment-edge: var(--area-edge-cards);
     position: relative;
     flex: none;
     inline-size: var(--_attachment-size);
@@ -38,7 +38,7 @@
   /* The status sets the edge: the card edge while it is fine or on its way, the fields' invalid edge when it failed
      (Input, File upload). */
   .area-attachment--ready,
-  .area-attachment--uploading { --_attachment-edge: var(--area-border-card); }
+  .area-attachment--uploading { --_attachment-edge: var(--area-edge-cards); }
   .area-attachment--error { --_attachment-edge: var(--area-input-invalid-color); }
   .area-attachment__image { display: block; inline-size: 100%; block-size: 100%; border-radius: inherit; object-fit: cover; }
 

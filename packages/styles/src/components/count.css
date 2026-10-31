@@ -70,6 +70,8 @@
     --_count-plate: var(--area-bg-mark);
     /* The type ramp's one exception: a label on a fill is 500 (Badge, Button solid). */
     --_count-weight: var(--area-weight-strong);
+    /* The Tags stroke group's edge, drawn inside so the count keeps its size (axes/stroke-groups.ts, 2026-10-30). */
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-tags);
   }
 
   /* The text a screen reader hears after the number ("3 unread"). */

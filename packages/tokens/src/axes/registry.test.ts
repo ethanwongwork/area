@@ -35,7 +35,9 @@ describe("axis registry", () => {
         // Danger hover, 2026-10-23 (axes/states.ts).
         "danger-hover",
         // Feedback, 2026-10-24 (axes/feedback.ts).
-        "feedback"].sort(),
+        "feedback",
+        // Stroke groups, 2026-10-30 (axes/stroke-groups.ts).
+        "stroke-cards", "stroke-blocks", "stroke-callouts", "stroke-floating", "stroke-regions", "stroke-dividers", "stroke-fields", "stroke-buttons", "stroke-options", "stroke-tracks", "stroke-tags", "stroke-media"].sort(),
     );
   });
 });

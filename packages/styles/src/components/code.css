@@ -219,7 +219,7 @@
     flex-direction: column;
     /* spec (audit S7a): Card's edge for a block standing alone; was border-decorative #f3. It has no shadow to carry
        it, so the frame is `stroke-width`, as Table's and Composer's (consistency pass 2026-10-12). */
-    border: var(--area-stroke-width) solid var(--area-border-card);
+    border: var(--area-stroke-width) solid var(--area-edge-blocks);
     /* spec: concentric with the header's copy action at both sizes (md 11, sm 10; owner, 2026-10-22 and round 11);
        ChatGPT's 24 wraps a 48 header with 36 round buttons 7 in, which Area doesn't have. Code stays 14/20. */
     border-radius: var(--_code-radius);
@@ -236,7 +236,7 @@
     border: 0;
     border-radius: 0;
     /* The one rule: what is above it is rendered, what is below it is source. */
-    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-start: var(--area-border-width) solid var(--area-edge-dividers);
   }
 
   /*
@@ -608,7 +608,8 @@
   .area-code-block--outline { --_code-ground: var(--area-bg-code); }
   .area-code-block--soft {
     --_code-ground: var(--area-input-bg-soft);
-    border-color: var(--area-input-edge-soft);
+    /* Soft is the fill alone: no edge until Contrast More (a soft field's old edge; soft fields now take the Fields group's). */
+    border-color: color-mix(in srgb, transparent, var(--area-edge-control) calc(var(--area-contrast-more) * 100%));
   }
 
   /*

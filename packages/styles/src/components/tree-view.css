@@ -173,12 +173,12 @@
     inset-block: calc(-1 * var(--area-ui-row-gap)) 0;
     inset-inline-start: round(down, calc(var(--_tree-start) + var(--_tree-chevron) / 2 - 0.5px), 1px);
     inline-size: calc(var(--_tree-depth) * var(--_tree-step));
-    background-image: repeating-linear-gradient(to right, var(--area-border-decorative) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step));
+    background-image: repeating-linear-gradient(to right, var(--area-edge-dividers) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step));
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--area-duration-fast) var(--area-ease-out);
   }
-  .area-tree-view--guides [role="treeitem"]:dir(rtl)::before { background-image: repeating-linear-gradient(to left, var(--area-border-decorative) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step)); }
+  .area-tree-view--guides [role="treeitem"]:dir(rtl)::before { background-image: repeating-linear-gradient(to left, var(--area-edge-dividers) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step)); }
   .area-tree-view--guides:focus-within [role="treeitem"]::before { opacity: 1; transition-duration: 0s; }
   @media (hover: hover) { .area-tree-view--guides:hover [role="treeitem"]::before { opacity: 1; transition-duration: 0s; } }
   /*

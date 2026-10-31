@@ -105,7 +105,7 @@
   .area-checkbox--soft,
   .area-radio--soft {
     --_card-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense) - var(--area-stroke-width)); /* spec: 12 to the content, compact 8, border counted once (shadcn 11) */
-    --_card-edge: var(--area-edge-control); /* spec: shadcn ≈ #e3; was border-decorative #f3 */
+    --_card-edge: var(--area-edge-options); /* spec: shadcn ≈ #e3; was border-decorative #f3 */
     --_card-edge-hover: var(--area-edge-control-hover);
     box-sizing: border-box;
     inline-size: 100%;
@@ -150,8 +150,9 @@
    */
   .area-checkbox--soft,
   .area-radio--soft {
-    --_card-edge: transparent;
-    --_card-edge-hover: transparent;
+    /* The Options stroke group's edge (axes/stroke-groups.ts, 2026-10-30), at rest and under the pointer. */
+    --_card-edge: var(--area-edge-options);
+    --_card-edge-hover: var(--area-edge-options);
     background-color: var(--area-bg-component);
   }
   @media (hover: hover) { .area-checkbox--soft:hover:not([data-disabled], :has(> .area-checkbox__control:checked)),

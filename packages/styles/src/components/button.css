@@ -368,8 +368,10 @@
     --_fg: var(--_tone-fg);
     /* Its fill a step darker; Contrast takes it to the outline Button's line by the level, as every edge (owner,
        2026-10-18: some components "dont visibly change at all"). */
-    --_border: color-mix(in oklab, var(--_surface-hover), var(--_line) calc(var(--area-contrast-more) * 100%));
-    --_border-hover: var(--_surface-active);
+    /* The Buttons stroke group's edge (axes/stroke-groups.ts, 2026-10-30), kept under the pointer while the fill steps;
+       Contrast takes it on toward the 3:1 stroke as every edge. Was its fill a step darker, an edge nothing else used. */
+    --_border: var(--area-edge-buttons);
+    --_border-hover: var(--area-edge-buttons);
   }
 
   /*

@@ -20,6 +20,7 @@ import { RADIUS_AXIS } from "./radius.ts";
 import { REST_SHADOW_AXIS, SURFACE_AXIS } from "./surface.ts";
 import { ELEVATION_AXIS } from "./elevation.ts";
 import { DEPTH_AXES } from "./depth.ts";
+import { STROKE_GROUP_AXES } from "./stroke-groups.ts";
 import { STATE_AXES } from "./states.ts";
 import { DENSITY_AXIS } from "./density.ts";
 import { TYPE_AXIS } from "./type-size.ts";
@@ -63,6 +64,8 @@ export const AXES: AxisDefinition[] = [
   ELEVATION_AXIS,
   // Edge and Depth's other controls (2026-10-18): Stroke, Rest and Field shadow, Shadow size, Softness, Light, Shadow colour.
   ...DEPTH_AXES,
+  // Stroke groups (2026-10-30): an edge amount for each of twelve groups of components, under Edge contrast.
+  ...STROKE_GROUP_AXES,
   // Interaction states (2026-10-21): the focus ring, and the stroke, shadow and fill scales for hover, selected and pressed.
   ...STATE_AXES,
   MOTION_AXIS,
@@ -88,7 +91,8 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
   { heading: "Emphasis", settings: ["action", "selection", "status-colours", "contrast"] },
   { heading: "Size", settings: ["type", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },
-  { heading: "Stroke", settings: ["surface", "stroke"] },
+  // Width and the master Edge contrast, then each group's amount (owner, 2026-10-30, the stroke review).
+  { heading: "Stroke", settings: ["surface", "stroke", "stroke-cards", "stroke-blocks", "stroke-callouts", "stroke-floating", "stroke-regions", "stroke-dividers", "stroke-fields", "stroke-buttons", "stroke-options", "stroke-tracks", "stroke-tags", "stroke-media"] },
   { heading: "Shadow", settings: ["elevation", "shadow-resting", "shadow-field", "shadow-rest", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] },
   { heading: "States", settings: ["fill-hover", "stroke-hover", "shadow-hover", "fill-selected", "selected-stroke", "selected-tint", "fill-pressed", "focus-ring", "danger-hover"] },
   { heading: "Effects", settings: ["motion", "easing", "feedback"] },

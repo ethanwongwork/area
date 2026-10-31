@@ -18,6 +18,7 @@ import { ABSTRACT_BOARD, AbstractBoard } from "../content/examples/abstract-boar
 import { MobileScreen } from "../content/examples/mobile.tsx";
 import { SettingsScreen } from "../content/examples/settings.tsx";
 import { HairlineScreen } from "../content/examples/hairline.tsx";
+import { StrokeGroupsScreen } from "../content/examples/stroke-groups.tsx";
 
 export const EXAMPLES = [
   {
@@ -67,6 +68,14 @@ export const EXAMPLES = [
     families: ["Empty state", "Button", "Segmented"],
     gaps: ["Empty state has no figure slot: its icon slot holds a 16 glyph, so the figure sits above it.", "The figures are a third-party package on trial, not part of Area."],
     Screen: HairlineScreen,
+  },
+  {
+    id: "stroke-groups",
+    label: "Stroke groups",
+    description: "Every stroke group (Inspector › Stroke), each group's members in one cell at the Canvas's settings (2026-10-30).",
+    families: ["Card", "Panel", "Menu", "Popover", "Dialog", "Alert", "Toast", "Code block", "Table", "Input", "Select", "Button", "Segmented", "Slider", "Switch", "Progress", "Radio", "Badge", "Chip", "Count", "Kbd", "Avatar"],
+    gaps: [],
+    Screen: StrokeGroupsScreen,
   },
 ] as const;
 

@@ -33,7 +33,7 @@
   .area-toolbar--surface {
     --_toolbar-inset: var(--area-ui-cluster); /* spec: 8, compact 6 (compact pass) */
     --_toolbar-bg: var(--area-bg-surface);
-    --_toolbar-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-border-float), var(--area-shadow-float);
+    --_toolbar-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-edge-floating), var(--area-shadow-float);
   }
   .area-toolbar--sm { --_height: var(--area-control-sm); --_toolbar-icon: var(--area-icon-sm); --_toolbar-text: var(--area-control-sm-text); --_toolbar-leading: var(--area-control-sm-leading); --_toolbar-radius: var(--area-radius-control-sm); }
   .area-toolbar--md { --_height: var(--area-control-md); --_toolbar-icon: var(--area-icon-md); --_toolbar-text: var(--area-control-md-text); --_toolbar-leading: var(--area-control-md-leading); --_toolbar-radius: var(--area-radius-control-md); }
@@ -67,7 +67,7 @@
   /* Owner (2026-09-27): keep the command height, lighter stroke: the bar's seam role, as the rules
      inside Panel and Code block (a rule is never heavier than the surface it divides). A seam in a container:
      `border-width`, as those rules (consistency pass 2026-10-12; was `stroke-width`). */
-  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-border-width); block-size: var(--_item); background: var(--area-border-decorative); }
+  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-border-width); block-size: var(--_item); background: var(--area-edge-dividers); }
   .area-toolbar--vertical .area-toolbar__separator { inline-size: var(--_item); block-size: var(--area-border-width); }
   .area-toolbar:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
 }

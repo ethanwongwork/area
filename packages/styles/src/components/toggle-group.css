@@ -41,7 +41,7 @@
        layer (bg-subtle, the old paint) equals the page at layer contrast 0 and left only the ring (Layers sweep
        2026-10-16). Light 100 + 4 is the same #f7f7f7; dark is the rest fill, near the #28 groove the spec measured. */
     background-color: var(--area-bg-component);
-    outline: var(--area-border-width) solid var(--area-border-decorative);
+    outline: var(--area-border-width) solid var(--area-edge-buttons);
     outline-offset: calc(-1 * var(--area-border-width));
   }
   .area-toggle-group--soft > .area-button {

@@ -49,6 +49,7 @@
  * drawing is laid out at 1x and shrunk whole, so its parts keep their proportions (half pixels included). Every drawing is shown, not used: its tile is inert, and the
  * drawing is hidden from assistive tech.
  */
+import { StrokeLab } from "./content/examples/stroke-groups.tsx";
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import {
   Avatar, Badge, Button, Card, CardContent, CardDescription, CardTitle, Checkbox, Chip, Count, Input, MenuItem, Nav,
@@ -309,6 +310,19 @@ const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
   feedback: { scale: 1.5, subject: LoopingPress },
   surface: { scale: 1.5, subject: CardSurface },
   stroke: { scale: 1.5, subject: CardWithField },
+  // Each stroke group shows its own members (content/examples/stroke-groups.tsx), at the scale Shadow's settings use.
+  "stroke-cards": { scale: 1.25, subject: () => <StrokeLab only="cards" /> },
+  "stroke-blocks": { scale: 1.25, subject: () => <StrokeLab only="blocks" /> },
+  "stroke-callouts": { scale: 1.25, subject: () => <StrokeLab only="callouts" /> },
+  "stroke-floating": { scale: 1.25, subject: () => <StrokeLab only="floating" /> },
+  "stroke-regions": { scale: 1.25, subject: () => <StrokeLab only="regions" /> },
+  "stroke-dividers": { scale: 1.25, subject: () => <StrokeLab only="dividers" /> },
+  "stroke-fields": { scale: 1.25, subject: () => <StrokeLab only="fields" /> },
+  "stroke-buttons": { scale: 1.25, subject: () => <StrokeLab only="buttons" /> },
+  "stroke-options": { scale: 1.25, subject: () => <StrokeLab only="options" /> },
+  "stroke-tracks": { scale: 1.25, subject: () => <StrokeLab only="tracks" /> },
+  "stroke-tags": { scale: 1.25, subject: () => <StrokeLab only="tags" /> },
+  "stroke-media": { scale: 1.25, subject: () => <StrokeLab only="media" /> },
   "shadow-rest": { scale: 1.25, subject: CardSurface },
   "shadow-resting": { scale: 1.25, subject: CardSurface },
   "shadow-field": { scale: 1.25, subject: FieldSurface },

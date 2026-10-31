@@ -59,7 +59,7 @@
   /* The track is the parts in a row, 2 apart so the ground shows between them (dataviz: a surface gap separates
      stacked segments, never a stroke); its own fill draws only what is left of the range. Its pill rounds the outer
      ends; the inner ends stay square, so a short part is a block, not a dot. */
-  .area-meter--segmented > .area-meter__track { display: flex; gap: var(--area-space-2); /* spec: dataviz 2px surface gap */ background-color: transparent; }
+  .area-meter--segmented > .area-meter__track { display: flex; gap: var(--area-space-2); /* spec: dataviz 2px surface gap */ background-color: transparent; outline: none; /* parts, not a trough: no Tracks edge */ }
   .area-meter__segment,
   .area-meter__rest { flex: 0 1 0; min-inline-size: var(--area-space-2); block-size: 100%; }
   .area-meter__rest { background-color: var(--_progress-track, var(--area-fill-track)); }

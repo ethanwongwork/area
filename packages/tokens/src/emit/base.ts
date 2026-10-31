@@ -15,6 +15,7 @@ import { MOTION_AXIS, duration } from "../axes/motion.ts";
 import { SOFT_EDGE, SOFT_EDGE_FILTER } from "../axes/surface.ts";
 import { type GroundEdge, contrastMix, layerCss, onGround, rawEdge, strokeEdge, strokeEdgeHover } from "../color/layers.ts";
 import { depthDerived } from "../axes/depth.ts";
+import { strokeGroupDerived } from "../axes/stroke-groups.ts";
 import { accentDerived, statusDerived } from "../axes/accent.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 import { brandDefaultCss } from "../semantic/brand.ts";
@@ -155,6 +156,8 @@ function derivedOnPage(): Record<string, string> {
     // The Elevation roles, from Depth and the Edge and Depth levers (axes/depth.ts): every input is an axis, so they
     // re-derive wherever one is set.
     ...depthDerived(),
+    // Each stroke group's edge (axes/stroke-groups.ts): its amount and Edge contrast over what is under it.
+    ...strokeGroupDerived(),
     // The accent's paint (axes/accent.ts): each colour at the Accent strength, the solid and its hover at the Solid step,
     // from the Accent setting's full-strength tokens, so a subtree that sets any of the three re-derives.
     ...accentDerived(),
@@ -280,7 +283,9 @@ function derivedOnPage(): Record<string, string> {
     [`${PREFIX}input-edge-hover`]: `var(${PREFIX}edge-control-hover)`,
     // A soft field's resting edge: none (the fill carries it, as Figma's) at standard contrast, and the strong control
     // edge under increased contrast, where a required boundary targets 3:1 (CONTRAST.md); the fill alone read 1.07:1.
-    [`${PREFIX}input-edge-soft`]: `color-mix(in srgb, transparent, var(${PREFIX}edge-control) calc(var(${PREFIX}contrast-more) * 100%))`,
+    // A soft field's edge is the Fields stroke group's (axes/stroke-groups.ts, 2026-10-30): its amount over the field, and
+    // the strong stroke under Contrast More as before. Was none until Contrast More.
+    [`${PREFIX}input-edge-soft`]: `var(${PREFIX}edge-fields)`,
     [`${PREFIX}input-text`]: `var(${PREFIX}fg-default)`,
     [`${PREFIX}input-placeholder`]: `var(${PREFIX}fg-placeholder)`,
     [`${PREFIX}input-icon`]: `var(${PREFIX}fg-muted)`,
@@ -355,7 +360,8 @@ function derivedOnPage(): Record<string, string> {
     // edge, black 10%; owner 2026-10-12, reversing the solid #f7 edge of 2026-09-28, which merged with light
     // grounds on straight edges and showed only as fringe at the corners).
     // The swatch ring steps with every other stroke (owner, 2026-10-18), to the strong stroke at More.
-    [`${PREFIX}token-swatch-ring`]: contrastMix("light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1))", `var(${PREFIX}stroke-control)`),
+    // A swatch's hairline is the Media stroke group's (axes/stroke-groups.ts, 2026-10-30; was 10% black or white at 4).
+    [`${PREFIX}token-swatch-ring`]: `var(${PREFIX}edge-media)`,
     // Heights, rows, gaps, insets and marks from the type size and the density (axes/type-size.ts,
     // axes/density.ts): live calc, so a subtree that sets either re-derives them here.
     ...sizeDerivations(),

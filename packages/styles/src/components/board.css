@@ -146,7 +146,7 @@
        card; its lift is the Elevation axis's resting role (1.5% at the default step, none at 0; was Notion's
        0 4 12 / 0 1 2 at 2.7% / 2%). */
     box-shadow: var(--area-shadow-edge), var(--area-shadow-resting),
-      0 0 0 var(--area-border-width) color-mix(in oklab, color-mix(in oklab, var(--_color, var(--area-fg-default)) 8%, transparent), var(--_ring-strong, var(--area-border-card)) calc(var(--area-contrast-more) * 100%)); /* spec; Contrast takes it to the card frame (the strong stroke at More), or the colour's ink in a colour (2026-10-18) */
+      0 0 0 var(--area-border-width) color-mix(in oklab, color-mix(in oklab, var(--_color, var(--area-fg-default)) calc(var(--area-stroke-cards-step) * 2.5% * var(--area-stroke-strength)), transparent), var(--_ring-strong, var(--area-border-card)) calc(var(--area-contrast-more) * 100%)); /* spec; Contrast takes it to the card frame (the strong stroke at More), or the colour's ink in a colour (2026-10-18) */
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
     user-select: none;
   }

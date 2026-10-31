@@ -26,7 +26,7 @@
        off thumb's ring take the strong stroke, so the thumb still reads on its track. */
     --_off: var(--area-fill-track);
     --_off-hover: var(--area-fill-track-hover);
-    --_edge: var(--area-edge-control);
+    --_edge: var(--area-edge-tracks);
     --_thumb-ring: color-mix(in srgb, transparent, var(--area-stroke-control) calc(var(--area-contrast-more) * 100%));
     display: inline-flex;
     align-items: flex-start;

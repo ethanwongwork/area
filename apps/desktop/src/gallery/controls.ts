@@ -5,13 +5,15 @@
  * the Inspector's Canvas section and the saved Canvas (studio.tsx restoreCanvas, which keeps only
  * values listed here) both read this list.
  */
-import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, PILL_SHAPES, SETTING_GROUPS, SETTINGS, settingLabel } from "@area/tokens/config";
+import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, PILL_SHAPES, SETTING_GROUPS, SETTINGS, STROKE_GROUPS, settingLabel } from "@area/tokens/config";
 import TOKENS from "@area/tokens/tokens.json";
 /** Edge and Depth's controls besides Stroke width (Surface) and Shadow (Elevation) (@area/tokens axes/depth.ts), and the
  * interaction states (axes/states.ts), each one `data-area-<axis>`. */
 export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color",
   // The interaction states (axes/states.ts, depth.ts; owner 2026-10-21), read from the registry the same way.
-  "stroke-hover", "selected-stroke", "focus-ring", "shadow-hover", "fill-hover", "fill-selected", "fill-pressed", "selected-tint", "danger-hover"] as const;
+  "stroke-hover", "selected-stroke", "focus-ring", "shadow-hover", "fill-hover", "fill-selected", "fill-pressed", "selected-tint", "danger-hover",
+  // The stroke groups (axes/stroke-groups.ts; owner 2026-10-30): an edge amount per group of components.
+  "stroke-cards", "stroke-blocks", "stroke-callouts", "stroke-floating", "stroke-regions", "stroke-dividers", "stroke-fields", "stroke-buttons", "stroke-options", "stroke-tracks", "stroke-tags", "stroke-media"] as const;
 export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 
 export interface GalleryControl {
@@ -145,7 +147,9 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   { axis: "pills", kind: "chips", label: label("pills"), hint: "On: a pill. Off: follows Corner.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : title(value) })) },
   // Stroke and Shadow: lengths in px, strengths as a share of the strongest.
   bar("surface", value => `${value}px`, { hint: "The line round cards, panels and floating surfaces" }),
-  bar("stroke", value => percent(value, 8), { hint: "How dark every edge is against its ground" }),
+  bar("stroke", value => percent(value, 8), { hint: "How dark every edge is against its ground: the master over the groups below" }),
+  // Each group's amount (axes/stroke-groups.ts): steps of 2.5% of the text colour, 0 none, 4 is 10%, 8 is 20%.
+  ...STROKE_GROUPS.map(group => bar(`stroke-${group.id}` as GalleryControl["axis"], value => value === "0" ? "None" : `${Number(value) * 2.5}%`, { hint: group.hint })),
   bar("elevation", value => percent(value, 8), { hint: "Menus, popovers, tooltips and dialogs" }),
   bar("shadow-resting", value => percent(value, 8), { hint: "Cards, panels and raised thumbs at rest" }),
   bar("shadow-field", value => percent(value, 8), { hint: "Outline fields, select triggers, outline and soft buttons" }),

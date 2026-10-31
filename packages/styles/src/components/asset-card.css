@@ -82,7 +82,7 @@
     overflow: clip;
     /* The card's edge and the frame's are one stroke (owner, 2026-10-21: "i think they should be the same"): the divider
        role, #e2 light, #333 dark. Was Card's `border-card` (#ee light), lighter than the frame it holds. */
-    border: var(--_edge) solid var(--area-border-divider);
+    border: var(--_edge) solid var(--area-edge-cards);
     border-radius: var(--_corner);
     /* The tile tone: Card tone (owner, 2026-10-22), Auto the recessed role (neutral/50 at the default settings, Table's
        header fill), so it follows Neutral, Ground, Layers and dark (owner, round 59: the round-58 mix to #fafafa was a
@@ -144,7 +144,7 @@
     /* A frame with no shadow to carry it (DESIGN_SYSTEM.md, Strokes: Table's frame): `stroke-width` in `border-divider`.
        It was the card's own edge (`border-card` at `border-width`, the designs' #eee), 1.08:1 on the card's recessed
        ground in light, so it read too thin (owner, 2026-10-21); now 1.21:1, and dark is unchanged (both roles #333). */
-    border: var(--area-stroke-width) solid var(--area-border-divider);
+    border: var(--area-stroke-width) solid var(--area-edge-media);
     border-radius: var(--_frame-corner);
     /* The frame tone (color/layers.ts FRAME_SAME): the page tone, the ground every component is drawn for, so a raised
        surface inside (Card, Menu, Dialog) lifts from it as in an app (owner, 2026-10-22, the layer map: on the raised tone a
@@ -214,7 +214,7 @@
      2026-10-27: white on the card's tone with no edge, a component or a card thumbnail floated loose and the 2 × 2 read
      as two images and two stray marks). Images keep no edge (owner, round 59: "dont put any strokes around them"); a
      containerless card's frame shows no edge at rest, and neither do its cells. Inset, so the cell keeps its size. */
-  .area-asset-card__cell:has(> .area-asset-card__thumb) { box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-divider); }
+  .area-asset-card__cell:has(> .area-asset-card__thumb) { box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-media); }
   .area-asset-card--containerless .area-asset-card__cell { box-shadow: none; }
   .area-asset-card__cell > img { display: block; inline-size: 100%; block-size: 100%; min-block-size: 0; object-fit: cover; }
   /* Anything else in a cell is a thumbnail of it, not the live thing at full size (owner, round 57: "components, and any

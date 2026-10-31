@@ -216,6 +216,8 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   the standalone person is enlarged to the median (head r 3.5, body 11 wide, circle keyline) while person-* keep their
   figure, and dashed rings keep 8 dashes with a one-line gap between them (22.3° dashes). Docs: icons.md, "Optical pass,
   2026-10-26".
+  Reversed in part 2026-10-30 (owner: "looks too big"): head r 3 again, body 10 wide, foot at 14; the hull audit's
+  median is not the eye's for a figure with a big round head.
 
 - **Review against Cursor (owner, 2026-10-29; spec "Review against Cursor, 2026-10-29"):** Cursor's icons can be measured
   from its installed font (`/Applications/Cursor.app/Contents/Resources/app/out/media/cursor-icons-16.woff2`, glyph names

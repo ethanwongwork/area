@@ -25,7 +25,7 @@
  */
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { Badge, Button, Input, Nav, NavGroup, NavItem, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading } from "@area/react";
-import { ArrowLeftIcon, PaletteIcon, PersonIcon, SwatchBookIcon } from "@area/icons";
+import { ArrowLeftIcon, ContrastIcon, PaletteIcon, SettingsIcon } from "@area/icons";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, SETTING_GROUPS } from "@area/tokens/config";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
 import { activeTheme, asLive, liveOf, versionName, AREA_ID } from "../systems.ts";
@@ -45,10 +45,12 @@ import { brandStyle } from "../brand.ts";
 import { inMode } from "./theme-settings.ts";
 
 export type SettingsSection = "general" | "appearance" | "theme";
+// Cursor's icons for the same sections (its settings nav, read from the bundle 2026-10-30): General the gear, Appearance
+// light and dark (its color-mode), and a theme the palette.
 const SECTIONS: ReadonlyArray<{ id: SettingsSection; label: string; icon: ReactNode }> = [
-  { id: "general", label: "General", icon: <PersonIcon /> },
-  { id: "appearance", label: "Appearance", icon: <PaletteIcon /> },
-  { id: "theme", label: "Theme", icon: <SwatchBookIcon /> },
+  { id: "general", label: "General", icon: <SettingsIcon /> },
+  { id: "appearance", label: "Appearance", icon: <ContrastIcon /> },
+  { id: "theme", label: "Theme", icon: <PaletteIcon /> },
 ];
 
 interface Row { section: SettingsSection; group: string; label: string; description: string; control: ReactNode; wide?: boolean }

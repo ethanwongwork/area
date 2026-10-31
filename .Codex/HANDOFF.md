@@ -1,6 +1,19 @@
 # Handoff
 
 ## Current state (2026-10-30)
+- **Card rebuilt, resting shadow, stroke groups review, settings icons, branch `claude/theme-appearance-stroke-work-766611`
+  (uncommitted, 2026-10-30).** Card: one space on the card for every slot (sm 16, md 20, lg 24; compact 4 less), media
+  steps out to its inset, one section gap (12 / 16 / 20), CardContent optional (no padding), vertical cards a flex column
+  with the footer at the bottom, CardFooter `spread`, Template / task and / prompt; Card back In review; spec Feedback
+  log and Review note; cohesion test. Resting shadow `0 0.5px 1.5px -0.5px` at 4% (was 8%). Settings nav: gear, contrast,
+  palette; person icon head r 3 (icons.md). Stroke review page https://claude.ai/artifact/EMR6Enr65EhJVq17SZonSx (db
+  `verdicts`): the owner's picks are in (Defined: cards 4, blocks 5, callouts 4, floating 5, regions 3, dividers 3,
+  fields 5, buttons 3, options 4, tracks 3, tags 3, media 2; build the 12 groups, Edge contrast as master, one amount for
+  light and dark, one width). **Stroke groups built** (README "Built"): twelve axes `stroke-<group>` (axes/stroke-groups.ts),
+  derived `edge-<group>` (translucent text colour × amount × Edge contrast, Contrast to 3:1), every member re-pointed
+  (DESIGN_SYSTEM.md "Strokes" table), Inspector and Settings rows, Foundations pictures, Testing › Stroke groups, cohesion
+  test. Open: families not reopened one by one; dark shadow rims still draw beside the Floating and Cards edges. Checks: build, React 620, tokens 27,922,
+  typecheck, check:docs, playgrounds, app-css, test:desktop 28; Electron relaunched from this worktree.
 - **Prose lines and text flow, branch `claude/app-status-ui-flow-add234` (uncommitted).** From a vertical rhythm audit
   against Cursor 3.27 and Claude 3.6556 (https://claude.ai/artifact/Ai15EUzS46xKra4ZqjzMsj; evidence and derivations in
   `docs/research/vertical-rhythm-2026-10-30/`). Type axis: `text-sm|md-prose-leading` (1.5 × size on the 2px ramp: 13/20,

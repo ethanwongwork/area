@@ -55,7 +55,7 @@
        layer (bg-subtle, the old paint) equals the page at layer contrast 0 and left only the ring (Layers sweep
        2026-10-16). Light 100 + 4 is the same #f7f7f7; dark is the rest fill, near the #28 groove the spec measured. */
     background-color: var(--area-bg-component);
-    outline: var(--area-stroke-width) solid var(--area-input-edge-soft);
+    outline: var(--area-stroke-width) solid var(--area-edge-buttons);
     outline-offset: calc(-1 * var(--area-stroke-width));
     /* Concentric with the track, but never sharper than radius-floor, 4 (radius audit 2026-10-03:
        a compact sm track left its items 2; Figma's nested segments keep 3-5), capped against the

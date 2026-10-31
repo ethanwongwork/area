@@ -134,7 +134,7 @@
   .area-file-upload-item__separator {
     inline-size: var(--area-border-width);
     block-size: var(--area-space-12);
-    background-color: var(--area-border-decorative); /* the lightest line, border-decorative (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; "dividers that are inset to have a very light subtle stroke by default"). Was border-subtle, darker than every other separator */
+    background-color: var(--area-edge-dividers); /* the lightest line, border-decorative (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; "dividers that are inset to have a very light subtle stroke by default"). Was border-subtle, darker than every other separator */
   }
   .area-file-upload-item__status { display: inline-flex; align-items: center; gap: var(--area-space-4); }
   .area-file-upload-item__status > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }

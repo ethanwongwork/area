@@ -28,7 +28,7 @@
     --_row-button-radius: max(var(--area-radius-min), calc(var(--area-radius-control-sm) + (var(--area-radius-row) - var(--_card-end) - var(--area-radius-control-sm)) * var(--area-radius-concentric)));
     min-inline-size: 0;
     overflow: hidden;
-    border: var(--area-stroke-width) solid var(--area-border-card); /* no shadow under it: a required frame (DESIGN_SYSTEM.md, "Strokes") */
+    border: var(--area-stroke-width) solid var(--area-edge-blocks); /* no shadow under it: a required frame (DESIGN_SYSTEM.md, "Strokes") */
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -160,7 +160,7 @@
     min-inline-size: 0;
     margin: 0;
     overflow-x: auto;
-    border: var(--area-stroke-width) solid var(--area-border-card); /* Code block's frame */
+    border: var(--area-stroke-width) solid var(--area-edge-blocks); /* Code block's frame */
     border-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) - var(--area-space-4) - var(--area-ui-row-inset)));
     background-color: var(--area-bg-code);
     color: var(--area-fg-default);

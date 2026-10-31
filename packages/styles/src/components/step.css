@@ -89,7 +89,7 @@
     min-inline-size: 0;
     margin-block-start: var(--area-space-4); /* spec: Cursor content gap 4 */
     padding-inline-start: calc(var(--area-space-12) - var(--area-stroke-width)); /* spec: Claude Code rail at 12 */
-    border-inline-start: var(--area-stroke-width) solid var(--area-border-divider);
+    border-inline-start: var(--area-stroke-width) solid var(--area-edge-dividers);
   }
   .area-step__body[hidden] { display: none; }
 
