@@ -27,7 +27,6 @@ import { Badge, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, Brea
 import { ArrowLeftIcon, CardsIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, GridIcon, OpenIcon, ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
 import SNIPPETS from "virtual:demo-snippets";
-import { CopyButton } from "../copy.tsx";
 // @ts-expect-error — the gallery's page content and status registry are authored in JavaScript.
 import { COMPONENT_PAGES } from "../content/pages.mjs";
 // @ts-expect-error — as above.
@@ -42,7 +41,7 @@ import { fitTiles } from "../gallery/fit.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
 import { SpecimenBox } from "../specimen-box.tsx";
-import { CodeWell, Selection } from "../inspector.tsx";
+import { CodeWell, longLines } from "../inspector.tsx";
 import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
 import { appScale } from "../app-scale.ts";
 import { CanvasSection, GALLERY_LOOK, Tile, TileGrid, type CardLook } from "../tile.tsx";
@@ -733,9 +732,10 @@ export function ComponentsPage() {
         ) : selectedFamily ? (
           <FamilyCode family={selectedFamily} code={selectedTile ? SNIPPETS[selectedTile.demo] : undefined} />
         ) : (
-          <PanelSection heading="Package">
-            <CodeWell code={`npm install @area/react @area/styles\n\nimport "@area/styles";\nimport { Button } from "@area/react";`} />
-          </PanelSection>
+          <>
+            <PanelSection heading="Install"><CodeWell prompt="$" code="npm install @area/react @area/styles" /></PanelSection>
+            <PanelSection heading="Import"><CodeWell code={`import "@area/styles";\nimport { Button } from "@area/react";`} /></PanelSection>
+          </>
         ),
       }}
     />
@@ -752,7 +752,8 @@ function FamilyDesign({ family, tile, pinned, onPin, onOpen }: {
   const manifest = manifestOf(family);
   const status = statusOf(family);
   return (
-    <PanelSection heading={tile ? "Tile" : "Family"} actions={
+    // Open and Pin show on hover or focus; Pin stays while it is on (owner, 2026-10-30, "Section headings carry more").
+    <PanelSection heading={tile ? "Tile" : "Family"} revealActions actions={
       <>
         {onOpen ? (
           <Tooltip side="bottom" describes={false} trigger={
@@ -765,22 +766,20 @@ function FamilyDesign({ family, tile, pinned, onPin, onOpen }: {
       <Facts label={tile ? "Tile" : "Family"} items={tile ? [
         ["Specimen", tile.label],
         ["Family", family.name],
-        tile.note ? ["Note", tile.note] : null,
         ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
       ] : [
         manifest && Object.keys(manifest.variants).length ? ["Variants", Object.entries(manifest.variants).map(([axis, values]) => `${axis} ${values.length}`).join(" · ")] : null,
         manifest && Object.keys(manifest.defaults).length ? ["Defaults", Object.values(manifest.defaults).join(", ")] : null,
         ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
         ["Tiles", TILES.get(family.slug)!.length],
-        manifest ? ["Purpose", manifest.description] : null,
         ["Spec", <Link href={specUrl(family)} target="_blank" rel="noreferrer">{family.slug}.md</Link>],
-      ]} />
+      ]} note={tile ? tile.note : manifest?.description} />
     </PanelSection>
   );
 }
 
 /**
- * Code, for a family or one of its tiles: what to copy, the import and the code in wells, the class and its modifiers,
+ * Code, for a family or one of its tiles: the import and the code in wells (each with its copy), the class and its modifiers,
  * then (on the Stage, `measure` set) the specimen's measured box and paint (src/specimen-box.tsx).
  */
 function FamilyCode({ family, code, measure }: { family: Family; code?: string; measure?: string }) {
@@ -788,19 +787,17 @@ function FamilyCode({ family, code, measure }: { family: Family; code?: string; 
   const manifest = manifestOf(family);
   return (
     <>
-      {names || code ? (
-        <Selection>
-          {code ? <CopyButton label="Copy code" icon={<CopyIcon />} fullWidth value={() => code} /> : null}
-          {names ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth value={() => importLine(names)} /> : null}
-        </Selection>
-      ) : null}
+      {/* The wells carry their own copy (no Copy code and Copy import buttons over them: owner, 2026-10-30, "Code in
+          the Inspector"). */}
       {names ? <PanelSection heading="Import"><CodeWell code={importLine(names)} wrap /></PanelSection> : null}
-      {code ? <PanelSection heading="Code"><CodeWell code={code} /></PanelSection> : null}
+      {/* A long sample opens as its first lines (CodeWell), so the heading says how long it is. */}
+      {code ? <PanelSection heading="Code" count={longLines(code) && `${longLines(code)} lines`}><CodeWell code={code} /></PanelSection> : null}
       {manifest ? (
         <PanelSection heading="Class">
           <Facts label="Class" items={[
-            ["Block", <Code>.{manifest.block}</Code>],
-            ...Object.entries(manifest.variants).map(([axis, values]) => [axis[0]!.toUpperCase() + axis.slice(1), values.map(value => `--${value}`).join(" ")] as const),
+            // Class names as plain mono text that wraps, not chips (a chip broke in two: owner, 2026-10-30).
+            ["Block", <span className="studio-mono">.{manifest.block}</span>],
+            ...Object.entries(manifest.variants).map(([axis, values]) => [axis[0]!.toUpperCase() + axis.slice(1), <span className="studio-mono">{values.map(value => `--${value}`).join(" ")}</span>] as const),
             manifest.defaults && Object.keys(manifest.defaults).length ? ["Defaults", Object.entries(manifest.defaults).map(([axis, value]) => `${axis} ${value}`).join(", ")] : null,
           ]} />
         </PanelSection>

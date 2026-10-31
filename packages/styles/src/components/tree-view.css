@@ -46,9 +46,9 @@
   }
 
  /* A selected or current row keeps its plate under the pointer (DESIGN_SYSTEM.md, row plates). */
-  @media (hover: hover) { .area-tree-view [role="treeitem"]:hover:not([data-disabled], [aria-current="page"], [aria-selected="true"]) { background: var(--area-bg-component-hover); } }
+  @media (hover: hover) { .area-tree-view [role="treeitem"]:hover:not([data-disabled], [aria-current="page"], [aria-selected="true"]) { background-color: var(--area-bg-component-hover); } }
   .area-tree-view [role="treeitem"][aria-selected="true"],
-  .area-tree-view [role="treeitem"][aria-current="page"] { background: var(--_tree-selection); color: var(--area-fg-default); }
+  .area-tree-view [role="treeitem"][aria-current="page"] { background-color: var(--_tree-selection); color: var(--area-fg-default); }
   /*
    * Motion (docs/MOTION.md, "Hover plate", "Selected"; docs/specs/tree-view.md, "Motion and
    * interaction, 2026-10-07"). The base `--area-transition` is the leave (fast, ease-out); hover,
@@ -56,7 +56,7 @@
    */
   /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
      takes the pressed fill while held, one step firmer than selected, landing at once like the hover. */
-  .area-tree-view [role="treeitem"]:active:not([data-disabled], [aria-current="page"], [aria-selected="true"]) { background: var(--area-bg-component-pressed); }
+  .area-tree-view [role="treeitem"]:active:not([data-disabled], [aria-current="page"], [aria-selected="true"]) { background-color: var(--area-bg-component-pressed); }
   @media (hover: hover) { .area-tree-view [role="treeitem"]:hover { transition-duration: var(--area-hover-in); } }
   .area-tree-view [role="treeitem"]:is(:active, [aria-selected="true"], [aria-current="page"]) { transition-duration: var(--area-press-in); }
   /* The current row is marked by fill and ink alone; the edge marker was removed (owner, pass 3). */
@@ -142,4 +142,63 @@
      (motion sweep 2026-10-22: the opacity-only list dropped the ghost button's hover plate at once), and the reveal
      zeroes only the opacity's clock, so a plate leaving the button still fades while the row stays hovered. */
   .area-tree-view__actions > * { --_reveal: var(--area-duration-fast); transition: var(--area-transition), opacity var(--_reveal) var(--area-ease-out); }
+
+  /* --- sm, guides, status (owner 2026-10-30) ---------------------------------------------------------------------- */
+  /*
+   * From the Inspector panel study (docs/research/inspector-panel-2026-10-30, pick "A file-tree density for Tree view:
+   * Build"; values in cursor.md and claude-code.md). sm is the file tree's density: rows a small control tall (26 in
+   * compact; Cursor's and Claude's file trees are 24), a 12 chevron (Claude's caret xs, Cursor's hover chevron) with 4
+   * after it (both trees' icon gap), so a level indents by 16. The columns rule holds (a child's chevron under its
+   * parent's icon), so the indent is the slot and the gap, not Claude's 10 or Cursor's 8.
+   */
+  .area-tree-view--md { --_tree-chevron: var(--area-icon-md); }
+  .area-tree-view--sm {
+    --_tree-chevron: var(--area-icon-xs); /* spec: 12 */
+    --_tree-gap: var(--area-space-4); /* spec: Cursor's and Claude's icon gap, 4 */
+    --_tree-plate-inset: calc(-1 * var(--area-space-2));
+    font-size: var(--area-control-sm-text);
+    line-height: var(--area-control-sm-leading);
+  }
+  .area-tree-view--sm [role="treeitem"] { block-size: var(--area-control-sm); }
+  .area-tree-view--sm .area-tree-view__chevron svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); --_glyph-cut: var(--area-type-icon-xs-cut); }
+  /*
+   * guides: a 1px line under each open branch, from its chevron's centre down its children, drawn in the lightest line
+   * (border-decorative), as VS Code's explorer and Claude's Files tree draw them: only while the tree is hovered or
+   * holds focus, landing at once and leaving on `fast`. Each row draws one line per ancestor in its indent, reaching
+   * through the gap above it so the lines run unbroken. Outside the text, so it never sits under a label.
+   */
+  .area-tree-view--guides [role="treeitem"]::before {
+    content: "";
+    position: absolute;
+    inset-block: calc(-1 * var(--area-ui-row-gap)) 0;
+    inset-inline-start: round(down, calc(var(--_tree-start) + var(--_tree-chevron) / 2 - 0.5px), 1px);
+    inline-size: calc(var(--_tree-depth) * var(--_tree-step));
+    background-image: repeating-linear-gradient(to right, var(--area-border-decorative) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step));
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-tree-view--guides [role="treeitem"]:dir(rtl)::before { background-image: repeating-linear-gradient(to left, var(--area-border-decorative) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step)); }
+  .area-tree-view--guides:focus-within [role="treeitem"]::before { opacity: 1; transition-duration: 0s; }
+  @media (hover: hover) { .area-tree-view--guides:hover [role="treeitem"]::before { opacity: 1; transition-duration: 0s; } }
+  /*
+   * A row's status (TreeViewNode status): git's letter at the row's end, Cursor's 12px w500 tabular in the git colour,
+   * here the status inks Edit summary's counts take (added success, removed danger, modified warning). The word is read
+   * out; the letter is not.
+   */
+  .area-tree-view__status {
+    flex: none;
+    margin-inline-start: auto;
+    min-inline-size: 1ch;
+    text-align: center;
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-weight: var(--area-weight-strong);
+    font-variant-numeric: tabular-nums;
+  }
+  .area-tree-view__trailing + .area-tree-view__status { margin-inline-start: 0; }
+  .area-tree-view__status + .area-tree-view__actions { margin-inline-start: 0; }
+  .area-tree-view__status[data-status="added"] { color: var(--area-fg-success); }
+  .area-tree-view__status[data-status="modified"] { color: var(--area-fg-warning); }
+  .area-tree-view__status[data-status="removed"] { color: var(--area-fg-danger); }
 }

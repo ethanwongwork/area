@@ -12,3 +12,11 @@ export const GalleryMeterLg = () => <Meter style={row} size="lg" label="Label" d
 export const GalleryMeterLabelOnly = () => <Meter style={row} label="Label" value={1200} max={4000} valueText="1,200 / 4,000" />;
 /* The bar alone, named for assistive tech. */
 export const GalleryMeterBare = () => <Meter style={row} aria-label="Label" value={24} valueText={null} />;
+/* Parts of one measure, each named in the legend with its value and share (owner 2026-10-30, docs/research/inspector-panel-2026-10-30). */
+export const GalleryMeterSegments = () => (
+  <Meter style={row} label="Label" segments={[{ label: "Label", value: 6 }, { label: "Label", value: 4 }, { label: "Label", value: 3 }, { label: "Label", value: 1 }]} />
+);
+/* Parts against a limit: max leaves the rest of the track, and the value says how much is used. */
+export const GalleryMeterSegmentsLimit = () => (
+  <Meter style={row} label="Label" max={100} valueText="44% used" segments={[{ label: "Label", value: 22 }, { label: "Label", value: 12 }, { label: "Label", value: 10 }]} />
+);

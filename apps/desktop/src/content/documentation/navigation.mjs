@@ -229,17 +229,19 @@ export default {
       ["Do", "Give the tree an aria-label that says what the hierarchy is; it is a single Tab stop."],
       ["Do", "Give each row control tabIndex={-1} and a keyboard equivalent elsewhere; set data-pinned on one that must stay visible, such as a lock."],
       ["Do", "Keep labels as plain text: typeahead matches the start of each label."],
+      ["Do", "Use size sm for a file tree or a list of changes in a panel, guides when the levels run deep, and status for how each item changed."],
       ["Don't", "Put anything in a row that must be reached with Tab; only the active row is in the Tab order."],
       ["Don't", "Expect a parent's check to show a partial state; checkbox mode has no indeterminate parents."],
     ],
     // Spec: Anatomy, Variants; source: TreeView.tsx.
     parts: {
-      root: "The tree: one Tab stop over a flat list of rows, each stepped in by its level, with the shared row plates.",
+      root: "The tree: one Tab stop over a flat list of rows, each stepped in by its level, with the shared row plates. Size sm is the file tree's density; guides draws a line under each open branch while the tree is hovered or focused.",
       chevron: "The expand toggle on a branch row. Its pointer target is larger than its plate; collapsed, it points along the reading direction.",
       check: "The checkbox mark in checkbox mode, in the icon column; it shows the row's checked state.",
       icon: "An optional type glyph per row, hidden from assistive tech.",
       label: "The row's text, and what typeahead matches.",
-      trailing: "End-of-row text such as a status letter or a count.",
+      trailing: "End-of-row text such as a count or a value.",
+      status: "How the item changed: A (added), M (modified) or D (removed) in its tone, read out as the word.",
       actions: "Row controls at the end (lock, visibility), shown on hover, focus and selection. A click on one doesn't activate the row.",
     },
     // Source: TreeView.tsx handleKeyDown.

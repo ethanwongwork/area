@@ -237,3 +237,22 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-30 (file-tree density)
+
+- **What changed:** `size="sm"`: rows a small control tall (26 in compact), a 12 chevron (its 12px cut) with 4 after
+  it, so a level indents 16 and a child's chevron still sits under its parent's label; text the small control's.
+  `guides`: a 1px line in the lightest line (border-decorative) under each open branch, from its chevron's centre,
+  reaching through the 1 between rows, shown while the tree is hovered or holds focus (at once; leaves on `fast`).
+  `status` on a node: git's letter at the row's end, A added (success ink), M modified (warning), D removed (danger),
+  12 w500 tabular, read out as the word. Row paints moved to `background-color` (no visible change). Three tiles: Size /
+  sm, Guides, Content / status; the Project files tile's A and M are statuses now. The app's History Inspector lists the
+  unpublished changes as a tree: each theme (A new, D gone, M changed) with the settings it changed under it, M, the new
+  value at the end.
+- **Why:** your pick "A file-tree density for Tree view: Build" on the Inspector panel study
+  (docs/research/inspector-panel-2026-10-30; Cursor's Agents tree 24 rows, indent 8 + 8, status 12 tabular; Claude's
+  Files tree 24 rows, indent 8 + 10, guides on hover).
+- **Not as proposed:** the indent is 16 a level (the chevron slot and its gap, so the columns rule holds), not 10;
+  rows are 26 (a small control at the defaults), not 24. Not built, waiting for a use: +N −N counts at the row's end
+  (Edit summary's) and compacted single-child folders (a label the caller writes, "src / pages").
+- **Verdict:** in review.

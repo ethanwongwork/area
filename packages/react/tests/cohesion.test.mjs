@@ -771,3 +771,15 @@ test('the Composer takes Card\'s corner', () => {
   assert.ok(norm(composer).includes(norm(card)), `${composer} does not take ${card}`);
   assert.equal(norm(read('.area-composer', '--_composer-term')), norm(read('.area-card', '--_card-term')));
 });
+
+// panel.css / field.css / description-list.css: one label column per panel (owner 2026-10-30, "One Inspector grid",
+// docs/research/inspector-panel-2026-10-30). A Field and a facts list in a panel both read --_panel-label, so a control
+// and a fact's value start on one edge; values had started at 95, 104, 116 and 123 in one Inspector.
+test('a panel\'s Fields and facts share its label column', () => {
+  const read = (selector, prop) => rules.find(rule => rule.selector === selector && new RegExp(`${prop}\\s*:`).test(rule.body))?.body.match(new RegExp(`${prop}\\s*:\\s*([^;]+)`))?.[1].trim();
+  assert.ok(read('.area-panel', '--_panel-label'), 'the panel publishes no label column');
+  assert.equal(read('.area-panel .area-field--auto', '--_label-share'), 'var(--_panel-label)');
+  const facts = read('.area-panel .area-description-list--columns:not(.area-description-list--framed)', 'grid-template-columns');
+  assert.ok(facts?.startsWith('var(--_panel-label)'), `facts in a panel take ${facts}`);
+  assert.equal(read('.area-panel .area-description-list--columns:not(.area-description-list--framed)', 'column-gap'), 'var(--area-ui-cluster)');
+});

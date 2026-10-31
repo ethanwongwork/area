@@ -336,10 +336,16 @@ out.
   2. a component's Properties;
   3. the preview, unless the Canvas already shows it at size;
   4. actions;
-  5. one facts Table.
+  5. one facts list: a Description list on the panel's label column, so its values start where the controls do,
+     its rows packed at 26 (owner, 2026-10-30, docs/research/inspector-panel-2026-10-30); a sentence about the
+     thing (its purpose, a note) is a muted note under the list, never a value.
 - **Code**: how to use it, as Figma's Dev Mode shows it. It holds:
-  - copy actions;
-  - the import and the code in Code block `sm` wells;
+  - the import and the code in Code block `sm` wells, `soft` (the panel's fields' look) with no language header (the
+    section's heading names it), each with its own copy shown on hover or focus, a cut line fading at the edge, a long
+    block opening as its first 5 lines; a command with its `$` prompt (owner, 2026-10-30,
+    docs/research/inspector-panel-2026-10-30). No copy buttons repeat what a well copies; copy actions stay for what
+    no well shows (a token, a hex, an SVG);
+  - class names as plain mono text in the facts;
   - facts tables (name, token, class, modifiers, attribute);
   - for a component on the Stage, its measured box (Box model) and computed paint,
     re-measured when a setting changes (`src/specimen-box.tsx`).

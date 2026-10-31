@@ -648,7 +648,7 @@ function Snapshots({ bundle, snapshots, onLoad, onDelete }: { bundle: string; sn
   const own = snapshots.filter(s => s.bundle === bundle);
   if (!own.length) return null;
   return (
-    <PanelSection heading="Snapshots">
+    <PanelSection heading="Snapshots" count={own.length}>
       {own.map(s => (
         <div key={s.id} className="lab-snapshot">
           <span className="lab-snapshot__name" title={new Date(s.at).toLocaleString()}>{s.name}</span>

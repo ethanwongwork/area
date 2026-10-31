@@ -223,7 +223,7 @@
     /* spec: concentric with the header's copy action at both sizes (md 11, sm 10; owner, 2026-10-22 and round 11);
        ChatGPT's 24 wraps a 48 header with 36 round buttons 7 in, which Area doesn't have. Code stays 14/20. */
     border-radius: var(--_code-radius);
-    background-color: var(--area-bg-code);
+    background-color: var(--_code-ground, var(--area-bg-code));
     overflow: hidden;
   }
 
@@ -502,7 +502,8 @@
   }
 
   .area-code-block[data-collapsed] .area-code-block__pre {
-    max-block-size: calc(var(--_code-leading) * 8 + var(--_code-block-inset) * 2);
+    /* Eight lines, or the count `collapsedLines` sets (Cursor's shell output shows 5; inspector-panel-2026-10-30). */
+    max-block-size: calc(var(--_code-leading) * var(--area-code-block-lines, 8) + var(--_code-block-inset) * 2);
     overflow: hidden;
   }
 
@@ -515,7 +516,7 @@
     block-size: var(--_code-bar);
     padding: 0;
     border: 0; /* no rule above it (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; docs/research/dividers-2026-10-25): the fade marks the cut */
-    background-color: var(--area-bg-code);
+    background-color: var(--_code-ground, var(--area-bg-code));
     color: var(--area-fg-muted);
     font-family: inherit;
     font-size: var(--_code-ui-size);
@@ -587,9 +588,78 @@
     background-image: linear-gradient(
       to bottom,
       transparent,
-      var(--area-bg-code) 55%,
-      var(--area-bg-code)
+      var(--_code-ground, var(--area-bg-code)) 55%,
+      var(--_code-ground, var(--area-bg-code))
     );
     background-color: transparent;
   }
+
+  /* --- soft, prompt, revealed copy, clipped lines (owner 2026-10-30) --------------------------------------------- */
+  /*
+   * From the Inspector panel study (docs/research/inspector-panel-2026-10-30, owner pick "Code in the Inspector:
+   * Build"). Values are cited in that folder's cursor.md and claude-code.md.
+   *
+   * soft: the fields' soft look, a fill with no edge, for code in a surface whose fields are soft (a panel: one field
+   * style per surface). A frame inside a frameless Inspector read as a box in a box. Claude's command card is a radius-8
+   * fill with no ring; Cursor's shell output sits on its 4% fill. The edge keeps its width (transparent, or the strong
+   * edge under increased contrast, as a soft field's), so every inset and the concentric corner stay as they are.
+   */
+  /* outline (the default) is the frame above: Card's edge round the code ground. */
+  .area-code-block--outline { --_code-ground: var(--area-bg-code); }
+  .area-code-block--soft {
+    --_code-ground: var(--area-input-bg-soft);
+    border-color: var(--area-input-edge-soft);
+  }
+
+  /*
+   * A prompt before a command (`prompt="$"`): muted, outside the copied text and not selectable, as Claude's (`$ `
+   * select-none, secondary) and Cursor's (tertiary) command blocks. Every line keeps the prompt's column, so a wrapped
+   * or continued command hangs under its first character; only the first line shows it.
+   */
+  .area-code-block:has(.area-code-block__prompt) .area-code-block__line { grid-template-columns: var(--_code-gutter) auto minmax(0, 1fr); }
+  .area-code-block--unnumbered:has(.area-code-block__prompt) .area-code-block__line { grid-template-columns: auto minmax(0, 1fr); }
+  .area-code-block__prompt {
+    padding-inline-end: 1ch; /* one space, as a shell prints it */
+    color: var(--area-fg-muted);
+    user-select: none;
+    white-space: pre;
+  }
+  .area-code-block__line:not(:first-child) > .area-code-block__prompt { visibility: hidden; }
+  .area-code-block--unnumbered .area-code-block__prompt { padding-inline-start: var(--_code-start); }
+  .area-code-block--unnumbered .area-code-block__line > .area-code-block__prompt + .area-code-block__text { padding-inline-start: 0; }
+
+  /*
+   * revealActions: the floating copy (and actions) show while the block is hovered or holds focus, as Cursor's code
+   * blocks (opacity 0 to 1 on hover or focus-within, 4 from the top and end). They land at once and leave on `fast`
+   * (MOTION.md, "Hover plate"); a touch screen always shows them. Shown, they sit on the block's ground over the code,
+   * so the first line keeps its full width rather than a reserved gap.
+   */
+  .area-code-block--reveal-actions > .area-code-block__actions { border-radius: var(--area-radius-control-sm); background-color: var(--_code-ground, var(--area-bg-code)); }
+  .area-code-block--reveal-actions > .area-code-block__actions ~ .area-code-block__body .area-code-block__line:first-child .area-code-block__text { padding-inline-end: var(--_code-inline-inset); }
+  @media (hover: hover) {
+    .area-code-block--reveal-actions > .area-code-block__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+    .area-code-block--reveal-actions:not(:hover, :focus-within) > .area-code-block__actions { pointer-events: none; }
+    .area-code-block--reveal-actions:is(:hover, :focus-within) > .area-code-block__actions { opacity: 1; transition-duration: 0s; }
+  }
+
+  /*
+   * A line cut off at the end edge fades out over its last 16 rather than stopping at a hard edge (Cursor's OverflowFade
+   * and shell output fade, 16). The fade follows the scroll: full while more of the line lies past the edge, gone at the
+   * end, and absent when nothing overflows (the scroll timeline is then inactive). Wrapped code never overflows.
+   */
+  @supports (animation-timeline: scroll()) {
+    .area-code-block__pre {
+      --_code-fade-edge: 16px; /* spec: Cursor 16 */
+      mask-image: linear-gradient(to right, #000 calc(100% - var(--_code-fade)), transparent);
+      /* Scroll-linked, not timed: no duration or curve of the motion settings applies (the fade holds to 95%). */
+      animation-name: area-code-fade;
+      animation-fill-mode: both;
+      animation-timeline: scroll(self x);
+    }
+    .area-code-block__pre:dir(rtl) { mask-image: linear-gradient(to left, #000 calc(100% - var(--_code-fade)), transparent); }
+  }
 }
+
+/* The fade's width, registered so the scroll timeline can ease it (a length, not a colour; THEMING.md). */
+@property --_code-fade { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@keyframes area-code-fade { from { --_code-fade: var(--_code-fade-edge); } 95% { --_code-fade: var(--_code-fade-edge); } to { --_code-fade: 0px; } }
