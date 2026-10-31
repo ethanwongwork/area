@@ -59,6 +59,16 @@ const MAX = 1;
  * and Preview frame 0.73, Code block 0.75 when measured. The groups stay, read by data-fit-group, to retune by.
  */
 const AUTO_SCALE = 0.7;
+/*
+ * Auto follows the card (owner, 2026-10-31: "i want the content in the middle screen to scale up and down"): AUTO_SCALE is
+ * the scale in a card whose view is AUTO_VIEW wide (the 277 card it was found in), and a card wider or narrower scales
+ * its specimen by the same ratio, so a card and what it holds grow and shrink together as the window, the panels or the
+ * zoom change. Never past 1:1 (AUTO_MOST): a gallery shows a component at most at its real size; Fit and the exact zooms
+ * go further. Until then every card drew its specimen at 0.7 whatever its width, so a wide card held a small specimen in
+ * a wide margin.
+ */
+const AUTO_VIEW = 275;
+const AUTO_MOST = 1;
 const GROUPS = [
   { name: "small", area: 6000, scale: AUTO_SCALE },
   { name: "medium", area: 24000, scale: AUTO_SCALE },
@@ -317,12 +327,14 @@ export function fitTiles(canvas: HTMLElement): () => void {
     // The measure behind the group, for retuning the bounds (px² at type 14 / 32).
     entry.tile.dataset.fitArea = String(Math.round(measured.w * measured.h));
   }
+  // Auto's most for a card of this view's width (AUTO_VIEW); Fit's and a zoom's are their own.
+  const most = (entry: Tile, room: { outer: number }) => filling ? entry.group : Math.min(AUTO_MOST, entry.group * room.outer / AUTO_VIEW);
   // The width a fluid specimen is laid out at: its tile over its scale, or its content's if narrower.
   const layoutWidth = (entry: Tile, room: number, scale: number) => Math.min(room / scale, entry.hug ?? Infinity);
   // A fluid specimen takes the first width at which nothing truncates (a few specimens, a few tries),
   // laid out for the tile at its group's scale: zoomed by it, it fills the tile.
   const fluid = tiles.filter(tile => tile.fluid);
-  const fluidRooms = new Map(fluid.map(entry => [entry, layoutWidth(entry, roomOf(entry.view).w, exact ?? entry.group)]));
+  const fluidRooms = new Map(fluid.map(entry => [entry, (room => layoutWidth(entry, room.w, exact ?? most(entry, room)))(roomOf(entry.view))]));
   let open = fluid;
   for (const factor of WIDEN) {
     if (!open.length) break;
@@ -346,9 +358,9 @@ export function fitTiles(canvas: HTMLElement): () => void {
     // layouts, however many tiles changed.
     const rooms = batch.map(entry => roomOf(entry.view, entry.hugs));
     // A fluid specimen fills its tile at any zoom: laid out at the room over the zoom, then scaled.
-    batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(layoutWidth(entry, rooms[index]!.w, exact ?? entry.group) * (exact ? 1 : entry.widen))}px`; });
+    batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(layoutWidth(entry, rooms[index]!.w, exact ?? most(entry, rooms[index]!)) * (exact ? 1 : entry.widen))}px`; });
     const extents = batch.map(entry => extent(entry.stage, true));
-    const scales = batch.map((entry, index) => exact ?? fit(rooms[index]!, extents[index]!, entry.group));
+    const scales = batch.map((entry, index) => exact ?? fit(rooms[index]!, extents[index]!, most(entry, rooms[index]!)));
     batch.forEach((entry, index) => { entry.stage.style.scale = scales[index]!.toFixed(3); });
     // A waterfall's view hugs its specimen at that scale, then the cards are placed.
     const hugging = batch.filter(entry => entry.hugs);

@@ -142,7 +142,7 @@ export function HomePage() {
             {projects.length ? (
               <TileGrid span="wide" cards min={SYSTEM_MIN}>
                 {projects.map(entry => (
-                  <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name}
+                  <Tile key={entry.id} span="wide" stage="screen" inert label={entry.name}
                     value={`${systemName(entry.system)}, ${entry.pages.length} ${entry.pages.length === 1 ? "page" : "pages"}`}
                     selected={chosenProject?.id === entry.id} onSelect={() => select(entry.id, { replace: true })} onOpen={() => navigate({ page: "project", project: entry.id })}>
                     <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={projectScope(entry)} />
@@ -157,7 +157,7 @@ export function HomePage() {
           <CanvasSection id="home-systems" title="Systems" count={systems.length} lede="The Library's systems: the look and the rules a product is built with, each edited in place and published.">
             <TileGrid span="wide" cards min={SYSTEM_MIN}>
               {systems.map(entry => (
-                <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name} value={`${entry.themes.length} ${entry.themes.length === 1 ? "theme" : "themes"}, ${activeTheme(entry).name} in use`}
+                <Tile key={entry.id} span="wide" stage="screen" inert label={entry.name} value={`${entry.themes.length} ${entry.themes.length === 1 ? "theme" : "themes"}, ${activeTheme(entry).name} in use`}
                   selected={chosen?.id === entry.id} onSelect={() => select(entry.id, { replace: true })} onOpen={() => open(entry)}>
                   <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={scopeOf(entry)} />
                 </Tile>

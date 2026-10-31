@@ -6,7 +6,7 @@
   .studio-canvas__body:has(> .setup-stage) { padding: 0; overflow: hidden; }
   /* What the stage shows, at the Canvas header's start: 12 apart as the header's controls, the screen's Select as wide as
      the header's filters (studio-canvas__actions). */
-  .setup-stage__lead { display: flex; align-items: center; gap: var(--area-space-12); min-inline-size: 0; --area-input-inline-size: calc(var(--area-space-96) + var(--area-space-32)); } /* pick: 128 */
+  .setup-stage__lead { display: flex; align-items: center; gap: var(--area-space-12); min-inline-size: 0; margin-inline-end: auto; /* holds the Canvas bar's start (canvas.css) */ --area-input-inline-size: calc(var(--area-space-96) + var(--area-space-32)); } /* pick: 128 */
 
   /* The chat: the Inspector's Chat view, term for term (chat.css): turns 16 apart (Codex's items, Cursor's blocks), the
      composer's place at the foot holding the progress over the question, 8 apart. */

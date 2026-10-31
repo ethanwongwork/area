@@ -21,7 +21,7 @@
     min-inline-size: 0;
     min-block-size: 0;
     overflow: auto;
-    padding: var(--_canvas-margin) max(var(--_canvas-margin), calc((100% - var(--_canvas-measure)) / 2));
+    padding: var(--_canvas-margin);
     /* Trial (owner, 2026-10-12: "try making the canvas pages for all tabs white"): the page ground,
        white in light and Area's near-black in dark, the panels' own ground, so the window is one
        surface and tiles stand on their hairlines. Was neutral 25 (owner, 2026-10-03). */
@@ -38,9 +38,18 @@
      options, in rule 14's order. */
   .studio-canvas__bar {
     display: flex;
+    /* Too narrow for one row (a 960 window with both panels leaves the Canvas 424), the controls wrap onto rows of their
+       own under the path, at the end, 4 apart as a header's plates, rather than run under the Inspector (2026-10-31: at
+       1000 the path was cut to nothing and Live, Working and Publish ran off the Canvas). One row is unchanged: the small
+       control with 5 above and below. */
+    flex-wrap: wrap;
     align-items: center;
+    /* The controls run from the end, on every row; the lead's auto end margin holds the start. */
+    justify-content: flex-end;
     box-sizing: border-box;
-    block-size: var(--_studio-bar);
+    min-block-size: var(--_studio-bar);
+    padding-block: calc((var(--_studio-bar) - var(--area-control-sm)) / 2);
+    row-gap: var(--area-space-4);
     /* Its controls sit as far from the sides as from the top and the rule, (bar − rule − small control) / 2, 7 at the
        app's scale, as the Titlebar's and the Inspector's bar (owner, 2026-10-18: "these controls are not evenly inset,
        theres too much space horizontally"; was the Canvas's 14 margin). */
@@ -50,11 +59,13 @@
        the Canvas, as Notion's and ChatGPT's top bars carry none; nor clear space for one (2026-10-31). */
     /* The bar's start (a way out, a path) and its controls stay at least 12 apart, as everything drawn in it; the path
        is cut first (2026-10-25: at 1024 the path ran into the first control). */
-    gap: var(--area-space-12);
+    column-gap: var(--area-space-12);
   }
   /* The header's start (view-controls.tsx ViewLead): what the Canvas shows, as ghost menus 4 apart, so their plates read
      as one group, as Figma's toolbar menus sit; the end's controls follow after the space between. */
-  .studio-canvas__lead { display: flex; align-items: center; gap: var(--area-space-4); min-inline-size: 0; }
+  /* It takes the room the controls leave (a zero basis, so it never makes them wrap by its own length), down to what it
+     cannot give: its menus and buttons whole and a path's first words (below); only then do the controls wrap. */
+  .studio-canvas__lead { display: flex; flex: 1 1 0%; align-items: center; gap: var(--area-space-4); min-inline-size: min-content; margin-inline-end: auto; }
   /* Everything drawn is 12 apart, as in the Titlebar: a field's edge, a track, an icon
      (studio-bar-icon). */
   .studio-canvas__actions {
@@ -64,9 +75,13 @@
     align-items: center;
     gap: var(--area-space-12);
     /* The controls keep their width and the path at the bar's start gives way (2026-10-25: the Overview's breadcrumb
-       pushed the grid / list switch off the Canvas at 1024). */
-    flex: none;
-    margin-inline-start: auto;
+       pushed the grid / list switch off the Canvas at 1024); past that the group wraps under it (the bar, above), and a
+       group wider than the Canvas wraps its own controls, each whole. */
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: var(--area-space-4);
+    min-inline-size: 0;
     white-space: nowrap;
   }
   /* A heading that opens its family: not selectable, as the app's other controls; Link's underline on hover. */
@@ -194,8 +209,9 @@
     /* As many columns of at least 260 as fit, never more than four (owner, 2026-10-22: "the default card size should be
        … like 280 to 300 px width. i just need 4 columns across not more"; was 200 the same day, then 360, 400, 380 and
        280 before), counted, so the Stage's strips span them as they span pairs of units. 260 puts three cards of 277
-       (type 14) to 296 (13 Compact) across a 1440 window with both panels, where 280 left two of 421; four 300 cards and
-       their gaps are the feed's measure (app.css), so four across never pass 300. */
+       (type 14) to 296 (13 Compact) across a 1440 window with both panels, where 280 left two of 421. Past four the
+       cards grow with the Canvas (owner, 2026-10-31, "scale up and down"; the feed's 1236 measure held them at 300 until
+       then), and Auto scales their specimens with them (gallery/fit.ts). */
     --_pairs: clamp(1, round(down, calc((100cqw + var(--_gap)) / (var(--_card-min, 260px) * var(--_zoom, 1) + var(--_gap))), 1), 4);
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
   }
@@ -259,6 +275,9 @@
   [data-stage="center"] > .gallery-tile__view { grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; }
   [data-stage="center"] > .gallery-tile__view svg { display: block; flex: none; }
   [data-stage="flow"] > .gallery-tile__view { align-content: start; }
+  /* A product screen (src/tile.tsx, `screen`): the view is the screen's own 16:9, which the screen fills, so the tile is
+     its thumbnail at every width rather than a square with the screen floating in its middle. */
+  .gallery-tile--plain[data-stage="screen"] > .gallery-tile__view { aspect-ratio: 1920 / 1080; /* spec: setup-screen.tsx SCREEN */ grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
   .studio-tile-error { margin: 0; color: var(--area-fg-danger); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
 
 
@@ -267,9 +286,17 @@
   /* The Canvas bar's start on a tile: the Overview button, then the path to the tile (Area's Breadcrumb), its glyph 12
      from the path's first letter as everything drawn in the bar is 12 apart (the button's box is wider than its glyph by
      the small control less the small icon); the path gives way first when the bar is narrow. */
-  .studio-canvas__lead { display: flex; align-items: center; gap: calc(var(--area-space-12) - (var(--area-control-sm) - var(--area-icon-sm)) / 2); min-inline-size: 0; }
-  /* Cut where the controls begin, past the focus ring's reach, rather than run under them. */
-  .studio-canvas__crumbs { min-inline-size: 0; overflow: clip; overflow-clip-margin: var(--area-space-4); }
+  /* The button's plate and the first link's plate stand 4 apart, as the plates in a header's group (2026-10-31: they were
+     2 apart, the link's 6 overhang eating the gap, and read as one smudge on hover). */
+  .studio-canvas__lead:has(> .studio-canvas__crumbs) { gap: calc(var(--area-space-4) + var(--area-space-6)); /* spec: group gap 4 + the link plate's 6 overhang (breadcrumb.css) */ }
+  /* Cut where the controls begin rather than run under them, but past the links' plates (6 beyond their text) and their
+     focus rings, so the first link's plate is whole on hover (2026-10-31: a 4 margin cut 2 off its start). */
+  .studio-canvas__crumbs { min-inline-size: calc(var(--area-space-96) + var(--area-space-24)); /* pick: 120, the path's first step and its chevron ("Components ›") before the controls wrap */ overflow: clip; overflow-clip-margin: calc(var(--area-space-6) + var(--area-focus-offset) + var(--area-focus-width)); }
+  /* A path that opens the bar starts on the feed's margin, so "Components" stands over the first section's title, and its
+     plate stays inside the bar's 7 (owner, 2026-10-31: "the breadcrumb spacing on the horizontal side doesnt look right";
+     it started on the bar's 7, its plate 1 from the Canvas's edge, 9 left of the titles under it). */
+  .studio-canvas__bar > .studio-canvas__lead > .studio-canvas__crumbs:first-child,
+  .studio-canvas__bar > .studio-canvas__crumbs:first-child { margin-inline-start: calc(var(--_canvas-margin) - (var(--_studio-head) - var(--area-control-sm)) / 2); }
   /* A family's section: its title 12 over its cards (the feed's heading space), its groups when open 24 apart, a
      group's name 8 over its row (a lede's spacing), and Show all 12 under the cards (a heading's space). */
   .studio-overview__body { display: grid; gap: var(--area-space-24); min-inline-size: 0; } /* pick: between a heading's 12 and a section's 40 */

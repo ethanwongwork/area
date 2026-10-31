@@ -10,7 +10,8 @@ looks; this skill decides where components go, how far apart, under which titles
 come from products measured in `docs/research/ui-patterns-2026-10-22/` (each file cites its sources). The app's own
 layout (`docs/PRODUCT_UI.md`, "The app's layout") is the worked example and wins where it has decided something.
 
-Check a composed screen with `area-ui-review` before calling it done.
+Check a composed screen with `area-ui-review` before calling it done, and the desktop app's interactions (hover,
+tooltips, bars as the window narrows, menus, tabs) with `area-interaction-pass`.
 
 ## Procedure
 

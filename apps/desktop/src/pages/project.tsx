@@ -143,7 +143,7 @@ export function ProjectOverview() {
             {project.explorations.length ? (
               <TileGrid span="wide" cards min={CARD_MIN}>
                 {project.explorations.map(entry => (
-                  <Tile key={entry.id} span="wide" stage="fit" inert label={entry.name} value={entry.published ? `Published in ${versionName(systemName(project.system), entry.published)}` : "Not published"}
+                  <Tile key={entry.id} span="wide" stage="screen" inert label={entry.name} value={entry.published ? `Published in ${versionName(systemName(project.system), entry.published)}` : "Not published"}
                     onSelect={() => navigate({ page: "exploration", item: entry.id })} onOpen={() => navigate({ page: "exploration", item: entry.id })}>
                     <ThemeScreen theme={entry.theme} mode={theme} />
                   </Tile>
@@ -295,11 +295,11 @@ export function ExplorationPage() {
             lede={`From ${from?.name ?? "a theme"} in ${versionName(systemName(project.system), liveOf(openSystem).version)}. Change it in the Inspector's Theme view; nothing in ${systemName(project.system)} changes until you publish.`}>
             <TileGrid span="wide" cards min={CARD_MIN}>
               {from ? (
-                <Tile span="wide" stage="fit" inert label={from.name} value={`Live in ${versionName(systemName(project.system), liveOf(openSystem).version)}`}>
+                <Tile span="wide" stage="screen" inert label={from.name} value={`Live in ${versionName(systemName(project.system), liveOf(openSystem).version)}`}>
                   <ThemeScreen theme={from} mode={theme} />
                 </Tile>
               ) : null}
-              <Tile span="wide" stage="fit" inert label={exploration.name} value={exploration.published ? `Published in ${versionName(systemName(project.system), exploration.published)}` : "Not published"}>
+              <Tile span="wide" stage="screen" inert label={exploration.name} value={exploration.published ? `Published in ${versionName(systemName(project.system), exploration.published)}` : "Not published"}>
                 <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={scope} />
               </Tile>
             </TileGrid>

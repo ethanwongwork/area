@@ -212,6 +212,20 @@ const within = (node: Element | null, target: EventTarget | null) => target inst
 let lastClosed = 0;
 const skipping = () => Date.now() - lastClosed < TOOLTIP_SKIP_DELAY;
 
+/*
+ * The element that had focus when the window lost it (2026-10-31, the desktop app: "the tooltips start to glitch and get
+ * stuck"). Returning to the window focuses it again, and after the keyboard switched apps (⌘Tab) it matches
+ * :focus-visible, so its tooltip opened by itself and stayed until something else took focus. That focus is a return,
+ * not a move, and shows nothing; the next key or press anywhere forgets it.
+ */
+let returning: Element | null = null;
+if (typeof window !== "undefined") {
+  addEventListener("blur", event => { if (event.target === window) returning = document.activeElement; });
+  const forget = () => { returning = null; };
+  addEventListener("keydown", forget, true);
+  addEventListener("pointerdown", forget, true);
+}
+
 export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenChange, side = "top", align = "center", offset, arrow, delay = TOOLTIP_DELAY, closeDelay = TOOLTIP_CLOSE_DELAY, describes = true, id: idProp, surface }: AnchoredProps & { arrow?: boolean; /** The surface's id when the consumer sets one. */ id?: string; delay?: number; closeDelay?: number; /** False when the tooltip's text is already the trigger's name, so it isn't announced twice. */ describes?: boolean; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
   const generatedId = useId();
   const id = idProp ?? generatedId;
@@ -224,17 +238,49 @@ export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenCh
   shown.current = open;
   const [instant, setInstant] = useState(false);
   const { show, hide, clear, hovers, focused } = useHoverIntent(open, setOpen, { delay, closeDelay, onClose: () => { if (shown.current) lastClosed = Date.now(); } });
+  /*
+   * While open, anything that says the pointer or the window has gone closes it, so a tooltip never outlives what it
+   * names (2026-10-31, "the tooltips start to glitch and get stuck"). The trigger's own pointerleave is not enough: none
+   * fires when the trigger moves or is disabled under a still pointer (a panel toggle, Back after the last step), when
+   * the pointer crosses a window drag region (Electron's headers), or when it leaves the window from the trigger's edge.
+   * A pointer move anywhere but the trigger and the tooltip closes it, unless the keyboard put focus on the trigger; so
+   * does the pointer leaving the window, the window losing focus, and the page being hidden.
+   */
+  useEffect(() => {
+    if (!open) return;
+    const keyboard = () => !!triggerNode.current?.matches(":focus-visible");
+    const away = (target: EventTarget | null) => !within(triggerNode.current, target) && !within(surfaceNode.current, target);
+    const onMove = (event: PointerEvent) => { if (event.pointerType !== "touch" && away(event.target) && !keyboard()) hide(); };
+    const onOut = (event: MouseEvent) => { if (!event.relatedTarget && !keyboard()) hide(0); };
+    const onGone = () => hide(0);
+    const onVisibility = () => { if (document.hidden) hide(0); };
+    addEventListener("pointermove", onMove, true);
+    document.addEventListener("mouseout", onOut, true);
+    addEventListener("blur", onGone);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      removeEventListener("pointermove", onMove, true);
+      document.removeEventListener("mouseout", onOut, true);
+      removeEventListener("blur", onGone);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [open]);
+  // A trigger whose menu or popover is open has said what it is: its tooltip would only cover what it opened.
+  const expanded = (node: Element) => node.getAttribute("aria-expanded") === "true";
   const t = trigger as Trigger;
   const describedBy = [t.props?.["aria-describedby"], describes ? id : undefined].filter(Boolean).join(" ") || undefined;
   return <>
     {isValidElement(trigger) ? cloneElement(t, {
       ref: triggerRef,
       "aria-describedby": describedBy,
-      onPointerEnter: compose(t.props.onPointerEnter, (event: ReactPointerEvent) => { if (!hovers(event)) return; const skip = skipping(); setInstant(skip); show(skip ? 0 : delay); }),
+      onPointerEnter: compose(t.props.onPointerEnter, (event: ReactPointerEvent) => { if (!hovers(event) || expanded(event.currentTarget as Element)) return; const skip = skipping(); setInstant(skip); show(skip ? 0 : delay); }),
       // Moving onto the tooltip (or the bridge over the gap) keeps it open.
       onPointerLeave: compose(t.props.onPointerLeave, (event: ReactPointerEvent) => { if (!within(surfaceNode.current, event.relatedTarget)) hide(); }),
       onPointerDown: compose(t.props.onPointerDown, () => hide(0)),
-      onFocus: compose(t.props.onFocus, (event: ReactFocusEvent<HTMLElement>) => { setInstant(skipping()); focused(event); }),
+      onFocus: compose(t.props.onFocus, (event: ReactFocusEvent<HTMLElement>) => {
+        if (returning === event.currentTarget || expanded(event.currentTarget)) { returning = null; return; }
+        setInstant(skipping()); focused(event);
+      }),
       onBlur: compose(t.props.onBlur, () => hide(0)),
     }) : trigger}
     {surface({
@@ -242,6 +288,8 @@ export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenCh
       ref: surfaceNode,
       popover: "manual",
       "data-instant": instant ? "" : undefined,
+      // A name only (an icon button's label) lets the pointer through (surface.css); a description stays hoverable.
+      "data-passthrough": describes ? undefined : "",
       // Content on hover stays while the pointer is over it (WCAG 1.4.13).
       onPointerEnter: () => clear(),
       onPointerLeave: (event: ReactPointerEvent) => { if (!within(triggerNode.current, event.relatedTarget)) hide(); },

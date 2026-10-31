@@ -12,7 +12,7 @@
  * --store='{"canvas":{"ui":"compact"}}' for saved settings, --width=1024 for a narrow window, --run='<js>' to act
  * on the page first, as opening Settings, which no hash names).
  */
-const { app, BrowserWindow, ipcMain, Menu, nativeTheme, net, protocol, session, shell } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, nativeTheme, net, protocol, screen, session, shell } = require("electron");
 const { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, watch, writeFileSync } = require("node:fs");
 const { join, normalize, sep } = require("node:path");
 const { pathToFileURL } = require("node:url");
@@ -31,12 +31,43 @@ const widthArg = Number(process.argv.find(arg => arg.startsWith("--width="))?.sl
 /* Neutral 975 and white: the app's page ground in each theme, so a resize never shows a flash. */
 const GROUND = { dark: "#020202", light: "#ffffff" };
 
+/*
+ * Where the window opens (owner, 2026-10-31: "doesnt open to the full width of the screen"): the first time, the whole work
+ * area of the display under the pointer (the screen less the menu bar and Dock, as a double-click on the title bar zooms it);
+ * after that, where it was last left (~/Library/Application Support/Area/window.json), as Cursor and Figma reopen, unless that
+ * place is no longer on any display. A capture keeps 1440 × 900 (or --width), so its frames stay comparable.
+ */
+const MIN = { width: 960, height: 600 };
+const placeFile = () => join(app.getPath("userData"), "window.json");
+function openingPlace() {
+  if (capture) return { width: widthArg ? Math.max(MIN.width, widthArg) : 1440, height: 900 };
+  const area = screen.getDisplayNearestPoint(screen.getCursorScreenPoint()).workArea;
+  try {
+    const saved = JSON.parse(readFileSync(placeFile(), "utf8"));
+    const shown = screen.getAllDisplays().some(({ workArea: d }) => saved.x < d.x + d.width - 100 && saved.x + saved.width > d.x + 100 && saved.y >= d.y - 10 && saved.y < d.y + d.height - 100);
+    if (shown && saved.width >= MIN.width && saved.height >= MIN.height) return saved;
+  } catch {}
+  return { ...area, width: widthArg ? Math.max(MIN.width, widthArg) : area.width };
+}
+function keepPlace(window) {
+  if (capture) return;
+  let timer;
+  const write = () => {
+    if (window.isDestroyed() || window.isMinimized() || window.isFullScreen()) return;
+    try { writeFileSync(placeFile(), JSON.stringify({ ...window.getNormalBounds(), maximized: window.isMaximized() })); } catch {}
+  };
+  const save = () => { clearTimeout(timer); timer = setTimeout(write, 400); };
+  window.on("resize", save);
+  window.on("move", save);
+  window.on("close", () => { clearTimeout(timer); write(); });
+}
+
 function createWindow() {
+  const { maximized, ...place } = openingPlace();
   const window = new BrowserWindow({
-    width: widthArg ? Math.max(960, widthArg) : 1440,
-    height: 900,
-    minWidth: 960,
-    minHeight: 600,
+    ...place,
+    minWidth: MIN.width,
+    minHeight: MIN.height,
     title: "Area",
     show: false,
     backgroundColor: nativeTheme.shouldUseDarkColors ? GROUND.dark : GROUND.light,
@@ -53,6 +84,8 @@ function createWindow() {
     },
   });
   window.loadFile(join(dist, "index.html"), { ...(themeArg ? { query: { theme: themeArg } } : {}), ...(hashArg ? { hash: hashArg } : {}) });
+  if (maximized) window.maximize();
+  keepPlace(window);
   window.once("ready-to-show", () => { if (!capture) window.show(); });
   // Links that leave the app open in the browser, never inside the window.
   window.webContents.setWindowOpenHandler(({ url }) => { require("electron").shell.openExternal(url); return { action: "deny" }; });

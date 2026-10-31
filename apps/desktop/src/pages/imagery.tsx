@@ -25,7 +25,8 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AssetGrid, AssetGridItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, GridIcon, OpenIcon } from "@area/icons";
-import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { ChromeButton, SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { appScale } from "../app-scale.ts";
 import { hrefOf } from "../places.ts";
 import { CanvasSection, CARD_SCOPE } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewSwitch } from "../view-controls.tsx";
@@ -123,7 +124,8 @@ export function ImageryPage() {
 
   const total = library?.items.length ?? 0;
   const trail = (
-    <Breadcrumb aria-label="Location" className="studio-imagery__trail">
+    // The Canvas bar's path, as Components' (one line, the app's scale, starting on the feed's margin; styles/canvas.css).
+    <Breadcrumb nowrap aria-label="Location" className="studio-canvas__crumbs" {...appScale()}>
       <BreadcrumbList>
         <BreadcrumbItem>{folder || opened ? <BreadcrumbLink href={hrefOf({ page: "inspiration" })} onClick={event => { event.preventDefault(); select(""); }}>Inspiration</BreadcrumbLink> : <BreadcrumbPage>Inspiration</BreadcrumbPage>}</BreadcrumbItem>
         {folder ? <>
@@ -196,17 +198,17 @@ export function ImageryPage() {
         <SidebarTree label="Image groups" count={total} current={folder?.id} onSelect={openFolder}
           groups={[{ id: "groups", label: "Groups", items: folders.map(entry => ({ id: entry.id, label: entry.name, icon: <GridIcon />, trailing: <span className="studio-muted studio-imagery__count">{byFolder.get(entry.id)?.length ?? 0}</span> })) }]} />
       </SidebarList>}
-      canvasLead={opened ? <>
-        <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ArrowLeftIcon />} aria-label={`Back to ${folder?.name ?? "Inspiration"}`} onClick={closeViewer} />
+      canvasLead={<div className="studio-canvas__lead">
+        {opened ? <ChromeButton label={`Back to ${folder?.name ?? "Inspiration"}`} keys={["Esc"]} shortcut="Escape" icon={<ArrowLeftIcon />} onClick={closeViewer} /> : null}
         {trail}
-      </> : trail}
+      </div>}
       canvasTitle={opened ? nameOf(opened) : folder?.name ?? "Inspiration"}
       canvasRef={canvas}
       canvasActions={
         <ViewControls>
           {opened ? <>
-            <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ChevronLeftIcon />} aria-label="Previous image" onClick={() => step(-1)} />
-            <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ChevronRightIcon />} aria-label="Next image" onClick={() => step(1)} />
+            <ChromeButton label="Previous image" keys={["←"]} shortcut="ArrowLeft" icon={<ChevronLeftIcon />} onClick={() => step(-1)} />
+            <ChromeButton label="Next image" keys={["→"]} shortcut="ArrowRight" icon={<ChevronRightIcon />} onClick={() => step(1)} />
           </> : <>
             <Select size="sm" variant="soft" aria-label="Card size" value={size} onChange={event => setSize(event.currentTarget.value as Size)}>
               <option value="small">Small</option>
