@@ -7,7 +7,9 @@
  *   #system/<system>/themes/<theme>            the system's themes
  *   #system/<system>/themes/new/<question>     a new theme, made in the Setup chat
  *   #system/<system>/themes/settings/<group>/<item>  Themes on one setting (its group: Page, Accent, … Effects)
+ *   #system/<system>/tokens/<group>            every token, in tiers, narrowed to one group (2026-10-31)
  *   #system/<system>/colors/<item>             the color scales (and typography/<role>, icons/<category>)
+ *   #system/<system>/spacing                   a foundation that had been settings only (and shape, elevation, motion)
  *   #system/<system>/components/<item>         a family, or a family's tile (<slug>/<tile>)
  *   #system/<system>/patterns/<item>           the system's screens
  *   #system/<system>/history/<version>         the system's publishes, newest first
@@ -15,7 +17,9 @@
  *   #project/<project>/pages/<page>/<layer>    one of its pages, and a layer on it
  *   #project/<project>/explorations/<id>       an exploration: a theme tried on the project's system
  *   #project/<project>/versions/<id>           its saved versions
- *   #inspiration/<item>                      Imagery's groups and images (<group>/<image>; the Library page until 2026-10-29)
+ *   #references/<item>                       References (Inspiration until 2026-10-31, the Library page until 2026-10-29): Saved
+ *                                            at its root, "discover" and "following", a collection and its images
+ *                                            (<collection>/<image>)
  *   #labs/<lab>/<item>                       labs out of the nav (Materials, Tests)
  *
  * A system is one of the workspace's (src/systems.ts) and a project one of its projects (src/projects.ts): the app names
@@ -26,8 +30,9 @@
 
 /** A page: what draws the Canvas (and the Sidebar's list, if it has one). */
 export type PageId =
-  | "home" | "themes" | "theme-setup" | "foundations" | "settings" | "color" | "typography" | "icons"
-  | "components" | "patterns" | "history" | "inspiration" | "materials" | "tests"
+  | "home" | "themes" | "theme-setup" | "foundations" | "settings" | "tokens" | "color" | "typography" | "icons"
+  | "spacing" | "shape" | "elevation" | "motion"
+  | "components" | "patterns" | "history" | "references" | "materials" | "tests"
   | "project" | "project-page" | "exploration" | "versions";
 
 export interface Place {
@@ -60,10 +65,12 @@ export const PROJECT_PAGES: ReadonlySet<PageId> = new Set(["project", "project-p
 const AREA = "area";
 
 /** The pages with a list of their own: in the Sidebar it takes the panel over, under a back row (Phase 0's takeover). */
-export const LIST_PAGES: ReadonlySet<PageId> = new Set(["color", "typography", "icons", "components", "patterns", "inspiration", "materials", "tests"]);
+export const LIST_PAGES: ReadonlySet<PageId> = new Set(["tokens", "color", "typography", "icons", "components", "patterns", "references", "materials", "tests"]);
 
 /** A system's sections, as their hashes say them (Foundations until 2026-10-31 held Colors, Typography and Icons). */
-const SECTIONS = ["themes", "colors", "typography", "icons", "components", "patterns", "history"];
+const SECTIONS = ["themes", "tokens", "colors", "typography", "spacing", "shape", "elevation", "motion", "icons", "components", "patterns", "history"];
+/** The foundations that had been settings only, each a page since 2026-10-31. */
+const FOUNDATION_SECTIONS = ["tokens", "spacing", "shape", "elevation", "motion"] as const;
 /** Foundations' own pages, which old /foundations/<page> links name before the setting groups. */
 const FOUNDATION_PAGES = ["color", "typography", "icons"] as const;
 
@@ -71,6 +78,15 @@ const FOUNDATION_PAGES = ["color", "typography", "icons"] as const;
 const MOVED_TO_TESTS = new Set(["hairline", "stroke-groups"]);
 const patternsPlace = (system: string, item: string | undefined): Place =>
   item && MOVED_TO_TESTS.has(item.split("/")[0]!) ? { page: "tests", item } : { page: "patterns", system, item };
+
+/** References' views: what others share and what you keep (Saved, its root; its collections are the page's list). */
+export const REFERENCE_VIEWS: ReadonlyArray<{ item?: string; label: string }> = [
+  { item: "discover", label: "Discover" },
+  { item: "following", label: "Following" },
+  { label: "Saved" },
+];
+/** Which of References' views an item is on, or none for Saved's (a collection, and an image in it). */
+export const referenceView = (item?: string) => REFERENCE_VIEWS.find(view => view.item && view.item === item?.split("/")[0])?.item;
 
 /** A setting group's heading as its slug ("Shape" → "shape"). */
 export const groupSlug = (heading: string) => heading.toLowerCase().replace(/[^a-z0-9]+/g, "-");
@@ -87,11 +103,11 @@ export function hrefOf(place: Place): string {
     case "foundations": return `${system}/themes/settings`;
     case "settings": return `${system}/themes/settings/${place.group ?? ""}${encode(place.item)}`;
     case "color": return `${system}/colors${encode(place.item)}`;
-    case "typography": case "icons": return `${system}/${place.page}${encode(place.item)}`;
+    case "typography": case "icons": case "tokens": case "spacing": case "shape": case "elevation": case "motion": return `${system}/${place.page}${encode(place.item)}`;
     case "components": return `${system}/components${encode(place.item)}`;
     case "patterns": return `${system}/patterns${encode(place.item)}`;
     case "history": return `${system}/history${encode(place.item)}`;
-    case "inspiration": return `#inspiration${encode(place.item)}`;
+    case "references": return `#references${encode(place.item)}`;
     case "project": return `#project/${place.project ?? ""}${encode(place.item)}`;
     case "project-page": return `#project/${place.project ?? ""}/pages${encode(place.item)}`;
     case "exploration": return `#project/${place.project ?? ""}/explorations${encode(place.item)}`;
@@ -124,6 +140,7 @@ export function parsePlace(hash: string): Place | null {
     }
     if (section === "colors") return { page: "color", system, item: rest(more) };
     if (section === "typography" || section === "icons") return { page: section, system, item: rest(more) };
+    if ((FOUNDATION_SECTIONS as readonly string[]).includes(section ?? "")) return { page: section as PageId, system, item: rest(more) };
     // An old link: Foundations held Colors, Typography, Icons and the setting groups until 2026-10-31.
     if (section === "foundations") {
       const [page, ...item] = more;
@@ -145,7 +162,7 @@ export function parsePlace(hash: string): Place | null {
     if (section === "versions") return { page: "versions", project, item: rest(more) };
     return { page: "project", project, item: rest([section ?? "", ...more]) };
   }
-  if (root === "inspiration") return { page: "inspiration", item: rest(parts) };
+  if (root === "references") return { page: "references", item: rest(parts) };
   if (root === "labs" && parts[0] === "materials") return { page: "materials", item: rest(parts.slice(1)) };
   if (root === "labs" && parts[0] === "tests") return { page: "tests", item: rest(parts.slice(1)) };
   return null;
@@ -154,7 +171,7 @@ export function parsePlace(hash: string): Place | null {
 /**
  * Where an old link goes (the Titlebar's tabs until 2026-10-28, and their own older names): Theme → Themes (a setting's
  * link to its group's page), Components → Components, Typography, Color and Icons → their sections, Testing → Patterns,
- * Imagery and the Library page → Inspiration, Materials → Labs. `groupOf` names a setting's group (its slug), so `#theme/radius` lands on Shape.
+ * Imagery, the Library page and Inspiration → References, Materials → Labs. `groupOf` names a setting's group (its slug), so `#theme/radius` lands on Shape.
  */
 export function redirect(hash: string, groupOf?: (setting: string) => string | undefined): Place | null {
   const [root, ...parts] = partsOf(hash);
@@ -171,13 +188,13 @@ export function redirect(hash: string, groupOf?: (setting: string) => string | u
     case "icons": return { page: "icons", system: AREA, item };
     // Testing was the Examples tab until 2026-10-17.
     case "testing": case "examples": return patternsPlace(AREA, item);
-    // Imagery was the Brand tab 2026-10-18 to 24 (#brand/<group>/<image>), then the Library, and Inspiration since the
-    // Library became what's live (2026-10-29). Systems were brands until 2026-10-29 (#brand/<system>/<section>/…): the
-    // same place under #system/, or none for a system this app doesn't have.
-    case "imagery": case "library": return { page: "inspiration", item };
+    // Imagery was the Brand tab 2026-10-18 to 24 (#brand/<group>/<image>), then the Library, Inspiration once the Library
+    // became what's live (2026-10-29), and References since 2026-10-31 (owner: "references is good"). Systems were brands
+    // until 2026-10-29 (#brand/<system>/<section>/…): the same place under #system/, or none for a system this app doesn't have.
+    case "imagery": case "library": case "inspiration": return { page: "references", item };
     case "brand": return knownSystem(parts[0]) || SECTIONS.includes(parts[1] ?? "")
       ? parsePlace(`#system/${parts.map(part => encodeURIComponent(part)).join("/")}`)
-      : { page: "inspiration", item };
+      : { page: "references", item };
     case "materials": return { page: "materials", item };
     default: return null;
   }
@@ -189,18 +206,18 @@ export function resolve(hash: string, groupOf?: (setting: string) => string | un
 }
 
 /**
- * What an open tab holds: Home, one Library item (a system, or Inspiration), one project, or a lab (owner, 2026-10-29:
+ * What an open tab holds: Home, References, one system, one project, or a lab (owner, 2026-10-29:
  * "tabs can be libraries or projects … the tab itself in the canvas will always just be the project itself"). A tab
  * never changes what it holds: what is inside it (a system's sections, a project's pages, explorations and versions) is
  * reached through the Sidebar, and anything else opens in the tab holding it, or a new one.
  */
-export type TabKind = "home" | "system" | "project" | "inspiration" | "labs";
+export type TabKind = "home" | "system" | "project" | "references" | "labs";
 export const tabKind = (place: Place): TabKind =>
-  place.page === "home" ? "home" : place.page === "inspiration" ? "inspiration" : place.page === "materials" || place.page === "tests" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
+  place.page === "home" ? "home" : place.page === "references" ? "references" : place.page === "materials" || place.page === "tests" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
 export const tabName = (place: Place): string => {
   const kind = tabKind(place);
   return kind === "system" ? systemName(place.system) : kind === "project" ? projectName(place.project)
-    : kind === "labs" ? (place.page === "tests" ? "Tests" : "Materials") : ({ home: "Home", inspiration: "Inspiration" } as const)[kind];
+    : kind === "labs" ? (place.page === "tests" ? "Tests" : "Materials") : ({ home: "Home", references: "References" } as const)[kind];
 };
 /** What a tab holds, as a key: two places in one system or project are in the same tab. */
 export const tabHolds = (place: Place): string => {

@@ -228,8 +228,8 @@ const KIND_LABEL: Record<Kind, string> = {
   actions: "Actions and choices", fields: "Fields and text entry", pickers: "Pickers and inspector parts", navigation: "Navigation, menus and overlays",
   status: "Status and feedback", content: "Surfaces and content", conversation: "Conversation",
 };
-const KIND_ORDER = [...Object.values(KIND_LABEL), "Other"];
-const kindOf = (family: Family) => {
+export const KIND_ORDER = [...Object.values(KIND_LABEL), "Other"];
+export const kindOf = (family: Family) => {
   const kind = (Object.keys(KIND_LABEL) as Kind[]).find(key => family.slug in (DOCUMENTATION_GROUPS as Record<Kind, object>)[key]);
   return kind ? KIND_LABEL[kind] : "Other";
 };

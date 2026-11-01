@@ -15,7 +15,7 @@
  */
 import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useInsertionEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode, type Ref } from "react";
 import { Avatar, Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, Titlebar, Tooltip, TreeView, type TreeViewNode } from "@area/react";
-import { ArrowLeftIcon, ArrowRightIcon, ImagesIcon, MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SettingsIcon, SunIcon } from "@area/icons";
+import { ArrowLeftIcon, ArrowRightIcon, BookmarkIcon, MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SettingsIcon, SunIcon } from "@area/icons";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./gallery/controls.ts";
 import { ComponentsPage } from "./pages/components.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
@@ -25,6 +25,8 @@ import { ThemePage } from "./pages/theme.tsx";
 import { ExamplesPage } from "./pages/examples.tsx";
 import { MaterialsPage } from "./pages/materials.tsx";
 import { ImageryPage } from "./pages/imagery.tsx";
+import { TokensPage } from "./pages/tokens.tsx";
+import { FoundationPage } from "./pages/foundation.tsx";
 import { HistoryPage } from "./pages/history.tsx";
 import { ExplorationPage, ProjectOverview, ProjectPageView, VersionsPage } from "./pages/project.tsx";
 import { PublishControls } from "./publish.tsx";
@@ -384,7 +386,7 @@ export function Studio() {
   const tab = tabs.list.find(entry => entry.id === tabs.current) ?? tabs.list[0]!;
   const { place } = tab;
   const item = place.item;
-  // The open system: the current tab's, a project tab's system, else the last a tab showed (Home, Inspiration and labs
+  // The open system: the current tab's, a project tab's system, else the last a tab showed (Home, References and labs
   // paint in it).
   const openProject = tabKind(place) === "project" ? projects.find(entry => entry.id === place.project) ?? null : null;
   const lastSystem = useRef(AREA_ID);
@@ -479,7 +481,7 @@ export function Studio() {
       const next: Place = tabKind(to) === "system" && !to.system ? { ...to, system: tabKind(open.place) === "system" ? open.place.system ?? AREA_ID : lastSystem.current }
         : tabKind(to) === "project" && !to.project ? { ...to, project: open.place.project } : to;
       // A tab never changes what it holds (owner, 2026-10-29: "the tab itself … will always just be the project itself"):
-      // a place in another system, project or Inspiration opens in the tab already holding it, else a new tab.
+      // a place in another system, project or References opens in the tab already holding it, else a new tab.
       if (!options.newTab && tabHolds(next) !== tabHolds(open.place)) {
         const holder = current.list.find(entry => entry.id !== HOME_TAB && tabHolds(entry.place) === tabHolds(next));
         if (!holder) return navigateIn(current, open, next, { ...options, newTab: true });
@@ -797,7 +799,7 @@ export function Studio() {
   // The picks' one rule is in the head while there are any; the scopes that carry the settings carry data-area-colours.
   useColoursSheet(state.shown.colours);
 
-  const inspiration = tabs.list.find(entry => entry.place.page === "inspiration");
+  const references = tabs.list.find(entry => entry.place.page === "references");
   return (
     <StudioContext.Provider value={state}>
     <AppScaleContext.Provider value={scale}>
@@ -824,8 +826,8 @@ export function Studio() {
           search: <SearchEverything open={searching} onOpenChange={setSearching} />,
           tabs: <AppTabs tabs={tabs.list} current={tab.id} onSelect={selectTab} onClose={closeTab} onNew={() => setSearching("new")} />,
           canvasEnd: <>
-            <ChromeButton label="Inspiration" icon={<ImagesIcon />}
-              onClick={() => inspiration ? selectTab(inspiration.id) : navigate({ page: "inspiration" }, { newTab: true })} />
+            <ChromeButton label="References" icon={<BookmarkIcon />}
+              onClick={() => references ? selectTab(references.id) : navigate({ page: "references" }, { newTab: true })} />
             <ChromeButton label={theme === "dark" ? "Light mode" : "Dark mode"}
               icon={theme === "dark" ? <SunIcon /> : <MoonIcon />} onClick={() => setTheme(theme === "dark" ? "light" : "dark")} />
           </>,
@@ -842,6 +844,8 @@ export function Studio() {
           place.page === "foundations" || place.page === "settings" ? <ThemesPage /> :
           place.page === "components" ? <ComponentsPage /> :
           place.page === "typography" ? <TypographyPage /> :
+          place.page === "tokens" ? <TokensPage /> :
+          place.page === "spacing" || place.page === "shape" || place.page === "elevation" || place.page === "motion" ? <FoundationPage key={place.page} id={place.page} /> :
           place.page === "icons" ? <IconsPage /> :
           place.page === "patterns" ? <ExamplesPage /> :
           place.page === "history" ? <HistoryPage /> :
@@ -851,7 +855,7 @@ export function Studio() {
           place.page === "versions" ? <VersionsPage /> :
           place.page === "materials" ? <MaterialsPage /> :
           place.page === "tests" ? <ExamplesPage lab /> :
-          place.page === "inspiration" ? <ImageryPage /> : <ColorPage />
+          place.page === "references" ? <ImageryPage /> : <ColorPage />
         }</Fragment>
         </ShellContext.Provider>
       </div>
@@ -1001,7 +1005,7 @@ function keepSpecimenLinks(event: ReactMouseEvent<HTMLElement>) {
  * Titlebar spanned them until then), and no titles (owner, 2026-10-14, after Framer and Figma):
  *   Sidebar    its Panel's bar: the window controls' room (macOS), the Sidebar's toggle and search; back and forward at
  *              its end. The profile and Settings at its foot.
- *   Canvas     a plain Titlebar: the open tabs; Inspiration and light / dark at its end. With the Sidebar hidden it starts
+ *   Canvas     a plain Titlebar: the open tabs; References and light / dark at its end. With the Sidebar hidden it starts
  *              with the window controls' room, the toggle, search and back and forward; with the Inspector hidden it ends
  *              with that toggle.
  *   Inspector  its Panel's bar: its views, and its toggle at the end.
@@ -1063,7 +1067,8 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
             </>}
             bareFooter footer={<ProfileFoot />}>
             {/* The nav always, then the page's own list under it (app-nav.tsx PageList; the Takeover replaced the nav). */}
-            {nav ?? (sidebar ? <><AppNav /><PageList>{sidebar}</PageList></> : <AppNav />)}
+            {/* Components' families are the system nav's own rows (2026-10-31), so its list would say them twice. */}
+            {nav ?? (sidebar && studio.place.page !== "components" ? <><AppNav /><PageList>{sidebar}</PageList></> : <AppNav />)}
           </Panel>
         </div>
       ) : null}
@@ -1218,8 +1223,10 @@ export function SidebarList({ children }: { children: ReactNode }) {
  * Canvas shows, so the current row is always in view; an `axis:` row only opens and closes, as a group does.
  */
 export interface SidebarTreeGroup { id: string; label: string; items: TreeViewNode[] }
-export function SidebarTree({ label, count, groups, current, reveal, onSelect }: {
+export function SidebarTree({ label, count, groups, current, reveal, onSelect, all = true }: {
   label: string; count: number; groups: SidebarTreeGroup[]; current?: string; reveal?: string[]; onSelect?: (id: string) => void;
+  /** The All row; left out where the nav above already has a row for the whole (References' Saved). */
+  all?: boolean;
 }) {
   const { select } = useStudio();
   const branches = groups.filter(group => group.items.length).map(group => `group:${group.id}`);
@@ -1229,13 +1236,13 @@ export function SidebarTree({ label, count, groups, current, reveal, onSelect }:
   const revealKey = (reveal ?? []).join("|");
   useEffect(() => { if (reveal?.length) setOpened(open => [...new Set([...open, ...reveal])]); }, [revealKey]);
   const items: TreeViewNode[] = [
-    { id: "all", label: "All", trailing: <Count count={count} max={9999} /> },
+    ...(all ? [{ id: "all", label: "All", trailing: <Count count={count} max={9999} /> }] : []),
     ...groups.filter(group => group.items.length).map(group => ({ id: `group:${group.id}`, label: group.label, trailing: <Count count={group.items.length} max={9999} />, children: group.items })),
   ];
-  const now = current ?? "all";
+  const now = current ?? (all ? "all" : undefined);
   const toggle = (id: string) => setOpened(open => open.includes(id) ? open.filter(entry => entry !== id) : [...open, id]);
   return (
-    <TreeView aria-label={label} className="studio-sidebar__tree" items={items} currentId={now} selectedIds={[now]}
+    <TreeView aria-label={label} className="studio-sidebar__tree" items={items} currentId={now} selectedIds={now ? [now] : []}
       expandedIds={[...branches.filter(id => !closed.includes(id)), ...opened]}
       onExpandedChange={ids => { setClosed(branches.filter(id => !ids.includes(id))); setOpened(ids.filter(id => !id.startsWith("group:"))); }}
       onActivate={id => {

@@ -19,15 +19,20 @@
  * and its name below. Both hold the gallery cards' look
  * (tile.tsx, CARD_SCOPE).
  *
+ * References (owner, 2026-10-31; Inspiration until then): the page is Saved at its root, the library's folders its
+ * collections and then everything saved; Discover and Following, what others share, are their own views and hold nothing
+ * until sharing exists. The folders are collections because a collection is what you gather around a look (owner: "collect
+ * a bunch of sources, images, ui examples, components, typefaces, colors, and create an entire collection").
+ *
  * Electron serves the library as area-brand://library/ (electron/main.cjs); the browser preview as /__brand/
- * (scripts/dev.mjs). Location: #imagery/<folder>, #imagery/<folder>/<image> for the viewer.
+ * (scripts/dev.mjs). Location: #references/<collection>, #references/<collection>/<image> for the viewer.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AssetGrid, AssetGridItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, GridIcon, OpenIcon } from "@area/icons";
 import { ChromeButton, SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { appScale } from "../app-scale.ts";
-import { hrefOf } from "../places.ts";
+import { hrefOf, referenceView } from "../places.ts";
 import { CanvasSection, CARD_SCOPE, FEED_TABLE } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewSwitch } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -73,7 +78,9 @@ export function useLibrary() {
 export function ImageryPage() {
   const { library, error } = useLibrary();
   const { item, select, query } = useStudio();
-  const [folderId, openedId] = (item ?? "").split("/");
+  // Discover and Following are views of their own; anything else is Saved's: a collection, and an image in it.
+  const view = referenceView(item);
+  const [folderId, openedId] = view ? [] : (item ?? "").split("/");
   const [size, setSize] = useViewOption<Size>("brand:size", "medium", ["small", "medium", "large"]);
   const [mode, setMode] = useViewOption<Mode>("brand:mode", "grid", ["grid", "waterfall", "list"]);
   const [chosen, setChosen] = useState<string | null>(null);
@@ -123,14 +130,15 @@ export function ImageryPage() {
   });
 
   const total = library?.items.length ?? 0;
+  const viewName = view === "discover" ? "Discover" : view === "following" ? "Following" : "Saved";
   const trail = (
     // The Canvas bar's path, as Components' (one line, the app's scale, starting on the feed's margin; styles/canvas.css).
     <Breadcrumb nowrap aria-label="Location" className="studio-canvas__crumbs" {...appScale()}>
       <BreadcrumbList>
-        <BreadcrumbItem>{folder || opened ? <BreadcrumbLink href={hrefOf({ page: "inspiration" })} onClick={event => { event.preventDefault(); select(""); }}>Inspiration</BreadcrumbLink> : <BreadcrumbPage>Inspiration</BreadcrumbPage>}</BreadcrumbItem>
+        <BreadcrumbItem>{folder || opened ? <BreadcrumbLink href={hrefOf({ page: "references" })} onClick={event => { event.preventDefault(); select(""); }}>Saved</BreadcrumbLink> : <BreadcrumbPage>{viewName}</BreadcrumbPage>}</BreadcrumbItem>
         {folder ? <>
           <BreadcrumbSeparator />
-          <BreadcrumbItem>{opened ? <BreadcrumbLink href={hrefOf({ page: "inspiration", item: folder.id })} onClick={event => { event.preventDefault(); closeViewer(); }}>{folder.name}</BreadcrumbLink> : <BreadcrumbPage>{folder.name}</BreadcrumbPage>}</BreadcrumbItem>
+          <BreadcrumbItem>{opened ? <BreadcrumbLink href={hrefOf({ page: "references", item: folder.id })} onClick={event => { event.preventDefault(); closeViewer(); }}>{folder.name}</BreadcrumbLink> : <BreadcrumbPage>{folder.name}</BreadcrumbPage>}</BreadcrumbItem>
         </> : null}
         {opened ? <><BreadcrumbSeparator /><BreadcrumbItem><BreadcrumbPage>{nameOf(opened)}</BreadcrumbPage></BreadcrumbItem></> : null}
       </BreadcrumbList>
@@ -144,7 +152,7 @@ export function ImageryPage() {
         {entries.map(entry => (
           <tr key={entry.id} data-selected={entry.id === chosen ? "" : undefined} onClick={() => setChosen(entry.id)} onDoubleClick={() => openImage(entry)}>
             <TableCell fit><img className="studio-imagery__row-thumb" src={url(entry.thumb)} alt="" loading="lazy" decoding="async" /></TableCell>
-            <td><a href={hrefOf({ page: "inspiration", item: `${entry.folder}/${entry.id}` })} onClick={event => { event.preventDefault(); openImage(entry); }}>{nameOf(entry)}</a></td>
+            <td><a href={hrefOf({ page: "references", item: `${entry.folder}/${entry.id}` })} onClick={event => { event.preventDefault(); openImage(entry); }}>{nameOf(entry)}</a></td>
             <td><span className="studio-muted">{entry.source || "—"}</span></td>
             <td><span className="studio-muted">{entry.width} × {entry.height}</span></td>
           </tr>
@@ -165,7 +173,10 @@ export function ImageryPage() {
   );
 
   let body;
-  if (error) body = <EmptyState title="No image library" description="The library is read from ~/Library/Application Support/Area/Brand/library.json, which is missing or unreadable." />;
+  // What others share arrives with sharing; until then each view says what it will hold.
+  if (view === "discover") body = <EmptyState title="Nothing shared yet" description="Collections, systems and designs that people share appear here, chosen by people rather than gathered by a crawler." />;
+  else if (view === "following") body = <EmptyState title="Not following anyone yet" description="Collections and people you follow appear here as they add to them." />;
+  else if (error) body = <EmptyState title="No image library" description="The library is read from ~/Library/Application Support/Area/Brand/library.json, which is missing or unreadable." />;
   else if (!library) body = <div className="studio-imagery__loading"><Spinner size="md" label="Loading the image library" /></div>;
   else if (opened) body = (
     <figure className="studio-imagery__viewer">
@@ -176,9 +187,9 @@ export function ImageryPage() {
   else if (folder || searching) body = shown.length ? (
     <CanvasSection id="brand-images" title={searching ? <>{folder ? `${folder.name}: ` : ""}{shown.length} results</> : undefined}>{imageGrid(shown, folder?.name ?? "Results")}</CanvasSection>
   ) : <EmptyState title="Nothing found" description={`Nothing matches “${query}”.`} />;
-  else body = (
-    <CanvasSection id="brand-groups" title="Groups" count={folders.length}>
-      <AssetGrid aria-label="Groups" value={chosen} onValueChange={setChosen} onOpen={openFolder} {...CARD_SCOPE}
+  else body = <>
+    <CanvasSection id="brand-groups" title="Collections" count={folders.length}>
+      <AssetGrid aria-label="Collections" value={chosen} onValueChange={setChosen} onOpen={openFolder} {...CARD_SCOPE}
         style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
         {folders.map(entry => (
           // A group keeps the layered card (owner, 2026-10-24: "use the old asset card style with the layered containers for
@@ -189,33 +200,35 @@ export function ImageryPage() {
         ))}
       </AssetGrid>
     </CanvasSection>
-  );
+    {/* Everything saved, newest first as the library keeps it, whichever collection holds it. */}
+    <CanvasSection id="brand-saved" title="All saved" count={total}>{imageGrid(library.items, "All saved")}</CanvasSection>
+  </>;
 
   const chosenFolder = !opened && !folder ? folders.find(entry => entry.id === chosen) : undefined;
   return (
     <Workspace
       sidebar={<SidebarList>
-        <SidebarTree label="Image groups" count={total} current={folder?.id} onSelect={openFolder}
-          groups={[{ id: "groups", label: "Groups", items: folders.map(entry => ({ id: entry.id, label: entry.name, icon: <GridIcon />, trailing: <span className="studio-muted studio-imagery__count">{byFolder.get(entry.id)?.length ?? 0}</span> })) }]} />
+        <SidebarTree label="Collections" count={total} current={folder?.id} onSelect={openFolder} all={false}
+          groups={[{ id: "groups", label: "Collections", items: folders.map(entry => ({ id: entry.id, label: entry.name, icon: <GridIcon />, trailing: <span className="studio-muted studio-imagery__count">{byFolder.get(entry.id)?.length ?? 0}</span> })) }]} />
       </SidebarList>}
       canvasLead={<div className="studio-canvas__lead">
-        {opened ? <ChromeButton label={`Back to ${folder?.name ?? "Inspiration"}`} keys={["Esc"]} shortcut="Escape" icon={<ArrowLeftIcon />} onClick={closeViewer} /> : null}
+        {opened ? <ChromeButton label={`Back to ${folder?.name ?? "Saved"}`} keys={["Esc"]} shortcut="Escape" icon={<ArrowLeftIcon />} onClick={closeViewer} /> : null}
         {trail}
       </div>}
-      canvasTitle={opened ? nameOf(opened) : folder?.name ?? "Inspiration"}
+      canvasTitle={opened ? nameOf(opened) : folder?.name ?? viewName}
       canvasRef={canvas}
       canvasActions={
         <ViewControls>
           {opened ? <>
             <ChromeButton label="Previous image" keys={["←"]} shortcut="ArrowLeft" icon={<ChevronLeftIcon />} onClick={() => step(-1)} />
             <ChromeButton label="Next image" keys={["→"]} shortcut="ArrowRight" icon={<ChevronRightIcon />} onClick={() => step(1)} />
-          </> : <>
+          </> : view ? null : <>
             <Select size="sm" variant="soft" aria-label="Card size" value={size} onChange={event => setSize(event.currentTarget.value as Size)}>
               <option value="small">Small</option>
               <option value="medium">Medium</option>
               <option value="large">Large</option>
             </Select>
-            {folder || searching ? <ViewSwitch waterfall value={mode} onChange={setMode} /> : null}
+            <ViewSwitch waterfall value={mode} onChange={setMode} />
           </>}
         </ViewControls>
       }
@@ -244,15 +257,15 @@ export function ImageryPage() {
                 ]} />
               </PanelSection>
             </>
-          ) : library ? (
-            <PanelSection heading={chosenFolder ?? folder ? "Group" : "Inspiration"}>
-              <Facts label="Inspiration" items={chosenFolder ?? folder ? [
+          ) : library && !view ? (
+            <PanelSection heading={chosenFolder ?? folder ? "Collection" : "Saved"}>
+              <Facts label="Saved" items={chosenFolder ?? folder ? [
                 ["Name", (chosenFolder ?? folder)!.name],
                 ["Assets", byFolder.get((chosenFolder ?? folder)!.id)?.length ?? 0],
                 ["Holds", (chosenFolder ?? folder)!.description],
               ] : [
                 ["Assets", total],
-                ["Groups", folders.length],
+                ["Collections", folders.length],
                 ["From", "Pinterest, oval / brand"],
                 ["Saved", new Date(library.fetched).toLocaleDateString()],
                 ["Stored in", <Code>Application Support/Area/Brand</Code>],

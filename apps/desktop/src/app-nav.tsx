@@ -2,58 +2,67 @@
  * The app's navigation (docs/research/app-structure-2026-10-28/README.md; the shell is variation A, owner 2026-10-28):
  *
  *   AppTabs   the Titlebar's open tabs, as a browser's: Home first (icon only, never closed: Figma's file browser tab),
- *             then one per open project, Library item (a system, Inspiration) or lab, its type icon, name and close, then
+ *             then References, one per open project, system or lab, its type icon, name and close, then
  *             New tab (owner, 2026-10-29: "i like the floating tab component from claude codes browser")
  *   AppNav    the Sidebar's nav, the tab's own (owner, 2026-10-29: "tabs can be libraries or projects … those will be
  *             accessed through the left nav, but the tab itself … will always just be the project itself"): in Home's tab
- *             the workspace (Home, then Projects and the Library, a row each); in a system's tab its sections, in a
- *             project's its overview, pages and their layers, explorations and versions, each under a back row to Home.
+ *             the workspace (Home and References, then Projects and Systems, a row each); in a system's tab its
+ *             sections, in References' its views, in a project's its overview, pages and their layers, explorations and
+ *             versions, each under a back row to Home.
  *             A click opens in the tab holding what it names (this one, or another), ⌘-click in a new one
- *   PageList  a page's own list under the nav (Components' families, Icons' categories, the Library's groups), under
+ *   PageList  a page's own list under the nav (Components' families, Icons' categories, References' collections), under
  *             its filter; the nav stays (2026-10-30; was a takeover of the Sidebar under a back row)
  *
- * Explore comes with the phase that builds it; until then it is left out (product UI rule 16), as is the person's row.
+ * References (owner, 2026-10-31: Explore renamed "since its a collection of all designs, images, etc") is what others share
+ * (Discover, Following) and what you keep (Saved, its collections), one place beside Home.
  * New project and New system are their sections' last rows (Home's dialogs).
  */
 import { Fragment, useEffect, useId, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, SearchField, Tooltip } from "@area/react";
-import { AddIcon, ArrowLeftIcon, ChevronDownIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, ImageIcon, ImagesIcon, LayoutIcon, PaletteIcon } from "@area/icons";
-import { systemName, HOME_TAB, hrefOf, LIST_PAGES, projectName, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
+import { AddIcon, ArrowLeftIcon, BookmarkIcon, ChevronDownIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, ImageIcon, LayoutIcon, ShapesIcon } from "@area/icons";
+import { systemName, HOME_TAB, hrefOf, LIST_PAGES, projectName, REFERENCE_VIEWS, referenceView, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
 import { addExploration, addPage } from "./projects.ts";
 import { activeTheme, versionName } from "./systems.ts";
 import { ChromeButton, SidebarList, useStudio } from "./studio.tsx";
-import { FAMILIES } from "./pages/components.tsx";
-import { PATTERNS } from "./pages/examples.tsx";
+import { FAMILIES, KIND_ORDER, kindOf } from "./pages/components.tsx";
 
-const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <PaletteIcon />, project: <FolderIcon />, inspiration: <ImagesIcon />, labs: <FlaskIcon /> };
+// A system is the triangle, square and circle (owner, 2026-10-31: "a simple composition of triangle square, and circle";
+// never the palette, and not the four-diamond component); its own drawing is being made in the icon set.
+const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <ShapesIcon />, project: <FolderIcon />, references: <BookmarkIcon />, labs: <FlaskIcon /> };
 
 /**
  * A system's sections, one row each and one click away (owner, 2026-10-30: "foundations is not very well organized ... the
  * actual nav items are too hidden behind multiple clicks. i want to simplify the design system overall. each system is one
  * thing with components, colors, typography, icons, patterns, etc underneath it"). Foundations and its setting-group pages
  * are gone: a theme's settings are edited on Themes (its Playground), so an old Foundations link opens Themes, on the
- * setting it named.
+ * setting it named. In the Sidebar they sit in three groups (SystemNav); this list is search's.
  */
 export const SYSTEM_SECTIONS: ReadonlyArray<{ place: Place; label: string }> = [
   { place: { page: "themes" }, label: "Themes" },
+  { place: { page: "tokens" }, label: "Tokens" },
   { place: { page: "color" }, label: "Colors" },
   { place: { page: "typography" }, label: "Typography" },
+  { place: { page: "spacing" }, label: "Spacing" },
+  { place: { page: "shape" }, label: "Shape" },
+  { place: { page: "elevation" }, label: "Elevation" },
+  { place: { page: "motion" }, label: "Motion" },
   { place: { page: "icons" }, label: "Icons" },
   { place: { page: "components" }, label: "Components" },
   { place: { page: "patterns" }, label: "Patterns" },
-  { place: { page: "history" }, label: "History" },
+  { place: { page: "history" }, label: "Versions" },
 ];
 
 /** A place's name: its section or lab. */
 export function placeLabel(place: Place): string {
   if (place.page === "settings" || place.page === "foundations") return "Themes";
-  return ({ home: "Home", themes: "Themes", "theme-setup": "New theme", color: "Colors", typography: "Typography", icons: "Icons",
-    components: "Components", patterns: "Patterns", history: "History", inspiration: "Inspiration", materials: "Materials", tests: "Tests",
+  return ({ home: "Home", themes: "Themes", "theme-setup": "New theme", tokens: "Tokens", color: "Colors", typography: "Typography", icons: "Icons",
+    spacing: "Spacing", shape: "Shape", elevation: "Elevation", motion: "Motion",
+    components: "Components", patterns: "Patterns", history: "Versions", references: "References", materials: "Materials", tests: "Tests",
     project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions" } as Record<PageId, string>)[place.page];
 }
 /** What a page's list holds, for its filter's placeholder. */
-const LISTED: Partial<Record<PageId, string>> = { color: "scales", typography: "typefaces and roles", icons: "icons", components: "components",
-  patterns: "patterns", inspiration: "images", materials: "bundles", tests: "tests" };
+const LISTED: Partial<Record<PageId, string>> = { tokens: "tokens", color: "scales", typography: "typefaces and roles", icons: "icons", components: "components",
+  patterns: "patterns", references: "collections", materials: "bundles", tests: "tests" };
 
 /** Same section, whatever is chosen on it. New theme, and an old Foundations link, are under Themes. */
 const sectionOf = (place: Place) => place.page === "theme-setup" || place.page === "foundations" || place.page === "settings" ? "themes" : place.page;
@@ -125,11 +134,11 @@ function Expander({ open, label, controls, onToggle }: { open: boolean; label: s
   return <Button size="sm" variant="ghost" iconOnly icon={<ChevronDownIcon />} aria-label={label} aria-expanded={open} aria-controls={controls} onClick={onToggle} />;
 }
 
-/** The Sidebar's nav for the current tab: the workspace in Home's tab (and Inspiration's and a lab's), else the tab's tree. */
+/** The Sidebar's nav for the current tab: the workspace in Home's tab (and a lab's), else the tab's tree. */
 export function AppNav() {
   const { place } = useStudio();
   const kind = tabKind(place);
-  return kind === "system" ? <SystemNav /> : kind === "project" ? <ProjectNav /> : <WorkspaceNav />;
+  return kind === "system" ? <SystemNav /> : kind === "project" ? <ProjectNav /> : kind === "references" ? <ReferencesNav /> : <WorkspaceNav />;
 }
 
 /** Opens a place from a nav row: in the tab holding it (src/studio.tsx `navigate`), ⌘-click in a new one. */
@@ -152,7 +161,12 @@ function BackHome() {
   );
 }
 
-/** The workspace: Home, then the projects and the Library (each system, and Inspiration), each opening in its own tab. */
+/**
+ * The workspace: Home and References, then the projects and the systems, each opening in its own tab. Home and References
+ * are the two places beside the work (owner, 2026-10-31: "the public facing explore page should just be elevated next to
+ * home"). Systems was the Library until 2026-10-31 (owner: "rename library to systems … so we just have projects and
+ * systems, anything live or published can just remain as either a project or a system").
+ */
 function WorkspaceNav() {
   const { place, systems, projects } = useStudio();
   const open = useOpen();
@@ -161,6 +175,7 @@ function WorkspaceNav() {
       <Nav aria-label="Workspace">
         <NavGroup>
           <NavItem href={hrefOf({ page: "home" })} icon={<HomeIcon />} current={place.page === "home"} onClick={open({ page: "home" })}>Home</NavItem>
+          <NavItem href={hrefOf({ page: "references" })} icon={TAB_ICONS.references} onClick={open({ page: "references" })}>References</NavItem>
         </NavGroup>
         <NavGroup label="Projects">
           {projects.map(project => (
@@ -170,11 +185,10 @@ function WorkspaceNav() {
           ))}
           <NavItem href={hrefOf({ page: "home", item: "new-project" })} icon={<AddIcon />} onClick={open({ page: "home", item: "new-project" })}>New project</NavItem>
         </NavGroup>
-        <NavGroup label="Library">
+        <NavGroup label="Systems">
           {systems.map(system => (
             <NavItem key={system.id} href={hrefOf({ page: "themes", system: system.id })} icon={TAB_ICONS.system} onClick={open({ page: "themes", system: system.id })}>{system.name}</NavItem>
           ))}
-          <NavItem href={hrefOf({ page: "inspiration" })} icon={TAB_ICONS.inspiration} current={place.page === "inspiration"} onClick={open({ page: "inspiration" })}>Inspiration</NavItem>
           <NavItem href={hrefOf({ page: "home", item: "new" })} icon={<AddIcon />} onClick={open({ page: "home", item: "new" })}>New system</NavItem>
         </NavGroup>
       </Nav>
@@ -182,27 +196,102 @@ function WorkspaceNav() {
   );
 }
 
-/** A system's tab: its sections, one row each (SYSTEM_SECTIONS), Themes first and History last. */
-function SystemNav() {
-  const { place, openSystem, workingSystem, changes } = useStudio();
+/** References' tab: Discover, Following and Saved, one row each (no counts, as a system's rows). */
+function ReferencesNav() {
+  const { place } = useStudio();
   const open = useOpen();
-  const at = (target: Place): Place => ({ ...target, system: workingSystem.id });
-  const row = (target: Place, label: string, trailing?: ReactNode, actions?: ReactNode) => (
-    <NavItem key={label} href={hrefOf(at(target))} current={samePage(target, place)} onClick={open(at(target))} trailing={trailing} actions={actions}>{label}</NavItem>
+  const view = referenceView(place.item);
+  return (
+    <SidebarList>
+      <Nav aria-label="References">
+        <BackHome />
+        <NavGroup label="References">
+          {REFERENCE_VIEWS.map(entry => {
+            const target: Place = { page: "references", item: entry.item };
+            return (
+              <NavItem key={entry.label} href={hrefOf(target)} onClick={open(target)}
+                current={entry.item ? view === entry.item : !view && !place.item}>
+                {entry.label}
+              </NavItem>
+            );
+          })}
+        </NavGroup>
+      </Nav>
+    </SidebarList>
   );
+}
+
+/** The families by kind, in Components' own order (its Documentation files; src/pages/components.tsx kindOf). */
+const FAMILIES_BY_KIND: ReadonlyArray<[string, typeof FAMILIES]> = KIND_ORDER
+  .map(kind => [kind, [...FAMILIES].filter(family => kindOf(family) === kind).sort((a, b) => a.name.localeCompare(b.name))] as [string, typeof FAMILIES])
+  .filter(([, list]) => list.length > 0);
+
+/**
+ * A system's tab, after the design systems' own sites (research 2026-10-31: Primer, Carbon, Atlassian, Material, Apple's
+ * HIG, Spectrum; owner: "i dont like seeing components with 122 next to it … maybe components should be exposed"):
+ * Foundations (the language: Themes, Tokens, Colors, Typography, Spacing, Shape, Elevation, Motion, Icons), then Components, every family by name under its kind
+ * (Atlassian's and the HIG's groups past ~80 families; Primer and Carbon list theirs flat under ~60), each kind a row that
+ * opens to its families, the current family's kind open; then Patterns and Versions. No row carries a bare count: Versions
+ * says what is unpublished, which is news, not a size.
+ */
+function SystemNav() {
+  const { place, workingSystem, changes } = useStudio();
+  const open = useOpen();
+  const ids = useId();
+  const at = (target: Place): Place => ({ ...target, system: workingSystem.id });
+  const row = (target: Place, label: string, trailing?: ReactNode) => (
+    <NavItem key={label} href={hrefOf(at(target))} current={samePage(target, place)} onClick={open(at(target))} trailing={trailing}>{label}</NavItem>
+  );
+  // The family on the Canvas (a family, or one of its tiles), and its kind, which stays open.
+  const family = place.page === "components" ? place.item?.split("/")[0] : undefined;
+  const currentKind = family ? FAMILIES_BY_KIND.find(([, list]) => list.some(entry => entry.slug === family))?.[0] : undefined;
+  const [opened, setOpened] = useState<ReadonlySet<string>>(() => new Set());
+  const [closed, setClosed] = useState<ReadonlySet<string>>(() => new Set());
+  const isOpen = (kind: string) => opened.has(kind) || (kind === currentKind && !closed.has(kind));
+  const toggle = (kind: string) => {
+    const next = !isOpen(kind);
+    setOpened(current => { const set = new Set(current); if (next) set.add(kind); else set.delete(kind); return set; });
+    setClosed(current => { const set = new Set(current); if (next) set.delete(kind); else set.add(kind); return set; });
+  };
   return (
     <SidebarList>
       <Nav aria-label={workingSystem.name}>
         <BackHome />
-        <NavGroup label={workingSystem.name}>
-          {row({ page: "themes" }, "Themes", <Count count={openSystem.themes.length} />)}
-          {row({ page: "color" }, "Colors")}
-          {row({ page: "typography" }, "Typography")}
-          {row({ page: "icons" }, "Icons")}
-          {row({ page: "components" }, "Components", <Count count={FAMILIES.length} max={9999} />)}
-          {row({ page: "patterns" }, "Patterns", <Count count={PATTERNS.length} />)}
-          {/* History counts the publishes; while the working copy has changes, it says how many are waiting. */}
-          {row({ page: "history" }, "History", changes.length ? <span className="studio-muted">{changes.length} unpublished</span> : <Count count={workingSystem.releases.length} />)}
+        {/* The language, after the design systems' Foundations and Figma's variables and styles (2026-10-31): Themes, then
+            every token, then each foundation the tokens make, then Icons. */}
+        <NavGroup label="Foundations">
+          {SYSTEM_SECTIONS.slice(0, SYSTEM_SECTIONS.findIndex(entry => entry.place.page === "components")).map(entry => row(entry.place, entry.label))}
+        </NavGroup>
+        <NavGroup label="Components">
+          {/* Every family at once, by kind (the Overview's sections). */}
+          <NavItem href={hrefOf(at({ page: "components" }))} current={place.page === "components" && !family} onClick={open(at({ page: "components" }))}>Overview</NavItem>
+          {FAMILIES_BY_KIND.map(([kind, list]) => {
+            const shown = isOpen(kind);
+            const families = `${ids}-${kind.replace(/\W+/g, "-")}`;
+            return (
+              <Fragment key={kind}>
+                <NavItem href={hrefOf(at({ page: "components" }))}
+                  onClick={event => { event.preventDefault(); toggle(kind); }}
+                  actions={<Expander open={shown} label={kind} controls={families} onToggle={() => toggle(kind)} />}>
+                  {kind}
+                </NavItem>
+                <div id={families} hidden={!shown}>
+                  <NavGroup nested>
+                    {list.map(entry => {
+                      const target = at({ page: "components", item: entry.slug });
+                      return <NavItem key={entry.slug} href={hrefOf(target)} current={family === entry.slug} onClick={open(target)}>{entry.name}</NavItem>;
+                    })}
+                  </NavGroup>
+                </div>
+              </Fragment>
+            );
+          })}
+        </NavGroup>
+        <NavGroup>
+          {row({ page: "patterns" }, "Patterns")}
+          {/* A system's release notes, Versions as a project's are (History until 2026-10-31: one word for one idea). While
+              the draft has changes, it says how many are waiting. */}
+          {row({ page: "history" }, "Versions", changes.length ? <span className="studio-muted">{changes.length} unpublished</span> : undefined)}
         </NavGroup>
       </Nav>
     </SidebarList>
