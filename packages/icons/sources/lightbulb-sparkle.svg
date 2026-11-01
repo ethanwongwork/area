@@ -1,0 +1,7 @@
+<svg data-set="area-pilot" data-angles="free" data-keyline="circle" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path data-filled="fill" d="M3.553 9.393A4.5 4.5 0 1 1 10.447 9.393C9.933 10.005 9.444 10.724 9.25 11.5L8.767 13.432A0.75 0.75 0 0 1 8.039 14H5.961A0.75 0.75 0 0 1 5.233 13.432L4.75 11.5C4.556 10.724 4.067 10.005 3.553 9.393Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M10.258 9.624C9.817 10.183 9.42 10.82 9.25 11.5L8.767 13.432A0.75 0.75 0 0 1 8.039 14L5.961 14A0.75 0.75 0 0 1 5.233 13.432L4.75 11.5C4.556 10.724 4.067 10.005 3.553 9.393A4.5 4.5 0 0 1 8.178 2.157" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="cut" d="M4.583 11H9.417" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11 1.5Q11.36 4.14 14 4.5Q11.36 4.86 11 7.5Q10.64 4.86 8 4.5Q10.64 4.14 11 1.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="halo" d="M11 1.5Q11.36 4.14 14 4.5Q11.36 4.86 11 7.5Q10.64 4.86 8 4.5Q10.64 4.14 11 1.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

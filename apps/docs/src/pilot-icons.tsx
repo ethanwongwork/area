@@ -93,6 +93,24 @@ export const root = (size: number | undefined, { title, mirrored, style, ...prop
 };
 const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");
 
+export const PilotAbsolutePositionIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <rect x="6.5" y="6.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2.5 8.5H6.5M8.5 2.5V6.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotAbsolutePositionFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <rect x="6.5" y="6.5" width="4" height="4" rx="1" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="2.5" y="2.5" width="11" height="11" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2.5 8.5H6.5M8.5 2.5V6.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
 export const PilotAccessibilityIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props)}>
     <circle cx="8" cy="3" r="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -1087,6 +1105,22 @@ export const PilotArrowRightToLineFilledIcon = ({ weight, size, ...props }: Pilo
   );
 };
 
+export const PilotArrowSplitIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <path d="M2.5 11.5H13.5M11 9L13.5 11.5L11 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M3.464 11.5A2.5 2.5 0 0 0 5.232 10.768L13.5 2.5M10.5 2.5H13.5V5.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotArrowSplitFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <path d="M 2.688 11.5 H 13.5 M 11.133 9.133 L 13.5 11.5 L 11.133 13.867" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M 3.464 11.5 A 2.5 2.5 0 0 0 5.232 10.768 L 13.5 2.5 M 10.688 2.5 H 13.5 V 5.313" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
 export const PilotArrowUpIcon = ({ weight, size, ...props }: PilotIconProps) => size === 10 ? (
   <svg {...root(size, props, undefined, 10)}>
     <path d="M4.5 8.5V1.5M1.5 4.5L4.5 1.5L7.5 4.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw10(weight) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -1395,6 +1429,22 @@ export const PilotAwardFilledIcon = ({ weight, size, ...props }: PilotIconProps)
       <circle cx="8" cy="6.5" r="2" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="8" cy="6.5" r="4.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
       <path d="M5.5 10.5L5.148 13.319A0.75 0.75 0 0 0 6.129 14.124L7.763 13.579A0.75 0.75 0 0 1 8.237 13.579L9.871 14.124A0.75 0.75 0 0 0 10.852 13.319L10.5 10.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
+export const PilotBackgroundBlurIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <path d="M2 6L6 2M2 10L10 2M2 14L5.25 10.75M10.75 5.25L14 2" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <rect x="7.5" y="7.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotBackgroundBlurFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <rect x="7.5" y="7.5" width="6" height="6" rx="1" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2 6L6 2M2 10L10 2M2 14L5.25 10.75M10.75 5.25L14 2" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };
@@ -4256,6 +4306,22 @@ export const PilotCircleDotDashedFilledIcon = ({ weight, size, ...props }: Pilot
   );
 };
 
+export const PilotCircleProgressIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 8V4.5A3.5 3.5 0 0 1 11.5 8Z" fill="currentColor" />
+  </svg>
+);
+
+export const PilotCircleProgressFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 8V4.5A3.5 3.5 0 0 1 11.5 8Z" fill="currentColor" />
+    </svg>
+  );
+};
+
 export const PilotCircuitBoardIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props)}>
     <rect x="2" y="2" width="12" height="12" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -5787,6 +5853,24 @@ export const PilotDivideFilledIcon = ({ weight, size, ...props }: PilotIconProps
       <path d="M 3.688 7.5 H 12.313" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="8" cy="3.75" r="1.4375" fill="currentColor" />
       <circle cx="8" cy="11.25" r="1.4375" fill="currentColor" />
+    </svg>
+  );
+};
+
+export const PilotDnaIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <path d="M4 2C4 6 12 10 12 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12 2C12 3.426 10.983 4.853 9.674 6.279M6.326 9.721C5.017 11.147 4 12.574 4 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M5.25 5H10.75M5.25 11H10.75" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotDnaFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <path d="M 4 2 C 4 6 12 10 12 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M 12 2 C 12 3.426 10.983 4.853 9.674 6.279 M 6.326 9.721 C 5.017 11.147 4 12.574 4 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M 5.25 5 H 10.75 M 5.25 11 H 10.75" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };
@@ -7897,6 +7981,28 @@ export const PilotGemFilledIcon = ({ weight, size, ...props }: PilotIconProps) =
   );
 };
 
+export const PilotGhostIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <path d="M12.5 6.5L12.5 12.887A0.5 0.5 0 0 1 11.668 13.26L10.748 12.443A0.75 0.75 0 0 0 9.752 12.443L8.332 13.705A0.5 0.5 0 0 1 7.668 13.705L6.248 12.443A0.75 0.75 0 0 0 5.252 12.443L4.332 13.26A0.5 0.5 0 0 1 3.5 12.887L3.5 6.5A4.5 4.5 0 0 1 12.5 6.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M6.5 6V7.5M9.5 6V7.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotGhostFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  const id = useMaskId();
+  return (
+    <svg {...root(size, props)}>
+      <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
+        <rect width="16" height="16" fill="white" />
+        <path d="M6.5 6V7.5M9.5 6V7.5" fill="none" stroke="black" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      </mask>
+      <g mask={`url(#${id})`}>
+        <path d="M12.5 6.5L12.5 12.887A0.5 0.5 0 0 1 11.668 13.26L10.748 12.443A0.75 0.75 0 0 0 9.752 12.443L8.332 13.705A0.5 0.5 0 0 1 7.668 13.705L6.248 12.443A0.75 0.75 0 0 0 5.252 12.443L4.332 13.26A0.5 0.5 0 0 1 3.5 12.887L3.5 6.5A4.5 4.5 0 0 1 12.5 6.5Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+    </svg>
+  );
+};
+
 export const PilotGifIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props)}>
     <rect x="1.5" y="3.5" width="13" height="9" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -9688,6 +9794,31 @@ export const PilotLightbulbOffFilledIcon = ({ weight, size, ...props }: PilotIco
   );
 };
 
+export const PilotLightbulbSparkleIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <path d="M10.258 9.624C9.817 10.183 9.42 10.82 9.25 11.5L8.767 13.432A0.75 0.75 0 0 1 8.039 14L5.961 14A0.75 0.75 0 0 1 5.233 13.432L4.75 11.5C4.556 10.724 4.067 10.005 3.553 9.393A4.5 4.5 0 0 1 8.178 2.157" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M4.583 11H9.417" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M11 1.5Q11.36 4.14 14 4.5Q11.36 4.86 11 7.5Q10.64 4.86 8 4.5Q10.64 4.14 11 1.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotLightbulbSparkleFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  const id = useMaskId();
+  return (
+    <svg {...root(size, props)}>
+      <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
+        <rect width="16" height="16" fill="white" />
+        <path d="M11 1.5Q11.36 4.14 14 4.5Q11.36 4.86 11 7.5Q10.64 4.86 8 4.5Q10.64 4.14 11 1.5Z" fill="none" stroke="black" style={{ strokeWidth: haloWidth(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M2.583 11L4.583 11H9.417L11.417 11" fill="none" stroke="black" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="butt" strokeLinejoin="miter" />
+      </mask>
+      <g mask={`url(#${id})`}>
+        <path d="M3.553 9.393A4.5 4.5 0 1 1 10.447 9.393C9.933 10.005 9.444 10.724 9.25 11.5L8.767 13.432A0.75 0.75 0 0 1 8.039 14H5.961A0.75 0.75 0 0 1 5.233 13.432L4.75 11.5C4.556 10.724 4.067 10.005 3.553 9.393Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+      <path d="M11 1.5Q11.36 4.14 14 4.5Q11.36 4.86 11 7.5Q10.64 4.86 8 4.5Q10.64 4.14 11 1.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
 export const PilotLineIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props)}>
     <path d="M2.5 13.5L13.5 2.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -10748,6 +10879,22 @@ export const PilotMoreVerticalFilledIcon = ({ weight, size, ...props }: PilotIco
   );
 };
 
+export const PilotMotionIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <circle cx="10.5" cy="8" r="3.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2 8H4.5M3 5H5M3 11H5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotMotionFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <circle cx="10.5" cy="8" r="3.5" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2 8H4.5M3 5H5M3 11H5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
 export const PilotMountainIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props)}>
     <path d="M1.75 12C3.9 10.988 5.6 7.163 6.5 3H9.5C10.4 7.163 12.1 10.988 14.25 12Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -11093,6 +11240,26 @@ export const PilotOptionsFilledIcon = ({ weight, size, ...props }: PilotIconProp
   );
 };
 
+export const PilotOrbitIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <circle cx="8" cy="8" r="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M13.766 6.342A6 6 0 0 1 6.342 13.766M2.234 9.658A6 6 0 0 1 9.658 2.234" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="12.243" cy="3.757" r="1" fill="currentColor" style={{ r: sw(weight, size, 0.8889) }} />
+    <circle cx="3.757" cy="12.243" r="1" fill="currentColor" style={{ r: sw(weight, size, 0.8889) }} />
+  </svg>
+);
+
+export const PilotOrbitFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M13.766 6.342A6 6 0 0 1 6.342 13.766M2.234 9.658A6 6 0 0 1 9.658 2.234" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12.243" cy="3.757" r="1" fill="currentColor" style={{ r: sw(weight, size, 0.8889) }} />
+      <circle cx="3.757" cy="12.243" r="1" fill="currentColor" style={{ r: sw(weight, size, 0.8889) }} />
+    </svg>
+  );
+};
+
 export const PilotOutdentIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props, true)}>
     <path d="M4.5 5.5L2.5 7.5L4.5 9.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -11417,6 +11584,22 @@ export const PilotPanelLeftCloseFilledIcon = ({ weight, size, ...props }: PilotI
   );
 };
 
+export const PilotPanelLeftFloatIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <rect x="2" y="3.5" width="12" height="9" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <rect x="4" y="5.5" width="2.5" height="5" rx="1" fill="currentColor" />
+  </svg>
+);
+
+export const PilotPanelLeftFloatFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <rect x="2" y="3.5" width="12" height="9" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="4" y="5.5" width="2.5" height="5" rx="1" fill="currentColor" />
+    </svg>
+  );
+};
+
 export const PilotPanelLeftOpenIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props)}>
     <rect x="2" y="3.5" width="12" height="9" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -11472,6 +11655,26 @@ export const PilotPanelRightCloseFilledIcon = ({ weight, size, ...props }: Pilot
         <path d="M6.5 3.5H3.5A1.5 1.5 0 0 0 2 5V11A1.5 1.5 0 0 0 3.5 12.5H6.5Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
         <rect x="2" y="3.5" width="12" height="9" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
         <path d="M11 6L9 8L11 10" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+    </svg>
+  );
+};
+
+export const PilotPanelRightFloatIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <g transform="matrix(-1 0 0 1 16 0)">
+      <rect x="2" y="3.5" width="12" height="9" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="4" y="5.5" width="2.5" height="5" rx="1" fill="currentColor" />
+    </g>
+  </svg>
+);
+
+export const PilotPanelRightFloatFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <g transform="matrix(-1 0 0 1 16 0)">
+        <rect x="2" y="3.5" width="12" height="9" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size, 1.3333) }} strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="4" y="5.5" width="2.5" height="5" rx="1" fill="currentColor" />
       </g>
     </svg>
   );
@@ -13556,6 +13759,24 @@ export const PilotSearchOffFilledIcon = ({ weight, size, ...props }: PilotIconPr
   );
 };
 
+export const PilotSearchSparkleIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <path d="M10.536 10.536A5 5 0 0 1 2 7A5 5 0 0 1 8.619 2.269" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M10.75 10.75L14 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M11 2Q11.36 4.64 14 5Q11.36 5.36 11 8Q10.64 5.36 8 5Q10.64 4.64 11 2Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotSearchSparkleFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <path d="M11 2Q11.36 4.64 14 5Q11.36 5.36 11 8Q10.64 5.36 8 5Q10.64 4.64 11 2Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.536 10.536A5 5 0 0 1 2 7A5 5 0 0 1 8.619 2.269" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.75 10.75L14 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
 export const PilotSendIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props, true)}>
     <path d="M12.794 8.887L4.343 13.282A1 1 0 0 1 2.948 12.036L4.224 8.718A2 2 0 0 0 4.224 7.282L2.948 3.964A1 1 0 0 1 4.343 2.718L12.794 7.113A1 1 0 0 1 12.794 8.887Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -14083,6 +14304,24 @@ export const PilotSignatureFilledIcon = ({ weight, size, ...props }: PilotIconPr
       <path d="M10.125 3L5.262 7.863A0.4 0.4 0 0 0 5.159 8.042L4.5 10.5L6.958 9.841A0.4 0.4 0 0 0 7.137 9.738L12 4.875A1.326 1.326 0 0 0 10.125 3Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
       <path d="M11.938 4.938L12.658 5.658A0.75 0.75 0 0 1 12.658 6.718L10.938 8.438" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
       <path d="M2.5 12.5C3.5 12.5 4.5 13.5 5.5 13.5S7.5 12 8.5 12 10.5 13.5 11.5 13.5 13 13 13.5 12.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
+export const PilotSignpostIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <path d="M5.5 2.5L12.086 2.5A1 1 0 0 1 12.793 2.793L13.47 3.47A0.75 0.75 0 0 1 13.47 4.53L12.793 5.207A1 1 0 0 1 12.086 5.5L5.5 5.5A1 1 0 0 1 4.5 4.5L4.5 3.5A1 1 0 0 1 5.5 2.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M10.5 8.5L3.914 8.5A1 1 0 0 0 3.207 8.793L2.53 9.47A0.75 0.75 0 0 0 2.53 10.53L3.207 11.207A1 1 0 0 0 3.914 11.5L10.5 11.5A1 1 0 0 0 11.5 10.5L11.5 9.5A1 1 0 0 0 10.5 8.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 5.5V8.5M8 11.5V13.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotSignpostFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <path d="M5.5 2.5L12.086 2.5A1 1 0 0 1 12.793 2.793L13.47 3.47A0.75 0.75 0 0 1 13.47 4.53L12.793 5.207A1 1 0 0 1 12.086 5.5L5.5 5.5A1 1 0 0 1 4.5 4.5L4.5 3.5A1 1 0 0 1 5.5 2.5Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.5 8.5L3.914 8.5A1 1 0 0 0 3.207 8.793L2.53 9.47A0.75 0.75 0 0 0 2.53 10.53L3.207 11.207A1 1 0 0 0 3.914 11.5L10.5 11.5A1 1 0 0 0 11.5 10.5L11.5 9.5A1 1 0 0 0 10.5 8.5Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 5.5V8.5M8 11.5V13.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };
@@ -15311,6 +15550,22 @@ export const PilotSunMoonFilledIcon = ({ weight, size, ...props }: PilotIconProp
     <svg {...root(size, props)}>
       <path d="M9.077 5.146A3 3 0 1 0 12.854 8.923A0.25 0.25 0 0 0 12.547 8.606A2.55 2.55 0 0 1 9.394 5.452A0.25 0.25 0 0 0 9.077 5.146Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
       <path d="M10 1.5V2.5M10 13.5V14.5M3.5 8H4.5M5.507 3.507L6.2 4.2M5.507 12.493L6.2 11.8" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
+export const PilotSunriseIcon = ({ weight, size, ...props }: PilotIconProps) => (
+  <svg {...root(size, props)}>
+    <path d="M6 10A2 2 0 0 1 10 10" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 4V5M2 10H3M13 10H14M3.757 5.757L4.464 6.464M12.243 5.757L11.536 6.464M2 12.5H14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const PilotSunriseFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+  return (
+    <svg {...root(size, props)}>
+      <path d="M6 10A2 2 0 0 1 10 10" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 4V5M2 10H3M13 10H14M3.757 5.757L4.464 6.464M12.243 5.757L11.536 6.464M2 12.5H14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };
@@ -17102,9 +17357,10 @@ export const PilotZoomOutFilledIcon = ({ weight, size, ...props }: PilotIconProp
 };
 
 /** Review batches and owner status, from packages/icons/sources/batches.json. */
-export const PILOT_BATCHES = [{"id":"batch-1","title":"Batch 1 · Core","icons":{"add":"approved","arrow-up":"approved","bell":"approved","check":"approved","chevron-down":"approved","copy":"approved","dismiss":"approved","document":"approved","eye":"approved","folder":"approved","info":"approved","link":"approved","more-horizontal":"approved","open":"approved","person":"approved","reset":"approved","search":"approved","settings":"approved","status-available":"approved","trash":"approved","warning":"approved"}},{"id":"batch-2","title":"Batch 2 · Alignment","icons":{"align-left":"approved","align-center":"approved"}},{"id":"batch-3","title":"Batch 3 · Docs chrome","icons":{"expand":"approved","panel-left":"approved","book":"approved","options":"approved","color":"approved","text":"approved","shapes":"approved","list":"approved","square-dashed":"approved","layers":"approved","flash":"approved"}},{"id":"batch-4","title":"Batch 4 · Inspector","icons":{"angle":"approved","aspect-ratio":"approved","auto-layout":"approved","corner":"approved","corners":"approved","dots-four":"approved","eye-off":"approved","flip":"approved","flow":"approved","flow-wrap":"approved","flow-free":"approved","gap":"approved","opacity":"approved","padding":"approved","padding-sides":"approved","token":"approved","rotate":"approved","grip":"approved","padding-side":"approved","sides":"approved"}},{"id":"batch-5","title":"Batch 5 · Common","icons":{"lock":"approved","star":"approved","heart":"approved","calendar":"approved","clock":"approved","pencil":"approved","download":"approved","upload":"approved","filter":"approved","sort":"approved","sparkle":"approved","location":"approved"}},{"id":"batch-6","title":"Batch 6 · Everyday","icons":{"minus":"approved","send":"approved","home":"approved","mail":"approved","chat":"approved","image":"approved","mic":"approved","help":"approved","bookmark":"approved"}},{"id":"batch-7","title":"Batch 7 · Controls & system","icons":{"menu":"approved","grid":"approved","play":"approved","pause":"approved","undo":"approved","sun":"approved","moon":"approved","desktop":"approved","code":"approved","terminal":"approved","error":"approved","unlock":"approved","share":"approved","globe":"approved"}},{"id":"batch-8","title":"Batch 8 · Objects","icons":{"attach":"approved","tag":"approved","people":"approved","zoom-in":"approved","zoom-out":"approved","flag":"approved","archive":"approved","cloud":"approved","phone":"approved","camera":"approved","cart":"approved"}},{"id":"batch-9","title":"Batch 9 · Text & objects","icons":{"bold":"approved","italic":"approved","underline":"approved","quote":"approved","hash":"approved","at":"approved","key":"approved","shield":"approved","gift":"approved","map":"approved","chart":"approved","table":"approved"}},{"id":"batch-10","title":"Batch 10 · Editing & devices","icons":{"strikethrough":"approved","heading":"approved","list-bullet":"approved","wifi":"approved","bluetooth":"approved","battery":"approved","plug":"approved","power":"approved","printer":"approved","headphones":"approved","video":"approved","inbox":"approved"}},{"id":"batch-11","title":"Batch 11 · Everyday objects","icons":{"thumbs-up":"approved","smile":"approved","briefcase":"approved","building":"approved","compass":"approved","crop":"approved","trophy":"approved","coffee":"approved"}},{"id":"batch-12","title":"Batch 12 · System & tools","icons":{"database":"approved","server":"approved","scissors":"approved","log-in":"approved","log-out":"approved","keyboard":"approved","pointer":"approved","move":"approved","hourglass":"approved","loader":"approved"}},{"id":"batch-13","title":"Batch 13 · Media & commerce","icons":{"volume":"approved","volume-off":"approved","music":"approved","film":"approved","credit-card":"approved","wallet":"approved","receipt":"approved","lightbulb":"approved","megaphone":"approved"}},{"id":"batch-14","title":"Batch 14 · Tools & actions","icons":{"person-add":"approved","history":"approved","save":"approved","bug":"approved","eyedropper":"approved","paintbrush":"approved","puzzle":"approved","ruler":"approved"}},{"id":"batch-15","title":"Batch 15 · Off states & objects","icons":{"bell-off":"approved","mic-off":"approved","video-off":"approved","calculator":"approved","graduation-cap":"approved","car":"approved","package":"approved"}},{"id":"batch-16","title":"Batch 16 · Keys & connections","icons":{"wifi-off":"approved","link-off":"approved","cloud-upload":"approved","command":"approved","return":"approved","backspace":"approved","rocket":"approved"}},{"id":"batch-17","title":"Batch 17 · Media & everyday","icons":{"skip-forward":"approved","stop":"approved","repeat":"approved","person-remove":"approved","clipboard":"approved","sticky-note":"approved","trending-up":"approved","shopping-bag":"approved"}},{"id":"batch-18","title":"Batch 18 · Add, sync & sensing","icons":{"calendar-add":"approved","folder-add":"approved","document-add":"approved","cloud-download":"approved","shuffle":"approved","fingerprint":"approved","gauge":"approved"}},{"id":"batch-19","title":"Batch 19 · Open, add & devices","icons":{"chat-add":"approved","cloud-off":"approved","folder-open":"approved","mail-open":"approved","timer":"approved","laptop":"approved"}},{"id":"batch-20","title":"Batch 20 · Devices","icons":{"tablet":"approved","tv":"approved","watch":"approved","mouse":"approved","speaker":"approved","hard-drive":"approved","chip":"approved"}},{"id":"batch-21","title":"Batch 21 · Checks & charts","icons":{"calendar-check":"approved","document-check":"approved","person-check":"approved","shield-check":"approved","bar-chart":"approved","pie-chart":"approved"}},{"id":"batch-22","title":"Batch 22 · Everyday UI","icons":{"add-circle":"approved","remove-circle":"approved","prohibited":"approved","chevrons-up-down":"approved","collapse":"approved","alarm":"approved","git-branch":"approved","grip-vertical":"approved","activity":"approved","layout":"approved","percent":"approved"}},{"id":"batch-23","title":"Batch 23 · Communication & text","icons":{"call":"approved","reply":"approved","sync":"approved","eraser":"approved","text-align-left":"approved","text-align-center":"approved","indent":"approved","outdent":"approved","columns":"approved","calendar-remove":"approved","folder-remove":"approved","document-remove":"approved"}},{"id":"batch-24","title":"Batch 24 · Lists & sorting","icons":{"list-numbered":"approved","sort-ascending":"approved","filter-dismiss":"approved","bookmark-add":"approved","reply-all":"approved","text-cursor":"approved"}},{"id":"batch-25","title":"Batch 25 · View & tools","icons":{"zoom-fit":"approved","paint-bucket":"approved","panel-bottom":"approved","panel-left-close":"approved","panel-left-open":"approved"}},{"id":"batch-26","title":"Batch 26 · Lists, marks & tools","icons":{"checkbox":"approved","list-checklist":"approved","bookmark-remove":"approved","filter-add":"approved","pushpin":"approved","palette":"approved"}},{"id":"batch-27","title":"Batch 27 · AI & chat","icons":{"arrow-up-circle":"approved","stop-circle":"approved","compose":"approved","waveform":"approved","bot":"approved"}},{"id":"batch-28","title":"Batch 28 · Figma tools","icons":{"frame":"approved","pen-tool":"approved","hand":"approved","spline":"approved","unpin":"approved"}},{"id":"batch-29","title":"Batch 29 · Commerce & objects","icons":{"truck":"approved","store":"approved","ticket":"approved","kanban":"approved"}},{"id":"batch-30","title":"Batch 30 · Nature & tools","icons":{"highlighter":"approved","flame":"approved","leaf":"approved","umbrella":"approved","snowflake":"approved","thermometer":"approved","mountain":"approved","anchor":"approved","magnet":"approved"}},{"id":"batch-31","title":"Batch 31 · Weather, shapes & money","icons":{"cloud-rain":"approved","cloud-lightning":"approved","wind":"approved","star-off":"approved","qr-code":"approved","rectangle":"approved","ellipse":"approved","coins":"approved"}},{"id":"batch-32","title":"Batch 32 · Demo gaps & arrows","icons":{"arrow-up-right":"approved","cloud-sun":"approved","wand":"approved","distribute-horizontal":"approved","record":"approved"}},{"id":"batch-33","title":"Batch 33 · Figma tools 2","icons":{"line":"approved","polygon":"approved","diamond":"approved","mask":"approved","boolean-union":"approved","boolean-subtract":"approved","boolean-intersect":"approved","boolean-exclude":"approved"}},{"id":"batch-34","title":"Batch 34 · Code & git","icons":{"git-commit":"approved","git-merge":"approved","braces":"approved","variable":"approved","function":"approved","sigma":"approved"}},{"id":"batch-35","title":"Batch 35 · Media & capture","icons":{"fast-forward":"approved","screen-share":"approved","picture-in-picture":"approved","images":"approved","captions":"approved","camera-off":"approved"}},{"id":"batch-38","title":"Batch 38 · Documents, money & awards","icons":{"library":"approved","code-block":"approved","banknote":"approved","bank":"approved","barcode":"approved","award":"approved","crown":"approved"}},{"id":"batch-39","title":"Batch 39 · People & talk","icons":{"frown":"approved","person-circle":"approved","chat-multiple":"approved","call-end":"approved"}},{"id":"batch-40","title":"Batch 40 · Nature & science","icons":{"contrast":"approved","flask":"approved","tree":"approved"}},{"id":"batch-42","title":"Batch 42 · Keys & effects","icons":{"shift":"approved","option":"approved","stroke-weight":"approved"}},{"id":"batch-41","title":"Batch 41 · Type","icons":{"text-size":"approved","superscript":"approved","subscript":"approved"}},{"id":"batch-43","title":"Batch 43 · Simplified returns","icons":{"id-card":"approved","newspaper":"approved","file-image":"approved","file-code":"approved","git-pull-request":"approved","plane":"approved","paw":"approved","escape":"approved","shadow":"approved","blur":"approved","line-height":"approved","letter-spacing":"approved","translate":"approved"}},{"id":"batch-44","title":"Batch 44 · Square containers","icons":{"square-dot":"approved","square-slash":"approved","square-plus":"approved","square-minus":"approved","square-arrow-up":"approved","square-arrow-up-right":"approved","square-text":"approved","square-text-cursor":"approved","square-list":"approved","square-search":"approved"}},{"id":"batch-45","title":"Batch 45 · Circle containers and status rings","icons":{"chevron-down-circle":"approved","play-circle":"approved","pause-circle":"approved","circle-dashed":"approved","circle-dot-dashed":"approved","circle-check-dashed":"approved"}},{"id":"batch-46","title":"Batch 46 · Notification dot","icons":{"bell-dot":"approved","chat-dot":"approved","mail-dot":"approved","square-badge":"approved","compass-dot":"approved"}},{"id":"batch-47","title":"Batch 47 · Checks, plays and off states","icons":{"folder-check":"approved","scan-check":"approved","desktop-check":"approved","desktop-play":"approved","search-off":"approved","flask-off":"approved"}},{"id":"batch-48","title":"Batch 48 · Agents and sparkles","icons":{"agent":"approved","chat-sparkle":"approved","grid-sparkle":"approved","grid-plus":"approved","corners-sparkle":"approved"}},{"id":"batch-49","title":"Batch 49 · Arrows 2","icons":{"arrow-left-right":"approved","arrow-right-left":"approved","arrow-right-to-line":"approved","caps-lock":"approved","chevrons-right":"approved","chevrons-down-up":"approved"}},{"id":"batch-50","title":"Batch 50 · Files","icons":{"files":"approved","file-export":"approved","clipboard-list":"approved"}},{"id":"batch-51","title":"Batch 51 · Code, git and shapes 2","icons":{"hexagon":"approved","cube":"approved","asterisk":"approved","plus-minus":"approved","brackets":"approved","split":"approved","git-pull-request-closed":"approved","git-pull-request-draft":"approved"}},{"id":"batch-53","title":"Batch 53 · Data and money","icons":{"dollar":"approved","chart-scatter":"approved","layout-dashboard":"approved","network":"approved"}},{"id":"batch-54","title":"Batch 54 · Messages","icons":{"chat-more":"approved","chat-code":"approved"}},{"id":"batch-55","title":"Batch 55 · Objects 2","icons":{"target":"approved","crosshair":"approved","disc":"approved","infinity":"approved"}},{"id":"batch-56","title":"Batch 56 · Objects 3","icons":{"check-check":"approved","presentation":"approved","blocks":"approved","badge-check":"approved","cookie":"approved","clapperboard":"approved","route":"approved","vault":"approved"}},{"id":"batch-57","title":"Batch 57 · Queue remainder","icons":{"bug-off":"approved","file-lock":"approved","folders":"approved","chat-warning":"approved","call-incoming":"approved","call-outgoing":"approved","app-window":"approved","gallery":"approved","markdown":"approved","case-upper":"approved","case-sensitive":"approved","wrench":"approved","bandage":"approved","atom":"approved"}},{"id":"batch-58","title":"Batch 58 · AI, people and exploring","icons":{"brain":"approved","brain-off":"approved","waypoints":"approved","smile-plus":"approved","person-chat":"approved","binoculars":"approved"}},{"id":"batch-59","title":"Batch 59 · Leisure","icons":{"dumbbell":"approved","piano":"approved","toy-brick":"approved","square-smile":"approved","crystal-ball":"approved","utensils":"approved","basketball":"approved"}},{"id":"batch-60","title":"Batch 60 · Later list and debugger","icons":{"chef-hat":"approved","chess-rook":"approved","vr-goggles":"approved","circuit-board":"approved","cube-wireframe":"approved","debug-step-over":"approved","breakpoint":"approved","stack-frame":"approved"}},{"id":"batch-61","title":"Batch 61 · Bot cast","icons":{"bot-agent":"approved"}},{"id":"batch-62","title":"Batch 62 · Coverage round 1","icons":{"corner-down-right":"approved","chevron-last":"approved","navigation":"approved","mouse-pointer-click":"approved","import":"approved","signature":"approved","text-color":"approved","bring-to-front":"approved","group":"approved","remove-formatting":"approved","clipboard-check":"approved","clipboard-paste":"approved","list-plus":"approved","list-tree":"approved","workflow":"approved","cloud-check":"approved","archive-restore":"approved","headset":"approved","person-settings":"approved","bell-ring":"approved","life-buoy":"approved","square-x":"approved","more-circle":"approved","radio-button":"approved","star-half":"approved","shield-alert":"approved","image-plus":"approved","cart-add":"approved","calendar-clock":"approved","octagon-alert":"approved","toggle":"approved","accessibility":"approved","discount":"approved","currency-euro":"approved","cards":"approved"}},{"id":"batch-63","title":"Batch 63 · Coverage round 2","icons":{"exit-door":"approved","locate":"approved","lasso":"approved","pilcrow":"approved","insert-row":"approved","spell-check":"approved","text-wrap":"approved","file-search":"approved","file-spreadsheet":"approved","rss":"approved","file-pen":"approved","folder-lock":"approved","chart-gantt":"approved","webhook":"approved","voicemail":"approved","phone-missed":"approved","broadcast":"approved","cast":"approved","image-off":"approved","radio":"approved","battery-charging":"approved","battery-low":"approved","brightness":"approved","devices":"approved","gamepad":"approved","signal":"approved","usb":"approved","scan-face":"approved","shield-off":"approved","badge":"approved","handshake":"approved","meh":"approved","basket":"approved","piggy-bank":"approved","scale":"approved","cloud-snow":"approved","dice":"approved","hammer":"approved","notebook":"approved","party-popper":"approved","pentagon":"approved","octagon":"approved"}},{"id":"batch-64","title":"Batch 64 · Zip archive","icons":{"folder-zip":"approved"}},{"id":"batch-65","title":"Batch 65 · Build queue","icons":{"file-diff":"approved","chat-question":"approved","plug-off":"approved","binary":"approved","goal":"approved","radar":"approved","broom":"approved"}},{"id":"batch-66","title":"Batch 66 · Build next","icons":{"pencil-off":"approved","zap-off":"approved","location-off":"approved","chat-off":"approved","screen-share-off":"approved","bookmark-off":"approved","heart-off":"approved","flag-off":"approved","bluetooth-off":"approved","cloud-alert":"approved","clock-alert":"approved","shield-user":"approved","shield-x":"approved","shield-plus":"approved","mail-plus":"approved","person-x":"approved","person-key":"approved","file-cog":"approved","file-download":"approved","password":"approved","volume-low":"approved","merge":"approved","duplicate":"approved","toggle-off":"approved","share-nodes":"approved","git-fork":"approved","git-compare":"approved","bluetooth-connected":"approved","playlist":"approved","chart-bar-horizontal":"approved","equal":"approved","person-square":"approved"}},{"id":"batch-67","title":"Batch 67 · Pen","icons":{"pen":"approved"}},{"id":"batch-68","title":"Batch 68 · Audit gaps","icons":{"copy-check":"approved","document-dismiss":"approved","calendar-x":"approved","folder-search":"approved","timer-off":"approved","call-off":"approved","sparkle-off":"approved","person-lock":"approved","shield-lock":"approved","battery-full":"approved","battery-medium":"approved","maximize":"approved","minimize":"approved","loader-circle":"approved","text-align-justify":"approved","list-minus":"approved","case-lower":"approved","regex":"approved","replace":"approved","heading-1":"approved","heading-2":"approved","heading-3":"approved","send-to-back":"approved","ungroup":"approved","arrow-up-from-line":"approved"}},{"id":"batch-69","title":"Batch 69 · New icons","icons":{"whole-word":"approved","text-search":"approved","list-filter":"approved","git-graph":"approved","git-branch-plus":"approved","git-pull-request-create":"approved","diff":"approved","repository":"approved","issue":"approved","folder-git":"approved","folder-code":"approved","folder-tree":"approved","folder-input":"approved","file-json":"approved","file-warning":"approved","logs":"approved","pipeline":"approved","container":"approved","server-cog":"approved","database-search":"approved","database-zap":"approved","cloud-sync":"approved","api":"approved","memory":"approved","brain-circuit":"approved","toolbox":"approved","telescope":"approved","scan-text":"approved","siren":"approved","square-mouse-pointer":"approved","text-select":"approved","table-of-contents":"approved","layout-template":"approved","timeline":"approved","milestone":"approved","monitor-cog":"approved","stamp":"approved","component":"approved","slice":"approved","blend":"approved","swatch-book":"approved","line-style":"approved"}},{"id":"batch-70","title":"Batch 70 · New icons","icons":{"file-x":"approved","file-clock":"approved","file-question":"approved","file-user":"approved","file-zip":"approved","folder-cog":"approved","folder-sync":"approved","form":"approved","table-cells-merge":"approved","table-cells-split":"approved","person-search":"approved","person-pen":"approved","person-star":"approved","shield-cog":"approved","eye-closed":"approved","mail-check":"approved","mail-warning":"approved","hand-wave":"approved","gif":"approved","calendar-off":"approved","calendar-search":"approved","calendar-sync":"approved","alarm-off":"approved","clock-check":"approved","search-alert":"approved","scan-qr":"approved","webcam":"approved","wifi-low":"approved","globe-off":"approved","book-add":"approved","scroll":"approved","gavel":"approved","tags":"approved","vote":"approved","text-quote":"approved","copyright":"approved","divide":"approved","location-add":"approved","arrow-up-right-circle":"approved"}},{"id":"batch-71","title":"Batch 71 · New icons","icons":{"repeat-once":"approved","switch-camera":"approved","eject":"approved","headphones-off":"approved","captions-off":"approved","vibrate":"approved","sim-card":"approved","monitor-off":"approved","megaphone-off":"approved","lightbulb-off":"approved","keyboard-off":"approved","power-off":"approved","bell-plus":"approved","calendar-range":"approved","bookmark-check":"approved","tag-plus":"approved","paint-roller":"approved","square-root":"approved","list-collapse":"approved","file-video":"approved","file-audio":"approved","file-upload":"approved","chart-area":"approved","gift-card":"approved"}},{"id":"batch-72","title":"Batch 72 · New icons","icons":{"gem":"approved","file-pdf":"approved","hand-coins":"approved","package-check":"approved","sort-alpha":"approved","sort-numeric":"approved","incognito":"approved"}},{"id":"batch-73","title":"Batch 73 · New icons","icons":{"move-horizontal":"approved","fold-horizontal":"approved","unfold-horizontal":"approved","space":"approved","chat-check":"approved","list-x":"approved","signal-low":"approved","signal-medium":"approved","square-alert":"approved"}},{"id":"batch-74","title":"Batch 74 · New icons","icons":{"panel-bottom-open":"approved","panel-bottom-close":"approved"}},{"id":"batch-75","title":"Batch 75 · Coverage from product surfaces","icons":{"image-sparkle":"approved","pencil-sparkle":"approved","text-sparkle":"approved","code-sparkle":"approved","people-group":"approved","person-dashed":"approved","circle-dollar":"approved","chat-pen":"approved","sun-moon":"approved","heading-4":"approved","heading-5":"approved","heading-6":"approved","pilcrow-right":"approved","pilcrow-left":"approved"}},{"id":"batch-76","title":"Batch 76 · Cohesion pass, round 1","icons":{"system":"approved","bookmarks":"approved"}}] as const;
+export const PILOT_BATCHES = [{"id":"batch-1","title":"Batch 1 · Core","icons":{"add":"approved","arrow-up":"approved","bell":"approved","check":"approved","chevron-down":"approved","copy":"approved","dismiss":"approved","document":"approved","eye":"approved","folder":"approved","info":"approved","link":"approved","more-horizontal":"approved","open":"approved","person":"approved","reset":"approved","search":"approved","settings":"approved","status-available":"approved","trash":"approved","warning":"approved"}},{"id":"batch-2","title":"Batch 2 · Alignment","icons":{"align-left":"approved","align-center":"approved"}},{"id":"batch-3","title":"Batch 3 · Docs chrome","icons":{"expand":"approved","panel-left":"approved","book":"approved","options":"approved","color":"approved","text":"approved","shapes":"approved","list":"approved","square-dashed":"approved","layers":"approved","flash":"approved"}},{"id":"batch-4","title":"Batch 4 · Inspector","icons":{"angle":"approved","aspect-ratio":"approved","auto-layout":"approved","corner":"approved","corners":"approved","dots-four":"approved","eye-off":"approved","flip":"approved","flow":"approved","flow-wrap":"approved","flow-free":"approved","gap":"approved","opacity":"approved","padding":"approved","padding-sides":"approved","token":"approved","rotate":"approved","grip":"approved","padding-side":"approved","sides":"approved"}},{"id":"batch-5","title":"Batch 5 · Common","icons":{"lock":"approved","star":"approved","heart":"approved","calendar":"approved","clock":"approved","pencil":"approved","download":"approved","upload":"approved","filter":"approved","sort":"approved","sparkle":"approved","location":"approved"}},{"id":"batch-6","title":"Batch 6 · Everyday","icons":{"minus":"approved","send":"approved","home":"approved","mail":"approved","chat":"approved","image":"approved","mic":"approved","help":"approved","bookmark":"approved"}},{"id":"batch-7","title":"Batch 7 · Controls & system","icons":{"menu":"approved","grid":"approved","play":"approved","pause":"approved","undo":"approved","sun":"approved","moon":"approved","desktop":"approved","code":"approved","terminal":"approved","error":"approved","unlock":"approved","share":"approved","globe":"approved"}},{"id":"batch-8","title":"Batch 8 · Objects","icons":{"attach":"approved","tag":"approved","people":"approved","zoom-in":"approved","zoom-out":"approved","flag":"approved","archive":"approved","cloud":"approved","phone":"approved","camera":"approved","cart":"approved"}},{"id":"batch-9","title":"Batch 9 · Text & objects","icons":{"bold":"approved","italic":"approved","underline":"approved","quote":"approved","hash":"approved","at":"approved","key":"approved","shield":"approved","gift":"approved","map":"approved","chart":"approved","table":"approved"}},{"id":"batch-10","title":"Batch 10 · Editing & devices","icons":{"strikethrough":"approved","heading":"approved","list-bullet":"approved","wifi":"approved","bluetooth":"approved","battery":"approved","plug":"approved","power":"approved","printer":"approved","headphones":"approved","video":"approved","inbox":"approved"}},{"id":"batch-11","title":"Batch 11 · Everyday objects","icons":{"thumbs-up":"approved","smile":"approved","briefcase":"approved","building":"approved","compass":"approved","crop":"approved","trophy":"approved","coffee":"approved"}},{"id":"batch-12","title":"Batch 12 · System & tools","icons":{"database":"approved","server":"approved","scissors":"approved","log-in":"approved","log-out":"approved","keyboard":"approved","pointer":"approved","move":"approved","hourglass":"approved","loader":"approved"}},{"id":"batch-13","title":"Batch 13 · Media & commerce","icons":{"volume":"approved","volume-off":"approved","music":"approved","film":"approved","credit-card":"approved","wallet":"approved","receipt":"approved","lightbulb":"approved","megaphone":"approved"}},{"id":"batch-14","title":"Batch 14 · Tools & actions","icons":{"person-add":"approved","history":"approved","save":"approved","bug":"approved","eyedropper":"approved","paintbrush":"approved","puzzle":"approved","ruler":"approved"}},{"id":"batch-15","title":"Batch 15 · Off states & objects","icons":{"bell-off":"approved","mic-off":"approved","video-off":"approved","calculator":"approved","graduation-cap":"approved","car":"approved","package":"approved"}},{"id":"batch-16","title":"Batch 16 · Keys & connections","icons":{"wifi-off":"approved","link-off":"approved","cloud-upload":"approved","command":"approved","return":"approved","backspace":"approved","rocket":"approved"}},{"id":"batch-17","title":"Batch 17 · Media & everyday","icons":{"skip-forward":"approved","stop":"approved","repeat":"approved","person-remove":"approved","clipboard":"approved","sticky-note":"approved","trending-up":"approved","shopping-bag":"approved"}},{"id":"batch-18","title":"Batch 18 · Add, sync & sensing","icons":{"calendar-add":"approved","folder-add":"approved","document-add":"approved","cloud-download":"approved","shuffle":"approved","fingerprint":"approved","gauge":"approved"}},{"id":"batch-19","title":"Batch 19 · Open, add & devices","icons":{"chat-add":"approved","cloud-off":"approved","folder-open":"approved","mail-open":"approved","timer":"approved","laptop":"approved"}},{"id":"batch-20","title":"Batch 20 · Devices","icons":{"tablet":"approved","tv":"approved","watch":"approved","mouse":"approved","speaker":"approved","hard-drive":"approved","chip":"approved"}},{"id":"batch-21","title":"Batch 21 · Checks & charts","icons":{"calendar-check":"approved","document-check":"approved","person-check":"approved","shield-check":"approved","bar-chart":"approved","pie-chart":"approved"}},{"id":"batch-22","title":"Batch 22 · Everyday UI","icons":{"add-circle":"approved","remove-circle":"approved","prohibited":"approved","chevrons-up-down":"approved","collapse":"approved","alarm":"approved","git-branch":"approved","grip-vertical":"approved","activity":"approved","layout":"approved","percent":"approved"}},{"id":"batch-23","title":"Batch 23 · Communication & text","icons":{"call":"approved","reply":"approved","sync":"approved","eraser":"approved","text-align-left":"approved","text-align-center":"approved","indent":"approved","outdent":"approved","columns":"approved","calendar-remove":"approved","folder-remove":"approved","document-remove":"approved"}},{"id":"batch-24","title":"Batch 24 · Lists & sorting","icons":{"list-numbered":"approved","sort-ascending":"approved","filter-dismiss":"approved","bookmark-add":"approved","reply-all":"approved","text-cursor":"approved"}},{"id":"batch-25","title":"Batch 25 · View & tools","icons":{"zoom-fit":"approved","paint-bucket":"approved","panel-bottom":"approved","panel-left-close":"approved","panel-left-open":"approved"}},{"id":"batch-26","title":"Batch 26 · Lists, marks & tools","icons":{"checkbox":"approved","list-checklist":"approved","bookmark-remove":"approved","filter-add":"approved","pushpin":"approved","palette":"approved"}},{"id":"batch-27","title":"Batch 27 · AI & chat","icons":{"arrow-up-circle":"approved","stop-circle":"approved","compose":"approved","waveform":"approved","bot":"approved"}},{"id":"batch-28","title":"Batch 28 · Figma tools","icons":{"frame":"approved","pen-tool":"approved","hand":"approved","spline":"approved","unpin":"approved"}},{"id":"batch-29","title":"Batch 29 · Commerce & objects","icons":{"truck":"approved","store":"approved","ticket":"approved","kanban":"approved"}},{"id":"batch-30","title":"Batch 30 · Nature & tools","icons":{"highlighter":"approved","flame":"approved","leaf":"approved","umbrella":"approved","snowflake":"approved","thermometer":"approved","mountain":"approved","anchor":"approved","magnet":"approved"}},{"id":"batch-31","title":"Batch 31 · Weather, shapes & money","icons":{"cloud-rain":"approved","cloud-lightning":"approved","wind":"approved","star-off":"approved","qr-code":"approved","rectangle":"approved","ellipse":"approved","coins":"approved"}},{"id":"batch-32","title":"Batch 32 · Demo gaps & arrows","icons":{"arrow-up-right":"approved","cloud-sun":"approved","wand":"approved","distribute-horizontal":"approved","record":"approved"}},{"id":"batch-33","title":"Batch 33 · Figma tools 2","icons":{"line":"approved","polygon":"approved","diamond":"approved","mask":"approved","boolean-union":"approved","boolean-subtract":"approved","boolean-intersect":"approved","boolean-exclude":"approved"}},{"id":"batch-34","title":"Batch 34 · Code & git","icons":{"git-commit":"approved","git-merge":"approved","braces":"approved","variable":"approved","function":"approved","sigma":"approved"}},{"id":"batch-35","title":"Batch 35 · Media & capture","icons":{"fast-forward":"approved","screen-share":"approved","picture-in-picture":"approved","images":"approved","captions":"approved","camera-off":"approved"}},{"id":"batch-38","title":"Batch 38 · Documents, money & awards","icons":{"library":"approved","code-block":"approved","banknote":"approved","bank":"approved","barcode":"approved","award":"approved","crown":"approved"}},{"id":"batch-39","title":"Batch 39 · People & talk","icons":{"frown":"approved","person-circle":"approved","chat-multiple":"approved","call-end":"approved"}},{"id":"batch-40","title":"Batch 40 · Nature & science","icons":{"contrast":"approved","flask":"approved","tree":"approved"}},{"id":"batch-42","title":"Batch 42 · Keys & effects","icons":{"shift":"approved","option":"approved","stroke-weight":"approved"}},{"id":"batch-41","title":"Batch 41 · Type","icons":{"text-size":"approved","superscript":"approved","subscript":"approved"}},{"id":"batch-43","title":"Batch 43 · Simplified returns","icons":{"id-card":"approved","newspaper":"approved","file-image":"approved","file-code":"approved","git-pull-request":"approved","plane":"approved","paw":"approved","escape":"approved","shadow":"approved","blur":"approved","line-height":"approved","letter-spacing":"approved","translate":"approved"}},{"id":"batch-44","title":"Batch 44 · Square containers","icons":{"square-dot":"approved","square-slash":"approved","square-plus":"approved","square-minus":"approved","square-arrow-up":"approved","square-arrow-up-right":"approved","square-text":"approved","square-text-cursor":"approved","square-list":"approved","square-search":"approved"}},{"id":"batch-45","title":"Batch 45 · Circle containers and status rings","icons":{"chevron-down-circle":"approved","play-circle":"approved","pause-circle":"approved","circle-dashed":"approved","circle-dot-dashed":"approved","circle-check-dashed":"approved"}},{"id":"batch-46","title":"Batch 46 · Notification dot","icons":{"bell-dot":"approved","chat-dot":"approved","mail-dot":"approved","square-badge":"approved","compass-dot":"approved"}},{"id":"batch-47","title":"Batch 47 · Checks, plays and off states","icons":{"folder-check":"approved","scan-check":"approved","desktop-check":"approved","desktop-play":"approved","search-off":"approved","flask-off":"approved"}},{"id":"batch-48","title":"Batch 48 · Agents and sparkles","icons":{"agent":"approved","chat-sparkle":"approved","grid-sparkle":"approved","grid-plus":"approved","corners-sparkle":"approved"}},{"id":"batch-49","title":"Batch 49 · Arrows 2","icons":{"arrow-left-right":"approved","arrow-right-left":"approved","arrow-right-to-line":"approved","caps-lock":"approved","chevrons-right":"approved","chevrons-down-up":"approved"}},{"id":"batch-50","title":"Batch 50 · Files","icons":{"files":"approved","file-export":"approved","clipboard-list":"approved"}},{"id":"batch-51","title":"Batch 51 · Code, git and shapes 2","icons":{"hexagon":"approved","cube":"approved","asterisk":"approved","plus-minus":"approved","brackets":"approved","split":"approved","git-pull-request-closed":"approved","git-pull-request-draft":"approved"}},{"id":"batch-53","title":"Batch 53 · Data and money","icons":{"dollar":"approved","chart-scatter":"approved","layout-dashboard":"approved","network":"approved"}},{"id":"batch-54","title":"Batch 54 · Messages","icons":{"chat-more":"approved","chat-code":"approved"}},{"id":"batch-55","title":"Batch 55 · Objects 2","icons":{"target":"approved","crosshair":"approved","disc":"approved","infinity":"approved"}},{"id":"batch-56","title":"Batch 56 · Objects 3","icons":{"check-check":"approved","presentation":"approved","blocks":"approved","badge-check":"approved","cookie":"approved","clapperboard":"approved","route":"approved","vault":"approved"}},{"id":"batch-57","title":"Batch 57 · Queue remainder","icons":{"bug-off":"approved","file-lock":"approved","folders":"approved","chat-warning":"approved","call-incoming":"approved","call-outgoing":"approved","app-window":"approved","gallery":"approved","markdown":"approved","case-upper":"approved","case-sensitive":"approved","wrench":"approved","bandage":"approved","atom":"approved"}},{"id":"batch-58","title":"Batch 58 · AI, people and exploring","icons":{"brain":"approved","brain-off":"approved","waypoints":"approved","smile-plus":"approved","person-chat":"approved","binoculars":"approved"}},{"id":"batch-59","title":"Batch 59 · Leisure","icons":{"dumbbell":"approved","piano":"approved","toy-brick":"approved","square-smile":"approved","crystal-ball":"approved","utensils":"approved","basketball":"approved"}},{"id":"batch-60","title":"Batch 60 · Later list and debugger","icons":{"chef-hat":"approved","chess-rook":"approved","vr-goggles":"approved","circuit-board":"approved","cube-wireframe":"approved","debug-step-over":"approved","breakpoint":"approved","stack-frame":"approved"}},{"id":"batch-61","title":"Batch 61 · Bot cast","icons":{"bot-agent":"approved"}},{"id":"batch-62","title":"Batch 62 · Coverage round 1","icons":{"corner-down-right":"approved","chevron-last":"approved","navigation":"approved","mouse-pointer-click":"approved","import":"approved","signature":"approved","text-color":"approved","bring-to-front":"approved","group":"approved","remove-formatting":"approved","clipboard-check":"approved","clipboard-paste":"approved","list-plus":"approved","list-tree":"approved","workflow":"approved","cloud-check":"approved","archive-restore":"approved","headset":"approved","person-settings":"approved","bell-ring":"approved","life-buoy":"approved","square-x":"approved","more-circle":"approved","radio-button":"approved","star-half":"approved","shield-alert":"approved","image-plus":"approved","cart-add":"approved","calendar-clock":"approved","octagon-alert":"approved","toggle":"approved","accessibility":"approved","discount":"approved","currency-euro":"approved","cards":"approved"}},{"id":"batch-63","title":"Batch 63 · Coverage round 2","icons":{"exit-door":"approved","locate":"approved","lasso":"approved","pilcrow":"approved","insert-row":"approved","spell-check":"approved","text-wrap":"approved","file-search":"approved","file-spreadsheet":"approved","rss":"approved","file-pen":"approved","folder-lock":"approved","chart-gantt":"approved","webhook":"approved","voicemail":"approved","phone-missed":"approved","broadcast":"approved","cast":"approved","image-off":"approved","radio":"approved","battery-charging":"approved","battery-low":"approved","brightness":"approved","devices":"approved","gamepad":"approved","signal":"approved","usb":"approved","scan-face":"approved","shield-off":"approved","badge":"approved","handshake":"approved","meh":"approved","basket":"approved","piggy-bank":"approved","scale":"approved","cloud-snow":"approved","dice":"approved","hammer":"approved","notebook":"approved","party-popper":"approved","pentagon":"approved","octagon":"approved"}},{"id":"batch-64","title":"Batch 64 · Zip archive","icons":{"folder-zip":"approved"}},{"id":"batch-65","title":"Batch 65 · Build queue","icons":{"file-diff":"approved","chat-question":"approved","plug-off":"approved","binary":"approved","goal":"approved","radar":"approved","broom":"approved"}},{"id":"batch-66","title":"Batch 66 · Build next","icons":{"pencil-off":"approved","zap-off":"approved","location-off":"approved","chat-off":"approved","screen-share-off":"approved","bookmark-off":"approved","heart-off":"approved","flag-off":"approved","bluetooth-off":"approved","cloud-alert":"approved","clock-alert":"approved","shield-user":"approved","shield-x":"approved","shield-plus":"approved","mail-plus":"approved","person-x":"approved","person-key":"approved","file-cog":"approved","file-download":"approved","password":"approved","volume-low":"approved","merge":"approved","duplicate":"approved","toggle-off":"approved","share-nodes":"approved","git-fork":"approved","git-compare":"approved","bluetooth-connected":"approved","playlist":"approved","chart-bar-horizontal":"approved","equal":"approved","person-square":"approved"}},{"id":"batch-67","title":"Batch 67 · Pen","icons":{"pen":"approved"}},{"id":"batch-68","title":"Batch 68 · Audit gaps","icons":{"copy-check":"approved","document-dismiss":"approved","calendar-x":"approved","folder-search":"approved","timer-off":"approved","call-off":"approved","sparkle-off":"approved","person-lock":"approved","shield-lock":"approved","battery-full":"approved","battery-medium":"approved","maximize":"approved","minimize":"approved","loader-circle":"approved","text-align-justify":"approved","list-minus":"approved","case-lower":"approved","regex":"approved","replace":"approved","heading-1":"approved","heading-2":"approved","heading-3":"approved","send-to-back":"approved","ungroup":"approved","arrow-up-from-line":"approved"}},{"id":"batch-69","title":"Batch 69 · New icons","icons":{"whole-word":"approved","text-search":"approved","list-filter":"approved","git-graph":"approved","git-branch-plus":"approved","git-pull-request-create":"approved","diff":"approved","repository":"approved","issue":"approved","folder-git":"approved","folder-code":"approved","folder-tree":"approved","folder-input":"approved","file-json":"approved","file-warning":"approved","logs":"approved","pipeline":"approved","container":"approved","server-cog":"approved","database-search":"approved","database-zap":"approved","cloud-sync":"approved","api":"approved","memory":"approved","brain-circuit":"approved","toolbox":"approved","telescope":"approved","scan-text":"approved","siren":"approved","square-mouse-pointer":"approved","text-select":"approved","table-of-contents":"approved","layout-template":"approved","timeline":"approved","milestone":"approved","monitor-cog":"approved","stamp":"approved","component":"approved","slice":"approved","blend":"approved","swatch-book":"approved","line-style":"approved"}},{"id":"batch-70","title":"Batch 70 · New icons","icons":{"file-x":"approved","file-clock":"approved","file-question":"approved","file-user":"approved","file-zip":"approved","folder-cog":"approved","folder-sync":"approved","form":"approved","table-cells-merge":"approved","table-cells-split":"approved","person-search":"approved","person-pen":"approved","person-star":"approved","shield-cog":"approved","eye-closed":"approved","mail-check":"approved","mail-warning":"approved","hand-wave":"approved","gif":"approved","calendar-off":"approved","calendar-search":"approved","calendar-sync":"approved","alarm-off":"approved","clock-check":"approved","search-alert":"approved","scan-qr":"approved","webcam":"approved","wifi-low":"approved","globe-off":"approved","book-add":"approved","scroll":"approved","gavel":"approved","tags":"approved","vote":"approved","text-quote":"approved","copyright":"approved","divide":"approved","location-add":"approved","arrow-up-right-circle":"approved"}},{"id":"batch-71","title":"Batch 71 · New icons","icons":{"repeat-once":"approved","switch-camera":"approved","eject":"approved","headphones-off":"approved","captions-off":"approved","vibrate":"approved","sim-card":"approved","monitor-off":"approved","megaphone-off":"approved","lightbulb-off":"approved","keyboard-off":"approved","power-off":"approved","bell-plus":"approved","calendar-range":"approved","bookmark-check":"approved","tag-plus":"approved","paint-roller":"approved","square-root":"approved","list-collapse":"approved","file-video":"approved","file-audio":"approved","file-upload":"approved","chart-area":"approved","gift-card":"approved"}},{"id":"batch-72","title":"Batch 72 · New icons","icons":{"gem":"approved","file-pdf":"approved","hand-coins":"approved","package-check":"approved","sort-alpha":"approved","sort-numeric":"approved","incognito":"approved"}},{"id":"batch-73","title":"Batch 73 · New icons","icons":{"move-horizontal":"approved","fold-horizontal":"approved","unfold-horizontal":"approved","space":"approved","chat-check":"approved","list-x":"approved","signal-low":"approved","signal-medium":"approved","square-alert":"approved"}},{"id":"batch-74","title":"Batch 74 · New icons","icons":{"panel-bottom-open":"approved","panel-bottom-close":"approved"}},{"id":"batch-75","title":"Batch 75 · Coverage from product surfaces","icons":{"image-sparkle":"approved","pencil-sparkle":"approved","text-sparkle":"approved","code-sparkle":"approved","people-group":"approved","person-dashed":"approved","circle-dollar":"approved","chat-pen":"approved","sun-moon":"approved","heading-4":"approved","heading-5":"approved","heading-6":"approved","pilcrow-right":"approved","pilcrow-left":"approved"}},{"id":"batch-76","title":"Batch 76 · Cohesion pass, round 1","icons":{"system":"approved","bookmarks":"approved"}},{"id":"batch-77","title":"Batch 77 · App, agent and design-panel concepts","icons":{"search-sparkle":"review","lightbulb-sparkle":"review","circle-progress":"review","arrow-split":"review","panel-left-float":"review","background-blur":"review","absolute-position":"review","motion":"review","ghost":"review","signpost":"review","dna":"review","orbit":"review","sunrise":"review"}}] as const;
 
 export const PILOT_ICONS = [
+  { name: "absolute-position", keyline: "square", derivedFrom: undefined, Icon: PilotAbsolutePositionIcon, Filled: PilotAbsolutePositionFilledIcon, fill: "solid" },
   { name: "accessibility", keyline: "circle", derivedFrom: undefined, Icon: PilotAccessibilityIcon, Filled: PilotAccessibilityFilledIcon, fill: "solid" },
   { name: "activity", keyline: "horizontal", derivedFrom: undefined, Icon: PilotActivityIcon, Filled: PilotActivityFilledIcon, fill: "weight" },
   { name: "add", keyline: "square", derivedFrom: undefined, Icon: PilotAddIcon, Filled: PilotAddFilledIcon, fill: "weight" },
@@ -17146,6 +17402,7 @@ export const PILOT_ICONS = [
   { name: "arrow-right-from-line", keyline: "square", derivedFrom: "arrow-up-from-line", Icon: PilotArrowRightFromLineIcon, Filled: PilotArrowRightFromLineFilledIcon, fill: "weight" },
   { name: "arrow-right-left", keyline: "square", derivedFrom: undefined, Icon: PilotArrowRightLeftIcon, Filled: PilotArrowRightLeftFilledIcon, fill: "weight" },
   { name: "arrow-right-to-line", keyline: "square", derivedFrom: undefined, Icon: PilotArrowRightToLineIcon, Filled: PilotArrowRightToLineFilledIcon, fill: "weight" },
+  { name: "arrow-split", keyline: "square", derivedFrom: undefined, Icon: PilotArrowSplitIcon, Filled: PilotArrowSplitFilledIcon, fill: "weight" },
   { name: "arrow-up", keyline: "vertical", derivedFrom: undefined, Icon: PilotArrowUpIcon, Filled: PilotArrowUpFilledIcon, fill: "weight" },
   { name: "arrow-up-circle", keyline: "circle", derivedFrom: undefined, Icon: PilotArrowUpCircleIcon, Filled: PilotArrowUpCircleFilledIcon, fill: "solid" },
   { name: "arrow-up-down", keyline: "vertical", derivedFrom: "arrow-left-right", Icon: PilotArrowUpDownIcon, Filled: PilotArrowUpDownFilledIcon, fill: "weight" },
@@ -17162,6 +17419,7 @@ export const PILOT_ICONS = [
   { name: "attach", keyline: "circle", derivedFrom: undefined, Icon: PilotAttachIcon, Filled: PilotAttachFilledIcon, fill: "weight" },
   { name: "auto-layout", keyline: "square", derivedFrom: undefined, Icon: PilotAutoLayoutIcon, Filled: PilotAutoLayoutFilledIcon, fill: "solid" },
   { name: "award", keyline: "vertical", derivedFrom: undefined, Icon: PilotAwardIcon, Filled: PilotAwardFilledIcon, fill: "solid" },
+  { name: "background-blur", keyline: "square", derivedFrom: undefined, Icon: PilotBackgroundBlurIcon, Filled: PilotBackgroundBlurFilledIcon, fill: "solid" },
   { name: "backspace", keyline: "horizontal", derivedFrom: undefined, Icon: PilotBackspaceIcon, Filled: PilotBackspaceFilledIcon, fill: "solid" },
   { name: "badge", keyline: "circle", derivedFrom: undefined, Icon: PilotBadgeIcon, Filled: PilotBadgeFilledIcon, fill: "solid" },
   { name: "badge-check", keyline: "circle", derivedFrom: undefined, Icon: PilotBadgeCheckIcon, Filled: PilotBadgeCheckFilledIcon, fill: "solid" },
@@ -17292,6 +17550,7 @@ export const PILOT_ICONS = [
   { name: "circle-dashed", keyline: "circle", derivedFrom: undefined, Icon: PilotCircleDashedIcon, Filled: PilotCircleDashedFilledIcon, fill: "weight" },
   { name: "circle-dollar", keyline: "circle", derivedFrom: undefined, Icon: PilotCircleDollarIcon, Filled: PilotCircleDollarFilledIcon, fill: "solid" },
   { name: "circle-dot-dashed", keyline: "circle", derivedFrom: undefined, Icon: PilotCircleDotDashedIcon, Filled: PilotCircleDotDashedFilledIcon, fill: "weight" },
+  { name: "circle-progress", keyline: "circle", derivedFrom: undefined, Icon: PilotCircleProgressIcon, Filled: PilotCircleProgressFilledIcon, fill: "weight" },
   { name: "circuit-board", keyline: "square", derivedFrom: undefined, Icon: PilotCircuitBoardIcon, Filled: PilotCircuitBoardFilledIcon, fill: "solid" },
   { name: "clapperboard", keyline: "square", derivedFrom: undefined, Icon: PilotClapperboardIcon, Filled: PilotClapperboardFilledIcon, fill: "solid" },
   { name: "clipboard", keyline: "vertical", derivedFrom: undefined, Icon: PilotClipboardIcon, Filled: PilotClipboardFilledIcon, fill: "solid" },
@@ -17365,6 +17624,7 @@ export const PILOT_ICONS = [
   { name: "distribute-horizontal", keyline: "square", derivedFrom: undefined, Icon: PilotDistributeHorizontalIcon, Filled: PilotDistributeHorizontalFilledIcon, fill: "solid" },
   { name: "distribute-vertical", keyline: "square", derivedFrom: "distribute-horizontal", Icon: PilotDistributeVerticalIcon, Filled: PilotDistributeVerticalFilledIcon, fill: "solid" },
   { name: "divide", keyline: "square", derivedFrom: undefined, Icon: PilotDivideIcon, Filled: PilotDivideFilledIcon, fill: "weight" },
+  { name: "dna", keyline: "vertical", derivedFrom: undefined, Icon: PilotDnaIcon, Filled: PilotDnaFilledIcon, fill: "weight" },
   { name: "document", keyline: "vertical", derivedFrom: undefined, Icon: PilotDocumentIcon, Filled: PilotDocumentFilledIcon, fill: "solid" },
   { name: "document-add", keyline: "vertical", derivedFrom: undefined, Icon: PilotDocumentAddIcon, Filled: PilotDocumentAddFilledIcon, fill: "solid" },
   { name: "document-check", keyline: "vertical", derivedFrom: undefined, Icon: PilotDocumentCheckIcon, Filled: PilotDocumentCheckFilledIcon, fill: "solid" },
@@ -17456,6 +17716,7 @@ export const PILOT_ICONS = [
   { name: "gauge", keyline: "horizontal", derivedFrom: undefined, Icon: PilotGaugeIcon, Filled: PilotGaugeFilledIcon, fill: "weight" },
   { name: "gavel", keyline: "square", derivedFrom: undefined, Icon: PilotGavelIcon, Filled: PilotGavelFilledIcon, fill: "solid" },
   { name: "gem", keyline: "square", derivedFrom: undefined, Icon: PilotGemIcon, Filled: PilotGemFilledIcon, fill: "weight" },
+  { name: "ghost", keyline: "vertical", derivedFrom: undefined, Icon: PilotGhostIcon, Filled: PilotGhostFilledIcon, fill: "solid" },
   { name: "gif", keyline: "horizontal", derivedFrom: undefined, Icon: PilotGifIcon, Filled: PilotGifFilledIcon, fill: "solid" },
   { name: "gift", keyline: "square", derivedFrom: undefined, Icon: PilotGiftIcon, Filled: PilotGiftFilledIcon, fill: "solid" },
   { name: "gift-card", keyline: "horizontal", derivedFrom: undefined, Icon: PilotGiftCardIcon, Filled: PilotGiftCardFilledIcon, fill: "solid" },
@@ -17538,6 +17799,7 @@ export const PILOT_ICONS = [
   { name: "life-buoy", keyline: "circle", derivedFrom: undefined, Icon: PilotLifeBuoyIcon, Filled: PilotLifeBuoyFilledIcon, fill: "solid" },
   { name: "lightbulb", keyline: "vertical", derivedFrom: undefined, Icon: PilotLightbulbIcon, Filled: PilotLightbulbFilledIcon, fill: "solid" },
   { name: "lightbulb-off", keyline: "square", derivedFrom: undefined, Icon: PilotLightbulbOffIcon, Filled: PilotLightbulbOffFilledIcon, fill: "solid" },
+  { name: "lightbulb-sparkle", keyline: "circle", derivedFrom: undefined, Icon: PilotLightbulbSparkleIcon, Filled: PilotLightbulbSparkleFilledIcon, fill: "solid" },
   { name: "line", keyline: "square", derivedFrom: undefined, Icon: PilotLineIcon, Filled: PilotLineFilledIcon, fill: "weight" },
   { name: "line-height", keyline: "square", derivedFrom: undefined, Icon: PilotLineHeightIcon, Filled: PilotLineHeightFilledIcon, fill: "weight" },
   { name: "line-style", keyline: "horizontal", derivedFrom: undefined, Icon: PilotLineStyleIcon, Filled: PilotLineStyleFilledIcon, fill: "weight" },
@@ -17591,6 +17853,7 @@ export const PILOT_ICONS = [
   { name: "more-circle", keyline: "circle", derivedFrom: undefined, Icon: PilotMoreCircleIcon, Filled: PilotMoreCircleFilledIcon, fill: "solid" },
   { name: "more-horizontal", keyline: "horizontal", derivedFrom: undefined, Icon: PilotMoreHorizontalIcon, Filled: PilotMoreHorizontalFilledIcon, fill: "weight" },
   { name: "more-vertical", keyline: "vertical", derivedFrom: "more-horizontal", Icon: PilotMoreVerticalIcon, Filled: PilotMoreVerticalFilledIcon, fill: "weight" },
+  { name: "motion", keyline: "square", derivedFrom: undefined, Icon: PilotMotionIcon, Filled: PilotMotionFilledIcon, fill: "solid" },
   { name: "mountain", keyline: "horizontal", derivedFrom: undefined, Icon: PilotMountainIcon, Filled: PilotMountainFilledIcon, fill: "solid" },
   { name: "mouse", keyline: "vertical", derivedFrom: undefined, Icon: PilotMouseIcon, Filled: PilotMouseFilledIcon, fill: "solid" },
   { name: "mouse-pointer-click", keyline: "square", derivedFrom: undefined, Icon: PilotMousePointerClickIcon, Filled: PilotMousePointerClickFilledIcon, fill: "solid" },
@@ -17608,6 +17871,7 @@ export const PILOT_ICONS = [
   { name: "open", keyline: "square", derivedFrom: undefined, Icon: PilotOpenIcon, Filled: PilotOpenFilledIcon, fill: "weight" },
   { name: "option", keyline: "horizontal", derivedFrom: undefined, Icon: PilotOptionIcon, Filled: PilotOptionFilledIcon, fill: "weight" },
   { name: "options", keyline: "square", derivedFrom: undefined, Icon: PilotOptionsIcon, Filled: PilotOptionsFilledIcon, fill: "solid" },
+  { name: "orbit", keyline: "circle", derivedFrom: undefined, Icon: PilotOrbitIcon, Filled: PilotOrbitFilledIcon, fill: "solid" },
   { name: "outdent", keyline: "square", derivedFrom: undefined, Icon: PilotOutdentIcon, Filled: PilotOutdentFilledIcon, fill: "weight" },
   { name: "package", keyline: "square", derivedFrom: undefined, Icon: PilotPackageIcon, Filled: PilotPackageFilledIcon, fill: "solid" },
   { name: "package-check", keyline: "square", derivedFrom: undefined, Icon: PilotPackageCheckIcon, Filled: PilotPackageCheckFilledIcon, fill: "solid" },
@@ -17625,9 +17889,11 @@ export const PILOT_ICONS = [
   { name: "panel-bottom-open", keyline: "horizontal", derivedFrom: undefined, Icon: PilotPanelBottomOpenIcon, Filled: PilotPanelBottomOpenFilledIcon, fill: "solid" },
   { name: "panel-left", keyline: "horizontal", derivedFrom: undefined, Icon: PilotPanelLeftIcon, Filled: PilotPanelLeftFilledIcon, fill: "solid" },
   { name: "panel-left-close", keyline: "horizontal", derivedFrom: undefined, Icon: PilotPanelLeftCloseIcon, Filled: PilotPanelLeftCloseFilledIcon, fill: "solid" },
+  { name: "panel-left-float", keyline: "horizontal", derivedFrom: undefined, Icon: PilotPanelLeftFloatIcon, Filled: PilotPanelLeftFloatFilledIcon, fill: "weight" },
   { name: "panel-left-open", keyline: "horizontal", derivedFrom: undefined, Icon: PilotPanelLeftOpenIcon, Filled: PilotPanelLeftOpenFilledIcon, fill: "solid" },
   { name: "panel-right", keyline: "horizontal", derivedFrom: "panel-left", Icon: PilotPanelRightIcon, Filled: PilotPanelRightFilledIcon, fill: "solid" },
   { name: "panel-right-close", keyline: "horizontal", derivedFrom: "panel-left-close", Icon: PilotPanelRightCloseIcon, Filled: PilotPanelRightCloseFilledIcon, fill: "solid" },
+  { name: "panel-right-float", keyline: "horizontal", derivedFrom: "panel-left-float", Icon: PilotPanelRightFloatIcon, Filled: PilotPanelRightFloatFilledIcon, fill: "weight" },
   { name: "panel-right-open", keyline: "horizontal", derivedFrom: "panel-left-open", Icon: PilotPanelRightOpenIcon, Filled: PilotPanelRightOpenFilledIcon, fill: "solid" },
   { name: "panel-top", keyline: "horizontal", derivedFrom: "panel-bottom", Icon: PilotPanelTopIcon, Filled: PilotPanelTopFilledIcon, fill: "solid" },
   { name: "panel-top-close", keyline: "horizontal", derivedFrom: "panel-bottom-close", Icon: PilotPanelTopCloseIcon, Filled: PilotPanelTopCloseFilledIcon, fill: "solid" },
@@ -17730,6 +17996,7 @@ export const PILOT_ICONS = [
   { name: "search", keyline: "circle", derivedFrom: undefined, Icon: PilotSearchIcon, Filled: PilotSearchFilledIcon, fill: "weight" },
   { name: "search-alert", keyline: "circle", derivedFrom: undefined, Icon: PilotSearchAlertIcon, Filled: PilotSearchAlertFilledIcon, fill: "solid" },
   { name: "search-off", keyline: "circle", derivedFrom: undefined, Icon: PilotSearchOffIcon, Filled: PilotSearchOffFilledIcon, fill: "weight" },
+  { name: "search-sparkle", keyline: "circle", derivedFrom: undefined, Icon: PilotSearchSparkleIcon, Filled: PilotSearchSparkleFilledIcon, fill: "solid" },
   { name: "send", keyline: "square", derivedFrom: undefined, Icon: PilotSendIcon, Filled: PilotSendFilledIcon, fill: "solid" },
   { name: "send-to-back", keyline: "square", derivedFrom: undefined, Icon: PilotSendToBackIcon, Filled: PilotSendToBackFilledIcon, fill: "solid" },
   { name: "server", keyline: "square", derivedFrom: undefined, Icon: PilotServerIcon, Filled: PilotServerFilledIcon, fill: "solid" },
@@ -17757,6 +18024,7 @@ export const PILOT_ICONS = [
   { name: "signal-low", keyline: "square", derivedFrom: undefined, Icon: PilotSignalLowIcon, Filled: PilotSignalLowFilledIcon, fill: "weight" },
   { name: "signal-medium", keyline: "square", derivedFrom: undefined, Icon: PilotSignalMediumIcon, Filled: PilotSignalMediumFilledIcon, fill: "weight" },
   { name: "signature", keyline: "square", derivedFrom: undefined, Icon: PilotSignatureIcon, Filled: PilotSignatureFilledIcon, fill: "solid" },
+  { name: "signpost", keyline: "square", derivedFrom: undefined, Icon: PilotSignpostIcon, Filled: PilotSignpostFilledIcon, fill: "solid" },
   { name: "sim-card", keyline: "vertical", derivedFrom: undefined, Icon: PilotSimCardIcon, Filled: PilotSimCardFilledIcon, fill: "solid" },
   { name: "siren", keyline: "square", derivedFrom: undefined, Icon: PilotSirenIcon, Filled: PilotSirenFilledIcon, fill: "solid" },
   { name: "skip-back", keyline: "square", derivedFrom: "skip-forward", Icon: PilotSkipBackIcon, Filled: PilotSkipBackFilledIcon, fill: "solid" },
@@ -17817,6 +18085,7 @@ export const PILOT_ICONS = [
   { name: "subtract", keyline: "square", derivedFrom: undefined, Icon: PilotSubtractIcon, Filled: PilotSubtractFilledIcon, fill: "weight" },
   { name: "sun", keyline: "circle", derivedFrom: undefined, Icon: PilotSunIcon, Filled: PilotSunFilledIcon, fill: "solid" },
   { name: "sun-moon", keyline: "circle", derivedFrom: undefined, Icon: PilotSunMoonIcon, Filled: PilotSunMoonFilledIcon, fill: "solid" },
+  { name: "sunrise", keyline: "horizontal", derivedFrom: undefined, Icon: PilotSunriseIcon, Filled: PilotSunriseFilledIcon, fill: "solid" },
   { name: "superscript", keyline: "square", derivedFrom: undefined, Icon: PilotSuperscriptIcon, Filled: PilotSuperscriptFilledIcon, fill: "weight" },
   { name: "swatch-book", keyline: "square", derivedFrom: undefined, Icon: PilotSwatchBookIcon, Filled: PilotSwatchBookFilledIcon, fill: "solid" },
   { name: "switch-camera", keyline: "square", derivedFrom: undefined, Icon: PilotSwitchCameraIcon, Filled: PilotSwitchCameraFilledIcon, fill: "solid" },

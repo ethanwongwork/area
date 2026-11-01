@@ -309,5 +309,95 @@
   "kit",
   "foundations",
   "styles"
+ ],
+ "search-sparkle": [
+  "ai search",
+  "ai review",
+  "smart search",
+  "find with ai"
+ ],
+ "lightbulb-sparkle": [
+  "ai suggestion",
+  "ai fix",
+  "idea",
+  "quick fix",
+  "suggest"
+ ],
+ "circle-progress": [
+  "in progress",
+  "status",
+  "progress",
+  "started",
+  "task"
+ ],
+ "arrow-split": [
+  "fork",
+  "branch off",
+  "split off",
+  "exploration",
+  "variation",
+  "spin off"
+ ],
+ "panel-left-float": [
+  "floating panel",
+  "overlay panel",
+  "floating sidebar",
+  "sidebar"
+ ],
+ "background-blur": [
+  "backdrop blur",
+  "frosted glass",
+  "effect",
+  "blur behind"
+ ],
+ "absolute-position": [
+  "absolute",
+  "constraints",
+  "pin",
+  "ignore auto layout",
+  "position"
+ ],
+ "motion": [
+  "animation",
+  "transition",
+  "movement",
+  "speed",
+  "easing"
+ ],
+ "ghost": [
+  "incognito",
+  "temporary",
+  "spooky",
+  "halloween"
+ ],
+ "signpost": [
+  "directions",
+  "guide",
+  "wayfinding",
+  "sign"
+ ],
+ "dna": [
+  "genetics",
+  "helix",
+  "biology",
+  "science"
+ ],
+ "orbit": [
+  "planet",
+  "space",
+  "satellite",
+  "astronomy"
+ ],
+ "sunrise": [
+  "morning",
+  "dawn",
+  "sunset",
+  "horizon"
+ ],
+ "panel-right-float": [
+  "floating panel",
+  "overlay panel",
+  "floating inspector",
+  "sidebar"
  ]
 }
