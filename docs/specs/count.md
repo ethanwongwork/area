@@ -86,7 +86,7 @@ keeps the same fill and ink on the current tab (`primer--underline-nav-counter--
 | min-width | = height | Fluent, Spectrum, Indicator (circle for one digit) | — |
 | radius | full (pill) | Primer 20 on 18, Fluent circular, Badge | Notion's 4 draws nothing (no fill) |
 | text | 12/16 (`control-xs`) | Primer 12, Fluent medium 12, shadcn 12; Badge md | Notion sets its count in its 14px heading text; Area keeps the count a step below the label, as Badge |
-| weight | plain 400, soft 500 | Type ramp: 500 only for a label on a fill; Notion 400 | Primer 600 |
+| weight | 400, plain and soft (soft was 500 until 2026-11-01) | Owner 2026-11-01: a count's digits at 500 read larger than the regular label beside them; Notion 400 | Primer 600 |
 | numerals | tabular | shadcn, Chakra, Indicator | — |
 | plain ink | `fg-muted` #646464 | Notion's neutral count rgb(95, 94, 89) (muted heading ink); Nav trailing ink | — |
 | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))` /* spec */ | Primer 12% of neutral 8 = #f0 on white = 6% black | Translucent so it stays visible on the hover and selected row plates (#f3 / active); dark 10% white, not measured |
@@ -113,7 +113,7 @@ Forced colours: the soft plate gains a 1px CanvasText border.
 
 | Peer | Shared role | Peer value | Count | Match |
 |---|---|---|---|---|
-| Badge md / sm | inline scale, text | 20 / 16, 12/16 500 on a fill | 20 / 16, 12/16 (500 soft, 400 plain) | match |
+| Badge md / sm | inline scale, text | 20 / 16, 12/16 500 on a fill | 20 / 16, 12/16 400 | Count stays regular on its plate (2026-11-01) |
 | Indicator count | formatting | 99+, tabular | same helper, tabular | match |
 | Nav trailing | ink on the current row | muted, fixed | muted, fixed | match |
 | Badge neutral soft, Chip input | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))` (badge.css:17, 58; chip.css:80) | count.css:68 | match (audit S6a) |
@@ -179,3 +179,12 @@ Linear and GitHub swap the digits in place.
 - **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
 - **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
   on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.
+
+## Review note, 2026-11-01 (soft at 400; the app's one count)
+
+- **What changed:** `variant="soft"` is weight 400, as plain (it was 500, Badge's "label on a fill"). The desktop app
+  draws every count that follows a label as Count soft sm: section titles, card names, the Sidebar's rows (2026-11-01;
+  section and card counts were muted text, the Sidebar's plain md).
+- **Why:** the owner: "i like the updated counts in badges but the type size seems way larger than the actual text".
+  The text was the same size (11 at type 13); at 500 its digits, as tall as capitals, read larger than an 11 regular card
+  name beside it. Shown side by side on the Area Feed Kit page (artifact 3VBMTvWZ…, "Count component").

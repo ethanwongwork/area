@@ -84,9 +84,22 @@ export const GalleryAssetCardChecker = () => <AssetCard style={card} fill="check
 /* The frame alone (Preview frame, folded in): containerless with no name or controls, filling its column, as an
    inspector's preview of the selection; named for assistive technology by aria-label. */
 export const GalleryAssetCardFrame = () => <AssetCard style={card} container="containerless" media={<SearchIcon width={48} height={48} />} role="img" aria-label="Search" />;
+/* Screen: a 16:9 frame, a product screen's 1920 × 1080. */
+export const GalleryAssetCardScreen = () => <AssetCard style={card} aspect="screen" media={<Button>Button</Button>} name="Button" />;
+/* Fit cover: the image cropped to the card's aspect (here 16:9) instead of its own ratio. */
+export const GalleryAssetCardFitCover = () => <AssetCard style={card} aspect="screen" fit="cover" media="images/david-tee.jpg" mediaRatio={1} name="David Tee" />;
+/* Fit contain: the whole image at its own ratio, centred in the card's square footprint (Are.na's grid). */
+export const GalleryAssetCardFitContain = () => <AssetCard style={card} container="basic" fit="contain" media="images/chip-filter.png" mediaRatio={1} name="Filter" />;
+/* Mosaic strip: a group's assets in one row at their own ratios, the frame's height, running on past the card's end. */
+export const GalleryAssetCardMosaicStrip = () => (
+  <AssetCard style={{ inlineSize: 448 }} aspect="wide" mosaic="strip" name="Group one" actions={more("Group one")}
+    group={["images/david-tee.jpg", "images/chip-filter.png", "images/chip-pixels.png", "images/david-tee.jpg"]} />
+);
 export const GalleryAssetCardLandscape = () => <AssetCard style={card} aspect="landscape" media={<Button>Button</Button>} name="Button" />;
 /* Name below: the head under the frame, the card's inset above it. */
 export const GalleryAssetCardCaptionBelow = () => <AssetCard style={card} caption="below" media={<Button>Button</Button>} name="Button" />;
+/* Outside: the card is its frame alone, the asset 8 in all round; the name and controls 4 under the card. */
+export const GalleryAssetCardCaptionOutside = () => <AssetCard style={card} caption="outside" media="images/david-tee.jpg" fit="cover" name="David Tee" actions={more("David Tee")} />;
 /* Basic: one surface, the head and the asset on the card's fill, no frame of its own. */
 export const GalleryAssetCardBasic = () => <AssetCard style={card} container="basic" media={<Button>Button</Button>} name="Button" />;
 /* Raised: the card in the surface, white in light. */

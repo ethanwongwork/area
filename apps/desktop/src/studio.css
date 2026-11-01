@@ -24,6 +24,7 @@
 @import url("styles/option-marks.css") layer(studio);
 @import url("styles/choice-figures.css") layer(studio);
 @import url("styles/imagery.css") layer(studio);
+@import url("styles/feed.css") layer(studio);
 @import url("styles/foundation.css") layer(studio);
 @import url("styles/chat.css") layer(studio);
 @import url("styles/settings.css") layer(studio);

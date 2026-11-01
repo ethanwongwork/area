@@ -16,7 +16,7 @@ import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
 import { CanvasSection, Tile, TileGrid, WhenVisible, FEED_TABLE } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
-import { CanvasSettings } from "../canvas-settings.tsx";
+import { axesUnder, CanvasSettings } from "../canvas-settings.tsx";
 import { readStored, writeStored } from "../storage.ts";
 import { Facts } from "../facts.tsx";
 import { CodeWell, Preview, Selection } from "../inspector.tsx";
@@ -25,7 +25,7 @@ import { SCALES, type ScaleStep } from "../tokens.ts";
 import { ArrangeMenu, sortBy, useArrangement } from "../organize.tsx";
 
 /* Sort and group (src/organize.tsx). The default is the palette's own order, neutrals then hues. */
-const SORTS = [{ value: "palette", label: "Palette order" }, { value: "name", label: "Name" }, { value: "chroma", label: "Colourfulness" }] as const;
+const SORTS = [{ value: "palette", label: "Palette order" }, { value: "name", label: "Name" }, { value: "chroma", label: "Colorfulness" }] as const;
 const GROUPS = [{ value: "kind", label: "Neutrals and hues" }, { value: "none", label: "None" }] as const;
 type Sort = (typeof SORTS)[number]["value"];
 type Group = (typeof GROUPS)[number]["value"];
@@ -282,8 +282,9 @@ export function ColorPage() {
         </Sheet>
       ) : <EmptyState title="No scales" description={`Nothing matches “${query}”.`} />}
       inspector={{
-        // Neutral tints the neutral ramp (PRODUCT_UI rule 14: the settings that change this tab's specimens).
-        theme: <CanvasSettings axes={["neutral", "type", "density"]} />,
+        // The page edits what it shows (owner's pick, 2026-10-31: "each subject page edits its settings"): every colour
+        // setting, Page, Accent and Emphasis, the ramps following as they move; Size for the labels. Themes keeps them all.
+        theme: <CanvasSettings axes={[...axesUnder("Page", "Accent", "Emphasis"), "type", "density"]} />,
         design: picked ? <StepDesign step={picked.step} token={token} description={picked.scale.description}
             paintedAs={picked.scale.id === "neutral" && canvas.neutral !== "neutral" ? `${title(canvas.neutral)} ${picked.step.level} (Neutral is ${title(canvas.neutral)})` : undefined} />
           : view ? (

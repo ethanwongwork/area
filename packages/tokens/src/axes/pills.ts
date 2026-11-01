@@ -4,8 +4,9 @@
  *
  * Not an axis (an axis picks one preset; this is a set). Selected with a space-separated list on
  * any element, inherited like an axis: `<html data-area-pills="chip count switch avatar">`. With
- * no attribute the defaults apply: Badge, Chip, Count, Switch and Avatar are pills, everything
- * else follows the radius setting. Each component reads its own flag, `--area-pill-<id>` (0 or
+ * no attribute the defaults apply: Badge, Chip, Switch and Avatar are pills, everything else
+ * follows the radius setting (Count since 2026-11-01, owner: "id prefer if counts were not pills, but its okay if other
+ * badges are pills"; Notion's board count is a 4 corner, Primer's and Fluent's pills). Each component reads its own flag, `--area-pill-<id>` (0 or
  * 1), and adds `flag x radius-full` to its corner, so the shapes concentric with it follow too
  * (an Input's action button, a Switch's thumb, Segmented items). A component's own `pill` prop,
  * where it has one, overrides the flag for that instance.
@@ -25,7 +26,7 @@ export const PILL_SHAPES: readonly PillShape[] = [
   { id: "segmented", label: "Segmented", covers: "the Segmented track and its items", pill: false },
   { id: "chip", label: "Chip", covers: "Chip, its swatch and remove button", pill: true },
   { id: "badge", label: "Badge", covers: "Badge, Badge group", pill: true },
-  { id: "count", label: "Count", covers: "Count", pill: true },
+  { id: "count", label: "Count", covers: "Count", pill: false },
   { id: "switch", label: "Switch", covers: "Switch track and thumb", pill: true },
   { id: "avatar", label: "Avatar", covers: "Avatar (a rounded square when not a pill)", pill: true },
 ];

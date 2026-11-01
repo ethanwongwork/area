@@ -20,7 +20,7 @@
  *   #references/<item>                       References (Inspiration until 2026-10-31, the Library page until 2026-10-29): Saved
  *                                            at its root, "discover" and "following", a collection and its images
  *                                            (<collection>/<image>)
- *   #labs/<lab>/<item>                       labs out of the nav (Materials, Tests)
+ *   #labs/<lab>/<item>                       labs out of the nav (Materials, Tests, Feed: every feed element, 2026-11-01)
  *
  * A system is one of the workspace's (src/systems.ts) and a project one of its projects (src/projects.ts): the app names
  * them with `setSystems` and `setProjects`, and a hash naming another is no place. Old links (#components/button, #theme, #imagery, #brand/area/… …) are the Area system's and redirect
@@ -32,7 +32,7 @@
 export type PageId =
   | "home" | "themes" | "theme-setup" | "foundations" | "settings" | "tokens" | "color" | "typography" | "icons"
   | "spacing" | "shape" | "elevation" | "motion"
-  | "components" | "patterns" | "history" | "references" | "materials" | "tests"
+  | "components" | "patterns" | "history" | "references" | "materials" | "tests" | "feed"
   | "project" | "project-page" | "exploration" | "versions";
 
 export interface Place {
@@ -114,6 +114,7 @@ export function hrefOf(place: Place): string {
     case "versions": return `#project/${place.project ?? ""}/versions${encode(place.item)}`;
     case "materials": return `#labs/materials${encode(place.item)}`;
     case "tests": return `#labs/tests${encode(place.item)}`;
+    case "feed": return `#labs/feed${encode(place.item)}`;
   }
 }
 
@@ -165,6 +166,7 @@ export function parsePlace(hash: string): Place | null {
   if (root === "references") return { page: "references", item: rest(parts) };
   if (root === "labs" && parts[0] === "materials") return { page: "materials", item: rest(parts.slice(1)) };
   if (root === "labs" && parts[0] === "tests") return { page: "tests", item: rest(parts.slice(1)) };
+  if (root === "labs" && parts[0] === "feed") return { page: "feed", item: rest(parts.slice(1)) };
   return null;
 }
 
@@ -213,11 +215,11 @@ export function resolve(hash: string, groupOf?: (setting: string) => string | un
  */
 export type TabKind = "home" | "system" | "project" | "references" | "labs";
 export const tabKind = (place: Place): TabKind =>
-  place.page === "home" ? "home" : place.page === "references" ? "references" : place.page === "materials" || place.page === "tests" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
+  place.page === "home" ? "home" : place.page === "references" ? "references" : place.page === "materials" || place.page === "tests" || place.page === "feed" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
 export const tabName = (place: Place): string => {
   const kind = tabKind(place);
   return kind === "system" ? systemName(place.system) : kind === "project" ? projectName(place.project)
-    : kind === "labs" ? (place.page === "tests" ? "Tests" : "Materials") : ({ home: "Home", references: "References" } as const)[kind];
+    : kind === "labs" ? (place.page === "tests" ? "Tests" : place.page === "feed" ? "Feed" : "Materials") : ({ home: "Home", references: "References" } as const)[kind];
 };
 /** What a tab holds, as a key: two places in one system or project are in the same tab. */
 export const tabHolds = (place: Place): string => {

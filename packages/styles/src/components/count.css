@@ -35,7 +35,8 @@
     min-inline-size: var(--_count-height);
     block-size: var(--_count-height);
     padding-inline: var(--_count-gutter);
-    /* A pill while data-area-pills lists `count` (the default); otherwise the radius setting's corner.
+    /* A pill while data-area-pills lists `count`; otherwise, the default since 2026-11-01 (owner: "id prefer if counts
+       were not pills"), the radius setting's corner for its height (4 at 14 and 18, Notion's board count's 4).
        React pill / pill={false} override. */
     --_count-pill: var(--area-pill-count);
     border-radius: calc(max(var(--area-radius-min), round(down, calc(var(--_count-height) * var(--area-radius-factor)), 2px)) + var(--_count-pill) * var(--area-radius-full));
@@ -68,8 +69,10 @@
     /* spec: Primer's CounterLabel fill, neutral 8 at 12% (#f0 on white): 6% black; dark takes
        10% white to register on the dark page. */
     --_count-plate: var(--area-bg-mark);
-    /* The type ramp's one exception: a label on a fill is 500 (Badge, Button solid). */
-    --_count-weight: var(--area-weight-strong);
+    /* Regular, as plain (owner, 2026-11-01: "the type size seems way larger than the actual text"): a count is a number
+       read with its owner's label, not a label on a fill, and at 500 its digits, as tall as capitals, read larger than the
+       regular label beside them (an 11 card name, a 13 nav row). It was 500 from 2026-09-27, Badge's "label on a fill". */
+    --_count-weight: var(--area-weight-regular);
     /* The Tags stroke group's edge, drawn inside so the count keeps its size (axes/stroke-groups.ts, 2026-10-30). */
     box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-tags);
   }

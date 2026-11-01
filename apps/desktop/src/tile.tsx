@@ -20,10 +20,13 @@
  * (src/gallery/fit.ts) still finds component specimens.
  */
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { AssetCard, AssetGridItem, ListBoxItem, SectionHeading } from "@area/react";
+import { AssetCard, AssetGridItem, Badge, Count, ListBoxItem, SectionHeading } from "@area/react";
+import { CircleDashedIcon, TagIcon } from "@area/icons";
 import { feedScale, feedScaleWithin } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
+import { ScreenCover } from "./setup-screen.tsx";
+import type { GalleryMode, GalleryRatio } from "./view-controls.tsx";
 
 /**
  * The look the Canvas's Asset cards hold whatever the Inspector previews (owner, 2026-10-24: "the style should be -1 card
@@ -37,10 +40,28 @@ export const CARD_SCOPE = { "data-area-card-tone-light": "-25", "data-area-card-
  *  scope then writes only what the open theme moves from the app's look. */
 const cardRestored = (chrome: CanvasAxes) => ({ "data-area-card-tone-light": chrome["card-tone-light"], "data-area-card-tone-dark": chrome["card-tone-dark"], "data-area-stroke": chrome.stroke, "data-area-shadow-rest": chrome["shadow-rest"] });
 
-/** A table in the feed: it takes the feed's one frame inset and corner (styles/app.css .studio-table, Table's public hooks). */
-export const FEED_TABLE = { className: "studio-table" } as const;
+/** A table in the feed: it takes the feed's one frame inset, corner and fill (styles/app.css .studio-table, Table's public
+ *  hooks) and the cards' stroke, so it is one family with them (2026-11-01). */
+export const FEED_TABLE = { className: "studio-table", "data-area-stroke": CARD_SCOPE["data-area-stroke"] } as const;
+/** A code block in the feed: the same (styles/app.css .studio-code, Code block's hooks). */
+export const FEED_CODE = { className: "studio-code", "data-area-stroke": CARD_SCOPE["data-area-stroke"] } as const;
 
 export type TileSpan = "unit" | "wide";
+/**
+ * A project's status, one badge in two states, colour-coded with the icons Home's timeline draws for the same events
+ * (owner, 2026-11-01: "color code the project status badge indicators, match them with the icons that we used from
+ * before"): published or live, the tag, success; a draft or not yet published, the dashed circle (Home's "changes waiting
+ * to publish"), caution.
+ */
+export type ProjectStatus = "published" | "draft";
+export const STATUS = {
+  published: { tone: "success", icon: <TagIcon /> },
+  draft: { tone: "caution", icon: <CircleDashedIcon /> },
+} as const;
+export function StatusBadge({ status, children }: { status: ProjectStatus; children: ReactNode }) {
+  return <Badge variant="soft" tone={STATUS[status].tone} icon={STATUS[status].icon} className="gallery-tile__badge">{children}</Badge>;
+}
+export type TileShape = "square" | "wide";
 /**
  * How the stage places its content:
  *   fit     centred in a wide margin and scaled to fit (components; fit.ts sizes it)
@@ -54,19 +75,53 @@ export type TileSpan = "unit" | "wide";
 export type TileStage = "fit" | "center" | "flow" | "none" | "screen";
 
 /** An Asset card tile's look: its container, where its name sits, its fill and whether it has an edge (Asset card's axes). */
-export interface CardLook { container: "framed" | "basic" | "containerless"; caption: "above" | "below" | "overlay"; fill: "recessed" | "raised"; borderless: boolean }
+export interface CardLook { container: "framed" | "basic" | "containerless"; caption: "above" | "below" | "overlay" | "outside"; fill: "recessed" | "raised"; borderless: boolean }
 /**
  * The gallery cards' look: one surface (owner, 2026-10-24: "i like the basic, name below treatment"), its name in the
  * frame's first row at the top-left, as every card, tile and table in the feed (owner, 2026-10-31: "top-left everywhere";
  * docs/research/feed-system-2026-10-31; it was shown on the card under the pointer from 2026-10-24).
  */
-export const GALLERY_LOOK: CardLook = { container: "basic", caption: "above", fill: "recessed", borderless: false };
+export const GALLERY_LOOK: CardLook = { container: "basic", caption: "outside", fill: "recessed", borderless: false };
+
+/** An Asset card's head in the feed: the app's card name (styles/canvas.css, .gallery-tile__caption: 11/14 at type 13). */
+export const CARD_CAPTION = { className: "gallery-tile__caption" } as const;
+
+/**
+ * An image card's shape in a gallery of images, by the gallery's mode (view-controls.tsx GalleryMode; owner, 2026-11-01):
+ * Grid gives every card one square footprint with the whole image inside at its own ratio (Are.na), Fixed ratio crops
+ * every image to the chosen ratio, Waterfall and List leave it its own (the Asset grid hugs it in a waterfall).
+ */
+export function imageCard(mode: GalleryMode, ratio: GalleryRatio, width?: number, height?: number) {
+  const mediaRatio = width && height ? width / height : undefined;
+  const headProps = CARD_CAPTION;
+  return mode === "fixed" ? { fit: "cover" as const, aspect: ratio, mediaRatio, headProps }
+    : mode === "grid" ? { fit: "contain" as const, aspect: "square" as const, mediaRatio, headProps }
+    : { fit: "natural" as const, mediaRatio, headProps };
+}
+
+/**
+ * A collection's card, one card in two widths (owner, 2026-11-01: "the collection and group cards should be the same? one
+ * is just a full width horizontal scroll version"; "for the collection cards with 4 in a grid, the AR should be square for
+ * the images"): in a grid (References' Saved) the square card, its first four square, 2 × 2; across a column (Home) a row
+ * of its images at their own ratios, `COLLECTION_ROW` tall, scrolling sideways. Its name and count top-left.
+ */
+export const COLLECTION_CARD = { container: "framed", caption: "outside", aspect: "square", mosaic: "grid", headProps: CARD_CAPTION } as const;
+export const COLLECTION_STRIP = { container: "framed", caption: "outside", mosaic: "strip", headProps: CARD_CAPTION } as const;
+/** A full-width collection's row height (Asset card's `--area-asset-card-strip-height`): References' Medium image. */
+export const COLLECTION_ROW = 192; /* pick: imagery.tsx SIZES.medium */
+/** A grid of collections: the feed's card grid (260 at the least). */
+export const COLLECTION_MIN = 260; /* pick: the feed's card grid, PRODUCT_UI "The Canvas is a feed" */
+export function collectionName(name: string, count: number) {
+  return <>{name} <FeedCount count={count} /></>;
+}
 
 export interface TileProps {
   /** The name, in the caption under the frame. */
   label: ReactNode;
   /** Under the name: a hex, a size, a count, a grade. */
   value?: ReactNode;
+  /** The value as a project's status (published or draft): its badge colour-coded with its icon (`STATUS`). */
+  status?: ProjectStatus;
   span: TileSpan;
   stage: TileStage;
   selected?: boolean;
@@ -77,7 +132,7 @@ export interface TileProps {
    * Figma open what a click selects, or on a click with `openOnClick`. A double-click in a text
    * field stays the field's.
    */
-  onOpen?: () => void;
+  onOpen?: (how: OpenHow) => void;
   /**
    * The tile as an option of the Asset grid around it (docs/specs/list-box.md, asset-card.md): its value. The grid owns
    * the Tab stop, the arrows and the selection; `selected` and `onSelect` are then unused.
@@ -90,6 +145,8 @@ export interface TileProps {
   /** What a pin menu pins (src/organize.tsx, PinMenu): the thing's key and its name. */
   "data-key"?: string;
   "data-name"?: string;
+  /** The design the tile opens in the design viewer: its frame grows into the viewer and takes it back (src/morph.ts). */
+  "data-design"?: string;
   /** The frame painted as its visual: a colour and the ink that reads on it. */
   paint?: { background: string; color: string };
   /** The frame as a setting's own scope (data-area-* attributes): it takes the setting and paints its subtle ground. */
@@ -104,8 +161,14 @@ export interface TileProps {
   /** A card (owner, 2026-10-14, after Compass's gallery): a square frame, the specimen in a wider margin. */
   card?: boolean;
   /** An Asset card tile's frame shape, where its kind has its own (owner, 2026-10-24: "each specific thing can be designed
-   *  with slightly different proportions"): a card is landscape unless this says otherwise. */
+   *  with slightly different proportions"): a card is square unless this says otherwise (landscape until 2026-11-01). */
   aspect?: "square" | "landscape" | "hug";
+  /**
+   * A plain tile's shape (owner, 2026-11-01: one card, "just variants of each other", then two shapes): square
+   * (components, colours, images; the default) or wide, 16:9, for anything designed (a screen, a cover; a screen's
+   * default), where a 1920 x 1080 window fits whole.
+   */
+  shape?: TileShape;
   /** Controls in the caption, at the end of the name's line (a Copy code button). */
   actions?: ReactNode;
   /** A click on the tile, outside the controls in its specimen and caption, opens it (`onOpen`). */
@@ -120,7 +183,16 @@ export interface TileProps {
   children?: ReactNode;
 }
 
+/** How a tile was opened: with ⌘ (Ctrl), in a tab of its own, as Figma opens a file (owner's pick, 2026-10-31). */
+export interface OpenHow { newTab: boolean }
+const how = (event: { metaKey: boolean; ctrlKey: boolean }): OpenHow => ({ newTab: event.metaKey || event.ctrlKey });
+
 const CONTROLS = "a, button, input, textarea, select, label, [contenteditable], [role=button], [role=switch], [role=checkbox], [role=radio], [role=tab], [role=slider], [role=combobox]";
+/** A click opens the tile unless it was on a control inside it (the tile, a button to the keyboard, is not one of them). */
+const onControl = (event: { target: EventTarget; currentTarget: EventTarget }) => {
+  const control = (event.target as Element).closest(CONTROLS);
+  return Boolean(control && control !== event.currentTarget);
+};
 
 export function Tile(props: TileProps) {
   return props.container === "asset" ? <AssetTile {...props} /> : <PlainTile {...props} />;
@@ -131,29 +203,36 @@ export function Tile(props: TileProps) {
  * box sits in a wrapper that is the control (a List box option, a button, or an article), so a grid's keyboard and
  * selection stay the List box's and the box draws the states: the edge steps on hover, the selected edge, the ring.
  */
-function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+function PlainTile({ label, value, status, span, stage, shape, selected, onSelect, onOpen, card, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": design, paint, scope, stageScope, inert, children }: TileProps) {
   const specimen = { ...specimenScope(), ...stageScope };
+  // The name on the left; badges and controls at the end (owner, 2026-11-01): a value is a badge.
+  const head = (scale: Record<string, string | undefined>) => (
+    <div className="gallery-tile__head" {...scale}>
+      <span className="gallery-tile__label">{label}</span>
+      {value != null && value !== "" ? status ? <StatusBadge status={status}>{value}</StatusBadge> : <Badge variant="soft" tone="neutral" className="gallery-tile__badge">{value}</Badge> : null}
+      {actions}
+    </div>
+  );
   const view = stage === "none" ? null : stage === "fit"
     ? <div className="gallery-tile__view" {...specimen}><div className="gallery-tile__stage">{children}</div></div>
-    : <div className="gallery-tile__view" inert={inert || undefined} {...specimen}>{children}</div>;
+    : <div className="gallery-tile__view" inert={inert || undefined} {...specimen}>{stage === "screen" ? <ScreenCover.Provider value>{children}</ScreenCover.Provider> : children}</div>;
   const box = (
-    <div className="gallery-tile gallery-tile--plain" data-span={span} data-stage={stage} data-layout={card ? "card" : undefined}
+    <div className="gallery-tile gallery-tile--plain" data-span={span} data-stage={stage} data-shape={shape ?? (stage === "screen" ? "wide" : "square")} data-layout={card ? "card" : undefined} data-design={design}
       data-painted={paint ? "" : undefined} data-scoped={scope ? "" : undefined}
       // The ground the box paints, so a specimen's control fills step from it (styles layers.css).
       data-area-ground={paint ? undefined : "raised"}
       style={paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined} {...(paint ? specimen : {})} {...scope}>
-      {/* The name is the app's chrome, at the app's scale whatever the Canvas previews. */}
-      <div className="gallery-tile__head" {...feedScaleWithin({ ...(paint ? specimen : {}), ...scope })}>
-        <span className="gallery-tile__label">{label}</span>
-        {value != null ? <span className="gallery-tile__value">{value}</span> : null}
-        {actions}
-      </div>
+      {/* A colour's name stays on the colour, in its ink: the colour is the card. */}
+      {paint ? head(feedScaleWithin({ ...specimen, ...scope })) : null}
       {view}
     </div>
   );
+  // Every other card's name sits under it on the page (owner, 2026-11-01, the card explorer's pick: the card holds the
+  // picture 8 in; the name, its badges and controls 4 below), at the app's scale whatever the Canvas previews.
+  const below = paint ? null : head(feedScale());
   const shared = { id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, className: "gallery-plain" };
   if (option !== undefined) {
-    return <ListBoxItem value={option} textValue={typeof label === "string" ? label : undefined} {...shared}>{box}</ListBoxItem>;
+    return <ListBoxItem value={option} textValue={typeof label === "string" ? label : undefined} {...shared}>{box}{below}</ListBoxItem>;
   }
   // A tile whose stage is inert has nothing inside to focus, so the tile itself is the control: a Tab stop that Enter
   // or Space selects, its state as aria-pressed (product UI rule 5).
@@ -161,9 +240,9 @@ function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card
     return (
       // A double-click opens it, as a double-click opens what a click selects everywhere else (Home's systems and projects,
       // Themes' themes; 2026-10-31: this branch dropped `onOpen`, so a double-click only selected).
-      <article {...shared} role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect} onDoubleClick={onOpen}
+      <article {...shared} role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect} onDoubleClick={onOpen ? event => onOpen(how(event)) : undefined}
         onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>
-        {box}
+        {box}{below}
       </article>
     );
   }
@@ -171,22 +250,22 @@ function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card
   if (onOpen && openOnClick) {
     return (
       <article {...shared} role="button" tabIndex={0} data-selected={selected ? "" : undefined}
-        onClick={event => { if (!(event.target as Element).closest(CONTROLS)) onOpen(); }}
-        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(); } }}>
-        {box}
+        onClick={event => { if (!onControl(event)) onOpen(how(event)); }}
+        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(how(event)); } }}>
+        {box}{below}
       </article>
     );
   }
   return (
     <article {...shared} data-selected={selected ? "" : undefined} onPointerDown={onSelect} onFocusCapture={onSelect}
-      onDoubleClick={onOpen ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(); } : undefined}>
-      {box}
+      onDoubleClick={onOpen ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(how(event)); } : undefined}>
+      {box}{below}
     </article>
   );
 }
 
 /** Area's Asset card (Components). */
-function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card, aspect, look, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card, aspect, look, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": design, paint, scope, stageScope, inert, children }: TileProps) {
   const { chrome } = useStudio();
   const specimen = { ...cardRestored(chrome.canvas), ...specimenScope(), ...stageScope };
   const view = stage === "none" ? null : stage === "fit"
@@ -199,6 +278,7 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
     "data-span": span,
     "data-stage": stage,
     "data-layout": card ? "card" : undefined,
+    "data-design": design,
     "data-painted": paint ? "" : undefined,
     "data-scoped": scope ? "" : undefined,
     "data-area-ground": paint || look?.container === "containerless" ? undefined : scope ? "recessed" : look?.container === "basic" ? (look.fill === "raised" ? "raised" : "tile") : look?.fill === "raised" ? "frame-raised" : "frame",
@@ -213,8 +293,8 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
   const captionProps = { className: "gallery-tile__caption", ...feedScaleWithin(frameProps) };
   const shared = { ...CARD_SCOPE, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, name: label, meta: value, actions, frameProps, captionProps,
     container: look?.container, caption: look?.caption, fill: look?.fill, borderless: look?.borderless,
-    // A card's frame is 5:4, the gallery four across (owner, 2026-10-22; Asset card's landscape aspect).
-    aspect: aspect ?? (card ? "landscape" as const : undefined) };
+    // A component's card is square (owner, 2026-11-01: "a square AR one for components specifically"; 5:4 from 2026-10-22).
+    aspect: aspect ?? (card ? "square" as const : undefined) };
   if (option !== undefined) {
     return <AssetGridItem value={option} className="gallery-asset" textValue={typeof label === "string" ? label : undefined} {...shared}>{view}</AssetGridItem>;
   }
@@ -222,7 +302,7 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
   // Tab stop that Enter or Space selects, its state as aria-pressed (product UI rule 5).
   if (inert && onSelect) {
     return (
-      <AssetCard {...shared} className="gallery-asset" interactive role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect} onDoubleClick={onOpen}
+      <AssetCard {...shared} className="gallery-asset" interactive role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect} onDoubleClick={onOpen ? event => onOpen(how(event)) : undefined}
         onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>
         {view}
       </AssetCard>
@@ -230,8 +310,8 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
   }
   return (
     <AssetCard {...shared} className="gallery-asset" interactive selected={selected} onPointerDown={onSelect} onFocusCapture={onSelect}
-      onClick={onOpen && openOnClick ? event => { if (!(event.target as Element).closest(CONTROLS)) onOpen(); } : undefined}
-      onDoubleClick={onOpen && !openOnClick ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(); } : undefined}>
+      onClick={onOpen && openOnClick ? event => { if (!onControl(event)) onOpen(how(event)); } : undefined}
+      onDoubleClick={onOpen && !openOnClick ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(how(event)); } : undefined}>
       {view}
     </AssetCard>
   );
@@ -250,6 +330,15 @@ export function TileGrid({ span, cards, waterfall, min, className, children }: {
 }
 
 /**
+ * A count after a label in the feed (owner, 2026-11-01: one count everywhere, "i like the updated counts in badges"):
+ * Area's Count, soft and small, overhanging the label's line equally above and below (styles/canvas.css .studio-count),
+ * so a title or a card name sits where it would without one. It was the muted number alone.
+ */
+export function FeedCount({ count }: { count: number }) {
+  return <span className="studio-count"><Count variant="soft" size="sm" count={count} max={9999} /></span>;
+}
+
+/**
  * A titled group on the Canvas: a family, a scale, a category, a setting. Every section of the feed reads one way
  * (owner, 2026-10-22: "make the copy, titles, and subtitles to be more consistent and intentional"): its title, then
  * `count`, muted, when its block is a collection (cards, rows, swatches, icons); and `lede`, one sentence saying what it
@@ -262,7 +351,7 @@ export function CanvasSection({ id, title, count, lede, role, children }: { id: 
     <section className="studio-section" id={id} role={role} aria-labelledby={title ? `${id}-title` : undefined}>
       {/* Area's SectionHeading (app-shell.css): the strong title trimmed to its cap, the muted lede 8 under it. */}
       {title ? <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede} {...feedScale()}
-        title={count === undefined ? title : <>{title} <span className="studio-muted studio-tabular">{count}</span></>} /> : null}
+        title={count === undefined ? title : <>{title} <FeedCount count={count} /></>} /> : null}
       {children}
     </section>
   );

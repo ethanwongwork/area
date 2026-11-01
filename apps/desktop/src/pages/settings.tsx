@@ -132,7 +132,7 @@ const GROUPS: Record<string, { section: SettingsSection; title?: string; lede?: 
 };
 
 /** One row: its name over a one-line description, the control at the end; a wide row (pictures) takes the line under them. */
-function SettingsRow({ label, description, wide, reset, children }: { label: string; description?: string; wide?: boolean; reset?: Reset; children: ReactNode }) {
+export function SettingsRow({ label, description, wide, reset, children }: { label: string; description?: string; wide?: boolean; reset?: Reset; children: ReactNode }) {
   return (
     <div className="studio-settings__row" data-wide={wide ? "" : undefined} data-setting={reset?.setting}>
       <div className="studio-settings__text">

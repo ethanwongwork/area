@@ -38,6 +38,9 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
    * four leave cells empty. Set, it replaces `media` and `color`.
    */
   group?: Array<ReactNode | string>;
+  /** A group's layout. grid (the default): the first four 2 × 2. strip: a row of up to eight at their own ratios, the
+   *  frame's height, running on past the card's end. Both as far apart as from the card's edge. */
+  mosaic?: "grid" | "strip";
   /** Selected: the card's edge in the selection colour. In an AssetGrid the grid sets it. */
   selected?: boolean;
   /**
@@ -52,17 +55,25 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
    * the states paint it.
    */
   container?: "framed" | "basic" | "containerless";
-  /** above (the default): the head, its name and controls, over the frame. below: under it. */
-  caption?: "above" | "below" | "overlay";
+  /** above (the default): the head, its name and controls, over the frame. below: under it. outside: the card is the frame
+   *  alone, the asset `--area-asset-card-inset` in all round (8 by default), and the head sits under the card, 4 below it. */
+  caption?: "above" | "below" | "overlay" | "outside";
   /** recessed (the default): the card in bg-subtle. raised: the surface, white in light. checker: the card recessed and
    *  the frame on a transparency checker, a colour painted over it so its alpha shows. */
   fill?: "recessed" | "raised" | "checker";
   /** No edge at rest; hover and selection still draw theirs. */
   borderless?: boolean;
   /** square (the default): the frame is 1:1, or an image's own ratio, and the card adds its head. landscape: the same at
-   * 5:4. wide: 2:1, for a colour or a banner. hug: a component's frame takes its own height. */
-  aspect?: "square" | "landscape" | "hug" | "wide";
-  /** An image's width over its height, so it holds its shape before it loads (a waterfall's cards). */
+   * 5:4. wide: 2:1, for a colour or a banner. screen: 16:9, a product screen's 1920 × 1080. hug: a component's frame takes
+   * its own height. */
+  aspect?: "square" | "landscape" | "hug" | "wide" | "screen";
+  /**
+   * How an image fills its frame. natural (the default): the frame takes the image's own ratio. cover: the frame takes
+   * `aspect` and the image is cropped to it. contain: the frame takes `aspect` and the whole image sits centred in it at
+   * its own ratio (give `mediaRatio`), so every card in a grid keeps one footprint (Are.na's grid).
+   */
+  fit?: "natural" | "cover" | "contain";
+  /** An image's width over its height, so it holds its shape before it loads (a waterfall's cards, a contained image). */
   mediaRatio?: number;
   /** The frame's content as the host lays it out, in place of `media` (an app's specimen stage). */
   children?: ReactNode;
@@ -77,19 +88,22 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
 const image = (source: string, alt: string, ratio?: number) => (
   <img src={source} alt={alt} loading="lazy" decoding="async" draggable={false} style={ratio ? { aspectRatio: ratio } : undefined} />
 );
+/** A strip shows at most this many; the rest run past the card's end anyway. */
+const STRIP = 8;
 const join = (...names: Array<string | undefined>) => names.filter(Boolean).join(" ");
 
 export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardProps>(function AssetCard(
-  { name, meta: _meta, actions, media, mediaAlt = "", color, group, selected, interactive, caption = "above", fill = "recessed", borderless, container = "framed", aspect = "square",
-    mediaRatio, children, frameProps, headProps, captionProps, className, style, ...rest }, ref,
+  { name, meta: _meta, actions, media, mediaAlt = "", color, group, mosaic = "grid", selected, interactive, caption = "above", fill = "recessed", borderless, container = "framed", aspect = "square",
+    fit = "natural", mediaRatio, children, frameProps, headProps, captionProps, className, style, ...rest }, ref,
 ) {
   const layout = group ? "group" : color !== undefined && children === undefined ? "color" : typeof media === "string" && children === undefined ? "image" : "asset";
-  const cells = group ? [0, 1, 2, 3].map(index => group[index]) : [];
+  const cells = group ? (mosaic === "strip" ? group.slice(0, STRIP) : [0, 1, 2, 3].map(index => group[index])) : [];
+  const ratio = layout === "image" && fit === "contain" && mediaRatio ? { "--_media-ratio": mediaRatio } : undefined;
   const { className: frameClass, ...frameRest } = frameProps ?? {};
   const { className: headClass, ...headRest } = headProps ?? captionProps ?? {};
   return (
-    <div ref={ref} className={assetCardVariants({ layout, container, caption, fill, aspect, interactive, borderless }, className)} data-selected={selected ? "" : undefined}
-      style={layout === "color" ? { ...style, "--_asset-color": color } as CSSProperties : style} {...rest}>
+    <div ref={ref} className={assetCardVariants({ layout, container, caption, fill, aspect, fit, mosaic, interactive, borderless }, className)} data-selected={selected ? "" : undefined}
+      style={layout === "color" ? { ...style, "--_asset-color": color } as CSSProperties : ratio ? { ...style, ...ratio } as CSSProperties : style} {...rest}>
       {name != null || actions ? (
         <div className={join(assetCardVariants.element("head"), headClass)} {...headRest}>
           {name != null ? <span className={assetCardVariants.element("name")}>{name}</span> : null}
@@ -211,7 +225,7 @@ export const AssetGrid = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGridPro
   );
 });
 
-export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | "textValue" | "color">, Pick<AssetCardProps, "name" | "meta" | "actions" | "media" | "mediaAlt" | "mediaRatio" | "color" | "group" | "caption" | "fill" | "borderless" | "container" | "aspect" | "children" | "frameProps" | "headProps" | "captionProps"> {
+export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | "textValue" | "color">, Pick<AssetCardProps, "name" | "meta" | "actions" | "media" | "mediaAlt" | "mediaRatio" | "fit" | "color" | "group" | "mosaic" | "caption" | "fill" | "borderless" | "container" | "aspect" | "children" | "frameProps" | "headProps" | "captionProps"> {
   /** The text typeahead matches; the name when it is a string. */
   textValue?: string;
 }
@@ -219,7 +233,7 @@ export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | 
 /** One card in an AssetGrid: an option whose content is an AssetCard. A waterfall's cards hug; the grid's container is
     every card's unless a card sets its own. */
 export const AssetGridItem = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGridItemProps>(function AssetGridItem(
-  { name, meta, actions, media, mediaAlt, mediaRatio, color, group, caption, fill, borderless, container, aspect, children, frameProps, headProps, captionProps, textValue, value, className, onDoubleClick, ...rest }, ref,
+  { name, meta, actions, media, mediaAlt, mediaRatio, fit, color, group, mosaic, caption, fill, borderless, container, aspect, children, frameProps, headProps, captionProps, textValue, value, className, onDoubleClick, ...rest }, ref,
 ) {
   const grid = useContext(GridContext);
   return (
@@ -231,7 +245,7 @@ export const AssetGridItem = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGri
       onDoubleClick={event => { onDoubleClick?.(event); if (!event.defaultPrevented && !rest.disabled) grid.open?.(value); }}
       {...rest}
     >
-      <AssetCard name={name} meta={meta} actions={actions} media={media} mediaAlt={mediaAlt} mediaRatio={mediaRatio} color={color} group={group} caption={caption} fill={fill} borderless={borderless}
+      <AssetCard name={name} meta={meta} actions={actions} media={media} mediaAlt={mediaAlt} mediaRatio={mediaRatio} fit={fit} color={color} group={group} mosaic={mosaic} caption={caption} fill={fill} borderless={borderless}
         container={container ?? grid.container} aspect={aspect ?? (grid.layout === "waterfall" ? "hug" : "square")}
         frameProps={frameProps} headProps={headProps ?? captionProps}>{children}</AssetCard>
     </ListBoxItem>
