@@ -86,7 +86,7 @@ textarea { font: 13px/1.5 var(--font); width: 100%; box-sizing: border-box; min-
   <div class="bar" role="toolbar" aria-label="Board settings">
     <div class="group">Size <span class="seg" id="sizes"></span></div>
     <div class="group">Line at 16px <span class="seg" id="weights"></span></div>
-    <div class="group" id="corners-group" hidden>Corners <span class="seg" id="corners"></span></div>
+    <div class="group" id="corners-group" hidden>Show <span class="seg" id="corners"></span></div>
     <label class="check"><input type="checkbox" id="keys"> Keylines</label>
     <label class="check"><input type="checkbox" id="labels"> Names</label>
     <button class="btn" id="shuffle" type="button">Shuffle boards</button>
@@ -125,6 +125,7 @@ textarea { font: 13px/1.5 var(--font); width: 100%; box-sizing: border-box; min-
 (() => {
   const NOW = JSON.parse(document.getElementById("data").textContent);
   const ALT = JSON.parse(document.getElementById("alt").textContent);
+  const ALT_LABEL = __ALTLABEL__;
   let ICONS = NOW;
   let BY = Object.fromEntries(ICONS.map(i => [i.n, i]));
   const PER = 60;
@@ -200,7 +201,7 @@ textarea { font: 13px/1.5 var(--font); width: 100%; box-sizing: border-box; min-
     const useSet = w => { ICONS = w === "less" ? ALT : NOW; BY = Object.fromEntries(ICONS.map(i => [i.n, i])); };
     useSet(which);
     const el = document.getElementById("corners");
-    el.innerHTML = [["now", "Now"], ["less", "Less round"]].map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${v === which}">${l}</button>`).join("");
+    el.innerHTML = [["now", "Now"], ["less", ALT_LABEL]].map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${v === which}">${l}</button>`).join("");
     el.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; which = b.dataset.v; put("corners", which);
       el.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); useSet(which); render(); });
   }

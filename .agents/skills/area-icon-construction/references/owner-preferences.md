@@ -248,3 +248,7 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   the tips with more room round them; the bots are bot (no mouth, eyes centred) and bot-agent (a narrower hat on a
   brim the head's width) only: the eight role bots (automator, builder, designer, generator, guard, lead, researcher,
   scholar) are removed.
+  Round 4 picks, 2026-11-01: the cohesion rules are adopted; corners less round (frames r 1.5, mid frames and bars r 1;
+  glyph and figure curves untouched); the system / shapes triangle at 60° like warning, play, eject and flask; balance
+  over 1× crispness stands; the smallest gap rises to one line (1.125) and the smallest counter to 1.5, the 171 icons
+  under it redrawn in family batches, each shown before it lands (the detail step of 2026-09-28 is retired).

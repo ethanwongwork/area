@@ -53,8 +53,9 @@ open lines (cross, close, check), reach to within about a pixel of it.
 
 **Negative space.** Negative space is designed like ink. Measure it in ink at 1.125px;
 the lint prints every gap and counter with `--report`.
-- **Gaps** between separate shapes come from a scale (a *detail* step, 0.875–1.125, sits under
-  tight since the owner's detail round; tight now runs to 1.75):
+- **Gaps** between separate shapes come from a scale. No gap is narrower than the line (owner, 2026-11-01: at 16 the
+  0.875–1.125 *detail* step of the 2026-09-28 detail round read as clumped lines, and Lucide and Tabler keep 1.33);
+  the one exception is the ⌀1.5 dot under a !, i or ? stem (0.94, owner, 2026-10-03). Tight runs to 1.75:
   - *tight*, 1.125–1.625px: satellites such as the bell's clapper, the dot of an i or !,
     and a gear's hub, and overlap cuts (a gap equal to the line, 1.125px);
   - *standard*, 1.75–2px (3px between centre-lines): parallel strokes, bars, a pupil or
@@ -62,9 +63,9 @@ the lint prints every gap and counter with `--report`.
   - *open*, 2.5px or more: space that no longer reads as a gap.
   Anything else is a near miss. Change it until it is one of the three, or join the shapes.
   Cursor's rule is the floor: cuts of 2.5 grid units or less blur into one shape.
-- **Counters.** Enclosed pockets use the same scale. A satellite pocket, such as a
-  clapper cup or a document's fold, may be tight (a 1.25–1.625px disc fits). Every other
-  pocket is standard (1.75px or more; 1.875 for a 3px bar or an r 1.5 ring). Anything
+- **Counters.** Enclosed pockets use the same scale, with a floor of 1.5 (owner, 2026-11-01). A satellite pocket,
+  such as a clapper cup or a document's fold, may be tight (1.5–1.75). Every other pocket is standard (1.75px or more;
+  1.875 for a 3px bar or an r 1.5 ring). Anything
   smaller reads as a blot at 16px: the r 1.5 clapper cup was 0.43, and Fluent's 3px
   dog-ear is 0.66 at this weight. Grow the pocket until it reaches a step, or remove it.
   A U shape (straight sides and a round bottom) holds a larger counter than a half-circle
@@ -82,15 +83,16 @@ the lint prints every gap and counter with `--report`.
 - check: 45° arms in a 1:2 ratio. Standalone it is 3.5 / 7 (M3 8 L6.5 11.5 L13.5 4.5).
   Inside a ring it is 2 / 4 (M5 8 L7 10 L11 6);
 - corner radius, on the centre-line, set by the frame's size, never by the object (owner, 2026-11-01:
-  folders at r 1.5 sat beside keyboards and cameras of the same 12 × 10 at r 2). The set should feel soft:
-  no container corner is square. Rounder than Fluent's minimum, well short of ChatGPT's:
-  - 2px for a frame 9 or more long and 7 or more high: document page, folder, bookmark, mail, calendar,
-    camera, laptop, wallet, panel, the scan corners;
-  - 1.5px for a frame 5 to 8: copy's sheets, the booleans' squares, lock and gift bodies, folders' back copy;
-  - 1px for bars 3px tall (alignment) and small parts (the trash handle, a phone in devices, building's annex);
-  - a part on a frame keeps its own size's radius; an object whose roundness is its shape keeps it (mouse,
-    gamepad, the handset, toggle). `docs/research/icon-cohesion-2026-10-31/tools/reradius.py` changes a radius
-    without moving the shape; `tools/radii.py` audits it;
+  folders at r 1.5 sat beside keyboards and cameras of the same 12 × 10 at r 2), and on the less round scale the owner
+  chose the same day (about Lucide's 1.33 at 16):
+  - 1.5px for a frame 9 or more long and 7 or more high: document page, folder, bookmark, mail, calendar, camera,
+    laptop, wallet, panel, the scan corners;
+  - 1px for a frame 5 to 8 (copy's sheets, the booleans' squares, lock and gift bodies, folders' back copy), and for
+    bars 3px tall and small parts (the trash handle, a phone in devices, building's annex);
+  - a curve that belongs to a glyph, a figure or an organic shape is not a corner and keeps its drawing (command's
+    loops, braces, quote, the person's shoulders, bug, gauge, the database cylinder), and an object whose roundness is
+    its shape keeps it (mouse, gamepad, the handset, toggle). `docs/research/icon-cohesion-2026-10-31/tools/reradius.py`
+    changes a radius without moving the shape; `tools/radii.py` audits it;
 - overlap cut: where one shape passes behind another (shapes' circle), the hidden part
   stops so the gap equals the line (2.25px between centre-lines, 1.125px of space).
   Owner, round 4: 3px read too far. **A gap is information, never style** (owner, 2026-10-02,
@@ -469,7 +471,7 @@ five libraries (`refs.mjs`), never at one large size beside Fluent alone.
 `PACKAGE_GLYPHS` in the generator, never a hand-copied path, and pass the slot's `size`.
 base.css sets the line from `--area-weight-icon` and the size curve.
 
-**Cohesion (2026-10-31; the rules below owner to confirm, the dot weight and kept solids owner-picked 2026-11-01; research and numbers in `docs/research/icon-cohesion-2026-10-31/`).**
+**Cohesion (2026-10-31; owner-adopted 2026-11-01; research and numbers in `docs/research/icon-cohesion-2026-10-31/`).**
 Measured against Lucide, Phosphor, Tabler, Heroicons, Iconoir and Fluent, Area's spread of size, density and
 mass is the libraries' own, and Area follows their consensus concept by concept (r 0.83–0.90). What set it
 apart was solid ink (35% of icons, against 16–17% in Lucide and Phosphor) and single drawings. So:

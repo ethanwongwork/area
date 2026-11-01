@@ -194,3 +194,14 @@ making all the icons at all sizes slightly less round … make sure the shapes/r
   except the system / shapes triangle (56° against 60–62°), redrawn at 60°.
 - **Less round** (`reradius.py` with `SRC_DIR` on a copy): frames r 2 → 1.5 and mid frames 1.5 → 1 change 305 icons,
   about Lucide's 1.33. Icon Boards (`boards.py --compare`) has a Corners toggle for the whole set.
+
+## Round 5 (2026-11-01; review page): the floor and less round corners
+
+Owner picks (round 4): cohesion rules adopted; corners less round; the gap floor raised to one line and counters to
+1.5; the 60° triangle; balance over 1× crispness kept. Applied in the sources and waiting on the owner's look before
+regenerating: less round corners in about 220 icons (`reradius.py`, glyph and figure curves restored by hand), about
+190 icons redrawn to the floor by family (four agents for the batch-1 families, three for the rest, then a consolidation
+pass: the family sparkle in chat-sparkle, git-graph's curve, monitor-off's slash exemption, person frames at r 1.5,
+sliver fixes in chat- and image-sparkle). The lint enforces the floor (`GAPS` without the detail step, counters from
+1.5; the !, i and ? stem dot excepted; `data-floor="kept"` on 16 owner constructions held for a decision). Open: the
+small lock's two sizes, sort-alpha's arrow 0.5 below sort-numeric's.

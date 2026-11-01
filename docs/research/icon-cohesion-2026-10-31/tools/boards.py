@@ -5,7 +5,7 @@ collection `flags`, the weight pick and notes in `decisions`). Reads the 16px bu
 leaves out turns and aliases, and stores each drawing once: the page sets the line per display size on the
 size curve, so the weight control can show any line across the whole set.
 
-  python3 docs/research/icon-cohesion-2026-10-31/tools/boards.py out.html [--compare SOURCES_DIR]
+  python3 docs/research/icon-cohesion-2026-10-31/tools/boards.py out.html [--compare SOURCES_DIR] [--label "Name"]
 With --compare, both sets are drawn from sources and the page gets a Corners toggle (now / the variant).
 then publish out.html as the same artifact (Artifact tool, url above).
 """
@@ -45,6 +45,6 @@ if "--compare" in sys.argv:
     alt = from_sources(sys.argv[sys.argv.index("--compare") + 1])
 data = json.dumps(out, separators=(",", ":"))
 assert "</script" not in data
-page = open(os.path.join(HERE, "boards-template.html")).read().replace("__DATA__", data).replace("__ALT__", json.dumps(alt, separators=(",", ":")) if alt else "null")
+page = open(os.path.join(HERE, "boards-template.html")).read().replace("__DATA__", data).replace("__ALT__", json.dumps(alt, separators=(",", ":")) if alt else "null").replace("__ALTLABEL__", json.dumps(sys.argv[sys.argv.index("--label") + 1] if "--label" in sys.argv else "Variant"))
 open(sys.argv[1], "w").write(page)
 print(f"{len(out)} drawings → {sys.argv[1]}")
