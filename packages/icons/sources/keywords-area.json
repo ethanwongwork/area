@@ -348,5 +348,17 @@
   "sound",
   "audio",
   "speaker"
+ ],
+ "bookmarks": [
+  "collection",
+  "saved",
+  "references",
+  "favorites"
+ ],
+ "system": [
+  "design system",
+  "kit",
+  "foundations",
+  "styles"
  ]
 }

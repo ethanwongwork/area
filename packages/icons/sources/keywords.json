@@ -1751,6 +1751,27 @@
     "bookmark minus"
    ]
   },
+  "bookmarks": {
+   "names": {
+    "phosphor": "bookmarks-simple",
+    "fluent": "bookmark_multiple",
+    "material": "bookmarks"
+   },
+   "keywords": [
+    "collection",
+    "saved",
+    "references",
+    "favorites",
+    "bookmarks simple",
+    "bookmark multiple",
+    "reading",
+    "reader",
+    "novel",
+    "story",
+    "placeholder",
+    "favorited"
+   ]
+  },
   "boolean-exclude": {
    "names": {
     "lucide": "squares-exclude",
@@ -13210,6 +13231,28 @@
     "arrowhead",
     "refreshing",
     "spin"
+   ]
+  },
+  "system": {
+   "names": {
+    "lucide": "shapes",
+    "phosphor": "shapes",
+    "fluent": "shapes",
+    "material": "shapes"
+   },
+   "keywords": [
+    "design system",
+    "kit",
+    "foundations",
+    "styles",
+    "shapes",
+    "equilateral",
+    "classification",
+    "different",
+    "collection",
+    "toy",
+    "learning",
+    "geometry"
    ]
   },
   "table": {

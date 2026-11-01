@@ -104,7 +104,7 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   an alternative (file-zip: archive, or a labelled file type).
 - **Solids in the outline style** are exceptions, each recorded: quote's marks and bold's B,
   stop-circle's square and record's disc, the boolean operations' result, contrast's half,
-  shadow's band, folder-zip's teeth, id-card's person, stroke-weight's bars, newspaper's picture block. (paw's
+  shadow's band, folder-zip's teeth, id-card's person, stroke-weight's bars. (newspaper's picture block was one until 2026-11-01, now text lines.) (paw's
   toes are r 1.25 rings, solid only when filled.) The solid is
   what the icon shows; ordinary details stay lines.
 - **Owner, 2026-10-02:** multiples follow Phosphor's layering (Shared parts); library is
@@ -231,5 +231,8 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   uncohesive in the App Map's key. Measured, Area's size and weight spread matches the libraries'; its solids
   (35% of icons) and single drawings set it apart. Proposed rules (construction rules, Cohesion): solids only
   as marks, long objects on the rising diagonal, inner ring diagonals rise, letters use their keyline,
-  separate-shape compositions as a class. Round 1: system (three options), bookmarks for Collection, compass's
-  needle, link on the diagonal, the case family at cap 7.5. `docs/research/icon-cohesion-2026-10-31/`.
+  separate-shape compositions as a class. `docs/research/icon-cohesion-2026-10-31/`.
+  Owner picks, 2026-11-01 (batch 76): system is option A, shapes' triad with the triangle grown, and shapes shares
+  it (system is its alias); Collection is `bookmarks`; newspaper's picture is text lines (Updates keeps newspaper);
+  compass's needle rises; link and link-off lie on the diagonal (12 and 10px cuts follow); the case family is cap
+  7.5. The rules and the reach of the solids rule are still unanswered: round 2 waits on them.

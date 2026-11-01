@@ -1231,6 +1231,15 @@
         "pilcrow-right": "approved",
         "pilcrow-left": "approved"
       }
+    },
+    {
+      "id": "batch-76",
+      "title": "Batch 76 · Cohesion pass, round 1",
+      "note": "From the cohesion pass (docs/research/icon-cohesion-2026-10-31): the App Map's new places and kinds of things. Owner picks 2026-11-01 on the review page: system A (shapes' triad, which shapes now shares), bookmarks for Collection, newspaper's picture as lines, and compass, link and the case family redrawn.",
+      "icons": {
+        "system": "approved",
+        "bookmarks": "approved"
+      }
     }
   ]
 }

@@ -985,6 +985,10 @@ const MAP = {
   FluentRefPilcrowRightFilledIcon: "text_paragraph_direction_right_16_filled",
   FluentRefPilcrowLeftIcon: "text_paragraph_direction_left_16_regular",
   FluentRefPilcrowLeftFilledIcon: "text_paragraph_direction_left_16_filled",
+  FluentRefSystemIcon: "shapes_16_regular",
+  FluentRefSystemFilledIcon: "shapes_16_filled",
+  FluentRefBookmarksIcon: "bookmark_multiple_16_regular",
+  FluentRefBookmarksFilledIcon: "bookmark_multiple_16_filled",
   // icon-batch.mjs adds Fluent references for new batches above this line.
   FluentRefDatabaseIcon: "database_16_regular",
   FluentRefDatabaseFilledIcon: "database_16_filled",

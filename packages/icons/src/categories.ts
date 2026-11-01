@@ -115,7 +115,7 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "layers", "square-dashed", "token", "component", "slice",
   ] },
   { slug: "shapes", name: "Shapes", icons: [
-    "shapes", "rectangle", "rectangle-vertical", "ellipse", "polygon", "pentagon", "hexagon", "octagon", "diamond",
+    "shapes", "system", "rectangle", "rectangle-vertical", "ellipse", "polygon", "pentagon", "hexagon", "octagon", "diamond",
     "cube", "cube-wireframe",
   ] },
   { slug: "files", name: "Files & documents", icons: [
@@ -148,7 +148,7 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "smile", "smile-plus", "meh", "frown", "square-smile",
     "thumbs-up", "thumbs-down",
     "heart", "heart-off", "star", "star-half", "star-off",
-    "bookmark", "bookmark-add", "bookmark-remove", "bookmark-off", "bookmark-check",
+    "bookmark", "bookmark-add", "bookmark-remove", "bookmark-off", "bookmark-check", "bookmarks",
     "flag", "flag-off", "tag", "tags", "tag-plus",
   ] },
   { slug: "ai", name: "AI & agents", icons: [

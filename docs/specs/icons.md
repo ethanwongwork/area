@@ -5424,3 +5424,12 @@ drew 1.61px (not the curve's 1.42), and moving type 15 to 20 alone would have dr
   File page, which set their own icon line, set it to 1 (`--area-type-icon-line` joins `OVERRIDABLE`).
 - **Result:** default-size icons draw 1.33px at type 15 (slot 20, was 16 at 1.21) and 1.42 at 16 (was 1.61). Types 12–14,
   the app's type 13 included, are unchanged.
+
+## Batch 76: Cohesion pass, round 1, 2026-10-31
+
+| Icon | Construction |
+|---|---|
+| system | square; alias of shapes (owner pick A, 2026-11-01): a triangle over a square and a circle, each as large as the gap scale allows in the 12px box. The triangle (vertices 4.25, 6.5 / 8, 1 / 11.75, 6.5, r 0.75 corners) is the largest part, since it covers half its box; the square 4.5 at 2, 9 with r 1; the circle r 2.25 at 11.75, 11.25. Gaps 1.38 and 1.56 tight, 1.88 standard. The drawing sits 0.5 high so the square's and circle's edges land on whole pixels (1× frames). Filled: all three solid. |
+| bookmarks | square; bookmark's drawing at 7 × 9.35 with a back copy offset 3 up and right (the multiples rule), the back drawn as an open L stopping one overlap cut (2.3) short of the front. Every vertical edge sits on x.5 and the tops on 1.5 and 4.5, so it is crisp at 1× and 0.5 left and high of centre (crisp over centred). Filled: the front fills and the back stays a line. |
+
+Redrawn in the same round, all owner-approved on the review page (2026-11-01). compass and compass-dot: the needle lies on the rising diagonal, straight-sided, tips at 11, 5 and 5, 11 (r 0.5), sides at 9, 9 and 7, 7 (r 0.75). Fluent's NW–SE needle lay on the slash's diagonal and read as ⊘. link and link-off: on the rising diagonal, two r 2.83 hooks on centres 5, 11 and 11, 5 with 1-unit straight ends, the bar 6, 10 to 10, 6, every 45° segment on the lattice; 12.8 square, where the flat link was 13.1 × 7.1 and read 19% light. link-off keeps the shared slash flat, and its filled bar keeps the lower-left half. The 12px and 10px cuts follow: the 12 cut is the drawing at 0.75 (hooks r 2.12 on 3.75, 8.25 and 8.25, 3.75); the 10 cut puts r 1.41 hooks on 3, 6 and 6, 3 round 4.5. case-sensitive, case-upper and case-lower: cap 4 to 11.5 (7.5, was 6.5), x-height 4.5 with r 2.25 bowls, the A 5.5 wide with its bar on 9.5 and the B's bar on 7.5. The pair reuses the single letters. newspaper: the solid picture block is replaced by text lines (4 to 9.5 on 5.5 and 8, and 4 to 7.5 on 10.5), so newspaper is no longer a recorded solid. Filled: the lines are knockouts. shapes takes system's drawing.

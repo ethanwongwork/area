@@ -6762,6 +6762,34 @@ export const FluentRefPilcrowLeftFilledIcon = () => (
   </svg>
 );
 
+/** Fluent `shapes_16_regular`. */
+export const FluentRefSystemIcon = () => (
+  <svg {...base}>
+    <path d="M5.5 2A3.5 3.5 0 0 0 5 8.96v1.01A4.5 4.5 0 1 1 9.97 5h-1A3.5 3.5 0 0 0 5.5 2m3 4A2.5 2.5 0 0 0 6 8.5v4A2.5 2.5 0 0 0 8.5 15h4a2.5 2.5 0 0 0 2.5-2.5v-4A2.5 2.5 0 0 0 12.5 6zM7 8.5C7 7.67 7.67 7 8.5 7h4c.83 0 1.5.67 1.5 1.5v4c0 .83-.67 1.5-1.5 1.5h-4A1.5 1.5 0 0 1 7 12.5z" />
+  </svg>
+);
+
+/** Fluent `shapes_16_filled`. */
+export const FluentRefSystemFilledIcon = () => (
+  <svg {...base}>
+    <path d="M1 5.5A4.5 4.5 0 0 1 9.97 5H8.5A3.5 3.5 0 0 0 5 8.5v1.47A4.5 4.5 0 0 1 1 5.5m7.5.5A2.5 2.5 0 0 0 6 8.5v4A2.5 2.5 0 0 0 8.5 15h4a2.5 2.5 0 0 0 2.5-2.5v-4A2.5 2.5 0 0 0 12.5 6z" />
+  </svg>
+);
+
+/** Fluent `bookmark_multiple_16_regular`. */
+export const FluentRefBookmarksIcon = () => (
+  <svg {...base}>
+    <path d="M4.65 2c.3-.6.91-1 1.62-1h4.63A3.1 3.1 0 0 1 14 4.1v7.37c0 .7-.4 1.31-1 1.61V4.1A2.1 2.1 0 0 0 10.9 2zm.15 1C3.8 3 3 3.8 3 4.8v9.7a.5.5 0 0 0 .72.45l3.78-1.9 3.78 1.9a.5.5 0 0 0 .72-.45V4.8c0-1-.8-1.8-1.8-1.8zM4 4.8c0-.44.36-.8.8-.8h5.4c.44 0 .8.36.8.8v8.89l-3.28-1.64a.5.5 0 0 0-.44 0L4 13.7z" />
+  </svg>
+);
+
+/** Fluent `bookmark_multiple_16_filled`. */
+export const FluentRefBookmarksFilledIcon = () => (
+  <svg {...base}>
+    <path d="M4.65 2h6.25c1.16 0 2.1.94 2.1 2.1v8.98c.6-.3 1-.9 1-1.61V4.1A3.1 3.1 0 0 0 10.9 1H6.27c-.71 0-1.32.4-1.62 1m.15 1C3.8 3 3 3.8 3 4.8v9.7a.5.5 0 0 0 .72.45l3.78-1.9 3.78 1.9a.5.5 0 0 0 .72-.45V4.8c0-1-.8-1.8-1.8-1.8z" />
+  </svg>
+);
+
 /** Fluent `database_16_regular`. */
 export const FluentRefDatabaseIcon = () => (
   <svg {...base}>
