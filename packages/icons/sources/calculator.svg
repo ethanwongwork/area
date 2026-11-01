@@ -1,11 +1,10 @@
-<svg data-set="area-pilot" data-keyline="vertical" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect data-filled="solid" x="3" y="1.5" width="10" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<rect data-filled="line" x="5" y="3.5" width="6" height="3" rx="1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M6 3.5H10A1 1 0 0 1 11 4.5V5.5A1 1 0 0 1 10 6.5H6A1 1 0 0 1 5 5.5V4.5A1 1 0 0 1 6 3.5Z" fill="currentColor" stroke="none"/>
-<circle data-filled="hole" cx="5.25" cy="9" r="0.5625" fill="currentColor"/>
-<circle data-filled="hole" cx="8" cy="9" r="0.5625" fill="currentColor"/>
-<circle data-filled="hole" cx="10.75" cy="9" r="0.5625" fill="currentColor"/>
-<circle data-filled="hole" cx="5.25" cy="12" r="0.5625" fill="currentColor"/>
-<circle data-filled="hole" cx="8" cy="12" r="0.5625" fill="currentColor"/>
-<circle data-filled="hole" cx="10.75" cy="12" r="0.5625" fill="currentColor"/>
+<svg data-set="area-pilot" data-keyline="square" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect data-filled="solid" x="2.5" y="2" width="11" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="knockout" d="M5.5 5H10.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="hole" cx="5.25" cy="8" r="0.5625" fill="currentColor"/>
+<circle data-filled="hole" cx="8" cy="8" r="0.5625" fill="currentColor"/>
+<circle data-filled="hole" cx="10.75" cy="8" r="0.5625" fill="currentColor"/>
+<circle data-filled="hole" cx="5.25" cy="11" r="0.5625" fill="currentColor"/>
+<circle data-filled="hole" cx="8" cy="11" r="0.5625" fill="currentColor"/>
+<circle data-filled="hole" cx="10.75" cy="11" r="0.5625" fill="currentColor"/>
 </svg>

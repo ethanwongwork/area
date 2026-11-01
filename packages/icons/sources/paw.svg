@@ -1,7 +1,7 @@
-<svg data-set="area-pilot" data-keyline="circle" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M5.828 8.414A2.25 2.25 0 0 1 10.172 8.414A2.5 2.5 0 0 0 11.427 9.978A2 2 0 0 1 9.731 13.596A4.5 4.5 0 0 0 6.269 13.596A2 2 0 0 1 4.573 9.978A2.5 2.5 0 0 0 5.828 8.414Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="solid" cx="2.75" cy="7.25" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="solid" cx="5.75" cy="3.75" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="solid" cx="10.25" cy="3.75" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="solid" cx="13.25" cy="7.25" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<svg data-set="area-pilot" data-floor="kept" data-keyline="circle" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path data-filled="solid" d="M6.069 9.257A2 2 0 0 1 9.931 9.257A2.222 2.222 0 0 0 11.046 10.647A1.778 1.778 0 0 1 9.539 13.863A4 4 0 0 0 6.461 13.863A1.778 1.778 0 0 1 4.954 10.647A2.222 2.222 0 0 0 6.069 9.257Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="solid" cx="2.75" cy="7.75" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="solid" cx="5.25" cy="3.25" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="solid" cx="10.75" cy="3.25" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="solid" cx="13.25" cy="7.75" r="1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

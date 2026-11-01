@@ -1,7 +1,7 @@
 <svg data-set="area-pilot" data-angles="free" data-keyline="circle" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path data-filled="solid" d="M8.15 14H8A6 6 0 0 1 8 2A6 5.5 0 0 1 14 7.5A3 3 0 0 1 11 10.5H9.608A1.021 1.021 0 0 0 8.792 12.133L8.967 12.367A1.021 1.021 0 0 1 8.15 14Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="hole" cx="9" cy="4.75" r="1" fill="currentColor"/>
-<circle data-filled="hole" cx="11.25" cy="7" r="1" fill="currentColor"/>
-<circle data-filled="hole" cx="4.75" cy="8.25" r="1" fill="currentColor"/>
-<circle data-filled="hole" cx="6" cy="5.25" r="1" fill="currentColor"/>
+<circle data-filled="hole" cx="9" cy="5" r="1" fill="currentColor"/>
+<circle data-filled="hole" cx="11.25" cy="7.25" r="1" fill="currentColor"/>
+<circle data-filled="hole" cx="5" cy="9" r="1" fill="currentColor"/>
+<circle data-filled="hole" cx="5.75" cy="5.75" r="1" fill="currentColor"/>
 </svg>
