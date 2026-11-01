@@ -128,7 +128,7 @@ export function ExamplesPage({ lab = false }: { lab?: boolean }) {
       ) : !shown.length ? (
         <EmptyState title={lab ? "No tests" : "No patterns"} description={`Nothing matches “${query}”.`} />
       ) : (
-        <TileGrid span="wide">
+        <TileGrid span="wide" cards>
           {shown.map(entry => (
             <Tile key={entry.id} span="wide" stage="center" inert card label={entry.label} openOnClick onOpen={() => select(entry.id)}>
               {/* A whole screen per tile: each draws as it nears the view (tile.tsx WhenVisible). */}

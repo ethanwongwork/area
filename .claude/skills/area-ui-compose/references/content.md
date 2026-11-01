@@ -34,10 +34,11 @@ What fills the content region, and the rules for each pattern. Evidence: `docs/r
 
 ## Feed of sections
 
-Area's Canvas is the reference implementation (`PRODUCT_UI.md`, "The Canvas is a feed"): one column, at most 1236 and
-centred; each section a heading (title, muted count on collections, an optional one-sentence lede) over **one** block;
-cards 12 apart (at least 260 wide, at most four across), heading 12 over its block, sections 40 apart, margin 16, each
-measured to what is drawn.
+Area's Canvas is the reference implementation (`PRODUCT_UI.md`, "The Canvas is a feed"): one column the Canvas's width;
+each section a heading (title, muted count on collections, an optional one-sentence lede) over **one** block; cards 12
+apart (at least 260 wide, at most four across), one inset (16) and one corner (16) inside every frame, heading 16 over its
+block, sections 48 apart, margin 32, each measured to what is drawn. Those are the default density's; every one steps
+with density (spacing.md, Feed).
 
 - One block per section. Two blocks under one heading make the heading ambiguous; give the second its own heading.
 - A section's actions ("Show all", "Browse N", add) sit at its title row's end (Notion's template feed, Figma

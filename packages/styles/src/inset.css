@@ -70,8 +70,9 @@
     /* A row's glyph edge is the density's row inset (8 at both densities, as Tree view, Notion,
      * Figma and Cursor; evidence audit R1), not the icon centred in the row. The reserved box is
      * the row less that inset each side: 16 at default (the icon itself), 8 in a compact 24 row,
-     * so the 16 icon still starts 8 in. docs/research/compact-evidence-2026-10-02/README.md. */
-    --_box-icon: calc(var(--area-ui-row) - var(--area-ui-row-inset) * 2);
+     * so the 16 icon still starts 8 in. docs/research/compact-evidence-2026-10-02/README.md. A panel's list takes the
+     * panel's row pad instead, 6 (panel.css --_panel-row-pad; its plates 8 from the edge, Cursor's, 2026-10-31). */
+    --_box-icon: calc(var(--area-ui-row) - var(--_panel-row-pad, var(--area-ui-row-inset)) * 2);
   }
   /* A Nav heading names rows that may lead with an icon. Its content edge therefore
    * follows the icon viewport rather than a font-specific cap measurement: group names,

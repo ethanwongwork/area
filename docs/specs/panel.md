@@ -47,9 +47,11 @@ Popover float over the page. A panel stays beside its subject.
 | section count | `count` on PanelSection | How much a section holds, before its rows are read | Gallery `content-count`; Claude's rail cards, Cursor's trays |
 | section revealActions | boolean on PanelSection | Occasional heading actions shown on hover or focus | Gallery `behavior-reveal-actions`; VS Code's pane headers |
 
-Panel insets (sm 12, md 16) and gaps (sm 8, md 12) are fixed spacing, not the gutter or gap
-ramps. The compact pass steps them down one rung (insets read `inset-surface-sm/md`, 12 / 16 →
-8 / 12; gaps 8 / 12 → 6 / 8; the md label gap reads `ui-stack`, 6 / 4); see the feedback log.
+Panel insets and gaps follow density through `ui-dense`, as every spacing role does. sm's inset is Surface's sm inset
+less 2 (10 at type 14 / 32, 8 at type 13); md's is Surface's md inset with a floor of 14: 14 at Compact and at type 13 /
+32, 18 at type 13 Comfortable, 16 / 20 at type 14 (2026-10-31; it was a fixed 14 at every density from 2026-10-09).
+Gaps: md 10, sm 6, each less 4 or 2 per `ui-dense` step; the md label gap reads `ui-stack`. The floor keeps a list's row
+plates, hung the panel's row pad (6) into the inset, 8 from the edge at 14 (Cursor and Claude keep them 8 away).
 
 ## Sources
 
@@ -125,7 +127,7 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | numeric rows | **NumberField soft with letter prefixes** X / Y / W / H (`apps/desktop/src/content/demos/gallery.tsx:680-690`) | Figma's letter-prefixed number fields (`figma--number-field`) | Prefix ink and box differ from Figma; see [number-field.md](number-field.md) |
 | rules (bar, section, footer) | **`border-decorative`**, the panel's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 | Second pass: new divider role for rules; Figma #e6 (`figma--size-select` edge), ChatGPT 10% black; Notion's menu rules are lighter, 7% (#f0, `menu/notion--page-menu--open`); #e2 is the nearest rung to #e5 | Was `border-decorative` #f3f3f3 |
 | section rule extent | full width; last section none (`panel.css:114-127`) | Area's own | — |
-| inset (sides, last field to a rule) | **sm 12, md 16** (`--_inset`) | Owner (2026-09-28: "the margins are too big for both") | Was 16 / 20 for one round, 12 / 16 before that |
+| inset (sides, last field to a rule) | **sm: Surface's sm inset less 2; md: `max(14, inset-surface-md)`**, 14 at type 13 / 32 and Compact, 18 at Comfortable (`--_inset`, 2026-10-31) | Owner (2026-09-28: "the margins are too big for both"); round 2 (2026-10-09) took md to 14; density, 2026-10-31 | Was 16 / 20 for one round, 12 / 16 before that, then a fixed 14 at md |
 | section heading and bar | **a row: the button with one field gap above and below** (8 / 12), title centred; heading row sm 44, md 56; bar sm 45, md 57 | Figma's header row 40 = 8 + 24 + 8; VS Code's pane header (Cursor) a 22 row with centred actions; owner (2026-09-28: "make sure the padding for the inset buttons is even") | Was sized from the title (cap one inset below the rule), which left the button 6.3 above and ~11 below |
 | end-of-row buttons (bar, heading actions, row action) | **box on the inset, one field gap after the last field** | Owner (2026-09-28: "use the same gaps between the inputs … and the button"); Figma 8 between H and its action | A glyph-on-inset pull (tried the same day) widened the gap after H |
 | md width in the gallery | the md size tile at 280 | Owner (2026-09-28: "show a slightly larger width of the container for medium") | The component default stays 240 (owner, 2026-09-27) |
@@ -413,3 +415,19 @@ No rule under the bar, between sections or above the footer: the bar's height, a
   muted text; one at a row's end is Count), so the actions don't take its place. Group labels inside a section are not
   built: nothing in the Inspector holds groups yet (GOVERNANCE, keep it lean); they wait for the first view that does.
 - **Verdict:** in review.
+
+## Review note, 2026-10-31 (inset follows density)
+
+- **What changed:** the md inset follows density. It stays 14 at Compact and at the app's type 13 / 32 (no pixel changed
+  there, light or dark) and opens to 18 at Comfortable (16 and 20 at type 14). The Titlebar's start and end, when it starts
+  with a title or floats, read the same value.
+- **Why:** the sm tier and every other spacing role already stepped with density; md held 14 since round 2 (2026-10-09),
+  so at Comfortable the rows and controls grew inside Compact's room. Claude Code steps its pads 12 → 16 between its
+  densities. The floor of 14 keeps list plates at least 6 from the edge (Cursor and Claude: 8).
+- Evidence: `docs/research/region-balance-2026-10-31/README.md`. Back to review.
+
+## Review note, 2026-10-31 (row pad)
+
+- **What changed:** a list of rows in the body (Nav, Tree view) hangs by the panel's row pad, 6, published as
+  `--_panel-row-pad` for those rows' sides, so their plates sit 8 from the edge (were 6) and their text on the inset.
+- **Why:** owner pick q-plates (Cursor's and Claude's sidebars). Still in review.

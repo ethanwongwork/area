@@ -224,6 +224,9 @@
   .area-tabs--vertical .area-tabs__panel:focus-visible::before { inset-block-start: calc(var(--area-space-6) - var(--_focus-room) - var(--area-focus-width)); }
 
   /* --- Table -------------------------------------------------------------- */
+  /* Public hooks (2026-10-31, as Asset card's --area-asset-card-corner and -name-inset): --area-table-corner, the frame's
+     corner, and --area-table-edge, the first and last cells' side inset (md and lg; sm keeps one inset), so a page that
+     sets one inset and one corner for every frame (the desktop app's feed) can give its tables the same. */
   /* Body cells align to their first line; headers center labels and controls.
    * Column dividers are optional, independent of row spacing and stripes. */
   .area-table-wrapper {
@@ -235,7 +238,7 @@
     border: var(--area-stroke-width) solid var(--area-edge-blocks);
     /* The surface corner, never deeper than 1.5 x the cells' side inset (owner, 2026-10-12: a
        compact table put 8px-inset cells under an 18 corner). Bites only at the roundest settings. */
-    border-radius: min(var(--area-radius-container), max(var(--area-radius-floor), round(down, calc((var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)) * 1.5), 2px)));
+    border-radius: var(--area-table-corner, min(var(--area-radius-container), max(var(--area-radius-floor), round(down, calc((var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)) * 1.5), 2px))));
     background-color: var(--area-bg-surface);
   }
 
@@ -245,15 +248,24 @@
    * values look sparse. Primer, OpenAI and shadcn all set tables at 14.
    */
   .area-table {
-    /* Above and below a cell: 8, compact 6 (sm 4 / 2, lg 12 / 8; compact pass, round 6). */
-    --_cell-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
+    /* Above and below a cell: see --_cell-inset below (sm 4 / 2 and the UI line; compact pass, round 6). */
     /* spec: 12 at the sides, compact 8 (Notion table cells 12; VS Code's keybindings table 10). */
     --_cell-side: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
     /* The first and last cells sit a step further from the frame than columns sit from each other, so the frame reads as
        one object and the columns as its parts (owner, 2026-10-31, feed rhythm pick 2: Primer's props table 16 at the frame
        and 12 between columns; Cursor's settings 14 at the side). sm keeps one inset (below), as a dense table in a panel
        wants. */
-    --_cell-edge: calc(var(--_cell-side) + var(--area-space-4)); /* spec */
+    --_cell-edge: var(--area-table-edge, calc(var(--_cell-side) + var(--area-space-4))); /* spec */
+    /* md and lg set their text on the prose line (13/20 at type 13), so a description that wraps reads as prose, not as
+       stacked UI lines (owner pick q-table-lines, 2026-10-31; Primer's props table 1.67, Notion's 1.43; it was 13/18 and
+       Button's Props ran 8 lines on it). sm, a dense table in a panel or a chat reply, keeps the UI line. */
+    --_cell-line: var(--area-text-sm-prose-leading);
+    /* Above and below a cell, the text sits as far from the rule as it does from the frame's side: the edge inset less the
+       line's half-leading, so cap and baseline are --_cell-edge from the rules (owner, 2026-10-31: "why do the tables have
+       so much more horizontal spacing inset added than vertical top and bottom spacing?"; it was 7 against 14 at the
+       sides, about 11 on the ink). 9 at type 13 / 32, a 39 row (Cursor's settings rows 42, Primer's 44); 7 at Compact,
+       13 at Comfortable. Read at the cell, where 1cap is its own text's. */
+    --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2), 1px));
     /* layout="fixed": the label column (owner, 2026-10-31, feed rhythm pick 3: Primer fixes its Name column at 27%). */
     --_label-column: 27%; /* spec */
     inline-size: 100%;
@@ -263,7 +275,7 @@
      * is chrome: it compresses with the interface instead of holding at prose size.
      */
     font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
+    line-height: var(--_cell-line);
   }
 
   .area-table th,
@@ -347,9 +359,11 @@
     inline-size: 1%;
     white-space: nowrap;
   }
-  .area-table--sm { --_cell-inset: calc(var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)); --_cell-edge: var(--_cell-side); }
-  .area-table--md { --_cell-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); }
-  .area-table--lg { --_cell-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); }
+  .area-table--sm { --_cell-line: var(--area-ui-leading); --_cell-inset: calc(var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)); --_cell-edge: var(--_cell-side); }
+  /* md: the base's prose line and balanced inset, stated so a md table inside an sm one keeps them. */
+  .area-table--md { --_cell-line: var(--area-text-sm-prose-leading); --_cell-edge: var(--area-table-edge, calc(var(--_cell-side) + var(--area-space-4))); --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2), 1px)); }
+  /* lg: a step more room above and below than md's balanced inset. */
+  .area-table--lg { --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2 + var(--area-space-4)), 1px)); }
   .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
   .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-stroke-width) solid var(--area-edge-dividers); }
 

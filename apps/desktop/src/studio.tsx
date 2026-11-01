@@ -29,7 +29,7 @@ import { HistoryPage } from "./pages/history.tsx";
 import { ExplorationPage, ProjectOverview, ProjectPageView, VersionsPage } from "./pages/project.tsx";
 import { PublishControls } from "./publish.tsx";
 import { readStored, writeStored } from "./storage.ts";
-import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
+import { AppScaleContext, InheritedScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
@@ -801,6 +801,8 @@ export function Studio() {
   return (
     <StudioContext.Provider value={state}>
     <AppScaleContext.Provider value={scale}>
+    {/* <html> carries the app's scale (the chrome's defaults), so chrome outside the Canvas body states none of its own. */}
+    <InheritedScaleContext.Provider value={scale}>
       {/* The conversation outlives tabs and views; the Canvas's selection rides along as its context chip. */}
       <ChatProvider selection={selectionLabel(item)}>
       <ChatShortcut />
@@ -854,6 +856,7 @@ export function Studio() {
         </ShellContext.Provider>
       </div>
       </ChatProvider>
+    </InheritedScaleContext.Provider>
     </AppScaleContext.Provider>
     </StudioContext.Provider>
   );
@@ -1002,8 +1005,9 @@ function keepSpecimenLinks(event: ReactMouseEvent<HTMLElement>) {
  *              with the window controls' room, the toggle, search and back and forward; with the Inspector hidden it ends
  *              with that toggle.
  *   Inspector  its Panel's bar: its views, and its toggle at the end.
- * Under them, on one line, the Canvas's view options, the Sidebar's first row and the Inspector's first heading. Every region
- * insets its content by Panel's 14 (src/studio.css).
+ * Under them, on one line, the Canvas's view options and the Sidebar's first row; the Inspector's first heading sits a
+ * little under it. The Sidebar and Inspector inset their content by Panel's md inset (14, 18 at Comfortable), the Canvas
+ * by its feed margin (src/styles/app.css).
  */
 export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
   const studio = useStudio();
@@ -1026,6 +1030,8 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
   // document's head while Brand is on, so the body, cards and titles keep Area's palette.
   const brand = canvasPicks && studio.brand.on ? studio.brand : null;
   useBrandSheet(brand);
+  // The scale the Canvas body sets, which the chrome drawn in it inherits (src/app-scale.ts).
+  const bodyScale = useMemo<AppScale>(() => ({ "data-area-type": axes["data-area-type"]!, "data-area-density": axes["data-area-density"]! }), [axes["data-area-type"], axes["data-area-density"]]);
   const specimens = useMemo(() => canvasPicks ? { ...movedFrom(canvasAttributes(studio.shown.canvas, studio.shown.material), chromeAttributes), ...(brand ? { "data-area-brand": "" } : {}), ...(hasColours(studio.shown.colours) ? { "data-area-colours": "" } : {}) } : {}, [canvasPicks, studio.shown, brand, chromeAttributes]);
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
@@ -1068,7 +1074,7 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
           {shell.tabs}
         </Titlebar>
         <header className="studio-canvas__bar">{canvasLead}{canvasActions}<PublishControls /></header>
-        <div ref={canvasRef} className="studio-canvas__body" {...axes} onClick={keepSpecimenLinks}><SpecimenScopeContext.Provider value={specimens}>{canvas}</SpecimenScopeContext.Provider></div>
+        <div ref={canvasRef} className="studio-canvas__body" {...axes} onClick={keepSpecimenLinks}><SpecimenScopeContext.Provider value={specimens}><InheritedScaleContext.Provider value={bodyScale}>{canvas}</InheritedScaleContext.Provider></SpecimenScopeContext.Provider></div>
       </main>
       {showInspector ? (
         <div className="studio-inspector" onClick={keepSpecimenLinks}>
@@ -1127,9 +1133,32 @@ function InspectorPanel({ views, width, end }: { views: InspectorViews; width: R
         <span className="studio-head__group">{end}</span>
       </>}>
       {/* Keyed, so a view opens at its top and its own sections' state starts fresh. */}
-      <Fragment key={shown?.id}>{chat ? <ChatTranscript scroller={scroller} /> : shown ? views[shown.id as Exclude<InspectorView, "chat">] : null}</Fragment>
+      <Fragment key={shown?.id}>{chat ? <ChatTranscript scroller={scroller} /> : shown ? <InspectorView>{views[shown.id as Exclude<InspectorView, "chat">]}</InspectorView> : null}</Fragment>
     </Panel>
   );
+}
+
+/**
+ * An Inspector view's content. It says whether it opens on a section heading (`data-lead="heading"`), which app.css puts on
+ * the line the Sidebar's first row and the Canvas bar share (owner pick q-line, 2026-10-31); a view that opens on a preview
+ * (a typeface's Design) keeps the panel's inset. Read from what is drawn, as a view's content changes with the selection.
+ */
+function InspectorView({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const view = ref.current;
+    if (!view) return;
+    const mark = () => {
+      const first = view.firstElementChild;
+      const heading = first?.classList.contains("area-panel__section") && first.firstElementChild?.classList.contains("area-panel__heading");
+      if (heading) view.dataset.lead = "heading"; else delete view.dataset.lead;
+    };
+    mark();
+    const watch = new MutationObserver(mark);
+    watch.observe(view, { childList: true, subtree: true });
+    return () => watch.disconnect();
+  }, []);
+  return <div ref={ref} className="studio-inspector__view">{children}</div>;
 }
 
 /**

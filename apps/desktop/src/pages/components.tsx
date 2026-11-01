@@ -45,8 +45,8 @@ import { Facts } from "../facts.tsx";
 import { SpecimenBox } from "../specimen-box.tsx";
 import { CodeWell, longLines } from "../inspector.tsx";
 import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
-import { appScale } from "../app-scale.ts";
-import { CanvasSection, GALLERY_LOOK, Tile, TileGrid, type CardLook } from "../tile.tsx";
+import { appScale, feedScale, InheritedScaleContext } from "../app-scale.ts";
+import { CanvasSection, GALLERY_LOOK, Tile, TileGrid, type CardLook, FEED_TABLE } from "../tile.tsx";
 
 /*
  * The Cards menu (owner, 2026-10-25: "there should just be 1 style of container, so the options for that menu should be
@@ -330,7 +330,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
       <div ref={body} className="studio-overview__body" data-fit="">
         {open ? groupsOf(tiles).map(([group, list]) => (
           <div key={group} className="studio-overview__group">
-            <p className="studio-overview__group-label" {...appScale()}>{group} <span className="studio-muted studio-tabular">{list.length}</span></p>
+            <p className="studio-overview__group-label" {...feedScale()}>{group} <span className="studio-muted studio-tabular">{list.length}</span></p>
             <TileGrid span="wide" cards waterfall={waterfall}>{near ? list.map(card) : ghosts(list.length)}</TileGrid>
           </div>
         )) : (
@@ -339,7 +339,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
       </div>
       {more || open ? (
         // A text control in the title link's style, so its text starts on the cards' edge as the title does.
-        <div className="studio-overview__more" {...appScale()}>
+        <div className="studio-overview__more" {...feedScale()}>
           <button type="button" className="studio-section__link studio-overview__toggle" aria-expanded={open} aria-controls={`family-${family.slug}`} onClick={onToggle}>
             {open ? "Show one row" : `Show all ${tiles.length}`}
           </button>
@@ -352,7 +352,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
 /** A section's title as CanvasSection draws it (Area's SectionHeading), with the family's status after its count. */
 function SectionTitle({ id, title, count, badge }: { id: string; title: ReactNode; count: number; badge: ReactNode }) {
   return (
-    <SectionHeading className="studio-section-heading studio-overview__title" level={3} titleId={id} {...appScale()}
+    <SectionHeading className="studio-section-heading studio-overview__title" level={3} titleId={id} {...feedScale()}
       title={<>{title} <span className="studio-muted studio-tabular">{count}</span> <span className="studio-overview__status">{badge}</span></>} />
   );
 }
@@ -406,7 +406,9 @@ function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
     {purpose ? <p className="studio-lede" {...appScale()}>{purpose}</p> : null}
     <Tabs className="studio-family-tabs" size="sm" aria-label={`${family.name} views`} value={tab} onValueChange={next => onTab(next as FamilyTab)}
       items={FAMILY_TABS.map(entry => ({ id: entry.id, label: entry.label }))} {...appScale()}>
-      {/* The tabs' panel is the app's; the specimens inside take the Inspector's settings (specimen-scope.tsx). */}
+      {/* The tabs' panel is the app's; the specimens inside take the Inspector's settings (specimen-scope.tsx). Its text is
+          the tabs' UI size, not the Canvas body's text-md, so the feed's chrome inside states its scale (src/app-scale.ts). */}
+      <InheritedScaleContext.Provider value={null}>
       <div className="studio-family-tabs__panel">
         {tab === "overview" ? overview
           : tab === "documentation" ? <DocumentationTab family={info} onOpenFamily={onOpenFamily} familyName={familyName} />
@@ -414,6 +416,7 @@ function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
           : tab === "code" ? <CodeTab family={info} />
           : <SpecTab family={info} />}
       </div>
+      </InheritedScaleContext.Provider>
     </Tabs>
     </>
   );
@@ -692,7 +695,7 @@ export function ComponentsPage() {
           : <EmptyState title="No tiles yet" description="This family has no gallery specimens." />
       ) : onCanvas.length ? mode === "list" ? (
         // List: one row per family, its status, tile count and import.
-          <Table size="md" interactive aria-label="Components">
+          <Table wrapperProps={FEED_TABLE} size="md" interactive aria-label="Components">
             <thead><tr><th scope="col">Family</th><th scope="col">Status</th><th scope="col">Tiles</th><th scope="col">Import</th></tr></thead>
             <tbody>
               {onCanvas.map(entry => (

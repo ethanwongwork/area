@@ -9,7 +9,7 @@
     /* Resting rows in body ink, as Nav (ChatGPT's sidebar, 2026-09-27) and every other list; the
        plate alone marks current or selected (audit D-3 A, owner 2026-09-30; was fg-muted). */
     color: var(--area-fg-default);
-    --_tree-start: var(--area-ui-row-inset); /* spec: Nav's glyph edge, 8 default, 6 compact */
+    --_tree-start: var(--_panel-row-pad, var(--area-ui-row-inset)); /* spec: Nav's glyph edge, 8; a panel's list 6 (panel.css) */
     --_tree-chevron: var(--area-icon-md); /* spec */
     /*
      * spec (owner, pass 3): chevron, icon and label are spaced evenly, 6px apart, and each
@@ -37,7 +37,7 @@
      * gap (16 + 6), so rows share columns (docs/specs/tree-view.md).
      */
     padding-inline-start: calc(var(--_tree-start) + var(--_tree-depth) * var(--_tree-step));
-    padding-inline-end: var(--area-space-8);
+    padding-inline-end: var(--_panel-row-pad, var(--area-space-8));
     border-radius: var(--area-radius-row);
     cursor: default;
     outline: none;

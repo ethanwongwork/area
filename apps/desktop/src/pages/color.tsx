@@ -14,7 +14,7 @@ import { CheckIcon, CopyIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
-import { CanvasSection, Tile, TileGrid, WhenVisible } from "../tile.tsx";
+import { CanvasSection, Tile, TileGrid, WhenVisible, FEED_TABLE } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { readStored, writeStored } from "../storage.ts";
@@ -246,7 +246,7 @@ export function ColorPage() {
               <CanvasSection role={mode === "list" ? undefined : "group"} id={`scale-${entry.id}`} title={view ? undefined : title(entry.id)} count={steps.length}>
                 {mode === "list" ? (
                   // List: one row per step, its token and values.
-                    <Table size="md" interactive aria-label={`${title(entry.id)} steps`}>
+                    <Table wrapperProps={FEED_TABLE} size="md" interactive aria-label={`${title(entry.id)} steps`}>
                       <thead><tr><th scope="col">Step</th><th scope="col">Token</th><th scope="col">Hex</th><th scope="col">OKLCH</th><th scope="col">Text</th></tr></thead>
                       <tbody>
                         {steps.map(item => (

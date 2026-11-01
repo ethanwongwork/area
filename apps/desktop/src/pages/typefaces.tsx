@@ -33,7 +33,7 @@ import { appScale } from "../app-scale.ts";
 import { Specimen } from "../specimen-scope.tsx";
 import { readStored, writeStored } from "../storage.ts";
 import { useStudio, Workspace } from "../studio.tsx";
-import { CanvasSection } from "../tile.tsx";
+import { CanvasSection, FEED_TABLE } from "../tile.tsx";
 import { TYPE_ROLES } from "../tokens.ts";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 
@@ -258,7 +258,7 @@ export function TypefaceWorkspace({ face, tab: routeTab, sidebar }: { face: Type
                 ))}
               </GlyphGrid>
             ) : (
-              <Table size="md" interactive aria-label={entry.name}>
+              <Table wrapperProps={FEED_TABLE} size="md" interactive aria-label={entry.name}>
                 <thead><tr><th scope="col">Glyph</th><th scope="col">Unicode</th><th scope="col">Name</th></tr></thead>
                 <tbody>
                   {entry.cps.map(cp => (
@@ -387,7 +387,7 @@ function SpecimenTab({ face, facts, stack, sample }: { face: Typeface; facts: Fa
       ) : null}
       {styles.length ? (
         <Section id="specimen-styles" title="Styles" count={styles.length} lede="Each weight and italic the face has, written in itself.">
-          <Table size="md" aria-label="Styles">
+          <Table wrapperProps={FEED_TABLE} size="md" aria-label="Styles">
             <thead><tr><th scope="col">Style</th><th scope="col">Weight</th><th scope="col">Sample</th></tr></thead>
             <tbody>
               {styles.map(entry => (

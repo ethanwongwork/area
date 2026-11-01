@@ -24,7 +24,12 @@
     /* spec (owner, review round 2, 2026-10-09: "a bit too big for all sizes … more compact, maybe by like 2px, evenly"):
        every spacing step 2 smaller than the measured Figma values: md inset 14 (Figma 16), gaps 10 (12), labels 4 (6);
        sm inset 10 (12), gaps 6 (8). The inset is measured from the outside, the edge counted once (it sat 1 deeper). */
-    --_inset: calc(var(--area-space-16) - var(--area-space-2)); /* spec: 14 at both densities */
+    /* spec (2026-10-31, docs/research/region-balance-2026-10-31): the md inset follows density as every other spacing
+       role does (spacing.md rule 6; the sm tier already did), reading Surface's md inset, with 14 as its floor: 14 at
+       Compact and at the default type 13 / 32, 18 at Comfortable (16 and 20 at type 14). Under 14 a list's plates,
+       hung the row's 8 into the inset, would sit closer than 6 to the edge (Cursor and Claude keep them 8 away).
+       It was 14 at every density, so Comfortable grew the rows and controls inside an unchanged inset. */
+    --_inset: max(calc(var(--area-space-16) - var(--area-space-2)), var(--area-inset-surface-md));
     /* The side inset inside the panel's edge: the inset less the border, so content sits --_inset from the
        outside (inset.css: the border counted once). A flush panel has no edge. */
     --_edge: var(--area-border-width);
@@ -157,16 +162,19 @@
   .area-panel__body > .area-scroll-area__viewport { padding: 0 var(--_side-end) var(--_side) var(--_side-start); }
   /*
    * Lists of rows in a panel (a Sidebar's Nav, a Tree view) hang their plates into the panel's inset by
-   * the row's own start inset, so their text, group labels and trailing counts sit on the panel's one
-   * text column (inset.css: one column per surface) and the plates 6 from the edge (owner, 2026-10-12:
-   * the Sidebar's rows stacked Panel's 14 and the row's 8, text at 22). Notion's sidebar plates sit 8
-   * from its edge, Figma's 8 (docs/specs/nav.md, "width").
+   * the row's own side padding, so their text, group labels and trailing counts sit on the panel's one
+   * text column (inset.css: one column per surface; owner, 2026-10-12: the Sidebar's rows stacked Panel's
+   * 14 and the row's 8, text at 22). In a panel that padding is 6, published as --_panel-row-pad for Nav
+   * and Tree view to read, so the plates sit 8 from the edge and the text stays at 14 (owner pick q-plates,
+   * 2026-10-31; Cursor's Agents sidebar: plates 8 in, text 6 inside them; Claude's plates 8 in). It was the
+   * row's 8, plates 6 from the edge. 12 at Comfortable, where the inset is 18.
    */
   .area-panel__body :is(.area-nav:not(.area-nav--horizontal), .area-tree-view) {
+    --_panel-row-pad: calc(var(--area-ui-row-inset) - var(--area-space-2)); /* spec: Cursor's 6 */
     /* The panel sets the width: the list fills it, its own default measure (Nav's 240) set aside. */
     inline-size: auto;
     max-inline-size: none;
-    margin-inline: calc(var(--area-ui-row-inset) * -1);
+    margin-inline: calc(var(--_panel-row-pad) * -1);
   }
   .area-panel__body > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: 0; }
   /* A section without a heading starts one inset below the bar or rule. */
@@ -453,10 +461,9 @@
 
   /*
    * A panel's tier is its inset, not a control height -- the controls inside carry their
-   * own. The insets (12 / 16) and gaps (8 / 12) are fixed spacing steps: they do not follow
-   * density, so under compact the controls shrink and the insets stay. The compact values
-   * are set in the density pass (audit F-26 B, owner 2026-09-30; this comment used to say
-   * the tiers stepped on the gutter ramp, which the code never did).
+   * own. Both tiers' insets and gaps follow density through `ui-dense` (audit F-26 B, owner 2026-09-30): sm reads
+   * Surface's sm inset less 2, md Surface's md inset with a floor of 14 (2026-10-31; it was a fixed 14 from 2026-10-09
+   * to then, so Comfortable kept Compact's inset).
    */
   /* spec (inspector): the row (heading height, action column) follows the panel's tier. Two
    * tiers (owner, 2026-09-27): sm, Figma's inspector density, and md, the default. 24px rows
@@ -468,7 +475,7 @@
     --_panel-label-text: var(--area-text-xs-size); --_panel-label-leading: var(--area-text-xs-leading);
     --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
   }
-  .area-panel--md { --_inset: calc(var(--area-space-16) - var(--area-space-2)); --_row: var(--area-control-md); }
+  .area-panel--md { --_inset: max(calc(var(--area-space-16) - var(--area-space-2)), var(--area-inset-surface-md)); --_row: var(--area-control-md); }
   /* window-bar: the bar is on a window's top line, one of an app's region headers (owner, 2026-10-30: "the header should
      be shorter in height, matching cursor"): the small control 7 from its top and bottom, as a bar's controls sit 7 from
      its side, and no hairline. 40 at type 13 / 32, Cursor's agents window (its bars 40); 38 at 13 / 28. The body keeps

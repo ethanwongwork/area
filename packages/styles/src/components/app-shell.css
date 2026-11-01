@@ -5,7 +5,7 @@
  * PRODUCT_UI.md's last open gap ("App-shell parts: Titlebar ... and a section heading"). No value is new.
  *
  * Titlebar: a window's top bar. Panel's bar height (a md row, the panel gap above and below, the rule; panel.css
- * --_bar), so it lines up with a Panel's bar at any type size and density; Panel's 14 side inset. In a frameless
+ * --_bar), so it lines up with a Panel's bar at any type size and density; Panel's side inset (14, 18 at Comfortable). In a frameless
  * window the bar is the drag region and its controls stay pressable.
  * Inside it (owner, review round 27: "the nav items look bigger than the buttons and inputs ... the gaps, inset
  * padding, margins, etc should all be intentional"; docs/research/inset-actions-2026-10-16.md):
@@ -24,8 +24,9 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-titlebar {
-    --_titlebar-start: calc(var(--area-space-16) - var(--area-space-2)); /* spec: Panel's 14 */
-    --_titlebar-end: calc(var(--area-space-16) - var(--area-space-2));
+    /* spec: Panel's md inset, 14 at Compact and the default, 18 at Comfortable (panel.css) */
+    --_titlebar-start: max(calc(var(--area-space-16) - var(--area-space-2)), var(--area-inset-surface-md));
+    --_titlebar-end: max(calc(var(--area-space-16) - var(--area-space-2)), var(--area-inset-surface-md));
     display: flex;
     align-items: center;
     gap: var(--area-ui-cluster); /* spec: 8, compact 6 */
@@ -45,7 +46,7 @@
    * The bar's controls at its ends sit as far from the side as from the top and the rule, (height − rule − small control)
    * / 2: 7 at the app's scale (owner, 2026-10-18: "these controls are not evenly inset, theres too much space
    * horizontally"; was Panel's 14, and 13 at the end beside macOS's traffic lights). A bar that starts with its title
-   * keeps the title on Panel's 14 column; the traffic lights' clearance stays.
+   * keeps the title on Panel's inset column (14, 18 at Comfortable); the traffic lights' clearance stays.
    */
   .area-titlebar:not(.area-titlebar--floating) {
     --_titlebar-even: calc((var(--area-control-md) - var(--area-control-sm)) / 2 + var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense));

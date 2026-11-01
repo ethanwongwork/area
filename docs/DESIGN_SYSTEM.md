@@ -416,7 +416,7 @@ and `emit/base.ts`; never copy a table into a component
   value on the 2px leading ramp at or above 1.5 × the size, the line spacing WCAG 1.4.8 asks of paragraphs and 1.4.12
   requires text to survive. 12/18, 13/20, 14/22, 15/24, 16/24 (`text-sm-prose-leading`, `text-md-prose-leading`; the
   type axis, `proseLeading` in `axes/type-size.ts`). Message uses it: at type 13 a turn is 15/24 (was 15/22). Parts set in
-  prose keep their UI lines and state them (Step, Plan, Edit summary, Turn notice, a table); `cohesion.test.mjs` checks
+  prose keep their UI lines and state them (Step, Plan, Edit summary, Turn notice, a small table); a md or lg Table sets its cells on the prose line, so a wrapped description reads as prose, with a block inset that puts the text as far from the rules as from the frame (2026-10-31); `cohesion.test.mjs` checks
   both. "Reading" stays text-md's name, the size; prose is the line.
 - **Every scope restarts at the body role.** Below the page root, an element with its own Type sets `text-md` for
   text set straight in it (THEMING.md, CSS inheritance). A component that holds free text states its own role

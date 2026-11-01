@@ -3,14 +3,12 @@
  * a ruled Titlebar spanned them until then). The Sidebar sits on the chrome's recessed ground beside the Canvas, and no
  * header carries a rule (owner, 2026-10-22); the panels' seams are the dividers.
  *
- * One inset and one stroke throughout. Every region insets its content by Panel's 14 (its spec: 14
- * at both densities), on every side, measured to what is drawn: a control's box, a text's cap or
- * baseline (text-box trim), a row plate's edge. So the Titlebar's first tab, the Sidebar's rows, the
- * Canvas's sections and the Inspector's headings start 14 from their region's edge, and the first
- * text in each region sits on one line under the Titlebar (owner, 2026-10-14: "the inset padding on
- * the left and right and top and bottom is equal for all headers, panels"). Only the Titlebar is a
- * bar; the Canvas and Inspector carry no titles (owner, 2026-10-14, after Framer and Figma). The
- * Canvas's body is a feed with its own wider margin, 32 (owner, 2026-10-22; see .studio-canvas).
+ * One inset and one stroke throughout. The Sidebar and the Inspector inset their content by Panel's md inset, on every
+ * side, measured to what is drawn: a control's box, a text's cap or baseline (text-box trim), a row plate's edge. It
+ * follows density, as every spacing role does (2026-10-31, docs/research/region-balance-2026-10-31): 14 at Compact and
+ * at the app's type 13 / 32, 18 at Comfortable. The Canvas carries no title (owner, 2026-10-14, after Framer and Figma);
+ * its body is a feed with its own margin, a step wider (see .studio-canvas). Each region has its own header on the
+ * window's top line (owner, 2026-10-30).
  * Every divider is the same stroke: --area-border-width in --area-border-decorative, the colour
  * Panel draws its section rules and seams in.
  * Only the app's own classes are styled here; Area components keep their own CSS. Values are
@@ -38,8 +36,8 @@
    * are the Workspace's (src/studio.tsx, usePanelWidth): Sidebar 240 (200 to 360), Inspector 256 (256 to 500).
    */
   .studio {
-    /* Chrome: one inset for every region (Panel's 14), one rule, one bar height. */
-    --_studio-inset: calc(var(--area-space-16) - var(--area-space-2)); /* spec: Panel's 14 */
+    /* Chrome: one inset for every region (Panel's md inset: 14, 18 at Comfortable), one rule, one bar height. */
+    --_studio-inset: max(calc(var(--area-space-16) - var(--area-space-2)), var(--area-inset-surface-md)); /* spec: Panel's */
     --_studio-rule: var(--area-border-width) solid var(--area-border-decorative);
     /* The regions' headers on the window's top line (owner, 2026-10-30, Cursor's 40): Panel's window bar and Titlebar sm,
        the small control 7 from their top and bottom. */
@@ -53,22 +51,34 @@
     /* The Canvas is a feed (owner, 2026-10-22: "margins larger than the gaps ... a consistent feed style ...
        documentation style that is simple, repeatable, consistent"; after a component docs page and Primer's
        UnderlineNav page). One column of sections, each a heading (and lede) over one block: a grid of cards, a Stage,
-       plain text, a Table or a Code block. Four spacings, each clearly larger than the one inside it:
-         gap       8  between cards, one gap for every gallery (owner, 2026-10-24: "maybe everything can be 8px?";
-                      was 12, Compass's, 2026-10-14); colour's swatch sheet is tighter, 4 (styles/color.css)
-         heading  12  from a section's heading to its block, so a title reads with what it names
-         section  40  between sections
-         margin   16  round the feed, a step past the gap, so a gallery of cards fills the Canvas as a set (owner,
-                      2026-10-22, "more full width of the canvas for more room"; the references' margin equals their
-                      gap, about 4.5% of a card; was 32, before that 14, the panels' inset)
+       plain text, a Table or a Code block. One small system (owner, 2026-10-31: "open to increasing the margins to 32px
+       for the main feed canvas … simplify everything that goes into the feed overall and just make things more
+       consistent, more cohesive, more visually balanced and intentionally spacious"; docs/research/feed-system-2026-10-31):
+       five spacings, each a step past the one inside it, all on the spacing ramp and stepping with density by level
+       (Claude Code's gaps step the same way, 32 to 40 between sections). Compact / Default / Comfortable:
+         gap       8 / 12 / 16  between cards, one gap for every gallery; colour's swatch sheet stays 4 (styles/color.css)
+         frame    12 / 16 / 20  inside every frame: tiles, the Stage, Asset cards, colour cards, tables, Settings' rows
+         heading  12 / 16 / 20  from a section's heading to its block, so a title reads with what it names
+         margin   24 / 32 / 40  round the feed: twice the frame inset (Claude Code's transcript gutter, 32)
+         section  40 / 48 / 56  between sections
+       It was 8 / 12-14-16 / 12 / 16 / 40 (2026-10-22 to 31: "more full width of the canvas for more room").
        The feed fills the Canvas at every width (owner, 2026-10-31: "i want the content in the middle screen to scale up
        and down"): the cards grow with it, four across at most, and their specimens scale with the cards (gallery/fit.ts,
        Auto). It was at most 1236 wide and centred (four 300 cards) from 2026-10-22, which left a hidden panel's room as
        empty margins. The grid's columns are counted from the body's content box (cqw). */
-    --_canvas-margin: var(--area-space-16);
-    --_canvas-gap: var(--area-space-8); /* pick */
-    --_canvas-heading: var(--area-space-12);
-    --_canvas-section: var(--area-space-40);
+    --_canvas-margin: calc(var(--area-space-32) + var(--area-space-8) * var(--area-ui-level)); /* pick: 32 */
+    --_canvas-gap: calc(var(--area-space-12) + var(--area-space-4) * var(--area-ui-level));
+    --_canvas-heading: calc(var(--area-space-16) + var(--area-space-4) * var(--area-ui-level));
+    --_canvas-section: calc(var(--area-space-48) + var(--area-space-8) * var(--area-ui-level));
+    /* One inset inside every frame in the feed (tiles, the Stage, Asset cards, colour cards, tables, Settings' rows): the
+       text and the frame's first row start this far from its edge (2026-10-31, "simplify everything that goes into the
+       feed"; it was 12 for tiles and the Stage, 16 for cards, 14 for tables). */
+    --_frame-inset: calc(var(--area-space-16) + var(--area-space-4) * var(--area-ui-level));
+    /* The feed's loose text (section titles and ledes, a page's lede, its tabs, Show all, the Canvas path, Settings' title)
+       starts a little in from the frames under it, so a title doesn't sit flush with a card's or table's rounded edge
+       (owner, 2026-10-31: "should the text above the containers be inset 2 or 4px? maybe not quite as far as cursor but
+       just slightly"; Cursor's settings titles sit 8 in, Primer's and Notion's flush). 4: half Cursor's step, on the ramp. */
+    --_text-inset: var(--area-space-4); /* pick */
     /* The reading column: Settings, document feeds and a chat that takes the Canvas read at one measure (owner, 2026-10-31,
        feed rhythm pick 5; Claude Code's default transcript width, Narrow, is 768; docs/PRODUCT_UI.md, "The reading
        column"). */
@@ -78,10 +88,10 @@
        was 12 from 2026-10-13, "make the corner radius sharper"), and its inset; the Stage (src/stage.tsx) is the tile
        made large, with the same. */
     --_tile-radius: 16px; /* pick */
-    /* Cards (colour cards, and the Asset cards on Components and Typography): 16 from the edge to the text, a step past the
-       plain tiles' 12 (owner, 2026-10-24: "the same corner, padding, and text title size to match color"). */
-    --_card-inset: var(--area-space-16); /* pick */
-    --_tile-inset: var(--area-space-12);
+    /* Cards and tiles share the feed's one frame inset (owner, 2026-10-24: "the same corner, padding, and text title size
+       to match color"; tiles kept 12 until 2026-10-31). */
+    --_card-inset: var(--_frame-inset);
+    --_tile-inset: var(--_frame-inset);
     display: grid;
     /* One column the window's width: without it the column sizes to its content, and a long row of tabs (a horizontal Nav
        is max-content wide) pushed the header's end off the window (2026-10-29, 12 tabs). One row: each region has its own
@@ -245,19 +255,32 @@
   .studio-takeover > .studio-sidebar__list:first-child { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); margin-block-end: var(--area-space-12); }
   .studio-takeover > .studio-sidebar__list + .studio-sidebar__list { padding-block-start: 0; }
   /* A page's list under the nav (app-nav.tsx PageList): one rule from the nav, then its filter and its rows, as the
-     takeover drew them. */
-  .studio-page-list { margin-block-start: var(--area-space-8); border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
-  .studio-page-list > .studio-sidebar__list:first-child { display: grid; grid-template-columns: minmax(0, 1fr); margin-block-end: var(--area-space-4); }
+     takeover drew them. The rule has the same air on both sides, 8 (spacing.md rule 5; owner, 2026-10-31: "why is the
+     search control so close to the divider above it?": the nav's list gives back 8 at its foot, so the rule touched the
+     last row's plate and the filter sat 4 under it). The filter stays 4 over its own rows, so it reads as theirs. */
+  .studio-page-list { margin-block-start: calc(var(--area-ui-row-inset) + var(--area-space-8)); border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+  .studio-page-list > .studio-sidebar__list:first-child { display: grid; grid-template-columns: minmax(0, 1fr); padding-block-start: var(--area-space-8); margin-block-end: var(--area-space-4); }
   .studio-page-list > .studio-sidebar__list + .studio-sidebar__list { padding-block-start: 0; }
-  /* The filter spans the row plates exactly (Cursor's search over its settings rows): the rows hang their plates the row
-     inset into the Sidebar's margin, so it does too. It was inset by it instead, starting 16 right of the plates and
+  /* The filter spans the row plates exactly (Cursor's search over its settings rows): the rows hang their plates Panel's
+     row pad (6) into the Sidebar's margin, so it does too. It was inset by it instead, starting 16 right of the plates and
      ending 8 past its list, which scrolled a narrow Sidebar sideways (2026-10-30). One column that may shrink, so nothing
      in a takeover's head widens the Sidebar. */
-  .studio-takeover__filter { inline-size: calc(100% + var(--area-ui-row-inset) * 2); max-inline-size: none; margin-inline: calc(var(--area-ui-row-inset) * -1); }
+  .studio-takeover__filter { inline-size: calc(100% + (var(--area-ui-row-inset) - var(--area-space-2)) * 2); max-inline-size: none; margin-inline: calc((var(--area-ui-row-inset) - var(--area-space-2)) * -1); /* spec: Panel's row pad, 6 */ }
 
 
   /* The Inspector's selection (src/inspector.tsx): Area's PreviewFrame, then the copy actions two
      to a row, 8 apart (the icon hover window's spacing). */
+  /* The feed's tables take the feed's one frame inset and corner (Table's public hooks). */
+  .studio-table { --area-table-edge: var(--_frame-inset); --area-table-corner: var(--_tile-radius); }
+  /* The Inspector's view (src/studio.tsx, InspectorPanel): a view that opens on a section heading puts that heading on the
+     line the Sidebar's first row and the Canvas bar's controls share (owner pick q-line, 2026-10-31; it sat 5 under it at
+     type 13 / 32, 9 at Comfortable), as the Sidebar's first row is centred there. The line is half the Canvas bar under the
+     headers; the heading row's middle is Panel's heading air (its panel gap) and half a md row under them, so the view
+     moves up by the difference (5 at type 13 / 32, 2 Compact, 9 Comfortable), always less than that air. */
+  .studio-inspector__view { display: flex; flex-direction: column; min-inline-size: 0; }
+  .studio-inspector__view[data-lead="heading"] {
+    margin-block-start: calc((var(--_studio-bar) - var(--area-control-md)) / 2 - (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)));
+  }
   /* The Inspector's views (src/studio.tsx, InspectorPanel): Theme, Design and Code as the Titlebar's Nav pills, in the
      Panel's bar, so they share the line the Canvas header and the Sidebar's first row sit on (rule 14). */
   .studio-inspector__views { flex: 0 1 auto; min-inline-size: 0; }
@@ -295,6 +318,6 @@
   /* A page's opening sentence (a family's purpose): a subtitle, as a section's (the feed's one size, 13/18, muted), at a
      reading measure, trimmed to cap and baseline so
      the Canvas's margin and the 24 to the tabs measure to its ink. */
-  .studio-lede { margin: 0 0 var(--area-space-24); max-inline-size: 80ch; /* pick: the docs' measure */ color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
+  .studio-lede { margin: 0 0 var(--area-space-24) var(--_text-inset); max-inline-size: 80ch; /* pick: the docs' measure */ color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
   .studio-tabular { font-variant-numeric: tabular-nums; }
   .studio-prop { display: block; }

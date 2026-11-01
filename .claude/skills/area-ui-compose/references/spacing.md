@@ -18,8 +18,8 @@ Values are Default / Compact (the app runs Compact). Tokens are in `packages/tok
 | Heading to block | a section's title (and lede) to what it names | one step past the block's items (options 8 apart → 12) | `SectionHeading` over its block |
 | Section | sections of a page or panel | `Stack gap="section"` 24 / 16 | inside a Surface or panel |
 | Surface inset | a container's edge to its content | `inset-surface-sm` 12 / 8, `inset-surface-md` 16 / 12; Surface's text inset sm / md / lg 14 / 16 / 20 (Compact 10 / 12 / 14) | `Surface`, `Card` (set by size, never by prop) |
-| Region inset | a panel's edge to its rows | the app's 14 | `Panel` |
-| Feed | a documentation or gallery feed | cards 8 (at least 260 wide, at most four across), heading 12, sections 40, margin 16; fills the Canvas | the app's Canvas (`app.css` `--_canvas-*`) |
+| Region inset | a panel's edge to its rows | 14 / 14, Comfortable 18 (type 13; 16 / 20 at type 14): `max(14, inset-surface-md)`; a list's plates hang Panel's row pad (6) into it, so they sit 8 from the edge and the text on the inset | `Panel` md |
+| Feed | a documentation or gallery feed | Compact / Default / Comfortable: margin 24 / 32 / 40; cards 8 / 12 / 16 apart (at least 260 wide, at most four across); one inset inside every frame 12 / 16 / 20 and one corner, 16; heading to block 12 / 16 / 20; sections 40 / 48 / 56; loose text 4 in from the frames; fills the Canvas | the app's Canvas (`app.css` `--_canvas-*`, `--_frame-inset`) |
 | Reading column | settings, a document feed, a chat in the Canvas | 768, centred; sections 32 (settings), heading 12, rows 42 / 60 | `--_reading-column` (app.css); Claude Code's Narrow transcript 768 |
 
 Prose (text past two lines: a chat turn, documentation) runs on its own ladder, set out in `docs/DESIGN_SYSTEM.md` ›
@@ -50,15 +50,17 @@ margins and section gaps a screen sets itself come from this ramp.
 2. **Each ring is larger than the one inside it:** inside < related < group < heading-to-block < section. A heading
    sits closer to its own block than to the block before it.
 3. **A margin is at least one ramp step past the gap it frames.** How far past depends on the region: a gallery that
-   should fill its region takes one step (the app's Canvas: 16 round cards 12 apart, owner 2026-10-22, "more full
-   width of the canvas"; it was 32, and 14 read as one grid with the page); a reading page or a site takes more (24–32
+   should fill its region takes a step or two (the app's Canvas: 32 round cards 12 apart, twice the frames' 16 inset,
+   owner 2026-10-31; it was 16 round 8 from 2026-10-22); a reading page or a site takes more (24–32
    on a phone, 32–96 a side on a desktop). The margin need not exceed the section gap.
 4. **Measure to ink.** Text from its cap or baseline, frames from their edge, icons from their square box. Area's
    heading-to-block 12 is cap/baseline to the frame, not line box to line box.
 5. **Space before rules.** Separate groups by space; add a rule only when space alone can't (a dense list, a table, a
    panel's sections). A rule has the same air on both sides (Figma 16 / 16).
 6. **Density changes the roles, not the ramp.** A dense tool steps every role down together; it never shrinks one gap
-   alone.
+   alone. Regions and feeds are roles too: a level that grows the rows and controls also grows the panels' inset and the
+   feed's margin, gaps and sections (`docs/THEMING.md` › What density does to a screen; it held them fixed until
+   2026-10-31, so Comfortable grew the rows inside Compact's room).
 7. **Spread is not spacing.** A title with its action at the far end (`Stack spread`) fills the width; the ladder
    doesn't apply to that space.
 

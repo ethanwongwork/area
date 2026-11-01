@@ -10,10 +10,10 @@
  * New project's.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from "react";
-import { AssetGrid, AssetGridItem, Badge, Button, Card, CardContent, CardDescription, CardHeader, CardLink, CardTitle, ConfirmDialog, Dialog, EmptyState, Field, Input, PanelSection, Radio, RadioGroup, Select, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
+import { AssetGrid, AssetGridItem, Badge, Button, ConfirmDialog, Dialog, EmptyState, Field, Input, PanelSection, Radio, RadioGroup, Select, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
 import { AddIcon } from "@area/icons";
 import { canvasAttributes, useStudio, Workspace, type Visit } from "../studio.tsx";
-import { CanvasSection, CARD_SCOPE, Tile, TileGrid } from "../tile.tsx";
+import { CanvasSection, CARD_SCOPE, Tile, TileGrid, FEED_TABLE } from "../tile.tsx";
 import { ViewControls } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
@@ -150,7 +150,7 @@ export function HomePage() {
                 ))}
               </TileGrid>
             ) : (
-              <EmptyState title="No projects yet" description="A project uses one of your systems to make screens, try explorations of its look and save versions."
+              <EmptyState size="sm" title="No projects yet" description="A project uses one of your systems to make screens, try explorations of its look and save versions."
                 actions={<Button size="sm" variant="soft" tone="neutral" onClick={() => setStarting(true)}>New project</Button>} />
             )}
           </CanvasSection>
@@ -165,33 +165,38 @@ export function HomePage() {
             </TileGrid>
           </CanvasSection>
           <CanvasSection id="home-new" title="New system" lede="Start from Area's values, describe the system in a chat, or import it.">
-            <TileGrid span="unit" cards>
+            {/* Settings' framed rows (styles/settings.css), not Cards: a way is a name, a line and an action, in the feed's one
+                voice (13/18; owner pick q-cards, 2026-10-31). Card titles are 15/22 at every size, which put each way above
+                its section's 13/18 title; the feed's tiles need a picture these have none of. Cursor's settings rows. */}
+            <div className="studio-settings__rows" role="list" aria-label="Ways to start a system">
               {WAYS.map(way => (
-                <Card key={way.origin}>
-                  <CardContent>
-                    <CardHeader action={way.later ? <Badge size="sm" variant="soft" tone="neutral">Later</Badge> : undefined}>
-                      <CardTitle>{way.later ? way.title : <CardLink href="#home/new" onClick={event => { event.preventDefault(); setMaking(way.origin); }}>{way.title}</CardLink>}</CardTitle>
-                      <CardDescription>{way.description}</CardDescription>
-                    </CardHeader>
-                  </CardContent>
-                </Card>
+                <div key={way.origin} className="studio-settings__row" role="listitem">
+                  <div className="studio-settings__text">
+                    <span className="studio-settings__label">{way.title}</span>
+                    <span className="studio-settings__description">{way.description}</span>
+                  </div>
+                  <div className="studio-settings__control">
+                    {way.later ? <Badge size="sm" variant="soft" tone="neutral">Later</Badge>
+                      : <Button size="sm" variant="soft" tone="neutral" aria-label={`Start: ${way.title}`} onClick={() => setMaking(way.origin)}>Start</Button>}
+                  </div>
+                </div>
               ))}
-            </TileGrid>
+            </div>
           </CanvasSection>
           <CanvasSection id="home-boards" title="Inspiration" count={boards.length}>
             {boards.length ? (
               <AssetGrid aria-label="Inspiration's boards" onOpen={id => navigate({ page: "inspiration", item: id })} {...CARD_SCOPE}
                 style={{ "--area-asset-card-size": `${BOARD_SIZE}px` } as CSSProperties}>
-                {boards.map(entry => <AssetGridItem key={entry.id} value={entry.id} name={entry.name} container="framed" caption="below" aspect="landscape" group={firstOf(entry.id)} />)}
+                {boards.map(entry => <AssetGridItem key={entry.id} value={entry.id} name={entry.name} container="framed" caption="above" aspect="landscape" group={firstOf(entry.id)} />)}
               </AssetGrid>
             ) : (
-              <EmptyState title="No boards yet" description="Inspiration's groups appear here as boards. Open Inspiration to see what it holds."
+              <EmptyState size="sm" title="No boards yet" description="Inspiration's groups appear here as boards. Open Inspiration to see what it holds."
                 actions={<Button size="sm" variant="soft" tone="neutral" onClick={() => navigate({ page: "inspiration" })}>Open Inspiration</Button>} />
             )}
           </CanvasSection>
           <CanvasSection id="home-recent" title="Recent" count={visits.length}>
             {visits.length ? (
-              <Table aria-label="Recent places">
+              <Table wrapperProps={FEED_TABLE} aria-label="Recent places">
                 <thead><tr><TableHeaderCell>Place</TableHeaderCell><TableHeaderCell fit>Opened</TableHeaderCell></tr></thead>
                 <tbody>
                   {visits.map(({ place, at }) => (
@@ -202,7 +207,7 @@ export function HomePage() {
                   ))}
                 </tbody>
               </Table>
-            ) : <EmptyState title="Nothing opened yet" description="The places you open, a project's pages, a system's components or a board, appear here." />}
+            ) : <EmptyState size="sm" title="Nothing opened yet" description="The places you open, a project's pages, a system's components or a board, appear here." />}
           </CanvasSection>
         </div>
         {starting ? <NewProject systems={systems} onCancel={() => setStarting(false)} onCreate={start} /> : null}
