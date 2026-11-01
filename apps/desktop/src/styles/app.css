@@ -69,6 +69,10 @@
     --_canvas-gap: var(--area-space-8); /* pick */
     --_canvas-heading: var(--area-space-12);
     --_canvas-section: var(--area-space-40);
+    /* The reading column: Settings, document feeds and a chat that takes the Canvas read at one measure (owner, 2026-10-31,
+       feed rhythm pick 5; Claude Code's default transcript width, Narrow, is 768; docs/PRODUCT_UI.md, "The reading
+       column"). */
+    --_reading-column: calc(var(--area-space-96) * 8);
     /* Tiles: every Canvas container's corner (plain tiles, Asset cards, colour cards, the Stage, Theme's setup panel),
        held at 16 whatever the Canvas's Radius previews (owner, 2026-10-23: "make all the containers tiles 16px corner";
        was 12 from 2026-10-13, "make the corner radius sharper"), and its inset; the Stage (src/stage.tsx) is the tile

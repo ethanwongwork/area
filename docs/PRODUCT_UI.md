@@ -306,6 +306,19 @@ Cursor's nav with Figma's tabs).
   Theme, Typography) a **subtitle** (muted, one sentence ending in a full stop) says what the block holds; **copy**
   (prose, table text) is regular. A family's purpose opens its page as a subtitle. `CanvasSection` (`src/tile.tsx`) and
   the family tabs' `Section` take `count` and `lede`.
+- **Tables in a feed share one label column** (owner, 2026-10-31, docs/research/feed-rhythm-2026-10-31): a page's tables
+  take `Table layout="fixed"`, so each first column is 27% (Primer's Name column) and values start on one line down the
+  page (the API tab's were 84, 200 and 145 wide). A first column of marks (Do / Don't) stays `auto`; a page that sets its
+  own `colgroup` for every table (Typography's list) keeps it.
+- **The reading column** (owner, 2026-10-31): Settings, document feeds and a chat that takes the Canvas read at one
+  measure, 768 (`--_reading-column`, app.css; Claude Code's default transcript width, Narrow, is 768). The Canvas's
+  galleries and tables fill the Canvas instead.
+- **One feed, altered for chat** (owner, 2026-10-31): the same steps name every feed. Section 40 on the Canvas, 32 in
+  Settings, an exchange 24 in chat (Claude Code 20 / 24); heading → block 12, which in chat is a message → its reply
+  (Claude 6 / 8; Area keeps 12 so the step means the same in both); blocks: cards 8 apart, a group of rows, prose 16
+  apart in chat; rows 42 one line and 60 with a description (Settings; Cursor 42 / 61). A chat has no page title (its bar
+  names the thread) and a composer at its foot, the column's width. Settings groups rule their rows only between the
+  text edges (16 in, as Cursor's 12 and Description list justified).
 - A bar's controls sit as far from the side as from the top and the rule: 7, 24 tall
   (owner, 2026-10-18; Figma's panel tabs: 8 and 8).
 

@@ -937,11 +937,13 @@ export const tabs = {
 export const table = {
   block: "area-table",
   description: "Presents rows of structured data.",
-  variants: { size: ["sm", "md", "lg"] },
+  // layout: auto sizes every column to its content; fixed gives the first column the label column (27%), so the tables
+  // of one feed start their values on one line (owner, 2026-10-31, feed rhythm pick 3).
+  variants: { size: ["sm", "md", "lg"], layout: ["auto", "fixed"] },
   booleans: ["interactive", "striped", "column-dividers", "flush", "baseline"],
   elements: ["cell", "link"],
   elementModifiers: { cell: ["numeric", "fit"] },
-  defaults: { size: "md" },
+  defaults: { size: "md", layout: "auto" },
 } as const satisfies ComponentManifest;
 
 export const tableWrapper = {

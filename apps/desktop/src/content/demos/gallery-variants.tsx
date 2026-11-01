@@ -38,6 +38,16 @@ const tableBody = (interactive = false) => (
 const tableHead = <thead><tr><th scope="col">Name</th><th scope="col">Status</th><TableHeaderCell numeric>Value</TableHeaderCell></tr></thead>;
 export const GalleryTableLarge = () => <Table size="lg" aria-label="Table">{tableHead}{tableBody()}</Table>;
 export const GalleryTableInteractive = () => <Table interactive aria-label="Table">{tableHead}{tableBody(true)}</Table>;
+// Fixed: term / value rows whose first column is the label column, so tables stacked in one feed line up.
+export const GalleryTableFixed = () => (
+  <Table layout="fixed" aria-label="Table">
+    <tbody>
+      <tr><td>Name</td><td>Item one</td></tr>
+      <tr><td>Status</td><td><Badge dot tone="success">Status</Badge></td></tr>
+      <tr><td>Value</td><td>1</td></tr>
+    </tbody>
+  </Table>
+);
 
 export const GallerySeparatorSpacing = () => (
   <div style={{ inlineSize: "calc(var(--area-space-96) * 2)" }}>

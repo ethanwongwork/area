@@ -177,7 +177,7 @@ test('surfaces: headings in the outline, a stretched table link, one disabled di
   assert.match(renderToString(h(CardTitle, null, 'Plan')), /^<h3 class="area-card__title">Plan<\/h3>$/);
   assert.match(renderToString(h(CardTitle, { level: 2 }, 'Plan')), /^<h2 /);
   assert.match(renderToString(h(Panel, { title: 'Design', titleLevel: 3 }, 'rows')), /<h3 class="area-panel__title"/);
-  assert.match(renderToString(h(Table, { 'aria-label': 'Items', wrapperProps: { id: 'wrap' } }, h('tbody', null, h('tr', null, h('td', null, h(TableLink, { href: '#a' }, 'A')))))), /<div id="wrap" class="area-table-wrapper"><table class="area-table area-table--md" aria-label="Items">.*<a class="area-table__link" href="#a">A<\/a>/);
+  assert.match(renderToString(h(Table, { 'aria-label': 'Items', wrapperProps: { id: 'wrap' } }, h('tbody', null, h('tr', null, h('td', null, h(TableLink, { href: '#a' }, 'A')))))), /<div id="wrap" class="area-table-wrapper"><table class="area-table area-table--md area-table--auto" aria-label="Items">.*<a class="area-table__link" href="#a">A<\/a>/);
   assert.match(css, /\.area-calendar\[aria-disabled="true"\] \.area-button:disabled \{ opacity: 1; \}/);
   assert.match(css, /\.area-alignment-picker\[aria-disabled="true"\] \{ opacity: var\(--area-opacity-disabled\);/);
 });
