@@ -166,15 +166,17 @@ the lint prints every gap and counter with `--report`.
   (owner) and volume-off a speaker with a 3.5px × (Fluent's mute). The lint fails any other
   `-off` icon
   without the shared slash;
-- dots, two sizes by role (the lint allows only these):
+- dots, three sizes by role (the lint allows only these):
   - ⌀2 for a dot that is the icon or one of its marks: more, wi-fi's source,
     gap's dot, cart's wheels, list-bullet's bullets and a centre point in a frame (crosshair,
     square-dot, circle-dot-dashed) (Cursor's dot roles; owner, 2026-10-02); on whole-pixel centres so they fill 2 × 2 pixels at 1×;
-  - ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning, the ?)
-    and for a detail set inside a shape: keys (calculator, keyboard), lights (server, car),
-    windows (building), eyes (smile), an eyelet (tag), opacity's grid, dots grouped inside a
-    container (chat-more, app-window, square-list). Place them on the
-    gap scale from their frame and each other (quarter centres are fine for filled dots).
+  - ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning, the ?);
+  - ⌀1.125, the line's own weight (r 0.5625), for a detail set inside a shape: keys (calculator,
+    keyboard), lights (server), windows (building), eyes (smile, the bots), an eyelet (tag), opacity's
+    grid, dots grouped inside a container (chat-more, square-list). Lucide's and Tabler's dots are the
+    line's weight; ⌀1.5 details were a third heavier and read as dark spots in a row (owner, 2026-11-01,
+    cohesion pass). A detail dot keeps a ⌀1.5 dot's place: the lint measures its gaps from the ⌀1.5
+    placement, so place it on the gap scale as a ⌀1.5 dot (quarter centres are fine for filled dots).
   Every dot's radius follows the size curve with the line (`r` set from `sw`, owner 2026-10-05),
   so the ratio to the stem holds at 24–48px.
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
@@ -464,7 +466,7 @@ five libraries (`refs.mjs`), never at one large size beside Fluent alone.
 `PACKAGE_GLYPHS` in the generator, never a hand-copied path, and pass the slot's `size`.
 base.css sets the line from `--area-weight-icon` and the size curve.
 
-**Cohesion (2026-10-31; owner to confirm; research and numbers in `docs/research/icon-cohesion-2026-10-31/`).**
+**Cohesion (2026-10-31; the rules below owner to confirm, the dot weight and kept solids owner-picked 2026-11-01; research and numbers in `docs/research/icon-cohesion-2026-10-31/`).**
 Measured against Lucide, Phosphor, Tabler, Heroicons, Iconoir and Fluent, Area's spread of size, density and
 mass is the libraries' own, and Area follows their consensus concept by concept (r 0.83–0.90). What set it
 apart was solid ink (35% of icons, against 16–17% in Lucide and Phosphor) and single drawings. So:

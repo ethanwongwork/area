@@ -236,3 +236,8 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   it (system is its alias); Collection is `bookmarks`; newspaper's picture is text lines (Updates keeps newspaper);
   compass's needle rises; link and link-off lie on the diagonal (12 and 10px cuts follow); the case family is cap
   7.5. The rules and the reach of the solids rule are still unanswered: round 2 waits on them.
+  Round 2 picks, 2026-11-01: inner detail dots are the line's weight (⌀1.125, r 0.5625) in 47 icons, the i, ! and ?
+  dots stay ⌀1.5 and mark dots ⌀2; app-window's bar holds two tab lines (Lucide's) instead of three dots; briefcase
+  has one plain band, no clasp; every recorded solid is kept (quote, bold, stop-circle, record, the booleans,
+  contrast, shadow, folder-zip, id-card, stroke-weight, qr-code, the play shapes, gauge's needle, text-color's bar,
+  the bots' visors, image's sun, paint-bucket's drop, globe as Fluent's).

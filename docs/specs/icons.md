@@ -5433,3 +5433,17 @@ drew 1.61px (not the curve's 1.42), and moving type 15 to 20 alone would have dr
 | bookmarks | square; bookmark's drawing at 7 × 9.35 with a back copy offset 3 up and right (the multiples rule), the back drawn as an open L stopping one overlap cut (2.3) short of the front. Every vertical edge sits on x.5 and the tops on 1.5 and 4.5, so it is crisp at 1× and 0.5 left and high of centre (crisp over centred). Filled: the front fills and the back stays a line. |
 
 Redrawn in the same round, all owner-approved on the review page (2026-11-01). compass and compass-dot: the needle lies on the rising diagonal, straight-sided, tips at 11, 5 and 5, 11 (r 0.5), sides at 9, 9 and 7, 7 (r 0.75). Fluent's NW–SE needle lay on the slash's diagonal and read as ⊘. link and link-off: on the rising diagonal, two r 2.83 hooks on centres 5, 11 and 11, 5 with 1-unit straight ends, the bar 6, 10 to 10, 6, every 45° segment on the lattice; 12.8 square, where the flat link was 13.1 × 7.1 and read 19% light. link-off keeps the shared slash flat, and its filled bar keeps the lower-left half. The 12px and 10px cuts follow: the 12 cut is the drawing at 0.75 (hooks r 2.12 on 3.75, 8.25 and 8.25, 3.75); the 10 cut puts r 1.41 hooks on 3, 6 and 6, 3 round 4.5. case-sensitive, case-upper and case-lower: cap 4 to 11.5 (7.5, was 6.5), x-height 4.5 with r 2.25 bowls, the A 5.5 wide with its bar on 9.5 and the B's bar on 7.5. The pair reuses the single letters. newspaper: the solid picture block is replaced by text lines (4 to 9.5 on 5.5 and 8, and 4 to 7.5 on 10.5), so newspaper is no longer a recorded solid. Filled: the lines are knockouts. shapes takes system's drawing.
+
+## Cohesion pass, round 2, 2026-11-01
+
+Owner picks on the cohesion review page (`docs/research/icon-cohesion-2026-10-31/`, round 2).
+
+| Icon | Change |
+|---|---|
+| detail dots (47 icons) | Every dot set inside a shape (keys, windows, lights, eyes, an eyelet, grouped dots) is the line's weight, ⌀1.125 (r 0.5625), on the size curve like the others; it was ⌀1.5, a third heavier than the line. Lucide's and Tabler's dots are the line's weight. Centres unchanged: the lint measures a detail dot's gaps from its ⌀1.5 placement. Changed: bandage, bank, bluetooth-connected, the bots (bot, -automator, -builder, -designer, -generator, -guard, -lead, -scholar), brightness, building, calculator, calendar, calendar-range, chat-more, clipboard-list, cloud-snow, cookie, dice, discount, exit-door, frown, gamepad, hard-drive, key, keyboard, keyboard-off, line-style, meh, opacity, password, person-key, piggy-bank, scan-face, server, server-cog, smile, smile-plus, speaker, square-list, square-smile, swatch-book, tag, tag-plus, tags. The i, ! and ? dots stay ⌀1.5; mark dots stay ⌀2. |
+| app-window | The bar (2.5–5.5, its line on 5.5) holds two tab lines at 5.5 and 8.5 (Lucide's) instead of three ⌀1.5 dots. Filled: the body below the bar fills; the bar and its lines stay lines. |
+| briefcase | One plain band at 9.5 edge to edge (Lucide's and Phosphor's), without Fluent's split band and clasp. Filled: the band is a gap. |
+
+Kept, owner-confirmed: quote, bold, stop-circle, record, the booleans, contrast, shadow, folder-zip, id-card,
+stroke-weight, qr-code, the play shapes in containers, gauge's needle, text-color's bar, the bots' visors, image's sun,
+paint-bucket's drop, globe (Fluent's, exactly).

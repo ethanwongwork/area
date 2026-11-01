@@ -466,12 +466,13 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   });
   if (strict) for (const el of elements.filter(e => e.filled === "knockout"))
     if (!el.samples.some(insideSolid)) fail(name, "a knockout lies outside every solid; it would vanish when filled");
-  // Dots come in two sizes (docs/specs/icons.md, "Shared parts"): ⌀2 for a dot that is the
-  // icon or one of its marks, ⌀1.5 for a dot with a stem or a detail set inside a shape.
+  // Dots come in three sizes (docs/specs/icons.md, "Shared parts"): ⌀2 for a dot that is the
+  // icon or one of its marks, ⌀1.5 for a dot with a stem (the i, the !, the ?), and ⌀1.125, the line's
+  // own weight, for a detail set inside a shape (keys, windows, eyes; owner, 2026-11-01, cohesion pass).
   // data-dot="free" records an owner-approved exception (quote's marks, rocket's window).
   if (root["data-dot"] === "free") for (const el of elements) if (el.tag === "circle") el.freeDot = true;
   if (strict && root["data-dot"] !== "free") for (const el of elements.filter(e => e.tag === "circle" && !e.stroked))
-    if (!["1", "0.75"].includes(el.attrs.r)) fail(name, `a dot is r 1 (⌀2) or r 0.75 (⌀1.5), not r ${el.attrs.r}`);
+    if (!["1", "0.75", "0.5625"].includes(el.attrs.r)) fail(name, `a dot is r 1 (⌀2), r 0.75 (⌀1.5, with a stem) or r 0.5625 (⌀1.125, a detail), not r ${el.attrs.r}`);
   // Off states share one slash (M2 2L14 14). data-off="own" records an owner-chosen form
   // (eye-off is a closed eye, volume-off a speaker with a ×, as Fluent's mute).
   if (strict && name.endsWith("-off") && root["data-off"] !== "own" && !elements.some(el => /M2 2L14 14\b/.test(el.attrs.d ?? "")))
@@ -503,7 +504,10 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     // data-gap="slash" (owner-approved, recorded in the spec): the base icon is drawn whole and the
     // shared slash crosses it flat, so a part beside the slash keeps its base position (keyboard-off's keys).
     if (root["data-gap"] === "slash" && [drawn[p], drawn[q]].some(el => el.attrs?.d === "M2 2L14 14")) continue;
-    const g = d - pads[p] - pads[q];
+    // A detail dot (⌀1.125, the line's weight) keeps the place a ⌀1.5 dot had: its gaps are measured
+    // from that ⌀1.5 placement, so shrinking the dot to the line moved no key, window or eye (owner, 2026-11-01).
+    const place = el => !el.stroked && el.tag === "circle" && el.attrs.r === "0.5625" ? 0.1875 : 0;
+    const g = d - pads[p] - pads[q] - place(drawn[p]) - place(drawn[q]);
     if (g <= 0) continue;  // the inks overlap: a join, not a gap
     // Outline-only lines are not drawn in the filled variant, so they have no filled gap.
     const negative = [drawn[p].filled, drawn[q].filled].some(role => ["knockout", "hole", "cut", "line"].includes(role));

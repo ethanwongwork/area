@@ -2,8 +2,8 @@
 <rect data-filled="solid" x="2.5" y="2.5" width="11" height="4.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="line" d="M7.758 9H4A1.5 1.5 0 0 0 2.5 10.5V12A1.5 1.5 0 0 0 4 13.5H7.469" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="fill" d="M7.758 9H4A1.5 1.5 0 0 0 2.5 10.5V12A1.5 1.5 0 0 0 4 13.5H7.469A4.5 4.5 0 0 1 7.758 9Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="hole" cx="5" cy="4.75" r="0.75" fill="currentColor"/>
-<circle data-filled="hole" cx="5" cy="11.25" r="0.75" fill="currentColor"/>
+<circle data-filled="hole" cx="5" cy="4.75" r="0.5625" fill="currentColor"/>
+<circle data-filled="hole" cx="5" cy="11.25" r="0.5625" fill="currentColor"/>
 <circle data-filled="solid" data-halo="" cx="11.5" cy="11.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="gap" d="M12.25 11.5A0.75 0.75 0 1 1 10.75 11.5A0.75 0.75 0 1 1 12.25 11.5Z" stroke="none" fill="currentColor"/>
 <path d="M11.500 10.000L11.500 9.250M12.799 10.750L13.449 10.375M12.799 12.250L13.449 12.625M11.500 13.000L11.500 13.750M10.201 12.250L9.551 12.625M10.201 10.750L9.551 10.375" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
