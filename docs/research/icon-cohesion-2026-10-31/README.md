@@ -133,3 +133,28 @@ Updates may instead take `megaphone` or `scroll` (review page).
   a key or nav shows them; `BEFORE_DIR` adds the shipped build above, `AREA_DIR` reads the sources.
 - `audit-consensus.md`: every flagged icon before this pass; `area-measures-before.json`: Area's measures
   before this pass.
+
+## Round 1 applied (2026-11-01)
+
+Owner picks on the review page: system A (system is an alias of shapes, which takes the drawing), bookmarks for
+Collection, newspaper's picture as text lines, and compass, link (with its 12px and 10px cuts) and the case family
+approved. Batch 76; spec "Batch 76: Cohesion pass, round 1". The rules and the solids question were left unanswered.
+
+## Round 2 (2026-11-01; review page)
+
+Every solid and every flagged outlier, sorted against the record:
+
+- **Content solids, redrawn:** app-window (two tab lines in its bar, Lucide's, instead of three ⌀1.5 dots) and
+  briefcase (one plain band, Lucide's and Phosphor's, instead of Fluent's split band and clasp).
+- **Kept, the icon's own mass or an owner pick:** quote, bold, stop-circle, record, the booleans, contrast, shadow,
+  folder-zip, id-card, stroke-weight, qr-code, the play shapes in containers, gauge's needle, text-color's bar, the
+  bots' visors, image's sun, paint-bucket's drop, usb's pins (line-weight squares), globe (owner: copy Fluent exactly;
+  against the libraries' consensus it is −1% density, not an outlier).
+- **Small or light, recorded:** voicemail (the widest its keyline allows), call-end (enlarged at the owner's request),
+  wand (the open gap is deliberate), eye-off (the owner's closed eye), corner and corners (Figma's inspector marks);
+  function, grip and git-commit match Lucide.
+- **Large or heavy:** concept mismatches in the map. T and H match Lucide; pairs (Aa) are smaller in every set.
+  gif and markdown are dense lettered labels: a later candidate.
+- **Stroke pile-ups** (snowflake, gem, arrowheads, the flat slash crossing): measured blobs match Lucide's.
+- **Asked:** inner detail dots at the line's weight (⌀1.125, Lucide's and Tabler's dot) instead of ⌀1.5, in the 62
+  icons that have them; the i, !, ? and ⌀2 mark dots unchanged.
