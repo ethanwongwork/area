@@ -19,13 +19,13 @@ import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
-import { appScale } from "../app-scale.ts";
+import { feedScale } from "../app-scale.ts";
 import { Specimen } from "../specimen-scope.tsx";
-import { CanvasSection, Tile, TileGrid, type CardLook } from "../tile.tsx";
+import { CanvasSection, Tile, TileGrid, type CardLook, FEED_TABLE } from "../tile.tsx";
 import { factsOf, FaceSample, FaceSummary, KINDS, TYPEFACES, typefaceOf, TypefaceWorkspace, useInstalled } from "./typefaces.tsx";
 
-/* Type cards keep the name below (owner, 2026-10-24); the other galleries show it on hover (tile.tsx, GALLERY_LOOK). */
-const TYPE_LOOK: CardLook = { container: "basic", caption: "below", fill: "recessed", borderless: false };
+/* Type cards: the name top-left as every gallery's (owner, 2026-10-31: "top-left everywhere"; it was at the foot). */
+const TYPE_LOOK: CardLook = { container: "basic", caption: "above", fill: "recessed", borderless: false };
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { CodeWell, Preview, Selection } from "../inspector.tsx";
@@ -162,7 +162,7 @@ export function TypographyPage() {
             ...TYPE_SIZES.map(type => [weight, type, `Type ${type}`] as const),
           ] as ReadonlyArray<readonly ["regular" | "strong", string | undefined, string]>).filter(([w, type]) => type || weights === "all" || weights === w).map(([w, type, label]) => (
             <section key={label} className="studio-type-row" aria-label={label}>
-              <div className="studio-type-row__head" {...appScale()}>
+              <div className="studio-type-row__head" {...feedScale()}>
                 <span>{label}</span>
                 <span className="studio-tabular">{metrics(view, type ?? density)}</span>
               </div>
@@ -196,7 +196,7 @@ export function TypographyPage() {
                   })}
                 </TileGrid>
               ) : (
-                <Table size="md" interactive aria-label={`${kind.label} typefaces`}>
+                <Table wrapperProps={FEED_TABLE} size="md" interactive aria-label={`${kind.label} typefaces`}>
                   <thead><tr><th scope="col">Typeface</th><th scope="col">Foundry</th><th scope="col">Licence</th><th scope="col">Characters</th><th scope="col">Axes</th></tr></thead>
                   <tbody>
                     {kind.faces.map(entry => {
@@ -249,7 +249,7 @@ export function TypographyPage() {
                 ) : (
                   // List: Geist's table, each example its own name set in its own style, at each weight shown. In the
                   // framed Table, every cell on its first baseline, so a 72 example and its 14 values share a line.
-                  <Table size="lg" interactive baseline aria-label={group.label}>
+                  <Table wrapperProps={FEED_TABLE} size="lg" interactive baseline aria-label={group.label}>
                       {/* One set of column widths for every table, so the columns line up down the Canvas. */}
                       <colgroup><col style={{ inlineSize: "52%" }} /><col style={{ inlineSize: "10%" }} /><col style={{ inlineSize: "13%" }} /><col style={{ inlineSize: "13%" }} /><col /></colgroup>
                       <thead>

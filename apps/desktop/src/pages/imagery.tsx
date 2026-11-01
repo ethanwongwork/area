@@ -28,7 +28,7 @@ import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, GridIcon, OpenIcon } 
 import { ChromeButton, SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { appScale } from "../app-scale.ts";
 import { hrefOf } from "../places.ts";
-import { CanvasSection, CARD_SCOPE } from "../tile.tsx";
+import { CanvasSection, CARD_SCOPE, FEED_TABLE } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewSwitch } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
@@ -138,7 +138,7 @@ export function ImageryPage() {
   );
 
   const imageGrid = (entries: BrandItem[], label: string) => mode === "list" ? (
-    <Table size="md" interactive aria-label={label}>
+    <Table wrapperProps={FEED_TABLE} size="md" interactive aria-label={label}>
       <thead><tr><th scope="col">Image</th><th scope="col">Name</th><th scope="col">Source</th><th scope="col">Size</th></tr></thead>
       <tbody>
         {entries.map(entry => (
@@ -156,7 +156,7 @@ export function ImageryPage() {
       layout={mode === "waterfall" ? "waterfall" : "grid"} {...CARD_SCOPE}
       style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
       {entries.map(entry => (
-        <AssetGridItem key={entry.id} value={entry.id} name={nameOf(entry)} media={url(entry.thumb)} container="basic" caption="overlay"
+        <AssetGridItem key={entry.id} value={entry.id} name={nameOf(entry)} media={url(entry.thumb)} container="basic" caption="above"
           // Its own shape, in the grid too (owner, 2026-10-24: "just their own unique height, and the top of each image row
           // always aligns": the Asset grid tops its rows); packed into columns in the waterfall.
           mediaRatio={entry.width && entry.height ? entry.width / entry.height : undefined} />
@@ -184,7 +184,7 @@ export function ImageryPage() {
           // A group keeps the layered card (owner, 2026-10-24: "use the old asset card style with the layered containers for
           // groups"): framed, landscape ("the AR can be landscape"), its four cells lined up with the name and as far apart
           // as from the edge (Asset card's group inset), the name below, in the gallery cards' look.
-          <AssetGridItem key={entry.id} value={entry.id} name={entry.name} container="framed" caption="below" aspect="landscape"
+          <AssetGridItem key={entry.id} value={entry.id} name={entry.name} container="framed" caption="above" aspect="landscape"
             group={(byFolder.get(entry.id) ?? []).slice(0, 4).map(asset => url(asset.thumb))} />
         ))}
       </AssetGrid>

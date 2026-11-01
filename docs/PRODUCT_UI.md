@@ -269,9 +269,14 @@ Cursor's nav with Figma's tabs).
   (owner, 2026-10-31, Claude's browser pane: "the second row of controls below feel like part of the tabs bar", then "it
   still looks too tall"; measured there a 24 field in a 34 row, 11 under the tabs; was 47, then 40). What the Canvas
   shows sits at its start as ghost menus (view-controls.tsx ViewLead and ViewFilter: "i dont like that theyre all right
-  aligned. maybe use more dropdowns"), how it is shown (zoom, layout, New theme) at its end. Its controls and the
-  Sidebar's first row share one line (58); the Inspector's first heading, set by Panel's own body inset, sits 5 under it
-  (63). The Sidebar and Inspector are 14 in on all sides. **Narrow**, the start gives way first (a path shortens to its
+  aligned. maybe use more dropdowns"), how it is shown (zoom, layout, New theme) at its end. Its controls, the
+  Sidebar's first row and the Inspector's first heading share one line (58 at type 13 / 32; the heading sat 5 under it
+  until 2026-10-31, owner pick q-line: an Inspector view that opens on a heading moves up by the difference,
+  `.studio-inspector__view[data-lead="heading"]`). The Sidebar and Inspector are Panel's md inset in on all sides: 14,
+  and 18 at Comfortable (`docs/THEMING.md` › What density does to a screen; it was 14 at every density until
+  2026-10-31); a list's plates sit 8 from the edge, the text 6 inside them (Cursor's; owner pick q-plates, 2026-10-31).
+  A section's list under the nav sits under one rule with 8 of air on each side, its filter 4 over its rows (owner,
+  2026-10-31: "why is the search control so close to the divider above it?"). **Narrow**, the start gives way first (a path shortens to its
   first step, 120), then the end's groups wrap onto rows of their own under it, at the end, 4 apart, each control whole;
   nothing runs under the Inspector (owner, 2026-10-31: "fix the responsiveness"; at a 1000 window with both panels the
   path was cut to nothing and Live, Working and Publish ran off the Canvas). One row is unchanged.
@@ -294,10 +299,15 @@ Cursor's nav with Figma's tabs).
   screen to scale up and down"; it was at most 1236 and centred from 2026-10-22, so a hidden panel's room became empty
   margins); each section
   is a heading (and a muted lede) over one block: a grid of cards, the Stage, plain text, a Table or a Code block.
-  Spacings grow outward: cards 8 apart (colour's swatch sheet 4; owner, 2026-10-24: "maybe everything can be 8px?"; was 12), at least 260 wide (277 to 300 in a 1440 window), at most four across (owner, 2026-10-22: "more like a gallery", "280 to 300 px
+  One small system (owner, 2026-10-31: "open to increasing the margins to 32px … simplify everything that goes into the
+  feed … more consistent, more cohesive, more visually balanced and intentionally spacious";
+  `docs/research/feed-system-2026-10-31`), spacings growing outward: cards 12 apart (colour's swatch sheet 4; were 8 from
+  2026-10-24), one inset (16) and one corner (16) inside every frame (tiles, the Stage, Asset cards, colour cards, tables
+  through Table's `--area-table-edge` and `--area-table-corner`, Settings' rows), every gallery on one card grid, at least 260 wide (277 to 300 in a 1440 window), at most four across (owner, 2026-10-22: "more like a gallery", "280 to 300 px
   width … 4 columns across not more"); past four the cards grow with the Canvas and, at Auto, their specimens with them,
   0.7 at a 277 card and up to 1:1 (`gallery/fit.ts`, AUTO_VIEW); a product screen's tile is the screen's 16:9, filled
-  (`Tile stage="screen"`), not a square with the screen in its middle; a heading 12 over its block, sections 40 apart, the Canvas margin 16, each
+  (`Tile stage="screen"`), not a square with the screen in its middle; a heading 16 over its block, sections 48 apart, the Canvas margin 32 (at the default density; Compact 12 / 40 / 24 and
+  cards 8 apart, Comfortable 20 / 56 / 40 and 16; was 12 / 40 / 16), each
   measured to what is drawn: a frame's edge, a text's cap or baseline (titles, ledes and prose are trimmed; a Table
   measures to its frame, as a card does).
 - **One voice for the feed's text** (owner, 2026-10-22: "make the copy, titles, and subtitles to be more consistent and
@@ -305,17 +315,33 @@ Cursor's nav with Figma's tabs).
   collection (cards, rows, swatches, icons), never on facts, code or prose; where the page explains (a family's tabs,
   Theme, Typography) a **subtitle** (muted, one sentence ending in a full stop) says what the block holds; **copy**
   (prose, table text) is regular. A family's purpose opens its page as a subtitle. `CanvasSection` (`src/tile.tsx`) and
-  the family tabs' `Section` take `count` and `lede`.
+  the family tabs' `Section` take `count` and `lede`. Nothing in a section speaks louder than its title: an empty state inside a section is Empty state `sm` (its title the
+  feed's 13/18 at 500, its description joined), and only one that takes the whole Canvas (no results, a missing library)
+  keeps md's 15/22 (2026-10-31, type pass; Home's and a project's six were md). A prop's name in the API's Props table
+  sits on the cell's line as inline Code; only several names stack (as a grid they became blocks and every row grew to
+  36.4 against the other tables' 33).
 - **Tables in a feed share one label column** (owner, 2026-10-31, docs/research/feed-rhythm-2026-10-31): a page's tables
   take `Table layout="fixed"`, so each first column is 27% (Primer's Name column) and values start on one line down the
   page (the API tab's were 84, 200 and 145 wide). A first column of marks (Do / Don't) stays `auto`; a page that sets its
   own `colgroup` for every table (Typography's list) keeps it.
+- **Loose text sits 4 in from the frames** (owner, 2026-10-31: "should the text above the containers be inset 2 or 4px?
+  maybe not quite as far as cursor but just slightly"): section titles and ledes, a page's lede, a family's or typeface's
+  tabs, Show all, the Canvas path and Settings' titles start 4 in from the cards, tables, Stage and groups they sit over
+  (`--_text-inset`, app.css; Cursor's titles 8, Primer's and Notion's flush). Home's ways to start a system are Settings'
+  framed rows (a name, its line, Start), not Cards, whose 15/22 titles outranked their section (owner pick q-cards).
+- **Every card's name sits at its top-left** (owner, 2026-10-31: "top-left everywhere"): in the frame's first row, its
+  cap and start 16 from the frame (the feed's frame inset), 13/18 regular, on component examples, typeface cards, boards,
+  images, screens, history and the Stage (Asset card `caption="above"`; tile.tsx GALLERY_LOOK). They were at the foot
+  (typefaces, boards) or on hover (components, images).
+- **Tables balance their insets** (owner, 2026-10-31: "why do the tables have so much more horizontal spacing inset added
+  than vertical"): a md table's text sits as far from the rules as from the frame's side (14 on the ink), on the prose
+  line (13/20), rows 39 at type 13 / 32 (Cursor's settings rows 42, Primer's 44).
 - **The reading column** (owner, 2026-10-31): Settings, document feeds and a chat that takes the Canvas read at one
   measure, 768 (`--_reading-column`, app.css; Claude Code's default transcript width, Narrow, is 768). The Canvas's
   galleries and tables fill the Canvas instead.
-- **One feed, altered for chat** (owner, 2026-10-31): the same steps name every feed. Section 40 on the Canvas, 32 in
-  Settings, an exchange 24 in chat (Claude Code 20 / 24); heading → block 12, which in chat is a message → its reply
-  (Claude 6 / 8; Area keeps 12 so the step means the same in both); blocks: cards 8 apart, a group of rows, prose 16
+- **One feed, altered for chat** (owner, 2026-10-31): the same steps name every feed. Section 48 on the Canvas, 32 in
+  Settings, an exchange 24 in chat (Claude Code 20 / 24); heading → block 16 on the Canvas and in Settings, 12 in chat,
+  a message → its reply (Claude 6 / 8); blocks: cards 12 apart, a group of rows, prose 16
   apart in chat; rows 42 one line and 60 with a description (Settings; Cursor 42 / 61). A chat has no page title (its bar
   names the thread) and a composer at its foot, the column's width. Settings groups rule their rows only between the
   text edges (16 in, as Cursor's 12 and Description list justified).
@@ -330,7 +356,7 @@ Cursor's nav with Figma's tabs).
 2. Sort and group (rule 7), an icon menu;
 3. how things are drawn (zoom, style, size). On Components the style is the Cards menu, an icon menu of two
    independent choices (owner, 2026-10-25: "there should just be 1 style of container"): **Container** (Basic, the
-   name and Copy on hover, the default) or **No container**; and **Fixed height** (5:4, the default) or **Waterfall**,
+   name and Copy in its first row, the default; on hover until 2026-10-31) or **No container**; and **Fixed height** (5:4, the default) or **Waterfall**,
    each card hugging its component at its scale with 28 above and below it, between half and 5:4 of its width, dropped
    into the shortest column (`src/gallery/fit.ts`). A taller component gets a taller card, never a larger scale. It was
    nine looks (Framed, Name below, Basic, white, no stroke, Containerless…; 2026-10-22 to 2026-10-25);

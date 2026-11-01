@@ -365,3 +365,11 @@ Nav's separator paints `border-decorative` (#f3). Was `border-divider` (#e2). Th
   Claude Code's session list fades a cut name over 24 before its trailing marks (`--df-hover-mask`, desktop 4.4212),
   as Area's tabs already fade under their close.
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-10-31 (plates in a panel)
+
+- **What changed:** in a Panel's body a vertical Nav's plates sit 8 from the panel's edge (were 6), its text still on the
+  panel's 14 column: the panel hangs the list by its row pad, 6, which the inset contract reads for the row's sides
+  (`--_panel-row-pad`, panel.css and inset.css). Outside a panel nothing changes.
+- **Why:** owner pick q-plates (`docs/research/region-balance-2026-10-31`): Cursor's and Claude's sidebar plates sit 8 in,
+  Cursor's text 6 inside them. Back to review.

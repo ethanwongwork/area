@@ -95,7 +95,7 @@
      bar's rule to the first title's cap, as the Inspector's first heading sits, and from a title's
      baseline to its tiles. A lede follows its title at one line's spacing (8), as prose does. */
   /* A section's title (and lede) is Area's SectionHeading (app-shell.css, 2026-10-15); the Canvas margin follows it. */
-  .studio-section-heading { margin-block-end: var(--_canvas-heading); }
+  .studio-section-heading { margin-block-end: var(--_canvas-heading); margin-inline-start: var(--_text-inset); }
 
   /* --- Tiles and the grid (src/tile.tsx) ------------------------------------ */
 
@@ -296,13 +296,13 @@
      plate stays inside the bar's 7 (owner, 2026-10-31: "the breadcrumb spacing on the horizontal side doesnt look right";
      it started on the bar's 7, its plate 1 from the Canvas's edge, 9 left of the titles under it). */
   .studio-canvas__bar > .studio-canvas__lead > .studio-canvas__crumbs:first-child,
-  .studio-canvas__bar > .studio-canvas__crumbs:first-child { margin-inline-start: calc(var(--_canvas-margin) - (var(--_studio-head) - var(--area-control-sm)) / 2); }
+  .studio-canvas__bar > .studio-canvas__crumbs:first-child { margin-inline-start: calc(var(--_canvas-margin) + var(--_text-inset) - (var(--_studio-head) - var(--area-control-sm)) / 2); }
   /* A family's section: its title 12 over its cards (the feed's heading space), its groups when open 24 apart, a
      group's name 8 over its row (a lede's spacing), and Show all 12 under the cards (a heading's space). */
   .studio-overview__body { display: grid; gap: var(--area-space-24); min-inline-size: 0; } /* pick: between a heading's 12 and a section's 40 */
   .studio-overview__group { display: grid; gap: var(--area-space-8); min-inline-size: 0; }
   .studio-overview__group-label { margin: 0; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
-  .studio-overview__more { display: flex; margin-block-start: var(--area-space-12); }
+  .studio-overview__more { display: flex; margin-block-start: var(--area-space-12); margin-inline-start: var(--_text-inset); }
   /* Show all: the feed's copy (13/18, muted, trimmed to cap and baseline), no plate, the title link's underline on hover. */
   .studio-overview__toggle { appearance: none; padding: 0; border: 0; background: none; color: var(--area-fg-muted); font: inherit; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; cursor: pointer; }
   /* The family's status follows its count on the title's line. */
@@ -315,7 +315,9 @@
   /* Overview, Documentation, API, Code, Spec: Area's Tabs at the app's scale; the panel's 12 (Tabs' own) sets the gap. */
   /* 12 more than Tabs' own 12, so the tab bar stands 24 off what it shows, as the lede stands 24 over it: the bar
      belongs to the whole page, not to the first section under it. */
-  .studio-family-tabs__panel { min-inline-size: 0; padding-block-start: var(--area-space-12); }
+  /* The tab row is loose text, on the feed's text column; its panel's frames go back to the margin. */
+  .studio-family-tabs { margin-inline-start: var(--_text-inset); }
+  .studio-family-tabs__panel { min-inline-size: 0; padding-block-start: var(--area-space-12); margin-inline-start: calc(var(--_text-inset) * -1); }
   /* One column no wider than the Canvas: a long code line or path scrolls inside its Code block or Table. */
   .studio-family-tabs__panel > .studio-sections { grid-template-columns: minmax(0, 1fr); }
   /* Markdown and stacked tables: blocks 16 apart, a paragraph or list kept to a reading measure. */

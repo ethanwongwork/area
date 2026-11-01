@@ -1,6 +1,39 @@
 # Handoff
 
 ## Current state (2026-10-31)
+- **Region balance across densities, branch `claude/spacing-layout-balance-17deb8` (uncommitted, 2026-10-31).** Owner asked
+  whether the Sidebar, Canvas and Inspector need spacing / optical-balance updates against Claude Code and Cursor, and for it
+  to be documented in the density themes. Finding: at the app's type 13 / 32 the regions match the references; but Panel's md
+  inset (14) and the Canvas feed (16 / 8 / 12 / 40) held still while density grew the rows. Now Panel md is `max(14,
+  inset-surface-md)` (14, 18 at Comfortable; Titlebar's title start and the app's `--_studio-inset` the same) and the feed
+  steps (Compact 16 / 8 / 10 / 32, Comfortable 20 / 12 / 16 / 48). Type 13 / 32 is pixel-identical, light and dark (capture
+  mode). Docs: THEMING.md "What density does to a screen", spacing.md rule 6, PRODUCT_UI, Panel spec, research
+  `docs/research/region-balance-2026-10-31/` (Claude and Cursor bundle values, before-after.png). Open for the owner:
+  q-line (Inspector's first heading 5 under the shared line) and q-plates (row plates 6 vs the references' 8). Checks: all
+  React, desktop, token, app-css, playgrounds, docs, typecheck. The IA playground steps 2–3 are uncommitted in
+  `ia-design-playground-review-3e30b0` (another session's).
+- **One feed system, same branch (uncommitted, 2026-10-31).** Owner: margins 32, simplify the feed. Built
+  (`docs/research/feed-system-2026-10-31/`): margin 24/32/40, cards 8/12/16, one frame inset 12/16/20 (`--_frame-inset`:
+  tiles, Stage, Asset and colour cards, Settings' rows' sides, feed tables), heading 12/16/20, sections 40/48/56, by
+  `ui-level`; Table gained public hooks `--area-table-corner` / `--area-table-edge` (OVERRIDABLE), set only on feed tables
+  (`FEED_TABLE`); Patterns and a project's pages on the card grid. Every card's name now top-left (owner,
+  "top-left everywhere"). Open: Asset card's resting shadow vs plain tiles, colour sheet's 4 gap (earlier owner picks).
+- **Owner's four picks + spacing feedback, same branch (uncommitted, 2026-10-31).** q-line (Inspector's first heading on
+  the shared line, `InspectorView` + `data-lead`), q-plates (panel lists hang by `--_panel-row-pad` 6: plates 8 in, text
+  14; inset.css reads it), q-table-lines + balanced table insets (md/lg cells 13/20, block = frame inset − half-leading,
+  rows 39), q-cards (Home's ways as Settings rows). Feedback: the divider over a section's list has 8 / 8 air; feed text
+  (titles, ledes, tabs, Show all, path, Settings titles) 4 in from frames (`--_text-inset`). Table, Nav, Tree view in
+  review (Nav and Tree view were missing from REVIEW_COMPONENTS; Meter still is, its note says in review). All checks green.
+- **Type pass, same branch (uncommitted, 2026-10-31).** `docs/research/type-pass-2026-10-31/` (census scripts, every role
+  and pair measured). The chrome is on the ramp (13/18, 11/14, 15/22, 19/26; 400 / 500); joined pairs 8–10.3. Fixed:
+  in-section empty states → Empty state `sm` (Home's three, a project's three); the Props table's single names inline
+  (rows 36.4 → 33). Open: q-cards (Home's New system card titles 15 over a 13 section), q-table-lines (wrapped table
+  cells on 13/18). Electron runs from this worktree with `--dev` (reloads on build).
+- **PR #177 restored, same branch (uncommitted, 2026-10-31).** Its merge was dropped from main's history by #178's merge 21 s
+  later. Reapplied (`feedScale`, `InheritedScaleContext`; `docs/research/desktop-perf-2026-10-29/`, new section "Restored
+  onto main"): Canvas type scopes Components 238 → 0, Colors 48 → 0; scrolling Colors 2.6× faster; page opens within noise
+  (lazy tiles took most of that). Pixel-identical in capture mode. Open: scrolling the Components overview costs about 1 s
+  a screen with or without it (likely `gallery/fit.ts` restyling the Canvas per tile).
 - **Claude Code shell audit, branch `claude/code-ui-design-audit-f1c645` (2026-10-31).** Owner liked Claude Code's new
   sectioned UI; measured from its bundle (`docs/research/claude-code-ui-audit-2026-10-31.md`; picks on artifact
   F8nRcyToXTGCa3XMU22Cs8 `verdicts`). Built the yes picks: the Inspector's Theme groups fold with "Default" / "N changed"

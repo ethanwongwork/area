@@ -15,7 +15,7 @@ import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
 import { AssetGrid, AssetGridItem, Button, Card, CardContent, CardDescription, CardHeader, CardLink, CardTitle, ConfirmDialog, Dialog, EmptyState, Field, Input, Menu, MenuItem, PanelSection, Radio, RadioGroup, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
 import { AddIcon, ChevronDownIcon } from "@area/icons";
 import { canvasAttributes, useStudio, Workspace } from "../studio.tsx";
-import { CanvasSection, CARD_SCOPE, Tile, TileGrid } from "../tile.tsx";
+import { CanvasSection, CARD_SCOPE, Tile, TileGrid, FEED_TABLE } from "../tile.tsx";
 import { ViewControls } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -150,13 +150,13 @@ export function ProjectOverview() {
                 ))}
               </TileGrid>
             ) : (
-              <EmptyState title="No explorations yet" description={`An exploration tries a change to ${systemName(project.system)}'s look here, and Publish puts it in the system.`}
+              <EmptyState size="sm" title="No explorations yet" description={`An exploration tries a change to ${systemName(project.system)}'s look here, and Publish puts it in the system.`}
                 actions={<Button size="sm" variant="soft" tone="neutral" onClick={newExploration}>New exploration</Button>} />
             )}
           </CanvasSection>
           <CanvasSection id="project-versions" title="Versions" count={project.versions.length}>
             {project.versions.length ? (
-              <Table aria-label="Versions">
+              <Table wrapperProps={FEED_TABLE} aria-label="Versions">
                 <thead><tr><TableHeaderCell>Version</TableHeaderCell><TableHeaderCell fit>Saved</TableHeaderCell></tr></thead>
                 <tbody>
                   {[...project.versions].reverse().map(version => (
@@ -168,7 +168,7 @@ export function ProjectOverview() {
                 </tbody>
               </Table>
             ) : (
-              <EmptyState title="No versions yet" description="Save version keeps a copy of the pages and explorations to go back to."
+              <EmptyState size="sm" title="No versions yet" description="Save version keeps a copy of the pages and explorations to go back to."
                 actions={<Button size="sm" variant="soft" tone="neutral" onClick={save}>Save version</Button>} />
             )}
           </CanvasSection>
@@ -221,7 +221,7 @@ export function ProjectPageView() {
       }
       canvas={<>
         {page.layers.length ? (
-          <TileGrid span="wide">
+          <TileGrid span="wide" cards>
             {page.layers.map(entry => (
               <Tile key={entry.id} span="wide" stage="center" inert card label={entry.name} value={entry.kind === "screen" ? "Screen" : "Image"}
                 selected={entry.id === layer?.id} onSelect={() => select(`${page.id}/${entry.id}`, { replace: true })}>
@@ -236,7 +236,7 @@ export function ProjectPageView() {
           <Dialog open onOpenChange={next => { if (!next) setPicking(false); }} title="Add image" description="Choose an image from Inspiration: it goes at the end of the page.">
             <AssetGrid aria-label="Inspiration" {...CARD_SCOPE} style={{ "--area-asset-card-size": `${PICK_SIZE}px` } as CSSProperties}
               onOpen={value => { const image = images.find(entry => `${entry.folder}/${entry.id}` === value); if (image) add("image", value, nameOf(image)); setPicking(false); }}>
-              {images.slice(0, 60).map(entry => <AssetGridItem key={`${entry.folder}/${entry.id}`} value={`${entry.folder}/${entry.id}`} name={nameOf(entry)} media={url(entry.thumb)} container="framed" caption="below" aspect="square" />)}
+              {images.slice(0, 60).map(entry => <AssetGridItem key={`${entry.folder}/${entry.id}`} value={`${entry.folder}/${entry.id}`} name={nameOf(entry)} media={url(entry.thumb)} container="framed" caption="above" aspect="square" />)}
             </AssetGrid>
           </Dialog>
         ) : null}
@@ -305,7 +305,7 @@ export function ExplorationPage() {
             </TileGrid>
           </CanvasSection>
           <CanvasSection id="exploration-screens" title="On the system's screens" count={PATTERNS.length - 2} lede="The system's patterns, in the exploration.">
-            <TileGrid span="wide">
+            <TileGrid span="wide" cards>
               {PATTERNS.filter(entry => entry.id !== "chat" && entry.id !== "abstract-board").map(entry => (
                 <Tile key={entry.id} span="wide" stage="center" inert card label={entry.label}>
                   <WidthZoom><div className="ex-thumb" aria-hidden="true"><entry.Screen /></div></WidthZoom>
@@ -395,7 +395,7 @@ export function VersionsPage() {
         <div className="studio-sections">
           <CanvasSection id="versions" title="Versions" count={project.versions.length} lede="Copies of the pages and explorations, newest first. Restoring one keeps the others.">
             {project.versions.length ? (
-              <Table aria-label="Versions">
+              <Table wrapperProps={FEED_TABLE} aria-label="Versions">
                 <thead><tr><TableHeaderCell>Version</TableHeaderCell><TableHeaderCell fit>Pages</TableHeaderCell><TableHeaderCell fit>Explorations</TableHeaderCell><TableHeaderCell fit>Saved</TableHeaderCell></tr></thead>
                 <tbody>
                   {[...project.versions].reverse().map(version => (
@@ -409,7 +409,7 @@ export function VersionsPage() {
                 </tbody>
               </Table>
             ) : (
-              <EmptyState title="No versions yet" description="Save version keeps a copy of the pages and explorations to go back to."
+              <EmptyState size="sm" title="No versions yet" description="Save version keeps a copy of the pages and explorations to go back to."
                 actions={<Button size="sm" variant="soft" tone="neutral" onClick={save}>Save version</Button>} />
             )}
           </CanvasSection>

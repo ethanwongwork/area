@@ -17,7 +17,7 @@ import { GlyphCell, GlyphGrid, GlyphSheet } from "../glyph-sheet.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
 import { Specimen } from "../specimen-scope.tsx";
-import { CanvasSection } from "../tile.tsx";
+import { CanvasSection, FEED_TABLE } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
@@ -225,7 +225,7 @@ export function IconsPage() {
               {mode === "list" ? (
                 // List: one row per icon in the framed Table, drawn at the
                 // chosen size, with its facts.
-                <Table size="md" interactive aria-label={section.name}>
+                <Table wrapperProps={FEED_TABLE} size="md" interactive aria-label={section.name}>
                   <thead><tr><th scope="col">Icon</th><th scope="col">Name</th><th scope="col">Keyline</th><th scope="col">Status</th></tr></thead>
                   <tbody>
                     {section.shown.map(name => {

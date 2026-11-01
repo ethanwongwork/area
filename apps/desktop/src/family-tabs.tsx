@@ -15,6 +15,7 @@
  */
 import { Fragment, type ReactNode } from "react";
 import { Badge, Code, CodeBlock, Kbd, Link, ScrollArea, SectionHeading, Table, TableCell, TableLink } from "@area/react";
+import { FEED_TABLE } from "./tile.tsx";
 import SOURCES from "virtual:component-sources";
 import { hrefOf } from "./places.ts";
 // @ts-expect-error — the documentation content is authored in JavaScript.
@@ -273,7 +274,7 @@ export function Markdown({ text, idPrefix }: { text: string; idPrefix: string })
 export function DataTable({ label, head, rows, fit = [], layout = "fixed" }: { label: string; head: ReactNode[]; rows: ReactNode[][]; fit?: number[]; layout?: "auto" | "fixed" }) {
   return (
     <ScrollArea type="hover" className="studio-table-scroll" viewportProps={{ className: "studio-table-scroll__viewport" }}>
-    <Table size="md" layout={layout} aria-label={label}>
+    <Table wrapperProps={FEED_TABLE} size="md" layout={layout} aria-label={label}>
       <thead><tr>{head.map((cell, index) => <th key={index} scope="col">{cell}</th>)}</tr></thead>
       <tbody>
         {rows.map((row, index) => (
@@ -288,7 +289,7 @@ export function DataTable({ label, head, rows, fit = [], layout = "fixed" }: { l
 /** Term / value rows (the Inspector's facts, on the Canvas). */
 export function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, ReactNode] | null | false | undefined> }) {
   return (
-    <Table size="md" layout="fixed" aria-label={label}>
+    <Table wrapperProps={FEED_TABLE} size="md" layout="fixed" aria-label={label}>
       <tbody>
         {rows.filter((row): row is [ReactNode, ReactNode] => Boolean(row)).map(([term, value], index) => (
           <tr key={index}><td><span className="studio-muted">{term}</span></td><td>{value}</td></tr>
@@ -424,7 +425,9 @@ export function ApiTab({ family }: { family: FamilyInfo }) {
         <Section id="api-props" title="Props" count={family.api.length} lede="From the React source and its descriptions.">
           <DataTable label="Props" head={["Prop", "Type", "Default", "Description"]} fit={[0, 2]}
             rows={family.api.map(([prop = "", type = "", fallback]) => [
-              <span className="studio-doc__stack">{prop.split(/ \/ /).map(name => <Code key={name} className="studio-prop">{name}</Code>)}</span>,
+              // One name sits on the cell's line as inline Code, as the Default column's does; only a prop with several names
+              // stacks them (a grid makes each a block, its padding added to the line: rows were 36.4, not 33, 2026-10-31).
+              prop.includes(" / ") ? <span className="studio-doc__stack">{prop.split(/ \/ /).map(name => <Code key={name} className="studio-prop">{name}</Code>)}</span> : <Code>{prop}</Code>,
               type,
               fallback && fallback !== "—" ? <Code>{fallback}</Code> : <span className="studio-muted">—</span>,
               describe(prop) ? <Inline text={describe(prop)} /> : <span className="studio-muted">—</span>,

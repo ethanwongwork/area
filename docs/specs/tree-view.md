@@ -263,3 +263,9 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
   name now does; the label fills the row up to its trailing part.
 - **Why:** the owner's pick p4 on the Claude Code audit (docs/research/claude-code-ui-audit-2026-10-31.md).
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-10-31 (plates in a panel)
+
+- **What changed:** in a Panel's body a Tree view's rows start 6 inside their plates (`--_tree-start` and the end read
+  `--_panel-row-pad`), so the plates sit 8 from the panel's edge and the labels keep the panel's column, as Nav's.
+- **Why:** owner pick q-plates, with Nav. Back to review.

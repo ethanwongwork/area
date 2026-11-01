@@ -37,7 +37,7 @@ export const OVERRIDABLE: readonly string[] = [
   "--area-radius-list", "--area-radius-list-row", "--area-select-edge", "--area-select-edge-hover",
   "--area-select-inline-size", "--area-selection-band", "--area-selection-band-hover", "--area-selection-edge",
   "--area-selection-surface", "--area-selection-surface-hover", "--area-switch-color", "--area-switch-color-hover",
-  "--area-textarea-edge", "--area-textarea-edge-hover", "--area-textarea-edge-soft", "--area-token-edge",
+  "--area-table-corner", "--area-table-edge", "--area-textarea-edge", "--area-textarea-edge-hover", "--area-textarea-edge-soft", "--area-token-edge",
   "--area-type-icon-line", "--area-weight-icon",
 ];
 

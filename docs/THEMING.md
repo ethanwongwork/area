@@ -107,8 +107,32 @@ outside both roles.
 | Setting | Values (default) | What it sets |
 |---|---|---|
 | `type` | `12` … `16`, `13` (default since 2026-10-25; was 14) | The base UI text size. Every type role follows: small text is 2 under (never under 10), reading text and titles 2 over. Also the icon stroke, the icon slot (16, or 20 from type 15, where a default-size icon's line takes the size curve's ratio `type-icon-line`, 0.8846: 1.33px at 15, 1.42 at 16), the check box and toggle size, and which densities are allowed (Compact up to 14, Comfortable from 13). |
-| `density` | `28` (Compact), `32` (default), `36` (Comfortable) | The room around text, named by the medium Button's height at type 14. It sets control heights (the text line plus twice the room, never under 24), rows (the text line plus twice the room, never under 5 a side: 28 at type 13 Compact, owner 2026-10-22), gaps, layout steps and surface insets. |
+| `density` | `28` (Compact), `32` (default), `36` (Comfortable) | The room around text, named by the medium Button's height at type 14. It sets control heights (the text line plus twice the room, never under 24), rows (the text line plus twice the room, never under 5 a side: 28 at type 13 Compact, owner 2026-10-22), gaps, layout steps, surface insets and the regions' spacing (below). |
 | `radius` | `0` (Sharp), `2`, `4`, `6`, `8`, `10` (default since 2026-10-25; was 8), `12`, `14`, `pill` | The medium Button's corner. Every corner derives from it ([Size and shape](DESIGN_SYSTEM.md#size-and-shape)) |
+
+**What density does to a screen** (2026-10-31, `docs/research/region-balance-2026-10-31`). Every spacing role steps
+with the rows and controls, so a level changes a screen's room evenly, never its rows alone (`area-ui-compose` ›
+spacing.md rule 6). At type 13, the app's type:
+
+| Role | Compact (28) | Default (32) | Comfortable (36) | Token or rule |
+|---|---|---|---|---|
+| Row (Nav, Tree view, Menu) | 28 | 30 | 34 | `ui-row` |
+| Small / medium control | 24 / 26 | 26 / 30 | 30 / 34 | `control-sm`, `control-md` |
+| Region inset (Panel md: a Sidebar's, an Inspector's edge to its text) | 14 | 14 | 18 | `max(14, inset-surface-md)`; 16 / 20 at type 14 |
+| Row plates from the region's edge | 8 | 8 | 12 | the region inset less Panel's row pad, 6 (Cursor's) |
+| Table row (md, one line, in the feed) | 35 | 43 | 51 | the prose line + the frame inset less its half-leading, twice |
+| Feed text from the frames (titles, ledes, tabs, Show all) | 4 | 4 | 4 | `--_text-inset`, fixed |
+| Feed margin (the Canvas's edge to its sections) | 24 | 32 | 40 | `32 + 8 × ui-level` |
+| Cards apart | 8 | 12 | 16 | `12 + 4 × ui-level` |
+| Inside every feed frame (tiles, cards, tables, rows) | 12 | 16 | 20 | `16 + 4 × ui-level` |
+| Heading to its block | 12 | 16 | 20 | `16 + 4 × ui-level` |
+| Sections apart | 40 | 48 | 56 | `48 + 8 × ui-level` |
+| Header (each region's) | 38 | 40 | 44 | the small control, 7 above and below |
+
+Claude Code steps the same way between its two densities (pads 12 → 16, section gaps 32 → 40, rows 26 → 32); Cursor's
+Agents window is one density, near Area's Compact (text 14 from the edge, rows 28). The region inset holds 14 at
+Compact rather than following Surface's 12: under 14, a list's plates would sit closer than 6 to the edge, where both
+references keep them 8 away.
 
 - `data-area-ui` is shorthand, not an axis: `compact` is type 12 with density 28,
   `default` is type 14 with 32. An explicit `type` or `density` on the same element wins.

@@ -32,7 +32,7 @@ columns and editable cells).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | sm 4, md 8 (default), lg 12 block cell inset | Owner (three cell insets) | Untitled header 44 / 36, rows 72 / 56; Notion rows 36 |
+| size | sm 4 on the UI line; md (default) and lg on the prose line, their block inset the frame's less the half-leading (md 9, lg 13 at type 13 / 32) | Owner (three cell insets); balanced, 2026-10-31 | Untitled header 44 / 36, rows 72 / 56; Notion rows 36 |
 | interactive | off, on | Hover plate only when a row is clickable | Untitled row hover; Notion reveals row controls instead |
 | layout | auto (default), fixed | fixed: the first column is the label column (27%), so the tables of one feed start their values on one line; the other columns size to their content | Primer's props table (Name 27%); Cursor's dashboard settings (values on one line per group); owner pick, 2026-10-31 |
 | striped | off, on | Long, wide rows | Owner |
@@ -102,8 +102,8 @@ selected or hovered row.
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | wrapper | 1px **`border-divider`** #e2e2e2 at `stroke-width`, so the frame keeps its edge under the Elevated preset (where `border-width` is 0); radius 12 (`radius-container`), no shadow (`navigation.css:121-130`) | Peer Card edge (third pass); Untitled radius 12 | Was `border-decorative` #f3, lighter than the row rules inside it. Untitled adds `shadow-xs`; Notion is full-bleed. The frame stays darker than Card's #ee edge because it has no shadow to carry it (audit S7b) |
-| text | 14/20 (`ui-size`) | Untitled body 14/20; Notion cells 14 | Follows the density axis |
-| cell inset | 4 / 8 / 12 block, 12 inline between columns, 16 at the frame (md, lg; sm 12) | Owner (three insets); Primer props 16 at the frame, 12 between columns (2026-10-31) | Notion 7.5 / 8; Untitled 24 sides; the frame step is Primer's and Cursor's settings (14 side, rules 12 in) |
+| text | `ui-size` (13 at type 13); line: sm the UI line (18), md and lg the prose line (`text-sm-prose-leading`, 20) since 2026-10-31 | Untitled body 14/20; Notion cells 14 | Follows the density axis |
+| cell inset | block: sm 4; md the edge less the prose line's half-leading (9 at type 13 / 32, so the text is 14 from the rules, as from the frame); lg 4 more. 12 inline between columns, 16 at the frame (md, lg; sm 12), less the density step |  Owner (three insets); Primer props 16 at the frame, 12 between columns (2026-10-31) | Notion 7.5 / 8; Untitled 24 sides; the frame step is Primer's and Cursor's settings (14 side, rules 12 in) |
 | label column (`layout="fixed"`) | first column 27%, wraps; outranks a fit cell | Primer props: Name 198 of 728 (27%), Default 15%, Description 58% | Only the first column is fixed; the rest size to content, as the app's API tab needs (Prop, Type, Default, Description) |
 | header | `bg-subtle` #f7f7f7 / #282828, `fg-muted`, 400, middle | Untitled neutral-50 header, neutral-500 ink; owner (middle); Notion muted 400 ink | Notion has no header fill; kept (third pass) |
 | body alignment | top (first line) | Inset contract (first-line alignment) | — |
@@ -245,3 +245,23 @@ label columns of 84, 200 and 145 on one page and rows of 33.
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-10-31 (balanced insets, prose line)
+
+- **What changed:** md and lg cells set their text on the prose line (13/20 at type 13) and take a block inset worked out
+  from the frame's: the edge inset less the line's half-leading (`--_cell-inset`, read at the cell with `1cap`). Text now
+  sits 14 from the rules on the ink, the same as from the frame's side; one-line rows are 39 at type 13 / 32 (were 33),
+  35 at Compact, 47 at Comfortable; a wrapped description runs on 20px lines (was 18). sm is unchanged (UI line, 3 / 10).
+- **Why:** the owner: "why do the tables have so much more horizontal spacing inset added than vertical top and bottom
+  spacing?" (7 above and below against 14 at the frame, about 11 on the ink); and pick q-table-lines (Button's Props ran 8
+  lines on the 13/18 UI line; Primer's prop table runs 1.67, Notion's 1.43). Cursor's settings rows 42, Primer's 44.
+- Evidence: `docs/research/type-pass-2026-10-31/README.md`. Back to review.
+
+## Review note, 2026-10-31 (public hooks)
+
+- **What changed:** two public hooks, as Asset card's: `--area-table-corner` (the wrapper's corner) and
+  `--area-table-edge` (the first and last cells' side inset, md and lg; sm keeps one inset). Both fall back to the
+  values above. The desktop app's feed sets them to its one frame inset and corner (16 / 16 at type 13 / 32), on its own
+  tables only; with the balanced block inset that makes its rows 43.
+- **Why:** the owner asked for one consistent, spacious feed (`docs/research/feed-system-2026-10-31`); tables were the
+  one frame at 14 / 14 among 16s. Listed in `OVERRIDABLE` (rederive.ts).
