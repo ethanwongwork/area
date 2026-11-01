@@ -178,57 +178,6 @@
   "assistant",
   "robot"
  ],
- "bot-automator": [
-  "ai",
-  "robot",
-  "automation",
-  "workflow"
- ],
- "bot-builder": [
-  "ai",
-  "robot",
-  "build",
-  "construct"
- ],
- "bot-designer": [
-  "ai",
-  "robot",
-  "design",
-  "creative"
- ],
- "bot-generator": [
-  "ai",
-  "robot",
-  "generate",
-  "create"
- ],
- "bot-guard": [
-  "ai",
-  "robot",
-  "safety",
-  "security",
-  "moderation"
- ],
- "bot-lead": [
-  "ai",
-  "robot",
-  "leader",
-  "orchestrator",
-  "manager"
- ],
- "bot-researcher": [
-  "ai",
-  "robot",
-  "research",
-  "investigate"
- ],
- "bot-scholar": [
-  "ai",
-  "robot",
-  "learning",
-  "education",
-  "tutor"
- ],
  "breakpoint": [
   "debug",
   "debugger",

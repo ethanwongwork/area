@@ -175,3 +175,7 @@ type 13), and noted the isometric and angled views beside a flat car and truck.
   r 2 for frames ≥ 9 × 7, 1.5 for 5–8, 1 below, about 40 icons.
 - **Bots:** ten (bot and nine role hats); only bot-agent is used in the app (AgentIcon, the Plan rail demo). Their
   heads are r 2.5, rounder than any other frame. Asked per bot: keep, revise or remove.
+
+Round 3 applied 2026-11-01 as picked (spec "Cohesion pass, round 3"): radius by size in about 50 icons, plane top-down,
+switch-camera on the camera, snowflake's V's given room, bot and bot-agent redrawn and the eight role bots removed (802
+icons). move and container kept. Icon Boards republished from the new build.

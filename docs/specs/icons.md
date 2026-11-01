@@ -5447,3 +5447,20 @@ Owner picks on the cohesion review page (`docs/research/icon-cohesion-2026-10-31
 Kept, owner-confirmed: quote, bold, stop-circle, record, the booleans, contrast, shadow, folder-zip, id-card,
 stroke-weight, qr-code, the play shapes in containers, gauge's needle, text-color's bar, the bots' visors, image's sun,
 paint-bucket's drop, globe (Fluent's, exactly).
+
+## Cohesion pass, round 3, 2026-11-01
+
+From the owner's flags on Icon Boards (`docs/research/icon-cohesion-2026-10-31/tools/boards.py`) and the review page.
+
+| Change | Icons |
+|---|---|
+| Corner radius by frame size: r 2 for frames ≥ 9 × 7, 1.5 for 5–8, 1 below. Each corner keeps its corner point; only the radius changes (`tools/reradius.py`). | r 1.5 → 2: bookmark, bookmark-add, -check, -off, -remove, building, folder and its 12 members, folder-open, folders, hard-drive, home, inbox, laptop, newspaper, rectangle, ruler, toolbox, wallet, archive, archive-restore, devices, gallery, memory, presentation, toy-brick, trash, vote. r 2.5 → 2: captions, scan-check, scan-face, scan-qr, scan-text, group, corners-sparkle. r 1 → 2: book-add, repository (the cover's right corners). r 1 → 1.5: chip. Kept: kanban (4-wide columns), truck, building's annex, objects whose roundness is the shape. |
+| plane | Top-down, nose up (the owner's viewpoint rule): a fuselage 3 wide on x.5 edges, swept wings to 2 and 14, a tailplane to 5 and 11, r 1.5 nose, r 0.5 elsewhere. Replaces the angled airliner of 2026-10-29. |
+| switch-camera | camera's body exactly, its lens a 270° arc (r 2 at 8, 9) with a 1.4 head at the top, pointing clockwise. |
+| snowflake | The V's stay at the tips; their vertex moves in to r 3.75 and their barbs to 2.12 long, so the barb ends sit 0.5 inside the arm's tip. |
+| bot | No mouth; the eyes (1.5 tall at x 5 and 11) centred in the head; head r 2. |
+| bot-agent, agent | A brim the head's width (2–14, Q dip to 7.125) and a narrower crown (5–11 at its foot, 5.5–10.5 at its top) standing on it; head r 2. |
+| Removed | bot-automator, bot-builder, bot-designer, bot-generator, bot-guard, bot-lead, bot-researcher, bot-scholar (owner: remove). |
+
+Kept by the owner: move, container (isometric, the one exception to flat views). Known and unchanged: folder-cog's filled
+variant shows a sliver at the gear's hub (present before this round).

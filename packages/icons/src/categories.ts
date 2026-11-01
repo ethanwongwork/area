@@ -153,8 +153,7 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
   ] },
   { slug: "ai", name: "AI & agents", icons: [
     "sparkle", "sparkle-off", "chat-sparkle", "grid-sparkle", "image-sparkle", "pencil-sparkle", "text-sparkle", "code-sparkle",
-    "agent", "bot", "bot-agent", "bot-builder", "bot-researcher", "bot-scholar", "bot-guard",
-    "bot-lead", "bot-designer", "bot-generator", "bot-automator",
+    "agent", "bot", "bot-agent",
     "brain", "brain-circuit", "brain-off",
   ] },
   { slug: "media", name: "Media", icons: [

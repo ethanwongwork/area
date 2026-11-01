@@ -241,3 +241,10 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   has one plain band, no clasp; every recorded solid is kept (quote, bold, stop-circle, record, the booleans,
   contrast, shadow, folder-zip, id-card, stroke-weight, qr-code, the play shapes, gauge's needle, text-color's bar,
   the bots' visors, image's sun, paint-bucket's drop, globe as Fluent's).
+  Round 3 picks, 2026-11-01 (Icon Boards flags): line weight stays 1.125; corner radius by frame size (r 2 for frames
+  ≥ 9 × 7, 1.5 for 5–8, 1 below; about 50 icons moved to it with no shape moved); flat views with depth only where depth
+  is the idea, container kept isometric; the plane top-down nose up (the angled airliner retired); switch-camera is
+  camera's body with a turning arrow for its lens; move and container keep their drawings; snowflake keeps its V's at
+  the tips with more room round them; the bots are bot (no mouth, eyes centred) and bot-agent (a narrower hat on a
+  brim the head's width) only: the eight role bots (automator, builder, designer, generator, guard, lead, researcher,
+  scholar) are removed.
