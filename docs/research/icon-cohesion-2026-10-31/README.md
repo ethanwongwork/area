@@ -158,3 +158,20 @@ Every solid and every flagged outlier, sorted against the record:
 - **Stroke pile-ups** (snowflake, gem, arrowheads, the flat slash crossing): measured blobs match Lucide's.
 - **Asked:** inner detail dots at the line's weight (⌀1.125, Lucide's and Tabler's dot) instead of ⌀1.5, in the 62
   icons that have them; the i, !, ? and ⌀2 mark dots unchanged.
+
+## Round 3 (2026-11-01; Icon Boards flags, review page)
+
+Icon Boards (`tools/boards.py`, artifact 4debUbHgJLDBGmzXcUde6Q): the owner flagged container, move, plane, snowflake and
+switch-camera, kept the line at 1.125 (Geist's stem is 0.085 em Regular, 0.107 em Medium: 1.10px for regular labels at
+type 13), and noted the isometric and angled views beside a flat car and truck.
+
+- Candidates: move with an open centre (Phosphor's); snowflake with shorter V's set in from the tips; switch-camera on
+  camera's own body with a turning arrow for its lens; plane top-down nose up, or a side view (`plane-side`, a
+  candidate source); container flat (three ribs) against keeping the isometric one.
+- **Corner radius** (`tools/radii.py`, and the main-frame pass in this round): frames of one size use different
+  radii. 144 large frames are r 2, 31 are r 1.5 (the folder family, bookmark, home, inbox, laptop, wallet, rectangle,
+  ruler, hard-drive, newspaper, toolbox, building) and 5 are r 1 (kanban, truck, book-add, repository, scroll); mid
+  frames split between 1.5 (archive, copy) and 2 (battery, cards). The rule names objects rather than sizes. Proposed:
+  r 2 for frames ≥ 9 × 7, 1.5 for 5–8, 1 below, about 40 icons.
+- **Bots:** ten (bot and nine role hats); only bot-agent is used in the app (AgentIcon, the Plan rail demo). Their
+  heads are r 2.5, rounder than any other frame. Asked per bot: keep, revise or remove.
