@@ -1324,6 +1324,7 @@ function gallerySpecimenTable() {
       { id: "loading", title: "Loading", demo: "GalleryTableLoading" },
       { id: "size-lg", title: "Size / lg", demo: "GalleryTableLarge" },
       { id: "interactive", title: "Interactive rows", demo: "GalleryTableInteractive" },
+      { id: "layout-fixed", title: "Layout / fixed", demo: "GalleryTableFixed" },
     ],
     tabs: [
       { id: "default", title: "Default", demo: "GalleryTabs" },

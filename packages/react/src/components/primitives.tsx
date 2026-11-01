@@ -1265,6 +1265,9 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   /** Highlights rows on hover. Use only when a row is clickable. */
   interactive?: boolean;
   size?: VariantProps<typeof MANIFESTS.table>["size"];
+  /** `fixed`: the first column takes the label column (27%) whatever its content, so tables in one feed start their
+   * values on one line; the other columns still size to their content. `auto` (default) sizes every column to its content. */
+  layout?: VariantProps<typeof MANIFESTS.table>["layout"];
   striped?: boolean;
   columnDividers?: boolean;
   /** No frame: the table sits on its surface, its rows ruled and its cell inset hanging outside the content edge. */
@@ -1306,7 +1309,7 @@ export const TableHeaderCell = /* @__PURE__ */ forwardRef<HTMLTableCellElement, 
 });
 
 export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(function Table(
-  { interactive, size, striped, columnDividers, flush, baseline, wrapperProps, className, ...rest },
+  { interactive, size, layout, striped, columnDividers, flush, baseline, wrapperProps, className, ...rest },
   ref,
 ) {
   // A wide table scrolls; a keyboard can only scroll what it can focus, so the wrapper becomes a
@@ -1331,7 +1334,7 @@ export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(fu
       {...(overflows ? { tabIndex: 0, role: "region", "aria-label": name, "aria-labelledby": name ? undefined : labelledBy } : {})}>
       <table
         ref={ref}
-        className={tableVariants({ interactive, size, striped, columnDividers, flush, baseline }, className)}
+        className={tableVariants({ interactive, size, layout, striped, columnDividers, flush, baseline }, className)}
         {...rest}
       />
     </div>

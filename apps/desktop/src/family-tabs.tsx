@@ -266,12 +266,14 @@ export function Markdown({ text, idPrefix }: { text: string; idPrefix: string })
 
 /**
  * One Area Table: a header row and body rows; `fit` columns shrink to their longest entry. A table wider than the Canvas
- * (a spec's evidence table) scrolls in Area's Scroll area rather than widening the page.
+ * (a spec's evidence table) scrolls in Area's Scroll area rather than widening the page. Its first column is the label
+ * column (`layout="fixed"`, owner 2026-10-31, docs/research/feed-rhythm-2026-10-31), so a tab's tables start their values
+ * on one line; a first column of marks (Best practices' Do and Don't) stays `auto`.
  */
-function DataTable({ label, head, rows, fit = [] }: { label: string; head: ReactNode[]; rows: ReactNode[][]; fit?: number[] }) {
+function DataTable({ label, head, rows, fit = [], layout = "fixed" }: { label: string; head: ReactNode[]; rows: ReactNode[][]; fit?: number[]; layout?: "auto" | "fixed" }) {
   return (
     <ScrollArea type="hover" className="studio-table-scroll" viewportProps={{ className: "studio-table-scroll__viewport" }}>
-    <Table size="md" aria-label={label}>
+    <Table size="md" layout={layout} aria-label={label}>
       <thead><tr>{head.map((cell, index) => <th key={index} scope="col">{cell}</th>)}</tr></thead>
       <tbody>
         {rows.map((row, index) => (
@@ -286,10 +288,10 @@ function DataTable({ label, head, rows, fit = [] }: { label: string; head: React
 /** Term / value rows (the Inspector's facts, on the Canvas). */
 function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, ReactNode] | null | false | undefined> }) {
   return (
-    <Table size="md" aria-label={label}>
+    <Table size="md" layout="fixed" aria-label={label}>
       <tbody>
         {rows.filter((row): row is [ReactNode, ReactNode] => Boolean(row)).map(([term, value], index) => (
-          <tr key={index}><TableCell fit><span className="studio-muted">{term}</span></TableCell><td>{value}</td></tr>
+          <tr key={index}><td><span className="studio-muted">{term}</span></td><td>{value}</td></tr>
         ))}
       </tbody>
     </Table>
@@ -348,7 +350,7 @@ export function DocumentationTab({ family, onOpenFamily, familyName }: {
       ) : null}
       {doc.practices?.length ? (
         <Section id="doc-practices" title="Best practices" count={doc.practices.length} lede="What to do and what to avoid.">
-          <DataTable label="Best practices" head={["", "Guidance"]} fit={[0]}
+          <DataTable label="Best practices" head={["", "Guidance"]} fit={[0]} layout="auto"
             rows={doc.practices.map(([kind, text]) => [<Badge size="sm" variant="soft" tone={kind === "Do" ? "success" : "danger"}>{kind}</Badge>, <Inline text={text} />])} />
         </Section>
       ) : null}

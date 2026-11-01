@@ -34,6 +34,7 @@ columns and editable cells).
 |---|---|---|---|
 | size | sm 4, md 8 (default), lg 12 block cell inset | Owner (three cell insets) | Untitled header 44 / 36, rows 72 / 56; Notion rows 36 |
 | interactive | off, on | Hover plate only when a row is clickable | Untitled row hover; Notion reveals row controls instead |
+| layout | auto (default), fixed | fixed: the first column is the label column (27%), so the tables of one feed start their values on one line; the other columns size to their content | Primer's props table (Name 27%); Cursor's dashboard settings (values on one line per group); owner pick, 2026-10-31 |
 | striped | off, on | Long, wide rows | Owner |
 | column-dividers | off, on | Dense comparisons | Owner; Notion draws hairlines between every cell |
 | composition | selection, sorting, empty, loading | Owner (composed, not an API) | Untitled checkbox column; Notion's hover checkbox |
@@ -65,14 +66,16 @@ notion  div rows, full-bleed (no container edge or radius); tabular-nums on the 
   hover   no row plate; a row checkbox fades to 0.7 and each cell shows a white "open" chip
 area  div.area-table-wrapper  1px border-divider, radius 12, bg-surface, overflow-x auto
   table.area-table  border-collapse, 14/20
-    th   padding 8/12, bg-subtle, fg-muted, 400, nowrap, middle
-    td   padding 8/12, top-aligned, 1px border-divider below (none on the last row)
+    th   padding 8/12 (16 at the frame, md and lg), bg-subtle, fg-muted, 400, nowrap, middle
+    td   padding 8/12 (16 at the frame, md and lg), top-aligned, 1px border-divider below (none on the last row)
+    .area-table--fixed  first column 27% (the label column)
     .area-table__cell--numeric  end-aligned, tabular figures
     .area-table__cell--fit      shrink-to-fit control column
 ```
 
-Inset: cell = `--_cell-inset` (4 / 8 / 12) block, 12 inline (compact 8, a literal since the `gutter-*` tokens were removed 2026-10-02); the wrapper border
-is outside the table, so the first column's text sits 1 + 12 = 13 from the wrapper edge.
+Inset: cell = `--_cell-inset` (4 / 8 / 12) block, `--_cell-side` 12 inline between columns (compact 8, a literal since the
+`gutter-*` tokens were removed 2026-10-02), and `--_cell-edge` = side + 4 at the frame for md and lg (sm keeps the side
+inset); the wrapper border is outside the table, so the first column's text sits 1 + 16 = 17 from the wrapper edge (sm 13).
 Row height md = 8 + 20 + 8 + 1 divider = 37 (Notion 36 + hairline = 36.55).
 
 ## Measurements
@@ -100,7 +103,8 @@ selected or hovered row.
 |---|---|---|---|
 | wrapper | 1px **`border-divider`** #e2e2e2 at `stroke-width`, so the frame keeps its edge under the Elevated preset (where `border-width` is 0); radius 12 (`radius-container`), no shadow (`navigation.css:121-130`) | Peer Card edge (third pass); Untitled radius 12 | Was `border-decorative` #f3, lighter than the row rules inside it. Untitled adds `shadow-xs`; Notion is full-bleed. The frame stays darker than Card's #ee edge because it has no shadow to carry it (audit S7b) |
 | text | 14/20 (`ui-size`) | Untitled body 14/20; Notion cells 14 | Follows the density axis |
-| cell inset | 4 / 8 / 12 block, 12 inline | Owner (three insets) | Notion 7.5 / 8; Untitled 24 sides; kept (third pass) |
+| cell inset | 4 / 8 / 12 block, 12 inline between columns, 16 at the frame (md, lg; sm 12) | Owner (three insets); Primer props 16 at the frame, 12 between columns (2026-10-31) | Notion 7.5 / 8; Untitled 24 sides; the frame step is Primer's and Cursor's settings (14 side, rules 12 in) |
+| label column (`layout="fixed"`) | first column 27%, wraps; outranks a fit cell | Primer props: Name 198 of 728 (27%), Default 15%, Description 58% | Only the first column is fixed; the rest size to content, as the app's API tab needs (Prop, Type, Default, Description) |
 | header | `bg-subtle` #f7f7f7 / #282828, `fg-muted`, 400, middle | Untitled neutral-50 header, neutral-500 ink; owner (middle); Notion muted 400 ink | Notion has no header fill; kept (third pass) |
 | body alignment | top (first line) | Inset contract (first-line alignment) | — |
 | divider | 1px **`border-divider`** #e2e2e2 / #333333 below each row but the last, at `stroke-width` like the frame (since the 2026-10-12 consistency pass) | Second pass divider role; Untitled 1px neutral-200 | Was `border-decorative` |
@@ -217,6 +221,21 @@ Interactive rows press at `bg-component-pressed`, one step past selected (Notion
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → row rules and column dividers are at `stroke-width`, as the frame (were `border-width`, so under Elevated a framed table lost its rows) (navigation.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · type size and density split (owner) → cell insets follow the spacing step (`ui-dense`, 8 → 18 at the side); the frame's corner is capped at 1.5 × the side inset (compact at type 12–13, radius 12+: 18 over 8 → 12) (`navigation.css`). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-15 · PRODUCT_UI.md open gap ("Table props for its fit and numeric cells"), owner: "merge it, then continue working" → `TableCell` and `TableHeaderCell` (`scope="col"` by default) take `numeric` and `fit`, writing the existing `area-table__cell--numeric` / `--fit` modifiers; nothing renders differently. The app (Facts, the Stage's anatomy, Components' list, the Icons list) and the Table demos use them instead of the class names.
+- 2026-10-31 · owner picks on the feed rhythm review ("build my picks"; question: "how does this impact denser tables that are in the inspector panel") → the first and last cells sit 4 further from the frame than columns sit apart (md, lg; sm unchanged, so dense tables keep one inset), and `layout="fixed"` gives the first column a 27% label column; rows unchanged → navigation.css, manifest.ts, primitives.tsx, gallery tile "Layout / fixed", family-tabs.tsx. docs/research/feed-rhythm-2026-10-31.
+
+## Feed rhythm, 2026-10-31
+
+Research and picks: `docs/research/feed-rhythm-2026-10-31/` and the review page (collection `verdicts`). Measured: Cursor's
+settings (bundle CSS: rows 12 / 14, 13/18, 42 tall, rules inset 12), Primer's props table (live: 8 block, 16 at the frame,
+12 between columns, rows 43.66, columns 27 / 15 / 58%), Claude's settings rows and transcript (bundle). Area's API tab had
+label columns of 84, 200 and 145 on one page and rows of 33.
+
+| Pick | Owner | Built |
+|---|---|---|
+| Row spacing (block inset +4) | Keep (a) | Nothing: rows stay 33 at type 13 |
+| Outer cells +4 at the frame | Yes | `--_cell-edge` on the first and last cells, md and lg; sm keeps one inset for dense tables in panels and chat replies (the Inspector chat's markdown tables are `size="sm"`) |
+| One label column per feed | Yes (b) | `layout: auto \| fixed`; the app's Documentation, API and Spec tables use fixed (Best practices' mark column stays auto) |
+| Header ground | Keep | Nothing |
 
 ## Review note, 2026-10-22 (round 69)
 

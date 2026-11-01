@@ -6,7 +6,7 @@
 .studio-settings {
   display: grid;
   gap: var(--area-space-32);
-  max-inline-size: calc(var(--area-space-96) * 8);
+  max-inline-size: var(--_reading-column);
   margin-inline: auto;
   padding-block: var(--area-space-24) var(--area-space-48);
 }
@@ -25,12 +25,21 @@
   background: var(--area-bg-subtle);
 }
 .studio-settings__row {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--area-space-16);
   padding: var(--_tile-inset) var(--area-space-16);
 }
-.studio-settings__row + .studio-settings__row { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+/* Rules stop at the text edge, so the group reads as one plate (owner, 2026-10-31, feed rhythm pick 4: Cursor insets its
+   rules 12; Area's justified Description list insets them by the row's side padding). */
+.studio-settings__row + .studio-settings__row::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: var(--area-space-16);
+  border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+}
 .studio-settings__text { display: grid; flex: 1; min-inline-size: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
 .studio-settings__label { color: var(--area-fg-default); }
 .studio-settings__description { color: var(--area-fg-muted); }
@@ -79,7 +88,7 @@
   display: grid;
   /* The rows reach their reading width first; the preview takes the rest, at least a screen you can read (368), up to six
      columns. Below 560 + 32 + 368 the preview goes above the rows. */
-  grid-template-columns: minmax(calc(var(--area-space-96) * 6 - var(--area-space-16)), calc(var(--area-space-96) * 8)) minmax(calc(var(--area-space-96) * 4 - var(--area-space-16)), 1fr);
+  grid-template-columns: minmax(calc(var(--area-space-96) * 6 - var(--area-space-16)), var(--_reading-column)) minmax(calc(var(--area-space-96) * 4 - var(--area-space-16)), 1fr);
   max-inline-size: calc(var(--area-space-96) * 14 + var(--area-space-32));
   margin-inline: auto;
   align-items: start;
@@ -98,7 +107,7 @@
 /* The screen in a window's proportion, as a theme's card draws it (theme.css). */
 .ss-frame.studio-settings__screen { block-size: auto; aspect-ratio: 1920 / 1080; border-radius: var(--_tile-radius); }
 @container (inline-size < 960px) {
-  .studio-settings-split { grid-template-columns: minmax(0, calc(var(--area-space-96) * 8)); }
+  .studio-settings-split { grid-template-columns: minmax(0, var(--_reading-column)); }
   .studio-settings__preview { position: static; padding-block-end: 0; }
   .studio-settings-split > .studio-settings__preview { order: -1; }
 }

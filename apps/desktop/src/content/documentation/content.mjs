@@ -117,13 +117,15 @@ export default {
       ["Do", "Make a row clickable with one TableLink and set interactive, so the hover plate and the click agree."],
       ["Do", "Name a table with aria-label or aria-labelledby; a wide one scrolls in a region that takes that name."],
       ["Do", "Use striped for long, wide rows, and columnDividers for dense comparisons."],
+      ["Do", "Set layout=\"fixed\" on the tables of one page or feed, so each starts its values on the same line."],
+      ["Do", "Use size sm for a dense table in a panel or a chat reply: its cells keep one inset at the frame."],
       ["Don't", "Set interactive on a table whose rows do nothing: the hover plate promises a click."],
       ["Don't", "Wrap Table in another table wrapper: it draws its own, and the edge doubles."],
       ["Don't", "Rely on data-selected alone: put the selection state on the row's Checkbox."],
     ],
     // Spec: Anatomy; source: TableCell, TableLink.
     parts: {
-      root: "A native table inside a scrolling wrapper that draws the frame and corner; size sets the cells' block inset, flush drops the frame.",
+      root: "A native table inside a scrolling wrapper that draws the frame and corner; size sets the cells' block inset (md and lg sit a step further in at the frame), layout fixed gives the first column the label column, flush drops the frame.",
       cell: "A td or th; numeric aligns it to the end in tabular figures, fit keeps it as narrow as its content without wrapping.",
       link: "A link stretched over its row, so the whole row is one target; other controls in the row sit above it and the row shows its focus.",
     },

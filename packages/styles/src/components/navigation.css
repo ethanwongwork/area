@@ -247,6 +247,15 @@
   .area-table {
     /* Above and below a cell: 8, compact 6 (sm 4 / 2, lg 12 / 8; compact pass, round 6). */
     --_cell-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
+    /* spec: 12 at the sides, compact 8 (Notion table cells 12; VS Code's keybindings table 10). */
+    --_cell-side: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
+    /* The first and last cells sit a step further from the frame than columns sit from each other, so the frame reads as
+       one object and the columns as its parts (owner, 2026-10-31, feed rhythm pick 2: Primer's props table 16 at the frame
+       and 12 between columns; Cursor's settings 14 at the side). sm keeps one inset (below), as a dense table in a panel
+       wants. */
+    --_cell-edge: calc(var(--_cell-side) + var(--area-space-4)); /* spec */
+    /* layout="fixed": the label column (owner, 2026-10-31, feed rhythm pick 3: Primer fixes its Name column at 27%). */
+    --_label-column: 27%; /* spec */
     inline-size: 100%;
     border-collapse: collapse;
     /*
@@ -260,8 +269,7 @@
   .area-table th,
   .area-table td,
   .area-table__cell {
-    /* spec: 12 at the sides, compact 8 (Notion table cells 12; VS Code's keybindings table 10). */
-    padding: var(--_cell-inset) calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
+    padding: var(--_cell-inset) var(--_cell-side);
     text-align: start;
     vertical-align: top;
     /* Row rules are standalone dividers, `stroke-width` like the frame, so they stay under Borderless too. */
@@ -272,6 +280,17 @@
   .area-table tbody tr:last-child td {
     border-block-end: 0;
   }
+
+  .area-table :is(th, td):first-child { padding-inline-start: var(--_cell-edge); }
+  .area-table :is(th, td):last-child { padding-inline-end: var(--_cell-edge); }
+
+  /* layout="fixed": the first column takes the label column whatever its content, so every table in a feed starts its
+     values on one line (owner, 2026-10-31: the API tab's label columns were 84, 200 and 145 wide on one page). The
+     columns after it still size to their content. It outranks a fit cell, and the last column always takes the rest, so a
+     fit cell there can't hand its room back to the label column (a Token / Uses table drew its tokens 890 wide). */
+  .area-table--auto { table-layout: auto; }
+  .area-table.area-table--fixed > * > tr > :first-child { inline-size: var(--_label-column); white-space: normal; }
+  .area-table.area-table--fixed > * > tr > .area-table__cell--fit:last-child:not(:first-child) { inline-size: auto; }
 
   .area-table th {
     background-color: var(--area-bg-subtle);
@@ -328,7 +347,7 @@
     inline-size: 1%;
     white-space: nowrap;
   }
-  .area-table--sm { --_cell-inset: calc(var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)); }
+  .area-table--sm { --_cell-inset: calc(var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)); --_cell-edge: var(--_cell-side); }
   .area-table--md { --_cell-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); }
   .area-table--lg { --_cell-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); }
   .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
@@ -349,7 +368,7 @@
     overflow: visible;
   }
   .area-table--flush {
-    --_flush-side: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* the cells' side inset */
+    --_flush-side: var(--_cell-side); /* the cells' side inset */
   }
   /* A flush table meets what is above and below as a card or a paragraph does (owner, 2026-10-22: "make sure the gaps
      vertically are correct and consistent"). Read, not chosen: its first row drops the cell inset above it and its last

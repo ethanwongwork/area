@@ -19,7 +19,8 @@ Values are Default / Compact (the app runs Compact). Tokens are in `packages/tok
 | Section | sections of a page or panel | `Stack gap="section"` 24 / 16 | inside a Surface or panel |
 | Surface inset | a container's edge to its content | `inset-surface-sm` 12 / 8, `inset-surface-md` 16 / 12; Surface's text inset sm / md / lg 14 / 16 / 20 (Compact 10 / 12 / 14) | `Surface`, `Card` (set by size, never by prop) |
 | Region inset | a panel's edge to its rows | the app's 14 | `Panel` |
-| Feed | a documentation or gallery feed | cards 12 (at least 260 wide, at most four across), heading 12, sections 40, margin 16, measure 1236 | the app's Canvas (`app.css` `--_canvas-*`) |
+| Feed | a documentation or gallery feed | cards 8 (at least 260 wide, at most four across), heading 12, sections 40, margin 16; fills the Canvas | the app's Canvas (`app.css` `--_canvas-*`) |
+| Reading column | settings, a document feed, a chat in the Canvas | 768, centred; sections 32 (settings), heading 12, rows 42 / 60 | `--_reading-column` (app.css); Claude Code's Narrow transcript 768 |
 
 Prose (text past two lines: a chat turn, documentation) runs on its own ladder, set out in `docs/DESIGN_SYSTEM.md` ›
 Size and shape › Prose lines and Text that flows (owner, 2026-10-30; Message and the app's chat use it):
@@ -33,6 +34,11 @@ Size and shape › Prose lines and Text that flows (owner, 2026-10-30; Message a
 | Reply | the person's message and its reply | 12 | 12 | `space-12` |
 | Above a heading | the text before a heading | 24 | 20 | the block gap + `space-8` |
 | Exchange | one exchange of a conversation and the next | 24 | 24 | `space-24` |
+
+The chat is the feed's ladder with three changes (owner, 2026-10-31, docs/research/feed-rhythm-2026-10-31): an exchange
+is the section step (24, Claude Code 20 / 24), a message over its reply is the heading step (12; Claude 6 / 8), and blocks
+are prose-gap apart. It has no page title and a composer at its foot, the column's width. Rows inside a reply (a plan, a
+fact list) are the same framed rows as Settings, and a table in a reply is `Table size="sm"` (one inset at the frame).
 
 The spacing ramp is fixed: 0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96 (`--area-space-*`). Region
 margins and section gaps a screen sets itself come from this ramp.
