@@ -15,7 +15,7 @@
  */
 import { Fragment, type ReactNode } from "react";
 import { Badge, Code, CodeBlock, Kbd, Link, ScrollArea, SectionHeading, Table, TableCell, TableLink } from "@area/react";
-import { FEED_TABLE } from "./tile.tsx";
+import { FEED_CODE, FEED_TABLE, FeedCount } from "./tile.tsx";
 import SOURCES from "virtual:component-sources";
 import { hrefOf } from "./places.ts";
 // @ts-expect-error — the documentation content is authored in JavaScript.
@@ -236,7 +236,7 @@ export function Markdown({ text, idPrefix }: { text: string; idPrefix: string })
             return <SectionHeading key={index} className="studio-doc__heading" level={Math.min(Math.max(block.level, 2), 6) as 2}
               titleId={`${idPrefix}-${anchor(block.text)}`} title={<Inline text={block.text} />} />;
           case "code":
-            return <CodeBlock key={index} code={block.text} language={block.language || undefined} lineNumbers={false} {...appScale()} />;
+            return <CodeBlock key={index} code={block.text} language={block.language || undefined} lineNumbers={false} {...FEED_CODE} {...appScale()} />;
           case "table": {
             const [head = [], ...body] = block.rows;
             return <DataTable key={index} label="Spec table" head={head.map(cell => <Inline text={cell} />)}
@@ -309,7 +309,7 @@ export function Section({ id, title, count, lede, children }: { id: string; titl
   return (
     <section className="studio-section" id={id} aria-labelledby={`${id}-title`} {...appScale()}>
       <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede}
-        title={count === undefined ? title : <>{title} <span className="studio-muted studio-tabular">{count}</span></>} />
+        title={count === undefined ? title : <>{title} <FeedCount count={count} /></>} />
       {children}
     </section>
   );
@@ -494,7 +494,7 @@ export function CodeTab({ family }: { family: FamilyInfo }) {
       {files.map(file => (
         <Section key={file.id} id={file.id} title={file.title} lede={`${file.what}.`}>
           <CodeBlock title={file.path} language={file.language} {...(file.html ? { html: highlight(file.code) } : { code: file.code })}
-            collapsible defaultCollapsed {...appScale()} />
+            collapsible defaultCollapsed {...FEED_CODE} {...appScale()} />
         </Section>
       ))}
     </div>

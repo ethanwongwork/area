@@ -5,11 +5,23 @@
  */
 import { useState, type ReactNode } from "react";
 import { Button, Menu, MenuItem, Segmented } from "@area/react";
-import { ChevronDownIcon, GridIcon, LayoutDashboardIcon, ListIcon } from "@area/icons";
+import { AspectRatioIcon, ChevronDownIcon, GridIcon, LayoutDashboardIcon, ListIcon } from "@area/icons";
 import { readStored, writeStored } from "./storage.ts";
 import { appScale } from "./app-scale.ts";
 
 export type ViewMode = "grid" | "list";
+/**
+ * How a gallery of images is laid out (owner, 2026-11-01, after Are.na): grid, every card one footprint and each image
+ * whole inside it at its own ratio (Asset card `fit="contain"`); waterfall, columns of cards at their images' own heights;
+ * fixed, every image cropped to one ratio (`fit="cover"`); list, a table.
+ */
+export type GalleryMode = "grid" | "waterfall" | "fixed" | "list";
+export const GALLERY_MODES: readonly GalleryMode[] = ["grid", "waterfall", "fixed", "list"];
+/** The fixed ratio's choices: the card's three shapes as Asset card's aspects, 4:3 first (owner, 2026-11-01). */
+export type GalleryRatio = "screen" | "landscape" | "square";
+export const GALLERY_RATIOS: ReadonlyArray<{ value: GalleryRatio; label: string }> = [
+  { value: "landscape", label: "4:3" }, { value: "square", label: "1:1" }, { value: "screen", label: "16:9" },
+];
 
 /** A tab's saved choice: its view mode or a filter's value. */
 export function useViewOption<T extends string>(key: string, initial: T, allowed: readonly T[]) {
@@ -22,15 +34,16 @@ export function useViewOption<T extends string>(key: string, initial: T, allowed
 }
 
 /**
- * The grid / list switch. With `waterfall` (Brand's assets, owner 2026-10-19) a third segment between them lays the
- * cards out as a waterfall, each hugging its asset.
+ * The grid / list switch. With `waterfall` (Brand's assets, owner 2026-10-19) a segment after Grid lays the cards out as a
+ * waterfall, each hugging its asset; with `fixed` (a gallery of images, 2026-11-01) one more crops them to one ratio.
  */
-export function ViewSwitch<M extends string = ViewMode>({ value, onChange, waterfall }: { value: M; onChange: (mode: M) => void; waterfall?: boolean }) {
+export function ViewSwitch<M extends string = ViewMode>({ value, onChange, waterfall, fixed }: { value: M; onChange: (mode: M) => void; waterfall?: boolean; fixed?: boolean }) {
   return (
     <Segmented size="sm" iconOnly aria-label="View" value={value} onValueChange={next => onChange(next as M)}
       items={[
         { value: "grid", label: "Grid", icon: <GridIcon /> },
         ...(waterfall ? [{ value: "waterfall", label: "Waterfall", icon: <LayoutDashboardIcon /> }] : []),
+        ...(fixed ? [{ value: "fixed", label: "Fixed ratio", icon: <AspectRatioIcon /> }] : []),
         { value: "list", label: "List", icon: <ListIcon /> },
       ]} />
   );

@@ -3,13 +3,18 @@
  * product would use it (owner, 2026-10-17). A screen that tries something out (a trial package, a bench of one setting) is a
  * test, in Labs › Tests, not a pattern (2026-10-31): a project adds patterns only. The Sidebar lists the examples; the Canvas shows the chosen one at full size, inside the Canvas's
  * settings, so every Inspector setting (colour, Layers, type, density, radius, surface, elevation, motion) reaches it;
- * All shows each example as a tile. The Inspector holds every Canvas setting, then the example's facts.
+ * All shows each example as a tile, which opens it in the design viewer (src/design-viewer.tsx, 2026-10-31) at its own
+ * width (`width`, a desktop's 1440 unless it says), fitted, in Light, Dark or both, ← and → stepping through the list. The Inspector holds every Canvas setting, then the example's facts.
  */
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection } from "@area/react";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { useDesignViewer } from "../design-viewer.tsx";
+import { openDesign, useCardArrival } from "../morph.ts";
+import { Specimen } from "../specimen-scope.tsx";
+import { ViewControls, ViewLead } from "../view-controls.tsx";
 import { hrefOf } from "../places.ts";
-import { Tile, TileGrid, WhenVisible } from "../tile.tsx";
+import { Tile, TileGrid, WhenVisible, type OpenHow } from "../tile.tsx";
 import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { matches } from "../search.ts";
@@ -62,6 +67,8 @@ export const EXAMPLES = [
     description: "A phone's Today at 390, after a journal app: times down a dashed line, a note, tasks with chips, a card, a composer at the foot (2026-10-21).",
     families: ["Button", "Segmented", "Checkbox", "Chip", "Card", "Avatar", "Badge", "Composer"],
     gaps: ["The dashed time line and the time pills are app CSS: Timeline has no dashed line or pill markers."],
+    // A phone draws its own body and corner.
+    width: 390, bare: true,
     Screen: MobileScreen,
   },
   {
@@ -79,6 +86,7 @@ export const EXAMPLES = [
     description: "The showcase every theme is seen on (2026-10-30): a generic desktop app at 1920 × 1080, with its menu open and its toast showing.",
     families: ["Panel", "Nav", "Card", "Alert", "Table", "Badge", "Avatar", "Composer", "Field", "Select", "Segmented", "Slider", "Chip", "Switch", "Radio", "Menu", "Toast", "Meter", "Kbd", "Count", "Tabs"],
     gaps: ["The window's lights are app CSS: Area has no window-controls part."],
+    width: 1920,
     Screen: () => <WorkspaceScreen hold={new Set(SHOWCASE)} />,
   },
   {
@@ -94,6 +102,15 @@ export const EXAMPLES = [
 
 type Example = typeof EXAMPLES[number];
 const isTest = (entry: Example) => "test" in entry && entry.test;
+/** A screen's width in the viewer: its own, else a desktop's. */
+const DESKTOP = 1440; /* pick: a laptop's common width */
+const widthOf = (entry: Example) => "width" in entry ? entry.width : DESKTOP;
+const isBare = (entry: Example) => "bare" in entry && entry.bare;
+/** A screen as the design viewer draws it (src/design-viewer.tsx): Patterns, Tests and a project's screen layers. */
+export const screenDesign = (entry: Example) => ({
+  width: widthOf(entry), frame: isBare(entry) ? "bare" as const : "window" as const,
+  render: (mode: "light" | "dark") => <Specimen className={isBare(entry) ? undefined : "studio-viewer__design"} data-area-theme={mode}><entry.Screen /></Specimen>,
+});
 /** The system's screens: what Patterns lists and a project adds. */
 export const PATTERNS = EXAMPLES.filter(entry => !isTest(entry));
 /** The screens that try something out: Labs › Tests. */
@@ -101,11 +118,27 @@ export const TESTS = EXAMPLES.filter(isTest);
 
 /** Patterns, or with `lab` the Tests lab: the same page over its own screens. */
 export function ExamplesPage({ lab = false }: { lab?: boolean }) {
-  const { query, item, select } = useStudio();
+  const { query, item, select, theme, navigate } = useStudio();
   const list = lab ? TESTS : PATTERNS;
   const page = lab ? "tests" as const : "patterns" as const;
   const shown = list.filter(entry => matches(query, entry.label, entry.description, ...entry.families));
   const example = list.find(entry => entry.id === item);
+  // The viewer steps through the list it was opened from (the search's results, else every screen).
+  const siblings = example && shown.includes(example) ? shown : list;
+  const at = example ? siblings.indexOf(example) : -1;
+  // ⌘-click opens the screen in a tab of its own (owner's pick, 2026-10-31); otherwise it opens here, from its card.
+  const open = (id: string, how?: OpenHow) => {
+    if (how?.newTab) { navigate({ page, item: id }, { newTab: true }); return; }
+    openDesign(`${page}:${id}`);
+    select(id);
+  };
+  const viewed = example ?? list[0]!;
+  const viewer = useDesignViewer({
+    active: Boolean(example), design: `${page}:${viewed.id}`, label: viewed.label, appMode: theme, ...screenDesign(viewed),
+    back: { label: lab ? "Back to Tests" : "Back to Patterns", onBack: () => select("") },
+    step: { index: at, count: siblings.length, noun: "screen", onStep: by => select(siblings[(at + by + siblings.length) % siblings.length]!.id, { replace: true }) },
+  });
+  useCardArrival();
   return (
     <Workspace
       sidebar={<SidebarList>{
@@ -123,14 +156,14 @@ export function ExamplesPage({ lab = false }: { lab?: boolean }) {
         </Nav>
       }</SidebarList>}
       canvasTitle={example ? example.label : lab ? "All tests" : "All patterns"}
-      canvas={example ? (
-        <div className="ex-canvas"><example.Screen /></div>
-      ) : !shown.length ? (
+      canvasLead={example ? <ViewLead>{viewer.lead}</ViewLead> : undefined}
+      canvasActions={example ? <ViewControls>{viewer.controls}</ViewControls> : undefined}
+      canvas={example ? viewer.stage : !shown.length ? (
         <EmptyState title={lab ? "No tests" : "No patterns"} description={`Nothing matches “${query}”.`} />
       ) : (
         <TileGrid span="wide" cards>
           {shown.map(entry => (
-            <Tile key={entry.id} span="wide" stage="center" inert card label={entry.label} openOnClick onOpen={() => select(entry.id)}>
+            <Tile key={entry.id} span="wide" stage="center" shape="wide" inert card label={entry.label} openOnClick onOpen={how => open(entry.id, how)} data-design={`${page}:${entry.id}`}>
               {/* A whole screen per tile: each draws as it nears the view (tile.tsx WhenVisible). */}
               <WhenVisible estimate={320}><WidthZoom><div className="ex-thumb" aria-hidden="true"><entry.Screen /></div></WidthZoom></WhenVisible>
             </Tile>

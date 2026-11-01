@@ -70,7 +70,13 @@ function ViewSwitch({ view, onChange }: { view: View; onChange: (view: View) => 
     items={[{ value: "grid", label: "Grid", icon: <GridIcon /> }, { value: "list", label: "List", icon: <ListIcon /> }]} />;
 }
 
-export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-hue-dark", "tint-light", "tint-dark", "ink-tint", "accent", "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "feedback", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
+/** Every setting the Inspector edits, as Themes and Components show them. */
+export const INSPECTOR_AXES: readonly Axis[] = ["neutral", "tint-hue", "tint-hue-dark", "tint-light", "tint-dark", "ink-tint", "accent", "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "feedback", "pills"];
+/** The settings under some headings (a subject page's own: Colors edits Page, Accent and Emphasis; owner's pick, 2026-10-31). */
+export const axesUnder = (...headings: string[]): Axis[] =>
+  GROUPS.filter(group => headings.includes(group.heading)).flatMap(group => group.settings as readonly Axis[]).filter(axis => INSPECTOR_AXES.includes(axis));
+
+export function CanvasSettings({ material, axes = INSPECTOR_AXES, children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
   // Material shows with every setting: a tab that narrows its settings shows no surfaces a material paints.
   const showMaterial = material ?? axes.length === GALLERY_CONTROLS.length - 1;
   // Ground, Layers, Tint strength and Card tone exist once per theme; the Inspector sets the mode the app is in (owner, 2026-10-22: "separate the

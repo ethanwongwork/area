@@ -9,7 +9,7 @@
  * Location: #system/<system>/tokens, #system/<system>/tokens/<group>.
  */
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
-import { Code, ColorSwatch, PanelSection, Table, TableCell, TableHeaderCell } from "@area/react";
+import { Code, ColorSwatch, Count, PanelSection, Table, TableCell, TableHeaderCell } from "@area/react";
 import { CopyIcon } from "@area/icons";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, FEED_TABLE } from "../tile.tsx";
@@ -140,7 +140,7 @@ export function TokensPage() {
       canvasTitle={group ? TOKEN_GROUPS.find(entry => entry.id === group)!.label : "Tokens"}
       sidebar={<SidebarList>
         <SidebarTree label="Token groups" count={TOKEN_LIST.length} current={group} onSelect={id => select(id)}
-          groups={[{ id: "groups", label: "Groups", items: TOKEN_GROUPS.map(entry => ({ id: entry.id, label: entry.label, trailing: <span className="studio-muted studio-tabular">{counts(entry.id)}</span> })) }]} />
+          groups={[{ id: "groups", label: "Groups", items: TOKEN_GROUPS.map(entry => ({ id: entry.id, label: entry.label, trailing: <Count variant="soft" size="sm" count={counts(entry.id)} max={9999} /> })) }]} />
       </SidebarList>}
       canvasActions={
         <ViewControls>

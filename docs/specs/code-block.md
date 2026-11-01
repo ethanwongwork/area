@@ -396,3 +396,12 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 - **Not as proposed:** the corner stays concentric with the copy (11.5 in the Inspector at the defaults, the copy's 8
   plus its inset), the round 11 rule, rather than the page's proposed 8.
 - **Verdict:** in review.
+
+## Review note, 2026-11-01 (one family of frames)
+
+- **What changed:** public hooks, as Table's: `--area-code-block-inset` (the code's inset from the frame above, below and
+  at its start; the copy then sits as far from the end as from the top), `--area-code-block-corner` (the corner) and
+  `--area-code-block-fill` (an outlined block's ground). Unset, nothing moves. The desktop app's feed sets its frame inset,
+  tile corner and tile fill (`FEED_CODE`), with the cards' Stroke 2. Listed in `OVERRIDABLE`.
+- **Why:** in Labs › Feed the code sat 12 in under an 11 corner on white while every other frame held its content 16 in
+  under 16 on the tile fill (owner, 2026-11-01: "all containers feel consistent").

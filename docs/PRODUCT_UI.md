@@ -145,6 +145,17 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     Code identifiers keep their names (`workingSystem`, `releases`); only what a person reads changes. Also avoid Figma's
     "Style" for a bundle of values (say composite token), "Mode" for anything but light and dark, and "Collection" for
     tokens (a collection is References' group of saved items; tokens come in groups).
+25. **Anything designed opens the same way, alone on a bounded canvas** (owner, 2026-10-31: "anything thats designed
+    exists in its own standalone visual playground like figma, but its only ever limited to 1 design, not an infinite
+    canvas"; the IA and playground review's step 2). A gallery's card opens its design in the design viewer
+    (src/design-viewer.tsx) in the tab that holds it: a theme's screen (Themes › Screen), a pattern or test, an icon, an
+    References image, a project page's layer. The card grows into the canvas and Back, Escape or ⌘↑ shrinks the design into
+    it, still chosen (src/morph.ts); ⌘[ is the tab's Back. The design sits at its true size on a ground of its own (Grey,
+    White, Black, Checkerboard), fitted or zoomed from 10% to 400% (6400% for an icon, with a pixel grid from 800%) by the
+    stepper, a pinch, + and −, ⇧0 (100%) and ⇧1 (fit); Space or the middle button drags it, and the canvas ends at the
+    design plus 48. A themed design shows Light, Dark or both. The header's start holds Back and what is shown; its end
+    the place among the gallery's designs ("3 of 12"), the steps (← and →) and the zoom. Read only until the playground's
+    tools (the review's steps 4 to 7). Components keeps its Stage, which opens and returns the same way.
 
 ## The app's layout
 
@@ -200,7 +211,7 @@ Cursor's nav with Figma's tabs).
   edited in the Inspector's Theme view, published into the system as an update to the theme it came from or as a new
   theme, solo users straight away) and versions (named copies of the pages and explorations, restored from the
   Inspector). Nothing else on a project's pages edits the system: they have no Theme view.
-- **Home** (`src/pages/home.tsx`): one centred column at the reading measure (720; owner, 2026-10-31: "a single column
+- **Home** (`src/pages/home.tsx`): one centred column at the reading measure (768 since 2026-11-01, 720 before; owner, 2026-10-31: "a single column
   feed", the name Home kept). The Sidebar lists the projects and systems, so Home is what happened: Continue (the last 4
   places opened), then Latest, a Timeline newest first: the open system's changes waiting to publish (current, with
   Review), each system's publishes (its first is when it began; a publish's note, then its theme drawn as Setup's
@@ -374,6 +385,65 @@ Cursor's nav with Figma's tabs).
   cap and start 16 from the frame (the feed's frame inset), 13/18 regular, on component examples, typeface cards, boards,
   images, screens, history and the Stage (Asset card `caption="above"`; tile.tsx GALLERY_LOOK). They were at the foot
   (typefaces, boards) or on hover (components, images).
+- **One family of frames** (owner, 2026-11-01: "i like the idea that all containers feel consistent, and part of the same
+  family, visually"; Labs › Feed showed three): every frame in a feed (a tile, an Asset card, a collection, a table, a code
+  block, a group of Settings rows) holds its content at the frame inset (16) under the tile corner (16), on the tile fill
+  inside the cards' edge. Tables and code blocks were the page's white in the darker block edge, Settings' rows white in a
+  lighter one; now `FEED_TABLE` and `FEED_CODE` (tile.tsx) give them the tile fill and the cards' Stroke 2 through Table's
+  and Code block's public hooks, and Settings' rows take the plain tile's fill and edge (styles/settings.css).
+- **The card, as picked** (owner, 2026-11-01, the card explorer, artifact KCvLgSPg…: "apply 8 and update the corner
+  radius to 16, also dont add a stroke to the inset images"; "even closer to 4"): every card is its picture alone in a
+  frame (the tile fill, the card edge, a 16 corner), the picture 8 in on every side (half the frame inset), and the name,
+  its badges and controls sit 4 under the card on the page at the feed's 13/18, the name 4 in on the text edge, controls
+  ending on the card's edge (Asset card `caption="outside"`, `--area-asset-card-inset`; plain tiles' head after the box).
+  A colour keeps its name inside, in its ink. Cards are 16 apart (12 / 16 / 20 by density). Two shapes: square, and 16:9
+  for anything designed, where a window fits whole; UI never runs to the card's edge. Images inside cards draw no edge.
+  Components' No container is the same card clear at rest, appearing on hover. A project's status is one badge in two
+  states, colour-coded with the icons Home's timeline draws for the same events (owner: "color code the project status
+  badge indicators, match them with the icons that we used from before"): published or live, the tag, success; a draft or
+  not yet published, the dashed circle, caution (tile.tsx `status`, StatusBadge). Other values stay neutral badges. The
+  paragraph below is the day's history.
+- **One card, three shapes** (owner, 2026-11-01: "they should all be the same just variants of each other … a square AR
+  one for components specifically"; "more like 4:3"; "some projects might want a full thumbnail 16:9 cover"): every card
+  is one card with one header, in **square** (components, colours; Asset card `aspect="square"`, Tile's default),
+  **landscape 4:3** (screens, designs, Patterns, a project's pages, anything else; Tile `shape="landscape"`, a screen's
+  default) or **cover**, a 16:9 picture running to the card's sides and foot under the same header (Home's timeline, a
+  project's full thumbnail; Tile `shape="cover"`). A screen covers its picture from the top-left (setup-screen.tsx
+  ScreenCover), as a design tool's frame thumbnail. A card's top-right holds badges and controls only: a value is a Badge.
+  It was three builds (a square specimen tile, a 5:4 Asset card, a 16:9 screen tile) with their own headers. Cards show
+  one picture (owner: "for normal project cards it should only be 1 visual"); a collection shows several as one card in two
+  widths: the square card with its first four square, 2 × 2 (References; tile.tsx COLLECTION_CARD), and across a column a
+  row of its images at their own ratios that scrolls sideways (Home; COLLECTION_STRIP, 192 tall). Its name and count
+  top-left. Image galleries' Fixed ratio offers the same three: 4:3 (default), 1:1, 16:9.
+- **Every card is drawn one way** (owner, 2026-11-01: "update the gaps, padding, text placement, etc to be more in line
+  with the rest of the cards. can the card captions be smaller?"; then "a consistent header styling across all
+  cards/containers"): the name at the ramp's xs, regular (11/14 at type 13; it was 13/18), its cap 16 from the top and
+  side, in a header row the inset plus the cap tall, half the inset from the top; text in the row (a name, a value at the
+  end) sits on the 16 text edge, and a control or badge centres on the name's line, its box as far from the end as from
+  the top (a 26 button 7 and 7; a status badge no longer pushes the name down, as it did); the picture 15 under the cap
+  (plain tiles had 12, Asset cards 15) and 16 from the sides and foot. A feed code block's header is the same row
+  (Code block's inset hook): its language where a card has its name, Copy where a card has its controls; a picture held that far in keeps the small corner (8 at the default; images had 2, a
+  collection's cells 0, screens 8), through Asset card's frame corner, which no longer runs out under a deep inset.
+- **One count** (owner, 2026-11-01: "i like the updated counts in badges"; "id prefer if counts were not pills, but its
+  okay if other badges are pills"): every number that follows a label (a section title, a card name, a Sidebar row) is
+  Count soft sm, 14 tall at type 13, 11/14 regular on the mark plate, the corner setting's corner for its height (4), never
+  a pill by default. It overhangs a title's line equally (tile.tsx FeedCount, `.studio-count`), so the title keeps its
+  place. Section and card counts were muted numbers, the Sidebar's plain md; Count soft was 500 and a pill. A system whose
+  themes still list `count` among their pills keeps pill counts until that theme changes (Themes › Shape › Pills).
+- **Galleries of images have three views** (owner, 2026-11-01, after Are.na): **Grid** (the default), every card one
+  square footprint and each image whole inside it at its own ratio (Asset card `fit="contain"`), so nothing is cropped and
+  every card weighs the same; **Waterfall**, columns of cards at their images' own heights; **Fixed ratio**, every image
+  cropped to one ratio (`fit="cover"`), 16:9 by default or 5:4 or 1:1 from the Ratio menu beside the switch; and List
+  (view-controls.tsx GalleryMode, tile.tsx `imageCard`). The Grid was each image's own height with row tops aligned until
+  then. Image cards hold their picture at the frame inset, as screens and collections do (`--area-asset-card-inset`,
+  `.studio-images`).
+- **Three feed layouts** (owner, 2026-11-01: "a tight margin variation (for galleries) and single column feed"): Canvas,
+  the feed above (margin 32); **Gallery**, the margin down to the frame inset (12 / 16 / 20), still past the gap, for walls
+  of images; **Column**, one item a row in the reading column (768), as Home. Labs › Feed (`#labs/feed`, ⌘K "Feed") shows
+  every element a feed holds, one labelled section each, in all three, with the gallery views and the live spacings in
+  the Inspector (`src/pages/feed-lab.tsx`, styles/feed.css). References takes Gallery (owner, 2026-11-01: "Yes, use
+  Gallery"; its design viewer keeps its own ground); the margin is set on the whole Canvas, so the bar's path starts on
+  the titles' line. Every other page keeps Canvas; Home and Settings read in the column.
 - **Tables balance their insets** (owner, 2026-10-31: "why do the tables have so much more horizontal spacing inset added
   than vertical"): a md table's text sits as far from the rules as from the frame's side (14 on the ink), on the prose
   line (13/20), rows 39 at type 13 / 32 (Cursor's settings rows 42, Primer's 44).

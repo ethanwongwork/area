@@ -13,16 +13,23 @@
  * sheet, and the Inspector already shows the name and actions for the cell the keys are on. The card's rows are built
  * only while it is open, so a sheet of thousands of cells carries one empty surface each.
  */
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { HoverCard, ListBox, ListBoxItem } from "@area/react";
 import { Specimen } from "./specimen-scope.tsx";
 
-export function GlyphSheet({ grid, label, value, onChoose, size, children }: {
-  grid: boolean; label: string; value: string | null; onChoose: (value: string) => void; size: number; children: ReactNode;
+export function GlyphSheet({ grid, label, value, onChoose, onOpen, size, children }: {
+  grid: boolean; label: string; value: string | null; onChoose: (value: string) => void;
+  /** Enter, or a double-click on a cell, opens the cell chosen (Finder's and Figma's open); with ⌘, in a tab of its own. */
+  onOpen?: (value: string, newTab: boolean) => void;
+  size: number; children: ReactNode;
 }) {
   const style = { "--_size": `${size}px` } as CSSProperties;
+  const opening = onOpen ? {
+    onKeyDown: (event: KeyboardEvent<HTMLDivElement>) => { if (event.key === "Enter" && value) { event.preventDefault(); onOpen(value, event.metaKey || event.ctrlKey); } },
+    onDoubleClick: (event: MouseEvent<HTMLDivElement>) => { const cell = (event.target as Element).closest<HTMLElement>("[data-key]"); if (cell?.dataset.key) onOpen(cell.dataset.key, event.metaKey || event.ctrlKey); },
+  } : {};
   return grid
-    ? <ListBox layout="grid" aria-label={label} value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-glyphs studio-sections" style={style}>{children}</ListBox>
+    ? <ListBox layout="grid" aria-label={label} value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-glyphs studio-sections" style={style} {...opening}>{children}</ListBox>
     : <div className="studio-glyphs studio-sections" style={style}>{children}</div>;
 }
 
@@ -42,7 +49,7 @@ export interface GlyphCard {
   actions?: ReactNode;
 }
 
-export function GlyphCell({ value, label, children, card, data }: {
+export function GlyphCell({ value, label, children, card, data, design }: {
   /** The ListBox option's value. */
   value: string;
   /** The accessible name, also what typing finds. */
@@ -52,6 +59,8 @@ export function GlyphCell({ value, label, children, card, data }: {
   card: () => GlyphCard;
   /** data-* hooks for the page (scrolling to the chosen cell). */
   data?: Record<string, string>;
+  /** What the design viewer opens from this cell (src/morph.ts `data-design`), when the page opens its glyphs. */
+  design?: string;
 }) {
   const [open, setOpen] = useState(false);
   const content = open ? card() : null;
@@ -60,7 +69,7 @@ export function GlyphCell({ value, label, children, card, data }: {
       trigger={
         <ListBoxItem value={value} textValue={label} className="studio-glyphs__cell" data-key={value} data-name={label} aria-label={label} {...data}>
           {/* The glyph is the specimen: it takes the Inspector's settings, its cell stays the app's (specimen-scope.tsx). */}
-          <Specimen as="span" className="studio-glyphs__specimen">{children}</Specimen>
+          <Specimen as="span" className="studio-glyphs__specimen" data-design={design}>{children}</Specimen>
         </ListBoxItem>
       }>
       {content ? <>

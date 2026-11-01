@@ -24,6 +24,7 @@ import { ColorPage } from "./pages/color.tsx";
 import { ThemePage } from "./pages/theme.tsx";
 import { ExamplesPage } from "./pages/examples.tsx";
 import { MaterialsPage } from "./pages/materials.tsx";
+import { FeedLabPage } from "./pages/feed-lab.tsx";
 import { ImageryPage } from "./pages/imagery.tsx";
 import { TokensPage } from "./pages/tokens.tsx";
 import { FoundationPage } from "./pages/foundation.tsx";
@@ -855,6 +856,7 @@ export function Studio() {
           place.page === "versions" ? <VersionsPage /> :
           place.page === "materials" ? <MaterialsPage /> :
           place.page === "tests" ? <ExamplesPage lab /> :
+          place.page === "feed" ? <FeedLabPage /> :
           place.page === "references" ? <ImageryPage /> : <ColorPage />
         }</Fragment>
         </ShellContext.Provider>
@@ -1236,8 +1238,8 @@ export function SidebarTree({ label, count, groups, current, reveal, onSelect, a
   const revealKey = (reveal ?? []).join("|");
   useEffect(() => { if (reveal?.length) setOpened(open => [...new Set([...open, ...reveal])]); }, [revealKey]);
   const items: TreeViewNode[] = [
-    ...(all ? [{ id: "all", label: "All", trailing: <Count count={count} max={9999} /> }] : []),
-    ...groups.filter(group => group.items.length).map(group => ({ id: `group:${group.id}`, label: group.label, trailing: <Count count={group.items.length} max={9999} />, children: group.items })),
+    ...(all ? [{ id: "all", label: "All", trailing: <Count variant="soft" size="sm" count={count} max={9999} /> }] : []),
+    ...groups.filter(group => group.items.length).map(group => ({ id: `group:${group.id}`, label: group.label, trailing: <Count variant="soft" size="sm" count={group.items.length} max={9999} />, children: group.items })),
   ];
   const now = current ?? (all ? "all" : undefined);
   const toggle = (id: string) => setOpened(open => open.includes(id) ? open.filter(entry => entry !== id) : [...open, id]);
@@ -1261,7 +1263,7 @@ export function SidebarAll({ count, current }: { count: number; current: boolean
   const { place, select } = useStudio();
   return (
     <NavGroup>
-      <NavItem href={hrefOf({ ...place, item: undefined })} current={current} onClick={event => { event.preventDefault(); select(""); }} trailing={<Count count={count} max={9999} />}>All</NavItem>
+      <NavItem href={hrefOf({ ...place, item: undefined })} current={current} onClick={event => { event.preventDefault(); select(""); }} trailing={<Count variant="soft" size="sm" count={count} max={9999} />}>All</NavItem>
     </NavGroup>
   );
 }

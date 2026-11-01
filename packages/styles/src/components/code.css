@@ -38,8 +38,9 @@
     display: flex;
     align-items: center;
     gap: var(--area-ui-cluster);
-    min-block-size: var(--_code-bar);
-    padding-block: var(--_code-header-block);
+    min-block-size: var(--_code-head-size, var(--_code-bar));
+    block-size: var(--_code-head-size, auto);
+    padding-block: var(--_code-head-pad, var(--_code-header-block)) var(--_code-head-zero, var(--_code-header-block));
     padding-inline: var(--_code-start); /* 12, compact 8: the code column (compact pass) */
     font-size: var(--_code-ui-size);
     line-height: var(--_code-ui-leading);
@@ -48,7 +49,7 @@
      buttons sit 7 from the top and the end; the filename keeps the code column (owner 2026-10-01,
      equal insets; was 12 at the end). */
   .area-code-block__header > .area-code-block__actions:last-child {
-    margin-inline-end: calc(var(--_code-header-block) - var(--_code-start));
+    margin-inline-end: var(--_code-head-end, calc(var(--_code-header-block) - var(--_code-start)));
   }
 
   /* The filename is a literal, so it is set in the same face as the code it names. */
@@ -168,9 +169,12 @@
   .area-code-block--md {
     --_code-size: var(--area-text-sm-size);
     --_code-leading: var(--area-text-sm-leading);
-    --_code-block-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8 */
+    /* `--area-code-block-inset` and `--area-code-block-corner` (public hooks, 2026-11-01, as Table's edge and corner) hold
+       a block to the frames around it: the code's inset from the edge above, below and at the start, and the corner. The
+       app's feed sets its one frame inset and corner (owner: "all containers feel consistent"). */
+    --_code-block-inset: var(--area-code-block-inset, calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense))); /* 12, compact 8 */
     --_code-inline-inset: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12 */
-    --_code-start: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8 */
+    --_code-start: var(--area-code-block-inset, calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense))); /* 12, compact 8 */
     --_code-gutter: calc(var(--area-space-24) + var(--area-space-8));
     --_code-diff-gutter: var(--area-space-48);
     --_code-number-start: var(--area-space-6);
@@ -180,21 +184,22 @@
     --_code-header-block: var(--area-space-4);
     --_code-bar: var(--area-control-md);
     /* The floating copy: centred on the first line, as far from the end. */
-    --_code-copy-top: calc(var(--area-space-12) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2);
-    --_code-copy-end: var(--area-space-8);
+    --_code-copy-top: calc(var(--area-code-block-inset, var(--area-space-12)) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2);
+    /* 8 from the end; with the inset hook, as far from the end as from the top. */
+    --_code-copy-end: calc(var(--area-code-block-inset, calc(var(--area-space-8) - (var(--area-text-sm-leading) - var(--area-control-sm)) / 2)) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2);
     --_code-copy-clear: var(--area-space-48);
     /* spec (owner, 2026-10-22: "the corner inset here is incorrect"): concentric with the header's copy, as sm is
        (round 11): the copy's corner plus its inset and the border, 6 + 4 + 1 = 11, and square at Sharp
        (radius-concentric 0). Was radius-container 12, which left the copy's 6 corner 5 in under a 12 one. */
-    --_code-radius: calc(var(--area-radius-control-sm) + (var(--_code-header-block) + var(--area-stroke-width)) * var(--area-radius-concentric));
+    --_code-radius: var(--area-code-block-corner, calc(var(--area-radius-control-sm) + (var(--_code-header-block) + var(--area-stroke-width)) * var(--area-radius-concentric)));
   }
 
   .area-code-block--sm {
     --_code-size: var(--area-text-xs-size); /* spec: Figma 11; Area's smallest UI text */
     --_code-leading: calc(var(--area-leading-18) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Figma 18; compact 16 */
-    --_code-block-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Figma 8 top and bottom; compact 6 */
+    --_code-block-inset: var(--area-code-block-inset, calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense))); /* spec: Figma 8 top and bottom; compact 6 */
     --_code-inline-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Figma line padding 8 */
-    --_code-start: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
+    --_code-start: var(--area-code-block-inset, calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense))); /* spec */
     /* spec: numbers 4 in, code 28 in (Figma 4 and 29, less its 1px column); compact 24. */
     --_code-gutter: calc(var(--area-space-24) + var(--area-space-4) - var(--area-space-4) * var(--area-ui-dense));
     --_code-diff-gutter: calc(var(--area-space-40) + var(--area-space-4) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 4 + 8 marker + 4 + two digits + 12 */
@@ -209,7 +214,7 @@
        in as the floating one (3, compact 2), and the corner is the copy's radius plus that inset and the border, so the
        two corners are concentric: 6 + 3 + 1 = 10 (compact 9). */
     --_code-header-block: var(--_code-copy-top);
-    --_code-radius: calc(var(--area-radius-control-sm) + var(--_code-copy-top) + var(--area-stroke-width));
+    --_code-radius: var(--area-code-block-corner, calc(var(--area-radius-control-sm) + var(--_code-copy-top) + var(--area-stroke-width)));
   }
 
   .area-code-block {
@@ -225,6 +230,17 @@
     border-radius: var(--_code-radius);
     background-color: var(--_code-ground, var(--area-bg-code));
     overflow: hidden;
+    /* With the inset hook (a host's card frame; owner, 2026-11-01: "a consistent header styling across all
+       cards/containers"), the header is the host's card header: a row of the inset plus the cap, half the inset from the
+       top, so the language's cap sits the inset down and in, the actions centred on its line as far from the end as from
+       the top, and the code half the inset under the row. Without the hook each is invalid and the defaults stand. */
+    /* `--_code-unset` is never set: without the hook these resolve invalid, and each use falls back. */
+    --_code-hook: var(--area-code-block-inset, var(--_code-unset));
+    --_code-head-pad: calc(var(--_code-hook) / 2 - var(--area-stroke-width));
+    --_code-head-zero: calc(var(--_code-hook) * 0);
+    --_code-head-size: calc(var(--_code-hook) * 1.5 - var(--area-stroke-width) + 1cap);
+    --_code-head-end: calc((1cap - var(--area-control-sm)) / 2 + var(--_code-hook) * 0);
+    --_code-head-gap: calc(var(--_code-hook) / 2 - var(--area-stroke-width));
   }
 
   /*
@@ -256,7 +272,7 @@
   /* Under a header the code starts at once: the header's own half row already sits between the title's line and the
      first line of code, so they are 28 apart (36 / 2 + 20 / 2), 1.4 lines (the reference's JSON label to its first line:
      1.4 of its 18 pitch; sm 17 + 9 over 18). The block's inset stays below the last line. */
-  .area-code-block__header + .area-code-block__body > .area-code-block__pre { padding-block-start: 0; }
+  .area-code-block__header + .area-code-block__body > .area-code-block__pre { padding-block-start: var(--_code-head-gap, 0); }
 
   /* The first line keeps clear of the control that floats over it. */
   .area-code-block > .area-code-block__actions ~ .area-code-block__body
@@ -605,7 +621,9 @@
    * edge under increased contrast, as a soft field's), so every inset and the concentric corner stay as they are.
    */
   /* outline (the default) is the frame above: Card's edge round the code ground. */
-  .area-code-block--outline { --_code-ground: var(--area-bg-code); }
+  /* `--area-code-block-fill` (public hook, 2026-11-01, as Table's): the outlined block's ground, so a page whose frames share
+     one fill (the desktop app's feed) gives its code the same. */
+  .area-code-block--outline { --_code-ground: var(--area-code-block-fill, var(--area-bg-code)); }
   .area-code-block--soft {
     --_code-ground: var(--area-input-bg-soft);
     /* Soft is the fill alone: no edge until Contrast More (a soft field's old edge; soft fields now take the Fields group's). */

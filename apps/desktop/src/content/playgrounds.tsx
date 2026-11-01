@@ -12,6 +12,9 @@
  * A tile whose specimen is exactly a prop combination (size-sm, solid-info, state-loading) opens as
  * that configuration; any other tile (an icon, a shortcut, context around the component) is a
  * composition and the Stage shows its demo as written.
+ *
+ * These are the hand-made playgrounds. Every other family with a manifest gets Properties derived from it, editing the
+ * tile's own demo in place (src/content/derived-props.tsx, 2026-10-31).
  */
 import type { ComponentType, CSSProperties, ReactNode } from "react";
 import { AccordionItem, Badge, Button, Checkbox, Chip, Count, Input, Spinner, Switch, Tag } from "@area/react";

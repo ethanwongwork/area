@@ -57,7 +57,7 @@ export function placeLabel(place: Place): string {
   if (place.page === "settings" || place.page === "foundations") return "Themes";
   return ({ home: "Home", themes: "Themes", "theme-setup": "New theme", tokens: "Tokens", color: "Colors", typography: "Typography", icons: "Icons",
     spacing: "Spacing", shape: "Shape", elevation: "Elevation", motion: "Motion",
-    components: "Components", patterns: "Patterns", history: "Versions", references: "References", materials: "Materials", tests: "Tests",
+    components: "Components", patterns: "Patterns", history: "Versions", references: "References", materials: "Materials", tests: "Tests", feed: "Feed",
     project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions" } as Record<PageId, string>)[place.page];
 }
 /** What a page's list holds, for its filter's placeholder. */
@@ -336,7 +336,7 @@ function ProjectNav() {
               <Fragment key={page.id}>
                 <NavItem href={hrefOf({ page: "project-page", project, item: page.id })} icon={<DocumentIcon />}
                   current={pageId === page.id && !layerId} onClick={open({ page: "project-page", project, item: page.id })}
-                  trailing={page.layers.length ? <Count count={page.layers.length} /> : undefined}
+                  trailing={page.layers.length ? <Count variant="soft" size="sm" count={page.layers.length} /> : undefined}
                   actions={page.layers.length ? <Expander open={shown} label={`${page.name}'s layers`} controls={layers} onToggle={() => toggle(page.id)} /> : undefined}>
                   {page.name}
                 </NavItem>
@@ -368,7 +368,7 @@ function ProjectNav() {
         </NavGroup>
         <NavGroup>
           <NavItem href={hrefOf({ page: "versions", project })} icon={<HistoryIcon />} current={place.page === "versions"} onClick={open({ page: "versions", project })}
-            trailing={<Count count={openProject.versions.length} />}>
+            trailing={<Count variant="soft" size="sm" count={openProject.versions.length} />}>
             Versions
           </NavItem>
         </NavGroup>
