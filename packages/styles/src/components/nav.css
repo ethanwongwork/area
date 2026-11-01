@@ -264,6 +264,20 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  /*
+   * A vertical row's cut name fades out instead of ending in an ellipsis (owner, 2026-10-31, pick p4 of
+   * docs/research/claude-code-ui-audit-2026-10-31.md): Claude Code's session list fades a name's last 24 before its
+   * trailing marks (--df-hover-mask, desktop 4.4212). The name fills the row up to its trailing part, so a name that
+   * fits ends before the fade; a horizontal row (a tab) keeps its own fade under the close (below). Tree view's label
+   * follows the same rule.
+   */
+  .area-nav:not(.area-nav--horizontal) .area-nav__text {
+    --_nav-fade: var(--area-space-24); /* spec: Claude Code's sidebar name fade, 24 */
+    flex: 1 1 auto;
+    text-overflow: clip;
+    mask-image: linear-gradient(to left, transparent, #000 var(--_nav-fade));
+  }
+  .area-nav:not(.area-nav--horizontal) .area-nav__text:dir(rtl) { mask-image: linear-gradient(to right, transparent, #000 var(--_nav-fade)); }
 
   /*
    * Pushed to the end of the row: a count, a shortcut, a status dot. Muted even when the

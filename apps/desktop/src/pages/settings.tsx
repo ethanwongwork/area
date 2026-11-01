@@ -183,6 +183,10 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
   const mode: Row = { section: "appearance", group: "mode", label: "Mode", description: "Light, dark, or as your Mac is set.", wide: true,
     control: <Pictures label="Mode" value={studio.mode} onChange={value => studio.setMode(value as Mode)}
       options={(["system", "light", "dark"] as const).map(value => ({ value, label: value === "system" ? "System" : value === "light" ? "Light" : "Dark", picture: <ModePicture mode={value} values={chrome.canvas} material={chrome.material} /> }))} /> };
+  const panels: Row = { section: "appearance", group: "mode", label: "Panels", description: "Side by side with a line between, or floating on the sidebar's ground.",
+    control: <Segmented size="sm" fullWidth aria-label="Panels" value={appLook.panels ?? "sectioned"}
+      onValueChange={value => setAppLook({ ...appLook, panels: value === "floating" ? "floating" : undefined })}
+      items={[{ value: "sectioned", label: "Sectioned" }, { value: "floating", label: "Floating" }]} /> };
   const drawn: Row = { section: "appearance", group: "look", label: "Drawn in", description: "A system's published theme, or settings only the app uses.",
     control: <Segmented size="sm" fullWidth aria-label="Drawn in" value={appLook.follow ? "system" : "own"}
       onValueChange={value => setAppLook(value === "own" ? { ...appLook, follow: false, own: { ...chrome.canvas }, material: chrome.material } : { ...appLook, follow: true })}
@@ -216,7 +220,7 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
   return [
     { section: "general", group: "profile", label: "Name", description: "As the Sidebar's foot shows it.",
       control: <Input size="sm" variant="soft" fullWidth aria-label="Name" value={studio.profileName} onChange={event => studio.setProfileName(event.currentTarget.value)} /> },
-    mode, drawn, ...following, ...theme,
+    mode, panels, drawn, ...following, ...theme,
   ];
 }
 

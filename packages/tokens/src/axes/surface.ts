@@ -24,12 +24,16 @@
  * edge for a shape a box-shadow cannot follow (the Popover arrow). Contrast never strengthens it (no system surveyed
  * does). Forced colours drop box-shadow; forced-colors.css puts the frame back there.
  *
+ * Hairline (owner, 2026-10-31, pick p3 of docs/research/claude-code-ui-audit-2026-10-31.md, after Claude Code's ring
+ * hairline): one device pixel at any density, 1px at 1x, 0.5px at 2x, a third at 3x (`--area-device-pixel`, emit/css.ts),
+ * so it is 0.5's line on a Retina screen without 0.5's half-pixel offset on a 1x one.
+ *
  * Until 2026-10-19 the frame was 0 or 1 and 0 always drew the soft edge (labelled "0 (Borderless)", then briefly Edge:
  * Line / Shadow); a surface could not be flat, and a line could not take a shadow.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
-export const SURFACE_STEPS = ["0", "0.5", "1", "1.5", "2"] as const;
+export const SURFACE_STEPS = ["0", "hairline", "0.5", "1", "1.5", "2"] as const;
 export const REST_SHADOW_STEPS = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
 
 const REST = "var(--area-shadow-rest-step, 0)";
@@ -41,15 +45,16 @@ export const SOFT_EDGE_FILTER = `drop-shadow(0 0.5px 1.5px light-dark(rgb(0 0 0 
 export const SURFACE_AXIS: AxisDefinition = {
   id: "surface",
   label: "Stroke width",
-  description: "The line round cards, panels and floating surfaces, in px: 0 (flat, no line) to 2.",
+  description: "The line round cards, panels and floating surfaces, in px: 0 (flat, no line) to 2, or Hairline (one device pixel).",
   defaultPreset: "1",
   namespaces: ["--area-frame-width:"],
   presets: SURFACE_STEPS.map(step => ({
     id: step,
-    label: step === "0" ? "0 (Flat)" : step,
+    label: step === "0" ? "0 (Flat)" : step === "hairline" ? "Hairline" : step,
     description: step === "0" ? "No line round surfaces; a Rest shadow can set them apart instead. Control and state edges remain."
+      : step === "hairline" ? "A line one device pixel wide round cards, panels and floating surfaces: 1px at 1x, 0.5px at 2x."
       : `A ${step}px line round cards, panels and floating surfaces.`,
-    tokens: tokens({ "frame-width": `${step}px` }),
+    tokens: tokens({ "frame-width": step === "hairline" ? "var(--area-device-pixel)" : `${step}px` }),
   })),
 };
 

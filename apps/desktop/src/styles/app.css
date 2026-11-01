@@ -157,6 +157,33 @@
   .studio-lead { grid-template-rows: auto minmax(0, 1fr); }
   .studio-head--lead { border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
 
+  /* --- Floating panels (src/app-look.ts AppPanels; owner, 2026-10-31, pick p5 of docs/research/claude-code-ui-audit-2026-10-31.md)
+   * Claude Code's other shell (--cds-panel-inset and --cds-panel-gap, 8 each, desktop 4.4212): the window is the
+   * Sidebar's ground, and the Canvas and the Inspector float on it, 8 from the window's edges and 8 apart. The Inspector is
+   * a floating Panel (studio.tsx, `flush` off: panel.css draws the system's container corner, frame, edge and resting
+   * shadow); the Canvas, the app's own region, is drawn with the same tokens. The Sidebar stays on the ground, its seam
+   * gone, since the ground meets the cards. Every region starts 8 down, so the headers keep one line, and the traffic
+   * lights follow them (studio.tsx). */
+  .studio[data-panels="floating"] {
+    --_studio-float: var(--area-space-8); /* spec: Claude Code's panel inset and gap, 8 */
+  }
+  .studio[data-panels="floating"] .studio-workspace {
+    --area-chrome-fill: var(--area-bg-subtle);
+    gap: var(--_studio-float);
+    padding: var(--_studio-float);
+    padding-inline-start: 0;
+    background-color: var(--area-chrome-bg);
+  }
+  .studio[data-panels="floating"] .studio-workspace:not([data-sidebar]) { padding-inline-start: var(--_studio-float); }
+  .studio[data-panels="floating"] .studio-sidebar { --area-edge-regions: transparent; }
+  .studio[data-panels="floating"] .studio-canvas {
+    overflow: clip;
+    border: var(--area-border-width) solid var(--area-edge-regions);
+    border-radius: var(--area-radius-container);
+    box-shadow: var(--area-shadow-edge), var(--area-shadow-resting);
+  }
+  .studio[data-panels="floating"] .studio-drag { block-size: calc(var(--_studio-head) + var(--_studio-float)); }
+
   /* --- The regions' headers (owner, 2026-10-30, after Cursor: "3 distinct parts each with their own header") -----------
    * Each region's header is on the window's top line: the Sidebar's and the Inspector's are their Panels' bars, the
    * Canvas's (and a lead's) a plain Titlebar, all Panel's bar height. A header's controls sit in groups at its two ends. */

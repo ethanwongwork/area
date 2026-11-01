@@ -8,6 +8,9 @@
  * specimens, and its own display settings follow in a Display section (Typography's sample text).
  * They write data-area-* on the Canvas only, so the app's own chrome stays compact. Where every setting shows (Components,
  * Examples), Material follows: a bundle, then each lever, its switches shown while it is on (src/material.ts).
+ * Each group folds (owner, 2026-10-31, after Claude Code's side panel: docs/research/claude-code-ui-audit-2026-10-31.md,
+ * pick p2): its heading is a disclosure, a closed group says on its heading row what it holds ("Default", "2 changed";
+ * Material its bundle), and which groups are closed is remembered for every tab.
  */
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { CustomSelect, PanelSection, Segmented } from "@area/react";
@@ -21,7 +24,7 @@ import { brandStyle } from "./brand.ts";
 import { ROW_OF, RowField, SettingRow, type Reset, type RowContext } from "./inspector-rows.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { inMode } from "./pages/theme-settings.ts";
-import { useStudio, type CanvasAxes } from "./studio.tsx";
+import { CANVAS_DEFAULTS, useStudio, type CanvasAxes } from "./studio.tsx";
 
 type Axis = keyof CanvasAxes;
 // Headings and their settings are the registry's (@area/tokens axes/registry.ts SETTING_GROUPS; owner, 2026-10-19: "i
@@ -43,6 +46,25 @@ const SWATCHES = new Set<string>(["accent", "tint-hue", "tint-hue-dark"]);
 const GRID_MOST = 12;
 const layoutOf = (view: View, axis: string, count: number) =>
   view === "grid" && (SWATCHES.has(axis) || (FIGURED.has(axis) && count <= GRID_MOST)) ? "grid" as const : "list" as const;
+/** The groups a person has closed, by heading: one list for every tab, so a group stays closed wherever it shows. */
+function useFolds() {
+  const [closed, setClosed] = useState<readonly string[]>(() => readStored<string[]>("inspector-closed-groups", []));
+  const fold = (heading: string) => ({
+    collapsible: true,
+    open: !closed.includes(heading),
+    onOpenChange: (open: boolean) => setClosed(current => {
+      const next = open ? current.filter(name => name !== heading) : [...current.filter(name => name !== heading), heading];
+      writeStored("inspector-closed-groups", next);
+      return next;
+    }),
+  });
+  return fold;
+}
+/** A closed group's summary: how many of its settings differ from Area's defaults. */
+function changedSummary(axes: readonly Axis[], values: CanvasAxes) {
+  const changed = axes.filter(axis => (values[axis] ?? CANVAS_DEFAULTS[axis]) !== CANVAS_DEFAULTS[axis]).length;
+  return changed ? `${changed} changed` : "Default";
+}
 function ViewSwitch({ view, onChange }: { view: View; onChange: (view: View) => void }) {
   return <Segmented size="sm" iconOnly aria-label="Show setting lists as" value={view} onValueChange={next => onChange(next as View)}
     items={[{ value: "grid", label: "Grid", icon: <GridIcon /> }, { value: "list", label: "List", icon: <ListIcon /> }]} />;
@@ -54,7 +76,8 @@ export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-
   // Ground, Layers, Tint strength and Card tone exist once per theme; the Inspector sets the mode the app is in (owner, 2026-10-22: "separate the
   // dark mode choice from the light mode, i shouldnt be choosing both at the same time"), the Titlebar's switch choosing
   // which, so light's pair shows in Light and dark's in Dark.
-  const { theme } = useStudio();
+  const { theme, canvas } = useStudio();
+  const fold = useFolds();
   const inTheme = (axis: Axis) => inMode(axis, theme);
   const [view, setViewState] = useState<View>(() => readStored<View>("inspector-list-view", "grid"));
   const setView = (next: View) => { setViewState(next); writeStored("inspector-list-view", next); };
@@ -64,12 +87,13 @@ export function CanvasSettings({ material, axes = ["neutral", "tint-hue", "tint-
       {GROUPS.map(group => {
         const shown = (group.settings as readonly Axis[]).filter(axis => axes.includes(axis) && inTheme(axis));
         return shown.length ? [
-          <PanelSection key={group.heading} heading={group.heading} actions={group.heading === first ? <ViewSwitch view={view} onChange={setView} /> : undefined}>
+          <PanelSection key={group.heading} heading={group.heading} {...fold(group.heading)} summary={changedSummary(shown, canvas)}
+            actions={group.heading === first ? <ViewSwitch view={view} onChange={setView} /> : undefined}>
             {(drawn => shown.map(axis => <Setting key={axis} axis={axis} drawn={drawn} />))(new Set<string>())}
           </PanelSection>,
         ] : null;
       })}
-      {showMaterial ? <MaterialSettings /> : null}
+      {showMaterial ? <MaterialSettings fold={fold("Material")} /> : null}
       {children ? <PanelSection heading="Display">{children}</PanelSection> : null}
     </ViewContext.Provider>
   );
@@ -100,11 +124,12 @@ function Setting({ axis, drawn }: { axis: Axis; drawn: Set<string> }) {
  * to 8, as Elevation; the bundle's own value carries its name ("3 (Glass)"); None, the default, carries no mark (owner, 2026-10-20). A lever's
  * switches show while it is on, so None is one row and a bundle shows only what it uses.
  */
-function MaterialSettings() {
+function MaterialSettings({ fold }: { fold: ReturnType<ReturnType<typeof useFolds>> }) {
   const { canvas, material, setMaterialBundle, setMaterialValue, previewCanvas, previewMaterial } = useStudio();
   const view = useContext(ViewContext);
+  const bundle = MATERIAL_BUNDLES[material.bundle]?.label ?? material.bundle;
   return (
-    <PanelSection heading="Material">
+    <PanelSection heading="Material" {...fold} summary={Object.keys(material.overrides).length ? `${bundle}, changed` : bundle}>
       <MaterialRows canvas={canvas} material={material} onBundle={setMaterialBundle} onValue={setMaterialValue}
         previewCanvas={previewCanvas} previewMaterial={previewMaterial} layout={count => layoutOf(view, "material", count)} />
     </PanelSection>

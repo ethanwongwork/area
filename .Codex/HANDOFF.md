@@ -1,6 +1,14 @@
 # Handoff
 
 ## Current state (2026-10-31)
+- **Claude Code shell audit, branch `claude/code-ui-design-audit-f1c645` (2026-10-31).** Owner liked Claude Code's new
+  sectioned UI; measured from its bundle (`docs/research/claude-code-ui-audit-2026-10-31.md`; picks on artifact
+  F8nRcyToXTGCa3XMU22Cs8 `verdicts`). Built the yes picks: the Inspector's Theme groups fold with "Default" / "N changed"
+  summaries (p2); Stroke width › Hairline, one device pixel via `--area-device-pixel` (p3; 1x unverified on a real 1x
+  screen); vertical Nav and Tree view names fade over 24 instead of an ellipsis (p4; Nav and Tree view back to review);
+  Settings › Appearance › Panels, Sectioned or Floating (p5; `--area-edge-regions` now OVERRIDABLE). p1 (icon view
+  buttons) no; p6 (segmented Meter) already existed. Checks: build, typecheck, npm test, contrast, React, desktop, docs,
+  app-css, playgrounds; looked at in Electron light and dark.
 - **Typeface library in Typography, branch `claude/open-source-web-fonts-5529c2` (in a PR, 2026-10-31).** Research and
   the owner's picks: `docs/research/typefaces-2026-10-31/` (specimen artifact 42NXMyi3…, `verdicts`). Typography's Sidebar
   lists 107 faces (Text, Display, Code, Licensed) above the roles; a face opens at `…/typography/face/<id>/<tab>` with

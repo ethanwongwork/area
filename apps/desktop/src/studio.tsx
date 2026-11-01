@@ -614,11 +614,12 @@ export function Studio() {
       // The window's own ground (seen while it resizes) is the page's, as the chosen ground paints it.
       window.areaDesktop?.setGround?.(paintedHex(getComputedStyle(document.body).backgroundColor));
       // The traffic lights stay centred on the headers' line, which grows with type and density (39 at 13 Compact, 53 at 14/32).
-      const bar = document.querySelector(".studio-head")?.getBoundingClientRect().height;
-      if (bar) window.areaDesktop?.setTitlebar?.(bar);
+      // Floating panels set the headers 8 down, so the lights centre on the header's middle, not its height's.
+      const head = document.querySelector(".studio-head")?.getBoundingClientRect();
+      if (head?.height) window.areaDesktop?.setTitlebar?.(head.top * 2 + head.height);
     });
     return () => cancelAnimationFrame(frame);
-  }, [chrome, theme]);
+  }, [chrome, theme, appLook.panels]);
 
   // Shortcuts, as the Tooltips name them: ⌘B and ⌥⌘B show and hide the Sidebar and the Inspector (Cursor's and VS Code's
   // primary and secondary side bars); ⌘[ and ⌘] go back and forward through the tab's places (Finder, Safari, Cursor).
@@ -803,7 +804,7 @@ export function Studio() {
       {/* The conversation outlives tabs and views; the Canvas's selection rides along as its context chip. */}
       <ChatProvider selection={selectionLabel(item)}>
       <ChatShortcut />
-      <div className="studio">
+      <div className="studio" data-panels={appLook.panels === "floating" ? "floating" : undefined}>
         {/* No bar across the window (owner, 2026-10-30, after Cursor: "the full sectioning of the ui into 3 distinct parts each
             with their own header"): each region has a header on the window's top line, and this strip under them is the
             window's drag region in Electron, each control in it a hole (app.css). Was Area's Titlebar, Phase 0's variation A. */}
@@ -1008,6 +1009,8 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
   const studio = useStudio();
   const shell = useContext(ShellContext)!;
   const showSidebar = panels && studio.sidebar, showInspector = panels && studio.inspector && inspector !== undefined;
+  // Floating panels (app-look.ts AppPanels): the Inspector is a floating Panel, not a docked one.
+  const floating = studio.appLook.panels === "floating";
   // The panels take the app's own type and density (its chosen system's theme, src/app-look.ts).
   const sidebarWidth = usePanelWidth("sidebar", studio.chrome.canvas.type, studio.chrome.canvas.density);
   const inspectorWidth = usePanelWidth("inspector", studio.chrome.canvas.type, studio.chrome.canvas.density);
@@ -1034,7 +1037,8 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
     switchInstantly();
   }, [signature]);
   return (
-    <div className="studio-workspace" data-sidebar={lead || showSidebar ? "" : undefined} data-inspector={showInspector ? "" : undefined}>
+    <div className="studio-workspace" data-sidebar={lead || showSidebar ? "" : undefined} data-inspector={showInspector ? "" : undefined}
+      data-area-chrome={floating ? "" : undefined}>
       {/* The Sidebar is chrome on a recessed ground (owner, 2026-10-22; cursor-audit-2026-10-22.md item 4), as the
           Testing screens' sidebars: the Panel is a chrome region painting the fill styles/app.css names (panel.css) and
           declares the recessed ground, so its row plates step from what is under them (layers.css). */}
@@ -1069,7 +1073,7 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
       {showInspector ? (
         <div className="studio-inspector" onClick={keepSpecimenLinks}>
           {isViews(inspector) ? <InspectorPanel views={inspector} width={inspectorWidth} end={shell.inspectorToggle} />
-            : <Panel flush bareBar windowBar resizable="start" aria-label="Inspector" {...inspectorWidth} action={<span className="studio-head__group studio-head__group--end">{shell.inspectorToggle}</span>}>{inspector}</Panel>}
+            : <Panel flush={!floating} bareBar windowBar resizable="start" aria-label="Inspector" {...inspectorWidth} action={<span className="studio-head__group studio-head__group--end">{shell.inspectorToggle}</span>}>{inspector}</Panel>}
         </div>
       ) : null}
     </div>
@@ -1098,7 +1102,8 @@ const isViews = (value: ReactNode | InspectorViews): value is InspectorViews =>
   value !== null && typeof value === "object" && !isValidElement(value) && !Array.isArray(value) && !(Symbol.iterator in value);
 
 function InspectorPanel({ views, width, end }: { views: InspectorViews; width: ReturnType<typeof usePanelWidth>; end: ReactNode }) {
-  const { inspectorView, setInspectorView } = useStudio();
+  const { inspectorView, setInspectorView, appLook } = useStudio();
+  const floating = appLook.panels === "floating";
   const offered = INSPECTOR_VIEWS.filter(entry => entry.id === "chat" || (views[entry.id] != null && views[entry.id] !== false));
   // A page without the chosen view shows Design (2026-10-31; its first until then, so Code on a family became Theme on
   // Themes); the choice itself is kept for the pages that have it.
@@ -1108,7 +1113,7 @@ function InspectorPanel({ views, width, end }: { views: InspectorViews; width: R
   const scroller = useRef<HTMLDivElement | null>(null);
   return (
     // A bare bar: no rule under the views (owner, 2026-10-22; cursor-audit-2026-10-22.md item 4), as the Canvas header.
-    <Panel flush bareBar windowBar resizable="start" aria-label="Inspector" {...width} viewportRef={scroller}
+    <Panel flush={!floating} bareBar windowBar resizable="start" aria-label="Inspector" {...width} viewportRef={scroller}
       bareFooter={chat} footer={chat ? <ChatComposer scroller={scroller} /> : undefined} action={<>
         <Nav orientation="horizontal" aria-label="Inspector views" className="studio-inspector__views">
           {offered.map(entry => (

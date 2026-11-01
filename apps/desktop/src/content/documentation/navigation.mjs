@@ -27,7 +27,7 @@ export default {
       label: "A group's heading: a row-height title in the muted ink, quieter than the items. It is not interactive.",
       item: "The link row: owns the row height, the hover, pressed and current plates, the focus ring and the disabled dimming.",
       icon: "The leading icon box, sized by the slot and hidden from assistive tech. An item with an icon and no label is the icon alone in a square plate, named by its aria-label.",
-      text: "The item's label; a long label ends in an ellipsis instead of wrapping the row.",
+      text: "The item's label, one line: in a sidebar a long label fades out over its last 24 before the trailing part; a tab's fades under its close.",
       trailing: "End-of-row annotation: a count, a shortcut or a status dot, in the muted ink even on the current row.",
       separator: "A rule between runs of items; a vertical hairline in a horizontal Nav.",
       row: "Wraps an item and its actions so both share one plate; the actions sit beside the link, never inside it.",
