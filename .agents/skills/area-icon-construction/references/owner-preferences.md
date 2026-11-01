@@ -226,3 +226,10 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   icons carry their content where Cursor's are bare), gauge's semicircle. Changed: expand / collapse (and their maximize
   / minimize aliases) take 3.5 heads with the shafts to a standard gap at the centre; the plane is a top-down airliner on
   the rising diagonal (the side view is retired). A 12px cut follows use: Reference list's `return` has one.
+
+- **Cohesion pass (2026-10-31, delegated, owner to confirm on the review page):** the owner found the set
+  uncohesive in the App Map's key. Measured, Area's size and weight spread matches the libraries'; its solids
+  (35% of icons) and single drawings set it apart. Proposed rules (construction rules, Cohesion): solids only
+  as marks, long objects on the rising diagonal, inner ring diagonals rise, letters use their keyline,
+  separate-shape compositions as a class. Round 1: system (three options), bookmarks for Collection, compass's
+  needle, link on the diagonal, the case family at cap 7.5. `docs/research/icon-cohesion-2026-10-31/`.

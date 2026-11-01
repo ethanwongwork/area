@@ -20,6 +20,7 @@ The rules every Area icon is drawn to, enforced where measurable by `packages/ic
 - Centring
 - Sizes
 - In components
+- Cohesion
 
 
 **Weight.** `--area-weight-icon`, 1.125px for Geist. Sources are authored at 1.25px and
@@ -462,3 +463,26 @@ five libraries (`refs.mjs`), never at one large size beside Fluent alone.
 `packages/react/src/components/Glyph.tsx`. Add the icon (or one element of it) to
 `PACKAGE_GLYPHS` in the generator, never a hand-copied path, and pass the slot's `size`.
 base.css sets the line from `--area-weight-icon` and the size curve.
+
+**Cohesion (2026-10-31; owner to confirm; research and numbers in `docs/research/icon-cohesion-2026-10-31/`).**
+Measured against Lucide, Phosphor, Tabler, Heroicons, Iconoir and Fluent, Area's spread of size, density and
+mass is the libraries' own, and Area follows their consensus concept by concept (r 0.83–0.90). What set it
+apart was solid ink (35% of icons, against 16–17% in Lucide and Phosphor) and single drawings. So:
+- *Measure against the consensus.* Run that folder's `tools/measure.mjs area` on the build and
+  `tools/compare.py <dir> <names>`: an icon more than 7% off its concept's consensus in size, 20% in density
+  or 25% in mass is redrawn toward its peers or recorded with the reason. Look at it in a strip
+  (`tools/strip.mjs`, a group in one line at 16 / 20 / 24, as a nav or key shows it), not alone.
+- *Solids are marks, not details.* Every set that publishes rules keeps outline icons free of solid areas
+  (Lucide: "fills are officially not supported"; SF Symbols: "an outlined symbol has no solid areas"). A
+  solid stays only where it is the icon's identity or a named dot role (more, bullets, the i, ! and ? dots,
+  wi-fi's source, a centre point, the notification dot, a mark's fill, the recorded solid exceptions).
+  Content inside a container (a picture, window controls, an eyelet, a sun) is a line or is left out.
+- *Long, thin objects lie on the rising diagonal* when that brings them to their keyline (link: 13.1 × 7.1
+  flat, 12.8 × 12.8 on the diagonal).
+- *An inner diagonal in a ring rises.* The falling diagonal is the slash's; a needle on it reads as ⊘
+  (compass).
+- *Letters use their keyline.* A pair spans the horizontal keyline at cap 7.5 and x-height 4.5 (Aa, AB, ab),
+  so it reads at the size of text's T and every library's Aa.
+- *A composition of separate shapes is a class* (shapes, system, grid, component): parts on the gap scale
+  cap at about 4.5 in the 12px box, so it reads lighter than one silhouette. Make each part as large as the
+  gaps allow, the triangle largest (it covers half its box).
