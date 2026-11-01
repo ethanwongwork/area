@@ -5483,7 +5483,7 @@ automatically do the passes and audit yourself". Per-icon notes (old → new gap
   family's ±3 sparkle (control points 0.12 of the radius).
 - **Held constructions simplified:** calculator (a line display, keys 2.75 apart on an 11 × 12 frame), clapperboard
   (two stripes), spell-check (the type family's A over the 1.5 / 3 check), qr-code (hollow finders, two data modules),
-  piano (solid black keys), gift-card (ribbons and tails, no loops), table-cells-merge and -split (a 3-tall header on a
+  piano (solid black keys), gift-card (the ribbon cross alone), table-cells-merge and -split (a 3-tall header on a
   12 × 10 frame, the marks on the lattice), the pencils' band 0.5 further down the shaft. bug-off and pencil-off take
   `data-gap="slash"`, calendar-off `data-counter="sliver"`.
 - **Kept as recorded exceptions** (`data-floor="kept"`): paw (r 1.25 toe rings, 1.38 counters), code-sparkle (no room
