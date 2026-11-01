@@ -10,38 +10,6 @@ export type ExploreCandidate = {
 
 const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none", "aria-hidden": true, focusable: false } as const;
 
-const PilotAgentAIcon = ({ weight, size, ...props }: PilotIconProps) => (
-  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <rect x="2" y="6.5" width="12" height="7.5" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M8 6.5V5M6.5 3.5A1.5 1.5 0 1 1 9.5 3.5A1.5 1.5 0 1 1 6.5 3.5Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M4.26 9L11.74 9A0.5 0.5 0 0 1 12.23 9.598L12.011 10.696A1 1 0 0 1 11.03 11.5L9.957 11.5A0.5 0.5 0 0 1 9.604 11.354L8.354 10.104A0.5 0.5 0 0 0 7.646 10.104L6.396 11.354A0.5 0.5 0 0 1 6.043 11.5L4.97 11.5A1 1 0 0 1 3.989 10.696L3.77 9.598A0.5 0.5 0 0 1 4.26 9Z" fill="currentColor" />
-  </svg>
-);
-
-const PilotAgentBIcon = ({ weight, size, ...props }: PilotIconProps) => (
-  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <rect x="2" y="6.5" width="12" height="7.5" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M8 6.5V4" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <circle cx="8" cy="3" r="1" fill="currentColor" style={{ r: sw(weight, size, 0.8889) }} />
-    <path d="M4.26 9L11.74 9A0.5 0.5 0 0 1 12.23 9.598L12.011 10.696A1 1 0 0 1 11.03 11.5L9.957 11.5A0.5 0.5 0 0 1 9.604 11.354L8.354 10.104A0.5 0.5 0 0 0 7.646 10.104L6.396 11.354A0.5 0.5 0 0 1 6.043 11.5L4.97 11.5A1 1 0 0 1 3.989 10.696L3.77 9.598A0.5 0.5 0 0 1 4.26 9Z" fill="currentColor" />
-  </svg>
-);
-
-const PilotAgentCIcon = ({ weight, size, ...props }: PilotIconProps) => (
-  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <rect x="2" y="3.5" width="12" height="9" rx="1.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M4.26 7L11.74 7A0.5 0.5 0 0 1 12.23 7.598L12.011 8.696A1 1 0 0 1 11.03 9.5L9.957 9.5A0.5 0.5 0 0 1 9.604 9.354L8.354 8.104A0.5 0.5 0 0 0 7.646 8.104L6.396 9.354A0.5 0.5 0 0 1 6.043 9.5L4.97 9.5A1 1 0 0 1 3.989 8.696L3.77 7.598A0.5 0.5 0 0 1 4.26 7Z" fill="currentColor" />
-  </svg>
-);
-
-const PilotAgentDIcon = ({ weight, size, ...props }: PilotIconProps) => (
-  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
-    <circle cx="6.5" cy="4.5" r="3" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M7.5 13.5H1.5A3.5 3.5 0 0 1 5 10H5.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M11 8Q11.36 10.64 14 11Q11.36 11.36 11 14Q10.64 11.36 8 11Q10.64 10.64 11 8Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
 const PilotFingerprintBoldIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
     <path d="M2.5 13V8A5.5 5.5 0 0 1 13.5 8V11" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
@@ -138,10 +106,6 @@ const PilotFingerprintTracksIcon = ({ weight, size, ...props }: PilotIconProps) 
 );
 
 export const EXPLORE: readonly ExploreCandidate[] = [
-  { group: "agent", label: "A · bot with sunglasses", Icon: PilotAgentAIcon, gaps: ["1.2 tight","1.94 standard"], counters: [1.88,3.18], notes: [] },
-  { group: "agent", label: "B · sunglasses, antenna dot", Icon: PilotAgentBIcon, gaps: ["1.94 standard","1.2 tight","1.94 standard","5 open"], counters: [3.18], notes: [] },
-  { group: "agent", label: "C · sunglasses, no antenna", Icon: PilotAgentCIcon, gaps: ["1.2 tight"], counters: [3.54], notes: [] },
-  { group: "agent", label: "D · person with the family sparkle", Icon: PilotAgentDIcon, gaps: ["1.47 tight","1.58 tight","1.42 tight"], counters: [4.87,1.51], notes: [] },
   { group: "fingerprint", label: "8 · Two arches and a stem (Tabler)", Icon: PilotFingerprintBoldIcon, gaps: ["1.37 tight","4.37 open","1.87 standard"], counters: [], notes: [] },
   { group: "fingerprint", label: "6 · Broken arches (Fluent)", Icon: PilotFingerprintFluentIcon, gaps: ["1.38 tight","1.38 tight","1.57 tight","3.48 open","3.88 open","0.95","6.88 open","0.98","1.38 tight","1.38 tight","4.55 open","1.38 tight","9.06 open","1.79 standard","1.47 tight"], counters: [], notes: ["shapes 2 and 3 leave a 0.95px gap; move them 0.18 apart for tight, or 0.8 apart for standard (or join them)","shapes 2 and 5 close to 0.68px in the filled variant (1.5px line); keep 0.875: move them 0.19 apart","shapes 2 and 5 leave a 0.98px gap; move them 0.14 apart for tight, or 0.77 apart for standard (or join them)"] },
   { group: "fingerprint", label: "7 · Leaning arcs (Heroicons)", Icon: PilotFingerprintLeanIcon, gaps: ["1.37 tight","3.88 open","3.88 open","1.07","1.37 tight","1.37 tight","1.61 tight","3.32 open","4.55 open","4.55 open"], counters: [], notes: ["shapes 1 and 5 close to 0.79px in the filled variant (1.5px line); keep 0.875: move them 0.08 apart","shapes 1 and 5 leave a 1.07px gap; move them 0.05 apart for tight, or 0.68 apart for standard (or join them)"] },

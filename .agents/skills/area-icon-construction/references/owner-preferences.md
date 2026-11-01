@@ -259,3 +259,5 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   Agent, 2026-11-01: "the hat is too small now. the brim should also extend past the sides of the head": the brim is
   the agent's identity and must overhang the head (narrow the head rather than lose the brim to the floor); the crown
   is wide (two-thirds of the head), not the narrow round-3 crown.
+  Agent, 2026-11-01 (later): the hat is retired. The agent is bot with sunglasses (pick A of four: antenna dot, no
+  antenna and person-with-sparkle declined): bot's body and antenna exactly, the sunglasses replacing its eyes.
