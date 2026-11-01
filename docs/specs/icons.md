@@ -5464,3 +5464,33 @@ From the owner's flags on Icon Boards (`docs/research/icon-cohesion-2026-10-31/t
 
 Kept by the owner: move, container (isometric, the one exception to flat views). Known and unchanged: folder-cog's filled
 variant shows a sliver at the gear's hub (present before this round).
+
+## Cohesion pass, rounds 5–7, 2026-11-01
+
+Owner (round 4 picks): corners less round, the gap floor raised to one line, the cohesion rules adopted; then "just
+automatically do the passes and audit yourself". Per-icon notes (old → new gaps) are in
+`docs/research/icon-cohesion-2026-10-31/round5-notes/`.
+
+- **Corners less round:** frames r 1.5 (≥ 9 × 7), mid frames and bars r 1, in about 220 icons, every corner point kept
+  (`tools/reradius.py`). Curves that belong to glyphs, figures or organic shapes keep their drawing. The 12px open cut
+  follows (r 1).
+- **Gap floor:** no gap under the line (1.125) and no counter under 1.5, enforced by the lint; the !, i and ? stem dot
+  keeps 0.94. About 190 icons redrawn by family (files, people, calendars and clocks, folders, batteries, bells, and
+  the rest in three groups). Larger changes: calendar's date grid is one row of three; keyboard 3 + 2 keys; building a
+  2 × 2 window grid; bank four columns; memory one chip; server one frame with a divider; telescope one tube on a
+  tripod; the bell's base 0.5 higher so its clapper pocket opens; battery-charging Lucide's full-height bolt;
+  folder-search's lens on the corner; person-square's head r 1.5; person-chat's figure solid; every small sparkle the
+  family's ±3 sparkle (control points 0.12 of the radius).
+- **Held constructions simplified:** calculator (a line display, keys 2.75 apart on an 11 × 12 frame), clapperboard
+  (two stripes), spell-check (the type family's A over the 1.5 / 3 check), qr-code (hollow finders, two data modules),
+  piano (solid black keys), gift-card (ribbons and tails, no loops), table-cells-merge and -split (a 3-tall header on a
+  12 × 10 frame, the marks on the lattice), the pencils' band 0.5 further down the shaft. bug-off and pencil-off take
+  `data-gap="slash"`, calendar-off `data-counter="sliver"`.
+- **Kept as recorded exceptions** (`data-floor="kept"`): paw (r 1.25 toe rings, 1.38 counters), code-sparkle (no room
+  for the ±3 sparkle between code's chevrons), globe's filled variant (Fluent's).
+- **globe, globe-off:** the outline is now stroked on Fluent's centre-lines (r 6 ring, r 8.45 lens arcs, latitudes at 6
+  and 10, the ring's even thirds), so it follows the size curve; Fluent's 1px filled path had drawn it 45% denser than
+  its class at 16 and 75% at 48. The filled variant keeps Fluent's filled globe.
+- **The system / shapes triangle** is 60°, as warning, play, eject and flask.
+- Open: the small lock is 4 × 3 in person-lock and file-lock, 5 × 3 in folder-lock; sort-alpha's arrow sits 0.5 below
+  sort-numeric's.

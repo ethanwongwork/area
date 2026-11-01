@@ -8232,7 +8232,9 @@ export const PilotGlobeIcon = ({ weight, size, ...props }: PilotIconProps) => si
 ) : size === 12 ? (
   <svg {...root(size, props)}>
     <g style={{ opacity: cut10Opacity(16, true) }}>
-      <path d="M8 14A6 6 0 1 0 8 2A6 6 0 0 0 8 14M8 3C8.37 3 8.88 3.36 9.31 4.32Q9.45 4.62 9.57 5H6.43Q6.55 4.63 6.69 4.32C7.12 3.36 7.63 3 8 3M5.78 3.9Q5.55 4.4 5.38 5H4A5 5 0 0 1 6.04 3.4Q5.9 3.64 5.78 3.9M5.16 6A12 12 0 0 0 5.16 10H3.42A5 5 0 0 1 3.42 6ZM5.38 11A8 8 0 0 0 6.04 12.6A5 5 0 0 1 4 11ZM6.43 11H9.57A6 6 0 0 1 9.31 11.68C8.88 12.64 8.37 13 8 13S7.12 12.64 6.69 11.68A6 6 0 0 1 6.43 11M9.83 10H6.17A11 11 0 0 1 6.17 6H9.81A11 11 0 0 1 9.81 10M10.6 11H12A5 5 0 0 1 9.96 12.6Q10.11 12.36 10.22 12.1Q10.45 11.6 10.62 11M12.58 10H10.84A12 12 0 0 0 10.84 6H12.58A5 5 0 0 1 12.58 10M9.96 3.4C10.77 3.75 11.48 4.3 12 5H10.62A8 8 0 0 0 9.96 3.4" fill="currentColor" />
+      <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 2A8.45 8.45 0 0 0 8 14M8 2A8.45 8.45 0 0 1 8 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2.343 6H13.657M2.343 10H13.657" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
     </g>
     <g transform="scale(1.333333)" style={{ opacity: cut10Opacity(12, true) }}>
       <path d="M11 6A5 5 0 1 0 1 6a5 5 0 0 0 10 0m-6.99.5c.05 1.3.3 2.47.68 3.28A4 4 0 0 1 2.03 6.5zm1 0H7a8 8 0 0 1-.5 2.66 3 3 0 0 1-.49.81l-.05-.05a3 3 0 0 1-.44-.76 8 8 0 0 1-.5-2.66M7 5.5H5c.05-1.08.24-2 .5-2.66A3 3 0 0 1 6 2.03l.05.05q.2.19.44.76c.26.66.45 1.59.5 2.66m1 1h1.98A4 4 0 0 1 7.3 9.78c.37-.81.63-1.97.68-3.28m1.98-1H7.99a9 9 0 0 0-.68-3.28A4 4 0 0 1 9.97 5.5M4 5.5H2.03A4 4 0 0 1 4.7 2.22a9 9 0 0 0-.68 3.28" fill="currentColor" />
@@ -8245,7 +8247,9 @@ export const PilotGlobeIcon = ({ weight, size, ...props }: PilotIconProps) => si
   </svg>
 ) : (
   <svg {...root(size, props)}>
-    <path d="M8 14A6 6 0 1 0 8 2A6 6 0 0 0 8 14M8 3C8.37 3 8.88 3.36 9.31 4.32Q9.45 4.62 9.57 5H6.43Q6.55 4.63 6.69 4.32C7.12 3.36 7.63 3 8 3M5.78 3.9Q5.55 4.4 5.38 5H4A5 5 0 0 1 6.04 3.4Q5.9 3.64 5.78 3.9M5.16 6A12 12 0 0 0 5.16 10H3.42A5 5 0 0 1 3.42 6ZM5.38 11A8 8 0 0 0 6.04 12.6A5 5 0 0 1 4 11ZM6.43 11H9.57A6 6 0 0 1 9.31 11.68C8.88 12.64 8.37 13 8 13S7.12 12.64 6.69 11.68A6 6 0 0 1 6.43 11M9.83 10H6.17A11 11 0 0 1 6.17 6H9.81A11 11 0 0 1 9.81 10M10.6 11H12A5 5 0 0 1 9.96 12.6Q10.11 12.36 10.22 12.1Q10.45 11.6 10.62 11M12.58 10H10.84A12 12 0 0 0 10.84 6H12.58A5 5 0 0 1 12.58 10M9.96 3.4C10.77 3.75 11.48 4.3 12 5H10.62A8 8 0 0 0 9.96 3.4" fill="currentColor" />
+    <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 2A8.45 8.45 0 0 0 8 14M8 2A8.45 8.45 0 0 1 8 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2.343 6H13.657M2.343 10H13.657" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -8259,7 +8263,9 @@ export const PilotGlobeFilledIcon = ({ weight, size, ...props }: PilotIconProps)
 
 export const PilotGlobeOffIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props)}>
-    <path d="M8 14A6 6 0 1 0 8 2A6 6 0 0 0 8 14M8 3C8.37 3 8.88 3.36 9.31 4.32Q9.45 4.62 9.57 5H6.43Q6.55 4.63 6.69 4.32C7.12 3.36 7.63 3 8 3M5.78 3.9Q5.55 4.4 5.38 5H4A5 5 0 0 1 6.04 3.4Q5.9 3.64 5.78 3.9M5.16 6A12 12 0 0 0 5.16 10H3.42A5 5 0 0 1 3.42 6ZM5.38 11A8 8 0 0 0 6.04 12.6A5 5 0 0 1 4 11ZM6.43 11H9.57A6 6 0 0 1 9.31 11.68C8.88 12.64 8.37 13 8 13S7.12 12.64 6.69 11.68A6 6 0 0 1 6.43 11M9.83 10H6.17A11 11 0 0 1 6.17 6H9.81A11 11 0 0 1 9.81 10M10.6 11H12A5 5 0 0 1 9.96 12.6Q10.11 12.36 10.22 12.1Q10.45 11.6 10.62 11M12.58 10H10.84A12 12 0 0 0 10.84 6H12.58A5 5 0 0 1 12.58 10M9.96 3.4C10.77 3.75 11.48 4.3 12 5H10.62A8 8 0 0 0 9.96 3.4" fill="currentColor" />
+    <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 2A8.45 8.45 0 0 0 8 14M8 2A8.45 8.45 0 0 1 8 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M2.343 6H13.657M2.343 10H13.657" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
     <path d="M2 2L14 14" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );

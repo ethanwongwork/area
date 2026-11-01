@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Outliers in optical size, ink and balance at every size, within each keyline class (cohesion pass, 2026-11-01).
 
-Reads sizes.mjs's JSON. Icons are compared with their own keyline class (square, circle, horizontal, vertical, from
+Reads sizes.mjs's JSON. Icons are compared with their own class (keyline × fill kind: a line glyph with line glyphs, a solid with solids) (square, circle, horizontal, vertical, from
 packages/icons/dist/icons.json), because a ring is drawn larger than a square on purpose. At each size an icon's size,
 mass and density are divided by its class median there; an icon is flagged when it sits outside the class's 10–90%
 band by more than the tolerance at most sizes, or when its standing changes across sizes (fine at 16, heavy at 48),
@@ -17,7 +17,7 @@ TOP = int(sys.argv[sys.argv.index("--top") + 1]) if "--top" in sys.argv else 60
 meta = {x["name"]: x for x in json.load(open(os.path.join(os.getcwd(), "packages/icons/dist/icons.json")))}
 sizes = sorted(d, key=int)
 skip = {n for n, m in meta.items() if m.get("aliasOf") or m.get("derivedFrom")}
-cls = lambda n: meta.get(n, {}).get("keyline", "?")
+cls = lambda n: meta.get(n, {}).get("keyline", "?") + "/" + meta.get(n, {}).get("fill", "?")
 rel = collections.defaultdict(dict)
 for s in sizes:
     by = collections.defaultdict(list)
@@ -33,12 +33,12 @@ for n, r in rel.items():
     sz = [r[s]["size"] for s in sizes]; ms = [r[s]["mass"] for s in sizes]; dn = [r[s]["density"] for s in sizes]
     off = max(abs(st.mean(r[s]["cx"] for s in sizes)), abs(st.mean(r[s]["cy"] for s in sizes)))
     drift = max(dn) - min(dn)
-    score = abs(st.mean(sz)) * 3 + abs(st.mean(dn)) + abs(st.mean(ms)) * 0.5 + drift + max(0, off - 0.03) * 10
+    score = abs(st.mean(sz)) * 3 + abs(st.mean(dn)) + abs(st.mean(ms)) * 0.5 + drift * 2
     flags = []
     if abs(st.mean(sz)) > 0.08: flags.append("large" if st.mean(sz) > 0 else "small")
     if abs(st.mean(dn)) > 0.25: flags.append("dense" if st.mean(dn) > 0 else "light")
     if drift > 0.15: flags.append(f"drifts {min(dn):+.0%}→{max(dn):+.0%}")
-    if off > 0.03: flags.append(f"off-centre {off:.0%}")
+    if off > 0.06 and "--balance" in sys.argv: flags.append(f"off-centre {off:.0%}")
     rows.append((score, n, cls(n), st.mean(sz), st.mean(dn), drift, off, flags))
 rows.sort(reverse=True)
 flagged = [r for r in rows if r[7]]

@@ -496,3 +496,9 @@ apart was solid ink (35% of icons, against 16–17% in Lucide and Phosphor) and 
 - *Flat views, depth only where depth is the idea* (owner, 2026-11-01). Objects are drawn front or side on (car,
   truck, the plane top-down nose up); cube, package, cube-wireframe, layers and database keep their depth, and
   container stays isometric by the owner's pick.
+- *Measure at every size.* `tools/sizes.mjs` draws the build at 16, 20, 24, 32 and 48 and `tools/sizes.py` compares
+  each icon with its class (keyline × fill kind) at each size. An icon whose density changes against its class across
+  sizes is drawn outside the size curve: an outline drawn as a filled path (Fluent's globe until 2026-11-01) keeps a
+  fixed line while every stroke thins, so draw outlines as strokes. Solids (the booleans, contrast, stroke-weight,
+  quote) drift by nature and are recorded. Diagonal objects (a pencil, a wand) read small by hull area; judge them in a
+  strip, not by the number.

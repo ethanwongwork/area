@@ -205,3 +205,14 @@ pass: the family sparkle in chat-sparkle, git-graph's curve, monitor-off's slash
 sliver fixes in chat- and image-sparkle). The lint enforces the floor (`GAPS` without the detail step, counters from
 1.5; the !, i and ? stem dot excepted; `data-floor="kept"` on 16 owner constructions held for a decision). Open: the
 small lock's two sizes, sort-alpha's arrow 0.5 below sort-numeric's.
+
+## Rounds 6–7 (2026-11-01, run on the owner's "just automatically do the passes")
+
+- Round 5 landed (regenerated and tested); the held constructions were simplified (spec "rounds 5–7").
+- **All sizes** (`tools/sizes.mjs`, `tools/sizes.py`): within each class (keyline × fill kind), the drift across 16–48
+  comes from solids (expected) and from globe and globe-off, whose outline was Fluent's fixed 1px filled path (+45% at
+  16 to +75% at 48 against their class). Their outlines are now stroked; the rest of the set holds its standing across
+  sizes. Hull-size "small" flags are diagonal objects and thin line glyphs, which read correctly in strips.
+- **Shared parts** (`generate.mjs --check --parts`): members keep their base's body exactly (chat, mail, calendar,
+  folder, document checked); drift comes from marks, cuts and the family sparkle. Ring radii are one scale (r 6 full
+  rings ×35, r 5 lenses, r 4.5 rings sharing space, timer r 5.5).
