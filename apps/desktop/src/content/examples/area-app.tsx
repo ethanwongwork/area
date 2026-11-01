@@ -3,7 +3,7 @@
  * area electron app itself?"), so Settings › Theme's preview shows a theme on the app it is made in. Its three regions,
  * each with its own header, as the app draws them (src/studio.tsx): the Sidebar on the recessed ground (the window's
  * lights, its toggle, search, back and forward; a back row, a filter, the overview and its groups; the profile at its
- * foot), the Canvas (the tabs, Inspiration and light / dark; a breadcrumb over sections of component tiles) and the
+ * foot), the Canvas (the tabs, References and light / dark; a breadcrumb over sections of component tiles) and the
  * Inspector (its views and toggle; Theme's rows). Built only from Area's components; the frame's settings paint it.
  * People: David Tee.
  */
@@ -12,7 +12,7 @@ import {
   Checkbox, Field, Input, Nav, NavGroup, NavItem, Panel, PanelSection, SearchField, Segmented, Select, Slider, Switch, Titlebar,
 } from "@area/react";
 import {
-  AddIcon, ArrowLeftIcon, ArrowRightIcon, GridIcon, HomeIcon, ImagesIcon, ListIcon, MoonIcon, PaletteIcon, PanelLeftFilledIcon,
+  AddIcon, ArrowLeftIcon, ArrowRightIcon, BookmarkIcon, GridIcon, HomeIcon, ListIcon, MoonIcon, PanelLeftFilledIcon, ShapesIcon,
   PanelRightFilledIcon, SearchIcon, SettingsIcon,
 } from "@area/icons";
 import type { ReactNode } from "react";
@@ -55,10 +55,10 @@ export function AreaAppScreen() {
         </div>
       </Panel>
       <main className="ex-area__canvas">
-        <Titlebar variant="plain" size="sm" end={<>{icon("Inspiration", <ImagesIcon />)}{icon("Dark mode", <MoonIcon />)}</>}>
+        <Titlebar variant="plain" size="sm" end={<>{icon("References", <BookmarkIcon />)}{icon("Dark mode", <MoonIcon />)}</>}>
           <Nav orientation="horizontal" aria-label="Open tabs">
             <NavItem href="#" icon={<HomeIcon />} aria-label="Home" />
-            <NavItem href="#" icon={<PaletteIcon />} current>Area</NavItem>
+            <NavItem href="#" icon={<ShapesIcon />} current>Area</NavItem>
           </Nav>
           {icon("New tab", <AddIcon />)}
         </Titlebar>

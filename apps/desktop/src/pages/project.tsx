@@ -52,7 +52,7 @@ function ProjectActions({ project }: { project: Project }) {
         onDone={name => { updateProject(project.id, current => ({ ...current, name })); setRenaming(false); }} /> : null}
       {deleting ? (
         <ConfirmDialog open title={`Delete ${project.name}?`} tone="danger" confirmLabel="Delete project"
-          description="Its folder moves to the Trash, where it can be put back; its tab closes. What it published stays in the Library."
+          description="Its folder moves to the Trash, where it can be put back; its tab closes. What it published stays in its system."
           onOpenChange={next => { if (!next) setDeleting(false); }} onConfirm={() => { deleteProject(project.id); setDeleting(false); }} />
       ) : null}
     </PanelSection>
@@ -87,7 +87,7 @@ function LayerView({ layer, library }: { layer: Layer; library: ReturnType<typeo
   // Nothing while Inspiration loads.
   if (!library) return null;
   const image = library.items.find(entry => `${entry.folder}/${entry.id}` === layer.ref);
-  return image ? <img className="studio-layer__image" src={url(image.thumb)} alt={image.alt || nameOf(image)} /> : <p className="studio-muted">This image is no longer in Inspiration.</p>;
+  return image ? <img className="studio-layer__image" src={url(image.thumb)} alt={image.alt || nameOf(image)} /> : <p className="studio-muted">This image is no longer in your saved references.</p>;
 }
 
 /** Save version's dialog: a name for the copy. */
@@ -206,7 +206,7 @@ export function ProjectPageView() {
   const images = library?.items ?? [];
   const sourceOf = (entry: Layer) => entry.kind === "screen"
     ? `${systemName(project.system)} › Patterns › ${EXAMPLES.find(example => example.id === entry.ref)?.label ?? entry.ref}`
-    : `Inspiration › ${library?.folders.find(folder => folder.id === entry.ref.split("/")[0])?.name ?? entry.ref.split("/")[0]}`;
+    : `References › ${library?.folders.find(folder => folder.id === entry.ref.split("/")[0])?.name ?? entry.ref.split("/")[0]}`;
   return (
     <Workspace
       canvasTitle={page.name}
@@ -230,11 +230,11 @@ export function ProjectPageView() {
             ))}
           </TileGrid>
         ) : (
-          <EmptyState title={`${page.name} is empty`} description="Add one of the system's screens, or an image from Inspiration. Each is a layer, listed under the page in the Sidebar." />
+          <EmptyState title={`${page.name} is empty`} description="Add one of the system's screens, or an image from your saved references. Each is a layer, listed under the page in the Sidebar." />
         )}
         {picking ? (
-          <Dialog open onOpenChange={next => { if (!next) setPicking(false); }} title="Add image" description="Choose an image from Inspiration: it goes at the end of the page.">
-            <AssetGrid aria-label="Inspiration" {...CARD_SCOPE} style={{ "--area-asset-card-size": `${PICK_SIZE}px` } as CSSProperties}
+          <Dialog open onOpenChange={next => { if (!next) setPicking(false); }} title="Add image" description="Choose an image from your saved references: it goes at the end of the page.">
+            <AssetGrid aria-label="Saved references" {...CARD_SCOPE} style={{ "--area-asset-card-size": `${PICK_SIZE}px` } as CSSProperties}
               onOpen={value => { const image = images.find(entry => `${entry.folder}/${entry.id}` === value); if (image) add("image", value, nameOf(image)); setPicking(false); }}>
               {images.slice(0, 60).map(entry => <AssetGridItem key={`${entry.folder}/${entry.id}`} value={`${entry.folder}/${entry.id}`} name={nameOf(entry)} media={url(entry.thumb)} container="framed" caption="above" aspect="square" />)}
             </AssetGrid>
@@ -362,7 +362,7 @@ function PublishExploration({ onClose }: { onClose: () => void }) {
   const submit = (event?: FormEvent) => { event?.preventDefault(); publishExploration(exploration.id, replaces && Boolean(from), kind, note); onClose(); };
   return (
     <Dialog open onOpenChange={next => { if (!next) onClose(); }} title={`Publish ${versionName(system, version)}`}
-      description={`Everyone using ${system} gets it, and it goes in ${system}'s History from ${openProject.name}. Unpublished changes in ${system} stay unpublished.`}
+      description={`Everyone using ${system} gets it, and it goes in ${system}'s Versions from ${openProject.name}. Unpublished changes in ${system} stay unpublished.`}
       footer={<><Button variant="ghost" tone="neutral" onClick={onClose}>Cancel</Button><Button onClick={() => submit()}>Publish {versionName(system, version)}</Button></>}>
       <form className="studio-publish" onSubmit={submit}>
         <BeforeAfter before={from && replaces ? { label: `Live in ${versionName(system, live.version)}`, value: from.name, theme: from } : null}

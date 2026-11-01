@@ -522,7 +522,7 @@ function CodeTab({ face, facts }: { face: Typeface; facts: FaceFacts | undefined
   } else if (face.source.geist) {
     blocks.push({ id: "install", title: "Install", lede: "Vercel's own build, with italics and stylistic sets.", code: "npm install geist", language: "bash" });
   } else if (face.source.files) {
-    blocks.push({ id: "font-face", title: "Load it", lede: "Copy the face's files from its repository, with the licence, and declare them.", language: "css",
+    blocks.push({ id: "font-face", title: "Load it", lede: "Copy the face's files from where it is published, with the licence, and declare them.", language: "css",
       code: (facts?.styles ?? [{ weight: "400", style: "normal" }]).map(style => `@font-face {\n  font-family: "${face.name}";\n  font-weight: ${style.weight};\n  font-style: ${style.style};\n  font-display: swap;\n  src: url("./fonts/${face.source.files}/…") format("woff2");\n}`).join("\n\n") });
   } else if (face.source.installed) {
     blocks.push({ id: "font-face", title: "Load it", lede: "With the foundry's web licence: its web font files, from your own server.", language: "css",
