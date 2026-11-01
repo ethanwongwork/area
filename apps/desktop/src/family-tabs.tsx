@@ -270,7 +270,7 @@ export function Markdown({ text, idPrefix }: { text: string; idPrefix: string })
  * column (`layout="fixed"`, owner 2026-10-31, docs/research/feed-rhythm-2026-10-31), so a tab's tables start their values
  * on one line; a first column of marks (Best practices' Do and Don't) stays `auto`.
  */
-function DataTable({ label, head, rows, fit = [], layout = "fixed" }: { label: string; head: ReactNode[]; rows: ReactNode[][]; fit?: number[]; layout?: "auto" | "fixed" }) {
+export function DataTable({ label, head, rows, fit = [], layout = "fixed" }: { label: string; head: ReactNode[]; rows: ReactNode[][]; fit?: number[]; layout?: "auto" | "fixed" }) {
   return (
     <ScrollArea type="hover" className="studio-table-scroll" viewportProps={{ className: "studio-table-scroll__viewport" }}>
     <Table size="md" layout={layout} aria-label={label}>
@@ -286,7 +286,7 @@ function DataTable({ label, head, rows, fit = [], layout = "fixed" }: { label: s
 }
 
 /** Term / value rows (the Inspector's facts, on the Canvas). */
-function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, ReactNode] | null | false | undefined> }) {
+export function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, ReactNode] | null | false | undefined> }) {
   return (
     <Table size="md" layout="fixed" aria-label={label}>
       <tbody>
@@ -304,7 +304,7 @@ function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, Rea
  * count when the block is a collection (a table's rows, a grid's cards), never on facts, code or prose; and a subtitle,
  * one sentence saying what the block holds.
  */
-function Section({ id, title, count, lede, children }: { id: string; title: string; count?: number; lede?: ReactNode; children: ReactNode }) {
+export function Section({ id, title, count, lede, children }: { id: string; title: string; count?: number; lede?: ReactNode; children: ReactNode }) {
   return (
     <section className="studio-section" id={id} aria-labelledby={`${id}-title`} {...appScale()}>
       <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede}

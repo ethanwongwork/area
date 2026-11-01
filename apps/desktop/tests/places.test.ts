@@ -66,6 +66,8 @@ test("a place's hash reads back as the same place", () => {
     { page: "themes", system: "area" }, { page: "theme-setup", system: "area" }, { page: "foundations", system: "area" },
     { page: "settings", system: "area", group: "shape" }, { page: "settings", system: "area", group: "shape", item: "radius" },
     { page: "color", system: "area", item: "blue" }, { page: "typography", system: "area" }, { page: "icons", system: "area", item: "arrows" },
+    // A typeface in Typography, and one of its tabs (src/pages/typography.tsx).
+    { page: "typography", system: "area", item: "face/inter" }, { page: "typography", system: "area", item: "face/inter/glyphs" },
     { page: "components", system: "area", item: "button/size-sm" }, { page: "patterns", system: "area", item: "analytics" },
     { page: "themes", system: "northwind", item: "theme-2" }, { page: "components", system: "northwind", item: "button" },
     { page: "inspiration", item: "a b/c" }, { page: "materials", item: "glass" }, { page: "tests", item: "hairline" }, { page: "history", system: "area", item: "1.2" },

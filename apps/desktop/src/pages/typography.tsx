@@ -8,9 +8,13 @@
  * with no measures ("make the card more landscape, remove the size leading tracking details"). Choosing a role
  * in the Sidebar shows it at each weight and at every type size, in a sample line the Inspector's Canvas section edits.
  * The Inspector shows the chosen role (its "Aa", its CSS and token to copy, its facts) or, with none, the type scale.
+ *
+ * Typefaces (owner, 2026-10-31; src/pages/typefaces.tsx): the library sits in the same Sidebar, Text, Display, Code and
+ * Licensed above the roles, and on the overview as a card per face before the roles' cards. A face opens on its own
+ * page (`face/<id>`, a tab after it): Specimen, Glyphs, About and Code.
  */
 import { useState, type ReactNode } from "react";
-import { Code, CopyButton as AreaCopyButton, EmptyState, Field, ListBox, PanelSection, Table, TableLink, Textarea, Tooltip } from "@area/react";
+import { Code, CopyButton as AreaCopyButton, EmptyState, Field, ListBox, PanelSection, Table, TableCell, TableLink, Textarea, Tooltip } from "@area/react";
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
@@ -18,6 +22,7 @@ import { hrefOf } from "../places.ts";
 import { appScale } from "../app-scale.ts";
 import { Specimen } from "../specimen-scope.tsx";
 import { CanvasSection, Tile, TileGrid, type CardLook } from "../tile.tsx";
+import { factsOf, FaceSample, FaceSummary, KINDS, TYPEFACES, typefaceOf, TypefaceWorkspace, useInstalled } from "./typefaces.tsx";
 
 /* Type cards keep the name below (owner, 2026-10-24); the other galleries show it on hover (tile.tsx, GALLERY_LOOK). */
 const TYPE_LOOK: CardLook = { container: "basic", caption: "below", fill: "recessed", borderless: false };
@@ -92,6 +97,10 @@ export function TypographyPage() {
   // The Sidebar's choice (All, or one role) and the Inspector's (the row chosen on the Canvas;
   // with one role on the Canvas, that role; with none, the type scale).
   const view = TYPE_ROLES.find(entry => entry.id === item);
+  // A typeface's page: `face/<id>`, then its tab.
+  const [faceId, faceTab] = item?.startsWith("face/") ? item.slice(5).split("/") : [];
+  const face = typefaceOf(faceId);
+  const mac = useInstalled();
   // The chosen style, "<weight>:<role>": one cell, since each role shows in both weights (2026-10-15, List box).
   const [selected, setSelected] = useState<string>();
   const [selectedWeight, selectedId] = (selected?.split(":") ?? []) as ["regular" | "strong" | undefined, string | undefined];
@@ -111,14 +120,27 @@ export function TypographyPage() {
     : sortBy(matching, entry => -entry.metrics[DEFAULT_TYPE]!.size, arrangement.descending);
   const sections = arrangement.group === "kind" ? GROUPS : [ALL_ROLES];
   const changeSample = (value: string) => { setSample(value); writeStored("typeSample", value); };
+  // The library, filtered by the search (name, foundry, designers), in the catalogue's order.
+  const faces = TYPEFACES.filter(entry => matches(query, entry.name, entry.foundry, ...entry.designers));
+  const faceGroups = KINDS.map(kind => ({ ...kind, faces: faces.filter(kind.test) })).filter(kind => kind.faces.length);
+  const chosenFace = selected?.startsWith("face:") ? typefaceOf(selected.slice(5)) : undefined;
+
+  // The Sidebar: the typefaces by kind, then the roles (product UI rule 7: the Canvas's order).
+  const sidebar = (
+    <SidebarList>
+      <SidebarTree label="Typography" count={faces.length + shown.length} current={face ? `face/${face.id}` : view?.id}
+        groups={[
+          ...faceGroups.map(kind => ({ id: `faces-${kind.id}`, label: kind.label, items: kind.faces.map(entry => ({ id: `face/${entry.id}`, label: entry.name })) })),
+          ...sections.map(group => ({ id: group.id, label: group.label,
+            items: shown.filter(entry => (group.groups as readonly string[]).includes(entry.group)).map(entry => ({ id: entry.id, label: entry.name })) })),
+        ]} />
+    </SidebarList>
+  );
+  if (face) return <TypefaceWorkspace face={face} tab={faceTab} sidebar={sidebar} />;
 
   return (
     <Workspace
-      sidebar={<SidebarList>
-        <SidebarTree label="Type roles" count={shown.length} current={view?.id}
-          groups={sections.map(group => ({ id: group.id, label: group.label,
-            items: shown.filter(entry => (group.groups as readonly string[]).includes(entry.group)).map(entry => ({ id: entry.id, label: entry.name })) }))} />
-      </SidebarList>}
+      sidebar={sidebar}
       canvasActions={
         <ViewControls>
           <ViewFilter label="Weight" value={weights} onChange={setWeights}
@@ -128,7 +150,7 @@ export function TypographyPage() {
           {view ? null : <ViewSwitch value={mode} onChange={setMode} />}
         </ViewControls>
       }
-      canvasTitle={view ? view.name : "All roles"}
+      canvasTitle={view ? view.name : "Typography"}
       canvas={view ? (
         // One role: at the Canvas's type size in each weight, then at every type size, in the sample
         // line, as ruled rows on the Canvas's surface (owner, 2026-10-12: type sits on the surface; a
@@ -150,11 +172,50 @@ export function TypographyPage() {
             </section>
           ))}
         </div>
-      ) : !shown.length ? (
+      ) : !shown.length && !faces.length ? (
         // No matches: the Sidebar keeps All, and the Canvas says so (product UI rule 10, docs/PRODUCT_UI.md).
-        <EmptyState title="No type roles" description={`Nothing matches “${query}”.`} />
+        <EmptyState title="Nothing found" description={`No typeface or type role matches “${query}”.`} />
       ) : (
         <Sheet grid={mode === "grid"} value={selected ?? null} onChoose={setSelected}>
+          {/* The typeface library first: a card per face, "Aa" in the face and its name below, as the roles' cards; a
+              double-click (or the Sidebar) opens its page. The list view: one table per kind. */}
+          {faceGroups.map(kind => (
+            <CanvasSection key={kind.id} role={mode === "grid" ? "group" : undefined} id={`faces-${kind.id}`} title={`${kind.label} typefaces`} count={kind.faces.length} lede={kind.lede}>
+              {mode === "grid" ? (
+                <TileGrid span="wide" cards>
+                  {kind.faces.map(entry => {
+                    const facts = factsOf(entry, mac);
+                    return (
+                      <Tile key={entry.id} container="asset" look={TYPE_LOOK} aspect="hug" span="wide" stage="flow" option={`face:${entry.id}`}
+                        label={entry.name} aria-label={`${entry.name}, ${entry.foundry}`} onOpen={() => select(`face/${entry.id}`)}>
+                        <span className="studio-type-card" aria-hidden="true">
+                          <FaceSample face={entry} facts={facts} className="studio-type-card__sample" style={{ fontSize: "var(--area-display-sm-size)", lineHeight: "var(--area-display-sm-leading)" }} />
+                        </span>
+                      </Tile>
+                    );
+                  })}
+                </TileGrid>
+              ) : (
+                <Table size="md" interactive aria-label={`${kind.label} typefaces`}>
+                  <thead><tr><th scope="col">Typeface</th><th scope="col">Foundry</th><th scope="col">Licence</th><th scope="col">Characters</th><th scope="col">Axes</th></tr></thead>
+                  <tbody>
+                    {kind.faces.map(entry => {
+                      const facts = factsOf(entry, mac);
+                      return (
+                        <tr key={entry.id} data-selected={chosenFace?.id === entry.id ? "" : undefined}>
+                          <td><TableLink href={hrefOf({ page: "typography", item: `face/${entry.id}` })} onClick={event => { event.preventDefault(); select(`face/${entry.id}`); }}>{entry.name}</TableLink></td>
+                          <td><span className="studio-muted">{entry.foundry}</span></td>
+                          <td><span className="studio-muted">{entry.licence}</span></td>
+                          <TableCell numeric>{facts ? facts.characters.toLocaleString() : "—"}</TableCell>
+                          <td><span className="studio-muted">{facts?.axes.length ? facts.axes.map(axis => axis.tag).join(", ") : "—"}</span></td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              )}
+            </CanvasSection>
+          ))}
           {sections.map(group => {
             const list = shown.filter(entry => (group.groups as readonly string[]).includes(entry.group));
             if (!list.length) return null;
@@ -233,7 +294,7 @@ export function TypographyPage() {
                 </Field>
               </PanelSection>
             ) : null}
-            {role ? (
+            {chosenFace ? <FaceSummary face={chosenFace} facts={factsOf(chosenFace, mac)} /> : role ? (
               <>
                 <Selection preview={<Preview><span style={roleStyle(role, view ? weight : selectedWeight ?? weight)} aria-hidden="true">Aa</span></Preview>} />
                 <PanelSection heading="Role">
