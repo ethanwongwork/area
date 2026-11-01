@@ -1,6 +1,8 @@
 <svg data-set="area-pilot" data-alias-of="bot-agent" data-keyline="circle" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M3 6.607V12A1.5 1.5 0 0 0 4.5 13.5H11.5A1.5 1.5 0 0 0 13 12V6.607" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="solid" d="M4 6.794L4.48 3.362A1 1 0 0 1 5.47 2.5L7.099 2.5A0.5 0.5 0 0 1 7.376 2.584L7.723 2.815A0.5 0.5 0 0 0 8.277 2.815L8.624 2.584A0.5 0.5 0 0 1 8.901 2.5L10.53 2.5A1 1 0 0 1 11.52 3.362L12 6.794Q8 7.456 4 6.794Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M1.5 6.25Q8 8 14.5 6.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M5.158 9L10.842 9A0.38 0.38 0 0 1 11.215 9.598L11.048 10.696A0.76 0.76 0 0 1 10.303 11.5L9.487 11.5A0.38 0.38 0 0 1 9.219 11.354L8.269 10.104A0.38 0.38 0 0 0 7.731 10.104L6.781 11.354A0.38 0.38 0 0 1 6.513 11.5L5.697 11.5A0.76 0.76 0 0 1 4.952 10.696L4.785 9.598A0.38 0.38 0 0 1 5.158 9Z" fill="currentColor"/>
+<path d="M3 7.107V12.5A1.5 1.5 0 0 0 4.5 14H11.5A1.5 1.5 0 0 0 13 12.5V7.107" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M4 7.294L4.5 2.888A1 1 0 0 1 5.494 2L7.099 2A0.5 0.5 0 0 1 7.376 2.084L7.723 2.315A0.5 0.5 0 0 0 8.277 2.315L8.624 2.084A0.5 0.5 0 0 1 8.901 2L10.506 2A1 1 0 0 1 11.5 2.888L12 7.294Q8 7.956 4 7.294Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M4.303 4.625Q8 5.025 11.697 4.625" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M1.5 4.625H4.303Q8 5.025 11.697 4.625H14.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1.5 6.75Q8 8.5 14.5 6.75" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5.158 9.5L10.842 9.5A0.38 0.38 0 0 1 11.215 10.098L11.048 11.196A0.76 0.76 0 0 1 10.303 12L9.487 12A0.38 0.38 0 0 1 9.219 11.854L8.269 10.604A0.38 0.38 0 0 0 7.731 10.604L6.781 11.854A0.38 0.38 0 0 1 6.513 12L5.697 12A0.76 0.76 0 0 1 4.952 11.196L4.785 10.098A0.38 0.38 0 0 1 5.158 9.5Z" fill="currentColor"/>
 </svg>
