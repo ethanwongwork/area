@@ -6,8 +6,9 @@ its ends slide along their edges to the NEW radius, and the runs either side fol
 box is under MIN on its long side (a lock, a clip, a badge) keep their radius: the rule is by size.
 
   python3 docs/research/icon-cohesion-2026-10-31/tools/reradius.py OLD NEW name,name… [--min 6] [--dry]
+  SRC_DIR=folder runs it on a copy of the sources (the less-round demo).
 """
-import re, sys
+import os, re, sys
 
 TOK = re.compile(r"[MLHVCSQAZmlhvcsqaz]|-?\d*\.?\d+(?:e-?\d+)?")
 ARITY = {"M": 2, "L": 2, "H": 1, "V": 1, "C": 6, "S": 4, "Q": 4, "A": 7, "Z": 0}
@@ -79,7 +80,7 @@ if __name__ == "__main__":
     old, new, names = float(args[0]), float(args[1]), args[2].split(",")
     minlong = float(sys.argv[sys.argv.index("--min") + 1]) if "--min" in sys.argv else 6
     for n in names:
-        p = f"packages/icons/sources/{n}.svg"; t = open(p).read(); total = 0
+        p = os.path.join(os.environ.get("SRC_DIR", "packages/icons/sources"), f"{n}.svg"); t = open(p).read(); total = 0
         def path(m):
             global total
             d, c = reradius(m.group(2), old, new, minlong); total += c; return m.group(1) + d + m.group(3)

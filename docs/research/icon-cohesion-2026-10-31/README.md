@@ -179,3 +179,18 @@ type 13), and noted the isometric and angled views beside a flat car and truck.
 Round 3 applied 2026-11-01 as picked (spec "Cohesion pass, round 3"): radius by size in about 50 icons, plane top-down,
 switch-camera on the camera, snowflake's V's given room, bot and bot-agent redrawn and the eight role bots removed (802
 icons). move and container kept. Icon Boards republished from the new build.
+
+## Round 4 (2026-11-01; review page)
+
+Owner: "at 16 size some of the lines can become very dense/clumped and some icons ink just looks really off … open to
+making all the icons at all sizes slightly less round … make sure the shapes/roundness/angles are all consistent."
+
+- **Gaps** (full lint report): 171 icons have a gap under one line (0.87–1.12, the detail step) and 66 a counter under
+  1.5; families: files 15, person 14, calendar 10, folders 8, battery 5, git 4, and the lettered icons. Lucide and
+  Tabler keep 1.33 at 16. Proposed: the floor rises to one line (1.125), counters to 1.5, redrawn by family.
+- **1×** (`tools/px16.mjs`, a real 16px canvas): Area's clumping sits between Phosphor and Lucide; 108 icons are over
+  60% grey half-pixels (lines on whole pixels). Balance over crispness (owner, 2026-10-16) stands unless changed.
+- **Angles** (`tools/angles.py`): consistent by family (45° throughout, 1 : 2 isometric, 2 : 1 slants, 60° pencil tips)
+  except the system / shapes triangle (56° against 60–62°), redrawn at 60°.
+- **Less round** (`reradius.py` with `SRC_DIR` on a copy): frames r 2 → 1.5 and mid frames 1.5 → 1 change 305 icons,
+  about Lucide's 1.33. Icon Boards (`boards.py --compare`) has a Corners toggle for the whole set.
