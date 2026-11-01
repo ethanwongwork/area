@@ -1238,19 +1238,19 @@
       "title": "Batch 77 · App, agent and design-panel concepts",
       "note": "Concepts Area lacked, found by reading the icons Cursor (its cursor-icons registry and codicon additions) and the Claude desktop app (its 395-glyph set) use in sidebars, settings, agent panels and pickers, plus Area's own IA after PR #191: AI review and suggestion marks, task status, a non-git split for Explorations, a floating panel, two Figma design-panel effects, Motion for Foundations, and five picker icons. Drawn on the 2026-11-01 rules (gap floor one line, less round corners). Dropped: agents (two agent figures; the offset back copy read as a padlock at 16) and mailbox (the flag read as a corner mark; mail and inbox cover the use).",
       "icons": {
-        "search-sparkle": "review",
-        "lightbulb-sparkle": "review",
-        "circle-progress": "review",
-        "arrow-split": "review",
-        "panel-left-float": "review",
-        "background-blur": "review",
-        "absolute-position": "review",
-        "motion": "review",
-        "ghost": "review",
-        "signpost": "review",
-        "dna": "review",
-        "orbit": "review",
-        "sunrise": "review"
+        "search-sparkle": "approved",
+        "lightbulb-sparkle": "approved",
+        "circle-progress": "approved",
+        "arrow-split": "approved",
+        "panel-left-float": "approved",
+        "background-blur": "approved",
+        "absolute-position": "approved",
+        "motion": "approved",
+        "ghost": "approved",
+        "signpost": "approved",
+        "dna": "approved",
+        "orbit": "approved",
+        "sunrise": "approved"
       }
     }
   ]

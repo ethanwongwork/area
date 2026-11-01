@@ -252,3 +252,7 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   glyph and figure curves untouched); the system / shapes triangle at 60° like warning, play, eject and flask; balance
   over 1× crispness stands; the smallest gap rises to one line (1.125) and the smallest counter to 1.5, the 171 icons
   under it redrawn in family batches, each shown before it lands (the detail step of 2026-09-28 is retired).
+  Rounds 6–7 and batch 77 picks, 2026-11-01: the passes the owner asked to run on their own ("just automatically do the
+  passes and audit yourself") are kept as applied (held constructions simplified to the floor, gift-card on gift's bow,
+  globe stroked); batch 77 (concepts read from Cursor's and the Claude app's icon sets and the new IA) approved whole;
+  Explorations keeps git-branch in the app's sidebar (arrow-split stays in the set for fork / split-off uses).
