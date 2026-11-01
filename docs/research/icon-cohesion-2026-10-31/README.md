@@ -216,3 +216,5 @@ small lock's two sizes, sort-alpha's arrow 0.5 below sort-numeric's.
 - **Shared parts** (`generate.mjs --check --parts`): members keep their base's body exactly (chat, mail, calendar,
   folder, document checked); drift comes from marks, cuts and the family sparkle. Ring radii are one scale (r 6 full
   rings ×35, r 5 lenses, r 4.5 rings sharing space, timer r 5.5).
+- gift-card: the held loops and tails could not reach the floor and the ribbon cross alone read as a table, so it
+  takes gift's own bow (unchanged) on a centred band at 9, with the ribbon below the knot only.
