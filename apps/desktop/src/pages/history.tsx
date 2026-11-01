@@ -1,5 +1,6 @@
 /**
- * History, a system's last section (the IA of 2026-10-29): every publish, newest first, each its version, kind, date, note
+ * Versions, a system's last section (the IA of 2026-10-29; History until 2026-10-31, renamed to match a project's
+ * Versions, PRODUCT_UI.md rule 24): its release notes, every publish, newest first, each its version, kind, date, note
  * and where it came from (the system itself, or a project's exploration), drawn as its theme in use beside the version
  * before it, so the changelog is seen rather than read. A version chosen shows its facts in the Inspector, with Restore,
  * which makes it the working copy to publish again (a revert is a new publish, never a rewrite of History).
@@ -64,7 +65,7 @@ export function HistoryPage() {
   const newestFirst = [...releases].reverse();
   return (
     <Workspace
-      canvasTitle="History"
+      canvasTitle="Versions"
       canvas={<>
         <div className="studio-sections">
           {newestFirst.map(release => {
@@ -91,7 +92,7 @@ export function HistoryPage() {
         </div>
         {chosen && restoring ? (
           <ConfirmDialog open title={`Restore ${versionName(workingSystem.name, chosen.version)}?`} confirmLabel="Restore"
-            description={`The working copy becomes ${versionName(workingSystem.name, chosen.version)}, ready to publish as the next version. ${changes.length ? `Its ${changes.length} unpublished ${changes.length === 1 ? "change is" : "changes are"} replaced.` : "Nothing published changes until you publish."}`}
+            description={`Your draft becomes ${versionName(workingSystem.name, chosen.version)}, ready to publish as the next version. ${changes.length ? `Its ${changes.length} unpublished ${changes.length === 1 ? "change is" : "changes are"} replaced.` : "Nothing published changes until you publish."}`}
             onOpenChange={next => { if (!next) setRestoring(false); }} onConfirm={() => { revertSystem(chosen.version); setRestoring(false); }} />
         ) : null}
       </>}
@@ -115,8 +116,8 @@ export function HistoryPage() {
           </PanelSection>
         </>) : (
           <>
-            <PanelSection heading="History">
-              <Facts label="History" items={[
+            <PanelSection heading="Versions">
+              <Facts label="Versions" items={[
                 ["Live", versionName(workingSystem.name, live.version)],
                 ["Publishes", releases.length],
                 changes.length ? null : ["Unpublished", "None"],

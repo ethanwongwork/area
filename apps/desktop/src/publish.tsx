@@ -80,7 +80,11 @@ export function ThemeScreen({ theme, mode }: { theme: SystemTheme; mode: "light"
   return <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={{ ...canvasAttributes(theme.canvas, theme.material), "data-area-theme": mode }} />;
 }
 
-/** The end of a system tab's Canvas bar: Live / Working and Publish, while the working copy has changes. */
+/**
+ * The end of a system tab's Canvas bar: Live / Draft and Publish, while the working copy has changes. Draft is Figma's word
+ * for what is not published yet; the app's copy says design words, not git's (owner, 2026-10-31: "the whole merge, repo,
+ * commit, push terminology should be updated to design friendly terms"; Working until then).
+ */
 export function PublishControls() {
   const { place, live, setLive, changes } = useStudio();
   const [publishing, setPublishing] = useState(false);
@@ -89,7 +93,7 @@ export function PublishControls() {
     <>
       <ViewControls>
         <Segmented size="sm" aria-label="Show" value={live ? "live" : "working"} onValueChange={value => setLive(value === "live")}
-          items={[{ value: "live", label: "Live" }, { value: "working", label: "Working" }]} />
+          items={[{ value: "live", label: "Live" }, { value: "working", label: "Draft" }]} />
         <Button size="sm" onClick={() => setPublishing(true)}>Publish {changes.length} {changes.length === 1 ? "change" : "changes"}</Button>
       </ViewControls>
       {/* Outside the bar's group, whose text never wraps. */}
@@ -116,7 +120,7 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
   );
   return (
     <Dialog open onOpenChange={next => { if (!next) onClose(); }} title={`Publish ${versionName(workingSystem.name, version)}`}
-      description={`Everyone using ${workingSystem.name} and every project on it gets ${versionName(workingSystem.name, version)}. It goes in History with this note.`}
+      description={`Everyone using ${workingSystem.name} and every project on it gets ${versionName(workingSystem.name, version)}. It goes in Versions with this note.`}
       footer={<>
         <Button variant="ghost" tone="danger" className="studio-publish__discard" onClick={() => setDiscarding(true)}>Discard changes</Button>
         <Button variant="ghost" tone="neutral" onClick={onClose}>Cancel</Button>

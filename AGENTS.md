@@ -11,12 +11,14 @@ components and accurate specs matter more than speed.
   built only from Area and judged only in the app. Its regions are:
   - **Three regions, each with its own header** (owner, 2026-10-30; no Titlebar across the window): the
     Sidebar's holds the window controls' room, its toggle, search (⌘K, every place) and back and forward;
-    the Canvas's the open tabs (Home first and fixed, then one per project, system, Inspiration or lab; a
-    tab never changes what it holds), Inspiration and light / dark; the Inspector's its views and toggle.
+    the Canvas's the open tabs (Home first and fixed, then References or one per project, system or lab; a
+    tab never changes what it holds), References and light / dark; the Inspector's its views and toggle.
     The profile and Settings (⌘,) sit at the Sidebar's foot.
-  - **Sidebar** (the tab's own nav: in Home's tab Home, Projects and the Library; in a system's
-    tab its Themes, Colors, Typography, Icons, Components, Patterns and History, one row each (owner,
-    2026-10-30); in a project's tab its Overview, Pages and layers, Explorations and Versions; a page's
+  - **Sidebar** (the tab's own nav: in Home's tab Home, References, Projects and Systems (owner,
+    2026-10-31: References is Discover, Following and Saved with its collections); in a system's
+    tab Foundations (Themes, Tokens, Colors, Typography, Spacing, Shape, Elevation, Motion, Icons), Components (every
+    family by name, under its kind) and
+    Patterns and Versions (owner, 2026-10-30; grouped 2026-10-31; Versions was History); in a project's tab its Overview, Pages and layers, Explorations and Versions; a page's
     own list sits under the nav, never in place of it),
     **Canvas** and **Inspector** (Theme, Design, Code, Chat). Places and old links:
     `apps/desktop/src/places.ts`; systems (called brands until 2026-10-29), their themes and

@@ -290,6 +290,12 @@
   .studio-inspector-actions > :last-child:nth-child(odd) { grid-column: 1 / -1; }
   /* New brand's and Rename's form (src/pages/home.tsx): the name, then how it starts, a field's gap apart (Dialog's form). */
   .studio-home__form { display: grid; gap: var(--area-space-16); /* pick: Form's field gap */ }
+  /* Home is one column, centred (owner, 2026-10-31: "a single column feed"), at the reading measure: ChatGPT's thread 768,
+     Notion's text 708 (ui-compose content.md, Widths). */
+  .studio-home__feed { width: min(100%, 720px); /* pick */ margin-inline: auto; }
+  /* An event's note, then its picture, a group apart. */
+  .studio-home__event { display: grid; gap: var(--area-space-12); /* pick: the feed's card gap */ }
+  .studio-home__note { margin: 0; max-width: 66ch; }
   /* Publish's dialog (src/publish.tsx, src/pages/project.tsx): Live beside Publishing, then the changes, the kind and the
      note, a field's gap apart as the form above. Live and Publishing are two tiles, 8 apart (the cards' gap). */
   .studio-publish { display: grid; gap: var(--area-space-16); /* pick: Form's field gap */ }

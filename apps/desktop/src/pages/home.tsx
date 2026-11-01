@@ -1,25 +1,27 @@
 /**
- * Home (docs/research/app-structure-2026-10-28/README.md, Phase 2; the IA of 2026-10-29): the workspace at a glance, in
- * the fixed first tab (Figma's file browser). Its feed: the projects, each drawn in the theme it uses; the Library's
- * systems, each drawn as Setup's product screen in its chosen theme; New system, three ways (a fork of the Area Starter's
- * values, an import, which is a stub until import exists, or describing it in the Setup chat); Inspiration's boards; and
- * the places visited lately. A project, a system, a board or a place opens in the tab already holding it, else a new tab
- * (src/studio.tsx `navigate`).
+ * Home (docs/research/app-structure-2026-10-28/README.md, Phase 2; a single-column feed since 2026-10-31, owner: "i do like
+ * the general name or concept of home, but just want things to be displayed as almost like a single column feed … a feed
+ * of things, updates, notifications, launches, new published work, new projects"), in the fixed first tab. The Sidebar
+ * already lists the projects and systems, so Home is what happened: Continue (the last few places), then Latest, a
+ * Timeline newest first: changes waiting to publish, each system's publishes (its release notes, drawn as the theme they
+ * published), projects started, versions saved, references saved. A system's or project's picture selects it for the
+ * Inspector (Open, Rename, Delete) and opens it on a double-click; its title opens it. Notifications from other people
+ * and launches by people you follow join the same Timeline when sharing exists.
  *
  * Location: #home, #home/<system or project> for a chosen one, #home/new for New system's dialog, #home/new-project for
  * New project's.
  */
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent } from "react";
-import { AssetGrid, AssetGridItem, Badge, Button, ConfirmDialog, Dialog, EmptyState, Field, Input, PanelSection, Radio, RadioGroup, Select, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
-import { AddIcon } from "@area/icons";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { AssetGrid, AssetGridItem, Button, ConfirmDialog, Dialog, EmptyState, Field, Input, Link, PanelSection, Radio, RadioGroup, Select, Table, TableCell, TableHeaderCell, TableLink, Timeline, TimelineItem } from "@area/react";
+import { AddIcon, BookmarkIcon, CircleDashedIcon, FolderIcon, HistoryIcon, ShapesIcon, TagIcon } from "@area/icons";
 import { canvasAttributes, useStudio, Workspace, type Visit } from "../studio.tsx";
 import { CanvasSection, CARD_SCOPE, Tile, TileGrid, FEED_TABLE } from "../tile.tsx";
 import { ViewControls } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
-import { hasColours } from "../colours.ts";
-import { activeTheme, asLive, liveOf, ORIGIN_LABEL, versionName, type System, type SystemOrigin } from "../systems.ts";
-import type { Project } from "../projects.ts";
+import { activeTheme, asLive, liveOf, ORIGIN_LABEL, RELEASE_KIND_LABEL, versionName, type Release, type System, type SystemOrigin } from "../systems.ts";
+import type { Project, ProjectVersion } from "../projects.ts";
+import { ThemeScreen } from "../publish.tsx";
 import { projectName, systemName, hrefOf, resolve, tabKind, type Place } from "../places.ts";
 import { placeLabel } from "../app-nav.tsx";
 import { readStored } from "../storage.ts";
@@ -30,12 +32,21 @@ import { SETTINGS } from "./theme-settings.ts";
 import { TYPE_ROLES } from "../tokens.ts";
 import { categories as ICON_CATEGORIES } from "@area/icons/meta";
 
-/** A system card is the feed's 300 card, wide enough to read the screen in it (PRODUCT_UI.md, the Canvas feed), as Themes'. */
-const SYSTEM_MIN = 300; /* pick */
-/** A board is a Library group's card at Imagery's medium size. */
+/** A picture in the feed fills the column: one card a row (a column of 720 holds no two at this minimum). */
+const FEED_CARD_MIN = 480; /* pick */
+/** A collection is a References card at Imagery's medium size. */
 const BOARD_SIZE = 192; /* pick: imagery.tsx SIZES.medium */
-/** Recent shows the last few places, as Figma's Recents and Cursor's recent projects do. */
-const RECENT = 8; /* pick */
+/** Continue shows the last few places, as Notion's Home "Recently visited" and Cursor's recent projects do. */
+const RECENT = 4; /* pick */
+/** Saved references show their first collections; References holds the rest. */
+const SAVED_SHOWN = 6; /* pick */
+
+/** What happened, for the feed: each from the workspace's own records, never made up. */
+type HomeEvent =
+  | { kind: "release"; at: number; system: System; release: Release }
+  | { kind: "project"; at: number; project: Project }
+  | { kind: "version"; at: number; project: Project; version: ProjectVersion }
+  | { kind: "saved"; at: number };
 
 /** The three ways to start a system, in the order Home offers them. Import waits for import itself. */
 const WAYS: ReadonlyArray<{ origin: Exclude<SystemOrigin, "area">; title: string; description: string; later?: boolean }> = [
@@ -44,7 +55,7 @@ const WAYS: ReadonlyArray<{ origin: Exclude<SystemOrigin, "area">; title: string
   { origin: "import", title: "Import", description: "From Figma, a site or a codebase. Not built yet.", later: true },
 ];
 
-/** How long ago, in the words a file browser uses ("Just now", "5 min ago", "3 days ago"). */
+/** How long ago, in the words a file browser uses ("Just now", "5 min ago", "3 days ago"); past a week, the date. */
 function ago(at: number, now: number): string {
   const minutes = Math.round((now - at) / 60000);
   if (minutes < 1) return "Just now";
@@ -52,8 +63,10 @@ function ago(at: number, now: number): string {
   const hours = Math.round(minutes / 60);
   if (hours < 24) return `${hours} h ago`;
   const days = Math.round(hours / 24);
-  return days === 1 ? "Yesterday" : `${days} days ago`;
+  if (days < 7) return days === 1 ? "Yesterday" : `${days} days ago`;
+  return new Date(at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: new Date(at).getFullYear() === new Date(now).getFullYear() ? undefined : "numeric" });
 }
+const plural = (count: number, one: string, many = `${one}s`) => `${count} ${count === 1 ? one : many}`;
 
 /** What a place has chosen, by its name where the app has one ("state-selected" → "Selected state"), else its id in words. */
 function itemLabel(place: Place): string | undefined {
@@ -75,7 +88,7 @@ function visitLabel(place: Place): string {
 }
 
 export function HomePage() {
-  const { item, select, navigate, systems, projects, openSystem, theme, brand: accent, shown, createSystem, renameSystem, deleteSystem, createProject } = useStudio();
+  const { item, select, navigate, systems, projects, openSystem, theme, changes, createSystem, renameSystem, deleteSystem, createProject } = useStudio();
   const { library } = useLibrary();
   const chosen = systems.find(entry => entry.id === item) ?? null;
   const chosenProject = projects.find(entry => entry.id === item) ?? null;
@@ -116,16 +129,80 @@ export function HomePage() {
     // A described system opens on its first theme's Setup chat; one from the Starter on its Themes.
     navigate({ page: origin === "described" ? "theme-setup" : "themes", system: made.id });
   };
-  // A system card draws its chosen theme's settings and Material. Exact colours are one rule in the document's head for the
-  // open system alone (src/colours.ts, src/brand.ts), so only its card shows them.
-  const scopeOf = (entry: System) => {
-    const own = activeTheme(entry);
-    const open = entry.id === openSystem.id;
-    return { ...canvasAttributes(open ? shown.canvas : own.canvas, open ? shown.material : own.material),
-      ...(open && hasColours(shown.colours) ? { "data-area-colours": "" } : {}), ...(open && accent.on ? { "data-area-brand": "" } : {}), "data-area-theme": theme };
-  };
   const boards = library?.folders ?? [];
   const firstOf = (folder: string) => (library?.items ?? []).filter(entry => entry.folder === folder).slice(0, 4).map(entry => url(entry.thumb));
+
+  // Everything that happened, newest first: each system's publishes (its first is when it began), each project's start and
+  // saved versions, and the references saved.
+  const events = useMemo(() => {
+    const list: HomeEvent[] = [
+      ...systems.flatMap(system => system.releases.map(release => ({ kind: "release" as const, at: Date.parse(release.at), system, release }))),
+      ...projects.flatMap(project => [
+        { kind: "project" as const, at: Date.parse(project.created), project },
+        ...project.versions.map(version => ({ kind: "version" as const, at: Date.parse(version.at), project, version })),
+      ]),
+      ...(library?.items.length ? [{ kind: "saved" as const, at: Date.parse(library.fetched) }] : []),
+    ];
+    return list.filter(event => Number.isFinite(event.at)).sort((a, b) => b.at - a.at);
+  }, [systems, projects, library]);
+  const eventKey = (event: HomeEvent) => event.kind === "release" ? `release:${event.system.id}:${event.release.version}`
+    : event.kind === "project" ? `project:${event.project.id}` : event.kind === "version" ? `version:${event.project.id}:${event.version.id}` : "saved";
+  // A title that opens what it names, in the tab holding it (⌘-click: a new one).
+  const opener = (target: Place, label: string) => (
+    <Link href={hrefOf(target)} onClick={event => { event.preventDefault(); navigate(target, { newTab: event.metaKey || event.ctrlKey }); }}>{label}</Link>
+  );
+  // One picture, the column's width: selecting it shows it in the Inspector, a double-click opens it.
+  const picture = (key: string, label: string, value: string, selected: boolean, onSelect: () => void, onOpen: () => void, figure: ReactNode) => (
+    <TileGrid key={key} span="wide" cards min={FEED_CARD_MIN}>
+      <Tile span="wide" stage="screen" inert label={label} value={value} selected={selected} onSelect={onSelect} onOpen={onOpen}>{figure}</Tile>
+    </TileGrid>
+  );
+  const feedEvent = (event: HomeEvent) => {
+    const key = eventKey(event);
+    const time = ago(event.at, now);
+    const dateTime = new Date(event.at).toISOString();
+    if (event.kind === "release") {
+      const { system, release } = event;
+      const first = release.kind === "first";
+      const published = release.themes.find(entry => entry.id === release.theme) ?? release.themes[0]!;
+      const from = release.from ? projects.find(entry => entry.id === release.from)?.name : undefined;
+      return (
+        <TimelineItem key={key} icon={first ? <ShapesIcon /> : <TagIcon />} time={time} dateTime={dateTime}
+          title={first ? <>{opener({ page: "themes", system: system.id }, system.name)} began</> : <>{opener({ page: "history", system: system.id, item: release.version }, versionName(system.name, release.version))} published</>}
+          meta={first ? ORIGIN_LABEL[system.origin] : [RELEASE_KIND_LABEL[release.kind], from ? `from ${from}` : null].filter(Boolean).join(", ")}>
+          <div className="studio-home__event">
+            {release.note && !first ? <p className="studio-home__note">{release.note}</p> : null}
+            {picture(`release:${system.id}:${release.version}`, published.name, versionName(system.name, release.version), chosen?.id === system.id,
+              () => select(system.id, { replace: true }), () => open(system), <ThemeScreen theme={published} mode={theme} />)}
+          </div>
+        </TimelineItem>
+      );
+    }
+    if (event.kind === "project") {
+      const { project } = event;
+      return (
+        <TimelineItem key={key} icon={<FolderIcon />} time={time} dateTime={dateTime} meta={`Uses ${systemName(project.system)}`}
+          title={<>{opener({ page: "project", project: project.id }, project.name)} started</>}>
+          {picture(`project:${project.id}`, project.name, `${systemName(project.system)}, ${plural(project.pages.length, "page")}`, chosenProject?.id === project.id,
+            () => select(project.id, { replace: true }), () => navigate({ page: "project", project: project.id }),
+            <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={projectScope(project)} />)}
+        </TimelineItem>
+      );
+    }
+    if (event.kind === "version") return (
+      <TimelineItem key={key} icon={<HistoryIcon />} time={time} dateTime={dateTime} meta={event.project.name}
+        title={<>{opener({ page: "versions", project: event.project.id }, event.version.name)} saved</>} />
+    );
+    return (
+      <TimelineItem key={key} icon={<BookmarkIcon />} time={time} dateTime={dateTime} meta={plural(boards.length, "collection")}
+        title={<>{opener({ page: "references" }, `${plural(library?.items.length ?? 0, "reference")} saved`)}</>}>
+        <AssetGrid aria-label="Collections" onOpen={id => navigate({ page: "references", item: id })} {...CARD_SCOPE}
+          style={{ "--area-asset-card-size": `${BOARD_SIZE}px` } as CSSProperties}>
+          {boards.slice(0, SAVED_SHOWN).map(entry => <AssetGridItem key={entry.id} value={entry.id} name={entry.name} container="framed" caption="above" aspect="landscape" group={firstOf(entry.id)} />)}
+        </AssetGrid>
+      </TimelineItem>
+    );
+  };
 
   return (
     <Workspace
@@ -137,64 +214,8 @@ export function HomePage() {
         </ViewControls>
       }
       canvas={<>
-        <div className="studio-sections">
-          <CanvasSection id="home-projects" title="Projects" count={projects.length} lede="Where new things and big changes are made, each with one system as it is published.">
-            {projects.length ? (
-              <TileGrid span="wide" cards min={SYSTEM_MIN}>
-                {projects.map(entry => (
-                  <Tile key={entry.id} span="wide" stage="screen" inert label={entry.name}
-                    value={`${systemName(entry.system)}, ${entry.pages.length} ${entry.pages.length === 1 ? "page" : "pages"}`}
-                    selected={chosenProject?.id === entry.id} onSelect={() => select(entry.id, { replace: true })} onOpen={() => navigate({ page: "project", project: entry.id })}>
-                    <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={projectScope(entry)} />
-                  </Tile>
-                ))}
-              </TileGrid>
-            ) : (
-              <EmptyState size="sm" title="No projects yet" description="A project uses one of your systems to make screens, try explorations of its look and save versions."
-                actions={<Button size="sm" variant="soft" tone="neutral" onClick={() => setStarting(true)}>New project</Button>} />
-            )}
-          </CanvasSection>
-          <CanvasSection id="home-systems" title="Systems" count={systems.length} lede="The Library's systems: the look and the rules a product is built with, each edited in place and published.">
-            <TileGrid span="wide" cards min={SYSTEM_MIN}>
-              {systems.map(entry => (
-                <Tile key={entry.id} span="wide" stage="screen" inert label={entry.name} value={`${entry.themes.length} ${entry.themes.length === 1 ? "theme" : "themes"}, ${activeTheme(entry).name} in use`}
-                  selected={chosen?.id === entry.id} onSelect={() => select(entry.id, { replace: true })} onOpen={() => open(entry)}>
-                  <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={scopeOf(entry)} />
-                </Tile>
-              ))}
-            </TileGrid>
-          </CanvasSection>
-          <CanvasSection id="home-new" title="New system" lede="Start from Area's values, describe the system in a chat, or import it.">
-            {/* Settings' framed rows (styles/settings.css), not Cards: a way is a name, a line and an action, in the feed's one
-                voice (13/18; owner pick q-cards, 2026-10-31). Card titles are 15/22 at every size, which put each way above
-                its section's 13/18 title; the feed's tiles need a picture these have none of. Cursor's settings rows. */}
-            <div className="studio-settings__rows" role="list" aria-label="Ways to start a system">
-              {WAYS.map(way => (
-                <div key={way.origin} className="studio-settings__row" role="listitem">
-                  <div className="studio-settings__text">
-                    <span className="studio-settings__label">{way.title}</span>
-                    <span className="studio-settings__description">{way.description}</span>
-                  </div>
-                  <div className="studio-settings__control">
-                    {way.later ? <Badge size="sm" variant="soft" tone="neutral">Later</Badge>
-                      : <Button size="sm" variant="soft" tone="neutral" aria-label={`Start: ${way.title}`} onClick={() => setMaking(way.origin)}>Start</Button>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CanvasSection>
-          <CanvasSection id="home-boards" title="Inspiration" count={boards.length}>
-            {boards.length ? (
-              <AssetGrid aria-label="Inspiration's boards" onOpen={id => navigate({ page: "inspiration", item: id })} {...CARD_SCOPE}
-                style={{ "--area-asset-card-size": `${BOARD_SIZE}px` } as CSSProperties}>
-                {boards.map(entry => <AssetGridItem key={entry.id} value={entry.id} name={entry.name} container="framed" caption="above" aspect="landscape" group={firstOf(entry.id)} />)}
-              </AssetGrid>
-            ) : (
-              <EmptyState size="sm" title="No boards yet" description="Inspiration's groups appear here as boards. Open Inspiration to see what it holds."
-                actions={<Button size="sm" variant="soft" tone="neutral" onClick={() => navigate({ page: "inspiration" })}>Open Inspiration</Button>} />
-            )}
-          </CanvasSection>
-          <CanvasSection id="home-recent" title="Recent" count={visits.length}>
+        <div className="studio-sections studio-home__feed">
+          <CanvasSection id="home-continue" title="Continue">
             {visits.length ? (
               <Table wrapperProps={FEED_TABLE} aria-label="Recent places">
                 <thead><tr><TableHeaderCell>Place</TableHeaderCell><TableHeaderCell fit>Opened</TableHeaderCell></tr></thead>
@@ -207,7 +228,20 @@ export function HomePage() {
                   ))}
                 </tbody>
               </Table>
-            ) : <EmptyState size="sm" title="Nothing opened yet" description="The places you open, a project's pages, a system's components or a board, appear here." />}
+            ) : <EmptyState size="sm" title="Nothing opened yet" description="The places you open, a project's designs, a system's components or a collection, appear here." />}
+          </CanvasSection>
+          <CanvasSection id="home-latest" title="Latest">
+            {events.length || changes.length ? (
+              <Timeline aria-label="Latest">
+                {/* The open system's unpublished changes come first: the one thing here waiting on you. */}
+                {changes.length ? (
+                  <TimelineItem current icon={<CircleDashedIcon />} title={`${plural(changes.length, "change")} waiting to publish`} meta={openSystem.name} time="Now">
+                    <Button size="sm" variant="soft" tone="neutral" onClick={() => navigate({ page: "history", system: openSystem.id })}>Review</Button>
+                  </TimelineItem>
+                ) : null}
+                {events.map(feedEvent)}
+              </Timeline>
+            ) : <EmptyState size="sm" title="Nothing yet" description="Publishes, new projects, saved versions and references appear here as they happen." />}
           </CanvasSection>
         </div>
         {starting ? <NewProject systems={systems} onCancel={() => setStarting(false)} onCreate={start} /> : null}
@@ -262,7 +296,7 @@ export function HomePage() {
             <Facts label="Workspace" items={[
               ["Projects", projects.length],
               ["Systems", systems.length],
-              ["Boards", boards.length],
+              ["Collections", boards.length],
               ["Open system", openSystem.name],
             ]} />
           </PanelSection>

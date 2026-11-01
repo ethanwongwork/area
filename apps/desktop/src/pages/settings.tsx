@@ -257,7 +257,7 @@ function useThemeLook(): Look | null {
   const followed = appLook.follow && (appLook.system || AREA_ID) === workingSystem.id;
   return {
     values: canvas, material,
-    lede: followed ? `The app is drawn in ${workingSystem.name}: it changes when you publish.` : `Changes stay in ${workingSystem.name}'s working copy until you publish them.`,
+    lede: followed ? `The app is drawn in ${workingSystem.name}: it changes when you publish.` : `Changes stay in ${workingSystem.name}'s draft until you publish them.`,
     context: { values: canvas, mode: theme, brand: brandStyle(brand), layout: () => "list", set: changes => { for (const [name, value] of Object.entries(changes)) setCanvas(name as keyof CanvasAxes, value); } },
     onBundle: setMaterialBundle, onValue: setMaterialValue,
   };

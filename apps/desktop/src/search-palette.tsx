@@ -9,7 +9,7 @@ import { CommandPalette, type CommandItem } from "@area/react";
 import { SearchIcon } from "@area/icons";
 import { categories as ICON_CATEGORIES, icons as ICON_META } from "@area/icons/meta";
 import { ChromeButton, useStudio } from "./studio.tsx";
-import { hrefOf, type Place } from "./places.ts";
+import { hrefOf, REFERENCE_VIEWS, type Place } from "./places.ts";
 import { SYSTEM_SECTIONS, placeLabel } from "./app-nav.tsx";
 import { FAMILIES } from "./pages/components.tsx";
 import { PATTERNS, TESTS } from "./pages/examples.tsx";
@@ -33,7 +33,8 @@ const ENTRIES: ReadonlyArray<{ place: Place; label: string; description: string;
   { place: { page: "home" }, label: "Home", description: "Workspace", group: "Places", keywords: ["projects", "systems", "boards", "recent"] },
   ...([{ page: "theme-setup" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
   ...SYSTEM_SECTIONS.map(entry => ({ place: entry.place, label: entry.label, description: OPEN_SYSTEM, group: "Places" })),
-  { place: { page: "inspiration" }, label: "Inspiration", description: "Library", group: "Places", keywords: ["library", "images", "boards", "imagery"] },
+  ...REFERENCE_VIEWS.map(view => ({ place: { page: "references" as const, item: view.item }, label: view.label, description: "References", group: "Places",
+    keywords: ["references", "inspiration", "collections", "explore", "images", "saved"] })),
   { place: { page: "materials" }, label: "Materials", description: "Labs", group: "Places", keywords: ["lab", "material bundles"] },
   { place: { page: "tests" }, label: "Tests", description: "Labs", group: "Places", keywords: ["lab", "trial", "testing"] },
   ...FAMILIES.map(family => ({ place: { page: "components" as const, item: family.slug }, label: family.name, description: "Component", group: "Components" })),

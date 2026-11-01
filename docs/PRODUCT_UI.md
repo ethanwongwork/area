@@ -124,6 +124,27 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     Setup and the Playground. The Workspace is a 1920 × 1080 desktop app (`content/examples/workspace.tsx`; owner,
     2026-10-30: "the northwind ui looks terrible. it looks fake ... make it a 1920x 1080 screen and scale it down"; "dont
     name it anything, just use generic copy"): sidebar, main column and details panel, no product or workspace name.
+24. **Code's words, except where design has a friendlier one** (owner, 2026-10-31: "keep code terms consistent except for
+    when a more design friendly term can be implemented or used … the whole merge, repo, commit, push terminology should be
+    updated to design friendly terms that people are used to, like project, save, etc. but changing tokens to variables is
+    unecessary"). Keep the terms designers and engineers share: **tokens** (never Figma's "variables"), component, variant,
+    props, slot, instance, theme. Git's words never reach the app's copy; say the design word instead:
+
+    | Git | The app says |
+    |---|---|
+    | repository | system or project |
+    | branch, fork | exploration |
+    | commit | save (a version) |
+    | push, merge, release | publish |
+    | pull request, review | review |
+    | working copy, uncommitted | draft, unpublished |
+    | diff | changes, before and after |
+    | revert, checkout | restore |
+    | conflict | two changes to one thing, side by side |
+
+    Code identifiers keep their names (`workingSystem`, `releases`); only what a person reads changes. Also avoid Figma's
+    "Style" for a bundle of values (say composite token), "Mode" for anything but light and dark, and "Collection" for
+    tokens (a collection is References' group of saved items; tokens come in groups).
 
 ## The app's layout
 
@@ -146,10 +167,11 @@ Cursor's nav with Figma's tabs).
   is `…/typography/face/<face>/<tab>`, its tabs Specimen, Glyphs, About and Code, since 2026-10-31), Icons
   (`…/icons/<category>`; Icons' wall and a typeface's Glyphs are one glyph sheet, `src/glyph-sheet.tsx`), Components,
   Patterns (the system's screens; a screen that tries something out is a test, in Labs › Tests, since 2026-10-31) and History (`…/history/<version>`); a project's Overview (`#project/<project>`), pages
-  (`…/pages/<page>/<layer>`), explorations (`…/explorations/<id>`) and Versions (`…/versions/<id>`); Inspiration
-  (`#inspiration`, Imagery, then the Library page, renamed) and Labs (`#labs/materials`, `#labs/tests`, out of the nav, reached by search; each its own tab). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
-  Components, `#typography`, `#color`, `#icons` → their sections, `…/foundations` and its group pages → Themes (2026-10-30), `…/foundations/color|typography|icons` → their sections (2026-10-31), `#testing` → Patterns (a moved screen → Tests), `#imagery` and `#library` →
-  Inspiration, `#materials` → Labs; old links are the Area system's, and `#brand/…` links from before the rename open their `#system/…` place
+  (`…/pages/<page>/<layer>`), explorations (`…/explorations/<id>`) and Versions (`…/versions/<id>`); References
+  (`#references`: Saved, its collections and their images at `#references/<collection>/<image>`, and Discover and
+  Following at `#references/discover|following`; Imagery, the Library page and Inspiration until 2026-10-31) and Labs (`#labs/materials`, `#labs/tests`, out of the nav, reached by search; each its own tab). Old links redirect: `#theme` → Themes, `#theme/<setting>` → its group's page, `#components` →
+  Components, `#typography`, `#color`, `#icons` → their sections, `…/foundations` and its group pages → Themes (2026-10-30), `…/foundations/color|typography|icons` → their sections (2026-10-31), `#testing` → Patterns (a moved screen → Tests), `#imagery`, `#library` and `#inspiration` →
+  References, `#materials` → Labs; old links are the Area system's, and `#brand/…` links from before the rename open their `#system/…` place
   (`tests/places.test.ts`). A hash naming a system or project the workspace doesn't have is no
   place. A specimen's own in-page links (an example screen's `#home`, a demo's `#library`) stay in the specimen: the
   Workspace prevents a hash link's click in the Canvas and the Inspector that nothing else handled. Projects and Explore
@@ -165,30 +187,34 @@ Cursor's nav with Figma's tabs).
   are the working copy, and its releases (`releases`, never empty; a file from before them starts with one) hold what was
   published, each a version, a kind (Fixes, Adds, Needs work in products: patch, minor, major), a note, a date and the
   project it came from. While the working copy differs from the last release, a system tab's Canvas bar ends in a Live /
-  Working switch and Publish (`src/publish.tsx`); Publish's dialog shows Live beside Publishing for the theme in use, every
+  Draft switch (Working until 2026-10-31, rule 24) and Publish (`src/publish.tsx`); Publish's dialog shows Live beside Publishing for the theme in use, every
   changed value in a table, the kind (proposed from the changes) and a note drafted from them, and Discard changes. Live
-  shows the system as published; editing anything switches back to Working. History lists every publish, newest first,
+  shows the system as published; editing anything switches back to Draft. History lists every publish, newest first,
   beside the version before it, with Restore (the working copy becomes that version, published again as a new one). The settings saved before systems (localStorage `canvas`, `material`, `colours`, `brand`)
   became the Area system's Default theme once, at the first launch with no Area system on disk; the old keys are no longer
   read. The Area system can't be deleted.
 - **Projects** (`src/projects.ts`, `src/pages/project.tsx`; the IA of 2026-10-29): where new things and big changes are
   made. Each is `~/Library/Application Support/Area/Projects/<id>/project.json` (as systems), and uses one theme of one
   system as published (a project never sees a system's unpublished working copy). It holds pages (boards of layers: the
-  system's Patterns screens and Inspiration's images, in order), explorations (a theme tried from one of the system's,
+  system's Patterns screens and saved references' images, in order), explorations (a theme tried from one of the system's,
   edited in the Inspector's Theme view, published into the system as an update to the theme it came from or as a new
   theme, solo users straight away) and versions (named copies of the pages and explorations, restored from the
   Inspector). Nothing else on a project's pages edits the system: they have no Theme view.
-- **Home** (`src/pages/home.tsx`): the feed of the workspace: Projects (each drawn in the theme it uses; New project:
-  a name, a system and a theme), Systems (each drawn as Setup's screen in its chosen theme; a
-  double-click opens it), New system (from the Area Starter: Area's values; Describe it: the system is made and its first
-  theme's Setup chat opens; Import: a stub, marked Later), Inspiration (its groups, as boards) and Recent (the last 8 places
-  opened). The Inspector's Design view shows the chosen system with Open, Rename and Delete; Home has no Theme view. Themes
+- **Home** (`src/pages/home.tsx`): one centred column at the reading measure (720; owner, 2026-10-31: "a single column
+  feed", the name Home kept). The Sidebar lists the projects and systems, so Home is what happened: Continue (the last 4
+  places opened), then Latest, a Timeline newest first: the open system's changes waiting to publish (current, with
+  Review), each system's publishes (its first is when it began; a publish's note, then its theme drawn as Setup's
+  screen), projects started (drawn in the theme they use), versions saved and references saved (the first collections).
+  Every event comes from the workspace's own records; notifications and launches by others join it when sharing exists.
+  A picture selects its system or project for the Inspector and opens it on a double-click; its title opens it. New
+  project (a name, a system and a theme) and New system (from the Area Starter, Describe it, or Import, a stub marked
+  Later) are the Canvas bar's. The Inspector's Design view shows the chosen system with Open, Rename and Delete; Home has no Theme view. Themes
   lists the open system's themes: double-click or Use chooses one, New theme adds one at Area's values and opens Setup on it.
 - **Headers** (owner, 2026-10-30, after Cursor: "the full sectioning of the ui into 3 distinct parts each with their own
   header"; a Titlebar spanned the window from 2026-10-10): each region has its own header on the window's top line, 40 at
   type 13 (Cursor's; the small control 7 from its top and bottom: Panel `windowBar`, Titlebar `size="sm"`), with no rule; the panels' seams are the dividers. **Sidebar**: its Panel's bar, the macOS traffic
   lights' room (the toggle 83 from the window's edge, Cursor's), the Sidebar's toggle and Search (⌘K), then Back and
-  Forward (⌘[ ⌘], the tab's own history) at its end. **Canvas**: a plain Titlebar, the open tabs, then Inspiration and
+  Forward (⌘[ ⌘], the tab's own history) at its end. **Canvas**: a plain Titlebar, the open tabs, then References and
   light / dark at its end; with the Sidebar hidden it starts with the lights' room, the toggle, Search and Back and
   Forward, and with the Inspector hidden it ends with that toggle. **Inspector**: its Panel's bar, its views, then its
   toggle. A lead (Setup's chat) has a header row of its own over it, with Search and Back and Forward. A strip under the
@@ -223,7 +249,9 @@ Cursor's nav with Figma's tabs).
   Nav's square icon-only item (Figma's file browser tab), never closed, always on Home, named in a Tooltip with ⌘⇧H. From
   Home a system, board or place opens in the tab already holding that system (or the Library, a lab), else in a new tab at
   the end; Home from any tab (the nav's row, ⌘⇧H, search) switches to the Home tab. Tabs work as a browser's, after Claude Code's browser
-  (owner, 2026-10-29): each holds one thing (a project, a system, Inspiration, a lab) with its type icon and name, and
+  (owner, 2026-10-29): each holds one thing (References, a project, a system, a lab) with its type icon and name (a system's
+  is `shapes`, a triangle, square and circle, until its own drawing lands; never the palette or the four-diamond
+  `component`: owner, 2026-10-31), and
   never changes what it holds ("the tab itself … will always just be the project itself": a place in another project or
   system opens in the tab holding it, else a new one), 120 to 170
   wide, hugging its name in between; its close shows on hover, focus and the current tab (always on touch; Tree view's
@@ -241,12 +269,25 @@ Cursor's nav with Figma's tabs).
   2026-10-30) opens Command palette over every place, component, setting,
   scale, type role, icon category and pattern, and icons by name from two letters; a choice opens in the current tab.
 - **The Sidebar's nav** (`src/app-nav.tsx`) is the tab's own (owner, 2026-10-29: "within each project there are a bunch
-  of things in it … accessed through the left nav"). Home's tab (and Inspiration's and a lab's): Home, then Projects (a
-  row each, New project last) and the Library (each system, Inspiration, New system last). A system's tab: a back row to
+  of things in it … accessed through the left nav"). Home's tab (and a lab's): Home and References (owner, 2026-10-31: Explore "elevated next to home", renamed References
+  "since its a collection of all designs, images, etc"), then Projects (a row each, New project last) and Systems
+  (each system, New system last; the Library until 2026-10-31: "so we just have projects and systems, anything live or
+  published can just remain as either a project or a system"). References' tab: a back row to Home, then
+  Discover and Following (what others share; empty until sharing exists) and Saved (what you keep, counted), with its
+  collections under the nav. A system's tab: a back row to
   Home, then the system's sections, one row each (owner, 2026-10-30: "each system is one thing with components, colors,
-  typography, icons, patterns, etc underneath it"): Themes, Colors, Typography, Icons, Components, Patterns, History (which
-  says how many changes are unpublished). A section with its own list (Colors' scales, Icons' categories, Components'
-  families, Patterns' screens) shows it under the nav, after one rule and its filter (`PageList`), so every section stays
+  typography, icons, patterns, etc underneath it"), in three groups after the design systems' sites (2026-10-31, Primer,
+  Carbon, Atlassian, Material, the HIG, Spectrum; owner: "i dont like seeing components with 122 next to it … maybe
+  compoenents should be exposed"): **Foundations** (Themes, Tokens, Colors, Typography, Spacing, Shape, Elevation, Motion,
+  Icons; Tokens and the four foundations that had been settings only since 2026-10-31, after Figma's variables and styles
+  and the design tokens format: Tokens lists every token in tiers, Raw values, Roles and Component tokens, with its live
+  value, what it refers to and what it is for, and copies as design tokens; each foundation draws itself, lists its tokens
+  and edits its settings in the Inspector's Theme view, `src/token-catalog.ts`, `pages/tokens.tsx`, `pages/foundation.tsx`),
+  **Components** (Overview, then
+  each kind, its Documentation file, as a row that opens to its families by name, A to Z; the current family's kind
+  open) and Patterns and Versions (History until 2026-10-31; it says how many changes are unpublished). No row carries a bare count. Components'
+  families are the nav's own rows, so its page adds no list under the nav (search finds a family by name). A section with
+  its own list (Colors' scales, Icons' categories, Patterns' screens) shows it under the nav, after one rule and its filter (`PageList`), so every section stays
   one click away; it replaced the nav until 2026-10-30. A page of many heavy parts draws them as they near the view
   (`tile.tsx` `WhenVisible`): Colors and Patterns had held a click 2.5 seconds. A project's tab: a back row to Home, then Overview, Pages (each a chevron to its
   layers; New page), Explorations (each with the version it published; New exploration) and Versions. A click opens in

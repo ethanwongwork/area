@@ -34,12 +34,14 @@ test("every old tab's link redirects to its place", () => {
     ["#testing/hairline", "#labs/tests/hairline"],
     ["#system/area/patterns/stroke-groups", "#labs/tests/stroke-groups"],
     // Imagery, then the Library page, is Inspiration since 2026-10-29.
-    ["#imagery", "#inspiration"],
-    ["#imagery/folder-1/image-2", "#inspiration/folder-1/image-2"],
-    ["#library", "#inspiration"],
-    ["#library/folder-1/image-2", "#inspiration/folder-1/image-2"],
-    ["#brand", "#inspiration"],
-    ["#brand/folder-1", "#inspiration/folder-1"],
+    ["#imagery", "#references"],
+    ["#imagery/folder-1/image-2", "#references/folder-1/image-2"],
+    ["#library", "#references"],
+    ["#library/folder-1/image-2", "#references/folder-1/image-2"],
+    ["#brand", "#references"],
+    ["#brand/folder-1", "#references/folder-1"],
+    ["#inspiration", "#references"],
+    ["#inspiration/folder-1/image-2", "#references/folder-1/image-2"],
     // Systems were brands until 2026-10-29.
     ["#brand/area/themes", "#system/area/themes"],
     ["#brand/area/components/button/size-sm", "#system/area/components/button/size-sm"],
@@ -69,8 +71,12 @@ test("a place's hash reads back as the same place", () => {
     // A typeface in Typography, and one of its tabs (src/pages/typography.tsx).
     { page: "typography", system: "area", item: "face/inter" }, { page: "typography", system: "area", item: "face/inter/glyphs" },
     { page: "components", system: "area", item: "button/size-sm" }, { page: "patterns", system: "area", item: "analytics" },
+    // Tokens and the foundations that had been settings only (2026-10-31); References' views.
+    { page: "tokens", system: "area" }, { page: "tokens", system: "area", item: "color" }, { page: "spacing", system: "area" },
+    { page: "shape", system: "area" }, { page: "elevation", system: "northwind" }, { page: "motion", system: "area" },
+    { page: "references", item: "discover" }, { page: "references", item: "following" },
     { page: "themes", system: "northwind", item: "theme-2" }, { page: "components", system: "northwind", item: "button" },
-    { page: "inspiration", item: "a b/c" }, { page: "materials", item: "glass" }, { page: "tests", item: "hairline" }, { page: "history", system: "area", item: "1.2" },
+    { page: "references", item: "a b/c" }, { page: "materials", item: "glass" }, { page: "tests", item: "hairline" }, { page: "history", system: "area", item: "1.2" },
     { page: "project", project: "launch" }, { page: "project-page", project: "launch", item: "page-1/layer-2" },
     { page: "exploration", project: "launch", item: "exploration-1" }, { page: "versions", project: "launch" }, { page: "versions", project: "launch", item: "version-1" },
   ];
@@ -106,7 +112,7 @@ test("a second system is a place once the workspace has it, and tabs are named b
   assert.equal(tabName({ page: "home" }), "Home");
   assert.equal(tabHolds(place), "system:northwind");
   assert.equal(tabHolds({ page: "components" }), "system:area");
-  assert.notEqual(tabHolds(place), tabHolds({ page: "inspiration" }));
+  assert.notEqual(tabHolds(place), tabHolds({ page: "references" }));
   // An old link is still the Area system's; a link from before the rename keeps its system.
   assert.equal(hrefOf(resolve("#brand/northwind/patterns/chat", groupOf)!), "#system/northwind/patterns/chat");
   assert.equal(hrefOf(resolve("#components/button", groupOf)!), "#system/area/components/button");
@@ -123,22 +129,22 @@ test("a tab holds one project or Library item: everything inside it is the same 
   assert.equal(tabHolds(overview), "project:launch");
   assert.notEqual(tabHolds(overview), tabHolds({ page: "themes", system: "area" }));
   assert.equal(tabHolds({ page: "history", system: "area" }), tabHolds({ page: "components", system: "area" }));
-  assert.equal(tabName({ page: "inspiration", item: "folder-1" }), "Inspiration");
+  assert.equal(tabName({ page: "references", item: "folder-1" }), "References");
   setProjects([]);
 });
 
 test("the saved tab migrates once; saved tabs restore after Home", () => {
-  assert.deepEqual(restoreTabs(undefined, "imagery"), { tabs: [{ id: "t1", hash: "#inspiration", panel: "page" }], current: "t1" });
+  assert.deepEqual(restoreTabs(undefined, "imagery"), { tabs: [{ id: "t1", hash: "#references", panel: "page" }], current: "t1" });
   assert.deepEqual(restoreTabs(undefined, "theme"), { tabs: [{ id: "t1", hash: "#system/area/themes", panel: "nav" }], current: "t1" });
   // Nothing saved: Home alone.
   assert.deepEqual(restoreTabs(undefined, undefined), { tabs: [], current: HOME_TAB });
   // A tab saved before the rename (#brand/area/…) opens on its #system/ place.
   const saved = { tabs: [{ id: "a", hash: "#library/x", panel: "nav" }, { id: "b", hash: "#nowhere", panel: "page" }, { id: "c", hash: "#brand/area/patterns", panel: "page" }], current: "c" };
-  assert.deepEqual(restoreTabs(saved, "components"), { tabs: [{ id: "a", hash: "#inspiration/x", panel: "nav" }, { id: "c", hash: "#system/area/patterns", panel: "page" }], current: "c" });
+  assert.deepEqual(restoreTabs(saved, "components"), { tabs: [{ id: "a", hash: "#references/x", panel: "nav" }, { id: "c", hash: "#system/area/patterns", panel: "page" }], current: "c" });
   assert.equal(restoreTabs({ tabs: [{ id: "a", hash: "#library", panel: "nav" }], current: "gone" }, null).current, "a");
   // Home is never saved as a tab of its own; the current tab may be Home; every tab closed is Home alone.
   assert.deepEqual(restoreTabs({ tabs: [{ id: "h", hash: "#home", panel: "nav" }, { id: "a", hash: "#library", panel: "nav" }], current: HOME_TAB }, null),
-    { tabs: [{ id: "a", hash: "#inspiration", panel: "nav" }], current: HOME_TAB });
+    { tabs: [{ id: "a", hash: "#references", panel: "nav" }], current: HOME_TAB });
   assert.deepEqual(restoreTabs({ tabs: [], current: HOME_TAB }, "components"), { tabs: [], current: HOME_TAB });
   // A deleted system's tab is gone.
   assert.deepEqual(restoreTabs({ tabs: [{ id: "n", hash: "#system/northwind/themes", panel: "nav" }], current: "n" }, null), { tabs: [], current: HOME_TAB });
