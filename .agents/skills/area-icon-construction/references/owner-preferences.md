@@ -256,3 +256,6 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   passes and audit yourself") are kept as applied (held constructions simplified to the floor, gift-card on gift's bow,
   globe stroked); batch 77 (concepts read from Cursor's and the Claude app's icon sets and the new IA) approved whole;
   Explorations keeps git-branch in the app's sidebar (arrow-split stays in the set for fork / split-off uses).
+  Agent, 2026-11-01: "the hat is too small now. the brim should also extend past the sides of the head": the brim is
+  the agent's identity and must overhang the head (narrow the head rather than lose the brim to the floor); the crown
+  is wide (two-thirds of the head), not the narrow round-3 crown.
