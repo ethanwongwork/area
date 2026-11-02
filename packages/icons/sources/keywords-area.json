@@ -399,5 +399,13 @@
   "overlay panel",
   "floating inspector",
   "sidebar"
+ ],
+ "bot-agents": [
+  "agents",
+  "multiple agents",
+  "background tasks",
+  "multitask",
+  "subagents",
+  "parallel agents"
  ]
 }

@@ -1901,6 +1901,15 @@
     "robot"
    ]
   },
+  "bot-agents": {
+   "keywords": [
+    "multiple agents",
+    "background tasks",
+    "multitask",
+    "subagents",
+    "parallel agents"
+   ]
+  },
   "braces": {
    "names": {
     "lucide": "braces",

@@ -13,7 +13,7 @@
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { AssetGrid, AssetGridItem, Button, ConfirmDialog, Dialog, EmptyState, Field, Input, Link, PanelSection, Radio, RadioGroup, Select, Table, TableCell, TableHeaderCell, TableLink, Timeline, TimelineItem } from "@area/react";
-import { AddIcon, BookmarkIcon, CircleDashedIcon, FolderIcon, HistoryIcon, ShapesIcon, TagIcon } from "@area/icons";
+import { AddIcon, BookmarkIcon, CircleDashedIcon, FolderIcon, HistoryIcon, SystemIcon, TagIcon } from "@area/icons";
 import { canvasAttributes, useStudio, Workspace, type Visit } from "../studio.tsx";
 import { CanvasSection, CARD_SCOPE, Tile, TileGrid, FEED_TABLE } from "../tile.tsx";
 import { ViewControls } from "../view-controls.tsx";
@@ -167,7 +167,7 @@ export function HomePage() {
       const published = release.themes.find(entry => entry.id === release.theme) ?? release.themes[0]!;
       const from = release.from ? projects.find(entry => entry.id === release.from)?.name : undefined;
       return (
-        <TimelineItem key={key} icon={first ? <ShapesIcon /> : <TagIcon />} time={time} dateTime={dateTime}
+        <TimelineItem key={key} icon={first ? <SystemIcon /> : <TagIcon />} time={time} dateTime={dateTime}
           title={first ? <>{opener({ page: "themes", system: system.id }, system.name)} began</> : <>{opener({ page: "history", system: system.id, item: release.version }, versionName(system.name, release.version))} published</>}
           meta={first ? ORIGIN_LABEL[system.origin] : [RELEASE_KIND_LABEL[release.kind], from ? `from ${from}` : null].filter(Boolean).join(", ")}>
           <div className="studio-home__event">

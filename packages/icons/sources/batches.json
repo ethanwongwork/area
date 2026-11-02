@@ -781,7 +781,7 @@
       "note": "The queue's remaining files, messages, calls, letters and objects.",
       "icons": {
         "bug-off": "approved",
-        "file-lock": "approved",
+        "file-lock": "review",
         "folders": "approved",
         "chat-warning": "approved",
         "call-incoming": "approved",
@@ -1018,7 +1018,7 @@
         "timer-off": "approved",
         "call-off": "approved",
         "sparkle-off": "approved",
-        "person-lock": "approved",
+        "person-lock": "review",
         "shield-lock": "approved",
         "battery-full": "approved",
         "battery-medium": "approved",
@@ -1173,8 +1173,8 @@
         "file-pdf": "approved",
         "hand-coins": "approved",
         "package-check": "approved",
-        "sort-alpha": "approved",
-        "sort-numeric": "approved",
+        "sort-alpha": "review",
+        "sort-numeric": "review",
         "incognito": "approved"
       }
     },
@@ -1251,6 +1251,14 @@
         "dna": "approved",
         "orbit": "approved",
         "sunrise": "approved"
+      }
+    },
+    {
+      "id": "batch-78",
+      "title": "Batch 78 · Several agents; the small lock and sort arrows unified",
+      "note": "The cohesion pass's open items (owner: \"take care of all the open items\"): an icon for several agents now the agent is bot with sunglasses, and two parts that drifted between family members: the small lock (4 × 3 r 0.5 in file-lock and person-lock, 5 × 3 r 1 in folder-lock) and the sort family's down arrow (13 in sort-alpha, from 3.5 in sort-numeric, 3–12.5 in sort).",
+      "icons": {
+        "bot-agents": "review"
       }
     }
   ]

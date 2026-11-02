@@ -991,6 +991,8 @@ const MAP = {
   FluentRefOrbitFilledIcon: "planet_16_filled",
   FluentRefSunriseIcon: "weather_sunny_low_20_regular",
   FluentRefSunriseFilledIcon: "weather_sunny_low_20_filled",
+  FluentRefBotAgentsIcon: "bot_16_regular",
+  FluentRefBotAgentsFilledIcon: "bot_16_filled",
   // icon-batch.mjs adds Fluent references for new batches above this line.
   FluentRefDatabaseIcon: "database_16_regular",
   FluentRefDatabaseFilledIcon: "database_16_filled",

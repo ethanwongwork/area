@@ -1,6 +1,17 @@
 # Handoff
 
-## Current state (2026-10-31)
+## Current state (2026-11-01)
+- **Icon cohesion pass, branch `claude/icon-cohesion-11900d` (PR to main, 2026-11-01).** Owner: the set didn't look
+  cohesive. Measured against six libraries (`docs/research/icon-cohesion-2026-10-31/`, tools for strips, boards, radii,
+  angles, 1x and every-size measures); rules adopted in the icon skill ("Cohesion"). Applied over rounds 1–7: gap floor one
+  line (tight 1.125) and counters 1.5, enforced by the lint (~190 redraws); corners less round (r 1.5 frames ≥ 9 × 7, r 1
+  smaller); held constructions simplified; globe stroked; 8 role bots removed. New: `SystemIcon` (System tab, Home's feed,
+  the area-app example), `BookmarksIcon`, batch 77 (13 concepts read from Cursor's and the Claude app's icon sets:
+  search/lightbulb-sparkle, circle-progress, arrow-split (RTL mirror), panel-left/right-float, background-blur,
+  absolute-position, motion, ghost, signpost, dna, orbit, sunrise), batch 78 (`BotAgentsIcon`; file-lock and person-lock
+  share folder-lock's 5 × 3 lock; the sort family shares one arrow). Agent is now bot with sunglasses (owner pick A).
+  817 icons. In review: batch 78 and the four icons it touched. Review page
+  https://claude.ai/artifact/KTwGjUgbj5uJZ5yPvFazqh (db `verdicts`), Icon Boards https://claude.ai/artifact/4debUbHgJLDBGmzXcUde6Q.
 - **Region balance across densities, branch `claude/spacing-layout-balance-17deb8` (uncommitted, 2026-10-31).** Owner asked
   whether the Sidebar, Canvas and Inspector need spacing / optical-balance updates against Claude Code and Cursor, and for it
   to be documented in the density themes. Finding: at the app's type 13 / 32 the regions match the references; but Panel's md

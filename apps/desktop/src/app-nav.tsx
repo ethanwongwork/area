@@ -19,7 +19,7 @@
  */
 import { Fragment, useEffect, useId, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, SearchField, Tooltip } from "@area/react";
-import { AddIcon, ArrowLeftIcon, BookmarkIcon, ChevronDownIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, ImageIcon, LayoutIcon, ShapesIcon } from "@area/icons";
+import { AddIcon, ArrowLeftIcon, BookmarkIcon, ChevronDownIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, ImageIcon, LayoutIcon, SystemIcon } from "@area/icons";
 import { systemName, HOME_TAB, hrefOf, LIST_PAGES, projectName, REFERENCE_VIEWS, referenceView, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
 import { addExploration, addPage } from "./projects.ts";
 import { activeTheme, versionName } from "./systems.ts";
@@ -28,7 +28,7 @@ import { FAMILIES, KIND_ORDER, kindOf } from "./pages/components.tsx";
 
 // A system is the triangle, square and circle (owner, 2026-10-31: "a simple composition of triangle square, and circle";
 // never the palette, and not the four-diamond component); its own drawing is being made in the icon set.
-const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <ShapesIcon />, project: <FolderIcon />, references: <BookmarkIcon />, labs: <FlaskIcon /> };
+const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <SystemIcon />, project: <FolderIcon />, references: <BookmarkIcon />, labs: <FlaskIcon /> };
 
 /**
  * A system's sections, one row each and one click away (owner, 2026-10-30: "foundations is not very well organized ... the
