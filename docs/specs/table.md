@@ -265,3 +265,12 @@ label columns of 84, 200 and 145 on one page and rows of 33.
   tables only; with the balanced block inset that makes its rows 43.
 - **Why:** the owner asked for one consistent, spacious feed (`docs/research/feed-system-2026-10-31`); tables were the
   one frame at 14 / 14 among 16s. Listed in `OVERRIDABLE` (rederive.ts).
+
+## Review note, 2026-11-01 (one family of frames)
+
+- **What changed:** a third public hook, `--area-table-fill` (the wrapper's fill; `bg-surface` by default). The desktop
+  app's feed sets it to its tiles' fill and puts its tables under the cards' Stroke 2 scope (`FEED_TABLE`), so a feed table
+  is the same frame as a card: one fill, one edge (6% against the cards' 5%), the 16 corner and inset. Row rules stay
+  lighter than the frame (3.75%). Listed in `OVERRIDABLE`.
+- **Why:** the owner asked that "all containers feel consistent, and part of the same family"; Labs › Feed showed the
+  tables as the page's white inside a darker edge beside light grey cards.

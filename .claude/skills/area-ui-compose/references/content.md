@@ -80,6 +80,17 @@ with density (spacing.md, Feed).
 | Corner | the card's corner, the media's = card − inset when it sits inside | Notion 10; Figma tiles 6, standalone cards 13 |
 | Hover | the card lifts (shadow fades in); the image never scales (rule 2) | PRODUCT_UI.md rule 3 |
 
+## Galleries of images: Grid, Waterfall, Fixed ratio
+
+Area's app offers three views of the same images (PRODUCT_UI.md, "Galleries of images have three views"; owner,
+2026-11-01, after Are.na): **Grid**, every card one square footprint with the whole image centred inside at its own
+ratio (`AssetGridItem fit="contain" mediaRatio={w / h}`), so no image is cropped and every card weighs the same;
+**Waterfall** (below); **Fixed ratio**, every image cropped to one aspect (`fit="cover" aspect="screen" | "landscape" |
+"square"`). Default to Grid for mixed references, Fixed ratio for screens and designs (16:9), Waterfall for one kind of
+tall image (posters, pins). A design's or project's card shows one picture at 16:9; a collection shows its images as a
+strip (`mosaic="strip"`) at the same footprint. Every card: name 11/14 top-left 16 in, picture 15 under the cap, 16 in,
+corner 8. Labs › Feed shows every element in all three feed layouts.
+
 ## Waterfall (masonry)
 
 Use for items whose height varies with their content (images at their own ratio). `AssetGrid layout="waterfall"` puts

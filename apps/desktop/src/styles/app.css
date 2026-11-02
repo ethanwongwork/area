@@ -67,7 +67,8 @@
        Auto). It was at most 1236 wide and centred (four 300 cards) from 2026-10-22, which left a hidden panel's room as
        empty margins. The grid's columns are counted from the body's content box (cqw). */
     --_canvas-margin: calc(var(--area-space-32) + var(--area-space-8) * var(--area-ui-level)); /* pick: 32 */
-    --_canvas-gap: calc(var(--area-space-12) + var(--area-space-4) * var(--area-ui-level));
+    /* Cards 16 apart (owner, 2026-11-01, the card explorer's pick; 12 until then), 12 / 16 / 20 by density. */
+    --_canvas-gap: calc(var(--area-space-16) + var(--area-space-4) * var(--area-ui-level));
     --_canvas-heading: calc(var(--area-space-16) + var(--area-space-4) * var(--area-ui-level));
     --_canvas-section: calc(var(--area-space-48) + var(--area-space-8) * var(--area-ui-level));
     /* One inset inside every frame in the feed (tiles, the Stage, Asset cards, colour cards, tables, Settings' rows): the
@@ -271,7 +272,14 @@
   /* The Inspector's selection (src/inspector.tsx): Area's PreviewFrame, then the copy actions two
      to a row, 8 apart (the icon hover window's spacing). */
   /* The feed's tables take the feed's one frame inset and corner (Table's public hooks). */
-  .studio-table { --area-table-edge: var(--_frame-inset); --area-table-corner: var(--_tile-radius); }
+  /* One family of frames (owner, 2026-11-01: "i like the idea that all containers feel consistent, and part of the same
+     family, visually"; Labs › Feed): every frame in the feed, a tile, a card, a table, a code block, a group of Settings
+     rows, holds its content at the frame inset under the tile corner, on the tile fill inside the card edge. Tables and code
+     blocks were the page's white inside a darker block edge and Settings' rows white inside a lighter one; tables, code and
+     cards now share the cards' stroke (CARD_SCOPE's Stroke 2 on the frame, FEED_TABLE, FEED_CODE), and their row rules
+     stay lighter than the frame. */
+  .studio-table { --area-table-edge: var(--_frame-inset); --area-table-corner: var(--_tile-radius); --area-table-fill: var(--area-bg-stripe); }
+  .studio-code { --area-code-block-inset: var(--_frame-inset); --area-code-block-corner: var(--_tile-radius); --area-code-block-fill: var(--area-bg-stripe); }
   /* The Inspector's view (src/studio.tsx, InspectorPanel): a view that opens on a section heading puts that heading on the
      line the Sidebar's first row and the Canvas bar's controls share (owner pick q-line, 2026-10-31; it sat 5 under it at
      type 13 / 32, 9 at Comfortable), as the Sidebar's first row is centred there. The line is half the Canvas bar under the
@@ -292,7 +300,8 @@
   .studio-home__form { display: grid; gap: var(--area-space-16); /* pick: Form's field gap */ }
   /* Home is one column, centred (owner, 2026-10-31: "a single column feed"), at the reading measure: ChatGPT's thread 768,
      Notion's text 708 (ui-compose content.md, Widths). */
-  .studio-home__feed { width: min(100%, 720px); /* pick */ margin-inline: auto; }
+  /* Home reads down the reading column, as Settings and the feed's Column layout (2026-11-01; it was its own 720). */
+  .studio-home__feed { width: min(100%, var(--_reading-column)); margin-inline: auto; }
   /* An event's note, then its picture, a group apart. */
   .studio-home__event { display: grid; gap: var(--area-space-12); /* pick: the feed's card gap */ }
   .studio-home__note { margin: 0; max-width: 66ch; }

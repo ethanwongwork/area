@@ -20,11 +20,11 @@ import { type TokenMap } from "../axes/schema.ts";
 /** Tokens set outside the axes: by component and app stylesheets (Layers' grounds above all) and by inline styles. */
 export const OVERRIDABLE: readonly string[] = [
   "--area-accent-solid-full", "--area-action-solid", "--area-action-solid-hover", "--area-asset-card-corner",
-  "--area-asset-card-name-inset", "--area-asset-card-size", "--area-asset-grid-gap", "--area-bg-component",
+  "--area-asset-card-inset", "--area-asset-card-name-inset", "--area-asset-card-size", "--area-asset-card-strip-height", "--area-asset-grid-gap", "--area-bg-component",
   "--area-bg-component-active", "--area-bg-component-hover", "--area-bg-component-pressed", "--area-bg-surface",
   "--area-border", "--area-border-card", "--area-border-decorative", "--area-border-divider", "--area-border-faint",
   "--area-border-float", "--area-border-hover", "--area-border-subtle", "--area-border-width", "--area-button-text",
-  "--area-choice-min", "--area-choice-ratio", "--area-chrome-bg", "--area-chrome-fill", "--area-composer-edge",
+  "--area-choice-min", "--area-choice-ratio", "--area-code-block-corner", "--area-code-block-fill", "--area-code-block-inset", "--area-chrome-bg", "--area-chrome-fill", "--area-composer-edge",
   "--area-composer-focus-color", "--area-edge-control", "--area-edge-control-hover", "--area-edge-control-strong", "--area-edge-regions",
   "--area-edge-selected", "--area-edge-shift-dark", "--area-edge-shift-light", "--area-fg-default",
   "--area-fg-muted", "--area-fg-on-action", "--area-fg-on-neutral", "--area-file-tile-figure", "--area-fill-toggle",
@@ -37,7 +37,7 @@ export const OVERRIDABLE: readonly string[] = [
   "--area-radius-list", "--area-radius-list-row", "--area-select-edge", "--area-select-edge-hover",
   "--area-select-inline-size", "--area-selection-band", "--area-selection-band-hover", "--area-selection-edge",
   "--area-selection-surface", "--area-selection-surface-hover", "--area-switch-color", "--area-switch-color-hover",
-  "--area-table-corner", "--area-table-edge", "--area-textarea-edge", "--area-textarea-edge-hover", "--area-textarea-edge-soft", "--area-token-edge",
+  "--area-table-corner", "--area-table-edge", "--area-table-fill", "--area-textarea-edge", "--area-textarea-edge-hover", "--area-textarea-edge-soft", "--area-token-edge",
   "--area-type-icon-line", "--area-weight-icon",
 ];
 

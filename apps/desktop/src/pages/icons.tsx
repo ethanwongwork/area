@@ -5,6 +5,10 @@
  * icon (its drawing, Copy SVG, Download, Copy name and import, its facts and search words from
  * @area/icons/meta), else the Sidebar's category, else the set. Icons, categories and batches come from
  * @area/icons; the SVG export and CopyButton are ../copy.tsx.
+ *
+ * A double-click or Enter opens the icon in the design viewer (src/design-viewer.tsx, 2026-10-31) on its 16 grid: fitted
+ * up to 2400%, zoomed to 6400% with a pixel grid from 800%, in Light, Dark or both, ← and → stepping through the wall.
+ * Its place is #system/<system>/icons/<category, or all>/<icon>.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement } from "react";
 import { Badge, Button, Code, Count, EmptyState, PanelSection, Segmented, Select, Table, TableCell, TableLink } from "@area/react";
@@ -18,8 +22,10 @@ import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
 import { Specimen } from "../specimen-scope.tsx";
 import { CanvasSection, FEED_TABLE } from "../tile.tsx";
-import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
+import { useViewOption, ViewControls, ViewFilter, ViewLead, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
+import { useDesignViewer } from "../design-viewer.tsx";
+import { openDesign, useCardArrival } from "../morph.ts";
 import { Facts } from "../facts.tsx";
 import { CodeWell, Preview, Selection } from "../inspector.tsx";
 import { matches } from "../search.ts";
@@ -76,6 +82,8 @@ const STATUS_LABEL = (name: string) => statusOf(name) === "approved" ? "Approved
 const SIZE = { min: 12, max: 32, initial: 16 } as const;
 const SIZES = Array.from({ length: (SIZE.max - SIZE.min) / 4 + 1 }, (_, index) => SIZE.min + index * 4);
 const PREVIEW = 128;
+/** An icon's grid in the design viewer: the 16 it is drawn on (packages/icons/sources). */
+const GRID = 16;
 const CARD_PREVIEW = 96;
 
 /** Saves an icon's SVG as a file (the browser's download; Electron asks where). */
@@ -101,7 +109,7 @@ function IconCell({ entry, style, size }: { entry: Entry; style: Mode; size: num
     return node ? standaloneSvg(node, entry.name) : "";
   };
   return (
-    <GlyphCell value={entry.name} label={titleCase(entry.name)} data={{ "data-icon": entry.name }}
+    <GlyphCell value={entry.name} label={titleCase(entry.name)} data={{ "data-icon": entry.name }} design={`icon:${entry.name}`}
       card={() => ({
         name: entry.name,
         meta: CATEGORY_OF.get(entry.name)?.name,
@@ -117,7 +125,7 @@ function IconCell({ entry, style, size }: { entry: Entry; style: Mode; size: num
 }
 
 export function IconsPage() {
-  const { query, item, select } = useStudio();
+  const { query, item, select, theme, navigate } = useStudio();
   const [style, setStyle] = useState<Mode>(() => (readStored<string>("iconMode", "outline") === "filled" ? "filled" : "outline"));
   const [size, setSize] = useState<number>(() => {
     const saved = Number(readStored("iconSize", SIZE.initial));
@@ -127,11 +135,13 @@ export function IconsPage() {
 
   // The Sidebar's choice (All, or one category) and the Inspector's (one icon, until the Sidebar's
   // choice changes; with none, the category or the set).
-  const view = ICON_CATEGORIES.find(category => category.slug === item);
+  const [scopeSlug, openedName] = (item ?? "").split("/");
+  const view = ICON_CATEGORIES.find(category => category.slug === scopeSlug);
+  const opened = openedName ? BY_NAME.get(openedName) : undefined;
   const [selected, setSelected] = useState<string>();
-  useEffect(() => setSelected(undefined), [item]);
+  useEffect(() => setSelected(undefined), [scopeSlug]);
   const choose = (name: string) => setSelected(name);
-  const icon = selected ? BY_NAME.get(selected) : undefined;
+  const icon = opened ?? (selected ? BY_NAME.get(selected) : undefined);
   const [mode, setMode] = useViewOption<ViewMode>("icons", "grid", ["grid", "list"]);
   const [status, setStatus] = useViewOption<"all" | "approved" | "review">("icons-status", "all", ["all", "approved", "review"]);
   // A new key (was "icons", grouped by category), so the wall is what every saved arrangement opens on.
@@ -158,6 +168,27 @@ export function IconsPage() {
   const onCanvas = sections;
   const total = onCanvas.reduce((sum, section) => sum + section.shown.length, 0);
   const pinned = pins.pins.filter(name => BY_NAME.has(name));
+
+  // The viewer: the icon opened, stepping through the wall in its order; back leaves it chosen on the wall.
+  const wall = useMemo(() => [...new Set(onCanvas.flatMap(section => section.shown))], [onCanvas]);
+  const at = opened ? wall.indexOf(opened.name) : -1;
+  const openIcon = (name: string, newTab = false) => {
+    const item = `${view?.slug ?? "all"}/${name}`;
+    if (newTab) { navigate({ page: "icons", item }, { newTab: true }); return; }
+    setSelected(name);
+    openDesign(`icon:${name}`);
+    select(item);
+  };
+  const viewed = opened ?? BY_NAME.get(wall[0] ?? "") ?? BY_NAME.values().next().value!;
+  const Viewed = style === "filled" ? viewed.Filled : viewed.Icon;
+  const viewer = useDesignViewer({
+    active: Boolean(opened), design: `icon:${viewed.name}`, label: titleCase(viewed.name), width: GRID, height: GRID, appMode: theme,
+    frame: "bare", maxFit: 24, max: 64, pixelGrid: true,
+    render: mode => <Specimen className="studio-viewer__design studio-viewer__design--icon" data-area-theme={mode}><Viewed size={GRID} aria-hidden="true" /></Specimen>,
+    back: { label: `Back to ${view?.name ?? "All icons"}`, onBack: () => { setSelected(viewed.name); select(view?.slug ?? ""); } },
+    step: { index: at, count: wall.length, noun: "icon", onStep: by => { if (at < 0) return; const next = wall[(at + by + wall.length) % wall.length]!; setSelected(next); select(`${view?.slug ?? "all"}/${next}`, { replace: true }); } },
+  });
+  useCardArrival();
 
   // Keep the selected icon in view when it changes from the Sidebar or a link.
   const canvas = useRef<HTMLDivElement>(null);
@@ -198,9 +229,16 @@ export function IconsPage() {
               .map(section => ({ id: section.slug, label: section.name, trailing: <Count count={section.shown.length} /> })) },
           ]} />
       </PinMenu></SidebarList>}
-      canvasTitle={view ? view.name : "All icons"}
+      canvasTitle={opened ? titleCase(opened.name) : view ? view.name : "All icons"}
       canvasRef={canvas}
-      canvasActions={
+      canvasLead={opened ? <ViewLead>{viewer.lead}</ViewLead> : undefined}
+      canvasActions={opened ? (
+        <ViewControls>
+          <Segmented size="sm" iconOnly aria-label="Style" value={style} onValueChange={value => setStyle(value as Mode)}
+            items={[{ value: "outline", label: "Outline", icon: <StarIcon /> }, { value: "filled", label: "Filled", icon: <StarFilledIcon /> }]} />
+          {viewer.controls}
+        </ViewControls>
+      ) : (
         <ViewControls>
           <ViewFilter label="Status" value={status} onChange={setStatus}
             options={[{ value: "all", label: "All statuses" }, { value: "approved", label: "Approved" }, { value: "review", label: "In review" }]} />
@@ -216,10 +254,10 @@ export function IconsPage() {
           </Select>
           <ViewSwitch value={mode} onChange={setMode} />
         </ViewControls>
-      }
-      canvas={total ? (
+      )}
+      canvas={opened ? viewer.stage : total ? (
         <PinMenu pins={pins} label="Icon">
-        <GlyphSheet grid={mode !== "list"} label="Icons" value={icon?.name ?? null} onChoose={choose} size={size}>
+        <GlyphSheet grid={mode !== "list"} label="Icons" value={icon?.name ?? null} onChoose={choose} onOpen={openIcon} size={size}>
           {onCanvas.map(section => (
             <CanvasSection key={section.slug} role={mode === "list" ? undefined : "group"} id={`icons-${section.slug}`} title={view || onCanvas.length === 1 ? undefined : section.name} count={section.shown.length}>
               {mode === "list" ? (

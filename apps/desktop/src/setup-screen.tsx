@@ -18,7 +18,7 @@
  * area-illustration skill's engine (styles/figures.css; words by engine/markup.js). The theme reaches it as attributes on
  * the frame, so a change repaints it without re-rendering. It is shown, not used: inert and hidden from assistive tech.
  */
-import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { createContext, useContext, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { WorkspaceScreen } from "./content/examples/workspace.tsx";
 import { blankImages, figureMarkup } from "../../../.claude/skills/area-illustration/engine/markup.js";
@@ -152,6 +152,13 @@ export const FIGURES = false;
  */
 const TRUE_STROKES = { "--area-stroke-width": "inherit", "--area-border-width": "inherit" } as CSSProperties;
 
+/**
+ * A screen as a card's picture covers it from the top-left (tile.tsx sets this inside a screen tile; owner, 2026-11-01:
+ * cards in 1:1, 4:3 or a 16:9 cover), as a design tool draws a frame's thumbnail: the larger of the two scales, so a 4:3
+ * card shows the window's start (its sidebar and content) rather than the whole window shrunk into a band.
+ */
+export const ScreenCover = createContext(false);
+
 export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity: asked = "real", view = {}, measure, onMeasure, crossfade, onFit, isolate, className }: ScreenFigureProps) {
   const fidelity = FIGURES ? asked : "real";
   const frame = useRef<HTMLDivElement>(null), place = useRef<HTMLDivElement>(null), zoom = useRef<HTMLDivElement>(null), veilRef = useRef<HTMLSpanElement>(null);
@@ -178,6 +185,7 @@ export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity:
       .finished.then(() => ghost.remove(), () => ghost.remove());
   }, [full]);
   const [size, setSize] = useState({ w: 0, h: 0 });
+  const cover = useContext(ScreenCover);
   useLayoutEffect(() => {
     const element = frame.current;
     if (!element) return;
@@ -228,6 +236,10 @@ export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity:
       top = size.h / 2 - (r.y + r.h / 2) * fit;
       left = natural.w * fit >= size.w ? Math.min(0, Math.max(size.w - natural.w * fit, left)) : (size.w - natural.w * fit) / 2;
       top = natural.h * fit >= size.h ? Math.min(0, Math.max(size.h - natural.h * fit, top)) : (size.h - natural.h * fit) / 2;
+    } else if (cover) {
+      fit = Math.max(size.w / natural.w, size.h / natural.h);
+      left = 0;
+      top = 0;
     } else {
       fit = Math.min(1, size.w / natural.w, size.h / natural.h);
       left = (size.w - natural.w * fit) / 2;
@@ -273,7 +285,7 @@ export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity:
     p.style.left = `${left.toFixed(1)}px`;
     p.style.top = `${top.toFixed(1)}px`;
     onMeasure?.(boxes);
-  }, [html, signature, size.w, size.h, region, regionZoom, scale, focusOn, fidelity, measure?.join(" ")]);
+  }, [html, signature, size.w, size.h, region, regionZoom, scale, focusOn, fidelity, cover, measure?.join(" ")]);
   return (
     <div ref={frame} className={`ss-frame af-${fidelity}${className ? ` ${className}` : ""}`} inert aria-hidden="true" {...scope}>
       <div ref={place} className="ss-frame__place"><div ref={zoom} className="af-zoom" style={fidelity === "real" ? TRUE_STROKES : undefined} dangerouslySetInnerHTML={{ __html: html }} /></div>

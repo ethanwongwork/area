@@ -25,16 +25,18 @@
  * a bunch of sources, images, ui examples, components, typefaces, colors, and create an entire collection").
  *
  * Electron serves the library as area-brand://library/ (electron/main.cjs); the browser preview as /__brand/
- * (scripts/dev.mjs). Location: #references/<collection>, #references/<collection>/<image> for the viewer.
+ * (scripts/dev.mjs). Location: #references/<collection>, #references/<collection>/<image> for the design viewer.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { AssetGrid, AssetGridItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
-import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, GridIcon, OpenIcon } from "@area/icons";
-import { ChromeButton, SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
+import { AssetGrid, AssetGridItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, Count, EmptyState, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
+import { GridIcon, OpenIcon } from "@area/icons";
+import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { appScale } from "../app-scale.ts";
 import { hrefOf, referenceView } from "../places.ts";
-import { CanvasSection, CARD_SCOPE, FEED_TABLE } from "../tile.tsx";
-import { useViewOption, ViewControls, ViewSwitch } from "../view-controls.tsx";
+import { CanvasSection, CARD_SCOPE, COLLECTION_CARD, COLLECTION_MIN, collectionName, FEED_TABLE, imageCard } from "../tile.tsx";
+import { GALLERY_MODES, GALLERY_RATIOS, useViewOption, ViewControls, ViewFilter, ViewLead, ViewSwitch, type GalleryMode, type GalleryRatio } from "../view-controls.tsx";
+import { useDesignViewer } from "../design-viewer.tsx";
+import { openDesign, useCardArrival } from "../morph.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
 import { Preview, Selection } from "../inspector.tsx";
@@ -59,7 +61,6 @@ const kindLabel = (item: BrandItem) => item.kind === "jpeg" ? "JPG" : item.kind.
    be slightly larger"; was 160 / 224 / 320, then 120 / 160 / 240). */
 const SIZES = { small: 144, medium: 192, large: 288 } as const; /* pick */
 type Size = keyof typeof SIZES;
-type Mode = "grid" | "waterfall" | "list";
 
 /** The Library's file (library.json), read once; Home shows its groups as boards. */
 export function useLibrary() {
@@ -77,12 +78,13 @@ export function useLibrary() {
 
 export function ImageryPage() {
   const { library, error } = useLibrary();
-  const { item, select, query } = useStudio();
+  const { item, select, query, theme, navigate } = useStudio();
   // Discover and Following are views of their own; anything else is Saved's: a collection, and an image in it.
   const view = referenceView(item);
   const [folderId, openedId] = view ? [] : (item ?? "").split("/");
   const [size, setSize] = useViewOption<Size>("brand:size", "medium", ["small", "medium", "large"]);
-  const [mode, setMode] = useViewOption<Mode>("brand:mode", "grid", ["grid", "waterfall", "list"]);
+  const [mode, setMode] = useViewOption<GalleryMode>("brand:mode", "grid", GALLERY_MODES);
+  const [ratio, setRatio] = useViewOption<GalleryRatio>("brand:ratio", "landscape", GALLERY_RATIOS.map(entry => entry.value));
   const [chosen, setChosen] = useState<string | null>(null);
   const canvas = useRef<HTMLDivElement>(null);
 
@@ -106,7 +108,7 @@ export function ImageryPage() {
   useEffect(() => { setChosen(null); canvas.current?.scrollTo({ top: 0 }); }, [folderId]);
 
   const openFolder = (id: string) => select(id);
-  const openImage = (entry: BrandItem) => { setChosen(entry.id); select(`${entry.folder}/${entry.id}`); };
+  const openImage = (entry: BrandItem) => { setChosen(entry.id); openDesign(`image:${entry.id}`); select(`${entry.folder}/${entry.id}`); };
   const closeViewer = () => select(opened?.folder ?? folderId ?? "");
   // The viewer steps through the list it was opened from (the folder, or the search's results).
   const siblings = opened ? (shown.some(entry => entry.id === opened.id) ? shown : byFolder.get(opened.folder) ?? []) : [];
@@ -117,17 +119,16 @@ export function ImageryPage() {
     setChosen(next.id);
     select(`${next.folder}/${next.id}`, { replace: true });
   };
-  useEffect(() => {
-    if (!opened) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.target instanceof HTMLElement && event.target.closest("input, textarea, select, [role=listbox]")) return;
-      if (event.key === "ArrowRight") { event.preventDefault(); step(1); }
-      else if (event.key === "ArrowLeft") { event.preventDefault(); step(-1); }
-      else if (event.key === "Escape") { event.preventDefault(); closeViewer(); }
-    };
-    addEventListener("keydown", onKey);
-    return () => removeEventListener("keydown", onKey);
+  // The image in the design viewer (src/design-viewer.tsx, 2026-10-31): at its own size, fitted, on the viewer's ground.
+  const viewed = opened ?? library?.items[0];
+  const viewer = useDesignViewer({
+    active: Boolean(opened), design: `image:${viewed?.id ?? ""}`, label: viewed ? nameOf(viewed) : "Image",
+    width: viewed?.width || 1200, height: viewed?.height || 900, selfScaled: true, themed: false, frame: "bare", appMode: theme,
+    render: () => viewed ? <img className="studio-viewer__image" src={url(viewed.file)} alt={viewed.alt || nameOf(viewed)} style={{ background: viewed.color }} /> : null,
+    back: { label: `Back to ${folder?.name ?? "Saved"}`, onBack: closeViewer },
+    step: { index: opened ? siblings.findIndex(entry => entry.id === opened.id) : -1, count: siblings.length, noun: "image", onStep: step },
   });
+  useCardArrival();
 
   const total = library?.items.length ?? 0;
   const viewName = view === "discover" ? "Discover" : view === "following" ? "Following" : "Saved";
@@ -161,13 +162,16 @@ export function ImageryPage() {
     </Table>
   ) : (
     <AssetGrid aria-label={label} value={chosen} onValueChange={setChosen} onOpen={id => { const entry = entries.find(e => e.id === id); if (entry) openImage(entry); }}
-      layout={mode === "waterfall" ? "waterfall" : "grid"} {...CARD_SCOPE}
+      layout={mode === "waterfall" ? "waterfall" : "grid"} className="studio-images" {...CARD_SCOPE}
       style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
       {entries.map(entry => (
-        <AssetGridItem key={entry.id} value={entry.id} name={nameOf(entry)} media={url(entry.thumb)} container="basic" caption="above"
-          // Its own shape, in the grid too (owner, 2026-10-24: "just their own unique height, and the top of each image row
-          // always aligns": the Asset grid tops its rows); packed into columns in the waterfall.
-          mediaRatio={entry.width && entry.height ? entry.width / entry.height : undefined} />
+        <AssetGridItem key={entry.id} value={entry.id} name={nameOf(entry)} media={url(entry.thumb)} container="basic" caption="outside"
+          // Its own shape in one footprint (Grid, after Are.na), packed into columns (Waterfall) or cropped to one ratio
+          // (Fixed ratio): owner, 2026-11-01. Until then the grid's rows were each image's own height, tops aligned.
+          {...imageCard(mode, ratio, entry.width, entry.height)}
+          frameProps={{ "data-design": `image:${entry.id}` }}
+          // ⌘ with the double-click opens the image in a tab of its own (owner's pick, 2026-10-31).
+          onDoubleClick={event => { if (event.metaKey || event.ctrlKey) { event.preventDefault(); navigate({ page: "references", item: `${entry.folder}/${entry.id}` }, { newTab: true }); } }} />
       ))}
     </AssetGrid>
   );
@@ -178,61 +182,53 @@ export function ImageryPage() {
   else if (view === "following") body = <EmptyState title="Not following anyone yet" description="Collections and people you follow appear here as they add to them." />;
   else if (error) body = <EmptyState title="No image library" description="The library is read from ~/Library/Application Support/Area/Brand/library.json, which is missing or unreadable." />;
   else if (!library) body = <div className="studio-imagery__loading"><Spinner size="md" label="Loading the image library" /></div>;
-  else if (opened) body = (
-    <figure className="studio-imagery__viewer">
-      <img key={opened.id} src={url(opened.file)} alt={opened.alt || nameOf(opened)} style={{ aspectRatio: `${opened.width} / ${opened.height}`, background: opened.color }} />
-      <figcaption className="studio-muted">{siblings.findIndex(entry => entry.id === opened.id) + 1} of {siblings.length}</figcaption>
-    </figure>
-  );
+  else if (opened) body = viewer.stage;
   else if (folder || searching) body = shown.length ? (
     <CanvasSection id="brand-images" title={searching ? <>{folder ? `${folder.name}: ` : ""}{shown.length} results</> : undefined}>{imageGrid(shown, folder?.name ?? "Results")}</CanvasSection>
   ) : <EmptyState title="Nothing found" description={`Nothing matches “${query}”.`} />;
-  else body = <>
+  else body = <div className="studio-sections">
     <CanvasSection id="brand-groups" title="Collections" count={folders.length}>
       <AssetGrid aria-label="Collections" value={chosen} onValueChange={setChosen} onOpen={openFolder} {...CARD_SCOPE}
-        style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
+        style={{ "--area-asset-card-size": `${COLLECTION_MIN}px` } as CSSProperties}>
         {folders.map(entry => (
-          // A group keeps the layered card (owner, 2026-10-24: "use the old asset card style with the layered containers for
-          // groups"): framed, landscape ("the AR can be landscape"), its four cells lined up with the name and as far apart
-          // as from the edge (Asset card's group inset), the name below, in the gallery cards' look.
-          <AssetGridItem key={entry.id} value={entry.id} name={entry.name} container="framed" caption="above" aspect="landscape"
+          // A collection in the grid: the square card, its first four square, 2 × 2 (owner, 2026-11-01). It was the
+          // layered 2 × 2 at 5:4 (2026-10-24), then a strip for a day.
+          <AssetGridItem key={entry.id} value={entry.id} textValue={entry.name} name={collectionName(entry.name, byFolder.get(entry.id)?.length ?? 0)} {...COLLECTION_CARD}
             group={(byFolder.get(entry.id) ?? []).slice(0, 4).map(asset => url(asset.thumb))} />
         ))}
       </AssetGrid>
     </CanvasSection>
     {/* Everything saved, newest first as the library keeps it, whichever collection holds it. */}
     <CanvasSection id="brand-saved" title="All saved" count={total}>{imageGrid(library.items, "All saved")}</CanvasSection>
-  </>;
+  </div>;
 
   const chosenFolder = !opened && !folder ? folders.find(entry => entry.id === chosen) : undefined;
   return (
     <Workspace
       sidebar={<SidebarList>
         <SidebarTree label="Collections" count={total} current={folder?.id} onSelect={openFolder} all={false}
-          groups={[{ id: "groups", label: "Collections", items: folders.map(entry => ({ id: entry.id, label: entry.name, icon: <GridIcon />, trailing: <span className="studio-muted studio-imagery__count">{byFolder.get(entry.id)?.length ?? 0}</span> })) }]} />
+          groups={[{ id: "groups", label: "Collections", items: folders.map(entry => ({ id: entry.id, label: entry.name, icon: <GridIcon />, trailing: <Count variant="soft" size="sm" count={byFolder.get(entry.id)?.length ?? 0} max={9999} /> })) }]} />
       </SidebarList>}
-      canvasLead={<div className="studio-canvas__lead">
-        {opened ? <ChromeButton label={`Back to ${folder?.name ?? "Saved"}`} keys={["Esc"]} shortcut="Escape" icon={<ArrowLeftIcon />} onClick={closeViewer} /> : null}
-        {trail}
-      </div>}
+      canvasLead={opened ? <ViewLead>{viewer.lead}</ViewLead> : <div className="studio-canvas__lead">{trail}</div>}
       canvasTitle={opened ? nameOf(opened) : folder?.name ?? viewName}
       canvasRef={canvas}
+      // A wall of images takes the feed's tight Gallery margin (owner, 2026-11-01: "Yes, use Gallery"; styles/feed.css);
+      // the design viewer keeps its own ground.
+      canvasScope={opened ? undefined : { "data-feed": "gallery" }}
       canvasActions={
         <ViewControls>
-          {opened ? <>
-            <ChromeButton label="Previous image" keys={["←"]} shortcut="ArrowLeft" icon={<ChevronLeftIcon />} onClick={() => step(-1)} />
-            <ChromeButton label="Next image" keys={["→"]} shortcut="ArrowRight" icon={<ChevronRightIcon />} onClick={() => step(1)} />
-          </> : view ? null : <>
+          {opened ? viewer.controls : view ? null : <>
             <Select size="sm" variant="soft" aria-label="Card size" value={size} onChange={event => setSize(event.currentTarget.value as Size)}>
               <option value="small">Small</option>
               <option value="medium">Medium</option>
               <option value="large">Large</option>
             </Select>
-            <ViewSwitch waterfall value={mode} onChange={setMode} />
+            {mode === "fixed" ? <ViewFilter label="Ratio" value={ratio} onChange={setRatio} options={GALLERY_RATIOS} /> : null}
+            <ViewSwitch waterfall fixed value={mode} onChange={setMode} />
           </>}
         </ViewControls>
       }
-      canvas={<div className="studio-imagery">{body}</div>}
+      canvas={opened ? body : <div className="studio-imagery">{body}</div>}
       inspector={{
         theme: <CanvasSettings axes={["type", "density"]} />,
         // An image library: what is chosen, and no code.

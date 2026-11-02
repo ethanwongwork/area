@@ -8,14 +8,14 @@
  * are one rule in the document's head (src/colours.ts, src/brand.ts), drawn for the theme in use alone.
  *
  * Three views of the Canvas. Screen, the first (owner, 2026-10-31): the theme in use on the Workspace, alone on a grey
- * ground, fitted or zoomed, its mode, ground and states in the header (src/screen-viewer.tsx, a trial of how a project's
- * screens are viewed). Close-up (the Playground, owner 2026-10-30: "focus on the actual theme playground/creation/editing
+ * ground, fitted or zoomed, its mode, ground and states in the header (src/design-viewer.tsx, which every gallery opens
+ * its designs in). Close-up (the Playground, owner 2026-10-30: "focus on the actual theme playground/creation/editing
  * experience"): one setting at a time, the Inspector row last pressed or focused (`data-setting`, src/inspector-rows.tsx),
  * its components in bento tiles at 1× or 2× as the component review page does (src/setting-preview.tsx), live as the row
  * moves and while a list's option is hovered. Themes is the cards.
  */
 import { useEffect, useState, type SyntheticEvent } from "react";
-import { Button, PanelSection } from "@area/react";
+import { Button, MenuItem, MenuSeparator, PanelSection } from "@area/react";
 import { AddIcon } from "@area/icons";
 import { canvasAttributes, CANVAS_DEFAULTS, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
@@ -23,8 +23,8 @@ import { useViewOption, ViewControls, ViewFilter, ViewLead } from "../view-contr
 import { Playground, settingHint, settingName } from "../setting-preview.tsx";
 import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
-import { useScreenViewer } from "../screen-viewer.tsx";
+import { SCREEN, SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
+import { useDesignViewer } from "../design-viewer.tsx";
 import { hasColours } from "../colours.ts";
 import type { SystemTheme } from "../systems.ts";
 
@@ -41,7 +41,19 @@ export function ThemesPage() {
   // The new theme is the one used, so the Setup chat writes it.
   const newTheme = () => { addTheme(); navigate({ page: "theme-setup" }); };
   const [view, setView] = useViewOption<"screen" | "close-up" | "themes">("themes-view", "screen", ["screen", "close-up", "themes"]);
-  const viewer = useScreenViewer({ scope: scopeOf(openTheme), appMode: theme });
+  // The theme in use on the Workspace, at its 1920 × 1080; its held states and window frame are the view's own toggles.
+  const [states, setStates] = useViewOption<"on" | "off">("viewer-states", "on", ["on", "off"]);
+  const [frame, setFrame] = useViewOption<"window" | "bare">("viewer-frame", "window", ["window", "bare"]);
+  const screenScope = scopeOf(openTheme);
+  const viewer = useDesignViewer({
+    design: `theme:${openTheme.id}`, label: "Screen", width: SCREEN.w, height: SCREEN.h, selfScaled: true, appMode: theme, frame,
+    render: (mode, scale) => <ScreenFigure className="studio-viewer__figure" hold={states === "on" ? SHOWCASE : []} view={{ scale }} crossfade scope={{ ...screenScope, "data-area-theme": mode }} />,
+    menu: <>
+      <MenuSeparator />
+      <MenuItem checked={states === "on"} onClick={() => setStates(states === "on" ? "off" : "on")}>Show held states</MenuItem>
+      <MenuItem checked={frame === "window"} onClick={() => setFrame(frame === "window" ? "bare" : "window")}>Window frame</MenuItem>
+    </>,
+  });
   // An old Foundations link to one setting opens on its close-up.
   useEffect(() => { if (place.page === "settings" && place.item) setView("close-up"); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [zoom, setZoom] = useViewOption<"1" | "2">("playground-zoom", "2", ["1", "2"]);

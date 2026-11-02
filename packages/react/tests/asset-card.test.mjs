@@ -104,5 +104,55 @@ test("the app's Asset card hooks stop at the tile stage and the Stage", async ()
   const canvas = readFileSync(new URL('../../../apps/desktop/src/styles/canvas.css', import.meta.url), 'utf8');
   const reset = canvas.match(/\.gallery-tile__stage,\s*\.studio-stage__view \{[^}]*\}/);
   assert.ok(reset, 'one reset for both specimen holders');
-  for (const hook of ['--area-asset-card-corner', '--area-asset-card-name-inset', '--area-asset-grid-gap']) assert.match(reset[0], new RegExp(`${hook}: initial;`));
+  for (const hook of ['--area-asset-card-corner', '--area-asset-card-name-inset', '--area-asset-card-inset', '--area-asset-grid-gap']) assert.match(reset[0], new RegExp(`${hook}: initial;`));
+});
+
+// 2026-11-01 (owner: "1920x1080 AR for card thumbnails"; Are.na's grid; "redesign the group cards for saved references"):
+// a screen aspect, an image's fit, and a group's strip (the "Group container" strip design).
+test('aspect screen, fit and the strip are classes; contain carries the image ratio; a strip draws only what it has', async () => {
+  const screen = render(h(AssetCard, { name: 'Button', aspect: 'screen', media: h('span', null, 'B') }));
+  assert.match(screen, /area-asset-card--screen/);
+  assert.match(render(h(AssetCard, { name: 'David Tee', media: 'a.png' })), /area-asset-card--natural/, 'natural by default');
+  const cover = render(h(AssetCard, { name: 'David Tee', media: 'a.png', fit: 'cover', aspect: 'screen' }));
+  assert.match(cover, /area-asset-card--cover/);
+  const contain = render(h(AssetCard, { name: 'David Tee', media: 'a.png', fit: 'contain', mediaRatio: 0.5 }));
+  assert.match(contain, /area-asset-card--contain[^>]*style="--_media-ratio:0.5"/);
+  const strip = render(h(AssetCard, { name: 'Group one', group: ['a.png', 'b.png', 'c.png', 'd.png', 'e.png'], mosaic: 'strip' }));
+  assert.match(strip, /area-asset-card--strip/);
+  assert.equal((strip.match(/area-asset-card__cell/g) || []).length, 5, 'five cells, no empty ones');
+  assert.equal((render(h(AssetCard, { name: 'Group two', group: ['a.png'], mosaic: 'strip' })).match(/area-asset-card__cell/g) || []).length, 1);
+  const item = render(h(AssetGrid, { 'aria-label': 'Images' }, h(AssetGridItem, { value: 'a', name: 'A', media: 'a.png', fit: 'cover', aspect: 'screen' })));
+  assert.match(item, /area-asset-card--cover/);
+  const { readFileSync } = await import('node:fs');
+  const css = readFileSync(new URL('../../styles/src/components/asset-card.css', import.meta.url), 'utf8');
+  assert.match(css, /\.area-asset-card--image:is\(\.area-asset-card--cover, \.area-asset-card--contain\) > \.area-asset-card__frame \{ aspect-ratio: var\(--_aspect, 1\); \}/, 'a fitted image takes the card aspect');
+  assert.match(css, /\.area-asset-card--basic \{ --_inset: max\(0px, calc\(var\(--area-asset-card-inset/, 'a basic card takes the inset hook');
+});
+
+// 2026-11-01: an asset held far in keeps at least the small corner (the group designs' rounded cells).
+test('the frame corner never drops under the small radius where the inset runs it out', async () => {
+  const { readFileSync } = await import('node:fs');
+  const css = readFileSync(new URL('../../styles/src/components/asset-card.css', import.meta.url), 'utf8');
+  assert.match(css, /--_frame-corner: max\(var\(--area-radius-min\), calc\([^;]*\), min\(var\(--area-radius-small\), calc\(var\(--_corner\) - var\(--_edge\)\)\)\);/);
+});
+
+// 2026-11-01: landscape is 4:3 (one card in three shapes), and a strip scrolls sideways at a host's row height.
+test('landscape is 4:3 and a strip scrolls at the strip height hook', async () => {
+  const { readFileSync } = await import('node:fs');
+  const css = readFileSync(new URL('../../styles/src/components/asset-card.css', import.meta.url), 'utf8');
+  assert.match(css, /\.area-asset-card--landscape:not\(\.area-asset-card--image\) > \.area-asset-card__frame \{ aspect-ratio: 4 \/ 3; \}/);
+  assert.match(css, /\.area-asset-card--landscape \{ --_aspect: 4 \/ 3; \}/);
+  assert.match(css, /\.area-asset-card--strip > \.area-asset-card__frame \{[^}]*block-size: var\(--area-asset-card-strip-height, auto\)/);
+  assert.match(css, /\.area-asset-card--strip \.area-asset-card__mosaic \{[^}]*overflow-x: auto;/);
+});
+
+// 2026-11-01 (the card explorer's pick): caption outside, the card its frame alone and the head under it, 4 below.
+test('caption outside is a class; the frame draws the card and the head sits under it', async () => {
+  assert.match(render(h(AssetCard, { name: 'David Tee', media: 'a.png', caption: 'outside' })), /area-asset-card--outside/);
+  const { readFileSync } = await import('node:fs');
+  const css = readFileSync(new URL('../../styles/src/components/asset-card.css', import.meta.url), 'utf8');
+  assert.match(css, /\.area-asset-card\.area-asset-card--outside \{[^}]*gap: var\(--area-space-4\);/);
+  assert.match(css, /\.area-asset-card\.area-asset-card--outside > \.area-asset-card__frame \{[^}]*border-radius: var\(--_corner\);/);
+  assert.match(css, /\.area-asset-card\.area-asset-card--outside > \.area-asset-card__head \{ order: 1;/);
+  assert.doesNotMatch(css, /\.area-asset-card--contain \.area-asset-card__media > img \{[^}]*box-shadow/, 'no edge on a contained image');
 });

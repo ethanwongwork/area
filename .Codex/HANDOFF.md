@@ -12,6 +12,34 @@
   share folder-lock's 5 × 3 lock; the sort family shares one arrow). Agent is now bot with sunglasses (owner pick A).
   817 icons. In review: batch 78 and the four icons it touched. Review page
   https://claude.ai/artifact/KTwGjUgbj5uJZ5yPvFazqh (db `verdicts`), Icon Boards https://claude.ai/artifact/4debUbHgJLDBGmzXcUde6Q.
+- **Next session (owner, 2026-11-01): the status badges and their icons, then tables and data visualisation.** Project
+  status is a first pass (tile.tsx `STATUS`: published = tag + success, draft = dashed circle + caution); the owner wants
+  to work on badges + icons as a set, and on tables / data vis in the feed. Explorers: Card Explorer KCvLgSPg…, Feed Kit
+  3VBMTvWZ…. The owner's Area system has 5 unpublished changes (Count off the pill list among them).
+- **Feed content and galleries, branch `claude/feed-content-gallery-layouts-5ead71` (uncommitted, 2026-11-01).** First
+  ported the IA playground's steps 2–3 + q6, left uncommitted in `ia-design-playground-review-3e30b0` (design viewer,
+  morph, derived Properties; resolved against #186–#191: References naming, glyph sheet, FEED_TABLE). Then the owner's
+  feed pass: Labs › Feed (`#labs/feed`, ⌘K "Feed"; `src/pages/feed-lab.tsx`) shows every feed element in labelled
+  sections in three layouts (Canvas, Gallery with the frame inset as margin, Column at 768). One family of frames: tables
+  and code blocks take the tile fill and the cards' Stroke 2 (new hooks `--area-table-fill`, `--area-code-block-inset /
+  -corner / -fill`), Settings rows the plain tile's fill and edge. Asset card: `aspect="screen"` (16:9), `fit` (natural,
+  cover, contain), `mosaic="strip"` (owner's "Group container" designs), frame corner floored at radius-small, hook
+  `--area-asset-card-inset`. Galleries: Grid (Are.na footprint, default),
+  Waterfall, Fixed ratio (+ Ratio menu) in References; collections are strips at 16:9 (References, Home); every card's
+  name 11/14 in one header row (text on the 16 edge, controls and badges as far from the end as from the top; Code
+  block's header follows with its inset hook), its picture 15 under the cap, 16 in, corner 8; counts are Count soft sm,
+  weight 400 (soft was 500), not pills by default (pills.ts; the owner's Area system still lists `count` in its pills,
+  removed from their working copy on their yes, unpublished with 4 earlier changes); one card in three shapes (square
+  components, 4:3 default, 16:9 cover; Tile `shape`, Asset card landscape 4:3, values as badges, screens cover from the
+  top-left; collections square 2 × 2 in References, scrolling strips on Home); then the explorer's pick (artifact
+  KCvLgSPg…): Asset card `caption="outside"`, every card 8 in, 16 corners, names 4 below at 13, 16 gaps, square or
+  16:9 only, no edge on images; project status badges colour-coded (published: tag, success; draft: dashed circle,
+  caution); Feed Kit 3VBMTvWZ…; a
+  project's Pages are one 16:9 picture each; Home's column 768. Painted plain tiles' names take their ink. Docs:
+  PRODUCT_UI (four new rules), specs asset-card / table / code-block, compose skill content.md. Checks: typecheck, tokens
+  27,922, React 631, desktop 30, contracts, docs, app-css, playgrounds. Looked at in Electron, light and dark. References
+  takes the Gallery layout (owner's yes; margin set on the whole Canvas, path aligned). Open: a project's page cards
+  unverified with a real project (owner has none).
 - **Region balance across densities, branch `claude/spacing-layout-balance-17deb8` (uncommitted, 2026-10-31).** Owner asked
   whether the Sidebar, Canvas and Inspector need spacing / optical-balance updates against Claude Code and Cursor, and for it
   to be documented in the density themes. Finding: at the app's type 13 / 32 the regions match the references; but Panel's md

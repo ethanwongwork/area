@@ -40,8 +40,20 @@
  *              ratio (owner, round 65: "for components can you make the top layer frame a 1:1 AR always. for images,
  *              it can vary based on the image height"); landscape, the same at 5:4 (owner, 2026-10-22: the gallery
               four across; a gallery's media, measured 195 x 158); hug, a component's frame takes its own height instead
+ *              screen, the frame 16:9, a product screen's 1920 × 1080 (owner, 2026-11-01: "for ui, 1920x1080 AR for card
+ *              thumbnails is the standard")
+ *   fit        how an image fills its frame (owner, 2026-11-01, after Are.na: "images keep their aspect ratio no matter
+ *              what bc there is an underlying grid that keeps AR and keeps each things footprint the same"):
+ *              natural (the default), the frame takes the image's own ratio; cover, the frame takes the card's aspect
+ *              and the image is cropped to it; contain, the frame takes the card's aspect and the whole image sits
+ *              centred in it at its own ratio, the group inset round it, so every card keeps one footprint
+ *   mosaic     a group's layout: grid (the default), the first four 2 × 2; strip, a row of them at their own ratios,
+ *              the frame's height, scrolling sideways edge to edge (owner, 2026-11-01, the "Group container" designs);
+ *              both as far apart as from the card's edge, every cell at the frame's corner
  *   waterfall  (AssetGrid) columns of the least width, each card hugging, dropped into the shortest column
  * Public hooks: `--area-asset-card-size` (the grid's column), `--area-asset-grid-gap` (the grid's gap), `--area-asset-card-corner` (the card's corner),
+ * `--area-asset-card-inset` (a basic card's asset from its outer edge on the open sides, the edge counted once; 0 by default),
+ * `--area-asset-card-strip-height` (a strip's row height, in place of the aspect),
  * `--area-asset-card-name-inset` (how far the name's cap sits from the card's edge, across and above and below; the head
  * grows to keep it, never under its controls).
  * ------------------------------------------------------------------------- */
@@ -57,7 +69,10 @@
     /* Concentric: the card's corner less what lies between the two outlines, the edge and the inset (16 − 1 − 4 = 11). */
     /* The edge always counts, it is physical; the inset counts where corners are concentric (radius-concentric, 0 at
        Square): 2026-10-26, a card held at a corner by the hook kept its frame 1 rounder than its inner curve at Square. */
-    --_frame-corner: max(var(--area-radius-min), calc(var(--_corner) - var(--_edge) - var(--_inset) * var(--area-radius-concentric)));
+    /* An asset held far in (a group, or a host's inset hook, the app's 16) keeps at least the small corner, so a picture
+       still reads as rounded where the concentric corner runs out (owner, 2026-11-01, the group designs: rounded cells
+       8 in a 16 card; the app's screens draw theirs at radius-small): never rounder than the card's own inner curve. */
+    --_frame-corner: max(var(--area-radius-min), calc(var(--_corner) - var(--_edge) - var(--_inset) * var(--area-radius-concentric)), min(var(--area-radius-small), calc(var(--_corner) - var(--_edge))));
     /* The head's own padding, the designs' 4, apart from the frame's inset, so a basic card (no inset) keeps its head. */
     --_head-pad: var(--area-space-4);
     --_head: calc(var(--area-control-sm) + 2 * var(--_head-pad)); /* spec: the designs' 33 inside the edge */
@@ -195,7 +210,7 @@
   .area-asset-card__mosaic {
     display: grid;
     grid-template: repeat(2, minmax(0, 1fr)) / repeat(2, minmax(0, 1fr));
-    gap: var(--_inset); /* spec: the group design's 4, the card's inset */
+    gap: var(--_inset); /* spec: the group designs' gap equals their padding (round 59; 2026-11-01, both 8 in the designs) */
     min-inline-size: 0;
     min-block-size: 0;
   }
@@ -237,6 +252,29 @@
   .area-asset-card__thumb:dir(rtl) { inset-inline-start: auto; inset-inline-end: 0; transform-origin: 100% 0; }
   /* A cell with nothing in it (a group of fewer than four) is left as the card's ground. */
   .area-asset-card__cell:empty { background-color: transparent; }
+  /* Strip (owner, 2026-11-01, the "Group container" strip design): one row, every asset the frame's height at its own
+     ratio, each at the frame's corner, as far apart as the grid's cells; the row runs on past the card's end, where the
+     card's own corner cuts the last one, so it reads as more to see. An element is square. Images are square until they
+     load (aspect-ratio auto 1), so the row holds its place. */
+  .area-asset-card--grid {}
+  /* The row scrolls sideways (owner, 2026-11-01: "one is just a full width horizontal scroll version"), running to the
+     card's edges inside its edge and starting on its inset, so the first asset lines up with the name. Its height is the
+     frame's aspect at the card's width, or `--area-asset-card-strip-height` (a full-width row in a feed). */
+  .area-asset-card--strip > .area-asset-card__frame { overflow: visible; block-size: var(--area-asset-card-strip-height, auto); }
+  .area-asset-card--strip .area-asset-card__mosaic {
+    display: flex;
+    margin-inline: calc(-1 * var(--_inset));
+    padding-inline: var(--_inset);
+    scroll-padding-inline: var(--_inset);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .area-asset-card--strip .area-asset-card__mosaic::-webkit-scrollbar { display: none; }
+  .area-asset-card--strip .area-asset-card__cell { display: block; flex: none; block-size: 100%; scroll-snap-align: start; }
+  .area-asset-card--strip .area-asset-card__cell > img { inline-size: auto; aspect-ratio: auto 1; }
+  .area-asset-card--strip .area-asset-card__cell:has(> .area-asset-card__thumb) { aspect-ratio: 1; }
 
   /* Selected: the card's edge in the selection colour, at least stroke-width. */
   /* The Selected stroke setting's width, inside (the edge plus a ring), and the Selected tint setting's layer. */
@@ -260,6 +298,47 @@
   .area-asset-card--above {}
   .area-asset-card--below { padding: var(--_inset) var(--_inset) 0; }
   .area-asset-card--below > .area-asset-card__head { order: 1; }
+  /* Outside (owner, 2026-11-01, the card explorer's pick: "apply 8 and update the corner radius to 16"; "move the below
+     text/button row even closer to 4"): the card is its frame alone, the asset `--area-asset-card-inset` in from the card's
+     edge on every side (8 by default here), and the head sits under the card on the page, 4 below it, its name 4 in and
+     its controls ending on the card's edge. The frame draws everything the card drew (fill, edge, corner, lift, the
+     selected edge); the asset inside takes the inner corner. */
+  .area-asset-card.area-asset-card--outside {
+    --_inset: max(0px, calc(var(--area-asset-card-inset, calc(var(--area-space-8) + var(--_edge))) - var(--_edge)));
+    gap: var(--area-space-4); /* spec: owner, "even closer to 4" */
+    padding: 0;
+    overflow: visible;
+    border-width: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+  .area-asset-card.area-asset-card--outside > .area-asset-card__frame {
+    order: 0;
+    padding: var(--_inset);
+    overflow: clip;
+    border: var(--_edge) solid var(--area-edge-cards);
+    border-radius: var(--_corner);
+    background-color: var(--area-bg-tile);
+    box-shadow: var(--_sel-ring, inset 0 0 0 0 transparent), var(--area-shadow-edge), var(--_lift);
+    transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in);
+  }
+  .area-asset-card.area-asset-card--outside.area-asset-card--color > .area-asset-card__frame { padding: 0; background-color: var(--_asset-color); }
+  .area-asset-card.area-asset-card--outside > .area-asset-card__head { order: 1; block-size: var(--area-control-sm); padding: 0 0 0 var(--area-space-4); }
+  .area-asset-card--outside .area-asset-card__media { border-radius: var(--_frame-corner); overflow: clip; }
+  /* A group's cells as far apart as from the card's outer edge (the inset and the edge). */
+  .area-asset-card--outside .area-asset-card__mosaic { gap: calc(var(--_inset) + var(--_edge)); }
+  .area-asset-card--outside.area-asset-card--contain .area-asset-card__media { --_pad: 0px; --_room-b: 100cqb; padding: 0; border-radius: 0; overflow: visible; }
+  .area-asset-card--outside:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card--outside > .area-asset-card__frame { border-color: var(--area-stroke-selected); }
+  /* Containerless and outside: the same card, clear at rest, its fill and edge fading in under the pointer, with focus
+     inside or selected; nothing moves (owner, 2026-11-01: "the card is still there it will just appear on hover"). */
+  .area-asset-card.area-asset-card--outside.area-asset-card--containerless:not(:focus-within, [data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame { border-color: transparent; background-color: transparent; box-shadow: none; }
+  .area-asset-grid__item:is(:focus-visible, [aria-selected="true"]) > .area-asset-card.area-asset-card--outside.area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-edge-cards); background-color: var(--area-bg-tile); }
+  @media (hover: hover) {
+    [data-area-shadow-hover="0"] .area-asset-grid__item:not([aria-selected="true"], [data-disabled]):hover .area-asset-card--outside > .area-asset-card__frame { border-color: var(--area-edge-control-hover); }
+    .area-asset-card.area-asset-card--outside.area-asset-card--containerless:hover > .area-asset-card__frame,
+    .area-asset-grid__item:hover > .area-asset-card.area-asset-card--outside.area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-edge-cards); background-color: var(--area-bg-tile); box-shadow: var(--_sel-ring, inset 0 0 0 0 transparent), var(--area-shadow-edge), var(--_lift); }
+  }
   /* Controls sit in the corner opposite the name (owner, 2026-10-24: "i dont like the button being right next to the
      title, can you make the button on the opposite corner"): with the name below or over the asset, the controls leave
      the head for the card's top end, their box as far in as its centre sits from the name's cap, so a button's glyph keeps
@@ -342,7 +421,10 @@
   /* Basic: one surface (owner, 2026-10-22). No inset and no frame of its own: the asset sits on the card's fill, the
      head over or under it with nothing between; its corner is Card's, with no frame inside to be concentric with. The
      head's controls end 4 in, where the card no longer pads them (the head rule, with no inset). */
-  .area-asset-card--basic { --_inset: 0px; padding: 0; }
+  /* `--area-asset-card-inset` (from the card's outer edge, the edge counted once) holds the asset that far in on a basic
+     card's three open sides, as a framed group holds its cells (owner, 2026-11-01: "all containers feel consistent, and
+     part of the same family": the app's image cards hold their picture as its collection and screen cards do). */
+  .area-asset-card--basic { --_inset: max(0px, calc(var(--area-asset-card-inset, var(--_edge)) - var(--_edge))); padding: 0 var(--_inset) var(--_inset); }
   /* Its corner stays concentric (the card's less its edge), so what fills it (an image) is cut on the card's own curve. */
   .area-asset-card--basic > .area-asset-card__frame { border-width: 0; border-radius: var(--_frame-corner); background-color: transparent; }
   /* Fill: raised, the surface (white in light) for the whole card; recessed, the default, the tile tone (Card tone). */
@@ -352,12 +434,46 @@
   :where(.area-asset-card--raised) > .area-asset-card__frame { background-color: var(--area-bg-frame-raised); }
   /* Borderless: no edge at rest, its width kept so nothing moves; the selected and hover edges still draw. */
   .area-asset-card--borderless { border-color: transparent; }
-  /* Landscape: 5:4 for every kind but an image (spec: owner 2026-10-22; the reference gallery's media 195 x 158). */
-  .area-asset-card--landscape:not(.area-asset-card--image) > .area-asset-card__frame { aspect-ratio: 5 / 4; } /* spec */
+  /* Landscape: 4:3 for every kind but an image (owner, 2026-11-01: "maybe the ratios can be more like 4:3 or 5:4", then the
+     three shapes, 1:1, 4:3 and a 16:9 cover; Preview frame's and File tile's landscape are 4:3 too). It was 5:4 from
+     2026-10-22 (the reference gallery's media 195 x 158), close enough to square to read as one. */
+  .area-asset-card--landscape:not(.area-asset-card--image) > .area-asset-card__frame { aspect-ratio: 4 / 3; } /* spec */
   /* Wide: 2:1 for every kind but an image, a colour or a short banner (Preview frame's wide, folded in 2026-10-26: the
      app's colour Inspector). */
   .area-asset-card--wide:not(.area-asset-card--image) > .area-asset-card__frame { aspect-ratio: 2; } /* spec */
   .area-asset-card--framed {}
+  /* Screen: 16:9 for every kind but a natural image, a product screen's 1920 × 1080 (owner, 2026-11-01). */
+  .area-asset-card--screen:not(.area-asset-card--image) > .area-asset-card__frame { aspect-ratio: 16 / 9; } /* spec */
+  /* Fit: an image held to the card's aspect, cropped (cover) or whole (contain); natural leaves it its own ratio. */
+  .area-asset-card--natural {}
+  .area-asset-card--square { --_aspect: 1; }
+  .area-asset-card--landscape { --_aspect: 4 / 3; }
+  .area-asset-card--wide { --_aspect: 2; }
+  .area-asset-card--screen { --_aspect: 16 / 9; }
+  .area-asset-card--image:is(.area-asset-card--cover, .area-asset-card--contain) > .area-asset-card__frame { aspect-ratio: var(--_aspect, 1); }
+  .area-asset-card--cover .area-asset-card__media > img { block-size: 100%; aspect-ratio: auto; }
+  /* Contain: the frame is a size container, so the image's box is the image (its corner and edge on its own outline):
+     as wide as the frame allows, or as tall, at its ratio (`mediaRatio`, set as --_media-ratio; square until known,
+     drawn whole by object-fit). The group inset round it, measured from the frame, as a group's cells sit; on the side the
+     head takes, the head's own room. The frame paints nothing: the card's fill is the footprint (Are.na's cell). */
+  .area-asset-card--contain > .area-asset-card__frame { container-type: size; border-color: transparent; background-color: transparent; }
+  .area-asset-card--contain .area-asset-card__media {
+    /* The group inset in all, less what the card's own inset already gives. */
+    --_pad: max(0px, calc(var(--_group-inset) - var(--_inset)));
+    --_room-i: calc(100cqi - 2 * var(--_pad));
+    --_room-b: calc(100cqb - var(--_pad));
+    padding: 0 var(--_pad) var(--_pad);
+  }
+  .area-asset-card--contain.area-asset-card--below .area-asset-card__media { padding: var(--_pad) var(--_pad) 0; }
+  .area-asset-card--contain.area-asset-card--overlay .area-asset-card__media { --_room-b: calc(100cqb - 2 * var(--_pad)); padding: var(--_pad); }
+  .area-asset-card--contain .area-asset-card__media > img {
+    inline-size: min(var(--_room-i), var(--_room-b) * var(--_media-ratio, 1));
+    block-size: auto;
+    aspect-ratio: var(--_media-ratio, 1);
+    object-fit: contain;
+    border-radius: max(var(--area-radius-min), calc(var(--_frame-corner) - var(--_pad) * var(--area-radius-concentric)));
+    /* No edge on an image inside a card (owner, 2026-11-01: "dont add a stroke to the inset images"). */
+  }
   /* Hug: the card follows its content's height at its width; an image keeps its own ratio, a group and a colour stay
      square, a component takes its own height and the room around it. */
   .area-asset-card--hug.area-asset-card--asset > .area-asset-card__frame { aspect-ratio: auto; }

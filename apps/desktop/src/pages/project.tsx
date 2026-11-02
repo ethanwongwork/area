@@ -6,23 +6,26 @@
  *
  *   ProjectOverview   #project/<id>: its pages, explorations and versions, with New page, New exploration, Save version
  *   ProjectPageView   #project/<id>/pages/<page>/<layer>: a page's layers in order, a system's screens and Inspiration's
- *                     images, each a tile; Add screen and Add image put one at the end
+ *                     images, each a tile; Add screen and Add image put one at the end. A double-click opens a layer in
+ *                     the design viewer (src/design-viewer.tsx), …/<layer>/open, ← and → stepping through the page
  *   ExplorationPage   #project/<id>/explorations/<id>: the exploration's theme, which the Inspector's Theme view edits, on
  *                     the screen and the system's patterns; Publish puts it in the system
  *   VersionsPage      #project/<id>/versions/<id>: saved versions, each restored from the Inspector
  */
 import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
-import { AssetGrid, AssetGridItem, Button, Card, CardContent, CardDescription, CardHeader, CardLink, CardTitle, ConfirmDialog, Dialog, EmptyState, Field, Input, Menu, MenuItem, PanelSection, Radio, RadioGroup, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
+import { AssetGrid, AssetGridItem, Button, ConfirmDialog, Dialog, EmptyState, Field, Input, Menu, MenuItem, PanelSection, Radio, RadioGroup, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
 import { AddIcon, ChevronDownIcon } from "@area/icons";
 import { canvasAttributes, useStudio, Workspace } from "../studio.tsx";
-import { CanvasSection, CARD_SCOPE, Tile, TileGrid, FEED_TABLE } from "../tile.tsx";
-import { ViewControls } from "../view-controls.tsx";
+import { CanvasSection, CARD_SCOPE, Tile, TileGrid, type OpenHow, FEED_TABLE } from "../tile.tsx";
+import { ViewControls, ViewLead } from "../view-controls.tsx";
+import { useDesignViewer, type DesignViewerOptions } from "../design-viewer.tsx";
+import { openDesign, useCardArrival } from "../morph.ts";
 import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
 import { hasColours } from "../colours.ts";
 import { hrefOf, systemName } from "../places.ts";
-import { EXAMPLES, PATTERNS, WidthZoom } from "./examples.tsx";
+import { EXAMPLES, PATTERNS, screenDesign, WidthZoom } from "./examples.tsx";
 import { NameDialog } from "./home.tsx";
 import { nameOf, url, useLibrary } from "./imagery.tsx";
 import { BeforeAfter, KINDS, ThemeScreen } from "../publish.tsx";
@@ -90,6 +93,19 @@ function LayerView({ layer, library }: { layer: Layer; library: ReturnType<typeo
   return image ? <img className="studio-layer__image" src={url(image.thumb)} alt={image.alt || nameOf(image)} /> : <p className="studio-muted">This image is no longer in your saved references.</p>;
 }
 
+/** A layer as the design viewer draws it: its screen at its width, or its image at its size; null when its source is gone. */
+function layerDesign(layer: Layer, library: ReturnType<typeof useLibrary>["library"]): Pick<DesignViewerOptions, "width" | "height" | "frame" | "render" | "selfScaled" | "themed"> | null {
+  if (layer.kind === "screen") {
+    const example = EXAMPLES.find(entry => entry.id === layer.ref);
+    return example ? screenDesign(example) : null;
+  }
+  const image = library?.items.find(entry => `${entry.folder}/${entry.id}` === layer.ref);
+  return image ? {
+    width: image.width || 1200, height: image.height || 900, selfScaled: true, themed: false, frame: "bare",
+    render: () => <img className="studio-viewer__image" src={url(image.file)} alt={image.alt || nameOf(image)} style={{ background: image.color }} />,
+  } : null;
+}
+
 /** Save version's dialog: a name for the copy. */
 function useSaveVersion(project: Project | null) {
   const { updateProject } = useStudio();
@@ -103,6 +119,7 @@ function useSaveVersion(project: Project | null) {
 
 export function ProjectOverview() {
   const { openProject, openSystem, updateProject, navigate, theme } = useStudio();
+  const { library } = useLibrary();
   const { save, dialog } = useSaveVersion(openProject);
   if (!openProject) return null;
   const project = openProject;
@@ -126,16 +143,15 @@ export function ProjectOverview() {
       canvas={<>
         <div className="studio-sections">
           <CanvasSection id="project-pages" title="Pages" count={project.pages.length} lede={`Boards of screens and images, in ${systemName(project.system)}'s published look.`}>
-            <TileGrid span="unit" cards>
+            {/* One picture a page, its first layer at a product screen's 16:9 (owner, 2026-11-01: "for normal project cards
+                it should only be 1 visual. maybe for ui, 1920x1080 AR for card thumbnails is the standard"); a click opens
+                it, ⌘-click in a tab of its own. They were text cards (a name and its layers' names) until then. */}
+            <TileGrid span="wide" cards min={CARD_MIN}>
               {project.pages.map(page => (
-                <Card key={page.id}>
-                  <CardContent>
-                    <CardHeader>
-                      <CardTitle><CardLink href={hrefOf({ page: "project-page", project: project.id, item: page.id })} onClick={event => { event.preventDefault(); navigate({ page: "project-page", item: page.id }); }}>{page.name}</CardLink></CardTitle>
-                      <CardDescription>{page.layers.length ? `${plural(page.layers.length, "layer")}: ${page.layers.slice(0, 3).map(layer => layer.name).join(", ")}${page.layers.length > 3 ? "…" : ""}` : "Empty"}</CardDescription>
-                    </CardHeader>
-                  </CardContent>
-                </Card>
+                <Tile key={page.id} span="wide" stage="screen" inert openOnClick label={page.name} value={page.layers.length ? plural(page.layers.length, "layer") : "Empty"}
+                  onOpen={how => navigate({ page: "project-page", item: page.id }, { newTab: how.newTab })}>
+                  {page.layers[0] ? <LayerView layer={page.layers[0]} library={library} /> : null}
+                </Tile>
               ))}
             </TileGrid>
           </CanvasSection>
@@ -143,7 +159,7 @@ export function ProjectOverview() {
             {project.explorations.length ? (
               <TileGrid span="wide" cards min={CARD_MIN}>
                 {project.explorations.map(entry => (
-                  <Tile key={entry.id} span="wide" stage="screen" inert label={entry.name} value={entry.published ? `Published in ${versionName(systemName(project.system), entry.published)}` : "Not published"}
+                  <Tile key={entry.id} span="wide" stage="screen" inert label={entry.name} status={entry.published ? "published" : "draft"} value={entry.published ? `Published in ${versionName(systemName(project.system), entry.published)}` : "Not published"}
                     onSelect={() => navigate({ page: "exploration", item: entry.id })} onOpen={() => navigate({ page: "exploration", item: entry.id })}>
                     <ThemeScreen theme={entry.theme} mode={theme} />
                   </Tile>
@@ -181,15 +197,36 @@ export function ProjectOverview() {
 }
 
 export function ProjectPageView() {
-  const { openProject, item, select, updateProject, navigate } = useStudio();
+  const { openProject, item, select, updateProject, navigate, theme } = useStudio();
   const { library } = useLibrary();
   const [picking, setPicking] = useState(false);
   const [renaming, setRenaming] = useState(false);
-  const [pageId, layerId] = (item ?? "").split("/");
+  const [pageId, layerId, view] = (item ?? "").split("/");
+  const shownPage = openProject?.pages.find(entry => entry.id === pageId) ?? openProject?.pages[0];
+  const chosenLayer = shownPage?.layers.find(entry => entry.id === layerId) ?? null;
+  // The layer opened in the design viewer, and its place on the page; back leaves it selected on the page.
+  const design = chosenLayer ? layerDesign(chosenLayer, library) : null;
+  const opened = view === "open" && design ? chosenLayer : null;
+  const layers = shownPage?.layers ?? [];
+  const at = opened ? layers.indexOf(opened) : -1;
+  const viewer = useDesignViewer({
+    active: Boolean(opened), design: `layer:${chosenLayer?.id ?? ""}`, label: chosenLayer?.name ?? "Layer", appMode: theme,
+    width: 1440, render: () => null, ...design,
+    back: { label: `Back to ${shownPage?.name ?? "the page"}`, onBack: () => select(`${shownPage?.id}/${chosenLayer?.id}`) },
+    step: { index: at, count: layers.length, noun: "layer", onStep: by => { const next = layers[(at + by + layers.length) % layers.length]!; select(`${shownPage?.id}/${next.id}/open`, { replace: true }); } },
+  });
+  useCardArrival();
   if (!openProject) return null;
   const project = openProject;
-  const page = project.pages.find(entry => entry.id === pageId) ?? project.pages[0]!;
-  const layer = page.layers.find(entry => entry.id === layerId) ?? null;
+  const page = shownPage!;
+  const layer = chosenLayer;
+  // ⌘-click opens the layer in a tab of its own (owner's pick, 2026-10-31); otherwise here, from its card.
+  const openLayer = (entry: Layer, how?: OpenHow) => {
+    if (!layerDesign(entry, library)) return;
+    if (how?.newTab) { navigate({ page: "project-page", item: `${page.id}/${entry.id}/open` }, { newTab: true }); return; }
+    openDesign(`layer:${entry.id}`);
+    select(`${page.id}/${entry.id}/open`);
+  };
   const add = (kind: Layer["kind"], ref: string, name: string) => {
     const made = addLayer(project, page.id, kind, ref, name);
     updateProject(project.id, () => made.project);
@@ -209,8 +246,9 @@ export function ProjectPageView() {
     : `References › ${library?.folders.find(folder => folder.id === entry.ref.split("/")[0])?.name ?? entry.ref.split("/")[0]}`;
   return (
     <Workspace
-      canvasTitle={page.name}
-      canvasActions={
+      canvasTitle={opened ? opened.name : page.name}
+      canvasLead={opened ? <ViewLead>{viewer.lead}</ViewLead> : undefined}
+      canvasActions={opened ? <ViewControls>{viewer.controls}</ViewControls> : (
         <ViewControls>
           <Menu aria-label="Add screen" align="end" tooltip="Add one of the system's screens"
             trigger={<Button variant="ghost" tone="neutral" size="sm" icon={<AddIcon />} trailingIcon={<ChevronDownIcon />}>Add screen</Button>}>
@@ -218,13 +256,14 @@ export function ProjectPageView() {
           </Menu>
           <Button size="sm" variant="ghost" tone="neutral" icon={<AddIcon />} disabled={!images.length} onClick={() => setPicking(true)}>Add image</Button>
         </ViewControls>
-      }
-      canvas={<>
+      )}
+      canvas={opened ? viewer.stage : <>
         {page.layers.length ? (
           <TileGrid span="wide" cards>
             {page.layers.map(entry => (
-              <Tile key={entry.id} span="wide" stage="center" inert card label={entry.name} value={entry.kind === "screen" ? "Screen" : "Image"}
-                selected={entry.id === layer?.id} onSelect={() => select(`${page.id}/${entry.id}`, { replace: true })}>
+              <Tile key={entry.id} span="wide" stage="center" shape="wide" inert card label={entry.name} value={entry.kind === "screen" ? "Screen" : "Image"}
+                selected={entry.id === layer?.id} onSelect={() => select(`${page.id}/${entry.id}`, { replace: true })}
+                onOpen={how => openLayer(entry, how)} data-design={`layer:${entry.id}`}>
                 <LayerView layer={entry} library={library} />
               </Tile>
             ))}
@@ -247,6 +286,7 @@ export function ProjectPageView() {
         design: layer ? (<>
           <PanelSection>
             <div className="studio-inspector-actions">
+              {layerDesign(layer, library) ? <Button size="sm" variant="soft" tone="neutral" onClick={() => openLayer(layer)}>Open</Button> : null}
               <Button size="sm" variant="soft" tone="danger" onClick={() => removeLayer(layer.id)}>Remove layer</Button>
             </div>
           </PanelSection>
@@ -295,11 +335,11 @@ export function ExplorationPage() {
             lede={`From ${from?.name ?? "a theme"} in ${versionName(systemName(project.system), liveOf(openSystem).version)}. Change it in the Inspector's Theme view; nothing in ${systemName(project.system)} changes until you publish.`}>
             <TileGrid span="wide" cards min={CARD_MIN}>
               {from ? (
-                <Tile span="wide" stage="screen" inert label={from.name} value={`Live in ${versionName(systemName(project.system), liveOf(openSystem).version)}`}>
+                <Tile span="wide" stage="screen" inert label={from.name} status="published" value={`Live in ${versionName(systemName(project.system), liveOf(openSystem).version)}`}>
                   <ThemeScreen theme={from} mode={theme} />
                 </Tile>
               ) : null}
-              <Tile span="wide" stage="screen" inert label={exploration.name} value={exploration.published ? `Published in ${versionName(systemName(project.system), exploration.published)}` : "Not published"}>
+              <Tile span="wide" stage="screen" inert label={exploration.name} status={exploration.published ? "published" : "draft"} value={exploration.published ? `Published in ${versionName(systemName(project.system), exploration.published)}` : "Not published"}>
                 <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={scope} />
               </Tile>
             </TileGrid>

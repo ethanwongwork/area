@@ -2,25 +2,5 @@
 .studio-imagery { display: grid; align-content: start; min-block-size: 100%; }
 .studio-imagery__loading { display: grid; place-items: center; min-block-size: 50vh; }
 .studio-imagery__count { font-variant-numeric: tabular-nums; }
-/* The viewer: the image as large as the Canvas allows, never upscaled past its own pixels. */
-.studio-imagery__viewer {
-  display: grid;
-  grid-template: minmax(0, 1fr) auto / minmax(0, 1fr);
-  place-items: center;
-  gap: var(--area-space-12);
-  min-block-size: calc(100vh - 160px);
-  margin: 0;
-}
-.studio-imagery__viewer > img {
-  max-inline-size: 100%;
-  max-block-size: calc(100vh - 180px);
-  inline-size: auto;
-  block-size: auto;
-  object-fit: contain;
-  /* A standalone image takes the container corner (owner, 2026-10-18: images rounded by size, 12 large, 6 thumbnails). */
-  border-radius: var(--area-radius-container);
-  box-shadow: 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
-}
-.studio-imagery__viewer > figcaption { font-size: var(--area-text-xs-size); font-variant-numeric: tabular-nums; }
 .studio-imagery__preview { inline-size: 100%; block-size: 100%; object-fit: contain; }
 .studio-imagery__row-thumb { display: block; inline-size: 32px; block-size: 32px; object-fit: cover; border-radius: var(--area-radius-small); }

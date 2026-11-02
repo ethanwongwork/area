@@ -1145,12 +1145,12 @@ export const fileGrid = {
 
 export const assetCard = {
   block: "area-asset-card",
-  description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio; an element, a colour, or a group as a 2×2 mosaic); framed, basic or containerless, its name above, below or over the asset on hover, recessed or raised or on a transparency checker, square, landscape, wide or hugging its asset; with no name or controls and containerless, the frame alone (an inspector's preview).",
-  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below", "overlay"], fill: ["recessed", "raised", "checker"], aspect: ["square", "landscape", "hug", "wide"] },
+  description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio, cropped to the card's aspect or whole within it; an element, a colour, or a group as a 2×2 mosaic or a strip); framed, basic or containerless, its name above, below or over the asset on hover, recessed or raised or on a transparency checker, square, landscape, wide, 16:9 screen or hugging its asset; with no name or controls and containerless, the frame alone (an inspector's preview).",
+  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below", "overlay", "outside"], fill: ["recessed", "raised", "checker"], aspect: ["square", "landscape", "hug", "wide", "screen"], fit: ["natural", "cover", "contain"], mosaic: ["grid", "strip"] },
   booleans: ["interactive", "borderless"],
   states: ["selected"],
   elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb"],
-  defaults: { layout: "asset", container: "framed", caption: "above", fill: "recessed", aspect: "square" },
+  defaults: { layout: "asset", container: "framed", caption: "above", fill: "recessed", aspect: "square", fit: "natural", mosaic: "grid" },
 } as const satisfies ComponentManifest;
 
 export const assetGrid = {

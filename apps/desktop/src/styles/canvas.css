@@ -96,6 +96,9 @@
      baseline to its tiles. A lede follows its title at one line's spacing (8), as prose does. */
   /* A section's title (and lede) is Area's SectionHeading (app-shell.css, 2026-10-15); the Canvas margin follows it. */
   .studio-section-heading { margin-block-end: var(--_canvas-heading); margin-inline-start: var(--_text-inset); }
+  /* A count after a label (tile.tsx FeedCount, 2026-11-01): Count soft sm, centred on the label's line and overhanging it
+     equally above and below, so a cap-trimmed title or card name keeps its place with or without one. */
+  .studio-count { display: inline-flex; vertical-align: middle; margin-block: calc((1cap - var(--area-mark-label-sm)) / 2); margin-inline-start: var(--area-space-2); }
 
   /* --- Tiles and the grid (src/tile.tsx) ------------------------------------ */
 
@@ -127,6 +130,8 @@
   .studio-canvas__body {
     --area-asset-card-corner: var(--_tile-radius);
     --area-asset-card-name-inset: var(--_card-inset);
+    /* Every Asset card holds its asset half the frame inset in (8), as a plain tile does (2026-11-01). */
+    --area-asset-card-inset: calc(var(--_frame-inset) / 2);
     --area-asset-grid-gap: var(--_canvas-gap);
     /* The tile's edge is read here, under the Canvas's own settings (Layers, theme), not the chrome's. */
     --_tile-edge: var(--area-border-card); /* Card's edge */
@@ -167,10 +172,19 @@
   .gallery-tile--plain {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
-    row-gap: var(--area-space-12);
+    /* One header for every card (owner, 2026-11-01: "there should be a consistent header styling across all
+       cards/containers"): a small control's row (24) half the inset from the top, so the name's cap lands the inset down
+       (8 + (24 − 8) / 2 = 16) and a button in it sits 8 from the top and the side; the visual half the inset under it, 15
+       under the cap, as an Asset card's head (the edge counted once). A badge or button no longer makes the head taller
+       and pushes the name down (a status badge did, 2026-11-01). Holds at every density: the inset steps with the
+       control (12 / 20, 16 / 24, 20 / 28). */
+    row-gap: calc(var(--_tile-inset) / 2 - var(--area-stroke-width));
     box-sizing: border-box;
     min-inline-size: 0;
-    padding: calc(var(--_tile-inset) - var(--area-stroke-width));
+    /* The card holds its picture alone, half the frame inset in all round (8 at the default; owner, 2026-11-01, the card
+       explorer's pick: "apply 8 and update the corner radius to 16"); its name sits under it (.gallery-plain below). A
+       colour keeps its name inside, in its ink, the header row as before. */
+    padding: calc(var(--_tile-inset) / 2 - var(--area-stroke-width));
     border: var(--area-stroke-width) solid var(--area-border-card);
     border-radius: var(--_tile-radius);
     background: var(--area-bg-stripe);
@@ -179,8 +193,31 @@
   }
   .gallery-tile--plain[data-scoped] { background: var(--area-bg-stripe); }
   .gallery-tile--plain[data-stage="none"] { grid-template-rows: auto; }
-  .gallery-tile--plain > .gallery-tile__view { aspect-ratio: 1; }
-  .gallery-tile--plain > .gallery-tile__head .gallery-tile__label { color: var(--area-fg-default); }
+  /* The header row: text on the inset (the name at the start, a value at the end), a control's plate as far from the
+     side as from the top (the row runs half the inset past the text edge). */
+  /* The row is the inset plus the name's cap tall, so the cap sits exactly the inset down whatever the control height (the
+     app's small control is 26 at its scale, which put the cap at 17); a control in it centres on the cap's line, its box
+     as far from the end as from the top. */
+  /* With its name outside, the box is its picture alone: one row. */
+  .gallery-tile--plain:not([data-painted]) { grid-template-rows: minmax(0, 1fr); row-gap: 0; }
+  /* A colour's own header row inside it (the colour is the card): the frame inset round it, as before. */
+  .gallery-tile--plain[data-painted] { padding: calc(var(--_tile-inset) / 2 - var(--area-stroke-width)) calc(var(--_tile-inset) - var(--area-stroke-width)) calc(var(--_tile-inset) - var(--area-stroke-width)); }
+  .gallery-tile--plain > .gallery-tile__head { block-size: calc(var(--_tile-inset) + 1cap); align-items: center; margin-inline-end: calc((1cap - var(--area-control-sm)) / 2); }
+  /* The name under the card: a small control's row 4 below it (owner: "even closer to 4"), the name 4 in on the feed's
+     text edge at the feed's 13, badges and controls ending on the card's edge. */
+  .gallery-plain { row-gap: var(--area-space-4); }
+  .gallery-plain > .gallery-tile__head { display: flex; align-items: center; gap: var(--area-space-8); block-size: var(--area-control-sm); padding-inline-start: var(--_text-inset); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .gallery-plain > .gallery-tile__head > .gallery-tile__label { flex: 1 1 auto; color: var(--area-fg-default); }
+  /* Two shapes (owner, 2026-11-01: "are all 3 aspect ratios necessary?"): square, the default (components, colours,
+     images), and wide, 16:9, for anything designed (a screen, a cover), where a 1920 x 1080 window fits whole. */
+  .gallery-tile--plain > .gallery-tile__view { aspect-ratio: 1; border-radius: max(var(--area-radius-small), calc(var(--_tile-radius) - var(--_tile-inset) / 2)); }
+  .gallery-tile--plain[data-shape="wide"] > .gallery-tile__view { aspect-ratio: 16 / 9; }
+  /* A screen fills its picture whole at 16:9 (setup-screen.tsx covers it from the top-left where the shapes differ). */
+  .gallery-tile--plain[data-stage="screen"] > .gallery-tile__view > .ss-frame { aspect-ratio: auto; block-size: 100%; }
+  .gallery-tile--plain:not([data-painted]) > .gallery-tile__head .gallery-tile__label { color: var(--area-fg-default); }
+  /* A painted frame's name is in the colour's own ink (2026-11-01: a plain painted tile's name took the default ink, black
+     on a dark colour; the Colors page set its own). */
+  .gallery-tile[data-painted] .gallery-tile__label, .gallery-tile[data-painted] .gallery-tile__value { color: inherit; }
   @media (hover: hover) {
     .gallery-plain:hover > .gallery-tile--plain:not([data-painted]) { border-color: var(--area-edge-control-hover); transition-duration: 0s; }
     .gallery-plain:hover > .gallery-tile--plain[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); transition-duration: 0s; } /* pick */
@@ -198,7 +235,11 @@
 
   /* The caption's name and value in the app's UI text (13 at its scale, owner, 2026-10-13). A painted frame's caption
      takes the colour's ink (Color's grade, studio-swatch__grade). */
-  .gallery-tile__caption { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  /* A card's name under it is the feed's 13/18 (owner, 2026-11-01, the card explorer's pick; it was 11/14 inside the card
+     for an afternoon), the Asset cards' (CARD_CAPTION) and the plain tiles' (.gallery-plain > head) alike; a colour's name
+     inside it stays the ramp's xs. */
+  .gallery-tile__caption { font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .gallery-tile > .gallery-tile__head { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
 
   /*
    * Cards (src/tile.tsx, `card`; owner, 2026-10-14, after Compass's gallery, measured at 1440: 331 x 336 cards 12
@@ -260,6 +301,7 @@
   .studio-stage__view {
     --area-asset-card-corner: initial;
     --area-asset-card-name-inset: initial;
+    --area-asset-card-inset: initial;
     --area-asset-grid-gap: initial;
   }
   .gallery-tile__stage {
@@ -277,7 +319,7 @@
   [data-stage="flow"] > .gallery-tile__view { align-content: start; }
   /* A product screen (src/tile.tsx, `screen`): the view is the screen's own 16:9, which the screen fills, so the tile is
      its thumbnail at every width rather than a square with the screen floating in its middle. */
-  .gallery-tile--plain[data-stage="screen"] > .gallery-tile__view { aspect-ratio: 1920 / 1080; /* spec: setup-screen.tsx SCREEN */ grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
+  .gallery-tile--plain[data-stage="screen"] > .gallery-tile__view { grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
   .studio-tile-error { margin: 0; color: var(--area-fg-danger); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
 
 
@@ -307,8 +349,8 @@
   .studio-overview__toggle { appearance: none; padding: 0; border: 0; background: none; color: var(--area-fg-muted); font: inherit; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; cursor: pointer; }
   /* The family's status follows its count on the title's line. */
   .studio-overview__status { display: inline-flex; vertical-align: middle; margin-inline-start: var(--area-space-4); }
-  /* A section not yet drawn holds its room with empty cards of the cards' own shape (Asset card landscape, 5:4). */
-  .studio-overview__ghost { aspect-ratio: 5 / 4; border-radius: var(--_tile-radius); background: var(--area-bg-subtle); }
+  /* A section not yet drawn holds its room with empty cards of the cards' own shape (square since 2026-11-01). */
+  .studio-overview__ghost { aspect-ratio: 1; border-radius: var(--_tile-radius); background: var(--area-bg-subtle); }
 
   /* --- A family's tabs (src/family-tabs.tsx) -------------------------------- */
 

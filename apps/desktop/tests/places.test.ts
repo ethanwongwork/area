@@ -76,7 +76,7 @@ test("a place's hash reads back as the same place", () => {
     { page: "shape", system: "area" }, { page: "elevation", system: "northwind" }, { page: "motion", system: "area" },
     { page: "references", item: "discover" }, { page: "references", item: "following" },
     { page: "themes", system: "northwind", item: "theme-2" }, { page: "components", system: "northwind", item: "button" },
-    { page: "references", item: "a b/c" }, { page: "materials", item: "glass" }, { page: "tests", item: "hairline" }, { page: "history", system: "area", item: "1.2" },
+    { page: "references", item: "a b/c" }, { page: "materials", item: "glass" }, { page: "tests", item: "hairline" }, { page: "feed" }, { page: "history", system: "area", item: "1.2" },
     { page: "project", project: "launch" }, { page: "project-page", project: "launch", item: "page-1/layer-2" },
     { page: "exploration", project: "launch", item: "exploration-1" }, { page: "versions", project: "launch" }, { page: "versions", project: "launch", item: "version-1" },
   ];

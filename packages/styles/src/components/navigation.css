@@ -226,7 +226,8 @@
   /* --- Table -------------------------------------------------------------- */
   /* Public hooks (2026-10-31, as Asset card's --area-asset-card-corner and -name-inset): --area-table-corner, the frame's
      corner, and --area-table-edge, the first and last cells' side inset (md and lg; sm keeps one inset), so a page that
-     sets one inset and one corner for every frame (the desktop app's feed) can give its tables the same. */
+     sets one inset and one corner for every frame (the desktop app's feed) can give its tables the same; and
+     --area-table-fill (2026-11-01), the frame's fill, so such a page's tables take its frames' one fill too. */
   /* Body cells align to their first line; headers center labels and controls.
    * Column dividers are optional, independent of row spacing and stripes. */
   .area-table-wrapper {
@@ -239,7 +240,7 @@
     /* The surface corner, never deeper than 1.5 x the cells' side inset (owner, 2026-10-12: a
        compact table put 8px-inset cells under an 18 corner). Bites only at the roundest settings. */
     border-radius: var(--area-table-corner, min(var(--area-radius-container), max(var(--area-radius-floor), round(down, calc((var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)) * 1.5), 2px))));
-    background-color: var(--area-bg-surface);
+    background-color: var(--area-table-fill, var(--area-bg-surface));
   }
 
   /*

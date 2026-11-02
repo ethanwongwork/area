@@ -19,10 +19,12 @@
   text-box: trim-both cap alphabetic;
 }
 .studio-settings__group { display: grid; gap: var(--_canvas-heading); }
+/* The feed's one frame (app.css, 2026-11-01): the plain tile's fill and edge, so a group of rows is the same family as the
+   cards, tables and code beside it (it was the subtle ground, white at the app's settings, in a lighter edge). */
 .studio-settings__rows {
-  border: var(--area-border-width) solid var(--area-border-decorative);
+  border: var(--area-stroke-width) solid var(--area-border-card);
   border-radius: var(--_tile-radius);
-  background: var(--area-bg-subtle);
+  background: var(--area-bg-stripe);
 }
 .studio-settings__row {
   position: relative;

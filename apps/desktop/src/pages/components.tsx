@@ -39,6 +39,7 @@ import { componentSpecimens, demoWrapper } from "../content/specimens.mjs";
 import { SPECIMEN_GROUPS, specimenGroup, specimenLabel, specimenName } from "../content/specimen-names.mjs";
 import { DEMOS } from "../content/registry.tsx";
 import { PLAYGROUNDS, configCode, initialConfig, renderConfig, sameConfig, tileConfig, type Config, type Playground, type PropValue } from "../content/playgrounds.tsx";
+import { derivedPlayground, drawsComponent, Overridden, overriddenCode, snippetConfig } from "../content/derived-props.tsx";
 import { fitTiles } from "../gallery/fit.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
@@ -46,7 +47,7 @@ import { SpecimenBox } from "../specimen-box.tsx";
 import { CodeWell, longLines } from "../inspector.tsx";
 import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
 import { appScale, feedScale, InheritedScaleContext } from "../app-scale.ts";
-import { CanvasSection, GALLERY_LOOK, Tile, TileGrid, type CardLook, FEED_TABLE } from "../tile.tsx";
+import { CanvasSection, GALLERY_LOOK, Tile, TileGrid, type CardLook, type OpenHow, FEED_TABLE, FeedCount } from "../tile.tsx";
 
 /*
  * The Cards menu (owner, 2026-10-25: "there should just be 1 style of container, so the options for that menu should be
@@ -69,6 +70,7 @@ import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } fr
 import { ChromeButton, SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
 import { matches } from "../search.ts";
+import { morph } from "../morph.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
 
 interface Example { id: string; title: string; demo: string; note?: string; group?: string }
@@ -79,6 +81,13 @@ interface Tile { id: string; name: string; group: string; value: string; label: 
 interface ManifestLike { block: string; description: string; variants: Record<string, readonly string[]>; defaults: Record<string, string>; elements?: readonly string[]; states?: readonly string[]; stateAttributes?: Record<string, string> }
 
 export const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly).sort((a, b) => a.name.localeCompare(b.name));
+/* Properties for the families without a hand-made playground, from their manifests (src/content/derived-props.tsx). */
+const DERIVED = new Map(FAMILIES.flatMap(family => {
+  const derived = !PLAYGROUNDS[family.slug] && family.manifest ? derivedPlayground(family.manifest) : null;
+  return derived ? [[family.slug, derived] as const] : [];
+}));
+/** A derived edit on the Stage: the playground, where the tile started, and what the Properties set. */
+interface DerivedEdit { playground: Playground; from: Config; to: Config }
 const STATUS_LABEL = { complete: "Complete", review: "In review", unrefined: "Unrefined" } as const;
 const STATUS_TONE = { complete: "success", review: "caution", unrefined: "neutral" } as const;
 type Status = keyof typeof STATUS_LABEL;
@@ -157,27 +166,8 @@ function variantRows(family: Family): TreeViewNode[] | undefined {
 /** The rows that hold a tile, opened so it shows in the Sidebar. */
 const revealOf = (family: Family, tile?: Tile) => [`key:${family.slug}`, ...(tile && tile.group !== "Default" ? [`axis:${family.slug}/${tile.group}`] : [])];
 
-/*
- * The move between the Overview and a tile (owner, 2026-10-25: the view shifts "to some kind of gallery view … then you
- * can return back to the original design thing you were looking at or open a new one"): opening a card grows the Stage
- * from it on `slow`; leaving shrinks the Stage into its card on `moderate`, exits being a step faster. Both are moves
- * across the screen while visible, so ease-in-out (MOTION.md), and both read the motion tokens where they play, so Motion
- * 0 and reduced motion skip them. The scale is the width's alone, from the top start, so nothing is stretched; the
- * element rests untransformed, on whole pixels.
- */
+/* The move between the Overview and a tile (src/morph.ts): the Stage grows from its card, and shrinks back into it. */
 let pendingMorph: { from: DOMRect; to: "stage" | "tile" } | null = null;
-function morph(element: Element | null | undefined, from: DOMRect, duration: "slow" | "moderate") {
-  if (!(element instanceof HTMLElement)) return;
-  const to = element.getBoundingClientRect();
-  const style = getComputedStyle(element);
-  const ms = parseFloat(style.getPropertyValue(`--area-duration-${duration}`)) || 0;
-  if (!ms || !to.width || !from.width) return;
-  const easing = style.getPropertyValue("--area-ease-in-out").trim() || "ease-in-out";
-  element.animate([
-    { transformOrigin: "0 0", transform: `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width})` },
-    { transformOrigin: "0 0", transform: "none" },
-  ], { duration: ms, easing });
-}
 /*
  * Zoom (src/gallery/fit.ts; owner, 2026-10-18: "the default should be the automatic scaling approach based on the
  * largest components, then there should just be Auto, Fit 50% 75% 80% 90% 100%, 110%, 125%, 150% 175% 200%"):
@@ -264,7 +254,7 @@ function useFit(ref: { current: HTMLElement | null }, key: unknown, enabled = tr
  */
 function Overview({ groups, visit, open, onToggle, onOpen, zoom, look, waterfall }: {
   groups: Array<[string, Family[]]>; visit?: string; open: string[]; onToggle: (slug: string) => void;
-  onOpen: (key: string, from?: Element | null) => void; zoom: string; look: CardLook; waterfall: boolean;
+  onOpen: (key: string, from?: Element | null, how?: OpenHow) => void; zoom: string; look: CardLook; waterfall: boolean;
 }) {
   // The arrangement's groups keep their order but draw no title of their own: a group's title over a family's read as
   // two headings of one tier stacked 12 apart. The Sidebar names the groups, and each family's status follows its title.
@@ -280,7 +270,7 @@ function Overview({ groups, visit, open, onToggle, onOpen, zoom, look, waterfall
 
 /** One family in the Overview: its name, status and tile count over one row of its tiles, or all of them in groups. */
 function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, waterfall }: {
-  family: Family; open: boolean; onToggle: () => void; visit?: string; onOpen: (key: string, from?: Element | null) => void; zoom: string; look: CardLook; waterfall: boolean;
+  family: Family; open: boolean; onToggle: () => void; visit?: string; onOpen: (key: string, from?: Element | null, how?: OpenHow) => void; zoom: string; look: CardLook; waterfall: boolean;
 }) {
   const tiles = TILES.get(family.slug)!;
   const status = statusOf(family);
@@ -314,7 +304,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
   const card = (entry: Tile) => (
     <Tile key={entry.id} container="asset" id={`variant-${family.slug}-${entry.id}`} span="wide" stage="fit" card look={look} aspect={waterfall ? "hug" : undefined} openOnClick
       aria-label={`${family.name}: ${entry.label}`} data-key={family.slug} data-name={family.name} label={entry.value}
-      selected={here && entry.id === visitTile} onOpen={() => onOpen(`${family.slug}/${entry.id}`, document.getElementById(`variant-${family.slug}-${entry.id}`))}
+      selected={here && entry.id === visitTile} onOpen={how => onOpen(`${family.slug}/${entry.id}`, document.getElementById(`variant-${family.slug}-${entry.id}`), how)}
       actions={<CopyCode code={SNIPPETS[entry.demo]} name={`${family.name} ${entry.label}`} />}>
       <TileBoundary><Demo name={entry.demo} /></TileBoundary>
     </Tile>
@@ -330,7 +320,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
       <div ref={body} className="studio-overview__body" data-fit="">
         {open ? groupsOf(tiles).map(([group, list]) => (
           <div key={group} className="studio-overview__group">
-            <p className="studio-overview__group-label" {...feedScale()}>{group} <span className="studio-muted studio-tabular">{list.length}</span></p>
+            <p className="studio-overview__group-label" {...feedScale()}>{group} <FeedCount count={list.length} /></p>
             <TileGrid span="wide" cards waterfall={waterfall}>{near ? list.map(card) : ghosts(list.length)}</TileGrid>
           </div>
         )) : (
@@ -353,7 +343,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
 function SectionTitle({ id, title, count, badge }: { id: string; title: ReactNode; count: number; badge: ReactNode }) {
   return (
     <SectionHeading className="studio-section-heading studio-overview__title" level={3} titleId={id} {...feedScale()}
-      title={<>{title} <span className="studio-muted studio-tabular">{count}</span> <span className="studio-overview__status">{badge}</span></>} />
+      title={<>{title} <FeedCount count={count} /> <span className="studio-overview__status">{badge}</span></>} />
   );
 }
 
@@ -363,18 +353,21 @@ function SectionTitle({ id, title, count, badge }: { id: string; title: ReactNod
  * previous and next, and its section in the Overview; the strips of tiles that followed the Stage moved there. The
  * reference is in the other tabs (src/family-tabs.tsx).
  */
-function FamilyPreview({ family, tiles, tile, config, onChange, zoom, replays }: {
-  family: Family; tiles: Tile[]; tile: Tile; config: Config | null; onChange: (prop: string, value: PropValue) => void; zoom: string; replays: number;
+function FamilyPreview({ family, tiles, tile, config, derived, hasProperties, onChange, zoom, replays }: {
+  family: Family; tiles: Tile[]; tile: Tile; config: Config | null; derived: DerivedEdit | null; hasProperties: boolean;
+  onChange: (prop: string, value: PropValue) => void; zoom: string; replays: number;
 }) {
   const playground = PLAYGROUNDS[family.slug];
   const onStage = config && playground ? matchingTile(playground, tiles, config) : tile;
-  const label = config && playground ? onStage?.label ?? "Custom" : tile.label;
+  const label = config && playground ? onStage?.label ?? "Custom" : derived ? "Custom" : tile.label;
   return (
     <div className="studio-sections" {...zoomScope(zoom)}>
-      <CanvasSection id="family-preview" title="Preview" lede={playground ? "At its real size, with its code. The Inspector sets its properties." : "At its real size, with its code."}>
+      <CanvasSection id="family-preview" title="Preview" lede={hasProperties ? "At its real size, with its code. The Inspector sets its properties." : "At its real size, with its code."}>
         <Stage zoom={zoom} replays={replays} label={label}
-          code={config && playground ? configCode(playground, config) : SNIPPETS[tile.demo]}>
-          <TileBoundary>{config && playground ? renderConfig(playground, config, onChange) : <Demo name={tile.demo} />}</TileBoundary>
+          code={config && playground ? configCode(playground, config) : derived ? overriddenCode(derived.playground, SNIPPETS[tile.demo]!, derived.from, derived.to) : SNIPPETS[tile.demo]}>
+          <TileBoundary>{config && playground ? renderConfig(playground, config, onChange)
+            : derived ? <Overridden key={tile.demo} playground={derived.playground} demo={tile.demo} from={derived.from} to={derived.to} />
+            : <Demo name={tile.demo} />}</TileBoundary>
         </Stage>
       </CanvasSection>
     </div>
@@ -428,7 +421,7 @@ function matchingTile(playground: Playground, tiles: Tile[], config: Config) {
 }
 
 export function ComponentsPage() {
-  const { query, item, select } = useStudio();
+  const { query, item, select, navigate } = useStudio();
   // The Sidebar's choice: every family (All, the default) or one family's Stage, on one of its tiles.
   const [slug = "", tileId] = (item ?? "").split("/");
   const family = FAMILIES.find(entry => entry.slug === slug);
@@ -464,6 +457,14 @@ export function ComponentsPage() {
   const [edit, setEdit] = useState<{ key: string; config: Config } | null>(null);
   const [replays, setReplays] = useState(0);
   const config = playground && stageTile ? (edit?.key === stageKey ? edit.config : tileConfig(playground, stageTile.name)) : null;
+  // A family without a playground edits the tile's own demo, where it draws the component (derived-props.tsx).
+  const stageSnippet = stageTile ? SNIPPETS[stageTile.demo] : undefined;
+  const derived = family && !playground ? DERIVED.get(family.slug) : undefined;
+  const derivedHere = derived && drawsComponent(derived, stageSnippet) ? derived : undefined;
+  const derivedFrom = derivedHere ? snippetConfig(derivedHere, stageSnippet!) : null;
+  const derivedConfig = derivedFrom ? (edit?.key === stageKey ? edit.config : derivedFrom) : null;
+  const derivedEdit: DerivedEdit | null = derivedHere && derivedFrom && derivedConfig && !sameConfig(derivedFrom, derivedConfig)
+    ? { playground: derivedHere, from: derivedFrom, to: derivedConfig } : null;
 
   const arrangement = useArrangement<Sort, Group>("components", { sort: "name", descending: false, group: "kind" }, SORTS, GROUPS);
   const pins = usePins("components");
@@ -494,7 +495,9 @@ export function ComponentsPage() {
   // here"), and Back or Escape returns to it. A card opened from the Overview grows into the Stage; leaving shrinks the
   // Stage into its card (pendingMorph, morph).
   const canvas = useRef<HTMLDivElement>(null);
-  const open = (key: string, from?: Element | null) => {
+  const open = (key: string, from?: Element | null, how?: OpenHow) => {
+    // ⌘-click opens the tile in a tab of its own (owner's pick, 2026-10-31), the Overview staying here.
+    if (how?.newTab) { navigate({ page: "components", item: key }, { newTab: true }); return; }
     if (from) pendingMorph = { from: from.getBoundingClientRect(), to: "stage" };
     select(key);
   };
@@ -564,6 +567,7 @@ export function ComponentsPage() {
 
   // Properties: an edit that lands on a tile's own configuration moves the Stage to that tile.
   const change = (prop: string, value: PropValue) => {
+    if (derivedConfig) { setEdit({ key: stageKey, config: { ...derivedConfig, [prop]: value } }); return; }
     if (!playground || !family) return;
     const next = { ...(config ?? initialConfig(playground)), [prop]: value };
     const match = matchingTile(playground, tiles, next);
@@ -571,6 +575,7 @@ export function ComponentsPage() {
     setEdit({ key: match ? `${family.slug}/${match.id}` : stageKey, config: next });
   };
   const reset = () => {
+    if (derivedConfig) { setEdit(null); return; }
     if (!family || !playground) return;
     const first = matchingTile(playground, tiles, initialConfig(playground)) ?? tiles[0]!;
     setEdit(null);
@@ -584,7 +589,7 @@ export function ComponentsPage() {
   const previous = at > 0 ? sequence[at - 1] : undefined;
   const following = at >= 0 ? sequence[at + 1] : undefined;
   const stepName = (step: (typeof sequence)[number]) => `${step.family.name}, ${step.tile.label}`;
-  const stageLabel = config && playground ? matchingTile(playground, tiles, config)?.label ?? "Custom" : stageTile?.label;
+  const stageLabel = config && playground ? matchingTile(playground, tiles, config)?.label ?? "Custom" : derivedEdit ? "Custom" : stageTile?.label;
 
   // The Overview fits section by section (FamilySection); the Stage shows its tile at its real size.
   const counts = { complete: 0, review: 0, unrefined: 0 };
@@ -691,7 +696,7 @@ export function ComponentsPage() {
       canvas={family ? (
         stageTile
           ? <FamilyPage family={family} tab={familyTab} onTab={setFamilyTab} onOpenFamily={open}
-              overview={<FamilyPreview family={family} tiles={tiles} tile={stageTile} config={config} onChange={change} zoom={zoom} replays={replays} />} />
+              overview={<FamilyPreview family={family} tiles={tiles} tile={stageTile} config={config} derived={derivedEdit} hasProperties={Boolean(playground || derivedHere)} onChange={change} zoom={zoom} replays={replays} />} />
           : <EmptyState title="No tiles yet" description="This family has no gallery specimens." />
       ) : onCanvas.length ? mode === "list" ? (
         // List: one row per family, its status, tile count and import.
@@ -723,6 +728,8 @@ export function ComponentsPage() {
             {/* Properties edit the Stage, so they show on the Overview tab only (main, 2026-10-19). */}
             {family && playground && onOverview ? (
               <Properties playground={playground} config={config ?? initialConfig(playground)} changed={Boolean(config) && !sameConfig(config!, initialConfig(playground))} onChange={change} onReset={reset} />
+            ) : family && derivedHere && derivedConfig && onOverview ? (
+              <Properties playground={derivedHere} config={derivedConfig} changed={Boolean(derivedEdit)} onChange={change} onReset={reset} />
             ) : null}
             {family ? (
               <FamilyDesign family={family} pinned={pins.has(family.slug)} onPin={() => pins.toggle(family.slug)}
@@ -745,8 +752,8 @@ export function ComponentsPage() {
         ),
         // Code: how to use it, and on the Stage the specimen measured, as Figma's Dev Mode.
         code: family ? (
-          <FamilyCode family={family} measure={stageKey + JSON.stringify(config)}
-            code={config && playground ? configCode(playground, config) : stageTile ? SNIPPETS[stageTile.demo] : undefined} />
+          <FamilyCode family={family} measure={stageKey + JSON.stringify(config ?? derivedConfig)}
+            code={config && playground ? configCode(playground, config) : derivedEdit ? overriddenCode(derivedEdit.playground, stageSnippet!, derivedEdit.from, derivedEdit.to) : stageSnippet} />
         ) : selectedFamily ? (
           <FamilyCode family={selectedFamily} code={selectedTile ? SNIPPETS[selectedTile.demo] : undefined} />
         ) : (

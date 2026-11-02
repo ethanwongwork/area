@@ -15,7 +15,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEven
 import { AssetGrid, AssetGridItem, Button, ConfirmDialog, Dialog, EmptyState, Field, Input, Link, PanelSection, Radio, RadioGroup, Select, Table, TableCell, TableHeaderCell, TableLink, Timeline, TimelineItem } from "@area/react";
 import { AddIcon, BookmarkIcon, CircleDashedIcon, FolderIcon, HistoryIcon, SystemIcon, TagIcon } from "@area/icons";
 import { canvasAttributes, useStudio, Workspace, type Visit } from "../studio.tsx";
-import { CanvasSection, CARD_SCOPE, Tile, TileGrid, FEED_TABLE } from "../tile.tsx";
+import { CanvasSection, CARD_SCOPE, COLLECTION_ROW, COLLECTION_STRIP, collectionName, Tile, TileGrid, FEED_TABLE, type ProjectStatus } from "../tile.tsx";
 import { ViewControls } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
@@ -32,10 +32,8 @@ import { SETTINGS } from "./theme-settings.ts";
 import { TYPE_ROLES } from "../tokens.ts";
 import { categories as ICON_CATEGORIES } from "@area/icons/meta";
 
-/** A picture in the feed fills the column: one card a row (a column of 720 holds no two at this minimum). */
+/** A picture in the feed fills the column: one card a row (the 768 reading column holds no two at this minimum). */
 const FEED_CARD_MIN = 480; /* pick */
-/** A collection is a References card at Imagery's medium size. */
-const BOARD_SIZE = 192; /* pick: imagery.tsx SIZES.medium */
 /** Continue shows the last few places, as Notion's Home "Recently visited" and Cursor's recent projects do. */
 const RECENT = 4; /* pick */
 /** Saved references show their first collections; References holds the rest. */
@@ -130,7 +128,7 @@ export function HomePage() {
     navigate({ page: origin === "described" ? "theme-setup" : "themes", system: made.id });
   };
   const boards = library?.folders ?? [];
-  const firstOf = (folder: string) => (library?.items ?? []).filter(entry => entry.folder === folder).slice(0, 4).map(entry => url(entry.thumb));
+  const inFolder = (folder: string) => (library?.items ?? []).filter(entry => entry.folder === folder);
 
   // Everything that happened, newest first: each system's publishes (its first is when it began), each project's start and
   // saved versions, and the references saved.
@@ -152,9 +150,9 @@ export function HomePage() {
     <Link href={hrefOf(target)} onClick={event => { event.preventDefault(); navigate(target, { newTab: event.metaKey || event.ctrlKey }); }}>{label}</Link>
   );
   // One picture, the column's width: selecting it shows it in the Inspector, a double-click opens it.
-  const picture = (key: string, label: string, value: string, selected: boolean, onSelect: () => void, onOpen: () => void, figure: ReactNode) => (
+  const picture = (key: string, label: string, value: string, selected: boolean, onSelect: () => void, onOpen: () => void, figure: ReactNode, status?: ProjectStatus) => (
     <TileGrid key={key} span="wide" cards min={FEED_CARD_MIN}>
-      <Tile span="wide" stage="screen" inert label={label} value={value} selected={selected} onSelect={onSelect} onOpen={onOpen}>{figure}</Tile>
+      <Tile span="wide" stage="screen" inert label={label} value={value} status={status} selected={selected} onSelect={onSelect} onOpen={onOpen}>{figure}</Tile>
     </TileGrid>
   );
   const feedEvent = (event: HomeEvent) => {
@@ -173,7 +171,7 @@ export function HomePage() {
           <div className="studio-home__event">
             {release.note && !first ? <p className="studio-home__note">{release.note}</p> : null}
             {picture(`release:${system.id}:${release.version}`, published.name, versionName(system.name, release.version), chosen?.id === system.id,
-              () => select(system.id, { replace: true }), () => open(system), <ThemeScreen theme={published} mode={theme} />)}
+              () => select(system.id, { replace: true }), () => open(system), <ThemeScreen theme={published} mode={theme} />, "published")}
           </div>
         </TimelineItem>
       );
@@ -196,9 +194,13 @@ export function HomePage() {
     return (
       <TimelineItem key={key} icon={<BookmarkIcon />} time={time} dateTime={dateTime} meta={plural(boards.length, "collection")}
         title={<>{opener({ page: "references" }, `${plural(library?.items.length ?? 0, "reference")} saved`)}</>}>
-        <AssetGrid aria-label="Collections" onOpen={id => navigate({ page: "references", item: id })} {...CARD_SCOPE}
-          style={{ "--area-asset-card-size": `${BOARD_SIZE}px` } as CSSProperties}>
-          {boards.slice(0, SAVED_SHOWN).map(entry => <AssetGridItem key={entry.id} value={entry.id} name={entry.name} container="framed" caption="above" aspect="landscape" group={firstOf(entry.id)} />)}
+        {/* The collection card across the column: a row of its images that scrolls sideways (tile.tsx COLLECTION_STRIP). */}
+        <AssetGrid aria-label="Collections" onOpen={id => navigate({ page: "references", item: id })} className="studio-images" {...CARD_SCOPE}
+          style={{ "--area-asset-card-size": "100%", "--area-asset-card-strip-height": `${COLLECTION_ROW}px` } as CSSProperties}>
+          {boards.slice(0, SAVED_SHOWN).map(entry => (
+            <AssetGridItem key={entry.id} value={entry.id} textValue={entry.name} name={collectionName(entry.name, inFolder(entry.id).length)} {...COLLECTION_STRIP}
+              group={inFolder(entry.id).slice(0, 8).map(asset => url(asset.thumb))} />
+          ))}
         </AssetGrid>
       </TimelineItem>
     );

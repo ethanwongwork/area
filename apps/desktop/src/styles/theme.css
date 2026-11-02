@@ -129,12 +129,12 @@
   /* A wrapper that only listens (the Themes page's Inspector, which tells the Playground which row was touched). */
   .studio-contents { display: contents; }
 
-/* --- The screen viewer (src/screen-viewer.tsx; owner 2026-10-31: "centered by itself with a gray background frame thats
- * zoomable") --------------------------------------------------------------------------------------------------------
+/* --- The design viewer (src/design-viewer.tsx; the screen viewer until 2026-10-31, owner: "centered by itself with a
+ * gray background frame thats zoomable") ---------------------------------------------------------------------------
  * The Canvas body is the viewer's: no padding, its own scroller. The ground is Setup's stage grey by default, or the
- * person's White, Black or a checkerboard; the screen sits centred on it, 48 from its edges when fitted, and scrolls when
- * zoomed past the view. Two screens (Light and Dark) sit 32 apart. The window frame is the viewer's, not the theme's: a
- * corner of 12 at the screen's scale (a desktop window's) and a lift that reads on every ground. */
+ * person's White, Black or a checkerboard; the design sits centred on it, 48 from its edges when fitted, and scrolls when
+ * zoomed past the view. Two (Light and Dark) sit 32 apart. The window frame is the viewer's, not the theme's: a
+ * corner of 12 at the design's scale (a desktop window's) and a lift that reads on every ground. */
 .studio-canvas__body:has(> .studio-viewer) { padding: 0; overflow: hidden; }
 .studio-viewer {
   --_ground: color-mix(in srgb, var(--area-fg-default) 6%, var(--area-bg-page)); /* pick: Setup's stage, about #f0f0f0 light, #161616 dark */
@@ -180,3 +180,26 @@
 .studio-viewer__swatch[data-ground="white"] { background: #ffffff; }
 .studio-viewer__swatch[data-ground="black"] { background: #000000; }
 .studio-viewer__swatch[data-ground="checker"] { background: repeating-conic-gradient(#d6d6d6 0% 25%, #ffffff 0% 50%) 0 0 / 6px 6px; }
+/* A design the viewer scales: laid out at its true width from the frame's top start and scaled from there, so the frame
+   (sized at the zoom) holds it exactly. Its ground is its theme's page. */
+.studio-viewer__content { position: absolute; inset-block-start: 0; inset-inline-start: 0; transform-origin: 0 0; }
+.studio-viewer__design { background: var(--area-bg-page); color: var(--area-fg-default); }
+/* An icon's design: its glyph alone in its box, nothing round it (the pixel grid shows the box). */
+.studio-viewer__design--icon { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
+/* An image's design fills its frame at the zoom, with the container corner a standalone image takes (owner, 2026-10-18:
+   images rounded by size, 12 large) and the swatch ring, as Inspiration's viewer drew it. */
+.studio-viewer__image { display: block; inline-size: 100%; block-size: 100%; border-radius: var(--area-radius-container); box-shadow: 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); }
+/* The pixel grid from 800% (Figma's): a hairline at every whole pixel of the design, in the ground's rim ink. */
+.studio-viewer__pixels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(to right, var(--_rim) 1px, transparent 1px), linear-gradient(to bottom, var(--_rim) 1px, transparent 1px);
+  background-size: var(--_px) var(--_px);
+}
+/* Space held, or the middle button: the ground drags. */
+.studio-viewer[data-panning="ready"] { cursor: grab; }
+.studio-viewer[data-panning="dragging"] { cursor: grabbing; }
+.studio-viewer[data-panning] * { pointer-events: none; }
+/* The design's place among its gallery's ("3 of 12"), before the steps. */
+.studio-viewer__place { color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); font-variant-numeric: tabular-nums; white-space: nowrap; }

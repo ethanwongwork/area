@@ -25,7 +25,7 @@ import { CanvasSection, Tile, TileGrid, type CardLook, FEED_TABLE } from "../til
 import { factsOf, FaceSample, FaceSummary, KINDS, TYPEFACES, typefaceOf, TypefaceWorkspace, useInstalled } from "./typefaces.tsx";
 
 /* Type cards: the name top-left as every gallery's (owner, 2026-10-31: "top-left everywhere"; it was at the foot). */
-const TYPE_LOOK: CardLook = { container: "basic", caption: "above", fill: "recessed", borderless: false };
+const TYPE_LOOK: CardLook = { container: "basic", caption: "outside", fill: "recessed", borderless: false };
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { CodeWell, Preview, Selection } from "../inspector.tsx";

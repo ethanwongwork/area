@@ -72,6 +72,8 @@ actions (Card), a framed preview of a page at its own size (Preview frame).
 | layout | image: the image covers the frame, cropped | `media` as a URL | Image container |
 | layout | color: the colour paints the frame, the swatch ring over its edge | `color` | (extension, owner 2026-10-19) |
 | layout | group: a 2×2 mosaic of the first four assets, 4 apart, no frame | `group` | Group container |
+| mosaic | grid (default): the 2×2 above · strip: up to eight assets in one row at their own ratios (an element square), the frame's height, as far apart as from the card's edge, running on past the card's end, where the card's own corner cuts the last one; images square until they load | Owner 2026-11-01: "update the designs of the group cards" with two "Group container" designs (a strip and a 2×2, gaps equal to padding, every image rounded) | The owner's designs |
+| fit | natural (default): an image's frame takes its own ratio · cover: the frame takes `aspect` and the image is cropped to it · contain: the frame takes `aspect` and is a size container; the whole image sits centred at `mediaRatio` (as `--_media-ratio`), the group inset round it (less the card's own inset), on the side the head takes the head's room; the image draws its own corner (frame corner − that inset, at least `radius-min`) and the media edge; the frame paints nothing, so the card's fill is the footprint | Owner 2026-11-01: "i like how in are.na images keep their aspect ratio no matter what bc there is an underlying grid that keeps AR and keeps each things footprint the same" | Are.na's channel grid (square cells, images whole) |
 | interactive | off · on: the card is a control outside an asset grid | `interactive` | the app's gallery tiles |
 | state | hover (lift), pressed, selected (edge), focus (ring on the card) | — | gallery tile |
 | container | framed (default): the card · containerless: no card at rest (no fill, edge or shadow), the head and the frame in the same places; a component's frame shows the hovered edge on hover and the selected edge when selected; an image or group is its own surface and selection rings it (2, `stroke-selected`) | Owner 2026-10-19 (main): containerless views | Pinterest, Cosmos |
@@ -79,7 +81,7 @@ actions (Card), a framed preview of a page at its own size (Preview frame).
 | container (basic) | basic: one surface, the head and the asset on the card's fill, no inset, no frame of its own and no divider; Card's corner | Owner 2026-10-22: "no divider lines across … maybe just a basic container would work" | A gallery's tile (the owner's references) |
 | fill | recessed (default): bg-subtle · raised: bg-surface, white in light · checker: the frame on Color swatch's transparency checker (8 cells, 16% ink on the frame tone), a colour painted over it so its alpha shows (Preview frame's, folded in 2026-10-26; Zeplin's and Figma's export previews); the frame of a basic card declares the same ground | Owner 2026-10-22: "playing with the fill and stroke" | — |
 | borderless | off · on: no edge at rest, its width kept; hover and selection still draw | Owner 2026-10-22: "playing with the fill and stroke" | — |
-| aspect | square (default) · landscape: the frame 5:4, an image at its own ratio · wide: the frame 2:1, for a colour or a banner (Preview frame's, folded in 2026-10-26) · hug: the card as tall as its head and its asset at its width (an image at `mediaRatio`, a group and a colour square) | Owner 2026-10-19 (main): "a waterfall view that hugs the size of assets"; landscape owner 2026-10-22: "update the aspect ratio of the asset cards" | Pinterest's board; landscape: a gallery's media, 195 × 158 (the owner's reference, 2026-10-22) |
+| aspect | square (default) · landscape: the frame 4:3 (5:4 until 2026-11-01), an image at its own ratio · wide: the frame 2:1, for a colour or a banner (Preview frame's, folded in 2026-10-26) · screen: the frame 16:9, a product screen's 1920 × 1080 (owner 2026-11-01: "for ui, 1920x1080 AR for card thumbnails is the standard") · hug: the card as tall as its head and its asset at its width (an image at `mediaRatio`, a group and a colour square) | Owner 2026-10-19 (main): "a waterfall view that hugs the size of assets"; landscape owner 2026-10-22: "update the aspect ratio of the asset cards" | Pinterest's board; landscape: a gallery's media, 195 × 158 (the owner's reference, 2026-10-22) |
 | grid layout | grid (default): square cards in rows · waterfall: hugging cards in columns of the least width, each into the shortest column in reading order | Owner 2026-10-19 (main) | Pinterest's board, Cosmos, Savee |
 | content (no head) | no `name` and no `actions`: no head. Containerless, the card is its frame alone: no inset, the frame filling its column at its aspect, its edge (`border-divider` at `stroke-width`) shown at rest and the container corner, since nothing carries it; framed or basic, the card's inset on all four sides | owner 2026-10-26: "Fold Preview frame into Asset card: add the wide aspect, a checker fill and an unnamed containerless frame, move the Inspector to it, and deprecate Preview frame": Preview frame folded in; the app's Inspector previews | Figma's and Penpot's asset tiles; Polaris Thumbnail |
 
@@ -96,7 +98,7 @@ area-asset-card          the card: as tall as its head and its frame, Card's cor
     __actions            small ghost controls, ending 4 in (on the frame's side), centred on the head
   __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; the frame tone (`bg-frame`: the page tone, or the recessed tone where the card is the page's; a raised card's `bg-frame-raised`) + divider edge at stroke-width; frame ground (2026-10-23; the page tone and ground from 2026-10-22; was surface, raised)
     __media              asset: centred, 12 of room · image: covers the frame (object-fit cover)
-    __mosaic             group: 2 × 2, 4 apart, the frame's place (the frame paints nothing)
+    __mosaic             group: 2 × 2, as far apart as from the edge, the frame's place (the frame paints nothing) · strip: a row, the frame's height, past the card's end
       __cell             one asset cropped to its cell, the frame's corner
 ```
 
@@ -434,3 +436,40 @@ rest unchanged.
   reading as one 2 × 2; each element cell is its own card's frame shrunk, so it draws that frame.
 - **Also:** the Stage now shows Asset card as it ships, 4 in with its own corner. It still took the app's tile corner
   and 16 inset, which the gallery tiles stopped taking on 2026-10-26, and an Asset grid the app's 8 gap for its 12.
+
+## Review note, 2026-11-01 (feed and gallery content)
+
+- **What changed:** `aspect="screen"` (16:9); `fit` for images (natural, cover, contain); `mosaic="strip"` for groups;
+  a public hook `--area-asset-card-inset` that holds a basic card's asset that far from its outer edge on its three open
+  sides (the edge counted once; 0 by default, so nothing shipped moves).
+- **Why:** the owner asked for one family of containers across the app's feeds, project cards with one 16:9 picture,
+  a redesigned collection card, and Are.na's footprint grid beside the waterfall and a fixed ratio as gallery views. The
+  app now draws References' and Home's collections as strips at 16:9, image grids in Grid (contain, square),
+  Waterfall (natural) or Fixed ratio (cover at 16:9, 5:4 or 1:1), and holds their pictures at its 16 frame inset.
+- **Tiles:** Aspect / screen, Fit / cover, Fit / contain, Mosaic / strip. Tests: asset-card.test.mjs (classes, the ratio,
+  a strip's cells, the CSS rules).
+- **Then (same day, the owner's "Group container" designs):** the lead mosaic (one large, two beside, 2 apart, square
+  inside) became the strip; the frame corner keeps at least `radius-small` (never more than the card's inner curve) where
+  the inset runs the concentric corner out, so cells and contained images 16 in are rounded 8 like the app's screens.
+
+## Review note, 2026-11-01 (one card in three shapes)
+
+- **What changed:** `aspect="landscape"` is 4:3 (was 5:4, which read as square beside a square card); a strip scrolls
+  sideways inside the card's edge, starting on the inset, its row the frame's aspect or `--area-asset-card-strip-height`.
+- **Why:** the owner: "they should all be the same just variants of each other … a more landscape AR … and then a square
+  AR one for components", "maybe … 4:3", "some projects might want a full thumbnail 16:9 cover", and of collections "one is
+  just a full width horizontal scroll version". The app draws components square, everything else 4:3, a project's
+  thumbnail as a 16:9 cover (its plain tile's `shape`), collections square 2 × 2 in a grid and a scrolling strip across
+  Home's column. Preview frame's and File tile's landscape were already 4:3.
+
+## Review note, 2026-11-01 (caption outside: the app's cards)
+
+- **What changed:** `caption="outside"`: the card is its frame alone, the asset `--area-asset-card-inset` in on every
+  side (8 by default), its fill, edge, corner, lift and selected edge drawn by the frame; the head sits under the card
+  on the page, 4 below it, the name 4 in and the controls ending on the card's edge. Containerless and outside: the same
+  card clear at rest, its fill and edge on hover, focus or selection, nothing moving. A contained image no longer draws an
+  edge. Tile: Caption / outside.
+- **Why:** the owner's pick in the card explorer (artifact KCvLgSPg…): "apply 8 and update the corner radius to 16, also
+  dont add a stroke to the inset images", "move the below text/button row even closer to 4", and of the card toggle "the
+  card is still there it will just appear on hover". The app's Components, References, Home and Typography cards and its
+  plain tiles all take it: 16 corners, 8 in, names 4 below at 13, 16 apart, square or 16:9.
