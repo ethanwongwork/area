@@ -57,5 +57,10 @@
   .gallery-plain:is(:focus-within, [aria-selected="true"]) .studio-swatch__copy { opacity: 1; transition-duration: 0s; }
   @media (hover: none) { .studio-swatch__copy { opacity: 1; } }
 
+  /* A series card (color.tsx, SeriesSection): the mark as a 3 line, then the ramp's seven steps, under the token. */
+  .studio-series__mark { display: block; block-size: 3px; margin-block-start: var(--area-space-8); border-radius: 2px; }
+  .studio-series__ramp { display: flex; gap: 2px; margin-block-start: var(--area-space-8); }
+  .studio-series__ramp > i { flex: 1; block-size: var(--area-space-12); border-radius: 2px; }
+
   /* A list row's step: a colour chip beside its level. */
   .studio-step { display: inline-flex; align-items: center; gap: var(--area-space-8); font-variant-numeric: tabular-nums; }

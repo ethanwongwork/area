@@ -38,23 +38,21 @@
   /* --- segmented: a stacked meter ------------------------------------------- */
   /*
    * Parts of one measure side by side on the bar, each named in a legend under it (owner 2026-10-30, Inspector panel
-   * study, docs/research/inspector-panel-2026-10-30: Claude's Context card and Cursor's usage tray). The colours are a
-   * fixed categorical order of palette steps, assigned by a part's place, never its size, so a part keeps its colour
-   * when the others change. Chosen by snapping the dataviz reference order (blue, orange, aqua, yellow, magenta, green,
-   * violet, red) to the nearest palette step by lightness, then validated (dataviz validate_palette.js): light on white
-   * passes the lightness band, chroma floor, adjacent CVD separation (worst 13.9) and the normal-vision floor (22.7);
-   * yellow and pink sit under 3:1 on white, which the legend's labels relieve. Dark on near-black passes every check
-   * (worst CVD 11.7, normal 18.1) with yellow and red one step darker than their nearest match, which left the band.
+   * study, docs/research/inspector-panel-2026-10-30: Claude's Context card and Cursor's usage tray). A part takes the
+   * series colour of its place, never its size, so a part keeps its colour when the others change: the series' mark
+   * (2026-11-01, the colour system study: OpenAI's colours), at 3:1 on every light ground and the luminous colour on dark,
+   * so every part reads as a non-text mark (WCAG 1.4.11), which yellow 450 (2.31:1) and pink 300 (2.73:1) did not.
+   * Series lightness moves them; the order and its colour-vision checks are the series gate's (contrast/series.test.ts).
    */
   .area-meter--segmented {
-    --_meter-1: light-dark(var(--area-blue-500), var(--area-blue-400)); /* spec */
-    --_meter-2: light-dark(var(--area-orange-500), var(--area-orange-550)); /* spec */
-    --_meter-3: light-dark(var(--area-teal-500), var(--area-teal-550)); /* spec */
-    --_meter-4: light-dark(var(--area-yellow-450), var(--area-yellow-550)); /* spec */
-    --_meter-5: light-dark(var(--area-pink-300), var(--area-pink-450)); /* spec */
-    --_meter-6: light-dark(var(--area-green-600), var(--area-green-600)); /* spec */
-    --_meter-7: light-dark(var(--area-purple-550), var(--area-purple-350)); /* spec */
-    --_meter-8: light-dark(var(--area-red-450), var(--area-red-400)); /* spec */
+    --_meter-1: var(--area-series-1);
+    --_meter-2: var(--area-series-2);
+    --_meter-3: var(--area-series-3);
+    --_meter-4: var(--area-series-4);
+    --_meter-5: var(--area-series-5);
+    --_meter-6: var(--area-series-6);
+    --_meter-7: var(--area-series-7);
+    --_meter-8: var(--area-series-8);
   }
   /* The track is the parts in a row, 2 apart so the ground shows between them (dataviz: a surface gap separates
      stacked segments, never a stroke); its own fill draws only what is left of the range. Its pill rounds the outer

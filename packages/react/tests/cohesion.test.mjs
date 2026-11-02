@@ -388,13 +388,15 @@ test('every painted ground is declared in layers.css', () => {
   const strip = text => text.replace(/\/\*[\s\S]*?\*\//g, '');
   const layers = strip(readFileSync(new URL('layers.css', src), 'utf8'));
   // Each ground's list: the :where(...) before `[data-area-ground="<ground>"]`, its selectors with a trailing :not() dropped.
-  const declared = { raised: new Set(), page: new Set(), recessed: new Set() };
+  const declared = { raised: new Set(), page: new Set(), recessed: new Set(), well: new Set() };
   for (const ground of Object.keys(declared)) {
     const at = layers.indexOf(`[data-area-ground="${ground}"] {`);
     assert.ok(at > 0, `layers.css has no ${ground} ground`);
     const open = layers.lastIndexOf(':where(', at);
     let depth = 0, end = open + ':where('.length - 1;
     for (let i = end; i < layers.length; i++) { if (layers[i] === '(') depth++; else if (layers[i] === ')' && --depth === 0) { end = i; break; } }
+    // A ground declared by its attribute alone (`[data-area-ground="recessed"] {` with no :where list before it).
+    if (!/^\s*,\s*$/.test(layers.slice(end + 1, at))) continue;
     const list = layers.slice(open + ':where('.length, end);
     let part = '', level = 0;
     for (const ch of list + ',') {
@@ -404,7 +406,7 @@ test('every painted ground is declared in layers.css', () => {
     }
   }
   if (/\.area-select::picker\(select\)\s*\{[^}]*--area-bg-component:\s*var\(--area-bg-component-raised\)/.test(layers)) declared.raised.add('.area-select::picker(select)');
-  const GROUND = { 'bg-surface': 'raised', 'bg-code': 'raised', 'bg-subtle': 'recessed', 'bg-page': 'page' };
+  const GROUND = { 'bg-surface': 'raised', 'bg-code': 'raised', 'bg-subtle': 'recessed', 'bg-well': 'well', 'bg-page': 'page' };
   // Painted grounds that hold nothing with a control fill, each with its reason.
   const EXEMPT = {
     '.area-asset-card__cell': 'a group cell: an image or an inert thumbnail',
@@ -424,7 +426,6 @@ test('every painted ground is declared in layers.css', () => {
     '.area-diff__fold': 'a static fold row in a diff',
     '.area-file-tile__figure > img': 'an image',
     '.area-file-upload-item__icon': 'an icon box',
-    '.area-table th': 'header text only (the table wrapper is the raised ground)',
     '.area-presence': 'a status dot',
     '.area-presence[data-out-of-office]': 'a status dot',
     '.area-switch__thumb': "the switch's own thumb",
@@ -499,7 +500,7 @@ test('the pressed fill is re-derived on every ground and every setting scope', (
     for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
     return [...out, list.slice(start)].map(part => part.trim()).filter(Boolean); };
   const parts = selector => split(selector).flatMap(part => /^:where\(.*\)$/.test(part) ? parts(part.slice(7, -1)) : [part]);
-  for (const ground of ['raised', 'page', 'recessed', 'card', 'tile', 'frame', 'frame-raised']) {
+  for (const ground of ['raised', 'page', 'recessed', 'well', 'card', 'tile', 'frame', 'frame-raised']) {
     for (const selector of pointer(ground)) for (const part of parts(selector)) {
       if (part.startsWith('[data-area-ground=')) continue;
       // The native Select's picker is a pseudo-element (it cannot join a list) and its options never press
@@ -523,7 +524,7 @@ test('a setting scope inside a ground keeps the ground\'s fills', async () => {
   const { AXIS_PRESETS } = await import('../../tokens/dist/config.js');
   const scopes = [...css.matchAll(/@scope \(([^{]*)\) \{\s*:where\(([^{]*)\) \{([^{}]*)\}/g)].map(([, root, settings, body]) => ({
     root: root.replace(/\s+/g, ' '), settings: settings.replace(/\s+/g, ' '), ground: /--area-bg-component: var\(--area-bg-component-(\w+)\)/.exec(body)?.[1] }));
-  const grounds = ['raised', 'page', 'card', 'tile', 'recessed'];
+  const grounds = ['raised', 'page', 'card', 'tile', 'recessed', 'well'];
   assert.deepEqual(scopes.map(scope => scope.ground).sort(), [...grounds].sort());
   const split = list => { const out = []; let depth = 0, start = 0;
     for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
@@ -602,7 +603,7 @@ test('every ground moves the edges and restates every edge role and its readers'
   const parts = selector => split(selector).flatMap(part => /^:where\(.*\)$/.test(part) ? parts(part.slice(7, -1)) : [part]);
   const shifting = new Set(rules.filter(rule => /--area-edge-shift-light:\s*(0|max\()/.test(rule.body) && !/:root/.test(rule.selector)).flatMap(rule => parts(rule.selector)));
   const restating = new Set(parts(restate.selector.replace(/ > \*$/, '')));
-  for (const ground of ['raised', 'page', 'recessed', 'card', 'tile', 'frame', 'frame-raised']) {
+  for (const ground of ['raised', 'page', 'recessed', 'well', 'card', 'tile', 'frame', 'frame-raised']) {
     for (const rule of rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${ground})`) && !/^:where\(\s*\[data-area-/.test(rule.selector)))
       for (const part of parts(rule.selector)) {
         if (part === '.area-select::picker(select)') continue;

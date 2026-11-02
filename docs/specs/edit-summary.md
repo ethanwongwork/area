@@ -83,7 +83,7 @@ area-diff                    mono, Code block sm's type; Code block's frame (car
 | diff type | text-xs on 18 (compact 16), mono; insets 8 (compact 6), number start 4, gap 4 | Code block sm (peer) | the Inspector's code well |
 | diff frame | border-card, radius-row (concentric with the list: 12 − 4), bg-code | Code block (peer) | round 49 |
 | diff tint, marker | success-surface / danger-surface; marker 8 wide in fg-success-vivid / fg-danger-vivid, strong | Code block's diff (peer) | one diff paint across Area (cleanup pass 2026-10-19; was Cursor's 3px strip) |
-| fold | the diff's size, sans, muted on bg-subtle; from the number start 4 to the diff's end inset | cursor collapsed regions 12px on bg-tertiary | round 49 |
+| fold | the diff's size, sans, muted on bg-well; from the number start 4 to the diff's end inset | cursor collapsed regions 12px on bg-tertiary | round 49 |
 | kept / undone | counts muted; undone name struck through; the row says "Kept" / "Undone" | cursor Keep / Undo | — |
 
 ## States
@@ -257,4 +257,4 @@ buttons keep their own corner.
   (was 8). Undo all and Keep all stay at the end.
 - **Why:** side by side, "Title  +3 −1" read looser than "Item one +2 −1" under it; one card, one name-to-counts gap.
 - **Verdict:** approved (owner, 2026-10-29, review page round 82); Complete.
-
+- 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): The fold painted `bg-subtle`, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light).

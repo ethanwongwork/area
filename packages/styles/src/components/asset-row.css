@@ -31,7 +31,7 @@
     padding: var(--area-space-4); /* spec: Penpot 2; a small margin around a drawn asset */
     overflow: hidden;
     border-radius: var(--area-radius-small); /* spec: Penpot 6, shadcn Item 6 */
-    background: var(--area-bg-subtle); /* spec: a neutral fill (Penpot, shadcn muted, Figma rgb(245)); Box model's ground */
+    background: var(--area-bg-well); /* spec: a neutral fill (Penpot, shadcn muted, Figma rgb(245)); Box model's ground */
     color: var(--area-fg-default);
   }
   /* A light ring over the well and whatever fills it: the swatch ring (owner, round 15: "should there be a light

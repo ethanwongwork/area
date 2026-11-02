@@ -75,7 +75,7 @@ Area:
 
 ```
 div    .area-box-model[--tone]        role="img", aria-label "Margin 24, border 1, padding 16, radius 8, size 608 × 184";
-                                        the margin: bg-subtle in a solid 1px border-subtle line, radius-container
+                                        the margin: bg-well in a solid 1px border-subtle line, radius-container
   span   __label                          "Margin", muted
   div    __side--top|right|bottom|left    margin values (`__value`), the tone's ink
   div    __border                         surface, 1px inset edge-control stroke, radius-container
@@ -100,7 +100,7 @@ Generated with `node scripts/capture-compare.mjs` (rows abbreviated).
 | slot · property | figma · dev-box-model | area · default |
 |---|---|---|
 | well size | 287 × 190 | 288 × 184 |
-| well radius / fill | 5px · rgb(245, 245, 245) | 6px (`radius-small`) · `bg-subtle` rgb(247, 247, 247) |
+| well radius / fill | 5px · rgb(245, 245, 245) | 6px (`radius-small`) · `bg-well` rgb(249, 249, 249) at Layers 0 |
 | border box | 223 × 120, 32 in, radius 16 (the element's), white, 1px rgb(230) ring | 224 × 120, 32 in, radius 12 (`radius-container`), surface, 1px divider ring |
 | padding box | 159 × 72, radius 2 | 160 × 72, radius 2 |
 | label | padding 4 8, at x 64 | padding 4 8, at x 64 |
@@ -111,7 +111,7 @@ Generated with `node scripts/capture-compare.mjs` (rows abbreviated).
 | Slot · property | Reference | Area | Basis | Reason when it differs |
 |---|---|---|---|---|
 | ring size | Figma 32 columns × 24 rows | 32 × 32 squares (`control-md`, compact 28) | owner (round 10: square; round 11: "bigger"), Figma's 32 columns | square rings put corner values on the diagonal |
-| margin | Figma: a grey well rgb(245), radius 5, values as chips on crossing lines | `bg-subtle` (#f7) inside a solid 1px `border-subtle` (#d4) stroke, `radius-container` (12), plain values | owner (round 11: grey ground, a box with lines; round 12: no dashes, the family's corner) | the container family's corner, as Panel and Code block |
+| margin | Figma: a grey well rgb(245), radius 5, values as chips on crossing lines | `bg-well` (#f9 at Layers 0) inside a solid 1px `border-subtle` (#d4) stroke, `radius-container` (12), plain values | owner (round 11: grey ground, a box with lines; round 12: no dashes, the family's corner) | the container family's corner, as Panel and Code block |
 | border box | Figma: white, 1px rgb(230) ring, the element's radius | surface, 1px inset `edge-control` stroke, `radius-container` (12) | Figma's ring; owner round 11 (strokes at every level, rounder) | — |
 | padding | Figma: grey (or blue) fill, 1px ring, radius 2 | the tone's fill and its strong border (neutral: `bg-active`, `border-subtle`), `radius-control-md` (8) | the owner's reference blue; round 11 strokes | — |
 | content | Figma: white, 1px dashed rgb(230), radius 2 | surface, 1px stroke in the tone's border (`info-border`; neutral `edge-control`), `radius-small` (6), at least one ring tall | Figma; round 11 strokes and corners | solid: the dashes belong to the margin |
@@ -218,3 +218,4 @@ None open. (Round 10's two were accepted; square rings replaced the 32 margin ro
   and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
   docs/research/dark-soft-tones-2026-10-28).
 - **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
+- 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): The margin well painted `bg-subtle`, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light).

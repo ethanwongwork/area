@@ -97,3 +97,4 @@ concentric; at the default that is 4, Button's own corner at 20 (owner: "follow 
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+- 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): the tile's ground painted `bg-subtle`, which equals the page at Layer contrast 0 (the default) → `bg-well` (#f9f9f9 / #161616 at Layers 0), so an image with transparency sits on a visible ground.

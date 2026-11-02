@@ -141,7 +141,11 @@ changes. Brand themes (`semantic/brand.ts`) can take any colour, so `contrast/br
 samples them: the reference brands, edge colours (near grey, white, black, neon) and 500
 seeded brands over hue, chroma and lightness, every assertion plus `BRAND_ASSERTIONS` (the
 accent pairings on secondary and tertiary, each supporting tone's label, brand-surface text)
-in both modes, and 60 of them at Saturation 30, Shade 200 and 850, and fixed status. The report exits nonzero for failures. `npm run build` does not run this gate.
+in both modes, and 60 of them at Saturation 30, Shade 200 and 850, and fixed status. Data colours have their own gate,
+`contrast/series.test.ts`, at every Series lightness, both modes, sRGB and Display P3: neighbours ΔE ≥ 8 under simulated
+protanopia and deuteranopia (Machado 2009) and ≥ 15 under normal vision, marks at chroma ≥ 0.10 and ≥ 3:1 on every
+shipped ground, a number ≥ 4.5:1 on its fill, ramps one hue with steps ≥ 0.06 apart in lightness (the dataviz
+validator's thresholds; its dark lightness band is not held, by the owner's choice of luminous dark marks). The report exits nonzero for failures. `npm run build` does not run this gate.
 Check rendered paint and keyboard-triggered focus in the app (Inspector › Theme › Contrast at
 Standard, Medium and More), plus the component's real interactions. Validate the actual foreground/background/edge combinations
 introduced by a change, including nested themes and relevant contrast preferences.

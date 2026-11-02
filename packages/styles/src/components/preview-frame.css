@@ -35,7 +35,7 @@
   .area-preview-frame--wide { --_aspect: 2; } /* spec: the app's colour preview */
   .area-preview-frame--surface { --_ground: var(--area-bg-surface); }
   /* Figma's well, Box model's ground: a recess in the panel, outlined by the swatch ring as Asset row's well. */
-  .area-preview-frame--subtle { --_ground: var(--area-bg-subtle); --_edge: var(--area-token-swatch-ring); }
+  .area-preview-frame--subtle { --_ground: var(--area-bg-well); --_edge: var(--area-token-swatch-ring); }
 
   /* The content is contained and only ever scaled down (Figma scale-down, Penpot contain, Polaris max 100%). An svg
      keeps its own size. */

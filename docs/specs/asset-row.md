@@ -52,7 +52,7 @@ Area:
 
 ```
 div   .area-asset-row
-  span  __preview     40 square well, 8 in: bg-subtle, radius-small, the swatch ring over it (::after); an image
+  span  __preview     40 square well, 8 in: bg-well, radius-small, the swatch ring over it (::after); an image
                       covering it edge to edge, or an icon at icon-md (16) centred, 4 inside
   span  __text        column: __name 12/16 strong, __meta 12/16 muted, tabular; 12 from the preview; each line ellipsis
   span  __actions     trailing, 2 apart, inside the row's 8 padding
@@ -66,7 +66,7 @@ Inset equations: preview 8 from every edge of the 56 row (8 + 40 + 8), so stacke
 | Slot · property | Reference | Area | Basis | Reason when it differs |
 |---|---|---|---|---|
 | row height | 56 | 56: 8 + 40 + 8 | Figma; shadcn Attachment (8 around 40) | — |
-| preview | 56 flush at the panel edge, radius 2 | 40, inset 8, `bg-subtle` (#f7, Box model's ground), `radius-small` (6), a 1px swatch ring over it; an image fills it (`cover`), an icon sits 4 inside | survey: 40 in shadcn, Penpot, Polaris, Untitled UI; every reference but Figma insets; Penpot 6 | Figma is the outlier (flush, 56, radius 2) |
+| preview | 56 flush at the panel edge, radius 2 | 40, inset 8, `bg-well` (#f9 at Layers 0, Box model's ground), `radius-small` (6), a 1px swatch ring over it; an image fills it (`cover`), an icon sits 4 inside | survey: 40 in shadcn, Penpot, Polaris, Untitled UI; every reference but Figma insets; Penpot 6 | Figma is the outlier (flush, 56, radius 2) |
 | preview content | a 16 placeholder mark | an image fills the well (`object-fit: cover`, no padding); an icon or vector at `icon-md` (16) centred, 4 inside | owner, round 15 ("should the image be full container?"); Figma's centred 16 mark | — |
 | ring | — | `token-swatch-ring` at `stroke-width`, inset, over the well and its content; forced colours: a CanvasText border | owner, round 15 ("should there be a light stroke too?"); Polaris 1px 8% | — |
 | text | 16 in, two lines | 12 gap; name 12/16 strong, meta 12/16 muted and tabular, no gap (32) | survey: 12 in Untitled UI, Fluent, Polaris; name 500 / 600 in shadcn, Untitled UI, Fluent | Figma's 16; Area's inspector type |
@@ -112,3 +112,4 @@ says what it is); an icon preview is `aria-hidden`. Native props and the ref rea
   and design systems (`docs/research/asset-row-survey.md`) before redrawing.
 - 2026-10-12 · owner, review round 15 (needs changes): full-bleed image, light stroke → applied. Round 16.
 - 2026-10-12 · owner, review round 16: approved.
+- 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): The preview well painted `bg-subtle`, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light).

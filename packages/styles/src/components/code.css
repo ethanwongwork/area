@@ -108,8 +108,9 @@
    * lines and a badge with a swatch must not.
    */
   .area-code {
-    /* spec: inline code keeps the 25 rung (#fafafa) now that the block's ground is the page. */
-    --_code-bg: var(--area-bg-stripe);
+    /* spec: inline code keeps about the 25 rung (#fafafa): the well, #f9f9f9 at Layer contrast 0, the token's ground
+       (bg-stripe, which it read until 2026-11-01, is 1.03:1 there). */
+    --_code-bg: var(--area-token-bg);
     /* spec (audit G-3): dark `border-decorative` equals the stripe fill, so dark takes the faint edge. */
     --_code-edge: light-dark(var(--area-border-decorative), var(--area-border-faint));
     --_code-text: var(--area-fg-default);
