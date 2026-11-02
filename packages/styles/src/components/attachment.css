@@ -19,7 +19,7 @@
     inline-size: var(--_attachment-size);
     block-size: var(--_attachment-size);
     border-radius: var(--_attachment-radius);
-    background-color: var(--area-bg-subtle);
+    background-color: var(--area-bg-well);
     color: var(--area-fg-default);
   }
   /* The edge is drawn over the picture (an inset line), so a white image still has a bound: Cursor's stroke at 72%,

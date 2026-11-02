@@ -9,7 +9,7 @@
  * selected"). With the defaults the raised fills equal the page's in light, so nothing there changes.
  *
  * The rule (DESIGN_SYSTEM.md, Layers): a component whose own CSS paints a ground (`bg-surface` or `bg-code` raised,
- * `bg-subtle` recessed, `bg-page` page) under anything that paints a control fill (a plate, a soft field, a ghost button)
+ * `bg-subtle` recessed, `bg-well` well, `bg-page` page) under anything that paints a control fill (a plate, a soft field, a ghost button)
  * is listed below with that ground, so the fills step from what is actually under them. `cohesion.test.mjs` ("every
  * painted ground is declared") fails a component that paints one without being listed or exempted with a reason.
  *
@@ -133,6 +133,22 @@
     --area-selection-band: var(--area-selection-band-recessed);
     --area-selection-band-hover: var(--area-selection-band-recessed-hover);
   }
+  /* A well (`bg-well`, color/layers.ts): a fill painted to be seen, the recessed tone but never closer to the page than the
+     page's own control fill, so it shows at Layer contrast 0, where the recessed tone is the page (2026-11-01: Table's
+     header had painted the page there). Controls in it step from it. A soft Surface, a preview choice card and Plan's
+     steps stay recessed: Flat keeps them flat (owner, 2026-10-29, Surface's spec). */
+  :where(.area-table th),
+  [data-area-ground="well"] {
+    --area-bg-component: var(--area-bg-component-well);
+    --area-bg-component-hover: var(--area-bg-component-well-hover);
+    --area-bg-component-active: var(--area-bg-component-well-active);
+    --area-input-bg-soft: var(--area-bg-component-well);
+    --area-input-bg-disabled: var(--area-bg-component-well);
+    --area-selection-surface: var(--area-selection-surface-well);
+    --area-selection-surface-hover: var(--area-selection-surface-well-hover);
+    --area-selection-band: var(--area-selection-band-well);
+    --area-selection-band-hover: var(--area-selection-band-well-hover);
+  }
 
   /*
    * Pressed: the plate under a pointer or key that is held, one step firmer than selected. Hover,
@@ -165,7 +181,7 @@
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, .area-asset-card--raised > .area-asset-card__frame,
     .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-surface--soft,
-    .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps
+    .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps, .area-table th
   ),
   [data-area-ground],
   :where([data-area-theme], [data-area-neutral], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
@@ -214,6 +230,10 @@
     --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-recessed)));
     --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-recessed) - var(--area-layer-dark-raised)));
   }
+  :where(.area-table th), [data-area-ground="well"] {
+    --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-well)));
+    --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-well) - var(--area-layer-dark-raised)));
+  }
   :where(.area-card), [data-area-ground="card"] {
     --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-card)));
     --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-card) - var(--area-layer-dark-raised)));
@@ -238,7 +258,7 @@
     .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"],
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, [data-area-ground="page"],
     .area-asset-card__frame, [data-area-ground="frame"], .area-asset-card--raised > .area-asset-card__frame, [data-area-ground="frame-raised"],
-    .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps,
+    .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps, .area-table th, [data-area-ground="well"],
     [data-area-ground="recessed"], .area-card, [data-area-ground="card"],
     .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), [data-area-ground="tile"]) > * {
     --area-border-decorative: light-dark(oklab(from var(--area-border-decorative-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-decorative-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
@@ -293,7 +313,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -319,7 +339,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -345,7 +365,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -371,7 +391,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -398,7 +418,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -418,6 +438,32 @@
       --area-selection-surface-hover: var(--area-selection-surface-recessed-hover);
       --area-selection-band: var(--area-selection-band-recessed);
       --area-selection-band-hover: var(--area-selection-band-recessed-hover);
+    }
+  }
+  @scope (.area-table th, [data-area-ground="well"]) {
+    :where(
+    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
+    [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
+    [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
+    [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
+    [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
+    [data-area-stroke], [data-area-stroke-cards], [data-area-stroke-blocks], [data-area-stroke-callouts], [data-area-stroke-floating], [data-area-stroke-regions], [data-area-stroke-dividers], [data-area-stroke-fields], [data-area-stroke-buttons], [data-area-stroke-options], [data-area-stroke-tracks], [data-area-stroke-tags], [data-area-stroke-media],
+    [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
+    [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
+    [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
+    [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
+    [data-area-motion], [data-area-easing], [data-area-feedback], [data-area-ui], [data-area-contrast]
+    ) {
+      --area-bg-component: var(--area-bg-component-well);
+      --area-bg-component-hover: var(--area-bg-component-well-hover);
+      --area-bg-component-active: var(--area-bg-component-well-active);
+      --area-input-bg-soft: var(--area-bg-component-well);
+      --area-input-bg-disabled: var(--area-bg-component-well);
+      --area-selection-surface: var(--area-selection-surface-well);
+      --area-selection-surface-hover: var(--area-selection-surface-well-hover);
+      --area-selection-band: var(--area-selection-band-well);
+      --area-selection-band-hover: var(--area-selection-band-well-hover);
     }
   }
 }

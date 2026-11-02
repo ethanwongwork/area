@@ -47,7 +47,7 @@ export function problemsFor(theme: "light" | "dark", cast: Cast, share: number |
       const m = layerLightnessAt(theme, g, n, fills, cardTone), at = `${Number((g * 100).toFixed(2))}/${n}`;
       const memo = new Map<number, string>(), hx = (L: number) => { let x = memo.get(L); if (x === undefined) memo.set(L, x = layerHex(theme, L, cast)); return x; };
       const edge = hx(m.ink.edge), mm = MIN[theme];
-      for (const [name, ground] of [["page", m.page], ["raised", m.raised], ["recessed", m.recessed], ["card", m.card], ["tile", m.tile]] as const) {
+      for (const [name, ground] of [["page", m.page], ["raised", m.raised], ["recessed", m.recessed], ["card", m.card], ["tile", m.tile], ["well", m.well]] as const) {
         const [rest, hover, selected] = m.fill[name];
         for (const t of shares) {
           const ink = (L: number) => inkHex(theme, L, cast, t), body = ink(m.ink.body), muted = ink(m.ink.muted), text = shares.length > 1 ? `, text ${t}` : "";
@@ -56,7 +56,7 @@ export function problemsFor(theme: "light" | "dark", cast: Cast, share: number |
           // Soft Badge and Count: muted on the soft-mark plate (base.ts bg-mark) laid over the ground.
           if (contrast(muted, markOver(theme, hx(ground))) < 4.5) problems.push(`${at}: muted on a mark on ${name}${text}`);
           // An interactive soft Badge under the pointer (bg-mark-hover, 10.7% black) on the page and on layers.
-          if (theme === "light" && name !== "recessed" && name !== "tile" && contrast(muted, markOver(theme, hx(ground), 0.893)) < 4.5) problems.push(`${at}: muted on a hovered mark on ${name}${text}`);
+          if (theme === "light" && name !== "recessed" && name !== "tile" && name !== "well" && contrast(muted, markOver(theme, hx(ground), 0.893)) < 4.5) problems.push(`${at}: muted on a hovered mark on ${name}${text}`);
           if (contrast(body, hx(selected)) < 4.5) problems.push(`${at}: body on ${name} selected${text}`);
         }
         for (const bg of [ground, rest]) if (contrast(edge, hx(bg)) < 3) problems.push(`${at}: control edge on ${name}`);

@@ -306,7 +306,9 @@
   .area-table.area-table--fixed > * > tr > .area-table__cell--fit:last-child:not(:first-child) { inline-size: auto; }
 
   .area-table th {
-    background-color: var(--area-bg-subtle);
+    /* The well: a fill that shows at every Layer contrast (bg-subtle, the recessed layer, is the page at 0; 2026-11-01).
+       A header's controls step from it (layers.css). */
+    background-color: var(--area-bg-well);
     color: var(--area-fg-muted);
     font-weight: var(--area-weight-regular);
     white-space: nowrap;
@@ -365,7 +367,7 @@
   .area-table--md { --_cell-line: var(--area-text-sm-prose-leading); --_cell-edge: var(--area-table-edge, calc(var(--_cell-side) + var(--area-space-4))); --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2), 1px)); }
   /* lg: a step more room above and below than md's balanced inset. */
   .area-table--lg { --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2 + var(--area-space-4)), 1px)); }
-  .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
+  .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-well); } /* bg-stripe is 1.03:1 at Layer contrast 0 */
   .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-stroke-width) solid var(--area-edge-dividers); }
 
   /*

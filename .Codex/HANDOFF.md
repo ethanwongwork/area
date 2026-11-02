@@ -1,6 +1,20 @@
 # Handoff
 
 ## Current state (2026-11-01)
+- **Colour system study, branch `claude/color-system-study-a95d3f` (uncommitted, 2026-11-01).** Audit of the
+  ladder, Layers roles and contrast, plus research (Radix, Tailwind v4, Material HCT, Carbon, Leonardo, Primer, Apple,
+  Linear, OKHSL, P3, data palettes) in `docs/research/color-system-2026-11-01/` (README, sources.md, measurement scripts).
+  Findings: every chromatic rung rides the sRGB edge (share ≈ 1); OpenAI's luminous colours (owner's pick over Cursor's,
+  2026-11-01) are that edge at L 0.79, chroma ≤ 0.13, which most hues have no rung for; at Layers 0 `bg-subtle` (Table header and 9 other fills) equals the
+  page. Seven ranked proposals. Proposal 1 built (owner: "Yes, fix fills"): a `bg-well` ground in color/layers.ts (#f9f9f9 / #161616 at
+  Layers 0) paints Table's header and stripes, Box model, image wells, Attachment, diff fold, inline code and Token; soft
+  Surface, preview choice cards and Plan steps stay recessed (owner 2026-10-29 keep Flat flat, confirmed 2026-11-01).
+  Checks all pass (tokens 29,110, contrast report, cohesion, family tests, typecheck, docs); seen in Electron light/dark. Review page https://claude.ai/artifact/XNh7uSYHV7YmCqoATNM7s9
+  (db `verdicts`: p1–p7, p0, tuning). Owner picks 2026-11-01: Build p2, p4, p5, p6, p7; Agree p0, p3 — all built
+  2026-11-01: color/place.ts (colourAt), color/series.ts + axes/series.ts (Series lightness 66–80, default 79;
+  --area-series-<n>, -fill, -ink, -ramp-1…7; P3 under @media color-gamut), contrast/series.test.ts, Meter's stacked parts on
+  the series. Checks: tokens 29,295, react 634, desktop 30, docs, contrast report, typecheck, build. No Chart family or
+  heat cells yet (data-views session builds on the tokens); Foundations › Colors ends with a Series section.
 - **Status badges, branch `claude/worktree-cleanup-status-badges-a187b0` (PR to main, 2026-11-01).** Badge `variant="plain"`
   (no plate; mark at 3:1, words at 4.5: light = brightest palette step / vivid ink, dark = vivid / text ink); every variant's
   marks held to its own plate (soft and color one step deeper for the tint); cap and marks centred in the plate (the optical

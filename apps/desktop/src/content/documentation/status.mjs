@@ -400,7 +400,7 @@ export default {
       label: "What is measured; it names the meter.",
       value: "The value as shown, the percentage by default; hidden from assistive tech, which reads the meter's own value.",
       track: "Progress's bar, filled to the share of the range in the tone's color; with segments, the parts side by side 2 apart.",
-      segment: "One part on the bar, in its place's color of a fixed order of eight.",
+      segment: "One part on the bar, in the series color of its place (series 1 to 8), set by Series lightness.",
       rest: "What is left of the range when max is above the parts' sum, in the track's fill.",
       legend: "The list under the bar naming every part that is above 0.",
       item: "A legend row: the swatch, the label, then the value and its share.",

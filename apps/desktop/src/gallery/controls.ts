@@ -17,7 +17,7 @@ export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "sh
 export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "tint-hue" | "tint-hue-dark" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | "feedback" | DepthLever;
+  axis: "theme" | "neutral" | "tint-hue" | "tint-hue-dark" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "series-lightness" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | "feedback" | DepthLever;
   /**
    * Named choices are a Segmented (Apple and Primer cap segments at 5-7); an ordered range is a bar, Slider's field
    * variant with its exact value inside it (owner, 2026-10-24), which answers the stepped Slider's old fault of reading as
@@ -135,6 +135,8 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   { axis: "action", kind: "segmented", label: label("action"), hint: "Whether primary buttons are grey or the accent", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: label("selection"), hint: "Whether checked, selected and current things are grey or the accent", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "status-colours", kind: "segmented", label: label("status-colours"), hint: "Red, amber, green and blue messages and badges: in full color, or muted to the accent's Saturation", defaultValue: DEFAULT_AXES["status-colours"], items: [{ value: "fixed", label: "Vivid" }, { value: "match", label: "Muted" }] },
+  // The eight data colours (2026-11-01, the colour system study): how light their luminous colour is; 79 is OpenAI's.
+  bar("series-lightness", value => value, { hint: "How light chart and meter colours glow: lower is deeper, higher is paler; 79 matches OpenAI's" }),
   // Increased contrast (docs/CONTRAST.md): a scoped setting, not an axis. System writes no attribute, so the OS decides.
   bar("contrast", value => percent(value, 8), { hint: "Stronger edges, focus and state; System follows the OS", named: { system: "System" }, custom: "4", barLabel: "Level" }),
   // Size: whole px for text (half px blurs), density by name.

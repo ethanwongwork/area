@@ -28,6 +28,7 @@ import { GROUND_DARK_AXIS, GROUND_LIGHT_AXIS, LAYERS_DARK_AXIS, LAYERS_LIGHT_AXI
 import { INK_TINT_AXIS, TINT_DARK_AXIS, TINT_HUE_AXIS, TINT_HUE_DARK_AXIS, TINT_LIGHT_AXIS } from "./tint.ts";
 import { CARD_TONE_DARK_AXIS, CARD_TONE_LIGHT_AXIS } from "./card-tone.ts";
 import { ACCENT_STRENGTH_AXIS, LABEL_TINT_AXIS, SOLID_DARK_AXIS, SOLID_LIGHT_AXIS, STATUS_COLOURS_AXIS } from "./accent.ts";
+import { SERIES_AXIS } from "./series.ts";
 
 export const AXES: AxisDefinition[] = [
   THEME_AXIS,
@@ -47,6 +48,8 @@ export const AXES: AxisDefinition[] = [
   LABEL_TINT_AXIS,
   // The status tones: as the palette draws them, or quieted with the accent (2026-10-23).
   STATUS_COLOURS_AXIS,
+  // The eight data colours (2026-11-01, the colour system study): how light their luminous colour is.
+  SERIES_AXIS,
   ACTION_AXIS,
   SELECTION_AXIS,
   GROUND_LIGHT_AXIS,
@@ -88,7 +91,7 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
   { heading: "Accent", settings: ["accent", "solid-light", "solid-dark", "accent-strength", "label-tint"] },
   // Emphasis (owner 2026-10-27: "avoid long phrases like where it paints"; was "Where it paints"): how strongly things
   // stand out, the accent on buttons and selection, the status tones, and contrast.
-  { heading: "Emphasis", settings: ["action", "selection", "status-colours", "contrast"] },
+  { heading: "Emphasis", settings: ["action", "selection", "status-colours", "series-lightness", "contrast"] },
   { heading: "Size", settings: ["type", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },
   // Width and the master Edge contrast, then each group's amount (owner, 2026-10-30, the stroke review).

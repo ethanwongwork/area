@@ -23,7 +23,7 @@
        "no dashed lines"), at the container family's corner, as Panel and Code block. */
     border: var(--area-stroke-width) solid var(--_margin-line);
     border-radius: var(--area-radius-container); /* spec: 12 */
-    background: var(--area-bg-subtle);
+    background: var(--area-bg-well);
     color: var(--area-fg-default);
     font-size: var(--area-text-xs-size); /* spec: Figma 11/16; Area's smallest UI text */
     line-height: var(--area-text-xs-leading);

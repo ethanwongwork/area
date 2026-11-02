@@ -1,0 +1,403 @@
+<title>Area Colour Study</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column of findings; each comparison is a pair of fixed panels, white page and Area's #020202,
+   so every colour is judged on the ground it ships on whatever theme the viewer uses. Area's own neutrals and Geist. */
+:root {
+  --page: #ffffff; --ink: #282828; --muted: #666666; --rule: #e2e2e2; --fill: #f9f9f9; --fill-hover: #f2f2f2;
+  --accent: #0160d9; --good: #00853c; --warn: #b25b00;
+  --font: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* the two fixed comparison grounds */
+  --light-ground: #ffffff; --light-ink: #282828; --light-muted: #666666; --light-rule: #e2e2e2;
+  --dark-ground: #020202; --dark-ink: #eeeeee; --dark-muted: #c5c5c5; --dark-rule: #333333;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --page: #020202; --ink: #eeeeee; --muted: #c5c5c5; --rule: #333333; --fill: #161616; --fill-hover: #1f1f1f;
+  --accent: #79aeff; --good: #3fcf7c; --warn: #ffa34d; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --page: #020202; --ink: #eeeeee; --muted: #c5c5c5; --rule: #333333; --fill: #161616; --fill-hover: #1f1f1f;
+  --accent: #79aeff; --good: #3fcf7c; --warn: #ffa34d; color-scheme: dark }
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--ink); font: 400 14px/20px var(--font); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 96px; display: grid; gap: 56px; }
+h1 { font: 600 28px/36px var(--font); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h2 { font: 600 20px/28px var(--font); margin: 0; text-wrap: balance; }
+h3 { font: 500 14px/20px var(--font); margin: 0; }
+p { margin: 0; max-width: 72ch; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+.section { display: grid; gap: 16px; min-width: 0; }
+.eyebrow { font: 500 12px/16px var(--font); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+.lede { display: grid; gap: 12px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.fact { border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.fact b { font: 600 20px/24px var(--font); font-variant-numeric: tabular-nums; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 860px) { .pair { grid-template-columns: 1fr; } }
+.panel { border-radius: 12px; padding: 16px; display: grid; gap: 12px; min-width: 0; align-content: start; }
+.panel.light { background: var(--light-ground); color: var(--light-ink); border: 1px solid var(--rule); --p-muted: var(--light-muted); --p-rule: var(--light-rule); --p-ground: var(--light-ground); }
+.panel.dark { background: var(--dark-ground); color: var(--dark-ink); border: 1px solid var(--rule); --p-muted: var(--dark-muted); --p-rule: var(--dark-rule); --p-ground: var(--dark-ground); }
+.panel .cap { font: 500 12px/16px var(--font); color: var(--p-muted); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.scroll { overflow-x: auto; min-width: 0; }
+.ramp { display: grid; grid-template-columns: 56px repeat(23, minmax(18px, 1fr)); gap: 2px; align-items: center; min-width: 520px; }
+.ramp .lab { font: 500 11px/14px var(--font); color: var(--p-muted); }
+.ramp .sw { height: 28px; border-radius: 3px; cursor: crosshair; }
+.ogrid { display: grid; grid-template-columns: minmax(84px, auto) repeat(3, minmax(88px, 1fr)); gap: 6px 8px; align-items: center; min-width: 380px; }
+.ogrid .lab { font: 500 11px/14px var(--font); color: var(--p-muted); }
+.ocell { display: grid; grid-template-columns: 28px 1fr; gap: 6px; align-items: center; }
+.ocell .sw { height: 24px; border-radius: 4px; cursor: crosshair; }
+.ocell .num { font: 400 10px/12px var(--mono); color: var(--p-muted); text-align: left; }
+.ramp .sw.mid { outline: 1.5px dashed var(--p-muted); outline-offset: 1px; }
+.ramp .num { font: 400 9px/12px var(--mono); color: var(--p-muted); text-align: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 12px/16px var(--font); padding: 6px 10px; border-radius: 8px; border: 1px solid var(--rule); background: var(--page); color: var(--ink); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--page); border-color: var(--ink); }
+.chip:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.readout { min-height: 20px; }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px 20px; }
+.control { display: grid; gap: 4px; }
+.control label { display: flex; justify-content: space-between; font: 500 12px/16px var(--font); }
+.control input[type=range] { width: 100%; accent-color: var(--ink); }
+.chart { display: grid; gap: 8px; }
+.bars { display: flex; align-items: end; gap: 6px; height: 112px; border-bottom: 1px solid var(--p-rule); }
+.bars span { flex: 1; border-radius: 4px 4px 0 0; }
+.keys { display: flex; flex-wrap: wrap; gap: 4px 10px; }
+.keys span { display: inline-flex; gap: 5px; align-items: center; font: 400 11px/14px var(--font); color: var(--p-muted); }
+.keys i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+.heat { display: grid; grid-template-columns: 64px repeat(7, 1fr); gap: 2px; align-items: center; min-width: 360px; }
+.heat .cell { height: 32px; border-radius: 3px; display: grid; place-items: center; font: 500 11px/14px var(--mono); }
+table.val { border-collapse: collapse; width: 100%; font-size: 12px; min-width: 640px; }
+table.val th, table.val td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+table.val th { font-weight: 500; color: var(--muted); }
+.ok { color: var(--good); } .bad { color: var(--warn); }
+.mock { border: 1px solid var(--p-rule); border-radius: 8px; overflow: hidden; }
+.mock table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.mock th, .mock td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--p-rule); }
+.mock th { font-weight: 500; color: var(--p-muted); }
+.mock tr:last-child td { border-bottom: 0; }
+.code-chip { font: 400 12px/18px var(--mono); padding: 1px 5px; border-radius: 4px; }
+.proposals { display: grid; gap: 12px; }
+.prop { border: 1px solid var(--rule); border-radius: 12px; padding: 16px; display: grid; gap: 10px; grid-template-columns: 32px 1fr; }
+.prop .rank { font: 600 20px/24px var(--font); color: var(--muted); font-variant-numeric: tabular-nums; }
+.prop .body { display: grid; gap: 8px; min-width: 0; }
+.prop .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); }
+.pick { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pick button { font: 500 12px/16px var(--font); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--rule); background: var(--page); color: var(--ink); cursor: pointer; }
+.pick button[aria-pressed="true"] { background: var(--ink); color: var(--page); border-color: var(--ink); }
+.pick textarea { width: 100%; min-height: 36px; font: 400 13px/18px var(--font); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--rule); background: var(--page); color: var(--ink); resize: vertical; }
+.status { font-size: 12px; color: var(--muted); }
+.sticky-status { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--page); border-bottom: 1px solid var(--rule); padding-block: 8px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="lede">
+    <div class="eyebrow">Area · colour system study · 1 Nov 2026</div>
+    <h1>How Area's colours are made, and how to make pastel-but-saturated data colours fit</h1>
+    <p class="muted">Every swatch here is computed from Area's own code (palette.json through <span class="mono">scale.ts</span>) or sampled from your OpenAI references. Your direction (1 Nov): OpenAI's colours, not Cursor's, so the series below are built on the hues sampled from those images. Nothing in Area has changed. Each comparison shows the white page and Area's dark page (#020202) side by side, whatever theme you view this in. Pick a verdict for each proposal at the bottom; the sliders save with your picks.</p>
+    <p id="saveState" class="status">Connecting to the picks store…</p>
+  </header>
+
+  <section class="section">
+    <h2>What the audit found</h2>
+    <div class="facts">
+      <div class="fact"><b>0.95–1.00</b><span>Share of the chroma sRGB can show that nearly every chromatic rung from 100 to 950 uses (trimmed light ends and purple's dark end aside). The ladder is one path along the gamut's edge.</span></div>
+      <div class="fact"><b>L 0.79, C ≤ 0.13</b><span>OpenAI's luminous colours are that same edge at one lightness with chroma capped: sky, lilac and peach come out within ΔE 0.3–0.9 (×100) of the samples. Area's rungs miss them by 0.3–6.1 because no rung sits at L 0.79 in most hues.</span></div>
+      <div class="fact"><b>1.8–8.3</b><span>ΔE between neighbouring rungs. Blue jumps 7–8 per step from 150 to 300, then barely moves (2.4–3.1) from 350 to 500; teal and yellow do the opposite.</span></div>
+      <div class="fact"><b>0.18–0.41</b><span>Share teal, lime, green and yellow keep halfway to white when a heat ramp mixes 500 toward white. Blue keeps 1.0. That is the grey middle.</span></div>
+      <div class="fact"><b>7 roles = page</b><span>At the default Layers 0, bg-subtle, -surface, -card, -tile, -frame, -frame-raised and -code all equal the page, in both modes. Ten components paint bg-subtle as a fill, including the Table header.</span></div>
+      <div class="fact"><b>27,922 pass</b><span>Every token test passes today (npm test, 85 s). The proposals add colours outside what is gated, so each one comes with its own checks.</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="openai">
+    <h2>1. OpenAI's colours against Area</h2>
+    <p class="muted">Fifteen colours sampled from your OpenAI images (approximate: blurred photographs). For each: the nearest rung Area has today, and the proposed luminous colour at the sample's own hue (the ladder's edge at the lightness and cap set in section 3). ΔE is OKLab distance × 100; under 2 is one just-noticeable step.</p>
+    <div class="pair">
+      <div class="panel light"><div class="cap"><span>White page</span><span>Sample · nearest rung today · proposed</span></div><div class="scroll" id="openaiLight"></div></div>
+      <div class="panel dark"><div class="cap"><span>#020202 page</span><span>Sample · nearest rung today · proposed</span></div><div class="scroll" id="openaiDark"></div></div>
+    </div>
+    <p class="readout mono muted" id="readout">Hover a swatch.</p>
+  </section>
+
+  <section class="section" id="between">
+    <h2>2. Steps between the rungs</h2>
+    <p class="muted">Where two rungs sit more than ΔE 6 apart (100 to 600), the continuous ladder places a step at the midpoint lightness, at full strength, at the hue between them. Dashed outlines mark the added steps. palette.json is unchanged; these are computed.</p>
+    <div class="pair">
+      <div class="panel light"><div class="cap"><span>White page</span><span>Today, then with added steps</span></div><div class="scroll" id="betweenLight"></div></div>
+      <div class="panel dark"><div class="cap"><span>#020202 page</span><span>Today, then with added steps</span></div><div class="scroll" id="betweenDark"></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="series">
+    <h2>3. Series colours from OpenAI's palette</h2>
+    <p class="muted">Eight hues sampled from your references: sky, pink, yellow-green, lilac, peach orange, mint, periwinkle, peach, in the validator's best order. On white the luminous colour fills bars and areas and a deeper point on the same hue (3:1 on the page) draws lines, dots and the fill's edge, as GitHub Primer pairs its data colours. On the dark page the luminous colour is the mark itself (10:1 or more). The sliders move the luminous colours on every hue at once.</p>
+    <div class="controls">
+      <div class="control"><label for="fillL"><span>Luminous lightness</span><span class="mono" id="fillLV"></span></label><input id="fillL" type="range" min="0.72" max="0.88" step="0.01" value="0.79"></div>
+      <div class="control"><label for="fillS"><span>Luminous share of the room</span><span class="mono" id="fillSV"></span></label><input id="fillS" type="range" min="0.6" max="1" step="0.05" value="1"></div>
+      <div class="control"><label for="fillC"><span>Luminous chroma cap</span><span class="mono" id="fillCV"></span></label><input id="fillC" type="range" min="0.08" max="0.18" step="0.01" value="0.13"></div>
+      <div class="control"><label for="darkL"><span>Dark area fill lightness</span><span class="mono" id="darkLV"></span></label><input id="darkL" type="range" min="0.3" max="0.55" step="0.01" value="0.4"></div>
+    </div>
+    <div class="pair">
+      <div class="panel light" id="seriesLight"></div>
+      <div class="panel dark" id="seriesDark"></div>
+    </div>
+    <div class="scroll"><table class="val" id="valTable"></table></div>
+    <p class="muted">Validator: the dataviz skill's checks (OKLCH lightness band, chroma ≥ 0.10, Machado 2009 colour-vision ΔE between neighbours, a normal-vision floor of 15, 3:1 against the page). The luminous colours sit above the skill's lightness band on purpose (brighter, as you asked); on white they are about 2:1, so a luminous fill needs its edge or labels. At one lightness, four hues can't all stay apart for colour-blind readers when any two touch (all-pairs, first four); stacked and side-by-side charts only put neighbours together.</p>
+  </section>
+
+  <section class="section" id="heat">
+    <h2>4. Heat ramps: mixed toward white, or walked along the hue</h2>
+    <p class="muted">Seven steps ending at 500. Today's mix toward white (OKLab) greys out hues whose brightest colour is light (teal, lime, yellow, green, cyan). Walking the hue holds the end's share of the room at every lightness. The number in each cell is its share.</p>
+    <div class="pair">
+      <div class="panel light"><div class="cap"><span>White page</span><span>Mixed (today) / walked (proposed)</span></div><div class="scroll" id="heatLight"></div></div>
+      <div class="panel dark"><div class="cap"><span>#020202 page</span><span>Mixed toward #020202 / walked up from the ground</span></div><div class="scroll" id="heatDark"></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="layers">
+    <h2>5. Fills that vanish at Layers 0</h2>
+    <p class="muted">Table's header paints bg-subtle, which at Layers 0 (the default) is the page itself. Inline code paints bg-stripe, 1.03:1 on white. Proposed: a fill role that always steps from its ground (bg-component: #f9f9f9 light, #161616 dark), for the components that mean "a fill" rather than "a recessed layer".</p>
+    <div class="pair">
+      <div class="panel light" id="layersLight"></div>
+      <div class="panel dark" id="layersDark"></div>
+    </div>
+  </section>
+
+  <section class="section" id="picks">
+    <h2>Proposals, ranked</h2>
+    <p class="muted">Ranked by what they fix for the cost. Each would land through the area-foundation-change skill: tokens, every consuming family, the Inspector, docs and contrast tests together. Your verdicts and notes save as you choose them.</p>
+    <div class="proposals" id="proposals"></div>
+  </section>
+</div>
+
+<script>
+const DATA = {"levels":[25,50,75,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,925,950,975],"series":{"sky":{"h":239,"emphasis":{"light":"#0096d9","dark":"#6bc5ff"},"fill":{"light":"#6bc5ff","dark":"#244c66"},"ink":{"light":"#004f76","dark":"#9dc4df"}},"peach orange":{"h":47,"emphasis":{"light":"#ea6600","dark":"#fe9f6f"},"fill":{"light":"#fe9f6f","dark":"#693920"},"ink":{"light":"#793100","dark":"#e0b29c"}},"lilac":{"h":309,"emphasis":{"light":"#c062ff","dark":"#d3a3fa"},"fill":{"light":"#d3a3fa","dark":"#56396c"},"ink":{"light":"#7100a5","dark":"#cab3df"}},"yellow-green":{"h":104,"emphasis":{"light":"#9c9000","dark":"#c8be52"},"fill":{"light":"#c8be52","dark":"#4d4921"},"ink":{"light":"#524b00","dark":"#c6c180"}},"pink":{"h":346,"emphasis":{"light":"#ff32ba","dark":"#f697cc"},"fill":{"light":"#f697cc","dark":"#693152"},"ink":{"light":"#880060","dark":"#e1acc7"}},"periwinkle":{"h":276,"emphasis":{"light":"#7682ff","dark":"#a8b5ff"},"fill":{"light":"#a8b5ff","dark":"#3b4277"},"ink":{"light":"#3f00e3","dark":"#b4bcdf"}},"mint":{"h":171,"emphasis":{"light":"#00a180","dark":"#4ed5af"},"fill":{"light":"#4ed5af","dark":"#255144"},"ink":{"light":"#005844","dark":"#89cfb7"}},"peach":{"h":16,"emphasis":{"light":"#ff4967","dark":"#ff99a0"},"fill":{"light":"#ff99a0","dark":"#703137"},"ink":{"light":"#91002c","dark":"#e1afb1"}}},"seq":{"teal":{"mixed":["#e3f3f0","#c7e6e0","#abdad1","#8dcdc2","#6ec0b4","#49b4a5","#00a797"],"walked":["#70ffeb","#00f6df","#00e5d0","#00d5c1","#00c6b3","#00b6a5","#00a797"]},"lime":{"mixed":["#eaf2e1","#d5e5c3","#c1d8a5","#adcb86","#99bd66","#86b042","#73a200"],"walked":["#b7fe00","#abef00","#a0df00","#94cf00","#89c000","#7eb100","#73a200"]},"blue":{"mixed":["#deecff","#bed8ff","#9ec4ff","#7eb0fe","#5d9bfc","#3985f9","#006df5"],"walked":["#cde1ff","#b0cfff","#92bdff","#74aaff","#5396ff","#2e81ff","#006df5"]},"orange":{"mixed":["#ffece1","#fdd9c3","#fbc6a5","#f8b287","#f49e67","#ef8a43","#ea7401"],"walked":["#ffddc9","#ffccad","#ffb98f","#ffa66e","#ff9246","#fc7d01","#ea7401"]}},"between":{"blue":[{"level":25,"hex":"#f7f9fc"},{"level":50,"hex":"#f0f6ff"},{"level":75,"hex":"#e6f0ff"},{"level":100,"hex":"#dbe9fe"},{"level":150,"hex":"#c1d9fd"},{"level":"175","hex":"#afcfff"},{"level":200,"hex":"#a0c5fd"},{"level":"225","hex":"#8cbaff"},{"level":250,"hex":"#79aeff"},{"level":"275","hex":"#67a3ff"},{"level":300,"hex":"#5598ff"},{"level":350,"hex":"#3d8aff"},{"level":400,"hex":"#2a80ff"},{"level":450,"hex":"#0f75fe"},{"level":500,"hex":"#006df5"},{"level":550,"hex":"#0160d9"},{"level":600,"hex":"#0056c5"},{"level":650,"hex":"#004cb0"},{"level":700,"hex":"#0044a0"},{"level":750,"hex":"#003b8c"},{"level":800,"hex":"#00337a"},{"level":850,"hex":"#002966"},{"level":900,"hex":"#001f50"},{"level":925,"hex":"#00153c"},{"level":950,"hex":"#000b27"},{"level":975,"hex":"#000109"}],"teal":[{"level":25,"hex":"#f7fcfb"},{"level":50,"hex":"#f1fbf9"},{"level":75,"hex":"#e5faf6"},{"level":100,"hex":"#c2fcf2"},{"level":150,"hex":"#a1fff0"},{"level":200,"hex":"#82feec"},{"level":250,"hex":"#4dffe9"},{"level":300,"hex":"#03fae3"},{"level":350,"hex":"#00f2db"},{"level":"375","hex":"#00e7d1"},{"level":400,"hex":"#00dcc7"},{"level":"425","hex":"#00cebb"},{"level":450,"hex":"#03c1af"},{"level":"475","hex":"#00b4a3"},{"level":500,"hex":"#00a797"},{"level":550,"hex":"#039486"},{"level":600,"hex":"#008578"},{"level":650,"hex":"#00766a"},{"level":700,"hex":"#00665c"},{"level":750,"hex":"#00594f"},{"level":800,"hex":"#004a43"},{"level":850,"hex":"#003d37"},{"level":900,"hex":"#002e29"},{"level":925,"hex":"#00211d"},{"level":950,"hex":"#001310"},{"level":975,"hex":"#000202"}],"yellow":[{"level":25,"hex":"#fdfaf4"},{"level":50,"hex":"#f9f6f0"},{"level":75,"hex":"#f6f1e5"},{"level":100,"hex":"#fdecc6"},{"level":150,"hex":"#fcdf9e"},{"level":200,"hex":"#f9d17a"},{"level":250,"hex":"#faca62"},{"level":300,"hex":"#fbc243"},{"level":350,"hex":"#f9ba1d"},{"level":400,"hex":"#f3b303"},{"level":"425","hex":"#e7aa00"},{"level":450,"hex":"#dba102"},{"level":"475","hex":"#cd9600"},{"level":500,"hex":"#bf8c02"},{"level":550,"hex":"#ab7d02"},{"level":600,"hex":"#976e00"},{"level":650,"hex":"#866100"},{"level":700,"hex":"#765500"},{"level":750,"hex":"#654800"},{"level":800,"hex":"#553c00"},{"level":850,"hex":"#453000"},{"level":900,"hex":"#352300"},{"level":925,"hex":"#2b1500"},{"level":950,"hex":"#1a0b00"},{"level":975,"hex":"#020201"}]},"current":{"light":["#006df5","#ea7401","#00a797","#dba102","#ff66a4","#00853c","#7d41da","#f5244f"],"dark":["#2a80ff","#d16702","#039486","#ab7d02","#f22e8c","#00853c","#a071ff","#fc3b5a"]},"openai":[{"name":"sky","hex":"#6bc4fd","L":0.787,"C":0.118,"h":239,"share":0.97,"near":"cyan-300","nearHex":"#4ad2ff","nearDE":0.04,"proposed":"#6ac5ff","proposedDE":0.003},{"name":"sky pale","hex":"#96d6f5","L":0.844,"C":0.078,"h":230,"share":0.8,"near":"cyan-200","nearHex":"#8ddfff","nearDE":0.024,"proposed":"#4ecafd","proposedDE":0.074},{"name":"aqua","hex":"#79dbf6","L":0.841,"C":0.1,"h":218,"share":0.82,"near":"cyan-200","nearHex":"#8ddfff","nearDE":0.025,"proposed":"#37cef2","proposedDE":0.06},{"name":"mint","hex":"#6acbad","L":0.774,"C":0.103,"h":171,"share":0.68,"near":"teal-400","nearHex":"#00dcc7","nearDE":0.055,"proposed":"#4dd5b0","proposedDE":0.031},{"name":"periwinkle","hex":"#8e9bef","L":0.713,"C":0.123,"h":276,"share":0.82,"near":"indigo-250","nearHex":"#98a9fe","nearDE":0.042,"proposed":"#a8b5ff","proposedDE":0.079},{"name":"periwinkle pale","hex":"#9bb0f7","L":0.768,"C":0.105,"h":271,"share":0.89,"near":"indigo-250","nearHex":"#98a9fe","nearDE":0.024,"proposed":"#a1b7ff","proposedDE":0.022},{"name":"lilac","hex":"#d0a1f5","L":0.782,"C":0.126,"h":309,"share":0.85,"near":"purple-250","nearHex":"#b89fff","nearDE":0.04,"proposed":"#d3a3f9","proposedDE":0.008},{"name":"lilac pale","hex":"#d4abf8","L":0.805,"C":0.114,"h":308,"share":0.89,"near":"purple-200","nearHex":"#cabaff","nearDE":0.037,"proposed":"#d2a3fa","proposedDE":0.021},{"name":"pink","hex":"#ff9ed3","L":0.813,"C":0.131,"h":346,"share":1,"near":"pink-200","nearHex":"#ffabc7","nearDE":0.04,"proposed":"#f797cb","proposedDE":0.023},{"name":"rose pink","hex":"#ffabc5","L":0.83,"C":0.103,"h":359,"share":1,"near":"pink-200","nearHex":"#ffabc7","nearDE":0.003,"proposed":"#fe96b8","proposedDE":0.047},{"name":"peach","hex":"#fe9da3","L":0.796,"C":0.116,"h":16,"share":0.98,"near":"red-250","nearHex":"#ff8c93","nearDE":0.038,"proposed":"#ff99a0","proposedDE":0.009},{"name":"peach orange","hex":"#ef9365","L":0.749,"C":0.127,"h":47,"share":0.78,"near":"orange-300","nearHex":"#fe9c51","nearDE":0.043,"proposed":"#fe9f70","proposedDE":0.04},{"name":"orange","hex":"#fb7c07","L":0.72,"C":0.184,"h":52,"share":0.99,"near":"orange-450","nearHex":"#f77b03","nearDE":0.008,"proposed":"#fca169","proposedDE":0.088},{"name":"yellow-green","hex":"#d6c607","L":0.814,"C":0.171,"h":104,"share":0.99,"near":"yellow-350","nearHex":"#f9ba1d","nearDE":0.061,"proposed":"#c9be52","proposedDE":0.048},{"name":"violet","hex":"#997ffe","L":0.679,"C":0.182,"h":290,"share":0.99,"near":"purple-300","nearHex":"#a781fe","nearDE":0.023,"proposed":"#b9aeff","proposedDE":0.13}],"luminous":{"L":0.79,"s":1,"cap":0.13}};
+const VALIDATION = {"order":["sky","pink","yellow-green","lilac","peach orange","mint","periwinkle","peach"],"rows":[["Current Meter (shared series today)","light","pass","pass","13.9 (pass)","22.7 (pass)","5.6","relief"],["Current Meter (shared series today)","dark","pass","pass","11.7 (pass)","18.1 (pass)","1.6","pass"],["Round 10 (ladder peaks)","light","pass","pass","10.5 (pass)","26.7 (pass)","6.4","pass"],["Round 10 (ladder peaks)","dark","fail","pass","10.5 (pass)","26.7 (pass)","6.4","pass"],["Proposed marks (light: emphasis; dark: luminous)","light","pass","pass","10.3 (pass)","24.7 (pass)","5.5","pass"],["Proposed marks (light: emphasis; dark: luminous)","dark","fail","pass","8.7 (pass)","17.5 (pass)","1.4","pass"],["Proposed luminous fills (light)","light","fail","pass","8.7 (pass)","17.5 (pass)","1.4","relief"],["Proposed luminous fills (light)","dark","fail","fail","4.3 (fail)","11.5 (fail)","0.9","relief"]]};
+
+// ---- OKLab (Ottosson), sRGB, gamut room, Accent strength's mix ---------------------------------------------------------
+const lin = c => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+const enc = c => c <= 0.0031308 ? 12.92 * c : 1.055 * Math.max(0, c) ** (1 / 2.4) - 0.055;
+const hexRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+const rgbHex = rgb => "#" + rgb.map(c => Math.round(Math.min(1, Math.max(0, c)) * 255).toString(16).padStart(2, "0")).join("");
+function rgbLab([r, g, b]) {
+  [r, g, b] = [lin(r), lin(g), lin(b)];
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b), m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b), s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return { L: 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, a: 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, b: 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s };
+}
+function labLinear({ L, a, b }) {
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3, m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3, s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s, -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s];
+}
+const lchLab = (L, C, h) => ({ L, a: C * Math.cos(h * Math.PI / 180), b: C * Math.sin(h * Math.PI / 180) });
+const labLch = ({ L, a, b }) => ({ L, C: Math.hypot(a, b), h: (Math.atan2(b, a) * 180 / Math.PI + 360) % 360 });
+const inGamut = lab => labLinear(lab).every(c => c >= -1e-7 && c <= 1 + 1e-7);
+function room(L, h) { let lo = 0, hi = 0.5; if (L <= 0 || L >= 1) return 0; for (let i = 0; i < 30; i++) { const m = (lo + hi) / 2; inGamut(lchLab(L, m, h)) ? lo = m : hi = m; } return lo; }
+const colourAt = (h, L, s, cap = Infinity) => rgbHex(labLinear(lchLab(L, Math.min(cap, s * room(L, h)), h)).map(enc));
+const lch = hex => labLch(rgbLab(hexRgb(hex)));
+const share = hex => { const c = lch(hex), r = room(c.L, c.h); return r > 0.002 ? c.C / r : 0; };
+const Y = hex => hexRgb(hex).reduce((s, c, i) => s + lin(c) * [0.2126, 0.7152, 0.0722][i], 0);
+const wcag = (a, b) => { const [x, y] = [Y(a), Y(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+function withStrength(hex, strength) {
+  if (strength >= 100) return hex;
+  const g = enc(Y(hex)), a = rgbLab(hexRgb(hex)), gl = rgbLab([g, g, g]), t = strength / 100;
+  return rgbHex(labLinear({ L: a.L * t + gl.L * (1 - t), a: a.a * t + gl.a * (1 - t), b: a.b * t + gl.b * (1 - t) }).map(enc));
+}
+function mixLab(a, b, t) { const x = rgbLab(hexRgb(a)), y = rgbLab(hexRgb(b)); return rgbHex(labLinear({ L: x.L + (y.L - x.L) * t, a: x.a + (y.a - x.a) * t, b: x.b + (y.b - x.b) * t }).map(enc)); }
+const fmt = (n, d = 3) => Number(n).toFixed(d);
+const describe = hex => { const c = lch(hex); return `${hex}  L ${fmt(c.L, 2)}  C ${fmt(c.C)}  h ${fmt(c.h, 0)}  share ${fmt(share(hex), 2)}  ${fmt(wcag(hex, "#ffffff"), 2)}:1 on white  ${fmt(wcag(hex, "#020202"), 2)}:1 on #020202`; };
+const el = (tag, attrs = {}, ...kids) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) k === "style" ? n.style.cssText = v : k.startsWith("on") ? n.addEventListener(k.slice(2), v) : n.setAttribute(k, v); for (const k of kids) n.append(k); return n; };
+
+// ---- State: picks and tuning (saved), plus local view state ------------------------------------------------------------
+const state = { fillL: DATA.luminous.L, fillS: DATA.luminous.s, fillC: DATA.luminous.cap, darkL: 0.4, verdicts: {} };
+const readout = document.getElementById("readout");
+
+// ---- 1. OpenAI samples -------------------------------------------------------------------------------------------------
+const de = (x, y) => { const p = rgbLab(hexRgb(x)), q = rgbLab(hexRgb(y)); return Math.hypot(p.L - q.L, p.a - q.a, p.b - q.b) * 100; };
+function swatch(hex, label) {
+  const sw = el("span", { class: "sw", style: `background:${hex}`, title: describe(hex), tabindex: "0", "aria-label": `${label}: ${describe(hex)}` });
+  const show = () => readout.textContent = `${label}  ·  ${describe(hex)}`;
+  sw.addEventListener("mouseenter", show); sw.addEventListener("focus", show);
+  return sw;
+}
+function renderOpenai() {
+  for (const id of ["openaiLight", "openaiDark"]) {
+    const grid = el("div", { class: "ogrid" });
+    grid.append(el("span", { class: "lab" }, ""), el("span", { class: "lab" }, "Sample"), el("span", { class: "lab" }, "Area today"), el("span", { class: "lab" }, "Proposed"));
+    for (const o of DATA.openai) {
+      const proposed = colourAt(o.h, state.fillL, state.fillS, state.fillC);
+      grid.append(el("span", { class: "lab" }, o.name),
+        el("span", { class: "ocell" }, swatch(o.hex, `${o.name} (sample)`), el("span", { class: "num" }, `L ${fmt(o.L, 2)}`)),
+        el("span", { class: "ocell" }, swatch(o.nearHex, `${o.near} (nearest rung)`), el("span", { class: "num" }, `${o.near} · ${fmt(o.nearDE * 100, 1)}`)),
+        el("span", { class: "ocell" }, swatch(proposed, `${o.name} (proposed)`), el("span", { class: "num" }, `ΔE ${fmt(de(o.hex, proposed), 1)}`)));
+    }
+    document.getElementById(id).replaceChildren(grid);
+  }
+}
+
+// ---- 2. In-between steps ----------------------------------------------------------------------------------------------
+function renderBetween() {
+  for (const id of ["betweenLight", "betweenDark"]) {
+    const box = document.getElementById(id); box.replaceChildren();
+    for (const [fam, steps] of Object.entries(DATA.between)) {
+      const today = steps.filter(s => typeof s.level === "number"), added = steps.filter(s => typeof s.level === "string");
+      const grid = el("div", { class: "ramp", style: `grid-template-columns:56px repeat(${steps.length}, minmax(14px, 1fr)); min-width:${steps.length * 18 + 60}px; margin-bottom:8px` });
+      // Today's row aligned under the combined columns: blanks where steps were added.
+      grid.append(el("span", { class: "lab" }, fam));
+      steps.forEach(s => grid.append(typeof s.level === "number" ? el("span", { class: "sw", style: `background:${s.hex}`, title: `${fam} ${s.level} · ${describe(s.hex)}` }) : el("span")));
+      grid.append(el("span", { class: "lab" }, "+ steps"));
+      steps.forEach(s => grid.append(el("span", { class: "sw" + (typeof s.level === "string" ? " mid" : ""), style: `background:${s.hex}`, title: `${fam} ${s.level}${typeof s.level === "string" ? " (added)" : ""} · ${describe(s.hex)}` })));
+      grid.append(el("span"));
+      steps.forEach(s => grid.append(el("span", { class: "num" }, typeof s.level === "string" ? s.level : (s.level % 100 === 0 ? String(s.level) : ""))));
+      box.append(grid);
+      void today; void added;
+    }
+  }
+}
+
+// ---- 3. Series ---------------------------------------------------------------------------------------------------------
+const ORDER = VALIDATION.order;
+const SAMPLE = [62, 88, 45, 74, 52, 96, 38, 68];
+function seriesFor() {
+  return ORDER.map(n => {
+    const s = DATA.series[n], luminous = colourAt(s.h, state.fillL, state.fillS, state.fillC);
+    return { name: n, emphasis: { light: s.emphasis.light, dark: luminous }, fill: { light: luminous, dark: colourAt(s.h, state.darkL, 0.7, 0.09) } };
+  });
+}
+function chart(title, note, marks) {
+  const bars = el("div", { class: "bars" });
+  marks.forEach((m, i) => bars.append(el("span", { style: `height:${SAMPLE[i]}%;background:${m.fill};${m.edge ? `box-shadow: inset 0 0 0 1.5px ${m.edge}` : ""}`, title: `${m.name} · ${describe(m.fill)}` })));
+  const keys = el("div", { class: "keys" }, ...marks.map(m => el("span", {}, el("i", { style: `background:${m.fill};${m.edge ? `box-shadow: inset 0 0 0 1.5px ${m.edge}` : ""}` }), m.name)));
+  return el("div", { class: "chart" }, el("div", { class: "cap" }, el("span", {}, title), el("span", {}, note)), bars, keys);
+}
+function renderSeries() {
+  for (const [id, v] of [["fillLV", fmt(state.fillL, 2)], ["fillSV", fmt(state.fillS, 2)], ["fillCV", fmt(state.fillC, 2)], ["darkLV", fmt(state.darkL, 2)]]) document.getElementById(id).textContent = v;
+  const ser = seriesFor();
+  const meterNames = ["blue 500", "orange 500", "teal 500", "yellow 450", "pink 300", "green 600", "purple 550", "red 450"];
+  const meterNamesDark = ["blue 400", "orange 550", "teal 550", "yellow 550", "pink 450", "green 600", "purple 350", "red 400"];
+  const sample = { sky: "#6bc4fd", pink: "#ff9ed3", "yellow-green": "#d6c607", lilac: "#d0a1f5", "peach orange": "#ef9365", mint: "#6acbad", periwinkle: "#8e9bef", peach: "#fe9da3" };
+  for (const mode of ["light", "dark"]) {
+    const box = document.getElementById(mode === "light" ? "seriesLight" : "seriesDark");
+    box.replaceChildren(el("div", { class: "cap" }, el("span", {}, mode === "light" ? "White page" : "#020202 page"), el("span", {}, "")));
+    box.append(chart("Today: Meter's eight", "solid", DATA.current[mode].map((f, i) => ({ name: (mode === "light" ? meterNames : meterNamesDark)[i], fill: f }))));
+    box.append(chart("Your OpenAI samples", "sampled, for reference", ORDER.map(n => ({ name: n, fill: sample[n] }))));
+    if (mode === "light") {
+      box.append(chart("Proposed: luminous fill + edge", "bars and areas", ser.map(s => ({ name: s.name, fill: s.fill.light, edge: s.emphasis.light }))));
+      box.append(chart("Proposed: emphasis", "lines, dots, keys; ≥ 3:1", ser.map(s => ({ name: s.name, fill: s.emphasis.light }))));
+    } else {
+      box.append(chart("Proposed: luminous marks", "bars, lines, dots; ≥ 10:1", ser.map(s => ({ name: s.name, fill: s.emphasis.dark }))));
+      box.append(chart("Proposed: deep area + luminous edge", "areas under a line", ser.map(s => ({ name: s.name, fill: s.fill.dark, edge: s.emphasis.dark }))));
+    }
+  }
+  const t = document.getElementById("valTable");
+  t.replaceChildren(el("tr", {}, ...["Set", "Mode", "Lightness band", "Chroma ≥ 0.10", "Neighbour CVD ΔE", "Normal ΔE", "First 4, all pairs CVD", "≥ 3:1 on page"].map(h => el("th", {}, h))));
+  for (const r of VALIDATION.rows) {
+    const cls = v => /pass/.test(v) ? "ok" : /fail|relief|floor/.test(v) ? "bad" : "";
+    t.append(el("tr", {}, ...r.map((c, i) => el("td", { class: i > 1 ? cls(c) : "" }, c))));
+  }
+}
+
+// ---- 4. Heat ------------------------------------------------------------------------------------------------------------
+function renderHeat() {
+  for (const mode of ["light", "dark"]) {
+    const box = document.getElementById(mode === "light" ? "heatLight" : "heatDark"); box.replaceChildren();
+    for (const [fam, v] of Object.entries(DATA.seq)) {
+      const grid = el("div", { class: "heat", style: "margin-bottom:10px" });
+      for (const [label, list] of [[`${fam} mixed`, v.mixed], [`${fam} walked`, v.walked]]) {
+        grid.append(el("span", { class: "lab mono", style: "font-size:11px;color:var(--p-muted)" }, label.replace(" ", "\n")));
+        // Dark: the same end colour, mixed toward the dark page, or walked up from L 0.24 at the end's share.
+        const end = list[list.length - 1], e = lch(end), sh = share(end);
+        const cells = mode === "light" ? list : label.endsWith("mixed")
+          ? list.map((_, i) => mixLab(end, "#020202", 1 - (i + 1) / list.length))
+          : list.map((_, i) => colourAt(e.h, 0.24 + (e.L - 0.24) * (i + 1) / list.length, sh));
+        cells.forEach(hex => { const ink = wcag(hex, "#282828") >= wcag(hex, "#ffffff") ? "#282828" : "#ffffff"; grid.append(el("span", { class: "cell", style: `background:${hex};color:${ink}`, title: describe(hex) }, fmt(share(hex), 2))); });
+      }
+      box.append(grid);
+    }
+  }
+}
+
+// ---- 5. Layers 0 -------------------------------------------------------------------------------------------------------
+function renderLayers() {
+  const rows = [["Title", "Label", "1,204"], ["Title", "Label", "872"], ["Title", "Label", "65"]];
+  for (const [mode, page, subtle, comp, stripe, rule] of [["light", "#ffffff", "#ffffff", "#f9f9f9", "#fbfbfb", "#e2e2e2"], ["dark", "#020202", "#020202", "#161616", "#040404", "#333333"]]) {
+    const box = document.getElementById(mode === "light" ? "layersLight" : "layersDark");
+    const table = head => el("div", { class: "mock" }, el("table", {}, el("tr", { style: `background:${head}` }, ...["Name", "Owner", "Count"].map(h => el("th", {}, h))), ...rows.map(r => el("tr", {}, ...r.map(c => el("td", {}, c))))));
+    box.replaceChildren(
+      el("div", { class: "cap" }, el("span", {}, `Today: header bg-subtle ${subtle} (= page)`), el("span", {}, `${fmt(wcag(subtle, page), 2)}:1`)), table(subtle),
+      el("div", { class: "cap" }, el("span", {}, `Proposed: header bg-component ${comp}`), el("span", {}, `${fmt(wcag(comp, page), 2)}:1, as Primer's #f6f8fa`)), table(comp),
+      el("div", { class: "cap" }, el("span", {}, "Inline code"), el("span", {}, "")),
+      el("p", {}, "Run ", el("span", { class: "code-chip", style: `background:${stripe}` }, "npm test"), ` today (bg-stripe ${stripe}, ${fmt(wcag(stripe, page), 2)}:1), proposed `, el("span", { class: "code-chip", style: `background:${comp}` }, "npm test"), ` (${comp}).`));
+    void rule;
+  }
+}
+
+// ---- Proposals and picks ------------------------------------------------------------------------------------------------
+const PROPOSALS = [
+  ["p1", "1", "Built: fills that never vanish", "Built 1 Nov on your yes, as a well (bg-well: the recessed tone, never closer to the page than its control fill, #f9f9f9 / #161616 at Layers 0). It paints Table's header and stripes, Box model, image wells, Attachment, the diff fold, inline code and Token; controls inside step from it. Soft Surface, preview choice cards and Plan's steps stay flat at Layers 0: you confirmed the 29 Oct keep Flat flat on 1 Nov.", "Done for eight families; the other three are a one-line change each.", "Checked: every token, contrast and cohesion test passes; seen in the app, light and dark."],
+  ["p2", "2", "Built: series colours from OpenAI's palette", "Shared --area-series-1…8 roles on the eight hues sampled from your references. Each has a luminous colour (the ladder's edge at one lightness, chroma capped: L 0.79, C ≤ 0.13 by default), an emphasis on the same hue at 3:1 for lines, dots and edges on white, and an ink for numbers inside a fill. On dark pages the luminous colour is the mark. Meter, the Chart family and Table's heat cells read them.", "Medium: a token group, emit, Meter's switch, docs, a gallery tile.", "Medium: luminous fills are about 2:1 on white, so they need their edge or labels; the hues stay apart from status colours."],
+  ["p4", "3", "Built: ramps walk the hue", "Sequential (heat, calendar) and diverging ramps step along the hue at its own share of the room, never mix toward white; diverging arms meet at the neutral ground. Fixes the grey middle of teal, lime, yellow, green and cyan, and a heat ramp can end on a luminous colour.", "Low: a ramp function and its tokens, used by the series' heat cells.", "Low."],
+  ["p5", "4", "Built: steps between rungs", "colourAt(h, L, share) becomes the one placement function, so colours like OpenAI's (L 0.79, where most hues have no rung) and custom colours can sit between rungs. palette.json stays as it is.", "Medium: a generator change and an Inspector affordance for positions.", "Medium: more positions to gate; keep them out of semantic roles."],
+  ["p6", "5", "Built: data colours gated in the tests", "Add the validator's checks (neighbour colour-vision ΔE ≥ 8, normal-vision ≥ 15, emphasis ≥ 3:1 on page and card, fill + edge pairs) to the token tests, light and dark, at every Accent strength.", "Low: a test file beside contrast/.", "None; it guards the series."],
+  ["p7", "6", "Built: wide-gamut luminous colours on P3 screens", "Under @media (color-gamut: p3), luminous colours take the extra chroma Display P3 holds at L 0.8 (+26–40% for green, pink and orange; +9% for blue): closer to the glow of OpenAI's images on a Mac. sRGB stays the gated base.", "Medium to high: two paints per colour, a P3 gate.", "Medium: contrast re-measured in P3; sRGB screens see no change."],
+  ["p3", "–", "Set aside: Soft and Dusty tiers", "Accent strength's mix for every family reproduces Cursor's dusty tones (ΔE ≤ 3.3). You prefer OpenAI's colours (1 Nov), so it is not proposed for data colours.", "Low, if wanted later.", "Low."],
+  ["p0", "–", "Not proposed: re-spacing palette.json", "Evening the ladder's steps would move every solved role (solids, inks, indicators) and every component reviewed on them. Steps between rungs give the in-between colours without moving a rung.", "High.", "High."],
+];
+let db = null, saving = 0;
+const saveState = document.getElementById("saveState");
+function renderProposals() {
+  const box = document.getElementById("proposals"); box.replaceChildren();
+  PROPOSALS.forEach(([id, rank, title, what, cost, risk]) => {
+    const v = state.verdicts[id] ?? {};
+    const choices = id === "p1" ? [["flat", "Keep them flat"], ["build", "Fill them too"]] : id === "p0" || id === "p3" ? [["agree", "Agree"], ["reconsider", "Reconsider"]] : [["build", "Build"], ["later", "Later"], ["no", "No"]];
+    const note = el("textarea", { id: `note-${id}`, placeholder: "Note (optional)", "aria-label": `${title}: note` });
+    note.value = v.note ?? "";
+    note.addEventListener("change", () => savePick(id, { note: note.value }));
+    box.append(el("article", { class: "prop" }, el("div", { class: "rank" }, rank),
+      el("div", { class: "body" }, el("h3", {}, title), el("p", {}, what), el("div", { class: "meta" }, el("span", {}, "Cost: " + cost), el("span", {}, "Risk: " + risk)),
+        el("div", { class: "pick" }, ...choices.map(([c, label]) => el("button", { "aria-pressed": String(v.pick === c), onclick: () => savePick(id, { pick: c }) }, label))), note)));
+  });
+}
+async function savePick(id, patch) {
+  state.verdicts[id] = { ...(state.verdicts[id] ?? {}), ...patch };
+  renderProposals();
+  if (!db) { saveState.textContent = "Picks can't be saved in this view; they stay on this page until you reload."; return; }
+  saving++; saveState.textContent = "Saving…";
+  try { await db.doc(`verdicts/${id}`).set({ ...state.verdicts[id], tuning: tuning(), at: new Date().toISOString() }); saveState.textContent = "Saved."; }
+  catch (e) { saveState.textContent = "Couldn't save (" + (e?.code ?? "error") + "). Your pick is still shown here."; }
+  finally { saving--; }
+}
+const tuning = () => ({ luminousL: state.fillL, luminousShare: state.fillS, luminousCap: state.fillC, darkL: state.darkL });
+let tuneTimer = null;
+function saveTuning() { if (!db) return; clearTimeout(tuneTimer); tuneTimer = setTimeout(() => db.doc("verdicts/tuning").set({ ...tuning(), at: new Date().toISOString() }).then(() => saveState.textContent = "Saved.").catch(() => {}), 600); }
+
+// ---- Wiring -------------------------------------------------------------------------------------------------------------
+const renderTuned = () => { renderOpenai(); renderSeries(); };
+for (const [id, key, render] of [["fillL", "fillL", renderTuned], ["fillS", "fillS", renderTuned], ["fillC", "fillC", renderTuned], ["darkL", "darkL", renderSeries]]) {
+  document.getElementById(id).addEventListener("input", e => { state[key] = Number(e.target.value); render(); saveTuning(); });
+}
+function syncInputs() { for (const [id, key] of [["fillL", "fillL"], ["fillS", "fillS"], ["fillC", "fillC"], ["darkL", "darkL"]]) document.getElementById(id).value = state[key]; }
+function renderAll() { syncInputs(); renderOpenai(); renderBetween(); renderSeries(); renderHeat(); renderLayers(); renderProposals(); }
+renderAll();
+
+(async () => {
+  const timer = setTimeout(() => { if (!db) saveState.textContent = "Picks can't be saved in this view; they stay on this page until you reload."; }, 10000);
+  try { db = await window.claude?.use?.("db"); } catch { db = null; }
+  clearTimeout(timer);
+  if (!db) { saveState.textContent = "Picks can't be saved in this view; they stay on this page until you reload."; return; }
+  saveState.textContent = "Picks save as you choose them.";
+  db.collection("verdicts").onSnapshot(snap => {
+    if (saving) return;
+    for (const d of snap.docs) {
+      const body = d.data();
+      if (d.id === "tuning") { for (const [k, f] of [["fillL", "luminousL"], ["fillS", "luminousShare"], ["fillC", "luminousCap"], ["darkL", "darkL"]]) if (typeof body[f] === "number") state[k] = body[f]; }
+      else state.verdicts[d.id] = { pick: body.pick, note: body.note };
+    }
+    renderAll();
+  }, () => { saveState.textContent = "Couldn't load saved picks; new picks may still save."; });
+})();
+</script>
