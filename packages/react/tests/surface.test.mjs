@@ -60,8 +60,8 @@ test('one edge per boundary: only the outermost raised Surface lifts; a soft wel
 
 test('text set straight in a Surface takes the body role of its own scope, as Card body text does', () => {
   const base = rule('.area-surface');
-  assert.match(base, /font-size: var\(--area-text-sm-size\);/);
-  assert.match(base, /line-height: var\(--area-text-sm-leading\);/);
+  assert.match(base, /font-size: var\(--area-text-base-size\);/);
+  assert.match(base, /line-height: var\(--area-text-base-leading\);/);
 });
 
 test('the border is counted once and kept in every variant, so the inset does not move with the paint', () => {

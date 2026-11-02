@@ -27,7 +27,7 @@ for one release; `status` wins. The CSS modifiers keep their names (`area-turn-n
 
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
-| type | text-md (Message's), muted | claude-code secondary; codex muted | no italic: Area does not set type in italic |
+| type | text-lg (Message's), muted | claude-code secondary; codex muted | no italic: Area does not set type in italic |
 | icon | 16 slot: stop, info (error, compacted) | codex ■ marker; Area glyphs | — |
 | error ink | the icon in fg-danger; the words in fg-default (stopped and compacted stay muted) | cursor error title; codex red ■ | the one notice that asks for something (round 50) |
 | gap | 4 between the line's parts | Step's line; Cursor ToolCallLine gap 4 | it sits among the steps (round 49) |
@@ -67,8 +67,8 @@ The agent chat's shared rules (all five families):
 
 | Rule | Value | Basis |
 |---|---|---|
-| Lines in the transcript | the reply's type (text-md); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
-| Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
+| Lines in the transcript | the reply's type (text-lg); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
+| Cards (Edit summary, Plan) | one size, text-base; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
 | Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |

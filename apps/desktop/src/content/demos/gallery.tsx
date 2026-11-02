@@ -1883,7 +1883,7 @@ export const GallerySkeletonText = () => <Skeleton shape="text" style={{ fontSiz
 export const GallerySkeletonCircle = () => <Skeleton shape="circle" />;
 export const GallerySkeletonType = () => (
   <div style={{ display: "grid", gap: "var(--area-space-16)", inlineSize: "100%" }}>
-    {[{ name: "Display", token: "display-sm" }, { name: "Title", token: "title-md" }, { name: "Body", token: "text-md" }].map(({ name, token }) => (
+    {[{ name: "Display", token: "display-sm" }, { name: "Title", token: "title-md" }, { name: "Body", token: "text-lg" }].map(({ name, token }) => (
       <div key={name} style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", alignItems: "center", gap: "var(--area-space-12)", fontSize: `var(--area-${token}-size)`, lineHeight: `var(--area-${token}-leading)`, letterSpacing: `var(--area-${token}-tracking)` }}>
         <span>{name}</span><Skeleton shape="text" />
       </div>
@@ -1923,8 +1923,8 @@ export const GallerySkeletonCard = () => (
   <div style={{ inlineSize: 210, maxInlineSize: "100%" }}><Card role="region" aria-label="Loading card" aria-busy="true" style={{ inlineSize: "100%" }}>
     <CardMedia><Skeleton style={{ blockSize: "100%" }} /></CardMedia>
     <CardContent>
-      <Skeleton shape="text" style={{ inlineSize: "56%", fontSize: "var(--area-text-md-size)", lineHeight: "var(--area-text-md-leading)" }} />
-      <Skeleton lines={2} style={{ fontSize: "var(--area-text-sm-size)", lineHeight: "var(--area-text-sm-leading)" }} />
+      <Skeleton shape="text" style={{ inlineSize: "56%", fontSize: "var(--area-text-lg-size)", lineHeight: "var(--area-text-lg-leading)" }} />
+      <Skeleton lines={2} style={{ fontSize: "var(--area-text-base-size)", lineHeight: "var(--area-text-base-leading)" }} />
     </CardContent>
   </Card></div>
 );
@@ -2026,7 +2026,7 @@ export const GallerySpinnerEmpty = () => (
     <Spinner label="Loading" />
     <div style={{ display: "grid" }}>
       <span style={{ fontWeight: "var(--area-weight-strong)" }}>Title</span>
-      <span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-sm-size)", lineHeight: "var(--area-text-sm-leading)" }}>Description</span>
+      <span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-base-size)", lineHeight: "var(--area-text-base-leading)" }}>Description</span>
     </div>
   </div>
 );

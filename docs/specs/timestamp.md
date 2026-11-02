@@ -19,7 +19,7 @@ Oct 14" within a year, else "Oct 14, 2025", then the time.
 
 | Slot | Area | Basis |
 |---|---|---|
-| type | text-sm, muted, centred | Codex 14/20 text-tertiary under a 13 chat |
+| type | text-base, muted, centred | Codex 14/20 text-tertiary under a 13 chat |
 | space | none of its own; the conversation's gap | Area: components own no outer margin (Codex py-4 on its row) |
 
 ## Review note, 2026-10-19

@@ -46,10 +46,10 @@
     /* spec (2026-10-30): the space, where every slot but media sits: 20 at md, compact 16 (the owner's references pad
        their cards 20 to 24 at a 36 control, 0.6 of a control; Area's 30 control gives 20). Was 16 (8 inset + 8 in
        CardContent only), so a header or footer put straight in the card sat 8 from the edge. */
-    --_card-space: calc(var(--area-space-20) - var(--area-space-4) * var(--area-ui-dense)); /* spec */
+    --_card-space: var(--area-card-inset, calc(var(--area-space-20) - var(--area-space-4) * var(--area-ui-dense))); /* spec */
     /* spec (2026-10-30): the section gap between blocks, 16 at md, compact 12 (the references' 12 to 16 between a text
        group and a tag row or list; was 12 in CardContent and 8 between the card's own children). */
-    --_card-section: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* spec */
+    --_card-section: var(--area-card-gap, calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense))); /* spec */
     /* The control a header action holds: a default Button, a small one in a small card. */
     --_card-action: var(--area-control-md);
     /* The surface corner plus 4 (owner, 2026-10-03: card and dialog follow the surface), so it steps by
@@ -66,13 +66,13 @@
     --_card-title-size: var(--area-title-xs-size);
     --_card-title-leading: var(--area-title-xs-leading);
     --_card-title-tracking: var(--area-title-xs-tracking);
-    --_card-body-size: var(--area-text-sm-size);
-    --_card-body-leading: var(--area-text-sm-leading);
-    --_card-body-tracking: var(--area-text-sm-tracking);
+    --_card-body-size: var(--area-text-base-size);
+    --_card-body-leading: var(--area-text-base-leading);
+    --_card-body-tracking: var(--area-text-base-tracking);
     /* spec: owner (2026-09-27), a lighter edge than the divider (#e2) with a faint lift under
        it. Light #ee (neutral 100) sits between Notion's 8% ring (#eb) and the decorative seam
        (#f3); dark keeps the divider rung, since 800 disappears against the dark surface. */
-    --_card-edge: var(--area-edge-cards);
+    --_card-edge: var(--area-card-edge, var(--area-edge-cards));
     /* The Elevation axis's resting role: 0 0 2 + 0 2 4 at half the step in % (1.5% at the default 3),
        dark doubled, transparent at 0 (axes/elevation.ts; was Figma's 0 0 8 halo with a contact line). */
     --_card-shadow: var(--area-shadow-resting); /* the Elevation axis role (axes/elevation.ts): a resting surface */
@@ -88,7 +88,7 @@
     /* The drawn corner: the card's radius, never deeper than 1.5 x its text inset, so text never sits
        in a curve twice its inset (owner, 2026-10-12: radius 14 put 16px-inset text in a 28 corner;
        docs/research/ui-size-scale-2026-10-12.md). Bites only at the roundest settings. */
-    --_card-corner: min(var(--_card-radius), max(var(--area-radius-floor), round(down, calc(var(--_card-text-inset) * 1.5), 2px)));
+    --_card-corner: var(--area-card-corner, min(var(--_card-radius), max(var(--area-radius-floor), round(down, calc(var(--_card-text-inset) * 1.5), 2px))));
     --_card-padding: calc(var(--_card-space) - var(--_card-border));
     --_card-gap: var(--_card-section);
     --_card-media-radius: max(var(--area-radius-floor), calc(var(--_card-corner) - var(--_card-inset)));
@@ -108,7 +108,10 @@
        cards an 8% ring; the owner took it a rung lighter, with the shadow above. */
     border: var(--_card-border) solid var(--_card-edge);
     border-radius: var(--_card-corner);
-    background: var(--area-bg-card); /* Card tone (Auto: the raised layer, bg-surface) */
+    /* Public hooks (2026-11-02, as Table's --area-table-corner / -edge / -fill and Asset card's): --area-card-corner,
+       --area-card-inset (the content's distance from the edge, the edge counted inside it), --area-card-gap, --area-card-fill
+       and --area-card-edge, so a page that frames its blocks one way (the desktop app's feed) draws them as Cards. */
+    background: var(--area-card-fill, var(--area-bg-card)); /* Card tone (Auto: the raised layer, bg-surface) */
     color: var(--area-fg-default);
     font-size: var(--_card-title-size);
     line-height: var(--_card-title-leading);
@@ -1299,8 +1302,8 @@
   .area-menu__lines > .area-menu__text { text-box: none; padding-block: 0; }
   .area-menu__description {
     color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
   }
 
   /* spec: danger keeps its red label; its plate follows Danger hover, red by default (below), the neutral wash at Neutral
@@ -1801,9 +1804,9 @@
     color: var(--area-fg-default);
     /* Card's body role, so text set straight in a Surface follows the Type setting of its scope instead of the page's
        (the body role is stated only on body; a scope with its own Type restates tokens, not the inherited size). */
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
-    letter-spacing: var(--area-text-sm-tracking);
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
+    letter-spacing: var(--area-text-base-tracking);
     box-shadow: var(--_sf-shade), var(--_sf-lift);
   }
 

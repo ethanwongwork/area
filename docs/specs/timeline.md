@@ -74,7 +74,7 @@ article  entry                 padding 12 0
 Area:
 
 ```
-ol     .area-timeline                       role="list"; text-sm (14/20); --_marker 24, --_gap 12, --_spacing 16
+ol     .area-timeline                       role="list"; text-base (14/20); --_marker 24, --_gap 12, --_spacing 16
   li     .area-timeline-item[--current]        grid: marker column | content; 16 below all but the last; aria-current
     ::before                                    the line: 1px divider ink at x 11.5, from 4 below this mark to 4 above
                                                 the next (the mark's own height: dot 6, icon 16, media 24)

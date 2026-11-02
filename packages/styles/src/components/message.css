@@ -14,11 +14,11 @@
     inline-size: 100%;
     min-inline-size: 0;
     color: var(--area-fg-default);
-    font-size: var(--area-text-md-size);
+    font-size: var(--area-text-lg-size);
     /* Prose lines, 1.5 × the size on the leading ramp (15/24 at type 13; was the UI line, 15/22): a turn runs past two
        lines. Parts set in a turn (Step, Plan, a code block, a table) keep their own UI lines (DESIGN_SYSTEM.md, Prose
        lines; docs/research/vertical-rhythm-2026-10-30). */
-    line-height: var(--area-text-md-prose-leading);
+    line-height: var(--area-text-lg-prose-leading);
   }
   /* spec (message.md, measured 2026-09-28): the user's actions sit 4 below the bubble, ChatGPT's;
      the assistant's keep 12 under the prose (audit G-25). */
@@ -45,8 +45,8 @@
      4) and the next block is the gap after it. */
   .area-message__content { min-inline-size: 0; overflow-wrap: anywhere; }
   .area-message__content > * { margin-block: 0; }
-  .area-message__content > * + * { margin-block-start: var(--area-text-md-prose-gap); }
-  .area-message__content > :is(h1, h2, h3, h4, h5, h6):not(:first-child) { margin-block-start: calc(var(--area-text-md-prose-gap) + var(--area-space-8)); }
+  .area-message__content > * + * { margin-block-start: var(--area-text-lg-prose-gap); }
+  .area-message__content > :is(h1, h2, h3, h4, h5, h6):not(:first-child) { margin-block-start: calc(var(--area-text-lg-prose-gap) + var(--area-space-8)); }
   .area-message__content > :is(h1, h2, h3, h4, h5, h6) + *,
   .area-message__content > * + :is(ul, ol) { margin-block-start: var(--area-space-8); }
   .area-message__content :is(ul, ol) > li + li { margin-block-start: var(--area-space-4); }

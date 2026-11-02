@@ -269,7 +269,7 @@
     --area-select-edge: var(--area-input-edge);
     --area-select-edge-hover: var(--area-input-edge-hover);
     --area-selection-edge: color-mix(in srgb, var(--area-edge-control-hover), var(--area-edge-accent) calc(var(--area-selection-accent) * 100%));
-    --area-token-edge: light-dark(var(--area-border-decorative), var(--area-border-faint));
+    --area-token-edge: light-dark(var(--area-border-subtle), var(--area-border-faint));
   }
 
   /*

@@ -1,6 +1,35 @@
 # Handoff
 
 ## Current state (2026-11-01)
+- **System pages on the feed's kit, branch `claude/system-visuals-consistency-c69dff` (uncommitted, 2026-11-01).** Owner:
+  bring the rest of the system's categories up to the cleaned-up cards, "a big, expansive library of cohesive containers".
+  Surveyed every System page in light: Themes, Tokens, Colors, Typography, Icons, Components, Patterns and Versions already
+  use the kit. Spacing, Shape, Elevation and Motion drew bare rows and boxes with their own type. Now `ScaleTable`
+  (pages/foundation.tsx) puts ramps in the framed feed Table, with the drawing in the last column (space ramp, gaps,
+  durations). `SpecimenCard` is the square card on the unit grid, its value as the badge (control heights, corners,
+  strokes, shadows, easing curves drawn as `EasingCurve`). Motion's Play moved to the Canvas bar, and every foundation
+  section has its count. Labs › Feed gained Scale table, Specimen cards, Type cards and Glyph sheet. Typography's
+  TYPE_LOOK is GALLERY_LOOK. PRODUCT_UI has a new rule, "Every page draws from one kit". Checks: typecheck, desktop
+  build, app-css, playgrounds, docs, test:desktop 30. Looked at in the browser preview (4425), light and dark; Electron
+  launched from this worktree (another session's window from worktree-cleanup-status-badges left open). Open: shadows
+  barely read in dark (the system's own shadow values); `.claude/launch.json` has a local 4425 entry (don't commit).
+  Then the owner asked for one sample feed of everything: Labs › Feed now holds every content type, grouped Text, Type,
+  Colour, Foundations, Icons, Components, Designs, Images, Data, Code and settings, Activity. New blocks: page lede, list,
+  type ramp, colour scale (real ColorCard), Stage, props table, stat cards, chart (Analytics' drawing) and Meters in
+  `FEED_FRAME`. The Feed Kit artifact (3VBMTvWZ…, version 9) is that page captured from the app with its real CSS
+  (`docs/research/feed-kit-2026-11-01/`, capture + build scripts). Two mismatches it showed, fixed on the owner's yes:
+  every data mark (Analytics' chart and legend, Scale table bars, easing curves, crossing dots) now draws in Meter's and
+  Progress's fill, the Selection role, not the accent; the Stage takes the plain tile's fill (bg-stripe) and edge at
+  the stroke width. Artifact republished (version 10).
+  Then the owner's next round: colour cards' copy in the feed's type (level 13/18 sans as every card name, values xs sans
+  tabular) and their view no longer clips (OKLCH's O lost its foot); feed tables' header a step under the rows (Table hook
+  `--area-table-head-fill`, white rows under grey in light); one quiet card hover (CARD_SCOPE Hover lift 0 + Hover edge 1,
+  plain tiles one step); type ramp and Type styles framed as ruled rows after Google Fonts and the foundries
+  (`docs/research/type-presentation-2026-11-01/`; Pangram and Fontshare unreachable). Typeface cards keep "Aa" (owner's
+  pick); the research's name-in-its-face card is the open question.
+  Then: type lists are the regular framed Table (`TypeTable`, src/type-kit.tsx: Typography's role page, a typeface's
+  ramp, Labs › Feed); `TypeTesters` (display line apart from a heavy and a regular paragraph, each card's controls one header row, inline Sliders as Pangram's), `TypefaceCard` (type alone in the 16:9 card; name and up to two badges: Variable/Static, Licensed/Not installed; Typography's role cards keep a one-line header). Tester header is Area's Toolbar (Select group, ToolbarSeparator before each Slider). TypeTable has a column per metric. Code/Token chip edge now border-subtle #e8e8e8 (token-edge). Value tables use Table fit/numeric/baseline; Code starting a cell has no start margin; scale bars and motion tracks centre on the text line. Section heading lede joins its title at 11 (prose line); FeedCount centres on the cap. Type ramp is Cursor's (2026-11-02, owner picked the full ramp): text-xs 11/14, NEW text-sm 12/16 (secondary: descriptions, meta, help, ledes, timestamps in ~15 families), text-base 13/18 (renamed from text-sm), text-lg 14/22 (renamed from text-md, was 15/22), titles 16/18/20/26; tokens renamed in live code/docs/skills only (research captures keep old names). Feed frames are Area Card via new public hooks (--area-card-corner/-inset/-gap/-fill/-edge); stat cards use CardDescription/CardValue. Every Tile is Area's Asset card (PlainTile and its CSS removed; tests/tile.test.ts guards it); colours paint the frame, label inside or below (Colors › Label). Stage and typeface code blocks take FEED_CODE. Still app-made in the feed: the Analytics chart drawing, GlyphSheet. Plain status badge (PR #194) is on main, not this branch: merge main after committing. Plain tiles now take CARD_SCOPE and the Asset card's edge-cards / bg-tile, so design, reference, colour and type cards are one frame in light and dark; colour cards use the galleries' gap; card text 16 in. Sample copy: pangrams with punctuation (Quick zephyrs blow, vexing daft Jim!; Sphinx of black quartz). `.studio-sections` is now one minmax(0, 1fr) column (a long one-line sample widened
+  the feed). The kit artifact wires the tester's controls in a script and embeds the faces it names.
 - **Icon cohesion pass, branch `claude/icon-cohesion-11900d` (PR to main, 2026-11-01).** Owner: the set didn't look
   cohesive. Measured against six libraries (`docs/research/icon-cohesion-2026-10-31/`, tools for strips, boards, radii,
   angles, 1x and every-size measures); rules adopted in the icon skill ("Cohesion"). Applied over rounds 1–7: gap floor one

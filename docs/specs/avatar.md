@@ -137,7 +137,7 @@ be described (2026-10-19, as Badge's unnamed forms): `alt` (`alt=""` beside a vi
 | Peer | Shared role | Peer value | Avatar | Match |
 |---|---|---|---|---|
 | Nav marker, Tree view rail, Code block linked line | current / selection marker | Selection role | `selection-solid` ring | match |
-| Chip avatar | initials size | `control-xs-text` (12 at default, 11 compact) in the Chip's 20px avatar (chip.css:198-205) | 14px at md (`text-sm`, display.css:74), 12 at sm | differs by box size: the Chip avatar is smaller than Avatar sm |
+| Chip avatar | initials size | `control-xs-text` (12 at default, 11 compact) in the Chip's 20px avatar (chip.css:198-205) | 14px at md (`text-base`, display.css:74), 12 at sm | differs by box size: the Chip avatar is smaller than Avatar sm |
 | Focus ring | ring geometry | 2px `focus-color`, 2px offset | 2px ring, 2px gap, `selection-solid` | same geometry, told apart by colour |
 | Indicator | status on avatar | inside the owner's box (`overlap="circular"`) | anchor, no own slot | match |
 | Badge | label on a fill | 500 | 500 | match |

@@ -43,7 +43,7 @@
   inset-inline: var(--_frame-inset);
   border-block-start: var(--area-border-width) solid var(--area-border-decorative);
 }
-.studio-settings__text { display: grid; flex: 1; min-inline-size: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+.studio-settings__text { display: grid; flex: 1; min-inline-size: 0; font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
 .studio-settings__label { color: var(--area-fg-default); }
 .studio-settings__description { color: var(--area-fg-muted); }
 /* The control column: one width for every row (the Inspector's floor at the app's scale, about 280 at type 13), so the
@@ -56,8 +56,8 @@
   inline-size: min(calc(var(--area-space-96) * 3 - var(--area-space-16)), 45%);
   --area-input-inline-size: 100%;
   /* A value written as text (Page colour's "Grey 100%") reads at the rows' size, as the controls' own text. */
-  font-size: var(--area-text-sm-size);
-  line-height: var(--area-text-sm-leading);
+  font-size: var(--area-text-base-size);
+  line-height: var(--area-text-base-leading);
 }
 /* A control that fills (a framed Field, a full-width Segmented, dropdown or field) takes the column; a switch or a button
    keeps its own width at the column's end, as Cursor's. */
@@ -118,4 +118,4 @@
 /* A row's name and its Reset (src/inspector-rows.tsx, owner 2026-10-30: "add reset buttons for all the controls"): the
    button follows the name, centred on its line; the line keeps the text's height, so a row is as tall with it as without,
    and the controls keep one width down the column. */
-.studio-settings__name { display: flex; align-items: center; gap: var(--area-space-4); block-size: var(--area-text-sm-leading); min-inline-size: 0; }
+.studio-settings__name { display: flex; align-items: center; gap: var(--area-space-4); block-size: var(--area-text-base-leading); min-inline-size: 0; }

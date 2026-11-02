@@ -30,7 +30,7 @@
     /* spec: the composer's height: 16/24 text and 12 above and below (ChatGPT 52 on 26 leading).
        Compact 14/20 and 10, so the row stays the compact composer's 40 (was 44; Cursor's
        follow-up composer 42, dense list rows 28-36; cursor-desktop.md, 2026-10-02). */
-    min-block-size: calc(var(--area-text-md-leading) + (var(--area-space-12) - var(--area-space-2) * var(--area-ui-dense)) * 2);
+    min-block-size: calc(var(--area-text-lg-leading) + (var(--area-space-12) - var(--area-space-2) * var(--area-ui-dense)) * 2);
     padding-block: 0;
     /* spec: the composer's inset, 8 like ChatGPT (6 compact); the end leaves room for the dismiss, a small Button 8 in
        (audit G-18). */
@@ -42,8 +42,8 @@
     background: transparent;
     color: inherit;
     font-family: var(--area-font-sans);
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-size: var(--area-text-lg-size);
+    line-height: var(--area-text-lg-leading);
     text-align: start;
     cursor: pointer;
     transition: var(--area-transition);

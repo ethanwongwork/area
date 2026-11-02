@@ -177,7 +177,7 @@ const RAMP = [
   { role: "display-sm", name: "Display" },
   { role: "title-md", name: "Title" },
   { role: "title-xs", name: "Heading" },
-  { role: "text-sm", name: "Body" },
+  { role: "text-base", name: "Body" },
   { role: "text-xs", name: "Caption" },
 ] as const;
 function Ramp({ size }: { size: string }) {

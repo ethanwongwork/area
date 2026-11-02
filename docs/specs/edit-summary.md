@@ -53,7 +53,7 @@ codex   "• Edited 2 files (+6 -1)", per file "└ path (+1 -1)", numbered +/- 
 Area:
 
 ```
-area-edit-summary            card: card edge at stroke-width, container corner, surface fill; text-sm throughout
+area-edit-summary            card: card edge at stroke-width, container corner, surface fill; text-base throughout
   area-edit-summary__head    flex, wraps, gap 8; a small control plus its inset above and below; title 12 in; a divider:
                              title, counts, Undo all, Keep all (buttons at the end, wrapping under the title when narrow)
   area-edit-summary__files   padding 4; ui-row-gap between rows (Menu's)
@@ -72,7 +72,7 @@ area-diff                    mono, Code block sm's type; Code block's frame (car
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
 | card edge, fill | border-card at stroke-width, no shadow; bg-surface | cursor (one card shape) + Code block | a required frame (round 49) |
-| type | text-sm across the card; sm buttons | Cursor cards 13 under a 14 reply | round 49: the card mixed four sizes |
+| type | text-base across the card; sm buttons | Cursor cards 13 under a 14 reply | round 49: the card mixed four sizes |
 | card corner | radius-container | Code block md (peer) | Cursor's 12 is its card radius; Area's card corner role |
 | head | min height control-sm + 2 × inset, inset (row − control-sm) / 2, never under 4; title 12 in (list 4 + row inset 8); gap 4, the rows' name-to-counts gap (round 82; was 8); no seam under it (2026-10-25; was `border-decorative` from round 56, Code block's header seam) | Code block's header (stable height with or without actions); Cursor card header 0 12 | rounds 49 and 52 |
 | list / row | list padding 4, ui-row-gap between rows; Menu rows: ui-row tall, row inset, radius-row, gap-row (12, compact 8) | Menu (peer: `--_menu-gap`, surface.css); cursor rows radius 6 | round 49; audit 2026-10-19 (was gap 8 at every density) |
@@ -142,8 +142,8 @@ The agent chat's shared rules (all five families):
 
 | Rule | Value | Basis |
 |---|---|---|
-| Lines in the transcript | the reply's type (text-md); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
-| Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
+| Lines in the transcript | the reply's type (text-lg); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
+| Cards (Edit summary, Plan) | one size, text-base; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
 | Card head | one row tall, no rule under it (2026-10-25); a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
@@ -151,7 +151,7 @@ The agent chat's shared rules (all five families):
 | What a line opens | 4 under the line, on a 1px rail with its content 12 in | Cursor content gap 4; Claude Code's rail at 12 |
 | Backplates | one: the row plate under the pointer or focus | Menu |
 
-Changed here: the card's text drops to text-sm (it mixed 16 titles, 14 buttons, 13 code and 12 diff); the head is a
+Changed here: the card's text drops to text-base (it mixed 16 titles, 14 buttons, 13 code and 12 diff); the head is a
 row tall with its title 12 in and the buttons 4 from the end (was 6 × 8 padding); file rows are Menu rows (were 2 × 6
 with a 2px button inside); the diff sits 4 under its row, as wide as the row plate (was 2 2 6). The Diff takes Code
 block sm's metrics and diff paint: a + / − marker in the vivid inks instead of a 3px strip (Cursor's), so Area draws

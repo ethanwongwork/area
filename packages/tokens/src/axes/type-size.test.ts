@@ -5,36 +5,38 @@ import { DENSITY_LEVELS } from "./density.ts";
 describe("type size (docs/research/ui-size-scale-2026-10-12.md)", () => {
   const px = (value: string) => Number(value.match(/(\d+)\)?$/)![1]);
 
-  it("keeps 14 at today's default roles", () => {
-    const t = typeSizeTokens(14);
-    expect([t["text-xs-size"], t["text-sm-size"], t["text-md-size"], t["title-xs-size"]]).toEqual([
-      "var(--area-size-12)", "var(--area-size-14)", "var(--area-size-16)", "var(--area-size-16)",
-    ]);
-    expect(t["type-box"]).toBe("16px");
-    expect(t["weight-icon"]).toBe("1.125px");
+  it("is Cursor's ramp at 13: 11/14, 12/16, 13/18, 14/22, titles 16 / 18 / 20 / 26 (owner, 2026-11-02)", () => {
+    const t = typeSizeTokens(13);
+    const pair = (role: string) => `${px(t[`${role}-size`]!)}/${px(t[`${role}-leading`]!)}`;
+    expect(["text-xs", "text-sm", "text-base", "text-lg"].map(pair)).toEqual(["11/14", "12/16", "13/18", "14/22"]);
+    expect(["title-xs", "title-sm", "title-md", "title-lg"].map(pair)).toEqual(["16/22", "18/24", "20/28", "26/30"]);
+    expect(t["type-box"]).toBe("14px");
   });
 
-  it("sets small text two under the base, never under 10, and titles at the reading size", () => {
+  it("steps the body roles with the base: small two under, secondary one under, reading one over", () => {
     for (const base of TYPE_SIZES) {
       const t = typeSizeTokens(base);
       expect(px(t["text-xs-size"]!)).toBe(Math.max(10, base - 2));
-      expect(px(t["text-md-size"]!)).toBe(base + 2);
-      expect(t["title-xs-size"]).toBe(t["text-md-size"]);
+      expect(px(t["text-sm-size"]!)).toBe(base - 1);
+      expect(px(t["text-base-size"]!)).toBe(base);
+      expect(px(t["text-lg-size"]!)).toBe(base + 1);
     }
   });
 
   it("opens prose to 1.5 lines on the leading ramp, paragraphs two-thirds of a line apart (2026-10-30)", () => {
-    const pair = (base: (typeof TYPE_SIZES)[number], role: "sm" | "md") => {
+    const pair = (base: (typeof TYPE_SIZES)[number], role: "base" | "lg") => {
       const t = typeSizeTokens(base);
       return `${px(t[`text-${role}-size`]!)}/${px(t[`text-${role}-prose-leading`]!)} ${px(t[`text-${role}-prose-gap`]!)}`;
     };
-    expect(TYPE_SIZES.map(base => pair(base, "sm"))).toEqual(["12/18 12", "13/20 12", "14/22 16", "15/24 16", "16/24 16"]);
-    expect(TYPE_SIZES.map(base => pair(base, "md"))).toEqual(["14/22 16", "15/24 16", "16/24 16", "17/26 16", "18/28 20"]);
-    // Never tighter than the UI line, and at least WCAG 1.4.8's 1.5.
-    for (const base of TYPE_SIZES) for (const role of ["sm", "md"] as const) {
+    expect(TYPE_SIZES.map(base => pair(base, "base"))).toEqual(["12/18 12", "13/20 12", "14/22 16", "15/24 16", "16/24 16"]);
+    expect(TYPE_SIZES.map(base => pair(base, "lg"))).toEqual(["13/20 12", "14/22 16", "15/24 16", "16/24 16", "17/26 16"]);
+    // Reading text's line is its prose line; never tighter than WCAG 1.4.8's 1.5.
+    for (const base of TYPE_SIZES) {
       const t = typeSizeTokens(base);
-      expect(px(t[`text-${role}-prose-leading`]!)).toBeGreaterThanOrEqual(px(t[`text-${role}-leading`]!));
-      expect(px(t[`text-${role}-prose-leading`]!) / px(t[`text-${role}-size`]!)).toBeGreaterThanOrEqual(1.5);
+      expect(t["text-lg-leading"]).toBe(t["text-lg-prose-leading"]);
+      for (const role of ["base", "lg"] as const) {
+        expect(px(t[`text-${role}-prose-leading`]!) / px(t[`text-${role}-size`]!)).toBeGreaterThanOrEqual(1.5);
+      }
     }
   });
 

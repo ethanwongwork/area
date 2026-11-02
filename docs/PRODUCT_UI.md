@@ -391,6 +391,10 @@ Cursor's nav with Figma's tabs).
   inside the cards' edge. Tables and code blocks were the page's white in the darker block edge, Settings' rows white in a
   lighter one; now `FEED_TABLE` and `FEED_CODE` (tile.tsx) give them the tile fill and the cards' Stroke 2 through Table's
   and Code block's public hooks, and Settings' rows take the plain tile's fill and edge (styles/settings.css).
+  A table's rows are the exception (owner, 2026-11-01): white rows under a grey header in light, tile-grey rows under the
+  page's near-black header in dark, so its header always sits a step under its rows (`--area-table-head-fill`). Every
+  feed card hovers one way: its edge one step darker and no lift (CARD_SCOPE's Hover edge 1 and Hover lift 0; plain
+  tiles the same step), since the lift and the controls' two-step edge read too strong on a wall of cards.
 - **The card, as picked** (owner, 2026-11-01, the card explorer, artifact KCvLgSPg…: "apply 8 and update the corner
   radius to 16, also dont add a stroke to the inset images"; "even closer to 4"): every card is its picture alone in a
   frame (the tile fill, the card edge, a 16 corner), the picture 8 in on every side (half the frame inset), and the name,
@@ -444,6 +448,29 @@ Cursor's nav with Figma's tabs).
   the Inspector (`src/pages/feed-lab.tsx`, styles/feed.css). References takes Gallery (owner, 2026-11-01: "Yes, use
   Gallery"; its design viewer keeps its own ground); the margin is set on the whole Canvas, so the bar's path starts on
   the titles' line. Every other page keeps Canvas; Home and Settings read in the column.
+- **Every page draws from one kit** (owner, 2026-11-01: "bring the rest of the system axes/categories up to speed … a
+  big, expansive library of cohesive containers, visuals, text, titles, etc for all the pages in area"). A page's Canvas
+  is made only of these blocks, each shown in Labs › Feed with the rule it follows; a page that needs something else adds
+  it to the kit (and the lab) first, never a one-page drawing. Text: the section title, its count and subtitle
+  (`CanvasSection`), a page's lede (`.studio-lede`), prose and a note (`.studio-feed__prose`, `__note`). Frames: the
+  **card**, square or 16:9, its name, badges and controls under it (`Tile`, Asset card); the **specimen card**, the same
+  card on the unit grid for one token (a corner, an edge, a shadow, a control's height, an easing's curve), its drawing
+  in the middle, its value the badge (`SpecimenCard`, pages/foundation.tsx); the **colour card**, its name inside in its
+  ink; the **type card**, Aa on the frame inset; **collection cards** (2 × 2, strip); the **image gallery** (Grid,
+  Waterfall, Fixed ratio, List); the **table** (`FEED_TABLE`); the **scale table**, a ramp down the same table with its
+  drawing at true size in the last column (`ScaleTable`: the space ramp and gaps as bars, durations as a crossing dot);
+  the **code block** (`FEED_CODE`); **Settings rows**; the **Stage** and the **props table** (a family's Preview and
+  API); the **colour scale** (Colors' step cards, the galleries' gap apart); and, for data, **stat cards**, a **chart** and
+  **Meters**, each in Area's **Card** drawn as the feed's frame through its public hooks (`FEED_FRAME`: `--area-card-corner`,
+  `-inset`, `-gap`, `-fill`, `-edge`, the table's corner, inset, fill and edge, in the cards' own scope; owner, 2026-11-02:
+  "the feed kit should leverage and use real components and styles/colors anyway, not custom designs"). A stat card is
+  Card's own parts: `CardDescription` for its name, `CardValue` for the figure, a tone `Badge` over its note in a
+  `CardDescription` under it. Area has no chart component yet, so the chart is the Analytics pattern's drawing. Every mark that draws a value (a chart's line, a bar, a curve, a dot) is in the ink Area's
+  Meter and Progress fill with, the Selection role, so a page's charts and Meters are one colour and change together. **A table's columns are sized by what they hold** (owner, 2026-11-02: "be more intentional about column widths and alignment in tables"): a table of names and descriptions keeps the label column (`layout="fixed"`, 27%, so those tables line up down a page); a table of values sizes each column to its content with Table's own cell options: a name or token `fit`, every number `numeric` and `fit` (set to the end in tabular figures, its heading with it, so digits line up), and the column that carries the row (a sample, a drawing, a description) takes the rest; rows that mix sizes sit on one baseline (`baseline`). The **type ramp** and a face's **type styles** are the feed's Table (`TypeTable`, src/type-kit.tsx): the style in the label column, then one column per metric (size, line height, tracking, weight; owner, 2026-11-02: "all have their own columns"), the sample last on one line at its size, clipped at the cell; the **type testers** keep display apart from body (owner, 2026-11-01, after Pangram Pangram's Altera Sans sampler): one full-width card with a single editable line at display size, then a heavy and a regular paragraph in two half-width cards, each card's controls one row along its top, Area's `Toolbar`: the typeface and style Selects a group of its items 8 apart, each as wide as its text, then each bar (Slider, label inline: label, rail, value) after the toolbar's divider, the bars sharing the rest of the row up to 192 each, scrolling sideways only where the Canvas is narrower than every control at its least (`TypeTesters`, first on every typeface's Specimen tab); a **typeface card** is 16:9 with the type alone in it ("Aa" or a paragraph from its top-left, the card inset in), and under it its name and two badges at most: Variable or Static (neutral, a fact), then Licensed (info: publishing needs the foundry's licence) or Not installed (caution); no badge for an open face or a file format (`TypefaceCard`; owner, 2026-11-02); a role's card (Typography) keeps a one-line header, size / leading and tracking, and Copy CSS under it. Sample copy is pangrams with punctuation: "Quick zephyrs blow, vexing daft Jim!" on a display line, "Sphinx of black quartz, judge my vow." in tables and cards, and running text with an ampersand, a question, quotes, a dash and the figures. **Every tile is Area's Asset card** (`Tile`, src/tile.tsx; owner, 2026-11-02: "Yes, rebuild tiles"; it reverses the 2026-10-21 rule that kept Asset card to the Components tab and drew a plain box of the app's own everywhere else): the gallery look (`GALLERY_LOOK`: the frame alone, the name, badges and controls outside under it), square or 16:9 (Asset card's `screen` aspect), a value as a badge and a project's status as its status badge. A colour paints the frame and holds its level inside in its ink, or under the card as every other card's (Colors' Label option, `paintLabel`). **Every card is one frame**: a design's, a reference's, a colour's and a type card share the Asset card's edge, fill (the cards' own scope, `CARD_SCOPE`), corner and the galleries' gap; a picture sits half the frame inset in (8), and text inside a card sits the frame inset in from its outer edge (16), its cap trimmed, as a colour card's level (owner, 2026-11-01). Research: `docs/research/type-presentation-2026-11-01`. Unframed: a **list**, the **glyph sheet** (icons,
+  characters), the **timeline** and the **empty state** (`sm` in a section). The Feed Kit artifact is Labs › Feed captured
+  from the app (`docs/research/feed-kit-2026-11-01/`). Spacing, Shape, Elevation and Motion drew bare rows and
+  boxes on the page with their own type until 2026-11-01; they now use the scale table and the specimen card, and Motion's
+  Play sits in the Canvas bar with every page's view controls.
 - **Tables balance their insets** (owner, 2026-10-31: "why do the tables have so much more horizontal spacing inset added
   than vertical"): a md table's text sits as far from the rules as from the frame's side (14 on the ink), on the prose
   line (13/20), rows 39 at type 13 / 32 (Cursor's settings rows 42, Primer's 44).

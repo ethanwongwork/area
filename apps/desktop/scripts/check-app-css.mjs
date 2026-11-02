@@ -20,7 +20,6 @@ const files = ["studio.css", ...readdirSync(join(src, "styles")).filter(name => 
 
 const KNOWN = {
   // Gaps: the component needs a public hook or prop.
-  ".area-list-box--grid .area-list-box__item.gallery-plain": "List box: a grid option whose content draws its own frame (no plate, the content's corner)",
   ".lang-state-hover.area-input": "a forced-state hook, so a specimen can show hover at rest (Theme previews)",
   ".lang-state-focus-field.area-input": "a forced-state hook (focus) for specimens",
   ".lang-state-lift.area-card": "a forced-state hook (lift) for specimens",

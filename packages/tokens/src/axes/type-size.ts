@@ -6,19 +6,25 @@
  * text, and emit/base.ts derives heights, gaps and insets from both.
  *
  * Products put interface text at 13 (VS Code, Cursor, macOS) or 14 (Notion, ChatGPT, GitHub,
- * Fluent); 14 is the default, today's default UI size. Every value is a whole pixel on a ramp:
+ * Fluent); 13 is the default (2026-10-26). The body steps are Cursor's (owner, 2026-11-02: "make sure the type ramp is
+ * updated to match what cursor does", the full ramp picked over a reading step alone): its `--cursor-font-size-xs / sm /
+ * base / lg` 11/14, 12/16, 13/18, 14/22 and its titles 16, 18, 20 and 26 at its 13 base, read from its bundle
+ * (docs/research/type-presentation-2026-11-01). Each moves with the base, a whole pixel on a ramp:
  *
- *   UI text (text-sm)       the base, at the default's leading ratio: 12/16 … 16/24
- *   small text (text-xs)    the base less 2, never under 10 (macOS Caption, antd compact, VS Code
- *                           count badges): 10 / 11 / 12 / 13 / 14 (owner, 2026-10-12: 10 at 12)
- *   reading (text-md)       the base plus 2: 14 / 15 / 16 / 17 / 18
- *   surface title (title-xs) the reading size, so Card and Dialog titles stay peers while they
- *                           move with the type (was held at 16, audit H-7, 2026-09-30)
- *   titles and display      in proportion to the base, whole pixels, each role's leading at its ratio at 14 (owner,
- *                           2026-10-19: "should title and display also change?" → yes, so the hierarchy keeps one
- *                           ratio from 12 to 16, as Apple's Dynamic Type scales every style; they were held at 20 / 24 /
- *                           32 with display one rung down below 14): at 12 17 / 21 / 27 and 48 / 62, at 16 23 / 27 / 37
- *                           and 64 / 82; 14 is unchanged
+ *   small (text-xs)         the base less 2, never under 10: badges, counts, keys, axis ticks (Cursor xs): 10 / 11 / 12
+ *                           / 13 / 14 (owner, 2026-10-12: 10 at 12)
+ *   secondary (text-sm)     the base less 1: a description, metadata, help and hints under the UI line (Cursor sm, the
+ *                           size it declares most): 11 / 12 / 13 / 14 / 15
+ *   UI (text-base)          the base, at the default's leading ratio: every control, row and label, 12/16 … 16/24 (Cursor
+ *                           base). It was `text-sm` until 2026-11-02
+ *   reading (text-lg)       the base plus 1 on its prose line: a chat turn, a document, the feed's copy, 13/20 · 14/22 ·
+ *                           15/24 · 16/24 · 17/26 (Cursor lg, its conversation and rich text). It was `text-md`, the base
+ *                           plus 2 on the UI line (15/22 at 13), until 2026-11-02
+ *   titles (title-*)        Cursor's 16 / 18 / 20 / 26 at 13 (a settings or surface title, a dialog's message and a
+ *                           reply's heading, a modal title, a document's h1), in proportion to the base, whole pixels,
+ *                           each role's leading at its ratio at 13 (owner, 2026-10-19: one ratio from 12 to 16, as Apple's
+ *                           Dynamic Type scales every style); they were 15 / 19 / 22 / 30 at 13 until 2026-11-02
+ *   display                 in proportion to the base, as before: 52 / 67 at 13
  *   prose leading           text that runs past two lines (a chat reply, documentation): the first value on the 2px
  *                           leading ramp at or above 1.5 × the size, WCAG 1.4.8's line spacing (owner, 2026-10-30;
  *                           docs/research/vertical-rhythm-2026-10-30): 12/18, 13/20, 14/22, 15/24, 16/24. Its paragraph
@@ -59,7 +65,8 @@ export const proseGap = (px: number) => {
 /** Every value the axis writes for one base size. Exported for the docs' type tables. */
 export function typeSizeTokens(base: TypeSize): Record<string, string> {
   const small = Math.max(10, base - 2);
-  const reading = base + 2;
+  const secondary = base - 1;
+  const reading = base + 1;
   const box = Math.max(14, LEADING[base]! - 4);
   // Titles and display scale with the base: a role's size at 14 times base / 14, whole pixels; its leading keeps the
   // role's ratio at 14 on the 2px leading ramp.
@@ -67,17 +74,25 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
     const px = Math.round((at14 * base) / 14);
     return [px, Math.round((px * leadingAt14) / at14 / 2) * 2] as const;
   };
-  const titleSm = scaled(20, 28), titleMd = scaled(24, 32), titleLg = scaled(32, 40);
+  // Titles: Cursor's at its 13 base (16/22, 18/24, 20/28, 26/30; docs/research/type-presentation-2026-11-01), times base / 13.
+  const scaled13 = (at13: number, leadingAt13: number) => {
+    const px = Math.round((at13 * base) / 13);
+    return [px, Math.round((px * leadingAt13) / at13 / 2) * 2] as const;
+  };
+  const titleXs = scaled13(16, 22), titleSm = scaled13(18, 24), titleMd = scaled13(20, 28), titleLg = scaled13(26, 30);
   const display = { sm: scaled(56, 56), lg: scaled(72, 72) };
   return {
     ...GEIST_TOKENS,
     "weight-icon": `${Number((1.125 * base / 14).toFixed(3))}px`,
     "text-xs-size": size(small), "text-xs-leading": leading(small), "text-xs-tracking": tracking(small),
-    "text-sm-size": size(base), "text-sm-leading": leading(base), "text-sm-tracking": tracking(base),
-    "text-md-size": size(reading), "text-md-leading": leading(reading), "text-md-tracking": "0em",
-    "text-sm-prose-leading": `var(--area-leading-${proseLeading(base)})`, "text-sm-prose-gap": `var(--area-space-${proseGap(base)})`,
-    "text-md-prose-leading": `var(--area-leading-${proseLeading(reading)})`, "text-md-prose-gap": `var(--area-space-${proseGap(reading)})`,
-    "title-xs-size": size(reading), "title-xs-leading": leading(reading), "title-xs-tracking": "0em",
+    "text-base-size": size(base), "text-base-leading": leading(base), "text-base-tracking": tracking(base),
+    "text-sm-size": size(secondary), "text-sm-leading": leading(secondary), "text-sm-tracking": tracking(secondary),
+    // Reading text is only ever read as running text, so its line is the prose line (Cursor's lg, 14/22).
+    "text-lg-size": size(reading), "text-lg-leading": `var(--area-leading-${proseLeading(reading)})`, "text-lg-tracking": tracking(reading),
+    "text-sm-prose-leading": `var(--area-leading-${proseLeading(secondary)})`,
+    "text-base-prose-leading": `var(--area-leading-${proseLeading(base)})`, "text-base-prose-gap": `var(--area-space-${proseGap(base)})`,
+    "text-lg-prose-leading": `var(--area-leading-${proseLeading(reading)})`, "text-lg-prose-gap": `var(--area-space-${proseGap(reading)})`,
+    "title-xs-size": size(titleXs[0]), "title-xs-leading": `var(--area-leading-${titleXs[1]})`, "title-xs-tracking": "0em",
     "title-sm-size": size(titleSm[0]), "title-sm-leading": `var(--area-leading-${titleSm[1]})`, "title-sm-tracking": "-0.01em",
     "title-md-size": size(titleMd[0]), "title-md-leading": `var(--area-leading-${titleMd[1]})`, "title-md-tracking": "-0.015em",
     "title-lg-size": size(titleLg[0]), "title-lg-leading": `var(--area-leading-${titleLg[1]})`, "title-lg-tracking": "-0.02em",
@@ -110,7 +125,7 @@ export const TYPE_AXIS: AxisDefinition = {
   presets: TYPE_SIZES.map(base => ({
     id: String(base),
     label: String(base),
-    description: `${base}px interface text, ${Math.max(10, base - 2)}px small text, ${base + 2}px reading text.`,
+    description: `${base}px interface text, ${base - 1}px secondary, ${Math.max(10, base - 2)}px small text, ${base + 1}px reading text.`,
     tokens: tokens(typeSizeTokens(base)),
   })),
 };

@@ -115,8 +115,8 @@
     background: transparent;
     color: inherit;
     font: inherit;
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-size: var(--area-text-lg-size);
+    line-height: var(--area-text-lg-leading);
   }
   .area-command-palette__input::placeholder { color: var(--area-input-placeholder); }
 

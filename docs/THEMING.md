@@ -106,7 +106,7 @@ outside both roles.
 
 | Setting | Values (default) | What it sets |
 |---|---|---|
-| `type` | `12` … `16`, `13` (default since 2026-10-25; was 14) | The base UI text size. Every type role follows: small text is 2 under (never under 10), reading text and titles 2 over. Also the icon stroke, the icon slot (16, or 20 from type 15, where a default-size icon's line takes the size curve's ratio `type-icon-line`, 0.8846: 1.33px at 15, 1.42 at 16), the check box and toggle size, and which densities are allowed (Compact up to 14, Comfortable from 13). |
+| `type` | `12` … `16`, `13` (default since 2026-10-25; was 14) | The base UI text size (`text-base`). Every type role follows, Cursor's ramp at 13 (2026-11-02): small text 2 under (never under 10), secondary text (`text-sm`) 1 under, reading text (`text-lg`) 1 over on its prose line, titles 16 / 18 / 20 / 26 at 13 in proportion. Also the icon stroke, the icon slot (16, or 20 from type 15, where a default-size icon's line takes the size curve's ratio `type-icon-line`, 0.8846: 1.33px at 15, 1.42 at 16), the check box and toggle size, and which densities are allowed (Compact up to 14, Comfortable from 13). |
 | `density` | `28` (Compact), `32` (default), `36` (Comfortable) | The room around text, named by the medium Button's height at type 14. It sets control heights (the text line plus twice the room, never under 24), rows (the text line plus twice the room, never under 5 a side: 28 at type 13 Compact, owner 2026-10-22), gaps, layout steps, surface insets and the regions' spacing (below). |
 | `radius` | `0` (Sharp), `2`, `4`, `6`, `8`, `10` (default since 2026-10-25; was 8), `12`, `14`, `pill` | The medium Button's corner. Every corner derives from it ([Size and shape](DESIGN_SYSTEM.md#size-and-shape)) |
 
@@ -268,7 +268,7 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 - **Tokens, not layout.** A scope selects tokens, not layout or component behaviour. Custom
   HTML must consume the right foreground, background and type roles itself.
 - **Text restarts at a Type scope.** An element below the page root that carries `data-area-type` sets its text to
-  the body role (`text-md` size, leading and tracking) of its own Type (`base.css`), so text set straight in it follows
+  the body role (`text-lg` size, leading and tracking) of its own Type (`base.css`), so text set straight in it follows
   that scope instead of keeping the size inherited from above. Components keep their own roles; a product whose page
   uses another body role sets it again on its own scopes.
 

@@ -17,7 +17,7 @@
     /* spec (owner, review round 8, after Linear's issue activity and an activity feed): the line stops short of
        every marker, so each mark stands on its own. */
     --_line-gap: var(--area-space-4); /* spec: owner, "small gaps around the indicators" */
-    --_leading: var(--area-text-sm-leading);
+    --_leading: var(--area-text-base-leading);
     display: flex;
     flex-direction: column;
     min-inline-size: 0;
@@ -25,7 +25,7 @@
     padding: 0;
     list-style: none;
     color: var(--area-fg-default);
-    font-size: var(--area-text-sm-size);
+    font-size: var(--area-text-base-size);
     line-height: var(--_leading);
   }
 

@@ -25,8 +25,8 @@
     column-gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
     row-gap: var(--area-space-4);
     color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
   }
   .area-hover-card__meta > * { display: inline-flex; align-items: center; gap: var(--area-space-4); }
 }

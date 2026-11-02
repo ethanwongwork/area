@@ -85,8 +85,8 @@
     max-inline-size: 100%;
     overflow: hidden;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size); /* spec: Asset card's detail line */
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-text-sm-size); /* spec: Asset card's detail line */
+    line-height: var(--area-text-sm-leading);
     font-variant-numeric: tabular-nums;
     text-overflow: ellipsis;
     white-space: nowrap;
