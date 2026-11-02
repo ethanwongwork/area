@@ -63,6 +63,7 @@ function gallerySpecimenTable() {
       { id: "size-sm", title: "Size / sm", demo: "GalleryTreeViewSm" },
       { id: "guides", title: "Guides", demo: "GalleryTreeViewGuides" },
       { id: "content-status", title: "Content / status", demo: "GalleryTreeViewStatus" },
+      { id: "behavior-sticky-branches", title: "Behavior / sticky branches", demo: "GalleryTreeViewSticky" },
     ],
     "color-swatch-picker": [
       { id: "default", title: "Default", demo: "GalleryColorSwatchPicker" },
@@ -202,6 +203,9 @@ function gallerySpecimenTable() {
       { id: "actions", title: "Actions", demo: "GalleryNavActions" },
       { id: "behavior-reveal-actions", title: "Behavior / actions on hover", demo: "GalleryNavRevealActions" },
       { id: "expandable", title: "Expandable", demo: "GalleryNavExpandable" },
+      { id: "folding", title: "Folding groups", demo: "NavFolding" },
+      { id: "content-pictures", title: "Content / pictures", demo: "NavPictures" },
+      { id: "behavior-sticky-heading", title: "Behavior / sticky heading", demo: "NavSticky" },
       { id: "selection-neutral", title: "Marker / selection neutral", demo: "NavNeutral" },
       { id: "state-disabled", title: "State / disabled", demo: "NavDisabled" },
     ],

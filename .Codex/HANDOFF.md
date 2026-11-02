@@ -1,6 +1,24 @@
 # Handoff
 
 ## Current state (2026-11-01)
+- **One Sidebar frame in every tab, branch `claude/beautiful-goldberg-36a1e2` (merged to main, 2026-11-02).** Owner: "every
+  page seems to create a new distinct nav". Research (Claude 4.4212 and Cursor 3.27 bundles), review page
+  K5TADzUii6U6kY6kpiCx5i and four rounds in `docs/research/consistent-nav-2026-11-01/`. As built: Home, References,
+  Projects and Systems held at the top (the current tab's marked), a rule, then the tab's context in one scroll, a
+  section's list after it with its filter held (`AppNav`); new places `#projects` and `#systems` (`pages/workspace-lists.tsx`).
+  Nav: nested runs step one icon column (children on the parent's name); `NavGroup` can fold (`open`, `onOpenChange`,
+  `actions`; the app no longer uses it). Round 4 picks (deep inside, review page `verdicts` r4-*): Tree view
+  `stickyBranches`, Nav `picture` and `NavGroup sticky`, the pinned name / list head / branches stack, sections fold on a
+  section change, pages and explorations capped at 5, the chosen row revealed, repeats numbered, tiles named in words
+  (`specimenWords`); later the same day the list's filter became a search icon on the list's head (⌥⌘F) and the
+  layers' pictures became kind icons (Nav `picture` stays for photographs); on 11-02 both Sidebar rules (under the places,
+  over a section's list) run the panel's full width, the scroll running edge to edge with its content inset back. The Sidebar widens to at least 288 (type 13) while it holds a list (`LIST_FLOOR`); Panel eases a
+  width the app sets. PRODUCT_UI's nav section rewritten. The status
+  badges session's Explorations marks (`StatusBadge iconOnly`) and main's `SystemIcon` are carried onto `AppNav`.
+- **Next session (owner, 2026-11-01): the status badges and their icons, then tables and data visualisation.** Project
+  status is a first pass (tile.tsx `STATUS`: published = tag + success, draft = dashed circle + caution); the owner wants
+  to work on badges + icons as a set, and on tables / data vis in the feed. Explorers: Card Explorer KCvLgSPg…, Feed Kit
+  3VBMTvWZ…. The owner's Area system has 5 unpublished changes (Count off the pill list among them).
 - **Colour system study, branch `claude/color-system-study-a95d3f` (uncommitted, 2026-11-01).** Audit of the
   ladder, Layers roles and contrast, plus research (Radix, Tailwind v4, Material HCT, Carbon, Leonardo, Primer, Apple,
   Linear, OKHSL, P3, data palettes) in `docs/research/color-system-2026-11-01/` (README, sources.md, measurement scripts).

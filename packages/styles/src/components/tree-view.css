@@ -25,7 +25,7 @@
   }
   .area-tree-view--navigation { --_tree-selection: var(--area-bg-component-active); }
   .area-tree-view--checkbox { --_tree-selection: var(--area-bg-component); }
-  .area-tree-view [role="treeitem"] {
+  .area-tree-view :is([role="treeitem"], .area-tree-view__pin) {
     position: relative;
     display: flex;
     align-items: center;
@@ -64,6 +64,32 @@
   .area-tree-view [role="treeitem"]:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
   /* Disabled rows dim as a whole, icon and chevron included, as Nav, Menu and Tabs rows do (audit D-5). */
   .area-tree-view [role="treeitem"][data-disabled] { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
+  /*
+   * Sticky branches (TreeView stickyBranches; owner pick r4-path, 2026-11-01, the desktop app's Sidebar): the open
+   * branches holding the rows scrolled past stay pinned at the top of the scroll, one row a level, as VS Code's and
+   * Cursor's sticky scroll. They are drawn over the rows (the pinned box takes no room), square and on the fill under the
+   * tree so nothing shows through, the last one closing on a divider; a click scrolls to the branch. Hooks:
+   * --area-tree-view-sticky-top (where they pin) and --area-tree-view-pin-fill.
+   */
+  .area-tree-view__pinned {
+    position: sticky;
+    inset-block-start: var(--area-tree-view-sticky-top, 0px);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    block-size: 0;
+    margin-block-end: calc(-1 * var(--area-ui-row-gap));
+  }
+  /* Each pin takes the rows' pitch, the row gap filled, so nothing shows between them. */
+  .area-tree-view__pin {
+    flex: none;
+    block-size: calc(var(--area-ui-row) + var(--area-ui-row-gap));
+    border-radius: 0;
+    background-color: var(--area-tree-view-pin-fill, var(--area-chrome-bg, var(--area-bg-page)));
+    cursor: pointer;
+  }
+  .area-tree-view__pin:last-child { box-shadow: 0 var(--area-stroke-width) 0 var(--area-edge-dividers); }
+  @media (hover: hover) { .area-tree-view__pin:hover { background-image: linear-gradient(var(--area-bg-component-hover), var(--area-bg-component-hover)); } }
   /*
    * spec: the chevron is a 16px icon slot like any other glyph (Notion 12–20px in a 22px slot).
    * Its hover plate (20px) and pointer target (24px) are drawn outside the slot so the row keeps its rhythm.
@@ -167,6 +193,7 @@
     line-height: var(--area-control-sm-leading);
   }
   .area-tree-view--sm [role="treeitem"] { block-size: var(--area-control-sm); }
+  .area-tree-view--sm .area-tree-view__pin { block-size: calc(var(--area-control-sm) + var(--area-ui-row-gap)); }
   .area-tree-view--sm .area-tree-view__chevron svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); --_glyph-cut: var(--area-type-icon-xs-cut); }
   /*
    * guides: a 1px line under each open branch, from its chevron's centre down its children, drawn in the lightest line

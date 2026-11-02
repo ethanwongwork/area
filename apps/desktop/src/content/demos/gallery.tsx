@@ -2238,6 +2238,12 @@ const archivedTree = [
   ] },
 ];
 export const GalleryTreeViewDisabled = () => <TreeView aria-label="Label" items={archivedTree} defaultExpandedIds={["src"]} defaultSelectedIds={["button"]} />;
+/* Sticky branches: the open folders holding the rows scrolled past stay pinned at the top of the scroll. */
+export const GalleryTreeViewSticky = () => (
+  <div style={{ blockSize: 150, overflowY: "auto", inlineSize: "100%" }}>
+    <TreeView aria-label="Label" stickyBranches items={fileTree} defaultExpandedIds={["src", "components"]} defaultSelectedIds={["button"]} />
+  </div>
+);
 export const GalleryTreeViewCollapsed = () => <TreeView aria-label="Label" items={fileTree} defaultSelectedIds={["src"]} />;
 export const GalleryComposerPrefilled = () => {
   const [value, setValue] = useState("Body text");

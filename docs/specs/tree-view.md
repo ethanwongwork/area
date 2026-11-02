@@ -40,6 +40,7 @@ in the manifest where the manifest can express it.
 | state | checked | `aria-checked` in checkbox mode | Checkbox filters |
 | state | disabled | Skipped by arrows and typeahead; the whole row dims to 50%, icon and chevron included, as Nav, Menu and Tabs (audit D-5) | Disabled row |
 | state | hover, focus-visible, action pinned | Runtime; `data-pinned` on a control | Layers with row controls |
+| behavior | sticky branches (`stickyBranches`) | The open branches holding the rows scrolled past stay pinned at the top of the scroll, one row a level; a click scrolls back to one. VS Code's and Cursor's sticky scroll; the desktop app's Sidebar lists four levels deep (owner pick r4-path, 2026-11-01) | Behavior / sticky branches |
 
 Manifest: `selectionMode` and the elements `chevron`, `check`, `icon`, `label`, `trailing`,
 `actions`. Row states live on `treeitem` descendants, which the manifest's block-scoped
@@ -269,3 +270,14 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
 - **What changed:** in a Panel's body a Tree view's rows start 6 inside their plates (`--_tree-start` and the end read
   `--_panel-row-pad`), so the plates sit 8 from the panel's edge and the labels keep the panel's column, as Nav's.
 - **Why:** owner pick q-plates, with Nav. Back to review.
+
+## Review note, 2026-11-01 (sticky branches)
+
+- **What changed:** `stickyBranches` pins the open branches holding the rows scrolled past at the top of the scroll
+  (`.area-tree-view__pinned`, a box that takes no room, at `--area-tree-view-sticky-top`), one row a level at the rows'
+  pitch, on `--area-tree-view-pin-fill` (the chrome's fill, else the page's), square, the last closing on a divider. The
+  pins are copies for the eye (`aria-hidden`); the rows stay in the tree, and a click on a pin scrolls its row to the pin
+  line and focuses it. Which branches pin is measured on scroll (one frame), from the first row under the line.
+- **Why:** the owner, on Area's Button tiles four levels down in the desktop app's Sidebar ("what it looks like when ur
+  working deep inside a system with lots of component variants"); pick r4-path, sticky parents.
+- **Verdict:** awaiting the owner.

@@ -1,4 +1,4 @@
-import { forwardRef, useMemo, useRef, useState } from "react";
+import { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { treeViewVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
@@ -42,6 +42,12 @@ export interface TreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, "onS
   size?: VariantProps<typeof MANIFESTS.treeView>["size"];
   /** Indent lines under each open branch, shown while the tree is hovered or holds focus. */
   guides?: boolean;
+  /**
+   * The open branches holding the rows scrolled past stay pinned at the top of the scroll, one row a level, as VS Code's
+   * and Cursor's sticky scroll; a click on one scrolls back to it. They pin at `--area-tree-view-sticky-top` (0) on
+   * `--area-tree-view-pin-fill` (the chrome's fill, else the page's).
+   */
+  stickyBranches?: boolean;
 }
 
 type VisibleNode = { node: TreeViewNode; depth: number; parentId?: string; position: number; count: number };
@@ -55,7 +61,7 @@ function flatten(items: TreeViewNode[], expanded: Set<string>, depth = 1, parent
 /** A single-tab-stop hierarchical list. Arrow keys navigate; Space activates or checks. */
 export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeView(
   { items, selectionMode = "navigation", expandedIds, defaultExpandedIds = [], onExpandedChange,
-    selectedIds, defaultSelectedIds = [], onSelectedChange, onActivate, currentId, size, guides,
+    selectedIds, defaultSelectedIds = [], onSelectedChange, onActivate, currentId, size, guides, stickyBranches,
     className, onKeyDown, ...rest }, ref,
 ) {
   const [ownExpanded, setOwnExpanded] = useState(defaultExpandedIds);
@@ -67,6 +73,48 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
   const root = useRef<HTMLDivElement | null>(null);
   const typeahead = useRef("");
   const typeaheadTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Sticky branches: the ancestors of the first row under the pin line whose own rows have scrolled above it.
+  const [pinned, setPinned] = useState<string[]>([]);
+  useEffect(() => {
+    const tree = root.current;
+    if (!stickyBranches || !tree) { setPinned([]); return; }
+    let scroller: HTMLElement | null = tree.parentElement;
+    while (scroller && !/(auto|scroll)/.test(getComputedStyle(scroller).overflowY)) scroller = scroller.parentElement;
+    const target: HTMLElement | Window = scroller ?? window;
+    const parentOf = new Map(visible.map(row => [row.node.id, row.parentId]));
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const pin = tree.querySelector<HTMLElement>(":scope > .area-tree-view__pinned");
+      const rows = [...tree.querySelectorAll<HTMLElement>(':scope > [role="treeitem"]')];
+      if (!pin || !rows.length) return;
+      const line = pin.getBoundingClientRect().top;
+      const pitch = rows[1] ? rows[1].getBoundingClientRect().top - rows[0]!.getBoundingClientRect().top : rows[0]!.offsetHeight;
+      const top = (id: string) => rows.find(row => row.dataset.treeId === id)?.getBoundingClientRect().top ?? Infinity;
+      let chain: string[] = [];
+      // Twice: the pinned rows cover the first rows under the line, so the row they hold is further down.
+      for (let pass = 0; pass < 2; pass++) {
+        const under = rows.find(row => row.getBoundingClientRect().bottom > line + chain.length * pitch + 1)?.dataset.treeId;
+        const ancestors: string[] = [];
+        for (let parent = under ? parentOf.get(under) : undefined; parent; parent = parentOf.get(parent)) ancestors.unshift(parent);
+        chain = ancestors.filter(id => top(id) < line);
+      }
+      setPinned(current => current.join("|") === chain.join("|") ? current : chain);
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(measure); };
+    measure();
+    target.addEventListener("scroll", schedule, { passive: true });
+    return () => { target.removeEventListener("scroll", schedule); if (frame) cancelAnimationFrame(frame); };
+  }, [stickyBranches, visible]);
+  const scrollTo = (id: string) => {
+    const tree = root.current;
+    const row = tree?.querySelector<HTMLElement>(`[role="treeitem"][data-tree-id="${CSS.escape(id)}"]`);
+    const pin = tree?.querySelector<HTMLElement>(":scope > .area-tree-view__pinned");
+    let scroller: HTMLElement | null = tree?.parentElement ?? null;
+    while (scroller && !/(auto|scroll)/.test(getComputedStyle(scroller).overflowY)) scroller = scroller.parentElement;
+    if (row && pin && scroller) scroller.scrollTop += row.getBoundingClientRect().top - pin.getBoundingClientRect().top;
+    focusItem(id);
+  };
   const activeId = visible.some(row => row.node.id === focused && !row.node.disabled) ? focused :
     visible.find(row => row.node.id === currentId && !row.node.disabled)?.node.id ??
     visible.find(row => !row.node.disabled)?.node.id;
@@ -135,7 +183,19 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
     event.preventDefault();
     if (next) focusItem(next);
   };
+  const byId = new Map(visible.map(row => [row.node.id, row]));
   return <div {...rest} ref={element => { root.current = element; if (typeof ref === "function") ref(element); else if (ref) ref.current = element; }} role="tree" className={treeViewVariants({ selectionMode, size, guides }, className)} onKeyDown={handleKeyDown}>
+    {/* The pinned branches are copies for the eye: the rows themselves stay in the tree, and a click scrolls to one. */}
+    {stickyBranches ? <div className="area-tree-view__pinned" aria-hidden="true">
+      {pinned.map(id => byId.get(id)).filter(Boolean).map(row => (
+        <div key={row!.node.id} className="area-tree-view__pin" style={{ "--_tree-depth": row!.depth - 1 } as React.CSSProperties} onClick={() => scrollTo(row!.node.id)}>
+          <span className="area-tree-view__chevron"><Glyph name="chevron-down" size={size === "sm" ? 12 : 16} /></span>
+          {row!.node.icon && <span className="area-tree-view__icon">{row!.node.icon}</span>}
+          <span className="area-tree-view__label">{row!.node.label}</span>
+          {row!.node.trailing && <span className="area-tree-view__trailing">{row!.node.trailing}</span>}
+        </div>
+      ))}
+    </div> : null}
     {visible.map(({ node, depth, position, count }) => {
       const branch = Boolean(node.children?.length);
       const open = expanded.has(node.id);
