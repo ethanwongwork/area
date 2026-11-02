@@ -1,6 +1,17 @@
 # Handoff
 
 ## Current state (2026-11-01)
+- **Icon cohesion pass, branch `claude/icon-cohesion-11900d` (PR to main, 2026-11-01).** Owner: the set didn't look
+  cohesive. Measured against six libraries (`docs/research/icon-cohesion-2026-10-31/`, tools for strips, boards, radii,
+  angles, 1x and every-size measures); rules adopted in the icon skill ("Cohesion"). Applied over rounds 1–7: gap floor one
+  line (tight 1.125) and counters 1.5, enforced by the lint (~190 redraws); corners less round (r 1.5 frames ≥ 9 × 7, r 1
+  smaller); held constructions simplified; globe stroked; 8 role bots removed. New: `SystemIcon` (System tab, Home's feed,
+  the area-app example), `BookmarksIcon`, batch 77 (13 concepts read from Cursor's and the Claude app's icon sets:
+  search/lightbulb-sparkle, circle-progress, arrow-split (RTL mirror), panel-left/right-float, background-blur,
+  absolute-position, motion, ghost, signpost, dna, orbit, sunrise), batch 78 (`BotAgentsIcon`; file-lock and person-lock
+  share folder-lock's 5 × 3 lock; the sort family shares one arrow). Agent is now bot with sunglasses (owner pick A).
+  817 icons. In review: batch 78 and the four icons it touched. Review page
+  https://claude.ai/artifact/KTwGjUgbj5uJZ5yPvFazqh (db `verdicts`), Icon Boards https://claude.ai/artifact/4debUbHgJLDBGmzXcUde6Q.
 - **Next session (owner, 2026-11-01): the status badges and their icons, then tables and data visualisation.** Project
   status is a first pass (tile.tsx `STATUS`: published = tag + success, draft = dashed circle + caution); the owner wants
   to work on badges + icons as a set, and on tables / data vis in the feed. Explorers: Card Explorer KCvLgSPg…, Feed Kit

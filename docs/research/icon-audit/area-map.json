@@ -584,6 +584,12 @@
     "lucide": "bookmark-minus",
     "huge": "BookmarkRemove01"
   },
+  "bookmarks": {
+    "fluent": "bookmark_multiple",
+    "phosphor": "bookmarks-simple",
+    "huge": "Bookmark02",
+    "sf": "bookmark.square"
+  },
   "boolean-exclude": {
     "fluent": "shape_exclude",
     "lucide": "squares-exclude",
@@ -4352,6 +4358,13 @@
     "phosphor": "arrows-clockwise",
     "huge": "ArrowReloadHorizontal",
     "sf": "arrow.triangle.2.circlepath"
+  },
+  "system": {
+    "fluent": "shapes",
+    "lucide": "shapes",
+    "phosphor": "shapes",
+    "huge": "Shapes",
+    "sf": "square.on.circle"
   },
   "table": {
     "fluent": "table",

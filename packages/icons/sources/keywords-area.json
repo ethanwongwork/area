@@ -178,57 +178,6 @@
   "assistant",
   "robot"
  ],
- "bot-automator": [
-  "ai",
-  "robot",
-  "automation",
-  "workflow"
- ],
- "bot-builder": [
-  "ai",
-  "robot",
-  "build",
-  "construct"
- ],
- "bot-designer": [
-  "ai",
-  "robot",
-  "design",
-  "creative"
- ],
- "bot-generator": [
-  "ai",
-  "robot",
-  "generate",
-  "create"
- ],
- "bot-guard": [
-  "ai",
-  "robot",
-  "safety",
-  "security",
-  "moderation"
- ],
- "bot-lead": [
-  "ai",
-  "robot",
-  "leader",
-  "orchestrator",
-  "manager"
- ],
- "bot-researcher": [
-  "ai",
-  "robot",
-  "research",
-  "investigate"
- ],
- "bot-scholar": [
-  "ai",
-  "robot",
-  "learning",
-  "education",
-  "tutor"
- ],
  "breakpoint": [
   "debug",
   "debugger",
@@ -348,5 +297,115 @@
   "sound",
   "audio",
   "speaker"
+ ],
+ "bookmarks": [
+  "collection",
+  "saved",
+  "references",
+  "favorites"
+ ],
+ "system": [
+  "design system",
+  "kit",
+  "foundations",
+  "styles"
+ ],
+ "search-sparkle": [
+  "ai search",
+  "ai review",
+  "smart search",
+  "find with ai"
+ ],
+ "lightbulb-sparkle": [
+  "ai suggestion",
+  "ai fix",
+  "idea",
+  "quick fix",
+  "suggest"
+ ],
+ "circle-progress": [
+  "in progress",
+  "status",
+  "progress",
+  "started",
+  "task"
+ ],
+ "arrow-split": [
+  "fork",
+  "branch off",
+  "split off",
+  "exploration",
+  "variation",
+  "spin off"
+ ],
+ "panel-left-float": [
+  "floating panel",
+  "overlay panel",
+  "floating sidebar",
+  "sidebar"
+ ],
+ "background-blur": [
+  "backdrop blur",
+  "frosted glass",
+  "effect",
+  "blur behind"
+ ],
+ "absolute-position": [
+  "absolute",
+  "constraints",
+  "pin",
+  "ignore auto layout",
+  "position"
+ ],
+ "motion": [
+  "animation",
+  "transition",
+  "movement",
+  "speed",
+  "easing"
+ ],
+ "ghost": [
+  "incognito",
+  "temporary",
+  "spooky",
+  "halloween"
+ ],
+ "signpost": [
+  "directions",
+  "guide",
+  "wayfinding",
+  "sign"
+ ],
+ "dna": [
+  "genetics",
+  "helix",
+  "biology",
+  "science"
+ ],
+ "orbit": [
+  "planet",
+  "space",
+  "satellite",
+  "astronomy"
+ ],
+ "sunrise": [
+  "morning",
+  "dawn",
+  "sunset",
+  "horizon"
+ ],
+ "panel-right-float": [
+  "floating panel",
+  "overlay panel",
+  "floating inspector",
+  "sidebar"
+ ],
+ "bot-agents": [
+  "agents",
+  "multiple agents",
+  "background tasks",
+  "multitask",
+  "subagents",
+  "parallel agents"
  ]
 }

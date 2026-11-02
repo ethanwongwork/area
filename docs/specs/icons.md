@@ -5424,3 +5424,101 @@ drew 1.61px (not the curve's 1.42), and moving type 15 to 20 alone would have dr
   File page, which set their own icon line, set it to 1 (`--area-type-icon-line` joins `OVERRIDABLE`).
 - **Result:** default-size icons draw 1.33px at type 15 (slot 20, was 16 at 1.21) and 1.42 at 16 (was 1.61). Types 12–14,
   the app's type 13 included, are unchanged.
+
+## Batch 76: Cohesion pass, round 1, 2026-10-31
+
+| Icon | Construction |
+|---|---|
+| system | square; alias of shapes (owner pick A, 2026-11-01): a triangle over a square and a circle, each as large as the gap scale allows in the 12px box. The triangle (vertices 4.25, 6.5 / 8, 1 / 11.75, 6.5, r 0.75 corners) is the largest part, since it covers half its box; the square 4.5 at 2, 9 with r 1; the circle r 2.25 at 11.75, 11.25. Gaps 1.38 and 1.56 tight, 1.88 standard. The drawing sits 0.5 high so the square's and circle's edges land on whole pixels (1× frames). Filled: all three solid. |
+| bookmarks | square; bookmark's drawing at 7 × 9.35 with a back copy offset 3 up and right (the multiples rule), the back drawn as an open L stopping one overlap cut (2.3) short of the front. Every vertical edge sits on x.5 and the tops on 1.5 and 4.5, so it is crisp at 1× and 0.5 left and high of centre (crisp over centred). Filled: the front fills and the back stays a line. |
+
+Redrawn in the same round, all owner-approved on the review page (2026-11-01). compass and compass-dot: the needle lies on the rising diagonal, straight-sided, tips at 11, 5 and 5, 11 (r 0.5), sides at 9, 9 and 7, 7 (r 0.75). Fluent's NW–SE needle lay on the slash's diagonal and read as ⊘. link and link-off: on the rising diagonal, two r 2.83 hooks on centres 5, 11 and 11, 5 with 1-unit straight ends, the bar 6, 10 to 10, 6, every 45° segment on the lattice; 12.8 square, where the flat link was 13.1 × 7.1 and read 19% light. link-off keeps the shared slash flat, and its filled bar keeps the lower-left half. The 12px and 10px cuts follow: the 12 cut is the drawing at 0.75 (hooks r 2.12 on 3.75, 8.25 and 8.25, 3.75); the 10 cut puts r 1.41 hooks on 3, 6 and 6, 3 round 4.5. case-sensitive, case-upper and case-lower: cap 4 to 11.5 (7.5, was 6.5), x-height 4.5 with r 2.25 bowls, the A 5.5 wide with its bar on 9.5 and the B's bar on 7.5. The pair reuses the single letters. newspaper: the solid picture block is replaced by text lines (4 to 9.5 on 5.5 and 8, and 4 to 7.5 on 10.5), so newspaper is no longer a recorded solid. Filled: the lines are knockouts. shapes takes system's drawing.
+
+## Cohesion pass, round 2, 2026-11-01
+
+Owner picks on the cohesion review page (`docs/research/icon-cohesion-2026-10-31/`, round 2).
+
+| Icon | Change |
+|---|---|
+| detail dots (47 icons) | Every dot set inside a shape (keys, windows, lights, eyes, an eyelet, grouped dots) is the line's weight, ⌀1.125 (r 0.5625), on the size curve like the others; it was ⌀1.5, a third heavier than the line. Lucide's and Tabler's dots are the line's weight. Centres unchanged: the lint measures a detail dot's gaps from its ⌀1.5 placement. Changed: bandage, bank, bluetooth-connected, the bots (bot, -automator, -builder, -designer, -generator, -guard, -lead, -scholar), brightness, building, calculator, calendar, calendar-range, chat-more, clipboard-list, cloud-snow, cookie, dice, discount, exit-door, frown, gamepad, hard-drive, key, keyboard, keyboard-off, line-style, meh, opacity, password, person-key, piggy-bank, scan-face, server, server-cog, smile, smile-plus, speaker, square-list, square-smile, swatch-book, tag, tag-plus, tags. The i, ! and ? dots stay ⌀1.5; mark dots stay ⌀2. |
+| app-window | The bar (2.5–5.5, its line on 5.5) holds two tab lines at 5.5 and 8.5 (Lucide's) instead of three ⌀1.5 dots. Filled: the body below the bar fills; the bar and its lines stay lines. |
+| briefcase | One plain band at 9.5 edge to edge (Lucide's and Phosphor's), without Fluent's split band and clasp. Filled: the band is a gap. |
+
+Kept, owner-confirmed: quote, bold, stop-circle, record, the booleans, contrast, shadow, folder-zip, id-card,
+stroke-weight, qr-code, the play shapes in containers, gauge's needle, text-color's bar, the bots' visors, image's sun,
+paint-bucket's drop, globe (Fluent's, exactly).
+
+## Cohesion pass, round 3, 2026-11-01
+
+From the owner's flags on Icon Boards (`docs/research/icon-cohesion-2026-10-31/tools/boards.py`) and the review page.
+
+| Change | Icons |
+|---|---|
+| Corner radius by frame size: r 2 for frames ≥ 9 × 7, 1.5 for 5–8, 1 below. Each corner keeps its corner point; only the radius changes (`tools/reradius.py`). | r 1.5 → 2: bookmark, bookmark-add, -check, -off, -remove, building, folder and its 12 members, folder-open, folders, hard-drive, home, inbox, laptop, newspaper, rectangle, ruler, toolbox, wallet, archive, archive-restore, devices, gallery, memory, presentation, toy-brick, trash, vote. r 2.5 → 2: captions, scan-check, scan-face, scan-qr, scan-text, group, corners-sparkle. r 1 → 2: book-add, repository (the cover's right corners). r 1 → 1.5: chip. Kept: kanban (4-wide columns), truck, building's annex, objects whose roundness is the shape. |
+| plane | Top-down, nose up (the owner's viewpoint rule): a fuselage 3 wide on x.5 edges, swept wings to 2 and 14, a tailplane to 5 and 11, r 1.5 nose, r 0.5 elsewhere. Replaces the angled airliner of 2026-10-29. |
+| switch-camera | camera's body exactly, its lens a 270° arc (r 2 at 8, 9) with a 1.4 head at the top, pointing clockwise. |
+| snowflake | The V's stay at the tips; their vertex moves in to r 3.75 and their barbs to 2.12 long, so the barb ends sit 0.5 inside the arm's tip. |
+| bot | No mouth; the eyes (1.5 tall at x 5 and 11) centred in the head; head r 2. |
+| bot-agent, agent | A brim the head's width (2–14, Q dip to 7.125) and a narrower crown (5–11 at its foot, 5.5–10.5 at its top) standing on it; head r 2. |
+| bot-agent, agent (2026-11-01, owner: "the hat is too small now. the brim should also extend past the sides of the head") | The brim runs 1.5–14.5 (Q dip to 7.125), past a head narrowed to 3–13 (r 1.5) so it reads as a brim within the live area; the crown widens to 4–12 at its foot and 4.48–11.52 at its top, keeping the dent; the glasses scale to 0.76 to keep 1.15 from the head's sides. Round 5 had dropped the brim line (0.6 from the head under the floor). The band is back (owner: "the line through the hat is gone?"): M4.303 4.625Q8 5.025 11.697 4.625 (`line`, a `gap` across the crown in filled), on a crown 2–7.34 tall so both pockets reach 1.5 (1.79 above, 1.83 below); head, brim and glasses moved down 0.5 for it (head 3–13 × 7.48–14), ink centred 8, 8. |
+| bot-agent, agent (2026-11-01, owner: "the agent should just be a totally new design maybe, or just the bot with sunglasses instead"; pick A of four) | bot's drawing exactly (square keyline; frame 2, 6.5, 12 × 7.5, r 1.5; antenna M8 6.5V5 and r 1.5 ring at 8, 3.5) with the agent's sunglasses in place of the eye strokes (solid, 3.77–12.23 × 9–11.5, centred on the frame at 10.25; 1.2 tight from the sides, 1.94 standard above and below); data-angles free for the lenses' slants; filled: the antenna solid as bot's, frame a line. The hat, brim and band are retired. Candidates dropped: B (antenna dot), C (no antenna, read as a visor), D (person with the family sparkle). |
+| Removed | bot-automator, bot-builder, bot-designer, bot-generator, bot-guard, bot-lead, bot-researcher, bot-scholar (owner: remove). |
+
+Kept by the owner: move, container (isometric, the one exception to flat views). Known and unchanged: folder-cog's filled
+variant shows a sliver at the gear's hub (present before this round).
+
+## Cohesion pass, rounds 5–7, 2026-11-01
+
+Owner (round 4 picks): corners less round, the gap floor raised to one line, the cohesion rules adopted; then "just
+automatically do the passes and audit yourself". Per-icon notes (old → new gaps) are in
+`docs/research/icon-cohesion-2026-10-31/round5-notes/`.
+
+- **Corners less round:** frames r 1.5 (≥ 9 × 7), mid frames and bars r 1, in about 220 icons, every corner point kept
+  (`tools/reradius.py`). Curves that belong to glyphs, figures or organic shapes keep their drawing. The 12px open cut
+  follows (r 1).
+- **Gap floor:** no gap under the line (1.125) and no counter under 1.5, enforced by the lint; the !, i and ? stem dot
+  keeps 0.94. About 190 icons redrawn by family (files, people, calendars and clocks, folders, batteries, bells, and
+  the rest in three groups). Larger changes: calendar's date grid is one row of three; keyboard 3 + 2 keys; building a
+  2 × 2 window grid; bank four columns; memory one chip; server one frame with a divider; telescope one tube on a
+  tripod; the bell's base 0.5 higher so its clapper pocket opens; battery-charging Lucide's full-height bolt;
+  folder-search's lens on the corner; person-square's head r 1.5; person-chat's figure solid; every small sparkle the
+  family's ±3 sparkle (control points 0.12 of the radius).
+- **Held constructions simplified:** calculator (a line display, keys 2.75 apart on an 11 × 12 frame), clapperboard
+  (two stripes), spell-check (the type family's A over the 1.5 / 3 check), qr-code (hollow finders, two data modules),
+  piano (solid black keys), gift-card (gift's own bow on a centred band at 9 with the ribbon below it; the cross alone read as a table), table-cells-merge and -split (a 3-tall header on a
+  12 × 10 frame, the marks on the lattice), the pencils' band 0.5 further down the shaft. bug-off and pencil-off take
+  `data-gap="slash"`, calendar-off `data-counter="sliver"`.
+- **Kept as recorded exceptions** (`data-floor="kept"`): paw (r 1.25 toe rings, 1.38 counters), code-sparkle (no room
+  for the ±3 sparkle between code's chevrons), globe's filled variant (Fluent's).
+- **globe, globe-off:** the outline is now stroked on Fluent's centre-lines (r 6 ring, r 8.45 lens arcs, latitudes at 6
+  and 10, the ring's even thirds), so it follows the size curve; Fluent's 1px filled path had drawn it 45% denser than
+  its class at 16 and 75% at 48. The filled variant keeps Fluent's filled globe.
+- **The system / shapes triangle** is 60°, as warning, play, eject and flask.
+- Open: the small lock is 4 × 3 in person-lock and file-lock, 5 × 3 in folder-lock; sort-alpha's arrow sits 0.5 below
+  sort-numeric's.
+
+## Batch 77: App, agent and design-panel concepts, 2026-11-01
+
+| Icon | Construction |
+|---|---|
+| search-sparkle | circle; search's r 5 lens and its 10.75→14 handle with chat-sparkle's ±3 family sparkle moved to 11, 5; the lens overlap-cut round the sparkle (behind, 2.25) from 8.619, 2.269 round the left to 10.536, 10.536 where the handle starts; sparkle to handle 1.64 tight, counter 1.51; filled: the sparkle solid, lens and handle lines. |
+| lightbulb-sparkle | circle; lightbulb moved 1 left (bulb centre 7, 6.5, band 4.583–9.417 at 11) with chat-sparkle's sparkle exactly (11, 4.5); the bulb overlap-cut round the sparkle (8.178, 2.157 round the left to 10.258, 9.624); gaps 1.12 tight, 2.72 open, counters 1.51 and 1.93; ink 0.25 right and high (the sparkle keeps the family position); filled: the bulb a fill, the band a cut, the sparkle ink with chat-sparkle's halo. |
+| circle-progress | circle; the shared r 6 ring with a solid top-right quarter wedge of r 3.5 (M8 8V4.5A3.5 3.5 0 0 1 11.5 8Z, edges on 8 / 4.5 / 11.5), Claude's ProgressQuarter; ring to wedge 1.94 standard; a recorded solid like contrast's half, so filled is the same drawing (a filled ring would invert the meaning). |
+| arrow-split | square; Explorations and fork-from-here without git's nodes (Claude's ArrowSplitRight): the main arrow M2.5 11.5H13.5 with arrow-right-left's 2.5 head; a branch leaves the stem at 3.464, 11.5 through an r 2.5 arc onto the rising diagonal x + y = 16 and ends in split's 3-leg corner head at 13.5, 2.5; diagonal to the main head's top barb 1.7 standard; centred 8, 8.25 to stay on the lattice; a line glyph, filled by weight. |
+| panel-left-float | horizontal; panel-left's frame exactly (2, 3.5, 12 × 9, r 1.5) with the panel as a solid 2.5 × 5 strip (4, 5.5, r 1) that touches no edge, 1.44 tight from the frame's side, top and bottom: a sidebar floating over the canvas (Cursor's panel-left-overlay, Area's floating panels); an outline strip would need a 3-wide pocket and read as a 0; panel-right-float by flipx; filled: the same drawing. |
+| background-blur | square; Figma's background blur beside blur: a backdrop of rising 45° hatching on the lattice (x + y = 8, 12, 16: M2 6L6 2, M2 10L10 2, and x + y = 16 cut round the card into M2 14L5.25 10.75 and M10.75 5.25L14 2) behind a front card (7.5, 7.5, 6 × 6, r 1); overlap cut 1.13, x + y = 12 clears the card's corner by 1.42, counter 4.93; filled: the card solid, the hatching lines. |
+| absolute-position | square; frame 2.5, 2.5, 11 × 11, r 1.5 with an item 6.5, 6.5, 4 × 4, r 1 held by guides M2.5 8.5H6.5 and M8.5 2.5V6.5 from the frame's left and top edges to the item's centre lines (Figma's constraints widget); item 3 from the right and bottom (1.88 standard); counters 3.95, 3.43, 2.93; filled: the item solid (padding's convention), frame and guides lines. |
+| motion | square (a line-glyph class, ink 13.1 × 8.1); a ball r 3.5 at 10.5, 8 with three speed lines M2 8H4.5, M3 5H5, M3 11H5, 3 apart; 1.38 tight from the middle line to the ball, about 1.64 from the outer ends; counter 5.87; an easing S-curve in a frame was tried and read as an integral or a chart; filled: the ball solid, lines stay lines. |
+| ghost | vertical; dome r 4.5 at 8, 6.5 on sides x 3.5 / 12.5, a three-tail wave foot (lows 14 at 3.5, 8, 12.5; peaks 12 at 5.75, 10.25; fillets r 0.5 at the lows, r 0.75 at the peaks; data-angles free); eyes bot's short strokes M6.5 6V7.5 and M9.5 6V7.5 (detail dots vanish at 16); eye gap 1.79 standard, side gaps 1.88, counter 4.88; filled: body solid, eyes knockouts. |
+| signpost | square; two 3-tall boards with r 1 ends and milestone's 45° point (r 0.75 tip, r 1 shoulders): right-pointing 4.5–14 × 2.5–5.5 and its mirror pointing left 2–11.5 × 8.5–11.5 (mirrored across 8 and moved down 6, on the lattice); post x 8 between the boards and below (11.5–13.5); boards 3 apart (1.88 standard), counters 1.93; filled: boards solid, post a line. |
+| dna | vertical; two S strands (M4 2C4 6 12 10 12 14 and its mirror) crossing once at 8, 8, the back strand overlap-cut (2.4, 1.28 tight); two rungs at 5 and 11 (5.25–10.75) joining the strands where they are widest; no end caps (with caps it read as hourglass); data-angles free; a line glyph, filled by weight. |
+| orbit | circle; the shared r 6 ring broken into two arcs round two ⌀2 mark-dot satellites on the rising diagonal (12.243, 3.757 and 3.757, 12.243; arc ends 1.44 tight from each dot), planet a stroked r 1.5 hub (counter 1.88), open 3.37 to the ring and 2.94 to the dots (one satellite read as a target); filled: planet and dots solid, ring a line. |
+| sunrise | horizontal; sun moved down 2 (centre 8, 10, diagonals on the lattice) with the same 1px rays from r 5 to 6 (up, two diagonals, left and right), the core sun's r 2 as its top half (M6 10A2 2 0 0 1 10 10), horizon M2 12.5H14 (crisp); rays and sun 1.38 tight to the horizon; ink centre 8, 8.25; filled: the half disc solid on its chord, rays and horizon lines. |
+
+## Batch 78: Several agents; the small lock and sort arrows unified, 2026-11-01
+
+| Icon | Construction |
+|---|---|
+| bot-agents | square; the multiples rule on the agent: a front bot (frame 2.5, 6, 8 × 7, r 1; a stub antenna M6.5 6V4; the agent's sunglasses at half width and 0.8 height, 4.23 × 2 on 8.5–10.5, 1.13 from the frame) with a back frame offset 3 up and right (5.5–13.5 × 3–10, r 1) drawn only where it shows, as one open path from 8.52, 3 (2.25 clear of the antenna's tip) round the top-right corner to 12.75, 9.97 (2.25 clear of the front frame); gaps 1.13, 1.18 tight, 1.94 standard; a line glyph like bookmarks, filled by weight. |
+
+Also in this batch, back to review: file-lock and person-lock take folder-lock's small lock (5 × 3, r 1, a 3-wide shackle: the 0.6 shackle-to-body ratio of lock itself and the small-part radius), each recut 2.25 round it (file-lock's page ends at 9.383 on its foot and 5.563 on its side, the fill following the lock's offset with a 0.75 fillet; person-lock's lock rises 0.5 to keep a standard gap to the head and the shoulder ends on its flat at 7.938). sort-alpha and sort-numeric take sort's down arrow exactly (M11.5 3V12.5, head 9–14 at 10); sort-alpha's A narrows to 4.875 so its foot stays open (2.55) from the arrowhead, with a 1.65 counter. arrow-split mirrors in right-to-left text (Material mirrors call_split; Fluent's arrow_split has no direction type).

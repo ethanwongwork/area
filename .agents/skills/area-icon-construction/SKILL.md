@@ -71,8 +71,10 @@ option rendered (explore candidates or `sheet.mjs`), not a text list.
    icons); the sliver check at 16 and 48; the 1× pixel view
    (`docs/research/icon-review/2026-10-10/quality/tools/px.mjs out.png name=path.svg …`: the 2× sheets hide a
    whole-pixel stroke's grey double row) and the doubled-stroke scan (`quality/tools/dups.mjs
-   packages/icons/sources <names>`); check the batch in the app's Icons tab; send the
-   owner a sheet (Area alone at 16–48, or beside the libraries).
+   packages/icons/sources <names>`); check the batch in the app's Icons tab; run the cohesion
+   check (`docs/research/icon-cohesion-2026-10-31/tools/compare.py`, Cohesion in the construction rules) and look
+   at the batch in a strip with its neighbours (`tools/strip.mjs`); send the owner a sheet (Area alone at
+   16–48, or beside the libraries).
 9. **Hand off:** update the icon line in `.Codex/HANDOFF.md`. Only the owner marks approvals.
 
 ## Owner preferences
