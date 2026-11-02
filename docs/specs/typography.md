@@ -15,7 +15,7 @@ distinction.
 - That makes 11 distinct sizes and two leadings for some sizes (16/22 and 16/24;
   20/26 and 20/30). Titles land on 26 and 30, off the 4px grid.
 - Components use: control-md 14/20 (about 30 rules), control-sm 13/18 (about 20),
-  control-lg (14), text-sm/xs (about 10). Component CSS does not use the title tokens.
+  control-lg (14), text-base/xs (about 10). Component CSS does not use the title tokens.
 - Foreground: `fg-default` and `fg-muted` (46 uses each), `fg-disabled` (14), plus
   tone colors.
 
@@ -56,8 +56,8 @@ Findings:
 | Role | Size / line height | Tracking | Replaces |
 |---|---|---|---|
 | caption | 12 / 16 | +0.005em | text-xs, control-xs |
-| ui | 14 / 20 | 0 | text-sm, control-md/lg |
-| body | 16 / 24 | 0 | text-md, title-xs (16/22) |
+| ui | 14 / 20 | 0 | text-base, control-md/lg |
+| body | 16 / 24 | 0 | text-lg, title-xs (16/22) |
 | title-sm | 20 / 28 | −0.01em | text-xl (20/30), title-sm (20/26) |
 | title-md | 24 / 32 | −0.015em | title-md (24/30) |
 | title-lg | 32 / 40 | −0.02em | title-lg |
@@ -120,3 +120,28 @@ Findings:
 ## Type size (2026-10-12)
 
 - 2026-10-12 · owner: "the 12 to 16 proposal"; type size separate from density → the `type` axis (12–16, default 14) sets every role: UI text at the base, small text base − 2 (floor 10; was a 12 floor, 2026-10-01), reading text and surface titles base + 2 (titles were held at 16, 2026-09-30), small-text tracking (+0.01 / +0.0075 / +0.005 / +0.0025em for 10–13), the icon stroke (1.125 × base / 14). Display steps down a rung below 14. `packages/tokens/src/axes/type-size.ts`; `docs/research/ui-size-scale-2026-10-12.md`.
+
+## Cursor's ramp (2026-11-02, current)
+
+Owner: "make sure the type ramp is updated to match what cursor does" (the full ramp, picked over a reading step alone).
+Read from Cursor's bundle (`docs/research/type-presentation-2026-11-01`): `--cursor-font-size-xs / sm / base / lg` 11 / 12
+/ 13 / 14 on 14 / 16 / 18 / 22 lines; titles 16 (settings and surface titles), 18 (a dialog's message, a reply's h2), 20
+(a modal's title), 26 (a document's h1).
+
+| Role | At type 13 | Rule (base B) | Was |
+|---|---|---|---|
+| `text-xs` | 11 / 14 | B − 2, never under 10 | same |
+| `text-sm` | 12 / 16 (prose 18) | B − 1 | new; `text-sm` was the base until 2026-11-02 |
+| `text-base` | 13 / 18 (prose 20) | B | `text-sm` |
+| `text-lg` | 14 / 22 | B + 1, its line the prose line | `text-md`, 15 / 22 (prose 24) |
+| `title-xs` | 16 / 22 | 16 × B / 13 | 15 / 22, the reading size |
+| `title-sm` | 18 / 24 | 18 × B / 13 | 19 / 26 |
+| `title-md` | 20 / 28 | 20 × B / 13 | 22 / 30 |
+| `title-lg` | 26 / 30 | 26 × B / 13 | 30 / 38 |
+| `display-sm`, `display-lg` | 52 / 52, 67 / 68 | 56 and 72 × B / 14 | same |
+
+Secondary text took `text-sm` in every family: Approval's descriptions and hints, choice and group descriptions, the
+Composer group's note, Custom select's caption, Empty state's description, Field's description, Figure's caption, File
+tile's meta, File upload's hint, Hover card's meta, Meter's description, Menu's description, Switch's description,
+Section heading's lede and Timestamp. A surface's own body (Card, Dialog and Popover descriptions) stays `text-base`;
+counts stay `text-xs`.

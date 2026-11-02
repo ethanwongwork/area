@@ -227,7 +227,9 @@
   /* Public hooks (2026-10-31, as Asset card's --area-asset-card-corner and -name-inset): --area-table-corner, the frame's
      corner, and --area-table-edge, the first and last cells' side inset (md and lg; sm keeps one inset), so a page that
      sets one inset and one corner for every frame (the desktop app's feed) can give its tables the same; and
-     --area-table-fill (2026-11-01), the frame's fill, so such a page's tables take its frames' one fill too. */
+     --area-table-fill (2026-11-01), the frame's fill, so such a page's tables take its frames' one fill too;
+     --area-table-head-fill (2026-11-01), the header row's fill, so a page can keep its header a step under its rows when
+     its fills differ from Area's (owner: "the top part was always darker than the cells below"). */
   /* Body cells align to their first line; headers center labels and controls.
    * Column dividers are optional, independent of row spacing and stripes. */
   .area-table-wrapper {
@@ -260,7 +262,7 @@
     /* md and lg set their text on the prose line (13/20 at type 13), so a description that wraps reads as prose, not as
        stacked UI lines (owner pick q-table-lines, 2026-10-31; Primer's props table 1.67, Notion's 1.43; it was 13/18 and
        Button's Props ran 8 lines on it). sm, a dense table in a panel or a chat reply, keeps the UI line. */
-    --_cell-line: var(--area-text-sm-prose-leading);
+    --_cell-line: var(--area-text-base-prose-leading);
     /* Above and below a cell, the text sits as far from the rule as it does from the frame's side: the edge inset less the
        line's half-leading, so cap and baseline are --_cell-edge from the rules (owner, 2026-10-31: "why do the tables have
        so much more horizontal spacing inset added than vertical top and bottom spacing?"; it was 7 against 14 at the
@@ -307,8 +309,8 @@
 
   .area-table th {
     /* The well: a fill that shows at every Layer contrast (bg-subtle, the recessed layer, is the page at 0; 2026-11-01).
-       A header's controls step from it (layers.css). */
-    background-color: var(--area-bg-well);
+       A header's controls step from it (layers.css). A page sets its own through --area-table-head-fill (2026-11-01). */
+    background-color: var(--area-table-head-fill, var(--area-bg-well));
     color: var(--area-fg-muted);
     font-weight: var(--area-weight-regular);
     white-space: nowrap;
@@ -351,6 +353,10 @@
      it onto the edge with align. */
   .area-table th > .area-button { margin-block: calc((var(--area-ui-leading) - var(--_height)) / 2); }
 
+  /* Code that starts a cell starts on the cell's edge, as the heading above it does (owner, 2026-11-02: the token badges
+     "look off"): its side margin keeps it off the words beside it in running text, and a cell's first word has none. */
+  .area-table :is(th, td) > .area-code:first-child { margin-inline-start: 0; }
+
   /* Tabular figures so columns of numbers align on the decimal. */
   .area-table .area-table__cell--numeric {
     text-align: end;
@@ -364,7 +370,7 @@
   }
   .area-table--sm { --_cell-line: var(--area-ui-leading); --_cell-inset: calc(var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)); --_cell-edge: var(--_cell-side); }
   /* md: the base's prose line and balanced inset, stated so a md table inside an sm one keeps them. */
-  .area-table--md { --_cell-line: var(--area-text-sm-prose-leading); --_cell-edge: var(--area-table-edge, calc(var(--_cell-side) + var(--area-space-4))); --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2), 1px)); }
+  .area-table--md { --_cell-line: var(--area-text-base-prose-leading); --_cell-edge: var(--area-table-edge, calc(var(--_cell-side) + var(--area-space-4))); --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2), 1px)); }
   /* lg: a step more room above and below than md's balanced inset. */
   .area-table--lg { --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2 + var(--area-space-4)), 1px)); }
   .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-well); } /* bg-stripe is 1.03:1 at Layer contrast 0 */

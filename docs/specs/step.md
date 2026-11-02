@@ -85,7 +85,7 @@ From the stylesheets (not capture-compare tables; no live captures yet):
 
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
-| line type | text-md (Message's) | peer: Message | a step sits in a reply; Codex and Claude Code match the panel's text |
+| line type | text-lg (Message's) | peer: Message | a step sits in a reply; Codex and Claude Code match the panel's text |
 | verb ink | fg-default, regular | cursor (verb over detail) | one label weight (DESIGN_SYSTEM); the default ink is the stronger of Area's two |
 | detail ink | fg-muted | cursor, codex | — |
 | gaps | 4 between parts and between steps | cursor + codex agree (4) | — |
@@ -116,7 +116,7 @@ Motion 0 (`--area-duration-loop`). Forced colours: the verb keeps CanvasText (th
 
 | Peer | Shared role | Peer value | Step | Match |
 |---|---|---|---|---|
-| Message | prose type | text-md | text-md | yes |
+| Message | prose type | text-lg | text-lg | yes |
 | Accordion | chevron glyph | chevron-down 12 | chevron-down 12 | yes |
 | Spinner | running | ring | wording + shimmer | Cursor and Codex mark running in the words |
 
@@ -150,8 +150,8 @@ The agent chat's shared rules (all five families):
 
 | Rule | Value | Basis |
 |---|---|---|
-| Lines in the transcript | the reply's type (text-md); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
-| Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
+| Lines in the transcript | the reply's type (text-lg); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
+| Cards (Edit summary, Plan) | one size, text-base; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
 | Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |

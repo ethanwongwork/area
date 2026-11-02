@@ -6,7 +6,7 @@
  * (docs/research/progress-tracker-2026-10-25: GitHub's segmented ProgressBar, Cursor's segmented bar and todo tray,
  * Codex's step pill, Linear's in-progress ring).
  *
- * The agent card (edit-summary.css has the rules; cleanup pass 2026-10-19, owner round 49): Code block's frame, text-sm
+ * The agent card (edit-summary.css has the rules; cleanup pass 2026-10-19, owner round 49): Code block's frame, text-base
  * throughout (Cursor's tray 13 under a 14 reply), a head one row tall with its text 12 in, no rule under it (since
  * 2026-10-25), and the items as Menu rows (not pressable, so no plate), their text after the mark's slot.
  * ------------------------------------------------------------------------- */
@@ -20,8 +20,8 @@
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
   }
   .area-plan__head {
     display: flex;
@@ -58,9 +58,9 @@
      card's end as far from the end as from the top; since 2026-10-25 it sits beside the title, so the count can end the
      row). */
   .area-plan__chevron {
-    --_plate-in: calc((var(--area-ui-row) - var(--area-text-sm-leading)) / 2);
+    --_plate-in: calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2);
     position: relative; isolation: isolate; place-items: center; justify-content: center; align-items: center;
-    inline-size: var(--area-text-sm-leading); block-size: var(--area-text-sm-leading);
+    inline-size: var(--area-text-base-leading); block-size: var(--area-text-base-leading);
     margin-inline: calc(-1 * var(--area-space-4)); /* the plate wraps the 12 glyph; the glyph sits 4 after the title */
   }
   .area-plan__chevron::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: max(var(--area-radius-min), calc(var(--area-radius-small) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_plate-in) - var(--area-radius-small)) * var(--area-radius-concentric))); transition: var(--area-transition); }
@@ -84,7 +84,7 @@
     align-items: start;
     column-gap: var(--area-gap-row); /* Menu's row gap (surface.css --_menu-gap), so the text lands on the list column */
     min-inline-size: 0;
-    padding-block: calc((var(--area-ui-row) - var(--area-text-sm-leading)) / 2);
+    padding-block: calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2);
     padding-inline: var(--area-ui-row-inset);
   }
   .area-plan__mark {
@@ -93,7 +93,7 @@
     align-items: center;
     justify-content: center;
     inline-size: var(--area-icon-sm);
-    block-size: var(--area-text-sm-leading);
+    block-size: var(--area-text-base-leading);
     color: var(--area-fg-muted);
   }
   .area-plan__mark > svg { inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
@@ -205,7 +205,7 @@
   }
   /* Steps are one step quieter and denser than items (Run Details' sub-lines; the agent panel's results 30 apart under
      steps 38): muted unless current, their rows 2 shorter each side (29 apart under items 36 at the default row). */
-  .area-plan__steps > .area-plan__item { padding-block: calc((var(--area-ui-row) - var(--area-text-sm-leading)) / 2 - var(--area-space-2)); }
+  .area-plan__steps > .area-plan__item { padding-block: calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2 - var(--area-space-2)); }
   .area-plan__steps > .area-plan__item:not(.area-plan__item--current) > .area-plan__text { color: var(--area-fg-muted); }
   @media (forced-colors: active) { .area-plan__steps { border: var(--area-stroke-width) solid CanvasText; } }
 
@@ -213,13 +213,13 @@
      panel's rail), at the mark's centre, in the decorative edge; past an item's steps box it runs on beside it. */
   .area-plan--rail > .area-plan__items > .area-plan__item { position: relative; }
   .area-plan--rail > .area-plan__items > .area-plan__item:not(:last-child)::before {
-    --_rail-pad: calc((var(--area-ui-row) - var(--area-text-sm-leading)) / 2);
+    --_rail-pad: calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2);
     content: "";
     position: absolute;
     inset-inline-start: calc(var(--area-ui-row-inset) + var(--area-icon-sm) / 2 - var(--area-stroke-width) / 2);
     --_rail-off: calc((var(--area-icon-sm) - var(--area-space-4)) / 2 + var(--area-space-4)); /* the ring's radius + the gap */
-    inset-block-start: calc(var(--_rail-pad) + var(--area-text-sm-leading) / 2 + var(--_rail-off));
-    inset-block-end: calc(-1 * (var(--area-space-4) + var(--_rail-pad) + var(--area-text-sm-leading) / 2 - var(--_rail-off))); /* the rail's 4 between rows */
+    inset-block-start: calc(var(--_rail-pad) + var(--area-text-base-leading) / 2 + var(--_rail-off));
+    inset-block-end: calc(-1 * (var(--area-space-4) + var(--_rail-pad) + var(--area-text-base-leading) / 2 - var(--_rail-off))); /* the rail's 4 between rows */
     inline-size: var(--area-stroke-width);
     background: var(--area-edge-dividers);
   }

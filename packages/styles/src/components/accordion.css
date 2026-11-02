@@ -26,8 +26,8 @@
 
   /* spec: the title's text role, md 16/24 (Notion), sm 14/20 (ChatGPT, shadcn); both step
      down with the UI scale (compact 14/20 and 12/16). */
-  .area-accordion-item--md { --_text: var(--area-text-md-size); --_leading: var(--area-text-md-leading); }
-  .area-accordion-item--sm { --_text: var(--area-text-sm-size); --_leading: var(--area-text-sm-leading); }
+  .area-accordion-item--md { --_text: var(--area-text-lg-size); --_leading: var(--area-text-lg-leading); }
+  .area-accordion-item--sm { --_text: var(--area-text-base-size); --_leading: var(--area-text-base-leading); }
 
   /* Plain (Notion's toggle): a leading chevron with its own hover plate, a 2px pad around the
      title's line (28 at md, 24 at sm), content on the title's column. */

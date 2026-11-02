@@ -85,7 +85,7 @@ In a 14px table cell: 12.25px/16.54px, 22px tall (`area--table`).
 | shell · inline inset | 6 incl. border (`code.css:149`) | Untitled 6 | — |
 | shell · block inset | 3 incl. border | Untitled 2 (ring inside padding) | Area's edge is a real border; 1px more, 24.9px tall at 14px |
 | fill | `token-bg` = `bg-well`, #f9f9f9 / #161616 at Layers 0 (was `bg-stripe`, 1.03:1 there; before that the 25 rung #fafafa); was `bg-code` until the block's ground became the page (2026-09-28) | Untitled neutral-50 #fafafa | — |
-| edge | `border-decorative` #f3f3f3 (`code.css:141`) | Untitled neutral-200 #e5e5e5 | Area's decorative seam role; lighter. Kept (third pass): the token has a fill, so its edge is a seam, not a rule |
+| edge | `token-edge`: `border-subtle` #e8e8e8 in light, `border-faint` in dark (emit/base.ts; code.css reads it) | Untitled neutral-200 #e5e5e5 | The edge step nearest Untitled's ring (2026-11-02); was the decorative seam #f3f3f3, which vanished on white table rows |
 | text · size | 0.875em (`code.css:132`) | Untitled 14 in 16px prose; kept em-relative by owner (audit G-26 A, 2026-09-30) | Relative so one reference follows the prose it sits in (14 / 18.9 in body text, 12.25 / 16.5 in small text), off the type ramp on purpose |
 | text · leading | 1.35 (`code.css:133`) | Area's own | Untitled 20px; a unitless tight leading keeps lines from spreading |
 | text · weight / face | 400 `font-mono` | Type ramp (400 for text) | Untitled 700 in the body face |
@@ -95,7 +95,7 @@ In a 14px table cell: 12.25px/16.54px, 22px tall (`area--table`).
 
 Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
 
-1. Edge ink: kept at `border-decorative` #f3f3f3 against Untitled's neutral-200 #e5e5e5.
+1. Edge ink: `border-subtle` #e8e8e8 (was `border-decorative` #f3f3f3 until 2026-11-02) against Untitled's neutral-200 #e5e5e5; a role rather than the literal, so it still moves with the ground under it.
    The token has a fill, so its edge is a seam, not a rule.
 
 ## States
@@ -212,3 +212,8 @@ owner's pick, so it waits for a yes.
 - **Why:** it shows one Code, the subtle one; the old title promised several.
 - **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.
 - 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): Inline code (and Token, `token-bg`) painted `bg-stripe`, 1.03:1 on white and #040404 in dark, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light). Inline code now reads `token-bg` as Token does, so the two stay one style.
+
+- 2026-11-02 · owner: "is this the real token fill badge color? it seems so light" → "Yes, strengthen it": the chip's edge (Code
+  and Token, one role, `token-edge`) steps from the decorative seam (#f3f3f3) to `border-subtle` (#e8e8e8), the edge step
+  nearest Untitled's measured #e5e5e5; on a Table's white rows the #fafafa fill and #f3f3f3 seam all but vanished. Dark
+  unchanged (`border-faint`). code.css reads `token-edge` instead of its own copy of the old pair.

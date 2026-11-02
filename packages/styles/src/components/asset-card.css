@@ -435,7 +435,7 @@
     border-radius: var(--area-radius-full);
     background-color: var(--area-bg-surface);
     box-shadow: var(--area-shadow-control);
-    font-size: var(--area-ui-size, var(--area-text-sm-size));
+    font-size: var(--area-ui-size, var(--area-text-base-size));
     pointer-events: none;
   }
   .area-asset-card__badge[data-mark] { inline-size: var(--area-control-sm); justify-content: center; padding-inline: 0; }

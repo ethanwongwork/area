@@ -401,7 +401,7 @@ function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
     <Tabs className="studio-family-tabs" size="sm" aria-label={`${family.name} views`} value={tab} onValueChange={next => onTab(next as FamilyTab)}
       items={FAMILY_TABS.map(entry => ({ id: entry.id, label: entry.label }))} {...appScale()}>
       {/* The tabs' panel is the app's; the specimens inside take the Inspector's settings (specimen-scope.tsx). Its text is
-          the tabs' UI size, not the Canvas body's text-md, so the feed's chrome inside states its scale (src/app-scale.ts). */}
+          the tabs' UI size, not the Canvas body's text-lg, so the feed's chrome inside states its scale (src/app-scale.ts). */}
       <InheritedScaleContext.Provider value={null}>
       <div className="studio-family-tabs__panel">
         {tab === "overview" ? overview

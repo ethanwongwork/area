@@ -22,7 +22,7 @@ export const GalleryTableOfContentsTop = () => <TableOfContents style={side} ite
 /* It follows the page: scroll the article and the section being read is marked. */
 const page = (id: string, title: string) => (
   <section key={id}>
-    <h3 id={id} style={{ margin: "0 0 var(--area-space-8)", fontSize: "var(--area-text-md-size)", lineHeight: "var(--area-text-md-leading)", fontWeight: "var(--area-weight-strong)" }}>{title}</h3>
+    <h3 id={id} style={{ margin: "0 0 var(--area-space-8)", fontSize: "var(--area-text-lg-size)", lineHeight: "var(--area-text-lg-leading)", fontWeight: "var(--area-weight-strong)" }}>{title}</h3>
     <p style={{ margin: "0 0 var(--area-space-24)", color: "var(--area-fg-muted)" }}>Body text that wraps onto a second line. Body text that continues the paragraph. Body text that continues the paragraph. Body text that continues the paragraph.</p>
   </section>
 );

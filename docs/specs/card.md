@@ -159,7 +159,7 @@ no change in any of 30 nodes (hidden window).
 | pressed | none | Not every system has one; none of the products | — |
 | reveal | opacity 0 → 1 over `duration-fast` (100; audit F-38, was 200) on hover or focus-within; always on with no hover | Notion 0.2s; ChatGPT reveals actions | — |
 | nested actions | allowed, few | Apple widgets, Notion, ChatGPT; block-link pattern | Fluent, Carbon and M3 say a clickable card holds no actions; documented as a trade-off |
-| type | **three roles at every size**: title `text-md` 16/24 500; description `text-sm` 14/20 muted; value `title-lg` 32/40; lists take the body size in content ink | Owner (simplify the ramp) | Replaces per-size titles (14 / 16 / 20) and the sm description (12) |
+| type | **three roles at every size**: title `text-lg` 16/24 500; description `text-base` 14/20 muted; value `title-lg` 32/40; lists take the body size in content ink | Owner (simplify the ramp) | Replaces per-size titles (14 / 16 / 20) and the sm description (12) |
 | default size | md for every tile and template; a card nested in a card is one size down | Owner | Weather and stat were sm, news, plan and feature lg |
 | vertical media | 16:9 | Every system's default card image | Demos set aspect ratios inline (16:9, 2:1) |
 | immersive media | inset like any media, gradient over it | Owner (only bleed meets the edge) | Was edge to edge |

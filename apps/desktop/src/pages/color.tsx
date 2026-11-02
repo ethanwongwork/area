@@ -53,6 +53,9 @@ function copyValue(format: CopyFormat, scale: string, item: ScaleStep) {
   return format === "hex" ? item.hex.toUpperCase() : format === "rgb" ? `rgb(${r} ${g} ${b})` : format === "oklch" ? item.oklch
     : format === "variable" ? `var(--area-${scale}-${item.level})` : `--area-${scale}-${item.level}`;
 }
+/* Where a step card's level sits: on the colour (the default) or under the card. */
+type LabelPlace = "inside" | "below";
+const LABEL_PLACES = [{ value: "inside", label: "On the colour" }, { value: "below", label: "Below the card" }] as const;
 /* A card's text: tinted from its own scale (tintedInk), or the black or white it carries. */
 type Ink = "tinted" | "mono";
 const INKS = [{ value: "tinted", label: "Tinted text" }, { value: "mono", label: "Black and white text" }] as const;
@@ -137,18 +140,26 @@ function oklchShort(value: string) {
  * The Canvas's steps. In the grid every card is an option of one Asset grid (docs/specs/asset-card.md, list-box.md): one Tab stop, the
  * arrows across the scales, selection following focus so the Inspector shows the keys' step. The list is Tables.
  */
-function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: string | null; onChoose: (value: string) => void; children: ReactNode }) {
+export function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: string | null; onChoose: (value: string) => void; children: ReactNode }) {
   return grid
     ? <ListBox layout="grid" aria-label="Color steps" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-sections">{children}</ListBox>
     : <div className="studio-sections">{children}</div>;
 }
 
-function ColorCard({ scale, item, ink, copy }: { scale: string; item: ScaleStep; ink?: ScaleStep; copy: CopyFormat }) {
+/** A step's card. Its text is tinted from its own scale unless the page says otherwise (`ink`: a step of the scale to set it
+ *  in, or "mono" for the black or white the step carries), so a card shown outside Colors (Labs › Feed, the Feed Kit) is
+ *  tinted too (owner, 2026-11-02: "i thought the color cards would use tinted fg colors towards the color palette"). */
+export function ColorCard({ scale, item, ink: inkProp, copy, labelPlace = "inside" }: { scale: string; item: ScaleStep; ink?: ScaleStep | "mono"; copy: CopyFormat; labelPlace?: LabelPlace }) {
+  const inside = labelPlace === "inside";
+  const ink = inkProp === "mono" ? undefined : inkProp ?? tintedInk(SCALES.find(entry => entry.id === scale)?.steps ?? [], item);
   const [r, g, b] = rgbOf(item.hex);
   const ratio = ink ? ratioOf(ink.hex, item.hex) : item.contrast.ratio;
   const inkName = ink ? `${title(scale)} ${ink.level}` : item.contrast.fg === "#ffffff" ? "white" : "black";
   return (
-    <Tile span="unit" stage="flow" option={`${scale}-${item.level}`}
+    // The card hugs its values (Asset card's hug); its level on the colour, or under the card as every other card's name
+    // (Colors' Label option; owner, 2026-11-02: "would like to see the color cards with the color palette label below the
+    // card rather than on the surface, just as an option").
+    <Tile span="unit" stage="flow" aspect="hug" paintLabel={labelPlace} option={`${scale}-${item.level}`}
       aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${inkName} text ${ratio.toFixed(2)} to 1, ${grade(ratio)}`}
       // The ink paints its live step, as the card does, so a Neutral tint moves both together.
       paint={{ background: `var(--area-${scale}-${item.level})`, color: ink ? `var(--area-${scale}-${ink.level})` : item.contrast.fg }}
@@ -158,7 +169,7 @@ function ColorCard({ scale, item, ink, copy }: { scale: string; item: ScaleStep;
       actions={
         <span className="studio-swatch__copy">
           <Tooltip side="bottom" describes={false} trigger={
-            <AreaCopyButton variant="ghost" size="sm" iconOnly onColor label={`Copy ${title(scale)} ${item.level} ${COPY_NAMES[copy]}`}
+            <AreaCopyButton variant="ghost" size="sm" iconOnly onColor={inside} label={`Copy ${title(scale)} ${item.level} ${COPY_NAMES[copy]}`}
               icon={<CopyIcon />} copiedIcon={<CheckIcon />} value={() => copyValue(copy, scale, item)} />
           }>
             Copy {COPY_NAMES[copy]}
@@ -228,6 +239,7 @@ export function ColorPage() {
   const picked = chosen ? { ...chosen, step: paints(chosen.scale.id, chosen.step) } : undefined;
   const [contrast, setContrast] = useViewOption<Contrast>("color-contrast", "all", ["all", "white", "black"]);
   const [ink, setInk] = useViewOption<Ink>("color-ink", "tinted", ["tinted", "mono"]);
+  const [labelPlace, setLabelPlace] = useViewOption<LabelPlace>("color-label", "inside", ["inside", "below"]);
   const [copyFormat, setCopyFormat] = useViewOption<CopyFormat>("color-copy", "hex", ["hex", "rgb", "oklch", "variable", "token"]);
   const passes = (item: ScaleStep) => contrast === "all" || contrastWith(item.hex, contrast === "white" ? "#ffffff" : "#000000") >= 4.5;
   const arrangement = useArrangement<Sort, Group>("color", { sort: "palette", descending: false, group: "kind" }, SORTS, GROUPS);
@@ -257,6 +269,7 @@ export function ColorPage() {
         <ViewControls>
           <ViewFilter label="Contrast" value={contrast} onChange={setContrast} options={CONTRASTS} />
           {mode === "list" ? null : <ViewFilter label="Card text" value={ink} onChange={setInk} options={INKS} />}
+          {mode === "list" ? null : <ViewFilter label="Label" value={labelPlace} onChange={setLabelPlace} options={LABEL_PLACES} />}
           {mode === "list" ? null : <ViewFilter label="Copy format" value={copyFormat} onChange={setCopyFormat} options={COPY_FORMATS} />}
           {view ? null : <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={GROUPS}
             directions={arrangement.sort === "name" ? ["A to Z", "Z to A"] : arrangement.sort === "chroma" ? ["Greyest first", "Most colorful first"] : ["First to last", "Last to first"]} />}
@@ -302,7 +315,7 @@ export function ColorPage() {
                   // Columns one card wide, the card as wide as its longest line, so every value stays on one line (owner, 2026-10-23).
                   <TileGrid span="unit" className="studio-color-grid">
                     {steps.map(item => (
-                      <ColorCard key={item.level} scale={entry.id} item={item} ink={ink === "tinted" ? tintedInk(ramp, item) : undefined} copy={copyFormat} />
+                      <ColorCard key={item.level} scale={entry.id} item={item} ink={ink === "tinted" ? tintedInk(ramp, item) ?? "mono" : "mono"} copy={copyFormat} labelPlace={labelPlace} />
                     ))}
                   </TileGrid>
                 )}

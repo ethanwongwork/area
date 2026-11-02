@@ -47,7 +47,7 @@ chapters, an onboarding plan). Not a Stepper (markers that take the person to a 
 ## Anatomy
 
 ```
-area-plan                 the agent card: card edge at stroke-width, container corner, bg-surface; text-sm
+area-plan                 the agent card: card edge at stroke-width, container corner, bg-surface; text-base
   area-plan--rail         the marks joined by a 1px line in the divider ink, 4 short of each ring; beside a steps box
   area-plan__head         button (aria-expanded): icon (with icon), title, chevron beside it, count at the end on the meta column; ui-row
                           tall, padding 0 12 (the card column);
@@ -166,8 +166,8 @@ The agent chat's shared rules (all five families):
 
 | Rule | Value | Basis |
 |---|---|---|
-| Lines in the transcript | the reply's type (text-md); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
-| Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
+| Lines in the transcript | the reply's type (text-lg); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
+| Cards (Edit summary, Plan) | one size, text-base; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
 | Card head | one row tall, no rule under it (2026-10-25); a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
@@ -175,7 +175,7 @@ The agent chat's shared rules (all five families):
 | What a line opens | 4 under the line, on a 1px rail with its content 12 in | Cursor content gap 4; Claude Code's rail at 12 |
 | Backplates | one: the row plate under the pointer or focus | Menu |
 
-Changed here: the Plan is the agent card (was a recessed grey tray with no edge), at text-sm (was the reply's 16), a
+Changed here: the Plan is the agent card (was a recessed grey tray with no edge), at text-base (was the reply's 16), a
 rule under its head when open, its items Menu rows a row tall with the first line centred (were 4 apart on a 22
 line). The head's title and the marks share the 12 column. Ink: the current item default, the rest muted (Cursor);
 done and cancelled struck.

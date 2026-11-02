@@ -51,10 +51,10 @@
     --_panel-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10, compact 6 */
     --_panel-row-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10, compact 6 */
     --_panel-label-gap: calc(var(--area-ui-stack) - var(--area-space-2)); /* Field's label gap less 2: 4 / compact 2 */
-    --_panel-label-text: var(--area-text-sm-size);
-    --_panel-label-leading: var(--area-text-sm-leading);
-    --_panel-title-text: var(--area-text-md-size);
-    --_panel-title-leading: var(--area-text-md-leading);
+    --_panel-label-text: var(--area-text-base-size);
+    --_panel-label-leading: var(--area-text-base-leading);
+    --_panel-title-text: var(--area-text-lg-size);
+    --_panel-title-leading: var(--area-text-lg-leading);
     /* spec (owner, 2026-10-30, docs/research/inspector-panel-2026-10-30, "One Inspector grid"): the panel's one label
        column, 40% of a row less the cluster gap (95 in a 272 panel), published so every row that pairs a name with a
        value (Field, Description list) starts its value on one edge. It resolves where it is used, so 100% is that row's

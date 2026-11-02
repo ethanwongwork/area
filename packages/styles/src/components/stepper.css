@@ -20,14 +20,14 @@
     --_line: var(--area-stroke-width); /* spec: Timeline's 1px line (Ant, MUI, GOV.UK 1px) */
     --_line-gap: var(--area-space-4); /* spec: Timeline's gap around each marker */
     --_spacing: var(--area-space-16); /* spec: Timeline's 16 between events */
-    --_leading: var(--area-text-sm-leading);
+    --_leading: var(--area-text-base-leading);
     display: flex;
     margin: 0;
     padding: 0;
     list-style: none;
     min-inline-size: 0;
     color: var(--area-fg-default);
-    font-size: var(--area-text-sm-size);
+    font-size: var(--area-text-base-size);
     line-height: var(--_leading);
   }
   .area-stepper--horizontal { flex-direction: row; align-items: flex-start; }

@@ -2,7 +2,7 @@
 
 /* A value: its swatch, then the value, which wraps inside its cell rather than widening the table. */
 .studio-tokens__value { display: inline-flex; align-items: center; gap: var(--area-space-8); min-width: 0; }
-.studio-tokens__text { font-family: var(--area-font-mono); font-size: var(--area-text-sm-size); white-space: nowrap; }
+.studio-tokens__text { font-family: var(--area-font-mono); font-size: var(--area-text-base-size); white-space: nowrap; }
 /* A formula or a font stack wraps inside its cell rather than widening the table. */
 .studio-tokens__text[data-long] { white-space: normal; overflow-wrap: anywhere; }
 .studio-tokens__refs { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-4); }
@@ -10,40 +10,43 @@
 .studio-tokens__ref { all: unset; cursor: pointer; border-radius: var(--area-radius-4); }
 .studio-tokens__ref:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color, var(--area-accent-indicator)); outline-offset: 2px; }
 
-/* The drawings: rows (a ramp read left to right) or a grid of specimens. */
-/* A ramp's rows share one set of columns (subgrid), each as wide as its longest name or value, so a drawing starts right
-   after its value and every row lines up. */
-.studio-foundation__rows { display: grid; grid-template-columns: max-content max-content minmax(0, 1fr); column-gap: var(--area-space-16); row-gap: var(--area-space-4); }
-/* A specimen column is 96 and each drawing starts at its padding, so drawings sit a ramp step apart (a 64 box: 48). */
-.studio-foundation__grid { display: grid; grid-template-columns: repeat(auto-fill, 96px); /* pick */ gap: var(--area-space-16); }
-.studio-foundation__specimen {
-  all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: var(--area-space-4); padding: var(--area-space-8);
-  border-radius: var(--area-radius-8); color: var(--area-fg-default);
-}
-/* A ramp row reads name, value, then its drawing, so the three stay one row rather than three columns. */
-.studio-foundation__rows .studio-foundation__specimen { grid-column: 1 / -1; grid-template-columns: subgrid; column-gap: var(--area-space-16); align-items: center; }
-.studio-foundation__specimen:hover { background: var(--area-bg-component-hover); }
-.studio-foundation__specimen[data-selected] { background: var(--area-bg-component-active); }
-.studio-foundation__specimen:focus-visible { outline: var(--area-focus-width) solid var(--area-accent-indicator); outline-offset: 2px; }
-.studio-foundation__figure { display: flex; align-items: center; min-height: 24px; min-width: 0; }
-.studio-foundation__grid .studio-foundation__figure { justify-content: start; min-height: 88px; /* pick */ }
-.studio-foundation__name { font-family: var(--area-font-mono); font-size: var(--area-text-sm-size); overflow-wrap: anywhere; }
-.studio-foundation__value { font-size: var(--area-text-sm-size); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.studio-foundation__rows .studio-foundation__name { grid-column: 1; grid-row: 1; }
-.studio-foundation__rows .studio-foundation__value { grid-column: 2; grid-row: 1; }
-.studio-foundation__rows .studio-foundation__figure { grid-column: 3; grid-row: 1; }
+/* Every mark that draws a value (a ramp's bar, an easing's curve, a crossing dot; the feed's charts, styles/examples.css)
+   takes the ink Area's own data components fill with: Meter's and Progress's fill, the Selection role (2026-11-01; they
+   were the accent, so a page drew its bars blue beside black Meters at the app's settings). Selection set to Accent turns
+   them all blue together. */
 
-.studio-foundation__bar { display: block; block-size: 12px; min-inline-size: 1px; background: var(--area-accent-solid); border-radius: 2px; }
-.studio-foundation__control { display: block; inline-size: 72px; border-radius: var(--area-radius-6); background: var(--area-bg-component); border: 1px solid var(--area-edge-buttons, var(--area-border)); }
-.studio-foundation__box { display: block; inline-size: 64px; block-size: 64px; background: var(--area-bg-surface); border: 1px solid var(--area-border); }
-.studio-foundation__card { display: block; inline-size: 88px; block-size: 64px; background: var(--area-bg-surface); border-radius: var(--area-radius-10); }
+/* The drawings (src/pages/foundation.tsx), on the feed's two blocks: a Scale table (a ramp, its drawing in the last
+   column) and the square card (a specimen in its middle, its name under it). Nothing here frames, insets or titles: the
+   Table, the tile and CanvasSection do, so a foundation reads as every other page of the feed. */
 
-/* Motion: a dot crosses its track when Play is on. */
-.studio-foundation__track { position: relative; display: block; inline-size: 100%; block-size: 12px; border-radius: 6px; background: var(--area-bg-component); }
-.studio-foundation__dot {
-  position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 12px; border-radius: 50%; background: var(--area-accent-solid);
+/* A Scale table's drawing cell: the drawing on the row's line, never taller than the text. */
+/* The drawing sits on the row's text line, centred on it (its middle on the text's x-height middle), as a glyph would; it
+   was a flex box whose bar hung from the line's top, 4 above the words beside it (owner, 2026-11-02). */
+.studio-scale__figure { display: block; min-inline-size: 0; }
+/* A length at its true size: a bar the ramp's height, the small corner, in the data ink (below). */
+.studio-scale__bar { display: inline-block; vertical-align: middle; block-size: var(--area-space-12); min-inline-size: 1px; max-inline-size: 100%; background: var(--area-selection-solid); border-radius: var(--area-radius-2); }
+
+/* A specimen in a card's middle: a box at half the card's width, a surface on the tile (the raised layer, so it stands
+   lighter than the tile in dark as a card or a popover does), its edge the decorative rule (a stroke specimen draws its own
+   token's), so its corner, edge or shadow is the one thing that changes. */
+.studio-specimen { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
+.studio-specimen__box { display: block; inline-size: 50%; aspect-ratio: 1; box-sizing: border-box; background: var(--area-bg-surface); border: var(--area-border-width) solid var(--area-border-decorative); }
+.studio-specimen__box[data-edge] { border-width: var(--area-stroke-width); border-radius: var(--area-radius-container); }
+.studio-specimen__box[data-raised] { border: 0; border-radius: var(--area-radius-container); }
+/* A control height: a field's box at that height, the card's half wide. */
+.studio-specimen__control { display: block; inline-size: 50%; box-sizing: border-box; background: var(--area-bg-component); border: var(--area-border-width) solid var(--area-edge-buttons, var(--area-border)); border-radius: var(--area-radius-control); }
+/* An easing: its curve over the track its dot crosses, a group's gap apart. */
+.studio-specimen__motion { display: grid; gap: var(--area-space-12); inline-size: 50%; }
+.studio-curve { display: block; inline-size: 100%; overflow: visible; }
+.studio-curve__frame { fill: none; stroke: var(--area-border-decorative); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.studio-curve__line { fill: none; stroke: var(--area-selection-solid); stroke-width: 1.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+
+/* Motion: a dot crosses its track when Play (the Canvas bar) is on. */
+/* On the row's text line, centred on it, as a scale bar (above). */
+.studio-track { position: relative; display: inline-block; vertical-align: middle; inline-size: 100%; block-size: var(--area-space-12); border-radius: var(--area-radius-full); background: var(--area-bg-component); }
+.studio-track__dot {
+  position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: var(--area-space-12); border-radius: 50%; background: var(--area-selection-solid);
   transition-property: inset-inline-start;
 }
-[data-playing] .studio-foundation__dot { inset-inline-start: calc(100% - 12px); }
-@media (prefers-reduced-motion: reduce) { .studio-foundation__dot { transition-duration: 0s !important; } }
-.studio-foundation__play { display: flex; }
+[data-playing] .studio-track__dot { inset-inline-start: calc(100% - var(--area-space-12)); }
+@media (prefers-reduced-motion: reduce) { .studio-track__dot { transition-duration: 0s !important; } }

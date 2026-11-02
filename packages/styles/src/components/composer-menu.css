@@ -40,7 +40,7 @@
   .area-composer-menu__path > bdi { unicode-bidi: plaintext; }
   /* Nothing matches: one muted row at the text inset, as every list's empty row (Combobox, Command palette;
      DESIGN_SYSTEM.md, List rows): the cap centred in the row's square (inset.css), in the rows' type, as Combobox's,
-     so the menu keeps its size when the last match goes (chat set review 2026-10-28: it took the composer's text-md). */
+     so the menu keeps its size when the last match goes (chat set review 2026-10-28: it took the composer's text-lg). */
   .area-composer-menu__empty {
     display: flex;
     align-items: center;

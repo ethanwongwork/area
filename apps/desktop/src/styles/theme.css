@@ -17,7 +17,7 @@
   .lang-ramp__sample--display-sm { font-size: var(--area-display-sm-size); line-height: var(--area-display-sm-leading); letter-spacing: var(--area-display-sm-tracking); }
   .lang-ramp__sample--title-md { font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); }
   .lang-ramp__sample--title-xs { font-size: var(--area-title-xs-size); line-height: var(--area-title-xs-leading); }
-  .lang-ramp__sample--text-sm { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-regular); }
+  .lang-ramp__sample--text-base { font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); font-weight: var(--area-weight-regular); }
   .lang-ramp__sample--text-xs { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); font-weight: var(--area-weight-regular); color: var(--area-fg-muted); }
   .lang-ramp__size { justify-self: end; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); font-variant-numeric: tabular-nums; }
   .lang-card { inline-size: 176px; } /* pick */

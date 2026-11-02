@@ -23,37 +23,87 @@
   .studio-type__value { color: var(--area-fg-default); text-align: end; }
 
   /*
-   * Type on the surface (owner, 2026-10-12): no tiles. One role's samples are ruled rows, a label
-   * line (name at the start, metrics at the end) one gap over the sample, rows a margin apart with
-   * the divider between them. The grid view is cards (Components' Asset card, basic with the name
-   * below): "Aa" in the style, its name and metrics under it.
+   * Type in the feed (src/type-kit.tsx; owner, 2026-11-01: "maybe just using regular table components for type is better";
+   * docs/research/type-presentation-2026-11-01).
+   *
+   * TypeTable: a list of type in the feed's Table. The label column holds the name over its size or weight (muted, the
+   * ramp's xs); the sample cell holds the sample on one line at its size, clipped at the cell as Google Fonts' Styles list
+   * clips it, never wrapped.
    */
-  .studio-type-rows { display: grid; }
-  .studio-type-row { display: grid; gap: var(--area-space-8); padding-block: var(--area-space-16); } /* was the 14 margin; no rule between rows since 2026-10-25 (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional") */
-  .studio-type-row:first-child { padding-block-start: 0; }
-  .studio-type-row__head {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--area-space-8);
-    color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+  /* The sample takes its cell's width and asks for none of its own (0 wide, at least the cell), so a long line clips at the
+     cell instead of widening the table past its label column. */
+  .studio-type-cell { display: block; inline-size: 0; min-inline-size: 100%; overflow: clip; white-space: pre; }
+  .studio-type-cell > * { white-space: pre; }
+
+  /*
+   * TypeTesters (owner, 2026-11-01: "separate display from body ... just put 1 line of text. also make sure all the controls
+   * are just in one 'header' at the top"; measured from Pangram Pangram's Altera Sans sampler at 1440: a 20-corner card
+   * padded 26, its header one 38 row, the face and style on the start, the ranges as pills on the end 12 apart, the sample
+   * under it). Here the card is the feed's frame (styles/feed.css .studio-frame, its inset and corner); its header is one
+   * row of Area's controls at the app's scale, the selects on the start and the bars on the end, wrapping only when the
+   * Canvas is too narrow for one row; the sample under it, the frame inset below the header, at the tester's own
+   * properties (--tt-*). No rule under the header: the sample is the card, as Pangram's.
+   */
+  .studio-testers { display: grid; gap: var(--_gap, var(--area-space-16)); min-inline-size: 0; }
+  /* The paragraphs side by side, as Pangram's half cards, when each is wide enough to hold its header on one row (two
+     selects and a bar, 432); one above the other on a narrower Canvas. */
+  .studio-testers__pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--area-space-96) * 4 + var(--area-space-48))), 1fr)); /* pick: 432 */ gap: inherit; }
+  .studio-tester { --area-card-gap: var(--_frame-inset); /* the toolbar to its sample: the frame inset, Card's gap hook */ }
+  /* The header is Area's Toolbar (type-kit.tsx): its gap, its selects' widths and its dividers are the Toolbar's. The app
+     lays out only the bars: they take the row the selects leave, at the end, each sharing it evenly up to 192 and down to
+     its own least width (the Slider's label, value and shortest rail), so the header is always one row. */
+  .studio-tester__bars { display: flex; flex: 1 1 auto; justify-content: flex-end; align-items: center; gap: inherit; min-inline-size: min-content; }
+  /* Narrower than every control at its least (a phone-width Canvas), the row scrolls sideways rather than break or overlap. */
+  .studio-tester__head { display: flex; min-inline-size: 0; overflow-x: auto; scrollbar-width: none; }
+  .studio-tester__control--bar { display: flex; flex: 1 1 0; align-items: center; gap: inherit; max-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-16)); /* pick: 192, and its divider's 8 + 1 + 8 */ min-inline-size: min-content; }
+  .studio-tester__control[hidden] { display: none; }
+  .studio-tester__sample {
+    margin: 0; min-inline-size: 0; max-inline-size: 100%; outline: none; overflow-wrap: anywhere;
+    color: var(--area-fg-default);
+    font-size: var(--tt-size); line-height: var(--tt-leading);
+    font-weight: var(--tt-weight); font-style: var(--tt-style); font-stretch: var(--tt-width); letter-spacing: var(--tt-tracking);
+    font-variation-settings: normal;
   }
-  /* A type card (src/pages/typography.tsx): the "Aa" at the start, its cap the card's inset from the top and the side, as
-     the colour cards' level, in a frame twice as wide as tall (owner, 2026-10-24: "make the card more landscape, remove the
-     size leading tracking details"; was 5:4 with the metrics at the foot). The frame has no edge of its own, so the card's
-     edge is counted once. */
+  /* The display line is one sentence (owner: "1 line of text"), wrapping where the card ends as Pangram's does, balanced so its
+     lines are even: a pangram cut at the card's edge lost its punctuation, which is what it is there to show. */
+  .studio-tester__sample--display { text-wrap: balance; }
+  .studio-tester__sample--heading { text-wrap: pretty; }
+
+  /*
+   * A type card (TypefaceCard in src/type-kit.tsx; a role's card, src/pages/typography.tsx). Pangram's family cards at
+   * 1440: the name over its style count top-left (17.7 semibold over 14 muted, padded 26), a 140 "Aa" set at the card's
+   * foot. Here: 16:9, the feed's other card shape, padded the card inset; the header the card's facts at the app's
+   * reading size, strong over muted, as a card's name and count; the sample in the rest, "Aa" on the foot at half the card's
+   * inner height or a paragraph under the header. Under the card, only its name and status or Copy (owner, 2026-11-01).
+   * The frame has no edge of its own, so the card's edge is counted once.
+   */
   .gallery-tile__view:has(> .studio-type-card) { align-content: stretch; }
   .studio-type-card {
     display: grid;
-    align-content: start;
-    aspect-ratio: 2;
+    grid-template-rows: minmax(0, 1fr);
+    row-gap: var(--area-space-12);
+    aspect-ratio: 16 / 9;
     max-inline-size: 100%;
-    box-sizing: border-box;
-    padding: calc(var(--_card-inset) - var(--area-stroke-width)) calc(var(--_card-inset) - var(--area-stroke-width)) 0;
     min-inline-size: 0;
+    box-sizing: border-box;
+    /* Text the card inset from the card's outer edge, as a colour card's (owner, 2026-11-01: "a consistent card padding that
+       applies to all the other cards too like color"): the frame already holds its view half that in (8), so the rest. */
+    padding: calc(var(--_card-inset) - var(--area-asset-card-inset));
+    container-type: size;
+    overflow: clip;
   }
-  .studio-type-card__sample { overflow: hidden; white-space: nowrap; text-box: trim-both cap alphabetic; }
+  /* A role's card holds a header (Typography); a face's holds its type alone (owner, 2026-11-02). */
+  .studio-type-card:has(> .studio-type-card__head) { grid-template-rows: auto minmax(0, 1fr); }
+  /* One line (owner, 2026-11-01), trimmed to its cap so the cap sits exactly the inset down, as a colour card's level. */
+  .studio-type-card__head { min-inline-size: 0; overflow: clip; overflow-clip-margin: 0.3em; /* the trimmed line's descenders */ white-space: nowrap; text-overflow: ellipsis; color: var(--area-fg-default); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
+  .studio-type-card__sample { min-inline-size: 0; }
+  /* "Aa" from the card's top-left, its cap the inset down, as every card's text starts (a colour's level, a paragraph); it
+     sat on the foot under a header, Pangram's way, until the header went (owner, 2026-11-02: "should Aa be aligned to the
+     top or bottom of the card?"). A role's card sets its own size, the role's, and keeps its header above it. */
+  .studio-type-card[data-sample="glyphs"] > .studio-type-card__sample { align-self: start; overflow: hidden; white-space: nowrap; line-height: 1; text-box: trim-both cap alphabetic; }
+  .studio-type-card[data-sample="glyphs"] > .studio-type-card__sample:not([style*="font-size"]) { font-size: 50cqb; }
+  /* A paragraph from under the header, cut where the card ends. */
+  .studio-type-card[data-sample="paragraph"] > .studio-type-card__sample { align-self: start; overflow: clip; text-box: trim-start cap alphabetic; /* its first cap on the inset, as a colour card's level */ font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); text-wrap: pretty; }
 
   /* --- Typefaces (src/pages/typefaces.tsx) ------------------------------------- */
 
@@ -61,8 +111,8 @@
      a title and its lede are (DESIGN_SYSTEM.md, Text pairs: the reading line joins the title above it). */
   .studio-typeface-pair { display: grid; gap: var(--area-space-12); max-inline-size: 64ch; }
   .studio-typeface-pair__title { overflow-wrap: anywhere; }
-  .studio-typeface-pair__body { margin: 0; color: var(--area-fg-muted); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-prose-leading); }
+  .studio-typeface-pair__body { margin: 0; color: var(--area-fg-muted); font-family: var(--area-font-sans); font-size: var(--area-text-lg-size); line-height: var(--area-text-lg-prose-leading); }
   /* A style's sample in the Styles table: the reading size, on one line. */
-  .studio-typeface-style { font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading); white-space: nowrap; }
+  .studio-typeface-style { font-size: var(--area-text-lg-size); line-height: var(--area-text-lg-leading); white-space: nowrap; }
   /* The Inspector's character: the preview's size for a glyph (icons draw at 128 there). */
   .studio-typeface-preview { font-size: calc(var(--area-space-96) + var(--area-space-32)); line-height: 1; white-space: pre; }

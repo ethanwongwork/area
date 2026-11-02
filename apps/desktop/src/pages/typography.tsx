@@ -21,11 +21,12 @@ import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
 import { feedScale } from "../app-scale.ts";
 import { Specimen } from "../specimen-scope.tsx";
-import { CanvasSection, Tile, TileGrid, type CardLook, FEED_TABLE } from "../tile.tsx";
-import { factsOf, FaceSample, FaceSummary, KINDS, TYPEFACES, typefaceOf, TypefaceWorkspace, useInstalled } from "./typefaces.tsx";
+import { CanvasSection, GALLERY_LOOK, Tile, TileGrid, FEED_TABLE } from "../tile.tsx";
+import { TYPE_COLUMNS, TYPE_SAMPLE, TypeTable, TypefaceCard, typeValues } from "../type-kit.tsx";
+import { factsOf, FaceSummary, KINDS, TYPEFACES, typefaceOf, TypefaceWorkspace, useInstalled } from "./typefaces.tsx";
 
-/* Type cards: the name top-left as every gallery's (owner, 2026-10-31: "top-left everywhere"; it was at the foot). */
-const TYPE_LOOK: CardLook = { container: "basic", caption: "outside", fill: "recessed", borderless: false };
+/* Type cards are the gallery's one card (tile.tsx GALLERY_LOOK); they had a copy of its look of their own. */
+const TYPE_LOOK = GALLERY_LOOK;
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { CodeWell, Preview, Selection } from "../inspector.tsx";
@@ -35,7 +36,7 @@ import { matches } from "../search.ts";
 import { DEFAULT_TYPE, TYPE_ROLES, TYPE_SIZES, type TypeRole } from "../tokens.ts";
 import { readStored, writeStored } from "../storage.ts";
 
-const SAMPLE = "Every component, icon and color in one place.";
+const SAMPLE = TYPE_SAMPLE;
 
 const GROUPS = [
   { id: "headings", label: "Headings", lede: "Introduce pages, sections and surfaces. Surface titles follow the type size; larger headings hold theirs.", groups: ["display", "title"] },
@@ -152,26 +153,17 @@ export function TypographyPage() {
       }
       canvasTitle={view ? view.name : "Typography"}
       canvas={view ? (
-        // One role: at the Canvas's type size in each weight, then at every type size, in the sample
-        // line, as ruled rows on the Canvas's surface (owner, 2026-10-12: type sits on the surface; a
-        // specimen is text, which needs no container).
-        <div className="studio-type-rows">
-          {([
-            ["regular", undefined, "Regular"],
-            ["strong", undefined, "Strong"],
-            ...TYPE_SIZES.map(type => [weight, type, `Type ${type}`] as const),
-          ] as ReadonlyArray<readonly ["regular" | "strong", string | undefined, string]>).filter(([w, type]) => type || weights === "all" || weights === w).map(([w, type, label]) => (
-            <section key={label} className="studio-type-row" aria-label={label}>
-              <div className="studio-type-row__head" {...feedScale()}>
-                <span>{label}</span>
-                <span className="studio-tabular">{metrics(view, type ?? density)}</span>
-              </div>
-              <Specimen {...(type ? { "data-area-type": type } : {})}>
-                <span className="studio-type__sample" style={roleStyle(view, w)}>{sample || SAMPLE}</span>
-              </Specimen>
-            </section>
-          ))}
-        </div>
+        // One role: at the Canvas's type size in each weight, then at every type size, in the sample line, as the feed's
+        // Table (owner, 2026-11-01: "maybe just using regular table components for type is better"; it was ruled rows on
+        // the surface from 2026-10-12): the label column names the row and its metrics, the sample sits on one line.
+        <TypeTable label={view.name} sampleHeader="Sample" columns={TYPE_COLUMNS} rows={([
+          ["regular", undefined, "Regular"],
+          ["strong", undefined, "Strong"],
+          ...TYPE_SIZES.map(type => [weight, type, `Type ${type}`] as const),
+        ] as ReadonlyArray<readonly ["regular" | "strong", string | undefined, string]>).filter(([w, type]) => type || weights === "all" || weights === w).map(([w, type, label]) => ({
+          key: label, name: label, values: typeValues(view.metrics[type ?? density]!, w === "strong" ? 500 : 400),
+          sample: <Specimen {...(type ? { "data-area-type": type } : {})}><span className="studio-type__sample" style={roleStyle(view, w)}>{sample || SAMPLE}</span></Specimen>,
+        }))} />
       ) : !shown.length && !faces.length ? (
         // No matches: the Sidebar keeps All, and the Canvas says so (product UI rule 10, docs/PRODUCT_UI.md).
         <EmptyState title="Nothing found" description={`No typeface or type role matches “${query}”.`} />
@@ -183,17 +175,9 @@ export function TypographyPage() {
             <CanvasSection key={kind.id} role={mode === "grid" ? "group" : undefined} id={`faces-${kind.id}`} title={`${kind.label} typefaces`} count={kind.faces.length} lede={kind.lede}>
               {mode === "grid" ? (
                 <TileGrid span="wide" cards>
-                  {kind.faces.map(entry => {
-                    const facts = factsOf(entry, mac);
-                    return (
-                      <Tile key={entry.id} container="asset" look={TYPE_LOOK} aspect="hug" span="wide" stage="flow" option={`face:${entry.id}`}
-                        label={entry.name} aria-label={`${entry.name}, ${entry.foundry}`} onOpen={() => select(`face/${entry.id}`)}>
-                        <span className="studio-type-card" aria-hidden="true">
-                          <FaceSample face={entry} facts={facts} className="studio-type-card__sample" style={{ fontSize: "var(--area-display-sm-size)", lineHeight: "var(--area-display-sm-leading)" }} />
-                        </span>
-                      </Tile>
-                    );
-                  })}
+                  {kind.faces.map(entry => (
+                    <TypefaceCard key={entry.id} face={entry} facts={factsOf(entry, mac)} option={`face:${entry.id}`} onOpen={() => select(`face/${entry.id}`)} />
+                  ))}
                 </TileGrid>
               ) : (
                 <Table wrapperProps={FEED_TABLE} size="md" interactive aria-label={`${kind.label} typefaces`}>
@@ -224,9 +208,9 @@ export function TypographyPage() {
             return (
               <CanvasSection key={group.id} role={mode === "grid" ? "group" : undefined} id={`type-${group.id}`} title={group.label} count={list.length} lede={group.lede}>
                 {mode === "grid" ? (
-                  // Cards: every style its own card (both weights side by side), basic with the name below (owner, 2026-10-24:
-                  // "make the card more landscape, remove the size leading tracking details"): the "Aa" at the start in the
-                  // style, Copy CSS in the opposite corner.
+                  // Cards: every style its own card (both weights side by side), basic with the name below and Copy CSS beside
+                  // it; the role's size, leading, weight and tracking in the card's header (owner, 2026-11-01: "put the badge
+                  // information in the 'header' of the card"; 2026-10-24 they had left the card's foot), the "Aa" in the style.
                   <TileGrid span="wide" cards>
                     {list.flatMap(entry => shownWeights.map(w => ({ entry, w }))).map(({ entry, w }) => (
                       <Tile key={`${w.id}:${entry.id}`} container="asset" look={TYPE_LOOK} aspect="hug" span="wide" stage="flow" option={`${w.id}:${entry.id}`}
@@ -240,7 +224,9 @@ export function TypographyPage() {
                             Copy CSS
                           </Tooltip>
                         }>
-                        <span className="studio-type-card" aria-hidden="true">
+                        <span className="studio-type-card" data-sample="glyphs" aria-hidden="true">
+                          {/* Its type facts in the card's one-line header (type-kit.tsx, TypefaceCard): size / leading, then tracking. */}
+                          <span className="studio-type-card__head studio-tabular">{entry.metrics[density]!.size} / {entry.metrics[density]!.leading}{trackingOf(entry, density) === "0" ? "" : ` · ${trackingOf(entry, density)}`}</span>
                           <span className="studio-type-card__sample" style={roleStyle(entry, w.id)}>Aa</span>
                         </span>
                       </Tile>

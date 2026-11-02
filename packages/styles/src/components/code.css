@@ -111,8 +111,9 @@
     /* spec: inline code keeps about the 25 rung (#fafafa): the well, #f9f9f9 at Layer contrast 0, the token's ground
        (bg-stripe, which it read until 2026-11-01, is 1.03:1 there). */
     --_code-bg: var(--area-token-bg);
-    /* spec (audit G-3): dark `border-decorative` equals the stripe fill, so dark takes the faint edge. */
-    --_code-edge: light-dark(var(--area-border-decorative), var(--area-border-faint));
+    /* The token chip's edge (emit/base.ts token-edge: border-subtle in light, the faint edge in dark), one role for Code
+       and Token so the two never drift; it was its own copy of the old decorative seam (owner, 2026-11-02). */
+    --_code-edge: var(--area-token-edge);
     --_code-text: var(--area-fg-default);
     /* The edge's width: the Surface axis's, since a filled chip carries itself without it; the subtle variant
        (token.css), which has no fill, draws it at the required width. Every inset that counts it reads this. */
@@ -168,8 +169,8 @@
    */
   .area-code-block,
   .area-code-block--md {
-    --_code-size: var(--area-text-sm-size);
-    --_code-leading: var(--area-text-sm-leading);
+    --_code-size: var(--area-text-base-size);
+    --_code-leading: var(--area-text-base-leading);
     /* `--area-code-block-inset` and `--area-code-block-corner` (public hooks, 2026-11-01, as Table's edge and corner) hold
        a block to the frames around it: the code's inset from the edge above, below and at the start, and the corner. The
        app's feed sets its one frame inset and corner (owner: "all containers feel consistent"). */
@@ -185,9 +186,9 @@
     --_code-header-block: var(--area-space-4);
     --_code-bar: var(--area-control-md);
     /* The floating copy: centred on the first line, as far from the end. */
-    --_code-copy-top: calc(var(--area-code-block-inset, var(--area-space-12)) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2);
+    --_code-copy-top: calc(var(--area-code-block-inset, var(--area-space-12)) + (var(--area-text-base-leading) - var(--area-control-sm)) / 2);
     /* 8 from the end; with the inset hook, as far from the end as from the top. */
-    --_code-copy-end: calc(var(--area-code-block-inset, calc(var(--area-space-8) - (var(--area-text-sm-leading) - var(--area-control-sm)) / 2)) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2);
+    --_code-copy-end: calc(var(--area-code-block-inset, calc(var(--area-space-8) - (var(--area-text-base-leading) - var(--area-control-sm)) / 2)) + (var(--area-text-base-leading) - var(--area-control-sm)) / 2);
     --_code-copy-clear: var(--area-space-48);
     /* spec (owner, 2026-10-22: "the corner inset here is incorrect"): concentric with the header's copy, as sm is
        (round 11): the copy's corner plus its inset and the border, 6 + 4 + 1 = 11, and square at Sharp

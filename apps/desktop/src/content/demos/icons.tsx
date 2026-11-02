@@ -186,7 +186,7 @@ const ExploreGroup = ({ group }: { group: string }) => (
     {EXPLORE.filter(candidate => candidate.group === group).map(({ label, Icon, gaps, counters, notes }) => (
       <div key={label} style={exploreCell}>
         <span>{label}</span>
-        <div style={{ ...row, font: "var(--area-weight-regular) var(--area-text-sm-size)/var(--area-text-sm-leading) var(--area-font-sans)" }}><Icon weight={1.125} /><span>{group}</span></div>
+        <div style={{ ...row, font: "var(--area-weight-regular) var(--area-text-base-size)/var(--area-text-base-leading) var(--area-font-sans)" }}><Icon weight={1.125} /><span>{group}</span></div>
         <div style={plate}>{big(<Icon weight={1.125} />)}</div>
         <span style={muted}>gaps {gaps.join(", ") || "none"}<br />counters {counters.join(", ")}</span>
         {notes.map(note => <span key={note} style={{ color: "var(--area-fg-caution)" }}>{note}</span>)}

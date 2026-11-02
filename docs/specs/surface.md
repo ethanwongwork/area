@@ -73,7 +73,7 @@ One element; children are the content. Inset equations (border counted once):
 | inset | text inset per size; media inset when holding Surfaces | peer: Card | |
 | `surface` fill · edge | `bg-surface`; `border-card` at `border-width` (Stroke width) | peer: Card | |
 | `surface` shadow | `shadow-edge` + `shadow-resting` when outermost; `shadow-edge` only when nested | peer: Card at the top; one edge per boundary when nested | a nested raised plane sits on the same fill, so its line is its edge |
-| text | `text-sm` size, leading and tracking on the root, `fg-default` | peer: Card's body role | measured 2026-10-20: with none, text set straight in a Surface took the page's 13/18 inside a canvas at Type 14 (14/20) |
+| text | `text-base` size, leading and tracking on the root, `fg-default` | peer: Card's body role | measured 2026-10-20: with none, text set straight in a Surface took the page's 13/18 inside a canvas at Type 14 (14/20) |
 | `soft` fill | `bg-subtle`, no edge, no shadow | Layers model: a recessed region is `bg-subtle` | |
 | ground | `surface` points control fills at the raised ground, `soft` at the recessed one | `layers.css` | |
 | depth | concentric to four levels, counting Surface, Card and Panel | the three-layer rule plus one | CSS cannot read a parent's value of a property an element also sets, so depth alternates two private properties per level |

@@ -51,7 +51,7 @@ area     shell, padding 8 (7 + 1 border), radius 16, Card's edge (#ee), no resti
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| input · type | **16/24** (`text-md`) | ChatGPT 16px (26 line); type ramp body 16/24 | Was 14/20. The row stays 48px: (32 − 24) / 2 = 4px padding |
+| input · type | **16/24** (`text-lg`) | ChatGPT 16px (26 line); type ramp body 16/24 | Was 14/20. The row stays 48px: (32 − 24) / 2 = 4px padding |
 | shell · edge | **1px Card's edge `light-dark(neutral-100, neutral-750)`** (rgb 238; composer.css:17-18) | Audit S7a (owner 2026-09-30): a surface standing alone on the page takes Card's edge; ChatGPT's 4% ring (about rgb 245) | Was `border-decorative` rgb 243, the faintest edge in the system, and before that the field edge (226) |
 | shell · hover | edge `input-edge-hover` #d4, not while focused or disabled (composer.css:36) | Audit S7a: Input's hover step | — |
 | shell · focus | edge and outline `composer-focus-color`, the quiet neutral (`border-subtle` at default contrast), plus the field halo (composer.css:37) | Audit S1 left Composer out of the blue field focus: a surface that holds a field | Input, Textarea and Select take the blue `field-focus-color` |

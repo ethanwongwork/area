@@ -6,7 +6,7 @@
  * a spinner; one that failed shows a mark and Retry. Measured from Cursor's queue tray and Codex's queued-message rail
  * (docs/specs/queue.md; composer-additions.md, D).
  *
- * It is the agent card (edit-summary.css, plan.css): Code block's frame, text-sm, a head one row tall with its text 12
+ * It is the agent card (edit-summary.css, plan.css): Code block's frame, text-base, a head one row tall with its text 12
  * in and no rule under it (2026-10-25), and the items as Menu rows with the row plate.
  * ------------------------------------------------------------------------- */
 @layer area.components {
@@ -22,8 +22,8 @@
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    font-size: var(--area-text-sm-size); /* spec: Cursor tray rows 13 under a 14 reply */
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--area-text-base-size); /* spec: Cursor tray rows 13 under a 14 reply */
+    line-height: var(--area-text-base-leading);
   }
   .area-queue__head {
     display: flex;
@@ -56,9 +56,9 @@
   /* Equal insets (round 52, owner: "slightly more room on the right side than on top"): the plate sits as far from the
      card's end as from its top, (row − plate) / 2, and its corner is the card's less that inset (concentric). */
   .area-queue__chevron {
-    --_plate-in: calc((var(--area-ui-row) - var(--area-text-sm-leading)) / 2);
+    --_plate-in: calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2);
     position: relative; isolation: isolate; place-items: center; justify-content: center; align-items: center;
-    inline-size: var(--area-text-sm-leading); block-size: var(--area-text-sm-leading);
+    inline-size: var(--area-text-base-leading); block-size: var(--area-text-base-leading);
     margin-inline-end: calc(var(--_plate-in) - var(--_card-column));
   }
   .area-queue__chevron::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: max(var(--area-radius-min), calc(var(--area-radius-small) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_plate-in) - var(--area-radius-small)) * var(--area-radius-concentric))); transition: var(--area-transition); }

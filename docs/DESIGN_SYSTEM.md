@@ -419,21 +419,27 @@ and the default density (28 Compact, 36 Comfortable). Read the ramps in `axes/de
 and `emit/base.ts`; never copy a table into a component
 ([research](research/ui-size-scale-2026-10-12.md)).
 
-- **The type ramp** is six sizes with one leading each: 12/16, 14/20, 16/24, then titles 20/28, 24/32, 32/40 at
-  type 14, on the 4px grid there and on the 2px leading ramp at other types (13/18 and 15/22 at type 13;
-  `LEADING` in `axes/type-size.ts`, [type spec](specs/typography.md)). Small text is the base minus 2, and never
-  under 10. These leadings are **UI lines**: a label, a row, a cell, a title, a description of one or two lines. They
-  run tight (1.38 to 1.5) so rows stay compact.
+- **The type ramp** is Cursor's (owner, 2026-11-02: "make sure the type ramp is updated to match what cursor does"; read
+  from Cursor's bundle, `docs/research/type-presentation-2026-11-01`). At type 13, four body steps and four titles:
+  `text-xs` 11/14 (badges, counts, keys), `text-sm` 12/16 (secondary: a description, metadata, help, a hint, a lede,
+  a caption, a timestamp), `text-base` 13/18 (every control, row, label and cell; the UI line), `text-lg` 14/22 (reading
+  text: a chat turn, a document, the feed's prose, a component's documentation), then `title-xs` 16/22, `title-sm`
+  18/24, `title-md` 20/28, `title-lg` 26/30, and display 52 / 67. Each moves with the Type setting (12 to 16): small
+  the base less 2 (never under 10), secondary the base less 1, reading the base plus 1, titles in proportion
+  (`axes/type-size.ts`, [type spec](specs/typography.md)). Before 2026-11-02 the base was `text-sm` and reading `text-md`
+  at the base plus 2 (15/22 at 13), with titles 15 / 19 / 22 / 30 and no secondary step. A surface's own body (a
+  Card's, a Dialog's or a Popover's description) is UI text, not secondary.
 - **Prose lines** (owner, 2026-10-30; `docs/research/vertical-rhythm-2026-10-30`). Prose that runs past two lines,
   where the eye has to find the next line (a chat turn, documentation and spec prose), takes the prose leading: the first
   value on the 2px leading ramp at or above 1.5 × the size, the line spacing WCAG 1.4.8 asks of paragraphs and 1.4.12
-  requires text to survive. 12/18, 13/20, 14/22, 15/24, 16/24 (`text-sm-prose-leading`, `text-md-prose-leading`; the
-  type axis, `proseLeading` in `axes/type-size.ts`). Message uses it: at type 13 a turn is 15/24 (was 15/22). Parts set in
+  requires text to survive. 12/18, 13/20, 14/22, 15/24, 16/24 (`text-sm-prose-leading`, `text-base-prose-leading`,
+  `text-lg-prose-leading`; the type axis, `proseLeading` in `axes/type-size.ts`). Reading text (`text-lg`) is only ever
+  prose, so its leading is its prose line: Message's turn is 14/22 at type 13, Cursor's conversation (was 15/24). Parts set in
   prose keep their UI lines and state them (Step, Plan, Edit summary, Turn notice, a small table); a md or lg Table sets its cells on the prose line, so a wrapped description reads as prose, with a block inset that puts the text as far from the rules as from the frame (2026-10-31); `cohesion.test.mjs` checks
-  both. "Reading" stays text-md's name, the size; prose is the line.
-- **Every scope restarts at the body role.** Below the page root, an element with its own Type sets `text-md` for
+  both.
+- **Every scope restarts at the body role.** Below the page root, an element with its own Type sets `text-lg` for
   text set straight in it (THEMING.md, CSS inheritance). A component that holds free text states its own role
-  (Card and Surface use `text-sm`); inline parts (Link, Code, Abbreviation) inherit the text they sit in. A part that
+  (Card and Surface use `text-base`); inline parts (Link, Code, Abbreviation) inherit the text they sit in. A part that
   stands on its own (a row, a cell) takes a ramp size, never inline Code's 0.875em.
 - **Text pairs** (owner, 2026-09-28 on Card, 2026-10-22 for every family; measured in
   `docs/research/text-gaps-2026-10-22`). Gaps are read on the glyphs (baseline to cap), and each kind of pair has one:

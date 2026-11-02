@@ -6,11 +6,11 @@
 .lab-board { display: grid; gap: var(--area-space-32, 32px) }
 .lab-group { display: grid; gap: var(--area-space-12, 12px) }
 .lab-group__head { display: grid; gap: var(--area-space-4, 4px) }
-.lab-group__title { font: var(--area-text-md-strong, 600 13px/1.4 var(--area-font-sans)); color: var(--area-fg-default) }
-.lab-group__parts, .lab-muted { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading) }
+.lab-group__title { font: var(--area-text-lg-strong, 600 13px/1.4 var(--area-font-sans)); color: var(--area-fg-default) }
+.lab-group__parts, .lab-muted { color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading) }
 .lab-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--area-space-12, 12px) }
 .lab-column { display: grid; gap: var(--area-space-6, 6px); align-content: start; min-inline-size: 0 }
-.lab-column__label { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading) }
+.lab-column__label { color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading) }
 .lab-scope {
   position: relative; overflow: hidden; min-block-size: 160px; padding: var(--area-space-24, 24px);
   border: var(--area-border-width) solid var(--area-border); border-radius: var(--area-radius-container, 12px);
@@ -34,16 +34,16 @@
 .lab-specimens--stack > :is(.area-input, .area-select, .area-textarea, .area-progress, .area-meter, .area-titlebar, .area-toolbar, .lab-chrome) { inline-size: 100% }
 .lab-page-sample { display: grid; gap: var(--area-space-16, 16px); min-block-size: 240px; align-content: start }
 .lab-nav { inline-size: 200px }
-.lab-chrome { padding: var(--area-space-10, 10px) var(--area-space-12, 12px); border-radius: var(--area-radius-container, 12px); background: var(--area-chrome-bg); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading) }
+.lab-chrome { padding: var(--area-space-10, 10px) var(--area-space-12, 12px); border-radius: var(--area-radius-container, 12px); background: var(--area-chrome-bg); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading) }
 /* The lab writes its specimen bar's title as plain text: UI text, as the bar's controls are. */
-.lab-titlebar { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading) }
+.lab-titlebar { font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading) }
 .lab-screen { inline-size: 1200px; zoom: 0.42 }
 .lab-table { inline-size: 100% }
 .lab-ratio[data-fails] { color: var(--area-fg-danger); font-weight: 600 }
 .lab-probes { position: absolute; visibility: hidden; pointer-events: none; inset-inline-start: 0; inset-block-start: 0 }
 .lab-ink { display: block }
 .lab-ink--muted { color: var(--area-fg-muted) }
-.lab-description { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size) }
+.lab-description { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-base-size) }
 .lab-snapshot { display: flex; align-items: center; gap: var(--area-space-4, 4px) }
 .lab-snapshot__name { flex: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 .lab-span { display: grid; grid-column: 1 / -1 }

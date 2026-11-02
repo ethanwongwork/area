@@ -8,7 +8,7 @@
  *
  * The agent card (shared with Plan, plan.css; cleanup pass 2026-10-19, owner round 49):
  *   frame   Code block's: the card edge at stroke-width (no shadow under it), the container corner, the surface fill.
- *   type    one size, text-sm, as Cursor's cards sit a step under the reply (13 under 14); buttons are sm, the same size.
+ *   type    one size, text-base, as Cursor's cards sit a step under the reply (13 under 14); buttons are sm, the same size.
  *   column  everything starts 12 in: the list's 4 (Menu's) plus the row inset 8, so the head's title and the rows' text
  *           share one edge (Cursor's card header 0 12).
  *   head    one row tall (ui-row); a trailing button sits as far from the end as from the top, (row − control) / 2, as
@@ -32,8 +32,8 @@
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
   }
   /* The head: title, the turn's counts, Undo all and Keep all. A narrow column (the Inspector) wraps the buttons to a
      second line, still at the end. */

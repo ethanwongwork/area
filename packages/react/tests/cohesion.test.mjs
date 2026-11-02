@@ -343,10 +343,10 @@ test('a line under its title joins it, and a label column fits its labels (DESIG
 
 test('prose runs on prose lines and flows on the ladder; parts set in it keep their UI lines (DESIGN_SYSTEM.md, "Prose lines")', () => {
   // 2026-10-30, docs/research/vertical-rhythm-2026-10-30: a turn's prose was 15/22 with its blocks evenly 16 apart.
-  assert.match(ruleFor('.area-message')?.body ?? '', /line-height:\s*var\(--area-text-md-prose-leading\)/, 'Message sets its prose on the prose line');
-  assert.match(ruleFor('.area-message__content > * + *')?.body ?? '', /margin-block-start:\s*var\(--area-text-md-prose-gap\)/, 'blocks the prose gap apart');
+  assert.match(ruleFor('.area-message')?.body ?? '', /line-height:\s*var\(--area-text-lg-prose-leading\)/, 'Message sets its prose on the prose line');
+  assert.match(ruleFor('.area-message__content > * + *')?.body ?? '', /margin-block-start:\s*var\(--area-text-lg-prose-gap\)/, 'blocks the prose gap apart');
   const heading = rules.find(rule => rule.selector.startsWith('.area-message__content > :is(h1') && rule.selector.includes(':not(:first-child)'));
-  assert.match(heading?.body ?? '', /calc\(var\(--area-text-md-prose-gap\) \+ var\(--area-space-8\)\)/, 'a heading carries its space above');
+  assert.match(heading?.body ?? '', /calc\(var\(--area-text-lg-prose-gap\) \+ var\(--area-space-8\)\)/, 'a heading carries its space above');
   const joins = rules.find(rule => rule.selector.includes('> :is(h1, h2, h3, h4, h5, h6) + *') && rule.selector.includes('> * + :is(ul, ol)'));
   assert.match(joins?.body ?? '', /margin-block-start:\s*var\(--area-space-8\)/, 'a heading and a list join what they introduce');
   // A part that sits in a turn states its own line, so it never inherits the prose line.
@@ -452,10 +452,10 @@ test('a Type scope restarts text at the body role, and containers of free text s
   // straight in it follows that scope instead of the size inherited from above (2026-10-20: a canvas at Type 14 kept
   // the app's 13). Zero specificity, so components keep their own roles.
   const scope = ruleFor(':where([data-area-type]:not(:root))')?.body ?? '';
-  assert.match(scope, /font-size:\s*var\(--area-text-md-size\)/, 'the Type scope does not restate the body size');
-  assert.match(scope, /line-height:\s*var\(--area-text-md-leading\)/, 'the Type scope does not restate the body leading');
+  assert.match(scope, /font-size:\s*var\(--area-text-lg-size\)/, 'the Type scope does not restate the body size');
+  assert.match(scope, /line-height:\s*var\(--area-text-lg-leading\)/, 'the Type scope does not restate the body leading');
   // Containers whose children are free text, not controls, carry a role of their own.
-  assert.match(ruleFor('.area-surface')?.body ?? '', /font-size:\s*var\(--area-text-sm-size\)/, 'Surface has no text role');
+  assert.match(ruleFor('.area-surface')?.body ?? '', /font-size:\s*var\(--area-text-base-size\)/, 'Surface has no text role');
   assert.match(css, /\.area-card \{[^}]*font-size:\s*var\(--_card-title-size\)/, 'Card has no text role');
 });
 
@@ -831,7 +831,8 @@ test('every stroke group\'s members draw its edge, and the groups are the only e
   // axes/stroke-groups.ts: twelve groups, each an amount of the text colour over the ground; a member that kept its old
   // rung would ignore its group's setting. One representative rule per member, as the stylesheet writes it.
   const members = {
-    cards: [['.area-card', /--_card-edge:\s*var\(--area-edge-cards\)/], ['.area-attachment', /--_attachment-edge:\s*var\(--area-edge-cards\)/]],
+    cards: [['.area-card', /--_card-edge:\s*var\((?:--area-card-edge,\s*var\()?--area-edge-cards\)/], // the group, or the group behind Card's public hook (2026-11-02)
+     ['.area-attachment', /--_attachment-edge:\s*var\(--area-edge-cards\)/]],
     blocks: [['.area-code-block', /border:[^;]*var\(--area-edge-blocks\)/], ['.area-table-wrapper', /border:[^;]*var\(--area-edge-blocks\)/]],
     callouts: [['.area-alert', /--_border:\s*var\(--area-edge-callouts\)/]],
     floating: [['.area-popover, .area-menu', /border:[^;]*var\(--area-edge-floating\)/], ['.area-dialog', /border:[^;]*var\(--area-edge-floating\)/], ['.area-toast', /border:[^;]*var\(--area-edge-floating\)/]],

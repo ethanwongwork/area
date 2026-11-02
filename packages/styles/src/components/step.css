@@ -13,8 +13,8 @@
     min-inline-size: 0;
     color: var(--area-fg-default);
     /* The reply's own type: a step sits in a Message (peer). */
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-size: var(--area-text-lg-size);
+    line-height: var(--area-text-lg-leading);
   }
 
   /* The line. As a button it keeps the text's look: no plate, no edge; only the chevron answers the pointer (the

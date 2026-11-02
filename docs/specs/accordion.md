@@ -47,7 +47,7 @@ Code block part.
 |---|---|---|---|
 | variant | plain (default) | A leading chevron before the title; the content sits on the title's column with no rule | Notion toggle block (`notion--toggle-block`); React Aria Disclosure; Primer `details` |
 | variant | divided | A trailing chevron and a rule after each item, the stacked FAQ / settings accordion | shadcn Accordion (`accordion.tsx:21, 37, 43`); Radix, Base UI, Ant Collapse borderless |
-| size | sm (14/20), md (16/24, default) | The title's text role: md is a document toggle, sm a UI-dense one | Notion 16/24 (md); ChatGPT sidebar section 14/18, shadcn `text-sm` (sm) |
+| size | sm (14/20), md (16/24, default) | The title's text role: md is a document toggle, sm a UI-dense one | Notion 16/24 (md); ChatGPT sidebar section 14/18, shadcn `text-base` (sm) |
 | state | open, disabled | Runtime state on the trigger (`aria-expanded`, `disabled`) | every source |
 | behavior | Accordion `multiple` | One open at a time by default (accordion); `multiple` lets any number stay open | Radix `type="single" / "multiple"`, React Aria `allowsMultipleExpanded`, native `<details name>` |
 
@@ -92,9 +92,9 @@ shell    div.nav-section-title       36 tall, padding 0 6 0 10
 shadcn (accordion.tsx @ 295a1f1)
 item     Item       border-b, none on the last (:21)
   header   Header     flex (:33)
-    trigger  Trigger    py-4, text-sm font-medium, gap-4, justify-between, hover:underline (:37)
+    trigger  Trigger    py-4, text-base font-medium, gap-4, justify-between, hover:underline (:37)
       icon     ChevronDown size-4 muted, rotate-180 when open, 200ms (:43)
-content  Content    text-sm; inner pt-0 pb-4 (:57, :60)
+content  Content    text-base; inner pt-0 pb-4 (:57, :60)
 ```
 
 Area:
@@ -181,7 +181,7 @@ rgba(33,27,23,.05) }`, `.xayv9eh:active` at twice the alpha (10%); ChatGPT's che
 | divided · rule | 1px `border-divider` after every item but the last | shadcn `border-b last:border-b-0` (`:21`); Separator's ink | — |
 | divided · content | padding-block-end half the line: sm 10, md 12 (compact 8 / 10) | shadcn rendered pb 10 at sm (2026-10-06) | Was 16 (`pb-4`, pinned source) |
 | title hover | the chevron plate (`bg-hover`, pressed `bg-active`) in both variants; the title never underlines; ink fixed | Google "People also ask" (the chevron's circle darkens); Notion, Apple, Figma FAQs show no title change; DESIGN_SYSTEM shared rule | shadcn underlines (`hover:underline`, still on ui.shadcn.com 2026-10-06); it was the only one of six accordions to do so, so divided dropped it |
-| sm title | text sm 14/20 (compact 12/16) | ChatGPT 14, shadcn `text-sm` | ChatGPT's 18 leading is its sidebar's; Area's 14 role is 14/20 |
+| sm title | text sm 14/20 (compact 12/16) | ChatGPT 14, shadcn `text-base` | ChatGPT's 18 leading is its sidebar's; Area's 14 role is 14/20 |
 | motion | chevron rotates over `duration-fast` with `ease-out`; body opens on `slow`, closes on `moderate` (`block-size` + `opacity`, `ease-in-out`) where `interpolate-size` is supported | ChatGPT 150ms transform; MOTION.md accordion recipe | Body motion added 2026-10-07, kept by the owner 2026-10-08 (Settled 1) |
 | focus | 2px `focus-color` outline, `focus-offset`, `radius-small` corners | Button's focus ring | — |
 | disabled | `opacity-disabled`, `cursor: not-allowed` on the trigger | Tree view rows (audit D-5) | — |

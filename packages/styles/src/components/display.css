@@ -30,7 +30,7 @@
     outline: var(--area-stroke-width) solid var(--area-edge-media);
     outline-offset: calc(-1 * var(--area-stroke-width));
     /* Initials step with the disc: 12 / 14 / 16 at 28 / 32 / 40 (Notion 14 at 32, docs/specs/avatar.md). */
-    font-size: var(--_text, var(--area-text-sm-size));
+    font-size: var(--_text, var(--area-text-base-size));
     /* The initials' line box is the glyph, not the surrounding text's leading (as Folder's avatar badge). */
     line-height: 1;
     font-weight: var(--area-weight-strong);
@@ -76,11 +76,11 @@
   }
 
   .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); --_text: var(--area-text-xs-size); }
-  .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); --_text: var(--area-text-sm-size); }
+  .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); --_text: var(--area-text-base-size); }
   .area-avatar--lg {
     --_size: var(--area-control-lg);
     --_icon: var(--area-space-24);
-    --_text: var(--area-text-md-size);
+    --_text: var(--area-text-lg-size);
   }
 
   .area-avatar-group {
