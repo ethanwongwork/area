@@ -24,6 +24,7 @@ import { colorPairs } from "./colors.ts";
 import { rederivationRules } from "./rederive.ts";
 import { brandDefaultCss } from "../semantic/brand.ts";
 import { PAGE_INPUTS } from "../color/colours.ts";
+import { seriesP3Rules } from "../axes/series.ts";
 
 const INDENT = "  ";
 
@@ -161,6 +162,14 @@ export function emitAxes(): string {
       }));
     }
   }
+
+  // Series colours on a wide-gamut screen (axes/series.ts, 2026-11-01): the luminous colour takes Display P3's room, as
+  // OpenAI's imagery does on a Mac. After every preset, so a P3 screen's paint wins at each Series lightness.
+  out.push("");
+  out.push(`${INDENT}/* Series colours on Display P3 screens. */`);
+  out.push(`${INDENT}@media (color-gamut: p3) {`);
+  for (const [selector, map] of seriesP3Rules()) out.push(rule(selector, map, INDENT + INDENT));
+  out.push(`${INDENT}}`);
 
   // Material (axes/material.ts): a bundle, then single levers, switches and stroke styles, which win over a bundle on
   // the same element by coming later.

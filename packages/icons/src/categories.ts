@@ -47,7 +47,7 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
   { slug: "status", name: "Status & alerts", icons: [
     "info", "alert-circle", "help", "warning", "error", "octagon-alert",
     "status-available", "badge", "badge-check", "square-badge",
-    "circle-dashed", "circle-dot-dashed", "issue", "circle-check-dashed",
+    "circle-dashed", "circle-dot-dashed", "circle-progress", "issue", "circle-check-dashed",
     "loader", "loader-circle", "record",
     "bell", "bell-dot", "bell-ring", "bell-off", "bell-plus", "siren",
   ] },
@@ -60,16 +60,16 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "checkbox", "radio-button", "toggle", "toggle-off",
   ] },
   { slug: "view", name: "View & zoom", icons: [
-    "search", "search-off", "search-alert", "square-search",
+    "search", "search-off", "search-alert", "square-search", "search-sparkle",
     "zoom-in", "zoom-out", "zoom-fit",
     "expand", "collapse", "fold-horizontal", "fold-vertical", "unfold-horizontal", "unfold-vertical", "maximize", "minimize",
     "eye", "eye-off", "eye-closed", "scan-check", "scan-qr", "scan-text",
   ] },
   { slug: "layout", name: "Layout & panels", icons: [
     "app-window", "layout", "layout-dashboard", "layout-template",
-    "panel-left", "panel-right", "panel-top", "panel-bottom", "panel-bottom-open", "panel-bottom-close", "panel-top-open", "panel-top-close",
+    "panel-left", "panel-right", "panel-left-float", "panel-right-float", "panel-top", "panel-bottom", "panel-bottom-open", "panel-bottom-close", "panel-top-open", "panel-top-close",
     "panel-left-close", "panel-right-close", "panel-left-open", "panel-right-open",
-    "columns", "rows", "split", "grid", "grid-plus", "blocks", "kanban", "cards", "table", "table-cells-merge", "table-cells-split", "form",
+    "columns", "rows", "split", "arrow-split", "grid", "grid-plus", "blocks", "kanban", "cards", "table", "table-cells-merge", "table-cells-split", "form",
     "picture-in-picture", "stack-frame", "timeline",
   ] },
   { slug: "edit", name: "Edit & clipboard", icons: [
@@ -109,13 +109,13 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "padding", "padding-sides", "padding-ends", "padding-side", "padding-axis", "sides",
     "corner", "corner-top-right", "corner-bottom-right", "corner-bottom-left", "corners", "corners-sparkle",
     "angle", "aspect-ratio", "flip", "flip-vertical",
-    "opacity", "blur", "shadow", "mask",
+    "opacity", "blur", "background-blur", "shadow", "mask", "absolute-position", "motion",
     "boolean-union", "boolean-subtract", "boolean-intersect", "boolean-exclude", "subtract",
     "group", "ungroup", "bring-to-front", "send-to-back",
     "layers", "square-dashed", "token", "component", "slice",
   ] },
   { slug: "shapes", name: "Shapes", icons: [
-    "shapes", "rectangle", "rectangle-vertical", "ellipse", "polygon", "pentagon", "hexagon", "octagon", "diamond",
+    "shapes", "system", "rectangle", "rectangle-vertical", "ellipse", "polygon", "pentagon", "hexagon", "octagon", "diamond",
     "cube", "cube-wireframe",
   ] },
   { slug: "files", name: "Files & documents", icons: [
@@ -145,16 +145,15 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "id-card", "handshake", "accessibility",
   ] },
   { slug: "reactions", name: "Reactions", icons: [
-    "smile", "smile-plus", "meh", "frown", "square-smile",
+    "smile", "smile-plus", "meh", "frown", "square-smile", "ghost",
     "thumbs-up", "thumbs-down",
     "heart", "heart-off", "star", "star-half", "star-off",
-    "bookmark", "bookmark-add", "bookmark-remove", "bookmark-off", "bookmark-check",
+    "bookmark", "bookmark-add", "bookmark-remove", "bookmark-off", "bookmark-check", "bookmarks",
     "flag", "flag-off", "tag", "tags", "tag-plus",
   ] },
   { slug: "ai", name: "AI & agents", icons: [
     "sparkle", "sparkle-off", "chat-sparkle", "grid-sparkle", "image-sparkle", "pencil-sparkle", "text-sparkle", "code-sparkle",
-    "agent", "bot", "bot-agent", "bot-builder", "bot-researcher", "bot-scholar", "bot-guard",
-    "bot-lead", "bot-designer", "bot-generator", "bot-automator",
+    "agent", "bot", "bot-agent", "bot-agents",
     "brain", "brain-circuit", "brain-off",
   ] },
   { slug: "media", name: "Media", icons: [
@@ -195,7 +194,7 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "home", "building", "store", "bank",
     "globe", "globe-off", "map", "location", "location-off", "location-add", "locate", "navigation", "compass", "compass-dot",
     "route", "target", "crosshair", "goal",
-    "car", "truck", "plane", "rocket", "anchor", "milestone",
+    "car", "truck", "plane", "rocket", "anchor", "milestone", "signpost",
   ] },
   { slug: "security", name: "Security", icons: [
     "lock", "unlock", "key", "password", "fingerprint", "scan-face",
@@ -212,12 +211,12 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "receipt", "discount", "gem", "ticket", "gift", "gift-card", "package", "package-check", "barcode", "qr-code",
   ] },
   { slug: "nature", name: "Weather & nature", icons: [
-    "sun", "moon", "sun-moon", "brightness", "cloud-sun", "cloud-rain", "cloud-lightning", "cloud-snow",
+    "sun", "moon", "sun-moon", "sunrise", "brightness", "cloud-sun", "cloud-rain", "cloud-lightning", "cloud-snow",
     "wind", "snowflake", "umbrella", "thermometer",
     "flame", "leaf", "tree", "mountain", "paw",
   ] },
   { slug: "science", name: "Science", icons: [
-    "flask", "flask-off", "atom", "magnet", "binoculars", "lightbulb", "lightbulb-off",
+    "flask", "flask-off", "atom", "dna", "orbit", "magnet", "binoculars", "lightbulb", "lightbulb-off", "lightbulb-sparkle",
     "graduation-cap", "calculator", "presentation", "scale", "telescope",
   ] },
   { slug: "objects", name: "Objects", icons: [

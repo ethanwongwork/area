@@ -335,6 +335,9 @@ export default {
       ["Do", "Set one look for a whole grid: caption above, below or overlay, container framed, basic or containerless, fill recessed or raised, an edge or borderless."],
       ["Do", "Use caption overlay where the asset says what it is (an image library): the asset fills the card and the name appears on it on hover and focus."],
       ["Do", "Set mediaAlt only when the image says more than the name; it is empty by default."],
+      ["Do", "Put a status in the card's name row when it has one (caption above, below or outside)."],
+      ["Do", "Use badge for a picture with no name row (caption overlay, an image library): a plain Badge, or its mark alone (iconOnly, with an aria-label), on a raised plate at the top start."],
+      ["Don't", "Put a Badge straight on a picture yourself: on a photo or a vivid cover its colours are lost. The badge slot gives it the plate."],
       ["Don't", "Scope the frame alone (frameProps with data-area-theme or a ground): a dark frame on a light card breaks the pair."],
       ["Don't", "Put text at the head's end: a detail goes in the asset itself (a type sample's line) or behind Copy."],
       ["Don't", "Pad or frame the asset yourself: the frame already sits 4 in with a corner concentric with the card's."],
@@ -353,6 +356,7 @@ export default {
       mosaic: "A group's assets filling the frame's place: a 2×2 grid of the first four, 4 apart, or (strip) up to eight in one row at their own ratios, the frame's height, running past the card's end; hidden from assistive tech.",
       cell: "One asset in the mosaic, cropped to its cell at the frame's corner; fewer than four leave cells as the card's ground.",
       thumb: "An element in a cell, laid out at about its own card's frame and scaled to the cell: a thumbnail, inert.",
+      badge: "A status on the asset: a plain Badge on a raised plate (the surface, a pill, the control shadow) 8 in from the frame's top start, shown at rest; a round plate for the mark alone.",
     },
     // Spec: States; source: AssetCardProps.selected.
     states: {

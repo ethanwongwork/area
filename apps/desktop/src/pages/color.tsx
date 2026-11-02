@@ -9,6 +9,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
 import { ROLE_SCALES } from "../../../../packages/tokens/src/color/presets.ts";
+import { RAMP_STEPS, SERIES } from "../../../../packages/tokens/src/color/series.ts";
 import { Code, ColorSwatch, CopyButton as AreaCopyButton, ListBox, EmptyState, PanelSection, Table, TableLink, Tooltip } from "@area/react";
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
@@ -174,6 +175,35 @@ function ColorCard({ scale, item, ink, copy }: { scale: string; item: ScaleStep;
 }
 const title = (id: string) => id[0]!.toUpperCase() + id.slice(1);
 
+/**
+ * The data colours (color/series.ts, 2026-11-01): each series as a card in its fill with its ink, the mark as a line and
+ * the ramp under it. Painted from the live tokens, so Series lightness and light / dark show here.
+ */
+function SeriesSection() {
+  return (
+    <CanvasSection id="scale-series" title="Series" count={SERIES.length}>
+      <TileGrid span="unit" className="studio-color-grid">
+        {SERIES.map(({ name }, i) => {
+          const n = i + 1;
+          return (
+            <Tile key={name} span="unit" stage="flow" label={<span className="studio-swatch__level">{n} {title(name)}</span>}
+              aria-label={`Series ${n}, ${name}: --area-series-${n}`}
+              paint={{ background: `var(--area-series-${n}-fill)`, color: `var(--area-series-${n}-ink)` }}>
+              <span className="studio-swatch__values">
+                <span>--area-series-{n}</span>
+                <span className="studio-series__mark" style={{ background: `var(--area-series-${n})` }} aria-hidden="true" />
+                <span className="studio-series__ramp" aria-hidden="true">
+                  {Array.from({ length: RAMP_STEPS }, (_, step) => <i key={step} style={{ background: `var(--area-series-${n}-ramp-${step + 1})` }} />)}
+                </span>
+              </span>
+            </Tile>
+          );
+        })}
+      </TileGrid>
+    </CanvasSection>
+  );
+}
+
 /* "<scale>-<level>", e.g. "blue-500"; the default selection is blue 500. */
 function parse(item?: string) {
   const [scale, level] = (item ?? "").split("-");
@@ -233,7 +263,8 @@ export function ColorPage() {
           <ViewSwitch value={mode} onChange={setMode} />
         </ViewControls>
       }
-      canvas={onCanvas.length ? (
+      // The series sit after the scales, a section's gap apart as the scales are (styles/canvas.css .studio-sections).
+      canvas={onCanvas.length ? (<div className="studio-sections">
         <Sheet grid={mode !== "list"} value={picked ? `${picked.scale.id}-${picked.step.level}` : null} onChoose={choose}>
           {onCanvas.map(entry => {
             const isSelected = (level: number) => entry.id === picked?.scale.id && level === picked?.step.level;
@@ -280,7 +311,8 @@ export function ColorPage() {
             );
           })}
         </Sheet>
-      ) : <EmptyState title="No scales" description={`Nothing matches “${query}”.`} />}
+        {view || contrast !== "all" ? null : <SeriesSection />}
+      </div>) : <EmptyState title="No scales" description={`Nothing matches “${query}”.`} />}
       inspector={{
         // The page edits what it shows (owner's pick, 2026-10-31: "each subject page edits its settings"): every colour
         // setting, Page, Accent and Emphasis, the ramps following as they move; Size for the labels. Themes keeps them all.

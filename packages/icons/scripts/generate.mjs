@@ -40,7 +40,10 @@ const KEYLINES = { square: [13, 13], circle: [14, 14], horizontal: [14, 11], ver
 // Detail (owner, 2026-09-28): more detail beats the strict minimum, so a gap may fall to
 // 0.875 (2 between centre-lines) where it adds detail, and tight runs straight into
 // standard (1.625–1.75 read the same). The overlap cut stays 1.125 everywhere.
-const GAPS = { detail: [0.875, 1.125], tight: [1.125, 1.75], standard: [1.75, 2.0] };
+// Floor (owner, 2026-11-01): the detail step read as clumped lines at 16 and is retired; no gap is narrower than the
+// line. data-floor="kept" records an owner construction that keeps the old detail step until the owner rules on it.
+const GAPS = { tight: [1.125, 1.75], standard: [1.75, 2.0] };
+const DETAIL_GAP = [0.875, 1.125];
 const OPEN = 2.5;
 const CLOSE_GAP = 0.875;      // data-gap="close": 2 between centre-lines at 1.125, the one step under tight
 const JOIN = 0.1;              // closer than this (centre-lines) counts as a join, not a gap
@@ -48,7 +51,8 @@ const JOIN = 0.1;              // closer than this (centre-lines) counts as a jo
 // tight; every other enclosed pocket is standard or larger.
 // Detail (owner, 2026-09-28): any pocket as wide as the detail gap (0.875) passes, so small rings
 // (paw's toes, git's nodes) can stay outlined instead of becoming dots.
-const COUNTERS = { detail: [0.875, 1.25], tight: [1.25, 1.75], standard: [1.75, Infinity] };
+const COUNTERS = { tight: [1.5, 1.75], standard: [1.75, Infinity] };
+const DETAIL_COUNTERS = { detail: [0.875, 1.25], small: [1.25, 1.5] };
 // Filled variant (docs/specs/icons.md, "Filled"): each shape declares its role. solid fills
 // the shape inside its outline edge; knockout cuts the stroke out of the solids at the icon
 // weight; hole cuts the shape's interior out. Unmarked shapes are drawn as in the outline.
@@ -466,12 +470,13 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   });
   if (strict) for (const el of elements.filter(e => e.filled === "knockout"))
     if (!el.samples.some(insideSolid)) fail(name, "a knockout lies outside every solid; it would vanish when filled");
-  // Dots come in two sizes (docs/specs/icons.md, "Shared parts"): ⌀2 for a dot that is the
-  // icon or one of its marks, ⌀1.5 for a dot with a stem or a detail set inside a shape.
+  // Dots come in three sizes (docs/specs/icons.md, "Shared parts"): ⌀2 for a dot that is the
+  // icon or one of its marks, ⌀1.5 for a dot with a stem (the i, the !, the ?), and ⌀1.125, the line's
+  // own weight, for a detail set inside a shape (keys, windows, eyes; owner, 2026-11-01, cohesion pass).
   // data-dot="free" records an owner-approved exception (quote's marks, rocket's window).
   if (root["data-dot"] === "free") for (const el of elements) if (el.tag === "circle") el.freeDot = true;
   if (strict && root["data-dot"] !== "free") for (const el of elements.filter(e => e.tag === "circle" && !e.stroked))
-    if (!["1", "0.75"].includes(el.attrs.r)) fail(name, `a dot is r 1 (⌀2) or r 0.75 (⌀1.5), not r ${el.attrs.r}`);
+    if (!["1", "0.75", "0.5625"].includes(el.attrs.r)) fail(name, `a dot is r 1 (⌀2), r 0.75 (⌀1.5, with a stem) or r 0.5625 (⌀1.125, a detail), not r ${el.attrs.r}`);
   // Off states share one slash (M2 2L14 14). data-off="own" records an owner-chosen form
   // (eye-off is a closed eye, volume-off a speaker with a ×, as Fluent's mute).
   if (strict && name.endsWith("-off") && root["data-off"] !== "own" && !elements.some(el => /M2 2L14 14\b/.test(el.attrs.d ?? "")))
@@ -503,7 +508,10 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     // data-gap="slash" (owner-approved, recorded in the spec): the base icon is drawn whole and the
     // shared slash crosses it flat, so a part beside the slash keeps its base position (keyboard-off's keys).
     if (root["data-gap"] === "slash" && [drawn[p], drawn[q]].some(el => el.attrs?.d === "M2 2L14 14")) continue;
-    const g = d - pads[p] - pads[q];
+    // A detail dot (⌀1.125, the line's weight) keeps the place a ⌀1.5 dot had: its gaps are measured
+    // from that ⌀1.5 placement, so shrinking the dot to the line moved no key, window or eye (owner, 2026-11-01).
+    const place = el => !el.stroked && el.tag === "circle" && el.attrs.r === "0.5625" ? 0.1875 : 0;
+    const g = d - pads[p] - pads[q] - place(drawn[p]) - place(drawn[q]);
     if (g <= 0) continue;  // the inks overlap: a join, not a gap
     // Outline-only lines are not drawn in the filled variant, so they have no filled gap.
     const negative = [drawn[p].filled, drawn[q].filled].some(role => ["knockout", "hole", "cut", "line"].includes(role));
@@ -517,17 +525,22 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     // data-gap="aligned" (owner-approved, recorded in the spec): shapes kept on one edge line
     // leave a diagonal gap between standard and open where a rounded corner meets them (qr-code).
     const aligned = root["data-gap"] === "aligned" && g > GAPS.standard[1] && g < OPEN;
-    const step = Object.entries(GAPS).find(([, [lo, hi]]) => g >= lo - 1e-6 && g <= hi + 1e-6)?.[0] ?? (g >= OPEN ? "open" : close ? "close" : aligned ? "aligned" : null);
+    // The ⌀1.5 dot under a !, i or ? stem sits 0.94 below it (owner, 2026-10-03), the one gap under the line; an icon
+    // marked data-floor="kept" keeps the retired detail step on an owner construction until the owner rules on it.
+    const stemDot = [drawn[p], drawn[q]].some(el => !el.stroked && el.tag === "circle" && el.attrs.r === "0.75");
+    const kept = root["data-floor"] === "kept" || stemDot;
+    const step = Object.entries(GAPS).find(([, [lo, hi]]) => g >= lo - 1e-3 && g <= hi + 1e-6)?.[0] ?? (g >= OPEN ? "open" : close ? "close" : aligned ? "aligned" : kept && g >= DETAIL_GAP[0] - 1e-6 && g <= DETAIL_GAP[1] + 1e-6 ? "detail" : null);
     gaps.push(`${r2(g)}${step ? " " + step : ""}`);
-    if (!step) fail(name, `shapes ${p + 1} and ${q + 1} leave a ${r2(g)}px gap; move them ${toSteps(g, [["detail", ...GAPS.detail], ["tight", ...GAPS.tight], ["standard", ...GAPS.standard], ["open", OPEN, Infinity]])} (or join them)`);
+    if (!step) fail(name, `shapes ${p + 1} and ${q + 1} leave a ${r2(g)}px gap; move them ${toSteps(g, [["tight", ...GAPS.tight], ["standard", ...GAPS.standard], ["open", OPEN, Infinity]])} (or join them)`);
   }
   // Counters: rasterise the ink and flood the outside; every enclosed pocket of negative
   // space must hold at least a tight disc, or it reads as a blot at 16px.
   const counters = measureCounters(drawn);
   // data-counter="sliver" (owner-approved, recorded in the spec): a slashed shape keeps
   // Fluent's fuller form, and the sliver between it and the slash stays (mic-off).
-  if (root["data-counter"] !== "sliver") for (const c of counters) if (!Object.values(COUNTERS).some(([lo, hi]) => c >= lo - 1e-6 && c <= hi + 1e-6))
-    fail(name, `an enclosed counter is ${r2(c)}px across; make it ${toSteps(c, [["detail", ...COUNTERS.detail], ["tight", ...COUNTERS.tight], ["standard", COUNTERS.standard[0], Infinity]]).replaceAll("apart", "larger").replaceAll("closer", "smaller")} (or remove it)`);
+  const counterSteps = root["data-floor"] === "kept" ? { ...DETAIL_COUNTERS, ...COUNTERS } : COUNTERS;
+  if (root["data-counter"] !== "sliver") for (const c of counters) if (!Object.values(counterSteps).some(([lo, hi]) => c >= lo - 1e-3 && c <= hi + 1e-6))
+    fail(name, `an enclosed counter is ${r2(c)}px across; make it ${toSteps(c, [["tight", ...COUNTERS.tight], ["standard", COUNTERS.standard[0], Infinity]]).replaceAll("apart", "larger").replaceAll("closer", "smaller")} (or remove it)`);
   // Keyline: the ink box at WEIGHT fits the icon's optical shape, centred on 8,8.
   if (strict && keylines && KEYLINES[keyline]) {
     const [kw, kh] = KEYLINES[keyline];

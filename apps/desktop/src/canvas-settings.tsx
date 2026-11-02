@@ -71,7 +71,7 @@ function ViewSwitch({ view, onChange }: { view: View; onChange: (view: View) => 
 }
 
 /** Every setting the Inspector edits, as Themes and Components show them. */
-export const INSPECTOR_AXES: readonly Axis[] = ["neutral", "tint-hue", "tint-hue-dark", "tint-light", "tint-dark", "ink-tint", "accent", "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "feedback", "pills"];
+export const INSPECTOR_AXES: readonly Axis[] = ["neutral", "tint-hue", "tint-hue-dark", "tint-light", "tint-dark", "ink-tint", "accent", "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours", "series-lightness", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "feedback", "pills"];
 /** The settings under some headings (a subject page's own: Colors edits Page, Accent and Emphasis; owner's pick, 2026-10-31). */
 export const axesUnder = (...headings: string[]): Axis[] =>
   GROUPS.filter(group => headings.includes(group.heading)).flatMap(group => group.settings as readonly Axis[]).filter(axis => INSPECTOR_AXES.includes(axis));

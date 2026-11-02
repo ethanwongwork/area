@@ -76,6 +76,7 @@ Spacing: header, 6, bar, 6, description (Field's stack; 4 in compact). Area adds
 | description | Field's description, 12/16 muted, under the bar | Peer Field; Figma's caption | — |
 | bar | Progress's: rail `edge-control`, sm 4 / md 6 / lg 8, pill, `selection-solid` fill | ChatGPT 6 pill; peer Progress | Progress's rail rather than ChatGPT's 10% ink, so a meter and a progress bar match |
 | tones | `warning-solid`, `danger-solid` fills | Spectrum Meter notice / negative; Area status solids | — |
+| segments' colours | `series-1` … `series-8`, the series' marks by a part's place (2026-11-01) | The series colours (color/series.ts, OpenAI's palette); dataviz validator | Was a fixed order of palette steps with yellow and pink under 3:1 on white; every mark now clears 3:1 on every ground |
 | semantics | `role="meter"`, value clamped to the range, `aria-valuetext` from a string value text, named by the label, described by the description | React Aria Meter; WAI-ARIA 1.2 | — |
 
 ## States
@@ -171,4 +172,15 @@ the value now ends the label's row.
 - **Why:** your pick "A stacked meter: Build" on the Inspector panel study (docs/research/inspector-panel-2026-10-30).
 - **Not as proposed:** 2 between parts (the dataviz rule), not Claude's 1; inner ends square, not rounded 1; colours
   from Area's palette steps, not the brand's supporting colours (those are only soft and strong tones today).
+- **Verdict:** in review.
+
+## Review note, 2026-11-01 (series colours)
+
+- **What changed:** a stacked meter's parts take the series colours (`--area-series-1` … `-8`, the marks): sky, pink,
+  yellow-green, lilac, peach orange, mint, periwinkle, peach. In light each is the lightest colour on its hue that clears
+  3:1 on every light ground (#0095d8 #ff2bb9 #9a8f00 #bf60ff #e86600 #00a07e #7581ff #ff4766); in dark the luminous colour
+  at Series lightness (79: #6bc5ff #f697cc #c8be52 #d3a3fa #fe9f6f #4ed5af #a8b5ff #ff99a0), wider on P3 screens.
+- **Why:** your Build pick on the colour system study's proposal 2 (docs/research/color-system-2026-11-01): one set of
+  data colours from OpenAI's palette for every chart, and Meter is the one data colour consumer today. Yellow 450 and
+  pink 300 sat at 2.31 and 2.73:1 on white; every part now reads as a mark.
 - **Verdict:** in review.

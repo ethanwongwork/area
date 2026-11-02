@@ -1,5 +1,5 @@
 <svg data-set="area-pilot" data-keyline="square" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M7.5 3.5A1.061 1.061 0 0 0 6 2L3 5A1.061 1.061 0 0 0 4.5 6.5L9 11A1.061 1.061 0 0 0 10.5 12.5L13.5 9.5A1.061 1.061 0 0 0 12 8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="cut" d="M4.5 6.5L7.5 3.5M9 11L12 8" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="solid" d="M6 8L2.25 11.75A1.061 1.061 0 0 0 3.75 13.25L7.5 9.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M8.5 4.5A1.4142 1.4142 0 0 0 6.5 2.5L3.5 5.5A1.4142 1.4142 0 0 0 5.5 7.5L8.5 10.5A1.4142 1.4142 0 0 0 10.5 12.5L13.5 9.5A1.4142 1.4142 0 0 0 11.5 7.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="cut" d="M5.5 7.5L8.5 4.5M8.5 10.5L11.5 7.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M6 8L2.25 11.75A1.4142 1.4142 0 0 0 4.25 13.75L8 10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

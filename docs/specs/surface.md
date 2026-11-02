@@ -140,3 +140,5 @@ their screens are the evidence for the rules, not for an API.
 - **Question:** at Layers 0 (Flat, the default) a soft Surface's fill is the recessed layer, equal to the page, so the
   well is invisible and its row looks inset under nothing. Show it at Flat, or keep Flat flat?
 - **Answer:** keep Flat flat (owner, 2026-10-29). A soft well shows once Layers is above 0. No change.
+- **2026-11-01:** confirmed when fills moved to the `well` ground (color-system study): a soft Surface is a region and stays
+  recessed, flat at Layers 0.

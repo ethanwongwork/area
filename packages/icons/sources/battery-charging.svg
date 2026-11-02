@@ -1,5 +1,6 @@
 <svg data-set="area-pilot" data-keyline="horizontal" data-angles="free" data-acute="sharp" data-gap="close" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect data-filled="solid" x="1.5" y="4.5" width="11" height="7" rx="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="fill" d="M3 4.5H11A1.5 1.5 0 0 1 12.5 6V10A1.5 1.5 0 0 1 11 11.5H3A1.5 1.5 0 0 1 1.5 10V6A1.5 1.5 0 0 1 3 4.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M3.95 11.5L3 11.5A1.5 1.5 0 0 1 1.5 10L1.5 6A1.5 1.5 0 0 1 3 4.5L5.101 4.5M10.05 4.5L11 4.5A1.5 1.5 0 0 1 12.5 6L12.5 10A1.5 1.5 0 0 1 11 11.5L8.899 11.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M14.5 6.5V9.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="knockout" d="M7.25 6.5L6.25 8H7.75L6.75 9.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="knockout" d="M7.75 4.5L5.75 8H8.25L6.25 11.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

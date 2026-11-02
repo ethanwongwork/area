@@ -15,7 +15,7 @@ function gallerySpecimenTable() {
   // name; a tile therefore names only its single specimen (default, soft-success,
   // size-md) and never repeats the family name just to fill space.
   const badgeTones = ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"];
-  const badgeVariants = ["soft", "solid", "outline", "color", "modern"];
+  const badgeVariants = ["soft", "solid", "outline", "color", "modern", "plain"];
   const titleCase = (value) => value[0].toUpperCase() + value.slice(1);
   const gallerySpecimens = {
     calendar: [
@@ -109,6 +109,8 @@ function gallerySpecimenTable() {
       { id: "state-containerless-image-selected", title: "State / containerless image selected", demo: "GalleryAssetCardContainerlessImageSelected" },
       { id: "caption-below", title: "Caption / below", demo: "GalleryAssetCardCaptionBelow" },
       { id: "caption-outside", title: "Caption / outside", demo: "GalleryAssetCardCaptionOutside" },
+      { id: "badge", title: "Badge / plate", demo: "GalleryAssetCardBadge" },
+      { id: "badge-mark", title: "Badge / mark", demo: "GalleryAssetCardBadgeMark" },
       { id: "container-basic", title: "Container / basic", demo: "GalleryAssetCardBasic" },
       { id: "fill-raised", title: "Fill / raised", demo: "GalleryAssetCardRaised" },
       { id: "borderless", title: "Borderless", demo: "GalleryAssetCardBorderless" },

@@ -1,0 +1,255 @@
+<title>Icon Boards</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono&display=swap">
+<style>
+/* Layout: a sticky control bar, then boards of 60 icons (10 × 6) on a quiet grey ground like a showcase sheet; the stroke study and the flagged list follow. Area's look: Geist, neutral greys, one flag red. */
+:root {
+  --bg: #f5f5f4; --board: #f5f5f4; --panel: #ffffff; --fg: #161616; --icon: #161616; --muted: #6e6e6a; --line: #e2e2df;
+  --flag: #e5484d; --flag-bg: #fde8e8; --key: #e2622b; --key-bg: rgb(226 98 43 / 0.16); --hover: rgb(0 0 0 / 0.05); --accent: #2563eb;
+  --font: "Geist", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #050505; --board: #0b0b0b; --panel: #111112; --fg: #ececec; --icon: #ececec; --muted: #9a9a9f; --line: #232326;
+  --flag: #ff6369; --flag-bg: #3b1214; --key: #ff8a50; --key-bg: rgb(255 138 80 / 0.16); --hover: rgb(255 255 255 / 0.06); --accent: #6b9bff; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #050505; --board: #0b0b0b; --panel: #111112; --fg: #ececec; --icon: #ececec; --muted: #9a9a9f; --line: #232326;
+  --flag: #ff6369; --flag-bg: #3b1214; --key: #ff8a50; --key-bg: rgb(255 138 80 / 0.16); --hover: rgb(255 255 255 / 0.06); --accent: #6b9bff; color-scheme: dark; }
+body { background: var(--bg); color: var(--fg); font: 14px/1.5 var(--font); }
+.page { max-width: 1120px; margin: 0 auto; padding-block: 32px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 28px; }
+h1 { font-size: 24px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 16px; font-weight: 600; margin: 0; }
+p { margin: 0; max-width: 72ch; }
+.lede { color: var(--muted); }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); padding-block: 10px; display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.group { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--panel); }
+.seg button { font: 500 12px/1 var(--font); color: var(--fg); background: none; border: 0; padding: 7px 10px; cursor: pointer; font-variant-numeric: tabular-nums; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.btn { font: 500 12px/1 var(--font); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; cursor: pointer; }
+.btn:hover, .seg button:hover:not([aria-pressed="true"]) { background: var(--hover); }
+label.check { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; color: var(--fg); cursor: pointer; }
+.count { margin-left: auto; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.count b { color: var(--flag); }
+button:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.boards { display: grid; gap: 20px; }
+.board { background: var(--board); border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 14px; min-width: 0; }
+.board header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-size: 12px; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); }
+.cell { position: relative; display: grid; justify-items: center; align-content: center; gap: 4px; padding: calc(var(--ds) * 0.55) 0; border: 0; background: none; color: var(--icon); cursor: pointer; border-radius: 10px; min-width: 0; }
+.cell:hover { background: var(--hover); }
+.cell[aria-pressed="true"] { background: var(--flag-bg); color: var(--flag); box-shadow: inset 0 0 0 1.5px var(--flag); }
+.cell svg { width: var(--ds); height: var(--ds); overflow: visible; display: block; }
+.cell .nm { font: 10px/1.2 var(--mono); color: var(--muted); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-inline: 2px; }
+.boards:not(.labels) .nm { display: none; }
+.ic .l { fill: none; stroke: currentColor; stroke-width: var(--sw); stroke-linecap: round; stroke-linejoin: round; }
+.ic circle[style] { r: calc(var(--r) * var(--rk) * 1px); }
+.ic .kl { fill: var(--key-bg); stroke: var(--key); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.boards:not(.keys) .kl { display: none; }
+@media (max-width: 720px) { .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 14px; min-width: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font: 12px var(--mono); padding: 4px 8px 4px 6px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; }
+.chip svg { width: 16px; height: 16px; color: var(--icon); }
+.chip:hover { border-color: var(--flag); }
+.empty { color: var(--muted); font-size: 13px; }
+textarea { font: 13px/1.5 var(--font); width: 100%; box-sizing: border-box; min-height: 64px; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); resize: vertical; }
+.state { font-size: 12px; color: var(--muted); min-height: 18px; }
+
+.weights { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px 24px; }
+.wcol { display: grid; gap: 2px; align-content: start; padding: 12px; border-radius: 10px; border: 1px solid transparent; }
+.wcol.now { border-color: var(--line); background: var(--bg); }
+.wcol h3 { margin: 0 0 6px; font: 500 12px var(--font); color: var(--muted); }
+.wrow { display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--fg); padding: 5px 0; }
+.wrow svg { width: 20px; height: 20px; color: var(--icon); flex: none; }
+.wrow.small { font-size: 13px; }
+.wrow.small svg { width: 16px; height: 16px; }
+.facts { font-size: 13px; color: var(--muted); display: grid; gap: 4px; }
+.facts b { color: var(--fg); font-weight: 600; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.opts button { font: 500 13px var(--font); padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer; }
+.opts button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="page">
+  <header style="display:grid;gap:8px">
+    <h1>Icon Boards</h1>
+    <p class="lede">All of Area's drawings, shuffled into boards of 60 (updated after round 3: radius by size, the new plane, switch-camera and snowflake, eight bots removed; your earlier flags stay until you unflag them). Click any icon that looks off from the rest: too large, too small, too heavy, too light, too busy, or drawn in a different hand. Shuffle to see each icon among new neighbours; your flags stay. Turns and aliases are left out because they repeat a drawing.</p>
+  </header>
+
+  <div class="bar" role="toolbar" aria-label="Board settings">
+    <div class="group">Size <span class="seg" id="sizes"></span></div>
+    <div class="group">Line at 16px <span class="seg" id="weights"></span></div>
+    <div class="group" id="corners-group" hidden>Show <span class="seg" id="corners"></span></div>
+    <label class="check"><input type="checkbox" id="keys"> Keylines</label>
+    <label class="check"><input type="checkbox" id="labels"> Names</label>
+    <button class="btn" id="shuffle" type="button">Shuffle boards</button>
+    <span class="count" id="count">0 flagged</span>
+  </div>
+
+  <div class="boards" id="boards"></div>
+
+  <section class="panel" aria-labelledby="flagged-h">
+    <h2 id="flagged-h">Flagged</h2>
+    <div class="chips" id="chips"><span class="empty">Nothing flagged yet. Click an icon on a board to flag it; click it again, or its chip here, to unflag.</span></div>
+    <label for="note-general" class="facts">Anything to add (what feels off about them, patterns you see)</label>
+    <textarea id="note-general" placeholder="e.g. the rings read larger than the squares; the folders look light"></textarea>
+    <div class="state" id="state-general" aria-live="polite"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="weight-h">
+    <h2 id="weight-h">Should the line weight change?</h2>
+    <p>The same icons beside text at each weight, the way they sit in the app. The boards' "Line at 16px" control shows any weight across the whole set.</p>
+    <div class="weights" id="wcols"></div>
+    <div class="facts">
+      <div><b>The text sets the weight.</b> Geist's stem is 0.085 em in Regular and 0.107 em in Medium (measured). At the app's type 13 that is 1.10px for regular labels and 1.39px for medium ones; at type 15, 1.28 and 1.61.</div>
+      <div><b>Area now:</b> 1.125 at 16px, following the size curve to 1.24 at 20 and 1.35 at 24, and following the type in the app (1.045 at type 13). It matches regular text's stem.</div>
+      <div><b>Other sets at 16px:</b> Phosphor, Heroicons, Iconoir and Fluent draw 1.0; Cursor 1.25; Lucide and Tabler 1.33.</div>
+      <div><b>Recommended: keep 1.125.</b> It is the stem of the regular text beside it. 1.25 or heavier matches medium text instead, and closes the small gaps and counters that detail-first drawings rely on; 1.0 reads fainter than the labels.</div>
+    </div>
+    <div class="opts" role="group" aria-label="Line weight pick" id="wpick"></div>
+    <textarea id="note-stroke" placeholder="Notes on weight"></textarea>
+    <div class="state" id="state-stroke" aria-live="polite"></div>
+  </section>
+</div>
+
+<script type="application/json" id="data">__DATA__</script>
+<script type="application/json" id="alt">__ALT__</script>
+<script>
+(() => {
+  const NOW = JSON.parse(document.getElementById("data").textContent);
+  const ALT = JSON.parse(document.getElementById("alt").textContent);
+  const ALT_LABEL = __ALTLABEL__;
+  let ICONS = NOW;
+  let BY = Object.fromEntries(ICONS.map(i => [i.n, i]));
+  const PER = 60;
+  // The size curve: the line in px at each slot, and above 24 the 24px drawing scaled (docs/specs/icons.md).
+  const CURVE = { 16: 1.125, 20: 1.24, 24: 1.35 };
+  const units = size => (size <= 24 ? CURVE[size] * 16 / size : CURVE[24] * 16 / 24);
+  const SIZES = [16, 20, 24, 32, 48];
+  const WEIGHTS = [1, 1.125, 1.25, 1.33, 1.5];
+  const KEY = { square: '<rect class="kl" x="1.5" y="1.5" width="13" height="13"/>', circle: '<circle class="kl" cx="8" cy="8" r="7"/>',
+    horizontal: '<rect class="kl" x="1" y="2.5" width="14" height="11"/>', vertical: '<rect class="kl" x="2.5" y="1" width="11" height="14"/>' };
+  const store = (() => { try { return window.localStorage; } catch { return null; } })();
+  const get = (k, d) => { try { const v = store?.getItem("ib-" + k); return v == null ? d : JSON.parse(v); } catch { return d; } };
+  const put = (k, v) => { try { store?.setItem("ib-" + k, JSON.stringify(v)); } catch {} };
+  let size = get("size", 24), weight = get("weight", 1.125), seed = get("seed", 7), keys = get("keys", false), labels = get("labels", false);
+  const flags = new Set();
+  let db = null;
+
+  const svg = (i, withKey) => `<svg class="ic" viewBox="0 0 16 16" fill="none" aria-hidden="true">${withKey ? KEY[i.k] || "" : ""}${i.s}</svg>`;
+  const applyVars = (el, sz, w) => { const u = units(sz) * w / 1.125; el.style.setProperty("--sw", u); el.style.setProperty("--rk", u / 1.125); el.style.setProperty("--ds", sz + "px"); };
+
+  function rng(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function boards() {
+    const r = rng(seed), list = ICONS.slice();
+    for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+    const n = Math.ceil(list.length / PER), out = [];
+    for (let b = 0; b < n; b++) out.push(list.slice(b * PER, (b + 1) * PER));
+    return out;
+  }
+  const host = document.getElementById("boards");
+  function render() {
+    host.innerHTML = "";
+    host.classList.toggle("keys", keys); host.classList.toggle("labels", labels);
+    applyVars(host, size, weight);
+    boards().forEach((list, b) => {
+      const el = document.createElement("section"); el.className = "board"; el.setAttribute("aria-label", "Board " + (b + 1));
+      el.innerHTML = `<header><span>Board ${b + 1} of ${Math.ceil(ICONS.length / PER)}</span><span class="bc"></span></header><div class="grid">${list.map(i =>
+        `<button type="button" class="cell" data-n="${i.n}" aria-pressed="${flags.has(i.n)}" aria-label="${i.n}" title="${i.n}">${svg(i, true)}<span class="nm">${i.n}</span></button>`).join("")}</div>`;
+      host.appendChild(el);
+    });
+    counts();
+  }
+  function counts() {
+    document.getElementById("count").innerHTML = `<b>${flags.size}</b> flagged of ${ICONS.length}`;
+    host.querySelectorAll(".board").forEach(bd => { const n = [...bd.querySelectorAll(".cell")].filter(c => flags.has(c.dataset.n)).length; bd.querySelector(".bc").textContent = n ? n + " flagged" : ""; });
+    host.querySelectorAll(".cell").forEach(c => c.setAttribute("aria-pressed", String(flags.has(c.dataset.n))));
+    const chips = document.getElementById("chips");
+    chips.innerHTML = flags.size ? [...flags].sort().map(n => BY[n] ? `<button type="button" class="chip" data-n="${n}" title="Unflag ${n}">${svg(BY[n])}${n}</button>` : "").join("")
+      : '<span class="empty">Nothing flagged yet. Click an icon on a board to flag it; click it again, or its chip here, to unflag.</span>';
+    applyVars(chips, 16, weight);
+  }
+  async function toggle(n) {
+    const on = !flags.has(n);
+    if (on) flags.add(n); else flags.delete(n);
+    counts();
+    if (!db) return;
+    try { const ref = db.collection("flags").doc(n); if (on) await ref.set({ name: n, at: new Date().toISOString(), seed, size, weight }); else await ref.delete(); }
+    catch (e) { document.getElementById("state-general").textContent = "A flag wasn't saved: " + (e && e.message || "the store refused it"); }
+  }
+  host.addEventListener("click", e => { const c = e.target.closest(".cell"); if (c) toggle(c.dataset.n); });
+  document.getElementById("chips").addEventListener("click", e => { const c = e.target.closest(".chip"); if (c) toggle(c.dataset.n); });
+
+  const seg = (id, values, current, fmt, onPick) => {
+    const el = document.getElementById(id);
+    el.innerHTML = values.map(v => `<button type="button" data-v="${v}" aria-pressed="${v === current}">${fmt(v)}</button>`).join("");
+    el.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; const v = Number(b.dataset.v);
+      el.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); onPick(v); });
+  };
+  seg("sizes", SIZES, size, v => v, v => { size = v; put("size", v); applyVars(host, size, weight); });
+  seg("weights", WEIGHTS, weight, v => v === 1.125 ? "1.125 now" : String(v), v => { weight = v; put("weight", v); applyVars(host, size, weight); applyVars(document.getElementById("chips"), 16, weight); });
+  if (ALT) {
+    document.getElementById("corners-group").hidden = false;
+    let which = get("corners", "now");
+    const useSet = w => { ICONS = w === "less" ? ALT : NOW; BY = Object.fromEntries(ICONS.map(i => [i.n, i])); };
+    useSet(which);
+    const el = document.getElementById("corners");
+    el.innerHTML = [["now", "Now"], ["less", ALT_LABEL]].map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${v === which}">${l}</button>`).join("");
+    el.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; which = b.dataset.v; put("corners", which);
+      el.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); useSet(which); render(); });
+  }
+  const kb = document.getElementById("keys"), lb = document.getElementById("labels");
+  kb.checked = keys; lb.checked = labels;
+  kb.addEventListener("change", () => { keys = kb.checked; put("keys", keys); host.classList.toggle("keys", keys); });
+  lb.addEventListener("change", () => { labels = lb.checked; put("labels", labels); host.classList.toggle("labels", labels); });
+  document.getElementById("shuffle").addEventListener("click", () => { seed = (seed * 48271 + 11) % 2147483647; put("seed", seed); render(); });
+
+  // Weight study: the same rows at each weight, 16px icons with 13px text and 20px icons with 15px text.
+  const ROWS = [["command", "Command"], ["history", "History"], ["text-size", "Typography"], ["database", "Database"], ["smile", "Optimistic"], ["cloud-upload", "Uploads"], ["table", "Table"], ["volume", "Volume"]];
+  const wcols = document.getElementById("wcols");
+  wcols.innerHTML = WEIGHTS.map(w => `<div class="wcol${w === 1.125 ? " now" : ""}" data-w="${w}"><h3>${w}px${w === 1.125 ? " · now" : ""}</h3>${ROWS.map(([n, t]) =>
+    `<div class="wrow small">${svg(BY[n])}<span>${t}</span></div>`).join("")}${ROWS.slice(0, 4).map(([n, t]) => `<div class="wrow">${svg(BY[n])}<span>${t}</span></div>`).join("")}</div>`).join("");
+  wcols.querySelectorAll(".wcol").forEach(c => { const w = Number(c.dataset.w);
+    c.querySelectorAll(".wrow.small").forEach(r => applyVars(r, 16, w)); c.querySelectorAll(".wrow:not(.small)").forEach(r => applyVars(r, 20, w)); });
+  let pick = null, strokeNote = "";
+  const wpick = document.getElementById("wpick");
+  wpick.innerHTML = WEIGHTS.map(w => `<button type="button" data-w="${w}" aria-pressed="false">${w === 1.125 ? "Keep 1.125" : w + "px"}</button>`).join("");
+  const paintPick = () => wpick.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.w) === pick)));
+  async function saveDoc(id, data, stateId) {
+    const s = document.getElementById(stateId);
+    if (!db) { s.textContent = "Saving needs the page open on claude.ai, signed in."; return; }
+    s.textContent = "Saving…";
+    try { await db.collection("decisions").doc(id).set({ ...data, at: new Date().toISOString() }); s.textContent = "Saved"; }
+    catch (e) { s.textContent = "Not saved: " + (e && e.message || "the store refused it"); }
+  }
+  wpick.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; pick = Number(b.dataset.w); paintPick(); saveDoc("stroke", { pick, note: strokeNote }, "state-stroke"); });
+  const ns = document.getElementById("note-stroke"); let t1;
+  ns.addEventListener("input", () => { strokeNote = ns.value; clearTimeout(t1); t1 = setTimeout(() => saveDoc("stroke", { pick, note: strokeNote }, "state-stroke"), 900); });
+  const ng = document.getElementById("note-general"); let t2;
+  ng.addEventListener("input", () => { clearTimeout(t2); t2 = setTimeout(() => saveDoc("general", { note: ng.value }, "state-general"), 900); });
+
+  render();
+  (async () => {
+    if (!window.claude || !window.claude.use) { document.getElementById("state-general").textContent = "Flags save when the page is open on claude.ai."; return; }
+    db = await window.claude.use("db");
+    if (!db) { document.getElementById("state-general").textContent = "Sign in to claude.ai to save flags."; return; }
+    const timer = setTimeout(() => { document.getElementById("state-general").textContent = "Saved flags can't be reached yet."; }, 10000);
+    db.collection("flags").onSnapshot(snap => {
+      if (!snap.fromCache) clearTimeout(timer);
+      flags.clear(); for (const d of snap.docs) flags.add(d.id); counts();
+    }, () => { clearTimeout(timer); document.getElementById("state-general").textContent = "Saved flags couldn't be loaded."; });
+    db.collection("decisions").onSnapshot(snap => {
+      for (const d of snap.docs) { const v = d.data() || {};
+        if (d.id === "stroke") { pick = v.pick ?? null; strokeNote = v.note ?? ""; paintPick(); if (document.activeElement !== ns) ns.value = strokeNote; }
+        if (d.id === "general" && document.activeElement !== ng) ng.value = v.note ?? ""; }
+    }, () => {});
+  })();
+})();
+</script>

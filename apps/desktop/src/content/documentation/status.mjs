@@ -13,6 +13,7 @@ export default {
       ["Do", "Use soft, the default, for status and metadata; outline for quiet labels beside dense text; solid for a state that must read at a glance."],
       ["Do", "Pick the tone for meaning (success, warning, danger) and the variant for emphasis; the two are independent."],
       ["Do", "Give a modern Badge a dot or an icon when its tone matters: modern keeps a neutral plate and colors only that add-on."],
+      ["Do", "Use plain for a status beside a name, as a card's or a row's: no plate, the icon, dot and words in the tone's color, starting on the text's column."],
       ["Do", "Give a dotOnly or iconOnly Badge an aria-label; it has no visible text, and the component throws without one."],
       ["Do", "Put the meaning in the label: an avatar, flag or icon is decorative and hidden from assistive tech."],
       ["Do", "Set truncate for labels that can run long; plain-text labels keep the full text in title."],
@@ -22,7 +23,7 @@ export default {
     ],
     // Spec: Anatomy (the area block); manifest elements.
     parts: {
-      root: "A span, or a native link with as=\"a\": owns the height, the pill or radius corner, the fill and border, and the text gutters.",
+      root: "A span, or a native link with as=\"a\": owns the height, the pill or radius corner, the fill and border, and the text gutters (none when plain).",
       dot: "A small colored disc before the label, in the tone's ink. dotOnly draws the dot alone.",
       "leading-icon": "An icon before the label, centred in the Badge's rounded end. Decorative.",
       label: "The text, cap-centred on the plate; with truncate it ends in an ellipsis.",
@@ -399,7 +400,7 @@ export default {
       label: "What is measured; it names the meter.",
       value: "The value as shown, the percentage by default; hidden from assistive tech, which reads the meter's own value.",
       track: "Progress's bar, filled to the share of the range in the tone's color; with segments, the parts side by side 2 apart.",
-      segment: "One part on the bar, in its place's color of a fixed order of eight.",
+      segment: "One part on the bar, in the series color of its place (series 1 to 8), set by Series lightness.",
       rest: "What is left of the range when max is above the parts' sum, in the track's fill.",
       legend: "The list under the bar naming every part that is above 0.",
       item: "A legend row: the swatch, the label, then the value and its share.",

@@ -125,7 +125,7 @@ Area, from the same script (`area--<tile>--rest--<theme>.json`, 14 files, light 
 
 | Slot · property | Reference | Area | Basis | Reason when it differs |
 |---|---|---|---|---|
-| ground | rgb(245, 245, 245) (Figma tile, folder row, Dev Mode well); Penpot canvas fill; Polaris white | `bg-surface` by default; `bg-subtle` as `subtle` | owner (2026-10-13): the component tile's ground; `subtle` keeps Figma's well (Box model, Asset row) | Area's fills (`bg-subtle`, `bg-component`, ghost hovers) are tuned on the surface: on a grey ground a previewed component loses them |
+| ground | rgb(245, 245, 245) (Figma tile, folder row, Dev Mode well); Penpot canvas fill; Polaris white | `bg-surface` by default; `bg-well` as `subtle` | owner (2026-10-13): the component tile's ground; `subtle` keeps Figma's well (Box model, Asset row) | Area's fills (`bg-subtle`, `bg-component`, ghost hovers) are tuned on the surface: on a grey ground a previewed component loses them |
 | ground, own fill | Figma paints the tile with the component's frame fill (rgb(25, 26, 31) here) | `color`: the frame takes that colour, over the checker | Figma | — |
 | edge | Figma: none at rest, a hairline at hover; Polaris Thumbnail 1px black 8% inset | 1px `border-card` (neutral 100, dark 750) inside, the tile's and Card's edge; `subtle`, `checker` and a colour take `token-swatch-ring` (black / white 10%) | owner (the tile's light stroke); peers: painted tiles, Asset row's well, Color swatch keep the translucent ring over paint | a solid line around a colour reads as a mat; the translucent ring shows evenly over any paint |
 | corner | 5 at 58 and 96 (Figma's one well radius); Penpot 8 | `radius-container` (12) | peer: Box model's outer box, the well beside it in the same inspector (owner, round 12: "the outer container can be its own unique radius, that matches whatever component family it should be") | Figma uses one small radius everywhere; Area's container family at panel width |
@@ -156,8 +156,8 @@ paint layer). RTL: symmetrical.
 | Peer | Shared role | Area value in peer | This component | Match / reason |
 |---|---|---|---|---|
 | Gallery tile | a component's frame | `bg-surface`, 1px `border-card`, corner 20 (the gallery's own) | `bg-surface`, 1px `border-card`, `radius-container` 12 | corner: the tile's 20 is fixed outside the radius setting; the frame follows the system's container corner |
-| Box model | the inspector's well | `bg-subtle`, `radius-container`, 1px `border-subtle` | `subtle`: `bg-subtle`, `radius-container`, 1px swatch ring | ring, not `border-subtle`: the swatch ring outlines a well and paint alike |
-| Asset row | a preview well | 40, `bg-subtle`, `radius-small`, swatch ring, icon at `icon-md`, image cover | the same paint at panel width; content contained | contain, not cover: the frame shows the whole asset; the row's thumbnail only identifies it |
+| Box model | the inspector's well | `bg-well`, `radius-container`, 1px `border-subtle` | `subtle`: `bg-well`, `radius-container`, 1px swatch ring | ring, not `border-subtle`: the swatch ring outlines a well and paint alike |
+| Asset row | a preview well | 40, `bg-well`, `radius-small`, swatch ring, icon at `icon-md`, image cover | the same paint at panel width; content contained | contain, not cover: the frame shows the whole asset; the row's thumbnail only identifies it |
 | Color swatch | checker, ring | 2 × 2 pixel mask, `fg-default` 16%, 5 cells across; swatch ring inside | the same mask and ink at 8 cells; the same ring | fixed cell for any width |
 
 ## Visual pass
@@ -204,3 +204,4 @@ density in a screenshot (corner and inset tokens re-derive), Electron (only the 
   default ground `bg-surface`, edge `border-card` (the tile's); `subtle` added for the grey well; paint keeps the
   swatch ring → round 23.
 - 2026-10-13 · round 23: approved.
+- 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): `subtle` painted `bg-subtle`, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light).

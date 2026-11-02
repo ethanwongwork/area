@@ -1,7 +1,7 @@
 # Handoff
 
 ## Current state (2026-11-01)
-- **One Sidebar frame in every tab, branch `claude/beautiful-goldberg-36a1e2` (uncommitted, 2026-11-01).** Owner: "every
+- **One Sidebar frame in every tab, branch `claude/beautiful-goldberg-36a1e2` (merged to main, 2026-11-02).** Owner: "every
   page seems to create a new distinct nav". Research (Claude 4.4212 and Cursor 3.27 bundles), review page
   K5TADzUii6U6kY6kpiCx5i and four rounds in `docs/research/consistent-nav-2026-11-01/`. As built: Home, References,
   Projects and Systems held at the top (the current tab's marked), a rule, then the tab's context in one scroll, a
@@ -13,13 +13,45 @@
   (`specimenWords`); later the same day the list's filter became a search icon on the list's head (⌥⌘F) and the
   layers' pictures became kind icons (Nav `picture` stays for photographs); on 11-02 both Sidebar rules (under the places,
   over a section's list) run the panel's full width, the scroll running edge to edge with its content inset back. The Sidebar widens to at least 288 (type 13) while it holds a list (`LIST_FLOOR`); Panel eases a
-  width the app sets. PRODUCT_UI's nav section rewritten. Another session
-  (`worktree-cleanup-status-badges`) has Explorations status marks in the old `ProjectNav`: port them onto `AppNav`'s
-  project context when merging.
+  width the app sets. PRODUCT_UI's nav section rewritten. The status
+  badges session's Explorations marks (`StatusBadge iconOnly`) and main's `SystemIcon` are carried onto `AppNav`.
 - **Next session (owner, 2026-11-01): the status badges and their icons, then tables and data visualisation.** Project
   status is a first pass (tile.tsx `STATUS`: published = tag + success, draft = dashed circle + caution); the owner wants
   to work on badges + icons as a set, and on tables / data vis in the feed. Explorers: Card Explorer KCvLgSPg…, Feed Kit
   3VBMTvWZ…. The owner's Area system has 5 unpublished changes (Count off the pill list among them).
+- **Colour system study, branch `claude/color-system-study-a95d3f` (uncommitted, 2026-11-01).** Audit of the
+  ladder, Layers roles and contrast, plus research (Radix, Tailwind v4, Material HCT, Carbon, Leonardo, Primer, Apple,
+  Linear, OKHSL, P3, data palettes) in `docs/research/color-system-2026-11-01/` (README, sources.md, measurement scripts).
+  Findings: every chromatic rung rides the sRGB edge (share ≈ 1); OpenAI's luminous colours (owner's pick over Cursor's,
+  2026-11-01) are that edge at L 0.79, chroma ≤ 0.13, which most hues have no rung for; at Layers 0 `bg-subtle` (Table header and 9 other fills) equals the
+  page. Seven ranked proposals. Proposal 1 built (owner: "Yes, fix fills"): a `bg-well` ground in color/layers.ts (#f9f9f9 / #161616 at
+  Layers 0) paints Table's header and stripes, Box model, image wells, Attachment, diff fold, inline code and Token; soft
+  Surface, preview choice cards and Plan steps stay recessed (owner 2026-10-29 keep Flat flat, confirmed 2026-11-01).
+  Checks all pass (tokens 29,110, contrast report, cohesion, family tests, typecheck, docs); seen in Electron light/dark. Review page https://claude.ai/artifact/XNh7uSYHV7YmCqoATNM7s9
+  (db `verdicts`: p1–p7, p0, tuning). Owner picks 2026-11-01: Build p2, p4, p5, p6, p7; Agree p0, p3 — all built
+  2026-11-01: color/place.ts (colourAt), color/series.ts + axes/series.ts (Series lightness 66–80, default 79;
+  --area-series-<n>, -fill, -ink, -ramp-1…7; P3 under @media color-gamut), contrast/series.test.ts, Meter's stacked parts on
+  the series. Checks: tokens 29,295, react 634, desktop 30, docs, contrast report, typecheck, build. No Chart family or
+  heat cells yet (data-views session builds on the tokens); Foundations › Colors ends with a Series section.
+- **Status badges, branch `claude/worktree-cleanup-status-badges-a187b0` (PR to main, 2026-11-01).** Badge `variant="plain"`
+  (no plate; mark at 3:1, words at 4.5: light = brightest palette step / vivid ink, dark = vivid / text ink); every variant's
+  marks held to its own plate (soft and color one step deeper for the tint); cap and marks centred in the plate (the optical
+  lift dropped for Badge only, 0.9 high before); icon gap 2. Project status: published = check circle, draft = empty ring
+  (`EllipseIcon`); a project's Explorations rows end on the mark alone. Asset card `badge` slot: a plain badge on a raised
+  plate at the frame's top start (Asset card back In review). Live sheet with Area's CSS: https://claude.ai/artifact/R5WRGDZRsypsQiawvYgtnq
+  (`verdicts/badge-look`). Open: a `fg-<tone>-mark` token at 3:1 (the light marks are palette steps in badge.css);
+  main's new `CircleProgressIcon` (batch 77) could draw In progress / In review marks when projects get those states; tables and data vis next. Nav consistency runs in its own session (one-consistent-app-nav).
+- **Icon cohesion pass, branch `claude/icon-cohesion-11900d` (PR to main, 2026-11-01).** Owner: the set didn't look
+  cohesive. Measured against six libraries (`docs/research/icon-cohesion-2026-10-31/`, tools for strips, boards, radii,
+  angles, 1x and every-size measures); rules adopted in the icon skill ("Cohesion"). Applied over rounds 1–7: gap floor one
+  line (tight 1.125) and counters 1.5, enforced by the lint (~190 redraws); corners less round (r 1.5 frames ≥ 9 × 7, r 1
+  smaller); held constructions simplified; globe stroked; 8 role bots removed. New: `SystemIcon` (System tab, Home's feed,
+  the area-app example), `BookmarksIcon`, batch 77 (13 concepts read from Cursor's and the Claude app's icon sets:
+  search/lightbulb-sparkle, circle-progress, arrow-split (RTL mirror), panel-left/right-float, background-blur,
+  absolute-position, motion, ghost, signpost, dna, orbit, sunrise), batch 78 (`BotAgentsIcon`; file-lock and person-lock
+  share folder-lock's 5 × 3 lock; the sort family shares one arrow). Agent is now bot with sunglasses (owner pick A).
+  817 icons. In review: batch 78 and the four icons it touched. Review page
+  https://claude.ai/artifact/KTwGjUgbj5uJZ5yPvFazqh (db `verdicts`), Icon Boards https://claude.ai/artifact/4debUbHgJLDBGmzXcUde6Q.
 - **Feed content and galleries, branch `claude/feed-content-gallery-layouts-5ead71` (uncommitted, 2026-11-01).** First
   ported the IA playground's steps 2–3 + q6, left uncommitted in `ia-design-playground-review-3e30b0` (design viewer,
   morph, derived Properties; resolved against #186–#191: References naming, glyph sheet, FEED_TABLE). Then the owner's
@@ -37,7 +69,7 @@
   components, 4:3 default, 16:9 cover; Tile `shape`, Asset card landscape 4:3, values as badges, screens cover from the
   top-left; collections square 2 × 2 in References, scrolling strips on Home); then the explorer's pick (artifact
   KCvLgSPg…): Asset card `caption="outside"`, every card 8 in, 16 corners, names 4 below at 13, 16 gaps, square or
-  16:9 only, no edge on images; project status badges colour-coded (published: tag, success; draft: dashed circle,
+  16:9 only, no edge on images; project status badges colour-coded (published: check circle, success; draft: empty ring,
   caution); Feed Kit 3VBMTvWZ…; a
   project's Pages are one 16:9 picture each; Home's column 768. Painted plain tiles' names take their ink. Docs:
   PRODUCT_UI (four new rules), specs asset-card / table / code-block, compose skill content.md. Checks: typecheck, tokens

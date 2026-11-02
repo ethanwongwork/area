@@ -104,7 +104,7 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   an alternative (file-zip: archive, or a labelled file type).
 - **Solids in the outline style** are exceptions, each recorded: quote's marks and bold's B,
   stop-circle's square and record's disc, the boolean operations' result, contrast's half,
-  shadow's band, folder-zip's teeth, id-card's person, stroke-weight's bars, newspaper's picture block. (paw's
+  shadow's band, folder-zip's teeth, id-card's person, stroke-weight's bars. (newspaper's picture block was one until 2026-11-01, now text lines.) (paw's
   toes are r 1.25 rings, solid only when filled.) The solid is
   what the icon shows; ordinary details stay lines.
 - **Owner, 2026-10-02:** multiples follow Phosphor's layering (Shared parts); library is
@@ -226,3 +226,38 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   icons carry their content where Cursor's are bare), gauge's semicircle. Changed: expand / collapse (and their maximize
   / minimize aliases) take 3.5 heads with the shafts to a standard gap at the centre; the plane is a top-down airliner on
   the rising diagonal (the side view is retired). A 12px cut follows use: Reference list's `return` has one.
+
+- **Cohesion pass (2026-10-31, delegated, owner to confirm on the review page):** the owner found the set
+  uncohesive in the App Map's key. Measured, Area's size and weight spread matches the libraries'; its solids
+  (35% of icons) and single drawings set it apart. Proposed rules (construction rules, Cohesion): solids only
+  as marks, long objects on the rising diagonal, inner ring diagonals rise, letters use their keyline,
+  separate-shape compositions as a class. `docs/research/icon-cohesion-2026-10-31/`.
+  Owner picks, 2026-11-01 (batch 76): system is option A, shapes' triad with the triangle grown, and shapes shares
+  it (system is its alias); Collection is `bookmarks`; newspaper's picture is text lines (Updates keeps newspaper);
+  compass's needle rises; link and link-off lie on the diagonal (12 and 10px cuts follow); the case family is cap
+  7.5. The rules and the reach of the solids rule are still unanswered: round 2 waits on them.
+  Round 2 picks, 2026-11-01: inner detail dots are the line's weight (⌀1.125, r 0.5625) in 47 icons, the i, ! and ?
+  dots stay ⌀1.5 and mark dots ⌀2; app-window's bar holds two tab lines (Lucide's) instead of three dots; briefcase
+  has one plain band, no clasp; every recorded solid is kept (quote, bold, stop-circle, record, the booleans,
+  contrast, shadow, folder-zip, id-card, stroke-weight, qr-code, the play shapes, gauge's needle, text-color's bar,
+  the bots' visors, image's sun, paint-bucket's drop, globe as Fluent's).
+  Round 3 picks, 2026-11-01 (Icon Boards flags): line weight stays 1.125; corner radius by frame size (r 2 for frames
+  ≥ 9 × 7, 1.5 for 5–8, 1 below; about 50 icons moved to it with no shape moved); flat views with depth only where depth
+  is the idea, container kept isometric; the plane top-down nose up (the angled airliner retired); switch-camera is
+  camera's body with a turning arrow for its lens; move and container keep their drawings; snowflake keeps its V's at
+  the tips with more room round them; the bots are bot (no mouth, eyes centred) and bot-agent (a narrower hat on a
+  brim the head's width) only: the eight role bots (automator, builder, designer, generator, guard, lead, researcher,
+  scholar) are removed.
+  Round 4 picks, 2026-11-01: the cohesion rules are adopted; corners less round (frames r 1.5, mid frames and bars r 1;
+  glyph and figure curves untouched); the system / shapes triangle at 60° like warning, play, eject and flask; balance
+  over 1× crispness stands; the smallest gap rises to one line (1.125) and the smallest counter to 1.5, the 171 icons
+  under it redrawn in family batches, each shown before it lands (the detail step of 2026-09-28 is retired).
+  Rounds 6–7 and batch 77 picks, 2026-11-01: the passes the owner asked to run on their own ("just automatically do the
+  passes and audit yourself") are kept as applied (held constructions simplified to the floor, gift-card on gift's bow,
+  globe stroked); batch 77 (concepts read from Cursor's and the Claude app's icon sets and the new IA) approved whole;
+  Explorations keeps git-branch in the app's sidebar (arrow-split stays in the set for fork / split-off uses).
+  Agent, 2026-11-01: "the hat is too small now. the brim should also extend past the sides of the head": the brim is
+  the agent's identity and must overhang the head (narrow the head rather than lose the brim to the floor); the crown
+  is wide (two-thirds of the head), not the narrow round-3 crown.
+  Agent, 2026-11-01 (later): the hat is retired. The agent is bot with sunglasses (pick A of four: antenna dot, no
+  antenna and person-with-sparkle declined): bot's body and antenna exactly, the sunglasses replacing its eyes.

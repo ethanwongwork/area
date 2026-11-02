@@ -18,16 +18,17 @@
  */
 import { useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, ScrollArea, SearchField, Tooltip } from "@area/react";
-import { AddIcon, BookmarkIcon, ChevronDownIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, LayoutIcon, SearchIcon, ShapesIcon } from "@area/icons";
+import { AddIcon, BookmarkIcon, ChevronDownIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, LayoutIcon, SearchIcon, SystemIcon } from "@area/icons";
 import { systemName, HOME_TAB, hrefOf, LIST_PAGES, projectName, REFERENCE_VIEWS, referenceView, resolve, tabHolds, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
 import { addExploration, addPage, type Project } from "./projects.ts";
 import { readStored, writeStored } from "./storage.ts";
 import { activeTheme, versionName } from "./systems.ts";
 import { ChromeButton, SidebarList, useStudio, type Visit } from "./studio.tsx";
+import { StatusBadge } from "./tile.tsx";
 
 // A system is the triangle, square and circle (owner, 2026-10-31: "a simple composition of triangle square, and circle";
 // never the palette, and not the four-diamond component); its own drawing is being made in the icon set.
-const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <ShapesIcon />, project: <FolderIcon />, references: <BookmarkIcon />, projects: <FolderIcon />, systems: <ShapesIcon />, labs: <FlaskIcon /> };
+const TAB_ICONS: Record<TabKind, ReactNode> = { home: <HomeIcon />, system: <SystemIcon />, project: <FolderIcon />, references: <BookmarkIcon />, projects: <FolderIcon />, systems: <SystemIcon />, labs: <FlaskIcon /> };
 
 /**
  * A system's sections, one row each and one click away (owner, 2026-10-30: "foundations is not very well organized ... the
@@ -357,7 +358,7 @@ export function AppNav({ children: list }: { children?: ReactNode }) {
             {capped(`${key}/explorations`, project.explorations, entry => place.page === "exploration" && place.item === entry.id, entry => (
               <NavItem key={entry.id} href={hrefOf(at({ page: "exploration", item: entry.id }))}
                 current={place.page === "exploration" && place.item === entry.id} onClick={open(at({ page: "exploration", item: entry.id }))}
-                trailing={entry.published ? <span className="studio-muted">{versionName(systemName(project.system), entry.published)}</span> : undefined}>
+                trailing={<StatusBadge status={entry.published ? "published" : "draft"} iconOnly>{entry.published ? `Published in ${versionName(systemName(project.system), entry.published)}` : "Not published"}</StatusBadge>}>
                 {entry.name}
               </NavItem>
             ))}
