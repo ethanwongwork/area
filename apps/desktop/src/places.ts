@@ -17,6 +17,9 @@
  *   #project/<project>/pages/<page>/<layer>    one of its pages, and a layer on it
  *   #project/<project>/explorations/<id>       an exploration: a theme tried on the project's system
  *   #project/<project>/versions/<id>           its saved versions
+ *   #projects/<item>                         every project, as cards (2026-11-01: one of the Sidebar's four places); the item
+ *                                            a chosen project
+ *   #systems/<item>                          every system, as cards; the item a chosen system
  *   #references/<item>                       References (Inspiration until 2026-10-31, the Library page until 2026-10-29): Saved
  *                                            at its root, "discover" and "following", a collection and its images
  *                                            (<collection>/<image>)
@@ -33,7 +36,7 @@ export type PageId =
   | "home" | "themes" | "theme-setup" | "foundations" | "settings" | "tokens" | "color" | "typography" | "icons"
   | "spacing" | "shape" | "elevation" | "motion"
   | "components" | "patterns" | "history" | "references" | "materials" | "tests" | "feed"
-  | "project" | "project-page" | "exploration" | "versions";
+  | "project" | "project-page" | "exploration" | "versions" | "projects" | "systems";
 
 export interface Place {
   page: PageId;
@@ -108,6 +111,8 @@ export function hrefOf(place: Place): string {
     case "patterns": return `${system}/patterns${encode(place.item)}`;
     case "history": return `${system}/history${encode(place.item)}`;
     case "references": return `#references${encode(place.item)}`;
+    case "projects": return `#projects${encode(place.item)}`;
+    case "systems": return `#systems${encode(place.item)}`;
     case "project": return `#project/${place.project ?? ""}${encode(place.item)}`;
     case "project-page": return `#project/${place.project ?? ""}/pages${encode(place.item)}`;
     case "exploration": return `#project/${place.project ?? ""}/explorations${encode(place.item)}`;
@@ -164,6 +169,8 @@ export function parsePlace(hash: string): Place | null {
     return { page: "project", project, item: rest([section ?? "", ...more]) };
   }
   if (root === "references") return { page: "references", item: rest(parts) };
+  if (root === "projects") return { page: "projects", item: rest(parts) };
+  if (root === "systems") return { page: "systems", item: rest(parts) };
   if (root === "labs" && parts[0] === "materials") return { page: "materials", item: rest(parts.slice(1)) };
   if (root === "labs" && parts[0] === "tests") return { page: "tests", item: rest(parts.slice(1)) };
   if (root === "labs" && parts[0] === "feed") return { page: "feed", item: rest(parts.slice(1)) };
@@ -208,18 +215,18 @@ export function resolve(hash: string, groupOf?: (setting: string) => string | un
 }
 
 /**
- * What an open tab holds: Home, References, one system, one project, or a lab (owner, 2026-10-29:
+ * What an open tab holds: Home, References, Projects (every project), Systems (every system), one system, one project, or a lab (owner, 2026-10-29:
  * "tabs can be libraries or projects … the tab itself in the canvas will always just be the project itself"). A tab
  * never changes what it holds: what is inside it (a system's sections, a project's pages, explorations and versions) is
  * reached through the Sidebar, and anything else opens in the tab holding it, or a new one.
  */
-export type TabKind = "home" | "system" | "project" | "references" | "labs";
+export type TabKind = "home" | "system" | "project" | "references" | "projects" | "systems" | "labs";
 export const tabKind = (place: Place): TabKind =>
-  place.page === "home" ? "home" : place.page === "references" ? "references" : place.page === "materials" || place.page === "tests" || place.page === "feed" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
+  place.page === "home" ? "home" : place.page === "references" ? "references" : place.page === "projects" ? "projects" : place.page === "systems" ? "systems" : place.page === "materials" || place.page === "tests" || place.page === "feed" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
 export const tabName = (place: Place): string => {
   const kind = tabKind(place);
   return kind === "system" ? systemName(place.system) : kind === "project" ? projectName(place.project)
-    : kind === "labs" ? (place.page === "tests" ? "Tests" : place.page === "feed" ? "Feed" : "Materials") : ({ home: "Home", references: "References" } as const)[kind];
+    : kind === "labs" ? (place.page === "tests" ? "Tests" : place.page === "feed" ? "Feed" : "Materials") : ({ home: "Home", references: "References", projects: "Projects", systems: "Systems" } as const)[kind];
 };
 /** What a tab holds, as a key: two places in one system or project are in the same tab. */
 export const tabHolds = (place: Place): string => {

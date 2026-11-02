@@ -78,6 +78,8 @@
    * follows the icon viewport rather than a font-specific cap measurement: group names,
    * icon ink, and shell identity can share one optical leading edge. */
   .area-nav__label, .area-menu__label { --_box-start: var(--_box-icon); }
+  /* A Nav heading with actions (a section's New) ends as a row with actions does: the action a nested square 4 in. */
+  .area-nav__label:has(> .area-nav__actions) { --_box-end: calc(var(--_box-height) - var(--area-space-4) * 2); }
   /* A menu group label sits on the icon column, as Nav's (audit D-15; was cap-centred, 11.7), when the rows
      lead with an icon (Command palette; Notion's palette labels share the icon edge). Over text-only rows it
      starts on their text column instead, the same cap-centred inset in the rows' type (11 at 32), so the title
@@ -241,7 +243,7 @@
   .area-segmented__label, .area-tabs__label, .area-code__label, .area-token__label,
   .area-nav__text, .area-menu__text, .area-input__affix, .area-command-palette__description, .area-popover__step,
   .area-avatar > span:not(.area-avatar__icon),
-  .area-nav__label > span, .area-menu__label > span {
+  .area-nav__label > span, .area-nav__toggle > span:first-child, .area-menu__label > span {
     text-box: trim-both cap alphabetic;
     padding-block: 0.25em;
     min-inline-size: 0;

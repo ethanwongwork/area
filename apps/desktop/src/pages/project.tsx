@@ -1,6 +1,6 @@
 /**
- * A project's pages (the IA of 2026-10-29; src/projects.ts): the tab is the project, and its Sidebar is its tree (src/app-nav.tsx,
- * ProjectNav). A project uses one theme of one system as the Library publishes it, so every specimen here paints in that
+ * A project's pages (the IA of 2026-10-29; src/projects.ts): the tab is the project, and it opens in place in the Sidebar's
+ * one tree (src/app-nav.tsx, AppNav), a page's layers the list under it. A project uses one theme of one system as the Library publishes it, so every specimen here paints in that
  * theme, and nothing on these pages edits the system: an exploration is where a project changes the look, and Publish is
  * how that change reaches the system.
  *
@@ -12,11 +12,11 @@
  *                     the screen and the system's patterns; Publish puts it in the system
  *   VersionsPage      #project/<id>/versions/<id>: saved versions, each restored from the Inspector
  */
-import { useMemo, useState, type CSSProperties, type FormEvent } from "react";
-import { AssetGrid, AssetGridItem, Button, ConfirmDialog, Dialog, EmptyState, Field, Input, Menu, MenuItem, PanelSection, Radio, RadioGroup, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
-import { AddIcon, ChevronDownIcon } from "@area/icons";
-import { canvasAttributes, useStudio, Workspace } from "../studio.tsx";
-import { CanvasSection, CARD_SCOPE, Tile, TileGrid, type OpenHow, FEED_TABLE } from "../tile.tsx";
+import { useMemo, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { AssetGrid, AssetGridItem, Button, ConfirmDialog, Dialog, EmptyState, Field, Input, Menu, MenuItem, Nav, NavItem, PanelSection, Radio, RadioGroup, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
+import { AddIcon, AppWindowIcon, ChevronDownIcon, ImageIcon } from "@area/icons";
+import { canvasAttributes, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { CanvasSection, CARD_SCOPE, Tile, TileGrid, type OpenHow, FEED_TABLE, WhenVisible } from "../tile.tsx";
 import { ViewControls, ViewLead } from "../view-controls.tsx";
 import { useDesignViewer, type DesignViewerOptions } from "../design-viewer.tsx";
 import { openDesign, useCardArrival } from "../morph.ts";
@@ -92,6 +92,15 @@ function LayerView({ layer, library }: { layer: Layer; library: ReturnType<typeo
   const image = library.items.find(entry => `${entry.folder}/${entry.id}` === layer.ref);
   return image ? <img className="studio-layer__image" src={url(image.thumb)} alt={image.alt || nameOf(image)} /> : <p className="studio-muted">This image is no longer in your saved references.</p>;
 }
+
+/**
+ * A layer's kind in the Sidebar's list, as Figma's layers mark a frame or an image: a screen or an image icon. It was the
+ * layer's picture, 20 × 14 (owner pick r4-thumbs, 2026-11-01), until the owner asked the same day "is the small image
+ * thumbnail very practical?": at that size a screen is a white plate with a few bars, so two variations of one screen
+ * (the case it was for) looked the same, an image read only as its colour, and every row drew a whole screen. The
+ * Canvas shows the chosen layer; the row's name says which.
+ */
+const LAYER_ICONS: Record<Layer["kind"], ReactNode> = { screen: <AppWindowIcon />, image: <ImageIcon /> };
 
 /** A layer as the design viewer draws it: its screen at its width, or its image at its size; null when its source is gone. */
 function layerDesign(layer: Layer, library: ReturnType<typeof useLibrary>["library"]): Pick<DesignViewerOptions, "width" | "height" | "frame" | "render" | "selfScaled" | "themed"> | null {
@@ -197,7 +206,7 @@ export function ProjectOverview() {
 }
 
 export function ProjectPageView() {
-  const { openProject, item, select, updateProject, navigate, theme } = useStudio();
+  const { openProject, item, select, updateProject, navigate, theme, query } = useStudio();
   const { library } = useLibrary();
   const [picking, setPicking] = useState(false);
   const [renaming, setRenaming] = useState(false);
@@ -244,8 +253,24 @@ export function ProjectPageView() {
   const sourceOf = (entry: Layer) => entry.kind === "screen"
     ? `${systemName(project.system)} › Patterns › ${EXAMPLES.find(example => example.id === entry.ref)?.label ?? entry.ref}`
     : `References › ${library?.folders.find(folder => folder.id === entry.ref.split("/")[0])?.name ?? entry.ref.split("/")[0]}`;
+  // The page's layers, its list under the nav (app-nav.tsx PageList; owner's pick 2026-11-01: a section's own list goes
+  // there, so the nav's tree stays three levels; they were rows under the page in the project's nav).
+  const listed = page.layers.filter(entry => entry.name.toLowerCase().includes(query.trim().toLowerCase()));
   return (
     <Workspace
+      sidebar={page.layers.length ? (
+        <SidebarList>
+          <Nav aria-label={`${page.name}'s layers`}>
+            {listed.map(entry => (
+              <NavItem key={entry.id} href={hrefOf({ page: "project-page", project: project.id, item: `${page.id}/${entry.id}` })}
+                icon={LAYER_ICONS[entry.kind]} current={entry.id === layer?.id}
+                onClick={event => { event.preventDefault(); select(`${page.id}/${entry.id}`); }}>
+                {entry.name}
+              </NavItem>
+            ))}
+          </Nav>
+        </SidebarList>
+      ) : undefined}
       canvasTitle={opened ? opened.name : page.name}
       canvasLead={opened ? <ViewLead>{viewer.lead}</ViewLead> : undefined}
       canvasActions={opened ? <ViewControls>{viewer.controls}</ViewControls> : (
@@ -269,7 +294,7 @@ export function ProjectPageView() {
             ))}
           </TileGrid>
         ) : (
-          <EmptyState title={`${page.name} is empty`} description="Add one of the system's screens, or an image from your saved references. Each is a layer, listed under the page in the Sidebar." />
+          <EmptyState title={`${page.name} is empty`} description="Add one of the system's screens, or an image from your saved references. Each is a layer, listed under the nav in the Sidebar." />
         )}
         {picking ? (
           <Dialog open onOpenChange={next => { if (!next) setPicking(false); }} title="Add image" description="Choose an image from your saved references: it goes at the end of the page.">

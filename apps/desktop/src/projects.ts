@@ -158,7 +158,12 @@ export function addPage(project: Project): { project: Project; page: ProjectPage
 export function addLayer(project: Project, pageId: string, kind: LayerKind, ref: string, name: string): { project: Project; layer: Layer | null } {
   const page = project.pages.find(entry => entry.id === pageId);
   if (!page) return { project, layer: null };
-  const layer = { id: nextId("layer", project.pages.flatMap(entry => entry.layers)), kind, ref, name };
+  // A screen or image added again is numbered on its page ("Analytics dashboard 2"), as New page and New exploration
+  // number theirs (owner pick r4-fixes, 2026-11-01: two layers had one name).
+  const taken = new Set(page.layers.map(entry => entry.name));
+  let named = name;
+  for (let count = 2; taken.has(named); count++) named = `${name} ${count}`;
+  const layer = { id: nextId("layer", project.pages.flatMap(entry => entry.layers)), kind, ref, name: named };
   return { project: { ...project, pages: project.pages.map(entry => entry === page ? { ...entry, layers: [...entry.layers, layer] } : entry) }, layer };
 }
 

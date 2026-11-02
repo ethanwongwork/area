@@ -5,7 +5,7 @@
 // Area system's Default once, and a #brand/… link from before the rename opens its #system/… place.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { systemName, HOME_TAB, hrefOf, parsePlace, redirect, resolve, restoreTabs, setProjects, setSystems, tabHolds, tabName, type Place } from "../src/places.ts";
+import { systemName, HOME_TAB, hrefOf, parsePlace, redirect, resolve, restoreTabs, setProjects, setSystems, tabHolds, tabKind, tabName, type Place } from "../src/places.ts";
 import { activeTheme, systemFile, systemSlug, loadSystems, newTheme, readSystem, starterSystem, withTheme, type Restorers } from "../src/systems.ts";
 
 const AREA_ONLY = [{ id: "area", name: "Area" }];
@@ -76,7 +76,7 @@ test("a place's hash reads back as the same place", () => {
     { page: "shape", system: "area" }, { page: "elevation", system: "northwind" }, { page: "motion", system: "area" },
     { page: "references", item: "discover" }, { page: "references", item: "following" },
     { page: "themes", system: "northwind", item: "theme-2" }, { page: "components", system: "northwind", item: "button" },
-    { page: "references", item: "a b/c" }, { page: "materials", item: "glass" }, { page: "tests", item: "hairline" }, { page: "feed" }, { page: "history", system: "area", item: "1.2" },
+    { page: "references", item: "a b/c" }, { page: "projects" }, { page: "systems", item: "area" }, { page: "materials", item: "glass" }, { page: "tests", item: "hairline" }, { page: "feed" }, { page: "history", system: "area", item: "1.2" },
     { page: "project", project: "launch" }, { page: "project-page", project: "launch", item: "page-1/layer-2" },
     { page: "exploration", project: "launch", item: "exploration-1" }, { page: "versions", project: "launch" }, { page: "versions", project: "launch", item: "version-1" },
   ];
@@ -203,4 +203,13 @@ test("system files: ids, broken files, Area first, new systems and themes", () =
   assert.equal(two.themes[1]!.canvas.radius, "0");
   // A file naming a theme it lacks uses its first.
   assert.equal(readSystem({ ...systemFile(two), theme: "gone" }, RESTORE)!.theme, "default");
+});
+
+// Projects and Systems, two of the Sidebar's four places (2026-11-01): each a tab of its own, as References is.
+test("Projects and Systems are tabs of their own", () => {
+  assert.deepEqual(parsePlace("#projects"), { page: "projects", item: undefined });
+  assert.deepEqual(parsePlace("#systems/area"), { page: "systems", item: "area" });
+  assert.equal(tabKind({ page: "projects" }), "projects");
+  assert.equal(tabName({ page: "systems" }), "Systems");
+  assert.equal(tabHolds({ page: "projects", item: "one" }), tabHolds({ page: "projects" }));
 });

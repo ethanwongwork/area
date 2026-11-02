@@ -35,3 +35,31 @@ test("Nav composes named navigation and groups with independent destination acti
   assert.ok(separator, html);
   assert.match(separator, /role="separator"/);
 });
+
+// packages/react/src/components/Nav.tsx NavGroup open / onOpenChange / actions (2026-11-01): a folding heading is a button.
+test("NavGroup folds from its heading and keeps its actions apart", () => {
+  const fold = open => renderToString(h(Nav, { "aria-label": "Workspace" }, h(NavGroup, { label: "Projects", open, onOpenChange: () => {}, actions: h("button", { "aria-label": "New project" }, "+") }, h(NavItem, { href: "/one" }, "One"))));
+  const shown = fold(true);
+  const button = shown.match(/<button type="button" class="area-nav__toggle"[^>]*>/)[0];
+  const id = button.match(/id="([^"]+)"/)[1];
+  const controls = button.match(/aria-controls="([^"]+)"/)[1];
+  assert.match(button, /aria-expanded="true"/);
+  assert.ok(shown.includes(`aria-labelledby="${id}"`), shown);
+  assert.match(shown, new RegExp(`<div class="area-nav__items" id="${controls}">`));
+  assert.match(shown, /area-nav__chevron" aria-hidden="true"/);
+  assert.match(shown, /<\/button><div class="area-nav__actions"><button aria-label="New project">/);
+  const folded = fold(false);
+  assert.match(folded, /aria-expanded="false"/);
+  assert.match(folded, /<div class="area-nav__items" id="[^"]+" hidden="">/);
+  // Without onOpenChange the heading stays plain text.
+  const fixed = renderToString(h(NavGroup, { label: "Projects", open: false }, h(NavItem, { href: "/one" }, "One")));
+  assert.doesNotMatch(fixed, /area-nav__toggle|hidden/);
+});
+
+// Nav.tsx NavItem picture and NavGroup sticky (2026-11-01).
+test("A picture takes the icon's place, and a sticky group's heading says so", () => {
+  const html = renderToString(h(Nav, { "aria-label": "Workspace" }, h(NavGroup, { label: "Project one", sticky: true }, h(NavItem, { href: "/one", icon: "I", picture: h("img", { src: "a.png", alt: "" }) }, "Layer"))));
+  assert.match(html, /<span class="area-nav__picture" aria-hidden="true"><img src="a.png" alt=""\/><\/span>/);
+  assert.doesNotMatch(html, /area-nav__icon/);
+  assert.match(html, /class="area-nav__label area-nav__label--sticky"/);
+});

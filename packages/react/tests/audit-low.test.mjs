@@ -8,9 +8,10 @@ import { Calendar, MANIFESTS, NavGroup } from "../dist/modules/index.js";
 // Low-severity owner calls from the 2026-09-29 audit.
 const css = readFileSync(new URL("../../styles/dist/area.css", import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 
-test("a nested Nav group steps its rows in by Tree view's level (audit D-20)", () => {
+// The step became one icon column on 2026-11-01 (owner: "fix the alignment here", children 4 short of the parent's name).
+test("a nested Nav group steps its rows in one icon column, onto the parent's name (audit D-20)", () => {
   assert.match(renderToString(h(NavGroup, { nested: true })), /class="area-nav__group area-nav__group--nested"/);
-  assert.match(css, /\.area-nav__group--nested \{\s*--_nav-indent: calc\(var\(--area-icon-md\) \+ 6px\);/);
+  assert.match(css, /\.area-nav__group--nested \{\s*--_nav-indent: calc\(var\(--area-icon-md\) \+ var\(--area-gap-row\)\);/);
   assert.match(css, /\.area-nav__group--nested \.area-nav__item \{ padding-inline-start: calc\(var\(--_inset-start\) \+ var\(--_nav-indent\)\); \}/);
 });
 

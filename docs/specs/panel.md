@@ -431,3 +431,11 @@ No rule under the bar, between sections or above the footer: the bar's height, a
 - **What changed:** a list of rows in the body (Nav, Tree view) hangs by the panel's row pad, 6, published as
   `--_panel-row-pad` for those rows' sides, so their plates sit 8 from the edge (were 6) and their text on the inset.
 - **Why:** owner pick q-plates (Cursor's and Claude's sidebars). Still in review.
+
+## Review note, 2026-11-01 (a width the app sets eases)
+
+- **What changed:** a resizable Panel whose width the app changes (not a drag) eases it on `moderate` ease-drawer
+  (`inline-size`); while it is dragged (`data-resizing`) it follows the pointer at once, and under reduced motion it
+  never animates (MOTION.md, "Panel width").
+- **Why:** the desktop app's Sidebar widens to 288 while it holds a section's list (owner, 2026-11-01).
+- **Verdict:** awaiting the owner.

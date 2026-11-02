@@ -36,7 +36,7 @@ import { componentStatus } from "../content/component-status.mjs";
 // @ts-expect-error — as above.
 import { componentSpecimens, demoWrapper } from "../content/specimens.mjs";
 // @ts-expect-error — as above.
-import { SPECIMEN_GROUPS, specimenGroup, specimenLabel, specimenName } from "../content/specimen-names.mjs";
+import { SPECIMEN_GROUPS, specimenGroup, specimenLabel, specimenName, specimenWords } from "../content/specimen-names.mjs";
 import { DEMOS } from "../content/registry.tsx";
 import { PLAYGROUNDS, configCode, initialConfig, renderConfig, sameConfig, tileConfig, type Config, type Playground, type PropValue } from "../content/playgrounds.tsx";
 import { derivedPlayground, drawsComponent, Overridden, overriddenCode, snippetConfig } from "../content/derived-props.tsx";
@@ -108,7 +108,8 @@ function tilesOf(family: Family): Tile[] {
   return specimens.map((example, index) => {
     const name = specimenName(example, family.slug) as string;
     const group: string = !hasDefault && index === 0 ? "Default" : (example.group ?? specimenGroup(name, family.slug));
-    const value: string = group === "Default" && !hasDefault ? name : specimenLabel(name, group);
+    // In words ("Outline, success"; owner pick r4-names, 2026-11-01); the id stays the tile's link.
+    const value: string = specimenWords(group === "Default" && !hasDefault ? name : specimenLabel(name, group));
     return { order: SPECIMEN_GROUPS.indexOf(group), tile: { id: example.id, name, group, value, label: group === "Default" ? value : `${group} / ${value}`, demo: example.demo, note: example.note ?? notes.get(example.demo) } };
   }).sort((a, b) => a.order - b.order).map(entry => entry.tile);
 }

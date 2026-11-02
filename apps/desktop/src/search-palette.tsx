@@ -30,7 +30,9 @@ const settingWhere = (setting: { id: string; heading: string }) => {
 /** A system's own place, described by the open system's name when shown (a choice opens it in that system). */
 const OPEN_SYSTEM = "";
 const ENTRIES: ReadonlyArray<{ place: Place; label: string; description: string; group: string; keywords?: string[] }> = [
-  { place: { page: "home" }, label: "Home", description: "Workspace", group: "Places", keywords: ["projects", "systems", "boards", "recent"] },
+  { place: { page: "home" }, label: "Home", description: "Workspace", group: "Places", keywords: ["recent", "latest", "feed"] },
+  { place: { page: "projects" }, label: "Projects", description: "Workspace", group: "Places", keywords: ["projects", "all projects"] },
+  { place: { page: "systems" }, label: "Systems", description: "Workspace", group: "Places", keywords: ["systems", "design systems", "library"] },
   ...([{ page: "theme-setup" }] as Place[]).map(place => ({ place, label: placeLabel(place), description: OPEN_SYSTEM, group: "Places" })),
   ...SYSTEM_SECTIONS.map(entry => ({ place: entry.place, label: entry.label, description: OPEN_SYSTEM, group: "Places" })),
   ...REFERENCE_VIEWS.map(view => ({ place: { page: "references" as const, item: view.item }, label: view.label, description: "References", group: "Places",

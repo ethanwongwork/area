@@ -176,6 +176,10 @@
     max-inline-size: none;
     margin-inline: calc(var(--_panel-row-pad) * -1);
   }
+  /* A Nav group's heading standing alone in a panel, over a list that is not a Nav (the desktop app's Sidebar: a list's
+     name and its search over a Tree view, 2026-11-01), takes the same pad, so its name sits on the panel's text column
+     too; it was 2 further in. */
+  .area-panel__body .area-nav__group { --_panel-row-pad: calc(var(--area-ui-row-inset) - var(--area-space-2)); /* spec: Cursor's 6 */ }
   .area-panel__body > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: 0; }
   /* A section without a heading starts one inset below the bar or rule. */
   .area-panel__section:not(:has(> .area-panel__heading:first-child)) { padding-block-start: var(--_inset); }
@@ -426,6 +430,11 @@
     border-radius: min(var(--area-radius-control-sm), max(var(--area-radius-min), round(down, calc(var(--area-control-sm) * var(--area-radius-factor)), 2px)));
   }
   .area-panel[data-resizing] { user-select: none; }
+  /* A width the app sets (a page that needs a wider list; the desktop app's Sidebar, owner 2026-11-01) eases on the
+     drawer curve, as a sheet does; a drag never lags behind the pointer (MOTION.md, "Panel width"). */
+  @media (prefers-reduced-motion: no-preference) {
+    .area-panel[data-resizable]:not([data-resizing]) { transition: inline-size var(--area-duration-moderate) var(--area-ease-drawer); }
+  }
   .area-panel__resize {
     --_resize-hit: 8px; /* spec: Figma 8 */
     --_resize-outside: 6px; /* spec: Figma 6 outside, 2 inside */

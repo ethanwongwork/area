@@ -69,6 +69,15 @@ export function specimenGroup(name, family) {
   if (head === 'template') return 'Templates';
   return 'Content';
 }
+/**
+ * A tile's label in words, as the Sidebar's list, the tiles and the Canvas path show it (owner pick r4-names, 2026-11-01):
+ * "outline-success" → "Outline, success", "sm" → "Small", "fullWidth" → "Full width". Ids and links keep the label.
+ */
+const SIZE_WORDS = { xs: 'extra small', sm: 'small', md: 'medium', lg: 'large', xl: 'extra large' };
+export function specimenWords(label) {
+  const text = label.split('-').map(part => SIZE_WORDS[part] ?? part.replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase()).join(', ');
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
 /** The tile label inside its group: the value without the group's own prefix. */
 export function specimenLabel(name, group) {
   if (group === 'Default') return 'default';

@@ -950,7 +950,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "tree-view", name: "Tree view", exportName: "TreeView", manifest: "treeView",
-    api: [["items", "TreeViewNode[]", "—"], ["selectionMode", '"navigation" | "checkbox"', '"navigation"'], ["expandedIds / defaultExpandedIds", "string[]", "—"], ["selectedIds / defaultSelectedIds", "string[]", "—"], ["onExpandedChange / onSelectedChange", "(ids: string[]) => void", "—"], ["onActivate", "(id: string) => void", "—"], ["currentId", "string", "—"], ["TreeViewNode", "{ id, label, children?, icon?, trailing?, actions?, disabled? }", "—"]],
+    api: [["items", "TreeViewNode[]", "—"], ["selectionMode", '"navigation" | "checkbox"', '"navigation"'], ["expandedIds / defaultExpandedIds", "string[]", "—"], ["selectedIds / defaultSelectedIds", "string[]", "—"], ["onExpandedChange / onSelectedChange", "(ids: string[]) => void", "—"], ["onActivate", "(id: string) => void", "—"], ["currentId", "string", "—"], ["TreeViewNode", "{ id, label, children?, icon?, trailing?, actions?, disabled? }", "—"], ["stickyBranches", "boolean: the open branches holding the rows scrolled past stay pinned at the top (--area-tree-view-sticky-top, --area-tree-view-pin-fill)", "false"]],
     examples: [{ id: "files", title: "Project files", demo: "GalleryTreeViewFiles" }, { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters" }, { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed" }, { id: "filled-folders", title: "Filled folders", demo: "GalleryTreeViewFilledFolders" }, { id: "layers", title: "Layers with row controls", note: "Row controls are outside the single Tab stop: give each tabIndex={-1} and a keyboard equivalent. data-pinned keeps a state control visible.", demo: "GalleryTreeViewLayers" }, { id: "disabled", title: "Disabled row", note: "Disabled rows are skipped by arrow keys and typeahead.", demo: "GalleryTreeViewDisabled" }],
   },
   {
@@ -2313,7 +2313,11 @@ export const COMPONENT_PAGES = [
       ["actions", "ReactNode (independent buttons inside the shared row backplate)", "—"],
       ["revealActions", "boolean: the actions show only while the row is hovered or holds focus (always on touch)", "false"],
       ["disabled", "boolean", "false"],
-      ["NavGroup nested", "boolean (an expandable item's children, one Tree view level in)", "false"],
+      ["NavGroup nested", "boolean (an expandable item's children, one icon column in: on a parent's name)", "false"],
+      ["NavGroup open / onOpenChange", "boolean / (open) => void: a labelled group folds, its heading the button", "—"],
+      ["NavGroup actions", "ReactNode (controls at the heading's end, such as a section's New)", "—"],
+      ["NavGroup sticky", "boolean: the heading stays at the top of the scroll while its rows pass under it (--area-nav-sticky-top, --area-nav-pin-fill)", "false"],
+      ["picture", "ReactNode: a 20 × 14 picture in the icon's place (a screen's or an image's thumbnail)", "—"],
     ],
     practices: [
       "Mark the current page with <code class='area-code'>current</code>, not with a class. It renders <code class='area-code'>aria-current=\"page\"</code>, which is both what the CSS selects on and what a screen reader announces \u2014 so an item cannot look current without being current.",
@@ -2328,6 +2332,12 @@ export const COMPONENT_PAGES = [
         title: "Vertical",
         note: "Use grouped destinations in a sidebar. The current page uses a filled row.",
         demo: "NavVertical",
+      },
+      {
+        id: "folding",
+        title: "Folding groups",
+        note: "Give a labelled group open and onOpenChange to fold it from its heading; its chevron shows on hover and while folded. Actions sit at the heading's end.",
+        demo: "NavFolding",
       },
       { id: "icons", title: "Icons", demo: "NavIcons" },
       { id: "counts", title: "Counts", demo: "NavCounts" },
