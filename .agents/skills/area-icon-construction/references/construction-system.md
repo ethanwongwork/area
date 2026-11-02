@@ -20,6 +20,7 @@ The rules every Area icon is drawn to, enforced where measurable by `packages/ic
 - Centring
 - Sizes
 - In components
+- Cohesion
 
 
 **Weight.** `--area-weight-icon`, 1.125px for Geist. Sources are authored at 1.25px and
@@ -52,8 +53,9 @@ open lines (cross, close, check), reach to within about a pixel of it.
 
 **Negative space.** Negative space is designed like ink. Measure it in ink at 1.125px;
 the lint prints every gap and counter with `--report`.
-- **Gaps** between separate shapes come from a scale (a *detail* step, 0.875–1.125, sits under
-  tight since the owner's detail round; tight now runs to 1.75):
+- **Gaps** between separate shapes come from a scale. No gap is narrower than the line (owner, 2026-11-01: at 16 the
+  0.875–1.125 *detail* step of the 2026-09-28 detail round read as clumped lines, and Lucide and Tabler keep 1.33);
+  the one exception is the ⌀1.5 dot under a !, i or ? stem (0.94, owner, 2026-10-03). Tight runs to 1.75:
   - *tight*, 1.125–1.625px: satellites such as the bell's clapper, the dot of an i or !,
     and a gear's hub, and overlap cuts (a gap equal to the line, 1.125px);
   - *standard*, 1.75–2px (3px between centre-lines): parallel strokes, bars, a pupil or
@@ -61,9 +63,9 @@ the lint prints every gap and counter with `--report`.
   - *open*, 2.5px or more: space that no longer reads as a gap.
   Anything else is a near miss. Change it until it is one of the three, or join the shapes.
   Cursor's rule is the floor: cuts of 2.5 grid units or less blur into one shape.
-- **Counters.** Enclosed pockets use the same scale. A satellite pocket, such as a
-  clapper cup or a document's fold, may be tight (a 1.25–1.625px disc fits). Every other
-  pocket is standard (1.75px or more; 1.875 for a 3px bar or an r 1.5 ring). Anything
+- **Counters.** Enclosed pockets use the same scale, with a floor of 1.5 (owner, 2026-11-01). A satellite pocket,
+  such as a clapper cup or a document's fold, may be tight (1.5–1.75). Every other pocket is standard (1.75px or more;
+  1.875 for a 3px bar or an r 1.5 ring). Anything
   smaller reads as a blot at 16px: the r 1.5 clapper cup was 0.43, and Fluent's 3px
   dog-ear is 0.66 at this weight. Grow the pocket until it reaches a step, or remove it.
   A U shape (straight sides and a round bottom) holds a larger counter than a half-circle
@@ -80,13 +82,17 @@ the lint prints every gap and counter with `--report`.
 - ring: r 6 at 8,8 (info, help, clock, token, status-available, any circled glyph);
 - check: 45° arms in a 1:2 ratio. Standalone it is 3.5 / 7 (M3 8 L6.5 11.5 L13.5 4.5).
   Inside a ring it is 2 / 4 (M5 8 L7 10 L11 6);
-- corner radius, on the centre-line. The set should feel soft: no container corner is
-  square, and the radius grows with the shape, so values differ but the softness is even.
-  Rounder than Fluent's minimum, well short of ChatGPT's:
-  - 2px for large containers and frames: document page, open's box, panel;
-  - 1.5px for mid containers: folder, copy sheets, trash body, shapes, the book's outer
-    page corners, square-dashed;
-  - 1px for bars 3px tall (alignment) and small parts (the trash handle);
+- corner radius, on the centre-line, set by the frame's size, never by the object (owner, 2026-11-01:
+  folders at r 1.5 sat beside keyboards and cameras of the same 12 × 10 at r 2), and on the less round scale the owner
+  chose the same day (about Lucide's 1.33 at 16):
+  - 1.5px for a frame 9 or more long and 7 or more high: document page, folder, bookmark, mail, calendar, camera,
+    laptop, wallet, panel, the scan corners;
+  - 1px for a frame 5 to 8 (copy's sheets, the booleans' squares, lock and gift bodies, folders' back copy), and for
+    bars 3px tall and small parts (the trash handle, a phone in devices, building's annex);
+  - a curve that belongs to a glyph, a figure or an organic shape is not a corner and keeps its drawing (command's
+    loops, braces, quote, the person's shoulders, bug, gauge, the database cylinder), and an object whose roundness is
+    its shape keeps it (mouse, gamepad, the handset, toggle). `docs/research/icon-cohesion-2026-10-31/tools/reradius.py`
+    changes a radius without moving the shape; `tools/radii.py` audits it;
 - overlap cut: where one shape passes behind another (shapes' circle), the hidden part
   stops so the gap equals the line (2.25px between centre-lines, 1.125px of space).
   Owner, round 4: 3px read too far. **A gap is information, never style** (owner, 2026-10-02,
@@ -165,15 +171,17 @@ the lint prints every gap and counter with `--report`.
   (owner) and volume-off a speaker with a 3.5px × (Fluent's mute). The lint fails any other
   `-off` icon
   without the shared slash;
-- dots, two sizes by role (the lint allows only these):
+- dots, three sizes by role (the lint allows only these):
   - ⌀2 for a dot that is the icon or one of its marks: more, wi-fi's source,
     gap's dot, cart's wheels, list-bullet's bullets and a centre point in a frame (crosshair,
     square-dot, circle-dot-dashed) (Cursor's dot roles; owner, 2026-10-02); on whole-pixel centres so they fill 2 × 2 pixels at 1×;
-  - ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning, the ?)
-    and for a detail set inside a shape: keys (calculator, keyboard), lights (server, car),
-    windows (building), eyes (smile), an eyelet (tag), opacity's grid, dots grouped inside a
-    container (chat-more, app-window, square-list). Place them on the
-    gap scale from their frame and each other (quarter centres are fine for filled dots).
+  - ⌀1.5 (1.33× the line) for a dot with a stem (the i of info, the ! of warning, the ?);
+  - ⌀1.125, the line's own weight (r 0.5625), for a detail set inside a shape: keys (calculator,
+    keyboard), lights (server), windows (building), eyes (smile, the bots), an eyelet (tag), opacity's
+    grid, dots grouped inside a container (chat-more, square-list). Lucide's and Tabler's dots are the
+    line's weight; ⌀1.5 details were a third heavier and read as dark spots in a row (owner, 2026-11-01,
+    cohesion pass). A detail dot keeps a ⌀1.5 dot's place: the lint measures its gaps from the ⌀1.5
+    placement, so place it on the gap scale as a ⌀1.5 dot (quarter centres are fine for filled dots).
   Every dot's radius follows the size curve with the line (`r` set from `sw`, owner 2026-10-05),
   so the ratio to the stem holds at 24–48px.
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
@@ -462,3 +470,35 @@ five libraries (`refs.mjs`), never at one large size beside Fluent alone.
 `packages/react/src/components/Glyph.tsx`. Add the icon (or one element of it) to
 `PACKAGE_GLYPHS` in the generator, never a hand-copied path, and pass the slot's `size`.
 base.css sets the line from `--area-weight-icon` and the size curve.
+
+**Cohesion (2026-10-31; owner-adopted 2026-11-01; research and numbers in `docs/research/icon-cohesion-2026-10-31/`).**
+Measured against Lucide, Phosphor, Tabler, Heroicons, Iconoir and Fluent, Area's spread of size, density and
+mass is the libraries' own, and Area follows their consensus concept by concept (r 0.83–0.90). What set it
+apart was solid ink (35% of icons, against 16–17% in Lucide and Phosphor) and single drawings. So:
+- *Measure against the consensus.* Run that folder's `tools/measure.mjs area` on the build and
+  `tools/compare.py <dir> <names>`: an icon more than 7% off its concept's consensus in size, 20% in density
+  or 25% in mass is redrawn toward its peers or recorded with the reason. Look at it in a strip
+  (`tools/strip.mjs`, a group in one line at 16 / 20 / 24, as a nav or key shows it), not alone.
+- *Solids are marks, not details.* Every set that publishes rules keeps outline icons free of solid areas
+  (Lucide: "fills are officially not supported"; SF Symbols: "an outlined symbol has no solid areas"). A
+  solid stays only where it is the icon's identity or a named dot role (more, bullets, the i, ! and ? dots,
+  wi-fi's source, a centre point, the notification dot, a mark's fill, the recorded solid exceptions).
+  Content inside a container (a picture, window controls, an eyelet, a sun) is a line or is left out.
+- *Long, thin objects lie on the rising diagonal* when that brings them to their keyline (link: 13.1 × 7.1
+  flat, 12.8 × 12.8 on the diagonal).
+- *An inner diagonal in a ring rises.* The falling diagonal is the slash's; a needle on it reads as ⊘
+  (compass).
+- *Letters use their keyline.* A pair spans the horizontal keyline at cap 7.5 and x-height 4.5 (Aa, AB, ab),
+  so it reads at the size of text's T and every library's Aa.
+- *A composition of separate shapes is a class* (shapes, system, grid, component): parts on the gap scale
+  cap at about 4.5 in the 12px box, so it reads lighter than one silhouette. Make each part as large as the
+  gaps allow, the triangle largest (it covers half its box).
+- *Flat views, depth only where depth is the idea* (owner, 2026-11-01). Objects are drawn front or side on (car,
+  truck, the plane top-down nose up); cube, package, cube-wireframe, layers and database keep their depth, and
+  container stays isometric by the owner's pick.
+- *Measure at every size.* `tools/sizes.mjs` draws the build at 16, 20, 24, 32 and 48 and `tools/sizes.py` compares
+  each icon with its class (keyline × fill kind) at each size. An icon whose density changes against its class across
+  sizes is drawn outside the size curve: an outline drawn as a filled path (Fluent's globe until 2026-11-01) keeps a
+  fixed line while every stroke thins, so draw outlines as strokes. Solids (the booleans, contrast, stroke-weight,
+  quote) drift by nature and are recorded. Diagonal objects (a pencil, a wand) read small by hull area; judge them in a
+  strip, not by the number.

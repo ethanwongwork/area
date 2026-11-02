@@ -12,7 +12,7 @@ import {
   Checkbox, Field, Input, Nav, NavGroup, NavItem, Panel, PanelSection, SearchField, Segmented, Select, Slider, Switch, Titlebar,
 } from "@area/react";
 import {
-  AddIcon, ArrowLeftIcon, ArrowRightIcon, BookmarkIcon, GridIcon, HomeIcon, ListIcon, MoonIcon, PanelLeftFilledIcon, ShapesIcon,
+  AddIcon, ArrowLeftIcon, ArrowRightIcon, BookmarkIcon, GridIcon, HomeIcon, ListIcon, MoonIcon, PanelLeftFilledIcon, SystemIcon,
   PanelRightFilledIcon, SearchIcon, SettingsIcon,
 } from "@area/icons";
 import type { ReactNode } from "react";
@@ -58,7 +58,7 @@ export function AreaAppScreen() {
         <Titlebar variant="plain" size="sm" end={<>{icon("References", <BookmarkIcon />)}{icon("Dark mode", <MoonIcon />)}</>}>
           <Nav orientation="horizontal" aria-label="Open tabs">
             <NavItem href="#" icon={<HomeIcon />} aria-label="Home" />
-            <NavItem href="#" icon={<ShapesIcon />} current>Area</NavItem>
+            <NavItem href="#" icon={<SystemIcon />} current>Area</NavItem>
           </Nav>
           {icon("New tab", <AddIcon />)}
         </Titlebar>

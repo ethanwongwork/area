@@ -36,8 +36,8 @@ test("ink blue: the link blue of product UI, with the variant's underline", () =
 test("the 12px mark carries its 16px drawing and its 12px cut; base.css shows the cut where the xs slot is 12", () => {
   const svg = render(h(Link, { href: "https://example.com", external: true }, "Help")).match(/<svg[\s\S]*<\/svg>/)[0];
   assert.match(svg, /^<svg viewBox="0 0 16 16"/);
-  assert.match(svg, /<g data-area-glyph-drawing="16"><path d="M8 2.5H4.5/);
-  assert.match(svg, /<g data-area-glyph-drawing="12" transform="scale\(1.3333333333333333\)"><path d="M5.5 2.5H4/);
+  assert.match(svg, /<g data-area-glyph-drawing="16"><path d="M8 2.5H4A1.5/);
+  assert.match(svg, /<g data-area-glyph-drawing="12" transform="scale\(1.3333333333333333\)"><path d="M5.5 2.5H3.5A1/);
   const css = readFileSync(new URL("../../styles/src/base.css", import.meta.url), "utf8");
   assert.match(css, /\[data-area-glyph-drawing="12"\] \{ opacity: var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\); \}/);
 });

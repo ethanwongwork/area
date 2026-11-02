@@ -23,6 +23,7 @@
   "chevron-last": "the end, not the right; Material last_page",
   "debug-step-over": "forward motion; Fluent arrow_step_over",
   "trending-up": "time runs in reading order; Fluent and Material",
-  "trending-down": "time runs in reading order; Fluent and Material"
+  "trending-down": "time runs in reading order; Fluent and Material",
+  "arrow-split": "forward motion splitting off; Material call_split"
  }
 }

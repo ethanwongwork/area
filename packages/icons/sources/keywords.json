@@ -7,6 +7,13 @@
   "material": "@material-symbols/metadata@0.48.0"
  },
  "icons": {
+  "absolute-position": {
+   "keywords": [
+    "constraints",
+    "pin",
+    "ignore auto layout"
+   ]
+  },
   "accessibility": {
    "names": {
     "lucide": "accessibility",
@@ -752,6 +759,20 @@
     "arrowhead"
    ]
   },
+  "arrow-split": {
+   "names": {
+    "fluent": "arrow_split",
+    "material": "arrow_split"
+   },
+   "keywords": [
+    "fork",
+    "branch off",
+    "split off",
+    "exploration",
+    "variation",
+    "spin off"
+   ]
+  },
   "arrow-up": {
    "names": {
     "lucide": "arrow-up",
@@ -1034,6 +1055,14 @@
     "winning",
     "victory",
     "awards"
+   ]
+  },
+  "background-blur": {
+   "keywords": [
+    "backdrop blur",
+    "frosted glass",
+    "effect",
+    "blur behind"
    ]
   },
   "backspace": {
@@ -1751,6 +1780,27 @@
     "bookmark minus"
    ]
   },
+  "bookmarks": {
+   "names": {
+    "phosphor": "bookmarks-simple",
+    "fluent": "bookmark_multiple",
+    "material": "bookmarks"
+   },
+   "keywords": [
+    "collection",
+    "saved",
+    "references",
+    "favorites",
+    "bookmarks simple",
+    "bookmark multiple",
+    "reading",
+    "reader",
+    "novel",
+    "story",
+    "placeholder",
+    "favorited"
+   ]
+  },
   "boolean-exclude": {
    "names": {
     "lucide": "squares-exclude",
@@ -1851,71 +1901,13 @@
     "robot"
    ]
   },
-  "bot-automator": {
+  "bot-agents": {
    "keywords": [
-    "ai",
-    "robot",
-    "automation",
-    "workflow"
-   ]
-  },
-  "bot-builder": {
-   "keywords": [
-    "ai",
-    "robot",
-    "build",
-    "construct"
-   ]
-  },
-  "bot-designer": {
-   "keywords": [
-    "ai",
-    "robot",
-    "design",
-    "creative"
-   ]
-  },
-  "bot-generator": {
-   "keywords": [
-    "ai",
-    "robot",
-    "generate",
-    "create"
-   ]
-  },
-  "bot-guard": {
-   "keywords": [
-    "ai",
-    "robot",
-    "safety",
-    "security",
-    "moderation"
-   ]
-  },
-  "bot-lead": {
-   "keywords": [
-    "ai",
-    "robot",
-    "leader",
-    "orchestrator",
-    "manager"
-   ]
-  },
-  "bot-researcher": {
-   "keywords": [
-    "ai",
-    "robot",
-    "research",
-    "investigate"
-   ]
-  },
-  "bot-scholar": {
-   "keywords": [
-    "ai",
-    "robot",
-    "learning",
-    "education",
-    "tutor"
+    "multiple agents",
+    "background tasks",
+    "multitask",
+    "subagents",
+    "parallel agents"
    ]
   },
   "braces": {
@@ -3566,6 +3558,14 @@
     "version control"
    ]
   },
+  "circle-progress": {
+   "keywords": [
+    "in progress",
+    "status",
+    "started",
+    "task"
+   ]
+  },
   "circuit-board": {
    "names": {
     "lucide": "circuit-board",
@@ -4817,6 +4817,24 @@
     "quotient",
     "mathematics",
     "arithmetic"
+   ]
+  },
+  "dna": {
+   "names": {
+    "lucide": "dna",
+    "phosphor": "dna"
+   },
+   "keywords": [
+    "genetics",
+    "helix",
+    "biology",
+    "science",
+    "gene",
+    "gmo",
+    "heredity",
+    "chromosome",
+    "nucleic acid",
+    "double helix"
    ]
   },
   "document": {
@@ -6339,6 +6357,36 @@
     "rubygems"
    ]
   },
+  "ghost": {
+   "names": {
+    "lucide": "ghost",
+    "phosphor": "ghost"
+   },
+   "keywords": [
+    "incognito",
+    "temporary",
+    "spooky",
+    "halloween",
+    "spirit",
+    "haunt",
+    "specter",
+    "apparition",
+    "wraith",
+    "shade",
+    "phantom",
+    "entity",
+    "silhouette",
+    "pac-man",
+    "haunted",
+    "invisible",
+    "hidden",
+    "empty",
+    "dead",
+    "obsolete",
+    "outdated",
+    "scary"
+   ]
+  },
   "gif": {
    "names": {
     "phosphor": "gif",
@@ -7764,6 +7812,18 @@
     "lights"
    ]
   },
+  "lightbulb-sparkle": {
+   "names": {
+    "fluent": "lightbulb_sparkle"
+   },
+   "keywords": [
+    "ai suggestion",
+    "ai fix",
+    "idea",
+    "quick fix",
+    "suggest"
+   ]
+  },
   "line": {
    "names": {
     "lucide": "slash",
@@ -8710,6 +8770,15 @@
     "ellipses"
    ]
   },
+  "motion": {
+   "keywords": [
+    "animation",
+    "transition",
+    "movement",
+    "speed",
+    "easing"
+   ]
+  },
   "mountain": {
    "names": {
     "lucide": "mountain",
@@ -9005,6 +9074,21 @@
     "preferences"
    ]
   },
+  "orbit": {
+   "names": {
+    "lucide": "orbit",
+    "material": "orbit"
+   },
+   "keywords": [
+    "planet",
+    "space",
+    "satellite",
+    "astronomy",
+    "physics",
+    "satellites",
+    "moons"
+   ]
+  },
   "outdent": {
    "names": {
     "lucide": "list-indent-decrease",
@@ -9249,6 +9333,14 @@
     "<"
    ]
   },
+  "panel-left-float": {
+   "keywords": [
+    "floating panel",
+    "overlay panel",
+    "floating sidebar",
+    "sidebar"
+   ]
+  },
   "panel-left-open": {
    "names": {
     "lucide": "panel-left-open",
@@ -9296,6 +9388,14 @@
     "hide",
     "chevron",
     ">"
+   ]
+  },
+  "panel-right-float": {
+   "keywords": [
+    "floating panel",
+    "overlay panel",
+    "floating inspector",
+    "sidebar"
    ]
   },
   "panel-right-open": {
@@ -11241,6 +11341,18 @@
     "zoom"
    ]
   },
+  "search-sparkle": {
+   "names": {
+    "fluent": "search_sparkle"
+   },
+   "keywords": [
+    "ai search",
+    "ai review",
+    "smart search",
+    "find with ai",
+    "magnifying glass sparkle"
+   ]
+  },
   "send": {
    "names": {
     "lucide": "send",
@@ -12055,6 +12167,33 @@
     "verification",
     "unique",
     "verify"
+   ]
+  },
+  "signpost": {
+   "names": {
+    "lucide": "signpost",
+    "phosphor": "signpost",
+    "material": "signpost"
+   },
+   "keywords": [
+    "directions",
+    "guide",
+    "wayfinding",
+    "sign",
+    "direction",
+    "arrow",
+    "indicator",
+    "marker",
+    "bidirectional",
+    "left",
+    "right",
+    "east",
+    "west",
+    "checkpoint",
+    "traffic",
+    "road sign",
+    "transit",
+    "transportation"
    ]
   },
   "sim-card": {
@@ -13128,6 +13267,20 @@
     "appearance"
    ]
   },
+  "sunrise": {
+   "names": {
+    "lucide": "sunrise"
+   },
+   "keywords": [
+    "morning",
+    "dawn",
+    "sunset",
+    "horizon",
+    "weather",
+    "time",
+    "day"
+   ]
+  },
   "superscript": {
    "names": {
     "lucide": "superscript",
@@ -13210,6 +13363,28 @@
     "arrowhead",
     "refreshing",
     "spin"
+   ]
+  },
+  "system": {
+   "names": {
+    "lucide": "shapes",
+    "phosphor": "shapes",
+    "fluent": "shapes",
+    "material": "shapes"
+   },
+   "keywords": [
+    "design system",
+    "kit",
+    "foundations",
+    "styles",
+    "shapes",
+    "equilateral",
+    "classification",
+    "different",
+    "collection",
+    "toy",
+    "learning",
+    "geometry"
    ]
   },
   "table": {

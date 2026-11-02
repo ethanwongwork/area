@@ -1,14 +1,25 @@
 # Handoff
 
 ## Current state (2026-11-01)
-- **Status badges, branch `claude/worktree-cleanup-status-badges-a187b0` (uncommitted, 2026-11-01).** Badge `variant="plain"`
+- **Status badges, branch `claude/worktree-cleanup-status-badges-a187b0` (PR to main, 2026-11-01).** Badge `variant="plain"`
   (no plate; mark at 3:1, words at 4.5: light = brightest palette step / vivid ink, dark = vivid / text ink); every variant's
   marks held to its own plate (soft and color one step deeper for the tint); cap and marks centred in the plate (the optical
   lift dropped for Badge only, 0.9 high before); icon gap 2. Project status: published = check circle, draft = empty ring
   (`EllipseIcon`); a project's Explorations rows end on the mark alone. Asset card `badge` slot: a plain badge on a raised
   plate at the frame's top start (Asset card back In review). Live sheet with Area's CSS: https://claude.ai/artifact/R5WRGDZRsypsQiawvYgtnq
   (`verdicts/badge-look`). Open: a `fg-<tone>-mark` token at 3:1 (the light marks are palette steps in badge.css);
-  tables and data vis next. Nav consistency runs in its own session (one-consistent-app-nav).
+  main's new `CircleProgressIcon` (batch 77) could draw In progress / In review marks when projects get those states; tables and data vis next. Nav consistency runs in its own session (one-consistent-app-nav).
+- **Icon cohesion pass, branch `claude/icon-cohesion-11900d` (PR to main, 2026-11-01).** Owner: the set didn't look
+  cohesive. Measured against six libraries (`docs/research/icon-cohesion-2026-10-31/`, tools for strips, boards, radii,
+  angles, 1x and every-size measures); rules adopted in the icon skill ("Cohesion"). Applied over rounds 1–7: gap floor one
+  line (tight 1.125) and counters 1.5, enforced by the lint (~190 redraws); corners less round (r 1.5 frames ≥ 9 × 7, r 1
+  smaller); held constructions simplified; globe stroked; 8 role bots removed. New: `SystemIcon` (System tab, Home's feed,
+  the area-app example), `BookmarksIcon`, batch 77 (13 concepts read from Cursor's and the Claude app's icon sets:
+  search/lightbulb-sparkle, circle-progress, arrow-split (RTL mirror), panel-left/right-float, background-blur,
+  absolute-position, motion, ghost, signpost, dna, orbit, sunrise), batch 78 (`BotAgentsIcon`; file-lock and person-lock
+  share folder-lock's 5 × 3 lock; the sort family shares one arrow). Agent is now bot with sunglasses (owner pick A).
+  817 icons. In review: batch 78 and the four icons it touched. Review page
+  https://claude.ai/artifact/KTwGjUgbj5uJZ5yPvFazqh (db `verdicts`), Icon Boards https://claude.ai/artifact/4debUbHgJLDBGmzXcUde6Q.
 - **Feed content and galleries, branch `claude/feed-content-gallery-layouts-5ead71` (uncommitted, 2026-11-01).** First
   ported the IA playground's steps 2–3 + q6, left uncommitted in `ia-design-playground-review-3e30b0` (design viewer,
   morph, derived Properties; resolved against #186–#191: References naming, glyph sheet, FEED_TABLE). Then the owner's
