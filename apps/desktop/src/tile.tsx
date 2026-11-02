@@ -21,7 +21,7 @@
  */
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { AssetCard, AssetGridItem, Badge, Count, ListBoxItem, SectionHeading } from "@area/react";
-import { CircleDashedIcon, TagIcon } from "@area/icons";
+import { EllipseIcon, StatusAvailableFilledIcon } from "@area/icons";
 import { feedScale, feedScaleWithin } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
@@ -48,18 +48,24 @@ export const FEED_CODE = { className: "studio-code", "data-area-stroke": CARD_SC
 
 export type TileSpan = "unit" | "wide";
 /**
- * A project's status, one badge in two states, colour-coded with the icons Home's timeline draws for the same events
- * (owner, 2026-11-01: "color code the project status badge indicators, match them with the icons that we used from
- * before"): published or live, the tag, success; a draft or not yet published, the dashed circle (Home's "changes waiting
- * to publish"), caution.
+ * A project's status, one badge in two states, colour-coded (owner, 2026-11-01: "color code the project status badge
+ * indicators"), drawn as the status circles (owner, later the same day: "i dont like the tag icon for published, what
+ * happened to the circles"; the 2026-10-30 status prototype's marks): published or live, the filled circle with its
+ * check knocked out, success; a draft or not yet published, the empty ring, caution (the dashed circle until the live
+ * sheet, 2026-11-01: "the dashed circle looks too faint"; 23 units of ink beside the check circle's 125, the ring's 47). Plain (owner, 2026-11-01: "i
+ * kinda like the merge icons with the colors, no backplate"): the icon carries the colour and the words stay the
+ * caption's muted text, with no plate behind them. `iconOnly` draws the mark alone, its words its accessible name and
+ * tooltip (a Sidebar row's trailing mark, as Claude Code marks each session).
  */
 export type ProjectStatus = "published" | "draft";
 export const STATUS = {
-  published: { tone: "success", icon: <TagIcon /> },
-  draft: { tone: "caution", icon: <CircleDashedIcon /> },
+  published: { tone: "success", icon: <StatusAvailableFilledIcon /> },
+  draft: { tone: "caution", icon: <EllipseIcon /> },
 } as const;
-export function StatusBadge({ status, children }: { status: ProjectStatus; children: ReactNode }) {
-  return <Badge variant="soft" tone={STATUS[status].tone} icon={STATUS[status].icon} className="gallery-tile__badge">{children}</Badge>;
+export function StatusBadge({ status, iconOnly, children }: { status: ProjectStatus; iconOnly?: boolean; children: ReactNode }) {
+  return iconOnly
+    ? <Badge variant="plain" iconOnly tone={STATUS[status].tone} icon={STATUS[status].icon} aria-label={String(children)} title={String(children)} />
+    : <Badge variant="plain" tone={STATUS[status].tone} icon={STATUS[status].icon} className="gallery-tile__badge">{children}</Badge>;
 }
 export type TileShape = "square" | "wide";
 /**

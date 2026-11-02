@@ -470,7 +470,7 @@ export const badge = {
   block: "area-badge",
   description: "Labels an item with a short status or metadata; optionally links to its details.",
   variants: {
-    variant: ["soft", "solid", "outline", "color", "modern"],
+    variant: ["soft", "solid", "outline", "color", "modern", "plain"],
     tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"],
     size: ["sm", "md", "lg"],
   },
@@ -1149,7 +1149,7 @@ export const assetCard = {
   variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below", "overlay", "outside"], fill: ["recessed", "raised", "checker"], aspect: ["square", "landscape", "hug", "wide", "screen"], fit: ["natural", "cover", "contain"], mosaic: ["grid", "strip"] },
   booleans: ["interactive", "borderless"],
   states: ["selected"],
-  elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb"],
+  elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb", "badge"],
   defaults: { layout: "asset", container: "framed", caption: "above", fill: "recessed", aspect: "square", fit: "natural", mosaic: "grid" },
 } as const satisfies ComponentManifest;
 

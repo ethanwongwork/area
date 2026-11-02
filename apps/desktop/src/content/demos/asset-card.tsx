@@ -1,7 +1,7 @@
 /** Asset card gallery specimens: one kind per tile. docs/specs/asset-card.md. Example people are David Tee. The card is
  * square: a head with the name and a More button, then the frame with the asset, 4 in (round 55's designs). */
-import { AssetCard, AssetGrid, AssetGridItem, Button, Card, CardContent, CardDescription, CardTitle, CopyButton } from "@area/react";
-import { MoreHorizontalIcon, SearchIcon } from "@area/icons";
+import { AssetCard, AssetGrid, AssetGridItem, Badge, Button, Card, CardContent, CardDescription, CardTitle, CopyButton } from "@area/react";
+import { EllipseIcon, MoreHorizontalIcon, SearchIcon, StatusAvailableFilledIcon } from "@area/icons";
 
 const card = { inlineSize: 224 } as const;
 /* The head's end holds controls only (round 58): More for what is managed (an image, a group), Copy for what is used (a
@@ -127,4 +127,15 @@ export const GalleryAssetGridWaterfallContainerless = () => (
     <AssetGridItem value="filter" name="Filter" media="images/chip-filter.png" mediaRatio={1} />
     <AssetGridItem value="group" name="Group one" group={["images/david-tee.jpg", "images/chip-filter.png", "images/chip-pixels.png", typeSample]} />
   </AssetGrid>
+);
+
+/** A status laid on the picture (2026-11-01): a plain Badge on the frame's top-start plate, at rest. */
+export const GalleryAssetCardBadge = () => (
+  <AssetCard style={card} aspect="screen" fit="cover" media="images/david-tee.jpg" mediaRatio={1} name="David Tee"
+    badge={<Badge variant="plain" tone="success" icon={<StatusAvailableFilledIcon size={12} />}>Published</Badge>} />
+);
+/** The mark alone, on a round plate: its word is its name. */
+export const GalleryAssetCardBadgeMark = () => (
+  <AssetCard style={card} aspect="screen" fit="cover" caption="overlay" media="images/david-tee.jpg" mediaRatio={1} name="David Tee"
+    badge={<Badge variant="plain" iconOnly tone="caution" icon={<EllipseIcon size={12} />} aria-label="Draft" />} />
 );

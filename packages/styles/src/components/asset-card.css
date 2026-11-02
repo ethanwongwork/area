@@ -408,6 +408,37 @@
     background-color: var(--area-bg-surface);
     box-shadow: var(--area-shadow-control);
   }
+  /* A badge laid on the asset (owner, 2026-11-01: "can these badges also be overlayed on top of the asset cards … for
+     designs, covers, images"; the live status sheet's pick): the overlay name's plate, mirrored to the frame's top start
+     and shown at rest, since a status is read before a hover. The plate is the raised surface, a small control tall, a
+     pill with the control shadow, padded as the name's is; the badge inside is plain, so its colours hold their contrast
+     against the surface whatever the picture (a plain badge straight on a photo or a vivid cover is lost). Placed as the
+     name is: as far in from the card's edge as its cap allows, which puts it flush with the frame's corner at the
+     default; then moved 8 in (below). The mark alone (an iconOnly badge) takes a round plate. Where a card has a name row
+     (caption above, below or outside), a status belongs there instead: the slot is for pictures with no row of their own. */
+  .area-asset-card__badge {
+    --_plate-pad: calc((var(--area-control-sm) - 1cap) / 2);
+    /* 8 in from the frame's top and start (owner, 2026-11-01: "the on pictures badge should be more inset"; it sat 2 in,
+       concentric with the corner): the asset's own inset in a card (--area-asset-card-inset), so the plate floats on the
+       picture as the picture floats in the card. */
+    --_badge-at: var(--area-space-8);
+    position: absolute;
+    inset-block-start: var(--_badge-at);
+    inset-inline-start: var(--_badge-at);
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    block-size: var(--area-control-sm);
+    max-inline-size: calc(100% - 2 * var(--_badge-at));
+    padding-inline: var(--_plate-pad);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-control);
+    font-size: var(--area-ui-size, var(--area-text-sm-size));
+    pointer-events: none;
+  }
+  .area-asset-card__badge[data-mark] { inline-size: var(--area-control-sm); justify-content: center; padding-inline: 0; }
   @media (hover: hover) {
     :is(.area-asset-card--overlay:hover, .area-asset-grid__item:hover > .area-asset-card--overlay) > .area-asset-card__head,
     :is(.area-asset-card--below:hover, .area-asset-grid__item:hover > .area-asset-card--below) > .area-asset-card__head > .area-asset-card__actions { opacity: 1; transition-duration: 0s; }

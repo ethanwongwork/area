@@ -473,3 +473,23 @@ rest unchanged.
   dont add a stroke to the inset images", "move the below text/button row even closer to 4", and of the card toggle "the
   card is still there it will just appear on hover". The app's Components, References, Home and Typography cards and its
   plain tiles all take it: 16 corners, 8 in, names 4 below at 13, 16 apart, square or 16:9.
+
+## Review note, 2026-11-01 (badge on the picture)
+
+- **What changed:** `badge` (element `badge`): a status or label laid on the asset at the frame's top start, on a raised
+  plate (the surface, `control-sm` tall, a pill, `shadow-control`, padded as the overlay name's plate), shown at rest; an
+  `iconOnly` badge takes a round plate. The plate sits concentric with the frame's corner: in by the frame's corner less
+  the pill's radius (2 at the default; flush, the frame's clip took 0.6 off the pill's curve), or as far as the overlay
+  name sits, whichever is more.
+- **Why:** the owner, 2026-11-01: "can these badges also be overlayed on top of the asset cards/containers in area for
+  designs, covers, images, etc. what would that look like?", then "go with your recommendations". The live sheet
+  (https://claude.ai/artifact/R5WRGDZRsypsQiawvYgtnq, "On pictures") laid six treatments on a light design, a dark photo
+  and a vivid cover: plain straight on the picture was lost on the photo and the cover; the solid variant read but put a
+  block of colour on every card; modern carried its own border and corner. The overlay name's plate, mirrored to the top
+  and holding a plain badge, keeps the badge's own contrast on the surface whatever the picture, and is one plate system.
+- **Verdict:** in review.
+- 2026-11-01, same day · owner: "the on pictures badge should be more inset, do you think this is good? or is it better
+  to put badges below in the title/footer of the cards" → the plate sits 8 in from the frame's top and start (was 2,
+  concentric with the corner), the asset's own inset in a card. Placement: a status goes in the card's name row where it
+  has one (the app's cards, caption outside); the slot is for pictures without a row (caption overlay, image libraries).
+  On a 16:9 design the top start is where its logo and navigation sit, and a status there covers the design.

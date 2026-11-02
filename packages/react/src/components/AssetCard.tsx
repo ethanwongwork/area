@@ -5,7 +5,7 @@
 // of cards (one Tab stop, arrows in two dimensions, typeahead) that also opens the focused card on Enter or a double
 // click, as FileGrid; as a waterfall its cards hug their assets in columns, each dropped into the shortest. Spec:
 // docs/specs/asset-card.md.
-import { createContext, forwardRef, useContext, useLayoutEffect, useRef } from "react";
+import { createContext, forwardRef, useContext, useLayoutEffect, useRef, isValidElement } from "react";
 import type { CSSProperties, HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { assetCardVariants, assetGridVariants } from "../variants.ts";
 import { ListBox, ListBoxItem, type ListBoxProps, type ListBoxItemProps } from "./ListBox.tsx";
@@ -75,6 +75,13 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
   fit?: "natural" | "cover" | "contain";
   /** An image's width over its height, so it holds its shape before it loads (a waterfall's cards, a contained image). */
   mediaRatio?: number;
+  /**
+   * A status or label laid on the asset, at the frame's top start, on a raised plate (the surface, a pill, the control
+   * shadow: the overlay name's plate, mirrored) and shown at rest. Pass a plain Badge (`variant="plain"`), or its mark
+   * alone (`iconOnly`, with an aria-label) for the compact form. For designs, covers and images, where the picture under
+   * it can be any colour.
+   */
+  badge?: ReactNode;
   /** The frame's content as the host lays it out, in place of `media` (an app's specimen stage). */
   children?: ReactNode;
   /** Attributes for the frame: a host's own class, scope or ground. */
@@ -93,7 +100,7 @@ const STRIP = 8;
 const join = (...names: Array<string | undefined>) => names.filter(Boolean).join(" ");
 
 export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardProps>(function AssetCard(
-  { name, meta: _meta, actions, media, mediaAlt = "", color, group, mosaic = "grid", selected, interactive, caption = "above", fill = "recessed", borderless, container = "framed", aspect = "square",
+  { name, meta: _meta, actions, badge, media, mediaAlt = "", color, group, mosaic = "grid", selected, interactive, caption = "above", fill = "recessed", borderless, container = "framed", aspect = "square",
     fit = "natural", mediaRatio, children, frameProps, headProps, captionProps, className, style, ...rest }, ref,
 ) {
   const layout = group ? "group" : color !== undefined && children === undefined ? "color" : typeof media === "string" && children === undefined ? "image" : "asset";
@@ -127,6 +134,7 @@ export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardPro
             {typeof media === "string" ? image(media, mediaAlt, mediaRatio) : media}
           </div>
         )}
+        {badge ? <div className={assetCardVariants.element("badge")} data-mark={isValidElement(badge) && (badge.props as { iconOnly?: boolean }).iconOnly ? "" : undefined}>{badge}</div> : null}
       </div>
     </div>
   );
