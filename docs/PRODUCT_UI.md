@@ -399,9 +399,11 @@ Cursor's nav with Figma's tabs).
   A colour keeps its name inside, in its ink. Cards are 16 apart (12 / 16 / 20 by density). Two shapes: square, and 16:9
   for anything designed, where a window fits whole; UI never runs to the card's edge. Images inside cards draw no edge.
   Components' No container is the same card clear at rest, appearing on hover. A project's status is one badge in two
-  states, colour-coded with the icons Home's timeline draws for the same events (owner: "color code the project status
-  badge indicators, match them with the icons that we used from before"): published or live, the tag, success; a draft or
-  not yet published, the dashed circle, caution (tile.tsx `status`, StatusBadge). Other values stay neutral badges. The
+  states, colour-coded and drawn as the status circles (owner: "color code the project status badge indicators"; "i dont
+  like the tag icon for published, what happened to the circles"): published or live, the check circle, success; a draft
+  or not yet published, the empty ring, caution (the dashed circle was too faint); plain, the icon coloured and no plate (tile.tsx `status`, StatusBadge).
+  A Sidebar row shows the mark alone at its end, its words its name and tooltip (a project's Explorations). Other values
+  stay neutral badges. The
   paragraph below is the day's history.
 - **One card, three shapes** (owner, 2026-11-01: "they should all be the same just variants of each other … a square AR
   one for components specifically"; "more like 4:3"; "some projects might want a full thumbnail 16:9 cover"): every card

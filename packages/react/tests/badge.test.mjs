@@ -12,7 +12,9 @@ test('default and full variant/tone matrix preserve orthogonal classes', () => {
     assert.ok(html.includes(`area-badge--${variant}`) && html.includes(`area-badge--${tone}`) && html.includes('area-badge__dot'));
   }
   assert.throws(()=>badgeVariants({variant:'tint'}),RangeError);
-  for (const variant of ['ghost','plain']) assert.throws(()=>badgeVariants({variant}),RangeError);
+  // plain came back on 2026-11-01 (docs/specs/badge.md, Plain variant); ghost stays removed (2026-09-24).
+  assert.throws(()=>badgeVariants({variant:'ghost'}),RangeError);
+  assert.match(render(h(Badge,{variant:'plain',tone:'success'},'Live')), /area-badge--plain area-badge--success/);
   assert.throws(()=>badgeVariants({tone:'custom'}),RangeError);
 });
 test('native link forwards navigation props and truncation preserves the full text', () => {

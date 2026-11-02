@@ -76,6 +76,7 @@ code (Code). BadgeGroup lays badges out; it adds no badge paint.
 | treatment | solid | Strong fill for a state that must read at a glance | Figma plan and role badges ("Free", "Guest") on its dark menu |
 | treatment | color | Tinted fill plus tinted border | Untitled badge-color (Area keeps it pill-shaped) |
 | treatment | modern | Neutral surface, subtle shadow, colored addon | Untitled badge-modern |
+| treatment | plain | No plate or edge, text sides 0, weight 400; the mark at 3:1 (light: the palette step of most chroma that clears it; dark: the vivid ink), the words at 4.5 (light: the vivid ink; dark: the text ink) | Claude Code's sidebar status marks (a coloured merge glyph beside a muted name, owner 2026-11-01); Area Count plain (Notion's board counts) |
 | tone | neutral, info, success, warning, caution, danger, discovery, inverse | Semantic paint | Notion's tag palette (purple, blue, yellow, green, brown, red); Untitled's twelve colors |
 | size | sm 16, md 20 (default), lg 24 | Owner (2026-09-25) | Kbd 16/20; Indicator count 16; Notion 20; ChatGPT 16 and 22; Figma 16 and 18; Untitled 22/24/28 |
 | composition | dot, dot only | Status with a colored dot; a dot with no label | Notion status property (every status tag); Untitled with-dot; gallery "Dot only" |
@@ -452,7 +453,7 @@ by `node scripts/validate-badge.mjs`. Pass-1 Area captures are in `before/`.
 | text · vertical position | cap centred (cap-height box) | `inset.css` rule | Better centred than Untitled's line box |
 | dot · slot / disc / start / gap | 8 / 6 / 4·6·8 / 4·4·6 | Owner (6px disc); start equals the slot's vertical inset | Notion paints an 8px dot with a 5px gap |
 | icon · slot / inset | 12 at sm; 16 at md, lg; inset (height − slot) / 2 = 2 / 2 / 4 | Owner (16px Fluent at md and above); sm uses native 12px cuts | Callers pass 12px artwork at sm; no current composition uses sm with an icon |
-| icon · gap | **4 at every size** (was 2 / 4 / 4 at type 14, 1 / 3 / 4 at 13) | DESIGN_SYSTEM.md Icon-to-label gap (4 at xs and compact); Untitled sm gap-0.5, md gap-1 | owner, 2026-10-30: a status mark touched its word in the sm plate |
+| icon · gap | **2 at every size**, box to box: about 4 ink to ink (4 from 2026-10-30, 6.2 ink to ink; before that 1 / 3 / 4 at type 13) | DESIGN_SYSTEM.md Icon-to-label gap (4 at xs and compact) read as the ink apart; Untitled sm gap-0.5, md gap-1 | owner, 2026-11-01: "the gap between the icon and text in badge looks too large" |
 | media, dismiss · box | 12 at sm; 16 at md, lg | Untitled 16 (md); sm follows the icon slot | — |
 | media · start / gap | 2 / 2 / 4; gap 4 / 4 / 6 | Equal inset, as for icons | Pass 1 used 3px at the 20px size |
 | dismiss · gap to text | **2 at every size** | Untitled `gap-0.5` (badges.tsx L346–L351) | The dismiss box holds 2px of air around its 12px glyph, so the visible gap is 4px. A dismissible badge uses the 2px gap for every pair of items |
@@ -700,4 +701,57 @@ Optical centre: the label sits a quarter of the cap–x-height gap above the cap
 - **Why:** the status badges (Soft + icon with a progress mark; https://claude.ai/artifact/13nEjv8rCm2eHZyYDnHXoM): at sm the
   mark sat 1px from its word. DESIGN_SYSTEM.md's icon-to-label gap is 4 at its smallest (xs and compact); the height-derived
   gap went under it. The 12px icon slot (review round 8) is unchanged.
+- **Verdict:** in review.
+
+### 2026-11-01 · Plain variant
+
+- **What changed:** `variant="plain"`: no plate, no edge and text sides 0, so the mark starts on the column of the text it
+  annotates; the leading or trailing icon and the dot take the tone's ink (`--_tone-fg`), the label `fg-muted` at weight
+  400 (Count plain's weight). A plain link underlines its label on hover. Plain inverse uses the inverse background as its
+  ink, as outline does. The desktop app's project status (published: the check circle, success; draft: the dashed circle,
+  caution; the tag until the same evening) uses it.
+- **Why:** the owner, 2026-11-01, pointing at Claude Code's sidebar (a purple merge glyph beside each session's muted
+  name): "i kinda like the merge icons with the colors, no backplate". On a card's caption the soft plate added a second
+  shape under the name; the colour on the glyph alone carries the status.
+  This brings back the `plain` the 2026-09-24 separation removed (with ghost, custom and the rounded shape, when badges
+  were pill-only); ghost stays removed. Its old meaning (an unfilled pill) is not this one: plain now has no shape at all.
+- **Verdict:** in review.
+
+### 2026-11-01 · Icon gap 2
+
+- **What changed:** a leading or trailing icon sits 2 from its label, box to box, at every size (was 4 from 2026-10-30).
+- **Why:** the owner: "the gap between the icon and text in badge looks too large". Measured in the app at type 13 (plain
+  Published and Draft): the 12 slot's 16-grid glyph leaves about 1.2 of its box empty and the label's first letter starts
+  about 1 inside its own, so the 4 box gap drew 6.2 ink to ink. At 2 the ink sits about 4 apart, the icon-to-label floor
+  as it is seen; the 2026-10-30 problem (a mark touching its word at 1, in the sm plate) does not return.
+- **Verdict:** in review.
+
+### 2026-11-01 · Marks centre on the label; plain takes the tone in its words
+
+- **What changed:** a leading or trailing icon and the dot centre on the label's cap, not the plate: they move by the
+  label's optical lift and its whole-pixel rounding (`translate`, inside the `text-box` support block; icon-only and
+  dot-only stay centred). Plain's words take the tone's text colour (were `fg-muted`); its icon and dot take the tone's
+  text colour in light and its solid in dark (`light-dark()`); neutral plain stays muted throughout.
+- **Why:** the owner: "the text doesnt seem vertically aligned with the icon". Measured at type 13 (plain Published and
+  Draft, 18 high): the cap's middle sat 0.9 above the icon's (lift 0.5, rounding 0.4); the x-height's middle 0.1 below.
+  Status words begin with a capital and most carry ascenders, so the cap is the line read. On the review page the owner
+  asked "colored text?" and picked the icon colour recommended there: the solids fail 3:1 on a light page for caution
+  (1.74) and warning (2.08) and pass on a dark one (4.37 and up).
+- **Verdict:** in review.
+
+### 2026-11-01 · Cap centred in the plate; brighter plain marks
+
+- **What changed:** the label's cap centres in the plate (the optical lift no longer applies to Badge; Tag and Citation
+  keep it), and the icon and dot follow it. Plain's mark takes, in light, the palette step of most chroma that clears 3:1
+  on white (green 500, yellow 500, orange 500, red 450, blue 450, purple 450) and, in dark, the tone's vivid ink; its words
+  the vivid ink in light and the text ink in dark. The app's Draft mark is the empty ring (`EllipseIcon`), not the dashed
+  circle.
+- **Why:** the owner, on the live sheet (https://claude.ai/artifact/R5WRGDZRsypsQiawvYgtnq): "the vertical alignment of
+  these badges is off" and "can you make the light mode colors more vibrant?". Measured at type 13: the cap and icon sat
+  0.9 above the plate's middle at sm and md, 0.6 at lg; centred, every type (12 to 16) and density lands within 0.45
+  (0.10 at 13). The light marks were the text rungs (5.6 to 8.3, darker and greyer than a graphic needs). The dashed
+  circle drew 23 units of ink in the 16 grid beside the check circle's 125 (the ring: 47); "the dashed circle looks too
+  faint".
+- **Open:** no semantic role sits at 3:1, so the light marks are palette steps in Badge; a `fg-<tone>-mark` role solved at
+  3:1 would carry them through the Status setting's Match.
 - **Verdict:** in review.

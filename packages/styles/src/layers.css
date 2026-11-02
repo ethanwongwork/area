@@ -25,7 +25,7 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
     .area-file-upload-item, .area-code-block, .area-edit-summary, .area-plan, .area-queue,
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
-    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge
   ),
   [data-area-ground="raised"] {
     --area-bg-component: var(--area-bg-component-raised);
@@ -162,7 +162,7 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
     .area-file-upload-item, .area-code-block, .area-edit-summary, .area-plan, .area-queue,
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
-    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, .area-asset-card--raised > .area-asset-card__frame,
     .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-surface--soft,
     .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps
@@ -205,7 +205,7 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary, .area-plan, .area-queue, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions,
+    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush), [data-area-ground="raised"], [data-area-ground="page"] {
     --area-edge-shift-light: 0;
     --area-edge-shift-dark: 0;
@@ -235,7 +235,7 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary, .area-plan, .area-queue, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, [data-area-ground="raised"],
+    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"],
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, [data-area-ground="page"],
     .area-asset-card__frame, [data-area-ground="frame"], .area-asset-card--raised > .area-asset-card__frame, [data-area-ground="frame-raised"],
     .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps,
@@ -289,7 +289,7 @@
     .area-edit-summary, .area-plan, .area-queue, .area-menu__search-surface, .area-diff,
     .area-surface--surface, .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
-    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, [data-area-ground="raised"]) {
+    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"]) {
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],

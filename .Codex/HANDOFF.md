@@ -1,6 +1,14 @@
 # Handoff
 
 ## Current state (2026-11-01)
+- **Status badges, branch `claude/worktree-cleanup-status-badges-a187b0` (PR to main, 2026-11-01).** Badge `variant="plain"`
+  (no plate; mark at 3:1, words at 4.5: light = brightest palette step / vivid ink, dark = vivid / text ink); every variant's
+  marks held to its own plate (soft and color one step deeper for the tint); cap and marks centred in the plate (the optical
+  lift dropped for Badge only, 0.9 high before); icon gap 2. Project status: published = check circle, draft = empty ring
+  (`EllipseIcon`); a project's Explorations rows end on the mark alone. Asset card `badge` slot: a plain badge on a raised
+  plate at the frame's top start (Asset card back In review). Live sheet with Area's CSS: https://claude.ai/artifact/R5WRGDZRsypsQiawvYgtnq
+  (`verdicts/badge-look`). Open: a `fg-<tone>-mark` token at 3:1 (the light marks are palette steps in badge.css);
+  main's new `CircleProgressIcon` (batch 77) could draw In progress / In review marks when projects get those states; tables and data vis next. Nav consistency runs in its own session (one-consistent-app-nav).
 - **Icon cohesion pass, branch `claude/icon-cohesion-11900d` (PR to main, 2026-11-01).** Owner: the set didn't look
   cohesive. Measured against six libraries (`docs/research/icon-cohesion-2026-10-31/`, tools for strips, boards, radii,
   angles, 1x and every-size measures); rules adopted in the icon skill ("Cohesion"). Applied over rounds 1–7: gap floor one
@@ -12,10 +20,6 @@
   share folder-lock's 5 × 3 lock; the sort family shares one arrow). Agent is now bot with sunglasses (owner pick A).
   817 icons. In review: batch 78 and the four icons it touched. Review page
   https://claude.ai/artifact/KTwGjUgbj5uJZ5yPvFazqh (db `verdicts`), Icon Boards https://claude.ai/artifact/4debUbHgJLDBGmzXcUde6Q.
-- **Next session (owner, 2026-11-01): the status badges and their icons, then tables and data visualisation.** Project
-  status is a first pass (tile.tsx `STATUS`: published = tag + success, draft = dashed circle + caution); the owner wants
-  to work on badges + icons as a set, and on tables / data vis in the feed. Explorers: Card Explorer KCvLgSPg…, Feed Kit
-  3VBMTvWZ…. The owner's Area system has 5 unpublished changes (Count off the pill list among them).
 - **Feed content and galleries, branch `claude/feed-content-gallery-layouts-5ead71` (uncommitted, 2026-11-01).** First
   ported the IA playground's steps 2–3 + q6, left uncommitted in `ia-design-playground-review-3e30b0` (design viewer,
   morph, derived Properties; resolved against #186–#191: References naming, glyph sheet, FEED_TABLE). Then the owner's
@@ -33,7 +37,7 @@
   components, 4:3 default, 16:9 cover; Tile `shape`, Asset card landscape 4:3, values as badges, screens cover from the
   top-left; collections square 2 × 2 in References, scrolling strips on Home); then the explorer's pick (artifact
   KCvLgSPg…): Asset card `caption="outside"`, every card 8 in, 16 corners, names 4 below at 13, 16 gaps, square or
-  16:9 only, no edge on images; project status badges colour-coded (published: tag, success; draft: dashed circle,
+  16:9 only, no edge on images; project status badges colour-coded (published: check circle, success; draft: empty ring,
   caution); Feed Kit 3VBMTvWZ…; a
   project's Pages are one 16:9 picture each; Home's column 768. Painted plain tiles' names take their ink. Docs:
   PRODUCT_UI (four new rules), specs asset-card / table / code-block, compose skill content.md. Checks: typecheck, tokens

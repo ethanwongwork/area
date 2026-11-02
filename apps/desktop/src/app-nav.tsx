@@ -25,6 +25,7 @@ import { addExploration, addPage } from "./projects.ts";
 import { activeTheme, versionName } from "./systems.ts";
 import { ChromeButton, SidebarList, useStudio } from "./studio.tsx";
 import { FAMILIES, KIND_ORDER, kindOf } from "./pages/components.tsx";
+import { StatusBadge } from "./tile.tsx";
 
 // A system is the triangle, square and circle (owner, 2026-10-31: "a simple composition of triangle square, and circle";
 // never the palette, and not the four-diamond component); its own drawing is being made in the icon set.
@@ -360,7 +361,7 @@ function ProjectNav() {
           {openProject.explorations.map(entry => (
             <NavItem key={entry.id} href={hrefOf({ page: "exploration", project, item: entry.id })} icon={<GitBranchIcon />}
               current={place.page === "exploration" && place.item === entry.id} onClick={open({ page: "exploration", project, item: entry.id })}
-              trailing={entry.published ? <span className="studio-muted">{versionName(systemName(openProject.system), entry.published)}</span> : undefined}>
+              trailing={<StatusBadge status={entry.published ? "published" : "draft"} iconOnly>{entry.published ? `Published in ${versionName(systemName(openProject.system), entry.published)}` : "Not published"}</StatusBadge>}>
               {entry.name}
             </NavItem>
           ))}

@@ -57,25 +57,35 @@
   @supports (text-box: trim-both cap alphabetic) {
     .area-badge > .area-badge__label {
       align-self: baseline;
-      /* Lifted by the marks' optical centre (inset.css): the cap sits that much above the middle. The baseline lands on
-         a whole pixel from the plate's top (owner, 2026-10-18: "the text vertical centering in the badge does not look
-         super consistent"): with a fractional offset (4.21 + a cap of 8.4 at 12px) the plate's edges and the glyphs
-         snap to device pixels apart, so the same badge drew its cap 10 or 11 device pixels down depending on where it
-         sat. Rounded, both snap together and every badge of a size draws alike. */
-      --_baseline: round(nearest, calc((var(--_height) - 2 * var(--area-stroke-width) + 1cap) / 2 - var(--_optical-lift)), 1px);
+      /* The cap centres in the plate, as Count's digits do (owner, 2026-11-01, on the pill variants: "the vertical alignment
+         of these badges is off"): the marks' optical lift (inset.css) pushed the rounding a whole step up, so the word and
+         its icon sat 0.9 above the plate's middle at type 13 (0.6 at lg); centred, they are within 0.45 at every type and
+         density (0.10 at 13). Status words begin with a capital. The baseline lands on a whole pixel from the plate's top
+         (owner, 2026-10-18: "the text vertical centering in the badge does not look super consistent"): with a fractional
+         offset the plate's edges and the glyphs snap to device pixels apart, so the same badge drew its cap 10 or 11 device
+         pixels down depending on where it sat. Rounded, both snap together and every badge of a size draws alike. */
+      --_baseline: round(nearest, calc((var(--_height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px);
       padding-block: calc(var(--_baseline) - 1cap) calc(var(--_height) - 2 * var(--area-stroke-width) - var(--_baseline));
     }
+    /* An icon or dot centres on the label's cap, not on the plate (owner, 2026-11-01: "the text doesnt seem vertically
+       aligned with the icon"): it moves by the label's whole-pixel rounding (at most 0.45), so the mark and the word share
+       one centre at every size. The slot moves, never a glyph. */
+    .area-badge > :is(.area-badge__leading-icon, .area-badge__trailing-icon, .area-badge__dot) {
+      translate: 0 calc(round(nearest, calc((var(--_height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px) - 1cap / 2 - (var(--_height) - 2 * var(--area-stroke-width)) / 2);
+    }
+    .area-badge--icon-only > .area-badge__leading-icon, .area-badge--dot-only > .area-badge__dot { translate: none; }
   }
   .area-badge__leading-icon, .area-badge__trailing-icon {
     display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
     inline-size: var(--_icon); block-size: var(--_icon);
   }
   .area-badge__leading-icon > svg, .area-badge__trailing-icon > svg { inline-size: 100%; block-size: 100%; }
-  /* An icon and its label are never closer than the icon-to-label gap's floor, 4 (DESIGN_SYSTEM.md, Icon-to-label gap:
-     4 at xs and compact). The height-derived gap gave 1 / 3 / 4 at type 13 (2 / 4 / 4 at 14): a status mark touched its
-     word in the sm plate (owner, 2026-10-30, the status badges: "isolate and fix the size/spacing"). Dots keep theirs:
-     the dot's 8 box already holds 1 of air. */
-  .area-badge:has(> :is(.area-badge__leading-icon, .area-badge__trailing-icon)):not(.area-badge--icon-only) { --_gap: var(--area-space-4); }
+  /* An icon and its label sit 2 apart, box to box, at every size (owner, 2026-11-01: "the gap between the icon and text in
+     badge looks too large"). The 12 slot holds a 16-grid glyph whose ink stops about 1.2 inside its box, and the label's
+     first letter starts about 1 inside its own, so the 4 floor of 2026-10-30 drew 6.2 ink to ink (measured, Published and
+     Draft, type 13); at 2 the ink sits about 4 apart, the icon-to-label floor as it is seen. The height-derived gap it
+     replaces was 1 at sm (the mark touched its word, 2026-10-30). Dots and media keep their gaps. */
+  .area-badge:has(> :is(.area-badge__leading-icon, .area-badge__trailing-icon)):not(.area-badge--icon-only) { --_gap: var(--area-space-2); }
   .area-badge__dot { display: grid; place-items: center; inline-size: var(--area-space-8); block-size: var(--area-space-8); flex-shrink: 0; }
   .area-badge__dot::before { content: ""; inline-size: var(--area-space-6); block-size: var(--area-space-6); border-radius: var(--area-radius-full); background: var(--_dot-color); }
   .area-badge--neutral {
@@ -176,8 +186,49 @@
   .area-badge--soft { --_border: var(--area-edge-tags); --_border-hover: var(--area-edge-tags); --_bg: var(--_surface); --_bg-hover: var(--_surface-hover); --_fg: var(--_tone-fg); }
   .area-badge--solid { --_bg: var(--_solid); --_bg-hover: var(--_solid-hover); --_fg: var(--_on-solid); --_dot-color: var(--_on-solid); }
   .area-badge--outline { --_bg: transparent; --_bg-hover: var(--_surface); --_fg: var(--_tone-fg); --_border: var(--_line); --_border-hover: var(--_line-hover); }
+  /*
+   * Plain: no plate and no edge; the add-on (a dot or an icon) and the words carry the tone, in regular weight (owner,
+   * 2026-11-01: "i kinda like the merge icons with the colors, no backplate", Claude Code's sidebar status marks; Count's
+   * plain is the same ink-only mark). With nothing behind it the text sides are 0, so the mark starts on the
+   * column of the text it annotates (inset.css). A plain link underlines its label on hover; its ink never moves.
+   */
+  .area-badge--plain {
+    --_bg: transparent; --_bg-hover: transparent; --_border: transparent; --_border-hover: transparent;
+    --_fg: light-dark(var(--_vivid, var(--_tone-fg)), var(--_tone-fg)); /* spec */
+    --_dot-color: var(--_mark, var(--_tone-fg));
+    font-weight: var(--area-weight-regular);
+  }
+  .area-badge--plain :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark, var(--_tone-fg)); }
+  /*
+   * Plain's colours (owner, 2026-11-01, on the live sheet: "these colors are nicer, can you make the light mode colors more
+   * vibrant?"). The mark is a graphic, held to 3:1: in light, the palette step of most chroma that clears it on white
+   * (measured: green 500 3.06, yellow 500 3.01, orange 500 3.00, red 450 4.00, blue 450 4.20, purple 450 4.11; the text
+   * rungs they replace sat at 5.6 to 8.3, darker and greyer); in dark, the tone's vivid ink (green #02de68 11.5), the
+   * sheet's pick over the dull solids (green 4.37). The words are text, held to 4.5: the vivid ink in light (green
+   * #00853c 4.75, amber #976e00 4.62), the text ink in dark. No semantic role sits at 3:1 yet, so the light steps are
+   * palette steps here (they follow palette edits, not the Status setting's Match). Neutral and inverse keep their ink.
+   *
+   * Every variant takes them (owner, 2026-11-01: "All variants"), each held against its own plate. Outline sits on the
+   * page, so it takes plain's mark and words. Modern keeps its default words and takes the mark (its solid icons failed
+   * 3:1 in light: caution 1.74, warning 2.08). Soft and color sit on the tone's tint, where the page's steps fall short
+   * (words 4.27, marks 2.75), so their marks take the brightest step that clears 3:1 on the tint (`--_mark-tint`: green,
+   * yellow, orange 550, red, blue, purple 400; 3.0 to 3.5; color's solid icons failed, caution 1.61) and their words keep
+   * the text ink, already the brightest that clears 4.5 there. Solid keeps its fill and on-solid ink. Dark takes the
+   * vivid ink everywhere (8 and up), over the dull solids color and modern drew (3.0 to 4.5).
+   */
+  .area-badge--outline { --_fg: light-dark(var(--_vivid, var(--_tone-fg)), var(--_tone-fg)); /* spec */ --_dot-color: var(--_mark, var(--_solid)); }
+  .area-badge--outline :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark, var(--_tone-fg)); }
+  .area-badge--soft { --_dot-color: var(--_mark-tint, var(--_solid)); }
+  .area-badge--soft :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark-tint, var(--_tone-fg)); }
+  .area-badge--success { --_vivid: var(--area-fg-success-vivid); --_mark: light-dark(var(--area-green-500), var(--area-fg-success-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-green-550), var(--area-fg-success-vivid)); /* spec */ }
+  .area-badge--caution { --_vivid: var(--area-fg-caution-vivid); --_mark: light-dark(var(--area-yellow-500), var(--area-fg-caution-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-yellow-550), var(--area-fg-caution-vivid)); /* spec */ }
+  .area-badge--warning { --_vivid: var(--area-fg-warning-vivid); --_mark: light-dark(var(--area-orange-500), var(--area-fg-warning-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-orange-550), var(--area-fg-warning-vivid)); /* spec */ }
+  .area-badge--danger { --_vivid: var(--area-fg-danger-vivid); --_mark: light-dark(var(--area-red-450), var(--area-fg-danger-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-red-400), var(--area-fg-danger-vivid)); /* spec */ }
+  .area-badge--info { --_vivid: var(--area-fg-info-vivid); --_mark: light-dark(var(--area-blue-450), var(--area-fg-info-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-blue-400), var(--area-fg-info-vivid)); /* spec */ }
+  .area-badge--discovery { --_vivid: var(--area-fg-discovery-vivid); --_mark: light-dark(var(--area-purple-450), var(--area-fg-discovery-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-purple-400), var(--area-fg-discovery-vivid)); /* spec */ }
+  @media (hover: hover) { a.area-badge--plain:hover .area-badge__label { text-decoration: underline; text-underline-offset: 0.2em; } }
   /* Transparent inverse treatments use inverse ink (the background endpoint). */
-  .area-badge--inverse.area-badge--outline { --_tone-fg: var(--area-bg-inverse); }
+  .area-badge--inverse:is(.area-badge--outline, .area-badge--plain) { --_tone-fg: var(--area-bg-inverse); }
   .area-badge--dot.area-badge--inverse { --_dot-color: var(--_fg); }
   .area-badge--icon-only, .area-badge--dot-only { inline-size: var(--_height); padding-inline: 0; }
   .area-badge--dot-only { --_bg: transparent; --_bg-hover: transparent; --_border: transparent; }
@@ -222,7 +273,10 @@
     --_dot-color: currentcolor;
     box-shadow: none;
   }
-  .area-badge:is(.area-badge--color, .area-badge--modern) :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_solid); }
+  .area-badge--color { --_dot-color: var(--_mark-tint, var(--_solid)); }
+  .area-badge--modern { --_dot-color: var(--_mark, var(--_solid)); }
+  .area-badge--color :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark-tint, var(--_solid)); }
+  .area-badge--modern :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark, var(--_solid)); }
   .area-badge__avatar, .area-badge__flag { display: inline-flex; inline-size: var(--_media); block-size: var(--_media); flex: none; border-radius: var(--area-radius-full); overflow: hidden; }
   .area-badge__avatar > *, .area-badge__flag > * { inline-size: 100%; block-size: 100%; object-fit: cover; }
   .area-badge__avatar > .area-avatar { --_size: var(--_media); --_text: var(--area-control-xs-text); }
