@@ -191,13 +191,13 @@
   .area-diff__line--removed { background-color: light-dark(color-mix(in oklab, var(--area-danger-solid) 12%, transparent), color-mix(in oklab, var(--area-danger-solid) 24%, transparent)); /* spec */ }
   .area-diff__line--added > .area-diff__marker { color: var(--area-fg-success-vivid); }
   .area-diff__line--removed > .area-diff__marker { color: var(--area-fg-danger-vivid); }
-  /* A fold: the unchanged run between hunks, one muted line in the interface sans on the recessed band, starting where
+  /* A fold: the unchanged run between hunks, one muted line in the interface sans on the well band, starting where
      the numbers do (Cursor's separator: sans, the small size, tertiary ink on bg-tertiary; owner's pick, option C, after
      a round in the mono). */
   .area-diff__fold {
     grid-column: 1 / -1;
     padding-inline: var(--area-space-4) var(--_diff-inline); /* where the numbers start */
-    background-color: var(--area-bg-subtle);
+    background-color: var(--area-bg-well);
     color: var(--area-fg-muted);
     font-family: var(--area-font-sans);
   }

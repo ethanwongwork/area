@@ -314,7 +314,8 @@ export const treeView = {
   // sm: the file tree's density; guides: indent lines on hover (owner 2026-10-30, docs/research/inspector-panel-2026-10-30).
   variants: { selectionMode: ["navigation", "checkbox"], size: ["sm", "md"] },
   booleans: ["guides"],
-  elements: ["chevron", "check", "icon", "label", "trailing", "status", "actions"],
+  // pinned, pin: stickyBranches' open branches held at the top of the scroll (2026-11-01).
+  elements: ["chevron", "check", "icon", "label", "trailing", "status", "actions", "pinned", "pin"],
   defaults: { selectionMode: "navigation", size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -470,7 +471,7 @@ export const badge = {
   block: "area-badge",
   description: "Labels an item with a short status or metadata; optionally links to its details.",
   variants: {
-    variant: ["soft", "solid", "outline", "color", "modern"],
+    variant: ["soft", "solid", "outline", "color", "modern", "plain"],
     tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"],
     size: ["sm", "md", "lg"],
   },
@@ -995,9 +996,10 @@ export const nav = {
   // A nav with neither modifier is vertical with a plate, which is the sidebar case. The
   // marker's colour is the Selection role, not a variant.
   variants: { orientation: ["horizontal"], selection: ["marker"] },
-  elements: ["group", "label", "item", "icon", "text", "trailing", "separator", "row", "actions"],
+  // A group's heading may fold its run (`toggle`, `chevron`, the run in `items`) and hold `actions` (2026-11-01).
+  elements: ["group", "label", "toggle", "chevron", "items", "item", "icon", "picture", "text", "trailing", "separator", "row", "actions"],
   // A nested group is an expandable item's children, stepped in like a Tree view level (audit D-20).
-  elementModifiers: { group: ["nested"], row: ["reveal"] },
+  elementModifiers: { group: ["nested"], row: ["reveal"], label: ["sticky"] },
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -1149,7 +1151,7 @@ export const assetCard = {
   variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below", "overlay", "outside"], fill: ["recessed", "raised", "checker"], aspect: ["square", "landscape", "hug", "wide", "screen"], fit: ["natural", "cover", "contain"], mosaic: ["grid", "strip"] },
   booleans: ["interactive", "borderless"],
   states: ["selected"],
-  elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb"],
+  elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb", "badge"],
   defaults: { layout: "asset", container: "framed", caption: "above", fill: "recessed", aspect: "square", fit: "natural", mosaic: "grid" },
 } as const satisfies ComponentManifest;
 

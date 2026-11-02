@@ -32,12 +32,12 @@ export const OVERRIDABLE: readonly string[] = [
   "--area-font-sans", "--area-frame-width", "--area-indicator-anchor-offset", "--area-input-bg-disabled",
   "--area-input-bg-soft", "--area-input-edge", "--area-input-edge-hover", "--area-input-edge-soft",
   "--area-input-inline-size", "--area-list-box-item", "--area-material-frost", "--area-material-transparency",
-  "--area-menu-min-inline-size", "--area-nav-inline-size", "--area-neutral-solid", "--area-panel-inline-size",
+  "--area-menu-min-inline-size", "--area-nav-inline-size", "--area-nav-pin-fill", "--area-nav-sticky-top", "--area-neutral-solid", "--area-panel-inline-size",
   "--area-popover-corner", "--area-popover-inline-size", "--area-popover-inset", "--area-radius-control",
   "--area-radius-list", "--area-radius-list-row", "--area-select-edge", "--area-select-edge-hover",
   "--area-select-inline-size", "--area-selection-band", "--area-selection-band-hover", "--area-selection-edge",
   "--area-selection-surface", "--area-selection-surface-hover", "--area-switch-color", "--area-switch-color-hover",
-  "--area-card-corner", "--area-card-edge", "--area-card-fill", "--area-card-gap", "--area-card-inset", "--area-table-corner", "--area-table-edge", "--area-table-fill", "--area-table-head-fill", "--area-textarea-edge", "--area-textarea-edge-hover", "--area-textarea-edge-soft", "--area-token-edge",
+  "--area-card-corner", "--area-card-edge", "--area-card-fill", "--area-card-gap", "--area-card-inset", "--area-table-corner", "--area-table-edge", "--area-table-fill", "--area-table-head-fill", "--area-textarea-edge", "--area-textarea-edge-hover", "--area-textarea-edge-soft", "--area-token-edge", "--area-tree-view-pin-fill", "--area-tree-view-sticky-top",
   "--area-type-icon-line", "--area-weight-icon",
 ];
 

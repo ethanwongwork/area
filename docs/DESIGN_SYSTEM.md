@@ -70,6 +70,19 @@ them:
   and a step the label cannot clear on moves toward the label's side until it can.
 - **Labels can take the hue, never lose the contract.** Label tint mixes an accent solid's label toward the most coloured
   rung that clears the label's contract on the fill and its hover at every strength; each of its five steps is gated.
+- **Colours have one placement** (2026-11-01, docs/research/color-system-2026-11-01). `colourAt(h, L, share, cap)`
+  (`color/place.ts`) places a colour by hue, OKLab lightness and its share of the sRGB room; every palette rung is that
+  function at its own L, h and share (within one 8-bit step), so data and picked colours can sit between rungs.
+  `palette.json` is never re-spaced, and in-between positions never become semantic roles.
+- **Data colours are the series** (owner's Build picks, 2026-11-01: OpenAI's colours, not Cursor's). Eight hues from the
+  owner's references in a fixed order: sky 239, pink 346, yellow-green 104, lilac 309, peach orange 47, mint 171,
+  periwinkle 276, peach 16. `--area-series-<n>` is the mark (lines, dots, keys, a stacked part, a fill's edge): in light
+  the lightest colour on the hue at 3:1 on every light ground, in dark the luminous colour. `-fill` is bars, areas and
+  heat cells: in light the luminous colour (about 2:1 on white, so it keeps its mark edge or a direct label), in dark a
+  deep area the line clears 3:1 over. `-ink` is a number inside the fill (4.5:1). `-ramp-1` … `-7` walk the hue at full
+  share from the ground, never mixed toward white. A part keeps its colour by its place, never its size; series never
+  mean status and never follow Saturation. On P3 screens the luminous colour takes Display P3's room. Series lightness
+  moves the luminous colour; `contrast/series.test.ts` holds the dataviz validator's thresholds at every value.
 - **Status colours keep their hue.** Under Status colours Match they quiet to the Accent strength with the accent's own
   mix; they never rotate toward it, so danger never reads as warning.
 - **Tonal inks stay under the gray-page bound.** A light tonal ink is no brighter than `TONAL_Y` (teal's #00766a, the
@@ -560,10 +573,20 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   (1.01:1 at Layers 8 before). What sits inside a ground measures from it; what a ground draws on itself (its frame,
   a hover or selected edge) measures from the ground it sits on, since that line is the boundary between the two: a
   Card on a sidebar frames itself against the sidebar and its fields against the card. Every ground sets the shift
-  and its children restate every edge role and every token that reads one (`cohesion.test.mjs`). At the defaults only
-  what sits on the recessed layer (a sidebar, a soft Surface, a preview choice card) and an Asset card's tile moves.
+  and its children restate every edge role and every token that reads one (`cohesion.test.mjs`). At Layers 0 (the
+  default) only what sits on a well (a Table header) moves; above it, what sits on the recessed layer (a sidebar, a
+  soft Surface, a preview choice card) and an Asset card's tile moves too.
+- **A fill paints the well, a region paints the recessed layer** (2026-11-01). `bg-subtle` is the recessed layer, a
+  region's tone (a sidebar), and at Layer contrast 0 it is the page: Flat means one tone. A fill that is drawn to be
+  seen (a Table header and striped rows, Box model's margin, an image well in Asset row, File tile and Preview frame,
+  Attachment, a diff's fold, inline code and Token) paints `bg-well`: the recessed tone, never closer to the page than
+  the page's own control fill (#f9f9f9 light, #161616 dark at Layers 0; the recessed tone from Layers 50 in light).
+  They had painted `bg-subtle` or the 1.03:1 `bg-stripe` and vanished at the default
+  (docs/research/color-system-2026-11-01). The `well` ground re-points the control fills, the press and the edges like
+  every other ground. A soft Surface, a preview choice card and Plan's steps are soft regions and stay recessed: Flat
+  keeps them flat (owner, 2026-10-29; confirmed 2026-11-01).
 - **A component that paints a ground declares it.** When a component's own CSS paints
-  `bg-surface` or `bg-code` (raised), `bg-subtle` (recessed) or `bg-page` under anything
+  `bg-surface` or `bg-code` (raised), `bg-subtle` (recessed), `bg-well` (well) or `bg-page` under anything
   with a control fill (a hover or selected plate, a soft field, a ghost button), it is
   listed with that ground in `packages/styles/src/layers.css`. Its controls then take the
   plate made for that ground, so a hover reads the same step on a card, a sidebar or the

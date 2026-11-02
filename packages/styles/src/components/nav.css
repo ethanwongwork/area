@@ -67,17 +67,19 @@
 
   /*
    * An expandable item's children (audit D-20): the plate stays full width and the content
-   * steps in by Tree view's level step, one 16px slot plus its 6px gap (docs/specs/tree-view.md),
-   * so a nested run reads as a level, not as the next group. The inset contract applies it
+   * steps in one icon column, the 16 icon and the row's gap (`gap-row`), so under a parent with an
+   * icon the children start exactly on its name (owner, 2026-11-01: "fix the alignment here",
+   * References' Discover, Following and Saved sat 4 short of its name; Notion's children start on
+   * the parent's name). It was Tree view's 22 level step (16 + 6). The inset contract applies it
    * (inset.css).
    */
   .area-nav__group--nested {
-    --_nav-indent: calc(var(--area-icon-md) + 6px); /* spec */
+    --_nav-indent: calc(var(--area-icon-md) + var(--area-gap-row)); /* spec */
   }
-  /* A nested run inside a nested run steps in once more, a level each, as Tree view's levels do (the desktop app's nav:
-     a brand › Foundations › its pages, 2026-10-28). */
-  .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + 6px) * 2); /* spec */ }
-  .area-nav__group--nested .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + 6px) * 3); /* spec */ }
+  /* A nested run inside a nested run steps in once more, a column each (the desktop app's nav: a system › Foundations ›
+     its pages, 2026-10-28). */
+  .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + var(--area-gap-row)) * 2); /* spec */ }
+  .area-nav__group--nested .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + var(--area-gap-row)) * 3); /* spec */ }
   .area-nav__group + .area-nav__group--nested { margin-block-start: 0; }
 
   /*
@@ -96,6 +98,73 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     font-weight: var(--area-weight-strong); /* spec: ChatGPT 500 */
+  }
+
+  /*
+   * A heading that folds its run (NavGroup open / onOpenChange; docs/specs/nav.md 2026-11-01, the desktop app's Projects
+   * and Systems): the whole heading row is the button, its name then a 12 chevron 4 after it, as Claude's and ChatGPT's
+   * sidebar sections. The ink stays the heading's on hover (foreground fixed); the chevron shows under the pointer, on
+   * focus and while the run is folded, pointing along the reading direction when folded as an expandable item's does.
+   * The button's hit area covers the row (an inset pseudo-element), and the heading's actions sit over it.
+   */
+  .area-nav__label:has(> .area-nav__toggle) { position: relative; }
+  .area-nav__toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4); /* spec: Claude's section title to its chevron */
+    flex: 1;
+    min-inline-size: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+  .area-nav__toggle::after { content: ""; position: absolute; inset: 0; border-radius: var(--area-radius-row); }
+  .area-nav__toggle:focus-visible { outline: none; }
+  .area-nav__toggle:focus-visible::after { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+  .area-nav__chevron { display: flex; flex-shrink: 0; opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-nav__chevron svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
+  .area-nav__toggle[aria-expanded="false"] .area-nav__chevron svg { rotate: -90deg; }
+  .area-nav__toggle[aria-expanded="false"] .area-nav__chevron svg:dir(rtl) { rotate: 90deg; }
+  .area-nav__toggle:is([aria-expanded="false"], :focus-visible) .area-nav__chevron { opacity: 1; transition-duration: 0s; }
+  @media (hover: hover) { .area-nav__label:hover .area-nav__chevron { opacity: 1; transition-duration: 0s; } }
+  @media (hover: none) { .area-nav__chevron { opacity: 1; } }
+  .area-nav__items { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); min-inline-size: 0; }
+  .area-nav__items[hidden] { display: none; }
+  /* The heading's actions: a row's, a nested square 4 in from the row's end (the row rule below), over the button. */
+  .area-nav__label {
+    --_nav-action-inset: var(--area-space-4); /* spec */
+    --_nav-action: calc(var(--_nav-row-height, var(--area-ui-row)) - var(--_nav-action-inset) * 2); /* spec */
+  }
+  .area-nav__label > .area-nav__actions { position: relative; z-index: 1; margin-inline-start: auto; }
+  /*
+   * A picture in the icon's place (NavItem picture; owner pick r4-thumbs, 2026-11-01: a design's layers, "variations of one
+   * screen are hard to tell apart by name alone"; Framer's layer thumbnails): the icon's height less 2 and a 10:7 frame,
+   * 20 × 14 at the 16 icon, on the icon column; the corner a small radius, a hairline on the divider edge so a white
+   * screen still has an edge. What it holds fills it, cropped from the top; it paints no ground of its own.
+   */
+  .area-nav__picture {
+    position: relative;
+    flex: none;
+    inline-size: calc(var(--area-icon-md) * 1.25); /* spec: 20 at the 16 icon */
+    block-size: calc(var(--area-icon-md) * 0.875); /* spec: 14 */
+    overflow: hidden;
+    border-radius: var(--area-radius-small);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-dividers);
+  }
+  .area-nav__picture > :is(img, video) { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; object-position: top; }
+
+  /* A sticky heading (NavGroup sticky; owner pick r4-name, 2026-11-01: the desktop app's project or system name) stays
+     pinned at the top of the scroll on the fill under the Nav while its rows scroll beneath it. Hooks:
+     --area-nav-sticky-top, --area-nav-pin-fill. */
+  .area-nav__label--sticky {
+    position: sticky;
+    inset-block-start: var(--area-nav-sticky-top, 0px);
+    z-index: 2;
+    background-color: var(--area-nav-pin-fill, var(--area-chrome-bg, var(--area-bg-page)));
   }
 
   .area-nav__item {

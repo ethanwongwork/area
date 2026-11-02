@@ -353,7 +353,8 @@ function derivedOnPage(): Record<string, string> {
     // Badge, or Chip. The on-color values intentionally stay local: they must derive from
     // the surrounding foreground rather than from a global page colour.
     // The 25 rung, as inline Code: the code block's ground became the page (2026-09-28).
-    [`${PREFIX}token-bg`]: `var(${PREFIX}bg-stripe)`,
+    // The well (color/layers.ts): the stripe it read until 2026-11-01 is 1.03:1 at Layer contrast 0.
+    [`${PREFIX}token-bg`]: `var(${PREFIX}bg-well)`,
     // Quieter than the default: no fill, the edge alone, in both themes (audit G-4 A; bg-subtle
     // was darker than the default in light and equal to it in dark).
     [`${PREFIX}token-bg-subtle`]: "transparent",

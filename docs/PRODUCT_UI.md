@@ -279,33 +279,60 @@ Cursor's nav with Figma's tabs).
 - **Search** (`src/search-palette.tsx`): the Sidebar header's Search (an icon, Cursor's; the Titlebar's field until
   2026-10-30) opens Command palette over every place, component, setting,
   scale, type role, icon category and pattern, and icons by name from two letters; a choice opens in the current tab.
-- **The Sidebar's nav** (`src/app-nav.tsx`) is the tab's own (owner, 2026-10-29: "within each project there are a bunch
-  of things in it … accessed through the left nav"). Home's tab (and a lab's): Home and References (owner, 2026-10-31: Explore "elevated next to home", renamed References
-  "since its a collection of all designs, images, etc"), then Projects (a row each, New project last) and Systems
-  (each system, New system last; the Library until 2026-10-31: "so we just have projects and systems, anything live or
-  published can just remain as either a project or a system"). References' tab: a back row to Home, then
-  Discover and Following (what others share; empty until sharing exists) and Saved (what you keep, counted), with its
-  collections under the nav. A system's tab: a back row to
-  Home, then the system's sections, one row each (owner, 2026-10-30: "each system is one thing with components, colors,
-  typography, icons, patterns, etc underneath it"), in three groups after the design systems' sites (2026-10-31, Primer,
-  Carbon, Atlassian, Material, the HIG, Spectrum; owner: "i dont like seeing components with 122 next to it … maybe
-  compoenents should be exposed"): **Foundations** (Themes, Tokens, Colors, Typography, Spacing, Shape, Elevation, Motion,
-  Icons; Tokens and the four foundations that had been settings only since 2026-10-31, after Figma's variables and styles
-  and the design tokens format: Tokens lists every token in tiers, Raw values, Roles and Component tokens, with its live
-  value, what it refers to and what it is for, and copies as design tokens; each foundation draws itself, lists its tokens
-  and edits its settings in the Inspector's Theme view, `src/token-catalog.ts`, `pages/tokens.tsx`, `pages/foundation.tsx`),
-  **Components** (Overview, then
-  each kind, its Documentation file, as a row that opens to its families by name, A to Z; the current family's kind
-  open) and Patterns and Versions (History until 2026-10-31; it says how many changes are unpublished). No row carries a bare count. Components'
-  families are the nav's own rows, so its page adds no list under the nav (search finds a family by name). A section with
-  its own list (Colors' scales, Icons' categories, Patterns' screens) shows it under the nav, after one rule and its filter (`PageList`), so every section stays
-  one click away; it replaced the nav until 2026-10-30. A page of many heavy parts draws them as they near the view
-  (`tile.tsx` `WhenVisible`): Colors and Patterns had held a click 2.5 seconds. A project's tab: a back row to Home, then Overview, Pages (each a chevron to its
-  layers; New page), Explorations (each with the version it published; New exploration) and Versions. A click opens in
-  the tab holding what it names, ⌘-click in a new one.
-- **Takeover**: a page with a list of its own (Components, Color, Typography, Icons, Patterns, Library, Materials) shows
-  it in the Sidebar's place, under a back row ("← Area", the system's name) and the list's filter (it was the Titlebar's search). The back row
-  shows the nav again and leaves the Canvas where it is; opening the page from the nav shows its list again.
+- **The Sidebar's nav** (`src/app-nav.tsx` `AppNav`; research and every round in `docs/research/consistent-nav-2026-11-01/`)
+  is the same frame in every tab (owner, 2026-11-01: "make sure the nav stays consistent and there are persistent places
+  to go back to"; then "what if the top header portion has home references projects and systems. then there is a divider
+  section and everything below that shows contextually what is supposed to be there"), as Claude's sidebar keeps its
+  slots across Chat and Code:
+  - **Four places, held at the top**: Home, References, Projects and Systems. The one holding the current tab is marked
+    (a project's tab marks Projects, a system's Systems; a lab's, Home). Projects (`#projects`) and Systems (`#systems`)
+    are tabs of their own, as References is: every project or system as cards (drawn as Home's feed draws them), New in
+    the bar, the chosen one in the Inspector (`src/pages/workspace-lists.tsx`).
+  - **A rule across the Sidebar's full width**, 8 of air on each side (owner, 2026-11-02: "should the dividers go full
+    width to separate them truly into sections?"): it divides the panel into regions, the held places from the scroll, as
+    Figma's left panel does; a rule that stops short reads as belonging to the block above. A section's list is set off
+    the same way, so the Sidebar reads as three regions: places, the tab's context, the open section's list.
+  - **The tab's context**, in one scroll (owner: "is it better if its not separated … everything is just in an endless
+    scroll?"): on Home, Recent (the places opened lately, one row a name); in References, Discover, Following and Saved,
+    then the collections; in Projects, every project and New project; in Systems, every system and New system; in a
+    project's tab, its name, then Overview, Pages (its pages, each with its layer count, and New page), Explorations (each
+    with the version it published, and New exploration) and Versions; in a system's tab, its name, then Themes,
+    Foundations (Tokens, Colors, Typography, Spacing, Shape, Elevation, Motion, Icons), Components, Patterns and Versions
+    (how many changes are unpublished). No row carries a bare count of a section. A project's or system's **name stays
+    pinned** at the top of the scroll (Nav's sticky heading; owner pick r4-name). Pages and Explorations show **5, then
+    Show more**, the current one always shown (pick r4-cap; Cursor's agents).
+  - **A section's own list follows its context** (`PageList`; owner's pick: the tree stays three levels), inside the
+    project's or system's group so its name stays over it: a page's layers, Components' families by kind (with Pinned),
+    Colors' scales, Typography's faces and roles, Icons' categories, Tokens' groups, Patterns' screens, References'
+    collections, after one rule. The list's **head** is one row: its name and a **search icon** (⌥⌘F), which opens the
+    filter in its place, focused; Escape or leaving it empty puts the name back, and a query keeps it open (owner,
+    2026-11-01: "make the search an icon button and not full width"; Figma's Layers and Cursor's Explorer heads). The
+    **pinned stack** as it scrolls: the name, then the list's head, then the list's
+    open branches (Tree view's sticky branches, pick r4-path: Area › Components › Actions and choices › Button ›
+    Variant × tone stays readable four levels down). Each tab's scroll starts at the top; on a new section the current row
+    is kept in view, and when the list would start below the Sidebar's middle the current row comes to the top. The
+    list's chosen row (a layer, a tile) is **always brought into view** when it changes or its tab opens (pick
+    r4-fixes). Choosing in the list leaves the scroll where it is.
+  - Foundations, Pages and Explorations open and close on a click. **Opening a section folds the project's or system's
+    others** and opens the one holding the page (pick r4-fold: "only the section holding the page stays open"); a row
+    opened by hand stays open until the section changes (`nav-open`). Any other row opens its place **in the tab holding
+    what it names** (a tab never changes what it holds), ⌘-click in a new one.
+  - **A project's pages**: a page opens on the Canvas, its layers as cards (Add screen, Add image), and its layers are
+    the list, each marked with its **kind's icon**, a screen or an image, as Figma's layers are, the chosen one marked;
+    a layer opens in the design viewer from its card. (A 20 × 14 picture of each, pick r4-thumbs, was dropped the same
+    day, owner: "is the small image thumbnail very practical?": a screen at that size is a white plate with a few bars,
+    so variations of one screen looked alike, and every row drew a whole screen.) A
+    screen or image added again is numbered on its page ("Analytics dashboard 2").
+  - **The Sidebar widens for a list** (owner, 2026-11-01: "in pages where more room is needed, the left nav can
+    automatically expand slightly to a minimum width"): while it holds a section's list it is at least 288 at type 13
+    (Claude's sidebar width, scaled by type as the rest; `studio.tsx` `LIST_FLOOR`). A width dragged wider is kept; on a
+    page without a list it goes back to its own. Panel eases a width the app sets (MOTION.md, "Panel width"); a page that
+    opens with its list takes the width as it opens.
+  - **Component tiles are named in words** ("Outline, success", "Small", "Full width"; pick r4-names,
+    `specimenWords`): in the list, on the tiles and in the Canvas path; their ids and links are unchanged.
+  - Labs stay out of the nav (search). A page of many heavy parts draws them as they near the view (`tile.tsx`
+    `WhenVisible`). Earlier the same day the nav was one tree of every project and system with folding groups; before
+    that (2026-10-29 to 11-01) each tab drew its own nav under a back row to Home.
 
 **Shared line and insets.**
 
@@ -327,7 +354,7 @@ Cursor's nav with Figma's tabs).
   `.studio-inspector__view[data-lead="heading"]`). The Sidebar and Inspector are Panel's md inset in on all sides: 14,
   and 18 at Comfortable (`docs/THEMING.md` › What density does to a screen; it was 14 at every density until
   2026-10-31); a list's plates sit 8 from the edge, the text 6 inside them (Cursor's; owner pick q-plates, 2026-10-31).
-  A section's list under the nav sits under one rule with 8 of air on each side, its filter 4 over its rows (owner,
+  A section's list under the nav sits under one full-width rule with 8 of air on each side, its head one row over its rows (owner,
   2026-10-31: "why is the search control so close to the divider above it?"). **Narrow**, the start gives way first (a path shortens to its
   first step, 120), then the end's groups wrap onto rows of their own under it, at the end, 4 apart, each control whole;
   nothing runs under the Inspector (owner, 2026-10-31: "fix the responsiveness"; at a 1000 window with both panels the
@@ -403,9 +430,11 @@ Cursor's nav with Figma's tabs).
   A colour keeps its name inside, in its ink. Cards are 16 apart (12 / 16 / 20 by density). Two shapes: square, and 16:9
   for anything designed, where a window fits whole; UI never runs to the card's edge. Images inside cards draw no edge.
   Components' No container is the same card clear at rest, appearing on hover. A project's status is one badge in two
-  states, colour-coded with the icons Home's timeline draws for the same events (owner: "color code the project status
-  badge indicators, match them with the icons that we used from before"): published or live, the tag, success; a draft or
-  not yet published, the dashed circle, caution (tile.tsx `status`, StatusBadge). Other values stay neutral badges. The
+  states, colour-coded and drawn as the status circles (owner: "color code the project status badge indicators"; "i dont
+  like the tag icon for published, what happened to the circles"): published or live, the check circle, success; a draft
+  or not yet published, the empty ring, caution (the dashed circle was too faint); plain, the icon coloured and no plate (tile.tsx `status`, StatusBadge).
+  A Sidebar row shows the mark alone at its end, its words its name and tooltip (a project's Explorations). Other values
+  stay neutral badges. The
   paragraph below is the day's history.
 - **One card, three shapes** (owner, 2026-11-01: "they should all be the same just variants of each other … a square AR
   one for components specifically"; "more like 4:3"; "some projects might want a full thumbnail 16:9 cover"): every card

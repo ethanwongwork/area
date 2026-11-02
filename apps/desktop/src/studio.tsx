@@ -41,6 +41,7 @@ import { AppNav, AppTabs, PageList } from "./app-nav.tsx";
 import { SearchEverything, type SearchFor } from "./search-palette.tsx";
 import { ThemesPage } from "./pages/themes.tsx";
 import { HomePage } from "./pages/home.tsx";
+import { ProjectsPage, SystemsPage } from "./pages/workspace-lists.tsx";
 import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 import { restoreBrand, useBrandSheet, type BrandState } from "./brand.ts";
 import { PAGE_AXES, hasColours, restoreColours, shownColours, useColoursSheet, type ColoursState } from "./colours.ts";
@@ -839,6 +840,8 @@ export function Studio() {
         <Fragment key={settings ? "settings" : tab.id}>{
           settings ? <SettingsPage section={settings} onSection={setSettings} /> :
           place.page === "home" ? <HomePage /> :
+          place.page === "projects" ? <ProjectsPage /> :
+          place.page === "systems" ? <SystemsPage /> :
           place.page === "themes" ? <ThemesPage /> :
           place.page === "theme-setup" ? <ThemePage flow="setup" /> :
           // Foundations is gone (2026-10-30); its old links open Themes, on the setting they named.
@@ -922,11 +925,23 @@ const INSPECTOR_FLOOR: Record<string, number> = {
   "16/28": 360, "16/32": 360, "16/36": 388,
 };
 
-function usePanelWidth(panel: keyof typeof WIDTHS, type: string, density: string) {
+/**
+ * The Sidebar's least width while it holds a section's list (Components' tiles four levels down, a page's layers with
+ * their pictures, Colors' scales; owner, 2026-11-01: "in pages where more room is needed, the left nav can automatically
+ * expand slightly to a minimum width"): Claude's sidebar, `--df-sidebar-width: 288px` (desktop 4.4212 bundle,
+ * docs/research/claude-code-ui-audit-2026-10-31.md), at type 13, scaled as the rest. A width dragged wider is kept; on
+ * a page without a list the Sidebar goes back to its own width. Panel eases the change (MOTION.md, "Panel width").
+ */
+const LIST_FLOOR = 288; /* spec: Claude's sidebar */
+
+function usePanelWidth(panel: keyof typeof WIDTHS, type: string, density: string, floor?: number) {
   const limits = WIDTHS[panel];
   const scale = panel === "sidebar" ? (Number(type) || 13) / 13 : 1;
-  const min = panel === "inspector" ? INSPECTOR_FLOOR[`${type}/${density}`] ?? limits.min : Math.round(limits.min * scale);
-  const max = Math.max(min, Math.round(limits.max * scale));
+  const max0 = Math.round(limits.max * scale);
+  const least = panel === "inspector" ? INSPECTOR_FLOOR[`${type}/${density}`] ?? limits.min : Math.round(limits.min * scale);
+  // A page's floor raises the least width, never past the most.
+  const min = Math.max(least, Math.min(max0, floor ? Math.round(floor * scale) : 0));
+  const max = Math.max(min, max0);
   const [base, setBase] = useState(() => {
     const saved = Number(readStored<Record<string, number>>("widths", {})[panel]);
     return saved >= limits.min && saved <= limits.max ? saved : limits.initial;
@@ -990,7 +1005,7 @@ export interface WorkspaceProps {
 
 /** The Inspector's settings and the Material as the attributes a scope takes (the Canvas's body, or a preview's). */
 export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof materialAttributes>[0]): Record<string, string | undefined> {
-  return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-hue-dark": shown["tint-hue-dark"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
+  return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-hue-dark": shown["tint-hue-dark"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-series-lightness": shown["series-lightness"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
 }
 
 /**
@@ -1022,7 +1037,8 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
   // Floating panels (app-look.ts AppPanels): the Inspector is a floating Panel, not a docked one.
   const floating = studio.appLook.panels === "floating";
   // The panels take the app's own type and density (its chosen system's theme, src/app-look.ts).
-  const sidebarWidth = usePanelWidth("sidebar", studio.chrome.canvas.type, studio.chrome.canvas.density);
+  // With a section's list the Sidebar is at least LIST_FLOOR wide (Settings' own nav keeps the Sidebar's width).
+  const sidebarWidth = usePanelWidth("sidebar", studio.chrome.canvas.type, studio.chrome.canvas.density, sidebar && !nav ? LIST_FLOOR : undefined);
   const inspectorWidth = usePanelWidth("inspector", studio.chrome.canvas.type, studio.chrome.canvas.density);
   const chromeAttributes = useMemo(() => canvasAttributes(studio.chrome.canvas, studio.chrome.material), [studio.chrome]);
   // The body, its cards, titles and header are app UI, at the shipped defaults; only the specimens inside take the
@@ -1068,9 +1084,14 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
               <span className="studio-head__group">{shell.history}</span>
             </>}
             bareFooter footer={<ProfileFoot />}>
-            {/* The nav always, then the page's own list under it (app-nav.tsx PageList; the Takeover replaced the nav). */}
-            {/* Components' families are the system nav's own rows (2026-10-31), so its list would say them twice. */}
-            {nav ?? (sidebar && studio.place.page !== "components" ? <><AppNav /><PageList>{sidebar}</PageList></> : <AppNav />)}
+            {/* The nav always, then the page's own list under it (app-nav.tsx PageList; the Takeover replaced the nav).
+                Components' families are its list again since the one tree (2026-11-01; the nav's rows 10-31 to 11-01). */}
+            {/* Home and References held at the top, then one scroll: the tree, then a page's list (app-nav.tsx AppNav). */}
+            {nav ?? (
+              <div className="studio-sidebar__split">
+                <AppNav>{sidebar ? <PageList>{sidebar}</PageList> : null}</AppNav>
+              </div>
+            )}
           </Panel>
         </div>
       ) : null}
@@ -1244,7 +1265,8 @@ export function SidebarTree({ label, count, groups, current, reveal, onSelect, a
   const now = current ?? (all ? "all" : undefined);
   const toggle = (id: string) => setOpened(open => open.includes(id) ? open.filter(entry => entry !== id) : [...open, id]);
   return (
-    <TreeView aria-label={label} className="studio-sidebar__tree" items={items} currentId={now} selectedIds={now ? [now] : []}
+    // The open branches you're inside stay pinned as their rows scroll (owner pick r4-path, 2026-11-01).
+    <TreeView aria-label={label} className="studio-sidebar__tree" stickyBranches items={items} currentId={now} selectedIds={now ? [now] : []}
       expandedIds={[...branches.filter(id => !closed.includes(id)), ...opened]}
       onExpandedChange={ids => { setClosed(branches.filter(id => !ids.includes(id))); setOpened(ids.filter(id => !id.startsWith("group:"))); }}
       onActivate={id => {

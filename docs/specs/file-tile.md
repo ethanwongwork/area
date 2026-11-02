@@ -50,7 +50,7 @@ Excluded for now: the framed "card" layout (Figma, ChatGPT: edge, radius 13–16
 | figure → name | 8 | coherence pass 2026-10-19 (Asset card's caption, 8 under its frame) |
 | column | figure + 48; a tile outside a grid is at most one column wide, so its name wraps as in the grid (round 83) | pick |
 | bare glyph | 50% of the square, `fg-muted`, line `stroke-width` (non-scaling) | owner ("way too thick"); coherence pass 2026-10-19 (one weight with Folder and File page) |
-| image | contained, `radius-small`, the swatch ring, on `bg-subtle` | Asset row's preview; coherence pass (kept: it stands on the bare surface) |
+| image | contained, `radius-small`, the swatch ring, on `bg-well` | Asset row's preview; coherence pass (kept: it stands on the bare surface) |
 | paint | ListBox's grid plates; hover changes the plate only | PRODUCT_UI rules 2 and 11 |
 | row alignment | tiles start at the top of their row | owner: "arent correctly positioned" |
 
@@ -132,3 +132,4 @@ card's images sit inside a frame).
 - **Why:** outside a grid the tile had no width of its own, so the Long name tile ran its name on one line, about 470
   wide under a 64 figure; the two-line rule only held inside the grid.
 - **Verdict:** approved (owner, 2026-10-29, review page round 83); Complete.
+- 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): The image's ground painted `bg-subtle`, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light).

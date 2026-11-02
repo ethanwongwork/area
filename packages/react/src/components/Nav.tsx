@@ -1,6 +1,7 @@
 import { forwardRef, useId } from "react";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
 import { cx, navVariants, MANIFESTS, type VariantProps } from "../variants.ts";
+import { Glyph } from "./Glyph.tsx";
 
 /**
  * Site navigation, vertical or horizontal.
@@ -37,17 +38,43 @@ export interface NavGroupProps extends HTMLAttributes<HTMLDivElement> {
   label?: ReactNode;
   /** An expandable item's children: the rows step in one Tree view level (audit D-20). */
   nested?: boolean;
+  /**
+   * A labelled group that folds: with `onOpenChange`, the heading is a button that shows and hides the run, its
+   * chevron after the name (Claude's and ChatGPT's sidebar sections). Controlled; leave both out for a fixed group.
+   */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Controls at the heading's end (a section's New), apart from the fold. */
+  actions?: ReactNode;
+  /**
+   * The heading stays pinned at the top of the scroll while the group's rows scroll under it (the desktop app's project
+   * or system name). It pins at `--area-nav-sticky-top` (0) on `--area-nav-pin-fill` (the chrome's fill, else the page's).
+   */
+  sticky?: boolean;
 }
 
 export const NavGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, NavGroupProps>(function NavGroup(
-  { label, nested, className, children, ...rest },
+  { label, nested, open, onOpenChange, actions, sticky, className, children, ...rest },
   ref,
 ) {
   const labelId = useId();
+  const itemsId = useId();
+  const folds = Boolean(label && onOpenChange);
+  const shown = !folds || open !== false;
   return (
     <div ref={ref} className={cx("area-nav__group", nested && "area-nav__group--nested", className)} role={label ? "group" : undefined} aria-labelledby={label ? labelId : undefined} {...rest}>
-      {label ? <div className="area-nav__label" id={labelId}><span>{label}</span></div> : null}
-      {children}
+      {label ? (
+        <div className={cx("area-nav__label", sticky && "area-nav__label--sticky")} id={folds ? undefined : labelId}>
+          {folds ? (
+            <button type="button" className="area-nav__toggle" id={labelId} aria-expanded={shown} aria-controls={itemsId} onClick={() => onOpenChange!(!shown)}>
+              <span>{label}</span>
+              <span className="area-nav__chevron" aria-hidden="true"><Glyph name="chevron-down" size={12} /></span>
+            </button>
+          ) : <span>{label}</span>}
+          {actions ? <div className="area-nav__actions">{actions}</div> : null}
+        </div>
+      ) : null}
+      {folds ? <div className="area-nav__items" id={itemsId} hidden={!shown}>{children}</div> : children}
     </div>
   );
 });
@@ -58,6 +85,12 @@ export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
   /** Leading icon. Sized by the slot, never by itself. With no children the item is the icon alone, a square plate,
    * named by its `aria-label` (the desktop app's Home tab). */
   icon?: ReactNode;
+  /**
+   * A small picture in the icon's place, 20 × 14 at type 14 (a screen's or an image's thumbnail, so items that share a
+   * name or a kind read apart: a design's layers). It sits on the icon column, the text after it. Takes the place of
+   * `icon`.
+   */
+  picture?: ReactNode;
   /** Pushed to the end of the row: a count, a shortcut, a status dot. */
   trailing?: ReactNode;
   /** Independent controls beside the link, within its shared row backplate; never nested inside the anchor. */
@@ -70,7 +103,7 @@ export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
 }
 
 export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProps>(function NavItem(
-  { current, icon, trailing, actions, revealActions, disabled, className, children, href, onClick, tabIndex, ...rest },
+  { current, icon, picture, trailing, actions, revealActions, disabled, className, children, href, onClick, tabIndex, ...rest },
   ref,
 ) {
   const link = (
@@ -89,7 +122,11 @@ export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProp
       onClick={disabled ? (event) => { event.preventDefault(); } : onClick}
       {...rest}
     >
-      {icon ? (
+      {picture ? (
+        <span className="area-nav__picture" aria-hidden="true">
+          {picture}
+        </span>
+      ) : icon ? (
         <span className="area-nav__icon" aria-hidden="true">
           {icon}
         </span>

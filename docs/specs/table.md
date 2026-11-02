@@ -9,7 +9,7 @@ Checkbox (row selection), Badge and Skeleton (cell content), Separator (dividers
 - Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)): Table retains three
   cell inset sizes (row spacing, not table width or text size). The gallery separates
   selection, sorting, compact rows, stripes and optional columnDividers; its tiles are 2×2.
-  Stripes use bg-stripe (neutral 25 in light mode, 800 in dark). Headers align vertically to
+  Stripes use bg-well (#f9f9f9 / #161616 at Layers 0). Headers align vertically to
   the middle. Sorting and selection are composed with native headers, buttons and Checkbox
   in the live gallery, rather than a data-grid API.
   Reference: [Carbon Table](https://carbondesignsystem.com/components/data-table/usage/).
@@ -66,7 +66,7 @@ notion  div rows, full-bleed (no container edge or radius); tabular-nums on the 
   hover   no row plate; a row checkbox fades to 0.7 and each cell shows a white "open" chip
 area  div.area-table-wrapper  1px border-divider, radius 12, bg-surface, overflow-x auto
   table.area-table  border-collapse, 14/20
-    th   padding 8/12 (16 at the frame, md and lg), bg-subtle, fg-muted, 400, nowrap, middle
+    th   padding 8/12 (16 at the frame, md and lg), bg-well (a well ground: its buttons step from it), fg-muted, 400, nowrap, middle
     td   padding 8/12 (16 at the frame, md and lg), top-aligned, 1px border-divider below (none on the last row)
     .area-table--fixed  first column 27% (the label column)
     .area-table__cell--numeric  end-aligned, tabular figures
@@ -105,19 +105,19 @@ selected or hovered row.
 | text | `ui-size` (13 at type 13); line: sm the UI line (18), md and lg the prose line (`text-base-prose-leading`, 20) since 2026-10-31 | Untitled body 14/20; Notion cells 14 | Follows the density axis |
 | cell inset | block: sm 4; md the edge less the prose line's half-leading (9 at type 13 / 32, so the text is 14 from the rules, as from the frame); lg 4 more. 12 inline between columns, 16 at the frame (md, lg; sm 12), less the density step |  Owner (three insets); Primer props 16 at the frame, 12 between columns (2026-10-31) | Notion 7.5 / 8; Untitled 24 sides; the frame step is Primer's and Cursor's settings (14 side, rules 12 in) |
 | label column (`layout="fixed"`) | first column 27%, wraps; outranks a fit cell | Primer props: Name 198 of 728 (27%), Default 15%, Description 58% | Only the first column is fixed; the rest size to content, as the app's API tab needs (Prop, Type, Default, Description) |
-| header | `bg-subtle` #f7f7f7 / #282828, `fg-muted`, 400, middle | Untitled neutral-50 header, neutral-500 ink; owner (middle); Notion muted 400 ink | Notion has no header fill; kept (third pass) |
+| header | `bg-well` #f9f9f9 / #161616 at Layers 0 (the recessed tone from Layers 50 in light), `fg-muted`, 400, middle | Untitled neutral-50 header, neutral-500 ink; owner (middle); Notion muted 400 ink | Notion has no header fill; kept (third pass) |
 | body alignment | top (first line) | Inset contract (first-line alignment) | — |
 | divider | 1px **`border-divider`** #e2e2e2 / #333333 below each row but the last, at `stroke-width` like the frame (since the 2026-10-12 consistency pass) | Second pass divider role; Untitled 1px neutral-200 | Was `border-decorative` |
 | hover (interactive) | `bg-component-hover` #f3f3f3 / #333333 on the cells | Row-plate rule; Untitled row hover | Notion paints no plate; kept (third pass): shared row plates |
 | selected (`data-selected`) | `bg-component-active` #eeeeee / #3f3f3f, kept under the pointer | Selection one step above hover | Untitled uses neutral-50 for both |
-| stripes | `bg-stripe` #fafafa / #282828 on even rows | Owner | Selection wins over a stripe (same specificity, later rule, `navigation.css:211, 213`) |
+| stripes | `bg-well` #f9f9f9 / #161616 on even rows | Owner | Selection wins over a stripe (same specificity, later rule, `navigation.css:211, 213`) |
 | numeric | end-aligned, `tabular-nums` | Earlier Area value | Notion sets tabular figures on the whole view |
 
 Settled in the third pass, all kept: Notion's is a database grid; Area's Table is a data
 table with shared row plates ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)).
 1. Frame. Notion's table has no container edge, radius or header fill; the header is told
    apart by its muted ink alone (`notion--header-row--rest`). Area keeps the bordered,
-   rounded wrapper with a `bg-subtle` header, as Untitled does.
+   rounded wrapper with a `bg-well` header, as Untitled does.
 2. Inline cell inset. Notion pads cells 8 inline (`notion--body-row--rest` node 9); Area
    keeps 12 (compact 8).
 3. Hover. Notion's hovered row gains no fill; it reveals a row checkbox (opacity 0 → 0.7)
@@ -164,7 +164,7 @@ still paints for grid and treegrid rows. Notion's cells are `role=button` inside
 2026-09-28 (batch 16, Claude in Chrome): Notion's table view ("returns", read-only): rows 36.6,
 0.56px rules at 7% warm (row and column), header 14/21 muted with no fill, cells without
 padding of their own. Area's md row is 37 (36 + the rule) with 12 inline insets, a framed wrapper, a
-`bg-subtle` header and horizontal rules only: the three differences settled in the third pass
+`bg-well` header and horizontal rules only: the three differences settled in the third pass
 (frame, inset, hover) stand. Selected row under the pointer: the hover rule excludes selected
 rows (`.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover`),
 so the #ee selection plate stays; checked in the gallery's selection tile by rule and computed
@@ -274,10 +274,11 @@ label columns of 84, 200 and 145 on one page and rows of 33.
   lighter than the frame (3.75%). Listed in `OVERRIDABLE`.
 - **Why:** the owner asked that "all containers feel consistent, and part of the same family"; Labs › Feed showed the
   tables as the page's white inside a darker edge beside light grey cards.
+- 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): The header painted `bg-subtle` and striped rows `bg-stripe` (1.03:1), which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light). The header is declared a `well` ground (layers.css), so a sort button's hover steps from it; it was exempt as "header text only".
 
 ## Review note, 2026-11-01 (header fill)
 
-- **What changed:** a fourth public hook, `--area-table-head-fill` (the header row's fill; `bg-subtle` by default),
+- **What changed:** a fourth public hook, `--area-table-head-fill` (the header row's fill; `bg-subtle` by default, `bg-well` since main's colour fills),
   listed in `OVERRIDABLE`. The desktop app's feed tables set their rows to the page's white and the header to the control
   grey in light, and the rows to the tile grey under the page's near-black header in dark, so the header is always a step
   under the rows.

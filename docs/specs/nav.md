@@ -6,6 +6,11 @@ marker), Breadcrumb (hover plate), Button ghost (row actions)
 
 ## Owner decisions
 
+- 2026-11-01: "maybe the projects and systems can collapse when its necessary to provide more room" (the desktop app's
+  one-tree Sidebar, docs/research/consistent-nav-2026-11-01/) → a labelled `NavGroup` folds from its heading (`open`,
+  `onOpenChange`) and holds `actions` at the heading's end (the section's New). Claude's sidebar sections ("Fold
+  sessions", desktop 4.4212) and ChatGPT's Projects and Chats headings fold the same way.
+
 - 2026-09-27 (second message): "get the nav titles from ChatGPT for nav and show the nav in full
   context" → group titles take ChatGPT's section title: the rows' 14px size at weight 500 in a
   quieter ink, a row pitch tall (`nav/chatgpt--sidebar-section-label`: 14/18 500 rgb(143) in a
@@ -46,6 +51,7 @@ expansion state (Tree view) or a view switcher inside a page (Tabs).
 | orientation | vertical (default), horizontal | Sidebar; top-level routes | ChatGPT, Notion and Figma sidebars; prior decision |
 | selection | plate (default), marker | Quiet current-location rail for outlines | Prior decision |
 | composition | groups, icons, counts, row actions, expandable | Sidebar content | ChatGPT recents (hover actions), Notion sidebar (icon rows, group labels), Figma sidebar (24px trailing action at opacity 0) |
+| composition | folding group (`open`, `onOpenChange`), heading actions | A long sidebar gives its sections' room back; New stays reachable while folded | Claude desktop's sidebar sections ("Fold sessions", group headings); ChatGPT's Projects and Chats headings; Cursor's Agents groups (each folds); the desktop app's Projects and Systems (2026-11-01) |
 | state | disabled | Unavailable destination | Untitled 50% |
 
 Gallery groups (`apps/docs/scripts/build.mjs:389-400`): Default; Layout (grouped,
@@ -80,6 +86,9 @@ area     nav.area-nav flex column, gap 2, 240 wide
     icon 16px (.area-nav__icon); text one line, a vertical row's fading out over its last 24 (2026-10-31); trailing fg-muted
   row    .area-nav__row: item + .area-nav__actions (28px buttons), one shared plate
   label  .area-nav__label 32px, fg-muted
+    toggle  button.area-nav__toggle (a folding group): the whole heading row its hit area, name then a 12 chevron 4 after
+    actions .area-nav__actions at the heading's end, a nested square 4 in, as a row's (inset.css --_box-end)
+  items  .area-nav__items: a folding group's run, hidden while folded
 ```
 
 Inset equations: vertical text-only rows start at (32 − 16)/2 = 8, the icon column, not the
@@ -126,7 +135,7 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 | item gap | 2 | Untitled 2 (38 pitch, 36 rows) | Notion, Figma single-row captures only |
 | separator | 1px `border-divider` #e2e2e2 / #333333 at `stroke-width` (since the 2026-10-12 consistency pass) | Second pass divider role | Was `border-decorative` |
 | group label | 32px row, **14/20 500** `fg-muted`, start 8 | Owner (2026-09-27, second message): ChatGPT's section title 14/18 500 rgb(143) (`nav/chatgpt--sidebar-section-label`) | Area's 14 leading is 20; rgb(143) is 3.3:1, so the ink is `fg-muted`. Notion's 12/16 was the first message's choice. Menu keeps 12/16 (Notion's menus) |
-| nested group | `NavGroup nested` (`area-nav__group--nested`): the content steps in by Tree view's level step, a 16px slot + 6 gap = 22 (`--_nav-indent`, `nav.css:74-77`), added to the row's start inset by the inset contract (`inset.css:172-173`); plates stay full width; no group gap above it. A nested group inside a nested group steps in a level more (44, then 66) | Audit D-20 A (owner 2026-09-30); Tree view's 22px level | Children used to sit on the parent's column; until 2026-10-28 a second level sat on the first |
+| nested group | `NavGroup nested` (`area-nav__group--nested`): the content steps in one icon column, the 16 icon + `gap-row` (28 at type 14 Default, 26 at the app's 13 Compact; `--_nav-indent`, nav.css), added to the row's start inset by the inset contract (`inset.css`), so under a parent with an icon the children start on its name; plates stay full width; no group gap above it. A nested group inside a nested group steps in a column more | Audit D-20 A (owner 2026-09-30); owner 2026-11-01 ("fix the alignment here": children 4 short of the parent's name); Notion's children start on the parent's name | Children used to sit on the parent's column; until 2026-10-28 a second level sat on the first; Tree view's 22 level step until 2026-11-01 |
 | closable tab | A horizontal row with actions (the desktop app's open tabs): the name `gap-md` after the icon (5 at type 13, as every control's icon and label); the close the **xs** icon (6.8 drawn at 13) in a nested square 4 in on every side (18 in the Titlebar's 26, through `--_nav-row-height` / `--_nav-row-radius`, which a container that shortens the items sets). With `revealActions` the close keeps no slot: the name runs to 8 from the plate's end and the close lands over it on hover, focus and while the row is current (always on touch), the name fading out under it (visible to 4 before the close's plate, an 8 fade). Horizontal rows never shrink; past its room the Nav scrolls | Claude Code's browser tabs (owner's screenshot); Figma desktop `desktop_shell.css` (close shown on `.isTabActive`, `:hover`, `:focus-within`, over a fixed-width tab, the owner's pick); Cursor 3.27.22 `workbench.desktop.main.css` (close at opacity 0 to 1 on `.tab.active`, `:hover`, `:focus`; `.tab-fade-hider`); Tree view's selected-row rule | 2026-10-29 rounds: gap-md 6 and an sm 16 close 2 from the top; then a kept slot (approved, then replaced the same day) |
 | icon-only item | A `NavItem` with an `icon` and no children renders no text slot: a square plate (`aspect-ratio: 1`, no side padding), the icon centred, named by its `aria-label`. In the Titlebar's tabs, 26 by 26 at type 13. Hover changes only the plate, as every horizontal item | Figma desktop `desktop_shell.css` `tab--fileBrowserTab`: `flex: 0 0 40px; height: 38px`, the icon centred, `--color-text-secondary` at rest, `--color-text` on hover and active (Area keeps the ink fixed on hover) | — |
 | group gap | **12** + the 2px item gap | ChatGPT 21 between sections at 35px rows (`nav/chatgpt--sidebar-projects-section`) | Notion 4; was 8 |
@@ -373,3 +382,47 @@ Nav's separator paints `border-decorative` (#f3). Was `border-divider` (#e2). Th
   (`--_panel-row-pad`, panel.css and inset.css). Outside a panel nothing changes.
 - **Why:** owner pick q-plates (`docs/research/region-balance-2026-10-31`): Cursor's and Claude's sidebar plates sit 8 in,
   Cursor's text 6 inside them. Back to review.
+
+## Review note, 2026-11-01 (folding groups)
+
+- **What changed:** a labelled `NavGroup` can fold. With `open` and `onOpenChange` its heading is a button
+  (`.area-nav__toggle`, `aria-expanded`, `aria-controls` on the run, `.area-nav__items`), the whole row its hit area; the
+  name keeps the heading's ink and type, and a 12 chevron 4 after it shows on hover, on focus and while folded, pointing
+  along the line when folded (the expandable item's chevron rule, fast ease-out). `actions` puts controls at the heading's
+  end, a nested square 4 in as a row's actions are, over the button. Without `onOpenChange` a heading is unchanged.
+  Gallery tile: Folding groups.
+- **Why:** the desktop app's Sidebar became one tree in every tab (owner's picks, review page K5TADzUii6U6kY6kpiCx5i,
+  2026-11-01), and the owner asked that Projects and Systems "collapse when its necessary to provide more room". Claude's
+  and ChatGPT's sidebar headings fold the same way; Cursor's Agents groups fold and cap at 5 rows.
+- **Verdict:** awaiting the owner. Nav stays in review. The desktop app moved to four fixed places the same day (its
+  groups no longer fold); the folding group stays as Nav's own composition, with its gallery tile.
+
+## Review note, 2026-11-01 (nested runs on the parent's name)
+
+- **What changed:** a nested run steps in one icon column (16 + `gap-row`), not Tree view's 22, so under a parent with an
+  icon its rows start on the parent's name; under a text-only parent they still read as a level. Deeper runs step a
+  column more.
+- **Why:** the owner, on the desktop app's References views ("fix the alignment here"): Discover, Following and Saved sat
+  4 short of References' name.
+- **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-01 (pictures and a sticky heading)
+
+- **What changed:** `NavItem picture` puts a 20 × 14 picture (the 16 icon × 1.25 by × 0.875) in the icon's place, on
+  the icon column, a small corner and a hairline on the divider edge, its image cropped from the top
+  (`.area-nav__picture`). `NavGroup sticky` keeps the heading at the top of the scroll while its rows pass under it
+  (`.area-nav__label--sticky`, at `--area-nav-sticky-top` on `--area-nav-pin-fill`, the chrome's fill, else the page's).
+  Gallery tiles: Content / pictures, Behavior / sticky heading.
+- **Why:** the owner's round 4 picks on the desktop app's Sidebar (2026-11-01): r4-thumbs, a design's layers "hard to
+  tell apart by name alone" (Framer's layer thumbnails); r4-name, a project's or system's name kept in view.
+- **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-01 (the app's layers drop their pictures)
+
+- **What changed:** the desktop app's layers list marks each layer's kind with an icon (a screen, an image) instead of
+  `NavItem picture`. The slot stays in Nav, for rows whose look survives 20 × 14 (photographs); the Documentation entry
+  now says not to picture a screen or a document.
+- **Why:** the owner asked "is the small image thumbnail very practical?". Read in the app at type 13: a screen at 20 × 14
+  is a pale plate with a few bars, so two variations of one screen (the case it was picked for) looked the same, an image
+  read only as its colour, and each row rendered a whole screen. Figma's layers mark kinds with icons.
+- **Verdict:** awaiting the owner.

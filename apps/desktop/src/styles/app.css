@@ -258,14 +258,70 @@
   /* A page's list under the nav (app-nav.tsx PageList): one rule from the nav, then its filter and its rows, as the
      takeover drew them. The rule has the same air on both sides, 8 (spacing.md rule 5; owner, 2026-10-31: "why is the
      search control so close to the divider above it?": the nav's list gives back 8 at its foot, so the rule touched the
-     last row's plate and the filter sat 4 under it). The filter stays 4 over its own rows, so it reads as theirs. */
-  .studio-page-list { margin-block-start: calc(var(--area-ui-row-inset) + var(--area-space-8)); border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
-  .studio-page-list > .studio-sidebar__list:first-child { display: grid; grid-template-columns: minmax(0, 1fr); padding-block-start: var(--area-space-8); margin-block-end: var(--area-space-4); }
+     last row's plate and the filter sat 4 under it). The list's head is one row, its heading (Nav's group heading, the
+     list's name and a search icon; owner, 2026-11-01: "make the search an icon button and not full width") or the filter
+     the icon opens, centred in the same row so the list never moves; its rows follow at the rows' own gap, as a Nav
+     group's follow its heading. */
+  .studio-page-list { position: relative; margin-block-start: calc(var(--area-ui-row-inset) + var(--area-space-8)); border-block-start: var(--area-border-width) solid transparent; }
+  .studio-page-list > .studio-sidebar__list:first-child { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: var(--area-ui-row); align-items: center; padding-block-start: var(--area-space-8); margin-block-end: var(--area-ui-row-gap); }
   .studio-page-list > .studio-sidebar__list + .studio-sidebar__list { padding-block-start: 0; }
+  /* The Sidebar is its four places, held, then one scroll: what the tab holds, then the page's list (app-nav.tsx AppNav;
+     owner, 2026-11-01: "the top header portion has home references projects and systems. then there is a divider section
+     and everything below that shows contextually"; "is it better if its not separated … everything is just in an endless
+     scroll?"). The list's filter is held at the top of the scroll once the rows above have scrolled past, on the
+     Sidebar's own fill. */
+  .studio-sidebar .area-scroll-area__content:has(> .studio-sidebar__split) { block-size: 100%; }
+  .studio-sidebar__split { display: flex; flex-direction: column; block-size: 100%; min-block-size: 0; min-inline-size: 0; }
+  /* The four places, then a rule with 8 of air on each side (spacing.md rule 5), then the tab's context in its scroll. */
+  .studio-sidebar__split > .studio-sidebar__list:first-child { position: relative; flex: none; margin-block-end: 0; padding-block-end: var(--area-space-8); border-block-end: var(--area-border-width) solid transparent; }
+  /* Both rules run the Sidebar's full width (owner, 2026-11-02: "should the dividers go full width to separate them truly
+     into sections?"): each divides the panel into regions, the held places from the scroll and the context from a
+     section's list (Figma's Pages over Layers), and a rule that stops short reads as belonging to the block above it
+     (panel.css, the same reasoning for Panel's sections). Each is drawn across its own row's border, out to the panel's
+     edges (Panel's published inset), so nothing moves; the stroke stays the quiet decorative one. */
+  :is(.studio-sidebar__split > .studio-sidebar__list:first-child, .studio-page-list)::before {
+    content: "";
+    position: absolute;
+    inset-inline: calc(var(--_panel-inset) * -1);
+    border-block-start: var(--area-border-width) solid var(--area-border-decorative);
+    pointer-events: none;
+  }
+  .studio-sidebar__split > .studio-sidebar__list:first-child::before { inset-block-end: calc(var(--area-border-width) * -1); }
+  .studio-page-list::before { inset-block-start: calc(var(--area-border-width) * -1); }
+  /* The scroll runs to the Sidebar's edges (so a section's rule can, and its scrollbar sits on the edge) and insets its
+     content back by Panel's inset, so the text keeps the panel's column, the plates hang 8 from the edge as the Panel's
+     body hangs its lists, and nothing scrolls sideways. Rows fade out over the 6 under the places instead of being cut. */
+  .studio-sidebar__scroll { flex: 1 1 auto; min-block-size: 0; margin-inline: calc(var(--_panel-inset) * -1);
+    mask-image: linear-gradient(to bottom, transparent, #000 calc(var(--area-space-12) - var(--area-space-6))); }
+  .studio-sidebar__scroll .studio-sidebar__workspace { margin-inline: var(--_panel-inset); }
+  /* The context's first row sits 8 under the rule, the fade's 6 inside it. */
+  .studio-sidebar__workspace { padding-block-start: var(--area-space-8); }
+  .studio-sidebar__empty { margin: 0; padding-inline: var(--area-space-8); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .studio-sidebar__scroll .studio-page-list > .studio-sidebar__list:first-child {
+    position: sticky; inset-block-start: var(--studio-pinned-name, 0px); z-index: 1;
+    margin-inline: calc((var(--area-ui-row-inset) - var(--area-space-2)) * -1); padding-inline: calc(var(--area-ui-row-inset) - var(--area-space-2));
+    /* The gap under the head is its own, so rows don't show between it and the pinned branches. */
+    margin-block-end: 0; padding-block-end: var(--area-ui-row-gap);
+    background-color: var(--area-chrome-bg);
+  }
+  /*
+   * The pinned stack (owner picks r4-name and r4-path, 2026-11-01): the project's or system's name (Nav's sticky heading)
+   * at the top, the list's head (its heading or filter) under it, then the list's open branches (Tree view's sticky branches) under that. A
+   * project's or system's list sits in its group, so the name stays over it too; inside the group's Nav it hangs by the
+   * row pad again, so it insets back. With a pinned name nothing scrolls past the top, so the fade goes.
+   */
+  .studio-sidebar__workspace:has(.area-nav__label--sticky) { --studio-pinned-name: var(--area-ui-row); }
+  .studio-sidebar__workspace {
+    --area-tree-view-sticky-top: calc(var(--studio-pinned-name, 0px) + var(--area-space-8) + var(--area-ui-row) + var(--area-ui-row-gap));
+  }
+  .studio-sidebar__workspace .studio-page-list { margin-inline: calc(var(--area-ui-row-inset) - var(--area-space-2)); }
+  .studio-sidebar__workspace > .studio-page-list { margin-inline: 0; }
+  .studio-sidebar__scroll:has(.area-nav__label--sticky) { mask-image: none; }
   /* The filter spans the row plates exactly (Cursor's search over its settings rows): the rows hang their plates Panel's
      row pad (6) into the Sidebar's margin, so it does too. It was inset by it instead, starting 16 right of the plates and
      ending 8 past its list, which scrolled a narrow Sidebar sideways (2026-10-30). One column that may shrink, so nothing
-     in a takeover's head widens the Sidebar. */
+     in a takeover's head widens the Sidebar. The list's heading hangs the same way, so its name starts on the nav's
+     headings and its search icon ends 4 in from the plates' end, as a row's actions do. */
   .studio-takeover__filter { inline-size: calc(100% + (var(--area-ui-row-inset) - var(--area-space-2)) * 2); max-inline-size: none; margin-inline: calc((var(--area-ui-row-inset) - var(--area-space-2)) * -1); /* spec: Panel's row pad, 6 */ }
 
 

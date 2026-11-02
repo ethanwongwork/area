@@ -103,6 +103,7 @@ describe("layers: the shipped CSS computes what the model does", () => {
         ["raised-fill-0", m.fill.raised[0]], ["raised-fill-2", m.fill.raised[2]], ["recessed-fill-1", m.fill.recessed[1]],
         ["card", m.card], ["tile", m.tile], ["card-fill-0", m.fill.card[0]], ["card-fill-2", m.fill.card[2]], ["tile-fill-1", m.fill.tile[1]],
         ["frame", m.frame], ["frame-raised", m.frameRaised], ["frame-fill-0", m.fill.frame[0]], ["frame-fill-2", m.fill.frame[2]], ["frame-raised-fill-1", m.fill.frameRaised[1]],
+        ["well", m.well], ["well-fill-0", m.fill.well[0]], ["well-fill-1", m.fill.well[1]], ["well-fill-2", m.fill.well[2]],
         ["body", m.ink.body], ["muted", m.ink.muted], ["edge", m.ink.edge],
         ...(theme === "light" ? [["vivid-darken", m.vividDarken], ["tonal-darken", m.tonalDarken]] as Array<[string, number]> : [["tint-lift", m.tintLift], ["tint-lift-fill", m.tintLiftFill]] as Array<[string, number]>),
       ];
@@ -239,7 +240,7 @@ describe("layers: a press has room on every ground", () => {
     for (const tone of ["auto", ...CARD_TONE_STEPS] as CardTone[]) for (const f of tone === "auto" ? FILL_COMBOS : [DEFAULT_FILL]) for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
       const m = layerLightness(theme, g, n, f, tone), muted = m.ink.muted ** 3, body = m.ink.body;
       const bound = theme === "light" ? Math.cbrt(4.6 * (muted + 0.05) - 0.05) : Math.cbrt(Math.max(0, (muted + 0.05) / 4.6 - 0.05));
-      for (const ground of ["page", "raised", "recessed", "card", "tile"] as const) {
+      for (const ground of ["page", "raised", "recessed", "card", "tile", "well"] as const) {
         const selected = m.fill[ground][2];
         const pressed = theme === "light" ? Math.max(selected - 0.12 * (selected - body), bound) : Math.min(selected + 0.14 * (body - selected), bound);
         // Dark fills stop where white text keeps 4.6:1 pressed (DARK_FILL_CEILING, 2026-10-23), so the room is always there.
@@ -260,7 +261,7 @@ describe("layers: edges keep their contrast on every ground", () => {
     const problems: string[] = [];
     for (const tone of ["auto", ...CARD_TONE_STEPS] as CardTone[]) for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
       const m = layerLightness(theme, g, n, DEFAULT_FILL, tone), ref = theme === "light" ? m.page : m.raised;
-      for (const ground of ["page", "raised", "recessed", "card", "tile"] as const) {
+      for (const ground of ["page", "raised", "recessed", "card", "tile", "well"] as const) {
         const L = m[ground], shift = edgeShift(theme, m, L);
         for (const k of Object.keys(EDGE_OFFSET.light) as (keyof typeof EDGE_OFFSET.light)[]) {
           const on = theme === "light" ? m.edge[k] - shift : m.edge[k] + shift;
@@ -342,8 +343,8 @@ describe("layers: every position is usable", () => {
     });
     it(`${theme}: the shipped CSS computes what the model does at every position`, () => {
       const grounds = [groundsOf(theme)[0]!, theme === "light" ? 100 : 8, groundsOf(theme).at(-1)!];
-      const keys = ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised", "page-fill-2", "card-fill-0", "body", "muted", "edge"] as const;
-      const model = (m: ReturnType<typeof layerLightness>): Record<(typeof keys)[number], number> => ({ page: m.page, raised: m.raised, recessed: m.recessed, card: m.card, tile: m.tile, frame: m.frame, "frame-raised": m.frameRaised, "page-fill-2": m.fill.page[2], "card-fill-0": m.fill.card[0], body: m.ink.body, muted: m.ink.muted, edge: m.ink.edge });
+      const keys = ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised", "well", "page-fill-2", "card-fill-0", "body", "muted", "edge"] as const;
+      const model = (m: ReturnType<typeof layerLightness>): Record<(typeof keys)[number], number> => ({ page: m.page, raised: m.raised, recessed: m.recessed, card: m.card, tile: m.tile, frame: m.frame, "frame-raised": m.frameRaised, well: m.well, "page-fill-2": m.fill.page[2], "card-fill-0": m.fill.card[0], body: m.ink.body, muted: m.ink.muted, edge: m.ink.edge });
       const compare = (g: number, n: number, tone: CardTone) => {
         const m = model(layerLightness(theme, g, n, DEFAULT_FILL, tone)), c = cssLightness(theme, g, n, DEFAULT_FILL, tone);
         for (const k of keys) expect(c[`layer-${theme}-${k}`], `${theme} ${g}/${n} card ${tone} ${k}`).toBeCloseTo(m[k], 6);

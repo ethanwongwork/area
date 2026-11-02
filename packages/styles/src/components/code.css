@@ -108,8 +108,9 @@
    * lines and a badge with a swatch must not.
    */
   .area-code {
-    /* spec: inline code keeps the 25 rung (#fafafa) now that the block's ground is the page. */
-    --_code-bg: var(--area-bg-stripe);
+    /* spec: inline code keeps about the 25 rung (#fafafa): the well, #f9f9f9 at Layer contrast 0, the token's ground
+       (bg-stripe, which it read until 2026-11-01, is 1.03:1 there). */
+    --_code-bg: var(--area-token-bg);
     /* The token chip's edge (emit/base.ts token-edge: border-subtle in light, the faint edge in dark), one role for Code
        and Token so the two never drift; it was its own copy of the old decorative seam (owner, 2026-11-02). */
     --_code-edge: var(--area-token-edge);

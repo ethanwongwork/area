@@ -52,7 +52,7 @@
 import { StrokeLab } from "./content/examples/stroke-groups.tsx";
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import {
-  Avatar, Badge, Button, Card, CardContent, CardDescription, CardTitle, Checkbox, Chip, Count, Input, MenuItem, Nav,
+  Avatar, Badge, Button, Card, CardContent, CardDescription, CardTitle, Checkbox, Chip, Count, Input, MenuItem, Meter, Nav,
   NavItem, Segmented, Switch,
 } from "@area/react";
 import { FolderIcon, HomeIcon, StarIcon } from "@area/icons";
@@ -393,6 +393,9 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
     // Status colours: the status tones the setting quiets, as solid Badges.
     case "status-colours":
       return [FILL.wide, <div className="lang-row"><Badge tone="danger" variant="solid">Failed</Badge><Badge tone="warning" variant="solid">Due</Badge><Badge tone="success" variant="solid">Done</Badge></div>];
+    // Series lightness: the data colours, as a stacked Meter's parts.
+    case "series-lightness":
+      return [FILL.wide, <Meter label="Storage" segments={[{ label: "Files", value: 6 }, { label: "Photos", value: 4 }, { label: "Mail", value: 3 }, { label: "Apps", value: 2 }]} />];
     // How much of its colour the accent keeps: everything it paints, a Button, a checked mark and a selected chip's tint.
     case "accent-strength":
       return [FILL.wide, <div className="lang-row"><Button>Save</Button><Checkbox label="On" defaultChecked /></div>];

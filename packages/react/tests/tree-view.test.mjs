@@ -41,3 +41,11 @@ test("TreeView size sm, guides and a row's status", () => {
   }
   assert.doesNotMatch(renderToString(h(TreeView, { "aria-label": "Files", items: [{ id: "x", label: "X" }] })), /area-tree-view__status|--guides/);
 });
+
+// TreeView.tsx stickyBranches (2026-11-01): a pinned box for the eye, ahead of the rows, hidden from assistive tech.
+test("Sticky branches add a hidden pinned box and keep the rows a tree", () => {
+  const html = renderToString(h(TreeView, { "aria-label": "Files", items, stickyBranches: true, defaultExpandedIds: ["src"] }));
+  assert.match(html, /role="tree"[^>]*><div class="area-tree-view__pinned" aria-hidden="true"><\/div><div role="treeitem"/);
+  assert.equal(renderToString(h(TreeView, { "aria-label": "Files", items })).includes("area-tree-view__pinned"), false);
+  assert.match(css, /\.area-tree-view__pinned\s*\{[^}]*position:\s*sticky/);
+});
