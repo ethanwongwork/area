@@ -48,7 +48,7 @@ release.
 ## Anatomy
 
 ```
-area-approval                 the Composer's shell: its edge, corner, field fill and inset; text-lg; gap ui-cluster
+area-approval                 the Composer's edge, corner and field fill; the agent card's padding (4); text-base; gap ui-cluster
   area-approval__head         the heading and the actions on one row, on the row inset; its first line sits in a row
     area-approval__heading    the title and description, one block
       area-approval__title    strong
@@ -71,11 +71,11 @@ area-approval                 the Composer's shell: its edge, corner, field fill
 
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
-| shell | Composer's edge, corner, fill and inset; the corner is Composer's expression term for term: the send button's corner (pill buttons add `radius-full`) plus the inset × max(concentric, pill) | peer: Composer (composer.css) | it takes the composer's place; Claude Code's card radius 8 is its own composer's. Audit 2026-10-19: the copy had dropped the pill terms, so pill buttons gave a pill Composer but not a pill Approval |
+| shell | Composer's edge, corner and fill; padded 4, the agent card's list padding, so its words sit on the cards' 12 column (2026-11-02; was the Composer's inset, 2 further in); the corner is Composer's expression term for term: the send button's corner (pill buttons add `radius-full`) plus the inset × max(concentric, pill) | peer: Composer (composer.css) | it takes the composer's place; Claude Code's card radius 8 is its own composer's. Audit 2026-10-19: the copy had dropped the pill terms, so pill buttons gave a pill Composer but not a pill Approval |
 | gap | 6 (ui-cluster at Compact) | Composer's gap | — |
-| head | on the row inset; first line in a row: (ui-row − text-lg leading) / 2 above the title | inset.css first-line alignment | round 54: the top had half a row less room than the foot |
-| title | text-lg strong | claude-code bold title | Area's one strong weight |
-| description | text-base muted | claude-code .9em secondary | — |
+| head | on the row inset; first line in a row: (ui-row − text-base leading) / 2 above the title | inset.css first-line alignment | round 54: the top had half a row less room than the foot |
+| title | text-base strong (2026-11-02; was text-lg) | claude-code bold title | Area's one strong weight |
+| description | text-base muted; an option's description too (2026-11-02; were text-sm 12) | claude-code .9em secondary | — |
 | options | Menu-row geometry: ui-row tall, row inset, row corner, Menu's row gap (gap-row: 12, compact 8) and ui-row-gap between rows; plate on hover / focus, bg-component-pressed while pressed | peer: Menu | Claude Code's ringed buttons read as a list of commands at 256; rows keep them one column |
 | number | quiet Kbd sm in the icon slot (icon-sm wide, centred), the label's size, muted, unboxed | claude-code `shortcutNum` (label size, .6); Codex "1." | round 51 |
 | instead | the last numbered row, its field unfilled | Claude Code (last option is free text) | a filled field added a third grey (cleanup pass 2026-10-19) |
@@ -133,7 +133,7 @@ The agent chat's shared rules (all five families):
 
 | Rule | Value | Basis |
 |---|---|---|
-| Lines in the transcript | the reply's type (text-lg); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
+| Lines in the transcript | text-base since 2026-11-02 (was the reply's text-lg); 4 between a line's parts | Cursor: cards 13 under a 14 reply; Cursor ToolCallLine gap 4 |
 | Cards (Edit summary, Plan) | one size, text-base; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
@@ -253,3 +253,12 @@ the foot the keycap ends 16 and the hint's baseline 20 from it, so top and foot 
 - **Verdict:** approved (owner, 2026-10-29, the Composer expansion review page, round 2); Complete.
 - **2026-10-29, later:** the Composer moved to Card's corner (18 in the app's scale), so Approval did too.
 - **Verdict (Card's corner):** approved (owner, 2026-10-29, the Composer expansion review page, round 3); Complete.
+
+- 2026-11-02 · trackers review.
+  - **What changed:** one size, text-base, for the title, description, options, their descriptions and the hint (was
+    text-lg with text-sm descriptions); padded 4 inside the edge, the agent card's list padding, so the title, numbers and
+    hint sit on Plan's and Edit summary's 12 column (was the Composer's inset, 2 further in); trailing controls keep the
+    card end. The corner stays the Composer's.
+  - **Why:** the owner: "the trackers dont look right, the type ramp looks wrong, the alignment looks off … do the
+    trackers need to be smaller?" An agent's work is UI and its answer prose (Cursor's cards 13 under a 14 reply), so
+    every tracker reads at text-base, one size, under the reply's text-lg; the cards' words share one 12 column.

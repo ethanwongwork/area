@@ -23,14 +23,17 @@
     grid-template-columns: minmax(0, 1fr);
     gap: var(--area-ui-cluster);
     min-inline-size: 0;
-    padding: calc(var(--_approval-inset) - var(--area-stroke-width));
+    /* The agent card's list padding (Plan, Edit summary: 4 in the frame), so its words land on their 12 column (owner,
+       2026-11-02: "the alignment looks off"; it was the Composer's 8, 2 further in). The corner stays the Composer's. */
+    padding: var(--area-space-4);
     border: var(--area-stroke-width) solid var(--area-composer-edge);
     border-radius: var(--_approval-radius);
     background: var(--area-input-bg);
     color: var(--area-fg-default);
-    /* The Composer's text: a question and its answers read at the field's size. */
-    font-size: var(--area-text-lg-size);
-    line-height: var(--area-text-lg-leading);
+    /* The trackers' UI size (Step; owner, 2026-11-02: "the type ramp looks wrong"): one size throughout, the title strong,
+       what explains it muted. Was the Composer's text-lg with 12 descriptions, three sizes in one card. */
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
   }
   /* The question and why, one block on the rows' column (the row inset), so title, description, numbers and hint share
      an edge. */
@@ -38,18 +41,18 @@
   .area-approval__foot { margin: 0; padding-inline: var(--area-ui-row-inset); }
   /* A trailing control's plate sits (row − control) / 2 from the card's end, never under 4 (the agent chat's card head
      rule, cleanup pass 2026-10-19): the row inset is given back and that offset taken instead. */
-  .area-approval { --_approval-trail: calc(max(var(--area-space-4), (var(--area-ui-row) - var(--area-control-sm)) / 2) - var(--area-ui-row-inset)); }
+  .area-approval { --_approval-trail: calc(max(var(--area-space-4), (var(--area-ui-row) - var(--area-control-sm)) / 2) - var(--area-ui-row-inset) - var(--area-space-4)); /* the shell's 4 given back too: Edit summary's card end */ }
   /* The head's first line sits in a row, as every line after it does (inset.css, first-line alignment; round 54, owner:
      "is the padding/margin at the top correct?"): half of what the row leaves around the title's line goes above it, so
      the room above the title matches the room under the hint's row. */
-  .area-approval__head { --_approval-first: max(0px, calc((var(--area-ui-row) - var(--area-text-lg-leading)) / 2)); display: flex; align-items: flex-start; gap: var(--area-ui-cluster); min-inline-size: 0; padding-block-start: var(--_approval-first); }
+  .area-approval__head { --_approval-first: max(0px, calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2)); display: flex; align-items: flex-start; gap: var(--area-ui-cluster); min-inline-size: 0; padding-block-start: var(--_approval-first); }
   .area-approval__heading { display: grid; flex: 1; min-inline-size: 0; }
   /* The head's actions (a question's place among several, a close) sit on the title's row: a row tall, centred on the
      title's first line, their last plate on the card's trailing offset. */
   .area-approval__actions { display: flex; flex: none; align-items: center; gap: var(--area-space-4); min-block-size: var(--area-ui-row); margin-block-start: calc(-1 * var(--_approval-first)); margin-inline-end: var(--_approval-trail); color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
   .area-approval__title { margin: 0; font-weight: var(--area-weight-strong); }
   .area-approval__description,
-  .area-approval__hint { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  .area-approval__hint { margin: 0; color: var(--area-fg-muted); }
   /* The hint is the card's last row (round 53, owner: "esc to cancel looks way too close to the bottom"): a row tall,
      centred, as the choices above it are, so the space under it is the shell's inset plus the row's own, like the space
      the Composer's footer row leaves. Its keycap sits one ui-cluster from the words (Kbd's rule). */
@@ -96,10 +99,10 @@
      6 above and below, the row grows), the note in the card's own description type. The key sits on the label's line
      (inset.css, first-line alignment); the check stays centred, as Menu's does. */
   .area-approval__option:has(.area-approval__option-description) { align-items: flex-start; padding-block: 6px; /* spec: Menu's row with a note */ }
-  .area-approval__option:has(.area-approval__option-description) > .area-approval__key { align-items: center; block-size: var(--area-text-lg-leading); }
+  .area-approval__option:has(.area-approval__option-description) > .area-approval__key { align-items: center; block-size: var(--area-text-base-leading); }
   .area-approval__option:has(.area-approval__option-description) > .area-approval__check { align-self: center; }
   .area-approval__lines { display: flex; flex: 1; flex-direction: column; min-inline-size: 0; }
-  .area-approval__option-description { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); overflow-wrap: anywhere; }
+  .area-approval__option-description { color: var(--area-fg-muted); overflow-wrap: anywhere; }
   /* The answer already given: Menu's selected row (its active fill, lands at once, outranks hover) and its check, the
      Selection role's ink; the other rows keep the check's column with the mark at rest (MOTION.md small mark). */
   .area-approval__option[data-selected] { background-color: var(--area-bg-component-active); transition-duration: 0s; }

@@ -1,46 +1,42 @@
   /* --- Glyph sheets (src/glyph-sheet.tsx): Icons' wall and a typeface's Glyphs tab -------------------------- */
 
   /* A sheet: label-free cells (Lucide, Primer, Font Book's repertoire), the name in the hover window and the
-     Inspector. A cell is twice the glyph, never less than the glyph plus 32 (the icon browser's rule). Glyphs
-     sit straight on the Canvas's surface, no container (owner, 2026-10-12, after Cursor's icon gallery): a glyph
-     is its own figure, so a frame round a sheet only adds a second edge. The cells' plates hang into the margin
-     by the cell's own inset, so the first glyph's centre, not its plate, sets the column (as a Nav row's text,
-     not its plate, sets the Sidebar's). */
+     Inspector. A cell is twice the glyph, never less than the glyph plus 32 (the icon browser's rule), at the least:
+     the columns share the Canvas's width, so the cards run edge to edge as every gallery's do. Each cell is a card
+     (src/glyph-sheet.tsx; owner, 2026-11-02: "the glyphs can be in containers like the rest of the cards"), so the
+     sheet starts on the Canvas's content edge, not hung into its margin as the old plates were. Cards a fifth of the
+     least cell apart, 8 at the 20 icon size: the owner's picture of a glyph grid holds its plates 0.16 of a plate
+     apart (23 on 141), and the feed's 16 between cards would leave a sheet of small cards mostly gap. */
   .studio-glyphs { --_cell: max(calc(var(--_size) * 2), calc(var(--_size) + var(--area-space-32))); --area-list-box-item: var(--_cell); }
-  /* Cells keep their own width and the spare room goes between the columns, so the first and last
-     glyphs sit exactly one hang from the edges at every Canvas width. */
   .studio-glyphs__sheet {
     display: grid;
-    grid-template-columns: repeat(auto-fill, var(--_cell));
-    justify-content: space-between;
-    gap: var(--area-space-2);
-    margin-inline: calc((var(--_cell) - var(--_size)) / -2);
+    grid-template-columns: repeat(auto-fill, minmax(var(--_cell), 1fr));
+    gap: calc(var(--_canvas-gap) / 2);
   }
-  .studio-glyphs__specimen { display: contents; }
   .studio-glyphs__glyph { display: grid; place-items: center; color: var(--area-fg-default); }
   .studio-glyphs__glyph svg { display: block; }
+  /* The option is the card's hit area and focus; the card paints rest, hover and selected (asset-card.css). */
   .studio-glyphs__cell {
     display: grid;
-    place-items: center;
+    place-items: stretch;
+    inline-size: auto;
+    min-inline-size: 0;
     min-block-size: var(--_cell);
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: var(--area-radius-row);
+    border-radius: var(--_tile-radius);
     background: transparent;
     color: var(--area-fg-default);
     cursor: default;
   }
+  .studio-glyphs__cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset, 2px); }
+  .studio-glyphs__card { inline-size: 100%; min-inline-size: 0; }
+  .studio-glyphs__specimen { display: grid; place-items: center; block-size: 100%; }
   .studio-glyphs__cell svg { display: block; flex: none; }
   /* A character in its face: the glyph set at the sheet's size on a one-em line, so the cell centres the em,
      not the font's own ascent and descent (Font Book's repertoire). */
   .studio-glyphs__char { display: block; font-size: var(--_size); line-height: 1; white-space: pre; font-feature-settings: normal; }
-  /* The row plates' pair (DESIGN_SYSTEM.md, "Shared state paint"): hover, then press and selected
-     a step firmer; in at once, out on `fast` (docs/MOTION.md). */
-  .studio-glyphs__cell { transition: var(--area-transition); }
-  @media (hover: hover) { .studio-glyphs__cell:hover { background: var(--area-bg-component-hover); transition-duration: 0s; } }
-  .studio-glyphs__cell:is(:active, [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
-  .studio-glyphs__cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
   /*
    * The hover window (GlyphCell): an Area Hover card 256 wide. Name and its meta on one line, the glyph
    * large on the card's own surface, then the actions. Insets and gaps are Popover's own (surface.css): 12 in

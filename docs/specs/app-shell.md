@@ -47,7 +47,7 @@
 
 - App preview: Titlebar 39 tall at the app's scale, equal to the Canvas bar; insets 14 / 14; end group gap 12; last
   button 14 from the edge; search 240. `area-titlebar--macos` computes 83 / 13 (the Electron window itself not
-  inspected). Section titles 13/18 at 500, 14 to the content, still naming their sections (`aria-labelledby`).
+  inspected). Section titles 16/22 at 500 (title-xs; 13/18 until 2026-11-02), 14 to the content, still naming their sections (`aria-labelledby`).
 - `packages/react/tests/app-shell.test.mjs`.
 
 ## Review note, 2026-10-15
@@ -111,3 +111,7 @@ Figma's panel tabs measure 8 and 8. (app-shell.css)
 - **Why:** owner, 2026-10-30: the desktop Canvas header's tabs started 14 in, beside 7 at its end: "it should be equal".
 - **Checks:** cohesion test "a bar of controls is inset as far from its sides as from its top".
 - **Verdict:** in review.
+
+- 2026-11-02 · owner: "is the size of each section title correct?" → Section heading's title takes title-xs (16/22 at type
+  13), the ramp's settings and surface title, strong; its lede joins at the title's line less its cap. It was text-base
+  13/18, under the Card titles (title-xs) it heads and a reply's headings. Every page's section titles move with it.

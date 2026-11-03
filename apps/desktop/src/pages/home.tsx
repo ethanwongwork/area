@@ -170,7 +170,7 @@ export function HomePage() {
           meta={first ? ORIGIN_LABEL[system.origin] : [RELEASE_KIND_LABEL[release.kind], from ? `from ${from}` : null].filter(Boolean).join(", ")}>
           <div className="studio-home__event">
             {release.note && !first ? <p className="studio-home__note">{release.note}</p> : null}
-            {picture(`release:${system.id}:${release.version}`, published.name, versionName(system.name, release.version), chosen?.id === system.id,
+            {picture(`release:${system.id}:${release.version}`, published.name, "Published", chosen?.id === system.id,
               () => select(system.id, { replace: true }), () => open(system), <ThemeScreen theme={published} mode={theme} />, "published")}
           </div>
         </TimelineItem>
@@ -181,7 +181,7 @@ export function HomePage() {
       return (
         <TimelineItem key={key} icon={<FolderIcon />} time={time} dateTime={dateTime} meta={`Uses ${systemName(project.system)}`}
           title={<>{opener({ page: "project", project: project.id }, project.name)} started</>}>
-          {picture(`project:${project.id}`, project.name, `${systemName(project.system)}, ${plural(project.pages.length, "page")}`, chosenProject?.id === project.id,
+          {picture(`project:${project.id}`, project.name, plural(project.pages.length, "page"), chosenProject?.id === project.id,
             () => select(project.id, { replace: true }), () => navigate({ page: "project", project: project.id }),
             <ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={projectScope(project)} />)}
         </TimelineItem>

@@ -21,7 +21,7 @@
  */
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { AssetCard, AssetGridItem, Badge, Count, ListBoxItem, SectionHeading } from "@area/react";
-import { EllipseIcon, StatusAvailableFilledIcon } from "@area/icons";
+import { AlertCircleFilledIcon, ArchiveIcon, CircleCheckDashedIcon, CircleDashedIcon, CircleProgressIcon, EllipseIcon, ErrorFilledIcon, StatusAvailableFilledIcon } from "@area/icons";
 import { feedScale, feedScaleWithin } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
@@ -61,16 +61,43 @@ export type TileSpan = "unit" | "wide";
  * kinda like the merge icons with the colors, no backplate"): the icon carries the colour and the words stay the
  * caption's muted text, with no plate behind them. `iconOnly` draws the mark alone, its words its accessible name and
  * tooltip (a Sidebar row's trailing mark, as Claude Code marks each session).
+ *
+ * Every status in the app is this badge (owner, 2026-11-02: "all badges are correct and consistent"; "apply new and more
+ * colors to the status badges"; then "i prefer just the icon in the nav by itself with no backplate, but prefer backplates
+ * on badges everywhere else"; "i prefer the orange colored badges over the yellow/gold"). On its tone's soft plate
+ * everywhere; in the Sidebar the mark alone, no plate (`iconOnly`). The mark is the one icon a badge keeps: it is how the
+ * Sidebar's bare mark is learnt. One meaning per hue (badge-catalogue.tsx): green done, blue active, purple review, orange
+ * needs you, red stopped, grey not yet or put away.
+ *
+ *   published  done (Published, Live, Complete, Approved)   success     the filled check circle
+ *   progress   active                                       info        the ring a quarter filled (CircleProgress)
+ *   review     in review, waiting for a yes                 discovery   the dashed ring round a check (CircleCheckDashed)
+ *   changes    changes requested                            warning     the alert circle, filled
+ *   draft      a draft, unpublished changes                 warning     the ring (gold until 2026-11-02)
+ *   none       to do (Unrefined, Not reviewed)              neutral     the dashed ring
+ *   blocked    blocked or failed                            danger      the cross circle, filled
+ *   archived   archived, deprecated                         neutral     the archive box
+ *
+ * Words are the state's shortest name ("Published", not "Published in Area v2"). `size` follows the row: md in a card's
+ * name row (its 18 line), sm in a table cell or a facts row.
  */
 export type ProjectStatus = "published" | "draft";
+export type Status = ProjectStatus | "progress" | "review" | "changes" | "none" | "blocked" | "archived";
 export const STATUS = {
   published: { tone: "success", icon: <StatusAvailableFilledIcon /> },
-  draft: { tone: "caution", icon: <EllipseIcon /> },
+  progress: { tone: "info", icon: <CircleProgressIcon /> },
+  review: { tone: "discovery", icon: <CircleCheckDashedIcon /> },
+  changes: { tone: "warning", icon: <AlertCircleFilledIcon /> },
+  draft: { tone: "warning", icon: <EllipseIcon /> },
+  none: { tone: "neutral", icon: <CircleDashedIcon /> },
+  blocked: { tone: "danger", icon: <ErrorFilledIcon /> },
+  archived: { tone: "neutral", icon: <ArchiveIcon /> },
 } as const;
-export function StatusBadge({ status, iconOnly, children }: { status: ProjectStatus; iconOnly?: boolean; children: ReactNode }) {
+/** On its plate; `iconOnly` (the Sidebar) the mark alone, plain, its words its name and tooltip. */
+export function StatusBadge({ status, iconOnly, size, children }: { status: Status; iconOnly?: boolean; size?: "sm" | "md"; children: ReactNode }) {
   return iconOnly
-    ? <Badge variant="plain" iconOnly tone={STATUS[status].tone} icon={STATUS[status].icon} aria-label={String(children)} title={String(children)} />
-    : <Badge variant="plain" tone={STATUS[status].tone} icon={STATUS[status].icon} className="gallery-tile__badge">{children}</Badge>;
+    ? <Badge variant="plain" iconOnly size={size} tone={STATUS[status].tone} icon={STATUS[status].icon} aria-label={String(children)} title={String(children)} />
+    : <Badge variant="soft" size={size} tone={STATUS[status].tone} icon={STATUS[status].icon} className="gallery-tile__badge">{children}</Badge>;
 }
 export type TileShape = "square" | "wide";
 /**
@@ -131,8 +158,8 @@ export interface TileProps {
   label: ReactNode;
   /** Under the name: a hex, a size, a count, a grade. */
   value?: ReactNode;
-  /** The value as a project's status (published or draft): its badge colour-coded with its icon (`STATUS`). */
-  status?: ProjectStatus;
+  /** The value as a status (done, in review, draft or not started): its badge colour-coded with its mark (`STATUS`). */
+  status?: Status;
   span: TileSpan;
   stage: TileStage;
   selected?: boolean;

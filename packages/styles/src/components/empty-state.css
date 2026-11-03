@@ -37,7 +37,12 @@
     /* spec: ChatGPT 16 under the tile, 8 between title and line, 16 above the actions. */
     --_media-gap: var(--area-space-16);
     --_title-gap: 0px; /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 8 after ChatGPT's empty state, baseline to cap 20) */
-    --_actions-gap: var(--area-space-16);
+    /* The actions stand off the text by a block's space (owner, 2026-11-02: "update the empty state, the size of the type
+       the gaps between text and the actions", with a mail app's empty state, 24 under its line): 24, was ChatGPT's 16. */
+    --_actions-gap: var(--area-space-24);
+    /* Its line on the UI step under the 16 title (the mail app's 14 under 18): 13/18, was the secondary 12/16. */
+    --_description-size: var(--area-text-base-size);
+    --_description-leading: var(--area-text-base-leading);
     /* The surface title role, Dialog's and Drawer's: 16/24 at both densities (owner, 2026-10-12: consistency pass O3;
        was ChatGPT's 18/24, off the type ramp). */
     --_title-size: var(--area-title-xs-size);
@@ -48,16 +53,21 @@
   .area-empty-state--sm {
     /* spec: Primer Blankslate small 16 around; compact 12 with the surface inset. */
     --_padding: var(--area-inset-surface-md);
-    /* spec: File upload's 40 tile with a 20 glyph (shadcn's 40 icon tile); 32 / 16 in compact. */
-    --_tile: var(--area-control-lg);
-    --_tile-radius: var(--area-radius-control-lg);
-    --_glyph-step: round(up, clamp(0, var(--area-ui-dense), 1), 1); /* a native 20 or 16, as md */
-    --_glyph: calc(20px - 4px * var(--_glyph-step)); /* spec */
-    --_glyph-line: calc(var(--area-weight-icon) * (0.8846 + 0.1154 * var(--_glyph-step)));
+    /* A quiet plate (owner, 2026-11-02, a finance app's empty state: a small soft plate and a 16 glyph over the title): the
+       32 control's tile with a 16 glyph, 28 / 12 in compact. It was File upload's 40 tile with a 20 glyph. */
+    --_tile: var(--area-control-md);
+    --_tile-radius: var(--area-radius-control-md);
+    --_glyph-step: round(up, clamp(0, var(--area-ui-dense), 1), 1); /* a native 16 or 12 */
+    --_glyph: calc(16px - 4px * var(--_glyph-step)); /* spec */
+    --_glyph-line: 1px; /* the icons' own line at 16 and 12 */
     /* spec: Notion 12 under the icon, 2 between title and line, 8 above the action. */
     --_media-gap: var(--area-space-12);
     --_title-gap: 0px; /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 2 after Notion) */
-    --_actions-gap: var(--area-space-8);
+    /* The actions a line's space off the text (owner, 2026-11-02; the finance and projects apps' 12): 12, was Notion's 8,
+       which read as part of the text. */
+    --_actions-gap: var(--area-space-12);
+    --_description-size: var(--area-text-sm-size);
+    --_description-leading: var(--area-text-sm-leading);
     /* spec: Notion 14/20 500, the UI type (12/16 in compact). */
     --_title-size: var(--area-ui-size);
     --_title-leading: var(--area-ui-leading);
@@ -99,8 +109,8 @@
   .area-empty-state__description {
     margin: 0;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--_description-size);
+    line-height: var(--_description-leading);
     text-wrap: balance;
   }
   /* spec: ChatGPT's actions row, 8 apart, centred. */

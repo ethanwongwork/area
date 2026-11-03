@@ -1,0 +1,117 @@
+  /* --- Data views (src/data-views.tsx; docs/research/data-views-2026-11-01) ----------------------------------------- */
+
+  /* The data views page's system in the app's kit: a module's body is its plot, then its key or legend, 12 apart; a
+     plot is drawn at its own width (overflow visible, so a halo or an end label may sit on the inset). Type, all on
+     Area's ramp: labels (axis ticks, units, legend words) Geist Mono 11/14 muted; a number on a mark 11/14 500; rows'
+     names 13/18; amounts tabular; the ring's total title-sm 500 in the mono. Strokes, all 1px: a guide is the muted ink
+     at 45% over the card. An empty cell is the trough (bg-component). */
+  .studio-data {
+    --_guide: color-mix(in oklab, var(--area-fg-muted) 45%, var(--area-card-fill, var(--area-bg-surface)));
+  }
+  .studio-data__body { display: grid; gap: var(--area-space-12); min-inline-size: 0; }
+  .studio-data__plot { position: relative; min-inline-size: 0; }
+  /* At its plot's width in the app; a still (the Feed Kit) scales it down by its viewBox rather than overflow. */
+  .studio-data svg { display: block; overflow: visible; max-inline-size: 100%; block-size: auto; }
+  /* A plot's drawing takes its plot's width: in the app it is drawn at that width; in a still it scales to its card. */
+  .studio-data__plot > svg { inline-size: 100%; }
+  .studio-data__label, .studio-data__axis, .studio-data__legend {
+    color: var(--area-fg-muted);
+    font-family: var(--area-font-mono);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+  }
+  .studio-data__axis { fill: var(--area-fg-muted); }
+  .studio-data__value { fill: var(--area-fg-default); font-family: var(--area-font-mono); font-size: var(--area-text-xs-size); font-weight: var(--area-weight-strong); font-variant-numeric: tabular-nums; }
+  /* On the blue ladder every light step carries the text ink; dark's two brightest (300, 200) carry the page's. */
+  .studio-data__value--on { fill: light-dark(var(--area-fg-default), var(--area-bg-page)); }
+  .studio-data__empty { fill: var(--area-bg-component); }
+  .studio-data__guide { stroke: var(--_guide); stroke-width: 1; }
+  .studio-data__total { fill: var(--area-fg-default); font-family: var(--area-font-mono); font-size: var(--area-title-sm-size); font-weight: var(--area-weight-strong); font-variant-numeric: tabular-nums; }
+  /* A legend: keys 8 square (corner 2), 8 from their words, items 16 apart. */
+  .studio-data__legend { display: flex; flex-wrap: wrap; gap: var(--area-space-4) var(--area-space-16); align-items: center; }
+  .studio-data__keyed { display: inline-flex; align-items: center; gap: var(--area-space-8); min-inline-size: 0; }
+  .studio-data__key { flex: none; inline-size: var(--area-space-8); block-size: var(--area-space-8); border-radius: 2px; /* spec: corner of an 8 mark */ }
+  /* Rows beside a ring: name, a dotted leader, the amount and the share, 28 tall. */
+  .studio-data__rows { display: grid; min-inline-size: 0; }
+  .studio-data__row { display: grid; grid-template-columns: auto minmax(var(--area-space-8), 1fr) auto auto; gap: var(--area-space-8); align-items: center; block-size: 28px; /* spec: list rows */ font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+  .studio-data__leader { block-size: 1px; background: repeating-linear-gradient(90deg, var(--_guide) 0 2px, transparent 2px 4px); transform: translateY(4px); }
+  .studio-data__number { font-variant-numeric: tabular-nums; text-align: end; }
+  .studio-data__share { min-inline-size: 4ch; color: var(--area-fg-muted); }
+  /* The ring beside its rows, 24 apart; stacked in a narrow card. */
+  .studio-data__split { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--area-space-24); align-items: center; container-type: inline-size; }
+  @container (max-width: 360px) { .studio-data__split { grid-template-columns: minmax(0, 1fr); justify-items: center; } .studio-data__split > .studio-data__rows { inline-size: 100%; } }
+  /* Modules side by side: halves of the feed, one a row under 640. */
+  .studio-data-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: var(--_canvas-gap); }
+
+  /* --- The rest of the page's modules (m1–m4, m10, m12–m21) --- */
+  /* Other and Dormant: a neutral, not a series; literal so it never depends on a mix of Area's computed greys (README
+     round 15). */
+  .studio-data { --_other: light-dark(#c8c8c8, #5c5c5c); /* spec */ }
+  /* Strokes, all 1px: a gridline the decorative edge, the baseline the divider, a guide dashed 2 2 in the guide grey. */
+  .studio-data__grid { stroke: var(--area-border-decorative); stroke-width: 1; shape-rendering: crispEdges; }
+  .studio-data__base { stroke: var(--area-border-divider); stroke-width: 1; shape-rendering: crispEdges; }
+  .studio-data__ref { stroke: var(--_guide); stroke-width: 1; stroke-dasharray: 2 2; }
+  /* A guide's label on its line: plain label text with a halo in the card's colour (never a pill: a pill reads as a handle). */
+  .studio-data__halo { paint-order: stroke; stroke: var(--area-card-fill, var(--area-bg-surface)); stroke-width: 4px; stroke-linejoin: round; }
+  /* Stacked shapes are parted by a 1.5 line in the card's colour, not an edge. */
+  .studio-data__gapline { fill: none; stroke: var(--area-card-fill, var(--area-bg-surface)); stroke-width: 1.5; stroke-linejoin: round; }
+  .studio-data__hit { fill: transparent; }
+  /* In a plot: a row's name 13/18 in the text ink; a time or uptime in the value column, tabular; a label in the ink. */
+  .studio-data__text { fill: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-base-size); }
+  .studio-data__num { fill: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-base-size); font-variant-numeric: tabular-nums; }
+  .studio-data__num--muted { fill: var(--area-fg-muted); }
+  .studio-data__axis--ink { fill: var(--area-fg-default); }
+  .studio-data__muted { color: var(--area-fg-muted); }
+
+  /* Stat tiles: a row of four, fewer as the feed narrows (the feed's stat cards' least width); the change Badge and what it
+     is against, 8 apart. */
+  .studio-data-quad { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); /* pick: feed.css .studio-frames */ gap: var(--_canvas-gap); }
+  .studio-data__change { display: flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-4) var(--area-space-8); min-inline-size: 0; }
+
+  /* A legend name that hides its series: the legend's words, unstyled as a button; a hidden one fades. */
+  .studio-data__toggle { padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; border-radius: 2px; /* spec: a key's corner */ }
+  .studio-data__toggle[aria-pressed="false"] { opacity: 0.4; }
+  .studio-data__toggle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+
+  /* Data bars (Bars, Pace, Funnel): name 120 · an 8 strip in the trough (corner 2) · value 64, 12 apart, on a 28 row; rows 2
+     apart. The fill runs to its share, then what is projected, 2 after it in the lighter colour. A large bar: 24 (corner 4)
+     on a 32 row. */
+  /* In a card too narrow for both columns and a strip, the name gives way (cut with an ellipsis), never the strip's least 32. */
+  .studio-data__columns, .studio-data__bar { display: grid; grid-template-columns: minmax(0, 120px) minmax(32px, 1fr) 64px; /* spec: name and value columns */ column-gap: var(--area-space-12); }
+  .studio-data__bars { position: relative; display: grid; gap: 2px; /* spec: marks 2 apart */ min-inline-size: 0; }
+  .studio-data__bar { align-items: center; block-size: 28px; /* spec: list rows */ font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); min-inline-size: 0; }
+  .studio-data__bar-name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .studio-data__track { position: relative; block-size: 8px; border-radius: 2px; /* spec: a strip, 8 tall, corner 2 */ background: var(--area-bg-component); }
+  .studio-data__fill, .studio-data__projected { position: absolute; inset-block: 0; border-radius: inherit; }
+  .studio-data__fill { inset-inline-start: 0; inline-size: calc(var(--_r) * 100%); background: var(--_c); }
+  .studio-data__projected { inset-inline-start: calc(var(--_r) * 100% + 2px); inline-size: max(0px, calc(var(--_p) * 100% - 2px)); background: color-mix(in oklab, var(--_c) 40%, var(--area-card-fill, var(--area-bg-surface))); }
+  .studio-data__bar--lg { block-size: 32px; /* spec: a row mark's row */ }
+  .studio-data__bar--lg .studio-data__track { block-size: 24px; border-radius: 4px; /* spec: a row mark, 24 tall, corner 4 */ }
+  /* A guide across a bar or the bar list, 4 past the strip at each end. */
+  .studio-data__vguide, .studio-data__guides i { position: absolute; inline-size: 1px; background: repeating-linear-gradient(180deg, var(--_guide) 0 2px, transparent 2px 4px); pointer-events: none; }
+  .studio-data__vguide { inset-block: -4px; }
+  .studio-data__scale { block-size: 14px; /* spec: a label line */ margin-block-end: 2px; }
+  .studio-data__scale > span, .studio-data__guides > span, .studio-data__marks > span { position: relative; }
+  .studio-data__scale > span > span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+  .studio-data__guides { position: absolute; inset: 18px 0 0; /* spec: under the scale, 14 + 4 */ pointer-events: none; z-index: 1; }
+  .studio-data__guides i { inset-block: 0; }
+
+  /* Pace: the limit's label over the bar at its place, the bar, then its ends; 4 apart. */
+  .studio-data__pace { display: grid; gap: var(--area-space-4); min-inline-size: 0; }
+  .studio-data__marks { block-size: 14px; }
+  .studio-data__marks > span > span { position: absolute; white-space: nowrap; }
+  .studio-data__ends { display: flex; justify-content: space-between; gap: var(--area-space-8); white-space: nowrap; }
+
+  /* Funnel: the data bar, then its share of the step before (muted), 12 apart. */
+  .studio-data__step { display: grid; grid-template-columns: minmax(0, 1fr) 6ch; column-gap: var(--area-space-12); align-items: center; font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+
+  /* Language bar: an 8 strip of parts, 2 apart, corner 2. */
+  .studio-data__strip { display: flex; gap: 2px; /* spec: marks 2 apart */ block-size: 8px; }
+  .studio-data__strip > i { display: block; block-size: 100%; border-radius: 2px; /* spec: an 8 mark's corner */ }
+
+  /* Diffstat: the path (its end kept when cut), added, removed, five 8 blocks; 28 rows, 12 apart. */
+  .studio-data__diff { display: grid; grid-template-columns: minmax(0, 1fr) 5ch 5ch auto; column-gap: var(--area-space-12); align-items: center; block-size: 28px; /* spec: list rows */ font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+  .studio-data__path { font-family: var(--area-font-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: rtl; text-align: left; /* the path reads from its start; rtl only moves the cut to it */ }
+  .studio-data__blocks { display: inline-flex; gap: 2px; /* spec: marks 2 apart */ }
+  .studio-data__blocks > i { inline-size: var(--area-space-8); block-size: var(--area-space-8); border-radius: 2px; /* spec: an 8 mark's corner */ }

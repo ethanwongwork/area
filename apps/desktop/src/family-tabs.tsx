@@ -15,7 +15,7 @@
  */
 import { Fragment, type ReactNode } from "react";
 import { Badge, Code, CodeBlock, Kbd, Link, ScrollArea, SectionHeading, Table, TableCell, TableLink } from "@area/react";
-import { FEED_CODE, FEED_TABLE, FeedCount } from "./tile.tsx";
+import { FEED_CODE, FEED_TABLE, FeedCount, StatusBadge, type Status } from "./tile.tsx";
 import SOURCES from "virtual:component-sources";
 import { hrefOf } from "./places.ts";
 // @ts-expect-error — the documentation content is authored in JavaScript.
@@ -54,7 +54,7 @@ export interface FamilyInfo {
   imports?: string;
   manifest?: FamilyManifest;
   api?: string[][];
-  status: { label: string; tone: "success" | "caution" | "neutral" };
+  status: { label: string; status: Status };
   /** Each tile's specimen name and its demo's code, in tile order. */
   demos: Array<{ label: string; code?: string }>;
 }
@@ -338,7 +338,7 @@ export function DocumentationTab({ family, onOpenFamily, familyName }: {
           manifest ? ["Purpose", manifest.description] : null,
           job ? ["Job", <Inline text={job.split("\n\n")[0]!.replace(/\n/g, " ")} />] : null,
           exportsOf(family).length ? ["Import", <Code>{`import { ${exportsOf(family).join(", ")} } from "@area/react";`}</Code>] : null,
-          ["Status", <Badge size="sm" variant="soft" tone={family.status.tone}>{family.status.label}</Badge>],
+          ["Status", <StatusBadge size="sm" status={family.status.status}>{family.status.label}</StatusBadge>],
           facts.get("Peers") ? ["Related", <Inline text={facts.get("Peers")!} />] : null,
           spec ? ["Spec", <Link href={`${REPO}docs/specs/${family.slug}.md`} target="_blank" rel="noreferrer">{family.slug}.md</Link>] : null,
         ]} />

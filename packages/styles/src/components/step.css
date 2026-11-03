@@ -12,9 +12,11 @@
     grid-template-columns: minmax(0, 1fr);
     min-inline-size: 0;
     color: var(--area-fg-default);
-    /* The reply's own type: a step sits in a Message (peer). */
-    font-size: var(--area-text-lg-size);
-    line-height: var(--area-text-lg-leading);
+    /* The UI's type, under the reply's prose (owner, 2026-11-02: "do the trackers need to be smaller?"): an agent's work is
+       UI and its answer prose, as Cursor sets its tool cards 13 under a 14 reply, so every tracker (Step, Plan, Edit
+       summary, Approval, Turn notice) reads at text-base and the prose at text-lg. Was the reply's text-lg. */
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
   }
 
   /* The line. As a button it keeps the text's look: no plate, no edge; only the chevron answers the pointer (the
@@ -46,9 +48,14 @@
     justify-content: center;
     inline-size: var(--area-icon-sm);
     block-size: var(--area-icon-sm);
+    margin-inline-end: var(--area-space-2); /* 6 to the verb: spec Codex's activity row (tracker pass 2026-11-02; Cursor's 4 read cramped beside a 16 icon at 15) */
     color: var(--area-fg-muted);
   }
-  .area-step__verb { flex: none; }
+  /* The line is quieter than the prose it sits in (tracker pass 2026-11-02; docs/research/agent-turn-2026-11-02): the verb
+     in the quiet ink (Cursor's verb 74%), what it acted on muted (60%); open, the verb takes the default ink, as an open
+     Accordion's title does. The foreground stays fixed on hover. */
+  .area-step__verb { flex: none; color: var(--area-fg-quiet); }
+  .area-step[data-open] > .area-step__row > .area-step__verb { color: var(--area-fg-default); }
   .area-step__icon > svg { inline-size: 100%; block-size: 100%; }
   /* Chevrons draw the Glyph's 12 cut in the xs icon slot. */
   .area-step__chevron > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }

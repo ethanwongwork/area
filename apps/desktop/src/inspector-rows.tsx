@@ -169,14 +169,15 @@ function SettingBar({ value, onSet, label, readout, short, title, name, reset, .
   );
 }
 
-function BarRow({ bar, shown, readout, text, ch, name, onSet, ...field }: {
+/** The bar and its value field, as every Inspector bar draws them; Labs › Feed's type testers draw it too (type-kit.tsx). */
+export function BarRow({ bar, shown, readout, text, ch, name, onSet, ...field }: {
   bar: Omit<SliderProps, "readout">; shown: number; readout: (value: number) => ReactNode; text: (value: number) => string; ch: number; name?: string; onSet: (value: number) => void;
 } & Pick<SliderProps, "id" | "aria-labelledby" | "aria-describedby" | "disabled">) {
   const disabled = field.disabled || bar.disabled;
   return (
     <div className="studio-bar" style={{ ["--_value-ch" as string]: ch }}>
       <Slider labelPosition="inside" readout={false} {...bar} {...field} disabled={disabled} aria-valuetext={String(readout(shown))} />
-      <ValueField shown={shown} min={Number(bar.min ?? 0)} max={Number(bar.max ?? 100)} readout={text} name={name} size={bar.size} disabled={disabled} onSet={onSet} />
+      <ValueField shown={shown} min={Number(bar.min ?? 0)} max={Number(bar.max ?? 100)} step={Number(bar.step ?? 1)} readout={text} name={name} size={bar.size} disabled={disabled} onSet={onSet} />
     </div>
   );
 }
@@ -184,17 +185,18 @@ function BarRow({ bar, shown, readout, text, ch, name, onSet, ...field }: {
 /**
  * A bar's value as a field: it shows the readout, and a typed value lands on the step it names ("Flat", "Vivid") or, for a
  * number, the step whose readout's number is nearest ("12" on a percent bar, "cool 40"). Up and Down step; Escape keeps
- * the value. Every bar's readout is words over steps, so this is a text field, not NumberField.
+ * the value. Every bar's readout is words over steps, so this is a text field, not NumberField. A bar of fractional steps
+ * (a type tester's leading, 0.05 apart) types and arrows on its own steps.
  */
-function ValueField({ shown, min, max, readout, name, size = "sm", disabled, onSet }: {
-  shown: number; min: number; max: number; readout: (value: number) => ReactNode; name?: string; size?: SliderProps["size"]; disabled?: boolean; onSet: (value: number) => void;
+function ValueField({ shown, min, max, step = 1, readout, name, size = "sm", disabled, onSet }: {
+  shown: number; min: number; max: number; step?: number; readout: (value: number) => ReactNode; name?: string; size?: SliderProps["size"]; disabled?: boolean; onSet: (value: number) => void;
 }) {
+  const steps = Array.from({ length: Math.round((max - min) / step) + 1 }, (_, index) => Number((min + index * step).toFixed(6)));
   const [typed, setTyped] = useState<string | null>(null);
   const text = (at: number) => String(readout(at));
   const parse = (entry: string) => {
     const want = entry.trim().toLowerCase();
     if (!want) return null;
-    const steps = Array.from({ length: max - min + 1 }, (_, index) => min + index);
     const exact = steps.find(at => text(at).toLowerCase() === want);
     if (exact !== undefined) return exact;
     const number = (value: string) => { const match = /-?\d+(\.\d+)?/.exec(value); return match ? Number(match[0]) : null; };
@@ -215,7 +217,7 @@ function ValueField({ shown, min, max, readout, name, size = "sm", disabled, onS
         else if (event.key === "Escape" && typed !== null) { event.preventDefault(); setTyped(null); }
         else if (event.key === "ArrowUp" || event.key === "ArrowDown") {
           event.preventDefault(); setTyped(null);
-          const next = Math.min(max, Math.max(min, shown + (event.key === "ArrowUp" ? 1 : -1) * (event.shiftKey ? 10 : 1)));
+          const next = Number(Math.min(max, Math.max(min, shown + (event.key === "ArrowUp" ? 1 : -1) * (event.shiftKey ? 10 : 1) * step)).toFixed(6));
           if (next !== shown) onSet(next);
         }
       }} />

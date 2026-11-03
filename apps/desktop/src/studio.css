@@ -9,6 +9,7 @@
  *   option-marks.css    the marks in a setting's options (src/option-marks.tsx)
  *   chat.css            the Inspector's Chat
  *   examples.css, materials.css, abstract-board.css   the Testing and Materials screens
+ *   data.css            the data views (src/data-views.tsx)
  *   figures.css         the area-illustration skill's engine, copied in at build (Setup's product screen)
  */
 @layer studio;
@@ -25,6 +26,7 @@
 @import url("styles/choice-figures.css") layer(studio);
 @import url("styles/imagery.css") layer(studio);
 @import url("styles/feed.css") layer(studio);
+@import url("styles/data.css") layer(studio);
 @import url("styles/foundation.css") layer(studio);
 @import url("styles/chat.css") layer(studio);
 @import url("styles/settings.css") layer(studio);

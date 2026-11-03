@@ -18,6 +18,8 @@ test("the value is clamped and scaled to min and max; a ReactNode value text is 
   assert.match(html, /class="area-meter area-meter--danger"/);
   assert.match(html, /--_progress-value:100/);
   assert.doesNotMatch(render(h(Meter, { value: 5, valueText: null, "aria-label": "x" })), /area-meter__header/);
+  // 2026-11-02: a data measure takes the first data color.
+  assert.match(render(h(Meter, { value: 5, tone: "data", "aria-label": "x" })), /class="area-meter area-meter--data"/);
 });
 
 // Segments (owner 2026-10-30): a group named by the label, parts in fixed slots, empty parts kept in place but not drawn.

@@ -34,7 +34,8 @@
      blocks (the prose gap; a heading's space above, a list's lead-in), so these reset only their inline sides. Headings take the message's size, strong, as a narrow panel wants;
      lists indent 2em (Cursor's and Claude Code's 2em), items 4 apart; a quote is a 3px rule (Cursor's). */
   .studio-md__heading { margin-inline: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
-  .studio-md__list { margin-inline: 0; padding-inline-start: 2em; /* spec: Cursor, Claude Code 2em */ }
+  /* Lists take Message's own: markers on the text's edge in a 1.25em slot (message.css; owner, 2026-11-02, was 2em). */
+  .studio-md__list { margin-inline: 0; }
   .studio-md__list > li + li, .studio-md__list .studio-md__list { margin-block-start: var(--area-space-4); }
   .studio-md__quote { margin-inline: 0; padding-inline-start: var(--area-space-12); border-inline-start: 3px solid var(--area-border-subtle); /* spec: Cursor's 3px rule */ color: var(--area-fg-muted); }
   .studio-md__table { max-inline-size: 100%; overflow-x: auto; }

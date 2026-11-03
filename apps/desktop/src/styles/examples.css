@@ -58,13 +58,14 @@
 .ex-chart { display: block; inline-size: 100%; block-size: auto }
 .ex-chart__grid { stroke: var(--area-border-decorative); stroke-width: 1 }
 .ex-chart__label { fill: var(--area-fg-muted); font-size: 11px; font-family: var(--area-font-sans) }
-.ex-chart__area { fill: color-mix(in oklab, var(--area-selection-solid) 12%, transparent) }
-.ex-chart__line { fill: none; stroke: var(--area-selection-solid); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round }
+/* The chart's series is the first data colour (color/series.ts, 2026-11-01): its mark for the line, its fill under it. */
+.ex-chart__area { fill: var(--area-series-1-fill); fill-opacity: 0.5 }
+.ex-chart__line { fill: none; stroke: var(--area-series-1); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round }
 .ex-chart__prior { fill: none; stroke: var(--area-border); stroke-width: 1.5; stroke-dasharray: 4 4 }
-.ex-chart__dot { fill: var(--area-selection-solid); stroke: var(--area-bg-surface); stroke-width: 2 }
+.ex-chart__dot { fill: var(--area-series-1); stroke: var(--area-bg-surface); stroke-width: 2 }
 .ex-legend { display: flex; gap: var(--area-space-16); color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading) }
 .ex-legend > span { display: inline-flex; align-items: center; gap: var(--area-space-6, 6px) }
-.ex-legend > span::before { content: ""; inline-size: 14px; block-size: 2px; border-radius: 1px; background: var(--area-selection-solid) }
+.ex-legend > span::before { content: ""; inline-size: 14px; block-size: 2px; border-radius: 1px; background: var(--area-series-1) }
 .ex-legend__prior::before { background: var(--area-border) !important }
 
   /* --- Testing · Hairline (trial, content/examples/hairline.tsx) ------------------------------------------------------

@@ -9,7 +9,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
 import { ROLE_SCALES } from "../../../../packages/tokens/src/color/presets.ts";
-import { RAMP_STEPS, SERIES } from "../../../../packages/tokens/src/color/series.ts";
+import { SERIES } from "../../../../packages/tokens/src/color/series.ts";
 import { Code, ColorSwatch, CopyButton as AreaCopyButton, ListBox, EmptyState, PanelSection, Table, TableLink, Tooltip } from "@area/react";
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
@@ -55,7 +55,7 @@ function copyValue(format: CopyFormat, scale: string, item: ScaleStep) {
 }
 /* Where a step card's level sits: on the colour (the default) or under the card. */
 type LabelPlace = "inside" | "below";
-const LABEL_PLACES = [{ value: "inside", label: "On the colour" }, { value: "below", label: "Below the card" }] as const;
+const LABEL_PLACES = [{ value: "inside", label: "On the color" }, { value: "below", label: "Below the card" }] as const;
 /* A card's text: tinted from its own scale (tintedInk), or the black or white it carries. */
 type Ink = "tinted" | "mono";
 const INKS = [{ value: "tinted", label: "Tinted text" }, { value: "mono", label: "Black and white text" }] as const;
@@ -79,6 +79,13 @@ function rolesOf(scale: string): Array<{ role: string; when?: string }> {
   }
   return roles;
 }
+/**
+ * The series a family carries (owner, 2026-11-02: "ive also updated the color palette ... and brought in the series colors
+ * into the palettes themselves, can you update the color documentation"; PR #198): every series is a step of its family at
+ * the default Series lightness (Light, sky 350), so a family's Inspector names its series and a step's names the series it
+ * is. Deep moves every series one step darker along its family.
+ */
+const seriesOf = (scale: string) => SERIES.map((entry, index) => ({ ...entry, n: index + 1 })).filter(entry => entry.family === scale);
 function usedBy(scale: string, level: number) {
   const roles = rolesOf(scale);
   return SEMANTICS.flatMap(([name, entry]) => {
@@ -149,21 +156,20 @@ export function Sheet({ grid, value, onChoose, children }: { grid: boolean; valu
 /** A step's card. Its text is tinted from its own scale unless the page says otherwise (`ink`: a step of the scale to set it
  *  in, or "mono" for the black or white the step carries), so a card shown outside Colors (Labs › Feed, the Feed Kit) is
  *  tinted too (owner, 2026-11-02: "i thought the color cards would use tinted fg colors towards the color palette"). */
-export function ColorCard({ scale, item, ink: inkProp, copy, labelPlace = "inside" }: { scale: string; item: ScaleStep; ink?: ScaleStep | "mono"; copy: CopyFormat; labelPlace?: LabelPlace }) {
+export function ColorCard({ scale, item, ink: inkProp, copy, labelPlace = "inside", name }: { scale: string; item: ScaleStep; ink?: ScaleStep | "mono"; copy: CopyFormat; labelPlace?: LabelPlace; /** The head's words where the section does not name the scale (Series: "Sky 350"); the level by default. */ name?: string }) {
   const inside = labelPlace === "inside";
   const ink = inkProp === "mono" ? undefined : inkProp ?? tintedInk(SCALES.find(entry => entry.id === scale)?.steps ?? [], item);
-  const [r, g, b] = rgbOf(item.hex);
   const ratio = ink ? ratioOf(ink.hex, item.hex) : item.contrast.ratio;
   const inkName = ink ? `${title(scale)} ${ink.level}` : item.contrast.fg === "#ffffff" ? "white" : "black";
   return (
     // The card hugs its values (Asset card's hug); its level on the colour, or under the card as every other card's name
     // (Colors' Label option; owner, 2026-11-02: "would like to see the color cards with the color palette label below the
     // card rather than on the surface, just as an option").
-    <Tile span="unit" stage="flow" aspect="hug" paintLabel={labelPlace} option={`${scale}-${item.level}`}
+    <Tile span="unit" stage="flow" paintLabel={labelPlace} option={`${scale}-${item.level}`}
       aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${inkName} text ${ratio.toFixed(2)} to 1, ${grade(ratio)}`}
       // The ink paints its live step, as the card does, so a Neutral tint moves both together.
       paint={{ background: `var(--area-${scale}-${item.level})`, color: ink ? `var(--area-${scale}-${ink.level})` : item.contrast.fg }}
-      label={<span className="studio-swatch__level">{item.level}</span>}
+      label={<span className="studio-swatch__level">{name ?? item.level}</span>}
       // Copy, in the card's corner on the level's line and in the colour's own ink (Button onColor); it shows while the card
       // is under the pointer, focused or selected, and always where nothing hovers (styles/color.css).
       actions={
@@ -177,9 +183,12 @@ export function ColorCard({ scale, item, ink: inkProp, copy, labelPlace = "insid
         </span>
       }>
       <span className="studio-swatch__values">
-        <span>HEX {item.hex.toUpperCase()}</span>
-        <span>RGB {r} {g} {b}</span>
-        <span>OKLCH {oklchShort(item.oklch)}</span>
+        {/* The hex, then OKLCH a line a channel (owner, 2026-11-02: "maybe square AR is better, but maybe the width can be
+            much smaller ... its okay if the oklch values each have their own line"): "#F7F9FC", "L 0.981", "C 0.004",
+            "H 258.3". RGB, the copy formats and the contrast are the Inspector's. It was HEX, RGB and OKLCH, each named on
+            one line, on a card 23 characters wide. */}
+        <span>{item.hex.toUpperCase()}</span>
+        {oklchShort(item.oklch).split(" ").map((value, index) => <span key={index}>{"LCH"[index]} {value}</span>)}
       </span>
     </Tile>
   );
@@ -187,32 +196,16 @@ export function ColorCard({ scale, item, ink: inkProp, copy, labelPlace = "insid
 const title = (id: string) => id[0]!.toUpperCase() + id.slice(1);
 
 /**
- * The data colours (color/series.ts, 2026-11-01): each series as a card in its fill with its ink, the mark as a line and
- * the ramp under it. Painted from the live tokens, so Series lightness and light / dark show here.
+ * A colour that is not a scale's step (a role's, a series') as the step's card (owner, 2026-11-02: "for the other color
+ * cards maybe it makes more sense to have the name/text inside the card"): its name at the head and its values two lines
+ * under, in the colour's own ink, the card hugging its text, on the colour grid (styles/color.css). One colour card: a
+ * picture's name sits under its card because the picture is the content; a colour's sits on it because the colour is.
  */
-function SeriesSection() {
+export function SwatchCard({ name, color, ink, values, label }: { name: string; color: string; ink: string; values: readonly ReactNode[]; label?: string }) {
   return (
-    <CanvasSection id="scale-series" title="Series" count={SERIES.length}>
-      <TileGrid span="unit" className="studio-color-grid">
-        {SERIES.map(({ name, family, step }, i) => {
-          const n = i + 1;
-          return (
-            <Tile key={name} span="unit" stage="flow" label={<span className="studio-swatch__level">{n} {title(name)}</span>}
-              aria-label={`Series ${n}, ${name}: --area-series-${n}`}
-              paint={{ background: `var(--area-series-${n}-fill)`, color: `var(--area-series-${n}-ink)` }}>
-              <span className="studio-swatch__values">
-                <span>--area-series-{n}</span>
-                <span>{family} {step}</span>
-                <span className="studio-series__mark" style={{ background: `var(--area-series-${n})` }} aria-hidden="true" />
-                <span className="studio-series__ramp" aria-hidden="true">
-                  {Array.from({ length: RAMP_STEPS }, (_, step) => <i key={step} style={{ background: `var(--area-series-${n}-ramp-${step + 1})` }} />)}
-                </span>
-              </span>
-            </Tile>
-          );
-        })}
-      </TileGrid>
-    </CanvasSection>
+    <Tile span="unit" stage="flow" inert label={<span className="studio-swatch__level">{name}</span>} aria-label={label ?? name} paint={{ background: color, color: ink }}>
+      <span className="studio-swatch__values">{values.map((value, index) => <span key={index}>{value}</span>)}</span>
+    </Tile>
   );
 }
 
@@ -325,7 +318,6 @@ export function ColorPage() {
             );
           })}
         </Sheet>
-        {view || contrast !== "all" ? null : <SeriesSection />}
       </div>) : <EmptyState title="No scales" description={`Nothing matches “${query}”.`} />}
       inspector={{
         // The page edits what it shows (owner's pick, 2026-10-31: "each subject page edits its settings"): every colour
@@ -338,6 +330,7 @@ export function ColorPage() {
               <Facts label="Scale" items={[
                 ["Steps", `${view.steps.length}, ${view.steps[0]!.level} to ${view.steps.at(-1)!.level}`],
                 ["Roles", rolesOf(view.id).length ? rolesOf(view.id).map(item => `${roleLabel(item.role)}${item.when ? ` (when ${item.when})` : ""}`).join(", ") : "None by default"],
+                seriesOf(view.id).length ? ["Series", seriesOf(view.id).map(entry => `${entry.n} ${title(entry.name)} at ${entry.step}`).join(", ")] : null,
                 view.description ? ["About", view.description] : null,
               ]} />
             </PanelSection>
@@ -348,6 +341,7 @@ export function ColorPage() {
                 ["Neutrals", SCALES.filter(entry => NEUTRALS.has(entry.id)).map(entry => title(entry.id)).join(", ")],
                 ["Hues", SCALES.filter(entry => !NEUTRALS.has(entry.id)).length],
                 ["Steps", `${SCALES[0]!.steps.length} a scale`],
+                ["Series", SERIES.map(entry => `${title(entry.family)} ${entry.step}`).join(", ")],
                 ["Defaults", `Neutral: ${title(defaultPreset("neutral"))}, Accent: ${title(defaultPreset("accent"))}`],
               ]} />
             </PanelSection>
@@ -391,7 +385,10 @@ function StepCode({ scale, step, token }: { scale: string; step: ScaleStep; toke
     <span className="studio-used-by">
       {uses.map(use => <span key={use.name}><Code>{use.name}</Code> <span className="studio-muted">{use.modes}{use.when ? `, when ${use.when}` : ""}</span></span>)}
     </span>
-  ) : <span className="studio-muted">No semantic token</span>;
+  ) : null;
+  // The series this step is, at the default Series lightness (Light).
+  const series = seriesOf(scale).filter(entry => entry.step === step.level);
+  const usedOrSeries: ReactNode = used ?? (series.length ? null : <span className="studio-muted">No semantic token</span>);
   return (
     <>
       <Selection>
@@ -402,7 +399,8 @@ function StepCode({ scale, step, token }: { scale: string; step: ScaleStep; toke
       <PanelSection heading="Token">
         <Facts label="Token" items={[
           ["Token", <Code>{token}</Code>],
-          ["Used by", used],
+          usedOrSeries ? ["Used by", usedOrSeries] : null,
+          series.length ? ["Series", <span className="studio-used-by">{series.map(entry => <span key={entry.n}><Code>--area-series-{entry.n}</Code> <span className="studio-muted">{title(entry.name)}, at Light</span></span>)}</span>] : null,
         ]} />
       </PanelSection>
     </>

@@ -50,7 +50,7 @@ let body = snap.body.replace(/<img([^>]*?)data-kit-art="(\d+)"([^>]*)>/g, (_, a,
 body = body.replace(/\sloading="lazy"/g, "");
 
 const groups = [
-  ["Text", "feed-lede"], ["Type", "feed-tester"], ["Colour", "feed-colors"], ["Foundations", "feed-scale"], ["Icons", "feed-glyphs"],
+  ["Chat", "feed-chat"], ["Text", "feed-prose"], ["Type", "feed-tester"], ["Color", "feed-colors"], ["Foundations", "feed-scale"], ["Icons", "feed-glyphs"],
   ["Components", "feed-specimens"], ["Designs", "feed-screens"], ["Images", "feed-collections"], ["Data", "feed-table"],
   ["Code and settings", "feed-code"], ["Activity", "feed-timeline"],
 ];
@@ -163,13 +163,27 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
     const sample = tester.querySelector(".studio-tester__sample");
     tester.querySelectorAll(".studio-tester__control[data-tt]").forEach(control => {
       const name = control.dataset.tt, range = control.querySelector("input[type=range]");
+      const field = control.querySelector("input:not([type=range])");
+      // A typed value lands on the bar's nearest step, as the app's field does.
+      if (range && field) {
+        const commit = () => {
+          const number = Number((field.value.match(/-?\d+(\.\d+)?/) || [])[0]);
+          if (Number.isFinite(number)) { range.value = String(Math.min(Number(range.max), Math.max(Number(range.min), number))); }
+          range.dispatchEvent(new Event("input"));
+        };
+        field.addEventListener("change", commit);
+        field.addEventListener("keydown", event => { if (event.key === "Enter") { event.preventDefault(); commit(); field.select(); } });
+      }
       if (range && PROPERTY[name]) range.addEventListener("input", () => {
         const value = Number(range.value), min = Number(range.min), max = Number(range.max), ratio = (value - min) / (max - min);
         const bar = range.closest(".area-slider");
         bar.style.setProperty("--_pct", ratio * 100 + "%");
         bar.style.setProperty("--_slider-ratio", String(ratio));
         const shown = bar.querySelector(".area-slider__value");
-        if (shown) shown.textContent = value.toFixed(Number(control.dataset.places || 0)) + (control.dataset.unit || "");
+        const text = value.toFixed(Number(control.dataset.places || 0)) + (control.dataset.unit || "");
+        if (shown) shown.textContent = text;
+        // The Inspector's value field beside the bar (inspector-rows.tsx BarRow) shows the same.
+        if (field && document.activeElement !== field) field.value = text;
         const [property, css] = PROPERTY[name](value);
         sample.style.setProperty(property, css);
       });

@@ -18,8 +18,11 @@
  *                  indicators or controls"; "the text is just the design and the only thing in the card").
  */
 import { useState, type CSSProperties, type ReactNode } from "react";
-import { Badge, Card, Select, Slider, Table, TableCell, TableHeaderCell, Toolbar, ToolbarGroup, ToolbarItem, ToolbarSeparator } from "@area/react";
+import { Badge, Card, Select, Table, TableCell, TableHeaderCell, Toolbar, ToolbarGroup, ToolbarItem } from "@area/react";
 import { feedScale } from "./app-scale.ts";
+import { BarRow } from "./inspector-rows.tsx";
+/** The Inspector's one field width (inspector-rows.tsx FIELD_CH): "72px", "1.00", "120%" all fit. */
+const FIELD_CH = 5;
 import { FEED_FRAME, FEED_TABLE, GALLERY_LOOK, Tile } from "./tile.tsx";
 import { factsOf, stackOf, typefaceOf, type FaceFacts, type Typeface } from "./pages/typefaces.tsx";
 
@@ -76,13 +79,13 @@ export function stylesOf(facts: FaceFacts | undefined): FaceStyle[] {
 /**
  * A face's badges, two at most (owner, 2026-11-02: "what other badges besides variable can typefaces have"): what its files
  * are, Variable or Static, in the neutral tone, as a fact; and how Area may use it only where that asks something of you,
- * in a tone: Licensed (info: publishing needs the foundry's licence) and Not installed (caution: Area cannot draw it
+ * in a tone: Licensed (info: publishing needs the foundry's licence) and Not installed (warning, orange: Area cannot draw it
  * until it is). An open face says nothing (most are; Built in was every card's), nor does a file format (Area serves
  * woff2 and reads whatever the Mac has, so it never changes what you can do).
  */
-export function badgesOf(face: Typeface, facts: FaceFacts | undefined): Array<{ label: string; tone: "neutral" | "info" | "caution" }> {
+export function badgesOf(face: Typeface, facts: FaceFacts | undefined): Array<{ label: string; tone: "neutral" | "info" | "warning" }> {
   const kind = facts ? [{ label: facts.axes.some(axis => axis.tag === "wght") ? "Variable" : "Static", tone: "neutral" as const }] : [];
-  const missing = !facts && !face.source.system ? [{ label: "Not installed", tone: "caution" as const }] : [];
+  const missing = !facts && !face.source.system ? [{ label: "Not installed", tone: "warning" as const }] : [];
   const licensed = face.tier === "licensed" || face.tier === "own-copy" ? [{ label: "Licensed", tone: "info" as const }] : [];
   return [...kind, ...missing, ...licensed].slice(0, 2);
 }
@@ -90,27 +93,45 @@ export function badgesOf(face: Typeface, facts: FaceFacts | undefined): Array<{ 
 /** The faces a tester offers: Area's own, then serifs and a display face from the library, each shipped with Area. */
 export const TESTER_FACES = ["geist", "inter", "fraunces", "newsreader", "cormorant", "playfair", "space-grotesk", "geist-mono"] as const;
 
-/* Pangrams with the punctuation a face has to draw as well as its letters (owner, 2026-11-02: "is there a pangram that uses
-   some other glyphs, like commas, &? !"; it was "Hamburgefonstiv", the type designer's spacing word, for a day): every letter
-   in each line, and between them commas, a colon, an ampersand, a question and an exclamation mark, quotes, a dash and the
-   figures. */
-export const TYPE_SAMPLE = "Sphinx of black quartz, judge my vow.";
+/* One sample line, a pangram, everywhere a line of type is shown (owner, 2026-11-02: "i like The five boxing wizards jumped
+   quickly"): the display line, a heading, the ramp and style tables, a role's card. Every letter, a capital and a full stop.
+   Paragraphs are prose, not stacked pangrams ("use some other placeholder copy for paragraphs"), and abstract, a quiet
+   scene with no subject of its own, so a reader looks at the type, not the argument ("more generic and/or abstract or niche
+   literature, no m dashes"): commas, a colon, a question, quotes and a figure, never an em dash. They were "Quick zephyrs
+   blow, vexing daft Jim!", "Sphinx of black quartz, judge my vow." and four pangrams run together, for a day;
+   "Hamburgefonstiv" before. */
+export const TYPE_SAMPLE = "The five boxing wizards jumped quickly.";
+export const TYPE_PARAGRAPH = "A quiet room at the edge of the morning, where the light comes in sideways and settles on the table. Nothing much happens here, and that is the point: the pages turn, the tea goes cold, and at 6:40 a clock somewhere agrees with itself. Who keeps the hours when no one is “counting” them?";
+/** A paragraph card's excerpt: the paragraph's first clause, short enough that it fits whole in a 16:9 card at its 18 at the
+ *  cards' least width (owner, 2026-11-02: "make sure the paragraph isnt too long so it actually fits in the card without the
+ *  text being cutoff"); the card clipped the full paragraph after its sixth line. */
+export const TYPE_EXCERPT = "A quiet room at the edge of the morning, where the light comes in sideways.";
+/** The samples the pages used before, so a saved sample that is still one of them takes today's. */
+const RETIRED_SAMPLES = new Set(["Sphinx of black quartz, judge my vow.", "Quick zephyrs blow, vexing daft Jim!", "Hamburgefonstiv"]);
+/** A page's saved sample line, today's when the saved one was a retired default. */
+export const savedSample = (stored: string) => (RETIRED_SAMPLES.has(stored) ? TYPE_SAMPLE : stored);
 const TESTER_TEXT = {
-  display: "Quick zephyrs blow, vexing daft Jim!",
+  display: TYPE_SAMPLE,
   heading: TYPE_SAMPLE,
-  body: "Jackdaws love my big sphinx of quartz & how vexingly quick daft zebras jump! Why pack my box with five dozen liquor jugs? “Waltz, bad nymph, for quick jigs vex” — 1234567890.",
+  body: TYPE_PARAGRAPH,
 };
 
-/** One bar in a tester's toolbar: the toolbar's divider, then Area's Slider with its label and value either side of the rail
- *  (Pangram's pill ranges). The slider keeps its own arrow keys, so it is not one of the toolbar's roving items. */
+/** One bar in a tester's toolbar: its name, then the Inspector's bar and value field (inspector-rows.tsx
+ *  BarRow; owner, 2026-11-02: "make these sliders use the same sliders + input on the side that the inspector in area uses"):
+ *  the label-inside bar without its text and a 5-character field that takes a typed value. They were Slider's own label and
+ *  readout either side of the rail (Pangram's pill ranges). The bar keeps its own arrow keys, so it is not one of the
+ *  toolbar's roving items. */
 function Control({ name, label, min, max, step, value, unit = "", places = 0, hidden, onChange }: {
   name: string; label: string; min: number; max: number; step: number; value: number; unit?: string; places?: number; hidden?: boolean; onChange: (value: number) => void;
 }) {
+  const show = (at: number) => `${at.toFixed(places)}${unit}`;
+  // No divider before it (owner, 2026-11-02: "remove the dividers here, just use gaps, the dividers are barely visible
+  // anyway"): a group's room before it parts it from the last (typography.css).
   return (
     <span className="studio-tester__control studio-tester__control--bar" data-tt={name} data-unit={unit} data-places={places} hidden={hidden}>
-      <ToolbarSeparator />
-      <Slider size="sm" label={label} min={min} max={max} step={step} value={value}
-        readout={(shown: number) => `${shown.toFixed(places)}${unit}`} onValueChange={next => onChange(next)} />
+      <span className="studio-tester__label" aria-hidden="true">{label}</span>
+      <BarRow bar={{ size: "sm", min, max, step, value, stepMarks: false, onValueChange: onChange, "aria-label": label }} shown={value}
+        readout={show} text={show} ch={FIELD_CH} name={label} onSet={onChange} />
     </span>
   );
 }
@@ -184,7 +205,7 @@ function Tester({ faces, defaultFace, stack, kind, size: startSize, weight: star
           {bars.includes("leading") ? <Control name="leading" label="Leading" min={0.8} max={2} step={0.05} value={leading} places={2} onChange={setLeading} /> : null}
           {bars.includes("tracking") ? <Control name="tracking" label="Spacing" min={-5} max={10} step={0.5} value={tracking} places={1} onChange={setTracking} /> : null}
           {/* Only a face with a width axis draws a width (Playfair among these); the bar is there, hidden, for the rest. */}
-          {bars.includes("width") ? <Control name="width" label="Width" min={wdth?.min ?? 75} max={wdth?.max ?? 125} step={0.5} value={width} unit="%" places={1} hidden={!wdth} onChange={setWidth} /> : null}
+          {bars.includes("width") ? <Control name="width" label="Width" min={wdth?.min ?? 75} max={wdth?.max ?? 125} step={1} value={width} unit="%" hidden={!wdth} onChange={setWidth} /> : null}
         </span>
       </Toolbar>
       </div>
@@ -220,10 +241,10 @@ export function TypefaceCard({ face, facts, sample = "glyphs", option, onOpen }:
   return (
     <Tile container="asset" look={GALLERY_LOOK} aspect="hug" span="wide" stage="flow" inert={option === undefined} option={option}
       label={face.name} aria-label={[face.name, face.foundry, ...badges.map(badge => badge.label)].join(", ")} onOpen={onOpen}
-      actions={badges.length ? <>{badges.map(badge => <Badge key={badge.label} size="sm" variant="soft" tone={badge.tone} className="gallery-tile__badge">{badge.label}</Badge>)}</> : undefined}>
+      actions={badges.length ? <>{badges.map(badge => <Badge key={badge.label} variant="soft" tone={badge.tone} className="gallery-tile__badge">{badge.label}</Badge>)}</> : undefined}>
       <span className="studio-type-card" data-sample={sample} aria-hidden="true">
         <span className={`studio-type-card__sample${drawn ? "" : " studio-muted"}`} style={{ fontFamily: drawn ? stackOf(face, facts) : undefined }}>
-          {sample === "glyphs" ? "Aa" : TESTER_TEXT.heading}
+          {sample === "glyphs" ? "Aa" : TYPE_EXCERPT}
         </span>
       </span>
     </Tile>

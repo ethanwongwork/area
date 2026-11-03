@@ -82,7 +82,7 @@ area-plan                 the agent card: card edge at stroke-width, container c
 | pending | muted ink, a 1px ring on the control hover edge | cursor quaternary; codex □; peer: Checkbox's rest edge | the control edge vanished on the Plan's subtle fill (L 0.913 on 0.976, browser check 2026-10-19) |
 | done | muted ink, struck through; the 12 ring and Checkbox's tick (1.25 line) in the muted ink; with meta (a phase), not struck | cursor done struck, `check-circle`; codex ✔; the references' phases (a check and "Completed") | owner 2026-10-25: a strike on a phase reads as removed; one mark silhouette (was a bare check glyph) |
 | cancelled | muted ink, struck through, the ring and a cross; with meta, not struck | cursor cancelled todos, `x-circle` | round 49; owner 2026-10-25 |
-| steps box | from the item's text column to the item row's edge; recessed (bg-subtle), radius-list, padding 4 0; 8 under the item's line, 4 extra below; rows 2 shorter each side, muted unless current | the agent panel reference (box on the label column, results 30 apart under steps 38, ~8 padding) | owner 2026-10-25: containers back "as long as the padding, alignment and visual balance is right" |
+| steps box | from the item's text column to the item row's edge; recessed (bg-subtle), radius-list, padding 4 0; 8 under the item's line, taking the item's end padding and the last step's 2 below (a negative margin; 2026-11-02, was 4 extra); rows 2 shorter each side, muted unless current | the agent panel reference (box on the label column, results 30 apart under steps 38, ~8 padding) | owner 2026-10-25: containers back "as long as the padding, alignment and visual balance is right" |
 | tracker room | with a bar or a rail: the agent card column (12 in, 13 from the outer edge, as the plain tray), head 8 taller (title 14 from the top), bar 12 under the title's line and 12 above the bottom, rail rows 4 apart | Claude's Context panel (8 text to bar); the agent chat's card column | owner 2026-10-25: "the padding/margins for the timeline and also the gap between the text and the indicators looks too small" (measured 12 / 7 / 6 / 12, unbalanced); owner 2026-10-28, chat set review: the column back to 12 ("move them to 13 anyway"), so the boxes in a chat start their text on one edge (it was Card's 16) |
 | bar | padding 6 column column folded, 6 column 8 open (the first item 1.1 rows under it); Progress sm (4) segments 2 apart, the selection fill on the track; no rule under it | cursor-bar 4 / 2; primer 2 apart | one bar per plan; Progress is the peer, so the segments are Progress |
 | ring | the pending ring (icon-sm − 4) in the selection fill, a conic pie inside it (icon-sm − 8) to the item's share | linear (ring + inner pie) | the mark and its segment read as one value, in one fill |
@@ -299,3 +299,12 @@ chevron moves out with it (its 12 column was the cause). Queue's head shares the
 - **Why:** the cross's rule was one class lighter than the rule that draws the tick for done and cancelled items, so
   the tick won and a cancelled item looked done (only its hidden "Cancelled" text told them apart).
 - **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.
+
+- 2026-11-02 · trackers review (owner: "the trackers dont look right, the type ramp looks wrong, the alignment looks off
+  … also delete the agent icon … do the trackers need to be smaller?").
+  - **What changed:** the steps box takes its item's end padding instead of adding 4 below it and its last step's 2, so the steps sit 16 from their item and from the next, as items sit 16 apart (were 16 and 22). The Plan stays at text-base: a same-day trial at the
+    reply's text-lg (15/22, items as plain lines) was reverted. The Feed kit's Plan drops its glyph and its hand-written
+    count ("3 of 5" over three segments; now the Plan's own "1 of 3").
+  - **Why:** the trackers are UI under the reply's prose, so they share one size (Step, Edit summary, Approval, Turn
+    notice at text-base too). At Layer contrast 0 the box is flat, and its extra 4 left a hole under the steps (25 against
+    20 above).

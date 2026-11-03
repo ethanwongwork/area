@@ -24,7 +24,7 @@
  * while the rows scroll; on a narrow Canvas it sits above them.
  */
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import { Badge, Button, Input, Nav, NavGroup, NavItem, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading } from "@area/react";
+import { Button, Input, Nav, NavGroup, NavItem, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading } from "@area/react";
 import { ArrowLeftIcon, ContrastIcon, PaletteIcon, SettingsIcon } from "@area/icons";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, SETTING_GROUPS } from "@area/tokens/config";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
@@ -43,6 +43,7 @@ import { useBrandSheet } from "../brand.ts";
 import { PublishDialog } from "../publish.tsx";
 import { brandStyle } from "../brand.ts";
 import { inMode } from "./theme-settings.ts";
+import { StatusBadge } from "../tile.tsx";
 
 export type SettingsSection = "general" | "appearance" | "theme";
 // Cursor's icons for the same sections (its settings nav, read from the bundle 2026-10-30): General the gear, Appearance
@@ -155,8 +156,8 @@ function ThemeTitle() {
       {editable ? (
         <div className="studio-settings__actions">
           {changes.length
-            ? <Badge size="sm" variant="soft" tone="warning">{changes.length} unpublished {changes.length === 1 ? "change" : "changes"}</Badge>
-            : <Badge size="sm" variant="soft" tone="success">Live</Badge>}
+            ? <StatusBadge size="sm" status="draft">{changes.length} {changes.length === 1 ? "change" : "changes"}</StatusBadge>
+            : <StatusBadge size="sm" status="published">Live</StatusBadge>}
           <Button size="sm" disabled={!changes.length} onClick={() => setPublishing(true)}>Publish</Button>
         </div>
       ) : null}

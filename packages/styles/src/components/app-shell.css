@@ -113,11 +113,15 @@
   }
 
   .area-section-heading { display: grid; gap: var(--area-space-8); min-inline-size: 0; }
+  /* A section's title is the ramp's settings and surface title, title-xs (16/22 at type 13; Cursor's settings and
+     surface titles, docs/specs/typography.md), strong (owner, 2026-11-02: "is the size of each section title correct?").
+     It was the UI's 13/18, which put it under the Cards it heads (their title-xs 16) and under a reply's headings. */
   .area-section-heading__title {
     margin: 0;
     color: var(--area-fg-default);
-    font-size: var(--area-text-base-size);
-    line-height: var(--area-text-base-leading);
+    font-size: var(--area-title-xs-size);
+    line-height: var(--area-title-xs-leading);
+    letter-spacing: var(--area-title-xs-tracking);
     font-weight: var(--area-weight-strong);
     text-box: trim-both cap alphabetic;
   }
@@ -130,7 +134,7 @@
     margin: 0;
     /* The title's prose line less the lede's cap: 11 at type 13. Its own 12/18 line put it 9 under, the join of two UI
        lines, which read as no gap. */
-    margin-block-start: calc(round(nearest, calc(var(--area-text-base-prose-leading) - 1cap), 1px) - var(--area-space-8));
+    margin-block-start: calc(round(nearest, calc(var(--area-title-xs-leading) - 1cap), 1px) - var(--area-space-8));
     color: var(--area-fg-muted);
     font-size: var(--area-text-sm-size);
     line-height: var(--area-text-sm-prose-leading);
