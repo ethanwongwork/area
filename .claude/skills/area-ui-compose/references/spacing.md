@@ -25,7 +25,7 @@ Values are Default / Compact (the app runs Compact). Tokens are in `packages/tok
 Prose (text past two lines: a chat turn, documentation) runs on its own ladder, set out in `docs/DESIGN_SYSTEM.md` ›
 Size and shape › Prose lines and Text that flows (owner, 2026-10-30; Message and the app's chat use it):
 
-| Role (prose) | Separates | At 15/24 (`text-md`, type 13) | At 13/20 (`text-sm`) | Token |
+| Role (prose) | Separates | At 15/24 (`text-lg`, type 13) | At 13/20 (`text-base`) | Token |
 |---|---|---|---|---|
 | Line | lines of one paragraph | 24 | 20 | `text-*-prose-leading` |
 | List item | items of one list | 4 | 4 | `space-4` |

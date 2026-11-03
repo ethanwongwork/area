@@ -74,7 +74,7 @@
     font-weight: var(--area-weight-strong);
   }
   /* spec: Untitled UI 12/18; Area's caption, 12/16. */
-  .area-file-upload__hint { margin: 0; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .area-file-upload__hint { margin: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
   /* An invalid zone's line says why, in the field's error ink, as Field's error message (round 83: it stayed muted,
      a hint beside a red edge). */
   .area-file-upload[data-invalid] .area-file-upload__hint { color: var(--area-field-error-color); }

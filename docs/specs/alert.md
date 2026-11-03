@@ -71,7 +71,7 @@ area   div.area-alert[role=status|alert]  grid "icon content actions dismiss"; o
 ```
 
 Font and gap come from `inset.css:199-203` (`ui-size`/`ui-leading` 14/20, gap 8); the
-dead `text-md` and `space-10` declarations were removed from `surface.css`.
+dead `text-lg` and `space-10` declarations were removed from `surface.css`.
 
 Inset equations (single line, measured in `area--dismissible--rest--light`):
 - block: 1 border + 8 padding + (28 − 20) / 2 = 13 to the text; shell 28 + 16 + 2 = 46

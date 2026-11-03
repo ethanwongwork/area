@@ -33,8 +33,8 @@
 | Titlebar gap / end gap | the cluster space, `ui-cluster` (8, compact 6), box to box; a Nav keeps its own 4 | log 2026-10-16 (round 27); Cursor's 8 between groups, ChatGPT's 8 |
 | Titlebar rule, ground | `ruled`: the Surface width (`border-width`, none at Borderless) in `border-decorative`; `bg-page` | the app's bar; log 2026-10-16 (round 28) |
 | Titlebar `floating` | Toolbar surface's paint (`bg-surface`, `shadow-edge`, `border-float` inset edge, `shadow-float`); controls one cluster space in on every side; the plate one cluster space off the window's top and sides; corner `radius-control-sm` + that inset, concentric; macOS: starts one cluster space after the lights (67) | log 2026-10-16 (round 28); Toolbar surface |
-| Section title | `text-sm` at `weight-strong`, trimmed cap / alphabetic | the app's section titles |
-| Section lede | `text-sm`, `fg-muted`, 64ch, trimmed; 8 under the title | the app |
+| Section title | `text-base` at `weight-strong`, trimmed cap / alphabetic | the app's section titles |
+| Section lede | `text-base`, `fg-muted`, 64ch, trimmed; 8 under the title | the app |
 
 ## Adoption
 

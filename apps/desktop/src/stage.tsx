@@ -11,6 +11,7 @@
  * width). The width shows in the head while it differs from the full width. How the Stage is viewed
  * (zoom, replay) is the Canvas bar's; what it renders is the Inspector's.
  */
+import { FEED_CODE } from "./tile.tsx";
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
 import { Button, CodeBlock, Field, Input, PanelSection, Segmented, Select, Switch } from "@area/react";
 // @ts-expect-error — the highlighter is authored in JavaScript.
@@ -97,9 +98,10 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
         onPointerDown={drag} onKeyDown={keys} onDoubleClick={() => setWidth(null)} />
     </div>
     {code ? (
-      // Keyed by the code, so a long snippet starts as its excerpt each time the Stage changes.
+      // Keyed by the code, so a long snippet starts as its excerpt each time the Stage changes. The feed's code block
+      // (FEED_CODE: the frame inset, corner and fill), so its text starts on the Stage's label edge (owner, 2026-11-02).
       <CodeBlock key={code} lineNumbers={false} language="tsx"
-        html={highlight(code)} collapsible={lines > EXCERPT} defaultCollapsed={lines > EXCERPT} {...feedScale()} />
+        html={highlight(code)} collapsible={lines > EXCERPT} defaultCollapsed={lines > EXCERPT} {...FEED_CODE} {...feedScale()} />
     ) : null}
     </div>
   );

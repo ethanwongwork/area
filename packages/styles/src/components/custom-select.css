@@ -240,8 +240,8 @@
     min-inline-size: 0;
     overflow: hidden;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
     text-overflow: ellipsis;
     white-space: nowrap;
   }

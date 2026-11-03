@@ -24,7 +24,7 @@ order.
 
 | Slot | Area | Basis |
 |---|---|---|
-| card | the agent card: Code block's frame, text-sm, one-row head with no rule under it (2026-10-25), Menu rows | Plan, Edit summary (peers); Cursor tray rows 13/18, radius 6 |
+| card | the agent card: Code block's frame, text-base, one-row head with no rule under it (2026-10-25), Menu rows | Plan, Edit summary (peers); Cursor tray rows 13/18, radius 6 |
 | rows | an `ol` with Menu's list padding 4 and ui-row-gap between rows; each row ui-row tall, row inset, row corner, Menu's row gap (gap-row: 12, compact 8); the row plate on hover and focus | Menu (peer) |
 | sending | the text at 60% opacity (`--_sending-opacity`), a Spinner sm in the 16 slot | Codex sending opacity-60 |
 | chevron | closed points along the reading direction (−90°, +90° in RTL), down when open, turns on `fast`; Accordion's hover plate | Plan (peer) |

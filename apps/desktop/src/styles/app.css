@@ -236,8 +236,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
   }
   /* The dividers: one hairline on each panel's inner edge. */
   /* The dividers between the panels are the Panels' own seams (a flush, resizable Panel keeps the
@@ -334,7 +334,16 @@
      blocks were the page's white inside a darker block edge and Settings' rows white inside a lighter one; tables, code and
      cards now share the cards' stroke (CARD_SCOPE's Stroke 2 on the frame, FEED_TABLE, FEED_CODE), and their row rules
      stay lighter than the frame. */
-  .studio-table { --area-table-edge: var(--_frame-inset); --area-table-corner: var(--_tile-radius); --area-table-fill: var(--area-bg-stripe); }
+  /* A feed table's header is a step under its rows in both modes (owner, 2026-11-01: "i would prefer if the top part of the
+     table was gray and the cells were white. or that the top part was always darker than the cells below"): in light the
+     rows are the page's white and the header the control grey; in dark the rows are the tile grey and the header the
+     page's near-black. Its rows were the tile fill under a white header (the subtle ground is white at Layers 0). */
+  .studio-table {
+    --area-table-edge: var(--_frame-inset);
+    --area-table-corner: var(--_tile-radius);
+    --area-table-fill: light-dark(var(--area-bg-page), var(--area-bg-stripe)); /* spec */
+    --area-table-head-fill: light-dark(var(--area-bg-component), var(--area-bg-page)); /* spec */
+  }
   .studio-code { --area-code-block-inset: var(--_frame-inset); --area-code-block-corner: var(--_tile-radius); --area-code-block-fill: var(--area-bg-stripe); }
   /* The Inspector's view (src/studio.tsx, InspectorPanel): a view that opens on a section heading puts that heading on the
      line the Sidebar's first row and the Canvas bar's controls share (owner pick q-line, 2026-10-31; it sat 5 under it at
@@ -378,8 +387,8 @@
   .studio-inspector-note {
     margin: 0;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
   }
   .studio-muted { color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
   /* A literal in a facts value (a class name, its modifiers): the code face at the Inspector wells' 12, on the row's
@@ -389,6 +398,6 @@
   /* A page's opening sentence (a family's purpose): a subtitle, as a section's (the feed's one size, 13/18, muted), at a
      reading measure, trimmed to cap and baseline so
      the Canvas's margin and the 24 to the tabs measure to its ink. */
-  .studio-lede { margin: 0 0 var(--area-space-24) var(--_text-inset); max-inline-size: 80ch; /* pick: the docs' measure */ color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
+  .studio-lede { margin: 0 0 var(--area-space-24) var(--_text-inset); max-inline-size: 80ch; /* pick: the docs' measure */ color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); text-box: trim-both cap alphabetic; }
   .studio-tabular { font-variant-numeric: tabular-nums; }
   .studio-prop { display: block; }

@@ -22,16 +22,16 @@ import {
 } from "@area/icons";
 
 /* Thirty days of active users (thousands), for the chart. */
-const DAILY = [18.2, 18.9, 19.4, 18.7, 17.1, 16.4, 19.8, 20.6, 21.1, 20.4, 21.9, 19.3, 18.8, 22.4, 23.1, 22.7, 23.8, 24.6, 21.9, 20.8, 24.9, 25.7, 26.2, 25.1, 26.8, 23.7, 22.9, 27.1, 27.9, 28.4];
-const PRIOR = [16.1, 16.4, 16.9, 16.2, 15.0, 14.6, 17.1, 17.8, 18.0, 17.6, 18.4, 16.8, 16.2, 18.9, 19.3, 19.0, 19.7, 20.2, 18.4, 17.6, 20.5, 21.0, 21.4, 20.7, 21.8, 19.9, 19.2, 22.0, 22.5, 22.9];
+export const DAILY = [18.2, 18.9, 19.4, 18.7, 17.1, 16.4, 19.8, 20.6, 21.1, 20.4, 21.9, 19.3, 18.8, 22.4, 23.1, 22.7, 23.8, 24.6, 21.9, 20.8, 24.9, 25.7, 26.2, 25.1, 26.8, 23.7, 22.9, 27.1, 27.9, 28.4];
+export const PRIOR = [16.1, 16.4, 16.9, 16.2, 15.0, 14.6, 17.1, 17.8, 18.0, 17.6, 18.4, 16.8, 16.2, 18.9, 19.3, 19.0, 19.7, 20.2, 18.4, 17.6, 20.5, 21.0, 21.4, 20.7, 21.8, 19.9, 19.2, 22.0, 22.5, 22.9];
 
-const KPIS = [
+export const KPIS = [
   { title: "Active users", value: "24,318", change: "+12.4%", up: true, note: "vs. 21,640 last period" },
   { title: "New sign-ups", value: "1,204", change: "+8.1%", up: true, note: "vs. 1,114 last period" },
   { title: "Conversion", value: "3.8%", change: "−0.4 pt", up: false, note: "vs. 4.2% last period" },
   { title: "Revenue", value: "$48.2k", change: "+15.9%", up: true, note: "vs. $41.6k last period" },
 ];
-const CHANNELS = [
+export const CHANNELS = [
   { label: "Organic search", value: 42, text: "10,214 users" },
   { label: "Direct", value: 28, text: "6,809 users" },
   { label: "Referral", value: 18, text: "4,377 users" },
@@ -45,7 +45,7 @@ const PAGES = [
   { path: "/changelog", views: "6,054", visitors: "3,977", bounce: "29%", trend: "+12%", up: true },
 ];
 
-function Chart({ series, prior }: { series: number[]; prior: number[] }) {
+export function Chart({ series, prior }: { series: number[]; prior: number[] }) {
   const w = 640, h = 200, pad = { t: 8, r: 8, b: 22, l: 34 };
   const max = 30, min = 10;
   const x = (i: number) => pad.l + (i / (series.length - 1)) * (w - pad.l - pad.r);

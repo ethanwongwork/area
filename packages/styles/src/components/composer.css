@@ -4,7 +4,7 @@
     --_composer-inset: var(--area-ui-cluster); /* 8, compact 6: a bar's inset (compact pass) */
     --_composer-height: calc(var(--_composer-action) + 2 * var(--_composer-inset));
     /* spec: ChatGPT writes at 16px; the type ramp's body is 16/24 (docs/specs/composer.md). */
-    --_composer-text: var(--area-text-md-size); --_composer-leading: var(--area-text-md-leading);
+    --_composer-text: var(--area-text-lg-size); --_composer-leading: var(--area-text-lg-leading);
     /* spec: ChatGPT keeps 8px between its round actions. */
     --_composer-gap: var(--area-ui-cluster); /* 8, compact 6 */
     display: flex;
@@ -145,8 +145,8 @@
     margin: 0;
     overflow: hidden;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;

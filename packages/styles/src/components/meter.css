@@ -27,7 +27,7 @@
   /* spec: the UI type in the muted ink with tabular numbers, as File upload's percentage takes the UI type. */
   .area-meter__value { flex: none; margin-inline-start: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
   /* spec: Field's description, 12/16 muted, under the bar (Figma's caption sits under its bar too). */
-  .area-meter__description { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .area-meter__description { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
 
   /* Tones: the fill takes the status's solid when the value means something (Spectrum Meter's notice / negative). */
   .area-meter--neutral { --_meter-fill: var(--area-selection-solid); }

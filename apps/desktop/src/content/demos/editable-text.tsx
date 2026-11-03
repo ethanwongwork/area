@@ -3,7 +3,7 @@ import { EditableText } from "@area/react";
 
 const frame = { inlineSize: 240 };
 /* A layer name is UI text (14/20); the component takes the font of where it sits. */
-const ui = { fontSize: "var(--area-text-sm-size)", lineHeight: "var(--area-text-sm-leading)" };
+const ui = { fontSize: "var(--area-text-base-size)", lineHeight: "var(--area-text-base-leading)" };
 const title = { margin: 0, fontSize: "var(--area-title-md-size)", lineHeight: "var(--area-title-md-leading)", fontWeight: "var(--area-weight-strong)" };
 
 /* Figma's layer name: double-click to rename. */

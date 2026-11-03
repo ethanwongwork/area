@@ -59,7 +59,7 @@
   .studio-glyph-card__name { min-inline-size: 0; overflow: hidden; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-overflow: ellipsis; white-space: nowrap; }
   /* The meta is the card's secondary line at the UI size, as Popover's description (owner,
      2026-10-17: the xs step read too small beside the name). */
-  .studio-glyph-card__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .studio-glyph-card__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
   .studio-glyph-card__preview { display: grid; place-items: center; block-size: calc(var(--area-space-96) + var(--area-space-48)); color: var(--area-fg-default); }
   .studio-glyph-card__preview svg { display: block; }
   .studio-glyph-card__preview .studio-glyphs__char { font-size: var(--area-space-96); }

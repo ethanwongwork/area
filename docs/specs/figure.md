@@ -38,7 +38,7 @@ Wikipedia, computed:
 |---|---|---|---|
 | layout | a column as wide as its media (`fit-content`, max 100%); the caption adds no width (`contain: inline-size`) | Wikipedia (a table) | the same result without table layout |
 | media | any element in its own shape; an `img`, `video`, `svg`, `picture` or `canvas` takes the container corner (`radius-container`, 12 at the default Radius) | owner, 2026-10-18 ("round the corners of images") | was the small corner (6) through round 38 |
-| caption | optional; UI text (`text-sm`), regular, `fg-muted`, 8 under the media, start-aligned, wraps to the media's width | Notion's caption (UI text, secondary ink); Carbon 8; round 35 | muted: the media leads |
+| caption | optional; UI text (`text-base`), regular, `fg-muted`, 8 under the media, start-aligned, wraps to the media's width | Notion's caption (UI text, secondary ink); Carbon 8; round 35 | muted: the media leads |
 
 ## Verification
 
@@ -76,7 +76,7 @@ Owner, round 34: "what is content bordered, also why is the text centered?" → 
 | Part | Type | Ink | Space | Basis |
 |---|---|---|---|---|
 | media | — | — | Area's media corner (`radius-small`) | Card media |
-| caption | UI text (`text-sm`), regular | `fg-muted` | 8 under the media, start-aligned, wraps to the media's width | Notion's caption is its UI text (14, as its controls) in its secondary ink; Carbon 8 |
+| caption | UI text (`text-base`), regular | `fg-muted` | 8 under the media, start-aligned, wraps to the media's width | Notion's caption is its UI text (14, as its controls) in its secondary ink; Carbon 8 |
 
 ## Review note, 2026-10-17 (round 35)
 
@@ -129,4 +129,4 @@ and a cropped image is the app's to make. A video will be Area's own player insi
 
 - 2026-10-18 · owner: "can you round the corners of images to something by default" → by size: a standalone image takes the container corner (12 at the default Radius; was the small corner, 6), a thumbnail keeps 6 → `figure.css`. Same rule in Asset card and the Brand viewer (asset-card.md).
 - 2026-10-19 · design-system audit → the caption reads `ui-size` / `ui-leading`, as its comment and its peers say (the
-  same values as `text-sm`; naming only, no visual change).
+  same values as `text-base`; naming only, no visual change).

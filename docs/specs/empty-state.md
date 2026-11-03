@@ -108,7 +108,7 @@ column `max-w-xl` 576. Notion's Favorites column 340 with a 12 gap under the ico
 | sm · gaps | 12 under the tile, 2 title to line, 8 above actions | Notion Favorites (12, 2), Skills (8) | — |
 | md · title | **`title-xs` 16/24** 500, `fg-default`, at both densities | Dialog and Drawer's surface title (consistency pass O3, owner 2026-10-12) | ChatGPT's 18/24 is off Area's six-step ramp; was a literal 18/24 (compact 16/24) |
 | sm · title | the UI type (14/20; 12/16 compact) 500, `fg-default` | Notion 14/20 500 | Notion's title is muted like its line; Area keeps the default ink in both sizes (ChatGPT, Untitled, shadcn, Primer), so the title reads first |
-| description | `text-sm` (14/20; 12/16 compact), `fg-muted` | ChatGPT and Notion 14/20 muted | — |
+| description | `text-base` (14/20; 12/16 compact), `fg-muted` | ChatGPT and Notion 14/20 muted | — |
 | measure | md 576, sm 340 | ChatGPT `max-w-xl` 576 (Notion Skills 600); Notion Favorites 340 | — |
 | wrapping | `text-wrap: balance` on title and line | shadcn, Primer | Products don't balance; balance keeps a two-line line even in the centred column |
 | padding | md 32 (2 × `inset-surface-md`; 24 compact), sm 16 (`inset-surface-md`; 12 compact) | Primer medium 32, small 16 | Products centre it in their own region with no padding; the component needs its own inset in a Card or Panel |

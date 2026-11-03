@@ -28,14 +28,15 @@ export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
  * Type primitives.
  *
  * The same two-tier shape colour uses: a fixed ramp of raw stops, and a semantic layer
- * that points at them. A composite such as `--area-text-md-size` resolves to
+ * that points at them. A composite such as `--area-text-lg-size` resolves to
  * `var(--area-size-16)` rather than to a literal, so the typography axis picks different
  * stops rather than multiplying arbitrary numbers -- which is what keeps every derived
  * size on the ramp instead of landing on 12.25px.
  */
 export const SIZE_RAMP = [
-  // 19 to 82 between the old rungs: titles and display scale with the type size (axes/type-size.ts, 2026-10-19).
-  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 30, 32, 34, 37, 40, 48, 52, 56, 60, 62, 64, 67,
+  // 19 to 82 between the old rungs: titles and display scale with the type size (axes/type-size.ts, 2026-10-19); 25 for
+  // the 20 title at type 16 (Cursor's titles, 2026-11-02).
+  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 30, 32, 34, 37, 40, 48, 52, 56, 60, 62, 64, 67,
   72, 77, 82, 96, 128,
 ] as const;
 
@@ -362,8 +363,11 @@ function derivedOnPage(): Record<string, string> {
     // Quieter than the default: no fill, the edge alone, in both themes (audit G-4 A; bg-subtle
     // was darker than the default in light and equal to it in dark).
     [`${PREFIX}token-bg-subtle`]: "transparent",
-    // Dark `border-decorative` equals the stripe fill, so dark takes the faint edge (audit G-3).
-    [`${PREFIX}token-edge`]: `light-dark(var(${PREFIX}border-decorative), var(${PREFIX}border-faint))`,
+    // Dark `border-decorative` equals the stripe fill, so dark takes the faint edge (audit G-3). Light takes the subtle
+    // edge (owner, 2026-11-02: the chip "seems so light"; the decorative #f3f3f3 seam on the #fafafa fill all but vanished
+    // on a Table's white rows): #e8e8e8, the edge step nearest Untitled's measured neutral-200 ring (#e5e5e5, code.md),
+    // a role, so it still moves with the ground under it.
+    [`${PREFIX}token-edge`]: `light-dark(var(${PREFIX}border-subtle), var(${PREFIX}border-faint))`,
     [`${PREFIX}token-text`]: `var(${PREFIX}fg-default)`,
     // The swatch ring, shared by Code's swatch, ColorSwatch and Asset row's preview: a translucent line drawn over
     // the colour, so it shows evenly all round on any colour and still outlines white on white (Figma's swatch
@@ -417,8 +421,8 @@ function sizeDerivations(): Record<string, string> {
   const out: Record<string, string> = {
     [`${PREFIX}ui-level`]: `clamp(${v("type-level-min")}, ${v("density-level")}, ${v("type-level-max")})`,
     [`${PREFIX}ui-dense`]: `round(nearest, calc((16 - (8 / 7 + ${up} * 2 / 7 + ${down} / 7) * ${v("type-base")}) / 4), 0.5)`,
-    [`${PREFIX}ui-size`]: v("text-sm-size"),
-    [`${PREFIX}ui-leading`]: v("text-sm-leading"),
+    [`${PREFIX}ui-size`]: v("text-base-size"),
+    [`${PREFIX}ui-leading`]: v("text-base-leading"),
     // Rows keep at least 5 above and below their text (owner, 2026-10-22, review of docs/research/cursor-audit-2026-10-22.md
     // item 2: "use the option"): 28 at the app's type 13 Compact, where the level's 4 made 26. Cursor's Agents rows 28
     // (12/16 + 6), Figma's file-browser rows 28 (11/16), ChatGPT 35 (14/20); Notion's 30 (14/21) kept Area's 1.44
@@ -445,10 +449,10 @@ function sizeDerivations(): Record<string, string> {
   };
   const tiers: Record<string, { line: string; room: number; floor: number; text: string; icon: string; gap: string }> = {
     xs: { line: v("type-small-leading"), room: 4, floor: 20, text: "text-xs", icon: v("type-icon-xs"), gap: "4px" },
-    sm: { line: v("type-leading"), room: 4, floor: 24, text: "text-sm", icon: v("type-icon"), gap: `calc(6px - 2px * ${step})` },
-    md: { line: v("type-leading"), room: 6, floor: 24, text: "text-sm", icon: v("type-icon"), gap: `calc(6px - 2px * ${step})` },
-    lg: { line: v("type-leading"), room: 10, floor: 24, text: "text-sm", icon: v("type-icon"), gap: "6px" },
-    xl: { line: v("type-reading-leading"), room: 12, floor: 24, text: "text-md", icon: `max(${v("type-icon")}, calc(24px + 8px * ${down}))`, gap: `calc(8px - 2px * ${step})` },
+    sm: { line: v("type-leading"), room: 4, floor: 24, text: "text-base", icon: v("type-icon"), gap: `calc(6px - 2px * ${step})` },
+    md: { line: v("type-leading"), room: 6, floor: 24, text: "text-base", icon: v("type-icon"), gap: `calc(6px - 2px * ${step})` },
+    lg: { line: v("type-leading"), room: 10, floor: 24, text: "text-base", icon: v("type-icon"), gap: "6px" },
+    xl: { line: v("type-reading-leading"), room: 12, floor: 24, text: "text-lg", icon: `max(${v("type-icon")}, calc(24px + 8px * ${down}))`, gap: `calc(8px - 2px * ${step})` },
   };
   for (const [tier, spec] of Object.entries(tiers)) {
     out[`${PREFIX}control-${tier}`] = height(spec.line, spec.room, spec.floor);

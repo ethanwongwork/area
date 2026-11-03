@@ -20,7 +20,7 @@
      exchange starts one ring out (24, the section role), the person's message joins its reply one step inside the prose
      gap (12, the group role), and anything else (a notice) is the prose gap apart (16). A time over a message joins it (8). */
   .studio-chat__transcript { display: grid; grid-template-columns: minmax(0, 1fr); padding-block-end: var(--area-space-8); }
-  .studio-chat__transcript > * + * { margin-block-start: var(--area-text-md-prose-gap); }
+  .studio-chat__transcript > * + * { margin-block-start: var(--area-text-lg-prose-gap); }
   .studio-chat__transcript > * + :is(.studio-chat__turn--user, .studio-chat__stamp) { margin-block-start: var(--area-space-24); }
   .studio-chat__transcript > .studio-chat__stamp + .studio-chat__turn--user { margin-block-start: var(--area-space-8); }
   .studio-chat__transcript > .studio-chat__turn--user + .studio-chat__turn--assistant { margin-block-start: var(--area-space-12); }
@@ -43,7 +43,7 @@
   /* The Testing screen: the Chat view in frames as wide as the Inspector can be, each its own panel. */
   .studio-chat-frames { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--area-space-24); }
   .studio-chat-frame { display: grid; gap: var(--area-space-8); margin: 0; }
-  .studio-chat-frame__label { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  .studio-chat-frame__label { color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
   .studio-chat-frame__panel {
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;

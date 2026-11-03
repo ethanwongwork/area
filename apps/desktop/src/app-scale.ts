@@ -31,7 +31,7 @@ const NO_SCALE: Partial<AppScale> = {};
  * between that sets its own text: the attributes only where the scale around differs, nothing where it is the same.
  * Each element carrying them is a scope the token rules re-resolve on (about 2,000 custom properties): 360 restated
  * scopes cost the Color page over a second as it opened (2026-10-29). Chrome elsewhere keeps appScale(): a type scope
- * also resets its text to text-md (base.css), which the Canvas header and a family's tabs rely on.
+ * also resets its text to text-lg (base.css), which the Canvas header and a family's tabs rely on.
  */
 export const feedScale = (): Partial<AppScale> => {
   const app = use(AppScaleContext);

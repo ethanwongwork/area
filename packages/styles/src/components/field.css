@@ -44,8 +44,8 @@
   }
 
   .area-field__description {
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
     color: var(--area-fg-muted);
   }
 

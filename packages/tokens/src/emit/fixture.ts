@@ -36,7 +36,7 @@ ${css}
   body {
     background: var(--area-bg-page);
     color: var(--area-fg-default);
-    font: var(--area-text-md-size)/var(--area-text-md-leading) var(--area-font-sans);
+    font: var(--area-text-lg-size)/var(--area-text-lg-leading) var(--area-font-sans);
     margin: 0; padding: 32px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start;
   }
   .probe {
@@ -90,7 +90,7 @@ window.areaProbe = function (el) {
     controlMd: v("--area-control-md"),
     radiusControl: v("--area-radius-control"),
     radiusContainer: v("--area-radius-container"),
-    textMdSize: v("--area-text-md-size"),
+    textMdSize: v("--area-text-lg-size"),
     fontSans: v("--area-font-sans").slice(0, 24),
     bgPage: color("--area-bg-page"),
     fgDefault: color("--area-fg-default"),

@@ -48,22 +48,22 @@ release.
 ## Anatomy
 
 ```
-area-approval                 the Composer's shell: its edge, corner, field fill and inset; text-md; gap ui-cluster
+area-approval                 the Composer's shell: its edge, corner, field fill and inset; text-lg; gap ui-cluster
   area-approval__head         the heading and the actions on one row, on the row inset; its first line sits in a row
     area-approval__heading    the title and description, one block
       area-approval__title    strong
-      area-approval__description  text-sm muted
+      area-approval__description  text-base muted
     area-approval__actions    slot at the end, a row tall, centred on the title's line; last plate on the trailing offset
   area-approval__detail       slot (Code block sm, Diff)
   area-approval__options      rows, ui-row-gap apart (Menu's: 2, compact 0)
     area-approval__option     button: `area-approval__key` (Kbd sm number, icon slot) + `area-approval__label`,
                               gap-row apart; the row plate on hover and focus, the pressed fill while pressed;
                               with a description, `area-approval__lines` holds the label over
-                              `area-approval__option-description` (text-sm muted), the row 6 above and below;
+                              `area-approval__option-description` (text-base muted), the row 6 above and below;
                               with `value`, `area-approval__check` at the end (chosen: data-selected, aria-current)
     area-approval__instead    the last option row (a label), its field `area-approval__field` the row's text
   area-approval__foot         the last row, ui-row tall, on the row inset
-    area-approval__hint       text-sm muted: filled Kbd Esc + "to cancel" (dismissLabel)
+    area-approval__hint       text-base muted: filled Kbd Esc + "to cancel" (dismissLabel)
     area-approval__footer     slot at the end (Skip, Continue), last plate on the trailing offset
 ```
 
@@ -73,14 +73,14 @@ area-approval                 the Composer's shell: its edge, corner, field fill
 |---|---|---|---|
 | shell | Composer's edge, corner, fill and inset; the corner is Composer's expression term for term: the send button's corner (pill buttons add `radius-full`) plus the inset × max(concentric, pill) | peer: Composer (composer.css) | it takes the composer's place; Claude Code's card radius 8 is its own composer's. Audit 2026-10-19: the copy had dropped the pill terms, so pill buttons gave a pill Composer but not a pill Approval |
 | gap | 6 (ui-cluster at Compact) | Composer's gap | — |
-| head | on the row inset; first line in a row: (ui-row − text-md leading) / 2 above the title | inset.css first-line alignment | round 54: the top had half a row less room than the foot |
-| title | text-md strong | claude-code bold title | Area's one strong weight |
-| description | text-sm muted | claude-code .9em secondary | — |
+| head | on the row inset; first line in a row: (ui-row − text-lg leading) / 2 above the title | inset.css first-line alignment | round 54: the top had half a row less room than the foot |
+| title | text-lg strong | claude-code bold title | Area's one strong weight |
+| description | text-base muted | claude-code .9em secondary | — |
 | options | Menu-row geometry: ui-row tall, row inset, row corner, Menu's row gap (gap-row: 12, compact 8) and ui-row-gap between rows; plate on hover / focus, bg-component-pressed while pressed | peer: Menu | Claude Code's ringed buttons read as a list of commands at 256; rows keep them one column |
 | number | quiet Kbd sm in the icon slot (icon-sm wide, centred), the label's size, muted, unboxed | claude-code `shortcutNum` (label size, .6); Codex "1." | round 51 |
 | instead | the last numbered row, its field unfilled | Claude Code (last option is free text) | a filled field added a third grey (cleanup pass 2026-10-19) |
-| hint | the card's last row: ui-row tall, centred, text-sm muted; Esc a filled Kbd sm, ui-cluster from the words | claude-code "Esc to cancel"; Kbd's rule (a key named in a sentence is filled) | rounds 52 and 53 |
-| option description | text-sm muted under the label; the row grows with 6 above and below; the key on the label's line, the check centred | peer: Menu's row with a note (model-picker.md: 6 / 6, check centred); inset.css first-line alignment | the card's own description type, so a choice's note and the question's read alike |
+| hint | the card's last row: ui-row tall, centred, text-base muted; Esc a filled Kbd sm, ui-cluster from the words | claude-code "Esc to cancel"; Kbd's rule (a key named in a sentence is filled) | rounds 52 and 53 |
+| option description | text-base muted under the label; the row grows with 6 above and below; the key on the label's line, the check centred | peer: Menu's row with a note (model-picker.md: 6 / 6, check centred); inset.css first-line alignment | the card's own description type, so a choice's note and the question's read alike |
 | chosen row | Menu's selected fill (bg-component-active), at once, outranking hover; no pressed fill; check icon-md in fg-selection, the other rows' check at rest (opacity 0, scale 0.6) | peer: Menu `[data-selected]`, `.area-menu__check` | one selected paint for every list (Shared state paint) |
 | actions, footer | a row tall; last plate (row − control-sm) / 2 from the card's end, never under 4 (the row inset given back); 4 between controls | the agent chat's card head rule (Cleanup pass) | a trailing plate lines up with Code block's and Plan's |
 
@@ -133,8 +133,8 @@ The agent chat's shared rules (all five families):
 
 | Rule | Value | Basis |
 |---|---|---|
-| Lines in the transcript | the reply's type (text-md); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
-| Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
+| Lines in the transcript | the reply's type (text-lg); 4 between a line's parts | Message; Cursor ToolCallLine gap 4 |
+| Cards (Edit summary, Plan) | one size, text-base; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
 | Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |

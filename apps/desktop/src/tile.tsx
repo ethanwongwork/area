@@ -31,20 +31,25 @@ import type { GalleryMode, GalleryRatio } from "./view-controls.tsx";
 /**
  * The look the Canvas's Asset cards hold whatever the Inspector previews (owner, 2026-10-24: "the style should be -1 card
  * color, 2 stroke strength, no rest shadow", for the gallery cards only), as they hold their corner: Card tone −1 in both
- * modes, Stroke 2, Rest shadow 0, set as the card's own setting scope. The specimen inside takes the defaults back and
+ * modes, Stroke 2, Rest shadow 0, set as the card's own setting scope. Hover is the edge one step darker and no lift
+ * (Hover lift 0, Hover edge 1; owner, 2026-11-01: "the shadow is too strong and the stroke color change is too strong"),
+ * as a plain tile's (styles/canvas.css). The specimen inside takes the defaults back and
  * the Inspector's settings over them (`specimenScope`, src/specimen-scope.tsx), so a component shows the settings being
  * previewed while its card stays the app's.
  */
-export const CARD_SCOPE = { "data-area-card-tone-light": "-25", "data-area-card-tone-dark": "-25", "data-area-stroke": "2", "data-area-shadow-rest": "0" } as const;
+export const CARD_SCOPE = { "data-area-card-tone-light": "-25", "data-area-card-tone-dark": "-25", "data-area-stroke": "2", "data-area-shadow-rest": "0", "data-area-shadow-hover": "0", "data-area-stroke-hover": "1" } as const;
 /** CARD_SCOPE's settings as the app is drawn (its look, src/app-look.ts), which a card's specimen starts from; the specimen's
  *  scope then writes only what the open theme moves from the app's look. */
-const cardRestored = (chrome: CanvasAxes) => ({ "data-area-card-tone-light": chrome["card-tone-light"], "data-area-card-tone-dark": chrome["card-tone-dark"], "data-area-stroke": chrome.stroke, "data-area-shadow-rest": chrome["shadow-rest"] });
+const cardRestored = (chrome: CanvasAxes) => ({ "data-area-card-tone-light": chrome["card-tone-light"], "data-area-card-tone-dark": chrome["card-tone-dark"], "data-area-stroke": chrome.stroke, "data-area-shadow-rest": chrome["shadow-rest"], "data-area-shadow-hover": chrome["shadow-hover"], "data-area-stroke-hover": chrome["stroke-hover"] });
 
 /** A table in the feed: it takes the feed's one frame inset, corner and fill (styles/app.css .studio-table, Table's public
  *  hooks) and the cards' stroke, so it is one family with them (2026-11-01). */
 export const FEED_TABLE = { className: "studio-table", "data-area-stroke": CARD_SCOPE["data-area-stroke"] } as const;
 /** A code block in the feed: the same (styles/app.css .studio-code, Code block's hooks). */
 export const FEED_CODE = { className: "studio-code", "data-area-stroke": CARD_SCOPE["data-area-stroke"] } as const;
+/** A block with no frame of its own (a chart, Meters, a number, a type tester) as Area's Card (2026-11-02), drawn through
+ *  its public hooks as the feed's frame (styles/feed.css .studio-frame), in the cards' own scope (Stroke 2, no rest shadow). */
+export const FEED_FRAME = { className: "studio-frame", ...CARD_SCOPE } as const;
 
 export type TileSpan = "unit" | "wide";
 /**
@@ -155,6 +160,8 @@ export interface TileProps {
   "data-design"?: string;
   /** The frame painted as its visual: a colour and the ink that reads on it. */
   paint?: { background: string; color: string };
+  /** A painted tile's name: on the colour, in its ink (the default), or under the card as every other card's. */
+  paintLabel?: "inside" | "below";
   /** The frame as a setting's own scope (data-area-* attributes): it takes the setting and paints its subtle ground. */
   scope?: Record<string, string>;
   /** The stage alone as a setting's scope, the frame staying as it is (the Theme tab's ground and layers: the window inside
@@ -179,12 +186,7 @@ export interface TileProps {
   actions?: ReactNode;
   /** A click on the tile, outside the controls in its specimen and caption, opens it (`onOpen`). */
   openOnClick?: boolean;
-  /**
-   * The container: `plain` (the default), a very light neutral box with a light gray line, the name in its first row;
-   * `asset`, Area's Asset card, on the Components tab only (owner, 2026-10-21: "the asset card doesnt need to be used
-   * everywhere, for now, just restrict it to be used only on the component page. everywhere else can just use standard
-   * very light neutral containers with a light gray stroke").
-   */
+  /** Kept for callers that name it: every tile is Area's Asset card now (2026-11-02). */
   container?: "plain" | "asset";
   children?: ReactNode;
 }
@@ -200,83 +202,29 @@ const onControl = (event: { target: EventTarget; currentTarget: EventTarget }) =
   return Boolean(control && control !== event.currentTarget);
 };
 
-export function Tile(props: TileProps) {
-  return props.container === "asset" ? <AssetTile {...props} /> : <PlainTile {...props} />;
-}
-
 /**
- * The plain container: a box with the name in its first row and the visual under it (studio.css, "Plain tiles"). The
- * box sits in a wrapper that is the control (a List box option, a button, or an article), so a grid's keyboard and
- * selection stay the List box's and the box draws the states: the edge steps on hover, the selected edge, the ring.
+ * Every tile is Area's Asset card (owner, 2026-11-02: "Yes, rebuild tiles", after "the feed kit should leverage and use
+ * real components"): the gallery look (GALLERY_LOOK: the frame alone, the name outside under it) unless a page gives its
+ * own. A colour paints the frame and holds its name inside, in its ink, or under the card as every other card's
+ * (`paintLabel`, Colors' Label option). The plain container it replaces was the app's own box (2026-10-21 to 2026-11-02).
  */
-function PlainTile({ label, value, status, span, stage, shape, selected, onSelect, onOpen, card, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": design, paint, scope, stageScope, inert, children }: TileProps) {
-  const specimen = { ...specimenScope(), ...stageScope };
-  // The name on the left; badges and controls at the end (owner, 2026-11-01): a value is a badge.
-  const head = (scale: Record<string, string | undefined>) => (
-    <div className="gallery-tile__head" {...scale}>
-      <span className="gallery-tile__label">{label}</span>
-      {value != null && value !== "" ? status ? <StatusBadge status={status}>{value}</StatusBadge> : <Badge variant="soft" tone="neutral" className="gallery-tile__badge">{value}</Badge> : null}
-      {actions}
-    </div>
-  );
-  const view = stage === "none" ? null : stage === "fit"
-    ? <div className="gallery-tile__view" {...specimen}><div className="gallery-tile__stage">{children}</div></div>
-    : <div className="gallery-tile__view" inert={inert || undefined} {...specimen}>{stage === "screen" ? <ScreenCover.Provider value>{children}</ScreenCover.Provider> : children}</div>;
-  const box = (
-    <div className="gallery-tile gallery-tile--plain" data-span={span} data-stage={stage} data-shape={shape ?? (stage === "screen" ? "wide" : "square")} data-layout={card ? "card" : undefined} data-design={design}
-      data-painted={paint ? "" : undefined} data-scoped={scope ? "" : undefined}
-      // The ground the box paints, so a specimen's control fills step from it (styles layers.css).
-      data-area-ground={paint ? undefined : "raised"}
-      style={paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined} {...(paint ? specimen : {})} {...scope}>
-      {/* A colour's name stays on the colour, in its ink: the colour is the card. */}
-      {paint ? head(feedScaleWithin({ ...specimen, ...scope })) : null}
-      {view}
-    </div>
-  );
-  // Every other card's name sits under it on the page (owner, 2026-11-01, the card explorer's pick: the card holds the
-  // picture 8 in; the name, its badges and controls 4 below), at the app's scale whatever the Canvas previews.
-  const below = paint ? null : head(feedScale());
-  const shared = { id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, className: "gallery-plain" };
-  if (option !== undefined) {
-    return <ListBoxItem value={option} textValue={typeof label === "string" ? label : undefined} {...shared}>{box}{below}</ListBoxItem>;
-  }
-  // A tile whose stage is inert has nothing inside to focus, so the tile itself is the control: a Tab stop that Enter
-  // or Space selects, its state as aria-pressed (product UI rule 5).
-  if (inert && onSelect) {
-    return (
-      // A double-click opens it, as a double-click opens what a click selects everywhere else (Home's systems and projects,
-      // Themes' themes; 2026-10-31: this branch dropped `onOpen`, so a double-click only selected).
-      <article {...shared} role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect} onDoubleClick={onOpen ? event => onOpen(how(event)) : undefined}
-        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>
-        {box}{below}
-      </article>
-    );
-  }
-  // A tile that opens on a click is a button to the keyboard too (Testing's screens).
-  if (onOpen && openOnClick) {
-    return (
-      <article {...shared} role="button" tabIndex={0} data-selected={selected ? "" : undefined}
-        onClick={event => { if (!onControl(event)) onOpen(how(event)); }}
-        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(how(event)); } }}>
-        {box}{below}
-      </article>
-    );
-  }
-  return (
-    <article {...shared} data-selected={selected ? "" : undefined} onPointerDown={onSelect} onFocusCapture={onSelect}
-      onDoubleClick={onOpen ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(how(event)); } : undefined}>
-      {box}{below}
-    </article>
-  );
+export function Tile(props: TileProps) {
+  return <AssetTile {...props} look={props.look ?? GALLERY_LOOK} />;
 }
 
 /** Area's Asset card (Components). */
-function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card, aspect, look, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": design, paint, scope, stageScope, inert, children }: TileProps) {
+function AssetTile({ label, value, status, paintLabel = "inside", span, stage, shape, selected, onSelect, onOpen, card, aspect, look, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": design, paint, scope, stageScope, inert, children }: TileProps) {
   const { chrome } = useStudio();
   const specimen = { ...cardRestored(chrome.canvas), ...specimenScope(), ...stageScope };
   const view = stage === "none" ? null : stage === "fit"
     ? <div className="gallery-tile__view" {...specimen}><div className="gallery-tile__stage">{children}</div></div>
-    : <div className="gallery-tile__view" inert={inert || undefined} {...specimen}>{children}</div>;
+    : <div className="gallery-tile__view" inert={inert || undefined} {...specimen}>{stage === "screen" ? <ScreenCover.Provider value>{children}</ScreenCover.Provider> : children}</div>;
+  // A value is a badge at the end of the name's line, a project's status colour-coded (owner, 2026-11-01), before the
+  // caption's controls.
+  const badge = value != null && value !== "" ? status ? <StatusBadge status={status}>{value}</StatusBadge> : <Badge variant="soft" tone="neutral" className="gallery-tile__badge">{value}</Badge> : null;
+  const captionEnd = badge && actions ? <>{badge}{actions}</> : badge ?? actions;
+  // A colour holds its name inside, in its ink, unless the page sets it under the card (Colors' Label option).
+  const inside = Boolean(paint) && paintLabel === "inside";
   // The frame: the app's own class and modes on Asset card's frame. The ground it declares (the frame tone, a basic card's
   // own fill, or recessed when scoped) lets the specimen's control fills step from the frame, not the Canvas (layers.css).
   const frameProps = {
@@ -293,16 +241,20 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
     ...(paint ? specimen : {}),
     ...scope,
   } as Record<string, string | undefined> & { className: string; style?: CSSProperties };
+  // A colour's name row inside its frame, at the app's scale (the frame is the specimen and takes the Inspector's).
+  const body = inside ? <><div className="gallery-tile__head" {...feedScaleWithin({ ...specimen, ...scope })}><span className="gallery-tile__label">{label}</span>{captionEnd}</div>{view}</> : view;
   // The caption is the app's chrome, at the app's scale whatever the Canvas previews.
   // The frame may set type or density, and the caption may sit inside it (overlay) or under it: it is measured against
   // the frame, so a frame with a scale of its own always gets the caption's stated.
   const captionProps = { className: "gallery-tile__caption", ...feedScaleWithin(frameProps) };
-  const shared = { ...CARD_SCOPE, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, name: label, meta: value, actions, frameProps, captionProps,
+  const shared = { ...CARD_SCOPE, id, "aria-label": ariaLabel ?? (inside && typeof label === "string" ? label : undefined), "data-key": dataKey, "data-name": dataName,
+    name: inside ? undefined : label, actions: inside ? undefined : captionEnd, frameProps, captionProps,
     container: look?.container, caption: look?.caption, fill: look?.fill, borderless: look?.borderless,
-    // A component's card is square (owner, 2026-11-01: "a square AR one for components specifically"; 5:4 from 2026-10-22).
-    aspect: aspect ?? (card ? "square" as const : undefined) };
+    // Two shapes (owner, 2026-11-01): square (components, colours, images, a component's card) or wide, 16:9, for anything
+    // designed, where a 1920 x 1080 window fits whole (a screen's default): Asset card's `screen` (its `wide` is 2:1).
+    aspect: aspect ?? (card ? "square" as const : shape === "wide" || (stage === "screen" && shape !== "square") ? "screen" as const : "square" as const) };
   if (option !== undefined) {
-    return <AssetGridItem value={option} className="gallery-asset" textValue={typeof label === "string" ? label : undefined} {...shared}>{view}</AssetGridItem>;
+    return <AssetGridItem value={option} className="gallery-asset" textValue={typeof label === "string" ? label : undefined} {...shared}>{body}</AssetGridItem>;
   }
   // A tile whose stage is inert has nothing inside to focus, so the tile itself is the control: a
   // Tab stop that Enter or Space selects, its state as aria-pressed (product UI rule 5).
@@ -310,7 +262,17 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
     return (
       <AssetCard {...shared} className="gallery-asset" interactive role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect} onDoubleClick={onOpen ? event => onOpen(how(event)) : undefined}
         onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>
-        {view}
+        {body}
+      </AssetCard>
+    );
+  }
+  // A tile that opens on a click and has nothing of its own to focus is a button to the keyboard too (Testing's screens).
+  if (onOpen && openOnClick && inert) {
+    return (
+      <AssetCard {...shared} className="gallery-asset" interactive role="button" tabIndex={0} selected={selected}
+        onClick={event => { if (!onControl(event)) onOpen(how(event)); }}
+        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(how(event)); } }}>
+        {body}
       </AssetCard>
     );
   }
@@ -318,7 +280,7 @@ function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card
     <AssetCard {...shared} className="gallery-asset" interactive selected={selected} onPointerDown={onSelect} onFocusCapture={onSelect}
       onClick={onOpen && openOnClick ? event => { if (!onControl(event)) onOpen(how(event)); } : undefined}
       onDoubleClick={onOpen && !openOnClick ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(how(event)); } : undefined}>
-      {view}
+      {body}
     </AssetCard>
   );
 }

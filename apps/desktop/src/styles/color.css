@@ -13,20 +13,27 @@
      2026-10-24: "make the cards fill the canvas"; they hugged their text the day before). The least width is the longest
      line, "OKLCH 1.000 0.000 359.9" (23 characters of the mono at the values' size), and the card's insets: 198 at type
      14 (12 values), 184 at 12, 225 at 16, so no value wraps. The cards sit 16 in from their edges, a step past the
-     Canvas tiles' 12 ("increase the padding on the current color cards"), and 4 apart, a swatch sheet's gap rather than
-     the tiles' 12 ("make the gaps 4px"). The grid is set in the values' face and size so `ch` measures their
-     characters. */
+     Canvas tiles' 12 ("increase the padding on the current color cards"), and the galleries' gap apart. The grid is set in the mono at the values' size so `ch` measures the
+     widest line with room to spare (the values are the sans since 2026-11-01, narrower than the mono). */
   .studio-color-grid {
     --_tile-inset: var(--_card-inset);
-    --_gap: var(--area-space-4); /* pick */
+    /* The galleries' one gap (owner, 2026-11-01: "the color card gaps between them should match the other galleries"; 4, a
+       swatch sheet's, from 2026-10-24). */
+    --_gap: var(--_canvas-gap);
     --_card-width: calc(23ch + var(--_tile-inset) * 2);
     grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--_card-width)), 1fr));
     font-family: var(--area-font-mono);
-    font-size: var(--area-text-xs-size);
+    font-size: var(--area-text-sm-size);
   }
-  /* The card hugs its text: no square view under the head. */
-  .studio-color-grid .gallery-tile--plain > .gallery-tile__view { aspect-ratio: auto; }
-  .studio-color-grid .gallery-tile--plain > .gallery-tile__head .studio-swatch__level { color: var(--_ink); }
+  /* The card hugs its text: no square view under the head. Nor does the view clip: the values are trimmed to their cap and
+     baseline, so a clipping view cut the round letters' overshoot (2026-11-01: OKLCH's O lost its foot). */
+  .studio-color-grid .gallery-tile > .gallery-tile__view { aspect-ratio: auto; overflow: visible; }
+  /* The card's copy in the feed's type (owner, 2026-11-01: "can the copy of the color cards be updated to match the rest of
+     everything"): the level is the card's name at the feed's 13/18, as every card name (canvas.css), and the values Area's sans at the
+     ramp's xs (11/14) with tabular figures, as a card's badges and a table's numbers. They were the mono at 11/14 for
+     both. One ink still (owner, 2026-10-14: no thinned field names). */
+  .studio-color-grid .gallery-tile > .gallery-tile__head { font-family: var(--area-font-sans); font-variant-numeric: tabular-nums; }
+  .studio-color-grid .gallery-tile > .gallery-tile__head .studio-swatch__level { color: var(--_ink); }
   /* Block lines, so the last value's baseline is trimmed onto the tile's inset at the foot, as the level's cap is at the
      head. Two blank lines of the values' leading under the level: from the level's baseline to the hex's cap is three
      leadings less the cap, as in untrimmed text with two empty lines between; the tile's 12 row gap is counted. */
@@ -36,16 +43,21 @@
     align-self: start;
     margin-block-start: calc(3lh - 1cap - var(--area-space-12));
     min-inline-size: 0;
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-family: var(--area-font-sans);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
   .studio-swatch__values > * { display: block; }
+  /* With the name under the card (Colors' Label: Below), the values start on the frame's inset. */
+  .gallery-tile:not(:has(> .gallery-tile__head)) .studio-swatch__values { margin-block-start: 0; }
   /* Copy (color.tsx, ColorCard): out of the flow, so the level's line keeps its height, in the corner with the button's box
      as far in as its centre sits from the level's cap: its glyph centres on the level's line and keeps the card's inset
      from the side as it does from the top. Shown under the pointer, with focus inside or selected; always without hover. */
-  .studio-color-grid .gallery-tile--plain { position: relative; }
-  .studio-swatch__copy {
+  .studio-color-grid .gallery-tile { position: relative; }
+  /* Copy with the name under the card sits in the caption, Asset card's controls, as every other card's. */
+  .gallery-tile > .gallery-tile__head .studio-swatch__copy {
     position: absolute;
     /* From the padding box, inside the card's edge, so the edge is counted once. */
     inset-block-start: calc(var(--_tile-inset) - var(--area-stroke-width) - (var(--area-control-sm) - 1cap) / 2);
@@ -53,8 +65,8 @@
     opacity: 0;
     transition: opacity var(--area-duration-fast) var(--area-ease-out);
   }
-  @media (hover: hover) { .gallery-plain:hover .studio-swatch__copy { opacity: 1; transition-duration: 0s; } }
-  .gallery-plain:is(:focus-within, [aria-selected="true"]) .studio-swatch__copy { opacity: 1; transition-duration: 0s; }
+  @media (hover: hover) { .gallery-asset:hover .studio-swatch__copy { opacity: 1; transition-duration: 0s; } }
+  .gallery-asset:is(:focus-within, [aria-selected="true"]) .studio-swatch__copy { opacity: 1; transition-duration: 0s; }
   @media (hover: none) { .studio-swatch__copy { opacity: 1; } }
 
   /* A series card (color.tsx, SeriesSection): the mark as a 3 line, then the ramp's seven steps, under the token. */

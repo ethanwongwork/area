@@ -30,7 +30,9 @@
   }
   /* Sections are a section apart and a section's title a heading's space over its content, so a title reads with
      what it names rather than floating between two sections. */
-  .studio-sections { display: grid; gap: var(--_canvas-section); }
+  /* One column the Canvas's width (PRODUCT_UI, "The Canvas is a feed"): an auto column grew to its widest block's one-line
+     content (a type sample, 2026-11-01) and ran the feed past the Canvas. */
+  .studio-sections { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--_canvas-section); }
   .studio-section { scroll-margin-block-start: var(--_canvas-margin); }
   /* The header: a small control with 5 above and below and 7 at the sides (36 at type 13), so they centre on the line the Sidebar's first row
      and the Inspector's first heading share. No title (owner, 2026-10-14): the Sidebar's selected
@@ -96,9 +98,20 @@
      baseline to its tiles. A lede follows its title at one line's spacing (8), as prose does. */
   /* A section's title (and lede) is Area's SectionHeading (app-shell.css, 2026-10-15); the Canvas margin follows it. */
   .studio-section-heading { margin-block-end: var(--_canvas-heading); margin-inline-start: var(--_text-inset); }
-  /* A count after a label (tile.tsx FeedCount, 2026-11-01): Count soft sm, centred on the label's line and overhanging it
-     equally above and below, so a cap-trimmed title or card name keeps its place with or without one. */
-  .studio-count { display: inline-flex; vertical-align: middle; margin-block: calc((1cap - var(--area-mark-label-sm)) / 2); margin-inline-start: var(--area-space-2); }
+  /* A count after a label (tile.tsx FeedCount, 2026-11-01): Count soft sm, centred on the label's cap, overhanging it
+     equally above and below, so a cap-trimmed title or card name keeps its place with or without one. Its baseline is its
+     bottom edge (an inline block that clips), set half the count's height less half the cap under the label's baseline;
+     its margin box is the cap alone, so the line never grows. It was `vertical-align: middle`, the x-height's centre, and
+     sat a pixel under the cap's (owner, 2026-11-02: "the 4 looks too low vertically"). */
+  .studio-count {
+    display: inline-block;
+    overflow: hidden;
+    line-height: 0; /* its box is the Count alone, no strut */
+    vertical-align: calc((1cap - var(--area-mark-label-sm)) / 2);
+    margin-block: calc(1cap - var(--area-mark-label-sm)) 0;
+    margin-inline-start: var(--area-space-2);
+  }
+  .studio-count > * { vertical-align: top; }
 
   /* --- Tiles and the grid (src/tile.tsx) ------------------------------------ */
 
@@ -150,100 +163,53 @@
     outline-offset: calc(var(--area-stroke-width) * -1);
   }
   .gallery-asset[aria-selected="true"] .gallery-tile[data-painted] { border-color: transparent; outline-color: var(--_ink); }
-  /* At Elevation 0 there is no lift, so a painted frame's outline steps to its ink at 24% on hover, 48% held. */
+  /* A painted frame's outline steps to its ink at 24% on hover, 48% held: the cards have no lift (CARD_SCOPE), so this is
+     a colour card's hover, as the edge step is every other card's. */
   @media (hover: hover) {
-    .studio-canvas__body[data-area-elevation="0"] .gallery-asset:not([aria-selected="true"]):hover .gallery-tile[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); } /* pick */
+    .gallery-asset:not([aria-selected="true"]):hover .gallery-tile[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); } /* pick */
   }
-  .studio-canvas__body[data-area-elevation="0"] .gallery-asset:not([aria-selected="true"]):active .gallery-tile[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); } /* pick */
+  .gallery-asset:not([aria-selected="true"]):active .gallery-tile[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); } /* pick */
   /* Scoped: the frame is a setting's own ground (Theme), Primer's tinted plate. */
   .gallery-tile[data-scoped] { background: var(--area-bg-subtle); color: var(--area-fg-default); }
   /*
-   * Plain tiles (src/tile.tsx, PlainTile; owner, 2026-10-21: Asset card on the Components tab only, "everywhere else can
-   * just use standard very light neutral containers with a light gray stroke"): a box in the stripe fill (#fafafa light)
-   * with Card's light edge at stroke-width, no shadow, 12 in, the name in its first row, then the visual. Its wrapper is
-   * the control (a List box option, a button, an article): the box draws the states, each landing at once (PRODUCT_UI
-   * rules 1-3): the edge steps on hover (no lift: a plain box), the selected edge at Selected stroke inside over the
-   * Selected tint, and the focus ring off the wrapper at focus-gap.
+   * A colour's card (src/tile.tsx, every tile Area's Asset card since 2026-11-02; the plain box it replaces is gone): the
+   * painted frame holds its name row and its values the frame inset in, the name's cap the inset down (a small control's
+   * row half the inset from the top, 8 + (24 − 8) / 2 = 16), a control in the row as far from the end as from the top;
+   * or, with its name under the card (`paintLabel="below"`, Colors' Label option), its values alone, the inset all round.
    */
-  .gallery-plain { display: grid; min-inline-size: 0; border-radius: var(--_tile-radius); outline: none; cursor: default; scroll-margin-block: var(--_canvas-margin); }
-  /* A List box option paints no plate of its own: the box does (List box's grid plate is for icon cells). */
-  .area-list-box--grid .area-list-box__item.gallery-plain { display: grid; place-items: stretch; min-block-size: 0; border-radius: var(--_tile-radius); background: transparent; cursor: default; }
-  .gallery-plain:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
-  .gallery-tile--plain {
+  .gallery-tile[data-painted] {
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
-    /* One header for every card (owner, 2026-11-01: "there should be a consistent header styling across all
-       cards/containers"): a small control's row (24) half the inset from the top, so the name's cap lands the inset down
-       (8 + (24 − 8) / 2 = 16) and a button in it sits 8 from the top and the side; the visual half the inset under it, 15
-       under the cap, as an Asset card's head (the edge counted once). A badge or button no longer makes the head taller
-       and pushes the name down (a status badge did, 2026-11-01). Holds at every density: the inset steps with the
-       control (12 / 20, 16 / 24, 20 / 28). */
-    row-gap: calc(var(--_tile-inset) / 2 - var(--area-stroke-width));
+    grid-template-rows: minmax(0, 1fr);
     box-sizing: border-box;
-    min-inline-size: 0;
-    /* The card holds its picture alone, half the frame inset in all round (8 at the default; owner, 2026-11-01, the card
-       explorer's pick: "apply 8 and update the corner radius to 16"); its name sits under it (.gallery-plain below). A
-       colour keeps its name inside, in its ink, the header row as before. */
-    padding: calc(var(--_tile-inset) / 2 - var(--area-stroke-width));
-    border: var(--area-stroke-width) solid var(--area-border-card);
-    border-radius: var(--_tile-radius);
-    background: var(--area-bg-stripe);
-    color: var(--area-fg-default);
-    transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out);
+    padding: calc(var(--_tile-inset) - var(--area-stroke-width));
   }
-  .gallery-tile--plain[data-scoped] { background: var(--area-bg-stripe); }
-  .gallery-tile--plain[data-stage="none"] { grid-template-rows: auto; }
-  /* The header row: text on the inset (the name at the start, a value at the end), a control's plate as far from the
-     side as from the top (the row runs half the inset past the text edge). */
-  /* The row is the inset plus the name's cap tall, so the cap sits exactly the inset down whatever the control height (the
-     app's small control is 26 at its scale, which put the cap at 17); a control in it centres on the cap's line, its box
-     as far from the end as from the top. */
-  /* With its name outside, the box is its picture alone: one row. */
-  .gallery-tile--plain:not([data-painted]) { grid-template-rows: minmax(0, 1fr); row-gap: 0; }
-  /* A colour's own header row inside it (the colour is the card): the frame inset round it, as before. */
-  .gallery-tile--plain[data-painted] { padding: calc(var(--_tile-inset) / 2 - var(--area-stroke-width)) calc(var(--_tile-inset) - var(--area-stroke-width)) calc(var(--_tile-inset) - var(--area-stroke-width)); }
-  .gallery-tile--plain > .gallery-tile__head { block-size: calc(var(--_tile-inset) + 1cap); align-items: center; margin-inline-end: calc((1cap - var(--area-control-sm)) / 2); }
-  /* The name under the card: a small control's row 4 below it (owner: "even closer to 4"), the name 4 in on the feed's
-     text edge at the feed's 13, badges and controls ending on the card's edge. */
-  .gallery-plain { row-gap: var(--area-space-4); }
-  .gallery-plain > .gallery-tile__head { display: flex; align-items: center; gap: var(--area-space-8); block-size: var(--area-control-sm); padding-inline-start: var(--_text-inset); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
-  .gallery-plain > .gallery-tile__head > .gallery-tile__label { flex: 1 1 auto; color: var(--area-fg-default); }
-  /* Two shapes (owner, 2026-11-01: "are all 3 aspect ratios necessary?"): square, the default (components, colours,
-     images), and wide, 16:9, for anything designed (a screen, a cover), where a 1920 x 1080 window fits whole. */
-  .gallery-tile--plain > .gallery-tile__view { aspect-ratio: 1; border-radius: max(var(--area-radius-small), calc(var(--_tile-radius) - var(--_tile-inset) / 2)); }
-  .gallery-tile--plain[data-shape="wide"] > .gallery-tile__view { aspect-ratio: 16 / 9; }
-  /* Text set in the card (stage flow: a colour's values, a series' ramp) is not a picture: no picture corner, which shaved
-     the first glyph of a last line and the first step of a ramp where the text met the view's edge (owner, 2026-11-02:
-     "why is the text getting cutoff/rounded off inside the cards?"). */
-  .gallery-tile--plain[data-stage="flow"] > .gallery-tile__view { border-radius: 0; }
-  /* A screen fills its picture whole at 16:9 (setup-screen.tsx covers it from the top-left where the shapes differ). */
-  .gallery-tile--plain[data-stage="screen"] > .gallery-tile__view > .ss-frame { aspect-ratio: auto; block-size: 100%; }
-  .gallery-tile--plain:not([data-painted]) > .gallery-tile__head .gallery-tile__label { color: var(--area-fg-default); }
-  /* A painted frame's name is in the colour's own ink (2026-11-01: a plain painted tile's name took the default ink, black
-     on a dark colour; the Colors page set its own). */
+  .gallery-tile[data-painted]:has(> .gallery-tile__head) {
+    grid-template-rows: auto minmax(0, 1fr);
+    row-gap: calc(var(--_tile-inset) / 2 - var(--area-stroke-width));
+    padding-block-start: calc(var(--_tile-inset) / 2 - var(--area-stroke-width));
+  }
+  .gallery-tile[data-painted] > .gallery-tile__head {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    block-size: calc(var(--_tile-inset) + 1cap);
+    margin-inline-end: calc((1cap - var(--area-control-sm)) / 2);
+  }
+  .gallery-tile[data-painted] > .gallery-tile__head > .gallery-tile__label { flex: 1 1 auto; }
+  /* A painted frame's name is in the colour's own ink. */
   .gallery-tile[data-painted] .gallery-tile__label, .gallery-tile[data-painted] .gallery-tile__value { color: inherit; }
-  @media (hover: hover) {
-    .gallery-plain:hover > .gallery-tile--plain:not([data-painted]) { border-color: var(--area-edge-control-hover); transition-duration: 0s; }
-    .gallery-plain:hover > .gallery-tile--plain[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); transition-duration: 0s; } /* pick */
-  }
-  .gallery-plain:active > .gallery-tile--plain[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); } /* pick */
-  .gallery-plain:is([aria-selected="true"], [aria-pressed="true"], [data-selected]) > .gallery-tile--plain:not([data-painted]) {
-    border-color: var(--area-stroke-selected);
-    box-shadow: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-stroke-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint);
-    transition-duration: 0s;
-  }
-  .gallery-plain:is([aria-selected="true"], [aria-pressed="true"], [data-selected]) > .gallery-tile--plain[data-painted] { outline-color: var(--_ink); }
-  @media (forced-colors: active) {
-    .gallery-plain:is([aria-selected="true"], [aria-pressed="true"], [data-selected]) > .gallery-tile--plain { outline: calc(var(--area-stroke-width) * 2) solid Highlight; }
-  }
+  /* A screen fills its picture whole at 16:9 (setup-screen.tsx covers it from the top-left where the shapes differ). */
+  .gallery-tile[data-stage="screen"] > .gallery-tile__view > .ss-frame { aspect-ratio: auto; block-size: 100%; }
 
   /* The caption's name and value in the app's UI text (13 at its scale, owner, 2026-10-13). A painted frame's caption
      takes the colour's ink (Color's grade, studio-swatch__grade). */
   /* A card's name under it is the feed's 13/18 (owner, 2026-11-01, the card explorer's pick; it was 11/14 inside the card
-     for an afternoon), the Asset cards' (CARD_CAPTION) and the plain tiles' (.gallery-plain > head) alike; a colour's name
-     inside it stays the ramp's xs. */
+     for an afternoon), every card's caption (CARD_CAPTION; there are no plain tiles since 2026-11-02); a colour's name
+     inside it too (owner, 2026-11-01: "can the copy of the color cards be updated to match the rest of everything"; it was
+     the ramp's xs), in the colour's ink. */
   .gallery-tile__caption { font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
   .gallery-tile > .gallery-tile__head { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .gallery-tile[data-painted] > .gallery-tile__head { font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
 
   /*
    * Cards (src/tile.tsx, `card`; owner, 2026-10-14, after Compass's gallery, measured at 1440: 331 x 336 cards 12
@@ -277,8 +243,8 @@
     justify-content: space-between;
     gap: var(--area-space-8);
     min-inline-size: 0;
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
   }
   /* The header's text is trimmed to its cap, so the label's cap sits the inset below the edge, as far as it sits from
      the side. */
@@ -323,7 +289,7 @@
   [data-stage="flow"] > .gallery-tile__view { align-content: start; }
   /* A product screen (src/tile.tsx, `screen`): the view is the screen's own 16:9, which the screen fills, so the tile is
      its thumbnail at every width rather than a square with the screen floating in its middle. */
-  .gallery-tile--plain[data-stage="screen"] > .gallery-tile__view { grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
+  .gallery-tile[data-stage="screen"] > .gallery-tile__view { grid-template: minmax(0, 1fr) / minmax(0, 1fr); }
   .studio-tile-error { margin: 0; color: var(--area-fg-danger); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
 
 
@@ -369,9 +335,10 @@
   /* Markdown and stacked tables: blocks 16 apart, a paragraph or list kept to a reading measure. */
   .studio-doc { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-16); min-inline-size: 0; }
   .studio-doc__text, .studio-doc__list { margin: 0; max-inline-size: 80ch; /* pick: a reading measure */ }
-  /* Prose is copy, the feed's one size (13/18, as tables; was the page's 15/22), trimmed to cap and baseline, as titles
-     and ledes are, so the feed's 12 and 40 measure to its ink. */
-  .studio-doc__text, .studio-doc__list { font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
+  /* Prose is reading text, Cursor's chat and documents' 14/22 at type 13 (`text-lg`; owner, 2026-11-02: "should the body
+     copy for the feed be larger?"; it was the UI's 13/18, as tables), trimmed to cap and baseline, as titles and ledes
+     are, so the feed's 12 and 40 measure to its ink. Tables, controls and chrome stay the UI's 13. */
+  .studio-doc__text, .studio-doc__list { font-size: var(--area-text-lg-size); line-height: var(--area-text-lg-leading); letter-spacing: var(--area-text-lg-tracking); text-box: trim-both cap alphabetic; }
   .studio-doc__list { display: grid; gap: var(--area-space-4); padding-inline-start: var(--area-space-20); }
   /* Several names in one cell (exports, values, families, keys) wrap as a row; a prop's names stack. Inline boxes 8
      apart on the cell's lines, so a trimmed last row (table.md, flush) trims at the cell's last baseline; a flex row's
@@ -383,7 +350,8 @@
 
   /* --- Stage (src/stage.tsx) ------------------------------------------------ */
 
-  /* A family's isolated view: the tile made large. The tile's edge, corner, surface and head; the
+  /* A family's isolated view: the tile made large. The tile's edge, corner, fill and head (2026-11-01: it drew the raised
+     surface's white inside the border width, so it stood apart from the cards and tables round it); the
      specimen at its real size in the middle; a grip on the right edge that resizes it. Its code is a separate
      Code block under the frame (owner, 2026-10-18; it was attached under a rule inside it, Primer's model). */
   .studio-stage {
@@ -393,14 +361,14 @@
     box-sizing: border-box;
     inline-size: 100%;
     max-inline-size: 100%;
-    border: var(--area-border-width) solid var(--_tile-edge);
+    border: var(--area-stroke-width) solid var(--_tile-edge);
     border-radius: var(--_tile-radius);
-    background: var(--area-bg-surface);
+    background: var(--area-bg-stripe);
     color: var(--area-fg-default);
     overflow: clip;
   }
   /* The head is a tile's head (the tile's inset, the border counted once). */
-  .studio-stage__head { padding: calc(var(--_tile-inset) - var(--area-border-width)) calc(var(--_tile-inset) - var(--area-border-width)) 0; }
+  .studio-stage__head { padding: calc(var(--_tile-inset) - var(--area-stroke-width)) calc(var(--_tile-inset) - var(--area-stroke-width)) 0; }
   /* The specimen at its real size, centred, as a tile's fit stage lays it out before scaling: the
      stage stretches so a fluid specimen takes the room and a fixed one centres. A specimen larger
      than the view scrolls from its start (safe centring). */

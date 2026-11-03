@@ -23,6 +23,7 @@ import { TYPEFACES as CATALOGUE } from "../content/typefaces/catalogue.mjs";
 import FACES_JSON from "../content/typefaces/generated/faces.json";
 import UNICODE_JSON from "../content/typefaces/generated/unicode.json";
 import { CanvasSettings } from "../canvas-settings.tsx";
+import { TYPE_COLUMNS, TYPE_SAMPLE, TypeTable, TypeTesters, typeValues } from "../type-kit.tsx";
 import { CopyButton } from "../copy.tsx";
 import { DataTable, FactTable, Section } from "../family-tabs.tsx";
 import { Facts } from "../facts.tsx";
@@ -33,8 +34,8 @@ import { appScale } from "../app-scale.ts";
 import { Specimen } from "../specimen-scope.tsx";
 import { readStored, writeStored } from "../storage.ts";
 import { useStudio, Workspace } from "../studio.tsx";
-import { CanvasSection, FEED_TABLE } from "../tile.tsx";
-import { TYPE_ROLES } from "../tokens.ts";
+import { CanvasSection, FEED_CODE, FEED_TABLE } from "../tile.tsx";
+import { DEFAULT_TYPE, TYPE_ROLES } from "../tokens.ts";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 
 /* --- Data --------------------------------------------------------------------- */
@@ -105,7 +106,7 @@ export function stackOf(face: Typeface, facts: FaceFacts | undefined) {
 }
 
 /** How Area may use the face, in a word and a sentence (docs/research/typefaces-2026-10-31, the licence table). */
-function useOf(face: Typeface, facts: FaceFacts | undefined): { label: string; tone: "success" | "info" | "caution" | "neutral"; text: string } {
+export function useOf(face: Typeface, facts: FaceFacts | undefined): { label: string; tone: "success" | "info" | "caution" | "neutral"; text: string } {
   switch (face.tier) {
     case "open": case "libre": return { label: "Built in", tone: "success", text: "Ships with Area under its open licence, so any system can use it and publish it." };
     case "system": return { label: "System", tone: "neutral", text: "The operating system's own face: nothing to download or license." };
@@ -118,7 +119,7 @@ function useOf(face: Typeface, facts: FaceFacts | undefined): { label: string; t
   }
 }
 
-const KIND_LABEL: Record<FaceKind, string> = { text: "Text", display: "Display", code: "Code" };
+export const KIND_LABEL: Record<FaceKind, string> = { text: "Text", display: "Display", code: "Code" };
 const hex = (cp: number) => cp.toString(16).toUpperCase().padStart(4, "0");
 const blockOf = (cp: number) => UNICODE.blocks.find(([start, end]) => cp >= start && cp <= end)?.[2] ?? "Unassigned";
 const nameOf = (cp: number) => UNICODE.names[cp.toString(16).toUpperCase()] ?? `U+${hex(cp)}`;
@@ -199,7 +200,7 @@ export const TAB_IDS = TABS.map(tab => tab.id) as readonly string[];
 
 /* Glyph sizes: Font Book's repertoire runs about 32 to 64; the sheet's cells follow the size, as the icons' do. */
 const GLYPH_SIZES = [24, 32, 40, 48, 64, 80, 96] as const;
-const SAMPLE = "Every component, icon and color in one place.";
+const SAMPLE = TYPE_SAMPLE;
 
 /**
  * A face's own Workspace: the Sidebar passed in from Typography, the face's tabs on the Canvas, the chosen character or
@@ -365,15 +366,14 @@ function SpecimenTab({ face, facts, stack, sample }: { face: Typeface; facts: Fa
   const styles = facts ? stylesOf(facts) : [];
   return (
     <div className="studio-sections">
+      <Section id="specimen-tester" title="Tester" lede="The face at display size on one line, then a heavy and a regular paragraph. Every sample is editable.">
+        <TypeTesters faces={[face.id]} defaultFace={face.id} stack={stack} />
+      </Section>
       <Section id="specimen-ramp" title="On Area's ramp" lede="The sample in this face at every role, at the Canvas's type size. The Inspector edits the sample.">
-        <div className="studio-type-rows">
-          {TYPE_ROLES.map(role => (
-            <section key={role.id} className="studio-type-row" aria-label={role.name}>
-              <div className="studio-type-row__head" {...appScale()}><span>{role.name}</span></div>
-              <Specimen><span className="studio-type__sample" style={{ ...roleStyle(role.id), fontFamily: stack }}>{sample}</span></Specimen>
-            </section>
-          ))}
-        </div>
+        <TypeTable label="On Area's ramp" columns={TYPE_COLUMNS.slice(0, 3)} rows={TYPE_ROLES.map(role => ({
+          key: role.id, name: role.name, values: typeValues(role.metrics[DEFAULT_TYPE]!, 400).slice(0, 3),
+          sample: <Specimen><span className="studio-type__sample" style={{ ...roleStyle(role.id), fontFamily: stack }}>{sample}</span></Specimen>,
+        }))} />
       </Section>
       {face.kind === "display" ? (
         <Section id="specimen-pair" title="Over a plain body" lede="A display face sets the titles; the body stays Area's text face.">
@@ -533,7 +533,7 @@ function CodeTab({ face, facts }: { face: Typeface; facts: FaceFacts | undefined
     <div className="studio-sections">
       {blocks.map(block => (
         <Section key={block.id} id={`code-${block.id}`} title={block.title} lede={block.lede}>
-          <CodeBlock code={block.code} language={block.language} lineNumbers={false} {...appScale()} />
+          <CodeBlock code={block.code} language={block.language} lineNumbers={false} {...FEED_CODE} {...appScale()} />
         </Section>
       ))}
     </div>

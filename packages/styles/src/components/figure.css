@@ -35,8 +35,8 @@
        Area's UI text, muted. */
     padding-block-start: var(--area-space-8);
     color: var(--area-fg-muted);
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
     text-align: start;
   }
 }
