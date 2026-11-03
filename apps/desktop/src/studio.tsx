@@ -76,10 +76,13 @@ export const CANVAS_DEFAULTS = Object.fromEntries(
 /** Marks a saved Canvas whose Layer contrast, Card shade and Text tint are positions (0–100), so restoreCanvas converts only
  * the ones saved before. */
 const CANVAS_POSITIONS = 1;
-/** A theme's Canvas as its system file holds it: marked as positions. */
-const markCanvas = (canvas: CanvasAxes) => ({ ...canvas, positions: CANVAS_POSITIONS });
-function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: string; positions?: number }): CanvasAxes {
-  const { ui, layers, positions, ...rest } = saved;
+/** Marks a saved Canvas whose Series lightness is sky's palette step (350 or 400, 2026-11-02, round 18), not a lightness
+ * (2: blue's, 66–78, default 70; unmarked: one shared, 66–80, default 79), so restoreCanvas moves only older ones. */
+const CANVAS_SERIES = 3;
+/** A theme's Canvas as its system file holds it: marked as positions and as blue's Series lightness. */
+const markCanvas = (canvas: CanvasAxes) => ({ ...canvas, positions: CANVAS_POSITIONS, series: CANVAS_SERIES });
+function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: string; positions?: number; series?: number }): CanvasAxes {
+  const { ui, layers, positions, series, ...rest } = saved;
   const legacy: Partial<CanvasAxes> = {
     ...(ui === "compact" ? { type: "12", density: "28" } : ui === "default" ? { type: "14", density: "32" } : {}),
     ...(typeof layers === "string" ? { "layers-light": layers, "layers-dark": layers } : {}),
@@ -102,6 +105,13 @@ function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: stri
     for (const axis of ["card-tone-light", "card-tone-dark"]) scaled(axis, 100 / 4);
     for (const axis of ["ink-tint", "label-tint", "fill-hover", "fill-selected", "fill-pressed"]) scaled(axis, 25);
     for (const axis of ["tint-light", "tint-dark"]) scaled(axis, 100 / 16);
+  }
+  // Series lightness became sky's palette step (data views round 18, 2026-11-02): a lightness saved before (blue's,
+  // or unmarked, the old shared one 9 higher) lands on 350, or on 400 where it was a deep pick (blue's 67 or under).
+  if (series !== CANVAS_SERIES && typeof merged["series-lightness"] === "string") {
+    const old = Number(merged["series-lightness"]);
+    const blue = series === 2 ? old : old - 9;
+    if (Number.isFinite(old) && old < 100) merged["series-lightness"] = blue <= 67 ? "400" : "350";
   }
   const canvas = { ...CANVAS_DEFAULTS };
   for (const control of GALLERY_CONTROLS) {

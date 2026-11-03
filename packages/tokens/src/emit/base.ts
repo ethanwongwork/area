@@ -19,6 +19,7 @@ import { strokeGroupDerived } from "../axes/stroke-groups.ts";
 import { accentDerived, statusDerived } from "../axes/accent.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 import { brandDefaultCss } from "../semantic/brand.ts";
+import { DATA_STATUS } from "../color/series.ts";
 
 /** 4px base with 2px, 6px and 10px half-steps for tight control interiors. */
 export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96] as const;
@@ -101,6 +102,10 @@ export function baseTokens(): Record<string, string> {
   // The one disabled dimming, for controls that dim rather than repaint (audit S21b; was 0.5
   // written in 17 rules). Text fields repaint instead (DESIGN_SYSTEM "Shared state paint").
   out[`${PREFIX}opacity-disabled`] = "0.5";
+
+  // Charts' status colours (color/series.ts DATA_STATUS; data views rounds 14 and 15): good, some trouble, failed, for
+  // trackers, uptime and CI runs. The same in light and dark; Area's success, warning and danger roles stay for text.
+  for (const [tone, value] of Object.entries(DATA_STATUS)) out[`${PREFIX}data-${tone}`] = value;
 
   // Read by AreaProvider in development to detect a missing stylesheet, which otherwise
   // presents as "the components render but look unstyled" with no error anywhere.

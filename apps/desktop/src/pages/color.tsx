@@ -183,7 +183,7 @@ function SeriesSection() {
   return (
     <CanvasSection id="scale-series" title="Series" count={SERIES.length}>
       <TileGrid span="unit" className="studio-color-grid">
-        {SERIES.map(({ name }, i) => {
+        {SERIES.map(({ name, family, step }, i) => {
           const n = i + 1;
           return (
             <Tile key={name} span="unit" stage="flow" label={<span className="studio-swatch__level">{n} {title(name)}</span>}
@@ -191,6 +191,7 @@ function SeriesSection() {
               paint={{ background: `var(--area-series-${n}-fill)`, color: `var(--area-series-${n}-ink)` }}>
               <span className="studio-swatch__values">
                 <span>--area-series-{n}</span>
+                <span>{family} {step}</span>
                 <span className="studio-series__mark" style={{ background: `var(--area-series-${n})` }} aria-hidden="true" />
                 <span className="studio-series__ramp" aria-hidden="true">
                   {Array.from({ length: RAMP_STEPS }, (_, step) => <i key={step} style={{ background: `var(--area-series-${n}-ramp-${step + 1})` }} />)}

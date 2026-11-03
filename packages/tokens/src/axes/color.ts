@@ -10,7 +10,7 @@
  * the fixed semantic tones (danger, warning, success, info), and the shadow colour.
  */
 import { type AxisDefinition, type AxisPreset, type TokenMap, tokens } from "./schema.ts";
-import { CHROMATIC_SCALES, MUTED_SCALES, NEUTRAL_SCALES, SCALE_DESCRIPTIONS, STATUS_TONES } from "../color/presets.ts";
+import { CHROMATIC_SCALES, DATA_SCALES, MUTED_SCALES, NEUTRAL_SCALES, SCALE_DESCRIPTIONS, STATUS_TONES } from "../color/presets.ts";
 import { type Theme } from "../color/scale.ts";
 import { type ResolvedTheme, DEFAULT_SELECTION, resolveTheme } from "../semantic/resolve.ts";
 import { LAYER_COLOR_TOKENS, castOf, tintRoom } from "../color/layers.ts";
@@ -51,7 +51,7 @@ function themePreset(t: Theme): AxisPreset {
   // the namespace, the achromatic cast is reached through it, and `cool` and `warm` keep
   // their own primitive ramps for anything that needs to name a specific cast.
   const ramps: Record<string, string> = {};
-  for (const spec of [...NEUTRAL_SCALES, ...CHROMATIC_SCALES, ...MUTED_SCALES]) {
+  for (const spec of [...NEUTRAL_SCALES, ...CHROMATIC_SCALES, ...MUTED_SCALES, ...DATA_SCALES]) {
     if (spec.id === NEUTRAL_ALIAS) continue;
     Object.assign(ramps, primitiveRamp(resolved, spec.id));
   }
@@ -79,7 +79,7 @@ export const THEME_AXIS: AxisDefinition = {
   description: "Light or dark.",
   defaultPreset: "light",
   namespaces: [
-    ...[...NEUTRAL_SCALES, ...CHROMATIC_SCALES, ...MUTED_SCALES]
+    ...[...NEUTRAL_SCALES, ...CHROMATIC_SCALES, ...MUTED_SCALES, ...DATA_SCALES]
       .filter((s) => s.id !== NEUTRAL_ALIAS)
       .map((s) => `--area-${s.id}-`),
     "--area-danger-",

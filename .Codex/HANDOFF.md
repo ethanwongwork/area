@@ -1,6 +1,39 @@
 # Handoff
 
 ## Current state (2026-11-01)
+- **Data views exploration, branch `claude/table-data-viz-templates-3538ee` (uncommitted, 2026-11-01).** Owner asked to
+  align Table and design simple modular data-vis templates (Cursor, GitHub, Notion; light colours, detailed labels). Research
+  only, nothing in packages or the app changed: `docs/research/data-views-2026-11-01/` (README with Cursor's chat-chart values
+  read from its app bundle, `github-primer.md`, `products.md`, `review.html`). Review artifact U8HnLTmy61KManYurax1yH: ten live
+  modules + the aligned Table, picks in `verdicts` (marks, grid, ends, header, summary, cells, first, m1–m10). Series colours =
+  Meter's validated eight. Round 2: flat marks, tinted text, frame White/Tile. Round 3 (owner's 11 editorial refs): one
+  system — seven type styles on Area's ramp (words Geist, numbers Geist Mono), rhythm 2/4/8/16/32, rows 24/32/40, module =
+  header strip 40 / body 16 / footer 32, ruled Sheet layout. Round 4: the page links Area's compiled CSS (published beside it, not committed) and real component markup (Segmented,
+  Button, Badge, ToggleGroup, Radio, Input, Table, Meter, Tooltip); no coloured text but Badge; full-strength series marks;
+  1px rules, 2 gaps, 2 corners; container-query boards and per-plot redraws. Round 5: Area Cards with no
+  dividers; bars = Slider bar-inside anatomy (trough, pastel fill, white grip), hatch for projected, guide pills, tick ruler;
+  Table header finding: bg-subtle = page at Layers 0, propose bg-component. Round 6: grip only on a live
+  Slider (data bars end in a 1px edge), plain guide labels, projected = lighter tint (hatch optional), one 1px stroke spec. Round 7: no edges on fills;
+  key matches mark (parts of a whole full colour, measures pastel); plots fill cards; 9 dev-tool modules (technical-patterns.md).
+  Round 8: shape audit (row marks 24, strips/keys 8, corner 4/2, gap 2, value-end rounding) and one bright palette (300–400 steps).
+  Round 9: basic accessible palette (blue/teal/purple/red/indigo 500, 400 dark), no text on solid fills, one column grid.
+  Round 10: vibrant palette at each hue's peak-chroma ladder step (400/500, same both themes), heat ramp = Area blue ladder steps.
+  Round 11: soft Cursor-like data colours (C 0.06–0.09; slate, mist, lavender first), white backgrounds kept.
+  Round 12: luminous pastels from OpenAI's colours (sky, coral, periwinkle, lime…), heat sky→periwinkle. Colour system
+  audit merged as PR #195. Round 13 (2026-11-02, branch synced to main f9a6f8d4): the page reads Area's series tokens
+  (light -fill, dark mark), heat on series 1's ramp (five labelled steps), status on Area's success/warning/danger,
+  Table header choice dropped (main's bg-well). Round 14: chart status set (green #5dce8e, yellow #ffcd53, red #ff4a4b;
+  Area's success roles unchanged), stepped heat keys spanning their plots, measured card audit (audit.js) at four widths.
+  Round 15: brighter page series with indigo (blue, pink, yellow-green, indigo, orange, mint, purple, peach; not in
+  Area's tokens, which would need per-series lightness), stat tiles as 30-day columns like Requests per day.
+  Round 16 (owner: "Yes, build it"): BUILT into tokens, uncommitted: color/series.ts per-series lightness + cap (blue,
+  pink, yellow-green, indigo, orange, mint, purple, peach), Series lightness = blue's L 66–78 default 70 (restoreCanvas
+  migrates old values −9), -fill same both modes, new -area, --area-data-success/-warning/-danger; gate + docs updated;
+  all checks pass (series-plan.md › Built). The page reads the tokens again.
+  Round 19: series folded into the palette (new families chartreuse/mint/sky/violet via generate.ts DATA_HUES; each
+  series a family step; Series lightness Light 350 / Deep 400); Badge icons take the words' ink (dot keeps the mark,
+  modern unchanged); flow tiles lose the picture corner (canvas.css); page corners ≤ a quarter side. Uncommitted.
+  Picks so far: first=foundation, m8=build.
 - **One Sidebar frame in every tab, branch `claude/beautiful-goldberg-36a1e2` (merged to main, 2026-11-02).** Owner: "every
   page seems to create a new distinct nav". Research (Claude 4.4212 and Cursor 3.27 bundles), review page
   K5TADzUii6U6kY6kpiCx5i and four rounds in `docs/research/consistent-nav-2026-11-01/`. As built: Home, References,

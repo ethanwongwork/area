@@ -212,6 +212,10 @@
      images), and wide, 16:9, for anything designed (a screen, a cover), where a 1920 x 1080 window fits whole. */
   .gallery-tile--plain > .gallery-tile__view { aspect-ratio: 1; border-radius: max(var(--area-radius-small), calc(var(--_tile-radius) - var(--_tile-inset) / 2)); }
   .gallery-tile--plain[data-shape="wide"] > .gallery-tile__view { aspect-ratio: 16 / 9; }
+  /* Text set in the card (stage flow: a colour's values, a series' ramp) is not a picture: no picture corner, which shaved
+     the first glyph of a last line and the first step of a ramp where the text met the view's edge (owner, 2026-11-02:
+     "why is the text getting cutoff/rounded off inside the cards?"). */
+  .gallery-tile--plain[data-stage="flow"] > .gallery-tile__view { border-radius: 0; }
   /* A screen fills its picture whole at 16:9 (setup-screen.tsx covers it from the top-left where the shapes differ). */
   .gallery-tile--plain[data-stage="screen"] > .gallery-tile__view > .ss-frame { aspect-ratio: auto; block-size: 100%; }
   .gallery-tile--plain:not([data-painted]) > .gallery-tile__head .gallery-tile__label { color: var(--area-fg-default); }

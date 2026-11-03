@@ -76,7 +76,7 @@ Spacing: header, 6, bar, 6, description (Field's stack; 4 in compact). Area adds
 | description | Field's description, 12/16 muted, under the bar | Peer Field; Figma's caption | — |
 | bar | Progress's: rail `edge-control`, sm 4 / md 6 / lg 8, pill, `selection-solid` fill | ChatGPT 6 pill; peer Progress | Progress's rail rather than ChatGPT's 10% ink, so a meter and a progress bar match |
 | tones | `warning-solid`, `danger-solid` fills | Spectrum Meter notice / negative; Area status solids | — |
-| segments' colours | `series-1` … `series-8`, the series' marks by a part's place (2026-11-01) | The series colours (color/series.ts, OpenAI's palette); dataviz validator | Was a fixed order of palette steps with yellow and pink under 3:1 on white; every mark now clears 3:1 on every ground |
+| segments' colours | `series-1` … `series-8`, the series' marks by a part's place (2026-11-01; hues brightened with indigo 2026-11-02) | The series colours (color/series.ts); dataviz validator | Was a fixed order of palette steps with yellow and pink under 3:1 on white; every mark now clears 3:1 on every ground |
 | semantics | `role="meter"`, value clamped to the range, `aria-valuetext` from a string value text, named by the label, described by the description | React Aria Meter; WAI-ARIA 1.2 | — |
 
 ## States
@@ -183,4 +183,24 @@ the value now ends the label's row.
 - **Why:** your Build pick on the colour system study's proposal 2 (docs/research/color-system-2026-11-01): one set of
   data colours from OpenAI's palette for every chart, and Meter is the one data colour consumer today. Yellow 450 and
   pink 300 sat at 2.31 and 2.73:1 on white; every part now reads as a mark.
+- **Verdict:** in review.
+
+## Review note, 2026-11-02 (brighter series, indigo)
+
+- **What changed:** the series behind a stacked meter's parts are now blue, pink, yellow-green, indigo, orange, mint,
+  purple and peach, each at its own lightness. Light parts (the marks, 3:1 on every light ground):
+  #0091ef #ff35a7 #9a8f00 #5a68ee #e26a00 #00a07e #a964eb #ff4660 (indigo and purple are their colours, which already clear 3:1). Dark parts, the colours at Series lightness 70:
+  #3ba4fc #ee67aa #c8be52 #5a68ee #f98942 #49d2ac #a964eb #fb8087.
+- **Why:** the owner's data views round 15 ("the blue, pink and purple are a bit too pastel like, maybe can you
+  introduce indigo?"), built into the tokens on "Yes, build it" (docs/research/data-views-2026-11-01/series-plan.md).
+- **Verdict:** in review.
+
+## Review note, 2026-11-02 (series on the palette)
+
+- **What changed:** each series is now a palette step: sky 350, pink 300, chartreuse 400, indigo 450, orange 350, mint
+  400, violet 350, red 250 (sky, chartreuse, mint and violet are new palette families). Light parts (the marks):
+  #048bed #f84294 #8f8601 #646cff #d16702 #029574 #b565ff #fc3b5a; dark parts, the colours:
+  #2c9dff #ff66a4 #d0c302 #646cff #fe8c30 #01dcad #b565ff #ff8c93.
+- **Why:** the owner's "add the series colors to the palette ... a more cohesive overall palette" (data views round 18),
+  "Yes, build them".
 - **Verdict:** in review.

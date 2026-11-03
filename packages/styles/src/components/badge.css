@@ -198,7 +198,6 @@
     --_dot-color: var(--_mark, var(--_tone-fg));
     font-weight: var(--area-weight-regular);
   }
-  .area-badge--plain :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark, var(--_tone-fg)); }
   /*
    * Plain's colours (owner, 2026-11-01, on the live sheet: "these colors are nicer, can you make the light mode colors more
    * vibrant?"). The mark is a graphic, held to 3:1: in light, the palette step of most chroma that clears it on white
@@ -215,11 +214,15 @@
    * yellow, orange 550, red, blue, purple 400; 3.0 to 3.5; color's solid icons failed, caution 1.61) and their words keep
    * the text ink, already the brightest that clears 4.5 there. Solid keeps its fill and on-solid ink. Dark takes the
    * vivid ink everywhere (8 and up), over the dull solids color and modern drew (3.0 to 4.5).
+   *
+   * Icons take the words' ink (owner, 2026-11-02, on a delta badge's arrow: "i also dont like how different in color the
+   * arrow icons are from the text color"; "Icons take the words' colour: arrows and status marks alike"): an icon beside
+   * words reads as part of the label, and the words' 4.5:1 clears an icon's 3:1 with room. The dot keeps the bright mark:
+   * it is the badge's colour, not a glyph. Modern keeps its marked icon, because its words are the default ink by design
+   * and the icon is the only place its tone shows.
    */
   .area-badge--outline { --_fg: light-dark(var(--_vivid, var(--_tone-fg)), var(--_tone-fg)); /* spec */ --_dot-color: var(--_mark, var(--_solid)); }
-  .area-badge--outline :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark, var(--_tone-fg)); }
   .area-badge--soft { --_dot-color: var(--_mark-tint, var(--_solid)); }
-  .area-badge--soft :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark-tint, var(--_tone-fg)); }
   .area-badge--success { --_vivid: var(--area-fg-success-vivid); --_mark: light-dark(var(--area-green-500), var(--area-fg-success-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-green-550), var(--area-fg-success-vivid)); /* spec */ }
   .area-badge--caution { --_vivid: var(--area-fg-caution-vivid); --_mark: light-dark(var(--area-yellow-500), var(--area-fg-caution-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-yellow-550), var(--area-fg-caution-vivid)); /* spec */ }
   .area-badge--warning { --_vivid: var(--area-fg-warning-vivid); --_mark: light-dark(var(--area-orange-500), var(--area-fg-warning-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-orange-550), var(--area-fg-warning-vivid)); /* spec */ }
@@ -275,7 +278,6 @@
   }
   .area-badge--color { --_dot-color: var(--_mark-tint, var(--_solid)); }
   .area-badge--modern { --_dot-color: var(--_mark, var(--_solid)); }
-  .area-badge--color :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark-tint, var(--_solid)); }
   .area-badge--modern :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_mark, var(--_solid)); }
   .area-badge__avatar, .area-badge__flag { display: inline-flex; inline-size: var(--_media); block-size: var(--_media); flex: none; border-radius: var(--area-radius-full); overflow: hidden; }
   .area-badge__avatar > *, .area-badge__flag > * { inline-size: 100%; block-size: 100%; object-fit: cover; }

@@ -1,0 +1,1089 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Area Data Views</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<script>
+  /* Area's scale (the app's: type 13, density 32) and theme, set before anything paints. */
+  (function () {
+    var r = document.documentElement, t = null;
+    try { t = localStorage.getItem("dv-theme"); } catch (e) {}
+    if (t) r.setAttribute("data-theme", t);
+    r.setAttribute("data-area-type", "13");
+    r.setAttribute("data-area-density", "32");
+    r.setAttribute("data-area-theme", t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="area.css">
+<style>
+/* Area's compiled CSS draws the cards, controls, badges, table, meter, slider and tooltip; this sheet adds the charts.
+   Layout: Area Cards on a 12-column grid that answers its own width; no dividers inside a card.
+   Language (round 5, from the owner's slider, goal and bar references): every bar sits in a trough (Area's soft field
+   fill, as Slider's bar); fills are pastel tints of the series colour; a thick bar ends in Slider's white grip, a thin
+   mark in a 2px edge of its full colour; what is projected or not yet in is hatched; guides are 1px dashed with their
+   label in a small pill on the line. */
+:root {
+  --page: var(--area-bg-page, #ffffff); --frame: var(--area-bg-surface, #ffffff); --band: var(--area-bg-subtle, #f7f7f7);
+  --trough: var(--area-bg-component, #f3f3f3);
+  --ink: var(--area-fg-default, #282828); --muted: var(--area-fg-muted, #666666);
+  --rule: var(--area-border-divider, #e2e2e2); --grid: var(--area-border-decorative, #f3f3f3);
+  --accent: var(--area-accent-solid, #006df5);
+  /* Area's series tokens (color/series.ts), built from round 15's set on the owner's "Yes, build it" (2026-11-02,
+     series-plan.md): blue, pink, yellow-green, indigo, orange, mint, purple, peach, each at its own lightness, the same
+     colour in light and dark. -fill paints bars, areas, keys and dots; the mark paints lines (the blue at 3:1 on white). */
+  --s1: var(--area-series-1-fill); --s2: var(--area-series-2-fill); --s3: var(--area-series-3-fill); --s4: var(--area-series-4-fill);
+  --s5: var(--area-series-5-fill); --s6: var(--area-series-6-fill); --s7: var(--area-series-7-fill); --s8: var(--area-series-8-fill);
+  --l1: var(--area-series-1);
+  --s0: light-dark(#c8c8c8, #5c5c5c); /* spec: the neutral for Other and Dormant, not a series; literal so it never depends on a mix of Area's computed greys */
+  /* heat with numbers in it: five steps of series 1's ramp, its family's own steps (sky), never mixed toward white:
+     1, 2 and 4 under the text ink, 6 and 7 under the page's (white in light, near black in dark); every number reads at
+     5:1 or more in both themes (step 5 reads under 4.5 with either). */
+  --q0: var(--area-series-1-ramp-1); --q1: var(--area-series-1-ramp-2); --q2: var(--area-series-1-ramp-4);
+  --q3: var(--area-series-1-ramp-6); --q4: var(--area-series-1-ramp-7);
+  --h1: var(--area-series-1-ramp-2); --h2: var(--area-series-1-ramp-4); --h3: var(--area-series-1-ramp-6); --h4: var(--area-series-1-ramp-7);
+  /* charts' status: Area's data trio (#5dce8e, #ffcd53, #ff4a4b), never a series; text keeps success/warning/danger */
+  --ok: var(--area-data-success); --warn: var(--area-data-warning); --bad: var(--area-data-danger);
+  --mk: 100%; /* marks are the colour itself */
+  --pj: 40%; /* projected: a lighter tint of the same colour */
+  --guide: color-mix(in oklab, var(--area-fg-muted, #666666) 45%, var(--area-bg-surface, #ffffff)); /* every guide, leader and tick */
+  --sans: var(--area-font-sans, "Geist", ui-sans-serif, system-ui, sans-serif);
+  --mono: var(--area-font-mono, "Geist Mono", ui-monospace, monospace);
+  --num: var(--mono);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: var(--area-bg-page, #020202); --frame: var(--area-bg-surface, #161616); --band: var(--area-bg-subtle, #222222);
+    --trough: var(--area-bg-component, #262626);
+    --ink: var(--area-fg-default, #eeeeee); --muted: var(--area-fg-muted, #b4b4b4);
+    --rule: var(--area-border-divider, #333333); --grid: var(--area-border-decorative, #282828);
+    --q2: var(--area-series-1-ramp-4); --q3: var(--area-series-1-ramp-6); --q4: var(--area-series-1-ramp-7);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: var(--area-bg-page, #020202); --frame: var(--area-bg-surface, #161616); --band: var(--area-bg-subtle, #222222);
+  --trough: var(--area-bg-component, #262626);
+  --ink: var(--area-fg-default, #eeeeee); --muted: var(--area-fg-muted, #b4b4b4);
+  --rule: var(--area-border-divider, #333333); --grid: var(--area-border-decorative, #282828);
+  --q2: var(--area-series-1-ramp-4); --q3: var(--area-series-1-ramp-6); --q4: var(--area-series-1-ramp-7);
+  color-scheme: dark;
+}
+:root[data-numbers="sans"] { --num: var(--sans); }
+/* Colours › Palette: each series snapped to its nearest palette step (ΔE_OK × 100 from the series: blue 3.5, pink 3.2,
+   yellow 6.7 or lime, indigo 3.1, orange 1.8, teal 3.9, purple 3.9, red 3.1), the same steps in both themes; heat walks
+   the blue ladder: light 75, 150, 200, 250 and 300 under Area's text (350 falls to 4.4), dark 900, 800 and 650 under light text and 300 and 200 under dark. */
+:root[data-colours^="palette"] {
+  --s1: var(--area-blue-300); --s2: var(--area-pink-300); --s3: var(--area-yellow-400); --s4: var(--area-indigo-450);
+  --s5: var(--area-orange-350); --s6: var(--area-teal-400); --s7: var(--area-purple-400); --s8: var(--area-red-250);
+  --l1: var(--area-blue-500);
+  --q0: var(--area-blue-75); --q1: var(--area-blue-150); --q2: var(--area-blue-200); --q3: var(--area-blue-250); --q4: var(--area-blue-300);
+  --h1: var(--area-blue-150); --h2: var(--area-blue-300); --h3: var(--area-blue-450); --h4: var(--area-blue-600);
+}
+:root[data-colours="palette-lime"] { --s3: var(--area-lime-250); }
+:root[data-theme="dark"][data-colours^="palette"] {
+  --q0: var(--area-blue-900); --q1: var(--area-blue-800); --q2: var(--area-blue-650); --q3: var(--area-blue-300); --q4: var(--area-blue-200);
+  --h1: var(--area-blue-850); --h2: var(--area-blue-700); --h3: var(--area-blue-500); --h4: var(--area-blue-300);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-colours^="palette"] {
+    --q0: var(--area-blue-900); --q1: var(--area-blue-800); --q2: var(--area-blue-650); --q3: var(--area-blue-300); --q4: var(--area-blue-200);
+    --h1: var(--area-blue-850); --h2: var(--area-blue-700); --h3: var(--area-blue-500); --h4: var(--area-blue-300);
+  }
+}
+:root[data-marks="vivid"] { --mk: 100%; }
+
+/* type: Area's ramp at type 13 */
+.t-figure { font-family: var(--num); font-size: var(--area-title-lg-size, 30px); line-height: var(--area-title-lg-leading, 38px); font-weight: 500; letter-spacing: var(--area-title-lg-tracking, -0.02em); font-variant-numeric: tabular-nums; }
+.t-total { font-family: var(--num); font-size: var(--area-title-sm-size, 19px); line-height: var(--area-title-sm-leading, 26px); font-weight: 500; letter-spacing: var(--area-title-sm-tracking, -0.01em); font-variant-numeric: tabular-nums; }
+.t-title { font-family: var(--sans); font-size: var(--area-text-sm-size, 13px); line-height: var(--area-text-sm-leading, 18px); font-weight: 500; }
+.t-text { font-family: var(--sans); font-size: var(--area-text-sm-size, 13px); line-height: var(--area-text-sm-leading, 18px); font-weight: 400; }
+.t-num { font-family: var(--num); font-size: var(--area-text-sm-size, 13px); line-height: var(--area-text-sm-leading, 18px); font-weight: 400; font-variant-numeric: tabular-nums; }
+.t-label { font-family: var(--mono); font-size: var(--area-text-xs-size, 11px); line-height: var(--area-text-xs-leading, 14px); font-weight: 400; color: var(--muted); }
+.t-mark { font-family: var(--mono); font-size: var(--area-text-xs-size, 11px); line-height: var(--area-text-xs-leading, 14px); font-weight: 500; font-variant-numeric: tabular-nums; }
+:root[data-labels="caps"] .t-label, :root[data-labels="caps"] .ax, :root[data-labels="caps"] .gpill { text-transform: uppercase; letter-spacing: 0.04em; }
+.strong { color: var(--ink); font-weight: 500; }
+
+* { box-sizing: border-box; }
+body { background: var(--page); color: var(--ink); font-family: var(--sans); font-size: 13px; line-height: 20px; margin: 0; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1184px; margin: 0 auto; padding-block: 40px 96px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 720px) { .wrap { padding-left: max(32px, env(safe-area-inset-left, 0px)); padding-right: max(32px, env(safe-area-inset-right, 0px)); } }
+h1 { font-size: var(--area-title-lg-size, 30px); line-height: var(--area-title-lg-leading, 38px); letter-spacing: var(--area-title-lg-tracking, -0.02em); font-weight: 500; margin: 0; text-wrap: balance; }
+section { margin-top: 48px; display: grid; gap: 16px; min-width: 0; }
+.top { display: grid; gap: 8px; }
+.lede { color: var(--muted); max-width: 70ch; margin: 0; }
+.muted { color: var(--muted); }
+
+/* look bar */
+.lookbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in oklab, var(--page) 90%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); margin-top: 24px; padding-block: 8px; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--page); }
+.ctl { display: flex; align-items: center; gap: 8px; }
+.saved { margin-left: auto; }
+
+/* the grid of Area Cards */
+.board { container-type: inline-size; }
+.grid12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+.grid12 > .area-card { min-width: 0; }
+.c12 { grid-column: span 12; } .c8 { grid-column: span 8; } .c6 { grid-column: span 6; } .c4 { grid-column: span 4; } .c3 { grid-column: span 3; }
+@container (max-width: 920px) { .c8, .c4 { grid-column: span 12; } .c3 { grid-column: span 6; } }
+@container (max-width: 600px) { .c6, .c3 { grid-column: span 12; } }
+.area-card__content { min-width: 0; }
+.area-card__header-action { white-space: nowrap; }
+.body { display: grid; gap: 12px; min-width: 0; }
+.plot { position: relative; min-width: 0; }
+.plot svg { display: block; overflow: visible; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: center; }
+.key { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; display: inline-block; background: var(--c); }
+.key.tint { background: color-mix(in oklab, var(--c) var(--mk), var(--frame)); }
+.key.proj { background: color-mix(in oklab, var(--c) var(--pj), var(--frame)); }
+:root[data-projected="hatch"] .key.proj { background: repeating-linear-gradient(135deg, color-mix(in oklab, var(--c) 60%, var(--frame)) 0 1px, color-mix(in oklab, var(--c) 12%, var(--frame)) 1px 4px); }
+.keyed { display: inline-flex; align-items: center; gap: 8px; }
+.lg { cursor: pointer; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-transform: inherit; letter-spacing: inherit; }
+.lg[aria-pressed="false"] { opacity: 0.4; }
+.lg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.fig-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.area-badge svg { width: 12px; height: 12px; }
+.sentence { color: var(--muted); max-width: 52ch; margin: 0; }
+
+/* guide pill: a guide line's label, sitting on the line (the workflow reference's edge labels) */
+.gpill { font: 400 11px/14px var(--mono); }
+
+/* key-value rows with leaders */
+.kv { display: grid; }
+.kv .r { display: grid; grid-template-columns: auto minmax(8px, 1fr) auto auto; gap: 8px; align-items: center; height: 28px; }
+.kv .r .lead { height: 1px; background: repeating-linear-gradient(90deg, var(--guide) 0 2px, transparent 2px 4px); transform: translateY(4px); }
+.kv .r .share { min-width: 4ch; text-align: right; color: var(--muted); }
+
+/* a data bar is Area's Slider bar with its label inside, read-only: trough, tinted fill, white grip */
+.dbar.area-slider { --_fill: var(--c, var(--s1)); --_fill-hover: var(--_fill); --_height: 24px; --_bar-radius: 4px; } /* a row mark: 24 tall, corner 4 */
+.dbar .area-slider__label { white-space: nowrap; }
+.dbar .area-slider__value { font-family: var(--num); font-variant-numeric: tabular-nums; }
+.dbar.area-slider .area-slider__fill { inset-inline-start: 0; inline-size: calc(var(--r) * 100%); border-start-end-radius: 4px; border-end-end-radius: 4px; }
+.dbar .area-slider__rail::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: calc(var(--r) * 100% - 4px); inline-size: calc(var(--p) * 100% + 4px); background: color-mix(in oklab, var(--c, var(--s1)) var(--pj), var(--frame)); border-start-end-radius: 4px; border-end-end-radius: 4px; }
+:root[data-projected="hatch"] .dbar .area-slider__rail::before { background: repeating-linear-gradient(135deg, color-mix(in oklab, var(--c, var(--s1)) 60%, var(--frame)) 0 1px, color-mix(in oklab, var(--c, var(--s1)) 12%, var(--frame)) 1px 5px); }
+.pace { position: relative; display: grid; gap: 4px; }
+.pace .marks { position: relative; height: 14px; }
+.pace .marks span { position: absolute; white-space: nowrap; }
+.pace .unused-vg { position: absolute; top: 14px; height: calc(100% - 28px); width: 1px; background: repeating-linear-gradient(180deg, var(--guide) 0 2px, transparent 2px 4px); z-index: 2; pointer-events: none; }
+.pace .ends { display: flex; justify-content: space-between; }
+.strokes .r { display: grid; grid-template-columns: 96px 120px minmax(0, 1fr); gap: 16px; align-items: center; min-height: 32px; }
+@container (max-width: 520px) { .strokes .r { grid-template-columns: 80px 64px minmax(0, 1fr); } }
+.sw .chip { display: flex; overflow: hidden; }
+.langbar { display: flex; gap: 2px; height: 8px; }
+.langbar i { display: block; height: 100%; border-radius: 2px; background: var(--c); }
+.langs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); column-gap: 24px; }
+.langs .r { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; align-items: center; height: 24px; }
+.langs .dot { width: 8px; height: 8px; }
+.diff .r { display: grid; grid-template-columns: minmax(0, 1fr) 5ch 5ch auto; gap: var(--col-gap); align-items: center; height: 28px; }
+.diff .path { font-family: var(--num); font-size: var(--area-text-sm-size, 13px); line-height: var(--area-text-sm-leading, 18px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; direction: rtl; text-align: left; }
+.diff .r > .t-num { text-align: right; }
+.diff .blocks { display: inline-flex; gap: 2px; }
+.diff .blocks i { width: 8px; height: 8px; border-radius: 2px; background: var(--c, var(--trough)); }
+.funnel .r { display: grid; grid-template-columns: minmax(0, 1fr) 6ch; gap: var(--col-gap); align-items: center; }
+.funnel .r .t-num { text-align: right; color: var(--muted); }
+.funnel { display: grid; gap: 2px; }
+.split { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px; align-items: center; }
+.split .kv { align-self: center; }
+@container (max-width: 600px) { .split { grid-template-columns: 1fr; justify-items: center; } .split .kv { width: 100%; } }
+.sw .chip b { display: block; height: 100%; }
+.bars { display: grid; gap: 2px; position: relative; }
+:root { --name-w: 120px; --val-w: 64px; --col-gap: 12px; } /* one name column and one value column for every row-based module */
+.hbar { display: grid; grid-template-columns: var(--name-w) minmax(0, 1fr) var(--val-w); column-gap: var(--col-gap); align-items: center; height: 28px; }
+.hbar .hb-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hbar .hb-val { text-align: right; }
+.hb-track { position: relative; height: 8px; border-radius: 2px; background: var(--trough); }
+.hb-fill { position: absolute; inset-block: 0; inset-inline-start: 0; width: calc(var(--r) * 100%); border-radius: 2px; background: var(--c); }
+.hb-proj { position: absolute; inset-block: 0; inset-inline-start: calc(var(--r) * 100% + 2px); width: max(0px, calc(var(--p) * 100% - 2px)); border-radius: 2px; background: color-mix(in oklab, var(--c) var(--pj), var(--frame)); }
+:root[data-projected="hatch"] .hb-proj { background: repeating-linear-gradient(135deg, color-mix(in oklab, var(--c) 60%, var(--frame)) 0 1px, color-mix(in oklab, var(--c) 12%, var(--frame)) 1px 4px); }
+.hbar--lg { height: 32px; }
+.hbar--lg .hb-track { height: 24px; border-radius: 4px; }
+.hbar--lg .hb-fill, .hbar--lg .hb-proj { border-radius: 4px; }
+.hb-track .vg { position: absolute; top: -4px; bottom: -4px; width: 1px; background: repeating-linear-gradient(180deg, var(--guide) 0 2px, transparent 2px 4px); }
+.cols3 { display: grid; grid-template-columns: var(--name-w) minmax(0, 1fr) var(--val-w); column-gap: var(--col-gap); }
+.bars-scale { height: 14px; margin-bottom: 4px; }
+.bars-scale > span { position: relative; }
+.bars-scale > span > span { position: absolute; transform: translateX(-50%); }
+.bars-guides { position: absolute; inset: 18px 0 0 0; pointer-events: none; z-index: 2; }
+.bars-guides > span { position: relative; }
+.bars-guides i { position: absolute; top: 0; bottom: 0; width: 1px; background: repeating-linear-gradient(180deg, var(--guide) 0 2px, transparent 2px 4px); }
+.slider-row .area-slider { max-width: 100%; }
+
+/* table: Area's Table with the header and totals on the trough fill (proposed) */
+.tbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.tbar .grow { flex: 1; }
+.data-table { --area-table-corner: 16px; --area-table-edge: 16px; }
+.data-table .area-table { min-width: 760px; }
+.data-table td.muted { white-space: normal; min-width: 240px; }
+.data-table th { font-family: var(--mono); font-size: var(--area-text-xs-size, 11px); line-height: var(--area-text-xs-leading, 14px); }
+.data-table tfoot td { background: var(--area-bg-well, var(--trough)); } /* the totals row on the header's ground */
+.data-table td.heat { background: color-mix(in oklab, var(--s1) var(--h), var(--frame)); }
+.dot { width: 8px; height: 8px; border-radius: 2px; display: inline-block; background: var(--c); flex-shrink: 0; } /* a key: every key is an 8 square, corner 2 */
+.inbar { display: inline-block; width: 48px; height: 8px; border-radius: 2px; background: var(--trough); margin-left: 8px; vertical-align: 1px; position: relative; overflow: hidden; }
+.inbar b { position: absolute; inset: 0 auto 0 0; border-radius: 2px; background: var(--s1); }
+
+/* review chrome */
+.verdicts { display: flex; flex-wrap: wrap; gap: 8px 24px; padding: 0 4px; }
+.vd { display: inline-flex; align-items: center; gap: 8px; }
+.choices { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.q { background: var(--band); border-radius: 16px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.notes .r { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 16px; padding-block: 8px; }
+@container (max-width: 640px) { .notes .r { grid-template-columns: 1fr; gap: 4px; } }
+.swatches { display: flex; flex-wrap: wrap; gap: 16px; }
+.sw { display: grid; gap: 6px; justify-items: start; }
+/* the series / palette comparison: a column per colour, the series over the step, 2 apart; ramps as rows of seven */
+.cmp { display: grid; gap: 16px; }
+.cmp-cols { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 16px 12px; }
+.cmp-col { display: grid; gap: 2px; min-width: 0; }
+.cmp-col i { display: block; height: 32px; border-radius: 4px; }
+.cmp-col i + i { border-start-start-radius: 0; border-start-end-radius: 0; }
+.cmp-col i:first-of-type { border-end-start-radius: 0; border-end-end-radius: 0; }
+.cmp-col i.pal { display: flex; gap: 2px; background: none; overflow: hidden; }
+.cmp-col i.pal b { flex: 1; }
+.cmp-col .t-label { margin-top: 4px; }
+.cmp-col .t-label + .t-label { margin-top: 0; }
+.cmp-ramp { display: grid; grid-template-columns: 120px minmax(0, 1fr); column-gap: 12px; align-items: center; height: 28px; }
+.cmp-ramp > span:last-child { display: flex; gap: 2px; height: 24px; }
+.cmp-ramp > span:last-child i { flex: 1; border-radius: 4px; }
+.sw .chip { width: 64px; height: 24px; border-radius: 4px; }
+
+/* svg furniture and marks */
+.gl { stroke: var(--grid); stroke-width: 1; shape-rendering: crispEdges; }
+.base { stroke: var(--rule); stroke-width: 1; shape-rendering: crispEdges; }
+.ax { fill: var(--muted); font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums; }
+.vl { fill: var(--ink); font-family: var(--mono); font-size: 11px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.ref { stroke: var(--guide); stroke-width: 1; stroke-dasharray: 2 2; }
+:root[data-colours="series"] .vl.hi { fill: var(--page); } /* the series' top two heat steps take the page's ink: white on light's deep steps, near black on dark's bright ones */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .vl.hi { fill: var(--page); } }
+:root[data-theme="dark"] .vl.hi { fill: var(--page); } /* the top two heat steps on dark are bright: dark ink reads, light ink does not */
+.halo { paint-order: stroke; stroke: var(--frame); stroke-width: 4px; stroke-linejoin: round; }
+.pj { fill: color-mix(in oklab, var(--c) var(--pj), var(--frame)); }
+.xh { stroke: var(--guide); stroke-width: 1; pointer-events: none; }
+.m { fill: color-mix(in oklab, var(--c) var(--mk), var(--frame)); }
+.edge { fill: var(--c); }
+.gapline { fill: none; stroke: var(--frame); stroke-width: 1.5; stroke-linejoin: round; } /* a spacer in the card's colour between touching shapes, not a stroke */
+.mf { fill: var(--c); }
+.ln { fill: none; stroke: var(--c); stroke-width: 1; stroke-linejoin: round; stroke-linecap: round; }
+.wash { fill: var(--c); fill-opacity: 0.10; }
+.pt { fill: var(--c); stroke: var(--frame); stroke-width: 2; }
+.hit { fill: transparent; }
+.lvl0 { fill: var(--trough); }
+.gp-bg { fill: var(--trough); }
+.gp-tx { fill: var(--ink); font-family: var(--mono); font-size: 11px; }
+[data-t]:hover > .m, .m[data-t]:hover { fill: color-mix(in oklab, var(--c) calc(var(--mk) + 12%), var(--frame)); }
+
+/* the chart tooltip is Area's Tooltip */
+#tip.area-tooltip { position: fixed; left: 0; top: 0; margin: 0; inset: auto; z-index: 50; pointer-events: none; visibility: hidden; display: grid; gap: 2px; min-width: 150px; max-width: 280px; text-box: none; padding-block: 8px; }
+#tip .tr { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+#tip .tr > span:first-child { opacity: 0.72; }
+#tip .ctx { opacity: 0.72; font: 400 11px/14px var(--mono); margin-bottom: 2px; }
+#tip .tot { border-top: 1px solid color-mix(in oklab, currentColor 20%, transparent); margin-top: 2px; padding-top: 4px; }
+#tip .key { background: var(--c); }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="t-label">Area · data views · round 19 · 2 November 2026</span>
+    <h1>One system for data</h1>
+    <p class="lede">Round 19. The series are palette steps now, with sky, chartreuse, mint and violet added to the palette; badge icons take their words' colour; narrow bars keep small corners.</p>
+  </header>
+
+  <div class="lookbar" role="toolbar" aria-label="Look">
+    <div class="ctl"><span class="t-label">Colours</span><div class="area-segmented area-segmented--sm" role="radiogroup" aria-label="Colours" data-q="colours"><button type="button" role="radio" class="area-segmented__item" data-v="series"><span class="area-segmented__label">Series</span></button><button type="button" role="radio" class="area-segmented__item" data-v="palette-gold"><span class="area-segmented__label">Palette, gold</span></button><button type="button" role="radio" class="area-segmented__item" data-v="palette-lime"><span class="area-segmented__label">Palette, lime</span></button></div></div>
+    <div class="ctl"><span class="t-label">Projected</span><div class="area-segmented area-segmented--sm" role="radiogroup" aria-label="Projected" data-q="projected"><button type="button" role="radio" class="area-segmented__item" data-v="lighter"><span class="area-segmented__label">Lighter</span></button><button type="button" role="radio" class="area-segmented__item" data-v="hatch"><span class="area-segmented__label">Hatched</span></button></div></div>
+    <div class="ctl"><span class="t-label">Numbers</span><div class="area-segmented area-segmented--sm" role="radiogroup" aria-label="Numbers" data-q="numbers"><button type="button" role="radio" class="area-segmented__item" data-v="mono"><span class="area-segmented__label">Mono</span></button><button type="button" role="radio" class="area-segmented__item" data-v="sans"><span class="area-segmented__label">Sans</span></button></div></div>
+    <div class="ctl"><span class="t-label">Theme</span><div class="area-segmented area-segmented--sm" role="radiogroup" aria-label="Theme" id="theme"><button type="button" role="radio" class="area-segmented__item" data-v="light"><span class="area-segmented__label">Light</span></button><button type="button" role="radio" class="area-segmented__item" data-v="dark"><span class="area-segmented__label">Dark</span></button></div></div>
+    <span class="saved t-label" id="saved" aria-live="polite"></span>
+  </div>
+
+  <!-- ===================================================== 1 the language -->
+  <section aria-labelledby="h-lang" class="board">
+    <div class="area-section-heading"><h2 class="area-section-heading__title" id="h-lang">1 · The language</h2><p class="area-section-heading__lede">Five parts, each taken from your references and from components Area already has. Every module below is built from them.</p></div>
+    <div class="grid12">
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Name, bar, value</h3><div class="area-card__description">One 28 row: the name in its column, an 8 strip in the soft field grey with the fill in the series colour, the value in its column. Text never sits on a fill.</div></div></div>
+        <div class="body" id="lang-bars"></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Lighter for what isn't in yet</h3><div class="area-card__description">Projected, forecast or still counting: the same colour at 40%, flat. Hatching is the alternative, in the bar at the top.</div></div></div>
+        <div class="body" id="lang-hatch"></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c4"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Eight series colours</h3><div class="area-card__description">Brighter, as the status colours: blue, pink, yellow-green, indigo, orange, mint, purple, peach, in that fixed order and the same in light and dark. Projected is the colour at 40%.</div></div></div>
+        <div class="body"><div class="swatches" id="lang-sw"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c4"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Guides</h3><div class="area-card__description">1px, dashed 2 2, in one guide grey. The label is plain Label text at the line's end. The bars' references, +$5K and +$10K, cross every row.</div></div></div>
+        <div class="body"><div class="plot" id="lang-guide"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c4"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">A key for heat</h3><div class="area-card__description">One block per step, in the plot's own columns from its first cell to its last, with the step edges under it. The cells take five colours, so the key shows five.</div></div></div>
+        <div class="body"><div class="plot" id="lang-heat"></div><div class="plot" id="lang-ruler"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Series on the palette</h3><div class="area-card__description">Each series is now a step on a palette family (the top chip, named on the last line); under it, the nearest step the palette had before sky, chartreuse, mint and violet joined it. Then the heat ramps: the series' own (its family's steps) and the blue ladder. The Colours switch at the top repaints every chart with either set.</div></div></div>
+        <div class="body"><div class="cmp" id="lang-cmp"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Every stroke</h3><div class="area-card__description">Four kinds, all 1px. No fill has an outline or an edge; touching shapes are kept apart by a gap in the card's colour.</div></div></div>
+        <div class="body strokes" id="lang-strokes"></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Type and rhythm</h3><div class="area-card__description">Measured from this page. Every text is one of these seven styles, and every space one of these values.</div></div></div>
+        <div class="body"><div class="area-table-wrapper data-table" style="--area-table-corner:12px"><table class="area-table area-table--sm area-table--auto"><thead><tr><th scope="col">Style</th><th scope="col">Font</th><th scope="col">Size / line</th><th scope="col">Area role</th><th scope="col">Use</th></tr></thead><tbody><tr><td>Figure</td><td>Numbers font</td><td class="t-num">30/38 · 500</td><td>title-lg</td><td>A card's one headline number</td></tr><tr><td>Total</td><td>Numbers font</td><td class="t-num">19/26 · 500</td><td>title-sm</td><td>A ring's centre</td></tr><tr><td>Card title</td><td>Geist</td><td class="t-num">15/22 · 500</td><td>title-xs (Area Card)</td><td>Every card's name</td></tr><tr><td>Text</td><td>Geist</td><td class="t-num">13/18 · 400</td><td>text-sm</td><td>Names in rows, descriptions, legends as rows</td></tr><tr><td>Number</td><td>Numbers font</td><td class="t-num">13/18 · 400</td><td>text-sm, tabular</td><td>Values in rows, tooltips; end-aligned</td></tr><tr><td>Label</td><td>Geist Mono</td><td class="t-num">11/14 · 400</td><td>text-xs</td><td>Axes, column heads, units, legends on plots, guide labels</td></tr><tr><td>Mark value</td><td>Geist Mono</td><td class="t-num">11/14 · 500</td><td>text-xs</td><td>A number on a light cell; ink only, never on a solid fill</td></tr></tbody></table></div><div class="area-table-wrapper data-table" style="--area-table-corner:12px"><table class="area-table area-table--sm area-table--auto"><thead><tr><th scope="col">Space</th><th scope="col">Value</th><th scope="col">Where</th></tr></thead><tbody><tr><td>Card inset</td><td class="t-num">18</td><td>Area Card md at type 13</td></tr><tr><td>Card head to body</td><td class="t-num">14</td><td>Area Card</td></tr><tr><td>Blocks in a body</td><td class="t-num">12</td><td>plot, legend, list</td></tr><tr><td>Columns</td><td class="t-num">120 · 12 · 64</td><td>name column, gap, value column in every row-based module</td></tr><tr><td>Axis gutter</td><td class="t-num">40</td><td>y labels and row labels</td></tr><tr><td>List row</td><td class="t-num">28</td><td>bars, key-value rows, files</td></tr><tr><td>Row mark</td><td class="t-num">24 + 2</td><td>cells, timeline bars</td></tr><tr><td>Strip</td><td class="t-num">8</td><td>bars, language bar, inline bars</td></tr><tr><td>Plot</td><td class="t-num">192 · 128 · 24</td><td>charts · ring and dots · tracker</td></tr><tr><td>Between marks</td><td class="t-num">2</td><td>every gap</td></tr></tbody></table></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Shape audit</h3><div class="area-card__description">Every mark on this page, after the audit. Two heights (24 for row marks, 8 for strips and keys), one corner (4, or 2 on an 8 mark, never past a quarter of a side, so a narrow column is never a pill), one gap (2). Bars round only at the value end.</div></div></div>
+        <div class="area-table-wrapper data-table" style="--area-table-corner:12px"><table class="area-table area-table--sm area-table--auto" aria-label="Shape audit"><thead><tr><th scope="col">Mark</th><th scope="col">Used in</th><th scope="col">Height</th><th scope="col">Corner</th><th scope="col">Gap</th><th scope="col">Was</th></tr></thead><tbody><tr><td>Row bar</td><td>Top models, funnel, pace, the language samples</td><td class="t-num">24</td><td class="t-num">4, the value end</td><td class="t-num">2 between rows</td><td class="muted">32 tall (Slider md), trough corner 8, fill end 2, rows 4 apart</td></tr><tr><td>Cell</td><td>Heat matrix, retention</td><td class="t-num">24</td><td class="t-num">4</td><td class="t-num">2</td><td class="muted">Matrix cells 28 tall with corner 6; retention corner 2</td></tr><tr><td>Timeline bar</td><td>CI waterfall, services, request success</td><td class="t-num">24</td><td class="t-num">4, at most half the width</td><td class="t-num">2</td><td class="muted">16, 16 and 32 tall; rows 32 and 24 apart; corners 2</td></tr><tr><td>Column</td><td>Requests per day, the week, response time, lifecycle</td><td class="t-num">the plot</td><td class="t-num">4, the value end only</td><td class="t-num">2</td><td class="muted">Corners 2, 1 and 2; lifecycle rounded every segment on all four corners</td></tr><tr><td>Calendar cell</td><td>Activity</td><td class="t-num">square, from the card's width</td><td class="t-num">4</td><td class="t-num">2</td><td class="muted">Corner 2</td></tr><tr><td>Strip</td><td>Language bar, the table's inline bar</td><td class="t-num">8</td><td class="t-num">2</td><td class="t-num">2</td><td class="muted">Inline bar 6 tall with round ends</td></tr><tr><td>Key</td><td>Legends, diffstat, the table's kind</td><td class="t-num">8 square</td><td class="t-num">2</td><td class="t-num">2</td><td class="muted">The table's kind was a circle</td></tr><tr><td>Circle</td><td>Dot grid, punch card</td><td class="t-num">sized</td><td class="t-num">—</td><td class="t-num">2</td><td class="muted">Unchanged: circles only count units or size by area</td></tr><tr><td>Ring segment</td><td>Spend share</td><td class="t-num">14 thick</td><td class="t-num">square ends</td><td class="t-num">2</td><td class="muted">Unchanged</td></tr><tr><td>Area band</td><td>Daily usage</td><td class="t-num">—</td><td class="t-num">—</td><td class="t-num">1.5 in the card's colour</td><td class="muted">Unchanged</td></tr></tbody></table></div>
+      </div></article>
+    </div>
+  </section>
+
+  <!-- ===================================================== 2 modules -->
+  <section aria-labelledby="h-mod" class="board">
+    <div class="area-section-heading"><h2 class="area-section-heading__title" id="h-mod">2 · Modules</h2><p class="area-section-heading__lede">Hover for values; click a legend name to hide a series. Drag the limit in "Spend pace": it is Area's Slider, and the bar above it follows.</p></div>
+
+    <div class="grid12" id="b1">
+      <article class="area-card area-card--vertical area-card--md c3" data-stat="0"></article>
+      <article class="area-card area-card--vertical area-card--md c3" data-stat="1"></article>
+      <article class="area-card area-card--vertical area-card--md c3" data-stat="2"></article>
+      <article class="area-card area-card--vertical area-card--md c3" data-stat="3"></article>
+      <article class="area-card area-card--vertical area-card--md c8"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Daily usage</h3><div class="area-card__description">Spend across the billing period, cumulative, with the rest of the period projected</div></div><div class="area-card__header-action t-label">USD</div></div>
+        <div class="body"><div class="plot" id="area"></div><div class="legend t-label" id="area-legend"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c4"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Top models</h3><div class="area-card__description">So far and projected, this period</div></div><div class="area-card__header-action t-label">requests</div></div>
+        <div class="body"><div class="bars" id="ranked"></div><div class="legend t-label"><span class="keyed"><i class="key tint" style="--c:var(--s1)"></i>So far</span><span class="keyed"><i class="key proj" style="--c:var(--s1)"></i>Projected</span></div></div>
+      </div></article>
+    </div>
+    <div class="verdicts" data-board="b1"></div>
+
+    <div class="grid12" id="b2">
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Spend pace</h3><div class="area-card__description" id="pace-sentence"></div></div><div class="area-card__header-action t-label">USD</div></div>
+        <div class="body"><div class="plot" id="pace"></div><div class="kv" id="pace-kv"></div><div class="legend t-label"><span class="keyed"><i class="key tint" style="--c:var(--s1)"></i>Spent</span><span class="keyed"><i class="key proj" style="--c:var(--s1)"></i>Projected</span><span class="keyed"><svg width="12" height="8" aria-hidden="true"><line x1="6" x2="6" y1="0" y2="8" class="ref" style="opacity:1"/></svg>On pace today</span></div><div class="slider-row" id="limit-slider"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Requests per day</h3><div class="area-card__description">Today still counting; the average marked</div></div><div class="area-card__header-action t-label">count</div></div>
+        <div class="body"><div class="plot" id="cols"></div><div class="legend t-label"><span class="keyed"><i class="key tint" style="--c:var(--s1)"></i>Requests</span><span class="keyed"><i class="key proj" style="--c:var(--s1)"></i>Today, so far</span></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">When requests happen</h3><div class="area-card__description" id="matrix-meta"></div></div><div class="area-card__header-action t-label">count</div></div>
+        <div class="body"><div class="plot" id="matrix"></div><div class="plot" id="matrix-ruler"></div></div>
+      </div></article>
+    </div>
+    <div class="verdicts" data-board="b2"></div>
+
+    <div class="grid12" id="b3">
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Activity</h3><div class="area-card__description" id="cal-meta"></div></div><div class="area-card__header-action t-label">count</div></div>
+        <div class="body"><div class="plot" id="cal"></div><div class="plot" id="cal-ruler"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Spend share</h3><div class="area-card__description">By kind, this period</div></div><div class="area-card__header-action t-label">USD</div></div>
+        <div class="body"><div class="split"><div class="plot" id="ring"></div><div class="kv" id="ring-kv"></div></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Spend share</h3><div class="area-card__description">1 dot = 1% of spend</div></div><div class="area-card__header-action t-label">%</div></div>
+        <div class="body"><div class="plot" id="dots"></div><div class="legend t-label" id="dots-legend"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Request success</h3><div class="area-card__description" id="trk-meta"></div></div><div class="area-card__header-action t-label">days</div></div>
+        <div class="body"><div class="plot" id="tracker"></div><div class="legend t-label" id="tracker-legend"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Requests over the week</h3><div class="area-card__description" id="spk-meta"></div></div><div class="area-card__header-action t-label">count</div></div>
+        <div class="body"><div class="plot" id="spikes"></div></div>
+      </div></article>
+    </div>
+    <div class="verdicts" data-board="b3"></div>
+  </section>
+
+  <!-- ===================================================== 3 more -->
+  <section aria-labelledby="h-more" class="board">
+    <div class="area-section-heading"><h2 class="area-section-heading__title" id="h-more">3 · From developer tools</h2><p class="area-section-heading__lede">Patterns from GitHub, Vercel, Sentry, Grafana and PostHog, drawn in the same language. Each one is a wide, row-based composition that fills its card.</p></div>
+    <div class="grid12" id="b4">
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Languages</h3><div class="area-card__description">Share of the repository by size. GitHub's language bar</div></div><div class="area-card__header-action t-label">%</div></div>
+        <div class="body"><div class="langbar" id="langbar"></div><div class="kv" id="langs"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Files changed</h3><div class="area-card__description" id="diff-meta"></div></div><div class="area-card__header-action t-label">lines</div></div>
+        <div class="body"><div class="diff" id="diff"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Run #1,284</h3><div class="area-card__description" id="wf-meta"></div></div><div class="area-card__header-action t-label">time</div></div>
+        <div class="body"><div class="plot" id="wf"></div><div class="legend t-label"><span class="keyed"><i class="key tint" style="--c:var(--s1)"></i>Passed</span><span class="keyed"><i class="key tint" style="--c:var(--bad)"></i>Failed</span><span class="keyed"><i class="key proj" style="--c:var(--s1)"></i>Waiting</span></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Response time</h3><div class="area-card__description">Requests by duration, last 24 hours, with percentiles</div></div><div class="area-card__header-action t-label">ms</div></div>
+        <div class="body"><div class="plot" id="hist"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c6"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Sign-up funnel</h3><div class="area-card__description">Last 30 days; each step as a share of the one before</div></div><div class="area-card__header-action t-label">people</div></div>
+        <div class="body"><div class="funnel" id="funnel"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Commits by hour</h3><div class="area-card__description">Last 7 days; a dot's area is its count. GitHub's former punch card</div></div><div class="area-card__header-action t-label">count</div></div>
+        <div class="body"><div class="plot" id="punch"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c8"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Retention</h3><div class="area-card__description">Weekly cohorts: the share still active each week after joining</div></div><div class="area-card__header-action t-label">%</div></div>
+        <div class="body"><div class="plot" id="ret"></div><div class="plot" id="ret-ruler"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c4"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Lifecycle</h3><div class="area-card__description">People per week, gained above the line, lost below</div></div><div class="area-card__header-action t-label">people</div></div>
+        <div class="body"><div class="plot" id="life"></div><div class="legend t-label" id="life-legend"></div></div>
+      </div></article>
+      <article class="area-card area-card--vertical area-card--md c12"><div class="area-card__content">
+        <div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">Services</h3><div class="area-card__description" id="st-meta"></div></div><div class="area-card__header-action t-label">days</div></div>
+        <div class="body"><div class="plot" id="status"></div><div class="legend t-label" id="status-legend"></div></div>
+      </div></article>
+    </div>
+    <div class="verdicts" data-board="b4"></div>
+  </section>
+
+  <!-- ===================================================== 3 table -->
+  <section aria-labelledby="h-table" class="board">
+    <div class="area-section-heading"><h2 class="area-section-heading__title" id="h-table">4 · Table</h2><p class="area-section-heading__lede">Area's Table, as main ships it: the header and the totals row on the well ground (#f9f9f9 light, #161616 dark), which shows at every Layers setting. Headers in Label type, numbers right-aligned and tabular.</p></div>
+    <div class="tbar">
+      <span id="btn-range"></span>
+      <div class="area-segmented area-segmented--sm" role="radiogroup" aria-label="Period" id="period"><button type="button" role="radio" class="area-segmented__item" data-v="1d" aria-checked="false"><span class="area-segmented__label">1d</span></button><button type="button" role="radio" class="area-segmented__item" data-v="7d" aria-checked="false"><span class="area-segmented__label">7d</span></button><button type="button" role="radio" class="area-segmented__item" data-v="30d" aria-checked="true" data-selected=""><span class="area-segmented__label">30d</span></button></div>
+      <span class="grow"></span>
+      <span id="btn-export"></span>
+    </div>
+    <div class="area-table-wrapper data-table"><table class="area-table area-table--md area-table--auto" id="tbl" aria-label="Usage by model"></table></div>
+  </section>
+
+  <!-- ===================================================== 4 choices -->
+  <section aria-labelledby="h-q" class="board">
+    <div class="area-section-heading"><h2 class="area-section-heading__title" id="h-q">5 · Choices</h2><p class="area-section-heading__lede">The bar at the top previews the first three. Kept from earlier rounds: heat matrix Build, and series colours before Chart.</p></div>
+    <div class="choices" id="choices"></div>
+  </section>
+
+  <section aria-labelledby="h-ev" class="board">
+    <div class="area-section-heading"><h2 class="area-section-heading__title" id="h-ev">6 · What changed in round 19</h2></div>
+    <article class="area-card area-card--vertical area-card--md"><div class="area-card__content notes">
+      <div class="r"><span class="t-title">Series on the palette</span><span class="t-text muted">Every series colour is now a palette step: blue is sky 350, pink pink 300, yellow-green chartreuse 400, indigo indigo 450, orange orange 350, mint mint 400, purple violet 350, peach red 250. Sky, chartreuse, mint and violet are new palette families, built the palette's own way at the series' hues, so they sit among the others in Foundations › Colors. Lines, areas, numbers and heat ramps are steps of the same family. Series lightness is now Light (sky 350) or Deep (one step down for every colour): lighter greys peach, deeper drops indigo under 3:1 on dark.</span></div>
+      <div class="r"><span class="t-title">Badge icons</span><span class="t-text muted">A badge's icon (the delta arrows here, check circles, rings) takes its words' colour now, in plain, outline, soft and color badges; the dot keeps the bright mark. Modern keeps its coloured icon, since its words are grey by design.</span></div>
+      <div class="r"><span class="t-title">Corners</span><span class="t-text muted">A mark's corner is now never more than a quarter of its side (it was half), so a narrow column keeps a small corner instead of becoming a pill: the stat tiles' 11-wide columns round by about 3, not 4 on both sides. Wide bars and 24 rows keep 4; 8 strips keep 2.</span></div>
+      <div class="r"><span class="t-title">Series or palette steps</span><span class="t-text muted">The Colours switch at the top repaints every chart with the series (today's tokens) or with each series' nearest palette step: blue 300, pink 300, yellow 400 (gold) or lime 250, indigo 450, orange 350, teal 400, purple 400, red 250. Both sets pass the colour-blind checks (palette: neighbours ΔE ≥ 13.2). With palette steps, heat walks the blue ladder. Every heat number reads at 5.1:1 or more either way. The card "Series or palette steps" in section 1 shows each pair side by side. Your pick saves under Choices.</span></div>
+      <div class="r"><span class="t-title">In Area's tokens</span><span class="t-text muted">The eight colours are Area's series tokens now, and the page draws from them: blue, pink, yellow-green, indigo, orange, mint, purple, peach, each at its own lightness, the same colour in light and dark. Series lightness (Inspector › Emphasis) is blue's lightness, 66 to 78, 70 by default, and the other seven move with it. Charts' status colours are <code>--area-data-success</code>, <code>-warning</code> and <code>-danger</code>. Area's gate checks all of it at every setting, light and dark, standard and wide-gamut screens.</span></div>
+      <div class="r"><span class="t-title">Heat steps</span><span class="t-text muted">Blue moved from hue 239 to 248, so its dark ramp's middle step no longer carries a number at 4.5:1 with either ink. Dark heat now uses steps 1, 2 and 4 under light text and 6 and 7 under dark text; every number reads at 5.5:1 or more in both themes.</span></div>
+      <div class="r"><span class="t-title">Brighter series, with indigo</span><span class="t-text muted">Blue, pink and purple were capped at chroma 0.13 at lightness 0.79, which is what made them pastel. They now sit where the status colours do, each at its own lightness with more colour: blue #3ba4fc, pink #ee67aa, purple #a964eb, and a new indigo #5a68ee in place of periwinkle. Yellow-green, orange, mint and peach stay as they were. The order (blue, pink, yellow-green, indigo, orange, mint, purple, peach) was searched with the validator so neighbours stay apart for colour-blind readers (ΔE ≥ 12.2) and everyone else (≥ 23.4), on white and on the dark card; indigo lands fourth, so it shows in every four-part chart. The same colours in both themes. Built into Area's series tokens on 2 November: the page reads them.</span></div>
+      <div class="r"><span class="t-title">Stat tiles like the rest</span><span class="t-text muted">The tiles were the only charts drawn as a dark 1px line over a faint wash, and their last point dived because today isn't over. Now each is 30 days of columns in the same anatomy as Requests per day: the series fill, 2 apart, rounded at the value end, today in the lighter "so far" tint. Acceptance is a share, so each column stands in a trough to 100%, as every bar does.</span></div>
+      <div class="r"><span class="t-title">Other's key</span><span class="t-text muted">The neutral for Other and Dormant mixed Area's computed muted grey, which some browsers can't resolve, so the key went blank. It is a plain grey now.</span></div>
+    </div></article>
+  </section>
+</div>
+<div id="tip" class="area-tooltip" role="presentation"></div>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const ICON = {"CheckIcon":"<svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M3 8L6.5 11.5L13.5 4.5\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg>","ArrowUpIcon":"<svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M8 14V2M3 7L8 2L13 7\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg>","ArrowDownIcon":"<svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" aria-hidden=\"true\" focusable=\"false\"><g transform=\"rotate(180 8 8)\"><path d=\"M8 14V2M3 7L8 2L13 7\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></g></svg>","DownloadIcon":"<svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M8 2.5V11M5 8L8 11L11 8\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path><path d=\"M2.5 10V12A1.5 1.5 0 0 0 4 13.5H12A1.5 1.5 0 0 0 13.5 12V10\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg>","CalendarIcon":"<svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" aria-hidden=\"true\" focusable=\"false\"><rect x=\"2.5\" y=\"3.5\" width=\"11\" height=\"10\" rx=\"2\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></rect><path d=\"M2.5 6.5H13.5\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path><path d=\"M5.5 2V4.5M10.5 2V4.5\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path><circle cx=\"5.5\" cy=\"8.75\" r=\"0.75\" fill=\"currentColor\" style=\"r:calc(var(--area-weight-icon) * 0.6667 * var(--area-type-icon-line, 1))\"></circle><circle cx=\"8\" cy=\"8.75\" r=\"0.75\" fill=\"currentColor\" style=\"r:calc(var(--area-weight-icon) * 0.6667 * var(--area-type-icon-line, 1))\"></circle><circle cx=\"10.5\" cy=\"8.75\" r=\"0.75\" fill=\"currentColor\" style=\"r:calc(var(--area-weight-icon) * 0.6667 * var(--area-type-icon-line, 1))\"></circle><circle cx=\"5.5\" cy=\"11.25\" r=\"0.75\" fill=\"currentColor\" style=\"r:calc(var(--area-weight-icon) * 0.6667 * var(--area-type-icon-line, 1))\"></circle><circle cx=\"8\" cy=\"11.25\" r=\"0.75\" fill=\"currentColor\" style=\"r:calc(var(--area-weight-icon) * 0.6667 * var(--area-type-icon-line, 1))\"></circle></svg>","CircleDashedIcon":"<svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M13.887 6.839A6 6 0 0 1 13.887 9.161M12.984 11.341A6 6 0 0 1 11.341 12.984M9.161 13.887A6 6 0 0 1 6.839 13.887M4.659 12.984A6 6 0 0 1 3.016 11.341M2.113 9.161A6 6 0 0 1 2.113 6.839M3.016 4.659A6 6 0 0 1 4.659 3.016M6.839 2.113A6 6 0 0 1 9.161 2.113M11.341 3.016A6 6 0 0 1 12.984 4.659\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg>","MinusIcon":"<svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" fill=\"none\" aria-hidden=\"true\" focusable=\"false\"><path d=\"M2.5 8H13.5\" fill=\"none\" stroke=\"currentColor\" style=\"stroke-width:calc(var(--area-weight-icon) * var(--area-type-icon-line, 1))\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg>"};
+  const state = { colours: "series", marks: "pastel", projected: "lighter", numbers: "mono", header: "trough", labels: "sentence", first: null };
+  const VALID = { colours: ["series", "palette-gold", "palette-lime"], projected: ["lighter", "hatch"], marks: ["pastel", "vivid"], numbers: ["mono", "sans"], header: ["trough", "subtle"], labels: ["sentence", "caps"], first: ["foundation", "type", "table", "labs", "heat"] };
+  const MODS = { b1: [["m1", "Stat tiles"], ["m2", "Area over time"], ["m4", "Bars"]], b2: [["m12", "Pace"], ["m3", "Columns"], ["m8", "Heat matrix"]], b3: [["m6", "Calendar"], ["m9", "Ring"], ["m11", "Dot grid"], ["m7", "Tracker"], ["m10", "Weekly strip"]], b4: [["m13", "Language bar"], ["m14", "Diffstat"], ["m15", "Waterfall"], ["m16", "Histogram"], ["m17", "Funnel"], ["m18", "Punch card"], ["m19", "Retention"], ["m20", "Lifecycle"], ["m21", "Status history"]] };
+  const verdicts = {}, notes = {};
+  const hidden = new Set();
+  const GAP = 2, LBL = 4, R = 2;
+  const step = f => Math.max(0, Math.min(4, Math.floor(f * 5))); /* a share 0–1 to one of the five heat steps */
+  const AX = 40, NAME_W = 120, VAL_W = 64, COL_GAP = 12; /* the axis gutter, and the name and value columns every row-based module shares */
+  let limit = 60;
+
+  /* ---------- data (seeded) ---------- */
+  const rng = s => () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const rnd = rng(7);
+  const DAYS = 30, PERIOD = 36; /* the billing period runs Oct 3 – Nov 7; today is Nov 1, day 30 */
+  const day = i => new Date(2026, 9, 3 + i);
+  const fmtDay = d => d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const KINDS = [{ name: "Agent", c: "--s1" }, { name: "Chat", c: "--s2" }, { name: "Tab", c: "--s3" }, { name: "Background", c: "--s4" }];
+  const spend = KINDS.map((k, ki) => Array.from({ length: DAYS }, (_, i) => +([0.82, 0.3, 0.07, 0.18][ki] * ([0, 6].includes(day(i).getDay()) ? 0.45 : 1) * (0.6 + rnd() * 0.9) * (1 + i / 60)).toFixed(2)));
+  const cum = spend.map(s => { let a = 0; return s.map(v => +(a += v).toFixed(2)); });
+  const rate = cum.map(c => c[DAYS - 1] / DAYS); /* average spend per day, for the projection */
+  const requests = Array.from({ length: DAYS }, (_, i) => Math.round(([0, 6].includes(day(i).getDay()) ? 70 : 190) * (0.7 + rnd() * 0.6) * (1 + i / 50)));
+  requests[DAYS - 1] = Math.round(requests[DAYS - 1] * 0.55); /* today, still counting */
+  const MATRIX = [0, 1, 2, 3, 4, 5, 6].map(di => Array.from({ length: 12 }, (_, c) => Math.round((c >= 4 && c <= 9 ? 1 : 0.25) * (di >= 5 ? 0.3 : 1) * (40 + rnd() * 80))));
+  const CAL = Array.from({ length: 53 * 7 }, (_, i) => { const wk = i % 7 === 0 || i % 7 === 6; return rnd() < (wk ? 0.55 : 0.12) ? 0 : Math.round(rnd() * (wk ? 10 : 30) * (0.5 + i / (53 * 7))); });
+  const TRACK = Array.from({ length: 90 }, () => { const p = rnd(); const st = p < 0.04 ? "bad" : p < 0.12 ? "warn" : "ok"; return { st, failed: st === "ok" ? 0 : st === "warn" ? 1 + Math.round(rnd() * 6) : 40 + Math.round(rnd() * 60) }; });
+  const HOURS = Array.from({ length: 168 }, (_, i) => Math.round((i % 24 >= 9 && i % 24 <= 18 ? 1 : 0.2) * (Math.floor(i / 24) >= 5 ? 0.35 : 1) * (10 + rnd() * 40)));
+  [34, 82, 108].forEach((i, k) => HOURS[i] = [88, 102, 95][k]);
+  const SPARKS = Array.from({ length: 6 }, () => Array.from({ length: 14 }, () => 0.9 + rnd() * 0.16));
+  const money = v => "$" + v.toFixed(2);
+  const compact = v => v >= 1e6 ? (v / 1e6).toFixed(1).replace(/\.0$/, "") + "M" : v >= 1e3 ? (v / 1e3).toFixed(1).replace(/\.0$/, "") + "K" : String(Math.round(v));
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const niceStep = v => { const p = 10 ** Math.floor(Math.log10(v)); const n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p; };
+  const ticksFor = (max, count) => { const step = niceStep(max / count); const top = Math.ceil(max / step) * step; const t = []; for (let v = 0; v <= top + 1e-9; v += step) t.push(+v.toFixed(6)); return t; };
+  const totalSpend = KINDS.reduce((a, _, k) => a + cum[k][DAYS - 1], 0);
+  const projected = totalSpend / DAYS * PERIOD;
+  const parts = KINDS.map((k, ki) => ({ ...k, v: cum[ki][DAYS - 1] }));
+  const share = v => Math.round(v / totalSpend * 100) + "%";
+  const tickIdx = (n, w) => { const k = Math.max(2, Math.min(n, Math.floor(w / 96) + 1)); return Array.from({ length: k }, (_, j) => Math.round(j * (n - 1) / (k - 1))); };
+  const anchor = (i, n) => i === 0 ? "start" : i === n - 1 ? "end" : "middle";
+
+  /* ---------- tooltip (Area's Tooltip) ---------- */
+  const tip = document.getElementById("tip");
+  const TIPS = [];
+  const tipId = html => (TIPS.push(html), TIPS.length - 1);
+  const showTip = (html, x, y) => {
+    tip.innerHTML = html; tip.style.visibility = "visible";
+    const r = tip.getBoundingClientRect(); let left = x + 16, top = y - r.height - 16;
+    if (left + r.width > innerWidth - 8) left = x - r.width - 16;
+    if (top < 8) top = y + 16;
+    tip.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px)`;
+  };
+  const hideTip = () => { tip.style.visibility = "hidden"; };
+  const ctx = t => `<span class="ctx">${esc(t)}</span>`;
+  const row = (label, value, color) => `<div class="tr"><span class="keyed">${color ? `<i class="key" style="--c:var(${color})"></i>` : ""}${esc(label)}</span><span class="t-num">${esc(value)}</span></div>`;
+  document.addEventListener("pointermove", e => {
+    const t = e.target.closest?.("[data-t]");
+    if (t) { showTip(TIPS[+t.dataset.t], e.clientX, e.clientY); return; }
+    if (!e.target.closest?.("[data-xh]")) hideTip();
+  });
+  document.addEventListener("pointerleave", hideTip);
+
+  /* ---------- drawing helpers ---------- */
+  /* the shape scale: row marks 24 tall, strips and keys 8; corner 4, never past a quarter of a side (2 on an 8 mark, under 4 on a column narrower than 16: owner, 2026-11-02, narrow bars read as pills); bars round
+     at the value end only, square at the baseline; every gap between marks 2 */
+  const grow = el => +(el.dataset.grow || 0); /* extra height a card's row hands its plot (fill) */
+  const corner = (w, h = Infinity) => Math.max(0, Math.min(4, w / 4, h / 4));
+  const barD = (x, y, w, h) => { const r = corner(w, h); return `M${x},${y}H${x + w}V${y + h - r}A${r},${r} 0 0 1 ${x + w - r},${y + h}H${x + r}A${r},${r} 0 0 1 ${x},${y + h - r}Z`; };
+  const barV = (x, y, w, h, r = 4) => { r = Math.max(0, Math.min(r, w / 2, h)); if (!r) return `M${x},${y + h}V${y}H${x + w}V${y + h}Z`; return `M${x},${y + h}V${y + r}A${r},${r} 0 0 1 ${x + r},${y}H${x + w - r}A${r},${r} 0 0 1 ${x + w},${y + r}V${y + h}Z`; };
+  const xLabel = (x, y, text, a) => `<text class="ax" x="${x}" y="${y + LBL}" dominant-baseline="hanging" text-anchor="${a}">${text}</text>`;
+  const yLabel = (x, y, text) => `<text class="ax" x="${x - 8}" y="${y}" dy="0.35em" text-anchor="end">${text}</text>`;
+  const svgOpen = (w, h, label) => `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)}">`;
+  const hatchDefs = id => `<defs>${["--s1", "--s2", "--s3", "--s4"].map((c, i) => `<pattern id="${id}-h${i + 1}" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="color-mix(in oklab, var(${c}) 12%, var(--frame))"/><line x1="0" y1="0" x2="0" y2="5" stroke="color-mix(in oklab, var(${c}) 60%, var(--frame))" stroke-width="1"/></pattern>`).join("")}</defs>`;
+  /* a guide's label in a pill on the line */
+  const textW = (t, px = 6.6) => t.length * px;
+  /* a guide's label: plain Label text at the line, never a pill (a pill reads as something to drag) */
+  const gpill = (x, y, text, a = "middle") => `<text class="ax halo" x="${a === "end" ? x - 4 : a === "start" ? x + 4 : x}" y="${y}" dy="0.35em" text-anchor="${a}">${esc(text)}</text>`;
+  const kvRows = (id, items, withMoney) => { document.getElementById(id).innerHTML = items.map(p => `<div class="r"><span class="t-text keyed"><i class="key" style="--c:var(${p.c})"></i>${p.name}</span><span class="lead"></span><span class="t-num">${withMoney ? money(p.v) : ""}</span><span class="t-num share">${share(p.v)}</span></div>`).join(""); };
+  const badge = (tone, text, icon) => `<span class="area-badge area-badge--soft area-badge--${tone} area-badge--md">${icon ? `<span class="area-badge__leading-icon" aria-hidden="true">${ICON[icon] || ""}</span>` : ""}<span class="area-badge__label">${text}</span></span>`;
+  const button = (text, icon) => `<button type="button" class="area-button area-button--outline area-button--neutral area-button--sm"><span class="area-button__icon" aria-hidden="true">${ICON[icon] || ""}</span><span class="area-button__label">${text}</span></button>`;
+  /* a read-only data bar: Area's Slider bar with its label inside, the fill tinted, a hatched projection after it */
+  /* a data bar: name | an 8 strip in the trough | value, on one 28 row. Text never sits on the fill. */
+  const dbar = (label, valueText, ratio, color, proj = 0, size = "md", tipHtml = "", extra = "") => `<div class="hbar${size === "lg" ? " hbar--lg" : ""}" style="--c:var(${color});--r:${Math.max(0, ratio).toFixed(4)};--p:${Math.max(0, proj).toFixed(4)}"${tipHtml ? ` data-t="${tipId(tipHtml)}"` : ""}><span class="t-text hb-name">${label}</span><span class="hb-track"><i class="hb-fill"></i>${proj > 0 ? '<i class="hb-proj"></i>' : ""}${extra}</span><span class="t-num hb-val">${valueText}</span></div>`;
+  /* what isn't in yet: a lighter tint of the same colour, or the hatch when that is picked */
+  const projFill = (id, ki, c) => state.projected === "hatch" ? `fill="url(#${id}-h${ki + 1})"` : `class="pj" style="--c:var(${c})"`;
+
+  /* ---------- 1 · the language ---------- */
+  const L = {};
+  L.bars = () => { document.getElementById("lang-bars").innerHTML = dbar("Agent", "$25.30", 25.3 / 26, "--s1") + dbar("Chat", "$9.56", 9.56 / 26, "--s2") + dbar("Tab", "$2.55", 2.55 / 26, "--s3"); };
+  L.hatch = () => { document.getElementById("lang-hatch").innerHTML = dbar("Spent", "$43.62", 43.62 / 60, "--s1", (projected - 43.62) / 60) + dbar("Requests", "5,842", 0.58, "--s1", 0.12) + dbar("Tokens", "41.3M", 0.41, "--s1", 0.09); };
+  L.cmp = () => {
+    const C = [["Blue", "blue-300", "3.5"], ["Pink", "pink-300", "3.2"], ["Yellow-green", "yellow-400 · lime-250", "6.7"], ["Indigo", "indigo-450", "3.1"], ["Orange", "orange-350", "1.8"], ["Mint", "teal-400", "3.9"], ["Purple", "purple-400", "3.9"], ["Peach", "red-250", "2.8"]];
+    const FAM = ["sky 350", "pink 300", "chartreuse 400", "indigo 450", "orange 350", "mint 400", "violet 350", "red 250"];
+    const RCP = [["#28a1ff", "248 r350", "1.4"], ["#ff60b1", "352 r300", "3.3"], ["#d2c302", "104 r400", "4.3"], ["#5f6dff", "274 r450", "2.9"], ["#fe883c", "50 r350", "0.9"], ["#01dcaf", "171 r400", "3.0"], ["#b565ff", "305 r350", "3.6"], ["#ff8c91", "18 r250", "2.8"]];
+    const cols = C.map(([n, step, d], i) => {
+      const steps = step.split(" · ");
+      return `<div class="cmp-col"><i style="background:var(--area-series-${i + 1}-fill)" title="Series ${i + 1}"></i><i class="pal">${steps.map(st => `<b style="background:var(--area-${st})" title="${st}"></b>`).join("")}</i><span class="t-text">${n}</span><span class="t-label muted">${steps[0]}${steps[1] ? " / lime" : ""} · ${d}</span><span class="t-label muted">now ${FAM[i]}</span></div>`;
+    }).join("");
+    const ramp = (label, vars) => `<div class="cmp-ramp"><span class="t-text">${label}</span><span>${vars.map(v => `<i style="background:${v.startsWith("#") ? v : `var(${v})`}"></i>`).join("")}</span></div>`;
+    document.getElementById("lang-cmp").innerHTML = `<div class="cmp-cols">${cols}</div><div>${ramp("Series ramp", [1, 2, 3, 4, 5, 6, 7].map(k => `--area-series-1-ramp-${k}`))}${ramp("Blue ladder", ["--area-blue-100", "--area-blue-200", "--area-blue-300", "--area-blue-400", "--area-blue-500", "--area-blue-600", "--area-blue-700"])}</div>`;
+  };
+  L.sw = () => { const C = [["Blue", "--s1"], ["Pink", "--s2"], ["Yellow-green", "--s3"], ["Indigo", "--s4"], ["Orange", "--s5"], ["Mint", "--s6"], ["Purple", "--s7"], ["Peach", "--s8"]]; document.getElementById("lang-sw").innerHTML = C.map(([n, c]) => `<div class="sw"><span class="chip"><b style="width:70%;background:var(${c})"></b><b style="width:30%;background:color-mix(in oklab, var(${c}) var(--pj), var(--frame))"></b></span><span class="t-label">${n}</span></div>`).join(""); };
+  L.strokes = () => {
+    const line = (attrs) => `<svg width="120" height="12" aria-hidden="true"><line x1="0" x2="120" y1="6.5" y2="6.5" stroke-width="1" ${attrs}/></svg>`;
+    const S = [["Rule", `stroke="var(--rule)"`, "Area's divider · baselines, the table's rows"], ["Grid", `stroke="var(--grid)"`, "Area's decorative edge · gridlines"], ["Guide", `class="ref"`, "dashed 2 2 · average, today, limit, peaks, scale marks, leaders, ticks"], ["Line", `stroke="var(--l1)"`, "the series colour · sparklines only"]];
+    document.getElementById("lang-strokes").innerHTML = S.map(([n, a, d]) => `<div class="r"><span class="t-title">${n}</span>${line(a)}<span class="t-label">${d}</span></div>`).join("");
+  };
+  L.guide = () => {
+    /* rows 20 apart from the bottom, as many as the card's height holds (three at least); the guides cross them all */
+    const el = document.getElementById("lang-guide"), W = Math.max(200, el.clientWidth), H = 116 + grow(el), xs = [0.45, 0.9];
+    const n = Math.max(3, Math.floor((H - 22) / 20)), fr = [0.52, 0.3, 0.71, 0.18, 0.4, 0.6, 0.25];
+    let s = svgOpen(W, H, "Two guides with their labels");
+    xs.forEach((f, i) => { s += `<line class="ref" x1="${W * f}" x2="${W * f}" y1="16" y2="${H}"/>${gpill(W * f, 6, i ? "+$10K" : "+$5K")}`; });
+    for (let i = 0; i < n; i++) { const y = H - 14 - i * 20; s += `<rect x="0" y="${y}" width="${W}" height="8" rx="2" class="lvl0"/><rect class="m" style="--c:var(--s1)" x="0" y="${y}" width="${W * fr[i % fr.length]}" height="8" rx="2"/>`; }
+    el.innerHTML = s + "</svg>";
+  };
+  /* the ruler: a gradient in the trough, ticks under it, ends named */
+  /* The key for a heat plot: one block per step, in the plot's own columns (from x0, where its cells start, to its end),
+     2 apart like the cells, a tick in each gap and the step's edge value under it. Steps, not a gradient: the cells take
+     five colours, so the key shows five. */
+  const HEAT = ["--q0", "--q1", "--q2", "--q3", "--q4"];
+  const ruler = (id, x0, steps, edges, label) => {
+    const el = document.getElementById(id), W = Math.max(160, el.clientWidth), k = steps.length, bw = (W - x0 - GAP * (k - 1)) / k, H = 8 + 2 + 4 + LBL + 14;
+    let s = svgOpen(W, H, label);
+    steps.forEach((v, i) => { s += `<rect ${v ? `fill="var(${v})"` : 'class="lvl0"'} x="${(x0 + i * (bw + GAP)).toFixed(2)}" y="0" width="${bw.toFixed(2)}" height="8" rx="2"/>`; });
+    const room = (W - x0) / k; /* a middle edge label is drawn only when a block is wide enough to keep labels apart */
+    edges.forEach((t, i) => {
+      if (t === "" || (i > 0 && i < k && room < 48)) return;
+      const x = i === 0 ? x0 : i === k ? W : x0 + i * (bw + GAP) - GAP / 2, a = i === 0 ? "start" : i === k ? "end" : "middle";
+      s += `<line x1="${(i === 0 ? x0 + 0.5 : i === k ? W - 0.5 : x).toFixed(2)}" x2="${(i === 0 ? x0 + 0.5 : i === k ? W - 0.5 : x).toFixed(2)}" y1="10" y2="14" stroke="var(--guide)" stroke-width="1"/><text class="ax" x="${x.toFixed(2)}" y="${14 + LBL}" dominant-baseline="hanging" text-anchor="${a}">${t}</text>`;
+    });
+    el.innerHTML = s + "</svg>";
+  };
+  L.ruler = () => {
+    const el = document.getElementById("lang-heat"), W = Math.max(160, el.clientWidth), D = ["M", "T", "W", "T", "F", "S", "S"], top = 14 + LBL, ch = 24;
+    const V = [[12, 30, 55, 80, 104, 41, 9], [19, 64, 119, 92, 71, 26, 5], [8, 47, 88, 110, 63, 33, 14], [22, 58, 97, 76, 85, 18, 3]].slice(0, Math.min(4, 2 + Math.floor(grow(el) / (ch + GAP)))), max = 119, cw = (W - GAP * 6) / 7;
+    let s = svgOpen(W, top + V.length * (ch + GAP) - GAP, `${V.length} weeks of requests by day`);
+    D.forEach((d, c) => { s += `<text class="ax" x="${c * (cw + GAP) + 8}" y="${top - LBL}">${d}</text>`; });
+    V.forEach((r, ri) => r.forEach((v, c) => { const x0 = c * (cw + GAP), y0 = top + ri * (ch + GAP); s += `<rect x="${x0}" y="${y0}" width="${cw}" height="${ch}" rx="4" fill="var(--q${step(v / max)})"/>${cw >= 32 ? `<text class="vl${step(v / max) >= 3 ? " hi" : ""}" x="${x0 + 8}" y="${y0 + ch / 2}" dy="0.35em">${v}</text>` : ""}`; }));
+    el.innerHTML = s + "</svg>";
+    ruler("lang-ruler", 0, HEAT, HEAT.map((_, i) => String(Math.round(max * i / 5))).concat(String(max)), `Scale from 0 to ${max}`);
+  };
+
+  /* ---------- 2 · modules ---------- */
+  const M = {};
+  M.stats = () => {
+    const S = [
+      { label: "Requests", unit: "count", desc: "Last 30 days", value: "5,842", d: "12.4%", up: true, tone: "success", note: "vs. 5,197", data: requests },
+      { label: "Tokens", unit: "count", desc: "Last 30 days", value: "41.3M", d: "8.1%", up: true, tone: "success", note: "vs. 38.2M", data: requests.map((v, i) => v * (6200 + (i % 5) * 400)) },
+      { label: "Spend", unit: "USD", desc: "This period", value: money(totalSpend), d: "15.9%", up: true, tone: "neutral", note: "vs. $37.64", data: Array.from({ length: DAYS }, (_, i) => spend.reduce((a, k) => a + k[i], 0)) },
+      { label: "Acceptance", unit: "%", desc: "Last 30 days", value: "38.4%", d: "1.2 pt", up: false, tone: "danger", note: "vs. 39.6%", data: requests.map((v, i) => +(40.5 - i * 0.07 + (v % 7) / 4).toFixed(1)) },
+    ];
+    document.querySelectorAll("[data-stat]").forEach(el => {
+      const s = S[+el.dataset.stat];
+      if (!el.firstChild) el.innerHTML = `<div class="area-card__content"><div class="area-card__header"><div class="area-card__heading"><h3 class="area-card__title">${s.label}</h3><div class="area-card__description">${s.desc}</div></div><div class="area-card__header-action t-label">${s.unit}</div></div>
+        <div class="body"><span class="t-figure">${s.value}</span><div class="fig-row">${badge(s.tone, s.d, s.up ? "ArrowUpIcon" : "ArrowDownIcon")}<span class="t-label">${s.note}</span></div><div class="plot sp"></div></div></div>`;
+      /* the trend: one column a day, as Requests per day, 2 apart, rounded at the value end; today isn't over, so it takes
+         the lighter "so far" tint. From zero, so a steady rate reads steady; a share stands in a trough to 100%, as every bar does. */
+      const sp = el.querySelector(".sp"), w = Math.max(80, sp.clientWidth), h = 32, d = s.data, n = d.length;
+      const pct = s.unit === "%", band = (w + GAP) / n, bw = band - GAP, max = pct ? 100 : Math.max(...d), fmtV = s.unit === "USD" ? money : s.unit === "%" ? v => v + "%" : compact;
+      sp.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">${d.map((v, i) => { const bh = Math.max(2, v / max * h), today = i === n - 1;
+        return `<g data-t="${tipId(ctx(fmtDay(day(DAYS - n + i)) + (today ? " · so far" : "")) + row(s.label, fmtV(v), "--s1"))}">${pct ? `<path class="lvl0" d="${barV(i * band, 0, bw, h, corner(bw))}"/>` : ""}<path ${today ? 'class="pj" style="--c:var(--s1)"' : 'class="m" style="--c:var(--s1)"'} d="${barV(i * band, h - bh, bw, bh, corner(bw))}"/><rect class="hit" x="${i * band}" y="0" width="${band}" height="${h}"/></g>`; }).join("")}</svg>`;
+    });
+  };
+
+  M.area = () => {
+    const el = document.getElementById("area"), W = Math.max(200, el.clientWidth), H = 192 + grow(el), P = { t: 12, b: 18, l: AX };
+    const N = PERIOD, shown = KINDS.filter(k => !hidden.has(k.name));
+    const val = (ki, i) => i < DAYS ? cum[ki][i] : cum[ki][DAYS - 1] + rate[ki] * (i - DAYS + 1);
+    const tot = Array.from({ length: N }, (_, i) => KINDS.reduce((a, k, ki) => a + (hidden.has(k.name) ? 0 : val(ki, i)), 0));
+    const t = ticksFor(Math.max(...tot) * 1.05, 4), top = t[t.length - 1];
+    const x = i => P.l + i * (W - P.l) / (N - 1), y = v => P.t + (1 - v / top) * (H - P.t - P.b);
+    let s = svgOpen(W, H, `Cumulative spend by kind, ${money(tot[DAYS - 1])} by Nov 1, projected ${money(tot[N - 1])} by Nov 7`) + hatchDefs("ar");
+    t.forEach(v => { s += `<line class="${v ? "gl" : "base"}" x1="${P.l}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/>${yLabel(P.l, y(v), "$" + v)}`; });
+    tickIdx(N, W - P.l).forEach(i => { s += xLabel(x(i), H - P.b, fmtDay(day(i)), anchor(i, N)); });
+    const lower = Array(N).fill(0);
+    KINDS.forEach((k, ki) => {
+      if (hidden.has(k.name)) return;
+      const up = lower.map((v, i) => v + val(ki, i));
+      const seg = (a, b) => { const tp = up.slice(a, b + 1).map((v, j) => `${j ? "L" : "M"}${x(a + j).toFixed(1)},${y(v).toFixed(1)}`).join(""); const bt = lower.slice(a, b + 1).map((v, j) => `L${x(a + j).toFixed(1)},${y(v).toFixed(1)}`).reverse().join(""); return [tp, bt]; };
+      const [pt, pb] = seg(0, DAYS - 1), [ft, fb] = seg(DAYS - 1, N - 1);
+      s += `<path class="m" style="--c:var(${k.c})" d="${pt}${pb}Z"/><path ${projFill("ar", ki, k.c)} d="${ft}${fb}Z"/><path class="gapline" d="${pt}"/><path class="gapline" d="${ft}"/>`;
+      up.forEach((v, i) => lower[i] = v);
+    });
+    const tx = x(DAYS - 1);
+    s += `<line class="ref" x1="${tx}" x2="${tx}" y1="${P.t}" y2="${H - P.b}"/>${gpill(tx, P.t + 2, "Today " + money(tot[DAYS - 1]), "end")}`;
+    s += `<g class="xhg" style="display:none"><line class="xh" y1="${P.t}" y2="${H - P.b}"/></g><rect class="hit" data-xh="1" x="${P.l}" y="${P.t}" width="${W - P.l}" height="${H - P.t - P.b}"/></svg>`;
+    el.innerHTML = s;
+    document.getElementById("area-legend").innerHTML = KINDS.map(k => `<button class="lg keyed" data-k="${k.name}" aria-pressed="${!hidden.has(k.name)}"><i class="key tint" style="--c:var(${k.c})"></i>${k.name}</button>`).join("") + `<span class="keyed"><i class="key proj" style="--c:var(--s1)"></i>Projected</span>`;
+    const hit = el.querySelector("[data-xh]"), xh = el.querySelector(".xhg"), line = xh.querySelector("line");
+    hit.addEventListener("pointermove", e => {
+      const r = el.getBoundingClientRect(); const i = Math.max(0, Math.min(N - 1, Math.round((e.clientX - r.left - P.l) / ((W - P.l) / (N - 1)))));
+      xh.style.display = ""; line.setAttribute("x1", x(i)); line.setAttribute("x2", x(i));
+      xh.querySelectorAll("circle").forEach(c => c.remove());
+      let acc = 0; KINDS.forEach((k, ki) => { if (hidden.has(k.name)) return; acc += val(ki, i); const c = document.createElementNS("http://www.w3.org/2000/svg", "circle"); c.setAttribute("class", "pt"); c.setAttribute("style", `--c:var(${k.c})`); c.setAttribute("cx", x(i)); c.setAttribute("cy", y(acc)); c.setAttribute("r", 3); xh.appendChild(c); });
+      showTip(ctx(fmtDay(day(i)) + (i === DAYS - 1 ? " · today" : i >= DAYS ? " · projected" : "")) + shown.slice().reverse().map(k => row(k.name, money(val(KINDS.indexOf(k), i)), k.c)).join("") + `<div class="tot">${row("Total", money(tot[i]))}</div>`, e.clientX, e.clientY);
+    });
+    hit.addEventListener("pointerleave", () => { xh.style.display = "none"; hideTip(); });
+  };
+  document.getElementById("area-legend").addEventListener("click", e => {
+    const b = e.target.closest("[data-k]"); if (!b) return;
+    const k = b.dataset.k; if (hidden.has(k)) hidden.delete(k); else if (hidden.size < KINDS.length - 1) hidden.add(k);
+    M.area();
+  });
+
+  M.ranked = () => {
+    const Lr = [["Large", 2140], ["Default", 1688], ["Fast", 912], ["Reasoning", 604], ["Small", 318], ["Other", 180]];
+    const f = PERIOD / DAYS, scale = niceStep(Lr[0][1] * f / 3) * 3, marks = [scale / 3, scale * 2 / 3];
+    const col = inner => `<span></span><span>${inner}</span><span></span>`;
+    document.getElementById("ranked").innerHTML = `<div class="bars-scale cols3 t-label">${col(marks.map(m => `<span style="left:${m / scale * 100}%">${compact(m)}</span>`).join(""))}</div><div class="bars-guides cols3">${col(marks.map(m => `<i style="left:${m / scale * 100}%"></i>`).join(""))}</div>`
+      + Lr.map(([n, v]) => dbar(n, v.toLocaleString(), v / scale, "--s1", v * (f - 1) / scale, "md", ctx(n) + row("So far", v.toLocaleString(), "--s1") + row("Projected", Math.round(v * f).toLocaleString()))).join("");
+  };
+
+
+  M.pace = () => {
+    const el = document.getElementById("pace"), max = Math.max(limit, projected) * 1.1, pc = v => (v / max * 100).toFixed(2) + "%", pace = limit * DAYS / PERIOD, over = projected > limit;
+    const lim = v => `left:${pc(v)};transform:translateX(${v / max > 0.8 ? "-100%" : "-50%"})`;
+    el.innerHTML = `<div class="pace"><div class="cols3 t-label" style="height:14px"><span></span><span style="position:relative"><span style="position:absolute;white-space:nowrap;${lim(limit)}">Limit ${money(limit)}</span></span><span></span></div>`
+      + dbar("Spent", money(totalSpend), totalSpend / max, "--s1", (projected - totalSpend) / max, "lg", ctx("This period") + row("Spent", money(totalSpend), "--s1") + row("Projected", money(projected)) + row("On pace today", money(pace)) + row("Limit", money(limit)), `<i class="vg" style="left:${pc(pace)}"></i><i class="vg" style="left:${pc(limit)}"></i>`)
+      + `<div class="cols3 t-label"><span></span><span style="display:flex;justify-content:space-between;gap:8px;white-space:nowrap">${el.clientWidth - NAME_W - VAL_W - 2 * COL_GAP >= 160 ? "<span>$0</span>" : "<span></span>"}<span>Projected ${money(projected)}</span></span><span></span></div></div>`;
+    kvRows("pace-kv", parts, true);
+    const diff = Math.abs(limit - projected);
+  };
+
+  M.cols = () => {
+    const el = document.getElementById("cols"), W = Math.max(200, el.clientWidth), H = 192 + grow(el), P = { t: 18, b: 18, l: AX };
+    const t = ticksFor(Math.max(...requests), 4), top = t[t.length - 1];
+    const band = (W - P.l) / DAYS, bw = Math.max(1, band - GAP);
+    const y = v => P.t + (1 - v / top) * (H - P.t - P.b);
+    const done = requests.slice(0, -1), avg = Math.round(done.reduce((a, b) => a + b, 0) / done.length), mi = requests.indexOf(Math.max(...requests));
+    let s = svgOpen(W, H, `Requests per day, average ${avg}, most ${requests[mi]} on ${fmtDay(day(mi))}`) + hatchDefs("co");
+    t.forEach(v => { s += `<line class="${v ? "gl" : "base"}" x1="${P.l}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/>${yLabel(P.l, y(v), v)}`; });
+    requests.forEach((v, i) => {
+      const bx = P.l + i * band + GAP / 2, today = i === DAYS - 1, h = y(0) - y(v);
+      s += today ? `<path ${projFill("co", 0, "--s1")} d="${barV(bx, y(v), bw, h)}"/>` : `<path class="m" style="--c:var(--s1)" d="${barV(bx, y(v), bw, h)}"/>`;
+      s += `<rect class="hit" x="${P.l + i * band}" y="${P.t}" width="${band}" height="${H - P.t - P.b}" data-t="${tipId(ctx(day(i).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) + (today ? " · so far" : "")) + row("Requests", v.toLocaleString(), "--s1") + row("vs. average", (v >= avg ? "+" : "−") + Math.abs(v - avg)))}"/>`;
+      if (i === mi) s += `<text class="vl" x="${bx + bw / 2}" y="${y(v) - LBL - 2}" text-anchor="middle">${v}</text>`;
+    });
+    s += `<line class="ref" x1="${P.l}" x2="${W}" y1="${y(avg)}" y2="${y(avg)}"/>${gpill(P.l, y(avg) - 9, "avg " + avg, "start")}`;
+    tickIdx(DAYS, W - P.l).forEach(i => { s += xLabel(P.l + i * band + band / 2, H - P.b, fmtDay(day(i)), anchor(i, DAYS)); });
+    el.innerHTML = s + "</svg>";
+  };
+
+  M.matrix = () => {
+    const el = document.getElementById("matrix"), W = Math.max(200, el.clientWidth), D = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], lab = AX, top = 14 + LBL;
+    const bins = W < 560 ? 6 : 12, per = 12 / bins;
+    const vals = MATRIX.map(r => Array.from({ length: bins }, (_, b) => r.slice(b * per, b * per + per).reduce((a, v) => a + v, 0)));
+    const cw = (W - lab - GAP * (bins - 1)) / bins, ch = 24, H = top + 7 * (ch + GAP) - GAP;
+    const max = Math.max(...vals.flat());
+    let s = svgOpen(W, H, `Requests by weekday and ${per * 2}-hour block, most ${max}`);
+    for (let c = 0; c < bins; c++) s += `<text class="ax" x="${lab + c * (cw + GAP) + 8}" y="${top - LBL}">${String(c * per * 2).padStart(2, "0")}:00</text>`;
+    vals.forEach((rv, di) => {
+      s += `<text class="ax" x="0" y="${top + di * (ch + GAP) + ch / 2}" dy="0.35em">${D[di]}</text>`;
+      rv.forEach((v, c) => {
+        const x0 = lab + c * (cw + GAP), y0 = top + di * (ch + GAP), h0 = c * per * 2;
+        s += `<g data-t="${tipId(ctx(`${D[di]} ${String(h0).padStart(2, "0")}:00–${String(h0 + per * 2).padStart(2, "0")}:00`) + row("Requests", String(v), "--s1") + row("Of the most", Math.round(v / max * 100) + "%"))}"><rect x="${x0}" y="${y0}" width="${cw}" height="${ch}" rx="4" fill="var(--q${step(v / max)})"/>${cw >= 32 ? `<text class="vl${step(v / max) >= 3 ? " hi" : ""}" x="${x0 + 8}" y="${y0 + ch / 2}" dy="0.35em">${v}</text>` : ""}</g>`;
+      });
+    });
+    el.innerHTML = s + "</svg>";
+    document.getElementById("matrix-meta").textContent = `Requests by weekday, ${per * 2}-hour blocks, last 4 weeks`;
+    ruler("matrix-ruler", lab, HEAT, HEAT.map((_, i) => String(Math.round(max * i / 5))).concat(String(max)), `Scale from 0 to ${max} requests`);
+  };
+
+  M.cal = () => {
+    /* the cells fill the card: as many weeks as fit at 12 a step (52 at most), then the step widens to the full width */
+    const el = document.getElementById("cal"), avail = Math.max(200, el.clientWidth), lab = AX, top = 14 + LBL;
+    const weeks = Math.max(8, Math.min(52, Math.floor((avail - lab + GAP) / 12)));
+    const step = (avail - lab + GAP) / weeks, size = step - GAP;
+    const W = avail, H = top + 7 * step - GAP;
+    const end = new Date(2026, 10, 1), start = new Date(end); start.setDate(end.getDate() - (weeks * 7 - 1) - end.getDay());
+    const lv = n => n === 0 ? 0 : n < 6 ? 1 : n < 14 ? 2 : n < 24 ? 3 : 4;
+    let s = svgOpen(W, H, `Requests per day over ${weeks} weeks`), lastMonth = -1, total = 0;
+    const off = 53 * 7 - weeks * 7;
+    for (let w = 0; w < weeks; w++) for (let d = 0; d < 7; d++) {
+      const dt = new Date(start); dt.setDate(start.getDate() + w * 7 + d); if (dt > end) continue;
+      if (d === 0 && dt.getMonth() !== lastMonth && dt.getDate() <= 7 && w < weeks - 2) { lastMonth = dt.getMonth(); s += `<text class="ax" x="${lab + w * step}" y="${top - LBL}">${dt.toLocaleDateString("en-US", { month: "short" })}</text>`; }
+      const n = CAL[off + w * 7 + d] || 0; total += n;
+      s += `<rect ${n ? `fill="var(--h${lv(n)})"` : 'class="lvl0"'} x="${(lab + w * step).toFixed(2)}" y="${(top + d * step).toFixed(2)}" width="${size.toFixed(2)}" height="${size.toFixed(2)}" rx="${corner(size / 2).toFixed(2)}" data-t="${tipId(ctx(dt.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })) + row("Requests", String(n), "--s1"))}"/>`;
+    }
+    ["Mon", "Wed", "Fri"].forEach((t, i) => { s += `<text class="ax" x="0" y="${top + (1 + i * 2) * step + size / 2}" dy="0.35em">${t}</text>`; });
+    el.innerHTML = s + "</svg>";
+    document.getElementById("cal-meta").textContent = `${total.toLocaleString()} requests in ${weeks} weeks`;
+    ruler("cal-ruler", lab, [null, "--h1", "--h2", "--h3", "--h4"], ["0", "1", "6", "14", "24", "More"], "Requests per day: none, 1 to 5, 6 to 13, 14 to 23, 24 or more");
+  };
+
+  M.ring = () => {
+    const size = 160, Rr = size / 2, th = 14, mid = Rr - th / 2, gapA = GAP / mid;
+    let a = -Math.PI / 2, s = svgOpen(size, size, "Spend share by kind");
+    parts.forEach(p => {
+      const sweep = p.v / totalSpend * Math.PI * 2, a0 = a + gapA / 2, a1 = a + sweep - gapA / 2; a += sweep;
+      const ri = Rr - th, large = a1 - a0 > Math.PI ? 1 : 0, P = (rad, ang) => `${(Rr + rad * Math.cos(ang)).toFixed(2)},${(Rr + rad * Math.sin(ang)).toFixed(2)}`;
+      s += `<path class="mf" style="--c:var(${p.c})" d="M${P(Rr, a0)}A${Rr},${Rr} 0 ${large} 1 ${P(Rr, a1)}L${P(ri, a1)}A${ri},${ri} 0 ${large} 0 ${P(ri, a0)}Z" data-t="${tipId(ctx(p.name) + row("Spend", money(p.v), p.c) + row("Share", share(p.v)))}"/>`;
+    });
+    s += `<foreignObject x="0" y="0" width="${size}" height="${size}" style="pointer-events:none"><div xmlns="http://www.w3.org/1999/xhtml" style="height:100%;display:grid;place-content:center"><span class="t-total">${money(totalSpend)}</span></div></foreignObject></svg>`;
+    document.getElementById("ring").innerHTML = s;
+    kvRows("ring-kv", parts, false);
+  };
+
+  M.dots = () => {
+    /* a wide waffle: 5 rows of 20, the dots as large as the card's width allows (at most 24) */
+    const el = document.getElementById("dots"), W = Math.max(200, el.clientWidth), cols = 20, rows = 5;
+    const d = Math.min(24, (W - (cols - 1) * GAP) / cols), pitch = d + GAP, H = rows * d + (rows - 1) * GAP; /* 2 apart both ways, as every mark */
+    const counts = parts.map(p => Math.round(p.v / totalSpend * 100)); counts[0] += 100 - counts.reduce((a, b) => a + b, 0);
+    const seq = parts.flatMap((p, i) => Array(counts[i]).fill(p));
+    let s = svgOpen(W, H, "Spend share by kind, one dot per percent");
+    /* filled column by column, so each kind is a block read left to right */
+    seq.forEach((p, i) => { const c = Math.floor(i / rows), r = i % rows; s += `<circle class="mf" style="--c:var(${p.c})" cx="${(c * pitch + d / 2).toFixed(2)}" cy="${(r * (d + GAP) + d / 2).toFixed(2)}" r="${(d / 2).toFixed(2)}" data-t="${tipId(ctx(p.name) + row("Share", share(p.v), p.c))}"/>`; });
+    el.innerHTML = s + "</svg>";
+    document.getElementById("dots-legend").innerHTML = parts.map(p => `<span class="keyed"><i class="key" style="--c:var(${p.c})"></i>${p.name} ${share(p.v)}</span>`).join("");
+  };
+
+  M.tracker = () => {
+    const el = document.getElementById("tracker"), W = Math.max(200, el.clientWidth), H = 24;
+    const N = Math.max(14, Math.min(90, Math.floor((W + GAP) / (6 + GAP)))), bw = (W - GAP * (N - 1)) / N;
+    const first = new Date(2026, 10, 1 - (N - 1));
+    let s = svgOpen(W, H + LBL + 14, `Request success per day over ${N} days`), failedDays = 0;
+    TRACK.slice(90 - N).forEach((t, i) => {
+      const dt = new Date(first); dt.setDate(first.getDate() + i); if (t.st !== "ok") failedDays++;
+      s += `<rect class="m" style="--c:var(--${t.st})" x="${(i * (bw + GAP)).toFixed(2)}" y="0" width="${bw.toFixed(2)}" height="${H}" rx="${corner(bw).toFixed(2)}" data-t="${tipId(ctx(fmtDay(dt)) + row({ ok: "All succeeded", warn: "Some failed", bad: "Most failed" }[t.st], t.failed + " failed", "--" + t.st))}"/>`;
+    });
+    s += xLabel(0, H, fmtDay(first), "start") + xLabel(W, H, "Nov 1", "end");
+    el.innerHTML = s + "</svg>";
+    document.getElementById("trk-meta").textContent = `99.2% succeeded over the last ${N} days; ${failedDays} days had failures`;
+    document.getElementById("tracker-legend").innerHTML = [["ok", "All succeeded"], ["warn", "Some failed"], ["bad", "Most failed"]].map(([k, l]) => `<span class="keyed"><i class="key tint" style="--c:var(--${k})"></i>${l}</span>`).join("");
+  };
+
+  M.spikes = () => {
+    const el = document.getElementById("spikes"), W = Math.max(200, el.clientWidth), H = 192 + grow(el), P = { t: 30, b: 18, l: AX };
+    const per = (W - P.l) / 168 >= 5 ? 1 : (W - P.l) / 84 >= 5 ? 2 : 4;
+    const vals = Array.from({ length: 168 / per }, (_, b) => HOURS.slice(b * per, b * per + per).reduce((a, v) => a + v, 0));
+    const n = vals.length, band = (W - P.l) / n, bw = Math.max(1, band - GAP);
+    const t = ticksFor(Math.max(...vals), 3), top = t[t.length - 1], y = v => P.t + (1 - v / top) * (H - P.t - P.b);
+    const order = vals.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]);
+    const peaks = []; for (const [, i] of order) { if (peaks.every(p => Math.abs(p - i) * band > 120)) peaks.push(i); if (peaks.length === 3) break; }
+    let s = svgOpen(W, H, `Requests per ${per === 1 ? "hour" : per + " hours"} over 7 days, three peaks labelled`);
+    t.forEach(v => { s += `<line class="${v ? "gl" : "base"}" x1="${P.l}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/>${yLabel(P.l, y(v), v)}`; });
+    vals.forEach((v, i) => {
+      const x0 = P.l + i * band + GAP / 2, h0 = i * per, dt = new Date(2026, 9, 26 + Math.floor(h0 / 24), h0 % 24), hh = String(h0 % 24).padStart(2, "0") + ":00";
+      s += `<path class="m" style="--c:var(--s1)" d="${barV(x0, y(v), bw, y(0) - y(v))}"/>`;
+      s += `<rect class="hit" x="${P.l + i * band}" y="${P.t}" width="${band}" height="${H - P.t - P.b}" data-t="${tipId(ctx(dt.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) + ", " + hh + (per > 1 ? ` · ${per} h` : "")) + row("Requests", String(v), "--s1"))}"/>`;
+      if (peaks.includes(i)) { const cx = x0 + bw / 2; s += `<line class="ref" x1="${cx}" x2="${cx}" y1="${y(v) - 2}" y2="${P.t - 12}"/>${gpill(cx, 9, `${dt.toLocaleDateString("en-US", { weekday: "short" })} ${hh} · ${v}`)}`; }
+    });
+    for (let d = 0; d < 7; d++) { const xd = P.l + d * (24 / per) * band; if ((W - P.l) / 7 >= 48 || d % 2 === 0) s += xLabel(xd + 4, H - P.b, new Date(2026, 9, 26 + d).toLocaleDateString("en-US", { weekday: "short", day: "numeric" }), "start"); }
+    el.innerHTML = s + "</svg>";
+    document.getElementById("spk-meta").textContent = `Requests per ${per === 1 ? "hour" : per + " hours"}, Oct 26 – Nov 1`;
+  };
+
+  M.table = () => {
+    const Rws = [["Large", "Agent", "--s1", true, 2140, 15.2e6, 18.42, 14.1], ["Default", "Chat", "--s2", true, 1688, 11.9e6, 9.86, 6.2], ["Fast", "Tab", "--s3", true, 912, 4.1e6, 2.11, -3.4], ["Reasoning", "Agent", "--s1", false, 604, 6.8e6, 8.73, 22.8], ["Small", "Background", "--s4", true, 318, 1.9e6, 0.92, -1.1], ["Other", "Chat", "--s2", false, 180, 1.4e6, 2.14, 4.0]];
+    const maxT = Math.max(...Rws.map(r => r[5]));
+    const sp = (d, q, ch) => { const w = 72, h = 16, v = d.map((f, i) => q * f * (1 + (ch / 100) * i / 14)), mx = Math.max(...v), mn = Math.min(...v); return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="--c:var(--l1);vertical-align:middle" aria-hidden="true"><path class="ln" d="${v.map((a, i) => `${i ? "L" : "M"}${(i * w / (v.length - 1)).toFixed(1)},${(2 + (1 - (a - mn) / (mx - mn || 1)) * (h - 4)).toFixed(1)}`).join("")}"/></svg>`; };
+    const th = (t, num) => `<th scope="col"${num ? ' class="area-table__cell--numeric"' : ""}>${t}</th>`;
+    let h = `<thead><tr>${th("Model")}${th("Kind")}${th("Status")}${th("Requests", 1)}${th("Tokens", 1)}${th("Cost", 1)}${th("Change", 1)}${th("Last 14 days")}</tr></thead><tbody>`;
+    Rws.forEach(([m, k, c, inc, q, tk, cost, ch], ri) => {
+      h += `<tr><td>${m}</td><td><span class="keyed"><i class="dot" style="--c:var(${c})"></i>${k}</span></td>
+        <td>${inc ? badge("success", "Included", "CheckIcon") : badge("neutral", "On-demand", "CircleDashedIcon")}</td>
+        <td class="area-table__cell--numeric t-num">${q.toLocaleString()}</td>
+        <td class="area-table__cell--numeric t-num">${compact(tk)}<span class="inbar"><b style="width:${tk / maxT * 100}%"></b></span></td>
+        <td class="area-table__cell--numeric t-num">${money(cost)}</td>
+        <td class="area-table__cell--numeric">${badge(ch >= 0 ? "success" : "danger", Math.abs(ch).toFixed(1) + "%", ch >= 0 ? "ArrowUpIcon" : "ArrowDownIcon")}</td>
+        <td>${sp(SPARKS[ri], q, ch)}</td></tr>`;
+    });
+    const sQ = Rws.reduce((a, r) => a + r[4], 0), sT = Rws.reduce((a, r) => a + r[5], 0), sC = Rws.reduce((a, r) => a + r[6], 0);
+    h += `</tbody><tfoot><tr><td class="t-title">Total</td><td class="t-label">4 kinds</td><td class="t-label">4 of 6 included</td><td class="area-table__cell--numeric t-num">${sQ.toLocaleString()}</td><td class="area-table__cell--numeric t-num">${compact(sT)}</td><td class="area-table__cell--numeric t-num">${money(sC)}</td><td class="area-table__cell--numeric t-label">avg +7.1%</td><td></td></tr></tfoot>`;
+    document.getElementById("tbl").innerHTML = h;
+    /* report the two header fills as the browser resolves them */
+  };
+
+  /* ---------- 3 · from developer tools ---------- */
+  M.langs = () => {
+    const Lg = [["TypeScript", 61.2, "--s1"], ["CSS", 22.4, "--s2"], ["JavaScript", 9.1, "--s3"], ["HTML", 4.3, "--s4"], ["Shell", 2.0, "--s5"], ["Other", 1.0, "--s0"]];
+    document.getElementById("langbar").innerHTML = Lg.map(([n, v, c]) => `<i style="flex:${v} 1 0;--c:var(${c})" data-t="${tipId(ctx(n) + row("Share", v.toFixed(1) + "%", c))}"></i>`).join("");
+    const total = 1.84e6; /* bytes */
+    document.getElementById("langs").innerHTML = Lg.map(([n, v, c]) => `<div class="r"><span class="t-text keyed"><i class="key" style="--c:var(${c})"></i>${n}</span><span class="lead"></span><span class="t-num">${(total * v / 100 / 1e3).toFixed(0)} KB</span><span class="t-num share">${v.toFixed(1)}%</span></div>`).join("");
+  };
+  M.diff = () => {
+    const F = [["packages/react/src/components/Chart.tsx", 214, 0], ["packages/react/src/index.ts", 6, 0], ["packages/styles/src/components/chart.css", 96, 0], ["packages/styles/src/components/navigation.css", 18, 6], ["apps/desktop/src/pages/data-lab.tsx", 64, 18], ["packages/tokens/src/axes/series.ts", 12, 46], ["docs/specs/table.md", 8, 58]];
+    const A = F.reduce((a, f) => a + f[1], 0), D = F.reduce((a, f) => a + f[2], 0);
+    const blocks = (a, d) => { const t = a + d, na = Math.round(a / Math.max(t, 1) * 5 * Math.min(1, t / 60)), nd = Math.round(d / Math.max(t, 1) * 5 * Math.min(1, t / 60)); return Array.from({ length: 5 }, (_, i) => `<i style="--c:${i < na ? "var(--ok)" : i < na + nd ? "var(--bad)" : "var(--trough)"}"></i>`).join(""); };
+    document.getElementById("diff-meta").textContent = `+${A} −${D} across ${F.length} files`;
+    document.getElementById("diff").innerHTML = F.map(([f, a, d]) => `<div class="r" data-t="${tipId(ctx(f) + row("Added", "+" + a) + row("Removed", "−" + d))}"><span class="path"><bdi>${f}</bdi></span><span class="t-num">+${a}</span><span class="t-num muted">−${d}</span><span class="blocks">${blocks(a, d)}</span></div>`).join("");
+  };
+  M.wf = () => {
+    const J = [["Install", 0, 42, "ok"], ["Lint", 42, 38, "ok"], ["Typecheck", 42, 71, "ok"], ["Build", 42, 128, "ok"], ["Test · unit", 170, 96, "ok"], ["Test · e2e", 170, 212, "bad"], ["Deploy preview", 382, 54, "wait"]];
+    const el = document.getElementById("wf"), W = Math.max(240, el.clientWidth), lab = NAME_W + COL_GAP, durW = VAL_W, top = 14 + LBL, rowH = 24 + GAP, bh = 24;
+    const plotW = W - lab - durW - COL_GAP, end = 440, x = t => lab + t / end * plotW, H = top + J.length * rowH;
+    const fmt = t => t >= 60 ? `${Math.floor(t / 60)}m ${String(t % 60).padStart(2, "0")}s` : `${t}s`;
+    let s = svgOpen(W, H, "CI run: seven jobs on a time axis; Test · e2e failed");
+    const every = Math.ceil(32 / (x(60) - x(0)));
+    for (let m = 0; m * 60 <= end; m++) { const xm = x(m * 60); s += `<line class="${m ? "ref" : "base"}" x1="${xm}" x2="${xm}" y1="${top}" y2="${H}"/>${m % every ? "" : `<text class="ax" x="${xm}" y="${top - LBL}" text-anchor="${m ? "middle" : "start"}">${m}m</text>`}`; }
+    J.forEach(([n, st, d, k], i) => {
+      const yc = top + i * rowH + rowH / 2, c = k === "bad" ? "--bad" : "--s1";
+      s += `<text class="ax" x="0" y="${yc}" dy="0.35em" style="font-family:var(--sans);font-size:13px;fill:var(--ink)">${n}</text>`;
+      s += k === "wait" ? `<rect class="pj" style="--c:var(${c})" x="${x(st)}" y="${yc - bh / 2}" width="${d / end * plotW}" height="${bh}" rx="4"/>` : `<rect class="m" style="--c:var(${c})" x="${x(st)}" y="${yc - bh / 2}" width="${d / end * plotW}" height="${bh}" rx="4"/>`;
+      s += `<text class="ax" x="${W}" y="${yc}" dy="0.35em" text-anchor="end" style="font-size:13px;fill:${k === "wait" ? "var(--muted)" : "var(--ink)"}">${k === "wait" ? "—" : fmt(d)}</text>`;
+      s += `<rect class="hit" x="0" y="${yc - rowH / 2}" width="${W}" height="${rowH}" data-t="${tipId(ctx(n) + row("Started", fmt(st)) + row("Took", k === "wait" ? "waiting" : fmt(d)) + row("Result", { ok: "Passed", bad: "Failed", wait: "Waiting" }[k]))}"/>`;
+    });
+    el.innerHTML = s + "</svg>";
+    document.getElementById("wf-meta").textContent = "7 jobs, 6m 22s so far; Test · e2e failed and Deploy preview is waiting";
+  };
+  M.hist = () => {
+    const r2 = rng(31); /* seeded per draw, so a redraw keeps its numbers */
+    const el = document.getElementById("hist"), W = Math.max(200, el.clientWidth), H = 192 + grow(el), P = { t: 30, b: 18, l: AX };
+    const bins = 25, step = 40, counts = Array.from({ length: bins }, (_, i) => { const ms = (i + 0.5) * step; return Math.round(900 * Math.exp(-Math.pow(Math.log(ms / 170), 2) / 0.5) + r2() * 30); });
+    const tot = counts.reduce((a, b) => a + b, 0), q = f => { let acc = 0; for (let i = 0; i < bins; i++) { acc += counts[i]; if (acc >= f * tot) return Math.round((i + (1 - (acc - f * tot) / counts[i])) * step); } return bins * step; };
+    const t = ticksFor(Math.max(...counts), 3), top = t[t.length - 1], band = (W - P.l) / bins, y = v => P.t + (1 - v / top) * (H - P.t - P.b), xm = ms => P.l + ms / step * band;
+    let s = svgOpen(W, H, `Response time histogram; p50 ${q(0.5)} ms, p95 ${q(0.95)} ms, p99 ${q(0.99)} ms`);
+    t.forEach(v => { s += `<line class="${v ? "gl" : "base"}" x1="${P.l}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/>${yLabel(P.l, y(v), compact(v))}`; });
+    counts.forEach((v, i) => { s += `<path class="m" style="--c:var(--s1)" d="${barV(P.l + i * band + GAP / 2, y(v), band - GAP, y(0) - y(v))}"/><rect class="hit" x="${P.l + i * band}" y="${P.t}" width="${band}" height="${H - P.t - P.b}" data-t="${tipId(ctx(`${i * step}–${(i + 1) * step} ms`) + row("Requests", v.toLocaleString(), "--s1"))}"/>`; });
+    /* percentile labels sit on the guide's top; one that would touch the label before it drops a line */
+    let prev = null;
+    [[0.5, "p50"], [0.95, "p95"], [0.99, "p99"]].forEach(([f, n]) => {
+      const v = q(f), xx = xm(v), text = `${n} ${v} ms`, w = text.length * 6.7 + 8, a = xx + w > W ? "end" : "start";
+      const span = a === "end" ? [xx - w, xx] : [xx, xx + w], ly = prev && prev.y === 8 && span[0] < prev.span[1] + 8 && span[1] > prev.span[0] - 8 ? 22 : 8;
+      prev = { span, y: ly };
+      s += `<line class="ref" x1="${xx}" x2="${xx}" y1="${ly + 8}" y2="${H - P.b}"/>${gpill(xx, ly, text, a)}`;
+    });
+    [0, 250, 500, 750, 1000].forEach(ms => { if (xm(ms) <= W) s += xLabel(xm(ms), H - P.b, ms ? (ms === 1000 ? "1 s" : ms) : "0 ms", ms === 0 ? "start" : xm(ms) > W - 20 ? "end" : "middle"); });
+    el.innerHTML = s + "</svg>";
+  };
+  M.funnel = () => {
+    const S = [["Visited", 12480], ["Viewed pricing", 6904], ["Signed up", 3212], ["Verified email", 2604], ["Created a project", 1840], ["Invited a team", 1012], ["Subscribed", 412]];
+    document.getElementById("funnel").innerHTML = S.map(([n, v], i) => `<div class="r">${dbar(n, v.toLocaleString(), v / S[0][1], "--s1", 0, "md", ctx(n) + row("People", v.toLocaleString(), "--s1") + row("Of the step before", i ? (v / S[i - 1][1] * 100).toFixed(1) + "%" : "—") + row("Of all visitors", (v / S[0][1] * 100).toFixed(1) + "%"))}<span class="t-num">${i ? (v / S[i - 1][1] * 100).toFixed(0) + "%" : ""}</span></div>`).join("");
+  };
+  M.punch = () => {
+    const el = document.getElementById("punch"), W = Math.max(240, el.clientWidth), lab = AX, top = 14 + LBL, D = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const pitch = (W - lab) / 24, rowH = Math.min(28, Math.max(18, pitch)), H = top + 7 * rowH, rMax = Math.min(pitch, rowH) / 2 - 1, max = Math.max(...HOURS);
+    let s = svgOpen(W, H, "Commits by weekday and hour over the last 7 days");
+    for (let h = 0; h < 24; h += (pitch < 24 ? 3 : 2)) s += `<text class="ax" x="${lab + h * pitch + pitch / 2}" y="${top - LBL}" text-anchor="middle">${String(h).padStart(2, "0")}</text>`;
+    D.forEach((dn, d) => {
+      const yc = top + d * rowH + rowH / 2;
+      s += `<text class="ax" x="0" y="${yc}" dy="0.35em">${dn}</text><line class="gl" x1="${lab}" x2="${W}" y1="${yc}" y2="${yc}"/>`;
+      for (let h = 0; h < 24; h++) { const v = HOURS[d * 24 + h], r = v ? Math.max(1.5, Math.sqrt(v / max) * rMax) : 0; if (r) s += `<circle class="m" style="--c:var(--s1)" cx="${lab + h * pitch + pitch / 2}" cy="${yc}" r="${r.toFixed(2)}"/>`; s += `<rect class="hit" x="${lab + h * pitch}" y="${yc - rowH / 2}" width="${pitch}" height="${rowH}" data-t="${tipId(ctx(`${dn} ${String(h).padStart(2, "0")}:00`) + row("Commits", String(v), "--s1"))}"/>`; }
+    });
+    el.innerHTML = s + "</svg>";
+  };
+  M.ret = () => {
+    const r2 = rng(37); /* seeded per draw, so a redraw keeps its numbers */
+    const el = document.getElementById("ret"), W = Math.max(240, el.clientWidth), weeks = 6, lab = 56, sizeW = 48, top = 14 + LBL, ch = 24;
+    const cw = (W - lab - sizeW - COL_GAP - GAP * (weeks - 1)) / weeks, H = top + weeks * (ch + GAP) - GAP;
+    const C = Array.from({ length: weeks }, (_, i) => { const d = new Date(2026, 8, 6 + i * 7); return { d, size: Math.round(380 + r2() * 220), ret: Array.from({ length: weeks - i }, (_, w) => w === 0 ? 100 : Math.round(100 * (0.42 + 0.1 * r2()) * Math.pow(0.86, w - 1))) }; });
+    let s = svgOpen(W, H, "Weekly retention cohorts");
+    s += `<text class="ax" x="0" y="${top - LBL}">Cohort</text><text class="ax" x="${lab + sizeW}" y="${top - LBL}" text-anchor="end">People</text>`;
+    for (let w = 0; w < weeks; w++) s += `<text class="ax" x="${lab + sizeW + COL_GAP + w * (cw + GAP) + 8}" y="${top - LBL}">W${w}</text>`;
+    C.forEach((c, i) => {
+      const y0 = top + i * (ch + GAP);
+      s += `<text class="ax" x="0" y="${y0 + ch / 2}" dy="0.35em">${fmtDay(c.d)}</text><text class="ax" x="${lab + sizeW}" y="${y0 + ch / 2}" dy="0.35em" text-anchor="end" style="fill:var(--ink)">${c.size}</text>`;
+      c.ret.forEach((v, w) => { const x0 = lab + sizeW + COL_GAP + w * (cw + GAP), now = w === c.ret.length - 1 && w > 0; /* this week isn't over: the lighter tint, no number yet (PostHog leaves it unfilled) */
+        s += now ? `<g data-t="${tipId(ctx(`Joined the week of ${fmtDay(c.d)}`) + row(`Week ${w}`, "in progress"))}"><rect class="pj" style="--c:var(--s1)" x="${x0}" y="${y0}" width="${cw}" height="${ch}" rx="4"/></g>`
+          : `<g data-t="${tipId(ctx(`Joined the week of ${fmtDay(c.d)}`) + row(`Week ${w}`, v + "%", "--s1") + row("People", String(Math.round(c.size * v / 100))))}"><rect x="${x0}" y="${y0}" width="${cw}" height="${ch}" rx="4" fill="var(--q${step(v / 100)})"/>${cw >= 32 ? `<text class="vl${step(v / 100) >= 3 ? " hi" : ""}" x="${x0 + 8}" y="${y0 + ch / 2}" dy="0.35em">${v}%</text>` : ""}</g>`; });
+    });
+    el.innerHTML = s + "</svg>";
+    ruler("ret-ruler", lab + sizeW + COL_GAP, HEAT, ["0%", "20%", "40%", "60%", "80%", "100%"], "Scale from 0% to 100% retained");
+  };
+  M.life = () => {
+    const r2 = rng(43); /* seeded per draw, so a redraw keeps its numbers */
+    const el = document.getElementById("life"), W = Math.max(200, el.clientWidth), H = 160 + grow(el), P = { t: 8, b: 18, l: AX }, N = 12;
+    const S = [["New", "--s1"], ["Returning", "--s3"], ["Resurrecting", "--s2"]], wk = Array.from({ length: N }, (_, i) => ({ New: Math.round(120 + r2() * 80 + i * 6), Returning: Math.round(260 + r2() * 60 + i * 9), Resurrecting: Math.round(30 + r2() * 30), Dormant: -Math.round(140 + r2() * 70) }));
+    const maxUp = Math.max(...wk.map(w => w.New + w.Returning + w.Resurrecting)), maxDn = Math.max(...wk.map(w => -w.Dormant));
+    const tp = ticksFor(maxUp, 2), up = tp[tp.length - 1], dn = Math.ceil(maxDn / (tp[1] || 1)) * (tp[1] || 1), y = v => P.t + (up - v) / (up + dn) * (H - P.t - P.b);
+    const band = (W - P.l) / N, bw = Math.max(2, band - GAP);
+    let s = svgOpen(W, H, "People gained and lost per week over 12 weeks");
+    [...tp, -dn].forEach(v => { s += `<line class="${v ? "gl" : "base"}" x1="${P.l}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/>${yLabel(P.l, y(v), v < 0 ? "−" + compact(-v) : compact(v))}`; });
+    wk.forEach((w, i) => {
+      const x0 = P.l + i * band + GAP / 2; let acc = 0;
+      S.forEach(([n, c], k) => { const v = w[n], yt = y(acc + v), hh = Math.max(0, y(acc) - yt - (acc ? GAP : 0)); s += k === S.length - 1 ? `<path class="m" style="--c:var(${c})" d="${barV(x0, yt, bw, hh)}"/>` : `<rect class="m" style="--c:var(${c})" x="${x0}" y="${yt}" width="${bw}" height="${hh}"/>`; acc += v; });
+      s += `<path class="m" style="--c:var(--s0)" d="${barD(x0, y(0) + GAP, bw, y(w.Dormant) - y(0) - GAP)}"/>`;
+      s += `<rect class="hit" x="${P.l + i * band}" y="${P.t}" width="${band}" height="${H - P.t - P.b}" data-t="${tipId(ctx("Week of " + fmtDay(new Date(2026, 7, 9 + i * 7))) + S.map(([n, c]) => row(n, "+" + w[n], c)).join("") + row("Dormant", "−" + -w.Dormant, "--s0"))}"/>`;
+    });
+    tickIdx(N, W - P.l).forEach(i => { s += xLabel(P.l + i * band + band / 2, H - P.b, fmtDay(new Date(2026, 7, 9 + i * 7)), anchor(i, N)); });
+    el.innerHTML = s + "</svg>";
+    document.getElementById("life-legend").innerHTML = [...S, ["Dormant", "--s0"]].map(([n, c]) => `<span class="keyed"><i class="key tint" style="--c:var(${c})"></i>${n}</span>`).join("");
+  };
+  M.status = () => {
+    const el = document.getElementById("status"), W = Math.max(240, el.clientWidth), lab = NAME_W + COL_GAP, upW = VAL_W + COL_GAP, rowH = 24, bh = 24, Sv = ["API", "Web app", "Workers", "Database", "Queue"];
+    const N = Math.max(14, Math.min(90, Math.floor((W - lab - upW + GAP) / (6 + GAP)))), bw = (W - lab - upW - GAP * (N - 1)) / N, H = Sv.length * (rowH + GAP) - GAP + LBL + 14;
+    const first = new Date(2026, 10, 1 - (N - 1)), rs = rng(41);
+    let s = svgOpen(W, H, `Five services' daily status over ${N} days`), incidents = 0;
+    Sv.forEach((name, j) => {
+      const yc = j * (rowH + GAP) + rowH / 2;
+      s += `<text class="ax" x="0" y="${yc}" dy="0.35em" style="font-family:var(--sans);font-size:13px;fill:var(--ink)">${name}</text>`;
+      let down = 0;
+      for (let i = 0; i < N; i++) { const p = rs(), st = p < 0.015 ? "bad" : p < 0.05 ? "warn" : "ok"; if (st !== "ok") incidents++; down += st === "bad" ? 0.6 : st === "warn" ? 0.05 : 0; const dt = new Date(first); dt.setDate(first.getDate() + i); s += `<rect class="m" style="--c:var(--${st})" x="${(lab + i * (bw + GAP)).toFixed(2)}" y="${yc - bh / 2}" width="${bw.toFixed(2)}" height="${bh}" rx="${corner(bw).toFixed(2)}" data-t="${tipId(ctx(`${name} · ${fmtDay(dt)}`) + row({ ok: "Operational", warn: "Degraded", bad: "Outage" }[st], "", "--" + st))}"/>`; }
+      s += `<text class="ax" x="${W}" y="${yc}" dy="0.35em" text-anchor="end" style="font-size:13px;fill:var(--ink)">${(100 - down / N * 100).toFixed(2)}%</text>`;
+    });
+    const yb = Sv.length * (rowH + GAP) - GAP;
+    s += xLabel(lab, yb, `${N} days ago`, "start") + xLabel(W - upW, yb, "Today", "end") + xLabel(W, yb, "uptime", "end");
+    el.innerHTML = s + "</svg>";
+    document.getElementById("st-meta").textContent = `Daily status, last ${N} days; ${incidents} days with incidents across 5 services`;
+    document.getElementById("status-legend").innerHTML = [["ok", "Operational"], ["warn", "Degraded"], ["bad", "Outage"]].map(([k, l]) => `<span class="keyed"><i class="key tint" style="--c:var(--${k})"></i>${l}</span>`).join("");
+  };
+
+  /* ---------- draw everything once, then each plot again when its width changes ---------- */
+  /* Plots whose height can give: a card shorter than the tallest in its row hands the leftover to its plot, so every
+     card in a row ends on its content (round 7: compositions fill their cards). Widths drive a redraw; heights don't. */
+  const GROW = ["area", "cols", "spikes", "hist", "life", "lang-guide", "lang-heat"];
+  function fill() {
+    GROW.forEach(id => { const el = document.getElementById(id); if (+el.dataset.grow) { el.dataset.grow = 0; PLOTS[id](); } });
+    GROW.forEach(id => {
+      const el = document.getElementById(id), card = el.closest(".area-card"), body = el.closest(".body");
+      const slack = Math.floor(card.getBoundingClientRect().bottom - parseFloat(getComputedStyle(card).paddingBottom) - body.getBoundingClientRect().bottom);
+      if (slack > 0) { el.dataset.grow = slack; PLOTS[id](); }
+    });
+  }
+  let fillQueued = false;
+  const queueFill = () => { if (fillQueued) return; fillQueued = true; requestAnimationFrame(() => { fillQueued = false; fill(); }); };
+  const PLOTS = { "lang-heat": L.ruler, area: M.area, cols: M.cols, matrix: M.matrix, cal: M.cal, tracker: M.tracker, spikes: M.spikes, dots: M.dots, wf: M.wf, hist: M.hist, punch: M.punch, ret: M.ret, life: M.life, status: M.status, "lang-guide": L.guide };
+  function renderAll() { TIPS.length = 0; Object.values(L).forEach(f => f()); Object.values(M).forEach(f => f()); }
+  const widths = new WeakMap();
+  const ro = new ResizeObserver(entries => {
+    let sparks = false;
+    for (const e of entries) {
+      const w = Math.round(e.contentRect.width); if (!w || widths.get(e.target) === w) continue; widths.set(e.target, w);
+      if (PLOTS[e.target.id]) PLOTS[e.target.id](); else sparks = true;
+    }
+    if (sparks) M.stats();
+    queueFill();
+  });
+
+  /* the spend limit: Area's Slider (bar, label inside), live */
+  document.getElementById("limit-slider").innerHTML = `<label class="area-slider area-slider--md area-slider--bar area-slider--inside" id="limit" style="--_pct:40%;--_slider-ratio:0.4"><span class="area-slider__label">Limit</span><span class="area-slider__track"><input type="range" class="area-slider__control" min="20" max="120" step="5" value="60" aria-label="Spend limit"><span class="area-slider__rail" aria-hidden="true"><span class="area-slider__fill"></span></span><span class="area-slider__thumb" aria-hidden="true"></span></span><span class="area-slider__value t-num" aria-hidden="true">$60</span></label>`;
+  const lim = document.getElementById("limit"), limIn = lim.querySelector("input");
+  limIn.addEventListener("input", () => { limit = +limIn.value; const r = (limit - 20) / 100; lim.style.setProperty("--_pct", r * 100 + "%"); lim.style.setProperty("--_slider-ratio", r); lim.querySelector(".area-slider__value").textContent = "$" + limit; M.pace(); });
+
+  /* ---------- picks ---------- */
+  let db = null;
+  const saved = document.getElementById("saved");
+  const say = t => { saved.textContent = t; };
+  async function save(id, data) {
+    if (!db) { say("Picks aren't saved in this view"); return; }
+    try { await db.doc("verdicts/" + id).set({ ...data, round: 19, at: new Date().toISOString() }); say("Saved"); }
+    catch (e) { say("Couldn't save: " + (e && e.code || "error")); }
+  }
+  const paintSeg = (seg, v) => seg.querySelectorAll("[data-v]").forEach(b => { const on = b.dataset.v === v; b.setAttribute("aria-checked", String(on)); b.tabIndex = on ? 0 : -1; if (on) b.setAttribute("data-selected", ""); else b.removeAttribute("data-selected"); });
+  function apply() {
+    for (const k of ["colours", "marks", "projected", "numbers", "header", "labels"]) root.dataset[k] = state[k];
+    document.querySelectorAll(".area-segmented[data-q]").forEach(s => paintSeg(s, state[s.dataset.q]));
+    document.querySelectorAll("input[type=radio][data-q]").forEach(r => { r.checked = state[r.dataset.q] === r.value; });
+  }
+  document.querySelectorAll(".area-segmented[data-q]").forEach(s => s.addEventListener("click", e => {
+    const b = e.target.closest("[data-v]"); if (!b) return;
+    state[s.dataset.q] = b.dataset.v; apply(); renderAll(); save(s.dataset.q, { pick: b.dataset.v, note: notes[s.dataset.q] || "" });
+  }));
+  const period = document.getElementById("period");
+  period.addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (b) paintSeg(period, b.dataset.v); });
+  document.getElementById("btn-range").outerHTML = button("Oct 3 – Nov 7", "CalendarIcon");
+  document.getElementById("btn-export").outerHTML = button("Export CSV", "DownloadIcon");
+
+  const Q = [
+    ["colours", "Chart colours", [["series", "Series (palette steps)", "Today's tokens: each series a step on its palette family, sky, chartreuse, mint and violet new to the palette."], ["palette-gold", "Palette steps, gold", "Each series is the nearest palette step; yellow-green becomes yellow 400. Heat is the blue ladder."], ["palette-lime", "Palette steps, lime", "The same, with lime 250 for yellow-green."]]],
+    ["projected", "Projected", [["lighter", "Lighter tint", "Recommended. Flat, one colour in three steps; reads at every size."], ["hatch", "Hatched", "Your goal and bar references. Adds a texture and a second line weight; crowds small marks."]]],
+    ["numbers", "Numbers", [["mono", "Geist Mono", "Recommended. Reads as measurement."], ["sans", "Geist, tabular", "Softer, closer to your goal and slider references."]]],
+    ["first", "Build first", [["type", "Type styles and the bar language", "Recommended. Text roles plus the data bar (Slider's anatomy, tinted), hatch and guide pill."], ["foundation", "Series colours, then Chart", "Your round 1 pick."], ["table", "Table first", "Trough header, Label headers, Number cells, totals."], ["labs", "A Labs page", "This board in the app as Labs › Data."]]],
+  ];
+  document.getElementById("choices").innerHTML = Q.map(([id, label, opts]) => `<div class="q"><fieldset class="area-radio-group area-radio-group--vertical"><legend class="area-radio-group__legend">${label}</legend><div class="area-radio-group__options">${opts.map(([v, t, d]) => `<label class="area-radio area-radio--md"><input type="radio" class="area-radio__control" name="q-${id}" value="${v}" data-q="${id}"><span class="area-choice-label"><span class="area-choice-label__title">${t}</span><span class="area-choice-label__description">${d}</span></span></label>`).join("")}</div></fieldset><div class="area-input area-input--outline area-input--sm"><input class="area-input__control" data-note="${id}" placeholder="Note (optional)" aria-label="Note on ${label}"></div></div>`).join("");
+  document.getElementById("choices").addEventListener("change", e => {
+    const r = e.target.closest("input[type=radio][data-q]");
+    if (r) { state[r.dataset.q] = r.value; apply(); if (r.dataset.q !== "first") renderAll(); save(r.dataset.q, { pick: r.value, note: notes[r.dataset.q] || "" }); return; }
+    const n = e.target.closest("[data-note]"); if (n) { notes[n.dataset.note] = n.value; save(n.dataset.note, { pick: state[n.dataset.note], note: n.value }); }
+  });
+
+  const paintVerdict = id => document.querySelectorAll(`[data-vid="${id}"] [data-mv]`).forEach(b => b.setAttribute("aria-pressed", String(verdicts[id] === b.dataset.mv)));
+  document.querySelectorAll(".verdicts").forEach(v => {
+    v.innerHTML = MODS[v.dataset.board].map(([id, name]) => `<span class="vd" data-vid="${id}"><span class="t-label">${name}</span><span role="group" aria-label="${name}" class="area-toggle-group area-toggle-group--soft area-toggle-group--sm">${["Build", "Later", "No"].map(t => `<button type="button" class="area-button area-button--ghost area-button--neutral area-button--md" aria-pressed="false" data-area-toggle-item="" data-mv="${t.toLowerCase()}"><span class="area-button__label">${t}</span></button>`).join("")}</span></span>`).join("");
+    v.addEventListener("click", e => {
+      const b = e.target.closest("[data-mv]"); if (!b) return;
+      const id = b.closest("[data-vid]").dataset.vid;
+      verdicts[id] = verdicts[id] === b.dataset.mv ? null : b.dataset.mv; paintVerdict(id);
+      save(id, { pick: verdicts[id], note: "" });
+    });
+  });
+
+  const themeSeg = document.getElementById("theme"), sysDark = matchMedia("(prefers-color-scheme: dark)");
+  const curTheme = () => root.dataset.theme || (sysDark.matches ? "dark" : "light");
+  const paintTheme = () => { paintSeg(themeSeg, curTheme()); root.setAttribute("data-area-theme", curTheme()); };
+  themeSeg.addEventListener("click", e => { const b = e.target.closest("[data-v]"); if (!b) return; root.dataset.theme = b.dataset.v; try { localStorage.setItem("dv-theme", b.dataset.v); } catch (er) {} paintTheme(); M.table(); });
+  sysDark.addEventListener?.("change", paintTheme);
+  paintTheme();
+
+  apply(); renderAll();
+  Object.keys(PLOTS).forEach(id => ro.observe(document.getElementById(id)));
+  document.querySelectorAll(".sp").forEach(el => ro.observe(el));
+  (document.fonts?.ready || Promise.resolve()).then(() => { renderAll(); fill(); });
+
+  (async () => {
+    try {
+      db = await window.claude?.use?.("db");
+      if (!db) { say("Picks aren't saved in this view"); return; }
+      const res = await db.collection("verdicts").get();
+      for (const d of res?.docs || []) {
+        const id = d.id, data = typeof d.data === "function" ? d.data() : d.data;
+        if (!data) continue;
+        if (/^m\d+$/.test(id)) { verdicts[id] = data.pick; paintVerdict(id); continue; }
+        if (id === "first" && VALID.first.includes(data.pick)) state.first = data.pick;
+        if (data.round >= 5 && VALID[id]?.includes(data.pick) && id !== "projected") state[id] = data.pick;
+        if (id === "projected" && data.round >= 6 && VALID.projected.includes(data.pick)) state.projected = data.pick;
+        if (id === "numbers" && data.round >= 3 && VALID.numbers.includes(data.pick)) state.numbers = data.pick;
+        if (data.round >= 5 && data.note) { notes[id] = data.note; const n = document.querySelector(`[data-note="${id}"]`); if (n) n.value = data.note; }
+      }
+      apply(); renderAll(); say("");
+    } catch (e) { say("Picks aren't saved in this view"); }
+  })();
+})();
+</script>

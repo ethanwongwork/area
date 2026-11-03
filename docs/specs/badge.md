@@ -755,3 +755,14 @@ Optical centre: the label sits a quarter of the cap–x-height gap above the cap
 - **Open:** no semantic role sits at 3:1, so the light marks are palette steps in Badge; a `fg-<tone>-mark` role solved at
   3:1 would carry them through the Status setting's Match.
 - **Verdict:** in review.
+
+### 2026-11-02 · Icons take the words' colour
+
+- **What changed:** in plain, outline, soft and color badges a leading or trailing icon (an arrow, a check circle, a
+  ring) takes the words' ink instead of the bright mark (`--_mark`, `--_mark-tint`). The dot keeps the bright mark.
+  Modern keeps its marked icon (its words are the default ink, so the icon is the only place its tone shows); solid
+  keeps its on-solid ink.
+- **Why:** the owner, on a delta badge in the data views review: "i also dont like how different in color the arrow
+  icons are from the text color, can they be closer in color if not the same?", then "Icons take the words' colour:
+  arrows and status marks alike". The words clear 4.5:1, past an icon's 3:1.
+- **Verdict:** in review.

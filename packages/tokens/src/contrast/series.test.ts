@@ -6,10 +6,12 @@
  * OKLab ΔE × 100 ≥ 8 and under normal vision by ≥ 15, marks at chroma ≥ 0.10, marks ≥ 3:1 on every ground they sit on
  * (WCAG 2.2 SC 1.4.11), a number ≥ 4.5:1 on its fill, ramps one hue with every step ≥ 0.06 lighter than the next. At every
  * Series lightness, in both modes, on sRGB and on Display P3. The skill's dark lightness band (L 0.48–0.67) is the one
- * check not held: dark marks are the luminous colours themselves, above it by the owner's choice (OpenAI's colours).
+ * check not held: dark marks are the series colours themselves, above it by the owner's choice (OpenAI's colours, then
+ * data views round 15). Charts' status colours (`DATA_STATUS`) are held as a set: every pair apart, as a tracker shows
+ * all three side by side.
  */
 import { describe, expect, it } from "vitest";
-import { RAMP_STEPS, SERIES, SERIES_GROUNDS_LIGHT, SERIES_LIGHTNESSES, seriesColours } from "../color/series.ts";
+import { DATA_STATUS, RAMP_STEPS, SERIES, SERIES_GROUNDS_LIGHT, SERIES_STEPS, seriesColours } from "../color/series.ts";
 import { hexLuminance, p3Luminance, ratioOf } from "../color/place.ts";
 import { SRGB, labToLch, parseHex, rgbToOklab, type Rgb } from "../color/oklab.ts";
 import { shippedThemes } from "../semantic/resolve.ts";
@@ -38,7 +40,7 @@ const GROUND_TOKENS = ["bg-page", "bg-surface", "bg-subtle", "bg-well", "bg-comp
 const grounds = { light: new Set<string>(), dark: new Set<string>() };
 for (const t of shippedThemes()) for (const k of GROUND_TOKENS) grounds[t.theme].add(t.tokens[k]!);
 
-const at = (lightness: number) => SERIES.map(s => seriesColours(s.hue, lightness));
+const at = (lightness: number) => SERIES.map(s => seriesColours(s, lightness));
 
 describe("series colours", () => {
   it("solve light marks on grounds no shipped light ground is darker than", () => {
@@ -46,14 +48,12 @@ describe("series colours", () => {
     for (const g of grounds.light) expect(hexLuminance(g), g).toBeGreaterThanOrEqual(floor - 1e-9);
   });
 
-  describe.each(SERIES_LIGHTNESSES.map(l => [l] as const))("at Series lightness %i", lightness => {
+  describe.each(SERIES_STEPS.map(l => [l] as const))("at Series lightness %i", lightness => {
     const series = at(lightness);
     for (const mode of ["light", "dark"] as const) {
       it(`keeps neighbours apart under colour-vision deficiency and normal vision (${mode})`, () => {
         for (const part of ["mark", "fill"] as const) {
           const list = series.map(c => c[mode][part]);
-          // Dark fills are areas under a luminous line, told apart by the line: only the light fills are categorical.
-          if (mode === "dark" && part === "fill") continue;
           for (let i = 0; i + 1 < list.length; i++) {
             const [a, b] = [list[i]!, list[i + 1]!];
             expect(Math.min(deltaE(a, b, "protan"), deltaE(a, b, "deutan")), `${mode} ${part} ${a}↔${b}`).toBeGreaterThanOrEqual(8);
@@ -85,16 +85,35 @@ describe("series colours", () => {
         }
       });
     }
-    it("shows a dark line over its own area fill", () => {
-      for (const c of series) expect(contrast(c.dark.mark, c.dark.fill)).toBeGreaterThanOrEqual(3);
+    it("shows a dark line over its own area", () => {
+      for (const c of series) expect(contrast(c.dark.mark, c.dark.area), `${c.dark.mark} over ${c.dark.area}`).toBeGreaterThanOrEqual(3);
     });
     it("keeps the P3 colours readable: a number on a light fill, a mark on every dark ground", () => {
       for (const c of series) {
         const y = p3Luminance(c.p3.rgb);
         expect(ratioOf(y, hexLuminance(c.light.ink)), `${c.light.ink} on ${c.p3.css}`).toBeGreaterThanOrEqual(4.5);
         for (const g of grounds.dark) expect(ratioOf(y, hexLuminance(g)), `${c.p3.css} on ${g}`).toBeGreaterThanOrEqual(3);
-        expect(ratioOf(y, hexLuminance(c.dark.fill))).toBeGreaterThanOrEqual(3);
+        expect(ratioOf(y, hexLuminance(c.dark.ink)), `${c.dark.ink} on ${c.p3.css} (dark)`).toBeGreaterThanOrEqual(4.5);
+        expect(ratioOf(y, hexLuminance(c.dark.area))).toBeGreaterThanOrEqual(3);
       }
+    });
+  });
+
+  describe("charts' status colours", () => {
+    const list = Object.values(DATA_STATUS);
+    const pairs = list.flatMap((a, i) => list.slice(i + 1).map(b => [a, b] as const));
+    it("keeps every pair apart under colour-vision deficiency and normal vision", () => {
+      for (const [a, b] of pairs) {
+        expect(Math.min(deltaE(a, b, "protan"), deltaE(a, b, "deutan")), `${a}↔${b}`).toBeGreaterThanOrEqual(8);
+        expect(deltaE(a, b), `${a}↔${b} normal`).toBeGreaterThanOrEqual(15);
+      }
+    });
+    it("draws them with colour, not grey", () => {
+      for (const c of list) expect(lch(c).C, c).toBeGreaterThanOrEqual(0.10);
+    });
+    it("shows each at 3:1 on every dark ground, and a failure at 3:1 on every light ground", () => {
+      for (const c of list) for (const g of grounds.dark) expect(contrast(c, g), `${c} on ${g}`).toBeGreaterThanOrEqual(3);
+      for (const g of grounds.light) expect(contrast(DATA_STATUS.danger, g), `${DATA_STATUS.danger} on ${g}`).toBeGreaterThanOrEqual(3);
     });
   });
 });
