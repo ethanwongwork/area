@@ -11,7 +11,7 @@
  * Its place is #system/<system>/icons/<category, or all>/<icon>.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement } from "react";
-import { Badge, Button, Code, Count, EmptyState, PanelSection, Segmented, Select, Table, TableCell, TableLink } from "@area/react";
+import { Button, Code, Count, EmptyState, PanelSection, Segmented, Select, Table, TableCell, TableLink } from "@area/react";
 import { batches as ICON_BATCHES, categories as ICON_CATEGORIES, icons as ICON_META } from "@area/icons/meta";
 import * as APPROVED from "@area/icons";
 import * as IN_REVIEW from "@area/icons/review";
@@ -21,7 +21,7 @@ import { GlyphCell, GlyphGrid, GlyphSheet } from "../glyph-sheet.tsx";
 import { SidebarList, SidebarTree, useStudio, Workspace } from "../studio.tsx";
 import { hrefOf } from "../places.ts";
 import { Specimen } from "../specimen-scope.tsx";
-import { CanvasSection, FEED_TABLE } from "../tile.tsx";
+import { CanvasSection, FEED_TABLE, StatusBadge } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewLead, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { useDesignViewer } from "../design-viewer.tsx";
@@ -43,10 +43,10 @@ const CATEGORY_OF = new Map(ICON_CATEGORIES.flatMap(category => category.icons.m
 const BATCH_TITLE = new Map(ICON_BATCHES.map(batch => [batch.id, batch.title]));
 /** An icon's review status, from its batch (a variant shares its base icon's); none when it was never put in one. */
 const statusOf = (name: string) => { const entry = BY_NAME.get(name); return entry?.batch ? entry.status : undefined; };
-/** An icon's review status as the components' status reads: a soft Badge, success when approved. */
-const StatusBadge = ({ name }: { name: string }) => statusOf(name) === "approved"
-  ? <Badge size="sm" tone="success" variant="soft">Approved</Badge>
-  : <Badge size="sm" tone="caution" variant="soft">In review</Badge>;
+/** An icon's review status as every status reads (tile.tsx `STATUS`): done when approved, else in review. */
+const IconStatus = ({ name }: { name: string }) => statusOf(name) === "approved"
+  ? <StatusBadge size="sm" status="published">Approved</StatusBadge>
+  : <StatusBadge size="sm" status="review">In review</StatusBadge>;
 const titleCase = (name: string) => name.split("-").map(word => word[0]!.toUpperCase() + word.slice(1)).join(" ");
 /* The package's record of each icon: its export names, and the names that draw the same icon. */
 const META = new Map(ICON_META.map(entry => [entry.name, entry]));
@@ -275,15 +275,15 @@ export function IconsPage() {
                           <TableCell fit><Specimen as="span" className="studio-glyphs__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></Specimen></TableCell>
                           <td><TableLink href={hrefOf({ page: "icons" })} onClick={event => { event.preventDefault(); choose(name); }}><Code>{name}</Code></TableLink></td>
                           <td><span className="studio-muted">{entry.keyline}</span></td>
-                          <td>{statusOf(name) ? <StatusBadge name={name} /> : <span className="studio-muted">—</span>}</td>
+                          <td>{statusOf(name) ? <IconStatus name={name} /> : <span className="studio-muted">—</span>}</td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </Table>
               ) : (
-                // Grid: label-free cells straight on the Canvas's surface, no container (owner,
-                // 2026-10-12, after Cursor's icon gallery); names in the hover window and the Inspector.
+                // Grid: label-free cells, each glyph on its own card (owner, 2026-11-02: "the glyphs can be in containers
+                // like the rest of the cards"; bare on the Canvas from 2026-10-12); names in the hover window and the Inspector.
                 <GlyphGrid>
                   {section.shown.map(name => {
                     const entry = BY_NAME.get(name);
@@ -313,7 +313,7 @@ export function IconsPage() {
                 meta?.rtl ? ["Right to left", "Mirrors"] : null,
                 meta?.cuts?.includes(12) ? ["At 12px", "Own drawing"] : null,
                 meta?.source ? ["Ink from", `${LIBRARIES.find(([key]) => key === meta.source!.library)?.[1] ?? meta.source.library} ${meta.source.names[0]}`] : null,
-                iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
+                iconStatus ? ["Status", <IconStatus name={icon.name} />] : null,
                 iconStatus ? ["Batch", iconStatus.batch] : null,
               ]} />
             </PanelSection>

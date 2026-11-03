@@ -386,6 +386,7 @@ export default {
       ["Do", "Name what is measured with label (\"Storage\"); without one, pass aria-label."],
       ["Do", "Say what the number means in valueText (\"1.2 of 5 GB\") or description (\"Resets in 4 days\")."],
       ["Do", "Set tone to warning or danger when the value means trouble, and say so in the text as well."],
+      ["Do", "Set tone to data for a measure shown among charts (a share, a rate), so it takes the first data color as the charts beside it do; keep neutral for usage against a limit."],
       ["Do", "Pass valueText as a string when you can; that is what a screen reader announces."],
       ["Do", "Pass segments for the parts of one measure, at most eight, always in the same order and at 0 when empty, so each part keeps its color; fold a ninth into Other."],
       ["Do", "Set max with segments only when there is a limit; the rest of the track then shows what is left."],

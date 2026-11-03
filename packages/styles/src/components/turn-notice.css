@@ -2,18 +2,20 @@
  * Turn notice
  *
  * How a turn ended, on one quiet line in its column: stopped, failed (with Retry) or compacted. Codex's "■ Conversation
- * interrupted", Cursor's error with Retry, Claude Code's compact row (docs/specs/turn-notice.md).
+ * interrupted", Cursor's error with Retry, Claude Code's compact row (docs/specs/turn-notice.md). Since the tracker pass
+ * (2026-11-02) stopped and compacted are Codex's divider: the words, then a rule to the column's end, 8 after them; no
+ * icon. Only an error, which asks for something, keeps its mark.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-turn-notice {
     --_notice-icon: var(--area-fg-muted);
     display: flex;
     align-items: center;
-    gap: var(--area-space-4); /* a line's gap: it sits among the steps (Step) */
+    gap: var(--area-space-6); /* Step's icon gap: it sits among the steps */
     min-inline-size: 0;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-lg-size);
-    line-height: var(--area-text-lg-leading);
+    font-size: var(--area-text-base-size); /* the trackers' UI size (Step) */
+    line-height: var(--area-text-base-leading);
   }
   .area-turn-notice--stopped,
   .area-turn-notice--compacted { --_notice-icon: var(--area-fg-muted); }
@@ -29,8 +31,21 @@
   }
   .area-turn-notice__icon > svg { inline-size: 100%; block-size: 100%; }
   .area-turn-notice__text { min-inline-size: 0; overflow-wrap: anywhere; }
+  /* The divider: a 1px rule on the line's middle from 8 after the words to the column's end (spec: Codex's turn divider,
+     gap 8, a full-width 1px rule), in the Dividers stroke group. An action, when there is one, follows the rule. */
+  .area-turn-notice:is(.area-turn-notice--stopped, .area-turn-notice--compacted) { gap: var(--area-space-8); }
+  .area-turn-notice:is(.area-turn-notice--stopped, .area-turn-notice--compacted)::after {
+    content: "";
+    flex: 1 1 0;
+    order: 1;
+    min-inline-size: var(--area-space-24);
+    block-size: var(--area-stroke-width);
+    background-color: var(--area-edge-dividers);
+  }
+  .area-turn-notice__action { order: 2; }
   /* An error is the one notice that asks for something: its words in the default ink, its icon in the danger ink
      (Cursor's error title, Codex's red ■). */
   .area-turn-notice--error > .area-turn-notice__text { color: var(--area-fg-default); }
   .area-turn-notice__action { flex: none; }
+  @media (forced-colors: active) { .area-turn-notice::after { background-color: CanvasText; } }
 }

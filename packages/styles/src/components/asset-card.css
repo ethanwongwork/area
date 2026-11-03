@@ -323,6 +323,11 @@
     transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in);
   }
   .area-asset-card.area-asset-card--outside.area-asset-card--color > .area-asset-card__frame { padding: 0; background-color: var(--_asset-color); }
+  /* A screen held the inset in is 16:9 itself, the card the inset taller and wider round it (owner, 2026-11-02: "make sure
+     ... the bottom of the design isnt cutoff"): a 16:9 frame left the picture a little wider than 16:9 (704 × 389 in a
+     720 × 405 card), so a window covering it lost its foot. A window fits whole at 16:9 (2026-11-01). */
+  .area-asset-card.area-asset-card--outside.area-asset-card--screen:not(.area-asset-card--image) > .area-asset-card__frame { aspect-ratio: auto; }
+  .area-asset-card.area-asset-card--outside.area-asset-card--screen:not(.area-asset-card--image) > .area-asset-card__frame > :not(.area-asset-card__badge) { aspect-ratio: 16 / 9; } /* spec */
   .area-asset-card.area-asset-card--outside > .area-asset-card__head { order: 1; block-size: var(--area-control-sm); padding: 0 0 0 var(--area-space-4); }
   .area-asset-card--outside .area-asset-card__media { border-radius: var(--_frame-corner); overflow: clip; }
   /* A group's cells as far apart as from the card's outer edge (the inset and the edge). */
@@ -538,8 +543,10 @@
      around it to carry it, it keeps its edge at rest, and takes the container corner (it is the outermost shape). */
   .area-asset-card--containerless:not(:has(> .area-asset-card__head)) { padding: 0; border-width: 0; --_corner: var(--area-asset-card-corner, var(--area-radius-container)); --_frame-corner: var(--_corner); }
   .area-asset-card--containerless:not(:has(> .area-asset-card__head)):not(.area-asset-card--color, .area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame { border-color: var(--area-border-divider); }
-  /* Framed or basic with no head: the card's inset on all four sides. */
-  .area-asset-card:not(.area-asset-card--containerless):not(:has(> .area-asset-card__head)) { padding-block-start: var(--_inset); }
+  /* Framed or basic with no head: the card's inset on all four sides. Not outside: there the frame is the card and holds
+     the inset itself, so a headless outside card (a colour with its name on it) took 7 at the top alone and its grid's rows
+     read twice its columns apart (2026-11-02, owner: "is the vertical being different intentional?"). */
+  .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--outside):not(:has(> .area-asset-card__head)) { padding-block-start: var(--_inset); }
 
   /* Containerless: no card at rest. A component's frame keeps its box, its edge clear until hover (the hovered edge) or
      selection (the selected edge); an image or a group is its own surface: no frame edge, the states ring it. */

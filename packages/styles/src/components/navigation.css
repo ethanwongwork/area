@@ -501,9 +501,12 @@
   }
 
   .area-select--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-select:hover:not(:disabled):not(:focus) { --_t-paint: var(--area-hover-in); border-color: var(--_border-hover); } }
+  @media (hover: hover) { .area-select:hover:not(:disabled):not(:focus-visible) { --_t-paint: var(--area-hover-in); border-color: var(--_border-hover); } }
 
-  .area-select:focus {
+  /* The field's focus paint shows for keyboard focus only (2026-11-02, owner: a pointer choice left the ring on): a
+     select opens a picker, as a Button does, so after a choice made with the pointer it keeps focus without the ring.
+     Input keeps :focus, since its caret is its focus. */
+  .area-select:focus-visible {
     --_t-paint: 0s;
     --_t-halo: 0s;
     border-color: var(--_border-focus);

@@ -49,13 +49,30 @@
      selects and a bar, 432); one above the other on a narrower Canvas. */
   .studio-testers__pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, calc(var(--area-space-96) * 4 + var(--area-space-48))), 1fr)); /* pick: 432 */ gap: inherit; }
   .studio-tester { --area-card-gap: var(--_frame-inset); /* the toolbar to its sample: the frame inset, Card's gap hook */ }
-  /* The header is Area's Toolbar (type-kit.tsx): its gap, its selects' widths and its dividers are the Toolbar's. The app
+  /* The header is Area's Toolbar (type-kit.tsx): its gap and its selects' widths are the Toolbar's; no dividers (owner,
+     2026-11-02: "just use gaps"): each bar group starts the Toolbar's gap twice after the last, where gap, a 1px divider
+     and gap stood. The app
      lays out only the bars: they take the row the selects leave, at the end, each sharing it evenly up to 192 and down to
      its own least width (the Slider's label, value and shortest rail), so the header is always one row. */
   .studio-tester__bars { display: flex; flex: 1 1 auto; justify-content: flex-end; align-items: center; gap: inherit; min-inline-size: min-content; }
   /* Narrower than every control at its least (a phone-width Canvas), the row scrolls sideways rather than break or overlap. */
-  .studio-tester__head { display: flex; min-inline-size: 0; overflow-x: auto; scrollbar-width: none; }
-  .studio-tester__control--bar { display: flex; flex: 1 1 0; align-items: center; gap: inherit; max-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-16)); /* pick: 192, and its divider's 8 + 1 + 8 */ min-inline-size: min-content; }
+  /* A scroller clips what its edges hold, so it keeps a focus ring's room around the controls (the field ring: its offset
+     and the wider of its outline and halo) and gives it back as a negative margin: the header sits where it did and a
+     keyboard-focused select is ringed whole (2026-11-02; it was cut at top and bottom). */
+  .studio-tester__head {
+    --_ring: calc(var(--area-focus-offset) + max(var(--area-field-focus-outline-width), var(--area-field-focus-halo-width), var(--area-focus-width)));
+    display: flex; min-inline-size: 0; overflow-x: auto; scrollbar-width: none;
+    margin: calc(-1 * var(--_ring)); padding: var(--_ring);
+  }
+  /* A bar: its name, then the Inspector's bar and value field (inspector-rows.tsx BarRow; owner, 2026-11-02), up to 256 with
+     the divider, so the rail keeps about the Inspector's length beside its 5-character field. */
+  .studio-tester__control--bar { display: flex; flex: 1 1 0; align-items: center; gap: inherit; max-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-64)); /* pick: 256, name, bar and field */ min-inline-size: min-content; }
+  /* A group's room: an empty first item, so the inherited gap falls twice before the name (the Toolbar's gap doubled, 16
+     at its 8, at every density). */
+  .studio-tester__control--bar::before { content: ""; }
+  .studio-tester__control--bar > .studio-bar { flex: 1 1 auto; min-inline-size: calc(var(--area-space-64) + var(--area-space-48)); /* pick: 112, a bar with a 5-character field */ }
+  /* The bar's name, as the Inspector row's label: the UI line, default ink. */
+  .studio-tester__label { flex: none; color: var(--area-fg-default); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); white-space: nowrap; }
   .studio-tester__control[hidden] { display: none; }
   .studio-tester__sample {
     margin: 0; min-inline-size: 0; max-inline-size: 100%; outline: none; overflow-wrap: anywhere;

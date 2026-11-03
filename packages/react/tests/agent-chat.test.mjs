@@ -201,6 +201,10 @@ test("a Turn notice is a status, or an alert when the turn failed", () => {
   assert.match(renderToString(h(TurnNotice, {}, "Stopped")), /^<div role="status" class="area-turn-notice area-turn-notice--stopped"/);
   assert.match(renderToString(h(TurnNotice, { status: "compacted" }, "Compacted")), /^<div role="status" class="area-turn-notice area-turn-notice--compacted"/);
   assert.match(renderToString(h(TurnNotice, { status: "error" }, "Failed")), /^<div role="alert" class="area-turn-notice area-turn-notice--error"/);
+  // Tracker pass 2026-11-02: stopped and compacted are a divider line (Codex), so only an error carries a mark.
+  assert.doesNotMatch(renderToString(h(TurnNotice, {}, "Stopped")), /area-turn-notice__icon/);
+  assert.doesNotMatch(renderToString(h(TurnNotice, { status: "compacted" }, "Compacted")), /area-turn-notice__icon/);
+  assert.match(renderToString(h(TurnNotice, { status: "error" }, "Failed")), /area-turn-notice__icon/);
   // The deprecated `kind` still works for a release; `status` wins.
   assert.match(renderToString(h(TurnNotice, { kind: "error" }, "Failed")), /^<div role="alert" class="area-turn-notice area-turn-notice--error"/);
   assert.match(renderToString(h(TurnNotice, { status: "stopped", kind: "error" }, "Stopped")), /^<div role="status"/);

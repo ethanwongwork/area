@@ -27,10 +27,11 @@ for one release; `status` wins. The CSS modifiers keep their names (`area-turn-n
 
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
-| type | text-lg (Message's), muted | claude-code secondary; codex muted | no italic: Area does not set type in italic |
-| icon | 16 slot: stop, info (error, compacted) | codex ■ marker; Area glyphs | — |
+| type | text-base (the trackers' UI size; was text-lg, Message's), muted | claude-code secondary; codex muted | no italic: Area does not set type in italic |
+| icon | error only: info in a 16 slot | cursor error title; Area glyphs | stopped and compacted are a divider (tracker pass 2026-11-02) |
+| divider | stopped and compacted: the words, then a 1px rule in the Dividers group to the column's end, 8 after them | codex "You stopped after {t}", gap 8, full-width 1px rule | a turn's end reads as a break in the column, not another step |
 | error ink | the icon in fg-danger; the words in fg-default (stopped and compacted stay muted) | cursor error title; codex red ■ | the one notice that asks for something (round 50) |
-| gap | 4 between the line's parts | Step's line; Cursor ToolCallLine gap 4 | it sits among the steps (round 49) |
+| gap | 6 between the error's icon and words (Step's icon gap); 8 before the rule | Step; codex 8 | — |
 | action | ghost sm Button after the text | cursor Retry | — |
 
 ## Behavior and accessibility
@@ -86,3 +87,15 @@ gap-md token, the same 4 by another name); an error's words are in the default i
   you; stopped and compacted stay quiet. Spacing is now exactly a step line's.
 - **Why:** you asked for intentional, consistent spacing and colour; the notice sits among the steps, so it shares their
   line.
+
+- 2026-11-02 · tracker pass, from the apps' bundles, read 2026-11-02 (Cursor `ToolCallLine.js` / `todo-list.js`, Claude Code's `TurnStatusStep` and to-dos, Codex's `agent-activity-item-row`).
+  - **What changed:** stopped and compacted lose their icon and become a divider: the muted words, then a rule to the
+    column's end; an error keeps its info mark, 6 from its words.
+  - **Why:** Codex ends a stopped turn with "You stopped after {t}" and a full-width rule, and the stop square read as a
+    button among the steps.
+
+- 2026-11-02 · trackers review.
+  - **What changed:** the line reads at text-base (was the reply's text-lg).
+  - **Why:** the owner: "the trackers dont look right, the type ramp looks wrong, the alignment looks off … do the
+    trackers need to be smaller?" An agent's work is UI and its answer prose (Cursor's cards 13 under a 14 reply), so
+    every tracker reads at text-base, one size, under the reply's text-lg; the cards' words share one 12 column.

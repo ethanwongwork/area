@@ -23,7 +23,7 @@
  */
 import { Component, createElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import * as AreaReact from "@area/react";
-import { Badge, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, Count, EmptyState, Kbd, Link, Menu, MenuItem, MenuLabel, MenuSeparator, PanelSection, SectionHeading, Table, TableCell, TableLink, Tabs, Tooltip, ZoomControl, type TreeViewNode } from "@area/react";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, Count, EmptyState, Kbd, Link, Menu, MenuItem, MenuLabel, MenuSeparator, PanelSection, SectionHeading, Table, TableCell, TableLink, Tabs, Tooltip, ZoomControl, type TreeViewNode } from "@area/react";
 import { ArrowLeftIcon, CardsIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, GridIcon, OpenIcon, ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
 import SNIPPETS from "virtual:demo-snippets";
@@ -47,7 +47,7 @@ import { SpecimenBox } from "../specimen-box.tsx";
 import { CodeWell, longLines } from "../inspector.tsx";
 import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
 import { appScale, feedScale, InheritedScaleContext } from "../app-scale.ts";
-import { CanvasSection, GALLERY_LOOK, Tile, TileGrid, type CardLook, type OpenHow, FEED_TABLE, FeedCount } from "../tile.tsx";
+import { CanvasSection, GALLERY_LOOK, StatusBadge, Tile, TileGrid, type CardLook, type OpenHow, FEED_TABLE, FeedCount } from "../tile.tsx";
 
 /*
  * The Cards menu (owner, 2026-10-25: "there should just be 1 style of container, so the options for that menu should be
@@ -89,7 +89,8 @@ const DERIVED = new Map(FAMILIES.flatMap(family => {
 /** A derived edit on the Stage: the playground, where the tile started, and what the Properties set. */
 interface DerivedEdit { playground: Playground; from: Config; to: Config }
 const STATUS_LABEL = { complete: "Complete", review: "In review", unrefined: "Unrefined" } as const;
-const STATUS_TONE = { complete: "success", review: "caution", unrefined: "neutral" } as const;
+/** Each status as the app's one status badge (tile.tsx `STATUS`): complete is done, review in review, unrefined not started. */
+const STATUS_MARK = { complete: "published", review: "review", unrefined: "none" } as const;
 type Status = keyof typeof STATUS_LABEL;
 const manifestOf = (family: Family) => family.manifest ? (MANIFESTS as unknown as Record<string, ManifestLike>)[family.manifest] : undefined;
 /* What a family exports from @area/react: its recorded names, else its own name when the package
@@ -317,7 +318,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
     <section ref={section} className="studio-section" id={`family-${family.slug}`} aria-labelledby={`family-${family.slug}-title`}>
       <SectionTitle id={`family-${family.slug}-title`}
         title={<a href={hrefOf({ page: "components", item: family.slug })} className="studio-section__link" onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</a>}
-        count={tiles.length} badge={<Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>} />
+        count={tiles.length} badge={<StatusBadge size="sm" status={STATUS_MARK[status]}>{STATUS_LABEL[status]}</StatusBadge>} />
       <div ref={body} className="studio-overview__body" data-fit="">
         {open ? groupsOf(tiles).map(([group, list]) => (
           <div key={group} className="studio-overview__group">
@@ -385,7 +386,7 @@ function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
   const status = statusOf(family);
   const info: FamilyInfo = {
     slug: family.slug, name: family.name, imports: importsOf(family), manifest: manifestOf(family) as FamilyManifest | undefined, api: family.api,
-    status: { label: STATUS_LABEL[status], tone: STATUS_TONE[status] },
+    status: { label: STATUS_LABEL[status], status: STATUS_MARK[status] },
     demos: TILES.get(family.slug)!.map(entry => ({ label: entry.label, code: SNIPPETS[entry.demo] })),
   };
   const familyName = (slug: string) => FAMILIES.find(entry => entry.slug === slug)?.name;
@@ -707,7 +708,7 @@ export function ComponentsPage() {
               {onCanvas.map(entry => (
                 <tr key={entry.slug}>
                   <td><TableLink href={hrefOf({ page: "components", item: entry.slug })} onClick={event => { event.preventDefault(); select(entry.slug); }}>{entry.name}</TableLink></td>
-                  <td><Badge size="sm" tone={STATUS_TONE[statusOf(entry)]} variant="soft">{STATUS_LABEL[statusOf(entry)]}</Badge></td>
+                  <td><StatusBadge size="sm" status={STATUS_MARK[statusOf(entry)]}>{STATUS_LABEL[statusOf(entry)]}</StatusBadge></td>
                   <TableCell numeric>{TILES.get(entry.slug)!.length}</TableCell>
                   <td>{entry.imports ?? entry.exportName ? <Code>{entry.imports ?? entry.exportName}</Code> : <span className="studio-muted">—</span>}</td>
                 </tr>
@@ -792,11 +793,11 @@ function FamilyDesign({ family, tile, pinned, onPin, onOpen }: {
       <Facts label={tile ? "Tile" : "Family"} items={tile ? [
         ["Specimen", tile.label],
         ["Family", family.name],
-        ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
+        ["Status", <StatusBadge size="sm" status={STATUS_MARK[status]}>{STATUS_LABEL[status]}</StatusBadge>],
       ] : [
         manifest && Object.keys(manifest.variants).length ? ["Variants", Object.entries(manifest.variants).map(([axis, values]) => `${axis} ${values.length}`).join(", ")] : null,
         manifest && Object.keys(manifest.defaults).length ? ["Defaults", Object.values(manifest.defaults).join(", ")] : null,
-        ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
+        ["Status", <StatusBadge size="sm" status={STATUS_MARK[status]}>{STATUS_LABEL[status]}</StatusBadge>],
         ["Tiles", TILES.get(family.slug)!.length],
         ["Spec", <Link href={specUrl(family)} target="_blank" rel="noreferrer">{family.slug}.md</Link>],
       ]} note={tile ? tile.note : manifest?.description} />

@@ -85,10 +85,10 @@ From the stylesheets (not capture-compare tables; no live captures yet):
 
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
-| line type | text-lg (Message's) | peer: Message | a step sits in a reply; Codex and Claude Code match the panel's text |
-| verb ink | fg-default, regular | cursor (verb over detail) | one label weight (DESIGN_SYSTEM); the default ink is the stronger of Area's two |
+| line type | text-base, the trackers' UI size, under the reply's text-lg | cursor cards 13 under a 14 reply; codex 13 | owner 2026-11-02, "do the trackers need to be smaller?" (was text-lg, Message's) |
+| verb ink | fg-quiet, regular; fg-default when open | cursor verb 74% over detail 60%; codex summary 60%; claude-code verb muted | the line is quieter than the prose it sits in (tracker pass 2026-11-02; was fg-default); the foreground stays fixed on hover |
 | detail ink | fg-muted | cursor, codex | — |
-| gaps | 4 between parts and between steps | cursor + codex agree (4) | — |
+| gaps | 6 from the icon to the verb (the row's 4 + 2 on the icon), 4 between the verb and detail and between steps | codex icon 6; cursor + codex group 4 | Cursor's 4 read cramped beside a 16 icon at 15 (tracker pass 2026-11-02) |
 | chevron | 12 glyph `chevron-down`, rotated 270° closed (90° in RTL, pointing along the reading direction), hidden until hover / focus / open; appears at once and fades out on `fast`, turns on `fast` | cursor | Area's chevron glyph (Accordion's); MOTION.md Hover and Chevron rotation |
 | running | verb shimmer, 60% → 100% → 60% of its ink over 2s × the motion loop | cursor `TextShimmerContent.js` | stops at Motion 0 and under reduced motion |
 | failed | verb in fg-danger | codex ✘, claude-code failure dot | — |
@@ -205,3 +205,15 @@ same start; the rule says they belong to the line above. It stays one rule for e
 
 - **What changed:** A step's input and output, a group's steps and Reasoning's summary ease open and shut (Accordion's recipe: open over slow, close over moderate, ease-in-out).
 - **Why:** They snapped while Accordion and Code block eased. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+- 2026-11-02 · tracker pass (owner: "the trackers need some design passes … make sure inset padding, gaps, alignment,
+  optical balance, etc are all up to date"), from the apps' bundles, read 2026-11-02 (Cursor `ToolCallLine.js` / `todo-list.js`, Claude Code's `TurnStatusStep` and to-dos, Codex's `agent-activity-item-row`).
+  - **What changed:** the verb takes the quiet ink (the default ink once open); the icon sits 6 from the verb (was 4).
+  - **Why:** all three apps draw a step line quieter than the reply around it (Cursor 74 / 60%, Codex 60%, Claude Code
+    muted); Area's verb was the reply's own ink, so a run of steps read as prose. Codex puts its icon 6 from the words.
+
+- 2026-11-02 · trackers review.
+  - **What changed:** the line reads at text-base (was the reply's text-lg).
+  - **Why:** the owner: "the trackers dont look right, the type ramp looks wrong, the alignment looks off … do the
+    trackers need to be smaller?" An agent's work is UI and its answer prose (Cursor's cards 13 under a 14 reply), so
+    every tracker reads at text-base, one size, under the reply's text-lg; the cards' words share one 12 column.

@@ -87,7 +87,7 @@ export function SystemsPage() {
                 const live = liveOf(entry);
                 return (
                   <Tile key={entry.id} span="wide" stage="screen" inert label={entry.name} status="published"
-                    value={`${versionName(entry.name, live.version)}, ${plural(entry.themes.length, "theme")}`}
+                    value="Live"
                     selected={chosen?.id === entry.id} onSelect={() => select(entry.id, { replace: true })}
                     onOpen={how => navigate({ page: "themes", system: entry.id }, { newTab: how?.newTab })}>
                     <ThemeScreen theme={activeTheme(asLive(entry))} mode={theme} />

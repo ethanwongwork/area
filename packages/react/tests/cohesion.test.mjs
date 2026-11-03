@@ -353,6 +353,14 @@ test('prose runs on prose lines and flows on the ladder; parts set in it keep th
   for (const part of ['.area-step', '.area-plan', '.area-edit-summary', '.area-turn-notice']) {
     assert.ok(rules.some(rule => rule.selector.split(',').map(s => s.trim()).includes(part) && /line-height:/.test(rule.body)), `${part} should set its own line height`);
   }
+  // An agent's work is UI under the reply's prose (owner, 2026-11-02: "do the trackers need to be smaller?"): every tracker
+  // reads at the UI size, one size, as Cursor's cards sit 13 under a 14 reply.
+  for (const part of ['.area-step', '.area-plan', '.area-edit-summary', '.area-turn-notice', '.area-approval']) {
+    assert.ok(rules.some(rule => rule.selector.split(',').map(s => s.trim()).includes(part) && /font-size:\s*var\(--area-text-base-size\)/.test(rule.body)), `${part} should read at text-base`);
+  }
+  for (const part of ['.area-approval__description', '.area-approval__hint', '.area-approval__option-description']) {
+    assert.doesNotMatch(rules.filter(rule => rule.selector.split(',').map(s => s.trim()).includes(part)).map(rule => rule.body).join(';'), /font-size/, `${part} should keep the card's one size`);
+  }
 });
 
 test('every Kbd is a keycap: nothing unboxes it (owner 2026-10-22)', () => {

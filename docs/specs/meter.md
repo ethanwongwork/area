@@ -18,7 +18,7 @@ state), not a Slider (it is not set by the user), not a chart.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| tone | neutral (default), warning, danger | A value that means trouble (near or at a limit) | Spectrum Meter informative / notice / negative; ChatGPT's is neutral |
+| tone | neutral (default), warning, danger, data | A value that means trouble (near or at a limit); data, a measure among charts in series 1's color | Spectrum Meter informative / notice / negative; ChatGPT's is neutral; data: the data views (2026-11-02) |
 | size | sm, md (default), lg | Progress's bar thickness 4 / 6 / 8 | ChatGPT 6; Figma's usage card 10 |
 | content | label, description, value text, each optional | ChatGPT: label, then description and value on one line; Figma: label, value, caption | ChatGPT, Figma |
 | segments | up to eight parts of one measure, with a legend | Where a measure is made of parts (usage by kind, changes by group) | Claude's Context card, Cursor's usage tray; Gallery `content-segments`, `content-segments-limit`; the app's History Inspector |
@@ -204,3 +204,4 @@ the value now ends the label's row.
 - **Why:** the owner's "add the series colors to the palette ... a more cohesive overall palette" (data views round 18),
   "Yes, build them".
 - **Verdict:** in review.
+- 2026-11-02 · owner: "does the meters data vis need to be updated to match the other data stuff", then "Data meters take series 1" → `tone="data"`: the fill in `--area-series-1-fill`, the same in both modes, as a chart's bars; a stacked Meter's parts take each series' `-fill` (they took the mark, the 3:1 line color in light), as the data views' ring, dots and bars draw parts of a whole. Usage and limit meters keep neutral. → meter.css, manifest.
