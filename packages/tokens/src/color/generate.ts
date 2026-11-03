@@ -90,10 +90,16 @@ export function generatedSpec(id: string): ScaleSpec | undefined {
   return { id, kind: "chromatic", trim: round(trim), ...(foreground === "dark" ? { solidForeground: "dark" as const } : {}) };
 }
 
-/** A palette family, named or generated. */
+/**
+ * The data families (presets.ts DATA_SCALES; data views round 18, 2026-11-02): the palette's recipe at the data colours'
+ * hues the palette lacked, named so they sit in it as hues.
+ */
+export const DATA_HUES: Readonly<Record<string, number>> = { chartreuse: 105, mint: 170, sky: 250, violet: 305 };
+
+/** A palette family, named, data or generated. */
 export function familyFor(id: string): Record<string, PaletteRung> | undefined {
   const match = HUE_ID.exec(id);
-  return match ? generatedFamily(Number(match[1])) : FAMILIES[id];
+  return match ? generatedFamily(Number(match[1])) : id in DATA_HUES ? generatedFamily(DATA_HUES[id]!) : FAMILIES[id];
 }
 
 // ---------------------------------------------------------------------------

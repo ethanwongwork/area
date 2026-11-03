@@ -16,6 +16,7 @@
  * as a decision.
  */
 import type { ScaleSpec } from "./scale.ts";
+import { DATA_HUES, generatedFamily, generatedSpec, hueScaleId } from "./generate.ts";
 
 /**
  * `solidForeground: "dark"` marks the hues whose solid fill carries black text.
@@ -70,7 +71,24 @@ export const NEUTRAL_SCALES: readonly ScaleSpec[] = [
   { id: "warm", kind: "neutral" },
 ];
 
-export const ALL_SCALES: readonly ScaleSpec[] = [...NEUTRAL_SCALES, ...CHROMATIC_SCALES, ...MUTED_SCALES];
+/**
+ * Families the data colours needed and the palette lacked (data views round 18; owner, 2026-11-02: "can you add the series
+ * colors to the palette ... i like the hue of the series better but just want a more cohesive overall palette"). Each is
+ * the palette's own recipe at its hue (generate.ts `generatedFamily`: the neighbours' lightness ladder and share of
+ * sRGB's room), so it sits in the palette as one more hue: sky between cyan and blue, chartreuse between yellow and lime,
+ * mint short of teal, violet past purple. A series hue within 8° of a named family uses that family instead (indigo,
+ * orange, pink, red). Like brown, not accent candidates: they stay out of the accent list and its contrast gates.
+ */
+export const DATA_SCALES: readonly ScaleSpec[] = Object.entries(DATA_HUES).map(([id, hue]) =>
+  ({ ...generatedSpec(hueScaleId(hue))!, id, family: generatedFamily(hue) }));
+
+/** Every family, neutrals first, then the hues around the wheel with the data families in their places, then brown. */
+const HUE_ORDER = ["red", "orange", "yellow", "chartreuse", "lime", "green", "mint", "teal", "cyan", "sky", "blue", "indigo", "purple", "violet", "pink"];
+export const ALL_SCALES: readonly ScaleSpec[] = [
+  ...NEUTRAL_SCALES,
+  ...HUE_ORDER.map(id => [...CHROMATIC_SCALES, ...DATA_SCALES].find(spec => spec.id === id)!),
+  ...MUTED_SCALES,
+];
 
 /** One sentence per scale, rendered above its ramp in the documentation. */
 export const SCALE_DESCRIPTIONS: Record<string, string> = {
@@ -88,6 +106,10 @@ export const SCALE_DESCRIPTIONS: Record<string, string> = {
   indigo: "A blue-violet, set apart from the blue of info and the default accent.",
   purple: "The discovery tone. Marks AI features and newly-introduced surfaces.",
   pink: "A warm magenta. The pink tag tone.",
+  chartreuse: "A yellow-green between yellow and lime. Data series 3.",
+  mint: "A green-blue short of teal. Data series 6.",
+  sky: "A clear blue between cyan and blue. Data series 1.",
+  violet: "A purple leaning to magenta. Data series 7.",
   brown: "Orange at a third of its chroma: an earth tone for tags. The brown tag tone.",
 };
 
