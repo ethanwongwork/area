@@ -76,7 +76,9 @@ export function problemsFor(theme: "light" | "dark", cast: Cast, share: number |
 /** A small evaluator for the CSS math layers.ts writes: calc, min, max, clamp, pow and var() over the settings. */
 export function evaluate(expr: string, vars: Record<string, number>): number {
   const js = expr
+    .replace(/var\(--area-([a-z0-9-]+), ([0-9.]+)\)/g, (_, name, fallback) => `(${name in vars ? vars[name] : fallback})`)
     .replace(/var\(--area-([a-z0-9-]+)\)/g, (_, name) => { if (!(name in vars)) throw new Error(`unknown var ${name}`); return `(${vars[name]})`; })
+    .replace(/\bround\(up, /g, "((x,s)=>Math.ceil(x/s)*s)(")
     .replace(/\bcalc\(/g, "(").replace(/\bpow\(/g, "Math.pow(").replace(/\bmin\(/g, "Math.min(").replace(/\bmax\(/g, "Math.max(")
     .replace(/\bclamp\(/g, "((a,x,b)=>Math.min(b,Math.max(a,x)))(");
   return Function(`"use strict"; return (${js});`)() as number;

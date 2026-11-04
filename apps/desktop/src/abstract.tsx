@@ -393,6 +393,10 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
     // Status colours: the status tones the setting quiets, as solid Badges.
     case "status-colours":
       return [FILL.wide, <div className="lang-row"><Badge tone="danger" variant="solid">Failed</Badge><Badge tone="warning" variant="solid">Due</Badge><Badge tone="success" variant="solid">Done</Badge></div>];
+    // Tone tint and Tone contrast: status words on their tints, as soft Badges (axes/tone-tint.ts, axes/tone-floor.ts).
+    case "tone-tint":
+    case "tone-contrast":
+      return [FILL.wide, <div className="lang-row"><Badge tone="caution">Pending</Badge><Badge tone="warning">Due</Badge><Badge tone="success">Done</Badge></div>];
     // Series lightness: the data colours, as a stacked Meter's parts.
     case "series-lightness":
       return [FILL.wide, <Meter label="Storage" segments={[{ label: "Files", value: 6 }, { label: "Photos", value: 4 }, { label: "Mail", value: 3 }, { label: "Apps", value: 2 }]} />];

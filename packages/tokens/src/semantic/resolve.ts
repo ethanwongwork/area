@@ -8,7 +8,8 @@
 import { type BuiltScale, type Theme, WHITE, buildScale } from "../color/scale.ts";
 import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES, ROLE_SCALES, STATUS_TONES } from "../color/presets.ts";
 import { type Role, type ScaleLookup, type ScaleView, resolveAliases } from "./aliases.ts";
-import { DEFAULT_LAYER_SELECTION, type LayerSelection, castOf, layerTokens } from "../color/layers.ts";
+import { DEFAULT_LAYER_SELECTION, DEFAULT_TONE_FLOOR, FLOOR_ROLES, type LayerSelection, type ToneFloor, castOf, layerTokens, toneFloorId } from "../color/layers.ts";
+import { DEFAULT_TONE_TINT, type ToneTint } from "../color/curves.ts";
 import { ACCENT_HUES, DEFAULT_ACCENT_STRENGTH, type SolidPick, generatedSpec, hueScaleId, mixOklab, withStrength } from "../color/generate.ts";
 import { SEMANTIC_ALIASES } from "./aliases.ts";
 
@@ -28,6 +29,10 @@ export interface ThemeSelection {
   labelTint?: number;
   /** Status colours (axes/accent.ts): "match" quiets the status tones to the Accent strength; "fixed" when omitted. */
   statusColours?: "fixed" | "match";
+  /** Tone contrast (axes/tone-floor.ts): the lowest ratio status and label words keep; 4.5 when omitted. */
+  toneFloor?: ToneFloor;
+  /** Tone tint (axes/tone-tint.ts): the status and label tints' colour, percent of Area's; 100 when omitted. */
+  toneTint?: ToneTint;
 }
 
 export interface ResolvedTheme extends ThemeSelection {
@@ -97,6 +102,15 @@ export function resolveWithRoles(selection: ThemeSelection, given: Partial<Recor
   const cast = castOf(hexAt("light", 50), hexAt("dark", 900))[theme];
   const resolvedTokens = { ...resolveAliases(lookup, theme), ...layerTokens(theme, selection.layers ?? DEFAULT_LAYER_SELECTION, cast) };
   Object.assign(resolvedTokens, accentPaint(roles.accent, theme, resolvedTokens, selection));
+  // Tone tint and Tone contrast: each status and label tone's soft surfaces at the tint and its ink at the tint and the
+  // floor, as emit/base.ts picks them.
+  const floor = toneFloorId(selection.toneFloor ?? DEFAULT_TONE_FLOOR), tint = selection.toneTint ?? DEFAULT_TONE_TINT;
+  const states = { rest: 0, hover: 1, active: 2 } as const;
+  for (const role of FLOOR_ROLES) {
+    resolvedTokens[`fg-${role}`] = roles[role].tonal.inkAt(theme, tint, floor);
+    for (const [name, alias] of Object.entries(SEMANTIC_ALIASES))
+      if (alias.kind === "tonalSurface" && alias.role === role) resolvedTokens[name] = roles[role].tonal.tint(theme, tint)[states[alias.state]]!;
+  }
   // Status colours Match: every status tone's colour but its label at the Accent strength, as emit/base.ts derives it.
   if (selection.statusColours === "match") for (const [name, alias] of Object.entries(SEMANTIC_ALIASES))
     if (alias.role && STATUS_TONES.includes(alias.role) && !name.startsWith("fg-on-")) resolvedTokens[name] = withStrength(resolvedTokens[name]!, selection.accentStrength ?? DEFAULT_ACCENT_STRENGTH);

@@ -127,6 +127,10 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     case "label-tint": return swatch("var(--area-fg-on-accent)", { "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"], "data-area-solid-light": canvas["solid-light"], "data-area-label-tint": value });
     // Series lightness: the first series' fill at the option (axes/series.ts).
     case "series-lightness": return swatch("var(--area-series-1-fill)", { "data-area-series-lightness": value });
+    // Tone tint: caution's tint at the option.
+    case "tone-tint": return swatch("var(--area-caution-surface-active)", { "data-area-tone-tint": value });
+    // Tone contrast: caution's words at the floor, on the Canvas's strength.
+    case "tone-contrast": return swatch("var(--area-fg-caution)", { "data-area-tone-contrast": value });
     case "status-colours": return swatch("var(--area-danger-solid)", { "data-area-accent-strength": canvas["accent-strength"], "data-area-status-colours": value });
     case "solid-light":
     case "solid-dark": return swatch("var(--area-accent-solid)", { "data-area-theme": axis === "solid-light" ? "light" : "dark", "data-area-accent": canvas.accent, "data-area-accent-strength": canvas["accent-strength"], [`data-area-${axis}`]: value });

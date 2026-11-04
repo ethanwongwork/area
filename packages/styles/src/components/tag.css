@@ -26,9 +26,6 @@
     --_remove: calc(var(--_height) - var(--area-space-4));
     --_remove-inset: var(--area-space-2);
     --_bg: light-dark(rgb(42 28 0 / 0.07), rgb(255 255 255 / 0.1)); /* spec: Notion's default tag */
-    /* Dark: the tone's vivid ink at 16% over whatever is behind (owner 2026-10-06: lighter plate,
-       more vibrant label; was the readable ink at 20% under the pale strong ink). */
-    --_dark-tint: 16%; /* spec */
     --_fg: var(--area-fg-default);
     display: inline-flex;
     align-items: center;
@@ -61,37 +58,24 @@
   .area-tag--md { --_height: var(--area-mark-label-lg); }
 
   /*
-   * Owner 2026-10-08 (accepted the audit's recommendations): light inks deepened to OKLCH L 0.49 or
-   * less (contrast 5.6+ on the tint, 4.5+ under the x's hover plate, which read faintly before); dark
-   * green and yellow inks calmed to the other tones' colourfulness (C 0.11) inside Tag only, since the
-   * shared vivid tokens also paint Badge and Alert.
-   * Tones. Light (owner 2026-10-06, "lighter background so the foreground can be more vibrant"):
-   * a pale opaque tint of the tone's hue, every tone at one lightness and colourfulness (OKLCH
-   * L 0.955, C 0.035; brown 0.018 and gray 0.007 stay quiet), under the tone's readable ink
-   * (literal inks at OKLCH L 0.49 or less since 2026-10-08; brown and gray read `fg-brown` / `fg-gray`;
-   * contrast 5.6-7.3 on the tint, 4.5-6.1 under the x's hover plate). Notion's tints (18-28% of the hue under a muted dark ink)
-   * read washed beside it. Dark: the tone's vivid ink on that ink at 16% over whatever is behind
-   * (contrast 6.0-10.7 on near-black), so the label carries the colour, not the plate.
-   * Map: default neutral, blue info, green success, orange warning, yellow caution, red danger,
-   * purple discovery, plus Notion's gray, pink and brown.
+   * Tones (owner, 2026-11-03: "Yes, move them" onto the tone tokens): each colour is its tone's soft tint under its tone's
+   * words, the pair a soft Badge paints (`<tone>-surface`, `fg-<tone>`), so Tone tint and Tone contrast reach Tag and a
+   * Tag matches the Badge, Callout and Board column of its colour in both modes. Map: default neutral, blue info, green
+   * success, orange warning, yellow caution, red danger, purple discovery, plus gray, pink and brown. Until 2026-11-03 each
+   * colour was a measured literal (light: one pale tint at OKLCH L 0.955, C 0.035 under an ink at L 0.49 or less; dark: the
+   * vivid ink on a 16% wash of itself, its label lifted toward white as dark layers lightened); the solved tints are opaque,
+   * so the lift is gone with the wash.
    */
   .area-tag--neutral { --_bg: light-dark(rgb(42 28 0 / 0.07), rgb(255 255 255 / 0.1)); --_fg: var(--area-fg-default); } /* spec */
-  .area-tag--info { --_bg: light-dark(#e2f1ff, color-mix(in oklab, var(--area-fg-info-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#0056cf, var(--area-fg-info-vivid)); } /* spec */
-  .area-tag--success { --_bg: light-dark(#e0f7e4, color-mix(in oklab, #85ce94 var(--_dark-tint), transparent)); --_fg: light-dark(#006f2c, #85ce94); } /* spec */
-  .area-tag--warning { --_bg: light-dark(#ffeadb, color-mix(in oklab, var(--area-fg-warning-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#994500, var(--area-fg-warning-vivid)); } /* spec */
-  .area-tag--caution { --_bg: light-dark(#fcefd6, color-mix(in oklab, #e2b968 var(--_dark-tint), transparent)); --_fg: light-dark(#7c5800, #e2b968); } /* spec */
-  .area-tag--danger { --_bg: light-dark(#ffe7e7, color-mix(in oklab, var(--area-fg-danger-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#bc002d, var(--area-fg-danger-vivid)); } /* spec */
-  .area-tag--discovery { --_bg: light-dark(#f2ecff, color-mix(in oklab, var(--area-fg-discovery-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#7322d7, var(--area-fg-discovery-vivid)); } /* spec */
-  .area-tag--pink { --_bg: light-dark(#ffe7f0, color-mix(in oklab, var(--area-fg-pink-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#b50060, var(--area-fg-pink-vivid)); } /* spec */
-  /* Brown: the palette's brown family. Gray: Notion's gray, the warm cast of the neutral grey, a
-     step firmer than the default tag. */
-  .area-tag--brown { --_bg: light-dark(#faede5, color-mix(in oklab, var(--area-fg-brown-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(var(--area-fg-brown), var(--area-fg-brown-vivid)); } /* spec */
-  .area-tag--gray { --_bg: light-dark(#eeeae6, color-mix(in oklab, var(--area-fg-gray) var(--_dark-tint), transparent)); --_fg: var(--area-fg-gray); } /* spec */
-  /* A tinted tone's dark plate is its ink over whatever is behind, so it lightens with the dark layers; the label mixes
-     toward white by the Layers model's lift: on a card or the page by `layer-dark-tint-lift` (0 up to the defaults, 0.24
-     at ground 24 + layers 8, where brown fell to 3.98:1), and in a field by `-fill` (a soft Tag picker; caution fell to
-     4.14:1 there). Layers sweep 2026-10-16; tokens color/layers.ts TINT_LIFT. */
-  .area-tag:not(.area-tag--neutral) { --_lift: var(--area-layer-dark-tint-lift); color: light-dark(var(--_fg), color-mix(in oklab, var(--_fg), white calc(var(--_lift) * 100%))); }
+  .area-tag--info { --_bg: var(--area-info-surface); --_fg: var(--area-fg-info); }
+  .area-tag--success { --_bg: var(--area-success-surface); --_fg: var(--area-fg-success); }
+  .area-tag--warning { --_bg: var(--area-warning-surface); --_fg: var(--area-fg-warning); }
+  .area-tag--caution { --_bg: var(--area-caution-surface); --_fg: var(--area-fg-caution); }
+  .area-tag--danger { --_bg: var(--area-danger-surface); --_fg: var(--area-fg-danger); }
+  .area-tag--discovery { --_bg: var(--area-discovery-surface); --_fg: var(--area-fg-discovery); }
+  .area-tag--pink { --_bg: var(--area-pink-surface); --_fg: var(--area-fg-pink); }
+  .area-tag--brown { --_bg: var(--area-brown-surface); --_fg: var(--area-fg-brown); }
+  .area-tag--gray { --_bg: var(--area-gray-surface); --_fg: var(--area-fg-gray); }
 
   /* An icon side centres the icon in the tag's end square, as Badge's does ((h - icon) / 2: 4 at 20, 6 at 24), and
      the icon stands the xs icon gap (4) from the label, Badge's at the same height (spacing audit 2026-10-17: it was 6

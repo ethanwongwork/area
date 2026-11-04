@@ -6,7 +6,7 @@
 import { describe, expect, it } from "vitest";
 import {
   DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, HUED_INKS, LAYER_STEPS, VIVID_ROLES, castOf, DEFAULT_FILL, FILL_STEPS, type FillSelection, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
-  DEFAULT_INK_TINT, INK_TINT_STEPS, TINT_HUES, TINT_STEP, TINT_STEPS, inkHex, CARD_TONE_STEPS, type CardTone, tintedDarken, TONAL_Y, VIVID_Y,
+  DEFAULT_INK_TINT, INK_TINT_STEPS, TINT_HUES, TINT_STEP, TINT_STEPS, inkHex, CARD_TONE_STEPS, type CardTone, tintedDarken, TONAL_Y, VIVID_Y, toneFloorDarken,
   EDGE_OFFSET, PRESS_ROOM, edgeShift, FRAME_SAME, POSITIONS, SIGNED_POSITIONS, layersAt, cardToneAt, inkShareAt,
   layersPosition, cardTonePosition, inkTintPosition, DEFAULT_LAYERS, tintChromaAt, tintPosition, fillStepAt, fillPosition,
 } from "./layers.ts";
@@ -119,13 +119,13 @@ describe("layers: inks with a hue follow the ground", () => {
   const inks = { vivid: new Set<string>(), tonal: new Set<string>() };
   for (const neutral of NEUTRAL_SCALES) for (const accent of CHROMATIC_SCALES) {
     const t = resolveTheme({ theme: "light", neutral: neutral.id, accent: accent.id }).tokens;
-    for (const { token, darken } of HUED_INKS) inks[darken].add(t[token]!);
+    for (const { token, darken } of HUED_INKS) inks[darken === "floor" ? "tonal" : darken].add(t[token]!);
   }
   // And the accent at every hue (axes/color.ts, 2026-10-23), at full strength and the quietest, with the status tones
   // quieted to it (Status colours Match, axes/accent.ts).
   for (const hue of ACCENT_HUES) for (const accentStrength of [100, 30]) {
     const t = resolveTheme({ theme: "light", neutral: "neutral", accent: String(hue), accentStrength, statusColours: "match" }).tokens;
-    for (const { token, darken } of HUED_INKS) inks[darken].add(t[token]!);
+    for (const { token, darken } of HUED_INKS) inks[darken === "floor" ? "tonal" : darken].add(t[token]!);
   }
   it("light: vivid and tonal inks keep 4.5:1 on every page and the grounds on it, and are unchanged on white", () => {
     const problems: string[] = [];
@@ -156,15 +156,37 @@ describe("layers: inks with a hue follow the ground", () => {
     }
     expect(problems.slice(0, 20)).toEqual([]);
   }, 60_000);
-  // Tag's dark inks (tag.css: the vivid rungs, gray, and its green and yellow literals) over a 16% wash of themselves.
-  const tagInks = [...VIVID_ROLES.filter(r => r !== "accent" && r !== "caution" && r !== "success").map(r => resolveTheme({ theme: "dark", neutral: "neutral", accent: "blue" }).tokens[`fg-${r}-vivid`]!), resolveTheme({ theme: "dark", neutral: "neutral", accent: "blue" }).tokens["fg-gray"]!, "#85ce94", "#e2b968"];
-  it("dark: tinted labels keep 4.5:1 on their plate on every raised layer, field and hovered row", () => {
+  // A Board column's words in dark (board.css, 2026-11-03: Tag and Board on the tone tokens): each tone's ink, lifted toward
+  // white by the Layers model, over the column's ground (half the tone's resting tint over whatever is behind) and over
+  // the tone's opaque tints, which the count and the add row paint. Tag paints those tints too (tone-floor.test.ts).
+  const darkTokens = resolveTheme({ theme: "dark", neutral: "neutral", accent: "blue" }).tokens;
+  const columnTones = ["danger", "warning", "caution", "success", "info", "discovery", "pink", "brown", "gray"];
+  it("dark: a Board column's words keep 4.5:1 on its ground on every raised layer, field and hovered row", () => {
     const problems: string[] = [];
     for (const g of GROUND_DARK_STEPS) for (const n of LAYER_STEPS) {
       const m = layerLightness("dark", g, n);
       for (const [ground, lift] of [[m.page, m.tintLift], [m.raised, m.tintLift], [m.fill.raised[0], m.tintLiftFill], [m.fill.raised[1], m.tintLiftFill]] as const) {
         const bg = layerHex("dark", ground, { chroma: 0, hue: 0 });
-        for (const ink of tagInks) if (wcagContrastHex(mixOklab(ink, "white", lift), alphaOver(ink, 0.16, bg)) < 4.5) problems.push(`${g}/${n}: ${ink} on ${bg}`);
+        for (const tone of columnTones) {
+          const ink = darkTokens[`fg-${tone}`]!, column = alphaOver(darkTokens[`${tone}-surface`]!, 0.5, bg), lifted = mixOklab(ink, "white", lift);
+          for (const plate of [column, darkTokens[`${tone}-surface`]!, darkTokens[`${tone}-surface-hover`]!, darkTokens[`${tone}-surface-active`]!]) if (wcagContrastHex(lifted, plate) < 4.5) problems.push(`${g}/${n}: ${tone} ${ink} on ${plate}`);
+        }
+      }
+    }
+    expect(problems).toEqual([]);
+  });
+  it("light: a Board column's words keep 4.5:1 on its ground on every page and layer step", () => {
+    const lightTokens = resolveTheme({ theme: "light", neutral: "neutral", accent: "blue" }).tokens;
+    const problems: string[] = [];
+    for (const g of GROUND_LIGHT_STEPS) for (const n of LAYER_STEPS) {
+      const m = layerLightness("light", g, n), deepest = Math.min(m.recessed, m.card, m.tile);
+      const bg = layerHex("light", deepest, { chroma: 0, hue: 0 });
+      for (const tone of columnTones) {
+        // The tones' words darken by the floor's darken (the tonal one at 4.5); gray, a neutral, by the tonal one too.
+        const ink = mixOklab(lightTokens[`fg-${tone}`]!, "black", toneFloorDarken(deepest, 4.5));
+        // The column's ground; the count and the add row's plates are the tone's own opaque tints, gated with the tones.
+        const column = alphaOver(lightTokens[`${tone}-surface`]!, 0.5, bg);
+        if (wcagContrastHex(ink, column) < 4.5) problems.push(`${g}/${n}: ${tone} ${ink} on ${column}`);
       }
     }
     expect(problems).toEqual([]);

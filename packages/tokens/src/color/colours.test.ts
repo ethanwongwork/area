@@ -154,7 +154,7 @@ describe("colours: inks with a hue hold on every picked page", () => {
   const inks = { vivid: new Set<string>(), tonal: new Set<string>() };
   for (const neutral of NEUTRAL_SCALES) for (const accent of CHROMATIC_SCALES) {
     const t = resolveTheme({ theme: "light", neutral: neutral.id, accent: accent.id }).tokens;
-    for (const { token, darken } of HUED_INKS) inks[darken].add(t[token]!);
+    for (const { token, darken } of HUED_INKS) inks[darken === "floor" ? "tonal" : darken].add(t[token]!);
   }
   it("light", () => {
     const problems: string[] = [];

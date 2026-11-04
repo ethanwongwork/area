@@ -6,7 +6,11 @@
  */
 import { type ResolvedTheme } from "./resolve.ts";
 import { SEMANTIC_ALIASES, type Alias } from "./aliases.ts";
-import { tintRoom } from "../color/layers.ts";
+import { FLOOR_ROLES, TONE_FLOORS, tintRoom, toneFloorId } from "../color/layers.ts";
+import { TONE_TINTS, toneTintId } from "../color/curves.ts";
+
+/** A soft surface's state, as the tint's paint lists them. */
+const STATE_INDEX = { rest: 0, hover: 1, active: 2 } as const;
 import { SOLID_STEPS } from "../color/generate.ts";
 import { STATUS_TONES } from "../color/presets.ts";
 
@@ -19,6 +23,17 @@ export function tokensForRole(theme: ResolvedTheme, role: string): Record<string
     // A vivid or tonal ink is written as its rung; the Layers model derives `fg-<role>-vivid` and `fg-<role>` from it, so
     // it follows the ground (color/layers.ts HUED_INKS).
     // A tonal stroke is written as its rung too; base.ts moves it with the Contrast level.
+    // A status or label tone's ink is written once per Tone tint and Tone contrast floor (`<name>-rung-t<tint>-f<floor>`),
+    // and its soft surfaces once per Tone tint (`<name>-t<tint>`); emit/base.ts picks the setting's into `<name>-rung` and
+    // `<name>` (axes/tone-floor.ts, axes/tone-tint.ts).
+    if ((alias.kind === "tonalForeground" || alias.kind === "tonalSurface") && (FLOOR_ROLES as readonly string[]).includes(role)) {
+      const tonal = theme.roles[role as keyof ResolvedTheme["roles"]]!.tonal;
+      for (const tint of TONE_TINTS) {
+        if (alias.kind === "tonalSurface") out[`${name}-t${toneTintId(tint)}`] = tonal.tint(theme.theme, tint)[STATE_INDEX[alias.state]]!;
+        else for (const floor of TONE_FLOORS) out[`${name}-rung-t${toneTintId(tint)}-f${toneFloorId(floor)}`] = tonal.inkAt(theme.theme, tint, toneFloorId(floor));
+      }
+      continue;
+    }
     out[alias.kind === "vivid" || alias.kind === "tonalForeground" || alias.kind === "stroke" || alias.kind === "strokeHover" ? `${name}-rung` : name] = theme.tokens[name]!;
   }
   return out;

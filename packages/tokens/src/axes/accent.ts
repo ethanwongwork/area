@@ -147,6 +147,8 @@ export function statusDerived(): Record<string, string> {
   const theme = THEME_AXIS.presets[0]!.tokens;
   for (const name of Object.keys(theme)) {
     if (!name.endsWith("-full")) continue;
+    // A Tone tint's or floor's colour is an input to its pick, which is mixed once (axes/tone-tint.ts `toneDerived`).
+    if (/-t\d+(-f\d+)?-full$/.test(name)) continue;
     const base = name.slice("--area-".length, -"-full".length);
     out[`--area-${base}`] = atStrength(v(`${base}-full`), strength);
   }

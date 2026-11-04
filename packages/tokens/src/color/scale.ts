@@ -16,9 +16,10 @@
  */
 import { type Oklch, SRGB, parseHex, toHex, toOklchCss } from "./oklab.ts";
 import { gamutMap, maxChromaAt } from "./gamut.ts";
-import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, DARK_TONAL_CHROMA, type Level, type Ramp, CHROMA_TRIM, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight } from "./curves.ts";
+import { colourAt } from "./place.ts";
+import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, DARK_TONAL_CHROMA, DEFAULT_TONE_TINT, LIGHT_TONAL_CHROMA, TINT_HUE_LEVEL, VIVID_PEAK_CHROMA, type Level, type Ramp, CHROMA_TRIM, HUE_DRIFT, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight, hueDrift } from "./curves.ts";
 import { apcaMagnitude, relativeLuminance, wcagContrastHex } from "./contrast.ts";
-import { TONAL_Y } from "./layers.ts";
+import { TONE_FLOORS, toneFloorApca, toneFloorId, toneFloorY } from "./layers.ts";
 import { type AlphaSolution, solveAlpha } from "./alpha.ts";
 import PALETTE from "./palette.json" with { type: "json" };
 import { ACCENT_STRENGTHS, SOLID_STEPS, type SolidStep, familyFor, mixOklab, withStrength } from "./generate.ts";
@@ -51,6 +52,8 @@ export interface ScaleSpec {
   solidForeground?: "light" | "dark";
   /** A generated family's light-end chroma trim (color/generate.ts: its neighbours' `CHROMA_TRIM`, mixed). */
   trim?: number;
+  /** A generated family's hue drift (color/generate.ts: its neighbours' `HUE_DRIFT`, mixed). */
+  drift?: { light: number; dark: number };
   /**
    * A family given directly rather than read from the palette by `id`: a brand colour's family (color/brand.ts), which
    * never enters palette.json or the shared scale cache.
@@ -114,6 +117,15 @@ export interface TonalChoice {
   surfaceActive: { light: Level; dark: Level };
   /** What the rest, hover and pressed surfaces paint, per theme. */
   paint: { light: readonly [string, string, string]; dark: readonly [string, string, string] };
+  /**
+   * The ink each Tone contrast floor paints, per theme, keyed by `toneFloorId` ("450" is the default): solved between the
+   * family's two nearest steps, not snapped to one (`solveInk`, 2026-11-02). `foreground` is the step it was solved from.
+   */
+  ink: { light: Readonly<Record<string, string>>; dark: Readonly<Record<string, string>> };
+  /** The rest, hover and pressed paint at a Tone tint (curves.ts TONE_TINTS, percent of the ladder); `paint` at 100. */
+  tint: (theme: Theme, tint: number) => readonly [string, string, string];
+  /** The ink at a Tone tint and a Tone contrast floor (`toneFloorId`), solved on that tint's paint; `ink` at 100. */
+  inkAt: (theme: Theme, tint: number, floor: string) => string;
 }
 
 export interface StrokeChoice {
@@ -181,6 +193,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
   // bypass this path because their palette anchors also define surface contrast.
   const rotation = HUE_ROTATION[spec.id] ?? 0;
   const trim = CHROMA_TRIM[spec.id] ?? spec.trim ?? 1;
+  const drift = HUE_DRIFT[spec.id] ?? spec.drift;
   const familyPeakChroma = Math.max(...Object.values(family).map((rung) => rung.oklch.C));
   const familyPeakLevel = LEVELS.reduce(
     (peak, level) => family[String(level)]!.oklch.C > family[String(peak)]!.oklch.C ? level : peak,
@@ -193,7 +206,8 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
 
     // Tapered trim at the light end; an explicit lift and ceiling at the dark end.
     const trimFactor = trim === 1 ? 1 : 1 - (1 - trim) * chromaTrimWeight(level);
-    const hue = (rung.oklch.H + rotation + 360) % 360;
+    const turn = rotation + hueDrift(drift, level);
+    const hue = (rung.oklch.H + turn + 360) % 360;
     const lightness = rung.oklch.L + (spec.kind === "chromatic" ? (DARK_LIGHTNESS_LIFT[level] ?? 0) : 0);
     const darkCap = DARK_CHROMA_CAP[level];
     const chroma = level >= 600 && level < 975 && spec.kind === "chromatic"
@@ -204,7 +218,7 @@ export function buildScale(spec: ScaleSpec, theme: Theme): BuiltScale {
         )
       : Math.min(rung.oklch.C * trimFactor, maxChromaAt(lightness, hue, SRGB), familyPeakChroma);
 
-    if (level === spec.exact || (rotation === 0 && lightness === rung.oklch.L && chroma === rung.oklch.C)) {
+    if (level === spec.exact || (turn === 0 && lightness === rung.oklch.L && chroma === rung.oklch.C)) {
       const oklch: Oklch = { L: rung.oklch.L, C: rung.oklch.C, h: rung.oklch.H };
       return { level, oklch, hex: rung.hex, oklchCss: toOklchCss(oklch), contrast: stepContrast(rung.hex) };
     }
@@ -299,11 +313,11 @@ const TONAL_SURFACE_SEQUENCES: Record<Theme, readonly (readonly [Level, Level, L
  * deliberately pair-aware: a slightly quieter ground may admit substantially more colour
  * in the text, while every selected combination still clears AA and the dark APCA floor.
  *
- * In dark the chosen rungs no longer paint (owner, 2026-10-28): the surfaces are the neutral control fills' lightness
- * in the family's hue at DARK_TONAL_CHROMA (curves.ts), quieter and darker than any rung sequence here. The ink is
- * still chosen against the rungs as well as the paint: for every named family the rungs are the lighter, stricter
- * ground, so the ink stays the one that was reviewed, and a dark, grey brand whose rungs sit below the paint takes a
- * lighter ink rather than failing on it.
+ * The chosen rungs no longer paint in either mode (dark 2026-10-28, light 2026-11-02): the surfaces are the neutral
+ * control fills' lightness in the family's light-end hue at DARK_TONAL_CHROMA or LIGHT_TONAL_CHROMA (curves.ts). In light
+ * the ink is read on that paint. In dark it is still chosen against the rungs as well: for every named family the rungs
+ * are the lighter, stricter ground, so the ink stays the one that was reviewed, and a dark, grey brand whose rungs sit
+ * below the paint takes a lighter ink rather than failing on it.
  */
 function chooseTonalPair(steps: readonly ScaleStep[], kind: ScaleKind): TonalChoice {
   const controls = [INVERSION.component, INVERSION.componentHover, INVERSION.componentActive];
@@ -317,31 +331,43 @@ function chooseTonalPair(steps: readonly ScaleStep[], kind: ScaleKind): TonalCho
       surfaceHover: { light: levels.light[1]!, dark: levels.dark[1]! },
       surfaceActive: { light: levels.light[2]!, dark: levels.dark[2]! },
       paint: { light: hexes(levels.light), dark: hexes(levels.dark) },
+      ink: {
+        light: floorsOf(byLevel.get(INVERSION.textTonal.light as Level)!.hex),
+        dark: floorsOf(byLevel.get(INVERSION.textTonal.dark as Level)!.hex),
+      },
+      tint: theme => hexes(levels[theme]),
+      inkAt: theme => byLevel.get(INVERSION.textTonal[theme] as Level)!.hex,
     };
   }
 
-  // Dark paint: the neutral control fill's lightness at each state, in this family's hue there, at DARK_TONAL_CHROMA.
-  const darkPaint = controls.map((slot, i) => {
-    const level = slot.dark as Level;
-    const neutral = FAMILIES.neutral![String(level)]!.oklch;
-    return toHex(gamutMap({ L: neutral.L, C: DARK_TONAL_CHROMA[i]!, h: byLevel.get(level)!.oklch.h }, SRGB).rgb);
+  // The paint, in both modes: the neutral control fill's lightness at each state, in the family's light-end hue, at
+  // LIGHT_TONAL_CHROMA or DARK_TONAL_CHROMA (curves.ts).
+  // A muted family (brown) carries its share of a vivid one's colour (VIVID_PEAK_CHROMA).
+  const tintHue = byLevel.get(TINT_HUE_LEVEL)!.oklch.h;
+  const share = Math.min(1, Math.max(...steps.map(step => step.oklch.C)) / VIVID_PEAK_CHROMA);
+  const paintOf = (theme: Theme, tint: number = DEFAULT_TONE_TINT) => controls.map((slot, i) => {
+    const neutral = FAMILIES.neutral![String(slot[theme])]!.oklch;
+    // In light the colour holds and the lightness gives way: near white sRGB holds little chroma at most hues (red, blue,
+    // purple: 0.012 at the rest fill), so a tint sits as far under the fill's lightness as its chroma needs. Yellow and
+    // green stay at the fill; red and blue settle near L 0.95. In dark the chroma gives way
+    // instead: a lighter tint there takes the words' contrast (at Tone tint 160 yellow's rose to #524400 and its ink fell
+    // to near white), so a tint keeps the fill's lightness and carries what sRGB shows there.
+    const C = (theme === "light" ? LIGHT_TONAL_CHROMA : DARK_TONAL_CHROMA)[i]! * share * tint / 100;
+    const L = theme === "light" ? holdingLightness(neutral.L, C, tintHue) : neutral.L;
+    return toHex(gamutMap({ L, C: Math.min(C, maxChromaAt(L, tintHue, SRGB)), h: tintHue }, SRGB).rgb);
   }) as unknown as readonly [string, string, string];
+  const lightPaint = paintOf("light"), darkPaint = paintOf("dark");
 
-  const picked = {} as Record<Theme, { foreground: Level; surfaces: readonly [Level, Level, Level]; paint: readonly [string, string, string] }>;
+  const picked = {} as Record<Theme, { foreground: Level; surfaces: readonly [Level, Level, Level]; paint: readonly [string, string, string]; ink: Record<string, string> }>;
+  const ambientOf = (theme: Theme) => [INVERSION.page, INVERSION.surface, INVERSION.subtle].map(slot => groundHex(slot[theme]));
   for (const theme of ["light", "dark"] as const) {
     const ambient = [INVERSION.page, INVERSION.surface, INVERSION.subtle].map(slot => groundHex(slot[theme]));
     let best: { foreground: ScaleStep; surfaces: readonly [Level, Level, Level]; surfaceChroma: number } | undefined;
     for (const surfaces of TONAL_SURFACE_SEQUENCES[theme]) {
-      const grounds = [...ambient, ...hexes(surfaces), ...(theme === "dark" ? darkPaint : [])];
+      // Light inks read on what paints; dark ones on the rungs as well, the lighter, stricter ground there.
+      const grounds = [...ambient, ...(theme === "light" ? lightPaint : [...hexes(surfaces), ...darkPaint])];
       for (const foreground of steps) {
-        // At every Accent strength (color/generate.ts): the ink and its tints quiet together; the neutral grounds stay. In
-        // light the ink is also no brighter than TONAL_Y, the bound the Layers model darkens hued inks by on a gray page
-        // (layers.ts): every named family's is, and a hue's generated family has to be too (2026-10-23).
-        const readable = ACCENT_STRENGTHS.every(strength => grounds.every((background, i) => {
-          const ink = withStrength(foreground.hex, strength), ground = i < ambient.length ? background : withStrength(background, strength);
-          return wcagContrastHex(ink, ground) >= 4.5 && (theme === "light" ? relativeLuminance(parseHex(ink)) <= TONAL_Y : apcaMagnitude(ink, ground) >= 60);
-        }));
-        if (!readable) continue;
+        if (!inkReads(foreground.hex, grounds, ambient.length, theme, 4.5)) continue;
         const surfaceChroma = surfaces.reduce((sum, level) => sum + byLevel.get(level)!.oklch.C, 0);
         if (!best || foreground.oklch.C > best.foreground.oklch.C + 1e-9 ||
           (Math.abs(foreground.oklch.C - best.foreground.oklch.C) <= 1e-9 && surfaceChroma > best.surfaceChroma)) {
@@ -350,7 +376,10 @@ function chooseTonalPair(steps: readonly ScaleStep[], kind: ScaleKind): TonalCho
       }
     }
     if (!best) throw new Error(`No accessible tonal foreground/surface pairing for ${theme}.`);
-    picked[theme] = { foreground: best.foreground.level, surfaces: best.surfaces, paint: theme === "dark" ? darkPaint : hexes(best.surfaces) };
+    // Each floor's ink on the grounds the default's surfaces give: the surfaces never move with Tone contrast.
+    const grounds = [...ambient, ...(theme === "light" ? lightPaint : [...hexes(best.surfaces), ...darkPaint])];
+    const ink = Object.fromEntries(TONE_FLOORS.map(floor => [toneFloorId(floor), solveInk(steps, grounds, ambient.length, theme, floor)]));
+    picked[theme] = { foreground: best.foreground.level, surfaces: best.surfaces, paint: theme === "dark" ? darkPaint : lightPaint, ink };
   }
 
   return {
@@ -359,7 +388,79 @@ function chooseTonalPair(steps: readonly ScaleStep[], kind: ScaleKind): TonalCho
     surfaceHover: { light: picked.light.surfaces[1], dark: picked.dark.surfaces[1] },
     surfaceActive: { light: picked.light.surfaces[2], dark: picked.dark.surfaces[2] },
     paint: { light: picked.light.paint, dark: picked.dark.paint },
+    ink: { light: picked.light.ink, dark: picked.dark.ink },
+    // Other Tone tints, worked out when asked for: only the status and label tones' families ever are (axes/tone-tint.ts).
+    tint: memo((theme: Theme, tint: number) => tint === DEFAULT_TONE_TINT ? picked[theme].paint : paintOf(theme, tint)),
+    inkAt: memo((theme: Theme, tint: number, floor: string) => {
+      if (tint === DEFAULT_TONE_TINT) return picked[theme].ink[floor]!;
+      const ambient = ambientOf(theme), paint = theme === "light" ? paintOf("light", tint) : paintOf("dark", tint);
+      const grounds = [...ambient, ...(theme === "light" ? paint : [...hexes(picked.dark.surfaces), ...paint])];
+      return solveInk(steps, grounds, ambient.length, theme, Number(floor) / 100);
+    }),
   };
+}
+
+/** A function remembered by its arguments. */
+function memo<A extends unknown[], R>(fn: (...args: A) => R): (...args: A) => R {
+  const seen = new Map<string, R>();
+  return (...args: A) => {
+    const key = args.join("|");
+    if (!seen.has(key)) seen.set(key, fn(...args));
+    return seen.get(key)!;
+  };
+}
+
+/** The lightness nearest a light `fill`, at or under it, where sRGB holds `chroma` at `hue`: the fill itself when it does. */
+function holdingLightness(fill: number, chroma: number, hue: number): number {
+  if (maxChromaAt(fill, hue, SRGB) >= chroma) return fill;
+  let near = fill, far = fill - 0.2;
+  for (let k = 0; k < 30; k++) { const mid = (near + far) / 2; if (maxChromaAt(mid, hue, SRGB) >= chroma) far = mid; else near = mid; }
+  return far;
+}
+
+/** One colour at every floor: a neutral's ink, which Tone contrast never moves. */
+const floorsOf = (hex: string) => Object.fromEntries(TONE_FLOORS.map(floor => [toneFloorId(floor), hex]));
+
+/**
+ * Whether an ink reads at a floor on every ground, at every Accent strength (color/generate.ts): the ink and its tints
+ * quiet together; the neutral grounds (the first `ambient`) stay. In light the ink is also no brighter than the floor's
+ * luminance bound (TONAL_Y at 4.5), which the Layers model darkens hued inks by on a gray page (layers.ts): every named
+ * family's is, and a hue's generated family has to be too (2026-10-23). In dark it keeps the floor's APCA as well.
+ */
+function inkReads(hex: string, grounds: readonly string[], ambient: number, theme: Theme, floor: number): boolean {
+  const bound = toneFloorY(floor), apca = toneFloorApca(floor);
+  return ACCENT_STRENGTHS.every(strength => grounds.every((background, i) => {
+    const ink = withStrength(hex, strength), ground = i < ambient ? background : withStrength(background, strength);
+    return wcagContrastHex(ink, ground) >= floor && (theme === "light" ? relativeLuminance(parseHex(ink)) <= bound : apcaMagnitude(ink, ground) >= apca);
+  }));
+}
+
+/**
+ * A tone's ink at a floor, exact rather than snapped to a step (2026-11-02, owner: "Yes, start step 1" of solving roles
+ * from hue and chroma). The most chromatic step that reads, then as far toward its neighbour on the ground's side (the
+ * lighter step in light, the darker in dark) as still reads, along the family's own curve: lightness, hue and share of
+ * the sRGB room each interpolated (place.ts `colourAt`), so the hue drift and chroma shape between the two steps hold.
+ * A step's neighbour that reads with more colour would already have been chosen, so the search only crosses one gap.
+ */
+function solveInk(steps: readonly ScaleStep[], grounds: readonly string[], ambient: number, theme: Theme, floor: number): string {
+  let best: ScaleStep | undefined;
+  for (const step of steps) if (inkReads(step.hex, grounds, ambient, theme, floor) && (!best || step.oklch.C > best.oklch.C + 1e-9)) best = step;
+  if (!best) throw new Error(`No ${theme} ink reads at ${floor}:1.`);
+  const i = steps.indexOf(best), next = steps[theme === "light" ? i - 1 : i + 1];
+  if (!next || next.oklch.C <= best.oklch.C) return best.hex;
+  const share = (s: ScaleStep) => Math.min(1, s.oklch.C / Math.max(1e-6, maxChromaAt(s.oklch.L, s.oklch.h, SRGB)));
+  const turn = ((next.oklch.h - best.oklch.h + 540) % 360) - 180;
+  const at = (t: number) => t === 0 ? best!.hex : colourAt(
+    (best!.oklch.h + turn * t + 360) % 360,
+    best!.oklch.L + (next.oklch.L - best!.oklch.L) * t,
+    share(best!) + (share(next) - share(best!)) * t,
+  );
+  let lo = 0, hi = 1;
+  for (let k = 0; k < 18; k++) {
+    const mid = (lo + hi) / 2;
+    if (inkReads(at(mid), grounds, ambient, theme, floor)) lo = mid; else hi = mid;
+  }
+  return at(lo);
 }
 
 /**
