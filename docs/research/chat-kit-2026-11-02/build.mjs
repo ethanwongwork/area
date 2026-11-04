@@ -172,7 +172,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   });
   window.__kitPaint();
   // A screen is drawn at 1920 x 1080 and scaled to its card, covering it from the top-left, as the app does.
-  const fit = () => document.querySelectorAll(".ss-frame").forEach(frame => {
+  // A visual question's frame opened at a zoom on a part (data-zoomed) keeps the zoom it was captured at.
+  const fit = () => document.querySelectorAll(".ss-frame:not([data-zoomed] .ss-frame)").forEach(frame => {
     const zoom = frame.querySelector(".af-zoom");
     if (zoom && frame.clientWidth) zoom.style.setProperty("--af-fit", String(Math.max(frame.clientWidth / 1920, frame.clientHeight / 1080)));
   });
@@ -184,6 +185,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   const setWidth = button => {
     widths.forEach(other => other.setAttribute("aria-pressed", String(other === button)));
     document.querySelectorAll(".studio-chatkit__frame").forEach(frame => { frame.dataset.width = button.dataset.width; frame.style.setProperty("--_chat-width", button.dataset.px + "px"); });
+    // The visual questions' variations, each a chat at the width, side by side.
+    document.querySelectorAll(".qk-variants").forEach(row => row.style.setProperty("--_chat-width", button.dataset.px + "px"));
     try { localStorage.setItem("chat-kit-width", button.dataset.width); } catch (e) {}
     fit();
   };

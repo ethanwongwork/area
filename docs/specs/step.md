@@ -226,3 +226,7 @@ After the live check (docs/research/chat-kit-2026-11-02/live.md): a step's verb 
 (a file, a query, a command) the default ink, so a run reads by its subjects; open, the verb takes the default ink. A
 group's summary and the thinking line stay one quiet line (verb and detail muted). It was verb quiet (74%), detail
 muted (60%).
+
+## 2026-11-04: read on its glyphs (Q-T2)
+
+Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). The outermost Step, Step group or Reasoning gives back its line's half-leading at its outer edge (`margin-block-start: calc((1cap - 1lh) / 2)`, and the end while nothing is open under the line), so its icon stays centred on the line and the gaps around it are read on the glyphs: a tracker that opens a block sits 16 under a title (it was 20). Steps inside a group keep their 4. Test: `packages/react/tests/type-rhythm.test.mjs`.

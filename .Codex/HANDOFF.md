@@ -1,6 +1,44 @@
 # Handoff
 
 ## Current state (2026-11-03)
+- **Visual questions, worktree `visual-feedback-ui-templates-cf32c1` (uncommitted, 2026-11-03).** Owner: a new UI type for
+  feed and chat, a frame (Asset card) over answers in any form (list, grid, pictures, bar, chips, any control), templates
+  for asking design questions and feedback visually. Research and rules in `docs/research/visual-questions-2026-11-03/`
+  (variable → answer kind table, choice research, open Q1 pins on the frame, Q2 four-up, Q3 beside rule). Built:
+  Approval `layout="grid"` (at most `--area-approval-columns`, 2 words / 4 pictures; cells 120 / 96; grid arrows) and
+  `items[].visual` (recessed frame, cards' edge; declared a recessed ground in layers.css); spec, docs entry, two gallery
+  tiles, tests. `src/question-kit.tsx`: `QuestionFrame` (Before, Light/Dark, Zoom, Full screen; opens zoomed on a part),
+  `VisualQuestion` (stacked, beside from 880), 12 templates (8 setting questions run as `QuestionRun`, 4 feedback);
+  Labs › Feed § Visual question beside / Setting / Feedback questions; Labs › Chat § Visual questions / Feedback
+  questions. Checks: react 638, contracts, typecheck, docs, app-css, playgrounds, desktop. Approval stays In review.
+  2026-11-04 (owner: top sections, variations side by side, detail pass, then a type and rhythm pass on both kits):
+  both kits open on Visual questions (12) + beside / run; unit: one corner (Approval `--area-approval-corner`), one text
+  column (13), one foot, system shapes. Type and rhythm: census + bundle research in `docs/research/kit-type-2026-11-04/`;
+  rules per kit in PRODUCT_UI.md "Type and rhythm in the kits"; fixed: activity day label regular, feed list trimmed.
+  Open for the owner there: Q-T1 data card titles at the section's 16, Q-T2 untrimmed first lines in components, Q-T3
+  collection cards' floating images. Checks: react 638, contracts, docs, app-css, playgrounds, desktop 31, typecheck.
+  Then (owner: "the badge doesnt look balanced"; "the asset card ... title and controls below and outside"; Q artifact;
+  kits in the artifacts; a type skill): Default is a same-size muted note; the frame is the feed's card (GALLERY_LOOK,
+  caption outside); a pictured answer is a tile (`area-approval__tile`, picture beside its button: nested buttons broke
+  the static artifact); question columns answer to the question's own container (rows of 3+ one a row under 560, words
+  under 400, pictures 2 under 600). Feed Kit (3VBMTvWZ…, v36: Width Least 424 / Typical 904 / Most 1440) and Chat Kit
+  (85QkQbtL…, v7) republished with the questions on top; builds skip `[data-zoomed]` frames. Decision page Kit Type
+  Decisions KeEDPx5sUTQXE6iKtu6sw1 (Q-T3 withdrawn). New skill `area-type-usage` (AGENTS.md table).
+  Then "Apply both": Q-T1 Card title hooks (`--area-card-title-size/-leading/-tracking`), the feed's `.studio-frame`
+  at 13/18 500; Q-T2 read on the glyphs: Message's reply text-box trims, Step (outermost), Timeline, plain Plan and Edit
+  summary, Turn notice, Timestamp give back `(1cap - 1lh) / 2`; every text-first section 15.7–16 under its title.
+  Test `packages/react/tests/type-rhythm.test.mjs`; specs, DESIGN_SYSTEM, PRODUCT_UI, skill updated; all three
+  artifacts republished. Left: Composer (opens on a control, 21) and Edit summary with Keep / Undo (19.6) keep boxes.
+  Round 3: the question's frame is Asset card overlay (name and controls inside on plates, on hover; screens now take
+  the plates; basic overlay pads its top); bars / swatches / chips share the answer rows' plate edge (5 / 5, 30 tall);
+  Answer Treatments artifact B9tSn3TNB6AVNvQ718Azjm (treatments.mjs: quiet, filled, outlined, card, raised × card,
+  page, well). Owner picked "Filled, in a card": Approval's answers (and its field row, pictured tiles) are filled
+  plates on bg-component, 4 apart, no hairlines, for every Approval (permission prompts too); spec, docs entry updated;
+  all three artifacts republished. Then: answers take a soft field's paint term for term (fill input-bg-soft, edge
+  input-edge-soft inside); Skip an outline button 2 in all round (concentric 8 in a 10 row); new template Exact values
+  (soft NumberFields with icons, a soft Select, outline toggles, 30 tall, 10 corners, 4 apart, as the answers).
+  Then: Approval mat 6 + row inset 6 (words and keys on 12, 10 answers concentric in 16; Cursor's tray), key → words 8,
+  `variant="plain"` (gallery tile) for "Several at once" (`SetQuestion`, Cursor IDE style: one card, numbered questions).
 - **Chat kit, branch `claude/feed-kits-area-chat-2a1286` (committed b9cef461, PR to main, 2026-11-03).** Owner: start a chat kit beside the
   feed kit; do chats follow different rules; research ChatGPT, Claude Code, Cursor. Research in
   `docs/research/chat-kit-2026-11-02/` (live.md: ChatGPT and Claude measured in the owner's Chrome; claude-desktop.md and

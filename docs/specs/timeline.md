@@ -212,3 +212,7 @@ window was hidden; measurements only).
 Owner: "im not a big fan of the use of '·' is it necessary?". The line drops its separator dots (and the `sep` part): the
 title, then who or where a gap (8) after it, then the time at the line's end (`time`, new part), muted, at the secondary
 step (12) with tabular figures, as every figure in a tracker. A long title wraps and the time keeps the end of its line.
+
+## 2026-11-04: read on its glyphs (Q-T2)
+
+Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). The list gives back its first line's half-leading at its top, and its last line's at its foot where the last event ends in text (not media, a card, code or a table): a timeline that opens a block sits 16 under a title (it was 19). Marks stay centred on their lines. Test: `packages/react/tests/type-rhythm.test.mjs`.

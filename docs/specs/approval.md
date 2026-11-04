@@ -33,6 +33,8 @@ offers the way on. Not a RadioGroup: a choice answers at once, as a permission d
 | actions | none, any (a compact Pagination sm, a close) | several questions in one card | Claude desktop's "‹ 3 of 4 ›" and close in the card's head |
 | footer | none, any (Skip, Continue) | the way on when the answer is not a choice | Claude desktop's Skip on the last row; Cursor's Skip / Run |
 | dismissLabel | "cancel", any verb | what Esc does in the hint | "Esc to cancel" (Claude Code); "Esc to skip" for a question |
+| layout | list (default), grid | short answers and pictured answers in columns (owner, 2026-11-03, visual questions) | the owner's 2 × 2 reference; Claude's question card's list beside a preview; Radix RadioCards, macOS Appearance (pictures) |
+| items[].visual | none, any element | a picture of what the choice comes to | the owner's "Select Interface" cards; Setup's choice cards (Radio `preview`) |
 
 The choices are `items` (a collection is `items`, Governance § 4); `options` stays as a deprecated alias for one
 release.
@@ -61,6 +63,10 @@ area-approval                 the Composer's edge, corner and field fill; the ag
                               with a description, `area-approval__lines` holds the label over
                               `area-approval__option-description` (text-base muted), the row 6 above and below;
                               with `value`, `area-approval__check` at the end (chosen: data-selected, aria-current)
+    area-approval__tile       with `visual`: the choice as a tile, `area-approval__visual` (the picture, aria-hidden,
+                              inert) beside its option button, never inside it (a picture of real UI holds buttons;
+                              2026-11-04: a parser split the nested buttons); the button's ::after covers the tile and
+                              the tile wears the row plate
     area-approval__instead    the last option row (a label), its field `area-approval__field` the row's text
   area-approval__foot         the last row, ui-row tall, on the row inset
     area-approval__hint       text-base muted: filled Kbd Esc + "to cancel" (dismissLabel)
@@ -76,12 +82,15 @@ area-approval                 the Composer's edge, corner and field fill; the ag
 | head | on the row inset; first line in a row: (ui-row − text-base leading) / 2 above the title | inset.css first-line alignment | round 54: the top had half a row less room than the foot |
 | title | text-base strong (2026-11-02; was text-lg) | claude-code bold title | Area's one strong weight |
 | description | text-base muted; an option's description too (2026-11-02; were text-sm 12) | claude-code .9em secondary | — |
-| options | Menu-row geometry: ui-row tall, row inset, row corner, Menu's row gap (gap-row: 12, compact 8) and ui-row-gap between rows; plate on hover / focus, bg-component-pressed while pressed | peer: Menu | Claude Code's ringed buttons read as a list of commands at 256; rows keep them one column |
+| options | Menu-row geometry (ui-row tall, row inset, row corner, gap-row 12 / compact 8 inside), **filled**: each answer in a soft field's paint at rest (fill `input-bg-soft`, edge `input-edge-soft` drawn inside: the fields beside it match), 4 apart; hover bg-component-hover, focus the same with the ring, pressed bg-component-pressed, chosen bg-component-active; no hairlines (2026-11-04, owner "Filled, in a card"; was Menu's unpainted rows 1 apart) | Answer Treatments (B9tSn3TNB6AVNvQ718Azjm): quiet, filled, outlined, card, raised × card, page, well | the answers read as things to press at rest; the plates part themselves |
 | number | quiet Kbd sm in the icon slot (icon-sm wide, centred), the label's size, muted, unboxed | claude-code `shortcutNum` (label size, .6); Codex "1." | round 51 |
 | instead | the last numbered row, its field unfilled | Claude Code (last option is free text) | a filled field added a third grey (cleanup pass 2026-10-19) |
 | hint | the card's last row: ui-row tall, centred, text-base muted; Esc a filled Kbd sm, ui-cluster from the words | claude-code "Esc to cancel"; Kbd's rule (a key named in a sentence is filled) | rounds 52 and 53 |
 | option description | text-base muted under the label; the row grows with 6 above and below; the key on the label's line, the check centred | peer: Menu's row with a note (model-picker.md: 6 / 6, check centred); inset.css first-line alignment | the card's own description type, so a choice's note and the question's read alike |
 | chosen row | Menu's selected fill (bg-component-active), at once, outranking hover; no pressed fill; check icon-md in fg-selection, the other rows' check at rest (opacity 0, scale 0.6) | peer: Menu `[data-selected]`, `.area-menu__check` | one selected paint for every list (Shared state paint) |
+| corner hook | `--area-approval-corner` (none by default: the Composer's corner) | a visual question's unit sets it to the cards' corner, so the question and its frame read as one family (2026-11-04 detail pass: 22 beside 16) | Asset card's `--area-asset-card-corner` |
+| grid | `layout="grid"`: columns `repeat(auto-fill, minmax(max(min(100%, cell), (100% − gaps) / columns), 1fr))`, so never more than `--area-approval-columns` (2 for words, 4 with pictures) and never under the cell (120 words, 96 pictures: two across the 268 Panel, four across a 456 split); 4 between plates; no hairlines; the field the whole last row | pick (docs/research/visual-questions-2026-11-03) | a narrow chat drops columns, a wide one stops at the count |
+| visual | a frame `--area-approval-ratio` (4 / 3) on bg-subtle with the cards' edge (Asset card's: `border-width`, `edge-cards`) as an inset outline; its corner the row's less the 4 mat (concentric); in a grid over the key and label (the key and label keep the row inset), in a list a `--area-approval-thumb` (64) thumbnail before them | peers: Radio `preview` (subtle ground, concentric picture), Asset card (edge) | the plate frames the picture as a mat on hover; a white screen on the white card keeps its bounds |
 | actions, footer | a row tall; last plate (row − control-sm) / 2 from the card's end, never under 4 (the row inset given back); 4 between controls | the agent chat's card head rule (Cleanup pass) | a trailing plate lines up with Code block's and Plan's |
 
 ## Behavior and accessibility
@@ -109,6 +118,9 @@ React tests (`packages/react/tests/agent-chat.test.mjs`, 9), the full React suit
 
 ## Feedback log
 
+- 2026-11-03 · owner: visual questions for chat and feed ("a main frame and a vertical list of answers … or horizontal
+  list or grid of answers") → `layout="grid"` and `items[].visual`; grid arrows in two dimensions. Templates in
+  apps/desktop/src/question-kit.tsx; research docs/research/visual-questions-2026-11-03. In review.
 - 2026-10-28 · owner: Setup as "a more compact chat panel, just like cursor, claude, chatgpt" → the question card
   (descriptions, value, actions, footer, dismissLabel, onActiveChange); reopened to In review.
 - 2026-10-18 · built for Phase 2 of the Inspector chat.
@@ -274,3 +286,27 @@ A plain approval (one-line choices) is unchanged.
 Then (owner: "fix the inset padding here"): a question's rows pad 8 (the row inset) above and below, so the 22 key sits
 as far from the plate's top as from its side (it rode 4 from the top on the note row's 6); rows align to the top, the
 label's first line centred on the key; the check and Skip stay centred.
+
+## 2026-11-04: filled answers (owner pick)
+
+Owner, "Filled, in a card", from Answer Treatments (https://claude.ai/artifact/B9tSn3TNB6AVNvQ718Azjm; docs/research/
+visual-questions-2026-11-03/treatments.mjs): every answer, the field's row and a pictured tile take a soft field's
+paint at rest (its fill and edge, so answers and fields in one card match: owner, "make sure the fill color and stroke of
+the answers somewhat matches what the fill and stroke of the inputs"), 4 apart; Skip is an outline button 2 in from its
+row's end, top and foot (concentric, 10 − 2 = 8); hover, focus, press and the chosen answer step the fill as a soft field's; the
+hairlines between answers with notes are gone. The card itself is unchanged (the Composer's edge and field fill; a
+visual question's unit gives it the feed's corner). It applies to every Approval: a permission prompt's answers are
+filled too.
+
+## 2026-11-04: the mat, the key gap and plain (owner: "is this padding around the answer containers correct? the inset corner between the inputs and the outer container dont look right … is the gap between the number and the text correct? … look at how cursor shows questions and also shows multiple questions at once")
+
+- **Mat 6, row inset 6.** Filled answers sit 6 from the card's outer edge (the edge counted once: padding 6 − stroke) and
+  hold their key 6 in, so the title, the keys and the hint share the 12 column (the chat's frame inset) and a 10 answer
+  corner is concentric in a 16 card (16 − 6). Was padding 4 and Menu's row inset 8 (plates 5 from the edge, 10 inside 16).
+  Source: Cursor's question tray (`Tray.stylex.js`, docs/research/chat-kit-2026-11-02/questions.md § 2): content 12 in,
+  each option's plate hanging 6 out so its key lines up with the question. Skip ends 2 from its row (concentric 8).
+- **Key to words 8** (`ui-cluster`, compact 6): Cursor 8 after a 20 key, Claude 10 after 28; was Menu's row gap 12.
+- **`variant="plain"`**: no edge, fill, mat or corner, for several questions in one card of the host's (Cursor's IDE pane
+  lists every question at once, numbered). The kit's "Several at once" (apps/desktop/src/question-kit.tsx `SetQuestion`):
+  the card's own shell, its head (Questions, N of M answered, close) and foot (Skip all, Continue) on the 12 column, the
+  questions 16 apart. Gallery tile: Variant / plain.

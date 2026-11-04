@@ -29,6 +29,12 @@
     line-height: var(--_leading);
   }
 
+  /* The list starts on its first event's cap and, where its last event ends in text, at that line's baseline (Q-T2, owner
+     2026-11-04, "Apply both"): the first and last lines' half-leading given back, as Step does, so a timeline that opens a
+     block sits 16 under a title (it was 19); its marks stay centred on their lines. */
+  .area-timeline { margin-block-start: calc((1cap - 1lh) / 2); }
+  .area-timeline:not(:has(> .area-timeline-item:last-child :is(.area-timeline-item__media, .area-card, img, pre, table))) { margin-block-end: calc((1cap - 1lh) / 2); }
+
   .area-timeline-item {
     position: relative;
     display: grid;

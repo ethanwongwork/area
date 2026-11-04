@@ -27,3 +27,7 @@ Oct 14" within a year, else "Oct 14, 2025", then the time.
 - **What changed:** new: a quiet centred time between turns after a long pause.
 - **Why:** Astryx's set has message times; none of the agent apps puts one on every message, and Codex shows exactly
   this, so this is what Area does.
+
+## 2026-11-04: read on its glyphs (Q-T2)
+
+Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). Its line gives back its half-leading above and below, so a time 8 over its message is 8 from its baseline (it measured 12). Test: `packages/react/tests/type-rhythm.test.mjs`.

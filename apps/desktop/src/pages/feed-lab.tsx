@@ -38,6 +38,7 @@ import { BadgeTables } from "../badge-catalogue.tsx";
 import { ActivityLog, EventMarks } from "../activity-kit.tsx";
 import { AreaOverTime, Bars, Calendar, Columns, Diffstat, DotGrid, Funnel, HeatMatrix, Histogram, LanguageBar, Lifecycle, Pace, PunchCard, Retention, ShareRing, StatTiles, StatusHistory, Tracker, Waterfall, WeeklyStrip } from "../data-views.tsx";
 import { Stage } from "../stage.tsx";
+import { CornersQuestion, QUESTION_TEMPLATES, QuestionVariant } from "../question-kit.tsx";
 import { TYPE_COLUMNS, TYPE_EXCERPT, TYPE_PARAGRAPH, TYPE_SAMPLE, TypefaceCardOf, TypeTable, TypeTesters, typeValues, WEIGHT_NAMES } from "../type-kit.tsx";
 import { DEFAULT_TYPE, SCALES, TYPE_ROLES } from "../tokens.ts";
 import { CHANNELS, Chart, DAILY, KPIS, PRIOR } from "../content/examples/analytics.tsx";
@@ -186,6 +187,16 @@ export function FeedLabPage() {
       }
       canvas={
         <div className="studio-sections studio-feed" data-layout={layout}>
+          {/* --- Visual questions first (owner, 2026-11-04: "in their own section at the top … each variation next to
+                 each other"): a frame over a question, every answer kind, then one as a wide feed draws it ------------ */}
+          <CanvasSection id="feed-questions" title="Visual questions" count={QUESTION_TEMPLATES.length}>
+            <div className="qk-gallery">{QUESTION_TEMPLATES.map(({ id, title, kind, Question }) => <QuestionVariant key={id} title={title} kind={kind}><Question /></QuestionVariant>)}</div>
+          </CanvasSection>
+
+          <CanvasSection id="feed-questions-beside" title="Visual question, beside">
+            <QuestionVariant title="Corners" kind="Beside"><CornersQuestion /></QuestionVariant>
+          </CanvasSection>
+
           {/* --- Text: what every page says, in one voice ------------------------------------------------------- */}
           {/* --- Chat: a conversation, a response on the whole ramp, an agent's trackers (src/chat-kit.tsx) ------------- */}
           <CanvasSection id="feed-chat" title="Conversation">

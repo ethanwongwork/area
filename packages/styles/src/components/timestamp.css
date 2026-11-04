@@ -16,4 +16,6 @@
     text-align: center;
     user-select: none;
   }
+  /* Read on its glyphs (Q-T2, owner 2026-11-04; Step's rule): a time 8 over its message is 8 from its baseline. */
+  .area-timestamp { margin-block: calc((1cap - 1lh) / 2); }
 }

@@ -102,7 +102,7 @@ test("an Approval numbers its choices, focuses the first only when asked and off
   // The deprecated `options` still works for a release.
   assert.equal((renderToString(h(Approval, { title: "T", options: [{ value: "yes", label: "Yes" }], onChoose: () => {} })).match(/class="area-approval__option"/g) ?? []).length, 1);
   const html = renderToString(h(Approval, { autoFocus: true, title: "Edit a.css?", description: "Why", items: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], onChoose: () => {}, onInstead: () => {} }, "detail"));
-  const id = html.match(/<section class="area-approval" aria-labelledby="([^"]+)"/)[1];
+  const id = html.match(/<section class="area-approval area-approval--list area-approval--surface" aria-labelledby="([^"]+)"/)[1];
   assert.match(html, new RegExp(`<p id="${id}" class="area-approval__title">Edit a\\.css\\?</p>`));
   assert.match(html, new RegExp(`class="area-approval__options" role="group" aria-labelledby="${id}"`));
   assert.equal((html.match(/class="area-approval__option"/g) ?? []).length, 2);
@@ -115,6 +115,17 @@ test("an Approval numbers its choices, focuses the first only when asked and off
   assert.doesNotMatch(html, /area-kbd--quiet/);
   assert.match(html, /<p class="area-approval__hint"><span class="area-kbd area-kbd--sm area-kbd--default"/);
   assert.match(html, /area-approval__hint/);
+});
+
+test("an Approval lays its choices in a grid and draws a choice's picture, inert and out of its name", () => {
+  const html = renderToString(h(Approval, { title: "T", layout: "grid", onChoose: () => {},
+    items: [{ value: "a", label: "Square", visual: h("i", { className: "pic" }) }, { value: "b", label: "Round" }] }));
+  assert.match(html, /<section class="area-approval area-approval--grid area-approval--surface"/);
+  // The picture sits beside its button in a tile, never inside it (a picture of real UI holds buttons).
+  assert.match(html, /<div class="area-approval__tile"><span class="area-approval__visual" aria-hidden="true" inert=""><i class="pic"><\/i><\/span><button type="button" class="area-approval__option"[^>]*><span class="area-approval__key"/);
+  assert.doesNotMatch(html, /<button[^>]*>(?:(?!<\/button>).)*area-approval__visual/);
+  assert.equal((html.match(/area-approval__visual/g) ?? []).length, 1);
+  assert.throws(() => renderToString(h(Approval, { title: "T", layout: "tiles", items: [], onChoose: () => {} })), /invalid layout/);
 });
 
 test("an Approval asks a question: descriptions, the answer given, head actions and a footer", () => {

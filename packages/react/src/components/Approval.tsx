@@ -12,12 +12,27 @@ export interface ApprovalOption {
   label: ReactNode;
   /** What the choice comes to, a line under its label (Claude Code's question options). */
   description?: ReactNode;
+  /**
+   * The choice drawn: a picture of what it comes to (a screen in that setting, a corner, a typeface's "Aa"), shown, not
+   * used: inert and hidden from assistive tech, the label names the choice. In a grid it sits over the key and label, in
+   * a list before them. Its frame's ratio is `--area-approval-ratio` (4 / 3 by default).
+   */
+  visual?: ReactNode;
 }
 
 /** How long keys are ignored after the approval appears. */
 const GUARD_MS = 500;
 
 interface ApprovalBaseProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
+  /**
+   * list (the default): one choice a row. grid: the choices in as many columns as fit, at most
+   * `--area-approval-columns` (2 for words, 4 for pictured choices), for short answers and pictures; the arrows move in
+   * two dimensions. The field to say what to do instead always takes a whole row.
+   */
+  layout?: "list" | "grid";
+  /** surface (the default): its own card, the Composer's shell. plain: no card (edge, fill, mat, corner), for several
+   *  questions listed in one card of the host's; its words keep their 6 inset, so the host's mat sets the column. */
+  variant?: "surface" | "plain";
   /** What it wants to do: "Run this command?", "Edit button.css?". */
   title: ReactNode;
   /** Why, in a sentence. */
@@ -63,7 +78,7 @@ export type ApprovalProps = ApprovalBaseProps & (
  * dismisses, Enter in the field sends what to do instead. With `autoFocus` the first choice takes focus when it appears.
  */
 export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval(
-  { title, description, items: itemsProp, options: optionsProp, onChoose, onInstead, insteadPlaceholder = "Tell it what to do instead", onDismiss, dismissLabel = "cancel",
+  { title, description, layout, variant, items: itemsProp, options: optionsProp, onChoose, onInstead, insteadPlaceholder = "Tell it what to do instead", onDismiss, dismissLabel = "cancel",
     value, onActiveChange, actions, footer, autoFocus = false, children, className, onKeyDown, ...rest }, ref,
 ) {
   const options = itemsProp ?? optionsProp ?? [];
@@ -104,6 +119,24 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
     // The choices and the field, in order: the arrows move through all of them.
     const buttons = [...(list.current?.querySelectorAll<HTMLElement>("button.area-approval__option, .area-approval__field") ?? [])];
     const index = buttons.indexOf(document.activeElement as HTMLElement);
+    // A grid's arrows move in two dimensions: across along the order, up and down to the nearest choice in the next row.
+    if (layout === "grid" && index >= 0 && !inField && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {
+      event.preventDefault();
+      const ahead = (event.key === "ArrowRight") !== (getComputedStyle(event.currentTarget).direction === "rtl");
+      buttons[(index + (ahead ? 1 : -1) + buttons.length) % buttons.length]?.focus();
+      return;
+    }
+    if (layout === "grid" && index >= 0 && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
+      event.preventDefault();
+      const boxOf = (element: HTMLElement) => (element.closest(".area-approval__instead") as HTMLElement | null ?? element).getBoundingClientRect();
+      const from = boxOf(buttons[index]!), centre = from.left + from.width / 2, down = event.key === "ArrowDown";
+      const rows = buttons.map((button, at) => ({ at, box: boxOf(button) })).filter(({ box }) => down ? box.top >= from.bottom - 1 : box.bottom <= from.top + 1);
+      const edge = rows.length ? (down ? Math.min(...rows.map(row => row.box.top)) : Math.max(...rows.map(row => row.box.bottom))) : 0;
+      const row = rows.filter(({ box }) => Math.abs((down ? box.top : box.bottom) - edge) < 2);
+      const target = row.sort((a, b) => Math.abs(a.box.left + a.box.width / 2 - centre) - Math.abs(b.box.left + b.box.width / 2 - centre))[0];
+      buttons[target ? target.at : down ? 0 : buttons.length - 1]?.focus();
+      return;
+    }
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       const next = event.key === "ArrowDown" ? (index + 1) % buttons.length : (index - 1 + buttons.length) % buttons.length;
@@ -115,13 +148,14 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
     }
   };
   // A question that can be skipped and answered in words puts Skip at the end of the words' row (its Esc still skips),
-  // and drops the hint row under the options.
+  // and drops the hint row under the options. Skip is an outline button: the row is a filled answer, and a soft or
+  // ghost plate on that fill reads as a word (2026-11-04).
   const skipInRow = Boolean(onInstead && onDismiss);
   const skipLabel = dismissLabel.charAt(0).toUpperCase() + dismissLabel.slice(1);
   // What to do instead is the last choice (Claude Code's): its number focuses the field, and Enter sends it.
   const insteadKey = onInstead && options.length < 9 ? String(options.length + 1) : undefined;
   return (
-    <section ref={ref} className={approvalVariants({}, className)} aria-labelledby={titleId} onKeyDown={keys} {...rest}>
+    <section ref={ref} className={approvalVariants({ layout, variant }, className)} aria-labelledby={titleId} onKeyDown={keys} {...rest}>
       <div className="area-approval__head">
         <div className="area-approval__heading">
           <p id={titleId} className="area-approval__title">{title}</p>
@@ -135,7 +169,7 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
         onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) { focused.current = undefined; report(); } }}>
         {options.map((option, index) => {
           const chosen = value !== undefined && option.value === value;
-          return (
+          const button = (
             <button key={option.value} type="button" className="area-approval__option" autoFocus={autoFocus && index === 0} onClick={event => { if (event.detail === 0 && settling()) return; onChoose(option.value); }}
               aria-keyshortcuts={index < 9 ? String(index + 1) : undefined} aria-current={chosen ? "true" : undefined} data-selected={chosen ? "" : undefined}
               aria-describedby={option.description ? `${optionId}-${index}` : undefined}
@@ -151,6 +185,15 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
               {value !== undefined ? <span className="area-approval__check" aria-hidden="true"><Glyph name="check" /></span> : null}
             </button>
           );
+          // A pictured choice is a tile: the picture beside its button, never inside it (a picture of real UI holds
+          // buttons and fields, and interactive content inside a button is invalid HTML: a parser splits it). The
+          // button covers the tile, so the whole tile is the hit target, and the tile wears the row's plate.
+          return option.visual != null ? (
+            <div key={option.value} className="area-approval__tile">
+              <span className="area-approval__visual" aria-hidden="true" inert>{option.visual}</span>
+              {button}
+            </div>
+          ) : button;
         })}
         {onInstead ? (
           <label className="area-approval__option area-approval__instead">
@@ -159,7 +202,7 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
               aria-keyshortcuts={insteadKey}
               onChange={event => setInstead(event.currentTarget.value)}
               onKeyDown={event => { if (event.key === "Enter" && instead.trim()) { event.preventDefault(); onInstead(instead.trim()); setInstead(""); } }} />
-            {skipInRow ? <Button className="area-approval__skip" variant="soft" tone="neutral" size="sm" aria-keyshortcuts="Escape" onClick={onDismiss}>{skipLabel}</Button> : null}
+            {skipInRow ? <Button className="area-approval__skip" variant="outline" tone="neutral" size="sm" aria-keyshortcuts="Escape" onClick={onDismiss}>{skipLabel}</Button> : null}
           </label>
         ) : null}
       </div> : null}

@@ -31,6 +31,11 @@
     --area-card-gap: var(--_canvas-gap);
     --area-card-fill: var(--area-bg-stripe);
     --area-card-edge: var(--area-edge-blocks);
+    /* A frame's title is the name role (Q-T1, owner 2026-11-04, "Apply both"): 13/18, weight 500 in the default ink, so
+       the section's 16/22 title heads its cards (it was the section title's own style; Kit Type Decisions). */
+    --area-card-title-size: var(--area-text-base-size);
+    --area-card-title-leading: var(--area-text-base-leading);
+    --area-card-title-tracking: var(--area-text-base-tracking);
   }
   /* Frames side by side: the card grid's columns and gap. */
   .studio-frames { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr)); /* pick: four across a 1440 Canvas with both panels */ gap: var(--_canvas-gap); }
@@ -41,6 +46,8 @@
   /* A list in the feed sits on the text edge, as prose: its bullets on the heading's edge, the lines hanging after them
      (owner, 2026-11-01: "this text is too indented"; the points started 32 past the heading). */
   .studio-feed__list { margin-inline-start: var(--_text-inset); padding-inline-start: 1.1em; /* pick: a disc and its space */ }
+  /* A list that opens its section starts on its first cap, 16 under the title, as the feed's prose (2026-11-04: 21). */
+  .studio-feed__list > li:first-child { text-box: trim-start cap alphabetic; }
 
   /* --- Chat in the kit (src/chat-kit.tsx) ------------------------------------------------------------------------- */
 
@@ -111,7 +118,9 @@
   /* The day: Area's group label over a run of rows (Nav's and Menu's: the rows' size at the strong weight in the muted
      ink), on the text edge, no rule (owner, 2026-11-03: "for the dates, is the divider across necessary? is the type size
      and color of those dates correct/consistent with area?"; it was 12 at 400 with a rule to the end). */
-  .studio-activity__label { margin: 0; padding-inline-start: var(--_text-inset); color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); font-weight: var(--area-weight-strong); }
+  /* A day's label is a group label, quieter than the events under it by ink alone, so regular (2026-11-04 type pass:
+     weight rises only with the default ink, PRODUCT_UI "Feed kit" and "Chat kit"; it was 500 in the muted ink). */
+  .studio-activity__label { margin: 0; margin-block: calc((1cap - 1lh) / 2); /* Q-T2: read on its glyphs */ padding-inline-start: var(--_text-inset); color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
   /* A row's leading mark: a 16 glyph, as a Step's icon (it was the status badge's small mark, 10). */
   .studio-activity__glyph { display: inline-flex; flex: none; inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
   .studio-activity__glyph > svg, .studio-activity__glyph > .studio-activity__ink > svg { inline-size: 100%; block-size: 100%; }

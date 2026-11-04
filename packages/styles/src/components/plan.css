@@ -250,4 +250,8 @@
      the frame's paddings on top (2026-11-02 pass: 27 and 26 against a Step's 13). */
   .area-plan.area-plan--plain > .area-plan__head { min-block-size: var(--area-text-base-leading); padding-block: 0; }
   .area-plan--plain > .area-plan__items { margin-block-end: calc((var(--area-text-base-leading) - var(--area-ui-row)) / 2); }
+  /* And from the line to its glyphs (Q-T2, owner 2026-11-04, "Apply both"; Step's rule): the head's cap and, while the
+     last item ends in text, its baseline are the plan's edges, so the gaps around it are read on the glyphs. */
+  .area-plan--plain { margin-block-start: calc((1cap - 1lh) / 2); }
+  .area-plan--plain:not(:has(> .area-plan__items > .area-plan__item:last-child .area-plan__steps)) { margin-block-end: calc((1cap - 1lh) / 2); }
 }

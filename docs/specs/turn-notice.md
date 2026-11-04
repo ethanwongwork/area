@@ -99,3 +99,7 @@ gap-md token, the same 4 by another name); an error's words are in the default i
   - **Why:** the owner: "the trackers dont look right, the type ramp looks wrong, the alignment looks off … do the
     trackers need to be smaller?" An agent's work is UI and its answer prose (Cursor's cards 13 under a 14 reply), so
     every tracker reads at text-base, one size, under the reply's text-lg; the cards' words share one 12 column.
+
+## 2026-11-04: read on its glyphs (Q-T2)
+
+Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). Its one line gives back its half-leading above and below (`margin-block: calc((1cap - 1lh) / 2)`), Step's rule. Test: `packages/react/tests/type-rhythm.test.mjs`.

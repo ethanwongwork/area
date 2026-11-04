@@ -27,6 +27,7 @@ import { Approval, Attachment, Button, Chip, Pagination, Menu, MenuItem, MenuSep
 import { AddIcon, BugIcon, DismissIcon, FileCodeIcon, ClipboardListIcon, HelpIcon, LayersIcon, PlugIcon, SparkleIcon, AttachIcon, BookIcon, ChatIcon, TerminalIcon, ListIcon, PencilIcon, LaptopIcon, ShieldIcon, CopyIcon, DocumentIcon, MoreHorizontalIcon, RefreshIcon, SearchIcon, ThumbsDownIcon, ThumbsUpIcon } from "@area/icons";
 import { CARD_SCOPE, FEED_CODE, FEED_TABLE } from "./tile.tsx";
 import { appScale } from "./app-scale.ts";
+import { QuestionRun } from "./question-kit.tsx";
 
 /* The composers' controls, in UI words: where the turn runs, what it may do without asking, and the model with its effort
    (models stay the placeholder vocabulary's options, never a product's names). */
@@ -315,6 +316,22 @@ export function Question() {
         </>} />
     </div>
   );
+}
+
+/** Visual questions in a chat (src/question-kit.tsx): the agent says what it will ask, then the setting questions one at
+ *  a time, each a frame over its question, a pick moving on, in the composer's place. */
+export function VisualRun() {
+  return (
+    <div {...chat()}>
+      <Message author="assistant" authorName="Assistant"><p>A few questions to set the look. Point at an answer to see it in the frame first.</p></Message>
+      <QuestionRun />
+    </div>
+  );
+}
+
+/** A chat's root around anything the kit shows in one (a visual question on its own). */
+export function InChat({ children }: { children: ReactNode }) {
+  return <div {...chat()}>{children}</div>;
 }
 
 /** The + menu open over the composer, as it shows when the + is pressed: Area's Menu as a placed surface (the menu with no

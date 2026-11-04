@@ -57,6 +57,9 @@ export const COMPONENT_PAGES = [
       {id: "descriptions", title: "Descriptions", demo: "GalleryApprovalDescriptions", note: "A question rather than a permission (Claude Code's AskUserQuestion): each choice says what it comes to, Menu's row with a note."},
       {id: "answered", title: "Answered", demo: "GalleryApprovalAnswered", note: "Asked again, the answer given is Menu's selected row with its check."},
       {id: "questions", title: "Questions", demo: "GalleryApprovalQuestions", note: "Among several questions: a compact Pagination in the head, the way on (Skip, Continue) at the end of the hint's row."},
+      {id: "grid", title: "Grid", demo: "GalleryApprovalGrid", note: "layout=\"grid\": short answers in as many columns as fit, at most --area-approval-columns (2), never under 120; the arrows move in two dimensions."},
+      {id: "plain", title: "Plain", demo: "GalleryApprovalPlain", note: "variant=\"plain\": no card of its own (edge, fill, mat, corner), for several questions listed in one card, as an agent's question tray lists them."},
+      {id: "pictures", title: "Pictures", demo: "GalleryApprovalPictures", note: "Each choice's visual drawn over its key and label in a grid (before them in a list), on a recessed frame, up to 4 across, never under 96."},
     ],
   },
   {

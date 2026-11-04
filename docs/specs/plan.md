@@ -321,3 +321,7 @@ words start on the text edge around it and its row plates hang outside it (as Na
 the text's line and its last row's half-leading hangs past its foot, so the words above and below are the turn's gap
 away. A plain plan is not a raised ground (layers.css). The diff (Edit summary) and nested steps (Plan) keep
 their own grounds.
+
+## 2026-11-04: read on its glyphs (Q-T2)
+
+Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). Plain gives back its head's half-leading at its top, and its last item's at its foot unless that item holds its steps box, Step's rule, so the gaps around a plain plan in a turn are read on the glyphs. Test: `packages/react/tests/type-rhythm.test.mjs`.

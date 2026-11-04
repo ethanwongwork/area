@@ -279,3 +279,7 @@ design?". Every figure in a tracker (Plan's count and meta, Step's meta, Edit su
 secondary step (`text-sm`, 12 at type 13) on the row's line: the face's figures are cap height and tabular, so at the
 label's 13 they read a size up. A file row takes `icon` (its kind's 16 glyph, muted, before the name) and splits a path:
 the file's name first, its folder after it, muted and cut from its start, so the part that differs leads.
+
+## 2026-11-04: read on its glyphs (Q-T2)
+
+Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). Plain gives back its head's half-leading at its top, and its last row's at its foot while the last file's diff is closed (a diff is a frame). A head that carries Keep / Undo is a control row and still sits a little lower (19.6 under a Step group, measured). Test: `packages/react/tests/type-rhythm.test.mjs`.

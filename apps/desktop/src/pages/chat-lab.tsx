@@ -23,7 +23,8 @@ import { ScreenFigure, SHOWCASE } from "../setup-screen.tsx";
 import { ColorCard, Sheet as ColorSheet } from "./color.tsx";
 import { SCALES } from "../tokens.ts";
 import { Bars } from "../data-views.tsx";
-import { AddMenu, AgentTurn, Attachments, CardsReply, Commands, Composers, Conversation, Question, Response, Trackers } from "../chat-kit.tsx";
+import { AddMenu, AgentTurn, Attachments, CardsReply, Commands, Composers, Conversation, InChat, Question, Response, Trackers, VisualRun } from "../chat-kit.tsx";
+import { QUESTION_TEMPLATES, QuestionVariant, SETTING_QUESTIONS } from "../question-kit.tsx";
 import { url, useLibrary } from "./imagery.tsx";
 import { ActivityLog, EventMarks } from "../activity-kit.tsx";
 
@@ -69,6 +70,14 @@ export function ChatLabPage() {
       canvasLead={<ViewLead><ViewFilter label="Width" align="start" value={width} onChange={setWidth} options={WIDTHS} /></ViewLead>}
       canvas={
         <div className="studio-sections studio-feed studio-chatkit">
+          {/* Visual questions first (owner, 2026-11-04): every variation side by side, each a chat at the chosen width,
+              then the setting questions as a chat asks them, one at a time. */}
+          <CanvasSection id="chat-questions" title="Visual questions" count={QUESTION_TEMPLATES.length}>
+            <div className="qk-variants" style={{ "--_chat-width": `${chosen.px}px` } as CSSProperties}>{QUESTION_TEMPLATES.map(({ id, title, kind, Question }) => (
+              <QuestionVariant key={id} title={title} kind={kind}><div {...frame}><InChat><Question /></InChat></div></QuestionVariant>
+            ))}</div>
+          </CanvasSection>
+          <CanvasSection id="chat-question-run" title="Visual question run" count={SETTING_QUESTIONS.length}><div {...frame}><VisualRun /></div></CanvasSection>
           <CanvasSection id="chat-conversation" title="Conversation"><div {...frame}><Conversation /></div></CanvasSection>
           <CanvasSection id="chat-response" title="Response"><div {...frame}><Response /></div></CanvasSection>
           <CanvasSection id="chat-cards" title="Response with cards"><div {...frame}><CardsReply designs={designs} chart={<Bars />} colors={colors} /></div></CanvasSection>
