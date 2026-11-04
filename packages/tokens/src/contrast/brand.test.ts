@@ -70,9 +70,12 @@ describe("brand: contrast gate", () => {
   it("the reference brands and the edge colours", () => {
     expect(run([...REFERENCE, ...EDGES]).slice(0, 20)).toEqual([]);
   }, 60_000);
+  // Time only, never fewer brands or a looser gate (2026-11-04): Tone tint and Tone contrast (#200) put more tokens in
+  // every theme the gate solves; the run takes 133s on a laptop and about 2.4 times that on a CI runner, which crossed
+  // the old 300s limit (main's runs of 2026-11-04 timed out at 316s).
   it("500 sampled brands", () => {
     expect(run(SAMPLE).slice(0, 20)).toEqual([]);
-  }, 300_000);
+  }, 600_000);
   for (const extra of [{ accentStrength: 30 }, { solid: { light: 200, dark: 200 } }, { solid: { light: 850, dark: 850 } }, { statusColours: "fixed" }])
     it(`60 sampled brands at ${JSON.stringify(extra)}`, () => {
       expect(run(SAMPLE.slice(0, 60), extra).slice(0, 20)).toEqual([]);
