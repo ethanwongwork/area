@@ -5,21 +5,21 @@ import { DENSITY_LEVELS } from "./density.ts";
 describe("type size (docs/research/ui-size-scale-2026-10-12.md)", () => {
   const px = (value: string) => Number(value.match(/(\d+)\)?$/)![1]);
 
-  it("is Cursor's ramp at 13: 11/14, 12/16, 13/18, 14/22, titles 16 / 18 / 20 / 26 (owner, 2026-11-02)", () => {
+  it("is Cursor's ramp at 13 with Claude's reading step: 11/14, 12/16, 13/18, 15/22, titles 16 / 18 / 20 / 26 (owner, 2026-11-02)", () => {
     const t = typeSizeTokens(13);
     const pair = (role: string) => `${px(t[`${role}-size`]!)}/${px(t[`${role}-leading`]!)}`;
-    expect(["text-xs", "text-sm", "text-base", "text-lg"].map(pair)).toEqual(["11/14", "12/16", "13/18", "14/22"]);
+    expect(["text-xs", "text-sm", "text-base", "text-lg"].map(pair)).toEqual(["11/14", "12/16", "13/18", "15/22"]);
     expect(["title-xs", "title-sm", "title-md", "title-lg"].map(pair)).toEqual(["16/22", "18/24", "20/28", "26/30"]);
     expect(t["type-box"]).toBe("14px");
   });
 
-  it("steps the body roles with the base: small two under, secondary one under, reading one over", () => {
+  it("steps the body roles with the base: small two under, secondary one under, reading two over", () => {
     for (const base of TYPE_SIZES) {
       const t = typeSizeTokens(base);
       expect(px(t["text-xs-size"]!)).toBe(Math.max(10, base - 2));
       expect(px(t["text-sm-size"]!)).toBe(base - 1);
       expect(px(t["text-base-size"]!)).toBe(base);
-      expect(px(t["text-lg-size"]!)).toBe(base + 1);
+      expect(px(t["text-lg-size"]!)).toBe(base + 2);
     }
   });
 
@@ -29,14 +29,14 @@ describe("type size (docs/research/ui-size-scale-2026-10-12.md)", () => {
       return `${px(t[`text-${role}-size`]!)}/${px(t[`text-${role}-prose-leading`]!)} ${px(t[`text-${role}-prose-gap`]!)}`;
     };
     expect(TYPE_SIZES.map(base => pair(base, "base"))).toEqual(["12/18 12", "13/20 12", "14/22 16", "15/24 16", "16/24 16"]);
-    expect(TYPE_SIZES.map(base => pair(base, "lg"))).toEqual(["13/20 12", "14/22 16", "15/24 16", "16/24 16", "17/26 16"]);
-    // Reading text's line is its prose line; never tighter than WCAG 1.4.8's 1.5.
+    // Reading text keeps its one line, Claude's 15/22 at 13 (owner, 2026-11-02), running or not.
+    expect(TYPE_SIZES.map(base => pair(base, "lg"))).toEqual(["14/20 12", "15/22 16", "16/24 16", "17/26 16", "18/28 20"]);
     for (const base of TYPE_SIZES) {
       const t = typeSizeTokens(base);
       expect(t["text-lg-leading"]).toBe(t["text-lg-prose-leading"]);
-      for (const role of ["base", "lg"] as const) {
-        expect(px(t[`text-${role}-prose-leading`]!) / px(t[`text-${role}-size`]!)).toBeGreaterThanOrEqual(1.5);
-      }
+      // UI text's prose line is never tighter than WCAG 1.4.8's 1.5; reading text's never under 1.4 (Claude's).
+      expect(px(t["text-base-prose-leading"]!) / px(t["text-base-size"]!)).toBeGreaterThanOrEqual(1.5);
+      expect(px(t["text-lg-prose-leading"]!) / px(t["text-lg-size"]!)).toBeGreaterThanOrEqual(1.4);
     }
   });
 

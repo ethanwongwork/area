@@ -22,7 +22,7 @@ import { hrefOf } from "../places.ts";
 import { feedScale } from "../app-scale.ts";
 import { Specimen } from "../specimen-scope.tsx";
 import { CanvasSection, GALLERY_LOOK, Tile, TileGrid, FEED_TABLE } from "../tile.tsx";
-import { TYPE_COLUMNS, TYPE_SAMPLE, TypeTable, TypefaceCard, typeValues } from "../type-kit.tsx";
+import { savedSample, TYPE_COLUMNS, TYPE_SAMPLE, TypeTable, TypefaceCard, typeValues } from "../type-kit.tsx";
 import { factsOf, FaceSummary, KINDS, TYPEFACES, typefaceOf, TypefaceWorkspace, useInstalled } from "./typefaces.tsx";
 
 /* Type cards are the gallery's one card (tile.tsx GALLERY_LOOK); they had a copy of its look of their own. */
@@ -94,7 +94,7 @@ function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: stri
 
 export function TypographyPage() {
   const { query, item, select, shown: { canvas } } = useStudio();
-  const [sample, setSample] = useState(() => readStored("typeSample", SAMPLE));
+  const [sample, setSample] = useState(() => savedSample(readStored("typeSample", SAMPLE)));
   // The Sidebar's choice (All, or one role) and the Inspector's (the row chosen on the Canvas;
   // with one role on the Canvas, that role; with none, the type scale).
   const view = TYPE_ROLES.find(entry => entry.id === item);

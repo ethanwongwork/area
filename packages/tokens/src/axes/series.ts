@@ -33,13 +33,13 @@ function seriesTokens(lightness: number, mode: "light" | "dark"): TokenMap {
 export const SERIES_AXIS: AxisDefinition = {
   id: "series-lightness",
   label: "Series lightness",
-  description: "How deep the data colours sit on their palette families, as sky's step: 350 (the lightest) or 400. Every series moves the same number of steps.",
+  description: "How deep the data colors sit on their palette families, as sky's step: 350 (the lightest) or 400. Every series moves the same number of steps.",
   defaultPreset: String(DEFAULT_SERIES_STEP),
   namespaces: ["--area-series-"],
   presets: SERIES_STEPS.map(lightness => ({
     id: String(lightness),
     label: lightness === SERIES_STEPS[SERIES_STEPS.length - 1] ? `${lightness} (Deep)` : String(lightness),
-    description: `The series colours with sky at its ${lightness} step.`,
+    description: `The series colors with sky at its ${lightness} step.`,
     tokens: seriesTokens(lightness, "light"),
     darkTokens: seriesTokens(lightness, "dark"),
   })),

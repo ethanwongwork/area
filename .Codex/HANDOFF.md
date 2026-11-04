@@ -50,6 +50,36 @@
   series a family step; Series lightness Light 350 / Deep 400); Badge icons take the words' ink (dot keeps the mark,
   modern unchanged); page corners ≤ a quarter side. Main's tile rewrite (#197) took over the colour cards' clipping fix.
   Picks so far: first=foundation, m8=build.
+- **Feed Kit updates, branch `claude/area-feed-kit-updates-86990a` (uncommitted, 2026-11-02).** Reading text is Claude's
+  15/22 (owner picked "15/22 like Claude" beside Claude Code's chat; `text-lg` = base + 2 on the UI ratio's line, its prose
+  line the same; type-size.ts, its test, DESIGN_SYSTEM, typography spec). Every status is `StatusBadge` (tile.tsx `STATUS`:
+  done check circle success, in review `CircleProgressIcon` caution, draft ring caution, not started ring neutral; md in a
+  card's name row, sm in tables and facts) on projects, Components, Icons, family tabs and Settings. Glyph sheets are cards:
+  each glyph an Asset card (basic, square, `CARD_SCOPE`), 8 apart, columns filling the Canvas (Icons, a face's Glyphs, Labs ›
+  Feed's new Icon gallery and Type glyph gallery; `CharacterCell` shared). Labs › Feed: Well colour card, Series section,
+  chart on `--area-series-1`. Later the same day: every status its own tone and circle mark (8 states, tile.tsx `STATUS`:
+  progress info, review discovery, changes warning, blocked danger, archived); `src/badge-catalogue.tsx` lists every badge
+  plain and plated with what it labels (Labs › Feed's badge tables); colour cards one card (name at the head, values two lines
+  under, hugging, ≥144 on the glyph galleries' 8 gap; steps unlabelled hex + OKLCH, RGB in the Inspector) on Colors and the
+  kit; Series as those cards; type tester bars are the Inspector's `BarRow` (now exported, fractional steps); glyph galleries
+  one 64 card in the kit (`GlyphSheet cell`); Asset card outside + screen keeps its asset 16:9 (window whole). Then: badges
+  on plates everywhere, the Sidebar a status's bare mark; shortest words ("Draft", "3 changes", "Live"); icons only on
+  statuses; one meaning per colour, gold dropped (draft and needs-you orange); Asset card's headless top inset no longer hits
+  outside cards (colour grids 8 both ways); `ScaleRow` (Colors' Size: Rows, kit "Colour scales, compact"); merged main's
+  palette fold (#198): Series cards show their palette step, the Colors Inspector names each family's and step's series.
+  Later: data views in the kit (`src/data-views.tsx`: heat matrix, calendar, tracker, ring, dot grid, the owner's Build
+  picks m6–m11, on series tokens); chat in the kit (`src/chat-kit.tsx`: conversation, a response on the whole ramp,
+  trackers); kit ledes removed; SectionHeading title now title-xs 16/22 (every page); colour cards square ≥112 with hex /
+  L / C / H lines; `ScaleRow` one unlabelled row; type samples "The five boxing wizards jumped quickly." + abstract prose
+  (`TYPE_PARAGRAPH`, card `TYPE_EXCERPT`). Then (v32–v34): Series section and compact scale rows removed; "color" in UI
+  copy; chat lists on the text edge, composer mode tag dropped; all 21 data views (heat on Area's blue ladder; Meter
+  `tone="data"` = series 1); Empty state type and action gaps; tracker pass from the apps' bundles (Step verb fg-quiet,
+  default when open, icon 6; Turn notice stopped/compacted a divider line, icon only on error); then the owner's review:
+  every tracker at text-base, one size (Step, Turn notice, Approval; Plan's text-lg trial reverted; DESIGN_SYSTEM type
+  ramp rule + cohesion test), Approval padded 4 so every card's words sit on the 12 column, Plan's steps box takes its
+  item's end padding (16 / 16 / 16 at Flat), kit Plan without its icon or hand count, kit turn gap 12; Select's field ring
+  on `:focus-visible` (a pointer choice left it on); type tester without dividers (groups two Toolbar gaps apart), its
+  scroller keeps ring room. Feed Kit v35. Open: card selection vs the owner's black selected chip.
 - **System pages on the feed's kit, branch `claude/system-visuals-consistency-c69dff` (committed e93b4664 and merged with main, 2026-11-02; not pushed).** Owner:
   bring the rest of the system's categories up to the cleaned-up cards, "a big, expansive library of cohesive containers".
   Surveyed every System page in light: Themes, Tokens, Colors, Typography, Icons, Components, Patterns and Versions already

@@ -196,3 +196,4 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
 
 - **What changed:** At the app's type 13 the glyph is 20 (md) and 16 (sm), native sizes, instead of 22 and 18.
 - **Why:** The compact step is in halves at type 13, which put the glyph between native cuts, slightly soft. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+- 2026-11-02 · owner: "update the empty state, the size of the type the gaps between text and the actions" (three references: a finance dashboard's and a projects app's small empty states, a mail app's large one) → sm: the actions 12 under the text (was 8), a 32 tile with a 16 glyph (was 40 / 20); md: the line at the UI step, 13/18 (was 12/16), the actions 24 under (was 16). Titles unchanged (sm 13, md 16). → empty-state.css.

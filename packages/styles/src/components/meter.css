@@ -33,6 +33,10 @@
   .area-meter--neutral { --_meter-fill: var(--area-selection-solid); }
   .area-meter--warning { --_meter-fill: var(--area-warning-solid); }
   .area-meter--danger { --_meter-fill: var(--area-danger-solid); }
+  /* data: a measure among charts, in the first data color (owner, 2026-11-02: "does the meters data vis need to be updated
+     to match the other data stuff"; "Data meters take series 1"): series 1's color, the same in light and dark, as a
+     chart's bars and parts are; a usage or limit meter keeps neutral. */
+  .area-meter--data { --_meter-fill: var(--area-series-1-fill); }
   .area-meter > .area-meter__track { --_progress-fill: var(--_meter-fill); }
 
   /* --- segmented: a stacked meter ------------------------------------------- */
@@ -45,14 +49,14 @@
    * Series lightness moves them; the order and its colour-vision checks are the series gate's (contrast/series.test.ts).
    */
   .area-meter--segmented {
-    --_meter-1: var(--area-series-1);
-    --_meter-2: var(--area-series-2);
-    --_meter-3: var(--area-series-3);
-    --_meter-4: var(--area-series-4);
-    --_meter-5: var(--area-series-5);
-    --_meter-6: var(--area-series-6);
-    --_meter-7: var(--area-series-7);
-    --_meter-8: var(--area-series-8);
+    --_meter-1: var(--area-series-1-fill);
+    --_meter-2: var(--area-series-2-fill);
+    --_meter-3: var(--area-series-3-fill);
+    --_meter-4: var(--area-series-4-fill);
+    --_meter-5: var(--area-series-5-fill);
+    --_meter-6: var(--area-series-6-fill);
+    --_meter-7: var(--area-series-7-fill);
+    --_meter-8: var(--area-series-8-fill);
   }
   /* The track is the parts in a row, 2 apart so the ground shows between them (dataviz: a surface gap separates
      stacked segments, never a stroke); its own fill draws only what is left of the range. Its pill rounds the outer

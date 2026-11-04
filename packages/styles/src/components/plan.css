@@ -197,7 +197,11 @@
     grid-column: 2 / -1;
     display: grid;
     gap: var(--area-ui-row-gap);
-    margin: var(--area-space-8) calc(-1 * var(--area-ui-row-inset)) var(--area-space-4) 0;
+    /* Even above and below (2026-11-02): at Layer contrast 0 the box is flat (owner, 2026-10-29), and its 4 below plus the
+       item's own end padding left the next item 21 under the last step against 15 above the first. The box takes the item's
+       end padding as its own and its last step's 2 (a negative margin of both), so the steps sit 16 from their item and 16
+       from the next, as items sit 16 apart. */
+    margin: var(--area-space-8) calc(-1 * var(--area-ui-row-inset)) calc((var(--area-text-base-leading) - var(--area-ui-row)) / 2 - var(--area-space-2)) 0;
     padding: var(--area-space-4) 0;
     border-radius: var(--area-radius-list);
     background-color: var(--area-bg-subtle);

@@ -10,7 +10,7 @@
      their columns from the column (a container), so a card takes the row (Home's least width, 480, fits once). */
   .studio-feed[data-layout="column"] { inline-size: min(100%, var(--_reading-column)); margin-inline: auto; container-type: inline-size; }
 
-  /* Copy in the feed: reading text (`text-lg`, Cursor's 14/22 at type 13; owner, 2026-11-02), 4 in from the frames, at
+  /* Copy in the feed: reading text (`text-lg`, Claude's 15/22 at type 13; owner, 2026-11-02), 4 in from the frames, at
      most the docs' measure, paragraphs its prose gap apart (16, Cursor's conversation blocks). A note under a block is
      secondary text (`text-sm`, Cursor's 12). */
   .studio-feed__prose { display: grid; gap: var(--area-text-lg-prose-gap); max-inline-size: 80ch; margin-inline-start: var(--_text-inset); }
@@ -41,3 +41,24 @@
   /* A list in the feed sits on the text edge, as prose: its bullets on the heading's edge, the lines hanging after them
      (owner, 2026-11-01: "this text is too indented"; the points started 32 past the heading). */
   .studio-feed__list { margin-inline-start: var(--_text-inset); padding-inline-start: 1.1em; /* pick: a disc and its space */ }
+
+  /* --- Chat in the kit (src/chat-kit.tsx) ------------------------------------------------------------------------- */
+
+  /* A conversation in the reading column (Claude's and ChatGPT's chat column), turns 24 apart as the Message gallery
+     sets them, the Composer the column's width (its public width hook); an agent's turn's parts the reply's prose gap
+     apart (16), as its blocks are. */
+  .studio-chat { --area-composer-inline-size: 100%; display: grid; gap: var(--area-space-24); max-inline-size: var(--_reading-column); }
+  /* A turn's trackers at the UI size, 12 apart (Claude Code's rows 10, its turns 15; was the prose gap, 16, set for 15/22). */
+  .studio-chat--turn { gap: var(--area-space-12); }
+  /* A reply's headings, one style (owner, 2026-11-02: "too many type styles"): title-xs (16/22), strong, the step over
+     the reading text (15/22) and the kit's section titles' own. The Inspector's narrow Chat keeps its headings at the
+     message's size (chat.css .studio-md__heading). */
+  .studio-response :is(h1, h2, h3, h4) { font-size: var(--area-title-xs-size); line-height: var(--area-title-xs-leading); letter-spacing: var(--area-title-xs-tracking); font-weight: var(--area-weight-strong); }
+  /* Text in a reply, and a turn's unframed lines, start on the feed's text inset (4 in from the frames, as a section's
+     title above them); its frames (a table, a code block, the Composer, a card) stay on the column's edge. */
+  .studio-chat .area-message__content > :is(p, h1, h2, h3, h4, ol, ul) { margin-inline-start: var(--_text-inset); }
+  .studio-chat__text { padding-inline-start: var(--_text-inset); min-inline-size: 0; }
+  /* A composer with its suggestion under it, the Composer gallery's 8 between; the reply composer's footer pushes the
+     model to its end. */
+  .studio-chat__composer { display: grid; gap: var(--area-space-8); }
+  .studio-chat__spacer { flex: 1 1 auto; }

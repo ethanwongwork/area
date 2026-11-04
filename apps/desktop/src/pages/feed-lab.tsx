@@ -5,7 +5,10 @@
  * one system (styles/app.css: margin, gap, frame inset, heading, section, text inset; docs/PRODUCT_UI.md, "The Canvas is
  * a feed"). Each section's title names the element and its subtitle the rule it follows, so the page is its own key.
  * It is the kit every page draws from (PRODUCT_UI.md, "Every page draws from one kit"; 2026-11-01): the foundations'
- * scale table and specimen cards, the type cards and the glyph sheet joined it then, from the pages that use them.
+ * scale table and specimen cards, the type cards and the glyph sheet joined it then, from the pages that use them. On
+ * 2026-11-02 (owner: "make sure everything is up to date … all badges are correct and consistent, and there is a visual for
+ * both a typeface glyph gallery and icon gallery"): Claude's reading step, the Well ground and the series colours, every
+ * status as one badge, and the two glyph galleries in cards.
  *
  * Three layouts, the Canvas bar's first menu: Canvas (the feed as every page draws it, margin 32), Gallery (the tight
  * margin, the frame inset, for walls of images) and Column (one item a row in the reading column, 768, as Home). The image
@@ -16,7 +19,7 @@
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { AssetGrid, AssetGridItem, Badge, Button, Card, CardDescription, CardValue, Checkbox, Code, CodeBlock, EmptyState, Input, Meter, PanelSection, Select, Switch, Table, TableCell, TableHeaderCell, Timeline, TimelineItem } from "@area/react";
-import { BookmarkIcon, CalendarIcon, FolderIcon, HomeIcon, SearchIcon, SettingsIcon, StarIcon, TagIcon } from "@area/icons";
+import { AddIcon, BellIcon, BookmarkIcon, CalendarIcon, CameraIcon, ChatIcon, ClockIcon, CodeIcon, CopyIcon, DownloadIcon, FilterIcon, FolderIcon, GlobeIcon, GridIcon, HeartIcon, HomeIcon, ImageIcon, LayersIcon, LinkIcon, LockIcon, MailIcon, PersonIcon, PlayIcon, SearchIcon, SendIcon, SettingsIcon, ShareIcon, SparkleIcon, StarIcon, TagIcon, TrashIcon, UploadIcon } from "@area/icons";
 import { useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, CARD_SCOPE, COLLECTION_CARD, COLLECTION_MIN, COLLECTION_ROW, COLLECTION_STRIP, collectionName, FEED_CODE, FEED_FRAME, FEED_TABLE, GALLERY_LOOK, imageCard, Tile, TileGrid } from "../tile.tsx";
 import { GALLERY_MODES, GALLERY_RATIOS, useViewOption, ViewControls, ViewFilter, ViewLead, ViewSwitch, type GalleryMode, type GalleryRatio } from "../view-controls.tsx";
@@ -28,9 +31,13 @@ import { EasingCurve, ScaleTable, SpecimenCard } from "./foundation.tsx";
 import { useTokenValues } from "./tokens.tsx";
 import { GlyphCell, GlyphGrid, GlyphSheet } from "../glyph-sheet.tsx";
 import { TOKEN_BY_NAME, type Token } from "../token-catalog.ts";
-import { ColorCard, Sheet as ColorSheet } from "./color.tsx";
+import { ColorCard, Sheet as ColorSheet, SwatchCard } from "./color.tsx";
+import { CharacterCell, factsOf, stackOf, typefaceOf } from "./typefaces.tsx";
+import { Composers, Conversation, Response, Trackers } from "../chat-kit.tsx";
+import { BadgeTables } from "../badge-catalogue.tsx";
+import { AreaOverTime, Bars, Calendar, Columns, Diffstat, DotGrid, Funnel, HeatMatrix, Histogram, LanguageBar, Lifecycle, Pace, PunchCard, Retention, ShareRing, StatTiles, StatusHistory, Tracker, Waterfall, WeeklyStrip } from "../data-views.tsx";
 import { Stage } from "../stage.tsx";
-import { TYPE_COLUMNS, TYPE_SAMPLE, TypefaceCardOf, TypeTable, TypeTesters, typeValues, WEIGHT_NAMES } from "../type-kit.tsx";
+import { TYPE_COLUMNS, TYPE_EXCERPT, TYPE_PARAGRAPH, TYPE_SAMPLE, TypefaceCardOf, TypeTable, TypeTesters, typeValues, WEIGHT_NAMES } from "../type-kit.tsx";
 import { DEFAULT_TYPE, SCALES, TYPE_ROLES } from "../tokens.ts";
 import { CHANNELS, Chart, DAILY, KPIS, PRIOR } from "../content/examples/analytics.tsx";
 import { nameOf, url, useLibrary } from "./imagery.tsx";
@@ -41,6 +48,8 @@ const LAYOUTS: ReadonlyArray<{ value: Layout; label: string }> = [
 ];
 /** A card in the column: one a row (a 768 column holds no two at this least width), as Home's pictures. */
 const COLUMN_MIN = 480; /* pick: Home's FEED_CARD_MIN */
+/** A timeline picture: one a row at any Canvas width (wider than any Canvas, so the cards grid clamps to one column). */
+const TIMELINE_MIN = 4096; /* pick */
 /** An image card's least width in the gallery layouts: References' Medium. */
 const IMAGE_MIN = 192; /* pick: imagery.tsx SIZES.medium */
 /** How many saved images the gallery sections show. */
@@ -49,7 +58,21 @@ const IMAGES = 12; /* pick */
 /** The tokens the foundation sections draw: a stretch of the space ramp, and a corner, a shadow and an easing. */
 const SCALE = ["--area-space-4", "--area-space-8", "--area-space-16", "--area-space-32", "--area-space-64"];
 const SPECIMENS = ["--area-radius-4", "--area-radius-16", "--area-shadow-float", "--area-ease-out"];
-const GLYPHS = [["home", HomeIcon], ["search", SearchIcon], ["bookmark", BookmarkIcon], ["folder", FolderIcon], ["tag", TagIcon], ["calendar", CalendarIcon], ["star", StarIcon], ["settings", SettingsIcon]] as const;
+/** The icon gallery's icons: three rows of the set's everyday concepts, at the Icons page's default 20. */
+const GLYPHS = [["home", HomeIcon], ["search", SearchIcon], ["add", AddIcon], ["bookmark", BookmarkIcon], ["folder", FolderIcon], ["image", ImageIcon],
+  ["layers", LayersIcon], ["grid", GridIcon], ["filter", FilterIcon], ["tag", TagIcon], ["calendar", CalendarIcon], ["clock", ClockIcon],
+  ["chat", ChatIcon], ["mail", MailIcon], ["send", SendIcon], ["bell", BellIcon], ["person", PersonIcon], ["lock", LockIcon],
+  ["link", LinkIcon], ["share", ShareIcon], ["copy", CopyIcon], ["download", DownloadIcon], ["upload", UploadIcon], ["trash", TrashIcon],
+  ["code", CodeIcon], ["globe", GlobeIcon], ["camera", CameraIcon], ["play", PlayIcon], ["heart", HeartIcon], ["star", StarIcon],
+  ["sparkle", SparkleIcon], ["settings", SettingsIcon]] as const;
+const ICON_SIZE = 20; /* pick: the Icons page's default size */
+/** The type glyph gallery: Area's face, its capitals, lower case and figures, as the owner's picture of a glyph grid. */
+const GLYPH_FACE = "geist";
+const CHARACTERS = [...Array.from({ length: 26 }, (_, i) => 0x41 + i), ...Array.from({ length: 26 }, (_, i) => 0x61 + i), ...Array.from({ length: 10 }, (_, i) => 0x30 + i)];
+const CHARACTER_SIZE = 32; /* pick: a typeface's Glyphs tab's second size */
+/** Both galleries' cards, one size (owner, 2026-11-02: "can the type glyph gallery and icon gallery size be the same size?"):
+ *  the characters' own, twice 32, so a 20 icon sits in the same 64 card. */
+const GLYPH_CELL = 64;
 
 /** The faces the paragraph cards show: Area's own, two serifs and a display serif, all shipped with Area. */
 const TYPEFACE_FACES = ["geist", "fraunces", "geist-mono"] as const;
@@ -62,8 +85,15 @@ const PROPS = [
   ["size", '"sm" | "md" | "lg"', "md", "Its height and type size."],
   ["icon", "ReactNode", "—", "A glyph before the label."],
 ] as const;
-/** A scale's steps on the sheet: every other step of Blue. */
-const scaleSteps = (SCALES.find(scale => scale.id === "blue")?.steps ?? []).filter((_, index) => index % 2 === 0);
+/** The role colours the swatch cards show: name, colour, the ink it carries, and its token. */
+const COLOUR_ROLES = [
+  ["Page", "var(--area-bg-page)", "var(--area-fg-default)", "bg-page"], ["Well", "var(--area-bg-well)", "var(--area-fg-default)", "bg-well"],
+  ["Neutral", "var(--area-neutral-solid)", "var(--area-fg-on-neutral)", "neutral-solid"], ["Action", "var(--area-action-solid)", "var(--area-fg-on-action)", "action-solid"],
+  ["Success", "var(--area-success-solid)", "var(--area-fg-on-success)", "success-solid"], ["Warning", "var(--area-warning-solid)", "var(--area-fg-on-warning)", "warning-solid"],
+  ["Danger", "var(--area-danger-solid)", "var(--area-fg-on-danger)", "danger-solid"],
+] as const;
+/** A scale's steps on the sheet: Blue, every step. */
+const scaleSteps = SCALES.find(scale => scale.id === "blue")?.steps ?? [];
 
 const CODE = `import { Button } from "@area/react";
 
@@ -110,7 +140,10 @@ export function FeedLabPage() {
   const tokens = useMemo(() => [...SCALE, ...SPECIMENS].map(name => TOKEN_BY_NAME.get(name)).filter((token): token is Token => Boolean(token)), []);
   const values = useTokenValues(body, tokens);
   const [glyph, setGlyph] = useState<string | null>(null);
+  const [character, setCharacter] = useState<string | null>(null);
   const [step, setStep] = useState<string | null>(null);
+  const face = typefaceOf(GLYPH_FACE);
+  const faceFacts = face ? factsOf(face, undefined) : undefined;
 
   const column = layout === "column";
   const cardMin = column ? COLUMN_MIN : undefined;
@@ -153,24 +186,31 @@ export function FeedLabPage() {
       canvas={
         <div className="studio-sections studio-feed" data-layout={layout}>
           {/* --- Text: what every page says, in one voice ------------------------------------------------------- */}
-          <p className="studio-lede">A page's opening sentence: muted, at the reading measure, 24 over what follows.</p>
-
-          <CanvasSection id="feed-lede" title="Section title and subtitle" lede="Description: one muted sentence of secondary text (12/18) under the title, ending in a full stop, 11 under it.">
-            <p className="studio-feed__note" {...feedScale()}>A section's block starts 16 under its title or subtitle; sections are 48 apart; all text starts 4 in from the frames.</p>
+          {/* --- Chat: a conversation, a response on the whole ramp, an agent's trackers (src/chat-kit.tsx) ------------- */}
+          <CanvasSection id="feed-chat" title="Conversation">
+            <Conversation />
           </CanvasSection>
 
-          <CanvasSection id="feed-title-count" title="Section title and count" count={4}>
-            <p className="studio-feed__note" {...feedScale()}>A title at the UI size, 13/18 medium; a muted count only when its block is a collection of cards, rows or images.</p>
+          <CanvasSection id="feed-composers" title="Composer">
+            <Composers />
           </CanvasSection>
 
-          <CanvasSection id="feed-prose" title="Copy" lede="Reading text at 14/22 regular (Cursor's chat and documents), in the reading measure, 4 in from the frames.">
+          <CanvasSection id="feed-response" title="Response">
+            <Response />
+          </CanvasSection>
+
+          <CanvasSection id="feed-trackers" title="Trackers">
+            <Trackers />
+          </CanvasSection>
+
+          <CanvasSection id="feed-prose" title="Copy">
             <div className="studio-feed__prose" {...feedScale()}>
-              <p>Body text that explains what a section holds. It reads one step over the interface's 13, on its prose line, and stops at the reading measure so a line never runs the Canvas's width.</p>
-              <p>A second paragraph follows the first 16 below it, as prose does in a chat.</p>
+              <p>{TYPE_PARAGRAPH}</p>
+              <p>{TYPE_EXCERPT}</p>
             </div>
           </CanvasSection>
 
-          <CanvasSection id="feed-list" title="List" lede="A component's documentation: a list of points, each a line of copy, 4 apart.">
+          <CanvasSection id="feed-list" title="List">
             <ul className="studio-doc__list studio-feed__list" {...feedScale()}>
               <li>Use it for one action on the page.</li>
               <li>Name the action with a verb.</li>
@@ -179,30 +219,30 @@ export function FeedLabPage() {
           </CanvasSection>
 
           {/* --- Type: Typography's faces and roles ------------------------------------------------------------ */}
-          <CanvasSection id="feed-tester" title="Type tester" lede="Display apart from body, as Pangram's sampler: one line at display size the feed's width, then a heavy and a regular paragraph side by side. Each card's controls are one Toolbar along its top; every sample is editable.">
+          <CanvasSection id="feed-tester" title="Type tester">
             <TypeTesters />
           </CanvasSection>
 
-          <CanvasSection id="feed-type" title="Typeface cards" count={TYPEFACE_FACES.length} lede="A face as the card, 16:9: the type alone in it, Aa from the top-left at the card's inset; under it its name and two badges at most, Variable or Static, then Licensed or Not installed.">
+          <CanvasSection id="feed-type" title="Typeface cards" count={TYPEFACE_FACES.length}>
             <TileGrid span="wide" cards min={cardMin}>
               {TYPEFACE_FACES.map(id => <TypefaceCardOf key={id} id={id} />)}
             </TileGrid>
           </CanvasSection>
 
-          <CanvasSection id="feed-type-paragraphs" title="Paragraph cards" count={PARAGRAPH_FACES.length} lede="The same card with a paragraph in the face in place of Aa, as Google Fonts lists faces.">
+          <CanvasSection id="feed-type-paragraphs" title="Paragraph cards" count={PARAGRAPH_FACES.length}>
             <TileGrid span="wide" cards min={cardMin}>
               {PARAGRAPH_FACES.map(id => <TypefaceCardOf key={id} id={id} sample="paragraph" />)}
             </TileGrid>
           </CanvasSection>
 
-          <CanvasSection id="feed-type-ramp" title="Type ramp" count={TYPE_ROLES.length} lede="Typography's roles in the feed's Table: the role, then its size, line height, tracking and weight each in its own column, its sample on one line at its size, largest first.">
+          <CanvasSection id="feed-type-ramp" title="Type ramp" count={TYPE_ROLES.length}>
             <TypeTable label="Type ramp" columns={TYPE_COLUMNS} rows={TYPE_ROLES.map(role => ({
               key: role.id, name: role.name, values: typeValues(role.metrics[DEFAULT_TYPE]!, role.group === "text" ? 400 : 500),
               sample: <span className="studio-type__sample" style={{ fontSize: `var(--area-${role.group}-${role.step}-size)`, lineHeight: `var(--area-${role.group}-${role.step}-leading)`, letterSpacing: `var(--area-${role.group}-${role.step}-tracking)`, fontWeight: role.group === "text" ? undefined : "var(--area-weight-strong)" }}>{TYPE_SAMPLE}</span>,
             }))} />
           </CanvasSection>
 
-          <CanvasSection id="feed-type-styles" title="Type styles" count={STYLES.length} lede="A face's weights in the same Table, as Google Fonts lists them: the style, its weight in its own column, then a line in it.">
+          <CanvasSection id="feed-type-styles" title="Type styles" count={STYLES.length}>
             <TypeTable label="Type styles" columns={["Weight"]} rows={STYLES.map(([name, weight]) => ({
               key: String(weight), name, values: [weight],
               sample: <span className="studio-type__sample" style={{ fontSize: "var(--area-title-lg-size)", lineHeight: "var(--area-title-lg-leading)", fontWeight: weight }}>{TYPE_SAMPLE}</span>,
@@ -210,16 +250,13 @@ export function FeedLabPage() {
           </CanvasSection>
 
           {/* --- Colour: Colors' scales and the roles painted from them ----------------------------------------- */}
-          <CanvasSection id="feed-colors" title="Colour cards" count={4} lede="A role's colour as the frame, its name in the colour's own ink.">
-            <TileGrid span="unit">
-              {([["Page", "var(--area-bg-page)", "var(--area-fg-default)"], ["Subtle", "var(--area-bg-subtle)", "var(--area-fg-default)"],
-                ["Neutral", "var(--area-neutral-solid)", "var(--area-fg-on-neutral)"], ["Action", "var(--area-action-solid)", "var(--area-fg-on-action)"]] as const).map(([label, background, color]) => (
-                <Tile key={label} span="unit" stage="flow" label={label} inert paint={{ background, color }} />
-              ))}
+          <CanvasSection id="feed-colors" title="Color cards" count={COLOUR_ROLES.length}>
+            <TileGrid span="unit" className="studio-color-grid">
+              {COLOUR_ROLES.map(([name, color, ink, token]) => <SwatchCard key={name} name={name} color={color} ink={ink} values={[token]} />)}
             </TileGrid>
           </CanvasSection>
 
-          <CanvasSection id="feed-scale-steps" title="Colour scale" count={scaleSteps.length} lede="Colors' step cards: the step painted, its level at the head, its hex, RGB and OKLCH in its ink, the galleries' gap apart.">
+          <CanvasSection id="feed-scale-steps" title="Color scale" count={scaleSteps.length}>
             <ColorSheet grid value={step} onChoose={setStep}>
               <TileGrid span="unit" className="studio-color-grid">
                 {scaleSteps.map(item => <ColorCard key={item.level} scale="blue" item={item} copy="hex" />)}
@@ -228,12 +265,12 @@ export function FeedLabPage() {
           </CanvasSection>
 
           {/* --- Foundations: Spacing, Shape, Elevation, Motion --------------------------------------------------- */}
-          <CanvasSection id="feed-scale" title="Scale table" count={SCALE.length} lede="A ramp down the framed Table: each token, its value, and its drawing at its true size in the last column.">
+          <CanvasSection id="feed-scale" title="Scale table" count={SCALE.length}>
             <ScaleTable label="Space ramp" figure="Length" rows={SCALE.map(token => ({ token, value: values.get(token) ?? "",
               drawing: <span className="studio-scale__bar" style={{ inlineSize: `var(${token})` } as CSSProperties} /> }))} />
           </CanvasSection>
 
-          <CanvasSection id="feed-specimens-tokens" title="Specimen cards" count={SPECIMENS.length} lede="A token as the square card on the unit grid: its drawing in the middle, its name under the card, its value the badge.">
+          <CanvasSection id="feed-specimens-tokens" title="Specimen cards" count={SPECIMENS.length}>
             <TileGrid span="unit">
               <SpecimenCard token="--area-radius-4" value={values.get("--area-radius-4")}><span className="studio-specimen__box" style={{ borderRadius: "var(--area-radius-4)" }} /></SpecimenCard>
               <SpecimenCard token="--area-radius-16" value={values.get("--area-radius-16")}><span className="studio-specimen__box" style={{ borderRadius: "var(--area-radius-16)" }} /></SpecimenCard>
@@ -243,33 +280,46 @@ export function FeedLabPage() {
           </CanvasSection>
 
           {/* --- Icons ------------------------------------------------------------------------------------------- */}
-          <CanvasSection id="feed-glyphs" title="Glyph sheet" count={GLYPHS.length} lede="Icons and characters straight on the Canvas, no frame round them: a glyph is its own figure. Its name is the hover window's.">
-            <GlyphSheet grid label="Glyphs" value={glyph} onChoose={setGlyph} size={20}>
+          <CanvasSection id="feed-glyphs" title="Icon gallery" count={GLYPHS.length}>
+            <GlyphSheet grid label="Icons" value={glyph} onChoose={setGlyph} size={ICON_SIZE} cell={GLYPH_CELL}>
               <GlyphGrid>
                 {GLYPHS.map(([name, Icon]) => (
                   <GlyphCell key={name} value={name} label={name} card={() => ({ name, preview: <Icon size={96} aria-hidden="true" /> })}>
-                    <span className="studio-glyphs__glyph"><Icon size={20} aria-hidden="true" /></span>
+                    <span className="studio-glyphs__glyph"><Icon size={ICON_SIZE} aria-hidden="true" /></span>
                   </GlyphCell>
                 ))}
               </GlyphGrid>
             </GlyphSheet>
           </CanvasSection>
 
+          <CanvasSection id="feed-characters" title="Type glyph gallery" count={CHARACTERS.length}>
+            {face && faceFacts ? (
+              <GlyphSheet grid label={`${face.name} characters`} value={character} onChoose={setCharacter} size={CHARACTER_SIZE} cell={GLYPH_CELL}>
+                <GlyphGrid>
+                  {CHARACTERS.map(cp => <CharacterCell key={cp} cp={cp} facts={faceFacts} stack={stackOf(face, faceFacts)} block={cp < 0x41 ? "Digits" : "Basic Latin"} />)}
+                </GlyphGrid>
+              </GlyphSheet>
+            ) : null}
+          </CanvasSection>
+
           {/* --- Components -------------------------------------------------------------------------------------- */}
-          <CanvasSection id="feed-specimens" title="Component cards" count={4} lede="Components' cards, square: the specimen centred 8 in, the name, its status and controls 4 under the card.">
+          <CanvasSection id="feed-specimens" title="Component cards" count={4}>
             <TileGrid span="wide" cards min={cardMin}>
-              <Tile container="asset" look={GALLERY_LOOK} span="wide" stage="center" card label="Button" inert actions={<Badge variant="soft" tone="success">Complete</Badge>}><Button>Button</Button></Tile>
-              <Tile container="asset" look={GALLERY_LOOK} span="wide" stage="center" card label="Badge" inert><Badge>Badge</Badge></Tile>
-              <Tile span="wide" stage="center" card label="Input" value="In review" inert><Input aria-label="Input" placeholder="Placeholder" /></Tile>
-              <Tile span="wide" stage="center" card label="Checkbox" inert><Checkbox label="Label" defaultChecked /></Tile>
+              <Tile container="asset" look={GALLERY_LOOK} span="wide" stage="center" card label="Button" inert status="published" value="Complete"><Button>Button</Button></Tile>
+              <Tile container="asset" look={GALLERY_LOOK} span="wide" stage="center" card label="Badge" inert status="review" value="In review"><Badge>Badge</Badge></Tile>
+              <Tile container="asset" look={GALLERY_LOOK} span="wide" stage="center" card label="Input" inert status="none" value="Unrefined"><Input aria-label="Input" placeholder="Placeholder" /></Tile>
+              <Tile container="asset" look={GALLERY_LOOK} span="wide" stage="center" card label="Checkbox" inert status="published" value="Complete"><Checkbox label="Label" defaultChecked /></Tile>
             </TileGrid>
           </CanvasSection>
 
-          <CanvasSection id="feed-stage" title="Stage" lede="A family's Preview: one specimen at its real size in the large frame, its code under it.">
+          {/* Every badge that can label something, plain and on its plate (src/badge-catalogue.tsx). */}
+          <BadgeTables />
+
+          <CanvasSection id="feed-stage" title="Stage">
             <Stage label="default" code={CODE} zoom="1" replays={0}><Button>Button</Button></Stage>
           </CanvasSection>
 
-          <CanvasSection id="feed-props" title="Props table" count={PROPS.length} lede="A family's API: each prop's name as code, its type, its default and what it does, on the label column.">
+          <CanvasSection id="feed-props" title="Props table" count={PROPS.length}>
             <Table wrapperProps={FEED_TABLE} layout="fixed" aria-label="Props">
               <thead><tr><TableHeaderCell>Prop</TableHeaderCell><TableHeaderCell>Type</TableHeaderCell><TableHeaderCell>Default</TableHeaderCell><TableHeaderCell>Description</TableHeaderCell></tr></thead>
               <tbody>
@@ -281,7 +331,7 @@ export function FeedLabPage() {
           </CanvasSection>
 
           {/* --- Designs: screens, themes, versions, a project's pages ------------------------------------------ */}
-          <CanvasSection id="feed-screens" title="Design cards" count={2} lede="Anything designed (a screen, a theme, a pattern, a page): 16:9, whole at 1920 × 1080, 8 in, its status as a badge.">
+          <CanvasSection id="feed-screens" title="Design cards" count={2}>
             <TileGrid span="wide" cards min={cardMin ?? COLLECTION_MIN}>
               <Tile span="wide" stage="screen" inert label="Title" status="published" value="Published"><ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={screen} /></Tile>
               <Tile span="wide" stage="screen" inert label="Title" status="draft" value="Draft"><ScreenFigure className="studio-theme-card" screen="analytics" scope={screen} /></Tile>
@@ -289,7 +339,7 @@ export function FeedLabPage() {
           </CanvasSection>
 
           {/* --- Images: References ------------------------------------------------------------------------------ */}
-          <CanvasSection id="feed-collections" title="Collection cards, full width" count={folders.length} lede="The collection card across the feed: every image at its own ratio in one row that scrolls sideways, starting on the card's inset.">
+          <CanvasSection id="feed-collections" title="Collection cards, full width" count={folders.length}>
             {folders.length ? (
               <AssetGrid aria-label="Collections" className="studio-images" {...CARD_SCOPE} style={{ "--area-asset-card-size": "100%", "--area-asset-card-strip-height": `${COLLECTION_ROW}px` } as CSSProperties}>
                 {folders.slice(0, 2).map(entry => (
@@ -300,7 +350,7 @@ export function FeedLabPage() {
             ) : <EmptyState size="sm" title="No saved references" description="Collections appear here once References has a library." />}
           </CanvasSection>
 
-          <CanvasSection id="feed-groups" title="Collection cards, in a grid" count={folders.length} lede="The square card: a collection's first four, each square, 2 × 2, as far apart as from the card's edge.">
+          <CanvasSection id="feed-groups" title="Collection cards, in a grid" count={folders.length}>
             {folders.length ? (
               <AssetGrid aria-label="Groups" className="studio-images" {...CARD_SCOPE} style={{ "--area-asset-card-size": `${cardMin ?? COLLECTION_MIN}px` } as CSSProperties}>
                 {folders.map(entry => (
@@ -311,16 +361,12 @@ export function FeedLabPage() {
             ) : <EmptyState size="sm" title="No saved references" description="Groups appear here once References has a library." />}
           </CanvasSection>
 
-          <CanvasSection id="feed-images" title={`Image gallery: ${modeLabel}`} count={images.length}
-            lede={mode === "grid" ? "Every card one square footprint; each image whole inside it at its own ratio (Are.na)."
-              : mode === "waterfall" ? "Columns of cards at their images' own heights, each dropped into the shortest column."
-              : mode === "fixed" ? `Every image cropped to ${GALLERY_RATIOS.find(entry => entry.value === ratio)?.label}.`
-              : "A table: the same frame inset and label column as every feed table."}>
+          <CanvasSection id="feed-images" title={`Image gallery: ${modeLabel}`} count={images.length}>
             {images.length ? imageSection : <EmptyState size="sm" title="No saved references" description="Images appear here once References has a library." />}
           </CanvasSection>
 
           {/* --- Data: tables, numbers, charts ------------------------------------------------------------------ */}
-          <CanvasSection id="feed-table" title="Table" count={3} lede="The default framed Table: the frame inset at its sides, one label column (27%), rows 39.">
+          <CanvasSection id="feed-table" title="Table" count={3}>
             <Table wrapperProps={FEED_TABLE} layout="fixed" aria-label="Items">
               <thead><tr><TableHeaderCell>Name</TableHeaderCell><TableHeaderCell>Value</TableHeaderCell><TableHeaderCell fit>Changed</TableHeaderCell></tr></thead>
               <tbody>
@@ -331,7 +377,7 @@ export function FeedLabPage() {
             </Table>
           </CanvasSection>
 
-          <CanvasSection id="feed-stats" title="Stat cards" count={KPIS.length} lede="Card with its own parts in the feed's frame: the name a description, the figure Card's value, the change a tone Badge under it.">
+          <CanvasSection id="feed-stats" title="Stat cards" count={KPIS.length}>
             <div className="studio-frames">
               {KPIS.map(kpi => (
                 // Card's own parts (owner, 2026-11-02: "use real components"): the name a description, the figure Card's value,
@@ -345,25 +391,99 @@ export function FeedLabPage() {
             </div>
           </CanvasSection>
 
-          <CanvasSection id="feed-chart" title="Chart" lede="A series over time in the feed's frame, its legend under it. Area has no chart component yet: this is the Analytics pattern's drawing.">
+          <CanvasSection id="feed-chart" title="Chart">
             <Card {...FEED_FRAME}>
               <Chart series={DAILY} prior={PRIOR} />
               <div className="ex-legend"><span className="ex-legend__now">This period</span><span className="ex-legend__prior">Previous period</span></div>
             </Card>
           </CanvasSection>
 
-          <CanvasSection id="feed-meters" title="Meters" count={CHANNELS.length} lede="Shares of a whole, one Meter a row in the feed's frame: the label, its value at the end, the bar under them.">
+          <CanvasSection id="feed-heat" title="Heat matrix">
+            <HeatMatrix />
+          </CanvasSection>
+
+          <CanvasSection id="feed-calendar" title="Calendar">
+            <Calendar />
+          </CanvasSection>
+
+          <CanvasSection id="feed-tracker" title="Tracker">
+            <Tracker />
+          </CanvasSection>
+
+          <CanvasSection id="feed-parts" title="Parts of a whole" count={2}>
+            <div className="studio-data-pair">
+              <ShareRing />
+              <DotGrid />
+            </div>
+          </CanvasSection>
+
+          <CanvasSection id="feed-stat-tiles" title="Stat tiles" count={4}>
+            <StatTiles />
+          </CanvasSection>
+
+          <CanvasSection id="feed-area-bars" title="Area over time and bars" count={2}>
+            <div className="studio-data-pair">
+              <AreaOverTime />
+              <Bars />
+            </div>
+          </CanvasSection>
+
+          <CanvasSection id="feed-pace-columns" title="Pace and columns" count={2}>
+            <div className="studio-data-pair">
+              <Pace />
+              <Columns />
+            </div>
+          </CanvasSection>
+
+          <CanvasSection id="feed-weekly-strip" title="Weekly strip">
+            <WeeklyStrip />
+          </CanvasSection>
+
+          <CanvasSection id="feed-languages-diffstat" title="Language bar and diffstat" count={2}>
+            <div className="studio-data-pair">
+              <LanguageBar />
+              <Diffstat />
+            </div>
+          </CanvasSection>
+
+          <CanvasSection id="feed-waterfall" title="Waterfall">
+            <Waterfall />
+          </CanvasSection>
+
+          <CanvasSection id="feed-histogram-funnel" title="Histogram and funnel" count={2}>
+            <div className="studio-data-pair">
+              <Histogram />
+              <Funnel />
+            </div>
+          </CanvasSection>
+
+          <CanvasSection id="feed-punch-card" title="Punch card">
+            <PunchCard />
+          </CanvasSection>
+
+          <CanvasSection id="feed-retention-lifecycle" title="Retention and lifecycle" count={2}>
+            <div className="studio-data-pair">
+              <Retention />
+              <Lifecycle />
+            </div>
+          </CanvasSection>
+
+          <CanvasSection id="feed-status-history" title="Status history">
+            <StatusHistory />
+          </CanvasSection>
+
+          <CanvasSection id="feed-meters" title="Meters" count={CHANNELS.length}>
             <Card {...FEED_FRAME}>
-              <div className="ex-meters">{CHANNELS.map(channel => <Meter key={channel.label} label={channel.label} description={channel.text} value={channel.value} valueText={`${channel.value}%`} />)}</div>
+              <div className="ex-meters">{CHANNELS.map(channel => <Meter key={channel.label} tone="data" label={channel.label} description={channel.text} value={channel.value} valueText={`${channel.value}%`} />)}</div>
             </Card>
           </CanvasSection>
 
           {/* --- Code and settings -------------------------------------------------------------------------------- */}
-          <CanvasSection id="feed-code" title="Code block" lede="Code block, outlined: the frame inset above, below and at its start, the frame's corner.">
+          <CanvasSection id="feed-code" title="Code block">
             <CodeBlock code={CODE} language="tsx" lineNumbers={false} {...FEED_CODE} {...appScale()} />
           </CanvasSection>
 
-          <CanvasSection id="feed-rows" title="Settings rows" lede="A group of rows in one frame: a name over its description, the control at the end, rules between the text edges.">
+          <CanvasSection id="feed-rows" title="Settings rows">
             <div className="studio-settings__rows">
               <SettingsRow label="Label" description="Description of what the setting changes."><Switch aria-label="Label" checked={toggled} onCheckedChange={setToggled} /></SettingsRow>
               <SettingsRow label="Label" description="Description of what the setting changes."><Select size="sm" aria-label="Label" defaultValue="one"><option value="one">Option one</option><option value="two">Option two</option></Select></SettingsRow>
@@ -371,20 +491,22 @@ export function FeedLabPage() {
           </CanvasSection>
 
           {/* --- Activity ---------------------------------------------------------------------------------------- */}
-          <CanvasSection id="feed-timeline" title="Timeline" lede="Home's events in the reading column: a mark, a title that opens what it names, its meta and time, a picture under it.">
-            <div className="studio-feed__column"><Timeline aria-label="Events">
+          <CanvasSection id="feed-timeline" title="Timeline">
+            <Timeline aria-label="Events">
               <TimelineItem icon={<TagIcon />} title="Title published" meta="Description" time="Just now" />
               <TimelineItem icon={<FolderIcon />} title="Title started" meta="Description" time="Yesterday">
-                <TileGrid span="wide" cards min={COLUMN_MIN}>
-                  <Tile span="wide" stage="screen" inert label="Title" value="Description"><ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={screen} /></Tile>
+                {/* One card the item's full width (owner, 2026-11-02: "make sure this is full width"): a least width no Canvas
+                    reaches, so the grid holds one column. */}
+                <TileGrid span="wide" cards min={TIMELINE_MIN}>
+                  <Tile span="wide" stage="screen" inert label="Title" status="published" value="Published"><ScreenFigure className="studio-theme-card" hold={SHOWCASE} scope={screen} /></Tile>
                 </TileGrid>
               </TimelineItem>
               <TimelineItem icon={<BookmarkIcon />} title="12 references saved" meta="Description" time="3 days ago" />
-            </Timeline></div>
+            </Timeline>
           </CanvasSection>
 
-          <CanvasSection id="feed-empty" title="Empty state" lede="Inside a section, Empty state sm: never louder than the section's title.">
-            <EmptyState size="sm" title="Nothing yet" description="Description of what will appear here."
+          <CanvasSection id="feed-empty" title="Empty state">
+            <EmptyState size="sm" icon={<FolderIcon />} title="Nothing yet" description="Description of what will appear here."
               actions={<Button size="sm" variant="soft" tone="neutral">Action</Button>} />
           </CanvasSection>
         </div>

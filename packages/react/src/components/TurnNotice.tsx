@@ -21,7 +21,8 @@ export const TurnNotice = forwardRef<HTMLDivElement, TurnNoticeProps>(function T
   const status = statusProp ?? kind ?? "stopped";
   return (
     <div ref={ref} role={status === "error" ? "alert" : "status"} className={turnNoticeVariants({ status }, className)} {...rest}>
-      <span className="area-turn-notice__icon" aria-hidden="true"><Glyph name={status === "stopped" ? "stop" : "info"} size={16} /></span>
+      {/* Only an error carries a mark; stopped and compacted are a divider line (turn-notice.css). */}
+      {status === "error" ? <span className="area-turn-notice__icon" aria-hidden="true"><Glyph name="info" size={16} /></span> : null}
       <span className="area-turn-notice__text">{children}</span>
       {action ? <span className="area-turn-notice__action">{action}</span> : null}
     </div>

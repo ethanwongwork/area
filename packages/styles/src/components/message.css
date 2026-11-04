@@ -50,6 +50,19 @@
   .area-message__content > :is(h1, h2, h3, h4, h5, h6) + *,
   .area-message__content > * + :is(ul, ol) { margin-block-start: var(--area-space-8); }
   .area-message__content :is(ul, ol) > li + li { margin-block-start: var(--area-space-4); }
+  /* A list's markers start on the text's edge, in a 1.25em slot, its items' words after it (owner, 2026-11-02: "the list
+     and bulleted lists should align to the text and not be so indented"): a bullet's left and a "1." 's left on the
+     paragraph's edge, every item's words 1.25em in (18.75 at 15), so bullets and numbers share one text edge and a
+     wrapped line hangs under the words. Drawn as a ::before in the slot: an outside marker ends where the words begin, so
+     its start moved with its width (7 for "• ", 11 for "1. " at 15) and the browser's 40 put it 33 in. Nested lists step
+     one slot in. Lists keep their semantics in the markup (ul / ol, li). */
+  .area-message__content :is(ul, ol) { padding-inline-start: 0; list-style: none; }
+  .area-message__content ol { counter-reset: area-message-list; }
+  .area-message__content :is(ul, ol) > li { position: relative; padding-inline-start: 1.25em; /* spec: the marker slot */ }
+  .area-message__content ol > li { counter-increment: area-message-list; }
+  .area-message__content :is(ul, ol) > li::before { position: absolute; inset-inline-start: 0; }
+  .area-message__content ul > li::before { content: "\2022"; }
+  .area-message__content ol > li::before { content: counter(area-message-list) "."; font-variant-numeric: tabular-nums; }
 
   /* spec: 32 icon buttons with no gap, muted (ChatGPT 143 on 13 ink). The buttons' plates line
    * up with the turn: the assistant's first plate starts on the text edge, the person's last

@@ -249,7 +249,7 @@ export const fileUploadItem = {
 export const meter = {
   block: "area-meter",
   description: "Shows a value within a known range, such as usage against a limit.",
-  variants: { tone: ["neutral", "warning", "danger"] },
+  variants: { tone: ["neutral", "warning", "danger", "data"] },
   // segmented: parts of the measure on the bar, named in a legend (owner 2026-10-30, docs/research/inspector-panel-2026-10-30).
   booleans: ["segmented"],
   elements: ["header", "label", "value", "track", "segment", "rest", "legend", "item", "swatch", "item-label", "item-value", "item-share", "description"],

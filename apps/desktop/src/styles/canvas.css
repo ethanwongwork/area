@@ -335,11 +335,14 @@
   /* Markdown and stacked tables: blocks 16 apart, a paragraph or list kept to a reading measure. */
   .studio-doc { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-16); min-inline-size: 0; }
   .studio-doc__text, .studio-doc__list { margin: 0; max-inline-size: 80ch; /* pick: a reading measure */ }
-  /* Prose is reading text, Cursor's chat and documents' 14/22 at type 13 (`text-lg`; owner, 2026-11-02: "should the body
+  /* Prose is reading text, Claude's 15/22 at type 13 (`text-lg`; owner, 2026-11-02: "should the body
      copy for the feed be larger?"; it was the UI's 13/18, as tables), trimmed to cap and baseline, as titles and ledes
      are, so the feed's 12 and 40 measure to its ink. Tables, controls and chrome stay the UI's 13. */
   .studio-doc__text, .studio-doc__list { font-size: var(--area-text-lg-size); line-height: var(--area-text-lg-leading); letter-spacing: var(--area-text-lg-tracking); text-box: trim-both cap alphabetic; }
-  .studio-doc__list { display: grid; gap: var(--area-space-4); padding-inline-start: var(--area-space-20); }
+  /* A documentation list as a reply's (message.css): each marker on the text's edge in a 1.25em slot, the words after it. */
+  .studio-doc__list { display: grid; gap: var(--area-space-4); padding-inline-start: 0; list-style: none; }
+  .studio-doc__list > li { position: relative; padding-inline-start: 1.25em; }
+  .studio-doc__list > li::before { content: "\2022"; position: absolute; inset-inline-start: 0; }
   /* Several names in one cell (exports, values, families, keys) wrap as a row; a prop's names stack. Inline boxes 8
      apart on the cell's lines, so a trimmed last row (table.md, flush) trims at the cell's last baseline; a flex row's
      baseline is its first line's. */

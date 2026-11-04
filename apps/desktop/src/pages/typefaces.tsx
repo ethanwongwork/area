@@ -23,7 +23,7 @@ import { TYPEFACES as CATALOGUE } from "../content/typefaces/catalogue.mjs";
 import FACES_JSON from "../content/typefaces/generated/faces.json";
 import UNICODE_JSON from "../content/typefaces/generated/unicode.json";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { TYPE_COLUMNS, TYPE_SAMPLE, TypeTable, TypeTesters, typeValues } from "../type-kit.tsx";
+import { savedSample, TYPE_COLUMNS, TYPE_SAMPLE, TypeTable, TypeTesters, typeValues } from "../type-kit.tsx";
 import { CopyButton } from "../copy.tsx";
 import { DataTable, FactTable, Section } from "../family-tabs.tsx";
 import { Facts } from "../facts.tsx";
@@ -106,16 +106,16 @@ export function stackOf(face: Typeface, facts: FaceFacts | undefined) {
 }
 
 /** How Area may use the face, in a word and a sentence (docs/research/typefaces-2026-10-31, the licence table). */
-export function useOf(face: Typeface, facts: FaceFacts | undefined): { label: string; tone: "success" | "info" | "caution" | "neutral"; text: string } {
+export function useOf(face: Typeface, facts: FaceFacts | undefined): { label: string; tone: "info" | "warning" | "neutral"; text: string } {
   switch (face.tier) {
-    case "open": case "libre": return { label: "Built in", tone: "success", text: "Ships with Area under its open licence, so any system can use it and publish it." };
+    case "open": case "libre": return { label: "Built in", tone: "neutral", text: "Ships with Area under its open licence, so any system can use it and publish it." };
     case "system": return { label: "System", tone: "neutral", text: "The operating system's own face: nothing to download or license." };
     case "own-copy": return facts
-      ? { label: "Installed", tone: "info", text: "Free under Fontshare's licence, which forbids offering it as a built-in choice. Drawn from your own installed copy." }
-      : { label: "Not installed", tone: "caution", text: "Free under Fontshare's licence, which forbids offering it as a built-in choice. Download it from Fontshare to see it here." };
+      ? { label: "Installed", tone: "neutral", text: "Free under Fontshare's licence, which forbids offering it as a built-in choice. Drawn from your own installed copy." }
+      : { label: "Not installed", tone: "warning", text: "Free under Fontshare's licence, which forbids offering it as a built-in choice. Download it from Fontshare to see it here." };
     default: return facts
-      ? { label: "Installed", tone: "info", text: "Drawn from the copy installed on this Mac. Publishing it needs a web licence from the foundry." }
-      : { label: "Not installed", tone: "caution", text: "Install the foundry's fonts (a trial is enough to look) to see it here. Publishing it needs a web licence." };
+      ? { label: "Installed", tone: "neutral", text: "Drawn from the copy installed on this Mac. Publishing it needs a web licence from the foundry." }
+      : { label: "Not installed", tone: "warning", text: "Install the foundry's fonts (a trial is enough to look) to see it here. Publishing it needs a web licence." };
   }
 }
 
@@ -203,6 +203,26 @@ const GLYPH_SIZES = [24, 32, 40, 48, 64, 80, 96] as const;
 const SAMPLE = TYPE_SAMPLE;
 
 /**
+ * One character as a glyph sheet's card (src/glyph-sheet.tsx): the character in its face, its hover window its glyph name,
+ * its block, the character large, its code point and Unicode name, and Copy. A face's Glyphs tab and Labs › Feed's type
+ * glyph gallery both draw it.
+ */
+export function CharacterCell({ cp, facts, stack, block }: { cp: number; facts: FaceFacts; stack: string; block: string }) {
+  return (
+    <GlyphCell value={hex(cp)} label={nameOf(cp)}
+      card={() => ({
+        name: facts.glyphNames?.[cp.toString(16).toUpperCase()] ?? `U+${hex(cp)}`,
+        meta: block,
+        preview: <span className="studio-glyphs__char" style={{ fontFamily: stack }}>{charOf(cp)}</span>,
+        detail: <><span>U+{hex(cp)}</span><span>{nameOf(cp)}</span></>,
+        actions: <CopyButton label="Copy character" icon={<CopyIcon />} fullWidth size="md" value={() => String.fromCodePoint(cp)} />,
+      })}>
+      <span className="studio-glyphs__char" style={{ fontFamily: stack }}>{charOf(cp)}</span>
+    </GlyphCell>
+  );
+}
+
+/**
  * A face's own Workspace: the Sidebar passed in from Typography, the face's tabs on the Canvas, the chosen character or
  * the face in the Inspector.
  */
@@ -212,7 +232,7 @@ export function TypefaceWorkspace({ face, tab: routeTab, sidebar }: { face: Type
   const facts = factsOf(face, mac);
   const tab: Tab = (TAB_IDS.includes(routeTab ?? "") ? routeTab : "specimen") as Tab;
   const onTab = (next: Tab) => select(next === "specimen" ? `face/${face.id}` : `face/${face.id}/${next}`);
-  const [sample, setSample] = useState(() => readStored("typeSample", SAMPLE));
+  const [sample, setSample] = useState(() => savedSample(readStored("typeSample", SAMPLE)));
   const changeSample = (value: string) => { setSample(value); writeStored("typeSample", value); };
   const [size, setSize] = useState<number>(() => { const saved = Number(readStored("glyphSize", 48)); return (GLYPH_SIZES as readonly number[]).includes(saved) ? saved : 48; });
   useEffect(() => writeStored("glyphSize", size), [size]);
@@ -245,18 +265,7 @@ export function TypefaceWorkspace({ face, tab: routeTab, sidebar }: { face: Type
           <CanvasSection key={entry.name} role={mode === "grid" ? "group" : undefined} id={`glyphs-${entry.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} title={entry.name} count={entry.cps.length}>
             {mode === "grid" ? (
               <GlyphGrid>
-                {entry.cps.map(cp => (
-                  <GlyphCell key={cp} value={hex(cp)} label={nameOf(cp)}
-                    card={() => ({
-                      name: facts.glyphNames?.[cp.toString(16).toUpperCase()] ?? `U+${hex(cp)}`,
-                      meta: entry.name,
-                      preview: <span className="studio-glyphs__char" style={{ fontFamily: stack }}>{charOf(cp)}</span>,
-                      detail: <><span>U+{hex(cp)}</span><span>{nameOf(cp)}</span></>,
-                      actions: <CopyButton label="Copy character" icon={<CopyIcon />} fullWidth size="md" value={() => String.fromCodePoint(cp)} />,
-                    })}>
-                    <span className="studio-glyphs__char" style={{ fontFamily: stack }}>{charOf(cp)}</span>
-                  </GlyphCell>
-                ))}
+                {entry.cps.map(cp => <CharacterCell key={cp} cp={cp} facts={facts} stack={stack} block={entry.name} />)}
               </GlyphGrid>
             ) : (
               <Table wrapperProps={FEED_TABLE} size="md" interactive aria-label={entry.name}>

@@ -241,7 +241,7 @@ own step.
   `bg-mark`, so they stay visible on a hovered or selected row. Avatar and a selected Chip
   keep `bg-component-active`.
 - **Quiet ink.** Icon actions (ghost icon Buttons, Message actions) use `fg-quiet`, the
-  Button's 75% ink. Text-like rows (prompt suggestions, Code block tabs) use `fg-muted`.
+  Button's 75% ink, as does a Step's verb (Cursor's 74%; the default ink once open). Text-like rows (prompt suggestions, Code block tabs) use `fg-muted`.
   Unselected options in a set (Segmented, Tabs) take the muted ink and the selected one the
   default ink.
 - **Raised thumbs.** The Segmented thumb is the white surface in light and
@@ -445,22 +445,26 @@ and the default density (28 Compact, 36 Comfortable). Read the ramps in `axes/de
 and `emit/base.ts`; never copy a table into a component
 ([research](research/ui-size-scale-2026-10-12.md)).
 
-- **The type ramp** is Cursor's (owner, 2026-11-02: "make sure the type ramp is updated to match what cursor does"; read
-  from Cursor's bundle, `docs/research/type-presentation-2026-11-01`). At type 13, four body steps and four titles:
+- **The type ramp** is Cursor's with Claude's reading step (owner, 2026-11-02: "make sure the type ramp is updated to
+  match what cursor does", read from Cursor's bundle, `docs/research/type-presentation-2026-11-01`; then, beside Claude
+  Code's chat, reading text "15/22 like Claude"). At type 13, four body steps and four titles:
   `text-xs` 11/14 (badges, counts, keys), `text-sm` 12/16 (secondary: a description, metadata, help, a hint, a lede,
-  a caption, a timestamp), `text-base` 13/18 (every control, row, label and cell; the UI line), `text-lg` 14/22 (reading
-  text: a chat turn, a document, the feed's prose, a component's documentation), then `title-xs` 16/22, `title-sm`
+  a caption, a timestamp), `text-base` 13/18 (every control, row, label and cell; the UI line), `text-lg` 15/22 (reading
+  text: a chat turn, a document, the feed's prose, a component's documentation; Claude's prose step), then `title-xs` 16/22, `title-sm`
   18/24, `title-md` 20/28, `title-lg` 26/30, and display 52 / 67. Each moves with the Type setting (12 to 16): small
-  the base less 2 (never under 10), secondary the base less 1, reading the base plus 1, titles in proportion
+  the base less 2 (never under 10), secondary the base less 1, reading the base plus 2, titles in proportion
   (`axes/type-size.ts`, [type spec](specs/typography.md)). Before 2026-11-02 the base was `text-sm` and reading `text-md`
-  at the base plus 2 (15/22 at 13), with titles 15 / 19 / 22 / 30 and no secondary step. A surface's own body (a
-  Card's, a Dialog's or a Popover's description) is UI text, not secondary.
+  (15/22 at 13, prose 24), with titles 15 / 19 / 22 / 30 and no secondary step; reading was Cursor's 14/22 for a day. A surface's own body (a
+  Card's, a Dialog's or a Popover's description) is UI text, not secondary. So is an agent's work in a turn (owner,
+  2026-11-02, "do the trackers need to be smaller?"): Step, Reasoning, Plan, Edit summary, Approval and Turn notice read
+  at `text-base`, one size with ink for hierarchy, under the turn's `text-lg` prose (Cursor's cards 13 under a 14 reply).
 - **Prose lines** (owner, 2026-10-30; `docs/research/vertical-rhythm-2026-10-30`). Prose that runs past two lines,
   where the eye has to find the next line (a chat turn, documentation and spec prose), takes the prose leading: the first
   value on the 2px leading ramp at or above 1.5 × the size, the line spacing WCAG 1.4.8 asks of paragraphs and 1.4.12
   requires text to survive. 12/18, 13/20, 14/22, 15/24, 16/24 (`text-sm-prose-leading`, `text-base-prose-leading`,
-  `text-lg-prose-leading`; the type axis, `proseLeading` in `axes/type-size.ts`). Reading text (`text-lg`) is only ever
-  prose, so its leading is its prose line: Message's turn is 14/22 at type 13, Cursor's conversation (was 15/24). Parts set in
+  `text-lg-prose-leading`; the type axis, `proseLeading` in `axes/type-size.ts`). Reading text (`text-lg`) keeps one
+  line, running or not, the UI ratio's: Message's turn is 15/22 at type 13, Claude's prose (1.47, a hair under 1.5, as
+  Claude's; it was 15/24, then Cursor's 14/22). Parts set in
   prose keep their UI lines and state them (Step, Plan, Edit summary, Turn notice, a small table); a md or lg Table sets its cells on the prose line, so a wrapped description reads as prose, with a block inset that puts the text as far from the rules as from the frame (2026-10-31); `cohesion.test.mjs` checks
   both.
 - **Every scope restarts at the body role.** Below the page root, an element with its own Type sets `text-lg` for

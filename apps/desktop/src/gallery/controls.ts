@@ -142,7 +142,7 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   // Tone contrast (2026-11-02): how far status words may trade contrast for colour. 4.5:1 is AA.
   bar("tone-contrast", value => `${value}:1`, { hint: "The lowest contrast colored status words keep on their tints. 4.5:1 is WCAG AA; lower is brighter and more saturated, below AA. Links and body text keep 4.5:1" }),
   // The eight data colours (2026-11-01, the colour system study; palette steps 2026-11-02): sky's step, the others moving with it.
-  { axis: "series-lightness", kind: "segmented", label: label("series-lightness"), hint: "How deep chart and meter colours sit on their palette families: Light is sky 350, Deep one step down for every colour", defaultValue: DEFAULT_AXES["series-lightness"], items: [{ value: "350", label: "Light" }, { value: "400", label: "Deep" }] },
+  { axis: "series-lightness", kind: "segmented", label: label("series-lightness"), hint: "How deep chart and meter colors sit on their palette families: Light is sky 350, Deep one step down for every color", defaultValue: DEFAULT_AXES["series-lightness"], items: [{ value: "350", label: "Light" }, { value: "400", label: "Deep" }] },
   // Increased contrast (docs/CONTRAST.md): a scoped setting, not an axis. System writes no attribute, so the OS decides.
   bar("contrast", value => percent(value, 8), { hint: "Stronger edges, focus and state; System follows the OS", named: { system: "System" }, custom: "4", barLabel: "Level" }),
   // Size: whole px for text (half px blurs), density by name.

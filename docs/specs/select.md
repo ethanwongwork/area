@@ -125,7 +125,7 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | hover | border → `border-subtle` #d4d4d4; ink fixed | `navigation.css:247` |
-| focus | border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo | `navigation.css:249-254`; audit S1, as [input.md](input.md) |
+| focus | keyboard focus only (`:focus-visible`): border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo | `navigation.css`; audit S1, as [input.md](input.md) | a pointer choice keeps focus without the ring (2026-11-02): a select opens a picker, as a Button does |
 | invalid / success / warning | border and halo in the tone colour; `aria-invalid` or `data-*`; forced colours draw invalid (`aria-invalid` or `data-invalid`) dashed (`forced-colors.css`) | `area--error`, `area--success`, `area--warning` |
 | placeholder | a chosen empty-value option (`option:checked[value=""]`) is a placeholder: the trigger takes `input-placeholder` ink, as Input's (`navigation.css:320-321`; audit B-19 B, owner 2026-09-30) | Was default ink, read as a chosen value |
 | disabled | fill #f7, `border-faint`, ink and chevron `fg-disabled` rgb(164); no opacity | `area--disabled`; `navigation.css:338` |
@@ -271,3 +271,11 @@ Gap: Select sets `gap: var(--_gap)`, its size's tier (6 at md; 4 at Compact 13).
 
 - **What changed:** The hover edge eases in on Feedback's hover clock, as Input's.
 - **Why:** One hover clock for every field. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+## Review note, 2026-11-02 (owner: "fix this visual bug after using the dropdown and changing the selection")
+
+- **What changed:** The field's focus paint (edge, halo, outline) shows on keyboard focus only (`:focus-visible`, was
+  `:focus`); hover's edge holds off only while that ring shows.
+- **Why:** After a style was chosen with the pointer in the type tester, the select kept focus and drew the 2px field
+  ring around itself (clipped by the toolbar). A select opens a picker, as a Button does, so it takes a Button's focus
+  rule; Input keeps `:focus`, since its caret is its focus.

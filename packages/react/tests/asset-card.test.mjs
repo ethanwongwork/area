@@ -155,4 +155,8 @@ test('caption outside is a class; the frame draws the card and the head sits und
   assert.match(css, /\.area-asset-card\.area-asset-card--outside > \.area-asset-card__frame \{[^}]*border-radius: var\(--_corner\);/);
   assert.match(css, /\.area-asset-card\.area-asset-card--outside > \.area-asset-card__head \{ order: 1;/);
   assert.doesNotMatch(css, /\.area-asset-card--contain \.area-asset-card__media > img \{[^}]*box-shadow/, 'no edge on a contained image');
+  // 2026-11-02: a headless outside card (a colour, its name on it) takes no top inset of its own; its frame holds the inset.
+  assert.match(css, /\.area-asset-card:not\(\.area-asset-card--containerless, \.area-asset-card--outside\):not\(:has\(> \.area-asset-card__head\)\) \{ padding-block-start/);
+  // A screen held the inset in keeps its asset 16:9, so a window fits whole.
+  assert.match(css, /\.area-asset-card--outside\.area-asset-card--screen:not\(\.area-asset-card--image\) > \.area-asset-card__frame > :not\(\.area-asset-card__badge\) \{ aspect-ratio: 16 \/ 9; \}/);
 });

@@ -121,7 +121,7 @@ Findings:
 
 - 2026-10-12 · owner: "the 12 to 16 proposal"; type size separate from density → the `type` axis (12–16, default 14) sets every role: UI text at the base, small text base − 2 (floor 10; was a 12 floor, 2026-10-01), reading text and surface titles base + 2 (titles were held at 16, 2026-09-30), small-text tracking (+0.01 / +0.0075 / +0.005 / +0.0025em for 10–13), the icon stroke (1.125 × base / 14). Display steps down a rung below 14. `packages/tokens/src/axes/type-size.ts`; `docs/research/ui-size-scale-2026-10-12.md`.
 
-## Cursor's ramp (2026-11-02, current)
+## Cursor's ramp, Claude's reading step (2026-11-02, current)
 
 Owner: "make sure the type ramp is updated to match what cursor does" (the full ramp, picked over a reading step alone).
 Read from Cursor's bundle (`docs/research/type-presentation-2026-11-01`): `--cursor-font-size-xs / sm / base / lg` 11 / 12
@@ -133,7 +133,7 @@ Read from Cursor's bundle (`docs/research/type-presentation-2026-11-01`): `--cur
 | `text-xs` | 11 / 14 | B − 2, never under 10 | same |
 | `text-sm` | 12 / 16 (prose 18) | B − 1 | new; `text-sm` was the base until 2026-11-02 |
 | `text-base` | 13 / 18 (prose 20) | B | `text-sm` |
-| `text-lg` | 14 / 22 | B + 1, its line the prose line | `text-md`, 15 / 22 (prose 24) |
+| `text-lg` | 15 / 22 | B + 2 on the UI ratio's line, running or not (Claude's prose) | `text-md`, 15 / 22 (prose 24); Cursor's 14 / 22 for a day |
 | `title-xs` | 16 / 22 | 16 × B / 13 | 15 / 22, the reading size |
 | `title-sm` | 18 / 24 | 18 × B / 13 | 19 / 26 |
 | `title-md` | 20 / 28 | 20 × B / 13 | 22 / 30 |
@@ -145,3 +145,10 @@ Composer group's note, Custom select's caption, Empty state's description, Field
 tile's meta, File upload's hint, Hover card's meta, Meter's description, Menu's description, Switch's description,
 Section heading's lede and Timestamp. A surface's own body (Card, Dialog and Popover descriptions) stays `text-base`;
 counts stay `text-xs`.
+
+**Reading step, Claude's (2026-11-02, later the same day).** The owner put Claude Code's chat beside the Feed Kit's Copy
+(14/22) and picked "15/22 like Claude". Measured: Claude Code's reply text has a 10.5 cap on a 21 line (15 at Claude's
+sans); the Claude app's bundle (`ion-dist.asar`) sets prose `--cds-font-size-prose--sm` 0.9375rem on
+`--cds-leading-prose--sm` 1.375rem, 15/22, and claude.ai's response body 16/24. `text-lg` is now B + 2 on the UI ratio's
+line (14/20, 15/22, 16/24, 17/26, 18/28 for B 12–16), its prose line the same and its paragraph gap 16 at 13. The
+1.5 prose rule stays for `text-sm` and `text-base`.
