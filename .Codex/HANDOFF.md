@@ -1,6 +1,31 @@
 # Handoff
 
 ## Current state (2026-11-01)
+- **Chat kit, branch `claude/feed-kits-area-chat-2a1286` (uncommitted, 2026-11-02).** Owner: start a chat kit beside the
+  feed kit; do chats follow different rules; research ChatGPT, Claude Code, Cursor. Research in
+  `docs/research/chat-kit-2026-11-02/` (live.md: ChatGPT and Claude measured in the owner's Chrome; claude-desktop.md and
+  cursor.md from the app bundles). Answer: same components, different composition; type and spacing never change with
+  width, the column, gutters, bubble, overflow and cards-across do. Built: Labs › Chat (`#labs/chat`,
+  `pages/chat-lab.tsx`, Width Panel 268 / Split 456 / Column 768; new blocks in `chat-kit.tsx`), Message bubble
+  `max(70%, min(100% - 48, 456px))`, narrow Composer pickers cut their words, Step group `meta`, bar-list names ≤ 30%.
+  Open for the owner: README proposals W1–W5. Checks: typecheck, desktop 31, react 64, docs, app-css, playgrounds.
+  Then a layout pass (owner: "why are all the composers and other designs in a container?"): the kit's panel frames
+  removed (a chat is bare at its width); a chat's root takes the cards' stroke and `--_frame-inset` 12, so every frame
+  in a reply draws one edge and holds its words 12–13 in; Card's size classes now honour `--area-card-inset` / `-gap`
+  (the feed's stat cards, charts and meters go 18 → 16 in, as specified); time joins its message 8; activity comment
+  on the surface at 13; color steps fill a reply. Artifact Chat Kit https://claude.ai/artifact/85QkQbtLFrFDhtMSMXVHg5
+  (build.mjs in the research folder).
+  Round 3: the composer's + opens a Menu (modes in tone inks, then files, model, connectors); new pill shape `composer`
+  (on by default: the composer's buttons and pickers are pills); Plan and Edit summary `variant="plain"` (unboxed, on the
+  text edge, not a raised ground), used for the kit's trackers 16 apart; activity log (`src/activity-kit.tsx`) in both
+  kits. Checks: tokens 29,174, react 637, desktop 31, docs, app-css, playgrounds, typecheck.
+  Round 4 (2026-11-03): tracker figures at text-sm; Edit summary file `icon` + folder after the name; Avatar `xs` (line
+  height) for the activity log, names at weight 500; one real dark-mode scenario as the kit's copy (no product names);
+  multi-question card from docs/research/chat-kit-2026-11-02/questions.md. Artifact republished.
+  Round 5 (2026-11-03): live gaps closed (+ menu notes on one line; Step verb muted, detail full ink; question card 22
+  keys, Dividers lines, Skip in the free row, close in the head); Timeline drops its "·" (time at the line's end, 12; new
+  `time` part, `sep` gone); activity log: group-label dates, tables for changes, bare toned 16 marks with EVENTS meanings
+  and an Event marks key in both kits.
 - **Data views exploration, branch `claude/table-data-viz-templates-3538ee` (committed, PR to main, 2026-11-02).** Owner asked to
   align Table and design simple modular data-vis templates (Cursor, GitHub, Notion; light colours, detailed labels). Research
   only, nothing in packages or the app changed: `docs/research/data-views-2026-11-01/` (README with Cursor's chat-chart values

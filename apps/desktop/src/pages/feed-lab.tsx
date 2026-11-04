@@ -35,6 +35,7 @@ import { ColorCard, Sheet as ColorSheet, SwatchCard } from "./color.tsx";
 import { CharacterCell, factsOf, stackOf, typefaceOf } from "./typefaces.tsx";
 import { Composers, Conversation, Response, Trackers } from "../chat-kit.tsx";
 import { BadgeTables } from "../badge-catalogue.tsx";
+import { ActivityLog, EventMarks } from "../activity-kit.tsx";
 import { AreaOverTime, Bars, Calendar, Columns, Diffstat, DotGrid, Funnel, HeatMatrix, Histogram, LanguageBar, Lifecycle, Pace, PunchCard, Retention, ShareRing, StatTiles, StatusHistory, Tracker, Waterfall, WeeklyStrip } from "../data-views.tsx";
 import { Stage } from "../stage.tsx";
 import { TYPE_COLUMNS, TYPE_EXCERPT, TYPE_PARAGRAPH, TYPE_SAMPLE, TypefaceCardOf, TypeTable, TypeTesters, typeValues, WEIGHT_NAMES } from "../type-kit.tsx";
@@ -503,6 +504,14 @@ export function FeedLabPage() {
               </TimelineItem>
               <TimelineItem icon={<BookmarkIcon />} title="12 references saved" meta="Description" time="3 days ago" />
             </Timeline>
+          </CanvasSection>
+
+          <CanvasSection id="feed-activity" title="Activity log">
+            <div className="studio-feed__column"><ActivityLog /></div>
+          </CanvasSection>
+
+          <CanvasSection id="feed-event-marks" title="Event marks" count={10}>
+            <EventMarks />
           </CanvasSection>
 
           <CanvasSection id="feed-empty" title="Empty state">

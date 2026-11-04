@@ -36,6 +36,8 @@ export interface PlanProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   /** The items' marks joined by a line, a timeline (owner 2026-10-25, an agent run's progress): for plans whose items
    * carry detail or steps of their own. */
   rail?: boolean;
+  /** surface (default): its own frame. plain: no frame, its words on the text edge around it, as a turn's steps (a chat). */
+  variant?: VariantProps<typeof MANIFESTS.plan>["variant"];
   /** A 16 glyph before the title: what the plan is about, or its state. */
   icon?: ReactNode;
   open?: boolean;
@@ -49,7 +51,7 @@ const shareOf = (item: PlanItem) => item.status === "done" ? 1 : item.status ===
 
 /** What is done, what it is doing, what is next, and a count; folds to its head. */
 export const Plan = forwardRef<HTMLElement, PlanProps>(function Plan(
-  { items, title = "Plan", count, bar, rail, icon, open: openProp, defaultOpen = true, onOpenChange, className, ...rest }, ref,
+  { items, title = "Plan", count, bar, rail, variant, icon, open: openProp, defaultOpen = true, onOpenChange, className, ...rest }, ref,
 ) {
   const listId = useId();
   const titleId = useId();
@@ -60,7 +62,7 @@ export const Plan = forwardRef<HTMLElement, PlanProps>(function Plan(
   // The whole plan's share, for the bar's one announced value: segmented, the mean of the segments; single, done of all.
   const share = items.length ? (bar === "segmented" ? items.reduce((sum, item) => sum + shareOf(item), 0) : done) / items.length : 0;
   return (
-    <section ref={ref} className={planVariants({ bar, rail }, className)} data-open={open ? "" : undefined} aria-labelledby={titleId} {...rest}>
+    <section ref={ref} className={planVariants({ bar, rail, variant }, className)} data-open={open ? "" : undefined} aria-labelledby={titleId} {...rest}>
       <button type="button" className="area-plan__head" aria-expanded={open} aria-controls={listId}
         onClick={() => { const next = !open; if (openProp === undefined) setOwn(next); onOpenChange?.(next); }}>
         {icon ? <span className="area-plan__icon" aria-hidden="true">{icon}</span> : null}

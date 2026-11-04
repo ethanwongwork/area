@@ -1,7 +1,7 @@
 // EditSummary, EditSummaryFile and Diff: what an agent changed, and how. Spec: docs/specs/edit-summary.md.
 import { forwardRef, useId, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
-import { diffVariants, editSummaryVariants } from "../variants.ts";
+import { diffVariants, editSummaryVariants, MANIFESTS, type VariantProps } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 
@@ -31,6 +31,8 @@ export interface EditSummaryFileProps extends Omit<HTMLAttributes<HTMLDivElement
   state?: EditFileStatus;
   onKeep?: () => void;
   onUndo?: () => void;
+  /** A 16 glyph before the name: the file's kind (a code, image or document glyph). */
+  icon?: ReactNode;
   /** The file's Diff, shown under the row when its name is pressed. */
   diff?: ReactNode;
   /** Whether the diff shows (controlled); pair with `onOpenChange`. */
@@ -42,9 +44,13 @@ export interface EditSummaryFileProps extends Omit<HTMLAttributes<HTMLDivElement
 
 /** One changed file: its name and +N −N (a button that opens its diff), and Undo and Keep. */
 export const EditSummaryFile = forwardRef<HTMLDivElement, EditSummaryFileProps>(function EditSummaryFile(
-  { name, added, removed, status: statusProp, state: stateProp, onKeep, onUndo, diff, open: openProp, defaultOpen = false, onOpenChange, className, ...rest }, ref,
+  { name, added, removed, icon, status: statusProp, state: stateProp, onKeep, onUndo, diff, open: openProp, defaultOpen = false, onOpenChange, className, ...rest }, ref,
 ) {
   const state = statusProp ?? stateProp ?? "pending";
+  // A path shows its file name first and its folder after it, muted ("settings.tsx src/pages").
+  const cut = name.lastIndexOf("/");
+  const base = cut < 0 ? name : name.slice(cut + 1);
+  const folder = cut < 0 ? "" : name.slice(0, cut);
   const diffId = useId();
   const [own, setOwn] = useState(defaultOpen);
   const open = openProp ?? own;
@@ -55,7 +61,9 @@ export const EditSummaryFile = forwardRef<HTMLDivElement, EditSummaryFileProps>(
         data-kept={state === "kept" ? "" : undefined} data-undone={state === "undone" ? "" : undefined} {...rest}>
         <button type="button" className="area-edit-summary__name" aria-expanded={diff ? open : undefined} aria-controls={diff ? diffId : undefined}
           onClick={() => { if (diff) toggle(); }}>
-          <span>{name}</span>
+          {icon ? <span className="area-edit-summary__icon" aria-hidden="true">{icon}</span> : null}
+          <span className="area-edit-summary__base">{base}</span>
+          {folder ? <span className="area-edit-summary__folder"><bdi>{folder}</bdi></span> : null}
           <Counts added={added} removed={removed} />
           {diff ? <span className="area-edit-summary__chevron" aria-hidden="true"><Glyph name="chevron-down" size={12} /></span> : null}
         </button>
@@ -81,17 +89,20 @@ export interface EditSummaryProps extends Omit<HTMLAttributes<HTMLElement>, "tit
   /** Keep and Undo for every pending file; leave out when none is pending. */
   onKeepAll?: () => void;
   onUndoAll?: () => void;
+  /** surface (default): its own frame. plain: no frame, its words on the text edge around it, as a turn's steps (a chat);
+   *  a file's diff keeps its own. */
+  variant?: VariantProps<typeof MANIFESTS.editSummary>["variant"];
   /** EditSummaryFile rows. */
   children: ReactNode;
 }
 
 /** What an agent changed in a turn: the count and +N −N, Undo all and Keep all, and a row per file. */
 export const EditSummary = forwardRef<HTMLElement, EditSummaryProps>(function EditSummary(
-  { title, added, removed, onKeepAll, onUndoAll, children, className, "aria-label": ariaLabel, ...rest }, ref,
+  { title, added, removed, onKeepAll, onUndoAll, variant, children, className, "aria-label": ariaLabel, ...rest }, ref,
 ) {
   const titleId = useId();
   return (
-    <section ref={ref} className={editSummaryVariants({}, className)} aria-labelledby={ariaLabel ? undefined : titleId} aria-label={ariaLabel} {...rest}>
+    <section ref={ref} className={editSummaryVariants({ variant }, className)} aria-labelledby={ariaLabel ? undefined : titleId} aria-label={ariaLabel} {...rest}>
       <div className="area-edit-summary__head">
         <span id={titleId} className="area-edit-summary__title">{title ?? "Edited files"}</span>
         <Counts added={added} removed={removed} />

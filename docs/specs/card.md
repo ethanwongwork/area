@@ -392,3 +392,11 @@ lift is `shadow-resting` at Rest shadow, its own number since the nine controls 
   of at its top.
 - **Why:** With a short title and one line, half the thumbnail's height was empty below the text, which read as
   unfinished; a list row centres a short text on its picture.
+
+## 2026-11-02: the size classes honour the public hooks
+
+`--area-card-inset` and `--area-card-gap` (public since 2026-11-02) were read only by the base rule; `.area-card--sm / --md /
+--lg` set `--_card-space` and `--_card-section` again from the ramp, so a page's hook lost to the size. The desktop app's
+feed frames looked right only because the md value at the app's density was near the feed's 16 (they drew 18). Each size
+now takes the hook first and its ramp value as the fallback. Found in the Chat kit's layout pass
+(docs/research/chat-kit-2026-11-02), where the hook asked for 12.

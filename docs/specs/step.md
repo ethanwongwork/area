@@ -63,7 +63,8 @@ area-step                 grid; the line, then the body
     area-step__chevron    12 glyph, hidden until the row is hovered or focused, or the step is open
   area-step__body         margin-top 4, on a rail: a 1px border-inline-start (border-divider at stroke-width), content
                           12 in with the rule counted; hidden when closed
-area-step--group          a Step whose body holds `area-step__items`: steps, 4 apart (same body and rail)
+area-step--group          a Step whose body holds `area-step__items`: steps, 4 apart (same body and rail); its `meta`
+                          ends the line as a Step's does (the run's time, "6m 12s"; 2026-11-02)
 area-step--reasoning      a Step whose body is the summary in muted ink, pre-wrap
 ```
 
@@ -217,3 +218,11 @@ same start; the rule says they belong to the line above. It stays one rule for e
   - **Why:** the owner: "the trackers dont look right, the type ramp looks wrong, the alignment looks off … do the
     trackers need to be smaller?" An agent's work is UI and its answer prose (Cursor's cards 13 under a 14 reply), so
     every tracker reads at text-base, one size, under the reply's text-lg; the cards' words share one 12 column.
+
+
+## 2026-11-03: the verb muted, the detail in the full ink
+
+After the live check (docs/research/chat-kit-2026-11-02/live.md): a step's verb is the muted ink and what it acted on
+(a file, a query, a command) the default ink, so a run reads by its subjects; open, the verb takes the default ink. A
+group's summary and the thinking line stay one quiet line (verb and detail muted). It was verb quiet (74%), detail
+muted (60%).

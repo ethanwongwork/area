@@ -521,10 +521,12 @@ export const step = {
 
 export const editSummary = {
   block: "area-edit-summary", description: "What an agent changed in a turn: files with their +N −N, each opening to its diff, with Keep and Undo.",
-  variants: {},
+  // variant: surface, its own frame (a tray, a panel); plain, no frame, its words on the reply's text edge, as a turn's
+  // steps (owner 2026-11-02, the Chat kit: "the tracker, do they need containers?"; Claude Code's rows carry no box).
+  variants: { variant: ["surface", "plain"] },
   states: ["open", "kept", "undone"],
-  elements: ["head", "title", "counts", "added", "removed", "actions", "files", "file", "name", "chevron", "status", "diff"],
-  defaults: {},
+  elements: ["head", "title", "counts", "added", "removed", "actions", "files", "file", "name", "icon", "base", "folder", "chevron", "status", "diff"],
+  defaults: {}, // variant unset draws the frame (surface), so the default writes no class
 } as const satisfies ComponentManifest;
 
 export const diff = {
@@ -540,7 +542,7 @@ export const approval = {
   variants: {},
   // The question card's parts (owner 2026-10-28, Setup as a chat panel; Claude Code's AskUserQuestion): the head's
   // actions, an option's description and check, the foot's footer.
-  elements: ["head", "heading", "title", "description", "actions", "detail", "options", "option", "key", "lines", "label", "option-description", "check", "instead", "field", "foot", "hint", "footer"],
+  elements: ["head", "heading", "title", "description", "actions", "detail", "options", "option", "key", "lines", "label", "option-description", "check", "instead", "field", "skip", "foot", "hint", "footer"],
   states: ["selected"], // an option's, as Menu's rows (data-selected: the answer given)
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -549,13 +551,14 @@ export const plan = {
   block: "area-plan", description: "A plan's progress: what is done, what is happening now, what is next, with its count and an optional bar; folds to its head.",
   // bar: a bar under the head that stays when folded, one for the whole plan or one segment per item (owner 2026-10-25,
   // progress trackers: GitHub's segmented ProgressBar, Cursor's segmented bar, Linear's project bar).
-  variants: { bar: ["none", "single", "segmented"] },
+  // variant: surface, its own frame; plain, no frame, as Edit summary's (owner 2026-11-02, the Chat kit).
+  variants: { bar: ["none", "single", "segmented"], variant: ["surface", "plain"] },
   // rail: the marks joined by a line, a timeline whose items carry detail and steps (owner 2026-10-25, the agent run).
   booleans: ["rail"],
   states: ["open"],
   elements: ["head", "icon", "title", "count", "chevron", "bar", "segment", "items", "item", "mark", "text", "detail", "meta", "steps"],
   elementModifiers: { item: ["done", "current", "pending", "cancelled"], mark: ["ring"] },
-  defaults: { bar: "none" },
+  defaults: { bar: "none" }, // variant unset draws the frame (surface), so the default writes no class
 } as const satisfies ComponentManifest;
 
 export const turnNotice = {
@@ -623,7 +626,7 @@ export const avatar = {
   block: "area-avatar",
   description: "Represents a user or entity.",
   variants: {
-    size: ["sm", "md", "lg"],
+    size: ["xs", "sm", "md", "lg"],
     shape: ["circle", "square"],
     tone: ["neutral", "inverse"],
   },
@@ -1219,7 +1222,7 @@ export const timelineItem = {
   description: "One event on a timeline: a dot, icon or avatar marker, a title, its time and details.",
   variants: {},
   booleans: ["current"],
-  elements: ["marker", "dot", "icon", "media", "content", "line", "title", "sep", "meta", "body"],
+  elements: ["marker", "dot", "icon", "media", "content", "line", "title", "meta", "time", "body"],
   defaults: {},
 } as const satisfies ComponentManifest;
 

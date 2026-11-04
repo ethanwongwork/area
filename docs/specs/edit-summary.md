@@ -258,3 +258,24 @@ buttons keep their own corner.
 - **Why:** side by side, "Title  +3 −1" read looser than "Item one +2 −1" under it; one card, one name-to-counts gap.
 - **Verdict:** approved (owner, 2026-10-29, review page round 82); Complete.
 - 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): The fold painted `bg-subtle`, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light).
+
+
+## 2026-11-02: variant plain
+
+Owner, in the Chat kit (Labs › Chat): "the tracker, do they need containers? the containers look off, and out of place, not
+even padding around them, gaps look either too big or too small". Measured in docs/research/chat-kit-2026-11-02: the
+references' turn summaries and tool rows carry no box (only an opened output does), and grouped tool rows sit unboxed, and in Area's turn the boxed Edit summary sat 27 (text to text) from the line above against a Step's 13. `variant`
+(surface, the default and unset; plain) is Area's name for a frame that can go (Calendar, Description list). Plain drops
+the border, fill and corner and the list's 4 padding, and hangs the edit summary one row inset into the margin, so its
+words start on the text edge around it and its row plates hang outside it (as Nav's and Message actions' do); its head is
+the text's line and its last row's half-leading hangs past its foot, so the words above and below are the turn's gap
+away. A plain edit summary is not a raised ground (layers.css). The diff (Edit summary) and nested steps (Plan) keep
+their own grounds.
+
+## 2026-11-02: figures at the secondary step, a file's icon and folder
+
+Owner: "the text size of the numbers on the right look way bigger than the left ... can you look into the code changes
+design?". Every figure in a tracker (Plan's count and meta, Step's meta, Edit summary's +N −N) is metadata, the ramp's
+secondary step (`text-sm`, 12 at type 13) on the row's line: the face's figures are cap height and tabular, so at the
+label's 13 they read a size up. A file row takes `icon` (its kind's 16 glyph, muted, before the name) and splits a path:
+the file's name first, its folder after it, muted and cut from its start, so the part that differs leads.

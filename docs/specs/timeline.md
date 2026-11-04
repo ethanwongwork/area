@@ -205,3 +205,10 @@ window was hidden; measurements only).
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+
+## 2026-11-03: no dots; the time at the line's end
+
+Owner: "im not a big fan of the use of '·' is it necessary?". The line drops its separator dots (and the `sep` part): the
+title, then who or where a gap (8) after it, then the time at the line's end (`time`, new part), muted, at the secondary
+step (12) with tabular figures, as every figure in a tracker. A long title wraps and the time keeps the end of its line.

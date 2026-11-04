@@ -84,6 +84,14 @@
   /* The action slots are fieldsets, so a disabled composer disables them natively (audit G-14). */
   .area-composer__actions { flex-shrink: 0; min-inline-size: 0; margin: 0; padding: 0; border: 0; }
   .area-composer__actions--leading { margin-inline-end: 0; }
+  /* A narrow composer gives way inside its leading group before the send leaves the shell (2026-11-02,
+     docs/research/chat-kit-2026-11-02: the full composer, attach + permissions + model and effort + mic, ran 32 past the
+     Inspector's 268). Its pickers shrink and cut their words short, icons and chevrons kept, the last one first (Cursor
+     drops its mode's label under 250; Claude Code hides tool detail under 500). Buttons never shrink. */
+  .area-composer__actions--leading { flex-shrink: 1; }
+  .area-composer__actions--leading > .area-model-picker { min-inline-size: 0; }
+  .area-composer__actions--leading .area-model-picker__trigger { flex-shrink: 1; min-inline-size: 0; max-inline-size: 100%; }
+  .area-composer__actions--leading .area-model-picker__trigger > .area-button__label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .area-composer__actions--trailing { margin-inline-start: auto; }
   .area-composer__extras { display: contents; }
   .area-composer__footer { justify-content: space-between; }
@@ -91,6 +99,9 @@
   /* The send and every action in the shell take its concentric corner (a pill under the Pills setting, as Button does);
      `rounded` keeps a Button's own. Attachments in the context row, at the same inset, take it too. */
   .area-composer__actions > .area-button:not(.area-button--rounded) { --_shape: calc(var(--_composer-action-radius) + var(--_button-pill) * var(--area-radius-full)); }
+  /* Pills › Composer (on by default, 2026-11-02; Cursor's composer pills and round send): every button and picker in the
+     composer and its header is a pill (a circle when square) whatever Button's own flag; off, they follow Button's. */
+  :is(.area-composer, .area-composer-group__header) .area-button:not(.area-button--rounded) { --_button-pill: max(var(--area-pill-button), var(--area-pill-composer)); }
   .area-composer .area-attachment { --_attachment-radius: var(--_composer-action-radius); }
   /* A round send (`submitPill`, ChatGPT's) makes a pill composer. */
   .area-composer:has(.area-composer__submit.area-button--pill) { --_composer-corner: calc(var(--_composer-height) / 2); }

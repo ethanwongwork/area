@@ -30,7 +30,11 @@
   /* spec: ChatGPT's bubble — padding 10/16 on 16/24 text, at most 70% of the column.
    * Corner: the composer's (16), where the words were typed; ChatGPT's 22 is a pill at one line. */
   .area-message__bubble {
-    max-inline-size: 70%; /* spec */
+    /* spec: 70% of a wide column (ChatGPT's --user-chat-width), but never narrower than the column less 48 nor than
+       ChatGPT's compact bubble, min(456px, 100%) (2026-11-02, docs/research/chat-kit-2026-11-02): 538 of 768, 408 of
+       456, 220 of 268. A narrow chat keeps the person's words on few lines and still shows they are the person's (Claude
+       85% beside an artifact, Cursor 32 in under 480); 70% of the Inspector's 268 was 188, a word or two a line. */
+    max-inline-size: max(70%, min(100% - var(--area-space-48), 456px));
     padding: calc(10px - var(--area-space-4) * var(--area-ui-dense)) calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10 × 16, compact 6 × 12 on 14/20 */
     /* The composer's corner: its control radius plus its inset (16, compact 12). */
     border-radius: calc(var(--area-radius-control-md) + var(--area-ui-cluster) * var(--area-radius-concentric));

@@ -126,21 +126,21 @@
   /* Size: the space, the section gap and the media inset step together; the corner follows the media inset as before. */
   .area-card--sm {
     --_card-inset: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)); /* spec: 6, compact 4 */
-    --_card-space: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 16, compact 12 */
-    --_card-section: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
+    --_card-space: var(--area-card-inset, calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense))); /* spec: 16, compact 12; the public hook wins */
+    --_card-section: var(--area-card-gap, calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense))); /* spec: 12, compact 8; the public hook wins */
     --_card-action: var(--area-control-sm);
     --_card-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_card-term), var(--area-radius-container))));
   }
   .area-card--md {
     --_card-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: 8, compact 6 */
-    --_card-space: calc(var(--area-space-20) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 20, compact 16 */
-    --_card-section: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 16, compact 12 */
+    --_card-space: var(--area-card-inset, calc(var(--area-space-20) - var(--area-space-4) * var(--area-ui-dense))); /* spec: 20, compact 16; the public hook wins */
+    --_card-section: var(--area-card-gap, calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense))); /* spec: 16, compact 12; the public hook wins */
     --_card-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_card-term), var(--area-radius-container))));
   }
   .area-card--lg {
     --_card-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
-    --_card-space: calc(var(--area-space-24) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 24, compact 20 */
-    --_card-section: calc(var(--area-space-20) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 20, compact 16 */
+    --_card-space: var(--area-card-inset, calc(var(--area-space-24) - var(--area-space-4) * var(--area-ui-dense))); /* spec: 24, compact 20; the public hook wins */
+    --_card-section: var(--area-card-gap, calc(var(--area-space-20) - var(--area-space-4) * var(--area-ui-dense))); /* spec: 20, compact 16; the public hook wins */
     --_card-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_card-term), var(--area-radius-container))));
   }
 

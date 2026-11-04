@@ -35,7 +35,8 @@ the turn.
 
 ```
 column      768 wide
-user        bubble padding 10 16, radius 22, 16/24, max 70% of the column, at the column's end;
+user        bubble padding 10 16, radius 22, 16/24, max 70% of a wide column (at least the column less 48 or 456),
+            at the column's end;
             background rgb(232,243,254) with blue ink = the owner's accent personalization
             (ChatGPT's default bubble is neutral); actions (copy, share, edit) 32 × 32, no gap,
             hidden until hover
@@ -49,7 +50,7 @@ actions     six 32 × 32 buttons, radius 8, no gap, icons 20 (16 for regenerate 
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| bubble padding, width | 10 16, at most 70%, at the end | ChatGPT | — |
+| bubble padding, width | 10 16, at most max(70%, min(100% − 48, 456)), at the end | measured references, docs/research/chat-kit-2026-11-02 | — |
 | bubble corner | 16, the composer's (send Button 8 + 8) | the words were typed in the composer | ChatGPT 22 is a full pill at one line; owner: rounder, not pill |
 | bubble fill | neutral component fill, default ink | ChatGPT's default is neutral | the blue came from the owner's accent setting |
 | prose | the prose line, `text-lg-prose-leading` (16/24 at type 14, 15/24 at 13; was the UI line, 15/22 at 13); blocks the prose gap apart (16); a heading the gap plus 8 above and 8 below; a list 8 under its lead-in, items 4 apart | DESIGN_SYSTEM.md › Prose lines, Text that flows (owner, 2026-10-30); docs/research/vertical-rhythm-2026-10-30 | ChatGPT 26 leading; Area's prose line is 1.5 × the size on its 2px ramp |
@@ -113,3 +114,11 @@ on `fast`? Recommendation: yes, but together with Card and Tree view so every re
 - 2026-10-14 · owner: "merge it, then continue working" (the all-axis audit's open item) → the loop stops through the Motion axis's `duration-loop` token (1, or 0 at step 0 and under reduced motion): the cursor's breath is `calc(1s * duration-loop)`, resting at full ink. The nearest motion scope now decides, so a non-zero scope nested in a 0 scope runs it; it was a `[data-area-motion="0"]` descendant rule plus a reduced-motion media rule (cohesion test pins it).
 - 2026-10-30 · owner: a vertical rhythm audit against Cursor and Claude, then "add the reading leading tokens and apply the text-flow rules to Message and the chat markdown" → Message sets `text-lg-prose-leading` (15/24 at type 13, was 15/22) and its blocks the `text-lg-prose-gap` apart; headings take the gap plus 8 above and 8 below, a list 8 under its lead-in, items 4. Step, Plan, Edit summary and Turn notice keep their own UI lines (cohesion test). → message.css. Back In review.
 - 2026-11-02 · owner: "the list and bulleted lists should align to the text and not be so indented" → a list's markers start on the text's edge in a 1.25em slot (`::before`, a counter for numbers), the words 1.25em in (18.75 at 15); nested lists one slot further. It was the browser's 40 (markers 33 in). The app's chat markdown and documentation lists take the same. → message.css.
+
+
+## 2026-11-02: the bubble in a narrow chat
+
+The bubble was 70% at every width, so in the Inspector (268 of text) it was 188 wide, a word or two a line. Measured
+(docs/research/chat-kit-2026-11-02): the references keep 70% of a 768 thread, `min(456px, 100%)` in a compact one, 84–85%
+in a narrow one and a 32 inset under 480. Now `max(70%, min(100% - 48, 456px))`: 538 of
+768 (unchanged), 408 of 456, 220 of 268.

@@ -262,3 +262,15 @@ the foot the keycap ends 16 and the hint's baseline 20 from it, so top and foot 
   - **Why:** the owner: "the trackers dont look right, the type ramp looks wrong, the alignment looks off … do the
     trackers need to be smaller?" An agent's work is UI and its answer prose (Cursor's cards 13 under a 14 reply), so
     every tracker reads at text-base, one size, under the reply's text-lg; the cards' words share one 12 column.
+
+
+## 2026-11-03: a question's keys, lines and Skip
+
+After the live check (docs/research/chat-kit-2026-11-02/live.md). An approval whose choices carry notes (a question) keys
+each choice in a square keycap the extra-small control tall (22 at type 13), its choices a light Dividers line apart (gone
+beside a row under the pointer, focused or chosen). With both `onInstead` and `onDismiss`, Skip (`dismissLabel`, as a
+sentence-case soft small Button, Esc still works) ends the answer-of-one's-own row and the hint row under the choices goes.
+A plain approval (one-line choices) is unchanged.
+Then (owner: "fix the inset padding here"): a question's rows pad 8 (the row inset) above and below, so the 22 key sits
+as far from the plate's top as from its side (it rode 4 from the top on the note row's 6); rows align to the top, the
+label's first line centred on the key; the check and Skip stay centred.

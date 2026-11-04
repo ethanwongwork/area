@@ -23,7 +23,7 @@
     .area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
-    .area-file-upload-item, .area-code-block, .area-edit-summary, .area-plan, .area-queue,
+    .area-file-upload-item, .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue,
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge
   ),
@@ -176,7 +176,7 @@
     .area-card, .area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
-    .area-file-upload-item, .area-code-block, .area-edit-summary, .area-plan, .area-queue,
+    .area-file-upload-item, .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue,
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, .area-asset-card--raised > .area-asset-card__frame,
@@ -220,7 +220,7 @@
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
-    .area-edit-summary, .area-plan, .area-queue, .area-menu__search-surface, .area-diff,
+    .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
     .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush), [data-area-ground="raised"], [data-area-ground="page"] {
     --area-edge-shift-light: 0;
@@ -254,7 +254,7 @@
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
-    .area-edit-summary, .area-plan, .area-queue, .area-menu__search-surface, .area-diff,
+    .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
     .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"],
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, [data-area-ground="page"],
     .area-asset-card__frame, [data-area-ground="frame"], .area-asset-card--raised > .area-asset-card__frame, [data-area-ground="frame-raised"],
@@ -306,7 +306,7 @@
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
-    .area-edit-summary, .area-plan, .area-queue, .area-menu__search-surface, .area-diff,
+    .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
     .area-surface--surface, .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
     .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"]) {

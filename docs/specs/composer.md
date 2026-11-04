@@ -234,3 +234,16 @@ footer row holds what it held.
   and Surface (18), but its buttons were 13 against 8 on every other 30px Button and Input, and the one-line composer
   read close to a pill. A surface standing alone on the page already takes Card's edge, so it takes Card's corner.
 - **Verdict (Card's corner):** approved (owner, 2026-10-29, the Composer expansion review page, round 3); Complete.
+
+
+## 2026-11-02: Pills › Composer
+
+Owner: "the composer should have round buttons/pill buttons for the composer as part of the rounded/pill theme selection,
+and it should be rounded by default for area (like cursor)". A new pill shape, `composer` (packages/tokens axes/pills.ts),
+on by default: every button and picker in the composer and its header (attach or +, modes, the model, mic, send) is a
+pill, a circle when square, whatever Button's own flag (`--_button-pill: max(--area-pill-button, --area-pill-composer)`);
+off, they follow Button's. The shell keeps its own corner. The measured references draw 24 pills and a round send
+(docs/research/chat-kit-2026-11-02).
+
+The narrow composer (same day): the leading group shrinks and its pickers cut their words with an ellipsis, so the send
+never leaves the shell (it ran 32 past the Inspector's 268).

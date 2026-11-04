@@ -51,11 +51,16 @@
     margin-inline-end: var(--area-space-2); /* 6 to the verb: spec Codex's activity row (tracker pass 2026-11-02; Cursor's 4 read cramped beside a 16 icon at 15) */
     color: var(--area-fg-muted);
   }
-  /* The line is quieter than the prose it sits in (tracker pass 2026-11-02; docs/research/agent-turn-2026-11-02): the verb
-     in the quiet ink (Cursor's verb 74%), what it acted on muted (60%); open, the verb takes the default ink, as an open
-     Accordion's title does. The foreground stays fixed on hover. */
-  .area-step__verb { flex: none; color: var(--area-fg-quiet); }
+  /* The verb is the line's quiet part and what it acted on its subject (owner, 2026-11-03, after the live check in
+     docs/research/chat-kit-2026-11-02/live.md: the measured step lists set the verb muted and the query or file in the
+     full ink, as "Searched the web  quarterly report template"): the verb muted, the detail in the default ink, so a run of
+     steps reads by what was read, run or edited. Open, the verb takes the default ink, as an open Accordion's title does.
+     The foreground stays fixed on hover. It was the verb quiet (74%) and the detail muted (60%), tracker pass 2026-11-02. */
+  .area-step__verb { flex: none; color: var(--area-fg-muted); }
   .area-step[data-open] > .area-step__row > .area-step__verb { color: var(--area-fg-default); }
+  /* A run's summary and the thinking line stay one quiet line, verb and detail muted ("Explored 3 files", "Thought for
+     4s"; the measured folded summary is one muted line). */
+  .area-step:is(.area-step--group, .area-step--reasoning) > .area-step__row > .area-step__detail { color: var(--area-fg-muted); }
   .area-step__icon > svg { inline-size: 100%; block-size: 100%; }
   /* Chevrons draw the Glyph's 12 cut in the xs icon slot. */
   .area-step__chevron > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
@@ -63,10 +68,11 @@
     min-inline-size: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: var(--area-fg-muted);
+    color: var(--area-fg-default);
     font-variant-numeric: tabular-nums;
   }
-  .area-step__meta { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  /* A tracker's figures are metadata, the ramp's secondary step (12) on the row's line (owner, 2026-11-02: "the text size of the numbers on the right look way bigger than the left": the face's figures are cap-height and tabular, so at the label's 13 a count read a size up). */
+  .area-step__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; }
   /* The chevron waits until the line is hovered or focused, or the step is open (Cursor: hidden until hover / open,
      rotated 90° open). It is the closed accordion chevron, pointing at the text it opens. */
   .area-step__chevron {

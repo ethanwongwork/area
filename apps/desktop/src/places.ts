@@ -35,7 +35,7 @@
 export type PageId =
   | "home" | "themes" | "theme-setup" | "foundations" | "settings" | "tokens" | "color" | "typography" | "icons"
   | "spacing" | "shape" | "elevation" | "motion"
-  | "components" | "patterns" | "history" | "references" | "materials" | "tests" | "feed"
+  | "components" | "patterns" | "history" | "references" | "materials" | "tests" | "feed" | "chat"
   | "project" | "project-page" | "exploration" | "versions" | "projects" | "systems";
 
 export interface Place {
@@ -120,6 +120,7 @@ export function hrefOf(place: Place): string {
     case "materials": return `#labs/materials${encode(place.item)}`;
     case "tests": return `#labs/tests${encode(place.item)}`;
     case "feed": return `#labs/feed${encode(place.item)}`;
+    case "chat": return `#labs/chat${encode(place.item)}`;
   }
 }
 
@@ -174,6 +175,7 @@ export function parsePlace(hash: string): Place | null {
   if (root === "labs" && parts[0] === "materials") return { page: "materials", item: rest(parts.slice(1)) };
   if (root === "labs" && parts[0] === "tests") return { page: "tests", item: rest(parts.slice(1)) };
   if (root === "labs" && parts[0] === "feed") return { page: "feed", item: rest(parts.slice(1)) };
+  if (root === "labs" && parts[0] === "chat") return { page: "chat", item: rest(parts.slice(1)) };
   return null;
 }
 
@@ -222,11 +224,11 @@ export function resolve(hash: string, groupOf?: (setting: string) => string | un
  */
 export type TabKind = "home" | "system" | "project" | "references" | "projects" | "systems" | "labs";
 export const tabKind = (place: Place): TabKind =>
-  place.page === "home" ? "home" : place.page === "references" ? "references" : place.page === "projects" ? "projects" : place.page === "systems" ? "systems" : place.page === "materials" || place.page === "tests" || place.page === "feed" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
+  place.page === "home" ? "home" : place.page === "references" ? "references" : place.page === "projects" ? "projects" : place.page === "systems" ? "systems" : place.page === "materials" || place.page === "tests" || place.page === "feed" || place.page === "chat" ? "labs" : PROJECT_PAGES.has(place.page) ? "project" : "system";
 export const tabName = (place: Place): string => {
   const kind = tabKind(place);
   return kind === "system" ? systemName(place.system) : kind === "project" ? projectName(place.project)
-    : kind === "labs" ? (place.page === "tests" ? "Tests" : place.page === "feed" ? "Feed" : "Materials") : ({ home: "Home", references: "References", projects: "Projects", systems: "Systems" } as const)[kind];
+    : kind === "labs" ? (place.page === "tests" ? "Tests" : place.page === "feed" ? "Feed" : place.page === "chat" ? "Chat" : "Materials") : ({ home: "Home", references: "References", projects: "Projects", systems: "Systems" } as const)[kind];
 };
 /** What a tab holds, as a key: two places in one system or project are in the same tab. */
 export const tabHolds = (place: Place): string => {
