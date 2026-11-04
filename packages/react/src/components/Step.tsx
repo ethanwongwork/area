@@ -85,6 +85,8 @@ export interface StepGroupProps extends DisclosureProps, Omit<HTMLAttributes<HTM
   verb: ReactNode;
   /** "6 files", "2m 5s". */
   detail?: ReactNode;
+  /** At the line's end, muted: how long the run took ("6m 12s", Claude Code's turn summary), as a Step's own meta. */
+  meta?: ReactNode;
   status?: StepRunStatus;
   /** The Steps it folds. */
   children: ReactNode;

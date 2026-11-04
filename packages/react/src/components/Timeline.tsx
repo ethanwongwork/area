@@ -39,19 +39,18 @@ export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(functio
     : icon ? <span className={el("icon")}>{icon}</span>
     : <span className={el("dot")} />;
   const when = time == null ? null : dateTime ? <time dateTime={dateTime}>{time}</time> : time;
-  // One line: the title, then who or where and when, each after a dot, all at one size; the time comes last.
-  const after = [meta, when].filter(part => part != null && part !== false);
-  const sep = <span className={el("sep")} aria-hidden="true">·</span>;
+  // One line, no dots between its parts (owner, 2026-11-03: "im not a big fan of the use of '·' is it necessary?"): the
+  // title, who or where a gap after it, and the time at the line's end.
+  const hasMeta = meta != null && meta !== false;
   return (
     <li ref={ref} aria-current={current ? "true" : undefined} className={timelineItemVariants({ current }, className)} {...rest}>
       <span className={el("marker")} aria-hidden={media ? undefined : true}>{marker}</span>
       <div className={el("content")}>
-        {title != null || after.length ? (
+        {title != null || hasMeta || when != null ? (
           <div className={el("line")}>
             {title != null ? <span className={el("title")}>{title}</span> : null}
-            {after.map((part, index) => (
-              <span key={index} className={el("meta")}>{title != null || index > 0 ? sep : null}{part}</span>
-            ))}
+            {hasMeta ? <span className={el("meta")}>{meta}</span> : null}
+            {when != null ? <span className={el("time")}>{when}</span> : null}
           </div>
         ) : null}
         {children != null ? <div className={el("body")}>{children}</div> : null}

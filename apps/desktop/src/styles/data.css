@@ -78,7 +78,7 @@
      apart. The fill runs to its share, then what is projected, 2 after it in the lighter colour. A large bar: 24 (corner 4)
      on a 32 row. */
   /* In a card too narrow for both columns and a strip, the name gives way (cut with an ellipsis), never the strip's least 32. */
-  .studio-data__columns, .studio-data__bar { display: grid; grid-template-columns: minmax(0, 120px) minmax(32px, 1fr) 64px; /* spec: name and value columns */ column-gap: var(--area-space-12); }
+  .studio-data__columns, .studio-data__bar { display: grid; grid-template-columns: minmax(0, min(120px, 30%)) minmax(32px, 1fr) 64px; /* spec: name and value columns; the name gives way first in a narrow chat (at most 30%: 71 of a 268 panel, its bars 77 wide, not 32) */ column-gap: var(--area-space-12); }
   .studio-data__bars { position: relative; display: grid; gap: 2px; /* spec: marks 2 apart */ min-inline-size: 0; }
   .studio-data__bar { align-items: center; block-size: 28px; /* spec: list rows */ font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); min-inline-size: 0; }
   .studio-data__bar-name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }

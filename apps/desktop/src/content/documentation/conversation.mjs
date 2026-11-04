@@ -19,7 +19,7 @@ export default {
     // Spec: Decisions; manifest elements.
     parts: {
       root: "An article for one turn, named \"<name> said\"; it lays out the bubble or the prose, then the actions.",
-      bubble: "The person's words: at most 70% of the column, at its end, on the Composer's corner and the neutral component fill.",
+      bubble: "The person's words: at most 70% of a wide column and nearly the whole of a narrow one (48 short of it), at its end, on the Composer's corner and the neutral component fill.",
       content: "The assistant's prose across the column, at the body size; paragraphs, lists, code and citations sit inside it.",
       actions: "MessageActions: a named group of ghost icon Buttons with no gap. On the person's turn it shows on hover and focus (always on touch).",
       cursor: "The dot after the last word while streaming; it breathes, and rests at full ink with Motion 0 or reduced motion.",
@@ -52,6 +52,7 @@ export default {
       ["Do", "Set loading while a reply streams and pass onStop: the field stays editable, Enter doesn't send, and send becomes Stop."],
       ["Do", "Pass onQueue in an agent chat so Enter during a run queues the draft for a Queue instead of doing nothing."],
       ["Do", "Put context chips (Chip input) and Attachments in context, and a Composer menu in menu, so they share the composer's width."],
+      ["Do", "Let the + open a Menu of modes and things to add (a mode's icon in its tone's ink, then files, the model, connectors)."],
       ["Do", "Pass a ModelPicker as mode and attach-style actions as leadingActions; disabled disables every nested action too."],
       ["Do", "Put where the message runs in header, and tools with a ComposerNote in footer; they share the composer's width and line up with its shell."],
       ["Do", "Pass onFiles so files dropped on the composer or pasted into it arrive as files, and pair it with a ComposerAttach for picking."],
@@ -425,6 +426,8 @@ export default {
     // Spec: Job and boundaries, Decisions, Behavior and accessibility; source: EditSummary.tsx JSDoc.
     practices: [
       ["Do", "Show one Edit summary at the end of a turn that changed files, with the turn's totals and an EditSummaryFile per file."],
+      ["Do", "Use variant plain in the transcript, among a turn's Steps, so its head and rows sit on the text edge; a file's Diff keeps its own frame."],
+      ["Do", "Give each file an icon of its kind and its full path as name: the row shows the file's name first and its folder after it, muted."],
       ["Do", "Give each file a Diff so its name opens to the change; name the diff by its file with aria-label (\"Changes to button.css\"). Diff's label still works for one release."],
       ["Do", "Pass onKeepAll and onUndoAll while any file is pending, and leave them out once every file is settled."],
       ["Do", "Set a file's status to kept or undone once the person acts: its actions leave and the row says Kept or Undone. state still works for one release."],
@@ -548,6 +551,7 @@ export default {
       ["Do", "Give an item meta for its own count (\"2 of 4\") and a current item progress, so its segment and its ring fill together."],
       ["Do", "Pass count when the items are phases of a larger count (\"9 of 14\" questions in 8 chapters)."],
       ["Do", "Use rail when items carry detail or steps of their own, so the whole tracker reads as one timeline in one container."],
+      ["Do", "Use variant plain inside a turn's transcript, among Steps and the reply, so it reads as the turn's own lines; keep the frame (surface) in a tray or panel of its own."],
       ["Don't", "Nest steps more than one level: an item's steps take no steps of their own."],
       ["Don't", "Make items clickable: the plan reports the agent's progress, it isn't a checklist."],
       ["Don't", "Leave it in the transcript after the run; it rides above the composer while the agent works."],

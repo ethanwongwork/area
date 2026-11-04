@@ -4,7 +4,7 @@
  *
  * Not an axis (an axis picks one preset; this is a set). Selected with a space-separated list on
  * any element, inherited like an axis: `<html data-area-pills="chip count switch avatar">`. With
- * no attribute the defaults apply: Badge, Chip, Switch and Avatar are pills, everything else
+ * no attribute the defaults apply: Badge, Chip, Switch, Avatar and the Composer's buttons are pills, everything else
  * follows the radius setting (Count since 2026-11-01, owner: "id prefer if counts were not pills, but its okay if other
  * badges are pills"; Notion's board count is a 4 corner, Primer's and Fluent's pills). Each component reads its own flag, `--area-pill-<id>` (0 or
  * 1), and adds `flag x radius-full` to its corner, so the shapes concentric with it follow too
@@ -23,6 +23,11 @@ export interface PillShape {
 export const PILL_SHAPES: readonly PillShape[] = [
   { id: "button", label: "Button", covers: "Button, Split button, Button group, icon buttons", pill: false },
   { id: "field", label: "Fields", covers: "Input, Select, Combobox, Number field, Input group, Color field (and the buttons inside them)", pill: false },
+  // Composer (owner, 2026-11-02: "the composer should have round buttons/pill buttons ... as part of the rounded/pill
+  // theme selection, and it should be rounded by default for area (like cursor)"): its buttons and pickers, attach,
+  // modes, model, mic and send (the measured references' 24 pills and round send). Its shell keeps its
+  // own corner (a pill only with a round send at one line).
+  { id: "composer", label: "Composer", covers: "Composer's buttons and pickers: attach, modes, model, mic, send", pill: true },
   { id: "segmented", label: "Segmented", covers: "the Segmented track and its items", pill: false },
   { id: "chip", label: "Chip", covers: "Chip, its swatch and remove button", pill: true },
   { id: "badge", label: "Badge", covers: "Badge, Badge group", pill: true },

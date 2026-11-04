@@ -94,12 +94,44 @@
   /* The number sits in the row's icon slot, centred, so every label starts on one column, as the small keycap (16):
      every key has its backplate (owner, 2026-10-22; round 51 had unboxed it at the label's size, as Claude Code). */
   .area-approval__key { display: inline-flex; flex: none; justify-content: center; inline-size: var(--area-icon-sm); color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  /* A question's keys (a choice with a note, 2026-11-03, live check docs/research/chat-kit-2026-11-02/live.md: the
+     measured question card keys each option in a filled square about the row's control size, 28 in a 44 row): the
+     keycap is a square the extra-small control tall (22 at type 13), centred on the label's line, so the number reads as
+     the thing to press. A plain approval's one-line rows keep the small 16 keycap. */
+  .area-approval:has(.area-approval__option-description) .area-approval__key { inline-size: var(--area-control-xs); }
+  .area-approval:has(.area-approval__option-description) .area-approval__key > .area-kbd { --_height: var(--area-control-xs); --_min: var(--area-control-xs); }
+  /* The key square sits as far from the plate's top as from its side (the row inset, 8), not the note row's 6 over an 18
+     line that let the 22 key ride 4 from the top (owner, 2026-11-03: "fix the inset padding here"); the label's first
+     line centres on the key. */
+  .area-approval:has(.area-approval__option-description) .area-approval__option { align-items: flex-start; padding-block: var(--area-ui-row-inset); }
+  .area-approval:has(.area-approval__option-description) .area-approval__option > :is(.area-approval__check, .area-approval__skip) { align-self: center; }
+  .area-approval:has(.area-approval__option-description) .area-approval__option > .area-approval__key { align-items: center; block-size: var(--area-control-xs); }
+  .area-approval:has(.area-approval__option-description) .area-approval__option > :is(.area-approval__lines, .area-approval__label, .area-approval__field) { padding-block-start: calc((var(--area-control-xs) - var(--area-text-base-leading)) / 2); }
   .area-approval__label { min-inline-size: 0; overflow-wrap: anywhere; }
   /* A choice with what it comes to under it (Claude Code's question options): Menu's row with a note (model-picker.md:
      6 above and below, the row grows), the note in the card's own description type. The key sits on the label's line
      (inset.css, first-line alignment); the check stays centred, as Menu's does. */
   .area-approval__option:has(.area-approval__option-description) { align-items: flex-start; padding-block: 6px; /* spec: Menu's row with a note */ }
   .area-approval__option:has(.area-approval__option-description) > .area-approval__key { align-items: center; block-size: var(--area-text-base-leading); }
+  /* Options a light line apart (2026-11-03, the measured question card's hairlines): the Dividers stroke, inset to the
+     rows' text column, gone beside a row under the pointer, focused or chosen, so a plate never sits on a line. A plain
+     approval's short rows keep no lines. */
+  .area-approval:has(.area-approval__option-description) .area-approval__option { position: relative; }
+  .area-approval:has(.area-approval__option-description) .area-approval__option + .area-approval__option::before {
+    content: "";
+    position: absolute;
+    inset-inline: var(--area-ui-row-inset);
+    inset-block-start: calc(-0.5 * var(--area-ui-row-gap) - var(--area-stroke-width) / 2);
+    block-size: var(--area-stroke-width);
+    background-color: var(--area-edge-dividers);
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-approval__option:is(:focus-visible, [data-selected]) + .area-approval__option::before,
+  .area-approval__option:is(:focus-visible, [data-selected])::before { background-color: transparent; }
+  @media (hover: hover) {
+    .area-approval__option:hover + .area-approval__option::before,
+    .area-approval__option:hover::before { background-color: transparent; }
+  }
   .area-approval__option:has(.area-approval__option-description) > .area-approval__check { align-self: center; }
   .area-approval__lines { display: flex; flex: 1; flex-direction: column; min-inline-size: 0; }
   .area-approval__option-description { color: var(--area-fg-muted); overflow-wrap: anywhere; }
@@ -123,4 +155,7 @@
     font: inherit;
   }
   .area-approval__field::placeholder { color: var(--area-fg-muted); opacity: 1; }
+  /* Skip at the end of the answer-of-one's-own row (2026-11-03, the measured question card): the way past the question
+     sits where the last answer would be typed; the hint row under the options goes. */
+  .area-approval__skip { flex: none; margin-inline-end: calc(var(--area-space-4) - var(--area-ui-row-inset)); }
 }

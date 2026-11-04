@@ -92,10 +92,13 @@
   }
   /* One line: what happened, then when and who after a dot, all in the UI text (owner, review round 8: "the dates
      seem quite small"; Linear and the activity feed run the time on the same line, the same size, muted). */
-  .area-timeline-item__line { overflow-wrap: anywhere; }
-  .area-timeline-item__title { font-weight: var(--area-weight-regular); /* spec: Linear, the activity feed and the run log, 400 */ }
+  /* No dots between the parts (owner, 2026-11-03: "im not a big fan of the use of '·' is it necessary?"; it was title ·
+     meta · time): who or where a gap after the title, and the time at the line's end, metadata at the ramp's secondary
+     step (12), as every figure in a tracker. A long title wraps; the time keeps the end of the first line it fits. */
+  .area-timeline-item__line { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--area-space-8); overflow-wrap: anywhere; }
+  .area-timeline-item__title { flex: 0 1 auto; min-inline-size: 0; font-weight: var(--area-weight-regular); /* spec: 400 */ }
   .area-timeline-item__meta { color: var(--area-fg-muted); }
-  .area-timeline-item__sep { margin-inline: var(--area-space-4); /* spec: Notion's separator, 4 either side */ }
+  .area-timeline-item__time { flex: none; margin-inline-start: auto; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .area-timeline-item__body { margin-block-start: var(--area-space-8); /* spec: Notion 8 under the time */ }
   .area-timeline-item__body:first-child { margin-block-start: 0; }
 

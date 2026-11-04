@@ -40,6 +40,7 @@ const ENTRIES: ReadonlyArray<{ place: Place; label: string; description: string;
   { place: { page: "materials" }, label: "Materials", description: "Labs", group: "Places", keywords: ["lab", "material bundles"] },
   { place: { page: "tests" }, label: "Tests", description: "Labs", group: "Places", keywords: ["lab", "trial", "testing"] },
   { place: { page: "feed" }, label: "Feed", description: "Labs", group: "Places", keywords: ["lab", "gallery", "cards", "spacing", "elements"] },
+  { place: { page: "chat" }, label: "Chat", description: "Labs", group: "Places", keywords: ["lab", "conversation", "messages", "agent", "composer"] },
   ...FAMILIES.map(family => ({ place: { page: "components" as const, item: family.slug }, label: family.name, description: "Component", group: "Components" })),
   ...SETTINGS.map(setting => ({ place: { page: "settings" as const, group: groupSlug(setting.heading), item: setting.id }, label: setting.title, description: settingWhere(setting), group: "Settings", keywords: [setting.label, setting.id] })),
   ...SCALES.map(scale => ({ place: { page: "color" as const, item: scale.id }, label: title(scale.id), description: "Color scale", group: "Color" })),

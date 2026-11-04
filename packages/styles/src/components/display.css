@@ -75,6 +75,9 @@
       0 0 0 var(--area-space-4) var(--_ring, var(--area-selection-solid));
   }
 
+  /* xs (2026-11-02): an avatar set in a line of UI text, as tall as the line (18 at type 13), so a name with its picture
+     keeps the line's height (an activity log's "David Tee commented"); sm's 26 grew the line. */
+  .area-avatar--xs { --_size: var(--area-text-base-leading); --_icon: var(--area-icon-xs); --_text: var(--area-text-xs-size); }
   .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); --_text: var(--area-text-xs-size); }
   .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); --_text: var(--area-text-base-size); }
   .area-avatar--lg {

@@ -11,7 +11,9 @@
  * 2026-10-25), and the items as Menu rows (not pressable, so no plate), their text after the mark's slot.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  .area-plan {
+  /* The frame is the default (surface), so the bare class draws it and `--surface` restates it for manifest parity. */
+  .area-plan,
+  .area-plan--surface {
     --_card-list: var(--area-space-4); /* spec: Menu's list padding 4 */
     --_card-column: calc(var(--_card-list) + var(--area-ui-row-inset)); /* 12 */
     min-inline-size: 0;
@@ -46,7 +48,8 @@
   /* The count ends on the card column, the items' meta column under it, so the plan's numbers read as one column
      (owner 2026-10-25, "dense ... visually balanced"; Claude's Context panel: a section's title with its chevron beside
      it, its numbers at the end). */
-  .area-plan__count { flex: none; margin-inline-start: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  /* A tracker's figures are metadata, the ramp's secondary step (12) on the row's line (owner, 2026-11-02: "the text size of the numbers on the right look way bigger than the left": the face's figures are cap-height and tabular, so at the label's 13 a count read a size up). */
+  .area-plan__count { flex: none; margin-inline-start: auto; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; }
   .area-plan__chevron { display: inline-flex; flex: none; color: var(--area-fg-muted); transform: rotate(-90deg); transition: transform var(--area-duration-fast) var(--area-ease-out); /* MOTION.md: every chevron turns on fast */ }
   /* Closed points along the reading direction, so it mirrors in right-to-left text (Accordion, Tree view). */
   .area-plan__chevron:dir(rtl) { transform: rotate(90deg); }
@@ -164,7 +167,7 @@
      spacing as shown"). */
   .area-plan[data-open] > .area-plan__bar { padding-block-end: var(--area-space-8); }
   /* An item's trailing value (its own count, a date): muted, its digits tabular, at the row's end. */
-  .area-plan__meta { flex: none; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .area-plan__meta { flex: none; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; white-space: nowrap; }
   /* A current item with a known share: the pending ring filling as a pie inside it (Linear's in-progress ring), in the
      bar's fill, so the item and its segment read as one value. */
   .area-plan__mark--ring { position: relative; }
@@ -228,4 +231,23 @@
     background: var(--area-edge-dividers);
   }
   @media (forced-colors: active) { .area-plan--rail > .area-plan__items > .area-plan__item:not(:last-child)::before { background: CanvasText; } }
+
+  /* Plain (owner 2026-11-02, the Chat kit: "the tracker, do they need containers? the containers look off"): no frame,
+     fill or corner; its words sit on the text edge around it, as a turn's steps and reply do (Claude Code's turn rows and
+     tool rows carry no box, Cursor's Agents window groups them unboxed). The list's padding goes and the plan hangs one
+     row inset into the margin, so the head's and the items' words start on the edge and their plates hang outside it, as
+     Nav's and Message actions' do. Its nested steps keep their recessed ground. */
+  .area-plan--plain {
+    --_card-list: 0px;
+    overflow: visible;
+    margin-inline: calc(-1 * var(--area-ui-row-inset));
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+  /* Plain sits on the turn's rhythm as a Step does: its head is the text's line (no row height or bar room above it), and
+     its last row's half-leading hangs past its foot, so the words above and below it are the turn's gap away (12), not
+     the frame's paddings on top (2026-11-02 pass: 27 and 26 against a Step's 13). */
+  .area-plan.area-plan--plain > .area-plan__head { min-block-size: var(--area-text-base-leading); padding-block: 0; }
+  .area-plan--plain > .area-plan__items { margin-block-end: calc((var(--area-text-base-leading) - var(--area-ui-row)) / 2); }
 }

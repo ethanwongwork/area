@@ -16,7 +16,9 @@
  *   rows    Menu rows: ui-row tall, the row inset, the row corner, the row plate.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  .area-edit-summary {
+  /* The frame is the default (surface), so the bare class draws it and `--surface` restates it for manifest parity. */
+  .area-edit-summary,
+  .area-edit-summary--surface {
     --_card-list: var(--area-space-4); /* spec: Menu's list padding 4 */
     --_card-column: calc(var(--_card-list) + var(--area-ui-row-inset)); /* 12: the rows' text */
     /* A button's inset from the end and the top: what is left of the row around a small control, never under 4. */
@@ -56,7 +58,8 @@
   }
   .area-edit-summary__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* The counts read as one figure: 4 apart, a line's gap (Step). */
-  .area-edit-summary__counts { display: inline-flex; flex: none; gap: var(--area-space-4); font-variant-numeric: tabular-nums; }
+  /* A tracker's figures are metadata, the ramp's secondary step (12) on the row's line (owner, 2026-11-02: "the text size of the numbers on the right look way bigger than the left": the face's figures are cap-height and tabular, so at the label's 13 a count read a size up). */
+  .area-edit-summary__counts { display: inline-flex; flex: none; gap: var(--area-space-4); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; }
   .area-edit-summary__added { color: var(--area-fg-success); }
   .area-edit-summary__removed { color: var(--area-fg-danger); }
   /* Text buttons side by side with no gap: their own padding spaces the labels (Message actions). */
@@ -110,7 +113,14 @@
   }
   .area-edit-summary__name:focus-visible { outline: none; }
   .area-edit-summary__file:has(> .area-edit-summary__name:focus-visible) { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
-  .area-edit-summary__name > span:first-child { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-edit-summary__base { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* A file's mark (2026-11-02, the code changes pass): its kind's 16 glyph before the name in the muted ink, as a Step's
+     icon, so a list of files reads as files; its folder after the name, muted, cut from its start (Composer menu's path),
+     so the name, the part that differs, leads. */
+  .area-edit-summary__icon { display: inline-flex; flex: none; color: var(--area-fg-muted); margin-inline-end: var(--area-space-4); }
+  .area-edit-summary__icon > svg { inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
+  .area-edit-summary__folder { flex: 0 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; color: var(--area-fg-muted); }
+  .area-edit-summary__folder > bdi { direction: ltr; unicode-bidi: plaintext; }
   .area-edit-summary__chevron { display: inline-flex; flex: none; color: var(--area-fg-muted); transform: rotate(-90deg); transition: transform var(--area-duration-fast) var(--area-ease-out); /* MOTION.md: every chevron turns on fast */ }
   /* Closed points along the reading direction, so it mirrors in right-to-left text (Accordion, Tree view). */
   .area-edit-summary__chevron:dir(rtl) { transform: rotate(90deg); }
@@ -138,7 +148,7 @@
   /* Kept or undone: settled. The counts go quiet; an undone file's name is struck. */
   .area-edit-summary__status { flex: none; color: var(--area-fg-muted); }
   .area-edit-summary__file:is([data-kept], [data-undone]) .area-edit-summary__counts > * { color: var(--area-fg-muted); }
-  .area-edit-summary__file[data-undone] .area-edit-summary__name > span:first-child { text-decoration: line-through; color: var(--area-fg-muted); }
+  .area-edit-summary__file[data-undone] .area-edit-summary__base { text-decoration: line-through; color: var(--area-fg-muted); }
   /* A file's diff under its row: 4 below it (a line's body gap, Step), the list's row break included, as wide as the
      row's plate. */
   /* The diff under its file, 4 below the row, in a bordered box whose edges sit on the card's text line (12 in: the
@@ -205,4 +215,19 @@
     .area-diff { border: var(--area-stroke-width) solid CanvasText; }
     .area-diff__line--added > .area-diff__marker, .area-diff__line--removed > .area-diff__marker { color: CanvasText; }
   }
+
+  /* Plain (owner 2026-11-02, as Plan's): no frame, fill or corner; the head and the file rows' words on the text edge
+     around it, their plates hanging one row inset into the margin. A file's diff keeps its own frame. */
+  .area-edit-summary--plain {
+    --_card-list: 0px;
+    overflow: visible;
+    margin-inline: calc(-1 * var(--area-ui-row-inset));
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+  /* Plain sits on the turn's rhythm (as Plan's): the head the text's line (its small buttons, when it has them, set it taller), and
+     the last row's half-leading hangs past its foot. */
+  .area-edit-summary--plain > .area-edit-summary__head { min-block-size: var(--area-text-base-leading); padding-block: 0; }
+  .area-edit-summary--plain > .area-edit-summary__files { margin-block-end: calc((var(--area-text-base-leading) - var(--area-ui-row)) / 2); }
 }

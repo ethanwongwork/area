@@ -143,6 +143,7 @@ export default {
     ],
     // Spec: Variants, Behavior and accessibility; primitives.tsx Avatar JSDoc.
     practices: [
+      ["Do", "Use size xs for a person set in a line of text (an activity log's \"David Tee commented\"), so the line keeps its height; sm and up stand on their own."],
       ["Do", "Pass alt with src (alt=\"\" beside a visible name), or aria-label: an image Avatar with neither throws."],
       ["Do", "Give fallback initials (one or two letters) or an icon, shown when there is no image or it fails to load."],
       ["Do", "Use a circle for people and square for teams, workspaces and bots; unset follows the theme's pills setting."],

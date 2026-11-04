@@ -3,6 +3,7 @@ import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { approvalVariants } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
+import { Button } from "./Button.tsx";
 import { Kbd } from "./primitives.tsx";
 
 export interface ApprovalOption {
@@ -113,6 +114,10 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
       else if (onInstead && Number(event.key) === options.length + 1) { event.preventDefault(); list.current?.querySelector<HTMLInputElement>(".area-approval__field")?.focus(); }
     }
   };
+  // A question that can be skipped and answered in words puts Skip at the end of the words' row (its Esc still skips),
+  // and drops the hint row under the options.
+  const skipInRow = Boolean(onInstead && onDismiss);
+  const skipLabel = dismissLabel.charAt(0).toUpperCase() + dismissLabel.slice(1);
   // What to do instead is the last choice (Claude Code's): its number focuses the field, and Enter sends it.
   const insteadKey = onInstead && options.length < 9 ? String(options.length + 1) : undefined;
   return (
@@ -154,13 +159,16 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
               aria-keyshortcuts={insteadKey}
               onChange={event => setInstead(event.currentTarget.value)}
               onKeyDown={event => { if (event.key === "Enter" && instead.trim()) { event.preventDefault(); onInstead(instead.trim()); setInstead(""); } }} />
+            {skipInRow ? <Button className="area-approval__skip" variant="soft" tone="neutral" size="sm" aria-keyshortcuts="Escape" onClick={onDismiss}>{skipLabel}</Button> : null}
           </label>
         ) : null}
       </div> : null}
-      <div className="area-approval__foot">
-        <p className="area-approval__hint"><Kbd keys={["Esc"]} size="sm" />{` to ${dismissLabel}`}</p>
-        {footer ? <div className="area-approval__footer">{footer}</div> : null}
-      </div>
+      {skipInRow && !footer ? null : (
+        <div className="area-approval__foot">
+          {skipInRow ? null : <p className="area-approval__hint"><Kbd keys={["Esc"]} size="sm" />{` to ${dismissLabel}`}</p>}
+          {footer ? <div className="area-approval__footer">{footer}</div> : null}
+        </div>
+      )}
     </section>
   );
 });

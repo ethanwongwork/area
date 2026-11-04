@@ -48,8 +48,20 @@
      sets them, the Composer the column's width (its public width hook); an agent's turn's parts the reply's prose gap
      apart (16), as its blocks are. */
   .studio-chat { --area-composer-inline-size: 100%; display: grid; gap: var(--area-space-24); max-inline-size: var(--_reading-column); }
+  /* A chat's frames step in with its type (2026-11-02 pass, docs/research/chat-kit-2026-11-02): 12, the inset its own
+     frames keep (Plan, Edit summary, Approval: words 13 in with the edge), not the feed's 16 for cards a grid apart.
+     Cursor's tool cards pad 10, its table cells 10; Claude Code's step cards 8; Claude's code block 14. The feed's table,
+     code block and cards in a reply take it through --_frame-inset, so every frame in a reply holds its words alike. */
+  .studio-chat { --_frame-inset: var(--area-space-12); }
+  /* A time over a message joins it (8), as the Inspector's chat sets it (chat.css); the next turn is the turn gap. */
+  .studio-chat > .area-timestamp + * { margin-block-start: calc(var(--area-space-8) - var(--area-space-24)); }
+  /* A card in a chat that is not a block of the reply (a comment in an activity log): the chat's frame, on the surface,
+     as the Edit summary beside it (it was the feed's grey frame, 16 in, under a white one 12 in). */
+  .studio-chat__card { --area-card-corner: var(--area-radius-container); --area-card-inset: var(--_frame-inset); --area-card-fill: var(--area-bg-surface); --area-card-edge: var(--area-edge-blocks); }
   /* A turn's trackers at the UI size, 12 apart (Claude Code's rows 10, its turns 15; was the prose gap, 16, set for 15/22). */
-  .studio-chat--turn { gap: var(--area-space-12); }
+  /* Unboxed trackers (Plan and Edit summary plain, 2026-11-02) sit the reply's block gap apart (16), so each reads as its
+     own line of the turn; at 12, boxless, a plan's last item and the edit summary's head read as one list. */
+  .studio-chat--turn { gap: var(--area-text-lg-prose-gap); }
   /* A reply's headings, one style (owner, 2026-11-02: "too many type styles"): title-xs (16/22), strong, the step over
      the reading text (15/22) and the kit's section titles' own. The Inspector's narrow Chat keeps its headings at the
      message's size (chat.css .studio-md__heading). */
@@ -62,3 +74,72 @@
      model to its end. */
   .studio-chat__composer { display: grid; gap: var(--area-space-8); }
   .studio-chat__spacer { flex: 1 1 auto; }
+
+  /* --- The Chat kit (Labs › Chat, src/pages/chat-lab.tsx; docs/research/chat-kit-2026-11-02) ---------------------- */
+
+  /* Each section's chat at the chosen width, a container so its parts answer to the chat's width, not the Canvas's. Bare at
+     every width (owner, 2026-11-02: "why are all the composers and other designs in a container?"): a chat sits on its
+     panel's ground with no frame of its own, so the kit draws none; the width is the only thing that changes. */
+  .studio-chatkit__frame { container-type: inline-size; inline-size: min(100%, var(--_chat-width)); }
+  /* Inside a chat the column is the chat's, not the reading measure (the Column width is that measure already). */
+  .studio-chatkit .studio-chat { max-inline-size: none; }
+  /* A frame a reply carries (cards, a chart, colors) sits on the column's edge, as its table and code block do. */
+  .studio-chat__block { min-inline-size: 0; }
+  /* A comment in an activity log's card: the log's UI text (13), as every line around it; a reply's 15 belongs to replies. */
+  .studio-chat__note { margin: 0; font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+  /* The command menu opens over the field: room above the composer for it. */
+  .studio-chat--menu { padding-block-start: calc(var(--area-space-96) * 2); /* pick: the menu's four rows and two heads */ }
+  /* A reply's color steps fill its column (auto-fit: five across a 768 reply, each a step wider), as the reply's other
+     blocks do; the feed's sheet keeps its empty tracks (auto-fill) so a page of scales lines up across rows. */
+  .studio-chat .studio-color-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--_card-width)), 1fr)); }
+  /* The + menu's toned marks: the span carries the tone's ink to the icon inside it and draws nothing itself. */
+  .studio-chat__tone { display: contents; }
+  /* A + menu row's note, on its label's line: muted, a row gap after the label (12), cut short before it wraps. */
+  .studio-chat__aside { margin-inline-start: var(--area-space-12); color: var(--area-fg-muted); white-space: nowrap; }
+  /* The model's effort in the + menu, in the discovery ink (the reference's "Ultra"), a word apart. */
+  .studio-chat__effort { margin-inline-start: var(--area-space-4); color: var(--area-fg-discovery); }
+  /* The open + menu over its composer, the Composer menu's 8 above the field, as wide as Claude's and Cursor's (320). */
+  .studio-chat__over { display: grid; gap: var(--area-space-8); }
+  .studio-chat__menu { inline-size: min(100%, calc(var(--area-space-96) * 4)); /* pick: 384, a mode and its note on one line */ }
+
+  /* --- The activity log (src/activity-kit.tsx; the Feed kit and the Chat kit) ------------------------------------- */
+
+  /* Days a turn's gap apart (24), each a label on a rule over its events (12 under it). Its cards are the chat's frame:
+     12 in, in the cards' stroke (each card carries it), the log's UI type. */
+  .studio-activity { --_frame-inset: var(--area-space-12); display: grid; gap: var(--area-space-24); min-inline-size: 0; }
+  .studio-activity__day { display: grid; gap: var(--area-space-8); min-inline-size: 0; }
+  /* The day: Area's group label over a run of rows (Nav's and Menu's: the rows' size at the strong weight in the muted
+     ink), on the text edge, no rule (owner, 2026-11-03: "for the dates, is the divider across necessary? is the type size
+     and color of those dates correct/consistent with area?"; it was 12 at 400 with a rule to the end). */
+  .studio-activity__label { margin: 0; padding-inline-start: var(--_text-inset); color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); font-weight: var(--area-weight-strong); }
+  /* A row's leading mark: a 16 glyph, as a Step's icon (it was the status badge's small mark, 10). */
+  .studio-activity__glyph { display: inline-flex; flex: none; inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
+  .studio-activity__glyph > svg, .studio-activity__glyph > .studio-activity__ink > svg { inline-size: 100%; block-size: 100%; }
+  .studio-activity__glyph:not(:has(> .studio-activity__ink)) { color: var(--area-fg-muted); }
+  /* An event's tone, carried to the bare icon in the Timeline's mark slot (the span draws nothing itself). */
+  .studio-activity__ink { display: contents; }
+  /* Who did it: their avatar a small gap before their name, on the line. */
+  /* The name stays on the line's baseline with the words around it; the avatar alone is centred on the line (an
+     inline-flex who sat its name on the avatar's foot, 3 over the rest). */
+  /* Names and objects in the strong weight (500), not the browser's bold (700), so the line keeps one ink level a step
+     over its muted verbs (2026-11-02: "the overall balance seems off"). */
+  .studio-activity strong { font-weight: var(--area-weight-strong); }
+  .studio-activity__face { display: inline-flex; margin-inline-end: var(--area-space-6); vertical-align: middle; }
+  /* A card's one row: what, then its figures at the end. */
+  .studio-activity__row { display: flex; align-items: center; gap: var(--area-space-8); min-inline-size: 0; font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+  .studio-activity__row > :last-child { margin-inline-start: auto; }
+  .studio-activity__names { display: inline-flex; align-items: center; gap: var(--area-space-6); color: var(--area-fg-muted); }
+  .studio-activity__counts { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .studio-activity__added { color: var(--area-fg-success); }
+  .studio-activity__removed { color: var(--area-fg-danger); }
+  /* The changes: a list, each its short name then its line, 8 apart. */
+  /* Two columns, so every change's value starts on one line whatever its name's length (each item a row of the list's
+     grid, subgrid). */
+  .studio-activity__changes { display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: var(--area-space-12); row-gap: var(--area-space-8); margin: 0; padding: 0; list-style: none; font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+  .studio-activity__changes > li { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: baseline; justify-items: start; min-inline-size: 0; }
+  /* A card's figures at the end of its row: metadata, the ramp's secondary step (as a tracker's figures). */
+  .studio-activity__meta { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; }
+  /* A file: its glyph on the well's square (32, the control's height), then its name and size on two lines. */
+  .studio-activity__file { display: grid; flex: none; place-items: center; inline-size: var(--area-control-md); block-size: var(--area-control-md); border-radius: var(--area-radius-control-md); background-color: var(--area-bg-well); color: var(--area-fg-muted); }
+  .studio-activity__lines { display: grid; flex: 1; min-inline-size: 0; }
+  .studio-activity__lines > :last-child { margin: 0; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }

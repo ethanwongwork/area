@@ -308,3 +308,16 @@ chevron moves out with it (its 12 column was the cause). Queue's head shares the
   - **Why:** the trackers are UI under the reply's prose, so they share one size (Step, Edit summary, Approval, Turn
     notice at text-base too). At Layer contrast 0 the box is flat, and its extra 4 left a hole under the steps (25 against
     20 above).
+
+
+## 2026-11-02: variant plain
+
+Owner, in the Chat kit (Labs › Chat): "the tracker, do they need containers? the containers look off, and out of place, not
+even padding around them, gaps look either too big or too small". Measured in docs/research/chat-kit-2026-11-02: the
+references' turn summaries and tool rows carry no box (only an opened output does), and grouped tool rows sit unboxed, and in Area's turn the boxed Plan sat 27 (text to text) from the line above against a Step's 13. `variant`
+(surface, the default and unset; plain) is Area's name for a frame that can go (Calendar, Description list). Plain drops
+the border, fill and corner and the list's 4 padding, and hangs the plan one row inset into the margin, so its
+words start on the text edge around it and its row plates hang outside it (as Nav's and Message actions' do); its head is
+the text's line and its last row's half-leading hangs past its foot, so the words above and below are the turn's gap
+away. A plain plan is not a raised ground (layers.css). The diff (Edit summary) and nested steps (Plan) keep
+their own grounds.
