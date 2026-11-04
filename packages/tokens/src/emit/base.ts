@@ -17,6 +17,7 @@ import { type GroundEdge, contrastMix, layerCss, onGround, rawEdge, strokeEdge, 
 import { depthDerived } from "../axes/depth.ts";
 import { strokeGroupDerived } from "../axes/stroke-groups.ts";
 import { accentDerived, statusDerived } from "../axes/accent.ts";
+import { toneDerived } from "../axes/tone-tint.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 import { brandDefaultCss } from "../semantic/brand.ts";
 import { DATA_STATUS } from "../color/series.ts";
@@ -173,6 +174,9 @@ function derivedOnPage(): Record<string, string> {
     ...accentDerived(),
     // The status tones' colours (axes/accent.ts Status colours): full, or quieted with the accent.
     ...statusDerived(),
+    // Each status and label tone's soft surfaces at the Tone tint and its ink at that tint and the Tone contrast floor
+    // (axes/tone-tint.ts, axes/tone-floor.ts), from the colours above.
+    ...toneDerived(),
     // The brand roles where no brand is set (semantic/brand.ts, 2026-10-26): secondary and tertiary as the accent, the brand
     // surfaces as the page and the inverse ground. A brand (phase 2) writes its own over them.
     ...brandDefaultCss().derived,

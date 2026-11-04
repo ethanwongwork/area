@@ -1,0 +1,167 @@
+{
+ "source": "Notion web app (app.notion.com), stylesheet custom properties under ':root, .notion-light-theme' and '.notion-dark-theme', read 2026-11-02 without changing the owner's theme. Banner = BacSec ground + TexSec ink (light).",
+ "light": {
+  "yellow": {
+   "BacPri": "#fcfaef",
+   "BacSec": "#f9f3dc",
+   "BacInt": "#fdf6e6",
+   "BacTer": "#f2e3b7",
+   "TexPri": "#655121",
+   "TexSec": "#cb9434",
+   "TexTer": "#d8c283"
+  },
+  "orange": {
+   "BacPri": "#fcf7f4",
+   "BacSec": "#fbebde",
+   "BacInt": "#fdf1e8",
+   "BacTer": "#f3ddcb",
+   "TexPri": "#6a4222",
+   "TexSec": "#d27b2d",
+   "TexTer": "#cba27d"
+  },
+  "red": {
+   "BacPri": "#fdf6f6",
+   "BacSec": "#fce9e7",
+   "BacInt": "#fdf0ef",
+   "BacTer": "#f7d9d5",
+   "TexPri": "#6d3531",
+   "TexSec": "#cf5148",
+   "TexTer": "#d0988d"
+  },
+  "green": {
+   "BacPri": "#f6f9f7",
+   "BacSec": "#e8f1ec",
+   "BacInt": "#eff5f1",
+   "BacTer": "#d7e6dd",
+   "TexPri": "#2a533c",
+   "TexSec": "#50946e",
+   "TexTer": "#8bb79d"
+  },
+  "blue": {
+   "BacPri": "#f3f9fd",
+   "BacSec": "#e5f2fc",
+   "BacInt": "#ecf5fd",
+   "BacTer": "#cee3f7",
+   "TexPri": "#264a72",
+   "TexSec": "#387dc9",
+   "TexTer": "#83abe1"
+  },
+  "purple": {
+   "BacPri": "#faf7fc",
+   "BacSec": "#f3ebf9",
+   "BacInt": "#f6f0fb",
+   "BacTer": "#e8dbf2",
+   "TexPri": "#553b69",
+   "TexSec": "#9a6bb4",
+   "TexTer": "#b49cc6"
+  },
+  "pink": {
+   "BacPri": "#fcf7f9",
+   "BacSec": "#fae9f1",
+   "BacInt": "#fbeff5",
+   "BacTer": "#f4d8e4",
+   "TexPri": "#68354e",
+   "TexSec": "#c14c8a",
+   "TexTer": "#c897ad"
+  },
+  "brown": {
+   "BacPri": "#faf8f6",
+   "BacSec": "#f5ede9",
+   "BacInt": "#f7f2f0",
+   "BacTer": "#ebdfd7",
+   "TexPri": "#584437",
+   "TexSec": "#9f765a",
+   "TexTer": "#bca290"
+  },
+  "gray": {
+   "BacPri": "#f9f8f7",
+   "BacSec": "#f0efed",
+   "BacInt": "#f4f3f3",
+   "BacTer": "#e6e5e3",
+   "TexPri": "#494846",
+   "TexSec": "#7d7a75",
+   "TexTer": "#ada9a3"
+  }
+ },
+ "dark": {
+  "yellow": {
+   "BacPri": "#23221a",
+   "BacSec": "#504425",
+   "BacInt": "#2d2b20",
+   "BacEle": "#373325",
+   "BacTer": "#836426",
+   "TexPri": "#f9f3dc",
+   "IcoSec": "#d8c283",
+   "IcoTer": "#cb9434"
+  },
+  "orange": {
+   "BacPri": "#231e1b",
+   "BacSec": "#53361f",
+   "BacInt": "#30241c",
+   "BacEle": "#3d2a1d",
+   "BacTer": "#88522f",
+   "TexPri": "#fbebde",
+   "IcoSec": "#cba27d",
+   "IcoTer": "#d27b2d"
+  },
+  "red": {
+   "BacPri": "#241d1d",
+   "BacSec": "#502c29",
+   "BacInt": "#332221",
+   "BacEle": "#412725",
+   "BacTer": "#924943",
+   "TexPri": "#fce9e7",
+   "IcoSec": "#d0988d",
+   "IcoTer": "#cf5148"
+  },
+  "green": {
+   "BacPri": "#1b211d",
+   "BacSec": "#263d30",
+   "BacInt": "#202b24",
+   "BacEle": "#24342b",
+   "BacTer": "#37674c",
+   "TexPri": "#e8f1ec",
+   "IcoSec": "#8bb79d",
+   "IcoTer": "#50946e"
+  },
+  "blue": {
+   "BacPri": "#1a2027",
+   "BacSec": "#233850",
+   "BacInt": "#1e2834",
+   "BacEle": "#213041",
+   "BacTer": "#355f8b",
+   "TexPri": "#e5f2fc",
+   "IcoSec": "#83abe1",
+   "IcoTer": "#387dc9"
+  },
+  "purple": {
+   "BacPri": "#221d25",
+   "BacSec": "#3c2d47",
+   "BacInt": "#2c2332",
+   "BacEle": "#36293f",
+   "BacTer": "#674d7b",
+   "TexPri": "#f3ebf9",
+   "IcoTer": "#9a6bb4"
+  },
+  "pink": {
+   "BacPri": "#261c20",
+   "BacSec": "#4e2b3c",
+   "BacInt": "#332129",
+   "BacEle": "#3f2631",
+   "BacTer": "#7b4760",
+   "TexPri": "#fae9f1",
+   "IcoSec": "#c897ad",
+   "IcoTer": "#c14c8a"
+  },
+  "brown": {
+   "BacPri": "#25201d",
+   "BacSec": "#45362d",
+   "BacInt": "#2f2722",
+   "BacEle": "#382d26",
+   "BacTer": "#6d5340",
+   "TexPri": "#f5ede9",
+   "IcoSec": "#bca290",
+   "IcoTer": "#9f765a"
+  }
+ }
+}

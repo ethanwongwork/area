@@ -242,12 +242,51 @@ export const VIVID_Y = (1 + 0.05) / INK_TARGET.text - 0.05;
  * and are unchanged at the defaults. */
 export const TONAL_ROLES = ["accent", "danger", "warning", "caution", "success", "info", "discovery", "pink", "gray", "brown"] as const;
 export const TONAL_Y = 0.141;
+/**
+ * Tone contrast (owner, 2026-11-02: "allow for more vibrant colors in places where accessibility limits the vibrancy"): the
+ * lowest WCAG ratio a status or label tone's words keep on the grounds they are solved on (scale.ts `solveInk`). 4.5 is
+ * AA and the default; below it a theme trades contrast for colour, on purpose and said out loud (docs/CONTRAST.md).
+ * The accent's ink (links, selection) and every neutral ink keep 4.5 at every value.
+ */
+export const TONE_FLOORS = [4.5, 4, 3.5, 3, 2.75, 2.5] as const;
+export type ToneFloor = (typeof TONE_FLOORS)[number];
+export const DEFAULT_TONE_FLOOR: ToneFloor = 4.5;
+/** A floor as a token suffix: 4.5 → "450", 2.75 → "275". */
+export const toneFloorId = (floor: number) => String(Math.round(floor * 100));
+/** The roles whose words follow Tone contrast: the status tones and the label tones that have a hue. */
+export const FLOOR_ROLES = ["danger", "warning", "caution", "success", "info", "discovery", "pink", "brown"] as const;
+/** The text target the Layers model darkens a floor's inks to on a gray page: the floor plus the text rule's margin. */
+export const toneFloorTarget = (floor: number) => floor + (INK_TARGET.text - DEFAULT_TONE_FLOOR);
+/** The luminance bound a floor's light inks are solved under, which the Layers model darkens them by on a gray page. At
+ * 4.5 it is TONAL_Y, so the default paints as it did; below, the brightest ink that keeps the floor's target on the
+ * deepest ground text sits on over a white page at any Layer contrast, so a white page never darkens them (as TONAL_Y
+ * holds) and the tints the words sit on are what bind: the pressed tint lands on the floor. A tighter bound, TONAL_Y's
+ * headroom kept in proportion, held yellow at 2.85:1 on its tint at 2.5 (2026-11-02). */
+export const toneFloorY = (floor: number) =>
+  floor === DEFAULT_TONE_FLOOR ? TONAL_Y : (whiteDeepest() ** 3 + 0.05) / toneFloorTarget(floor) - 0.05;
+let deepestOnWhite: number | undefined;
+/** The deepest ground text sits on (recessed, card or tile) over a white page, at every Layer contrast step. */
+const whiteDeepest = () => deepestOnWhite ??= Math.min(...LAYER_STEPS.map(n => {
+  const m = layerLightness("light", 100, n);
+  return Math.min(m.recessed, m.card, m.tile);
+}));
+/** Dark's APCA floor for a tone's words: Lc 60 at 4.5 (the reviewed one), 8 less per WCAG point below it (Lc 44 at
+ * 2.5, about APCA's floor for large or bold text). */
+export const toneFloorApca = (floor: number) => 60 - (DEFAULT_TONE_FLOOR - floor) * 8;
+/** 1 where Tone contrast applies, 0 wherever Contrast is raised at all (Medium, More, or the OS asking under System):
+ * there every tone is back at 4.5. */
+export const TONE_FLOOR_ON = "(1 - min(1, round(up, var(--area-contrast-more, 0), 1)))";
 /** Every hued ink the model derives: its token, the rung the axes write and the luminance bound it is solved for. */
 export const HUED_INKS = [
   ...VIVID_ROLES.map(role => ({ token: `fg-${role}-vivid`, bound: VIVID_Y, darken: "vivid" as const })),
-  ...TONAL_ROLES.map(role => ({ token: `fg-${role}`, bound: TONAL_Y, darken: "tonal" as const })),
+  // The status and label tones follow Tone contrast: their darken is solved for the floor's target and bound.
+  ...TONAL_ROLES.map(role => ({ token: `fg-${role}`, bound: TONAL_Y, darken: (FLOOR_ROLES as readonly string[]).includes(role) ? "floor" as const : "tonal" as const })),
 ];
-const darkenFor = (page: number, bound: number) => 1 - Math.min(1, Math.cbrt(Math.max(0, (page ** 3 + 0.05) / INK_TARGET.text - 0.05) / bound));
+const darkenFor = (page: number, bound: number, target: number = INK_TARGET.text) => 1 - Math.min(1, Math.cbrt(Math.max(0, (page ** 3 + 0.05) / target - 0.05) / bound));
+/** The status and label tones' darken at a Tone contrast floor on a light ground of lightness `page`, tinted by `chroma`
+ * as `tintedDarken` counts it: `layer-light-floor-darken` in numbers. At 4.5 it is the tonal one. */
+export const toneFloorDarken = (page: number, floor: number, chroma = 0) =>
+  darkenFor(page - HUED_INK_MARGIN * Math.max(0, chroma - HUED_INK_FREE), toneFloorY(floor), toneFloorTarget(floor));
 /**
  * On a tinted page the hued inks darken as if the page were this share of its tint darker (2026-10-23): the darkening is
  * solved for a gray page's luminance, and a tint lowers the page's luminance at the same lightness (a red or pink tint at
@@ -512,6 +551,9 @@ export function layerLightnessCss(): Record<string, string> {
     out[`layer-dark-${ground}-fill-${i}`] = df(v(`layer-dark-${ground}`), dm[i]!);
   });
   const cube = (x: string) => `pow(${x}, 3)`;
+  // A Tone contrast number, or the default's wherever Contrast is raised (TONE_FLOOR_ON).
+  const floorAt = (name: "target" | "y", fallback: number) =>
+    `calc(${num(fallback)} + (var(${P}tone-floor-${name}, ${num(fallback)}) - ${num(fallback)}) * ${TONE_FLOOR_ON})`;
   const root3 = (x: string) => `pow(${x}, ${num(1 / 3)})`;
   const inkLightCss = (bg: string, ratio: string, today: number) => `min(${num(today)}, ${root3(`max(0, (${cube(bg)} + 0.05) / ${ratio} - 0.05)`)})`;
   const inkLight = (bg: string, ratio: number, today: number) => `min(${num(today)}, ${root3(`max(0, (${cube(bg)} + 0.05) / ${num(ratio)} - 0.05)`)})`;
@@ -531,6 +573,9 @@ export function layerLightnessCss(): Record<string, string> {
     "layer-dark-edge": inkDark(top(0), INK_TARGET.edge, INK_TODAY.dark.edge),
     "layer-light-vivid-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedVivid)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(VIVID_Y)}`)}))`,
     "layer-light-tonal-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedTonal)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(TONAL_Y)}`)}))`,
+    // The status and label tones' darken, for the Tone contrast floor's target and bound (axes/tone-floor.ts); the
+    // tonal one's at 4.5 and wherever Contrast is raised.
+    "layer-light-floor-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedTonal)} + 0.05) / ${floorAt("target", INK_TARGET.text)} - 0.05) / ${floorAt("y", TONAL_Y)}`)}))`,
     "layer-dark-tint-lift": `clamp(0, calc((max(${v("layer-dark-raised")}, ${v("layer-dark-card")}, ${v("layer-dark-tile")}, ${v("layer-dark-well")}) - ${num(TINT_LIFT.layer.from)}) * ${num(TINT_LIFT.layer.perL)}), 1)`,
     "layer-dark-tint-lift-fill": `clamp(0, calc((${top(1)} - ${num(TINT_LIFT.fill.from)}) * ${num(TINT_LIFT.fill.perL)}), 1)`,
   });

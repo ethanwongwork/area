@@ -80,7 +80,8 @@ export const NEUTRAL_SCALES: readonly ScaleSpec[] = [
  * orange, pink, red). Like brown, not accent candidates: they stay out of the accent list and its contrast gates.
  */
 export const DATA_SCALES: readonly ScaleSpec[] = Object.entries(DATA_HUES).map(([id, hue]) =>
-  ({ ...generatedSpec(hueScaleId(hue))!, id, family: generatedFamily(hue) }));
+  // Without the neighbours' hue drift (curves.ts HUE_DRIFT, 2026-11-02): the series steps were approved before it.
+  ({ ...generatedSpec(hueScaleId(hue))!, drift: undefined, id, family: generatedFamily(hue) }));
 
 /** Every family, neutrals first, then the hues around the wheel with the data families in their places, then brown. */
 const HUE_ORDER = ["red", "orange", "yellow", "chartreuse", "lime", "green", "mint", "teal", "cyan", "sky", "blue", "indigo", "purple", "violet", "pink"];

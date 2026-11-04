@@ -19,7 +19,7 @@
 import PALETTE from "./palette.json" with { type: "json" };
 import { SRGB, clampRgb, oklabToRgb, oklchToRgb, parseHex, rgbToOklab, toHex } from "./oklab.ts";
 import { maxChromaAt } from "./gamut.ts";
-import { CHROMA_TRIM, LEVELS } from "./curves.ts";
+import { CHROMA_TRIM, HUE_DRIFT, LEVELS } from "./curves.ts";
 import type { ScaleSpec } from "./scale.ts";
 
 /** One rung of a palette family: its hex and OKLCH, as palette.json writes it. */
@@ -79,15 +79,21 @@ export function generatedFamily(hue: number): Record<string, PaletteRung> {
   return out;
 }
 
-/** A generated family's spec: chromatic, its neighbours' light-end trim mixed, and the nearer neighbour's label. */
+/** A generated family's spec: chromatic, its neighbours' light-end trim and hue drift mixed, and the nearer neighbour's label. */
 export function generatedSpec(id: string): ScaleSpec | undefined {
   const match = HUE_ID.exec(id);
   if (!match) return undefined;
   const hue = Number(match[1]);
   const { lo, hi, t } = neighbours(hue);
   const trim = (CHROMA_TRIM[lo.id] ?? 1) + ((CHROMA_TRIM[hi.id] ?? 1) - (CHROMA_TRIM[lo.id] ?? 1)) * t;
+  const none = { light: 0, dark: 0 }, a = HUE_DRIFT[lo.id] ?? none, b = HUE_DRIFT[hi.id] ?? none;
+  const drift = { light: round(a.light + (b.light - a.light) * t), dark: round(a.dark + (b.dark - a.dark) * t) };
   const foreground = t < 0.5 ? lo.foreground : hi.foreground;
-  return { id, kind: "chromatic", trim: round(trim), ...(foreground === "dark" ? { solidForeground: "dark" as const } : {}) };
+  return {
+    id, kind: "chromatic", trim: round(trim),
+    ...(drift.light || drift.dark ? { drift } : {}),
+    ...(foreground === "dark" ? { solidForeground: "dark" as const } : {}),
+  };
 }
 
 /**

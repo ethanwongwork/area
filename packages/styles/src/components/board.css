@@ -19,15 +19,15 @@
   }
 
   .area-board-column {
-    /* The column's colour: Tag's ink for the same colour (tag.css), so a column and a Tag of one colour match.
-       Neutral uses the default ink. */
+    /* The column's colour: its tone's words (`fg-<tone>`, the ink a Tag of that colour shows), and its ground, half its
+       tone's resting tint over the page (owner, 2026-11-03: Tag and Board onto the tone tokens), so Tone tint and Tone
+       contrast reach a column and a column matches its Tag. Neutral uses the default ink over no tint. */
     --_color: var(--area-fg-default);
-    /* spec: Notion's column tints run 3% (default, purple) to 6.3% (yellow); unmeasured colours 3.5%. */
-    --_tint: 3%;
-    /* The colour as text (the count, the add row): its plates are translucent, so it follows the ground, darkening with
-       the light page as the vivid inks do and lightening with the dark layers as Tag's labels do (Layers sweep
-       2026-10-16: 4.18:1 at light 90, 4.06:1 at dark 24 + 8). */
-    --_ink: light-dark(color-mix(in oklab, var(--_color), black calc(var(--area-layer-light-vivid-darken) * 100%)), color-mix(in oklab, var(--_color), white calc(var(--area-layer-dark-tint-lift) * 100%)));
+    --_surface-tone: transparent;
+    /* The colour as text (the count, the add row): the tone's words already follow a light page (the Layers model darkens
+       them); in dark the column's ground is translucent, so they lighten with the dark layers as before (Layers sweep
+       2026-10-16: 4.06:1 at dark 24 + 8). Neutral darkens with the light page as the vivid inks do. */
+    --_ink: light-dark(var(--_color), color-mix(in oklab, var(--_color), white calc(var(--area-layer-dark-tint-lift) * 100%)));
     display: flex;
     flex-direction: column;
     flex: none;
@@ -39,22 +39,23 @@
        default, Card's, Dialog's and Composer's outer corner (owner, 2026-10-18: "too round compared to the other
        components"; it was 20, the card's container 12 plus 8, the roundest surface in the system). */
     border-radius: calc(var(--area-radius-row) + var(--area-space-8) * var(--area-radius-concentric));
-    background-color: color-mix(in oklab, var(--_color) var(--_tint), transparent);
+    background-color: color-mix(in oklab, var(--_surface-tone) 50%, transparent);
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
   /* Custom colours (owner, round 7: "custom colors rather than semantic"), each Tag's ink of that colour. */
-  .area-board-column--neutral { --_color: var(--area-fg-default); --_tint: 3%; } /* spec: Notion's default rgba(66,35,3,.03) */
-  .area-board-column--gray { --_color: var(--area-fg-gray); --_tint: 3.5%; }
-  .area-board-column--brown { --_color: light-dark(var(--area-fg-brown), var(--area-fg-brown-vivid)); --_tint: 3.5%; }
-  .area-board-column--orange { --_color: light-dark(#994500, var(--area-fg-warning-vivid)); --_tint: 3.5%; } /* spec: Tag orange */
-  .area-board-column--yellow { --_color: light-dark(#7c5800, #e2b968); --_tint: 6.3%; } /* spec: Tag yellow; Notion rgba(207,175,0,.063) */
-  .area-board-column--green { --_color: light-dark(#006f2c, #85ce94); --_tint: 3.5%; } /* spec: Tag green; Notion rgba(3,87,31,.035) */
-  .area-board-column--blue { --_color: light-dark(#0056cf, var(--area-fg-info-vivid)); --_tint: 4.7%; } /* spec: Tag blue; Notion rgba(0,128,213,.047) */
-  .area-board-column--purple { --_color: light-dark(#7322d7, var(--area-fg-discovery-vivid)); --_tint: 3%; } /* spec: Tag purple; Notion rgba(98,3,161,.03) */
-  .area-board-column--pink { --_color: light-dark(#b50060, var(--area-fg-pink-vivid)); --_tint: 3.5%; } /* spec: Tag pink */
-  .area-board-column--red { --_color: light-dark(#bc002d, var(--area-fg-danger-vivid)); --_tint: 3.5%; } /* spec: Tag red */
+  /* Neutral keeps its 3% wash of the default ink (half of 6%). */
+  .area-board-column--neutral { --_color: var(--area-fg-default); --_surface-tone: color-mix(in oklab, var(--area-fg-default) 6%, transparent); --_ink: light-dark(color-mix(in oklab, var(--_color), black calc(var(--area-layer-light-vivid-darken) * 100%)), var(--_color)); }
+  .area-board-column--gray { --_color: var(--area-fg-gray); --_surface-tone: var(--area-gray-surface); --_surface-tone-hover: var(--area-gray-surface-hover); --_surface-tone-active: var(--area-gray-surface-active); }
+  .area-board-column--brown { --_color: var(--area-fg-brown); --_surface-tone: var(--area-brown-surface); --_surface-tone-hover: var(--area-brown-surface-hover); --_surface-tone-active: var(--area-brown-surface-active); }
+  .area-board-column--orange { --_color: var(--area-fg-warning); --_surface-tone: var(--area-warning-surface); --_surface-tone-hover: var(--area-warning-surface-hover); --_surface-tone-active: var(--area-warning-surface-active); }
+  .area-board-column--yellow { --_color: var(--area-fg-caution); --_surface-tone: var(--area-caution-surface); --_surface-tone-hover: var(--area-caution-surface-hover); --_surface-tone-active: var(--area-caution-surface-active); }
+  .area-board-column--green { --_color: var(--area-fg-success); --_surface-tone: var(--area-success-surface); --_surface-tone-hover: var(--area-success-surface-hover); --_surface-tone-active: var(--area-success-surface-active); }
+  .area-board-column--blue { --_color: var(--area-fg-info); --_surface-tone: var(--area-info-surface); --_surface-tone-hover: var(--area-info-surface-hover); --_surface-tone-active: var(--area-info-surface-active); }
+  .area-board-column--purple { --_color: var(--area-fg-discovery); --_surface-tone: var(--area-discovery-surface); --_surface-tone-hover: var(--area-discovery-surface-hover); --_surface-tone-active: var(--area-discovery-surface-active); }
+  .area-board-column--pink { --_color: var(--area-fg-pink); --_surface-tone: var(--area-pink-surface); --_surface-tone-hover: var(--area-pink-surface-hover); --_surface-tone-active: var(--area-pink-surface-active); }
+  .area-board-column--red { --_color: var(--area-fg-danger); --_surface-tone: var(--area-danger-surface); --_surface-tone-hover: var(--area-danger-surface-hover); --_surface-tone-active: var(--area-danger-surface-active); }
 
   /* spec: Notion's group header, 40 tall; the title starts on the cards' text (8 + the card's 10). */
   .area-board-column__header {
@@ -66,10 +67,10 @@
   }
   /* The group's name in plain text (owner, round 7: no badge title), the UI type at the strong weight. */
   .area-board-column__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--area-weight-strong); }
-  /* The count is a soft Badge; in a coloured column it takes the colour, as the tint does. */
+  /* The count is a soft Badge; in a coloured column it is that tone's soft Badge: its resting tint under its words. */
   .area-board-column:not(.area-board-column--neutral) .area-board-column__count {
-    --_surface: color-mix(in oklab, var(--_color) 12%, transparent);
-    --_tone-fg: var(--_ink);
+    --_surface: var(--_surface-tone);
+    --_tone-fg: var(--_color);
   }
   /* The neutral column's count is muted text on the mark over the column's 3% tint, a step deeper than the mark the
      Layers model solves muted for: it darkens with the light page as the vivid inks do (4.36:1 at 95 + 0 before). */
@@ -119,9 +120,9 @@
   .area-board-column:not(.area-board-column--neutral) { --_ring-strong: var(--_ink); }
   .area-board-column:not(.area-board-column--neutral) .area-board-column__add {
     --_add-ink: var(--_ink);
-    /* The card's hover strength, 6%; pressed at twice it, 12%. */
-    --_add-plate: color-mix(in oklab, var(--_color) 6%, transparent);
-    --_add-plate-active: color-mix(in oklab, var(--_color) 12%, transparent); /* spec: twice the hover, as Notion 5% → 10% */
+    /* The tone's own hover and pressed tints, which its words are solved on (2026-11-03; were 6% and 12% of the ink). */
+    --_add-plate: var(--_surface-tone-hover);
+    --_add-plate-active: var(--_surface-tone-active);
   }
   @media (hover: hover) { .area-board-column__add:hover { background-color: var(--_add-plate); transition-duration: var(--area-hover-in); } }
   .area-board-column__add:active { background-color: var(--_add-plate-active); transition-duration: var(--area-press-in); }

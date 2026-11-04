@@ -1,7 +1,7 @@
 # Handoff
 
-## Current state (2026-11-01)
-- **Chat kit, branch `claude/feed-kits-area-chat-2a1286` (uncommitted, 2026-11-02).** Owner: start a chat kit beside the
+## Current state (2026-11-03)
+- **Chat kit, branch `claude/feed-kits-area-chat-2a1286` (committed b9cef461, PR to main, 2026-11-03).** Owner: start a chat kit beside the
   feed kit; do chats follow different rules; research ChatGPT, Claude Code, Cursor. Research in
   `docs/research/chat-kit-2026-11-02/` (live.md: ChatGPT and Claude measured in the owner's Chrome; claude-desktop.md and
   cursor.md from the app bundles). Answer: same components, different composition; type and spacing never change with
@@ -26,6 +26,22 @@
   keys, Dividers lines, Skip in the free row, close in the head); Timeline drops its "·" (time at the line's end, 12; new
   `time` part, `sep` gone); activity log: group-label dates, tables for changes, bare toned 16 marks with EVENTS meanings
   and an Event marks key in both kits.
+- **Gold yellow + Tone contrast, worktree `notion-ui-yellow-style-d8e00b` (uncommitted).** Owner wanted Notion's banner
+  gold (measured live: #cb9434 on #f9f3dc, 2.41:1) and a setting that trades accessibility for vibrancy in banners and badges.
+  Built: yellow `HUE_DRIFT` (curves.ts, +8° light end, −10° from 600); tone inks solved between steps (scale.ts `solveInk`);
+  axis `tone-contrast` 4.5 (default) … 2.5 (axes/tone-floor.ts) for danger/warning/caution/success/info/discovery/pink/brown
+  `fg-*`, accent and neutral never move, raised Contrast returns 4.5; floor darken `layer-light-floor-darken`; gate
+  `contrast/tone-floor.test.ts`; Inspector bar under Emphasis; docs THEMING/CONTRAST/DESIGN_SYSTEM. All checks pass. Review
+  artifact Jtcd5D8eEN1tG8z4v66tdR. Round 3 (owner: "go with your recs, then work on the tints"): light soft tints = neutral
+  fill lightness in the family's light-end hue at `LIGHT_TONAL_CHROMA` 0.025/0.035/0.045, lightness giving way where sRGB
+  can't hold it (red/blue/purple/pink ~0.95, as Notion's banner grounds); brown ×0.44 (`VIVID_PEAK_CHROMA`); dark tints take
+  the same hue rule. Evidence docs/research/tone-tints-2026-11-02/ (Notion light+dark read without switching theme;
+  ChatGPT Apps SDK). Round 4 ("Yes, build it"): axis `tone-tint` 0/50/100/130/160 (axes/tone-tint.ts, `toneDerived` picks
+  surfaces by tint and inks by tint × floor; strength mixed once after the pick), lazy `tint`/`inkAt` on TonalChoice; dark
+  tints keep the fill's lightness (chroma gives way), light keeps chroma (lightness gives way). Gate covers every tint ×
+  floor. tokens.css 400 KB (346 before both settings). Round 5 (2026-11-03, "Yes, move them"): Tag = its tone's soft Badge
+  (`<tone>-surface`, `fg-<tone>`), Board column = half the tone's tint, count = tone Badge, add row = tone hover/pressed tints;
+  layers.test.ts guards Board's words light and dark. No product names in copy (owner). Open: commit + PR. Electron not relaunched: another session owned 4400.
 - **Data views exploration, branch `claude/table-data-viz-templates-3538ee` (committed, PR to main, 2026-11-02).** Owner asked to
   align Table and design simple modular data-vis templates (Cursor, GitHub, Notion; light colours, detailed labels). Research
   only, nothing in packages or the app changed: `docs/research/data-views-2026-11-01/` (README with Cursor's chat-chart values

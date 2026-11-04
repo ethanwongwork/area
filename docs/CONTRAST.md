@@ -37,6 +37,27 @@ presented as universally conforming. A token test passing is not proof of render
 conformance on arbitrary backgrounds. Historical paint
 measurements are in Git history (`archive/docs/batches/V01/`, removed after commit `2f90f2d`).
 
+## Tone contrast, the one deliberate exception
+
+Tone contrast (`axes/tone-floor.ts`, 2026-11-02) lets a theme trade contrast for colour in one place: the words of the
+status and label tones (`fg-danger`, `-warning`, `-caution`, `-success`, `-info`, `-discovery`, `-pink`, `-brown`) on the
+grounds they are solved on. Its default, 4.5, is AA and is what every other check here assumes. Below it, down to 2.5,
+a theme is **below WCAG AA for those words**, by the owner's choice, for brighter, more saturated status colour.
+
+- **The gate follows the floor; it is never dropped.** `contrast/tone-floor.test.ts` checks every floor at every Tone tint
+  (0 to 160) in both modes, at every Status strength: each tone's ink clears the floor on its tints at rest, hover and pressed, the page, the surface
+  and the subtle ground, and in dark the floor's APCA too (Lc 60 at 4.5, 8 less per point, Lc 44 at 2.5). On a gray light
+  page the floor's darken (`layer-light-floor-darken`) keeps the floor at every ground and layer step, and white never
+  darkens the inks.
+- **What never moves:** the accent's ink (links, selection), every neutral ink, words on a solid fill, the vivid inks,
+  edges, focus and indicators. All of those keep the targets above at every floor.
+- **More contrast wins.** Any raised Contrast, including the OS asking for more under System, puts every tone back at
+  4.5, in the inks and in their darken.
+- **Where tone words show** (the stylesheets that read a floor tone's `fg-<tone>`, 2026-11-02): Surface's tone callouts,
+  Link, Citation, Button's tone variants, Badge, Calendar, Tree view, File upload, Edit summary, Chip, Turn notice, Tag,
+  Stepper, Step, Queue, Color, Box model, Board and Attachment. A theme that lowers the floor lowers it for all of them.
+  Field and Choice messages use the vivid inks, which never move.
+
 ## Roles
 
 - `border-decorative`: seams inside a container (Panel, Code block and Command palette rules, Menu
