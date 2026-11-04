@@ -6,9 +6,10 @@
  * instead (Claude Code's). Measured from Claude Code's permission prompt and Codex's approval modal
  * (docs/specs/approval.md).
  *
- * Paint (cleanup pass 2026-10-19, owner round 49: "are the backplate colors correct, are the 1 2 3 and esc using kbd
- * or badges?"): one backplate only, the row plate under the pointer or focus (Menu's). The numbers and Esc are quiet
- * Kbd, Menu's shortcut paint (unboxed, muted); the field is part of its row, with no fill of its own.
+ * Paint (owner, 2026-11-04, "Filled, in a card"): every answer a plate on the control fill, 4 apart, no hairlines; the
+ * hover step, focus, press and the chosen fill on it; the field's row filled as an answer. The numbers and Esc are
+ * quiet Kbd (unboxed, muted). Until 2026-11-04 the rows were Menu's, painted only under the pointer or focus (cleanup
+ * pass 2026-10-19, round 49).
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-approval {
@@ -18,14 +19,24 @@
        one-line height, square at Sharp (a cohesion test keeps the two equal). */
     --_approval-height: calc(var(--area-control-md) + 2 * var(--_approval-inset));
     --_approval-term: calc((var(--_approval-inset) - var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)) * var(--area-radius-concentric));
-    --_approval-radius: min(calc(var(--_approval-height) / 2), max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_approval-term), var(--area-radius-container)))));
+    /* Public hook `--area-approval-corner`: a host that sets the card beside another frame (a visual question's Asset
+       card) gives both one corner; docked in the composer's place it stays the Composer's. */
+    --_approval-radius: var(--area-approval-corner, min(calc(var(--_approval-height) / 2), max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_approval-term), var(--area-radius-container))))));
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--area-ui-cluster);
     min-inline-size: 0;
     /* The agent card's list padding (Plan, Edit summary: 4 in the frame), so its words land on their 12 column (owner,
        2026-11-02: "the alignment looks off"; it was the Composer's 8, 2 further in). The corner stays the Composer's. */
-    padding: var(--area-space-4);
+    /* The mat and the row inset (owner, 2026-11-04: "is this padding around the answer containers correct? the inset
+       corner between the inputs and the outer container dont look right"; Cursor's question tray, read from its bundle:
+       content 12 in, each answer's plate hanging 6 out so its key lines up with the question): filled answers sit 6 from
+       the card's outer edge (the edge counted once) and hold their key 6 in, so every word in the card (title, keys,
+       the hint) starts 12 in, the chat's frame inset, and a 10 answer corner is concentric in a 16 card (16 − 6). Was 4
+       and 8: the plates nearly touched the edge, 10 inside 16 at 5. */
+    --_approval-row: var(--area-space-6);
+    --_approval-mat: max(0px, calc(var(--area-space-6) - var(--area-stroke-width)));
+    padding: var(--_approval-mat);
     border: var(--area-stroke-width) solid var(--area-composer-edge);
     border-radius: var(--_approval-radius);
     background: var(--area-input-bg);
@@ -38,10 +49,10 @@
   /* The question and why, one block on the rows' column (the row inset), so title, description, numbers and hint share
      an edge. */
   .area-approval__head,
-  .area-approval__foot { margin: 0; padding-inline: var(--area-ui-row-inset); }
+  .area-approval__foot { margin: 0; padding-inline: var(--_approval-row); }
   /* A trailing control's plate sits (row − control) / 2 from the card's end, never under 4 (the agent chat's card head
      rule, cleanup pass 2026-10-19): the row inset is given back and that offset taken instead. */
-  .area-approval { --_approval-trail: calc(max(var(--area-space-4), (var(--area-ui-row) - var(--area-control-sm)) / 2) - var(--area-ui-row-inset) - var(--area-space-4)); /* the shell's 4 given back too: Edit summary's card end */ }
+  .area-approval { --_approval-trail: calc(max(var(--area-space-4), (var(--area-ui-row) - var(--area-control-sm)) / 2) - var(--_approval-row) - var(--_approval-mat)); /* the shell's mat given back too: Edit summary's card end */ }
   /* The head's first line sits in a row, as every line after it does (inset.css, first-line alignment; round 54, owner:
      "is the padding/margin at the top correct?"): half of what the row leaves around the title's line goes above it, so
      the room above the title matches the room under the hint's row. */
@@ -63,20 +74,28 @@
   /* A key named in the hint's sentence is a keycap (Kbd's rule, round 52: a key named in prose is filled; a key that
      labels a row or a button is quiet). */
   .area-approval__detail { min-inline-size: 0; }
-  /* Menu's list: its break between rows (ui-row-gap: 1) so adjacent plates stay distinct. */
-  .area-approval__options { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-row-gap); }
-  /* A choice is a Menu row: the row's height, inset, gap and corner; the row plate under the pointer and on focus. */
+  /* Filled answers (owner, 2026-11-04, "Filled, in a card", Answer Treatments B9tSn3TNB6AVNvQ718Azjm): every answer is a
+     plate on the control fill at rest, so the card's choices read as things to press before the pointer finds them; the
+     plates sit 4 apart (a grid's plates' room) and part themselves, so no hairlines. It was Menu's list: rows with no
+     paint at rest, 1 apart, hairlines between rows with notes. */
+  .area-approval__options { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-4); }
+  /* A choice is a Menu row in shape (its height, inset, gap and corner) on the control fill; the hover step, focus,
+     press and chosen fills on it, as a soft field's. */
   .area-approval__option {
     display: flex;
     align-items: center;
-    gap: var(--area-gap-row); /* Menu's row gap (surface.css --_menu-gap): 12, compact 8, so the label lands on the list column */
+    gap: var(--area-ui-cluster); /* key to words 8, compact 6 (owner, 2026-11-04: "is the gap between the number and the text correct?"; Cursor 8 after a 20 key, Claude 10 after 28; was Menu's 12) */
     min-block-size: var(--area-ui-row);
     min-inline-size: 0;
     margin: 0;
-    padding: 0 var(--area-ui-row-inset);
+    padding: 0 var(--_approval-row);
     border: 0;
     border-radius: var(--area-radius-row);
-    background: none;
+    /* A soft field's paint, term for term (input.css .area-input--soft; owner, 2026-11-04: "make sure the fill color and
+       stroke of the answers somewhat matches what the fill and stroke of the inputs"): its fill and its edge (none, or
+       the strong edge where Contrast asks for one), drawn inside so a row keeps its size beside a field. */
+    background: var(--area-input-bg-soft);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-input-edge-soft);
     color: inherit;
     font: inherit;
     text-align: start;
@@ -103,7 +122,7 @@
   /* The key square sits as far from the plate's top as from its side (the row inset, 8), not the note row's 6 over an 18
      line that let the 22 key ride 4 from the top (owner, 2026-11-03: "fix the inset padding here"); the label's first
      line centres on the key. */
-  .area-approval:has(.area-approval__option-description) .area-approval__option { align-items: flex-start; padding-block: var(--area-ui-row-inset); }
+  .area-approval:has(.area-approval__option-description) .area-approval__option { align-items: flex-start; padding-block: var(--_approval-row); }
   .area-approval:has(.area-approval__option-description) .area-approval__option > :is(.area-approval__check, .area-approval__skip) { align-self: center; }
   .area-approval:has(.area-approval__option-description) .area-approval__option > .area-approval__key { align-items: center; block-size: var(--area-control-xs); }
   .area-approval:has(.area-approval__option-description) .area-approval__option > :is(.area-approval__lines, .area-approval__label, .area-approval__field) { padding-block-start: calc((var(--area-control-xs) - var(--area-text-base-leading)) / 2); }
@@ -113,25 +132,6 @@
      (inset.css, first-line alignment); the check stays centred, as Menu's does. */
   .area-approval__option:has(.area-approval__option-description) { align-items: flex-start; padding-block: 6px; /* spec: Menu's row with a note */ }
   .area-approval__option:has(.area-approval__option-description) > .area-approval__key { align-items: center; block-size: var(--area-text-base-leading); }
-  /* Options a light line apart (2026-11-03, the measured question card's hairlines): the Dividers stroke, inset to the
-     rows' text column, gone beside a row under the pointer, focused or chosen, so a plate never sits on a line. A plain
-     approval's short rows keep no lines. */
-  .area-approval:has(.area-approval__option-description) .area-approval__option { position: relative; }
-  .area-approval:has(.area-approval__option-description) .area-approval__option + .area-approval__option::before {
-    content: "";
-    position: absolute;
-    inset-inline: var(--area-ui-row-inset);
-    inset-block-start: calc(-0.5 * var(--area-ui-row-gap) - var(--area-stroke-width) / 2);
-    block-size: var(--area-stroke-width);
-    background-color: var(--area-edge-dividers);
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
-  }
-  .area-approval__option:is(:focus-visible, [data-selected]) + .area-approval__option::before,
-  .area-approval__option:is(:focus-visible, [data-selected])::before { background-color: transparent; }
-  @media (hover: hover) {
-    .area-approval__option:hover + .area-approval__option::before,
-    .area-approval__option:hover::before { background-color: transparent; }
-  }
   .area-approval__option:has(.area-approval__option-description) > .area-approval__check { align-self: center; }
   .area-approval__lines { display: flex; flex: 1; flex-direction: column; min-inline-size: 0; }
   .area-approval__option-description { color: var(--area-fg-muted); overflow-wrap: anywhere; }
@@ -157,5 +157,96 @@
   .area-approval__field::placeholder { color: var(--area-fg-muted); opacity: 1; }
   /* Skip at the end of the answer-of-one's-own row (2026-11-03, the measured question card): the way past the question
      sits where the last answer would be typed; the hint row under the options goes. */
-  .area-approval__skip { flex: none; margin-inline-end: calc(var(--area-space-4) - var(--area-ui-row-inset)); }
+  /* Skip is an outline button inset in its row as far from the end as from the top and foot ((row − control-sm) / 2: 2),
+     so its corner is the row's less that inset, concentric (10 − 2 = 8; it sat 4 from the end, 2 from the top). */
+  .area-approval__skip { flex: none; margin-inline-end: calc((var(--area-ui-row) - var(--area-control-sm)) / 2 - var(--_approval-row)); }
+
+  /*
+   * Grid (owner, 2026-11-03, visual questions: "a vertical list of answers to select from or horizontal list or grid of
+   * answers"): the choices in as many columns as fit, never more than `--area-approval-columns` (2 for words, as the
+   * owner's 2 x 2 reference; 4 for pictured choices) and never under a cell's least width (120 for words, 96 for a
+   * picture: two across the 268 Panel, four across a 456 split), so a narrow chat drops columns and a wide one stops at
+   * the count. Each choice keeps its row (key, label, check); the plates sit 4 apart, the hover plate's own breathing
+   * room, and the field to say what to do instead takes the whole last row. No hairlines between cells: the gap parts them.
+   */
+  .area-approval--grid .area-approval__options {
+    --_approval-columns: var(--area-approval-columns, 2); /* public hook: the most columns */
+    --_approval-cell: calc(var(--area-space-96) + var(--area-space-24)); /* pick: 120, two words and a key */
+    --_approval-gap: var(--area-space-4); /* pick: the hover plates' room */
+    grid-template-columns: repeat(auto-fill, minmax(max(min(100%, var(--_approval-cell)), calc((100% - (var(--_approval-columns) - 1) * var(--_approval-gap)) / var(--_approval-columns))), 1fr));
+    gap: var(--_approval-gap);
+  }
+  .area-approval--grid:has(.area-approval__visual) .area-approval__options {
+    --_approval-columns: var(--area-approval-columns, 4);
+    --_approval-cell: var(--area-space-96); /* pick: 96, a picture still read at a glance */
+  }
+  .area-approval--grid .area-approval__instead { grid-column: 1 / -1; }
+
+  /*
+   * A pictured choice (`visual`): the choice drawn, over its key and label in a grid (the owner's "Select Interface" cards)
+   * and before them in a list. The picture is a recessed frame (bg-subtle, as a Radio preview card's ground) its corner
+   * concentric with the row plate 4 round it, so on hover the plate frames the picture as a mat; the key and label keep
+   * the row's own inset under it, so every label in the card starts on one column.
+   */
+  .area-approval__visual {
+    --_approval-mat: var(--area-space-4); /* spec: the plate round the picture, the shell's own 4 */
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
+    aspect-ratio: var(--area-approval-ratio, 4 / 3); /* public hook: a picture's frame (16 / 9 for a screen, 1 for a swatch) */
+    min-inline-size: 0;
+    overflow: hidden;
+    border-radius: max(var(--area-radius-min), calc(var(--area-radius-row) - var(--_approval-mat) * var(--area-radius-concentric)));
+    background-color: var(--area-bg-subtle);
+    /* The frame's edge drawn over the picture (an outline paints above its content), so a white screen on the card's
+       white still has its bounds: the cards' edge at the border width, as Asset card's. */
+    outline: var(--area-border-width) solid var(--area-edge-cards);
+    outline-offset: calc(-1 * var(--area-border-width));
+    color: var(--area-fg-default);
+    pointer-events: none;
+  }
+  /* The tile: the picture over its button (Approval.tsx: beside it in the markup, never inside), 4 apart and the mat's 4
+     round both; the tile wears the row plate (hover, focus, press, chosen) and its button paints none of its own, its
+     ::after stretched over the tile so the whole tile answers the pointer. The button keeps the row (key, label, check)
+     at the row's inset less the mat, so every label in the card starts on one column. */
+  .area-approval__tile {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--area-space-4);
+    min-inline-size: 0;
+    padding: var(--area-space-4);
+    border-radius: var(--area-radius-row);
+    background-color: var(--area-input-bg-soft); /* the filled answer's plate (a soft field's), the picture on it as on a mat */
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-input-edge-soft);
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) { .area-approval__tile:has(> .area-approval__option:hover) { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  .area-approval__tile:has(> .area-approval__option:focus-visible) {
+    background-color: var(--area-bg-component-hover);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: calc(-1 * var(--area-focus-width));
+    transition-duration: 0s;
+  }
+  .area-approval__tile:has(> .area-approval__option:active:not([data-selected])) { background-color: var(--area-bg-component-pressed); }
+  .area-approval__tile:has(> .area-approval__option[data-selected]) { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-approval__tile > .area-approval__option,
+  .area-approval__tile > .area-approval__option:is(:focus-visible, :active, [data-selected]) { background-color: transparent; box-shadow: none; outline: none; }
+  @media (hover: hover) { .area-approval__tile > .area-approval__option:hover { background-color: transparent; } }
+  .area-approval__tile > .area-approval__option {
+    position: static;
+    min-block-size: calc(var(--area-ui-row) - 2 * var(--area-space-4));
+    padding-inline: calc(var(--_approval-row) - var(--area-space-4));
+  }
+  .area-approval__tile > .area-approval__option::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+  /* A picture's name is one line, cut short with an ellipsis, never broken inside a word (2026-11-04: "Workspac e" in
+     four 96 cells): the picture names the choice, the label confirms it. */
+  .area-approval__tile > .area-approval__option > .area-approval__label { overflow: hidden; overflow-wrap: normal; text-overflow: ellipsis; white-space: nowrap; }
+  /* In a list the picture leads the row, a thumbnail `--area-approval-thumb` wide (64 by default), the row centred on it. */
+  .area-approval--list .area-approval__tile { grid-template-columns: var(--area-approval-thumb, var(--area-space-64)) minmax(0, 1fr); align-items: center; gap: var(--area-ui-cluster); } /* public hook */
+
+  /* Plain (owner, 2026-11-04: several questions at once, as Cursor's IDE pane lists them): no card of its own; the host
+     card draws the edge, fill and mat, and the question's words and answers keep their 6 inset inside it. */
+  .area-approval--surface {} /* the default: the card above */
+  .area-approval--plain { padding: 0; border: 0; border-radius: 0; background: none; }
 }

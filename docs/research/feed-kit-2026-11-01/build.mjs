@@ -50,7 +50,7 @@ let body = snap.body.replace(/<img([^>]*?)data-kit-art="(\d+)"([^>]*)>/g, (_, a,
 body = body.replace(/\sloading="lazy"/g, "");
 
 const groups = [
-  ["Chat", "feed-chat"], ["Text", "feed-prose"], ["Type", "feed-tester"], ["Color", "feed-colors"], ["Foundations", "feed-scale"], ["Icons", "feed-glyphs"],
+  ["Questions", "feed-questions"], ["Chat", "feed-chat"], ["Text", "feed-prose"], ["Type", "feed-tester"], ["Color", "feed-colors"], ["Foundations", "feed-scale"], ["Icons", "feed-glyphs"],
   ["Components", "feed-specimens"], ["Designs", "feed-screens"], ["Images", "feed-collections"], ["Data", "feed-table"],
   ["Code and settings", "feed-code"], ["Activity", "feed-timeline"],
 ];
@@ -113,6 +113,15 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .kit-bar a:focus-visible, .kit-bar button:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
 .kit-bar button { flex: none; border: var(--area-border-width) solid var(--kit-rule); color: var(--kit-fg); }
 @media (max-width: 560px) { .kit-bar__name span { display: none; } }
+/* The Canvas's widths (owner, 2026-11-04: "apply the proper min and max widths"): the feed between the least Canvas the
+   app gives it (a 960 window with both panels open, 960 - 240 - 296 = 424), the typical (a 1440 window with both panels,
+   904) and the most this kit shows (a 1440 window with the panels closed); narrower windows (a phone) keep the 16 margin. */
+.kit .studio-feed { inline-size: min(100%, var(--kit-feed, 1440px)); margin-inline: auto; transition: inline-size 0s; }
+.kit-bar__widths { display: flex; gap: var(--area-space-2); flex: none; }
+.kit-bar__widths button { border: 0; }
+.kit-bar__widths button span { color: var(--kit-muted); font-variant-numeric: tabular-nums; margin-inline-start: var(--area-space-4); }
+.kit-bar__widths button[aria-pressed="true"] { background: var(--kit-plate); color: var(--kit-fg); }
+@media (max-width: 720px) { .kit-bar { flex-wrap: wrap; } .kit-bar__groups { order: 3; flex-basis: 100%; } .kit-bar__widths button span { display: none; } }
 </style>
 <script>
 (() => {
@@ -135,6 +144,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 <div class="studio kit">
   <header class="kit-bar">
     <div class="kit-bar__name">Feed kit <span>Area · Labs</span></div>
+    <div class="kit-bar__widths" role="group" aria-label="Width">${[["least", "Least", 424], ["typical", "Typical", 904], ["most", "Most", 1440]].map(([id, label, px]) => `<button type="button" data-width="${id}" data-px="${px}" aria-pressed="${id === "most"}">${label} <span>${px}</span></button>`).join("")}</div>
     <nav class="kit-bar__groups" aria-label="Groups">${groups.map(([label, id]) => `<a href="#${id}">${label}</a>`).join("")}</nav>
     <button type="button" id="kit-theme">Dark</button>
   </header>
@@ -149,7 +159,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   });
   window.__kitPaint();
   // A screen is drawn at 1920 x 1080 and scaled to its card, covering it from the top-left, as the app does.
-  const fit = () => document.querySelectorAll(".ss-frame").forEach(frame => {
+  // A visual question's frame opened at a zoom on a part (data-zoomed) keeps the zoom it was captured at.
+  const fit = () => document.querySelectorAll(".ss-frame:not([data-zoomed] .ss-frame)").forEach(frame => {
     const zoom = frame.querySelector(".af-zoom");
     if (zoom && frame.clientWidth) zoom.style.setProperty("--af-fit", String(Math.max(frame.clientWidth / 1920, frame.clientHeight / 1080)));
   });
@@ -203,6 +214,18 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
       });
     });
   });
+  // The Width switch: the feed at the Canvas's least, typical or most width.
+  const widths = document.querySelectorAll(".kit-bar__widths button");
+  const setWidth = button => {
+    widths.forEach(other => other.setAttribute("aria-pressed", String(other === button)));
+    document.documentElement.style.setProperty("--kit-feed", button.dataset.px + "px");
+    try { localStorage.setItem("feed-kit-width", button.dataset.width); } catch (e) {}
+    requestAnimationFrame(fit);
+  };
+  widths.forEach(button => button.addEventListener("click", () => setWidth(button)));
+  let saved = null; try { saved = localStorage.getItem("feed-kit-width"); } catch (e) {}
+  const start = [...widths].find(button => button.dataset.width === saved);
+  if (start) setWidth(start);
   // The snapshot is a still: links and buttons in it go nowhere.
   document.querySelector(".kit .studio-canvas__body").addEventListener("click", event => { if (event.target.closest("a")) event.preventDefault(); });
 })();

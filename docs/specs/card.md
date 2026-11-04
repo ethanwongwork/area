@@ -400,3 +400,13 @@ lift is `shadow-resting` at Rest shadow, its own number since the nine controls 
 feed frames looked right only because the md value at the app's density was near the feed's 16 (they drew 18). Each size
 now takes the hook first and its ramp value as the fallback. Found in the Chat kit's layout pass
 (docs/research/chat-kit-2026-11-02), where the hook asked for 12.
+
+## 2026-11-04: a title hook (Q-T1)
+
+Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04): a data
+card's title was the section title's 16/22 over it, so the section no longer headed its cards. Card's title keeps one
+role at every size, `title-xs`, and gains public hooks `--area-card-title-size`, `--area-card-title-leading` and
+`--area-card-title-tracking`, set together to another ramp step. The desktop app's feed frames (`.studio-frame`: data
+views, stat cards, the type tester) set `text-base` (13/18), weight unchanged (500, default ink): the name role. Dialogs,
+popovers and every other Card keep 16/22. Evidence: Cursor's card titles are 13 medium in primary ink; Claude's section
+headers stand one step over their rows.

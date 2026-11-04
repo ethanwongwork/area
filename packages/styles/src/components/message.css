@@ -49,6 +49,16 @@
      4) and the next block is the gap after it. */
   .area-message__content { min-inline-size: 0; overflow-wrap: anywhere; }
   .area-message__content > * { margin-block: 0; }
+  /* The reply starts on its first cap and ends at its last line's descent (Q-T2, owner 2026-11-04, "Apply both"; Kit Type
+     Decisions): the half-leading above and below the text is trimmed, as Card trims its title and last line, so every gap
+     around a reply (a section's title over it, the turn above, its actions under it) is read on the glyphs (DESIGN_SYSTEM,
+     Text pairs) and a reply that opens a block sits where a frame would (16 under a title; it was 21). Frames in a reply
+     (a table, a code block, a card) are not text and keep their edges. The person's bubble keeps its padding. */
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-message--assistant > .area-message__content > :is(p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote):first-child { text-box: trim-start cap text; }
+    .area-message--assistant > .area-message__content > :is(p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote):last-child { text-box: trim-end cap text; }
+    .area-message--assistant > .area-message__content > :is(p, h1, h2, h3, h4, h5, h6, ul, ol, blockquote):only-child { text-box: trim-both cap text; }
+  }
   .area-message__content > * + * { margin-block-start: var(--area-text-lg-prose-gap); }
   .area-message__content > :is(h1, h2, h3, h4, h5, h6):not(:first-child) { margin-block-start: calc(var(--area-text-lg-prose-gap) + var(--area-space-8)); }
   .area-message__content > :is(h1, h2, h3, h4, h5, h6) + *,

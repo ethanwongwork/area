@@ -19,6 +19,13 @@
     line-height: var(--area-text-base-leading);
   }
 
+  /* The outermost Step, Step group or Reasoning starts on its line's cap and ends at its baseline (Q-T2, owner
+     2026-11-04, "Apply both"): its box gives back the line's half-leading above and, while nothing opens under the line,
+     below, so the gaps around a tracker are read on the glyphs and one that opens a block sits 16 under a title (it was
+     20). Margins, not text-box: the row's icon stays centred on the line, and a step inside a group keeps its 4. */
+  .area-step:not(.area-step .area-step) { margin-block-start: calc((1cap - 1lh) / 2); }
+  .area-step:not(.area-step .area-step):not(:has(.area-step__body:not([hidden]))) { margin-block-end: calc((1cap - 1lh) / 2); }
+
   /* The line. As a button it keeps the text's look: no plate, no edge; only the chevron answers the pointer (the
      foreground stays fixed on hover). */
   .area-step__row {

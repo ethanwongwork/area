@@ -122,3 +122,7 @@ The bubble was 70% at every width, so in the Inspector (268 of text) it was 188 
 (docs/research/chat-kit-2026-11-02): the references keep 70% of a 768 thread, `min(456px, 100%)` in a compact one, 84–85%
 in a narrow one and a 32 inset under 480. Now `max(70%, min(100% - 48, 456px))`: 538 of
 768 (unchanged), 408 of 456, 220 of 268.
+
+## 2026-11-04: read on its glyphs (Q-T2)
+
+Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). An assistant reply trims its first and last text lines (`text-box: trim-start cap text`, `trim-end cap text`), as Card trims its title and last line: the gaps around a reply (a section title over it, the turn above, its actions under it) are read on the glyphs. A reply that opens a block sits 16 under a title (it was 21); the person's turn to the reply reads 24 (it was 29). Frames in a reply and the person's bubble are unchanged. Test: `packages/react/tests/type-rhythm.test.mjs`.

@@ -230,4 +230,8 @@
      the last row's half-leading hangs past its foot. */
   .area-edit-summary--plain > .area-edit-summary__head { min-block-size: var(--area-text-base-leading); padding-block: 0; }
   .area-edit-summary--plain > .area-edit-summary__files { margin-block-end: calc((var(--area-text-base-leading) - var(--area-ui-row)) / 2); }
+  /* And from the line to its glyphs (Q-T2, owner 2026-11-04; Step's rule), the foot only while the last file's diff is
+     closed (a diff is a frame and keeps its edge). */
+  .area-edit-summary--plain { margin-block-start: calc((1cap - 1lh) / 2); }
+  .area-edit-summary--plain:not(:has(> .area-edit-summary__files > :last-child .area-edit-summary__diff:not([hidden])))  { margin-block-end: calc((1cap - 1lh) / 2); }
 }

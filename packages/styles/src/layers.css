@@ -25,7 +25,7 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
     .area-file-upload-item, .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue,
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
-    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge
   ),
   [data-area-ground="raised"] {
     --area-bg-component: var(--area-bg-component-raised);
@@ -70,7 +70,8 @@
      from it (owner, round 60: "make sure the backplate on the button is accessible": on the page's plate the hover read
      #f3 on the card's #f7, 1.04:1; from the recessed ground #eb, 1.11:1, the step every plate takes from its ground). A
      soft Surface paints the recessed ground too, and so does a preview choice card (Radio and Checkbox
-     `layout="preview"`), the soft ground its picture sits on, and Plan's steps box (an open item's steps). */
+     `layout="preview"`), the soft ground its picture sits on, Plan's steps box (an open item's steps) and a pictured
+     Approval choice's frame. */
   /* Card tone's two grounds (owner, 2026-10-22; color/layers.ts): a Card paints the card tone (Auto: raised) and an
      Asset card the tile tone (Auto: recessed), so their controls step from whatever Card tone sets. */
   :where(.area-card), [data-area-ground="card"] {
@@ -121,7 +122,7 @@
     --area-selection-band: var(--area-selection-band-frame-raised);
     --area-selection-band-hover: var(--area-selection-band-frame-raised-hover);
   }
-  :where(.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps),
+  :where(.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps, .area-approval__visual),
   [data-area-ground="recessed"] {
     --area-bg-component: var(--area-bg-component-recessed);
     --area-bg-component-hover: var(--area-bg-component-recessed-hover);
@@ -178,10 +179,10 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
     .area-file-upload-item, .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue,
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
-    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, .area-asset-card--raised > .area-asset-card__frame,
     .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-surface--soft,
-    .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps, .area-table th
+    .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps, .area-approval__visual, .area-table th
   ),
   [data-area-ground],
   :where([data-area-theme], [data-area-neutral], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
@@ -221,12 +222,12 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
+    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush), [data-area-ground="raised"], [data-area-ground="page"] {
     --area-edge-shift-light: 0;
     --area-edge-shift-dark: 0;
   }
-  :where(.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps), [data-area-ground="recessed"] {
+  :where(.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps, .area-approval__visual), [data-area-ground="recessed"] {
     --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-recessed)));
     --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-recessed) - var(--area-layer-dark-raised)));
   }
@@ -255,10 +256,10 @@
     .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"],
+    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"],
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, [data-area-ground="page"],
     .area-asset-card__frame, [data-area-ground="frame"], .area-asset-card--raised > .area-asset-card__frame, [data-area-ground="frame-raised"],
-    .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps, .area-table th, [data-area-ground="well"],
+    .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps, .area-approval__visual, .area-table th, [data-area-ground="well"],
     [data-area-ground="recessed"], .area-card, [data-area-ground="card"],
     .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), [data-area-ground="tile"]) > * {
     --area-border-decorative: light-dark(oklab(from var(--area-border-decorative-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-decorative-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
@@ -309,7 +310,7 @@
     .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
     .area-surface--surface, .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
-    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"]) {
+    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"]) {
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
@@ -413,7 +414,7 @@
       --area-selection-band-hover: var(--area-selection-band-tile-hover);
     }
   }
-  @scope (.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps,
+  @scope (.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-plan__steps, .area-approval__visual,
     [data-area-ground="recessed"]) {
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],

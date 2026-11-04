@@ -390,8 +390,12 @@
     max-inline-size: calc(100% - var(--_name-pad) * 2);
   }
   .area-asset-card--overlay > .area-asset-card__head > .area-asset-card__actions { pointer-events: auto; opacity: 1; }
+  /* A screen (aspect screen: a product's UI, any colour and busy under the name) takes the plates too (owner, 2026-11-04:
+     a visual question's frame, "the controls for zoom level, dark mode, etc should be inside the container in buttons that
+     appear on hover, also maybe move the label to the inside too"). */
   .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__name,
-  .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__name {
+  .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__name,
+  .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__name {
     --_plate-pad: calc((var(--area-control-sm) - 1cap) / 2);
     display: flex;
     align-items: center;
@@ -408,7 +412,8 @@
   }
   .area-asset-card:is(.area-asset-card--below, .area-asset-card--overlay) > .area-asset-card__head > .area-asset-card__actions .area-button { --_shape: var(--_actions-corner); }
   .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
-  .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions {
+  .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions,
+  .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions {
     border-radius: var(--_actions-corner);
     background-color: var(--area-bg-surface);
     box-shadow: var(--area-shadow-control);
@@ -461,6 +466,9 @@
      card's three open sides, as a framed group holds its cells (owner, 2026-11-01: "all containers feel consistent, and
      part of the same family": the app's image cards hold their picture as its collection and screen cards do). */
   .area-asset-card--basic { --_inset: max(0px, calc(var(--area-asset-card-inset, var(--_edge)) - var(--_edge))); padding: 0 var(--_inset) var(--_inset); }
+  /* Overlay has no head row over the asset, so its fourth side is open too (2026-11-04, a visual question's frame: the
+     picture sat 8 in at the sides and the foot, 1 at the top). */
+  .area-asset-card--basic.area-asset-card--overlay { padding: var(--_inset); }
   /* Its corner stays concentric (the card's less its edge), so what fills it (an image) is cut on the card's own curve. */
   .area-asset-card--basic > .area-asset-card__frame { border-width: 0; border-radius: var(--_frame-corner); background-color: transparent; }
   /* Fill: raised, the surface (white in light) for the whole card; recessed, the default, the tile tone (Card tone). */

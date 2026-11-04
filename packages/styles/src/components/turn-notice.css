@@ -17,6 +17,9 @@
     font-size: var(--area-text-base-size); /* the trackers' UI size (Step) */
     line-height: var(--area-text-base-leading);
   }
+  /* One line read on its glyphs (Q-T2, owner 2026-11-04; Step's rule): the box gives back the line's half-leading. */
+  .area-turn-notice { margin-block: calc((1cap - 1lh) / 2); }
+
   .area-turn-notice--stopped,
   .area-turn-notice--compacted { --_notice-icon: var(--area-fg-muted); }
   .area-turn-notice--error { --_notice-icon: var(--area-fg-danger); }

@@ -1124,6 +1124,9 @@ function gallerySpecimenTable() {
       { id: "content-descriptions", title: "Content / descriptions", demo: "GalleryApprovalDescriptions" },
       { id: "state-answered", title: "State / answered", demo: "GalleryApprovalAnswered" },
       { id: "content-questions", title: "Content / questions", demo: "GalleryApprovalQuestions" },
+      { id: "layout-grid", title: "Layout / grid", demo: "GalleryApprovalGrid" },
+      { id: "content-pictures", title: "Content / pictures", demo: "GalleryApprovalPictures" },
+      { id: "variant-plain", title: "Variant / plain", demo: "GalleryApprovalPlain" },
     ],
     plan: [
       { id: "default", title: "Default", demo: "GalleryPlan" },

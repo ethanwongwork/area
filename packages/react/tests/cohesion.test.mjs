@@ -420,6 +420,7 @@ test('every painted ground is declared in layers.css', () => {
     '.area-asset-card__cell': 'a group cell: an image or an inert thumbnail',
     '.area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__name': 'the name\'s plate holds text only',
     '.area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__name': 'the name\'s plate holds text only',
+    '.area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__name': 'the name\'s plate holds text only',
     '.area-asset-row__preview': 'an image well',
     '.area-attachment': 'its close button paints the video glass tints, not ground fills',
     '.area-box-model': 'labels and values only',
@@ -783,7 +784,11 @@ test('Approval keeps the Composer\'s corner', () => {
   const read = (selector, prop) => rules.find(rule => rule.selector === selector && new RegExp(`${prop}\\s*:`).test(rule.body))?.body.match(new RegExp(`${prop}\\s*:\\s*([^;]+)`))?.[1].trim();
   const norm = value => value?.replace(/--_(composer|approval)-/g, '--_x-').replace(/\s+/g, ' ');
   assert.ok(read('.area-composer', '--_composer-corner'), 'the composer corner is missing');
-  assert.equal(norm(read('.area-approval', '--_approval-radius')), norm(read('.area-composer', '--_composer-corner')));
+  // Its one public hook (2026-11-04, visual questions: the card beside an Asset card frame takes the frame's corner)
+  // wraps the Composer's corner, which stays the default term for term.
+  const radius = norm(read('.area-approval', '--_approval-radius'));
+  assert.match(radius, /^var\(--area-approval-corner, .+\)$/);
+  assert.equal(radius.replace(/^var\(--area-approval-corner, (.+)\)$/, '$1'), norm(read('.area-composer', '--_composer-corner')));
   assert.equal(norm(read('.area-approval', '--_approval-height')), norm(read('.area-composer', '--_composer-height')).replace('var(--_x-action)', 'var(--area-control-md)'));
   assert.equal(norm(read('.area-approval', '--_approval-term')), norm(read('.area-composer', '--_composer-term')));
 });

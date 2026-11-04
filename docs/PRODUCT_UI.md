@@ -713,6 +713,97 @@ out.
   - The composer is the Panel's footer.
   - ⌘L opens Chat and focuses the composer; Esc stops a reply.
 
+## Type and rhythm in the kits
+
+Owner, 2026-11-04: "be extra careful about defining when each size of the type ramp is used, as well as when to change
+the foreground or weight, and the spacing rhythm between text. make sure to define chat kit and feed kit independently."
+Evidence: Area's own census of both kits and the products' bundles (`docs/research/kit-type-2026-11-04/`). Values are at
+type 13; every size moves with the Type setting, every gap with Density.
+
+### Rules both kits keep
+
+1. **One property changes at a time.** Hierarchy is drawn by size (structure: a title over its block), or by ink (a
+   description, metadata, a header), or by weight (a name, a title); a step down never changes all three. Inside a row or
+   a card, a label and its description share one size and the description drops one ink step (13 default over 13
+   muted); only a caption or metadata drops a size, to 12, and then it is muted too.
+2. **Weight rises only with the default ink.** 500 (`weight-strong`) is for titles, a name that starts a line (a person,
+   a question, a frame's title) and controls; it is never set on muted text in the kits (a group label is muted and
+   regular). Area has two weights in UI text: 400 and 500.
+3. **Two inks for words, one for controls.** `fg-default` for what is read, `fg-muted` for what explains it (a
+   description, metadata, a table's header, a group label, a placeholder of a row); `fg-quiet` belongs to ghost controls
+   and icons; tone inks belong to badges, marks and diff counts.
+4. **The smaller, the quieter.** 12 is always muted; 11 is a badge, a count, a key or a data label, never a sentence.
+5. **Gaps are read on the glyphs**: a text's cap and baseline, a frame's edge. A line that belongs to a title or label
+   joins it (no gap between their line boxes); joined lines sit 4 apart at most; groups 8 to 16; blocks 16; sections 48
+   (feed) or turns 24 (chat).
+
+### Feed kit (Labs › Feed; the Canvas)
+
+| Role | Ramp | Ink | Weight | Where |
+|---|---|---|---|---|
+| Section title | `title-xs` 16/22 | default | 500 | `CanvasSection`, 4 in on the text edge |
+| Section count | `text-xs` 11/14 on Count's soft plate | muted | 400 | after a collection's title only |
+| Section lede | `text-sm` 12, prose line 18 | muted | 400 | one sentence, explaining pages only; the kit has none |
+| Card name | `text-base` 13/18 | default | 400 | 4 under the card (or in its head), on the text edge |
+| Card value | Badge, `text-xs` 11/14 | tone | 500 | the end of the name's row |
+| A frame's title | `text-base` 13/18 | default | 500 | Card in the feed's frames (data views, stat cards, the tester), Card's title hook (Q-T1, applied) |
+| Text in a frame (a cell, a label, a row, a choice) | `text-base` 13/18 (a md Table's cells 13/20) | default | 400 | every frame |
+| What explains it (a description, a header, a muted cell) | `text-base` 13 | muted | 400 | joined to what it explains |
+| Metadata on a row's line (time, step count, size) | `text-sm` 12 on the row's 18 | muted | 400 | the row's end |
+| A caption or note standing alone, a timestamp | `text-sm` 12/16 | muted | 400 | under a block, 8 under it |
+| A figure | `title-lg` 26/30 | default | 400 | a stat card's value |
+| Data labels (axes, keys, ticks) | `text-xs` 11/14, mono | muted | 400 | charts and data views |
+| Prose | `text-lg` 15/22, at most 80ch | default | 400 | paragraphs 16 apart (`text-lg-prose-gap`), trimmed to their cap |
+| Code | mono 13/20 in Code block; inline code 0.875em of its text | default | 400 | |
+
+Widths: the feed is the Canvas's, from 424 (a 960 window with both panels) through 904 (a 1440 window with both panels)
+to 1440 (panels closed) in the Feed Kit artifact's Width switch; under 560 the margin is 16. Grids count their columns
+from the width (cards at least 260, four across at most), and nothing in the feed has a width of its own but the
+reading column (768) for prose and timelines.
+
+Rhythm: margin 32, sections 48, a title 16 over its block (to the frame's edge or the first cap), cards 16 apart, the
+frame inset 16 and corner 16, a picture 8 in, text 4 in from the frames, a card's caption 4 under it, a visual
+question's frame 8 over its question.
+
+### Chat kit (Labs › Chat; a chat column 268, 456 or 768)
+
+| Role | Ramp | Ink | Weight | Where |
+|---|---|---|---|---|
+| A reply's text, the person's bubble, the composer's field | `text-lg` 15/22 | default | 400 | paragraphs 16 apart |
+| A reply's heading | `title-xs` 16/22 | default | 500 | one step over the text, one heading style a reply |
+| Inline code | mono 0.875em | default | 400 | on its line's plate |
+| An agent's work (Step, Reasoning, Plan, Edit summary, Turn notice) | `text-base` 13/18 | verb muted, detail default | 400 | 16 apart, on the text edge |
+| A card's title (Approval's question, a frame's name) | `text-base` 13/18 | default | 500 (the question) / 400 (a frame's name) | 13 in from the edge |
+| A card's choices and rows | `text-base` 13/18 | default; a choice's description muted, joined | 400 | rows on the row inset |
+| Metadata (a step's time, a plan's count, +/− counts) | `text-sm` 12 on the row's 18 | muted (+/− their tones) | 400 | the row's end |
+| A timestamp | `text-sm` 12/16 | muted | 400 | 8 over its message |
+| Keys, badges | `text-xs` 11 | muted / tone | 500 | Kbd, Badge |
+| Tables and code in a reply | the feed's frames, `text-base` 13 | header muted | 400 | the column's edge, 12 in (`--_frame-inset`) |
+
+Widths: a chat is one column at one of three widths, Panel 268 (the Inspector's least, less its insets), Split 456 (a
+chat beside what it made) and Column 768 (the reading column), never wider; type and spacing never change with it, the
+bubble, overflow, cards across and a question's columns do (two pictures across under 600, one word answer a row under
+400, a row of three or four under 560).
+
+Rhythm: turns 24 apart, a message 12 over its reply, a time 8 over its message, a reply's blocks 16 apart (text,
+tables, code, cards, a visual question), trackers 16 apart, a visual question's frame 8 over its question, frames 12 in.
+A chat has no section titles and no ledes: the kit's section titles are the kit's, not the chat's.
+
+### Decided (owner, 2026-11-04: "Apply both")
+
+- **Q-T1. A data card's title is the name role.** Card's title keeps `title-xs` and gains public hooks
+  (`--area-card-title-size`, `-leading`, `-tracking`); the feed's frames set 13/18, weight 500, so the section's 16/22
+  title heads its cards.
+- **Q-T2. Text that opens or closes a block is read on its glyphs.** Message's reply trims its first and last lines;
+  Step, Timeline, plain Plan and Edit summary, Turn notice and Timestamp give back their line's half-leading at their
+  outer edge. Measured after: every text-first section 15.7–16 under its title (were 19–21), a person's turn 24 over the
+  reply (29), a time 8 over its message (12), trackers 15–17 apart (20–25). A block that opens on a control (the
+  Composer's picker) or a head with buttons (Edit summary pending) keeps its box (21, 19.6).
+- **Q-T3. Collection cards** (checked 2026-11-04, withdrawn): the audit read 33 to the first picture; the card draws its
+  frame and edge 16 under the title and holds its pictures 8 in, as every card. No change.
+
+Decision page: https://claude.ai/artifact/KeEDPx5sUTQXE6iKtu6sw1 (Kit Type Decisions).
+
 ## Open component gaps
 
 Recorded, not yet built; each needs its own component pass ([Governance](GOVERNANCE.md#1-decide-what-kind-of-change-it-is)).

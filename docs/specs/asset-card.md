@@ -493,3 +493,14 @@ rest unchanged.
   concentric with the corner), the asset's own inset in a card. Placement: a status goes in the card's name row where it
   has one (the app's cards, caption outside); the slot is for pictures without a row (caption overlay, image libraries).
   On a 16:9 design the top start is where its logo and navigation sit, and a status there covers the design.
+
+## 2026-11-04: overlay on a screen (a visual question's frame)
+
+Owner: "the controls for zoom level, dark mode, etc should be inside the container in buttons that appear on hover, also
+maybe move the label to the inside too, this can be a variety of the feed card that keeps all controls on the inside of
+the frame and is typically shown in more of an interactive, larger form factor." That is `caption="overlay"`, which
+already shows the name at the bottom start and the controls at the top end under the pointer or with focus (always on
+touch). Two changes: a screen (`aspect="screen"`, a product's UI, busy under the name) now takes the raised plates an
+image or a group takes, and a basic overlay card pads its top as its other sides (it had no head row there, so the
+picture sat 1 from the top and 8 from the rest). Used by `QuestionFrame` (apps/desktop/src/question-kit.tsx); the feed and
+chat galleries keep their names outside.

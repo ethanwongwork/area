@@ -538,13 +538,17 @@ export const diff = {
 } as const satisfies ComponentManifest;
 
 export const approval = {
-  block: "area-approval", description: "An agent asks before it acts: what and why, the thing itself, numbered choices with their scope, and a field to say what to do instead.",
-  variants: {},
+  block: "area-approval", description: "An agent asks before it acts: what and why, the thing itself, numbered choices with their scope (stacked, or in a grid of words or pictures), and a field to say what to do instead.",
+  // layout: grid, the choices in as many columns as fit, for short words and pictured choices (owner 2026-11-03, visual
+  // questions: "a vertical list of answers to select from or horizontal list or grid of answers").
+  // variant: surface, its own card; plain, no card (owner 2026-11-04, several questions in one card, as Cursor's IDE pane
+  // lists them; Plan's and Edit summary's plain).
+  variants: { layout: ["list", "grid"], variant: ["surface", "plain"] },
   // The question card's parts (owner 2026-10-28, Setup as a chat panel; Claude Code's AskUserQuestion): the head's
   // actions, an option's description and check, the foot's footer.
-  elements: ["head", "heading", "title", "description", "actions", "detail", "options", "option", "key", "lines", "label", "option-description", "check", "instead", "field", "skip", "foot", "hint", "footer"],
+  elements: ["head", "heading", "title", "description", "actions", "detail", "options", "option", "tile", "visual", "key", "lines", "label", "option-description", "check", "instead", "field", "skip", "foot", "hint", "footer"],
   states: ["selected"], // an option's, as Menu's rows (data-selected: the answer given)
-  defaults: {},
+  defaults: { layout: "list", variant: "surface" },
 } as const satisfies ComponentManifest;
 
 export const plan = {

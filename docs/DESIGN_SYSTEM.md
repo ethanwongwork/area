@@ -458,6 +458,12 @@ and `emit/base.ts`; never copy a table into a component
   Card's, a Dialog's or a Popover's description) is UI text, not secondary. So is an agent's work in a turn (owner,
   2026-11-02, "do the trackers need to be smaller?"): Step, Reasoning, Plan, Edit summary, Approval and Turn notice read
   at `text-base`, one size with ink for hierarchy, under the turn's `text-lg` prose (Cursor's cards 13 under a 14 reply).
+- **Text that opens or closes a block is read on its glyphs** (owner, 2026-11-04, Q-T2; `docs/research/kit-type-2026-11-04`):
+  a gap above a block is measured to its first cap, below it to its last baseline, as to a frame's edge. Flowing text
+  trims its first and last lines (`text-box`: Card, Message's reply, the feed's prose); a component whose first line is
+  a row with an icon gives back the line's half-leading at its outer edge instead (`margin-block: calc((1cap - 1lh) / 2)`:
+  Step, Timeline, plain Plan and Edit summary, Turn notice, Timestamp), so its icon stays centred. A control row (a
+  button, a picker) is a frame, not a line: it keeps its box. `type-rhythm.test.mjs` holds the list.
 - **Prose lines** (owner, 2026-10-30; `docs/research/vertical-rhythm-2026-10-30`). Prose that runs past two lines,
   where the eye has to find the next line (a chat turn, documentation and spec prose), takes the prose leading: the first
   value on the 2px leading ramp at or above 1.5 × the size, the line spacing WCAG 1.4.8 asks of paragraphs and 1.4.12

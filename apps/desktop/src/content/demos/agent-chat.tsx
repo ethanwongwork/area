@@ -118,6 +118,21 @@ export const GalleryApprovalQuestions = () => {
     </div>
   );
 };
+// Grid (visual questions, 2026-11-03): short answers two across, and pictured answers, each drawn over its key and label.
+export const GalleryApprovalGrid = () => (
+  <div style={frame}><Approval title="Title" layout="grid" items={[...options, { value: "four", label: "Option four" }]} onChoose={() => {}} /></div>
+);
+const pictured = ["one", "two", "three", "four"].map((value, index) => ({
+  value, label: `Option ${["one", "two", "three", "four"][index]}`,
+  visual: <span style={{ inlineSize: 24, blockSize: 24, borderRadius: [0, 4, 8, 12][index], background: "var(--area-neutral-solid)" }} />,
+}));
+export const GalleryApprovalPictures = () => (
+  <div style={frame}><Approval title="Title" layout="grid" items={pictured} onChoose={() => {}} /></div>
+);
+// Plain (2026-11-04): no card of its own, for several questions in one card of the host's.
+export const GalleryApprovalPlain = () => (
+  <div style={frame}><Approval variant="plain" title="Title" description="Description" items={options} onChoose={() => {}} /></div>
+);
 export const GalleryApprovalInstead = () => (
   <div style={frame}><Approval title="Title" description="Description" items={options} onChoose={() => {}} onInstead={() => {}} insteadPlaceholder="Placeholder" /></div>
 );

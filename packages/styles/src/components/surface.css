@@ -63,9 +63,12 @@
     --_card-border: var(--area-border-width);
     /* spec (consistency pass): one title role and one body role at every size. */
     /* The surface title role, held in compact as Dialog's (audit H-7). */
-    --_card-title-size: var(--area-title-xs-size);
-    --_card-title-leading: var(--area-title-xs-leading);
-    --_card-title-tracking: var(--area-title-xs-tracking);
+    /* Public hooks `--area-card-title-size` / `-leading` / `-tracking` (2026-11-04, Q-T1): a page whose Cards sit under a
+       section title of the same size (the desktop app's feed: data views and stat cards under title-xs section titles)
+       sets the row's name role, text-base, so the section heads its cards; every other Card keeps the surface title. */
+    --_card-title-size: var(--area-card-title-size, var(--area-title-xs-size));
+    --_card-title-leading: var(--area-card-title-leading, var(--area-title-xs-leading));
+    --_card-title-tracking: var(--area-card-title-tracking, var(--area-title-xs-tracking));
     --_card-body-size: var(--area-text-base-size);
     --_card-body-leading: var(--area-text-base-leading);
     --_card-body-tracking: var(--area-text-base-tracking);

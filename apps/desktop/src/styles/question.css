@@ -1,0 +1,128 @@
+/* ---------------------------------------------------------------------------
+ * Visual questions (src/question-kit.tsx; docs/research/visual-questions-2026-11-03): a frame (Asset card) over a
+ * question (Approval), the same in a chat and a feed. App layout only: the frame and the question are Area's own.
+ * ------------------------------------------------------------------------- */
+  /* The unit: frame then question, 8 apart (the Asset grid's gap), so the picture reads as the question's. Its own width
+     decides the layout: stacked in a chat's column, beside each other from 880 (a wide feed), the frame three fifths. */
+  .qk-unit {
+    container: qk-unit / inline-size;
+    min-inline-size: 0;
+    /* One family (detail pass, 2026-11-04): the frame and the question take the feed's frame corner (16; the question was
+       the Composer's 22). The frame is the feed's card, its name and controls outside under it on the text edge. */
+    --_unit-corner: var(--_tile-radius); /* the feed's one corner (app.css), every frame's in the kits */
+    --area-asset-card-corner: var(--_unit-corner);
+    --area-approval-corner: var(--_unit-corner);
+  }
+  /* The question's columns: a template's count where it gives one, else Approval's own (2 words, 4 pictures); a narrow
+     question holds pictures two by two (under 600: never three and an orphan) and words one a row (under 400: two words
+     and a key don't fit 127, "On a / computer" wrapped). */
+  .qk-choices { --area-approval-columns: var(--_qk-columns, initial); }
+  .qk-unit__body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); }
+  @container qk-unit (min-width: 880px) { /* pick: a 456 question beside a 16:9 frame still 416 wide */
+    .qk-unit__body { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; }
+  }
+  .qk-unit__frame, .qk-unit__question { min-inline-size: 0; }
+  /* The question is its own container, so its columns answer to its own width: beside a frame in a wide feed it is two
+     fifths of the unit (348 at 880), not the unit (2026-11-04: pictures stayed four across in 348). */
+  .qk-unit__question { container: qk-question / inline-size; }
+  /* Pictures four across want a picture of at least 136 (a name and its key on one line); a narrower question holds
+     them two by two, never three and an orphan. */
+  @container qk-question (max-width: 599px) { .qk-choices--pictures { --area-approval-columns: 2; } } /* pick: 4 × 136 + the card */
+  @container qk-question (max-width: 399px) { .qk-choices--words { --area-approval-columns: 1; } } /* pick: 2 × 120 + the card */
+  /* A row of three or four answers (steps, points, A or B) needs 170 a cell for a word, its note, its key and the check;
+     narrower, it reads one answer a row (456: "Balanced D / efault" in 146). */
+  @container qk-question (max-width: 559px) { .qk-choices--row { --area-approval-columns: 1; } } /* pick: 3 × 170 + the card */
+
+  /* The frame's picture fills it: a screen fitted whole, or a picture of its own centred at the chosen zoom. */
+  .qk-frame__view { position: relative; }
+  .ss-frame.qk-frame__screen { inline-size: 100%; block-size: 100%; }
+  .qk-frame__visual { display: grid; place-items: center; inline-size: 100%; block-size: 100%; min-block-size: 0; overflow: hidden; }
+  /* Full screen: the card takes the screen, its picture every row under the head. */
+  .qk-frame:fullscreen { display: flex; flex-direction: column; padding: var(--area-space-16); background-color: var(--area-bg-page); }
+  .qk-frame:fullscreen .qk-frame__view { flex: 1 1 auto; aspect-ratio: auto; }
+
+  /* A choice's picture, its own scope's real component fitted to the frame. */
+  .qk-pic { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
+  .qk-pic > * { inline-size: 100%; block-size: 100%; }
+  /* A typeface is "Aa" set in itself, as Font Book's cards (typefaces.tsx). */
+  .qk-aa { font-size: var(--area-title-lg-size); line-height: 1; color: var(--area-fg-default); }
+  /* "Default" after an answer's words, as Setup's (setup.css .setup-option). */
+  /* "Default" after an answer's words: the same size, the muted ink, a word space and a half after them (6), on their
+     line; where a cell is short of room it moves under them as a joined line, never a plate beside them. */
+  .qk-default__note { margin-inline-start: var(--area-space-6); color: var(--area-fg-muted); white-space: nowrap; }
+
+  /* A page set in the face asked about: a heading, text and a note on the page's ground. */
+  .qk-page {
+    --_face: var(--area-font-sans);
+    display: grid;
+    align-content: center;
+    gap: var(--area-space-12);
+    inline-size: 100%;
+    block-size: 100%;
+    padding: var(--area-space-32) var(--area-space-48);
+    background-color: var(--area-bg-page);
+    color: var(--area-fg-default);
+    font-family: var(--_face);
+  }
+  .qk-page__title { margin: 0; font-size: var(--area-title-md-size); line-height: 1.2; font-weight: var(--area-weight-strong); }
+  .qk-page__text { margin: 0; max-inline-size: 36em; font-size: var(--area-text-lg-size); line-height: var(--area-text-lg-leading); }
+  .qk-page__text--muted { color: var(--area-fg-muted); }
+
+  /* A or B: the two designs side by side, each a whole screen, its letter under it; the one under the pointer ringed in
+     the selection colour, both dimmed for Neither. */
+  .qk-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-12); align-content: center; inline-size: 100%; block-size: 100%; padding: var(--area-space-16); }
+  .qk-compare__side { display: grid; gap: var(--area-space-8); justify-items: center; margin: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .qk-compare__side[data-dim] { opacity: 0.5; /* pick */ }
+  .ss-frame.qk-compare__screen { inline-size: 100%; aspect-ratio: 16 / 9; border-radius: var(--area-radius-4); outline: var(--area-stroke-width) solid var(--area-edge-blocks); }
+  .qk-compare__side[data-lit] > .qk-compare__screen { outline: 2px solid var(--area-fg-selection); /* spec: the selected stroke's 2 */ }
+  .qk-compare__name { color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); font-weight: var(--area-weight-strong); }
+
+  /* An answer that isn't a press (a bar, swatches, chips) is a plate itself, so it shares the rows' plate edge: its
+     outer edges are the answer rows' (the "Something else" row's plate, 4 in from the card) and the foot's buttons end
+     on the same line (2026-11-04, owner: "make sure the controls and answer containers are always aligned or
+     consistently sized"; the bars sat 8 further in, on the rows' text column). Words under a bar keep the text column. */
+  .qk-stack, .qk-bar, .qk-chips { padding-inline: 0; }
+  .qk-stack { display: grid; gap: var(--area-space-12); }
+  /* Bars stacked as the answer rows are: a row's height each (Slider's bar is the control's, the row's at every
+     density), 4 apart as a grid's plates. */
+  .qk-stack--bars { gap: var(--area-space-4); }
+  /* Several questions in one card (SetQuestion): the question card's own shell (the Composer's edge and field fill, the
+     unit's corner, the 6 mat), its head and foot on the 12 column, the questions 16 apart, each a plain Approval whose
+     words keep their 6 inset inside the mat. Its head reads as a question card's: the name strong, the count muted. */
+  .qk-set {
+    container: qk-question / inline-size;
+    display: grid;
+    gap: var(--area-ui-cluster);
+    padding: max(0px, calc(var(--area-space-6) - var(--area-stroke-width)));
+    border: var(--area-stroke-width) solid var(--area-composer-edge);
+    border-radius: var(--area-approval-corner, var(--_tile-radius));
+    background: var(--area-input-bg);
+    color: var(--area-fg-default);
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
+  }
+  /* The words 6 in; the last control 4 from the card's inner edge, as a question card's close and way on (Approval's
+     trailing offset), so both kinds of card end their controls 5 from the outer edge. */
+  .qk-set__head, .qk-set__foot { display: flex; align-items: center; gap: var(--area-ui-cluster); min-block-size: var(--area-ui-row); padding-inline: var(--area-space-6) 0; margin-inline-end: calc(var(--area-space-4) - max(0px, calc(var(--area-space-6) - var(--area-stroke-width)))); }
+  .qk-set__title { font-weight: var(--area-weight-strong); }
+  .qk-set__count { margin-inline-end: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  .qk-set__list { display: grid; gap: var(--area-space-16); }
+  .qk-set__foot { justify-content: flex-end; }
+  /* Fields as answers: two across, 4 apart, as a grid's answer plates; the toggles a row of outline boxes 4 apart. */
+  .qk-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-4); }
+  .qk-fields__toggles { display: flex; gap: var(--area-space-4); }
+  @container qk-question (max-width: 399px) { .qk-fields { grid-template-columns: minmax(0, 1fr); } }
+  .qk-bar { display: grid; gap: var(--area-space-4); padding-block: var(--area-space-4); }
+  /* A bar's ends under it, muted, as Setup's (setup.css .setup-control__ends). */
+  .qk-bar__ends { display: flex; justify-content: space-between; padding-inline: var(--area-ui-row-inset); color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+
+  /* The kits' sections (owner, 2026-11-04: "each variation next to each other"). The feed: every variation a cell of one
+     grid, the feed's card gap apart, each at least a chat's split column wide (456). The chat kit: each variation a
+     chat at the chosen width, wrapping, the same gap. Rows of a grid hold their units' tops in line. */
+  .qk-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 456px), 1fr)); gap: var(--_canvas-gap); align-items: start; /* pick: 456, the split chat */ }
+  .qk-variants { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--_canvas-gap); }
+  .qk-variants > .qk-variant { inline-size: min(100%, var(--_chat-width)); }
+  /* A variation: its unit, then its name and kind 4 under it, the name on the text edge (the feed card's caption). */
+  .qk-variant { display: grid; gap: var(--area-space-4); min-inline-size: 0; margin: 0; }
+  .qk-variant__caption { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); min-block-size: var(--area-control-xs); padding-inline-start: var(--_text-inset); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+  .qk-variant__name { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
