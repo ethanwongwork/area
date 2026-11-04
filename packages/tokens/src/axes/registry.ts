@@ -29,6 +29,8 @@ import { INK_TINT_AXIS, TINT_DARK_AXIS, TINT_HUE_AXIS, TINT_HUE_DARK_AXIS, TINT_
 import { CARD_TONE_DARK_AXIS, CARD_TONE_LIGHT_AXIS } from "./card-tone.ts";
 import { ACCENT_STRENGTH_AXIS, LABEL_TINT_AXIS, SOLID_DARK_AXIS, SOLID_LIGHT_AXIS, STATUS_COLOURS_AXIS } from "./accent.ts";
 import { SERIES_AXIS } from "./series.ts";
+import { TONE_FLOOR_AXIS } from "./tone-floor.ts";
+import { TONE_TINT_AXIS } from "./tone-tint.ts";
 
 export const AXES: AxisDefinition[] = [
   THEME_AXIS,
@@ -48,6 +50,10 @@ export const AXES: AxisDefinition[] = [
   LABEL_TINT_AXIS,
   // The status tones: as the palette draws them, or quieted with the accent (2026-10-23).
   STATUS_COLOURS_AXIS,
+  // How far status words may trade contrast for colour (2026-11-02): 4.5 (AA) down to 2.5.
+  TONE_FLOOR_AXIS,
+  // How much colour status and label tints carry (2026-11-02): 0 (gray) to 160.
+  TONE_TINT_AXIS,
   // The eight data colours (2026-11-01, the colour system study): how light their luminous colour is.
   SERIES_AXIS,
   ACTION_AXIS,
@@ -91,7 +97,7 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
   { heading: "Accent", settings: ["accent", "solid-light", "solid-dark", "accent-strength", "label-tint"] },
   // Emphasis (owner 2026-10-27: "avoid long phrases like where it paints"; was "Where it paints"): how strongly things
   // stand out, the accent on buttons and selection, the status tones, and contrast.
-  { heading: "Emphasis", settings: ["action", "selection", "status-colours", "series-lightness", "contrast"] },
+  { heading: "Emphasis", settings: ["action", "selection", "status-colours", "tone-tint", "tone-contrast", "series-lightness", "contrast"] },
   { heading: "Size", settings: ["type", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },
   // Width and the master Edge contrast, then each group's amount (owner, 2026-10-30, the stroke review).

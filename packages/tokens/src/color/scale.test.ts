@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
 import { type Theme, WHITE, assertScale, buildScale } from "./scale.ts";
-import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, DARK_TONAL_CHROMA, INVERSION, LEVELS } from "./curves.ts";
+import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, DARK_TONAL_CHROMA, INVERSION, LEVELS, LIGHT_TONAL_CHROMA, TINT_HUE_LEVEL, VIVID_PEAK_CHROMA } from "./curves.ts";
 import { maxChromaAt } from "./gamut.ts";
 import { SRGB } from "./oklab.ts";
 import { labToLch, parseHex, rgbToOklab } from "./oklab.ts";
-import { APCA, WCAG, apcaMagnitude, wcagContrastHex } from "./contrast.ts";
+import { APCA, WCAG, apcaMagnitude, relativeLuminance, wcagContrastHex } from "./contrast.ts";
+import { TONAL_Y } from "./layers.ts";
 import PALETTE from "./palette.json" with { type: "json" };
 
 const THEMES: Theme[] = ["light", "dark"];
@@ -312,6 +313,15 @@ describe("chroma across families", () => {
           );
 
         const moreChromatic = scale.steps.filter(step => step.oklch.C > selectedForeground.oklch.C + 1e-9);
+        // In light the tints paint from the neutral fills (2026-11-02): the ink is the most chromatic step that reads on
+        // what paints and stays under the Layers bound; the rung sequence no longer paints.
+        if (theme === "light") {
+          const grounds = [...ambient, ...scale.tonal.paint.light];
+          const reads = (hex: string) => grounds.every(background => wcagContrastHex(hex, background) >= WCAG.TEXT) && relativeLuminance(parseHex(hex)) <= TONAL_Y;
+          expect(reads(selectedForeground.hex), `${spec.id}/light foreground ${selectedForeground.level} reads`).toBe(true);
+          expect(moreChromatic.some(step => reads(step.hex)), `${spec.id}/light foreground ${selectedForeground.level}`).toBe(false);
+          continue;
+        }
         expect(
           moreChromatic.some(step => sequences[theme].some(surfaceLevels => passes(step, surfaceLevels))),
           `${spec.id}/${theme} foreground ${selectedForeground.level}`,
@@ -326,22 +336,32 @@ describe("chroma across families", () => {
     }
   });
 
-  // Owner, 2026-10-28 (dark soft tones, option A): a dark tonal surface is the neutral control fill of its state with
-  // the tone's hue at DARK_TONAL_CHROMA, never a palette rung; light still paints its rungs.
-  it("paints dark tonal surfaces at the neutral control lightness and the quiet chroma", () => {
+  // Owner, 2026-10-28 (dark soft tones, option A) and 2026-11-02 (light): a tonal surface is
+  // the neutral control fill of its state with the tone's light-end hue at DARK_TONAL_CHROMA or LIGHT_TONAL_CHROMA, never
+  // a palette rung; where sRGB holds less near white (light blue), the chroma is what it can show.
+  it("paints tonal surfaces at the neutral control lightness and the quiet chroma, in both modes", () => {
     const controls = [INVERSION.component, INVERSION.componentHover, INVERSION.componentActive];
-    const neutralL = controls.map(slot => PALETTE.families.neutral[String(slot.dark) as "800"].oklch.L);
-    for (const spec of CHROMATIC_SCALES) {
-      const scale = buildScale(spec, "dark");
-      const light = buildScale(spec, "light");
-      scale.tonal.paint.dark.forEach((hex, i) => {
-        const lch = labToLch(rgbToOklab(parseHex(hex), SRGB));
-        expect(lch.L, `${spec.id} L ${i}`).toBeCloseTo(neutralL[i]!, 2);
-        expect(lch.C, `${spec.id} C ${i}`).toBeCloseTo(DARK_TONAL_CHROMA[i]!, 2);
-      });
-      const rungs = [light.tonal.surface.light, light.tonal.surfaceHover.light, light.tonal.surfaceActive.light]
-        .map(level => light.steps.find(step => step.level === level)!.hex);
-      expect(light.tonal.paint.light).toEqual(rungs);
+    for (const theme of ["light", "dark"] as const) {
+      const neutralL = controls.map(slot => PALETTE.families.neutral[String(slot[theme]) as "800"].oklch.L);
+      const chroma = theme === "light" ? LIGHT_TONAL_CHROMA : DARK_TONAL_CHROMA;
+      for (const spec of CHROMATIC_SCALES) {
+        const scale = buildScale(spec, theme);
+        const hue = scale.steps.find(step => step.level === TINT_HUE_LEVEL)!.oklch.h;
+        const share = Math.min(1, Math.max(...scale.steps.map(step => step.oklch.C)) / VIVID_PEAK_CHROMA);
+        scale.tonal.paint[theme].forEach((hex, i) => {
+          const lch = labToLch(rgbToOklab(parseHex(hex), SRGB));
+          if (theme === "light") {
+            // Light: the chroma holds; the lightness is the fill's, or as far under it as sRGB needs to show it.
+            expect(lch.C, `${theme} ${spec.id} C ${i}`).toBeCloseTo(chroma[i]! * share, 2);
+            expect(lch.L, `${theme} ${spec.id} L ${i}`).toBeLessThan(neutralL[i]! + 0.005);
+            if (maxChromaAt(neutralL[i]!, hue, SRGB) >= chroma[i]! * share) expect(lch.L, `${theme} ${spec.id} L ${i}`).toBeCloseTo(neutralL[i]!, 2);
+          } else {
+            // Dark: the lightness is the fill's; the chroma is the ladder's or what sRGB shows there.
+            expect(lch.L, `${theme} ${spec.id} L ${i}`).toBeCloseTo(neutralL[i]!, 2);
+            expect(lch.C, `${theme} ${spec.id} C ${i}`).toBeCloseTo(Math.min(chroma[i]! * share, maxChromaAt(neutralL[i]!, hue, SRGB)), 2);
+          }
+        });
+      }
     }
   });
 });

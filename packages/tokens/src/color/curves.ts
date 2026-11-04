@@ -181,6 +181,42 @@ export const HUE_ROTATION: Record<string, number> = {
 };
 
 /**
+ * Area's hue drift, in OKLCh degrees, per family: how far the light end and the dark end of a ramp turn, with the
+ * bright middle held (owner, 2026-11-02: a gold yellow for banners and badges).
+ *
+ * A flat hue cannot make a yellow that reads as yellow at both ends. Darkened at one hue a yellow turns olive, because
+ * the dark end of sRGB at a yellow hue is mostly green; every measured reference ramp turns toward amber as it darkens
+ * instead, from about 100 at the light end to 64-77 at its readable ink (docs/research/tone-tints-2026-11-02). The
+ * palette's yellow ran 87, 82, 82.
+ *
+ * Yellow's drift lands its ground at 95 and its readable ink near 72, the reference median, which keeps it about 20
+ * degrees clear of orange's ink (52). The bright middle (300-400, the solid and the series steps) does not move.
+ */
+export const HUE_DRIFT: Record<string, { light: number; dark: number }> = {
+  yellow: { light: 8, dark: -10 },
+};
+
+/** The light end's share of the drift: full at 100 and below, none from 200 up, so dark mode's inks barely turn. */
+export function lightDriftWeight(level: number): number {
+  if (level <= 100) return 1;
+  if (level >= 200) return 0;
+  return (200 - level) / 100;
+}
+
+/** The dark end's share: none at 400 and below, full from 600 down the ladder, linear between. */
+export function darkDriftWeight(level: number): number {
+  if (level <= 400) return 0;
+  if (level >= 600) return 1;
+  return (level - 400) / 200;
+}
+
+/** A family's drift at a rung, in degrees. */
+export function hueDrift(drift: { light: number; dark: number } | undefined, level: number): number {
+  if (!drift) return 0;
+  return drift.light * lightDriftWeight(level) + drift.dark * darkDriftWeight(level);
+}
+
+/**
  * Area's chroma trim, per family, applied to the light end of a ramp.
  *
  * This exists because Area's anchor and this table answer different questions. The export
@@ -255,6 +291,39 @@ export const DARK_LIGHTNESS_LIFT: Partial<Record<Level, number>> = {
  * (docs/research/dark-soft-tones-2026-10-28/).
  */
 export const DARK_TONAL_CHROMA = [0.05, 0.06, 0.07] as const;
+
+/**
+ * The same in light (owner, 2026-11-02: "go with your recs, then work on the tints"): a tone's
+ * soft surfaces at the neutral control fills' lightness (INVERSION.component, componentHover, componentActive: L 0.982 /
+ * 0.973 / 0.961), in the tone's hue, at this chroma, so a soft tone is the neutral soft fill with colour in it in both
+ * modes. The measured references' soft grounds put rest at C 0.012-0.042, median 0.027, and hover and pressed at
+ * 0.034-0.072 (docs/research/tone-tints-2026-11-02/). The palette's rungs had run 0.006 (danger) to 0.035 at rest and up to 0.104
+ * pressed (success's mint), at lightness 0.83 to 0.98. sRGB holds less near white at some hues (blue): there the
+ * chroma is what it can show.
+ */
+export const LIGHT_TONAL_CHROMA = [0.025, 0.035, 0.045] as const;
+
+/**
+ * Tone tint (axes/tone-tint.ts, owner 2026-11-02: "Yes, build it"): how much colour the soft tones' tints carry, as a
+ * percent of the ladders above, one for both modes. 100 is the default; 160 is the richest measured reference (rest
+ * about 0.04 in light, 0.08 in dark); 50 is about the palette's rungs before 2026-11-02; 0 is the neutral fill itself.
+ */
+export const TONE_TINTS = [0, 50, 100, 130, 160] as const;
+export type ToneTint = (typeof TONE_TINTS)[number];
+export const DEFAULT_TONE_TINT: ToneTint = 100;
+export const toneTintId = (tint: number) => String(tint);
+
+/**
+ * A muted family's tints carry its share of a vivid one's colour: the ladders above times its peak chroma over this, the
+ * least vivid named hue's (cyan, 0.146), at most 1. Brown (peak 0.064) takes 0.44: 0.011 at rest in light and 0.022 in
+ * dark, about what the references' browns carry; at the full ladder its tints matched warning's in both modes. A
+ * grey brand's tints go grey with it.
+ */
+export const VIVID_PEAK_CHROMA = 0.146;
+
+/** The rung whose hue a tone's tints take in both modes: the light end, where a tint lives. Yellow's drift turns its dark
+ * rungs toward amber (HUE_DRIFT); its tints stay yellow (95° in both modes). */
+export const TINT_HUE_LEVEL = 100;
 
 export const DARK_CHROMA_CAP: Partial<Record<Level, number>> = {
   650: 0.52,

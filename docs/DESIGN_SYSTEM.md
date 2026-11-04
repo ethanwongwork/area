@@ -52,6 +52,9 @@ them:
 **Palette.** `packages/tokens/src/color/palette.json` is vendored and stays verbatim.
 
 - Hue and chroma tuning goes in the explicit tables in `color/curves.ts`.
+- **A hue may drift along its ramp** (`HUE_DRIFT`, 2026-11-02). Yellow turns +8° at its light end
+  and −10° from 600 down, the bright middle held, so its ground reads as cream and its readable
+  ink as gold, not olive (measured references drift the same way: docs/research/tone-tints-2026-11-02). Generated accent hues mix their neighbours' drift; the data families don't take it.
 - Semantic selection goes in `INVERSION` and the resolver.
 - Keep the light-end and neutral lightness anchors and the gamut constraints.
 - A dark-end lightness adjustment is an explicit, bounded table entry, so it cannot move a
@@ -73,7 +76,10 @@ them:
 - **Colours have one placement** (2026-11-01, docs/research/color-system-2026-11-01). `colourAt(h, L, share, cap)`
   (`color/place.ts`) places a colour by hue, OKLab lightness and its share of the sRGB room; every palette rung is that
   function at its own L, h and share (within one 8-bit step), so data and picked colours can sit between rungs.
-  `palette.json` is never re-spaced, and in-between positions never become semantic roles.
+  `palette.json` is never re-spaced, and in-between positions never become semantic roles, with one exception: a tone's
+  ink (`fg-<tone>`) is solved between its family's two nearest steps (2026-11-02, `scale.ts` `solveInk`), the most
+  colour that still clears its floor, where a step would give some of it away (yellow's pressed tint sat between 600
+  and 650). Tone contrast (docs/THEMING.md) sets that floor.
 - **Data colours are the series, and every series is a palette step** (owner's Build picks, 2026-11-01: OpenAI's
   colours; brightened with an indigo and folded into the palette 2026-11-02, data views rounds 15 and 18). Eight series in
   a fixed order, each a step on its family: blue = sky 350, pink = pink 300, yellow-green = chartreuse 400, indigo =
@@ -95,14 +101,25 @@ them:
 - **Status colours keep their hue.** Under Status colours Match they quiet to the Accent strength with the accent's own
   mix; they never rotate toward it, so danger never reads as warning.
 - **Tonal inks stay under the gray-page bound.** A light tonal ink is no brighter than `TONAL_Y` (teal's #00766a, the
-  brightest named one), the luminance the Layers model darkens hued inks for on a gray page.
-- **Dark soft tones are quiet** (owner, 2026-10-28, docs/research/dark-soft-tones-2026-10-28). In dark a tone's soft
-  surfaces (`<tone>-surface`, `-hover`, `-active`, and `-border-subtle`) are the neutral control fill of the same state
-  (`bg-component`, `-hover`, `-pressed`: L 0.277 / 0.321 / 0.368) in the tone's hue at chroma 0.05 / 0.06 / 0.07
-  (`DARK_TONAL_CHROMA`, `color/scale.ts` `chooseTonalPair`), never a palette rung: ChatGPT, Notion and Figma all sit at
-  chroma 0.04–0.07 there, and the rungs carried up to 0.15 and read almost solid. A soft Button in a tone is the neutral
-  soft Button with colour in it. The ink is gated on the rungs and on the paint, so every named family keeps its ink;
-  light still paints its rungs.
+  brightest named one), the luminance the Layers model darkens hued inks for on a gray page. Under a lower Tone contrast
+  floor, the floor's own bound and darken stand in for it (`toneFloorY`, `layer-light-floor-darken`).
+- **Soft tones are the neutral soft fill with colour in it, in both modes** (dark: owner, 2026-10-28,
+  docs/research/dark-soft-tones-2026-10-28; light: owner, 2026-11-02, docs/research/tone-tints-2026-11-02). A tone's
+  soft surfaces (`<tone>-surface`, `-hover`, `-active`, and `-border-subtle`) take the lightness of the neutral control
+  fill of the same state, in the family's light-end hue (`TINT_HUE_LEVEL`, so yellow's tints stay yellow while its
+  dark rungs drift to amber), at chroma 0.025 / 0.035 / 0.045 in light (`LIGHT_TONAL_CHROMA`) and 0.05 / 0.06 / 0.07 in
+  dark (`DARK_TONAL_CHROMA`), never a palette rung (`color/scale.ts` `chooseTonalPair`).
+  - **In light the colour holds; the lightness gives way.** Near white sRGB holds little chroma at most hues (red, blue
+    and purple, 0.012 at the light rest fill), so a tint sits as far under the fill as its chroma needs: yellow and green
+    stay at the fill (L 0.976), red, blue, purple and pink settle near 0.95 (docs/research/tone-tints-2026-11-02). The light rungs had run chroma 0.006 to 0.104 and lightness 0.83 to 0.98.
+  - **In dark the lightness holds; the chroma gives way** to what sRGB shows at the fill: a lighter dark tint takes the
+    words' contrast (at Tone tint 160 yellow's rose to #524400 and its ink fell to near white).
+  - **Tone tint** (docs/THEMING.md) scales the ladders for the status and label tones, 0 to 160 percent; every tint's
+    words are solved on it at every Tone contrast floor.
+  - **A muted family carries its share** (`VIVID_PEAK_CHROMA`): brown's tints take 0.44 of the ladder; at the full
+    ladder they matched warning's.
+  - Light inks are solved on what paints; dark inks on the rungs too, the stricter ground there, so dark's reviewed inks
+    hold.
 
 **Tone means meaning; treatment means emphasis.**
 

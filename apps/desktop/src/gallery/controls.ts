@@ -17,7 +17,7 @@ export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "sh
 export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "tint-hue" | "tint-hue-dark" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "series-lightness" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | "feedback" | DepthLever;
+  axis: "theme" | "neutral" | "tint-hue" | "tint-hue-dark" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "tone-tint" | "tone-contrast" | "series-lightness" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | "feedback" | DepthLever;
   /**
    * Named choices are a Segmented (Apple and Primer cap segments at 5-7); an ordered range is a bar, Slider's field
    * variant with its exact value inside it (owner, 2026-10-24), which answers the stepped Slider's old fault of reading as
@@ -64,6 +64,8 @@ const INACTIVE: Partial<Record<string, GalleryControl["inactive"]>> = {
   "solid-dark": values => accentShows(values) ? null : "Shows only while Buttons or Selection is Accent",
   "label-tint": values => values.action === "accent" || values.selection === "accent" ? null : "Shows only while Buttons or Selection is Accent",
   "status-colours": values => values["accent-strength"] === "100" ? "No effect at Saturation 100%" : null,
+  // Raised Contrast (and the OS asking for more under System) puts every tone back at 4.5 (axes/tone-floor.ts).
+  "tone-contrast": values => values.contrast && values.contrast !== "system" && Number(values.contrast) > 0 ? "No effect while Contrast is raised" : null,
   "shadow-color": (_, mode) => mode === "dark" ? "Dark shadows are always black" : null,
   "stroke-hover": values => values.stroke === "0" ? "No effect while Edge contrast is 0%" : null,
 };
@@ -135,6 +137,10 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   { axis: "action", kind: "segmented", label: label("action"), hint: "Whether primary buttons are grey or the accent", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: label("selection"), hint: "Whether checked, selected and current things are grey or the accent", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "status-colours", kind: "segmented", label: label("status-colours"), hint: "Red, amber, green and blue messages and badges: in full color, or muted to the accent's Saturation", defaultValue: DEFAULT_AXES["status-colours"], items: [{ value: "fixed", label: "Vivid" }, { value: "match", label: "Muted" }] },
+  // Tone tint (2026-11-02): how much colour status tints carry, percent of Area's.
+  bar("tone-tint", value => value === "0" ? "None" : `${value}%`, { hint: "How much color status and label tints carry: 0 is the gray fill, 100% Area's, 160% the richest. Their words stay readable at Tone contrast" }),
+  // Tone contrast (2026-11-02): how far status words may trade contrast for colour. 4.5:1 is AA.
+  bar("tone-contrast", value => `${value}:1`, { hint: "The lowest contrast colored status words keep on their tints. 4.5:1 is WCAG AA; lower is brighter and more saturated, below AA. Links and body text keep 4.5:1" }),
   // The eight data colours (2026-11-01, the colour system study; palette steps 2026-11-02): sky's step, the others moving with it.
   { axis: "series-lightness", kind: "segmented", label: label("series-lightness"), hint: "How deep chart and meter colours sit on their palette families: Light is sky 350, Deep one step down for every colour", defaultValue: DEFAULT_AXES["series-lightness"], items: [{ value: "350", label: "Light" }, { value: "400", label: "Deep" }] },
   // Increased contrast (docs/CONTRAST.md): a scoped setting, not an axis. System writes no attribute, so the OS decides.

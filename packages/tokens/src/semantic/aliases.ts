@@ -25,6 +25,7 @@ import { apcaMagnitude, wcagContrastHex } from "../color/contrast.ts";
 import type { Theme } from "../color/scale.ts";
 import { tonalStroke } from "./stroke.ts";
 import { ACCENT_STRENGTHS, withStrength } from "../color/generate.ts";
+import { DEFAULT_TONE_FLOOR, toneFloorId } from "../color/layers.ts";
 
 /** The roles the semantic layer addresses. The colour axis repoints `accent`. */
 export const ROLES = [
@@ -284,6 +285,11 @@ export interface ScaleView {
     surfaceHover: { light: Level; dark: Level };
     surfaceActive: { light: Level; dark: Level };
     paint: { light: readonly [string, string, string]; dark: readonly [string, string, string] };
+    /** Each Tone contrast floor's ink, keyed by `toneFloorId` (scale.ts `solveInk`). */
+    ink: { light: Readonly<Record<string, string>>; dark: Readonly<Record<string, string>> };
+    /** The paint and inks at another Tone tint (scale.ts TonalChoice). */
+    tint: (theme: Theme, tint: number) => readonly [string, string, string];
+    inkAt: (theme: Theme, tint: number, floor: string) => string;
   };
   contrast: { hex: string };
 }
@@ -323,7 +329,8 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
     case "tonalSurface":
       return scales[aliasValue.role].tonal.paint[theme][TONAL_STATES.indexOf(aliasValue.state)]!;
     case "tonalForeground":
-      return scales[aliasValue.role].byLevel[scales[aliasValue.role].tonal.foreground[theme]]!;
+      // The default floor's ink, solved between steps (scale.ts solveInk); Tone contrast picks another in CSS.
+      return scales[aliasValue.role].tonal.ink[theme][toneFloorId(DEFAULT_TONE_FLOOR)]!;
     case "stroke":
       return tonalStroke(scales[aliasValue.role].byLevel[INVERSION.textTonal[theme]]!, theme, false);
     case "strokeHover":
@@ -386,8 +393,11 @@ export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme)
       const level = view.tonal[key][theme];
       return view.byLevel[level] === view.tonal.paint[theme][TONAL_STATES.indexOf(aliasValue.state)] ? level : null;
     }
-    case "tonalForeground":
-      return scales[aliasValue.role].tonal.foreground[theme];
+    case "tonalForeground": {
+      // A solved ink sits between steps; it is a numbered rung only where it landed on one.
+      const view = scales[aliasValue.role], level = view.tonal.foreground[theme];
+      return view.byLevel[level] === view.tonal.ink[theme][toneFloorId(DEFAULT_TONE_FLOOR)] ? level : null;
+    }
     case "stroke":
     case "strokeHover":
       // A semantic tint is not a numbered palette rung.

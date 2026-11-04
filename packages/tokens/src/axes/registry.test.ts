@@ -32,6 +32,8 @@ describe("axis registry", () => {
         "card-tone-light", "card-tone-dark",
         // Any accent colour, 2026-10-23 (axes/accent.ts).
         "accent-strength", "solid-light", "solid-dark", "label-tint", "status-colours",
+        // Tone contrast, 2026-11-02 (axes/tone-floor.ts).
+        "tone-contrast", "tone-tint",
         // Danger hover, 2026-10-23 (axes/states.ts).
         "danger-hover",
         // Feedback, 2026-10-24 (axes/feedback.ts).

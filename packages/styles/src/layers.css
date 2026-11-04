@@ -313,7 +313,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -339,7 +339,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -365,7 +365,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -391,7 +391,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -418,7 +418,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -444,7 +444,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
