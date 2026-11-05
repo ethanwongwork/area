@@ -111,6 +111,57 @@ export function ChoicePreview({ axis }: { axis: string; preset: string }): React
     ? <ScreenFigure className="cv-screen" hold={SHOWCASE} scope={{}} />
     : <Scaled fill={0.84} max={1} group={`choice-${axis}`}><SettingSpecimen setting={axis} /></Scaled>;
 }
+/**
+ * Premade simple UI as a question's answer (owner, 2026-11-04: "id prefer the simple abstract, premade ui as answers",
+ * with references of small window and component pictograms): the tiny window's family, drawn from real tokens so the
+ * scope round it (an answer's radius, the theme) reaches it, on one artboard (272 x 192: the 240 x 160 window and room for
+ * its lift) that an SVG viewBox scales whole into any picture, so every answer in a question is drawn at one scale.
+ */
+export type MiniKind = "workspace" | "dashboard" | "settings" | "phone";
+const ARTBOARD = { w: 272, h: 192 }; /* pick: the window and its shadow's room */
+const BARS = [38, 62, 48, 80, 56, 92, 70]; /* pick: a week of requests, as a share of the chart's height */
+function MiniDashboard(): ReactNode {
+  return (
+    <div className="cv-mini" aria-hidden="true">
+      <div className="cv-mini__side" data-area-ground="recessed"><i className="cv-mini__row cv-mini__row--current" /><i className="cv-mini__row" /><i className="cv-mini__row" /></div>
+      <div className="cv-mini__main">
+        <div className="cv-mini__head"><b /><span className="cv-mini__action" /></div>
+        <div className="qk-mini__stats">{[0, 1, 2].map(n => <div key={n} className="cv-mini__card qk-mini__stat" data-area-ground="raised"><i /><b /></div>)}</div>
+        <div className="cv-mini__card qk-mini__chart" data-area-ground="raised"><span className="qk-mini__bars">{BARS.map((h, n) => <i key={n} style={{ blockSize: `${h}%` }} />)}</span></div>
+      </div>
+    </div>
+  );
+}
+function MiniSettings(): ReactNode {
+  return (
+    <div className="cv-mini" aria-hidden="true">
+      <div className="cv-mini__side" data-area-ground="recessed"><i className="cv-mini__row" /><i className="cv-mini__row cv-mini__row--current" /><i className="cv-mini__row" /></div>
+      <div className="cv-mini__main">
+        <div className="cv-mini__head"><b /></div>
+        <div className="cv-mini__card qk-mini__rows" data-area-ground="raised">
+          {[true, false, true].map((on, n) => <span key={n} className="qk-mini__setting"><i /><span className="qk-mini__switch" data-on={on ? "" : undefined} /></span>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+function MiniPhone(): ReactNode {
+  return (
+    <div className="qk-mini__phone" aria-hidden="true">
+      <span className="qk-mini__notch" /><b />
+      {[0, 1, 2, 3].map(n => <span key={n} className="qk-mini__item"><span className="qk-mini__dot" /><i /></span>)}
+      <span className="qk-mini__tabbar" />
+    </div>
+  );
+}
+export function MiniPicture({ kind = "workspace" }: { kind?: MiniKind }): ReactNode {
+  const drawing = kind === "dashboard" ? <MiniDashboard /> : kind === "settings" ? <MiniSettings /> : kind === "phone" ? <MiniPhone /> : <MiniUI />;
+  return (
+    <svg className="qk-artboard" viewBox={`0 0 ${ARTBOARD.w} ${ARTBOARD.h}`} preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <foreignObject x="0" y="0" width={ARTBOARD.w} height={ARTBOARD.h}><div className="qk-art">{drawing}</div></foreignObject>
+    </svg>
+  );
+}
 /** The figures' picture, kept for when they return (setup-screen.tsx FIGURES). */
 export function ChoiceFigure({ axis, preset }: { axis: string; preset: string }): ReactNode {
   return kindOf(axis) === "mini"

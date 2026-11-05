@@ -325,3 +325,7 @@ their own grounds.
 ## 2026-11-04: read on its glyphs (Q-T2)
 
 Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). Plain gives back its head's half-leading at its top, and its last item's at its foot unless that item holds its steps box, Step's rule, so the gaps around a plain plan in a turn are read on the glyphs. Test: `packages/react/tests/type-rhythm.test.mjs`.
+
+## 2026-11-04: margins kept apart
+
+Plain is its own block formatting context (`display: flow-root`, 2026-11-04 kit pass): its list's negative foot and its own glyph margin had collapsed to the larger of the two, so the next tracker sat 20.4 under the last item's baseline in the Chat kit against the turn's 16. Measured after: 16.0.

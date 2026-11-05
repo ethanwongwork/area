@@ -223,7 +223,7 @@
        (type 14) to 296 (13 Compact) across a 1440 window with both panels, where 280 left two of 421. Past four the
        cards grow with the Canvas (owner, 2026-10-31, "scale up and down"; the feed's 1236 measure held them at 300 until
        then), and Auto scales their specimens with them (gallery/fit.ts). */
-    --_pairs: clamp(1, round(down, calc((100cqw + var(--_gap)) / (var(--_card-min, 260px) * var(--_zoom, 1) + var(--_gap))), 1), 4);
+    --_pairs: clamp(1, round(down, calc((100cqw + var(--_gap)) / (var(--_card-min, 260px) * var(--_zoom, 1) + var(--_gap))), 1), var(--_most, 4));
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
   }
   .gallery-tile[data-layout="card"] > .gallery-tile__view { padding: var(--area-space-12); }

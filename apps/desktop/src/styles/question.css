@@ -9,7 +9,10 @@
     min-inline-size: 0;
     /* One family (detail pass, 2026-11-04): the frame and the question take the feed's frame corner (16; the question was
        the Composer's 22). The frame is the feed's card, its name and controls outside under it on the text edge. */
-    --_unit-corner: var(--_tile-radius); /* the feed's one corner (app.css), every frame's in the kits */
+    /* The question's corner (2026-11-04, aligned answers): an answer plate's 10 and the 12 mat round it, so the plates
+       are concentric in the card; the frame takes it too, so the unit keeps one corner. It was the feed's 16, which left a
+       12 mat a 4 plate. */
+    --_unit-corner: calc(var(--area-radius-row) + var(--area-space-12));
     --area-asset-card-corner: var(--_unit-corner);
     --area-approval-corner: var(--_unit-corner);
   }
@@ -27,7 +30,10 @@
   .qk-unit__question { container: qk-question / inline-size; }
   /* Pictures four across want a picture of at least 136 (a name and its key on one line); a narrower question holds
      them two by two, never three and an orphan. */
-  @container qk-question (max-width: 599px) { .qk-choices--pictures { --area-approval-columns: 2; } } /* pick: 4 × 136 + the card */
+  @container qk-question (max-width: 599px) { .qk-choices--pictures:not(.qk-choices--trio) { --area-approval-columns: 2; } } /* pick: 4 × 136 + the card */
+  /* Six pictures three across (a template that asks for three) keep three while each still holds 136: beside a frame in a
+     wide feed the question is 457, and two across stood it 673 tall beside a 393 frame (2026-11-04 kit pass). */
+  @container qk-question (max-width: 439px) { .qk-choices--trio { --area-approval-columns: 2; } } /* pick: 3 × 136 + the card */
   @container qk-question (max-width: 399px) { .qk-choices--words { --area-approval-columns: 1; } } /* pick: 2 × 120 + the card */
   /* A row of three or four answers (steps, points, A or B) needs 170 a cell for a word, its note, its key and the check;
      narrower, it reads one answer a row (456: "Balanced D / efault" in 146). */
@@ -44,6 +50,39 @@
   /* A choice's picture, its own scope's real component fitted to the frame. */
   .qk-pic { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
   .qk-pic > * { inline-size: 100%; block-size: 100%; }
+  /* Simple premade UI as an answer's picture (owner, 2026-11-04: "id prefer the simple abstract, premade ui as answers";
+     choice-visuals.tsx MiniPicture): one artboard scaled whole by its viewBox into the picture, centred on its soft ground,
+     so every answer in a question is drawn at one scale. */
+  .qk-pic:has(> .qk-artboard) { position: relative; }
+  .qk-pic > .qk-artboard { position: absolute; inset: 0; display: block; inline-size: 100%; block-size: 100%; overflow: visible; } /* held to the picture's box whatever its ratio */
+  .qk-art { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
+  /* The window's edge at the stroke width (2026-11-04): the tiny window's ring is drawn at the border width, which a
+     theme's Strokes setting can take to 0, and in dark its soft lift reads as nothing, so the window and the phone lost
+     their outline on the near-black ground. */
+  .qk-art > :is(.cv-mini, .qk-mini__phone) { border: var(--area-stroke-width) solid var(--area-border-card); }
+  /* The tiny window's family (setup.css .cv-mini): a dashboard's figures and chart, settings rows with switches, a phone. */
+  .qk-mini__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; } /* pick */
+  .cv-mini__card.qk-mini__stat { gap: 5px; padding: 6px; }
+  .cv-mini__card.qk-mini__stat > i { inline-size: 70%; } /* pick */
+  .cv-mini__card.qk-mini__stat > b { inline-size: 56%; block-size: 7px; } /* pick: a figure, heavier than a label */
+  .cv-mini__card.qk-mini__chart { block-size: 54px; padding: 8px 8px 0; } /* pick */
+  .qk-mini__bars { display: flex; align-items: flex-end; gap: 6px; block-size: 100%; } /* pick */
+  .qk-mini__bars > i { flex: 1 1 0; border-radius: 2px 2px 0 0; background: var(--area-selection-solid); }
+  .cv-mini__card.qk-mini__rows { gap: 0; padding: 2px 8px; }
+  .qk-mini__setting { display: flex; align-items: center; justify-content: space-between; block-size: 26px; } /* pick */
+  .qk-mini__setting + .qk-mini__setting { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+  .qk-mini__setting > i { inline-size: 64px; block-size: 4px; border-radius: 2px; background: var(--area-fg-muted); } /* pick */
+  .qk-mini__switch { position: relative; inline-size: 20px; block-size: 12px; border-radius: var(--area-radius-full); background: var(--area-fill-track); } /* pick */
+  .qk-mini__switch::after { content: ""; position: absolute; inset-block-start: 2px; inset-inline-start: 2px; inline-size: 8px; block-size: 8px; border-radius: var(--area-radius-full); background: var(--area-bg-surface); }
+  .qk-mini__switch[data-on] { background: var(--area-selection-solid); }
+  .qk-mini__switch[data-on]::after { inset-inline-start: 10px; }
+  .qk-mini__phone { position: relative; display: grid; align-content: start; gap: 6px; inline-size: 88px; block-size: 168px; padding: 18px 8px 8px; border-radius: 16px; background: var(--area-bg-page); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-card), 0 2px 8px -2px rgb(0 0 0 / 0.12); } /* pick: the window's lift */
+  .qk-mini__phone > b { inline-size: 40px; block-size: 6px; margin-block-end: 2px; border-radius: 3px; background: var(--area-fg-default); } /* pick */
+  .qk-mini__notch { position: absolute; inset-block-start: 6px; inset-inline-start: 50%; translate: -50% 0; inline-size: 24px; block-size: 4px; border-radius: var(--area-radius-full); background: var(--area-bg-component-active); } /* pick */
+  .qk-mini__item { display: flex; align-items: center; gap: 6px; block-size: 18px; } /* pick */
+  .qk-mini__dot { flex: none; inline-size: 12px; block-size: 12px; border-radius: var(--area-radius-full); background: var(--area-bg-component-active); } /* pick */
+  .qk-mini__item > i { flex: 1 1 auto; block-size: 4px; border-radius: 2px; background: var(--area-fg-muted); }
+  .qk-mini__tabbar { position: absolute; inset-inline: 8px; inset-block-end: 8px; block-size: 14px; border-radius: var(--area-radius-control-xs); background: var(--area-bg-subtle); } /* pick */
   /* A typeface is "Aa" set in itself, as Font Book's cards (typefaces.tsx). */
   .qk-aa { font-size: var(--area-title-lg-size); line-height: 1; color: var(--area-fg-default); }
   /* "Default" after an answer's words, as Setup's (setup.css .setup-option). */
@@ -87,13 +126,13 @@
      density), 4 apart as a grid's plates. */
   .qk-stack--bars { gap: var(--area-space-4); }
   /* Several questions in one card (SetQuestion): the question card's own shell (the Composer's edge and field fill, the
-     unit's corner, the 6 mat), its head and foot on the 12 column, the questions 16 apart, each a plain Approval whose
-     words keep their 6 inset inside the mat. Its head reads as a question card's: the name strong, the count muted. */
+     unit's corner, Approval's 12 mat), its head, foot and every answer plate on the card's text edge, the questions 16
+     apart, each a plain Approval. Its head reads as a question card's: the name strong, the count muted. */
   .qk-set {
     container: qk-question / inline-size;
     display: grid;
     gap: var(--area-ui-cluster);
-    padding: max(0px, calc(var(--area-space-6) - var(--area-stroke-width)));
+    padding: max(0px, calc(var(--area-space-12) - var(--area-stroke-width))); /* Approval's mat: the plates on the card's text edge */
     border: var(--area-stroke-width) solid var(--area-composer-edge);
     border-radius: var(--area-approval-corner, var(--_tile-radius));
     background: var(--area-input-bg);
@@ -103,7 +142,9 @@
   }
   /* The words 6 in; the last control 4 from the card's inner edge, as a question card's close and way on (Approval's
      trailing offset), so both kinds of card end their controls 5 from the outer edge. */
-  .qk-set__head, .qk-set__foot { display: flex; align-items: center; gap: var(--area-ui-cluster); min-block-size: var(--area-ui-row); padding-inline: var(--area-space-6) 0; margin-inline-end: calc(var(--area-space-4) - max(0px, calc(var(--area-space-6) - var(--area-stroke-width)))); }
+  .qk-set__head, .qk-set__foot { display: flex; align-items: center; gap: var(--area-ui-cluster); min-block-size: var(--area-ui-row); }
+  /* The head's line sits on the mat as Approval's title does (its row's half above it given back). */
+  .qk-set__head { margin-block-start: calc((var(--area-text-base-leading) - var(--area-ui-row)) / 2); }
   .qk-set__title { font-weight: var(--area-weight-strong); }
   .qk-set__count { margin-inline-end: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
   .qk-set__list { display: grid; gap: var(--area-space-16); }

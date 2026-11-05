@@ -202,7 +202,7 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
               aria-keyshortcuts={insteadKey}
               onChange={event => setInstead(event.currentTarget.value)}
               onKeyDown={event => { if (event.key === "Enter" && instead.trim()) { event.preventDefault(); onInstead(instead.trim()); setInstead(""); } }} />
-            {skipInRow ? <Button className="area-approval__skip" variant="outline" tone="neutral" size="sm" aria-keyshortcuts="Escape" onClick={onDismiss}>{skipLabel}</Button> : null}
+            {skipInRow ? <Button className="area-approval__skip" variant="ghost" tone="neutral" size="sm" aria-keyshortcuts="Escape" onClick={onDismiss}>{skipLabel}</Button> : null}
           </label>
         ) : null}
       </div> : null}

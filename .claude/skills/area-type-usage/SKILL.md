@@ -146,3 +146,8 @@ The tables in `docs/PRODUCT_UI.md` list every role per kit; change them there, n
 - Four 96 picture cells at 456: "Workspac e" → two by two under 600, names on one line.
 - A section opening on a component's text sat 19–21 under its title, frames 16 (Q-T2) → read on its glyphs (applied).
 - Six type styles in one reply (h1–h4, quote, caption) → three: 16 headings, 15 text, 13 UI.
+- The feed's prose trimmed every paragraph to its cap (16 apart on the glyphs) while a reply's ran 16 between line boxes
+  (27): one reading text, two rhythms → trim a block's outer edges only, everywhere (2026-11-04).
+- A reply's heading rule written as a descendant (`.studio-response h3`) drew a chart card's CardTitle (an h3) at 16 in a
+  chat: style a composition's own children (`> .area-message__content > h3`), never every heading under it. The census
+  names the part (`area-card__title`); check which card before dismissing a row as a screen figure's.

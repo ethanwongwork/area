@@ -23,11 +23,11 @@
  * edits, runs the tests and asks before installing; a reply explains spacing tokens. Never an em dash, never a product.
  */
 import { useState, type ReactNode } from "react";
-import { Approval, Attachment, Button, Chip, Pagination, Menu, MenuItem, MenuSeparator, Citation, CodeBlock, Code, Composer, ComposerMic, Diff, ComposerMenu, ModelPicker, PromptSuggestions, EditSummary, EditSummaryFile, Message, MessageActions, Plan, Reasoning, Step, StepGroup, Table, TableCell, TableHeaderCell, Timestamp, TurnNotice, type ComposerMenuGroup, type DiffHunk } from "@area/react";
+import { Approval, Attachment, Button, Chip, Pagination, Menu, MenuItem, MenuSeparator, Citation, CodeBlock, Code, Composer, ComposerMic, ComposerNote, Diff, ComposerMenu, EmptyState, Link, ModelPicker, PromptSuggestions, EditSummary, EditSummaryFile, Message, MessageActions, Plan, Reasoning, ReferenceList, ReferenceListItem, Step, StepGroup, Table, TableCell, TableHeaderCell, Timestamp, TurnNotice, type ComposerMenuGroup, type DiffHunk } from "@area/react";
 import { AddIcon, BugIcon, DismissIcon, FileCodeIcon, ClipboardListIcon, HelpIcon, LayersIcon, PlugIcon, SparkleIcon, AttachIcon, BookIcon, ChatIcon, TerminalIcon, ListIcon, PencilIcon, LaptopIcon, ShieldIcon, CopyIcon, DocumentIcon, MoreHorizontalIcon, RefreshIcon, SearchIcon, ThumbsDownIcon, ThumbsUpIcon } from "@area/icons";
 import { CARD_SCOPE, FEED_CODE, FEED_TABLE } from "./tile.tsx";
 import { appScale } from "./app-scale.ts";
-import { QuestionRun } from "./question-kit.tsx";
+import { noted, QuestionRun } from "./question-kit.tsx";
 
 /* The composers' controls, in UI words: where the turn runs, what it may do without asking, and the model with its effort
    (models stay the placeholder vocabulary's options, never a product's names). */
@@ -84,8 +84,11 @@ export function Conversation() {
           <li>and <Code>data-theme</Code> set on the root, so every token follows.</li>
         </ul>
       </Message>
-      <Composer layout="stacked" placeholder={PLACEHOLDER} header={<Where />}
-        leadingActions={<><Add /><Permission /></>} mode={<Model />} trailingActions={<ComposerMic />} />
+      <div className="studio-chat__composer">
+        <Composer layout="stacked" placeholder={PLACEHOLDER} header={<Where />}
+          leadingActions={<><Add /><Permission /></>} mode={<Model />} trailingActions={<ComposerMic />} />
+        <ComposerNote>Answers can be wrong. Check anything important.</ComposerNote>
+      </div>
     </div>
   );
 }
@@ -280,7 +283,7 @@ export function AgentTurn() {
    questions "N of M" with chevrons, always offers Skip, and moves on by itself once one choice is picked). */
 const QUESTIONS = [
   { title: "Which theme should the app open in?", items: [
-    { value: "system", label: "Match the system", description: "Follows the device's light or dark setting" },
+    { value: "system", label: noted("Match the system", "Recommended"), description: "Follows the device's light or dark setting" },
     { value: "light", label: "Light" },
     { value: "dark", label: "Dark" },
   ] },
@@ -343,6 +346,91 @@ export function AddMenu() {
         <Menu aria-label="Add" className="studio-chat__menu">{ADD_ITEMS}</Menu>
         <Composer layout="stacked" placeholder={PLACEHOLDER} leadingActions={<Add />} mode={<Model />} trailingActions={<ComposerMic />} />
       </div>
+    </div>
+  );
+}
+
+/* --- A chat's states (2026-11-04 kit gaps: docs/research/kit-gaps-2026-11-04) ------------------------------------------
+ * What a chat shows besides a finished reply, each from the component made for it: an empty chat, a reply arriving, a
+ * turn that failed, a reply with its sources, and a reply with its earlier versions. */
+
+/** An empty chat: what it can do, the composer, and a few ways in under it (each prompt under the composer's
+ *  placeholder, as the measured home screens set them). */
+export function EmptyChat() {
+  return (
+    <div {...chat()}>
+      <EmptyState size="sm" title="What are we making?" description="Ask about your system, or start from one of these." />
+      <div className="studio-chat__composer">
+        <Composer layout="stacked" placeholder={PLACEHOLDER} leadingActions={<Add />} mode={<Model />} trailingActions={<ComposerMic />} />
+        <PromptSuggestions layout="list" label="Suggestions" items={[
+          { id: "theme", label: "Set up a theme for a workspace", icon: <SparkleIcon /> },
+          { id: "audit", label: "Check the contrast of every color", icon: <SearchIcon /> },
+          { id: "doc", label: "Write the docs for the Button family", icon: <BookIcon /> },
+        ]} />
+      </div>
+    </div>
+  );
+}
+
+/** A reply arriving: its thinking still running, then the words as they stream, the cursor at their end. */
+export function Streaming() {
+  return (
+    <div {...chat()}>
+      <Message author="user">Why do the cards look heavier in dark mode?</Message>
+      <div {...chat("turn")}>
+        <div className="studio-chat__text"><Reasoning running>Comparing the card edge in light and dark</Reasoning></div>
+        <Message author="assistant" authorName="Assistant" streaming>
+          <p>In dark mode the card edge is drawn a step lighter than the page, so it reads as</p>
+        </Message>
+      </div>
+    </div>
+  );
+}
+
+/** A turn that failed, with the way to try again on its line. */
+export function Failed() {
+  return (
+    <div {...chat()}>
+      <Message author="user">Publish the theme to the team library.</Message>
+      <div className="studio-chat__text"><TurnNotice status="error" action={<Button size="sm" variant="ghost" tone="neutral" icon={<RefreshIcon />}>Retry</Button>}>The library didn't answer. Nothing was published.</TurnNotice></div>
+    </div>
+  );
+}
+
+/** A reply that cites what it read: links in its text, a citation, then its sources as a numbered list. */
+export function Sources() {
+  return (
+    <div {...chat()}>
+      <Message author="user">How much contrast does body text need?</Message>
+      <Message author="assistant" authorName="Assistant" actions={ANSWER_ACTIONS} className="studio-response">
+        <p>Body text needs at least 4.5:1 against its background, and large text 3:1. <Citation href="#chat-sources" icon={<BookIcon size={12} />} label="Contrast" title="Contrast guidelines" /></p>
+        <p>Area's text colors already meet it on every page color; see <Link href="#chat-sources">Contrast</Link> for how each one is checked.</p>
+        <div className="studio-chat__text"><ReferenceList title="Sources" marker="number">
+          <ReferenceListItem source="Area docs" title="Contrast" href="#chat-sources" description="How text, edges and focus are checked" />
+          <ReferenceListItem source="Area docs" title="Colors" href="#chat-sources" description="The text colors and where each is used" />
+          <ReferenceListItem source="Area docs" title="Themes" href="#chat-sources" description="Page colors in light and dark" />
+        </ReferenceList></div>
+      </Message>
+    </div>
+  );
+}
+
+/** A reply asked for again: which version this is, among its actions. */
+export function Versions() {
+  const [page, setPage] = useState(2);
+  const actions = (
+    <MessageActions>
+      <Pagination layout="compact" size="sm" pageCount={2} page={page} onPageChange={setPage}
+        labels={{ nav: "Versions", previous: "Previous version", next: "Next version", status: (current, count) => <>{current} of {count}</> }} />
+      {action("Copy", <CopyIcon />)}{action("Regenerate", <RefreshIcon />)}{action("More actions", <MoreHorizontalIcon />)}
+    </MessageActions>
+  );
+  return (
+    <div {...chat()}>
+      <Message author="user">Name the three spacing steps.</Message>
+      <Message author="assistant" authorName="Assistant" actions={actions}>
+        {page === 2 ? <p>Tight, Default and Roomy: the words people use for room.</p> : <p>Compact, Comfortable and Spacious.</p>}
+      </Message>
     </div>
   );
 }

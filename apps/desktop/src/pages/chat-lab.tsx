@@ -23,7 +23,7 @@ import { ScreenFigure, SHOWCASE } from "../setup-screen.tsx";
 import { ColorCard, Sheet as ColorSheet } from "./color.tsx";
 import { SCALES } from "../tokens.ts";
 import { Bars } from "../data-views.tsx";
-import { AddMenu, AgentTurn, Attachments, CardsReply, Commands, Composers, Conversation, InChat, Question, Response, Trackers, VisualRun } from "../chat-kit.tsx";
+import { AddMenu, AgentTurn, Attachments, CardsReply, Commands, Composers, Conversation, EmptyChat, Failed, InChat, Question, Response, Sources, Streaming, Trackers, Versions, VisualRun } from "../chat-kit.tsx";
 import { QUESTION_TEMPLATES, QuestionVariant, SETTING_QUESTIONS } from "../question-kit.tsx";
 import { url, useLibrary } from "./imagery.tsx";
 import { ActivityLog, EventMarks } from "../activity-kit.tsx";
@@ -79,7 +79,12 @@ export function ChatLabPage() {
           </CanvasSection>
           <CanvasSection id="chat-question-run" title="Visual question run" count={SETTING_QUESTIONS.length}><div {...frame}><VisualRun /></div></CanvasSection>
           <CanvasSection id="chat-conversation" title="Conversation"><div {...frame}><Conversation /></div></CanvasSection>
+          <CanvasSection id="chat-empty" title="Empty chat"><div {...frame}><EmptyChat /></div></CanvasSection>
+          <CanvasSection id="chat-streaming" title="Streaming"><div {...frame}><Streaming /></div></CanvasSection>
           <CanvasSection id="chat-response" title="Response"><div {...frame}><Response /></div></CanvasSection>
+          <CanvasSection id="chat-sources" title="Response with sources"><div {...frame}><Sources /></div></CanvasSection>
+          <CanvasSection id="chat-versions" title="Versions"><div {...frame}><Versions /></div></CanvasSection>
+          <CanvasSection id="chat-failed" title="Failed turn"><div {...frame}><Failed /></div></CanvasSection>
           <CanvasSection id="chat-cards" title="Response with cards"><div {...frame}><CardsReply designs={designs} chart={<Bars />} colors={colors} /></div></CanvasSection>
           <CanvasSection id="chat-agent" title="Agent turn"><div {...frame}><AgentTurn /></div></CanvasSection>
           <CanvasSection id="chat-trackers" title="Trackers"><div {...frame}><Trackers /></div></CanvasSection>
