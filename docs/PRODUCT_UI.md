@@ -156,6 +156,14 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     design plus 48. A themed design shows Light, Dark or both. The header's start holds Back and what is shown; its end
     the place among the gallery's designs ("3 of 12"), the steps (← and →) and the zoom. Read only until the playground's
     tools (the review's steps 4 to 7). Components keeps its Stage, which opens and returns the same way.
+26. **A picture of a setting, an answer or a component shows it at true size** (owner, 2026-11-04: "Show UI at 1:1"; the
+    fidelity pass, docs/research/fidelity-2026-11-04: a part judged inside a whole 1920 screen fitted to a frame was drawn
+    at 0.2 to 0.36 of its size, 13px text at 2.6 to 4.7px, a 1px edge at 0.2px). A frame or card that shows what a
+    setting or an answer changes opens on that part (its region: the form, the list, the menu) at 100%, cropped, never
+    shrunk below it; Zoom's Fit is one click away. A card that stands for a whole design (a project, page, theme or
+    version; Publish's before and after) keeps the whole screen fitted, as a thumbnail, and opens at 1:1 (rule 25). A
+    question about the whole design (which screen, A or B, how close, what's off) shows the whole screen fitted.
+    `QuestionFrame` (src/question-kit.tsx) opens at 100% on its `focus`; Setup's Component view draws the part at 2.5×.
 
 ## The app's layout
 
