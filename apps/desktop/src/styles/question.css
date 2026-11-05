@@ -9,7 +9,10 @@
     min-inline-size: 0;
     /* One family (detail pass, 2026-11-04): the frame and the question take the feed's frame corner (16; the question was
        the Composer's 22). The frame is the feed's card, its name and controls outside under it on the text edge. */
-    --_unit-corner: var(--_tile-radius); /* the feed's one corner (app.css), every frame's in the kits */
+    /* The question's corner (2026-11-04, aligned answers): an answer plate's 10 and the 12 mat round it, so the plates
+       are concentric in the card; the frame takes it too, so the unit keeps one corner. It was the feed's 16, which left a
+       12 mat a 4 plate. */
+    --_unit-corner: calc(var(--area-radius-row) + var(--area-space-12));
     --area-asset-card-corner: var(--_unit-corner);
     --area-approval-corner: var(--_unit-corner);
   }
@@ -123,13 +126,13 @@
      density), 4 apart as a grid's plates. */
   .qk-stack--bars { gap: var(--area-space-4); }
   /* Several questions in one card (SetQuestion): the question card's own shell (the Composer's edge and field fill, the
-     unit's corner, the 6 mat), its head and foot on the 12 column, the questions 16 apart, each a plain Approval whose
-     words keep their 6 inset inside the mat. Its head reads as a question card's: the name strong, the count muted. */
+     unit's corner, Approval's 12 mat), its head, foot and every answer plate on the card's text edge, the questions 16
+     apart, each a plain Approval. Its head reads as a question card's: the name strong, the count muted. */
   .qk-set {
     container: qk-question / inline-size;
     display: grid;
     gap: var(--area-ui-cluster);
-    padding: max(0px, calc(var(--area-space-6) - var(--area-stroke-width)));
+    padding: max(0px, calc(var(--area-space-12) - var(--area-stroke-width))); /* Approval's mat: the plates on the card's text edge */
     border: var(--area-stroke-width) solid var(--area-composer-edge);
     border-radius: var(--area-approval-corner, var(--_tile-radius));
     background: var(--area-input-bg);
@@ -139,7 +142,9 @@
   }
   /* The words 6 in; the last control 4 from the card's inner edge, as a question card's close and way on (Approval's
      trailing offset), so both kinds of card end their controls 5 from the outer edge. */
-  .qk-set__head, .qk-set__foot { display: flex; align-items: center; gap: var(--area-ui-cluster); min-block-size: var(--area-ui-row); padding-inline: var(--area-space-6) 0; margin-inline-end: calc(var(--area-space-4) - max(0px, calc(var(--area-space-6) - var(--area-stroke-width)))); }
+  .qk-set__head, .qk-set__foot { display: flex; align-items: center; gap: var(--area-ui-cluster); min-block-size: var(--area-ui-row); }
+  /* The head's line sits on the mat as Approval's title does (its row's half above it given back). */
+  .qk-set__head { margin-block-start: calc((var(--area-text-base-leading) - var(--area-ui-row)) / 2); }
   .qk-set__title { font-weight: var(--area-weight-strong); }
   .qk-set__count { margin-inline-end: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
   .qk-set__list { display: grid; gap: var(--area-space-16); }

@@ -173,3 +173,11 @@ component pictograms on soft grounds). This replaces "Filled, in a card" (Round 
   tiny window at each corner), never a screenshot of a screen; the frame keeps the real screen and follows the answer
   under the pointer, then the chosen one;
 - Recommended is a muted word after the label, the answer listed first.
+
+## Aligned answers (2026-11-04, later)
+
+Owner, shown the aligned mock: "build the aligned version, make sure the fill and stroke of the answer containers are also
+correct, and fix the alignment, padding, margins, inset corner pairings". The answers are plates again (a soft field's
+paint) on the question's text edge, 12 from the card's; every corner is the one outside it less the gap: card 22, plate
+10, number square 4, Skip 6. The unit's frame takes the question's 22. Pictures stay premade simple UI; words stay lists;
+Recommended stays a muted note. Spec: docs/specs/approval.md.
