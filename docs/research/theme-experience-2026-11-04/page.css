@@ -1,0 +1,70 @@
+/* The kits' page chrome, copied from docs/research/feed-kit-2026-11-01/build.mjs (keep in step), then this page's own lines. */
+/* The page around the snapshot: Area's own tokens (the snapshot carries the app's settings on <html>), the app's chrome
+   for the bar. Layout: one sticky bar of the kit's groups over the feed, as the app's Canvas bar over its body. */
+:root {
+  --kit-bg: var(--area-bg-page, #fff);
+  --kit-fg: var(--area-fg-default, #1c1c1c);
+  --kit-muted: var(--area-fg-muted, #6b6b6b);
+  --kit-rule: var(--area-border-decorative, #e6e6e6);
+  --kit-plate: var(--area-bg-component-hover, #f2f2f2);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --kit-bg: var(--area-bg-page, #0b0b0c); --kit-fg: var(--area-fg-default, #f0f0f0); --kit-muted: var(--area-fg-muted, #a8a8a8); --kit-rule: var(--area-border-decorative, #2a2a2a); --kit-plate: var(--area-bg-component-hover, #1c1c1c); color-scheme: dark; } }
+:root[data-theme="dark"] { --kit-bg: var(--area-bg-page, #0b0b0c); --kit-fg: var(--area-fg-default, #f0f0f0); --kit-muted: var(--area-fg-muted, #a8a8a8); --kit-rule: var(--area-border-decorative, #2a2a2a); --kit-plate: var(--area-bg-component-hover, #1c1c1c); color-scheme: dark; }
+html, body { block-size: auto; overflow: visible; }
+body { background: var(--kit-bg); color: var(--kit-fg); font-family: var(--area-font-sans); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--kit-bg); }
+.studio.kit { display: block; block-size: auto; overflow: visible; }
+.kit .studio-canvas__body {
+  overflow: visible; min-block-size: 0;
+  padding-block: var(--_canvas-margin);
+  padding-left: max(var(--_canvas-margin), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--_canvas-margin), env(safe-area-inset-right, 0px));
+}
+.kit .studio-section { scroll-margin-block-start: calc(var(--_studio-bar) + var(--_canvas-margin) + env(safe-area-inset-top, 0px)); }
+@media (max-width: 560px) { .studio.kit { --_canvas-margin: 16px; } }
+.kit-bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  display: flex; align-items: center; gap: var(--area-space-12);
+  min-block-size: var(--_studio-bar);
+  padding-block: var(--area-space-6);
+  padding-left: max(var(--_canvas-margin), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--_canvas-margin), env(safe-area-inset-right, 0px));
+  background: var(--kit-bg); border-block-end: var(--area-border-width) solid var(--kit-rule);
+}
+.kit-bar__name { flex: none; font-weight: var(--area-weight-strong); white-space: nowrap; padding-inline-start: var(--_text-inset); }
+.kit-bar__name span { color: var(--kit-muted); font-weight: var(--area-weight-regular); }
+.kit-bar__groups { display: flex; gap: var(--area-space-2); min-inline-size: 0; overflow-x: auto; scrollbar-width: none; margin-inline-end: auto; }
+.kit-bar__groups::-webkit-scrollbar { display: none; }
+.kit-bar a, .kit-bar button {
+  flex: none; display: inline-flex; align-items: center; block-size: var(--area-control-sm); padding-inline: var(--area-space-8);
+  border: 0; border-radius: var(--area-radius-control); background: transparent; color: var(--kit-muted);
+  font: inherit; font-size: var(--area-ui-size); text-decoration: none; white-space: nowrap; cursor: pointer;
+}
+.kit-bar a:hover, .kit-bar button:hover { background: var(--kit-plate); color: var(--kit-fg); }
+.kit-bar a:focus-visible, .kit-bar button:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
+.kit-bar button { flex: none; border: var(--area-border-width) solid var(--kit-rule); color: var(--kit-fg); }
+@media (max-width: 560px) { .kit-bar__name span { display: none; } }
+/* The Canvas's widths (owner, 2026-11-04: "apply the proper min and max widths"): the feed between the least Canvas the
+   app gives it (a 960 window with both panels open, 960 - 240 - 296 = 424), the typical (a 1440 window with both panels,
+   904) and the most this kit shows (a 1440 window with the panels closed); narrower windows (a phone) keep the 16 margin. */
+.kit .studio-feed { inline-size: min(100%, var(--kit-feed, 1440px)); margin-inline: auto; transition: inline-size 0s; }
+.kit-bar__widths { display: flex; gap: var(--area-space-2); flex: none; }
+.kit-bar__widths button { border: 0; }
+.kit-bar__widths button span { color: var(--kit-muted); font-variant-numeric: tabular-nums; margin-inline-start: var(--area-space-4); }
+.kit-bar__widths button[aria-pressed="true"] { background: var(--kit-plate); color: var(--kit-fg); }
+@media (max-width: 720px) { .kit-bar { flex-wrap: wrap; } .kit-bar__groups { order: 3; flex-basis: 100%; } .kit-bar__widths button span { display: none; } }
+
+/* This page: a chat in the kit's frame, the feed's questions a section's rows. */
+.kit-bar__widths button span:empty { display: none; }
+.kit-bar button:disabled { opacity: var(--area-opacity-disabled); cursor: default; }
+.kit-bar button:disabled:hover { background: transparent; }
+.tx .studio-chatkit__frame { margin-inline: auto; }
+.tx-feed-questions { display: grid; gap: var(--_canvas-gap, 24px); }
+.tx .tx-unit { scroll-margin-block-start: calc(var(--_studio-bar) + var(--_canvas-margin) + env(safe-area-inset-top, 0px)); }
+.tx .area-message { scroll-margin-block-start: calc(var(--_studio-bar) + var(--_canvas-margin) + env(safe-area-inset-top, 0px)); }
+/* An answer given: the reply bubble, pressed to ask the question again. */
+.tx-change { all: unset; cursor: pointer; }
+.tx-change:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); border-radius: var(--area-radius-small); }
+/* Motion's frame: a switch flipping and a button, on the page, in the answer's Speed, Easing and Feedback. */
+.tx-stage { display: grid; place-items: center; inline-size: 100%; block-size: 100%; background: var(--area-bg-page); color: var(--area-fg-default); }
+.tx-motion { display: flex; gap: var(--area-space-16); align-items: center; }

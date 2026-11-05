@@ -1,0 +1,102 @@
+<title>Fidelity Pass</title>
+<style>
+:root {
+  --bg: #ffffff; --ink: #1f1f1f; --muted: #6b6b6b; --rule: #e6e6e6; --plate: #f6f6f6;
+  --yes: #1d7a3e; --no: #9a3b12; --part: #8a6a00;
+  font-family: Geist, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0b0b0c; --ink: #ededed; --muted: #a3a3a3; --rule: #2a2a2a; --plate: #161617; --yes: #5fcf86; --no: #f08a5d; --part: #e0b84a; } }
+:root[data-theme="dark"] { --bg: #0b0b0c; --ink: #ededed; --muted: #a3a3a3; --rule: #2a2a2a; --plate: #161617; --yes: #5fcf86; --no: #f08a5d; --part: #e0b84a; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-size: 14px; line-height: 20px; }
+main { max-width: 880px; margin: 0 auto; padding: 48px 16px 96px; }
+h1 { font-size: 26px; line-height: 32px; font-weight: 600; margin: 0 0 8px; }
+h2 { font-size: 18px; line-height: 24px; font-weight: 600; margin: 48px 0 12px; }
+h3 { font-size: 14px; line-height: 20px; font-weight: 600; margin: 0; }
+p { margin: 0 0 12px; }
+.muted { color: var(--muted); }
+.lede { color: var(--muted); max-width: 680px; }
+table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--rule); }
+th { font-weight: 500; color: var(--muted); font-size: 13px; }
+td:first-child { width: 34%; }
+.verdict { font-weight: 600; white-space: nowrap; }
+.yes { color: var(--yes); } .no { color: var(--no); } .part { color: var(--part); }
+.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 12px; }
+figure { margin: 0; }
+figure img { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--rule); background: #fff; }
+figcaption { margin-top: 8px; font-size: 13px; color: var(--muted); }
+figcaption b { color: var(--ink); font-weight: 500; }
+.wide { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+ol { padding-left: 20px; margin: 0; } li { margin-bottom: 12px; }
+code { font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 12.5px; background: var(--plate); padding: 1px 4px; border-radius: 4px; }
+.box { background: var(--plate); border-radius: 12px; padding: 16px; margin-top: 12px; }
+@media (max-width: 560px) { td:first-child { width: auto; } th, td { padding-right: 8px; } }
+</style>
+<main>
+  <h1>Fidelity pass</h1>
+  <p class="lede">Why Area's UI reads less finished than vector examples in Figma. I measured Area's Workspace screen as the
+  browser draws it: true size (1920 × 1080), a 2× display, Area's defaults, 548 elements, 131 of them painted.
+  Each of my earlier guesses is marked held, partly held or wrong.</p>
+
+  <h2>Results</h2>
+  <table>
+    <thead><tr><th>Guess</th><th>Result</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Fractional sizes blur edges</td><td class="verdict no">Wrong</td>
+        <td>78 of 131 painted boxes do land between device pixels, and text trimming causes most of them: 39 of the 49
+        vertical cases go away without it (heights like 16.86 and 35.09). But Chrome snaps box edges when it paints: a card's
+        1px edge reads as two full device rows (grey 234, 234), not a smear. The cost is at most one device pixel of
+        unevenness in repeated rows.</td></tr>
+      <tr><td>Text sits off centre in controls</td><td class="verdict no">Wrong</td>
+        <td>In all 36 controls with a visible box, the cap's centre is within 0.36px of the box's centre.</td></tr>
+      <tr><td>Shadows are fainter than in kits</td><td class="verdict yes">Held</td>
+        <td>Darkest pixel under the open menu: <b>248</b> at the default (Menu lift 3), <b>242</b> at High (5),
+        <b>235</b> with a common Figma kit's large shadow (<code>0 12 16 −4 / 8%</code> + <code>0 4 6 −2 / 3%</code>).
+        The default menu shadow is about a third as deep as a typical kit's.</td></tr>
+      <tr><td>Text is smaller and tighter than in kits</td><td class="verdict yes">Held (by choice)</td>
+        <td>Area's default UI text is 13/18. Most Figma kits' body text is 14/20. That's 7% smaller with 10% less line height,
+        and nine type styles share one screen. You chose 13 on purpose; it reads as density rather than craft.</td></tr>
+      <tr><td>Area is shown scaled down</td><td class="verdict yes">Held</td>
+        <td>The kits and artifacts show components inside a 1920-wide screen fitted into a card. At 380 wide that's a scale
+        of 0.2: 13px text draws at 2.6px and a 1px edge at 0.2px. Figma examples are shown 1:1 or zoomed in.</td></tr>
+      <tr><td>Text renders differently</td><td class="verdict part">Not measured</td>
+        <td>Electron draws Geist with grayscale anti-aliasing (<code>antialiased</code>). This needs a Figma frame beside it
+        at the same size to judge.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Shadows: same menu, three depths</h2>
+  <div class="figs">
+    <figure><img alt="Menu at Area's default lift" src="menu-asis.png"><figcaption><b>Area default</b> · Menu lift 3 · darkest 248</figcaption></figure>
+    <figure><img alt="Menu at Area's High lift" src="menu-elev5.png"><figcaption><b>Area High</b> · Menu lift 5 · darkest 242</figcaption></figure>
+    <figure><img alt="Menu with a common kit's large shadow" src="menu-kitshadow.png"><figcaption><b>Common kit shadow</b> · darkest 235</figcaption></figure>
+  </div>
+
+  <h2>Type: 13 against 14</h2>
+  <div class="figs wide">
+    <figure><img alt="Workspace body at type 13" src="body-asis.png"><figcaption><b>Type 13</b> · Area's default</figcaption></figure>
+    <figure><img alt="Workspace body at type 14" src="body-type14.png"><figcaption><b>Type 14</b> · what most kits show</figcaption></figure>
+  </div>
+
+  <h2>What would close the gap, in order</h2>
+  <ol>
+    <li><b>Show components the way Figma does.</b> In kits, artifacts and feed cards, show the part at 1:1 (or 2×), cropped,
+    instead of a whole 1920 screen shrunk to a thumbnail. This is the largest visible gain, and no token changes.</li>
+    <li><b>Deepen the default floating shadow.</b> Move the default Menu lift toward the kits' depth (the High step gets
+    two-thirds of the way). This is a default change across every family, so it's your decision, made with the
+    foundation-change process.</li>
+    <li><b>Keep trimmed text on whole pixels.</b> Round the trim margins to half pixels so rows and cards stay on the
+    grid. A small gain: tidier rows, not sharper edges.</li>
+  </ol>
+
+  <h2>What's still missing</h2>
+  <div class="box">
+    <p>This compares Area with published kit values, not with the Figma examples you had in mind. Share one (a frame link
+    or an exported PNG at 1× or 2×) and I'll build the same screen in Area at the same size and compare them point by point:
+    type, edges, fills, shadows and spacing.</p>
+    <p class="muted" style="margin:0">Method: <code>docs/research/fidelity-2026-11-04/</code> (screen.tsx, measure.cjs, pixels.cjs),
+    built against the feed-chat-kits-refinement worktree. Hidden Electron window at the display's 2× ratio. Measured on
+    2026-11-04 in light mode only.</p>
+  </div>
+</main>

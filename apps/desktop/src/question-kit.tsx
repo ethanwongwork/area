@@ -63,9 +63,13 @@ interface FrameProps {
   visual?: (scopeOf: (changes: Changes) => Record<string, string | undefined>) => ReactNode;
   /** Before: hold the frame on the settings the question started from, to compare. Off where there is nothing before. */
   before?: boolean;
-  /** Open at this zoom on the part the question changes (a corner reads at 100%, not at the screen's fitted 39%). */
-  zoom?: number;
+  /** The part the question changes. The frame opens on it at true size (owner, 2026-11-04, "Show UI at 1:1": a corner,
+   *  an edge or a shadow judged in a whole screen fitted to the frame was drawn at 0.2 to 0.36 of its size; the fidelity
+   *  pass, docs/research/fidelity-2026-11-04). Zoom to fit is a click away. No part: the whole screen, fitted, for a
+   *  question about the whole design (Screen kind, A or B, How close, What's off). */
   focus?: Region;
+  /** Open at another zoom on the part than true size. */
+  zoom?: number;
 }
 
 /** Asset card as the frame: the visual 16:9 under a head of controls. */
@@ -73,7 +77,7 @@ export function QuestionFrame({ name, shown, screen = "workspace", hold = SHOWCA
   const studio = useStudio();
   const [mode, setMode] = useState<Mode>(studio.theme === "dark" ? "dark" : "light");
   const [was, setWas] = useState(false);
-  const [scale, setScale] = useState<number | null>(opening ?? null);
+  const [scale, setScale] = useState<number | null>(opening ?? (focus ? 1 : null));
   const [fitted, setFitted] = useState(1);
   const [full, setFull] = useState(false);
   const card = useRef<HTMLDivElement>(null);
@@ -207,7 +211,7 @@ export function RoomQuestion(props: QuestionProps) {
   // The steps in the question's own words (the setting's middle step is called Default, which read "Default Default").
   const WORDS: Record<string, string> = { "28": "Tighter", "32": "Balanced", "36": "Roomier" };
   const items = (controlOf("density")?.items ?? []).map(item => ({ value: item.value, label: isDefault(WORDS[item.value] ?? item.label, item.value === defaultOf("density")), set: { density: item.value } }));
-  return <ChoiceQuestion {...props} name="Workspace" title="How much room between things?" description="Taller rows and wider gaps, or more on the screen." items={items} />;
+  return <ChoiceQuestion {...props} name="Workspace, the list" title="How much room between things?" description="Taller rows and wider gaps, or more on the screen." items={items} focus="list" />;
 }
 
 const CORNERS = ["0", "4", "8", "10", "14", "pill"] as const;
@@ -215,7 +219,7 @@ const CORNERS = ["0", "4", "8", "10", "14", "pill"] as const;
 export function CornersQuestion(props: QuestionProps) {
   const studio = useStudio();
   return (
-    <ChoiceQuestion {...props} name="Workspace, the form" title="How round should corners be?" layout="grid" columns={3} ratio="4 / 3" zoom={1} focus="form"
+    <ChoiceQuestion {...props} name="Workspace, the form" title="How round should corners be?" layout="grid" columns={3} ratio="4 / 3" focus="form"
       items={CORNERS.map(value => ({ value, label: isDefault(say("radius", value), value === defaultOf("radius")), set: { radius: value },
         visual: <span className="qk-pic" {...canvasAttributes({ ...studio.shown.canvas, radius: value }, studio.shown.material)}><MiniPicture /></span> }))} />
   );
@@ -245,7 +249,7 @@ function BarQuestion({ place, onDone, name, title, description, axis, label, sta
   );
 }
 export const ShadowQuestion = (props: QuestionProps) => (
-  <BarQuestion {...props} name="Workspace, a menu open" title="How much should floating things lift?" description="Menus, popovers and dialogs cast this shadow." axis="elevation" label="Shadow" start="Flat" end="Lifted" zoom={1} focus="menu" />
+  <BarQuestion {...props} name="Workspace, a menu open" title="How much should floating things lift?" description="Menus, popovers and dialogs cast this shadow." axis="elevation" label="Shadow" start="Flat" end="Lifted" focus="menu" />
 );
 
 /** The palette's accents, each its 500 step at full strength, and any hue on a bar. */
@@ -259,7 +263,7 @@ export function AccentQuestion({ place, onDone }: QuestionProps) {
   const custom = /^\d+$/.test(accent);
   const changes: Changes = { accent, action: "accent", selection: "accent" };
   return (
-    <VisualQuestion frame={<QuestionFrame name="Workspace" shown={changes} />}>
+    <VisualQuestion frame={<QuestionFrame name="Workspace, the form" shown={changes} focus="action" />}>
       <Approval title="Which color should actions be?" description="Primary buttons, checked boxes and the current page." items={[]} onChoose={() => {}}
         {...inWords(onDone)} actions={headActions(place)}
         footer={<Button size="sm" onClick={() => onDone?.()}>Continue</Button>}>
@@ -313,7 +317,7 @@ export function FineTuneQuestion({ place, onDone }: QuestionProps) {
       readout={(index: number) => say(axis, scale[index] ?? value)} onValueChange={index => setValues(current => ({ ...current, [axis]: scale[index]! }))} />;
   };
   return (
-    <VisualQuestion frame={<QuestionFrame name="Workspace, the form" shown={values} zoom={1} focus="form" />}>
+    <VisualQuestion frame={<QuestionFrame name="Workspace, the form" shown={values} focus="form" />}>
       <Approval title="Fine-tune the details" description="Exact values; every other setting stays as it is." items={[]} onChoose={() => {}}
         {...inWords(onDone)} actions={headActions(place)}
         footer={<>
@@ -347,7 +351,7 @@ export function FieldsQuestion({ place, onDone }: QuestionProps) {
   };
   const pill = values.radius === "pill";
   return (
-    <VisualQuestion frame={<QuestionFrame name="Workspace, the form" shown={values} zoom={1} focus="form" />}>
+    <VisualQuestion frame={<QuestionFrame name="Workspace, the form" shown={values} focus="form" />}>
       <Approval title="Set the exact values" description="Type a value or drag an icon; each lands on its setting's nearest step." items={[]} onChoose={() => {}}
         {...inWords(onDone)} actions={headActions(place)}
         footer={<>
@@ -393,7 +397,7 @@ export function SetQuestion({ onDone }: QuestionProps) {
   })) as Changes;
   const done = SET.filter(q => answers[q.id]).length;
   return (
-    <VisualQuestion frame={<QuestionFrame name="Workspace" shown={shown} />}>
+    <VisualQuestion frame={<QuestionFrame name="Workspace, the form" shown={shown} focus="form" />}>
       <section className="qk-set" aria-label="Questions" {...STROKE}>
         <div className="qk-set__head">
           <span className="qk-set__title">Questions</span>
