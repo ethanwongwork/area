@@ -33,7 +33,7 @@ import { GlyphCell, GlyphGrid, GlyphSheet } from "../glyph-sheet.tsx";
 import { TOKEN_BY_NAME, type Token } from "../token-catalog.ts";
 import { ColorCard, Sheet as ColorSheet, SwatchCard } from "./color.tsx";
 import { CharacterCell, factsOf, stackOf, typefaceOf } from "./typefaces.tsx";
-import { Composers, Conversation, Response, Trackers } from "../chat-kit.tsx";
+import { Composers, Conversation, Response, Sources, Trackers } from "../chat-kit.tsx";
 import { BadgeTables } from "../badge-catalogue.tsx";
 import { ActivityLog, EventMarks } from "../activity-kit.tsx";
 import { AreaOverTime, Bars, Calendar, Columns, Diffstat, DotGrid, Funnel, HeatMatrix, Histogram, LanguageBar, Lifecycle, Pace, PunchCard, Retention, ShareRing, StatTiles, StatusHistory, Tracker, Waterfall, WeeklyStrip } from "../data-views.tsx";
@@ -209,6 +209,10 @@ export function FeedLabPage() {
 
           <CanvasSection id="feed-response" title="Response">
             <Response />
+          </CanvasSection>
+
+          <CanvasSection id="feed-sources" title="Response with sources">
+            <Sources />
           </CanvasSection>
 
           <CanvasSection id="feed-trackers" title="Trackers">

@@ -283,3 +283,7 @@ the file's name first, its folder after it, muted and cut from its start, so the
 ## 2026-11-04: read on its glyphs (Q-T2)
 
 Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). Plain gives back its head's half-leading at its top, and its last row's at its foot while the last file's diff is closed (a diff is a frame). A head that carries Keep / Undo is a control row and still sits a little lower (19.6 under a Step group, measured). Test: `packages/react/tests/type-rhythm.test.mjs`.
+
+## 2026-11-04: margins kept apart
+
+Plain is its own block formatting context (`display: flow-root`, 2026-11-04 kit pass, as Plan's): the file list's negative foot had collapsed into its glyph margin, so the block after it sat 19.4 under the last row against 16. Measured after: 16.

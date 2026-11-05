@@ -110,8 +110,11 @@ test("an Approval numbers its choices, focuses the first only when asked and off
   // What to do instead is the last row: numbered after the choices, a field with no fill of its own.
   assert.match(html, /<label class="area-approval__option area-approval__instead">/);
   assert.match(html, /<input class="area-approval__field" type="text" aria-label="Tell it what to do instead"[^>]*aria-keyshortcuts="3"/);
-  // Every key is a keycap (owner 2026-10-22): the row numbers are small keycaps, never quiet text.
-  assert.equal((html.match(/area-approval__key[^]*?area-kbd area-kbd--sm area-kbd--default/g) ?? []).length >= 2, true);
+  // The row numbers are plain ordinals on the text edge (owner, 2026-11-04, plain answers), not keycaps; a key named in the
+  // hint's sentence is still a keycap (Kbd keeps its backplate wherever it is drawn, owner 2026-10-22).
+  assert.match(html, /<span class="area-approval__key" aria-hidden="true">1<\/span>/);
+  assert.match(html, /<span class="area-approval__key" aria-hidden="true">3<\/span><input class="area-approval__field"/);
+  assert.doesNotMatch(html, /area-approval__key" aria-hidden="true"><span class="area-kbd/);
   assert.doesNotMatch(html, /area-kbd--quiet/);
   assert.match(html, /<p class="area-approval__hint"><span class="area-kbd area-kbd--sm area-kbd--default"/);
   assert.match(html, /area-approval__hint/);

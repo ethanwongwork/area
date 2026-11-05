@@ -239,6 +239,10 @@
      Nav's and Message actions' do. Its nested steps keep their recessed ground. */
   .area-plan--plain {
     --_card-list: 0px;
+    /* Its own block formatting context, so the list's negative foot (below) shortens the plan instead of collapsing into
+       the plan's own glyph margin (2026-11-04 kit pass: the two collapsed to the larger, and the next tracker sat 20.4
+       under the last item's baseline against the turn's 16). */
+    display: flow-root;
     overflow: visible;
     margin-inline: calc(-1 * var(--area-ui-row-inset));
     border: 0;

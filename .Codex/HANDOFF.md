@@ -1,6 +1,39 @@
 # Handoff
 
-## Current state (2026-11-03)
+## Current state (2026-11-04)
+- **Feed and Chat kit refinement, worktree `feed-chat-kits-refinement-a31e9c` (uncommitted, 2026-11-04).** Owner: refine type,
+  spacing, balance, corners, fill, stroke, rhythm in both kits. Measured (census, glyph rhythm probe, a corner/fill/edge
+  census, light and dark, Panel/Split/Column, a 400 feed). Fixed: plain Plan and Edit summary `display: flow-root` (their
+  glyph margin had collapsed into the list's negative foot: 20.4 / 19.4 → 16); the feed's prose trims only its block's
+  edges (paragraphs 27 on the glyphs, as a reply's; were 16); a reply's heading rule scoped to the reply's own children
+  (a chart card's h3 title drew at 16 in a chat); a reply's design cards never keep empty tracks (`--_most`, canvas.css);
+  the activity log's cards take the kit's 16 corner (were 20); question cards take the cards' stroke in the feed as in a
+  chat; a three-across picture question keeps three to 440 (beside a frame it stood 673 tall by a 393 frame). Docs:
+  PRODUCT_UI kit rules, plan/edit-summary specs, area-type-usage mistakes. Checks: react 641, desktop 31, cohesion +
+  type-rhythm, docs, playgrounds, app-css, typecheck. Open proposals: an Approval in a chat at 22 (the composer's) beside
+  16 frames; Plan's pending ring at ~1.1:1 under the chat's card stroke; a fixed-layout table at 268 splits code tokens.
+  Feed Kit / Chat Kit artifacts not republished. Then (owner: "should there be a close button on the chat answers? …
+  more padding around the answer part … so that the backplates align with the text?"): × only on a run of questions
+  (`headActions`, question-kit.tsx); asked: plates on the title's edge (mat 12, plates 10, card 22 concentric, the unit's
+  frame 22 too) vs today's hanging plates (mat 6, card 16). Then (owner: "the answer backplates and the skip button
+  and number backplate look off … can the answers just be plain text … not all answers need a frame … recommended
+  answers?"; "Yes, build it"; "id prefer the simple abstract, premade ui as answers"): Approval answers are plain rows
+  (plate on hover/focus/chosen, hanging 6 out, concentric 10 in 16), numbers plain digits (not Kbd; Esc stays a keycap),
+  Skip ghost; kit: words are lists, Where it's used has no frame, Recommended a muted word (`noted`), pictured answers
+  are `MiniPicture` (choice-visuals.tsx: workspace / dashboard / settings / phone on a 272 × 192 artboard scaled by a
+  viewBox; corners = the tiny window per radius). `FIGURES` stays false (frames real). Spec, Documentation entry,
+  PRODUCT_UI, visual-questions README updated; agent-chat test updated. Checks: react 641, desktop 31, docs,
+  playgrounds, app-css, typecheck.
+  Then ("relaunch the chat and feed kits, evaluate and research any gaps, fix any inconsistencies, see what needs to be
+  updated in area design system"; the theme-as-one-chat request was interrupted, not started): report and open
+  decisions in `docs/research/kit-gaps-2026-11-04/README.md`. Chat kit gained Empty chat, Streaming, Response with
+  sources (also in the feed), Versions, Failed turn, a Composer note. Fixed in components: Message's list rules leaked
+  into a Reference list (now `:not([class*="area-"])`, DESIGN_SYSTEM "a host's text rules leave components alone",
+  cohesion test), the streaming cursor sat on its own line, Approval's plate corner = card − mat (`--_approval-plate`).
+  DESIGN_SYSTEM also: a list's ordinal is not a keycap. Checks: react 642, desktop 31, docs, playgrounds, app-css,
+  typecheck, manifest. Feed Kit v42 and Chat Kit v13 republished.
+
+## Earlier state (2026-11-03)
 - **Visual questions, worktree `visual-feedback-ui-templates-cf32c1` (uncommitted, 2026-11-03).** Owner: a new UI type for
   feed and chat, a frame (Asset card) over answers in any form (list, grid, pictures, bar, chips, any control), templates
   for asking design questions and feedback visually. Research and rules in `docs/research/visual-questions-2026-11-03/`

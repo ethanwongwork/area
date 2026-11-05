@@ -220,6 +220,9 @@
      around it, their plates hanging one row inset into the margin. A file's diff keeps its own frame. */
   .area-edit-summary--plain {
     --_card-list: 0px;
+    /* Its own block formatting context (as Plan's): the file list's negative foot shortens the summary rather than
+       collapsing into its glyph margin (2026-11-04 kit pass: 19.4 to the next block against 16). */
+    display: flow-root;
     overflow: visible;
     margin-inline: calc(-1 * var(--area-ui-row-inset));
     border: 0;
