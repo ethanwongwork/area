@@ -371,6 +371,15 @@ test('every Kbd is a keycap: nothing unboxes it (owner 2026-10-22)', () => {
   }
 });
 
+// DESIGN_SYSTEM.md, "Text that flows": a host's text rules style its own text, never a component set in it (2026-11-04:
+// Message's list markers drew over a Reference list's numbers in a reply). Message's list rules exclude Area's parts.
+test("a host's text rules leave components alone", () => {
+  // A descendant list rule (`.area-message__content :is(ul, ol)`, `… ol`), not a direct child's (`> * + :is(ul, ol)`).
+  const lists = rules.filter(rule => /\.area-message__content (:is\(ul, ol\)|ul|ol)(?![\w-])/.test(rule.selector));
+  assert.ok(lists.length >= 5, 'Message has its list rules');
+  for (const rule of lists) assert.match(rule.selector, /:not\(\[class\*="area-"\]\)/, `${rule.selector} reaches a component's list`);
+});
+
 test('soft fields draw a boundary under increased contrast', () => {
   // CONTRAST.md: under increased contrast a required boundary targets 3:1. A soft field's fill alone read 1.07:1,
   // so its resting edge is `input-edge-soft`: the Fields group's amount at standard contrast, the strong control edge at more.

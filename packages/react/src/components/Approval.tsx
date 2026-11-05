@@ -175,7 +175,7 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
               aria-describedby={option.description ? `${optionId}-${index}` : undefined}
               onPointerEnter={() => { pointed.current = option.value; report(); }}
               onFocus={() => { focused.current = option.value; report(); }}>
-              <span className="area-approval__key" aria-hidden="true">{index < 9 ? <Kbd keys={[String(index + 1)]} size="sm" /> : null}</span>
+              <span className="area-approval__key" aria-hidden="true">{index < 9 ? index + 1 : null}</span>
               {option.description ? (
                 <span className="area-approval__lines">
                   <span className="area-approval__label">{option.label}</span>
@@ -197,12 +197,12 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
         })}
         {onInstead ? (
           <label className="area-approval__option area-approval__instead">
-            <span className="area-approval__key" aria-hidden="true">{insteadKey ? <Kbd keys={[insteadKey]} size="sm" /> : null}</span>
+            <span className="area-approval__key" aria-hidden="true">{insteadKey ?? null}</span>
             <input className="area-approval__field" type="text" aria-label={insteadPlaceholder} placeholder={insteadPlaceholder} value={instead}
               aria-keyshortcuts={insteadKey}
               onChange={event => setInstead(event.currentTarget.value)}
               onKeyDown={event => { if (event.key === "Enter" && instead.trim()) { event.preventDefault(); onInstead(instead.trim()); setInstead(""); } }} />
-            {skipInRow ? <Button className="area-approval__skip" variant="outline" tone="neutral" size="sm" aria-keyshortcuts="Escape" onClick={onDismiss}>{skipLabel}</Button> : null}
+            {skipInRow ? <Button className="area-approval__skip" variant="ghost" tone="neutral" size="sm" aria-keyshortcuts="Escape" onClick={onDismiss}>{skipLabel}</Button> : null}
           </label>
         ) : null}
       </div> : null}

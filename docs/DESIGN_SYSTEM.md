@@ -275,6 +275,8 @@ own step.
     survives hover, press and selection.
   - In lists a shortcut is quiet: 12/16, 400, muted, and it takes a danger row's ink.
   - Escape is written "Esc".
+  - A list's ordinal is not a keycap: Approval numbers its answers with plain muted digits (owner, 2026-11-04);
+    a key named in a sentence (its "Esc to cancel") is still a keycap.
 - **List rows.**
   - Every icon row puts its label on one 36px column (8 inset + 16 icon + `gap-row` 12):
     Menu, Command palette, Combobox, Select options and Nav. Tree view keeps its own grid.
@@ -513,6 +515,10 @@ and `emit/base.ts`; never copy a table into a component
     (8). Steps inside a group stay 4 apart.
   Space is compared on one basis, baseline to cap: a gap quoted between line boxes (another product's 2px) is that gap
   plus the lines' own leading, about 9 at 13/18.
+  - **A host's text rules style its own text, never a component set in it** (2026-11-04 kit pass). Message's list markers
+    and a reply's heading size reached a Reference list's numbers and a chart Card's title inside the reply. A host that
+    styles flowing text reaches its own children (`> h3`), or excludes Area's parts (`:not([class*="area-"])`); a
+    component inside keeps its own type. Test: `cohesion.test.mjs` ("a host's text rules leave components alone").
 - **Shared controls use the same tier's icon, text and gap tokens.**
 - **Icon-to-label gap:**
   - 6 at sm, md and lg; 4 at xs and compact;

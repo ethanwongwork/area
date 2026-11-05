@@ -753,7 +753,7 @@ type 13; every size moves with the Type setting, every gap with Density.
 | A caption or note standing alone, a timestamp | `text-sm` 12/16 | muted | 400 | under a block, 8 under it |
 | A figure | `title-lg` 26/30 | default | 400 | a stat card's value |
 | Data labels (axes, keys, ticks) | `text-xs` 11/14, mono | muted | 400 | charts and data views |
-| Prose | `text-lg` 15/22, at most 80ch | default | 400 | paragraphs 16 apart (`text-lg-prose-gap`), trimmed to their cap |
+| Prose | `text-lg` 15/22, at most 80ch | default | 400 | paragraphs 16 apart between line boxes (`text-lg-prose-gap`; 27 on the glyphs, as a reply's), the block trimmed to its first cap and last baseline |
 | Code | mono 13/20 in Code block; inline code 0.875em of its text | default | 400 | |
 
 Widths: the feed is the Canvas's, from 424 (a 960 window with both panels) through 904 (a 1440 window with both panels)
@@ -774,7 +774,8 @@ question's frame 8 over its question.
 | Inline code | mono 0.875em | default | 400 | on its line's plate |
 | An agent's work (Step, Reasoning, Plan, Edit summary, Turn notice) | `text-base` 13/18 | verb muted, detail default | 400 | 16 apart, on the text edge |
 | A card's title (Approval's question, a frame's name) | `text-base` 13/18 | default | 500 (the question) / 400 (a frame's name) | 13 in from the edge |
-| A card's choices and rows | `text-base` 13/18 | default; a choice's description muted, joined | 400 | rows on the row inset |
+| A card's choices and rows | `text-base` 13/18 | default; a choice's description muted, joined | 400 | plain rows, the number a muted digit on the question's edge |
+| An answer's note (Recommended, Default) | `text-base` 13/18, after the label | muted | 400 | never a Badge; the recommended answer first |
 | Metadata (a step's time, a plan's count, +/− counts) | `text-sm` 12 on the row's 18 | muted (+/− their tones) | 400 | the row's end |
 | A timestamp | `text-sm` 12/16 | muted | 400 | 8 over its message |
 | Keys, badges | `text-xs` 11 | muted / tone | 500 | Kbd, Badge |
@@ -782,11 +783,14 @@ question's frame 8 over its question.
 
 Widths: a chat is one column at one of three widths, Panel 268 (the Inspector's least, less its insets), Split 456 (a
 chat beside what it made) and Column 768 (the reading column), never wider; type and spacing never change with it, the
-bubble, overflow, cards across and a question's columns do (two pictures across under 600, one word answer a row under
-400, a row of three or four under 560).
+bubble, overflow, cards across and a question's columns do (two pictures across under 600, or under 440 for a question
+that asks for three; one word answer a row under 400, a row of three or four under 560). A reply's cards never keep
+empty tracks: two designs share the column.
 
 Rhythm: turns 24 apart, a message 12 over its reply, a time 8 over its message, a reply's blocks 16 apart (text,
 tables, code, cards, a visual question), trackers 16 apart, a visual question's frame 8 over its question, frames 12 in.
+Every frame in a chat or a question takes the kit's corner (16) and the cards' stroke, a question in the feed as in a
+chat (2026-11-04 kit pass: the activity log's cards were 20, the feed's question cards drew the app's heavier edge).
 A chat has no section titles and no ledes: the kit's section titles are the kit's, not the chat's.
 
 ### Decided (owner, 2026-11-04: "Apply both")

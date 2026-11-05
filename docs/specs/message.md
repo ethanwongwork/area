@@ -126,3 +126,12 @@ in a narrow one and a 32 inset under 480. Now `max(70%, min(100% - 48, 456px))`:
 ## 2026-11-04: read on its glyphs (Q-T2)
 
 Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). An assistant reply trims its first and last text lines (`text-box: trim-start cap text`, `trim-end cap text`), as Card trims its title and last line: the gaps around a reply (a section title over it, the turn above, its actions under it) are read on the glyphs. A reply that opens a block sits 16 under a title (it was 21); the person's turn to the reply reads 24 (it was 29). Frames in a reply and the person's bubble are unchanged. Test: `packages/react/tests/type-rhythm.test.mjs`.
+
+## 2026-11-04: lists that are the reply's own; the cursor on the last word (kit gaps pass)
+
+- The reply's list rules (markers, the 1.25em slot, the 4 between items) apply to its own lists only,
+  `:not([class*="area-"])`: markdown's and an app's lists keep them, a component set in a reply (Reference list) keeps
+  its own. A Reference list in a reply had drawn the reply's markers over its numbers. Rule: DESIGN_SYSTEM "Text that
+  flows" (a host's text rules leave components alone); test: `cohesion.test.mjs`.
+- Streaming: when a reply ends in a text block (a paragraph, a heading, a quote or a list), the dot is drawn on that
+  block's last line (its last item's), and the cursor element after it stands down; it sat on a line of its own.

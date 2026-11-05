@@ -26,7 +26,7 @@ import { Approval, AssetCard, Badge, Button, Chip, ChipGroup, ColorSwatchPicker,
 import { CornerIcon, DismissIcon, EllipseIcon, RectangleIcon, HistoryIcon, LineStyleIcon, MaximizeIcon, MinimizeIcon, MoonIcon, ShadowIcon, SunIcon, TextSizeIcon } from "@area/icons";
 import { canvasAttributes, CANVAS_DEFAULTS, useStudio, type CanvasAxes } from "./studio.tsx";
 import { ScreenFigure, SHOWCASE, type Hold, type Region, type ScreenId } from "./setup-screen.tsx";
-import { ChoicePreview } from "./choice-visuals.tsx";
+import { MiniPicture, type MiniKind } from "./choice-visuals.tsx";
 import { GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { hueName } from "./inspector-rows.tsx";
 import { AXES } from "./tokens.ts";
@@ -44,7 +44,11 @@ const say = (axis: Axis, value: string) => controlOf(axis)?.items.find(item => i
 const defaultOf = (axis: Axis) => (CANVAS_DEFAULTS as Record<string, string>)[axis] ?? "";
 /** "Default" after an answer's words, in the same size one ink step down (the kits' type rule 1; a Badge beside a word
  *  outweighed it and doubled the row: owner, 2026-11-04, "doesnt look balanced with the badge next to it"). */
-const isDefault = (label: ReactNode, yes: boolean) => yes ? <span className="qk-default">{label}<span className="qk-default__note">Default</span></span> : label;
+/** A note after an answer's words, the same size in the muted ink, on their line: "Default" (the setting's own), or
+ *  "Recommended" (what the asker would pick; owner, 2026-11-04: "how would you show recommended answers (as a badge?) or
+ *  just plain text?"), never a plated Badge beside a word in a row of words. One note an answer: Recommended wins. */
+export const noted = (label: ReactNode, note: "Default" | "Recommended" | undefined) => note ? <span className="qk-default">{label}<span className="qk-default__note">{note}</span></span> : label;
+const isDefault = (label: ReactNode, yes: boolean) => noted(label, yes ? "Default" : undefined);
 
 /* --- The frame ------------------------------------------------------------------------------------------------------ */
 
@@ -106,16 +110,25 @@ export function QuestionFrame({ name, shown, screen = "workspace", hold = SHOWCA
 }
 
 /** The unit: the frame over the question, 8 apart; beside each other in a wide feed (studio-question, feed.css). */
-export function VisualQuestion({ frame, children }: { frame: ReactNode; children: ReactNode }) {
-  return <div className="qk-unit"><div className="qk-unit__body"><div className="qk-unit__frame">{frame}</div><div className="qk-unit__question">{children}</div></div></div>;
+/* A question's cards take the cards' stroke wherever the question sits (2026-11-04 kit pass), as a chat's root gives
+   them: in the feed the question card drew the app's edge (light 0.949) beside its frame's 6% and beside the same card
+   in a chat (0.975). */
+const STROKE = { "data-area-stroke": CARD_SCOPE["data-area-stroke"] } as const;
+
+/** The unit: a frame over the question, or the question alone where its answer changes nothing visible (owner,
+ *  2026-11-04: "not all answers need a frame above showing the context"). */
+export function VisualQuestion({ frame, children }: { frame?: ReactNode; children: ReactNode }) {
+  return <div className="qk-unit" {...STROKE}><div className="qk-unit__body">{frame ? <div className="qk-unit__frame">{frame}</div> : null}<div className="qk-unit__question">{children}</div></div></div>;
 }
 
-/** The question's head end: where it is among several, then a close. */
-const headActions = (place: Place | undefined, onClose?: () => void) => <>
-  {place ? <Pagination layout="compact" size="sm" pageCount={place.count} page={place.at + 1} onPageChange={page => place.go(page - 1)}
-    labels={{ nav: "Questions", previous: "Previous question", next: "Next question", status: (page, count) => <>{page} of {count}</> }} /> : null}
+/** The question's head end, only in a run of several (owner, 2026-11-04: "should there be a close button on the chat
+ *  answers? maybe its not necessary"): where it is among them, then a close that ends the whole run (Skip moves past one
+ *  question). A single question has no head end: Skip and Esc already end it, and a close beside them said it twice. */
+const headActions = (place: Place | undefined, onClose?: () => void) => place ? <>
+  <Pagination layout="compact" size="sm" pageCount={place.count} page={place.at + 1} onPageChange={page => place.go(page - 1)}
+    labels={{ nav: "Questions", previous: "Previous question", next: "Next question", status: (page, count) => <>{page} of {count}</> }} />
   <Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Close questions" icon={<DismissIcon />} onClick={onClose} />
-</>;
+</> : undefined;
 
 interface QuestionProps { place?: Place; onDone?: () => void }
 
@@ -127,7 +140,9 @@ const inWords = (onDone?: () => void) => ({ onInstead: () => onDone?.(), instead
  * A setting question whose answers are presses: the answer under the pointer or focus is drawn in the frame, a press
  * picks it (and moves on in a run). One shape for words in a list, words in a grid and pictures in a grid.
  */
-function ChoiceQuestion({ place, onDone, name, title, description, items, layout = "list", columns, ratio, screen, frameScreen, hold, visual, zoom, focus }: QuestionProps & Pick<FrameProps, "zoom" | "focus"> & {
+function ChoiceQuestion({ place, onDone, name, title, description, items, layout = "list", columns, ratio, screen, frameScreen, hold, visual, zoom, focus, frameless }: QuestionProps & Pick<FrameProps, "zoom" | "focus"> & {
+  /** No frame: the answer changes nothing visible. */
+  frameless?: boolean;
   /** What the frame shows: a name, or the shown answer's own (a screen's). */
   name: ReactNode | ((label: ReactNode | undefined) => ReactNode); title: string; description?: string; layout?: "list" | "grid"; columns?: number; ratio?: string;
   items: ReadonlyArray<ApprovalOption & { set: Changes; screen?: ScreenId }>;
@@ -145,9 +160,9 @@ function ChoiceQuestion({ place, onDone, name, title, description, items, layout
   // Before compares with where the question started, so it shows only where an answer changes a setting.
   const changes = items.some(item => Object.keys(item.set).length > 0);
   return (
-    <VisualQuestion frame={<QuestionFrame name={typeof name === "function" ? name(shownItem?.label) : name} shown={shownItem?.set ?? {}} before={changes}
+    <VisualQuestion frame={frameless ? undefined : <QuestionFrame name={typeof name === "function" ? name(shownItem?.label) : name} shown={shownItem?.set ?? {}} before={changes}
       screen={shownItem?.screen ?? frameScreen?.(shownValue) ?? screen} hold={hold} visual={visual} zoom={zoom} focus={focus} />}>
-      <Approval title={title} description={description} layout={layout} style={style} className={pictured ? "qk-choices qk-choices--pictures" : `qk-choices qk-choices--words${(columns ?? 2) >= 3 ? " qk-choices--row" : ""}`}
+      <Approval title={title} description={description} layout={layout} style={style} className={pictured ? `qk-choices qk-choices--pictures${columns === 3 ? " qk-choices--trio" : ""}` : `qk-choices qk-choices--words${(columns ?? 2) >= 3 ? " qk-choices--row" : ""}`}
         items={items.map(({ set: _set, screen: _screen, ...item }) => item)} value={value} onActiveChange={setActive}
         onChoose={next => { setValue(next); onDone?.(); }} {...inWords(onDone)} actions={headActions(place)} />
     </VisualQuestion>
@@ -156,27 +171,30 @@ function ChoiceQuestion({ place, onDone, name, title, description, items, layout
 
 /* --- Setting questions ---------------------------------------------------------------------------------------------- */
 
+/** Each screen kind's simple picture (choice-visuals.tsx MiniPicture). */
+const MINI_OF: Partial<Record<ScreenId, MiniKind>> = { workspace: "workspace", analytics: "dashboard", settings: "settings", phone: "phone" };
 const SCREEN_KINDS: ReadonlyArray<{ value: ScreenId; label: string }> = [
   { value: "workspace", label: "Workspace" }, { value: "analytics", label: "Dashboard" }, { value: "settings", label: "Settings" }, { value: "phone", label: "Phone app" },
 ];
-/** Which screen to start from: each answer the screen itself, small (the owner's "Select Interface" cards). */
+/** Which screen to start from: each answer the screen as a simple abstract picture (words as bars; the owner's "Select
+ *  Interface" cards), the frame the real screen under the pointer or chosen. */
 export function ScreenKindQuestion(props: QuestionProps) {
   const studio = useStudio();
   const scope = { ...canvasAttributes(studio.shown.canvas, studio.shown.material), "data-area-theme": studio.theme };
   return (
     <ChoiceQuestion {...props} name={label => label ?? "Workspace"} title="Which screen should we start from?" description="Every later question draws on it." layout="grid" ratio="16 / 9"
       items={SCREEN_KINDS.map(kind => ({ value: kind.value, label: kind.label, set: {}, screen: kind.value,
-        visual: <ScreenFigure className="cv-screen" screen={kind.value} hold={kind.value === "workspace" ? SHOWCASE : []} scope={scope} /> }))}
+        visual: <span className="qk-pic" {...scope}><MiniPicture kind={MINI_OF[kind.value] ?? "workspace"} /></span> }))}
       screen="workspace" />
   );
 }
 
-/** Where it's used: four short answers, two across (the owner's 2 x 2 reference); the frame turns to a phone for Phone. */
+/** Where it's used: four short answers in words, and no frame (its answer changes nothing on the screen yet). */
 export function WhereQuestion(props: QuestionProps) {
   return (
-    <ChoiceQuestion {...props} name="Workspace" title="Where will people use it most?" layout="grid"
+    <ChoiceQuestion {...props} name="Workspace" title="Where will people use it most?" frameless
       items={[
-        { value: "desktop", label: "On a computer", set: {}, screen: "workspace" },
+        { value: "desktop", label: noted("On a computer", "Recommended"), set: {}, screen: "workspace" },
         { value: "phone", label: "On a phone", set: {}, screen: "phone" },
         { value: "both", label: "Both equally", set: {}, screen: "workspace" },
         { value: "unsure", label: "Not sure yet", set: {}, screen: "workspace" },
@@ -189,17 +207,17 @@ export function RoomQuestion(props: QuestionProps) {
   // The steps in the question's own words (the setting's middle step is called Default, which read "Default Default").
   const WORDS: Record<string, string> = { "28": "Tighter", "32": "Balanced", "36": "Roomier" };
   const items = (controlOf("density")?.items ?? []).map(item => ({ value: item.value, label: isDefault(WORDS[item.value] ?? item.label, item.value === defaultOf("density")), set: { density: item.value } }));
-  return <ChoiceQuestion {...props} name="Workspace" title="How much room between things?" description="Taller rows and wider gaps, or more on the screen." layout="grid" columns={3} items={items} />;
+  return <ChoiceQuestion {...props} name="Workspace" title="How much room between things?" description="Taller rows and wider gaps, or more on the screen." items={items} />;
 }
 
 const CORNERS = ["0", "4", "8", "10", "14", "pill"] as const;
-/** Corners: a look words say badly, so each answer is the real component drawn at that corner. */
+/** Corners: a look words say badly, so each answer is the tiny window (simple abstract UI) drawn at that corner. */
 export function CornersQuestion(props: QuestionProps) {
   const studio = useStudio();
   return (
     <ChoiceQuestion {...props} name="Workspace, the form" title="How round should corners be?" layout="grid" columns={3} ratio="4 / 3" zoom={1} focus="form"
       items={CORNERS.map(value => ({ value, label: isDefault(say("radius", value), value === defaultOf("radius")), set: { radius: value },
-        visual: <span className="qk-pic" {...canvasAttributes({ ...studio.shown.canvas, radius: value }, studio.shown.material)}><ChoicePreview axis="radius" preset={value} /></span> }))} />
+        visual: <span className="qk-pic" {...canvasAttributes({ ...studio.shown.canvas, radius: value }, studio.shown.material)}><MiniPicture /></span> }))} />
   );
 }
 
@@ -376,7 +394,7 @@ export function SetQuestion({ onDone }: QuestionProps) {
   const done = SET.filter(q => answers[q.id]).length;
   return (
     <VisualQuestion frame={<QuestionFrame name="Workspace" shown={shown} />}>
-      <section className="qk-set" aria-label="Questions">
+      <section className="qk-set" aria-label="Questions" {...STROKE}>
         <div className="qk-set__head">
           <span className="qk-set__title">Questions</span>
           <span className="qk-set__count">{done} of {SET.length} answered</span>
@@ -384,8 +402,7 @@ export function SetQuestion({ onDone }: QuestionProps) {
         </div>
         <div className="qk-set__list">
           {SET.map((q, index) => (
-            <Approval key={q.id} variant="plain" layout="grid" className={`qk-choices qk-choices--words${q.columns >= 3 ? " qk-choices--row" : ""}`}
-              style={{ "--_qk-columns": q.columns } as CSSProperties} title={`${index + 1}. ${q.title}`}
+            <Approval key={q.id} variant="plain" className="qk-choices qk-choices--words" title={`${index + 1}. ${q.title}`}
               items={q.items.map(([value, label]) => ({ value, label: isDefault(label, value === defaultOf(q.id as Axis)) }))}
               value={answers[q.id]} onActiveChange={value => setActive(value === undefined ? null : { id: q.id, value })}
               onChoose={value => setAnswers(current => ({ ...current, [q.id]: value }))}
@@ -418,7 +435,7 @@ export function NextStepQuestion(props: QuestionProps) {
   return (
     <ChoiceQuestion {...props} name="Workspace" title="What would you like to do next?"
       items={[
-        { value: "use", label: "Use this design", description: "Keep it as the system's theme", set: {} },
+        { value: "use", label: noted("Use this design", "Recommended"), description: "Keep it as the system's theme", set: {} },
         { value: "change", label: "Change a few things", description: "A few questions about what's off", set: {} },
         { value: "another", label: "Try another direction", description: "Start again from a different look", set: { neutral: "warm", radius: "14", density: "36" } },
       ]} />
@@ -445,7 +462,7 @@ export function CompareQuestion(props: QuestionProps) {
         ))}
       </div>
     )} />}>
-      <Approval title="Which direction is closer?" layout="grid" className="qk-choices qk-choices--words qk-choices--row" style={{ "--_qk-columns": 4 } as CSSProperties}
+      <Approval title="Which direction is closer?" className="qk-choices qk-choices--words"
         items={[{ value: "a", label: "A" }, { value: "b", label: "B" }, { value: "both", label: "Both work" }, { value: "neither", label: "Neither" }]}
         value={value} onActiveChange={setActive} onChoose={next => { setValue(next); props.onDone?.(); }}
         {...inWords(props.onDone)} insteadPlaceholder="What would make it closer?" actions={headActions(props.place)} />
@@ -456,7 +473,7 @@ export function CompareQuestion(props: QuestionProps) {
 /** How close: an opinion, so named points in a row, never a bar. */
 export function HowCloseQuestion(props: QuestionProps) {
   return (
-    <ChoiceQuestion {...props} name="Workspace" title="How close is this to what you had in mind?" layout="grid" columns={3}
+    <ChoiceQuestion {...props} name="Workspace" title="How close is this to what you had in mind?"
       items={[{ value: "far", label: "Not yet", set: {} }, { value: "close", label: "Close", set: {} }, { value: "there", label: "That's it", set: {} }]} />
   );
 }
@@ -496,10 +513,10 @@ export function WhatsOffQuestion({ place, onDone }: QuestionProps) {
 
 /** Every template, named, for a kit's sections. */
 export const QUESTION_TEMPLATES: ReadonlyArray<{ id: string; title: string; kind: string; Question: (props: QuestionProps) => ReactNode }> = [
-  { id: "next", title: "Next step", kind: "List", Question: NextStepQuestion },
-  { id: "where", title: "Where it's used", kind: "Grid", Question: WhereQuestion },
-  { id: "room", title: "Room", kind: "Steps", Question: RoomQuestion },
-  { id: "close", title: "How close", kind: "Points", Question: HowCloseQuestion },
+  { id: "next", title: "Next step", kind: "Recommended", Question: NextStepQuestion },
+  { id: "where", title: "Where it's used", kind: "No frame", Question: WhereQuestion },
+  { id: "room", title: "Room", kind: "Default", Question: RoomQuestion },
+  { id: "close", title: "How close", kind: "Words", Question: HowCloseQuestion },
   { id: "screen", title: "Screen kind", kind: "Pictures", Question: ScreenKindQuestion },
   { id: "corners", title: "Corners", kind: "Pictures", Question: CornersQuestion },
   { id: "typeface", title: "Typeface", kind: "Specimens", Question: TypefaceQuestion },

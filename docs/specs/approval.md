@@ -58,7 +58,7 @@ area-approval                 the Composer's edge, corner and field fill; the ag
     area-approval__actions    slot at the end, a row tall, centred on the title's line; last plate on the trailing offset
   area-approval__detail       slot (Code block sm, Diff)
   area-approval__options      rows, ui-row-gap apart (Menu's: 2, compact 0)
-    area-approval__option     button: `area-approval__key` (Kbd sm number, icon slot) + `area-approval__label`,
+    area-approval__option     button: `area-approval__key` (a plain muted digit, one figure wide) + `area-approval__label`,
                               gap-row apart; the row plate on hover and focus, the pressed fill while pressed;
                               with a description, `area-approval__lines` holds the label over
                               `area-approval__option-description` (text-base muted), the row 6 above and below;
@@ -82,14 +82,15 @@ area-approval                 the Composer's edge, corner and field fill; the ag
 | head | on the row inset; first line in a row: (ui-row − text-base leading) / 2 above the title | inset.css first-line alignment | round 54: the top had half a row less room than the foot |
 | title | text-base strong (2026-11-02; was text-lg) | claude-code bold title | Area's one strong weight |
 | description | text-base muted; an option's description too (2026-11-02; were text-sm 12) | claude-code .9em secondary | — |
-| options | Menu-row geometry (ui-row tall, row inset, row corner, gap-row 12 / compact 8 inside), **filled**: each answer in a soft field's paint at rest (fill `input-bg-soft`, edge `input-edge-soft` drawn inside: the fields beside it match), 4 apart; hover bg-component-hover, focus the same with the ring, pressed bg-component-pressed, chosen bg-component-active; no hairlines (2026-11-04, owner "Filled, in a card"; was Menu's unpainted rows 1 apart) | Answer Treatments (B9tSn3TNB6AVNvQ718Azjm): quiet, filled, outlined, card, raised × card, page, well | the answers read as things to press at rest; the plates part themselves |
-| number | quiet Kbd sm in the icon slot (icon-sm wide, centred), the label's size, muted, unboxed | claude-code `shortcutNum` (label size, .6); Codex "1." | round 51 |
+| options | Menu-row geometry (ui-row tall, row inset; corner the card's less the mat, `--_approval-plate`: 10 in a 16 card, 16 in the Composer's 22), **plain**: no paint at rest, 4 apart; hover bg-component-hover, focus the same with the ring, pressed bg-component-pressed, chosen bg-component-active; the plate hangs one row inset (6) outside the question's text edge, so in a 16 card at mat 6 it is concentric (16 = 10 + 6); no hairlines (owner 2026-11-04, "Yes, build it"; filled plates for an afternoon before) | Menu; Claude Code's and Codex's question rows | the filled plate, its 22 key square (corner 8, 6 inside a 10 plate) and Skip's outline (2 from the row's end, 6 from its top) made three nested corners in a row that did not agree |
+| number | a plain digit, the label's size, muted, tabular, one figure wide (`1ch`), on the question's text edge; key to words `ui-cluster` (8) | claude-code `shortcutNum` (label size, .6); Codex "1." | an ordinal in a list, not a keycap: Kbd keeps its backplate wherever it is drawn (Esc in the hint) |
+| Skip | a ghost Button sm at the free row's end; its hover plate (row − control-sm) / 2 from the row's end and top, concentric (8 in 10) | Menu's trailing control | an outline Skip read as a second answer |
 | instead | the last numbered row, its field unfilled | Claude Code (last option is free text) | a filled field added a third grey (cleanup pass 2026-10-19) |
 | hint | the card's last row: ui-row tall, centred, text-base muted; Esc a filled Kbd sm, ui-cluster from the words | claude-code "Esc to cancel"; Kbd's rule (a key named in a sentence is filled) | rounds 52 and 53 |
 | option description | text-base muted under the label; the row grows with 6 above and below; the key on the label's line, the check centred | peer: Menu's row with a note (model-picker.md: 6 / 6, check centred); inset.css first-line alignment | the card's own description type, so a choice's note and the question's read alike |
 | chosen row | Menu's selected fill (bg-component-active), at once, outranking hover; no pressed fill; check icon-md in fg-selection, the other rows' check at rest (opacity 0, scale 0.6) | peer: Menu `[data-selected]`, `.area-menu__check` | one selected paint for every list (Shared state paint) |
 | corner hook | `--area-approval-corner` (none by default: the Composer's corner) | a visual question's unit sets it to the cards' corner, so the question and its frame read as one family (2026-11-04 detail pass: 22 beside 16) | Asset card's `--area-asset-card-corner` |
-| grid | `layout="grid"`: columns `repeat(auto-fill, minmax(max(min(100%, cell), (100% − gaps) / columns), 1fr))`, so never more than `--area-approval-columns` (2 for words, 4 with pictures) and never under the cell (120 words, 96 pictures: two across the 268 Panel, four across a 456 split); 4 between plates; no hairlines; the field the whole last row | pick (docs/research/visual-questions-2026-11-03) | a narrow chat drops columns, a wide one stops at the count |
+| grid | `layout="grid"`, for pictured answers (words are a list, 2026-11-04): columns `repeat(auto-fill, minmax(max(min(100%, cell), (100% − gaps) / columns), 1fr))`, so never more than `--area-approval-columns` (2 for words, 4 with pictures) and never under the cell (120 words, 96 pictures: two across the 268 Panel, four across a 456 split); 4 between plates; no hairlines; the field the whole last row | pick (docs/research/visual-questions-2026-11-03) | a narrow chat drops columns, a wide one stops at the count |
 | visual | a frame `--area-approval-ratio` (4 / 3) on bg-subtle with the cards' edge (Asset card's: `border-width`, `edge-cards`) as an inset outline; its corner the row's less the 4 mat (concentric); in a grid over the key and label (the key and label keep the row inset), in a list a `--area-approval-thumb` (64) thumbnail before them | peers: Radio `preview` (subtle ground, concentric picture), Asset card (edge) | the plate frames the picture as a mat on hover; a white screen on the white card keeps its bounds |
 | actions, footer | a row tall; last plate (row − control-sm) / 2 from the card's end, never under 4 (the row inset given back); 4 between controls | the agent chat's card head rule (Cleanup pass) | a trailing plate lines up with Code block's and Plan's |
 
@@ -310,3 +311,17 @@ filled too.
   lists every question at once, numbered). The kit's "Several at once" (apps/desktop/src/question-kit.tsx `SetQuestion`):
   the card's own shell, its head (Questions, N of M answered, close) and foot (Skip all, Continue) on the 12 column, the
   questions 16 apart. Gallery tile: Variant / plain.
+
+## 2026-11-04: plain answers (owner: "the answer backplates and the skip button and number backplate look off (corner radius) … wondering if the answers can just be plain text … how would you show recommended answers"; then "Yes, build it", and "id prefer the simple abstract, premade ui as answers")
+
+- **Plain rows.** The filled plates go: an answer is Menu's row, painted only on hover, focus, press and when chosen. Its
+  plate hangs 6 outside the question's text edge (the hanging rule of every row plate), concentric in the 16 card. The
+  question of aligning plates with the title (mat 12 in a 22 card) goes with the resting plates.
+- **Numbers** are plain muted digits on the text edge (Approval.tsx renders the digit, not a Kbd); Esc in the hint stays
+  a keycap. **Skip** is a ghost Button.
+- **Recommended** is a muted word after the label, the same size, listed first (the kit's `noted`, as "Default"); never a
+  Badge.
+- **In the kit** (apps/desktop/src/question-kit.tsx): words are lists; a frame only where the answer changes something
+  visible (Where it's used has none); pictured answers are premade simple UI (choice-visuals.tsx `MiniPicture`: the tiny
+  window, a dashboard, settings, a phone, drawn from tokens on one artboard that a viewBox scales whole), never a
+  screenshot; the frame over the question keeps the real screen. Test: `agent-chat.test.mjs` (plain digits).

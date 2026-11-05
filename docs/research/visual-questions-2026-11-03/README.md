@@ -140,7 +140,7 @@ the Electron window (`../kit-type-2026-11-04/README.md`, findings 1–6):
 - one text column: the frame's name 13 in, as the question's title, keys and words row (it was 16);
 - one trailing offset: the last control of either card 5 from its end;
 - one foot: every kind ends on "Something else … Skip"; a kind that isn't one press adds Use default / Continue under it;
-- pictures in the system's shapes (screens and type 16:9, corners 4:3; 3:2 is gone), two by two under 600, a picture's
+- pictures in the system's shapes (screens and type 16:9, corners 4:3; 3:2 is gone), two by two under 600 (a question asking for three keeps three to 440), a picture's
   name one line with an ellipsis; an answer's words never cut (a Default badge goes under them where a cell is short);
 - Before only where an answer changes a setting; Screen kind's frame names the screen it shows; Room's steps Tighter /
   Balanced / Roomier.
@@ -156,3 +156,20 @@ the Electron window (`../kit-type-2026-11-04/README.md`, findings 1–6):
   without a container … try to not use dividers"): [treatments.mjs](treatments.mjs) builds
   https://claude.ai/artifact/B9tSn3TNB6AVNvQ718Azjm from a Labs › Chat snapshot: quiet, filled, outlined, filled and
   outlined, raised; in a card, on the page, in a well. Nothing in the component changed for it; the pick decides.
+
+## Plain answers (2026-11-04)
+
+Owner: "the answer backplates and the skip button and number backplate look off (corner radius) … not a huge fan of the
+complicated ui being the answers, and also the example frame above … not all answers need a frame above showing the
+context, and not all answers need to show a picture of the actual ui in the answer … how would you show recommended
+answers"; then "Yes, build it" and "id prefer the simple abstract, premade ui as answers like these examples" (window and
+component pictograms on soft grounds). This replaces "Filled, in a card" (Round 3):
+
+- answers are plain rows (Approval), the plate only under the pointer, on focus and when chosen; numbers plain digits;
+  Skip a ghost button;
+- words are a list, one answer a row (grids of words are gone: Room, How close, A or B, Several at once);
+- a frame only where the answer changes something visible (Where it's used has none);
+- a pictured answer is premade simple UI (`MiniPicture`: workspace, dashboard, settings, phone; the corners question the
+  tiny window at each corner), never a screenshot of a screen; the frame keeps the real screen and follows the answer
+  under the pointer, then the chosen one;
+- Recommended is a muted word after the label, the answer listed first.
