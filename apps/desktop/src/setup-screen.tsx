@@ -155,7 +155,9 @@ const TRUE_STROKES = { "--area-stroke-width": "inherit", "--area-border-width": 
 /**
  * A screen as a card's picture covers it from the top-left (tile.tsx sets this inside a screen tile; owner, 2026-11-01:
  * cards in 1:1, 4:3 or a 16:9 cover), as a design tool draws a frame's thumbnail: the larger of the two scales, so a 4:3
- * card shows the window's start (its sidebar and content) rather than the whole window shrunk into a band.
+ * card shows the window's start (its sidebar and content) rather than the whole window shrunk into a band. The card stands
+ * for the whole design, so it stays a thumbnail of the whole screen and opens at 1:1 (PRODUCT_UI rule 26; a hero crop was
+ * tried on 2026-11-04 and dropped on 2026-11-05 for that rule).
  */
 export const ScreenCover = createContext(false);
 
@@ -245,6 +247,11 @@ export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity:
       left = (size.w - natural.w * fit) / 2;
       top = (size.h - natural.h * fit) / 2;
     }
+    // On device pixels (2026-11-04, the fidelity pass): a screen centred in a frame a rounded pixel wider or narrower than
+    // it sat a quarter pixel off, which blurs every edge it draws.
+    const ratio = window.devicePixelRatio || 1;
+    left = Math.round(left * ratio) / ratio;
+    top = Math.round(top * ratio) / ratio;
     onFit?.(fit);
     // Field text as shapes, and the pointer, in the screen's own coordinates (the zoom scales them with it).
     if (fidelity !== "real") {
@@ -282,8 +289,8 @@ export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity:
       if (part) Object.assign(veil.style, { left: `${left + part.x * fit - room}px`, top: `${top + part.y * fit - room}px`, width: `${part.w * fit + 2 * room}px`, height: `${part.h * fit + 2 * room}px` });
     }
     z.style.setProperty("--af-fit", fit.toFixed(4));
-    p.style.left = `${left.toFixed(1)}px`;
-    p.style.top = `${top.toFixed(1)}px`;
+    p.style.left = `${left}px`;
+    p.style.top = `${top}px`;
     onMeasure?.(boxes);
   }, [html, signature, size.w, size.h, region, regionZoom, scale, focusOn, fidelity, cover, measure?.join(" ")]);
   return (

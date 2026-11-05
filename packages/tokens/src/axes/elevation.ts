@@ -4,8 +4,13 @@
  * for corner radius and the 1px scale for typeface"). Research: docs/research/elevation-2026-10-14.md.
  *
  * The number is the Menu's shadow strength in percent, as the radius setting is the medium Button's corner
- * and the type setting the base text size: 0 (Flat) to 8, one step at a time, 3 by default. Every role
+ * and the type setting the base text size: 0 (Flat) to 8, one step at a time, 8 by default. Every role
  * scales from it, so one setting moves the whole library together.
+ *
+ * The default was 3 until 2026-11-05 (owner: "go with your recs", on the shadow depth page of the fidelity pass,
+ * docs/research/shadow-depth-2026-11-04.md): under the open menu at true size, 3 reached 249 on a 255 page and a common UI
+ * kit's large shadow 231, so menus read faint beside kit examples; 8, the top of the scale, reaches 240 and stays inside it,
+ * short of Fluent's strength, which the owner found too strong. Resting stays 3 (a separate setting, depth.ts).
  *
  * Components never pick a shadow; they name the role they play:
  *
@@ -46,7 +51,7 @@ export type ElevationStep = (typeof ELEVATION_STEPS)[number];
 
 const describe = (step: number) =>
   step === 0 ? "No shadows. Edges and the dialog scrim separate surfaces."
-    : `The Menu's shadow at ${step}%; every role scales from it${step === 3 ? " (default: Notion's lightest lift)" : step === 5 ? " (Notion's popover)" : step === 8 ? " (ChatGPT's menu)" : ""}.`;
+    : `The Menu's shadow at ${step}%; every role scales from it${step === 3 ? " (a light lift)" : step === 5 ? " (a popover's)" : step === 8 ? " (default: a full menu's)" : ""}.`;
 
 /**
  * Since 2026-10-18 (Edge and Depth, axes/depth.ts) the axis writes the number alone (`--area-elevation`), labelled
@@ -58,7 +63,7 @@ export const ELEVATION_AXIS: AxisDefinition = {
   id: "elevation",
   label: "Floating shadow",
   description: "How much menus, popovers, tooltips and dialogs lift, as the Menu's shadow strength from 0 (flat) to 8.",
-  defaultPreset: "3",
+  defaultPreset: "8",
   namespaces: ["--area-elevation:"],
   presets: ELEVATION_STEPS.map(step => ({
     id: String(step),

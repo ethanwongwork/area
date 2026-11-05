@@ -90,3 +90,5 @@ and pressed; with no Material the slot adds only a transparent layer, so the loo
 - **What changed:** the demo has five turns, so it opens more than the 200 threshold from the end and the button shows at rest, 24 above the composer. The component is unchanged.
 - **Why:** with three turns the conversation ended 130 from the end at the app's type 13, under the threshold, so the tile never showed the button it demonstrates.
 - **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.
+
+- 2026-11-05 · owner: "go with your recs" on the shadow depth page (docs/research/shadow-depth-2026-11-04.md) → the Elevation default is 8, so this surface's float role is an 8% key (was 3%).
