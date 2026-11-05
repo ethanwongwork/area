@@ -6,12 +6,14 @@
  * thumbs on a Slider marked [data-af-ghosts] (shares of its travel, or "ease:<n>" for n equal steps of time placed
  * by the scope's --area-ease-in-out).
  *
- *   AFS.stage(parent, { html, w = 280, h = 180, fidelity = "bars" | "real" | "shapes", scope = {}, states = [], fit = "fill" | number,
+ *   AFS.stage(parent, { html, w = 280, h = 180, fidelity = "bars" | "line" | "real" | "shapes", scope = {}, states = [], fit = "fill" | number,
  *                       pad = 0.8, max = w / 280, center = null | "contain" | "cover" | "right" | "width" })   → the stage element
  * center fits and centres the drawing on what it paints (not on a wrapper), leaving `pad` of the frame around it.
  * max is the scale every figure shares (1 at the 280 × 180 master, 0.5 on a 140 × 90 card); a figure only shrinks
  * below it when it would not fit, so a button is a button's size beside a menu.
  */
+import { groundOf, markLines } from "./line.js";
+
 var AFS = (() => {
   const POINTER = '<svg class="af-pointer" viewBox="0 0 11 17" aria-hidden="true"><path d="M.5.5v13.2l3.3-3.1 2.3 5.2 2.1-.9-2.3-5.1h4.6Z"/></svg>';
   let uid = 0;
@@ -58,7 +60,7 @@ var AFS = (() => {
     z = z.firstElementChild;
     const box = z.getBoundingClientRect();
     const local = (r) => ({ x: (r.left - box.left) / f, y: (r.top - box.top) / f, w: r.width / f, h: r.height / f });
-    if (fidelity === "bars") fieldText(z, local);
+    if (fidelity === "bars" || fidelity === "line") fieldText(z, local);
     for (const s of z.querySelectorAll("[data-af-ghosts]")) {
       const spec = s.dataset.afGhosts, input = s.querySelector("input") || s, r = local(input.getBoundingClientRect());
       let ps = spec.split(",").map(Number);
@@ -139,7 +141,8 @@ var AFS = (() => {
 
   function stage(parent, { html, w = 280, h = 180, fidelity = "bars", scope = {}, states = [], fit = "fill", pad = 0.8, max = w / 280, center = null } = {}) {
     const st = document.createElement("div");
-    st.className = `af-stage af-${fidelity}`;
+    /* Line reads the components as Area paints them first (engine/line.js), so it starts plain. */
+    st.className = `af-stage af-${fidelity === "line" ? "plain" : fidelity}`;
     st.style.setProperty("--af-w", `${w}px`);
     st.style.setProperty("--af-h", `${h}px`);
     for (const [k, v] of Object.entries(scope)) if (v != null) st.setAttribute(k, v);
@@ -151,9 +154,17 @@ var AFS = (() => {
     const f = typeof fit === "number" ? fit : Math.min(max, (w * pad) / Math.max(1, z.offsetWidth), (h * pad) / Math.max(1, z.offsetHeight));
     st.style.setProperty("--af-fit", f.toFixed(4));
     hold(st, z, f, fidelity);
+    if (fidelity === "line") {
+      const ground = groundOf(st);
+      st.style.setProperty("--af-ground", ground);
+      markLines(z.firstElementChild, ground);
+      st.classList.replace("af-plain", "af-line");
+    }
     if (center) centre(st, z, center, pad, max);
     return st;
   }
 
-  return { stage, easeOf, painted };
+  return { stage, easeOf, painted, centre };
 })();
+
+export { AFS };

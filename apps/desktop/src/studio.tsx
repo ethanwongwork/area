@@ -20,6 +20,7 @@ import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./galle
 import { ComponentsPage } from "./pages/components.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
 import { IconsPage } from "./pages/icons.tsx";
+import { IllustrationsPage } from "./pages/illustrations.tsx";
 import { ColorPage } from "./pages/color.tsx";
 import { ThemePage } from "./pages/theme.tsx";
 import { ExamplesPage } from "./pages/examples.tsx";
@@ -862,6 +863,7 @@ export function Studio() {
           place.page === "tokens" ? <TokensPage /> :
           place.page === "spacing" || place.page === "shape" || place.page === "elevation" || place.page === "motion" ? <FoundationPage key={place.page} id={place.page} /> :
           place.page === "icons" ? <IconsPage /> :
+          place.page === "illustrations" ? <IllustrationsPage /> :
           place.page === "patterns" ? <ExamplesPage /> :
           place.page === "history" ? <HistoryPage /> :
           place.page === "project" ? <ProjectOverview /> :

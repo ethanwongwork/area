@@ -14,7 +14,8 @@
   --af-ink: 20%;                      /* how much of the text's own colour a bar takes */
   position: relative; display: block; overflow: hidden; flex: none;
   inline-size: var(--af-w, 280px); block-size: var(--af-h, 180px);
-  background: var(--area-bg-page); color: var(--area-fg-default);
+  /* --af-stage-ground: a page's own ground for its figures (the app's Illustrations gallery); the page's by default. */
+  background: var(--af-stage-ground, var(--area-bg-page)); color: var(--area-fg-default);
   font-family: var(--area-font-sans); text-align: start; pointer-events: none;
 }
 .af-z { position: absolute; inset-block-start: 50%; inset-inline-start: 50%; translate: var(--af-dx, 0px) var(--af-dy, 0px); transform: translate(-50%, -50%); }
@@ -81,7 +82,7 @@
 /* A gallery tile: one family in the screens' vignette frame (480 × 360), at its own size, centred on what it paints
    with room around it (engine/stage.js, centre). A few show a tight set: a row (avatars), a column (badges), a small
    grid (chips, tags, presence), a pair laid over each other (menus) or stacked (messages). */
-.af-tile { display: grid; place-items: center; inline-size: 480px; block-size: 360px; padding: 24px; background: var(--area-bg-page); }
+.af-tile { display: grid; place-items: center; inline-size: 480px; block-size: 360px; padding: 24px; background: var(--af-stage-ground, var(--area-bg-page)); }
 .af-tile__demo { display: grid; place-items: center; max-inline-size: 432px; min-inline-size: 0; }
 /* A bar that takes its container's width (progress, a skeleton block) has none of its own in a centred tile: give it a column's. */
 .af-tile__demo > :is(.area-progress, .area-skeleton--block) { inline-size: 240px; }
@@ -89,6 +90,12 @@
 :is(.af-tile, .sx-vgrid, .sx-tabpage) [role="tabpanel"] { display: none; }
 /* A titlebar spans its tile as the top of a window does, at a window's narrow width. */
 .af-tile--width .af-tile__demo { inline-size: 420px; max-inline-size: none; }
+/* Open (SHOW `open`): an overlay that keeps its surface in the markup while closed (a hover card, a date picker's
+   calendar) is held open, its native popover drawn in flow under its trigger at Popover's 8 gap, where the anchoring
+   script would place it. The engine sheet is unlayered, so this wins over the component's own placement. */
+.af-open [popover] { display: block; position: relative; inset: auto; margin: 8px 0 0; translate: none; transform: none; opacity: 1; visibility: visible; }
+/* A picker's trigger and panel share a row box: stack them, the panel under its field. */
+.af-open .area-date-picker { display: inline-flex; flex-direction: column; align-items: flex-start; }
 .af-tile--width .af-tile__demo > * { inline-size: 100%; min-inline-size: 0; }
 .af-tile--row { display: flex; align-items: center; justify-content: center; gap: 12px; }
 .af-tile--column { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
@@ -97,3 +104,133 @@
 .af-tile--overlap > :nth-child(2) { translate: 64px 48px; }
 .af-tile--overlap > :first-child { translate: -40px -30px; }
 .af-tile--stack { align-content: center; gap: 16px; }
+
+/* Line (owner, 2026-11-04: "im really liking the last few line art examples showing cosmetic products"): Area's
+   components as a drawing, after the references in docs/research/illustrations-2026-11-04. engine/line.js reads the
+   components as Area paints them and marks each part (an edge, a fill with its colour and grey, a raised layer with its
+   shadow, a strong control fill, a dot, a picture, a heading's words); this sheet draws the marks. The default is the
+   house style, Hairline: one ink (the muted text colour), one line exactly 1px on screen, no fills or shadows, words as
+   rules, headings outlined, pictures crossed. Owner, 2026-11-04: "show me a bunch of different styles ... a variety of
+   fills, strokes, shadows, abstractness vs detail", so every choice is an axis on the stage, each independent:
+
+     data-af-stroke   hair (1px, default) · regular (1.5) · bold (2) · none
+     data-af-ink      muted (default) · strong (the text colour) · accent (the accent's ink, a blueprint)
+     data-af-fill     none (default) · paper (every part the ground, so layers hide what is under them) · soft (a light
+                      tone of the ink, stronger where Area's fill is) · tonal (Area's own fills in grey) · color (Area's own)
+     data-af-shadow   none (default) · soft (an even lift under raised layers) · hard (an offset copy in ink) · real (Area's)
+     data-af-text     rule (default) · bar (a light pill) · outline (an outlined pill) · real (the words, in ink) · none
+     data-af-detail   full (default) · reduced (no icons) · blocks (containers only: no words, icons or marks)
+     data-af-pic      cross (default) · glyph (a sun over a hill) · tone (a block of ink tone) · hatch (diagonal lines)
+     data-af-accent   none (default) · primary (what is on or primary in the accent)
+*/
+.af-line {
+  --af-line-ink: var(--area-fg-muted); --af-weight: 1;
+  --af-tone: color-mix(in srgb, var(--af-line-ink) 14%, transparent);
+  --af-on: var(--af-tone); --af-on-ink: var(--af-line-ink);
+  --af-paper: var(--af-ground, var(--area-bg-page));
+}
+.af-line[data-af-ink="strong"] { --af-line-ink: var(--area-fg-default); }
+.af-line[data-af-ink="accent"] { --af-line-ink: var(--area-fg-accent, var(--area-accent-solid)); }
+.af-line[data-af-stroke="regular"] { --af-weight: 1.5; }
+.af-line[data-af-stroke="bold"] { --af-weight: 2; }
+.af-line[data-af-stroke="none"] { --af-weight: 0; }
+.af-line[data-af-accent="primary"] { --af-on: var(--area-accent-solid); --af-on-ink: var(--area-fg-on-accent, #fff); }
+.af-line .af-zoom { --af-line: calc(var(--af-weight) * 1.04px / var(--af-fit, 1)); --af-hair: calc(1.04px / var(--af-fit, 1)); color: var(--af-line-ink); }
+
+/* The base: every part's own paint cleared, its edges in the ink at the line. */
+.af-line .af-zoom *:not(.af-pointer, .af-pointer *) {
+  color: var(--af-line-ink) !important; background-color: transparent !important; background-image: none !important;
+  box-shadow: none !important; text-shadow: none !important; border-color: var(--af-line-ink) !important;
+  outline-color: var(--af-line-ink) !important; outline-width: var(--af-line) !important; filter: none !important; backdrop-filter: none !important;
+}
+.af-line[data-af-stroke="none"] .af-zoom * { border-color: transparent !important; }
+.af-line .af-zoom :not(.tx)::before, .af-line .af-zoom :not(.tx)::after {
+  background-color: transparent !important; background-image: none !important; box-shadow: none !important;
+  border-color: var(--af-line-ink) !important; color: var(--af-line-ink) !important;
+}
+.af-line .af-zoom .af-ink-before::before, .af-line .af-zoom .af-ink-after::after { background-color: var(--af-line-ink) !important; }
+/* A part drawn only by its fill or shadow: its outline, inside its box and round its corners. */
+.af-line .af-zoom .af-e { outline: var(--af-line) solid var(--af-line-ink) !important; outline-offset: calc(-1 * var(--af-line)) !important; }
+.af-line[data-af-stroke="none"] .af-zoom .af-e { outline-style: none !important; }
+.af-line .af-zoom .af-dot, .af-line .af-zoom .af-rule { background-color: var(--af-line-ink) !important; }
+.af-line .af-zoom .af-rule:is([style*="height: 1px"], [style*="block-size: 1px"]) { block-size: var(--af-hair) !important; }
+
+/* Fills. */
+.af-line:is([data-af-fill="none"], :not([data-af-fill])) .af-zoom .af-tone { background-color: var(--af-on) !important; }
+.af-line[data-af-fill="paper"] .af-zoom :is(.af-f, .af-s, .af-raise) { background-color: var(--af-paper) !important; }
+.af-line[data-af-fill="paper"] .af-zoom .af-tone { background-color: var(--af-on) !important; }
+.af-line[data-af-fill="soft"] .af-zoom .af-f { background-color: color-mix(in srgb, var(--af-line-ink) calc(5% + var(--af-k, 0) * 22%), var(--af-paper)) !important; }
+/* A shadow can't lift a layer off a near-black page, so in dark a raised layer is a step lighter instead. */
+.af-line[data-af-fill="soft"] .af-zoom .af-raise:not(.af-f) { background-color: light-dark(var(--af-paper), color-mix(in srgb, var(--af-line-ink) 9%, var(--af-paper))) !important; }
+.af-line[data-af-fill="soft"][data-af-accent="primary"] .af-zoom .af-tone { background-color: var(--af-on) !important; }
+/* Tonal: each part in a grey as far from the ground as Area's fill is, made plain (7% for a layer that only lifts, near
+   the ink for a strong fill), so a white card on a white page still reads as a block. */
+.af-line[data-af-fill="tonal"] .af-zoom .af-f { background-color: color-mix(in srgb, var(--af-line-ink) calc(7% + var(--af-k, 0) * 80%), var(--af-paper)) !important; }
+.af-line[data-af-fill="tonal"] .af-zoom :is(.af-s, .af-raise):not(.af-f) { background-color: color-mix(in srgb, var(--af-line-ink) 7%, var(--af-paper)) !important; }
+.af-line[data-af-fill="tonal"] .af-zoom .af-raise .af-raise:not(.af-f) { background-color: var(--af-paper) !important; }
+.af-line[data-af-fill="tonal"][data-af-accent="primary"] .af-zoom .af-tone { background-color: var(--af-on) !important; }
+.af-line[data-af-fill="color"] .af-zoom .af-f { background-color: var(--af-c) !important; }
+/* On a primary or accent fill, the words and icons take the fill's own ink. */
+.af-line:is([data-af-accent="primary"], [data-af-fill="tonal"], [data-af-fill="color"]) .af-zoom .af-tone :is(*, .tx) { color: var(--af-tone-ink, var(--af-on-ink)) !important; }
+.af-line:is([data-af-fill="tonal"], [data-af-fill="color"]):not([data-af-accent="primary"]) .af-zoom .af-tone { --af-tone-ink: var(--area-bg-page); }
+.af-line:is([data-af-accent="primary"], [data-af-fill="tonal"], [data-af-fill="color"]) .af-zoom .af-tone .tx::before { background-color: currentColor !important; border-color: currentColor !important; }
+
+/* Shadows: on raised layers. */
+.af-line[data-af-shadow="soft"] .af-zoom .af-raise {
+  box-shadow: 0 calc(2px / var(--af-fit, 1)) calc(4px / var(--af-fit, 1)) rgb(0 0 0 / 0.05), 0 calc(10px / var(--af-fit, 1)) calc(28px / var(--af-fit, 1)) rgb(0 0 0 / 0.09) !important;
+}
+.af-line[data-af-shadow="hard"] .af-zoom .af-raise { box-shadow: calc(4px / var(--af-fit, 1)) calc(4px / var(--af-fit, 1)) 0 0 var(--af-line-ink) !important; }
+.af-line[data-af-shadow="real"] .af-zoom .af-raise { box-shadow: var(--af-sh, none) !important; }
+:is(.af-line[data-af-shadow="soft"], .af-line[data-af-shadow="hard"]) .af-zoom .af-raise .af-raise { box-shadow: none !important; }
+/* A raised layer that the theme draws flat needs a ground to cast from. */
+.af-line:is([data-af-shadow="soft"], [data-af-shadow="hard"]):is([data-af-fill="none"], :not([data-af-fill])) .af-zoom .af-raise { background-color: var(--af-paper) !important; }
+
+/* Icons: every stroke at the line (hairline when strokes are off), filled marks filled. */
+.af-line .af-zoom svg :is(path, circle, rect, line, polyline, polygon, ellipse) { vector-effect: non-scaling-stroke; stroke-width: max(var(--af-line), var(--af-hair)) !important; }
+.af-line .af-zoom svg [stroke="currentColor"][fill="currentColor"] { fill: none; }
+
+/* Words. */
+.af-line .tx { position: relative; -webkit-text-fill-color: transparent; }
+.af-line .tx::before {
+  content: ""; position: absolute; inset-inline: 0.04em; inset-block-start: 50%; block-size: max(var(--af-line), var(--af-hair));
+  translate: 0 0.06em; background: var(--af-line-ink); border-radius: 0;
+}
+.af-line .tx--h::before {
+  block-size: 0.7em; translate: 0 -46%; background: none; box-sizing: border-box;
+  border: max(var(--af-line), var(--af-hair)) solid var(--af-line-ink); border-radius: 0.12em;
+}
+.af-line[data-af-text="bar"] .tx::before { block-size: 0.62em; translate: 0 -46%; border: 0; border-radius: 99px; background: color-mix(in srgb, var(--af-line-ink) 32%, transparent); }
+.af-line[data-af-text="bar"] .tx--h::before { background: color-mix(in srgb, var(--af-line-ink) 55%, transparent); border-radius: 0.14em; }
+.af-line[data-af-text="outline"] .tx::before { block-size: 0.62em; translate: 0 -46%; background: none; box-sizing: border-box; border: var(--af-hair) solid var(--af-line-ink); border-radius: 99px; }
+.af-line[data-af-text="outline"] .tx--h::before { border-radius: 0.14em; }
+.af-line[data-af-text="real"] .tx { -webkit-text-fill-color: currentColor; }
+.af-line[data-af-text="real"] .tx::before, .af-line[data-af-text="none"] .tx::before { content: none; }
+.af-line[data-af-text="real"] :is(input, textarea, select) { -webkit-text-fill-color: currentColor; }
+.af-line[data-af-text="real"] .af-value, .af-line[data-af-text="none"] .af-value { display: none; }
+.af-line .tx--d::before { inset-inline: 0.08em; }
+.af-line .tx--p::before { content: none; }
+.af-line:not([data-af-text="real"]) ::placeholder { color: transparent; }
+.af-line:not([data-af-text="real"]) :is(select, input, textarea) { -webkit-text-fill-color: transparent; }
+
+/* Detail. */
+.af-line:is([data-af-detail="reduced"], [data-af-detail="blocks"]) .af-zoom svg:not(.af-pointer, .af-pic svg) { visibility: hidden; }
+.af-line[data-af-detail="blocks"] .tx::before { content: none; }
+.af-line[data-af-detail="blocks"] .af-value, .af-line[data-af-detail="blocks"] .af-pointer { display: none; }
+.af-line[data-af-detail="blocks"] .af-zoom :is(.af-dot, .af-ink-before, .af-ink-after) { visibility: hidden; }
+
+/* Pictures: the box, then its cross, glyph, tone or hatching. */
+.af-line .af-picd { opacity: 0; }
+.af-pic { position: absolute; display: grid; place-items: center; box-sizing: border-box; pointer-events: none; overflow: hidden; }
+.af-pic > svg { grid-area: 1 / 1; display: block; overflow: visible; }
+.af-line .af-pic { border: var(--af-line) solid var(--af-line-ink); }
+.af-pic__cross { inline-size: 100%; block-size: 100%; }
+.af-pic__cross line { stroke: var(--af-line-ink, currentColor); stroke-width: var(--af-hair, 1px); vector-effect: non-scaling-stroke; opacity: 0.6; }
+.af-pic__glyph { display: none !important; inline-size: 34%; block-size: 34%; max-inline-size: 72px; fill: none; stroke: var(--af-line-ink); stroke-linecap: round; stroke-linejoin: round; }
+.af-pic__glyph * { vector-effect: non-scaling-stroke; stroke-width: max(var(--af-line, 1px), var(--af-hair, 1px)) !important; }
+.af-line[data-af-pic="glyph"] .af-pic__cross, .af-line[data-af-pic="tone"] .af-pic__cross, .af-line[data-af-pic="hatch"] .af-pic__cross { display: none; }
+.af-line[data-af-pic="glyph"] .af-pic__glyph { display: block !important; }
+.af-line[data-af-pic="tone"] .af-zoom .af-pic { background-color: color-mix(in srgb, var(--af-line-ink) 24%, var(--af-paper)) !important; }
+.af-line[data-af-pic="hatch"] .af-zoom .af-pic { background-image: repeating-linear-gradient(-45deg, var(--af-line-ink) 0 var(--af-hair), transparent var(--af-hair) calc(6px / var(--af-fit, 1))) !important; }
+.af-line[data-af-detail="blocks"] .af-pic__cross { display: none; }
+/* The pointer, drawn as a line too. */
+.af-line .af-pointer path { fill: var(--af-paper); stroke: var(--af-line-ink); stroke-width: var(--af-hair, 1px); vector-effect: non-scaling-stroke; }

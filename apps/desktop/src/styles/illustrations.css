@@ -1,0 +1,55 @@
+/* Illustrations (src/pages/illustrations.tsx): the library of abstract UI, drawn by the area-illustration skill's engine
+   (figures.css) in its card. */
+
+/* A figure fills its card's picture; the engine's stage is sized to it. */
+.ill-figure { position: relative; inline-size: 100%; block-size: 100%; min-block-size: 0; overflow: clip; }
+.ill-figure > .af-stage { position: absolute; inset: 0; }
+/* The figure's ground is the card's own, so the drawing sits on the card as a drawing on its paper (abstract.css reads
+   --af-stage-ground; the engine's stylesheet is unlayered, so a layered rule can't reach the stage's paint). */
+.gallery-tile .ill-figure, .ill-preview .ill-figure { --af-stage-ground: transparent; }
+.gallery-tile:has(.ill-figure) > .gallery-tile__view { aspect-ratio: 16 / 9; }
+/* The gallery (owner, 2026-11-04, a gallery of product shots: "all the illustrations would be presented just like first
+   image if they were in a gallery"): every screen, phone, vignette and component in one portrait card, 9:10 as the
+   reference's (286 × 316), on the card's plain recessed ground, four across. */
+.ill-grid--gallery .gallery-tile:has(.ill-figure) { aspect-ratio: 9 / 10; }
+.ill-grid--gallery .gallery-tile:has(.ill-figure) > .gallery-tile__view { aspect-ratio: auto; block-size: 100%; }
+/* The figure's own ground, part of the picture as an image's backdrop is (the card keeps the app's tone and edge): the
+   reference's 245 243 241 made neutral (owner: "plain neutral backgrounds"), dark enough that white UI (a card, a dialog,
+   a menu) stands off it; in dark a step above the near-black page, so the dark UI's own surfaces still read. */
+.ill-grid--gallery .ill-figure, .ill-preview[data-frame="gallery"] .ill-figure { --af-stage-ground: light-dark(oklch(0.966 0 0), oklch(0.21 0 0)); } /* spec */
+
+/* A style's sampler: three vignettes side by side, one row the Canvas's width, so every style compares on one subject. */
+.ill-sampler { display: flex; }
+.studio-grid.ill-grid--styles { grid-template-columns: minmax(0, 1fr); }
+.ill-grid--styles .gallery-tile:has(.ill-figure) > .gallery-tile__view { aspect-ratio: 4 / 1; }
+
+/* Sheets take the Canvas's width, one a row, so their parts draw near their true size, as a sheet of the references. */
+.studio-grid.ill-grid--sheets { grid-template-columns: minmax(0, 1fr); }
+.ill-grid--sheets .gallery-tile:has(.ill-figure) > .gallery-tile__view { aspect-ratio: 5 / 2; }
+
+/* The Inspector's preview: the figure at the panel's width, in its own card's shape. */
+.ill-preview { aspect-ratio: 16 / 9; border-radius: var(--area-radius-container); background: var(--area-bg-component); overflow: clip; }
+.ill-preview[data-shape="square"] { aspect-ratio: 1; }
+.ill-preview[data-frame="gallery"] { aspect-ratio: 9 / 10; }
+
+/* A sheet: its parts at their true size on one baseline, as a product range is lined up, with room for the notes
+   under and beside each (the notes are drawn in the card's own pixels, .ill-notes). */
+.ill-sheet { display: flex; align-items: flex-end; gap: 104px; inline-size: max-content; padding: 24px 48px 64px 24px; }
+/* Each part keeps its own width: a demo that takes its container's (a field, a slider) gets a field's measure. */
+.ill-sheet__part { display: grid; flex: none; inline-size: max-content; min-inline-size: 48px; margin: 0; }
+.ill-sheet__part > .af-tile__demo { inline-size: max-content; min-inline-size: 0; max-inline-size: 480px; }
+.ill-sheet__part > .af-tile__demo:has(> :is(.area-slider, .area-progress, .area-meter, .area-tabs)) { inline-size: 240px; }
+
+/* The notes: dimension lines and names in the line's ink, 1px and 10px in the card's own pixels. */
+.ill-notes { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; overflow: visible; pointer-events: none; }
+.ill-notes line { stroke: var(--af-line-ink, var(--area-fg-muted)); stroke-width: 1; shape-rendering: crispEdges; }
+.ill-notes .ill-notes__ext { stroke-dasharray: 1 2; opacity: 0.7; }
+.ill-notes text { fill: var(--af-line-ink, var(--area-fg-muted)); font-family: var(--area-font-sans); font-size: 10px; }
+.ill-notes .ill-notes__value { font-family: var(--area-font-mono); font-size: 9px; font-variant-numeric: tabular-nums; }
+.ill-notes .ill-notes__number { font-family: var(--area-font-mono); font-size: 9px; }
+
+/* In a gallery card a demo that takes its container's width (a field, a select, a slider) gets a field's measure, not the
+   component tile's 420 (engine/abstract.css .af-tile--width), so it draws at the shared scale instead of shrinking. */
+.ill-grid--gallery .af-tile--width .af-tile__demo, .ill-preview[data-frame="gallery"] .af-tile--width .af-tile__demo { inline-size: 180px; }
+/* A row of tabs or steps needs a row's measure, or its labels wrap. */
+.ill-grid--gallery .af-tile--width .af-tile__demo:has(> :is(.area-tabs, .area-stepper, .area-pagination)), .ill-preview[data-frame="gallery"] .af-tile--width .af-tile__demo:has(> :is(.area-tabs, .area-stepper, .area-pagination)) { inline-size: 280px; }

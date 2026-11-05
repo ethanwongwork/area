@@ -10,6 +10,13 @@
 const NUMBER = /^(?:\d|[:.,/%+×–-])+$/;
 const word = (w) => /^[:.,/%+×–—-]+$/.test(w) ? `<span class="tx tx--p">${w}</span>` : !/\d/.test(w) || !NUMBER.test(w) ? `<span class="tx">${w}</span>`
   : w.split("").map((c) => `<span class="tx tx--${/\d/.test(c) ? "d" : "p"}">${c}</span>`).join("");
+/* A run of several words is held in one plain inline span (tx-run), so a flex parent (a heading drawn as a flex row,
+   .area-toc__title) takes the run as one item and keeps its spaces; in running text the span changes nothing. */
+const run = (part) => {
+  const [, lead, core, trail] = part.match(/^(\s*)([\s\S]*?)(\s*)$/);
+  const words = core.split(/(\s+)/).map((w) => (/^\s*$/.test(w) ? w : word(w))).join("");
+  return `${lead}${/\s/.test(core) ? `<span class="tx-run">${words}</span>` : words}${trail}`;
+};
 export function wrapText(html) {
   const skip = /^(option|textarea|style|script|title)$/i;
   let depth = 0;
@@ -19,7 +26,7 @@ export function wrapText(html) {
       if (m && skip.test(m[2])) depth += m[1] ? -1 : part.endsWith("/>") ? 0 : 1;
       return part;
     }
-    return depth === 0 && /\S/.test(part) ? part.split(/(\s+)/).map((w) => (/^\s*$/.test(w) ? w : word(w))).join("") : part;
+    return depth === 0 && /\S/.test(part) ? run(part) : part;
   }).join("");
 }
 

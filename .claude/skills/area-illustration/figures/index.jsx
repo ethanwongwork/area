@@ -12,8 +12,8 @@
  * Copy follows the placeholder vocabulary (docs/DESIGN_SYSTEM.md, Example copy); the person is David Tee.
  */
 import { renderToStaticMarkup } from "react-dom/server";
-import { Board, BoardCard, BoardColumn, Button, Link, Menu, MenuItem, MenuSeparator, Message, MessageActions, Slider } from "@area/react";
-import { CopyIcon, DocumentIcon, MoreHorizontalIcon, PencilIcon, RefreshIcon, StarIcon, ThumbsUpIcon, TrashIcon } from "@area/icons";
+import { Board, BoardCard, BoardColumn, Button, Kbd, Link, Menu, MenuItem, MenuSeparator, Message, MessageActions, Slider } from "@area/react";
+import { CopyIcon, DocumentIcon, LinkIcon, MoreHorizontalIcon, OpenIcon, PencilIcon, RefreshIcon, StarIcon, ThumbsUpIcon, TrashIcon } from "@area/icons";
 import { COMPONENT_PAGES } from "../../../../apps/desktop/src/content/pages.mjs";
 import { componentSpecimens, demoWrapper } from "../../../../apps/desktop/src/content/specimens.mjs";
 import { DEMOS } from "../../../../apps/desktop/src/content/registry.tsx";
@@ -59,6 +59,14 @@ export const SHOW = {
   "time-field": { ids: ["state-filled"] },
   "editable-text": { ids: ["state-editing"] },
   popover: { ids: ["teaching"] },
+  /* Overlays shown open (owner, 2026-11-04: "Yes, open them"): a closed one is only its trigger. A toggletip has an
+     open specimen; a hover card and the date pickers keep their surface in the markup, held open (abstract.css .af-open);
+     a context menu renders its rows only once opened, so it is drawn at the pointer over its area. */
+  toggletip: { ids: ["state-open"] },
+  "hover-card": { open: true },
+  "date-picker": { open: true },
+  "date-range-picker": { open: true },
+  "context-menu": { node: () => <FigContextMenu /> },
   count: { ids: ["variant-soft"] },
   "zoom-control": { ids: ["content-view"] },
   /* A link in running text, the way links are read (the app's demo is the link alone). */
@@ -69,6 +77,20 @@ export const SHOW = {
   drawer: { bleed: "right" },
   titlebar: { layout: "width", bleed: "width" },
 };
+
+/* A context menu opened by a right-click in its area: the area (the demo's dashed region) and Menu at the pointer. */
+const FigContextMenu = () => (
+  <div style={{ position: "relative", paddingBlockEnd: 120 }}>
+    <div style={{ display: "grid", placeItems: "center", inlineSize: 240, minBlockSize: 96, border: "var(--area-border-width) dashed var(--area-border-default)", borderRadius: "var(--area-radius-container)", color: "var(--area-fg-muted)" }}>Right-click here</div>
+    <Menu aria-label="Label" className="area-context-menu__menu" style={{ position: "absolute", insetBlockStart: 56, insetInlineStart: 140, minInlineSize: 200 }}>
+      <MenuItem shortcut={<Kbd keys={["cmd", "l"]} size="sm" />} icon={<LinkIcon />}>Copy link</MenuItem>
+      <MenuItem icon={<DocumentIcon />}>Duplicate</MenuItem>
+      <MenuItem icon={<OpenIcon />}>Open in new tab</MenuItem>
+      <MenuSeparator />
+      <MenuItem tone="danger" icon={<TrashIcon />}>Delete</MenuItem>
+    </Menu>
+  </div>
+);
 
 const FigBoard = () => (
   <Board aria-label="Label">
@@ -188,7 +210,7 @@ export function render() {
     const chosen = pick?.ids ? pick.ids.map((id) => all.find((sp) => sp.id === id)).filter(Boolean) : all.slice(0, 1);
     const parts = pick?.node ? [safe(`gallery/${page.slug}`, () => html(<div className="af-tile__demo" style={{ inlineSize: "max-content", maxInlineSize: "none" }}>{pick.node()}</div>))] : chosen.map((sp) => {
       const Demo = DEMOS[sp.demo], style = styleOf(demoWrapper(sp.demo)?.style);
-      return safe(`gallery/${page.slug}/${sp.id}`, () => html(<div className="af-tile__demo" style={style}><Demo /></div>));
+      return safe(`gallery/${page.slug}/${sp.id}`, () => html(<div className={`af-tile__demo${pick?.open ? " af-open" : ""}`} style={style}><Demo /></div>));
     }).filter(Boolean);
     return { slug: page.slug, name: page.name, kind: kindOf[page.slug] || "Other", layout: pick?.layout || "single", cols: pick?.cols, bleed: pick?.bleed || null, parts };
   });

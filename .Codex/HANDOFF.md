@@ -1,6 +1,20 @@
 # Handoff
 
 ## Current state (2026-11-04)
+- **Illustrations, worktree `abstract-ui-illustrations-7d873a` (merged via its PR, 2026-11-04).** Owner: the abstract UI
+  library again, under the system's "Illustrations", one cohesive high-fidelity style after cosmetic line art. Built:
+  the Line drawing in the area-illustration engine (`engine/line.js` + `.af-line` in abstract.css: one ink
+  `--area-fg-muted`, 1px lines, no fills or shadows, words as rules, headings outlined, pictures crossed, control-sized
+  strong fills a 14% tone); `stage.js` now an ES module too; Illustrations page (`src/pages/illustrations.tsx`,
+  `#system/<system>/illustrations/<section>`, Foundations after Icons): Sheets (8 line-ups with numbered names and
+  measured dimension lines), Screens 14, Phones 6, Vignettes 16, Components 119 by kind; Drawing menu keeps Bars, Shapes,
+  Real. Research and open items (exploded views, accent, paper): `docs/research/illustrations-2026-11-04/README.md`.
+  Round 2: Line became 8 axes (`data-af-*`) and 16 Styles to compare. Round 3 (owner: "rely on real ui, but scaled
+  down to fit ... plain neutral backgrounds ... presented just like first image"): Real UI is the page default; screens,
+  phones, vignettes and components sit in 9:10 gallery cards on the card grid, on a neutral figure ground
+  (`--af-stage-ground`, read by abstract.css's stage and component plate), one shared 1.1× scale (at a 290 card).
+  Overlays drawn open (`SHOW` `open`, `.af-open`; context menu at the pointer); word runs in `span.tx-run`.
+  Checks: desktop build, typecheck, app-css, docs, playgrounds, places tests.
 - **Aligned answers, branch `claude/approval-aligned-answers` (uncommitted, 2026-11-04 late).** Owner, shown the aligned
   mock: "build the aligned version … fill and stroke … alignment, padding, margins, inset corner pairings". Approval: plates
   in a soft field's paint on the question's text edge (mat 12), corners card 22 / plate 10 / number square 4 / Skip 6,
