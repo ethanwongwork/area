@@ -44,7 +44,9 @@ export async function renderFigures() {
 export function assets() {
   return {
     css: ["engine/abstract.css", "figures/screens.css"].map((f) => readFileSync(join(HERE, f), "utf8")).join("\n"),
-    js: readFileSync(join(HERE, "engine/stage.js"), "utf8"),
+    /* The Line pass is an ES module the app imports; the bench inlines it as a script. */
+    js: [readFileSync(join(HERE, "engine/line.js"), "utf8"), readFileSync(join(HERE, "engine/stage.js"), "utf8")]
+      .map((source) => source.replace(/^import .*$/gm, "").replace(/^export \{[^}]*\};?$/gm, "").replace(/^export /gm, "")).join("\n"),
   };
 }
 
@@ -52,6 +54,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const args = process.argv.slice(2);
   const dir = resolve(args.find((a) => !a.startsWith("--")) || join(process.cwd(), "area-figures-bench"));
   const only = args.includes("--only") ? args[args.indexOf("--only") + 1].split(",") : null;
+  const fidelity = args.includes("--fidelity") ? args[args.indexOf("--fidelity") + 1] : "bars";
   mkdirSync(dir, { recursive: true });
   copyFileSync(AREA_CSS, join(dir, "area.css"));
   const figures = await renderFigures();
@@ -69,12 +72,13 @@ ${["light", "dark"].map((theme) => `<section data-theme-bench="${theme}"></secti
 const F = ${JSON.stringify(figures).replace(/<\//g, "<\\/")};
 const ONLY = ${JSON.stringify(only)};
 const DEFAULTS = ${JSON.stringify(DEFAULTS)};
+const FIDELITY = ${JSON.stringify(fidelity)};
 for (const sec of document.querySelectorAll("[data-theme-bench]")) {
   const theme = sec.dataset.themeBench, scope = { ...DEFAULTS, "data-area-theme": theme };
   const row = (title) => { const b = document.createElement("div"); b.className = "set"; b.innerHTML = "<b>" + title + " · " + theme + "</b><div class=opts></div>"; sec.append(b); return b.lastChild; };
   for (const [set, frame, k] of [["desktop", [320, 180], 0.3125], ["mobile", [128, 270], 0.3125], ["isolated", [240, 180], 0.5]]) {
     const o = row(set);
-    for (const [id, sc] of Object.entries(F.screens[set])) if (!ONLY || ONLY.includes(id)) AFS.stage(o, { html: sc.html, w: frame[0], h: frame[1], fit: k, pad: 1, scope });
+    for (const [id, sc] of Object.entries(F.screens[set])) if (!ONLY || ONLY.includes(id)) AFS.stage(o, { html: sc.html, w: frame[0], h: frame[1], fit: k, pad: 1, scope, fidelity: FIDELITY });
   }
   for (const c of F.gallery.filter((c) => !ONLY || ONLY.includes(c.slug))) {
     const st = AFS.stage(row(c.slug), { html: '<div class="af-tile"></div>', w: 240, h: 180, fit: 0.5, pad: 1, scope });

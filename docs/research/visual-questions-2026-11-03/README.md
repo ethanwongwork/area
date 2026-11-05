@@ -181,3 +181,12 @@ correct, and fix the alignment, padding, margins, inset corner pairings". The an
 paint) on the question's text edge, 12 from the card's; every corner is the one outside it less the gap: card 22, plate
 10, number square 4, Skip 6. The unit's frame takes the question's 22. Pictures stay premade simple UI; words stay lists;
 Recommended stays a muted note. Spec: docs/specs/approval.md.
+
+## True size (2026-11-04)
+
+Owner: "Show UI at 1:1", after the fidelity pass (`../fidelity-2026-11-04/`): a part judged inside a whole screen fitted
+to the frame was drawn at 0.2 to 0.36 of its size. The frame now opens at 100% on the part a template names (`focus`):
+Room on the list, Accent on the form's primary button (its switches above it), Corners, Several at once,
+Fine-tune and Exact values on the form, Shadows on the open menu.
+Questions about the whole design (Screen kind, A or B, Next step, How close, What's off) open fitted. Fit is the Zoom
+control's own button. PRODUCT_UI rule 26.

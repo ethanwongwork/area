@@ -1,6 +1,20 @@
 # Handoff
 
 ## Current state (2026-11-04)
+- **Illustrations, worktree `abstract-ui-illustrations-7d873a` (merged via its PR, 2026-11-04).** Owner: the abstract UI
+  library again, under the system's "Illustrations", one cohesive high-fidelity style after cosmetic line art. Built:
+  the Line drawing in the area-illustration engine (`engine/line.js` + `.af-line` in abstract.css: one ink
+  `--area-fg-muted`, 1px lines, no fills or shadows, words as rules, headings outlined, pictures crossed, control-sized
+  strong fills a 14% tone); `stage.js` now an ES module too; Illustrations page (`src/pages/illustrations.tsx`,
+  `#system/<system>/illustrations/<section>`, Foundations after Icons): Sheets (8 line-ups with numbered names and
+  measured dimension lines), Screens 14, Phones 6, Vignettes 16, Components 119 by kind; Drawing menu keeps Bars, Shapes,
+  Real. Research and open items (exploded views, accent, paper): `docs/research/illustrations-2026-11-04/README.md`.
+  Round 2: Line became 8 axes (`data-af-*`) and 16 Styles to compare. Round 3 (owner: "rely on real ui, but scaled
+  down to fit ... plain neutral backgrounds ... presented just like first image"): Real UI is the page default; screens,
+  phones, vignettes and components sit in 9:10 gallery cards on the card grid, on a neutral figure ground
+  (`--af-stage-ground`, read by abstract.css's stage and component plate), one shared 1.1× scale (at a 290 card).
+  Overlays drawn open (`SHOW` `open`, `.af-open`; context menu at the pointer); word runs in `span.tx-run`.
+  Checks: desktop build, typecheck, app-css, docs, playgrounds, places tests.
 - **Aligned answers, branch `claude/approval-aligned-answers` (uncommitted, 2026-11-04 late).** Owner, shown the aligned
   mock: "build the aligned version … fill and stroke … alignment, padding, margins, inset corner pairings". Approval: plates
   in a soft field's paint on the question's text edge (mat 12), corners card 22 / plate 10 / number square 4 / Skip 6,
@@ -8,6 +22,17 @@
   corner `calc(radius-row + 12)` (22) for frame and question; Several at once on the same mat. Measured in the app light
   and dark (spec history). Checks: react 642, desktop 31, contracts 14, docs, playgrounds, app-css, manifest, typecheck.
   Another session (worktree abstract-ui-illustrations-7d873a) runs its own dev Electron; its start closed this one's.
+- **Theme experience, fidelity pass and UI at 1:1, worktree `theme-experience-questions-2fa84f` (uncommitted, on main
+  a79e2122).** Theme Setup Flow artifact VsXoduNGgEVNRzSHLQsMJ8 (Setup's 41 questions in order, Chat at 268/456/768 or a
+  dedicated Feed of visual answer cards; `docs/research/theme-experience-2026-11-04/`). Fidelity Pass artifact
+  ML6aoMQzMFev48hnz8CxUv (`docs/research/fidelity-2026-11-04/`): Chrome snaps box edges, so fractional sizes and text
+  centring are not why Area reads less finished than Figma examples; faint default shadows (menu 248 vs a kit's 235)
+  and UI shown at 0.2 of its size are. Built (owner: "Show UI at 1:1"): PRODUCT_UI rule 26; `QuestionFrame` opens at 100%
+  on its `focus` (Room the list, Accent the Save button, Several at once the form); whole-design questions stay fitted;
+  Setup's stage and the screen tiles unchanged (one-to-one.md says why). The flow was then redrawn on the kits' own
+  composition (qk-unit, the kit bar, the app's look on the root) and rebuilt on main a79e2122 (#204's aligned answers):
+  flow v6, Feed Kit v45, Chat Kit v16 (captured from file://, the avatar inlined). Checks: typecheck, playgrounds, docs, diff --check; seen in Electron light and dark. Open: the owner's Figma
+  frame for a direct comparison; deeper default shadows (a foundation change, the owner's call).
 - **Feed and Chat kit refinement, worktree `feed-chat-kits-refinement-a31e9c` (uncommitted, 2026-11-04).** Owner: refine type,
   spacing, balance, corners, fill, stroke, rhythm in both kits. Measured (census, glyph rhythm probe, a corner/fill/edge
   census, light and dark, Panel/Split/Column, a 400 feed). Fixed: plain Plan and Edit summary `display: flow-root` (their

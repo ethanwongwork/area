@@ -1,12 +1,26 @@
 # The style
 
-## Three drawings (`engine/abstract.css`)
+## Four drawings (`engine/abstract.css`)
+
+**Line is the house style** (owner, 2026-11-04, after cosmetic product line art; measured in
+`docs/research/illustrations-2026-11-04`): one ink (`--area-fg-muted`), one line exactly 1px on screen, no fills or
+shadows. `engine/line.js` reads the components as Area paints them and marks each part: an edge stays an edge; a part
+drawn only by a fill or shadow becomes its outline; a control-sized strong fill keeps a 14% tone of the ink; a dot (8px
+or less) is solid ink; a picture is its box with a cross. A word is one rule its own width at the x-height's middle; a
+heading's word is its cap height outlined. A sheet (the Illustrations page) lines parts up on one baseline with numbered
+names and measured dimension lines. Bars, Real and Shapes below stay, to compare.
+
+Line's choices are eight independent axes set on the stage (`data-af-stroke`, `-ink`, `-fill`, `-shadow`, `-text`,
+`-detail`, `-pic`, `-accent`; abstract.css lists their values). A style is a value on each (the Illustrations page's
+`STYLES`); line.js records what each part painted (`--af-c` its colour, `--af-k` how far it stood from the ground,
+`--af-sh` its shadow, `af-raise` a raised layer), so an axis gives paint back without measuring again. All straight on.
 
 | | Words | Buttons, badges, chips, counts | Icons | Everything else |
 |---|---|---|---|---|
 | **Bars** | A rounded bar: the word's width, 0.7em tall (cap height), in its own colour at `--af-ink` (20%) | Their colour alone | Kept | Area's own |
 | **Real** | As written | As written | Kept | Area's own |
 | **Shapes** | Gone | Their colour alone | Gone | Area's own |
+| **Line** | One 1px rule (headings: cap height outlined) | Outlined; a strong fill keeps a light tone | Kept, strokes at 1px | Outlines only, no fills or shadows |
 
 The bar is a pseudo-element behind the word, whose text goes clear. So a line keeps its
 real spacing, a title is darker than body text (its colour is darker), and muted text is

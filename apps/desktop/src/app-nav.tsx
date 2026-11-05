@@ -47,6 +47,7 @@ export const SYSTEM_SECTIONS: ReadonlyArray<{ place: Place; label: string }> = [
   { place: { page: "elevation" }, label: "Elevation" },
   { place: { page: "motion" }, label: "Motion" },
   { place: { page: "icons" }, label: "Icons" },
+  { place: { page: "illustrations" }, label: "Illustrations" },
   { place: { page: "components" }, label: "Components" },
   { place: { page: "patterns" }, label: "Patterns" },
   { place: { page: "history" }, label: "Versions" },
@@ -55,13 +56,13 @@ export const SYSTEM_SECTIONS: ReadonlyArray<{ place: Place; label: string }> = [
 /** A place's name: its section or lab. */
 export function placeLabel(place: Place): string {
   if (place.page === "settings" || place.page === "foundations") return "Themes";
-  return ({ home: "Home", projects: "Projects", systems: "Systems", themes: "Themes", "theme-setup": "New theme", tokens: "Tokens", color: "Colors", typography: "Typography", icons: "Icons",
+  return ({ home: "Home", projects: "Projects", systems: "Systems", themes: "Themes", "theme-setup": "New theme", tokens: "Tokens", color: "Colors", typography: "Typography", icons: "Icons", illustrations: "Illustrations",
     spacing: "Spacing", shape: "Shape", elevation: "Elevation", motion: "Motion",
     components: "Components", patterns: "Patterns", history: "Versions", references: "References", materials: "Materials", tests: "Tests", feed: "Feed",
     project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions" } as Record<PageId, string>)[place.page];
 }
 /** What a page's list holds, for its head's name and its filter's placeholder. */
-const LISTED: Partial<Record<PageId, string>> = { tokens: "tokens", color: "scales", typography: "typefaces and roles", icons: "icons", components: "components", "project-page": "layers",
+const LISTED: Partial<Record<PageId, string>> = { tokens: "tokens", color: "scales", typography: "typefaces and roles", icons: "icons", illustrations: "illustrations", components: "components", "project-page": "layers",
   patterns: "patterns", references: "collections", materials: "bundles", tests: "tests" };
 
 /** Same section, whatever is chosen on it. New theme, and an old Foundations link, are under Themes. */
