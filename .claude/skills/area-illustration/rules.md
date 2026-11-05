@@ -42,3 +42,8 @@ still, with the pointer where it would be.
 
 Copy is the placeholder vocabulary. Real fidelity only where the text's colour is the
 subject.
+
+## 09 · One line, one ink
+
+In Line, every stroke is 1px on screen and the muted ink, whatever the scale: edges, outlines, icons, words, notes. A
+fill survives only as a control's light tone or a dot's ink. A sheet's dimensions are measured from the drawing.

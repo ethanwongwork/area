@@ -1,6 +1,19 @@
 # Handoff
 
-## Current state (2026-11-03)
+## Current state (2026-11-04)
+- **Illustrations, worktree `abstract-ui-illustrations-7d873a` (uncommitted, 2026-11-04).** Owner: the abstract UI
+  library again, under the system's "Illustrations", one cohesive high-fidelity style after cosmetic line art. Built:
+  the Line drawing in the area-illustration engine (`engine/line.js` + `.af-line` in abstract.css: one ink
+  `--area-fg-muted`, 1px lines, no fills or shadows, words as rules, headings outlined, pictures crossed, control-sized
+  strong fills a 14% tone); `stage.js` now an ES module too; Illustrations page (`src/pages/illustrations.tsx`,
+  `#system/<system>/illustrations/<section>`, Foundations after Icons): Sheets (8 line-ups with numbered names and
+  measured dimension lines), Screens 14, Phones 6, Vignettes 16, Components 119 by kind; Drawing menu keeps Bars, Shapes,
+  Real. Research and open items (exploded views, accent, paper): `docs/research/illustrations-2026-11-04/README.md`.
+  Round 2: Line became 8 axes (`data-af-*`) and 16 Styles to compare. Round 3 (owner: "rely on real ui, but scaled
+  down to fit ... plain neutral backgrounds ... presented just like first image"): Real UI is the page default; screens,
+  phones, vignettes and components sit in 9:10 gallery cards on the card grid, on a neutral figure ground
+  (`--af-stage-ground`, read by abstract.css's stage and component plate), one shared 1.1× scale (at a 290 card).
+  Checks: desktop build, typecheck, app-css, docs, places tests.
 - **Visual questions, worktree `visual-feedback-ui-templates-cf32c1` (uncommitted, 2026-11-03).** Owner: a new UI type for
   feed and chat, a frame (Asset card) over answers in any form (list, grid, pictures, bar, chips, any control), templates
   for asking design questions and feedback visually. Research and rules in `docs/research/visual-questions-2026-11-03/`

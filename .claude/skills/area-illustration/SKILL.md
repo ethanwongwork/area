@@ -8,7 +8,11 @@ argument-hint: "[setting id, component or screen]"
 
 An Area figure is Area's own UI, not a drawing of it. It is composed from `@area/react` and
 the app's demos, rendered to markup with every word wrapped, and drawn by one stylesheet
-(`engine/abstract.css`) in one of three ways:
+(`engine/abstract.css`) in one of four ways. **Line** is the house style (owner, 2026-11-04; `style.md`), shown in the
+app's Illustrations page (`apps/desktop/src/pages/illustrations.tsx`, under the system's Foundations):
+
+- **Line**: Area's components as a technical line drawing: one ink, one 1px line, words as rules, headings outlined,
+  pictures as a box with a cross, no fills or shadows (`engine/line.js` marks the parts first).
 
 - **Bars** (the default): every word is a rounded bar its own width and the height of its
   ink, in its own colour at 20%. A button, badge, chip or count keeps only its colour.
@@ -48,6 +52,7 @@ The review page and its saved marks are in `docs/research/area-figures-2026-10-2
 | `concepts.md` | From a setting to a figure; the screens. |
 | `engine/abstract.css` | Bars and Shapes, forced states, the pointer, ghost thumbs. |
 | `engine/markup.js` | `wrapText`, `blankImages`, `figureMarkup`: words as span.tx and images as blanks, shared with the app's Setup stage (`apps/desktop/src/setup-screen.tsx`). |
+| `engine/line.js` | `markLines`: the Line drawing's pass (which parts are edges, outlines, tones, dots, pictures, headings). An ES module the app imports; the bench inlines it. |
 | `engine/stage.js` | `AFS.stage`: frames markup at a fidelity under a scope, holds states, scales it, places the pointer and ghosts. |
 | `figures/compositions.jsx` | `COMPOSITIONS`: grids of 4 to 6 similarly sized components, each showing one thing. Add one per theme setting: 4 to 6 parts 200 wide in `Frame`, no containers. |
 | `figures/index.jsx` | `KINDS` (the gallery's kinds of UI), `SHOW` (the few families shown as a grid, a pair or another specimen), `VIGNETTES`, `SETTINGS`; `render()` renders screens, gallery, settings. |
@@ -67,8 +72,9 @@ The review page and its saved marks are in `docs/research/area-figures-2026-10-2
    vignette }, { scope, attr, states, fidelity })`. Pick the screen where the token shows most. `scope` adds what an
    option needs in order to show (Light tint 8 for Tint hue). Use `fidelity: "real"` only when the text's colour is
    the subject.
-3. **Render and look.** `npm run build` once (Area's CSS and the packages' dist), then
-   `node .claude/skills/area-illustration/build.mjs <scratch-dir> [--only id,…]`. Serve the folder and open it in
+3. **Render and look.** In the app: System › Foundations › Illustrations (Drawing menu in the Canvas bar). For a bench:
+   `npm run build` once (Area's CSS and the packages' dist), then
+   `node .claude/skills/area-illustration/build.mjs <scratch-dir> [--only id,…] [--fidelity line]`. Serve the folder and open it in
    the app's browser pane, showing the pane first. Check light and dark against `style.md`'s "The look".
 4. **Hand over.** Rebuild the review page (`docs/research/area-figures-2026-10-24/build.mjs`) and republish it to
    the same file path. Say what was added and anything not checked.
@@ -94,4 +100,9 @@ figure there is app work that follows the owner's picks.
 | a specimen too faint to read alone (a ghost icon) | pick a better one of the family's own in `SHOW` |
 | page styles leaking into a figure (blue links, margins) | scope page rules with `:not(.af-stage *)` |
 | a broken image in a figure | images are blank media blocks (`blankImages`); don't link app images |
+| a Line part that vanished (a row's plate, a thumb) | it painted by a fill or pseudo-element line.js didn't read; mark it there, never by hand in a figure |
+| a whole screen gone grey in Line | a large strong fill took the tone; the tone is for control-sized parts (line.js) |
+| typing a dimension | a sheet's numbers are measured from the drawing (illustrations.tsx, annotate) |
+| an overlay drawn closed (only its trigger: a context menu's area, a hover card's link) | show it open: its open specimen in `SHOW` (`ids`), `open: true` where its surface is in the markup (abstract.css `.af-open` draws the popover under its trigger), or a `node` of the real surface at the pointer |
+| words run together in a flex heading ("Onthispage") | a run of words is one `span.tx-run` (markup.js), so a flex parent keeps its spaces; don't split runs into loose spans |
 | inventing copy | the placeholder vocabulary: Title, Description, Body text, Label, Item one, Button, Action |

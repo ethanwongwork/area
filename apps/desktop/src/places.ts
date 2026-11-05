@@ -8,7 +8,7 @@
  *   #system/<system>/themes/new/<question>     a new theme, made in the Setup chat
  *   #system/<system>/themes/settings/<group>/<item>  Themes on one setting (its group: Page, Accent, … Effects)
  *   #system/<system>/tokens/<group>            every token, in tiers, narrowed to one group (2026-10-31)
- *   #system/<system>/colors/<item>             the color scales (and typography/<role>, icons/<category>)
+ *   #system/<system>/colors/<item>             the color scales (and typography/<role>, icons/<category>, illustrations/<section>)
  *   #system/<system>/spacing                   a foundation that had been settings only (and shape, elevation, motion)
  *   #system/<system>/components/<item>         a family, or a family's tile (<slug>/<tile>)
  *   #system/<system>/patterns/<item>           the system's screens
@@ -33,7 +33,7 @@
 
 /** A page: what draws the Canvas (and the Sidebar's list, if it has one). */
 export type PageId =
-  | "home" | "themes" | "theme-setup" | "foundations" | "settings" | "tokens" | "color" | "typography" | "icons"
+  | "home" | "themes" | "theme-setup" | "foundations" | "settings" | "tokens" | "color" | "typography" | "icons" | "illustrations"
   | "spacing" | "shape" | "elevation" | "motion"
   | "components" | "patterns" | "history" | "references" | "materials" | "tests" | "feed" | "chat"
   | "project" | "project-page" | "exploration" | "versions" | "projects" | "systems";
@@ -68,10 +68,10 @@ export const PROJECT_PAGES: ReadonlySet<PageId> = new Set(["project", "project-p
 const AREA = "area";
 
 /** The pages with a list of their own: in the Sidebar it takes the panel over, under a back row (Phase 0's takeover). */
-export const LIST_PAGES: ReadonlySet<PageId> = new Set(["tokens", "color", "typography", "icons", "components", "patterns", "references", "materials", "tests"]);
+export const LIST_PAGES: ReadonlySet<PageId> = new Set(["tokens", "color", "typography", "icons", "illustrations", "components", "patterns", "references", "materials", "tests"]);
 
 /** A system's sections, as their hashes say them (Foundations until 2026-10-31 held Colors, Typography and Icons). */
-const SECTIONS = ["themes", "tokens", "colors", "typography", "spacing", "shape", "elevation", "motion", "icons", "components", "patterns", "history"];
+const SECTIONS = ["themes", "tokens", "colors", "typography", "spacing", "shape", "elevation", "motion", "icons", "illustrations", "components", "patterns", "history"];
 /** The foundations that had been settings only, each a page since 2026-10-31. */
 const FOUNDATION_SECTIONS = ["tokens", "spacing", "shape", "elevation", "motion"] as const;
 /** Foundations' own pages, which old /foundations/<page> links name before the setting groups. */
@@ -106,7 +106,7 @@ export function hrefOf(place: Place): string {
     case "foundations": return `${system}/themes/settings`;
     case "settings": return `${system}/themes/settings/${place.group ?? ""}${encode(place.item)}`;
     case "color": return `${system}/colors${encode(place.item)}`;
-    case "typography": case "icons": case "tokens": case "spacing": case "shape": case "elevation": case "motion": return `${system}/${place.page}${encode(place.item)}`;
+    case "typography": case "icons": case "illustrations": case "tokens": case "spacing": case "shape": case "elevation": case "motion": return `${system}/${place.page}${encode(place.item)}`;
     case "components": return `${system}/components${encode(place.item)}`;
     case "patterns": return `${system}/patterns${encode(place.item)}`;
     case "history": return `${system}/history${encode(place.item)}`;
@@ -146,7 +146,7 @@ export function parsePlace(hash: string): Place | null {
       return group ? { page: "settings", system, group, item: rest(item) } : { page: "foundations", system };
     }
     if (section === "colors") return { page: "color", system, item: rest(more) };
-    if (section === "typography" || section === "icons") return { page: section, system, item: rest(more) };
+    if (section === "typography" || section === "icons" || section === "illustrations") return { page: section, system, item: rest(more) };
     if ((FOUNDATION_SECTIONS as readonly string[]).includes(section ?? "")) return { page: section as PageId, system, item: rest(more) };
     // An old link: Foundations held Colors, Typography, Icons and the setting groups until 2026-10-31.
     if (section === "foundations") {
