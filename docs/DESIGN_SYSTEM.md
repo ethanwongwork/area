@@ -275,8 +275,8 @@ own step.
     survives hover, press and selection.
   - In lists a shortcut is quiet: 12/16, 400, muted, and it takes a danger row's ink.
   - Escape is written "Esc".
-  - A list's ordinal is not a keycap: Approval numbers its answers with plain muted digits (owner, 2026-11-04);
-    a key named in a sentence (its "Esc to cancel") is still a keycap.
+  - A keycap set inside a plate takes the plate's corner less its inset (Approval's number square: 4 in a 10 plate,
+    6 in), so the two curves agree.
 - **List rows.**
   - Every icon row puts its label on one 36px column (8 inset + 16 icon + `gap-row` 12):
     Menu, Command palette, Combobox, Select options and Nav. Tree view keeps its own grid.

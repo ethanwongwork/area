@@ -1,6 +1,13 @@
 # Handoff
 
 ## Current state (2026-11-04)
+- **Aligned answers, branch `claude/approval-aligned-answers` (uncommitted, 2026-11-04 late).** Owner, shown the aligned
+  mock: "build the aligned version … fill and stroke … alignment, padding, margins, inset corner pairings". Approval: plates
+  in a soft field's paint on the question's text edge (mat 12), corners card 22 / plate 10 / number square 4 / Skip 6,
+  rows 34; Kbd numbers again (DESIGN_SYSTEM: a keycap in a plate takes its corner less its inset); the question unit's
+  corner `calc(radius-row + 12)` (22) for frame and question; Several at once on the same mat. Measured in the app light
+  and dark (spec history). Checks: react 642, desktop 31, contracts 14, docs, playgrounds, app-css, manifest, typecheck.
+  Another session (worktree abstract-ui-illustrations-7d873a) runs its own dev Electron; its start closed this one's.
 - **Feed and Chat kit refinement, worktree `feed-chat-kits-refinement-a31e9c` (uncommitted, 2026-11-04).** Owner: refine type,
   spacing, balance, corners, fill, stroke, rhythm in both kits. Measured (census, glyph rhythm probe, a corner/fill/edge
   census, light and dark, Panel/Split/Column, a 400 feed). Fixed: plain Plan and Edit summary `display: flow-root` (their

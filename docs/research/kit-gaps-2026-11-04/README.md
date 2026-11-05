@@ -64,8 +64,8 @@ Open:
    Options: the ring takes the strong control edge everywhere, or the chat's stroke scope stops at frames.
 2. **A fixed table at 268** splits code tokens ("space-" / "4"): Table's label column is 27%. Options: tables scroll under
    400 (the references do), or a code token never breaks.
-3. **Approval's corner in a chat**: 22 (the Composer's) where it takes the composer's place, 16 in a visual question.
-   Concentric either way now (#9); the question is whether a reply should show two card corners.
+3. ~~Approval's corner in a chat~~: settled by the aligned answers (later 2026-11-04): every question card is 22, a
+   visual question's frame with it.
 4. **Reference list's separators** are em dashes (its citation style, owner round 37), while the kit's copy rule is
    "never an em dash". Keep as a typographic separator, or a middle dot.
 5. **Figures**: `FIGURES` (setup-screen.tsx) is off since 2026-10-30, while answers now use premade pictures

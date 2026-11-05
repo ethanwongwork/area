@@ -774,7 +774,7 @@ question's frame 8 over its question.
 | Inline code | mono 0.875em | default | 400 | on its line's plate |
 | An agent's work (Step, Reasoning, Plan, Edit summary, Turn notice) | `text-base` 13/18 | verb muted, detail default | 400 | 16 apart, on the text edge |
 | A card's title (Approval's question, a frame's name) | `text-base` 13/18 | default | 500 (the question) / 400 (a frame's name) | 13 in from the edge |
-| A card's choices and rows | `text-base` 13/18 | default; a choice's description muted, joined | 400 | plain rows, the number a muted digit on the question's edge |
+| A card's choices and rows | `text-base` 13/18 | default; a choice's description muted, joined | 400 | filled plates on the question's text edge (12 in), the number a keycap square 6 in |
 | An answer's note (Recommended, Default) | `text-base` 13/18, after the label | muted | 400 | never a Badge; the recommended answer first |
 | Metadata (a step's time, a plan's count, +/− counts) | `text-sm` 12 on the row's 18 | muted (+/− their tones) | 400 | the row's end |
 | A timestamp | `text-sm` 12/16 | muted | 400 | 8 over its message |
