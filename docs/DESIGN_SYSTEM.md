@@ -306,14 +306,15 @@ role ([research](research/elevation-2026-10-14.md)):
 | `shadow-resting` | Card, Panel, Board card, Composer | Resting lift |
 | `shadow-field` | Outline fields and select triggers; outline and soft Buttons | Field shadow (0 by default) |
 | `shadow-tooltip` | Tooltip, Toggletip | Elevation |
-| `shadow-lift` | A linked Card or an app tile under the pointer | Elevation, at half weight |
+| `shadow-lift` | A linked Card or an app tile under the pointer | Hover lift |
 | `shadow-float` | Menu and everything that opens one, Popover and everything built on it, Select picker, Toast, Calendar and Color picker surfaces, floating Toolbar, Board card actions, Scroll to latest | Elevation |
 | `shadow-modal` | Dialog, Confirm dialog, Drawer, Command palette | Elevation, doubled |
 | `shadow-edge` | Listed first by every framed surface | Rest shadow (0 by default) |
 
-- **Elevation is one number**, the Menu's shadow strength in percent: 0 (Flat) to 8, 3 by
-  default. The anchors are Notion's lightest lift (3), its popover (5) and ChatGPT's menu (8).
-  Dark doubles every alpha.
+- **Elevation is one number**, the Menu's shadow strength in percent: 0 (Flat) to 8, 8 by
+  default (3 until 2026-11-05: menus read faint beside UI kit examples,
+  [research](research/shadow-depth-2026-11-04.md)). The anchors are a light lift (3), a
+  popover (5) and a full menu (8). Dark doubles every alpha.
 - **In-flow controls rest flat.** Buttons, fields, Chip, Tag and content (Code block, Table,
   Alert, Accordion) take no lift by default; they rest on their edge and plate.
 - **Every role is eight layer slots at every setting:** a lip, six soft layers and a

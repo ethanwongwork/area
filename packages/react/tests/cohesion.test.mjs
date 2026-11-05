@@ -71,13 +71,14 @@ test('every surface takes its depth from its elevation role', () => {
   }
   // Each Elevation step writes its number alone; the roles read it.
   for (let step = 0; step <= 8; step++) assert.match(css, new RegExp(`\\[data-area-elevation="${step}"\\] \\{\\s*--area-elevation: ${step};`), `Elevation ${step} does not write its number`);
-  // The defaults reproduce the step-3 two-layer recipe exactly (Fluent's ambient + key, ambient half, dark doubled):
+  // The defaults reproduce the two-layer recipe exactly at Floating 8 (3 until 2026-11-05, docs/research/shadow-depth-2026-11-04.md;
+  // Fluent's ambient + key, ambient half, dark doubled):
   // two slots (ambient: no offset, the ambient blur, half the key; key: full offset and blur), the rest transparent,
   // Shadow size 1 (×4/4), no tightness, lip or highlight, black, ×2 in dark, rest at 3 as Shadow, fields at 0.
   const root = css.slice(css.indexOf(':where(:root)'));
   const leaf = name => root.match(new RegExp(`--area-${name}:\\s*([^;]+);`))?.[1].trim();
   assert.deepEqual([leaf('elevation'), leaf('shadow-size'), leaf('shadow-tightness'), leaf('shadow-lip'), leaf('shadow-highlight-light'), leaf('shadow-tint-l'), leaf('shadow-tint-c'), leaf('shadow-resting-step'), leaf('shadow-field-step'), leaf('stroke-strength'), leaf('shadow-rest-step')],
-    ['3', '1', '0', '0', '0', '0', '0', '3', '0', '1', '0'], 'the Edge and Depth defaults moved'); // resting lift 3; main's Rest shadow 0
+    ['8', '1', '0', '0', '0', '0', '0', '3', '0', '1', '0'], 'the Edge and Depth defaults moved'); // Floating 8; resting lift 3; main's Rest shadow 0
   assert.deepEqual([1, 2, 3, 4, 5, 6].map(i => [leaf(`shadow-slot-${i}-t`), leaf(`shadow-slot-${i}-g`), leaf(`shadow-slot-${i}-a`)]),
     [['0', '1', '0.5'], ['1', '0', '1'], ['0', '0', '0'], ['0', '0', '0'], ['0', '0', '0'], ['0', '0', '0']], 'the default Layers are not the ambient + key pair');
   const float = root.match(/--area-shadow-float:\s*([^;]+);/)[1];

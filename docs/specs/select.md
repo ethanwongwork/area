@@ -113,7 +113,7 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 | picker · offset | 4 from the field, below; `position-try-fallbacks: flip-block` with `position-try-order: normal`, so it flips only when below doesn't fit (`navigation.css:347-348`) | Audit B-5 B (owner 2026-09-30): Combobox list rules; UUI 4px offset | Was no flip (pre-2026-09-24 owner decision, superseded). Chrome's UA default (`most-block-size`) opened it on the roomier side |
 | picker · size | min width max(trigger, 224); max height min(324, 100%), then scrolls | Combobox list (Menu's 224; Figma's 324 font list) | Was the trigger's width and at most 288 |
 | picker · surface | padding 4, the field's corner + 4 (sm 10, md 12, lg 14; surface.css "A list opened from a field"), `border-float` (was `border-decorative` until the 2026-10-12 consistency pass), `bg-surface` | Peer: Menu (4px inset) | UUI radius 8 |
-| picker · lift | `--area-shadow-float`, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (3% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts) | Audit "Floating lift" (Notion popover; Menu, Popover) | Was `shadow-2`. A Surface axis role since audit S10 |
+| picker · lift | `--area-shadow-float`, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (8% key at the default 8, 3% until 2026-11-05), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts) | Audit "Floating lift" (Notion popover; Menu, Popover) | Was `shadow-2`. A Surface axis role since audit S10 |
 | option · row | Menu's row (audit B-4): 32 at every trigger size; text start on the inset contract (32 − 1cap) / 2 ≈ 11 (11.03 measured live); check edge 8 from the end; gap `--area-gap-row` 12; corner the select's own (sm 6, md 8, lg 10; was Menu's 8 at every size); 2px apart (`navigation.css:356-378`) | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6. Was min 32, padding 6 8, radius `radius-row` |
 | optgroup · label | 32 row, 12/16 `fg-muted`, regular weight (`navigation.css:403-412`) | Peer: Menu group label | — |
 | option · hover / focus | `bg-component-hover` #f3; keyboard focus is the plate alone, as Menu and Combobox rows | Audit row-plate rule; audit B-5 | Was the plate plus a 2px inset focus ring |
@@ -279,3 +279,5 @@ Gap: Select sets `gap: var(--_gap)`, its size's tier (6 at md; 4 at Compact 13).
 - **Why:** After a style was chosen with the pointer in the type tester, the select kept focus and drew the 2px field
   ring around itself (clipped by the toolbar). A select opens a picker, as a Button does, so it takes a Button's focus
   rule; Input keeps `:focus`, since its caret is its focus.
+
+- 2026-11-05 · owner: "go with your recs" on the shadow depth page (docs/research/shadow-depth-2026-11-04.md) → the Elevation default is 8, so this surface's float role is an 8% key (was 3%).

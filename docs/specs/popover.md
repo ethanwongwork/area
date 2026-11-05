@@ -90,7 +90,7 @@ sides, then 8px-inset list rows (menu-like). shadcn's content is a grid with 16p
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| surface · shadow | **`--area-shadow-float`**, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (3% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts), as Menu | Notion (same lift on popovers and menus); ChatGPT 8/16; shadcn 4/6 + 2/4 | Was `shadow-2` (1–2px). One lift for every floating surface, a Surface axis role since audit S10 |
+| surface · shadow | **`--area-shadow-float`**, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (8% key at the default 8, 3% until 2026-11-05), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts), as Menu | Notion (same lift on popovers and menus); ChatGPT 8/16; shadcn 4/6 + 2/4 | Was `shadow-2` (1–2px). One lift for every floating surface, a Surface axis role since audit S10 |
 | surface · preferred width | **320** | shadcn 320; ChatGPT 254; Notion 456 | Was 240. Still capped at the container |
 | sections · gap | **16** | Notion 16 (header to field); shadcn 16 | Was 12 |
 | surface · inset | 12 (border included, unchanged) | Between shadcn 10 and Notion 16 | — |
@@ -229,3 +229,5 @@ Open questions: none new.
 - **Why:** the same fix as Command palette's descriptions: text beside a button label is cut to its capitals as the
   label is, so their baselines meet.
 - **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.
+
+- 2026-11-05 · owner: "go with your recs" on the shadow depth page (docs/research/shadow-depth-2026-11-04.md) → the Elevation default is 8, so this surface's float role is an 8% key (was 3%).

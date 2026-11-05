@@ -1,6 +1,14 @@
 # Handoff
 
 ## Current state (2026-11-04)
+- **Fidelity: viewer zoom, sharp cards, Floating 8, worktree `figma-vector-fidelity-zoom-d94ad5` (PR, 2026-11-05).** Owner:
+  Figma's vector fidelity and zoom for UI examples. Design viewer (`design-viewer.tsx`): pinch zooms about the pointer,
+  keys about the centre, every design to 3200% (icons 6400%), pixel grid from 800%, centred on whole pixels. ScreenFigure
+  places screens on whole device pixels (`setup-screen.tsx`); a hero crop on whole-design cards was built and dropped
+  for PRODUCT_UI rule 26 (owner: "Follow the rule"). Elevation default 3 → 8 (owner: "go with your recs"; measured in
+  `docs/research/shadow-depth-2026-11-04.md`), Resting stays 3. The owner's Area system: working theme set to 8 (owner
+  yes), releases 1.0 and 1.0.1 still 3, so app chrome draws 3 until they publish. Open: a side-by-side with the owner's
+  Figma frame (needs the frame); dark shadows read only as the rim.
 - **Illustrations, worktree `abstract-ui-illustrations-7d873a` (merged via its PR, 2026-11-04).** Owner: the abstract UI
   library again, under the system's "Illustrations", one cohesive high-fidelity style after cosmetic line art. Built:
   the Line drawing in the area-illustration engine (`engine/line.js` + `.af-line` in abstract.css: one ink

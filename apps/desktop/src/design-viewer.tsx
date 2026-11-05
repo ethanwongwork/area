@@ -8,8 +8,10 @@
  *
  * The design sits centred on a ground of its own at its true size, fitted to the Canvas (`maxFit` lets a small one, an
  * icon, fit larger than 100%) or zoomed: the Zoom control, a pinch (Ctrl or ⌘ with the wheel), + and −, ⇧0 for 100% and
- * ⇧1 to fit, as Figma's keys. Pan scrolls, or drags with Space held or the middle button; the canvas ends at the design
- * plus its margin, so it can't be lost. From 800% a pixel grid shows where `pixelGrid` asks for one (icons).
+ * ⇧1 to fit, as Figma's keys; a pinch zooms about the pointer, the keys about the view's centre. Pan scrolls, or drags
+ * with Space held or the middle button; the canvas ends at the design plus its margin, so it can't be lost. Every design
+ * zooms to 3200% (an icon to 6400%) and shows a pixel grid from 800%, as Figma's (owner, 2026-11-04, the fidelity pass;
+ * the grid was the icons' alone and the rest stopped at 400% until then). The design is centred on whole pixels.
  *
  * Its controls sit in the Canvas header (Figma's and Framer's preview bars): at its start, after Back, what is shown, as
  * ghost menus: the design's mode (Light, Dark, or both side by side, for a themed design) and the ground behind it (Grey,
@@ -59,10 +61,10 @@ export interface DesignViewerOptions {
   appMode: "light" | "dark";
   /** The frame round the design: a desktop window's corner and lift, or none (a phone draws its own). */
   frame?: "window" | "bare";
-  /** The largest zoom fitting may choose (1: never past true size; an icon's is larger) and the largest a person may. */
+  /** The largest zoom fitting may choose (1: never past true size; an icon's is larger) and the largest a person may (3200%). */
   maxFit?: number;
   max?: number;
-  /** A pixel grid from 800%. */
+  /** A pixel grid from 800% (on by default). */
   pixelGrid?: boolean;
   /** More rows for the zoom's menu (the view's own toggles). */
   menu?: ReactNode;
@@ -84,14 +86,18 @@ export interface DesignViewer {
 }
 
 export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
-  const { design, label, width, height, render, selfScaled = false, themed = true, appMode, frame = "window", maxFit = 1, max = 4, pixelGrid = false, menu, back, step, active = true } = options;
+  const { design, label, width, height, render, selfScaled = false, themed = true, appMode, frame = "window", maxFit = 1, max = 32, pixelGrid = true, menu, back, step, active = true } = options;
   const [mode, setMode] = useViewOption<Mode>("viewer-mode", appMode, ["light", "dark", "both"]);
   const [ground, setGround] = useViewOption<Ground>("viewer-ground", "grey", ["grey", "white", "black", "checker"]);
   // A zoom the person chose, for the design it was chosen on; otherwise the design is fitted to the view.
   const [chosen, setChosen] = useState<{ design: string; zoom: number } | null>(null);
   const zoom = chosen?.design === design ? chosen.zoom : null;
   const clamp = (next: number) => Math.min(max, Math.max(MIN, next));
-  const setZoom = (next: number | null) => setChosen(next === null ? null : { design, zoom: clamp(next) });
+  // The keys and the Zoom control zoom about the view's centre; Fit centres the design again.
+  const setZoom = (next: number | null) => {
+    anchor.current = next === null || !element ? null : pointAt(element.clientWidth / 2, element.clientHeight / 2);
+    setChosen(next === null ? null : { design, zoom: clamp(next) });
+  };
   const [size, setSize] = useState({ w: 0, h: 0 });
   // The view is attached whenever the stage mounts (the page may open on another view first).
   const [element, setElement] = useState<HTMLElement | null>(null);
@@ -132,33 +138,48 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
   const stops = STOPS.filter(stop => stop <= max);
   const zoomBy = (by: 1 | -1) => setZoom(by > 0 ? stops.find(stop => stop > scale + 1e-3) ?? max : [...stops].reverse().find(stop => stop < scale - 1e-3) ?? MIN);
 
-  // A pinch on a trackpad (the wheel with Ctrl), or ⌘ with the wheel, zooms about the view; the wheel alone scrolls.
+  // A zoom keeps one point of the design where it is in the view (`anchor`: the point in the design's own pixels, from the
+  // first screen's top start, and where it sits in the view): the view's centre for the keys and the Zoom control, and the
+  // pointer for a pinch (owner, 2026-11-04, the fidelity pass: "figma's vector fidelity and zooming"; Figma zooms about
+  // the pointer). It was the view's centre for both, kept as a share of the scrolled content, until then.
   const shown = useRef(scale);
   shown.current = scale;
   const current = useRef(design);
   current.current = design;
+  const anchor = useRef<{ x: number; y: number; px: number; py: number } | null>(null);
+  /** The design's point under a point of the view (`px`, `py` from its top start), at the zoom drawn now. */
+  const pointAt = (px: number, py: number) => {
+    const screen = first.current;
+    if (!element || !screen) return null;
+    const view = element.getBoundingClientRect(), at = screen.getBoundingClientRect();
+    return { x: (view.left + px - at.left) / shown.current, y: (view.top + py - at.top) / shown.current, px, py };
+  };
+  useEffect(() => { anchor.current = null; }, [design]);
   useEffect(() => {
     if (!element) return;
+    // A pinch on a trackpad (the wheel with Ctrl), or ⌘ with the wheel, zooms about the pointer; the wheel alone scrolls.
     const wheel = (event: WheelEvent) => {
       if (!event.ctrlKey && !event.metaKey) return;
       event.preventDefault();
+      const view = element.getBoundingClientRect();
+      anchor.current = pointAt(event.clientX - view.left, event.clientY - view.top);
       setChosen({ design: current.current, zoom: clamp(shown.current * Math.exp(-event.deltaY * 0.01)) });
     };
     element.addEventListener("wheel", wheel, { passive: false });
     return () => element.removeEventListener("wheel", wheel);
   }, [element, max]);
-
-  // A zoom keeps the point at the view's centre where it was (the centre as a share of the content, kept as it scrolls).
-  const centre = useRef({ x: 0.5, y: 0.5 });
-  useEffect(() => { centre.current = { x: 0.5, y: 0.5 }; }, [design]);
   useLayoutEffect(() => {
-    if (!element) return;
-    element.scrollLeft = centre.current.x * element.scrollWidth - element.clientWidth / 2;
-    element.scrollTop = centre.current.y * element.scrollHeight - element.clientHeight / 2;
-  }, [element, scale, n, natural]);
+    const screen = first.current;
+    if (!element || !screen) return;
+    // Until the view scrolls or zooms, the design's centre stays at the view's.
+    const to = anchor.current ?? { x: width / 2, y: natural / 2, px: element.clientWidth / 2, py: element.clientHeight / 2 };
+    const view = element.getBoundingClientRect(), at = screen.getBoundingClientRect();
+    element.scrollLeft = Math.round(at.left - view.left + element.scrollLeft + to.x * scale - to.px);
+    element.scrollTop = Math.round(at.top - view.top + element.scrollTop + to.y * scale - to.py);
+  }, [element, scale, n, natural, size.w, size.h]);
+  // Scrolling, and the keys' zooms after it, keep the design's point at the view's centre.
   const track = () => {
-    if (!element) return;
-    centre.current = { x: (element.scrollLeft + element.clientWidth / 2) / element.scrollWidth, y: (element.scrollTop + element.clientHeight / 2) / element.scrollHeight };
+    if (element) anchor.current = pointAt(element.clientWidth / 2, element.clientHeight / 2);
   };
 
   // Opened from a card: once the view has its size, the design grows from where the card was.
@@ -247,10 +268,16 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
   );
 
   const box = { inlineSize: Math.round(width * scale), blockSize: Math.round(natural * scale) };
+  // Centred on whole pixels: where the room left round the designs is odd, a pixel more at the end, so the design's top
+  // start lands on a pixel (a half pixel blurs every edge and word on a 1x display).
+  const columns = direction === "row" ? n : 1, rows = direction === "row" ? 1 : n;
+  const odd = (room: number, used: number) => (Math.round(room - used) % 2 + 2) % 2;
+  const endPad = odd(size.w, box.inlineSize * columns + GAP * (columns - 1)), bottomPad = odd(size.h, box.blockSize * rows + GAP * (rows - 1));
   const stage = (
     <section ref={setElement} className="studio-viewer" data-ground={ground} data-panning={panning ?? undefined} aria-label={label}
       onScroll={track} onPointerDown={pan}>
-      <div className="studio-viewer__canvas" data-direction={direction} style={{ padding: MARGIN, gap: GAP }}>
+      <div className="studio-viewer__canvas" data-direction={direction}
+        style={{ paddingBlock: `${MARGIN}px ${MARGIN + bottomPad}px`, paddingInline: `${MARGIN}px ${MARGIN + endPad}px`, gap: GAP }}>
         {modes.map((at, index) => (
           <div key={at} ref={index === 0 ? first : undefined} className="studio-viewer__screen" data-frame={frame}
             style={{ ...box, ["--_viewer-scale" as string]: scale }}>
