@@ -1,0 +1,117 @@
+/* ---------------------------------------------------------------------------
+ * Design card
+ *
+ * One design in a container: the gallery card at rest, and the same ground grown to Full view when opened (owner,
+ * 2026-11-05: "no more 'asset cards' the containers contain designs that are high fidelity zoomable vector designs";
+ * picks on the Design Containers page, docs/research/design-containers-2026-11-05/, every one the recommendation).
+ * Spec: docs/specs/design-card.md.
+ *
+ * The design is drawn at its true size and measured; React places it by its layout's rule (placeDesign, DesignCard.tsx)
+ * and writes the place as a transform, so it is the same live DOM at every zoom, never a picture of it:
+ *
+ *   part    a control, a component, a pattern, a type line: a tenth of the short side round it (12 to 48), never past
+ *           100%, and below 50% held at 50% and cropped on its focus (centre, top or start)
+ *   screen  a window: a twentieth (8 to 48), always whole, the card 16:9
+ *   phone   a phone: stands from the top margin at 60% of the width and runs off the bottom
+ *   icon    whole multiples of its size, 1× to 4×, about a quarter of the card
+ *   color   the colour paints the ground, no margin
+ *
+ * Geometry (the gallery card, owner 2026-11-01: corner 16, name 4 under): the ground is Card's corner (the container
+ * corner plus 8, concentric), the tile tone with the card edge, its lift on hover; the caption sits under it, 4 below,
+ * its name 4 in, the true size muted at its end, the controls ending on the ground's edge.
+ * Public hooks: `--area-design-card-corner` (the ground's corner).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-design-card {
+    --_edge: var(--area-border-width);
+    --_edge-state: max(var(--area-border-width), var(--area-stroke-width));
+    /* spec: the gallery card's 16 at the default, Card's corner for an 8 inset (asset-card.css, caption outside). */
+    --_corner: var(--area-design-card-corner, max(var(--area-radius-floor), calc(var(--area-radius-container) + var(--area-space-8) * var(--area-radius-concentric))));
+    --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent;
+    --_ratio: 1;
+    --_paint: var(--area-bg-tile);
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-4); /* spec: the card system's 4 between the card and its name (2026-11-01) */
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    text-align: start;
+  }
+  .area-design-card--part {}
+  .area-design-card--screen {}
+  .area-design-card--icon {}
+  .area-design-card--square {}
+  .area-design-card--wide { --_ratio: 16 / 9; } /* spec: a 1920 × 1080 window whole (owner, 2026-11-01) */
+  .area-design-card--interactive { cursor: default; outline: none; }
+
+  /* The ground: the container. It clips what runs past it (a cropped part, a standing phone). */
+  .area-design-card__ground {
+    position: relative;
+    box-sizing: border-box;
+    aspect-ratio: var(--_ratio);
+    min-inline-size: 0;
+    overflow: clip;
+    border: var(--_edge) solid var(--area-edge-cards);
+    border-radius: var(--_corner);
+    background-color: var(--_paint);
+    box-shadow: var(--_sel-ring, inset 0 0 0 0 transparent), var(--area-shadow-edge), var(--_lift);
+    transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in);
+  }
+  /* A colour paints the ground; its edge is the swatch ring over it, so a white or a near-ground colour keeps its outline. */
+  .area-design-card--color { --_paint: var(--_design-color, var(--area-bg-tile)); }
+  .area-design-card--color > .area-design-card__ground {
+    border-color: transparent;
+    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring);
+    outline-offset: calc(-1 * var(--area-stroke-width));
+  }
+
+  /* The design at its true size, from the ground's top start inside the edge; React writes its place. Until it is
+     measured it is laid out but not shown, so nothing jumps. */
+  .area-design-card__design {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    display: flow-root;
+    inline-size: max-content;
+    transform-origin: 0 0;
+  }
+  /* An icon is measured as its glyph's own box, no line round it. */
+  .area-design-card--icon > .area-design-card__ground > .area-design-card__design { display: flex; line-height: 0; }
+  [dir="rtl"] .area-design-card__design { transform-origin: 100% 0; }
+  .area-design-card:not([data-placed]) .area-design-card__design { visibility: hidden; }
+  .area-design-card--phone > .area-design-card__ground > .area-design-card__design,
+  .area-design-card--screen > .area-design-card__ground > .area-design-card__design { inline-size: auto; }
+
+  /* The caption: the name, its true size, the controls. */
+  .area-design-card__caption {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    min-inline-size: 0;
+    block-size: var(--area-control-sm);
+    padding-inline-start: var(--area-space-4); /* spec: the name 4 in (asset-card.css, caption outside) */
+  }
+  .area-design-card__name { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-design-card__detail { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .area-design-card__actions { display: flex; flex: none; align-items: center; gap: var(--area-space-2); }
+
+  /* States: selected, the edge in the selection colour with the Selected stroke and tint; interactive, focus rings the
+     ground and hover lifts it (or, at Hover lift 0, the edge one step darker). */
+  .area-design-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-design-card__ground {
+    --_edge: var(--_edge-state);
+    border-color: var(--area-stroke-selected);
+    --_sel-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_edge))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint);
+  }
+  .area-design-card--interactive:focus-visible > .area-design-card__ground { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
+  @media (hover: hover) {
+    .area-design-card--interactive:hover > .area-design-card__ground {
+      --_lift: var(--area-shadow-lift);
+      transition-duration: var(--area-duration-fast);
+      transition-timing-function: var(--area-ease-out);
+    }
+    [data-area-shadow-hover="0"] .area-design-card--interactive:not([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover > .area-design-card__ground { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
+  }
+  .area-design-card--interactive:active > .area-design-card__ground { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s; }
+}

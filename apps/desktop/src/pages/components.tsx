@@ -302,9 +302,14 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
     observer.observe(grid);
     return () => observer.disconnect();
   }, [near, open]);
-  useFit(body, `${family.slug}:${open}:${columns}:${zoom}:${near}:${waterfall}`, near);
+  // At Auto, in the gallery's own look, each card is a Design card that places its design itself (owner, 2026-11-05: the
+  // Design Containers picks: never past 100%, a tenth's margin, held at 50% and cropped below); Fit, an exact zoom, a
+  // waterfall or another card look keep the Asset card that fit.ts scales.
+  const placed = zoom === "auto" && !waterfall && look === GALLERY_LOOK;
+  useFit(body, `${family.slug}:${open}:${columns}:${zoom}:${near}:${waterfall}`, near && !placed);
   const card = (entry: Tile) => (
     <Tile key={entry.id} container="asset" id={`variant-${family.slug}-${entry.id}`} span="wide" stage="fit" card look={look} aspect={waterfall ? "hug" : undefined} openOnClick
+      design={placed ? "part" : false}
       aria-label={`${family.name}: ${entry.label}`} data-key={family.slug} data-name={family.name} label={entry.value}
       selected={here && entry.id === visitTile} onOpen={how => onOpen(`${family.slug}/${entry.id}`, document.getElementById(`variant-${family.slug}-${entry.id}`), how)}
       actions={<CopyCode code={SNIPPETS[entry.demo]} name={`${family.name} ${entry.label}`} />}>

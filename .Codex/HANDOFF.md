@@ -1,6 +1,16 @@
 # Handoff
 
-## Current state (2026-11-04)
+## Current state (2026-11-06)
+- **Design card, worktree `design-container-display-0918d8` (uncommitted, 2026-11-06).** Owner: "no more 'asset
+  cards'" — containers hold live designs and open into Full view. Design Containers artifact E95K8UoMuAYPLDVBNJFMHT
+  (`docs/research/design-containers-2026-11-05/`): the owner picked every recommendation (one component; margin a tenth,
+  12–48, framed a twentieth; parts hold 50% and crop on focus; phones stand at 60%; name and true size below). Built
+  `DesignCard` + `placeDesign` (`packages/react`, `design-card.css`, manifest `designCard`, spec
+  `docs/specs/design-card.md`, docs entry, 8 tiles, in review). The app's Tile uses it for every screen tile and for
+  Components at Auto in the gallery look; Fit, exact zooms, waterfall, other looks, Patterns, Illustrations, images,
+  collections, colours and type sheets are still Asset cards. Checks: build, typecheck, react 649 + design-card,
+  cohesion, npm test, contracts, docs, playgrounds, app-css. Electron not relaunched: session
+  `design-interface-ui-4d0a03` runs its own (it edits `design-viewer.tsx` and `project.tsx`, uncommitted).
 - **Fidelity: viewer zoom, sharp cards, Floating 8, worktree `figma-vector-fidelity-zoom-d94ad5` (PR, 2026-11-05).** Owner:
   Figma's vector fidelity and zoom for UI examples. Design viewer (`design-viewer.tsx`): pinch zooms about the pointer,
   keys about the centre, every design to 3200% (icons 6400%), pixel grid from 800%, centred on whole pixels. ScreenFigure
