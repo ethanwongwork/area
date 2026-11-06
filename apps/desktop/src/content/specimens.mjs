@@ -90,6 +90,16 @@ function gallerySpecimenTable() {
       { id: "size-lg", title: "Size / lg", demo: "GalleryColorSwatchSizeLg" },
       { id: "layout-icon-slot", title: "Layout / in an icon slot", demo: "GalleryColorSwatchInSlot" },
     ],
+    "design-card": [
+      { id: "default", title: "Layout / part", demo: "GalleryDesignCard" },
+      { id: "state-held", title: "Layout / part held at 50%", demo: "GalleryDesignCardHeld" },
+      { id: "layout-screen", title: "Layout / screen", demo: "GalleryDesignCardScreen" },
+      { id: "layout-phone", title: "Layout / phone", demo: "GalleryDesignCardPhone" },
+      { id: "layout-icon", title: "Layout / icon", demo: "GalleryDesignCardIcon" },
+      { id: "layout-color", title: "Layout / color", demo: "GalleryDesignCardColor" },
+      { id: "state-selected", title: "State / selected", demo: "GalleryDesignCardSelected" },
+      { id: "behavior-interactive", title: "Behavior / interactive", demo: "GalleryDesignCardInteractive" },
+    ],
     "asset-card": [
       { id: "default", title: "Kind / image", demo: "GalleryAssetCard" },
       { id: "layout-group", title: "Kind / group", demo: "GalleryAssetCardGroup" },

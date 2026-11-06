@@ -386,7 +386,7 @@ export function IllustrationsPage() {
                   {section.items.map(entry => {
                     const key = `${section.id}:${entry.id}`;
                     return (
-                      <Tile key={key} span={shape === "wide" ? "wide" : "unit"} shape={shape} stage="screen" inert label={entry.name}
+                      <Tile key={key} span={shape === "wide" ? "wide" : "unit"} shape={shape} stage="screen" design={false} inert label={entry.name}
                         selected={chosen?.entry === entry} onSelect={() => { setSelected(key); if (entry.look) setLook(entry.look); }} data-key={key}>
                         <Figure item={entry} look={look} theme={theme} />
                       </Tile>
