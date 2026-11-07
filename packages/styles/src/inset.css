@@ -110,6 +110,11 @@
     /* Transparent tabs align to content, rather than a backplate inset. */
     padding-inline: 0;
   }
+  /* Plate tabs (selection="plate") are a backplate, so they take the shared inset; an icon or a trailing count is a
+     glyph edge, the icon's box. */
+  .area-tabs--plate .area-tabs__tab { padding-inline: var(--_inset-start) var(--_inset-end); }
+  .area-tabs--plate .area-tabs__tab:has(> .area-tabs__icon:first-child) { --_box-start: var(--_box-icon); }
+  .area-tabs--plate .area-tabs__tab:has(> :not(.area-tabs__label):last-child) { --_box-end: var(--_box-icon); }
   /* Badge uses the shared rule on every side. Its one difference is the shape: a full-round
    * pill's text must clear the round end, so a text side reserves a 4px box instead of the cap
    * and the label starts 2 inside the radius (h / 2 - 2: 6 / 8 / 10 at 16 / 20 / 24, Untitled

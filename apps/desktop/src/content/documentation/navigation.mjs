@@ -60,7 +60,7 @@ export default {
   tabs: {
     // Spec: Job and boundaries.
     instead: [
-      ["Picking a value or a mode, such as a filter or a view setting", ["segmented"], "Segmented picks a value and is filled; Tabs switch the view below them and mark it with an underline."],
+      ["Picking a value or a mode, such as a filter or a view setting", ["segmented"], "Segmented picks a value on a filled track; Tabs switch the view below them and mark it with an underline or a plate, with no track."],
       ["Moving to another page or route", ["nav"], "Nav moves between pages; Tabs switch views of one page."],
       ["Showing progress through an ordered flow", ["stepper"], "Stepper records what is done and what is left; Tabs are views in no order."],
     ],
@@ -71,21 +71,22 @@ export default {
       ["Do", "Use vertical orientation for a settings view with many sections; the arrow keys follow the orientation."],
       ["Do", "Set activationMode=\"manual\" when a panel is slow to show, so the arrows move focus and Enter or Space selects."],
       ["Do", "Turn on track to draw a divider under the list where the tabs need a baseline."],
-      ["Don't", "Restyle Tabs as filled pills. That treatment is Segmented, or a horizontal Nav for routes."],
+      ["Do", "Use selection=\"plate\" for a panel's or an inspector's views, where an underline would compete with the panel's own rules: the selected tab sits on a soft plate and the others are plain muted labels."],
+      ["Don't", "Put plate tabs on a filled track or give them a raised plate. A track with a raised option is Segmented, which picks a value; a row of closable plates for open documents is a horizontal Nav."],
       ["Don't", "Use Tabs to move between pages; the URL doesn't change. Use Nav."],
     ],
     // Spec: Anatomy, Decisions.
     parts: {
       root: "Holds the tab list and the panels: a column, or a row when vertical.",
-      list: "The tablist: the row (or column) of tabs, with the optional track divider under it. It draws the selected indicator, which slides to the tab you choose and lies on the track.",
-      tab: "A button with no inline padding, so its label sits on the panel's edge; its indicator spans the whole tab, icon and count included.",
+      list: "The tablist: the row (or column) of tabs, with the optional track divider under it. It draws the selected indicator, the underline or the plate, which slides to the tab you choose; the underline lies on the track.",
+      tab: "A button with no inline padding, so its label sits on the panel's edge; its indicator spans the whole tab, icon and count included. A plate tab takes a control's inset and corner instead.",
       panel: "The tabpanel for the selected tab; the others are hidden. It is focusable, so Tab reaches a panel with no controls, and shows a ring with room around its content when focused, as a focused tab rings its label.",
       label: "The tab's text: muted at 400 until selected, then default ink at 500. A hidden strong copy holds the selected width, so the row never moves.",
       icon: "An optional leading icon, hidden from assistive tech.",
     },
     // Spec: States.
     states: {
-      selected: "The default ink at 500 and the indicator in the Selection role. The selected tab is the list's only Tab stop.",
+      selected: "The default ink at 500 and the indicator in the Selection role, or with selection=\"plate\" the active fill behind the tab; hover and press take their fills, the ink fixed. The selected tab is the list's only Tab stop.",
       disabled: "Dims, ignores input and is skipped by the arrow keys; native disabled.",
     },
     // Source: primitives.tsx Tabs onKeyDown.
