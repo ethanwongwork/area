@@ -204,6 +204,51 @@
     opacity: var(--area-opacity-disabled);
   }
 
+  /*
+   * Plate (`selection="plate"`; owner 2026-11-06: "i like the backplate version", docs/specs/tabs.md, "Plate"). The
+   * selected tab sits on a soft plate, the others are plain muted labels, and there is no underline: a panel's views
+   * (Problems, Output, Terminal), an inspector's sections. Measured: an IDE's bottom-panel tabs (22 tall, corner 4, 4
+   * apart, 12/500, the plate its list's inactive selection fill, #141414 at 8% × 90%, rest ink 74%), a design tool's
+   * panel tabs (24, corner 5, 8 sides, #f5 plate) and a notes app's view tabs (32, 12 sides, a 5% wash). The paint is
+   * horizontal Nav's (nav.css): muted at rest, the component hover fill under the pointer with the ink fixed, the
+   * active fill and the default ink when selected, the pressed fill while held. The sides are the shared inset contract,
+   * (height − cap) / 2 (inset.css), which gives the references' own 8 at 24, 6 at 22 and 11 at 32; the corner is the
+   * control radius of the tab's tier; the gap Nav's horizontal 4. The plate replaces the underline, so it is the part
+   * that slides (below); the hover and press marks are plates too.
+   */
+  .area-tabs--plate { --_tab-gap: var(--area-space-4); --_tab-radius: var(--area-radius-control-md); }
+  .area-tabs--plate.area-tabs--sm { --_tab-radius: var(--area-radius-control-sm); }
+  .area-tabs--plate.area-tabs--lg { --_tab-radius: var(--area-radius-control-lg); }
+  .area-tabs--plate .area-tabs__tab { border-radius: var(--_tab-radius); }
+  .area-tabs--plate .area-tabs__tab::after { content: none; }
+  @media (hover: hover) {
+    .area-tabs--plate .area-tabs__tab:hover:not([data-disabled]):not([data-selected]) { background-color: var(--area-bg-component-hover); }
+  }
+  .area-tabs--plate .area-tabs__tab[data-selected] { background-color: var(--area-bg-component-active); }
+  .area-tabs--plate .area-tabs__tab:active:not([data-disabled]) { background-color: var(--area-bg-component-pressed); }
+  /* The sliding plate: the list's indicator takes the selected tab's whole box and corner, behind the labels, as
+     Segmented's plate does (segmented.css). */
+  .area-tabs--plate .area-tabs__list { isolation: isolate; }
+  .area-tabs--plate .area-tabs__list[data-indicator]::after,
+  .area-tabs--plate.area-tabs--vertical .area-tabs__list[data-indicator]::after,
+  .area-tabs--plate.area-tabs--vertical .area-tabs__list[data-indicator]:dir(rtl)::after {
+    z-index: 0;
+    inline-size: var(--_ind-w);
+    block-size: var(--_ind-h);
+    border-radius: var(--_tab-radius);
+    background-color: var(--area-bg-component-active);
+    translate: var(--_ind-x) var(--_ind-y);
+  }
+  .area-tabs--plate .area-tabs__list[data-indicator] > .area-tabs__tab { z-index: 1; }
+  .area-tabs--plate .area-tabs__list[data-indicator] > .area-tabs__tab[data-selected]:not(:active) { background-color: transparent; }
+  /* A plate carries its own room, so the focus ring is the plate's edge, drawn inside it as a Nav row's, and the list
+     needs no room before its first tab: the first plate stands on the content's edge. */
+  .area-tabs--plate .area-tabs__tab:focus-visible::before { inset: 0; border-radius: var(--_tab-radius); }
+  .area-tabs.area-tabs--plate:not(.area-tabs--vertical) > .area-tabs__list:not(:has(> .area-indicator-anchor)) { padding-inline-start: 0; margin-inline-start: 0; }
+  /* Vertical plates fill the list's width, as Nav rows, their text on the shared inset; there is no rail. */
+  .area-tabs--plate.area-tabs--vertical { gap: var(--area-inset-surface-md); }
+  .area-tabs--plate.area-tabs--vertical .area-tabs__tab { padding-inline: var(--_inset-start) var(--_inset-end); }
+
   .area-tabs__panel {
     padding-block-start: var(--area-inset-surface-md); /* 16, compact 12 */
   }

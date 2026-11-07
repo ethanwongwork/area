@@ -934,8 +934,10 @@ export const toast = {
 
 export const tabs = {
   block: "area-tabs",
-  description: "Switches between views with transparent tabs and rounded indicators; labels align with panel content.",
-  variants: { size: ["sm", "md", "lg"], orientation: ["vertical"] },
+  description: "Switches between views: transparent tabs with a rounded underline whose labels align with panel content, or (selection plate) a soft plate behind the selected tab.",
+  // `selection` names how the selected tab is marked, as Nav's does: the underline (default, a marker) or a plate
+  // (owner 2026-11-06, docs/specs/tabs.md "Plate").
+  variants: { size: ["sm", "md", "lg"], orientation: ["vertical"], selection: ["plate"] },
   booleans: ["track"],
   states: ["selected", "disabled"],
   elements: ["list", "tab", "panel", "label", "reserve", "icon"],
