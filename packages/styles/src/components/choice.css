@@ -300,10 +300,10 @@
    * no ground, edge or tint of its own, under the pointer or chosen. No control drawn: the native input stays, so the
    * keyboard and the accessible name are the control's.
    */
-  /* :is(*, :hover, :has(…)) lifts the rule over soft's hover fill and the chosen card's stroke (0,4,0), whose paint a
+  /* :is(*, :has(…)) lifts the rule (0,4,0) over soft's hover fill and the chosen card's stroke (0,4,0), whose paint a
      thumbnail moves to its picture. */
-  :is(.area-checkbox--card, .area-checkbox--soft).area-checkbox--thumbnail:is(*, :hover, :has(> .area-checkbox__control:checked)),
-  :is(.area-radio--card, .area-radio--soft).area-radio--thumbnail:is(*, :hover, :has(> .area-radio__control:checked)) {
+  :is(.area-checkbox--card, .area-checkbox--soft).area-checkbox--thumbnail:is(*, :has(> .area-checkbox__control:checked)),
+  :is(.area-radio--card, .area-radio--soft).area-radio--thumbnail:is(*, :has(> .area-radio__control:checked)) {
     position: relative;
     display: grid;
     align-content: start;
