@@ -1,21 +1,21 @@
 # Handoff
 
 ## Current state (2026-11-07)
-- **Appearance, same worktree (uncommitted, 2026-11-07).** Mode's pictures: the app in a 720 × 540 window (sidebar and
+- **Appearance, same worktree (PR #211, 2026-11-07).** Mode's pictures: the app in a 720 × 540 window (sidebar and
   page, `content/examples/workspace-compact.tsx`), words as bars (owner picked "B as bars" from four layouts and three
   drawings), three across, each a new Radio/Checkbox `layout="thumbnail"` (picture is the card, name under it at the
   start; specs' review notes 2026-11-07; gallery tiles "Layout / thumbnail"). Every Settings picture row uses it.
   Then Cursor's Appearance settings that Area's tokens carry: Text size (12–16 over the followed system's Type),
   Reduce motion, Follow your Mac's contrast, Reduce transparency (`appLook` overrides; research note's second pass).
   Checked in the app light and dark; Follow your Mac's contrast is not verified against a Mac set to Increase contrast.
-- **Settings, same worktree (uncommitted, 2026-11-07).** Owner: "move dark mode to the settings control" and study
+- **Settings, same worktree (PR #211, 2026-11-07).** Owner: "move dark mode to the settings control" and study
   Cursor's, ChatGPT's and Claude's settings for "full fidelity and useability". Research and decisions:
   `docs/research/settings-2026-11-07/README.md` (ChatGPT and Claude measured in Chrome, light only; Cursor from its
   bundle). Built: no mode button in the Canvas header; ⌘, and the gear toggle Settings; search results take the Sidebar
   (grouped by section, ↓ / Enter, the row scrolled to and marked 3 s); Esc clears then closes; new Chat (default model,
   live or recorded, sign-in) and Keyboard sections; Theme's preview has a System / Light / Dark icon switch. Design
   panel: only its tab row peeks; a tab click scrolls it up.
-- **Design interface, worktree `design-interface-ui-4d0a03` (uncommitted, 2026-11-06).** Owner: a Figma-like design
+- **Design interface, worktree `design-interface-ui-4d0a03` (PR #211, 2026-11-06).** Owner: a Figma-like design
   interface with the design in the Canvas, "not full height … a small peak section below, the whole middle section is
   scrollable", the bottom a gallery of iterations and layers plus documentation, code and supporting tabs; Sidebar and
   Inspector unchanged. Picks (asked): a plain scroll scrolls the page; one layer at a time on the stage; iterations
