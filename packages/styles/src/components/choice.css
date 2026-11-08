@@ -290,13 +290,97 @@
   .area-radio--preview > .area-choice-label { justify-items: center; }
   /* The card shows the choice; the input stays for the keyboard and assistive tech, out of sight. */
   .area-checkbox--preview > .area-checkbox__control,
-  .area-radio--preview > .area-radio__control {
+  .area-radio--preview > .area-radio__control,
+  .area-checkbox--thumbnail > .area-checkbox__control,
+  .area-radio--thumbnail > .area-radio__control {
     position: absolute;
     inline-size: 1px;
     block-size: 1px;
     opacity: 0;
     pointer-events: none;
   }
+  /*
+   * Thumbnail: a choice as its picture, its name under it outside the picture, at the start (owner 2026-11-07, Settings ›
+   * Appearance's Mode: "move the text outside the container and left align it"; macOS Appearance, Untitled UI's interface
+   * theme). The picture is the card: its frame takes a preview picture's corner, the card's rest edge and the selected stroke,
+   * drawn over the picture so a choice never moves it; the name sits 8 under it in the label's own type. The option has
+   * no ground, edge or tint of its own, under the pointer or chosen. No control drawn: the native input stays, so the
+   * keyboard and the accessible name are the control's.
+   */
+  /* :is(*, :has(…)) lifts the rule (0,4,0) over soft's hover fill and the chosen card's stroke (0,4,0), whose paint a
+     thumbnail moves to its picture. */
+  :is(.area-checkbox--card, .area-checkbox--soft).area-checkbox--thumbnail:is(*, :has(> .area-checkbox__control:checked)),
+  :is(.area-radio--card, .area-radio--soft).area-radio--thumbnail:is(*, :has(> .area-radio__control:checked)) {
+    position: relative;
+    display: grid;
+    align-content: start;
+    row-gap: var(--area-space-8); /* spec: the references' picture-to-name gap, 8–10 */
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+  .area-checkbox--thumbnail > .area-checkbox__visual,
+  .area-radio--thumbnail > .area-radio__visual {
+    position: relative;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr); /* one track the frame's size, so a picture can fill it */
+    place-items: center;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: var(--area-choice-ratio, 4 / 3); /* public hook, as preview */
+    overflow: hidden;
+    /* The corner a preview's picture has in its card (the card's less the 8 mat), so a window drawn in it keeps its
+       corner controls: the surface corner itself (20 at type 13) cut into a small window's lights. */
+    border-radius: max(var(--area-radius-min), calc(var(--area-radius-container) - var(--area-space-8) * var(--area-radius-concentric)));
+    background-color: var(--area-bg-subtle);
+    color: var(--area-fg-default);
+  }
+  /* A drawn picture (a window, a layout) sits in a mat of the frame's ground, framed as a preview sits in its card (owner
+     2026-11-07: "some margins/padding around it in the card, like a frame"): the frame takes the card's corner, the
+     picture the corner concentric inside the mat. A photo or video fills its frame to the edge, as before. */
+  .area-checkbox--thumbnail > .area-checkbox__visual:not(:has(> :is(img, video, picture))),
+  .area-radio--thumbnail > .area-radio__visual:not(:has(> :is(img, video, picture))) {
+    --_thumb-mat: var(--area-space-12); /* spec: the card's inset, so the picture reads framed at a row's 200 */
+    padding: var(--_thumb-mat);
+    border-radius: var(--area-radius-container);
+  }
+  .area-checkbox--thumbnail > .area-checkbox__visual:not(:has(> :is(img, video, picture))) > *,
+  .area-radio--thumbnail > .area-radio__visual:not(:has(> :is(img, video, picture))) > * {
+    overflow: hidden;
+    border-radius: max(var(--area-radius-min), calc(var(--area-radius-container) - var(--_thumb-mat) * var(--area-radius-concentric)));
+    /* The picture's own edge, the options' edge (as the frame at rest): a page-colored window on a page-colored mat otherwise has none. */
+    box-shadow: 0 0 0 var(--area-stroke-width) var(--area-edge-options);
+  }
+  /* The frame's edge over the picture: the card's rest edge, its hover edge, and when chosen the selected stroke at the
+     Selected stroke setting's width, inside, so the picture never moves. */
+  .area-checkbox--thumbnail > .area-checkbox__visual::after,
+  .area-radio--thumbnail > .area-radio__visual::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_card-edge);
+    pointer-events: none;
+    transition: var(--area-transition);
+  }
+  @media (hover: hover) { .area-checkbox--thumbnail:hover:not([data-disabled]), .area-radio--thumbnail:hover:not([data-disabled]) { --_card-edge: var(--_card-edge-hover); } }
+  .area-checkbox--thumbnail:has(> .area-checkbox__control:checked) > .area-checkbox__visual::after,
+  .area-radio--thumbnail:has(> .area-radio__control:checked) > .area-radio__visual::after {
+    box-shadow: inset 0 0 0 max(var(--area-stroke-width), var(--area-selected-width)) var(--area-stroke-selected);
+  }
+  .area-checkbox--thumbnail > .area-choice-label,
+  .area-radio--thumbnail > .area-choice-label { justify-items: start; text-align: start; }
+  /* The ring goes round the picture, the part that is chosen, not the picture and its name. */
+  .area-checkbox--thumbnail:has(> .area-checkbox__control:focus-visible),
+  .area-radio--thumbnail:has(> .area-radio__control:focus-visible) { outline: none; }
+  .area-checkbox--thumbnail:has(> .area-checkbox__control:focus-visible) > .area-checkbox__visual,
+  .area-radio--thumbnail:has(> .area-radio__control:focus-visible) > .area-radio__visual {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-gap);
+  }
+  @media (forced-colors: active) { .area-checkbox--thumbnail > .area-checkbox__visual::after, .area-radio--thumbnail > .area-radio__visual::after { border: 1px solid CanvasText; } }
+
   /*
    * Media: a picture choice shown with its answer row (owner, 2026-10-26, Setup's answered picture questions: "i want the
    * illustration to sit directly on the card not cropped in a frame, or if there is a frame the corners should be
@@ -352,8 +436,8 @@
   :is(.area-checkbox--media, .area-checkbox--media-row) > .area-choice-label, :is(.area-radio--media, .area-radio--media-row) > .area-choice-label { grid-area: label; }
   :is(.area-checkbox--media, .area-checkbox--media-row) > .area-checkbox__meta, :is(.area-radio--media, .area-radio--media-row) > .area-radio__meta { grid-area: meta; padding-inline-start: 0; }
   /* A photo or video fills its frame at any ratio, cropped to cover; `--area-choice-ratio: auto` keeps its own. */
-  :is(.area-checkbox--preview, .area-checkbox--media, .area-checkbox--media-row) > .area-checkbox__visual > :is(img, video, picture),
-  :is(.area-radio--preview, .area-radio--media, .area-radio--media-row) > .area-radio__visual > :is(img, video, picture) {
+  :is(.area-checkbox--preview, .area-checkbox--thumbnail, .area-checkbox--media, .area-checkbox--media-row) > .area-checkbox__visual > :is(img, video, picture),
+  :is(.area-radio--preview, .area-radio--thumbnail, .area-radio--media, .area-radio--media-row) > .area-radio__visual > :is(img, video, picture) {
     display: block;
     inline-size: 100%;
     block-size: 100%;
@@ -361,8 +445,8 @@
   }
 
   /* A group of previews or media cards lays them on equal columns of at least `--area-choice-min` (104 by default). */
-  .area-radio-group__options:has(> :is(.area-radio--preview, .area-radio--media)),
-  .area-checkbox-group__options:has(> :is(.area-checkbox--preview, .area-checkbox--media)) {
+  .area-radio-group__options:has(> :is(.area-radio--preview, .area-radio--thumbnail, .area-radio--media)),
+  .area-checkbox-group__options:has(> :is(.area-checkbox--preview, .area-checkbox--thumbnail, .area-checkbox--media)) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(var(--area-choice-min, 104px), 1fr)); /* public hook */
     align-items: stretch;

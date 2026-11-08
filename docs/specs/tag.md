@@ -267,7 +267,7 @@ Remove presses at 20% of its ink (hover 12%). Not selectable. See [interaction p
 
 10px icons at Compact (owner: "go with 10px icons, draw the cuts"): the icon and remove glyph boxes are at most the plate less 4 (`--_icon`): 12 at 20 and 24, 10 in Compact's 14, with their 10px cuts (`--_glyph-cut10`; docs/specs/icons.md "10px cuts"); the icon side follows the box ((14 − 10) / 2 = 2). Supersedes the open note below.
 
-Text side and optical centre (owner, 2026-10-17: "the padding on the left side of the text looks way too big and the type doesnt look as centered vertically as the Public text"): the side is the room above the cap plus 1, at most 6 (`min(6, round((h − 1cap) / 2 + 1))`): 6 at 20 and 24, 4 at Compact's 14 (matching the ×'s 4.2 on the other side), 5 at 18. The label centres a quarter of the cap–x-height gap above cap centre (`(1cap − 1ex) / 4`: 0.5 at 11px, 0.6 at 14), so lowercase labels read centred beside the ×; Spectrum lifts its labels above centre the same way. Since the follow-up the rule is shared with Badge and Citation (inset.css, "Marks: optical centre"). Open: the 12px icon fills Compact's 14 tag (1 each side), as in Badge; a smaller glyph needs a 10px cut.
+Text side and optical centre (owner, 2026-10-17: "the padding on the left side of the text looks way too big and the type doesnt look as centered vertically as the Public text"): the side is the room above the cap plus 1, at most 6 (`min(6, round((h − 1cap) / 2 + 1))`): 6 at 20 and 24, 4 at Compact's 14 (matching the ×'s 4.2 on the other side), 5 at 18. The label's cap centres in the plate on Badge's whole-pixel baseline, `edge + round((h − 2 · edge + 1cap) / 2)` from the top, so a Tag, a Badge and a Count of one height and text draw their words on one pixel row (owner, 2026-11-07; DESIGN_SYSTEM.md, "Marks on one line"). From 2026-10-17 to 2026-11-07 it centred a quarter of the cap–x-height gap above cap centre (`(1cap − 1ex) / 4`, the marks' optical lift, which Citation keeps for lowercase site names), and sat 0.58 high at type 13 beside the badges that dropped the lift on 2026-11-01. Open: the 12px icon fills Compact's 14 tag (1 each side), as in Badge; a smaller glyph needs a 10px cut.
 
 Text size: the UI size while the tag is at least its line tall (Notion's 14 in 20; md 13 in 18 at Compact), the small size when it is shorter (`sign(ui-leading − height)`): Compact 13's 14 tag sets 11, as Badge, Count, Kbd and Citation do at that height; it held 13, 0.93 of its height (owner, 2026-10-17: "the type here looks way too big for this backplate").
 
@@ -299,3 +299,14 @@ Each `color` reads the hue role table (`--area-hue-<hue>-<role>`, packages/token
 same tone tokens, and the neutral literal (rgba(42,28,0,.07), dark white 10%) moved into `hue-neutral-bg`, so every value
 is unchanged (no contrast floor forced a change). The table gives Tag an icon, outline, accent and translucent role per
 hue for later variants; none is drawn yet.
+
+## Review note, 2026-11-07 (marks on one line: vertical)
+
+- **What changed:** the label's cap centres in the plate on Badge's whole-pixel baseline (tag.css), and a leading icon
+  moves by the same rounding, as Badge's. The optical lift is gone from Tag (inset.css keeps it for Citation). Size,
+  side, text, corner and paint are unchanged.
+- **Why:** the owner asked "the vertical alignment the same/consistent?" across the marks. Measured on 195 rendered
+  marks at type 12–16 × density 28 / 32 / 36: Tag sat 0.45–0.73 high everywhere (0.58 at type 13), Badge within ±0.45.
+  "Yes, fix both": Tag is now within −0.33 to +0.45, and wherever a Tag and a Badge share a height and a text size
+  their words land on the same pixel row. A Tag in 13px text beside an 11px badge of the same height centres a
+  larger cap, so its baseline sits a pixel lower; both are centred.

@@ -26,13 +26,28 @@ block language tabs, Badge (counts)
   500, C selected 500): the selected label is 500 over 400 at rest, each tab's width reserved at 500, a written
   exception to the one-weight rule (DESIGN_SYSTEM.md, "Ink and weight"); the indicator lies on the track.
 
+- 2026-11-06 (owner, review https://claude.ai/artifact/7vSwH9XbPa4ywGjZBCHbcp, `verdicts/pick`: "Plate only, panel plate"):
+  Tabs gain `selection="plate"` (the backplate, "Plate, 2026-11-06" below); the underline stays the default. No pill plate
+  and no folder tabs (recorded as candidates in COMPONENTS.md). The project's design panel uses `size="sm"
+  selection="plate"`.
+- 2026-11-06 (owner, after review https://claude.ai/artifact/UXtHV5V6QF3BnKZqKoj5co of four ways to tell open documents
+  from views: "i do like the style of A still"): open documents (horizontal Nav) and views (plate Tabs) keep one plate.
+  They differ by place and content (documents: the window's header, an icon, a close, 120 to 170 wide; views: short
+  labels inside their region). Rule: view tabs stay inside their region and never sit directly under the Canvas header's
+  open tabs at the same size; a screen that needs both separates them by a region edge or spacing, not a second style.
+  Measured for the record: an IDE's editor tabs are joined cells (header #f3f3f3, current #fcfcfc, 1px dividers at 12%
+  ink) and a design tool's file tabs are 38-tall cells (11/500, translucent dividers, current on the page fill); both
+  keep plates for panel views.
+
 ## Job and boundaries
 
 Tabs switch between views of one page with a transparent tab row and an underline (or a
-rail, vertically). A segmented control picks a value and is filled; Nav moves between
-pages. The underline rather than a fill is what keeps Tabs and Segmented apart
-(`navigation.css:1-7`). Notion's database view tabs and Figma's tabs are filled pills; in
-Area that treatment belongs to Segmented or a horizontal Nav.
+rail, vertically), or since 2026-11-06 (`selection="plate"`) a soft plate behind the selected
+tab. A segmented control picks a value and is filled on a track; Nav moves between pages.
+What keeps Tabs and Segmented apart is the job and the track: Segmented's options sit in a
+filled trough with a raised, edged plate; plate tabs have no track and a flat plate in the
+active fill. A horizontal Nav paints the same plate for routes and open documents (closable
+rows); Tabs own the tablist role, panels and arrow keys.
 
 ## Variants
 
@@ -43,6 +58,7 @@ Area that treatment belongs to Segmented or a horizontal Nav.
 | track | off, on | Optional baseline divider | Untitled 1px neutral-200; Notion's Share tabs sit on a hairline (`popover/notion--share-popover--open` node 4) |
 | composition | icons, counts | Owner | Untitled; Notion view tabs carry a 20px icon (`notion--view-tab--rest`) |
 | state | disabled | Owner | Untitled |
+| selection | marker (underline, default), **plate** | Owner 2026-11-06 ("i like the backplate version") | An IDE's bottom panel (Problems / Output / Terminal), a design tool's panel tabs, a notes app's view tabs; Nav's `selection` names the same choice |
 
 Gallery groups (`apps/docs/scripts/build.mjs:784-793`): Default; States (disabled); Layout
 (vertical); Sizes (sm, lg); Content (with track, icons, counts).
@@ -208,6 +224,50 @@ Segmented's plate has since 2026-10-24, instead of the old tab's bar fading out 
   first paint never misses the indicator. Code block's language tabs share the hook.
 - **Forced colours:** the list's bar is Highlight; the tab's own stays clear.
 
+## Plate, 2026-11-06
+
+Owner, sharing a screenshot of an IDE's bottom panel: "i also want to explore different tab component visuals, are there
+other ones? ... i like the backplate version". Intake: a value on a new Tabs axis, `selection` (rung 5/6), named as Nav's
+`selection` (plate | marker), since it is the same choice of how the current item is marked; not a new component (the
+job, roles, keyboard and panels are Tabs'), not Segmented (no track, no raised plate, it switches views), not a
+horizontal Nav (no tablist, no panels).
+
+**Measured** (read-only, 2026-11-06):
+
+| Source | Height | Corner | Sides | Gap | Text | Rest ink | Selected plate | Hover |
+|---|---|---|---|---|---|---|---|---|
+| IDE bottom panel (Cursor 3.x `workbench.desktop.main.css` `.composite-bar .monaco-action-bar:not(.vertical) .action-item`, `.action-label`, `.action-item.checked`; theme `cursor-light/dark-color-theme.json`) | 22 (`!important`) | 4 | 4 / 6 padding, margin 2 | 4 (2 + 2) | 12 / 500 every tab | `panelTitle.inactiveForeground` #141414BD (74%); dark #F0F0F0BD | `list.inactiveSelectionBackground` × 90%: #141414 at 8% → ~7%; dark #F0F0F0 at 6.7% → ~6% | ink to full (`list.inactiveSelectionForeground`); no plate |
+| Design tool panel tab (`figma--panel-tab--{rest,hover}`, `figma--tab-selected`, 2026-09-26) | 24 | 5 | 8 | — | 11/16 450, selected 550 | 50% black | #f5f5f5 | #f5 plate, ink fixed |
+| Notes app view tab (`notion--view-tab*`, 2026-09-26 / 09-28) | 32 | 20 | 12 | 1 | 14/16.8 500 | #7d7a75 | rgba(33, 27, 23, .05) | the same 5% wash, ink fixed |
+
+**Decisions:**
+
+| Slot · property | Area value | Basis |
+|---|---|---|
+| tab · height | the size tier, 28 / 32 / 40 (unchanged) | Tabs' sizes |
+| tab · sides | the shared inset, (height − cap) / 2 (`inset.css`); an icon or trailing count the icon's box | Reproduces the references: 8 at 24 (design tool 8), ~6.7 at 22 (IDE 6), 11 at 32 (notes app 12) |
+| tab · corner | `radius-control-sm/md/lg` by tier | A control's corner on the radius axis; IDE 4 at 22 and design tool 5 at 24 are the control proportion; the notes app's pill is Pill corners' job |
+| gap | `space-4` at every size | IDE 4; horizontal Nav 4 (peer) |
+| rest ink, weight | `fg-muted`, 400; selected `fg-default` 500 with the width reserved | Tabs' family rule (2026-10-21); IDE keeps 500 on every tab |
+| selected plate | `bg-component-active` | Horizontal Nav's current plate (peer); the IDE's inactive-selection fill is the same role |
+| hover | `bg-component-hover` plate, ink fixed | Foreground fixed on hover (design tool and notes app); horizontal Nav. The IDE inks the label instead |
+| pressed | `bg-component-pressed` | Shared state paint (Nav) |
+| motion | the plate is the sliding indicator: the list's `::after` takes the selected tab's box and corner, behind the labels (`isolation: isolate`), on `duration-base` `ease-in-out` | Segmented's sliding plate; Tabs' sliding bar |
+| focus | a 2px ring on the plate's own edge, inside it; the list needs no start room | Nav rows |
+| alignment | the first plate stands on the panel's content edge (its label one inset in) | IDE panel: the plate 4 from the panel's edge |
+| vertical | plates fill the list's width on the shared inset; no rail | Nav rows |
+| track | unchanged: a divider under the list; plates stand on it | — |
+| forced colours | the selected tab Highlight / HighlightText | Nav's current rows |
+
+Gallery: Selection / plate (md) and Selection / plate, sm (a panel's views), under Variants (`specimen-names.mjs`: Tabs'
+`selection` is a treatment, not the Selection role). Read in the app's dist build at the defaults (type 13), 2026-11-06:
+md 30 tall, 10 each side, corner 8, 4 apart, selected plate oklch(0.962) on the white page, label 13/18 at 500 over 400;
+the plate slides on click and arrow keys, the focus ring lies on the plate's edge, hover paints the hover fill in light
+and dark. Not verified: forced colours in a browser; the Electron window itself (another session's was open).
+
+Review page of the other treatments (underline, plate on a track, pill plate, Segmented, closable Nav plates, folder
+tabs): https://claude.ai/artifact/7vSwH9XbPa4ywGjZBCHbcp, the owner's pick in its `verdicts/pick` document.
+
 ## Verification
 
 Compared the Notion and Figma tab captures above with 8 Area captures (`tabs/area--*`,
@@ -219,6 +279,12 @@ in [the audit](../research/cohesion-audit.md#verification).
 Tab labels are not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
 
 ## Feedback log
+
+- 2026-11-06 · owner: "i also want to explore different tab component visuals, are there other ones? ... i like the
+  backplate version" (an IDE's bottom panel) → `selection="plate"` built from the IDE's bundle CSS and theme, the design
+  tool and notes app captures, and horizontal Nav's paint (navigation.css, inset.css, forced-colors.css, manifest.ts,
+  primitives.tsx, gallery-variants.tsx, specimens.mjs, documentation/navigation.mjs); a review page of the other
+  treatments; owner picked plate only, and plate for the design panel. In review.
 
 - 2026-10-21 · owner: "i also want to improve the tab component ui ... maybe the text needs to be strong for selected?"
   → research (Notion, Figma captures; 10 design systems from source, Sources) and a mock of three weights; owner picked

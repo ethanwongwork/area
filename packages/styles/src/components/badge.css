@@ -6,8 +6,8 @@
        step below the text it annotates (owner 2026-09-27). See docs/specs/badge.md. */
     --_height: var(--area-mark-label-md); /* spec: 20, the mark ladder role (audit S21a) */
     /* Every inner value is a function of the height (compact pass, 2026-10-01), restating the
-     * measured 16 / 20 / 24 rows exactly: text sides 6 / 8 / 10 and dot side 4 / 6 / 8 (both by
-     * the inset contract, inset.css), icon and media 12 / 16 / 16, gap 2 / 4 / 4, media side
+     * measured 16 / 20 / 24 rows: text sides (h - 6) / 2, 5 / 7 / 9 (4 / 6 / 8 at type 13's 14 / 18 / 22; Count's
+     * too, 2026-11-07) and dot side 4 / 6 / 8 (both by the inset contract, inset.css), icon and media 12 / 16 / 16, gap 2 / 4 / 4, media side
      * 2 / 2 / 4, media gap 4 / 4 / 6. So a mark
      * the UI scale shortens (compact md is 16) is drawn as the default mark of that height. */
     /* spec (owner, review round 8: "can the icons be smaller?"): 12 at every size, as Untitled UI's

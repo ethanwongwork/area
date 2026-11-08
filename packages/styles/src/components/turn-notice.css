@@ -49,6 +49,14 @@
   /* An error is the one notice that asks for something: its words in the default ink, its icon in the danger ink
      (Cursor's error title, Codex's red ■). */
   .area-turn-notice--error > .area-turn-notice__text { color: var(--area-fg-default); }
+  /* An error's words can run to two or three lines (the live agent's "isn't signed in", 2026-11-06): the mark and the
+     action stay on the first line (inset.css, first-line alignment), not the middle of the block. Everything sits on
+     the first line's baseline: the mark is a line tall with an empty glyph to give it that baseline, and a Retry's
+     label shares it, so a one-line notice with Retry is laid out as before. */
+  .area-turn-notice--error { align-items: first baseline; }
+  .area-turn-notice--error > .area-turn-notice__icon { block-size: 1lh; }
+  .area-turn-notice--error > .area-turn-notice__icon::before { content: "\200b"; inline-size: 0; }
+  .area-turn-notice--error > .area-turn-notice__icon > svg { block-size: var(--area-icon-sm); }
   .area-turn-notice__action { flex: none; }
   @media (forced-colors: active) { .area-turn-notice::after { background-color: CanvasText; } }
 }

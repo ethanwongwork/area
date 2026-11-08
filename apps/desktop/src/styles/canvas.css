@@ -103,7 +103,7 @@
      bottom edge (an inline block that clips), set half the count's height less half the cap under the label's baseline;
      its margin box is the cap alone, so the line never grows. It was `vertical-align: middle`, the x-height's centre, and
      sat a pixel under the cap's (owner, 2026-11-02: "the 4 looks too low vertically"). */
-  .studio-count {
+  .studio-count, .studio-overview__status {
     display: inline-block;
     overflow: hidden;
     line-height: 0; /* its box is the Count alone, no strut */
@@ -111,7 +111,7 @@
     margin-block: calc(1cap - var(--area-mark-label-sm)) 0;
     margin-inline-start: var(--area-space-2);
   }
-  .studio-count > * { vertical-align: top; }
+  .studio-count > *, .studio-overview__status > * { vertical-align: top; }
 
   /* --- Tiles and the grid (src/tile.tsx) ------------------------------------ */
 
@@ -317,8 +317,10 @@
   .studio-overview__more { display: flex; margin-block-start: var(--area-space-12); margin-inline-start: var(--_text-inset); }
   /* Show all: the feed's copy (13/18, muted, trimmed to cap and baseline), no plate, the title link's underline on hover. */
   .studio-overview__toggle { appearance: none; padding: 0; border: 0; background: none; color: var(--area-fg-muted); font: inherit; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; cursor: pointer; }
-  /* The family's status follows its count on the title's line. */
-  .studio-overview__status { display: inline-flex; vertical-align: middle; margin-inline-start: var(--area-space-4); }
+  /* The family's status follows its count on the title's line, placed as the count is (.studio-count above: centred on the
+     title's cap, one space and 2 after what precedes it). It sat on the x-height's middle, 1.3 under the count, 4 after it
+     (owner, 2026-11-06: "why are count and badge so stylistically and scale wise different"; DESIGN_SYSTEM.md, "Marks on
+     one line"). Both are sm marks, so the shared rule's mark-label-sm is the status's height too. */
   /* A section not yet drawn holds its room with empty cards of the cards' own shape (square since 2026-11-01). */
   .studio-overview__ghost { aspect-ratio: 1; border-radius: var(--_tile-radius); background: var(--area-bg-subtle); }
 

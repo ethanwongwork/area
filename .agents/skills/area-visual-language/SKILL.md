@@ -84,6 +84,10 @@ for both sides, and repeat in light and dark.
 - **Across families, not just within one:** put the component beside every family that
   paints the same role (a hover row in Menu, Nav, Tree view, Table and Select; a floating
   surface in Menu, Popover, Dialog and Toast). Most drift is between families.
+- **Marks that share a line:** a Count beside a Badge (or any two inline marks) must share
+  height, text size, shape and text side (DESIGN_SYSTEM.md, "Marks on one line"), and in the
+  composition both centre on the label's cap with equal gaps. Measure the pair where it sits:
+  a 1px drop or a 2px difference in side reads as "a different size" even at equal heights.
 - **Edges and shape:** radius follows the shape role. Nested radius is
   `max(min(radius-floor, own corner), outer − inset)`. Pills and circles stay full. Lines
   read the right width token: `stroke-width` for required lines, `border-width` for frames

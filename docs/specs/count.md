@@ -49,8 +49,12 @@ span.area-count   inline-flex, min-width = height, pill, plate, ink, 12/16 tabul
   span.area-count__label   visually hidden words after the number ("unread")
 ```
 
-Inset: 0 border + gutter 6 (md) / 4 (sm) + 0; text centred on the 20 / 16 box. A single digit
-makes a circle (min-width = height).
+Inset: 0 border (the edge is drawn inside) + gutter (h − 6) / 2 + 0: 6 at md 18, 4 at sm 14 (type 13), the
+marks' text side shared with Badge (2026-11-07). One character (`data-single`) has no gutter, so one digit is a
+circle as a pill (min-width = height). The digits' cap centres in the plate on Badge's whole-pixel baseline,
+`edge + round((h − 2 · edge + 1cap) / 2)` from the top (11 at sm 14, type 13), so a Count and a Badge of one height
+draw their digits and words on one pixel row at every type and density (2026-11-07); the count is a block box trimmed
+to cap and baseline (`text-box`), its padding placing them.
 
 ## Measurements
 
@@ -82,9 +86,9 @@ keeps the same fill and ink on the current tab (`primer--underline-nav-counter--
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | height md / sm | 20 / 16 | Notion 20; Fluent 20 / 16; Badge md / sm | Primer 18 sits off Area's inline scale |
-| gutter md / sm | 6 / 4 | Notion 6, Primer 6, Fluent medium 6; Fluent small 4, Indicator 4 | — |
+| gutter md / sm | (h − 6) / 2: 6 / 4 at type 13 (18 / 14); 0 for one character | Badge (one text side for marks on one line, 2026-11-07); GitLab and Fluent 6 on 20; Ant 0 for one character | Was (h − 8) / 2, 5 / 3 at type 13: tighter than any count or badge surveyed (docs/research/count-badge-2026-11-07) |
 | min-width | = height | Fluent, Spectrum, Indicator (circle for one digit) | — |
-| radius | full (pill) | Primer 20 on 18, Fluent circular, Badge | Notion's 4 draws nothing (no fill) |
+| radius | full (pill), the Pills list's default again since 2026-11-07 | Badge (one shape for marks on one line); Primer, GitLab, Fluent, Material, Ant, Spectrum, Carbon counts | Off the list 2026-11-01 to 11-07 (owner: "id prefer if counts were not pills"); a count beside a pill status then read as another family |
 | text | 12/16 (`control-xs`) | Primer 12, Fluent medium 12, shadcn 12; Badge md | Notion sets its count in its 14px heading text; Area keeps the count a step below the label, as Badge |
 | weight | 400, plain and soft (soft was 500 until 2026-11-01) | Owner 2026-11-01: a count's digits at 500 read larger than the regular label beside them; Notion 400 | Primer 600 |
 | numerals | tabular | shadcn, Chakra, Indicator | — |
@@ -113,7 +117,7 @@ Forced colours: the soft plate gains a 1px CanvasText border.
 
 | Peer | Shared role | Peer value | Count | Match |
 |---|---|---|---|---|
-| Badge md / sm | inline scale, text | 20 / 16, 12/16 500 on a fill | 20 / 16, 12/16 400 | Count stays regular on its plate (2026-11-01) |
+| Badge md / sm | marks on one line (DESIGN_SYSTEM.md): height, text, shape, text side | mark-label md / sm, control-xs, pill, (h − 6) / 2 | same; 400 | match; Count stays regular on its plate (2026-11-01) |
 | Indicator count | formatting | 99+, tabular | same helper, tabular | match |
 | Nav trailing | ink on the current row | muted, fixed | muted, fixed | match |
 | Badge neutral soft, Chip input | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))` (badge.css:17, 58; chip.css:80) | count.css:68 | match (audit S6a) |
@@ -188,3 +192,20 @@ Linear and GitHub swap the digits in place.
 - **Why:** the owner: "i like the updated counts in badges but the type size seems way larger than the actual text".
   The text was the same size (11 at type 13); at 500 its digits, as tall as capitals, read larger than an 11 regular card
   name beside it. Shown side by side on the Area Feed Kit page (artifact 3VBMTvWZ…, "Count component").
+
+## Review note, 2026-11-07 (marks on one line)
+
+- **What changed:** Count is a pill again by default (back on the Pills list, beside Badge), and its digits sit 4 from
+  the edge at sm and 6 at md (were 3 and 5), the side Badge now uses too. A one-digit count drops its sides, so it is a
+  circle as tall as the count (`data-single`, set by React). Height, text, weight, plate and ink are unchanged.
+- **Why:** the owner, on "Button 44 ✓ Complete": "why are count and badge so stylistically and scale wise different";
+  then "maybe they should all be pills then?, also is there too much horizontal padding on the textside?" The height
+  and text were already Badge's; the shape, the side and the heading's placement were not. Fourteen design systems
+  surveyed give a count and a status on one line one shape and one side, about 0.3 of the height for the side
+  (docs/research/count-badge-2026-11-07). Picked on the review page (artifact 2g6mM75s…): pills, (h − 6) / 2,
+  weights kept.
+- **Follow-up, 2026-11-07 (vertical):** the owner asked "are the text weights in all the badges used correctly? the
+  vertical alignment the same/consistent?" Weights follow one rule (plated 500; plain, Count and Tag 400; Kbd 500).
+  Count was centred by its line box, exact but fractional, so beside a badge its digits could land a pixel row apart
+  (0.45 at type 12, 0.38 at 15, 0.10 at 13). "Yes, fix both": Count takes Badge's whole-pixel baseline; swept at type
+  12–16 × density 28 / 32 / 36, every Count matches the Badge of its height to 0.01 (57 pairs). Widths unchanged.

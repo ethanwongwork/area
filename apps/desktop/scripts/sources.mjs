@@ -8,13 +8,15 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-const DIRS = { specs: ["docs/specs", ".md"], css: ["packages/styles/src/components", ".css"], react: ["packages/react/src/components", ".tsx"] };
+const DIRS = { specs: ["docs/specs", ".md"], css: ["packages/styles/src/components", ".css"], react: ["packages/react/src/components", ".tsx"],
+  // The patterns' screens, for a project layer's Code tab in the design interface (src/design-panel.tsx, 2026-11-06).
+  screens: ["apps/desktop/src/content/examples", ".tsx"] };
 
 /** Every source file, as absolute paths (the renderer watches them). */
 export const sourceFiles = repo => Object.values(DIRS).flatMap(([dir, ext]) =>
   readdirSync(join(repo, dir)).filter(name => name.endsWith(ext)).map(name => join(repo, dir, name)));
 
-/** { specs, css, react }: file name -> text; propDocs: interface -> prop -> description. */
+/** { specs, css, react, screens }: file name -> text; propDocs: interface -> prop -> description. */
 export function readSources(repo) {
   const out = {};
   for (const [key, [dir, ext]] of Object.entries(DIRS)) {

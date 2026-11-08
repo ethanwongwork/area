@@ -137,7 +137,8 @@ export interface CheckboxProps extends ChoiceProps {
   variant?: VariantProps<typeof MANIFESTS.checkbox>["variant"];
   /** Card layout: `row` (visual, text, control on one line), `list` (the control first, then the text, then meta: a list
    * of options), `tile` (visual above the label, control in the corner) or `preview` (the visual centred as the choice's
-   * own picture, the label centred under it, no control drawn) `media` (the picture in an 8px mat, a list row under
+   * own picture, the label centred under it, no control drawn), `thumbnail` (the picture is the card, its name under
+   * it outside, at the start: an Appearance picker's) `media` (the picture in an 8px mat, a list row under
    * it) or `media-row` (the picture at the row's start, the row centred beside it; `--area-choice-media` sets its share). */
   layout?: VariantProps<typeof MANIFESTS.checkbox>["layout"];
   /** A short value at the option's end, muted and tabular: what the choice comes to ("11:24 AM", "14 questions"). */
@@ -468,7 +469,7 @@ export { Switch, type SwitchProps } from "./Switch.tsx";
 export type RadioProps = Omit<ChoiceProps, "size"> & {
   /** A contained, full-width option: `card` (an edge) or `soft` (a fill, the chosen one darker), as Checkbox. */
   variant?: VariantProps<typeof MANIFESTS.radio>["variant"];
-  /** Card layout: `row`, `list` (the control first), `tile`, `preview`, `media` or `media-row`, as Checkbox. */
+  /** Card layout: `row`, `list` (the control first), `tile`, `preview`, `thumbnail`, `media` or `media-row`, as Checkbox. */
   layout?: VariantProps<typeof MANIFESTS.radio>["layout"];
   /** A short value at the option's end, as Checkbox. */
   meta?: ReactNode;

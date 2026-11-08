@@ -47,6 +47,8 @@ const STATES = new Set(['empty', 'collapsed']);
 const FAMILY_GROUPS = {
   indicator: { presence: 'Variants', outOfOffice: 'States', count: 'Content' },
   menu: { danger: 'Tones' },
+  // Tabs' selection axis is a treatment (underline or plate), not the Selection emphasis role (2026-11-06).
+  tabs: { selection: 'Variants' },
 };
 export function specimenGroup(name, family) {
   if (name === 'default' || name.startsWith('default-')) return 'Default';

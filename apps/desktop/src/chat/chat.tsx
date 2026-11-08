@@ -18,13 +18,28 @@ import { ChatAddIcon, ChatIcon, CommandIcon, DocumentIcon } from "@area/icons";
 import { Markdown } from "./markdown.tsx";
 import { RECORDINGS } from "./recording.ts";
 import { useChatSession, type ChatSession, type Part, type Turn } from "./session.ts";
+import { readStored, writeStored } from "../storage.ts";
 
-/** The models offered (Claude Opus 5.5 by default; the engine passes the value to the Agent SDK in Phase 3). */
+/** The models offered (Claude Opus 5.5 by default; the engine passes the value to the Agent SDK, electron/agent.cjs). */
 export const CHAT_MODELS = [
   { value: "claude-opus-5-5", label: "Claude Opus 5.5", description: "Most capable for long, agentic work" },
   { value: "claude-sonnet-5-5", label: "Claude Sonnet 5.5", description: "Fast, for everyday edits" },
   { value: "claude-haiku-5-5", label: "Claude Haiku 5.5", description: "Fastest, for quick questions" },
 ];
+
+const MODEL_KEY = "chat-model";
+const MODEL_EVENT = "area-chat-model";
+const savedModel = () => { const saved = readStored<string>(MODEL_KEY, CHAT_MODELS[0]!.value); return CHAT_MODELS.some(entry => entry.value === saved) ? saved : CHAT_MODELS[0]!.value; };
+/** The model chats start with (Settings › Chat), kept between launches; every reader follows a change. */
+export function useDefaultModel(): [string, (model: string) => void] {
+  const [model, setModel] = useState(savedModel);
+  useEffect(() => {
+    const follow = () => setModel(savedModel());
+    addEventListener(MODEL_EVENT, follow);
+    return () => removeEventListener(MODEL_EVENT, follow);
+  }, []);
+  return [model, (next: string) => { writeStored(MODEL_KEY, next); dispatchEvent(new Event(MODEL_EVENT)); }];
+}
 
 interface ChatContextValue {
   session: ChatSession;
@@ -53,8 +68,12 @@ function lastActivity(turns: Turn[], index: number): number | undefined {
 }
 
 export function ChatProvider({ selection, children }: { selection?: string; children: ReactNode }) {
-  const session = useChatSession();
-  const [model, setModel] = useState(CHAT_MODELS[0]!.value);
+  // The composer's menu changes this chat's model; Settings › Chat sets the one chats start with, and this chat follows it.
+  const [preferred] = useDefaultModel();
+  const [model, setModel] = useState(preferred);
+  useEffect(() => setModel(preferred), [preferred]);
+  // The app's chat is live wherever the engine answers (the Electron app); elsewhere it plays the recordings.
+  const session = useChatSession(undefined, { live: true, model });
   const composer = useRef<HTMLTextAreaElement | null>(null);
   return <ChatContext.Provider value={{ session, model, setModel, selection, composer }}>{children}</ChatContext.Provider>;
 }
@@ -76,12 +95,15 @@ export const selectionLabel = (item?: string) => item
 /** How a tool's call reads while it runs and once it is done (Cursor's and Codex's verb pairs). */
 const VERBS: Record<string, readonly [string, string]> = {
   Read: ["Reading", "Read"], Grep: ["Searching", "Searched"], Glob: ["Finding files", "Found files"],
-  Edit: ["Editing", "Edited"], Write: ["Writing", "Wrote"], Bash: ["Running", "Ran"],
+  Edit: ["Editing", "Edited"], MultiEdit: ["Editing", "Edited"], Write: ["Writing", "Wrote"], NotebookEdit: ["Editing", "Edited"], Bash: ["Running", "Ran"],
+  Agent: ["Delegating", "Delegated"], Task: ["Delegating", "Delegated"], Skill: ["Loading a skill", "Loaded a skill"], ToolSearch: ["Finding tools", "Found tools"],
   WebFetch: ["Fetching", "Fetched"], WebSearch: ["Searching the web", "Searched the web"], TodoWrite: ["Updating the plan", "Updated the plan"],
 };
 /** Reads and searches fold into one "Explored" group (Cursor, Codex). */
 const EXPLORE = new Set(["Read", "Grep", "Glob"]);
 const detailOf = (input: Readonly<Record<string, unknown>>) => {
+  if (typeof input.description === "string" && typeof input.prompt === "string") return input.description;
+  if (typeof input.skill === "string") return input.skill;
   const path = typeof input.file_path === "string" ? input.file_path.split("/").at(-1) : undefined;
   const pattern = typeof input.pattern === "string" ? input.pattern : undefined;
   const command = typeof input.command === "string" ? input.command : undefined;
@@ -90,10 +112,11 @@ const detailOf = (input: Readonly<Record<string, unknown>>) => {
 };
 
 type ToolPart = Extract<Part, { kind: "tool" }>;
-/** An Edit's change as a Diff: its old lines out, its new lines in (line numbers arrive with the engine). */
+/** An Edit's change as a Diff: its old lines out, its new lines in; a Write's text, all in. No line numbers yet. */
 function editOf(part: ToolPart) {
   const before = typeof part.input.old_string === "string" ? part.input.old_string.split("\n") : [];
-  const after = typeof part.input.new_string === "string" ? part.input.new_string.split("\n") : [];
+  const after = typeof part.input.new_string === "string" ? part.input.new_string.split("\n")
+    : typeof part.input.content === "string" ? part.input.content.split("\n") : [];
   const name = typeof part.input.file_path === "string" ? part.input.file_path.split("/").at(-1)! : "file";
   const hunks: DiffHunk[] = [{ lines: [
     ...before.map(text => ({ kind: "deleted" as const, text })),
@@ -158,14 +181,16 @@ function AssistantParts({ parts }: { parts: Part[] }) {
 const plainText = (turn: Extract<Turn, { author: "assistant" }>) =>
   turn.parts.filter((part): part is Extract<Part, { kind: "text" }> => part.kind === "text").map(part => part.text).join("\n\n");
 
-/** The turn's edits, once it is done: Edit summary with Keep and Undo (a recorded run changes no file either way). */
+/** The turn's edits, once it is done: Edit summary with Keep and Undo. Live, Undo puts the file back (electron/agent.cjs)
+ *  and says why when it can't; a recorded run changes no file either way. */
 function TurnEdits({ turn }: { turn: Extract<Turn, { author: "assistant" }> }) {
   const { session } = useChat();
   const edits = turn.parts.filter(isEdit).filter(part => part.status === "done");
   if (!edits.length) return null;
   const files = edits.map(part => ({ id: part.id, ...editOf(part), state: session.edits[part.id] ?? "pending" }));
   const pending = files.filter(file => file.state === "pending").map(file => file.id);
-  return (
+  const failed = files.filter(file => session.undoFailed[file.id]);
+  return (<>
     <EditSummary title={`Edited ${files.length} file${files.length === 1 ? "" : "s"}`}
       added={files.reduce((sum, file) => sum + file.added, 0)} deleted={files.reduce((sum, file) => sum + file.removed, 0)}
       onKeepAll={pending.length ? () => session.setEdits(pending, "kept") : undefined}
@@ -176,7 +201,8 @@ function TurnEdits({ turn }: { turn: Extract<Turn, { author: "assistant" }> }) {
           diff={<Diff aria-label={`Changes to ${file.name}`} hunks={file.hunks} />} />
       ))}
     </EditSummary>
-  );
+    {failed.map(file => <TurnNotice key={file.id} status="error">{`Couldn't undo ${file.name}: ${session.undoFailed[file.id]}`}</TurnNotice>)}
+  </>);
 }
 
 function TurnView({ turn }: { turn: Turn }) {
@@ -192,6 +218,7 @@ function TurnView({ turn }: { turn: Turn }) {
       <AssistantParts parts={turn.parts} />
       {turn.done ? <TurnEdits turn={turn} /> : null}
       {turn.stopped ? <TurnNotice status="stopped">You stopped this reply{turn.seconds ? ` after ${turn.seconds}s` : ""}.</TurnNotice> : null}
+      {turn.error ? <TurnNotice status="error">{turn.error}</TurnNotice> : null}
     </Message>
   );
 }
@@ -218,7 +245,8 @@ export function ChatTranscript({ scroller }: { scroller: RefObject<HTMLElement |
     return (
       <div className="studio-chat__empty">
         <EmptyState size="sm" icon={<ChatIcon />} title="Ask about Area"
-          description="Replies are recorded runs for now: the agent connects in a later phase." />
+          description={session.mode === "live" ? "Claude works in this repository and asks before each edit or command."
+            : "Replies here are recorded runs: Claude answers in the Area app."} />
         <PromptSuggestions layout="chips" label="Suggested prompts"
           items={RECORDINGS.map(recording => ({ id: recording.id, label: recording.prompt }))}
           onSelect={suggestion => { session.send(suggestion.label); composer.current?.focus(); }} />
@@ -335,15 +363,16 @@ export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | n
       {/* The run's plan rides above the composer while it runs (Cursor's tray). */}
       {running && session.plan ? <Plan items={session.plan} /> : null}
       {session.approval ? (
-        // The question takes the composer's place until it is answered (Claude Code, Codex). "For this session" plays as
-        // a yes in a recorded run; the engine remembers it (Phase 3).
+        // The question takes the composer's place until it is answered (Claude Code, Codex). "For this session" allows the
+        // tool for the rest of the chat (the engine remembers it; a recorded run plays it as a yes).
         <Approval autoFocus title={session.approval.title} description={session.approval.description}
           items={[{ value: "yes", label: "Yes" }, { value: "session", label: "Yes, for this session" }, { value: "no", label: "No" }]}
-          onChoose={value => session.answer(value !== "no")}
-          // What to do instead goes to the agent with the no (Phase 3); a recorded run plays its no.
-          onInstead={() => session.answer(false)} insteadPlaceholder="Tell Claude what to do instead">
-          {session.approval.tool_name === "Edit" ? <Diff aria-label={`Changes to ${String(session.approval.input.file_path ?? "").split("/").at(-1)}`}
-            hunks={editOf({ kind: "tool", id: session.approval.tool_use_id, name: "Edit", input: session.approval.input, status: "running" }).hunks} /> : null}
+          onChoose={value => session.answer(value !== "no", { always: value === "session" })}
+          // What to do instead goes to the agent with the no; a recorded run plays its no.
+          onInstead={text => session.answer(false, { instead: text })} insteadPlaceholder="Tell Claude what to do instead">
+          {session.approval.tool_name === "Edit" || session.approval.tool_name === "Write" ? <Diff aria-label={`Changes to ${String(session.approval.input.file_path ?? "").split("/").at(-1)}`}
+            hunks={editOf({ kind: "tool", id: session.approval.tool_use_id, name: session.approval.tool_name, input: session.approval.input, status: "running" }).hunks} />
+            : typeof session.approval.input.command === "string" ? <CodeBlock size="sm" lineNumbers={false} code={session.approval.input.command} wrap /> : null}
         </Approval>
       ) : (
         <Composer ref={composer} layout="stacked" value={draft} onValueChange={next => { setDraft(next); }}

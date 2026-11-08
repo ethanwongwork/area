@@ -10,6 +10,13 @@
  *   explorations  a theme tried on the project's system, from one of its themes; Publish puts it in the system as an update
  *                 to that theme or a new one (src/systems.ts `publishTheme`)
  *   versions      named copies of the pages and explorations, to go back to
+ *   history       iterations: every change to the pages kept automatically (owner, 2026-11-06: "a gallery of all previous
+ *                 iterations"), newest last, at most HISTORY_LIMIT; a version is a named one kept for good
+ *   comments      notes on a layer (the design interface's Comments tab)
+ *   notes         the project's research and insights, one text (its Research tab)
+ *   changes       design changes made in the Inspector's Design view to an element of a layer (owner, 2026-11-06: "each
+ *                 change to be made and then logged and then sent to the chat all at once when the user chooses"): each
+ *                 drawn on the stage at once, kept until it is undone, and marked sent when the batch goes to Chat
  *
  * Pure: the projects test (tests/projects.test.ts) imports it; the restore functions that check a theme come from the app.
  */
@@ -31,6 +38,34 @@ export interface Exploration {
 }
 /** A saved version: a copy of the pages and explorations. */
 export interface ProjectVersion { id: string; name: string; at: string; pages: ProjectPage[]; explorations: Exploration[] }
+/** An iteration: the pages as one change left them, kept automatically (`recordIteration`). */
+export interface Iteration { id: string; at: string; note: string; pages: ProjectPage[] }
+/** A note on one of a page's layers. */
+export interface LayerComment { id: string; page: string; layer: string; author: string; text: string; at: string }
+/**
+ * A design change to one element of a layer's screen (src/design-edit.ts): what it is (its path of child indices from the
+ * screen's root, its component and its words), which property, and the value before and after, in words and as applied.
+ */
+export interface DesignChange {
+  id: string;
+  page: string;
+  layer: string;
+  path: number[];
+  /** The element's component ("Button") or "Frame", and its words ("New report"), as the log names it. */
+  target: string;
+  label: string;
+  /** "prop:variant", "text", "style:gap", "type", "style:background-color" … */
+  property: string;
+  /** The property in words ("Variant", "Gap"). */
+  name: string;
+  from: string;
+  to: string;
+  /** What is applied: a modifier's value, the words, or a CSS value (`var(--area-space-12)`). */
+  value: string;
+  at: string;
+  /** When it went to Chat in a batch; a sent change stays drawn until it is cleared. */
+  sent?: string;
+}
 export interface Project {
   id: string;
   name: string;
@@ -42,9 +77,15 @@ export interface Project {
   pages: ProjectPage[];
   explorations: Exploration[];
   versions: ProjectVersion[];
+  history: Iteration[];
+  comments: LayerComment[];
+  notes: string;
+  changes: DesignChange[];
 }
 
 export const PROJECT_FILE_VERSION = 1;
+/** The iterations a project keeps; the oldest go first. Named versions are kept for good. */
+export const HISTORY_LIMIT = 100; /* pick */
 
 /** An id not among `taken`: `<prefix>-<n>`, counting up from the list's length. */
 export function nextId(prefix: string, taken: Iterable<{ id: string }>): string {
@@ -58,7 +99,7 @@ export function nextId(prefix: string, taken: Iterable<{ id: string }>): string 
 export function newProject(name: string, system: string, theme: string, taken: Iterable<string>, now = new Date()): Project {
   return {
     id: systemSlug(name || "project", taken), name: name.trim() || "Untitled project", created: now.toISOString(), system, theme,
-    pages: [{ id: "page-1", name: "Page 1", layers: [] }], explorations: [], versions: [],
+    pages: [{ id: "page-1", name: "Page 1", layers: [] }], explorations: [], versions: [], history: [], comments: [], notes: "", changes: [],
   };
 }
 
@@ -102,6 +143,23 @@ function readExplorations(saved: unknown, restore: Restorers): Exploration[] {
   return explorations;
 }
 
+function readChanges(saved: unknown): DesignChange[] {
+  const changes: DesignChange[] = [];
+  for (const entry of Array.isArray(saved) ? saved : []) {
+    const c = (entry && typeof entry === "object" ? entry : {}) as Record<string, unknown>;
+    const strings = ["page", "layer", "property", "value"].every(key => typeof c[key] === "string" && c[key]);
+    if (!strings || !Array.isArray(c.path) || !c.path.every(step => Number.isInteger(step) && (step as number) >= 0)) continue;
+    const id = text(c.id, nextId("change", changes));
+    if (changes.some(other => other.id === id)) continue;
+    changes.push({
+      id, page: c.page as string, layer: c.layer as string, path: c.path as number[], target: text(c.target, "Element"), label: typeof c.label === "string" ? c.label : "",
+      property: c.property as string, name: text(c.name, c.property as string), from: typeof c.from === "string" ? c.from : "", to: typeof c.to === "string" ? c.to : "",
+      value: c.value as string, at: typeof c.at === "string" ? c.at : new Date(0).toISOString(), ...(typeof c.sent === "string" && c.sent ? { sent: c.sent } : {}),
+    });
+  }
+  return changes;
+}
+
 /** A project read from its file, or null when the file is not one (no id or name, or no system). */
 export function readProject(saved: unknown, restore: Restorers): Project | null {
   if (!saved || typeof saved !== "object") return null;
@@ -115,11 +173,27 @@ export function readProject(saved: unknown, restore: Restorers): Project | null 
     versions.push({ id, name: text(v.name, `Version ${versions.length + 1}`), at: typeof v.at === "string" ? v.at : new Date(0).toISOString(), pages: readPages(v.pages), explorations: readExplorations(v.explorations, restore) });
   }
   const pages = readPages(s.pages);
+  const history: Iteration[] = [];
+  for (const entry of Array.isArray(s.history) ? s.history : []) {
+    const h = (entry && typeof entry === "object" ? entry : {}) as Record<string, unknown>;
+    const id = text(h.id, nextId("iteration", history));
+    if (history.some(other => other.id === id)) continue;
+    history.push({ id, at: typeof h.at === "string" ? h.at : new Date(0).toISOString(), note: text(h.note, "A change"), pages: readPages(h.pages) });
+  }
+  const comments: LayerComment[] = [];
+  for (const entry of Array.isArray(s.comments) ? s.comments : []) {
+    const c = (entry && typeof entry === "object" ? entry : {}) as Record<string, unknown>;
+    if (typeof c.text !== "string" || !c.text.trim() || typeof c.page !== "string" || typeof c.layer !== "string") continue;
+    const id = text(c.id, nextId("comment", comments));
+    if (comments.some(other => other.id === id)) continue;
+    comments.push({ id, page: c.page, layer: c.layer, author: text(c.author, "David Tee"), text: c.text.trim(), at: typeof c.at === "string" ? c.at : new Date(0).toISOString() });
+  }
   return {
     id: s.id, name: s.name.trim(), created: typeof s.created === "string" ? s.created : new Date(0).toISOString(),
     system: s.system, theme: text(s.theme, "default"),
     pages: pages.length ? pages : [{ id: "page-1", name: "Page 1", layers: [] }],
     explorations: readExplorations(s.explorations, restore), versions,
+    history: history.slice(-HISTORY_LIMIT), comments, notes: typeof s.notes === "string" ? s.notes : "", changes: readChanges(s.changes),
   };
 }
 
@@ -134,6 +208,7 @@ export function projectFile(project: Project, canvas: (axes: CanvasAxes) => Reco
     id: project.id, name: project.name, created: project.created, system: project.system, theme: project.theme,
     pages: project.pages, explorations: project.explorations.map(exploration),
     versions: project.versions.map(version => ({ ...version, explorations: version.explorations.map(exploration) })),
+    history: project.history, comments: project.comments, notes: project.notes, changes: project.changes,
   };
 }
 
@@ -185,4 +260,149 @@ export function saveVersion(project: Project, name: string, now = new Date()): P
 export function restoreVersion(project: Project, id: string): Project {
   const version = project.versions.find(entry => entry.id === id);
   return version ? { ...project, pages: version.pages, explorations: version.explorations } : project;
+}
+
+/**
+ * What a change did to the pages, in words ("Added Analytics dashboard to Page 1"), or null when it left them as they
+ * were (an exploration, a comment, the notes): only a change to the pages is an iteration.
+ */
+export function describeChange(before: readonly ProjectPage[], after: readonly ProjectPage[]): string | null {
+  if (JSON.stringify(before) === JSON.stringify(after)) return null;
+  const added = after.filter(page => !before.some(other => other.id === page.id));
+  const removed = before.filter(page => !after.some(other => other.id === page.id));
+  if (added.length === 1 && !removed.length) return `Added ${added[0]!.name}`;
+  if (removed.length === 1 && !added.length) return `Deleted ${removed[0]!.name}`;
+  const notes: string[] = [];
+  for (const page of after) {
+    const was = before.find(other => other.id === page.id);
+    if (!was) continue;
+    if (was.name !== page.name) notes.push(`Renamed ${was.name} to ${page.name}`);
+    const gained = page.layers.filter(layer => !was.layers.some(other => other.id === layer.id));
+    const lost = was.layers.filter(layer => !page.layers.some(other => other.id === layer.id));
+    for (const layer of gained) notes.push(`Added ${layer.name} to ${page.name}`);
+    for (const layer of lost) notes.push(`Removed ${layer.name} from ${page.name}`);
+    for (const layer of page.layers) {
+      const old = was.layers.find(other => other.id === layer.id);
+      if (old && old.name !== layer.name) notes.push(`Renamed ${old.name} to ${layer.name}`);
+    }
+    if (!gained.length && !lost.length && was.layers.map(layer => layer.id).join() !== page.layers.map(layer => layer.id).join()) notes.push(`Reordered ${page.name}`);
+  }
+  if (!notes.length) return "Changed the pages";
+  return notes.length === 1 ? notes[0]! : `${notes[0]}, and ${notes.length - 1} more`;
+}
+
+/**
+ * The project after a change, with the change kept as an iteration when it changed the pages. The first iteration is
+ * the pages before any change, so the oldest state can be gone back to.
+ */
+export function recordIteration(before: Project, after: Project, now = new Date(), note?: string): Project {
+  const said = describeChange(before.pages, after.pages);
+  if (!said) return after;
+  const history = [...after.history];
+  if (!history.length) history.push({ id: "iteration-1", at: before.created, note: "Before the first change", pages: before.pages });
+  history.push({ id: nextId("iteration", history), at: now.toISOString(), note: note ?? said, pages: after.pages });
+  return { ...after, history: history.slice(-HISTORY_LIMIT) };
+}
+
+/** The project's pages put back to an iteration (the history stays, and the restore is an iteration of its own). */
+export function restoreIteration(project: Project, id: string): Project {
+  const iteration = project.history.find(entry => entry.id === id);
+  return iteration ? { ...project, pages: iteration.pages } : project;
+}
+
+/** The project with a comment on a layer, newest last. */
+export function addComment(project: Project, page: string, layer: string, author: string, body: string, now = new Date()): Project {
+  const said = body.trim();
+  if (!said) return project;
+  return { ...project, comments: [...project.comments, { id: nextId("comment", project.comments), page, layer, author, text: said, at: now.toISOString() }] };
+}
+
+/* --- Design changes (the Inspector's Design view and its log) --------------------------------------------------------- */
+
+/** The same element and property on the same layer. */
+const sameSpot = (a: Pick<DesignChange, "page" | "layer" | "path" | "property">, b: Pick<DesignChange, "page" | "layer" | "path" | "property">) =>
+  a.page === b.page && a.layer === b.layer && a.property === b.property && a.path.join("/") === b.path.join("/");
+
+/**
+ * The project with a design change logged. A second change to an element's property, not yet sent, updates the first
+ * (its `from` stays the value before either); one that puts the value back to where it was removes it.
+ */
+export function logChange(project: Project, change: Omit<DesignChange, "id" | "at" | "sent">, now = new Date()): Project {
+  const open = project.changes.find(entry => !entry.sent && sameSpot(entry, change));
+  if (open) {
+    if (change.to === open.from) return { ...project, changes: project.changes.filter(entry => entry !== open) };
+    return { ...project, changes: project.changes.map(entry => entry === open ? { ...entry, to: change.to, value: change.value, at: now.toISOString() } : entry) };
+  }
+  if (change.to === change.from) return project;
+  return { ...project, changes: [...project.changes, { ...change, id: nextId("change", project.changes), at: now.toISOString() }] };
+}
+
+/** The project without a change (Undo in the log). */
+export function undoChange(project: Project, id: string): Project {
+  return { ...project, changes: project.changes.filter(entry => entry.id !== id) };
+}
+
+/** The changes not yet sent, oldest first. */
+export const pendingChanges = (project: Project) => project.changes.filter(entry => !entry.sent);
+
+/** The project with every pending change marked sent (one batch to Chat). */
+export function markSent(project: Project, now = new Date()): Project {
+  return { ...project, changes: project.changes.map(entry => entry.sent ? entry : { ...entry, sent: now.toISOString() }) };
+}
+
+/** The project without its sent changes (their overrides leave the stage). */
+export function clearSent(project: Project): Project {
+  return { ...project, changes: project.changes.filter(entry => !entry.sent) };
+}
+
+/** The changes drawn on a layer: pending and sent, oldest first. */
+export const changesOn = (project: Project, page: string, layer: string) => project.changes.filter(entry => entry.page === page && entry.layer === layer);
+
+/** The project with a layer renamed, duplicated (after itself) or removed; its changes and comments follow it. */
+export function renameLayer(project: Project, page: string, layer: string, name: string): Project {
+  const named = name.trim();
+  if (!named) return project;
+  return { ...project, pages: project.pages.map(entry => entry.id === page ? { ...entry, layers: entry.layers.map(other => other.id === layer ? { ...other, name: named } : other) } : entry) };
+}
+export function duplicateLayer(project: Project, page: string, layer: string): { project: Project; layer: Layer | null } {
+  const at = project.pages.find(entry => entry.id === page);
+  const original = at?.layers.find(entry => entry.id === layer);
+  if (!at || !original) return { project, layer: null };
+  const taken = new Set(at.layers.map(entry => entry.name));
+  let named = `${original.name} copy`;
+  for (let count = 2; taken.has(named); count++) named = `${original.name} copy ${count}`;
+  const copy = { ...original, id: nextId("layer", project.pages.flatMap(entry => entry.layers)), name: named };
+  const layers = [...at.layers];
+  layers.splice(layers.indexOf(original) + 1, 0, copy);
+  return { project: { ...project, pages: project.pages.map(entry => entry === at ? { ...entry, layers } : entry) }, layer: copy };
+}
+export function removeLayer(project: Project, page: string, layer: string): Project {
+  return {
+    ...project,
+    pages: project.pages.map(entry => entry.id === page ? { ...entry, layers: entry.layers.filter(other => other.id !== layer) } : entry),
+    changes: project.changes.filter(entry => !(entry.page === page && entry.layer === layer)),
+  };
+}
+
+/** The project with a page renamed, duplicated (after itself, its layers copied with new ids) or deleted. */
+export function renamePage(project: Project, page: string, name: string): Project {
+  const named = name.trim();
+  return named ? { ...project, pages: project.pages.map(entry => entry.id === page ? { ...entry, name: named } : entry) } : project;
+}
+export function duplicatePage(project: Project, page: string): { project: Project; page: ProjectPage | null } {
+  const original = project.pages.find(entry => entry.id === page);
+  if (!original) return { project, page: null };
+  const taken = new Set(project.pages.map(entry => entry.name));
+  let named = `${original.name} copy`;
+  for (let count = 2; taken.has(named); count++) named = `${original.name} copy ${count}`;
+  const used = [...project.pages.flatMap(entry => entry.layers)];
+  const layers = original.layers.map(entry => { const copy = { ...entry, id: nextId("layer", used) }; used.push(copy); return copy; });
+  const copy = { id: nextId("page", project.pages), name: named, layers };
+  const pages = [...project.pages];
+  pages.splice(pages.indexOf(original) + 1, 0, copy);
+  return { project: { ...project, pages }, page: copy };
+}
+export function deletePage(project: Project, page: string): Project {
+  if (project.pages.length < 2) return project;
+  return { ...project, pages: project.pages.filter(entry => entry.id !== page), changes: project.changes.filter(entry => entry.page !== page) };
 }

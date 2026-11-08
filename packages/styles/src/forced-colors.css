@@ -103,6 +103,9 @@
     .area-slider__control:focus-visible ~ :is(.area-slider__thumb, .area-slider__rail) { outline-color: Highlight; }
     .area-tabs__tab[data-selected]::after, .area-tabs__list[data-indicator]::after { background-color: Highlight; forced-color-adjust: none; }
     .area-tabs__list[data-indicator] > .area-tabs__tab[data-selected]::after { background-color: transparent; }
+    /* A plate tab's selected plate is the system selection pair, its label on it. */
+    .area-tabs--plate .area-tabs__tab[data-selected] { forced-color-adjust: none; background-color: Highlight; color: HighlightText; }
+    .area-tabs--plate .area-tabs__list[data-indicator] > .area-tabs__tab[data-selected] { background-color: transparent; }
     /* Current and selected rows were a plate alone, which forced colours remove (audit D-14):
        paint them with the system selection pair, and draw the Nav marker in Highlight. */
     .area-nav:not(.area-nav--marker) .area-nav__item[aria-current]:not([aria-current="false"]),

@@ -376,7 +376,7 @@ export const checkbox = {
   description: "Toggles a single independent option.",
   // soft and list (owner 2026-10-25, Notion Calendar's settings rows, a proposal card's options): a filled option with
   // its control first and a value at its end.
-  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "media", "media-row"], size: ["md", "lg"] },
+  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] },
   // read-only: a state set elsewhere, not toggled (components audit 2026-11-07, O2; a native checkbox ignores readonly).
   states: ["checked", "indeterminate", "disabled", "invalid", "read-only"],
   elements: ["control", "visual", "meta"],
@@ -395,7 +395,7 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "media", "media-row"], size: ["md", "lg"] },
+  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] },
   // read-only: set on each option of a read-only Radio group.
   states: ["disabled", "read-only"],
   elements: ["control", "visual", "meta"],
@@ -503,6 +503,7 @@ export const count = {
   block: "area-count", description: "Shows how many items the element it sits in holds, beside that element's label.",
   variants: { variant: ["plain", "soft"], size: ["sm", "md"] },
   booleans: ["pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
+  states: ["single"], // data-single: a one-character count drops its sides, a circle as a pill (2026-11-07)
   elements: ["label"],
   defaults: { variant: "plain", size: "md" },
 } as const satisfies ComponentManifest;
@@ -979,8 +980,10 @@ export const toast = {
 
 export const tabs = {
   block: "area-tabs",
-  description: "Switches between views with transparent tabs and rounded indicators; labels align with panel content.",
-  variants: { size: ["sm", "md", "lg"], orientation: ["vertical"] },
+  description: "Switches between views: transparent tabs with a rounded underline whose labels align with panel content, or (selection plate) a soft plate behind the selected tab.",
+  // `selection` names how the selected tab is marked, as Nav's does: the underline (default, a marker) or a plate
+  // (owner 2026-11-06, docs/specs/tabs.md "Plate").
+  variants: { size: ["sm", "md", "lg"], orientation: ["vertical"], selection: ["plate"] },
   booleans: ["track"],
   states: ["selected", "disabled"],
   // unseen: a dot for a tab whose content changed since it was last looked at (components audit D6, 2026-11-07).

@@ -65,6 +65,8 @@ before it is built.
 
 | Candidate | Job | Likely answer | Missing |
 |---|---|---|---|
+| Pill plate tabs | Plate tabs with fully round ends (a notes app's view tabs) | Setting: `tabs` in the Pills set, not a variant | Owner chose plate only, 2026-11-06 (review 7vSwH9XbPa4ywGjZBCHbcp); revisit if a system asks for pill tabs |
+| Folder tabs | A selected tab joined to the surface below (browser, old settings windows) | A third Tabs `selection` value | Declined 2026-11-06 (owner: plate only): no measured product uses it; open documents are a horizontal Nav |
 | Tab groups | Named or split groups of open tabs (Chrome's groups, Figma's split and pinned tabs) | Desktop app shell, not a component yet | Many open tabs in real use: wait for Projects (Phase 4) or a split view (owner's question, 2026-10-29) |
 | Action tile | An action with its icon over its label, in an equal-width grid | Component, or a Card / Toggle group composition | Captures in two more products (seen in Cursor's icon card and Figma's new-file tiles) |
 | DataGrid, TreeGrid | Editable, resizable, virtualized rows | New family on Table | Editing, selection and virtualization contracts |

@@ -28,7 +28,7 @@ for one release; `status` wins. The CSS modifiers keep their names (`area-turn-n
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
 | type | text-base (the trackers' UI size; was text-lg, Message's), muted | claude-code secondary; codex muted | no italic: Area does not set type in italic |
-| icon | error only: info in a 16 slot | cursor error title; Area glyphs | stopped and compacted are a divider (tracker pass 2026-11-02) |
+| icon | error only: info in a 16 slot, on the first line's baseline (a wrapped error keeps it on its first line) | cursor error title; Area glyphs; inset.css first-line alignment | stopped and compacted are a divider (tracker pass 2026-11-02) |
 | divider | stopped and compacted: the words, then a 1px rule in the Dividers group to the column's end, 8 after them | codex "You stopped after {t}", gap 8, full-width 1px rule | a turn's end reads as a break in the column, not another step |
 | error ink | the icon in fg-danger; the words in fg-default (stopped and compacted stay muted) | cursor error title; codex red ■ | the one notice that asks for something (round 50) |
 | gap | 6 between the error's icon and words (Step's icon gap); 8 before the rule | Step; codex 8 | — |
@@ -103,3 +103,11 @@ gap-md token, the same 4 by another name); an error's words are in the default i
 ## 2026-11-04: read on its glyphs (Q-T2)
 
 Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). Its one line gives back its half-leading above and below (`margin-block: calc((1cap - 1lh) / 2)`), Step's rule. Test: `packages/react/tests/type-rhythm.test.mjs`.
+
+## 2026-11-06: a wrapped error keeps its mark on the first line
+
+The live agent's sign-in error runs to three lines in the Inspector at 290; the mark sat on the middle of the block
+(`align-items: center`). An error notice now aligns on its first baseline: the mark's slot is a line tall with an empty
+glyph for a baseline, and a Retry's label shares the baseline, so a one-line error with Retry is laid out as before.
+Measured in Electron at type 13: wrapped, the mark's centre is the first line's centre (24.6 / 24.6); one line with
+Retry, text, mark and button share a centre (95.9). Light and dark checked. Verdict: open for the owner.

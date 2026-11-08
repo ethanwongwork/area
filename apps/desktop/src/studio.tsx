@@ -15,7 +15,7 @@
  */
 import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useInsertionEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode, type Ref } from "react";
 import { Avatar, Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, Titlebar, Tooltip, TreeView, type TreeViewNode } from "@area/react";
-import { ArrowLeftIcon, ArrowRightIcon, BookmarkIcon, MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SettingsIcon, SunIcon } from "@area/icons";
+import { ArrowLeftIcon, ArrowRightIcon, BookmarkIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SettingsIcon } from "@area/icons";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./gallery/controls.ts";
 import { ComponentsPage } from "./pages/components.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
@@ -48,7 +48,7 @@ import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, typ
 import { restoreBrand, useBrandSheet, type BrandState } from "./brand.ts";
 import { PAGE_AXES, hasColours, restoreColours, shownColours, useColoursSheet, type ColoursState } from "./colours.ts";
 import { activeTheme, AREA_ID, asLive, changesOf, systemFile, loadSystems, newTheme, publish, publishTheme, revertTo, starterSystem, withTheme, type Change, type ReleaseKind, type System, type SystemOrigin, type SystemTheme, type Restorers } from "./systems.ts";
-import { loadProjects, newProject, projectFile, type Project } from "./projects.ts";
+import { loadProjects, newProject, projectFile, recordIteration, type Project } from "./projects.ts";
 import { chromeOf, restoreAppLook, type AppLook } from "./app-look.ts";
 import { SettingsPage, type SettingsSection } from "./pages/settings.tsx";
 
@@ -453,7 +453,6 @@ export function Studio() {
   }, []);
   const theme: Theme = mode === "system" ? (osDark ? "dark" : "light") : mode;
   const setMode = useCallback((next: Mode) => { setModeState(next); writeStored("theme", next); }, []);
-  const setTheme = (next: Theme) => setMode(next);
   // The app's own look (src/app-look.ts): Area's chosen theme as published until the person picks another in Settings.
   const [appLook, setAppLookState] = useState<AppLook>(() => {
     const look = restoreAppLook(readStored("appLook", null), CANVAS_DEFAULTS);
@@ -462,6 +461,15 @@ export function Studio() {
   });
   const setAppLook = useCallback((look: AppLook) => { setAppLookState(look); writeStored("appLook", look); }, []);
   const [settings, setSettings] = useState<SettingsSection | null>(null);
+  // ⌘, toggles Settings (Cursor's). The app menu's accelerator and the window's key handler may both see one press, so a
+  // second toggle within 200 ms is the same press.
+  const toggled = useRef(0);
+  const toggleSettings = useCallback(() => {
+    const now = performance.now();
+    if (now - toggled.current < 200) return;
+    toggled.current = now;
+    setSettings(current => current ? null : "appearance");
+  }, []);
   const [profileName, setProfileNameState] = useState(() => readStored<string>("profileName", "David Tee"));
   const setProfileName = useCallback((name: string) => { setProfileNameState(name); writeStored("profileName", name); }, []);
   const [query, setQuery] = useState("");
@@ -554,7 +562,7 @@ export function Studio() {
    */
   const runTabCommand = useCallback((command: TabCommand, index?: number) => {
     if (command === "new-tab") { setSearching("new"); return; }
-    if (command === "settings") { setSettings(current => current ?? "appearance"); return; }
+    if (command === "settings") { toggleSettings(); return; }
     if (command === "close-tab") { closeTab(tabsRef.current.current); return; }
     if (command === "home") { setTabs(current => current.current === HOME_TAB ? current : { ...current, current: HOME_TAB }); return; }
     setTabs(current => {
@@ -610,10 +618,18 @@ export function Studio() {
   // and the Inspector change when that theme is published or the person picks another; the Inspector's settings paint the
   // specimens alone (src/specimen-scope.tsx), over the app's look.
   const appliedPicks = useRef<string[]>([]);
+  // The Mac's increased contrast (Settings › Appearance, Follow your Mac's contrast): while it is on, it wins over a theme's
+  // own contrast, as the tokens follow it wherever no contrast is set.
+  const moreContrast = useMacPreference("(prefers-contrast: more)");
   const chrome = useMemo(() => {
     const look = chromeOf(appLook, systems, MATERIAL_DEFAULT);
-    return { canvas: look.canvas as CanvasAxes, material: look.material as MaterialState };
-  }, [appLook, systems]);
+    const canvas = look.canvas as CanvasAxes, material = look.material as MaterialState;
+    return {
+      canvas: appLook.followContrast !== false && moreContrast ? { ...canvas, contrast: "system" } as CanvasAxes : canvas,
+      // Reduce transparency: the Material's see-through levers at 0, as prefers-reduced-transparency resolves (material.css).
+      material: appLook.reduceTransparency ? { ...material, overrides: { ...material.overrides, transparency: "0", frost: "0" } } : material,
+    };
+  }, [appLook, systems, moreContrast]);
   // Written as an insertion effect, which runs before every layout effect of the commit, so the first layout read in the
   // commit (a Segmented measuring its thumb) finds <html> styled.
   useInsertionEffect(() => {
@@ -646,7 +662,7 @@ export function Studio() {
       if (!(event.metaKey || event.ctrlKey) || event.shiftKey) return;
       const key = event.code === "KeyB" ? "b" : event.code === "BracketLeft" ? "[" : event.code === "BracketRight" ? "]" : event.code === "KeyT" ? "t" : event.code === "Comma" ? "," : "";
       // ⌘, opens Settings (every Mac app's key; the app menu's Settings… in Electron).
-      if (key === "," && !event.altKey) { event.preventDefault(); setSettings(current => current ?? "appearance"); return; }
+      if (key === "," && !event.altKey) { event.preventDefault(); toggleSettings(); return; }
       // In Electron the app menu takes ⌘T, ⌘W, ⌘1–9 and ⌃Tab (runTabCommand); a browser keeps most of them for itself.
       if (key === "t" && !event.altKey) { event.preventDefault(); runTabCommand("new-tab"); }
       else if (key === "b") { event.preventDefault(); togglePanel(event.altKey ? "inspector" : "sidebar"); }
@@ -736,7 +752,8 @@ export function Studio() {
       setProjectList(list => [...list, made]);
       return made;
     },
-    updateProject: (id, change) => setProjectList(list => list.map(entry => entry.id === id ? change(entry) : entry)),
+    // Every change to a project's pages is kept as an iteration (projects.ts recordIteration), whoever made it.
+    updateProject: (id, change) => setProjectList(list => list.map(entry => entry.id === id ? recordIteration(entry, change(entry)) : entry)),
     deleteProject: id => {
       projectDisk()?.trash(id);
       setTabs(current => {
@@ -820,7 +837,8 @@ export function Studio() {
     {/* <html> carries the app's scale (the chrome's defaults), so chrome outside the Canvas body states none of its own. */}
     <InheritedScaleContext.Provider value={scale}>
       {/* The conversation outlives tabs and views; the Canvas's selection rides along as its context chip. */}
-      <ChatProvider selection={selectionLabel(item)}>
+      {/* On a project's page the chip names the page and layer, not their ids ("Dashboard › Analytics dashboard"). */}
+      <ChatProvider selection={projectSelection(openProject, place) ?? selectionLabel(item)}>
       <ChatShortcut />
       <div className="studio" data-panels={appLook.panels === "floating" ? "floating" : undefined}>
         {/* No bar across the window (owner, 2026-10-30, after Cursor: "the full sectioning of the ui into 3 distinct parts each
@@ -842,8 +860,6 @@ export function Studio() {
           canvasEnd: <>
             <ChromeButton label="References" icon={<BookmarkIcon />}
               onClick={() => references ? selectTab(references.id) : navigate({ page: "references" }, { newTab: true })} />
-            <ChromeButton label={theme === "dark" ? "Light mode" : "Dark mode"}
-              icon={theme === "dark" ? <SunIcon /> : <MoonIcon />} onClick={() => setTheme(theme === "dark" ? "light" : "dark")} />
           </>,
           inspectorToggle: <ChromeButton label={panels.inspector ? "Hide inspector" : "Show inspector"} keys={["⌥", "⌘", "B"]} shortcut="Alt+Meta+B"
             icon={panels.inspector ? <PanelRightFilledIcon /> : <PanelRightIcon />} onClick={() => togglePanel("inspector")} />,
@@ -996,6 +1012,8 @@ export interface WorkspaceProps {
    * out). Left out, the page has no Inspector and no toggle for one (Settings).
    */
   inspector?: ReactNode | InspectorViews;
+  /** Pinned at the Design view's foot, as Chat's composer is at its view's (a project page's change log). */
+  inspectorFooter?: ReactNode;
   /** The Sidebar's own nav in place of the tab's (Settings' sections). */
   nav?: ReactNode;
   /**
@@ -1018,6 +1036,20 @@ export interface WorkspaceProps {
 }
 
 /** The Inspector's settings and the Material as the attributes a scope takes (the Canvas's body, or a preview's). */
+/** Whether a media query about the Mac's settings matches, kept current as the Mac's settings change. */
+function useMacPreference(query: string): boolean {
+  const [matches, setMatches] = useState(() => typeof matchMedia === "function" && matchMedia(query).matches);
+  useEffect(() => {
+    if (typeof matchMedia !== "function") return;
+    const list = matchMedia(query);
+    const change = () => setMatches(list.matches);
+    list.addEventListener("change", change);
+    change();
+    return () => list.removeEventListener("change", change);
+  }, [query]);
+  return matches;
+}
+
 export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof materialAttributes>[0]): Record<string, string | undefined> {
   return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-hue-dark": shown["tint-hue-dark"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-accent-strength": shown["accent-strength"], "data-area-solid-light": shown["solid-light"], "data-area-solid-dark": shown["solid-dark"], "data-area-label-tint": shown["label-tint"], "data-area-status-colours": shown["status-colours"], "data-area-tone-tint": shown["tone-tint"], "data-area-tone-contrast": shown["tone-contrast"], "data-area-series-lightness": shown["series-lightness"], "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-feedback": shown.feedback, "data-area-pills": shown.pills, ...materialAttributes(material) };
 }
@@ -1036,7 +1068,8 @@ function keepSpecimenLinks(event: ReactMouseEvent<HTMLElement>) {
  * Titlebar spanned them until then), and no titles (owner, 2026-10-14, after Framer and Figma):
  *   Sidebar    its Panel's bar: the window controls' room (macOS), the Sidebar's toggle and search; back and forward at
  *              its end. The profile and Settings at its foot.
- *   Canvas     a plain Titlebar: the open tabs; References and light / dark at its end. With the Sidebar hidden it starts
+ *   Canvas     a plain Titlebar: the open tabs; References at its end (light and dark are Settings › Appearance's Mode,
+ *              owner 2026-11-07). With the Sidebar hidden it starts
  *              with the window controls' room, the toggle, search and back and forward; with the Inspector hidden it ends
  *              with that toggle.
  *   Inspector  its Panel's bar: its views, and its toggle at the end.
@@ -1044,7 +1077,7 @@ function keepSpecimenLinks(event: ReactMouseEvent<HTMLElement>) {
  * little under it. The Sidebar and Inspector inset their content by Panel's md inset (14, 18 at Comfortable), the Canvas
  * by its feed margin (src/styles/app.css).
  */
-export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
+export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasActions, canvas, inspector, inspectorFooter, canvasRef, canvasScope, canvasPicks = true, panels = true }: WorkspaceProps) {
   const studio = useStudio();
   const shell = useContext(ShellContext)!;
   const showSidebar = panels && studio.sidebar, showInspector = panels && studio.inspector && inspector !== undefined;
@@ -1120,7 +1153,7 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
       </main>
       {showInspector ? (
         <div className="studio-inspector" onClick={keepSpecimenLinks}>
-          {isViews(inspector) ? <InspectorPanel views={inspector} width={inspectorWidth} end={shell.inspectorToggle} />
+          {isViews(inspector) ? <InspectorPanel views={inspector} width={inspectorWidth} end={shell.inspectorToggle} designFooter={inspectorFooter} />
             : <Panel flush={!floating} bareBar windowBar resizable="start" aria-label="Inspector" {...inspectorWidth} action={<span className="studio-head__group studio-head__group--end">{shell.inspectorToggle}</span>}>{inspector}</Panel>}
         </div>
       ) : null}
@@ -1149,7 +1182,7 @@ const INSPECTOR_VIEWS: ReadonlyArray<{ id: InspectorView; label: string }> = [
 const isViews = (value: ReactNode | InspectorViews): value is InspectorViews =>
   value !== null && typeof value === "object" && !isValidElement(value) && !Array.isArray(value) && !(Symbol.iterator in value);
 
-function InspectorPanel({ views, width, end }: { views: InspectorViews; width: ReturnType<typeof usePanelWidth>; end: ReactNode }) {
+function InspectorPanel({ views, width, end, designFooter }: { views: InspectorViews; width: ReturnType<typeof usePanelWidth>; end: ReactNode; designFooter?: ReactNode }) {
   const { inspectorView, setInspectorView, appLook } = useStudio();
   const floating = appLook.panels === "floating";
   const offered = INSPECTOR_VIEWS.filter(entry => entry.id === "chat" || (views[entry.id] != null && views[entry.id] !== false));
@@ -1162,7 +1195,7 @@ function InspectorPanel({ views, width, end }: { views: InspectorViews; width: R
   return (
     // A bare bar: no rule under the views (owner, 2026-10-22; cursor-audit-2026-10-22.md item 4), as the Canvas header.
     <Panel flush={!floating} bareBar windowBar resizable="start" aria-label="Inspector" {...width} viewportRef={scroller}
-      bareFooter={chat} footer={chat ? <ChatComposer scroller={scroller} /> : undefined} action={<>
+      bareFooter={chat} footer={chat ? <ChatComposer scroller={scroller} /> : shown?.id === "design" && designFooter ? designFooter : undefined} action={<>
         <Nav orientation="horizontal" aria-label="Inspector views" className="studio-inspector__views">
           {offered.map(entry => (
             <NavItem key={entry.id} href={`#${entry.id}`} current={entry.id === shown?.id}
@@ -1208,13 +1241,15 @@ function InspectorView({ children }: { children: ReactNode }) {
  * and cursor"): the person's avatar and name, then Settings (⌘,), which opens over the current tab.
  */
 function ProfileFoot() {
-  const { profileName, openSettings, settings } = useStudio();
+  const { profileName, openSettings, closeSettings, settings } = useStudio();
   const initials = profileName.split(/\s+/).filter(Boolean).slice(0, 2).map(word => word[0]!.toUpperCase()).join("") || "?";
   return (
     <div className="studio-profile">
       <Avatar size="sm" fallback={initials} alt="" />
       <span className="studio-profile__name">{profileName}</span>
-      <ChromeButton label="Settings" keys={["⌘", ","]} shortcut="Meta+Comma" icon={<SettingsIcon />} pressed={settings !== null} onClick={() => openSettings()} />
+      {/* Pressed while Settings is open, and a second click closes it (Cursor's gear: "Settings" / "Close Settings"). */}
+      <ChromeButton label={settings ? "Close settings" : "Settings"} keys={["⌘", ","]} shortcut="Meta+Comma" icon={<SettingsIcon />} pressed={settings !== null}
+        onClick={() => settings ? closeSettings() : openSettings()} />
     </div>
   );
 }
@@ -1244,6 +1279,15 @@ function ChatShortcut() {
  * The Sidebar's list: its row plates sit 6 from the Titlebar, the sides and the foot, so its first
  * row's text shares a line with the Canvas header's controls and the Inspector's first heading.
  */
+/** A project page's chosen page and layer, by name, for the Chat's context chip; undefined elsewhere. */
+function projectSelection(project: Project | null, place: Place): string | undefined {
+  if (!project || place.page !== "project-page") return undefined;
+  const [pageId, layerId] = (place.item ?? "").split("/");
+  const page = project.pages.find(entry => entry.id === pageId) ?? project.pages[0];
+  const layer = page?.layers.find(entry => entry.id === layerId) ?? page?.layers[0];
+  return page ? [page.name, layer?.name].filter(Boolean).join(" › ") : undefined;
+}
+
 export function SidebarList({ children }: { children: ReactNode }) {
   return <div className="studio-sidebar__list">{children}</div>;
 }

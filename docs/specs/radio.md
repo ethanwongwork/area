@@ -29,7 +29,7 @@ Checkbox.
 |---|---|---|---|
 | size | md (default), lg (sm removed 2026-09-28); the box follows the type size (2026-10-14) | Label type follows the tier | Untitled sm 16 / md 20 |
 | variant | `card`: a contained, full-width option with the control at the end, as Checkbox's card (owner 2026-09-28) | Owner references (plan and registration pickers); shadcn Choice Card | gallery `card`, `card-tile` |
-| layout (card) | row (default): visual, text and control on one line; tile: visual above the label, control in the top-end corner; preview: the visual centred as the option's own picture, the label centred under it, no control drawn, the card a soft ground (2026-10-21), its picture in an 8px mat with concentric corners (2026-10-26); media: the picture in the same mat with the list row (control, label, meta) under it at the card's inset; media-row: the picture at the row's start (`--area-choice-media`, 32%), the row centred beside it (2026-10-26). Any `--area-choice-ratio`; a photo or video covers its frame, `auto` keeps a photo's own ratio. Read with a variant (card or soft) (forms.tsx:318) | Owner reference 1; the owner's Appearance picker; Radix RadioCards | gallery `card`, `card-tile`, `card-preview`, `media`, `media-row` |
+| layout (card) | row (default): visual, text and control on one line; tile: visual above the label, control in the top-end corner; preview: the visual centred as the option's own picture, the label centred under it, no control drawn, the card a soft ground (2026-10-21), its picture in an 8px mat with concentric corners (2026-10-26); thumbnail: the picture is the card (its frame the edge and the selected stroke) and the name sits 8 under it outside, at the start (2026-11-07); media: the picture in the same mat with the list row (control, label, meta) under it at the card's inset; media-row: the picture at the row's start (`--area-choice-media`, 32%), the row centred beside it (2026-10-26). Any `--area-choice-ratio`; a photo or video covers its frame, `auto` keeps a photo's own ratio. Read with a variant (card or soft) (forms.tsx:318) | Owner reference 1; the owner's Appearance picker; Radix RadioCards | gallery `card`, `card-tile`, `card-preview`, `thumbnail`, `media`, `media-row` |
 | variant | `soft` (2026-10-25): the card's shape and inset painted as a control fill (`bg-component`) with no edge, the hover fill under the pointer, the chosen one the control fill a step darker (`bg-component-active`) under the card's Selected tint layer; options in a group stretch and sit 4 apart (the selection surface was tried first: a heavy navy band in dark at Accent) | Owner: "build the filled option rows (control first, trailing value, selected fill)"; Notion Calendar's settings options (rows 4 apart, the chosen one darker), a proposal card's options | gallery `soft`, `soft-caption` |
 | layout | `list` (2026-10-25): the control first, then the text, then meta; read with either variant | Notion Calendar (radio first) | gallery `soft` |
 | composition | `meta` (2026-10-25): a short value at the option's end, muted and tabular, trimmed to its cap and centred on the label's first line with the control (inset.css) | Notion Calendar ("11:24 AM"), the proposal card's counts | gallery `soft` |
@@ -304,3 +304,20 @@ Group rhythm: as Checkbox group, the description and validation sit `ui-stack` (
 - **What changed:** RadioGroup takes `validation` and `validationStatus` (`success`, `warning`), as Checkbox group; its read-only state is `data-read-only` on the fieldset and on each option (manifest `read-only`), and `data-readonly` stays painted as the deprecated spelling for one release.
 - **Why:** forms.tsx:241-262 (only `error`); manifest.ts:401 and choice.css:205 spelled `readonly` where 17 places say `read-only`. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-07 (thumbnail)
+
+Owner, Settings › Appearance's Mode (two references: an Appearance page's interface theme pictures and a Settings
+window's Theme cards): "can you also move the text outside the container and left align it?" Built as the `thumbnail`
+layout (not a change to `preview`, whose centred name inside a soft card the gallery and Setup still use):
+
+- The picture is the card: its frame takes a preview picture's corner (the surface corner less the 8 mat, 12 at type
+  13; the surface corner itself, 20, cut into a small window's corner controls), the card's rest edge and hover edge,
+  and when chosen the selected stroke at the Selected stroke width, all drawn inside over the picture (`::after`), so a
+  choice never moves it. The frame is a recessed ground (layers.css), as a preview card is.
+- The name sits 8 under the picture at the start (the references' 8–10), in the label's own type. No ground, edge or
+  tint on the option itself, under the pointer or chosen; the focus ring goes round the picture.
+- No control drawn; the native input stays for the keyboard and the accessible name. Groups lay thumbnails out as
+  preview cards (`--area-choice-min`, `--area-choice-ratio`).
+
+Framed (owner 2026-11-07, "some margins/padding around it in the card, like a frame"): a drawn picture sits in a 12 mat (the card inset) of the frame's ground, the frame at the container corner, the picture concentric inside it with the options' edge; a photo or video still fills the frame.

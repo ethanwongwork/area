@@ -2,8 +2,7 @@
 
 ## Current state (2026-11-08)
 
-- **Worktree `component-design-review-92c949`: title balance + system gaps build (uncommitted; main moved to aad148af,
-  Tabs plate, PR #209, not merged here yet: `docs/COMPONENTS.md` overlaps).**
+- **Worktree `component-design-review-92c949`: title balance + system gaps build (committed with the components audit build; main merged in 2026-11-08).**
   - Title balance (owner "4 is right"): a component's title is its text's size, its copy a step (4) off; an item's
     name joins its line (DESIGN_SYSTEM "Text pairs"; `docs/research/title-balance-2026-11-06`).
   - System gaps (artifact CWcHa47TDvM9tESQufAmD2, picks in `verdicts`; owner picked L1–L3, C1–C9, then "Take all
@@ -17,7 +16,7 @@
   - Checks: build, typecheck, npm test 29241, contrast 536/0, React 654, desktop 31, contracts 9, docs 119, playgrounds,
     app-css, diff --check (test:consumer hung in `npm pack` and was stopped, not run). Seen in the desktop build in the browser pane, light and dark (Tag colours, Panel title,
     Dialog). Electron not relaunched: session `design-interface-ui-4d0a03` runs its own window and watcher.
-- **Components audit, built (2026-11-08, same worktree, uncommitted).** Owner picked O1–O5, then "Take all recs":
+- **Components audit, built (2026-11-08, same worktree; committed, main merged in, pull request opened).** Owner picked O1–O5, then "Take all recs":
   every Build row built (O1–O7, V1–V7, V9, V10, V15, N1–N7, N14, D1, D5, D6), Later rows in COMPONENTS.md Candidates,
   Decide rows (V11, V13, N10, D2, D3, D4, D7–D9) open on artifact St7jcEipvPoa3GvSwnAvBT. Table and departures:
   `docs/research/components-audit-2026-11-07/README.md` ("Built from the picks"). New families In review: Page header,
@@ -27,6 +26,59 @@
 - **Elsewhere:** `design-interface-ui-4d0a03` is another session's (design viewer and project pages, uncommitted).
   Merged to main since the entries below: kits #203, aligned answers #204, theme experience #205, illustrations #206,
   fidelity #207, Design card #208, Tabs plate #209.
+- **Appearance, same worktree (PR #211, 2026-11-07).** Mode's pictures: the app in a 720 × 540 window (sidebar and
+  page, `content/examples/workspace-compact.tsx`), words as bars (owner picked "B as bars" from four layouts and three
+  drawings), three across, each a new Radio/Checkbox `layout="thumbnail"` (picture is the card, name under it at the
+  start; specs' review notes 2026-11-07; gallery tiles "Layout / thumbnail"). Every Settings picture row uses it.
+  Then Cursor's Appearance settings that Area's tokens carry: Text size (12–16 over the followed system's Type),
+  Reduce motion, Follow your Mac's contrast, Reduce transparency (`appLook` overrides; research note's second pass).
+  Checked in the app light and dark; Follow your Mac's contrast is not verified against a Mac set to Increase contrast.
+- **Settings, same worktree (PR #211, 2026-11-07).** Owner: "move dark mode to the settings control" and study
+  Cursor's, ChatGPT's and Claude's settings for "full fidelity and useability". Research and decisions:
+  `docs/research/settings-2026-11-07/README.md` (ChatGPT and Claude measured in Chrome, light only; Cursor from its
+  bundle). Built: no mode button in the Canvas header; ⌘, and the gear toggle Settings; search results take the Sidebar
+  (grouped by section, ↓ / Enter, the row scrolled to and marked 3 s); Esc clears then closes; new Chat (default model,
+  live or recorded, sign-in) and Keyboard sections; Theme's preview has a System / Light / Dark icon switch. Design
+  panel: only its tab row peeks; a tab click scrolls it up.
+- **Design interface, worktree `design-interface-ui-4d0a03` (PR #211, 2026-11-06).** Owner: a Figma-like design
+  interface with the design in the Canvas, "not full height … a small peak section below, the whole middle section is
+  scrollable", the bottom a gallery of iterations and layers plus documentation, code and supporting tabs; Sidebar and
+  Inspector unchanged. Picks (asked): a plain scroll scrolls the page; one layer at a time on the stage; iterations
+  automatic; extra tabs Components & tokens, Specs, Comments, Checks, Research. Built: a project page is a stage
+  (design-viewer `scroll: "page"`, Fit in frame ⇧1 / Fill width ⇧2) over `src/design-panel.tsx` (9 tabs);
+  `projects.ts` history (recordIteration in studio's updateProject, 100 kept), comments, notes; `src/design-scan.ts`
+  reads specs and WCAG checks from the drawn design; screens' sources in `virtual:component-sources` (`screens`).
+  PRODUCT_UI's project-pages bullet rewritten; gap: Tabs sticky list. Checks: typecheck, desktop build, app tests 32,
+  app-css, docs, playgrounds; seen headless (Edge guest, test project in preview storage) light and dark. Open: the tab
+  row scrolls away (gap); iteration cards picture one layer only; no visual review against the owner's references yet.
+  Same day, screens artifact (owner: "show it and all the other main screens … real ui, not just screenshots"):
+  https://claude.ai/artifact/8gfAnimqxcwskbY5pcZBsd, the production renderer in iframes, each seeded through
+  window.name (in-memory storage, sample References, Geist from npm); builder and states are scratchpad-only. Cleanup it
+  found: Fill width is edge to edge (no ground, no window); every panel tab opens with its summary row; Research's head
+  overlapped its cards; comment field and button one size; Inspector actions one row per thing (Rename layer is new);
+  an empty page keeps its Layers list so the Sidebar doesn't narrow. Then: design frame drop shadow removed (rim kept;
+  every viewer), panel sides 16 and even; ConfirmDialog description default ink, trimmed to its baseline (spec review
+  note open). Then the editing (owner picks: Area-aware, live + saved, log at the Design view's foot, row menus):
+  select on the stage, ElementPanel props/words/layout/fill/type/corner as tokens, `DesignChange` log with undo and
+  Send to chat (one message); layer/page Rename, Duplicate, Remove in Sidebar row menus. Then Phase 3, the live Chat
+  (owner: "Connect the Inspector Chat to a live agent"): `electron/agent.cjs`, the Agent SDK (pinned 0.3.319) in main
+  over IPC, one resumed session per chat, asks before every edit and command (Approval from canUseTool), real Keep/Undo
+  from before/after file reads, sign-in failures as a plain error notice; the chat is live in Electron, recorded
+  elsewhere (docs/research/inspector-chat-2026-10-18, Phase 3). Turn notice: a wrapped error keeps its mark on the first
+  line (spec note open). Tests 39 (agent.test.ts, a stand-in SDK). Open: this Mac's Claude Code sign-in had expired
+  (`claude auth login` needed), so no live reply with tools has been seen yet.
+- **Marks on one line: Count beside Badge, worktree `vigilant-raman-cdac08` (uncommitted, 2026-11-07).** Owner on
+  "Button 44 ✓ Complete": the pair looked like two sizes. Same height and text already; drifted were the shape (Count
+  off Pills since 2026-11-01), the text side (Count 3, Badge 5) and the heading's placement (status 1.3 low). Review page
+  https://claude.ai/artifact/2g6mM75soKAoZSTmL1pG74, survey of 14 systems in `docs/research/count-badge-2026-11-07/`;
+  owner: "Yes, build it" (pills both, side (h − 6) / 2 both, weights kept). Built: Count back on the default Pills,
+  Badge and Count text side 4 / 6 at type 13, one-character count `data-single` (a circle), `.studio-overview__status`
+  placed as `.studio-count`, Badges table count md, DESIGN_SYSTEM.md "Marks on one line" + cohesion test, specs, docs,
+  skill. Count reopened (in review). Checks all pass (react 651, npm test, contracts, desktop build, playgrounds,
+  app-css, docs). Follow-up ("Yes, fix both", 2026-11-07): Count and Tag take Badge's whole-pixel cap centre (Count a
+  trimmed block box; Tag drops the optical lift, Citation keeps it), so marks of one height and text share a pixel row
+  at type 12–16 × density 28–36; second cohesion test. Open, not built: Area's sm marks (14 at type 13) are shorter
+  than any status mark surveyed.
 
 ## Earlier state (2026-11-06)
 - **Title balance, worktree `component-design-review-92c949` (uncommitted, 2026-11-06; owner: "Keep it", then "4 is right").** Owner, on the app's confirm:

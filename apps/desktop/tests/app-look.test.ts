@@ -36,3 +36,19 @@ test("off, the app takes its own settings; a followed system that is gone falls 
   assert.equal(look.system?.id, "area");
   assert.equal(look.theme, area.theme);
 });
+
+test("reading and access overrides: text size over a followed system, reduce motion everywhere, unknown values dropped", () => {
+  const area = { ...starterSystem("Area", [], RESTORE, "starter", NOW), id: "area" };
+  const follows = { follow: true, system: "area", own: DEFAULTS };
+  assert.equal(chromeOf({ ...follows, type: "15" }, [area], MATERIAL).canvas.type, "15");
+  // A look of its own sets Type among its own settings; the override is a followed system's.
+  assert.equal(chromeOf({ follow: false, system: "area", own: DEFAULTS, type: "15" }, [area], MATERIAL).canvas.type, "13");
+  const still = chromeOf({ ...follows, reduceMotion: true }, [area], MATERIAL).canvas;
+  assert.equal(still.motion, "0");
+  assert.equal(still.feedback, "off");
+  const saved = restoreAppLook({ follow: true, system: "area", own: {}, type: "40", reduceMotion: "yes", followContrast: false, reduceTransparency: true }, DEFAULTS);
+  assert.equal(saved.type, undefined);
+  assert.equal(saved.reduceMotion, undefined);
+  assert.equal(saved.followContrast, false);
+  assert.equal(saved.reduceTransparency, true);
+});

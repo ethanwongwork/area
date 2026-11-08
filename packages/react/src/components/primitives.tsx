@@ -2075,10 +2075,15 @@ export interface TabsProps extends Omit<Div, "defaultValue"> {
   orientation?: "horizontal" | "vertical";
   activationMode?: "automatic" | "manual";
   track?: boolean;
+  /**
+   * How the selected tab is marked. `marker` (default): a rounded underline, labels on the panel's content edge.
+   * `plate`: a soft plate behind the selected tab and plain muted labels, for a panel's or an inspector's views.
+   */
+  selection?: "marker" | "plate";
 }
 
 export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(function Tabs(
-  { items, tabs: legacyTabs, value: controlledValue, defaultValue, onValueChange, "aria-label": ariaLabel, label, size = "md", orientation = "horizontal", activationMode = "automatic", track, className, children, ...rest },
+  { items, tabs: legacyTabs, value: controlledValue, defaultValue, onValueChange, "aria-label": ariaLabel, label, size = "md", orientation = "horizontal", activationMode = "automatic", track, selection = "marker", className, children, ...rest },
   ref,
 ) {
   // Each tab's key: its value, else its deprecated id.
@@ -2096,7 +2101,7 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
     onValueChange?.(next, event);
   };
   return (
-    <div ref={ref} className={tabsVariants({ size, track, orientation: orientation === "vertical" ? orientation : undefined }, className)} {...rest}>
+    <div ref={ref} className={tabsVariants({ size, track, orientation: orientation === "vertical" ? orientation : undefined, selection: selection === "plate" ? selection : undefined }, className)} {...rest}>
       <div ref={list} className="area-tabs__list" role="tablist" aria-label={ariaLabel ?? label ?? "Views"} aria-orientation={orientation}>
         {tabs.map((tab) => (
           <button

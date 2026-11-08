@@ -7,6 +7,10 @@ import { InfoIcon, SparkleIcon, WarningIcon } from "@area/icons";
 const tableRows = ["Item one", "Item two", "Item three"];
 
 export const GalleryTabsLarge = () => <Tabs size="lg" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }]} />;
+/* Plate: a soft plate behind the selected tab, plain muted labels, no underline (owner 2026-11-06; docs/specs/tabs.md, "Plate"). */
+export const GalleryTabsPlate = () => <Tabs aria-label="Tabs, plate" selection="plate" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }, { value: "three", label: "Item three", content: "Body text" }]} />;
+/* The plate at sm, a panel's or an inspector's views. */
+export const GalleryTabsPlateSmall = () => <Tabs aria-label="Tabs, plate, small" selection="plate" size="sm" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }, { value: "three", label: "Item three", content: "Body text" }]} />;
 
 export const GalleryToastNeutral = () => <Toast icon={<InfoIcon />}>Body text</Toast>;
 

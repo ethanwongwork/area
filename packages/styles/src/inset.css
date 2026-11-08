@@ -110,12 +110,19 @@
     /* Transparent tabs align to content, rather than a backplate inset. */
     padding-inline: 0;
   }
-  /* Badge uses the shared rule on every side. Its one difference is the shape: a full-round
-   * pill's text must clear the round end, so a text side reserves a 4px box instead of the cap
-   * and the label starts 2 inside the radius (h / 2 - 2: 6 / 8 / 10 at 16 / 20 / 24, Untitled
-   * UI's measured gutters). Square slots use their own box: icon (h - icon) / 2, the 8px dot
-   * slot (h - 8) / 2, avatar, flag and dismiss (h - media) / 2. */
-  .area-badge { --_box-text: calc(var(--area-space-2) * 2); }
+  /* Plate tabs (selection="plate") are a backplate, so they take the shared inset; an icon or a trailing count is a
+     glyph edge, the icon's box. */
+  .area-tabs--plate .area-tabs__tab { padding-inline: var(--_inset-start) var(--_inset-end); }
+  .area-tabs--plate .area-tabs__tab:has(> .area-tabs__icon:first-child) { --_box-start: var(--_box-icon); }
+  .area-tabs--plate .area-tabs__tab:has(> :not(.area-tabs__label):last-child) { --_box-end: var(--_box-icon); }
+  /* Badge uses the shared rule on every side. Its one difference is the text side: a mark's text sits (h - 6) / 2 from
+   * its outer edge, edge counted once (4 / 6 / 8 at 14 / 18 / 22), about 0.3 of the height. That is GitLab's and Fluent's
+   * pill (6 on 20), the rounded systems' side and Area's Tag, and Count's too, so a count and a status on one line keep
+   * their words the same distance from the edge whatever the shape (owner, 2026-11-07: "is there too much horizontal
+   * padding on the textside?"; DESIGN_SYSTEM.md, "Marks on one line"; docs/research/count-badge-2026-11-07). It was
+   * (h - 4) / 2, 5 / 7 / 9. Square slots use their own box: icon (h - icon) / 2, the 8px dot slot (h - 8) / 2, avatar,
+   * flag and dismiss (h - media) / 2. */
+  .area-badge { --_box-text: var(--area-space-6); }
   .area-badge:has(> .area-badge__dot:first-child) { --_box-start: var(--area-space-8); }
   /* An icon side centres the icon in the pill's end, as an avatar or flag does: with the 12 icon
      (owner, review round 8: smaller icons, less side spacing) that is 4 from the end at md. */
@@ -254,12 +261,14 @@
   /* Marks: optical centre (owner, 2026-10-17, on Tag at Compact: "the type doesnt look as centered vertically as the
    * Public text"). A mark's label is often lowercase (a tag, a tone name, a cited site), and a cap-centred lowercase
    * body sits up to the half-gap between cap height and x-height below a centred dot, icon or x: about 1px in a 14
-   * plate. Tag and Citation centre their label midway, a quarter of that gap above the cap centre (0.5 at 11px, 0.6 at
+   * plate. Tag and Citation centred their label midway, a quarter of that gap above the cap centre (0.5 at 11px, 0.6 at
    * 14), as Spectrum sets labels above centre (docs/research/spacing-2026-10-17/external.md §5). The slot moves, never a
-   * glyph. Count keeps the cap centre, since digits are cap-height, and so does Badge since 2026-11-01: its words are
-   * statuses that begin with a capital, and the lift plus its whole-pixel rounding set them 0.9 high in the plate. */
-  .area-tag__label, .area-citation__label { --_optical-lift: calc((1cap - 1ex) / 4); }
-  .area-tag > .area-tag__label, .area-citation > .area-citation__label {
+   * glyph. Citation keeps it (a cited site is lowercase). Count keeps the cap centre, since digits are cap-height, and so
+   * do Badge since 2026-11-01 (its statuses begin with a capital, and the lift plus its whole-pixel rounding set them 0.9
+   * high) and Tag since 2026-11-07: the three marks that share a line share Badge's whole-pixel cap centre (badge.css,
+   * tag.css, count.css; DESIGN_SYSTEM.md, "Marks on one line"), and Tag sat 0.58 high beside them. */
+  .area-citation__label { --_optical-lift: calc((1cap - 1ex) / 4); }
+  .area-citation > .area-citation__label {
     padding-block: calc(0.25em - var(--_optical-lift)) calc(0.25em + var(--_optical-lift));
   }
   .area-chip__label, .area-segmented__label, .area-tabs__label, .area-token__label, .area-code__label {

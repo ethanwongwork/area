@@ -1,12 +1,14 @@
 /**
  * The Chat view's session: the conversation as turns, built from the Agent SDK's messages (src/chat/recording.ts). In
- * Phase 1 and 2 a recorded run plays them; in Phase 3 the engine in Electron's main process sends the same messages
- * over IPC, and this reducer is unchanged (docs/research/inspector-chat-2026-10-18).
+ * Phase 1 and 2 a recorded run played them; in Phase 3 (2026-11-06) the engine in Electron's main process
+ * (electron/agent.cjs) sends the same messages over IPC and this reducer reads them unchanged. The Inspector's chat is
+ * live wherever the engine answers (the Electron app); in a browser, a capture and the Testing screen's frames it plays
+ * the recordings (docs/research/inspector-chat-2026-10-18).
  *
  * Phase 2 adds what the new components draw: the plan (the latest TodoWrite), a pending approval (the run pauses on it
  * until the person answers), and each edit's Keep or Undo.
  */
-import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { recordingFor, type ChatEvent, type PermissionRequest, type RecordedEvent, type Recording, type ToolInput } from "./recording.ts";
 
 export type Part =
@@ -15,7 +17,7 @@ export type Part =
   | { kind: "tool"; id: string; name: string; input: ToolInput; status: "running" | "done" | "error"; output?: string };
 export type Turn =
   | { id: string; author: "user"; text: string; context?: string; at: number }
-  | { id: string; author: "assistant"; parts: Part[]; done: boolean; stopped?: boolean; seconds?: number };
+  | { id: string; author: "assistant"; parts: Part[]; done: boolean; stopped?: boolean; seconds?: number; /** Why the run failed (the engine). */ error?: string };
 
 export interface PlanStep { id: string; label: string; status: "complete" | "current" | "pending" | "cancelled" }
 export type EditState = "pending" | "kept" | "undone";
@@ -35,6 +37,8 @@ export interface ChatState {
   approval?: PermissionRequest;
   /** Keep or Undo per edit (tool call id). */
   edits: Record<string, EditState>;
+  /** Why an Undo didn't go through, per edit (the file changed since). */
+  undoFailed: Record<string, string>;
 }
 
 type Action =
@@ -43,13 +47,14 @@ type Action =
   | { type: "answered" }
   | { type: "stop"; at: number }
   | { type: "edit"; ids: string[]; state: EditState }
+  | { type: "undoFailed"; reasons: Record<string, string> }
   | { type: "enqueue"; text: string; context?: string }
   | { type: "dequeue"; id: string }
   | { type: "clear" };
 
 let ids = 0;
 const nextId = () => `turn-${++ids}`;
-const EMPTY: ChatState = { turns: [], queue: [], running: false, edits: {} };
+const EMPTY: ChatState = { turns: [], queue: [], running: false, edits: {}, undoFailed: {} };
 
 /** The assistant turn being written, with `fn` applied to a copy of its parts. */
 function withCurrent(state: ChatState, fn: (parts: Part[], turn: Extract<Turn, { author: "assistant" }>) => Partial<Extract<Turn, { author: "assistant" }>> | void): ChatState {
@@ -72,7 +77,9 @@ function planOf(input: ToolInput): PlanStep[] | undefined {
 export function reduce(state: ChatState, action: Action): ChatState {
   switch (action.type) {
     case "clear": return EMPTY;
-    case "edit": return { ...state, edits: { ...state.edits, ...Object.fromEntries(action.ids.map(id => [id, action.state])) } };
+    case "edit": return { ...state, edits: { ...state.edits, ...Object.fromEntries(action.ids.map(id => [id, action.state])) },
+      undoFailed: Object.fromEntries(Object.entries(state.undoFailed).filter(([id]) => !action.ids.includes(id))) };
+    case "undoFailed": return { ...state, undoFailed: { ...state.undoFailed, ...action.reasons } };
     case "enqueue": return { ...state, queue: [...state.queue, { id: `queued-${++ids}`, text: action.text, context: action.context }] };
     case "dequeue": return { ...state, queue: state.queue.filter(item => item.id !== action.id) };
     case "answered": return { ...state, approval: undefined };
@@ -101,9 +108,13 @@ export function reduce(state: ChatState, action: Action): ChatState {
     };
     case "message": {
       const { message, at } = action;
-      if (message.type === "permission_request") return { ...state, approval: message };
+      // A question after a stop (it crossed the stop on its way) is dropped: the engine has denied it.
+      if (message.type === "permission_request") return state.running ? { ...state, approval: message } : state;
       if (message.type === "result") {
-        return { ...withCurrent(state, () => ({ done: true, seconds: Math.round(message.duration_ms / 1000) })), running: false };
+        return { ...withCurrent(state, parts => {
+          parts.forEach((part, index) => { if (part.kind === "text" && part.streaming) parts[index] = { ...part, streaming: false }; });
+          return { done: true, seconds: Math.round(message.duration_ms / 1000), ...(message.error ? { error: message.error } : {}) };
+        }), running: false, approval: undefined };
       }
       if (message.type === "stream_event") {
         const delta = message.event.delta;
@@ -159,13 +170,16 @@ function elapsed(turn: Extract<Turn, { author: "assistant" }>, at: number) {
 }
 
 export interface ChatSession extends ChatState {
-  /** Send a prompt; until the engine connects, the recorded run that answers it plays (`recordingFor`). */
+  /** Live: the agent answers (electron/agent.cjs); recorded: a recorded run plays (`recordingFor`). */
+  mode: "live" | "recorded";
+  /** Send a prompt to the agent, or play the recorded run that answers it. */
   send: (text: string, context?: string) => void;
   stop: () => void;
   clear: () => void;
-  /** Answer the pending approval: true runs the tool, false plays what follows a no. */
-  answer: (allow: boolean) => void;
-  /** Keep or undo edits (tool call ids). A recorded run changes no file either way. */
+  /** Answer the pending approval: yes runs the tool (`always`: and this tool for the rest of the chat); no, with what
+   *  to do instead if given. A recorded run plays what follows its yes or its no. */
+  answer: (allow: boolean, extra?: { always?: boolean; instead?: string }) => void;
+  /** Keep or undo edits (tool call ids). Live, Undo puts the files back (or says why not); a recorded run changes none. */
   setEdits: (ids: string[], state: EditState) => void;
   /** Write a message while a run works: it waits in the queue and is sent when the run finishes. */
   enqueue: (text: string, context?: string) => void;
@@ -177,9 +191,37 @@ export interface ChatSession extends ChatState {
   load: (recording: Recording) => void;
 }
 
+const agentBridge = () => typeof window === "undefined" ? undefined : window.areaDesktop?.agent;
+let chatCount = 0;
+const newChatId = () => `chat-${Date.now().toString(36)}-${++chatCount}`;
+
+export interface ChatSessionOptions {
+  /** Talk to the agent when the engine answers (the Inspector's chat; the Testing frames stay recorded). */
+  live?: boolean;
+  /** The model each prompt goes to (the composer's Model picker). */
+  model?: string;
+}
+
 /** One conversation and its player. `initial` loads a finished run (the Testing screen's frames). */
-export function useChatSession(initial?: Recording): ChatSession {
+export function useChatSession(initial?: Recording, options: ChatSessionOptions = {}): ChatSession {
   const [state, dispatch] = useReducer(reduce, EMPTY);
+  const [mode, setMode] = useState<ChatSession["mode"]>("recorded");
+  // The engine's conversation: a new id on New chat (the agent's session starts again).
+  const chatId = useRef(newChatId());
+  const live = useRef(false);
+  live.current = mode === "live";
+  const model = useRef(options.model);
+  model.current = options.model;
+  const latest = useRef(state);
+  latest.current = state;
+  useEffect(() => {
+    const agent = options.live ? agentBridge() : undefined;
+    if (!agent) return;
+    let alive = true;
+    agent.status().then(status => { if (alive && status.available) setMode("live"); }, () => {});
+    const off = agent.onEvent((chat, message) => { if (chat === chatId.current) dispatch({ type: "message", message: message as ChatEvent, at: Date.now() }); });
+    return () => { alive = false; off(); agent.close(chatId.current); };
+  }, [options.live]);
   const timer = useRef(0);
   // What is left to play after a paused approval, and what to play on a no.
   const paused = useRef<{ rest: readonly RecordedEvent[]; denied: readonly RecordedEvent[] } | null>(null);
@@ -211,17 +253,41 @@ export function useChatSession(initial?: Recording): ChatSession {
   const send = useCallback((text: string, context?: string) => {
     halt();
     dispatch({ type: "send", text, context, at: Date.now() });
-    play(recordingFor(text).events);
+    const agent = agentBridge();
+    if (live.current && agent) agent.send(chatId.current, { text, context, model: model.current });
+    else play(recordingFor(text).events);
   }, [play]);
-  const stop = useCallback(() => { halt(); dispatch({ type: "stop", at: Date.now() }); }, []);
-  const clear = useCallback(() => { halt(); dispatch({ type: "clear" }); }, []);
-  const answer = useCallback((allow: boolean) => {
+  const stop = useCallback(() => {
+    halt();
+    if (live.current) agentBridge()?.stop(chatId.current);
+    dispatch({ type: "stop", at: Date.now() });
+  }, []);
+  const clear = useCallback(() => {
+    halt();
+    if (live.current) { agentBridge()?.close(chatId.current); chatId.current = newChatId(); }
+    dispatch({ type: "clear" });
+  }, []);
+  const answer = useCallback((allow: boolean, extra: { always?: boolean; instead?: string } = {}) => {
+    const asked = latest.current.approval;
+    dispatch({ type: "answered" });
+    if (live.current) {
+      if (asked) agentBridge()?.answer(chatId.current, asked.tool_use_id, { allow, ...extra });
+      return;
+    }
     const waiting = paused.current;
     paused.current = null;
-    dispatch({ type: "answered" });
     if (waiting) play(allow ? waiting.rest : waiting.denied);
   }, [play]);
-  const setEdits = useCallback((ids: string[], next: EditState) => dispatch({ type: "edit", ids, state: next }), []);
+  const setEdits = useCallback((ids: string[], next: EditState) => {
+    const agent = agentBridge();
+    if (!live.current || next !== "undone" || !agent) { dispatch({ type: "edit", ids, state: next }); return; }
+    agent.undo(chatId.current, ids).then(results => {
+      const done = ids.filter(id => results[id] === "ok");
+      if (done.length) dispatch({ type: "edit", ids: done, state: "undone" });
+      const failed = Object.fromEntries(ids.filter(id => results[id] !== "ok").map(id => [id, results[id] ?? "Couldn't undo this edit."]));
+      if (Object.keys(failed).length) dispatch({ type: "undoFailed", reasons: failed });
+    }, error => dispatch({ type: "undoFailed", reasons: Object.fromEntries(ids.map(id => [id, String(error)])) }));
+  }, []);
   const enqueue = useCallback((text: string, context?: string) => dispatch({ type: "enqueue", text, context }), []);
   const unqueue = useCallback((id: string) => dispatch({ type: "dequeue", id }), []);
   // Send now: the run stops (its turn says so) and the message goes at once.
@@ -250,5 +316,5 @@ export function useChatSession(initial?: Recording): ChatSession {
   }, [play]);
   const loaded = useRef(false);
   useEffect(() => { if (initial && !loaded.current) { loaded.current = true; load(initial); } }, [initial, load]);
-  return useMemo(() => ({ ...state, send, stop, clear, answer, setEdits, enqueue, unqueue, sendNow, load }), [state, send, stop, clear, answer, setEdits, enqueue, unqueue, sendNow, load]);
+  return useMemo(() => ({ ...state, mode, send, stop, clear, answer, setEdits, enqueue, unqueue, sendNow, load }), [state, mode, send, stop, clear, answer, setEdits, enqueue, unqueue, sendNow, load]);
 }

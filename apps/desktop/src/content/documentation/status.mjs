@@ -14,6 +14,7 @@ export default {
       ["Do", "Pick the tone for meaning (success, warning, danger) and the variant for emphasis; the two are independent."],
       ["Do", "Give a modern Badge a dot or an icon when its tone matters: modern keeps a neutral plate and colors only that add-on."],
       ["Do", "Use plain for a status beside a name, as a card's or a row's: no plate, the icon, dot and words in the tone's color, starting on the text's column."],
+      ["Do", "Beside a Count, use the same size: a Badge and a Count share one height, text size, shape and text side, and differ only in paint, weight and the status mark."],
       ["Do", "Give a dotOnly or iconOnly Badge an aria-label; it has no visible text, and the component throws without one."],
       ["Do", "Put the meaning in the label: an avatar, flag or icon is decorative and hidden from assistive tech."],
       ["Do", "Set truncate for labels that can run long; plain-text labels keep the full text in title."],
@@ -90,6 +91,7 @@ export default {
     // Spec: Variants, States, Behavior and accessibility; Count.tsx JSDoc.
     practices: [
       ["Do", "Place a Count right after its owner's label: a nav row, a tab, a filter or a group heading."],
+      ["Do", "Beside a status Badge, give the Count the Badge's size: the two share one height, text size, shape and text side, and differ only in paint and weight."],
       ["Do", "Use plain by default; use soft where the row's hover or selected fill would swallow plain ink."],
       ["Do", "Pass label with the words the owner lacks (\"unread\"), so a screen reader hears \"Inbox 3 unread\"."],
       ["Do", "Set showZero={false} where a zero says nothing; a zero Count then renders nothing."],
@@ -98,7 +100,7 @@ export default {
     ],
     // Spec: Anatomy.
     parts: {
-      root: "An inline span holding the formatted number (max+ above max); at least as wide as it is tall, so one digit is round.",
+      root: "An inline span holding the formatted number (max+ above max): a pill by default, as Badge, with its text the marks' side from the edge; at least as wide as it is tall, and one character drops its sides, so one digit is a circle.",
       label: "Visually hidden words after the number, read by screen readers only.",
     },
     aria: [],
