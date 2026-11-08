@@ -10,6 +10,9 @@ packages/tokens  →  packages/styles  →  packages/react  →  apps/desktop
  and derivations      + the manifest         typed from the manifest  docs, Inspector
                                                          ↑
                       packages/icons  →  Glyph (generated into react)
+
+packages/output reads all four (and the app's Documentation entries) to write a system into a project:
+ `area init | build | check | mcp`, and the app's Write to folder
 ```
 
 Each package depends only on the ones to its left. CSS never depends on React, and React
@@ -234,6 +237,22 @@ Shared behaviour:
   and `status-marks.ts`, which is how components get icons without depending on
   `@area/icons`.
 - The app imports `@area/icons` directly. Process: the `area-icon-construction` skill.
+
+## Output (`packages/output`)
+
+A published system written into a project's folder as code the project owns, and the contract that keeps agents inside
+it. Decisions and research: `docs/research/system-output-2026-11-08/`. TypeScript run as it is (Node 22.18+ and
+Electron's Node strip types); no dependencies.
+
+- `src/definition.ts` `.area/system.json`, the choices, from a release (`definitionFromSystem`).
+- `src/library.ts` every input loaded into plain data, with a version that hashes them (a library update is a new one).
+- `src/inventory.ts` what a system holds: chosen components, the ones they need, left-out options and what can't go.
+- `src/targets/` `css.ts` (the axes sheet pruned to the chosen values and rebound to `:root` or a theme's scope;
+  component sheets without left-out selectors), `react.ts`, `icons.ts`, `agents.ts` (DESIGN.md, the AGENTS.md block,
+  components.json). `src/css.ts` is the walker they share (parse and print are the identity on every Area sheet).
+- `src/write.ts` plan then apply: the lock, `.area/base/` copies and the three-way merge (`src/merge.ts`).
+- `src/check.ts`, `src/project.ts`, `src/mcp.ts` the checks and the MCP server, answering from the project's files.
+- `src/cli.ts` the `area` command; the app calls `writeRelease` from `apps/desktop/electron/output.cjs`.
 
 ## The app (`apps/desktop`)
 
