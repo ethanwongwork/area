@@ -29,6 +29,38 @@
   .studio-chat__steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-4); min-inline-size: 0; }
   /* The composer: the context chip over it; Scroll to latest rises above it (scroll-to-latest.css). */
   .studio-chat__composer { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); }
+  /* Expanded (P10): the composer takes the panel's height (chat.tsx measures it), its shell the rest of the column. */
+  .studio-chat__composer[data-expanded] { grid-template-rows: auto; align-content: stretch; }
+  .studio-chat__composer[data-expanded] > :last-child { min-block-size: 0; }
+
+  /* --- The chat workflow (docs/research/chat-workflow-2026-11-08) -------------------------------------------------- */
+  /* A reply's More (P7): the plain Accordion under the answer, its heading on the text's edge, the prose gap above. */
+  .studio-chat__more { min-inline-size: 0; }
+  /* Options (P4): a picture each, named under it (question.css's compare sides), two to a row so each stays wide enough
+     to read at the Inspector's widths, then the choice; set aside (Not now), they dim. */
+  .studio-chat__options { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); min-inline-size: 0; container-type: inline-size; }
+  /* One picture at the column's width under 440 (the Inspector's usual widths), the options side by side from 440. */
+  @container (min-width: 440px) { .studio-chat__options > .studio-chat__one { display: none; } }
+  @container (max-width: 439.98px) { .studio-chat__options > .studio-chat__compare { display: none; } }
+  .studio-chat__compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-12) var(--area-space-8); min-inline-size: 0; }
+  .studio-chat__picked { display: flex; align-items: center; gap: var(--area-space-8); margin: 0; color: var(--area-fg-muted); }
+  /* A question the agent asked, kept (P3): the question muted, the answer the person's own bubble at the column's end,
+     a line's gap under it. */
+  .studio-chat__asked { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-12); min-inline-size: 0; }
+  .studio-chat__asked-pair { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-4); min-inline-size: 0; }
+  .studio-chat__asked-question { margin: 0; color: var(--area-fg-muted); }
+  .studio-chat__answer { justify-self: end; }
+  /* What rode with a person's message, over their bubble at its end: the changes card, then chips and pictures. */
+  .studio-chat__sent-with { display: grid; justify-items: end; gap: var(--area-space-8); min-inline-size: 0; }
+  .studio-chat__transcript > .studio-chat__sent-with + .studio-chat__turn--user { margin-block-start: var(--area-space-8); }
+  .studio-chat__change-card { inline-size: min(100%, calc(var(--area-space-96) * 3)); /* pick: 288, the person's bubble's widest */ }
+  .studio-chat__sent-chips { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--area-space-4); }
+  .studio-chat__restored { margin: 0; color: var(--area-fg-muted); text-align: end; }
+  /* Ask about this (P13): a small button under the selected words, over the turns. */
+  .studio-chat__transcript { position: relative; }
+  .studio-chat__ask-about { position: absolute; z-index: 2; }
+  /* An approval's code (P2), folded under Show code in the approval's body. */
+  .studio-chat__show-code { min-inline-size: 0; }
 
   /* Markdown in a reply (src/chat/markdown.tsx). Each block is a direct child of Message's content, which spaces the
      blocks (the prose gap; a heading's space above, a list's lead-in), so these reset only their inline sides. Headings take the message's size, strong, as a narrow panel wants;

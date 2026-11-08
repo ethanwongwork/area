@@ -331,8 +331,9 @@ export const composer = {
   block: "area-composer",
   description: "Writes and submits a message with optional action slots.",
   variants: { layout: ["inline", "stacked"] },
-  states: ["disabled", "dragging"],
-  elements: ["context", "entry", "input", "actions", "extras", "footer", "submit", "mic", "attach", "file"],
+  // expanded: the field opens to its container's height for a long prompt (owner 2026-11-08, the chat workflow study, P10).
+  states: ["disabled", "dragging", "expanded"],
+  elements: ["context", "entry", "input", "actions", "extras", "footer", "submit", "mic", "attach", "file", "expand"],
   elementModifiers: { actions: ["leading", "trailing"] },
   defaults: { layout: "inline" },
 } as const satisfies ComponentManifest;
@@ -539,7 +540,9 @@ export const editSummary = {
   variants: { variant: ["surface", "plain"] },
   states: ["open", "kept", "undone"],
   // deleted: the shared change word (components audit D6, 2026-11-07); removed, its deprecated part name.
-  elements: ["head", "title", "counts", "added", "deleted", "removed", "actions", "files", "file", "name", "icon", "base", "folder", "chevron", "status", "diff"],
+  // change, change-name, change-value: a design row, what changed in the design's words ("Save button", "Corner 8 → 12"),
+  // no counts (owner 2026-11-08, the chat workflow study, P2); code and code-toggle: the files folded under Show code.
+  elements: ["head", "title", "counts", "added", "deleted", "removed", "actions", "files", "file", "name", "icon", "base", "folder", "chevron", "status", "diff", "change", "change-name", "change-value", "code", "code-toggle"],
   defaults: {}, // variant unset draws the frame (surface), so the default writes no class
 } as const satisfies ComponentManifest;
 

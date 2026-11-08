@@ -158,6 +158,48 @@
      ground). Was edge to edge on the card (round 73's A) and a recessed well (round 72). */
   .area-edit-summary__diff { min-inline-size: 0; margin-inline: var(--area-ui-row-inset); padding-block: calc(var(--area-space-4) - var(--area-ui-row-gap)); }
 
+  /* ---- Design rows and the code fold (owner 2026-11-08, the chat workflow study, P2) ---- */
+  /* A change in the design's words: a Menu row's metrics with nothing to press, its name in the default ink and its
+     property from and to after it, a line's gap away, muted (the file row's name and folder). The value gives way first,
+     cut at its end; the name keeps up to two thirds of the row. Settled rows go quiet as a file's do. */
+  .area-edit-summary__change {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4); /* a line's gap (Step) */
+    min-inline-size: 0;
+    min-block-size: var(--area-ui-row);
+    padding-inline: var(--area-ui-row-inset);
+  }
+  .area-edit-summary__change-name { flex: 0 1 auto; max-inline-size: 66%; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-edit-summary__change-value { flex: 1 1 0; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--area-fg-muted); }
+  .area-edit-summary__change[data-undone] > .area-edit-summary__change-name { text-decoration: line-through; color: var(--area-fg-muted); }
+  /* Show code: one more row at the list's foot, a file row's plate, press and ring, its label muted (hover moves the plate, never the ink), the
+     files' +N −N after it and the chevron turning as a file's does; the files open under it at the list's row gap. */
+  .area-edit-summary__code-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    min-inline-size: 0;
+    min-block-size: var(--area-ui-row);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--area-ui-row-inset);
+    border: 0;
+    border-radius: var(--area-radius-row);
+    background: transparent;
+    color: var(--area-fg-muted);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) { .area-edit-summary__code-toggle:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  .area-edit-summary__code-toggle:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
+  .area-edit-summary__code-toggle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+  .area-edit-summary__code-toggle[data-open] > .area-edit-summary__chevron { transform: none; }
+  .area-edit-summary__code { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-row-gap); min-inline-size: 0; }
+  .area-edit-summary__code[hidden] { display: none; }
+
   /* ---- Diff ---- */
   /* Code block sm's metrics and diff paint (code.css: the Inspector's code well), so Area draws one diff: its type and
      leading, its insets, its number start, its + / − marker in the vivid inks and its tints. Numbers, marker and text
