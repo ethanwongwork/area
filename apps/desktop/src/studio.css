@@ -43,3 +43,4 @@
    scripts/renderer.mjs). Each face has its own family name, so a face downloads only when the Typography page draws it. */
 @import url("styles/typefaces.css");
 @import url("styles/glyphs.css") layer(studio);
+@import url("styles/design.css") layer(studio);

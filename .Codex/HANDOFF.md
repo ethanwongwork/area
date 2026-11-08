@@ -1,6 +1,47 @@
 # Handoff
 
-## Current state (2026-11-06)
+## Current state (2026-11-07)
+- **Appearance, same worktree (PR #211, 2026-11-07).** Mode's pictures: the app in a 720 × 540 window (sidebar and
+  page, `content/examples/workspace-compact.tsx`), words as bars (owner picked "B as bars" from four layouts and three
+  drawings), three across, each a new Radio/Checkbox `layout="thumbnail"` (picture is the card, name under it at the
+  start; specs' review notes 2026-11-07; gallery tiles "Layout / thumbnail"). Every Settings picture row uses it.
+  Then Cursor's Appearance settings that Area's tokens carry: Text size (12–16 over the followed system's Type),
+  Reduce motion, Follow your Mac's contrast, Reduce transparency (`appLook` overrides; research note's second pass).
+  Checked in the app light and dark; Follow your Mac's contrast is not verified against a Mac set to Increase contrast.
+- **Settings, same worktree (PR #211, 2026-11-07).** Owner: "move dark mode to the settings control" and study
+  Cursor's, ChatGPT's and Claude's settings for "full fidelity and useability". Research and decisions:
+  `docs/research/settings-2026-11-07/README.md` (ChatGPT and Claude measured in Chrome, light only; Cursor from its
+  bundle). Built: no mode button in the Canvas header; ⌘, and the gear toggle Settings; search results take the Sidebar
+  (grouped by section, ↓ / Enter, the row scrolled to and marked 3 s); Esc clears then closes; new Chat (default model,
+  live or recorded, sign-in) and Keyboard sections; Theme's preview has a System / Light / Dark icon switch. Design
+  panel: only its tab row peeks; a tab click scrolls it up.
+- **Design interface, worktree `design-interface-ui-4d0a03` (PR #211, 2026-11-06).** Owner: a Figma-like design
+  interface with the design in the Canvas, "not full height … a small peak section below, the whole middle section is
+  scrollable", the bottom a gallery of iterations and layers plus documentation, code and supporting tabs; Sidebar and
+  Inspector unchanged. Picks (asked): a plain scroll scrolls the page; one layer at a time on the stage; iterations
+  automatic; extra tabs Components & tokens, Specs, Comments, Checks, Research. Built: a project page is a stage
+  (design-viewer `scroll: "page"`, Fit in frame ⇧1 / Fill width ⇧2) over `src/design-panel.tsx` (9 tabs);
+  `projects.ts` history (recordIteration in studio's updateProject, 100 kept), comments, notes; `src/design-scan.ts`
+  reads specs and WCAG checks from the drawn design; screens' sources in `virtual:component-sources` (`screens`).
+  PRODUCT_UI's project-pages bullet rewritten; gap: Tabs sticky list. Checks: typecheck, desktop build, app tests 32,
+  app-css, docs, playgrounds; seen headless (Edge guest, test project in preview storage) light and dark. Open: the tab
+  row scrolls away (gap); iteration cards picture one layer only; no visual review against the owner's references yet.
+  Same day, screens artifact (owner: "show it and all the other main screens … real ui, not just screenshots"):
+  https://claude.ai/artifact/8gfAnimqxcwskbY5pcZBsd, the production renderer in iframes, each seeded through
+  window.name (in-memory storage, sample References, Geist from npm); builder and states are scratchpad-only. Cleanup it
+  found: Fill width is edge to edge (no ground, no window); every panel tab opens with its summary row; Research's head
+  overlapped its cards; comment field and button one size; Inspector actions one row per thing (Rename layer is new);
+  an empty page keeps its Layers list so the Sidebar doesn't narrow. Then: design frame drop shadow removed (rim kept;
+  every viewer), panel sides 16 and even; ConfirmDialog description default ink, trimmed to its baseline (spec review
+  note open). Then the editing (owner picks: Area-aware, live + saved, log at the Design view's foot, row menus):
+  select on the stage, ElementPanel props/words/layout/fill/type/corner as tokens, `DesignChange` log with undo and
+  Send to chat (one message); layer/page Rename, Duplicate, Remove in Sidebar row menus. Then Phase 3, the live Chat
+  (owner: "Connect the Inspector Chat to a live agent"): `electron/agent.cjs`, the Agent SDK (pinned 0.3.319) in main
+  over IPC, one resumed session per chat, asks before every edit and command (Approval from canUseTool), real Keep/Undo
+  from before/after file reads, sign-in failures as a plain error notice; the chat is live in Electron, recorded
+  elsewhere (docs/research/inspector-chat-2026-10-18, Phase 3). Turn notice: a wrapped error keeps its mark on the first
+  line (spec note open). Tests 39 (agent.test.ts, a stand-in SDK). Open: this Mac's Claude Code sign-in had expired
+  (`claude auth login` needed), so no live reply with tools has been seen yet.
 - **Marks on one line: Count beside Badge, worktree `vigilant-raman-cdac08` (uncommitted, 2026-11-07).** Owner on
   "Button 44 ✓ Complete": the pair looked like two sizes. Same height and text already; drifted were the shape (Count
   off Pills since 2026-11-01), the text side (Count 3, Badge 5) and the heading's placement (status 1.3 low). Review page

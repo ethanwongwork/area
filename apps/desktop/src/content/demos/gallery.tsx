@@ -569,6 +569,13 @@ export const GalleryCheckboxCardPreview = () => (
     <Checkbox variant="card" layout="preview" label="Option three" />
   </CheckboxGroup>
 );
+export const GalleryCheckboxThumbnail = () => (
+  <CheckboxGroup label="Label" style={{ inlineSize: "420px", "--area-choice-ratio": "16 / 10" } as CSSProperties}>
+    <Checkbox variant="soft" layout="thumbnail" label="Light" defaultChecked leadingVisual={<DemoImage />} />
+    <Checkbox variant="soft" layout="thumbnail" label="Dark" leadingVisual={<DemoImage />} />
+    <Checkbox variant="soft" layout="thumbnail" label="System" leadingVisual={<DemoImage />} />
+  </CheckboxGroup>
+);
 export const GalleryCheckboxCardTile = () => (
   <CheckboxGroup label="Label" style={{ inlineSize: "520px" }}>
     <Checkbox variant="card" layout="tile" label="Colors" leadingVisual={<PaletteIcon size={20} />} defaultChecked />
@@ -1793,6 +1800,14 @@ export const GalleryRadioCardPreview = () => (
     <Radio variant="card" layout="preview" value="light" label="Light" leadingVisual={<DemoImage />} />
     <Radio variant="card" layout="preview" value="dark" label="Dark" leadingVisual={<DemoImage />} />
     <Radio variant="card" layout="preview" value="system" label="System" leadingVisual={<DemoImage />} />
+  </RadioGroup>
+);
+/* The picture is the card, its name under it at the start (Settings › Appearance's Mode). */
+export const GalleryRadioThumbnail = () => (
+  <RadioGroup label="Label" name="gallery-radio-thumbnail" defaultValue="light" style={{ inlineSize: "420px", "--area-choice-ratio": "16 / 10" } as CSSProperties}>
+    <Radio variant="soft" layout="thumbnail" value="light" label="Light" leadingVisual={<DemoImage />} />
+    <Radio variant="soft" layout="thumbnail" value="dark" label="Dark" leadingVisual={<DemoImage />} />
+    <Radio variant="soft" layout="thumbnail" value="system" label="System" leadingVisual={<DemoImage />} />
   </RadioGroup>
 );
 /* A picture choice with its row (Setup's answered picture questions): the picture in an 8px mat, the radio, name and meta under it. */

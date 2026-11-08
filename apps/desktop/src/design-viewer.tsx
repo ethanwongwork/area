@@ -19,9 +19,17 @@
  * the zoom, whose menu holds the view's own toggles. Escape or ⌘↑ goes back, shrinking the design into its card
  * (src/morph.ts); ⌘[ is the tab's Back. The choices are the viewer's, kept per person (view-controls.tsx
  * `useViewOption`); the design's own look is its theme's.
+ *
+ * With `scroll: "page"` the viewer is the stage of the design interface (a project's page, src/pages/project.tsx; owner,
+ * 2026-11-06: "the main center page will not be full height, there will be a small peak section below, the whole middle
+ * section is scrollable"): a plain scroll moves the page past it to the panel below, so the viewer never takes it (a
+ * sideways scroll still pans the design); a pinch or ⌘ with the wheel zooms and Space or the middle button drags, as
+ * before. Its fitting has two rules, the view's own: Fit (the whole design in the frame) and Fill width (the design as
+ * wide as the frame, edge to edge with no ground or window round it, the stage as tall as the design then is, so the
+ * page scrolls down through it), ⇧1 and ⇧2.
  */
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
-import { Button, ZoomControl } from "@area/react";
+import { Button, MenuItem, ZoomControl } from "@area/react";
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, MoonIcon, SunIcon, SunMoonIcon } from "@area/icons";
 import { useViewOption, ViewFilter } from "./view-controls.tsx";
 import { leaveFrom, morph, takeMorph } from "./morph.ts";
@@ -74,6 +82,8 @@ export interface DesignViewerOptions {
   step?: { index: number; count: number; noun: string; onStep: (by: 1 | -1) => void };
   /** Whether the viewer is showing: its keys are the gallery's while it is not (a page calls the hook either way). */
   active?: boolean;
+  /** Who takes a plain scroll: the viewer (it pans the design), or the page it sits in (the design interface's stage). */
+  scroll?: "self" | "page";
 }
 
 export interface DesignViewer {
@@ -83,12 +93,17 @@ export interface DesignViewer {
   controls: ReactNode;
   /** The ground with the design on it, for the Canvas body. */
   stage: ReactNode;
+  /** With `scroll: "page"` and Fill width, how tall the stage must be to hold the design whole; otherwise undefined. */
+  height?: number;
 }
 
 export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
-  const { design, label, width, height, render, selfScaled = false, themed = true, appMode, frame = "window", maxFit = 1, max = 32, pixelGrid = true, menu, back, step, active = true } = options;
+  const { design, label, width, height, render, selfScaled = false, themed = true, appMode, frame = "window", maxFit = 1, max = 32, pixelGrid = true, menu, back, step, active = true, scroll = "self" } = options;
   const [mode, setMode] = useViewOption<Mode>("viewer-mode", appMode, ["light", "dark", "both"]);
   const [ground, setGround] = useViewOption<Ground>("viewer-ground", "grey", ["grey", "white", "black", "checker"]);
+  // How a design is fitted on a page's stage: whole in the frame, or as wide as the frame (the page scrolls through it).
+  const [fitRule, setFitRule] = useViewOption<"fit" | "width">("viewer-fit", "fit", ["fit", "width"]);
+  const filling = scroll === "page" && fitRule === "width";
   // A zoom the person chose, for the design it was chosen on; otherwise the design is fitted to the view.
   const [chosen, setChosen] = useState<{ design: string; zoom: number } | null>(null);
   const zoom = chosen?.design === design ? chosen.zoom : null;
@@ -132,9 +147,12 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
     (size.h - 2 * MARGIN - GAP * (rows - 1)) / (natural * rows),
   );
   const across = fitOf(n, 1), stacked = fitOf(1, n);
-  const fitted = size.w ? clamp(Math.min(maxFit, Math.max(across, stacked))) : 0.25;
+  // Fill width: the designs side by side as wide as the frame, edge to edge (a browser's view of a page, no ground round
+  // it), whatever their height; with a zoom chosen the ground and its margin come back.
+  const wide = (size.w - GAP * (n - 1)) / (width * n);
+  const fitted = size.w ? clamp(filling ? wide : Math.min(maxFit, Math.max(across, stacked))) : 0.25;
   const scale = zoom ?? fitted;
-  const direction = n === 1 || across >= stacked ? "row" : "column";
+  const direction = n === 1 || filling || across >= stacked ? "row" : "column";
   const stops = STOPS.filter(stop => stop <= max);
   const zoomBy = (by: 1 | -1) => setZoom(by > 0 ? stops.find(stop => stop > scale + 1e-3) ?? max : [...stops].reverse().find(stop => stop < scale - 1e-3) ?? MIN);
 
@@ -157,9 +175,17 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
   useEffect(() => { anchor.current = null; }, [design]);
   useEffect(() => {
     if (!element) return;
-    // A pinch on a trackpad (the wheel with Ctrl), or ⌘ with the wheel, zooms about the pointer; the wheel alone scrolls.
+    // A pinch on a trackpad (the wheel with Ctrl), or ⌘ with the wheel, zooms about the pointer; the wheel alone scrolls,
+    // the view or, on a page's stage, the page (a sideways scroll there still pans the design).
     const wheel = (event: WheelEvent) => {
-      if (!event.ctrlKey && !event.metaKey) return;
+      if (!event.ctrlKey && !event.metaKey) {
+        if (scroll === "page" && Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+          event.preventDefault();
+          element.scrollLeft += event.deltaX;
+          anchor.current = pointAt(element.clientWidth / 2, element.clientHeight / 2);
+        }
+        return;
+      }
       event.preventDefault();
       const view = element.getBoundingClientRect();
       anchor.current = pointAt(event.clientX - view.left, event.clientY - view.top);
@@ -167,7 +193,7 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
     };
     element.addEventListener("wheel", wheel, { passive: false });
     return () => element.removeEventListener("wheel", wheel);
-  }, [element, max]);
+  }, [element, max, scroll]);
   useLayoutEffect(() => {
     const screen = first.current;
     if (!element || !screen) return;
@@ -195,18 +221,20 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
   // Figma's view keys: + and − step the zoom, ⇧0 is 100%, ⇧1 fits; ← and → step through the gallery. Space held pans.
   const spaceHeld = useRef(false);
   const [panning, setPanning] = useState<"ready" | "dragging" | null>(null);
-  const latest = useRef({ zoomBy, setZoom, step });
-  latest.current = { zoomBy, setZoom, step };
+  const fitBy = (rule: "fit" | "width") => { setFitRule(rule); setZoom(null); };
+  const latest = useRef({ zoomBy, setZoom, step, fitBy });
+  latest.current = { zoomBy, setZoom, step, fitBy };
   useEffect(() => {
     if (!active) return;
     const down = (event: KeyboardEvent) => {
       const target = event.target as Element | null;
       if (event.defaultPrevented || target?.closest?.(TYPING) || document.querySelector(":popover-open, dialog[open]")) return;
       if (event.metaKey || event.ctrlKey || event.altKey) return;
-      const { zoomBy: by, setZoom: to, step: move } = latest.current;
+      const { zoomBy: by, setZoom: to, step: move, fitBy: fit } = latest.current;
       if (event.code === "Space") { event.preventDefault(); if (!spaceHeld.current) { spaceHeld.current = true; setPanning(now => now ?? "ready"); } return; }
       if (event.shiftKey && event.code === "Digit0") { event.preventDefault(); to(1); }
-      else if (event.shiftKey && event.code === "Digit1") { event.preventDefault(); to(null); }
+      else if (event.shiftKey && event.code === "Digit1") { event.preventDefault(); if (scroll === "page") fit("fit"); else to(null); }
+      else if (scroll === "page" && event.shiftKey && event.code === "Digit2") { event.preventDefault(); fit("width"); }
       else if (event.key === "+" || event.key === "=") { event.preventDefault(); by(1); }
       else if (event.key === "-" || event.key === "_") { event.preventDefault(); by(-1); }
       else if (move && !event.shiftKey && (event.key === "ArrowLeft" || event.key === "ArrowRight")) { event.preventDefault(); move.onStep(event.key === "ArrowRight" ? 1 : -1); }
@@ -219,7 +247,7 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
     addEventListener("keydown", down);
     addEventListener("keyup", up);
     return () => { removeEventListener("keydown", down); removeEventListener("keyup", up); spaceHeld.current = false; setPanning(null); };
-  }, [active]);
+  }, [active, scroll]);
   const pan = (event: ReactPointerEvent<HTMLElement>) => {
     if (!element || !(event.button === 1 || (event.button === 0 && spaceHeld.current))) return;
     event.preventDefault();
@@ -261,7 +289,12 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
       </> : null}
       <ZoomControl stepper size="sm" aria-label="Zoom" value={scale} min={MIN} max={max} presets={[0.5, 1, 2].filter(stop => stop <= max)} stops={stops}
         shortcuts={{ zoomIn: "+", zoomOut: "−", zoomToFit: "⇧1", presets: { 1: "⇧0" } }}
-        valueLabel={zoom === null ? "Fit" : undefined} onValueChange={next => setZoom(next)} onZoomToFit={() => setZoom(null)}>
+        valueLabel={zoom === null ? (filling ? "Fill" : "Fit") : undefined} onValueChange={next => setZoom(next)}
+        onZoomToFit={scroll === "page" ? undefined : () => setZoom(null)}>
+        {scroll === "page" ? <>
+          <MenuItem radio checked={zoom === null && !filling} shortcut="⇧1" onClick={() => fitBy("fit")}>Fit in frame</MenuItem>
+          <MenuItem radio checked={zoom === null && filling} shortcut="⇧2" onClick={() => fitBy("width")}>Fill width</MenuItem>
+        </> : null}
         {menu}
       </ZoomControl>
     </>
@@ -272,12 +305,14 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
   // start lands on a pixel (a half pixel blurs every edge and word on a 1x display).
   const columns = direction === "row" ? n : 1, rows = direction === "row" ? 1 : n;
   const odd = (room: number, used: number) => (Math.round(room - used) % 2 + 2) % 2;
+  const bleed = filling && zoom === null;
+  const margin = bleed ? 0 : MARGIN;
   const endPad = odd(size.w, box.inlineSize * columns + GAP * (columns - 1)), bottomPad = odd(size.h, box.blockSize * rows + GAP * (rows - 1));
   const stage = (
-    <section ref={setElement} className="studio-viewer" data-ground={ground} data-panning={panning ?? undefined} aria-label={label}
+    <section ref={setElement} className="studio-viewer" data-scroll={scroll === "page" ? "page" : undefined} data-fill={bleed ? "" : undefined} data-ground={ground} data-panning={panning ?? undefined} aria-label={label}
       onScroll={track} onPointerDown={pan}>
       <div className="studio-viewer__canvas" data-direction={direction}
-        style={{ paddingBlock: `${MARGIN}px ${MARGIN + bottomPad}px`, paddingInline: `${MARGIN}px ${MARGIN + endPad}px`, gap: GAP }}>
+        style={{ paddingBlock: `${margin}px ${margin + (bleed ? 0 : bottomPad)}px`, paddingInline: `${margin}px ${margin + (bleed ? 0 : endPad)}px`, gap: GAP }}>
         {modes.map((at, index) => (
           <div key={at} ref={index === 0 ? first : undefined} className="studio-viewer__screen" data-frame={frame}
             style={{ ...box, ["--_viewer-scale" as string]: scale }}>
@@ -293,5 +328,6 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
       </div>
     </section>
   );
-  return { lead, controls, stage };
+  const stageHeight = bleed ? Math.round(natural * scale) : undefined;
+  return { lead, controls, stage, height: stageHeight };
 }

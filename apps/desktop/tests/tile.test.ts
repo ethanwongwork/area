@@ -16,7 +16,8 @@ const rule = (selector: string) => {
 };
 
 test("Tile is Area's Asset card, the gallery look unless a page gives its own", () => {
-  assert.match(tile, /export function Tile\(props: TileProps\) \{\s*return <AssetTile \{\.\.\.props\} look=\{props\.look \?\? GALLERY_LOOK\} \/>;/);
+  // A design (a screen by default) is Area's Design card since 2026-11-05 (PR #208); every other tile stays the Asset card.
+  assert.match(tile, /export function Tile\(props: TileProps\) \{[\s\S]*?return <DesignTile \{\.\.\.props\} design=\{design\} \/>;\s*return <AssetTile \{\.\.\.props\} look=\{props\.look \?\? GALLERY_LOOK\} \/>;/);
   assert.doesNotMatch(tile, /function PlainTile\b/, "the plain container is gone");
   assert.doesNotMatch(css, /\.gallery-tile--plain\b|\.gallery-plain\b/, "no app CSS draws a plain box");
 });

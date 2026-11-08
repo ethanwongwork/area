@@ -163,11 +163,15 @@
 }
 .studio-viewer__canvas[data-direction="column"] { flex-direction: column; }
 .studio-viewer__screen { position: relative; flex: none; }
+/* A screen's window: its corners and a hairline rim, no drop shadow (owner, 2026-11-06: "remove the shadows behind the
+   frame"); the ground sets it off. */
 .studio-viewer__screen[data-frame="window"] {
   border-radius: calc(12px * var(--_viewer-scale, 1)); /* pick */
   overflow: hidden;
-  box-shadow: 0 0 0 1px var(--_rim), 0 12px 40px color-mix(in srgb, #000 12%, transparent); /* pick */
+  box-shadow: 0 0 0 1px var(--_rim); /* pick */
 }
+/* Fill width: the design meets the frame's edges, so it has no window of its own (corners, rim). */
+.studio-viewer[data-fill] .studio-viewer__screen[data-frame="window"] { border-radius: 0; box-shadow: none; }
 /* A ground's swatch in its menu: a 12 dot with a hairline, so White reads on a white list. */
 .studio-viewer__swatch {
   display: inline-block;

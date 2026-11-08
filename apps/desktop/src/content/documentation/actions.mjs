@@ -336,6 +336,7 @@ export default {
       ["Do", "Give the group a visible label; it becomes the fieldset's legend."],
       ["Do", "Use vertical for settings stacks and horizontal for a short inline choice."],
       ["Do", "Use card layout=\"preview\" when each option is best shown as itself (a theme, a layout, a typeface): pass its picture as leadingVisual; the label stays the name."],
+      ["Do", "Use layout=\"thumbnail\" for a settings row of pictures (light, dark, a layout): the picture is the card, drawing the edge and the selected stroke, and the name sits under it outside, at the start."],
       ["Do", "Use layout=\"media\" when a picture choice also needs its row (the radio, the name, meta), as a chosen picture shown as an answer: the picture in an 8px mat, the row under it."],
       ["Do", "Use layout=\"media-row\" for the same card in a full-width list: the picture at the row's start (--area-choice-media sets its share, 32%), the row centred beside it."],
       ["Do", "Set --area-choice-ratio to the picture's ratio (16 / 10, 4 / 3, 1, 3 / 4); a photo or video covers its frame, and auto keeps the image's own ratio."],

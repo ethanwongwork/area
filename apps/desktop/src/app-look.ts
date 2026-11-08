@@ -24,7 +24,23 @@ export interface AppLook {
    * (the default), or floating, the Canvas and the Inspector as Panels on the Sidebar's ground.
    */
   panels?: AppPanels;
+  /*
+   * Overrides for reading and access, over whatever the app is drawn in (owner, 2026-11-07: "build and implement some of
+   * the cursor settings for appearance if they are helpful"; Cursor's UI Font Size, Reduce Motion, Follow System High
+   * Contrast and Reduce Transparency, docs/research/settings-2026-11-07). Each is unset at its default.
+   */
+  /** The app's text size, a Type value ("12"–"16"), over the followed system's Type. */
+  type?: string;
+  /** Motion off whatever the Mac is set to: motion 0 and press feedback off, as `prefers-reduced-motion` resolves. */
+  reduceMotion?: boolean;
+  /** false: the theme's own contrast even when the Mac asks for more (on by default, as the tokens follow the Mac). */
+  followContrast?: boolean;
+  /** Opaque, unblurred fills whatever the Material, as `prefers-reduced-transparency` resolves. */
+  reduceTransparency?: boolean;
 }
+
+/** The Type values the app's text size steps through. */
+export const APP_TYPES = ["12", "13", "14", "15", "16"] as const;
 
 export type AppPanels = "sectioned" | "floating";
 
@@ -39,6 +55,10 @@ export function restoreAppLook(saved: unknown, defaults: Record<string, string>)
   return {
     ...(value.material && typeof value.material === "object" ? { material: value.material } : {}),
     ...(value.panels === "floating" ? { panels: "floating" as const } : {}),
+    ...(typeof value.type === "string" && (APP_TYPES as readonly string[]).includes(value.type) ? { type: value.type } : {}),
+    ...(value.reduceMotion === true ? { reduceMotion: true } : {}),
+    ...(value.followContrast === false ? { followContrast: false } : {}),
+    ...(value.reduceTransparency === true ? { reduceTransparency: true } : {}),
     follow: value.follow !== false,
     system: typeof value.system === "string" && value.system ? value.system : AREA_ID,
     theme: typeof value.theme === "string" && value.theme ? value.theme : undefined,
@@ -52,10 +72,26 @@ export function restoreAppLook(saved: unknown, defaults: Record<string, string>)
  * Area, a theme that is gone to the system's chosen one.
  */
 export function chromeOf<M>(look: AppLook, systems: readonly System[], material: M): { canvas: Record<string, string>; material: M | System["themes"][number]["material"]; system?: System; theme?: string } {
+  const drawn = drawnIn(look, systems, material);
+  return { ...drawn, canvas: withOverrides(drawn.canvas, look) };
+}
+
+function drawnIn<M>(look: AppLook, systems: readonly System[], material: M): { canvas: Record<string, string>; material: M | System["themes"][number]["material"]; system?: System; theme?: string } {
   if (!look.follow) return { canvas: look.own, material: (look.material as M | undefined) ?? material };
   const chosen = systems.find(entry => entry.id === look.system) ?? systems.find(entry => entry.id === AREA_ID) ?? systems[0];
   if (!chosen) return { canvas: look.own, material: (look.material as M | undefined) ?? material };
   const published = asLive(chosen);
   const theme = published.themes.find(entry => entry.id === look.theme) ?? activeTheme(published);
   return { canvas: theme.canvas as unknown as Record<string, string>, material: theme.material, system: chosen, theme: theme.id };
+}
+
+/** The reading and access overrides on the settings the app is drawn in (contrast and transparency are applied where the
+    Mac's preference and the Material are read, src/studio.tsx). A look of its own sets its Type in its own settings. */
+function withOverrides(canvas: Record<string, string>, look: AppLook): Record<string, string> {
+  if (!(look.follow && look.type) && !look.reduceMotion) return canvas;
+  return {
+    ...canvas,
+    ...(look.follow && look.type ? { type: look.type } : {}),
+    ...(look.reduceMotion ? { motion: "0", feedback: "off" } : {}),
+  };
 }

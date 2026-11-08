@@ -368,7 +368,7 @@ export const checkbox = {
   description: "Toggles a single independent option.",
   // soft and list (owner 2026-10-25, Notion Calendar's settings rows, a proposal card's options): a filled option with
   // its control first and a value at its end.
-  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "media", "media-row"], size: ["md", "lg"] },
+  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] },
   states: ["checked", "indeterminate", "disabled", "invalid"],
   elements: ["control", "visual", "meta"],
   defaults: { size: "md" },
@@ -386,7 +386,7 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "media", "media-row"], size: ["md", "lg"] },
+  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] },
   states: ["disabled"],
   elements: ["control", "visual", "meta"],
   defaults: { size: "md" },

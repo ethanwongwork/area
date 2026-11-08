@@ -26,6 +26,7 @@ import { AnalyticsDashboard } from "./content/examples/analytics.tsx";
 import { AreaAppScreen } from "./content/examples/area-app.tsx";
 import { MobileScreen } from "./content/examples/mobile.tsx";
 import { SettingsScreen } from "./content/examples/settings.tsx";
+import { CompactWorkspace } from "./content/examples/workspace-compact.tsx";
 
 /** The Workspace's true size: a 1920 × 1080 display (owner, 2026-10-30: "make it a 1920x 1080 screen and scale it down";
     was a 1024 × 640 window), shown scaled down as a screenshot is. */
@@ -74,15 +75,21 @@ export const SCREENS = {
   area: { label: "Area", node: () => <AreaAppScreen /> },
 } as const;
 export type ScreenId = keyof typeof SCREENS;
+/** The Workspace in a 720 × 540 window, for small pictures (the Mode choices; workspace-compact.tsx): one per layout under
+    review. Not a screen to pick, so kept out of SCREENS' lists. */
+export type PictureId = "compact";
+const PICTURES: Record<PictureId, { node: () => ReactNode }> = {
+  compact: { node: () => <CompactWorkspace /> },
+};
 
 const MARKUP = new Map<string, string>();
 /** A screen's figure markup for a set of held states, rendered once each; words wrapped as shapes only where they are
     drawn as bars or shapes (a wrapped word in a flex label would take the label's gap). */
-function markupOf(screen: ScreenId, hold: readonly Hold[], words: boolean): string {
+function markupOf(screen: ScreenId | PictureId, hold: readonly Hold[], words: boolean): string {
   const key = `${screen}:${words}:${[...hold].sort().join(" ")}`;
   let html = MARKUP.get(key);
   if (!html) {
-    const rendered = renderToStaticMarkup(SCREENS[screen].node(new Set(hold)));
+    const rendered = renderToStaticMarkup(screen in PICTURES ? PICTURES[screen as PictureId].node() : SCREENS[screen as ScreenId].node(new Set(hold)));
     html = words ? figureMarkup(rendered) : blankImages(rendered);
     MARKUP.set(key, html);
   }
@@ -109,8 +116,8 @@ export type FigureView = { region?: undefined; scale?: number; focus?: Region } 
 export interface RegionBox { region: Region; x: number; y: number; w: number; h: number }
 
 export interface ScreenFigureProps {
-  /** Which product screen (the Workspace by default). */
-  screen?: ScreenId;
+  /** Which product screen (the Workspace by default), or a small window's picture. */
+  screen?: ScreenId | PictureId;
   /** The theme: data-area-* attributes for the frame. */
   scope: Record<string, string | undefined>;
   hold?: readonly Hold[];
@@ -162,7 +169,9 @@ const TRUE_STROKES = { "--area-stroke-width": "inherit", "--area-border-width": 
 export const ScreenCover = createContext(false);
 
 export function ScreenFigure({ screen = "workspace", scope, hold = [], fidelity: asked = "real", view = {}, measure, onMeasure, crossfade, onFit, isolate, className }: ScreenFigureProps) {
-  const fidelity = FIGURES ? asked : "real";
+  // A small window's picture keeps the drawing it asks for: Settings' Mode draws it with words as bars (owner 2026-11-07,
+  // "B as bars").
+  const fidelity = FIGURES || screen in PICTURES ? asked : "real";
   const frame = useRef<HTMLDivElement>(null), place = useRef<HTMLDivElement>(null), zoom = useRef<HTMLDivElement>(null), veilRef = useRef<HTMLSpanElement>(null);
   const html = markupOf(screen, hold, fidelity !== "real");
   // The crossfade: before the new choices paint, a copy of the drawing under the old ones is laid over it and fades out

@@ -241,12 +241,29 @@ Cursor's nav with Figma's tabs).
 - **Profile and Settings** (owner, 2026-10-30: "a profile and setting control to the bottom left … like claude and
   cursor"): the Sidebar's foot holds the person's avatar and name and Settings (⌘,; the app menu's Settings… in
   Electron). Settings (`src/pages/settings.tsx`) opens over the current tab in Cursor's layout: the Sidebar becomes its
-  sections (General, Appearance, Theme) under Back and a search, the Canvas holds the section's groups of rows (a title
-  and its description, the control at the end, in a recessed box), and there is no Inspector. Back, Esc or opening any
-  place closes it. Only settings that work are shown (rule 16). **Appearance and Theme are apart** (owner, 2026-10-30:
+  sections (General, Appearance, Theme, Chat, Keyboard) under Back and a search, the Canvas holds the section's groups of
+  rows (a title and its description, the control at the end, in a recessed box), and there is no Inspector. Back, Esc,
+  the gear again, ⌘, again or opening any place closes it (owner, 2026-11-07, after Cursor; the three products measured
+  in `docs/research/settings-2026-11-07/`). **Search** results take the Sidebar's list, grouped under their sections, a
+  name's matches first; ↓ and Enter reach them from the field, and choosing one opens its section, scrolls to the setting
+  and marks it in the accent surface for 3 s; Esc in the field clears it, a second Esc closes Settings. **Light and
+  dark** are Appearance's Mode only (owner, 2026-11-07: "move dark mode to the settings control"; none of the three
+  keeps it in the window): the Canvas header has no mode button, and Theme's preview carries the same three-way switch
+  (Segmented `iconOnly`, Claude's) since Theme edits the mode the app is in. **Chat** is the Inspector Chat's default
+  model (kept between launches; the composer's menu changes one chat), whether replies are live, and how to sign in;
+  **Keyboard** lists every shortcut the app answers. **Mode's pictures** are the app in a 720 × 540 window (sidebar and
+  page, `content/examples/workspace-compact.tsx`), its words as bars, three across the row; each choice is Radio
+  `layout="thumbnail"`: the picture is the card and its name sits under it at the start (owner, 2026-11-07: "B as bars
+  ... move the text outside the container and left align it"). **Text** and **Accessibility** are the reference's reading
+  and access settings that Area's tokens already carry (owner, 2026-11-07): Text size (12–16, over the followed system's
+  Type; a look of its own sets Type itself), Reduce motion (motion 0 and press feedback off, whatever the Mac is set
+  to), Follow your Mac's contrast (on: the Mac's increased contrast wins over the theme's) and Reduce transparency (the
+  Material's see-through levers at 0); each is an override in `appLook` (`src/app-look.ts`). Only settings that work
+  are shown (rule 16). **Appearance and Theme are apart** (owner, 2026-10-30:
   "theme is theme and appearance is for the actual electron ui? both would show the same level of customization"):
-  Appearance is the app's own look (Mode; Drawn in A system, with its System, Theme and an Edit in Theme row, or Its own
-  look, which shows every Theme setting and Material apart from any system); Theme is the open system's theme as its
+  Appearance is the app's own look (Mode; Panels; Text size and Accessibility, below; Drawn in A system, with its
+  System, Theme and an Edit in Theme row, or Its own look, which shows every Theme setting and Material apart from any
+  system); Theme is the open system's theme as its
   Inspector edits it (System and Theme pickers, Live or its unpublished changes and Publish in the title, every Theme
   setting with the exact colours, and Material). A project's tab shows its system as published, so Theme there offers
   only Open, the system's own tab. Both draw a setting with the Inspector's own rows in a Settings frame
@@ -325,9 +342,36 @@ Cursor's nav with Figma's tabs).
     others** and opens the one holding the page (pick r4-fold: "only the section holding the page stays open"); a row
     opened by hand stays open until the section changes (`nav-open`). Any other row opens its place **in the tab holding
     what it names** (a tab never changes what it holds), ⌘-click in a new one.
-  - **A project's pages**: a page opens on the Canvas, its layers as cards (Add screen, Add image), and its layers are
-    the list, each marked with its **kind's icon**, a screen or an image, as Figma's layers are, the chosen one marked;
-    a layer opens in the design viewer from its card. (A 20 × 14 picture of each, pick r4-thumbs, was dropped the same
+  - **A project's pages are the design interface** (owner, 2026-11-06: "the main center page … will be where the design
+    lives … not full height, there will be a small peak section below, the whole middle section is scrollable";
+    `src/pages/project.tsx`, `src/design-panel.tsx`): the layer on a **stage** at the top (the design viewer with
+    `scroll: "page"`), short of the Canvas by a peek (the panel's tab row only, 37 at type 13; owner, 2026-11-06: a click on any tab
+    scrolls the panel up to the Canvas's top), and the
+    **design panel** under it, at least the Canvas's height; the Canvas body scrolls as one page from one to the other. A
+    plain scroll over the design scrolls the page (owner's pick); a pinch or ⌘-wheel zooms, Space or the middle button
+    drags, a sideways scroll pans. The zoom's menu fits the design two ways, the view's own: **Fit in frame** (⇧1) and
+    **Fill width** (⇧2: the design as wide as the frame, the stage as tall as it then is, so the page scrolls through
+    it). The stage holds **one layer at a time** (owner's pick): the chosen one, else the page's first; the Layers tab, the
+    Sidebar's list (each marked with its **kind's icon**, a screen or an image, as Figma's layers are) and ← → choose
+    another. The panel's tabs (Area's Tabs, the open one a view option): **Iterations** (every change to the pages kept
+    automatically, `projects.ts` `recordIteration`, at most 100, newest first, a double-click goes back; the saved
+    versions under them), **Layers** (the cards, Add screen, Add image), **Documentation**, **Code** (the screen's
+    source), **Components & tokens** (its families and the tokens their rules read), **Specs** and **Checks** (read from
+    the drawn design by `src/design-scan.ts`: type styles, colors, corners; WCAG contrast, alt text, names, labels),
+    **Comments** (on the layer, in the project file) and **Research** (the project's notes and the references it uses).
+    **Editing** (owner, 2026-11-06: "shouldnt the actual figma style design panel be there? … each change to be made and
+    then logged and then sent to the chat all at once"; `src/design-select.tsx`, `design-inspector.tsx`, `design-edit.ts`):
+    a hover outlines the component or frame under the pointer and a click selects it (outlined in the indicator blue with
+    its name over it; the design's own controls don't act; Esc clears, ↑ selects the parent). The Inspector's Design view
+    shows what it is, **Area-aware** (owner's pick): a component its props (its manifest's variants) and words, a frame
+    its direction, gap, padding, fill and corner, text its words, type role, weight and ink, each read from the drawn
+    element as the token it matches or as it is, "off scale". A choice is drawn on the stage at once and kept in the
+    project (`DesignChange`; owner's pick: live and saved), one entry per element and property; the **log** sits at the
+    Design view's foot (owner's pick), each change undoable, a click on one opens its element, and **Send to chat** puts
+    them all in Chat as one message (by page and layer, with the screen's file), for the agent to write into the source;
+    they stay drawn, marked sent, until cleared. With nothing selected the view shows the layer and page facts. A
+    layer's and a page's Rename, Duplicate and Remove/Delete are its Sidebar row's menu (its … and a right-click; owner's
+    pick), not Inspector buttons. (A 20 × 14 picture of each, pick r4-thumbs, was dropped the same
     day, owner: "is the small image thumbnail very practical?": a screen at that size is a white plate with a few bars,
     so variations of one screen looked alike, and every row drew a whole screen.) A
     screen or image added again is numbered on its page ("Analytics dashboard 2").
@@ -819,6 +863,10 @@ Decision page: https://claude.ai/artifact/KeEDPx5sUTQXE6iKtu6sw1 (Kit Type Decis
 ## Open component gaps
 
 Recorded, not yet built; each needs its own component pass ([Governance](GOVERNANCE.md#1-decide-what-kind-of-change-it-is)).
+
+- **Tabs: a sticky list** (2026-11-06): the design panel's tab row scrolls away with a long tab (Specs, Code), since the
+  Tabs' list and panels are one block and the app may not position `.area-tabs__list`. Wanted: a `stickyList` prop (the
+  list sticks to its scroller's top, on the panel's ground), as Nav's sticky heading does.
 
 From the app CSS audit (2026-10-22, `docs/research/cursor-audit-2026-10-22.md` item 10; `npm run check:app-css -w
 @area/desktop` lists every rule that still restyles a component, with its gap):

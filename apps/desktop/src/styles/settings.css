@@ -119,3 +119,13 @@
    button follows the name, centred on its line; the line keeps the text's height, so a row is as tall with it as without,
    and the controls keep one width down the column. */
 .studio-settings__name { display: flex; align-items: center; gap: var(--area-space-4); block-size: var(--area-text-base-leading); min-inline-size: 0; }
+
+/* The preview's bar: the screen it shows, and the mode the rows edit (Claude's three-way Theme switch, as icons). */
+.studio-settings__preview-bar { display: flex; align-items: center; gap: var(--area-space-8); }
+.studio-settings__preview-bar > :first-child { flex: 1 1 auto; min-inline-size: 0; }
+/* A search result's row, marked while it comes into view and for 3 s after (Cursor's search highlight), then fading. */
+.studio-settings__row { transition: background-color var(--area-duration-slow) var(--area-ease-in-out); }
+.studio-settings__row[data-found] { background-color: var(--area-accent-surface); transition-duration: 0s; }
+.studio-settings__rows { overflow: clip; }
+/* No results: one muted line where the results would be, at the nav's text inset. */
+.studio-settings__none { margin: 0; padding-inline: var(--area-space-8); color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }

@@ -21,6 +21,20 @@ interface AreaDesktop {
    * first of its family names found, and what the files say (src/pages/typefaces.tsx, InstalledFacts). Null in a capture.
    */
   installedFonts?(wanted: Array<{ id: string; names: string[] }>): Promise<Record<string, unknown> | null>;
+  /**
+   * The Inspector Chat's agent (electron/agent.cjs): the Claude Agent SDK in this repository. Each chat id is one
+   * conversation; events come back as src/chat/recording.ts's ChatEvent. `status` fails or says unavailable in a capture.
+   */
+  agent?: {
+    status(): Promise<{ available: boolean; reason?: string; cwd?: string }>;
+    send(chat: string, request: { text: string; context?: string; model?: string }): void;
+    answer(chat: string, toolUseId: string, reply: { allow: boolean; always?: boolean; instead?: string }): void;
+    stop(chat: string): void;
+    close(chat: string): void;
+    /** Undo edits by tool call id: "ok", or why not, per id. */
+    undo(chat: string, ids: string[]): Promise<Record<string, string>>;
+    onEvent(listener: (chat: string, message: unknown) => void): () => void;
+  };
   /** The app menu's tab commands (electron/main.cjs): ⌘T, ⌘⇧T, ⌘⇧H, ⌘W, ⌃Tab, ⌃⇧Tab, ⌘1–9. Returns the unsubscribe. */
   onCommand?(listener: (command: TabCommand, index?: number) => void): () => void;
 }
@@ -40,6 +54,8 @@ declare module "virtual:component-sources" {
     specs: Record<string, string>;
     css: Record<string, string>;
     react: Record<string, string>;
+    /** The patterns' screens (src/content/examples/*.tsx), by file name. */
+    screens: Record<string, string>;
     /** Interface name (ButtonProps) -> prop -> its JSDoc. */
     propDocs: Record<string, Record<string, string>>;
   };
