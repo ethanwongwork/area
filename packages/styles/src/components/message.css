@@ -10,7 +10,7 @@
     display: flex;
     flex-direction: column;
     /* spec: actions 12 under the last line (ChatGPT 12). */
-    gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8 (compact pass) */
+    gap: var(--area-gap-row); /* 12, compact 8 (compact pass) */
     inline-size: 100%;
     min-inline-size: 0;
     color: var(--area-fg-default);
@@ -35,13 +35,57 @@
        456, 220 of 268. A narrow chat keeps the person's words on few lines and still shows they are the person's (Claude
        85% beside an artifact, Cursor 32 in under 480); 70% of the Inspector's 268 was 188, a word or two a line. */
     max-inline-size: max(70%, min(100% - var(--area-space-48), 456px));
-    padding: calc(10px - var(--area-space-4) * var(--area-ui-dense)) calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10 × 16, compact 6 × 12 on 14/20 */
+    padding: calc(10px - var(--area-space-4) * var(--area-ui-dense)) var(--area-inset-surface-md); /* spec: 10 × 16, compact 6 × 12 on 14/20 */
     /* The composer's corner: its control radius plus its inset (16, compact 12). */
-    border-radius: calc(var(--area-radius-control-md) + var(--area-ui-cluster) * var(--area-radius-concentric));
+    --_bubble-radius: calc(var(--area-radius-control-md) + var(--area-ui-cluster) * var(--area-radius-concentric));
+    /* Where two of the person's bubbles meet in a stack, their end corners tighten to a quarter of the corner (4 at 16,
+       3 at compact 12), so it follows the Radius setting. spec: derived; the reference sets the meeting corner per
+       look and ships no default (docs/research/components-audit-2026-11-07/chat-apps.md, Message bubble stack). */
+    --_bubble-meet: calc(var(--_bubble-radius) / 4); /* spec */
+    border-radius: var(--_bubble-radius);
     background-color: var(--area-bg-component);
     overflow-wrap: anywhere;
     white-space: pre-wrap;
   }
+
+  /* A stack: the person's consecutive messages (MessageGroup) or one message split into bubbles (`split`), 2 apart,
+     the end corners tightened where two bubbles meet (spec: chat-apps.md, the bubble stack gap 2px). The person's
+     bubbles line up on the column's end, so the end corners are the ones that meet; a bubble with a status line under
+     it (sending, not sent) keeps the stack's corners. */
+  .area-message__stack {
+    --_stack-gap: var(--area-space-2); /* spec: 2 */
+    display: flex;
+    flex-direction: column;
+    gap: var(--_stack-gap);
+    min-inline-size: 0;
+  }
+  .area-message > .area-message__stack { align-items: flex-end; inline-size: 100%; }
+  .area-message__stack > .area-message__bubble:not(:first-child),
+  .area-message__stack > .area-message--user:not(:first-child) > .area-message__bubble,
+  .area-message__stack > .area-message--user:not(:first-child) > .area-message__stack > .area-message__bubble:first-child { border-start-end-radius: var(--_bubble-meet); }
+  .area-message__stack > .area-message__bubble:not(:last-child),
+  .area-message__stack > .area-message--user:not(:last-child) > .area-message__bubble,
+  .area-message__stack > .area-message--user:not(:last-child) > .area-message__stack > .area-message__bubble:last-child { border-end-end-radius: var(--_bubble-meet); }
+
+  /* The person's message on its way (Queue's paint for a sending row): after the long wait the bubble dims to Queue's
+     60% and "Sending…" shows; until then the line keeps its place, unseen (Spinner's delay). Not sent: Turn notice's
+     error line, the words in the default ink, the mark in the danger ink, Retry after them. */
+  .area-message--sending { --_sending-opacity: 0.6; /* spec: Queue's sending opacity (Codex opacity-60) */ }
+  .area-message--sending:not([data-waiting]) > :is(.area-message__bubble, .area-message__stack) { opacity: var(--_sending-opacity); }
+  .area-message--sending[data-waiting] > .area-message__status { visibility: hidden; }
+  .area-message__status {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-6); /* Turn notice's icon gap */
+    min-block-size: var(--area-control-sm); /* the Retry Button's row, so the line is one height with or without it */
+    margin: 0;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-base-size); /* Turn notice's size */
+    line-height: var(--area-text-base-leading);
+  }
+  .area-message__status > svg { flex: none; inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); color: var(--area-fg-danger); }
+  .area-message__status-text { min-inline-size: 0; overflow-wrap: anywhere; }
+  .area-message--error > .area-message__status > .area-message__status-text { color: var(--area-fg-default); }
 
   /* spec: the assistant's prose runs the column, its blocks the prose gap apart (two-thirds of a prose line: 16 at
      15/24). The text flows on Area's ladder (DESIGN_SYSTEM.md, Text that flows): a heading carries its space above (the
@@ -92,7 +136,7 @@
   /* Actions take the quiet ghost Button ink as every icon action does (audit S6b, owner 2026-09-30); was fg-muted. */
   /* The person's actions show on hover or focus (ChatGPT hides them until then); the latest
    * assistant turn keeps its actions shown. */
-  .area-message--user > .area-message__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-message--user > .area-message__actions { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
   /* Keyboard focus shows them at once (MOTION.md: focus is instant, nothing opened from the keyboard
      waits on a fade); the pointer's reveal keeps the duration-fast fade both ways, as the system's
      other reveal-on-hover rows (Card, Tree view) do. */

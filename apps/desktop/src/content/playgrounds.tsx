@@ -118,10 +118,11 @@ export const PLAYGROUNDS: Record<string, Playground> = {
   button: {
     name: "Button",
     component: Button as ComponentType<Record<string, unknown>>,
-    controls: controlsOf(MANIFESTS.button, { choices: ["variant", "tone", "size"], switches: ["pill", "fullWidth", "selected", "loading", "disabled"], text: { children: "Button" } }),
+    controls: controlsOf(MANIFESTS.button, { choices: ["variant", "tone", "size"], switches: ["pill", "fullWidth", "selected", "loading", "inactive", "disabled"], text: { children: "Button" } }),
     // Full width stretches to its tile's frame, and align pulls an unfilled button back to the text
     // above it: both read only in their tile's context.
-    compositions: ["align-start", "align-end", "fullWidth"],
+    // Inactive's tile gives its reason, inactiveText, which has no control here.
+    compositions: ["align-start", "align-end", "fullWidth", "state-inactive"],
     tiles: { "state-selected": { selected: true, variant: "ghost", children: "Selected" } },
   },
   // Checkbox: one box and its label. Checked is its state (the box and the switch move together);
@@ -201,17 +202,13 @@ export const PLAYGROUNDS: Record<string, Playground> = {
       "state-loading": { loading: true, checked: true },
     },
   },
-  // Tag: the default tile is an info tag; each tone's tile names its tone.
+  // Tag: the default tile is a blue tag; each colour's tile names its colour (Board column's set, 2026-11-07).
   tag: {
     name: "Tag",
     component: Tag as unknown as ComponentType<Record<string, unknown>>,
-    controls: controlsOf(MANIFESTS.tag, { choices: [{ axis: "tone", initial: "info" }, "size"], text: { children: "Tag" }, switches: [] }),
+    controls: controlsOf(MANIFESTS.tag, { choices: [{ axis: "color", initial: "blue" }, "size"], text: { children: "Tag" }, switches: [] }),
     tiles: {
-      "tone-neutral": { tone: "neutral", children: "Neutral" }, "tone-info": { children: "Info" }, "tone-success": { tone: "success", children: "Success" },
-      "tone-warning": { tone: "warning", children: "Warning" }, "tone-caution": { tone: "caution", children: "Caution" },
-      "tone-danger": { tone: "danger", children: "Danger" }, "tone-discovery": { tone: "discovery", children: "Discovery" },
-      "tone-gray": { tone: "gray", children: "Gray" }, "tone-brown": { tone: "brown", children: "Brown" },
-      "tone-pink": { tone: "pink", children: "Pink" },
+      "color-neutral": { color: "neutral", children: "Neutral" }, "color-gray": { color: "gray", children: "Gray" }, "color-brown": { color: "brown", children: "Brown" }, "color-orange": { color: "orange", children: "Orange" }, "color-yellow": { color: "yellow", children: "Yellow" }, "color-green": { color: "green", children: "Green" }, "color-blue": { children: "Blue" }, "color-purple": { color: "purple", children: "Purple" }, "color-pink": { color: "pink", children: "Pink" }, "color-red": { color: "red", children: "Red" },
     },
   },
 };

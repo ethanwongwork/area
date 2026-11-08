@@ -19,7 +19,7 @@ export type Turn =
   | { id: string; author: "user"; text: string; context?: string; at: number }
   | { id: string; author: "assistant"; parts: Part[]; done: boolean; stopped?: boolean; seconds?: number; /** Why the run failed (the engine). */ error?: string };
 
-export interface PlanStep { id: string; label: string; status: "done" | "current" | "pending" | "cancelled" }
+export interface PlanStep { id: string; label: string; status: "complete" | "current" | "pending" | "cancelled" }
 export type EditState = "pending" | "kept" | "undone";
 
 export interface QueuedMessage { id: string; text: string; context?: string; status?: "queued" | "sending" | "failed" }
@@ -65,7 +65,7 @@ function withCurrent(state: ChatState, fn: (parts: Part[], turn: Extract<Turn, {
   return { ...state, turns: [...state.turns.slice(0, -1), { ...last, parts, ...patch }] };
 }
 
-const TODO: Record<string, PlanStep["status"]> = { completed: "done", in_progress: "current", pending: "pending", cancelled: "cancelled" };
+const TODO: Record<string, PlanStep["status"]> = { completed: "complete", in_progress: "current", pending: "pending", cancelled: "cancelled" };
 function planOf(input: ToolInput): PlanStep[] | undefined {
   const todos = input.todos;
   if (!Array.isArray(todos)) return undefined;

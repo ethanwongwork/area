@@ -178,3 +178,7 @@ A Hover card previews the source, as Wikipedia's reference previews do. `variant
 10px favicon at Compact (owner: "go with 10px icons, draw the cuts"): the favicon box is ChatGPT's 12, at most the plate less 4 (10 in Compact's 14), where an Area icon draws its 10px cut; the demos pass the book `size={12}` so it carries the cuts. Supersedes the open note below.
 
 Sides from the height, as Badge's: an icon side `(h − 12) / 2` and a text side `(h − 4) / 2`, so ChatGPT's 4 / 8 at 20 and 1 / 5 in Compact's 14 (the literal 8 stayed at every height). The label joins inset.css's cap-trimmed text slots and the marks' optical centre (with Badge and Tag). Open: the 12px favicon in Compact's 14 pill, as Badge's icons. Measured in `docs/research/spacing-2026-10-17/` (review: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+
+### 2026-11-07 · Every hue's roles (components audit D5)
+
+The hued inks read the hue role table (`--area-hue-<hue>-<role>`, packages/tokens/src/semantic/hues.ts; DESIGN_SYSTEM.md, "Every hue has the same roles") (`hue-<hue>-text`), as Link's do: no value changed.

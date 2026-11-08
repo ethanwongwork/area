@@ -53,7 +53,8 @@ trigger's paint), Popover (anchoring)
 
 Pick one value (or, with `multiple`, several) from a short, fixed list whose options need more
 than text: a leading icon, a line of description under the label, a check on the chosen row,
-groups. The trigger is a button showing the current value; the popup is a listbox. Not Select (a native `<select>`: plain text
+groups. The trigger is a button showing the current value; the popup is a listbox (with `filterable` or a `footer`,
+a panel holding a filter field, the listbox and a footer; components audit V7). Not Select (a native `<select>`: plain text
 options, platform picker where `base-select` is missing), not Combobox (typing filters the
 list), not Menu (commands, no value), not ModelPicker (a composer recipe that could sit on this).
 
@@ -214,6 +215,8 @@ these captures predates the 2026-10-08 decision (check only now; Decisions).
 | disabled | Select's disabled paint; ghost: no plate, disabled ink | Select |
 | disabled option | Menu's 50% row, skipped by arrows and typeahead | Menu, Combobox |
 | invalid | `select-invalid-color` edge and ring | Select |
+| success / warning | `select-success-color` / `select-warning-color` edge and ring, from `validationStatus` or a Field's status (2026-11-07) | Select |
+| read-only | rest paint, no hover, default cursor; focusable with `aria-readonly`; the list never opens and typing changes nothing (2026-11-07) | Input, Radio group |
 
 ## Behavior and accessibility
 
@@ -232,7 +235,20 @@ With `multiple` (`CustomSelect.tsx:54-63`): the value is `values` / `defaultValu
 `onValuesChange` (`value` and `onValueChange` are ignored); the listbox is `aria-multiselectable`;
 Enter, Space and a click toggle the row and the list stays open; Escape, Tab and Alt+↑ close without
 choosing; the chosen set keeps the list's order; `name` submits one hidden input per value, and
-form reset restores `defaultValues`.
+form reset restores `defaultValues`. The trigger names one or two chosen labels and counts three or more
+(`selectedLabel(count)`, "3 selected"; WRITING.md, "A choice of several").
+With `filterable` or a `footer` (components audit V7, 2026-11-07; Primer's SelectPanel) the popup is a panel: Menu's
+surface with its header, list and footer regions (V5). `filterable` puts a soft sm Input (`role=combobox`,
+`aria-controls` the listbox, `aria-activedescendant`, named and placeholdered by `filterLabel`, "Filter") in the
+header; focus moves there as the list opens and returns to the trigger as it closes. The filter matches labels and
+text descriptions and marks the typed text (`highlightMatch`); ↑/↓ and Page keys move, Enter chooses (toggles with
+`multiple`), Escape closes from anywhere in the panel, Space types; the count of results is announced
+(`emptyText`, "No results", when none). With `multiple` the options chosen when the list opened come first (ungrouped
+lists only, so rows never jump while they are toggled), and a Select all row (`role=checkbox`, `aria-checked` true,
+false or mixed; `selectAllLabel`) chooses every enabled option shown, or none, and announces the count. `footer` holds
+the host's controls under the options: Save and Cancel for a set that waits to be kept, with the draft in `values`
+(the Save tile). Focus moving between the trigger, filter, Select all and footer keeps the list open; leaving the
+select closes it. With a footer and no filter, focus stays on the trigger and Tab goes into the footer.
 `onHighlightChange(value | null)` reports the row the pointer or the arrows are on while the list is open, once per
 change, and `null` when it closes, so a host can preview an option before it is chosen (shadcn's builder repaints its
 canvas on hover; Base UI's `onItemHighlighted`; `docs/research/settings-pickers-2026-10-18`). It never chooses.
@@ -407,3 +423,29 @@ The trigger's label is not selectable. See [interaction polish](../research/inte
 
 - **What changed:** A chosen option's check fades and grows in as Menu's does.
 - **Why:** One rule for a check in a list. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+### 2026-11-07 · Success, warning and read-only; open and defaultOpen (components audit O1, O2, O3)
+
+- **What changed:** `validationStatus` and a Field's status paint the trigger with Select's success and warning edges; `readOnly` keeps the trigger focusable with `aria-readonly`, blocks opening and typeahead, rest paint; `open` / `defaultOpen` join `onOpenChange`, and an outside open highlights the choice.
+- **Why:** CustomSelect.tsx:51 (invalid only), :32-73 (no readOnly), :56 (onOpenChange only). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Several from a long list (components audit V7)
+
+Evidence: `docs/research/components-audit-2026-11-07/primer.md` (SelectPanel: a filter field in the overlay, `showSelectedOptionsFirst`, `showSelectAll`,
+Save and Cancel in a footer, `message` and `loading`), `docs/research/components-audit-2026-11-07/internal.md`, `docs/research/components-audit-2026-11-07/notion.md` (menu filter field:
+28 tall, 3 6 padding, radius 6, a 3% fill, the field focus ring).
+
+- **What changed:** `filterable` (with `filterLabel`, `emptyText`), Select all with `multiple` (`selectAllLabel`),
+  `footer`, `selectedLabel`; the trigger counts three or more; the parts `panel`, `header`, `filter`, `select-all`,
+  `footer`. The filter is Input (soft, sm), not a part drawn here. Tiles: Behavior / several, filter; Behavior /
+  several, Save.
+- **Decisions:** Save and Cancel are a `footer` slot, not a `confirm` boolean: the host holds the draft (`values`) and
+  keeps it on Save, as the Save tile does, so the select needs no second value model and the footer takes any controls
+  (Menu's V5 `footer`, the same name). Selected first and Select all come with `filterable` (the long-list form), not
+  as their own booleans, so a short toggled list keeps its order. The count from three is a new WRITING.md rule: the
+  app's multiple selects with three or more chosen now read "3 selected" where they listed names.
+- **Not built:** Primer's `message` (error, warning), `loading`, `virtualized` and the narrow-screen full-screen panel.
+- **Why:** the components audit's V7; the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner. Verified in a static harness (Chromium): filter, marks, Enter, Tab to Select all,
+  Escape from the panel, the Save and Cancel draft; not checked in the app.

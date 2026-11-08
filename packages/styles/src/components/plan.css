@@ -105,7 +105,7 @@
      control hover edge: a 16 glyph needs the firmer edge); done, the ring and Checkbox's tick in the muted ink, settled
      and quieter than now; cancelled, the ring and a cross. Only the current item takes the selection colour. */
   .area-plan__mark { position: relative; }
-  .area-plan__item:is(.area-plan__item--pending, .area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::before {
+  .area-plan__item:is(.area-plan__item--pending, .area-plan__item--complete, .area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::before {
     content: "";
     box-sizing: border-box;
     inline-size: calc(var(--area-icon-sm) - var(--area-space-4));
@@ -113,8 +113,8 @@
     border: var(--area-stroke-width) solid var(--area-edge-control-hover);
     border-radius: var(--area-radius-full);
   }
-  .area-plan__item:is(.area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::before { border-color: currentColor; }
-  .area-plan__item:is(.area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::after {
+  .area-plan__item:is(.area-plan__item--complete, .area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::before { border-color: currentColor; }
+  .area-plan__item:is(.area-plan__item--complete, .area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::after {
     --_tick: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round' d='M5.5 8.25l1.75 1.75 3.25-4'/%3E%3C/svg%3E"); /* spec: Checkbox's tick (M5 8.5l2 2 4-5) drawn to the 10 inside the ring */
     content: "";
     position: absolute;
@@ -138,10 +138,10 @@
      strike-through when an item has meta (phases), keep it for plain to-dos"): its check and count say it is done, and a
      strike would read as removed. */
   .area-plan__item:not(.area-plan__item--current) > .area-plan__text { color: var(--area-fg-muted); }
-  .area-plan__item:is(.area-plan__item--done, .area-plan__item--cancelled):not(:has(> .area-plan__meta, > .area-plan__steps, > .area-plan__text > .area-plan__detail)) > .area-plan__text { text-decoration: line-through; } /* nor an item with detail or steps: a strike would run through its values */
+  .area-plan__item:is(.area-plan__item--complete, .area-plan__item--done, .area-plan__item--cancelled):not(:has(> .area-plan__meta, > .area-plan__steps, > .area-plan__text > .area-plan__detail)) > .area-plan__text { text-decoration: line-through; } /* nor an item with detail or steps: a strike would run through its values */
   @media (forced-colors: active) {
-    .area-plan__item:is(.area-plan__item--pending, .area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::before { border-color: CanvasText; }
-    .area-plan__item:is(.area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::after { forced-color-adjust: none; background-color: CanvasText; }
+    .area-plan__item:is(.area-plan__item--pending, .area-plan__item--complete, .area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::before { border-color: CanvasText; }
+    .area-plan__item:is(.area-plan__item--complete, .area-plan__item--done, .area-plan__item--cancelled) > .area-plan__mark::after { forced-color-adjust: none; background-color: CanvasText; }
   }
 
   /* The bar (owner 2026-10-25): under the head on the card column, staying when the plan folds, so the folded plan still

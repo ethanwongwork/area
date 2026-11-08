@@ -485,3 +485,9 @@ in ≈120ms with a decelerating curve; a press sets `data-pressed` and the knob 
   two dots; and whole-pixel rounding left gaps of 18 and 19.
 - **Exception kept:** the accent bar's grip is the selection's label ink, which is dark on dark mode's light neutral
   fill, where white would not show.
+
+### 2026-11-07 · Slider range: onValueCommit and the event (components audit O7, O3)
+
+- **What changed:** SliderRange takes `onValueCommit(pair)`, as Slider: once when the pointer lets go (if the pair changed), on each keyboard step and on each typed end; `onValueChange(pair, event)` passes the input, key or pointer event.
+- **Why:** SliderRange.tsx:10-28 committed on every step of a drag; Slider has `onValueCommit` (primitives.tsx:828). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

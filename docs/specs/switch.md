@@ -256,3 +256,12 @@ pointer press.
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-11-06 (balance pass; owner: "Keep it")
+
+- **What changed:** a description joins its label as the next line: the 12/16 line sits 7.7 under the 13/18 label's
+  baseline, its own line gap (7.4). It sat 2 below (9.7), 2.3 off its own line. A group's legend and its description
+  join the same way.
+- **Why:** the owner's balance pass ("no spacing logic between the title and the text … make sure all of this is
+  intentional"): a gap near a line's own spacing but not on it reads as no decision. File tile's meta already joined at
+  7.7. DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.

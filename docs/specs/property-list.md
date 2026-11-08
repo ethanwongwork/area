@@ -33,7 +33,7 @@ everywhere in Area. Not TreeView (hierarchy), not Menu (commands), not PanelRow 
 | rows | the panel's row gap (`--_panel-row-gap`: sm 8, md 12; outside a panel 8, compact 6; property-list.css, `.area-property-list`) | Panel row gap; Figma rows pitch 32 around 24px controls |
 | handle | fills the panel's side inset (`--_panel-inset`, 12 outside a panel), glyph (16 slot, `grip`: two 5px bars) centred, `input-icon` ink, corner radius-control-xs, not selectable; shown on hover, focus or drag; always shown on touch; only when `onReorder` is set and there are two or more items | Figma: reorder handle in the margin, only with more than one item |
 | drag | pointer capture on the handle; the moving row stays in place at 40% (its handle at full strength); a line twice `stroke-width` (2) in neutral ink (`fg-default`), fully rounded, on whole pixels, marks the landing gap (was the focus colour; neutral per the cohesion audit, 2026-09-27); no line beside the row's own position; Escape cancels | Common sortable-list pattern (Figma, Framer layer rows) |
-| keyboard | the handle is a button: ArrowUp/Down move one place, Home/End to the ends; focus stays on the moved row's handle; the move is announced in a polite live region ("00A797 fill moved to position 1 of 3"), and the list is described by "Use the arrow keys on a handle to move <label>." | WAI live-region announcement; keyboard parity with the pointer |
+| keyboard | the handle is a button: ArrowUp/Down move one place, Home/End to the ends; focus stays on the moved row's handle; the move is announced through the shared announcer, politely ("00A797 fill moved to position 1 of 3"), and the list is described by "Use the arrow keys on a handle to move <label>." | WAI live-region announcement; keyboard parity with the pointer |
 | inactive | `inactive` dims the value to 50%; the buttons stay full strength so the row can be turned back on | Figma dims hidden fills |
 | names | each item's `label` names its handle; the component adds the position ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move (the gallery passes "<hex> fill", "Drop shadow effect") |
 | list name | a consumer's `aria-label` names the list, else `PropertyList` `label` (PropertyList.tsx, the `ul`) | Audit S17: the consumer's attribute wins, as in every Area group |
@@ -56,7 +56,7 @@ to the top showed the drop line and reordered [0055FF, FFB800, 00A797] → [00A7
 FFB800] with the announcement; ArrowDown and End moved it and kept focus on its handle. React
 tests cover the markup. Screenshots at 3× (hover and mid-drag) sent in chat.
 
-Unverified: touch drag on a device; screen reader output of the live region; dark theme.
+Unverified: touch drag on a device; screen reader output of the announcement; dark theme.
 
 ## Motion and interaction, 2026-10-07
 
@@ -112,3 +112,7 @@ The handle is not selectable. See [interaction polish](../research/interaction-p
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → handle appears at once and fades out on fast; lifted and inactive dims land at once and return on fast; drop line rounded to whole pixels.
 - 2026-10-12 · owner, review round 16: approved.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the drop line is `stroke-width` × 2 (was `border-width` × 2, so it vanished under Elevated) (property-list.css). (docs/research/consistency-audit-2026-10-12.md)
+
+### 2026-11-07 · One announcer (components audit D1)
+
+The move's own `aria-live` span is replaced by `announce` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")); the instructions stay the list's description. No visible change.

@@ -1,7 +1,9 @@
 import { forwardRef, useId } from "react";
-import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
-import { cx, navVariants, MANIFESTS, type VariantProps } from "../variants.ts";
+import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode, Ref } from "react";
+import { cx, navVariants, tooltipVariants, MANIFESTS, type VariantProps } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
+import { AnchoredTooltip } from "./Overlays.tsx";
+import { useOpenState } from "./overlay.ts";
 
 /**
  * Site navigation, vertical or horizontal.
@@ -39,10 +41,12 @@ export interface NavGroupProps extends HTMLAttributes<HTMLDivElement> {
   /** An expandable item's children: the rows step in one Tree view level (audit D-20). */
   nested?: boolean;
   /**
-   * A labelled group that folds: with `onOpenChange`, the heading is a button that shows and hides the run, its
-   * chevron after the name (Claude's and ChatGPT's sidebar sections). Controlled; leave both out for a fixed group.
+   * A labelled group that folds: with `onOpenChange` or `defaultOpen`, the heading is a button that shows and hides the
+   * run, its chevron after the name (sidebar sections). `open` controls it; `defaultOpen` folds it on its own, starting
+   * open (`true`) or folded (`false`), as Panel section's and Accordion item's. Leave all three out for a fixed group.
    */
   open?: boolean;
+  defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   /** Controls at the heading's end (a section's New), apart from the fold. */
   actions?: ReactNode;
@@ -54,19 +58,20 @@ export interface NavGroupProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const NavGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, NavGroupProps>(function NavGroup(
-  { label, nested, open, onOpenChange, actions, sticky, className, children, ...rest },
+  { label, nested, open: openProp, defaultOpen, onOpenChange, actions, sticky, className, children, ...rest },
   ref,
 ) {
   const labelId = useId();
   const itemsId = useId();
-  const folds = Boolean(label && onOpenChange);
+  const folds = Boolean(label && (onOpenChange || defaultOpen !== undefined));
+  const [open, setOpen] = useOpenState(openProp, defaultOpen ?? true, onOpenChange);
   const shown = !folds || open !== false;
   return (
     <div ref={ref} className={cx("area-nav__group", nested && "area-nav__group--nested", className)} role={label ? "group" : undefined} aria-labelledby={label ? labelId : undefined} {...rest}>
       {label ? (
         <div className={cx("area-nav__label", sticky && "area-nav__label--sticky")} id={folds ? undefined : labelId}>
           {folds ? (
-            <button type="button" className="area-nav__toggle" id={labelId} aria-expanded={shown} aria-controls={itemsId} onClick={() => onOpenChange!(!shown)}>
+            <button type="button" className="area-nav__toggle" id={labelId} aria-expanded={shown} aria-controls={itemsId} onClick={() => setOpen(!shown)}>
               <span>{label}</span>
               <span className="area-nav__chevron" aria-hidden="true"><Glyph name="chevron-down" size={12} /></span>
             </button>
@@ -99,14 +104,25 @@ export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
    * actions; a touch screen always shows them. */
   revealActions?: boolean;
   disabled?: boolean;
+  /**
+   * Can't be opened now, for a reason that will pass or that the person can change (components audit V2, 2026-11-07):
+   * drawn as disabled, but it keeps its Tab stop and the pointer, so it can say why in `inactiveText`. Following it does
+   * nothing (`aria-disabled`, no href). `disabled` is for a place that truly isn't there.
+   */
+  inactive?: boolean;
+  /** Why an inactive item can't be opened ("Upgrade to see insights"): a Tooltip on hover and focus, and its accessible description. */
+  inactiveText?: ReactNode;
   children?: ReactNode;
 }
 
 export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProps>(function NavItem(
-  { current, icon, picture, trailing, actions, revealActions, disabled, className, children, href, onClick, tabIndex, ...rest },
+  { current, icon, picture, trailing, actions, revealActions, disabled, inactive: inactiveProp, inactiveText, className, children, href, onClick, tabIndex, ...rest },
   ref,
 ) {
-  const link = (
+  // Disabled wins; an inactive item is unavailable as disabled is, but stays a Tab stop.
+  const inactive = Boolean(inactiveProp) && !disabled;
+  const unavailable = disabled || inactive;
+  const anchor = (
     <a
       ref={ref}
       className={cx("area-nav__item", className)}
@@ -114,12 +130,14 @@ export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProp
       // current without also announcing it.
       aria-current={current ? "page" : undefined}
       data-disabled={disabled ? "" : undefined}
-      aria-disabled={disabled || undefined}
+      data-inactive={inactive ? "" : undefined}
+      aria-disabled={unavailable || undefined}
       // Without its href a disabled item keeps the link role, so aria-disabled means something (audit D-29).
-      role={disabled ? "link" : undefined}
-      href={disabled ? undefined : href}
-      tabIndex={disabled ? -1 : tabIndex}
-      onClick={disabled ? (event) => { event.preventDefault(); } : onClick}
+      role={unavailable ? "link" : undefined}
+      href={unavailable ? undefined : href}
+      // An anchor without an href is no Tab stop, so an inactive one is given one back.
+      tabIndex={disabled ? -1 : inactive ? (tabIndex ?? 0) : tabIndex}
+      onClick={unavailable ? (event) => { event.preventDefault(); } : onClick}
       {...rest}
     >
       {picture ? (
@@ -135,6 +153,10 @@ export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProp
       {trailing ? <span className="area-nav__trailing">{trailing}</span> : null}
     </a>
   );
+  // The reason shows on hover and focus and describes the item, as an Area Tooltip does.
+  const link = inactive && inactiveText != null && inactiveText !== false
+    ? <AnchoredTooltip trigger={anchor} side="right" surface={props => <div role="tooltip" className={tooltipVariants({})} {...(props as HTMLAttributes<HTMLDivElement> & { ref: Ref<HTMLDivElement> })}>{inactiveText}</div>} />
+    : anchor;
   return actions ? <div className={cx("area-nav__row", revealActions && "area-nav__row--reveal")}>{link}<div className="area-nav__actions">{actions}</div></div> : link;
 });
 

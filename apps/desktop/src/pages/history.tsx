@@ -48,7 +48,7 @@ function changeTree(changes: readonly Change[]): TreeViewNode[] {
     const values = own.filter(change => change.what !== "added" && change.what !== "removed");
     return {
       id: `theme:${theme}`, label: theme,
-      status: own.some(change => change.what === "added") ? "added" : own.some(change => change.what === "removed") ? "removed" : "modified",
+      status: own.some(change => change.what === "added") ? "added" : own.some(change => change.what === "removed") ? "deleted" : "modified",
       children: values.length ? values.map((change, index) => ({
         id: `theme:${theme}:${change.what}:${index}`, label: changeLabel(change), status: "modified" as const,
         trailing: changeValue(change, change.after),

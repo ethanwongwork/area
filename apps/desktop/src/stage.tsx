@@ -158,7 +158,7 @@ function renderControl(control: PlaygroundControl, value: PropValue, change: (va
 
 /**
  * Leaving the Stage and opening it, from the keyboard: Escape or ⌘↑ goes back to the grid (Finder's
- * enclosing folder), unless Escape belongs to a field or an open overlay. Listened for in the capture
+ * enclosing folder), unless Escape belongs to a field, an open overlay or a Selection bar (which clears the selection). Listened for in the capture
  * phase, so an overlay that closes on Escape is still open when this looks.
  */
 export function useStageKeys({ onBack, enabled }: { onBack: () => void; enabled: boolean }) {
@@ -171,7 +171,7 @@ export function useStageKeys({ onBack, enabled }: { onBack: () => void; enabled:
       const escape = event.key === "Escape" && !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey;
       if (!up && !escape) return;
       const target = event.target as Element | null;
-      if (escape && (event.defaultPrevented || target?.closest("input, textarea, select, [contenteditable], [role='combobox'], [role='menu'], [role='listbox']")
+      if (escape && (event.defaultPrevented || target?.closest("input, textarea, select, [contenteditable], [role='combobox'], [role='menu'], [role='listbox'], .area-selection-bar")
         || document.querySelector(":popover-open, dialog[open]"))) return;
       event.preventDefault();
       back.current();

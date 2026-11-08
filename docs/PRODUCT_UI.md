@@ -447,8 +447,8 @@ Cursor's nav with Figma's tabs).
   Theme, Typography) a **subtitle** (muted, one sentence ending in a full stop) says what the block holds; **copy**
   (prose, table text) is regular. A family's purpose opens its page as a subtitle. `CanvasSection` (`src/tile.tsx`) and
   the family tabs' `Section` take `count` and `lede`. Nothing in a section speaks louder than its title: an empty state inside a section is Empty state `sm` (its title the
-  feed's 13/18 at 500, its description joined), and only one that takes the whole Canvas (no results, a missing library)
-  keeps md's 15/22 (2026-10-31, type pass; Home's and a project's six were md). A prop's name in the API's Props table
+  feed's 13/18 at 500, its description a step (4) off), and only one that takes the whole Canvas (no results, a missing library)
+  keeps md's title (16/22 since the 2026-11-02 ramp) (2026-10-31, type pass; Home's and a project's six were md). A prop's name in the API's Props table
   sits on the cell's line as inline Code; only several names stack (as a grid they became blocks and every row grew to
   36.4 against the other tables' 33).
 - **Tables in a feed share one label column** (owner, 2026-10-31, docs/research/feed-rhythm-2026-10-31): a page's tables
@@ -785,8 +785,8 @@ type 13; every size moves with the Type setting, every gap with Density.
    description, metadata, a table's header, a group label, a placeholder of a row); `fg-quiet` belongs to ghost controls
    and icons; tone inks belong to badges, marks and diff counts.
 4. **The smaller, the quieter.** 12 is always muted; 11 is a badge, a count, a key or a data label, never a sentence.
-5. **Gaps are read on the glyphs**: a text's cap and baseline, a frame's edge. A line that belongs to a title or label
-   joins it (no gap between their line boxes); joined lines sit 4 apart at most; groups 8 to 16; blocks 16; sections 48
+5. **Gaps are read on the glyphs**: a text's cap and baseline, a frame's edge. A line that belongs to a name or label
+   joins it (no gap between their line boxes), a surface's copy stands a step (4) under its title; joined lines sit 4 apart at most; groups 8 to 16; blocks 16; sections 48
    (feed) or turns 24 (chat).
 
 ### Feed kit (Labs › Feed; the Canvas)
@@ -849,7 +849,8 @@ A chat has no section titles and no ledes: the kit's section titles are the kit'
 
 - **Q-T1. A data card's title is the name role.** Card's title keeps `title-xs` and gains public hooks
   (`--area-card-title-size`, `-leading`, `-tracking`); the feed's frames set 13/18, weight 500, so the section's 16/22
-  title heads its cards.
+  title heads its cards. Since 2026-11-06 Card's own title is 13/18 500 (the balance pass, DESIGN_SYSTEM.md "Text
+  pairs"), so every Card reads this way and the hooks remain for a page that wants a larger name.
 - **Q-T2. Text that opens or closes a block is read on its glyphs.** Message's reply trims its first and last lines;
   Step, Timeline, plain Plan and Edit summary, Turn notice and Timestamp give back their line's half-leading at their
   outer edge. Measured after: every text-first section 15.7–16 under its title (were 19–21), a person's turn 24 over the

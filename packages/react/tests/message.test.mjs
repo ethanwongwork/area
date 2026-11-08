@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToString } from "react-dom/server";
-import { Message, MessageActions, MANIFESTS } from "../dist/modules/index.js";
+import { Message, MessageActions, MessageGroup, MANIFESTS } from "../dist/modules/index.js";
 
 for (const [axis, values] of Object.entries(MANIFESTS.message.variants)) {
   for (const value of values) {
@@ -38,4 +38,31 @@ test("Message uses default names and preserves rich assistant content without st
     assert.ok(html.includes(`aria-label="${name} said"`));
     assert.doesNotMatch(html, /aria-busy|data-streaming|area-message__cursor|<p><p>/);
   }
+});
+
+// packages/react/src/components/Message.tsx: sending and not sent (components audit O6, 2026-11-07).
+test("a sending message waits before its line shows; a message not sent says so, with Retry", () => {
+  const sending = renderToString(h(Message, { author: "user", status: "sending" }, "Body text"));
+  const root = sending.match(/<article[^>]*>/)[0];
+  assert.match(root, /class="area-message area-message--user area-message--sending"/);
+  assert.match(root, /aria-busy="true"/);
+  // The first render waits (Spinner's delay "long"): the line is in place, unseen until the wait passes.
+  assert.match(root, /data-waiting=""/);
+  assert.match(sending, /<p class="area-message__status"><span class="area-message__status-text">Sending…<\/span><\/p>/);
+  const failed = renderToString(h(Message, { author: "user", status: "error", onRetry: () => {} }, "Body text"));
+  assert.doesNotMatch(failed.match(/<article[^>]*>/)[0], /aria-busy|data-waiting/);
+  assert.match(failed, /area-message__status"><svg[^>]*data-area-glyph="dismiss-circle"[^]*<span class="area-message__status-text">Not sent<\/span><button[^>]*>[^]*Retry<\/span><\/button><\/p>/);
+  assert.doesNotMatch(renderToString(h(Message, { author: "user", status: "error" }, "Body text")), /Retry/);
+  assert.match(renderToString(h(Message, { author: "user", status: "error", statusText: "Not delivered" }, "Body text")), />Not delivered</);
+  assert.doesNotMatch(renderToString(h(Message, { author: "user" }, "Body text")), /area-message__status/);
+});
+
+// V9: a stack of the person's messages, and one message split into bubbles.
+test("MessageGroup stacks turns; split puts each child in a bubble of its own on the same stack", () => {
+  const group = renderToString(h(MessageGroup, { id: "g", className: "extra" }, h(Message, { author: "user" }, "Item one"), h(Message, { author: "user" }, "Item two")));
+  assert.match(group, /^<div class="area-message__stack extra" id="g"><article[^>]*>[^]*<article/);
+  const split = renderToString(h(Message, { author: "user", split: true, streaming: true }, h("span", null, "Item one"), h("span", null, "Item two")));
+  assert.match(split, /<div class="area-message__stack"><div class="area-message__bubble"><span>Item one<\/span><\/div><div class="area-message__bubble"><span>Item two<\/span><span class="area-message__cursor"/);
+  // One child is one bubble, with no stack.
+  assert.doesNotMatch(renderToString(h(Message, { author: "user", split: true }, "Item one")), /area-message__stack/);
 });

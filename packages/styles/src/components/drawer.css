@@ -38,7 +38,7 @@
   .area-drawer__modal::backdrop {
     background: var(--area-scrim);
     opacity: 1;
-    transition: opacity var(--area-duration-moderate) var(--area-ease-out), overlay var(--_drawer-in) allow-discrete, display var(--_drawer-in) allow-discrete;
+    transition: opacity var(--area-fade-moderate) var(--area-ease-out), overlay var(--_drawer-in) allow-discrete, display var(--_drawer-in) allow-discrete;
   }
   .area-drawer__modal:not([open])::backdrop { opacity: 0; transition-duration: var(--_drawer-out); }
   html:has(.area-drawer__modal:modal) { overflow: hidden; }
@@ -116,32 +116,7 @@
     .area-drawer__modal, .area-drawer { --_drawer-in: 0s; --_drawer-out: 0s; }
   }
 
-  /* Header, title, description and close: Dialog's (surface.css), so the two read as one family. */
-  .area-drawer__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--area-inset-surface-md);
-    flex-shrink: 0;
-  }
-  .area-drawer__header:has(> .area-drawer__close) { margin-block-start: calc((var(--area-icon-md) - var(--area-leading-24)) / 2); }
-  .area-drawer__header > .area-drawer__close {
-    margin-block: calc((var(--area-leading-24) - var(--_height)) / 2);
-    margin-inline-end: calc((var(--_icon) - var(--_height)) / 2);
-  }
-  .area-drawer__heading { min-inline-size: 0; display: grid; gap: 0; } /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 4, baseline to cap 16) */
-  .area-drawer__header:has(> .area-drawer__close) .area-drawer__title { text-box: none; }
-  .area-drawer__title {
-    margin: 0;
-    /* Dialog's: without a close, the cap sits on the inset. */
-    text-box: trim-start cap alphabetic;
-    overflow-wrap: anywhere;
-    font-size: var(--area-title-xs-size);
-    line-height: var(--area-title-xs-leading);
-    letter-spacing: var(--area-title-xs-tracking);
-    font-weight: var(--area-weight-strong);
-  }
-  .area-drawer__description { margin: 0; overflow-wrap: anywhere; color: var(--area-fg-muted); }
+  /* Header, title, description and close: Dialog's title group, one rule for both (surface.css). */
   /* The body scrolls between a fixed header and footer, with Dialog's bleed for focus rings. */
   .area-drawer__body {
     --_drawer-bleed: calc(var(--area-focus-width) + var(--area-focus-gap));

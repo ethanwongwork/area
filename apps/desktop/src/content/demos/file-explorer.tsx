@@ -66,6 +66,18 @@ export const GalleryFileGrid = () => {
     </div>
   );
 };
+/* Several (components audit V7): `multiple` on the grid, as a file browser chooses: a click chooses one, Cmd or Ctrl+click
+   adds or removes one, Shift+click adds the run, Space toggles, Ctrl or Cmd+A chooses all. */
+export const GalleryFileGridMultiple = () => (
+  <div style={{ inlineSize: 420, maxInlineSize: "100%" }}>
+    <FileGrid aria-label="Label" size="md" multiple defaultValues={["one", "three"]}>
+      <FileGridItem value="one" name="Item one" meta="Description" figure={<Folder />} />
+      <FileGridItem value="two" name="Item two" meta="Description" figure={<Folder />} />
+      <FileGridItem value="three" name="Item three.pdf" meta="Description" figure={<FilePage />} />
+      <FileGridItem value="four" name="Item four.pdf" meta="Description" figure={<FilePage />} />
+    </FileGrid>
+  </div>
+);
 /* A folder under a drag tips open. */
 export const GalleryFileGridDropTarget = () => (
   <div style={{ inlineSize: 300, maxInlineSize: "100%" }}>

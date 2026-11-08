@@ -61,7 +61,9 @@ test("Combobox options preserve group names, selected value and disabled state",
 test("Combobox renders filtered, creatable, empty and readonly usages", () => {
   const filtered = renderToString(h(Combobox, { options, inputValue: "DESIGN", "aria-label": "Team" }));
   assert.equal((filtered.match(/role="option"/g) ?? []).length, 1);
-  assert.match(filtered, /Design team/);
+  // The typed text is marked in the option (highlightMatch; components audit V4, 2026-11-07).
+  assert.match(filtered.replace(/<[^>]+>/g, ""), /Design team/);
+  assert.match(filtered, /<mark class="area-menu__match">Design<\/mark> team/);
   assert.doesNotMatch(filtered, /Engineering team/);
   const empty = renderToString(h(Combobox, { options, defaultInputValue: "Missing", emptyText: "No teams", "aria-label": "Team" }));
   assert.match(empty, /area-combobox__empty" role="presentation">No teams/);

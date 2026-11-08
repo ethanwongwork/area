@@ -134,3 +134,9 @@ Password field instead of its own recipe (it drew the Fluent eye).
 ## Feedback log
 
 - 2026-10-13 · owner, review round 24: approved (no notes).
+
+### 2026-11-07 · onValueChange (components audit O3)
+
+- **What changed:** Input's `onValueChange(value, event)` reaches the field.
+- **Why:** PasswordField.tsx:9-18 passed props to Input, which had none. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

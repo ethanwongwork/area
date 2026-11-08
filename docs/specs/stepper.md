@@ -24,7 +24,7 @@ with arrows, which is Cursor's "stepper"), not Timeline (events that happened), 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | orientation | horizontal (default), vertical | near-universal (Atlassian horizontal only, GOV.UK vertical only) | — |
-| status (per step) | complete, current, upcoming, invalid | complete / current / upcoming everywhere; error in Carbon, Ant, MUI | — |
+| status (per step) | complete, current, pending, error (`upcoming`, `invalid` deprecated aliases) | complete / current / upcoming everywhere; error in Carbon, Ant, MUI | — |
 | content | title; optional description; what an open step holds (`children`) | all; MUI optional, Ant description; Base Web ProgressSteps and GOV.UK step-by-step open a step in place | the Theme setup's Sidebar |
 | behavior | static; done steps as buttons (`onStepSelect`); every step (`nonLinear`) | WAI, Atlassian, Spectrum, MUI linear; MUI `nonLinear`, Mantine, Ant | — |
 
@@ -110,7 +110,7 @@ choice controls' paint.
 - Status reaches assistive tech as words ("Members, current step"); markers are hidden. `statusLabels` changes the
   words.
 - Done steps are real buttons (Enter and Space). The current step isn't one.
-- The current step keeps `aria-current="step"` whatever its status, an `invalid` one included (2026-10-19).
+- The current step keeps `aria-current="step"` whatever its status, one in `error` included (2026-10-19).
 - An open step's content is ordinary content after the step's body, inside its `li`: its own controls keep their own
   roles and Tab stops (the Theme setup puts a Nav there).
 - Not verified: content in a horizontal step beyond one look; very long titles in horizontal steps (they wrap within the step's share), right-to-left.
@@ -197,3 +197,10 @@ Step buttons press at `bg-component-pressed`, one step past selected (Notion pre
   numbers are Kbd keycaps, so the marker now is one too. The light-to-dark fill is your round 67 idea and Ant's default
   steps. The spacing you liked is unchanged. Dots, bars and a small size remain proposals
   (`docs/research/text-gaps-2026-10-22/stepper.md`).
+
+### 2026-11-07 · Shared status words (system gaps C1)
+
+- **What changed:** A step not reached is `pending` (`--pending`) and one with a problem `error` (`--error`); React maps `upcoming` and `invalid` for one release.
+- **Why:** one set of status words across Plan, Stepper, Step, Queue, Attachment, File upload, Edit summary and Turn
+  notice (GOVERNANCE.md, "Status words"; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.

@@ -26,7 +26,7 @@ test("a Step is one line; with a body it is a button that opens it", () => {
 test("a running Step is busy and a failed one says so", () => {
   assert.match(renderToString(h(Step, { verb: "Reading", status: "running" })), /data-running="" aria-busy="true"/);
   const failed = renderToString(h(Step, { verb: "Ran", status: "failed" }));
-  assert.match(failed, /data-failed=""/);
+  assert.match(failed, /data-error=""/);
   assert.match(failed, /<span class="area-sr-only">Failed<\/span>/);
 });
 
@@ -53,6 +53,14 @@ test("an Edit summary names itself, totals its files and speaks its counts", () 
   assert.match(html, /aria-label="Undo button\.css"/);
   assert.match(html, /aria-label="Keep button\.css"/);
   assert.match(html, /class="area-edit-summary__name" aria-expanded="false"/);
+});
+
+test("Edit summary speaks the shared change words: deleted, with removed kept as its deprecated alias (components audit D6)", () => {
+  const html = renderToString(h(EditSummary, { added: 2, deleted: 5 }, h(EditSummaryFile, { name: "a.css", added: 2, deleted: 5 })));
+  assert.equal((html.match(/<span class="area-edit-summary__deleted"><span aria-hidden="true">−5<\/span><span class="area-sr-only">5 deleted<\/span><\/span>/g) ?? []).length, 2);
+  const legacy = renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 4 }));
+  assert.match(legacy, /area-edit-summary__deleted"><span aria-hidden="true">−4/);
+  assert.doesNotMatch(legacy, /area-edit-summary__removed/);
 });
 
 test("a kept or undone file settles: its actions leave and it says what happened", () => {
@@ -83,7 +91,9 @@ test("a Diff draws numbers, markers and folds, says which lines changed, and tak
   ] }));
   // It scrolls sideways, so a keyboard can reach it.
   assert.match(html, /^<figure class="area-diff" aria-label="Changes to a\.css" tabindex="0">/);
-  assert.match(html, /class="area-diff__line area-diff__line--removed"/);
+  // `removed`, the deprecated spelling, arrives as the shared word `deleted` (components audit D6).
+  assert.match(html, /class="area-diff__line area-diff__line--deleted"/);
+  assert.match(html, /<span class="area-sr-only">Deleted: <\/span>b/);
   assert.match(html, /class="area-diff__line area-diff__line--added"/);
   assert.match(html, /<span class="area-diff__marker" aria-hidden="true">−<\/span>/);
   assert.match(html, /<span class="area-sr-only">Added: <\/span>c/);
@@ -154,7 +164,7 @@ test("a Plan counts what is done and says each item's state", () => {
   ] }));
   assert.match(html, /data-open=""/);
   assert.match(html, /<span class="area-plan__count">1 of 3<\/span>/);
-  assert.match(html, /area-plan__item area-plan__item--done[^]*One<span class="area-sr-only">, Done<\/span>/);
+  assert.match(html, /area-plan__item area-plan__item--complete[^]*One<span class="area-sr-only">, Done<\/span>/);
   assert.match(html, /area-plan__item--current[^]*, In progress/);
   assert.match(html, /area-plan__item--pending[^]*, Not started/);
   const cancelled = renderToString(h(Plan, { items: [{ id: "1", label: "One", status: "cancelled" }] }));
@@ -204,7 +214,7 @@ test("a Plan on a rail holds its items' detail and the current item's steps in o
   // Detail sits in the item's words, before its status for assistive tech.
   assert.match(html, /One<span class="area-plan__detail"><span class="chip">Value<\/span><\/span><span class="area-sr-only">, Done/);
   // One level of steps, in an ordered list inside the current item.
-  assert.match(html, /area-plan__item--current[^]*<ol class="area-plan__steps"><li class="area-plan__item area-plan__item--done">[^]*Step one[^]*Value[^]*Step two/);
+  assert.match(html, /area-plan__item--current[^]*<ol class="area-plan__steps"><li class="area-plan__item area-plan__item--complete">[^]*Step one[^]*Value[^]*Step two/);
   assert.equal(html.match(/area-plan__steps/g).length, 1);
   assert.doesNotMatch(html, /Too deep/);
 });

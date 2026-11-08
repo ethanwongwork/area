@@ -134,6 +134,34 @@ without a meaning. `gray` has tints and inks only: a near-neutral scale has no t
 stroke that clears the outline floor. Every label colour has light and dark pairs checked by
 the contrast tests, including its strong ink on its tint.
 
+**Every hue has the same roles** (components audit D5, 2026-11-07; `packages/tokens/src/semantic/hues.ts`). The ten label
+hues (`neutral`, `gray`, `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red`: Tag `color`, Board
+columns, Link's and Citation's hued inks, and a chart that colours by a label) each have one role table,
+`--area-hue-<hue>-<role>`, in light and dark. A family that takes a hue reads these roles and never a tone or a palette
+step of its own, so a blue Tag, a blue column and a blue link are one blue.
+
+| Role | What it paints | Where it comes from | Held to (contrast gate) |
+|---|---|---|---|
+| `text` | words in the hue: a Tag label, a column's count, a hued link | the tone's ink, `fg-<tone>` (neutral `fg-default`) | 4.5:1 on the page, the surfaces and each of its own tints |
+| `icon` | a glyph or dot that stands alone | the tone's mark, `fg-<tone>-mark`: the first rung from 500 that clears 3.5:1 on white, the tone's ink in dark (neutral `fg-muted`) | 3:1 on the page, the surface and its tint |
+| `border` | an outline in the hue | the tone's stroke, `<tone>-border` (gray and neutral: the control edge `border`) | the ambient stroke tier, as the tone strokes |
+| `bg`, `bg-hover`, `bg-active` | the soft tint and its steps | `<tone>-surface`, `-hover`, `-active` (neutral: rgba(42,28,0,.07), dark white 10%, with the hover and selected washes laid over it) | its words, 4.5:1 |
+| `accent`, `on-accent` | the strong fill and the words on it | `<tone>-solid`, `fg-on-<tone>` (gray: warm 500 under white; neutral: the neutral solid) | 4.5:1 |
+| `bg-translucent` | a ground that sits on any ground: a Board column | `bg` at 50%, see-through (neutral: the default ink at 3%) | — (the words on it are the column's) |
+| `border-translucent` | a ring on a tinted ground | `text` at 10%: a Board card's ring at the default Cards stroke | — (decorative) |
+
+Blue is `info`, green `success`, orange `warning`, yellow `caution`, red `danger`, purple `discovery`; pink, gray and
+brown are label tones of their own. So the roles move with Tone tint, Tone contrast and Status colours as the tones do.
+A mark that stands alone takes `icon`, never `accent`: on white a yellow or orange fill sits under 3:1, and the accent is
+for a fill its own words identify. Data series stay `--area-series-<n>` (below); a chart colours by a label hue only
+when the data is a label.
+
+**Change words have their own inks** (components audit D6, 2026-11-07; Governance § 4, "Change words"):
+`--area-fg-change-added` (success), `-modified` (warning), `-deleted` (danger), `-untracked` and `-renamed` (info, the
+nearest hue to the cyan Cursor's editor gives them; git's letter tells the two apart). Tree view's status letter, a
+Tab's label and Edit summary's counts read them; Diff and Code block keep their line tints. `unseen` (changed since it
+was last looked at) is a state apart: a 6 dot in `accent-indicator`, never a colour of the status.
+
 **Emphasis roles.** Area has one chosen colour, the accent (any hue, strength and solid step), plus neutral. Components never
 offer an accent tone. They paint one of two roles, and the `action` and `selection` settings
 decide whether each is neutral or the accent. Action defaults to neutral, Selection to the accent (2026-10-22):
@@ -195,6 +223,22 @@ cell) and for controls nested on a row. The pressed fill follows every ground an
 setting (`packages/styles/src/layers.css`), and always moves at least the press room past selected, on a sidebar too. How dark each plate is comes from the Fill settings (Hover, Selected,
 Pressed; [Theming](THEMING.md#settings), interaction states), each built on the one before so the order always holds.
 
+**Selection when the list isn't focused** (components audit V15, 2026-11-07; the code editor's inactive selection): a
+list with its own focus (List box, Tree view in navigation mode, a Table that holds a checkbox, link or focusable row)
+paints its selected rows on the selected fill only while focus is inside it (`:focus-within`); while focus is elsewhere
+they step back to the **hover plate**, so the list you're working in reads as the active one. No script and no new
+token: the hover plate is already the quieter step on every ground, its words' contrast is asserted, and Hover fill
+never goes below 25, so the quieter plate is never invisible (CONTRAST.md). At Selected fill 0 the two plates are one and
+nothing changes. The place you are is not a selection: Nav's and Tree view's current page (`aria-current`) keep their
+plate. A table with nothing to focus can't be the active list and keeps the firm plate. `cohesion.test.mjs` holds the
+rule.
+
+**Inactive** (components audit V2, 2026-11-07; Button, Menu item, Nav item): drawn as disabled (its parts at
+`opacity-disabled`, no hover or press paint) but focusable and hoverable, with `aria-disabled` and its reason
+(`inactiveText`) as its description: a Tooltip on Button and Nav item, the note under a Menu row's label. The element
+itself never takes the opacity, so its focus indicator (Button's and Nav's ring, a Menu row's plate) stays at full
+strength. Which to use is [Writing › Disabled or inactive](WRITING.md#disabled-or-inactive).
+
 Stacked plates sit `ui-row-gap` apart: **1px at every type and density**, so a hovered row never runs into the current
 one (owner 2026-10-21; ChatGPT's and Notion's sidebar rows are 1 apart). It is a separation, not spacing: density
 changes the row's height, never this break. Spacing that should follow density uses `ui-stack`, `ui-cluster` or its
@@ -237,7 +281,7 @@ own step.
   - One glyph-edge grey, `edge-control-hover`, for Checkbox and Radio edges and the Slider
     thumb.
   - The Spinner track is its own ink at 25%.
-- **Neutral soft marks** (Badge soft, Chip input, soft Count) sit on one translucent plate,
+- **Neutral soft marks** (Badge soft, Chip input, soft Count, soft Mention) sit on one translucent plate,
   `bg-mark`, so they stay visible on a hovered or selected row. Avatar and a selected Chip
   keep `bg-component-active`.
 - **Quiet ink.** Icon actions (ghost icon Buttons, Message actions) use `fg-quiet`, the
@@ -307,7 +351,7 @@ role ([research](research/elevation-2026-10-14.md)):
 | `shadow-field` | Outline fields and select triggers; outline and soft Buttons | Field shadow (0 by default) |
 | `shadow-tooltip` | Tooltip, Toggletip | Elevation |
 | `shadow-lift` | A linked Card or an app tile under the pointer | Hover lift |
-| `shadow-float` | Menu and everything that opens one, Popover and everything built on it, Select picker, Toast, Calendar and Color picker surfaces, floating Toolbar, Board card actions, Scroll to latest | Elevation |
+| `shadow-float` | Menu and everything that opens one, Popover and everything built on it, Select picker, Toast, Calendar and Color picker surfaces, floating Toolbar and Selection bar, Board card actions, Scroll to latest | Elevation |
 | `shadow-modal` | Dialog, Confirm dialog, Drawer, Command palette | Elevation, doubled |
 | `shadow-edge` | Listed first by every framed surface | Rest shadow (0 by default) |
 
@@ -328,10 +372,10 @@ role ([research](research/elevation-2026-10-14.md)):
 - **Contrast never strengthens a shadow.**
 - **The edge does the separating at every step.** `border-float` (#eeeeee in light, #4b4b4b
   in dark) frames every floating surface: Popover, Menu, Dialog, Toast, Command palette, the
-  surface Calendar and Color picker, the floating Toolbar. A floating surface therefore stays
+  surface Calendar and Color picker, the floating Toolbar and Selection bar. A floating surface therefore stays
   distinct over another surface where its shadow no longer reads.
 - **Forced colours drop `box-shadow`.** `forced-colors.css` puts frames back at 1px and gives
-  the floating Toolbar, whose edge is an inset shadow, an outline.
+  the floating Toolbar and Selection bar, whose edge is an inset shadow, an outline.
 - **The dark Tooltip** stays a dark annotation (#282828 with a 5% white inset edge).
 
 **Edge and Depth** are ten independent controls, with no named looks: Stroke width, Stroke,
@@ -377,11 +421,11 @@ owner's picks:
 | Group | Amount | Members |
 |---|---|---|
 | Cards | 4 (10%) | Card, Surface, Asset card, Attachment, Board card, Preview frame |
-| Blocks | 5 (12.5%) | Code block, Table's frame, Description list framed, Plan, Queue, Edit summary |
+| Blocks | 5 (12.5%) | Code block, Table's frame, Description list framed, Settings group framed, Plan, Queue, Edit summary |
 | Callouts | 4 | Alert |
-| Floating | 5 | Menu, Popover, Hover card, Toast, Dialog, Drawer, Command palette, Calendar and Color picker surfaces, the Select picker, floating Toolbar and Titlebar |
+| Floating | 5 | Menu, Popover, Hover card, Toast, Dialog, Drawer, Command palette, Calendar and Color picker surfaces, the Select picker, floating Toolbar, Selection bar and Titlebar |
 | Regions | 3 (7.5%) | Panel, the Titlebar's rule |
-| Dividers | 3 | Separator, Menu, Nav, Toolbar and File upload separators, Table rows and column rules, Tabs track, Accordion, Description list divided, Link groups, Shortcut list, Inline list, Tree view guides, Timeline, Stepper and Step lines, Plan's rail, the Command palette's search rule, a flush Code block's rule |
+| Dividers | 3 | Separator, Menu, Nav, Toolbar and File upload separators, Table rows and column rules, Tabs track, Accordion, Description list divided, Settings group's rows, Link groups, Shortcut list, Inline list, Tree view guides, Timeline, Stepper and Step lines, Plan's rail, the Command palette's search rule, a flush Code block's rule |
 | Fields | 5 | Soft Input, Select, Custom select, Number field, Textarea, Date picker, Tag picker, OTP, Input group (`input-edge-soft`) |
 | Buttons | 3 | Soft Button, soft Button group, soft Split button, soft Toggle group, the Segmented track |
 | Options | 4 | Choice cards and soft choice rows (Radio, Checkbox) |
@@ -482,11 +526,22 @@ and `emit/base.ts`; never copy a table into a component
   stands on its own (a row, a cell) takes a ramp size, never inline Code's 0.875em.
 - **Text pairs** (owner, 2026-09-28 on Card, 2026-10-22 for every family; measured in
   `docs/research/text-gaps-2026-10-22`). Gaps are read on the glyphs (baseline to cap), and each kind of pair has one:
-  - a line that belongs to a title or label (description, subtitle, a group legend's description) **joins** it, with
-    no gap between their line boxes: title baseline to description cap is about 12 for a 16 title over 14 text and
-    10 for 14 over 14 (Figma and Notion 11.5). A 12/16 line has 2 less leading, so it sits 2 below (10.5 under a 14
-    title), as a choice's description does. Card, Dialog, Drawer, Popover, Alert, Toast, Empty state,
-    choices and their groups, Switch and Approval all follow it;
+  - **a surface's title is the size of the text it heads** (2026-11-06 balance pass, owner: "Keep it", then "4 is right";
+    `docs/research/title-balance-2026-11-06`): 13/18 over 13/18 at type 13, told apart by weight (500) and ink (default
+    over muted), never by size, and its copy stands **one step (4) off** it: 12.8 baseline to cap beside the copy's own
+    8.8 (11.7 over a 12/16 line). Card, Dialog, Confirm dialog, Drawer, Popover, Alert, Toast, Approval and Empty state
+    `sm` follow it (Cursor's confirm: its title 4 over its message). Joined on the copy's line (the pass's first try) the
+    title read as the paragraph's first line (owner: "the space between the title and the copy still doesnt look right");
+    before that, a 16 title over 13 text (1.23×, after the 2026-11-02 ramp moved title-xs from 15 to 16) joined at 10.0;
+  - **an item's name and its line join** with no gap between the line boxes: a choice's, a group legend's and Switch's
+    description, File tile's meta, a File upload row's size line, a Stepper step's description. The line reads as the
+    name's second line: 8.8 baseline to cap at 13/18, 7.7 for a 12/16 line beside its own 7.4 (they sat 2 apart until
+    2026-11-06);
+  - **a heading over its text** (a title that heads a page or a region rather than names a component: Empty state `md`,
+    Section heading, the app's section titles) takes a title step (`title-xs` and up) and the same step (4) off: 14.0
+    baseline to cap over 13/18 text (Cursor's settings header: 17/21, 4, 13/18);
+  - **never between**: a gap within about 2 of the text's own line gap, but not on it (the 10.0 above), reads as
+    neither joined nor apart, so as no decision. A pair is joined on the line (a name) or a whole step off it (a title);
   - a label above its one control: `ui-stack` (6), Field's gap, so the label's baseline sits 11 above the control's edge;
   - a text group (a title or legend, with or without its description) above a **set** it introduces (options, rows,
     links, a list) stands one step further from it than the set's items stand from each other, on Area's ladder
@@ -497,7 +552,7 @@ and `emit/base.ts`; never copy a table into a component
     the value starts `gap-row` (12) after it. A fixed column is for editable property rows only (Description list's
     `columns`, Notion's properties);
   - a text group to the block after it (a list, actions, a footer): the container's block gap (Card's 12).
-  Weight and ink follow the part, not the family: a title that names a surface or section is strong (500); the name
+  Weight and ink follow the part, not the family: a title that names a surface or heads a section is strong (500); the name
   of an item or control (a choice, a step, a row, a file) is regular (400); supporting lines are muted and regular.
   A joined pair is never tighter than the lines inside it: at 13/18 over 13/18 the join is 8.8 baseline to cap (Section
   heading 8, with its trimmed boxes), the same as the lede's own lines, so the title reads as the pair's first line.
@@ -738,8 +793,13 @@ How the files fit together is in [Architecture](ARCHITECTURE.md). The rules:
   - A value is `value` / `defaultValue` / `onValueChange(value, event)`. The event comes
     second, optional where a change can arrive without one.
   - On/off is `checked` (`onCheckedChange`) or `selected` (`onSelectedChange`).
-  - An overlay is `open` / `defaultOpen` / `onOpenChange`; a close is `onDismiss` /
-    `dismissLabel`.
+  - An overlay is `open` / `defaultOpen` / `onOpenChange`, and so is any list or menu a field or button opens; a close
+    is `onDismiss` / `dismissLabel`.
+  - Read-only is `readOnly`, painted `data-read-only` and announced `aria-readonly` where the role takes it: rest paint,
+    no hover or press, a default cursor. A control without a native read-only (a checkbox, a button that opens a
+    picker) blocks the change itself (components audit 2026-11-07, O2).
+  - Validation is `invalid` / `validationStatus` (`error`, `success`, `warning`) on every field, and a Field's status
+    reaches its control through `data-validation-status`: the success and warning edges are Input's (O1).
   - Pending is `loading`, and hover timing is `delay` / `closeDelay`.
   - Renamed props keep a deprecated alias for a release.
 - **Names and collections.**
@@ -747,15 +807,44 @@ How the files fit together is in [Architecture](ARCHITECTURE.md). The rules:
     (`menuLabel`, `dismissLabel`, `toggleLabel`), and `label` is visible text or spoken
     content.
   - A collection is `items`.
-  - Glyph slots are `icon` / `trailingIcon`, and media `leadingVisual`. Input keeps
-    `leadingIcon` / `trailingIcon` because a field has two glyph sides.
-  - `trailing` holds text or a count.
+  - Glyph slots are `icon` / `trailingIcon`, and media `leadingVisual`, in fields too: Input's and Search field's
+    `leadingIcon` is a deprecated alias of `icon` (owner, 2026-11-07, system gaps C4).
+  - A close is `onDismiss` / `dismissLabel`, and its part is `__dismiss` in every family (Chip, Tag, Attachment,
+    Dialog, Drawer, Alert, Toast, Badge, Prompt suggestions; was `__remove` and `__close` until 2026-11-07).
+  - `trailing` holds text or a count (Nav item, Tabs items, Tree view nodes, Menu item since 2026-11-07).
+  - An actions slot is `actions`, its part `__actions` (Alert, Toast, Empty state; 2026-11-07). Card header's single
+    `action` (one Badge or icon Button) is not yet aligned.
   - A picker that renders a group and a visible legend keeps `label` as a fallback name, and
     `aria-label` wins.
 - **Logical properties** (`inline-size`, `padding-inline`), so direction follows the scope.
 - **Stacking.** Components stack only locally (z-index 0–2 inside their own box). Floating
   surfaces use the top layer, the `z-*` scale is for product chrome, and the modal backdrop
   is `--area-scrim`.
+
+## Announcements
+
+One announcer says every change a screen reader would otherwise miss (components audit D1, 2026-11-07). A page has
+one polite region and one assertive region, made on first use and shared by every family; no family writes an
+`aria-live` region of its own.
+
+- **The API.** `announce(message, { politeness })` from `@area/react`, for a change that follows an event (a copy, a
+  toast, a tag added, a row moved). `useAnnouncement(message)` for a status a component shows away from focus: it says
+  the message each time it changes after the first render (an upload's state, the month on view, contrast passing).
+  `clearAnnouncements()` empties both regions.
+- **Polite by default.** `assertive` only for a failure the person must act on now: a danger Toast. A failed upload, a
+  "No results" and a finished step are polite.
+- **Say what changed, with its subject.** "Brand guidelines.pdf: Complete", not "Complete"; "Fills moved to position 2
+  of 3". The words follow [Writing](WRITING.md): a status is a past participle or a noun phrase, no "successfully".
+- **How it behaves.** No document is touched at import, so server rendering is safe; the regions are one per document,
+  even with two copies of the package; each message empties the region, then writes it 100 ms later, so the same
+  words twice are said twice; the text clears itself after 7 s, so it isn't found later while reading the page. While
+  a modal dialog is open the regions move into it, since the rest of the page is inert.
+- **Kept where the visible text is the message** (`packages/react/tests/cohesion.test.mjs` lists them): Alert's
+  `status` / `alert`, a named Spinner's `status`, a Toast shown without a Toaster, Turn notice, compact
+  Pagination's "Page 2 of 10", and an Empty state the page gives `role="status"` after a search. Each is the element on screen, rendered with its words, so the role names it rather
+  than reporting a change elsewhere.
+- **Not for validation.** A field's error is its description (`aria-describedby`, `aria-invalid`), read when the field
+  is reached; it is not announced as it appears.
 
 ## Example copy
 

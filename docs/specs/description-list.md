@@ -234,3 +234,9 @@ Framed insets: the frame's stroke is counted once, so text and rules sit 16 from
 - **Why:** you picked "One Inspector grid" and "packed, 26" on the Inspector panel study
   (https://claude.ai/artifact/WmGzS6vuoRKesKcRuhp6hj): values started in four places in one Inspector.
 - **Verdict:** in review.
+
+### 2026-11-07 · The event in onExpandedChange (components audit O3)
+
+- **What changed:** `onExpandedChange(expanded, event)` passes the Show more press.
+- **Why:** DescriptionList.tsx:25. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

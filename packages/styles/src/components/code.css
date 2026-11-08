@@ -174,13 +174,13 @@
     /* `--area-code-block-inset` and `--area-code-block-corner` (public hooks, 2026-11-01, as Table's edge and corner) hold
        a block to the frames around it: the code's inset from the edge above, below and at the start, and the corner. The
        app's feed sets its one frame inset and corner (owner: "all containers feel consistent"). */
-    --_code-block-inset: var(--area-code-block-inset, calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense))); /* 12, compact 8 */
-    --_code-inline-inset: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12 */
-    --_code-start: var(--area-code-block-inset, calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense))); /* 12, compact 8 */
+    --_code-block-inset: var(--area-code-block-inset, var(--area-inset-surface-sm)); /* 12, compact 8 */
+    --_code-inline-inset: var(--area-inset-surface-md); /* 16, compact 12 */
+    --_code-start: var(--area-code-block-inset, var(--area-inset-surface-sm)); /* 12, compact 8 */
     --_code-gutter: calc(var(--area-space-24) + var(--area-space-8));
     --_code-diff-gutter: var(--area-space-48);
     --_code-number-start: var(--area-space-6);
-    --_code-number-end: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
+    --_code-number-end: var(--area-inset-surface-sm);
     --_code-ui-size: var(--area-ui-size);
     --_code-ui-leading: var(--area-ui-leading);
     --_code-header-block: var(--area-space-4);
@@ -318,12 +318,13 @@
   }
 
   /* spec: without the gutter, code starts where the header's filename and the numbers do (12). */
-  .area-code-block--unnumbered .area-code-block__line:not(.area-code-block__line--added, .area-code-block__line--removed) .area-code-block__text {
+  .area-code-block--unnumbered .area-code-block__line:not(.area-code-block__line--added, .area-code-block__line--deleted, .area-code-block__line--removed) .area-code-block__text {
     padding-inline-start: var(--_code-start);
   }
 
   /* A diff marker keeps its own column even when the numbers are hidden. */
   .area-code-block--unnumbered .area-code-block__line--added,
+  .area-code-block--unnumbered .area-code-block__line--deleted,
   .area-code-block--unnumbered .area-code-block__line--removed {
     grid-template-columns: var(--_code-gutter) minmax(0, 1fr);
   }
@@ -434,13 +435,14 @@
     --_ink-darken: calc(0.075 * (max(1.25, 1.5 + 0.375 * (var(--area-fill-hover-step) - 2)) + 0.625 * var(--area-fill-selected-step)) / 2.125); /* spec */
     --_ink-lift: clamp(0, calc((var(--area-layer-dark-raised) - 0.225) * 4.5), 1); /* spec */
   }
-  .area-code-block__line:is(.area-code-block__line--added, .area-code-block__line--removed) { --_ink-darken: 0.05; } /* spec */
+  .area-code-block__line:is(.area-code-block__line--added, .area-code-block__line--deleted, .area-code-block__line--removed) { --_ink-darken: 0.05; } /* spec */
 
   .area-code-block__line--added {
     background-color: var(--area-success-surface);
   }
 
-  .area-code-block__line--removed {
+  /* `--removed` is the deprecated spelling of `--deleted` (components audit D6). */
+  .area-code-block__line--deleted, .area-code-block__line--removed {
     background-color: var(--area-danger-surface);
   }
 
@@ -449,7 +451,7 @@
     color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
   }
 
-  .area-code-block__line--removed .area-code-block__marker {
+  .area-code-block__line--deleted .area-code-block__marker, .area-code-block__line--removed .area-code-block__marker {
     --_ink: var(--area-fg-danger-vivid);
     color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
   }
@@ -658,7 +660,7 @@
   .area-code-block--reveal-actions > .area-code-block__actions { border-radius: var(--area-radius-control-sm); background-color: var(--_code-ground, var(--area-bg-code)); }
   .area-code-block--reveal-actions > .area-code-block__actions ~ .area-code-block__body .area-code-block__line:first-child .area-code-block__text { padding-inline-end: var(--_code-inline-inset); }
   @media (hover: hover) {
-    .area-code-block--reveal-actions > .area-code-block__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+    .area-code-block--reveal-actions > .area-code-block__actions { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
     .area-code-block--reveal-actions:not(:hover, :focus-within) > .area-code-block__actions { pointer-events: none; }
     .area-code-block--reveal-actions:is(:hover, :focus-within) > .area-code-block__actions { opacity: 1; transition-duration: 0s; }
   }

@@ -83,44 +83,113 @@ for the word.
 
 | Axis | Means | Values in use |
 |---|---|---|
-| `variant` | Visual treatment (emphasis) | `solid`, `soft`, `outline`, `ghost`, `plain`, `surface` |
+| `variant` | Visual treatment (emphasis) | `solid`, `soft`, `outline`, `ghost`, `plain`, `surface`; `underline` (Mention, a reference drawn as Link's line, 2026-11-07) |
 | `tone` | Semantic meaning | `neutral`, `info`, `success`, `warning`, `caution`, `danger`, `discovery`, `inverse` |
 | `size` | Scale tier | `sm`, `md`, `lg` (default `md`) |
 | `orientation` | Direction | `horizontal`, `vertical` |
 | `layout` | Arrangement of the parts | per component |
-| `kind` | Interaction role | per component |
+| `kind` | Interaction role | per component; Chart's is what it draws, `bar`, `line`, `area`, `donut`, `number` (N7, 2026-11-07) |
 | `side` | Which edge it attaches to | `top`, `right`, `bottom`, `left` (logical `start` / `end` for drawers) |
-| `status` | A process outcome shown by an item | per component (`uploading`, `complete`, `error`) |
+| `status` | A process outcome shown by an item | the shared words `pending`, `current`, `complete`, `error`, plus a family's own (`running`, `sending`, `uploading`, `queued`, `cancelled`, `kept`, `undone`, `stopped`, `compacted`) |
+
+**Status words** (owner, 2026-11-07, system gaps C1): not started is `pending`, the place someone is at is `current`,
+finished is `complete`, failed is `error`. Never `done`, `failed`, `invalid` or `upcoming` for these; Plan's `done`,
+Step's `done` / `failed`, Stepper's `upcoming` / `invalid`, Queue's `failed` and Attachment's `ready` (for `complete`,
+components audit V10) are deprecated aliases kept for one release. A family adds its own word only for a state the shared four don't name (an activity in progress, a choice
+taken).
+
+**Change words** (components audit D6, 2026-11-07; Cursor's editor decorations): what happened to a file or a line
+since it was last kept is `added`, `modified`, `deleted`, `untracked` or `renamed`, git's letters A, M, D, U and R,
+painted in `fg-change-<status>`. One vocabulary for Tree view rows (`status`), Tabs items (`status`), Edit summary's
+counts (`added` / `deleted`) and its Diff lines (`kind`), and Code block's `marks` (`@area/react` exports
+`CHANGE_STATUSES`, `CHANGE_MARK`, `changeStatus`). Never `removed`: Tree view's, Diff's and Code block's `removed` and Edit
+summary's `removed` count are deprecated aliases of `deleted`, kept for one release (the `__removed` part and `--removed`
+line modifiers with them). A change word is not a status word: a file can be `modified` and `pending` at once.
+
+**Unseen is a state, not a status** (D6): changed since it was last looked at. A boolean, `unseen`, on Tree view nodes
+and Tabs items, drawn as a dot in the accent's indicator rung and read as "Unseen". It never recolours the status beside
+it, so the two axes stay apart.
 
 **Booleans** are adjectives for the non-default state (`fullWidth`, `iconOnly`, `flush`,
 `pill`). CSS modifiers are kebab-case, React props camelCase.
 
 **Behaviour API:**
 
-- a value is `value` / `defaultValue` / `onValueChange(value, event)`;
+- a value is `value` / `defaultValue` / `onValueChange(value, event)`: every field and choice group, Input, Textarea,
+  Select and Password field beside native `onChange` (which runs first), and Checkbox group as an array (2026-11-07);
+- several chosen from a list is `multiple`, its set `values` / `defaultValues` / `onValuesChange(values, event)` in the
+  list's order (Custom select, List box, and File grid and Asset grid through it; components audit V7, 2026-11-07), so
+  `value` never changes type with a mode. Checkbox group and Toggle group, whose every choice is a control of its own,
+  keep `value` as an array;
+- a column's order is `sort` (`ascending`, `descending`, `none`, `aria-sort`'s words) / `onSortChange(sort, event)`
+  (Table's headings, V3); a fold is `expanded` / `defaultExpanded` / `onExpandedChange(expanded, event)` (Table's row
+  groups);
 - on/off is `checked` or `selected`;
-- an overlay is `open` / `defaultOpen` / `onOpenChange`;
+- an overlay is `open` / `defaultOpen` / `onOpenChange`, and so is any list or menu a field or button opens (Combobox,
+  Custom select, Tag picker, the Date pickers, Time field, Split button, Zoom control, Context menu; Nav group's fold);
 - a close is `onDismiss` / `dismissLabel`;
-- pending is `loading`;
+- read-only is `readOnly`, painted `data-read-only` (never `readonly`);
+- can't act now is `inactive`, its reason `inactiveText`, painted `data-inactive` with `aria-disabled` (Button, Menu item,
+  Nav item; components audit V2, 2026-11-07). `disabled` is for a control that truly can't act; the choice is
+  [Writing › Disabled or inactive](WRITING.md#disabled-or-inactive);
+- pending is `loading`, its words `loadingText`, a list's empty words `emptyText` (Input, Menu, Combobox, Command
+  palette); a loading mark's wait before it shows is `delay`, `"short"` 300 ms or `"long"` 1000 ms or a number (Spinner,
+  Skeleton; V6), painted `data-waiting`;
 - a collection is `items`;
-- glyph slots are `icon` / `trailingIcon`.
+- glyph slots are `icon` / `trailingIcon`;
+- a value that differs from its default is `modified`, one that differs from what was saved is `dirty`, and either is put
+  back by `onReset` (Setting row; Filter bar); both draw the one change dot (components audit N4, N5, 2026-11-07);
+- a region's length is `size` / `defaultSize` / `onSizeChange(size, event)` with `minSize` / `maxSize`, in px, and a
+  double-click on its handle puts `defaultSize` back (Splitter; components audit N6, 2026-11-07). Panel's `width` /
+  `defaultWidth` / `onWidthChange(width)` predates it and is a known deviation (no event);
+- series a legend hides are `hiddenKeys` / `defaultHiddenKeys` / `onHiddenKeysChange(keys, event)`, and showing a thing
+  or a table of the same data is `view` / `defaultView` / `onViewChange(view, event)` (`"chart"` or `"table"`; Chart, components
+  audit N7, 2026-11-07);
+- emptying a selection is `onClear` / `clearLabel` (Selection bar, as Input's clear); the small action after a label (a
+  Toggletip, a Link) is `labelAction` (Field, Setting row).
 
 Full rules are in [Design system › CSS, manifest and React](DESIGN_SYSTEM.md#css-manifest-and-react).
 
-**Label colours are not tones.** Hues without meaning (Tag's `pink`, `gray`, `brown`; Folder's palette) are a
-documented exception. New ones should use a `color` axis, never extend `tone`.
+**Label colours are not tones.** A hue without meaning is a `color`, from one set: `neutral`, `gray`, `brown`,
+`orange`, `yellow`, `green`, `blue`, `purple`, `pink`, `red` (Board column's and Tag's, owner 2026-11-07, system gaps C5;
+Tag's `tone` is a deprecated alias). Link's and Citation's `ink` take the same hue names. Folder's palette is a
+documented exception. Never extend `tone` with a hue.
+
+**A status icon's ink** is `fg-<tone>-mark` (Alert, Toast; 2026-11-07), a brighter rung than the tone's words, for
+every tone but neutral (caution and discovery added with Alert's, Toast's and Indicator's seven tones, 2026-11-07). Badge's
+marks keep their own rungs, chosen per ground (the page and the tint) for 3:1 (docs/specs/badge.md).
 
 **Known deviations** (2026-10-19 inventory; fix only when the family is next reopened, with
 the owner's agreement):
 
 - `ink` on Link and Citation;
-- `color` on Board column;
 - `type` on Scroll area;
 - camelCase axis names `labelPosition` and `selectionMode`;
 - non-treatment `variant` values: Citation `pill | footnote`, Link `inline | standalone`, Titlebar, Kbd `default`;
 - `kind` used for form (Indicator `count | dot`);
 - `size` without a default (Folder, File page, File tile);
-- `size` defaulting to `sm` (Tag, Drawer).
+- `show*` / `hide*` booleans that switch a default part or a display rule, not optional content (listed 2026-11-07, system
+  gaps T5): Dialog's and Drawer's `showCloseButton` (the close is on unless a footer or a flow takes it), Count's and
+  Indicator's `showZero`, Calendar's `showOutsideDays` (react-day-picker's name), Box field's `hideLabel` (a visually
+  hidden label). Password field's `showLabel` / `hideLabel` are strings, the toggle's two names, so they are labels, not
+  booleans;
+- `size` defaulting to `sm` (Drawer);
+- `size` of `md` and `lg` only (Checkbox, Radio: the box comes from the type, and `lg` is the touch row);
+- `size="xl"` on Dialog (components audit V1, 2026-11-07): four widths, sm 384 and md 480 as Drawer's, lg 720 and xl 880,
+  each a measured dialog width (a chat app's settings dialog is 880, its wide dialog 720). A width ladder for one family,
+  not the ramp's tier; no other family takes `xl`;
+- `inactive` on Property list (recorded 2026-11-07, V2): there it means a property switched off (a
+  layer's hidden fill), painted `data-inactive`, not the can't-act-now state above. Rename it (`hidden`) when Property
+  list is next reopened, with a deprecated alias;
+- `onWidthChange(width)` on Panel without the event (recorded 2026-11-07, N6): give it the event, as Splitter's
+  `onSizeChange(size, event)`, when Panel is next reopened;
+- `size="xs"` on Avatar (recorded 2026-11-07, components audit O7): an avatar on a line of text, the text line tall (18 at
+  type 13, 20 at 14), measured at 20 in two reference products' profile and sidebar rows and used by the app's activity
+  rows. A real use at a measured size, not the ramp's tier; no other family takes `xs`.
+
+**One name, one size** (owner, 2026-11-07, system gaps C8): marks share heights by name (Badge, Tag and Count: `md` 20,
+`lg` 24 at type 13; Tag was `sm` / `md` for the same two), and an aspect name should mean one shape everywhere. Open: Design card's `wide` is 16:9 and Asset card's is 2:1;
+Design card can't take `screen` (its layout's class), so they meet when Asset card retires.
 
 Do not copy a deviation into a new component.
 
@@ -155,7 +224,7 @@ docs never restate it.
 | **In review** | Built, waiting for the owner | Spec with job, variants, sources, anatomy, decisions, states, behaviour. CSS, manifest, React, demos with one tile per variant, Documentation entry. Checks pass. Shown on a review page |
 | **Complete** | Owner accepted | The owner said so; the slug is in `COMPLETE_COMPONENTS` with the round or batch |
 | **Reopened** | A refinement touched a Complete family | Moves back to In review until the owner accepts the change. A pass that only confirms keeps Complete |
-| **Deprecated** | Replaced, still exported | A named replacement, `@deprecated` JSDoc pointing to it, and an entry below. It stays exported so existing markup renders |
+| **Deprecated** | Replaced, still exported | A named replacement, `@deprecated` JSDoc pointing to it, and an entry below. In `DEPRECATED_COMPONENTS` with its replacement (2026-11-07): out of the gallery, search, Home and review batches, and a link to its page opens the replacement. It stays exported so existing markup renders |
 | **Removed** | Gone | Owner approval, and no use left in the app, demos or tests |
 
 **Deprecated now:**
@@ -163,8 +232,27 @@ docs never restate it.
 - Token, replaced by `<Code swatch>`;
 - MenuSearch, replaced by a Combobox or a Command palette;
 - Preview frame, replaced by a containerless Asset card with no name (2026-10-26);
-- the `--area-ease-spring` easing, with no replacement.
-- Slider `variant="field"`, replaced by `labelPosition="inside"` (the bar with its label inside; 2026-10-26).
+- the `--area-ease-spring` easing, with no replacement;
+- Slider `variant="field"`, replaced by `labelPosition="inside"` (the bar with its label inside; 2026-10-26);
+- status aliases: Plan `done`, Step `done` / `failed`, Stepper `upcoming` / `invalid`, Queue `failed` (2026-11-07; see
+  Status words); Attachment `ready`, replaced by `complete` (2026-11-07, components audit V10), with its `--ready`
+  modifier;
+- Tag's and File upload item's `onRemove` / `removeLabel`, replaced by `onDismiss` / `dismissLabel`; Input's and Search
+  field's `leadingIcon`, replaced by `icon` (2026-11-07).
+- components audit picks (2026-11-07, O2 and O7), each kept for one release: Radio group's `readonly` state and
+  `data-readonly` hook, replaced by `read-only` / `data-read-only`; Toast's `action` prop and `__action` part, replaced
+  by `actions` / `__actions` (Alert's names), and Alert's `action` prop by `actions`; Indicator's `withBorder` and
+  `hidden`, replaced by `bordered` and `invisible` (Indicator anchor's word); Tabs items' `id`, replaced by `value`;
+- change words (2026-11-07, components audit D6; see Change words): `removed`, replaced by `deleted`, on Tree view nodes'
+  `status`, Diff lines' `kind`, Code block's `marks` and Edit summary's count prop, with the `__removed` part and the
+  `--removed` line modifiers;
+- `CopyStatus`, replaced by `useCopy`'s `copiedLabel` / `failedLabel`: the result is said through the shared announcer
+  (`announce`, DESIGN_SYSTEM.md "Announcements"; components audit D1, 2026-11-07). It renders nothing;
+- the `@area/tokens/colours` export, replaced by `@area/tokens/color` (2026-11-07, system gaps T4: the public API says
+  `color`, as the app's copy does). Still British: the Colors and Status colors settings' attributes
+  (`data-area-colours`, `data-area-status-colours`) and internal names. Renaming an attribute is a setting change that
+  saved systems hold, so it needs the foundation-change pass with a migration of saved themes; until then, nothing new
+  spells it `colour`.
 
 Renamed props keep a deprecated alias for one release, for example `options` → `items`,
 `onRemove` / `onClose` → `onDismiss`, and a `label` that named a group → `aria-label`.

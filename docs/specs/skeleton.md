@@ -34,11 +34,12 @@ action in progress is Spinner; task progress is Progress.
 | lines | number | A paragraph; implies text; last line 65% (min 50px) | Primer `lines`; Chakra `noOfLines`; antd rows; Polaris `lines` |
 | wrap (children + `loading`) | behaviour | Painted on the real element, which keeps its size, place and corner | Radix, Spectrum (child radius), MUI, Chakra, Mantine, Geist |
 | composition | list, media object, card, type heights | Notion sidebar, ChatGPT history; Primer comments, MUI media; the card with controls omitted | `area--list`, `area--media-object`, `area--card`, `area--type-height` |
+| behaviour | `delay`: `"short"` 300 ms, `"long"` (or `true`) 1000 ms, or milliseconds | A quick load shows nothing (WRITING.md's loading ladder) | Primer SkeletonBox `delay` (`src/Skeleton/SkeletonBox.tsx:15`); tile `behavior-delay` |
 
 Removed: `rounded` (a shape only in MUI, where it is the block at 4px; everywhere else a corner
 comes from a radius prop or the wrapped element) and `rectangle` (renamed `block`, the default).
 Not added: separate SkeletonText / SkeletonAvatar parts (option B), wrap-first as the only mode
-(option C), pulse, show-delay, page-wide phase sync.
+(option C), pulse, page-wide phase sync. Show-delay was added on 2026-11-07 (`delay`, components audit V6).
 
 ## Sources
 
@@ -106,6 +107,7 @@ an 80 × 32 rounded block.
 |---|---|---|
 | animating | `area-shimmer`, 3s linear (display.css:162) | all tiles (`animation-name`) |
 | motion none / reduced | no animation, no gradient: a flat `bg-component` block | display.css:271-272; not tiled |
+| waiting (`data-waiting`) | a delay that hasn't passed: `opacity: 0` on the placeholder (block, lines or a wrapped element), its box kept, so nothing moves when it shows; it shows at once | V6; tile `behavior-delay` |
 
 ## Behavior and accessibility
 
@@ -190,3 +192,11 @@ Open questions: none.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → shimmer easing on `--area-ease-linear`; stop rules unchanged (verified 8 → 0 animations under motion none) → display.css Skeleton.
 - 2026-10-14 · owner: Motion is one number, default 210 → the shimmer runs a fixed 3s, ChatGPT's and Figma's (was `slow × 12`, which would have become 4.2s); stop rules unchanged → display.css Skeleton. docs/MOTION.md.
 - 2026-10-14 · owner: "merge it, then continue working" (the all-axis audit's open item) → the loop stops through the Motion axis's `duration-loop` token (1, or 0 at step 0 and under reduced motion): the shimmer's period is `calc(3s * duration-loop)` and the band fades with it, so at 0 the skeleton is flat (the wrap variant too). The nearest motion scope now decides, so a non-zero scope nested in a 0 scope runs it; it was a `[data-area-motion="0"]` descendant rule plus a reduced-motion media rule (cohesion test pins it).
+
+### 2026-11-07 · Delay (components audit V6)
+
+- **What changed:** `delay` on every shape and on a wrapped element (Spinner's, through `useLoadingDelay`). While it
+  waits the placeholder keeps its box, invisible: Primer renders nothing, which would move the layout when it appears.
+  Server and first client render both render it waiting.
+- **Why:** docs/research/components-audit-2026-11-07/primer.md. The owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

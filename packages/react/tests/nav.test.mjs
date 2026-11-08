@@ -63,3 +63,18 @@ test("A picture takes the icon's place, and a sticky group's heading says so", (
   assert.doesNotMatch(html, /area-nav__icon/);
   assert.match(html, /class="area-nav__label area-nav__label--sticky"/);
 });
+
+// Components audit V2 (2026-11-07): an inactive item keeps its Tab stop (no href, so tabindex 0), says it is unavailable,
+// and its reason is a Tooltip that describes it.
+test("NavItem inactive keeps a Tab stop, drops its href and is described by its reason", () => {
+  const html = renderToString(h(Nav, { "aria-label": "Label" }, h(NavItem, { href: "#two", inactive: true, inactiveText: "Description" }, "Item two")));
+  const link = html.match(/<a[^>]*>/)[0];
+  assert.doesNotMatch(link, /href=/);
+  for (const attr of ['role="link"', 'aria-disabled="true"', 'data-inactive=""', 'tabindex="0"']) assert.ok(link.includes(attr), attr);
+  const described = link.match(/aria-describedby="([^"]+)"/)[1];
+  assert.match(html, new RegExp(`role="tooltip"[^>]*id="${described}"[^>]*>Description<`));
+  const disabled = renderToString(h(NavItem, { href: "#two", inactive: true, disabled: true }, "Item two"));
+  assert.match(disabled, /tabindex="-1"/);
+  assert.doesNotMatch(disabled, /data-inactive/);
+  assert.ok(MANIFESTS.nav.states.includes("inactive"));
+});

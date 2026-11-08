@@ -167,3 +167,9 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
   → toggle-group.css, ToggleGroup.tsx (soft no longer carries ButtonGroup's classes); recaptured, round 5 in `before/`.
 - 2026-10-10 · owner, review round 6: approved → Complete in `component-status.mjs`.
 - 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → the soft track takes Segmented's change: `bg-component` (the control fill, stepping from its ground) instead of `bg-subtle`, which vanished at layer contrast 0. Light defaults unchanged (#f7f7f7).
+
+### 2026-11-07 · The event in onValueChange (components audit O3)
+
+- **What changed:** `onValueChange(values, event)` passes the press.
+- **Why:** ToggleGroup.tsx:26. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

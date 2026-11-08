@@ -5,7 +5,11 @@ import type { HTMLAttributes, LiHTMLAttributes, ReactElement, ReactNode } from "
 import { stepperVariants, stepperStepVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 
-export type StepStatus = "complete" | "current" | "upcoming" | "invalid";
+/** The shared status words (Governance § 4, 2026-11-07): complete, current, pending, error. `upcoming` and `invalid` are
+ * deprecated aliases of pending and error, kept for one release. */
+export type StepStatus = "complete" | "current" | "pending" | "error" | /** @deprecated use "pending" */ "upcoming" | /** @deprecated use "error" */ "invalid";
+type SharedStatus = Exclude<StepStatus, "upcoming" | "invalid">;
+const shared = (status: StepStatus): SharedStatus => status === "upcoming" ? "pending" : status === "invalid" ? "error" : status;
 
 export interface StepperProps extends Omit<HTMLAttributes<HTMLOListElement>, "onSelect"> {
   /** The current step's index, from 0. Steps before it are complete, steps after it are still to come. */
@@ -31,14 +35,14 @@ export interface StepperStepProps extends Omit<LiHTMLAttributes<HTMLLIElement>, 
    * step that is open; a person reads the others by their titles.
    */
   children?: ReactNode;
-  /** Overrides the status the step's place gives it, for a step with a problem (`invalid`). */
+  /** Overrides the status the step's place gives it, for a step with a problem (`error`). */
   status?: StepStatus;
   disabled?: boolean;
 }
 
-const STATUS_LABELS: Record<StepStatus, string> = { complete: "completed", current: "current step", upcoming: "not started", invalid: "has a problem" };
+const STATUS_LABELS: Record<SharedStatus, string> = { complete: "completed", current: "current step", pending: "not started", error: "has a problem" };
 
-type Injected = { index?: number; placed?: StepStatus; current?: boolean; select?: (() => void) | undefined; statusLabel?: string };
+type Injected = { index?: number; placed?: SharedStatus; current?: boolean; select?: (() => void) | undefined; statusLabel?: string };
 
 /**
  * An ordered list of steps (`ol`, named by `aria-label`), the current one `aria-current="step"` (ARIA 1.2's token
@@ -50,13 +54,15 @@ export const Stepper = /* @__PURE__ */ forwardRef<HTMLOListElement, StepperProps
   { current, orientation, onStepSelect, nonLinear, statusLabels, className, children, ...rest },
   ref,
 ) {
-  const labels = { ...STATUS_LABELS, ...statusLabels };
+  const given = statusLabels ?? {};
+  const labels: Record<SharedStatus, string> = { ...STATUS_LABELS, ...given,
+    pending: given.pending ?? given.upcoming ?? STATUS_LABELS.pending, error: given.error ?? given.invalid ?? STATUS_LABELS.error };
   const steps = Children.toArray(children).filter(isValidElement) as ReactElement<StepperStepProps & Injected>[];
   return (
     <ol ref={ref} className={stepperVariants({ orientation }, className)} {...rest}>
       {steps.map((step, index) => {
-        const placed: StepStatus = index < current ? "complete" : index === current ? "current" : "upcoming";
-        const status = step.props.status ?? placed;
+        const placed: SharedStatus = index < current ? "complete" : index === current ? "current" : "pending";
+        const status = step.props.status ? shared(step.props.status) : placed;
         const reachable = onStepSelect && !step.props.disabled && index !== current && (nonLinear || index < current);
         return cloneElement(step, {
           key: step.key ?? index,
@@ -72,10 +78,10 @@ export const Stepper = /* @__PURE__ */ forwardRef<HTMLOListElement, StepperProps
 });
 
 export const StepperStep = /* @__PURE__ */ forwardRef<HTMLLIElement, StepperStepProps>(function StepperStep(props, ref) {
-  const { title, description, status: _status, disabled, index = 0, placed = "upcoming", current = placed === "current", select, statusLabel, className, children, ...rest } = props as StepperStepProps & Injected;
+  const { title, description, status: _status, disabled, index = 0, placed = "pending", current = placed === "current", select, statusLabel, className, children, ...rest } = props as StepperStepProps & Injected;
   const marker = (
     <span className="area-stepper-step__marker" aria-hidden="true">
-      {placed === "complete" ? <Glyph name="check" size={12} /> : placed === "invalid" ? "!" : index + 1}
+      {placed === "complete" ? <Glyph name="check" size={12} /> : placed === "error" ? "!" : index + 1}
     </span>
   );
   const text = (
@@ -91,7 +97,7 @@ export const StepperStep = /* @__PURE__ */ forwardRef<HTMLLIElement, StepperStep
     <li
       ref={ref}
       className={stepperStepVariants({ status: placed }, className)}
-      // The step the person is on keeps aria-current="step" even when its status is invalid.
+      // The step the person is on keeps aria-current="step" even when its status is error.
       aria-current={current ? "step" : undefined}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...rest}

@@ -13,6 +13,11 @@ export default {
       ["Do", "Set authorName to the assistant's or product's name so the turn reads \"<name> said\"; the defaults are You and Assistant."],
       ["Do", "Put copy, rate, read aloud and regenerate in MessageActions as ghost icon Buttons, each with an aria-label."],
       ["Do", "Set streaming while the answer arrives: a dot follows the last word, the turn is marked busy and its actions wait until it is done."],
+      ["Do", "Set status=\"sending\" on the person's message until it is sent, then clear it; a quick send shows nothing, a slow one dims the bubble and says Sending… after a second."],
+      ["Do", "Set status=\"error\" with onRetry when it could not be sent: the line says Not sent with Retry, and the failure is said to screen readers."],
+      ["Do", "Wrap the person's consecutive messages in MessageGroup, and give actions to the last one, so the stack stays 2 apart."],
+      ["Do", "Use split when one message arrives in parts: each child becomes its own bubble on the same stack."],
+      ["Don't", "Use status on an assistant turn: a reply that failed ends with a Turn notice."],
       ["Don't", "Give the person's bubble an accent fill or its own corner: it is the neutral component fill on the Composer's corner, where the words were typed."],
       ["Don't", "Recolour the actions: they take the ghost Button's quiet ink, as every icon action does."],
     ],
@@ -23,18 +28,23 @@ export default {
       content: "The assistant's prose across the column, at the body size; paragraphs, lists, code and citations sit inside it.",
       actions: "MessageActions: a named group of ghost icon Buttons with no gap. On the person's turn it shows on hover and focus (always on touch).",
       cursor: "The dot after the last word while streaming; it breathes, and rests at full ink with Motion 0 or reduced motion.",
+      stack: "MessageGroup's turns, or a split message's bubbles: 2 apart, the end corners a quarter of the bubble's corner where two bubbles meet.",
+      status: "The line under a message on its way, in the notice line's type: Sending… in the muted ink, or the danger mark, Not sent in the default ink and Retry.",
+      "status-text": "The status line's words, from statusText.",
     },
     // Spec: Variants (state); message.css.
     states: {
       streaming: "The cursor follows the last word, the actions are hidden until the answer is done, and the article is aria-busy.",
+      waiting: "A sending message's first second: the status line holds its place unseen and the bubble keeps its ink; after it the bubble dims to 60% and Sending… shows. A quick send shows nothing.",
     },
     // Spec: Behavior and accessibility; the actions are Buttons.
     keyboard: [
-      ["Tab", "Moves through the turn's action Buttons; focusing one shows the person's actions at once."],
+      ["Tab", "Moves through the turn's action Buttons, and to Retry on a message not sent; focusing one shows the person's actions at once."],
     ],
     aria: [
       ["aria-label", "Always, on the article: \"<authorName> said\" (\"You said\" or \"Assistant said\" by default)."],
-      ["aria-busy", "While streaming."],
+      ["aria-busy", "While streaming, and while the person's message is sending."],
+      ["aria-live", "Not on the component: a message not sent is said once, politely, through the page's shared announcer (\"Message: Not sent\", or statusText)."],
       ["role=\"group\", aria-label", "On MessageActions, named \"Message actions\" unless you pass label."],
     ],
   },
@@ -111,6 +121,7 @@ export default {
       ["Do", "Name the list with aria-label (\"Files\", \"Commands\"). label and groups still work for one release; use aria-label and items."],
       ["Do", "Give file rows their folder as path, and group rows with a label when a list mixes kinds."],
       ["Do", "Set emptyLabel to say what found nothing (\"No files found\", \"No matching commands\")."],
+      ["Do", "For @ mentions, group people (the person first, then teams), files and pages; a pick writes \"@Name\" into the draft, and withMentions draws it as a Mention once sent."],
       ["Don't", "Move focus into the list: a pointer press on a row is kept from taking focus, so typing continues."],
       ["Don't", "Put what a pick does in the menu; onPick hands the row back, and the app inserts a chip or runs the command."],
     ],
@@ -130,37 +141,49 @@ export default {
   attachment: {
     // Spec: Job and boundaries.
     instead: [
-      ["A file that is not an image", ["chip"], "Non-image files are Chip input pills with a document icon."],
+      ["A file mentioned as context, not sent", ["chip"], "A file the message refers to (an @ mention) is a Chip input pill; Attachment is what is sent with it."],
       ["Choosing files from a drop zone or a button", ["file-upload"], "File upload picks files; Attachment shows one image already attached."],
       ["An image in a sent message", ["message", "figure"], "Attachment is the image before sending, in the Composer's context row."],
     ],
     // Spec: Variants, Decisions, Behavior and accessibility; source: ComposerParts.tsx JSDoc.
     practices: [
       ["Do", "Put Attachments in the Composer's context row, beside any context chips."],
+      ["Do", "Choose the kind by what is sent: image, file (its icon, name and type), quote (pasted or quoted text) or video (its poster and length)."],
+      ["Do", "Give a file its type's icon from @area/icons in icon (a file icon at 16); badge shows its extension unless you pass one, or null for none."],
       ["Do", "Set status=\"uploading\" with progress while it uploads; leave progress out while it is unknown and the ring turns."],
-      ["Do", "Set status=\"error\" with error saying why it failed; it is the tile's tooltip and its spoken name."],
-      ["Do", "Give every tile name, the file's name: it names the tile, its remove control and its upload."],
+      ["Do", "Set status=\"error\" with error saying why it failed, and onRetry to offer Retry; the reason is the tile's tooltip and its spoken name, and the failure is said to screen readers."],
+      ["Do", "Give every tile name, the file's name: it names the tile, its remove control, its retry and its upload."],
       ["Do", "Pass onDismiss to show the remove control, and dismissLabel to name it in your language (\"Remove <name>\" by default). onRemove still works for one release."],
-      ["Don't", "Use it for documents or other files; they are Chip input pills."],
-      ["Don't", "Use it outside the Composer's context row; how a sent message shows images belongs to Message."],
+      ["Don't", "Write status=\"ready\": it is a deprecated alias of complete, the default."],
+      ["Don't", "Use it outside the Composer's context row; how a sent message shows what it carried belongs to Message."],
     ],
     // Spec: Decisions, Round 52; manifest elements.
     parts: {
-      root: "A square tile on the Composer's button corner with a 1px card edge drawn over the picture; a failed tile takes the fields' invalid edge.",
-      image: "The thumbnail, filling the tile; it has no alt text of its own, the tile is named by the file.",
-      overlay: "Over the picture: a progress ring while uploading, or a danger mark when it failed.",
-      remove: "A small square button inside the top-end corner, on the on-media paint; shown on hover and focus, always on touch.",
+      root: "A tile on the Composer's button corner with a 1px card edge drawn over it: 64 square for an image or a video, 64 by 160 for a file or a quote; a failed tile takes the fields' invalid edge.",
+      image: "The thumbnail (a video's poster), filling the tile; it has no alt text of its own, the tile is named by the file.",
+      overlay: "Over the tile, under a veil: a progress ring while uploading, or the failure's mark and Retry when it failed.",
+      mark: "The failure's danger mark, named by the reason.",
+      play: "A video's play mark at the middle, on the on-media glass; it does not play here.",
+      body: "A file's or a quote's content, 8 in: its words at the top, its badge at the bottom.",
+      head: "A file's icon and name on one first line.",
+      icon: "A file's icon at 16 in the muted ink, on the name's first line.",
+      name: "A file's name in the default ink, up to three lines (two above a badge); whole in the tooltip.",
+      badge: "A file's type or a quote's source as a small Badge; a video's length on the glass in the bottom-end corner.",
+      quote: "A blockquote of the quoted words beside a 3 rule in the dividers' edge.",
+      text: "The quoted words in the muted ink, up to three lines (two above a badge).",
+      dismiss: "A small square button inside the top-end corner, on the on-media paint; shown on hover and focus, always on touch. A file's or a quote's words keep clear of it.",
     },
     // Source: the remove control is a native button.
     keyboard: [
-      ["Tab", "Moves to the remove control, which shows while it has focus."],
-      ["Enter or Space", "Removes the attachment."],
+      ["Tab", "Moves to Retry on a failed tile, then the remove control, which shows while it has focus."],
+      ["Enter or Space", "Retries the upload, or removes the attachment."],
     ],
     aria: [
-      ["role=\"group\", aria-label", "Always: the tile is a group named by the file's name."],
+      ["role=\"group\", aria-label", "Always: the tile is a group named by the file's name (a file's visible name is hidden, so it is said once)."],
       ["aria-busy", "While uploading; the ring is named \"Uploading <name>\", with the percentage once progress is known."],
-      ["aria-label", "On the remove control, from dismissLabel (\"Remove <name>\" by default); on the failed mark (role=\"img\"), the reason."],
-      ["title", "While status is error: the reason, as the tile's tooltip."],
+      ["aria-label", "On the remove control, from dismissLabel (\"Remove <name>\" by default); on Retry, \"Retry <name>\"; on the failed mark (role=\"img\"), the reason."],
+      ["title", "While status is error: the reason, as the tile's tooltip; otherwise a file's whole name or a quote's whole words."],
+      ["aria-live", "Not on the component: when an upload ends the page's shared announcer says \"<name>: Complete\" or \"<name>: <error>\" (\"Upload failed\" by default), politely."],
     ],
   },
 
@@ -174,10 +197,10 @@ export default {
     practices: [
       ["Do", "Show it above the composer only while messages wait, fed by the Composer's onQueue, and send them in order when the run finishes."],
       ["Do", "Pass onSendNow to stop the run and send that message at once, and onDismiss so a message can be dropped (onRemove still works for one release)."],
-      ["Do", "Mark a message sending while it goes, and failed with onRetry when it could not be sent."],
+      ["Do", "Mark a message sending while it goes, and error with onRetry when it could not be sent."],
       ["Do", "Set title to say the queue is paused (\"2 queued, paused\") after the person stops a run, until the next send."],
       ["Don't", "Offer reordering or sending without stopping: neither is built."],
-      ["Don't", "Mark a message failed without onRetry: the row then offers only Remove."],
+      ["Don't", "Mark a message error without onRetry: the row then offers only Remove."],
     ],
     // Spec: Decisions, Round 51/52; manifest elements.
     parts: {
@@ -204,6 +227,7 @@ export default {
       ["aria-expanded, aria-controls", "On the head, from open, pointing at the list."],
       ["aria-labelledby", "On the section and the list, from the title."],
       ["aria-label", "On each Remove, \"Remove “<text>”\"; on a failed row's mark (role=\"img\"), \"Not sent\"."],
+      ["aria-live", "Not on the component: a message that could not be sent is said through the page's shared announcer, \"“<text>”: Not sent\"."],
     ],
   },
 
@@ -404,7 +428,7 @@ export default {
     states: {
       open: "The body shows under the line and the chevron points down.",
       running: "The verb shimmers (stopped at Motion 0 and under reduced motion) and the step is aria-busy.",
-      failed: "The verb takes the danger ink, and \"Failed\" is read after the line.",
+      error: "The verb takes the danger ink, and \"Failed\" is read after the line.",
     },
     // Source: native button with aria-expanded.
     keyboard: [
@@ -441,9 +465,10 @@ export default {
       root: "The agent card: a section with Code block's frame at the card's text size, named by its title.",
       head: "One row: the title, the turn's counts, and Undo all and Keep all at the end; the files follow it with no rule between.",
       title: "The count of files changed.",
-      counts: "+N −N with tabular numbers; read as \"N added, N removed\".",
-      added: "+N in the success ink.",
-      removed: "−N in the danger ink.",
+      counts: "+N −N with tabular numbers; read as \"N added, N deleted\".",
+      added: "+N in the added color (the success ink).",
+      deleted: "−N in the deleted color (the danger ink). Pass the count as deleted; removed still works for one release.",
+      removed: "The deprecated name of the deleted part, kept beside it for one release.",
       actions: "Ghost sm Buttons, Undo and Keep; on a file row they show over its end on hover and focus, always on touch.",
       files: "The list of file rows.",
       file: "One file as a Menu row: its name button, then its actions or its status.",

@@ -31,6 +31,10 @@ navigation (Nav), not a single-value choice in a form (Select), not a searchable
 | item | checkable (switch or check) | Settings that toggle in place | Notion "Small text", "Full width" (switch); ChatGPT model picker (check) |
 | composition | search (**deprecated**) | `MenuSearch` / `.area-menu__search-surface` are deprecated in favour of Combobox (a field that filters a list) and Command palette (audit D-22 A, owner 2026-09-30); still exported so existing markup renders; gallery tile removed | — |
 | composition | submenu (`MenuSub`) | A row that opens a nested menu beside it (audit D-10 A, owner) | Notion page actions (submenus); ChatGPT model submenu |
+| item | trailing (`trailing`) | A count, badge or status before the shortcut (O7) | Nav item's, Tabs items' and Tree view nodes' trailing; tile `content-trailing` |
+| item | inactive (`inactive`, `inactiveText`) | Can't act now for a reason that passes or can change; drawn as disabled, reached by the arrows, its note says why (V2) | Primer ActionList `inactiveText` (`src/ActionList/shared.ts:50-53`); tile `state-inactive` |
+| composition | header, footer (`header`, `footer`) | Fixed regions above and below the rows, each set off by a rule; only the rows scroll (V5) | Cursor `Menu.stylex.js` `header{border-bottom:1px}`, `footer{border-top:1px}`; tiles `content-header-footer`, `behavior-scrolling-rows` |
+| state | empty (`emptyText`), loading (`loading`, `loadingText`) | A row in place of the rows: what's missing, or a Spinner while they arrive (V5) | Cursor `Menu.stylex.js` `empty`, `loading`; Primer ActionList `loading`; tiles `state-empty`, `state-loading` |
 
 ## Sources
 
@@ -336,3 +340,39 @@ computes the same fill, image, frost, stroke and box-shadow as a plain Menu.
 - **Why:** your note that 4 was a pixel too much.
 
 - 2026-11-05 · owner: "go with your recs" on the shadow depth page (docs/research/shadow-depth-2026-11-04.md) → the Elevation default is 8, so this surface's float role is an 8% key (was 3%).
+
+### 2026-11-07 · MenuItem's trailing slot (components audit O7)
+
+- **What changed:** `trailing` (the `__trailing` part) holds a count, badge or status at the row's end, before the shortcut, muted and tabular, as Nav item's trailing. No measured menu shows a count beside a shortcut, so the gap between them is the row's own.
+- **Why:** primitives.tsx:1651-1675 had only `shortcut`; Nav item, Tabs items and Tree view nodes have `trailing`. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Inactive rows, header and footer, empty and loading rows (components audit V2, V5)
+
+- **What changed:** `inactive` with `inactiveText` on MenuItem: `aria-disabled` and `data-inactive` (never native
+  `disabled`), so the arrows, typeahead (`Overlays.tsx` `enabledItems`, `primitives.tsx` `menuItemsOf`) and the pointer reach it;
+  choosing it does nothing and leaves the menu open (`data-keep-open`; Context menu and Split button skip it too). Its
+  reason replaces `description` in the note, hidden from the row's name and read through `aria-describedby`, so it is
+  said once. Its parts take `opacity-disabled` and the row doesn't, so the focus plate stays at full strength; the note
+  keeps the muted ink (4.5:1). Menu takes `header` and `footer` (a string header is set as a MenuLabel): with either,
+  the frame holds `__header`, `__list` and `__footer`, the list is the Scroll area on an anchored menu, so only the rows
+  scroll, and each region keeps the menu's 4 inset. The rules are the separator's line (`edge-dividers`), edge to edge
+  inside the frame: a seam that rows scroll under, not a divider between groups (MenuSeparator stays inset). `loading`
+  puts a loading row in place of the rows (`__loading`: a sm Spinner in the icon column and `loadingText`, "Loading"), after a
+  300 ms wait (`useLoadingDelay("short")`, V6) in which it keeps its place (`data-waiting`), with `aria-busy` on the menu; no
+  rows puts the empty row (`__empty`, `emptyText`, "No items"; `null` for none, which Context menu passes while closed).
+  Both rows take the rows' height and text column (inset.css) in the muted ink and are never reached by the arrows.
+- **Why:** docs/research/components-audit-2026-11-07/primer.md (ActionList `inactiveText`, `loading`), cursor.md (Menu header, footer, empty, loading),
+  internal.md (the `trailing` slot, O7, is documented and tiled as `content-trailing`). The owner took every
+  recommendation ("Take all recs", 2026-11-07).
+- **Not built:** Cursor's two menu sizes, muted rows, side preview pane, section title action and drop indicator (V5
+  named only header, footer, empty and loading).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · The match part (components audit V4)
+
+- **What changed:** `.area-menu__match`, the typed text in a filtered row: `font-weight: var(--area-weight-strong)`,
+  `color: inherit`, no fill, drawn by `highlightMatch` in Command palette, Combobox and Custom select's filter.
+- **Why:** those lists are Menu's rows, so the mark is Menu's part; weight, not colour, holds on every plate and in
+  forced colours. The owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

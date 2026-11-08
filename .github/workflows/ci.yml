@@ -52,6 +52,9 @@ jobs:
       - name: React tests
         run: node --test packages/react/tests/*.test.mjs
 
+      - name: Desktop app tests (places, tiles, chat, app look)
+        run: npm run test:desktop
+
       - name: Desktop app build, playground mapping and documentation entries
         run: |
           npm run build -w @area/desktop

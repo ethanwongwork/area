@@ -31,7 +31,7 @@ at the viewport's end corner, announces it, and removes it after its timer or on
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| tone | neutral (default, muted icon), info, success, warning, danger (icon color) | Outcome | Sonner types (success, info, warning, error); Notion (warning icon) |
+| tone | neutral (default, muted icon), info, success, warning, caution, danger, discovery (icon colour, `fg-<tone>-mark`; caution and discovery 2026-11-07) | Outcome; Button's and Badge's seven | Sonner types (success, info, warning, error); Notion (warning icon) |
 | composition | icon, title + description, action, dismiss | Undo, follow-up | Sonner (title, description, Undo, close); Notion (text action) |
 | layout | single line, multiline | Long messages | Sonner, Notion |
 | composition | standalone Toast; Toaster (`show`, `dismiss`, timers, stacking) | Hosting | Sonner's Toaster; Radix Toast (F8, 5000) |
@@ -97,9 +97,9 @@ Inset equations: text top = 1 + 9 = 10; icon = 10 + (20 − 16)/2 = 12; last con
 
 A standalone Toast's content announces itself: `role="status"` with `aria-atomic`, or
 `role="alert"` for danger, as Alert does; `live={false}` turns this off (primitives.tsx:1514-1544).
-`Toaster` and `useToaster()` host toasts (audit E-11 A, owner 2026-09-30; Toaster.tsx): polite and
-assertive live regions exist before any toast, so the first message is announced (danger goes to the
-assertive one), and its toasts render with `live={false}`; `show(options)` returns an id and
+`Toaster` and `useToaster()` host toasts (audit E-11 A, owner 2026-09-30; Toaster.tsx): each toast is
+said through the shared announcer (`announce`; danger is assertive, the rest polite), and its toasts
+render with `live={false}`; `show(options)` returns an id and
 `dismiss(id)` removes one. What is announced is the plain-text title and message, or `announcement`.
 Timers (the Toaster's `duration`, 5000 by default, or the toast's own) pause while the pointer or focus is
 in the region (WCAG 2.2.1); a toast with an action stays until dismissed. F8 (`hotkey`) focuses the region,
@@ -188,3 +188,31 @@ Open questions:
 
 - **What changed:** the description sits directly under the title: 10 from the title's baseline to the description's cap, was 15.
 - **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs".
+
+## Review note, 2026-11-06 (balance pass)
+
+- **What changed:** the description stands one step (4) off the title: 12.8 baseline to cap, beside the description's
+  own 8.8. It was joined (8.8), so the title read as the paragraph's first line.
+- **Why:** the owner, on the confirm dialog: "the space between the title and the copy still doesnt look right". One
+  rule for every surface title (Card, Dialog, Confirm dialog, Drawer, Popover, Alert, Toast, Approval, Empty state sm).
+  DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
+- The owner approved the 4 step ("4 is right", 2026-11-06).
+
+### 2026-11-07 · Status icon ink (system gaps C5)
+
+- **What changed:** the icon reads `fg-<tone>-mark`, the role Alert reads, instead of a copy of Alert's four inks. Same values.
+- **Why:** one colour vocabulary for labels and one ink for status icons (GOVERNANCE.md § 4; owner picked Build on the
+  system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Caution and discovery; the __actions part (components audit O4, O7)
+
+- **What changed:** `tone` takes caution and discovery (the icon on `fg-caution-mark` / `fg-discovery-mark`); the actions part is `__actions`, Alert's name, and the prop `actions`; `__action` and `action` are deprecated aliases kept for one release (the class still painted).
+- **Why:** manifest.ts:934, :935; Alert's part was `__actions`, Toast's `__action`. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · One announcer (components audit D1)
+
+The Toaster's two hand-written regions (polite and assertive) are replaced by the shared announcer (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")); `show`
+calls `announce(said, { politeness: tone === "danger" ? "assertive" : "polite" })`. A standalone Toast keeps its own
+`role` (its visible text is the message). No visible change.

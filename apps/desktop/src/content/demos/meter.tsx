@@ -6,6 +6,7 @@ const row = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%
 export const GalleryMeter = () => <Meter style={row} label="Label" description="Description" value={24} />;
 export const GalleryMeterWarning = () => <Meter style={row} tone="warning" label="Label" description="Description" value={82} valueText="18% left" />;
 export const GalleryMeterDanger = () => <Meter style={row} tone="danger" label="Label" description="Description" value={29} max={30} valueText="1 left" />;
+export const GalleryMeterMd = () => <Meter style={row} size="md" label="Label" description="Description" value={24} />;
 export const GalleryMeterSm = () => <Meter style={row} size="sm" label="Label" description="Description" value={24} />;
 export const GalleryMeterLg = () => <Meter style={row} size="lg" label="Label" description="Description" value={24} />;
 /* The label and the value, no description. */

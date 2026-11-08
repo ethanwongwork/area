@@ -30,7 +30,7 @@ test("a titled code block keeps its actions in the header, and floats them witho
 test("highlight ranges and diff marks paint the lines they name", () => {
   const html = renderToString(h(CodeBlock, { code: "one\ntwo\nthree", highlightLines: "2-3", marks: { 1: "removed", 3: "added" } }));
   assert.equal((html.match(/area-code-block__line--highlighted/g) ?? []).length, 2);
-  assert.match(html, /area-code-block__line--removed/);
+  assert.match(html, /area-code-block__line--deleted/); // `removed` given: the deprecated spelling (components audit D6)
   assert.match(html, /area-code-block__line--added/);
   assert.match(html, /area-code-block__marker">-</);
   assert.match(html, /area-code-block__marker">\+</);
@@ -101,12 +101,12 @@ test("dialog surface can compose inside a native modal without duplicate dialog 
   const html = renderToString(h(Dialog, { role: "group", "aria-modal": undefined, title: "Title", description: "Description", footer: h("button", null, "Close") }, "Body"));
   assert.match(html, /role="group"/);
   assert.doesNotMatch(html, /aria-modal/);
-  for (const part of ["heading", "title", "description", "close", "body", "footer"]) assert.match(html, new RegExp(`area-dialog__${part}`));
+  for (const part of ["heading", "title", "description", "dismiss", "body", "footer"]) assert.match(html, new RegExp(`area-dialog__${part}`));
   assert.match(html, /aria-labelledby="([^"]+)-title"/);
   assert.match(html, /aria-describedby="([^"]+)-description"/);
   assert.match(html, /aria-label="Close dialog"/);
   const withoutClose = renderToString(h(Dialog, { title: "Title", showCloseButton: false }));
-  assert.doesNotMatch(withoutClose, /area-dialog__close/);
+  assert.doesNotMatch(withoutClose, /area-dialog__dismiss/);
 });
 
 test("navigation actions stay outside the destination link", () => {
@@ -119,6 +119,6 @@ test("navigation actions stay outside the destination link", () => {
 test("toast announces content while leaving independent actions outside its live region", () => {
   const html = renderToString(h(Toast, { title: "Saved", onDismiss() {}, action: h("button", null, "Undo") }, "Project updated"));
   assert.match(html, /role="status" aria-atomic="true"/);
-  assert.match(html, /Project updated<\/div><\/div><div class="area-toast__action">/);
+  assert.match(html, /Project updated<\/div><\/div><div class="area-toast__actions">/);
   assert.match(html, /aria-label="Dismiss notification"/);
 });

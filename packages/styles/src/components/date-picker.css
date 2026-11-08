@@ -80,7 +80,7 @@
     user-select: none;
   }
   @media (hover: hover) {
-    .area-date-picker__trigger:hover:not(:disabled, [aria-expanded="true"]) {
+    .area-date-picker__trigger:hover:not(:disabled, [aria-expanded="true"], [data-read-only]) {
       border-color: var(--_border-hover);
       background-color: var(--_bg-hover);
     }
@@ -105,6 +105,24 @@
     --_focus-outline: var(--area-select-invalid-color);
     --_focus-halo: var(--area-select-invalid-halo-color);
   }
+  /* Success and warning, as Select's (components audit 2026-11-07, O1): a Field's status reaches every field. */
+  .area-date-picker__trigger[data-success] {
+    --_border: var(--area-select-success-color);
+    --_border-hover: var(--area-select-success-color);
+    --_border-focus: var(--area-select-success-color);
+    --_focus-outline: var(--area-select-success-color);
+    --_focus-halo: var(--area-select-success-halo-color);
+  }
+  .area-date-picker__trigger[data-warning] {
+    --_border: var(--area-select-warning-color);
+    --_border-hover: var(--area-select-warning-color);
+    --_border-focus: var(--area-select-warning-color);
+    --_focus-outline: var(--area-select-warning-color);
+    --_focus-halo: var(--area-select-warning-halo-color);
+  }
+  /* Read-only (O2): a date set elsewhere, shown at rest. Only disabled changes paint (Input's rule); the field keeps
+     its focus ring and doesn't answer the pointer. */
+  .area-date-picker__trigger[data-read-only] { cursor: default; }
   .area-date-picker__trigger:disabled {
     --_border: var(--area-border-faint);
     background-color: var(--area-select-bg-disabled);

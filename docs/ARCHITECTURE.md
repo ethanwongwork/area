@@ -268,7 +268,7 @@ provides two virtual modules:
 
 | File | Holds |
 |---|---|
-| `pages.mjs` | `COMPONENT_PAGES`: one entry per family (slug, name, manifest, imports, `api` rows, `examples` with notes). 116 families. |
+| `pages.mjs` | `COMPONENT_PAGES`: one entry per family (slug, name, manifest, imports, `api` rows, `examples` with notes). 119 families, plus the icon pilot page. |
 | `demos/<family>.tsx` | The demos, one exported function each, unique names across files |
 | `registry.tsx` | Imports every demo module into `DEMOS` (a duplicate name throws) |
 | `specimens.mjs` | `GALLERY_SPECIMENS`: each family's tiles, one variant per tile; without an entry, `Gallery<Name>` or the first example |

@@ -66,7 +66,7 @@ area    div.area-board (flex, 12 gap, scrolls sideways)
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | column | 276 wide, 12 apart | Notion | — |
-| tint | half the tone's resting tint over what is behind (`color-mix(<tone>-surface 50%, transparent)`), so Tone tint reaches the column; neutral keeps a 3% wash of the default ink | owner 2026-11-03 (Tag and Board on the tone tokens) | was the tone's ink at 3–6.3% per colour |
+| tint | the hue's translucent ground, `hue-<hue>-bg-translucent` (components audit D5): half the tone's resting tint over what is behind (`color-mix(<tone>-surface 50%, transparent)`), so Tone tint reaches the column; neutral keeps a 3% wash of the default ink | owner 2026-11-03 (Tag and Board on the tone tokens) | was the tone's ink at 3–6.3% per colour |
 | header | 40, the title 18 from the column's edge (on the cards' text), the count 6 after it, actions at the end | Notion; owner round 7 | — |
 | title | plain text, UI type, `weight-strong` | owner round 7 ("just regular text") | was a Tag in the column's tone |
 | count | a soft Badge sm; in a colour, that tone's soft Badge: its resting tint under its words (`<tone>-surface`, `fg-<tone>`); neutral: muted, darkened with a light page | owner round 7; 2026-11-03 | was the colour at 12% under the colour's ink |
@@ -206,3 +206,10 @@ Cards press at `bg-component-active`, or 9% of a coloured column's colour (7% in
   tone's soft Badge and its add row's plates the tone's hover and pressed tints.
 - **Why:** owner, "Yes, move them": Tone tint and Tone contrast now reach Board, and a column matches its Tag and Badge.
 - **Checks:** layers.test.ts holds every column's words at 4.5:1 on its ground on every light page and dark layer step.
+
+### 2026-11-07 · Every hue's roles (components audit D5)
+
+A column reads the hue role table (`--area-hue-<hue>-<role>`, packages/tokens/src/semantic/hues.ts; DESIGN_SYSTEM.md, "Every hue has the same roles"): `--_color` is `hue-<hue>-text`, the count's tint `hue-<hue>-bg`, and the ground
+`hue-<hue>-bg-translucent` (the base rule paints `--_ground`, no longer `color-mix(--_surface-tone 50%, transparent)`).
+The values are unchanged. The tints' hover and active steps the colour rules set were never read, and went. The card
+ring keeps its Cards-stroke formula; at the defaults it equals `hue-<hue>-border-translucent` (the words at 10%).

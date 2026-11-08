@@ -105,7 +105,7 @@
      side (Nav's --_nav-row-height and --_nav-row-radius). */
   .area-titlebar .area-nav--horizontal {
     --_nav-row-height: var(--area-control-sm);
-    --_nav-row-radius: min(var(--area-radius-control-sm), max(var(--area-radius-min), round(down, calc(var(--area-control-sm) * var(--area-radius-factor)), 2px)));
+    --_nav-row-radius: min(var(--area-radius-control-sm), var(--area-radius-control-sm));
   }
   .area-titlebar .area-nav--horizontal .area-nav__item {
     block-size: var(--_nav-row-height);

@@ -2,6 +2,7 @@ import { Children, createContext, forwardRef, isValidElement, useContext, useId,
 import type { CSSProperties, HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import { propertyListVariants } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
+import { announce } from "./announce.ts";
 
 export interface PropertyListProps extends HTMLAttributes<HTMLUListElement> {
   /** Names the list ("Fills"); each item's handle and announcements use it. */
@@ -51,7 +52,6 @@ export const PropertyList = forwardRef<HTMLUListElement, PropertyListProps>(func
   const [dragging, setDragging] = useState<number | null>(null);
   const [drop, setDrop] = useState<{ slot: number; top: number } | null>(null);
   const dropRef = useRef<{ slot: number; top: number } | null>(null);
-  const [message, setMessage] = useState("");
   const statusId = useId();
 
   useLayoutEffect(() => {
@@ -64,7 +64,7 @@ export const PropertyList = forwardRef<HTMLUListElement, PropertyListProps>(func
     if (!onReorder || from === to || to < 0 || to >= count) return;
     focusAfterMove.current = to;
     onReorder(from, to);
-    setMessage(`${itemLabel} moved to position ${to + 1} of ${count}`);
+    announce(`${itemLabel} moved to position ${to + 1} of ${count}`);
   };
   const slotAt = (y: number) => {
     const state = drag.current;
@@ -134,10 +134,9 @@ export const PropertyList = forwardRef<HTMLUListElement, PropertyListProps>(func
       {items.map((item, index) => <ItemIndex.Provider key={item.key ?? index} value={index}>{item}</ItemIndex.Provider>)}
       {drop ? <li className="area-property-list__indicator" aria-hidden="true" style={{ "--_drop": `${drop.top}px` } as CSSProperties} /> : null}
     </ul>
-    {/* The instructions stay the list's description; moves are announced in a separate live
-        region, so the description is not replaced by the last announcement. */}
+    {/* The instructions stay the list's description; moves are said through the shared announcer, so the
+        description is not replaced by the last announcement. */}
     {reorderable ? <span id={statusId} className="area-sr-only">{`Use the arrow keys on a handle to move ${label.toLowerCase()}.`}</span> : null}
-    {reorderable ? <span className="area-sr-only" aria-live="polite">{message}</span> : null}
   </PropertyListContext.Provider>;
 });
 

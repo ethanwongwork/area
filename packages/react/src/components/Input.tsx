@@ -2,7 +2,7 @@ import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
 import { forwardRef, useContext } from "react";
 import { InputGroupContext } from "./input-group-context.ts";
-import type { ButtonHTMLAttributes, CSSProperties, InputHTMLAttributes, ReactElement, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ChangeEvent, CSSProperties, InputHTMLAttributes, ReactElement, ReactNode } from "react";
 import { cx, inputVariants, tooltipVariants } from "../variants.ts";
 import { Spinner } from "./primitives.tsx";
 import { AnchoredTooltip } from "./Overlays.tsx";
@@ -10,9 +10,9 @@ import { AnchoredTooltip } from "./Overlays.tsx";
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   variant?: VariantProps<typeof MANIFESTS.input>["variant"];
   size?: VariantProps<typeof MANIFESTS.input>["size"];
-  /** @deprecated Use `leadingIcon`. */
+  /** Decorative visual at the logical start of the input (glyph slots are `icon` / `trailingIcon`, Governance § 4). */
   icon?: ReactNode;
-  /** Decorative visual at the logical start of the input. */
+  /** @deprecated Use `icon` (2026-11-07, system gaps C4). Kept for one release; `icon` wins. */
   leadingIcon?: ReactNode;
   /** Decorative visual at the logical end of the input. */
   trailingIcon?: ReactNode;
@@ -37,6 +37,11 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   /** Semantic validation paint. `invalid` remains the compatibility alias for `error`. */
   validationStatus?: "error" | "success" | "warning";
   invalid?: boolean;
+  /**
+   * The typed value and the change event, beside native `onChange` (which runs first; Governance § 4, components audit
+   * 2026-11-07 O3). Search field and Combobox replace it with their own.
+   */
+  onValueChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
   /** Class applied to the outer shell rather than the input itself. */
   className?: string;
   /** Style applied to the outer shell, with `className` (width and margin overrides). */
@@ -104,6 +109,8 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
     invalid,
     disabled: disabledProp,
     readOnly,
+    onChange,
+    onValueChange,
     className,
     style,
     "aria-invalid": ariaInvalid,
@@ -119,7 +126,7 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
   const validationStatus = validationStatusProp ?? group.validationStatus;
   const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
-  const startIcon = leadingIcon ?? icon;
+  const startIcon = icon ?? leadingIcon;
   const spinnerSize = size === "sm" ? "sm" : size === "lg" ? "lg" : "md";
   const resolvedLoaderPosition = loaderPosition === "auto" ? (startIcon ? "leading" : "trailing") : loaderPosition;
 
@@ -151,6 +158,10 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
         aria-invalid={invalidState ? true : ariaInvalid}
         aria-busy={loading ? true : ariaBusy}
         {...rest}
+        onChange={onChange || onValueChange ? (event: ChangeEvent<HTMLInputElement>) => {
+          onChange?.(event);
+          if (!event.defaultPrevented) onValueChange?.(event.target.value, event);
+        } : undefined}
       />
       {suffix ? <span className="area-input__affix">{suffix}</span> : null}
       {loading && resolvedLoaderPosition === "trailing" ? (

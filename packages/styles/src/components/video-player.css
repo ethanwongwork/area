@@ -80,7 +80,7 @@
     border-radius: var(--area-radius-full);
     cursor: pointer;
     /* Hover in at once, out on fast (MOTION.md, Hover). */
-    transition: opacity var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out);
   }
   .area-video-player__start > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-video-player__start:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
@@ -159,7 +159,7 @@
     flex: none;
     inline-size: 0;
     opacity: 0;
-    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-out);
   }
   .area-video-player__volume:is(:focus-within, [data-open]) > .area-video-player__range {
     inline-size: var(--_volume);
@@ -169,7 +169,7 @@
   .area-video-player__volume[data-muted] > .area-video-player__range { --_fill: var(--area-fg-muted); }
 
   /* Showing and hiding: in on fast, out on moderate, opacity only (MOTION.md; Media Chrome in faster than out). */
-  .area-video-player__controls { opacity: 1; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-video-player__controls { opacity: 1; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
   .area-video-player[data-idle] .area-video-player__controls { opacity: 0; transition-duration: var(--area-duration-moderate); }
   .area-video-player[data-idle] { cursor: none; }
   .area-video-player--auto {}

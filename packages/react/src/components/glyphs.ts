@@ -176,6 +176,23 @@ export const glyphs = {
   "picture-in-picture-filled": [
     "M14 6V4A1.5 1.5 0 0 0 12.5 2.5H3.5A1.5 1.5 0 0 0 2 4V10A1.5 1.5 0 0 0 3.5 11.5H5",
     "M8.5 8.5H13A1 1 0 0 1 14 9.5V12.5A1 1 0 0 1 13 13.5H8.5A1 1 0 0 1 7.5 12.5V9.5A1 1 0 0 1 8.5 8.5Z"
+  ],
+  "person": [
+    "M5 5A3 3 0 1 0 11 5A3 3 0 1 0 5 5Z",
+    "M3 14A3.5 3.5 0 0 1 6.5 10.5H9.5A3.5 3.5 0 0 1 13 14Z"
+  ],
+  "calendar": [
+    "M4 3.5H12A1.5 1.5 0 0 1 13.5 5V12A1.5 1.5 0 0 1 12 13.5H4A1.5 1.5 0 0 1 2.5 12V5A1.5 1.5 0 0 1 4 3.5Z",
+    "M2.5 6.5H13.5",
+    "M5.5 2V4M10.5 2V4",
+    "M4.6875 10A0.5625 0.5625 0 1 0 5.8125 10A0.5625 0.5625 0 1 0 4.6875 10Z",
+    "M7.4375 10A0.5625 0.5625 0 1 0 8.5625 10A0.5625 0.5625 0 1 0 7.4375 10Z",
+    "M10.1875 10A0.5625 0.5625 0 1 0 11.3125 10A0.5625 0.5625 0 1 0 10.1875 10Z"
+  ],
+  "link": [
+    "M4 8L3 9A2.828 2.828 0 0 0 7 13L8 12",
+    "M12 8L13 7A2.828 2.828 0 0 0 9 3L8 4",
+    "M6 10L10 6"
   ]
 } as const;
 export type GlyphName = keyof typeof glyphs;
@@ -186,7 +203,7 @@ export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill" | "knockout"
 /** A "body" glyph's filled paths, by path index (the speaker's body; its waves stay lines). */
 export const glyphBodies: Partial<Record<GlyphName, readonly number[]>> = {"volume-filled":[0],"volume-off-filled":[0],"picture-in-picture-filled":[1]};
 /** Filled dots inside a line drawing, by path index (the i's dot, the ?'s point). */
-export const glyphFills: Partial<Record<GlyphName, readonly number[]>> = {"info":[2],"help":[2]};
+export const glyphFills: Partial<Record<GlyphName, readonly number[]>> = {"info":[2],"help":[2],"calendar":[3,4,5]};
 /** Knocked-out marks in a "knockout" glyph, by path index (dismiss-circle's ×), stroked at the line. */
 export const glyphKnockouts: Partial<Record<GlyphName, readonly number[]>> = {"dismiss-circle":[1],"captions-filled":[1]};
 /** 12px cuts (docs/specs/icons.md, "12px cuts"): the glyph redrawn on the 12px grid, its lines on half pixels so they
@@ -216,6 +233,11 @@ export const glyphCuts12: Partial<Record<GlyphName, readonly string[]>> = {
   "return": [
     "M9.5 2.5V5.5A2 2 0 0 1 7.5 7.5H2.5",
     "M4.5 5.5L2.5 7.5L4.5 9.5"
+  ],
+  "link": [
+    "M2.75 6.25L2.25 6.75A2.121 2.121 0 0 0 5.25 9.75L5.75 9.25",
+    "M9.25 5.75L9.75 5.25A2.121 2.121 0 0 0 6.75 2.25L6.25 2.75",
+    "M4.75 7.25L7.25 4.75"
   ]
 };
 export const glyphCutFills12: Partial<Record<GlyphName, readonly number[]>> = {"info":[2]};
@@ -238,6 +260,11 @@ export const glyphCuts10: Partial<Record<GlyphName, readonly string[]>> = {
     "M1 4.5A3.5 3.5 0 1 0 8 4.5A3.5 3.5 0 1 0 1 4.5Z",
     "M4.5 4.75V6.25",
     "M4 3A0.5 0.5 0 1 0 5 3A0.5 0.5 0 1 0 4 3Z"
+  ],
+  "link": [
+    "M2 5A1.414 1.414 0 0 0 4 7",
+    "M7 4A1.414 1.414 0 0 0 5 2",
+    "M4 5L5 4"
   ]
 };
 export const glyphCutFills10: Partial<Record<GlyphName, readonly number[]>> = {"info":[2]};

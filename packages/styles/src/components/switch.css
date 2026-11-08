@@ -100,7 +100,7 @@
     background-color: var(--_off-hover);
     opacity: 0;
     transition:
-      opacity var(--area-duration-fast) var(--area-ease-out),
+      opacity var(--area-fade-fast) var(--area-ease-out),
       background-color var(--area-duration-base) var(--area-ease-in-out);
   }
 
@@ -155,7 +155,7 @@
   .area-switch[data-read-only] { cursor: default; }
   .area-switch[data-loading] { cursor: progress; }
 
-  .area-switch__text { display: flex; flex-direction: column; gap: var(--area-space-2); min-inline-size: 0; }
+  .area-switch__text { display: flex; flex-direction: column; gap: 0; min-inline-size: 0; } /* the description is the label's next line, as a choice's (Text pairs, 2026-11-06; was 2) */
   .area-switch__label { display: block; font-size: var(--_text); line-height: var(--_leading); overflow-wrap: anywhere; }
   .area-switch__description { display: block; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); color: var(--area-fg-muted); overflow-wrap: anywhere; }
   .area-switch__loading { display: inline-flex; align-items: center; min-block-size: var(--_leading); order: 1; }

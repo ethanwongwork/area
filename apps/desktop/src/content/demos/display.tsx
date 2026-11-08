@@ -65,13 +65,13 @@ export const AlertTones = () => (
 );
 
 export const AlertAction = () => (
-  <Alert icon={<InfoIcon />} title="Title" action={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}} style={{ maxInlineSize: 720 }}>
+  <Alert icon={<InfoIcon />} title="Title" actions={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}} style={{ maxInlineSize: 720 }}>
     Body text
   </Alert>
 );
 
 export const AlertMultiline = () => (
-  <Alert layout="multiline" icon={<InfoIcon />} title="Title" action={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}} style={{ maxInlineSize: 720 }}>
+  <Alert layout="multiline" icon={<InfoIcon />} title="Title" actions={<><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></>} onDismiss={() => {}} style={{ maxInlineSize: 720 }}>
     Body text that wraps onto a second line
   </Alert>
 );

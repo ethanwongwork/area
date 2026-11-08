@@ -50,3 +50,20 @@ test("a toggle can be uncontrolled with defaultSelected (audit A-17)", () => {
   assert.match(render({ defaultSelected: false }), /aria-pressed="false"/);
   assert.doesNotMatch(render({ onSelectedChange: () => {} }), /aria-pressed/);
 });
+
+// Components audit V2 (2026-11-07): inactive looks disabled but keeps focus, its press is dropped, and its reason is a
+// Tooltip that describes it.
+test("Button inactive keeps focus, drops the press and is described by its reason", () => {
+  const html = renderToString(h(Button, { inactive: true, inactiveText: "Description" }, "Button"));
+  const button = html.match(/<button[^>]*>/)[0];
+  assert.doesNotMatch(button, /\sdisabled=""/, "not native disabled: it keeps its Tab stop");
+  assert.match(button, /aria-disabled="true"/);
+  assert.match(button, /data-inactive=""/);
+  const described = button.match(/aria-describedby="([^"]+)"/)[1];
+  assert.match(html, new RegExp(`<div role="tooltip" class="area-tooltip area-tooltip--top" id="${described}"[^>]*>Description</div>`));
+  // Without a reason, no tooltip; disabled wins over inactive.
+  assert.doesNotMatch(renderToString(h(Button, { inactive: true }, "Button")), /role="tooltip"/);
+  const disabled = renderToString(h(Button, { inactive: true, disabled: true, inactiveText: "Description" }, "Button"));
+  assert.doesNotMatch(disabled, /data-inactive|role="tooltip"/);
+  assert.match(disabled, /\sdisabled=""/);
+});

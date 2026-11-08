@@ -17,14 +17,15 @@
  *                  It ran h1 to h4, a quote, a caption and a badge for a turn: six sizes in one reply
  *   Trackers       what an agent's turn shows while it works: a Plan on its rail, a group of Steps, Reasoning, an Edit
  *                  summary, an Approval and a Turn notice
+ *   NotSent        the person's messages as a stack (MessageGroup), one not sent with Retry (components audit O6, V9)
  *
  * Copy is one real, generic scenario (owner, 2026-11-02: "use real generic chat/code/design specific copy for these so
  * that it makes sense"): a person asks an agent to add a dark mode switch to a settings page; the agent plans, reads,
  * edits, runs the tests and asks before installing; a reply explains spacing tokens. Never an em dash, never a product.
  */
 import { useState, type ReactNode } from "react";
-import { Approval, Attachment, Button, Chip, Pagination, Menu, MenuItem, MenuSeparator, Citation, CodeBlock, Code, Composer, ComposerMic, ComposerNote, Diff, ComposerMenu, EmptyState, Link, ModelPicker, PromptSuggestions, EditSummary, EditSummaryFile, Message, MessageActions, Plan, Reasoning, ReferenceList, ReferenceListItem, Step, StepGroup, Table, TableCell, TableHeaderCell, Timestamp, TurnNotice, type ComposerMenuGroup, type DiffHunk } from "@area/react";
-import { AddIcon, BugIcon, DismissIcon, FileCodeIcon, ClipboardListIcon, HelpIcon, LayersIcon, PlugIcon, SparkleIcon, AttachIcon, BookIcon, ChatIcon, TerminalIcon, ListIcon, PencilIcon, LaptopIcon, ShieldIcon, CopyIcon, DocumentIcon, MoreHorizontalIcon, RefreshIcon, SearchIcon, ThumbsDownIcon, ThumbsUpIcon } from "@area/icons";
+import { Approval, Attachment, Button, Chip, Pagination, Menu, MenuItem, MenuSeparator, Citation, CodeBlock, Code, Composer, ComposerMic, ComposerNote, Diff, ComposerMenu, EmptyState, Link, ModelPicker, PromptSuggestions, EditSummary, EditSummaryFile, Message, MessageActions, MessageGroup, Plan, Reasoning, ReferenceList, ReferenceListItem, Step, StepGroup, Table, TableCell, TableHeaderCell, Timestamp, TurnNotice, type ComposerMenuGroup, type DiffHunk } from "@area/react";
+import { AddIcon, BugIcon, DismissIcon, FileCodeIcon, FilePdfIcon, ClipboardListIcon, HelpIcon, LayersIcon, PlugIcon, SparkleIcon, AttachIcon, BookIcon, ChatIcon, TerminalIcon, ListIcon, PencilIcon, LaptopIcon, ShieldIcon, CopyIcon, DocumentIcon, MoreHorizontalIcon, RefreshIcon, SearchIcon, ThumbsDownIcon, ThumbsUpIcon } from "@area/icons";
 import { CARD_SCOPE, FEED_CODE, FEED_TABLE } from "./tile.tsx";
 import { appScale } from "./app-scale.ts";
 import { noted, QuestionRun } from "./question-kit.tsx";
@@ -142,16 +143,16 @@ export function Response() {
 }
 
 const PLAN = [
-  { id: "1", label: "Read the theme tokens", status: "done" as const, meta: "4 of 4" },
+  { id: "1", label: "Read the theme tokens", status: "complete" as const, meta: "4 of 4" },
   { id: "2", label: "Add the theme switch", status: "current" as const, progress: 0.5, meta: "1 of 2", items: [
-    { id: "2a", label: "Settings page", status: "done" as const },
+    { id: "2a", label: "Settings page", status: "complete" as const },
     { id: "2b", label: "Saved preference", status: "current" as const },
   ] },
   { id: "3", label: "Run the tests", status: "pending" as const },
 ];
 const HUNKS: DiffHunk[] = [{ lines: [
   { kind: "context", text: '<Section title="Appearance">', old: 41, new: 41 },
-  { kind: "removed", text: '  <Row label="Theme">Light</Row>', old: 42 },
+  { kind: "deleted", text: '  <Row label="Theme">Light</Row>', old: 42 },
   { kind: "added", text: '  <Row label="Theme"><ThemeSwitch /></Row>', new: 42 },
   { kind: "context", text: "</Section>", old: 43, new: 43 },
 ] }];
@@ -179,9 +180,9 @@ export function Trackers() {
       {/* No glyph before the title (owner, 2026-11-02: "delete the agent icon why is it being used there"), and the
           Plan's own count, done of its items, so the count and the bar's three segments agree (it was "3 of 5"). */}
       <div className="studio-chat__text"><Plan items={PLAN} rail bar="segmented" title="Dark mode" variant="plain" /></div>
-      <div className="studio-chat__text"><EditSummary title="Edited 2 files" added={30} removed={4} variant="plain">
-        <EditSummaryFile name="src/pages/settings.tsx" icon={<FileCodeIcon />} added={24} removed={3} status="pending" diff={<Diff aria-label="Changes to settings.tsx" hunks={HUNKS} />} defaultOpen />
-        <EditSummaryFile name="src/theme.ts" icon={<FileCodeIcon />} added={6} removed={1} status="pending" />
+      <div className="studio-chat__text"><EditSummary title="Edited 2 files" added={30} deleted={4} variant="plain">
+        <EditSummaryFile name="src/pages/settings.tsx" icon={<FileCodeIcon />} added={24} deleted={3} status="pending" diff={<Diff aria-label="Changes to settings.tsx" hunks={HUNKS} />} defaultOpen />
+        <EditSummaryFile name="src/theme.ts" icon={<FileCodeIcon />} added={6} deleted={1} status="pending" />
       </EditSummary></div>
       <Approval title="Run npm install?" description="It adds one package to package.json." items={CHOICES} value={choice} onChoose={setChoice} />
       <div className="studio-chat__text"><TurnNotice status="stopped">You stopped this reply after 12s.</TurnNotice></div>
@@ -212,12 +213,16 @@ export function CardsReply({ designs, chart, colors }: { designs: ReactNode; cha
   );
 }
 
-/** What waits in the composer before it is sent: a picture and a file, each removable, over the field. */
+/** What waits in the composer before it is sent: a picture, a file and a pasted quote sent with the message (Attachment's
+ *  kinds, components audit V10), and a file it only mentions (a Chip), each removable, over the field. */
 export function Attachments({ image }: { image?: string }) {
-  const [files, setFiles] = useState(["settings.tsx", "tokens.json"]);
-  const [picture, setPicture] = useState(Boolean(image));
+  const [files, setFiles] = useState(["settings.tsx"]);
+  const [sent, setSent] = useState(["picture", "spec", "quote"]);
+  const drop = (item: string) => () => setSent(list => list.filter(entry => entry !== item));
   const chips = <>
-    {picture && image ? <Attachment src={image} name="Screenshot" onDismiss={() => setPicture(false)} /> : null}
+    {sent.includes("picture") && image ? <Attachment src={image} name="Screenshot" onDismiss={drop("picture")} /> : null}
+    {sent.includes("spec") ? <Attachment kind="file" name="Dark mode spec.pdf" icon={<FilePdfIcon />} onDismiss={drop("spec")} /> : null}
+    {sent.includes("quote") ? <Attachment kind="quote" name="Pasted text" text="In dark mode the card edge is one step lighter than the page, and the switch sits under Appearance." onDismiss={drop("quote")} /> : null}
     {files.map(name => <Chip key={name} kind="input" size="sm" icon={<DocumentIcon />} onDismiss={() => setFiles(list => list.filter(entry => entry !== name))}>{name}</Chip>)}
   </>;
   return (
@@ -393,6 +398,22 @@ export function Failed() {
     <div {...chat()}>
       <Message author="user">Publish the theme to the team library.</Message>
       <div className="studio-chat__text"><TurnNotice status="error" action={<Button size="sm" variant="ghost" tone="neutral" icon={<RefreshIcon />}>Retry</Button>}>The library didn't answer. Nothing was published.</TurnNotice></div>
+    </div>
+  );
+}
+
+/** The person's messages as a stack (MessageGroup, components audit V9): three sent one after another, 2 apart, the
+ *  middle one not sent, with Retry (O6); Retry sends it again, a second passes, then it is sent. */
+export function NotSent() {
+  const [status, setStatus] = useState<"sending" | "error" | undefined>("error");
+  const retry = () => { setStatus("sending"); window.setTimeout(() => setStatus(undefined), 2400); };
+  return (
+    <div {...chat()}>
+      <MessageGroup>
+        <Message author="user">Add a dark mode switch to the settings page.</Message>
+        <Message author="user" status={status} onRetry={retry}>Put it under Appearance, next to the type size.</Message>
+        <Message author="user">And keep the card edges readable in dark mode.</Message>
+      </MessageGroup>
     </div>
   );
 }

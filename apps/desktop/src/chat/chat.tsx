@@ -119,7 +119,7 @@ function editOf(part: ToolPart) {
     : typeof part.input.content === "string" ? part.input.content.split("\n") : [];
   const name = typeof part.input.file_path === "string" ? part.input.file_path.split("/").at(-1)! : "file";
   const hunks: DiffHunk[] = [{ lines: [
-    ...before.map(text => ({ kind: "removed" as const, text })),
+    ...before.map(text => ({ kind: "deleted" as const, text })),
     ...after.map(text => ({ kind: "added" as const, text })),
   ] }];
   return { name, added: after.length, removed: before.length, hunks };
@@ -129,7 +129,7 @@ const isEdit = (part: Part): part is ToolPart => part.kind === "tool" && (part.n
 /** One tool call as a Step: its verb pair, what it acted on, and its output (or its diff) when opened. */
 function ToolStep({ part }: { part: ToolPart }) {
   const [live, past] = VERBS[part.name] ?? [part.name, part.name];
-  const status = part.status === "running" ? "running" : part.status === "error" ? "failed" : "done";
+  const status = part.status === "running" ? "running" : part.status === "error" ? "error" : "complete";
   if (part.name === "TodoWrite") {
     const plan = Array.isArray(part.input.todos) ? part.input.todos as Array<{ status?: string }> : [];
     return <Step verb={part.status === "running" ? live : past} detail={`${plan.filter(todo => todo.status === "completed").length} of ${plan.length} done`} status={status} />;
@@ -192,11 +192,11 @@ function TurnEdits({ turn }: { turn: Extract<Turn, { author: "assistant" }> }) {
   const failed = files.filter(file => session.undoFailed[file.id]);
   return (<>
     <EditSummary title={`Edited ${files.length} file${files.length === 1 ? "" : "s"}`}
-      added={files.reduce((sum, file) => sum + file.added, 0)} removed={files.reduce((sum, file) => sum + file.removed, 0)}
+      added={files.reduce((sum, file) => sum + file.added, 0)} deleted={files.reduce((sum, file) => sum + file.removed, 0)}
       onKeepAll={pending.length ? () => session.setEdits(pending, "kept") : undefined}
       onUndoAll={pending.length ? () => session.setEdits(pending, "undone") : undefined}>
       {files.map(file => (
-        <EditSummaryFile key={file.id} name={file.name} added={file.added} removed={file.removed} status={file.state}
+        <EditSummaryFile key={file.id} name={file.name} added={file.added} deleted={file.removed} status={file.state}
           onKeep={() => session.setEdits([file.id], "kept")} onUndo={() => session.setEdits([file.id], "undone")}
           diff={<Diff aria-label={`Changes to ${file.name}`} hunks={file.hunks} />} />
       ))}

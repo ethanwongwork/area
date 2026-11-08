@@ -1,7 +1,8 @@
 # Handoff
 
-## Current state (2026-11-07)
-- **Output, worktree `system-output-e26092` (uncommitted, 2026-11-08).** Brief steps 2 and 5: a published system written
+## Current state (2026-11-08)
+
+- **Output, worktree `system-output-e26092` (pull request, 2026-11-08).** Brief steps 2 and 5: a published system written
   into a project's folder as code it owns, kept current by a three-way merge, with an agent contract. Research and ranked
   decisions: `docs/research/system-output-2026-11-08/` (README, sources); review page
   https://claude.ai/artifact/3ZXFHZRTqEr4xq9S29zsrg (11 decisions, recommendations built, picks in `verdicts`, none yet).
@@ -19,6 +20,30 @@
   IPC only). Open: choosing between two changes in the app, GitHub destination, resolved token values in DESIGN.md,
   `area check` in CI, publishing the package for `npx area`. Inventory shape note for the inventory session in the shared
   notes folder (`system-output-2026-11-08.md`).
+- **Worktree `component-design-review-92c949`: title balance + system gaps build (committed with the components audit build; main merged in 2026-11-08).**
+  - Title balance (owner "4 is right"): a component's title is its text's size, its copy a step (4) off; an item's
+    name joins its line (DESIGN_SYSTEM "Text pairs"; `docs/research/title-balance-2026-11-06`).
+  - System gaps (artifact CWcHa47TDvM9tESQufAmD2, picks in `verdicts`; owner picked L1–L3, C1–C9, then "Take all
+    recs"). Built: L1 L2 L3 C1 C3 C4 C5 C6 C7 C8 M2 M3 D3 Q4 T4 T5 S1 S3 — table in
+    `docs/research/system-gaps-2026-11-06/README.md` ("Built from the picks").
+  - Not built yet (picked): C2 one frame recipe for cards (L) then C9 frame prop; D1 fuller usage entries (schema
+    slots, overlay states, missing keys) and D2 stage and date per family; Q1 DOM behaviour tests, Q2 screenshot
+    baseline, Q3 accessibility runs (`area-a11y-audit` is the manual half). Owner still to decide: C10, M1, V1, V2.
+  - Open from the build: Design card `wide` (16:9) vs Asset card `wide` (2:1) waits for Asset card's retirement; the
+    Colors settings' `data-area-colours` attributes need a foundation pass with a saved-theme migration.
+  - Checks: build, typecheck, npm test 29241, contrast 536/0, React 654, desktop 31, contracts 9, docs 119, playgrounds,
+    app-css, diff --check (test:consumer hung in `npm pack` and was stopped, not run). Seen in the desktop build in the browser pane, light and dark (Tag colours, Panel title,
+    Dialog). Electron not relaunched: session `design-interface-ui-4d0a03` runs its own window and watcher.
+- **Components audit, built (2026-11-08, same worktree; committed, main merged in, pull request opened).** Owner picked O1–O5, then "Take all recs":
+  every Build row built (O1–O7, V1–V7, V9, V10, V15, N1–N7, N14, D1, D5, D6), Later rows in COMPONENTS.md Candidates,
+  Decide rows (V11, V13, N10, D2, D3, D4, D7–D9) open on artifact St7jcEipvPoa3GvSwnAvBT. Table and departures:
+  `docs/research/components-audit-2026-11-07/README.md` ("Built from the picks"). New families In review: Page header,
+  Selection bar, Setting row, Filter bar, Mention, Splitter, Chart; 21 Complete families reopened. Owner calls listed in
+  the README's departures column (Dialog 384/480, file tile 64×160, Chart line 1.5, Splitter on the app's panel edges,
+  "3 selected" in the app's multi-pickers, untracked/renamed share blue).
+- **Elsewhere:** `design-interface-ui-4d0a03` is another session's (design viewer and project pages, uncommitted).
+  Merged to main since the entries below: kits #203, aligned answers #204, theme experience #205, illustrations #206,
+  fidelity #207, Design card #208, Tabs plate #209.
 - **Appearance, same worktree (PR #211, 2026-11-07).** Mode's pictures: the app in a 720 × 540 window (sidebar and
   page, `content/examples/workspace-compact.tsx`), words as bars (owner picked "B as bars" from four layouts and three
   drawings), three across, each a new Radio/Checkbox `layout="thumbnail"` (picture is the card, name under it at the
@@ -72,6 +97,20 @@
   trimmed block box; Tag drops the optical lift, Citation keeps it), so marks of one height and text share a pixel row
   at type 12–16 × density 28–36; second cohesion test. Open, not built: Area's sm marks (14 at type 13) are shorter
   than any status mark surveyed.
+
+## Earlier state (2026-11-06)
+- **Title balance, worktree `component-design-review-92c949` (uncommitted, 2026-11-06; owner: "Keep it", then "4 is right").** Owner, on the app's confirm:
+  "no spacing logic between the title and the text … the type style size contrast … is large. make sure all of this is
+  intentional." Cause: the 2026-11-02 ramp moved `title-xs` 15 → 16, so Dialog/Card/Drawer titles sat 1.23× their 13
+  text, joined 10.0 beside the text's 8.8 (in between). Rule now (DESIGN_SYSTEM "Text pairs"): a component's title is
+  its text's size (13/18 500), its copy a step (4) off (12.8; second look, owner: joined "still doesnt look right");
+  an item's name joins its line; a heading (Empty state md, Section heading) title-xs, a step off; never between. Built: Dialog, Confirm dialog, Drawer, Card titles 13/18 (close centring reads the title's line);
+  Empty state md gap 4; Checkbox/Radio/legend/Switch descriptions and File upload meta joined (were 2 off); feed's Card
+  hook removed. Sweep, captures, research: `docs/research/title-balance-2026-11-06`. Review artifact Mth8bhGouVQJTfxmvxawQg
+  (Q1 Panel md bar title 15/22, Q2 Card list 7 apart, Q3 none). Checks: build, typecheck, react 649, contracts, docs,
+  app-css, playgrounds, npm test. Seen in the browser build light and dark (headless captures); Electron not relaunched
+  (session `design-interface-ui-4d0a03` runs its own).
+- **System gaps review (2026-11-07, same worktree, research only).** Four sweeps (components, foundations and process, ten design systems, the installed apps' bundles): `docs/research/system-gaps-2026-11-06/README.md`. Review artifact CWcHa47TDvM9tESQufAmD2, 39 proposals (L, C, M, D, Q, T, S, V) with picks in its `verdicts` collection; nothing built from it yet. Stale docs fixed on the way (family count 119, interaction skill places, `ease-in`, Step shimmer, joined-title remnants).
 - **Design card, worktree `design-container-display-0918d8` (uncommitted, 2026-11-06).** Owner: "no more 'asset
   cards'" — containers hold live designs and open into Full view. Design Containers artifact E95K8UoMuAYPLDVBNJFMHT
   (`docs/research/design-containers-2026-11-05/`): the owner picked every recommendation (one component; margin a tenth,

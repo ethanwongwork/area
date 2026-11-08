@@ -63,7 +63,7 @@ area     button.area-chip (or span wrapper when removable)  owns: tier height, 1
   visual span __swatch / __avatar / __image  20px (icon 16 + 4) · __icon 16px, fg-muted
   label  span __label
   action button __action  (removable + clickable)
-  remove button __remove  circle 20 / 24 / 32 (`--_remove`), concentric radius, fg-muted, Area dismiss glyph 16
+  remove button __dismiss  circle 20 / 24 / 32 (`--_remove`), concentric radius, fg-muted, Area dismiss glyph 16
   trailing span __trailing-icon  ChipLink with `treatment="icon"`, 16px, fg-muted
 ```
 
@@ -296,3 +296,9 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
   and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
   docs/research/dark-soft-tones-2026-10-28).
 - **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
+
+### 2026-11-07 · One dismiss API and part (system gaps C4)
+
+- **What changed:** the remove control's part is `area-chip__dismiss` (was `__remove`), as every family's close.
+- **Why:** one dismiss API and one part name across the families that close or remove (Governance § 4; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
