@@ -44,6 +44,7 @@ npm test               # token math, axes and the contrast gate
 | Package exports | `npm run test:consumer` after a build |
 | Icons | The `area-icon-construction` skill's gate; `npm run test:icons` |
 | App chat code | `npm run test:desktop` |
+| Output (`packages/output`), or anything it reads (axes, component CSS, React sources) | `npm run test:output` (after a build), `npm run typecheck`; `npm run fidelity -w @area/output` after a change to the axes, base or component CSS (the written CSS must paint exactly what Area paints; `AREA_SYSTEM_FILE=<system.json>` adds a saved system) |
 
 **Full sweep before a pull request:** `npm run build && npm run typecheck && npm test && npm run test:contracts && node --test packages/react/tests/*.test.mjs && npm run check:playgrounds -w @area/desktop && npm run check:docs -w @area/desktop && npm run check:app-css -w @area/desktop`.
 
