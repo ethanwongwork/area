@@ -1,6 +1,18 @@
 # Handoff
 
 ## Current state (2026-11-06)
+- **Marks on one line: Count beside Badge, worktree `vigilant-raman-cdac08` (uncommitted, 2026-11-07).** Owner on
+  "Button 44 ✓ Complete": the pair looked like two sizes. Same height and text already; drifted were the shape (Count
+  off Pills since 2026-11-01), the text side (Count 3, Badge 5) and the heading's placement (status 1.3 low). Review page
+  https://claude.ai/artifact/2g6mM75soKAoZSTmL1pG74, survey of 14 systems in `docs/research/count-badge-2026-11-07/`;
+  owner: "Yes, build it" (pills both, side (h − 6) / 2 both, weights kept). Built: Count back on the default Pills,
+  Badge and Count text side 4 / 6 at type 13, one-character count `data-single` (a circle), `.studio-overview__status`
+  placed as `.studio-count`, Badges table count md, DESIGN_SYSTEM.md "Marks on one line" + cohesion test, specs, docs,
+  skill. Count reopened (in review). Checks all pass (react 651, npm test, contracts, desktop build, playgrounds,
+  app-css, docs). Follow-up ("Yes, fix both", 2026-11-07): Count and Tag take Badge's whole-pixel cap centre (Count a
+  trimmed block box; Tag drops the optical lift, Citation keeps it), so marks of one height and text share a pixel row
+  at type 12–16 × density 28–36; second cohesion test. Open, not built: Area's sm marks (14 at type 13) are shorter
+  than any status mark surveyed.
 - **Design card, worktree `design-container-display-0918d8` (uncommitted, 2026-11-06).** Owner: "no more 'asset
   cards'" — containers hold live designs and open into Full view. Design Containers artifact E95K8UoMuAYPLDVBNJFMHT
   (`docs/research/design-containers-2026-11-05/`): the owner picked every recommendation (one component; margin a tenth,

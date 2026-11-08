@@ -665,6 +665,18 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   and room below; never centre it against the whole paragraph.
 - **Matching tiers.** Use matching tier icon, text and gap tokens. Menu, Nav and message
   content use medium UI type; supporting text uses at least small UI type.
+- **Marks on one line** (owner, 2026-11-07). A Count and a Badge of the same size share one
+  height (`mark-label-*`), one text size (`control-xs`), one shape (both on the Pills list by
+  default, or neither) and one text side: `(H − 6) / 2` from the outer edge, edge counted
+  once, 4 / 6 / 8 at 14 / 18 / 22 (about 0.3 of the height, as GitLab's and Fluent's pills and
+  Area's Tag). They differ only in paint (a status carries its tone, a count stays neutral),
+  weight (status 500, count 400) and the status mark. A one-character count drops its sides,
+  so it is a circle as a pill. Count, Badge and Tag centre their cap on one whole-pixel
+  baseline, `edge + round((H − 2 · edge + 1cap) / 2)` from the plate's top, so marks of one
+  height and text draw their words on the same pixel row at every type and density (owner,
+  2026-11-07; Tag dropped the optical lift that Citation keeps for lowercase site names). In a heading or a name, every mark is centred on the label's
+  cap and follows what precedes it by one space and 2 (the app's `.studio-count`).
+  `cohesion.test.mjs` guards it; docs/research/count-badge-2026-11-07 has the survey.
 - **Framework-free markup uses the same slots as React.** Native editable controls keep
   browser editing metrics.
 

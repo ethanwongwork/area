@@ -8,7 +8,9 @@
  *
  * Two axes set private properties that the base rule consumes:
  *   variant  plain (Notion's board counts: no plate) or soft (Primer's CounterLabel);
- *   size     sm 16 / md 20, Badge's sm and md heights.
+ *   size     sm / md, Badge's sm and md heights (14 / 18 at type 13).
+ * A count and a status badge on one line share one height, text, shape and text side (owner, 2026-11-07; DESIGN_SYSTEM.md,
+ * "Marks on one line"; docs/research/count-badge-2026-11-07).
  * The ink stays fixed with the owner's hover and selection, as Nav's trailing slot does.
  * ------------------------------------------------------------------------- */
 @layer area.components {
@@ -16,9 +18,11 @@
     /* spec: md, the default. 20 tall (Notion's board count, Fluent medium, shadcn's sidebar
        count; Primer 18), 6 at the sides (Notion 6, Primer 6, Fluent medium 6). */
     --_count-height: var(--area-mark-label-md);
-    /* 6 at 20 and 4 at 16: half of what the 8px of digit room leaves, so a mark the UI scale
-       shortens is drawn as the default mark of that height (compact pass). */
-    --_count-gutter: calc((var(--_count-height) - var(--area-space-8)) / 2); /* spec */
+    /* The marks' text side (inset.css, Badge): (height - 6) / 2 from the outer edge, 4 at 14 and 6 at 18, about 0.3 of
+       the height, as GitLab's and Fluent's pills (6 on 20) and Area's Tag (owner, 2026-11-07: "is there too much horizontal
+       padding on the textside?"). Count draws its edge inside, so the whole side is padding. It was (height - 8) / 2, 3 at
+       14, tighter than any count or badge surveyed; a one-digit count drops its sides instead (below). */
+    --_count-gutter: calc((var(--_count-height) - var(--area-space-6)) / 2); /* spec */
     /* spec: 12/16 (Primer 12, shadcn 12, Fluent medium 12; Notion sets its board count in the
        14px heading text). Badge's caption text. */
     --_count-text: var(--area-control-xs-text);
@@ -26,6 +30,7 @@
     --_count-ink: var(--area-fg-muted);
     --_count-plate: transparent;
     --_count-weight: var(--area-weight-regular);
+    --_count-edge: 0px;
 
     display: inline-flex;
     align-items: center;
@@ -35,9 +40,9 @@
     min-inline-size: var(--_count-height);
     block-size: var(--_count-height);
     padding-inline: var(--_count-gutter);
-    /* A pill while data-area-pills lists `count`; otherwise, the default since 2026-11-01 (owner: "id prefer if counts
-       were not pills"), the radius setting's corner for its height (4 at 14 and 18, Notion's board count's 4).
-       React pill / pill={false} override. */
+    /* A pill while data-area-pills lists `count`, the default again since 2026-11-07 with Badge (owner: "maybe they should all
+       be pills then?"; it was off the list from 2026-11-01); otherwise the radius setting's corner for its height (4 at 14
+       and 18). React pill / pill={false} override. */
     --_count-pill: var(--area-pill-count);
     border-radius: calc(max(var(--area-radius-min), round(down, calc(var(--_count-height) * var(--area-radius-factor)), 2px)) + var(--_count-pill) * var(--area-radius-full));
     background: var(--_count-plate);
@@ -77,6 +82,26 @@
     box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-tags);
   }
 
+  /* The digits sit on Badge's whole-pixel baseline (owner, 2026-11-07: "the vertical alignment the same/consistent?"):
+     the cap centres in the plate and the baseline rounds to a whole pixel from the plate's top, by Badge's formula with its
+     edge (badge.css), so a Count and a Badge of one height on one line draw their text on the same pixel row at every type
+     and density. Centred by its line box it was exact but fractional, up to 0.45 off the badge beside it (type 12; 0.38 at
+     15, 0.10 at 13). A block box trims its line to cap and baseline, and the padding places them; the edge is drawn inside,
+     so only a forced-colors border (below) comes off the padding. */
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-count {
+      --_count-baseline: calc(var(--area-stroke-width) + round(nearest, calc((var(--_count-height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px));
+      display: inline-block;
+      text-align: center;
+      text-box: trim-both cap alphabetic;
+      padding-block: calc(var(--_count-baseline) - 1cap - var(--_count-edge)) calc(var(--_count-height) - var(--_count-baseline) - var(--_count-edge));
+    }
+  }
+
+  /* One character: no sides, so the count is as wide as it is tall, a circle as a pill and a square with corners (Ant's
+     one-character count; GitLab's, Fluent's and Material's are circles too). React sets data-single. */
+  .area-count[data-single] { padding-inline: 0; }
+
   /* The text a screen reader hears after the number ("3 unread"). */
   .area-count__label {
     position: absolute;
@@ -91,7 +116,7 @@
   }
 
   @media (forced-colors: active) {
-    .area-count--soft { border: var(--area-border-width) solid CanvasText; }
+    .area-count--soft { --_count-edge: var(--area-border-width); border: var(--_count-edge) solid CanvasText; }
   }
   .area-count--pill { --_count-pill: 1; }
   .area-count--rounded { --_count-pill: 0; }

@@ -84,7 +84,21 @@
   .area-tag__icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--_icon); block-size: var(--_icon); margin-inline-end: calc(var(--area-gap-xs) - var(--area-space-2)); }
   .area-tag__icon > svg { inline-size: 100%; block-size: 100%; }
   .area-tag__label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
-  /* The label's optical centre is the marks' shared rule (inset.css, "Marks: optical centre"). */
+  /* The label's cap centres in the plate on Badge's whole-pixel baseline (owner, 2026-11-07: "the vertical alignment the
+     same/consistent?"), Badge's formula with the tag's inside edge in its place (badge.css), so a Tag, a Badge and a Count
+     of one height draw their text on one pixel row. Until 2026-11-07 Tag kept the marks' optical lift (inset.css), a
+     quarter of the cap-to-x-height gap above the cap centre, and sat 0.58 high at type 13 (0.45 to 0.73 at every type and
+     density) beside the badges that dropped it on 2026-11-01. The trimmed label fills the plate's height, so align-items
+     places it at the top and the padding sets the baseline; the icon moves by the same rounding (as Badge's). */
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-tag > .area-tag__label {
+      --_baseline: calc(var(--area-stroke-width) + round(nearest, calc((var(--_height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px));
+      padding-block: calc(var(--_baseline) - 1cap) calc(var(--_height) - var(--_baseline));
+    }
+    .area-tag > .area-tag__icon {
+      translate: 0 calc(var(--area-stroke-width) + round(nearest, calc((var(--_height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px) - 1cap / 2 - var(--_height) / 2);
+    }
+  }
 
   /*
    * The remove control. At rest it is just the ×, in the tag's ink. Under the pointer it gets a
