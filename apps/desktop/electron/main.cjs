@@ -276,6 +276,8 @@ function installedFontFiles() {
 
 // The Inspector Chat's agent (electron/agent.cjs): the Claude Agent SDK in this repository, over IPC. Not in a capture.
 if (!capture) require("./agent.cjs").register(() => BrowserWindow.getAllWindows()[0]);
+// Write to folder (electron/output.cjs): a system's published version written into a project as code. Not in a capture.
+if (!capture) require("./output.cjs").register(() => BrowserWindow.getAllWindows()[0]);
 
 ipcMain.handle("area:fonts-installed", (_event, wanted) => {
   if (capture || !Array.isArray(wanted)) return null;

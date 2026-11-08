@@ -1,0 +1,22 @@
+{
+  "name": "@area/output",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Area's output: a system written out as code its project owns (CSS, React, icons, DESIGN.md), the lock and three-way merge, checks and an MCP server.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "bin": {
+    "area": "./bin/area.mjs"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "fidelity": "node scripts/fidelity.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.2",
+    "typescript": "^5.7.0"
+  }
+}

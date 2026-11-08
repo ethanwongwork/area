@@ -35,8 +35,27 @@ interface AreaDesktop {
     undo(chat: string, ids: string[]): Promise<Record<string, string>>;
     onEvent(listener: (chat: string, message: unknown) => void): () => void;
   };
+  /**
+   * Write to folder (electron/output.cjs, @area/output): a system's published version written into a project's folder.
+   * `where` is a destination ({ kind: "folder", path }; GitHub comes later as another kind). Absent in a capture.
+   */
+  output?: {
+    choose(suggested?: string | null): Promise<string | null>;
+    plan(where: OutputWhere, system: string, version: string): Promise<OutputPlan | { error: string }>;
+    write(where: OutputWhere, system: string, version: string, prefer?: "markers" | "yours" | "area"): Promise<OutputPlan | { error: string }>;
+    reveal(where: OutputWhere): void;
+  };
   /** The app menu's tab commands (electron/main.cjs): ⌘T, ⌘⇧T, ⌘⇧H, ⌘W, ⌃Tab, ⌃⇧Tab, ⌘1–9. Returns the unsubscribe. */
   onCommand?(listener: (command: TabCommand, index?: number) => void): () => void;
+}
+type OutputWhere = { kind: "folder"; path: string };
+/** What writing a system into a folder does (packages/output src/write.ts), file by file. */
+interface OutputPlan {
+  definition: { system: { id: string; name: string }; version: string; dir: string };
+  steps: Array<{ path: string; action: "added" | "updated" | "unchanged" | "kept-edits" | "merged" | "conflict" | "exists" | "removed" | "left" | "skipped"; conflicts?: number }>;
+  summary: Partial<Record<OutputPlan["steps"][number]["action"], number>>;
+  notes: string[];
+  library: string;
 }
 type TabCommand = "new-tab" | "reopen-tab" | "close-tab" | "next-tab" | "previous-tab" | "tab" | "home" | "settings";
 interface Window { areaDesktop?: AreaDesktop }

@@ -2,6 +2,24 @@
 
 ## Current state (2026-11-08)
 
+- **Output, worktree `system-output-e26092` (pull request, 2026-11-08).** Brief steps 2 and 5: a published system written
+  into a project's folder as code it owns, kept current by a three-way merge, with an agent contract. Research and ranked
+  decisions: `docs/research/system-output-2026-11-08/` (README, sources); review page
+  https://claude.ai/artifact/3ZXFHZRTqEr4xq9S29zsrg (11 decisions, recommendations built, picks in `verdicts`, none yet).
+  Built: `packages/output` (`@area/output`, bin `area`: init, build, check, mcp; TypeScript run as is): `.area/system.json`
+  from a release, theme CSS = Area's axes sheet pruned to the chosen values and rebound to `:root` (a second theme on
+  `[data-area-system-theme]`), component CSS without left-out components and options, React sources with their import
+  closure and a pruned manifest (types narrow), icon sprite, DESIGN.md + an AGENTS.md block + components.json, lock +
+  `.area/base/` copies + diff3 merge, checks, a read-only 5-tool MCP server (2025-11-25 `initialize` and 2026-07-28
+  stateless). App: Versions › a version › Inspector › Code › Write to folder… (`electron/output.cjs`, `src/output.ts`,
+  design words). Verified: `npm run test:output` 13 (the proof point: two systems, a library update, edits kept; same
+  bytes; merge vs brute-force LCS), `npm run fidelity -w @area/output` (2,808 tokens + 192 painted values identical to
+  Area's, light and dark, 4 systems incl. the owner's Area 1.0.1), the written React type-checks alone, MCP over stdio,
+  the app's IPC writing Area 1.0.1 to a scratch folder (220 files, then 220 unchanged), the Code section light and dark;
+  typecheck, tokens 29,241, desktop 41. Not verified: the native folder picker and the Write dialog by hand (driven over
+  IPC only). Open: choosing between two changes in the app, GitHub destination, resolved token values in DESIGN.md,
+  `area check` in CI, publishing the package for `npx area`. Inventory shape note for the inventory session in the shared
+  notes folder (`system-output-2026-11-08.md`).
 - **Worktree `component-design-review-92c949`: title balance + system gaps build (committed with the components audit build; main merged in 2026-11-08).**
   - Title balance (owner "4 is right"): a component's title is its text's size, its copy a step (4) off; an item's
     name joins its line (DESIGN_SYSTEM "Text pairs"; `docs/research/title-balance-2026-11-06`).
