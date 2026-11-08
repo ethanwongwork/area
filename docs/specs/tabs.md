@@ -94,7 +94,9 @@ area  div.area-tabs (column; row when vertical, gap 16)
     tab   button.area-tabs__tab[role=tab] 32px, padding 0, gap 6, fg-muted, 14/20 400
       icon  .area-tabs__icon 16px;  label .area-tabs__label (trimmed text; a column holding the text
             and .area-tabs__reserve, an aria-hidden 500 copy at no height that reserves the selected width)
+      unseen .area-tabs__unseen 6 dot in accent-indicator after the label (an item's `unseen`, components audit D6)
       ::after indicator 2px, radius-full, full tab width, at the tab's bottom edge
+      [data-status] an item's change (`status`): the label in fg-change-<status>, the word read out
   panel div.area-tabs__panel[role=tabpanel] padding-top 16 (6 vertical)
 ```
 
@@ -339,3 +341,16 @@ Tab labels are not selectable. See [interaction polish](../research/interaction-
   content (it was 2, hugging the text). Code block's language tabs sit 4 further from the filename so their ring clears it.
 - **Why:** your note that the focus state looked funny. Untitled's inset ring assumes a tab with side padding; Area's
   tab is its label alone. Tabs and the panel do not move.
+
+### 2026-11-07 · Items keyed by value (components audit O7)
+
+- **What changed:** Each item takes `value`, as Segmented's, Toggle group's and Custom select's items; `id` is the deprecated key, read for one release.
+- **Why:** primitives.tsx:1794-1797 keyed tabs by `id` while `value` selected one. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Change words and unseen (components audit D6)
+
+Items take `status`, the shared change words (Governance § 4, "Change words"; `CHANGE_STATUSES`, `CHANGE_MARK` in packages/react/src/components/change-status.ts): the tab carries `data-status` and its label takes `fg-change-<status>` in every state,
+selected too (Cursor's document tabs colour the label by its git decoration, cursor.md); the word is read after the
+label. `unseen` draws a 6 dot after the label in `accent-indicator` (Tree view's), read as "Unseen", apart from the
+status. Tile: Change words and unseen.

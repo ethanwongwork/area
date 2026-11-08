@@ -104,7 +104,7 @@
   /* Reveal-on-hover (audit F-38) follows the hover recipe (docs/MOTION.md): the dismiss appears with
      the row's plate, at once, and fades out over duration-fast, ease-out. Was a fade both ways,
      which showed the plate 100ms before its dismiss. */
-  .area-prompt-suggestions__dismiss { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-prompt-suggestions__dismiss { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
   .area-prompt-suggestions__row:focus-within > .area-prompt-suggestions__dismiss { transition-duration: 0s; }
   @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__dismiss { transition-duration: var(--area-hover-in); } }
 }

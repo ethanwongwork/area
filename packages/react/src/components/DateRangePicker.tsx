@@ -1,11 +1,13 @@
 // DateRangePicker: a field showing a range of dates that opens a Popover with optional presets above a range
 // Calendar, and a Clear row. Date picker's field and panel; Notion's search date filter. docs/specs/date-range-picker.md.
-import { forwardRef, useId, useRef, useState } from "react";
+import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import type { ButtonHTMLAttributes, ReactNode, SyntheticEvent } from "react";
 import { datePickerVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Calendar, type CalendarRange } from "./Calendar.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Popover } from "./primitives.tsx";
+import { assignRef, useOpenState } from "./overlay.ts";
+import { resolveValidation, validationAttributes, type ValidationStatus } from "./validation.ts";
 
 type Manifest = VariantProps<typeof MANIFESTS.datePicker>;
 
@@ -31,6 +33,12 @@ export interface DateRangePickerProps extends Omit<ButtonHTMLAttributes<HTMLButt
   size?: Manifest["size"];
   fullWidth?: boolean;
   invalid?: boolean;
+  /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
+  validationStatus?: ValidationStatus;
+  /** Internal Field-to-control validation bridge; plain HTML uses the matching data attribute. */
+  "data-validation-status"?: ValidationStatus;
+  /** Shows a range set elsewhere: focusable and readable (a combobox with `aria-readonly`), it doesn't open, as Date picker's. */
+  readOnly?: boolean;
   /** Submits the range as `<name>-start` and `<name>-end` ("YYYY-MM-DD"). */
   name?: string;
   /** Earliest and latest choosable dates, "YYYY-MM-DD". */
@@ -47,6 +55,9 @@ export interface DateRangePickerProps extends Omit<ButtonHTMLAttributes<HTMLButt
   formatOptions?: Intl.DateTimeFormatOptions;
   /** Offer a Clear row under the calendar. */
   clearable?: boolean;
+  /** The panel is open (controlled); `defaultOpen` opens it at first. */
+  open?: boolean;
+  defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -64,16 +75,20 @@ const same = (a: CalendarRange | null | undefined, b: CalendarRange | null | und
  * first day, then the last; Escape drops a half-picked range), and a Clear row. A preset or a finished range
  * sets the value and closes; focus returns to the field.
  */
-export const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(function DateRangePicker(
-  { value, defaultValue = null, onValueChange, presets, placeholder = "Pick dates", icon, variant, size, fullWidth, invalid, name,
-    min, max, isDateUnavailable, today, locale, firstDayOfWeek, visibleMonths = 1, formatOptions = SHORT_DATE, clearable = true,
-    onOpenChange, disabled, className, style, form, id: idProp, ...rest }, ref,
+export const DateRangePicker = forwardRef<HTMLButtonElement, DateRangePickerProps>(function DateRangePicker(
+  { value, defaultValue = null, onValueChange, presets, placeholder = "Pick dates", icon, variant, size, fullWidth, invalid, validationStatus,
+    readOnly, name, min, max, isDateUnavailable, today, locale, firstDayOfWeek, visibleMonths = 1, formatOptions = SHORT_DATE, clearable = true,
+    open: openProp, defaultOpen, onOpenChange, disabled, className, style, form, id: idProp, "aria-invalid": ariaInvalid,
+    "data-validation-status": fieldStatus, ...rest }, ref,
 ) {
   const generated = useId();
   const triggerId = idProp ?? `${generated}-trigger`;
   const [own, setOwn] = useState<CalendarRange | null>(defaultValue);
   const selected = value !== undefined ? value : own;
-  const [open, setOpenState] = useState(false);
+  // The ref and the native props reach the trigger, where Field's id lands (as Custom select's).
+  const [shownOpen, setOpenState] = useOpenState(openProp, defaultOpen, onOpenChange);
+  const open = shownOpen && !readOnly && !disabled;
+  const { status } = resolveValidation({ validationStatus, invalid, ariaInvalid, fieldStatus });
   const [month, setMonth] = useState<string | undefined>(undefined);
   const rootRef = useRef<HTMLDivElement | null>(null);
   const label = rest["aria-label"];
@@ -85,10 +100,13 @@ export const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
     return start.getTime() === end.getTime() ? formatter.format(start) : formatter.formatRange(start, end);
   };
   const setOpen = (next: boolean) => {
+    if (next && (readOnly || disabled)) return;
     setOpenState(next);
-    onOpenChange?.(next);
     if (next) setMonth(selected?.start.slice(0, 7));
   };
+  // Opened from outside (`open` or `defaultOpen`), the month starts at the range.
+  const wasOpen = useRef(false);
+  useEffect(() => { if (open && !wasOpen.current) setMonth(selected?.start.slice(0, 7)); wasOpen.current = open; }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
   const commit = (next: CalendarRange | null, event?: SyntheticEvent) => {
     if (value === undefined) setOwn(next);
     if (!(next === selected || same(next, selected))) onValueChange?.(next, event);
@@ -96,15 +114,23 @@ export const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
   const finish = () => { setOpen(false); document.getElementById(triggerId)?.focus(); };
 
   const shown = format(selected);
-  return <div ref={node => { rootRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
-    className={datePickerVariants({ variant, size, fullWidth }, cx("area-date-range-picker", className))} style={style} data-open={open ? "" : undefined}>
+  const trigger = (readOnlyTrigger: boolean) => <button {...rest} ref={node => assignRef(ref, node)} id={triggerId} type="button" form={form}
+    className="area-date-picker__trigger" disabled={disabled} aria-invalid={status === "error" || undefined} {...validationAttributes(status)}
+    // Read-only: a combobox that announces aria-readonly and never opens (a button has no read-only state).
+    {...(readOnlyTrigger ? { role: "combobox", "aria-readonly": true, "aria-expanded": false, "data-read-only": "" } : {})}>
+    {icon ? <span className="area-date-picker__icon" aria-hidden="true">{icon}</span> : null}
+    <span className="area-date-picker__value" data-placeholder={shown ? undefined : ""}>{shown || placeholder}</span>
+  </button>;
+  const hidden = name ? <>
+    <input type="hidden" name={`${name}-start`} form={form} disabled={disabled} value={selected?.start ?? ""} />
+    <input type="hidden" name={`${name}-end`} form={form} disabled={disabled} value={selected?.end ?? ""} />
+  </> : null;
+  const rootClass = datePickerVariants({ variant, size, fullWidth }, cx("area-date-range-picker", className));
+  if (readOnly) return <div ref={rootRef} className={rootClass} style={style}>{trigger(true)}{hidden}</div>;
+  return <div ref={rootRef} className={rootClass} style={style} data-open={open ? "" : undefined}>
     <Popover className="area-date-picker__panel" align="start"
       open={open} onOpenChange={next => setOpen(next)} aria-label={typeof label === "string" ? label : "Choose dates"}
-      trigger={<button {...rest} id={triggerId} type="button" form={form} className="area-date-picker__trigger" disabled={disabled}
-        aria-invalid={invalid || undefined}>
-        {icon ? <span className="area-date-picker__icon" aria-hidden="true">{icon}</span> : null}
-        <span className="area-date-picker__value" data-placeholder={shown ? undefined : ""}>{shown || placeholder}</span>
-      </button>}>
+      trigger={trigger(false)}>
       {presets?.length ? <div className="area-date-range-picker__presets" role="group" aria-label="Presets">
         {presets.map(preset => {
           const current = same(preset.value, selected);
@@ -128,9 +154,6 @@ export const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
         </button>
       </div> : null}
     </Popover>
-    {name ? <>
-      <input type="hidden" name={`${name}-start`} form={form} disabled={disabled} value={selected?.start ?? ""} />
-      <input type="hidden" name={`${name}-end`} form={form} disabled={disabled} value={selected?.end ?? ""} />
-    </> : null}
+    {hidden}
   </div>;
 });

@@ -8,7 +8,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, ColorPicker, ColorSwatch, ColorSwatchPicker, Popover } from "@area/react";
 import { ColorIcon } from "@area/icons";
-import { DEFAULT_PAGE, PAGE_RANGE, formatOklch, oklchHex, paintedChroma, parseColour, reachableChroma, type Oklch } from "@area/tokens/colours";
+import { DEFAULT_PAGE, PAGE_RANGE, formatOklch, oklchHex, paintedChroma, parseColour, reachableChroma, type Oklch } from "@area/tokens/color";
 import { neutralCast, presetColour, type ColoursState, type Mode } from "./colours.ts";
 import { hueName, RowField } from "./inspector-rows.tsx";
 import { SCALES } from "./tokens.ts";

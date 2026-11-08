@@ -38,6 +38,7 @@ components and accurate specs matter more than speed.
   - The rules: the relevant section of `docs/DESIGN_SYSTEM.md`, then `docs/THEMING.md`
     (settings), `docs/CONTRAST.md` (colour, focus, state paint) or `docs/MOTION.md`
     (transitions, crispness).
+  - Words (labels, buttons, errors, empty states, status words): `docs/WRITING.md`.
   - Commands and checks: `docs/DEVELOPMENT.md`.
   - A component's evidence and decisions: `docs/specs/<slug>.md`; shared cross-product
     values: `docs/research/BASELINE.md`.
@@ -57,6 +58,7 @@ components and accurate specs matter more than speed.
 | `area-type-usage` | Choosing and checking each text's type style, ink, weight, line and spacing in a component, composition or kit; the type census |
 | `area-ui-review` | Measuring and checking a composed screen's spacing, regions and copy (`scripts/layout-audit.js`) |
 | `area-interaction-pass` | Testing the app in motion and its interaction patterns: responsive Canvas, bars, tooltips, breadcrumbs, tiles, menus, tabs (`scripts/cdp.mjs` drives Electron) |
+| `area-a11y-audit` | Accessibility on a family or a screen: names and roles, keyboard, focus, target size, forced colours, reduced motion, zoom, RTL |
 | `checkpoint` | A requested checkpoint or handoff |
 
 ## Work

@@ -6,6 +6,7 @@ import { fileUploadItemVariants, fileUploadListVariants, fileUploadVariants, lin
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Progress } from "./primitives.tsx";
+import { useAnnouncement } from "./announce.ts";
 
 export interface FileRejection { file: File; reason: "type" | "size" | "count" }
 
@@ -111,17 +112,24 @@ export interface FileUploadItemProps extends Omit<LiHTMLAttributes<HTMLLIElement
   /** What went wrong, shown in place of the status. */
   error?: ReactNode;
   icon?: ReactNode;
+  /** Shows the remove (or, while uploading, cancel) control; called when it is pressed. */
+  onDismiss?: () => void;
+  /** @deprecated Use `onDismiss` (a close is `onDismiss` / `dismissLabel`, Governance § 4). Kept for one release. */
   onRemove?: () => void;
   onRetry?: () => void;
   labels?: { uploading?: string; complete?: string; remove?: string; cancel?: string; retry?: string };
 }
 
 export const FileUploadItem = forwardRef<HTMLLIElement, FileUploadItemProps>(function FileUploadItem(
-  { name, size, status = "uploading", progress, error, icon, onRemove, onRetry, labels, className, ...rest },
+  { name, size, status = "uploading", progress, error, icon, onDismiss: onDismissProp, onRemove, onRetry, labels, className, ...rest },
   ref,
 ) {
+  const onDismiss = onDismissProp ?? onRemove;
   const label = typeof name === "string" ? name : "file";
   const statusText = status === "error" ? error ?? "Upload failed" : status === "complete" ? labels?.complete ?? "Complete" : labels?.uploading ?? "Uploading…";
+  // A change of state is said through the shared announcer with the file's name, so "Complete" says which file
+  // (components audit D1); the row's own status is plain text.
+  useAnnouncement(`${label}: ${typeof statusText === "string" ? statusText : "Upload failed"}`);
   return (
     <li ref={ref} className={fileUploadItemVariants({ status }, className)} {...rest}>
       <span className={fileUploadItemVariants.element("icon")} aria-hidden="true">{icon ?? <Glyph name="document" size={20} />}</span>
@@ -131,15 +139,14 @@ export const FileUploadItem = forwardRef<HTMLLIElement, FileUploadItemProps>(fun
             <p className={fileUploadItemVariants.element("name")}>{name}</p>
             <p className={fileUploadItemVariants.element("meta")}>
               {size != null ? <><span>{formatFileSize(size)}</span><span className={fileUploadItemVariants.element("separator")} aria-hidden="true" /></> : null}
-              {/* Announced as it changes: uploading, complete or the error. */}
-              <span className={fileUploadItemVariants.element("status")} role="status">
+              <span className={fileUploadItemVariants.element("status")}>
                 {status === "complete" ? <Glyph name="check" /> : null}{statusText}
               </span>
             </p>
           </div>
           <div className={fileUploadItemVariants.element("actions")}>
             {status === "error" && onRetry ? <Button variant="ghost" size="sm" iconOnly icon={<Glyph name="reset" />} onClick={onRetry}>{`${labels?.retry ?? "Retry"} ${label}`}</Button> : null}
-            {onRemove ? <Button variant="ghost" size="sm" iconOnly icon={<Glyph name="dismiss" />} onClick={onRemove}>
+            {onDismiss ? <Button variant="ghost" size="sm" iconOnly icon={<Glyph name="dismiss" />} onClick={onDismiss}>
               {`${status === "uploading" ? labels?.cancel ?? "Cancel upload of" : labels?.remove ?? "Remove"} ${label}`}
             </Button> : null}
           </div>

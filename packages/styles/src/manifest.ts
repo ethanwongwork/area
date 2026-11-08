@@ -50,7 +50,8 @@ export const button = {
     align: ["start", "end"],
   },
   booleans: ["full-width", "icon-only", "pill", "rounded", "on-color"], // pill / rounded override data-area-pills (2026-10-04)
-  states: ["disabled", "loading", "selected"],
+  // inactive: looks disabled but keeps focus and says why (`inactiveText`; components audit V2, 2026-11-07).
+  states: ["disabled", "loading", "selected", "inactive"],
   elements: ["icon", "label"],
   defaults: { variant: "solid", tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
@@ -74,17 +75,20 @@ export const toggleGroup = {
 export const splitButton = {
   block: "area-split-button",
   description: "Joins a default action to a menu of related actions.",
-  variants: { variant: ["solid", "soft", "outline", "ghost"] },
+  // size: Button's tiers, passed to both parts (the React prop since the family was built; listed 2026-11-07, O7).
+  variants: { variant: ["solid", "soft", "outline", "ghost"], size: ["sm", "md", "lg"] },
   booleans: ["icon-only"],
   elements: ["action", "trigger", "menu"],
-  defaults: { variant: "solid" },
+  defaults: { variant: "solid", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const toolbar = {
   block: "area-toolbar",
   description: "Groups commands with keyboard navigation and optional overflow.",
   variants: { variant: ["plain", "surface"], size: ["sm", "md", "lg"], orientation: ["horizontal", "vertical"] },
-  booleans: ["full-width"],
+  // floating: the hover action bar (components audit N14, 2026-11-07; docs/specs/toolbar.md): over its parent's top-end
+  // corner, shown while the parent is hovered or holds focus.
+  booleans: ["full-width", "floating"],
   elements: ["group", "separator"],
   defaults: { variant: "plain", size: "md", orientation: "horizontal" },
 } as const satisfies ComponentManifest;
@@ -135,10 +139,11 @@ export const colorSwatchPicker = {
 export const colorField = {
   block: "area-color-field",
   description: "Edits a hex color beside its preview, with optional split opacity.",
-  variants: { size: ["sm", "md", "lg"] },
+  // variant: Input's treatments, passed to the field (the React prop since the family was built; listed 2026-11-07, O7).
+  variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
   booleans: ["full-width", "alpha"],
   elements: ["opacity"],
-  defaults: { size: "md" },
+  defaults: { variant: "outline", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const field = {
@@ -181,7 +186,8 @@ export const otpField = {
   block: "area-otp-field",
   description: "A one-time code drawn as a row of character slots over one real input.",
   variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
-  states: ["invalid", "disabled", "read-only"],
+  // success / warning: a Field's status, as Input's (components audit 2026-11-07, O1).
+  states: ["invalid", "success", "warning", "disabled", "read-only"],
   elements: ["group", "slot", "caret", "separator", "control"],
   defaults: { variant: "outline", size: "md" },
 } as const satisfies ComponentManifest;
@@ -249,11 +255,12 @@ export const fileUploadItem = {
 export const meter = {
   block: "area-meter",
   description: "Shows a value within a known range, such as usage against a limit.",
-  variants: { tone: ["neutral", "warning", "danger", "data"] },
+  // size: the track's height, Progress's tiers (the React prop since the family was built; listed 2026-11-07, O7).
+  variants: { tone: ["neutral", "warning", "danger", "data"], size: ["sm", "md", "lg"] },
   // segmented: parts of the measure on the bar, named in a legend (owner 2026-10-30, docs/research/inspector-panel-2026-10-30).
   booleans: ["segmented"],
   elements: ["header", "label", "value", "track", "segment", "rest", "legend", "item", "swatch", "item-label", "item-value", "item-share", "description"],
-  defaults: { tone: "neutral" },
+  defaults: { tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const descriptionList = {
@@ -315,7 +322,8 @@ export const treeView = {
   variants: { selectionMode: ["navigation", "checkbox"], size: ["sm", "md"] },
   booleans: ["guides"],
   // pinned, pin: stickyBranches' open branches held at the top of the scroll (2026-11-01).
-  elements: ["chevron", "check", "icon", "label", "trailing", "status", "actions", "pinned", "pin"],
+  // unseen: a dot for a row changed since it was last looked at, apart from its status (components audit D6, 2026-11-07).
+  elements: ["chevron", "check", "icon", "label", "trailing", "unseen", "status", "actions", "pinned", "pin"],
   defaults: { selectionMode: "navigation", size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -369,7 +377,8 @@ export const checkbox = {
   // soft and list (owner 2026-10-25, Notion Calendar's settings rows, a proposal card's options): a filled option with
   // its control first and a value at its end.
   variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] },
-  states: ["checked", "indeterminate", "disabled", "invalid"],
+  // read-only: a state set elsewhere, not toggled (components audit 2026-11-07, O2; a native checkbox ignores readonly).
+  states: ["checked", "indeterminate", "disabled", "invalid", "read-only"],
   elements: ["control", "visual", "meta"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
@@ -378,7 +387,7 @@ export const checkboxGroup = {
   block: "area-checkbox-group",
   description: "Groups related Checkbox options under one label.",
   variants: { orientation: ["vertical", "horizontal"] },
-  states: ["disabled", "invalid", "success", "warning"],
+  states: ["disabled", "invalid", "success", "warning", "read-only"],
   elements: ["legend", "description", "options", "validation"],
   defaults: { orientation: "vertical" },
 } as const satisfies ComponentManifest;
@@ -387,7 +396,8 @@ export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
   variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] },
-  states: ["disabled"],
+  // read-only: set on each option of a read-only Radio group.
+  states: ["disabled", "read-only"],
   elements: ["control", "visual", "meta"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
@@ -396,9 +406,10 @@ export const radioGroup = {
   block: "area-radio-group",
   description: "Groups mutually exclusive Radio options under one label.",
   variants: { orientation: ["vertical", "horizontal"] },
-  // readonly: a value shown, not chosen here (owner 2026-10-26: Setup's past answers): the chosen option drops its
-  // selected edge and tint.
-  states: ["disabled", "invalid", "readonly"],
+  // read-only: a value shown, not chosen here (owner 2026-10-26: Setup's past answers): the chosen option drops its
+  // selected edge and tint. Spelled `readonly` / `data-readonly` until 2026-11-07 (O2), still painted for one release.
+  // success / warning: a non-error validation message, as Checkbox group's (O1).
+  states: ["disabled", "invalid", "success", "warning", "read-only"],
   elements: ["legend", "description", "options", "validation"],
   defaults: { orientation: "vertical" },
 } as const satisfies ComponentManifest;
@@ -448,7 +459,7 @@ export const chip = {
   variants: { kind: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"] },
   booleans: ["swatch-only", "link", "link-icon", "pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
   states: ["selected", "disabled", "invalid"],
-  elements: ["swatch", "icon", "trailing-icon", "avatar", "image", "label", "action", "remove"],
+  elements: ["swatch", "icon", "trailing-icon", "avatar", "image", "label", "action", "dismiss"],
   defaults: { kind: "filter", size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -482,7 +493,8 @@ export const badge = {
 
 export const indicator = {
   block: "area-indicator", description: "Displays a compact notification count or activity dot.",
-  variants: {kind: ["count", "dot"], tone: ["neutral", "info", "success", "warning", "danger"]},
+  // tone: Button's and Badge's seven (components audit 2026-11-07, O4).
+  variants: {kind: ["count", "dot"], tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery"]},
   states: ["processing", "border"],
   defaults: {kind: "dot", tone: "danger"},
 } as const satisfies ComponentManifest;
@@ -515,7 +527,7 @@ export const step = {
   block: "area-step", description: "One thing an agent did, on one line: the verb (live, then past tense) and what it acted on; opens to its input and output.",
   variants: {},
   booleans: ["group", "reasoning"],
-  states: ["open", "running", "failed"],
+  states: ["open", "running", "error"], // the shared word (Governance § 4, 2026-11-07); data-failed is a deprecated alias
   elements: ["row", "icon", "verb", "detail", "meta", "chevron", "body", "items"],
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -526,7 +538,8 @@ export const editSummary = {
   // steps (owner 2026-11-02, the Chat kit: "the tracker, do they need containers?"; Claude Code's rows carry no box).
   variants: { variant: ["surface", "plain"] },
   states: ["open", "kept", "undone"],
-  elements: ["head", "title", "counts", "added", "removed", "actions", "files", "file", "name", "icon", "base", "folder", "chevron", "status", "diff"],
+  // deleted: the shared change word (components audit D6, 2026-11-07); removed, its deprecated part name.
+  elements: ["head", "title", "counts", "added", "deleted", "removed", "actions", "files", "file", "name", "icon", "base", "folder", "chevron", "status", "diff"],
   defaults: {}, // variant unset draws the frame (surface), so the default writes no class
 } as const satisfies ComponentManifest;
 
@@ -534,7 +547,7 @@ export const diff = {
   block: "area-diff", description: "A unified diff in Code block sm's metrics: line numbers, a + or − marker and a tint on added and removed lines, folds between hunks.",
   variants: {},
   elements: ["lines", "line", "number", "marker", "text", "fold"],
-  elementModifiers: { line: ["added", "removed"] },
+  elementModifiers: { line: ["added", "deleted", "removed"] }, // removed: deprecated for deleted (components audit D6)
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -562,7 +575,7 @@ export const plan = {
   booleans: ["rail"],
   states: ["open"],
   elements: ["head", "icon", "title", "count", "chevron", "bar", "segment", "items", "item", "mark", "text", "detail", "meta", "steps"],
-  elementModifiers: { item: ["done", "current", "pending", "cancelled"], mark: ["ring"] },
+  elementModifiers: { item: ["complete", "current", "pending", "cancelled", "done"], mark: ["ring"] }, // done: a deprecated alias of complete (2026-11-07)
   defaults: { bar: "none" }, // variant unset draws the frame (surface), so the default writes no class
 } as const satisfies ComponentManifest;
 
@@ -574,10 +587,12 @@ export const turnNotice = {
 } as const satisfies ComponentManifest;
 
 export const attachment = {
-  block: "area-attachment", description: "An image attached to a message before it is sent: its thumbnail, a remove control, and its upload's progress or failure.",
-  variants: { status: ["ready", "uploading", "error"] },
-  elements: ["image", "overlay", "remove"],
-  defaults: { status: "ready" },
+  block: "area-attachment", description: "Something attached to a message before it is sent (an image, a file, a quote or a video): a remove control, and its upload's progress or failure.",
+  // kind: file, quote and video beside the image (components audit V10, 2026-11-07). status: the shared words
+  // (Governance § 4) and the upload's own; ready is a deprecated alias of complete, kept for one release.
+  variants: { kind: ["image", "file", "quote", "video"], status: ["complete", "uploading", "error", "ready"] },
+  elements: ["image", "overlay", "mark", "dismiss", "play", "body", "head", "icon", "name", "badge", "quote", "text"],
+  defaults: { kind: "image", status: "complete" },
 } as const satisfies ComponentManifest;
 
 export const composerMenu = {
@@ -592,7 +607,7 @@ export const queue = {
   variants: {},
   states: ["open"],
   elements: ["head", "title", "chevron", "items", "item", "text", "status", "actions"],
-  elementModifiers: { item: ["sending", "failed"] },
+  elementModifiers: { item: ["sending", "error", "failed"] }, // failed: a deprecated alias of error (2026-11-07)
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -662,6 +677,8 @@ export const skeleton = {
   description: "Stands in for content that has not loaded.",
   variants: { shape: ["block", "text", "circle"] },
   booleans: ["static", "wrap"],
+  // waiting: a `delay` that has not passed yet; the placeholder keeps its box, invisible (components audit V6, 2026-11-07).
+  states: ["waiting"],
   elements: ["lines"],
   defaults: { shape: "block" },
 } as const satisfies ComponentManifest;
@@ -670,7 +687,8 @@ export const spinner = {
   block: "area-spinner",
   description: "Indicates an action in progress: turning with no known end, or stopped at a value.",
   variants: { size: ["sm", "md", "lg"] },
-  states: ["determinate"],
+  // waiting: a `delay` that has not passed yet; the ring keeps its box, invisible, its label held back (V6, 2026-11-07).
+  states: ["determinate", "waiting"],
   elements: ["track", "arc"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
@@ -724,9 +742,13 @@ export const scrollToLatest = {
 export const message = {
   block: "area-message",
   description: "One turn in a conversation: the person's bubble or the assistant's prose, with actions.",
-  variants: { author: ["user", "assistant"] },
-  states: ["streaming"],
-  elements: ["bubble", "content", "actions", "cursor"],
+  // status: the person's message on its way, sending (Queue's word for the activity) or error (not sent; components
+  // audit O6, 2026-11-07). Unset once sent, so it has no default.
+  variants: { author: ["user", "assistant"], status: ["sending", "error"] },
+  // waiting: a sending line's wait before it shows (Spinner's `delay`, V6).
+  states: ["streaming", "waiting"],
+  // stack: MessageGroup's turns or a split message's bubbles, 2 apart (V9); status: the sending or not-sent line.
+  elements: ["bubble", "content", "actions", "cursor", "stack", "status", "status-text"],
   // The bare block is the assistant's layout (audit S17, G-24).
   defaults: { author: "assistant" },
 } as const satisfies ComponentManifest;
@@ -760,7 +782,9 @@ export const commandPalette = {
   description: "Searches actions and places from a shortcut, and runs the one you pick.",
   variants: {},
   booleans: ["inline"],
-  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "empty", "footer", "hint", "keys"],
+  // path, more, back, step, body, preview: a result's path, a step's chevron, Back and trail, and the preview pane
+  // beside the results (components audit V4, 2026-11-07).
+  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "path", "more", "back", "step", "body", "preview", "empty", "footer", "hint", "keys"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -779,19 +803,26 @@ export const customSelect = {
   description: "Picks a value (or several, with multiple) from a short list whose options carry icons, descriptions and groups, as rows or a grid of previews.",
   variants: { variant: ["outline", "soft", "ghost"], size: ["sm", "md", "lg"], layout: ["list", "grid"] },
   booleans: ["full-width"],
-  states: ["open", "disabled", "invalid"],
+  // success / warning (a Field's status, O1) and read-only (a value set elsewhere, O2), as Input's (2026-11-07).
+  states: ["open", "disabled", "invalid", "success", "warning", "read-only"],
   stateAttributes: { disabled: "disabled", invalid: "aria-invalid" },
-  elements: ["trigger", "icon", "value", "chevron", "listbox", "option", "group", "separator", "grid", "preview", "caption"],
+  // panel, header, filter, select-all, footer: the list with its filter field, Select all and footer (components audit V7,
+  // 2026-11-07).
+  elements: ["trigger", "icon", "value", "chevron", "listbox", "option", "group", "separator", "grid", "preview", "caption", "panel", "header", "filter", "select-all", "footer"],
   defaults: { variant: "outline", size: "md", layout: "list" },
 } as const satisfies ComponentManifest;
 
 export const tag = {
   block: "area-tag",
   description: "A coloured label for a chosen or typed value, optionally removable.",
-  variants: { tone: ["neutral", "gray", "brown", "info", "success", "warning", "caution", "danger", "discovery", "pink"], size: ["sm", "md"] },
+  // color: the label colours, Board column's set (owner, 2026-11-07, system gaps C5: a label's hue is not a tone,
+  // Governance § 4). React maps the deprecated `tone` (info blue, success green, warning orange, caution yellow, danger
+  // red, discovery purple).
+  // size: md 20 and lg 24, Badge's names for the same heights (system gaps C8, 2026-11-07; were sm and md).
+  variants: { color: ["neutral", "gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"], size: ["md", "lg"] },
   states: ["disabled"],
-  elements: ["icon", "label", "remove"],
-  defaults: { tone: "neutral", size: "sm" },
+  elements: ["icon", "label", "dismiss"],
+  defaults: { color: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
 
 export const tagPicker = {
@@ -799,7 +830,7 @@ export const tagPicker = {
   description: "Picks several values, shown as coloured tags in the field, from a list that filters and can grow.",
   variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
   booleans: ["full-width"],
-  states: ["open", "disabled", "invalid"],
+  states: ["open", "disabled", "invalid", "success", "warning", "read-only"],
   stateAttributes: { invalid: "aria-invalid" },
   elements: ["field", "input", "listbox", "hint", "option", "create", "empty"],
   defaults: { variant: "outline", size: "md" },
@@ -810,7 +841,8 @@ export const datePicker = {
   description: "Shows a date in a field and opens a calendar, with the date as text, to change it.",
   variants: { variant: ["outline", "soft", "ghost"], size: ["sm", "md", "lg"] },
   booleans: ["full-width"],
-  states: ["open", "disabled", "invalid"],
+  // success / warning (O1) and read-only (O2), as Custom select's (2026-11-07).
+  states: ["open", "disabled", "invalid", "success", "warning", "read-only"],
   stateAttributes: { disabled: "disabled", invalid: "aria-invalid" },
   elements: ["trigger", "icon", "value", "panel", "footer"],
   defaults: { variant: "outline", size: "md" },
@@ -828,7 +860,7 @@ export const drawer = {
   block: "area-drawer",
   description: "Slides a panel in from an edge of the screen for a task beside the page.",
   variants: { side: ["end", "start", "bottom"], size: ["sm", "md"], actions: ["row", "stacked"] },
-  elements: ["modal", "header", "heading", "title", "description", "close", "body", "footer"],
+  elements: ["modal", "header", "heading", "title", "description", "dismiss", "body", "footer"],
   defaults: { side: "end", size: "sm", actions: "row" },
 } as const satisfies ComponentManifest;
 
@@ -872,7 +904,8 @@ export const card = {
 export const alert = {
   block: "area-alert",
   description: "Draws attention to an important message in place.",
-  variants: { tone: ["neutral", "info", "success", "warning", "danger"], layout: ["single-line", "multiline", "banner"] },
+  // tone: Button's and Badge's seven (caution and discovery added 2026-11-07, O4).
+  variants: { tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery"], layout: ["single-line", "multiline", "banner"] },
   booleans: ["flush"],
   elements: ["icon", "content", "title", "description", "link", "actions", "dismiss"],
   defaults: { tone: "neutral", layout: "single-line" },
@@ -881,9 +914,14 @@ export const alert = {
 export const dialog = {
   block: "area-dialog",
   description: "Interrupts with content that requires a response.",
-  variants: {},
-  elements: ["header", "heading", "title", "description", "close", "body", "footer", "modal"],
-  defaults: {},
+  // size: Drawer's sm and md (384, 480) and two wide widths, lg 720 and xl 880 (components audit V1, 2026-11-07).
+  variants: { size: ["sm", "md", "lg", "xl"] },
+  // full-height: the tallest the screen allows, whatever the content (V1).
+  booleans: ["full-height"],
+  // scrolled: the body has scrolled, so a rule shows under the header (V1).
+  states: ["scrolled"],
+  elements: ["header", "heading", "title", "description", "dismiss", "body", "footer", "modal"],
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const popover = {
@@ -899,9 +937,14 @@ export const menu = {
   block: "area-menu",
   description: "Lists actions triggered from a button.",
   variants: {},
-  states: ["disabled", "highlighted", "selected"],
+  // inactive: a row that looks disabled but stays reachable and says why in its note (V2, 2026-11-07).
+  states: ["disabled", "highlighted", "selected", "inactive"],
   // `search-surface` is deprecated (audit D-22): a searchable list is a Combobox or Command palette.
-  elements: ["item", "icon", "text", "lines", "description", "label", "label-text", "separator", "shortcut", "check", "toggle", "search-surface", "sub-chevron"],
+  // `trailing`: a row's count or badge before its shortcut (2026-11-07, O7), as Nav item's.
+  // header, footer: fixed regions above and below the rows, each with a rule; list: the rows' scroller between them;
+  // empty, loading: the row shown when there are no rows, or while they load (components audit V5, 2026-11-07).
+  // match: the typed text marked in a filtered row (highlightMatch; components audit V4, 2026-11-07).
+  elements: ["item", "icon", "text", "lines", "description", "label", "label-text", "separator", "trailing", "shortcut", "check", "toggle", "search-surface", "sub-chevron", "header", "footer", "list", "empty", "loading", "match"],
   elementModifiers: { item: ["danger", "sub"] },
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -928,8 +971,10 @@ export const toaster = {
 export const toast = {
   block: "area-toast",
   description: "Reports the outcome of an action without interrupting.",
-  variants: { tone: ["neutral", "info", "success", "warning", "danger"] },
-  elements: ["icon", "content", "title", "description", "action", "dismiss"],
+  // tone: Button's and Badge's seven (caution and discovery added 2026-11-07, O4).
+  variants: { tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery"] },
+  // `actions`, Alert's name for the part (2026-11-07, O7); `action` is its deprecated alias, kept for one release.
+  elements: ["icon", "content", "title", "description", "actions", "action", "dismiss"],
   defaults: { tone: "neutral" },
 } as const satisfies ComponentManifest;
 
@@ -941,7 +986,8 @@ export const tabs = {
   variants: { size: ["sm", "md", "lg"], orientation: ["vertical"], selection: ["plate"] },
   booleans: ["track"],
   states: ["selected", "disabled"],
-  elements: ["list", "tab", "panel", "label", "reserve", "icon"],
+  // unseen: a dot for a tab whose content changed since it was last looked at (components audit D6, 2026-11-07).
+  elements: ["list", "tab", "panel", "label", "reserve", "icon", "unseen"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -951,8 +997,14 @@ export const table = {
   // layout: auto sizes every column to its content; fixed gives the first column the label column (27%), so the tables
   // of one feed start their values on one line (owner, 2026-10-31, feed rhythm pick 3).
   variants: { size: ["sm", "md", "lg"], layout: ["auto", "fixed"] },
-  booleans: ["interactive", "striped", "column-dividers", "flush", "baseline"],
-  elements: ["cell", "link"],
+  // sticky-header, sticky-first-column: stay in view while the table scrolls under them (components audit V3, 2026-11-07).
+  booleans: ["interactive", "striped", "column-dividers", "flush", "baseline", "sticky-header", "sticky-first-column"],
+  // selected: a body row with `aria-selected="true"` (or `data-selected`) takes the selected fill (listed 2026-11-07, O7).
+  // collapsed: a row group folded to its heading row (`data-collapsed` on its tbody; V3).
+  states: ["selected", "collapsed"],
+  stateAttributes: { selected: "aria-selected", collapsed: "data-collapsed" },
+  // sort: a sortable heading's Button; group…: a row group's tbody, heading row and its parts; skeleton: loading rows (V3).
+  elements: ["cell", "link", "sort", "group", "group-heading", "group-row", "group-toggle", "group-chevron", "group-name", "group-count", "group-summary", "skeleton", "skeleton-line"],
   elementModifiers: { cell: ["numeric", "fit"] },
   defaults: { size: "md", layout: "auto" },
 } as const satisfies ComponentManifest;
@@ -995,7 +1047,7 @@ export const codeBlock = {
   booleans: ["flush", "wrap", "unnumbered", "reveal-actions"],
   states: ["collapsed"],
   elements: ["header", "title", "language", "languages", "select", "actions", "body", "pre", "code", "line", "gutter", "linenumber", "marker", "prompt", "text", "toggle"],
-  elementModifiers: { line: ["highlighted", "added", "removed"] },
+  elementModifiers: { line: ["highlighted", "added", "deleted", "removed"] }, // removed: deprecated for deleted (D6)
   defaults: { size: "md", variant: "outline" },
 } as const satisfies ComponentManifest;
 
@@ -1010,6 +1062,8 @@ export const nav = {
   elements: ["group", "label", "toggle", "chevron", "items", "item", "icon", "picture", "text", "trailing", "separator", "row", "actions"],
   // A nested group is an expandable item's children, stepped in like a Tree view level (audit D-20).
   elementModifiers: { group: ["nested"], row: ["reveal"], label: ["sticky"] },
+  // inactive: an item that looks disabled but keeps focus and says why in a Tooltip (components audit V2, 2026-11-07).
+  states: ["inactive"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -1111,6 +1165,86 @@ export const sectionHeading = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+// Components audit N1, N2, N4, N5 (2026-11-07): docs/specs/page-header.md, selection-bar.md, setting-row.md, filter-bar.md.
+export const pageHeader = {
+  block: "area-page-header",
+  description: "Heads a page: its title with a way back to its parent, a description, the title's actions and the page's tabs.",
+  variants: { size: ["sm", "md", "lg"] },
+  elements: ["parent", "title", "actions", "description", "navigation"],
+  defaults: { size: "md" },
+} as const satisfies ComponentManifest;
+
+export const selectionBar = {
+  block: "area-selection-bar",
+  description: "Says how many items are selected and holds the actions that apply to them, while any are selected.",
+  variants: {},
+  booleans: ["floating"],
+  states: ["empty"],
+  elements: ["count", "actions", "clear"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const settingRow = {
+  block: "area-setting-row",
+  description: "A preference on a settings page: its name, description and help, with its control at the end.",
+  variants: { orientation: ["horizontal", "vertical"] },
+  states: ["modified", "disabled"],
+  elements: ["body", "text", "heading", "label", "modified", "help", "reset", "description", "control"],
+  defaults: { orientation: "horizontal" },
+} as const satisfies ComponentManifest;
+
+export const settingsGroup = {
+  block: "area-settings-group",
+  description: "Groups setting rows under an optional heading, with a rule between rows.",
+  variants: {},
+  booleans: ["framed"],
+  elements: ["rows"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const filterBar = {
+  block: "area-filter-bar",
+  description: "Shows the filters a view has on as chips that open their editors, with Add filter and Reset.",
+  variants: {},
+  elements: ["item", "dirty", "add", "reset"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+// Components audit N3, N6 (2026-11-07): docs/specs/mention.md, splitter.md.
+export const mention = {
+  block: "area-mention",
+  description: "Refers to a person, a file, a page or a date inside text and messages, with the kind's mark; a date that is due turns to the danger ink.",
+  variants: { variant: ["plain", "underline", "soft"], kind: ["person", "file", "page", "date"] },
+  states: ["due"],
+  elements: ["icon", "label"],
+  defaults: { variant: "soft", kind: "person" },
+} as const satisfies ComponentManifest;
+
+export const splitter = {
+  block: "area-splitter",
+  description: "Two regions side by side or stacked, with a handle between them that resizes them by pointer or keyboard.",
+  variants: { orientation: ["horizontal", "vertical"] },
+  states: ["resizing"],
+  elements: ["pane", "handle"],
+  defaults: { orientation: "horizontal" },
+} as const satisfies ComponentManifest;
+
+// Components audit N7 (2026-11-07): docs/specs/chart.md. Chart draws bar, line, area and donut; ChartNumber the number.
+export const chart = {
+  block: "area-chart",
+  description: "Plots rows of data as bars, lines, areas or a donut, with a legend that hides series, a tooltip the keys reach and a table of the data; the number shows one figure with its change.",
+  variants: { kind: ["bar", "line", "area", "donut", "number"], size: ["sm", "md", "lg"] },
+  booleans: ["stacked"],
+  states: ["active", "busy"],
+  stateAttributes: { busy: "aria-busy" },
+  elements: [
+    "plot", "svg", "grid", "baseline", "guide", "tick", "mark", "band", "line", "wash", "part", "dot", "center", "center-label",
+    "tooltip", "tooltip-title", "tooltip-row", "key", "legend", "legend-item", "legend-label", "view", "table", "empty",
+    "label", "figure", "change", "note",
+  ],
+  defaults: { kind: "bar", size: "md" },
+} as const satisfies ComponentManifest;
+
 export const folder = {
   block: "area-folder",
   description: "Draws a folder as Finder does: a back panel with its tab, a sheet tucked inside, a front pocket, a count and an optional badge.",
@@ -1168,7 +1302,7 @@ export const assetCard = {
 export const designCard = {
   block: "area-design-card",
   description: "Shows one design in a container at its true size, placed by its layout's rule: a part (a control, a component, a pattern, a type line) in a tenth of the card's short side, never past 100% and held at 50% and cropped on its focus below that; a screen whole in a 16:9 card; a phone standing from the top and running off the bottom; an icon at whole multiples; a colour painting the card. Its name and true size sit under it; opened, the same ground grows to Full view.",
-  variants: { layout: ["part", "screen", "phone", "icon", "color"], aspect: ["square", "wide"] },
+  variants: { layout: ["part", "screen", "phone", "icon", "color"], aspect: ["square", "wide"] }, // wide: 16:9 (Asset card's wide is 2:1; `screen` would collide with the screen layout's class, so the names meet when Asset card retires)
   booleans: ["interactive"],
   states: ["selected"],
   elements: ["ground", "design", "caption", "name", "detail", "actions"],
@@ -1220,10 +1354,11 @@ export const stepper = {
 export const stepperStep = {
   block: "area-stepper-step",
   description: "One step of a stepper: its marker, title, an optional description and what an open step holds.",
-  variants: { status: ["complete", "current", "upcoming", "invalid"] },
+  // The shared status words (Governance § 4, 2026-11-07); React maps the deprecated upcoming and invalid to them.
+  variants: { status: ["complete", "current", "pending", "error"] },
   states: ["disabled"],
   elements: ["button", "body", "marker", "text", "title", "description", "content"],
-  defaults: { status: "upcoming" },
+  defaults: { status: "pending" },
 } as const satisfies ComponentManifest;
 
 export const timeline = {
@@ -1399,6 +1534,14 @@ export const MANIFESTS = {
   listBox,
   titlebar,
   sectionHeading,
+  pageHeader,
+  selectionBar,
+  mention,
+  splitter,
+  chart,
+  settingRow,
+  settingsGroup,
+  filterBar,
   assetRow,
   previewFrame,
   passwordField,

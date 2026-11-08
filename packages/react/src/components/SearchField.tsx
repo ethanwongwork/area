@@ -1,7 +1,7 @@
 // SearchField: an Input for a query, with a search glyph, a clear action once there is text, Escape
 // to clear, and an optional shortcut hint while empty. Spec: docs/specs/search-field.md.
 import { forwardRef, useCallback, useRef, useState } from "react";
-import type { ChangeEvent, KeyboardEvent, MouseEvent, ReactNode } from "react";
+import type { ChangeEvent, KeyboardEvent, MouseEvent, ReactNode, SyntheticEvent } from "react";
 import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Input, InputAction, type InputProps } from "./Input.tsx";
@@ -11,8 +11,8 @@ export interface SearchFieldProps extends Omit<InputProps, "type" | "value" | "d
   /** The query (controlled). */
   value?: string;
   defaultValue?: string;
-  /** Every change to the query, typed or cleared. */
-  onValueChange?: (value: string) => void;
+  /** Every change to the query, typed or cleared, with the change, key or click that made it (Governance § 4). */
+  onValueChange?: (value: string, event: SyntheticEvent) => void;
   /** After the clear action or Escape empties the field. */
   onClear?: () => void;
   /** Enter in the field, with the query. A surrounding form still submits. */
@@ -23,6 +23,8 @@ export interface SearchFieldProps extends Omit<InputProps, "type" | "value" | "d
   /** Name of the clear action. */
   clearLabel?: string;
   /** The leading glyph. Defaults to search; `null` leaves the start to the text. */
+  icon?: ReactNode;
+  /** @deprecated Use `icon` (2026-11-07, system gaps C4). Kept for one release; `icon` wins. */
   leadingIcon?: ReactNode;
 }
 
@@ -48,18 +50,18 @@ export const SearchField = /* @__PURE__ */ forwardRef<HTMLInputElement, SearchFi
     else if (ref) ref.current = node;
   }, [ref]);
 
-  const update = (next: string) => {
+  const update = (next: string, event: SyntheticEvent) => {
     if (value === undefined) setOwn(next);
-    onValueChange?.(next);
+    onValueChange?.(next, event);
   };
-  const clear = () => {
-    update("");
+  const clear = (event: SyntheticEvent) => {
+    update("", event);
     onClear?.();
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange?.(event);
-    update(event.target.value);
+    update(event.target.value, event);
   };
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(event);
@@ -68,14 +70,14 @@ export const SearchField = /* @__PURE__ */ forwardRef<HTMLInputElement, SearchFi
       // Handled here, so a dialog around the field stays open; a second Escape reaches it.
       event.preventDefault();
       event.stopPropagation();
-      clear();
+      clear(event);
     } else if (event.key === "Enter" && onSubmit) {
       onSubmit(query);
     }
   };
 
   const editable = !disabled && !readOnly;
-  const glyph = leadingIcon === undefined && icon === undefined ? <Glyph name="search" /> : leadingIcon ?? icon;
+  const glyph = leadingIcon === undefined && icon === undefined ? <Glyph name="search" /> : icon !== undefined ? icon : leadingIcon;
   return (
     <Input
       ref={setRefs}
@@ -90,7 +92,7 @@ export const SearchField = /* @__PURE__ */ forwardRef<HTMLInputElement, SearchFi
       value={query}
       onChange={handleChange}
       onKeyDown={handleKeyDown}
-      leadingIcon={glyph}
+      icon={glyph}
       aria-keyshortcuts={rest["aria-keyshortcuts"] ?? (shortcut?.length ? ariaKeys(shortcut) : undefined)}
       trailingAction={query !== "" && editable ? (
         <InputAction
@@ -100,8 +102,8 @@ export const SearchField = /* @__PURE__ */ forwardRef<HTMLInputElement, SearchFi
           // Out of the Tab order (Escape does the same), and pressing it keeps the caret in the field.
           tabIndex={-1}
           onMouseDown={(event: MouseEvent) => event.preventDefault()}
-          onClick={() => {
-            clear();
+          onClick={event => {
+            clear(event);
             inputRef.current?.focus();
           }}
         />

@@ -25,6 +25,7 @@ Cursor `ComposerSlashMenuList.js`, `ComposerSlashMenu.js`, `Menu.stylex.js`; Cla
 | path | Menu's shortcut ink and size at the row's end, at most 60% of the row (`--_path-max`, a pick); cut from its start; gives way before the name | Claude Code: right-aligned, RTL ellipsis at .4; Cursor trailing text max 180 | — |
 | groups | Menu's section label | Cursor section headers; Claude Code section header | — |
 | empty | one muted row, a row tall, at the text inset ((ui-row − 1cap) / 2), in the rows' type (ui-size, text-base): "No files found", "No matching commands" | Claude Code's wording; Combobox and Command palette's empty row (DESIGN_SYSTEM.md, List rows) | was the row inset (audit 2026-10-19); took the composer's text-lg until the chat set review (2026-10-28) |
+| mentions | @ lists people (the person, then teams), files and pages, one group each; a pick writes "@Name " into the draft and the sent message draws it with `withMentions` (docs/specs/mention.md) | the chat app's `MentionDropdown`; the editor's mention menu (`ui-mention-menu-side-preview`); the notes app's person, page and date mentions (Help Center; its menu not observed) | Components audit N3, 2026-11-07: no API change; the rows' 16 icon slot holds a person's or a team's icon |
 
 API: the list is named by `aria-label`; its rows come in `items` (groups of `{ label?, items }`). `label` and `groups`
 stay as deprecated aliases for one release; `aria-label` and `items` win.
@@ -55,3 +56,5 @@ stay as deprecated aliases for one release; `aria-label` and `items` win.
 - **What changed:** "No matches" is the size of the menu's rows (13/18). It was the composer's 15/22, so the menu grew
   when the last match went.
 - **Why:** Found measuring the chat set together; Combobox's empty row already takes the rows' size.
+- 2026-11-07 · components audit N3 → the @ list for mentions (people, files, pages) as a tile, Content / mentions
+  (`GalleryComposerMenuMentions`); the menu itself is unchanged.

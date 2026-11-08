@@ -3,6 +3,7 @@ import type { HTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } from "r
 import { treeViewVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { TYPEAHEAD_RESET } from "./Overlays.tsx";
+import { CHANGE_MARK, changeStatus, type ChangeStatusInput } from "./change-status.ts";
 
 export interface TreeViewNode {
   id: string;
@@ -19,13 +20,16 @@ export interface TreeViewNode {
   actions?: ReactNode;
   disabled?: boolean;
   /**
-   * How the item changed, as a letter at the row's end in its tone (Added A, Modified M, Removed D, git's), also read
-   * out as the word. For a file tree or a list of changes.
+   * How the item changed, as git's letter at the row's end in the change's ink (Added A, Modified M, Deleted D,
+   * Untracked U, Renamed R), also read out as the word: the shared change words (components audit D6, Governance § 4).
+   * `removed` is the deprecated spelling of `deleted`.
    */
   status?: TreeViewStatus;
+  /** Changed since it was last looked at: a dot before the status, apart from it (never a colour of the status). */
+  unseen?: boolean;
 }
-export type TreeViewStatus = "added" | "modified" | "removed";
-const STATUS_MARK: Record<TreeViewStatus, [letter: string, word: string]> = { added: ["A", "Added"], modified: ["M", "Modified"], removed: ["D", "Removed"] };
+/** The shared change words (`ChangeStatus`), and `removed`, deprecated for `deleted` (2026-11-07). */
+export type TreeViewStatus = ChangeStatusInput;
 export interface TreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
   items: TreeViewNode[];
   /** Navigation activates a row; checkbox mode toggles its checked state. */
@@ -215,7 +219,8 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
         {node.icon && <span className="area-tree-view__icon" aria-hidden="true">{node.icon}</span>}
         <span className="area-tree-view__label">{node.label}</span>
         {node.trailing && <span className="area-tree-view__trailing">{node.trailing}</span>}
-        {node.status && <span className="area-tree-view__status" data-status={node.status}><span aria-hidden="true">{STATUS_MARK[node.status][0]}</span><span className="area-sr-only">{STATUS_MARK[node.status][1]}</span></span>}
+        {node.unseen && <span className="area-tree-view__unseen"><span className="area-sr-only">Unseen</span></span>}
+        {node.status && (() => { const status = changeStatus(node.status); return <span className="area-tree-view__status" data-status={status}><span aria-hidden="true">{CHANGE_MARK[status].letter}</span><span className="area-sr-only">{CHANGE_MARK[status].word}</span></span>; })()}
         {node.actions && <span className="area-tree-view__actions" onClick={event => event.stopPropagation()}>{node.actions}</span>}
       </div>;
     })}

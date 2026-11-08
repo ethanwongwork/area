@@ -109,6 +109,7 @@ more.
 | disabled | Input's disabled fill and `border-faint` edge (none on soft); Tags disabled, no ×; list never opens | Input, Tag |
 | read-only | rest paint; Tags without ×; list never opens; Backspace removes nothing | Input |
 | invalid | `input-invalid-color` edge and ring | Input |
+| success / warning | `input-success-color` / `input-warning-color` edge and ring, from `validationStatus` or a Field's status (2026-11-07) | Input |
 
 ## Behavior and accessibility
 
@@ -117,7 +118,7 @@ the listbox is `aria-multiselectable`, options carry `aria-selected`. Typing fil
 contains) and highlights the first row; ↑/↓ move (wrapping, disabled rows skipped); Enter adds or
 removes the highlighted tag and keeps the list open, clearing a search; Backspace in an empty
 field removes the last tag; Escape closes; blur closes and clears the text. Each change is
-announced in a status region ("work added", "Ideas removed"). Each tag's × is a button named
+announced through the shared announcer ("work added", "Ideas removed"). Each tag's × is a button named
 "Remove <tag>". A pointer press on the field's empty space focuses the input and opens the list.
 The input's `aria-label` also names the listbox. Choosing the create row calls `onCreate(text)`; the
 new tag is chosen once the host adds it to `items` (`TagPicker.tsx:101-116`). `name` submits one
@@ -242,3 +243,13 @@ Fixed 2026-10-23 (owner: "make sure all inset corner radius pairings are not bro
 
 - **What changed:** A chosen row's check fades and grows in as Menu's does.
 - **Why:** One rule for a check in a list. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+### 2026-11-07 · Success and warning; read-only paint; the open state (components audit O1, O3)
+
+- **What changed:** `validationStatus` and a Field's status paint the field as Input's; read-only now carries `data-read-only` (no hover edge, default cursor); `open` / `defaultOpen` / `onOpenChange` control the list.
+- **Why:** TagPicker.tsx:40 (invalid only), :24-42 (no open-state API). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · One announcer (components audit D1)
+
+The hidden status span is replaced by `announce` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")). No visible change.

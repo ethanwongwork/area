@@ -89,7 +89,7 @@
     opacity: 0;
     transform: rotate(-90deg);
     /* MOTION.md: every chevron turns on fast ease-out. */
-    transition: opacity var(--area-duration-fast) var(--area-ease-out), transform var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-out), transform var(--area-duration-fast) var(--area-ease-out);
   }
   .area-step__row:focus-visible > .area-step__chevron,
   .area-step[data-open] > .area-step__row > .area-step__chevron { opacity: 1; transition-duration: 0s, var(--area-duration-fast); } /* opacity in at once; the turn keeps fast */
@@ -124,7 +124,7 @@
   }
   @keyframes area-step-shimmer { to { background-position: -200% 0; } }
   /* Failed: the verb in the danger ink (Codex ✘, Claude Code's failure dot). */
-  .area-step[data-failed] > .area-step__row > .area-step__verb { color: var(--area-fg-danger); }
+  :is(.area-step[data-error], .area-step[data-failed]) > .area-step__row > .area-step__verb { color: var(--area-fg-danger); }
 
   /* A group's steps: 4 apart (Cursor's and Codex's grouped gap). */
   .area-step--group .area-step__items { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-4); /* spec */ }

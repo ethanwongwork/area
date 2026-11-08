@@ -345,6 +345,19 @@ export const RadioInvalid = () => (
     <Radio value="two" label="Option two" />
   </RadioGroup>
 );
+/* A non-error message, as Checkbox group's (components audit 2026-11-07, O1). */
+export const RadioSuccess = () => (
+  <RadioGroup label="Label" name="contact-success" defaultValue="one" validation="Success message" validationStatus="success">
+    <Radio value="one" label="Option one" />
+    <Radio value="two" label="Option two" />
+  </RadioGroup>
+);
+export const RadioWarning = () => (
+  <RadioGroup label="Label" name="contact-warning" defaultValue="two" validation="Warning message" validationStatus="warning">
+    <Radio value="one" label="Option one" />
+    <Radio value="two" label="Option two" />
+  </RadioGroup>
+);
 
 
 

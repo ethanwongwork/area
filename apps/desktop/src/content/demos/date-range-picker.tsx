@@ -34,3 +34,13 @@ export const GalleryDateRangePickerGhost = () => (
 export const GalleryDateRangePickerDisabled = () => (
   <div style={frame}><DateRangePicker fullWidth aria-label="Dates" icon={<CalendarIcon />} today={today} disabled defaultValue={week} /></div>
 );
+/* Success and warning, as Date picker's; read-only shows a range set elsewhere (components audit 2026-11-07, O1, O2). */
+export const GalleryDateRangePickerSuccess = () => (
+  <div style={frame}><DateRangePicker fullWidth validationStatus="success" aria-label="Dates" icon={<CalendarIcon />} today={today} defaultValue={week} /></div>
+);
+export const GalleryDateRangePickerWarning = () => (
+  <div style={frame}><DateRangePicker fullWidth validationStatus="warning" aria-label="Dates" icon={<CalendarIcon />} today={today} defaultValue={week} /></div>
+);
+export const GalleryDateRangePickerReadOnly = () => (
+  <div style={frame}><DateRangePicker fullWidth readOnly aria-label="Dates" icon={<CalendarIcon />} today={today} defaultValue={week} /></div>
+);

@@ -52,10 +52,10 @@
     font-weight: var(--area-weight-regular);
     white-space: nowrap;
   }
-  .area-tag:has(> .area-tag__remove) { padding-inline-end: var(--_remove-inset); }
+  .area-tag:has(> .area-tag__dismiss) { padding-inline-end: var(--_remove-inset); }
   /* spec: 24, for a tag beside 32px controls; the same 14px text. */
-  .area-tag--sm { --_height: var(--area-mark-label-md); }
-  .area-tag--md { --_height: var(--area-mark-label-lg); }
+  .area-tag--md { --_height: var(--area-mark-label-md); }
+  .area-tag--lg { --_height: var(--area-mark-label-lg); }
 
   /*
    * Tones (owner, 2026-11-03: "Yes, move them" onto the tone tokens): each colour is its tone's soft tint under its tone's
@@ -64,18 +64,20 @@
    * success, orange warning, yellow caution, red danger, purple discovery, plus gray, pink and brown. Until 2026-11-03 each
    * colour was a measured literal (light: one pale tint at OKLCH L 0.955, C 0.035 under an ink at L 0.49 or less; dark: the
    * vivid ink on a 16% wash of itself, its label lifted toward white as dark layers lightened); the solved tints are opaque,
-   * so the lift is gone with the wash.
+   * so the lift is gone with the wash. Since 2026-11-07 (components audit D5) each colour reads its hue's roles
+   * (`hue-<hue>-bg`, `hue-<hue>-text`, semantic/hues.ts), the same tone tokens by name, and neutral's measured tint
+   * (rgba(42,28,0,.07), dark white 10%) is the neutral hue's `bg`: the values are unchanged.
    */
-  .area-tag--neutral { --_bg: light-dark(rgb(42 28 0 / 0.07), rgb(255 255 255 / 0.1)); --_fg: var(--area-fg-default); } /* spec */
-  .area-tag--info { --_bg: var(--area-info-surface); --_fg: var(--area-fg-info); }
-  .area-tag--success { --_bg: var(--area-success-surface); --_fg: var(--area-fg-success); }
-  .area-tag--warning { --_bg: var(--area-warning-surface); --_fg: var(--area-fg-warning); }
-  .area-tag--caution { --_bg: var(--area-caution-surface); --_fg: var(--area-fg-caution); }
-  .area-tag--danger { --_bg: var(--area-danger-surface); --_fg: var(--area-fg-danger); }
-  .area-tag--discovery { --_bg: var(--area-discovery-surface); --_fg: var(--area-fg-discovery); }
-  .area-tag--pink { --_bg: var(--area-pink-surface); --_fg: var(--area-fg-pink); }
-  .area-tag--brown { --_bg: var(--area-brown-surface); --_fg: var(--area-fg-brown); }
-  .area-tag--gray { --_bg: var(--area-gray-surface); --_fg: var(--area-fg-gray); }
+  .area-tag--neutral { --_bg: var(--area-hue-neutral-bg); --_fg: var(--area-hue-neutral-text); }
+  .area-tag--gray { --_bg: var(--area-hue-gray-bg); --_fg: var(--area-hue-gray-text); }
+  .area-tag--brown { --_bg: var(--area-hue-brown-bg); --_fg: var(--area-hue-brown-text); }
+  .area-tag--orange { --_bg: var(--area-hue-orange-bg); --_fg: var(--area-hue-orange-text); }
+  .area-tag--yellow { --_bg: var(--area-hue-yellow-bg); --_fg: var(--area-hue-yellow-text); }
+  .area-tag--green { --_bg: var(--area-hue-green-bg); --_fg: var(--area-hue-green-text); }
+  .area-tag--blue { --_bg: var(--area-hue-blue-bg); --_fg: var(--area-hue-blue-text); }
+  .area-tag--purple { --_bg: var(--area-hue-purple-bg); --_fg: var(--area-hue-purple-text); }
+  .area-tag--pink { --_bg: var(--area-hue-pink-bg); --_fg: var(--area-hue-pink-text); }
+  .area-tag--red { --_bg: var(--area-hue-red-bg); --_fg: var(--area-hue-red-text); }
 
   /* An icon side centres the icon in the tag's end square, as Badge's does ((h - icon) / 2: 4 at 20, 6 at 24), and
      the icon stands the xs icon gap (4) from the label, Badge's at the same height (spacing audit 2026-10-17: it was 6
@@ -106,7 +108,7 @@
    * ink at 12%, so the foreground stays fixed (system rule; Notion instead dims the × to 80%).
    * It was Badge's round plate, which met the tag's square corner at a different curve.
    */
-  .area-tag__remove {
+  .area-tag__dismiss {
     position: relative;
     display: inline-grid;
     place-items: center;
@@ -131,15 +133,15 @@
     transition-property: background-color;
     user-select: none;
   }
-  .area-tag__remove > svg { inline-size: var(--_icon); block-size: var(--_icon); }
-  @media (hover: hover) { .area-tag__remove:hover { background: color-mix(in srgb, currentColor 12%, transparent); transition-duration: var(--area-hover-in); } }
-  .area-tag__remove:active { transition-duration: var(--area-press-in); }
+  .area-tag__dismiss > svg { inline-size: var(--_icon); block-size: var(--_icon); }
+  @media (hover: hover) { .area-tag__dismiss:hover { background: color-mix(in srgb, currentColor 12%, transparent); transition-duration: var(--area-hover-in); } }
+  .area-tag__dismiss:active { transition-duration: var(--area-press-in); }
   /* spec: pressed 20% of the ink, a step past the 12% hover, as Chip's remove. */
-  .area-tag__remove:active { background: color-mix(in srgb, currentColor 20%, transparent); transition-duration: var(--area-press-in); }
-  .area-tag__remove:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-tag__dismiss:active { background: color-mix(in srgb, currentColor 20%, transparent); transition-duration: var(--area-press-in); }
+  .area-tag__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* An invisible 24px target (44 on coarse pointers) centred on the box (WCAG 2.5.8), as Badge's. */
-  .area-tag__remove::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; inline-size: var(--area-space-24); block-size: var(--area-space-24); }
-  @media (pointer: coarse) { .area-tag__remove::after { inline-size: calc(var(--area-space-40) + var(--area-space-4)); block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
+  .area-tag__dismiss::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; inline-size: var(--area-space-24); block-size: var(--area-space-24); }
+  @media (pointer: coarse) { .area-tag__dismiss::after { inline-size: calc(var(--area-space-40) + var(--area-space-4)); block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
   .area-tag[data-disabled] { opacity: var(--area-opacity-disabled); }
   @media (forced-colors: active) { .area-tag { border: 1px solid CanvasText; } }
 }

@@ -33,7 +33,7 @@ the meaning. Badge labels content with text; Chip is an interactive choice.
 | kind | count | Short number on an owner | Fluent CounterBadge; Untitled avatar count; Notion board group counts (plain-text variant, not adopted) |
 | status | available, away, busy, do-not-disturb, blocked, offline, out-of-office, unknown | Availability on identity | Fluent PresenceBadge (canonical eight); Untitled online/offline |
 | size (status) | sm 12, md 16, lg 20 | Native Fluent cuts | Fluent sizes (tiny 6 and extra-large 28 scale another cut, so excluded); xs 10 removed by audit C-19 A (owner): the system has no xs tier |
-| tone | danger (default), neutral, info, success, warning (accent removed 2026-09-29, D1) | Semantic paint | Figma danger dot, Untitled error count, Fluent brand count; gallery Tone / warning |
+| tone | danger (default), neutral, info, success, warning, caution, discovery (Button's and Badge's seven, 2026-11-07; accent removed 2026-09-29, D1) | Semantic paint, each tone's solid and its on-ink | Figma danger dot, Untitled error count, Fluent brand count; gallery Tone / warning, caution, discovery |
 | anchor | four corners; rectangular or circular owner | Attachment | Untitled avatar corner; Figma icon button |
 
 Excluded: Untitled's gloss gradients and reflection SVG on the status dot (a skeuomorphic
@@ -238,7 +238,9 @@ number); attached indicators are `aria-hidden` and `inert`, so the owner's acces
 must carry the state (the new tile's button is named "Notifications, new activity").
 Forced colors map the indicator to Highlight with a Canvas outline. Logical placement
 follows RTL.
-`hidden` renders nothing (`disabled` is a deprecated alias: it meant hide, audit C-25), and
+`invisible` renders nothing, Indicator anchor's word for the same idea (2026-11-07; `hidden`, also the native attribute, and
+`disabled`, which meant hide (audit C-25), are deprecated aliases); `bordered` draws the ring where the mark overlaps its owner
+(`withBorder` is its deprecated alias; the hook stays `data-border`); and
 `label` sets the accessible name as a string or a function of the count, as Count's; the
 default stays English ("N notifications", "New activity", "Processing") (Indicator.tsx:11-31).
 
@@ -539,3 +541,9 @@ Pinned commit: `d27922755bebae866d9ffe86b7da44c27ec801ee`.
   Area keeps centring it on the corner (owner, 2026-09-25; owner took the recommendation to keep it).
 - 2026-10-01 · owner (audit H-13): IndicatorAnchor `overlap` values are `rectangular | circular` (classes `--rectangular` / `--circular`; were `overlap-*`), and the `compact` boolean is `inset` (class `--inset`).
 - 2026-10-14 · owner: Motion is one number, default 210 → the processing pulse runs a fixed 1s (was `slow × 4`, which would have become 1.4s at the new default); it still stops at motion 0 and under reduced motion → indicator.css. docs/MOTION.md.
+
+### 2026-11-07 · Caution and discovery; bordered and invisible (components audit O4, O7)
+
+- **What changed:** `tone` takes Button's and Badge's seven (caution and discovery on their solids and on-inks); `bordered` replaces `withBorder` and `invisible` replaces `hidden` (Indicator anchor's word), both kept as deprecated aliases; the hook stays `data-border`.
+- **Why:** manifest.ts:485 listed five tones; Governance's booleans are adjectives, and one idea had two words (Indicator.tsx:12, 18, 43). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

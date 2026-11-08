@@ -22,7 +22,7 @@ test("CodeBlock renders named actions, header, code rows and native root props",
   assert.equal((html.match(/class="area-code-block__line"/g) ?? []).length, 2);
   assert.match(html, /&lt;b&gt;/);
   assert.doesNotMatch(html, /area-code-block__gutter/);
-  assert.match(html, /aria-live="polite"><\/span>/);
+  assert.doesNotMatch(html, /aria-live/, 'the copy result is said through the shared announcer (components audit D1)');
 });
 
 // packages/react/src/components/primitives.tsx:1615-1662,1689-1696: named native select or linked ARIA tablist/tabpanel.
@@ -53,7 +53,7 @@ test("CodeBlock supports line references, marks and both disclosure states", () 
     assert.equal(links.length, 3);
     for (const [, id] of links) assert.ok(html.includes(`id="${id}"`));
     assert.equal((html.match(/area-code-block__line--highlighted/g) ?? []).length, 2);
-    assert.match(html, /area-code-block__line--removed/);
+    assert.match(html, /area-code-block__line--deleted/);
     assert.match(html, /area-code-block__line--added/);
     assert.match(html, /area-code-block__marker">-<\/span>/);
     assert.match(html, /area-code-block__marker">\+<\/span>/);

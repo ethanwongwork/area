@@ -13,7 +13,7 @@
 
 **Edit summary** is what an agent changed in one turn: a card with a title, the turn's total +N −N, and a row per file with its own counts, each opening to its diff, with Keep and Undo for each file and
 for all. The caller words the title with the count ("Edited 2 files", as the Inspector chat passes it); without a
-`title` the card reads "Edited files" (`EditSummary.tsx`, the title's fallback). **Diff** draws a unified diff in Code block sm's metrics: line numbers, a + / − marker and a tint on added and removed lines, and a fold for
+`title` the card reads "Edited files" (`EditSummary.tsx`, the title's fallback). **Diff** draws a unified diff in Code block sm's metrics: line numbers, a + / − marker and a tint on added and deleted lines, and a fold for
 the unchanged runs between hunks. Not Code block's `marks` (one-sided, no numbers pairs or folds); not a review tool
 (staging, commits, split view are Codex's side panel and out of scope).
 
@@ -23,7 +23,7 @@ the unchanged runs between hunks. Not Code block's `marks` (one-sided, no number
 |---|---|---|---|
 | file status | pending, kept, undone | Keep / Undo per file and all | Cursor review ("Keep All", "Undo All", per-file Keep / Undo); Codex Undo / Review |
 | file open | closed, open (diff) | the diff on demand | Cursor `EditToolCallView.js` chevron; Codex "Review" |
-| (Diff) line kind | added, removed, context; fold | — | Cursor `DefaultDiff.stylex.js`; Codex TUI diff_render |
+| (Diff) line kind | added, deleted, context; fold (`removed`: deprecated alias of deleted, components audit D6) | — | Cursor `DefaultDiff.stylex.js`; Codex TUI diff_render |
 
 API: a file's outcome is `status` (Governance § 4; `state` stays as a deprecated alias for one release, `status` wins).
 A file's diff opens uncontrolled (`defaultOpen`) or controlled (`open` / `onOpenChange`), as Step, Plan and Queue do.
@@ -79,7 +79,7 @@ area-diff                    mono, Code block sm's type; Code block's frame (car
 | row plate | bg-component-hover on hover / focus, bg-component-pressed while the name is pressed | Menu rows (Shared state paint) | round 51; audit 2026-10-19 (was bg-component-active, the selected fill) |
 | row actions | muted ghost buttons, default ink on hover and press, no plate of their own; over the row's end on the row's plate (pointer), in flow on touch | Nav's and Board's row-action rule | round 51 |
 | button corners | concentric: head buttons take the card's corner less the border and their inset; row buttons the row's corner less theirs (the same clamped inset, never under 4, that sets their distance from the row's end); own corner under Sharp | owner round 51 | round 52 |
-| counts | +N fg-success, −N fg-danger, tabular, 4 apart | cursor git added / removed, codex green / red | — |
+| counts | +N `fg-change-added`, −N `fg-change-deleted` (the success and danger inks), tabular, 4 apart; read "N added", "N deleted" | cursor git added / removed, codex green / red | — |
 | diff type | text-xs on 18 (compact 16), mono; insets 8 (compact 6), number start 4, gap 4 | Code block sm (peer) | the Inspector's code well |
 | diff frame | border-card, radius-row (concentric with the list: 12 − 4), bg-code | Code block (peer) | round 49 |
 | diff tint, marker | success-surface / danger-surface; marker 8 wide in fg-success-vivid / fg-danger-vivid, strong | Code block's diff (peer) | one diff paint across Area (cleanup pass 2026-10-19; was Cursor's 3px strip) |
@@ -97,8 +97,8 @@ struck through.
 The file name is a button (`aria-expanded`) that opens its diff; Undo and Keep are separate Buttons labelled with the
 file ("Undo button.css"); Undo all and Keep all show only when the caller passes their handlers. The card is a
 `section` named by its title. The diff is a focusable `figure` named by its `aria-label`, such as "Changes to <file>" (a sideways scroll needs the
-keyboard); added and removed lines carry visually hidden "Added"
-/ "Removed" so the change is not colour alone. Long lines scroll sideways; the card never widens its column.
+keyboard); added and deleted lines carry visually hidden "Added"
+/ "Deleted" so the change is not colour alone. Long lines scroll sideways; the card never widens its column.
 
 ## Peers and consistency
 
@@ -287,3 +287,10 @@ Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs
 ## 2026-11-04: margins kept apart
 
 Plain is its own block formatting context (`display: flow-root`, 2026-11-04 kit pass, as Plan's): the file list's negative foot had collapsed into its glyph margin, so the block after it sat 19.4 under the last row against 16. Measured after: 16.
+
+### 2026-11-07 · Change words (components audit D6)
+
+The counts and the Diff speak the shared change words (Governance § 4, "Change words"; `CHANGE_STATUSES`, `CHANGE_MARK` in packages/react/src/components/change-status.ts). `deleted` replaces `removed` on EditSummary and EditSummaryFile (the count) and on
+DiffLine `kind`; `removed` stays a deprecated alias for one release. The part is `__deleted` (`__removed` kept beside it
+in the stylesheet), the line modifier `--deleted` (`--removed` kept), the hidden words "N deleted" and "Deleted:". The
+counts read `fg-change-added` / `fg-change-deleted`, which are the success and danger inks: no visible change.

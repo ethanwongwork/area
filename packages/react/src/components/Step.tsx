@@ -4,7 +4,10 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { stepVariants } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 
-export type StepRunStatus = "running" | "done" | "failed";
+/** The shared status words (Governance § 4, 2026-11-07): running is Step's own live word; complete and error are every
+ * family's. `done` and `failed` are deprecated aliases, kept for one release. */
+export type StepRunStatus = "running" | "complete" | "error" | /** @deprecated use "complete" */ "done" | /** @deprecated use "error" */ "failed";
+const shared = (status: StepRunStatus) => status === "done" ? "complete" : status === "failed" ? "error" : status;
 
 interface DisclosureProps {
   open?: boolean;
@@ -28,14 +31,15 @@ interface LineProps extends DisclosureProps {
   status: StepRunStatus;
   body?: ReactNode;
   modifiers: { group?: boolean; reasoning?: boolean };
-  /** Spoken after the line when the status is not already in its words (a failed step reads "failed"). */
+  /** Spoken after the line when the status is not already in its words (a step in error reads "failed"). */
   spoken?: string;
 }
 
 const Line = forwardRef<HTMLDivElement, LineProps & Omit<HTMLAttributes<HTMLDivElement>, "children">>(function Line(
-  { verb, detail, meta, icon, status, body, modifiers, open: openProp, defaultOpen, onOpenChange, spoken, className, ...rest }, ref,
+  { verb, detail, meta, icon, status: statusProp, body, modifiers, open: openProp, defaultOpen, onOpenChange, spoken, className, ...rest }, ref,
 ) {
   const bodyId = useId();
+  const status = shared(statusProp);
   const { open, toggle } = useDisclosure({ open: openProp, defaultOpen, onOpenChange });
   const expandable = body != null && body !== false;
   const parts = (
@@ -50,7 +54,7 @@ const Line = forwardRef<HTMLDivElement, LineProps & Omit<HTMLAttributes<HTMLDivE
   );
   return (
     <div ref={ref} className={stepVariants(modifiers, className)} data-open={expandable && open ? "" : undefined}
-      data-running={status === "running" ? "" : undefined} data-failed={status === "failed" ? "" : undefined}
+      data-running={status === "running" ? "" : undefined} data-error={status === "error" ? "" : undefined}
       aria-busy={status === "running" || undefined} {...rest}>
       {expandable
         ? <button type="button" className="area-step__row" aria-expanded={open} aria-controls={bodyId} onClick={toggle}>{parts}</button>
@@ -69,15 +73,15 @@ export interface StepProps extends DisclosureProps, Omit<HTMLAttributes<HTMLDivE
   meta?: ReactNode;
   /** A 16 glyph before the verb (Cursor's tool icon); none by default (Codex, Claude Code). */
   icon?: ReactNode;
-  /** running: the verb shimmers; failed: the verb in the danger ink. */
+  /** running: the verb shimmers; error: the verb in the danger ink. */
   status?: StepRunStatus;
   /** What went in and came out. A step with children opens to show them. */
   children?: ReactNode;
 }
 
 /** One thing an agent did, on one line, opening to its input and output. */
-export const Step = forwardRef<HTMLDivElement, StepProps>(function Step({ status = "done", children, ...rest }, ref) {
-  return <Line ref={ref} status={status} body={children} modifiers={{}} spoken={status === "failed" ? "Failed" : undefined} {...rest} />;
+export const Step = forwardRef<HTMLDivElement, StepProps>(function Step({ status = "complete", children, ...rest }, ref) {
+  return <Line ref={ref} status={status} body={children} modifiers={{}} spoken={shared(status) === "error" ? "Failed" : undefined} {...rest} />;
 });
 
 export interface StepGroupProps extends DisclosureProps, Omit<HTMLAttributes<HTMLDivElement>, "children"> {
@@ -93,7 +97,7 @@ export interface StepGroupProps extends DisclosureProps, Omit<HTMLAttributes<HTM
 }
 
 /** A run of steps folded under one line ("Explored 6 files", "Worked for 2m 5s"). */
-export const StepGroup = forwardRef<HTMLDivElement, StepGroupProps>(function StepGroup({ status = "done", children, ...rest }, ref) {
+export const StepGroup = forwardRef<HTMLDivElement, StepGroupProps>(function StepGroup({ status = "complete", children, ...rest }, ref) {
   return <Line ref={ref} status={status} body={<div className="area-step__items">{children}</div>} modifiers={{ group: true }} {...rest} />;
 });
 
@@ -108,7 +112,7 @@ export interface ReasoningProps extends DisclosureProps, Omit<HTMLAttributes<HTM
 
 /** The agent's thinking as one closed line ("Thought for 12s"), opening to its summary. */
 export const Reasoning = forwardRef<HTMLDivElement, ReasoningProps>(function Reasoning({ running, seconds, children, ...rest }, ref) {
-  return <Line ref={ref} status={running ? "running" : "done"} verb={running ? "Thinking" : "Thought"}
+  return <Line ref={ref} status={running ? "running" : "complete"} verb={running ? "Thinking" : "Thought"}
     detail={!running && seconds !== undefined ? `for ${seconds}s` : undefined}
     body={running ? undefined : children} modifiers={{ reasoning: true }} {...rest} />;
 });

@@ -8,7 +8,7 @@
 @layer area.components {
   .area-button, .area-input, .area-number-field, .area-chip, .area-select, .area-custom-select__trigger, .area-date-picker__trigger,
   .area-segmented__item, .area-nav__item, .area-nav__label,
-  .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-panel__bar, .area-slider--inside {
+  .area-menu__item, .area-menu__label, .area-menu__empty, .area-menu__loading, .area-tabs__tab, .area-badge, .area-panel__bar, .area-slider--inside {
     --_box-height: var(--_height);
     --_box-border: var(--area-stroke-width);
     /* The text's inline content box is its cap height. The cap unit works without text-box
@@ -64,7 +64,7 @@
   }
   .area-chip { --_box-icon: var(--_dot); }
   .area-segmented__item { --_box-height: var(--_item); }
-  .area-nav__item, .area-nav__label, .area-menu__item, .area-menu__label {
+  .area-nav__item, .area-nav__label, .area-menu__item, .area-menu__label, .area-menu__empty, .area-menu__loading {
     --_box-height: var(--area-ui-row);
     --_box-border: 0px;
     /* A row's glyph edge is the density's row inset (8 at both densities, as Tree view, Notion,
@@ -140,7 +140,8 @@
   .area-chip:has(> .area-chip__icon:first-child),
   .area-segmented__item:has(> .area-segmented__icon:first-child),
   .area-nav__item:has(> .area-nav__icon:first-child),
-  .area-menu__item:has(> .area-menu__icon:first-child) { --_box-start: var(--_box-icon); }
+  .area-menu__item:has(> .area-menu__icon:first-child),
+  .area-menu__loading { --_box-start: var(--_box-icon); }
 
   .area-button:has(> .area-button__icon:last-child),
   .area-input:has(> .area-input__icon:last-child),
@@ -152,7 +153,7 @@
   /* A trailing remove control is a nested square action: the chip reserves its box, as an
      Input reserves an InputAction's, instead of nudging it with a negative margin. */
   /* The remove circle is the end's own box: its 4px ring of chip is the end inset. */
-  .area-chip:has(> .area-chip__remove:last-child) { --_box-end: var(--_remove); }
+  .area-chip:has(> .area-chip__dismiss:last-child) { --_box-end: var(--_remove); }
   .area-chip:has(> :is(.area-chip__swatch, .area-chip__avatar, .area-chip__image):first-child) {
     --_box-start: var(--_visual);
   }

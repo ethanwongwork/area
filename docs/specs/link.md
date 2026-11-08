@@ -100,7 +100,7 @@ Area's underline (computed): 1px, offset 2px, `oklab(0.277 0 0 / 0.4)` on rgb(40
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | link · type | inherited | ChatGPT, Notion | — |
-| link · ink | inherited (`inherit`), or `fg-muted`, `fg-action`, `fg-info` (`blue`), or a hue's text ink (`fg-discovery`, `fg-pink`, `fg-success`, `fg-danger`, `fg-warning`, `fg-brown`) | ChatGPT and Notion inherit; Primer muted; Emphasis roles; owner 2026-10-09 (blue) and 2026-10-17 (hues) | — |
+| link · ink | inherited (`inherit`), or `fg-muted`, `fg-action`, or a hue's words, `hue-<hue>-text` (blue `fg-info`, purple `fg-discovery`, pink, green `fg-success`, red `fg-danger`, orange `fg-warning`, brown; components audit D5) | ChatGPT and Notion inherit; Primer muted; Emphasis roles; owner 2026-10-09 (blue) and 2026-10-17 (hues) | — |
 | link · underline (inline) | always | ChatGPT, Notion agree | — |
 | underline · colour | `currentColor` (the link's own ink) | ChatGPT; owner, review round 2 (2026-10-09) | Notion 40% (Area's value until round 2) |
 | underline · thickness | 1 stroke (`stroke-width`) | Area's other underlines; ChatGPT auto ≈ 1px | Notion 0.05em (0.8 at 16) |
@@ -258,3 +258,7 @@ Code block line numbers and toggle, Description list's "Show more", and the app'
 
 - **What changed:** the inline link in the specimen now takes the body size of the canvas (16 at Type 14, was 13), as a Link in a product's body text does.
 - **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.
+
+### 2026-11-07 · Every hue's roles (components audit D5)
+
+The hued inks read the hue role table (`--area-hue-<hue>-<role>`, packages/tokens/src/semantic/hues.ts; DESIGN_SYSTEM.md, "Every hue has the same roles") (`hue-<hue>-text`), the same tone inks by name: no value changed.

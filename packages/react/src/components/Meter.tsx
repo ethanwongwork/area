@@ -78,7 +78,7 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
     return (
       <div ref={ref} role="group" aria-labelledby={label ? `${id}-label` : undefined}
         aria-describedby={description ? `${id}-description` : undefined}
-        className={meterVariants({ tone }, cx("area-meter--segmented", className))} {...rest}>
+        className={meterVariants({ tone, size }, cx("area-meter--segmented", className))} {...rest}>
         {header}
         <div className={cx(progressVariants({ size }), meterVariants.element("track"))} aria-hidden="true">
           {segments.map((part, index) => part.value > 0
@@ -106,7 +106,7 @@ export const Meter = forwardRef<HTMLDivElement, MeterProps>(function Meter(
       aria-valuetext={typeof shown === "string" ? shown : undefined}
       aria-labelledby={label ? `${id}-label` : undefined}
       aria-describedby={description ? `${id}-description` : undefined}
-      className={meterVariants({ tone }, className)} {...rest}>
+      className={meterVariants({ tone, size }, className)} {...rest}>
       {header}
       <div className={cx(progressVariants({ size }), meterVariants.element("track"))} aria-hidden="true">
         <div className="area-progress__bar" style={{ "--_progress-value": pct } as CSSProperties} />

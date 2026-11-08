@@ -74,3 +74,14 @@ export const GalleryListBoxDisabled = () => (
     <ListBoxItem value="svg">SVG</ListBoxItem>
   </ListBox>
 );
+
+/* Several (components audit V7): `multiple` chooses any number, each with its check. Space toggles, Shift with an arrow
+   extends, Ctrl or Cmd+A chooses all; a click toggles a row. */
+export const GalleryListBoxMultiple = () => (
+  <ListBox aria-label="Label" multiple defaultValues={["one", "three"]} style={list}>
+    <ListBoxItem value="one">Option one</ListBoxItem>
+    <ListBoxItem value="two">Option two</ListBoxItem>
+    <ListBoxItem value="three">Option three</ListBoxItem>
+    <ListBoxItem value="four">Option four</ListBoxItem>
+  </ListBox>
+);

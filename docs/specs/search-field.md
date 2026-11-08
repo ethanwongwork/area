@@ -206,3 +206,9 @@ Resolved 2026-10-10 (owner: "proceed with your suggestions"); kept for the recor
 - **What changed:** the results under the field are Nav rows (plates, row height, the row inset), and "No results" takes a row's inset and height in the muted ink. The field is unchanged.
 - **Why:** the demo drew the results as bare list items with inline styles: no row height or plates, 18 apart, 8 in. Demos are made of real components.
 - **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.
+
+### 2026-11-07 · The event in onValueChange (components audit O3)
+
+- **What changed:** `onValueChange(query, event)` passes the change, the Escape key or the clear action's click.
+- **Why:** SearchField.tsx:15. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

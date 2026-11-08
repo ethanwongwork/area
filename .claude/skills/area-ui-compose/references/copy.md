@@ -23,8 +23,8 @@ Rules:
   and 50% ink. A title that is bigger, bolder and darker than its neighbour is shouting.
 - **A title that names a surface or section is strong (500); an item's name is regular** (Text pairs).
 - **Muted means one ink role** (`fg-muted`), never an opacity on default ink.
-- **Title and its description join**: no gap between their line boxes (baseline to cap about 12 for 16 over 14, 10 for
-  14 over 14). A text group sits one ladder step further from the set it introduces than the set's items are apart.
+- **A surface's title stands one step (4) off its copy; an item's name joins its line** (DESIGN_SYSTEM.md, Text pairs,
+  owner 2026-11-06). A text group sits one ladder step further from the set it introduces than the set's items are apart.
 
 ## Headers
 
@@ -32,7 +32,7 @@ Rules:
 
 1. context: a `Breadcrumb` or a back link;
 2. one row: the title, its actions at the trailing end (`Stack spread`), one primary action at most;
-3. the description, joined to the title;
+3. the description, one step (4) under the title;
 4. `Tabs` last, if the page has views.
 
 **In an app, the nav names the page.** The selected nav row is the page's title; the content does not repeat it as a
@@ -43,6 +43,9 @@ opens with its purpose as a subtitle instead.
 for the section sit at the title row's end ("Show all" on a shelf, a section's add button).
 
 ## Copy
+
+The rules are `docs/WRITING.md` (voice, case, buttons, errors, destructive actions, empty states, truncation, numbers);
+the points below are the ones a composed screen most often gets wrong.
 
 - **Sentence case** everywhere: titles, labels, menu items, buttons (ChatGPT, Notion, Figma; Cursor's uppercase pane
   headers are VS Code's legacy chrome, not its own surfaces).

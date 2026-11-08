@@ -410,3 +410,15 @@ role at every size, `title-xs`, and gains public hooks `--area-card-title-size`,
 views, stat cards, the type tester) set `text-base` (13/18), weight unchanged (500, default ink): the name role. Dialogs,
 popovers and every other Card keep 16/22. Evidence: Cursor's card titles are 13 medium in primary ink; Claude's section
 headers stand one step over their rows.
+
+## Review note, 2026-11-06 (balance pass; owner: "Keep it")
+
+- **What changed:** the title is the description's size, 13/18 strong in the default ink (was `title-xs` 16/22), and the
+  description joins it as the next line (8.8 baseline to cap, was 10.0). The public hooks `--area-card-title-*` stay;
+  the desktop feed no longer needs them (Q-T1 set the same 13/18 there on 2026-11-04). Value, sizes, insets unchanged.
+- **Why:** the owner's note on a confirm ("no spacing logic between the title and the text … the type style size contrast with the text is large … make sure all of this is intentional"). The 2026-11-02 ramp moved `title-xs` from 15 to 16 at type 13, so a 16 title sat over 13 text, 1.23× (the owner had approved 16 over 14, 1.14×, on 2026-09-26), and joined 10.0 baseline to cap beside the text's own 8.8: near the line gap but not on it. Cursor sets its confirm's title at its text's size (12/500 over 12) and its settings rows 13 over 13. DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
+
+- **Second look (owner: "the space between the title and the copy still doesnt look right"):** joined on the copy's
+  line, the title read as the paragraph's first line. Every surface title now stands one step (4) off its copy: 12.8
+  baseline to cap beside the copy's 8.8. Compared at 0, 4 and 6 on the review page; the owner picked 4 ("4 is right",
+  2026-11-06; Cursor's confirm sets its message 4 under its title).

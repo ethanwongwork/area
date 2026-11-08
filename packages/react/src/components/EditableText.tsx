@@ -1,7 +1,7 @@
 // EditableText: text that turns into a field in place to rename it (Figma's layer names, Notion's
 // titles). Enter or leaving the field commits; Escape cancels. Spec: docs/specs/editable-text.md.
 import { forwardRef, useEffect, useRef, useState } from "react";
-import type { HTMLAttributes, InputHTMLAttributes, KeyboardEvent, ReactNode } from "react";
+import type { HTMLAttributes, InputHTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { editableTextVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Tooltip } from "./primitives.tsx";
 
@@ -15,7 +15,7 @@ export interface EditableTextProps extends Omit<HTMLAttributes<HTMLSpanElement>,
   /** Initial value when uncontrolled. */
   defaultValue?: string;
   /** Called with the new value when an edit is committed (Enter or leaving the field), not on each key. */
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string, event: SyntheticEvent) => void;
   /** Start in the editing state, as a just-created item waiting for its name. Focus is not moved on first render. */
   defaultEditing?: boolean;
   /** Called when an edit starts or ends. */
@@ -56,7 +56,7 @@ export const EditableText = forwardRef<HTMLSpanElement, EditableTextProps>(funct
     setEditing(true);
     onEditingChange?.(true);
   };
-  const finish = (commit: boolean, refocus: boolean) => {
+  const finish = (commit: boolean, refocus: boolean, event: SyntheticEvent) => {
     if (!active.current) return;
     active.current = false;
     setEditing(false);
@@ -64,7 +64,7 @@ export const EditableText = forwardRef<HTMLSpanElement, EditableTextProps>(funct
     returnFocus.current = refocus;
     if (commit && draft !== value) {
       if (valueProp === undefined) setValueState(draft);
-      onValueChange?.(draft);
+      onValueChange?.(draft, event);
     }
   };
   // The whole text is selected when editing starts (Figma), and focus returns to the text after a
@@ -81,8 +81,8 @@ export const EditableText = forwardRef<HTMLSpanElement, EditableTextProps>(funct
   const onInputKey = (event: KeyboardEvent<HTMLInputElement>) => {
     inputProps?.onKeyDown?.(event);
     // Enter that confirms an IME composition (Japanese, Chinese) is not a commit.
-    if (event.key === "Enter" && !event.nativeEvent.isComposing) { event.preventDefault(); finish(true, true); }
-    else if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); finish(false, true); }
+    if (event.key === "Enter" && !event.nativeEvent.isComposing) { event.preventDefault(); finish(true, true, event); }
+    else if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); finish(false, true, event); }
   };
   const shown = editing ? draft : value;
   // The tooltip stays mounted while editing, so the text keeps its node (and its focus return).
@@ -106,7 +106,7 @@ export const EditableText = forwardRef<HTMLSpanElement, EditableTextProps>(funct
       {editing ? (
         <input ref={inputRef} type="text" {...inputProps} className="area-editable-text__input" aria-label={label}
           placeholder={placeholder} value={draft} onChange={event => setDraft(event.target.value)} onKeyDown={onInputKey}
-          onBlur={event => { inputProps?.onBlur?.(event); finish(true, false); }} />
+          onBlur={event => { inputProps?.onBlur?.(event); finish(true, false, event); }} />
       ) : null}
     </span>
   );

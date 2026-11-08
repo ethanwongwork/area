@@ -97,17 +97,17 @@
     font-variant-numeric: tabular-nums;
     vertical-align: super;
   }
-  /* Ink, as Link's (link.css): blue by default (Citation.tsx), Wikipedia's link blue. */
+  /* Ink, as Link's (link.css): blue by default (Citation.tsx), Wikipedia's link blue; a hue's words (`hue-<hue>-text`). */
   .area-citation--inherit {}
   .area-citation--muted { --_ink: var(--area-fg-muted); }
   .area-citation--action { --_ink: var(--area-fg-action); }
-  .area-citation--blue { --_ink: var(--area-fg-info); }
-  .area-citation--purple { --_ink: var(--area-fg-discovery); }
-  .area-citation--pink { --_ink: var(--area-fg-pink); }
-  .area-citation--green { --_ink: var(--area-fg-success); }
-  .area-citation--red { --_ink: var(--area-fg-danger); }
-  .area-citation--orange { --_ink: var(--area-fg-warning); }
-  .area-citation--brown { --_ink: var(--area-fg-brown); }
+  .area-citation--blue { --_ink: var(--area-hue-blue-text); }
+  .area-citation--purple { --_ink: var(--area-hue-purple-text); }
+  .area-citation--pink { --_ink: var(--area-hue-pink-text); }
+  .area-citation--green { --_ink: var(--area-hue-green-text); }
+  .area-citation--red { --_ink: var(--area-hue-red-text); }
+  .area-citation--orange { --_ink: var(--area-hue-orange-text); }
+  .area-citation--brown { --_ink: var(--area-hue-brown-text); }
   .area-citation__bracket {}
   /* A footnote is a link in the line, as Link: no plate on hover or press, the pointer and its ink say it is one. A plate
      behind a hued number failed in dark (the blue on the hover plate 3.97:1 at dark 24 + 8). */

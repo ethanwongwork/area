@@ -137,7 +137,7 @@ export default {
       ["aria-roledescription, aria-valuetext", "On the area's range input: \"2D slider\", with the saturation and brightness it holds."],
       ["aria-disabled", "On the group when disabled; every inner control is disabled too."],
       ["aria-pressed", "On the eyedropper Button while it samples."],
-      ["role=\"status\"", "On the contrast ratio, and on the out-of-sRGB note."],
+      ["aria-live", "Not on the component: the page's shared announcer says when contrast flips between passing and failing, and the out-of-sRGB note when it appears; the ratio itself has a full hidden sentence."],
     ],
   },
 
@@ -165,7 +165,7 @@ export default {
       months: "The months side by side, when visibleMonths is 2.",
       month: "One month: its header and its grid.",
       header: "The month's title row: previous at the start, the title centred, next at the end, each arrow's side on the outer day's.",
-      title: "The month and year, a heading (h2 by default); the first month's is a polite live region. With menus the heading stays, hidden, to name the grid.",
+      title: "The month and year, a heading (h2 by default); a month change is said once through the shared announcer. With menus the heading stays, hidden, to name the grid.",
       nav: "A slot the width of a small Button at each end of the header: previous on the first month, next on the last.",
       menus: "With caption=\"menus\", the month and the year as two ghost Custom selects in the title's place, bounded by min and max.",
       grid: "The month's table, role grid, labelled by its title.",
@@ -196,7 +196,7 @@ export default {
       ["aria-selected", "On a chosen day's cell, and on every cell of a range."],
       ["aria-current", "\"date\" on today."],
       ["aria-disabled", "On days outside the bounds or unavailable, which stay focusable; on the root when disabled."],
-      ["aria-live", "\"polite\" on the first month's title, so a month change is announced once."],
+      ["aria-live", "Not on the component: a month change is said once, politely, through the page's shared announcer, however many months show."],
       ["aria-description", "\"Has events\" on a day with a marker."],
     ],
   },
@@ -206,7 +206,7 @@ export default {
     instead: [
       ["A choice that opens from a field", ["select", "custom-select", "combobox"], "Their lists are popups; List box stays in the page."],
       ["Running a command", ["menu", "context-menu"], "Menu runs a command and closes; List box keeps one value chosen."],
-      ["Several independent on and off choices", ["toggle-group", "checkbox"], "List box holds one value only."],
+      ["A few independent on and off choices", ["toggle-group", "checkbox"], "Toggle group and Checkbox show each choice as its own control; List box suits a longer set."],
       ["Going to another page or view", ["nav"], "Nav moves somewhere; List box chooses a value."],
     ],
     // Spec: Variants, Decisions, Behavior and accessibility; source: ListBox.tsx JSDoc.
@@ -216,7 +216,8 @@ export default {
       ["Do", "Give an option without text a textValue, so typing reaches it, and an aria-label, so it is named."],
       ["Do", "Set selectionFollowsFocus when a preview beside the set should follow the keys."],
       ["Do", "Group options with ListBoxSection: its title names the group, and the arrows cross from one group to the next."],
-      ["Don't", "Use it for several selections: it holds one value."],
+      ["Do", "Set multiple to choose several, with values and onValuesChange; in a grid a click chooses one and Cmd or Ctrl+click adds, as a file browser does."],
+      ["Don't", "Use value and onValueChange with multiple: the set is values."],
       ["Don't", "Give two options the same value: the value is also the option's key."],
     ],
     // Spec: Anatomy, Decisions.
@@ -230,7 +231,7 @@ export default {
     // Spec: States, Decisions.
     states: {
       disabled: "The option dims and the arrow keys skip it; on the set, every option is disabled.",
-      selected: "The chosen option: in a list, the active plate and the check; in a grid, the active plate.",
+      selected: "The chosen option, or each of them with multiple: in a list, the active plate and the check; in a grid, the active plate. While focus is outside the list it steps back to the hover plate, so the list you're in reads as active.",
     },
     // Source: ListBox.tsx move().
     keyboard: [
@@ -238,13 +239,16 @@ export default {
       ["Up or Down", "Moves to the previous or next option; in a grid, to the nearest option in the row above or below, across sections."],
       ["Left or Right", "In a grid, moves to the previous or next option in reading order; mirrored in RTL."],
       ["Home or End", "Moves to the first or last option."],
-      ["Enter or Space", "Chooses the focused option."],
+      ["Enter or Space", "Chooses the focused option; with multiple, adds or removes it."],
+      ["Shift+Up or Shift+Down", "With multiple, moves and adds the options passed over; Shift+Home or Shift+End adds through to the end."],
+      ["Ctrl+A or Cmd+A", "With multiple, chooses every option, or none when all are chosen."],
       ["A or Z", "Any letter: typing a letter or a prefix jumps to the next option whose text starts with it."],
     ],
     aria: [
       ["role=\"listbox\"", "On the root."],
       ["aria-orientation", "\"vertical\" on a list; unset on a grid."],
-      ["role=\"option\", aria-selected", "On each option; true on the chosen one."],
+      ["role=\"option\", aria-selected", "On each option; true on the chosen one, or on each chosen one with multiple."],
+      ["aria-multiselectable", "On the root, with multiple."],
       ["aria-disabled", "On a disabled option, and on the root when the whole set is disabled."],
       ["role=\"group\", aria-labelledby", "On a section, labelled by its heading."],
       ["aria-label", "Pass one on the root (or aria-labelledby), and on an option whose content is not text."],
@@ -292,7 +296,7 @@ export default {
     aria: [
       ["aria-label", "On the list, from aria-label or label; on each handle, \"Reorder <label>, position n of m\"."],
       ["aria-describedby", "On a reorderable list: hidden instructions to use the arrow keys on a handle."],
-      ["aria-live", "A polite hidden region announces each move (\"<label> moved to position n of m\")."],
+      ["aria-live", "Not on the component: each move is said through the page's shared announcer (\"<label> moved to position n of m\")."],
     ],
   },
 
@@ -320,7 +324,7 @@ export default {
     // Spec: Anatomy, Decisions; source: primitives.tsx Panel, PanelSection, PanelRow, PanelStack.
     parts: {
       root: "The surface, 240 wide by default (--area-panel-inline-size), with its edge, corner and resting shadow; flush drops them.",
-      resize: "With resizable, the separator on one edge: drag it, or focus it and use the arrow keys.",
+      resize: "With resizable, the separator on one edge, painted as Splitter's handle: drag it, use the arrow keys, or double-click for defaultWidth.",
       bar: "The header row: the title and an action at its end; no rule beneath it (bareBar is the default now and deprecated).",
       title: "The panel's title, a heading (h2 by default) that names the panel region.",
       body: "A Scroll area between the bar and the footer, holding the sections and rows, inset on every side.",
@@ -345,7 +349,7 @@ export default {
     states: {
       collapsed: "A collapsible section is closed: its rows hide, the chevron turns and the summary shows.",
       resizable: "The panel has a resize separator on one edge.",
-      resizing: "The separator is being dragged.",
+      resizing: "The separator is being dragged: a 2 line in the accent on the panel's edge.",
     },
     // Source: primitives.tsx separator onKeyDown; native button.
     keyboard: [
@@ -360,6 +364,47 @@ export default {
       ["aria-expanded, aria-controls", "On a collapsible section's toggle, pointing at its rows."],
       ["role=\"separator\", aria-valuenow", "On the resize separator, with its minimum and maximum and the width in pixels as its value text."],
       ["role=\"group\", aria-labelledby", "On a PanelRow, labelled by its captions."],
+    ],
+  },
+
+  splitter: {
+    // Spec: Job and boundaries.
+    instead: [
+      ["A side panel whose own edge resizes it", ["panel"], "Panel's resizable edge sizes the panel against the page; a Splitter divides one area between two regions."],
+      ["Showing or hiding a region", ["drawer", "accordion"], "Drawer slides a region over the page; Accordion folds sections in a column."],
+      ["Two views of the same content in turn", ["tabs", "segmented"], "Tabs and Segmented switch between views; a Splitter shows both at once."],
+    ],
+    // Spec: Variants, Decisions, Behavior and accessibility; source: Splitter.tsx.
+    practices: [
+      ["Do", "Name the handle for the region it sizes with handleLabel (\"Resize sidebar\")."],
+      ["Do", "Set side to the region that keeps its size when the window grows, an inspector or a list, so the content takes the rest."],
+      ["Do", "Give minSize and maxSize so neither region can be squeezed out of use."],
+      ["Do", "Give defaultSize, so a double-click puts the first size back."],
+      ["Do", "Keep the size someone chose with size and onSizeChange, and restore it next time."],
+      ["Don't", "Nest a Splitter in a pane of the same orientation; give that pane its own regions instead."],
+      ["Don't", "Animate the size: a drag follows the pointer exactly."],
+    ],
+    // Spec: Anatomy; manifest elements and states.
+    parts: {
+      root: "The area the two regions share, in a row or a column; it owns nothing else.",
+      pane: "A region: the sized one keeps its size, the other takes the rest; each scrolls on its own.",
+      handle: "The 1 line between the regions, with a 4 hit area that grows to 12 after the pointer rests; a 2 line on hover, the accent while dragging.",
+    },
+    states: {
+      resizing: "The handle is being dragged: the line is the accent and the cursor stays the resize cursor everywhere.",
+    },
+    keyboard: [
+      ["Left or Right", "In side-by-side regions, moves the handle by 8 (Shift for 32), reversed right to left."],
+      ["Up or Down", "In stacked regions, moves the handle by 8 (Shift for 32)."],
+      ["Home or End", "Sets the sized region to its minimum or its maximum."],
+      ["Enter", "Puts the first size back, as a double-click does."],
+      ["Escape", "During a drag, puts the size back where it started."],
+    ],
+    aria: [
+      ["role=\"separator\", aria-orientation", "On the handle: vertical between side-by-side regions, horizontal between stacked ones."],
+      ["aria-valuenow, aria-valuemin, aria-valuemax", "On the handle: the sized region's size and its limits, in pixels, with the pixels as its value text."],
+      ["aria-controls", "On the handle, pointing at the sized region."],
+      ["aria-label", "On the handle, from handleLabel (\"Resize\" by default)."],
     ],
   },
 
@@ -424,7 +469,7 @@ export default {
     ],
     aria: [
       ["aria-label", "When copyable: \"Copy <name>, <value>\" unless you name it."],
-      ["aria-live", "When copyable, a polite hidden region says copiedLabel (\"Copied\") after a copy."],
+      ["aria-live", "Not on the component: when copyable, copiedLabel (\"Copied\") is said through the page's shared announcer after a copy."],
     ],
   },
 
@@ -529,7 +574,7 @@ export default {
       ["aria-describedby", "On the upload button, pointing at the hint when there is one."],
       ["aria-invalid", "On the upload button while invalid."],
       ["aria-hidden", "On the hidden file input and the icon."],
-      ["role=\"status\"", "On each FileUploadItem's status, so uploading, complete or the error is announced."],
+      ["aria-live", "Not on the component: a change of an item's status is said with its name (\"<name>: Complete\", or the error) through the page's shared announcer."],
     ],
   },
 

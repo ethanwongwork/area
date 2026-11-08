@@ -30,10 +30,10 @@ test('rows share one hover plate and one selection plate, and selection outranks
   // under the pointer (a hover rule of higher specificity would otherwise lighten it).
   const hover = [
     // Pointer hover sits under @media (hover: hover) (audit S21b); keyboard highlight does not.
-    '.area-menu__item:hover:not([data-disabled], [data-selected])',
+    '.area-menu__item:hover:not([data-disabled], [data-inactive], [data-selected])',
     '.area-menu__item:is([data-highlighted], :focus-visible):not([data-selected])',
-    '.area-nav__item:hover:not([data-disabled])',
-    '.area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current]:not([aria-current="false"]))):hover',
+    '.area-nav__item:hover:not([data-disabled], [data-inactive])',
+    '.area-nav__row:has(> .area-nav__item:not([data-disabled], [data-inactive], [aria-current]:not([aria-current="false"]))):hover',
     '.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td',
     '.area-tree-view [role="treeitem"]:hover:not([data-disabled], [aria-current="page"], [aria-selected="true"])',
   ];
@@ -279,6 +279,10 @@ test('every floating surface draws the floating frame', () => {
     assert.ok(rule, `${selector} does not draw the Floating group's edge`);
   }
   assert.match(ruleFor('.area-color-picker, .area-color-picker--surface')?.body ?? '', /--_picker-edge:\s*var\(--area-edge-floating\)/);
+  // The floating Toolbar and the floating Selection bar draw the edge inside their box-shadow, on the float role.
+  for (const selector of ['.area-toolbar--surface', '.area-selection-bar--floating']) {
+    assert.match(ruleFor(selector)?.body ?? '', /inset 0 0 0 var\(--area-border-width\) var\(--area-edge-floating\), var\(--area-shadow-float\)/, `${selector} does not draw the floating frame`);
+  }
 });
 
 test('row actions change ink, not plate: Nav, Board cards, Edit summary files and Queue rows', () => {
@@ -326,15 +330,36 @@ test('every transition and animation takes its curve and length from the motion 
 
 test('a line under its title joins it, and a label column fits its labels (DESIGN_SYSTEM.md, "Text pairs")', () => {
   // Owner 2026-09-28 (Card) and 2026-10-22 (every family): the same pair sat 10.5 to 20 apart across families.
+  // 2026-11-06 balance pass: a component's title is its text's size and joins it as its first line; a heading over its
+  // text (a title step) stands a whole step (4) off it. Never between: a 16 title joined over 13 text sat 10.0 beside the
+  // text's 8.8, which the owner read as no spacing logic.
   const titleGaps = [...css.matchAll(/--_title-gap:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.ok(titleGaps.length >= 5, `expected the title-gap slots, found ${titleGaps.length}`);
-  for (const gap of titleGaps) assert.equal(gap, '0px', `a title and its line sit apart again: --_title-gap ${gap}`);
-  for (const heading of ['.area-dialog__heading', '.area-drawer__heading']) {
-    assert.match(ruleFor(heading)?.body ?? '', /(^|[;\s])gap:\s*0\s*;/, `${heading} should join its title and description`);
+  for (const gap of titleGaps) assert.ok(gap === '0px' || gap === 'var(--area-space-4)', `a title and its line sit neither joined nor a step apart: --_title-gap ${gap}`);
+  const emptyMd = ruleFor('.area-empty-state--md')?.body ?? '';
+  assert.match(emptyMd, /--_title-size:\s*var\(--area-title-xs-size\)/, 'Empty state md heads a region with a title step');
+  assert.match(emptyMd, /--_title-gap:\s*var\(--area-space-4\)/, 'a heading over its text stands a step (4) off it');
+  // Owner 2026-11-06, second look: a title joined on its copy's line read as the paragraph's first line. Every surface
+  // title stands one step (4) off its copy; names of items (a choice, a Switch, a file row) still join theirs.
+  // Dialog and Drawer share one title group (system gaps C7, 2026-11-07).
+  for (const heading of [':is(.area-dialog__heading, .area-drawer__heading)', '.area-approval__heading']) {
+    assert.match(ruleFor(heading)?.body ?? '', /(^|[;\s])gap:\s*var\(--area-space-4\)/, `${heading}: the copy one step off its title`);
   }
+  assert.ok(titleGaps.every(gap => gap === 'var(--area-space-4)'), `every surface title stands a step off its copy: ${titleGaps.join(' / ')}`);
+  assert.ok(!rules.some(rule => rule.selector.includes('.area-card__title + .area-card__description')), "Card's description takes the text group's 4, not a join");
+  // A component's own title is the text's size: Dialog (and Confirm dialog, which uses it), Drawer and Card.
+  for (const title of [':is(.area-dialog__title, .area-drawer__title)']) {
+    const body = ruleFor(title)?.body ?? '';
+    assert.match(body, /font-size:\s*var\(--area-text-base-size\)/, `${title} should be its text's size`);
+    assert.match(body, /line-height:\s*var\(--area-text-base-leading\)/, `${title} should take its text's line`);
+  }
+  assert.match(ruleFor('.area-card')?.body ?? '', /--_card-title-size:\s*var\(--area-card-title-size,\s*var\(--area-text-base-size\)\)/, "Card's title should be its description's size");
+  assert.doesNotMatch(css, /var\(--area-leading-24\)\s*-\s*var\(--_height\)/, 'a close centres on its title\'s own line, not a fixed 24');
   const groups = rules.find(rule => rule.selector.includes('.area-checkbox-group__description') && /margin-block-start/.test(rule.body));
-  assert.match(groups?.body ?? '', /margin-block-start:\s*var\(--area-space-2\)/, 'a group description should sit under its legend as a choice description does');
-  assert.match(ruleFor('.area-choice-label')?.body ?? '', /gap:\s*var\(--area-space-2\)/, 'a choice title and its 12/16 description: 2 apart');
+  assert.match(groups?.body ?? '', /margin-block-start:\s*0\s*;/, 'a group description should join its legend as a choice description does');
+  // A 12/16 line under a 13/18 title joins it on its own line gap (7.7 beside 7.4), as File tile's meta; 2 apart sat 9.7.
+  assert.match(ruleFor('.area-choice-label')?.body ?? '', /gap:\s*0\s*;/, 'a choice title and its 12/16 description join');
+  assert.match(ruleFor('.area-switch__text')?.body ?? '', /gap:\s*0\s*;/, 'a Switch label and its description join');
   for (const set of ['.area-checkbox-group__options', '.area-radio-group__options']) {
     const body = ruleFor(set)?.body ?? '';
     assert.match(body, /gap:\s*var\(--area-ui-cluster\)/, `${set}: options 8 apart`);
@@ -884,6 +909,291 @@ test('a one-line option row takes the height ladder corner, pictures in a card t
   assert.match(base, /--_card-corner:\s*min\(var\(--area-radius-container\),.*var\(--_card-line\) \* var\(--area-radius-factor\)/, 'the corner is the ladder on the one-line height, capped at the surface');
   const pictures = rules.find(rule => /area-radio--preview/.test(rule.selector) && /--_card-corner:\s*var\(--area-radius-container\)/.test(rule.body));
   assert.ok(pictures && /area-radio--tile/.test(pictures.selector) && /area-radio--media-row/.test(pictures.selector), 'tile, preview and media options keep the surface corner');
+});
+
+test('named derivations are read, never written out again (system gaps C6, 2026-11-07)', () => {
+  // A formula a token already holds is read from the token, so changing the formula changes every family at once.
+  // Spacing that steps with density: gaps read the gap ladder (ui-stack, ui-cluster, gap-row), which rounds the curve to
+  // whole steps (L3); surface insets read inset-surface-sm / -md. A corner on a control height reads radius-control-*.
+  const dense = (a, b) => new RegExp(`calc\\(var\\(--area-space-${a}\\) - var\\(--area-space-${b}\\) \\* var\\(--area-ui-dense\\)\\)`);
+  for (const { selector, body } of rules) {
+    for (const [, prop, value] of body.matchAll(/(?:^|[;\s])([\w-]+)\s*:\s*([^;]+)/g)) {
+      if (prop.startsWith('--area-')) continue; // the tokens themselves
+      const gap = /^(gap|row-gap|column-gap|--_[\w-]*gap[\w-]*|--_card-section)$/.test(prop);
+      const inset = /^(padding[\w-]*|--_[\w-]*(inset|space|side|start|end|pad)[\w-]*)$/.test(prop);
+      if (gap) for (const [a, b, token] of [[12, 4, 'gap-row'], [8, 2, 'ui-cluster'], [6, 2, 'ui-stack']]) {
+        assert.doesNotMatch(value, dense(a, b), `${selector} ${prop} writes ${a} − ${b}·dense; read --area-${token}`);
+      }
+      if (inset) for (const [a, b, token] of [[16, 4, 'inset-surface-md'], [12, 4, 'inset-surface-sm']]) {
+        assert.doesNotMatch(value, dense(a, b), `${selector} ${prop} writes ${a} − ${b}·dense; read --area-${token}`);
+      }
+      assert.doesNotMatch(value, /round\(down, calc\(var\(--area-control-(xs|sm|md|lg|xl)\) \* var\(--area-radius-factor\)\), 2px\)/,
+        `${selector} ${prop} writes the ladder corner on a control height; read --area-radius-control-*`);
+    }
+  }
+});
+
+test('gaps on the 2px ladder never land between its rungs (system gaps L3, 2026-11-07)', () => {
+  // ui-dense is in halves, so 8 − 2 × 0.5 drew 7 (Card's list items at type 13). The gap ladder reads ui-gap-step.
+  for (const token of ['ui-stack', 'ui-cluster', 'gap-sm', 'gap-md', 'gap-xl']) {
+    const m = css.match(new RegExp(`--area-${token}:\\s*([^;]+);`));
+    assert.ok(m, `--area-${token} is emitted`);
+    assert.match(m[1], /ui-gap-step/, `--area-${token} reads ui-gap-step, not the half step`);
+  }
+});
+
+test('overlays enter from the one overlay scale (system gaps C7, 2026-11-07)', () => {
+  for (const { selector, body } of rules) {
+    if (selector.startsWith(':where(:root)') || selector.startsWith(':root')) continue;
+    assert.doesNotMatch(body, /(?:^|[;\s])(?:scale|--_[\w-]*(?:scale|from)):\s*0\.97\b/, `${selector} writes 0.97; read --area-overlay-scale`);
+  }
+});
+
+test('opacity reads the fade clock, so reduced motion keeps the fade and drops the movement (system gaps M2, 2026-11-07)', () => {
+  for (const { selector, body } of rules) {
+    assert.doesNotMatch(body, /opacity var\(--area-duration-(fast|base|moderate|slow)\)/, `${selector} fades on a movement clock; read --area-fade-*`);
+  }
+  const reduced = css.slice(css.indexOf('@media (prefers-reduced-motion: reduce)'));
+  assert.match(reduced, /--area-fade-base:\s*160ms/, 'reduced motion keeps a short fade');
+  assert.match(reduced, /\[data-area-motion="0"\][^{]*\{[^}]*--area-fade-base:\s*0ms/, 'Motion 0 keeps no fade, reduced or not');
+});
+
+test('an exit is never slower than its enter (docs/MOTION.md, Roles; system gaps M3)', () => {
+  const order = ['instant', 'fast', 'base', 'moderate', 'slow'];
+  const rank = value => order.indexOf(value.match(/--area-(?:duration|fade)-(\w+)/)?.[1] ?? '');
+  const anchored = ruleFor(':is(.area-popover, .area-menu, .area-tooltip)[popover]')?.body ?? '';
+  const enter = anchored.match(/--_overlay-duration:\s*([^;]+)/)?.[1] ?? '';
+  const exit = anchored.match(/--_overlay-exit:\s*([^;]+)/)?.[1] ?? '';
+  assert.ok(rank(exit) >= 0 && rank(exit) < rank(enter), `anchored overlays: exit ${exit} vs enter ${enter}`);
+  const modal = ':is(.area-dialog__modal, .area-command-palette__modal)';
+  const open = ruleFor(modal)?.body.match(/--_overlay-duration:\s*([^;]+)/)?.[1] ?? '';
+  const closed = ruleFor(`${modal}:not([open])`)?.body.match(/--_overlay-duration:\s*([^;]+)/)?.[1] ?? '';
+  assert.ok(rank(closed) >= 0 && rank(closed) < rank(open), `modals: exit ${closed} vs enter ${open}`);
+});
+
+test('every field that paints invalid paints success and warning too (components audit O1, 2026-11-07)', () => {
+  // A Field hands every control its status; a field that draws the error edge draws the other two the same way.
+  const fields = ['.area-input', '.area-number-field', '.area-textarea', '.area-select', '.area-otp-field', '.area-date-picker__trigger', '.area-custom-select__trigger', '.area-tag-picker__field'];
+  for (const field of fields) {
+    const own = rules.filter(rule => rule.selector.split(',').some(part => part.trim().startsWith(field)));
+    for (const state of ['success', 'warning']) {
+      const painted = own.find(rule => new RegExp(`^${field.replace(/[.]/g, '\\.')}\\[data-${state}\\]$`).test(rule.selector.trim()) && /--_border:/.test(rule.body));
+      assert.ok(painted, `${field}[data-${state}] sets the field's edge`);
+    }
+  }
+});
+
+test('status surfaces take every tone Button and Badge take (components audit O4, 2026-11-07)', async () => {
+  const { MANIFESTS } = await import('../dist/modules/index.js');
+  const tones = MANIFESTS.button.variants.tone;
+  for (const family of ['alert', 'toast', 'indicator']) {
+    assert.deepEqual(MANIFESTS[family].variants.tone, tones, `${family} tones`);
+    for (const tone of tones) {
+      if (family === 'toast' && tone === 'neutral') continue;
+      assert.ok(rules.some(rule => rule.selector.includes(`.area-${family}--${tone}`)), `.area-${family}--${tone} is painted`);
+    }
+  }
+  // A status icon's ink is the shared mark role for every tone that has one (Governance § 4).
+  for (const tone of tones.filter(tone => tone !== 'neutral')) {
+    assert.ok(rules.some(rule => rule.selector === `.area-toast--${tone} .area-toast__icon` && rule.body.includes(`--area-fg-${tone}-mark`)), `Toast ${tone} icon reads fg-${tone}-mark`);
+    assert.ok(rules.some(rule => rule.selector === `.area-alert--${tone}` && rule.body.includes(`--area-fg-${tone}-mark`)), `Alert ${tone} icon reads fg-${tone}-mark`);
+  }
+});
+
+test('read-only is spelled one way: data-read-only (components audit O2, 2026-11-07)', () => {
+  // `data-readonly` survives only as Radio group's deprecated alias, beside the shared spelling in the same selector.
+  for (const { selector } of rules) {
+    if (!selector.includes('[data-readonly]')) continue;
+    assert.match(selector, /\.area-radio-group:is\(\[data-read-only\], \[data-readonly\]\)/, selector);
+  }
+});
+
+test('one announcer: no family writes a live region of its own, except where the visible text is the message (components audit D1, 2026-11-07)', () => {
+  // DESIGN_SYSTEM.md, "Announcements". A change said away from focus goes through `announce` / `useAnnouncement`
+  // (components/announce.ts). The exceptions are elements whose visible content is itself the message, rendered with it.
+  const allowed = new Map([
+    ['announce.ts', ['aria-live']], // the announcer's own two regions
+    ['primitives.tsx', [
+      'role={tone === "danger" ? "alert" : "status"}', // Alert: the banner is the message
+      'role={label ? "status" : undefined}', // Spinner: a named wait, in place
+      'role={live ? (tone === "danger" ? "alert" : "status") : undefined}', // Toast without a Toaster (a Toaster turns it off)
+    ]],
+    ['TurnNotice.tsx', ['role={status === "error" ? "alert" : "status"}']], // a conversation's notice line
+    ['Pagination.tsx', ['aria-live']], // compact "Page 2 of 10": the visible words, built from the label's nodes
+  ]);
+  const dir = new URL('../src/components/', import.meta.url);
+  const pattern = /role=\{[^}]*"(?:status|alert|log)"[^}]*\}|role="(?:status|alert|log)"|aria-live|setAttribute\("role", ?"(?:status|alert)"/g;
+  for (const name of readdirSync(dir)) {
+    if (!/\.tsx?$/.test(name)) continue;
+    const found = (readFileSync(new URL(name, dir), 'utf8').match(pattern) ?? []).filter(hit => !hit.startsWith('setAttribute') || name !== 'announce.ts');
+    assert.deepEqual(found, allowed.get(name) ?? [], `${name} writes its own live region; use announce() or useAnnouncement()`);
+  }
+});
+
+test('a send or an upload that fails is said, offers Retry as onRetry and wears one mark (components audit O6, V10, 2026-11-07)', () => {
+  // Message (not sent), Queue (a queued message not sent), Attachment and File upload item (an upload that failed): the
+  // failure goes through the shared announcer, Retry is `onRetry`, and the mark is the danger ink's dismiss-circle.
+  const dir = new URL('../src/components/', import.meta.url);
+  const source = name => readFileSync(new URL(name, dir), 'utf8');
+  const section = (text, from, to) => text.slice(text.indexOf(from), to ? text.indexOf(to) : undefined);
+  const parts = source('ComposerParts.tsx');
+  const families = {
+    Message: section(source('Message.tsx'), 'export const Message =', 'export interface MessageActionsProps'),
+    Attachment: section(parts, 'export const Attachment =', '// ---- Composer menu ----'),
+    Queue: section(parts, 'export const Queue =', '// ---- Timestamp ----'),
+    FileUploadItem: section(source('FileUpload.tsx'), 'export const FileUploadItem ='),
+  };
+  for (const [family, code] of Object.entries(families)) {
+    assert.match(code, /useAnnouncement\(/, `${family} does not say its failure through the announcer`);
+    assert.match(code, /onRetry \?/, `${family} does not offer Retry from onRetry`);
+  }
+  for (const family of ['Message', 'Attachment', 'Queue']) assert.match(families[family], /<Glyph name="dismiss-circle" \/>/, `${family}'s failure mark`);
+  const body = selector => rules.filter(rule => rule.selector === selector).map(rule => rule.body).join(';');
+  assert.match(body('.area-message__status > svg'), /color:\s*var\(--area-fg-danger\)/);
+  assert.match(body('.area-attachment__mark'), /color:\s*var\(--area-fg-danger\)/);
+  // V9: the stack's meeting corner is the bubble's own corner, tightened, so it follows the Radius setting.
+  assert.match(body('.area-message__bubble'), /--_bubble-meet:\s*calc\(var\(--_bubble-radius\) \/ 4\)/);
+  assert.match(body('.area-message__stack'), /--_stack-gap:\s*var\(--area-space-2\)/);
+});
+
+test('every label hue reads its roles, never a tone or a palette step of its own (components audit D5, 2026-11-07)', async () => {
+  // semantic/hues.ts: one role table for every hue. Tag `color`, Board columns, and Link's and Citation's hued inks read it.
+  const tokens = readFileSync(new URL('../../tokens/dist/css/tokens.css', import.meta.url), 'utf8');
+  const hues = ['neutral', 'gray', 'brown', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'red'];
+  const roles = ['text', 'icon', 'border', 'bg', 'bg-hover', 'bg-active', 'accent', 'on-accent', 'bg-translucent', 'border-translucent'];
+  for (const hue of hues) for (const role of roles) assert.match(tokens, new RegExp(`--area-hue-${hue}-${role}:`), `--area-hue-${hue}-${role} is emitted`);
+  const { MANIFESTS } = await import('../dist/modules/index.js');
+  assert.deepEqual(MANIFESTS.tag.variants.color, hues, 'Tag takes every hue');
+  assert.deepEqual(MANIFESTS.boardColumn.variants.color, hues, 'Board takes every hue');
+  const painted = (selector) => rules.filter(rule => rule.selector === selector).map(rule => rule.body).join(';');
+  for (const hue of hues) {
+    assert.match(painted(`.area-tag--${hue}`), new RegExp(`--_bg:\\s*var\\(--area-hue-${hue}-bg\\);\\s*--_fg:\\s*var\\(--area-hue-${hue}-text\\)`), `Tag ${hue}`);
+    assert.match(painted(`.area-board-column--${hue}`), new RegExp(`--_ground:\\s*var\\(--area-hue-${hue}-bg-translucent\\)`), `Board ${hue} ground`);
+  }
+  for (const family of ['link', 'citation']) for (const hue of MANIFESTS[family].variants.ink.filter(ink => hues.includes(ink)))
+    assert.match(painted(`.area-${family}--${hue}`), new RegExp(`--_ink:\\s*var\\(--area-hue-${hue}-text\\)`), `${family} ${hue}`);
+});
+
+test('change words are one vocabulary in one set of inks (components audit D6, 2026-11-07)', async () => {
+  // Governance § 4, "Change words": added, modified, deleted, untracked, renamed; `removed` survives only as a deprecated
+  // alias beside `deleted`. Tree view, Tabs and Edit summary paint them from fg-change-<status>.
+  const { CHANGE_STATUSES, CHANGE_MARK } = await import('../dist/modules/index.js');
+  assert.deepEqual([...CHANGE_STATUSES], ['added', 'modified', 'deleted', 'untracked', 'renamed']);
+  assert.deepEqual(CHANGE_STATUSES.map(status => CHANGE_MARK[status].letter), ['A', 'M', 'D', 'U', 'R']);
+  const body = selector => rules.find(rule => rule.selector === selector)?.body ?? '';
+  for (const status of CHANGE_STATUSES) {
+    assert.match(body(`.area-tree-view__status[data-status="${status}"]`), new RegExp(`var\\(--area-fg-change-${status}\\)`), `Tree view ${status}`);
+    assert.match(body(`.area-tabs__tab[data-status="${status}"] .area-tabs__label`), new RegExp(`var\\(--area-fg-change-${status}\\)`), `Tabs ${status}`);
+  }
+  assert.match(body('.area-edit-summary__added'), /var\(--area-fg-change-added\)/);
+  assert.match(body('.area-edit-summary__deleted, .area-edit-summary__removed'), /var\(--area-fg-change-deleted\)/);
+  // `removed` is never painted alone: each of its selectors names `deleted` beside it.
+  for (const { selector } of rules) {
+    if (!/(__removed|--removed)\b/.test(selector)) continue;
+    assert.match(selector, /(__deleted|--deleted)\b/, `${selector} paints the deprecated spelling without the shared word`);
+  }
+  // Unseen is a dot apart from the status, never a colour of it.
+  for (const part of ['.area-tree-view__unseen', '.area-tabs__unseen']) assert.match(body(part), /background-color:\s*var\(--area-accent-indicator\)/, part);
+});
+
+test('a change since the default or the saved view is one mark: a 6 dot in the modified ink (components audit N4, N5, 2026-11-07)', () => {
+  // Setting row's modified dot and Filter bar's unsaved dot say the same thing (Governance § 4, Change words: modified),
+  // so they are one mark, the size of Tabs' and Tree view's unseen dot, which keeps its own (accent) ink.
+  const body = selector => rules.find(rule => rule.selector === selector)?.body ?? '';
+  for (const part of ['.area-setting-row__modified', '.area-filter-bar__dirty']) {
+    assert.match(body(part), /background-color:\s*var\(--area-fg-change-modified\)/, `${part} is not the modified ink`);
+    assert.match(body(part), /inline-size:\s*var\(--area-space-6\)/, `${part} is not the 6 dot`);
+    assert.match(body(part), /block-size:\s*var\(--area-space-6\)/, `${part} is not the 6 dot`);
+  }
+  assert.match(body('.area-tabs__unseen'), /inline-size:\s*var\(--area-space-6\)/, 'the unseen dot changed size');
+  assert.match(css, /\.area-setting-row__modified,\s*\.area-filter-bar__dirty\s*\{[^}]*background-color:\s*CanvasText/, 'the change dots have no forced-colours repair');
+});
+
+test('a selected row in a list that has lost focus steps back to the hover plate (components audit V15, 2026-11-07)', () => {
+  // DESIGN_SYSTEM.md "Shared state paint": every list with its own focus quiets its selection to the hover plate while
+  // focus is elsewhere, never quieter (the hover plate's text contrast is asserted in tokens, and Hover fill floors at 25).
+  const quiet = [
+    '.area-list-box:not(:focus-within) .area-list-box__item[aria-selected="true"]:not([data-disabled])',
+    '.area-tree-view--navigation:not(:focus-within) [role="treeitem"][aria-selected="true"]:not([aria-current="page"])',
+    '.area-table:not(:focus-within):has(tbody :is(input, button, a[href], [tabindex])) tbody tr:is([data-selected], [aria-selected="true"])',
+  ];
+  for (const selector of quiet) assert.match(ruleFor(selector)?.body ?? '', /var\(--area-bg-component-hover\)/, `${selector} does not step back to the hover plate`);
+  // The place you are (Nav's current page, a tree's current row) is not a selection, and keeps its plate.
+  for (const { selector } of rules) {
+    if (!/:not\(:focus-within\)/.test(selector) || !/aria-current/.test(selector)) continue;
+    assert.match(selector, /:not\(\[aria-current="page"\]\)/, `${selector} quiets the current page`);
+  }
+});
+
+test('inactive looks disabled but keeps a full-strength focus indicator (components audit V2, 2026-11-07)', () => {
+  // An opacity on the focusable element would fade its focus ring with it: inactive fades the parts, never the element.
+  for (const block of ['.area-button', '.area-menu__item', '.area-nav__item']) {
+    const own = ruleFor(`${block}[data-inactive]`);
+    assert.ok(own, `${block} has no inactive rule`);
+    assert.doesNotMatch(own.body, /(^|[;\s])opacity\s*:/, `${block}[data-inactive] fades the element and its ring`);
+    assert.ok(rules.some(({ selector, body }) => selector.startsWith(`${block}[data-inactive] >`) && /opacity:\s*var\(--area-opacity-disabled\)/.test(body)), `${block} doesn't fade its parts`);
+    // No hover or press paint, as disabled.
+    for (const { selector } of rules) {
+      if (!selector.startsWith(block + ':hover') && !selector.startsWith(block + ':active')) continue;
+      if (!/:not\(/.test(selector)) continue;
+      assert.match(selector, /data-inactive/, `${selector} paints an inactive ${block}`);
+    }
+  }
+});
+
+test('every list that filters as you type marks the typed text with one mark (components audit V4, 2026-11-07)', () => {
+  // One helper (highlightMatch) and one part (Menu's __match) for Command palette, Combobox and Custom select's filter, so
+  // a match reads the same in every list; no family draws its own.
+  const dir = new URL('../src/components/', import.meta.url);
+  for (const name of ['CommandPalette.tsx', 'Combobox.tsx', 'CustomSelect.tsx']) {
+    assert.match(readFileSync(new URL(name, dir), 'utf8'), /import \{ highlightMatch \} from "\.\/highlight\.tsx"/, `${name} uses highlightMatch`);
+  }
+  for (const name of readdirSync(dir).filter(file => /\.tsx$/.test(file) && file !== 'highlight.tsx')) {
+    assert.doesNotMatch(readFileSync(new URL(name, dir), 'utf8'), /<mark\b/, `${name} draws its own mark`);
+  }
+  const match = ruleFor('.area-menu__match');
+  assert.ok(match, 'the match part has its rule');
+  assert.match(match.body, /font-weight: var\(--area-weight-strong\)/);
+  assert.match(match.body, /color: inherit/, 'the mark keeps the row\'s ink, so it holds on every plate');
+  assert.match(match.body, /background: none/);
+});
+
+test('every resize edge shares one handle paint: Splitter\'s handle and Panel\'s resizable edge (components audit N6, 2026-11-07)', () => {
+  const both = (state = '', pseudo = '') => ruleFor(`.area-splitter__handle${state}${pseudo}, .area-panel__resize${state}${pseudo}`)?.body ?? '';
+  assert.match(both(), /--_sash-delay:\s*300ms/, 'the 300 ms rest before an edge shows itself');
+  assert.match(both(), /--_sash-line:\s*var\(--area-border-width\)/);
+  assert.match(both(':hover'), /--_sash-line:\s*2px;\s*--_sash-ink:\s*var\(--area-border-hover\)/, 'hover: a 2 line in the hover edge ink');
+  assert.match(both('[data-resizing]'), /--_sash-line:\s*2px;\s*--_sash-ink:\s*var\(--area-accent-indicator\)/, 'dragging: the accent');
+  assert.match(both(':focus-visible', '::after'), /background-color:\s*var\(--area-focus-color\)/, 'keyboard focus: the focus pill');
+  // A step, never an animation, so reduced motion has nothing to stop (MOTION.md, Resize edge).
+  const transition = both('', '::before').match(/transition:\s*([^;]+)/)?.[1] ?? '';
+  assert.ok(transition.split(',').every(part => /^[a-z-]+ 0s$/.test(part.trim())), transition);
+  // No resize edge paints itself apart from the shared rule.
+  for (const { selector, body } of rules) {
+    if (!/\.area-panel__resize|\.area-splitter__handle/.test(selector) || /forced/.test(selector)) continue;
+    if (selector.includes(', ')) continue;
+    assert.doesNotMatch(body, /background(-color)?:\s*var\(--area-(focus-color|accent|border-hover)/, `${selector} paints a resize edge on its own`);
+  }
+});
+
+test('hover-revealed actions hide by opacity, land at once and leave on the fade clock (components audit N14, 2026-11-07)', () => {
+  // Toolbar floating (the hover action bar), Panel's revealActions, Code block's and Nav's: Tab still reaches them, and
+  // focus inside the host shows them (MOTION.md, Hover-revealed actions).
+  const hosts = {
+    '.area-toolbar--floating': [/^\.area-toolbar--floating$/, /^:is\(:hover, :focus-within\) > \.area-toolbar--floating/],
+    '.area-panel__section--reveal': [/^\.area-panel__section--reveal > \.area-panel__heading > \.area-panel__actions > \*$/, /^\.area-panel__section--reveal:is\(:hover, :focus-within/],
+    '.area-code-block--reveal-actions': [/^\.area-code-block--reveal-actions > \.area-code-block__actions$/, /^\.area-code-block--reveal-actions:is\(:hover, :focus-within/],
+    '.area-nav__row--reveal': [/^\.area-nav__row--reveal > \.area-nav__actions$/, /^\.area-nav__row--reveal:is\(:hover, :focus-within/],
+  };
+  for (const [host, [hidden, shown]] of Object.entries(hosts)) {
+    const hide = rules.find(rule => hidden.test(rule.selector) && /opacity:\s*0\b/.test(rule.body));
+    assert.ok(hide, `${host}: no hiding rule`);
+    assert.match(hide.body, /transition:\s*opacity var\(--area-fade-fast\) var\(--area-ease-out\)/, `${host} leaves on another clock`);
+    const show = rules.find(rule => shown.test(rule.selector) && /opacity:\s*1\b/.test(rule.body));
+    assert.ok(show, `${host}: no rule shows it on hover and focus`);
+    assert.match(show.body, /transition-duration:\s*0s/, `${host} does not land at once`);
+    assert.doesNotMatch(hide.body, /display:\s*none|visibility:\s*hidden/, `${host} hides from the keyboard`);
+  }
 });
 
 test('a count and a status badge on one line share one shape and one text side (DESIGN_SYSTEM.md, "Marks on one line")', async () => {

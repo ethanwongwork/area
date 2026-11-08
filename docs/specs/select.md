@@ -281,3 +281,9 @@ Gap: Select sets `gap: var(--_gap)`, its size's tier (6 at md; 4 at Compact 13).
   rule; Input keeps `:focus`, since its caret is its focus.
 
 - 2026-11-05 · owner: "go with your recs" on the shadow depth page (docs/research/shadow-depth-2026-11-04.md) → the Elevation default is 8, so this surface's float role is an 8% key (was 3%).
+
+### 2026-11-07 · onValueChange (components audit O3)
+
+- **What changed:** `onValueChange(value, event)` beside native `onChange`, as Input's.
+- **Why:** forms.tsx:13-24. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

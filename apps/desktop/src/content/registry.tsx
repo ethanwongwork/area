@@ -61,6 +61,13 @@ import * as copyButtons from "./demos/copy-button.tsx";
 import * as fileExplorer from "./demos/file-explorer.tsx";
 import * as listBoxes from "./demos/list-box.tsx";
 import * as appShell from "./demos/app-shell.tsx";
+import * as pageHeaders from "./demos/page-header.tsx";
+import * as selectionBars from "./demos/selection-bar.tsx";
+import * as settingRows from "./demos/setting-row.tsx";
+import * as filterBars from "./demos/filter-bar.tsx";
+import * as mentions from "./demos/mention.tsx";
+import * as splitters from "./demos/splitter.tsx";
+import * as charts from "./demos/chart.tsx";
 import * as otpFields from "./demos/otp-field.tsx";
 import * as timeFields from "./demos/time-field.tsx";
 import * as spinnerValues from "./demos/spinner-value.tsx";
@@ -76,7 +83,7 @@ import * as linkGroups from "./demos/link-groups.tsx";
 import * as videoPlayers from "./demos/video-player.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, agentChat, composerAdditions, composerExpansion, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, copyButtons, fileExplorer, listBoxes, appShell, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes, referenceLists, tablesOfContents, figures, inlineLists, abbreviations, hatnotes, linkGroups, videoPlayers, assetCards, designCards, surfaces, stacks };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, agentChat, composerAdditions, composerExpansion, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, copyButtons, fileExplorer, listBoxes, appShell, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes, referenceLists, tablesOfContents, figures, inlineLists, abbreviations, hatnotes, linkGroups, videoPlayers, assetCards, designCards, surfaces, stacks, pageHeaders, selectionBars, settingRows, filterBars, mentions, splitters, charts };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -138,6 +145,13 @@ export const SOURCES = {
   fileExplorer: "demos/file-explorer.tsx",
   listBoxes: "demos/list-box.tsx",
   appShell: "demos/app-shell.tsx",
+  pageHeaders: "demos/page-header.tsx",
+  selectionBars: "demos/selection-bar.tsx",
+  settingRows: "demos/setting-row.tsx",
+  filterBars: "demos/filter-bar.tsx",
+  mentions: "demos/mention.tsx",
+  splitters: "demos/splitter.tsx",
+  charts: "demos/chart.tsx",
   otpFields: "demos/otp-field.tsx",
   timeFields: "demos/time-field.tsx",
   spinnerValues: "demos/spinner-value.tsx",

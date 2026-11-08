@@ -1,12 +1,17 @@
-// ListBox: a set of options to choose one from, laid out as a list or a grid, with one Tab stop.
+// ListBox: a set of options to choose one from (or, `multiple`, any number of), laid out as a list or a grid, with one
+// Tab stop.
 // The WAI-ARIA listbox (role listbox / option, aria-selected; React Aria's ListBox, @react-aria/listbox@3.14.0
 // useListBox.mjs:69, useOption.mjs:41-43): Tab enters at the selected option (else the first) and leaves the set;
 // arrows move inside it. In a grid, Left / Right step in reading order and Up / Down go to the nearest option by
 // centre in the row above or below (as React Aria's grid layout keeps the column, ListKeyboardDelegate.mjs:53-65, but
 // by geometry, so ragged rows and sections work); Home / End reach the ends; typing jumps to an option's text.
+// `multiple` (components audit V7, 2026-11-07; the APG listbox's multi-select keys): Space toggles the focused option,
+// Shift with an arrow (or Home / End) extends the choice as focus moves, Ctrl or Cmd+A chooses every option (or none, if
+// all are chosen). A click toggles a row in the list; in a grid (files, assets) it chooses that one alone, as a file
+// browser does, Cmd or Ctrl+click toggles it and Shift+click adds the run from the last one clicked.
 // Spec: docs/specs/list-box.md.
 import { createContext, forwardRef, useCallback, useContext, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
-import type { FocusEvent, HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from "react";
+import type { FocusEvent, HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode, SyntheticEvent } from "react";
 import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { TYPEAHEAD_RESET } from "./Overlays.tsx";
@@ -19,8 +24,10 @@ interface ListBoxContext {
   value: string | null | undefined;
   tabValue: string | undefined;
   disabled: boolean;
-  select: (value: string) => void;
-  focused: (value: string) => void;
+  multiple: boolean;
+  isSelected: (value: string) => boolean;
+  select: (value: string, event: SyntheticEvent) => void;
+  focused: (value: string, event: SyntheticEvent) => void;
 }
 
 const Context = createContext<ListBoxContext | null>(null);
@@ -38,29 +45,82 @@ export interface ListBoxProps extends Omit<HTMLAttributes<HTMLDivElement>, "defa
   /** The selected option's value (controlled). */
   value?: string | null;
   defaultValue?: string | null;
-  onValueChange?: (value: string) => void;
-  /** Moving with the keyboard also selects, so a preview beside the set follows the keys. */
+  /** The chosen value and the click, key or focus that chose it (Governance § 4). */
+  onValueChange?: (value: string, event: SyntheticEvent) => void;
+  /** Moving with the keyboard also selects, so a preview beside the set follows the keys (one choice only). */
   selectionFollowsFocus?: boolean;
+  /**
+   * Chooses any number of options (components audit V7): `aria-multiselectable`, and the choice is `values` /
+   * `defaultValues` / `onValuesChange`, as Custom select's `multiple` (`value` and `onValueChange` are ignored).
+   */
+  multiple?: boolean;
+  /** The chosen options' values, in the set's order (controlled; with `multiple`). */
+  values?: readonly string[];
+  defaultValues?: readonly string[];
+  /** The new set, in the set's order, and the click or key that changed it. */
+  onValuesChange?: (values: string[], event: SyntheticEvent) => void;
   disabled?: boolean;
   children?: ReactNode;
 }
 
 export const ListBox = /* @__PURE__ */ forwardRef<HTMLDivElement, ListBoxProps>(function ListBox(
-  { layout = "list", value: valueProp, defaultValue = null, onValueChange, selectionFollowsFocus = false, disabled = false, className, onKeyDown, children, ...rest },
+  { layout = "list", value: valueProp, defaultValue = null, onValueChange, selectionFollowsFocus = false, multiple = false,
+    values: valuesProp, defaultValues, onValuesChange, disabled = false, className, onKeyDown, children, ...rest },
   ref,
 ) {
   const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
   const box = useRef<HTMLDivElement | null>(null);
   const [localValue, setLocalValue] = useState<string | null>(defaultValue);
   const value = valueProp !== undefined ? valueProp : localValue;
+  const [ownValues, setOwnValues] = useState<readonly string[]>(defaultValues ?? []);
+  const chosen = valuesProp ?? ownValues;
+  // The option a Shift+click or Shift+arrow extends from: the last one clicked or toggled.
+  const anchor = useRef<string | undefined>(undefined);
   const [focusValue, setFocusValue] = useState<string>();
   const [first, setFirst] = useState<string>();
   const typed = useRef({ text: "", at: 0 });
 
-  const select = useCallback((next: string) => {
+  // A new set, kept in the options' order (values no longer listed keep their place at the end).
+  const commit = useCallback((next: Set<string>, event: SyntheticEvent) => {
+    const order = box.current ? [...box.current.querySelectorAll<HTMLElement>(OPTION)].filter(option => option.closest('[role="listbox"]') === box.current).map(option => option.dataset.value!) : [];
+    const listed = order.filter(entry => next.has(entry));
+    const ordered = [...listed, ...[...next].filter(entry => !listed.includes(entry))];
+    if (ordered.length === chosen.length && ordered.every((entry, index) => entry === chosen[index])) return;
+    if (valuesProp === undefined) setOwnValues(ordered);
+    onValuesChange?.(ordered, event);
+  }, [chosen, valuesProp, onValuesChange]);
+  // The enabled options' values from one to another, inclusive, in the set's order.
+  const run = (from: string | undefined, to: string) => {
+    const options = box.current ? optionsOf(box.current).map(option => option.dataset.value!) : [to];
+    const end = options.indexOf(to);
+    const start = from === undefined ? -1 : options.indexOf(from);
+    if (start < 0 || end < 0) return [to];
+    return options.slice(Math.min(start, end), Math.max(start, end) + 1);
+  };
+  const toggle = (next: string, event: SyntheticEvent) => {
+    const set = new Set(chosen);
+    if (set.has(next)) set.delete(next); else set.add(next);
+    anchor.current = next;
+    commit(set, event);
+  };
+  const extend = (to: string, event: SyntheticEvent) => commit(new Set([...chosen, ...run(anchor.current ?? to, to)]), event);
+
+  const select = useCallback((next: string, event: SyntheticEvent) => {
+    if (multiple) {
+      const pointer = event as MouseEvent;
+      if (pointer.shiftKey) { extend(next, event); return; }
+      // A grid of files or assets: a plain click chooses that one alone; Cmd or Ctrl+click toggles it.
+      if (layout === "grid" && event.type === "click" && !pointer.metaKey && !pointer.ctrlKey) {
+        anchor.current = next;
+        commit(new Set([next]), event);
+        return;
+      }
+      toggle(next, event);
+      return;
+    }
     if (valueProp === undefined) setLocalValue(next);
-    if (next !== value) onValueChange?.(next);
-  }, [valueProp, value, onValueChange]);
+    if (next !== value) onValueChange?.(next, event);
+  }, [valueProp, value, onValueChange, multiple, layout, commit, chosen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The Tab stop: the option last focused while it is still here, else the selected one, else the first.
   // Before the box is in the DOM (the server's render, the first one) the chosen value is trusted.
@@ -75,21 +135,32 @@ export const ListBox = /* @__PURE__ */ forwardRef<HTMLDivElement, ListBoxProps>(
   });
   const tabValue = present(focusValue) ? focusValue : present(value) ? value ?? undefined : first;
 
+  // The Tab stop with several chosen: the first chosen option still here.
+  const tabStop = multiple && !present(focusValue) ? chosen.find(present) ?? first : tabValue;
   const context = useMemo<ListBoxContext>(() => ({
-    id, layout, value, tabValue, disabled,
+    id, layout, value, tabValue: tabStop, disabled, multiple,
+    isSelected: next => multiple ? chosen.includes(next) : value === next,
     select,
-    focused: next => { setFocusValue(next); if (selectionFollowsFocus) select(next); },
-  }), [id, layout, value, tabValue, disabled, select, selectionFollowsFocus]);
+    focused: (next, event) => { setFocusValue(next); if (selectionFollowsFocus && !multiple) select(next, event); },
+  }), [id, layout, value, tabStop, disabled, multiple, chosen, select, selectionFollowsFocus]);
 
   const move = (event: KeyboardEvent<HTMLDivElement>) => {
     onKeyDown?.(event);
-    if (event.defaultPrevented || disabled || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.defaultPrevented || disabled) return;
     const node = box.current;
     const current = (event.target as HTMLElement).closest<HTMLElement>(OPTION);
     if (!node || !current || current.closest('[role="listbox"]') !== node) return;
     const options = optionsOf(node);
     const index = options.indexOf(current);
     if (index < 0) return;
+    // Ctrl or Cmd+A chooses every option; when all are chosen it chooses none (APG multi-select listbox).
+    if (multiple && (event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === "a") {
+      event.preventDefault();
+      const all = options.map(option => option.dataset.value!);
+      commit(new Set(all.every(entry => chosen.includes(entry)) ? chosen.filter(entry => !all.includes(entry)) : [...chosen, ...all]), event);
+      return;
+    }
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
     const rtl = getComputedStyle(current).direction === "rtl";
     let next: HTMLElement | undefined;
     const vertical = (down: boolean) => {
@@ -117,7 +188,8 @@ export const ListBox = /* @__PURE__ */ forwardRef<HTMLDivElement, ListBoxProps>(
       case "Enter":
       case " ":
         event.preventDefault();
-        if (current.dataset.value !== undefined) select(current.dataset.value);
+        if (current.dataset.value === undefined) return;
+        if (multiple) toggle(current.dataset.value, event); else select(current.dataset.value, event);
         return;
       default: {
         // Typeahead: printable keys build a prefix for a second, as Menu's (TYPEAHEAD_RESET).
@@ -132,6 +204,11 @@ export const ListBox = /* @__PURE__ */ forwardRef<HTMLDivElement, ListBoxProps>(
     }
     event.preventDefault();
     if (!next || next === current) return;
+    // Shift with a move extends the choice from where it started to where focus lands.
+    if (multiple && event.shiftKey && /^(Arrow(Up|Down|Left|Right)|Home|End)$/.test(event.key) && next.dataset.value !== undefined) {
+      if (anchor.current === undefined || !chosen.includes(anchor.current)) anchor.current = current.dataset.value;
+      extend(next.dataset.value, event);
+    }
     next.focus({ preventScroll: true });
     next.scrollIntoView({ block: "nearest", inline: "nearest" });
   };
@@ -143,6 +220,7 @@ export const ListBox = /* @__PURE__ */ forwardRef<HTMLDivElement, ListBoxProps>(
         role="listbox"
         className={cx("area-list-box", `area-list-box--${layout}`, className)}
         aria-disabled={disabled || undefined}
+        aria-multiselectable={multiple || undefined}
         aria-orientation={layout === "list" ? "vertical" : undefined}
         onKeyDown={move}
         {...rest}
@@ -169,15 +247,15 @@ export const ListBoxItem = /* @__PURE__ */ forwardRef<HTMLDivElement, ListBoxIte
   const box = useContext(Context);
   if (!box) throw new Error("ListBoxItem must be inside a ListBox");
   const disabled = disabledProp || box.disabled;
-  const selected = box.value === value;
+  const selected = box.isSelected(value);
   const click = (event: MouseEvent<HTMLDivElement>) => {
     onClick?.(event);
     if (event.defaultPrevented || disabled) return;
-    box.select(value);
+    box.select(value, event);
   };
   const focus = (event: FocusEvent<HTMLDivElement>) => {
     onFocus?.(event);
-    if (event.target === event.currentTarget && !disabled) box.focused(value);
+    if (event.target === event.currentTarget && !disabled) box.focused(value, event);
   };
   const list = box.layout === "list";
   return (

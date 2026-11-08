@@ -267,3 +267,9 @@ Open question: the 12px chevron is still the 16-grid drawing scaled. A native 12
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → the icon-only ghost trigger takes the corner of a box three quarters the Button's height: 6, compact 4, as before (`split-button.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → chevron turns with `rotate` over duration-fast (was transform over base); the open plate lands instantly; the icon-only chevron draws its 12 line (SplitButton.tsx).
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the soft trigger's quiet ink reads `fg-quiet` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
+
+### 2026-11-07 · open state, loading, size in the manifest (components audit O3, O7)
+
+- **What changed:** `open` / `defaultOpen` / `onOpenChange` drive the native popover; `loading` busies the action (Button's spinner) and disables the trigger; `size` (sm / md / lg) is in the manifest and on the root (`area-split-button--md`).
+- **Why:** SplitButton.tsx:11-34 (no open state, loading only through `actionProps`); manifest.ts:77 lacked the size React and this spec have. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

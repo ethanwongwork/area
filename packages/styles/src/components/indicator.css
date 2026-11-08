@@ -23,6 +23,9 @@
   .area-indicator--success { --_bg: var(--area-success-solid); --_fg: var(--area-fg-on-success); }
   .area-indicator--warning { --_bg: var(--area-warning-solid); --_fg: var(--area-fg-on-warning); }
   .area-indicator--danger { --_bg: var(--area-danger-solid); --_fg: var(--area-fg-on-danger); }
+  /* Caution and discovery, Button's and Badge's seven tones (components audit 2026-11-07, O4), on their solids. */
+  .area-indicator--caution { --_bg: var(--area-caution-solid); --_fg: var(--area-fg-on-caution); }
+  .area-indicator--discovery { --_bg: var(--area-discovery-solid); --_fg: var(--area-fg-on-discovery); }
   .area-indicator-anchor { position: relative; display: inline-flex; vertical-align: middle; --_overlap: 0%; --_x: 50%; --_y: -50%; --_shift: 1; --_inset: var(--area-indicator-anchor-offset, var(--area-space-0)); }
   .area-indicator-anchor--rectangular { --_overlap: 0%; }
   .area-indicator-anchor--inset { --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + var(--area-space-4)); }
@@ -59,7 +62,7 @@
     position: absolute; display: inline-flex; pointer-events: none; border-radius: var(--area-radius-full);
     translate: round(nearest, calc(var(--_x) * var(--_shift)), 1px) round(nearest, calc(var(--_y) * var(--_shift)), 1px);
     scale: 1; opacity: 1;
-    transition: scale var(--area-duration-fast) var(--area-ease-out), opacity var(--area-duration-fast) var(--area-ease-out);
+    transition: scale var(--area-duration-fast) var(--area-ease-out), opacity var(--area-fade-fast) var(--area-ease-out);
   }
   .area-indicator-anchor__indicator > :is(.area-indicator, .area-presence) { box-shadow: 0 0 0 var(--area-stroke-width) var(--area-bg-surface); /* owner: cutout matches the 1px icon stroke; required, so `stroke-width` */ }
   .area-indicator-anchor--top-end > .area-indicator-anchor__indicator { inset-block-start: var(--_edge); inset-inline-end: var(--_edge); }

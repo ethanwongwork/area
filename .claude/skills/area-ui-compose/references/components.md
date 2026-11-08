@@ -44,6 +44,7 @@ Every family's usage (when to use something else, do and don't) is its Documenta
 | A grid to browse, choose from and open | `AssetGrid` (grid · waterfall), `FileGrid`, `ListBox` grid layout | One Tab stop, arrows in two dimensions (rule 5) |
 | Columns of items by status | `Board`, `BoardColumn`, `BoardCard` | |
 | Rows of data | `Table` (`flush`, `baseline`), `TableCell`, `TableLink`, `Pagination` | Facts go in tables (rule 17) |
+| Data over time, parts of a whole, a headline figure | `Chart` (`kind` bar, line, area, donut; `stacked`; `size`), `ChartNumber` (figure, change, what it is against) | Title it in its `Card`; series take the series colors by place; the hidden table and `tableToggle` carry the values |
 | Labelled values | `DescriptionList`, `PropertyList`, `Infobox` | |
 | An image or media with a caption | `Figure`, `FileImage`, `VideoPlayer` | |
 | A summary of a subject | `Infobox` | |

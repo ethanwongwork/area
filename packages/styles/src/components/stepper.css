@@ -11,7 +11,7 @@
  * md size (20, compact 16) with its corner, a number in its 12 / 500 type. The fill carries the state, lighter to
  * darker (round 67: "a lighter fill and then a darker fill when selected"; Ant's default steps): a step to come is the
  * faint mark fill with a muted number, a done step the Selection tint with a check, the current step the Selection
- * solid (the one strong mark, as Timeline's current event), an invalid step the danger tint with "!".
+ * solid (the one strong mark, as Timeline's current event), a step in error the danger tint with "!".
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-stepper {
@@ -41,12 +41,12 @@
     display: flex;
     min-inline-size: 0;
   }
-  .area-stepper-step--upcoming {}
+  .area-stepper-step--pending {}
   /* The current step: the Selection solid and its ink (Checkbox, Radio, Switch on), the darkest fill. */
   .area-stepper-step--current { --_disc: var(--area-selection-solid); --_number: var(--area-fg-on-selection); --_title: var(--area-fg-default); }
   /* Done: the Selection tint (Chip's selected plate) with the check in the Selection ink, lighter than current. */
   .area-stepper-step--complete { --_disc: var(--area-selection-surface); --_number: var(--area-fg-selection); --_title: var(--area-fg-default); }
-  .area-stepper-step--invalid { --_disc: var(--area-danger-surface); --_number: var(--area-fg-danger); --_title: var(--area-fg-default); }
+  .area-stepper-step--error { --_disc: var(--area-danger-surface); --_number: var(--area-fg-danger); --_title: var(--area-fg-default); }
 
   .area-stepper-step__body,
   .area-stepper-step__button {

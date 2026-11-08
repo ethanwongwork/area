@@ -12,6 +12,7 @@ import { DEFAULT_LAYER_SELECTION, DEFAULT_TONE_FLOOR, FLOOR_ROLES, type LayerSel
 import { DEFAULT_TONE_TINT, type ToneTint } from "../color/curves.ts";
 import { ACCENT_HUES, DEFAULT_ACCENT_STRENGTH, type SolidPick, generatedSpec, hueScaleId, mixOklab, withStrength } from "../color/generate.ts";
 import { SEMANTIC_ALIASES } from "./aliases.ts";
+import { resolveHueRoles } from "./hues.ts";
 
 export interface ThemeSelection {
   theme: Theme;
@@ -114,6 +115,9 @@ export function resolveWithRoles(selection: ThemeSelection, given: Partial<Recor
   // Status colours Match: every status tone's colour but its label at the Accent strength, as emit/base.ts derives it.
   if (selection.statusColours === "match") for (const [name, alias] of Object.entries(SEMANTIC_ALIASES))
     if (alias.role && STATUS_TONES.includes(alias.role) && !name.startsWith("fg-on-")) resolvedTokens[name] = withStrength(resolvedTokens[name]!, selection.accentStrength ?? DEFAULT_ACCENT_STRENGTH);
+  // Every label hue's roles (semantic/hues.ts), as emit/base.ts writes them, so the gate measures the table itself.
+  const stepHex = (family: string, level: number) => scales[family]!.steps.find(step => step.level === level)!.hex;
+  Object.assign(resolvedTokens, resolveHueRoles(resolvedTokens, stepHex, theme));
   return { ...selection, theme, neutral, accent, scales, roles, tokens: resolvedTokens };
 }
 

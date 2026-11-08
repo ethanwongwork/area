@@ -50,7 +50,7 @@ is, in a gallery card that never enlarges it and never shrinks a part past legib
 | | `phone` | A phone. Stands from the top margin at 60% of the width and runs off the bottom (owner, 2026-11-04) |
 | | `icon` | An icon at whole multiples, 1× to 4×, so its pixels stay whole |
 | | `color` | A colour painting the card, with the swatch ring |
-| `aspect` | `square` (default), `wide` (16:9) | A screen is wide unless set |
+| `aspect` | `square` (default), `wide` (16:9) | A screen is wide unless set. Asset card's `wide` is 2:1 and its 16:9 is `screen`; `screen` can't be an aspect here (it is a layout, one class), so the two meet when Asset card retires (system gaps C8, 2026-11-07) |
 | `focus` (prop) | `center` (default), `top`, `start` | Where a held part is kept when the card crops it |
 | `interactive` | boolean | The card is a control: hover lifts, focus rings, a press drops |
 

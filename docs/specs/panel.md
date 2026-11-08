@@ -121,7 +121,7 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | shell · shadow | `shadow-2`, 0 1px 2px −0.5px `shadow-color` 6% (`panel.css:40`) | Shared rule: the floating lift is for overlays | A panel sits in the page flow; Notion's 20px-blur geometry would read as an overlay |
 | flush | no border, radius or shadow; `bg-page` (`panel.css:49-54`) | Figma's docked inspector: no radius, edge or shadow on any row (`figma--section-title`, `figma--color-row`) | — |
 | bar | `--_row` + 2 × `--_panel-gap` + rule: sm 45, md 57 (`panel.css:43-45`) | Owner 2026-09-28: the bar's button has one field gap above and below | Was `control-sm` + 2 × 4 + rule = 37 at every size |
-| title | 500; md 16/24, sm 14/20 (`--_panel-title-*`, `panel.css:105-111`) | Surface title (audit S2, owner 2026-09-30); type by size (owner 2026-09-28) | Was UI 14/20 at both sizes |
+| title | **500, the size of the rows it names: text-base 13/18 at type 13 (md and sm)** (`--_panel-title-*`) | Text pairs rule (DESIGN_SYSTEM.md): a surface's title is its text's size (owner, 2026-11-07, system gaps L1); the app's region headers and Cursor's panel titles are 13/18 500 | Was md 16/24 then text-lg 15/22 (the reading step) over 13/18 rows; before that UI 14/20 at both sizes |
 | heading | **500, `fg-default`; md 14/20, sm 12/16** (`--_panel-label-*`, `panel.css:162-177`; audit S2) | Second pass: the heading outranks muted labels by ink | Was 12/16, smaller than the 14px labels under it. Figma's title is 11/16 550 at the same ink as its field text; kept (third pass): one label weight, so ink sets headings apart |
 | field labels | **`fg-muted` #646464** (`panel.css:147`) | Second pass | Was the Field default ink |
 | numeric rows | **NumberField soft with letter prefixes** X / Y / W / H (`apps/desktop/src/content/demos/gallery.tsx:680-690`) | Figma's letter-prefixed number fields (`figma--number-field`) | Prefix ink and box differ from Figma; see [number-field.md](number-field.md) |
@@ -131,7 +131,7 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | section heading and bar | **a row: the button with one field gap above and below** (8 / 12), title centred; heading row sm 44, md 56; bar sm 45, md 57 | Figma's header row 40 = 8 + 24 + 8; VS Code's pane header (Cursor) a 22 row with centred actions; owner (2026-09-28: "make sure the padding for the inset buttons is even") | Was sized from the title (cap one inset below the rule), which left the button 6.3 above and ~11 below |
 | end-of-row buttons (bar, heading actions, row action) | **box on the inset, one field gap after the last field** | Owner (2026-09-28: "use the same gaps between the inputs … and the button"); Figma 8 between H and its action | A glyph-on-inset pull (tried the same day) widened the gap after H |
 | md width in the gallery | the md size tile at 280 | Owner (2026-09-28: "show a slightly larger width of the container for medium") | The component default stays 240 (owner, 2026-09-27) |
-| type and gaps by size | **sm**: bar title 14/20, section titles and labels 12/16, fields and their action 8 apart, rows 8 apart, labels 4 over; **md**: 16/24, 14/20, 12, 12, 6. Controls keep their tier's text (14/20). Published as `--_panel-*` for BoxField and PropertyList inside a panel | Owner (2026-09-28: "shouldn't there be differences in text size and gaps between medium and small?"); the control scale's gaps (4 / 8) and gutters (8 / 12) step the same way | Was one type ramp at both sizes (Card's rule), 8 / 6 gaps |
+| type and gaps by size | **sm**: bar title 13/18 (text-base), section titles and labels 12/16, fields and their action 8 apart, rows 8 apart, labels 4 over; **md**: bar title 13/18 (text-base), 14/20, 12, 12, 6. Controls keep their tier's text (14/20). Published as `--_panel-*` for BoxField and PropertyList inside a panel | Owner (2026-09-28: "shouldn't there be differences in text size and gaps between medium and small?"); the control scale's gaps (4 / 8) and gutters (8 / 12) step the same way | Was one type ramp at both sizes (Card's rule), 8 / 6 gaps |
 | section gap / stack gap | md 12 / 6, sm 8 / 4 (`--_panel-row-gap`, `--_panel-label-gap`) | Stack 6 matches Field's label gap (Untitled 6); type and gaps by size (owner 2026-09-28) | Was 8 / 6 at both sizes |
 | section rule placement | **midway: 16 below the last field, the next title's cap 16 below the rule**; a heading after a rule rises by `(row − 1cap) / 2`; a heading-only section's cap sits 16 above the rule below (`panel.css`) | Figma (batch 8, `figma--section-auto-layout`): 16 from the last field to the rule, 16.5 from the rule to the title's cap; heading-only sections 40 tall, text centred | Was 12 below the last field and about 26 from the rule to the cap (the 16 body gap plus half the heading row), so rules read as belonging to the section above |
 | inset tiers | sm 12, md 16 only (`panel.css:351-357`); the xs and lg tiers were removed | Owner (2026-09-27: two tiers) | Figma insets 16 start, 8 end |
@@ -438,4 +438,12 @@ No rule under the bar, between sections or above the footer: the bar's height, a
   (`inline-size`); while it is dragged (`data-resizing`) it follows the pointer at once, and under reduced motion it
   never animates (MOTION.md, "Panel width").
 - **Why:** the desktop app's Sidebar widens to 288 while it holds a section's list (owner, 2026-11-01).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Bar title at its rows' size (system gaps L1)
+
+- **What changed:** the medium Panel's bar title is text-base (13/18 at type 13), 500, the size of the rows under it
+  and of the small Panel's bar. It was text-lg (15/22), the reading step.
+- **Why:** the text pairs rule: a surface's title is the size of its text, and the reading size is for prose (owner
+  picked Build on the system gaps review, 2026-11-07).
 - **Verdict:** awaiting the owner.

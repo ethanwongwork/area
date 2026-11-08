@@ -140,7 +140,14 @@ references keep them 8 away.
 - `data-area-ui` is shorthand, not an axis: `compact` is type 12 with density 28,
   `default` is type 14 with 32. An explicit `type` or `density` on the same element wins.
 - `ui-dense` is the spacing step that each density level keeps against the type size: 1 at
-  Compact 12, 0 at Default 14, negative above. Component insets are written against it.
+  Compact 12, 0 at Default 14, negative above, in halves. Component insets are written against it.
+- `ui-gap-step` is the same curve in whole steps, for gaps on the 2px ladder (`ui-stack`, `ui-cluster`,
+  `gap-sm`, `gap-md`, `gap-xl`), so a gap is always 2, 4, 6, 8 or 10 and never lands between them (owner,
+  2026-11-07, system gaps L3: Card's list items were 7 apart at type 13 Default; now 8). Insets keep the half
+  step (14 at type 13).
+- A value a token already holds is read from the token, never written out again: `gap-row`, `ui-cluster` and
+  `ui-stack` for gaps, `inset-surface-sm` / `-md` for surface insets, `radius-control-*` for a corner on a
+  control height (`cohesion.test.mjs`, "named derivations").
 - Control side padding has no token: `inset.css` derives it from the height.
 - `data-area-pills` is a set, not an axis (`axes/pills.ts`). It is a space-separated list of
   the shapes that draw a pill: `button`, `field`, `segmented`, `chip`, `badge`, `count`,
@@ -428,6 +435,14 @@ Contrast, Selection) keeps working over it in CSS.
 - `opacity-disabled`: 0.5, a whole disabled control. Fields use their own disabled paint.
 - `scrim`: the modal backdrop, 13% black in light and `bg-overlay` in dark. It is derived,
   so a themed subtree re-derives it.
+- `hue-<hue>-<role>` (components audit D5, 2026-11-07): every label hue's roles, `text`, `icon`, `border`, `bg`,
+  `bg-hover`, `bg-active`, `accent`, `on-accent`, `bg-translucent`, `border-translucent`, for `neutral`, `gray`,
+  `brown`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink` and `red` (the table and its sources: DESIGN_SYSTEM.md,
+  "Every hue has the same roles"). Derived in `emit/base.ts` from `semantic/hues.ts`, so they follow Tone tint, Tone
+  contrast, Status colours and the Layers grounds wherever those are set; no setting of their own. With them
+  `fg-pink-mark`, `fg-brown-mark` and `fg-gray-mark` join the status marks.
+- `fg-change-added`, `-modified`, `-deleted`, `-untracked`, `-renamed` (components audit D6): the change words' inks,
+  aliases of the success, warning, danger and info inks (DESIGN_SYSTEM.md, "Change words have their own inks").
 
 ### Parked tokens
 
@@ -439,7 +454,7 @@ seams or come from `palette.json`. A parked token is not a promise of use.
 - Type: `display-sm/lg-*`, `title-sm/md-*`, `text-xs-tracking`.
 - Tiers no component uses: `control-xl`, `gap-xs` / `-xl`, `icon-xl`, `radius-control-xl`,
   `radius-nested`.
-- Motion: `ease-in` and the deprecated `ease-spring`.
+- Motion: the deprecated `ease-spring` (`ease-in` is used since the lift: a card's shadow fades out on `base` ease-in, MOTION.md "Lift").
 - Seams: `badge-bg`, `badge-fg`, `badge-tracking-wide`.
 - The `z-*` layer scale (0–80), for apps. Components stack locally, and floating surfaces
   use the top layer.

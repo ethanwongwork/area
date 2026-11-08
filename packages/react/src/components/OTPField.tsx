@@ -3,6 +3,7 @@ import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import type { ChangeEvent, ClipboardEvent, InputHTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { otpFieldVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
+import { resolveValidation, validationAttributes, type ValidationStatus } from "./validation.ts";
 
 type Manifest = VariantProps<typeof MANIFESTS.otpField>;
 
@@ -12,7 +13,8 @@ export interface OTPFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement
   /** The code (controlled). */
   value?: string;
   defaultValue?: string;
-  onValueChange?: (value: string) => void;
+  /** The cleaned code and the change or paste event that made it (Governance § 4). */
+  onValueChange?: (value: string, event: ChangeEvent<HTMLInputElement> | ClipboardEvent<HTMLInputElement>) => void;
   /** Once every slot is filled, with the code. */
   onComplete?: (value: string) => void;
   /** Slots per group, start to end ([3, 3] draws "123 – 456"); the groups add up to `length`. */
@@ -24,6 +26,10 @@ export interface OTPFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement
   variant?: Manifest["variant"];
   size?: Manifest["size"];
   invalid?: boolean;
+  /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
+  validationStatus?: ValidationStatus;
+  /** Internal Field-to-control validation bridge; plain HTML uses the matching data attribute. */
+  "data-validation-status"?: ValidationStatus;
   /** Class and style of the row of slots, the outer element. */
   className?: string;
   style?: InputHTMLAttributes<HTMLInputElement>["style"];
@@ -42,7 +48,7 @@ const PATTERN = { digits: "[0-9]*", alphanumeric: "[0-9A-Za-z]*" };
 export const OTPField = /* @__PURE__ */ forwardRef<HTMLInputElement, OTPFieldProps>(function OTPField(
   { length = 6, value, defaultValue = "", onValueChange, onComplete, groups, characters = "digits", mask, variant, size, invalid,
     disabled, readOnly, className, style, onFocus, onBlur, onSelect, onKeyUp, onKeyDown, onPointerUp, onPaste, autoComplete = "one-time-code",
-    inputMode, "aria-invalid": ariaInvalid, ...rest },
+    inputMode, validationStatus, "aria-invalid": ariaInvalid, "data-validation-status": fieldStatus, ...rest },
   ref,
 ) {
   const clean = useCallback((text: string) => text.replace(FILTER[characters], "").slice(0, length), [characters, length]);
@@ -102,7 +108,7 @@ export const OTPField = /* @__PURE__ */ forwardRef<HTMLInputElement, OTPFieldPro
       return;
     }
     if (value === undefined) setOwn(next);
-    onValueChange?.(next);
+    onValueChange?.(next, event);
     if (next.length === length && code.length < length) onComplete?.(next);
   };
 
@@ -118,7 +124,7 @@ export const OTPField = /* @__PURE__ */ forwardRef<HTMLInputElement, OTPFieldPro
     const caret = Math.min(start + pasted.length, next.length);
     if (next !== code) {
       if (value === undefined) setOwn(next);
-      onValueChange?.(next);
+      onValueChange?.(next, event);
       if (next.length === length && code.length < length) onComplete?.(next);
     }
     requestAnimationFrame(() => { input.setSelectionRange(caret, caret); readSelection(); });
@@ -159,12 +165,12 @@ export const OTPField = /* @__PURE__ */ forwardRef<HTMLInputElement, OTPFieldPro
     slots.push(<span key={`group-${group}`} className="area-otp-field__group" aria-hidden="true">{cells}</span>);
   });
 
-  const isInvalid = invalid || ariaInvalid === true || ariaInvalid === "true";
+  const { invalid: isInvalid, status } = resolveValidation({ validationStatus, invalid, ariaInvalid, fieldStatus });
   return (
     <div
       className={otpFieldVariants({ variant, size }, className)}
       style={style}
-      data-invalid={isInvalid ? "" : undefined}
+      {...validationAttributes(status)}
       data-disabled={disabled ? "" : undefined}
       data-read-only={readOnly ? "" : undefined}
       translate="no"

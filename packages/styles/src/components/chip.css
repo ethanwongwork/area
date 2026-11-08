@@ -78,12 +78,12 @@
     }
   }
   /* Pressing the remove button is the remove button's press, not the chip's. */
-  .area-chip:active:not([data-disabled], :has(> .area-chip__remove:active)) {
+  .area-chip:active:not([data-disabled], :has(> .area-chip__dismiss:active)) {
     background-color: var(--_bg-active);
     border-color: var(--_border-hover, var(--area-edge-control-hover));
   }
   /* A pointer press gives as a small Button's does (Feedback); a key press does not. */
-  .area-chip:active:not([data-disabled], :focus-visible, :has(> .area-chip__remove:active, > .area-chip__action:focus-visible)) { scale: var(--area-feedback-scale-sm); }
+  .area-chip:active:not([data-disabled], :focus-visible, :has(> .area-chip__dismiss:active, > .area-chip__action:focus-visible)) { scale: var(--area-feedback-scale-sm); }
 
   /* Focus is the ring alone, as Button, Segmented, Checkbox and Switch (audit C-13). */
   .area-chip:focus-visible {
@@ -229,7 +229,7 @@
 
   /* A removable chip is a composition: its primary action and removal action stay peers. */
   .area-chip__action,
-  .area-chip__remove {
+  .area-chip__dismiss {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -250,7 +250,7 @@
 
   .area-chip__action:not(button) { cursor: default; }
 
-  .area-chip__remove {
+  .area-chip__dismiss {
     flex: 0 0 var(--_remove);
     inline-size: var(--_remove);
     block-size: var(--_remove);
@@ -260,23 +260,23 @@
     /* The plate lands at once and fades out over fast, as every hover plate (was untimed). */
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
-  .area-chip__remove:active { transition-duration: var(--area-press-in); }
+  .area-chip__dismiss:active { transition-duration: var(--area-press-in); }
 
-  .area-chip[data-invalid] .area-chip__remove { color: var(--area-fg-danger); }
+  .area-chip[data-invalid] .area-chip__dismiss { color: var(--area-fg-danger); }
   /* Foreground stays fixed on hover; a plate in the chip's own ink shows the target, as the
      Alert dismiss does on its tinted ground. */
-  .area-chip__remove[data-hover] { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); }
-  @media (hover: hover) { .area-chip__remove:hover { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); transition-duration: var(--area-hover-in); } }
+  .area-chip__dismiss[data-hover] { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); }
+  @media (hover: hover) { .area-chip__dismiss:hover { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); transition-duration: var(--area-hover-in); } }
   /* spec: pressed 20% of the ink, a step past the 12% hover (Notion's 5% → 10% press doubles it). */
-  .area-chip__remove:active { background: var(--_remove-active, color-mix(in srgb, currentColor 20%, transparent)); }
-  .area-chip__remove:focus-visible,
+  .area-chip__dismiss:active { background: var(--_remove-active, color-mix(in srgb, currentColor 20%, transparent)); }
+  .area-chip__dismiss:focus-visible,
   .area-chip__action:focus-visible {
     /* Nested in the chip: the control's ring (Focus ring's offset, 0 at Hug), as Tag's remove and a field's actions
        (owner, 2026-10-12: consistency pass O1). */
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
-  .area-chip__remove > svg { inline-size: var(--_dot); block-size: var(--_dot); }
+  .area-chip__dismiss > svg { inline-size: var(--_dot); block-size: var(--_dot); }
 
   /* A chip carrying nothing but a swatch is square: there is no label to set its width. */
   .area-chip--swatch-only {

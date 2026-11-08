@@ -1,0 +1,37 @@
+/* ---------------------------------------------------------------------------
+ * Filter bar
+ *
+ * The filters a view has on, as a row (docs/specs/filter-bar.md; components audit N5, 2026-11-07): each filter a
+ * Chip that reads "Name: value" and opens its editor (a Popover or Menu the caller gives), an Add filter button that
+ * opens the caller's menu of properties, and Reset once the filters differ from the view's saved ones. A filter
+ * changed since it was saved carries a dot. Notion's database filter bar (chips 24 tall, 6 apart, a ghost "+ Filter",
+ * Reset at the end, a 9 orange unsaved dot) and Primer's filter pattern; no filtering happens here.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    /* spec: the chip set's gap, 8 (compact 6; the database's 6): Chip group's, so a row of filters is a row of chips. */
+    gap: var(--area-ui-cluster);
+    min-inline-size: 0;
+  }
+  /* A filter is a small Chip (the database's 24): an applied one (it has a value) takes Chip's selected paint, an
+     empty one ("Status", no value yet) the plain chip. Its chevron says it opens. */
+  .area-filter-bar__item { max-inline-size: 100%; }
+  /* The chevron ends the chip: its end inset is the icon box's, as an icon at a Button's end (inset.css). Chip's own
+     rule covers a leading icon only, so the filter states it (ChipLink's trailing icon has the same gap; spec). */
+  .area-filter-bar__item:has(> .area-chip__trailing-icon:last-child) { --_box-end: var(--_box-icon); }
+  /* Unsaved: the change mark for modified, a 6 dot (Setting row's modified dot; Tabs' and Tree view's unseen dot's
+     size), between the words and the chevron. The database's 9 orange dot at the chip's corner. */
+  .area-filter-bar__dirty {
+    flex: none;
+    inline-size: var(--area-space-6);
+    block-size: var(--area-space-6);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-fg-change-modified);
+  }
+  .area-filter-bar__add { flex: none; }
+  /* Reset at the row's end, where the database puts it, once the filters differ from the saved view. */
+  .area-filter-bar__reset { flex: none; margin-inline-start: auto; }
+}

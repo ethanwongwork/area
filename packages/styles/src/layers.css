@@ -22,7 +22,7 @@
   :where(
     .area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows, .area-description-list--framed, .area-titlebar--floating,
     .area-file-upload-item, .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue,
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge
@@ -176,7 +176,7 @@
   :where(
     .area-card, .area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows, .area-description-list--framed, .area-titlebar--floating,
     .area-file-upload-item, .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue,
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
@@ -219,7 +219,7 @@
    */
   :where(.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
     .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
@@ -253,7 +253,7 @@
   }
   :where(.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
     .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"],
@@ -291,6 +291,9 @@
     --area-select-edge-hover: var(--area-input-edge-hover);
     --area-selection-edge: color-mix(in srgb, var(--area-edge-control-hover), var(--area-edge-accent) calc(var(--area-selection-accent) * 100%));
     --area-token-edge: light-dark(var(--area-border-subtle), var(--area-border-faint));
+    /* The neutral and gray hues' outline is the control edge (semantic/hues.ts; components audit D5). */
+    --area-hue-neutral-border: var(--area-border);
+    --area-hue-gray-border: var(--area-border);
   }
 
   /*
@@ -305,7 +308,7 @@
    */
   @scope (.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows,
     .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
     .area-surface--surface, .area-asset-card--raised,

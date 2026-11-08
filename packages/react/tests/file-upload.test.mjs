@@ -24,7 +24,8 @@ test("a row shows name, size and status; uploading adds a named progress bar and
   const html = render(h(FileUploadList, null, h(FileUploadItem, { name: "Brand guidelines.pdf", size: 2_400_000, progress: 40, onRemove() {} })));
   assert.match(html, /^<ul class="area-file-upload-list"><li class="area-file-upload-item area-file-upload-item--uploading">/);
   assert.match(html, /<p class="area-file-upload-item__name">Brand guidelines.pdf<\/p>/);
-  assert.match(html, /<span>2.4 MB<\/span><span class="area-file-upload-item__separator" aria-hidden="true"><\/span><span class="area-file-upload-item__status" role="status">Uploading…<\/span>/);
+  assert.match(html, /<span>2.4 MB<\/span><span class="area-file-upload-item__separator" aria-hidden="true"><\/span><span class="area-file-upload-item__status">Uploading…<\/span>/);
+  assert.doesNotMatch(html, /role="status"/, 'a change is said through the shared announcer, with the file name (components audit D1)');
   assert.match(html, /role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" aria-label="Uploading Brand guidelines.pdf"/);
   assert.match(html, /<span class="area-sr-only">Cancel upload of Brand guidelines.pdf<\/span>/);
 });
@@ -35,7 +36,7 @@ test("complete shows the check and Remove; error shows the message, Retry and Re
   assert.match(done, /data-area-glyph="check"[^]*Complete<\/span>/);
   assert.match(done, />Remove Hero.png</);
   const failed = render(h(FileUploadItem, { name: "Report.pdf", status: "error", error: "Over 10 MB", onRetry() {}, onRemove() {} }));
-  assert.match(failed, /role="status">Over 10 MB<\/span>/);
+  assert.match(failed, /area-file-upload-item__status">Over 10 MB<\/span>/);
   assert.match(failed, />Retry Report.pdf</);
   assert.doesNotMatch(failed, /progressbar/);
 });

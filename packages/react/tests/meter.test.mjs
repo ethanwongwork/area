@@ -6,7 +6,7 @@ import { Meter, METER_SEGMENT_LIMIT } from "../dist/modules/index.js";
 
 test("a meter named by its label and described by its line, with the percentage as its value", () => {
   const html = render(h(Meter, { label: "Storage", description: "1.2 of 5 GB used", value: 24 }));
-  assert.match(html, /^<div role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="24" aria-valuetext="24%" aria-labelledby="([^"]+)-label" aria-describedby="\1-description" class="area-meter area-meter--neutral">/);
+  assert.match(html, /^<div role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="24" aria-valuetext="24%" aria-labelledby="([^"]+)-label" aria-describedby="\1-description" class="area-meter area-meter--neutral area-meter--md">/);
   assert.match(html, /<div class="area-meter__header"><div id="[^"]+-label" class="area-meter__label">Storage<\/div><span class="area-meter__value" aria-hidden="true">24%<\/span><\/div>/);
   assert.match(html, /<div class="area-progress area-progress--md area-meter__track" aria-hidden="true"><div class="area-progress__bar" style="--_progress-value:24"><\/div><\/div><p id="[^"]+-description" class="area-meter__description">1.2 of 5 GB used<\/p><\/div>$/);
 });
@@ -15,17 +15,17 @@ test("the value is clamped and scaled to min and max; a ReactNode value text is 
   const html = render(h(Meter, { value: 40, max: 30, tone: "danger", valueText: h("b", null, "full"), "aria-label": "Seats" }));
   assert.match(html, /aria-valuenow="30"/);
   assert.doesNotMatch(html, /aria-valuetext/);
-  assert.match(html, /class="area-meter area-meter--danger"/);
+  assert.match(html, /class="area-meter area-meter--danger area-meter--md"/);
   assert.match(html, /--_progress-value:100/);
   assert.doesNotMatch(render(h(Meter, { value: 5, valueText: null, "aria-label": "x" })), /area-meter__header/);
   // 2026-11-02: a data measure takes the first data color.
-  assert.match(render(h(Meter, { value: 5, tone: "data", "aria-label": "x" })), /class="area-meter area-meter--data"/);
+  assert.match(render(h(Meter, { value: 5, tone: "data", "aria-label": "x" })), /class="area-meter area-meter--data area-meter--md"/);
 });
 
 // Segments (owner 2026-10-30): a group named by the label, parts in fixed slots, empty parts kept in place but not drawn.
 test("Meter segments: a labelled group, a legend of the parts above 0, colours by place", () => {
   const html = render(h(Meter, { label: "Changes", segments: [{ label: "Page", value: 3 }, { label: "Accent", value: 0 }, { label: "Size", value: 1 }] }));
-  assert.match(html, /^<div role="group" aria-labelledby="[^"]+" class="area-meter area-meter--neutral area-meter--segmented"/);
+  assert.match(html, /^<div role="group" aria-labelledby="[^"]+" class="area-meter area-meter--neutral area-meter--md area-meter--segmented"/);
   assert.doesNotMatch(html, /role="meter"/);
   assert.equal((html.match(/class="area-meter__segment"/g) ?? []).length, 2);
   assert.match(html, /area-meter__segment" data-slot="3"/);

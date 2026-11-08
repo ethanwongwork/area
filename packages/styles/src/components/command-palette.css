@@ -17,42 +17,9 @@
     overflow: visible;
   }
   .area-command-palette__modal::backdrop { background: var(--area-scrim); /* Dialog's scrim */ }
-  /*
-   * Enter and exit are Dialog's (docs/MOTION.md, "Dialog, command palette, confirm dialog"; motion
-   * 2026-10-07; it used to snap open and shut): the surface fades and scales from 0.97 about its
-   * centre, the scrim fades with it. Opening runs on the moderate clock, closing one step faster
-   * on base, both ease-out; the scrim leaves on the surface's clock so it is never cut off when
-   * the dialog leaves the top layer. Durations are motion tokens: motion 0 and reduced
-   * motion make it instant, and reduced motion also drops the scale.
-   */
-  .area-command-palette__modal {
-    --_palette-from: 0.97; /* spec: Dialog's and the anchored overlays' scale */
-    opacity: 1;
-    scale: 1;
-    transition:
-      opacity var(--area-duration-moderate) var(--area-ease-out),
-      scale var(--area-duration-moderate) var(--area-ease-out),
-      overlay var(--area-duration-moderate) allow-discrete,
-      display var(--area-duration-moderate) allow-discrete;
-  }
-  .area-command-palette__modal:not([open]) {
-    opacity: 0;
-    scale: var(--_palette-from);
-    transition-duration: var(--area-duration-base);
-  }
-  .area-command-palette__modal::backdrop {
-    opacity: 1;
-    transition:
-      opacity var(--area-duration-moderate) var(--area-ease-out),
-      overlay var(--area-duration-moderate) allow-discrete,
-      display var(--area-duration-moderate) allow-discrete;
-  }
-  .area-command-palette__modal:not([open])::backdrop { opacity: 0; transition-duration: var(--area-duration-base); }
-  @starting-style {
-    .area-command-palette__modal[open] { opacity: 0; scale: var(--_palette-from); }
-    .area-command-palette__modal[open]::backdrop { opacity: 0; }
-  }
-  @media (prefers-reduced-motion: reduce) { .area-command-palette__modal { --_palette-from: 1; } }
+  /* Enter and exit are Dialog's, from its rule (surface.css, `:is(.area-dialog__modal, .area-command-palette__modal)`;
+     docs/MOTION.md, "Dialog, command palette, confirm dialog"): the fade and the overlay scale from the centre, moderate
+     in and base out. */
 
   .area-command-palette {
     /* spec (list pass, 2026-09-26): Menu's list model — 4 inset, 32 rows 2 apart, radius 8 — so the
@@ -141,6 +108,72 @@
    * other with the list's 2 gap, as a Menu's do. */
   .area-command-palette__description { color: var(--area-fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
   .area-command-palette__text { flex: 0 1 auto; }
+  /* A result's path (components audit V4, 2026-11-07; Notion's search: the page's path after its name, 12px tertiary):
+     after the name in the secondary ink, at the row's size so it shares the row's baseline. It gives its room up before
+     the name does (a shrink weight far past the name's), so a long path shortens to an ellipsis first. */
+  .area-command-palette__path { flex: 0 1000 auto; min-inline-size: 0; color: var(--area-fg-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* A row that opens a step ends in a chevron pointing into it (Menu's submenu chevron, at the row's end). */
+  .area-command-palette__more { display: inline-flex; flex-shrink: 0; margin-inline-start: auto; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
+  .area-command-palette__more > svg { inline-size: 100%; block-size: 100%; }
+
+  /* A step (V4; Cursor's quick input title bar with Back): Back takes the search icon's place, its arrow on the icon
+     column and its plate reaching 4 past it, and the step's trail sits before the typed text in the field's own type,
+     muted, so the two read as one line. */
+  .area-command-palette__back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    inline-size: calc(var(--area-icon-md) + var(--area-space-8));
+    block-size: calc(var(--area-icon-md) + var(--area-space-8));
+    margin-inline: calc(-1 * var(--area-space-4));
+    padding: 0;
+    border: 0;
+    border-radius: var(--area-radius-control-xs);
+    background: transparent;
+    color: var(--area-fg-muted);
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-command-palette__back > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+  @media (hover: hover) { .area-command-palette__back:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  .area-command-palette__back:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
+  .area-command-palette__back:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+  .area-command-palette__step {
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    max-inline-size: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-lg-size);
+    line-height: var(--area-text-lg-leading);
+  }
+
+  /* The preview pane (V4; Notion's search: 1006 wide with its preview on, the results column 600, the pane 406): beside
+     the results while some row has a preview, holding the active row's, the two columns 3 : 2 as Notion's. Under 640
+     the results would fall under 384 and the pane hides, so the results take the width. An inline palette never
+     overflows its host. */
+  .area-command-palette[data-preview] {
+    inline-size: min(calc(100vw - var(--area-space-32)), 1006px); /* spec: Notion 1006 */
+    container-type: inline-size;
+  }
+  .area-command-palette--inline[data-preview] { max-inline-size: 100%; }
+  .area-command-palette__body { display: flex; flex: 1; min-block-size: 0; }
+  .area-command-palette__body > .area-command-palette__list { flex: 3 1 0; /* spec: Notion 600 of 1006 */ min-inline-size: 0; }
+  .area-command-palette__preview {
+    flex: 2 1 0; /* spec: Notion 406 of 1006 */
+    min-inline-size: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: var(--_column);
+    /* A seam between two panes, as the search's rule over its results. */
+    border-inline-start: var(--area-border-width) solid var(--area-edge-dividers);
+  }
+  @container (inline-size < 640px) {
+    .area-command-palette__preview { display: none; }
+  }
   /* One empty state for every list: the Combobox row, 32 tall at the text inset (audit D-24 B;
      was a centred 96 block). */
   .area-command-palette__empty {

@@ -26,3 +26,8 @@ test("with alpha, the colour and opacity group is named", () => {
   assert.match(renderToString(h(ColorField, { alpha: true, "aria-label": "Fill" })), /role="group"[^>]*aria-label="Color and opacity"|aria-label="Color and opacity"[^>]*role="group"/);
   assert.match(renderToString(h(ColorField, { alpha: true, groupLabel: "Fill", "aria-label": "Fill hex" })), /aria-label="Fill"/);
 });
+
+test("Color field's variant is in the manifest and on its shell (components audit O7)", () => {
+  assert.deepEqual(MANIFESTS.colorField.variants.variant, ["outline", "soft"]);
+  assert.match(renderToString(h(ColorField, { "aria-label": "Color", variant: "soft" })), /area-input--soft[^"]*area-color-field area-color-field--soft/);
+});

@@ -23,6 +23,8 @@ the turn.
 |---|---|---|
 | author | user, assistant (default; optional in React, manifest default `author: "assistant"`: the bare block already is the assistant layout) | ChatGPT |
 | state | streaming (dot after the last word; actions wait) | ChatGPT |
+| status | sending, error (the person's message on its way, or not sent); unset once sent | Queue's sending row, Attachment's and Turn notice's error (components audit O6, internal.md:148) |
+| stack | MessageGroup (the person's consecutive messages) and `split` (one message in several bubbles): 2 apart, meeting corners tightened | the Claude app's bubble stack (chat-apps.md; components audit V9) |
 | actions | assistant: copy, rate, read aloud, regenerate, more; user: copy, edit (hover) | ChatGPT |
 
 ## Sources
@@ -57,6 +59,10 @@ actions     six 32 × 32 buttons, radius 8, no gap, icons 20 (16 for regenerate 
 | actions | ghost neutral icon Buttons (md, 32), no gap, the ghost Button's quiet ink (button.css:374-377; audit S6b, was `fg-muted`, message.css:50); the plates line up with the turn (assistant: first plate on the text edge; person: last plate on the bubble's edge); 12 below | ChatGPT (row, sizes); owner (alignment) | 16 icons (Area) instead of 20. ChatGPT pulls the row out 6 so its icons sit on the edge; the owner read the overhanging hover plates as misaligned (2026-09-27) |
 | user actions | shown on hover and focus (always on touch), at the bubble's end; same row geometry | ChatGPT hides them until hover; measured 2026-09-28: three 32 plates, no gap, 4 below the bubble, the last ending 4 inside its edge | the plates end on the bubble's edge (owner, 2026-09-27: plates line up with the turn) |
 | streaming | 8 dot 4 after the last word, pulsing (still under reduced motion); actions hidden until done; `aria-busy` | ChatGPT's dot | size not measured |
+| sending | `aria-busy`; after the long wait (1000 ms, Spinner's `delay="long"`, `data-waiting` until then) the bubble dims to 60% and "Sending…" shows under it in the notice line's type (text-base, muted); the line keeps its place while it waits | Queue's sending row (opacity 0.6, Codex opacity-60); WRITING.md "Loading shows by how long it takes" | a send is usually quick, so nothing shows for a second |
+| error | under the bubble: the dismiss-circle mark (icon-sm, danger ink), "Not sent" in the default ink, then Retry (a ghost neutral sm Button with the reset glyph) when `onRetry` is passed; `statusText` replaces the words; said once through the shared announcer ("Message: Not sent"), politely | Turn notice's error line (mark, default ink words, its action after); Queue's "Not sent" and dismiss-circle; the reference's failed strip and Retry (chat-apps.md, Attachment) | the bubble keeps its fill: the line says it, so a stack's corners and widths stay |
+| status line | 4 under the bubble (the person's actions' gap), a control-sm row (24) so it is one height with or without Retry, at the column's end | Message's own user gap | — |
+| stack | 2 apart; where two of the person's bubbles meet, their end corners (top-end of the lower, bottom-end of the upper) are a quarter of the bubble's corner: 4 at 16, 3 at compact 12; a bubble with a status line under it keeps them | gap: the reference's `--cds-message-bubble-stack-gap: 2px`; the meeting corner is set per look there with no default (chat-apps.md), so Area derives it from its own corner and the Radius setting | the person's bubbles line up on the column's end, so only the end corners meet |
 
 ## Visual pass
 
@@ -72,8 +78,10 @@ the edge). No change.
 
 ## Behavior and accessibility
 
-Each turn is an `article` named "<name> said": "You said" / "Assistant said" by default, or `authorName` (Message.tsx:20-23); actions are a named group of
-labelled buttons.
+Each turn is an `article` named "<name> said": "You said" / "Assistant said" by default, or `authorName`; actions are a named group of
+labelled buttons. A sending message is `aria-busy`; a message not sent is said through the shared announcer
+(`useAnnouncement`, DESIGN_SYSTEM.md "Announcements") as "Message: Not sent", and its Retry is a Button in the turn's
+Tab order. MessageGroup is a plain `div` (its turns keep their own names); a split message is one article.
 
 ## Verification
 
@@ -135,3 +143,15 @@ Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs
   flows" (a host's text rules leave components alone); test: `cohesion.test.mjs`.
 - Streaming: when a reply ends in a text block (a paragraph, a heading, a quote or a list), the dot is drawn on that
   block's last line (its last item's), and the cursor element after it stands down; it sat on a line of its own.
+
+## 2026-11-07: sending, not sent, stacks (components audit O6, V9)
+
+- **What changed:** a person's message can be `status="sending"` (after a second the bubble dims and "Sending…" shows
+  under it) or `status="error"` ("Not sent" with the danger mark and Retry from `onRetry`, said to screen readers).
+  `MessageGroup` stacks the person's consecutive messages 2 apart and `split` puts one message's parts in bubbles of
+  their own on the same stack; where two bubbles meet, their end corners tighten to a quarter of the corner (4 at 16).
+- **Why:** Message had only streaming, while Queue, Attachment and Turn notice already say a send or an upload failed
+  (internal.md:148); the Claude app stacks a person's bubbles 2 apart with tighter meeting corners (chat-apps.md). The
+  owner took every recommendation of the components audit (2026-11-07).
+- **Not measured:** the meeting corner (the reference sets it per look with no default), derived from Area's corner.
+- **Verdict:** awaiting the owner.
