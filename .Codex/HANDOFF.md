@@ -2,6 +2,20 @@
 
 ## Current state (2026-11-08)
 
+- **Chat workflow, worktree `chat-workflow-study-c0f913` (built, uncommitted, 2026-11-08).** Owner took all recs on
+  the study (https://claude.ai/artifact/GszAD4HPUQUjJoG9GwR3Km, picks in db `verdicts`; P12 and P14 Not now). Built:
+  the engine's own tools `show_options` and `log_changes` (in-process MCP, zod), AskUserQuestion on and answered from a
+  question card, pictures sent as pictures, Ask / Suggest / Change (`electron/agent.cjs`); options drawn as named
+  pictures that put their settings on the theme with Undo, questions kept as the person's reply, changes in design words
+  with Show code, approvals in plain words, work folded to one line (Settings › Chat › Work), More folds, Edit / Restore
+  to here / Try again / Try another way, Ask about this, @ menu of design things, + menu, starters, long paste chip,
+  Send to chat as one card (`src/chat/`, `design-inspector.tsx`). Components: Edit summary `EditSummaryChange` + `code`
+  fold; Composer `expandable` / `expanded`, cap 8 lines. Tests: `tests/agent.test.ts`, `tests/chat-words.test.ts`.
+  Since: branch brought up to main (PR #212's change words: `deleted`, Step `complete` / `error`; onExpandedChange
+  passes its event), options show one framed picture under 440 wide (side by side from 440), multi-select questions
+  (Chosen marks, Continue), past chats kept (last 20) and offered in @. Not done: a live run (no sign-in), saved
+  references in @, before/after pictures on design rows; chat turns in Versions dropped (Versions restores page
+  snapshots, not the code a chat changed). Multi-select is typechecked, not seen (no recorded run asks one).
 - **Worktree `component-design-review-92c949`: title balance + system gaps build (committed with the components audit build; main merged in 2026-11-08).**
   - Title balance (owner "4 is right"): a component's title is its text's size, its copy a step (4) off; an item's
     name joins its line (DESIGN_SYSTEM "Text pairs"; `docs/research/title-balance-2026-11-06`).

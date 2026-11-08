@@ -11,6 +11,18 @@ import { CommandIcon, DocumentIcon, FilePdfIcon, FolderIcon, LinkIcon, PeopleIco
 const frame = { inlineSize: 280 };
 const image = "images/chip-pixels.png";
 
+// ---- Composer expanded (the chat workflow study, 2026-11-08) ----
+/** A long draft: past eight lines Expand shows at the field's top end; expanded fills the container (here 320 tall). */
+export const GalleryComposerExpanded = () => {
+  const [expanded, setExpanded] = useState(true);
+  return (
+    <div style={{ ...frame, blockSize: 320, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+      <Composer layout="stacked" placeholder="Placeholder" expandable expanded={expanded} onExpandedChange={setExpanded}
+        defaultValue={Array.from({ length: 12 }, (_, index) => `Body text ${index + 1}`).join("\n")} />
+    </div>
+  );
+};
+
 // ---- Composer context row ----
 export const GalleryComposerContext = () => (
   <div style={frame}>

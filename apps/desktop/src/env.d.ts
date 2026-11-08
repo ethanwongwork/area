@@ -27,8 +27,10 @@ interface AreaDesktop {
    */
   agent?: {
     status(): Promise<{ available: boolean; reason?: string; cwd?: string }>;
-    send(chat: string, request: { text: string; context?: string; model?: string }): void;
-    answer(chat: string, toolUseId: string, reply: { allow: boolean; always?: boolean; instead?: string }): void;
+    /** `images`: pictures as base64, sent to the agent as pictures; `mode`: how it helps (ask, suggest, change). */
+    send(chat: string, request: { text: string; context?: string; model?: string; mode?: string; images?: Array<{ name: string; type: string; data: string }> }): void;
+    /** An approval's answer, or a question's (`answers`, question text to the answer; none skips it). */
+    answer(chat: string, toolUseId: string, reply: { allow?: boolean; always?: boolean; instead?: string; answers?: Record<string, string> }): void;
     stop(chat: string): void;
     close(chat: string): void;
     /** Undo edits by tool call id: "ok", or why not, per id. */

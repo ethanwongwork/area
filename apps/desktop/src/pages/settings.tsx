@@ -19,7 +19,7 @@
  * same control in all three places. Mode, Density and Corner are pictures (Radio's preview cards, each choice drawn in its
  * own scope by src/choice-visuals.tsx); the rest are plain controls. Only settings that work are shown (product UI rule 16).
  *
- *   Chat        the Inspector Chat's default model, whether its replies are live, and how to sign in
+ *   Chat        the Inspector Chat's default model, how its work shows, whether its replies are live, and how to sign in
  *   Keyboard    every shortcut the app answers
  *
  * Light and dark are Appearance's Mode alone (owner, 2026-11-07: "move dark mode to the settings control"; none of the
@@ -34,7 +34,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
 import { Badge, Button, Input, Kbd, Nav, NavGroup, NavItem, NumberField, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading, Switch } from "@area/react";
 import { ArrowLeftIcon, ChatIcon, ContrastIcon, DesktopIcon, KeyboardIcon, MoonIcon, PaletteIcon, SettingsIcon, SunIcon } from "@area/icons";
-import { CHAT_MODELS, useDefaultModel } from "../chat/chat.tsx";
+import { CHAT_MODELS, useDefaultModel, useWorkView } from "../chat/chat.tsx";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, SETTING_GROUPS } from "@area/tokens/config";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
 import { activeTheme, asLive, liveOf, versionName, AREA_ID } from "../systems.ts";
@@ -291,6 +291,7 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
   const studio = useStudio();
   const { appLook, setAppLook, systems, chrome, navigate, workingSystem, place } = studio;
   const [defaultModel, setDefaultModel] = useDefaultModel();
+  const [workView, setWorkView] = useWorkView();
   const live = useLiveChat();
   const [copied, setCopied] = useState(false);
   useEffect(() => { if (!copied) return; const timer = setTimeout(() => setCopied(false), 1500); return () => clearTimeout(timer); }, [copied]);
@@ -362,6 +363,9 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
       control: <Select size="sm" variant="soft" fullWidth aria-label="Model" value={defaultModel} onChange={event => setDefaultModel(event.currentTarget.value)}>
         {CHAT_MODELS.map(entry => <option key={entry.value} value={entry.value}>{entry.label}</option>)}
       </Select> },
+    { section: "chat", group: "chat", label: "Work", description: "While Claude works: one line in plain words that opens to its steps, or every step as it happens.",
+      control: <Segmented size="sm" fullWidth aria-label="Work" value={workView} onValueChange={value => setWorkView(value === "steps" ? "steps" : "summary")}
+        items={[{ value: "summary", label: "Summary" }, { value: "steps", label: "Every step" }]} /> },
     { section: "chat", group: "chat", label: "Replies", description: live
       ? "Claude works in this repository and asks before each edit or command."
       : "Recorded runs: Claude answers live in the Area app.",

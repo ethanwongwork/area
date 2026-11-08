@@ -138,7 +138,7 @@ test("agent: started from inside a Claude Code session, the agent leaves that se
 });
 
 test("session: what the engine sends draws the turn; a failure is the turn's error; a question after a stop is dropped", () => {
-  let state: ChatState = { turns: [], queue: [], running: false, edits: {}, undoFailed: {} };
+  let state: ChatState = { turns: [], queue: [], running: false, edits: {}, undoFailed: {}, answers: {} };
   state = reduce(state, { type: "send", text: "Hi", at: 0 });
   state = reduce(state, { type: "message", message: { type: "stream_event", event: { type: "content_block_delta", delta: { type: "text_delta", text: "Hel" } } }, at: 1 });
   state = reduce(state, { type: "message", message: { type: "result", subtype: "error_during_execution", duration_ms: 2000, error: "Claude isn't signed in" }, at: 2 });
@@ -151,4 +151,113 @@ test("session: what the engine sends draws the turn; a failure is the turn's err
   state = reduce(state, { type: "undoFailed", reasons: { t: "the file has changed since this edit." } });
   assert.equal(state.undoFailed.t, "the file has changed since this edit.");
   assert.equal(reduce(state, { type: "edit", ids: ["t"], state: "kept" }).undoFailed.t, undefined, "a new choice clears the failure");
+});
+
+/** A stand-in SDK whose one step is a call to the tool named `tool`; it records what the engine passed. */
+function askingSdk(calls: Options[], tool: string, input: Record<string, unknown>, extras: Record<string, unknown> = {}) {
+  return async () => ({
+    ...extras,
+    query: ({ prompt, options }: { prompt: unknown; options: Options }) => {
+      calls.push({ prompt, ...options });
+      async function* run() {
+        yield { type: "system", subtype: "init", session_id: "s", parent_tool_use_id: null };
+        yield { type: "assistant", message: { content: [{ type: "tool_use", id: "toolu_q", name: tool, input }] }, parent_tool_use_id: null, session_id: "s" };
+        const decision = await options.canUseTool(tool, input, { toolUseID: "toolu_q", signal: new AbortController().signal });
+        calls.push({ decision });
+        yield { type: "result", subtype: "success", is_error: false, duration_ms: 10, session_id: "s" };
+      }
+      return Object.assign(run(), { interrupt: async () => {}, close: () => {} });
+    },
+  });
+}
+
+test("agent: the question tool is on; its question goes to the page, its answers come back as the tool's input; Skip denies it", async () => {
+  const calls: Options[] = [];
+  const sent: Array<{ chat: string; message: ChatEvent }> = [];
+  const questions = [{ question: "What should feel calmer?", header: "Calmer", options: [{ label: "The edge (Recommended)", description: "A lighter line" }, { label: "The room", description: "More padding" }], multiSelect: false }];
+  const engine = createEngine({ toPage: (chat: string, message: ChatEvent) => sent.push({ chat, message }), loadSdk: askingSdk(calls, "AskUserQuestion", { questions }), loadZod: async () => ({}), root: tmpdir(), env: {} });
+  const running = engine.send("chat-q", { text: "Make the cards calmer" });
+  for (let i = 0; i < 50 && !sent.some(entry => entry.message.type === "question"); i++) await new Promise(r => setTimeout(r, 5));
+  const asked = sent.find(entry => entry.message.type === "question")!.message as Extract<ChatEvent, { type: "question" }>;
+  assert.equal(asked.tool_use_id, "toolu_q");
+  assert.equal(asked.questions[0]!.question, "What should feel calmer?");
+  assert.ok(!(calls[0]!.disallowedTools as string[]).includes("AskUserQuestion"), "the question tool is no longer turned off");
+  engine.answer("chat-q", "toolu_q", { answers: { "What should feel calmer?": "The edge" } });
+  await running;
+  const decision = calls.find(call => call.decision)!.decision;
+  assert.equal(decision.behavior, "allow");
+  assert.deepEqual(decision.updatedInput.answers, { "What should feel calmer?": "The edge" });
+  assert.deepEqual(decision.updatedInput.questions, questions, "the questions go back with their answers");
+
+  calls.length = 0;
+  sent.length = 0;
+  const skipped = engine.send("chat-q", { text: "Again" });
+  for (let i = 0; i < 50 && !sent.some(entry => entry.message.type === "question"); i++) await new Promise(r => setTimeout(r, 5));
+  engine.answer("chat-q", "toolu_q", {});
+  await skipped;
+  assert.equal(calls.find(call => call.decision)!.decision.behavior, "deny", "a skipped question goes on without an answer");
+});
+
+test("agent: Ask and Suggest take the writing tools away; Change keeps them; each says so to the agent", async () => {
+  const calls: Options[] = [];
+  const engine = createEngine({ toPage: () => {}, loadSdk: askingSdk(calls, "mcp__area__log_changes", {}), loadZod: async () => ({}), root: tmpdir(), env: {} });
+  await engine.send("chat-m", { text: "How do corners scale?", mode: "ask" });
+  await engine.send("chat-m", { text: "Options for the cards", mode: "suggest" });
+  await engine.send("chat-m", { text: "Make it so" });
+  const runs = calls.filter(call => call.cwd);
+  assert.deepEqual(runs[0]!.disallowedTools, ["Edit", "Write", "MultiEdit", "NotebookEdit"]);
+  assert.match(runs[0]!.systemPrompt.append, /chose Ask/);
+  assert.deepEqual(runs[1]!.disallowedTools, ["Edit", "Write", "MultiEdit", "NotebookEdit"]);
+  assert.match(runs[1]!.systemPrompt.append, /chose Suggest/);
+  assert.deepEqual(runs[2]!.disallowedTools, [], "Change, the default, may edit (asking first)");
+  assert.match(runs[2]!.systemPrompt.append, /design's words/, "the agent speaks in the design's words");
+});
+
+test("agent: pictures reach the agent as pictures, the words after them", async () => {
+  const calls: Options[] = [];
+  const engine = createEngine({ toPage: () => {}, loadSdk: askingSdk(calls, "mcp__area__log_changes", {}), loadZod: async () => ({}), root: tmpdir(), env: {} });
+  await engine.send("chat-i", { text: "Match this", images: [{ name: "ref.png", type: "image/png", data: "iVBORw0KGgo=" }, { name: "bad.svg", type: "image/svg+xml", data: "PHN2Zz4=" }] });
+  const prompt = calls[0]!.prompt as AsyncIterable<{ type: string; message: { role: string; content: Array<Record<string, any>> } }>;
+  assert.equal(typeof prompt, "object", "a prompt with pictures is a stream of messages, not a string");
+  const messages = [];
+  for await (const message of prompt) messages.push(message);
+  assert.equal(messages.length, 1);
+  const content = messages[0]!.message.content;
+  assert.deepEqual(content.map(block => block.type), ["image", "text"], "only a picture type the API reads is sent");
+  assert.equal(content[0]!.source.media_type, "image/png");
+  assert.equal(content[1]!.text, "Match this");
+});
+
+test("agent: Area's own tools: show_options and log_changes, allowed without asking", async () => {
+  const calls: Options[] = [];
+  const made: Array<{ name: string }> = [];
+  const extras = {
+    tool: (name: string, description: string, schema: unknown, handler: unknown) => ({ name, description, schema, handler }),
+    createSdkMcpServer: (options: { name: string; tools: Array<{ name: string }> }) => { made.push(...options.tools); return { type: "sdk", name: options.name, instance: {} }; },
+  };
+  const zod = await import("zod");
+  const engine = createEngine({ toPage: () => {}, loadSdk: askingSdk(calls, "mcp__area__show_options", { question: "Which?", options: [] }, extras), loadZod: async () => zod, root: tmpdir(), env: {} });
+  await engine.send("chat-t", { text: "Show me options" });
+  assert.deepEqual(made.map(entry => entry.name), ["show_options", "log_changes"]);
+  assert.equal(calls[0]!.mcpServers.area.name, "area");
+  assert.deepEqual(calls[0]!.allowedTools, ["mcp__area__show_options", "mcp__area__log_changes"]);
+  assert.equal(calls.find(call => call.decision)!.decision.behavior, "allow", "they only describe what to draw, so they never ask");
+  assert.match(calls[0]!.systemPrompt.append, /mcp__area__show_options/);
+});
+
+test("session: a question waits in the composer's place, its answer is kept; Restore marks the message; a send keeps what rode with it", () => {
+  let state: ChatState = { turns: [], queue: [], running: false, edits: {}, undoFailed: {}, answers: {} };
+  state = reduce(state, { type: "send", text: "Use these", at: 0, extra: { prompt: "Make these 2 design changes…", attachments: [{ kind: "changes", title: "2 design changes", items: [] }], mode: "suggest" } });
+  const sent = state.turns[0]!;
+  assert.ok(sent.author === "user" && sent.prompt === "Make these 2 design changes…" && sent.attachments?.length === 1 && sent.mode === "suggest");
+  const question = { type: "question", tool_use_id: "q1", questions: [{ question: "Which?", options: [{ label: "A" }, { label: "B" }] }] } as const;
+  state = reduce(state, { type: "message", message: question, at: 1 });
+  assert.equal(state.question?.tool_use_id, "q1");
+  state = reduce(state, { type: "answeredQuestion", id: "q1", answers: { "Which?": "B" } });
+  assert.equal(state.question, undefined);
+  assert.deepEqual(state.answers.q1, { "Which?": "B" });
+  state = reduce(state, { type: "stop", at: 2 });
+  assert.equal(reduce(state, { type: "message", message: { ...question, tool_use_id: "q2" }, at: 3 }).question, undefined, "a question after a stop is dropped");
+  state = reduce(state, { type: "restored", turn: sent.id });
+  assert.ok(state.turns[0]!.author === "user" && state.turns[0]!.restored);
 });

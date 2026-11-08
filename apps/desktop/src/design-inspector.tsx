@@ -11,8 +11,9 @@
  *
  * Each value is read from the element as drawn and shown as the token it matches, or as it is with "off scale". A choice
  * is a change: drawn on the stage at once and logged in the project (projects.ts `logChange`). The log sits at the
- * view's foot (the owner's pick), each change undoable, and Send to chat puts them all in Chat as one message, for the
- * agent to write into the screen's source; they stay drawn, marked sent, until cleared.
+ * view's foot (the owner's pick), each change undoable, and Send to chat puts them all in Chat's composer as one card (the
+ * chat workflow study, P9), for the agent to write into the screen's source; once sent they stay drawn, marked sent, until
+ * cleared.
  */
 import { useEffect, useMemo, useState, type RefObject } from "react";
 import { Button, Count, CustomSelect, Input, PanelSection } from "@area/react";
@@ -149,15 +150,24 @@ export interface ChangeLogProps {
 /** The Design view's foot: the changes not yet sent, newest first, and Send to chat. */
 export function ChangeLog({ project, page, layer, onOpen, screenFile }: ChangeLogProps) {
   const { updateProject, setInspectorView } = useStudio();
-  const { session } = useChat();
+  const { setChanges, setDraft, composer } = useChat();
   const pending = useMemo(() => pendingChanges(project), [project]);
   const sent = project.changes.length - pending.length;
   if (!project.changes.length) return null;
   const layerName = (change: DesignChange) => project.pages.find(entry => entry.id === change.page)?.layers.find(entry => entry.id === change.layer)?.name;
+  // Send to chat puts the changes in the composer as one card (the chat workflow study, P9), with room for a sentence;
+  // they are marked sent once the message goes. The agent reads the full list (changesMessage); the bubble shows the card.
   const send = () => {
-    session.send(changesMessage(project, pending, screenFile), `${project.name} · ${pending.length} design ${pending.length === 1 ? "change" : "changes"}`);
-    updateProject(project.id, current => markSent(current));
+    const page = pending.length && pending.every(change => change.page === pending[0]!.page) ? project.pages.find(entry => entry.id === pending[0]!.page)?.name : undefined;
+    setChanges({
+      title: `${pending.length === 1 ? "1 design change" : `${pending.length} design changes`}${page ? ` on ${page}` : ""}`,
+      items: pending.map(change => ({ thing: thing(change), change: said(change) })),
+      prompt: changesMessage(project, pending, screenFile),
+      onSent: () => updateProject(project.id, current => markSent(current)),
+    });
+    setDraft(current => current.trim() ? current : "Make these changes.");
     setInspectorView("chat");
+    requestAnimationFrame(() => composer.current?.focus());
   };
   return (
     <section className="studio-design__log" aria-label="Changes">
