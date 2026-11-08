@@ -84,8 +84,8 @@ Ref: design systems (`design-systems.md`: shadcn dashboard, Polaris Layout).
 | Region | Components | Values |
 |---|---|---|
 | Header | page title, a date range (`DateRangePicker`), filters, one primary action | |
-| Stats | a row of `Card`s (value, label, change) | 1 → 2 → 4 columns by container width; gap 16–24 |
-| Body | a primary column and a secondary column of `Card`s (charts, `Table`s, `Timeline`) | primary : secondary 2 : 1, secondary 240–320 |
+| Stats | a row of `Card`s, each a `ChartNumber` (label, value, change) | 1 → 2 → 4 columns by container width; gap 16–24 |
+| Body | a primary column and a secondary column of `Card`s (`Chart`s, `Table`s, `Timeline`) | primary : secondary 2 : 1, secondary 240–320 |
 | Empty | `EmptyState` per card | |
 
 ## Gallery or library

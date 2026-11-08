@@ -117,6 +117,8 @@ Area keeps `radius-small`, shared with every small control ([cohesion audit](../
 | focus-visible | 2px `focus-color` outline, 2px offset (choice.css:200-204) | not captured |
 | checked / indeterminate | fill and edge `selection-solid` at once; mark `scale` 0.6 → 1 + `opacity`, `fast` ease-out (Motion, 2026-10-07) | `area--selected`, `area--partial` |
 | invalid | edge and label `fg-danger-vivid`; checked becomes one danger fill | `area--invalid`, `area--invalid-selected` |
+| read-only | `readOnly` on the Checkbox or its group: the click is cancelled (a native checkbox ignores `readonly`), `aria-readonly` on the box, `data-read-only` on the row; no press or hover edge, default cursor; a chosen card keeps its rest edge (2026-11-07, Radio group's paint) | Switch, Radio group |
+| group value | `CheckboxGroup` `value` / `defaultValue` / `onValueChange(string[], event)` and `name`: each Checkbox is read by its `value`; its own `checked` wins; a form reset returns an uncontrolled group to `defaultValue` (2026-11-07) | Radio group, Toggle group |
 | disabled | whole label 50% | `area--disabled*` (opacity 0.5) |
 
 ## Behavior and accessibility
@@ -336,3 +338,18 @@ Group rhythm: a group's description and validation sit `ui-stack` (6, compact 4)
   For now the gallery's picture tiles show an image placeholder (owner: "just use an image placeholder for now to
   better asses the visuals"): Card media's flat fill with an image glyph, two steps from the soft card's fill (neutral
   150 in light, 800 in dark), filling the slot as a photo would. Radio and Checkbox share every rule.
+
+## Review note, 2026-11-06 (balance pass; owner: "Keep it")
+
+- **What changed:** a description joins its label as the next line: the 12/16 line sits 7.7 under the 13/18 label's
+  baseline, its own line gap (7.4). It sat 2 below (9.7), 2.3 off its own line. A group's legend and its description
+  join the same way.
+- **Why:** the owner's balance pass ("no spacing logic between the title and the text … make sure all of this is
+  intentional"): a gap near a line's own spacing but not on it reads as no decision. File tile's meta already joined at
+  7.7. DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
+
+### 2026-11-07 · Read-only; Checkbox group's value and name (components audit O2, O5)
+
+- **What changed:** Checkbox and CheckboxGroup take `readOnly`: the click is cancelled, `aria-readonly` on the box, `data-read-only` on the row, Radio group's read-only paint. CheckboxGroup takes `value` / `defaultValue` / `onValueChange(string[], event)` and `name`; each Checkbox is read by its `value`, its own `checked` still wins, and a form reset returns an uncontrolled group to its first values.
+- **Why:** A native checkbox ignores `readonly` (forms.tsx:118-139); Radio group had a value model and a name (forms.tsx:249-254, 284-292), Checkbox group neither. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

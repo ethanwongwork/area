@@ -161,7 +161,7 @@ export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromE
   ...[0, 3, 24, 125].map(count => [`GalleryBadgeCount${count}`, () => <Indicator count={count} />]),
   ["GalleryBadgeActivity", () => <Indicator tone="info" />],
   ["GalleryBadgeProcessing", () => <Indicator tone="info" processing />],
-  ["GalleryBadgeBorder", () => <Indicator tone="success" withBorder />],
+  ["GalleryBadgeBorder", () => <Indicator tone="success" bordered />],
   ["GalleryBadgeCountNeutral", () => <Indicator count={8} tone="neutral" />],
   ...(["sm", "md", "lg"] as const).map(size => [`GalleryBadgeSize${galleryName(size)}`, () => <Badge size={size}>{galleryName(size)}</Badge>]),
   ...galleryVariants.flatMap(variant => galleryTones.map(tone => [`GalleryBadge${galleryName(variant)}${galleryName(tone)}`, galleryBadge(variant, tone)])),

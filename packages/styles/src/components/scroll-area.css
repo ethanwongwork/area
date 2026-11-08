@@ -56,7 +56,7 @@
     opacity: 0;
     pointer-events: none;
     /* Motion (docs/MOTION.md, "Hover plate"): appears at once, fades out on fast. */
-    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-out);
   }
   .area-scroll-area__scrollbar[data-orientation="vertical"] {
     inset-block: 0;

@@ -29,6 +29,11 @@
       "import": "./dist/brand.js",
       "default": "./dist/brand.js"
     },
+    "./color": {
+      "types": "./dist/colours.d.ts",
+      "import": "./dist/colours.js",
+      "default": "./dist/colours.js"
+    },
     "./colours": {
       "types": "./dist/colours.d.ts",
       "import": "./dist/colours.js",

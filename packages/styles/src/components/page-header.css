@@ -1,0 +1,107 @@
+/* ---------------------------------------------------------------------------
+ * Page header
+ *
+ * A page's own title block (docs/specs/page-header.md; components audit N1, 2026-11-07): a way back to the parent
+ * (a Breadcrumb or a back Link) over the title, the title's actions at its end, a description under it, and the
+ * page's tabs or views under all of it. Primer's PageHeader (context area, title area, actions, description,
+ * navigation) and a chat app's PageHeader (title, subtitle, tabs, view toggle, actions) do the same job.
+ *
+ * The title is a page's heading, so it takes a title step (DESIGN_SYSTEM.md, Text pairs, "a heading over its text"):
+ * sm title-xs, md title-sm (the default, the app's Settings title), lg title-md. Its description is the UI line in the
+ * muted ink, one step (4) off it. Slots, never show* flags: a part that isn't given isn't drawn.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-page-header {
+    /* The md tier, the manifest default: a page's own title (area-type-usage: title-sm, "a page or a panel's own
+       title, once"; the app's Settings title). */
+    --_title-size: var(--area-title-sm-size);
+    --_title-leading: var(--area-title-sm-leading);
+    --_title-tracking: var(--area-title-sm-tracking);
+    display: grid;
+    /* The text column and the actions beside the title; the parent, the description and the navigation take the
+       rows above and under it. Rows with nothing in them collapse, so each part brings its own space (margins). */
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "parent parent"
+      "title actions"
+      "description ."
+      "navigation navigation";
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    text-align: start;
+  }
+  /* A sub-page or a panel's page: the region heading step (Section heading's 16/22). */
+  .area-page-header--sm {
+    --_title-size: var(--area-title-xs-size);
+    --_title-leading: var(--area-title-xs-leading);
+    --_title-tracking: var(--area-title-xs-tracking);
+  }
+  .area-page-header--md {
+    --_title-size: var(--area-title-sm-size);
+    --_title-leading: var(--area-title-sm-leading);
+    --_title-tracking: var(--area-title-sm-tracking);
+  }
+  /* A top-level page (Home, a library): the largest words step; title-lg is a figure's, never words. */
+  .area-page-header--lg {
+    --_title-size: var(--area-title-md-size);
+    --_title-leading: var(--area-title-md-leading);
+    --_title-tracking: var(--area-title-md-tracking);
+  }
+
+  /* The way back: a Breadcrumb, or a back Link. One step (8) over the title: a label line above the heading it
+     belongs to, closer than the block gap (12) and further than the title's own copy (4). Derived, not measured
+     (Primer's context area sets no gap of its own). */
+  .area-page-header__parent {
+    grid-area: parent;
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+    margin-block-end: var(--area-space-8);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+
+  .area-page-header__title {
+    grid-area: title;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--area-fg-default);
+    font-size: var(--_title-size);
+    line-height: var(--_title-leading);
+    letter-spacing: var(--_title-tracking);
+    font-weight: var(--area-weight-strong);
+    text-wrap: balance;
+  }
+
+  /* The title's actions, centred on the title's line: the box is the line's height, so taller Buttons overhang it
+     equally above and below rather than pushing the description down (first-line alignment, inset.css). The
+     description sits under the title only, so nothing runs under them. */
+  .area-page-header__actions {
+    grid-area: actions;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--area-space-8);
+    block-size: var(--_title-leading);
+    margin-inline-start: var(--area-space-16);
+  }
+
+  /* A heading over its text stands one step (4) off it (DESIGN_SYSTEM.md, Text pairs; the owner's "4 is right"): the
+     UI line in the muted ink, at a readable measure. */
+  .area-page-header__description {
+    grid-area: description;
+    max-inline-size: 64ch; /* spec: the app's readable measure, Section heading's lede */
+    margin: var(--area-space-4) 0 0;
+    color: var(--area-fg-muted);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    text-wrap: pretty;
+  }
+
+  /* The page's Tabs or views: a heading and the block it heads, 16 (the feed's heading gap; 12 in compact). */
+  .area-page-header__navigation {
+    grid-area: navigation;
+    min-inline-size: 0;
+    margin-block-start: var(--area-inset-surface-md);
+  }
+}

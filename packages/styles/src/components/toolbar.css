@@ -38,6 +38,30 @@
   .area-toolbar--sm { --_height: var(--area-control-sm); --_toolbar-icon: var(--area-icon-sm); --_toolbar-text: var(--area-control-sm-text); --_toolbar-leading: var(--area-control-sm-leading); --_toolbar-radius: var(--area-radius-control-sm); }
   .area-toolbar--md { --_height: var(--area-control-md); --_toolbar-icon: var(--area-icon-md); --_toolbar-text: var(--area-control-md-text); --_toolbar-leading: var(--area-control-md-leading); --_toolbar-radius: var(--area-radius-control-md); }
   .area-toolbar--lg { --_height: var(--area-control-lg); --_toolbar-icon: var(--area-icon-lg); --_toolbar-text: var(--area-control-lg-text); --_toolbar-leading: var(--area-control-lg-leading); --_toolbar-radius: var(--area-radius-control-lg); }
+  /*
+   * floating: the hover action bar (components audit N14, 2026-11-07; docs/specs/toolbar.md). One to four actions over
+   * the top-end corner of the row or block that holds it (its parent), shown while that parent is hovered or holds focus,
+   * so the row never reflows (a notes app's row "Open" bar and code-block bar; an editor's inline row actions; a chat
+   * app's code-block bar). It lands at once and leaves on fast, as every revealed action does (Nav, Panel section, Code
+   * block `revealActions`); a touch screen always shows it. Hidden, it is still in the tab order: Tab reaches it, and
+   * focus inside it is focus inside the parent, which shows it. The parent is made the bar's containing block.
+   * With `surface` it is the small bar: 2 in (the notes app's bars pad 2), the surface's floating edge and lift.
+   */
+  :where(*):has(> .area-toolbar--floating) { position: relative; }
+  .area-toolbar--floating {
+    position: absolute;
+    /* Derived, not measured (the notes app's bars sit in the block's corner; their offset wasn't read): 4 from the top
+       and the end, the ladder's smallest step (a 40 row holds the small bar, 30 at type 13, with 5 to spare). */
+    inset-block-start: var(--area-space-4);
+    inset-inline-end: var(--area-space-4);
+    z-index: 1;
+  }
+  .area-toolbar--floating.area-toolbar--surface { --_toolbar-inset: var(--area-space-2); /* spec: the notes app's bars, pad 2 */ }
+  @media (hover: hover) {
+    .area-toolbar--floating { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+    :not(:hover, :focus-within) > .area-toolbar--floating:not(:has([aria-expanded="true"])) { pointer-events: none; }
+    :is(:hover, :focus-within) > .area-toolbar--floating, .area-toolbar--floating:has([aria-expanded="true"]) { opacity: 1; transition-duration: 0s; }
+  }
   .area-toolbar--horizontal { flex-direction: row; }
   .area-toolbar--vertical { flex-direction: column; inline-size: fit-content; block-size: auto; }
   .area-toolbar--full-width { inline-size: 100%; }

@@ -178,3 +178,12 @@ export const linkGroupsVariants = /* @__PURE__ */ createVariants(manifests.linkG
 export const videoPlayerVariants = /* @__PURE__ */ createVariants(manifests.videoPlayer);
 export const surfaceVariants = /* @__PURE__ */ createVariants(manifests.surface);
 export const stackVariants = /* @__PURE__ */ createVariants(manifests.stack);
+// Components audit N1, N2, N4, N5 (2026-11-07).
+export const pageHeaderVariants = /* @__PURE__ */ createVariants(manifests.pageHeader);
+export const selectionBarVariants = /* @__PURE__ */ createVariants(manifests.selectionBar);
+export const mentionVariants = /* @__PURE__ */ createVariants(manifests.mention);
+export const splitterVariants = /* @__PURE__ */ createVariants(manifests.splitter);
+export const chartVariants = /* @__PURE__ */ createVariants(manifests.chart);
+export const settingRowVariants = /* @__PURE__ */ createVariants(manifests.settingRow);
+export const settingsGroupVariants = /* @__PURE__ */ createVariants(manifests.settingsGroup);
+export const filterBarVariants = /* @__PURE__ */ createVariants(manifests.filterBar);

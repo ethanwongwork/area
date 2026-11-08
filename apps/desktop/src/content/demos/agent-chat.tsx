@@ -12,7 +12,7 @@ const frame = { inlineSize: 280 };
 // ---- Step ----
 export const GalleryStep = () => <div style={frame}><Step verb="Label" detail="Value" /></div>;
 export const GalleryStepRunning = () => <div style={frame}><Step verb="Label" detail="Value" status="running" /></div>;
-export const GalleryStepFailed = () => <div style={frame}><Step verb="Label" detail="Value" status="failed" /></div>;
+export const GalleryStepFailed = () => <div style={frame}><Step verb="Label" detail="Value" status="error" /></div>;
 export const GalleryStepOpen = () => (
   <div style={frame}><Step verb="Label" detail="Value" defaultOpen><CodeBlock size="sm" lineNumbers={false} code="Body text" /></Step></div>
 );
@@ -45,7 +45,7 @@ export const GalleryReasoningRunning = () => <div style={frame}><Reasoning runni
 const hunks: DiffHunk[] = [
   { lines: [
     { kind: "context", text: "Body text", old: 1, new: 1 },
-    { kind: "removed", text: "Value", old: 2 },
+    { kind: "deleted", text: "Value", old: 2 },
     { kind: "added", text: "Value", new: 2 },
     { kind: "context", text: "Body text", old: 3, new: 3 },
   ] },
@@ -61,12 +61,12 @@ function Summary({ open, status = "pending" }: { open?: boolean; status?: EditFi
   const pending = states.some(value => value === "pending");
   return (
     <div style={frame}>
-      <EditSummary title="Title" added={3} removed={1}
+      <EditSummary title="Title" added={3} deleted={1}
         onKeepAll={pending ? () => setStates(current => current.map(value => value === "pending" ? "kept" : value)) : undefined}
         onUndoAll={pending ? () => setStates(current => current.map(value => value === "pending" ? "undone" : value)) : undefined}>
-        <EditSummaryFile name="Item one" added={2} removed={1} status={states[0]} onKeep={() => set(0, "kept")} onUndo={() => set(0, "undone")}
+        <EditSummaryFile name="Item one" added={2} deleted={1} status={states[0]} onKeep={() => set(0, "kept")} onUndo={() => set(0, "undone")}
           diff={<Diff aria-label="Changes to Item one" hunks={hunks} />} defaultOpen={open} />
-        <EditSummaryFile name="Item two" added={1} removed={0} status={states[1]} onKeep={() => set(1, "kept")} onUndo={() => set(1, "undone")}
+        <EditSummaryFile name="Item two" added={1} deleted={0} status={states[1]} onKeep={() => set(1, "kept")} onUndo={() => set(1, "undone")}
           diff={<Diff aria-label="Changes to Item two" hunks={[hunks[1]!]} />} />
       </EditSummary>
     </div>
@@ -139,7 +139,7 @@ export const GalleryApprovalInstead = () => (
 
 // ---- Plan ----
 const planItems = [
-  { id: "1", label: "Item one", status: "done" as const },
+  { id: "1", label: "Item one", status: "complete" as const },
   { id: "2", label: "Item two", status: "current" as const },
   { id: "3", label: "Item three", status: "pending" as const },
   { id: "4", label: "Item four", status: "pending" as const },
@@ -156,7 +156,7 @@ export const GalleryPlanCancelled = () => (
 // items then phases with their own counts and the current one's ring filling.
 export const GalleryPlanBar = () => <div style={frame}><Plan items={planItems} bar="single" defaultOpen={false} /></div>;
 const phases = [
-  { id: "1", label: "Item one", status: "done" as const, meta: "3 of 3" },
+  { id: "1", label: "Item one", status: "complete" as const, meta: "3 of 3" },
   { id: "2", label: "Item two", status: "current" as const, progress: 0.5, meta: "2 of 4" },
   { id: "3", label: "Item three", status: "pending" as const, meta: "0 of 2" },
   { id: "4", label: "Item four", status: "pending" as const, meta: "0 of 3" },
@@ -165,9 +165,9 @@ export const GalleryPlanSegmented = () => <div style={frame}><Plan items={phases
 // The whole tracker in one container (owner 2026-10-25, an agent run's timeline): marks on a rail, each item's values
 // as chips after its words, the current item's own steps in an inset box.
 const railItems = [
-  { id: "1", label: "Item one", status: "done" as const, detail: <><Badge size="sm" variant="outline">Value</Badge><Badge size="sm" variant="outline">Value</Badge></> },
+  { id: "1", label: "Item one", status: "complete" as const, detail: <><Badge size="sm" variant="outline">Value</Badge><Badge size="sm" variant="outline">Value</Badge></> },
   { id: "2", label: "Item two", status: "current" as const, progress: 0.5, meta: "1 of 2", items: [
-    { id: "2a", label: "Step one", status: "done" as const, meta: "Value" },
+    { id: "2a", label: "Step one", status: "complete" as const, meta: "Value" },
     { id: "2b", label: "Step two", status: "current" as const },
   ] },
   { id: "3", label: "Item three", status: "pending" as const },

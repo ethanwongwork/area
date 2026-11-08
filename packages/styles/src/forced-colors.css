@@ -9,6 +9,10 @@
     /* The floating Toolbar draws its edge inside its box-shadow, which forced colours drop. */
     .area-toolbar--surface { outline: var(--area-stroke-width) solid CanvasText; outline-offset: calc(-1 * var(--area-stroke-width)); }
     .area-toolbar--surface:focus-visible { outline: var(--area-focus-width) solid Highlight; outline-offset: var(--area-focus-offset); }
+    /* The floating Selection bar draws its edge the same way (selection-bar.css). */
+    .area-selection-bar--floating { outline: var(--area-stroke-width) solid CanvasText; outline-offset: calc(-1 * var(--area-stroke-width)); }
+    /* A change mark is a painted dot (Setting row's modified, Filter bar's unsaved): keep it in the text colour. */
+    .area-setting-row__modified, .area-filter-bar__dirty { forced-color-adjust: none; background-color: CanvasText; }
     /* Every field shell keeps a system edge, soft variants included (audit B-11). */
     .area-input, .area-textarea, .area-select, .area-number-field, .area-input-group {
       border-color: CanvasText;
@@ -80,7 +84,7 @@
     .area-tooltip { border: var(--area-stroke-width) solid CanvasText; }
     /* Code block lines (audit G-20): tints and the :target rail are painted fills and shadows,
        so a highlighted, added or removed line keeps a system-coloured rail instead. */
-    .area-code-block__line:is(.area-code-block__line--highlighted, .area-code-block__line--added, .area-code-block__line--removed, :target) {
+    .area-code-block__line:is(.area-code-block__line--highlighted, .area-code-block__line--added, .area-code-block__line--deleted, .area-code-block__line--removed, :target) {
       forced-color-adjust: none;
       box-shadow: none;
       border-inline-start: var(--area-space-2) solid Highlight;

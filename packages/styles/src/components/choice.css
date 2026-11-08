@@ -136,8 +136,8 @@
   :is(.area-radio--card, .area-radio--soft) > .area-choice-label { flex: 1 1 auto; min-inline-size: 0; }
   :is(.area-checkbox--card, .area-checkbox--soft) > .area-checkbox__control,
   :is(.area-radio--card, .area-radio--soft) > .area-radio__control { order: 1; }
-  @media (hover: hover) { .area-checkbox--card:hover:not([data-disabled]),
-  .area-radio--card:hover:not([data-disabled]) { border-color: var(--_card-edge-hover); } }
+  @media (hover: hover) { .area-checkbox--card:hover:not([data-disabled], [data-read-only]),
+  .area-radio--card:hover:not([data-disabled], [data-read-only]) { border-color: var(--_card-edge-hover); } }
   /* A chosen card takes the selected stroke, as every selected container (axes/states.ts; owner 2026-10-21, ChatGPT's
      2px tile; was the 1px edge darkened to the checked colour, 2026-09-28): the indicator colour at the Selected stroke
      setting's width, inside, and the Selected tint setting's layer. The control keeps the checked colour. */
@@ -167,8 +167,8 @@
     --_card-edge-hover: var(--area-edge-options);
     background-color: var(--area-bg-component);
   }
-  @media (hover: hover) { .area-checkbox--soft:hover:not([data-disabled], :has(> .area-checkbox__control:checked)),
-  .area-radio--soft:hover:not([data-disabled], :has(> .area-radio__control:checked)) { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  @media (hover: hover) { .area-checkbox--soft:hover:not([data-disabled], [data-read-only], :has(> .area-checkbox__control:checked)),
+  .area-radio--soft:hover:not([data-disabled], [data-read-only], :has(> .area-radio__control:checked)) { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
   /* The chosen one: the control fill a step darker (Notion Calendar's darker grey) under the card's Selected tint layer,
      so it follows the Selected fill setting as a chosen card does; the control carries the selection colour. (The
      selection surface was tried: at Accent it painted dark mode's rows a heavy navy band.) */
@@ -202,7 +202,14 @@
   /* Read-only (RadioGroup readOnly): a value shown, not a choice being made (Setup's past answers; owner 2026-10-26, "plain
      answers"): the chosen card or soft row keeps its rest edge and fill and the control's dot says which; no selected
      edge or tint. */
-  .area-radio-group[data-readonly] :is(.area-radio--card, .area-radio--soft):has(> .area-radio__control:checked) { border-color: var(--_card-edge); box-shadow: none; }
+  /* Checkbox's and Checkbox group's read-only (components audit 2026-11-07, O2) is the same paint, and a read-only
+     option takes no press. `data-read-only` is the shared spelling (2026-11-07); Radio group's `data-readonly` is its
+     deprecated alias, painted for one release. */
+  .area-radio-group:is([data-read-only], [data-readonly]) :is(.area-radio--card, .area-radio--soft):has(> .area-radio__control:checked),
+  :is(.area-checkbox--card, .area-checkbox--soft)[data-read-only]:has(> .area-checkbox__control:checked) { border-color: var(--_card-edge); box-shadow: none; }
+  .area-checkbox[data-read-only], .area-checkbox[data-read-only] > .area-checkbox__control,
+  .area-radio[data-read-only], .area-radio[data-read-only] > .area-radio__control,
+  .area-checkbox-group[data-read-only] .area-checkbox { cursor: default; }
   .area-checkbox--list, .area-radio--list { --_layout: list; }
   /* In a card or soft row the control is the row's leading mark, so the text follows it at the row gap (12, compact 8),
      the same as the card's inset before it and Menu's and Plan's icon-to-label gap (owner 2026-10-26: "the gaps
@@ -392,7 +399,7 @@
     scale: 0.6; /* spec: docs/MOTION.md small-mark recipe */
     transition:
       scale var(--area-duration-fast) var(--area-ease-out),
-      opacity var(--area-duration-fast) var(--area-ease-out);
+      opacity var(--area-fade-fast) var(--area-ease-out);
   }
 
   .area-checkbox__control::after {
@@ -437,8 +444,8 @@
   .area-checkbox--card:active,
   .area-radio--card:active { transition-duration: var(--area-press-in); }
   /* A choice card is a wide surface: it gives the wide amount under a press (Feedback). */
-  .area-checkbox--card:active:not([data-disabled], :has(> :focus-visible)),
-  .area-radio--card:active:not([data-disabled], :has(> :focus-visible)) { scale: var(--area-feedback-scale-wide); }
+  .area-checkbox--card:active:not([data-disabled], [data-read-only], :has(> :focus-visible)),
+  .area-radio--card:active:not([data-disabled], [data-read-only], :has(> :focus-visible)) { scale: var(--area-feedback-scale-wide); }
   .area-checkbox__control:focus-visible,
   .area-radio__control:focus-visible,
   .area-checkbox--card:has(> .area-checkbox__control:focus-visible),
@@ -532,9 +539,12 @@
   }
 
   .area-radio-group__description,
-  .area-checkbox-group__description { margin-block-start: var(--area-space-2); /* the legend's line, 2 as a choice's own title and description (a 12/16 line has 2 less leading than 14/20, so its cap sits 10.5 below the baseline, as a joined 14/20 line's 10.1): (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was ui-stack, 6, as a choice's own title and description already join) */ }
+  .area-checkbox-group__description { margin-block-start: 0; /* the legend's next line, as a choice's own description (DESIGN_SYSTEM.md, "Text pairs", 2026-11-06: 7.7 under the legend's baseline, the 12/16 line's own gap; was 2, 9.7) */ }
   .area-radio-group__description { color: var(--area-fg-muted); }
   .area-radio-group__validation { color: var(--area-fg-danger-vivid); }
+  /* Success and warning messages, as Checkbox group's (components audit 2026-11-07, O1). */
+  .area-radio-group[data-success] .area-radio-group__validation { color: var(--area-fg-success-vivid); }
+  .area-radio-group[data-warning] .area-radio-group__validation { color: var(--area-fg-warning-vivid); }
 
   .area-radio-group__options {
     display: flex;
@@ -645,10 +655,13 @@
 
   /* --- Labels ------------------------------------------------------------- */
 
+  /* A choice's description joins its title as the next line (DESIGN_SYSTEM.md, "Text pairs", 2026-11-06 balance pass):
+     no gap, so the 12/16 line sits 7.7 under the 13/18 title's baseline, its own line gap (7.4), as File tile's meta. A 2
+     gap set it 9.7: 2.3 off its own line, near it but not on it. */
   .area-choice-label {
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-2);
+    gap: 0;
   }
 
   .area-choice-label__title {

@@ -22,7 +22,7 @@ chapters, an onboarding plan). Not a Stepper (markers that take the person to a 
 
 | Axis | Value | Justification | Where |
 |---|---|---|---|
-| item status | done, current, pending, cancelled | cancelled: an item the agent dropped stays, struck, with a cross (round 49) | Cursor `todo-list.js` (in progress, pending, done struck; cancelled todos); Codex ✔ / □; Claude Code todos |
+| item status | complete, current, pending, cancelled (`done` a deprecated alias) | cancelled: an item the agent dropped stays, struck, with a cross (round 49) | Cursor `todo-list.js` (in progress, pending, done struck; cancelled todos); Codex ✔ / □; Claude Code todos |
 | open | open, folded | the tray folds | Cursor tray, Claude Code todos |
 | bar | none (default), single, segmented | a bar under the head that stays folded: the whole plan's share, or a segment per item filled by its share (2026-10-25) | Cursor ProgressBar (4 high, segments 2 apart); Primer segmented ProgressBar (2 apart); GitHub milestone bar |
 | item meta | any short value | an item's own count or date at the row's end | GitHub "9 of 12"; the references' phase counts; Cursor plan phases |
@@ -329,3 +329,10 @@ Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs
 ## 2026-11-04: margins kept apart
 
 Plain is its own block formatting context (`display: flow-root`, 2026-11-04 kit pass): its list's negative foot and its own glyph margin had collapsed to the larger of the two, so the next tracker sat 20.4 under the last item's baseline in the Chat kit against the turn's 16. Measured after: 16.0.
+
+### 2026-11-07 · Shared status words (system gaps C1)
+
+- **What changed:** A finished item is `complete` (`area-plan__item--complete`); `done` still works for one release.
+- **Why:** one set of status words across Plan, Stepper, Step, Queue, Attachment, File upload, Edit summary and Turn
+  notice (GOVERNANCE.md, "Status words"; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.

@@ -45,7 +45,7 @@ npm test               # token math, axes and the contrast gate
 | Icons | The `area-icon-construction` skill's gate; `npm run test:icons` |
 | App chat code | `npm run test:desktop` |
 
-**Full sweep before a pull request:** `npm run build && npm run typecheck && npm test && npm run test:contracts && node --test packages/react/tests/*.test.mjs && npm run check:playgrounds -w @area/desktop && npm run check:docs -w @area/desktop && npm run check:app-css -w @area/desktop`.
+**Full sweep before a pull request:** `npm run build && npm run typecheck && npm test && npm run test:contracts && node --test packages/react/tests/*.test.mjs && npm run test:desktop && npm run check:playgrounds -w @area/desktop && npm run check:docs -w @area/desktop && npm run check:app-css -w @area/desktop`.
 
 ## Continuous integration
 
@@ -59,9 +59,10 @@ about ten minutes, most of it the icon build). It runs:
 5. `test:contracts`;
 6. `test:icons`;
 7. the React suites;
-8. the desktop build with `check:playgrounds`, `check:docs` and `check:app-css`;
-9. `test:consumer`;
-10. a check that the build left tracked files unchanged.
+8. the desktop app's tests (`test:desktop`; since 2026-11-07);
+9. the desktop build with `check:playgrounds`, `check:docs` and `check:app-css`;
+10. `test:consumer`;
+11. a check that the build left tracked files unchanged.
 
 It skips the Electron binary and checks nothing in a browser. Preview, rendered contrast,
 forced colours and a 1x display still need a session. `npm ci` refuses a lockfile that

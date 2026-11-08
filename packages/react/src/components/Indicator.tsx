@@ -8,13 +8,22 @@ export interface IndicatorProps extends HTMLAttributes<HTMLSpanElement> {
   count?: number;
   max?: number;
   showZero?: boolean;
-  /** Renders nothing (audit C-25: `disabled` meant hide, which isn't what disabled means). */
+  /**
+   * Renders nothing, as Indicator anchor's `invisible` hides its mark (one word for one idea; components audit 2026-11-07,
+   * O7). Was `hidden`, which is also the native attribute; audit C-25 retired `disabled`, which isn't what hiding means.
+   */
+  invisible?: boolean;
+  /** @deprecated Use `invisible` (2026-11-07). Kept for one release. */
   hidden?: boolean;
-  /** @deprecated Use `hidden`. */
+  /** @deprecated Use `invisible`. */
   disabled?: boolean;
   /** The accessible name, or a function of the count, as Count's `label`; defaults to English. */
   label?: string | ((count: number) => string);
   processing?: boolean;
+  /** A ring in the ground's colour round the mark, where it overlaps its owner (an adjective for the non-default state,
+   * Governance § 4; the hook stays `data-border`). */
+  bordered?: boolean;
+  /** @deprecated Use `bordered` (2026-11-07). Kept for one release; `bordered` wins. */
   withBorder?: boolean;
   tone?: VariantProps<typeof MANIFESTS.indicator>["tone"];
   /** Availability is a status variant within the Indicator family. */
@@ -23,14 +32,15 @@ export interface IndicatorProps extends HTMLAttributes<HTMLSpanElement> {
   outOfOffice?: boolean;
 }
 export const Indicator = forwardRef<HTMLSpanElement, IndicatorProps>(function Indicator(
-  {count, max = 99, showZero = true, hidden, disabled = false, label, processing = false, withBorder = false, tone, status, size, outOfOffice, className, ...rest}, ref,
+  {count, max = 99, showZero = true, invisible, hidden, disabled = false, label, processing = false, bordered, withBorder = false, tone, status, size, outOfOffice, className, ...rest}, ref,
 ) {
   const number = count === undefined ? undefined : normalizeCount(count);
-  if (hidden || disabled || (!showZero && number === 0)) return null;
+  const border = bordered ?? withBorder;
+  if ((invisible ?? hidden) || disabled || (!showZero && number === 0)) return null;
   if (status && number === undefined) return <Presence ref={ref} status={status === "online" ? "available" : status} size={size} outOfOffice={outOfOffice} className={className} {...rest} />;
   return <span ref={ref} role="img" aria-label={typeof label === "function" ? label(number ?? 0) : label ?? (number === undefined ? (processing ? "Processing" : "New activity") : `${number} notifications`)} {...rest}
     className={indicatorVariants({kind: number === undefined ? "dot" : "count", tone}, className)}
-    data-processing={processing || undefined} data-border={withBorder || undefined}>
+    data-processing={processing || undefined} data-border={border || undefined}>
     {number === undefined ? null : formatCount(number, max)}
   </span>;
 });

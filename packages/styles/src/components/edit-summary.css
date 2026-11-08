@@ -60,8 +60,9 @@
   /* The counts read as one figure: 4 apart, a line's gap (Step). */
   /* A tracker's figures are metadata, the ramp's secondary step (12) on the row's line (owner, 2026-11-02: "the text size of the numbers on the right look way bigger than the left": the face's figures are cap-height and tabular, so at the label's 13 a count read a size up). */
   .area-edit-summary__counts { display: inline-flex; flex: none; gap: var(--area-space-4); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; }
-  .area-edit-summary__added { color: var(--area-fg-success); }
-  .area-edit-summary__removed { color: var(--area-fg-danger); }
+  /* The change words' inks (components audit D6, Governance § 4): `__removed` is the deprecated part name of `__deleted`. */
+  .area-edit-summary__added { color: var(--area-fg-change-added); }
+  .area-edit-summary__deleted, .area-edit-summary__removed { color: var(--area-fg-change-deleted); }
   /* Text buttons side by side with no gap: their own padding spaces the labels (Message actions). */
   .area-edit-summary__actions { display: inline-flex; flex: none; align-items: center; margin-inline-start: auto; }
   .area-edit-summary__head .area-button { --_shape: var(--_head-button-radius); }
@@ -129,7 +130,7 @@
   /* Undo and Keep show while the row is hovered or focused (Message's actions), always on touch. With a pointer they
      cover the row's end on its own plate (the card's fill under the row plate), so the name has the row until then;
      the last button ends as far from the row's end as from its top. */
-  .area-edit-summary__file > .area-edit-summary__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-edit-summary__file > .area-edit-summary__actions { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
   @media (hover: hover) {
     .area-edit-summary__file > .area-edit-summary__actions {
       position: absolute;
@@ -198,9 +199,9 @@
      quarter in dark): the status surfaces were near white in light, so added and removed read alike, and near solid in
      dark (owner, round 73: "i cant make out the difference between the red and green rows"). */
   .area-diff__line--added { background-color: light-dark(color-mix(in oklab, var(--area-success-solid) 14%, transparent), color-mix(in oklab, var(--area-success-solid) 24%, transparent)); /* spec */ }
-  .area-diff__line--removed { background-color: light-dark(color-mix(in oklab, var(--area-danger-solid) 12%, transparent), color-mix(in oklab, var(--area-danger-solid) 24%, transparent)); /* spec */ }
+  .area-diff__line--deleted, .area-diff__line--removed { background-color: light-dark(color-mix(in oklab, var(--area-danger-solid) 12%, transparent), color-mix(in oklab, var(--area-danger-solid) 24%, transparent)); /* spec */ }
   .area-diff__line--added > .area-diff__marker { color: var(--area-fg-success-vivid); }
-  .area-diff__line--removed > .area-diff__marker { color: var(--area-fg-danger-vivid); }
+  .area-diff__line--deleted > .area-diff__marker, .area-diff__line--removed > .area-diff__marker { color: var(--area-fg-danger-vivid); }
   /* A fold: the unchanged run between hunks, one muted line in the interface sans on the well band, starting where
      the numbers do (Cursor's separator: sans, the small size, tertiary ink on bg-tertiary; owner's pick, option C, after
      a round in the mono). */
@@ -213,7 +214,7 @@
   }
   @media (forced-colors: active) {
     .area-diff { border: var(--area-stroke-width) solid CanvasText; }
-    .area-diff__line--added > .area-diff__marker, .area-diff__line--removed > .area-diff__marker { color: CanvasText; }
+    .area-diff__line--added > .area-diff__marker, .area-diff__line--deleted > .area-diff__marker, .area-diff__line--removed > .area-diff__marker { color: CanvasText; }
   }
 
   /* Plain (owner 2026-11-02, as Plan's): no frame, fill or corner; the head and the file rows' words on the text edge

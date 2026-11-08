@@ -1,0 +1,78 @@
+/* ---------------------------------------------------------------------------
+ * Selection bar
+ *
+ * "3 selected" with the actions that apply to what is selected and a way to clear it, shown while anything is
+ * selected (docs/specs/selection-bar.md; components audit N2, 2026-11-07). Primer's Table.BulkActions (a named group,
+ * the count announced, focus kept where it was), a chat app's library selection toolbar and its sticky and floating
+ * action bars, and a notes app's database selection do the same job.
+ *
+ * Two placements: inline, a row in place of a list's or a table's head (no ground of its own, the database's and
+ * Primer's), or floating, a bar over the bottom of the scrolling region on the floating surface (the chat app's
+ * floating action bar), painted as the floating Toolbar. Mounted at zero, it draws nothing (data-empty), so the count
+ * going to zero is still said and focus can still be put back.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-selection-bar {
+    --_height: var(--area-control-md);
+    --_radius: var(--area-radius-control-md);
+    --_inset: 0px;
+    --_count-inset: 0px;
+    --_bg: transparent;
+    --_shadow: none;
+    display: flex;
+    align-items: center;
+    /* Toolbar's command spacing (8, compact 6), so the actions sit as a toolbar's do. */
+    gap: var(--area-ui-cluster);
+    box-sizing: border-box;
+    min-block-size: calc(var(--_height) + 2 * var(--_inset));
+    min-inline-size: 0;
+    padding: var(--_inset);
+    /* Concentric with its Buttons, at most a pill: the floating Toolbar's corner (toolbar.css). */
+    border-radius: min(calc(var(--_radius) + var(--_inset) * var(--area-radius-concentric)), calc(var(--_height) / 2 + var(--_inset)));
+    background: var(--_bg);
+    box-shadow: var(--_shadow);
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  /* Nothing selected: mounted, so the count's change to zero is said and focus can return, but not drawn. */
+  .area-selection-bar[data-empty] { display: none; }
+
+  /* The count names the selection: the name that starts the bar, so strong in the default ink (area-type-usage § 4). */
+  .area-selection-bar__count {
+    flex: none;
+    padding-inline: var(--_count-inset);
+    font-weight: var(--area-weight-strong);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .area-selection-bar__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--area-ui-cluster);
+    min-inline-size: 0;
+  }
+  /* Inline, the clear sits at the row's end, where a close sits; floating, the bar hugs its content, so it follows
+     the actions. */
+  .area-selection-bar__clear { flex: none; margin-inline-start: auto; }
+
+  /*
+   * Floating: the floating Toolbar's surface (toolbar.css `--surface`; DESIGN_SYSTEM.md, Elevation: shadow-float and the
+   * Floating stroke group's edge), held 16 over the bottom of the region it scrolls in and centred. The count's text
+   * stands 12 from the bar's edge (the inset 8 + 4), as text inside a frame does in the agent chat's cards.
+   */
+  .area-selection-bar--floating {
+    --_inset: var(--area-ui-cluster); /* spec: 8, compact 6, the floating Toolbar's */
+    --_count-inset: var(--area-space-4);
+    --_bg: var(--area-bg-surface);
+    --_shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-edge-floating), var(--area-shadow-float);
+    position: sticky;
+    inset-block-end: var(--area-space-16);
+    z-index: 1;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    margin-inline: auto;
+  }
+  .area-selection-bar--floating .area-selection-bar__clear { margin-inline-start: 0; }
+}

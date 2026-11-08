@@ -20,6 +20,13 @@ export interface ContextMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   label?: string;
   /** The area that opens the menu when right-clicked. */
   children: ReactNode;
+  /**
+   * Opens or closes it from outside (controlled), as Menu's `open`; `defaultOpen` opens it on mount. Opened this way, with
+   * no pointer to open at, it opens at the area's start as the keyboard opens it (with an `itemSelector`, at the first
+   * item). A right-click or Shift+F10 still opens it and reports through `onOpenChange`.
+   */
+  open?: boolean;
+  defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
 }
@@ -39,7 +46,7 @@ const itemsOf = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>('[
  * the Menu key). Choosing a row, Escape or a click elsewhere closes it and focus returns.
  */
 export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function ContextMenu(
-  { menu, menuLabel, label: labelProp, itemSelector, children, onOpenChange, disabled, className, onContextMenu, onKeyDown, ...rest }, ref,
+  { menu, menuLabel, label: labelProp, itemSelector, children, open: openProp, defaultOpen, onOpenChange, disabled, className, onContextMenu, onKeyDown, ...rest }, ref,
 ) {
   const area = useRef<HTMLDivElement | null>(null);
   const [item, setItem] = useState<HTMLElement | null>(null);
@@ -100,6 +107,26 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
     return () => item.removeAttribute("data-context-target");
   }, [item, point]);
 
+  // `open` / `defaultOpen` from outside: open at the area's start (or its first item) as the keyboard does, or close.
+  const wanted = openProp ?? (defaultOpen ? true : undefined);
+  useEffect(() => {
+    if (wanted === undefined || disabled) return;
+    if (wanted && !opened.current && area.current) {
+      const first = itemSelector ? area.current.querySelector<HTMLElement>(itemSelector) : null;
+      if (itemSelector && !first) return;
+      if (first) setItem(first);
+      returnFocus.current = document.activeElement as HTMLElement | null;
+      const target = first ?? area.current;
+      const rect = target.getBoundingClientRect();
+      const rtl = getComputedStyle(target).direction === "rtl";
+      setPoint({ x: rtl ? rect.right : rect.left, y: first ? rect.bottom : rect.top, keyboard: true, rtl });
+    } else if (!wanted && opened.current) {
+      menuRef.current?.hidePopover?.();
+      setLeaving(true);
+      setPoint(null);
+    }
+  }, [wanted]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const close = (restore: boolean) => {
     setLeaving(true);
     setPoint(null);
@@ -140,12 +167,15 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
   return <div ref={node => { area.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }} className={contextMenuVariants({}, className)} onContextMenu={open} onKeyDown={openFromKeyboard} {...rest}>
     {children}
     <Menu ref={menuRef} popover="auto" aria-label={menuLabel ?? labelProp ?? "Context menu"} tabIndex={-1} className="area-context-menu__menu"
+      // Its rows exist only while it is open, so a closed menu holds no empty row.
+      emptyText={point || leaving ? undefined : null}
       onToggle={event => { if ((event.nativeEvent as ToggleEvent).newState === "closed" && point) close(false); }}
       onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); menuRef.current?.hidePopover(); close(true); } else if (event.key === "Tab") { event.preventDefault(); menuRef.current?.hidePopover(); close(true); } }}
       onClick={event => {
         const item = (event.target as HTMLElement).closest('[role^="menuitem"]');
         // As an anchored Menu: a checkbox row stays open, an action or a radio choice closes (audit D-11).
-        if (!item || item.hasAttribute("disabled") || item.getAttribute("role") === "menuitemcheckbox" || (item as HTMLElement).dataset.keepOpen !== undefined) return;
+        // An inactive row (aria-disabled, components audit V2) does nothing and keeps the menu open.
+        if (!item || item.hasAttribute("disabled") || item.getAttribute("aria-disabled") === "true" || item.getAttribute("role") === "menuitemcheckbox" || (item as HTMLElement).dataset.keepOpen !== undefined) return;
         menuRef.current?.hidePopover();
         close(true);
       }}>

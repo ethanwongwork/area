@@ -15,9 +15,11 @@ export default {
       ["Do", "Set onColor on a Button that sits on a painted color (a color card): it takes the color's ink, with plates of that ink, as Badge's onColor."],
       ["Do", "Give an icon-only Button an aria-label: it is its only name."],
       ["Do", "Set loading while an action is pending: the Button keeps focus and ignores clicks, so a submit isn't sent twice."],
+      ["Do", "Set inactive with inactiveText when the action can't run now for a reason that passes or that the person can change (\"Upgrade to export\", \"Saving…\"): it looks disabled but keeps focus and says why."],
       ["Do", "Show a shortcut with a Kbd as the last child: it sits one gap after the label, and set aria-keyshortcuts when the page binds the key."],
       ["Don't", "Use a Button to go somewhere. Use Link, Nav or Breadcrumb."],
       ["Don't", "Set disabled with loading to show progress: loading and disabled together is plainly disabled."],
+      ["Don't", "Disable a Button because of something the person can fix or wait out; make it inactive and say why."],
       ["Don't", "Rely on HTML's submit default. Button is type=\"button\" unless you ask for submit."],
     ],
     // Spec: Anatomy (the area rows).
@@ -31,15 +33,17 @@ export default {
       disabled: "Dims and ignores input; native disabled.",
       loading: "A Spinner replaces the leading icon at full ink; clicks are dropped and the cursor shows progress.",
       selected: "A toggle that is on: the selected plate holds under hover and press (solid takes its hover fill).",
+      inactive: "Drawn as disabled, with no hover or press paint, but it keeps focus at a full-strength ring; a press does nothing, and inactiveText shows as a Tooltip that describes it.",
     },
     // Spec: Behavior and accessibility; native button keys.
     keyboard: [
-      ["Tab", "Moves focus to the Button. A loading Button stays in the Tab order."],
+      ["Tab", "Moves focus to the Button. A loading or inactive Button stays in the Tab order; focus shows an inactive one's reason."],
       ["Enter or Space", "Activates it. A toggle flips selected."],
     ],
     aria: [
       ["aria-pressed", "From selected, on a toggle."],
-      ["aria-disabled, aria-busy", "While loading (not native disabled, so focus stays)."],
+      ["aria-disabled, aria-busy", "While loading (not native disabled, so focus stays); aria-disabled alone while inactive."],
+      ["aria-describedby", "While inactive with inactiveText: points at the Tooltip that says why."],
       ["aria-label", "Required with iconOnly."],
       ["aria-keyshortcuts", "Not set by Button: pass it when the page binds the shortcut a trailing Kbd shows. The Kbd's chord is read as part of the name."],
     ],
@@ -94,6 +98,7 @@ export default {
       ["Do", "Use ghost icon-only for a tool with variants in a Toolbar, and set selected on the current tool."],
       ["Do", "Give the trigger a specific menuLabel when \"More options\" doesn't say what the menu holds."],
       ["Do", "Inside a Toolbar, leave size unset so the Split button takes the toolbar's size."],
+      ["Do", "Set loading while the default action runs: the action shows Button's spinner and the menu's trigger is disabled until it ends."],
       ["Don't", "Expect disabled to turn off only the menu: it disables both parts, and the control dims as one."],
       ["Don't", "Use ghost outside a toolbar or with a text label; it is drawn for icon-only tools."],
     ],
@@ -173,12 +178,14 @@ export default {
       ["Do", "Group related commands with ToolbarGroup and divide groups with ToolbarSeparator."],
       ["Do", "Show a toggled command with Button's selected; it keeps its fill under the pointer."],
       ["Do", "Put secondary commands in ToolbarOverflow as MenuItems, and name it with menuLabel when \"More actions\" is too vague."],
+      ["Do", "Use floating for a row's or a block's hover actions: one to four, size sm, variant surface, inside the row it acts on."],
       ["Don't", "Give an icon-only command no aria-label; arrow keys land on it with nothing to announce."],
       ["Don't", "Build a one-of-several choice from toggle Buttons in a group; use Segmented in the Toolbar."],
+      ["Don't", "Hide the only way to do something in a floating bar; give it a menu item or a keyboard shortcut too."],
     ],
     // Spec: Anatomy.
     parts: {
-      root: "The bar: one Tab stop that owns the size tier, the inset (none when plain, an even inset when surface), the corner, fill and shadow.",
+      root: "The bar: one Tab stop that owns the size tier, the inset (none when plain, an even inset when surface), the corner, fill and shadow. Floating, it sits over its parent's top-end corner and shows while the parent is hovered or holds focus.",
       group: "A labelled cluster of related commands, spaced apart from its neighbours.",
       separator: "A thin rule the height of the commands, turned across the toolbar's orientation.",
     },
@@ -213,7 +220,7 @@ export default {
       ["Do", "Set label when Copy alone doesn't say what is copied, such as Copy link."],
       ["Do", "Pass value as a function when the text must be read at the moment of the click."],
       ["Do", "Use children for a visible label when the button sits apart; the label stays as written while the icon changes."],
-      ["Don't", "Rename the button to Copied; the live region announces the result once and the name stays fixed."],
+      ["Don't", "Rename the button to Copied; the shared announcer says the result once and the name stays fixed."],
       ["Don't", "Add a Toast for the same copy; the check and the announcement already confirm it."],
     ],
     // Spec: Anatomy.
@@ -231,7 +238,7 @@ export default {
     ],
     aria: [
       ["aria-label", "On an icon-only button, from label (Copy by default); it does not change after a copy."],
-      ["aria-live", "Polite, on a hidden sibling that says the result once and is empty at rest."],
+      ["aria-live", "Not on the component: the result is said once, politely, through the page's shared announcer; the button writes no live region of its own."],
     ],
   },
 
@@ -295,6 +302,8 @@ export default {
       ["Do", "Use the card variant for a contained option in a list or grid: row for one line, tile for a visual above the label."],
       ["Do", "Use variant=\"soft\" layout=\"list\" for a settings list of options: filled rows, the control first, meta for what each comes to."],
       ["Do", "Mark a single required option with invalid; put errors about the whole set on CheckboxGroup."],
+      ["Do", "Give CheckboxGroup value and onValueChange (an array) and each Checkbox a value when the group's answer is one list; name submits each under one name."],
+      ["Do", "Set readOnly on Checkbox or CheckboxGroup to show choices made elsewhere; a native checkbox ignores readonly, so Checkbox blocks the change itself."],
       ["Don't", "Use a Checkbox for a setting that applies immediately; use Switch."],
       ["Don't", "Use indeterminate as a third choice; it only shows that a parent's children are partly checked."],
     ],
@@ -311,6 +320,7 @@ export default {
       indeterminate: "The box fills and shows a dash instead of the check, for a partial selection.",
       disabled: "The whole option dims to half and ignores input; native disabled.",
       invalid: "The edge and label turn danger; a checked invalid box becomes one danger fill.",
+      "read-only": "Rest paint, no hover or press; the box keeps its state (the click is cancelled) and announces aria-readonly. A chosen card keeps its rest edge.",
     },
     // Native checkbox keys.
     keyboard: [
@@ -320,6 +330,7 @@ export default {
     aria: [
       ["aria-invalid", "On the input when invalid is set; on CheckboxGroup's fieldset when it has an error."],
       ["aria-describedby", "Points at the caption, or on CheckboxGroup at its description and validation message."],
+      ["aria-readonly", "On each box while it or its group is read-only."],
     ],
   },
 
@@ -342,6 +353,7 @@ export default {
       ["Do", "Use variant=\"soft\" layout=\"list\" for a settings list of options (Notion Calendar's): filled rows 4 apart, the control first and the text 12 after it, the chosen one drawing the selected edge, and meta for what each comes to (\"11:24 AM\")."],
       ["Do", "Use readOnly on the group to show a value chosen elsewhere (a past answer in a conversation): the chosen row keeps its dot and fill without the selected edge, and the group is a radiogroup with aria-readonly."],
       ["Do", "Report a problem with the choice through the group's error, which marks every option."],
+      ["Do", "Use validation with validationStatus success or warning for a message about a valid choice, as Checkbox group's; error stays for a wrong one."],
       ["Don't", "Put a long description in meta; it is one short value. Use the caption."],
       ["Don't", "Use a single Radio on its own; once chosen it can't be cleared. Use a Checkbox."],
       ["Don't", "Give a Radio its own name inside a RadioGroup; it overrides the group's shared name and splits the set."],
@@ -356,6 +368,7 @@ export default {
     // Spec: States.
     states: {
       disabled: "The option dims to half and ignores input; disabling the group disables every option.",
+      "read-only": "In a read-only group: no hover or press, and the chosen card keeps its rest edge; the group is a radiogroup with aria-readonly.",
     },
     // Native radio keys (spec: arrow keys are the browser's).
     keyboard: [
@@ -366,6 +379,7 @@ export default {
     aria: [
       ["aria-describedby", "On RadioGroup's fieldset, pointing at its description and error; on a Radio, at its caption."],
       ["aria-invalid", "On RadioGroup's fieldset when it has an error."],
+      ["data-read-only", "On RadioGroup's fieldset and each option while read-only; data-readonly is the deprecated spelling."],
     ],
   },
 
@@ -512,7 +526,7 @@ export default {
       image: "A small thumbnail before the label; give it imageAlt unless the label names it.",
       label: "The chip's text; it names the chip.",
       action: "The removable chip's main button, present when it toggles or is clickable; a separate Tab stop from remove.",
-      remove: "The circular dismiss button after the label, named by dismissLabel (\"Remove\" plus the label by default).",
+      dismiss: "The circular dismiss button after the label, named by dismissLabel (\"Remove\" plus the label by default).",
     },
     // Spec: States, Decisions.
     states: {
@@ -587,6 +601,7 @@ export default {
       ["Do", "Add view toggles as MenuItem children with checked; they follow the zoom rows and keep the menu open."],
       ["Do", "Use stepper for a zoom out and zoom in pair either side of the percentage, which still opens the menu."],
       ["Do", "Use views and valueLabel for named ways to show the content, such as Fit, so the button says Fit instead of a number."],
+      ["Do", "Control the menu with open and onOpenChange when the page opens it from a shortcut; defaultOpen opens it once."],
       ["Don't", "Expect it to bind shortcuts; your page binds them and the menu only shows them."],
       ["Don't", "Use it for the canvas's own pinch or wheel zoom; it reports zooms you set through value and onValueChange."],
     ],
@@ -678,6 +693,77 @@ export default {
     aria: [
       ["target, rel", "With external: _blank and noopener noreferrer, unless you set your own."],
       ["aria-hidden", "On the external mark; a hidden \"(opens in a new tab)\" text, from newTabLabel, says it instead."],
+    ],
+  },
+
+  "selection-bar": {
+    // Spec: Job and boundaries; SelectionBar.tsx.
+    instead: [
+      ["Commands that don't depend on a selection", ["toolbar"], "Toolbar holds a view's commands all the time; Selection bar shows only while something is selected."],
+      ["Actions on one row, shown on hover", ["menu", "context-menu"], "A row's own Menu or its context menu acts on that row alone."],
+      ["Editing the selection's properties", ["panel"], "Panel's rows edit what is selected; Selection bar runs actions on it."],
+    ],
+    // Spec: Variants, Behavior and accessibility.
+    practices: [
+      ["Do", "Keep it mounted with count 0 when nothing is selected, so the change is said and focus can go back where it was."],
+      ["Do", "Give it the actions that apply to every selected item, a few small ghost Buttons and a Menu for the rest."],
+      ["Do", "Give onClear, so the clear button and Escape clear the selection."],
+      ["Do", "Use floating for a grid or a long list whose head scrolls away, at the end of the scrolling region."],
+      ["Do", "Give onFocusReturn when the element focus came from can disappear, so focus lands on the list instead."],
+      ["Don't", "Move focus to the bar when it appears; someone selecting with the keyboard is still selecting."],
+      ["Don't", "Put a destructive action first or make it the only way to clear the selection."],
+    ],
+    // Spec: Anatomy; manifest elements and states.
+    parts: {
+      root: "A named group (role=\"group\"): owns the gap between its parts; floating, the floating surface and its inset.",
+      count: "How many are selected, \"3 selected\", strong in the default ink; said each time it changes.",
+      actions: "The actions for the selection, a row that wraps.",
+      clear: "An icon-only ghost button that clears the selection, at the bar's end.",
+    },
+    states: {
+      empty: "Nothing is selected: the bar draws nothing but stays mounted.",
+    },
+    keyboard: [
+      ["Tab or Shift+Tab", "Moves between the actions and the clear button; showing the bar leaves focus where it was."],
+      ["Escape", "In the bar, calls onClear; focus goes back to where it was before it entered the bar."],
+    ],
+    aria: [
+      ["role=\"group\", aria-label", "On the bar: \"Selection actions\" by default."],
+      ["aria-label", "On the clear button: clearLabel, \"Clear selection\" by default."],
+    ],
+  },
+
+  "filter-bar": {
+    // Spec: Job and boundaries; FilterBar.tsx.
+    instead: [
+      ["Choosing one of a few views, or a filter that is always there", ["segmented", "tabs"], "A fixed choice is a Segmented or Tabs; Filter bar holds filters the person adds and removes."],
+      ["Filters typed as a query", ["search-field"], "Search field takes free text; Filter bar shows each filter as its own chip."],
+      ["Chips someone toggles on and off in a set", ["chip"], "Chip's filter kind toggles; a Filter bar's chip opens its editor."],
+    ],
+    // Spec: Variants, Behavior and accessibility.
+    practices: [
+      ["Do", "Make each filter a FilterBarItem as the trigger of its editor, a Popover or a Menu you give."],
+      ["Do", "Write the value as words: one or two picks by name, then a count from three (\"3 selected\")."],
+      ["Do", "Set dirty and onReset while the filters differ from the saved view, and dirty on each filter that changed."],
+      ["Do", "Put removing a filter in its editor, beside the editor's choices."],
+      ["Don't", "Filter inside the bar; it shows and edits filters, the view applies them."],
+      ["Don't", "Show Reset when nothing has changed."],
+    ],
+    // Spec: Anatomy; manifest elements.
+    parts: {
+      root: "A named group (role=\"group\") that wraps: the filters, then Add filter, then Reset at the end.",
+      item: "A filter: a small Chip reading \"Name: value\" with a chevron; with a value it takes Chip's selected paint.",
+      dirty: "A small dot before the chevron: the filter changed since the view was saved.",
+      add: "Add filter: a small ghost Button with the add glyph, the trigger of the properties' Menu.",
+      reset: "A small ghost Button at the end, shown while the filters differ from the saved view.",
+    },
+    keyboard: [
+      ["Tab or Shift+Tab", "Moves between the filters, Add filter and Reset."],
+      ["Enter or Space", "On a filter, opens its editor; on Add filter, opens the properties."],
+    ],
+    aria: [
+      ["role=\"group\", aria-label", "On the bar: \"Filters\" by default."],
+      ["aria-expanded, aria-haspopup, aria-controls", "On each filter and on Add filter, set by the Popover or Menu it opens."],
     ],
   },
 };

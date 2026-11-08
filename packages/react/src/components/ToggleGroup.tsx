@@ -2,7 +2,7 @@
 // most one. One Tab stop and arrow keys between the toggles (Radix, React Aria); inside a Toolbar
 // the toggles join the toolbar's own roving instead. Spec: docs/specs/toggle-group.md.
 import { createContext, forwardRef, useContext, useRef, useState } from "react";
-import type { HTMLAttributes, KeyboardEvent } from "react";
+import type { HTMLAttributes, KeyboardEvent, SyntheticEvent } from "react";
 import { buttonGroupVariants, toggleGroupVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button, type ButtonProps } from "./Button.tsx";
 import { InToolbar, ToolbarSize, toolbarItemProps } from "./toolbar-context.ts";
@@ -11,7 +11,7 @@ type ToggleGroupVariants = VariantProps<typeof MANIFESTS.toggleGroup>;
 
 interface ToggleGroupContextValue {
   pressed: (value: string) => boolean;
-  toggle: (value: string) => void;
+  toggle: (value: string, event: SyntheticEvent) => void;
   disabled: boolean;
   inToolbar: boolean;
 }
@@ -23,7 +23,8 @@ export interface ToggleGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   /** The toggles pressed at first (uncontrolled). */
   defaultValue?: string[];
   /** Called with the next set of pressed values. */
-  onValueChange?: (value: string[]) => void;
+  /** The pressed values after a press, and the press (Governance § 4). */
+  onValueChange?: (value: string[], event: SyntheticEvent) => void;
   /** `multiple`: any number pressed (bold, italic, underline). `single`: at most one, and pressing it again releases it. A choice that always has one answer is a Segmented. */
   selectionMode?: "multiple" | "single";
   /** `soft`: Segmented's track, pressed toggles raised. `outline`: joined at their edges (ButtonGroup's look). `ghost`: apart, as a Toolbar group. */
@@ -56,12 +57,12 @@ export const ToggleGroup = forwardRef<HTMLDivElement, ToggleGroupProps>(function
 
   const context: ToggleGroupContextValue = {
     pressed: item => value.includes(item),
-    toggle: item => {
+    toggle: (item, event) => {
       const current = latest.current;
       const next = current.includes(item) ? current.filter(v => v !== item) : selectionMode === "single" ? [item] : [...current, item];
       latest.current = next;
       if (valueProp === undefined) setLocal(next);
-      onValueChange?.(next);
+      onValueChange?.(next, event);
     },
     disabled,
     inToolbar,
@@ -140,7 +141,7 @@ export const ToggleGroupItem = forwardRef<HTMLButtonElement, ToggleGroupItemProp
       {...(group.inToolbar ? toolbarItemProps : { tabIndex: -1, "data-area-toggle-item": "" })}
       selected={group.pressed(value)}
       disabled={group.disabled || disabled}
-      onSelectedChange={() => group.toggle(value)} />
+      onSelectedChange={(_, event) => group.toggle(value, event)} />
   );
 });
 

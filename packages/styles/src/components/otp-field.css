@@ -122,6 +122,21 @@
     --_focus-outline: var(--area-input-invalid-color);
     --_focus-halo: var(--area-input-invalid-halo-color);
   }
+  /* Success and warning, as Input's (components audit 2026-11-07, O1): a Field's status reaches every field. */
+  .area-otp-field[data-success] {
+    --_border: var(--area-input-success-color);
+    --_border-hover: var(--area-input-success-color);
+    --_border-focus: var(--area-input-success-color);
+    --_focus-outline: var(--area-input-success-color);
+    --_focus-halo: var(--area-input-success-halo-color);
+  }
+  .area-otp-field[data-warning] {
+    --_border: var(--area-input-warning-color);
+    --_border-hover: var(--area-input-warning-color);
+    --_border-focus: var(--area-input-warning-color);
+    --_focus-outline: var(--area-input-warning-color);
+    --_focus-halo: var(--area-input-warning-halo-color);
+  }
   .area-otp-field[data-disabled] { --_bg: var(--area-input-bg-disabled); --_border: var(--area-border-faint); color: var(--area-fg-disabled); }
   .area-otp-field--soft[data-disabled] { --_border: transparent; }
   .area-otp-field[data-disabled] .area-otp-field__control { cursor: not-allowed; }

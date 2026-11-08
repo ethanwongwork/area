@@ -29,7 +29,7 @@ remainder as one more Avatar.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | sm 28, md 32 (default), lg 40 | Control tiers, so an avatar sits in a row of controls | Untitled 24–64; ChatGPT 20 and 24; Figma 24 |
+| size | xs (the text line: 18 at type 13, 20 at 14), sm 28, md 32 (default), lg 40 | Control tiers, so an avatar sits in a row of controls; xs sits on a line of text (a name in a sentence: the activity kit's "David Tee") and is Governance's recorded exception to "never xs" (2026-11-07) | Untitled 24–64; ChatGPT 20 (profile menu) and 24; Notion 20 (sidebar workspace); Figma 24 |
 | shape | unset (default: a circle while `data-area-pills` lists `avatar`, else a rounded square), circle, square | People circle; teams, workspaces and bots square, set per instance (owner, 2026-10-04) | Untitled, ChatGPT and Figma circle |
 | tone | neutral (default), inverse (accent removed 2026-09-29, D1) | Fallback ground; neutral by default | Untitled neutral only; Figma a per-user hue |
 | active | boolean | Current or speaking participant | Area's own; no product capture |
@@ -246,3 +246,9 @@ ChatGPT and Notion show the disc colour, then the image, with no fade.
 - **What changed:** the muted ink is #646464 at the defaults, was #666666 (2/255 darker).
 - **Why:** text is now solved on the deepest ground's selected fill pressed one readable step further, so a press shows
   on a sidebar too (it equalled the selected plate there). THEMING.md, Interaction states; `color/layers.ts` `PRESS_ROOM`.
+
+### 2026-11-07 · xs recorded as an exception (components audit O7)
+
+- **What changed:** No API change: `xs` stays, as Governance's recorded exception to "never xs": an avatar on a line of text (the text line, 18 at type 13, 20 at 14), measured at 20 in ChatGPT's profile menu and Notion's sidebar and used by the activity kit beside "David Tee". The Variants row lists it.
+- **Why:** The manifest and CSS shipped xs (display.css:80) against this spec's sizes and Governance § 5; the evidence supports the size (ChatGPT 20, Notion 20) and the app uses it, so recording beats retiring. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

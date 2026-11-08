@@ -99,6 +99,7 @@ sm 208 × 28; lg 280 × 40; groups [3, 3] 256 (the separator 16 plus 8 either si
 | filled | the last slot active while focused; `onComplete` fired once | all |
 | hover | every slot but the active one takes Input's hover edge; none when disabled or read-only (`otp-field.css:61-63`) | peer Input |
 | invalid / disabled | Input's paint (`otp-field.css:118-127`) | peer Input |
+| success / warning | Input's success and warning edges and halo, from `validationStatus` or a Field's status (`data-success`, `data-warning`; 2026-11-07) | peer Input |
 | read-only | rest paint, default cursor; the active slot still shows while focused; paste ignored | peer Input |
 
 ## Behavior and accessibility
@@ -133,3 +134,9 @@ arrows move by slot, typing over a selected slot replaces it, a paste of "12 34-
 - 2026-10-13 · owner, review round 24: approved (no notes).
 - 2026-10-14 · owner: "merge it, then continue working" (the all-axis audit's open item) → the loop stops through the Motion axis's `duration-loop` token (1, or 0 at step 0 and under reduced motion): the caret blink is `calc(1s * duration-loop)`, resting shown. The nearest motion scope now decides, so a non-zero scope nested in a 0 scope runs it; it was a `[data-area-motion="0"]` descendant rule plus a reduced-motion media rule (cohesion test pins it).
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft`, as Input's; the outline cells already read 3.79:1 / 5.49:1.
+
+### 2026-11-07 · Success and warning; the event in onValueChange (components audit O1, O3)
+
+- **What changed:** `validationStatus` (`error`, `success`, `warning`) and a Field's `data-validation-status` paint the slots as Input's (`data-success`, `data-warning`, `otp-field.css`); `onValueChange(code, event)` passes the change or paste event.
+- **Why:** Input, Number field, Textarea, Select and Input group showed a Field's success and warning; OTP field took only `invalid` (OTPField.tsx:26). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

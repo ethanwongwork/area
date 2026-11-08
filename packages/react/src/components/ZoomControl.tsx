@@ -1,7 +1,8 @@
 // ZoomControl: a canvas's zoom, shown as a percentage that opens a Menu to type a zoom, step in and out,
 // fit, or jump to a preset (Figma's "48%" zoom and view options). docs/specs/zoom-control.md.
 import { forwardRef, useState } from "react";
-import type { KeyboardEvent, ReactNode } from "react";
+import type { KeyboardEvent, ReactNode, SyntheticEvent } from "react";
+import { useOpenState } from "./overlay.ts";
 import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Input } from "./Input.tsx";
@@ -12,7 +13,8 @@ export interface ZoomControlProps extends Omit<ButtonProps, "value" | "defaultVa
   /** The zoom as a scale: 1 is 100% (controlled). */
   value?: number;
   defaultValue?: number;
-  onValueChange?: (zoom: number) => void;
+  /** The new zoom and the click or key that set it (Governance § 4). */
+  onValueChange?: (zoom: number, event: SyntheticEvent) => void;
   /** The range, as scales. Figma's is 2% to 25,600%. */
   min?: number;
   max?: number;
@@ -46,6 +48,9 @@ export interface ZoomControlProps extends Omit<ButtonProps, "value" | "defaultVa
   field?: boolean;
   /** A preset row's label; "Zoom to 50%" by default. */
   presetLabel?: (zoom: number) => string;
+  /** The menu is open (controlled); `defaultOpen` opens it at first. */
+  open?: boolean;
+  defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -54,20 +59,21 @@ const percent = (zoom: number) => `${Math.round(zoom * 100)}%`;
 /** A percentage button that opens the zoom menu. */
 export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomControlProps>(function ZoomControl(
   { value, defaultValue = 1, onValueChange, min = 0.02, max = 256, step = 2, presets = [0.5, 1, 2], onZoomToFit, shortcuts,
-    children, onOpenChange, stepper = false, stops, valueLabel, views, stepRows = true, field = true, presetLabel = zoom => `Zoom to ${percent(zoom)}`, size = "sm", variant = "ghost", tone = "neutral", className, "aria-label": ariaLabel, ...rest },
+    children, open: openProp, defaultOpen, onOpenChange, stepper = false, stops, valueLabel, views, stepRows = true, field = true, presetLabel = zoom => `Zoom to ${percent(zoom)}`, size = "sm", variant = "ghost", tone = "neutral", className, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
   const [own, setOwn] = useState(defaultValue);
   const zoom = value ?? own;
-  const [open, setOpen] = useState(false);
-  const [text, setText] = useState("");
+  const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
+  // The field starts at the zoom; each opening sets it again.
+  const [text, setText] = useState(() => percent(value ?? defaultValue));
   const [invalid, setInvalid] = useState(false);
 
-  const set = (next: number) => {
+  const set = (next: number, event: SyntheticEvent) => {
     const clamped = Math.min(max, Math.max(min, next));
     if (value === undefined) setOwn(clamped);
     // From a label ("Fit") the same zoom is still a choice: it leaves the label.
-    if (clamped !== zoom || valueLabel) onValueChange?.(clamped);
+    if (clamped !== zoom || valueLabel) onValueChange?.(clamped, event);
   };
   // In and out: the next stop past the zoom, else a multiple of `step`.
   const zoomIn = stops?.length ? stops.find(stop => stop > zoom + 1e-9) : zoom * step;
@@ -77,7 +83,6 @@ export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomCon
   const shown = valueLabel ?? percent(zoom);
   const openChange = (next: boolean) => {
     setOpen(next);
-    onOpenChange?.(next);
     if (next) { setText(percent(zoom)); setInvalid(false); }
   };
   // Typed zoom: "150", "150%" or "1.5x"; Enter applies it and closes, as Figma's field.
@@ -86,7 +91,7 @@ export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomCon
       event.preventDefault();
       const match = /^\s*(\d+(?:\.\d+)?)\s*(%|x)?\s*$/i.exec(text);
       if (!match || Number(match[1]) <= 0) { setInvalid(true); return; }
-      set(match[2]?.toLowerCase() === "x" ? Number(match[1]) : Number(match[1]) / 100);
+      set(match[2]?.toLowerCase() === "x" ? Number(match[1]) : Number(match[1]) / 100, event);
       event.currentTarget.closest<HTMLElement>("[popover]")?.hidePopover?.();
       return;
     }
@@ -110,15 +115,15 @@ export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomCon
         <MenuSeparator />
       </> : null}
       {stepRows ? <>
-        <MenuItem shortcut={shortcuts?.zoomIn} disabled={!canIn} onClick={() => { if (zoomIn !== undefined) set(zoomIn); }}>Zoom in</MenuItem>
-        <MenuItem shortcut={shortcuts?.zoomOut} disabled={!canOut} onClick={() => { if (zoomOut !== undefined) set(zoomOut); }}>Zoom out</MenuItem>
+        <MenuItem shortcut={shortcuts?.zoomIn} disabled={!canIn} onClick={event => { if (zoomIn !== undefined) set(zoomIn, event); }}>Zoom in</MenuItem>
+        <MenuItem shortcut={shortcuts?.zoomOut} disabled={!canOut} onClick={event => { if (zoomOut !== undefined) set(zoomOut, event); }}>Zoom out</MenuItem>
       </> : null}
       {onZoomToFit ? <MenuItem shortcut={shortcuts?.zoomToFit} onClick={onZoomToFit}>Zoom to fit</MenuItem> : null}
       {views?.map(view => <MenuItem key={view.label} radio checked={view.selected} onClick={view.onSelect}>{view.label}</MenuItem>)}
       {views?.length && presets.length ? <MenuSeparator /> : null}
       {presets.map(preset => (
         <MenuItem key={preset} radio checked={!valueLabel && Math.abs(zoom - preset) < 1e-9} shortcut={shortcuts?.presets?.[preset]}
-          onClick={() => set(preset)}>{presetLabel(preset)}</MenuItem>
+          onClick={event => set(preset, event)}>{presetLabel(preset)}</MenuItem>
       ))}
       {children ? <><MenuSeparator />{children}</> : null}
     </Menu>
@@ -128,7 +133,7 @@ export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomCon
   const stepButton = (label: string, glyph: "add" | "subtract", next: number | undefined, enabled: boolean) => (
     <Tooltip side="bottom" describes={false} trigger={
       <Button variant={variant} tone={tone} size={size} iconOnly className="area-zoom-control__step" icon={<Glyph name={glyph} />}
-        aria-label={label} disabled={!enabled} onClick={() => { if (next !== undefined) set(next); }} />
+        aria-label={label} disabled={!enabled} onClick={event => { if (next !== undefined) set(next, event); }} />
     }>{label}</Tooltip>
   );
   return (

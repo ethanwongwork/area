@@ -1,0 +1,146 @@
+/* ---------------------------------------------------------------------------
+ * Setting row and Settings group
+ *
+ * A page of preferences (docs/specs/setting-row.md; components audit N4, 2026-11-07): each row is a setting's name,
+ * its one-line description and an optional help (a Toggletip or a Link), with the control at the row's end, under the
+ * text when the row is narrow. A setting that differs from its default carries a dot after its name and a Reset that
+ * shows on hover or focus. Settings group stacks rows under an optional heading, ruled between them.
+ *
+ * Sources: a code editor's settings editor (`.cursor-settings-cell{gap:20px;padding:12px 14px}`, the column cell
+ * under 8, a modified indicator, a Reset toolbar revealed on hover over .3s), Primer's ControlGroup (title,
+ * description, control; grouped and divided) and Area's own Settings page (rows 42 at one line, 60 at two; rules
+ * between the text edges). Not Panel's rows: those act on a selection; this is a page of preferences.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-setting-row {
+    /* spec: 12 above and below (the editor's 12; the app's Settings rows), so one line is 42 and two 60 at type 13
+       (8 in compact). Plain rows start on the page's text edge; a framed group insets them. */
+    --_pad-block: var(--area-inset-surface-sm);
+    --_pad-inline: 0px;
+    /* spec: the app's 16 between the text and the control (the editor's 20 is off the ladder). */
+    --_gap: var(--area-space-16);
+    /* The row is its own container, so its control drops under the text when the row is narrow, whatever the page. */
+    container: area-setting-row / inline-size;
+    position: relative;
+    box-sizing: border-box;
+    min-inline-size: 0;
+    padding: var(--_pad-block) var(--_pad-inline);
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  .area-setting-row__body {
+    display: flex;
+    align-items: center;
+    gap: var(--_gap);
+    min-inline-size: 0;
+  }
+  /* The name and its description join (an item's name and its line, DESIGN_SYSTEM.md, Text pairs): the same size,
+     regular, told apart by ink. */
+  .area-setting-row__text {
+    display: grid;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+  /* The name's line keeps the text's height, so a row is as tall with its dot, help and Reset as without: they centre
+     on it and overhang it (the app's Settings rows). */
+  .area-setting-row__heading {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    block-size: var(--area-ui-leading);
+    min-inline-size: 0;
+  }
+  .area-setting-row__label {
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    font-weight: var(--area-weight-regular);
+    overflow-wrap: normal;
+  }
+  .area-setting-row__description {
+    margin: 0;
+    color: var(--area-fg-muted);
+    text-wrap: pretty;
+  }
+  .area-setting-row__help { display: inline-flex; flex: none; align-items: center; }
+  /* Modified: a 6 dot after the name in the change ink for modified (Governance § 4, Change words), the size of
+     Tabs' and Tree view's unseen dot, so a change mark is one mark (Filter bar's unsaved dot is the same). */
+  .area-setting-row__modified {
+    flex: none;
+    inline-size: var(--area-space-6);
+    block-size: var(--area-space-6);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-fg-change-modified);
+  }
+  .area-setting-row[data-modified] { /* Modified: the dot after the name, and Reset while onReset is given (below). */ }
+  .area-setting-row__reset { display: inline-flex; flex: none; align-items: center; }
+  /* Reset shows while the row is hovered or holds focus, as the editor's toolbar does, landing at once and leaving on
+     `fast` (Code block's revealed copy); Tab reaches it, which shows it. A touch screen always shows it. */
+  @media (hover: hover) {
+    .area-setting-row__reset { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+    .area-setting-row:not(:hover, :focus-within) .area-setting-row__reset { pointer-events: none; }
+    .area-setting-row:is(:hover, :focus-within) .area-setting-row__reset { opacity: 1; transition-duration: 0s; }
+  }
+
+  /* The control at the row's end at its own width; `--area-setting-row-control` gives a group one column, so the
+     controls line up down it (the app's Settings column). */
+  .area-setting-row__control {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: flex-end;
+    inline-size: var(--area-setting-row-control, auto);
+    max-inline-size: 50%;
+    min-inline-size: 0;
+  }
+
+  .area-setting-row--horizontal { /* The control beside the text: the base rule (and under it when narrow, below). */ }
+  /* Under the text: a control that needs the line (pictures, a list, a text area), or a narrow row. A text group over
+     its one control stands Field's label gap off it (6; the editor's 8). */
+  .area-setting-row--vertical > .area-setting-row__body { flex-direction: column; align-items: stretch; gap: var(--area-ui-stack); }
+  .area-setting-row--vertical > .area-setting-row__body > .area-setting-row__control { inline-size: auto; max-inline-size: none; justify-content: flex-start; }
+  /* spec: under 456 the control drops under its text: the 280 control column (the app's Inspector floor at type 13) +
+     the 16 gap + a 160 text column (Description list's term) no longer fit side by side. */
+  @container area-setting-row (inline-size < 456px) {
+    .area-setting-row__body { flex-direction: column; align-items: stretch; gap: var(--area-ui-stack); }
+    .area-setting-row__control { inline-size: auto; max-inline-size: none; justify-content: flex-start; }
+  }
+
+  /* Disabled: the words take the disabled ink; the control paints its own disabled state. */
+  .area-setting-row[data-disabled] :is(.area-setting-row__label, .area-setting-row__description) { color: var(--area-fg-disabled); }
+
+  /* --- Settings group ----------------------------------------------------- */
+  .area-settings-group {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    /* A heading and the block it heads: 16 (the feed's and the app's Settings; 12 in compact). */
+    gap: var(--area-inset-surface-md);
+    min-inline-size: 0;
+  }
+  .area-settings-group__rows {
+    --_rule-inset: 0px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-inline-size: 0;
+  }
+  /* A rule between rows, never above the first or under the last; a divider adds no space (the rows' own padding
+     parts them). The Dividers stroke group's line, between the text edges (PRODUCT_UI.md: settings groups rule their
+     rows only between the text edges). */
+  .area-settings-group__rows > .area-setting-row + .area-setting-row::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: var(--_rule-inset);
+    border-block-start: var(--area-border-width) solid var(--area-edge-dividers);
+    pointer-events: none;
+  }
+  /* Framed: Description list's and Table's frame (the Blocks group's edge, the container corner, the surface), the
+     rows 16 in, as the app's Settings box and the editor's grouped cells. */
+  .area-settings-group--framed > .area-settings-group__rows {
+    --_rule-inset: var(--area-inset-surface-md);
+    border: var(--area-stroke-width) solid var(--area-edge-blocks);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+  }
+  .area-settings-group--framed > .area-settings-group__rows > .area-setting-row { --_pad-inline: var(--area-inset-surface-md); }
+}

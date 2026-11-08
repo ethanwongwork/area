@@ -176,8 +176,8 @@ Third-pass additions:
 ## Behavior and accessibility
 
 - `role="group"` with a name; each month is a `table role="grid"` labelled by its month
-  heading (`h2` by default, `headingLevel` 2–6, audit F-22; only the first month's is
-  `aria-live`, so two months don't announce twice); weekday headers carry `abbr` with the full name. Days are
+  heading (`h2` by default, `headingLevel` 2–6, audit F-22); the month on view is said through the shared announcer when it changes, once however
+  many months show); weekday headers carry `abbr` with the full name. Days are
   buttons with full-date labels (`Tuesday, September 15, 2026`), `aria-current="date"` for
   today, `aria-selected` on the cell, `aria-multiselectable` for range and multiple.
 - One tab stop (roving tabindex). Arrows move by day and week (mirrored in RTL), Home/End to
@@ -347,3 +347,8 @@ Days press at `bg-pressed` (10%; they pressed with the 5% hover); circle days at
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+### 2026-11-07 · One announcer (components audit D1)
+
+The first month heading's `aria-live` is replaced by `useAnnouncement(formatMonth(visible))` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")): the month is said
+when it changes after the first render, once however many months show; the week layout says nothing. No visible change.

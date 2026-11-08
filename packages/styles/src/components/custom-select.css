@@ -91,7 +91,7 @@
     user-select: none;
   }
   @media (hover: hover) {
-    .area-custom-select:not([data-open]) > .area-custom-select__trigger:hover:not(:disabled) {
+    .area-custom-select:not([data-open]) > .area-custom-select__trigger:hover:not(:disabled, [data-read-only]) {
       border-color: var(--_border-hover);
       background-color: var(--_bg-hover);
     }
@@ -120,6 +120,24 @@
     --_focus-outline: var(--area-select-invalid-color);
     --_focus-halo: var(--area-select-invalid-halo-color);
   }
+  /* Success and warning, as Select's (components audit 2026-11-07, O1): a Field's status reaches every field. */
+  .area-custom-select__trigger[data-success] {
+    --_border: var(--area-select-success-color);
+    --_border-hover: var(--area-select-success-color);
+    --_border-focus: var(--area-select-success-color);
+    --_focus-outline: var(--area-select-success-color);
+    --_focus-halo: var(--area-select-success-halo-color);
+  }
+  .area-custom-select__trigger[data-warning] {
+    --_border: var(--area-select-warning-color);
+    --_border-hover: var(--area-select-warning-color);
+    --_border-focus: var(--area-select-warning-color);
+    --_focus-outline: var(--area-select-warning-color);
+    --_focus-halo: var(--area-select-warning-halo-color);
+  }
+  /* Read-only (O2): a value set elsewhere, shown at rest. Only disabled changes paint (Input's rule); the trigger keeps
+     its focus ring and doesn't answer the pointer. */
+  .area-custom-select__trigger[data-read-only] { cursor: default; }
   .area-custom-select__trigger:disabled {
     --_border: var(--area-border-faint);
     background-color: var(--area-select-bg-disabled);
@@ -175,6 +193,21 @@
      popping (2026-10-26, the interaction pass; it was visibility: hidden). */
   .area-custom-select__option[aria-selected="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   .area-custom-select__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
+
+  /*
+   * The panel (components audit V7, 2026-11-07; Primer's SelectPanel: a filter field in the overlay, selected first,
+   * select all, Save and Cancel in a footer): Menu's header, list and footer regions (V5) inside the same popover, so
+   * only the options scroll. The filter is a soft sm Input on the rows' inset (Notion's menu filter: 28 tall, a 3% fill,
+   * the field focus ring); Select all is a row of its own under it, its check at the rows' check column, the subtract
+   * mark while some are chosen.
+   */
+  .area-custom-select__panel {}
+  .area-custom-select__header {}
+  .area-custom-select__filter { flex: none; }
+  .area-custom-select__select-all { inline-size: 100%; border: 0; background: transparent; color: inherit; font: inherit; text-align: start; }
+  .area-custom-select__select-all[aria-checked="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
+  /* Save and Cancel (or a manage link) at the end, as a dialog's actions (Card's and Popover's footer gap). */
+  .area-custom-select__footer { flex-direction: row; align-items: center; justify-content: flex-end; gap: var(--area-ui-cluster); }
   /* spec: Notion's access menu rules its sections off (1px, 12 in; captures/custom-select/
      notion--member-access-menu--open--light); Menu's separator, between groups only. */
   .area-custom-select__separator { flex: none; }

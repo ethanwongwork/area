@@ -15,8 +15,9 @@ const rule = (selector: string) => {
   return css.slice(at, css.indexOf("}", at));
 };
 
-test("Tile is Area's Asset card, the gallery look unless a page gives its own", () => {
-  assert.match(tile, /export function Tile\(props: TileProps\) \{\s*return <AssetTile \{\.\.\.props\} look=\{props\.look \?\? GALLERY_LOOK\} \/>;/);
+test("Tile is Area's Design card for a design, else Asset card in the gallery look unless a page gives its own", () => {
+  // PR #208 (2026-11-06): a design (a component, a screen) sits in a Design card; everything else stays an Asset card.
+  assert.match(tile, /export function Tile\(props: TileProps\) \{[^}]*return <DesignTile \{\.\.\.props\} design=\{design\} \/>;\s*return <AssetTile \{\.\.\.props\} look=\{props\.look \?\? GALLERY_LOOK\} \/>;/);
   assert.doesNotMatch(tile, /function PlainTile\b/, "the plain container is gone");
   assert.doesNotMatch(css, /\.gallery-tile--plain\b|\.gallery-plain\b/, "no app CSS draws a plain box");
 });

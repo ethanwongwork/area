@@ -47,7 +47,7 @@ Code block part.
 |---|---|---|---|
 | variant | plain (default) | A leading chevron before the title; the content sits on the title's column with no rule | Notion toggle block (`notion--toggle-block`); React Aria Disclosure; Primer `details` |
 | variant | divided | A trailing chevron and a rule after each item, the stacked FAQ / settings accordion | shadcn Accordion (`accordion.tsx:21, 37, 43`); Radix, Base UI, Ant Collapse borderless |
-| size | sm (14/20), md (16/24, default) | The title's text role: md is a document toggle, sm a UI-dense one | Notion 16/24 (md); ChatGPT sidebar section 14/18, shadcn `text-base` (sm) |
+| size | sm (text-base, 13/18 at type 13), md (text-lg, 15/22, default) | The title's text role, which its content inherits: md is a document toggle over reading text, sm a UI-dense one over UI text. Title and content always share one size (the text pairs rule: a title is its text's size) | Notion 16/24 (md); ChatGPT sidebar section 14/18, shadcn `text-base` (sm) |
 | state | open, disabled | Runtime state on the trigger (`aria-expanded`, `disabled`) | every source |
 | behavior | Accordion `multiple` | One open at a time by default (accordion); `multiple` lets any number stay open | Radix `type="single" / "multiple"`, React Aria `allowsMultipleExpanded`, native `<details name>` |
 
@@ -392,3 +392,17 @@ The chevron plate presses at `bg-pressed`, Notion's 10%, as the spec comment sai
   value changed: body motion kept, Divided tile stays sm (md is the FAQ tile), plain chevron stays
   muted outline, divided md padding stays 12. Decisions' motion row brought up to date.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → no change: the divided rule was already at `stroke-width`, which every standalone divider now uses. (docs/research/consistency-audit-2026-10-12.md)
+
+### 2026-11-07 · Sizes checked against the text pairs rule (system gaps L2)
+
+- **What changed:** nothing in the CSS. The review proposed 13/18 titles over UI content and 15/22 only over reading
+  text; the item already sets one size on its root that title and content both inherit, so md is the reading
+  accordion and sm the UI one. Usage now says to pick sm for UI content.
+- **Why:** owner picked Build on the system gaps review (2026-11-07); the check found the rule already held.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · The event in onValueChange (components audit O3)
+
+- **What changed:** `onValueChange(open, event)` passes the trigger's click (absent when a find-in-page match opens an item).
+- **Why:** Accordion.tsx:94. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

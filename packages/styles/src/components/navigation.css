@@ -109,6 +109,18 @@
      bottom (audit D-21; was the end, opposite the rail). */
   .area-tabs--track.area-tabs--vertical .area-tabs__list { background-position: left top; background-size: var(--area-stroke-width) 100%; }
   .area-tabs--track.area-tabs--vertical .area-tabs__list:dir(rtl) { background-position: right top; }
+  /*
+   * A tab's change (components audit D6, 2026-11-07; Cursor's document tabs take the git colour on the label): the label
+   * in the shared change ink in every state, selected too, so the status reads the same wherever it shows. Unseen is a
+   * state apart: a 6 dot after the label in the accent's indicator rung (Tree view's), the label keeps its ink.
+   */
+  .area-tabs__tab[data-status="added"] .area-tabs__label { color: var(--area-fg-change-added); }
+  .area-tabs__tab[data-status="modified"] .area-tabs__label { color: var(--area-fg-change-modified); }
+  .area-tabs__tab[data-status="deleted"] .area-tabs__label { color: var(--area-fg-change-deleted); }
+  .area-tabs__tab[data-status="untracked"] .area-tabs__label { color: var(--area-fg-change-untracked); }
+  .area-tabs__tab[data-status="renamed"] .area-tabs__label { color: var(--area-fg-change-renamed); }
+  .area-tabs__unseen { flex: none; inline-size: var(--area-space-6); block-size: var(--area-space-6); border-radius: var(--area-radius-full); background-color: var(--area-accent-indicator); } /* spec: 6, Tree view's unseen dot */
+  @media (forced-colors: active) { .area-tabs__unseen { background-color: CanvasText; } }
   .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--_tab-icon); block-size: var(--_tab-icon); }
   .area-tabs__icon > svg { inline-size: 100%; block-size: 100%; }
   .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); --_tab-icon: var(--area-icon-sm); --_tab-item-gap: var(--area-gap-sm); }
@@ -253,7 +265,7 @@
   .area-table {
     /* Above and below a cell: see --_cell-inset below (sm 4 / 2 and the UI line; compact pass, round 6). */
     /* spec: 12 at the sides, compact 8 (Notion table cells 12; VS Code's keybindings table 10). */
-    --_cell-side: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
+    --_cell-side: var(--area-inset-surface-sm);
     /* The first and last cells sit a step further from the frame than columns sit from each other, so the frame reads as
        one object and the columns as its parts (owner, 2026-10-31, feed rhythm pick 2: Primer's props table 16 at the frame
        and 12 between columns; Cursor's settings 14 at the side). sm keeps one inset (below), as a dense table in a panel
@@ -373,7 +385,7 @@
   .area-table--md { --_cell-line: var(--area-text-base-prose-leading); --_cell-edge: var(--area-table-edge, calc(var(--_cell-side) + var(--area-space-4))); --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2), 1px)); }
   /* lg: a step more room above and below than md's balanced inset. */
   .area-table--lg { --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2 + var(--area-space-4)), 1px)); }
-  .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-well); } /* bg-stripe is 1.03:1 at Layer contrast 0 */
+  .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-well); --_row-paint: var(--area-bg-well); } /* bg-stripe is 1.03:1 at Layer contrast 0 */
   .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-stroke-width) solid var(--area-edge-dividers); }
 
   /*
@@ -422,8 +434,127 @@
      alignment), for rows whose cells are set at different sizes, such as a type specimen beside
      its token. */
   .area-table--baseline td { vertical-align: baseline; }
-  .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: var(--area-hover-in); }
+  .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); --_row-paint: var(--area-bg-component-active); transition-duration: var(--area-hover-in); }
+  /* Selection when the table isn't focused (components audit V15, 2026-11-07; DESIGN_SYSTEM.md "Shared state paint"): in
+     a table that takes focus (a row's checkbox, a link, a focusable row), a selected row steps back to the hover plate
+     while focus is elsewhere, so the focused list reads as the active one. A table with nothing to focus can't be the
+     active list, so its selection keeps the firm plate. */
+  .area-table:not(:focus-within):has(tbody :is(input, button, a[href], [tabindex])) tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-hover); --_row-paint: var(--area-bg-component-hover); }
+  .area-table--flush:not(:focus-within):has(tbody :is(input, button, a[href], [tabindex])) tbody tr:is([data-selected], [aria-selected="true"]) td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-hover); }
+  .area-table--flush:not(:focus-within):has(tbody :is(input, button, a[href], [tabindex])) tbody tr:is([data-selected], [aria-selected="true"]) td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-hover); }
+  /* The manifest's `selected` state is a body row's (`aria-selected="true"` on the tr); the block holds it while a row is
+     selected (2026-11-07, O7), so the state has a home on the block for the parity check. */
+  .area-table:has(tr[aria-selected="true"]) {}
   .area-table caption { padding: var(--area-space-12); text-align: start; color: var(--area-fg-muted); }
+
+  /* --- Table: sticky header and first column (components audit V3, 2026-11-07) ---
+     ChatGPT's TableStickyHeader (`position: sticky; top: 0; z-index: 10; background: var(--color-surface)`) and Claude's
+     sticky column (`--cds-sticky-column-bg`, `--cds-sticky-edge-*`): docs/research/components-audit-2026-11-07/chat-apps.md.
+     Both stick inside the wrapper, the table's own scroller (it scrolls sideways; give it a height to scroll down). A
+     sticky cell keeps a ground, so rows pass under it rather than through it: the header its fill, the first column the
+     table's fill with the row's own paint (stripe, selection, hover) laid over it through --_row-paint. Collapsed borders
+     don't travel with a sticky cell in every engine, so a sticky cell draws its rule itself. */
+  .area-table--sticky-header > thead > tr > th {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    border-block-end-color: transparent;
+    box-shadow: inset 0 calc(-1 * var(--area-stroke-width)) 0 var(--area-edge-dividers);
+  }
+  .area-table--flush.area-table--sticky-header > thead > tr > th { background-color: var(--area-table-fill, var(--area-bg-surface)); }
+  .area-table--sticky-first-column > * > tr > :first-child { position: sticky; inset-inline-start: 0; z-index: 1; }
+  .area-table--sticky-first-column.area-table--sticky-header > thead > tr > th:first-child { z-index: 3; }
+  .area-table.area-table--sticky-first-column > tbody > tr > :is(td, th):first-child {
+    background-color: var(--area-table-fill, var(--area-bg-surface));
+    background-image: linear-gradient(var(--_row-paint, transparent), var(--_row-paint, transparent));
+  }
+  @media (hover: hover) {
+    .area-table--sticky-first-column.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover { --_row-paint: var(--area-bg-component-hover); }
+  }
+  .area-table--sticky-first-column.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active { --_row-paint: var(--area-bg-component-pressed); }
+  /* The column's seam: a rule at its end, drawn only while columns are scrolled under it (ChatGPT's TableScroller
+     `animation-range: min(2px, 50%) …`, a scroll-linked seam). Where scroll timelines are missing it always shows. */
+  .area-table--sticky-first-column > * > tr > :first-child::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: var(--area-stroke-width);
+    background-color: var(--area-edge-dividers);
+    pointer-events: none;
+  }
+  @supports (animation-timeline: scroll()) {
+    .area-table--sticky-first-column > * > tr > :first-child::after {
+      opacity: 0;
+      /* Scroll-linked, not timed: no duration or curve of the motion settings applies. */
+      animation-name: area-table-seam;
+      animation-fill-mode: both;
+      animation-timeline: scroll(nearest inline);
+      animation-range: 0 2px; /* spec: ChatGPT min(2px, 50%) */
+    }
+  }
+
+  /* --- Table: sortable headings (V3) ---
+     The heading's Button (`.area-table__sort`, audit F-24's overhang above) names the column; aria-sort on the th says
+     the order. An unsorted column shows its arrow only under the pointer or focus, in the same box, so the label never
+     moves (Primer's SortHeader: the arrow at rest only on the sorted column). */
+  .area-table th > .area-table__sort[data-sort="none"] .area-button__icon { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  @media (hover: hover) { .area-table th > .area-table__sort[data-sort="none"]:hover .area-button__icon { opacity: 1; transition-duration: 0s; } }
+  .area-table th > .area-table__sort[data-sort="none"]:focus-visible .area-button__icon { opacity: 1; transition-duration: 0s; }
+
+  /* --- Table: row groups (V3) ---
+     A heading row that folds the rows under it, with the group's count and its total (Notion's grouped table: a 24
+     toggle, the group's name 14/500, its aggregate muted; docs/research/components-audit-2026-11-07/notion.md). The
+     heading row is the header's ground, so a group reads as a section of the table, not one of its rows. */
+  .area-table__group-heading > th {
+    padding-block: var(--_cell-inset);
+    color: var(--area-fg-default);
+    font-weight: var(--area-weight-regular);
+  }
+  .area-table__group-row { display: flex; align-items: center; gap: var(--area-ui-cluster); min-inline-size: 0; }
+  .area-table__group-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-ui-cluster);
+    min-inline-size: 0;
+    /* The toggle overhangs the cell's block padding, as a heading's sort Button does (audit F-24), so the row keeps its
+       text height; its plate reaches 4 past the column's text edge, where the chevron starts. */
+    margin-block: calc((var(--_cell-line) - var(--area-control-sm)) / 2);
+    margin-inline-start: calc(-1 * var(--area-space-4));
+    padding-block: 0;
+    padding-inline: var(--area-space-4) var(--area-space-6);
+    block-size: var(--area-control-sm);
+    border: 0;
+    border-radius: var(--area-radius-control-sm);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: var(--area-weight-strong);
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) { .area-table__group-toggle:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  .area-table__group-toggle:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
+  .area-table__group-toggle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+  .area-table__group-chevron { display: inline-flex; flex-shrink: 0; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
+  .area-table__group-chevron > svg { inline-size: 100%; block-size: 100%; }
+  .area-table__group-name { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-table__group-count,
+  .area-table__group-summary { color: var(--area-fg-muted); font-weight: var(--area-weight-regular); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .area-table__group-summary { margin-inline-start: auto; }
+  /* A folded group keeps only its heading row. */
+  .area-table__group[data-collapsed] > tr:not(.area-table__group-heading) { display: none; }
+  /* Every group's last row keeps its rule, so the next group's heading is ruled off; the table's last row drops it. */
+  .area-table > .area-table__group:not(:last-child) > tr:last-child > td { border-block-end: var(--area-stroke-width) solid var(--area-edge-dividers); }
+  .area-table > .area-table__group[data-collapsed]:last-child > .area-table__group-heading > th { border-block-end: 0; }
+
+  /* --- Table: loading rows (V3) ---
+     Skeleton lines in the cells while rows load (Primer's Table.Skeleton, `rows` default 10; Area 3, the gallery's
+     loading tile): the first column a name's width, the others a value's. Not a target: the rows take no hover. */
+  .area-table__skeleton { pointer-events: none; }
+  .area-table__skeleton-line { inline-size: var(--area-space-48); max-inline-size: 100%; }
+  .area-table__skeleton-line[data-column="first"] { inline-size: var(--area-space-96); }
+  .area-table__cell--numeric > .area-table__skeleton-line { margin-inline-start: auto; }
 
   /* --- Select ------------------------------------------------------------- */
   /*
@@ -615,9 +746,9 @@
          transition takes the clock of the state it goes to, so the closed rule carries the exit. */
       transform-origin: top left;
       opacity: 0;
-      scale: 0.97; /* spec: docs/MOTION.md overlay scale */
+      scale: var(--area-overlay-scale); /* docs/MOTION.md overlay scale */
       transition:
-        opacity var(--area-duration-fast) var(--area-ease-out),
+        opacity var(--area-fade-fast) var(--area-ease-out),
         scale var(--area-duration-fast) var(--area-ease-out),
         overlay var(--area-duration-fast) allow-discrete,
         display var(--area-duration-fast) allow-discrete;
@@ -629,7 +760,7 @@
       transition-duration: var(--area-duration-base);
     }
     @starting-style {
-      .area-select:open::picker(select) { opacity: 0; scale: 0.97; }
+      .area-select:open::picker(select) { opacity: 0; scale: var(--area-overlay-scale); }
     }
     /* Options are Menu rows, the one list model (audit B-4): 32 at every trigger size, text on
        the inset contract (32 less a cap, halved: 11), the check's edge 8 from the end, 12 between
@@ -691,3 +822,6 @@
     .area-select optgroup option { font-weight: var(--area-weight-regular); }
   }
 }
+
+/* The sticky first column's seam, scroll-linked (Table, components audit V3). */
+@keyframes area-table-seam { from { opacity: 0; } to { opacity: 1; } }

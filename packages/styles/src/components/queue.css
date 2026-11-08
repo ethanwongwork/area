@@ -96,10 +96,10 @@
   .area-queue__status { display: inline-flex; flex: none; align-items: center; justify-content: center; inline-size: var(--area-icon-sm); color: var(--area-fg-muted); }
   .area-queue__status > svg { inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
   .area-queue__item--sending > .area-queue__text { opacity: var(--_sending-opacity); }
-  .area-queue__item--failed > .area-queue__status { color: var(--area-fg-danger); }
+  :is(.area-queue__item--error, .area-queue__item--failed) > .area-queue__status { color: var(--area-fg-danger); }
   /* Send now and Remove: Edit summary's row actions. With a pointer they cover the row's end on its plate until the
      row is hovered or focused; on touch, and on a failed row (Retry is the way on), they stay. */
-  .area-queue__actions { display: inline-flex; flex: none; align-items: center; opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-queue__actions { display: inline-flex; flex: none; align-items: center; opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
   @media (hover: hover) {
     .area-queue__actions {
       position: absolute;
@@ -110,9 +110,9 @@
       background: linear-gradient(var(--_row-plate), var(--_row-plate)), var(--area-bg-surface);
     }
     .area-queue__item:hover > .area-queue__actions { opacity: 1; transition-duration: var(--area-hover-in); }
-    .area-queue__item--failed > .area-queue__actions { position: static; padding: 0; margin-inline-end: calc(var(--_card-end) - var(--area-ui-row-inset)); background: none; }
+    :is(.area-queue__item--error, .area-queue__item--failed) > .area-queue__actions { position: static; padding: 0; margin-inline-end: calc(var(--_card-end) - var(--area-ui-row-inset)); background: none; }
   }
   .area-queue__item:focus-within > .area-queue__actions,
-  .area-queue__item--failed > .area-queue__actions { opacity: 1; transition-duration: 0s; }
+  :is(.area-queue__item--error, .area-queue__item--failed) > .area-queue__actions { opacity: 1; transition-duration: 0s; }
   @media (hover: none) { .area-queue__actions { opacity: 1; margin-inline-end: calc(var(--_card-end) - var(--area-ui-row-inset)); } }
 }

@@ -107,7 +107,7 @@ Generated with `node scripts/capture-compare.mjs docs/research/captures/inspecto
 ## Behavior and accessibility
 
 A plain row is a `div` whose text is read as is (the swatch is decorative; the name carries the token). With `copyable`
-it is a `button` named "Copy <name>, <value>" ("Copy <name>" without a value; `aria-label` overrides it) whose result is announced once through a polite live region; `copyText` overrides
+it is a `button` named "Copy <name>, <value>" ("Copy <name>" without a value; `aria-label` overrides it) whose result is announced once through the shared announcer (`useCopy`'s `copiedLabel`, "Copied"); `copyText` overrides
 what is copied (default: the value, else the name). Native props and the ref reach the root.
 
 ## Peers and consistency
@@ -179,3 +179,7 @@ The copyable row presses at `bg-component-pressed`, one step past selected (Noti
   The row is still 22 tall.
 - **Why:** the text pass across every family. Token row reused inline Code's size, which is 0.875 of the text around
   it, so in a 14 panel it landed between two steps of the type ramp. A row stands on its own and takes a ramp size.
+
+### 2026-11-07 · One announcer (components audit D1)
+
+The copy result is said through the shared announcer (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")) instead of a live region inside the button. No visible change.

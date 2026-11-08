@@ -106,8 +106,9 @@ export function AnchoredPopover({ trigger, open: openProp, defaultOpen, onOpenCh
 /* --- Menu ----------------------------------------------------------------- */
 
 const ITEM = "[role^='menuitem']";
-// A menu's own rows: a nested MenuSub's rows belong to the submenu.
-const enabledItems = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>(ITEM)].filter(item => item.closest("[role='menu']") === menu && !item.matches(":disabled, [aria-disabled='true'], [data-disabled]"));
+// A menu's own rows: a nested MenuSub's rows belong to the submenu. An inactive row (`data-inactive`, V2) is
+// aria-disabled but stays reachable, so it can say why it can't act.
+const enabledItems = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>(ITEM)].filter(item => item.closest("[role='menu']") === menu && !item.matches(":disabled, [aria-disabled='true']:not([data-inactive]), [data-disabled]"));
 
 export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "start", offset = MENU_OFFSET, id: idProp, surface, wrapTrigger }: AnchoredProps & { /** The menu's id when the consumer sets one. */ id?: string; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode; /** Wraps the prepared trigger (Menu's `tooltip`). */ wrapTrigger?: (trigger: ReactNode) => ReactNode }) {
   const generatedId = useId();

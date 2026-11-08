@@ -36,7 +36,7 @@ in the manifest where the manifest can express it.
 | composition | trailing text | Status letters, counts | Project files (A, M); Checkbox filters (counts) |
 | composition | actions | Row controls at the end (Figma layers: lock, visibility) | Layers with row controls |
 | state | expanded / collapsed | Branches | Project files / Collapsed |
-| state | selected, current | `aria-selected`, `aria-current` (fill and main ink) | Project files |
+| state | selected, current | `aria-selected`, `aria-current` (fill and main ink); in navigation mode a selected row steps back to the hover plate while focus is outside the tree, the current row never (V15) | Project files |
 | state | checked | `aria-checked` in checkbox mode | Checkbox filters |
 | state | disabled | Skipped by arrows and typeahead; the whole row dims to 50%, icon and chevron included, as Nav, Menu and Tabs (audit D-5) | Disabled row |
 | state | hover, focus-visible, action pinned | Runtime; `data-pinned` on a control | Layers with row controls |
@@ -73,6 +73,8 @@ area     div[treeitem] 32px, radius 8, padding-start 8 + depth × 22 (20 at pass
   chevron  16px slot (Area chevron glyph), 20px hover plate, 24px pointer target outside it
   icon     16px, 6px after the chevron slot
   label    6px after the icon; a cut label fades out over its last 24 (2026-10-31; was an ellipsis)
+  unseen   6 dot in accent-indicator at the row's end, before the status (components audit D6)
+  status   git's letter A M D U R, 12 w500 tabular, in fg-change-<status>; the word is read out
   actions  end of row; controls shown on hover, focus and selection
 
 Columns (pass 3), from the row edge: 8, 30, 52, 74, … (start 8, step 22). Depth n puts its
@@ -96,6 +98,8 @@ chevron on column n, its icon on n + 1 and its label on n + 2.
 | current marker | **none** | Owner (pass 3) | Pass 2 made it a 3 × 16 pill. Notion and Figma draw none; fill, main ink and `aria-current` remain |
 | actions · slot | end of row, 2px between controls, −4px end margin (a 16px glyph in a 24px sm button lands 8px from the edge, as the row's text) | Owner (pass 2); Figma layers (owner screenshot, not captured) | Hidden until hover, focus-visible or selection; `data-pinned` keeps a state control visible. Ghost Buttons here hover `bg-hover` and press `bg-active` (`tree-view.css:74`; audit S11c) |
 | folders (gallery) | Area filled folder, `fg-info` | Owner (pass 2) | Demo content; the component does not colour icons |
+| status | `added` A, `modified` M, `deleted` D, `untracked` U, `renamed` R, in `fg-change-<status>` (success, warning, danger, info, info) | Cursor 3.27.22 git decorations (cursor.md; `workbench.glass.main.js`: added #70B489, modified #F1B467, removed #FC6B83, untracked #88C0D0, renamed cyan) | Area has no cyan: untracked and renamed take info, the nearest hue; the letter tells them apart. `removed` is the deprecated spelling of `deleted` |
+| unseen | a 6 dot, `accent-indicator`, before the status | Cursor AgentStatusDot (6 in a 14 box; doneUnseen accent) | A state apart from the status: it never recolours the letter |
 
 Measured after pass 1: depth 1 chevron at 8, icon at 28, label at 52; depth 2 chevron at
 28, label at 72; resting ink rgb(102), selected rgb(40) on rgb(243). Pass 3 measurements
@@ -280,4 +284,27 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
   line and focuses it. Which branches pin is measured on scroll (one frame), from the first row under the line.
 - **Why:** the owner, on Area's Button tiles four levels down in the desktop app's Sidebar ("what it looks like when ur
   working deep inside a system with lots of component variants"); pick r4-path, sticky parents.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Change words and unseen (components audit D6)
+
+`status` takes the shared change words (Governance § 4, "Change words"; `CHANGE_STATUSES`, `CHANGE_MARK` in packages/react/src/components/change-status.ts): `added`, `modified`, `deleted`, `untracked`, `renamed` (A, M, D, U, R), each in
+`fg-change-<status>`; `removed` is a deprecated alias of `deleted` (it renders `data-status="deleted"`, D, "Deleted"; it
+read "Removed" before). New `unseen` on a node: a 6 dot in the accent's indicator rung before the status, read as "Unseen".
+Tile: Content / Change words and unseen.
+
+### 2026-11-07 · Selection when the tree isn't focused (components audit V15)
+
+- **What changed:** in navigation mode, while focus is outside the tree, a selected row (`aria-selected`) takes the
+  hover plate instead of `--_tree-selection`; the current row (`aria-current="page"`) keeps its plate, since it is where
+  you are, not a selection. Checkbox trees already select on the rest fill and are unchanged. The desktop app's layer
+  and file trees show their selection on the quieter plate while focus is in the Canvas or the Inspector.
+- **Why:** docs/research/components-audit-2026-11-07/cursor.md, "Inactive selection" (the editor's lists paint `listActiveSelectionBackground` only while
+  focused, `listInactiveSelectionBackground` otherwise). One rule for every list with its own focus, so the list you
+  are in reads as the active one. The owner took every recommendation ("Take all recs", 2026-11-07).
+- **Decision:** the quieter plate is the hover plate, not a new token. A role declared on `:root` that reads
+  `bg-component-active` would resolve there and keep the page's fill on every raised and recessed ground (a menu, a
+  panel, a sidebar); the hover plate is already the step below selected on every ground, its words' contrast is
+  asserted, and Hover fill floors at 25, so it is never invisible (CONTRAST.md, "The quieter selected plate has a
+  floor"). At Selected fill 0 the two are one plate and nothing changes.
 - **Verdict:** awaiting the owner.

@@ -32,7 +32,7 @@ import { COMPONENT_PAGES } from "../content/pages.mjs";
 // @ts-expect-error — as above.
 import { DOCUMENTATION_GROUPS } from "../content/documentation.mjs";
 // @ts-expect-error — as above.
-import { componentStatus } from "../content/component-status.mjs";
+import { componentStatus, DEPRECATED_COMPONENTS } from "../content/component-status.mjs";
 // @ts-expect-error — as above.
 import { componentSpecimens, demoWrapper } from "../content/specimens.mjs";
 // @ts-expect-error — as above.
@@ -80,7 +80,8 @@ interface Tile { id: string; name: string; group: string; value: string; label: 
 /* The family's manifest (packages/styles/src/manifest.ts): its sentence, block, axes, defaults, parts and states. */
 interface ManifestLike { block: string; description: string; variants: Record<string, readonly string[]>; defaults: Record<string, string>; elements?: readonly string[]; states?: readonly string[]; stateAttributes?: Record<string, string> }
 
-export const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly).sort((a, b) => a.name.localeCompare(b.name));
+// A deprecated family keeps its page source for one release but leaves the gallery, search and Home (system gaps C3).
+export const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly && !DEPRECATED_COMPONENTS.has(family.slug)).sort((a, b) => a.name.localeCompare(b.name));
 /* Properties for the families without a hand-made playground, from their manifests (src/content/derived-props.tsx). */
 const DERIVED = new Map(FAMILIES.flatMap(family => {
   const derived = !PLAYGROUNDS[family.slug] && family.manifest ? derivedPlayground(family.manifest) : null;
@@ -121,6 +122,7 @@ const GROUP_LEDES: Record<string, string> = {
   Default: "The component as it ships.",
   Variants: "Its visual treatments and shapes.",
   Tones: "The same component in each semantic color.",
+  Colors: "The same component in each label color.",
   Sizes: "Each size, smallest first.",
   Layout: "Arrangements of its parts.",
   Content: "What it holds: text, icons and media.",
@@ -430,7 +432,9 @@ function matchingTile(playground: Playground, tiles: Tile[], config: Config) {
 export function ComponentsPage() {
   const { query, item, select, navigate } = useStudio();
   // The Sidebar's choice: every family (All, the default) or one family's Stage, on one of its tiles.
-  const [slug = "", tileId] = (item ?? "").split("/");
+  const [linked = "", tileId] = (item ?? "").split("/");
+  // An old link to a deprecated family opens the family to use instead (DEPRECATED_COMPONENTS).
+  const slug = DEPRECATED_COMPONENTS.get(linked) ?? linked;
   const family = FAMILIES.find(entry => entry.slug === slug);
   const shown = FAMILIES.filter(entry => matches(query, entry.name, entry.slug));
   const [mode, setMode] = useViewOption<ViewMode>("components", "grid", ["grid", "list"]);

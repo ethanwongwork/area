@@ -32,7 +32,7 @@ import { FIGURES, REGION_LABEL, SCREENS, ScreenFigure, type Region, type RegionB
 import { canvasAttributes, CANVAS_DEFAULTS, useStudio, Workspace, type CanvasAxes } from "../studio.tsx";
 import { coloursCode, hasColours, type ColoursState } from "../colours.ts";
 import { useBrandSheet } from "../brand.ts";
-import { oklchHex, parseColour } from "@area/tokens/colours";
+import { oklchHex, parseColour } from "@area/tokens/color";
 import { PagePicker, pageAnswer, pageHex } from "../page-colour.tsx";
 import { AXES } from "../tokens.ts";
 import { useViewOption, ViewControls } from "../view-controls.tsx";
@@ -392,14 +392,14 @@ export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
       items={chapters.map(entry => {
         const rows = asked.filter(row => row.chapter === entry.id);
         const behind = rows.filter(row => asked.indexOf(row) < at).length;
-        const status = reviewing || behind === rows.length ? "done" as const : entry.id === chapter?.id ? "current" as const : "pending" as const;
+        const status = reviewing || behind === rows.length ? "complete" as const : entry.id === chapter?.id ? "current" as const : "pending" as const;
         return {
           id: entry.id, label: entry.title, status,
           progress: status === "current" ? behind / rows.length : undefined,
-          meta: `${status === "done" ? rows.length : behind} of ${rows.length}`,
+          meta: `${status === "complete" ? rows.length : behind} of ${rows.length}`,
           items: status === "current" ? rows.map(row => {
             const index = asked.indexOf(row);
-            return { id: row.id, label: row.name, status: index < at ? "done" as const : index === at ? "current" as const : "pending" as const,
+            return { id: row.id, label: row.name, status: index < at ? "complete" as const : index === at ? "current" as const : "pending" as const,
               progress: index === at ? 0 : undefined, meta: index < at ? answerOf(row, values, studioColours) : undefined };
           }) : undefined,
         };

@@ -14,7 +14,7 @@ and reordering by drag need the engine (Phase 3) and are not built.
 
 | Axis | Value | Where |
 |---|---|---|
-| item status | queued, sending, failed | Codex (sending .6 + spinner; paused / failed with Retry) |
+| item status | queued, sending, error (`failed` a deprecated alias) | Codex (sending .6 + spinner; paused / failed with Retry) |
 
 API: `items`, `onSendNow(id)`, `onDismiss(id)` (Remove; `onRemove` stays as a deprecated alias for one release,
 `onDismiss` wins), `onRetry(id)`, `open` / `defaultOpen` / `onOpenChange`. The list is an `ol`: messages send in
@@ -116,3 +116,18 @@ summary's row buttons (the row's corner less their inset).
 
 - **What changed:** The queued messages ease open and shut with the head's chevron, on Accordion's recipe.
 - **Why:** They snapped while Accordion eased. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+### 2026-11-07 · Shared status words (system gaps C1)
+
+- **What changed:** An item that didn't send is `error` (`area-queue__item--error`); `failed` still works for one release.
+- **Why:** one set of status words across Plan, Stepper, Step, Queue, Attachment, File upload, Edit summary and Turn
+  notice (GOVERNANCE.md, "Status words"; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · A message not sent is said (components audit O6)
+
+- **What changed:** when a queued message can't be sent (`status: "error"`), the shared announcer says "“{text}”: Not
+  sent", politely, as Message and Attachment now say their failures. Nothing on screen changed. Reopened from Complete.
+- **Why:** a failure away from focus was silent to screen readers (DESIGN_SYSTEM.md "Announcements"); one rule for every
+  send or upload that fails (cohesion test).
+- **Verdict:** awaiting the owner.

@@ -207,7 +207,7 @@ export const ComposerMic = forwardRef<HTMLButtonElement, ComposerMicProps>(funct
   const [own, setOwn] = useState(Boolean(defaultSelected));
   const on = selected ?? own;
   return <Button {...rest} ref={ref} className={cx("area-composer__mic", className)} variant="ghost" tone="neutral" size={size} iconOnly
-    selected={on} onSelectedChange={next => { if (selected === undefined) setOwn(next); onSelectedChange?.(next); }}
+    selected={on} onSelectedChange={(next, event) => { if (selected === undefined) setOwn(next); onSelectedChange?.(next, event); }}
     aria-label={label} icon={<Glyph name={on ? "waveform" : "mic"} />} />;
 });
 

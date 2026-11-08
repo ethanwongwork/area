@@ -1,0 +1,205 @@
+/* ---------------------------------------------------------------------------
+ * Chart
+ *
+ * Plots rows of data as vertical bars (grouped or stacked), lines, areas or a donut, and shows one figure with its
+ * change (the number) (docs/specs/chart.md; components audit N7, 2026-11-07). A notes app's chart views (bar, line,
+ * donut, number), a chat app's charts (a legend that toggles series, a chart tooltip with rows, a table view) and the
+ * data views kit (apps/desktop/src/data-views.tsx, the owner's rounds 1–19) do the same job.
+ *
+ * The plot is SVG drawn at its box's measured width, so text never scales; its marks follow the data views system:
+ * marks 2 apart, a corner of min(4, side / 4) at the value end only, flat fills with no edge, 1px strokes (gridlines the
+ * Dividers group's line, the baseline the divider, a guide dashed 2 2), labels at the data label style (text-xs, mono,
+ * tabular, muted). Series paint the series tokens in order (`--area-series-<n>-fill` for fills and keys, the mark
+ * `--area-series-<n>` for lines). The tooltip is Area's Tooltip; the table view is Area's Table.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-chart {
+    /* spec: the plot's height (axis labels included), the data views kit's 192 at md (data-views.tsx, plots 192 tall);
+       sm 128 and lg 256 are the code-hosting product's chart heights (data views README, "Heights by size"). */
+    --_chart-height: 192px;
+    /* The ground under the plot: Card's fill (its public hook), else the card ground. Stacked areas part on it and a
+       point's ring is drawn in it. */
+    --_chart-ground: var(--area-card-fill, var(--area-bg-card));
+    /* A guide (the hovered x, a reference): the muted ink at 45% over the ground, dashed 2 2 (data views round 6). */
+    --_chart-guide: color-mix(in oklab, var(--area-fg-muted) 45%, var(--_chart-ground)); /* spec */
+    display: grid;
+    gap: var(--area-space-12); /* spec: body blocks 12 apart (data views round 9) */
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
+  }
+  .area-chart--sm { --_chart-height: 128px; /* spec */ }
+  .area-chart--md {}
+  .area-chart--lg { --_chart-height: 256px; /* spec */ }
+  /* Kind: bar, line and area share the axes and the gridlines; each kind's marks are drawn by React. */
+  .area-chart--bar {}
+  .area-chart--line {}
+  .area-chart--area {}
+  /* A donut's plot is the ring's height: 160 across at md, 128 and 192 (derived: the data views ring, 160, a step of 32
+     either side). */
+  .area-chart--donut { --_chart-height: 160px; /* spec */ }
+  .area-chart--donut.area-chart--sm { --_chart-height: 128px; /* spec */ }
+  .area-chart--donut.area-chart--lg { --_chart-height: 192px; /* spec */ }
+
+  /* The plot: one tab stop, the arrow keys move across x. Its font is the data label style, read by the drawing to size
+     the axis gutter. */
+  .area-chart__plot {
+    position: relative;
+    min-inline-size: 0;
+    block-size: var(--_chart-height);
+    border-radius: var(--area-radius-control-sm);
+    font-family: var(--area-font-mono);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+    outline: none;
+  }
+  .area-chart__plot:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+  .area-chart__svg { display: block; overflow: visible; }
+
+  /* Strokes, all 1px: a gridline the Dividers group's line, the baseline the divider, a guide dashed 2 2. */
+  .area-chart__grid { stroke: var(--area-edge-dividers); stroke-width: 1; shape-rendering: crispEdges; }
+  .area-chart__baseline { stroke: var(--area-border-divider); stroke-width: 1; shape-rendering: crispEdges; }
+  .area-chart__guide { stroke: var(--_chart-guide); stroke-width: 1; stroke-dasharray: 2 2; pointer-events: none; }
+  /* Axis labels: the data label style, muted, tabular. */
+  .area-chart__tick { fill: var(--area-fg-muted); }
+
+  /* Marks: a series' fill, flat, no edge (data views round 7). Bars and slices; the hovered band behind them is the
+     hover plate. */
+  .area-chart__mark { fill: var(--_chart-fill); }
+  .area-chart__band { fill: transparent; }
+  .area-chart__band[data-active] { fill: var(--area-bg-hover); }
+  /* A line: the series' mark, 1.5, round caps and joins (spec: a notes app's line 1.25, the references' 2). */
+  .area-chart__line { fill: none; stroke: var(--_chart-stroke); stroke-width: 1.5px; /* spec */ stroke-linecap: round; stroke-linejoin: round; }
+  /* An area's wash under its line: the series' colour at 24% at the top, to nothing at the baseline (React's gradient);
+     stacked, the bands are the flat fill, parted by a 1.5 line in the ground (data views round 2). */
+  .area-chart__wash { fill: var(--_chart-wash); }
+  .area-chart--stacked .area-chart__wash { fill: var(--_chart-fill); }
+  .area-chart__part { fill: none; stroke: var(--_chart-ground); stroke-width: 1.5px; /* spec */ stroke-linejoin: round; }
+  /* A point shows only where the pointer or the keys are: r 4, a 2 ring in the ground (spec: an editor's dots r 5, ring
+     2; the ring kept, the dot one step smaller beside a 1.5 line). */
+  .area-chart__dot { fill: var(--_chart-stroke); stroke: var(--_chart-ground); stroke-width: 2px; /* spec */ }
+
+  /* The donut's centre: the total, the second-rank figure (title-sm, 500, mono), over its label in the data label style. */
+  .area-chart__center { fill: var(--area-fg-default); font-size: var(--area-title-sm-size); font-weight: var(--area-weight-strong); }
+  .area-chart__center-label { fill: var(--area-fg-muted); }
+  .area-chart--donut .area-chart__plot { display: flex; justify-content: center; }
+  .area-chart--donut .area-chart__mark[data-active] { fill: color-mix(in oklab, var(--_chart-fill) 80%, var(--area-fg-default)); /* spec: a slice under the pointer, a step deeper */ }
+
+  /* The tooltip is Area's Tooltip surface, placed beside the hovered x; it stacks a title and one row per series. */
+  .area-chart__tooltip {
+    position: absolute;
+    z-index: 1;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--area-space-2);
+    inline-size: max-content;
+    pointer-events: none;
+    font-family: var(--area-font-sans);
+  }
+  .area-chart__tooltip-title { font-weight: var(--area-weight-strong); }
+  /* A row: the key, the series' name, its value at the end (tabular), 8 apart; at least 16 between name and value. */
+  .area-chart__tooltip-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: var(--area-space-8);
+  }
+  .area-chart__tooltip-row > :last-child { margin-inline-start: var(--area-space-8); font-variant-numeric: tabular-nums; }
+
+  /* A key: an 8 square, corner 2 (data views: strips and keys 8, corner 2). */
+  .area-chart__key {
+    flex: none;
+    inline-size: var(--area-space-8);
+    block-size: var(--area-space-8);
+    border-radius: 2px; /* spec: an 8 mark's corner */
+    background-color: var(--_chart-fill);
+  }
+
+  /* The legend: each series' key and name, a toggle that hides and shows it; items 16 apart, 4 between rows. */
+  .area-chart__legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--area-space-4) var(--area-space-16);
+    min-inline-size: 0;
+  }
+  .area-chart--donut .area-chart__legend { justify-content: center; }
+  .area-chart__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    min-inline-size: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 2px; /* spec: a key's corner */
+    margin: 0;
+    background: none;
+    color: var(--area-fg-muted);
+    font: inherit;
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    cursor: pointer;
+  }
+  .area-chart__legend-item:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* A hidden series keeps its words; its key empties to the trough with an edge, so the name still reads. */
+  .area-chart__legend-item[aria-pressed="false"] > .area-chart__key {
+    background-color: var(--area-bg-component);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border);
+  }
+  .area-chart__legend-item[aria-pressed="false"] > .area-chart__legend-label { text-decoration-line: line-through; }
+  .area-chart__legend-label { overflow-wrap: anywhere; }
+  /* The table toggle sits at the legend's end. */
+  .area-chart__view { margin-inline-start: auto; }
+
+  /* The table view: Area's Table in place of the plot. */
+  .area-chart__table { min-inline-size: 0; }
+  /* Nothing to plot: the empty words in the plot's place, muted, centred. */
+  .area-chart__empty {
+    display: grid;
+    place-items: center;
+    block-size: var(--_chart-height);
+    color: var(--area-fg-muted);
+    text-align: center;
+  }
+  /* Loading: a Skeleton fills the plot's box (Skeleton's delay keeps the box while it waits). */
+  .area-chart__plot > .area-skeleton { block-size: 100%; }
+  .area-chart[aria-busy="true"] .area-chart__plot { cursor: progress; }
+
+  /* --- The number: one figure, its label and its change ------------------- */
+  /* Label (text, muted) · figure (CardValue's: title-lg, regular, tabular) · the change (a soft Badge) and what it is
+     against (the data label style, mono, muted); 4 apart, as Card's text pairs. */
+  .area-chart--number { gap: var(--area-space-4); }
+  .area-chart__label { color: var(--area-fg-muted); overflow-wrap: anywhere; }
+  .area-chart__figure {
+    font-size: var(--area-title-lg-size);
+    line-height: var(--area-title-lg-leading);
+    letter-spacing: var(--area-title-lg-tracking);
+    font-weight: var(--area-weight-regular);
+    font-variant-numeric: tabular-nums;
+  }
+  .area-chart__change { display: flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-4) var(--area-space-8); min-inline-size: 0; }
+  .area-chart__note {
+    color: var(--area-fg-muted);
+    font-family: var(--area-font-mono);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (forced-colors: active) {
+    .area-chart__mark, .area-chart--stacked .area-chart__wash { fill: CanvasText; }
+    .area-chart__wash { fill: transparent; }
+    .area-chart__line, .area-chart__part { stroke: CanvasText; }
+    .area-chart__dot { fill: Highlight; stroke: Canvas; }
+    .area-chart__grid, .area-chart__baseline, .area-chart__guide { stroke: GrayText; }
+    .area-chart__tick, .area-chart__center, .area-chart__center-label { fill: CanvasText; }
+    .area-chart__band[data-active] { fill: Highlight; }
+    .area-chart__key { background-color: CanvasText; }
+    .area-chart__legend-item[aria-pressed="false"] > .area-chart__key { background-color: Canvas; box-shadow: inset 0 0 0 1px CanvasText; }
+  }
+}

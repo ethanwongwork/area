@@ -160,3 +160,12 @@ test('caption outside is a class; the frame draws the card and the head sits und
   // A screen held the inset in keeps its asset 16:9, so a window fits whole.
   assert.match(css, /\.area-asset-card--outside\.area-asset-card--screen:not\(\.area-asset-card--image\) > \.area-asset-card__frame > :not\(\.area-asset-card__badge\) \{ aspect-ratio: 16 \/ 9; \}/);
 });
+
+// docs/specs/list-box.md, "Several" (components audit V7, 2026-11-07): Asset grid takes List box's multi-select contract.
+test('AssetGrid with multiple selects several cards and says so', () => {
+  const html = render(h(AssetGrid, { 'aria-label': 'Label', multiple: true, defaultValues: ['b'] },
+    h(AssetGridItem, { value: 'a', name: 'Item one' }), h(AssetGridItem, { value: 'b', name: 'Item two' })));
+  assert.match(html, /role="listbox"[^>]*aria-multiselectable="true"/);
+  assert.match(html, /aria-selected="true"[^>]*data-value="b"/);
+  assert.match(html, /aria-selected="false"[^>]*data-value="a"/);
+});

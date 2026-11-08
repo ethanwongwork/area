@@ -34,3 +34,14 @@ export const GalleryOTPFieldComplete = () => {
     </Field>
   );
 };
+/* A Field's success and warning reach the slots, as Input's (components audit 2026-11-07, O1). */
+export const GalleryOTPFieldSuccess = () => (
+  <Field label="Label" validation="Success message" validationStatus="success">
+    <OTPField defaultValue="482915" />
+  </Field>
+);
+export const GalleryOTPFieldWarning = () => (
+  <Field label="Label" validation="Warning message" validationStatus="warning">
+    <OTPField defaultValue="482915" />
+  </Field>
+);

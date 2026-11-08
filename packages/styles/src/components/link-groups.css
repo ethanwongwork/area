@@ -6,7 +6,7 @@
  * Primer; docs/research/articles-rethink-2026-10-17/inline-list-navbox.md). Type follows the footers' hierarchy (owner,
  * round 34: "reevaluate the text styles and make sure hierarchy and proper type alignment is correct"): Vercel, Linear,
  * Apple, MDN and Docusaurus set the group heading in the strongest ink and the links dimmer.
- *   title    the surface title (title-xs, strong): Card's and Dialog's title
+ *   title    a section title (title-xs, strong), as the app's section titles: it heads groups that have their own headings
  *   heading  UI text, strong, default ink (Linear 13 / 510 primary; Vercel 14 / 500 gray-1000)
  *   links    UI text, regular, muted, underlined on hover (Linear tertiary, Vercel gray-900): Link muted standalone
  * Title, headings and links start on one edge; no element is inset.

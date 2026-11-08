@@ -32,7 +32,7 @@ whether a dismissed alert stays rendered.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| tone | neutral (default), info, success, warning, danger (Badge's order; accent removed 2026-09-29, D1) | Meaning, not emphasis; one family of semantic surfaces | Area's semantic tones; Untitled has no alert |
+| tone | neutral (default), info, success, warning, caution, danger, discovery (Button's and Badge's seven, in their order, 2026-11-07; accent removed 2026-09-29, D1) | Meaning, not emphasis; one family of semantic surfaces. Caution sits between warning and danger; discovery announces something new | Area's semantic tones; Primer's Banner (upsell = discovery); Untitled has no alert |
 | layout | single-line (default), multiline | A one-row message, or a title over wrapping body with actions below | Gallery tiles `default`, `multiline` |
 | layout | banner | A persistent one-line announcement across a page or section, link or status at the end | OpenAI business and Daybreak banners (owner references), Primer Banner, Fluent MessageBar, Polaris Banner, Ant `banner`; see Banner |
 | flush | boolean | A banner that meets its container's edges | Primer `flush`, Fluent `shape="square"`, Ant `banner` |
@@ -313,3 +313,25 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
   and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
   docs/research/dark-soft-tones-2026-10-28).
 - **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
+
+## Review note, 2026-11-06 (balance pass)
+
+- **What changed:** the description stands one step (4) off the title: 12.8 baseline to cap, beside the description's
+  own 8.8. It was joined (8.8), so the title read as the paragraph's first line.
+- **Why:** the owner, on the confirm dialog: "the space between the title and the copy still doesnt look right". One
+  rule for every surface title (Card, Dialog, Confirm dialog, Drawer, Popover, Alert, Toast, Approval, Empty state sm).
+  DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
+- The owner approved the 4 step ("4 is right", 2026-11-06).
+
+### 2026-11-07 · Status icon ink (system gaps C5)
+
+- **What changed:** the icon reads `fg-<tone>-mark`, the shared status-mark role, instead of its own four inks. Same values.
+- **Why:** one colour vocabulary for labels and one ink for status icons (GOVERNANCE.md § 4; owner picked Build on the
+  system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Caution and discovery; actions (components audit O4, O7)
+
+- **What changed:** `tone` takes caution and discovery, on the same tint, edge and icon recipe, the icon on the new `fg-caution-mark` (yellow 550, 3.7:1 on white) and `fg-discovery-mark` (purple 500, 4.7:1); in dark, the tone's ink. `actions` is the slot's prop, matching its part, with `action` a deprecated alias. The Variants row no longer says Badge's order: it is Button's and Badge's seven.
+- **Why:** manifest.ts:878 had five tones while Button and Badge carry seven; alert.md:35 cited "Badge's order", stale since Badge took caution and discovery. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

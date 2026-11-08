@@ -22,7 +22,7 @@ section of a document), not a Stepper (a process the person moves through).
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| status | running, done, failed | the three states every product draws | Cursor `ToolCallLine.js` + shimmer; Codex "Running" / "Ran" / "✘ Failed"; Claude Code dot colours |
+| status | running, complete, error (`done`, `failed` deprecated aliases) | the three states every product draws | Cursor `ToolCallLine.js` + shimmer; Codex "Running" / "Ran" / "✘ Failed"; Claude Code dot colours |
 | body | none, expandable | a step with input or output opens; one without stays a line | Cursor collapsible header; Claude Code IN / OUT; Codex transcript |
 | icon | none, any 16 glyph | Cursor shows a tool icon; Codex and Claude Code do not | Cursor `ToolCallLine.js` (icon secondary) |
 | (Step group) open | closed, open | groups fold; a running group can start open | Cursor `AgentTranscriptActivityGroup.js`, Codex "Explored", Claude Code quiet tools |
@@ -230,3 +230,10 @@ muted (60%).
 ## 2026-11-04: read on its glyphs (Q-T2)
 
 Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). The outermost Step, Step group or Reasoning gives back its line's half-leading at its outer edge (`margin-block-start: calc((1cap - 1lh) / 2)`, and the end while nothing is open under the line), so its icon stays centred on the line and the gaps around it are read on the glyphs: a tracker that opens a block sits 16 under a title (it was 20). Steps inside a group keep their 4. Test: `packages/react/tests/type-rhythm.test.mjs`.
+
+### 2026-11-07 · Shared status words (system gaps C1)
+
+- **What changed:** A finished step is `complete` and a failed one `error` (`data-error`); `done` and `failed` still work for one release.
+- **Why:** one set of status words across Plan, Stepper, Step, Queue, Attachment, File upload, Edit summary and Turn
+  notice (GOVERNANCE.md, "Status words"; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.

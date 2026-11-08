@@ -36,7 +36,7 @@ export function specimenName(example, family) {
  * Default, Variants, Tones, Sizes, Layout, Content, States, Behavior, then the full
  * variant × tone matrix, which is a reference rather than a first read.
  */
-export const SPECIMEN_GROUPS = ['Default', 'Variants', 'Tones', 'Sizes', 'Layout', 'Content', 'States', 'Behavior', 'Templates', 'Variant × tone'];
+export const SPECIMEN_GROUPS = ['Default', 'Variants', 'Tones', 'Colors', 'Sizes', 'Layout', 'Content', 'States', 'Behavior', 'Templates', 'Variant × tone'];
 // Treatments and shapes (Button pill, Switch long, Skeleton circle) are both a component's visual variants.
 const TREATMENTS = new Set(['solid', 'soft', 'outline', 'ghost', 'color', 'modern', 'dotSoft', 'dotOutline', 'pill', 'long', 'circle']);
 const LAYOUT = new Set(['horizontal', 'vertical', 'fullWidth', 'labelEnd', 'labelStart', 'right', 'bottom', 'left', 'top',
@@ -54,6 +54,8 @@ export function specimenGroup(name, family) {
   if (override) return override;
   const [head, ...rest] = name.split('-');
   const value = rest.join('-');
+  // A label colour (Tag's `color`, 2026-11-07): hues without meaning, beside the tones. Badge's `color` is a treatment.
+  if (head === 'color' && value && family !== 'badge') return 'Colors';
   if (TREATMENTS.has(head) && value) return 'Variant × tone';
   if (['variant', 'appearance', 'kind', 'shape'].includes(head) || (!value && TREATMENTS.has(head))) return 'Variants';
   // Emphasis-role tiles (Action / accent, Selection / accent) sit with the tones.
@@ -82,6 +84,6 @@ export function specimenWords(label) {
 export function specimenLabel(name, group) {
   if (group === 'Default') return 'default';
   const [head, ...rest] = name.split('-');
-  const prefixes = { Variants: ['variant', 'appearance', 'kind', 'shape', 'presence'], Tones: ['tone'], Sizes: ['size', 'presenceSize'], Layout: ['layout', 'side', 'orientation'], States: ['state'], Behavior: ['behavior'], Content: ['composition', 'content'], Templates: ['template'] };
+  const prefixes = { Variants: ['variant', 'appearance', 'kind', 'shape', 'presence'], Tones: ['tone'], Colors: ['color'], Sizes: ['size', 'presenceSize'], Layout: ['layout', 'side', 'orientation'], States: ['state'], Behavior: ['behavior'], Content: ['composition', 'content'], Templates: ['template'] };
   return (prefixes[group] ?? []).includes(head) && rest.length ? rest.join('-') : name;
 }

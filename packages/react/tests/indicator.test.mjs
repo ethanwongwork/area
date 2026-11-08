@@ -73,3 +73,12 @@ test('gallery presents exactly one indicator variant per specimen', async () => 
     }
   } finally { rmSync(out,{force:true}); }
 });
+
+test('bordered and invisible are the names; withBorder and hidden are deprecated aliases (components audit O7)', () => {
+  assert.match(render(h(Indicator, { tone: 'success', bordered: true })), /data-border="true"/);
+  assert.match(render(h(Indicator, { tone: 'success', withBorder: true })), /data-border="true"/);
+  assert.doesNotMatch(render(h(Indicator, { tone: 'success', bordered: false, withBorder: true })), /data-border/);
+  assert.equal(render(h(Indicator, { invisible: true })), '');
+  assert.equal(render(h(Indicator, { hidden: true })), '');
+  for (const tone of ['caution', 'discovery']) assert.match(render(h(Indicator, { tone })), new RegExp(`area-indicator--${tone}`));
+});

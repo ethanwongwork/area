@@ -29,8 +29,9 @@ test('row components that open with a line of text give back its half-leading at
   ]) assert.ok(has(selector, `${property}: ${TRIM}`), `${selector} keeps ${property}: ${TRIM}`);
 });
 
-test("Card's title is one role, title-xs, unless a page's hook sets another ramp step", () => {
-  assert.ok(css.includes('--_card-title-size: var(--area-card-title-size, var(--area-title-xs-size))'));
-  assert.ok(css.includes('--_card-title-leading: var(--area-card-title-leading, var(--area-title-xs-leading))'));
-  assert.ok(css.includes('--_card-title-tracking: var(--area-card-title-tracking, var(--area-title-xs-tracking))'));
+// 2026-11-06 balance pass (DESIGN_SYSTEM.md, "Text pairs"): a component's title is its text's size; it was title-xs.
+test("Card's title is one role, its description's size, unless a page's hook sets another ramp step", () => {
+  assert.ok(css.includes('--_card-title-size: var(--area-card-title-size, var(--area-text-base-size))'));
+  assert.ok(css.includes('--_card-title-leading: var(--area-card-title-leading, var(--area-text-base-leading))'));
+  assert.ok(css.includes('--_card-title-tracking: var(--area-card-title-tracking, var(--area-text-base-tracking))'));
 });

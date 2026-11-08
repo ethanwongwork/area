@@ -68,7 +68,7 @@
   /* The mat is the room above the title's line (2026-11-04, aligned answers): the card's 12 on every side; the half-row
      the head took above it when the mat was 6 now comes from the mat. */
   .area-approval__head { --_approval-first: 0px; display: flex; align-items: flex-start; gap: var(--area-ui-cluster); min-inline-size: 0; padding-block-start: var(--_approval-first); }
-  .area-approval__heading { display: grid; flex: 1; min-inline-size: 0; }
+  .area-approval__heading { display: grid; gap: var(--area-space-4); flex: 1; min-inline-size: 0; } /* a title stands one step (4) off its copy (DESIGN_SYSTEM.md, "Text pairs"; owner 2026-11-06: joined, "the space between the title and the copy still doesnt look right"): 12.8 baseline to cap beside the copy's 8.8 */
   /* The head's actions (a question's place among several, a close) sit on the title's row: a row tall, centred on the
      title's first line, their last plate on the card's trailing offset. */
   .area-approval__actions { display: flex; flex: none; align-items: center; gap: var(--area-space-4); block-size: var(--area-text-base-leading); margin-inline-end: var(--_approval-trail); color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
@@ -135,7 +135,7 @@
      Selection role's ink; the other rows keep the check's column with the mark at rest (MOTION.md small mark). */
   .area-approval__option[data-selected] { background-color: var(--area-bg-component-active); transition-duration: 0s; }
   .area-approval__check { display: inline-grid; flex: 0 0 var(--area-icon-md); place-items: center; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); margin-inline-start: auto; color: var(--area-fg-selection); }
-  .area-approval__check > svg { inline-size: 100%; block-size: 100%; transition: opacity var(--area-duration-fast) var(--area-ease-out), scale var(--area-duration-fast) var(--area-ease-out); }
+  .area-approval__check > svg { inline-size: 100%; block-size: 100%; transition: opacity var(--area-fade-fast) var(--area-ease-out), scale var(--area-duration-fast) var(--area-ease-out); }
   .area-approval__option:not([data-selected]) > .area-approval__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   /* What to do instead: the field is the row's text, with no fill, edge or ring of its own. */
   .area-approval__instead { cursor: text; }
@@ -209,8 +209,7 @@
     pointer-events: none;
   }
   /* The tile: the picture over its button (Approval.tsx: beside it in the markup, never inside), 4 apart and the mat's 4
-     round both; the tile wears the row plate (hover, focus, press, chosen) and its button paints none of its own, its
-     ::after stretched over the tile so the whole tile answers the pointer. The button keeps the row (key, label, check)
+     round both; the tile wears the row plate (hover, focus, press, chosen) and its button paints none of its own, its::after stretched over the tile so the whole tile answers the pointer. The button keeps the row (key, label, check)
      at the row's inset less the mat, so every label in the card starts on one column. */
   .area-approval__tile {
     position: relative;

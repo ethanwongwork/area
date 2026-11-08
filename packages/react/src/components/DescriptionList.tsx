@@ -1,7 +1,7 @@
 // Description list: labelled values, a term and its value per row, as a native <dl>.
 // Spec: docs/specs/description-list.md.
 import { Children, cloneElement, forwardRef, isValidElement, useId, useState } from "react";
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
+import type { HTMLAttributes, MouseEvent, ReactElement, ReactNode } from "react";
 import { cx, descriptionListVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 
@@ -22,7 +22,8 @@ export interface DescriptionListProps extends HTMLAttributes<HTMLDListElement> {
   /** Controlled: every row shown. */
   expanded?: boolean;
   defaultExpanded?: boolean;
-  onExpandedChange?: (expanded: boolean) => void;
+  /** The new state and the press on Show more / Show less. */
+  onExpandedChange?: (expanded: boolean, event: MouseEvent<HTMLButtonElement>) => void;
   /** The button's label while rows are hidden; a function receives the hidden count. Default "Show {n} more". */
   moreLabel?: string | ((hidden: number) => string);
   /** The button's label once every row shows. Default "Show less". */
@@ -46,9 +47,9 @@ export const DescriptionList = forwardRef<HTMLDListElement, DescriptionListProps
   if (!hidden) return <dl ref={ref} id={idProp} className={classes} {...rest}>{children}</dl>;
 
   const id = idProp ?? `${autoId}-list`;
-  const toggle = () => {
+  const toggle = (event: MouseEvent<HTMLButtonElement>) => {
     if (expandedProp === undefined) setLocalExpanded(!expanded);
-    onExpandedChange?.(!expanded);
+    onExpandedChange?.(!expanded, event);
   };
   // Rows past the count stay in the document, hidden, so the list keeps its order and a revealed row is the same node.
   const rows = items.map((item, index) => index < shown || expanded || !isValidElement(item)

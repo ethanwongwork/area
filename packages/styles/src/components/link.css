@@ -59,17 +59,18 @@
      version?"): ChatGPT's settings links rgb(44, 103, 197) (its text-info), Figma's file browser rgb(0, 123, 229);
      Area's info ink, #0160d9 (5.6:1 on white), #a0c5fd in dark. Neither product underlines them; Area keeps the
      variant's underline, so a blue link in a sentence is still underlined and a standalone one underlines on hover. */
-  .area-link--blue { --_ink: var(--area-fg-info); }
+  .area-link--blue { --_ink: var(--area-hue-blue-text); }
   /* Hued inks (owner, 2026-10-17: "the option to have the link be colored blue or standard text, or potentially another
      color like even gray, or purple"): the readable ink of each hue, the one Tag and Badge set their text in, so every
      one holds 4.5:1 on the page and follows the Layers ground. Purple is Wikipedia's visited ink (#6a60b0) family; red its
-     missing-page ink (#bf3c2c). Gray is `muted`. A hue names a colour, not a status: a red link is not an error. */
-  .area-link--purple { --_ink: var(--area-fg-discovery); }
-  .area-link--pink { --_ink: var(--area-fg-pink); }
-  .area-link--green { --_ink: var(--area-fg-success); }
-  .area-link--red { --_ink: var(--area-fg-danger); }
-  .area-link--orange { --_ink: var(--area-fg-warning); }
-  .area-link--brown { --_ink: var(--area-fg-brown); }
+     missing-page ink (#bf3c2c). Gray is `muted`. A hue names a colour, not a status: a red link is not an error. Each reads its hue's
+     words (`hue-<hue>-text`, semantic/hues.ts; components audit D5), the tone ink by name. */
+  .area-link--purple { --_ink: var(--area-hue-purple-text); }
+  .area-link--pink { --_ink: var(--area-hue-pink-text); }
+  .area-link--green { --_ink: var(--area-hue-green-text); }
+  .area-link--red { --_ink: var(--area-hue-red-text); }
+  .area-link--orange { --_ink: var(--area-hue-orange-text); }
+  .area-link--brown { --_ink: var(--area-hue-brown-text); }
 
   /* The external mark: Area's `open` glyph at 12, centred on the cap height so it sits with the
      text at any size, 4 after the label (the xs icon gap). It carries no underline. */

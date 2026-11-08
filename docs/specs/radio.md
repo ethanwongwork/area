@@ -109,6 +109,8 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 | focus-visible | 2px focus outline, 2px offset (choice.css:284-287); on a card the ring moves to the card (choice.css:130-135, 289-290) | not captured |
 | checked | fill `selection-solid` at once; dot `scale` 0.6 → 1 + `opacity`, `fast` ease-out (Motion, 2026-10-07) | `area--selected` |
 | group invalid | unchecked edges `fg-danger-vivid`; the checked option `danger-solid` with `fg-on-danger` dot; message in danger ink | `area--invalid` |
+| group success / warning | `validation` with `validationStatus`: the message in `fg-success-vivid` / `fg-warning-vivid`; the options unchanged (2026-11-07, as Checkbox group) | Checkbox group |
+| group read-only | `data-read-only` on the fieldset and each option (`data-readonly` is the deprecated spelling, still painted); no press or hover edge; the chosen card keeps its rest edge | owner 2026-10-26; 2026-11-07 spelling |
 | disabled | `opacity-disabled` (50%) | `area--disabled` |
 
 ## Behavior and accessibility
@@ -287,3 +289,18 @@ Group rhythm: as Checkbox group, the description and validation sit `ui-stack` (
   For now the gallery's picture tiles show an image placeholder (owner: "just use an image placeholder for now to
   better asses the visuals"): Card media's flat fill with an image glyph, two steps from the soft card's fill (neutral
   150 in light, 800 in dark), filling the slot as a photo would. Radio and Checkbox share every rule.
+
+## Review note, 2026-11-06 (balance pass; owner: "Keep it")
+
+- **What changed:** a description joins its label as the next line: the 12/16 line sits 7.7 under the 13/18 label's
+  baseline, its own line gap (7.4). It sat 2 below (9.7), 2.3 off its own line. A group's legend and its description
+  join the same way.
+- **Why:** the owner's balance pass ("no spacing logic between the title and the text … make sure all of this is
+  intentional"): a gap near a line's own spacing but not on it reads as no decision. File tile's meta already joined at
+  7.7. DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
+
+### 2026-11-07 · Radio group: success and warning; read-only spelled read-only (components audit O1, O2)
+
+- **What changed:** RadioGroup takes `validation` and `validationStatus` (`success`, `warning`), as Checkbox group; its read-only state is `data-read-only` on the fieldset and on each option (manifest `read-only`), and `data-readonly` stays painted as the deprecated spelling for one release.
+- **Why:** forms.tsx:241-262 (only `error`); manifest.ts:401 and choice.css:205 spelled `readonly` where 17 places say `read-only`. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

@@ -7,13 +7,16 @@
 
 - 2026-09-23 (COMPONENTS.md, inspector foundation item 6): "a resizable panel".
 - 2026-09-26: "move on to the next component".
+- 2026-11-07: components audit, "Take all recs" (N6 Splitter): the edge takes Splitter's handle paint and a double-click
+  puts `defaultWidth` back.
 
 ## Job and boundaries
 
 A panel docked beside a canvas or page can be made wider or narrower from one edge, by
 pointer or keyboard, within limits. It is a Panel option (`resizable`), not a new container.
-Not a general split layout (two resizable regions sharing a separator) — that is
-Resizable/Splitter in the broader backlog; the separator here only sizes its own panel.
+Not a general split layout (two resizable regions sharing a separator): that is
+[Splitter](splitter.md) (2026-11-07); the separator here only sizes its own panel. The two share one handle paint
+(splitter.css), so an edge looks and behaves the same wherever it is.
 
 ## Variants
 
@@ -22,10 +25,10 @@ Resizable/Splitter in the broader backlog; the separator here only sizes its own
 | edge | start | a panel docked at the end of the page (inspector) | Figma design panel: handle on its left edge |
 | edge | end | a panel docked at the start (sidebar) | Figma layers panel, Notion sidebar: handle on the right edge |
 | limits | min / max width | Figma 241–500 (design), 240–443 (layers) | both |
-| state | rest, hover, dragging, focus-visible, at min, at max | captured / source | Figma, Notion |
+| state | rest, hover, dragging, focus-visible, at min, at max | captured / source | Figma, Notion; the editor's sashes (hover and dragging paint) |
 
-Excluded: collapse-to-zero on double-click or Enter (neither product showed it without
-changing the owner's layout); vertical (height) resizing.
+Excluded: collapse-to-zero on Enter (neither product showed it without changing the owner's layout); vertical (height)
+resizing. A double-click puts `defaultWidth` back (the editor's `onEqualize`, Splitter's reset, 2026-11-07).
 
 ## Sources
 
@@ -65,9 +68,11 @@ focus-visible            ::before 4 × 50% of the edge,      outline 0 (no indic
 | role | `separator` (window splitter), `aria-orientation="vertical"`, `aria-controls` the panel | WAI; Notion | Figma uses `slider`; the WAI pattern is the one written for this job |
 | name / value | "Resize {panel}"; valuenow = width in px; valuetext "N pixels", "(minimum)" / "(maximum)" at a limit | Figma's px value and "(min)" | Notion's 0–100 says nothing about the width |
 | hit area | 8 wide, 6 outside the edge, 2 inside, full height | Figma | primary product for inspectors |
-| hover | cursor only | Figma | Notion's darker 2px edge is the alternative; Figma is primary |
+| hover | after the pointer rests 300 ms, a 2 line over the seam and the pixel outside it, in `border-hover` (the shared handle paint) | the editor's sash (`workbench.sash.hoverDelay` 300, `:hover::before{width:2px}`); Notion's darker 2px edge | Was cursor only (Figma) until 2026-11-07: the audit found an edge you can't see until you press it; the wait keeps passing over it from flashing |
+| dragging | a 2 line in `accent-indicator`, at once | the editor's sash (`[data-resizing]::before` in its accent) | — |
+| double-click | `defaultWidth` back, when given | the editor's `onEqualize`; Splitter | — |
 | cursor | `ew-resize`; at a limit the one direction left (`w-resize`/`e-resize`, mirrored in RTL) | Figma | Notion `col-resize` |
-| focus-visible | 4px pill, 50% of the edge, `--area-focus-color`, centred | Figma (4, 50%, pill) | Area's focus colour instead of Figma blue |
+| focus-visible | 4px pill, 50% of the edge, `--area-focus-color`, centred (the shared handle paint's `::after`; was this edge's own `::before`) | Figma (4, 50%, pill) | Area's focus colour instead of Figma blue |
 | limits | min 240, max 500 by default; props | Figma 240/241 and 500 | — |
 | keyboard | ←/→ move the edge 8px (Shift 32px), Home/End to min/max, Escape cancels a drag | WAI; Area spacing grid | steps not measured (pressing arrows would resize the owner's panel) |
 | docked seam | a `flush` resizable panel keeps a rule on its resize edge | Figma, Notion: a rule on that edge | `flush` otherwise has no border |
@@ -78,8 +83,8 @@ focus-visible            ::before 4 × 50% of the edge,      outline 0 (no indic
 
 | State | Change | Evidence |
 |---|---|---|
-| hover | cursor | Figma |
-| dragging | `data-resizing` on the panel (no text selection) | — |
+| hover | cursor; after 300 ms the 2 line in `border-hover` | the editor's sash |
+| dragging | `data-resizing` on the panel (no text selection) and on the edge: the 2 line in the accent | the editor's sash |
 | focus-visible | pill | Figma |
 | at min / max | directional cursor, "(minimum)" / "(maximum)" | Figma |
 
@@ -103,8 +108,10 @@ Home/End for the limits. Controlled (`width` + `onWidthChange`) or uncontrolled
 
 ## Open questions
 
-- Hover affordance: Figma shows nothing; Notion darkens the edge. Area follows Figma.
-- Collapse (Enter / double-click) was not observed; left out.
+- Hover affordance: settled 2026-11-07, the shared handle paint (above).
+- Collapse (Enter) was not observed; left out. A double-click resets to `defaultWidth`.
+- `onWidthChange(width)` passes no event, unlike Splitter's `onSizeChange(size, event)` (Governance § 4, known
+  deviations).
 
 ## Review note, 2026-11-01 (a width the app sets eases)
 
@@ -113,3 +120,17 @@ Home/End for the limits. Controlled (`width` + `onWidthChange`) or uncontrolled
   never animates (MOTION.md, "Panel width").
 - **Why:** the desktop app's Sidebar widens to 288 while it holds a section's list (owner, 2026-11-01).
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-07 (components audit N6: the shared handle paint)
+
+- **What changed:** the edge shows itself after the pointer rests on it for 300 ms: a 2 line over the seam, then the
+  accent while it is dragged. A double-click puts the starting width back. Keyboard focus keeps the 4 pill.
+- **Why:** the audit found the edge painted nothing until pressed; Splitter now draws the same handle, from one rule, so
+  every resize edge in Area looks and behaves alike.
+- **Verdict:** awaiting the owner.
+
+## Feedback log
+
+- 2026-11-07 · components audit N6 → the shared handle paint (splitter.css: 300 ms wait, 2 line in `border-hover`,
+  accent while dragging, focus pill moved to `::after`); `onDoubleClick` resets to `defaultWidth` (primitives.tsx).
+  Cohesion test "every resize edge shares one handle paint".

@@ -48,3 +48,39 @@ test("CustomSelect keeps onHighlightChange off the trigger", () => {
   assert.doesNotMatch(html, /onhighlightchange/i);
   assert.match(html, /role="combobox"/);
 });
+
+// docs/specs/custom-select.md, "Several from a long list" (components audit V7, 2026-11-07).
+const many = ["one", "two", "three", "four"].map(word => ({ value: word, label: `Option ${word}` }));
+test("CustomSelect names one or two chosen options and counts three or more", () => {
+  const two = renderToString(h(CustomSelect, { "aria-label": "Label", items: many, multiple: true, defaultValues: ["one", "two"] }));
+  assert.match(two, /area-custom-select__value">Option one, Option two</);
+  const three = renderToString(h(CustomSelect, { "aria-label": "Label", items: many, multiple: true, defaultValues: ["one", "two", "four"] }));
+  assert.match(three, /area-custom-select__value">3 selected</);
+  const custom = renderToString(h(CustomSelect, { "aria-label": "Label", items: many, multiple: true, defaultValues: ["one", "two", "four"], selectedLabel: count => `${count} teams` }));
+  assert.match(custom, /area-custom-select__value">3 teams</);
+});
+
+test("CustomSelect filterable: a panel with the filter field, Select all, the listbox and a footer", () => {
+  const html = renderToString(h(CustomSelect, { "aria-label": "Label", items: many, multiple: true, filterable: true, defaultValues: ["three"], footer: h("button", { type: "button" }, "Save") }));
+  const panel = html.match(/<div popover="manual" class="([^"]*)"/);
+  assert.ok(panel, "the panel is the popover");
+  assert.match(panel[1], /area-menu area-custom-select__listbox area-custom-select__panel/);
+  const filter = html.match(/<input[^>]*>/)[0];
+  for (const attr of ['role="combobox"', 'aria-label="Filter"', 'placeholder="Filter"', 'aria-autocomplete="list"']) assert.ok(filter.includes(attr), attr);
+  const listbox = html.match(/<div[^>]*role="listbox"[^>]*>/)[0];
+  assert.ok(listbox.includes(`id="${filter.match(/aria-controls="([^"]+)"/)[1]}"`), "the filter controls the listbox");
+  assert.match(listbox, /aria-multiselectable="true"/);
+  assert.match(listbox, /area-menu__list/);
+  assert.doesNotMatch(listbox, /popover/);
+  const all = html.match(/<button[^>]*area-custom-select__select-all[^>]*>/)[0];
+  assert.match(all, /role="checkbox"/);
+  assert.match(all, /aria-checked="mixed"/);
+  assert.match(html, /area-menu__header area-custom-select__header/);
+  assert.match(html, /area-menu__footer area-custom-select__footer"><button type="button">Save<\/button>/);
+  assert.ok(html.indexOf("area-custom-select__header") < html.indexOf('role="listbox"') && html.indexOf('role="listbox"') < html.indexOf("area-custom-select__footer"));
+  const plain = renderToString(h(CustomSelect, { "aria-label": "Label", items: many }));
+  assert.doesNotMatch(plain, /area-custom-select__panel|area-custom-select__filter|select-all/);
+  assert.match(plain, /role="listbox"[^>]*popover="manual"/, "without a filter or footer the listbox is the popover, as before");
+  const single = renderToString(h(CustomSelect, { "aria-label": "Label", items: many, filterable: true }));
+  assert.doesNotMatch(single, /select-all/, "Select all is for a set");
+});

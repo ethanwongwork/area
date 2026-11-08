@@ -98,6 +98,7 @@ Area md (captures): field 88 × 32 at "9:30 AM", segments 20 tall, 2 padding eit
 | a segment focused | `selection-surface` behind it, the field's ink; Input's focus edge on the shell | owner, round 24; Editable text |
 | empty segment | "––" in the placeholder ink | React Aria |
 | invalid | Input's invalid edge; `aria-invalid` on the segments | peer Input |
+| success / warning | Input's success and warning edges on the shell, from `validationStatus` or a Field's status (2026-11-07) | peer Input |
 | disabled | segments out of the Tab order, disabled ink, no list | React Aria |
 | read-only | segments focusable, not editable; no list | React Aria |
 | list open | Menu; the chosen row checked | ChatGPT |
@@ -159,3 +160,9 @@ reserves two digits, which pushed "9" away from its colon; the list now centres 
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+### 2026-11-07 · Success and warning; the list's open state; the event (components audit O1, O3)
+
+- **What changed:** `validationStatus` and a Field's status paint the shell as Input's; `open` / `defaultOpen` / `onOpenChange` control the list of times; `onValueChange(value, event)` passes the key or click.
+- **Why:** Time field mapped a Field's `error` and dropped success and warning (TimeField.tsx:82); its list had no open-state API, while every overlay has the trio (Governance § 4). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

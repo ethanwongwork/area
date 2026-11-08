@@ -75,14 +75,14 @@ export const ColorField = forwardRef<HTMLInputElement, ColorFieldProps>(function
     pattern={alpha ? "#?[0-9a-fA-F]{3,4}|#?[0-9a-fA-F]{6}|#?[0-9a-fA-F]{8}" : "#[0-9a-fA-F]{3,4}|#[0-9a-fA-F]{6}|#[0-9a-fA-F]{8}"}
     maxLength={9} spellCheck={false} autoCapitalize="off"
     variant={variant} size={size} fullWidth={fullWidth}
-    className={alpha ? undefined : cx(colorFieldVariants({ size, fullWidth }), className)}
-    leadingIcon={<ColorSwatch color={committed || "transparent"} size="sm" aria-hidden="true" />}
+    className={alpha ? undefined : cx(colorFieldVariants({ variant, size, fullWidth }), className)}
+    icon={<ColorSwatch color={committed || "transparent"} size="sm" aria-hidden="true" />}
     invalid={invalid || draftInvalid}
     onChange={(event: ChangeEvent<HTMLInputElement>) => { setDraft(event.target.value); onChange?.(event); }}
     onBlur={event => { onBlur?.(event); commit(event); }} onKeyDown={handleKeyDown} />;
   if (!alpha) return hexInput;
   return <InputGroup size={size} variant={variant} fullWidth={fullWidth} aria-label={groupLabel}
-    className={cx(colorFieldVariants({ size, fullWidth, alpha }), className)}>
+    className={cx(colorFieldVariants({ variant, size, fullWidth, alpha }), className)}>
     {hexInput}
     <NumberField className="area-color-field__opacity" aria-label={opacityLabel}
       value={Math.round(parseInt(committed.slice(7) || "FF", 16) / 255 * 100)}

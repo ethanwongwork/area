@@ -26,9 +26,9 @@ export const GalleryFileUpload = () => <FileUpload style={width} accept=".pdf,.p
 export const GalleryFileUploadDragging = () => <FileUpload style={width} hint={hint} data-dragging="" />;
 export const GalleryFileUploadInvalid = () => <FileUpload style={width} invalid hint="Error message" />;
 export const GalleryFileUploadDisabled = () => <FileUpload style={width} disabled hint={hint} />;
-export const GalleryFileUploadItemUploading = () => <FileUploadList style={width}><FileUploadItem name="Document.pdf" icon={typeIcon("Document.pdf")} size={2_400_000} status="uploading" progress={40} onRemove={() => {}} /></FileUploadList>;
-export const GalleryFileUploadItemComplete = () => <FileUploadList style={width}><FileUploadItem name="Image.png" icon={typeIcon("Image.png")} size={720_000} status="complete" onRemove={() => {}} /></FileUploadList>;
-export const GalleryFileUploadItemError = () => <FileUploadList style={width}><FileUploadItem name="File.pdf" icon={typeIcon("File.pdf")} size={14_200_000} status="error" error="Error message" onRetry={() => {}} onRemove={() => {}} /></FileUploadList>;
+export const GalleryFileUploadItemUploading = () => <FileUploadList style={width}><FileUploadItem name="Document.pdf" icon={typeIcon("Document.pdf")} size={2_400_000} status="uploading" progress={40} onDismiss={() => {}} /></FileUploadList>;
+export const GalleryFileUploadItemComplete = () => <FileUploadList style={width}><FileUploadItem name="Image.png" icon={typeIcon("Image.png")} size={720_000} status="complete" onDismiss={() => {}} /></FileUploadList>;
+export const GalleryFileUploadItemError = () => <FileUploadList style={width}><FileUploadItem name="File.pdf" icon={typeIcon("File.pdf")} size={14_200_000} status="error" error="Error message" onRetry={() => {}} onDismiss={() => {}} /></FileUploadList>;
 
 /* The whole flow: choose or drop files, and each one uploads (simulated) into the list below. */
 type Upload = { id: number; file: File; progress: number; status: "uploading" | "complete" | "error"; error?: string };
@@ -49,7 +49,7 @@ export const GalleryFileUploadFlow = () => {
       {uploads.length ? <FileUploadList>
         {uploads.map(upload => <FileUploadItem key={upload.id} name={upload.file.name} icon={typeIcon(upload.file.name, upload.file.type)} size={upload.file.size} status={upload.status} progress={upload.progress} error={upload.error}
           onRetry={() => setUploads(list => list.map(item => item.id === upload.id ? { ...item, status: "uploading", progress: 0, error: undefined } : item))}
-          onRemove={() => setUploads(list => list.filter(item => item.id !== upload.id))} />)}
+          onDismiss={() => setUploads(list => list.filter(item => item.id !== upload.id))} />)}
       </FileUploadList> : null}
     </div>
   );

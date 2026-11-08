@@ -42,3 +42,13 @@ export const GalleryDatePickerDisabled = () => (
 export const GalleryDatePickerInvalid = () => (
   <div style={frame}><DatePicker fullWidth invalid aria-label="Date" icon={<CalendarIcon />} today={today} /></div>
 );
+/* Success and warning, as Select's; read-only shows a date set elsewhere (components audit 2026-11-07, O1, O2). */
+export const GalleryDatePickerSuccess = () => (
+  <div style={frame}><DatePicker fullWidth validationStatus="success" aria-label="Date" icon={<CalendarIcon />} today={today} defaultValue="2026-10-14" /></div>
+);
+export const GalleryDatePickerWarning = () => (
+  <div style={frame}><DatePicker fullWidth validationStatus="warning" aria-label="Date" icon={<CalendarIcon />} today={today} defaultValue="2026-10-14" /></div>
+);
+export const GalleryDatePickerReadOnly = () => (
+  <div style={frame}><DatePicker fullWidth readOnly aria-label="Date" icon={<CalendarIcon />} today={today} defaultValue="2026-10-14" /></div>
+);

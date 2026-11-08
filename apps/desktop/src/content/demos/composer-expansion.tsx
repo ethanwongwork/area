@@ -5,7 +5,7 @@
  * Spec: docs/specs/composer.md.
  */
 import { useState } from "react";
-import { Composer, ComposerAttach, ComposerMic, ComposerNote, ModelPicker, PromptSuggestions, Tag } from "@area/react";
+import { announce, Composer, ComposerAttach, ComposerMic, ComposerNote, ModelPicker, PromptSuggestions, Tag } from "@area/react";
 import { LaptopIcon, ShieldIcon, SparkleIcon } from "@area/icons";
 
 const column = { inlineSize: "100%" };
@@ -39,11 +39,10 @@ export const GalleryComposerMicOn = () => <div style={column}><Composer placehol
 
 /** Files dragged over the composer: File upload's drop paint. Drop or paste files, or pick them with the +. */
 export const GalleryComposerDrop = () => {
-  const [names, setNames] = useState<string[]>([]);
+  const setNames = (names: string[]) => { if (names.length) announce(`Added ${names.join(", ")}`); };
   return <div style={column}>
     <Composer layout="stacked" placeholder="Placeholder" data-dragging="" onFiles={files => setNames(files.map(file => file.name))}
       leadingActions={<ComposerAttach onFiles={files => setNames(files.map(file => file.name))} />} />
-    <span className="area-sr-only" role="status">{names.length ? `Added ${names.join(", ")}` : ""}</span>
   </div>;
 };
 
@@ -59,7 +58,7 @@ export const GalleryComposerAgent = () => {
     <Composer layout="stacked" placeholder="Placeholder"
       header={<><ModelPicker size="sm" label="Label" items={[{ value: "one", label: "Option one" }, { value: "two", label: "Option two" }]} />
         <ModelPicker size="sm" label="Label" triggerProps={{ icon: <LaptopIcon /> }} items={[{ value: "three", label: "Option three" }]} /></>}
-      leadingActions={<><ComposerAttach />{mode ? <Tag tone="discovery" icon={<SparkleIcon size={12} />} onRemove={() => setMode(false)}>Label</Tag> : null}</>}
+      leadingActions={<><ComposerAttach />{mode ? <Tag color="purple" icon={<SparkleIcon size={12} />} onDismiss={() => setMode(false)}>Label</Tag> : null}</>}
       mode={<Model />} trailingActions={<ComposerMic />} />
     <PromptSuggestions layout="chips" items={[{ id: "one", label: "Item one", shortcut: ["Shift", "Tab"] }]} />
   </div>;
@@ -85,7 +84,7 @@ export const GalleryComposerCombined = () => {
     <Composer layout="stacked" placeholder="Placeholder"
       header={<><ModelPicker size="sm" label="Label" items={[{ value: "one", label: "Option one" }, { value: "two", label: "Option two" }]} />
         <ModelPicker size="sm" label="Label" triggerProps={{ icon: <LaptopIcon /> }} items={[{ value: "three", label: "Option three" }]} /></>}
-      leadingActions={<><ComposerAttach />{mode ? <Tag tone="discovery" icon={<SparkleIcon size={12} />} onRemove={() => setMode(false)}>Label</Tag> : null}
+      leadingActions={<><ComposerAttach />{mode ? <Tag color="purple" icon={<SparkleIcon size={12} />} onDismiss={() => setMode(false)}>Label</Tag> : null}
         <ModelPicker label="Label" triggerProps={{ icon: <ShieldIcon /> }} items={[{ value: "one", label: "Label" }, { value: "two", label: "Option two" }]} /></>}
       mode={<Model />} trailingActions={<ComposerMic />}
       footer={<ComposerNote>Body text</ComposerNote>} />

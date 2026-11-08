@@ -160,7 +160,7 @@ export function WorkspaceScreen({ hold = new Set() }: { hold?: ReadonlySet<Hold>
           <div className="ws-column">
             {/* A notice about the whole page, first on it, over the greeting (owner 2026-10-31: "add the banner back, maybe
                 at the top? above the greeting"): between the actions and the tasks it broke the column's flow. */}
-            <Alert tone="info" icon={<InfoIcon />} title="Connect your tools" action={<Button size="sm" variant="soft" tone="neutral">Connect</Button>}
+            <Alert tone="info" icon={<InfoIcon />} title="Connect your tools" actions={<Button size="sm" variant="soft" tone="neutral">Connect</Button>}
               onDismiss={() => undefined} dismissLabel="Dismiss">Bring in your files and calendars for better answers.</Alert>
             <div className="ws-intro" data-region="text">
               <span className="ws-title">Good afternoon</span>
