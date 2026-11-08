@@ -491,6 +491,7 @@ export const count = {
   block: "area-count", description: "Shows how many items the element it sits in holds, beside that element's label.",
   variants: { variant: ["plain", "soft"], size: ["sm", "md"] },
   booleans: ["pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
+  states: ["single"], // data-single: a one-character count drops its sides, a circle as a pill (2026-11-07)
   elements: ["label"],
   defaults: { variant: "plain", size: "md" },
 } as const satisfies ComponentManifest;

@@ -22,3 +22,10 @@ test('label adds visually hidden words after the number and passes native props'
   assert.match(html, /id="c"/);
   assert.match(html, />3<span class="area-count__label"> (<!-- -->)?unread<\/span>/);
 });
+
+test('a one-character count is marked so it drops its sides (a circle as a pill, 2026-11-07)', () => {
+  assert.doesNotMatch(render(h(Count, { count: 12, max: 9 })), /data-single/, '9+ is two characters');
+  assert.match(render(h(Count, { count: 3 })), /data-single=""/);
+  assert.match(render(h(Count, { count: 0 })), /data-single=""/);
+  assert.doesNotMatch(render(h(Count, { count: 12 })), /data-single/);
+});

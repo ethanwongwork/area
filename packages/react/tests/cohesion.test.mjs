@@ -885,3 +885,38 @@ test('a one-line option row takes the height ladder corner, pictures in a card t
   const pictures = rules.find(rule => /area-radio--preview/.test(rule.selector) && /--_card-corner:\s*var\(--area-radius-container\)/.test(rule.body));
   assert.ok(pictures && /area-radio--tile/.test(pictures.selector) && /area-radio--media-row/.test(pictures.selector), 'tile, preview and media options keep the surface corner');
 });
+
+test('a count and a status badge on one line share one shape and one text side (DESIGN_SYSTEM.md, "Marks on one line")', async () => {
+  // Owner, 2026-11-06/07 ("why are count and badge so stylistically and scale wise different"; picks on the Count beside
+  // Badge page): the same size of each is one height and one text size, and they keep their words (h - 6) / 2 from the
+  // outer edge, edge counted once; both are pills by default, or neither (docs/research/count-badge-2026-11-07).
+  const { DEFAULT_PILLS } = await import('../../tokens/dist/config.js');
+  assert.equal(DEFAULT_PILLS.includes('badge'), DEFAULT_PILLS.includes('count'), 'Badge and Count share the default shape');
+  const badgeSide = rules.filter(rule => rule.selector === '.area-badge' && /--_box-text/.test(rule.body)).at(-1)?.body ?? '';
+  assert.match(badgeSide, /--_box-text:\s*var\(--area-space-6\)/, "Badge's text side is (h - 6) / 2 (inset.css)");
+  const count = rules.find(rule => rule.selector === '.area-count' && /--_count-gutter/.test(rule.body))?.body ?? '';
+  assert.match(count, /--_count-gutter:\s*calc\(\(var\(--_count-height\) - var\(--area-space-6\)\) \/ 2\)/, "Count's text side is (h - 6) / 2 (no border: its edge is drawn inside)");
+  for (const size of ['sm', 'md']) {
+    assert.match(ruleFor(`.area-badge--${size}`)?.body ?? '', new RegExp(`--_height:\\s*var\\(--area-mark-label-${size}\\)`), `Badge ${size} is the ${size} mark height`);
+    assert.match(ruleFor(`.area-count--${size}`)?.body ?? '', new RegExp(`--_count-height:\\s*var\\(--area-mark-label-${size}\\)`), `Count ${size} is the ${size} mark height`);
+  }
+  assert.match(count, /font-size:\s*var\(--_count-text\)/);
+  assert.match(count, /--_count-text:\s*var\(--area-control-xs-text\)/, 'Count sets the marks\' text');
+  assert.match(ruleFor('.area-count[data-single]')?.body ?? '', /padding-inline:\s*0/, 'a one-character count drops its sides');
+});
+
+test('marks that share a line share Badge\'s whole-pixel cap centre (DESIGN_SYSTEM.md, "Marks on one line")', () => {
+  // Owner, 2026-11-07 ("the vertical alignment the same/consistent?"): Count centred by its line box sat up to 0.45 off a
+  // badge beside it, and Tag kept the optical lift Badge dropped (0.58 high). Each now rounds its baseline to a whole pixel
+  // from the plate's top by one formula: edge + round((h - 2 * edge + 1cap) / 2).
+  const norm = text => text.replace(/\s+/g, ' ');
+  const formula = height => `round(nearest, calc((var(${height}) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px)`;
+  const badge = norm(ruleFor('.area-badge > .area-badge__label')?.body ?? '');
+  assert.ok(badge.includes(`--_baseline: ${formula('--_height')}`), "Badge's label rounds its baseline (badge.css)");
+  const count = norm(rules.find(rule => rule.selector === '.area-count' && /--_count-baseline/.test(rule.body))?.body ?? '');
+  assert.ok(count.includes(`--_count-baseline: calc(var(--area-stroke-width) + ${formula('--_count-height')})`), "Count's digits take Badge's baseline, its edge counted from the plate's top");
+  assert.match(count, /text-box: trim-both cap alphabetic/, "Count's line is trimmed to cap and baseline, so the padding places them");
+  const tag = norm(ruleFor('.area-tag > .area-tag__label')?.body ?? '');
+  assert.ok(tag.includes(`--_baseline: calc(var(--area-stroke-width) + ${formula('--_height')})`), "Tag's label takes Badge's baseline");
+  assert.doesNotMatch(tag, /optical-lift/, 'Tag drops the optical lift (Citation keeps it)');
+});
