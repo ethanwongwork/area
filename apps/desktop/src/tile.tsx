@@ -20,12 +20,12 @@
  * (src/gallery/fit.ts) still finds component specimens.
  */
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { AssetCard, AssetGridItem, Badge, Count, ListBoxItem, SectionHeading } from "@area/react";
+import { AssetCard, AssetGridItem, Badge, Count, DesignCard, ListBoxItem, SectionHeading, type DesignFocus, type DesignLayout } from "@area/react";
 import { AlertCircleFilledIcon, ArchiveIcon, CircleCheckDashedIcon, CircleDashedIcon, CircleProgressIcon, EllipseIcon, ErrorFilledIcon, StatusAvailableFilledIcon } from "@area/icons";
 import { feedScale, feedScaleWithin } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
-import { ScreenCover } from "./setup-screen.tsx";
+import { SCREEN, ScreenCover } from "./setup-screen.tsx";
 import type { GalleryMode, GalleryRatio } from "./view-controls.tsx";
 
 /**
@@ -215,6 +215,15 @@ export interface TileProps {
   openOnClick?: boolean;
   /** Kept for callers that name it: every tile is Area's Asset card now (2026-11-02). */
   container?: "plain" | "asset";
+  /**
+   * The tile as Area's Design card (owner, 2026-11-05: "no more 'asset cards'", the Design Containers picks): the design at
+   * its true size, placed by its layout's rule, its name and true size under it. A screen tile is one by default (a
+   * ScreenFigure laid out at 1920 × 1080 and shown whole); `false` keeps the Asset card (a page whose gallery draws its own
+   * frames, Illustrations). Images, collections, colours and type sheets stay Asset cards until they move (spec).
+   */
+  design?: DesignLayout | false;
+  /** Where a part held at 50% is kept when its card crops it (Design card's `focus`). */
+  focus?: DesignFocus;
   children?: ReactNode;
 }
 
@@ -236,7 +245,49 @@ const onControl = (event: { target: EventTarget; currentTarget: EventTarget }) =
  * (`paintLabel`, Colors' Label option). The plain container it replaces was the app's own box (2026-10-21 to 2026-11-02).
  */
 export function Tile(props: TileProps) {
+  const design = props.design ?? (props.stage === "screen" ? "screen" : false);
+  if (design && props.option === undefined) return <DesignTile {...props} design={design} />;
   return <AssetTile {...props} look={props.look ?? GALLERY_LOOK} />;
+}
+
+/**
+ * Area's Design card (Components): the same handlers and caption as an Asset card tile, the design placed by the card. A
+ * screen tile's ScreenFigure is laid out at its true 1920 × 1080 and the card shows it whole in a twentieth's margin.
+ */
+function DesignTile({ label, value, status, design, focus, stage, selected, onSelect, onOpen, actions, openOnClick, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": dataDesign, paint, scope, stageScope, inert, shape, children }: TileProps & { design: DesignLayout }) {
+  const { chrome } = useStudio();
+  const specimen = { ...cardRestored(chrome.canvas), ...specimenScope(), ...stageScope };
+  const badge = value != null && value !== "" ? status ? <StatusBadge status={status}>{value}</StatusBadge> : <Badge variant="soft" tone="neutral" className="gallery-tile__badge">{value}</Badge> : undefined;
+  const screen = design === "screen";
+  const groundProps = { className: "studio-design", "data-design": dataDesign, "data-area-ground": scope ? "recessed" : undefined, ...scope } as Record<string, string | undefined>;
+  const card = {
+    ...CARD_SCOPE, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-stage": stage,
+    name: label, detail: badge, actions, layout: design, focus, color: paint?.background, selected,
+    aspect: shape === "square" ? "square" as const : shape === "wide" || screen ? "wide" as const : "square" as const,
+    designWidth: screen ? SCREEN.w : undefined, designHeight: screen ? SCREEN.h : undefined,
+    groundProps, designProps: { ...specimen, inert: inert || undefined } as Record<string, string | undefined>,
+    captionProps: { className: "gallery-tile__caption", ...feedScaleWithin(groundProps) } as Record<string, string | undefined>,
+  };
+  if (inert && onSelect) {
+    return (
+      <DesignCard {...card} className="studio-design-card" interactive role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect} onDoubleClick={onOpen ? event => onOpen(how(event)) : undefined}
+        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>{children}</DesignCard>
+    );
+  }
+  if (onOpen && openOnClick && inert) {
+    return (
+      <DesignCard {...card} className="studio-design-card" interactive role="button" tabIndex={0}
+        onClick={event => { if (!onControl(event)) onOpen(how(event)); }}
+        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(how(event)); } }}>{children}</DesignCard>
+    );
+  }
+  return (
+    <DesignCard {...card} className="studio-design-card" interactive={Boolean(onSelect || onOpen)} onPointerDown={onSelect} onFocusCapture={onSelect}
+      onClick={onOpen && openOnClick ? event => { if (!onControl(event)) onOpen(how(event)); } : undefined}
+      onDoubleClick={onOpen && !openOnClick ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(how(event)); } : undefined}>
+      {children}
+    </DesignCard>
+  );
 }
 
 /** Area's Asset card (Components). */

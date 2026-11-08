@@ -135,7 +135,8 @@ export const BADGE_GROUPS: readonly BadgeGroup[] = [
 
 /** A badge on its plate. */
 function Plated({ badge }: { badge: BadgeEntry }) {
-  if (badge.count !== undefined) return <Count variant="soft" size="sm" count={badge.count} />;
+  // md, as every badge in the column (it was the one sm mark there; DESIGN_SYSTEM.md, "Marks on one line").
+  if (badge.count !== undefined) return <Count variant="soft" count={badge.count} />;
   if (badge.status) return <StatusBadge status={badge.status}>{badge.label}</StatusBadge>;
   return <Badge variant="soft" tone={badge.tone}>{badge.label}</Badge>;
 }

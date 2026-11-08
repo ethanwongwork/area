@@ -311,6 +311,52 @@ export default {
     ],
   },
 
+  "design-card": {
+    // Spec: Job and boundaries.
+    instead: [
+      ["An image, a photo or a reference to browse", ["asset-card"], "Asset card frames a picture at its own ratio; Design card holds a live design at its true size."],
+      ["A group or a collection of assets", ["asset-card"], "Asset card's group draws a mosaic or a strip."],
+      ["A file in a file browser's icon view", ["file-tile"], "File tile draws a file's figure over its name, as Finder does."],
+      ["Content with its own text and actions inside the surface", ["card"], "Card holds a title, body and footer; Design card holds one design and names it under it."],
+    ],
+    // Spec: Variants, Decisions; source: DesignCard.tsx JSDoc.
+    practices: [
+      ["Do", "Pass the design at its true size and let the card place it: never scale, pad or centre it yourself."],
+      ["Do", "Pick the layout by what the design is: part for a control, a component, a pattern or a type line; screen for a window; phone for a phone; icon for an icon; color for a colour."],
+      ["Do", "Give a part that would be cropped its focus: top for a menu or a palette, start for a type line."],
+      ["Do", "Give a screen its true size with designWidth and designHeight (1920 × 1080), so it is laid out as it is used and shown whole."],
+      ["Do", "Leave the detail to show the true size; pass a colour's value or a status in its place, or null for nothing."],
+      ["Do", "Open the design in Full view from the card: the same ground grows to the viewer, with Full view's 48 margin."],
+      ["Do", "Give a setting's option its scope on the whole card or on designProps, so the design is drawn under it."],
+      ["Don't", "Use Design card for an image or a group: Asset card frames those."],
+      ["Don't", "Show a part past 100% in a gallery: the card never enlarges a design, and Full view zooms it."],
+      ["Don't", "Set interactive without making the card a control: give it a role, a tab stop and aria-pressed yourself."],
+    ],
+    // Spec: Anatomy; source: DesignCard.tsx.
+    parts: {
+      root: "The card: the ground with its caption under it, 4 apart.",
+      ground: "The container: Card's corner (16 at the default), the tile tone with the card edge, its lift on hover; it clips what runs past it.",
+      design: "The design's box at its true size, placed by the layout's rule as a transform, so it stays live DOM at every scale.",
+      caption: "The row under the ground: the name 4 in, the detail, the controls at the end.",
+      name: "The design's name in the UI text; one line, then an ellipsis.",
+      detail: "The true size by default, muted, in tabular figures; or a colour's value or a status.",
+      actions: "Controls at the caption's end, ending on the ground's edge.",
+    },
+    // Spec: States; source: DesignCardProps.selected.
+    states: {
+      selected: "The ground's edge turns the selection colour, with the Selected stroke and tint.",
+    },
+    // Source: DesignCard is not a control unless the host makes it one.
+    keyboard: [
+      ["Tab", "Moves to the card when the host makes it a control (interactive, a role and a tab stop)."],
+      ["Enter or Space", "Opens or selects the card, as the host's handler says."],
+    ],
+    aria: [
+      ["role, tabindex, aria-pressed", "Yours to set on an interactive card; aria-pressed shows as the selected edge."],
+      ["inert", "Set it on designProps when the design is shown, not used, so its controls take no focus."],
+    ],
+  },
+
   "asset-card": {
     // Spec: Job and boundaries.
     instead: [

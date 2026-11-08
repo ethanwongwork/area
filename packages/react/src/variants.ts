@@ -84,6 +84,7 @@ export const fileImageVariants = /* @__PURE__ */ createVariants(manifests.fileIm
 export const fileTileVariants = /* @__PURE__ */ createVariants(manifests.fileTile);
 export const fileGridVariants = /* @__PURE__ */ createVariants(manifests.fileGrid);
 export const assetCardVariants = /* @__PURE__ */ createVariants(manifests.assetCard);
+export const designCardVariants = /* @__PURE__ */ createVariants(manifests.designCard);
 export const assetGridVariants = /* @__PURE__ */ createVariants(manifests.assetGrid);
 export const previewFrameVariants = /* @__PURE__ */ createVariants(manifests.previewFrame);
 export const passwordFieldVariants = /* @__PURE__ */ createVariants(manifests.passwordField);

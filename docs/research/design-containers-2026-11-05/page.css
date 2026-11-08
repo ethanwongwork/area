@@ -1,0 +1,211 @@
+/* Design Containers page (entry.tsx). Layout: one reading column of 1240 at most, the gutter on .dcx-page; containers are
+   drawn at their real widths, so a row of them wraps and only a container wider than a phone scrolls in its own row.
+   Colour comes from Area's tokens (light and dark follow data-area-theme, set from the viewer's theme); the two guide
+   inks are the page's own, kept apart from the designs' accent. */
+:root {
+  --dcx-measure: #e5484d; /* margins: a spacing red */
+  --dcx-select: #0d99ff;  /* bounds and selection: a selection blue */
+  --dcx-on-select: #ffffff;
+}
+/* The app's stylesheet holds html and body at the window's height with body's overflow hidden (its regions scroll
+   instead); a page scrolls as a document. */
+html, body { background: var(--area-bg-page); color: var(--area-fg-default); block-size: auto; overflow: visible; }
+body { margin: 0; font-family: var(--area-font-sans); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); -webkit-font-smoothing: antialiased; }
+#root { min-inline-size: 0; }
+
+.dcx-page {
+  max-inline-size: 1240px;
+  margin-inline: auto;
+  padding-block: 48px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 64px;
+  min-inline-size: 0;
+}
+.dcx-loading { color: var(--area-fg-muted); margin: 0; }
+
+/* --- Top ------------------------------------------------------------------------------------------------------------ */
+.dcx-top { display: grid; gap: 24px; }
+.dcx-top__title { display: grid; gap: 8px; max-inline-size: 68ch; }
+.dcx-eyebrow { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+.dcx-top h1 { margin: 0; font-size: 26px; line-height: 32px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+.dcx-lede { margin: 0; color: var(--area-fg-muted); font-size: 15px; line-height: 22px; }
+.dcx-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+
+/* --- Sections ------------------------------------------------------------------------------------------------------- */
+.dcx-section { display: grid; gap: 24px; min-inline-size: 0; scroll-margin-block-start: 24px; }
+.dcx-section__head { display: grid; gap: 6px; max-inline-size: 72ch; }
+.dcx-section__head h2 { margin: 0; font-size: 20px; line-height: 26px; font-weight: 600; text-wrap: balance; }
+.dcx-section__head p { margin: 0; color: var(--area-fg-muted); font-size: 15px; line-height: 22px; }
+.dcx-tabs { display: flex; flex-wrap: wrap; gap: 8px; max-inline-size: 100%; overflow-x: auto; }
+
+/* --- The container -------------------------------------------------------------------------------------------------- */
+.dc { margin: 0; display: grid; row-gap: 4px; flex: none; }
+.dc__ground {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 16px;
+  background: var(--area-bg-tile);
+  color: var(--area-fg-default);
+  overflow: clip;
+  cursor: zoom-in;
+  font: inherit;
+  text-align: start;
+}
+/* The edge sits over the design, so a cropped design is cut by the corner and still edged. */
+.dc__ground::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 var(--area-stroke-width, 1px) var(--area-border-card);
+  pointer-events: none;
+}
+@media (hover: hover) { .dc__ground:hover::after { box-shadow: inset 0 0 0 var(--area-stroke-width, 1px) var(--area-border-hover); } }
+.dc__ground[data-kind="color"]::after { box-shadow: inset 0 0 0 var(--area-stroke-width, 1px) var(--area-token-swatch-ring, rgb(0 0 0 / 10%)); }
+.dc__ground:focus-visible { outline: 2px solid var(--dcx-select); outline-offset: 2px; }
+.dc__design { position: absolute; inset-block-start: 0; inset-inline-start: 0; transform-origin: 0 0; pointer-events: none; }
+.dc__caption { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; min-inline-size: 0; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+.dc__name { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--area-fg-default); }
+.dc__value { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dc__value > b { font-weight: 400; color: var(--area-fg-default); }
+
+/* Guides: the margin's safe area dashed, its width as a dimension, the design's bounds at its scale. */
+.dc__guides { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.dc__safe { position: absolute; border: 1px dashed var(--dcx-measure); border-radius: 4px; }
+.dc__bounds { position: absolute; outline: 1px solid var(--dcx-select); }
+.dc__m { position: absolute; inset-block-start: 0; inline-size: 1px; background: var(--dcx-measure); }
+.dc__m--side { inset-block-start: auto; inset-inline-start: 0; inline-size: auto; block-size: 1px; }
+.dc__m > i {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 4px;
+  transform: translateY(-50%);
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--dcx-measure);
+  color: #fff;
+  font-style: normal;
+  font-size: 10px;
+  line-height: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.dc__m--side > i { inset-block-start: 4px; inset-inline-start: 50%; transform: translateX(-50%); }
+
+/* The design at true size, cropped to its artboard. */
+.dcx-art { position: relative; overflow: visible; }
+.dcx-art__inner { position: absolute; inline-size: max-content; }
+.dcx-probe { position: absolute; inset-inline-start: -20000px; inset-block-start: 0; }
+.dcx-probe__item { position: relative; inline-size: max-content; margin-block-end: 40px; }
+.dcx-icon { display: grid; place-items: center; inline-size: 24px; block-size: 24px; color: var(--area-fg-default); }
+.dcx-type { display: block; font-family: var(--area-font-sans); font-size: 26px; line-height: 32px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; color: var(--area-fg-default); }
+.dcx-swatch { display: block; inline-size: 240px; block-size: 240px; border-radius: 16px; background: var(--area-accent-500); }
+
+/* --- One container -------------------------------------------------------------------------------------------------- */
+.dcx-one { display: grid; gap: 20px; }
+.dcx-one__controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+.dcx-field { display: inline-flex; align-items: center; gap: 8px; }
+.dcx-field__label { color: var(--area-fg-muted); }
+.dcx-select {
+  block-size: 28px;
+  padding-inline: 8px 24px;
+  border: 1px solid var(--area-border-card);
+  border-radius: var(--area-radius-control-sm, 6px);
+  background: var(--area-bg-surface);
+  color: var(--area-fg-default);
+  font: inherit;
+}
+.dcx-select:focus-visible { outline: 2px solid var(--dcx-select); outline-offset: 1px; }
+.dcx-slider { display: inline-flex; align-items: center; gap: 12px; inline-size: min(320px, 100%); }
+.dcx-slider > :first-child { flex: 1 1 auto; min-inline-size: 0; }
+.dcx-slider__value { inline-size: 3ch; text-align: end; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+.dcx-presets { display: flex; flex-wrap: wrap; gap: 4px; }
+.dcx-one__body { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 24px; align-items: start; }
+.dcx-one__stage { min-inline-size: 0; overflow-x: auto; padding-block-end: 4px; }
+@media (max-width: 760px) { .dcx-one__body { grid-template-columns: minmax(0, 1fr); } }
+
+.dcx-facts { margin: 0; display: grid; gap: 0; border-block-start: 1px solid var(--area-border-divider); }
+.dcx-facts > div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 12px; padding-block: 8px; border-block-end: 1px solid var(--area-border-divider); }
+.dcx-facts dt { color: var(--area-fg-muted); }
+.dcx-facts dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* --- Margins table -------------------------------------------------------------------------------------------------- */
+.dcx-tablewrap { overflow-x: auto; }
+.dcx-table { border-collapse: collapse; min-inline-size: 640px; inline-size: 100%; font-variant-numeric: tabular-nums; }
+.dcx-table th, .dcx-table td { padding: 10px 12px; border-block-end: 1px solid var(--area-border-divider); text-align: end; font-weight: 400; }
+.dcx-table thead th { color: var(--area-fg-muted); }
+.dcx-table th:first-child { text-align: start; }
+.dcx-table tbody th > span { display: block; color: var(--area-fg-muted); }
+.dcx-table td:last-child, .dcx-table th:last-child { color: var(--area-fg-muted); }
+
+/* --- Kinds and the gallery ------------------------------------------------------------------------------------------ */
+.dcx-kind { display: grid; gap: 24px; min-inline-size: 0; }
+.dcx-rules { margin: 0; padding-inline-start: 18px; display: grid; gap: 4px; max-inline-size: 72ch; color: var(--area-fg-default); }
+.dcx-strip { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px 16px; min-inline-size: 0; overflow-x: auto; }
+.dcx-strip__cell { display: grid; gap: 8px; }
+.dcx-strip__size { color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); font-variant-numeric: tabular-nums; }
+.dcx-gallery-wrap { display: grid; gap: 20px; min-inline-size: 0; }
+.dcx-gallery { display: grid; grid-template-columns: repeat(auto-fill, var(--_w)); gap: 24px 16px; align-items: start; overflow-x: auto; }
+
+/* --- Full view ------------------------------------------------------------------------------------------------------ */
+.dcx-full { border-radius: 16px; overflow: hidden; background: var(--area-bg-page); box-shadow: 0 0 0 1px var(--area-border-card); min-inline-size: 0; }
+.dcx-full__bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-block-size: 44px; padding-inline: 8px; border-block-end: 1px solid var(--area-border-divider); flex-wrap: wrap; }
+.dcx-full__lead, .dcx-full__end { display: flex; align-items: center; gap: 4px; min-inline-size: 0; }
+.dcx-full__title { display: inline-flex; align-items: baseline; gap: 8px; margin-inline-start: 8px; font-weight: 500; white-space: nowrap; }
+.dcx-full__title > span { color: var(--area-fg-muted); font-weight: 400; }
+.dcx-full__body { display: grid; grid-template-columns: minmax(0, 1fr) 248px; }
+.dcx-full__canvas { position: relative; block-size: clamp(420px, 72vh, 760px); min-inline-size: 0; }
+/* The viewer keeps the wheel to itself in the app (it fills the Canvas); in a page the wheel passes on to the page
+   once the design has nothing left to pan. */
+.dcx-full__canvas > .studio-viewer { block-size: 100%; overscroll-behavior: auto; }
+.dcx-full__canvas .dcx-art * { cursor: default; }
+.dcx-full__panel { padding: 16px; border-inline-start: 1px solid var(--area-border-divider); display: grid; align-content: start; gap: 12px; min-inline-size: 0; }
+.dcx-full__panel h3 { margin: 0; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); font-weight: 600; }
+.dcx-facts--panel > div { grid-template-columns: 72px minmax(0, 1fr); }
+.dcx-hint { margin: 0; color: var(--area-fg-muted); }
+@media (max-width: 860px) {
+  .dcx-full__body { grid-template-columns: minmax(0, 1fr); }
+  .dcx-full__panel { border-inline-start: 0; border-block-start: 1px solid var(--area-border-divider); }
+}
+.dcx-inspect { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.dcx-inspect > span { position: absolute; box-sizing: border-box; }
+.dcx-inspect__hover { outline: 1px solid var(--dcx-select); }
+.dcx-inspect__chosen { outline: 1px solid var(--dcx-select); }
+.dcx-inspect__chosen > i {
+  position: absolute;
+  inset-block-start: calc(100% + 6px);
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--dcx-select);
+  color: var(--dcx-on-select);
+  font-style: normal;
+  font-size: 11px;
+  line-height: 16px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Decisions ------------------------------------------------------------------------------------------------------ */
+.dcx-decisions { display: grid; gap: 32px; }
+.dcx-store { margin: 0; color: var(--area-fg-muted); }
+.dcx-q { display: grid; gap: 12px; }
+.dcx-q__head { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 8px; }
+.dcx-q__n { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; line-height: 22px; }
+.dcx-q__head h3 { margin: 0; font-size: 15px; line-height: 22px; font-weight: 600; }
+.dcx-q__head p { margin: 0; color: var(--area-fg-muted); }
+.dcx-q__group, .dcx-q__note { margin-inline-start: 40px; }
+@media (max-width: 560px) { .dcx-q__group, .dcx-q__note { margin-inline-start: 0; } }
+.dcx-q__group > legend { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.dcx-q__group .area-radio-group__options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.dcx-q__note { max-inline-size: 560px; }
+.dcx-rec { margin-inline-start: 8px; color: var(--area-fg-muted); font-weight: 400; font-size: var(--area-text-xs-size); }
+
+.dcx-foot { color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+

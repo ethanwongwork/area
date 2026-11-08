@@ -28,9 +28,11 @@ export const Count = forwardRef<HTMLSpanElement, CountProps>(function Count(
   { count, max = 99, showZero = true, label, variant, size, pill, className, ...rest }, ref,
 ) {
   if (!showZero && normalizeCount(count) === 0) return null;
+  const text = formatCount(count, max);
+  // One character drops the sides, so a one-digit count is as wide as it is tall: a circle as a pill (count.css).
   return (
-    <span ref={ref} {...rest} className={countVariants({ variant, size, pill: pill === true, rounded: pill === false }, className)}>
-      {formatCount(count, max)}
+    <span ref={ref} {...rest} data-single={text.length === 1 ? "" : undefined} className={countVariants({ variant, size, pill: pill === true, rounded: pill === false }, className)}>
+      {text}
       {label ? <span className="area-count__label"> {label}</span> : null}
     </span>
   );

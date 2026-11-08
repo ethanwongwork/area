@@ -19,7 +19,7 @@ in the app. The groups below match the files in `apps/desktop/src/content/docume
 | Pickers, colour and inspector parts | Color swatch, Color swatch picker, Color picker, Calendar, List box, Property list, Panel (with `resizable`), Box model, Token row, Asset row, Preview frame, File upload, Scroll area |
 | Navigation, menus and overlays | Nav, Tabs, Breadcrumb, Pagination, Stepper, Tree view, Menu, Context menu, Command palette, Popover, Hover card, Tooltip, Toggletip, Dialog, Confirm dialog, Drawer |
 | Status, feedback and labels | Badge, Badge group, Count, Indicator (with Presence), Avatar, Tag, Alert (with the banner layout), Toast, Progress, Spinner, Skeleton, Meter, Empty state, Separator, Code, Code block, Shortcut list |
-| Surfaces, content, files, articles and media | Surface, Stack, Card, Table, Description list, Timeline, Board, Accordion, Asset card, Folder, File page, File tile, Video player, Figure, Inline list, Abbreviation, Hatnote, Link groups, Reference list, Table of contents, Titlebar, Section heading |
+| Surfaces, content, files, articles and media | Surface, Stack, Card, Table, Description list, Timeline, Board, Accordion, Design card, Asset card, Folder, File page, File tile, Video player, Figure, Inline list, Abbreviation, Hatnote, Link groups, Reference list, Table of contents, Titlebar, Section heading |
 | Conversation and agent chat | Message, Composer, Composer menu, Attachment, Queue, Prompt suggestions, Model picker, Scroll to latest, Citation, Timestamp, Step, Edit summary, Approval, Plan, Turn notice |
 
 Token is deprecated in favour of `<Code swatch>` and Preview frame in favour of Asset card's frame alone; each is still
@@ -57,6 +57,8 @@ before it is built.
 
 | Candidate | Job | Likely answer | Missing |
 |---|---|---|---|
+| Pill plate tabs | Plate tabs with fully round ends (a notes app's view tabs) | Setting: `tabs` in the Pills set, not a variant | Owner chose plate only, 2026-11-06 (review 7vSwH9XbPa4ywGjZBCHbcp); revisit if a system asks for pill tabs |
+| Folder tabs | A selected tab joined to the surface below (browser, old settings windows) | A third Tabs `selection` value | Declined 2026-11-06 (owner: plate only): no measured product uses it; open documents are a horizontal Nav |
 | Tab groups | Named or split groups of open tabs (Chrome's groups, Figma's split and pinned tabs) | Desktop app shell, not a component yet | Many open tabs in real use: wait for Projects (Phase 4) or a split view (owner's question, 2026-10-29) |
 | Chart | Lines, bars, areas in Area's tokens | New family | Product captures. The Testing tab's dashboard draws its chart as an SVG meanwhile |
 | Action tile | An action with its icon over its label, in an equal-width grid | Component, or a Card / Toggle group composition | Captures in two more products (seen in Cursor's icon card and Figma's new-file tiles) |

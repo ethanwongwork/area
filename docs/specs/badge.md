@@ -442,8 +442,8 @@ by `node scripts/validate-badge.mjs`. Pass-1 Area captures are in `before/`.
 |---|---|---|---|
 | shell · height sm/md/lg | **16 / 20 / 24** | Owner (2026-09-25: "do what you recommend") | Replaces 20 / 24 / 28. 16 and 20 are Area's existing inline-chrome heights (Kbd small/normal 16/20, Indicator count 16); the products' badges are 16–22 (ChatGPT 16 and 22, Notion 20, Figma 16 and 18). 28 equalled the small button and read as a control |
 | shell · default size | **md 20** | Owner | A 20px badge fills the 20px line of 14/20 text exactly, so it sits in a sentence, a table cell or a 32px nav row (6px above and below) without moving the line |
-| shell · radius | pill | Owner (pill-only) | Products use 4–5px for select tags and labels; Notion status (the dot composition) is a pill |
-| shell · text gutter sm/md/lg | 6 / 8 / 10 (border counted once) | md: ChatGPT "Paid" 8px at 14px text; sm: ChatGPT "NEW" 6, Figma 5; lg: previous md (Untitled md) | — |
+| shell · radius | pill (the Pills list's default), shared with Count since 2026-11-07 | Owner (pill-only; one shape for marks on one line) | Products use 4–5px for select tags and labels; Notion status (the dot composition) is a pill; 8 of 14 design systems draw status as a pill |
+| shell · text gutter sm/md/lg | (h − 6) / 2 from the outer edge, border counted once: 4 / 6 / 8 at type 13 (14 / 18 / 22), 5 / 7 / 9 at 16 / 20 / 24 | Marks on one line (owner 2026-11-07): Count's side too; GitLab and Fluent 6 on 20; about 0.3 of the height (docs/research/count-badge-2026-11-07) | Was (h − 4) / 2, 6 / 8 / 10 at 16 / 20 / 24 (ChatGPT "Paid" 8 at 14px text, Untitled's pill): the roomy end of the pill systems, 7 on an 18 with 11px text |
 | shell · border (soft) | 1px transparent | Target products: Notion, ChatGPT "Paid" have no border on a filled badge | Untitled rings every badge (inset box-shadow); not adopted for soft |
 | shell · border (outline, neutral) | `edge-control` rgb(226) | Figma "AI" border rgb(230) | Within 4 levels; kept |
 | text · size / line | **12/16 sm and md; 14/20 lg** | Owner (2026-09-27), after viewing md labels on Card; Untitled sm (12px in a 20–22px pill); Figma 11px in 16–18 | Notion (14 in 20) and ChatGPT (14 in 22) set badge text at body size; beside a 14px description that made the label as large as the text it annotates and heavier. lg keeps 14/20 so the size steps stay distinct |
@@ -766,3 +766,18 @@ Optical centre: the label sits a quarter of the cap–x-height gap above the cap
   icons are from the text color, can they be closer in color if not the same?", then "Icons take the words' colour:
   arrows and status marks alike". The words clear 4.5:1, past an icon's 3:1.
 - **Verdict:** in review.
+
+## Review note, 2026-11-07 (marks on one line)
+
+- **What changed:** the text sits (h − 6) / 2 from the outer edge, 4 at sm and 6 at md at type 13 (was 5 and 7), the
+  side Count now shares. Shape (a pill), height, text, weight, paint, icon side and gaps are unchanged. In the app's
+  Components overview, the status beside a family's count is centred on the title's cap as the count is (it sat 1.3
+  lower) and follows the count by the same gap.
+- **Why:** the owner, on "Button 44 ✓ Complete": "why are count and badge so stylistically and scale wise different",
+  then "is there too much horizontal padding on the textside?" A count and a status on one line share one height, text,
+  shape and side in the systems surveyed; the side runs about 0.3 of the height, which Area's Badge exceeded (0.36 /
+  0.39) and its Count fell short of (0.21). DESIGN_SYSTEM.md, Optical insets, "Marks on one line";
+  docs/research/count-badge-2026-11-07.
+- **Follow-up, 2026-11-07 (vertical):** Badge's whole-pixel cap centre is now the marks' rule: Count and Tag take the
+  same formula (count.css, tag.css; cohesion.test.mjs), so marks of one height and text share a pixel row. Badge
+  itself is unchanged.

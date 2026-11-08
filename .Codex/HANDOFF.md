@@ -1,6 +1,6 @@
 # Handoff
 
-## Current state (2026-11-04)
+## Current state (2026-11-07)
 - **Appearance, same worktree (uncommitted, 2026-11-07).** Mode's pictures: the app in a 720 × 540 window (sidebar and
   page, `content/examples/workspace-compact.tsx`), words as bars (owner picked "B as bars" from four layouts and three
   drawings), three across, each a new Radio/Checkbox `layout="thumbnail"` (picture is the card, name under it at the
@@ -42,6 +42,28 @@
   elsewhere (docs/research/inspector-chat-2026-10-18, Phase 3). Turn notice: a wrapped error keeps its mark on the first
   line (spec note open). Tests 39 (agent.test.ts, a stand-in SDK). Open: this Mac's Claude Code sign-in had expired
   (`claude auth login` needed), so no live reply with tools has been seen yet.
+- **Marks on one line: Count beside Badge, worktree `vigilant-raman-cdac08` (uncommitted, 2026-11-07).** Owner on
+  "Button 44 ✓ Complete": the pair looked like two sizes. Same height and text already; drifted were the shape (Count
+  off Pills since 2026-11-01), the text side (Count 3, Badge 5) and the heading's placement (status 1.3 low). Review page
+  https://claude.ai/artifact/2g6mM75soKAoZSTmL1pG74, survey of 14 systems in `docs/research/count-badge-2026-11-07/`;
+  owner: "Yes, build it" (pills both, side (h − 6) / 2 both, weights kept). Built: Count back on the default Pills,
+  Badge and Count text side 4 / 6 at type 13, one-character count `data-single` (a circle), `.studio-overview__status`
+  placed as `.studio-count`, Badges table count md, DESIGN_SYSTEM.md "Marks on one line" + cohesion test, specs, docs,
+  skill. Count reopened (in review). Checks all pass (react 651, npm test, contracts, desktop build, playgrounds,
+  app-css, docs). Follow-up ("Yes, fix both", 2026-11-07): Count and Tag take Badge's whole-pixel cap centre (Count a
+  trimmed block box; Tag drops the optical lift, Citation keeps it), so marks of one height and text share a pixel row
+  at type 12–16 × density 28–36; second cohesion test. Open, not built: Area's sm marks (14 at type 13) are shorter
+  than any status mark surveyed.
+- **Design card, worktree `design-container-display-0918d8` (uncommitted, 2026-11-06).** Owner: "no more 'asset
+  cards'" — containers hold live designs and open into Full view. Design Containers artifact E95K8UoMuAYPLDVBNJFMHT
+  (`docs/research/design-containers-2026-11-05/`): the owner picked every recommendation (one component; margin a tenth,
+  12–48, framed a twentieth; parts hold 50% and crop on focus; phones stand at 60%; name and true size below). Built
+  `DesignCard` + `placeDesign` (`packages/react`, `design-card.css`, manifest `designCard`, spec
+  `docs/specs/design-card.md`, docs entry, 8 tiles, in review). The app's Tile uses it for every screen tile and for
+  Components at Auto in the gallery look; Fit, exact zooms, waterfall, other looks, Patterns, Illustrations, images,
+  collections, colours and type sheets are still Asset cards. Checks: build, typecheck, react 649 + design-card,
+  cohesion, npm test, contracts, docs, playgrounds, app-css. Electron not relaunched: session
+  `design-interface-ui-4d0a03` runs its own (it edits `design-viewer.tsx` and `project.tsx`, uncommitted).
 - **Fidelity: viewer zoom, sharp cards, Floating 8, worktree `figma-vector-fidelity-zoom-d94ad5` (PR, 2026-11-05).** Owner:
   Figma's vector fidelity and zoom for UI examples. Design viewer (`design-viewer.tsx`): pinch zooms about the pointer,
   keys about the centre, every design to 3200% (icons 6400%), pixel grid from 800%, centred on whole pixels. ScreenFigure

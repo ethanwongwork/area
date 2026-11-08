@@ -491,6 +491,7 @@ export const count = {
   block: "area-count", description: "Shows how many items the element it sits in holds, beside that element's label.",
   variants: { variant: ["plain", "soft"], size: ["sm", "md"] },
   booleans: ["pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
+  states: ["single"], // data-single: a one-character count drops its sides, a circle as a pill (2026-11-07)
   elements: ["label"],
   defaults: { variant: "plain", size: "md" },
 } as const satisfies ComponentManifest;
@@ -934,8 +935,10 @@ export const toast = {
 
 export const tabs = {
   block: "area-tabs",
-  description: "Switches between views with transparent tabs and rounded indicators; labels align with panel content.",
-  variants: { size: ["sm", "md", "lg"], orientation: ["vertical"] },
+  description: "Switches between views: transparent tabs with a rounded underline whose labels align with panel content, or (selection plate) a soft plate behind the selected tab.",
+  // `selection` names how the selected tab is marked, as Nav's does: the underline (default, a marker) or a plate
+  // (owner 2026-11-06, docs/specs/tabs.md "Plate").
+  variants: { size: ["sm", "md", "lg"], orientation: ["vertical"], selection: ["plate"] },
   booleans: ["track"],
   states: ["selected", "disabled"],
   elements: ["list", "tab", "panel", "label", "reserve", "icon"],
@@ -1162,6 +1165,16 @@ export const assetCard = {
   defaults: { layout: "asset", container: "framed", caption: "above", fill: "recessed", aspect: "square", fit: "natural", mosaic: "grid" },
 } as const satisfies ComponentManifest;
 
+export const designCard = {
+  block: "area-design-card",
+  description: "Shows one design in a container at its true size, placed by its layout's rule: a part (a control, a component, a pattern, a type line) in a tenth of the card's short side, never past 100% and held at 50% and cropped on its focus below that; a screen whole in a 16:9 card; a phone standing from the top and running off the bottom; an icon at whole multiples; a colour painting the card. Its name and true size sit under it; opened, the same ground grows to Full view.",
+  variants: { layout: ["part", "screen", "phone", "icon", "color"], aspect: ["square", "wide"] },
+  booleans: ["interactive"],
+  states: ["selected"],
+  elements: ["ground", "design", "caption", "name", "detail", "actions"],
+  defaults: { layout: "part", aspect: "square" },
+} as const satisfies ComponentManifest;
+
 export const assetGrid = {
   block: "area-asset-grid",
   description: "Lays asset cards out as a grid or a waterfall to browse, choose from and open, with one Tab stop.",
@@ -1380,6 +1393,7 @@ export const MANIFESTS = {
   fileTile,
   fileGrid,
   assetCard,
+  designCard,
   assetGrid,
   fileImage,
   listBox,

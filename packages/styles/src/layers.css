@@ -85,7 +85,7 @@
     --area-selection-band: var(--area-selection-band-card);
     --area-selection-band-hover: var(--area-selection-band-card-hover);
   }
-  :where(.area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised)), [data-area-ground="tile"] {
+  :where(.area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-design-card__ground), [data-area-ground="tile"] {
     --area-bg-component: var(--area-bg-component-tile);
     --area-bg-component-hover: var(--area-bg-component-tile-hover);
     --area-bg-component-active: var(--area-bg-component-tile-active);
@@ -181,7 +181,7 @@
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, .area-asset-card--raised > .area-asset-card__frame,
-    .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-surface--soft,
+    .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-design-card__ground, .area-surface--soft,
     .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual, .area-table th
   ),
   [data-area-ground],
@@ -239,7 +239,7 @@
     --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-card)));
     --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-card) - var(--area-layer-dark-raised)));
   }
-  :where(.area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised)), [data-area-ground="tile"] {
+  :where(.area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-design-card__ground), [data-area-ground="tile"] {
     --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-tile)));
     --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-tile) - var(--area-layer-dark-raised)));
   }
@@ -261,7 +261,7 @@
     .area-asset-card__frame, [data-area-ground="frame"], .area-asset-card--raised > .area-asset-card__frame, [data-area-ground="frame-raised"],
     .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual, .area-table th, [data-area-ground="well"],
     [data-area-ground="recessed"], .area-card, [data-area-ground="card"],
-    .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), [data-area-ground="tile"]) > * {
+    .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-design-card__ground, [data-area-ground="tile"]) > * {
     --area-border-decorative: light-dark(oklab(from var(--area-border-decorative-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-decorative-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
     --area-border-card: light-dark(oklab(from var(--area-border-card-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-card-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
     --area-border-float: light-dark(oklab(from var(--area-border-float-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-float-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
@@ -388,7 +388,7 @@
       --area-selection-band-hover: var(--area-selection-band-card-hover);
     }
   }
-  @scope (.area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), [data-area-ground="tile"]) {
+  @scope (.area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-design-card__ground, [data-area-ground="tile"]) {
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
