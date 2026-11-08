@@ -38,7 +38,7 @@ Toast (after the fact, with Undo when undo is possible: prefer that to a confirm
 | surface | 420 × 163, radius 24, 90% white with a 24px backdrop blur, shadow 0.5px ring 10% + 0 4 8 −2 10% | 420 (spec), Dialog's radius 16, surface fill, float lift |
 | inset | 20 (form padding) | Dialog's 16 |
 | title | 20/28 600, #0d | Dialog's 16/24 strong |
-| description | 16/24 400, #8f, two lines, 4 below the title (gap 4) | Dialog's 14/20 muted, 4 apart |
+| description | 16/24 400, #8f, two lines, 4 below the title (gap 4) | Dialog's size, joined to the title; default ink (the message), its last line on its baseline |
 | footer | 12 above, end-aligned, 12 gap | Dialog's footer (end, `ui-cluster` gap), 16 above (was 20 until 2026-10-07) |
 | Cancel | pill, 31 tall (6 16 padding, 18 line), #f3 fill, 0.56px 10% edge | Button soft neutral md (32) |
 | action | pill, 31 tall, red 10% tint, rgb(224,46,42) ink | Button soft danger md |
@@ -51,6 +51,8 @@ Toast (after the fact, with Undo when undo is possible: prefer that to a confirm
 |---|---|---|---|
 | width | 420 | ChatGPT | — |
 | surface, insets, type | Dialog's | Peer: Dialog (accepted; its spec already weighed ChatGPT's 20/28 title) | ChatGPT 20 inset, 20/28 title, 16/24 text |
+| description ink | default, not Dialog's muted | Radix Themes, Primer, Fluent 2, Atlassian, Spectrum (5 of 8); the type rule "one step between a title and its body" | The description is the dialog's only body; muted under a 16/500 title stepped size, weight and ink at once (owner 2026-11-06: "the type balance on this dialog looks wrong") |
+| description's last line | trimmed to its baseline (`text-box: trim-end cap alphabetic`) when no content follows it | DESIGN_SYSTEM.md Q-T2: text that closes a block is read on its glyphs, as the title's cap starts it | The gap to the buttons read 18–19 on the glyphs against the 16 inset (owner 2026-11-06: "the spacing looks off"); now 14–15 |
 | buttons | Button soft neutral Cancel; soft danger action (`tone="danger"`), solid neutral otherwise | ChatGPT (grey Cancel, red-tinted action) | Pills follow the theme's Pills setting |
 | close control | none; Escape, Cancel and the scrim cancel | ChatGPT | — |
 | initial focus | Cancel | WAI alertdialog (least destructive); Radix, Primer measured | — |
@@ -195,3 +197,14 @@ starts at y 328.07. That is Dialog's, reported to the lead rather than changed h
   and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
   docs/research/dark-soft-tones-2026-10-28).
 - **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
+
+## Review note, 2026-11-06 (type balance)
+
+- **What changed:** the description is drawn in the default ink, and when nothing follows it its last line ends on its
+  baseline, so the buttons sit 14 under the words, read on the glyphs as the 16 inset round them is.
+- **Why:** the owner's note on the design interface's "Go back to …?" confirm: "the type balance on this dialog looks
+  wrong, the spacing looks off". The title stepped down to the description in size, weight and ink at once (16/500
+  default over 13/400 muted), so the title shouted and the message whispered; five of the eight references draw a
+  confirm's message in the default ink. The description's line box added 4–5 under its last baseline, so the footer read
+  further from the words than the inset round them.
+- **Verdict:** open (owner review).

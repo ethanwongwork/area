@@ -152,6 +152,27 @@
   .ws-menu { position: absolute; inset-block-start: calc((var(--ws-bar) + var(--area-control-sm)) / 2 + var(--area-space-4)); inset-inline-end: calc((var(--ws-bar) - var(--area-control-sm)) / 2); z-index: 3; inline-size: 220px; }
   /* The toast at the region's end, 12 above the composer (the dock's top), never over it. */
   .ws-toast { position: absolute; inset-block-end: calc(100% + var(--area-space-12)); inset-inline-end: var(--area-space-24); z-index: 3; }
+  /*
+   * The Workspace in a small window (content/examples/workspace-compact.tsx; owner 2026-11-07, the Mode pictures): 720 ×
+   * 540, the same parts and gaps as the 1920 one where they fit, the regions narrowed, the page's column the main region
+   * less 16 a side. Arrangement only; every paint is the components' own. The sidebar and the page, as the owner picked.
+   */
+  .cw-window { grid-template-columns: 192px minmax(0, 1fr); --ws-bar: calc(var(--area-control-sm) + var(--area-space-16) - var(--area-space-2)); position: relative; display: grid; inline-size: 720px; block-size: 540px; overflow: hidden; background: var(--area-bg-page); color: var(--area-fg-default); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .cw-window > .cw-side { --area-panel-inline-size: 100%; block-size: 100%; min-block-size: 0; min-inline-size: 0; }
+  .cw-side__groups { display: grid; gap: var(--area-space-16); }
+  .cw-person { display: flex; align-items: center; gap: var(--area-space-8); padding-inline: var(--area-ui-row-inset); white-space: nowrap; }
+  .cw-main { position: relative; display: grid; grid-template-rows: var(--ws-bar) minmax(0, 1fr) auto; min-inline-size: 0; min-block-size: 0; }
+  .cw-head { display: flex; align-items: center; gap: var(--area-space-8); padding-inline: calc(var(--area-space-12) + var(--area-space-2)) calc((var(--ws-bar) - var(--area-control-sm)) / 2); }
+  .cw-head__title { font-weight: var(--area-weight-strong); }
+  .cw-body { display: grid; align-content: start; gap: var(--area-space-24); min-block-size: 0; overflow: hidden; padding: var(--area-space-24) var(--area-space-16) var(--area-space-16); }
+  .cw-intro { display: grid; gap: var(--area-space-12); }
+  .cw-title { font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); letter-spacing: var(--area-title-sm-tracking); font-weight: var(--area-weight-strong); text-box: trim-both cap alphabetic; }
+  .cw-lede { color: var(--area-fg-muted); text-box: trim-both cap alphabetic; }
+  .cw-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--area-space-8); }
+  .cw-card-icon { display: inline-flex; margin-block-end: var(--area-space-8); color: var(--area-fg-muted); }
+  .cw-section { display: grid; gap: var(--area-space-8); min-inline-size: 0; }
+  .cw-cell-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-inline-size: 0; inline-size: 100%; }
+  .cw-dock { --area-composer-inline-size: 100%; padding: 0 var(--area-space-16) var(--area-space-12); }
   .ss-body-text { color: var(--area-fg-muted); }
   .ss-cell-fit { inline-size: 1%; white-space: nowrap; }
   .ss-cell { display: inline-flex; }

@@ -99,7 +99,7 @@ function specFacts(preamble: string): Array<[string, string]> {
 }
 
 /** The stylesheet that draws the family: its own file, else the one that writes its block most. */
-function stylesheetOf(slug: string, block?: string): string | undefined {
+export function stylesheetOf(slug: string, block?: string): string | undefined {
   if (SOURCES.css[`${slug}.css`] !== undefined) return `${slug}.css`;
   if (!block) return undefined;
   const pattern = new RegExp(`\\.${block}(?![\\w-])`, "g");

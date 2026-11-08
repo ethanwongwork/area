@@ -5,20 +5,26 @@
  * how that change reaches the system.
  *
  *   ProjectOverview   #project/<id>: its pages, explorations and versions, with New page, New exploration, Save version
- *   ProjectPageView   #project/<id>/pages/<page>/<layer>: a page's layers in order, a system's screens and Inspiration's
- *                     images, each a tile; Add screen and Add image put one at the end. A double-click opens a layer in
- *                     the design viewer (src/design-viewer.tsx), …/<layer>/open, ← and → stepping through the page
+ *   ProjectPageView   #project/<id>/pages/<page>/<layer>: the design interface (2026-11-06): the layer on a stage, the
+ *                     design panel under it (src/design-panel.tsx: iterations, layers, documentation, code, components
+ *                     and tokens, specs, comments, checks, research); an element chosen on the stage is edited in the
+ *                     Inspector's Design view, its changes logged at the view's foot and sent to Chat together
+ *                     (src/design-select.tsx, design-inspector.tsx, design-edit.ts); an old …/<layer>/open link opens the same
  *   ExplorationPage   #project/<id>/explorations/<id>: the exploration's theme, which the Inspector's Theme view edits, on
  *                     the screen and the system's patterns; Publish puts it in the system
  *   VersionsPage      #project/<id>/versions/<id>: saved versions, each restored from the Inspector
  */
-import { useMemo, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
-import { AssetGrid, AssetGridItem, Button, ConfirmDialog, Dialog, EmptyState, Field, Input, Menu, MenuItem, Nav, NavItem, PanelSection, Radio, RadioGroup, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
-import { AddIcon, AppWindowIcon, ChevronDownIcon, ImageIcon } from "@area/icons";
+import { Fragment, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { AssetGrid, AssetGridItem, Button, ConfirmDialog, ContextMenu, Dialog, EmptyState, Field, Input, Menu, MenuItem, MenuSeparator, Nav, NavItem, PanelSection, Radio, RadioGroup, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
+import { AddIcon, AppWindowIcon, ChevronDownIcon, CopyIcon, ImageIcon, MoreHorizontalIcon, PencilIcon } from "@area/icons";
 import { canvasAttributes, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, CARD_SCOPE, Tile, TileGrid, type OpenHow, FEED_TABLE, WhenVisible } from "../tile.tsx";
 import { ViewControls, ViewLead } from "../view-controls.tsx";
 import { useDesignViewer, type DesignViewerOptions } from "../design-viewer.tsx";
+import { AddLayer, DesignPanel, screenFile } from "../design-panel.tsx";
+import { StageSelection } from "../design-select.tsx";
+import { ChangeLog, ElementPanel } from "../design-inspector.tsx";
+import { applyChange, screensIn } from "../design-edit.ts";
 import { openDesign, useCardArrival } from "../morph.ts";
 import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -29,7 +35,7 @@ import { EXAMPLES, PATTERNS, screenDesign, WidthZoom } from "./examples.tsx";
 import { NameDialog } from "./home.tsx";
 import { nameOf, url, useLibrary } from "./imagery.tsx";
 import { BeforeAfter, KINDS, ThemeScreen } from "../publish.tsx";
-import { addExploration, addLayer, addPage, restoreVersion, saveVersion, type Layer, type Project } from "../projects.ts";
+import { addExploration, addLayer, addPage, changesOn, duplicateLayer, removeLayer, renameLayer, restoreVersion, saveVersion, type DesignChange, type Layer, type Project } from "../projects.ts";
 import { activeTheme, liveOf, nextVersion, RELEASE_KIND_LABEL, versionName, type ReleaseKind } from "../systems.ts";
 
 /** An exploration's card is the feed's 300 card, as a theme's. */
@@ -205,126 +211,146 @@ export function ProjectOverview() {
   );
 }
 
+/**
+ * A page as the design interface (owner, 2026-11-06: "the main center page … will be where the design lives. you can zoom
+ * in and out on it or change the view settings to fill the frame space"): the layer on a stage at the top, short of the
+ * Canvas's height so the design panel (src/design-panel.tsx) peeks up under it, and the Canvas scrolls as one page from
+ * the one to the other; the stage never takes a plain scroll (design-viewer.tsx `scroll: "page"`). The stage holds one
+ * layer at a time (the owner's pick): the chosen one, else the page's first; the Layers tab, the Sidebar's list and ← →
+ * choose another. The Canvas bar is the viewer's: mode and ground at its start, the place, the steps and the zoom (Fit in
+ * frame, Fill width) at its end.
+ */
 export function ProjectPageView() {
   const { openProject, item, select, updateProject, navigate, theme, query } = useStudio();
   const { library } = useLibrary();
-  const [picking, setPicking] = useState(false);
-  const [renaming, setRenaming] = useState(false);
-  const [pageId, layerId, view] = (item ?? "").split("/");
+  // What a Rename dialog is open for: a layer of the page (from its row's menu in the Sidebar).
+  const [renaming, setRenaming] = useState<Layer | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const [pageId, layerId] = (item ?? "").split("/");
   const shownPage = openProject?.pages.find(entry => entry.id === pageId) ?? openProject?.pages[0];
-  const chosenLayer = shownPage?.layers.find(entry => entry.id === layerId) ?? null;
-  // The layer opened in the design viewer, and its place on the page; back leaves it selected on the page.
-  const design = chosenLayer ? layerDesign(chosenLayer, library) : null;
-  const opened = view === "open" && design ? chosenLayer : null;
   const layers = shownPage?.layers ?? [];
-  const at = opened ? layers.indexOf(opened) : -1;
+  // The layer on the stage: the one chosen, else the page's first.
+  const chosenLayer = layers.find(entry => entry.id === layerId) ?? layers[0] ?? null;
+  // The element chosen on the stage, for the layer it was chosen on (src/design-select.tsx).
+  const [chosen, setChosen] = useState<{ layer: string; path: number[] } | null>(null);
+  const selected = chosen && chosen.layer === chosenLayer?.id ? chosen.path : null;
+  const choose = (path: number[] | null) => setChosen(path && chosenLayer ? { layer: chosenLayer.id, path } : null);
+  // The design changes drawn on this layer (projects.ts `DesignChange`): the screen is keyed by them, so one undone
+  // redraws it from its code before the rest are drawn again.
+  const drawn = openProject && shownPage && chosenLayer ? changesOn(openProject, shownPage.id, chosenLayer.id) : [];
+  const revision = JSON.stringify(drawn.map(entry => [entry.path, entry.property, entry.value]));
+  const base = chosenLayer ? layerDesign(chosenLayer, library) : null;
+  const design = base ? { ...base, render: (mode: "light" | "dark", scale: number) => <Fragment key={revision}>{base.render(mode, scale)}</Fragment> } : null;
+  const at = chosenLayer ? layers.indexOf(chosenLayer) : -1;
   const viewer = useDesignViewer({
-    active: Boolean(opened), design: `layer:${chosenLayer?.id ?? ""}`, label: chosenLayer?.name ?? "Layer", appMode: theme,
+    active: Boolean(design), scroll: "page", design: `layer:${chosenLayer?.id ?? ""}`, label: chosenLayer?.name ?? "Layer", appMode: theme,
     width: 1440, render: () => null, ...design,
-    back: { label: `Back to ${shownPage?.name ?? "the page"}`, onBack: () => select(`${shownPage?.id}/${chosenLayer?.id}`) },
-    step: { index: at, count: layers.length, noun: "layer", onStep: by => { const next = layers[(at + by + layers.length) % layers.length]!; select(`${shownPage?.id}/${next.id}/open`, { replace: true }); } },
+    step: { index: at, count: layers.length, noun: "layer", onStep: by => { const next = layers[(at + by + layers.length) % layers.length]!; select(`${shownPage?.id}/${next.id}`, { replace: true }); } },
   });
-  useCardArrival();
+  // Draw the changes on every copy of the screen, now and whenever the stage draws one again (a mode, a layer).
+  useLayoutEffect(() => {
+    const host = stageRef.current;
+    if (!host) return;
+    const draw = () => { for (const root of screensIn(host)) for (const change of drawn) applyChange(root, change); };
+    draw();
+    const watch = new MutationObserver(records => { if (records.some(record => [...record.addedNodes].some(node => node instanceof Element && (node.matches(".studio-viewer__content, .studio-viewer__screen") || node.querySelector(".studio-viewer__content"))))) draw(); });
+    watch.observe(host, { childList: true, subtree: true });
+    return () => watch.disconnect();
+  }, [revision, chosenLayer?.id, design !== null]); // eslint-disable-line react-hooks/exhaustive-deps
   if (!openProject) return null;
   const project = openProject;
   const page = shownPage!;
   const layer = chosenLayer;
-  // ⌘-click opens the layer in a tab of its own (owner's pick, 2026-10-31); otherwise here, from its card.
-  const openLayer = (entry: Layer, how?: OpenHow) => {
-    if (!layerDesign(entry, library)) return;
-    if (how?.newTab) { navigate({ page: "project-page", item: `${page.id}/${entry.id}/open` }, { newTab: true }); return; }
-    openDesign(`layer:${entry.id}`);
-    select(`${page.id}/${entry.id}/open`);
-  };
+  const editable = Boolean(design && layer?.kind === "screen");
+  const show = (entry: Layer) => select(`${page.id}/${entry.id}`, { replace: true });
   const add = (kind: Layer["kind"], ref: string, name: string) => {
     const made = addLayer(project, page.id, kind, ref, name);
     updateProject(project.id, () => made.project);
     if (made.layer) select(`${page.id}/${made.layer.id}`);
   };
-  const removeLayer = (id: string) => {
-    updateProject(project.id, current => ({ ...current, pages: current.pages.map(entry => entry.id === page.id ? { ...entry, layers: entry.layers.filter(other => other.id !== id) } : entry) }));
-    select(page.id);
+  const duplicate = (entry: Layer) => {
+    const made = duplicateLayer(project, page.id, entry.id);
+    updateProject(project.id, () => made.project);
+    if (made.layer) select(`${page.id}/${made.layer.id}`, { replace: true });
   };
-  const deletePage = () => {
-    updateProject(project.id, current => ({ ...current, pages: current.pages.filter(entry => entry.id !== page.id) }));
-    navigate({ page: "project" });
+  const remove = (entry: Layer) => {
+    updateProject(project.id, current => removeLayer(current, page.id, entry.id));
+    if (entry.id === layer?.id) select(page.id, { replace: true });
   };
-  const images = library?.items ?? [];
+  const openChange = (change: DesignChange) => {
+    if (change.page !== page.id || change.layer !== layer?.id) select(`${change.page}/${change.layer}`, { replace: true });
+    setChosen({ layer: change.layer, path: change.path });
+  };
   const sourceOf = (entry: Layer) => entry.kind === "screen"
     ? `${systemName(project.system)} › Patterns › ${EXAMPLES.find(example => example.id === entry.ref)?.label ?? entry.ref}`
     : `References › ${library?.folders.find(folder => folder.id === entry.ref.split("/")[0])?.name ?? entry.ref.split("/")[0]}`;
+  const fileOf = (entry: Layer) => entry.kind === "screen" ? screenFile(entry.ref)?.path ?? null : null;
   // The page's layers, its list under the nav (app-nav.tsx PageList; owner's pick 2026-11-01: a section's own list goes
-  // there, so the nav's tree stays three levels; they were rows under the page in the project's nav).
+  // there, so the nav's tree stays three levels; they were rows under the page in the project's nav). Each row's menu
+  // (its … and a right-click) renames, duplicates and removes it, as Figma's layers list does (owner's pick, 2026-11-06).
   const listed = page.layers.filter(entry => entry.name.toLowerCase().includes(query.trim().toLowerCase()));
+  const layerMenu = (entry: Layer) => <>
+    <MenuItem icon={<PencilIcon />} onClick={() => setRenaming(entry)}>Rename</MenuItem>
+    <MenuItem icon={<CopyIcon />} onClick={() => duplicate(entry)}>Duplicate</MenuItem>
+    <MenuSeparator />
+    <MenuItem tone="danger" onClick={() => remove(entry)}>Remove</MenuItem>
+  </>;
   return (
     <Workspace
-      sidebar={page.layers.length ? (
+      // The list stays when the page is empty, so the Sidebar keeps its width from page to page (a list's floor).
+      sidebar={
         <SidebarList>
-          <Nav aria-label={`${page.name}'s layers`}>
-            {listed.map(entry => (
-              <NavItem key={entry.id} href={hrefOf({ page: "project-page", project: project.id, item: `${page.id}/${entry.id}` })}
-                icon={LAYER_ICONS[entry.kind]} current={entry.id === layer?.id}
-                onClick={event => { event.preventDefault(); select(`${page.id}/${entry.id}`); }}>
-                {entry.name}
-              </NavItem>
-            ))}
-          </Nav>
+          {page.layers.length ? (
+            <ContextMenu menuLabel="Layer actions" itemSelector="[data-layer]"
+              menu={row => { const entry = page.layers.find(other => other.id === row.dataset.layer); return entry ? layerMenu(entry) : null; }}>
+              <Nav aria-label={`${page.name}'s layers`}>
+                {listed.map(entry => (
+                  <NavItem key={entry.id} data-layer={entry.id} href={hrefOf({ page: "project-page", project: project.id, item: `${page.id}/${entry.id}` })}
+                    icon={LAYER_ICONS[entry.kind]} current={entry.id === layer?.id} revealActions
+                    actions={<Menu aria-label={`${entry.name} actions`} align="start" trigger={<Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<MoreHorizontalIcon />} aria-label={`${entry.name} actions`} tabIndex={-1} />}>{layerMenu(entry)}</Menu>}
+                    onClick={event => { event.preventDefault(); show(entry); }}>
+                    {entry.name}
+                  </NavItem>
+                ))}
+              </Nav>
+            </ContextMenu>
+          ) : <p className="studio-muted studio-sidebar__empty">No layers yet.</p>}
         </SidebarList>
-      ) : undefined}
-      canvasTitle={opened ? opened.name : page.name}
-      canvasLead={opened ? <ViewLead>{viewer.lead}</ViewLead> : undefined}
-      canvasActions={opened ? <ViewControls>{viewer.controls}</ViewControls> : (
-        <ViewControls>
-          <Menu aria-label="Add screen" align="end" tooltip="Add one of the system's screens"
-            trigger={<Button variant="ghost" tone="neutral" size="sm" icon={<AddIcon />} trailingIcon={<ChevronDownIcon />}>Add screen</Button>}>
-            {PATTERNS.map(example => <MenuItem key={example.id} onClick={() => add("screen", example.id, example.label)}>{example.label}</MenuItem>)}
-          </Menu>
-          <Button size="sm" variant="ghost" tone="neutral" icon={<AddIcon />} disabled={!images.length} onClick={() => setPicking(true)}>Add image</Button>
-        </ViewControls>
-      )}
-      canvas={opened ? viewer.stage : <>
-        {page.layers.length ? (
-          <TileGrid span="wide" cards>
-            {page.layers.map(entry => (
-              <Tile key={entry.id} span="wide" stage="center" shape="wide" inert card label={entry.name} value={entry.kind === "screen" ? "Screen" : "Image"}
-                selected={entry.id === layer?.id} onSelect={() => select(`${page.id}/${entry.id}`, { replace: true })}
-                onOpen={how => openLayer(entry, how)} data-design={`layer:${entry.id}`}>
-                <LayerView layer={entry} library={library} />
-              </Tile>
-            ))}
-          </TileGrid>
-        ) : (
-          <EmptyState title={`${page.name} is empty`} description="Add one of the system's screens, or an image from your saved references. Each is a layer, listed under the nav in the Sidebar." />
-        )}
-        {picking ? (
-          <Dialog open onOpenChange={next => { if (!next) setPicking(false); }} title="Add image" description="Choose an image from your saved references: it goes at the end of the page.">
-            <AssetGrid aria-label="Saved references" {...CARD_SCOPE} style={{ "--area-asset-card-size": `${PICK_SIZE}px` } as CSSProperties}
-              onOpen={value => { const image = images.find(entry => `${entry.folder}/${entry.id}` === value); if (image) add("image", value, nameOf(image)); setPicking(false); }}>
-              {images.slice(0, 60).map(entry => <AssetGridItem key={`${entry.folder}/${entry.id}`} value={`${entry.folder}/${entry.id}`} name={nameOf(entry)} media={url(entry.thumb)} container="framed" caption="above" aspect="square" />)}
-            </AssetGrid>
-          </Dialog>
-        ) : null}
-        {renaming ? <NameDialog title="Rename page" action="Rename" initial={page.name} onCancel={() => setRenaming(false)}
-          onDone={name => { updateProject(project.id, current => ({ ...current, pages: current.pages.map(entry => entry.id === page.id ? { ...entry, name } : entry) })); setRenaming(false); }} /> : null}
+      }
+      canvasTitle={layer ? layer.name : page.name}
+      canvasLead={design ? <ViewLead>{viewer.lead}</ViewLead> : undefined}
+      canvasActions={design ? <ViewControls>{viewer.controls}</ViewControls> : undefined}
+      canvas={<>
+        <div className="studio-design">
+          <div ref={stageRef} className="studio-design__stage" data-filled={viewer.height ? "" : undefined} data-editing={editable ? "" : undefined}
+            style={viewer.height ? { "--_stage-height": `${viewer.height}px` } as CSSProperties : undefined}>
+            {design ? viewer.stage : (
+              <div className="studio-design__empty">
+                <EmptyState title={layer ? "This layer's source is gone" : `${page.name} is empty`}
+                  description={layer ? "Its screen left Patterns, or its image left your saved references. Remove it from its menu in the Sidebar." : "Add one of the system's screens, or an image from your saved references. It shows here, and the panel below holds its iterations, documentation and code."}
+                  actions={layer ? undefined : <AddLayer onAdd={add} />} />
+              </div>
+            )}
+            <StageSelection stage={stageRef} enabled={editable} selected={selected} onSelect={choose} />
+          </div>
+          <DesignPanel project={project} page={page} layer={layer} stage={stageRef} onShow={show} onAdd={add}
+            layerView={entry => <LayerView layer={entry} library={library} />} />
+        </div>
+        {renaming ? <NameDialog title="Rename layer" action="Rename" initial={renaming.name} onCancel={() => setRenaming(null)}
+          onDone={name => { updateProject(project.id, current => renameLayer(current, page.id, renaming.id, name)); setRenaming(null); }} /> : null}
       </>}
+      inspectorFooter={<ChangeLog project={project} page={page} layer={layer} onOpen={openChange} screenFile={fileOf} />}
       inspector={{
-        design: layer ? (<>
-          <PanelSection>
-            <div className="studio-inspector-actions">
-              {layerDesign(layer, library) ? <Button size="sm" variant="soft" tone="neutral" onClick={() => openLayer(layer)}>Open</Button> : null}
-              <Button size="sm" variant="soft" tone="danger" onClick={() => removeLayer(layer.id)}>Remove layer</Button>
-            </div>
-          </PanelSection>
-          <PanelSection heading={layer.name}>
-            <Facts label="Layer" items={[["Kind", layer.kind === "screen" ? "Screen" : "Image"], ["From", sourceOf(layer)], ["Page", page.name], ["Order", `${page.layers.indexOf(layer) + 1} of ${page.layers.length}`]]} />
-          </PanelSection>
-        </>) : (<>
-          <PanelSection>
-            <div className="studio-inspector-actions">
-              <Button size="sm" variant="soft" tone="neutral" onClick={() => setRenaming(true)}>Rename page</Button>
-              {project.pages.length > 1 ? <Button size="sm" variant="soft" tone="danger" onClick={deletePage}>Delete page</Button> : null}
-            </div>
-          </PanelSection>
+        // The chosen element's properties (src/design-inspector.tsx), else what is on the stage: the layer and its page.
+        design: layer && selected && editable ? (
+          <ElementPanel project={project} page={page} layer={layer} stage={stageRef} path={selected} onSelect={choose} />
+        ) : (<>
+          {layer ? (
+            <PanelSection heading={layer.name}>
+              {editable ? <p className="studio-design__about">Click anything on the stage to change it here. Each change is drawn at once and logged below, to send to Chat together.</p> : null}
+              <Facts label="Layer" items={[["Kind", layer.kind === "screen" ? "Screen" : "Image"], ["From", sourceOf(layer)], ["Page", page.name], ["Order", `${page.layers.indexOf(layer) + 1} of ${page.layers.length}`]]} />
+            </PanelSection>
+          ) : null}
           <PanelSection heading={page.name}>
             <Facts label="Page" items={[["Layers", page.layers.length], ["Screens", page.layers.filter(entry => entry.kind === "screen").length], ["Images", page.layers.filter(entry => entry.kind === "image").length], ["Project", project.name]]} />
           </PanelSection>

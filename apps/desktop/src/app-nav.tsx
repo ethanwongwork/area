@@ -17,10 +17,11 @@
  * New project and New system are their groups' + (Home's dialogs); with no project yet, New project is the group's row.
  */
 import { useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
-import { Button, Count, Kbd, Nav, NavGroup, NavItem, ScrollArea, SearchField, Tooltip } from "@area/react";
-import { AddIcon, BookmarkIcon, ChevronDownIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, LayoutIcon, SearchIcon, SystemIcon } from "@area/icons";
+import { Button, ConfirmDialog, ContextMenu, Count, Kbd, Menu, MenuItem, MenuSeparator, Nav, NavGroup, NavItem, ScrollArea, SearchField, Tooltip } from "@area/react";
+import { AddIcon, BookmarkIcon, ChevronDownIcon, CopyIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, LayoutIcon, MoreHorizontalIcon, PencilIcon, SearchIcon, SystemIcon } from "@area/icons";
 import { systemName, HOME_TAB, hrefOf, LIST_PAGES, projectName, REFERENCE_VIEWS, referenceView, resolve, tabHolds, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
-import { addExploration, addPage, type Project } from "./projects.ts";
+import { addExploration, addPage, deletePage, duplicatePage, renamePage, type Project, type ProjectPage } from "./projects.ts";
+import { NameDialog } from "./pages/home.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { activeTheme, versionName } from "./systems.ts";
 import { ChromeButton, SidebarList, useStudio, type Visit } from "./studio.tsx";
@@ -242,6 +243,9 @@ export function AppNav({ children: list }: { children?: ReactNode }) {
   // A long run shows 5, then Show more (owner pick r4-cap, 2026-11-01; Cursor's Agents sidebar, SidebarPaginatedMenu
   // maxVisible 5); the current one always shows.
   const [more, setMore] = useState<ReadonlySet<string>>(() => new Set());
+  // A page's row menu (owner's pick, 2026-11-06: layer and page actions in the Sidebar's rows, as Figma's): the page a
+  // Rename or Delete dialog is open for.
+  const [pageAction, setPageAction] = useState<{ action: "rename" | "delete"; project: Project; page: ProjectPage } | null>(null);
   const capped = <T,>(key: string, entries: readonly T[], isCurrent: (entry: T) => boolean, draw: (entry: T) => ReactNode) => {
     const all = more.has(key);
     const shown = all ? entries : entries.filter((entry, index) => index < CAP || isCurrent(entry));
@@ -295,6 +299,30 @@ export function AppNav({ children: list }: { children?: ReactNode }) {
     navigate({ page: "exploration", project: project.id, item: made.exploration.id });
   };
 
+  const pageMenu = (project: Project, page: ProjectPage) => <>
+    <MenuItem icon={<PencilIcon />} onClick={() => setPageAction({ action: "rename", project, page })}>Rename</MenuItem>
+    <MenuItem icon={<CopyIcon />} onClick={() => {
+      const made = duplicatePage(project, page.id);
+      updateProject(project.id, () => made.project);
+      if (made.page) navigate({ page: "project-page", project: project.id, item: made.page.id });
+    }}>Duplicate</MenuItem>
+    {project.pages.length > 1 ? <><MenuSeparator /><MenuItem tone="danger" onClick={() => setPageAction({ action: "delete", project, page })}>Delete</MenuItem></> : null}
+  </>;
+  const pageDialog = pageAction ? (pageAction.action === "rename" ? (
+    <NameDialog title="Rename page" action="Rename" initial={pageAction.page.name} onCancel={() => setPageAction(null)}
+      onDone={name => { updateProject(pageAction.project.id, current => renamePage(current, pageAction.page.id, name)); setPageAction(null); }} />
+  ) : (
+    <ConfirmDialog open tone="danger" title={`Delete ${pageAction.page.name}?`} confirmLabel="Delete page"
+      description={pageAction.page.layers.length ? `Its ${pageAction.page.layers.length === 1 ? "layer goes" : `${pageAction.page.layers.length} layers go`} with it. Iterations keep the page as it was, to go back to.` : "Iterations keep the page as it was, to go back to."}
+      onOpenChange={next => { if (!next) setPageAction(null); }}
+      onConfirm={() => {
+        const { project, page } = pageAction;
+        updateProject(project.id, current => deletePage(current, page.id));
+        if (place.page === "project-page" && (place.item ?? "").split("/")[0] === page.id) navigate({ page: "project", project: project.id });
+        setPageAction(null);
+      }} />
+  )) : null;
+
   const context = (): ReactNode => {
     if (kind === "home") {
       const recent = recentPlaces();
@@ -341,6 +369,9 @@ export function AppNav({ children: list }: { children?: ReactNode }) {
       const [pageId] = place.page === "project-page" ? (place.item ?? "").split("/") : [];
       const at = (target: Omit<Place, "project">): Place => ({ ...target, project: project.id });
       return (
+        <ContextMenu menuLabel="Page actions" itemSelector="[data-page]"
+          menu={row => { const page = project.pages.find(entry => entry.id === row.dataset.page); return page ? pageMenu(project, page) : null; }}>
+        {pageDialog}
         <NavGroup label={project.name} sticky>
           <NavItem href={hrefOf(at({ page: "project" }))} icon={<LayoutIcon />} current={place.page === "project"} onClick={open(at({ page: "project" }))}>Overview</NavItem>
           {/* Pages, each a board of layers: the open page's layers are the list under the project. */}
@@ -348,8 +379,11 @@ export function AppNav({ children: list }: { children?: ReactNode }) {
             onClick={toggleOnly(`${key}/pages`)} actions={expander(`${key}/pages`, `${project.name}'s pages`)}>Pages</NavItem>
           {children(`${key}/pages`, <>
             {capped(`${key}/pages`, project.pages, page => pageId === page.id, page => (
-              <NavItem key={page.id} href={hrefOf(at({ page: "project-page", item: page.id }))} current={pageId === page.id} onClick={open(at({ page: "project-page", item: page.id }))}
-                trailing={page.layers.length ? <Count variant="soft" size="sm" count={page.layers.length} /> : undefined}>{page.name}</NavItem>
+              <NavItem key={page.id} data-page={page.id} href={hrefOf(at({ page: "project-page", item: page.id }))} current={pageId === page.id} onClick={open(at({ page: "project-page", item: page.id }))}
+                trailing={page.layers.length ? <Count variant="soft" size="sm" count={page.layers.length} /> : undefined} revealActions
+                actions={<Menu aria-label={`${page.name} actions`} align="start" trigger={<Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<MoreHorizontalIcon />} aria-label={`${page.name} actions`} tabIndex={-1} />}>{pageMenu(project, page)}</Menu>}>
+                {page.name}
+              </NavItem>
             ))}
             <NavItem href={hrefOf(at({ page: "project" }))} icon={<AddIcon />} onClick={event => { event.preventDefault(); newPage(project); }}>New page</NavItem>
           </>)}
@@ -369,6 +403,7 @@ export function AppNav({ children: list }: { children?: ReactNode }) {
             trailing={project.versions.length ? <Count variant="soft" size="sm" count={project.versions.length} /> : undefined}>Versions</NavItem>
           {list}
         </NavGroup>
+        </ContextMenu>
       );
     }
     if (kind === "system") {

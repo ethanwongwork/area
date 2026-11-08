@@ -1454,7 +1454,7 @@ export const COMPONENT_PAGES = [
     manifest: "checkbox",
     api: [
       ["variant", '"card" | "soft"', "—"],
-      ["layout", '"row" | "list" | "tile" | "preview" | "media" | "media-row" (with a variant)', '"row"'],
+      ["layout", '"row" | "list" | "tile" | "preview" | "thumbnail" | "media" | "media-row" (with a variant)', '"row"'],
       ["meta", "ReactNode: a short value at the end", "—"],
       ["size", '"md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
@@ -1488,7 +1488,7 @@ export const COMPONENT_PAGES = [
     manifest: "radio",
     api: [
       ["variant", '"card" | "soft"', "—"],
-      ["layout", '"row" | "list" | "tile" | "preview" | "media" | "media-row" (with a variant)', '"row"'],
+      ["layout", '"row" | "list" | "tile" | "preview" | "thumbnail" | "media" | "media-row" (with a variant)', '"row"'],
       ["meta", "ReactNode: a short value at the end", "—"],
       ["size", '"md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],

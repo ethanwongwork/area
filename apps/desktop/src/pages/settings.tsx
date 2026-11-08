@@ -19,17 +19,26 @@
  * same control in all three places. Mode, Density and Corner are pictures (Radio's preview cards, each choice drawn in its
  * own scope by src/choice-visuals.tsx); the rest are plain controls. Only settings that work are shown (product UI rule 16).
  *
+ *   Chat        the Inspector Chat's default model, whether its replies are live, and how to sign in
+ *   Keyboard    every shortcut the app answers
+ *
+ * Light and dark are Appearance's Mode alone (owner, 2026-11-07: "move dark mode to the settings control"; none of the
+ * three products keeps it in the window, docs/research/settings-2026-11-07/). Search works as Cursor's and ChatGPT's: the
+ * results take the Sidebar's list, grouped by section; choosing one opens its section, scrolls to the setting and marks
+ * it for 3 s. Esc in the field clears it first, then closes Settings; ⌘, toggles Settings (src/studio.tsx).
+ *
  * Theme has a live preview beside its rows (owner, 2026-10-30: "add a screen to the right of the theme canvas in settings to
  * preview all the changes live"): a product screen drawn in the theme being edited, in the mode the rows edit, held in view
  * while the rows scroll; on a narrow Canvas it sits above them.
  */
-import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import { Button, Input, Nav, NavGroup, NavItem, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading } from "@area/react";
-import { ArrowLeftIcon, ContrastIcon, PaletteIcon, SettingsIcon } from "@area/icons";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
+import { Badge, Button, Input, Kbd, Nav, NavGroup, NavItem, NumberField, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading, Switch } from "@area/react";
+import { ArrowLeftIcon, ChatIcon, ContrastIcon, DesktopIcon, KeyboardIcon, MoonIcon, PaletteIcon, SettingsIcon, SunIcon } from "@area/icons";
+import { CHAT_MODELS, useDefaultModel } from "../chat/chat.tsx";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, SETTING_GROUPS } from "@area/tokens/config";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
 import { activeTheme, asLive, liveOf, versionName, AREA_ID } from "../systems.ts";
-import { chromeOf } from "../app-look.ts";
+import { APP_TYPES, chromeOf } from "../app-look.ts";
 import { tabKind } from "../places.ts";
 import { CANVAS_DEFAULTS, canvasAttributes, SidebarList, useStudio, Workspace, type CanvasAxes, type Mode } from "../studio.tsx";
 import { MATERIAL_DEFAULT, bundleValue, type MaterialState } from "../material.ts";
@@ -45,32 +54,71 @@ import { brandStyle } from "../brand.ts";
 import { inMode } from "./theme-settings.ts";
 import { StatusBadge } from "../tile.tsx";
 
-export type SettingsSection = "general" | "appearance" | "theme";
+export type SettingsSection = "general" | "appearance" | "theme" | "chat" | "keyboard";
 // Cursor's icons for the same sections (its settings nav, read from the bundle 2026-10-30): General the gear, Appearance
 // light and dark (its color-mode), and a theme the palette.
 const SECTIONS: ReadonlyArray<{ id: SettingsSection; label: string; icon: ReactNode }> = [
   { id: "general", label: "General", icon: <SettingsIcon /> },
   { id: "appearance", label: "Appearance", icon: <ContrastIcon /> },
   { id: "theme", label: "Theme", icon: <PaletteIcon /> },
+  { id: "chat", label: "Chat", icon: <ChatIcon /> },
+  { id: "keyboard", label: "Keyboard", icon: <KeyboardIcon /> },
 ];
 
 interface Row { section: SettingsSection; group: string; label: string; description: string; control: ReactNode; wide?: boolean }
 
 export function SettingsPage({ section, onSection }: { section: SettingsSection; onSection: (section: SettingsSection | null) => void }) {
-  const studio = useStudio();
   const [query, setQuery] = useState("");
-  // Esc closes Settings, as it closes an overlay (product UI rule 5).
+  // Esc closes Settings, as it closes an overlay (product UI rule 5); in the search field it clears the field first.
   useEffect(() => {
-    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape" && !event.defaultPrevented && !(event.target as Element | null)?.closest?.("input, textarea, select, [role=dialog]")) onSection(null); };
+    const onKey = (event: globalThis.KeyboardEvent) => { if (event.key === "Escape" && !event.defaultPrevented && !(event.target as Element | null)?.closest?.("input, textarea, select, [role=dialog]")) onSection(null); };
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
   }, [onSection]);
   const rows = useRows(onSection);
-  const needle = query.trim().toLowerCase();
-  const shown = needle ? rows.filter(row => `${row.group} ${row.label} ${row.description}`.toLowerCase().includes(needle)) : rows.filter(row => row.section === section);
-  const groups = [...new Set(shown.map(row => row.group))];
   const appLook = useAppLook();
   const themeLook = useThemeLook();
+  const { theme } = useStudio();
+  const needle = query.trim().toLowerCase();
+  const results = needle ? search(indexOf(rows, Boolean(appLook), Boolean(themeLook), theme), needle) : [];
+  const shown = rows.filter(row => row.section === section);
+  const groups = [...new Set(shown.map(row => row.group))];
+  const canvas = useRef<HTMLDivElement>(null);
+  const [found, setFound] = useState<Entry & { at: number } | null>(null);
+  const open = (entry: Entry) => { onSection(entry.section); setFound({ ...entry, at: Date.now() }); };
+  // A chosen result: its row scrolled into view and marked for 3 s (Cursor's), once its section has drawn.
+  useLayoutEffect(() => {
+    if (!found || found.section !== section || !canvas.current) return;
+    const root = canvas.current;
+    const row = (found.setting ? root.querySelector<HTMLElement>(`[data-setting="${CSS.escape(found.setting)}"]`) : null)
+      ?? [...root.querySelectorAll<HTMLElement>(".studio-settings__row")].find(entry => entry.querySelector(".studio-settings__label")?.textContent === found.label)
+      ?? root.querySelector<HTMLElement>(`[aria-label="${CSS.escape(found.group)}"]`);
+    if (!row) return;
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    row.scrollIntoView({ block: "center", behavior: still ? "auto" : "smooth" });
+    row.setAttribute("data-found", "");
+    const timer = setTimeout(() => row.removeAttribute("data-found"), 3000);
+    return () => { clearTimeout(timer); row.removeAttribute("data-found"); };
+  }, [found, section]);
+  const onSearchKey = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Escape") { event.preventDefault(); if (query) setQuery(""); else onSection(null); }
+    else if (event.key === "ArrowDown" || event.key === "Enter") {
+      const first = document.querySelector<HTMLAnchorElement>(".studio-settings-results .area-nav__item");
+      if (!first) return;
+      event.preventDefault();
+      if (event.key === "Enter") first.click(); else first.focus();
+    }
+  };
+  // ↑ and ↓ move through the results; ↑ from the first goes back to the field.
+  const onResultsKey = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    const links = [...event.currentTarget.querySelectorAll<HTMLAnchorElement>(".area-nav__item")];
+    const at = links.indexOf(document.activeElement as HTMLAnchorElement);
+    event.preventDefault();
+    if (event.key === "ArrowUp" && at <= 0) { document.querySelector<HTMLInputElement>(".studio-takeover__filter input")?.focus(); return; }
+    links[Math.min(links.length - 1, Math.max(0, at + (event.key === "ArrowDown" ? 1 : -1)))]?.focus();
+  };
+  const sections = [...new Set(results.map(entry => entry.section))];
   return (
     <Workspace
       canvasTitle="Settings"
@@ -81,32 +129,45 @@ export function SettingsPage({ section, onSection }: { section: SettingsSection;
               <NavItem href="#" icon={<ArrowLeftIcon />} onClick={event => { event.preventDefault(); onSection(null); }}>Back</NavItem>
             </Nav>
             <SearchField size="sm" variant="soft" fullWidth className="studio-takeover__filter" value={query} onValueChange={setQuery}
-              placeholder="Search settings" aria-label="Search settings" />
+              onKeyDown={onSearchKey} placeholder="Search settings" aria-label="Search settings" />
           </SidebarList>
           <SidebarList>
-            <Nav aria-label="Settings">
-              <NavGroup>
-                {SECTIONS.map(entry => (
-                  <NavItem key={entry.id} href={`#settings-${entry.id}`} icon={entry.icon} current={!needle && section === entry.id}
-                    onClick={event => { event.preventDefault(); setQuery(""); onSection(entry.id); }}>{entry.label}</NavItem>
-                ))}
-              </NavGroup>
-            </Nav>
+            {needle ? (
+              results.length ? (
+                <Nav aria-label="Results" className="studio-settings-results" onKeyDown={onResultsKey}>
+                  {sections.map(id => (
+                    <NavGroup key={id} label={SECTION_NAME[id]}>
+                      {results.filter(entry => entry.section === id).map(entry => (
+                        <NavItem key={`${entry.group} ${entry.label}`} href={`#settings-${id}`} icon={SECTIONS.find(item => item.id === id)!.icon}
+                          onClick={event => { event.preventDefault(); open(entry); }}>{entry.label}</NavItem>
+                      ))}
+                    </NavGroup>
+                  ))}
+                </Nav>
+              ) : <p className="studio-settings__none" role="status">No settings match “{query.trim()}”.</p>
+            ) : (
+              <Nav aria-label="Settings">
+                <NavGroup>
+                  {SECTIONS.map(entry => (
+                    <NavItem key={entry.id} href={`#settings-${entry.id}`} icon={entry.icon} current={section === entry.id}
+                      onClick={event => { event.preventDefault(); onSection(entry.id); }}>{entry.label}</NavItem>
+                  ))}
+                </NavGroup>
+              </Nav>
+            )}
           </SidebarList>
         </div>
       }
-      canvas={(rows => !needle && section === "theme" && themeLook
+      canvas={(rows => section === "theme" && themeLook
         ? <div className="studio-settings-host"><div className="studio-settings-split">{rows}<ThemePreview /></div></div>
         : rows)(
-        <div className="studio-settings">
-          {needle ? <h1 className="studio-settings__title">Results for “{query.trim()}”</h1> : section === "theme" ? <ThemeTitle /> : (
-            <h1 className="studio-settings__title">{SECTIONS.find(entry => entry.id === section)!.label}</h1>
-          )}
+        <div ref={canvas} className="studio-settings">
+          {section === "theme" ? <ThemeTitle /> : <h1 className="studio-settings__title">{SECTION_NAME[section]}</h1>}
           {groups.map(group => {
             const heading = GROUPS[group];
             return (
-              <section key={group} className="studio-settings__group" aria-label={heading?.title}>
-                {heading?.title ? <SectionHeading className="studio-section-heading" title={needle ? `${SECTION_NAME[heading.section]} › ${heading.title}` : heading.title} lede={needle ? undefined : heading.lede} /> : null}
+              <section key={group} className="studio-settings__group" aria-label={heading?.title ?? SECTION_NAME[section]}>
+                {heading?.title ? <SectionHeading className="studio-section-heading" title={heading.title} lede={heading.lede} /> : null}
                 <div className="studio-settings__rows">
                   {shown.filter(row => row.group === group).map(row => (
                     <SettingsRow key={row.label} label={row.label} description={row.description} wide={row.wide}>{row.control}</SettingsRow>
@@ -115,22 +176,79 @@ export function SettingsPage({ section, onSection }: { section: SettingsSection;
               </section>
             );
           })}
-          {appLook && (needle || section === "appearance") ? <ThemeGroups look={appLook} needle={needle} prefix={needle ? "Appearance" : undefined} /> : null}
-          {themeLook && (needle || section === "theme") ? <ThemeGroups look={themeLook} needle={needle} prefix={needle ? "Theme" : undefined} /> : null}
+          {appLook && section === "appearance" ? <ThemeGroups look={appLook} /> : null}
+          {themeLook && section === "theme" ? <ThemeGroups look={themeLook} /> : null}
         </div>
       )}
     />
   );
 }
 
-const SECTION_NAME: Record<SettingsSection, string> = { general: "General", appearance: "Appearance", theme: "Theme" };
+/** A setting search finds: where it lives, its name, the words it matches on, and its row's setting when it has one. */
+interface Entry { section: SettingsSection; group: string; label: string; words: string; setting?: string }
+
+/** Every setting in every section, the Theme groups' rows included (as ThemeGroups draws them). */
+function indexOf(rows: Row[], appLook: boolean, themeLook: boolean, theme: "light" | "dark"): Entry[] {
+  const plain = rows.map(row => {
+    const group = GROUPS[row.group]?.title ?? SECTION_NAME[row.section];
+    return { section: row.section, group, label: row.label, words: `${row.description} ${group}` };
+  });
+  const looks = ([["appearance", appLook], ["theme", themeLook]] as const).filter(([, on]) => on).flatMap(([section]) => [
+    ...themeGroupsOf(theme).flatMap(group => group.rows.map(axis => {
+      const control = GALLERY_CONTROLS.find(entry => entry.axis === axis);
+      const combined = ROW_OF[axis];
+      const members = combined ? Object.keys(ROW_OF).filter(key => ROW_OF[key] === combined) : [axis];
+      const words = members.map(key => { const each = GALLERY_CONTROLS.find(entry => entry.axis === key); return `${each?.label ?? ""} ${each?.hint ?? ""}`; }).join(" ");
+      return { section, group: group.heading, label: combined === "greys" ? "Greys" : control?.label ?? axis, words: `${words} ${group.heading}`, setting: combined === "greys" ? "neutral" : axis };
+    })),
+    { section, group: "Material", label: "Material", words: MATERIAL_LEVERS.map(lever => lever.label).join(" ") },
+  ]);
+  return [...plain, ...looks];
+}
+
+/** The matches, a name's first: the name, then the rest of its words (Cursor weighs a name far over a description). */
+function search(entries: Entry[], needle: string): Entry[] {
+  const words = needle.split(/\s+/).filter(Boolean);
+  const hit = (text: string) => words.every(word => text.toLowerCase().includes(word));
+  const named = entries.filter(entry => hit(entry.label));
+  const rest = entries.filter(entry => !named.includes(entry) && hit(`${entry.label} ${entry.words}`));
+  return [...named, ...rest];
+}
+
+const SECTION_NAME: Record<SettingsSection, string> = { general: "General", appearance: "Appearance", theme: "Theme", chat: "Chat", keyboard: "Keyboard" };
 /** Each group's heading; the first group of a section has none. */
 const GROUPS: Record<string, { section: SettingsSection; title?: string; lede?: string }> = {
   profile: { section: "general" },
   mode: { section: "appearance" },
+  text: { section: "appearance", title: "Text" },
+  access: { section: "appearance", title: "Accessibility" },
   look: { section: "appearance", title: "The app's look", lede: "The app is drawn in one of your systems as it is published, or in a look of its own." },
   editing: { section: "theme" },
+  chat: { section: "chat" },
+  tabs: { section: "keyboard", title: "Tabs" },
+  panels: { section: "keyboard", title: "Panels and places" },
 };
+
+/**
+ * Every shortcut the app answers (the app menu, electron/main.cjs; the window's keys, src/studio.tsx),
+ * as ChatGPT's Keyboard lists them: what it does, its keys at the end.
+ */
+const SHORTCUTS: ReadonlyArray<{ group: string; label: string; keys: string[] }> = [
+  { group: "tabs", label: "New tab", keys: ["⌘", "T"] },
+  { group: "tabs", label: "Reopen closed tab", keys: ["⌘", "⇧", "T"] },
+  { group: "tabs", label: "Close tab", keys: ["⌘", "W"] },
+  { group: "tabs", label: "Next tab", keys: ["⌃", "Tab"] },
+  { group: "tabs", label: "Previous tab", keys: ["⌃", "⇧", "Tab"] },
+  { group: "tabs", label: "Go to a tab", keys: ["⌘", "1–9"] },
+  { group: "panels", label: "Search", keys: ["⌘", "K"] },
+  { group: "panels", label: "Home", keys: ["⌘", "⇧", "H"] },
+  { group: "panels", label: "Back", keys: ["⌘", "["] },
+  { group: "panels", label: "Forward", keys: ["⌘", "]"] },
+  { group: "panels", label: "Show or hide the sidebar", keys: ["⌘", "B"] },
+  { group: "panels", label: "Show or hide the inspector", keys: ["⌥", "⌘", "B"] },
+  { group: "panels", label: "Filter the sidebar's list", keys: ["⌥", "⌘", "F"] },
+  { group: "panels", label: "Settings", keys: ["⌘", ","] },
+];
 
 /** One row: its name over a one-line description, the control at the end; a wide row (pictures) takes the line under them. */
 export function SettingsRow({ label, description, wide, reset, children }: { label: string; description?: string; wide?: boolean; reset?: Reset; children: ReactNode }) {
@@ -172,8 +290,14 @@ const said = (axis: string, value: string) => (GALLERY_CONTROLS.find(entry => en
 function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
   const studio = useStudio();
   const { appLook, setAppLook, systems, chrome, navigate, workingSystem, place } = studio;
+  const [defaultModel, setDefaultModel] = useDefaultModel();
+  const live = useLiveChat();
+  const [copied, setCopied] = useState(false);
+  useEffect(() => { if (!copied) return; const timer = setTimeout(() => setCopied(false), 1500); return () => clearTimeout(timer); }, [copied]);
   const look = chromeOf(appLook, systems, MATERIAL_DEFAULT);
   const followed = look.system ?? systems[0]!;
+  // The followed system's own Type, under the app's Text size.
+  const systemType = chromeOf({ ...appLook, type: undefined }, systems, MATERIAL_DEFAULT).canvas.type ?? "13";
   const published = asLive(followed);
   // Theme edits the open system; another system opens in its own tab under Settings, which stays on Theme.
   const editSystem = (id: string) => {
@@ -182,7 +306,7 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
     onSection("theme");
   };
   const mode: Row = { section: "appearance", group: "mode", label: "Mode", description: "Light, dark, or as your Mac is set.", wide: true,
-    control: <Pictures label="Mode" value={studio.mode} onChange={value => studio.setMode(value as Mode)}
+    control: <Pictures label="Mode" min={200} value={studio.mode} onChange={value => studio.setMode(value as Mode)}
       options={(["system", "light", "dark"] as const).map(value => ({ value, label: value === "system" ? "System" : value === "light" ? "Light" : "Dark", picture: <ModePicture mode={value} values={chrome.canvas} material={chrome.material} /> }))} /> };
   const panels: Row = { section: "appearance", group: "mode", label: "Panels", description: "Side by side with a line between, or floating on the sidebar's ground.",
     control: <Segmented size="sm" fullWidth aria-label="Panels" value={appLook.panels ?? "sectioned"}
@@ -202,9 +326,24 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
         {published.themes.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
       </Select> },
     { section: "appearance", group: "look", label: "Its settings",
-      description: `Type ${said("type", chrome.canvas.type)}, ${said("density", chrome.canvas.density).toLowerCase()} density, ${said("radius", chrome.canvas.radius).toLowerCase()} corner, ${said("accent", chrome.canvas.accent).toLowerCase()} accent`,
+      description: `Type ${said("type", systemType)}, ${said("density", chrome.canvas.density).toLowerCase()} density, ${said("radius", chrome.canvas.radius).toLowerCase()} corner, ${said("accent", chrome.canvas.accent).toLowerCase()} accent`,
       control: <Button size="sm" variant="soft" tone="neutral" onClick={() => editSystem(followed.id)}>Edit in Theme</Button> },
   ] : [];
+  // Reading and access (Cursor's Typography, Motion and High Contrast groups; owner 2026-11-07): overrides over whatever the
+  // app is drawn in. Text size is the followed system's Type unless set; a look of its own sets Type among its settings.
+  const textSize: Row[] = appLook.follow ? [{ section: "appearance", group: "text", label: "Text size",
+    description: appLook.type ? `${followed.name}'s is ${systemType}.` : `${followed.name}'s, until you change it.`,
+    control: <NumberField size="sm" variant="soft" steppers="split" aria-label="Text size" min={Number(APP_TYPES[0])} max={Number(APP_TYPES.at(-1))} step={1}
+      value={Number(appLook.type ?? systemType)}
+      onValueChange={value => { const next = value == null ? undefined : String(Math.round(value)); setAppLook({ ...appLook, type: next && next !== systemType && (APP_TYPES as readonly string[]).includes(next) ? next : undefined }); }} /> }] : [];
+  const access: Row[] = [
+    { section: "appearance", group: "access", label: "Reduce motion", description: "Changes happen at once, whatever your Mac is set to.",
+      control: <Switch aria-label="Reduce motion" checked={appLook.reduceMotion === true} onChange={event => setAppLook({ ...appLook, reduceMotion: event.currentTarget.checked || undefined })} /> },
+    { section: "appearance", group: "access", label: "Follow your Mac's contrast", description: "Stronger edges, focus and state when your Mac increases contrast.",
+      control: <Switch aria-label="Follow your Mac's contrast" checked={appLook.followContrast !== false} onChange={event => setAppLook({ ...appLook, followContrast: event.currentTarget.checked ? undefined : false })} /> },
+    { section: "appearance", group: "access", label: "Reduce transparency", description: "Solid fills in place of see-through, blurred ones.",
+      control: <Switch aria-label="Reduce transparency" checked={appLook.reduceTransparency === true} onChange={event => setAppLook({ ...appLook, reduceTransparency: event.currentTarget.checked || undefined })} /> },
+  ];
   const editable = tabKind(place) !== "project";
   const theme: Row[] = [
     { section: "theme", group: "editing", label: "System", description: "The system whose theme you are editing.",
@@ -218,11 +357,36 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
       : { section: "theme", group: "editing", label: `Edit ${workingSystem.name}`, description: "This project uses it as published; its themes are edited in its own tab.",
         control: <Button size="sm" variant="soft" tone="neutral" onClick={() => editSystem(workingSystem.id)}>Open {workingSystem.name}</Button> },
   ];
+  const chat: Row[] = [
+    { section: "chat", group: "chat", label: "Model", description: "What a new chat starts with; the composer's menu changes one chat.",
+      control: <Select size="sm" variant="soft" fullWidth aria-label="Model" value={defaultModel} onChange={event => setDefaultModel(event.currentTarget.value)}>
+        {CHAT_MODELS.map(entry => <option key={entry.value} value={entry.value}>{entry.label}</option>)}
+      </Select> },
+    { section: "chat", group: "chat", label: "Replies", description: live
+      ? "Claude works in this repository and asks before each edit or command."
+      : "Recorded runs: Claude answers live in the Area app.",
+      control: <Badge size="sm" variant="soft" tone={live ? "success" : "neutral"}>{live ? "Live" : "Recorded"}</Badge> },
+    { section: "chat", group: "chat", label: "Sign in", description: "Claude answers once this Mac is signed in: run the command in Terminal, or set ANTHROPIC_API_KEY.",
+      control: <Button size="sm" variant="soft" tone="neutral" onClick={() => { void navigator.clipboard?.writeText("claude auth login"); setCopied(true); }}>{copied ? "Copied" : "Copy claude auth login"}</Button> },
+  ];
+  const keyboard: Row[] = SHORTCUTS.map(entry => ({ section: "keyboard", group: entry.group, label: entry.label, description: "",
+    control: <Kbd keys={entry.keys} size="sm" /> }));
   return [
     { section: "general", group: "profile", label: "Name", description: "As the Sidebar's foot shows it.",
       control: <Input size="sm" variant="soft" fullWidth aria-label="Name" value={studio.profileName} onChange={event => studio.setProfileName(event.currentTarget.value)} /> },
-    mode, panels, drawn, ...following, ...theme,
+    mode, panels, ...textSize, ...access, drawn, ...following, ...theme, ...chat, ...keyboard,
   ];
+}
+
+/** Whether the Chat's replies are live here: the Electron app's engine answers (electron/agent.cjs). */
+function useLiveChat() {
+  const [live, setLive] = useState(false);
+  useEffect(() => {
+    let on = true;
+    void window.areaDesktop?.agent?.status().then(status => { if (on) setLive(status.available); }).catch(() => {});
+    return () => { on = false; };
+  }, []);
+  return live;
 }
 
 /** A look the theme groups set: its values and Material, and how each is written. */
@@ -272,41 +436,36 @@ const PICTURED = new Set(["density", "radius"]);
  * Size, Shape, Stroke, Shadow, States, Effects), then Material. Light's and dark's pairs show in the mode the app is in, as
  * in the Inspector.
  */
-function ThemeGroups({ look, needle, prefix }: { look: Look; needle: string; prefix?: string }) {
+function ThemeGroups({ look }: { look: Look }) {
   const { theme } = useStudio();
-  const matches = (words: string) => !needle || words.toLowerCase().includes(needle);
-  const groups = SETTING_GROUPS.map(group => {
-    const axes = (group.settings as readonly string[]).filter(axis => axis in CANVAS_DEFAULTS && inMode(axis, theme)).filter(axis => {
-      const control = GALLERY_CONTROLS.find(entry => entry.axis === axis);
-      return matches(`${group.heading} ${control?.label ?? ""} ${control?.hint ?? ""} ${ROW_OF[axis] ?? ""}`);
-    });
-    const drawn = new Set<string>();
-    // A combined row (Greys, Accent) draws once, at the first setting it stands for.
-    const rows = axes.filter(axis => { const row = ROW_OF[axis]; if (!row) return true; if (drawn.has(row)) return false; drawn.add(row); return true; });
-    return { heading: group.heading, rows };
-  }).filter(group => group.rows.length);
-  const material = matches(`material ${MATERIAL_LEVERS.map(lever => lever.label).join(" ")}`);
-  const title = (heading: string) => prefix ? `${prefix} › ${heading}` : heading;
   return (
     <RowFrame.Provider value="settings">
-      {groups.map((group, at) => (
-        <section key={group.heading} className="studio-settings__group" aria-label={title(group.heading)}>
-          <SectionHeading className="studio-section-heading" title={title(group.heading)} lede={at === 0 && !needle ? look.lede : undefined} />
+      {themeGroupsOf(theme).map((group, at) => (
+        <section key={group.heading} className="studio-settings__group" aria-label={group.heading}>
+          <SectionHeading className="studio-section-heading" title={group.heading} lede={at === 0 ? look.lede : undefined} />
           <div className="studio-settings__rows">
             {group.rows.map(axis => PICTURED.has(axis) ? <PictureRow key={axis} axis={axis} look={look} /> : <SettingRow key={axis} axis={axis} context={look.context} />)}
           </div>
         </section>
       ))}
-      {material ? (
-        <section className="studio-settings__group" aria-label={title("Material")}>
-          <SectionHeading className="studio-section-heading" title={title("Material")} />
-          <div className="studio-settings__rows">
-            <MaterialRows canvas={look.values} material={look.material} onBundle={look.onBundle} onValue={look.onValue} />
-          </div>
-        </section>
-      ) : null}
+      <section className="studio-settings__group" aria-label="Material">
+        <SectionHeading className="studio-section-heading" title="Material" />
+        <div className="studio-settings__rows">
+          <MaterialRows canvas={look.values} material={look.material} onBundle={look.onBundle} onValue={look.onValue} />
+        </div>
+      </section>
     </RowFrame.Provider>
   );
+}
+
+/** The Theme groups' rows, in the mode the app is in: a combined row (Greys, Accent) once, at its first setting. */
+function themeGroupsOf(theme: "light" | "dark") {
+  return SETTING_GROUPS.map(group => {
+    const axes = (group.settings as readonly string[]).filter(axis => axis in CANVAS_DEFAULTS && inMode(axis, theme));
+    const drawn = new Set<string>();
+    const rows = axes.filter(axis => { const row = ROW_OF[axis]; if (!row) return true; if (drawn.has(row)) return false; drawn.add(row); return true; });
+    return { heading: group.heading, rows };
+  }).filter(group => group.rows.length);
 }
 
 /** A setting whose every choice is a picture of it, drawn in that choice's own scope over the look's other settings. */
@@ -330,15 +489,20 @@ function Pictures({ label, value, onChange, options, ratio, min }: { label: stri
   const style = { "--area-choice-min": `${min ?? 112}px`, ...(ratio ? { "--area-choice-ratio": ratio } : {}) } as CSSProperties;
   return (
     <RadioGroup label={<span className="area-sr-only">{label}</span>} orientation="horizontal" value={value} onValueChange={onChange} className="studio-settings__pictures" style={style}>
-      {options.map(option => <Radio key={option.value} variant="soft" layout="preview" value={option.value} label={option.label} leadingVisual={option.picture} />)}
+      {options.map(option => <Radio key={option.value} variant="soft" layout="thumbnail" value={option.value} label={option.label} leadingVisual={option.picture} />)}
     </RadioGroup>
   );
 }
 
 /** Mode: the app's window in light or dark, in the app's look; System shows both, halved. */
 function ModePicture({ mode, values, material }: { mode: Mode; values: CanvasAxes; material: MaterialState }) {
+  // The Workspace in a 720 window, its words as bars (owner 2026-11-07: "using real components and ui, scaled down, but not
+  // quite as abstract as just abstract ui ... like 720 width"; then "B as bars"): at a picture's size the 1920 screen was
+  // texture, this one's parts read.
   const window = (theme: "light" | "dark") => (
-    <span className="studio-settings__scope" {...canvasAttributes(values, material)} data-area-theme={theme}><ChoicePreview axis="theme" preset={theme} /></span>
+    <span className="studio-settings__scope" {...canvasAttributes(values, material)} data-area-theme={theme}>
+      <ScreenFigure className="cv-screen" screen="compact" scope={{}} fidelity="bars" />
+    </span>
   );
   return mode === "system" ? <span className="studio-settings__split">{window("light")}{window("dark")}</span> : window(mode);
 }
@@ -350,7 +514,7 @@ function ModePicture({ mode, values, material }: { mode: Mode; values: CanvasAxe
  * page's Playground (src/pages/themes.tsx).
  */
 function ThemePreview() {
-  const { shown, theme, brand, workingSystem } = useStudio();
+  const { shown, theme, brand, workingSystem, mode, setMode } = useStudio();
   const [screen, setScreenState] = useState<ScreenId>(() => {
     const saved = readStored<string>("settings-preview-screen", "area");
     return saved in SCREENS ? saved as ScreenId : "area";
@@ -364,12 +528,17 @@ function ThemePreview() {
   };
   return (
     <aside className="studio-settings__preview" aria-label={`Preview of ${activeTheme(workingSystem).name}`}>
-      <Select size="sm" variant="soft" fullWidth aria-label="Preview screen" value={screen} onChange={event => setScreen(event.currentTarget.value as ScreenId)}>
-        {/* The app itself first: a theme on the app it is made in (owner, 2026-10-30), then the product screens. */}
-        {(["area", ...(Object.keys(SCREENS) as ScreenId[]).filter(id => id !== "area")] as ScreenId[]).map(id => <option key={id} value={id}>{SCREENS[id].label}</option>)}
-      </Select>
+      <div className="studio-settings__preview-bar">
+        <Select size="sm" variant="soft" fullWidth aria-label="Preview screen" value={screen} onChange={event => setScreen(event.currentTarget.value as ScreenId)}>
+          {/* The app itself first: a theme on the app it is made in (owner, 2026-10-30), then the product screens. */}
+          {(["area", ...(Object.keys(SCREENS) as ScreenId[]).filter(id => id !== "area")] as ScreenId[]).map(id => <option key={id} value={id}>{SCREENS[id].label}</option>)}
+        </Select>
+        {/* The mode the rows edit, the app's Mode (Claude's Theme switch: System, Light, Dark as icons). */}
+        <Segmented size="sm" iconOnly aria-label="Mode" value={mode} onValueChange={value => setMode(value as Mode)}
+          items={[{ value: "system", label: "System", icon: <DesktopIcon /> }, { value: "light", label: "Light", icon: <SunIcon /> }, { value: "dark", label: "Dark", icon: <MoonIcon /> }]} />
+      </div>
       <ScreenFigure className="studio-settings__screen" screen={screen} scope={scope} fidelity="real" crossfade />
-      <p className="studio-settings__description">{activeTheme(workingSystem).name} in {theme === "light" ? "light" : "dark"}, as you change it. Switch light and dark from the header.</p>
+      <p className="studio-settings__description">{activeTheme(workingSystem).name} in {theme === "light" ? "light" : "dark"}, as you change it.</p>
     </aside>
   );
 }

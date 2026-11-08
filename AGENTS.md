@@ -12,7 +12,7 @@ components and accurate specs matter more than speed.
   - **Three regions, each with its own header** (owner, 2026-10-30; no Titlebar across the window): the
     Sidebar's holds the window controls' room, its toggle, search (⌘K, every place) and back and forward;
     the Canvas's the open tabs (Home first and fixed, then References or one per project, system or lab; a
-    tab never changes what it holds), References and light / dark; the Inspector's its views and toggle.
+    tab never changes what it holds) and References (light / dark moved to Settings › Appearance, owner 2026-11-07); the Inspector's its views and toggle.
     The profile and Settings (⌘,) sit at the Sidebar's foot.
   - **Sidebar** (the tab's own nav: in Home's tab Home, References, Projects and Systems (owner,
     2026-10-31: References is Discover, Following and Saved with its collections); in a system's

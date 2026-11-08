@@ -171,6 +171,36 @@ Not done: live captures of Cursor / Codex / Claude Code for side-by-side (values
 reasoning line not captured; the component review page not regenerated; Undo changes no file (a recorded run).
 Next, Phase 3: the Agent SDK in Electron's main process over IPC, `canUseTool` → Approval, real Keep / Undo.
 
+## Phase 3, built (2026-11-06)
+
+Owner: "Do this task here: Connect the Inspector Chat to a live agent." The engine is the Claude Agent SDK
+(`@anthropic-ai/claude-agent-sdk`, pinned 0.3.319) in Electron's main process, `apps/desktop/electron/agent.cjs`:
+
+- **One conversation per chat id.** Each prompt is a `query` that resumes the chat's Claude Code session; New chat
+  starts another. Working directory: the repository. The system prompt is Claude Code's with a short addition (read
+  AGENTS.md; design changes go into the screen's source with Area's components, props and tokens). Settings: the
+  repository's (`project`, `local`), not the person's global ones.
+- **What the page gets** is what the recordings were written as: text and thinking deltas, finished blocks, tool results
+  as text, the result (with `error`), and `permission_request` from `canUseTool` (its title and description are the
+  SDK's own sentence). Subagents' inner steps stay inside their call. `session.ts`'s reducer reads them unchanged.
+- **It asks before every edit and command** (permission mode `default`); "Yes, for this session" allows that tool for
+  the rest of the chat; a no with words sends them to the agent as what to do instead. AskUserQuestion is off: the
+  agent asks in its reply.
+- **Keep and Undo are real.** A PreToolUse hook reads each file before an edit, PostToolUse after; Undo writes the
+  before back while the file is as the edit left it (a turn's edits newest first) and says why when it isn't.
+- **Live where the engine answers.** The Inspector's chat asks `status()` and goes live in the Electron app; in a
+  browser, a capture and the Testing screen's frames it plays the recordings, as before. The empty state says which.
+- **Model:** the composer's picker goes with each prompt; thinking is adaptive with summaries, so Reasoning has words.
+- **Sign-in** is the person's own Claude Code login or ANTHROPIC_API_KEY. A failed sign-in ends the turn with an error
+  notice saying how to sign in. Started from inside a Claude Code session, the app leaves that session's variables out.
+
+Checked: `apps/desktop/tests/agent.test.ts` drives the engine with a stand-in SDK (a yes edits and Undo restores, a no
+with words, for this session, Stop, the sign-in message, the env, the reducer). In Electron the whole path ran to the
+SDK and back: on 2026-11-06 this Mac's Claude Code sign-in had expired (`claude auth status`: not logged in), so the
+reply was the sign-in notice; a reply with tools has not been seen live yet.
+
+Not yet: image attachments go as their names only; @ files come from a fixed list; line numbers in diffs.
+
 ## Chat additions, plan (2026-10-19)
 
 Owner, after round 49 (with Astryx's chat set as the prompt: composer, layout, message, message metadata, system

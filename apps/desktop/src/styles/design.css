@@ -1,0 +1,120 @@
+/* --- The design interface (a project's page: src/pages/project.tsx, src/design-panel.tsx; owner, 2026-11-06) ----------
+ * The Canvas body is one scroll: the stage, short of the body's height by the peek, then the design panel, at least the
+ * body's height, so scrolling to it fills the view with it. The stage never takes a plain scroll (design-viewer.tsx
+ * `scroll: "page"`): it clips the design and pans only by its own means (a sideways scroll, Space or the middle button).
+ * With Fill width the stage is as tall as the design at the frame's width, and the page scrolls through it. */
+.studio-canvas__body:has(> .studio-design) {
+  container-type: size;
+  padding: 0;
+}
+.studio-design {
+  /* Only the panel's tab row shows under the stage, the seam and one bar (owner, 2026-11-06: "just enough to show the
+     row only"); a click on a tab scrolls the panel up into view (design-panel.tsx). */
+  --_peek: calc(var(--_studio-bar) + var(--area-border-width)); /* pick: 37 at type 13 */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.studio-design__stage {
+  /* Never so short the design can't be judged (a 600 window). */
+  block-size: max(var(--area-space-96) * 3, 100cqh - var(--_peek)); /* pick: 288 floor */
+  min-inline-size: 0;
+}
+.studio-design__stage[data-filled] { block-size: var(--_stage-height); }
+.studio-design__stage > .studio-viewer { block-size: 100%; }
+.studio-viewer[data-scroll="page"] { overflow: hidden; overscroll-behavior: auto; }
+.studio-design__empty { display: grid; place-items: center; block-size: 100%; padding: var(--_canvas-margin); box-sizing: border-box; background: color-mix(in srgb, var(--area-fg-default) 6%, var(--area-bg-page)); /* pick: the viewer's grey ground */ }
+/* The panel: the page's ground, set off from the stage by the panels' seam. Its sides are the Canvas gap, tighter than
+   the page margin (owner, 2026-11-06: "tighter, even margins on the sides"), and even: the tabs' first label and the last
+   action's label both sit on that margin, as the cards' edges do. */
+.studio-design__panel {
+  box-sizing: border-box;
+  min-block-size: 100cqh;
+  padding-block: calc((var(--_studio-bar) - var(--area-control-sm)) / 2) var(--_canvas-gap);
+  padding-inline: var(--_canvas-gap);
+  border-block-start: var(--area-border-width) solid var(--area-border-divider);
+  background: var(--area-bg-page);
+}
+/* A tab's content starts a margin under the tabs. */
+.studio-design__body { padding-block-start: var(--_canvas-gap); }
+.studio-design__count { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+/* A tab's first row: what it holds (muted, one line where it fits), and its actions at the end. */
+/* It reads with what follows it: the cards' gap under it, not a section's. */
+.studio-design__head { margin-block-end: calc(var(--_canvas-gap) - var(--_canvas-section)); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--area-space-12); min-block-size: var(--area-control-sm); }
+.studio-design__summary { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+.studio-design__actions { display: flex; align-items: center; gap: var(--area-space-4); margin-inline-start: auto; }
+/* A ghost action's words end on the margin, not its hover box (the box's own end inset, inset.css). */
+.studio-design__actions > :last-child { margin-inline-end: calc(var(--_inset-end, 0px) * -1); }
+.studio-design__links { margin: 0; line-height: var(--area-text-base-leading); }
+.studio-design__list { margin: 0; padding-inline-start: var(--area-space-20); display: grid; gap: var(--area-space-8); }
+.studio-design__color { display: inline-flex; align-items: center; gap: var(--area-space-8); }
+.studio-design__swatch { inline-size: var(--area-space-12); block-size: var(--area-space-12); border-radius: var(--area-space-4); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); flex: none; }
+/* Comments: the composer, then the newest first, each an avatar beside its byline and words. */
+/* The field and its button are one size, side by side; the composer, the comments and Research's notes keep one measure. */
+.studio-design { --_measure: 640px; /* pick: a comment's measure */ }
+.studio-design__compose { display: flex; align-items: center; gap: var(--area-space-8); max-inline-size: var(--_measure); }
+.studio-design__compose > :first-child { flex: 1; }
+.studio-design__comments { display: grid; gap: var(--area-space-16); margin: 0; padding: 0; list-style: none; max-inline-size: var(--_measure); }
+.studio-design__notes { max-inline-size: var(--_measure); }
+.studio-design__comment { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--area-space-12); }
+.studio-design__comment p { margin: 0; }
+.studio-design__byline { color: var(--area-fg-default); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+
+/* --- Editing on the stage (src/design-select.tsx) ---------------------------------------------------------------------
+ * Hover outlines the component or frame under the pointer, the selection outlines the chosen one with its name over it
+ * (Figma's blue): drawn over the stage, one pixel at any zoom, in the indicator blue the app selects with. */
+.studio-design__stage { position: relative; }
+.studio-design__stage[data-editing] .studio-viewer__content { cursor: default; }
+.studio-design__select { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.studio-design__hover, .studio-design__selected {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  box-sizing: border-box;
+  border: var(--area-stroke-width) solid var(--area-accent-indicator);
+}
+.studio-design__hover { border-style: dashed; opacity: 0.7; /* pick */ }
+.studio-design__selected { border-width: calc(var(--area-stroke-width) * 2); /* pick: Figma's 2 */ }
+.studio-design__tag {
+  position: absolute;
+  inset-block-end: calc(100% + var(--area-space-4));
+  inset-inline-start: calc(var(--area-stroke-width) * -2);
+  max-inline-size: 320px; /* pick */
+  overflow: hidden;
+  padding-inline: var(--area-space-4);
+  border-radius: var(--area-radius-4);
+  background: var(--area-accent-indicator);
+  color: var(--area-fg-on-accent);
+  font-size: var(--area-text-xs-size);
+  line-height: var(--area-text-xs-leading);
+  font-weight: var(--area-weight-strong);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The Design view: a muted line under a heading (the chosen element's words, the hint before a choice). */
+.studio-design__about { margin: 0; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); overflow-wrap: anywhere; }
+
+/* --- The change log at the Design view's foot (src/design-inspector.tsx) ----------------------------------------------
+ * Its head (Changes and its count, Clear sent), the changes newest first (each its element over what changed, Undo at
+ * its end; a click opens the element), and Send to chat across the foot. A long log scrolls in itself, so the view's
+ * properties keep most of the panel. */
+.studio-design__log { display: grid; gap: var(--area-space-8); }
+.studio-design__log-head { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); min-block-size: var(--area-control-sm); }
+.studio-design__log-title { display: flex; align-items: center; gap: var(--area-space-6); margin: 0; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); font-weight: var(--area-weight-strong); }
+.studio-design__log-note { margin: 0; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+.studio-design__changes { display: grid; margin: 0; padding: 0; list-style: none; max-block-size: 220px; /* pick: about five changes */ overflow-y: auto; }
+.studio-design__change { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--area-space-4); }
+.studio-design__change-open {
+  all: unset;
+  display: grid;
+  min-inline-size: 0;
+  padding-block: var(--area-space-4);
+  padding-inline: var(--area-space-6);
+  margin-inline: calc(var(--area-space-6) * -1);
+  border-radius: var(--area-radius-control-sm);
+  cursor: default;
+}
+.studio-design__change-open:hover { background: var(--area-bg-component-hover); }
+.studio-design__change-open:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+.studio-design__change-what { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+.studio-design__change-how { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
