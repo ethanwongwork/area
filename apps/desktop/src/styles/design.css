@@ -61,8 +61,16 @@
 
 /* --- Editing on the stage (src/design-select.tsx) ---------------------------------------------------------------------
  * Hover outlines the component or frame under the pointer, the selection outlines the chosen one with its name over it
- * (Figma's blue): drawn over the stage, one pixel at any zoom, in the indicator blue the app selects with. */
-.studio-design__stage { position: relative; }
+ * in the selection blue below: drawn over the stage, one pixel at any zoom. */
+.studio-design__stage {
+  position: relative;
+  /* The editing chrome's own blue (owner, 2026-11-08: "a brighter more vibrant blue"): the vector tool's selection blue,
+     its ramp blue-500, read from its app bundle (docs/research/design-editing-2026-11-08/figma.md, desktop_shell.css
+     @247794 light, @308968 dark), with white words on it as there. Not Area's indicator role, which the Accent strength
+     setting mixes toward grey and which belongs to the design's own controls; this chrome is the tool's, over any design. */
+  --_select: light-dark(#0d99ff, #0c8ce9); /* spec */
+  --_on-select: #ffffff; /* spec */
+}
 .studio-design__stage[data-editing] .studio-viewer__content { cursor: default; }
 .studio-design__select { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .studio-design__hover, .studio-design__selected {
@@ -70,7 +78,7 @@
   inset-block-start: 0;
   inset-inline-start: 0;
   box-sizing: border-box;
-  border: var(--area-stroke-width) solid var(--area-accent-indicator);
+  border: var(--area-stroke-width) solid var(--_select);
 }
 .studio-design__hover { border-style: dashed; opacity: 0.7; /* pick */ }
 .studio-design__selected { border-width: calc(var(--area-stroke-width) * 2); /* pick: Figma's 2 */ }
@@ -82,14 +90,113 @@
   overflow: hidden;
   padding-inline: var(--area-space-4);
   border-radius: var(--area-radius-4);
-  background: var(--area-accent-indicator);
-  color: var(--area-fg-on-accent);
+  background: var(--_select);
+  color: var(--_on-select);
   font-size: var(--area-text-xs-size);
   line-height: var(--area-text-xs-leading);
   font-weight: var(--area-weight-strong);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* --- Direct editing (2026-11-08; docs/research/design-editing-2026-11-08/README.md, Stage) --------------------------
+ * The first copy's selection has handles: 8 squares on its corners and edge midpoints, white with the selection blue's
+ * line, each hit 16 (the measured editors' median, 8 drawn and 16 to hit), so a press on them resizes. Under
+ * the selection its size in the design's pixels ("320 × 48"), the tag's pill. A drag shows where a move lands as a 2
+ * line between siblings, a drawn shape's box as it is drawn, and a snapped shape's guides as 1 lines in the indicator.
+ * Handles hide on a box too small to hold them apart (under 24, the measured editors' 16 to 32). */
+.studio-design__handle {
+  --_handle: 8px; /* spec: research note, Stage (Penpot, tldraw, Excalidraw, Onlook, all 8) */
+  --_hit: 16px; /* spec: the median corner hit */
+  position: absolute;
+  display: none;
+  inline-size: var(--_handle);
+  block-size: var(--_handle);
+  box-sizing: border-box;
+  border: var(--area-stroke-width) solid var(--_select);
+  /* White in both modes, as every measured editor draws them: a dark page's ground went black over a light design. */
+  background: var(--_on-select);
+  pointer-events: auto;
+  translate: -50% -50%;
+}
+/* Its hit: larger than what is drawn. */
+.studio-design__handle::before { content: ""; position: absolute; inset: calc((var(--_handle) - var(--_hit)) / 2); }
+.studio-design__selected[data-handles] > .studio-design__handle { display: block; }
+.studio-design__handle[data-handle="nw"] { inset-block-start: 0; inset-inline-start: 0; cursor: nwse-resize; }
+.studio-design__handle[data-handle="n"] { inset-block-start: 0; inset-inline-start: 50%; cursor: ns-resize; }
+.studio-design__handle[data-handle="ne"] { inset-block-start: 0; inset-inline-start: 100%; cursor: nesw-resize; }
+.studio-design__handle[data-handle="e"] { inset-block-start: 50%; inset-inline-start: 100%; cursor: ew-resize; }
+.studio-design__handle[data-handle="se"] { inset-block-start: 100%; inset-inline-start: 100%; cursor: nwse-resize; }
+.studio-design__handle[data-handle="s"] { inset-block-start: 100%; inset-inline-start: 50%; cursor: ns-resize; }
+.studio-design__handle[data-handle="sw"] { inset-block-start: 100%; inset-inline-start: 0; cursor: nesw-resize; }
+.studio-design__handle[data-handle="w"] { inset-block-start: 50%; inset-inline-start: 0; cursor: ew-resize; }
+/* Edge midpoints only where the box is long enough to keep them clear of the corners (design-select.tsx sets it). */
+.studio-design__selected[data-small] > :is([data-handle="n"], [data-handle="e"], [data-handle="s"], [data-handle="w"]) { display: none; }
+.studio-design__size {
+  position: absolute;
+  inset-block-start: calc(100% + var(--area-space-6));
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  padding-inline: var(--area-space-4);
+  border-radius: var(--area-radius-4);
+  background: var(--_select);
+  color: var(--_on-select);
+  font-size: var(--area-text-xs-size);
+  line-height: var(--area-text-xs-leading);
+  font-weight: var(--area-weight-strong);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.studio-design__size[hidden] { display: none; }
+.studio-design__drop, .studio-design__ghost, .studio-design__guide { position: absolute; inset-block-start: 0; inset-inline-start: 0; box-sizing: border-box; }
+.studio-design__drop { background: var(--_select); border-radius: 1px; }
+.studio-design__ghost { border: var(--area-stroke-width) solid var(--_select); background: color-mix(in srgb, var(--_select) 8%, transparent); /* pick */ }
+.studio-design__ghost[data-ellipse] { border-radius: 50%; }
+.studio-design__guide { background: var(--_select); }
+.studio-design__drop[hidden], .studio-design__ghost[hidden], .studio-design__guide[hidden] { display: none; }
+/*
+ * A chosen frame's padding and gaps (design-select.tsx): each space has a bar at its middle to drag, and shows tinted while
+ * its bar is hovered or dragged (a vector tool's auto layout handles). The bar is 2 by 12 with a 16 hit, the handles'
+ * measures; drawn in the selection blue, as everything the stage draws.
+ */
+.studio-design__space { position: absolute; inset-block-start: 0; inset-inline-start: 0; box-sizing: border-box; pointer-events: none; }
+.studio-design__space[hidden] { display: none; }
+.studio-design__space:is(:has(> .studio-design__space-bar:hover), [data-active]) { background: color-mix(in srgb, var(--_select) 16%, transparent); /* pick */ }
+.studio-design__space-bar {
+  --_long: 12px; /* spec: research note, Stage */
+  --_thin: 2px; /* spec */
+  --_hit: 16px; /* spec: the handles' hit */
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: var(--_long);
+  block-size: var(--_thin);
+  border-radius: 1px;
+  background: var(--_select);
+  translate: -50% -50%;
+  pointer-events: auto;
+  cursor: ns-resize;
+}
+.studio-design__space[data-across] > .studio-design__space-bar { inline-size: var(--_thin); block-size: var(--_long); cursor: ew-resize; }
+.studio-design__space-bar::before { content: ""; position: absolute; inset: calc((var(--_thin) - var(--_hit)) / 2) calc((var(--_long) - var(--_hit) * 1.5) / 2); }
+.studio-design__space[data-across] > .studio-design__space-bar::before { inset: calc((var(--_long) - var(--_hit) * 1.5) / 2) calc((var(--_thin) - var(--_hit)) / 2); }
+/* The Design view's size: Hug, Fill or Fixed, then its length. */
+.studio-design__size-field { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--area-space-4); min-inline-size: 0; }
+/* A drawing tool's crosshair. */
+.studio-design__stage[data-tool] .studio-viewer__content { cursor: crosshair; }
+/* Words being edited in place: the caret's, and no outline of the field's own (the selection is the outline). */
+.studio-design__stage [contenteditable] { cursor: text; outline: none; }
+/* The design's tools, floating at the stage's foot, centred (a vector tool's bar): Area's Toolbar on its surface. */
+.studio-design__tools {
+  position: absolute;
+  inset-block-end: var(--area-space-12);
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  z-index: 1;
+}
+/* The clean copy of a screen being read into a design: drawn at its width, out of sight and reach. */
+.studio-design__capture { position: absolute; inset-block-start: 0; inset-inline-start: 0; visibility: hidden; pointer-events: none; contain: layout paint; }
+.studio-design__missing { display: inline-block; padding: var(--area-space-4); border: var(--area-stroke-width) dashed var(--area-border-default); color: var(--area-fg-muted); }
 
 /* The Design view: a muted line under a heading (the chosen element's words, the hint before a choice). */
 .studio-design__about { margin: 0; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); overflow-wrap: anywhere; }

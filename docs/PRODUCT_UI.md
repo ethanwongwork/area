@@ -361,7 +361,7 @@ Cursor's nav with Figma's tabs).
     **Comments** (on the layer, in the project file) and **Research** (the project's notes and the references it uses).
     **Editing** (owner, 2026-11-06: "shouldnt the actual figma style design panel be there? … each change to be made and
     then logged and then sent to the chat all at once"; `src/design-select.tsx`, `design-inspector.tsx`, `design-edit.ts`):
-    a hover outlines the component or frame under the pointer and a click selects it (outlined in the indicator blue with
+    a hover outlines the component or frame under the pointer and a click selects it (outlined in the selection blue, `#0d99ff` light and `#0c8ce9` dark, with
     its name over it; the design's own controls don't act; Esc clears, ↑ selects the parent). The Inspector's Design view
     shows what it is, **Area-aware** (owner's pick): a component its props (its manifest's variants) and words, a frame
     its direction, gap, padding, fill and corner, text its words, type role, weight and ink, each read from the drawn
@@ -369,7 +369,19 @@ Cursor's nav with Figma's tabs).
     project (`DesignChange`; owner's pick: live and saved), one entry per element and property; the **log** sits at the
     Design view's foot (owner's pick), each change undoable, a click on one opens its element, and **Send to chat** puts
     them all in Chat as one message (by page and layer, with the screen's file), for the agent to write into the source;
-    they stay drawn, marked sent, until cleared. With nothing selected the view shows the layer and page facts. A
+    they stay drawn, marked sent, until cleared. **Direct editing** (owner, 2026-11-08: "fully editable vector figma code
+    canvas … each design is isolated to its own container only"; `docs/research/design-editing-2026-11-08/`,
+    `src/design-doc.ts`, `design-capture.ts`, `design-editor.tsx`, `design-render.tsx`): a screen layer becomes a design
+    of its own on its first edit (read from the screen as drawn, its components kept as components with their props),
+    and every edit is an operation on it, logged as a `DesignChange` with its node and undo. On the stage: a click
+    chooses the deepest component, shape, added thing or run of words; a drag reorders in a frame's flow (a 2 drop line)
+    or moves a shape (snapping to its frame's and its siblings' edges and centres within 8); eight 8 handles (16 to hit)
+    resize to a Fixed size, its size in a pill under it, and a double-click on a side's makes it Hug; a chosen frame's
+    paddings and gaps have bars to drag, snapping to the space ramp (⇧ every side, ⌥ both opposite sides); the Design
+    view's Layout has Width and Height as Hug, Fill or Fixed beside the length; a double-click edits words in place; the bar at the stage's foot (Area's Toolbar, surface) holds the
+    tools V F R O T, Insert (⇧I) and Undo / Redo (⌘Z, ⇧⌘Z); ⌫, ⌘D, arrows (reorder, or nudge 1 / 10), Enter / ⇧Enter
+    and Tab move through the design. A layer with its own design draws it everywhere (stage, thumbnails, iterations) and
+    its Code tab shows its code written from it. With nothing selected the view shows the layer and page facts. A
     layer's and a page's Rename, Duplicate and Remove/Delete are its Sidebar row's menu (its … and a right-click; owner's
     pick), not Inspector buttons. (A 20 × 14 picture of each, pick r4-thumbs, was dropped the same
     day, owner: "is the small image thumbnail very practical?": a screen at that size is a white plate with a few bars,

@@ -22,6 +22,7 @@ import { useChat } from "./chat/chat.tsx";
 import { RowField } from "./inspector-rows.tsx";
 import { FAMILIES } from "./pages/components.tsx";
 import { describe, elementAt, parentOf, pathOf, propertiesOf, screensIn, type PropertyRow } from "./design-edit.ts";
+import { toJsx, type DocNode } from "./design-doc.ts";
 import { clearSent, logChange, markSent, pendingChanges, undoChange, type DesignChange, type Project, type ProjectPage, type Layer } from "./projects.ts";
 
 /** Sentinels for CustomSelect, which takes no empty value: a variant at its default, and a value off the scale. */
@@ -38,10 +39,15 @@ export interface ElementPanelProps {
   stage: RefObject<HTMLElement | null>;
   path: number[];
   onSelect: (path: number[] | null) => void;
+  /**
+   * On a layer that is edited as a design (src/design-editor.tsx): makes the change as an edit to it, which logs it.
+   * True when it did; without it (or when it can't), the change is an override drawn on the screen's code.
+   */
+  onEdit?: (property: string, value: string, words: { target: string; label: string; name: string; from: string; to: string }) => boolean;
 }
 
 /** The chosen element's properties. */
-export function ElementPanel({ project, page, layer, stage, path, onSelect }: ElementPanelProps) {
+export function ElementPanel({ project, page, layer, stage, path, onSelect, onEdit }: ElementPanelProps) {
   const { updateProject } = useStudio();
   const [read, setRead] = useState<{ target: string; label: string; component: boolean; rows: PropertyRow[]; parent: number[] | null } | null>(null);
   // Read again whenever the element or what is drawn on it changes (after the stage draws the changes).
@@ -59,12 +65,15 @@ export function ElementPanel({ project, page, layer, stage, path, onSelect }: El
       });
     });
     return () => cancelAnimationFrame(frame);
-  }, [key, drawn, stage]); // eslint-disable-line react-hooks/exhaustive-deps
+    // And after every edit to the layer's own design (a new document each time).
+  }, [key, drawn, stage, layer.doc]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!read) return <PanelSection heading="Selection"><p className="studio-muted">This element is no longer in the screen.</p></PanelSection>;
-  const change = (row: PropertyRow, value: string, label: string) => updateProject(project.id, current => logChange(current, {
-    page: page.id, layer: layer.id, path, target: read.target, label: read.label, property: row.property, name: row.name, from: row.currentLabel.replace(/ · (off scale|mixed)$/, ""), to: label, value,
-  }));
+  const change = (row: PropertyRow, value: string, label: string) => {
+    const words = { target: read.target, label: read.label, name: row.name, from: row.currentLabel.replace(/ · (off scale|mixed)$/, ""), to: label };
+    if (onEdit?.(row.property, value, words)) return;
+    updateProject(project.id, current => logChange(current, { page: page.id, layer: layer.id, path, ...words, property: row.property, value }));
+  };
   return (
     <>
       <PanelSection heading={read.target} actions={<>
@@ -91,6 +100,7 @@ export function ElementPanel({ project, page, layer, stage, path, onSelect }: El
 function PropertyField({ row, onChange }: { row: PropertyRow; onChange: (value: string, label: string) => void }) {
   const [words, setWords] = useState(row.current);
   useEffect(() => setWords(row.current), [row.current]);
+  if (row.size) return <RowField label={row.name} orientation="horizontal" reset={false}><SizeControl row={row} onChange={onChange} /></RowField>;
   if (!row.options) {
     const commit = () => { if (words.trim() && words !== row.current) onChange(words, words); };
     return (
@@ -112,10 +122,53 @@ function PropertyField({ row, onChange }: { row: PropertyRow; onChange: (value: 
   );
 }
 
+/**
+ * A size: Hug, Fill or Fixed, and its length (a vector tool's W and H). Typing a length makes it Fixed; Field's id and
+ * label go on to the choice.
+ */
+function SizeControl({ row, onChange, ...field }: { row: PropertyRow; onChange: (value: string, label: string) => void } & Record<string, unknown>) {
+  const length = row.size!.length;
+  const [typed, setTyped] = useState(String(length));
+  useEffect(() => setTyped(String(length)), [length]);
+  const commit = () => {
+    const next = Math.round(Number(typed));
+    if (!Number.isFinite(next) || next < 1) { setTyped(String(length)); return; }
+    if (next !== length || row.current !== "fixed") onChange(`fixed:${next}`, `${next}`);
+  };
+  const modes = row.options!;
+  return (
+    <div className="studio-design__size-field">
+      <CustomSelect size="sm" variant="soft" fullWidth {...field} aria-label={row.name} items={modes} value={row.current} disabled={modes.length < 2}
+        onValueChange={next => { if (next === row.current) return; if (next === "fixed") onChange(`fixed:${length}`, `${length}`); else onChange(next, modes.find(mode => mode.value === next)!.label); }} />
+      <Input size="sm" variant="soft" fullWidth inputMode="numeric" aria-label={`${row.name} in pixels`} value={typed}
+        onChange={event => setTyped(event.target.value.replace(/[^0-9.]/g, ""))} onBlur={commit}
+        onKeyDown={event => {
+          if (event.key === "Enter") commit();
+          if (event.key === "Escape") setTyped(String(length));
+          if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+            event.preventDefault();
+            const next = Math.max(1, (Number(typed) || length) + (event.key === "ArrowUp" ? 1 : -1) * (event.shiftKey ? 10 : 1));
+            setTyped(String(next));
+            onChange(`fixed:${next}`, `${next}`);
+          }
+        }} />
+    </div>
+  );
+}
+
 /* --- The log ----------------------------------------------------------------------------------------------------------- */
 
-/** A change in words: "Variant: Solid → Soft". */
-const said = (change: DesignChange) => `${change.name}: ${change.from || "none"} → ${change.to}`;
+/** An inserted node as one line of JSX, for Chat ("<Badge tone="success">Complete</Badge>"). */
+const jsxOf = (node: DocNode) => {
+  const code = toJsx({ version: 1, root: [node], next: 0 }).split("\n").filter(line => /^ {6}\S/.test(line)).map(line => line.trim());
+  const first = code[0] ?? "";
+  return code.length > 1 ? `${first} …` : first;
+};
+
+/** A change in words: "Variant: Solid → Soft", "Added: 2 of 4 in .ex-head__actions", "Removed: was 3 of 5". */
+const said = (change: DesignChange) => change.property === "insert" ? `${change.name}: ${change.to}`
+  : change.property === "remove" ? `${change.name}: was ${change.from}`
+  : `${change.name}: ${change.from || "none"} → ${change.to}`;
 const thing = (change: DesignChange) => !change.label ? change.target : change.target === "Frame" ? `Frame ${change.label}` : `${change.target} “${change.label}”`;
 
 /** The message Chat gets: every pending change, by page and layer, with the screen's file. */
@@ -130,7 +183,9 @@ export function changesMessage(project: Project, changes: readonly DesignChange[
     const layer = page?.layers.find(entry => entry.id === layerId);
     const file = layer ? screenFile(layer) : null;
     lines.push("", `${page?.name ?? "A page"} › ${layer?.name ?? "a layer"}${file ? ` (${file})` : ""}`);
-    for (const change of list) lines.push(`${number++}. ${thing(change)}: ${said(change)}${change.value.startsWith("var(") ? `, token ${change.value.slice(4, -1)}` : ""}`);
+    for (const change of list) lines.push(`${number++}. ${thing(change)}: ${said(change)}${change.value.startsWith("var(") ? `, token ${change.value.slice(4, -1)}` : ""}${change.property === "insert" && change.op?.op !== "batch" && change.op?.op === "insert" ? ` (${jsxOf(change.op.node)})` : ""}`);
+    // A layer edited as a design has its whole code, written from it, for the agent to match.
+    if (layer?.doc && list.some(change => change.node)) lines.push(`   The layer's design as code: the Code tab of ${layer.name}.`);
   }
   lines.push("", "Keep them to Area's components, props and tokens.");
   return lines.join("\n");

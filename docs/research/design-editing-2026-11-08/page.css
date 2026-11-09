@@ -1,0 +1,67 @@
+/* Direct Editing review page (entry.tsx). One reading column of 1240 at most, the gutter on .dex-page; the editor is the
+   app's stage and its side a list or the code. Colour comes from Area's tokens (light and dark follow data-area-theme). */
+html, body { background: var(--area-bg-page); color: var(--area-fg-default); block-size: auto; overflow: visible; }
+body { margin: 0; font-family: var(--area-font-sans); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); -webkit-font-smoothing: antialiased; }
+#root { min-inline-size: 0; }
+.dex-page {
+  max-inline-size: 1240px;
+  margin-inline: auto;
+  padding-block: 48px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 56px;
+  min-inline-size: 0;
+}
+.dex-top { display: grid; gap: 8px; max-inline-size: 68ch; }
+.dex-eyebrow { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+.dex-top h1 { margin: 0; font-size: 26px; line-height: 32px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+.dex-lede { margin: 0; color: var(--area-fg-muted); font-size: 15px; line-height: 22px; }
+.dex-muted { margin: 0; color: var(--area-fg-muted); }
+
+.dex-section { display: grid; gap: 20px; min-inline-size: 0; }
+.dex-section__head { display: grid; gap: 6px; max-inline-size: 72ch; }
+.dex-section__head h2 { margin: 0; font-size: 20px; line-height: 26px; font-weight: 600; text-wrap: balance; }
+.dex-section__head p { margin: 0; color: var(--area-fg-muted); font-size: 15px; line-height: 22px; }
+
+/* --- The editor: the viewer's bar, the stage, and its side ------------------------------------------------------------- */
+.dex-editor { border: var(--area-border-width) solid var(--area-border-divider); border-radius: 16px; overflow: clip; background: var(--area-bg-page); }
+.dex-editor__bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 8px; border-block-end: var(--area-border-width) solid var(--area-border-divider); flex-wrap: wrap; }
+.dex-editor__lead, .dex-editor__end { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.dex-editor__body { display: grid; grid-template-columns: minmax(0, 1fr) 300px; min-block-size: 560px; }
+.dex-editor__stage { block-size: 560px; min-inline-size: 0; }
+.dex-editor__stage > .studio-viewer { block-size: 100%; }
+.dex-editor__side { display: grid; grid-template-rows: auto minmax(0, 1fr); border-inline-start: var(--area-border-width) solid var(--area-border-divider); min-inline-size: 0; max-block-size: 560px; }
+.dex-editor__tabs { display: flex; align-items: center; gap: 8px; padding: 8px 12px; }
+.dex-editor__reset { margin-inline-start: auto; }
+.dex-log { list-style: none; margin: 0; padding: 0 12px 12px; display: grid; gap: 4px; overflow-y: auto; align-content: start; }
+.dex-log li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; padding-block: 4px; }
+.dex-log li > span { display: grid; min-inline-size: 0; }
+.dex-log strong { font-weight: var(--area-weight-strong); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dex-log li > span > span { color: var(--area-fg-muted); overflow-wrap: anywhere; }
+.dex-editor__side > .dex-muted { padding: 0 12px; }
+.dex-code { margin: 0 12px 12px; }
+@media (max-width: 860px) {
+  .dex-editor__body { grid-template-columns: minmax(0, 1fr); }
+  .dex-editor__side { border-inline-start: 0; border-block-start: var(--area-border-width) solid var(--area-border-divider); max-block-size: 320px; }
+}
+.dex-keys { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px 24px; margin: 0; }
+.dex-keys > div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 8px; }
+.dex-keys dt { font-weight: var(--area-weight-strong); }
+.dex-keys dd { margin: 0; color: var(--area-fg-muted); }
+
+.dex-how { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+.dex-how h3 { margin: 0 0 4px; font-size: 15px; line-height: 22px; font-weight: 600; }
+.dex-how p { margin: 0; color: var(--area-fg-muted); font-size: 14px; line-height: 21px; }
+
+/* --- Decisions ------------------------------------------------------------------------------------------------------- */
+.dex-decisions { display: grid; gap: 32px; }
+.dex-store { margin: 0; color: var(--area-fg-muted); }
+.dex-q { display: grid; gap: 12px; }
+.dex-q__head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start; }
+.dex-q__n { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; line-height: 22px; }
+.dex-q__head h3 { margin: 0; font-size: 15px; line-height: 22px; font-weight: 600; }
+.dex-q__head p { margin: 0; color: var(--area-fg-muted); }
+.dex-q__group .area-radio-group__options, .dex-q__group > div:last-child { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; }
+.dex-rec { margin-inline-start: 8px; vertical-align: middle; }
+.dex-foot { color: var(--area-fg-muted); font-size: var(--area-text-xs-size); }

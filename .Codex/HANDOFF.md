@@ -1,6 +1,30 @@
 # Handoff
 
-## Current state (2026-11-07)
+## Current state (2026-11-08)
+- **Direct editing, worktree `design-direct-editing-b4f631` (uncommitted, 2026-11-08).** Owner: "fully editable vector
+  figma code canvas (everything except an infinite canvas, each design is isolated to its own container only)". Research
+  and ranked options: `docs/research/design-editing-2026-11-08/README.md` (three cited reading notes beside it); review page
+  https://claude.ai/artifact/Ro31YaD6Uq2STLnWv4DcNv runs the slice live, 9 picks in `verdicts` (ids model, migrate, click,
+  shapes, insert, guides, drag, runs, next; empty at publish, recommendation drawn as chosen). Built (the recommendations):
+  a layer's own design document (`src/design-doc.ts`: element / component / text / shape nodes, stable `n<id>`s, ops
+  patch / insert / remove / move / batch each returning its undo, `toJsx`); migration on the first edit from a hidden clean
+  copy of the screen, components kept with their props via React fibers (`design-capture.ts`; analytics read back 775 of
+  775 nodes); `design-editor.tsx` (commit, ⌘Z / ⇧⌘Z, legacy overrides replayed); `design-render.tsx` (draws it, Insert's
+  list); `design-select.tsx` rewritten as the stage editor (tools V F R O T, Insert ⇧I, drag reorder with a drop line,
+  shape move with snapping, 8 handles 16 hit, size pill, words in place, ⌫ ⌘D arrows Enter Tab). `DesignChange` gains
+  optional `node`, `op`, `undo` (shape compatible for Chat and Flows' `link`); `Layer.doc`; `logDocChange`,
+  `revertChanges`, any-order `undoChange`; iterations coalesce a run of edits (60 s). Code tab writes a design's code.
+  Intake: tool bar a composition; handles app-only, "Selection frame" candidate in COMPONENTS.md. Checks: typecheck,
+  desktop tests 53 (14 new), build, app-css, docs, playgrounds. Tried in the browser preview (own storage) light and dark;
+  not driven in Electron with the owner's projects. Then the selection chrome became the vector tool's blue (`#0d99ff` /
+  `#0c8ce9`, white handles; owner: "brighter more vibrant blue"), and the owner took every recommendation ("go with
+  recs", 2026-11-08), so the Next pick was built: **layout controls** — Width and Height as Hug / Fill / Fixed with a
+  length in the Design view (`sizeStyles`, `sizeOf`), a double-click on a side handle hugs, padding and gap bars on a
+  chosen frame snapping to the space ramp (⇧ all, ⌥ opposite), shapes snapping to siblings. Code shows coloured
+  (owner: "use colored text for code"): the review page uses CodeBlock + `content/highlight.mjs`, now one tokenizer pass.
+  Capture keeps fields' checked/value and drops React's radio names. Checks: typecheck, desktop tests 55, build. The eight
+  taken picks are in `verdicts` (version 3 of the page); "next" is open again and recommends the design's layers. Open: file size
+  (iterations copy each design), pen and booleans, multi-select, a design's layer tree, Hug / Fill in grids.
 - **Appearance, same worktree (PR #211, 2026-11-07).** Mode's pictures: the app in a 720 × 540 window (sidebar and
   page, `content/examples/workspace-compact.tsx`), words as bars (owner picked "B as bars" from four layouts and three
   drawings), three across, each a new Radio/Checkbox `layout="thumbnail"` (picture is the card, name under it at the
