@@ -36,6 +36,7 @@ import { PublishControls } from "./publish.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { AppScaleContext, InheritedScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
+import { libraryOutput } from "./inventory.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
 import { groupSlug, HOME_TAB, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, setProjects, setSystems, tabHolds, tabKind, type Place } from "./places.ts";
@@ -47,7 +48,7 @@ import { ProjectsPage, SystemsPage } from "./pages/workspace-lists.tsx";
 import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 import { restoreBrand, useBrandSheet, type BrandState } from "./brand.ts";
 import { PAGE_AXES, hasColours, restoreColours, shownColours, useColoursSheet, type ColoursState } from "./colours.ts";
-import { activeTheme, AREA_ID, asLive, changesOf, systemFile, loadSystems, newTheme, publish, publishTheme, revertTo, starterSystem, withTheme, type Change, type ReleaseKind, type System, type SystemOrigin, type SystemTheme, type Restorers } from "./systems.ts";
+import { activeTheme, AREA_ID, asLive, asRelease, changesOf, followedVersion, liveOf, systemFile, loadSystems, newTheme, publish, publishTheme, revertTo, starterSystem, withTheme, type Change, type ReleaseKind, type System, type SystemLibrary, type SystemOrigin, type SystemTheme, type Restorers } from "./systems.ts";
 import { loadProjects, newProject, projectFile, recordIteration, type Project } from "./projects.ts";
 import { chromeOf, restoreAppLook, type AppLook } from "./app-look.ts";
 import { SettingsPage, type SettingsSection } from "./pages/settings.tsx";
@@ -152,12 +153,13 @@ function openSystems(): System[] {
   setSystems(systems);
   return systems;
 }
-const fileText = (system: System) => JSON.stringify(systemFile(system, markCanvas), null, 2);
+// Each release also says what it holds as the code generator reads it (inventory.tsx libraryOutput).
+const fileText = (system: System) => JSON.stringify(systemFile(system, markCanvas, libraryOutput), null, 2);
 /** Writes the systems named by `ids` (all of them in this browser's storage, which keeps one list). */
 function saveSystems(systems: readonly System[], ids: readonly string[]) {
   const store = disk();
   if (store) for (const system of systems) { if (ids.includes(system.id)) store.write(system.id, fileText(system)); }
-  else writeStored("systems", systems.map(system => systemFile(system, markCanvas)));
+  else writeStored("systems", systems.map(system => systemFile(system, markCanvas, libraryOutput)));
 }
 
 /** The projects (src/projects.ts), as the systems: Application Support in Electron, this browser's storage otherwise. */
@@ -344,6 +346,11 @@ interface StudioState {
   setLive: (live: boolean) => void;
   /** What the open system's working copy changed since Live. */
   changes: Change[];
+  /**
+   * Changes the open system's library (src/library.ts: what it includes and how each family is built, for every theme).
+   * Shown Live, the edit switches the tab to the working copy, as a theme's does; a project's tab never edits it.
+   */
+  updateLibrary: (change: (library: SystemLibrary) => SystemLibrary) => void;
   /** Publishes the open system's working copy as its next version. */
   publishSystem: (kind: Exclude<ReleaseKind, "first">, note: string) => void;
   /** Sets the open system's working copy back to Live, or to an earlier version. */
@@ -410,7 +417,10 @@ export function Studio() {
   // Systems shown Live in their tabs. A project always sees its system as published.
   const [liveViews, setLiveViews] = useState<ReadonlySet<string>>(() => new Set());
   const live = Boolean(openProject) || (tabKind(place) === "system" && liveViews.has(workingSystem.id));
-  const openSystem = useMemo(() => live ? asLive(workingSystem) : workingSystem, [live, workingSystem]);
+  // A project sees its system as the version it follows (systems.ts followedVersion; docs/research/system-inventory-2026-11-08
+  // Q7): its own, and the Fixes and Adds after it, until a release that Needs work in products waits for its Update.
+  const projectRelease = openProject ? followedVersion(workingSystem, openProject.release) : null;
+  const openSystem = useMemo(() => projectRelease ? asRelease(workingSystem, projectRelease) : live ? asLive(workingSystem) : workingSystem, [projectRelease, live, workingSystem]);
   const exploration = openProject && place.page === "exploration" ? openProject.explorations.find(entry => entry.id === item) ?? null : null;
   const openTheme = exploration?.theme
     ?? (openProject ? openSystem.themes.find(entry => entry.id === openProject.theme) ?? activeTheme(openSystem) : activeTheme(openSystem));
@@ -435,6 +445,13 @@ export function Studio() {
     if (at.project) return;
     if (at.live) toWorking(at.system);
     setSystemList(list => list.map(entry => entry.id === at.system ? withTheme(entry, change) : entry));
+  }, [toWorking]);
+  /** Changes the edited system's library (every theme shares it). */
+  const updateLibrary = useCallback((change: (library: SystemLibrary) => SystemLibrary) => {
+    const at = editing.current;
+    if (at.project) return;
+    if (at.live) toWorking(at.system);
+    setSystemList(list => list.map(entry => entry.id === at.system ? { ...entry, library: change(entry.library) } : entry));
   }, [toWorking]);
   // The mode is saved as "light", "dark" or "system" (src/theme.js reads it before first paint and follows the Mac for
   // anything but light or dark); the theme drawn is the mode, or the Mac's while it is System.
@@ -725,6 +742,7 @@ export function Studio() {
     openTheme,
     workingSystem,
     live,
+    updateLibrary,
     setLive: on => setLiveViews(views => {
       const id = workingSystem.id;
       if (views.has(id) === on) return views;
@@ -746,7 +764,9 @@ export function Studio() {
     projects,
     openProject,
     createProject: (name, system, theme) => {
-      const made = newProject(name, system, theme, projectsRef.current.map(entry => entry.id));
+      // A project keeps the version it was made with until it updates (systems.ts followedVersion).
+      const on = systems.find(entry => entry.id === system);
+      const made = newProject(name, system, theme, projectsRef.current.map(entry => entry.id), new Date(), on ? liveOf(on).version : undefined);
       projectsRef.current = [...projectsRef.current, made];
       setProjects(projectsRef.current);
       setProjectList(list => [...list, made]);
@@ -776,7 +796,8 @@ export function Studio() {
       const version = published.releases[published.releases.length - 1]!.version;
       setSystemList(list => list.map(entry => entry.id === system.id ? published : entry));
       setProjectList(list => list.map(entry => entry.id !== project.id ? entry
-        : { ...entry, explorations: entry.explorations.map(other => other.id === id ? { ...other, published: version } : other) }));
+        // Publishing from a project takes it to the version it made (projects.ts `release`).
+        : { ...entry, release: version, explorations: entry.explorations.map(other => other.id === id ? { ...other, published: version } : other) }));
     },
     createSystem: (name, origin) => {
       const made = starterSystem(name, systemsRef.current.map(entry => entry.id), RESTORE, origin);
@@ -826,7 +847,7 @@ export function Studio() {
       writeStored("panels", next);
       return next;
     }),
-  }), [query, theme, mode, setMode, chrome, appLook, setAppLook, settings, profileName, setProfileName, canvas, material, previewAxes, previewedMaterial, brand, colours, systems, openSystem, openTheme, workingSystem, live, changes, projects, openProject, toWorking, updateTheme, item, place, navigate, tab.panel, panels, inspectorView]);
+  }), [query, theme, mode, setMode, chrome, appLook, setAppLook, settings, profileName, setProfileName, canvas, material, previewAxes, previewedMaterial, brand, colours, systems, openSystem, openTheme, workingSystem, live, updateLibrary, changes, projects, openProject, toWorking, updateTheme, item, place, navigate, tab.panel, panels, inspectorView]);
   // The picks' one rule is in the head while there are any; the scopes that carry the settings carry data-area-colours.
   useColoursSheet(state.shown.colours);
 

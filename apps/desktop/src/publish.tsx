@@ -18,26 +18,50 @@ import { Tile } from "./tile.tsx";
 import { GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { tabKind } from "./places.ts";
 import { activeTheme, asLive, liveOf, nextVersion, proposedKind, RELEASE_KIND_LABEL, versionName, type Change, type ReleaseKind, type SystemTheme } from "./systems.ts";
+import { axisLabel, structureOf, valueLabel } from "./library.ts";
+import { familyName, manifestFor } from "./inventory.tsx";
+import { LibraryPictures } from "./library-pictures.tsx";
 
 type Kind = Exclude<ReleaseKind, "first">;
 export const KINDS: ReadonlyArray<{ value: Kind; description: string }> = [
   { value: "fixes", description: "Values change; nothing is added or taken away." },
   { value: "adds", description: "Something new, such as a theme." },
-  { value: "needs-work", description: "Something removed or renamed: products using it need work." },
+  { value: "needs-work", description: "Something removed, renamed or left out: products using it need work." },
 ];
 
 const CONTROL = new Map(GALLERY_CONTROLS.map(control => [control.axis, control] as const));
 const VALUE_NAMES: Record<string, string> = { material: "Material", colours: "Exact page colors", accent: "Exact accent" };
 
-/** A change's setting, as the Inspector names it. */
+/** A library change's state before and after (src/systems.ts libraryChanges). */
+const LIBRARY_STATE: Record<string, readonly [string, string]> = {
+  "family-left-out": ["Included", "Left out"], "family-included": ["Left out", "Included"],
+  "left-out": ["Included", "Left out"], included: ["Left out", "Included"],
+};
+/** Where a change is: its theme, or Components for the library, which every theme shares. */
+export const changePlace = (change: Change) => change.family ? "Components" : change.theme;
+
+/** A change's setting, as the Inspector names it: "Button tones: Danger", "Tabs, default selection". */
 export function changeLabel(change: Change): string {
+  if (change.family) {
+    const name = familyName(change.family);
+    if (!change.axis) return name;
+    if (change.what === "default") return `${name}, default ${structureOf(change.family, change.axis)?.label.toLowerCase() ?? change.axis}`;
+    return `${name} ${axisLabel(change.axis).toLowerCase()}: ${valueLabel(change.family, change.axis, change.value ?? "")}`;
+  }
   if (change.what === "added") return "Theme added";
   if (change.what === "removed") return "Theme removed";
   if (change.what === "name") return "Name";
   return CONTROL.get(change.what as never)?.label ?? VALUE_NAMES[change.what] ?? change.what;
 }
-/** A changed value, as the Inspector shows it ("Compact", "60%"). */
-export function changeValue(change: Change, value: string | undefined): string {
+/** A changed value, as the Inspector shows it ("Compact", "60%"); `side` says which, for a library change. */
+export function changeValue(change: Change, value: string | undefined, side: "before" | "after" = "after"): string {
+  if (change.family) {
+    if (change.what !== "default") return LIBRARY_STATE[change.what]?.[side === "before" ? 0 : 1] ?? "Changed";
+    const axis = change.axis ?? "";
+    const shipped = manifestFor(change.family)?.defaults[axis] ?? structureOf(change.family, axis)?.base;
+    const shown = value ?? shipped;
+    return shown ? valueLabel(change.family, axis, shown) : "—";
+  }
   if (value === undefined) return change.what === "added" ? "—" : change.what === "removed" ? "—" : "Changed";
   return CONTROL.get(change.what as never)?.items.find(item => item.value === value)?.label ?? value;
 }
@@ -46,12 +70,14 @@ export function changeValue(change: Change, value: string | undefined): string {
 export function draftNote(changes: readonly Change[]): string {
   const added = changes.filter(change => change.what === "added").map(change => change.theme);
   const removed = changes.filter(change => change.what === "removed").map(change => change.theme);
-  const values = changes.filter(change => !["added", "removed"].includes(change.what));
+  const values = changes.filter(change => !["added", "removed"].includes(change.what) && !change.family);
+  const library = [...new Set(changes.filter(change => change.family).map(change => familyName(change.family!)))];
   const list = (words: string[]) => words.length < 3 ? words.join(" and ") : `${words.slice(0, -1).join(", ")} and ${words.at(-1)}`;
   const parts = [
     added.length ? `Adds ${list(added)}` : "",
     removed.length ? `Removes ${list(removed)}` : "",
     values.length ? `${list([...new Set(values.map(changeLabel))].slice(0, 4))}${values.length > 4 ? " and more" : ""} in ${list([...new Set(values.map(change => change.theme))])}` : "",
+    library.length ? `${list(library.slice(0, 4))}${library.length > 4 ? " and more" : ""} in Components` : "",
   ].filter(Boolean);
   return parts.join("; ");
 }
@@ -127,16 +153,20 @@ export function PublishDialog({ onClose }: { onClose: () => void }) {
         <Button onClick={() => submit()}>Publish {versionName(workingSystem.name, version)}</Button>
       </>}>
       <form className="studio-publish" onSubmit={submit}>
-        <BeforeAfter before={was ? { label: `Live in ${versionName(workingSystem.name, live.version)}`, value: was.name, theme: was } : null} after={{ label: `Publishing as ${versionName(workingSystem.name, version)}`, value: now.name, theme: now }} empty={`${now.name} is new.`} mode={theme} />
+        {/* The theme screens when a theme changed; the changed families' tiles when the library did (library-pictures.tsx). */}
+        {changes.some(change => !change.family) || !changes.length ? (
+          <BeforeAfter before={was ? { label: `Live in ${versionName(workingSystem.name, live.version)}`, value: was.name, theme: was } : null} after={{ label: `Publishing as ${versionName(workingSystem.name, version)}`, value: now.name, theme: now }} empty={`${now.name} is new.`} mode={theme} />
+        ) : null}
+        <LibraryPictures before={live.library} after={workingSystem.library} changes={changes} beforeLabel="Live" afterLabel="Publishing" />
         <Table aria-label="Changes">
-          <thead><tr><TableHeaderCell>Theme</TableHeaderCell><TableHeaderCell>Setting</TableHeaderCell><TableHeaderCell>Live</TableHeaderCell><TableHeaderCell>Publishing</TableHeaderCell></tr></thead>
+          <thead><tr><TableHeaderCell>Where</TableHeaderCell><TableHeaderCell>Setting</TableHeaderCell><TableHeaderCell>Live</TableHeaderCell><TableHeaderCell>Publishing</TableHeaderCell></tr></thead>
           <tbody>
             {changes.map((change, at) => (
               <tr key={at}>
-                <TableCell>{change.theme}</TableCell>
+                <TableCell>{changePlace(change)}</TableCell>
                 <TableCell>{changeLabel(change)}</TableCell>
-                <TableCell className="studio-muted">{changeValue(change, change.before)}</TableCell>
-                <TableCell>{changeValue(change, change.after)}</TableCell>
+                <TableCell className="studio-muted">{changeValue(change, change.before, "before")}</TableCell>
+                <TableCell>{changeValue(change, change.after, "after")}</TableCell>
               </tr>
             ))}
           </tbody>

@@ -13,9 +13,10 @@ import { SETTING_GROUPS } from "@area/tokens/config";
 import { useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { Facts } from "../facts.tsx";
-import { changeLabel, changeValue, ThemeScreen } from "../publish.tsx";
+import { changeLabel, changePlace, changeValue, ThemeScreen } from "../publish.tsx";
 import { liveOf, RELEASE_KIND_LABEL, systemFile, versionName, type Change, type Release, type System } from "../systems.ts";
 import { choicesIn, describeWrite, folderName, lastFolder, rememberFolder } from "../output.ts";
+import { libraryOutput } from "../inventory.tsx";
 
 /** A release's card is the feed's 300 card, as a theme's. */
 const RELEASE_MIN = 300; /* pick */
@@ -42,9 +43,10 @@ function partOf(what: string): (typeof CHANGE_PARTS)[number] {
  * its new value at the end, as a source tree lists changed files.
  */
 function changeTree(changes: readonly Change[]): TreeViewNode[] {
-  const themes = [...new Set(changes.map(change => change.theme))];
+  // The library's changes (every theme shares them) are their own branch, Components (src/publish.tsx changePlace).
+  const themes = [...new Set(changes.map(changePlace))];
   return themes.map(theme => {
-    const own = changes.filter(change => change.theme === theme);
+    const own = changes.filter(change => changePlace(change) === theme);
     const values = own.filter(change => change.what !== "added" && change.what !== "removed");
     return {
       id: `theme:${theme}`, label: theme,
@@ -156,7 +158,8 @@ function useWriteToFolder(system: System) {
   const [pending, setPending] = useState<Pending | null>(null);
   const [written, setWritten] = useState<Written | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const text = () => JSON.stringify(systemFile(system));
+  // With each release's inventory and structure, as the generator reads them (inventory.tsx libraryOutput).
+  const text = () => JSON.stringify(systemFile(system, undefined, libraryOutput));
   const start = async (release: Release) => {
     if (!desktop) return;
     setError(null);

@@ -1,5 +1,6 @@
 // Accordion and AccordionItem: a stack of collapsible items (one open at a time unless `multiple`),
 // and one item, which also stands alone as a Notion-style toggle. Spec: docs/specs/accordion.md.
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { createContext, forwardRef, useContext, useEffect, useId, useRef, useState } from "react";
 import type { HTMLAttributes, ReactNode, SyntheticEvent } from "react";
 import { accordionVariants, accordionItemVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -38,6 +39,9 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
   { heading, open: openProp, defaultOpen = false, onOpenChange, value: valueProp, headingLevel, disabled, variant, size, className, children, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  const systemVariant = useSystemDefault("accordionItem", "variant", undefined as typeof variant);
+  const systemSize = useSystemDefault("accordionItem", "size", undefined as typeof size);
   const group = useContext(AccordionContext);
   const id = useId();
   const value = valueProp ?? id;
@@ -72,7 +76,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
     </button>
   );
   return (
-    <div ref={ref} {...rest} className={accordionItemVariants({ variant: variant ?? group?.variant, size: size ?? group?.size }, className)}
+    <div ref={ref} {...rest} className={accordionItemVariants({ variant: variant ?? group?.variant ?? systemVariant, size: size ?? group?.size ?? systemSize }, className)}
       data-open={open ? "" : undefined} data-disabled={disabled ? "" : undefined}>
       {H ? <H className="area-accordion-item__heading">{trigger}</H> : trigger}
       {/* In a group each panel is a region named by its trigger (WAI accordion). */}

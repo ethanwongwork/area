@@ -36,7 +36,8 @@ import { NameDialog } from "./home.tsx";
 import { nameOf, url, useLibrary } from "./imagery.tsx";
 import { BeforeAfter, KINDS, ThemeScreen } from "../publish.tsx";
 import { addExploration, addLayer, addPage, changesOn, duplicateLayer, removeLayer, renameLayer, restoreVersion, saveVersion, type DesignChange, type Layer, type Project } from "../projects.ts";
-import { activeTheme, liveOf, nextVersion, RELEASE_KIND_LABEL, versionName, type ReleaseKind } from "../systems.ts";
+import { activeTheme, followedVersion, liveOf, nextVersion, releasesAfter, RELEASE_KIND_LABEL, versionName, type ReleaseKind } from "../systems.ts";
+import { ReleaseNotice } from "../release-notice.tsx";
 
 /** An exploration's card is the feed's 300 card, as a theme's. */
 const CARD_MIN = 300; /* pick */
@@ -70,13 +71,16 @@ function ProjectActions({ project }: { project: Project }) {
 
 /** The project's facts: what it uses and holds. */
 function ProjectFacts({ project }: { project: Project }) {
-  const { openSystem } = useStudio();
+  const { openSystem, workingSystem } = useStudio();
+  // The version it follows (systems.ts followedVersion): its own, and the Fixes and Adds after it.
+  const followed = followedVersion(workingSystem, project.release);
+  const waiting = releasesAfter(workingSystem, followed).at(-1);
   const used = openSystem.themes.find(entry => entry.id === project.theme);
   return (
     <PanelSection heading={project.name}>
       <Facts label="Project" items={[
         ["Uses", `${systemName(project.system)} › ${used?.name ?? "a theme no longer published"}`],
-        ["Version", `${versionName(systemName(project.system), liveOf(openSystem).version)}, as published`],
+        ["Version", waiting ? `${versionName(systemName(project.system), followed)}; ${waiting.version} is out` : versionName(systemName(project.system), followed)],
         ["Pages", project.pages.length],
         ["Explorations", project.explorations.length],
         ["Versions", project.versions.length],
@@ -157,6 +161,7 @@ export function ProjectOverview() {
       }
       canvas={<>
         <div className="studio-sections">
+          <ReleaseNotice project={project} />
           <CanvasSection id="project-pages" title="Pages" count={project.pages.length} lede={`Boards of screens and images, in ${systemName(project.system)}'s published look.`}>
             {/* One picture a page, its first layer at a product screen's 16:9 (owner, 2026-11-01: "for normal project cards
                 it should only be 1 visual. maybe for ui, 1920x1080 AR for card thumbnails is the standard"); a click opens

@@ -74,6 +74,11 @@ export interface Project {
   /** The system it uses (an id) and which of its themes. */
   system: string;
   theme: string;
+  /**
+   * The system's version it was made with or last updated to (src/systems.ts `followedVersion`: later Fixes and Adds reach
+   * it on their own; a release that Needs work in products waits for Update). Absent in a project from before: it follows Live.
+   */
+  release?: string;
   pages: ProjectPage[];
   explorations: Exploration[];
   versions: ProjectVersion[];
@@ -96,9 +101,9 @@ export function nextId(prefix: string, taken: Iterable<{ id: string }>): string 
 }
 
 /** A new project on a system's theme, with one empty page. */
-export function newProject(name: string, system: string, theme: string, taken: Iterable<string>, now = new Date()): Project {
+export function newProject(name: string, system: string, theme: string, taken: Iterable<string>, now = new Date(), release?: string): Project {
   return {
-    id: systemSlug(name || "project", taken), name: name.trim() || "Untitled project", created: now.toISOString(), system, theme,
+    id: systemSlug(name || "project", taken), name: name.trim() || "Untitled project", created: now.toISOString(), system, theme, ...(release ? { release } : {}),
     pages: [{ id: "page-1", name: "Page 1", layers: [] }], explorations: [], versions: [], history: [], comments: [], notes: "", changes: [],
   };
 }
@@ -190,7 +195,7 @@ export function readProject(saved: unknown, restore: Restorers): Project | null 
   }
   return {
     id: s.id, name: s.name.trim(), created: typeof s.created === "string" ? s.created : new Date(0).toISOString(),
-    system: s.system, theme: text(s.theme, "default"),
+    system: s.system, theme: text(s.theme, "default"), ...(typeof s.release === "string" && s.release ? { release: s.release } : {}),
     pages: pages.length ? pages : [{ id: "page-1", name: "Page 1", layers: [] }],
     explorations: readExplorations(s.explorations, restore), versions,
     history: history.slice(-HISTORY_LIMIT), comments, notes: typeof s.notes === "string" ? s.notes : "", changes: readChanges(s.changes),
@@ -206,6 +211,7 @@ export function projectFile(project: Project, canvas: (axes: CanvasAxes) => Reco
   return {
     version: PROJECT_FILE_VERSION,
     id: project.id, name: project.name, created: project.created, system: project.system, theme: project.theme,
+    ...(project.release ? { release: project.release } : {}),
     pages: project.pages, explorations: project.explorations.map(exploration),
     versions: project.versions.map(version => ({ ...version, explorations: version.explorations.map(exploration) })),
     history: project.history, comments: project.comments, notes: project.notes, changes: project.changes,

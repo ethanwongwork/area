@@ -1,3 +1,4 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
 import { Children, forwardRef, isValidElement, useState } from "react";
@@ -101,6 +102,10 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
   },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  variant = useSystemDefault("button", "variant", variant);
+  tone = useSystemDefault("button", "tone", tone);
+  size = useSystemDefault("button", "size", size);
   const [localSelected, setLocalSelected] = useState(defaultSelected);
   const selected = selectedProp ?? localSelected;
   // Only a toggle (one with a selected state) flips on press; a plain button never gains aria-pressed.
