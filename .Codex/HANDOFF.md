@@ -1,6 +1,19 @@
 # Handoff
 
 ## Current state (2026-11-08)
+- **User flows, worktree `ecstatic-brattain-e4e57b` (PR, 2026-11-08; main through #215 merged in).** Owner: show "longer flows and complete
+  user flows with multiple pages"; study and review page https://claude.ai/artifact/L5ZPadtTxkThgz5X1m3ENe
+  (`docs/research/user-flows-2026-11-08/`), then "go with your recs, build the flow like these ui examples" (three
+  node editors). Built: a page becomes a flow at its first link (`projects.ts` links, branch, state, note; `src/flow.ts`);
+  its map on the stage in the examples' node style (`src/flow-map.tsx`, `styles/design.css`): Start, path left to right,
+  branches above, states below, link rows with ports and curves, dotted ground, dock with zoom and Play; a step opens
+  from its node and Back returns; On click › Goes to in the Design view (logged, undoable, sent to Chat); Play on the
+  stage; state switch; notes; flow checks (Inspector and Checks tab). PRODUCT_UI project-pages bullet, Candidates row
+  (flow node and connector). Checks: typecheck, app tests 49 (flow.test.ts new), app-css, playgrounds, docs; seen in the
+  browser preview light and dark. Not seen in Electron; flow patterns (proposal 8) not built. Restyled twice on the
+  owner's notes: now technical node cards (kind, name, mono source, screen 320 × 200, port rows In / outputs) with
+  port-to-port dashed lines on lanes, one turn radius, on the 8 grid; ends verified on ports by measurement. A visual pass then fixed the dock (the map pans in its
+  own box), the fit (above the dock) and state rows' words.
 - **System inventory and structure, worktree `system-inventory-structure-c39f5c` (PR, 2026-11-08; main
   through #214 merged in).** Owner's scope review: "more straightforward editing tools for customizing and updating a design system,
   components" (BRIEF layers 2 and 3); then "build with recs". Research, ranked options, the working copy's shape and

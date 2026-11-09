@@ -375,6 +375,35 @@ Cursor's nav with Figma's tabs).
     day, owner: "is the small image thumbnail very practical?": a screen at that size is a white plate with a few bars,
     so variations of one screen looked alike, and every row drew a whole screen.) A
     screen or image added again is numbered on its page ("Analytics dashboard 2").
+  - **A page becomes a flow at its first link** (the user flows study, owner 2026-11-08: "go with your recs, build the
+    flow like these ui examples", three node editors; `src/flow.ts`, `src/flow-map.tsx`, research and picks in
+    `docs/research/user-flows-2026-11-08`). Its layers in order are the **path** (numbered 1, 2, 3); a layer taken off
+    the path is a **branch**, numbered after the step it leaves (1a); a layer made a **state** of a step (Error,
+    Loading, Empty, Success) sits under it; each is a Sidebar row's menu item, and the Sidebar lists the steps numbered,
+    states under their step. A flow page opens on its **map**, the one design on the stage laid out by rule, never
+    placed by hand: Start, then the path left to right, End; branches above the step they leave, states under their step.
+    A step is a **node card** (owner, after a pipeline editor's graph: "more technical, more spacing around the labels,
+    more consistency … proper turns and curves"): its kind and role (Step 2, On the path), its name and its source in
+    mono, the screen (320 × 200 at 100%, 8 in), then its **port rows** (48 each): In on the start ("← 1 Create
+    account"), each link an output on the end named for the element that acts ("Continue", "→ 3 Profile"); a step with
+    no forward link has a muted "Next", the last step "Finish → End", a step's states an output each. Ports are 8 dots
+    centred on the card's edge, filled where a line meets them. **Lines** run port to port, dashed in one ink: level for
+    a stub, one 12 turn into the channel between columns (each line its own lane, 16 apart), one turn out, level into the
+    port; a line that would cross a card goes round it through the gap between rows; the chosen step's lines are the
+    selection colour and run. Everything sits on the 8 grid (card 336, columns 160 apart, rows 80). The ground is the
+    viewer's grey, dotted every 16; a floating dock at its foot holds the zoom and Play. The map opens fitted to the
+    stage's height above the dock (screens as large as it allows, a long flow scrolling sideways); the dock's Fit shows every step. At
+    any zoom the map pans in the stage's own box, the stage keeps its height and the dock stays over it; a zoom keeps the
+    middle of the view. A click chooses a node, a double-click or Enter opens its step on
+    the stage (the card's morph), and Back, Esc or ⌘↑ brings the map back with the step chosen; ← → walk the steps, and
+    a step with states has a Default / state switch in the Canvas bar. **Links** are made in the Design view: an element
+    chosen on the stage has **On click › Goes to** (Next step, any layer of the page, Back), logged as a change ("Goes
+    to: Next step → 3 Profile"), undone back to where it went, and sent to Chat with the others. **Play** (the Canvas
+    bar's or the dock's) walks the flow on the stage: a linked element follows its link, a click elsewhere goes on
+    where nothing is linked forward, else outlines the links for a moment; its bar at the stage's foot has Back,
+    Restart (R), the step with a menu to jump, Hints and Done (Esc). The Inspector on the map holds the flow's facts,
+    its description and its **checks** (unreachable steps, dead ends, wired steps with no way back), which the design
+    panel's Checks tab leads with too; a step has a one-line note, drawn under its node.
   - **The Sidebar widens for a list** (owner, 2026-11-01: "in pages where more room is needed, the left nav can
     automatically expand slightly to a minimum width"): while it holds a section's list it is at least 288 at type 13
     (Claude's sidebar width, scaled by type as the rest; `studio.tsx` `LIST_FLOOR`). A width dragged wider is kept; on a
