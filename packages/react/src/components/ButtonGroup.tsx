@@ -15,7 +15,7 @@ export const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(function
   { variant, size, fullWidth, className, ...rest }, ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  variant = useSystemDefault("buttonGroup", "variant", variant);
-  size = useSystemDefault("buttonGroup", "size", size);
+  variant = useSystemDefault("buttonGroup", "variant", variant, buttonGroupVariants.manifest.variants.variant);
+  size = useSystemDefault("buttonGroup", "size", size, buttonGroupVariants.manifest.variants.size);
   return <div ref={ref} role="group" className={buttonGroupVariants({ variant, size, fullWidth }, className)} {...rest} />;
 });

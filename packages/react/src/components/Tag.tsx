@@ -39,7 +39,7 @@ export const Tag = forwardRef<HTMLSpanElement, TagProps>(function Tag(
   { color: colorProp, tone, size, icon, onDismiss: onDismissProp, dismissLabel, onRemove, removeLabel, disabled, className, children, ...rest }, ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  size = useSystemDefault("tag", "size", size);
+  size = useSystemDefault("tag", "size", size, tagVariants.manifest.variants.size);
   const onDismiss = onDismissProp ?? onRemove;
   const label = dismissLabel ?? removeLabel ?? (typeof children === "string" ? `Remove ${children}` : "Remove");
   return <span ref={ref} className={tagVariants({ color: colorProp ?? (tone ? HUE[tone] ?? tone as TagColor : "neutral"), size }, className)} data-disabled={disabled ? "" : undefined} {...rest}>

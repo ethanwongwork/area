@@ -86,8 +86,8 @@ export const Avatar = /* @__PURE__ */ forwardRef<HTMLSpanElement, AvatarProps>(f
   ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  size = useSystemDefault("avatar", "size", size);
-  tone = useSystemDefault("avatar", "tone", tone);
+  size = useSystemDefault("avatar", "size", size, avatarVariants.manifest.variants.size);
+  tone = useSystemDefault("avatar", "tone", tone, avatarVariants.manifest.variants.tone);
   // As Badge does for its unnamed forms: an image with no description fails loudly in development rather than
   // silently reaching assistive tech as an unnamed picture.
   if (src && alt === undefined && !ariaLabel && !rest["aria-labelledby"] && !rest["aria-hidden"]) {
@@ -192,8 +192,8 @@ export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(func
   ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  tone = useSystemDefault("alert", "tone", tone);
-  layout = useSystemDefault("alert", "layout", layout);
+  tone = useSystemDefault("alert", "tone", tone, alertVariants.manifest.variants.tone);
+  layout = useSystemDefault("alert", "layout", layout, alertVariants.manifest.variants.layout);
   const actions = actionsProp ?? action;
   const resolvedLayout = layout ?? "single-line";
   // A banner's link ends the row (OpenAI's announcement banners); elsewhere it follows the text.
@@ -247,8 +247,8 @@ export interface CardProps extends Div {
 const cardVariants = createVariants(MANIFESTS.card);
 export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, size, selected, className, ...rest }, ref) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  layout = useSystemDefault("card", "layout", layout);
-  size = useSystemDefault("card", "size", size);
+  layout = useSystemDefault("card", "layout", layout, cardVariants.manifest.variants.layout);
+  size = useSystemDefault("card", "size", size, cardVariants.manifest.variants.size);
   return <div ref={ref} className={cardVariants({ layout, size }, className)} data-selected={selected ? "" : undefined} {...rest} />;
 });
 
@@ -2333,7 +2333,7 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
   ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  const systemSize = useSystemDefault("segmented", "size", undefined as typeof sizeProp);
+  const systemSize = useSystemDefault("segmented", "size", undefined as typeof sizeProp, segmentedVariants.manifest.variants.size);
   const options = items ?? legacyOptions ?? NO_ITEMS;
   const toolbarSize = useContext(ToolbarSize);
   // Its own size, else a toolbar's, else the system's.

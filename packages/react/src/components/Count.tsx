@@ -29,8 +29,8 @@ export const Count = forwardRef<HTMLSpanElement, CountProps>(function Count(
   { count, max = 99, showZero = true, label, variant, size, pill, className, ...rest }, ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  variant = useSystemDefault("count", "variant", variant);
-  size = useSystemDefault("count", "size", size);
+  variant = useSystemDefault("count", "variant", variant, countVariants.manifest.variants.variant);
+  size = useSystemDefault("count", "size", size, countVariants.manifest.variants.size);
   if (!showZero && normalizeCount(count) === 0) return null;
   const text = formatCount(count, max);
   // One character drops the sides, so a one-digit count is as wide as it is tall: a circle as a pill (count.css).

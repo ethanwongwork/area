@@ -26,9 +26,9 @@ export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>
   { as = "span", tone, variant, size, pill, dot, dotOnly, iconOnly, truncate, onColor, icon, trailingIcon, avatar, flag, onDismiss, dismissLabel, className, children, title, ...rest }, ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  variant = useSystemDefault("badge", "variant", variant);
-  tone = useSystemDefault("badge", "tone", tone);
-  size = useSystemDefault("badge", "size", size);
+  variant = useSystemDefault("badge", "variant", variant, badgeVariants.manifest.variants.variant);
+  tone = useSystemDefault("badge", "tone", tone, badgeVariants.manifest.variants.tone);
+  size = useSystemDefault("badge", "size", size, badgeVariants.manifest.variants.size);
   if ((iconOnly || dotOnly) && !rest["aria-label"] && !rest["aria-labelledby"] && !rest["aria-hidden"]) {
     throw new Error("Badge: iconOnly and dotOnly require aria-label or aria-labelledby (or aria-hidden when decorative).");
   }

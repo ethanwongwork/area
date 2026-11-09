@@ -40,8 +40,8 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
   ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  const systemVariant = useSystemDefault("accordionItem", "variant", undefined as typeof variant);
-  const systemSize = useSystemDefault("accordionItem", "size", undefined as typeof size);
+  const systemVariant = useSystemDefault("accordionItem", "variant", undefined as typeof variant, accordionItemVariants.manifest.variants.variant);
+  const systemSize = useSystemDefault("accordionItem", "size", undefined as typeof size, accordionItemVariants.manifest.variants.size);
   const group = useContext(AccordionContext);
   const id = useId();
   const value = valueProp ?? id;

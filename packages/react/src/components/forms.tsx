@@ -43,7 +43,7 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
   },
   ref,
 ) {
-  variant = useSystemDefault("select", "variant", variant); // the system's default (SystemDefaults) where the use gives none
+  variant = useSystemDefault("select", "variant", variant, selectVariants.manifest.variants.variant); // the system's default (SystemDefaults) where the use gives none
   // In a Toolbar, a Select without its own size takes the bar's tier (audit A-7).
   const toolbarSize = useContext(ToolbarSize);
   const size = sizeProp ?? toolbarSize;
@@ -105,7 +105,7 @@ export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, Textarea
   },
   ref,
 ) {
-  variant = useSystemDefault("textarea", "variant", variant); // the system's default (SystemDefaults) where the use gives none
+  variant = useSystemDefault("textarea", "variant", variant, textareaVariants.manifest.variants.variant); // the system's default (SystemDefaults) where the use gives none
   const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
 
@@ -169,7 +169,7 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
   ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  size = useSystemDefault("checkbox", "size", size);
+  size = useSystemDefault("checkbox", "size", size, checkboxVariants.manifest.variants.size);
   // In a CheckboxGroup with a value, the group says which are checked, their name and whether they can change (O5).
   const group = useContext(CheckboxGroupContext);
   const optionValue = value === undefined ? undefined : String(value);
@@ -431,7 +431,7 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
   ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  size = useSystemDefault("radio", "size", size);
+  size = useSystemDefault("radio", "size", size, radioVariants.manifest.variants.size);
   const group = useContext(RadioGroupContext);
   const descriptionId = useId();
   const resolvedDisabled = disabled ?? group?.disabled;

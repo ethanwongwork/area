@@ -129,8 +129,8 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     disabled, className, style, onKeyDown, onBlur, onClick, form, "aria-invalid": ariaInvalid, "data-validation-status": fieldStatus, ...rest }, ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  variant = useSystemDefault("customSelect", "variant", variant);
-  size = useSystemDefault("customSelect", "size", size);
+  variant = useSystemDefault("customSelect", "variant", variant, customSelectVariants.manifest.variants.variant);
+  size = useSystemDefault("customSelect", "size", size, customSelectVariants.manifest.variants.size);
   const options = items ?? NO_ITEMS;
   const id = useId();
   const listId = `${id}-listbox`;

@@ -48,7 +48,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
   ...rest
 }, ref) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  size = useSystemDefault("switch", "size", size);
+  size = useSystemDefault("switch", "size", size, switchVariants.manifest.variants.size);
   const input = useRef<HTMLInputElement>(null);
   useImperativeHandle(ref, () => input.current!, []);
   const id = useId();
