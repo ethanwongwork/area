@@ -4,6 +4,8 @@ import { datePickerVariants, type VariantProps, MANIFESTS } from "../variants.ts
 import { Calendar } from "./Calendar.tsx";
 import { Input } from "./Input.tsx";
 import { Popover } from "./primitives.tsx";
+import { assignRef, useOpenState } from "./overlay.ts";
+import { resolveValidation, validationAttributes, type ValidationStatus } from "./validation.ts";
 
 type Manifest = VariantProps<typeof MANIFESTS.datePicker>;
 
@@ -20,6 +22,15 @@ export interface DatePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   size?: Manifest["size"];
   fullWidth?: boolean;
   invalid?: boolean;
+  /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
+  validationStatus?: ValidationStatus;
+  /** Internal Field-to-control validation bridge; plain HTML uses the matching data attribute. */
+  "data-validation-status"?: ValidationStatus;
+  /**
+   * Shows a date set elsewhere: the field stays focusable and readable (a combobox with `aria-readonly`), the calendar
+   * doesn't open and the date can't change, as Radio group's and Input's read-only.
+   */
+  readOnly?: boolean;
   /** Submits the date ("YYYY-MM-DD") under this name. */
   name?: string;
   /** Earliest and latest choosable dates, "YYYY-MM-DD". */
@@ -34,6 +45,9 @@ export interface DatePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   formatOptions?: Intl.DateTimeFormatOptions;
   /** Offer a Clear row under the calendar. */
   clearable?: boolean;
+  /** The calendar is open (controlled); `defaultOpen` opens it at first. */
+  open?: boolean;
+  defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -53,16 +67,19 @@ const FULL_DATE: Intl.DateTimeFormatOptions = { month: "long", day: "numeric", y
  * Notion's date property; the calendar keeps its own keyboard (arrows by day and week, Page keys by
  * month).
  */
-export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(function DatePicker(
-  { value, defaultValue = null, onValueChange, placeholder = "Pick a date", icon, variant, size, fullWidth, invalid, name, min, max,
-    isDateUnavailable, today, locale, firstDayOfWeek, formatOptions = FULL_DATE, clearable = true, onOpenChange, disabled, className, style,
-    form, id: idProp, ...rest }, ref,
+export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(function DatePicker(
+  { value, defaultValue = null, onValueChange, placeholder = "Pick a date", icon, variant, size, fullWidth, invalid, validationStatus, readOnly,
+    name, min, max, isDateUnavailable, today, locale, firstDayOfWeek, formatOptions = FULL_DATE, clearable = true, open: openProp, defaultOpen,
+    onOpenChange, disabled, className, style, form, id: idProp, "aria-invalid": ariaInvalid, "data-validation-status": fieldStatus, ...rest }, ref,
 ) {
   const generated = useId();
   const triggerId = idProp ?? `${generated}-trigger`;
   const [own, setOwn] = useState<string | null>(defaultValue);
   const selected = value !== undefined ? value : own;
-  const [open, setOpenState] = useState(false);
+  // The ref and the native props reach the trigger, where Field's id lands (as Custom select's).
+  const [shownOpen, setOpenState] = useOpenState(openProp, defaultOpen, onOpenChange);
+  const open = shownOpen && !readOnly && !disabled;
+  const { status } = resolveValidation({ validationStatus, invalid, ariaInvalid, fieldStatus });
   const [text, setText] = useState("");
   const [month, setMonth] = useState<string | undefined>(undefined);
   const [textInvalid, setTextInvalid] = useState(false);
@@ -71,11 +88,15 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(function D
   const format = (iso: string | null) => { const date = fromIso(iso); return date ? new Intl.DateTimeFormat(locale, formatOptions).format(date) : ""; };
   const label = rest["aria-label"];
 
+  const prepare = () => { setText(format(selected)); setTextInvalid(false); setMonth(selected?.slice(0, 7)); };
   const setOpen = (next: boolean) => {
+    if (next && (readOnly || disabled)) return;
     setOpenState(next);
-    onOpenChange?.(next);
-    if (next) { setText(format(selected)); setTextInvalid(false); setMonth(selected?.slice(0, 7)); }
+    if (next) prepare();
   };
+  // Opened from outside (`open` or `defaultOpen`), the panel starts from the date as it is.
+  const wasOpen = useRef(false);
+  useEffect(() => { if (open && !wasOpen.current) prepare(); wasOpen.current = open; }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
   const commit = (next: string | null, event?: SyntheticEvent) => {
     if (value === undefined) setOwn(next);
     if (next !== selected) onValueChange?.(next, event);
@@ -114,15 +135,23 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(function D
   }, [value]);
 
   const shown = format(selected);
-  return <div ref={node => { rootRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
+  const trigger = (readOnlyTrigger: boolean) => <button {...rest} ref={node => assignRef(ref, node)} id={triggerId} type="button" form={form}
+    className="area-date-picker__trigger" disabled={disabled} aria-invalid={status === "error" || undefined} {...validationAttributes(status)}
+    // Read-only: a combobox that announces aria-readonly and never opens (a button has no read-only state).
+    {...(readOnlyTrigger ? { role: "combobox", "aria-readonly": true, "aria-expanded": false, "data-read-only": "" } : {})}>
+    {icon ? <span className="area-date-picker__icon" aria-hidden="true">{icon}</span> : null}
+    <span className="area-date-picker__value" data-placeholder={shown ? undefined : ""}>{shown || placeholder}</span>
+  </button>;
+  const hidden = name ? <input type="hidden" name={name} form={form} disabled={disabled} value={selected ?? ""} /> : null;
+  if (readOnly) return <div ref={rootRef} className={datePickerVariants({ variant, size, fullWidth }, className)} style={style}>
+    {trigger(true)}
+    {hidden}
+  </div>;
+  return <div ref={rootRef}
     className={datePickerVariants({ variant, size, fullWidth }, className)} style={style} data-open={open ? "" : undefined}>
     <Popover className="area-date-picker__panel" align="start" open={open} onOpenChange={next => setOpen(next)}
       aria-label={typeof label === "string" ? label : "Choose a date"}
-      trigger={<button {...rest} id={triggerId} type="button" form={form} className="area-date-picker__trigger" disabled={disabled}
-        aria-invalid={invalid || undefined}>
-        {icon ? <span className="area-date-picker__icon" aria-hidden="true">{icon}</span> : null}
-        <span className="area-date-picker__value" data-placeholder={shown ? undefined : ""}>{shown || placeholder}</span>
-      </button>}>
+      trigger={trigger(false)}>
       <Input size="sm" fullWidth aria-label="Date" value={text} invalid={textInvalid} placeholder={format(today ?? toIso(new Date()))}
         onChange={event => { setText(event.target.value); setTextInvalid(false); }} onKeyDown={handleTextKey}
         onFocus={event => { const field = event.currentTarget; requestAnimationFrame(() => field.select()); }}
@@ -139,6 +168,6 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(function D
         </button>
       </div> : null}
     </Popover>
-    {name ? <input type="hidden" name={name} form={form} disabled={disabled} value={selected ?? ""} /> : null}
+    {hidden}
   </div>;
 });

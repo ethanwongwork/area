@@ -27,7 +27,7 @@
     "test:badge": "node --test packages/react/tests/badge.test.mjs",
     "test:split-button": "node --test packages/react/tests/split-button.test.mjs",
     "test:dialog": "node --test packages/react/tests/dialog.test.mjs",
-    "test:contracts": "node --test packages/styles/scripts/manifest-parity.test.mjs apps/docs/scripts/axis-preferences.test.mjs",
+    "test:contracts": "node --test packages/styles/scripts/manifest-parity.test.mjs",
     "capture:compare": "node scripts/capture-compare.mjs",
     "audit:page": "node scripts/audit-page.mjs",
     "icons:pilot": "node packages/icons/scripts/generate.mjs",
@@ -39,7 +39,8 @@
     "icons:keywords": "node packages/icons/scripts/keywords.mjs",
     "lint:icons": "node packages/icons/scripts/generate.mjs --check",
     "test:icons": "npm test -w @area/icons",
-    "test:desktop": "node --test apps/desktop/tests/*.test.ts"
+    "test:desktop": "node --test apps/desktop/tests/*.test.ts",
+    "test:output": "npm test -w @area/output"
   },
   "engines": {
     "node": "^22.18.0 || ^24.0.0 || >=26.0.0"

@@ -23,9 +23,10 @@ test("Calendar draws its floating plate by default; plain drops it (audit F-21)"
 
 test("the modal Dialog and its scrim fade and scale in on the motion axis (audit E-19)", () => {
   // Closed carries the exit clock (one step faster, docs/MOTION.md): base out, moderate in.
-  assert.match(css, /\.area-dialog__modal:not\(\[open\]\) \{ --_overlay-duration: var\(--area-duration-base\); opacity: 0; scale: var\(--_overlay-scale\); \}/);
-  assert.match(css, /@starting-style \{\s*\.area-dialog__modal\[open\] \{ opacity: 0; scale: var\(--_overlay-scale\); \}\s*\.area-dialog__modal\[open\]::backdrop \{ opacity: 0; \}/);
-  assert.match(css, /\.area-dialog__modal \{[^}]*--_overlay-duration: var\(--area-duration-moderate\)/);
+  // Command palette shares the rule (system gaps C7, 2026-11-07).
+  assert.match(css, /:is\(\.area-dialog__modal, \.area-command-palette__modal\):not\(\[open\]\) \{ --_overlay-duration: var\(--area-duration-base\); --_overlay-fade: var\(--area-fade-base\); opacity: 0; scale: var\(--_overlay-scale\); \}/);
+  assert.match(css, /@starting-style \{\s*:is\(\.area-dialog__modal, \.area-command-palette__modal\)\[open\] \{ opacity: 0; scale: var\(--_overlay-scale\); \}\s*:is\(\.area-dialog__modal, \.area-command-palette__modal\)\[open\]::backdrop \{ opacity: 0; \}/);
+  assert.match(css, /:is\(\.area-dialog__modal, \.area-command-palette__modal\) \{[^}]*--_overlay-duration: var\(--area-duration-moderate\)/);
 });
 
 test("Popover has a close part and its title level is settable (audit E-8)", async () => {

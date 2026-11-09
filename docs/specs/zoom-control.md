@@ -115,3 +115,9 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
   and the typed field), `presetLabel` ("50%" instead of "Zoom to 50%"); the stepper's plates stand 2 apart (edge to
   edge, two shown plates met at their rounded corners; Figma's mode switch and Segmented keep a control's plates 2
   apart, Excalidraw joins its zoom buttons on one shared plate instead, measured). Defaults unchanged otherwise.
+
+### 2026-11-07 · open and defaultOpen; the event in onValueChange (components audit O3)
+
+- **What changed:** `open` / `defaultOpen` join `onOpenChange`; `onValueChange(zoom, event)` passes the click or key.
+- **Why:** ZoomControl.tsx:15, :49. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

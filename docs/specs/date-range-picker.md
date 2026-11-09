@@ -121,3 +121,8 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 - **What changed:** the ghost tile is sm, as Date picker's and Custom select's ghost tiles (a property value). No
   change at rest (a ghost field has no chrome and sm keeps the text size); its hover plate is 4 shorter. Demo only.
 
+### 2026-11-07 · Success, warning and read-only; open and defaultOpen; the ref on the trigger (components audit O1, O2, O3, O7)
+
+- **What changed:** As Date picker's: `validationStatus`, `readOnly`, `open` / `defaultOpen`, and the ref on the trigger button.
+- **Why:** DateRangePicker.tsx:33, :50, :19, :67. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

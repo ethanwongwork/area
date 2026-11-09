@@ -49,6 +49,10 @@
   @media (hover: hover) { .area-tree-view [role="treeitem"]:hover:not([data-disabled], [aria-current="page"], [aria-selected="true"]) { background-color: var(--area-bg-component-hover); } }
   .area-tree-view [role="treeitem"][aria-selected="true"],
   .area-tree-view [role="treeitem"][aria-current="page"] { background-color: var(--_tree-selection); color: var(--area-fg-default); }
+  /* Selection when the tree isn't focused (components audit V15, 2026-11-07; DESIGN_SYSTEM.md "Shared state paint"): the
+     selected row steps back to the hover plate, so the focused list reads as the active one. The current page is where
+     you are, not a selection, and keeps its plate. Checkbox trees already select on the rest fill. */
+  .area-tree-view--navigation:not(:focus-within) [role="treeitem"][aria-selected="true"]:not([aria-current="page"]) { background-color: var(--area-bg-component-hover); }
   /*
    * Motion (docs/MOTION.md, "Hover plate", "Selected"; docs/specs/tree-view.md, "Motion and
    * interaction, 2026-10-07"). The base `--area-transition` is the leave (fast, ease-out); hover,
@@ -168,7 +172,7 @@
     margin: calc(-1 * var(--area-stroke-width));
     opacity: 0;
     scale: 0.6; /* spec: docs/MOTION.md small-mark recipe */
-    transition: scale var(--area-duration-fast) var(--area-ease-out), opacity var(--area-duration-fast) var(--area-ease-out);
+    transition: scale var(--area-duration-fast) var(--area-ease-out), opacity var(--area-fade-fast) var(--area-ease-out);
   }
   .area-tree-view [aria-checked="true"] .area-tree-view__check svg { opacity: 1; scale: 1; }
   /* Reveal-on-hover fades on the one shared timing (audit F-38). The control keeps its own colour transition beside it
@@ -210,15 +214,15 @@
     background-image: repeating-linear-gradient(to right, var(--area-edge-dividers) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step));
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-out);
   }
   .area-tree-view--guides [role="treeitem"]:dir(rtl)::before { background-image: repeating-linear-gradient(to left, var(--area-edge-dividers) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step)); }
   .area-tree-view--guides:focus-within [role="treeitem"]::before { opacity: 1; transition-duration: 0s; }
   @media (hover: hover) { .area-tree-view--guides:hover [role="treeitem"]::before { opacity: 1; transition-duration: 0s; } }
   /*
    * A row's status (TreeViewNode status): git's letter at the row's end, Cursor's 12px w500 tabular in the git colour,
-   * here the status inks Edit summary's counts take (added success, removed danger, modified warning). The word is read
-   * out; the letter is not.
+   * here the shared change inks (`fg-change-<status>`, components audit D6, 2026-11-07; Governance § 4), the ones Edit summary's counts and Tabs take. The word is read out; the letter is not. `removed`
+   * arrives as `deleted` (TreeView.tsx).
    */
   .area-tree-view__status {
     flex: none;
@@ -232,7 +236,27 @@
   }
   .area-tree-view__trailing + .area-tree-view__status { margin-inline-start: 0; }
   .area-tree-view__status + .area-tree-view__actions { margin-inline-start: 0; }
-  .area-tree-view__status[data-status="added"] { color: var(--area-fg-success); }
-  .area-tree-view__status[data-status="modified"] { color: var(--area-fg-warning); }
-  .area-tree-view__status[data-status="removed"] { color: var(--area-fg-danger); }
+  .area-tree-view__status[data-status="added"] { color: var(--area-fg-change-added); }
+  .area-tree-view__status[data-status="modified"] { color: var(--area-fg-change-modified); }
+  .area-tree-view__status[data-status="deleted"] { color: var(--area-fg-change-deleted); }
+  .area-tree-view__status[data-status="untracked"] { color: var(--area-fg-change-untracked); }
+  .area-tree-view__status[data-status="renamed"] { color: var(--area-fg-change-renamed); }
+  /*
+   * Unseen (components audit D6): changed since it was last looked at, a state apart from the status: a 6 dot (Cursor's
+   * agent status dot, 6 in a 14 box; its tab dot is 4) in the accent's indicator rung, which holds 3:1 on every ground,
+   * before the status letter. The status keeps its ink.
+   */
+  .area-tree-view__unseen {
+    flex: none;
+    align-self: center;
+    margin-inline-start: auto;
+    inline-size: var(--area-space-6); /* spec: Cursor AgentStatusDot visibleSize 6 */
+    block-size: var(--area-space-6);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-accent-indicator);
+  }
+  .area-tree-view__trailing + .area-tree-view__unseen,
+  .area-tree-view__unseen + .area-tree-view__status,
+  .area-tree-view__unseen + .area-tree-view__actions { margin-inline-start: 0; }
+  @media (forced-colors: active) { .area-tree-view__unseen { background-color: CanvasText; } }
 }

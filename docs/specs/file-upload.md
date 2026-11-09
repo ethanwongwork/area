@@ -185,8 +185,8 @@ and `…/area--content-uploading--rest--light.json` (row).
 The zone's button ("Click to upload", described by the hint) is the keyboard and assistive-tech handle; a click anywhere
 else in the zone opens the same picker, and a drop on it takes the files. The file input is hidden (`display: none`,
 `aria-hidden`), named by `name` for forms. A drop is checked against `accept`, `maxSize` and `multiple` like the picker;
-rejections come back through `onReject` with the reason. Each row's status is a polite live region (Uploading…, Complete,
-the error), the bar is a named `progressbar`, and the buttons are named for their file ("Cancel upload of …", "Remove …",
+rejections come back through `onReject` with the reason. Each row's status is plain text; a change of state is said through the shared announcer with the file's name
+("Brand guidelines.pdf: Complete", or the error), the bar is a named `progressbar`, and the buttons are named for their file ("Cancel upload of …", "Remove …",
 "Retry …"). Disabled stops the picker and drops.
 
 ## Peers and consistency
@@ -282,3 +282,22 @@ The item's separator between size and status paints `border-decorative` (#f3). W
 - **Why:** it stayed the muted hint grey beside a red edge, so the reason a file was rejected read as a hint. Field
   and the file row's error status both say why in the error ink.
 - **Verdict:** approved (owner, 2026-10-29, review page round 83); Complete.
+
+## Review note, 2026-11-06 (balance pass; owner: "Keep it")
+
+- **What changed:** a row's size and status line joins the file name as its next line (8.8 baseline to cap, the line's
+  own gap); it sat 2 under the name (Untitled UI's mt-0.5), 10.8.
+- **Why:** the owner's balance pass ("make sure all of this is intentional"): a gap 2 off the line's own spacing reads as
+  neither joined nor apart. Every name and its line now join the same way (Card, File tile, Dialog). DESIGN_SYSTEM.md,
+  "Text pairs"; `docs/research/title-balance-2026-11-06`.
+
+### 2026-11-07 · One dismiss API and part (system gaps C4)
+
+- **What changed:** File upload item's remove (or cancel) control takes `onDismiss`; `onRemove` stays as a deprecated alias for one release.
+- **Why:** one dismiss API and one part name across the families that close or remove (Governance § 4; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · One announcer (components audit D1)
+
+Each row's `role="status"` is gone: `useAnnouncement` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")) says "<name>: <status>" when the status changes after
+the row appears, so "Complete" says which file and a list of rows is not several live regions. No visible change.

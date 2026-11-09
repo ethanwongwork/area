@@ -221,6 +221,12 @@
     min-inline-size: var(--_last-line-min);
   }
 
+  /* Waiting (`delay`, components audit V6, 2026-11-07; WRITING.md's loading ladder): a delayed placeholder keeps its box
+     and shows nothing until its wait has passed, then appears at once. It has no fade of its own, so reduced motion
+     changes nothing here. */
+  .area-skeleton[data-waiting],
+  .area-skeleton__lines[data-waiting] { opacity: 0; }
+
   @keyframes area-shimmer {
     from { background-position: 200% 0; }
     to { background-position: -100% 0; }
@@ -267,6 +273,10 @@
        reduced motion, resting on its drawing (12 to 3 o'clock). */
     animation: area-spin calc(1s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec */
   }
+
+  /* Waiting (`delay`, V6): the ring keeps its box, invisible, and its status region stays in the accessibility tree
+     (opacity, not visibility), empty, so its label is announced when it arrives with the ring. */
+  .area-spinner[data-waiting] { opacity: 0; }
 
   /* Inside a Button the spinner takes the label's ink, so it shows on any fill: a neutral
      spinner on a neutral solid button was the fill's own colour and disappeared. It fills the

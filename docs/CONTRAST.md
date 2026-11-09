@@ -140,6 +140,11 @@ lighter than the derived tints that paint, so a ring that clears on them clears 
 #0160d9, in light (500, #006df5, is 2.66:1 on the info tint's pressed fill) and #79aeff in dark (APCA on the near-black
 page). ChatGPT's #3a83f7 is 3.64:1 on white but 2.94:1 on the light pressed fill (#e7e7e7), and APCA 38 on the dark page.
 
+**An inactive control keeps its focus indicator at full strength** (components audit V2, 2026-11-07): it is drawn as
+disabled by fading its parts, never the focusable element, since an opacity on the element fades its outline with it.
+Its words may sit at the disabled opacity (an inactive control, as WCAG 1.4.3 exempts), but its reason may not: the
+Tooltip's text, and a Menu row's note at the muted ink, keep 4.5:1.
+
 Measure the actual painted opaque edge/outline against its ground. Measuring only the
 source color of a translucent halo is insufficient. Preserve focus and selected/invalid
 state simultaneously. Do not remove a native outline without supplying a visible replacement.
@@ -149,6 +154,11 @@ state simultaneously. Do not remove a native outline without supplying a visible
 State is more than color. Use text, shape, icons and native/ARIA semantics as appropriate.
 Control marks must have real positioned dimensions; do not depend on shadows alone for
 selection. Foregrounds stay fixed on hover; disabled/read-only/loading remain distinct.
+
+**The quieter selected plate has a floor** (components audit V15, 2026-11-07): a selected row in a list without focus
+steps back to the hover plate and never further, so its words keep the contrast asserted on `bg-component-hover`
+(`contrast/assertions.ts`) and the plate keeps Hover fill's step from its ground (25 at the least, never transparent).
+The row's own mark (a List box check, a Table checkbox) still says which is selected.
 
 `packages/styles/src/forced-colors.css` uses system colors for required marks, selected
 states, invalid indications and focus; Select restores its native arrow. These rules do

@@ -44,3 +44,10 @@ export const GalleryTagPickerDisabled = () => (
 export const GalleryTagPickerInvalid = () => (
   <div style={frame}><TagPicker fullWidth invalid aria-label="Label" placeholder="Placeholder" items={tags} /></div>
 );
+/* Success and warning, as Input's (components audit 2026-11-07, O1). */
+export const GalleryTagPickerSuccess = () => (
+  <div style={frame}><TagPicker fullWidth validationStatus="success" aria-label="Label" placeholder="Placeholder" items={tags} /></div>
+);
+export const GalleryTagPickerWarning = () => (
+  <div style={frame}><TagPicker fullWidth validationStatus="warning" aria-label="Label" placeholder="Placeholder" items={tags} /></div>
+);

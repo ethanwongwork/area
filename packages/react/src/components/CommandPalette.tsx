@@ -4,6 +4,8 @@ import { commandPaletteVariants } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { scrollOptionIntoList } from "./overlay.ts";
 import { ScrollArea } from "./ScrollArea.tsx";
+import { announce } from "./announce.ts";
+import { highlightMatch } from "./highlight.tsx";
 import { Kbd } from "./primitives.tsx";
 
 export interface CommandItem {
@@ -11,6 +13,21 @@ export interface CommandItem {
   label: string;
   /** Muted text after the label (a page's parent, a setting's current value). */
   description?: string;
+  /**
+   * Where the result lives, after its name in the secondary ink ("Projects / Item one"); it truncates before the name
+   * does (components audit V4).
+   */
+  path?: string;
+  /** Shown in the preview pane beside the results while this row is the active one (V4); hidden in a narrow palette. */
+  preview?: ReactNode;
+  /**
+   * Choosing the row opens a step that lists these instead of running it (a command that asks for more: "Change
+   * theme…" → the themes). The field shows the step's name and a Back button; Escape, or Backspace in an empty field,
+   * goes back (V4).
+   */
+  items?: CommandItem[];
+  /** The field's placeholder while this row's step is open. */
+  placeholder?: string;
   icon?: ReactNode;
   /** Keys shown at the row's end, e.g. ["cmd", "d"] (Kbd names). */
   shortcut?: string[];
@@ -47,12 +64,16 @@ export interface CommandPaletteProps extends Omit<HTMLAttributes<HTMLDivElement>
   /** Replaces the key hints below the list; `false` removes them. */
   footer?: ReactNode | false;
   filter?: (item: CommandItem, query: string) => boolean;
+  /** Names the Back button of a step (default "Back"). */
+  backLabel?: string;
+  /** Names the preview pane (default "Preview"). */
+  previewLabel?: string;
 }
 
 const matches = (item: CommandItem, query: string) => {
   const q = query.trim().toLocaleLowerCase();
   if (!q) return true;
-  return [item.label, item.description ?? "", ...(item.keywords ?? [])].some(text => text.toLocaleLowerCase().includes(q));
+  return [item.label, item.description ?? "", item.path ?? "", ...(item.keywords ?? [])].some(text => text.toLocaleLowerCase().includes(q));
 };
 const isApple = () => typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 
@@ -63,7 +84,7 @@ const isApple = () => typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test
 export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(function CommandPalette(
   { items, open: openProp, defaultOpen = false, onOpenChange, inline, hotkey, query: queryProp, defaultQuery = "",
     onQueryChange, placeholder = "Search or run a command…", "aria-label": ariaLabel, label: labelProp, emptyText = "No results", resultsLabel = (count: number) => `${count} ${count === 1 ? "result" : "results"}`,
-    footer, filter = matches, className, ...rest }, ref,
+    footer, filter = matches, backLabel = "Back", previewLabel = "Preview", className, ...rest }, ref,
 ) {
   const label = ariaLabel ?? labelProp ?? "Command palette";
   const id = useId();
@@ -73,6 +94,10 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
   const [ownQuery, setOwnQuery] = useState(defaultQuery);
   const query = queryProp ?? ownQuery;
   const [active, setActive] = useState(0);
+  // The steps opened so far: each a row with `items`, the last one's items listed (V4).
+  const [trail, setTrail] = useState<CommandItem[]>([]);
+  const step = trail.at(-1);
+  const list = step?.items ?? items;
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -93,22 +118,30 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     onQueryChange?.(next);
     setActive(0);
   };
+  const back = () => { setTrail(trail.slice(0, -1)); setQuery(""); };
+  // A closed palette opens at its first list again.
+  useEffect(() => { if (!open && trail.length) setTrail([]); }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Rows, grouped in the order each group first appears; the flat order is the arrow order.
   const rows = useMemo(() => {
-    const found = items.filter(item => filter(item, query));
+    const found = list.filter(item => filter(item, query));
     const order = [...new Set(found.map(item => item.group))];
     return [...found].sort((a, b) => order.indexOf(a.group) - order.indexOf(b.group));
-  }, [items, query, filter]);
+  }, [list, query, filter]);
+  // The count of what the query found, said through the shared announcer while the palette shows (components audit D1).
+  useEffect(() => {
+    if (!open || !query) return;
+    announce(rows.length ? resultsLabel(rows.length) : typeof emptyText === "string" ? emptyText : "");
+  }, [open, query, rows.length]); // eslint-disable-line react-hooks/exhaustive-deps -- the labels are read as they are now
   const enabled = (index: number) => rows[index] !== undefined && !rows[index]?.disabled;
-  const step = (from: number, delta: 1 | -1) => {
+  const next = (from: number, delta: 1 | -1) => {
     for (let i = 1; i <= rows.length; i++) {
       const next = (from + delta * i + rows.length * 2) % rows.length;
       if (enabled(next)) return next;
     }
     return -1;
   };
-  const current = enabled(active) ? active : step(-1, 1);
+  const current = enabled(active) ? active : next(-1, 1);
 
   useLayoutEffect(() => {
     if (inline) return;
@@ -139,19 +172,32 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
 
   const run = (item: CommandItem | undefined) => {
     if (!item || item.disabled) return;
+    if (item.items) {
+      // A step: its rows replace the list, and the field starts empty (Cursor's quick input title bar with Back).
+      item.onSelect?.();
+      setTrail([...trail, item]);
+      setQuery("");
+      announce(item.label);
+      inputRef.current?.focus();
+      return;
+    }
     item.onSelect?.();
-    if (!item.keepOpen && !inline) { setOpen(false); setQuery(""); }
+    if (!item.keepOpen && !inline) { setOpen(false); setQuery(""); setTrail([]); }
+  };
+  // Escape steps back one thing at a time: the typed text, then the step, then the palette.
+  const escape = () => {
+    if (query) setQuery("");
+    else if (trail.length) back();
+    else if (!inline) setOpen(false);
   };
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "ArrowDown") { event.preventDefault(); setActive(step(current, 1)); }
-    else if (event.key === "ArrowUp") { event.preventDefault(); setActive(step(current < 0 ? 0 : current, -1)); }
-    else if (event.key === "Home" && event.ctrlKey) { event.preventDefault(); setActive(step(-1, 1)); }
-    else if (event.key === "End" && event.ctrlKey) { event.preventDefault(); setActive(step(rows.length, -1)); }
+    if (event.key === "ArrowDown") { event.preventDefault(); setActive(next(current, 1)); }
+    else if (event.key === "ArrowUp") { event.preventDefault(); setActive(next(current < 0 ? 0 : current, -1)); }
+    else if (event.key === "Home" && event.ctrlKey) { event.preventDefault(); setActive(next(-1, 1)); }
+    else if (event.key === "End" && event.ctrlKey) { event.preventDefault(); setActive(next(rows.length, -1)); }
     else if (event.key === "Enter") { event.preventDefault(); run(rows[current]); }
-    else if (event.key === "Escape" && !inline) {
-      event.preventDefault();
-      if (query) setQuery(""); else setOpen(false);
-    }
+    else if (event.key === "Backspace" && !query && trail.length && !event.repeat) { event.preventDefault(); back(); }
+    else if (event.key === "Escape" && (!inline || trail.length)) { event.preventDefault(); escape(); }
   };
 
   let index = -1;
@@ -164,8 +210,10 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
       onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!item.disabled && i !== current) setActive(i); }}
       onClick={() => run(item)}>
       {item.icon ? <span className="area-menu__icon" aria-hidden="true">{item.icon}</span> : null}
-      <span className="area-menu__text area-command-palette__text">{item.label}</span>
-      {item.description ? <span className="area-command-palette__description">{item.description}</span> : null}
+      <span className="area-menu__text area-command-palette__text">{highlightMatch(item.label, query)}</span>
+      {item.path ? <span className="area-command-palette__path">{highlightMatch(item.path, query)}</span> : null}
+      {item.description ? <span className="area-command-palette__description">{highlightMatch(item.description, query)}</span> : null}
+      {item.items ? <span className="area-command-palette__more" aria-hidden="true"><Glyph name="chevron-down" rotate={270} /></span> : null}
       {item.shortcut ? <span className="area-menu__shortcut"><Kbd keys={item.shortcut} size="sm" /></span> : null}
     </div>;
   };
@@ -175,19 +223,10 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     if (last && last[0] === item.group) last[1].push(item); else groups.push([item.group, [item]]);
   }
 
-  const surface = <div ref={ref} role={inline ? "search" : undefined} aria-label={inline ? label : undefined}
-    className={commandPaletteVariants({ inline }, className)} {...rest}>
-    <div className="area-command-palette__search">
-      <span className="area-command-palette__search-icon" aria-hidden="true"><Glyph name="search" /></span>
-      <input ref={inputRef} className="area-command-palette__input" role="combobox" aria-label={label}
-        aria-expanded={true} aria-controls={listId} aria-autocomplete="list"
-        aria-activedescendant={current >= 0 ? `${id}-item-${current}` : undefined}
-        autoComplete="off" spellCheck={false} placeholder={placeholder} value={query}
-        onChange={event => setQuery(event.target.value)} onKeyDown={handleKeyDown} />
-    </div>
-    {/* The result count, or the empty text, is announced while a query is typed (audit D-29). */}
-    <span className="area-sr-only" role="status">{query ? (rows.length ? resultsLabel(rows.length) : typeof emptyText === "string" ? emptyText : "") : ""}</span>
-    <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={label} className="area-command-palette__list" viewportProps={{ tabIndex: undefined }}>
+  // The preview pane shows while some row has a preview; it holds the active row's (V4).
+  const previews = rows.some(item => item.preview !== undefined && item.preview !== null);
+  const preview = current >= 0 ? rows[current]?.preview : undefined;
+  const results = <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={label} className="area-command-palette__list" viewportProps={{ tabIndex: undefined }}>
       {rows.length === 0 ? <div className="area-command-palette__empty" role="presentation">{emptyText}</div> : null}
       {groups.map(([group, list], g) => group
         ? <div key={`${group}-${g}`} role="group" aria-labelledby={`${id}-group-${g}`} className="area-command-palette__group">
@@ -195,7 +234,33 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
             {list.map(renderRow)}
           </div>
         : <div key={`ungrouped-${g}`} role="presentation" className="area-command-palette__group">{list.map(renderRow)}</div>)}
-    </ScrollArea>
+    </ScrollArea>;
+
+  const surface = <div ref={ref} role={inline ? "search" : undefined} aria-label={inline ? label : undefined}
+    className={commandPaletteVariants({ inline }, className)} data-preview={previews ? "" : undefined} {...rest}>
+    <div className="area-command-palette__search">
+      {step
+        ? <button type="button" className="area-command-palette__back" aria-label={backLabel}
+            onPointerDown={event => event.preventDefault()} onClick={() => { back(); inputRef.current?.focus(); }}>
+            <Glyph name="arrow-up" rotate={270} />
+          </button>
+        : <span className="area-command-palette__search-icon" aria-hidden="true"><Glyph name="search" /></span>}
+      {/* The step's trail, before the typed text, describes the field (Cursor's quick input title). */}
+      {step ? <span id={`${id}-step`} className="area-command-palette__step">{trail.map(entry => entry.label).join(" / ")}</span> : null}
+      <input ref={inputRef} className="area-command-palette__input" role="combobox" aria-label={label}
+        aria-describedby={step ? `${id}-step` : undefined}
+        aria-expanded={true} aria-controls={listId} aria-autocomplete="list"
+        aria-activedescendant={current >= 0 ? `${id}-item-${current}` : undefined}
+        autoComplete="off" spellCheck={false} placeholder={step?.placeholder ?? placeholder} value={query}
+        onChange={event => setQuery(event.target.value)} onKeyDown={handleKeyDown} />
+    </div>
+    {/* The result count, or the empty text, is announced while a query is typed (audit D-29). */}
+    {previews
+      ? <div className="area-command-palette__body">
+          {results}
+          <div className="area-command-palette__preview" role="region" aria-label={previewLabel}>{preview}</div>
+        </div>
+      : results}
     {footer === false ? null : <div className="area-command-palette__footer" aria-hidden={footer ? undefined : true}>
       {footer ?? <>
         {/* Static hints (owner, round 68): what the keys do, not controls. A pointer clicks the row itself; keyboard
@@ -205,14 +270,15 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
           Move
         </span>
         <span className="area-command-palette__hint"><Kbd keys={["enter"]} size="sm" />Open</span>
-        {inline ? null : <span className="area-command-palette__hint"><Kbd keys={["esc"]} size="sm" />Close</span>}
+        {step ? <span className="area-command-palette__hint"><Kbd keys={["esc"]} size="sm" />Back</span>
+          : inline ? null : <span className="area-command-palette__hint"><Kbd keys={["esc"]} size="sm" />Close</span>}
       </>}
     </div>}
   </div>;
 
   if (inline) return surface;
   return <dialog ref={dialogRef} className="area-command-palette__modal" aria-label={label}
-    onCancel={event => { event.preventDefault(); if (query) setQuery(""); else setOpen(false); }}
+    onCancel={event => { event.preventDefault(); escape(); }}
     onClick={event => { if (event.target === event.currentTarget) setOpen(false); }}>
     {open ? (frozen.current = surface) : present ? frozen.current : null}
   </dialog>;

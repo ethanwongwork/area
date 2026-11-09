@@ -504,3 +504,13 @@ touch). Two changes: a screen (`aspect="screen"`, a product's UI, busy under the
 image or a group takes, and a basic overlay card pads its top as its other sides (it had no head row there, so the
 picture sat 1 from the top and 8 from the rest). Used by `QuestionFrame` (apps/desktop/src/question-kit.tsx); the feed and
 chat galleries keep their names outside.
+
+### 2026-11-07 · Several (components audit V7)
+
+- **What changed:** Asset grid takes List box's `multiple` (`values` / `defaultValues` / `onValuesChange`): its props
+  extend List box's and pass through, so nothing of its own changed. A click chooses one tile, Cmd or Ctrl+click adds or
+  removes one, Shift+click adds the run, Space toggles, Ctrl or Cmd+A chooses all; Enter still opens (docs/specs/list-box.md,
+  "Several"). It chose one value only before.
+- **Why:** docs/research/components-audit-2026-11-07/internal.md (choosing several files or assets is the grids' use);
+  the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

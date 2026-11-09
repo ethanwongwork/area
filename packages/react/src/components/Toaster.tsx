@@ -2,11 +2,12 @@ import { createContext, useCallback, useContext, useEffect, useLayoutEffect, use
 import type { ReactNode } from "react";
 import { cx } from "../variants.ts";
 import { Toast, type ToastProps } from "./primitives.tsx";
+import { announce } from "./announce.ts";
 
 export interface ToastOptions extends Omit<ToastProps, "children" | "onDismiss"> {
-  /** The message. Plain text is also what the live region announces. */
+  /** The message. Plain text is also what the shared announcer says. */
   message: ReactNode;
-  /** ms before it leaves. Defaults to the Toaster's; a toast with an action stays until dismissed. */
+  /** ms before it leaves. Defaults to the Toaster's; a toast with actions stays until dismissed. */
   duration?: number;
   /** What a screen reader hears, when `message` or `title` is not plain text. */
   announcement?: string;
@@ -54,15 +55,13 @@ const transitionMs = (node: Element | null | undefined) => {
 };
 
 /**
- * Hosts toasts (audit E-11 A, owner 2026-09-30). The live regions exist before any toast, so the
- * first message is announced; danger is assertive, as Alert's. Timers pause while the pointer or
+ * Hosts toasts (audit E-11 A, owner 2026-09-30). Each toast is said through the shared announcer
+ * (`announce`, components audit D1); danger is assertive, as Alert's. Timers pause while the pointer or
  * focus is in the region (WCAG 2.2.1), a toast with an action waits to be dismissed, F8 reaches
  * the region, and toasts stack newest last at the end corner.
  */
 export function Toaster({ children, label = "Notifications", duration = 5000, hotkey = "F8", className }: ToasterProps) {
   const [entries, setEntries] = useState<Entry[]>([]);
-  const [polite, setPolite] = useState("");
-  const [assertive, setAssertive] = useState("");
   const nextId = useRef(1);
   const region = useRef<HTMLElement | null>(null);
   const paused = useRef(false);
@@ -120,14 +119,12 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
   }, [dismiss]);
   const show = useCallback((options: ToastOptions) => {
     const id = nextId.current++;
-    const left = options.action ? Infinity : options.duration ?? duration;
+    const left = options.actions ?? options.action ? Infinity : options.duration ?? duration;
     timers.current.set(id, { left, started: Date.now() });
     setEntries(list => [...list, { ...options, toastId: id }]);
     const said = options.announcement ?? [text(options.title), text(options.message)].filter(Boolean).join(". ");
-    // Clear, then write on the next frame, so the same message twice is announced twice.
-    const set = options.tone === "danger" ? setAssertive : setPolite;
-    set("");
-    requestAnimationFrame(() => set(said));
+    // The announcer clears and writes again, so the same message twice is announced twice.
+    announce(said, { politeness: options.tone === "danger" ? "assertive" : "polite" });
     arm(id);
     return id;
   }, [arm, duration]);
@@ -165,8 +162,6 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
   const api = useMemo(() => ({ show, dismiss }), [show, dismiss]);
   return <ToasterContext.Provider value={api}>
     {children}
-    <span className="area-sr-only" role="status" aria-live="polite" aria-atomic="true">{polite}</span>
-    <span className="area-sr-only" role="alert" aria-live="assertive" aria-atomic="true">{assertive}</span>
     <section ref={region} className={cx("area-toaster", className)} aria-label={`${label} (${hotkey})`} tabIndex={-1}
       hidden={entries.length === 0}
       onPointerEnter={pause} onPointerLeave={() => { if (!region.current?.contains(document.activeElement)) resume(); }}

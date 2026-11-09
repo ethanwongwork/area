@@ -83,3 +83,11 @@ test('FileImage draws a landscape, or the picture in its place, and is decorativ
   assert.match(picture, /class="area-file-image__picture" src="shot.png" alt=""/);
   assert.doesNotMatch(picture, /area-file-image__scene/);
 });
+
+// docs/specs/list-box.md, "Several" (components audit V7, 2026-11-07): File grid takes List box's multi-select contract.
+test('FileGrid with multiple selects several tiles and says so', () => {
+  const html = render(h(FileGrid, { 'aria-label': 'Label', multiple: true, defaultValues: ['one', 'three'] },
+    ...['one', 'two', 'three'].map(value => h(FileGridItem, { key: value, value, name: `Item ${value}`, figure: h(Folder) }))));
+  assert.match(html, /role="listbox"[^>]*aria-multiselectable="true"/);
+  assert.deepEqual([...html.matchAll(/aria-selected="true"[^>]*data-value="(\w+)"/g)].map(match => match[1]), ['one', 'three']);
+});

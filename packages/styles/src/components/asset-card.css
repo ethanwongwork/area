@@ -363,7 +363,7 @@
     inset-inline-end: var(--_actions-offset);
     z-index: 1;
     opacity: 0;
-    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-out);
   }
   /* Overlay: the asset fills the card; the name sits on it at the bottom start, the name's inset from the edge, and the
      head shows, with the controls, under the pointer or with focus (owner, 2026-10-24, the app's cards: "have
@@ -381,7 +381,7 @@
     padding: 0;
     pointer-events: none; /* the card under it takes the press; the controls take their own */
     opacity: 0;
-    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-out);
   }
   .area-asset-card--overlay > .area-asset-card__head > .area-asset-card__name {
     position: absolute;

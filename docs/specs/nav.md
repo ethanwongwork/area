@@ -162,6 +162,7 @@ Third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questi
 | focus-visible | 2px `focus-color` outline, inset (offset −2), as Tabs, so rows 2 apart don't overlap the ring (audit S11b) | `nav.css:168-172` |
 | current (`aria-current`) | plate `bg-component-active`, `fg-default`, kept under the pointer; marker: no plate, rail | `area--default` row 1, `area--marker`; `notion--sidebar-row-current--hover` |
 | disabled (`data-disabled`) | opacity 0.5, no hover plate, `not-allowed` | `area--state-disabled`; `nav.css:175-178` |
+| inactive (`data-inactive`, `inactiveText`) | its parts at opacity 0.5, the item itself not (its ring stays full), no hover or press plate, `not-allowed`; no href, `role="link"`, `aria-disabled`, a Tab stop (`tabindex="0"`); the reason a Tooltip to the right that describes it | Primer NavList `inactiveText` (`NavList.docs.json:107`); components audit V2; tile `state-inactive` |
 
 ## Behavior and accessibility
 
@@ -425,4 +426,19 @@ Nav's separator paints `border-decorative` (#f3). Was `border-divider` (#e2). Th
 - **Why:** the owner asked "is the small image thumbnail very practical?". Read in the app at type 13: a screen at 20 × 14
   is a pale plate with a few bars, so two variations of one screen (the case it was picked for) looked the same, an image
   read only as its colour, and each row rendered a whole screen. Figma's layers mark kinds with icons.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Nav group's defaultOpen (components audit O3)
+
+- **What changed:** A labelled NavGroup folds with `defaultOpen` alone (it keeps its own state, starting open or folded), as Panel section and Accordion item; `open` and `onOpenChange` still control it.
+- **Why:** Nav.tsx:45-46 was controlled only. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Inactive items (components audit V2)
+
+- **What changed:** `inactive` and `inactiveText` on NavItem, and the manifest's `inactive` state. An inactive item drops
+  its href like a disabled one but keeps a Tab stop, says it is unavailable (`aria-disabled`) and is described by its
+  reason, a Tooltip on its inline end (a sidebar's rows; it flips where there is no room). Following it does nothing.
+  The current page is never made quieter by V15's inactive selection: it is where you are, not a selection.
+- **Why:** docs/research/components-audit-2026-11-07/primer.md (NavList `inactiveText`). The owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.

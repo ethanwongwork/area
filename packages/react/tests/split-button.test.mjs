@@ -8,7 +8,7 @@ const render = (props = {}) => renderToString(h(SplitButton, { menu: [h(MenuItem
 
 test("SplitButton renders two named buttons and a menu popover", () => {
   const html = render({ menuLabel: "More save options" });
-  assert.match(html, /role="group"[^>]*class="area-split-button area-split-button--solid"/);
+  assert.match(html, /role="group"[^>]*class="area-split-button area-split-button--solid area-split-button--md"/);
   assert.equal((html.match(/type="button"/g) ?? []).length, 4, "action, trigger and two menu items");
   assert.match(html, /class="area-button[^"]*area-split-button__action"[^>]*>/);
   assert.match(html, /aria-label="More save options"[^>]*aria-haspopup="menu"[^>]*aria-expanded="false"/);

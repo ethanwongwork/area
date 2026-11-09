@@ -181,3 +181,9 @@ No change in the Color field rules of `color.css`.
 
 - **What changed:** its swatches show the thin translucent ring again (black 10% in light, white 10% in dark), solid colours included.
 - **Why:** Color swatch's colour layer had been painting over its ring since a 2026-10-12 merge, so no swatch showed its outline; the fix is in Color swatch (docs/specs/color-swatch.md, round 56), and every family that draws one shows it.
+
+### 2026-11-07 · variant in the manifest (components audit O7)
+
+- **What changed:** `variant` (outline / soft, Input's) is in the manifest and on the field (`area-color-field--soft`); a Variant / soft tile joins the gallery.
+- **Why:** manifest.ts:138 listed only size; ColorField.tsx:77, 84 passed variant. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

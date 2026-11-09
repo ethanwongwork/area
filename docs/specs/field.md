@@ -175,3 +175,11 @@ Textarea is already `round()`ed; no transforms. Open question: none.
 - **What changed:** a Field can show a character count, "12 / 320", at the end of the line under its control.
 - **Why:** your text-field reference; Polaris, Carbon and ChatGPT's custom instructions show it the same way. It
   replaces the Textarea tile's hand-made count.
+
+## Review note, 2026-11-08
+
+- **What changed:** a horizontal Field beside a vertical Stack (a list of checkboxes) sets its label on the list's first
+  line, as it already did beside a Textarea; and Field reads the system's default `orientation` from `SystemDefaults`
+  (labels above, beside or by width as a system's structure choice; a use's own `orientation` wins).
+- **Why:** the Inspector's inventory rows (docs/research/system-inventory-2026-11-08) put a list of values beside its
+  axis's name; centred, the name floated beside the middle value.

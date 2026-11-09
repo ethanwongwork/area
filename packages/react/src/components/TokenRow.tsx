@@ -5,7 +5,7 @@
 import { forwardRef } from "react";
 import type { HTMLAttributes, MouseEvent, Ref } from "react";
 import { cx, tokenRowVariants } from "../variants.ts";
-import { CopyStatus, useCopy } from "./CopyButton.tsx";
+import { useCopy } from "./CopyButton.tsx";
 
 export interface TokenRowProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
   /** The token's name ("color/bg/surface"), shown as a Code token. */
@@ -28,7 +28,7 @@ export const TokenRow = /* @__PURE__ */ forwardRef<HTMLElement, TokenRowProps>(f
   ref,
 ) {
   // CopyButton's behaviour (docs/specs/copy-button.md) on the whole row: the same clock, state hook and live region.
-  const { state, copy: write } = useCopy(copyText ?? value ?? name);
+  const { state, copy: write } = useCopy(copyText ?? value ?? name, { copiedLabel });
 
   const body = (
     <>
@@ -54,7 +54,6 @@ export const TokenRow = /* @__PURE__ */ forwardRef<HTMLElement, TokenRowProps>(f
       aria-label={ariaLabel ?? `Copy ${name}${value !== undefined ? `, ${value}` : ""}`}
       data-copy-state={state === "idle" ? undefined : state} onClick={copy} {...rest}>
       {body}
-      <CopyStatus state={state} copiedLabel={copiedLabel} />
     </button>
   );
 });

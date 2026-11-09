@@ -65,3 +65,42 @@ test("a string shortcut sets each leading modifier in its own keycap, the rest a
   assert.deepEqual(keys("Del"), ["Del"]);
   assert.deepEqual(keys("⇧"), ["⇧"]);
 });
+
+test("MenuItem's trailing slot sits before the shortcut (components audit O7)", () => {
+  const html = renderToString(h(MenuItem, { trailing: "12", shortcut: "⌘K" }, "Inbox"));
+  assert.match(html, /<span class="area-menu__text">Inbox<\/span><span class="area-menu__trailing">12<\/span><span class="area-menu__shortcut">/);
+  assert.ok(MANIFESTS.menu.elements.includes("trailing"));
+  assert.doesNotMatch(renderToString(h(MenuItem, null, "Inbox")), /__trailing/);
+});
+
+// Components audit V2 (2026-11-07): an inactive row stays reachable (aria-disabled, never native disabled), keeps the
+// menu open, and its reason is its note, said once as its description.
+test("MenuItem inactive keeps its row reachable and says why in its note", () => {
+  const html = renderToString(h(MenuItem, { inactive: true, inactiveText: "Description", description: "Hidden by the reason" }, "Item two"));
+  const row = html.match(/<button[^>]*>/)[0];
+  assert.doesNotMatch(row, /\sdisabled=""|data-disabled/);
+  for (const attr of ['aria-disabled="true"', 'data-inactive=""', 'data-keep-open=""']) assert.ok(row.includes(attr), attr);
+  const described = row.match(/aria-describedby="([^"]+)"/)[1];
+  assert.match(html, new RegExp(`<span class="area-menu__description"><span id="${described}" aria-hidden="true">Description</span></span>`));
+  assert.doesNotMatch(html, /Hidden by the reason/);
+  assert.match(renderToString(h(MenuItem, { inactive: true, disabled: true }, "Item")), /\sdisabled=""/);
+});
+
+// Components audit V5 (2026-11-07): header and footer around the rows, and the empty and loading rows in their place.
+test("Menu header and footer frame the rows; the empty and loading rows stand in for them", () => {
+  const framed = renderToString(h(Menu, { "aria-label": "Label", header: "Label", footer: h(MenuItem, null, "Action") }, h(MenuItem, null, "Item one")));
+  assert.match(framed, /^<div role="menu" class="area-menu" aria-label="Label"><div class="area-menu__header"><div class="area-menu__label"><span class="area-menu__label-text">Label<\/span><\/div><\/div><div class="area-menu__list"><button[^>]*>.*Item one.*<\/button><\/div><div class="area-menu__footer"><button[^>]*role="menuitem"[^>]*>.*Action.*<\/button><\/div><\/div>$/);
+  // An anchored menu keeps the frame on the surface and scrolls only the list.
+  const anchored = renderToString(h(Menu, { trigger: h("button", null, "Open"), defaultOpen: true, header: "Label" }, h(MenuItem, null, "Item one")));
+  assert.match(anchored, /<div role="menu" class="area-menu"[^>]*><div class="area-menu__header">.*<\/div><div class="area-scroll-area area-scroll-area--hover area-menu__list"/);
+  // Without either, no list wrapper.
+  assert.doesNotMatch(renderToString(h(Menu, { "aria-label": "Label" }, h(MenuItem, null, "Item one"))), /area-menu__list/);
+  assert.match(renderToString(h(Menu, { "aria-label": "Label" })), /<div class="area-menu__empty"><span class="area-menu__text">No items<\/span><\/div>/);
+  assert.match(renderToString(h(Menu, { "aria-label": "Label", emptyText: "No items yet" })), /No items yet/);
+  assert.doesNotMatch(renderToString(h(Menu, { "aria-label": "Label", emptyText: null })), /area-menu__empty/);
+  const loading = renderToString(h(Menu, { "aria-label": "Label", loading: true }, h(MenuItem, null, "Item one")));
+  assert.match(loading, /^<div role="menu" class="area-menu" aria-busy="true"/);
+  assert.match(loading, /<div class="area-menu__loading" data-waiting=""><span class="area-menu__icon" aria-hidden="true"><span aria-hidden="true" class="area-spinner area-spinner--sm"><\/span><\/span><span class="area-menu__text">Loading<\/span><\/div>/);
+  assert.doesNotMatch(loading, /Item one/);
+  for (const part of ["header", "footer", "list", "empty", "loading"]) assert.ok(MANIFESTS.menu.elements.includes(part), part);
+});

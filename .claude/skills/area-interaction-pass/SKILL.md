@@ -61,8 +61,8 @@ minimum), in light and dark:
 | Place | Look for |
 |---|---|
 | Home | screen tiles fill (16:9), double-click opens, New project / New system dialogs open and cancel |
-| A system: Themes (Screen, Close-up, Themes), Colors, Typography, Icons, Components (Overview, a family, its tabs), Patterns, History | the bar (start, end, wrap), cards scale, Inspector rows don't clip |
-| Inspiration (groups, a group, an image) | the trail and the viewer's buttons |
+| A system: Themes (Screen, Close-up, Themes), Colors, Typography, Icons, Components (Overview, a family, its tabs), Patterns, Versions; Foundations (Tokens, Spacing, Shape, Elevation, Motion, Illustrations) | the bar (start, end, wrap), cards scale, Inspector rows don't clip |
+| References (Discover, Following, Saved, a collection, an image); Projects (Overview, Pages, a page) | the trail and the viewer's buttons |
 | Settings (⌘,): General, Appearance, Theme | Back and Esc close it, rows align |
 | Search (⌘K), New tab (+) | no duplicate rows, Esc closes, Enter opens |
 | Tabs, Back / Forward (⌘[ ⌘]) | close reveal, the tab under the pointer after a close, disabled ends |

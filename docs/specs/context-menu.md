@@ -117,3 +117,9 @@ Open question: none new.
 
 - **What changed:** the demo's right-click area text takes the body size of the canvas (16 at Type 14, was 13); the menu is unchanged.
 - **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.
+
+### 2026-11-07 · open and defaultOpen (components audit O3)
+
+- **What changed:** `open` opens or closes it from outside; opened that way it appears at the area's start (with `itemSelector`, under its first item), as the keyboard opens it; `defaultOpen` opens it on mount. A right-click or Shift+F10 still opens it and reports through `onOpenChange`.
+- **Why:** ContextMenu.tsx:23 had `onOpenChange` only. The audit's own row said no change (it opens at the pointer); the owner's pick built it, so a host can open the menu from a command. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

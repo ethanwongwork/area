@@ -28,6 +28,7 @@ content is Skeleton.
 |---|---|---|---|
 | size | sm 12, md 16 (default), lg 24 | Matches the icon slot it replaces | Untitled 32–64 standalone, 20 in buttons |
 | composition | in Button, Badge, Input; standalone with a label | Hosts' loading states | Gallery tiles `button`, `badge`, `input`, `empty` |
+| behaviour | `delay`: `"short"` 300 ms, `"long"` (or `true`) 1000 ms, or milliseconds | A quick load shows nothing (WRITING.md's loading ladder) | Primer Spinner `delay` (`src/Spinner/Spinner.tsx:27-28`, `:53`); tile `behavior-delay` |
 
 ## Sources
 
@@ -83,6 +84,7 @@ Read from the nodes of `area--size-small`, `area--default`, `area--size-large`,
 | running | rotates | all tiles (`animation-name: area-spin`) |
 | motion none | `animation: none`; the arc stays visible and still | display.css:304; not tiled |
 | reduced motion | `animation: none`; the arc rests at its identity turn | display.css; not tiled |
+| waiting (`data-waiting`) | a delay that hasn't passed: `opacity: 0`, the box kept; the status region present and empty, so the label is said when it arrives with the ring (opacity, not visibility, keeps the region in the tree). Appears at once, no fade, so reduced motion changes nothing | V6; tile `behavior-delay` |
 
 ## Behavior and accessibility
 
@@ -224,3 +226,12 @@ own; the evidence below came from that family's research
 - **What changed:** a Spinner in a Badge's icon slot takes the slot's size (12 at md) and the badge's ink, as a Spinner in a Button already did; a cohesion test covers both hosts. The empty tile's description now joins its title, muted, at the body size, as Empty state's.
 - **Why:** in the badge the 16 spinner overflowed the 12 slot onto the badge's edge and almost touched the label, and painted the selection colour in a toned badge. The empty tile set the description 12 under its title in the default ink, against the text-pair rule.
 - **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.
+
+### 2026-11-07 · Delay (components audit V6)
+
+- **What changed:** `delay` on the turning Spinner (a ring with a `value` shows at once), through `useLoadingDelay` and
+  `LOADING_DELAY` (exported from `@area/react`, shared with Skeleton and Menu's loading row). The server and the first
+  client render both render it waiting, so it hydrates as rendered and the timer starts only in the browser.
+- **Why:** docs/research/components-audit-2026-11-07/primer.md (Spinner `delay`, the loading ladder); WRITING.md's ladder says under a second, nothing. The
+  owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

@@ -75,9 +75,12 @@ test("Radio soft list puts its meta at the end, after the label", () => {
   assert.doesNotMatch(renderToString(h(Radio, { label: "One", layout: "list" })), /--list/);
 });
 
-test('a read-only RadioGroup is a radiogroup named by its legend, with aria-readonly and the readonly hook', () => {
+test('a read-only RadioGroup is a radiogroup named by its legend, with aria-readonly and the read-only hook', () => {
   const html = renderToString(h(RadioGroup, { label: 'Answer', readOnly: true, value: 'a' }, h(Radio, { value: 'a', label: 'Item one', variant: 'soft', layout: 'list' })));
-  assert.match(html, /<fieldset[^>]*role="radiogroup"[^>]*aria-readonly="true"[^>]*aria-labelledby="([^"]+)"[^>]*data-readonly=""/);
+  // The shared spelling, data-read-only (2026-11-07, O2); the options carry it too. data-readonly is CSS-only now.
+  assert.match(html, /<fieldset[^>]*role="radiogroup"[^>]*aria-readonly="true"[^>]*aria-labelledby="([^"]+)"[^>]*data-read-only=""/);
+  assert.match(html, /<label class="area-radio[^"]*" data-read-only="">/);
+  assert.doesNotMatch(html, /data-readonly/);
   const id = html.match(/aria-labelledby="([^"]+)"/)[1];
   assert.match(html, new RegExp(`<legend class="area-radio-group__legend" id="${id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`));
   assert.match(html, /<input[^>]*checked=""/);

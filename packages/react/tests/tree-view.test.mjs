@@ -31,15 +31,25 @@ test("rows rest in body ink, chevrons mirror in RTL, and selection outranks hove
 });
 
 // File-tree density (owner 2026-10-30): size and guides on the root, a status letter that reads as its word.
-test("TreeView size sm, guides and a row's status", () => {
+test("TreeView size sm, guides and a row's status in the shared change words (components audit D6)", () => {
   const html = renderToString(h(TreeView, { "aria-label": "Files", size: "sm", guides: true, items: [
-    { id: "a", label: "One", status: "added" }, { id: "m", label: "Two", status: "modified" }, { id: "d", label: "Three", status: "removed" },
+    { id: "a", label: "One", status: "added" }, { id: "m", label: "Two", status: "modified" }, { id: "d", label: "Three", status: "deleted" },
+    { id: "u", label: "Four", status: "untracked" }, { id: "r", label: "Five", status: "renamed" },
   ] }));
   assert.match(html, /class="area-tree-view area-tree-view--navigation area-tree-view--sm area-tree-view--guides"/);
-  for (const [status, letter, word] of [["added", "A", "Added"], ["modified", "M", "Modified"], ["removed", "D", "Removed"]]) {
+  for (const [status, letter, word] of [["added", "A", "Added"], ["modified", "M", "Modified"], ["deleted", "D", "Deleted"], ["untracked", "U", "Untracked"], ["renamed", "R", "Renamed"]]) {
     assert.match(html, new RegExp(`<span class="area-tree-view__status" data-status="${status}"><span aria-hidden="true">${letter}</span><span class="area-sr-only">${word}</span></span>`));
   }
   assert.doesNotMatch(renderToString(h(TreeView, { "aria-label": "Files", items: [{ id: "x", label: "X" }] })), /area-tree-view__status|--guides/);
+  // `removed`, the deprecated spelling, arrives as `deleted`.
+  assert.match(renderToString(h(TreeView, { "aria-label": "Files", items: [{ id: "x", label: "X", status: "removed" }] })), /data-status="deleted"><span aria-hidden="true">D<\/span><span class="area-sr-only">Deleted<\/span>/);
+  for (const status of ["added", "modified", "deleted", "untracked", "renamed"]) assert.match(css, new RegExp(`\\.area-tree-view__status\\[data-status="${status}"\\]\\s*\\{\\s*color:\\s*var\\(--area-fg-change-${status}\\)`));
+});
+
+test("unseen is a dot apart from the status: the status keeps its ink (components audit D6)", () => {
+  const html = renderToString(h(TreeView, { "aria-label": "Files", items: [{ id: "x", label: "X", status: "modified", unseen: true }] }));
+  assert.match(html, /<span class="area-tree-view__unseen"><span class="area-sr-only">Unseen<\/span><\/span><span class="area-tree-view__status" data-status="modified">/);
+  assert.match(css, /\.area-tree-view__unseen\s*\{[^}]*background-color:\s*var\(--area-accent-indicator\)/);
 });
 
 // TreeView.tsx stickyBranches (2026-11-01): a pinned box for the eye, ahead of the rows, hidden from assistive tech.

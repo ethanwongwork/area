@@ -4,8 +4,10 @@
  * to materials and other axis of customization"). It renders on the Canvas, inside the Canvas's settings, so every
  * Inspector setting reaches it.
  *
- * Everything is an Area component except the chart: Area has no chart yet, so it is an SVG drawn in Area's tokens
- * (accent, edges, muted ink), a gap recorded in docs/COMPONENTS.md. People: David Tee, and teams for the rest.
+ * Everything is an Area component except the chart, an SVG drawn in Area's tokens (accent, edges, muted ink). Area's
+ * Chart (2026-11-07, docs/specs/chart.md) is not swapped in yet: it plots from zero in the series colours, with no dashed
+ * previous period, so the swap would change this dashboard's look; the owner decides. People: David Tee, and teams for
+ * the rest.
  */
 import { useState } from "react";
 import {

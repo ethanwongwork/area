@@ -27,7 +27,18 @@ export type SdkMessage =
 
 /** The SDK asked before a tool ran (`canUseTool`): what the Approval shows. */
 export interface PermissionRequest { type: "permission_request"; tool_use_id: string; tool_name: string; title: string; description: string; input: ToolInput }
-export type ChatEvent = SdkMessage | PermissionRequest;
+/** A question the agent asks with AskUserQuestion (the chat workflow study, P3): the question card; the run waits. */
+export interface AgentQuestion { question: string; header?: string; options: ReadonlyArray<{ label: string; description?: string }>; multiSelect?: boolean }
+export interface QuestionRequest { type: "question"; tool_use_id: string; questions: readonly AgentQuestion[] }
+export type ChatEvent = SdkMessage | PermissionRequest | QuestionRequest;
+
+/** What Area's own tools describe (electron/agent.cjs `areaTools`), as the chat draws them. */
+export interface ShownOption { name: string; difference: string; settings?: Readonly<Record<string, string>> }
+export interface ShowOptionsInput { question: string; options: readonly ShownOption[]; recommended?: number; picture?: string }
+export interface LoggedChange { thing: string; property: string; from?: string; to: string }
+export const SHOW_OPTIONS = "mcp__area__show_options";
+export const LOG_CHANGES = "mcp__area__log_changes";
+export const ASK = "AskUserQuestion";
 
 export interface RecordedEvent { wait: number; message: ChatEvent; /** Played instead of the rest when the person says no. */ denied?: RecordedEvent[] }
 export interface Recording { id: string; prompt: string; events: readonly RecordedEvent[] }
@@ -71,8 +82,64 @@ const edit = (file: string, oldString: string, newString: string, denied: Record
   ];
 };
 
+/** A question the run pauses on (AskUserQuestion's call, then the card); whatever is answered, the rest plays. */
+const question = (asked: AgentQuestion): RecordedEvent[] => {
+  const id = `toolu_recorded_${++toolCount}`;
+  return [
+    { wait: 160, message: { type: "assistant", message: { content: [{ type: "tool_use", id, name: ASK, input: { questions: [asked] } }] } } },
+    { wait: 120, message: { type: "question", tool_use_id: id, questions: [asked] } },
+    { wait: 200, message: { type: "user", message: { content: [{ type: "tool_result", tool_use_id: id, content: "The person answered." }] } } },
+  ];
+};
+
 const BUTTON = "packages/styles/src/components/button.css";
+const SURFACE = "packages/styles/src/components/surface.css";
 const STEPS = ["Find the outline Button's hover edge", "Choose the next stroke up", "Edit button.css", "Check it under Contrast More"] as const;
+
+/** Runs that show the chat's own parts (the chat workflow study, 2026-11-08): options as pictures, a question back,
+ *  changes in design words with Show code. Recorded, so nothing they show is written. */
+const WORKFLOW: Recording[] = [
+  {
+    id: "card-options",
+    prompt: "Show me a few directions for the cards",
+    events: [
+      ...thinking(1400, "Three directions that differ in one way each: corners, room and lift."),
+      ...tool(SHOW_OPTIONS, {
+        question: "Which direction suits the cards?",
+        options: [
+          { name: "Crisp", difference: "Tighter corners, compact", settings: { radius: "4", density: "28" } },
+          { name: "Soft", difference: "Rounder corners, more room", settings: { radius: "14", density: "36" } },
+          { name: "Lifted", difference: "A deeper shadow at rest", settings: { "shadow-resting": "6", radius: "10" } },
+        ],
+        recommended: 1,
+      } satisfies ShowOptionsInput, "Shown 3 options as pictures.", 200),
+      ...text("Here are three directions, each changing one thing. Soft is my pick: rounder corners and more room read calmer at this size. Pick one to try it on the theme."),
+      done(4200),
+    ],
+  },
+  {
+    id: "calmer-cards",
+    prompt: "Make the cards feel calmer",
+    events: [
+      ...thinking(1300, "Calmer could mean less contrast at the edge or more room inside; ask which."),
+      ...question({ question: "What should feel calmer?", header: "Calmer", options: [
+        { label: "The edge (Recommended)", description: "A lighter line round each card" },
+        { label: "The room inside", description: "More padding round the words" },
+        { label: "Both", description: "A lighter line and more room" },
+      ] }),
+      ...tool("Read", { file_path: SURFACE }, "surface.css (1,679 lines)", 380),
+      ...edit(SURFACE, "    --_card-edge: var(--area-card-edge, var(--area-edge-cards));", "    --_card-edge: var(--area-card-edge, var(--area-edge-dividers));", [
+        ...text("Okay, I left the cards as they are. Say if you'd like a different step."),
+        done(5200),
+      ]),
+      ...tool(LOG_CHANGES, { changes: [
+        { thing: "Cards", property: "Edge", from: "Cards", to: "Dividers" },
+      ] satisfies LoggedChange[] }, "Logged 1 design change.", 120),
+      ...text("The cards' edge is a step lighter, so they sit quieter on the page.\n\n<!-- more -->\n\nI used the Dividers edge, the one rules between rows take, rather than a new value. Increased contrast still strengthens it, so the cards stay distinct for anyone who needs that."),
+      done(8600),
+    ],
+  },
+];
 
 export const RECORDINGS: readonly Recording[] = [
   {
@@ -109,7 +176,9 @@ export const RECORDINGS: readonly Recording[] = [
       done(5600),
     ],
   },
+  ...WORKFLOW,
 ];
+
 
 export const DEFAULT_RECORDING = RECORDINGS[0]!;
 export const recordingFor = (prompt: string) => RECORDINGS.find(entry => entry.prompt === prompt) ?? DEFAULT_RECORDING;

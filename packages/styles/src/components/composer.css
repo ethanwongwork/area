@@ -75,7 +75,19 @@
      after the button (round 81). The stacked input keeps its 8, on the footer's + glyph. */
   .area-composer__actions--leading ~ .area-composer__input { padding-inline-start: 0; }
   .area-composer--stacked .area-composer__input { min-block-size: calc(var(--_composer-leading) * 2 + var(--area-space-12)); }
-  .area-composer__input { max-block-size: calc(var(--area-control-md) * 5); }
+  /* Eight lines, then it scrolls and offers Expand (owner 2026-11-08, the chat workflow study, P10: a reference grows to
+     seven lines then expands to the column, another to 384 then scrolls). Was five controls tall (150 at 30). */
+  .area-composer__input { max-block-size: calc(var(--_composer-leading) * 8 + var(--_composer-action) - var(--_composer-leading)); }
+  /* Expanded: the shell fills its container's height and the field the shell's, for a long prompt; the container gives
+     it the room (the Inspector's chat lets it take the panel). */
+  .area-composer[data-expanded] { flex: 1 1 auto; min-block-size: 0; }
+  .area-composer[data-expanded] .area-composer__entry { min-block-size: 0; }
+  .area-composer[data-expanded] .area-composer__input { max-block-size: none; block-size: auto; field-sizing: fixed; }
+  /* Expand and Collapse: a small ghost button at the field's top end, inside the entry so a context row above keeps its
+     chips clear; the field's words keep clear of it. */
+  .area-composer__entry:has(> .area-composer__expand) { position: relative; }
+  .area-composer__expand { position: absolute; inset-block-start: calc((var(--_composer-action) - var(--area-control-sm)) / 2); inset-inline-end: 0; z-index: 1; }
+  .area-composer__entry:has(> .area-composer__expand) > .area-composer__input { padding-inline-end: calc(var(--area-control-sm) + var(--area-space-4)); }
   /* Native fit to the text, within the min and max above; follows font and density changes at
      runtime. Composer.tsx measures only where this is unsupported. */
   @supports (field-sizing: content) { .area-composer__input { field-sizing: content; } }

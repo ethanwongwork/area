@@ -10,8 +10,11 @@
  * know about.
  */
 export { Button, type ButtonProps } from "./components/Button.tsx";
+export { SystemDefaults, useSystemDefault, type SystemDefaultsProps, type SystemDefaultsValue } from "./components/SystemDefaults.tsx";
 export { ButtonGroup, type ButtonGroupProps } from "./components/ButtonGroup.tsx";
 export { SplitButton, type SplitButtonProps } from "./components/SplitButton.tsx";
+export { CHANGE_STATUSES, CHANGE_MARK, changeStatus, type ChangeStatus, type ChangeStatusInput } from "./components/change-status.ts";
+export { announce, clearAnnouncements, useAnnouncement, ANNOUNCE_DELAY_MS, ANNOUNCE_CLEAR_MS, type AnnounceOptions, type AnnouncePoliteness } from "./components/announce.ts";
 export { Toaster, useToaster, type ToasterProps, type ToasterApi, type ToastOptions } from "./components/Toaster.tsx";
 export { SliderRange, type SliderRangeProps, type SliderRangeValue } from "./components/SliderRange.tsx";
 export { Input, InputAction, type InputProps, type InputActionProps } from "./components/Input.tsx";
@@ -25,14 +28,15 @@ export { ColorSwatchPicker, type ColorSwatchPickerProps, type ColorSwatchOption 
 export { ColorField, normalizeHexColor, type ColorFieldProps } from "./components/ColorField.tsx";
 export { ModelPicker, type ModelPickerProps, type ModelOption } from "./components/ModelPicker.tsx";
 export { ScrollToLatest, type ScrollToLatestProps } from "./components/ScrollToLatest.tsx";
-export { Message, MessageActions, type MessageProps, type MessageActionsProps } from "./components/Message.tsx";
+export { Message, MessageActions, MessageGroup, type MessageProps, type MessageActionsProps, type MessageGroupProps, type MessageStatus } from "./components/Message.tsx";
 export { PromptSuggestions, type PromptSuggestionsProps, type PromptSuggestion } from "./components/PromptSuggestions.tsx";
 export { HoverCard, type HoverCardProps } from "./components/HoverCard.tsx";
 export { ContextMenu, type ContextMenuProps } from "./components/ContextMenu.tsx";
 export { CommandPalette, type CommandPaletteProps, type CommandItem } from "./components/CommandPalette.tsx";
+export { highlightMatch } from "./components/highlight.tsx";
 export { Combobox, type ComboboxProps, type ComboboxOption } from "./components/Combobox.tsx";
 export { CustomSelect, type CustomSelectProps, type CustomSelectOption } from "./components/CustomSelect.tsx";
-export { Tag, type TagProps, type TagTone } from "./components/Tag.tsx";
+export { Tag, type TagProps, type TagColor, type TagTone } from "./components/Tag.tsx";
 export { TagPicker, type TagPickerProps, type TagOption } from "./components/TagPicker.tsx";
 export { DatePicker, type DatePickerProps } from "./components/DatePicker.tsx";
 export { ConfirmDialog, type ConfirmDialogProps } from "./components/ConfirmDialog.tsx";
@@ -53,6 +57,13 @@ export { TokenRow, type TokenRowProps } from "./components/TokenRow.tsx";
 export { CopyButton, CopyStatus, useCopy, COPY_FEEDBACK_MS, type CopyButtonProps, type CopyState, type CopyValue } from "./components/CopyButton.tsx";
 export { ListBox, ListBoxItem, ListBoxSection, type ListBoxProps, type ListBoxItemProps, type ListBoxSectionProps } from "./components/ListBox.tsx";
 export { Titlebar, SectionHeading, type TitlebarProps, type SectionHeadingProps } from "./components/AppShell.tsx";
+export { PageHeader, type PageHeaderProps } from "./components/PageHeader.tsx";
+export { SelectionBar, selectionCountLabel, type SelectionBarProps } from "./components/SelectionBar.tsx";
+export { Mention, withMentions, type MentionKind, type MentionProps, type MentionToken } from "./components/Mention.tsx";
+export { Splitter, type SplitterEvent, type SplitterProps } from "./components/Splitter.tsx";
+export { Chart, ChartNumber, chartTicks, type ChartDatum, type ChartKind, type ChartNumberProps, type ChartProps, type ChartSeries, type ChartView } from "./components/Chart.tsx";
+export { SettingRow, SettingsGroup, type SettingRowProps, type SettingsGroupProps } from "./components/SettingRow.tsx";
+export { FilterBar, FilterBarItem, FilterBarAdd, type FilterBarProps, type FilterBarItemProps, type FilterBarAddProps } from "./components/FilterBar.tsx";
 export { AssetRow, type AssetRowProps } from "./components/AssetRow.tsx";
 export { Folder, type FolderProps } from "./components/Folder.tsx";
 export { FilePage, type FilePageProps } from "./components/FilePage.tsx";
@@ -101,11 +112,11 @@ export { Indicator, IndicatorAnchor, type IndicatorProps, type IndicatorAnchorPr
 export { Count, type CountProps } from "./components/Count.tsx";
 export { AccordionItem, Accordion, type AccordionItemProps, type AccordionProps } from "./components/Accordion.tsx";
 export { Step, StepGroup, Reasoning, type StepProps, type StepGroupProps, type ReasoningProps, type StepRunStatus } from "./components/Step.tsx";
-export { EditSummary, EditSummaryFile, Diff, type EditSummaryProps, type EditSummaryFileProps, type EditFileState, type EditFileStatus, type DiffProps, type DiffHunk, type DiffLine } from "./components/EditSummary.tsx";
+export { EditSummary, EditSummaryChange, EditSummaryFile, Diff, type EditSummaryProps, type EditSummaryChangeProps, type EditSummaryFileProps, type EditFileState, type EditFileStatus, type DiffProps, type DiffHunk, type DiffLine } from "./components/EditSummary.tsx";
 export { Approval, type ApprovalProps, type ApprovalOption } from "./components/Approval.tsx";
 export { Plan, type PlanProps, type PlanItem } from "./components/Plan.tsx";
 export { TurnNotice, type TurnNoticeProps, type TurnNoticeStatus } from "./components/TurnNotice.tsx";
-export { Attachment, ComposerMenu, Queue, Timestamp, formatTimestamp, TIMESTAMP_GAP, type AttachmentProps, type ComposerMenuProps, type ComposerMenuItem, type ComposerMenuGroup, type QueueProps, type QueueItem, type TimestampProps } from "./components/ComposerParts.tsx";
+export { Attachment, ComposerMenu, Queue, Timestamp, formatTimestamp, TIMESTAMP_GAP, type AttachmentProps, type AttachmentStatus, type ComposerMenuProps, type ComposerMenuItem, type ComposerMenuGroup, type QueueProps, type QueueItem, type TimestampProps } from "./components/ComposerParts.tsx";
 
 export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps, type ColorModel, type ColorView, type ColorGamut, type OklchValue } from "./components/ColorPicker.tsx";
 export { AREA_COLOR_GRID } from "./components/color-grid.ts";

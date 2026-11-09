@@ -24,3 +24,10 @@ export const GalleryTimeFieldControlled = () => {
     </Field>
   );
 };
+/* A Field's success and warning reach the field, as Input's (components audit 2026-11-07, O1). */
+export const GalleryTimeFieldSuccess = () => (
+  <Field label="Label" validation="Success message" validationStatus="success"><TimeField hourCycle={12} defaultValue="09:30" /></Field>
+);
+export const GalleryTimeFieldWarning = () => (
+  <Field label="Label" validation="Warning message" validationStatus="warning"><TimeField hourCycle={12} defaultValue="23:30" /></Field>
+);

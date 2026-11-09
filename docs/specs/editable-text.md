@@ -170,3 +170,9 @@ text does not move between states. Not compared side by side with Figma in one s
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+### 2026-11-07 · The event in onValueChange (components audit O3)
+
+- **What changed:** `onValueChange(value, event)` passes the Enter key or the blur that committed.
+- **Why:** EditableText.tsx:18. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

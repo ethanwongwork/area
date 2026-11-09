@@ -34,3 +34,29 @@ test('a grid lays options out without Menu rows; sections are named groups', () 
 test('ListBoxItem outside a ListBox is an error', () => {
   assert.throws(() => render(h(ListBoxItem, { value: 'a' }, 'A')), /inside a ListBox/);
 });
+
+// docs/specs/list-box.md, "Several" (components audit V7, 2026-11-07).
+test('multiple: a multiselectable listbox whose chosen options are selected, the first of them the Tab stop', () => {
+  const html = render(h(ListBox, { 'aria-label': 'Label', multiple: true, defaultValues: ['two', 'three'] },
+    h(ListBoxItem, { value: 'one' }, 'Option one'), h(ListBoxItem, { value: 'two' }, 'Option two'), h(ListBoxItem, { value: 'three' }, 'Option three')));
+  assert.match(html, /role="listbox"[^>]*aria-multiselectable="true"/);
+  const selected = [...html.matchAll(/aria-selected="true"[^>]*data-value="(\w+)"/g)].map(match => match[1]);
+  assert.deepEqual(selected, ['two', 'three']);
+  assert.equal((html.match(/data-selected=""/g) || []).length, 2, 'each chosen row shows its check');
+  assert.equal((html.match(/tabindex="0"/gi) || []).length, 1);
+  assert.match(html, /data-value="two" tabindex="0"/i);
+  const controlled = render(h(ListBox, { 'aria-label': 'Label', multiple: true, values: ['one'], value: 'two' }, h(ListBoxItem, { value: 'one' }, 'A'), h(ListBoxItem, { value: 'two' }, 'B')));
+  assert.match(controlled, /aria-selected="true"[^>]*data-value="one"/, 'values wins; value is ignored with multiple');
+  assert.match(controlled, /aria-selected="false"[^>]*data-value="two"/);
+  const single = render(options('size'));
+  assert.doesNotMatch(single, /aria-multiselectable/);
+});
+
+test('multiple: the keyboard contract is in the source (Space toggles, Shift extends, Ctrl or Cmd+A all, grid click chooses one)', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../src/components/ListBox.tsx', import.meta.url), 'utf8');
+  assert.match(source, /if \(multiple\) toggle\(current\.dataset\.value, event\)/);
+  assert.match(source, /event\.shiftKey && \/\^\(Arrow\(Up\|Down\|Left\|Right\)\|Home\|End\)\$\/\.test\(event\.key\)/);
+  assert.match(source, /event\.key\.toLowerCase\(\) === "a"/);
+  assert.match(source, /layout === "grid" && event\.type === "click" && !pointer\.metaKey && !pointer\.ctrlKey/);
+});

@@ -32,7 +32,7 @@ export const GalleryBoard = () => (
 export const GalleryBoardCardProperties = () => (
   <BoardColumn title="In progress" color="purple" count={1} onAdd={add}>
     <BoardCard href="#board" icon={<DocumentIcon />} title="Title">
-      <Tag tone="info">Tag</Tag>
+      <Tag color="blue">Tag</Tag>
       <span>Oct 14</span>
       <Avatar size="sm" fallback="DT" aria-label="David Tee" />
     </BoardCard>

@@ -33,6 +33,9 @@ safe action, built on this modal; confirm-dialog.md).
 | composition | without close | Forced choice (confirmation) | shadcn `showCloseButton={false}` |
 | composition | with field, scrollable body | Forms and long content | shadcn (form), Primer (scrolling body) |
 | behaviour | modal with `trigger`, or controlled `open` / `defaultOpen` | Opens itself as a native modal; without a trigger, `open` opens it (a menu item asking for confirmation) | shadcn `DialogTrigger`; ChatGPT, Primer |
+| size | sm 384, **md 480** (default), lg 720, xl 880 | sm and md are Drawer's two widths, one name one width across the modal family; lg for a table or two columns, xl for a settings dialog with its own sidebar (V1) | Claude `{sm:400, md:520, lg:720, xl:880}`; Cursor sm 320 … xxl 640; Primer 296 / 320 / 480 / 640; tiles `size-sm` … `size-xl` |
+| boolean | `fullHeight` | The tallest the screen allows (less 64), whatever the content, so a dialog whose content changes doesn't jump; the body takes the room | Claude Dialog `fullHeight`; Primer `height`; tile `full-height` |
+| state | scrolled (`data-scrolled`) | A rule under the header once the body leaves its top: content passing under a fixed header needs an edge | Claude `scroll-timeline:--cds-dialog-scroll`; Cursor `scrollable{border-top:1px}`; tile `state-scrolled` |
 
 Excluded: a divided or tinted footer (shadcn's new base footer is a muted strip with a top
 border; Primer divides the header). The prior decision keeps the footer undivided, and
@@ -91,16 +94,17 @@ footer action in the opposite corner by the same rule (12/12).
 |---|---|---|---|
 | surface · inset, gap | 16 (border included), `inset-surface-md` between sections (16, compact 12) | shadcn 16/16; Primer 16 | ChatGPT 24 |
 | surface · compact | inset **16** (border included, held), corner **16** (the surface corner plus 4, below), section gap 12 (`inset-surface-md`) | Figma Share dialog (`compact/figma--share-dialog--open--light`): header title 16 in, field row 16 in, corner 13; VS Code save dialog 13 / 9, corner 8 | Owner 2026-10-02 (cursor-desktop.md): Figma holds 16 in its dense UI; R8's compact 12 rested on VS Code alone |
-| surface · width | 480 preferred, at most the viewport less 32 (surface.css:922) | Between shadcn 384 and ChatGPT 600 / Primer 640 | — |
+| surface · width | by `size`: 384 / **480** / 720 / 880, at most the viewport less 32 (`--_dialog-size`, surface.css) | md: between shadcn 384 and ChatGPT 600 / Primer 640; sm: shadcn 384 and Drawer's sm; lg, xl: Claude | Claude's sm 400 and md 520 were not taken: md stays the 480 Dialog always had, and sm takes Drawer's 384 so one name is one width |
+| header · scroll rule | `edge-dividers`, 1px, edge to edge inside the border, in the middle of the header-to-body gap (rounded to a pixel); `opacity` 0 → 1 on `fade-fast` while `data-scrolled` | Claude, Cursor (a rule over the body only when it scrolls) | Undivided at rest, as Excluded below keeps the footer |
 | surface · border | `border-width` `border-float`, the floating-surface edge (surface.css:928) | All use a 1px ring | Was decorative |
 | surface · shadow | **`--area-shadow-modal`**, the Elevation axis's modal role: `0 0 8` + `0 14 28` at twice the Elevation step in % (6% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts); the Surface axis's `shadow-edge` is listed first (surface.css:935) | The topmost surface, over Popover and Menu's float (elevation-2026-10-14); Surface axis (owner, 2026-10-14) | Was `shadow-2` (1–2px). A Surface axis role since audit S10. References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |
 | scrim | **`scrim`**: #00000022 (13.3%) in light, #00000080 in dark, no blur (aliases.ts:155) | ChatGPT 13.3%; shadcn 10% | Was 65% with a 2px blur. Dark value not measured |
 | close · control | **32px ghost neutral Button** (md), Area `dismiss` glyph (`primitives.tsx:1699`) | ChatGPT 32, Primer 32; shadcn 28 | Was a bespoke 28px button whose foreground changed on hover (against the fixed-foreground rule). The written exception to the rectangular-surface close (ghost sm, 28), which Popover, Toast and Alert use (audit S9, owner) |
 | close · position | **8 from the top and 8 from the side**; icon on the 16 inset both ways | shadcn 8/8, Primer 8/8 (half the inset); ChatGPT 12/12 | Was 16/16 (box on the inset, icon at 22) |
-| title · alignment | line centred on the close (centres 24 and 24; cap 16.8) | Popover rule: header top = (icon − title leading) / 2 | Was trimmed to its cap on the inset, so the close's centre sat 7 below the title's |
+| title · alignment | line centred on the close (header top = (16 − 18) / 2, the title's own line; it read a fixed 24 until 2026-11-06, 2 off the 22 title) | Popover rule: header top = (icon − title leading) / 2 | Was trimmed to its cap on the inset, so the close's centre sat 7 below the title's |
 | title · without close | cap on the 16 inset (`text-box: trim-start`) | Popover | — |
-| title · type | **16/24 strong** (pass 2) | ChatGPT 16/24 (600), shadcn 16 (500); typography rule: standalone-surface title, as Card | Owner (pass 2): 20/28 regular looked too big, 1.4× the description. Area never exceeds 500 |
-| title → description | 4 gap, description keeps its line box; title baseline to cap **15.6**, as Card | Card (same 16/14 pair); Popover 15.1; shadcn 15.5 | Pass 0: 8 (both trimmed); pass 1: 15 with a trimmed description |
+| title · type | **the text's size, strong**: `text-base` 13/18 500, default ink (2026-11-06 balance pass) | Cursor's confirm (12/500 over 12), its settings rows (13 over 13); DESIGN_SYSTEM.md "Text pairs" | ChatGPT 16/24 (600), shadcn 16. Pass 2 (owner): 20/28 regular was too big, 1.4×; `title-xs` 16/22 over 13 was 1.23× after the 2026-11-02 ramp |
+| title → description | **one step (4) off**: baseline to cap **12.8**, beside the description's own 8.8 | Card, Popover, Alert, Toast (Text pairs); Cursor's confirm 4 | Pass 0: 8 (both trimmed); pass 1: 15; 2026-10-22: 12 (16 over 14); 2026-11-02 to 11-06: 10.0 (16 over 13); 2026-11-06 first pass: 8.8, joined |
 | surface · radius | **16** at the default and compact: the surface corner plus 4 (`radius-container` + 4, never more than twice the surface corner, so square with a square surface; Pill 28) (surface.css:917) | Concentric with the corner close at the default (8 + 8); ChatGPT 16; owner 2026-10-03 (one corner setting) | Pass 1: 12, not concentric (12 − 8 = 4 ≠ 8). Away from the default the close keeps the control step and is no longer concentric |
 | footer | actions end-aligned on the 16 inset, `ui-cluster` apart, wrapping; under 480px wide they stretch (surface.css:1001-1011) | shadcn 16, Primer 16 | ChatGPT 12/12 corner |
 | title element | `h2` | Popover, shadcn `DialogTitle` | Was a `div` |
@@ -267,3 +271,42 @@ Open questions: none new.
   across the whole Stage. The component itself is unchanged.
 - **Why:** The demos still carried a full-width style from the first gallery, so the Stage's "real size" view showed
   a dialog much wider than any you would ship.
+
+## Review note, 2026-11-06 (balance pass; owner: "Keep it")
+
+- **What changed:** the title is 13/18 strong in the default ink over the 13/18 muted description, joined as its first
+  line (8.8 baseline to cap, the description's own line gap); it was 16/22 joined 10.0. The close centres on the title's
+  own line, no longer a fixed 24. Confirm dialog and Drawer share it.
+- **Why:** the owner's note on a confirm ("no spacing logic between the title and the text … the type style size contrast with the text is large … make sure all of this is intentional"). The 2026-11-02 ramp moved `title-xs` from 15 to 16 at type 13, so a 16 title sat over 13 text, 1.23× (the owner had approved 16 over 14, 1.14×, on 2026-09-26), and joined 10.0 baseline to cap beside the text's own 8.8: near the line gap but not on it. Cursor sets its confirm's title at its text's size (12/500 over 12) and its settings rows 13 over 13. DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
+
+- **Second look (owner: "the space between the title and the copy still doesnt look right"):** joined on the copy's
+  line, the title read as the paragraph's first line. Every surface title now stands one step (4) off its copy: 12.8
+  baseline to cap beside the copy's 8.8. Compared at 0, 4 and 6 on the review page; the owner picked 4 ("4 is right",
+  2026-11-06; Cursor's confirm sets its message 4 under its title).
+
+### 2026-11-07 · One dismiss API and part (system gaps C4)
+
+- **What changed:** the close button's part is `area-dialog__dismiss` (was `__close`).
+- **Why:** one dismiss API and one part name across the families that close or remove (Governance § 4; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Sizes, full height and the scrolled rule (components audit V1)
+
+- **What changed:** `size` (sm 384, md 480 default, lg 720, xl 880; `--_dialog-size`), `fullHeight` (`--full-height`:
+  the surface at the screen less 64, rounded down to a pixel so the modal's even-pixel centring holds) and the
+  `scrolled` state: Dialog sets `data-scrolled` from its body's scroll position (`onScroll`; React skips the render when
+  it doesn't change), and the header draws a 1px rule in the separator's line under itself. Every Dialog now carries
+  its size class (`area-dialog--md` by default), as Drawer does.
+- **Deviation from the proposal:** the proposal said md 520 (Claude's). Dialog's width was already 480
+  (`calc(var(--area-space-96) * 5)`), so md stays 480, and sm is 384 rather than 400 because Drawer's sm is 384: Dialog
+  and Drawer now share sm and md exactly. `xl` is a recorded Governance deviation (a width ladder with measured uses).
+  The scroll rule is set by React rather than a scroll-driven animation, so it works without `scroll-timeline` support.
+- **Not taken:** 2xl 1024 / 3xl 1152 (no Area use yet), Cursor's centred header and header stepper, Primer's responsive
+  position (bottom sheet, full screen on a phone). Drawer's body is a Scroll area and draws no header rule yet: the same
+  rule would suit it, left for the owner.
+- **Confirm dialog and Command palette take no size** (their specs, 2026-11-07): one is a fixed question, the other a
+  search over a list with its own measured width.
+- **Why:** docs/research/components-audit-2026-11-07/chat-apps.md (Dialog sizes, `fullHeight`, the header rule), cursor.md (widths and the scrolled body
+  rule), primer.md (width and height scale), internal.md (Dialog had none of Drawer's `size`). The owner took every
+  recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

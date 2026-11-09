@@ -1,3 +1,4 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { forwardRef, useMemo } from "react";
 import { InputGroupContext } from "./input-group-context.ts";
 import type { HTMLAttributes } from "react";
@@ -19,6 +20,7 @@ export interface InputGroupProps extends HTMLAttributes<HTMLDivElement> {
 export const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(function InputGroup(
   { variant, size, fullWidth, disabled, required: _required, "data-validation-status": status, className, children, ...rest }, ref,
 ) {
+  variant = useSystemDefault("inputGroup", "variant", variant); // the system's default (SystemDefaults) where the use gives none
   const invalid = rest["aria-invalid"] === true || rest["aria-invalid"] === "true";
   const validationStatus = invalid ? "error" : status;
   const state = useMemo(() => ({ disabled, validationStatus }), [disabled, validationStatus]);

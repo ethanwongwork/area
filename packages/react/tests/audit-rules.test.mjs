@@ -15,10 +15,10 @@ test('Alert closes with a ghost small Button and the Area glyph (audit S9)', () 
 
 test('Chip dismisses through onDismiss with the Area glyph; onRemove still works (audit S9)', () => {
   const html = renderToString(h(Chip, { kind: 'input', onDismiss: () => {}, dismissLabel: 'Remove Design' }, 'Design'));
-  assert.match(html, /class="area-chip__remove" aria-label="Remove Design"/);
+  assert.match(html, /class="area-chip__dismiss" aria-label="Remove Design"/);
   assert.match(html, /data-area-glyph="dismiss"/);
   const legacy = renderToString(h(Chip, { kind: 'input', onRemove: () => {} }, 'Design'));
-  assert.match(legacy, /class="area-chip__remove" aria-label="Remove Design"/); // content-aware default (audit C-6)
+  assert.match(legacy, /class="area-chip__dismiss" aria-label="Remove Design"/); // content-aware default (audit C-6)
 });
 
 test('Dialog names its close control with dismissLabel (audit S9)', () => {
@@ -129,7 +129,7 @@ test('a removable chip keeps ref and props on one control, style on the chip; Ch
   const { ChipGroup } = await import('../dist/modules/index.js');
   const html = renderToString(h(Chip, { kind: 'input', onDismiss: () => {}, id: 'tag', style: { margin: 4 } }, 'David Tee'));
   assert.match(html, /^<span class="area-chip[^"]*" style="margin:4px">/);
-  assert.match(html, /<button id="tag" type="button" class="area-chip__remove" aria-label="Remove David Tee"/);
+  assert.match(html, /<button id="tag" type="button" class="area-chip__dismiss" aria-label="Remove David Tee"/);
   assert.match(renderToString(h(ChipGroup, { label: 'Filters' })), /role="group" aria-label="Filters"/);
 });
 
@@ -162,11 +162,10 @@ test('MenuSub is a menuitem that opens a nested auto popover menu (audit D-10)',
   assert.match(html, /<div role="menu" class="area-menu" id="[^"]+" popover="auto" tabindex="-1" aria-label="Move to"/);
 });
 
-test('Toaster renders its live regions before any toast; a danger Toast is an alert (audit E-11)', async () => {
+test('Toaster speaks through the shared announcer, not regions of its own; a danger Toast is an alert (audit E-11, components audit D1)', async () => {
   const { Toaster, Toast } = await import('../dist/modules/index.js');
   const html = renderToString(h(Toaster, null, h('p', null, 'App')));
-  assert.match(html, /role="status" aria-live="polite"/);
-  assert.match(html, /role="alert" aria-live="assertive"/);
+  assert.doesNotMatch(html, /aria-live|role="status"|role="alert"/);
   assert.match(html, /<section class="area-toaster" aria-label="Notifications \(F8\)" tabindex="-1" hidden="">/);
   assert.match(renderToString(h(Toast, { tone: 'danger' }, 'Failed')), /class="area-toast__content" role="alert"/);
   assert.match(renderToString(h(Toast, null, 'Saved')), /class="area-toast__content" role="status"/);

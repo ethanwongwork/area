@@ -9,12 +9,15 @@ import { NumberField } from "./NumberField.tsx";
 import { Select } from "./forms.tsx";
 import { Segmented } from "./primitives.tsx";
 import { Glyph } from "./Glyph.tsx";
+import { useAnnouncement } from "./announce.ts";
 import { AREA_COLOR_GRID } from "./color-grid.ts";
 import { clamp, contrastBand, contrastRatio, hslToHsv, hsvToRgb, inSrgb, oklchToRgb, rgbToHsl, rgbToHsv, rgbToOklch, type Rgb } from "./color-math.ts";
 import { colorPickerVariants, MANIFESTS, type VariantProps } from "../variants.ts";
 
 const byte = (n: number) => Math.round(clamp(n, 0, 255)).toString(16).padStart(2, "0").toUpperCase();
 const hexToRgb = (hex: string) => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)) as Rgb;
+
+const GAMUT_NOTE = "Outside sRGB: showing the nearest color with less chroma.";
 
 /** HSV conversion keeps hue/saturation state separate from the serialized RGB value. */
 export function hexToHsv(hex: string): [number, number, number, number] {
@@ -289,6 +292,11 @@ const SpectrumPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function Spe
     const threshold = contrast?.level === "AAA" ? 7 : 4.5;
     return { ratio: contrastRatio(shown, bg), threshold, band: contrastBand(h, bg, threshold) };
   }, [background, contrast?.level, rgb[0], rgb[1], rgb[2], a, h]);
+  // Said through the shared announcer when it changes (components audit D1): whether contrast passes, not every
+  // ratio while dragging, and the gamut note when the color leaves sRGB.
+  const passes = check ? check.ratio >= check.threshold : null;
+  useAnnouncement(passes === null ? null : `Contrast ${passes ? "passes" : "fails"} ${contrast?.level ?? "AA"}`);
+  useAnnouncement(gamutMapped ? GAMUT_NOTE : null);
   const bandPath = check && (() => {
     const steps = check.band.length - 1;
     const x = (i: number) => (i / steps * 100).toFixed(2);
@@ -351,7 +359,8 @@ const SpectrumPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function Spe
         items={views.map(item => ({ value: item, label: VIEWS[item], disabled }))} onValueChange={next => chooseView(next as ColorView)} />}
       {check && <div className="area-color-picker__contrast" data-pass={check.ratio >= check.threshold || undefined}>
         <span className="area-color-picker__contrast-pair" aria-hidden="true"><span style={{ "--_swatch-color": background } as CSSProperties} /></span>
-        <span className="area-color-picker__contrast-ratio" role="status" aria-label={`Contrast ${check.ratio.toFixed(2)} to 1 against ${background}, ${check.ratio >= check.threshold ? "passes" : "fails"} ${contrast?.level ?? "AA"}`}>
+        <span className="area-sr-only">{`Contrast ${check.ratio.toFixed(2)} to 1 against ${background}, ${check.ratio >= check.threshold ? "passes" : "fails"} ${contrast?.level ?? "AA"}`}</span>
+        <span className="area-color-picker__contrast-ratio" aria-hidden="true">
           {check.ratio.toFixed(2)}<span className="area-color-picker__contrast-unit"> : 1</span></span>
         <span className="area-color-picker__contrast-level" aria-hidden="true">
           <Glyph name={check.ratio >= check.threshold ? "check" : "dismiss"} />{contrast?.level ?? "AA"}</span>
@@ -396,7 +405,7 @@ const SpectrumPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function Spe
             onValueCommit={n => { if (n !== null) set(3, n); }} />}
         </InputGroup>
       </div>
-      {gamutMapped && <p className="area-color-picker__note" role="status">Outside sRGB: showing the nearest color with less chroma.</p>}
+      {gamutMapped && <p className="area-color-picker__note">{GAMUT_NOTE}</p>}
     </div>
     {(swatches.length > 0 || onAddSwatch) && <div className="area-color-picker__swatches">
       <div className="area-color-picker__heading"><span>{swatchesLabel}</span>

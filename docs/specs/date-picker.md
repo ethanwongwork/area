@@ -91,6 +91,8 @@ Field insets: Select's (text 10 at md; with an icon, the icon square 8 from the 
 | placeholder | `input-placeholder` ink ("Pick a date" by default; ghost demo "Empty", Notion's) | Select |
 | disabled | Select's disabled paint; never opens | Select |
 | invalid | `select-invalid-color` edge | Select |
+| success / warning | `select-success-color` / `select-warning-color` edge and halo, from `validationStatus` or a Field's status (2026-11-07) | Select |
+| read-only | rest paint, no hover, default cursor; the trigger is a focusable `combobox` with `aria-readonly` and `aria-expanded="false"`, and never opens (2026-11-07; a button has no read-only state) | Input, Custom select |
 | typed text invalid | Input invalid edge until edited | Input |
 
 ## Behavior and accessibility
@@ -219,3 +221,9 @@ The trigger's label is not selectable. See [interaction polish](../research/inte
 - 2026-10-08 · owner approved Custom select's recommendations (custom-select.md Q4, Q5, Q7), which name Date picker → no visible change: the field has no chevron today (open question 4). If one is added, it takes the shared field chevron inset (`inset.css`, 8 from the edge at sm/md) and `input-chevron` ink, and stays still.
 - 2026-10-08 · owner: approved on the component review page (re-review after the requested changes).
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft`, as Input's; ghost stays chromeless.
+
+### 2026-11-07 · Success, warning and read-only; open and defaultOpen; the ref on the trigger (components audit O1, O2, O3, O7)
+
+- **What changed:** `validationStatus` and a Field's status paint the trigger with Select's success and warning edges; `readOnly` shows a date set elsewhere (a focusable `combobox` with `aria-readonly` that never opens; rest paint, no hover); `open` / `defaultOpen` join `onOpenChange`; the ref now reaches the trigger button, where the native props and Field's id already landed (was the wrapper div).
+- **Why:** DatePicker.tsx:22 (invalid only), :37 (onOpenChange only), :10, :56 (`forwardRef<HTMLDivElement>` beside button props); Custom select forwards to its trigger. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

@@ -24,6 +24,8 @@ export interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title
   modal?: boolean;
   /** Shows the corner close control. On by default. */
   showCloseButton?: boolean;
+  /** Called by the close control before it closes the drawer, as Dialog's (one close API across the modal family). */
+  onDismiss?: () => void;
   dismissLabel?: string;
   /** Opens it when clicked. */
   trigger?: ReactElement<{ onClick?: (event: MouseEvent<HTMLElement>) => void }>;
@@ -40,7 +42,7 @@ export interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title
  * on the scrim closes it. Header, body and footer are Dialog's.
  */
 export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
-  { title, description, footer, side, size, actions, modal: isModal = true, showCloseButton = true, dismissLabel = "Close", trigger, open: openProp, defaultOpen, onOpenChange,
+  { title, description, footer, side, size, actions, modal: isModal = true, showCloseButton = true, onDismiss, dismissLabel = "Close", trigger, open: openProp, defaultOpen, onOpenChange,
     inline, className, children, ...rest }, ref,
 ) {
   const id = useId();
@@ -82,8 +84,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
         {title ? <h2 className="area-drawer__title" id={`${id}-title`}>{title}</h2> : null}
         {description ? <p className="area-drawer__description" id={`${id}-description`}>{description}</p> : null}
       </div>
-      {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-drawer__close" aria-label={dismissLabel}
-        icon={<Glyph name="dismiss" />} onClick={() => setOpen(false)} /> : null}
+      {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-drawer__dismiss" aria-label={dismissLabel}
+        icon={<Glyph name="dismiss" />} onClick={() => { onDismiss?.(); setOpen(false); }} /> : null}
     </div> : null}
     {children ? <ScrollArea className="area-drawer__body" viewportProps={{ tabIndex: undefined }}>{children}</ScrollArea> : null}
     {footer ? <div className="area-drawer__footer">{footer}</div> : null}

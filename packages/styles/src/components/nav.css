@@ -125,7 +125,7 @@
   .area-nav__toggle::after { content: ""; position: absolute; inset: 0; border-radius: var(--area-radius-row); }
   .area-nav__toggle:focus-visible { outline: none; }
   .area-nav__toggle:focus-visible::after { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
-  .area-nav__chevron { display: flex; flex-shrink: 0; opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-nav__chevron { display: flex; flex-shrink: 0; opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
   .area-nav__chevron svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
   .area-nav__toggle[aria-expanded="false"] .area-nav__chevron svg { rotate: -90deg; }
   .area-nav__toggle[aria-expanded="false"] .area-nav__chevron svg:dir(rtl) { rotate: 90deg; }
@@ -233,7 +233,7 @@
   /* Row plates: the component hover fill, then the active fill for the current page. Menu,
      Tree view, Table and Select use the same pair. */
   @media (hover: hover) {
-    .area-nav__item:hover:not([data-disabled]) {
+    .area-nav__item:hover:not([data-disabled], [data-inactive]) {
       background-color: var(--area-bg-component-hover);
     }
   }
@@ -258,8 +258,8 @@
   }
   /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
      takes the pressed fill while held, one step firmer than selected, landing at once like the hover. */
-  .area-nav__item:active:not([data-disabled]),
-  .area-nav__row:has(> .area-nav__item:active:not([data-disabled])) { background-color: var(--area-bg-component-pressed); }
+  .area-nav__item:active:not([data-disabled], [data-inactive]),
+  .area-nav__row:has(> .area-nav__item:active:not([data-disabled], [data-inactive])) { background-color: var(--area-bg-component-pressed); }
   .area-nav__item:is(:active, [aria-current]:not([aria-current="false"])),
   .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { transition-duration: var(--area-hover-in); }
 
@@ -311,6 +311,10 @@
     cursor: not-allowed;
     opacity: var(--area-opacity-disabled);
   }
+  /* Inactive (components audit V2, 2026-11-07): drawn as disabled, but it keeps its Tab stop, so its parts take the
+     opacity and the item itself doesn't: the focus ring stays at full strength. No hover or press plate. */
+  .area-nav__item[data-inactive] { cursor: not-allowed; }
+  .area-nav__item[data-inactive] > * { opacity: var(--area-opacity-disabled); }
 
   .area-nav__icon {
     display: inline-flex;
@@ -394,7 +398,7 @@
     border-radius: var(--_nav-row-radius, var(--area-radius-row));
     transition: var(--area-transition);
   }
-  @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current]:not([aria-current="false"]))):hover { background: var(--area-bg-component-hover); } }
+  @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [data-inactive], [aria-current]:not([aria-current="false"]))):hover { background: var(--area-bg-component-hover); } }
   /* Any current value (page, location, step) marks the row, as it marks the item (audit D-29). */
   .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { background: var(--area-bg-component-active); }
   .area-nav--marker .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { background: transparent; }
@@ -402,7 +406,7 @@
   .area-nav__row:has(> .area-nav__item:active:not([data-disabled])) { transition-duration: var(--area-press-in); }
   /* Pressed, restated after the row's hover: that rule's :has() outranks the press above, so a held row showed only
      its hover (interaction polish, 2026-10-16). */
-  .area-nav__row:has(> .area-nav__item:active:not([data-disabled])):active { background: var(--area-bg-component-pressed); }
+  .area-nav__row:has(> .area-nav__item:active:not([data-disabled], [data-inactive])):active { background: var(--area-bg-component-pressed); }
 
   .area-nav__row > .area-nav__item { flex: 1; }
   /* A horizontal row hugs its item and never shrinks, as a horizontal item does: past its room the Nav scrolls. */
@@ -433,7 +437,7 @@
    * always shows them. They keep their place, so the row's text never reflows.
    */
   @media (hover: hover) {
-    .area-nav__row--reveal > .area-nav__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+    .area-nav__row--reveal > .area-nav__actions { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
     .area-nav__row--reveal:not(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { pointer-events: none; }
     .area-nav__row--reveal:is(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { opacity: 1; transition-duration: 0s; }
     /* A horizontal row keeps its actions while it is current, as Tree view's selected row does (owner, 2026-10-29):
@@ -472,7 +476,7 @@
    * at once on hover and back on `fast`. Without hover the actions always show and the count stays hidden.
    */
   .area-nav__row--reveal:has(> .area-nav__item > .area-nav__trailing) { position: relative; padding-inline-end: 0; }
-  .area-nav__row--reveal > .area-nav__item > .area-nav__trailing { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-nav__row--reveal > .area-nav__item > .area-nav__trailing { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
   .area-nav__row--reveal:has(> .area-nav__item > .area-nav__trailing) > .area-nav__actions { position: absolute; inset-block: 0; inset-inline-end: var(--_nav-action-inset); }
   @media (hover: hover) {
     .area-nav__row--reveal:is(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__item > .area-nav__trailing { opacity: 0; transition-duration: 0s; }

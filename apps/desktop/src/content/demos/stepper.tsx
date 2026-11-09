@@ -56,7 +56,7 @@ export const GalleryStepperContent = () => (
 export const GalleryStepperInvalid = () => (
   <Stepper current={2} aria-label="Label" style={wide}>
     <StepperStep title="Step one" />
-    <StepperStep title="Step two" status="invalid" />
+    <StepperStep title="Step two" status="error" />
     <StepperStep title="Step three" />
   </Stepper>
 );

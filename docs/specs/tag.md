@@ -36,10 +36,10 @@ Badge-height (20) with body-size text (14 regular); that pairing is why it is it
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| tone | neutral (default), gray, brown, info, success, warning, caution, danger, discovery, pink | Notion's default, gray, brown, blue, green, orange, yellow, red, purple, pink | Notion select / multi-select / status tags |
-| size | sm 20 (default), md 24 | Notion's 20; 24 beside 32px controls (Tag picker lg) | Notion |
+| color | neutral (default), gray, brown, orange, yellow, green, blue, purple, pink, red (`tone` a deprecated alias) | Notion's default, gray, brown, orange, yellow, green, blue, purple, pink, red; Board column's set | Notion select / multi-select / status tags |
+| size | md 20 (default), lg 24 (Badge's names; were sm and md) | Notion's 20; 24 beside 32px controls (Tag picker lg) | Notion |
 | content | leading icon (12) | A glyph before the label | — |
-| behavior | removable (`onRemove`) | Notion's × in a multi-select field | `notion--tag-removable--*` |
+| behavior | removable (`onDismiss`) | Notion's × in a multi-select field | `notion--tag-removable--*` |
 | state | disabled | Field disabled | — |
 
 Every Notion tag colour is mapped.
@@ -65,7 +65,7 @@ Every Notion tag colour is mapped.
 | height | 20 (`mark-label-md`) | Notion | — |
 | corner | the radius setting for 20 (4 at default) | Notion 4 | — |
 | text | 14/20 regular, the tone's ink | Notion 14 regular | Line box 20 fills the tag |
-| fill and ink | Each tone is its tone's soft tint under its tone's words, the pair a soft Badge paints: `<tone>-surface` and `fg-<tone>` (gray: `gray-surface`, `fg-gray`), so Tone tint and Tone contrast reach Tag and a Tag matches its Badge, Callout and Board column in both modes. Neutral keeps its translucent default. At the defaults, light: caution #905e00 on #fcf7e5, danger #c8023a on #ffe8e9, info #015cd2 on #e4efff; dark: caution #fbc13b on #302806 | Owner, 2026-11-03: Tag and Board onto the tone tokens | Until 2026-11-03: light literals, one tint at OKLCH L 0.955 / C 0.035 under inks at L ≤ 0.49; dark, the vivid ink on a 16% wash of itself with a label lift. The shared tint is lighter at the default (C 0.025 at rest); Tone tint 130–160 carries more. Contrast is the tones' gate (contrast/tone-floor.test.ts) |
+| fill and ink | Each colour reads its hue's roles, `hue-<hue>-bg` under `hue-<hue>-text` (components audit D5), which are its tone's soft tint under its tone's words, the pair a soft Badge paints: `<tone>-surface` and `fg-<tone>` (gray: `gray-surface`, `fg-gray`), so Tone tint and Tone contrast reach Tag and a Tag matches its Badge, Callout and Board column in both modes. Neutral keeps its translucent default. At the defaults, light: caution #905e00 on #fcf7e5, danger #c8023a on #ffe8e9, info #015cd2 on #e4efff; dark: caution #fbc13b on #302806 | Owner, 2026-11-03: Tag and Board onto the tone tokens | Until 2026-11-03: light literals, one tint at OKLCH L 0.955 / C 0.035 under inks at L ≤ 0.49; dark, the vivid ink on a 16% wash of itself with a label lift. The shared tint is lighter at the default (C 0.025 at rest); Tone tint 130–160 carries more. Contrast is the tones' gate (contrast/tone-floor.test.ts) |
 | start side | 6 | Notion | — |
 | × | 16 box 2 in from the end and top, 12 glyph drawn at its 12 line (`Glyph size={12}`, as Badge's), ink 7.5 ≈ Notion's 7.4, in the tag's ink (as Badge's dismiss) | Notion (geometry); peer Badge (colour) | Notion's × is muted grey; beside the vivid inks a grey × read as a separate object (owner, 2026-10-06). Was the 16 drawing shrunk to 12, a 0.84px line (0.67 in the gallery's 0.8 view) that looked pixelated; now ~1px |
 | × hover | a 12% plate in the ×'s ink, radius 2 (concentric: 4 − 2) | System rule: foreground fixed on hover | Notion dims the × to 80% instead; Badge's round plate met the tag's corner on a different curve (the owner's "dismiss backplate") |
@@ -272,6 +272,33 @@ Text side and optical centre (owner, 2026-10-17: "the padding on the left side o
 Text size: the UI size while the tag is at least its line tall (Notion's 14 in 20; md 13 in 18 at Compact), the small size when it is shorter (`sign(ui-leading − height)`): Compact 13's 14 tag sets 11, as Badge, Count, Kbd and Citation do at that height; it held 13, 0.93 of its height (owner, 2026-10-17: "the type here looks way too big for this backplate").
 
 Icon side and gap: an icon centres in the tag's end square, `(h − icon) / 2` (4 at 20, 6 at 24), and stands the xs icon gap (4) from the label, as Badge's at the same height; it was 6 in and 2 from the label (the text side's Notion literal). The label joins inset.css's cap-trimmed text slots (at type 13 its cap sat 1px low), and the remove control's track centres, so a 12 glyph in Compact 13's 10 box overflows evenly (it hung 1 low). The 12-in-10 size is still open. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+
+### 2026-11-07 · One dismiss API and part (system gaps C4)
+
+- **What changed:** the × takes `onDismiss` / `dismissLabel` and its part is `area-tag__dismiss`; `onRemove` / `removeLabel` stay as deprecated aliases for one release.
+- **Why:** one dismiss API and one part name across the families that close or remove (Governance § 4; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Label colours (system gaps C5)
+
+- **What changed:** `color` replaces `tone`, with Board column's ten hues (neutral, gray, brown, orange, yellow, green, blue, purple, pink, red); the classes are `area-tag--<hue>`. `tone` still works for one release (info blue, success green, warning orange, caution yellow, danger red, discovery purple). Paint is unchanged: each hue reads the same tokens it did.
+- **Why:** one colour vocabulary for labels and one ink for status icons (GOVERNANCE.md § 4; owner picked Build on the
+  system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Size names (system gaps C8)
+
+- **What changed:** the sizes are `md` (20, the default) and `lg` (24), Badge's and Count's names for those heights; they were `sm` and `md`. No alias: the old `md` is the new `lg`, so a mapped `md` would be ambiguous; every use in the repository moved.
+- **Why:** one name, one size across the marks and one meaning for an aspect name (GOVERNANCE.md § 4; owner picked
+  Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Every hue's roles (components audit D5)
+
+Each `color` reads the hue role table (`--area-hue-<hue>-<role>`, packages/tokens/src/semantic/hues.ts; DESIGN_SYSTEM.md, "Every hue has the same roles"): `--_bg: var(--area-hue-<hue>-bg)`, `--_fg: var(--area-hue-<hue>-text)`. The roles alias the
+same tone tokens, and the neutral literal (rgba(42,28,0,.07), dark white 10%) moved into `hue-neutral-bg`, so every value
+is unchanged (no contrast floor forced a change). The table gives Tag an icon, outline, accent and translucent role per
+hue for later variants; none is drawn yet.
 
 ## Review note, 2026-11-07 (marks on one line: vertical)
 

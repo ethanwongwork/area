@@ -151,6 +151,9 @@
   /* Beside a multiline control the label sits on its first text line, not the middle of the box
      (audit B-23): top-aligned and dropped by the Textarea's block inset at md (12 less 4). */
   :is(.area-field--horizontal, .area-field--inline):has(> .area-textarea) { align-items: start; }
+  /* Beside a list of options (a vertical Stack of checkboxes, as an inspector's inventory rows) the label sits on the
+     list's first line: both start at the row's top and share one line height (2026-11-08, system inventory). */
+  :is(.area-field--horizontal, .area-field--inline):has(> .area-stack--vertical) { align-items: start; }
   :is(.area-field--horizontal, .area-field--inline):has(> .area-textarea) > .area-field__label {
     padding-block-start: max(var(--area-space-2), round(nearest, calc((var(--area-control-md) - 1cap) / 2 - var(--area-space-4)), 1px));
   }

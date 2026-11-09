@@ -249,6 +249,7 @@ filtered to the shell, text and icon rows (full tables: run the command on the s
 | menu open | a menu trigger (`aria-haspopup="menu"`, `aria-expanded="true"`) keeps the pressed plate while its menu is open, as Model picker did alone; a selected toggle keeps its own fill (button.css:145-150, audit G-12) | ChatGPT model picker |
 | disabled | unchanged | not captured |
 | loading | Spinner replaces the leading icon and fills the tier's icon box (`--_icon`: 12/16/20); full opacity, `cursor: progress`; `loading` + `disabled` is plainly disabled | Visuals not captured. Behaviour: audit S18 (owner pick 2026-09-30) |
+| inactive (`inactive`, `inactiveText`) | drawn as disabled: fill and edge mixed to `opacity-disabled` toward transparent, the parts at `opacity-disabled`, no hover, press or give, `cursor: not-allowed`; the button itself keeps full opacity so its focus ring does; `aria-disabled`, the press dropped; the reason a Tooltip that describes it. `disabled` wins | Primer `inactive` (`src/Button/types.ts:46-50`), Claude's `disabledReason` tooltip (chat-apps.md); components audit V2 |
 
 ## Behavior and accessibility
 
@@ -413,3 +414,22 @@ Solid presses one step past hover in the same direction (`--_solid-active`: neut
   and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
   docs/research/dark-soft-tones-2026-10-28).
 - **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
+
+### 2026-11-07 · The event in onSelectedChange (components audit O3)
+
+- **What changed:** `onSelectedChange(selected, event)` passes the press, as Chip's.
+- **Why:** Button.tsx:39. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Inactive (components audit V2)
+
+- **What changed:** `inactive` and `inactiveText`. An inactive Button looks disabled but keeps focus, its place in the
+  Tab order (and in a Toolbar's arrow order) and the pointer; `aria-disabled="true"` and `data-inactive`, the click
+  dropped as loading drops it. `inactiveText` renders an Area Tooltip on hover and focus that describes the button
+  (`aria-describedby`); it takes the place of a naming Tooltip, so an icon-only inactive button keeps its name in
+  `aria-label`. Painted without an opacity on the element (an opacity would fade the focus ring with it): the fill and
+  edge are mixed toward transparent by `opacity-disabled` and the parts take it, the same picture as disabled.
+- **Why:** docs/research/components-audit-2026-11-07/primer.md ("`inactive` is not `disabled`", the degraded-experiences order), chat-apps.md ("Disabled with
+  a reason"). The choosing rule is WRITING.md, "Disabled or inactive". The owner took every recommendation ("Take all
+  recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

@@ -13,7 +13,7 @@ test("an ordered list: done, current and upcoming steps; the current one is aria
   assert.match(html, /<li class="area-stepper-step area-stepper-step--complete"><span class="area-stepper-step__body"><span class="area-stepper-step__marker" aria-hidden="true"><svg [^>]*data-area-glyph="check"/);
   assert.match(html, /<li class="area-stepper-step area-stepper-step--current" aria-current="step">/);
   assert.match(html, /Members<span class="area-sr-only">, current step<\/span><\/span><span class="area-stepper-step__description">Teams<\/span>/);
-  assert.match(html, /<li class="area-stepper-step area-stepper-step--upcoming">.*aria-hidden="true">3<\/span>/);
+  assert.match(html, /<li class="area-stepper-step area-stepper-step--pending">.*aria-hidden="true">3<\/span>/);
 });
 
 test("onStepSelect makes done steps buttons, not the current or later ones; nonLinear opens the later ones too", () => {
@@ -26,7 +26,7 @@ test("a step with a problem, vertical layout, and custom status words", () => {
   const html = render(h(Stepper, { current: 2, orientation: "vertical", statusLabels: { invalid: "needs attention" } },
     h(StepperStep, { title: "Upload" }), h(StepperStep, { title: "Map", status: "invalid" }), h(StepperStep, { title: "Import" })));
   assert.match(html, /area-stepper--vertical/);
-  assert.match(html, /area-stepper-step--invalid"><span class="area-stepper-step__body"><span class="area-stepper-step__marker" aria-hidden="true">!<\/span>/);
+  assert.match(html, /area-stepper-step--error"><span class="area-stepper-step__body"><span class="area-stepper-step__marker" aria-hidden="true">!<\/span>/);
   assert.match(html, /, needs attention/);
 });
 
@@ -41,5 +41,5 @@ test("the current step keeps aria-current=step when it is marked invalid", () =>
   const html = render(h(Stepper, { current: 1, "aria-label": "Setup" },
     h(StepperStep, { title: "Details" }), h(StepperStep, { title: "Members", status: "invalid" }), h(StepperStep, { title: "Review" })));
   assert.equal((html.match(/aria-current="step"/g) ?? []).length, 1);
-  assert.match(html, /area-stepper-step--invalid" aria-current="step"/);
+  assert.match(html, /area-stepper-step--error" aria-current="step"/);
 });

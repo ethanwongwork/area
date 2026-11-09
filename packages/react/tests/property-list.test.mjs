@@ -13,7 +13,7 @@ test("PropertyList renders named reorder handles, stable instructions and compou
   for (const attr of ['aria-label="Layer fills"', 'id="fills"', 'class="area-property-list custom"']) assert.ok(list.includes(attr));
   const instructions = list.match(/aria-describedby="([^"]+)"/)[1];
   assert.ok(html.includes(`id="${instructions}" class="area-sr-only">Use the arrow keys on a handle to move fills.</span>`));
-  assert.match(html, /<span class="area-sr-only" aria-live="polite"><\/span>/);
+  assert.doesNotMatch(html, /aria-live/, 'moves are said through the shared announcer (components audit D1)');
   assert.match(html, /<li class="area-property-list__item row" data-inactive="" id="red" aria-describedby="help">/);
   assert.match(html, /aria-label="Reorder Red fill, position 1 of 2"/);
   assert.match(html, /aria-label="Reorder Blue fill, position 2 of 2"/);

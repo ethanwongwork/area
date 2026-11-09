@@ -23,7 +23,7 @@
  */
 import { Component, createElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import * as AreaReact from "@area/react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, Count, EmptyState, Kbd, Link, Menu, MenuItem, MenuLabel, MenuSeparator, PanelSection, SectionHeading, Table, TableCell, TableLink, Tabs, Tooltip, ZoomControl, type TreeViewNode } from "@area/react";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, Count, EmptyState, Kbd, Link, Menu, MenuItem, MenuLabel, MenuSeparator, PanelSection, SectionHeading, Switch, Table, TableCell, TableLink, Tabs, Tooltip, ZoomControl, type TreeViewNode } from "@area/react";
 import { ArrowLeftIcon, CardsIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, GridIcon, OpenIcon, ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
 import SNIPPETS from "virtual:demo-snippets";
@@ -32,7 +32,7 @@ import { COMPONENT_PAGES } from "../content/pages.mjs";
 // @ts-expect-error — as above.
 import { DOCUMENTATION_GROUPS } from "../content/documentation.mjs";
 // @ts-expect-error — as above.
-import { componentStatus } from "../content/component-status.mjs";
+import { componentStatus, DEPRECATED_COMPONENTS } from "../content/component-status.mjs";
 // @ts-expect-error — as above.
 import { componentSpecimens, demoWrapper } from "../content/specimens.mjs";
 // @ts-expect-error — as above.
@@ -72,15 +72,18 @@ import { hrefOf } from "../places.ts";
 import { matches } from "../search.ts";
 import { morph } from "../morph.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
+import { InventorySection, manifestFor, StructureSection, useLibrary } from "../inventory.tsx";
+import { leftOutSummary, setFamilyIncluded, tileLeftOut } from "../library.ts";
 
 interface Example { id: string; title: string; demo: string; note?: string; group?: string }
 interface Family { slug: string; name: string; docsOnly?: boolean; imports?: string; exportName?: string; manifest?: string; api?: string[][]; examples: Example[] }
 /** A gallery tile: its specimen name (size-sm), group (Sizes) and value in that group (sm). */
-interface Tile { id: string; name: string; group: string; value: string; label: string; demo: string; note?: string }
+export interface Tile { id: string; name: string; group: string; value: string; label: string; demo: string; note?: string }
 /* The family's manifest (packages/styles/src/manifest.ts): its sentence, block, axes, defaults, parts and states. */
 interface ManifestLike { block: string; description: string; variants: Record<string, readonly string[]>; defaults: Record<string, string>; elements?: readonly string[]; states?: readonly string[]; stateAttributes?: Record<string, string> }
 
-export const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly).sort((a, b) => a.name.localeCompare(b.name));
+// A deprecated family keeps its page source for one release but leaves the gallery, search and Home (system gaps C3).
+export const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly && !DEPRECATED_COMPONENTS.has(family.slug)).sort((a, b) => a.name.localeCompare(b.name));
 /* Properties for the families without a hand-made playground, from their manifests (src/content/derived-props.tsx). */
 const DERIVED = new Map(FAMILIES.flatMap(family => {
   const derived = !PLAYGROUNDS[family.slug] && family.manifest ? derivedPlayground(family.manifest) : null;
@@ -121,6 +124,7 @@ const GROUP_LEDES: Record<string, string> = {
   Default: "The component as it ships.",
   Variants: "Its visual treatments and shapes.",
   Tones: "The same component in each semantic color.",
+  Colors: "The same component in each label color.",
   Sizes: "Each size, smallest first.",
   Layout: "Arrangements of its parts.",
   Content: "What it holds: text, icons and media.",
@@ -137,7 +141,7 @@ class TileBoundary extends Component<{ children: ReactNode }, { error?: Error }>
   override render() { return this.state.error ? <p className="studio-tile-error">{this.state.error.message}</p> : this.props.children; }
 }
 
-function Demo({ name }: { name: string }) {
+export function Demo({ name }: { name: string }) {
   const demo = createElement(DEMOS[name] as () => ReactNode);
   const wrapper = demoWrapper(name);
   if (!wrapper) return demo;
@@ -147,6 +151,8 @@ function Demo({ name }: { name: string }) {
 
 /** Tile counts, computed once: the Sidebar shows one per family. */
 const TILES = new Map(FAMILIES.map(family => [family.slug, tilesOf(family)]));
+/** A family's gallery tiles in group order (its first is its Default), for pictures elsewhere (Publish's library pairs). */
+export const familyTiles = (slug: string): readonly Tile[] => TILES.get(slug) ?? [];
 const statusOf = (family: Family) => componentStatus(family.slug) as Status;
 /** A family's tiles in their groups, in SPECIMEN_GROUPS order. */
 const groupsOf = (tiles: Tile[]) => (SPECIMEN_GROUPS as string[]).map(group => [group, tiles.filter(entry => entry.group === group)] as const).filter(([, list]) => list.length);
@@ -158,8 +164,7 @@ const groupsOf = (tiles: Tile[]) => (SPECIMEN_GROUPS as string[]).map(group => [
  * value as the tiles are. A family with one tile has no rows under it. Row ids are `tile:<family>/<tile>` and
  * `axis:<family>/<group>` (studio.tsx, SidebarTree).
  */
-function variantRows(family: Family): TreeViewNode[] | undefined {
-  const tiles = TILES.get(family.slug)!;
+function variantRows(family: Family, tiles: Tile[] = TILES.get(family.slug)!): TreeViewNode[] | undefined {
   if (tiles.length < 2) return undefined;
   const row = (entry: Tile): TreeViewNode => ({ id: `tile:${family.slug}/${entry.id}`, label: entry.value });
   return groupsOf(tiles).flatMap(([group, list]) => group === "Default" ? list.map(row)
@@ -254,8 +259,10 @@ function useFit(ref: { current: HTMLElement | null }, key: unknown, enabled = tr
  * IntersectionObserver on the Canvas body, as far ahead as the window is tall), holding their room with empty cards
  * until then, and fits its own tiles (src/gallery/fit.ts); the first open draws a few screens, not the library.
  */
-function Overview({ groups, visit, open, onToggle, onOpen, zoom, look, waterfall }: {
+function Overview({ groups, visit, open, onToggle, onOpen, zoom, look, waterfall, tilesOf, leftOut }: {
   groups: Array<[string, Family[]]>; visit?: string; open: string[]; onToggle: (slug: string) => void;
+  /** The family's tiles the gallery shows, and whether a family or tile is left out of the system (drawn with a badge). */
+  tilesOf: (family: Family) => Tile[]; leftOut: (family: Family, tile?: Tile) => boolean;
   onOpen: (key: string, from?: Element | null, how?: OpenHow) => void; zoom: string; look: CardLook; waterfall: boolean;
 }) {
   // The arrangement's groups keep their order but draw no title of their own: a group's title over a family's read as
@@ -264,17 +271,17 @@ function Overview({ groups, visit, open, onToggle, onOpen, zoom, look, waterfall
     <div className="studio-sections" {...zoomScope(zoom)}>
       {groups.flatMap(([, list]) => list).map(entry => (
         <FamilySection key={entry.slug} family={entry} open={open.includes(entry.slug)} onToggle={() => onToggle(entry.slug)}
-          visit={visit} onOpen={onOpen} zoom={zoom} look={look} waterfall={waterfall} />
+          visit={visit} onOpen={onOpen} zoom={zoom} look={look} waterfall={waterfall} tiles={tilesOf(entry)} leftOut={tile => leftOut(entry, tile)} />
       ))}
     </div>
   );
 }
 
 /** One family in the Overview: its name, status and tile count over one row of its tiles, or all of them in groups. */
-function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, waterfall }: {
+function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, waterfall, tiles, leftOut }: {
   family: Family; open: boolean; onToggle: () => void; visit?: string; onOpen: (key: string, from?: Element | null, how?: OpenHow) => void; zoom: string; look: CardLook; waterfall: boolean;
+  tiles: Tile[]; leftOut: (tile?: Tile) => boolean;
 }) {
-  const tiles = TILES.get(family.slug)!;
   const status = statusOf(family);
   const [visitSlug, visitTile] = visit?.split("/") ?? [];
   const here = visitSlug === family.slug;
@@ -311,6 +318,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
     <Tile key={entry.id} container="asset" id={`variant-${family.slug}-${entry.id}`} span="wide" stage="fit" card look={look} aspect={waterfall ? "hug" : undefined} openOnClick
       design={placed ? "part" : false}
       aria-label={`${family.name}: ${entry.label}`} data-key={family.slug} data-name={family.name} label={entry.value}
+      value={!leftOut() && leftOut(entry) ? "Left out" : undefined} status={!leftOut() && leftOut(entry) ? "archived" : undefined}
       selected={here && entry.id === visitTile} onOpen={how => onOpen(`${family.slug}/${entry.id}`, document.getElementById(`variant-${family.slug}-${entry.id}`), how)}
       actions={<CopyCode code={SNIPPETS[entry.demo]} name={`${family.name} ${entry.label}`} />}>
       <TileBoundary><Demo name={entry.demo} /></TileBoundary>
@@ -323,7 +331,10 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
     <section ref={section} className="studio-section" id={`family-${family.slug}`} aria-labelledby={`family-${family.slug}-title`}>
       <SectionTitle id={`family-${family.slug}-title`}
         title={<a href={hrefOf({ page: "components", item: family.slug })} className="studio-section__link" onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</a>}
-        count={tiles.length} badge={<StatusBadge size="sm" status={STATUS_MARK[status]}>{STATUS_LABEL[status]}</StatusBadge>} />
+        count={tiles.length} badge={<>
+          <StatusBadge size="sm" status={STATUS_MARK[status]}>{STATUS_LABEL[status]}</StatusBadge>
+          {leftOut() ? <> <StatusBadge size="sm" status="archived">Left out</StatusBadge></> : null}
+        </>} />
       <div ref={body} className="studio-overview__body" data-fit="">
         {open ? groupsOf(tiles).map(([group, list]) => (
           <div key={group} className="studio-overview__group">
@@ -429,10 +440,32 @@ function matchingTile(playground: Playground, tiles: Tile[], config: Config) {
 
 export function ComponentsPage() {
   const { query, item, select, navigate } = useStudio();
+  // The open system's library (src/inventory.tsx, docs/research/system-inventory-2026-11-08 Q3): what it leaves out is
+  // hidden, families and tiles alike, until Show is With left out, which brings them back with a Left out badge. With
+  // nothing left out the control is left out too.
+  const { library, system, resolve, update, editable } = useLibrary();
+  const [scope, setScope] = useViewOption<"system" | "all">("components-scope", "system", ["system", "all"]);
+  const leavesOut = Object.values(library.families).some(choice => choice.included === false || Object.keys(choice.leftOut ?? {}).length > 0);
+  const showAll = scope === "all" || !leavesOut;
+  const familyIn = (entry: Family) => resolve(entry.slug)?.included !== false;
+  const tileIn = (entry: Family, tile: Tile) => {
+    const manifest = manifestFor(entry.slug), resolved = resolve(entry.slug);
+    return !manifest || !resolved || !tileLeftOut(tile.name, resolved, manifest);
+  };
+  const leftOut = (entry: Family, tile?: Tile) => !familyIn(entry) || (tile ? !tileIn(entry, tile) : false);
+  // A family keeps one tile at least (its first, the Default), so its section and row always open somewhere.
+  const tilesShown = (entry: Family) => {
+    const all = TILES.get(entry.slug)!;
+    if (showAll) return all;
+    const kept = all.filter(tile => tileIn(entry, tile));
+    return kept.length ? kept : all.slice(0, 1);
+  };
   // The Sidebar's choice: every family (All, the default) or one family's Stage, on one of its tiles.
-  const [slug = "", tileId] = (item ?? "").split("/");
+  const [linked = "", tileId] = (item ?? "").split("/");
+  // An old link to a deprecated family opens the family to use instead (DEPRECATED_COMPONENTS).
+  const slug = DEPRECATED_COMPONENTS.get(linked) ?? linked;
   const family = FAMILIES.find(entry => entry.slug === slug);
-  const shown = FAMILIES.filter(entry => matches(query, entry.name, entry.slug));
+  const shown = FAMILIES.filter(entry => matches(query, entry.name, entry.slug) && (showAll || familyIn(entry)));
   const [mode, setMode] = useViewOption<ViewMode>("components", "grid", ["grid", "list"]);
   // Zoom (owner, 2026-10-12: a closer view; 2026-10-14: a − 100% + control, Fit at the gallery's own
   // ratios): Fit, the default, or an exact 50% to 200% (src/gallery/fit.ts). A new key: the old "1"
@@ -493,8 +526,8 @@ export function ComponentsPage() {
   // a row's actions' room when they are hidden, which set the rows' counts in from the branches'.
   // A family's variants hang under its row where it is listed; a pinned row is a shortcut to the family alone.
   const treeRow = (entry: Family, prefix: "key" | "pin"): TreeViewNode => ({
-    id: `${prefix}:${entry.slug}`, label: entry.name, trailing: <Count count={TILES.get(entry.slug)!.length} />,
-    children: prefix === "key" ? variantRows(entry) : undefined,
+    id: `${prefix}:${entry.slug}`, label: entry.name, trailing: <Count count={tilesShown(entry).length} />,
+    children: prefix === "key" ? variantRows(entry, tilesShown(entry)) : undefined,
   });
 
   // Opening and leaving the Stage. Opening keeps the tile; leaving, by any route (Escape, ⌘↑, ⌘[, the Overview button,
@@ -591,7 +624,7 @@ export function ComponentsPage() {
   // Previous and next tile, through the library in the Sidebar's order: a family's last tile leads to the next family's
   // first, so the Stage walks every variant as the Overview lists them.
   const sequence = (ordered.some(entry => entry.slug === family?.slug) ? ordered : FAMILIES)
-    .flatMap(entry => TILES.get(entry.slug)!.map(tile => ({ family: entry, tile })));
+    .flatMap(entry => (entry === family ? TILES.get(entry.slug)! : tilesShown(entry)).map(tile => ({ family: entry, tile })));
   const at = family && stageTile ? sequence.findIndex(step => step.family === family && step.tile.id === stageTile.id) : -1;
   const previous = at > 0 ? sequence[at - 1] : undefined;
   const following = at >= 0 ? sequence[at + 1] : undefined;
@@ -691,6 +724,10 @@ export function ComponentsPage() {
         </ViewControls>
       ) : (
         <ViewControls>
+          {leavesOut ? (
+            <ViewFilter label="Show" value={scope} onChange={setScope}
+              options={[{ value: "system", label: `In ${system.name}` }, { value: "all", label: "With left out" }]} />
+          ) : null}
           <ViewFilter label="Status" value={status} onChange={setStatus}
             options={[{ value: "all", label: "All statuses" }, { value: "complete", label: "Complete" }, { value: "review", label: "In review" }, { value: "unrefined", label: "Unrefined" }]} />
           <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={GROUPS} directions={DIRECTIONS[arrangement.sort]} />
@@ -708,13 +745,17 @@ export function ComponentsPage() {
       ) : onCanvas.length ? mode === "list" ? (
         // List: one row per family, its status, tile count and import.
           <Table wrapperProps={FEED_TABLE} size="md" interactive aria-label="Components">
-            <thead><tr><th scope="col">Family</th><th scope="col">Status</th><th scope="col">Tiles</th><th scope="col">Import</th></tr></thead>
+            <thead><tr><th scope="col">Family</th><th scope="col">In {system.name}</th><th scope="col">Left out</th><th scope="col">Status</th><th scope="col">Tiles</th><th scope="col">Import</th></tr></thead>
             <tbody>
               {onCanvas.map(entry => (
                 <tr key={entry.slug}>
                   <td><TableLink href={hrefOf({ page: "components", item: entry.slug })} onClick={event => { event.preventDefault(); select(entry.slug); }}>{entry.name}</TableLink></td>
+                  {/* The inventory table (Q2): the family in or out of the system, and what of it is left out. */}
+                  <td><Switch size="sm" aria-label={`Include ${entry.name} in ${system.name}`} checked={familyIn(entry)} disabled={!editable}
+                    onChange={event => { const on = event.currentTarget.checked; update(current => setFamilyIncluded(current, entry.slug, manifestFor(entry.slug) ?? { variants: {}, defaults: {} }, on)); }} /></td>
+                  <td className="studio-muted">{familyIn(entry) ? leftOutSummary(entry.slug, resolve(entry.slug)!).join(", ") || "—" : "Everything"}</td>
                   <td><StatusBadge size="sm" status={STATUS_MARK[statusOf(entry)]}>{STATUS_LABEL[statusOf(entry)]}</StatusBadge></td>
-                  <TableCell numeric>{TILES.get(entry.slug)!.length}</TableCell>
+                  <TableCell numeric>{tilesShown(entry).length}</TableCell>
                   <td>{entry.imports ?? entry.exportName ? <Code>{entry.imports ?? entry.exportName}</Code> : <span className="studio-muted">—</span>}</td>
                 </tr>
               ))}
@@ -723,7 +764,8 @@ export function ComponentsPage() {
       ) : (
         <PinMenu pins={pins} label="Component">
           <Overview groups={groups.map(([label, list]) => [label, list.filter(entry => status === "all" || statusOf(entry) === status)])}
-            visit={selected} open={expanded} onToggle={toggleSection} onOpen={open} zoom={zoom} look={look} waterfall={height === "waterfall"} />
+            visit={selected} open={expanded} onToggle={toggleSection} onOpen={open} zoom={zoom} look={look} waterfall={height === "waterfall"}
+            tilesOf={tilesShown} leftOut={(entry, tile) => showAll && leavesOut && leftOut(entry, tile)} />
         </PinMenu>
       ) : <EmptyState title="No components" description={`Nothing matches “${query}”.`} />}
       inspector={{
@@ -739,15 +781,24 @@ export function ComponentsPage() {
               <Properties playground={derivedHere} config={derivedConfig} changed={Boolean(derivedEdit)} onChange={change} onReset={reset} />
             ) : null}
             {family ? (
-              <FamilyDesign family={family} pinned={pins.has(family.slug)} onPin={() => pins.toggle(family.slug)}
-                tile={config && playground ? matchingTile(playground, tiles, config) : stageTile} />
+              <>
+                <FamilyDesign family={family} pinned={pins.has(family.slug)} onPin={() => pins.toggle(family.slug)}
+                  tile={config && playground ? matchingTile(playground, tiles, config) : stageTile} />
+                <InventorySection slug={family.slug} />
+                <StructureSection slug={family.slug} />
+              </>
             ) : selectedFamily ? (
-              <FamilyDesign family={selectedFamily} pinned={pins.has(selectedFamily.slug)} onPin={() => pins.toggle(selectedFamily.slug)}
-                tile={selectedTile} onOpen={selected ? () => open(selected) : undefined} />
+              <>
+                <FamilyDesign family={selectedFamily} pinned={pins.has(selectedFamily.slug)} onPin={() => pins.toggle(selectedFamily.slug)}
+                  tile={selectedTile} onOpen={selected ? () => open(selected) : undefined} />
+                <InventorySection slug={selectedFamily.slug} />
+                <StructureSection slug={selectedFamily.slug} />
+              </>
             ) : (
               <PanelSection heading="Library">
                 <Facts label="Library" items={[
                   ["Families", FAMILIES.length],
+                  [`In ${system.name}`, FAMILIES.filter(familyIn).length],
                   ["Complete", counts.complete],
                   ["In review", counts.review],
                   counts.unrefined ? ["Unrefined", counts.unrefined] : null,

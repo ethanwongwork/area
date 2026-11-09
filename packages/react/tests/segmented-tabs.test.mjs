@@ -81,3 +81,23 @@ test("a full-width segmented shares equal columns its longest option sets, so no
   assert.match(rule, /display: grid/);
   assert.match(rule, /grid-auto-columns: minmax\(0, 1fr\)/);
 });
+
+test("Tabs items are keyed by value, as Segmented's; id is the deprecated key (components audit O7)", () => {
+  const byValue = renderToString(h(Tabs, { items: [{ value: "a", label: "Tab one" }, { value: "b", label: "Tab two" }], defaultValue: "b" }));
+  assert.match(byValue, /<button type="button" role="tab" id="[^"]+-tab-b"[^>]*aria-selected="true"/);
+  const byId = renderToString(h(Tabs, { items: [{ id: "a", label: "Tab one" }, { id: "b", label: "Tab two" }], defaultValue: "b" }));
+  assert.match(byId, /id="[^"]+-tab-b"[^>]*aria-selected="true"/);
+  // value wins where both are given.
+  assert.match(renderToString(h(Tabs, { items: [{ value: "x", id: "y", label: "Tab one" }] })), /-tab-x"/);
+});
+
+test("a tab's change takes the shared change word and ink; unseen is a dot apart from it (components audit D6)", () => {
+  const html = renderToString(h(Tabs, { "aria-label": "Files", items: [
+    { value: "a", label: "button.css", status: "modified", unseen: true },
+    { value: "b", label: "old.css", status: "removed" },
+    { value: "c", label: "notes.md" },
+  ] }));
+  assert.match(html, /data-status="modified"[^>]*><span class="area-tabs__label">button\.css<span class="area-tabs__reserve" aria-hidden="true">button\.css<\/span><\/span><span class="area-sr-only"> Modified<\/span><span class="area-tabs__unseen"><span class="area-sr-only"> Unseen<\/span><\/span>/);
+  assert.match(html, /data-status="deleted"[^>]*><span class="area-tabs__label">old\.css/);
+  assert.doesNotMatch(html.split("notes.md")[0].split("old.css").pop(), /data-status/);
+});

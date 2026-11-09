@@ -38,12 +38,23 @@
   *The raised plate and the track were superseded the same day (entries above): pressed
   toggles take Button's selected fill and the track group was removed.*
 
+- 2026-11-07: components audit, "Take all recs": N14 Hover action bar is built as Toolbar's `floating` boolean, not a
+  new family (review page St7jcEipvPoa3GvSwnAvBT).
+
 ## Job and boundaries
 
 Toolbar groups commands into one tab stop with arrow-key movement, optional groups,
 separators and an overflow menu for secondary commands. It does not choose a value
 (Segmented) or join edges (Button group). Its overflow is a Menu of MenuItems (audit A-8 / S16,
 owner 2026-09-30); this supersedes the earlier "a disclosure of Buttons, not a Menu" decision.
+
+**Hover action bar** (`floating`, components audit N14, 2026-11-07). One to four actions on a row or a block (Open,
+Copy, a language), over its top-end corner, shown while the row is hovered or holds focus. Intake: rung 6, a boolean on
+Toolbar, not a new family. The job is a toolbar's (a few commands, one Tab stop, arrow keys) placed over its host and
+revealed; the notes app's row "Open" bar and code-block bar (notion.md: 24 and 28 high, padding 2, radius 6, the small
+floating shadow) and the chat app's message actions (`reveal`, `alwaysVisible`; chat-apps.md "Message") are the two
+sources; neither needs anatomy, keyboard or semantics Toolbar lacks. It is not Selection bar (actions on a selection,
+present only while something is selected) and not a row's Menu or Context menu (a list of commands from a trigger).
 
 ## Variants
 
@@ -53,6 +64,7 @@ owner 2026-09-30); this supersedes the earlier "a disclosure of Buttons, not a M
 | size | sm, md (default), lg | Control tiers of the commands | Primer (prior decision); gallery `sizes` |
 | orientation | horizontal (default), vertical | Side rails | Gallery `vertical` |
 | booleans | `fullWidth` | Span a panel row | — |
+| booleans | `floating` | The hover action bar: over its parent's top-end corner, shown while the parent is hovered or holds focus | The notes app's row Open bar and code-block bar (notion.md); the chat app's revealed message actions (chat-apps.md) |
 | composition | groups, separator, overflow | Gallery `default` | Figma: tool row, divider, mode switch; Primer ActionBar overflow |
 | group variant | none (`track` removed 2026-09-27) | One-of-several choices are a Segmented inside the Toolbar | Figma's mode switch (`figma--mode-switch--rest`); owner reference (alignment) |
 | state | pressed toggle (`Button selected`) | A toggled command keeps Button's selected fill (owner 2026-09-27; was a raised plate) | Figma's selected mode option; owner references (Bold) |
@@ -143,6 +155,10 @@ captures were lost with a frozen tab and are not in the folder. Other tiles:
 | one-of-several | a Segmented inside the Toolbar (the `track` group was removed 2026-09-27) | Owner: "shouldn't that be a segmented control?" | Figma's mode switch is the same object |
 | fields | Select soft at the tier, as wide as its options | Owner references; Figma's type fields | Select's form default is 16rem |
 | overflow | ghost icon-only Button (`more` glyph, `aria-label` from `label`, default "More actions") opening a Menu in a native popover; Menu's surface and lift | Audit A-8 / S16 (owner 2026-09-30); SplitButton's model | Was a `details` disclosure of Buttons with its own surface (`toolbar.css`, removed) |
+| floating place | absolutely over the parent's top-end corner, 4 from the top and the end (`space-4`); the parent becomes its containing block (`:where(*):has(> .area-toolbar--floating)`, no specificity, so a host's own position wins) | Derived, not measured: the ladder's smallest step (a 40 row holds the 30 bar with 5 to spare) | The notes app's bars sit in the block's corner; their offset wasn't read |
+| floating inset | 2 with `surface` (`space-2`): at sm the bar is the small control plus 4, 30 at type 13 | the notes app's bars (pad 2; its row bar 24 high, code-block bar 28) | Area's small control is 26 at type 13, so the bar is 2 over the notes app's code-block bar |
+| floating reveal | `opacity` 0 → 1 while the parent is `:hover` or `:focus-within`, or while one of its menus is open; lands at once, leaves on `fade-fast`; pointer events off while hidden; always shown without hover (touch) | Nav, Panel section and Code block `revealActions` (MOTION.md, Hover-revealed actions) | — |
+| floating and Code block | Code block keeps its own revealed actions | — | Not a pure swap: its copy is centred on the first line of code (`--_code-copy-top`), sits on the block's ground, concentric with the block's corner, and is several Tab stops; a Toolbar would move it, add a frame and make it one Tab stop |
 | overflow placement | horizontal bar: below, end-aligned; vertical: to the right, start-aligned; clears the toolbar box by 4 (shared `clearToolbar`, as SplitButton's tool menus) | Figma's toolbelt: menus 4 from the bar | — |
 
 ## States
@@ -153,6 +169,8 @@ captures were lost with a frozen tab and are not in the folder. Other tiles:
 | command selected (toggle) | Button's selected fill (above), kept under the pointer | `area--default--rest--*`; Chrome computed styles |
 | overflow trigger hover or open | ghost Button's states; ink fixed | [button.md](button.md); not captured |
 | focus-visible | 2px focus ring on items (Button's), the overflow trigger and the toolbar root (`toolbar.css`) | not captured |
+| floating, hidden | `opacity: 0`, no pointer events; still in the tab order (where hover exists) | — |
+| floating, shown | the parent hovered or holding focus, or a menu of the bar open | — |
 | overflow open | Menu below (horizontal, end-aligned) or to the right (vertical, start-aligned), 4 from the bar | not captured since the change (earlier `area--default` capture shows the disclosure) |
 
 ## Behavior and accessibility
@@ -170,6 +188,11 @@ Composites take the toolbar's tier: `size` reaches SplitButton, Segmented and Se
 `ToolbarSize` context (`toolbar-context.ts`) when they set no `size` of their own; direct Buttons
 take it through `toolbar.css`. Forced colours paint the separator `ButtonText`
 (`forced-colors.css`, with the joined-button dividers).
+
+A `floating` bar is hidden by opacity only, so it stays in the tab order: Tab reaches it, and focus inside it is focus
+inside its parent, which shows it. It is one Tab stop like any Toolbar. Give it an `aria-label` naming what it acts on
+("Item one actions"). Its actions should also be reachable another way (a menu item, a shortcut): a hover bar is a
+shortcut, not the only path.
 
 ## Peers and consistency
 
@@ -269,3 +292,15 @@ them.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no toolbar change; tools take Button's instant-in, fast-out rule and Split button's chevron.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the separator is `border-width`, a seam in the bar like Panel's and Code block's rules (was `stroke-width`) (toolbar.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the floating (`surface`) toolbar lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+- 2026-11-07 · components audit N14 → `floating`, the hover action bar: over its parent's top-end corner, 4 in; 2 inset
+  with `surface`; revealed on hover or focus within as Nav's, Panel's and Code block's revealed actions; tile Variant /
+  floating; Code block not swapped (not a pure swap, Decisions). Cohesion test "hover-revealed actions hide by opacity".
+  Checked in the built renderer in a browser (`desktop-dist`): hidden at rest, shown on hovering its row and when focus
+  enters it by script; the bar 30 high, 5 from the row's outer top and end (4 inside its 1 border).
+
+## Review note, 2026-11-07 (components audit N14)
+
+- **What changed:** Toolbar gains `floating`: a small bar of one to four actions over a row's or a block's top-end
+  corner, shown while it is hovered or holds focus. Hidden, Tab still reaches it.
+- **Why:** you took the audit's recommendation; it's a toolbar placed over its host, so it is an option, not a new
+  family. Code block keeps its own copy, since swapping would move and frame it.

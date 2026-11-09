@@ -231,3 +231,12 @@ Open questions: none new.
 - **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.
 
 - 2026-11-05 · owner: "go with your recs" on the shadow depth page (docs/research/shadow-depth-2026-11-04.md) → the Elevation default is 8, so this surface's float role is an 8% key (was 3%).
+
+## Review note, 2026-11-06 (balance pass)
+
+- **What changed:** the description stands one step (4) off the title: 12.8 baseline to cap, beside the description's
+  own 8.8. It was joined (8.8), so the title read as the paragraph's first line.
+- **Why:** the owner, on the confirm dialog: "the space between the title and the copy still doesnt look right". One
+  rule for every surface title (Card, Dialog, Confirm dialog, Drawer, Popover, Alert, Toast, Approval, Empty state sm).
+  DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
+- The owner approved the 4 step ("4 is right", 2026-11-06).

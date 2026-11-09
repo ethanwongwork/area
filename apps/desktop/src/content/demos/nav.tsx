@@ -101,6 +101,16 @@ export const NavNeutral = () => (
   </div>
 );
 
+/* Inactive (components audit V2, 2026-11-07): drawn as disabled, but it keeps its Tab stop and says why in a Tooltip. */
+export const NavInactive = () => (
+  <Nav aria-label="Label">
+    <NavItem href="#" current>
+      Item one
+    </NavItem>
+    <NavItem href="#" inactive inactiveText="Description">Item two</NavItem>
+  </Nav>
+);
+
 export const NavDisabled = () => (
   <Nav aria-label="Label">
     <NavItem href="#" current>

@@ -58,7 +58,7 @@ list itself was measured only from its offscreen measurement nodes (24 rows, 26 
 | selected | the trailing check in a reserved column (`aria-selected`), no plate; the hover plate when highlighted | Notion and ChatGPT value lists (custom-select.md, 2026-10-07 audit); owner 2026-10-08 | Was the active plate plus check (audit S13 C, `data-selected`), 2026-09-30 to 2026-10-08. Area puts the check at the end (ChatGPT's model picker) |
 | position | top layer (native popover), placed by the shared JS engine (`useAnchoredPosition`: side bottom, align start, offset 4 = `MENU_OFFSET`, viewport padding 8), so it works without CSS anchor positioning; flips and shifts; min width max(field width, 224) | overlay.md (menu gap 4, audit S16 owner 2026-09-30); Figma list ≥ field | Was CSS anchor positioning |
 | height | min(324, the room beside the field), then scrolls; 50vh only before the engine reports the room | Figma (324, its font list viewport) | Was min(324, 50vh) |
-| empty | "No results" (`emptyText`), muted, a row tall, not an option; announced through a status region outside the listbox | — | — |
+| empty | "No results" (`emptyText`), muted, a row tall, not an option; announced through the shared announcer, outside the listbox | — | — |
 | create | "Create “text”" row with the add glyph when typed text matches no label exactly (not while the toggle shows every option) | Notion select | — |
 | list scroll | a Scroll area (owner 2026-10-09) | scroll-area.md, "Adoption" | Was the platform's scrollbar |
 | groups | Menu labels (muted, row tall) over `role=group` | Figma font picker sections | — |
@@ -155,3 +155,23 @@ commit with a filtered list (rows held while closing).
 
 - **What changed:** A chosen option's check fades and grows in as Menu's does.
 - **Why:** One rule for a check in a list. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+### 2026-11-07 · open, defaultOpen and onOpenChange (components audit O3)
+
+- **What changed:** The list's open state is controllable, as every overlay's; read-only and disabled never show it open.
+- **Why:** Combobox.tsx:24-51, :74 kept it in internal state. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · One announcer (components audit D1)
+
+"No results" is said through `announce` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")) when the open list becomes empty, instead of a hidden status span. No visible change.
+
+### 2026-11-07 · The typed text marked (components audit V4)
+
+- **What changed:** while the field's text is a search (not the chosen label), each option's label marks the typed
+  text with `highlightMatch` (Menu's `match` part: the strong weight in the row's ink). The same helper and part as
+  Command palette and Custom select's filter (cohesion test "every list that filters as you type…").
+- **Why:** docs/research/components-audit-2026-11-07/cursor.md (the quick input highlights query matches); the brief
+  asked whether Combobox already highlighted (it didn't) so the three lists share one mark. The owner took every
+  recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

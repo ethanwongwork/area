@@ -364,3 +364,10 @@ Spacing without the rules (2026-10-26, owner: "make sure the spacing is intentio
 - Used by Setup's Colours stage for the light and dark page (`apps/desktop/src/pages/theme-setup.tsx`, `reach` = `@area/tokens/colours` `reachableChroma`). Approved by the owner on the exact-colours review, 2026-10-28 (https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG, every family).
 
 - 2026-11-05 · owner: "go with your recs" on the shadow depth page (docs/research/shadow-depth-2026-11-04.md) → the Elevation default is 8, so this surface's float role is an 8% key (was 3%).
+
+### 2026-11-07 · One announcer (components audit D1)
+
+The contrast chip's `role="status"` (which said the ratio on every drag step) and the gamut note's are replaced by
+`useAnnouncement` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")): "Contrast passes AA" / "Contrast fails AA" is said when the verdict flips, and the gamut note
+when the color leaves sRGB. The chip's full sentence ("Contrast 4.52 to 1 against #FFFFFF, passes AA") is visually
+hidden text beside the visible ratio, which is `aria-hidden`. No visible change.

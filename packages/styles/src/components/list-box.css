@@ -53,6 +53,10 @@
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: calc(var(--area-focus-width) * -1);
   }
+  /* Selection when the list isn't focused (components audit V15, 2026-11-07; DESIGN_SYSTEM.md "Shared state paint"): the
+     chosen option steps back to the hover plate, in both layouts, so the focused list reads as the active one; the check
+     still says which it is. */
+  .area-list-box:not(:focus-within) .area-list-box__item[aria-selected="true"]:not([data-disabled]) { background: var(--area-bg-component-hover); }
   .area-list-box__item[data-disabled] { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
   .area-list-box[aria-disabled="true"] { opacity: var(--area-opacity-disabled); }
   .area-list-box[aria-disabled="true"] .area-list-box__item[data-disabled] { opacity: 1; }

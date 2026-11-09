@@ -37,6 +37,9 @@ The tab derives some rows itself. Never restate them:
 
 ## Writing the entry
 
+Every sentence follows `docs/WRITING.md` (sentence case, verbs, the shared status words, US spelling); a Do row about a
+component's own words (a button's label, an error, a destructive confirm) points at its rule there.
+
 ```js
 slug: {
   instead:   [["<situation>", ["<family-slug>", …], "<why that one>"], …],

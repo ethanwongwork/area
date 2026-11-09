@@ -205,3 +205,9 @@ the value now ends the label's row.
   "Yes, build them".
 - **Verdict:** in review.
 - 2026-11-02 · owner: "does the meters data vis need to be updated to match the other data stuff", then "Data meters take series 1" → `tone="data"`: the fill in `--area-series-1-fill`, the same in both modes, as a chart's bars; a stacked Meter's parts take each series' `-fill` (they took the mark, the 3:1 line color in light), as the data views' ring, dots and bars draw parts of a whole. Usage and limit meters keep neutral. → meter.css, manifest.
+
+### 2026-11-07 · size in the manifest (components audit O7)
+
+- **What changed:** `size` (sm / md / lg, the track's Progress tier) is in the manifest and on the root (`area-meter--md`).
+- **Why:** manifest.ts:252 lacked the size Meter.tsx:47 takes. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

@@ -111,4 +111,3 @@ The live agent's sign-in error runs to three lines in the Inspector at 290; the 
 glyph for a baseline, and a Retry's label shares the baseline, so a one-line error with Retry is laid out as before.
 Measured in Electron at type 13: wrapped, the mark's centre is the first line's centre (24.6 / 24.6); one line with
 Retry, text, mark and button share a centre (95.9). Light and dark checked. Verdict: open for the owner.
-

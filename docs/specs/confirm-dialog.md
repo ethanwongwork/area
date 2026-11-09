@@ -37,8 +37,8 @@ Toast (after the fact, with Undo when undo is possible: prefer that to a confirm
 |---|---|---|
 | surface | 420 × 163, radius 24, 90% white with a 24px backdrop blur, shadow 0.5px ring 10% + 0 4 8 −2 10% | 420 (spec), Dialog's radius 16, surface fill, float lift |
 | inset | 20 (form padding) | Dialog's 16 |
-| title | 20/28 600, #0d | Dialog's 16/24 strong |
-| description | 16/24 400, #8f, two lines, 4 below the title (gap 4) | Dialog's size, joined to the title; default ink (the message), its last line on its baseline |
+| title | 20/28 600, #0d | Dialog's title, the text's size strong (13/18 at type 13; `title-xs` until 2026-11-06) |
+| description | 16/24 400, #8f, two lines, 4 below the title (gap 4) | Dialog's 13/18, a step (4) under the title (12.8 baseline to cap); default ink (the message), its last line on its baseline (2026-11-06 type balance) |
 | footer | 12 above, end-aligned, 12 gap | Dialog's footer (end, `ui-cluster` gap), 16 above (was 20 until 2026-10-07) |
 | Cancel | pill, 31 tall (6 16 padding, 18 line), #f3 fill, 0.56px 10% edge | Button soft neutral md (32) |
 | action | pill, 31 tall, red 10% tint, rgb(224,46,42) ink | Button soft danger md |
@@ -197,6 +197,26 @@ starts at y 328.07. That is Dialog's, reported to the lead rather than changed h
   and read almost solid. A token change (DESIGN_SYSTEM.md, Colour: dark soft tones;
   docs/research/dark-soft-tones-2026-10-28).
 - **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
+
+## Review note, 2026-11-06 (balance pass; owner: "Keep it")
+
+- **What changed:** Dialog's title group, now the text's size: title 13/18 strong, description 13/18 muted, joined as
+  one message (8.8 baseline to cap, the description's own line). It was 16/22 over 13/18 joined 10.0. Footer, width and
+  buttons unchanged.
+- **Why:** the owner's note on a confirm ("no spacing logic between the title and the text … the type style size contrast with the text is large … make sure all of this is intentional"). The 2026-11-02 ramp moved `title-xs` from 15 to 16 at type 13, so a 16 title sat over 13 text, 1.23× (the owner had approved 16 over 14, 1.14×, on 2026-09-26), and joined 10.0 baseline to cap beside the text's own 8.8: near the line gap but not on it. Cursor sets its confirm's title at its text's size (12/500 over 12) and its settings rows 13 over 13. DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`. A confirm is a question and one line, a message rather than a page, as Alert and Toast are.
+
+- **Second look (owner: "the space between the title and the copy still doesnt look right"):** joined on the copy's
+  line, the title read as the paragraph's first line. Every surface title now stands one step (4) off its copy: 12.8
+  baseline to cap beside the copy's 8.8. Compared at 0, 4 and 6 on the review page; the owner picked 4 ("4 is right",
+  2026-11-06; Cursor's confirm sets its message 4 under its title).
+
+### 2026-11-07 · No size (components audit V1)
+
+- **Decision:** Confirm dialog takes no `size` when Dialog gains one. It is a question, a line and two buttons, measured
+  at 420 (ChatGPT's "Delete chat?"; confirm-dialog.css), and a wider or narrower confirm is not a different job: longer
+  content belongs in a Dialog. It renders Dialog's surface, so it carries Dialog's default `--md` class, and its own width
+  wins over it. Dialog's header rule on scroll reaches it too, if its extra content ever scrolls.
+- **Why:** docs/research/components-audit-2026-11-07/README.md, V1. The owner took every recommendation ("Take all recs", 2026-11-07).
 
 ## Review note, 2026-11-06 (type balance)
 

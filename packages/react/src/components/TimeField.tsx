@@ -1,12 +1,13 @@
 // TimeField: a time of day typed in segments (hour, minute, optional second, AM/PM) in Input's shell, with an
 // optional list of times at a fixed step. Spec: docs/specs/time-field.md.
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from "react";
-import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
+import type { HTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { cx, timeFieldVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { inputVariants } from "./Input.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Menu, MenuItem } from "./primitives.tsx";
-import { scrollOptionIntoList } from "./overlay.ts";
+import { scrollOptionIntoList, useOpenState } from "./overlay.ts";
+import { resolveValidation, validationAttributes, type ValidationStatus } from "./validation.ts";
 
 type InputManifest = VariantProps<typeof MANIFESTS.input>;
 
@@ -14,8 +15,8 @@ export interface TimeFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "de
   /** The time as "HH:MM" or "HH:MM:SS", 24-hour (controlled); null while incomplete. */
   value?: string | null;
   defaultValue?: string | null;
-  /** Each time the time becomes complete, changes, or is cleared (null). */
-  onValueChange?: (value: string | null) => void;
+  /** Each time the time becomes complete, changes, or is cleared (null), with the key or click that did it. */
+  onValueChange?: (value: string | null, event: SyntheticEvent) => void;
   /** 12 or 24 hours; the locale's by default (Intl hourCycle). */
   hourCycle?: 12 | 24;
   /** Minutes (default) or seconds. */
@@ -30,6 +31,14 @@ export interface TimeFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "de
   disabled?: boolean;
   readOnly?: boolean;
   invalid?: boolean;
+  /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
+  validationStatus?: ValidationStatus;
+  /** Internal Field-to-control validation bridge; plain HTML uses the matching data attribute. */
+  "data-validation-status"?: ValidationStatus;
+  /** The list of times (with `step`) is open (controlled); `defaultOpen` opens it at first; `onOpenChange` hears it open and close. */
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
   /** Submits the value under this name. */
   name?: string;
   /** Names of the list's trigger. */
@@ -74,12 +83,12 @@ const NAMES: Record<Kind, string> = { hour: "Hour", minute: "Minute", second: "S
  */
 export const TimeField = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeFieldProps>(function TimeField(
   { value, defaultValue = null, onValueChange, hourCycle, granularity = "minute", step, icon, locale, variant, size, disabled, readOnly,
-    invalid: invalidProp, name, listLabel = "Choose a time", className, style, id: idProp, "aria-label": ariaLabel, "aria-labelledby": labelledBy,
-    "aria-invalid": ariaInvalid, "data-validation-status": validationStatus, ...rest }: TimeFieldProps & { "data-validation-status"?: string },
+    invalid: invalidProp, validationStatus, name, listLabel = "Choose a time", open: openProp, defaultOpen, onOpenChange, className, style, id: idProp,
+    "aria-label": ariaLabel, "aria-labelledby": labelledBy, "aria-invalid": ariaInvalid, "data-validation-status": fieldStatus, ...rest },
   ref,
 ) {
-  // A Field around it passes aria-invalid (its error); `invalid` says the same directly.
-  const invalid = invalidProp || ariaInvalid === true || ariaInvalid === "true" || validationStatus === "error";
+  // A Field around it passes aria-invalid (its error) and its status; `invalid` and `validationStatus` say the same directly.
+  const { invalid, status } = resolveValidation({ validationStatus, invalid: invalidProp, ariaInvalid, fieldStatus });
   const cycle = hourCycle ?? localeCycle(locale);
   const seconds = granularity === "second";
   const [parts, setParts] = useState<Parts>(() => parse(value ?? defaultValue) ?? EMPTY);
@@ -94,16 +103,16 @@ export const TimeField = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeFieldPro
   const id = idProp ?? autoId;
   const segmentRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const typed = useRef<{ kind: Kind | null; text: string }>({ kind: null, text: "" });
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const commit = (next: Parts) => {
+  const commit = (next: Parts, event: SyntheticEvent) => {
     setParts(next);
     const before = toValue(parts, seconds);
     const after = toValue(next, seconds);
     if (before !== after) {
       lastValue.current = after;
-      onValueChange?.(after);
+      onValueChange?.(after, event);
     }
   };
 
@@ -155,10 +164,10 @@ export const TimeField = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeFieldPro
         const buffer = typed.current.kind === kind ? typed.current.text : "";
         if (buffer.length > 1) {
           typed.current = { kind, text: buffer.slice(0, -1) };
-          commit(withShown(kind, Number(typed.current.text)));
+          commit(withShown(kind, Number(typed.current.text)), event);
         } else if (current !== null && kind !== "period") {
           typed.current = { kind: null, text: "" };
-          commit(withShown(kind, null));
+          commit(withShown(kind, null), event);
         } else if (event.key === "Backspace") {
           focusSegment(index - 1);
         }
@@ -168,7 +177,7 @@ export const TimeField = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeFieldPro
         if (readOnly || event.ctrlKey || event.metaKey || event.altKey) return;
         if (kind === "period") {
           const key = event.key.toLowerCase();
-          if (key === "a" || key === "p") { event.preventDefault(); commit(withShown("period", key === "a" ? 0 : 1)); focusSegment(index + 1); }
+          if (key === "a" || key === "p") { event.preventDefault(); commit(withShown("period", key === "a" ? 0 : 1), event); focusSegment(index + 1); }
           return;
         }
         if (!/^\d$/.test(event.key)) return;
@@ -180,7 +189,7 @@ export const TimeField = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeFieldPro
           typed.current = { kind, text };
           const number = Number(text);
           // "0" in a 12-hour field waits for the next digit (01-09); otherwise it is the value.
-          if (!(kind === "hour" && cycle === 12 && number === 0)) commit(withShown(kind, number));
+          if (!(kind === "hour" && cycle === 12 && number === 0)) commit(withShown(kind, number), event);
           // Move on once no further digit could follow.
           if (text.length === 2 || number * 10 > max) { typed.current = { kind: null, text: "" }; focusSegment(index + 1); }
         }
@@ -189,7 +198,7 @@ export const TimeField = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeFieldPro
     event.preventDefault();
     if (readOnly) return;
     typed.current = { kind: null, text: "" };
-    commit(withShown(kind, next ?? null));
+    commit(withShown(kind, next ?? null), event);
   };
 
   // The list: every `step` minutes from midnight.
@@ -242,7 +251,7 @@ export const TimeField = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeFieldPro
       aria-disabled={disabled || undefined}
       className={cx(inputVariants({ variant, size }), timeFieldVariants({}, className))}
       style={style}
-      {...(invalid ? { "data-invalid": "" } : {})}
+      {...validationAttributes(status)}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(readOnly ? { "data-read-only": "" } : {})}
     >
@@ -302,7 +311,7 @@ export const TimeField = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeFieldPro
               const at = `${pad(time.hour)}:${pad(time.minute)}`;
               return (
                 <MenuItem key={at} radio checked={current === at}
-                  onClick={() => { typed.current = { kind: null, text: "" }; commit({ hour: time.hour, minute: time.minute, second: 0, period: time.hour >= 12 ? 1 : 0 }); }}>
+                  onClick={event => { typed.current = { kind: null, text: "" }; commit({ hour: time.hour, minute: time.minute, second: 0, period: time.hour >= 12 ? 1 : 0 }, event); }}>
                   {text}
                 </MenuItem>
               );

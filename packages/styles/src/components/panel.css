@@ -46,15 +46,16 @@
     /* spec (owner, 2026-09-28: "shouldn't there be differences in text size and gaps between medium and
        small?"): the panel's own text and gaps step with the tier; controls keep their tier's text (14/20
        at sm and md, the control scale). Published as --_panel-* so BoxField and PropertyList rows inside
-       a panel follow them. md: section titles and labels 14/20, bar title 16/24, fields 12 apart (and
-       from their row's action), rows 12 apart, labels 6 over their controls. */
+       a panel follow them. md: section titles and labels 14/20, fields 12 apart (and from their row's action),
+       rows 12 apart, labels 6 over their controls. The bar title is the size of the rows it names (owner,
+       2026-11-07, system gaps L1: a title is its text's size; was text-lg 15/22, the reading step). */
     --_panel-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10, compact 6 */
     --_panel-row-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10, compact 6 */
     --_panel-label-gap: calc(var(--area-ui-stack) - var(--area-space-2)); /* Field's label gap less 2: 4 / compact 2 */
     --_panel-label-text: var(--area-text-base-size);
     --_panel-label-leading: var(--area-text-base-leading);
-    --_panel-title-text: var(--area-text-lg-size);
-    --_panel-title-leading: var(--area-text-lg-leading);
+    --_panel-title-text: var(--area-text-base-size); /* spec: 13/18 at type 13, was text-lg */
+    --_panel-title-leading: var(--area-text-base-leading);
     /* spec (owner, 2026-10-30, docs/research/inspector-panel-2026-10-30, "One Inspector grid"): the panel's one label
        column, 40% of a row less the cluster gap (95 in a 272 panel), published so every row that pairs a name with a
        value (Field, Description list) starts its value on one edge. It resolves where it is used, so 100% is that row's
@@ -306,7 +307,7 @@
    * touch screen always shows them. They keep their place, so the heading never reflows.
    */
   @media (hover: hover) {
-    .area-panel__section--reveal > .area-panel__heading > .area-panel__actions > * { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+    .area-panel__section--reveal > .area-panel__heading > .area-panel__actions > * { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
     .area-panel__section--reveal:not(:hover, :focus-within) > .area-panel__heading > .area-panel__actions > :not([aria-pressed="true"], [aria-expanded="true"], :has([aria-pressed="true"], [aria-expanded="true"])) { pointer-events: none; }
     .area-panel__section--reveal:is(:hover, :focus-within) > .area-panel__heading > .area-panel__actions > *,
     .area-panel__section--reveal > .area-panel__heading > .area-panel__actions > :is([aria-pressed="true"], [aria-expanded="true"], :has([aria-pressed="true"], [aria-expanded="true"])) { opacity: 1; transition-duration: 0s; }
@@ -391,9 +392,9 @@
 
   /*
    * spec (docs/specs/resizable-panel.md): a resizable panel has a separator on one edge. Figma's
-   * is 8 wide, 6 outside the panel's edge and 2 inside (captured); hover changes only the cursor;
-   * at a limit the cursor points the one way the panel can still go; keyboard focus draws a 4px
-   * pill, half the edge's height, centred in the handle.
+   * is 8 wide, 6 outside the panel's edge and 2 inside (captured); at a limit the cursor points the
+   * one way the panel can still go; hover, dragging and keyboard focus take the shared handle paint
+   * (splitter.css; was cursor only on hover, 2026-11-07).
    */
   .area-panel[data-resizable] { position: relative; }
   /* Docked, the seam it keeps is the edge it resizes from (Figma, Notion: a rule on that edge). */
@@ -427,7 +428,7 @@
   /* A Nav in the bar is a row of controls: the small control's height and corner, as the Titlebar's tabs. */
   .area-panel__bar .area-nav--horizontal .area-nav__item {
     block-size: var(--area-control-sm);
-    border-radius: min(var(--area-radius-control-sm), max(var(--area-radius-min), round(down, calc(var(--area-control-sm) * var(--area-radius-factor)), 2px)));
+    border-radius: min(var(--area-radius-control-sm), var(--area-radius-control-sm));
   }
   .area-panel[data-resizing] { user-select: none; }
   /* A width the app sets (a page that needs a wider list; the desktop app's Sidebar, owner 2026-11-01) eases on the
@@ -456,15 +457,16 @@
   .area-panel__resize:is([data-edge="start"][data-limit="max"], [data-edge="end"][data-limit="min"]) { cursor: e-resize; }
   .area-panel__resize:dir(rtl):is([data-edge="start"][data-limit="min"], [data-edge="end"][data-limit="max"]) { cursor: e-resize; }
   .area-panel__resize:dir(rtl):is([data-edge="start"][data-limit="max"], [data-edge="end"][data-limit="min"]) { cursor: w-resize; }
-  .area-panel__resize:focus-visible::before {
-    content: "";
-    inline-size: 4px; /* spec: Figma 4 */
-    /* spec: Figma half the edge. Written as the edge less two whole-pixel quarters, so the pill
-       centres on whole pixels on an edge of either parity (MOTION.md, crispness 1). */
-    block-size: calc(100% - 2 * round(nearest, 25%, 1px));
-    border-radius: var(--area-radius-full);
-    background-color: var(--area-focus-color);
-  }
+  /*
+   * The edge's paint is the one handle paint every resize edge shares (splitter.css, components audit N6, 2026-11-07):
+   * after the pointer rests 300 ms a 2 line covers the seam and the pixel outside it, the accent's indicator ink while
+   * dragging, and the focus pill. It was cursor only (Figma) with the pill alone; a Splitter's handle and this edge now
+   * look and behave the same. Here the line sits on the panel's edge, the handle's outside 6 plus the rule.
+   */
+  .area-panel__resize { --_sash-at: calc(var(--_resize-outside) + var(--area-border-width) - var(--_sash-line)); }
+  .area-panel__resize::before { inset-block: 0; inline-size: var(--_sash-line); }
+  .area-panel__resize[data-edge="start"]::before { inset-inline-start: var(--_sash-at); }
+  .area-panel__resize[data-edge="end"]::before { inset-inline-end: var(--_sash-at); }
 
   /* --- Sizes -------------------------------------------------------------- */
 
@@ -480,7 +482,7 @@
   /* sm: section titles and labels 12/16, bar title 14/20, fields 8 apart, rows 8 apart, labels 4 over. */
   .area-panel--sm {
     --_inset: calc(var(--area-inset-surface-sm) - var(--area-space-2)); --_row: var(--area-control-sm); /* 10, compact 6 */
-    --_panel-gap: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)); --_panel-row-gap: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)); --_panel-label-gap: var(--area-space-4); /* spec: 6, compact 4; labels stay 4 over */
+    --_panel-gap: var(--area-ui-stack); --_panel-row-gap: var(--area-ui-stack); --_panel-label-gap: var(--area-space-4); /* spec: 6, compact 4; labels stay 4 over */
     --_panel-label-text: var(--area-text-xs-size); --_panel-label-leading: var(--area-text-xs-leading);
     --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
   }
@@ -503,5 +505,5 @@
   .area-panel__toggle[aria-expanded="false"] .area-panel__chevron svg { rotate: -90deg; }
   .area-panel__toggle[aria-expanded="false"] .area-panel__chevron:dir(rtl) svg { rotate: 90deg; }
   /* Reveal-on-hover fades on the one shared timing (audit F-38). */
-  .area-panel__chevron { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-panel__chevron { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
 }

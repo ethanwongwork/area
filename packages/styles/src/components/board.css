@@ -24,6 +24,9 @@
        contrast reach a column and a column matches its Tag. Neutral uses the default ink over no tint. */
     --_color: var(--area-fg-default);
     --_surface-tone: transparent;
+    /* The column's ground: its hue's translucent tint (`hue-<hue>-bg-translucent`, half its resting tint, see-through so
+       it sits on any ground; neutral the default ink at 3%), components audit D5. */
+    --_ground: transparent;
     /* The colour as text (the count, the add row): the tone's words already follow a light page (the Layers model darkens
        them); in dark the column's ground is translucent, so they lighten with the dark layers as before (Layers sweep
        2026-10-16: 4.06:1 at dark 24 + 8). Neutral darkens with the light page as the vivid inks do. */
@@ -39,23 +42,24 @@
        default, Card's, Dialog's and Composer's outer corner (owner, 2026-10-18: "too round compared to the other
        components"; it was 20, the card's container 12 plus 8, the roundest surface in the system). */
     border-radius: calc(var(--area-radius-row) + var(--area-space-8) * var(--area-radius-concentric));
-    background-color: color-mix(in oklab, var(--_surface-tone) 50%, transparent);
+    background-color: var(--_ground);
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
-  /* Custom colours (owner, round 7: "custom colors rather than semantic"), each Tag's ink of that colour. */
-  /* Neutral keeps its 3% wash of the default ink (half of 6%). */
-  .area-board-column--neutral { --_color: var(--area-fg-default); --_surface-tone: color-mix(in oklab, var(--area-fg-default) 6%, transparent); --_ink: light-dark(color-mix(in oklab, var(--_color), black calc(var(--area-layer-light-vivid-darken) * 100%)), var(--_color)); }
-  .area-board-column--gray { --_color: var(--area-fg-gray); --_surface-tone: var(--area-gray-surface); --_surface-tone-hover: var(--area-gray-surface-hover); --_surface-tone-active: var(--area-gray-surface-active); }
-  .area-board-column--brown { --_color: var(--area-fg-brown); --_surface-tone: var(--area-brown-surface); --_surface-tone-hover: var(--area-brown-surface-hover); --_surface-tone-active: var(--area-brown-surface-active); }
-  .area-board-column--orange { --_color: var(--area-fg-warning); --_surface-tone: var(--area-warning-surface); --_surface-tone-hover: var(--area-warning-surface-hover); --_surface-tone-active: var(--area-warning-surface-active); }
-  .area-board-column--yellow { --_color: var(--area-fg-caution); --_surface-tone: var(--area-caution-surface); --_surface-tone-hover: var(--area-caution-surface-hover); --_surface-tone-active: var(--area-caution-surface-active); }
-  .area-board-column--green { --_color: var(--area-fg-success); --_surface-tone: var(--area-success-surface); --_surface-tone-hover: var(--area-success-surface-hover); --_surface-tone-active: var(--area-success-surface-active); }
-  .area-board-column--blue { --_color: var(--area-fg-info); --_surface-tone: var(--area-info-surface); --_surface-tone-hover: var(--area-info-surface-hover); --_surface-tone-active: var(--area-info-surface-active); }
-  .area-board-column--purple { --_color: var(--area-fg-discovery); --_surface-tone: var(--area-discovery-surface); --_surface-tone-hover: var(--area-discovery-surface-hover); --_surface-tone-active: var(--area-discovery-surface-active); }
-  .area-board-column--pink { --_color: var(--area-fg-pink); --_surface-tone: var(--area-pink-surface); --_surface-tone-hover: var(--area-pink-surface-hover); --_surface-tone-active: var(--area-pink-surface-active); }
-  .area-board-column--red { --_color: var(--area-fg-danger); --_surface-tone: var(--area-danger-surface); --_surface-tone-hover: var(--area-danger-surface-hover); --_surface-tone-active: var(--area-danger-surface-active); }
+  /* Custom colours (owner, round 7: "custom colors rather than semantic"), each Tag's ink of that colour: the hue's roles
+     (semantic/hues.ts; components audit D5, 2026-11-07), the same tone tokens by name. Neutral keeps its 3% wash of the
+     default ink (its `bg-translucent`). The tints' unread hover and active steps went with the move. */
+  .area-board-column--neutral { --_color: var(--area-hue-neutral-text); --_ground: var(--area-hue-neutral-bg-translucent); --_ink: light-dark(color-mix(in oklab, var(--_color), black calc(var(--area-layer-light-vivid-darken) * 100%)), var(--_color)); }
+  .area-board-column--gray { --_color: var(--area-hue-gray-text); --_surface-tone: var(--area-hue-gray-bg); --_ground: var(--area-hue-gray-bg-translucent); }
+  .area-board-column--brown { --_color: var(--area-hue-brown-text); --_surface-tone: var(--area-hue-brown-bg); --_ground: var(--area-hue-brown-bg-translucent); }
+  .area-board-column--orange { --_color: var(--area-hue-orange-text); --_surface-tone: var(--area-hue-orange-bg); --_ground: var(--area-hue-orange-bg-translucent); }
+  .area-board-column--yellow { --_color: var(--area-hue-yellow-text); --_surface-tone: var(--area-hue-yellow-bg); --_ground: var(--area-hue-yellow-bg-translucent); }
+  .area-board-column--green { --_color: var(--area-hue-green-text); --_surface-tone: var(--area-hue-green-bg); --_ground: var(--area-hue-green-bg-translucent); }
+  .area-board-column--blue { --_color: var(--area-hue-blue-text); --_surface-tone: var(--area-hue-blue-bg); --_ground: var(--area-hue-blue-bg-translucent); }
+  .area-board-column--purple { --_color: var(--area-hue-purple-text); --_surface-tone: var(--area-hue-purple-bg); --_ground: var(--area-hue-purple-bg-translucent); }
+  .area-board-column--pink { --_color: var(--area-hue-pink-text); --_surface-tone: var(--area-hue-pink-bg); --_ground: var(--area-hue-pink-bg-translucent); }
+  .area-board-column--red { --_color: var(--area-hue-red-text); --_surface-tone: var(--area-hue-red-bg); --_ground: var(--area-hue-red-bg-translucent); }
 
   /* spec: Notion's group header, 40 tall; the title starts on the cards' text (8 + the card's 10). */
   .area-board-column__header {
@@ -216,7 +220,7 @@
     background-color: var(--_card-bg);
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-out);
   }
   .area-board-card__actions::before {
     content: "";

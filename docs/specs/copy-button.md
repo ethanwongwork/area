@@ -11,8 +11,8 @@
 
 ## Job and boundaries
 
-Copies a piece of text when pressed and confirms it in place: the icon turns to a check for two seconds and a polite
-live region says the result once. It is a Button: variants, tones, sizes, focus, disabled and the icon box are
+Copies a piece of text when pressed and confirms it in place: the icon turns to a check for two seconds and the shared
+announcer says the result once, politely. It is a Button: variants, tones, sizes, focus, disabled and the icon box are
 Button's.
 
 Not this component: copying announced by a Toast (Notion's and Figma's "Copy link" menu rows; a Menu item calls
@@ -51,7 +51,6 @@ Area
 button.area-button.area-copy-button   Button's shell: height, padding, radius, plate, focus
   span.area-button__icon              Button's icon box; the copy glyph, or the check while copied
   span.area-button__label             only with children
-span.area-sr-only[aria-live=polite]   sibling; empty at rest, "Copied to clipboard" / "Copy failed" once
 ```
 
 Inset equations are Button's (`docs/specs/button.md`).
@@ -62,7 +61,7 @@ Inset equations are Button's (`docs/specs/button.md`).
 |---|---|---|---|
 | feedback · duration | 2000 ms (`COPY_FEEDBACK_MS`) | uui `use-clipboard.ts:5`; shadcn 2000; Mantine's hook 2000; ChatGPT's canvas copy measured 2016 ms (chatgpt-pressed) | was 1600 in Code block and Token row with no source; Mantine's component 1000 and Zag's 3000 are the outliers |
 | feedback · what changes | the icon only: copy → check; the label and the name stay | uui (label stays), shadcn (sr-only name stays); Area audit G-21 (Code block: one fixed name) | Zag renames the button, and so does ChatGPT (name and tooltip "Copied", chatgpt-pressed); Notion changes nothing on the button (a toast and a live region, notion-code); a changing name is read on focus, not as a result |
-| feedback · announcement | polite live region beside the button, "Copied to clipboard" / "Copy failed" | Code block's (audit G-21) | — |
+| feedback · announcement | the shared announcer, polite, "Copied to clipboard" / "Copy failed" (`useCopy` says it) | Code block's (audit G-21); components audit D1 | was a polite live region beside the button until 2026-11-07 |
 | feedback · motion | the check enters from scale 0.6 with opacity over `duration-fast`, ease-out; the copy glyph returns at once | Code block, MOTION.md (2026-10-07) | moved from code.css to copy-button.css |
 | default variant / tone / size | ghost / neutral / sm | Code block's copy (the approved instance); ChatGPT's ghost icon buttons | ChatGPT's 32 / 20 icon is Button md's role; sm is Code block's, and `size` is open |
 | glyphs | Fluent copy and check cuts (Code block's); `icon` / `copiedIcon` override | Code block | the app passes Area's CopyIcon and CheckIcon |
@@ -74,13 +73,13 @@ Inset equations are Button's (`docs/specs/button.md`).
 | State | Changes | Evidence |
 |---|---|---|
 | rest, hover, press, focus, disabled | Button's | button.md |
-| copied (`data-copy-state="copied"`) | the icon is the check, entering scaled; the live region speaks | above |
-| failed (`data-copy-state="failed"`) | the copy glyph stays; the live region says "Copy failed" | Code block |
+| copied (`data-copy-state="copied"`) | the icon is the check, entering scaled; the announcer says "Copied to clipboard" | above |
+| failed (`data-copy-state="failed"`) | the copy glyph stays; the announcer says "Copy failed" | Code block |
 
 ## Behavior and accessibility
 
 A native `button type="button"` (Button). Icon-only takes `aria-label` from `label`; with children the visible label
-is the name. The live region is a sibling, so it never joins the button's name. A second press restarts the
+is the name. The result is said through the shared announcer, so it never joins the button's name. A second press restarts the
 two-second clock. `onClick` runs first; `preventDefault()` there skips the copy. A refused or missing clipboard, or a
 `value` function that throws, is the failed state. Forced colours: Button's. Reduced motion: the check's entry is a
 `duration-fast` animation, which Motion 0 and reduced motion zero.
@@ -88,13 +87,14 @@ two-second clock. `onClick` runs first; `preventDefault()` there skips the copy.
 ## Adoption
 
 - Code block's copy is `<CopyButton value={read} label={copyLabel} />` (its own live region removed).
-- Token row uses `useCopy` and `CopyStatus` (2000 ms, was 1600).
+- Token row uses `useCopy` with its own `copiedLabel` (2000 ms, was 1600). `CopyStatus` is deprecated and renders
+  nothing.
 - The app: `apps/desktop/src/copy.tsx` wraps CopyButton as an outline, labelled Button with Area's icons (it used to
   rename itself "Copied"); Typography's icon-only token copy is a CopyButton inside its Tooltip.
 
 ## Verification
 
-- `packages/react/tests/copy-button.test.mjs`: icon-only name and empty live region, labelled name, Button props,
+- `packages/react/tests/copy-button.test.mjs`: icon-only name and no live region of its own, labelled name, Button props,
   Code block and Token row on the same control and clock.
 - App preview: see the handoff.
 
@@ -114,3 +114,9 @@ two-second clock. `onClick` runs first; `preventDefault()` there skips the copy.
 - 2026-10-15 · owner: "go with your rec" (new components from the backlog) → Copy button, from PRODUCT_UI.md's open gaps.
 - 2026-10-16 · owner (on a parallel build of the same gap): "add my evidence" → sources chatgpt-pressed (ChatGPT's copied state held 2016 ms; it renames to "Copied") and notion-code (Notion's code-block copy: icon-only 24 × 24, confirmed by a toast and a live region, the button unchanged), with their captures. Evidence only: no value changes.
 - 2026-10-16 · owner, review round 27 (components27) → approved → Complete in `component-status.mjs`.
+
+### 2026-11-07 · One announcer (components audit D1)
+
+The result moved from a sibling `span.area-sr-only[aria-live=polite]` to the shared announcer (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")): `useCopy` takes
+`copiedLabel` / `failedLabel` and says the result when it settles, so Copy button renders only its Button. `CopyStatus`
+is deprecated (renders nothing; Governance § Deprecated). No visible change.
