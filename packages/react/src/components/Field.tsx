@@ -105,7 +105,7 @@ export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(func
   },
   ref,
 ) {
-  orientation = useSystemDefault("field", "orientation", orientation); // the system's default (SystemDefaults) where the use gives none
+  orientation = useSystemDefault("field", "orientation", orientation, fieldVariants.manifest.variants.orientation); // the system's default (SystemDefaults) where the use gives none
   const reactId = useId().replace(/:/g, "");
   const childArray = Children.toArray(children);
   const controlIndex = childArray.findIndex(isValidElement);

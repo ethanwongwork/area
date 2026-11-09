@@ -46,8 +46,8 @@ export const ToggleGroup = forwardRef<HTMLDivElement, ToggleGroupProps>(function
   ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  variant = useSystemDefault("toggleGroup", "variant", variant);
-  const systemSize = useSystemDefault("toggleGroup", "size", undefined as typeof sizeProp);
+  variant = useSystemDefault("toggleGroup", "variant", variant, toggleGroupVariants.manifest.variants.variant);
+  const systemSize = useSystemDefault("toggleGroup", "size", undefined as typeof sizeProp, toggleGroupVariants.manifest.variants.size);
   const inToolbar = useContext(InToolbar);
   const toolbarSize = useContext(ToolbarSize);
   // Its own size, else a toolbar's, else the system's.

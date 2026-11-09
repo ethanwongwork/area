@@ -27,8 +27,8 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
   ref,
 ) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  variant = useSystemDefault("link", "variant", variant);
-  ink = useSystemDefault("link", "ink", ink);
+  variant = useSystemDefault("link", "variant", variant, linkVariants.manifest.variants.variant);
+  ink = useSystemDefault("link", "ink", ink, linkVariants.manifest.variants.ink);
   return (
     <a
       ref={ref}

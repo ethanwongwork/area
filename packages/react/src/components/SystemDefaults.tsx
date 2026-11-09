@@ -1,5 +1,5 @@
 import { createContext, useContext, type ReactNode } from "react";
-import { MANIFESTS } from "../variants.ts";
+import type { MANIFESTS } from "../variants.ts";
 
 /**
  * A design system's own defaults (docs/research/system-inventory-2026-11-08): per family, by its manifest name ("tabs",
@@ -29,12 +29,13 @@ export function SystemDefaults({ value, children }: SystemDefaultsProps) {
 
 /**
  * The prop a component uses: its own, else the system's default for that family and axis when the family has the value
- * (`allowed`, for a prop whose values are not the manifest's, as Tabs' selection "marker" | "plate"), else undefined, so
- * the component's own default applies.
+ * (`values`: the family's own values for the axis, from its manifest, as `buttonVariants.manifest.variants.size`, or a
+ * prop's own values where they are not the manifest's, as Tabs' selection "marker" | "plate"), else undefined, so the
+ * component's own default applies. Each family passes its own values so that importing one component never pulls in
+ * every family's manifest (tests/consumer/imports.mjs, "unused components are removed").
  */
-export function useSystemDefault<T extends string>(family: keyof typeof MANIFESTS, axis: string, own: T | undefined, allowed?: readonly string[]): T | undefined {
+export function useSystemDefault<T extends string>(family: keyof typeof MANIFESTS, axis: string, own: T | undefined, values: readonly string[]): T | undefined {
   const value = useContext(SystemDefaultsContext)[family]?.[axis];
   if (own !== undefined || value === undefined) return own;
-  const values: readonly string[] = allowed ?? ((MANIFESTS[family] as { variants: Record<string, readonly string[]> }).variants[axis] ?? []);
   return values.includes(value) ? value as T : undefined;
 }

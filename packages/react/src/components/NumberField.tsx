@@ -61,7 +61,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy,
     "aria-invalid": ariaInvalid, ...rest }, ref,
 ) {
-  variant = useSystemDefault("numberField", "variant", variant); // the system's default (SystemDefaults) where the use gives none
+  variant = useSystemDefault("numberField", "variant", variant, numberFieldVariants.manifest.variants.variant); // the system's default (SystemDefaults) where the use gives none
   // Inside an InputGroup, the group's Field state reaches the control (audit B-14).
   const groupState = useContext(InputGroupContext);
   const disabled = disabledProp ?? groupState.disabled;

@@ -19,7 +19,7 @@ export interface SurfaceProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Surface = forwardRef<HTMLDivElement, SurfaceProps>(function Surface({ variant, size, className, ...rest }, ref) {
   // The system's defaults (SystemDefaults) where the use gives none.
-  variant = useSystemDefault("surface", "variant", variant);
-  size = useSystemDefault("surface", "size", size);
+  variant = useSystemDefault("surface", "variant", variant, surfaceVariants.manifest.variants.variant);
+  size = useSystemDefault("surface", "size", size, surfaceVariants.manifest.variants.size);
   return <div ref={ref} {...rest} className={surfaceVariants({ variant, size }, className)} />;
 });
