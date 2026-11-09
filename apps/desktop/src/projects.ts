@@ -26,6 +26,7 @@
  */
 import { restoreTheme, systemSlug, type Restorers, type SystemTheme } from "./systems.ts";
 import type { CanvasAxes } from "./studio.tsx";
+import { apply, find, readDoc, walk, type DesignDoc, type DocOp } from "./design-doc.ts";
 
 /** A thing on a page: a system's screen (a Patterns entry's id) or an Inspiration image (its `<group>/<image>`). */
 export type LayerKind = "screen" | "image";
@@ -41,6 +42,8 @@ export interface Layer {
   state?: string;
   /** On a flow page: one line on what happens at this step. */
   note?: string;
+  /** From its first edit: its own design (src/design-doc.ts), read from the screen as drawn; `ref` names that screen. */
+  doc?: DesignDoc;
 }
 /**
  * A link on a flow page: an element of a layer (its path of child indices from the screen's root, as a DesignChange's;
@@ -75,6 +78,9 @@ export interface LayerComment { id: string; page: string; layer: string; author:
 /**
  * A design change to one element of a layer's screen (src/design-edit.ts): what it is (its path of child indices from the
  * screen's root, its component and its words), which property, and the value before and after, in words and as applied.
+ * On a layer with its own design (direct editing, 2026-11-08) a change also names its node, which keeps its id through
+ * every edit, and holds the operation it made and the one that undoes it (src/design-doc.ts); its property may then be
+ * "insert", "remove", "move" or "size" as well. A change without them is an override drawn on the screen's code.
  */
 export interface DesignChange {
   id: string;
@@ -95,6 +101,10 @@ export interface DesignChange {
   at: string;
   /** When it went to Chat in a batch; a sent change stays drawn until it is cleared. */
   sent?: string;
+  /** On a layer's own design: the node, the operation made, and the one that undoes it. */
+  node?: string;
+  op?: DocOp;
+  undo?: DocOp;
   /** A link's change (property `link`): where the element went before, so Undo puts it back ("" for the next step). */
   was?: string;
 }
@@ -150,11 +160,13 @@ function readLayers(saved: unknown): Layer[] {
     if (!kind || typeof l.ref !== "string" || !l.ref) continue;
     const id = text(l.id, nextId("layer", layers));
     if (layers.some(other => other.id === id)) continue;
+    const doc = kind === "screen" ? readDoc(l.doc) : undefined;
     layers.push({
       id, kind, ref: l.ref, name: text(l.name, l.ref),
       ...(l.branch === true ? { branch: true } : {}),
       ...(typeof l.of === "string" && l.of ? { of: l.of, state: text(l.state, "State") } : {}),
       ...(typeof l.note === "string" && l.note.trim() ? { note: l.note.trim() } : {}),
+      ...(doc ? { doc } : {}),
     });
   }
   // A state names a step of the page that is not itself a state; anything else is a step again.
@@ -210,6 +222,9 @@ function readExplorations(saved: unknown, restore: Restorers): Exploration[] {
   return explorations;
 }
 
+/** Whether a saved value is an operation (its nodes are checked when it is applied: one that can't apply does nothing). */
+const isOp = (value: unknown): value is DocOp => Boolean(value) && typeof value === "object" && ["patch", "insert", "remove", "move", "batch"].includes((value as { op?: unknown }).op as string);
+
 function readChanges(saved: unknown): DesignChange[] {
   const changes: DesignChange[] = [];
   for (const entry of Array.isArray(saved) ? saved : []) {
@@ -222,6 +237,8 @@ function readChanges(saved: unknown): DesignChange[] {
       id, page: c.page as string, layer: c.layer as string, path: c.path as number[], target: text(c.target, "Element"), label: typeof c.label === "string" ? c.label : "",
       property: c.property as string, name: text(c.name, c.property as string), from: typeof c.from === "string" ? c.from : "", to: typeof c.to === "string" ? c.to : "",
       value: c.value as string, at: typeof c.at === "string" ? c.at : new Date(0).toISOString(), ...(typeof c.sent === "string" && c.sent ? { sent: c.sent } : {}),
+      ...(typeof c.node === "string" && /^n\d+$/.test(c.node) ? { node: c.node } : {}),
+      ...(isOp(c.op) ? { op: c.op } : {}), ...(isOp(c.undo) ? { undo: c.undo } : {}),
       ...(typeof c.was === "string" ? { was: c.was } : {}),
     });
   }
@@ -353,6 +370,7 @@ export function describeChange(before: readonly ProjectPage[], after: readonly P
     for (const layer of page.layers) {
       const old = was.layers.find(other => other.id === layer.id);
       if (old && old.name !== layer.name) notes.push(`Renamed ${old.name} to ${layer.name}`);
+      if (old && old.doc !== layer.doc && JSON.stringify(old.doc) !== JSON.stringify(layer.doc)) notes.push(`Edited ${layer.name}`);
     }
     if (!gained.length && !lost.length && was.layers.map(layer => layer.id).join() !== page.layers.map(layer => layer.id).join()) notes.push(`Reordered ${page.name}`);
     // A flow's own changes: links, states, branches.
@@ -385,9 +403,19 @@ export function recordIteration(before: Project, after: Project, now = new Date(
   if (!said) return after;
   const history = [...after.history];
   if (!history.length) history.push({ id: "iteration-1", at: before.created, note: "Before the first change", pages: before.pages });
-  history.push({ id: nextId("iteration", history), at: now.toISOString(), note: note ?? said, pages: after.pages });
+  const last = history[history.length - 1]!;
+  const noted = note ?? said;
+  // A run of edits to one design (a nudge held down, a drag, words typed) is one iteration, the latest state of it, until
+  // the design rests for EDIT_RUN_MS; every edit is still in the change log and the stage's undo.
+  if (/^Edited /.test(noted) && last.note === noted && history.length > 1 && now.getTime() - new Date(last.at).getTime() < EDIT_RUN_MS) {
+    history[history.length - 1] = { ...last, at: now.toISOString(), pages: after.pages };
+  } else {
+    history.push({ id: nextId("iteration", history), at: now.toISOString(), note: noted, pages: after.pages });
+  }
   return { ...after, history: history.slice(-HISTORY_LIMIT) };
 }
+/** How long a design rests before its next edit starts a new iteration. */
+export const EDIT_RUN_MS = 60_000; /* pick */
 
 /** The project's pages put back to an iteration (the history stays, and the restore is an iteration of its own). */
 export function restoreIteration(project: Project, id: string): Project {
@@ -422,13 +450,84 @@ export function logChange(project: Project, change: Omit<DesignChange, "id" | "a
   return { ...project, changes: [...project.changes, { ...change, id: nextId("change", project.changes), at: now.toISOString() }] };
 }
 
-/** The project without a change (Undo in the log). */
+/**
+ * The project without a change (Undo in the log). On a layer's own design its undo is applied, in any order: a change
+ * whose node is gone afterwards (it was inserted by the change undone) leaves the log with it.
+ */
 export function undoChange(project: Project, id: string): Project {
   const change = project.changes.find(entry => entry.id === id);
-  const kept = { ...project, changes: project.changes.filter(entry => entry.id !== id) };
-  if (change?.property !== "link") return kept;
+  const rest = project.changes.filter(entry => entry.id !== id);
   // A link's Undo puts the element's link back to where it went before (none: the next step).
-  return setLink(kept, change.page, { from: change.layer, path: change.path, label: change.label, to: change.was ?? "" });
+  if (change?.property === "link") return setLink({ ...project, changes: rest }, change.page, { from: change.layer, path: change.path, label: change.label, to: change.was ?? "" });
+  const layer = change?.undo && layerOf(project, change.page, change.layer);
+  if (!change?.undo || !layer?.doc) return { ...project, changes: rest };
+  const done = apply(layer.doc, change.undo);
+  if (!done) return { ...project, changes: rest };
+  const doc = done.doc;
+  const kept = rest.filter(entry => !(entry.page === change.page && entry.layer === change.layer && entry.node && entry.property !== "remove" && !find(doc, entry.node)));
+  return { ...withDoc(project, change.page, change.layer, doc), changes: kept };
+}
+
+/** A page's layer. */
+export const layerOf = (project: Project, page: string, layer: string) => project.pages.find(entry => entry.id === page)?.layers.find(entry => entry.id === layer);
+
+/** The project with a layer's design replaced (undefined: drawn from its screen's code again). */
+export function withDoc(project: Project, page: string, layer: string, doc: DesignDoc | undefined): Project {
+  return {
+    ...project,
+    pages: project.pages.map(entry => entry.id !== page ? entry : { ...entry, layers: entry.layers.map(other => {
+      if (other.id !== layer) return other;
+      const { doc: _old, ...rest } = other;
+      return doc ? { ...rest, doc } : rest;
+    }) }),
+  };
+}
+
+/** What an edit to a layer's design logs (projects.ts fills in the rest). */
+export type DocChange = Omit<DesignChange, "id" | "at" | "sent" | "op" | "undo" | "node"> & { node: string; op: DocOp; undo: DocOp };
+
+/**
+ * The project after an edit to a layer's design: the design after it, and the change logged. As `logChange`: a second
+ * change to a node's property, not yet sent, updates the first (keeping the first's undo), and one that puts it back
+ * removes it. Removing a node inserted since the last send takes its insert and its other unsent changes out of the log
+ * rather than logging a removal.
+ */
+export function logDocChange(project: Project, doc: DesignDoc, change: DocChange, now = new Date()): Project {
+  const designed = withDoc(project, change.page, change.layer, doc);
+  const onLayer = (entry: DesignChange) => entry.page === change.page && entry.layer === change.layer && !entry.sent;
+  if (change.property === "remove") {
+    const inserted = project.changes.find(entry => onLayer(entry) && entry.property === "insert" && entry.node === change.node);
+    if (inserted) {
+      const gone = new Set<string>();
+      if (inserted.op?.op === "insert") for (const node of walk([inserted.op.node])) gone.add(node.id);
+      return { ...designed, changes: project.changes.filter(entry => !(onLayer(entry) && entry.node && gone.has(entry.node))) };
+    }
+  }
+  const mergeable = change.property !== "insert" && change.property !== "remove";
+  const open = mergeable ? project.changes.find(entry => onLayer(entry) && entry.node === change.node && entry.property === change.property) : undefined;
+  if (open) {
+    if (change.to === open.from) return { ...designed, changes: project.changes.filter(entry => entry !== open) };
+    return { ...designed, changes: project.changes.map(entry => entry === open ? { ...entry, to: change.to, value: change.value, path: change.path, op: change.op, at: now.toISOString() } : entry) };
+  }
+  return { ...designed, changes: [...project.changes, { ...change, id: nextId("change", project.changes), at: now.toISOString() }] };
+}
+
+/**
+ * The project's changes with an edit taken back (the stage's ⌘Z) or done again (⇧⌘Z): the changes it added leave, and
+ * those it changed or removed come back as they were, each keeping when it was sent.
+ */
+export function revertChanges(current: readonly DesignChange[], from: readonly DesignChange[], to: readonly DesignChange[]): DesignChange[] {
+  const target = new Map(to.map(entry => [entry.id, entry]));
+  const source = new Set(from.map(entry => entry.id));
+  const out: DesignChange[] = [];
+  for (const entry of current) {
+    if (source.has(entry.id) && !target.has(entry.id)) continue;
+    const back = target.get(entry.id);
+    out.push(back ? { ...back, ...(entry.sent ? { sent: entry.sent } : {}) } : entry);
+  }
+  // Those the edit took out of the log come back.
+  for (const entry of to) if (!source.has(entry.id) && !out.some(other => other.id === entry.id)) out.push(entry);
+  return out;
 }
 
 /** The changes not yet sent, oldest first. */

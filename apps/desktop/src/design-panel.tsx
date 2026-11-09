@@ -8,7 +8,8 @@
  *                        versions; a double-click goes back to one
  *   Layers               the page's layers as cards: a click puts one on the stage; Add screen, Add image
  *   Documentation        what the layer is, what it is built from and what in it is not from Area
- *   Code                 the screen's source (src/content/examples), or an image's markup
+ *   Code                 the screen's source (src/content/examples), a design of its own written as code (design-doc.ts
+ *                        `toJsx`), or an image's markup
  *   Components & tokens  the families the screen uses and the tokens their stylesheets read
  *   Specs                the frame, type styles, colors and corners, read from the drawn design (src/design-scan.ts)
  *   Comments             notes on the layer, saved in the project
@@ -29,6 +30,7 @@ import { useViewOption } from "./view-controls.tsx";
 import { DataTable, FactTable, stylesheetOf } from "./family-tabs.tsx";
 // @ts-expect-error — the highlighter is authored in JavaScript.
 import { highlight } from "./content/highlight.mjs";
+import { toJsx } from "./design-doc.ts";
 import { appScale } from "./app-scale.ts";
 import { hrefOf, systemName } from "./places.ts";
 import { EXAMPLES, PATTERNS } from "./pages/examples.tsx";
@@ -288,6 +290,15 @@ function CodeTab({ layer }: DesignPanelProps) {
   const example = exampleOf(layer);
   const image = imageOf(layer, library);
   if (!layer) return <EmptyState size="sm" title="Nothing on the stage" description="Add a layer to the page, and its code shows here." />;
+  if (example && layer.doc) {
+    // A design of its own (src/design-doc.ts): its code is written from it, the components as themselves.
+    return (
+      <div className="studio-sections">
+        <TabHead>{`This layer's own design, written as code. It started from ${example.label}, whose file is unchanged.`}</TabHead>
+        <CodeBlock title={`${layer.name}.tsx`} language="tsx" html={highlight(toJsx(layer.doc, { name: layer.name }))} {...FEED_CODE} {...appScale()} />
+      </div>
+    );
+  }
   if (example) {
     const file = screenFile(example.id);
     return (
@@ -301,7 +312,7 @@ function CodeTab({ layer }: DesignPanelProps) {
   return (
     <div className="studio-sections">
       <TabHead>An image has no source of its own; this is its markup.</TabHead>
-      <CodeBlock language="html" code={markup} {...FEED_CODE} {...appScale()} />
+      <CodeBlock language="html" html={highlight(markup)} {...FEED_CODE} {...appScale()} />
     </div>
   );
 }

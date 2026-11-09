@@ -9,8 +9,8 @@ export const escapeHtml = (s) =>
 /**
  * Minimal JSX highlighting, at build time. Emits Area's own syntax classes.
  *
- * Keywords are matched last and only outside a tag, so `import` in prose stays prose and an
- * attribute named `for` is not recoloured as a statement.
+ * Tokens are taken in one pass (highlightTokens), so a string's quotes and a tag's name are
+ * never wrapped twice.
  *
  * Comments are recognised by line rather than by scan, because the only honest way to tell
  * a `//` comment from a `//` inside a URL is that it starts the line. A line that starts as
@@ -26,17 +26,26 @@ function highlightLine(line) {
   return highlightTokens(line);
 }
 
+/**
+ * One pass over a line, each token taken once: a double-quoted string, a tag's name, an attribute's name (straight
+ * before its `=`), a keyword, a brace. Everything between is escaped as it is. (A pass per kind over escaped text
+ * wrapped strings twice and took a string's closing quote for the next one's opening; direct editing, 2026-11-08.)
+ * Single quotes are left alone: in JSX's words they are apostrophes.
+ */
+const TOKEN = /("(?:[^"\\]|\\.)*")|(<\/?)([A-Za-z][\w.]*)|([A-Za-z_$][\w$-]*)(?==[^=])|\b(import|from|export|function|const|let|return|default|new|await|async)\b|([{}])/g;
+const span = (kind, text) => `<span class="area-syntax-${kind}">${escapeHtml(text)}</span>`;
+
 function highlightTokens(line) {
-  return escapeHtml(line)
-    .replace(/(&lt;\/?)([A-Za-z][\w.]*)/g, '$1<span class="area-syntax-tag">$2</span>')
-    .replace(
-      /([a-zA-Z-]+)(=)(&quot;[^&]*?&quot;)/g,
-      '<span class="area-syntax-attr">$1</span>$2<span class="area-syntax-string">$3</span>',
-    )
-    .replace(/(&quot;[^&]*?&quot;)/g, (m, q) => (m.includes("area-syntax") ? m : `<span class="area-syntax-string">${q}</span>`))
-    .replace(
-      /\b(import|from|export|const|let|return|default|new|await|async)\b/g,
-      '<span class="area-syntax-keyword">$1</span>',
-    )
-    .replace(/(\{)([^{}]*)(\})/g, '<span class="area-syntax-punct">$1</span>$2<span class="area-syntax-punct">$3</span>');
+  let out = "", last = 0;
+  for (const match of line.matchAll(TOKEN)) {
+    const [all, string, open, tag, attr, keyword, brace] = match;
+    out += escapeHtml(line.slice(last, match.index));
+    if (string) out += span("string", string);
+    else if (tag) out += escapeHtml(open) + span("tag", tag);
+    else if (attr) out += span("attr", attr);
+    else if (keyword) out += span("keyword", keyword);
+    else out += span("punct", brace);
+    last = match.index + all.length;
+  }
+  return out + escapeHtml(line.slice(last));
 }

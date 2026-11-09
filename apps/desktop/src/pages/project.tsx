@@ -24,7 +24,9 @@ import { useDesignViewer, type DesignViewerOptions } from "../design-viewer.tsx"
 import { AddLayer, DesignPanel, screenFile } from "../design-panel.tsx";
 import { StageSelection } from "../design-select.tsx";
 import { ChangeLog, ElementPanel } from "../design-inspector.tsx";
-import { applyChange, elementAt, pathOf, screensIn } from "../design-edit.ts";
+import { applyChange, elementAt, nodeFor, patchFor, pathOf, screensIn } from "../design-edit.ts";
+import { useDesignEditor } from "../design-editor.tsx";
+import { DocNodes } from "../design-render.tsx";
 import { checkFlow, isFlow, linkAt, nextOf, readFlow, stepName, type Flow } from "../flow.ts";
 import { FlowChecks, FlowDescription, FlowMap } from "../flow-map.tsx";
 import { openDesign, useCardArrival } from "../morph.ts";
@@ -97,6 +99,8 @@ function ProjectFacts({ project }: { project: Project }) {
 function LayerView({ layer, library }: { layer: Layer; library: ReturnType<typeof useLibrary>["library"] }) {
   if (layer.kind === "screen") {
     const example = EXAMPLES.find(entry => entry.id === layer.ref);
+    // A layer with a design of its own draws it, wherever its screen went.
+    if (layer.doc) return <WidthZoom><div className="ex-thumb" aria-hidden="true"><DocNodes nodes={layer.doc.root} /></div></WidthZoom>;
     return example ? <WidthZoom><div className="ex-thumb" aria-hidden="true"><example.Screen /></div></WidthZoom> : <p className="studio-muted">This screen is no longer in Patterns.</p>;
   }
   // Nothing while Inspiration loads.
@@ -118,7 +122,10 @@ const LAYER_ICONS: Record<Layer["kind"], ReactNode> = { screen: <AppWindowIcon /
 function layerDesign(layer: Layer, library: ReturnType<typeof useLibrary>["library"]): Pick<DesignViewerOptions, "width" | "height" | "frame" | "render" | "selfScaled" | "themed"> | null {
   if (layer.kind === "screen") {
     const example = EXAMPLES.find(entry => entry.id === layer.ref);
-    return example ? screenDesign(example) : null;
+    if (!example) return null;
+    // A design of its own is drawn as the screen was, in the screen's specimen at its width (src/design-render.tsx).
+    const doc = layer.doc;
+    return doc ? screenDesign({ ...example, Screen: () => <DocNodes nodes={doc.root} /> } as typeof example) : screenDesign(example);
   }
   const image = library?.items.find(entry => `${entry.folder}/${entry.id}` === layer.ref);
   return image ? {
@@ -251,9 +258,17 @@ export function ProjectPageView() {
   const choose = (path: number[] | null) => setChosen(path && chosenLayer ? { layer: chosenLayer.id, path } : null);
   // The design changes drawn on this layer (projects.ts `DesignChange`): the screen is keyed by them, so one undone
   // redraws it from its code before the rest are drawn again.
-  const drawn = openProject && shownPage && chosenLayer ? changesOn(openProject, shownPage.id, chosenLayer.id) : [];
+  // A layer with a design of its own has its changes in it; only a code-drawn screen draws them as overrides.
+  const drawn = openProject && shownPage && chosenLayer && !chosenLayer.doc ? changesOn(openProject, shownPage.id, chosenLayer.id) : [];
   const revision = JSON.stringify(drawn.map(entry => [entry.path, entry.property, entry.value]));
   const base = chosenLayer ? layerDesign(chosenLayer, library) : null;
+  // Direct editing (src/design-editor.tsx): the layer's design, read from its screen until its first edit.
+  const codeScreen = chosenLayer?.kind === "screen" ? EXAMPLES.find(entry => entry.id === chosenLayer.ref) : undefined;
+  const editor = useDesignEditor({
+    project: openProject, page: shownPage ?? null, layer: chosenLayer,
+    render: codeScreen ? () => screenDesign(codeScreen).render("light") : null, width: codeScreen ? screenDesign(codeScreen).width : 0,
+    onChange: next => updateProject(next.id, () => next),
+  });
   const design = base ? { ...base, render: (mode: "light" | "dark", scale: number) => <Fragment key={revision}>{base.render(mode, scale)}</Fragment> } : null;
   const at = chosenLayer ? layers.indexOf(chosenLayer) : -1;
   const viewer = useDesignViewer({
@@ -425,7 +440,8 @@ export function ProjectPageView() {
                   actions={layer ? undefined : <AddLayer onAdd={add} />} />
               </div>
             )}
-            <StageSelection stage={stageRef} enabled={editable} selected={selected} onSelect={choose} />
+            <StageSelection stage={stageRef} enabled={editable} selected={selected} onSelect={choose} editor={editor} />
+            {editor.capture}
             {play && flow && layer ? (
               <PlayBar flow={flow} page={page} layer={layer} trail={play.trail} hints={play.hints}
                 onBack={() => { if (play.trail.length > 1) { const trail = play.trail.slice(0, -1); setPlay({ ...play, trail }); select(`${page.id}/${trail[trail.length - 1]}`, { replace: true }); } }}
@@ -443,7 +459,16 @@ export function ProjectPageView() {
       inspector={{
         // The chosen element's properties (src/design-inspector.tsx), else what is on the stage: the layer and its page.
         design: layer && selected && editable ? (
-          <ElementPanel project={project} page={page} layer={layer} stage={stageRef} path={selected} onSelect={choose} />
+          <ElementPanel project={project} page={page} layer={layer} stage={stageRef} path={selected} onSelect={choose}
+            onEdit={editor.doc ? (row, value, words) => {
+              // An Inspector change is an edit to the design, as a stage tool's is.
+              const doc = editor.doc!;
+              const root = stageRef.current ? screensIn(stageRef.current)[0] : undefined;
+              const element = root ? elementAt(root, selected) : null;
+              const node = root && element ? nodeFor(doc, root, element) : null;
+              const op = node && patchFor(doc, node, row, value);
+              return Boolean(op && editor.commit(op, { ...words, property: row, value }));
+            } : undefined} />
         ) : flow && onMap ? (
           <FlowInspector project={project} page={page} flow={flow} onOpen={openStep} />
         ) : (<>
