@@ -1,3 +1,4 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import type { VariantProps } from "../variants.ts";
 import { InToolbar, ToolbarSize, toolbarItemProps } from "./toolbar-context.ts";
 import { MANIFESTS } from "../variants.ts";
@@ -84,6 +85,9 @@ export const Avatar = /* @__PURE__ */ forwardRef<HTMLSpanElement, AvatarProps>(f
   { size, shape, tone, active, src, alt, fallback, icon, className, role, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  size = useSystemDefault("avatar", "size", size);
+  tone = useSystemDefault("avatar", "tone", tone);
   // As Badge does for its unnamed forms: an image with no description fails loudly in development rather than
   // silently reaching assistive tech as an unnamed picture.
   if (src && alt === undefined && !ariaLabel && !rest["aria-labelledby"] && !rest["aria-hidden"]) {
@@ -187,6 +191,9 @@ export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(func
   { tone, layout, flush = false, icon, title, actions: actionsProp, action, link, onDismiss, dismissIcon, dismissLabel = "Dismiss alert", className, children, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  tone = useSystemDefault("alert", "tone", tone);
+  layout = useSystemDefault("alert", "layout", layout);
   const actions = actionsProp ?? action;
   const resolvedLayout = layout ?? "single-line";
   // A banner's link ends the row (OpenAI's announcement banners); elsewhere it follows the text.
@@ -239,6 +246,9 @@ export interface CardProps extends Div {
 
 const cardVariants = createVariants(MANIFESTS.card);
 export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, size, selected, className, ...rest }, ref) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  layout = useSystemDefault("card", "layout", layout);
+  size = useSystemDefault("card", "size", size);
   return <div ref={ref} className={cardVariants({ layout, size }, className)} data-selected={selected ? "" : undefined} {...rest} />;
 });
 
@@ -2083,9 +2093,11 @@ export interface TabsProps extends Omit<Div, "defaultValue"> {
 }
 
 export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(function Tabs(
-  { items, tabs: legacyTabs, value: controlledValue, defaultValue, onValueChange, "aria-label": ariaLabel, label, size = "md", orientation = "horizontal", activationMode = "automatic", track, selection = "marker", className, children, ...rest },
+  { items, tabs: legacyTabs, value: controlledValue, defaultValue, onValueChange, "aria-label": ariaLabel, label, size = "md", orientation = "horizontal", activationMode = "automatic", track, selection: selectionProp, className, children, ...rest },
   ref,
 ) {
+  // The system's default (SystemDefaults) where the use gives none; the underline (marker) otherwise.
+  const selection = useSystemDefault("tabs", "selection", selectionProp, ["marker", "plate"]) ?? "marker";
   // Each tab's key: its value, else its deprecated id.
   const source = items ?? legacyTabs ?? NO_ITEMS;
   const tabs = useMemo(() => source.map(tab => ({ ...tab, id: (tab.value ?? tab.id)! })), [source]);
@@ -2320,9 +2332,12 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
   { size: sizeProp, fullWidth, iconOnly, items, options: legacyOptions, value: controlledValue, defaultValue, label, onValueChange, onSelect, name, form, disabled, className, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  const systemSize = useSystemDefault("segmented", "size", undefined as typeof sizeProp);
   const options = items ?? legacyOptions ?? NO_ITEMS;
   const toolbarSize = useContext(ToolbarSize);
-  const size = sizeProp ?? toolbarSize;
+  // Its own size, else a toolbar's, else the system's.
+  const size = sizeProp ?? toolbarSize ?? systemSize;
   const [localValue, setLocalValue] = useState(defaultValue ?? options.find(option => !option.disabled)?.value);
   const initial = useRef(localValue);
   const hidden = useRef<HTMLInputElement | null>(null);

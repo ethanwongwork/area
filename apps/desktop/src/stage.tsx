@@ -19,6 +19,7 @@ import { highlight } from "./content/highlight.mjs";
 import type { Config, Playground, PlaygroundControl, PropValue } from "./content/playgrounds.tsx";
 import { feedScale } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
+import { LibrarySpecimens } from "./inventory.tsx";
 
 /** The narrowest the Stage is dragged to: a phone's 320 less the Canvas's margins. */
 const MIN_WIDTH = 288; /* pick */
@@ -91,7 +92,7 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
         {narrowed ? <span className="gallery-tile__value">{shown} px</span> : null}
       </div>
       <div className="studio-stage__view" data-zoom={zoom} {...specimenScope()}>
-        <div key={replays} className="studio-stage__content">{children}</div>
+        <div key={replays} className="studio-stage__content"><LibrarySpecimens>{children}</LibrarySpecimens></div>
       </div>
       <div className="studio-stage__handle" role="separator" aria-orientation="vertical" aria-label="Stage width"
         aria-valuemin={MIN_WIDTH} aria-valuemax={room} aria-valuenow={shown} aria-valuetext={`${shown} pixels`} tabIndex={0}

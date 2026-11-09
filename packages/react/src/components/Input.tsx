@@ -1,3 +1,4 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
 import { forwardRef, useContext } from "react";
@@ -120,6 +121,7 @@ export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(fu
   },
   ref,
 ) {
+  variant = useSystemDefault("input", "variant", variant); // the system's default (SystemDefaults) where the use gives none
   // Inside an InputGroup, the group's Field state reaches the control (audit B-14).
   const group = useContext(InputGroupContext);
   const disabled = disabledProp ?? group.disabled;

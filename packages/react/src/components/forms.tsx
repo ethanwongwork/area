@@ -1,3 +1,4 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { createContext, forwardRef, useContext, useEffect, useId, useRef, useState } from "react";
 import { assignRef } from "./overlay.ts";
 import { ToolbarSize } from "./toolbar-context.ts";
@@ -42,6 +43,7 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
   },
   ref,
 ) {
+  variant = useSystemDefault("select", "variant", variant); // the system's default (SystemDefaults) where the use gives none
   // In a Toolbar, a Select without its own size takes the bar's tier (audit A-7).
   const toolbarSize = useContext(ToolbarSize);
   const size = sizeProp ?? toolbarSize;
@@ -103,6 +105,7 @@ export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, Textarea
   },
   ref,
 ) {
+  variant = useSystemDefault("textarea", "variant", variant); // the system's default (SystemDefaults) where the use gives none
   const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
 
@@ -165,6 +168,8 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
     className, disabled: disabledProp, name: nameProp, value, checked: checkedProp, defaultChecked, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  size = useSystemDefault("checkbox", "size", size);
   // In a CheckboxGroup with a value, the group says which are checked, their name and whether they can change (O5).
   const group = useContext(CheckboxGroupContext);
   const optionValue = value === undefined ? undefined : String(value);
@@ -425,6 +430,8 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
   { variant, layout, size, label, description, caption, leadingVisual, meta, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  size = useSystemDefault("radio", "size", size);
   const group = useContext(RadioGroupContext);
   const descriptionId = useId();
   const resolvedDisabled = disabled ?? group?.disabled;

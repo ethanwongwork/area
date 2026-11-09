@@ -1,7 +1,22 @@
 # Handoff
 
 ## Current state (2026-11-08)
-
+- **System inventory and structure, worktree `system-inventory-structure-c39f5c` (uncommitted, 2026-11-08; main #212
+  merged in).** Owner's scope review: "more straightforward editing tools for customizing and updating a design system,
+  components" (BRIEF layers 2 and 3); then "build with recs". Research, ranked options, the working copy's shape and
+  what's built: `docs/research/system-inventory-2026-11-08/README.md`; review page
+  https://claude.ai/artifact/P44jDDPeDvYu8JeB1ixbFY (`verdicts` empty). Built, every recommendation (Q1–Q7):
+  `System.library` / `Release.library` (sparse differences from the manifests, per system), `src/library.ts` (rules,
+  `resolveFamily` for the generator, three structure pilots), `@area/react` `SystemDefaults` (read by 24 families; own
+  prop, then a parent's, then the system's), Components pages hide what is left out (Show › With left out), the List
+  view is the inventory table, Design view's In <system> and Structure; Publish lists library rows and pictures the
+  changed families (`library-pictures.tsx`); projects keep their version (`projects.ts release`, `followedVersion`:
+  Fixes and Adds reach them, Needs work waits) with an Overview notice, Review and Update (`release-notice.tsx`). Field:
+  label on a vertical Stack's first line. Checks: typecheck, build, npm test, React 779, desktop tests 48, playgrounds,
+  docs, app CSS, contracts; seen in the static build (4410, browser storage; test project and release removed after)
+  light and dark. Electron not relaunched (another session's window open; inventory edits there write the owner's system
+  files). Open: app chrome and example screens don't take the library's defaults; Calendar and Split button don't read
+  SystemDefaults; Setup questions not built.
 - **Worktree `component-design-review-92c949`: title balance + system gaps build (committed with the components audit build; main merged in 2026-11-08).**
   - Title balance (owner "4 is right"): a component's title is its text's size, its copy a step (4) off; an item's
     name joins its line (DESIGN_SYSTEM "Text pairs"; `docs/research/title-balance-2026-11-06`).

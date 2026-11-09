@@ -1,3 +1,4 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { forwardRef, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ButtonHTMLAttributes, FocusEvent, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { customSelectVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -127,6 +128,9 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     selectedLabel = (count: number) => `${count} selected`,
     disabled, className, style, onKeyDown, onBlur, onClick, form, "aria-invalid": ariaInvalid, "data-validation-status": fieldStatus, ...rest }, ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  variant = useSystemDefault("customSelect", "variant", variant);
+  size = useSystemDefault("customSelect", "size", size);
   const options = items ?? NO_ITEMS;
   const id = useId();
   const listId = `${id}-listbox`;

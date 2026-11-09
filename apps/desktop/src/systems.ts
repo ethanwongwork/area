@@ -13,6 +13,20 @@
  * a version, a kind (Fixes, Adds, Needs work in products) and a note. `changesOf` lists what the working copy changed
  * since; a system with none read from an older file starts with one release of what it has, so nothing reads as unpublished. Pure: the systems test
  * (tests/places.test.ts) imports it, and the restore functions that validate each value come in from the app (`Restorers`).
+ *
+ * The library (docs/research/system-inventory-2026-11-08, BRIEF "Customization model" layers 2 and 3): beside its themes,
+ * a system's working copy holds what it includes and how each family is built, for every theme alike. It is only what
+ * differs from Area's manifests (packages/styles/src/manifest.ts), so an empty library is Area as it ships:
+ *
+ *   library.families[<family slug>] = {
+ *     included?: false,                     // the family is left out of the system
+ *     leftOut?:  { [axis]: string[] },      // values left out, per manifest axis ("variant", "tone", "size" …) or "state"
+ *     defaults?: { [axis]: string },        // the system's default where it differs from the manifest's
+ *   }
+ *
+ * A structure choice (Tabs underline or plate, fields outlined or soft) is a default on an anatomy axis, the same data;
+ * src/library.ts names those axes, resolves a family for the code generator (`resolveFamily`) and edits the library.
+ * Publish copies the library into the release, and `changesOf` lists its changes as rows with a `family`.
  */
 import type { BrandState } from "./brand.ts";
 import type { ColoursState } from "./colours.ts";
@@ -41,6 +55,24 @@ export interface SystemTheme {
   /** The exact accent, Brand colours (src/brand.ts). */
   accent: BrandState;
 }
+/** One family's choices in a system: only what differs from Area's manifest for it (see the file's comment). */
+export interface FamilyChoice {
+  /** false: the family is left out of the system. Absent: included. */
+  included?: false;
+  /** Per axis (a manifest `variants` key, or "state"): the values left out, in the manifest's order. */
+  leftOut?: Record<string, string[]>;
+  /** Per axis: the system's default, where it differs from the manifest's. */
+  defaults?: Record<string, string>;
+}
+/** What a system includes and how each family is built, for every theme. Families not listed are as Area ships them. */
+export interface SystemLibrary {
+  families: Record<string, FamilyChoice>;
+}
+/** Area as it ships: everything included, every default the manifest's. */
+export const EMPTY_LIBRARY: SystemLibrary = Object.freeze({ families: Object.freeze({}) }) as SystemLibrary;
+/** The axis a family's states are listed under in `leftOut`. */
+export const STATE_AXIS = "state";
+
 export interface System {
   id: string;
   name: string;
@@ -51,6 +83,8 @@ export interface System {
   theme: string;
   /** The working copy: what its owners edit in place. */
   themes: SystemTheme[];
+  /** The working copy's library: what the system includes and how each family is built, for every theme. */
+  library: SystemLibrary;
   /** What was published, oldest first; the last is Live. Never empty. */
   releases: Release[];
 }
@@ -70,16 +104,30 @@ export interface Release {
   /** The theme in use when it was published. */
   theme: string;
   themes: SystemTheme[];
+  /** The library as published (empty in a release from before libraries: everything, as Area shipped it). */
+  library: SystemLibrary;
 }
 
-/** One thing the working copy changed since Live: a theme added, removed or renamed, or one of a theme's values. */
+/**
+ * One thing the working copy changed since Live: a theme added, removed or renamed, or one of a theme's values; or, with
+ * `family`, the library: a family left out or included again, a value left out or included again, a default changed.
+ */
 export interface Change {
-  /** The theme's name (the working one's, or Live's for a removed theme). */
+  /** The theme's name (the working one's, or Live's for a removed theme); "" for a library change, which every theme shares. */
   theme: string;
-  /** "added", "removed", "name", a Canvas axis, "material", "colours" or "accent". */
+  /**
+   * "added", "removed", "name", a Canvas axis, "material", "colours" or "accent"; for the library "family-left-out",
+   * "family-included", "left-out", "included" or "default".
+   */
   what: string;
   before?: string;
   after?: string;
+  /** A library change's family slug. */
+  family?: string;
+  /** A library change's axis ("variant", "size", "state" …). */
+  axis?: string;
+  /** The value left out or included again. */
+  value?: string;
 }
 /** Each theme value checked on the way in, as the app restores its saved settings (src/studio.tsx). */
 export interface Restorers {
@@ -103,6 +151,26 @@ export function systemSlug(name: string, taken: Iterable<string>): string {
   let id = base, n = 2;
   while (used.has(id) || id === "new") id = `${base}-${n++}`;
   return id;
+}
+
+/** A library from a file, each entry checked: anything that is not a family's choice is dropped, and empty ones too. */
+export function readLibrary(saved: unknown): SystemLibrary {
+  const s = (saved && typeof saved === "object" ? saved : {}) as Record<string, unknown>;
+  const listed = (s.families && typeof s.families === "object" ? s.families : {}) as Record<string, unknown>;
+  const strings = (value: unknown) => Array.isArray(value) ? [...new Set(value.filter((entry): entry is string => typeof entry === "string" && Boolean(entry)))] : [];
+  const families: Record<string, FamilyChoice> = {};
+  for (const [slug, entry] of Object.entries(listed)) {
+    if (!/^[a-z0-9-]+$/.test(slug) || !entry || typeof entry !== "object") continue;
+    const e = entry as Record<string, unknown>;
+    const choice: FamilyChoice = {};
+    if (e.included === false) choice.included = false;
+    const leftOut = Object.fromEntries(Object.entries(e.leftOut && typeof e.leftOut === "object" ? e.leftOut : {}).map(([axis, values]) => [axis, strings(values)]).filter(([, values]) => values!.length));
+    if (Object.keys(leftOut).length) choice.leftOut = leftOut;
+    const defaults = Object.fromEntries(Object.entries(e.defaults && typeof e.defaults === "object" ? e.defaults : {}).filter(([, value]) => typeof value === "string" && value)) as Record<string, string>;
+    if (Object.keys(defaults).length) choice.defaults = defaults;
+    if (Object.keys(choice).length) families[slug] = choice;
+  }
+  return { families };
 }
 
 /** A theme from saved values, each checked; a missing value is Area's default. */
@@ -140,8 +208,9 @@ export function readSystem(saved: unknown, restore: Restorers): System | null {
     return release ? [release] : [];
   });
   // A file from before publishing: what it has is its first version, so nothing reads as unpublished.
-  if (!releases.length) releases.push(firstRelease(themes, theme, created));
-  return { id: s.id, name: s.name.trim(), origin, created, theme, themes, releases };
+  const library = readLibrary(s.library);
+  if (!releases.length) releases.push(firstRelease(themes, theme, created, "First version", library));
+  return { id: s.id, name: s.name.trim(), origin, created, theme, themes, library, releases };
 }
 
 /** A release read from a file, or null when it is not one. */
@@ -155,13 +224,13 @@ function readRelease(saved: unknown, restore: Restorers): Release | null {
   return {
     version: r.version, kind, note: typeof r.note === "string" ? r.note : "", at: typeof r.at === "string" ? r.at : new Date(0).toISOString(),
     ...(typeof r.from === "string" && r.from ? { from: r.from } : {}),
-    theme: themes.some(theme => theme.id === r.theme) ? String(r.theme) : themes[0]!.id, themes,
+    theme: themes.some(theme => theme.id === r.theme) ? String(r.theme) : themes[0]!.id, themes, library: readLibrary(r.library),
   };
 }
 
 /** A system's first release: what it starts with, as version 1.0. */
-export function firstRelease(themes: SystemTheme[], theme: string, at: string, note = "First version"): Release {
-  return { version: "1.0", kind: "first", note, at, theme, themes };
+export function firstRelease(themes: SystemTheme[], theme: string, at: string, note = "First version", library: SystemLibrary = EMPTY_LIBRARY): Release {
+  return { version: "1.0", kind: "first", note, at, theme, themes, library };
 }
 
 /** The system's Live release: its latest. */
@@ -176,7 +245,31 @@ export const versionName = (name: string, version: string) => `${name} ${version
 /** The system as everyone else sees it: its Live release's themes (the theme in use stays the working one when Live has it). */
 export function asLive(system: System): System {
   const live = liveOf(system);
-  return { ...system, themes: live.themes, theme: live.themes.some(theme => theme.id === system.theme) ? system.theme : live.theme };
+  return { ...system, themes: live.themes, library: live.library, theme: live.themes.some(theme => theme.id === system.theme) ? system.theme : live.theme };
+}
+
+/**
+ * A project's version of its system (docs/research/system-inventory-2026-11-08, Q7): a project keeps the release it was
+ * made with until it updates. Fixes and Adds reach it on their own; a release that Needs work in products waits for the
+ * project to update (its notice, src/release-notice.tsx). So the version a project sees is the newest release after its
+ * own that no Needs work release stands before. A project with no version (made before this) follows Live, as before.
+ */
+export function followedVersion(system: System, pinned?: string): string {
+  const at = pinned ? system.releases.findIndex(release => release.version === pinned) : -1;
+  if (at < 0) return liveOf(system).version;
+  let reached = at;
+  while (reached + 1 < system.releases.length && system.releases[reached + 1]!.kind !== "needs-work") reached++;
+  return system.releases[reached]!.version;
+}
+/** The releases after `version`, oldest first: what a project on it has not taken yet. */
+export function releasesAfter(system: System, version: string): Release[] {
+  const at = system.releases.findIndex(release => release.version === version);
+  return at < 0 ? [] : system.releases.slice(at + 1);
+}
+/** The system as one of its releases published it (Live when there is no such release). */
+export function asRelease(system: System, version: string): System {
+  const release = system.releases.find(entry => entry.version === version) ?? liveOf(system);
+  return { ...system, themes: release.themes, library: release.library, theme: release.themes.some(theme => theme.id === system.theme) ? system.theme : release.theme };
 }
 
 /** A theme's values as one comparable string. */
@@ -185,7 +278,12 @@ const said = (value: unknown) => typeof value === "string" ? value : JSON.string
 
 /** What the working copy changed since Live, theme by theme, in the working copy's order. */
 export function changesOf(system: System): Change[] {
-  const live = liveOf(system).themes;
+  return changesBetween(liveOf(system), system);
+}
+/** What `now` (a working copy or a later release) changed from `was` (a release): its themes, then its library. */
+export function changesBetween(was: Pick<Release, "themes" | "library">, now: Pick<Release, "themes" | "library">): Change[] {
+  const live = was.themes;
+  const system = now;
   const changes: Change[] = [];
   for (const theme of system.themes) {
     const was = live.find(entry => entry.id === theme.id);
@@ -200,13 +298,36 @@ export function changesOf(system: System): Change[] {
     }
   }
   for (const was of live) if (!system.themes.some(theme => theme.id === was.id)) changes.push({ theme: was.name, what: "removed" });
+  return [...changes, ...libraryChanges(was.library, now.library)];
+}
+
+/** What a library changed from `was`, family by family (in slug order), then axis by axis. */
+export function libraryChanges(was: SystemLibrary, now: SystemLibrary): Change[] {
+  const changes: Change[] = [];
+  const slugs = [...new Set([...Object.keys(was.families), ...Object.keys(now.families)])].sort();
+  for (const family of slugs) {
+    const before = was.families[family] ?? {}, after = now.families[family] ?? {};
+    const inBefore = before.included !== false, inAfter = after.included !== false;
+    if (inBefore !== inAfter) changes.push({ theme: "", family, what: inAfter ? "family-included" : "family-left-out" });
+    const axes = [...new Set([...Object.keys(before.leftOut ?? {}), ...Object.keys(after.leftOut ?? {})])];
+    for (const axis of axes) {
+      const out = new Set(before.leftOut?.[axis] ?? []), next = new Set(after.leftOut?.[axis] ?? []);
+      for (const value of next) if (!out.has(value)) changes.push({ theme: "", family, axis, value, what: "left-out" });
+      for (const value of out) if (!next.has(value)) changes.push({ theme: "", family, axis, value, what: "included" });
+    }
+    const defaults = [...new Set([...Object.keys(before.defaults ?? {}), ...Object.keys(after.defaults ?? {})])];
+    for (const axis of defaults) {
+      if (before.defaults?.[axis] !== after.defaults?.[axis]) changes.push({ theme: "", family, axis, what: "default", before: before.defaults?.[axis], after: after.defaults?.[axis] });
+    }
+  }
   return changes;
 }
 
 /** The kind a publish of these changes is at least: a removed theme needs work in products, an added one adds, values fix. */
 export function proposedKind(changes: readonly Change[]): Exclude<ReleaseKind, "first"> {
-  if (changes.some(change => change.what === "removed")) return "needs-work";
-  if (changes.some(change => change.what === "added")) return "adds";
+  // Leaving a family or a value out of the library takes away what products may use, as removing a theme does.
+  if (changes.some(change => ["removed", "family-left-out", "left-out"].includes(change.what))) return "needs-work";
+  if (changes.some(change => ["added", "family-included", "included"].includes(change.what))) return "adds";
   return "fixes";
 }
 
@@ -220,7 +341,7 @@ export function nextVersion(version: string, kind: Exclude<ReleaseKind, "first">
 
 /** The system with its working copy published as the next version. */
 export function publish(system: System, kind: Exclude<ReleaseKind, "first">, note: string, now = new Date()): System {
-  const release: Release = { version: nextVersion(liveOf(system).version, kind), kind, note: note.trim(), at: now.toISOString(), theme: system.theme, themes: system.themes };
+  const release: Release = { version: nextVersion(liveOf(system).version, kind), kind, note: note.trim(), at: now.toISOString(), theme: system.theme, themes: system.themes, library: system.library };
   return { ...system, releases: [...system.releases, release] };
 }
 
@@ -234,14 +355,15 @@ export function publishTheme(system: System, theme: SystemTheme, replaces: strin
     ? themes.map(entry => entry.id === replaces ? { ...theme, id: replaces } : entry)
     : [...themes, theme];
   const live = liveOf(system);
-  const release: Release = { version: nextVersion(live.version, kind), kind, note: note.trim(), at: now.toISOString(), from, theme: live.theme, themes: put(live.themes) };
+  // An exploration publishes a theme only: Live's library goes on as it was.
+  const release: Release = { version: nextVersion(live.version, kind), kind, note: note.trim(), at: now.toISOString(), from, theme: live.theme, themes: put(live.themes), library: live.library };
   return { ...system, themes: put(system.themes), releases: [...system.releases, release] };
 }
 
 /** The system with its working copy set back to Live (Discard changes), or to an earlier release (Restore). */
 export function revertTo(system: System, version?: string): System {
   const release = system.releases.find(entry => entry.version === version) ?? liveOf(system);
-  return { ...system, themes: release.themes, theme: release.themes.some(theme => theme.id === system.theme) ? system.theme : release.theme };
+  return { ...system, themes: release.themes, library: release.library, theme: release.themes.some(theme => theme.id === system.theme) ? system.theme : release.theme };
 }
 
 /**
@@ -253,10 +375,10 @@ export function systemFile(system: System, canvas: (axes: CanvasAxes) => Record<
   return {
     version: SYSTEM_FILE_VERSION,
     id: system.id, name: system.name, origin: system.origin, created: system.created, theme: system.theme,
-    themes: system.themes.map(themeFile),
+    themes: system.themes.map(themeFile), library: system.library,
     releases: system.releases.map(release => ({
       version: release.version, kind: release.kind, note: release.note, at: release.at, ...(release.from ? { from: release.from } : {}),
-      theme: release.theme, themes: release.themes.map(themeFile),
+      theme: release.theme, themes: release.themes.map(themeFile), library: release.library,
     })),
   };
 }
@@ -266,7 +388,7 @@ export function starterSystem(name: string, taken: Iterable<string>, restore: Re
   const themes = [restoreTheme(null, restore, { id: "default", name: "Default" })];
   return {
     id: systemSlug(name, taken), name: name.trim() || "Untitled system", origin, created: now.toISOString(), theme: "default",
-    themes, releases: [firstRelease(themes, "default", now.toISOString(), ORIGIN_LABEL[origin])],
+    themes, library: EMPTY_LIBRARY, releases: [firstRelease(themes, "default", now.toISOString(), ORIGIN_LABEL[origin])],
   };
 }
 
@@ -295,7 +417,7 @@ export function loadSystems(files: readonly unknown[], legacy: () => Legacy, res
     const canvas = restore.canvas(saved.canvas ?? {});
     // The saved colours, or with none saved, the saved Canvas's page presets converted (restoreColours' own rule).
     const themes = [{ id: "default", name: "Default", canvas, material: restore.material(saved.material ?? null), colours: restore.colours(saved.colours ?? null, canvas), accent: restore.accent(saved.brand ?? null) }];
-    migrated = { id: AREA_ID, name: "Area", origin: "area", created: now.toISOString(), theme: "default", themes, releases: [firstRelease(themes, "default", now.toISOString())] };
+    migrated = { id: AREA_ID, name: "Area", origin: "area", created: now.toISOString(), theme: "default", themes, library: EMPTY_LIBRARY, releases: [firstRelease(themes, "default", now.toISOString())] };
     read.push(migrated);
   }
   const area = read.find(system => system.id === AREA_ID)!;

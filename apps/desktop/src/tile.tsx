@@ -24,6 +24,7 @@ import { AssetCard, AssetGridItem, Badge, Count, DesignCard, ListBoxItem, Sectio
 import { AlertCircleFilledIcon, ArchiveIcon, CircleCheckDashedIcon, CircleDashedIcon, CircleProgressIcon, EllipseIcon, ErrorFilledIcon, StatusAvailableFilledIcon } from "@area/icons";
 import { feedScale, feedScaleWithin } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
+import { LibrarySpecimens } from "./inventory.tsx";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
 import { SCREEN, ScreenCover } from "./setup-screen.tsx";
 import type { GalleryMode, GalleryRatio } from "./view-controls.tsx";
@@ -254,7 +255,9 @@ export function Tile(props: TileProps) {
  * Area's Design card (Components): the same handlers and caption as an Asset card tile, the design placed by the card. A
  * screen tile's ScreenFigure is laid out at its true 1920 × 1080 and the card shows it whole in a twentieth's margin.
  */
-function DesignTile({ label, value, status, design, focus, stage, selected, onSelect, onOpen, actions, openOnClick, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": dataDesign, paint, scope, stageScope, inert, shape, children }: TileProps & { design: DesignLayout }) {
+function DesignTile({ label, value, status, design, focus, stage, selected, onSelect, onOpen, actions, openOnClick, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": dataDesign, paint, scope, stageScope, inert, shape, children: own }: TileProps & { design: DesignLayout }) {
+  // The specimen takes the open system's defaults (src/inventory.tsx): a Default tile draws the system's choice.
+  const children = own == null ? own : <LibrarySpecimens>{own}</LibrarySpecimens>;
   const { chrome } = useStudio();
   const specimen = { ...cardRestored(chrome.canvas), ...specimenScope(), ...stageScope };
   const badge = value != null && value !== "" ? status ? <StatusBadge status={status}>{value}</StatusBadge> : <Badge variant="soft" tone="neutral" className="gallery-tile__badge">{value}</Badge> : undefined;
@@ -291,7 +294,8 @@ function DesignTile({ label, value, status, design, focus, stage, selected, onSe
 }
 
 /** Area's Asset card (Components). */
-function AssetTile({ label, value, status, paintLabel = "inside", span, stage, shape, selected, onSelect, onOpen, card, aspect, look, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": design, paint, scope, stageScope, inert, children }: TileProps) {
+function AssetTile({ label, value, status, paintLabel = "inside", span, stage, shape, selected, onSelect, onOpen, card, aspect, look, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, "data-design": design, paint, scope, stageScope, inert, children: own }: TileProps) {
+  const children = own == null ? own : <LibrarySpecimens>{own}</LibrarySpecimens>;
   const { chrome } = useStudio();
   const specimen = { ...cardRestored(chrome.canvas), ...specimenScope(), ...stageScope };
   const view = stage === "none" ? null : stage === "fit"

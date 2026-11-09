@@ -1,5 +1,6 @@
 // Link: goes somewhere, inline in running text or standalone. It keeps the type it sits in and adds
 // an underline. Spec: docs/specs/link.md.
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { forwardRef } from "react";
 import type { AnchorHTMLAttributes } from "react";
 import { linkVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -25,6 +26,9 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
   { variant, ink, external, newTabLabel = "(opens in a new tab)", className, children, target, rel, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  variant = useSystemDefault("link", "variant", variant);
+  ink = useSystemDefault("link", "ink", ink);
   return (
     <a
       ref={ref}

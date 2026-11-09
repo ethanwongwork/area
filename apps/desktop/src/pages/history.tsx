@@ -13,7 +13,7 @@ import { SETTING_GROUPS } from "@area/tokens/config";
 import { useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { Facts } from "../facts.tsx";
-import { changeLabel, changeValue, ThemeScreen } from "../publish.tsx";
+import { changeLabel, changePlace, changeValue, ThemeScreen } from "../publish.tsx";
 import { liveOf, RELEASE_KIND_LABEL, versionName, type Change, type Release } from "../systems.ts";
 
 /** A release's card is the feed's 300 card, as a theme's. */
@@ -41,9 +41,10 @@ function partOf(what: string): (typeof CHANGE_PARTS)[number] {
  * its new value at the end, as a source tree lists changed files.
  */
 function changeTree(changes: readonly Change[]): TreeViewNode[] {
-  const themes = [...new Set(changes.map(change => change.theme))];
+  // The library's changes (every theme shares them) are their own branch, Components (src/publish.tsx changePlace).
+  const themes = [...new Set(changes.map(changePlace))];
   return themes.map(theme => {
-    const own = changes.filter(change => change.theme === theme);
+    const own = changes.filter(change => changePlace(change) === theme);
     const values = own.filter(change => change.what !== "added" && change.what !== "removed");
     return {
       id: `theme:${theme}`, label: theme,

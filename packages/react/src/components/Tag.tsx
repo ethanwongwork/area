@@ -1,3 +1,4 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { forwardRef } from "react";
 import type { HTMLAttributes, MouseEvent, ReactNode } from "react";
 import { tagVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -37,6 +38,8 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
 export const Tag = forwardRef<HTMLSpanElement, TagProps>(function Tag(
   { color: colorProp, tone, size, icon, onDismiss: onDismissProp, dismissLabel, onRemove, removeLabel, disabled, className, children, ...rest }, ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  size = useSystemDefault("tag", "size", size);
   const onDismiss = onDismissProp ?? onRemove;
   const label = dismissLabel ?? removeLabel ?? (typeof children === "string" ? `Remove ${children}` : "Remove");
   return <span ref={ref} className={tagVariants({ color: colorProp ?? (tone ? HUE[tone] ?? tone as TagColor : "neutral"), size }, className)} data-disabled={disabled ? "" : undefined} {...rest}>

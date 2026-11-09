@@ -1,0 +1,77 @@
+/* System Inventory page (entry.tsx). Layout: one column of 1240 at most, the gutter on .si-page; each question is a
+   heading, the chosen answer's picture, then its options. Every colour is Area's token (light and dark follow
+   data-area-theme, set from the viewer's theme); the page adds none of its own. */
+html, body { background: var(--area-bg-page); color: var(--area-fg-default); block-size: auto; overflow: visible; }
+body { margin: 0; font-family: var(--area-font-sans); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); -webkit-font-smoothing: antialiased; }
+#root { min-inline-size: 0; }
+
+.si-page {
+  max-inline-size: 1240px;
+  margin-inline: auto;
+  padding-block: 48px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  gap: 72px;
+  min-inline-size: 0;
+}
+.si-top { display: grid; gap: 10px; max-inline-size: 72ch; }
+.si-eyebrow { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+.si-top h1 { margin: 0; font-size: 26px; line-height: 32px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+.si-lede { margin: 0; color: var(--area-fg-muted); font-size: 15px; line-height: 22px; }
+.si-store, .si-muted { color: var(--area-fg-muted); }
+.si-small { margin: 0; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+.si-foot { color: var(--area-fg-muted); font-size: var(--area-text-xs-size); }
+.si-row { display: flex; align-items: center; gap: 8px; }
+.si-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.si-section__head { display: grid; gap: 6px; max-inline-size: 72ch; }
+.si-section__head h2, .si-q__head h2 { margin: 0; font-size: 20px; line-height: 26px; font-weight: 600; text-wrap: balance; }
+.si-section__head p, .si-q__head p { margin: 0; color: var(--area-fg-muted); font-size: 15px; line-height: 22px; }
+
+/* The hero: the Inspector beside the Canvas, as the app lays them. */
+.si-hero { display: grid; gap: 20px; min-inline-size: 0; }
+.si-hero__body { display: grid; grid-template-columns: minmax(0, 1fr) 288px; border-radius: 12px; overflow: clip; box-shadow: 0 0 0 1px var(--area-border-card); min-inline-size: 0; }
+.si-hero__body > .si-insp { order: 2; border-inline-start: 1px solid var(--area-border-subtle); }
+.si-hero__canvas { display: grid; align-content: start; gap: 16px; padding: 16px 24px 24px; min-inline-size: 0; }
+.si-hero__bar { justify-content: flex-end; }
+@media (max-width: 760px) { .si-hero__body { grid-template-columns: minmax(0, 1fr); } .si-hero__body > .si-insp { order: 0; border-inline-start: 0; border-block-end: 1px solid var(--area-border-subtle); } }
+
+.si-insp { display: grid; align-content: start; background: var(--area-bg-page); font-size: 13px; line-height: 20px; min-inline-size: 0; }
+.si-insp__head { display: flex; align-items: center; block-size: 44px; padding-inline: 8px; border-block-end: 1px solid var(--area-border-subtle); }
+.si-values { display: grid; gap: 6px; justify-items: start; }
+.si-insp .area-field--horizontal { align-items: start; }
+
+/* The gallery: one family's section, its cards in the app's gallery look. */
+.si-gallery { display: grid; gap: 10px; min-inline-size: 0; }
+.si-gallery__head { display: flex; align-items: center; gap: 8px; }
+.si-gallery__title { font-size: 15px; line-height: 22px; font-weight: 600; }
+.si-gallery__foot { margin: 0; font-size: var(--area-text-xs-size); }
+.si-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px 12px; }
+.si-group { margin: 6px 0 0; font-weight: 500; }
+.si-tile { margin: 0; display: grid; gap: 6px; min-inline-size: 0; }
+.si-tile__frame { display: grid; place-items: center; aspect-ratio: 5 / 4; border-radius: 12px; background: var(--area-bg-tile); }
+.si-tile[data-out] .si-tile__frame > * { opacity: 0.4; }
+.si-tile__cap { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-inline-size: 0; font-size: var(--area-text-sm-size, 12px); }
+
+/* Questions. */
+.si-q { display: grid; gap: 16px; min-inline-size: 0; scroll-margin-block-start: 24px; }
+.si-q__head { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 8px; }
+.si-q__n { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; line-height: 26px; font-size: 15px; }
+.si-q__fig, .si-q__group, .si-q__note { margin-inline-start: 48px; min-inline-size: 0; }
+@media (max-width: 640px) { .si-q__fig, .si-q__group, .si-q__note { margin-inline-start: 0; } }
+.si-q__group > legend { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.si-q__group .area-radio-group__options { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
+.si-q__note { max-inline-size: 560px; }
+.si-rec { margin-inline-start: 8px; color: var(--area-fg-muted); font-weight: 400; font-size: var(--area-text-xs-size); }
+.si-frame { padding: 20px; border-radius: 12px; box-shadow: 0 0 0 1px var(--area-border-card); background: var(--area-bg-page); overflow-x: auto; min-inline-size: 0; font-size: 13px; line-height: 20px; }
+.si-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; align-items: start; }
+.si-triple { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; align-items: start; }
+.si-thumbs { --area-choice-min: 112px; }
+.si-thumb { display: grid; place-items: center; inline-size: 100%; block-size: 100%; padding: 12px; box-sizing: border-box; overflow: hidden; pointer-events: none; }
+.si-dialog { display: grid; gap: 12px; max-inline-size: 560px; padding: 20px; border-radius: 14px; background: var(--area-bg-page); box-shadow: var(--area-shadow-float); }
+.si-dialog__title { margin: 0; font-size: 15px; line-height: 22px; font-weight: 600; }
+.si-dialog > p { margin: 0; }
+.si-project { max-inline-size: 640px; }
+
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }

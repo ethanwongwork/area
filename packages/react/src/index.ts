@@ -10,6 +10,7 @@
  * know about.
  */
 export { Button, type ButtonProps } from "./components/Button.tsx";
+export { SystemDefaults, useSystemDefault, type SystemDefaultsProps, type SystemDefaultsValue } from "./components/SystemDefaults.tsx";
 export { ButtonGroup, type ButtonGroupProps } from "./components/ButtonGroup.tsx";
 export { SplitButton, type SplitButtonProps } from "./components/SplitButton.tsx";
 export { CHANGE_STATUSES, CHANGE_MARK, changeStatus, type ChangeStatus, type ChangeStatusInput } from "./components/change-status.ts";

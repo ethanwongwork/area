@@ -1,6 +1,7 @@
 // Toggle group: a set of toggle buttons the group keeps the state of, any number pressed or at
 // most one. One Tab stop and arrow keys between the toggles (Radix, React Aria); inside a Toolbar
 // the toggles join the toolbar's own roving instead. Spec: docs/specs/toggle-group.md.
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { createContext, forwardRef, useContext, useRef, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, SyntheticEvent } from "react";
 import { buttonGroupVariants, toggleGroupVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -44,9 +45,13 @@ export const ToggleGroup = forwardRef<HTMLDivElement, ToggleGroupProps>(function
     className, onKeyDown, onFocusCapture, onBlurCapture, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  variant = useSystemDefault("toggleGroup", "variant", variant);
+  const systemSize = useSystemDefault("toggleGroup", "size", undefined as typeof sizeProp);
   const inToolbar = useContext(InToolbar);
   const toolbarSize = useContext(ToolbarSize);
-  const size = sizeProp ?? toolbarSize;
+  // Its own size, else a toolbar's, else the system's.
+  const size = sizeProp ?? toolbarSize ?? systemSize;
   const [local, setLocal] = useState<string[]>(defaultValue ?? []);
   const value = valueProp ?? local;
   // Presses read the latest set, so two in one tick (before a re-render) both count.
