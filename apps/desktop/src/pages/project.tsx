@@ -14,9 +14,9 @@
  *                     the screen and the system's patterns; Publish puts it in the system
  *   VersionsPage      #project/<id>/versions/<id>: saved versions, each restored from the Inspector
  */
-import { Fragment, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
-import { AssetGrid, AssetGridItem, Button, ConfirmDialog, ContextMenu, Dialog, EmptyState, Field, Input, Menu, MenuItem, MenuSeparator, Nav, NavItem, PanelSection, Radio, RadioGroup, Table, TableCell, TableHeaderCell, TableLink } from "@area/react";
-import { AddIcon, AppWindowIcon, ChevronDownIcon, CopyIcon, ImageIcon, MoreHorizontalIcon, PencilIcon } from "@area/icons";
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { AssetGrid, AssetGridItem, Button, ConfirmDialog, ContextMenu, Dialog, EmptyState, Field, Input, Menu, MenuItem, MenuSeparator, MenuSub, Nav, NavItem, PanelSection, Radio, RadioGroup, Segmented, Table, TableCell, TableHeaderCell, TableLink, Textarea } from "@area/react";
+import { AddIcon, AppWindowIcon, ArrowLeftIcon, ChevronDownIcon, CopyIcon, ImageIcon, LightbulbIcon, MoreHorizontalIcon, PencilIcon, PlayIcon, RotateCcwIcon } from "@area/icons";
 import { canvasAttributes, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, CARD_SCOPE, Tile, TileGrid, type OpenHow, FEED_TABLE, WhenVisible } from "../tile.tsx";
 import { ViewControls, ViewLead } from "../view-controls.tsx";
@@ -24,7 +24,9 @@ import { useDesignViewer, type DesignViewerOptions } from "../design-viewer.tsx"
 import { AddLayer, DesignPanel, screenFile } from "../design-panel.tsx";
 import { StageSelection } from "../design-select.tsx";
 import { ChangeLog, ElementPanel } from "../design-inspector.tsx";
-import { applyChange, screensIn } from "../design-edit.ts";
+import { applyChange, elementAt, pathOf, screensIn } from "../design-edit.ts";
+import { checkFlow, isFlow, linkAt, nextOf, readFlow, stepName, type Flow } from "../flow.ts";
+import { FlowChecks, FlowDescription, FlowMap } from "../flow-map.tsx";
 import { openDesign, useCardArrival } from "../morph.ts";
 import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
@@ -35,7 +37,7 @@ import { EXAMPLES, PATTERNS, screenDesign, WidthZoom } from "./examples.tsx";
 import { NameDialog } from "./home.tsx";
 import { nameOf, url, useLibrary } from "./imagery.tsx";
 import { BeforeAfter, KINDS, ThemeScreen } from "../publish.tsx";
-import { addExploration, addLayer, addPage, changesOn, duplicateLayer, removeLayer, renameLayer, restoreVersion, saveVersion, type DesignChange, type Layer, type Project } from "../projects.ts";
+import { addExploration, addLayer, addPage, BACK, changesOn, duplicateLayer, removeLayer, renameLayer, restoreVersion, saveVersion, setBranch, setNote, setState, type DesignChange, type Layer, type Project, type ProjectPage } from "../projects.ts";
 import { activeTheme, liveOf, nextVersion, RELEASE_KIND_LABEL, versionName, type ReleaseKind } from "../systems.ts";
 
 /** An exploration's card is the feed's 300 card, as a theme's. */
@@ -163,7 +165,7 @@ export function ProjectOverview() {
                 it, ⌘-click in a tab of its own. They were text cards (a name and its layers' names) until then. */}
             <TileGrid span="wide" cards min={CARD_MIN}>
               {project.pages.map(page => (
-                <Tile key={page.id} span="wide" stage="screen" inert openOnClick label={page.name} value={page.layers.length ? plural(page.layers.length, "layer") : "Empty"}
+                <Tile key={page.id} span="wide" stage="screen" inert openOnClick label={page.name} value={isFlow(page) ? `Flow · ${plural(readFlow(page).steps.length, "step")}` : page.layers.length ? plural(page.layers.length, "layer") : "Empty"}
                   onOpen={how => navigate({ page: "project-page", item: page.id }, { newTab: how.newTab })}>
                   {page.layers[0] ? <LayerView layer={page.layers[0]} library={library} /> : null}
                 </Tile>
@@ -228,9 +230,16 @@ export function ProjectPageView() {
   const stageRef = useRef<HTMLDivElement>(null);
   const [pageId, layerId] = (item ?? "").split("/");
   const shownPage = openProject?.pages.find(entry => entry.id === pageId) ?? openProject?.pages[0];
-  const layers = shownPage?.layers ?? [];
-  // The layer on the stage: the one chosen, else the page's first.
-  const chosenLayer = layers.find(entry => entry.id === layerId) ?? layers[0] ?? null;
+  // A flow page (src/flow.ts) opens on its map; a step opens from its node, and Back brings the map again.
+  const flow: Flow | null = useMemo(() => shownPage && isFlow(shownPage) ? readFlow(shownPage) : null, [shownPage]);
+  const layers = flow ? flow.ordered.map(step => step.layer) : shownPage?.layers ?? [];
+  const onMap = Boolean(flow && !layers.some(entry => entry.id === layerId));
+  // The node chosen on the map: the step last open, or the one clicked.
+  const [mapChosen, setMapChosen] = useState<string | null>(null);
+  // Play (the flow walked on the stage): the steps taken, newest last, and whether the links show.
+  const [play, setPlay] = useState<{ trail: string[]; hints: boolean; flash: boolean } | null>(null);
+  // The layer on the stage: the one chosen, else the page's first (none on a flow's map).
+  const chosenLayer = onMap ? null : layers.find(entry => entry.id === layerId) ?? layers[0] ?? null;
   // The element chosen on the stage, for the layer it was chosen on (src/design-select.tsx).
   const [chosen, setChosen] = useState<{ layer: string; path: number[] } | null>(null);
   const selected = chosen && chosen.layer === chosenLayer?.id ? chosen.path : null;
@@ -245,7 +254,54 @@ export function ProjectPageView() {
   const viewer = useDesignViewer({
     active: Boolean(design), scroll: "page", design: `layer:${chosenLayer?.id ?? ""}`, label: chosenLayer?.name ?? "Layer", appMode: theme,
     width: 1440, render: () => null, ...design,
-    step: { index: at, count: layers.length, noun: "layer", onStep: by => { const next = layers[(at + by + layers.length) % layers.length]!; select(`${shownPage?.id}/${next.id}`, { replace: true }); } },
+    step: { index: at, count: layers.length, noun: flow ? "step" : "layer", onStep: by => { const next = layers[(at + by + layers.length) % layers.length]!; select(`${shownPage?.id}/${next.id}`, { replace: true }); } },
+    // On a flow, Back (Esc, ⌘↑) shrinks the step into its node on the map, still chosen.
+    ...(flow && chosenLayer && shownPage ? { back: { label: `Back to ${shownPage.name}`, onBack: () => { setPlay(null); setMapChosen(chosenLayer.id); select(shownPage.id); } } } : {}),
+  });
+  // Play: a click on a linked element follows its link; anywhere else on a step with no forward links goes on to the next;
+  // on a step with them it shows the links for a moment (hints). Esc ends it, R starts again.
+  const playLayer = play && chosenLayer ? chosenLayer.id : null;
+  useEffect(() => {
+    const host = stageRef.current;
+    if (!play || !flow || !shownPage || !playLayer || !host) return;
+    const go = (to: string) => {
+      if (to === BACK) { if (play.trail.length > 1) { const trail = play.trail.slice(0, -1); setPlay({ ...play, trail }); select(`${shownPage.id}/${trail[trail.length - 1]}`, { replace: true }); } return; }
+      setPlay({ ...play, trail: [...play.trail, to], flash: false });
+      select(`${shownPage.id}/${to}`, { replace: true });
+    };
+    const click = (event: MouseEvent) => {
+      const root = (event.target as Element | null)?.closest(".studio-viewer__content");
+      if (!root || !(event.target instanceof Element)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const path = pathOf(event.target, root);
+      const link = path ? linkAt(shownPage, playLayer, path) : null;
+      if (link) { go(link.to); return; }
+      const forward = (shownPage.links ?? []).some(entry => entry.from === playLayer && entry.to !== BACK);
+      if (!forward) { const next = nextOf(flow, playLayer); if (next) go(next); return; }
+      setPlay({ ...play, flash: true });
+      window.setTimeout(() => setPlay(was => was ? { ...was, flash: false } : was), 900);
+    };
+    const keys = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLElement && event.target.closest("input, textarea, [contenteditable]")) return;
+      if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); setPlay(null); }
+      else if (event.key.toLowerCase() === "r" && !event.metaKey && !event.ctrlKey) { const start = flow.steps[0]?.layer.id; if (start) { setPlay({ ...play, trail: [start], flash: false }); select(`${shownPage.id}/${start}`, { replace: true }); } }
+    };
+    host.addEventListener("click", click, true);
+    window.addEventListener("keydown", keys, true);
+    return () => { host.removeEventListener("click", click, true); window.removeEventListener("keydown", keys, true); };
+  }, [play, flow, shownPage, playLayer, select]);
+  // Mark the linked elements of the step on the stage, so hints can outline them.
+  useLayoutEffect(() => {
+    const host = stageRef.current;
+    if (!host || !shownPage || !chosenLayer) return;
+    const mark = () => {
+      for (const old of host.querySelectorAll("[data-flow-link]")) old.removeAttribute("data-flow-link");
+      for (const root of screensIn(host)) for (const link of shownPage.links ?? []) if (link.from === chosenLayer.id) elementAt(root, link.path)?.setAttribute("data-flow-link", link.to);
+    };
+    mark();
+    const timer = window.setTimeout(mark, 120);
+    return () => window.clearTimeout(timer);
   });
   // Draw the changes on every copy of the screen, now and whenever the stage draws one again (a mode, a layer).
   useLayoutEffect(() => {
@@ -261,7 +317,18 @@ export function ProjectPageView() {
   const project = openProject;
   const page = shownPage!;
   const layer = chosenLayer;
-  const editable = Boolean(design && layer?.kind === "screen");
+  const editable = Boolean(design && layer?.kind === "screen" && !play);
+  const startPlay = (from?: string) => {
+    const start = from ?? flow?.steps[0]?.layer.id;
+    if (!start) return;
+    setChosen(null);
+    setPlay({ trail: [start], hints: false, flash: false });
+    select(`${page.id}/${start}`, { replace: !onMap });
+  };
+  const openStep = (id: string) => { setMapChosen(id); select(`${page.id}/${id}`); };
+  // A step's states, for the stage's switch: the step itself first.
+  const stepOfShown = flow && layer ? (flow.byId.get(layer.id)?.role === "state" ? flow.byId.get(flow.byId.get(layer.id)!.of!) : flow.byId.get(layer.id)) : undefined;
+  const statesShown = stepOfShown ? flow!.states.get(stepOfShown.layer.id) ?? [] : [];
   const show = (entry: Layer) => select(`${page.id}/${entry.id}`, { replace: true });
   const add = (kind: Layer["kind"], ref: string, name: string) => {
     const made = addLayer(project, page.id, kind, ref, name);
@@ -292,6 +359,7 @@ export function ProjectPageView() {
   const layerMenu = (entry: Layer) => <>
     <MenuItem icon={<PencilIcon />} onClick={() => setRenaming(entry)}>Rename</MenuItem>
     <MenuItem icon={<CopyIcon />} onClick={() => duplicate(entry)}>Duplicate</MenuItem>
+    {flow ? <FlowMenu flow={flow} entry={entry} onFlow={change => updateProject(project.id, current => change(current, page.id))} /> : null}
     <MenuSeparator />
     <MenuItem tone="danger" onClick={() => remove(entry)}>Remove</MenuItem>
   </>;
@@ -304,27 +372,48 @@ export function ProjectPageView() {
             <ContextMenu menuLabel="Layer actions" itemSelector="[data-layer]"
               menu={row => { const entry = page.layers.find(other => other.id === row.dataset.layer); return entry ? layerMenu(entry) : null; }}>
               <Nav aria-label={`${page.name}'s layers`}>
-                {listed.map(entry => (
-                  <NavItem key={entry.id} data-layer={entry.id} href={hrefOf({ page: "project-page", project: project.id, item: `${page.id}/${entry.id}` })}
-                    icon={LAYER_ICONS[entry.kind]} current={entry.id === layer?.id} revealActions
-                    actions={<Menu aria-label={`${entry.name} actions`} align="start" trigger={<Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<MoreHorizontalIcon />} aria-label={`${entry.name} actions`} tabIndex={-1} />}>{layerMenu(entry)}</Menu>}
-                    onClick={event => { event.preventDefault(); show(entry); }}>
-                    {entry.name}
-                  </NavItem>
-                ))}
+                {listed.map(entry => {
+                  const step = flow?.byId.get(entry.id);
+                  return (
+                    <NavItem key={entry.id} data-layer={entry.id} href={hrefOf({ page: "project-page", project: project.id, item: `${page.id}/${entry.id}` })}
+                      className={step?.role === "state" ? "studio-flow-state" : undefined}
+                      icon={LAYER_ICONS[entry.kind]} current={entry.id === layer?.id || (onMap && entry.id === mapChosen)} revealActions
+                      actions={<Menu aria-label={`${entry.name} actions`} align="start" trigger={<Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<MoreHorizontalIcon />} aria-label={`${entry.name} actions`} tabIndex={-1} />}>{layerMenu(entry)}</Menu>}
+                      onClick={event => { event.preventDefault(); if (onMap) setMapChosen(entry.id); else show(entry); }}
+                      onDoubleClick={() => { if (onMap) openStep(entry.id); }}>
+                      {step && step.role !== "state" ? <span className="studio-flow-n">{step.number}</span> : null}{step?.role === "state" ? entry.state : entry.name}
+                    </NavItem>
+                  );
+                })}
               </Nav>
             </ContextMenu>
           ) : <p className="studio-muted studio-sidebar__empty">No layers yet.</p>}
         </SidebarList>
       }
-      canvasTitle={layer ? layer.name : page.name}
-      canvasLead={design ? <ViewLead>{viewer.lead}</ViewLead> : undefined}
-      canvasActions={design ? <ViewControls>{viewer.controls}</ViewControls> : undefined}
+      canvasTitle={layer ? (flow ? stepName(flow, layer) : layer.name) : page.name}
+      canvasLead={design && !onMap ? <ViewLead>{viewer.lead}</ViewLead> : undefined}
+      canvasActions={onMap ? (
+        <ViewControls><Button size="sm" variant="ghost" tone="neutral" icon={<PlayIcon />} onClick={() => startPlay()}>Play</Button></ViewControls>
+      ) : design ? (
+        <ViewControls>
+          {statesShown.length && stepOfShown ? (
+            <Segmented size="sm" aria-label="State" value={layer!.id} onValueChange={id => select(`${page.id}/${id}`, { replace: true })}
+              items={[{ value: stepOfShown.layer.id, label: "Default" }, ...statesShown.map(state => ({ value: state.layer.id, label: state.layer.state ?? "State" }))]} />
+          ) : null}
+          {flow && !play ? <Button size="sm" variant="ghost" tone="neutral" icon={<PlayIcon />} onClick={() => startPlay(layer?.id)}>Play</Button> : null}
+          {viewer.controls}
+        </ViewControls>
+      ) : undefined}
       canvas={<>
         <div className="studio-design">
-          <div ref={stageRef} className="studio-design__stage" data-filled={viewer.height ? "" : undefined} data-editing={editable ? "" : undefined}
-            style={viewer.height ? { "--_stage-height": `${viewer.height}px` } as CSSProperties : undefined}>
-            {design ? viewer.stage : (
+          <div ref={stageRef} className="studio-design__stage" data-filled={!onMap && viewer.height ? "" : undefined} data-editing={editable ? "" : undefined}
+            data-playing={play ? "" : undefined} data-hints={play && (play.hints || play.flash) ? "" : undefined}
+            style={!onMap && viewer.height ? { "--_stage-height": `${viewer.height}px` } as CSSProperties : undefined}>
+            {flow && onMap ? (
+              <FlowMap page={page} flow={flow} chosen={mapChosen} onChoose={setMapChosen} onOpen={openStep} onPlay={() => startPlay()}
+                picture={entry => <LayerView layer={entry} library={library} />}
+                source={entry => entry.kind === "screen" ? `examples/${entry.ref}.tsx` : `references/${entry.ref}`} />
+            ) : design ? viewer.stage : (
               <div className="studio-design__empty">
                 <EmptyState title={layer ? "This layer's source is gone" : `${page.name} is empty`}
                   description={layer ? "Its screen left Patterns, or its image left your saved references. Remove it from its menu in the Sidebar." : "Add one of the system's screens, or an image from your saved references. It shows here, and the panel below holds its iterations, documentation and code."}
@@ -332,6 +421,12 @@ export function ProjectPageView() {
               </div>
             )}
             <StageSelection stage={stageRef} enabled={editable} selected={selected} onSelect={choose} />
+            {play && flow && layer ? (
+              <PlayBar flow={flow} page={page} layer={layer} trail={play.trail} hints={play.hints}
+                onBack={() => { if (play.trail.length > 1) { const trail = play.trail.slice(0, -1); setPlay({ ...play, trail }); select(`${page.id}/${trail[trail.length - 1]}`, { replace: true }); } }}
+                onRestart={() => startPlay()} onJump={id => { setPlay({ ...play, trail: [...play.trail, id] }); select(`${page.id}/${id}`, { replace: true }); }}
+                onHints={() => setPlay({ ...play, hints: !play.hints })} onDone={() => setPlay(null)} />
+            ) : null}
           </div>
           <DesignPanel project={project} page={page} layer={layer} stage={stageRef} onShow={show} onAdd={add}
             layerView={entry => <LayerView layer={entry} library={library} />} />
@@ -344,19 +439,109 @@ export function ProjectPageView() {
         // The chosen element's properties (src/design-inspector.tsx), else what is on the stage: the layer and its page.
         design: layer && selected && editable ? (
           <ElementPanel project={project} page={page} layer={layer} stage={stageRef} path={selected} onSelect={choose} />
+        ) : flow && onMap ? (
+          <FlowInspector project={project} page={page} flow={flow} onOpen={openStep} />
         ) : (<>
           {layer ? (
-            <PanelSection heading={layer.name}>
-              {editable ? <p className="studio-design__about">Click anything on the stage to change it here. Each change is drawn at once and logged below, to send to Chat together.</p> : null}
-              <Facts label="Layer" items={[["Kind", layer.kind === "screen" ? "Screen" : "Image"], ["From", sourceOf(layer)], ["Page", page.name], ["Order", `${page.layers.indexOf(layer) + 1} of ${page.layers.length}`]]} />
+            <PanelSection heading={flow ? stepName(flow, layer) : layer.name}>
+              {editable ? <p className="studio-design__about">{flow || page.layers.length > 1
+                ? "Click anything on the stage to change it or say where it goes. Each change is drawn at once and logged below, to send to Chat together."
+                : "Click anything on the stage to change it here. Each change is drawn at once and logged below, to send to Chat together."}</p> : null}
+              <Facts label="Layer" items={[
+                ["Kind", layer.kind === "screen" ? "Screen" : "Image"], ["From", sourceOf(layer)], ["Page", page.name],
+                ...(flow ? [["Role", flowRole(flow, layer)] as [string, string]] : [["Order", `${page.layers.indexOf(layer) + 1} of ${page.layers.length}`] as [string, string]]),
+              ]} />
+              {flow ? <StepNote key={layer.id} layer={layer} onChange={note => updateProject(project.id, current => setNote(current, page.id, note, layer.id))} /> : null}
             </PanelSection>
           ) : null}
           <PanelSection heading={page.name}>
             <Facts label="Page" items={[["Layers", page.layers.length], ["Screens", page.layers.filter(entry => entry.kind === "screen").length], ["Images", page.layers.filter(entry => entry.kind === "image").length], ["Project", project.name]]} />
+            {!flow && page.layers.length > 1 ? <p className="studio-design__about">Choose an element on the stage and say where it goes, and this page becomes a flow.</p> : null}
           </PanelSection>
         </>),
       }}
     />
+  );
+}
+
+/** A layer's place in its flow, in words. */
+function flowRole(flow: Flow, layer: Layer): string {
+  const step = flow.byId.get(layer.id);
+  if (!step) return "Not in the flow";
+  if (step.role === "state") return `${flow.byId.get(step.of!)?.layer.name ?? "A step"}'s ${layer.state ?? "state"} state`;
+  if (step.role === "branch") return `Branch ${step.number}, off the path`;
+  return `Step ${step.number} of ${flow.steps.length}`;
+}
+
+/** A step's note: one line on what happens there, drawn under its node. */
+function StepNote({ layer, onChange }: { layer: Layer; onChange: (note: string) => void }) {
+  const [draft, setDraft] = useState<string | null>(null);
+  return (
+    <Textarea id={`step-note-${layer.id}`} aria-label={`${layer.name}'s note`} rows={2} placeholder="Note: what happens at this step"
+      value={draft ?? layer.note ?? ""} onChange={event => setDraft(event.currentTarget.value)}
+      onBlur={() => { if (draft !== null && draft !== (layer.note ?? "")) onChange(draft); setDraft(null); }} />
+  );
+}
+
+/** The flow's own row actions in the Sidebar: off or on the path, a state of a step, or a step again. */
+function FlowMenu({ flow, entry, onFlow }: { flow: Flow; entry: Layer; onFlow: (change: (project: Project, page: string) => Project) => void }) {
+  const steps = [...flow.steps, ...flow.branches].filter(step => step.layer.id !== entry.id && !(flow.states.get(entry.id)?.length));
+  return <>
+    <MenuSeparator />
+    {entry.of ? <MenuItem onClick={() => onFlow((project, page) => setState(project, page, entry.id, ""))}>Make a step</MenuItem>
+      : entry.branch ? <MenuItem onClick={() => onFlow((project, page) => setBranch(project, page, entry.id, false))}>Put on the path</MenuItem>
+      : <MenuItem onClick={() => onFlow((project, page) => setBranch(project, page, entry.id, true))}>Take off the path</MenuItem>}
+    {steps.length ? (
+      <MenuSub label={entry.of ? "Move state to" : "Make a state of"}>
+        {steps.map(step => (
+          <MenuSub key={step.layer.id} label={`${step.number} ${step.layer.name}`}>
+            {["Error", "Loading", "Empty", "Success"].map(name => (
+              <MenuItem key={name} onClick={() => onFlow((project, page) => setState(project, page, entry.id, step.layer.id, name))}>{name}</MenuItem>
+            ))}
+          </MenuSub>
+        ))}
+      </MenuSub>
+    ) : null}
+  </>;
+}
+
+/** The Inspector on a flow's map: its facts, its description and what a walk through it leaves undesigned. */
+function FlowInspector({ project, page, flow, onOpen }: { project: Project; page: ProjectPage; flow: Flow; onOpen: (layer: string) => void }) {
+  const { updateProject } = useStudio();
+  const checks = useMemo(() => checkFlow(flow), [flow]);
+  const states = [...flow.states.values()].reduce((sum, list) => sum + list.length, 0);
+  return <>
+    <PanelSection heading={page.name}>
+      <Facts label="Flow" items={[["Steps", flow.steps.length], ["Branches", flow.branches.length], ["States", states], ["Links", (page.links ?? []).length], ["Project", project.name]]} />
+      <FlowDescription page={page} onChange={note => updateProject(project.id, current => setNote(current, page.id, note))} />
+      <p className="studio-design__about">Double-click a step to open it. Choose an element on it and say where it goes; a step with no links goes on to the next.</p>
+    </PanelSection>
+    <PanelSection heading="Checks"><FlowChecks checks={checks} onOpen={onOpen} /></PanelSection>
+  </>;
+}
+
+/** Play's bar at the stage's foot: Back, Restart, the step (a menu to jump), Hints and Done. */
+function PlayBar({ flow, page, layer, trail, hints, onBack, onRestart, onJump, onHints, onDone }: {
+  flow: Flow; page: ProjectPage; layer: Layer; trail: string[]; hints: boolean;
+  onBack: () => void; onRestart: () => void; onJump: (id: string) => void; onHints: () => void; onDone: () => void;
+}) {
+  const step = flow.byId.get(layer.id);
+  const main = step?.role === "state" ? flow.byId.get(step.of!) : step;
+  const index = main ? flow.steps.findIndex(entry => entry.layer.id === main.layer.id) : -1;
+  return (
+    <div className="studio-play" role="toolbar" aria-label={`Playing ${page.name}`}>
+      <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<ArrowLeftIcon />} aria-label="Back" disabled={trail.length < 2} onClick={onBack} />
+      <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<RotateCcwIcon />} aria-label="Restart (R)" onClick={onRestart} />
+      <span className="studio-play__rule" aria-hidden="true" />
+      <Menu aria-label="Steps" align="start" trigger={<Button size="sm" variant="ghost" tone="neutral" trailingIcon={<ChevronDownIcon />}>
+        {index >= 0 && step?.role !== "branch" ? <span className="studio-muted">{`${index + 1} of ${flow.steps.length}`}&nbsp;</span> : null}{step?.role === "state" ? stepName(flow, layer) : step?.role === "branch" ? `${step.number} ${layer.name}` : layer.name}
+      </Button>}>
+        {flow.ordered.map(entry => <MenuItem key={entry.layer.id} onClick={() => onJump(entry.layer.id)}>{stepName(flow, entry.layer)}</MenuItem>)}
+      </Menu>
+      <span className="studio-play__rule" aria-hidden="true" />
+      <Button size="sm" variant="ghost" tone="neutral" icon={<LightbulbIcon />} selected={hints} onClick={onHints}>Hints</Button>
+      <Button size="sm" variant="soft" tone="neutral" onClick={onDone}>Done</Button>
+    </div>
   );
 }
 

@@ -18,6 +18,10 @@
  *                 change to be made and then logged and then sent to the chat all at once when the user chooses"): each
  *                 drawn on the stage at once, kept until it is undone, and marked sent when the batch goes to Chat
  *
+ * A page is a **flow** once it has a link (the user flows study, owner 2026-11-08: "go with your recs";
+ * docs/research/user-flows-2026-11-08): its layers in order are the path, a layer marked `branch` is off it, a layer
+ * with `of` is a state of another (Error, Loading), and `links` say where an element of a layer goes (src/flow.ts).
+ *
  * Pure: the projects test (tests/projects.test.ts) imports it; the restore functions that check a theme come from the app.
  */
 import { restoreTheme, systemSlug, type Restorers, type SystemTheme } from "./systems.ts";
@@ -25,8 +29,34 @@ import type { CanvasAxes } from "./studio.tsx";
 
 /** A thing on a page: a system's screen (a Patterns entry's id) or an Inspiration image (its `<group>/<image>`). */
 export type LayerKind = "screen" | "image";
-export interface Layer { id: string; kind: LayerKind; ref: string; name: string }
-export interface ProjectPage { id: string; name: string; layers: Layer[] }
+export interface Layer {
+  id: string;
+  kind: LayerKind;
+  ref: string;
+  name: string;
+  /** On a flow page: off the path, a branch reached only by a link. */
+  branch?: boolean;
+  /** On a flow page: the step this layer is a state of, and the state's name ("Error"). */
+  of?: string;
+  state?: string;
+  /** On a flow page: one line on what happens at this step. */
+  note?: string;
+}
+/**
+ * A link on a flow page: an element of a layer (its path of child indices from the screen's root, as a DesignChange's;
+ * none for the whole step) goes to another layer of the page, or back. `label` is the element's words ("Continue").
+ */
+export interface FlowLink { id: string; from: string; path: number[]; label: string; to: string }
+export const BACK = "back";
+export interface ProjectPage {
+  id: string;
+  name: string;
+  layers: Layer[];
+  /** Links make the page a flow (src/flow.ts); absent or empty, it is a board. */
+  links?: FlowLink[];
+  /** A flow's description: who takes it and what they finish with. */
+  note?: string;
+}
 export interface Exploration {
   id: string;
   name: string;
@@ -65,6 +95,8 @@ export interface DesignChange {
   at: string;
   /** When it went to Chat in a batch; a sent change stays drawn until it is cleared. */
   sent?: string;
+  /** A link's change (property `link`): where the element went before, so Undo puts it back ("" for the next step). */
+  was?: string;
 }
 export interface Project {
   id: string;
@@ -113,9 +145,33 @@ function readLayers(saved: unknown): Layer[] {
     if (!kind || typeof l.ref !== "string" || !l.ref) continue;
     const id = text(l.id, nextId("layer", layers));
     if (layers.some(other => other.id === id)) continue;
-    layers.push({ id, kind, ref: l.ref, name: text(l.name, l.ref) });
+    layers.push({
+      id, kind, ref: l.ref, name: text(l.name, l.ref),
+      ...(l.branch === true ? { branch: true } : {}),
+      ...(typeof l.of === "string" && l.of ? { of: l.of, state: text(l.state, "State") } : {}),
+      ...(typeof l.note === "string" && l.note.trim() ? { note: l.note.trim() } : {}),
+    });
   }
-  return layers;
+  // A state names a step of the page that is not itself a state; anything else is a step again.
+  return layers.map(layer => {
+    if (!layer.of) return layer;
+    const step = layers.find(other => other.id === layer.of);
+    if (step && !step.of && step.id !== layer.id) return layer;
+    const { of: _of, state: _state, ...rest } = layer;
+    return rest;
+  });
+}
+function readLinks(saved: unknown, layers: readonly Layer[]): FlowLink[] {
+  const links: FlowLink[] = [];
+  const has = (id: unknown) => typeof id === "string" && layers.some(layer => layer.id === id);
+  for (const entry of Array.isArray(saved) ? saved : []) {
+    const k = (entry && typeof entry === "object" ? entry : {}) as Record<string, unknown>;
+    if (!has(k.from) || !(k.to === BACK || has(k.to))) continue;
+    const path = Array.isArray(k.path) && k.path.every(step => Number.isInteger(step) && (step as number) >= 0) ? k.path as number[] : [];
+    if (links.some(other => other.from === k.from && other.path.join("/") === path.join("/"))) continue;
+    links.push({ id: text(k.id, nextId("link", links)), from: k.from as string, path, label: typeof k.label === "string" ? k.label : "", to: k.to as string });
+  }
+  return links;
 }
 function readPages(saved: unknown): ProjectPage[] {
   const pages: ProjectPage[] = [];
@@ -123,7 +179,13 @@ function readPages(saved: unknown): ProjectPage[] {
     const p = (entry && typeof entry === "object" ? entry : {}) as Record<string, unknown>;
     const id = text(p.id, nextId("page", pages));
     if (pages.some(other => other.id === id)) continue;
-    pages.push({ id, name: text(p.name, `Page ${pages.length + 1}`), layers: readLayers(p.layers) });
+    const layers = readLayers(p.layers);
+    const links = readLinks(p.links, layers);
+    pages.push({
+      id, name: text(p.name, `Page ${pages.length + 1}`), layers,
+      ...(links.length ? { links } : {}),
+      ...(typeof p.note === "string" && p.note.trim() ? { note: p.note } : {}),
+    });
   }
   return pages;
 }
@@ -155,6 +217,7 @@ function readChanges(saved: unknown): DesignChange[] {
       id, page: c.page as string, layer: c.layer as string, path: c.path as number[], target: text(c.target, "Element"), label: typeof c.label === "string" ? c.label : "",
       property: c.property as string, name: text(c.name, c.property as string), from: typeof c.from === "string" ? c.from : "", to: typeof c.to === "string" ? c.to : "",
       value: c.value as string, at: typeof c.at === "string" ? c.at : new Date(0).toISOString(), ...(typeof c.sent === "string" && c.sent ? { sent: c.sent } : {}),
+      ...(typeof c.was === "string" ? { was: c.was } : {}),
     });
   }
   return changes;
@@ -286,6 +349,22 @@ export function describeChange(before: readonly ProjectPage[], after: readonly P
       if (old && old.name !== layer.name) notes.push(`Renamed ${old.name} to ${layer.name}`);
     }
     if (!gained.length && !lost.length && was.layers.map(layer => layer.id).join() !== page.layers.map(layer => layer.id).join()) notes.push(`Reordered ${page.name}`);
+    // A flow's own changes: links, states, branches.
+    const nameOf = (id: string) => id === BACK ? "Back" : page.layers.find(layer => layer.id === id)?.name ?? "a removed layer";
+    const linkKey = (link: FlowLink) => `${link.from}|${link.path.join("/")}`;
+    for (const link of page.links ?? []) {
+      const old = (was.links ?? []).find(other => linkKey(other) === linkKey(link));
+      if (!old || old.to !== link.to) notes.push(`Linked ${link.label || nameOf(link.from)} to ${nameOf(link.to)}`);
+    }
+    for (const old of was.links ?? []) if (!(page.links ?? []).some(link => linkKey(link) === linkKey(old))) notes.push(`Unlinked ${old.label || nameOf(old.from)}`);
+    for (const layer of page.layers) {
+      const old = was.layers.find(other => other.id === layer.id);
+      if (!old) continue;
+      if ((old.of ?? "") !== (layer.of ?? "") || (old.state ?? "") !== (layer.state ?? "")) notes.push(layer.of ? `Made ${layer.name} ${nameOf(layer.of)}'s ${layer.state} state` : `Made ${layer.name} a step`);
+      if (Boolean(old.branch) !== Boolean(layer.branch)) notes.push(layer.branch ? `Took ${layer.name} off the path` : `Put ${layer.name} on the path`);
+      if ((old.note ?? "") !== (layer.note ?? "")) notes.push(`Noted ${layer.name}`);
+    }
+    if ((was.note ?? "") !== (page.note ?? "")) notes.push(`Described ${page.name}`);
   }
   if (!notes.length) return "Changed the pages";
   return notes.length === 1 ? notes[0]! : `${notes[0]}, and ${notes.length - 1} more`;
@@ -339,7 +418,11 @@ export function logChange(project: Project, change: Omit<DesignChange, "id" | "a
 
 /** The project without a change (Undo in the log). */
 export function undoChange(project: Project, id: string): Project {
-  return { ...project, changes: project.changes.filter(entry => entry.id !== id) };
+  const change = project.changes.find(entry => entry.id === id);
+  const kept = { ...project, changes: project.changes.filter(entry => entry.id !== id) };
+  if (change?.property !== "link") return kept;
+  // A link's Undo puts the element's link back to where it went before (none: the next step).
+  return setLink(kept, change.page, { from: change.layer, path: change.path, label: change.label, to: change.was ?? "" });
 }
 
 /** The changes not yet sent, oldest first. */
@@ -379,7 +462,11 @@ export function duplicateLayer(project: Project, page: string, layer: string): {
 export function removeLayer(project: Project, page: string, layer: string): Project {
   return {
     ...project,
-    pages: project.pages.map(entry => entry.id === page ? { ...entry, layers: entry.layers.filter(other => other.id !== layer) } : entry),
+    // Its links go with it, and its states become steps of their own.
+    pages: project.pages.map(entry => entry.id === page ? withLinks({
+      ...entry,
+      layers: entry.layers.filter(other => other.id !== layer).map(other => other.of === layer ? withoutState(other) : other),
+    }, (entry.links ?? []).filter(link => link.from !== layer && link.to !== layer)) : entry),
     changes: project.changes.filter(entry => !(entry.page === page && entry.layer === layer)),
   };
 }
@@ -396,8 +483,16 @@ export function duplicatePage(project: Project, page: string): { project: Projec
   let named = `${original.name} copy`;
   for (let count = 2; taken.has(named); count++) named = `${original.name} copy ${count}`;
   const used = [...project.pages.flatMap(entry => entry.layers)];
-  const layers = original.layers.map(entry => { const copy = { ...entry, id: nextId("layer", used) }; used.push(copy); return copy; });
-  const copy = { id: nextId("page", project.pages), name: named, layers };
+  const ids = new Map<string, string>();
+  const layers = original.layers.map(entry => { const copy = { ...entry, id: nextId("layer", used) }; used.push(copy); ids.set(entry.id, copy.id); return copy; });
+  // A flow's states and links follow their layers to the copy's ids.
+  const moved = (id: string) => ids.get(id) ?? id;
+  const copy: ProjectPage = {
+    id: nextId("page", project.pages), name: named,
+    layers: layers.map(entry => entry.of ? { ...entry, of: moved(entry.of) } : entry),
+    ...(original.links?.length ? { links: original.links.map(link => ({ ...link, from: moved(link.from), to: moved(link.to) })) } : {}),
+    ...(original.note ? { note: original.note } : {}),
+  };
   const pages = [...project.pages];
   pages.splice(pages.indexOf(original) + 1, 0, copy);
   return { project: { ...project, pages }, page: copy };
@@ -405,4 +500,71 @@ export function duplicatePage(project: Project, page: string): { project: Projec
 export function deletePage(project: Project, page: string): Project {
   if (project.pages.length < 2) return project;
   return { ...project, pages: project.pages.filter(entry => entry.id !== page), changes: project.changes.filter(entry => entry.page !== page) };
+}
+
+/* --- Flows (src/flow.ts reads them) ------------------------------------------------------------------------------------ */
+
+/** A page with its links; none leaves it a board. */
+function withLinks(page: ProjectPage, links: FlowLink[]): ProjectPage {
+  const { links: _old, ...rest } = page;
+  return links.length ? { ...rest, links } : rest;
+}
+function withoutState(layer: Layer): Layer {
+  const { of: _of, state: _state, ...rest } = layer;
+  return rest;
+}
+const onPage = (project: Project, page: string, change: (entry: ProjectPage) => ProjectPage): Project =>
+  ({ ...project, pages: project.pages.map(entry => entry.id === page ? change(entry) : entry) });
+
+/**
+ * The project with an element's link set: `to` a layer of the page or BACK, or "" for none (the element then goes where
+ * the step goes, the next step). One link per element; the first link makes the page a flow.
+ */
+export function setLink(project: Project, page: string, link: Omit<FlowLink, "id">): Project {
+  return onPage(project, page, entry => {
+    const links = entry.links ?? [];
+    const same = (other: FlowLink) => other.from === link.from && other.path.join("/") === link.path.join("/");
+    const at = links.find(same);
+    if (!link.to) return withLinks(entry, links.filter(other => !same(other)));
+    if (link.to !== BACK && !entry.layers.some(layer => layer.id === link.to)) return entry;
+    const next = { ...link, id: at?.id ?? nextId("link", links) };
+    return withLinks(entry, at ? links.map(other => other === at ? next : other) : [...links, next]);
+  });
+}
+
+/** The project with a layer made a state of a step (`of` and its name), or a step again (`of` empty). */
+export function setState(project: Project, page: string, layer: string, of: string, state = "State"): Project {
+  return onPage(project, page, entry => {
+    const step = entry.layers.find(other => other.id === of);
+    if (of && (!step || step.of || of === layer)) return entry;
+    return {
+      ...entry,
+      layers: entry.layers.map(other => {
+        if (other.id === layer) return of ? { ...withoutBranch(other), of, state: state.trim() || "State" } : withoutState(other);
+        // A step that becomes a state hands its own states to the step it joins.
+        if (of && other.of === layer) return { ...other, of };
+        return other;
+      }),
+    };
+  });
+}
+function withoutBranch(layer: Layer): Layer {
+  const { branch: _branch, ...rest } = layer;
+  return rest;
+}
+
+/** The project with a layer taken off the path (a branch, reached by a link) or put back on it. */
+export function setBranch(project: Project, page: string, layer: string, branch: boolean): Project {
+  return onPage(project, page, entry => ({
+    ...entry, layers: entry.layers.map(other => other.id !== layer ? other : branch ? { ...withoutState(other), branch: true } : withoutBranch(other)),
+  }));
+}
+
+/** The project with a layer's note, or a page's description (layer omitted). */
+export function setNote(project: Project, page: string, note: string, layer?: string): Project {
+  const said = note.trim();
+  return onPage(project, page, entry => {
+    if (!layer) { const { note: _n, ...rest } = entry; return said ? { ...rest, note: said } : rest; }
+    return { ...entry, layers: entry.layers.map(other => { if (other.id !== layer) return other; const { note: _n, ...rest } = other; return said ? { ...rest, note: said } : rest; }) };
+  });
 }

@@ -1,6 +1,18 @@
 # Handoff
 
-## Current state (2026-11-07)
+## Current state (2026-11-08)
+- **User flows, worktree `ecstatic-brattain-e4e57b` (uncommitted, 2026-11-08).** Owner: show "longer flows and complete
+  user flows with multiple pages"; study and review page https://claude.ai/artifact/L5ZPadtTxkThgz5X1m3ENe
+  (`docs/research/user-flows-2026-11-08/`), then "go with your recs, build the flow like these ui examples" (three
+  node editors). Built: a page becomes a flow at its first link (`projects.ts` links, branch, state, note; `src/flow.ts`);
+  its map on the stage in the examples' node style (`src/flow-map.tsx`, `styles/design.css`): Start, path left to right,
+  branches above, states below, link rows with ports and curves, dotted ground, dock with zoom and Play; a step opens
+  from its node and Back returns; On click › Goes to in the Design view (logged, undoable, sent to Chat); Play on the
+  stage; state switch; notes; flow checks (Inspector and Checks tab). PRODUCT_UI project-pages bullet, Candidates row
+  (flow node and connector). Checks: typecheck, app tests 49 (flow.test.ts new), app-css, playgrounds, docs; seen in the
+  browser preview light and dark. Not seen in Electron; flow patterns (proposal 8) not built. Restyled twice on the
+  owner's notes: now technical node cards (kind, name, mono source, screen 320 × 200, port rows In / outputs) with
+  port-to-port dashed lines on lanes, one turn radius, on the 8 grid; ends verified on ports by measurement.
 - **Appearance, same worktree (PR #211, 2026-11-07).** Mode's pictures: the app in a 720 × 540 window (sidebar and
   page, `content/examples/workspace-compact.tsx`), words as bars (owner picked "B as bars" from four layouts and three
   drawings), three across, each a new Radio/Checkbox `layout="thumbnail"` (picture is the card, name under it at the
