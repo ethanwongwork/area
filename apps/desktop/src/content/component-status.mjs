@@ -18,6 +18,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // round 77 approved (owner, 2026-10-27: the focus rings with room); code-block reopened 2026-10-30 (owner pick
   // "Code in the Inspector": soft, prompt, revealActions, collapsedLines, the end fade), in review.
   // queue: reopened 2026-11-07 (components audit O6: a message not sent is said through the shared announcer), in review.
+  // edit-summary: reopened 2026-11-08 (the chat workflow study, P2: EditSummaryChange design rows and the Show code fold), in review.
   'step', 'input', 'textarea', 'number-field',
   'select', 'input-group', 'empty-state', 'toggletip', // round 75 approved (owner, 2026-10-27)
   // asset-card: round 76 approved (owner, 2026-10-27); reopened 2026-11-01 for the badge slot (a status on the picture), in review.
@@ -86,7 +87,7 @@ export const COMPLETE_COMPONENTS = new Set([
   'box-field', 'breadcrumb', // breadcrumb: nowrap approved (owner, 2026-10-30; reopened 2026-10-25 for the Canvas bar's trail, its round 80 ellipsis approved 2026-10-28).
   'button-group',
   // code and color-swatch reopened 2026-10-12 for the translucent swatch ring (owner: "yes apply the swatch fix").
-  'composer',
+  // composer: reopened 2026-11-08 (the chat workflow study, P10: expandable / expanded, the cap 5 controls → 8 lines), in review.
   // color-field, color-picker, color-swatch-picker, panel and property-list reopened 2026-10-12: their swatches take the ring.
     'tooltip',
   // Approved 2026-10-08 on the component review page (recommendations for open questions accepted).

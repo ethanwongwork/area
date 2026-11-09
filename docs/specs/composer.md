@@ -5,11 +5,13 @@
 
 ## Owner decisions
 
+- 2026-11-08 (the chat workflow study, P10, "Take all recs"): the field grows to eight lines, then an Expand control
+  opens it to its container's height; `expandable`, `expanded` / `defaultExpanded` / `onExpandedChange`.
 - Before 2026-09-24 (moved from [prior decisions](PRIOR_DECISIONS.md)): Composer uses a
   native textarea (native selection, IME, Shift+Enter). Inline and stacked layouts share
   action slots and the submission contract: Enter sends, Shift+Enter adds a line,
   Ctrl/Command+Enter sends when Enter submission is off; send is unavailable for empty
-  text. The textarea grows to five control rows. Attachments, form submission and model
+  text. The textarea grows to five control rows (eight lines since 2026-11-08). Attachments, form submission and model
   selection belong to the application.
 - 2026-09-25: Composer is the next component after Tree view; the owner reviews later.
 - 2026-09-26: radius. Owner asked whether the composer should match ChatGPT's round send button
@@ -247,3 +249,15 @@ off, they follow Button's. The shell keeps its own corner. The measured referenc
 
 The narrow composer (same day): the leading group shrinks and its pickers cut their words with an ellipsis, so the send
 never leaves the shell (it ran 32 past the Inspector's 268).
+
+## Expanded, 2026-11-08 (the chat workflow study, P10)
+
+What changed: the field's cap is eight lines of its leading plus its block padding (was five controls, 150 at 30), from
+the study's measures (one reference grows to 182, seven lines, then offers Expand, which fills the column, 583 in a 766
+window; another grows to 384 then scrolls). `expandable` draws Expand (the `maximize` glyph, a ghost sm icon Button) at the
+field's top end once the draft passes the cap, and Collapse (`minimize`) while expanded; the field keeps clear of it by
+the control's width and a line's gap. Expanded is a state (`data-expanded`): the shell fills its container
+(flex 1, min 0) and the field the shell's height, `field-sizing: fixed`; the container gives the room (the Inspector's
+chat measures the panel). Escape collapses, the draft kept. Not a size: it is the same composer with more room.
+
+Tile: Expanded (`GalleryComposerExpanded`). Not yet looked at in dark or under Compact in the app.

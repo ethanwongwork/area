@@ -14,7 +14,9 @@ import { useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { Facts } from "../facts.tsx";
 import { changeLabel, changePlace, changeValue, ThemeScreen } from "../publish.tsx";
-import { liveOf, RELEASE_KIND_LABEL, versionName, type Change, type Release } from "../systems.ts";
+import { liveOf, RELEASE_KIND_LABEL, systemFile, versionName, type Change, type Release, type System } from "../systems.ts";
+import { choicesIn, describeWrite, folderName, lastFolder, rememberFolder } from "../output.ts";
+import { libraryOutput } from "../inventory.tsx";
 
 /** A release's card is the feed's 300 card, as a theme's. */
 const RELEASE_MIN = 300; /* pick */
@@ -64,6 +66,7 @@ export function HistoryPage() {
   const live = liveOf(workingSystem);
   const chosen = releases.find(release => release.version === item) ?? null;
   const newestFirst = [...releases].reverse();
+  const output = useWriteToFolder(workingSystem);
   return (
     <Workspace
       canvasTitle="Versions"
@@ -96,6 +99,7 @@ export function HistoryPage() {
             description={`Your draft becomes ${versionName(workingSystem.name, chosen.version)}, ready to publish as the next version. ${changes.length ? `Its ${changes.length} unpublished ${changes.length === 1 ? "change is" : "changes are"} replaced.` : "Nothing published changes until you publish."}`}
             onOpenChange={next => { if (!next) setRestoring(false); }} onConfirm={() => { revertSystem(chosen.version); setRestoring(false); }} />
         ) : null}
+        {output.dialog}
       </>}
       inspector={{
         design: chosen ? (<>
@@ -115,6 +119,7 @@ export function HistoryPage() {
               ["Live", chosen === live ? "Yes" : "No"],
             ]} note={chosen.note || undefined} />
           </PanelSection>
+          {output.section(chosen)}
         </>) : (
           <>
             <PanelSection heading="Versions">
@@ -137,4 +142,65 @@ export function HistoryPage() {
       }}
     />
   );
+}
+
+/*
+ * Write to folder (docs/research/system-output-2026-11-08): the chosen version written into a project's folder as code
+ * the project owns (CSS, React, icons, DESIGN.md), through electron/output.cjs. Choosing a folder shows what writing
+ * would do first, file by file in a sentence; Write does it. Written again later, the folder keeps its own edits. Only in
+ * the desktop app; a folder on this Mac only (GitHub comes later, as another destination).
+ */
+type Pending = { release: Release; path: string; plan: OutputPlan };
+type Written = { version: string; path: string; plan: OutputPlan };
+
+function useWriteToFolder(system: System) {
+  const desktop = typeof window !== "undefined" ? window.areaDesktop?.output : undefined;
+  const [pending, setPending] = useState<Pending | null>(null);
+  const [written, setWritten] = useState<Written | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  // With each release's inventory and structure, as the generator reads them (inventory.tsx libraryOutput).
+  const text = () => JSON.stringify(systemFile(system, undefined, libraryOutput));
+  const start = async (release: Release) => {
+    if (!desktop) return;
+    setError(null);
+    const path = await desktop.choose(lastFolder(system.id));
+    if (!path) return;
+    const plan = await desktop.plan({ kind: "folder", path }, text(), release.version);
+    if ("error" in plan) { setError(plan.error); return; }
+    setPending({ release, path, plan });
+  };
+  const write = async () => {
+    if (!desktop || !pending) return;
+    const result = await desktop.write({ kind: "folder", path: pending.path }, text(), pending.release.version);
+    if ("error" in result) { setError(result.error); setPending(null); return; }
+    rememberFolder(system.id, pending.path);
+    setWritten({ version: pending.release.version, path: pending.path, plan: result });
+    setPending(null);
+  };
+  const choices = pending ? choicesIn(pending.plan.summary) : 0;
+  const dialog = pending ? (
+    <ConfirmDialog open title={`Write ${versionName(system.name, pending.release.version)} to ${folderName(pending.path)}?`} confirmLabel="Write"
+      description={`${describeWrite(pending.plan.summary)} The code goes in ${pending.plan.definition.dir}, with DESIGN.md beside it.${choices ? " Where your edits and the system both changed the same lines, the file holds both, side by side, for you to choose." : ""}`}
+      onOpenChange={next => { if (!next) setPending(null); }} onConfirm={write} />
+  ) : null;
+  const section = (release: Release) => (
+    <PanelSection heading="Code">
+      <div className="studio-inspector-actions">
+        <Button size="sm" variant="soft" tone="neutral" disabled={!desktop} onClick={() => void start(release)}>Write to folder…</Button>
+        {written ? <Button size="sm" variant="soft" tone="neutral" onClick={() => desktop?.reveal({ kind: "folder", path: written.path })}>Show in Finder</Button> : null}
+      </div>
+      {written ? (
+        <Facts label="Written" items={[
+          ["Folder", folderName(written.path)],
+          ["Version", versionName(system.name, written.version)],
+          ["Files", describeWrite(written.plan.summary)],
+        ]} note={choicesIn(written.plan.summary) ? "Some files hold two changes side by side: choose one in each." : undefined} />
+      ) : (
+        <Facts label="Code" items={[]} note={error ?? (desktop
+          ? `Writes ${versionName(system.name, release.version)} into a project's folder as code the project owns, and DESIGN.md for people and agents. Written again, it keeps the project's edits.`
+          : "Writing to a folder needs the desktop app.")} />
+      )}
+    </PanelSection>
+  );
+  return { dialog, section };
 }

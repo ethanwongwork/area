@@ -157,6 +157,13 @@ interface FamilyChoice {
 }
 ```
 
+The code generator (packages/output, PR #213) reads each release's `inventory` and `structure` from the system file.
+The app writes them beside `library` (`systemFile(system, canvas, libraryOutput)`; library.ts `libraryOutputOf`):
+`inventory.components` is "all" unless a family is left out (then every other manifest slug), `inventory.exclude` the
+left-out values per manifest slug and axis (states and Tabs' implicit `marker` aren't modifiers, so they stay out),
+`structure["<slug>.<axis>"]` each moved default. The generator doesn't apply `structure` yet (its field is reserved),
+so a written system keeps Area's defaults until it does.
+
 `resolveFamily(choice, manifest)` (library.ts) gives the generator what to emit: `{ included, axes: { [axis]:
 { values, default } }, states }`. An empty library is Area as it ships. An axis with no manifest default (Tabs'
 `selection: ["plate"]`) has an implicit base value named in the registry (`marker`, "Underline").

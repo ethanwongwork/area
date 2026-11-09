@@ -67,6 +67,7 @@ export default {
       ["Do", "Put where the message runs in header, and tools with a ComposerNote in footer; they share the composer's width and line up with its shell."],
       ["Do", "Pass onFiles so files dropped on the composer or pasted into it arrive as files, and pair it with a ComposerAttach for picking."],
       ["Do", "Give a ModelPicker efforts when the model has a reasoning level; the effort shows muted after the name."],
+      ["Do", "Set expandable where long prompts are written, and give the composer's container the room to grow: Expand shows once the draft passes eight lines, and expanded fills the container."],
       ["Don't", "Build dictation as a plain Button: ComposerMic is a toggle, so it keeps one name and reports its state with aria-pressed."],
       ["Don't", "Turn off submitOnEnter just to allow new lines: Shift+Enter already adds one, and with it off only Cmd+Enter or Ctrl+Enter sends."],
       ["Don't", "Wrap it in a Field or give it a visible label: label names the field for assistive tech only."],
@@ -77,7 +78,7 @@ export default {
       root: "The shell: Card's edge and Card's corner (its actions concentric inside it), the composer's width and its inset.",
       context: "A row inside the shell above the field for context chips and Attachments; it wraps on the composer's gap.",
       entry: "The row that holds the field, and in the inline layout the leading and trailing actions beside it.",
-      input: "A native textarea at the body size; it grows with its text up to five rows, then scrolls.",
+      input: "A native textarea at the body size; it grows with its text up to eight lines, then scrolls (expanded: the shell's height).",
       actions: "A fieldset of action Buttons, leading or trailing; disabling the composer disables everything in it.",
       extras: "The inline layout's trailing slot for your own actions, between the mode and the send Button.",
       footer: "The stacked layout's row under the field: leading actions and mode at the start, trailing actions and send at the end.",
@@ -85,11 +86,13 @@ export default {
       mic: "ComposerMic: a ghost icon-only toggle Button, the mic at rest and the waveform on the selected plate while on.",
       attach: "ComposerAttach: the ghost + Button that opens the file picker.",
       file: "ComposerAttach's hidden file input; the chosen files go to its onFiles.",
+      expand: "Expand and Collapse: a ghost sm icon Button at the field's top end, shown with expandable once the draft passes the cap or while expanded.",
     },
     // Spec: Decisions (disabled).
     states: {
       disabled: "Field paint at full opacity, the text and placeholder in the disabled ink; the field and every action are disabled.",
       dragging: "Files are dragged over a composer with onFiles: the selection edge on the row plate, File upload's drop paint, until they leave or drop.",
+      expanded: "The shell fills its container's height and the field the shell's, for a long prompt; Escape or Collapse closes it, the draft kept.",
     },
     // Source: Composer.tsx keyDown, submit.
     keyboard: [
@@ -97,6 +100,7 @@ export default {
       ["Shift+Enter", "Adds a line."],
       ["Cmd+Enter or Ctrl+Enter", "Sends, also when submitOnEnter is off."],
       ["Tab", "Moves from the field to the actions and the send Button."],
+      ["Escape", "While expanded, closes the field to its eight lines (the draft stays)."],
     ],
     aria: [
       ["aria-busy", "On the root while loading."],
@@ -457,6 +461,8 @@ export default {
       ["Do", "Set a file's status to kept or undone once the person acts: its actions leave and the row says Kept or Undone. state still works for one release."],
       ["Do", "Control a file's diff with open and onOpenChange when the app must open it (a review that walks the files); defaultOpen otherwise."],
       ["Do", "Set title to the count (\"Edited 2 files\"); without it the head says \"Edited files\"."],
+      ["Do", "For a person who judges the design, not the code, list EditSummaryChange rows in the design's words (\"Save button\", Corner 8 → 12) and pass the files as code: they fold under Show code, the counts move onto that row."],
+      ["Do", "Settle design rows with the summary's Keep all and Undo all, and pass each row the status they come to."],
       ["Don't", "Use it as a review tool for staging or commits; it keeps or undoes one turn's edits."],
       ["Don't", "Signal a change by color alone: keep the +N −N and the diff's + and − markers."],
     ],
@@ -476,6 +482,11 @@ export default {
       chevron: "Shown when the file has a diff; it turns as the diff opens.",
       status: "\"Kept\" or \"Undone\" once the file is settled, in place of the actions.",
       diff: "The file's Diff, 4 under its row and as wide as the row plate; a wide one scrolls sideways.",
+      change: "EditSummaryChange: one change in the design's words, a Menu row's metrics with nothing to press.",
+      "change-name": "What changed (\"Save button\") in the default ink; it keeps up to two thirds of the row.",
+      "change-value": "The property, from → to, muted after the name; it is cut at its end first.",
+      code: "The files behind the changes, under Show code, at the list's row gap.",
+      "code-toggle": "Show code: a row at the list's foot with the files' +N −N and a chevron that turns as it opens.",
     },
     // Spec: States; source: data-open, data-kept, data-undone on the file.
     states: {
@@ -486,11 +497,11 @@ export default {
     // Source: native buttons; the Diff is a focusable region.
     keyboard: [
       ["Tab", "Moves to Undo all and Keep all, then each file's name, its Undo and Keep, and an open diff."],
-      ["Enter or Space", "On a file's name, opens or closes its diff; on an action, runs it."],
+      ["Enter or Space", "On a file's name, opens or closes its diff; on Show code, opens or closes the files; on an action, runs it."],
     ],
     aria: [
       ["aria-labelledby", "On the section, from the title, unless you pass aria-label."],
-      ["aria-expanded, aria-controls", "On a file's name, when it has a diff."],
+      ["aria-expanded, aria-controls", "On a file's name, when it has a diff, and on Show code."],
       ["aria-label", "On a file's Undo and Keep (\"Undo <name>\"); on the Diff, from aria-label (\"Changes\" by default; the deprecated label reads \"Changes to <label>\")."],
       ["tabindex", "The Diff is a Tab stop, so a wide diff can be scrolled from the keyboard."],
     ],

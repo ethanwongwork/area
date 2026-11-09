@@ -5,6 +5,10 @@
 
 ## Owner decisions
 
+- 2026-11-08 (the chat workflow study, P2, "Take all recs"): changes read in the design's words, a row a change
+  (EditSummaryChange: "Save button", Corner 8 → 12), with the files folded under Show code and Keep and Undo on the
+  summary. Review page https://claude.ai/artifact/GszAD4HPUQUjJoG9GwR3Km, research
+  `docs/research/chat-workflow-2026-11-08/`.
 - 2026-10-26 (round 73): the head title stays regular beside the 500-weight Undo all / Keep all ("Keep the chat card
   head titles regular; it's intentional"), as Plan's, Queue's and Code block's heads.
 - 2026-10-18: "start Phase 2 … Edit summary and diff".
@@ -24,6 +28,8 @@ the unchanged runs between hunks. Not Code block's `marks` (one-sided, no number
 | file status | pending, kept, undone | Keep / Undo per file and all | Cursor review ("Keep All", "Undo All", per-file Keep / Undo); Codex Undo / Review |
 | file open | closed, open (diff) | the diff on demand | Cursor `EditToolCallView.js` chevron; Codex "Review" |
 | (Diff) line kind | added, deleted, context; fold (`removed`: deprecated alias of deleted, components audit D6) | — | Cursor `DefaultDiff.stylex.js`; Codex TUI diff_render |
+| row kind | file, design change | a designer judges the change, not the file | 2026-11-08 study: every reference names files with +N −N; Area's Design view already logs component, property, from and to |
+| code fold | none, Show code | files under the design rows | 2026-11-08 study (P2) |
 
 API: a file's outcome is `status` (Governance § 4; `state` stays as a deprecated alias for one release, `status` wins).
 A file's diff opens uncontrolled (`defaultOpen`) or controlled (`open` / `onOpenChange`), as Step, Plan and Queue do.
@@ -294,3 +300,22 @@ The counts and the Diff speak the shared change words (Governance § 4, "Change 
 DiffLine `kind`; `removed` stays a deprecated alias for one release. The part is `__deleted` (`__removed` kept beside it
 in the stylesheet), the line modifier `--deleted` (`--removed` kept), the hidden words "N deleted" and "Deleted:". The
 counts read `fg-change-added` / `fg-change-deleted`, which are the success and danger inks: no visible change.
+
+## Design changes, 2026-11-08 (the chat workflow study, P2)
+
+What changed: a design row, `EditSummaryChange` (`name`, `property`, `from`, `to`, `status`): a Menu row's metrics with
+nothing to press, the name in the default ink (up to two thirds of the row) and the property from → to after it, a line's
+gap (4) away, muted, cut first. No counts and no actions of its own; the summary's Keep all and Undo all settle it, and a
+settled row goes quiet as a file's does (undone: struck). `added` and `deleted` are optional: leave both out for a
+summary of design changes. `code` folds the files (EditSummaryFile rows) under a Show code row at the list's foot, a
+file row's plate, press and ring, its label muted (hover moves the plate, never the ink), the files' +N −N after it (the counts leave the head)
+and the chevron turning on fast; `codeLabel`, `codeOpen` / `defaultCodeOpen` / `onCodeOpenChange` as a file's open.
+
+Why: the chat workflow study measured three references that all report edits as files with +N −N and code to approve;
+a designer judges a corner by its value and by looking at it. Area's Design view already logs changes as component,
+property, from and to, so the agent's log (electron/agent.cjs `log_changes`) uses the same words.
+
+Not built: the optional before and after picture on a design row (proposed in P2). A code change has no drawn "before"
+the chat can show yet; the stage shows the after.
+
+Tile: Design changes (`GalleryEditSummaryDesign`). Checks: styles build parity, `npm run typecheck`, `check:docs`.

@@ -1,8 +1,8 @@
 # Handoff
 
 ## Current state (2026-11-08)
-- **System inventory and structure, worktree `system-inventory-structure-c39f5c` (uncommitted, 2026-11-08; main #212
-  merged in).** Owner's scope review: "more straightforward editing tools for customizing and updating a design system,
+- **System inventory and structure, worktree `system-inventory-structure-c39f5c` (PR, 2026-11-08; main
+  through #214 merged in).** Owner's scope review: "more straightforward editing tools for customizing and updating a design system,
   components" (BRIEF layers 2 and 3); then "build with recs". Research, ranked options, the working copy's shape and
   what's built: `docs/research/system-inventory-2026-11-08/README.md`; review page
   https://claude.ai/artifact/P44jDDPeDvYu8JeB1ixbFY (`verdicts` empty). Built, every recommendation (Q1–Q7):
@@ -15,8 +15,43 @@
   label on a vertical Stack's first line. Checks: typecheck, build, npm test, React 779, desktop tests 48, playgrounds,
   docs, app CSS, contracts; seen in the static build (4410, browser storage; test project and release removed after)
   light and dark. Electron not relaunched (another session's window open; inventory edits there write the owner's system
-  files). Open: app chrome and example screens don't take the library's defaults; Calendar and Split button don't read
+  files). Each release in the system file also carries `inventory` and `structure` in the generator's shape (#213's
+  definition reads them); the generator doesn't apply `structure` (moved defaults) yet. Open: app chrome and example
+  screens don't take the library's defaults; Calendar and Split button don't read
   SystemDefaults; Setup questions not built.
+
+- **Chat workflow, worktree `chat-workflow-study-c0f913` (built, committed, pull request opened, 2026-11-08).** Owner took all recs on
+  the study (https://claude.ai/artifact/GszAD4HPUQUjJoG9GwR3Km, picks in db `verdicts`; P12 and P14 Not now). Built:
+  the engine's own tools `show_options` and `log_changes` (in-process MCP, zod), AskUserQuestion on and answered from a
+  question card, pictures sent as pictures, Ask / Suggest / Change (`electron/agent.cjs`); options drawn as named
+  pictures that put their settings on the theme with Undo, questions kept as the person's reply, changes in design words
+  with Show code, approvals in plain words, work folded to one line (Settings › Chat › Work), More folds, Edit / Restore
+  to here / Try again / Try another way, Ask about this, @ menu of design things, + menu, starters, long paste chip,
+  Send to chat as one card (`src/chat/`, `design-inspector.tsx`). Components: Edit summary `EditSummaryChange` + `code`
+  fold; Composer `expandable` / `expanded`, cap 8 lines. Tests: `tests/agent.test.ts`, `tests/chat-words.test.ts`.
+  Since: branch brought up to main (PR #212's change words: `deleted`, Step `complete` / `error`; onExpandedChange
+  passes its event), options show one framed picture under 440 wide (side by side from 440), multi-select questions
+  (Chosen marks, Continue), past chats kept (last 20) and offered in @. Not done: a live run (no sign-in), saved
+  references in @, before/after pictures on design rows; chat turns in Versions dropped (Versions restores page
+  snapshots, not the code a chat changed). Multi-select is typechecked, not seen (no recorded run asks one).
+- **Output, worktree `system-output-e26092` (pull request, 2026-11-08).** Brief steps 2 and 5: a published system written
+  into a project's folder as code it owns, kept current by a three-way merge, with an agent contract. Research and ranked
+  decisions: `docs/research/system-output-2026-11-08/` (README, sources); review page
+  https://claude.ai/artifact/3ZXFHZRTqEr4xq9S29zsrg (11 decisions, recommendations built, picks in `verdicts`, none yet).
+  Built: `packages/output` (`@area/output`, bin `area`: init, build, check, mcp; TypeScript run as is): `.area/system.json`
+  from a release, theme CSS = Area's axes sheet pruned to the chosen values and rebound to `:root` (a second theme on
+  `[data-area-system-theme]`), component CSS without left-out components and options, React sources with their import
+  closure and a pruned manifest (types narrow), icon sprite, DESIGN.md + an AGENTS.md block + components.json, lock +
+  `.area/base/` copies + diff3 merge, checks, a read-only 5-tool MCP server (2025-11-25 `initialize` and 2026-07-28
+  stateless). App: Versions › a version › Inspector › Code › Write to folder… (`electron/output.cjs`, `src/output.ts`,
+  design words). Verified: `npm run test:output` 13 (the proof point: two systems, a library update, edits kept; same
+  bytes; merge vs brute-force LCS), `npm run fidelity -w @area/output` (2,808 tokens + 192 painted values identical to
+  Area's, light and dark, 4 systems incl. the owner's Area 1.0.1), the written React type-checks alone, MCP over stdio,
+  the app's IPC writing Area 1.0.1 to a scratch folder (220 files, then 220 unchanged), the Code section light and dark;
+  typecheck, tokens 29,241, desktop 41. Not verified: the native folder picker and the Write dialog by hand (driven over
+  IPC only). Open: choosing between two changes in the app, GitHub destination, resolved token values in DESIGN.md,
+  `area check` in CI, publishing the package for `npx area`. Inventory shape note for the inventory session in the shared
+  notes folder (`system-output-2026-11-08.md`).
 - **Worktree `component-design-review-92c949`: title balance + system gaps build (committed with the components audit build; main merged in 2026-11-08).**
   - Title balance (owner "4 is right"): a component's title is its text's size, its copy a step (4) off; an item's
     name joins its line (DESIGN_SYSTEM "Text pairs"; `docs/research/title-balance-2026-11-06`).

@@ -36,6 +36,7 @@ import { PublishControls } from "./publish.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { AppScaleContext, InheritedScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
+import { libraryOutput } from "./inventory.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
 import { groupSlug, HOME_TAB, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, setProjects, setSystems, tabHolds, tabKind, type Place } from "./places.ts";
@@ -152,12 +153,13 @@ function openSystems(): System[] {
   setSystems(systems);
   return systems;
 }
-const fileText = (system: System) => JSON.stringify(systemFile(system, markCanvas), null, 2);
+// Each release also says what it holds as the code generator reads it (inventory.tsx libraryOutput).
+const fileText = (system: System) => JSON.stringify(systemFile(system, markCanvas, libraryOutput), null, 2);
 /** Writes the systems named by `ids` (all of them in this browser's storage, which keeps one list). */
 function saveSystems(systems: readonly System[], ids: readonly string[]) {
   const store = disk();
   if (store) for (const system of systems) { if (ids.includes(system.id)) store.write(system.id, fileText(system)); }
-  else writeStored("systems", systems.map(system => systemFile(system, markCanvas)));
+  else writeStored("systems", systems.map(system => systemFile(system, markCanvas, libraryOutput)));
 }
 
 /** The projects (src/projects.ts), as the systems: Application Support in Electron, this browser's storage otherwise. */

@@ -112,7 +112,7 @@ export { Indicator, IndicatorAnchor, type IndicatorProps, type IndicatorAnchorPr
 export { Count, type CountProps } from "./components/Count.tsx";
 export { AccordionItem, Accordion, type AccordionItemProps, type AccordionProps } from "./components/Accordion.tsx";
 export { Step, StepGroup, Reasoning, type StepProps, type StepGroupProps, type ReasoningProps, type StepRunStatus } from "./components/Step.tsx";
-export { EditSummary, EditSummaryFile, Diff, type EditSummaryProps, type EditSummaryFileProps, type EditFileState, type EditFileStatus, type DiffProps, type DiffHunk, type DiffLine } from "./components/EditSummary.tsx";
+export { EditSummary, EditSummaryChange, EditSummaryFile, Diff, type EditSummaryProps, type EditSummaryChangeProps, type EditSummaryFileProps, type EditFileState, type EditFileStatus, type DiffProps, type DiffHunk, type DiffLine } from "./components/EditSummary.tsx";
 export { Approval, type ApprovalProps, type ApprovalOption } from "./components/Approval.tsx";
 export { Plan, type PlanProps, type PlanItem } from "./components/Plan.tsx";
 export { TurnNotice, type TurnNoticeProps, type TurnNoticeStatus } from "./components/TurnNotice.tsx";

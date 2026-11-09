@@ -367,10 +367,21 @@ export function revertTo(system: System, version?: string): System {
 }
 
 /**
- * A system as its file holds it. `canvas` may add marks of its own to each theme's settings (the app's positions mark, so a
- * later conversion knows these are positions).
+ * A release's library as the code generator's definition reads it (packages/output/src/definition.ts, `inventory` and
+ * `structure` on each release): which components (manifest slugs) and which of their options, and the structure choices.
+ * Worked out by the app, which knows the manifests (src/inventory.tsx `libraryOutput`).
  */
-export function systemFile(system: System, canvas: (axes: CanvasAxes) => Record<string, unknown> = axes => axes) {
+export interface LibraryOutput {
+  inventory: { components: "all" | string[]; exclude: Record<string, Record<string, string[]>>; icons: "all" };
+  structure: Record<string, string>;
+}
+
+/**
+ * A system as its file holds it. `canvas` may add marks of its own to each theme's settings (the app's positions mark, so a
+ * later conversion knows these are positions). `output`, when given, writes each release's library as the generator
+ * reads it too (`inventory`, `structure`).
+ */
+export function systemFile(system: System, canvas: (axes: CanvasAxes) => Record<string, unknown> = axes => axes, output?: (library: SystemLibrary) => LibraryOutput) {
   const themeFile = (theme: SystemTheme) => ({ id: theme.id, name: theme.name, canvas: canvas(theme.canvas), material: theme.material, colours: theme.colours, accent: theme.accent });
   return {
     version: SYSTEM_FILE_VERSION,
@@ -378,7 +389,7 @@ export function systemFile(system: System, canvas: (axes: CanvasAxes) => Record<
     themes: system.themes.map(themeFile), library: system.library,
     releases: system.releases.map(release => ({
       version: release.version, kind: release.kind, note: release.note, at: release.at, ...(release.from ? { from: release.from } : {}),
-      theme: release.theme, themes: release.themes.map(themeFile), library: release.library,
+      theme: release.theme, themes: release.themes.map(themeFile), library: release.library, ...(output ? output(release.library) : {}),
     })),
   };
 }

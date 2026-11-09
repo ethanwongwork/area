@@ -148,3 +148,22 @@ test("a project keeps its version until a release that needs work, then follows 
   assert.deepEqual(asRelease(system, "1.1").library, EMPTY_LIBRARY);
   assert.deepEqual(asRelease(system, "2.0").library, withOut.library);
 });
+
+test("each release's library reaches the code generator's definition", async () => {
+  const { libraryOutputOf } = await import("../src/library.ts");
+  const { definitionFromSystem } = await import("../../../packages/output/src/definition.ts");
+  const families = [{ slug: "button", block: "area-button", manifest: BUTTON }, { slug: "tabs", block: "area-tabs", manifest: TABS }, { slug: "input", block: "area-input", manifest: INPUT }];
+  let library = setValueIncluded(EMPTY_LIBRARY, "button", BUTTON, "tone", "danger", false);
+  library = setValueIncluded(library, "button", BUTTON, "state", "loading", false);
+  library = setDefault(library, "tabs", TABS, "selection", "plate");
+  library = setFamilyIncluded(library, "input", INPUT, false);
+  const out = libraryOutputOf(library, families);
+  assert.deepEqual(out, { inventory: { components: ["button", "tabs"], exclude: { button: { tone: ["danger"] } }, icons: "all" }, structure: { "tabs.selection": "plate" } });
+  assert.deepEqual(libraryOutputOf(EMPTY_LIBRARY, families), { inventory: { components: "all", exclude: {}, icons: "all" }, structure: {} });
+  const system = publish({ ...starterSystem("Northwind", [], RESTORE, "starter", new Date("2026-11-08T12:00:00Z")), library }, "needs-work", "");
+  const file = JSON.parse(JSON.stringify(systemFile(system, undefined, entry => libraryOutputOf(entry, families))));
+  assert.deepEqual(definitionFromSystem(file).inventory, { components: ["button", "tabs"], exclude: { button: { tone: ["danger"] } }, icons: "all" });
+  assert.deepEqual(definitionFromSystem(file).structure, { "tabs.selection": "plate" });
+  // The first version, from before the change, holds everything.
+  assert.equal(definitionFromSystem(file, "1.0").inventory.components, "all");
+});

@@ -22,10 +22,10 @@ import { MANIFESTS } from "@area/styles/manifest";
 import { COMPONENT_PAGES } from "./content/pages.mjs";
 import { canvasAttributes, useStudio } from "./studio.tsx";
 import { tabKind } from "./places.ts";
-import { STATE_AXIS, type SystemLibrary } from "./systems.ts";
+import { STATE_AXIS, type LibraryOutput, type SystemLibrary } from "./systems.ts";
 import {
   axisLabel, chooseStructure, offerStructure, resetFamily, resolveFamily, setDefault, setFamilyIncluded, setValueIncluded,
-  STRUCTURES, systemDefaults, valueLabel, type ManifestShape, type ResolvedFamily, type Structure,
+  libraryOutputOf, STRUCTURES, systemDefaults, valueLabel, type ManifestShape, type ResolvedFamily, type Structure,
 } from "./library.ts";
 
 interface PageFamily { slug: string; name: string; manifest?: string; docsOnly?: boolean; exportName?: string; imports?: string }
@@ -38,6 +38,14 @@ export function manifestFor(slug: string): ManifestShape | undefined {
   const key = MANIFEST_NAME.get(slug);
   return key ? (MANIFESTS as unknown as Record<string, ManifestShape>)[key] : undefined;
 }
+/** A library as the code generator reads it (library.ts `libraryOutputOf`), over every family with a manifest. */
+export const libraryOutput = (library: SystemLibrary): LibraryOutput => libraryOutputOf(library, PAGES.flatMap(family => {
+  const manifest = manifestFor(family.slug);
+  const key = MANIFEST_NAME.get(family.slug);
+  const block = key ? (MANIFESTS as unknown as Record<string, { block: string }>)[key]?.block : undefined;
+  return manifest && block ? [{ slug: family.slug, block, manifest }] : [];
+}));
+
 /** A family's React component by its slug ("input-group" → "InputGroup"): its recorded export, else its name in Pascal case. */
 export function componentName(slug: string): string | undefined {
   const family = PAGES.find(entry => entry.slug === slug);

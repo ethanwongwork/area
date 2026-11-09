@@ -1,0 +1,240 @@
+<title>System Output Review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; a folder figure beside the summary; decisions as a numbered list of choice rows. */
+:root {
+  --bg: #f6f7f8; --panel: #ffffff; --fg: #15191d; --muted: #5d6670; --line: #dde1e5; --soft: #eef1f3;
+  --accent: #1f5f8b; --accent-soft: #e3eef6; --ok: #2f7a4f; --ok-soft: #e4f2e9;
+  --sans: "Instrument Sans", ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0d0f; --panel: #14181c; --fg: #e8ecef; --muted: #98a2ac; --line: #262c32; --soft: #1b2025;
+  --accent: #7db7e0; --accent-soft: #15283a; --ok: #7cc79a; --ok-soft: #13291d; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0b0d0f; --panel: #14181c; --fg: #e8ecef; --muted: #98a2ac; --line: #262c32; --soft: #1b2025;
+  --accent: #7db7e0; --accent-soft: #15283a; --ok: #7cc79a; --ok-soft: #13291d; color-scheme: dark }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans); }
+.page { max-width: 880px; margin: 0 auto; padding-block: 40px 120px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 36px; }
+h1 { font-size: 30px; line-height: 1.15; font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0; }
+h3 { font-size: 17px; font-weight: 600; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 66ch; }
+.lede { color: var(--muted); font-size: 16px; }
+code, .path { font-family: var(--mono); font-size: 0.86em; }
+header { display: grid; gap: 12px; }
+.facts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 20px; align-items: start; }
+@media (max-width: 720px) { .facts { grid-template-columns: minmax(0, 1fr); } }
+.checks { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.checks li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.mark { font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 4px; background: var(--ok-soft); color: var(--ok); white-space: nowrap; }
+.mark.open { background: var(--soft); color: var(--muted); }
+.tree { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; font: 12.5px/1.75 var(--mono); overflow-x: auto; white-space: pre; color: var(--muted); }
+.tree b { color: var(--fg); font-weight: 500; }
+.decisions { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; counter-reset: d; }
+.decision { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 12px; }
+.decision header { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: baseline; }
+.num { font: 500 12px var(--mono); color: var(--muted); }
+.state { font: 500 11px var(--mono); color: var(--muted); white-space: nowrap; }
+.state.chosen { color: var(--accent); }
+.why { color: var(--muted); font-size: 14px; }
+.options { display: grid; gap: 8px; border: 0; margin: 0; padding: 0; }
+.option { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; align-items: start; }
+.option:hover { background: var(--soft); }
+.option:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.option input { margin: 4px 0 0; accent-color: var(--accent); }
+.option input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.option strong { font-weight: 600; }
+.option .rec { font: 500 10.5px var(--mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); margin-left: 6px; }
+.option span.text { display: grid; gap: 2px; min-width: 0; }
+.option small { color: var(--muted); font-size: 13.5px; }
+textarea { width: 100%; min-height: 38px; resize: vertical; font: 14px/1.4 var(--sans); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.bar { position: fixed; left: 0; right: 0; bottom: 0; background: var(--panel); border-top: 1px solid var(--line); padding-block: 12px calc(12px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.bar .inner { max-width: 880px; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.bar p { color: var(--muted); font-size: 14px; }
+button { font: 500 14px var(--sans); border-radius: 8px; padding: 8px 14px; border: 1px solid var(--accent); background: var(--accent); color: var(--panel); cursor: pointer; }
+button:disabled { opacity: 0.5; cursor: default; }
+button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) { .option { transition: background-color 120ms, border-color 120ms; } }
+</style>
+
+<div class="page">
+  <header>
+    <h2>Area · Output · 2026-11-08</h2>
+    <h1>A system written out as code, and kept inside by agents</h1>
+    <p class="lede">A published version of a system can now be written into a project's folder as code the project owns: CSS, React, icons, DESIGN.md and an AGENTS.md block. Writing it again keeps the project's edits. Each decision below is built at the recommendation; pick another and it changes.</p>
+  </header>
+
+  <section class="facts" aria-label="What is built and checked">
+    <div style="display:grid;gap:14px">
+      <h2>Built and checked</h2>
+      <ul class="checks">
+        <li><span class="mark">exact</span><span>Written CSS paints what Area paints: all 2,808 tokens on the page and on a second theme's scope, plus 192 painted values on six components, light and dark, for four systems, your Area 1.0.1 among them.</span></li>
+        <li><span class="mark">13 pass</span><span>Two very different systems written from one library into two folders; a library update written into both with no choices to make and every local edit kept. Same choices, same bytes.</span></li>
+        <li><span class="mark">compiles</span><span>The written React type-checks on its own, with React as its only dependency; a left-out option stops type-checking.</span></li>
+        <li><span class="mark">works</span><span>Versions › a version › Code: Write to folder… in the app, the same core as the <code>area</code> command and the agents' server.</span></li>
+        <li><span class="mark open">open</span><span>Choosing between two changes in the app, GitHub as a destination, exact token values in DESIGN.md.</span></li>
+      </ul>
+    </div>
+    <div class="tree" aria-label="What a project holds">project/
+├─ <b>DESIGN.md</b>          the system, for people and agents
+├─ <b>AGENTS.md</b>          yours, with Area's block in it
+├─ <b>.area/</b>
+│  ├─ system.json     the choices
+│  ├─ area.lock       versions and file hashes
+│  └─ base/           what Area wrote last
+└─ <b>design-system/</b>
+   ├─ css/            tokens, theme, components
+   ├─ react/          components, manifest
+   ├─ icons/          sprite, icons.json
+   └─ components.json</div>
+  </section>
+
+  <section style="display:grid;gap:14px" aria-labelledby="decisions-heading">
+    <h2 id="decisions-heading">Decisions</h2>
+    <ol class="decisions" id="decisions"></ol>
+  </section>
+</div>
+
+<div class="bar" role="region" aria-label="Your picks">
+  <div class="inner">
+    <p id="status" aria-live="polite">Loading your picks…</p>
+    <button id="take-all" type="button" disabled>Take every recommendation</button>
+  </div>
+</div>
+
+<script>
+const DECISIONS = [
+  { id: "theme-sheet", title: "How a system's settings become CSS", why: "Area paints a setting through an attribute on the page. A written system has made its choices.", options: [
+    ["a", "Keep only the chosen rules, applied to the whole page", "Exact by construction, follows the device's contrast and motion settings; 0.5–0.7 MB.", true],
+    ["b", "Work every token out to a final value", "Smallest and easiest to read; stops following the device's settings and needs a rendering engine to write."],
+    ["c", "Ship all of Area's CSS and set attributes on the page", "Simplest; 2 MB, and every value the system didn't choose ships too."] ] },
+  { id: "base", title: "What a later write compares against", why: "Keeping edits needs what Area wrote last time, what the project holds now and what Area writes now.", options: [
+    ["a", "Keep a copy of what Area wrote, beside the system's choices", "Works offline, with no history and no old library; doubles the written files in the project.", true],
+    ["b", "Rebuild it from the library version recorded last time", "Smallest project; needs every past library version to stay available."],
+    ["c", "Only record a fingerprint of each file", "Edited files are never updated again; unedited ones are."] ] },
+  { id: "two-changes", title: "When the project and the system changed the same lines", why: "Rare in ordinary edits; the two-systems test had none.", options: [
+    ["a", "Write both, side by side in the file, and list them", "People and agents can choose in their editor; a check can fail until it's done.", true],
+    ["b", "Keep the project's, put the system's next to it", "Nothing breaks, and the choice is easy to miss."],
+    ["c", "Write nothing to that file until it's chosen in Area", "Safest; needs a side-by-side view in the app first."] ] },
+  { id: "left-out", title: "An option the system leaves out but a component it holds uses", why: "A dialog draws a quiet button; leaving quiet buttons out would draw it unstyled.", options: [
+    ["a", "Keep it, and say which component needs it", "Nothing ships broken; the left-out list can be longer than what's actually removed.", true],
+    ["b", "As A, and stop it being left out where it's chosen", "Clearer when choosing; the inventory work would add this."],
+    ["c", "Remove it anyway", "Exactly what was asked; some components draw unstyled."] ] },
+  { id: "agent-files", title: "What agents read", why: "Most coding agents read AGENTS.md; some also read their own rule files.", options: [
+    ["a", "DESIGN.md at the project's root, and a block of Area's in AGENTS.md", "Two places, every agent reached; the rest of AGENTS.md stays the project's.", true],
+    ["b", "As A, plus a rule file per agent", "Each agent gets its own format; more files for the project to own."],
+    ["c", "DESIGN.md only", "Least in the project; agents have to be told to read it."] ] },
+  { id: "agent-server", title: "What agents can ask the system directly", why: "A local server answering from the project's own files.", options: [
+    ["a", "Read only: find components, get one, look up a token, check a change, get the rules", "Agents ask, people decide what's written.", true],
+    ["b", "As A, plus writing: add a component, write the system again", "Faster loops; writing would need approval each time."],
+    ["c", "No server, rule files only", "Agents can't check their work against the system."] ] },
+  { id: "in-the-app", title: "Where writing sits in the app", why: "Built on a version, since only published versions are written out.", options: [
+    ["a", "Versions › a version › Code: Write to folder…", "Close to what's being written; one folder at a time.", true],
+    ["b", "A Code page in the system's nav", "Every folder the system is in, each one's version and what's out of date; more to build."],
+    ["c", "In the Publish dialog", "One step for solo work; ties publishing to one folder."] ] },
+  { id: "names", title: "Token names in the written code", why: "Library items re-theme because every system shares one set of names.", options: [
+    ["a", "Keep Area's names (--area-…)", "Anything from the library works in the project as it is.", true],
+    ["b", "The system's own prefix", "Reads as the project's own; library items need renaming on the way in."] ] },
+  { id: "light-dark", title: "Light and dark in the written system", why: "Area sets dark with an attribute on the page.", options: [
+    ["a", "Light by default; dark when the page says so", "The project decides; it adds one line to follow the device.", true],
+    ["b", "Follow the device by default; the page can override", "Right for most products; one more rule in the written CSS."] ] },
+  { id: "icons", title: "How icons are written", why: "The system's icons, 817 of them at every size until the inventory narrows them.", options: [
+    ["a", "One sprite and a list of names", "Two files; an edit to one icon stays separate from the rest.", true],
+    ["b", "One SVG file per icon", "Easy to open and swap one; 1,600 files."],
+    ["c", "One React component per icon", "Typed and tree-shaken; React only."] ] },
+  { id: "next", title: "What to build next", why: "Each is a step the brief asks for after this one.", options: [
+    ["a", "Choose between two changes side by side in the app", "Makes writing safe for someone who never opens the files.", true],
+    ["b", "GitHub as a place to write to", "Sign in, a proposal for review with before and after."],
+    ["c", "Exact token values in DESIGN.md", "Agents get colors and sizes as values, not just names."],
+    ["d", "A Code page for the system", "Every project the system is in, at a glance."] ] },
+];
+
+const list = document.getElementById("decisions");
+const statusLine = document.getElementById("status");
+const takeAll = document.getElementById("take-all");
+const saved = new Map();
+let store = null;
+
+function render() {
+  // A rebuild keeps the field being typed in, and where its caret is.
+  const active = document.activeElement?.id, caret = document.activeElement?.selectionStart;
+  queueMicrotask(() => { const el = active && document.getElementById(active); if (el) { el.focus(); if (caret != null && el.setSelectionRange) el.setSelectionRange(caret, caret); } });
+  list.textContent = "";
+  DECISIONS.forEach((d, i) => {
+    const rec = d.options.find(o => o[3])[0];
+    const entry = saved.get(d.id);
+    const pick = entry?.pick ?? rec;
+    const li = document.createElement("li");
+    li.className = "decision";
+    li.innerHTML = `<header><span class="num">${String(i + 1).padStart(2, "0")}</span><h3></h3><span class="state"></span></header><p class="why"></p><fieldset class="options"><legend class="visually-hidden" hidden></legend></fieldset><textarea rows="1" placeholder="A note (optional)"></textarea>`;
+    li.querySelector("h3").textContent = d.title;
+    li.querySelector(".why").textContent = d.why;
+    const state = li.querySelector(".state");
+    state.textContent = entry ? (entry.pick === rec ? "taken" : "changed") : "recommended";
+    if (entry) state.classList.add("chosen");
+    const fieldset = li.querySelector("fieldset");
+    fieldset.querySelector("legend").textContent = d.title;
+    for (const [value, label, text, isRec] of d.options) {
+      const id = `${d.id}-${value}`;
+      const option = document.createElement("label");
+      option.className = "option";
+      option.htmlFor = id;
+      option.innerHTML = `<input type="radio" name="${d.id}" id="${id}" value="${value}"><span class="text"><span><strong></strong>${isRec ? '<span class="rec">Recommended</span>' : ""}</span><small></small></span>`;
+      option.querySelector("strong").textContent = `${value.toUpperCase()}. ${label}`;
+      option.querySelector("small").textContent = text;
+      const input = option.querySelector("input");
+      input.checked = value === pick;
+      input.disabled = !store;
+      input.addEventListener("change", () => save(d, value, li.querySelector("textarea").value));
+      fieldset.append(option);
+    }
+    const note = li.querySelector("textarea");
+    note.id = `${d.id}-note`;
+    note.value = entry?.note ?? "";
+    note.disabled = !store;
+    let timer;
+    note.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => save(d, saved.get(d.id)?.pick ?? pick, note.value), 700); });
+    list.append(li);
+  });
+  const decided = DECISIONS.filter(d => saved.has(d.id)).length;
+  takeAll.disabled = !store || decided === DECISIONS.length;
+  if (store) statusLine.textContent = decided ? `${decided} of ${DECISIONS.length} decided. Undecided ones stay at the recommendation.` : `Nothing decided yet: every decision is at the recommendation.`;
+}
+
+async function save(d, pick, note) {
+  if (!store) return;
+  const data = { pick, note: note || "", title: d.title, label: d.options.find(o => o[0] === pick)[1], recommended: d.options.find(o => o[3])[0] };
+  const before = saved.get(d.id);
+  if (before && before.pick === data.pick && (before.note || "") === data.note) return;
+  saved.set(d.id, data);
+  statusLine.textContent = "Saving…";
+  try { await store.collection("verdicts").doc(d.id).set(data); render(); }
+  catch (e) { statusLine.textContent = "Couldn't save that pick. Try again in a moment."; }
+}
+
+takeAll.addEventListener("click", async () => {
+  takeAll.disabled = true;
+  for (const d of DECISIONS) if (!saved.has(d.id)) await save(d, d.options.find(o => o[3])[0], "");
+  render();
+});
+
+render();
+statusLine.textContent = "Loading your picks…";
+(async () => {
+  const db = await window.claude?.use?.("db");
+  if (!db) { statusLine.textContent = "Picks can't be saved in this view; every decision shows its recommendation."; return; }
+  const timeout = setTimeout(() => { statusLine.textContent = "Your picks can't be reached yet; showing the recommendations."; }, 10000);
+  db.collection("verdicts").onSnapshot(snap => {
+    clearTimeout(timeout);
+    store = db;
+    saved.clear();
+    for (const doc of snap.docs) if (doc.exists) saved.set(doc.id, doc.data());
+    render();
+  }, () => { clearTimeout(timeout); statusLine.textContent = "Your picks can't be loaded; showing the recommendations."; });
+})();
+</script>

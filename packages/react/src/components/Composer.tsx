@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
-import type { ChangeEvent, ClipboardEvent, DragEvent, HTMLAttributes, KeyboardEvent, ReactNode, TextareaHTMLAttributes } from "react";
+import type { ChangeEvent, ClipboardEvent, DragEvent, HTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent, TextareaHTMLAttributes } from "react";
 import { composerGroupVariants, composerVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button, type ButtonProps } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
@@ -58,6 +58,18 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
    * drop paint. Pair it with a ComposerAttach for picking.
    */
   onFiles?: (files: File[], event: DragEvent<HTMLDivElement> | ClipboardEvent<HTMLTextAreaElement>) => void;
+  /**
+   * Room for a long prompt: once the draft passes the field's eight lines (or while expanded), an Expand control at the
+   * field's top end opens it to the container's height, and Collapse closes it. The container gives the room.
+   */
+  expandable?: boolean;
+  /** Whether the field is open to its container (controlled); pair with `onExpandedChange`. */
+  expanded?: boolean;
+  defaultExpanded?: boolean;
+  onExpandedChange?: (expanded: boolean, event?: SyntheticEvent) => void;
+  /** Name the control: "Expand" and "Collapse". */
+  expandLabel?: string;
+  collapseLabel?: string;
   inputProps?: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "defaultValue" | "onChange" | "onKeyDown" | "rows" | "disabled" | "placeholder" | "maxLength">;
   onInputKeyDown?: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
 }
@@ -67,9 +79,15 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
   { layout = "inline", value, defaultValue = "", onValueChange, onSubmit,
     placeholder = "Write a message…", label = "Message", disabled, loading: loadingProp, busy, onStop, onQueue, stopLabel = "Stop", maxLength,
     leadingActions, trailingActions, mode, submitLabel = "Send message", submitPill, submitOnEnter = true, context, menu, inputProps, onInputKeyDown,
-    header, footer, onFiles, className, ...rest }, ref,
+    header, footer, onFiles, expandable, expanded: expandedProp, defaultExpanded = false, onExpandedChange, expandLabel = "Expand", collapseLabel = "Collapse",
+    className, ...rest }, ref,
 ) {
   const loading = loadingProp ?? busy;
+  const [ownExpanded, setOwnExpanded] = useState(defaultExpanded);
+  const expanded = Boolean(expandable) && (expandedProp ?? ownExpanded);
+  const setExpanded = (next: boolean, event?: SyntheticEvent) => { if (expandedProp === undefined) setOwnExpanded(next); onExpandedChange?.(next, event); };
+  // Whether the draft has passed the field's cap: the Expand control shows from then on (and while expanded).
+  const [overflowing, setOverflowing] = useState(false);
   // Files over the shell: counted, since dragenter and dragleave fire for every child crossed.
   const [dragging, setDragging] = useState(0);
   const hasFiles = (event: DragEvent) => Array.from(event.dataTransfer?.types ?? []).includes("Files");
@@ -106,7 +124,8 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
   useLayoutEffect(() => {
     const input = inputRef.current;
     if (!input) return;
-    if (typeof CSS !== "undefined" && CSS.supports?.("field-sizing: content")) {
+    if (expandable) setOverflowing(input.scrollHeight > input.clientHeight + 1);
+    if (expanded || (typeof CSS !== "undefined" && CSS.supports?.("field-sizing: content"))) {
       input.style.blockSize = "";
       return;
     }
@@ -124,7 +143,7 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
     });
     observer.observe(input);
     return () => observer.disconnect();
-  }, [text, layout]);
+  }, [text, layout, expanded, expandable]);
   const change = (event: ChangeEvent<HTMLTextAreaElement>) => {
     if (value === undefined) setOwnValue(event.target.value);
     onValueChange?.(event.target.value, event);
@@ -147,6 +166,8 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
   const keyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     onInputKeyDown?.(event);
     if (event.defaultPrevented) return;
+    // Escape closes an expanded field (the draft stays).
+    if (event.key === "Escape" && expanded) { event.preventDefault(); setExpanded(false, event); return; }
     // Safari can deliver the Enter that commits an IME candidate after compositionend, with
     // isComposing false but keyCode 229 (audit G-15).
     if (event.key !== "Enter" || event.nativeEvent.isComposing || event.keyCode === 229 || event.shiftKey) return;
@@ -162,13 +183,17 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
       aria-label={submitLabel} disabled={disabled || loading || !text.trim()} onClick={submit} icon={<Glyph name="arrow-up" />} />;
   const grouped = Boolean(header || footer);
   const shell = <div {...(grouped ? {} : rest)} {...drop} className={composerVariants({ layout }, grouped ? undefined : className)}
-    data-disabled={disabled ? "" : undefined} data-dragging={dragging ? "" : (rest as Record<string, unknown>)["data-dragging"] as string | undefined} aria-busy={loading || undefined}>
+    data-disabled={disabled ? "" : undefined} data-dragging={dragging ? "" : (rest as Record<string, unknown>)["data-dragging"] as string | undefined}
+    data-expanded={expanded ? "" : undefined} aria-busy={loading || undefined}>
     {menu}
     {context ? <div className="area-composer__context">{context}</div> : null}
     <div className="area-composer__entry">
       {/* A fieldset disables every nested action natively when the composer is disabled (audit G-14). */}
       {layout === "inline" && leadingActions && <fieldset disabled={disabled} className="area-composer__actions area-composer__actions--leading">{leadingActions}</fieldset>}
       <label htmlFor={inputId} className="area-sr-only">{label}</label>
+      {expandable && (overflowing || expanded) ? <Button className="area-composer__expand" variant="ghost" tone="neutral" size="sm" iconOnly
+        aria-label={expanded ? collapseLabel : expandLabel} aria-controls={inputId} disabled={disabled}
+        icon={<Glyph name={expanded ? "minimize" : "maximize"} />} onClick={event => { setExpanded(!expanded, event); inputRef.current?.focus(); }} /> : null}
       <textarea {...inputProps} id={inputId} ref={element => { inputRef.current = element; if (typeof ref === "function") ref(element); else if (ref) ref.current = element; }} className={cx("area-composer__input", inputProps?.className)} rows={layout === "inline" ? 1 : 2} value={text}
         onChange={change} onKeyDown={keyDown} onPaste={paste} placeholder={placeholder} disabled={disabled} maxLength={maxLength} />
       {layout === "inline" && <fieldset disabled={disabled} className="area-composer__actions area-composer__actions--trailing">

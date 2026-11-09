@@ -13,7 +13,7 @@
  * a default equal to the manifest's, an empty list and an empty family are dropped, so the library stays a list of
  * differences. States a family cannot work without (KEPT_STATES) are never offered to leave out.
  */
-import { EMPTY_LIBRARY, STATE_AXIS, type FamilyChoice, type SystemLibrary } from "./systems.ts";
+import { EMPTY_LIBRARY, STATE_AXIS, type FamilyChoice, type LibraryOutput, type SystemLibrary } from "./systems.ts";
 
 /** What the library reads of a manifest (packages/styles/src/manifest.ts). */
 export interface ManifestShape {
@@ -272,4 +272,29 @@ export function usesIn(code: string, component: string, axis?: string, value?: s
   if (value === undefined) return tags.filter(tag => new RegExp(`\\s${axis}(?=[\\s=/>])`).test(tag)).length;
   const set = new RegExp(`\\b${axis}=(?:"${value}"|\\{"${value}"\\}|\\{'${value}'\\})`);
   return tags.filter(tag => set.test(tag)).length;
+}
+
+/**
+ * A library as the code generator reads it (systems.ts `LibraryOutput`, packages/output's definition), over every family
+ * that has a manifest (`block`, "area-input-group"): components by manifest slug (the block without `area-`), every one
+ * unless a family is left out; each family's left-out values per axis (a structure's base value that isn't a modifier,
+ * and states, which aren't modifiers, stay out of `exclude`); and each moved default as `structure["<slug>.<axis>"]`.
+ */
+export function libraryOutputOf(library: SystemLibrary, families: ReadonlyArray<{ slug: string; block: string; manifest: ManifestShape }>): LibraryOutput {
+  const slugOf = (block: string) => block.replace(/^area-/, "");
+  const out = new Set(Object.entries(library.families).filter(([, choice]) => choice.included === false).map(([slug]) => slug));
+  const components = out.size ? [...new Set(families.filter(family => !out.has(family.slug)).map(family => slugOf(family.block)))].sort() : "all" as const;
+  const exclude: LibraryOutput["inventory"]["exclude"] = {};
+  const structure: Record<string, string> = {};
+  for (const family of families) {
+    const choice = library.families[family.slug];
+    if (!choice || choice.included === false) continue;
+    const slug = slugOf(family.block);
+    for (const [axis, values] of Object.entries(choice.leftOut ?? {})) {
+      const real = values.filter(value => axis !== STATE_AXIS && (family.manifest.variants[axis] ?? []).includes(value));
+      if (real.length) (exclude[slug] ??= {})[axis] = [...real].sort();
+    }
+    for (const [axis, value] of Object.entries(choice.defaults ?? {})) structure[`${slug}.${axis}`] = value;
+  }
+  return { inventory: { components, exclude, icons: "all" }, structure };
 }

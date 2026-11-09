@@ -4,7 +4,7 @@
  * the system's placeholder copy. Specs: docs/specs/{step,edit-summary,approval,plan,turn-notice}.md.
  */
 import { useState } from "react";
-import { Approval, Badge, Button, CodeBlock, Diff, EditSummary, EditSummaryFile, Pagination, Plan, Reasoning, Step, StepGroup, TurnNotice, type DiffHunk, type EditFileState } from "@area/react";
+import { Approval, Badge, Button, CodeBlock, Diff, EditSummary, EditSummaryChange, EditSummaryFile, Pagination, Plan, Reasoning, Step, StepGroup, TurnNotice, type DiffHunk, type EditFileState } from "@area/react";
 import { AgentIcon, DocumentIcon } from "@area/icons";
 
 const frame = { inlineSize: 280 };
@@ -76,6 +76,24 @@ export const GalleryEditSummary = () => <Summary />;
 export const GalleryEditSummaryOpen = () => <Summary open />;
 export const GalleryEditSummaryKept = () => <Summary status="kept" />;
 export const GalleryEditSummaryUndone = () => <Summary status="undone" />;
+/** Design changes: a row a change in the design's words, the files under Show code, Keep all and Undo all settling both. */
+export const GalleryEditSummaryDesign = () => {
+  const [status, setStatus] = useState<EditFileState>("pending");
+  const pending = status === "pending";
+  return (
+    <div style={frame}>
+      <EditSummary title="Title" added={3} deleted={1}
+        onKeepAll={pending ? () => setStatus("kept") : undefined} onUndoAll={pending ? () => setStatus("undone") : undefined}
+        code={<>
+          <EditSummaryFile name="Item one" added={2} deleted={1} status={status} diff={<Diff aria-label="Changes to Item one" hunks={hunks} />} />
+          <EditSummaryFile name="Item two" added={1} deleted={0} status={status} diff={<Diff aria-label="Changes to Item two" hunks={[hunks[1]!]} />} />
+        </>}>
+        <EditSummaryChange name="Item one" property="Label" from="Value one" to="Value two" status={status} />
+        <EditSummaryChange name="Item two" property="Label" from="Value one" to="Value two" status={status} />
+      </EditSummary>
+    </div>
+  );
+};
 export const GalleryDiff = () => <div style={frame}><Diff aria-label="Changes to Item one" hunks={hunks} /></div>;
 
 // ---- Approval ----
