@@ -23,10 +23,12 @@ Checkbox (row selection), Badge and Skeleton (cell content), Separator (dividers
 ## Job and boundaries
 
 Table presents rows of structured data in a native `table` inside a scrolling wrapper. It
-styles cells, headers, dividers, stripes and row plates. Sorting, selection and loading
-are compositions of native elements and other components; there is no data-grid API,
-keyboard grid or virtualisation (Notion's table view is such a grid: resizable, draggable
-columns and editable cells).
+styles cells, headers, dividers, stripes and row plates, and since 2026-11-07 (components audit V3) it keeps a sticky
+header and first column, sortable headings (`TableHeaderCell` `sort` / `onSortChange`; the rows are sorted by the
+caller), folding row groups with a count and a total (`TableGroup`) and skeleton rows while loading (`loading`).
+Selection stays a composition of native elements and Checkbox; there is no data-grid API, keyboard grid, row editing,
+bulk-actions bar or virtualisation (the DataGrid candidate in docs/COMPONENTS.md; Notion's table view is such a grid:
+resizable, draggable columns and editable cells).
 
 ## Variants
 
@@ -37,7 +39,12 @@ columns and editable cells).
 | layout | auto (default), fixed | fixed: the first column is the label column (27%), so the tables of one feed start their values on one line; the other columns size to their content | Primer's props table (Name 27%); Cursor's dashboard settings (values on one line per group); owner pick, 2026-10-31 |
 | striped | off, on | Long, wide rows | Owner |
 | column-dividers | off, on | Dense comparisons | Owner; Notion draws hairlines between every cell |
-| composition | selection, sorting, empty, loading | Owner (composed, not an API) | Untitled checkbox column; Notion's hover checkbox |
+| composition | selection, empty | Owner (composed, not an API) | Untitled checkbox column; Notion's hover checkbox |
+| sticky-header | off, on | The header stays while long tables scroll (V3) | ChatGPT `TableStickyHeader`, Claude `--cds-sticky-header-top` |
+| sticky-first-column | off, on | The naming column stays while wide tables scroll (V3) | Claude `--cds-sticky-column-bg`, `--cds-sticky-edge-*` |
+| heading `sort` | ascending, descending, none | A sortable column (V3; was a composed Button) | Primer `Table.SortHeader` (ASC, DESC, NONE) |
+| `TableGroup` | expanded, collapsed; `count`, `summary` | Rows under a heading that folds them, with a count or total (V3) | Notion's grouped table (OKR), Primer's row groups |
+| `loading` | `loadingRows` (3), `delay` | Skeleton rows in place of the bodies (V3; was composed with `aria-busy`) | Primer `Table.Skeleton` (`rows` 10) |
 
 Gallery groups (`apps/docs/scripts/build.mjs:772-783`): Default; Content (selection,
 sorting, interactive rows); Sizes (sm, lg); Layout (striped, column dividers); States
@@ -130,15 +137,17 @@ table with shared row plates ([cohesion audit](../research/cohesion-audit.md#thi
 |---|---|---|
 | rest | no fill | `area--default`; `notion--body-row--rest` |
 | hover (`--interactive`, unselected rows) | cells `bg-component-hover`; transition on the cells | `navigation.css:175-184`; not captured |
-| selected (`tr[data-selected]`, or `aria-selected` in a grid) | row `bg-component-active`; no hover over it | `navigation.css:213`; not captured selected |
+| selected (`tr[data-selected]`, or `aria-selected` in a grid) | row `bg-component-active`; no hover over it. In a table that holds a checkbox, a link, a button or a focusable row, the hover plate while focus is outside it (V15) | `navigation.css:213`; not captured selected |
 | focus-visible | on the composed controls (Checkbox, Button) only | — |
-| loading | `aria-busy` with Skeleton cells | `area--loading` |
+| loading (`loading`) | `aria-busy` on the table; the bodies replaced by `loadingRows` rows of Skeleton text lines, one per header column (a `colSpan` counts), the first a name's width (96), the others a value's (48), end-aligned in a numeric column; Skeleton's `delay` | `area--loading`; V3 |
+| collapsed (`TableGroup`) | `data-collapsed` on the group's tbody; only its heading row shows | V3 |
 
 ## Behavior and accessibility
 
 A native `table`; React forwards props and the ref to the `table` and always wraps it in
-`.area-table-wrapper` (`primitives.tsx:699-720`). Headers use `scope="col"`, sorting sets
-`aria-sort` on the header with a Button inside; the header Button overhangs the cell's block
+`.area-table-wrapper` (`primitives.tsx:699-720`). Headers use `scope="col"`; a `TableHeaderCell` with `sort` holds a
+ghost sm Button (`.area-table__sort`, named by the heading) and sets `aria-sort` only while its column is sorted (APG
+sortable table); a click asks for ascending, then descending (`onSortChange(next, event)`); the header Button overhangs the cell's block
 padding so the row keeps its text height and the label sits on the column's text edge
 (`navigation.css:197-200`, audit F-24). A clickable row holds one `TableLink`
 (`.area-table__link`), stretched over the row as CardLink covers a card, so the `interactive`
@@ -288,3 +297,55 @@ label columns of 84, 200 and 145 on one page and rows of 33.
 
 - 2026-11-02 · owner: "the token badges look off" → Code that starts a cell has no start margin (its side margin is
   for running text), so the chip starts on the cell's edge under the column heading; it sat 2 in.
+
+### 2026-11-07 · Selected row in the manifest (components audit O7)
+
+- **What changed:** `selected` is listed as the manifest's state: `aria-selected="true"` (or `data-selected`) on a body row takes the selected fill, as the stylesheet already painted.
+- **Why:** navigation.css:416-425 painted it; manifest.ts:949-959 listed no state. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Selection when the table isn't focused (components audit V15)
+
+- **What changed:** in a table that takes focus (`:has()` an input, button, link or `[tabindex]` in its body), a
+  selected row takes the hover plate (and the flush table's overhang with it) while focus is outside the table. A table
+  with nothing to focus can never be the active list, so its selection keeps the firm plate: quieting it would leave it
+  quiet for good. The Selection tile (row checkboxes) rests on the quieter plate until a checkbox has focus.
+- **Why:** docs/research/components-audit-2026-11-07/cursor.md, "Inactive selection" (the editor's lists paint `listActiveSelectionBackground` only while
+  focused, `listInactiveSelectionBackground` otherwise). One rule for every list with its own focus, so the list you
+  are in reads as the active one. The owner took every recommendation ("Take all recs", 2026-11-07).
+- **Decision:** the quieter plate is the hover plate, not a new token. A role declared on `:root` that reads
+  `bg-component-active` would resolve there and keep the page's fill on every raised and recessed ground (a menu, a
+  panel, a sidebar); the hover plate is already the step below selected on every ground, its words' contrast is
+  asserted, and Hover fill floors at 25, so it is never invisible (CONTRAST.md, "The quieter selected plate has a
+  floor"). At Selected fill 0 the two are one plate and nothing changes.
+- **Verdict:** awaiting the owner.
+
+## Sticky, sortable, grouped (components audit V3, 2026-11-07)
+
+Evidence: `docs/research/components-audit-2026-11-07/chat-apps.md` (Table: sticky header and first column, edge shadows; seams driven by the scroll),
+`docs/research/components-audit-2026-11-07/notion.md` (grouped table: toggle 24, name 14/500, aggregate muted; aggregation footer), `docs/research/components-audit-2026-11-07/primer.md`
+(DataTable: `Table.SortHeader` and `aria-sort`, row groups, `Table.Skeleton` `rows` 10).
+
+| Part | Area value | Basis | Reason when it differs |
+|---|---|---|---|
+| Sticky header | `position: sticky; inset-block-start: 0; z-index: 2` on the header cells; their ground is the header fill; the row rule drawn as an inset shadow (`border-block-end-color: transparent`) | ChatGPT `._TableStickyHeader ._TableHeaderCell{position:sticky;top:0;z-index:10;background:var(--color-surface)}` | Collapsed borders don't travel with a sticky cell in every engine, so the cell draws its own rule. It sticks inside the wrapper, the table's own scroller (it already scrolls sideways): the caller gives the wrapper a height (`wrapperProps`). A header that sticks to the page would need the wrapper to stop clipping sideways, which a wide table needs |
+| Sticky first column | `position: sticky; inset-inline-start: 0`; body cells take the table's fill (`--area-table-fill`, else `bg-surface`) with the row's own paint laid over it (`--_row-paint`: stripe, selection, the quieter selection, hover, press); the corner cell above both | Claude `--cds-sticky-column-bg` | — |
+| Column seam | a `stroke-width` rule in `edge-dividers` at the column's end, its opacity scroll-linked (`animation-timeline: scroll(nearest inline)`, range 0 to 2px), so it shows only while columns are scrolled under it; always shown where scroll timelines are missing | ChatGPT `._TableScroller{animation-range:min(2px,50%) …}`; Claude `--cds-sticky-edge-active` | A rule, not ChatGPT's edge shadow: Area's frames carry no shadow (S7b) |
+| Sort heading | the existing F-24 header Button (ghost, sm, overhanging the cell's block padding), `align` end on a numeric column; the arrow glyph up (ascending) or down (descending); unsorted, the arrow holds its box at opacity 0 and shows under the pointer or focus | Primer SortHeader (arrow at rest only on the sorted column) | — |
+| Row group heading | a `tbody` whose first row is a `th scope="rowgroup"` spanning the columns on the header's ground; a toggle button (control-sm, plate reaching 4 past the text edge, chevron 16 muted, name in the strong weight) with the count after the name, muted; the summary at the row's end, muted, tabular figures | Notion OKR: toggle 24, name 14/500, aggregate 14/500 `#a19e99` | The heading row takes the header's ground so a group reads as a section; Notion's rows have no ground. Only the heading row: Notion's per-column aggregation footer ("COUNT 2") is not built (no use yet) |
+| Skeleton rows | `loadingRows` (3) rows, Skeleton text lines 96 / 48 wide, `pointer-events: none`, `aria-hidden` | Primer `Table.Skeleton` `rows` 10; the gallery's former loading tile | 3: a table in a feed or panel; set `loadingRows` for a page |
+
+Not built (DataGrid candidate): row selection with a bulk-actions bar, pagination slot, editing, column resizing. The
+header that sticks to the page (outside the wrapper) is not built; see the sticky header row above. Not measured in
+Area: values are the peers' and the tokens', verified in a static harness (Chromium) by computed style, not in the app.
+
+- **What changed:** booleans `stickyHeader` and `stickyFirstColumn`; `TableHeaderCell` `sort` / `onSortChange`;
+  `TableGroup` (`heading`, `count`, `summary`, `colSpan`, `expanded` / `defaultExpanded` / `onExpandedChange`);
+  `TableSkeleton` and Table `loading` / `loadingRows` / `delay`. Manifest: the two booleans, the `collapsed` state and
+  the parts `sort`, `group`, `group-heading`, `group-row`, `group-toggle`, `group-chevron`, `group-name`, `group-count`,
+  `group-summary`, `skeleton`, `skeleton-line`. Tiles: Sorting (now the API), Row groups, Sticky header, Sticky first
+  column, Loading (now `loading`).
+- **Why:** the components audit's V3; the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+- 2026-11-07 · components audit V3 → sticky header and first column, sortable headings, row groups, skeleton rows →
+  navigation.css, manifest.ts, primitives.tsx, gallery tiles, Documentation entry, table.test.mjs.

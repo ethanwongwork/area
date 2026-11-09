@@ -8,18 +8,18 @@ specimen. How to decide whether something new belongs is in [Governance](GOVERNA
 
 ## Library
 
-116 families (2026-10-19). Compound parts follow their family (AccordionItem with
+126 families (2026-11-07). Compound parts follow their family (AccordionItem with
 Accordion). Each family has a spec in [`specs/`](specs/README.md) and a Documentation entry
 in the app. The groups below match the files in `apps/desktop/src/content/documentation/`.
 
 | Group | Families |
 |---|---|
-| Actions and choices | Button, Button group, Split button, Toggle group, Toolbar, Copy button, Segmented, Checkbox, Radio, Switch, Slider (and range), Chip, Alignment picker, Zoom control, Kbd, Link |
-| Fields and text entry | Field, Input, Input group, Number field, Box field, Textarea, Select (native), Custom select, Combobox, Tag picker, Date picker, Date range picker, Time field, Password field, OTP field, Search field, Editable text, Color field |
-| Pickers, colour and inspector parts | Color swatch, Color swatch picker, Color picker, Calendar, List box, Property list, Panel (with `resizable`), Box model, Token row, Asset row, Preview frame, File upload, Scroll area |
+| Actions and choices | Button, Button group, Split button, Toggle group, Toolbar (with the `floating` hover action bar), Selection bar, Filter bar, Copy button, Segmented, Checkbox, Radio, Switch, Slider (and range), Chip, Alignment picker, Zoom control, Kbd, Link |
+| Fields and text entry | Field, Setting row (with Settings group), Input, Input group, Number field, Box field, Textarea, Select (native), Custom select, Combobox, Tag picker, Date picker, Date range picker, Time field, Password field, OTP field, Search field, Editable text, Color field |
+| Pickers, colour and inspector parts | Color swatch, Color swatch picker, Color picker, Calendar, List box, Property list, Panel (with `resizable`), Splitter, Box model, Token row, Asset row, Preview frame, File upload, Scroll area |
 | Navigation, menus and overlays | Nav, Tabs, Breadcrumb, Pagination, Stepper, Tree view, Menu, Context menu, Command palette, Popover, Hover card, Tooltip, Toggletip, Dialog, Confirm dialog, Drawer |
 | Status, feedback and labels | Badge, Badge group, Count, Indicator (with Presence), Avatar, Tag, Alert (with the banner layout), Toast, Progress, Spinner, Skeleton, Meter, Empty state, Separator, Code, Code block, Shortcut list |
-| Surfaces, content, files, articles and media | Surface, Stack, Card, Table, Description list, Timeline, Board, Accordion, Design card, Asset card, Folder, File page, File tile, Video player, Figure, Inline list, Abbreviation, Hatnote, Link groups, Reference list, Table of contents, Titlebar, Section heading |
+| Surfaces, content, files, articles and media | Surface, Stack, Card, Table, Description list, Timeline, Board, Accordion, Design card, Asset card, Folder, File page, File tile, Video player, Figure, Inline list, Abbreviation, Hatnote, Link groups, Reference list, Table of contents, Titlebar, Page header, Section heading, Mention, Chart (with ChartNumber) |
 | Conversation and agent chat | Message, Composer, Composer menu, Attachment, Queue, Prompt suggestions, Model picker, Scroll to latest, Citation, Timestamp, Step, Edit summary, Approval, Plan, Turn notice |
 
 Token is deprecated in favour of `<Code swatch>` and Preview frame in favour of Asset card's frame alone; each is still
@@ -44,10 +44,18 @@ silhouettes, when judging coverage.
 | Menu · Context menu · Command palette | A list of commands from a trigger; at the pointer; filtered by typing |
 | Alert · Toast · Empty state | In-flow message; transient notification; a region with nothing in it |
 | Progress · Meter · Spinner · Skeleton | Task progress; a value in a range; indeterminate wait; loading placeholder |
+| Meter · Chart · Table | One value against its range, or parts of one measure; values compared across rows, drawn (bars, lines, areas, a donut, a number); the values to read, sort and compare exactly (a Chart's table view is a Table) |
 | Code · Code block · Kbd | Inline identifier; a block of source; a key chord |
 | Table · Description list · (DataGrid) | Rows of data; labelled values; editing, resizing and virtualization (not built) |
 | Button · Link | An action; a place |
 | Segmented · Tabs · Toggle group | One value of a set; panels; any number pressed |
+| Titlebar · Page header · Section heading | The window's bar; a page's own title block, once, with its way back, actions and tabs; a titled block inside a page |
+| Toolbar · Selection bar | A view's commands, always there; the actions on what is selected, only while something is |
+| Panel rows · Setting row · Field | Edit what is selected; a page of preferences that apply on their own, with a modified mark and Reset; a form's control, submitted |
+| Chip · Filter bar | A chip that toggles or is removed; a view's filters, each chip opening its editor, with Add filter and Reset |
+| Link · Mention · Chip (input) · Attachment | A place, in words; a person, file, page or date referred to inside text, with its mark; what the next message is about, beside the field; something sent with it |
+| Panel `resizable` · Splitter | A side panel's own edge, sized against the page; one area divided between two regions by a handle |
+| Toolbar · Toolbar `floating` · Selection bar | A view's commands, always there; one row's or block's few actions, shown while it is hovered or holds focus; the actions on what is selected |
 
 ## Candidates
 
@@ -60,10 +68,8 @@ before it is built.
 | Pill plate tabs | Plate tabs with fully round ends (a notes app's view tabs) | Setting: `tabs` in the Pills set, not a variant | Owner chose plate only, 2026-11-06 (review 7vSwH9XbPa4ywGjZBCHbcp); revisit if a system asks for pill tabs |
 | Folder tabs | A selected tab joined to the surface below (browser, old settings windows) | A third Tabs `selection` value | Declined 2026-11-06 (owner: plate only): no measured product uses it; open documents are a horizontal Nav |
 | Tab groups | Named or split groups of open tabs (Chrome's groups, Figma's split and pinned tabs) | Desktop app shell, not a component yet | Many open tabs in real use: wait for Projects (Phase 4) or a split view (owner's question, 2026-10-29) |
-| Chart | Lines, bars, areas in Area's tokens | New family | Product captures. The Testing tab's dashboard draws its chart as an SVG meanwhile |
 | Action tile | An action with its icon over its label, in an equal-width grid | Component, or a Card / Toggle group composition | Captures in two more products (seen in Cursor's icon card and Figma's new-file tiles) |
 | DataGrid, TreeGrid | Editable, resizable, virtualized rows | New family on Table | Editing, selection and virtualization contracts |
-| Splitter | Two resizable regions | Layout component | Captures; Panel `resizable` covers one edge today |
 | Date field, duration input | Segmented date entry; a duration | Fields on Time field's segments | Product captures |
 | Form validation summary | Errors gathered for a form | Composition of Alert + Link | Behaviour contract |
 | Menu bar | Application menus in a bar | New component on Menu | Keyboard contract; a target product that uses one |
@@ -71,6 +77,7 @@ before it is built.
 | Media scrubber | Seeking through audio or video time: the time under the pointer, chapter marks, live streams with no end, elapsed and remaining time | New component on Slider (Slider's `buffered` covers the loaded stretch, 2026-10-21); Video player's seek range would move onto it | A real use in ChatGPT, Notion, Figma or Cursor (an audio or video block); Media Chrome's and Vidstack's time ranges read at a pinned commit |
 | Text and highlight swatches | Pick a text or highlight colour, each swatch an "A" in its ink or on its fill | A sample option on Color swatch picker (`sample: "fill" \| "text" \| "highlight"`) | Notion's colour menu captured; the owner's Format panel (2026-10-21) |
 | Selected-label Segmented | A switcher whose options show icons, the selected one its label too ("⊕ Insert") | A Segmented option | Two more products or systems using it (one sighting: the owner's Insert / Format / Actions panel, 2026-10-21) |
+| Flow node and connector | A node editor's card (header, rows with ports) and the curve between ports, for products built with Area that show workflows, automations or agent graphs | A composition first (Card rows and an SVG connector); a component once a second product needs it | The app's flow map draws them as app UI (`src/flow-map.tsx`, 2026-11-08); evidence so far is three node editors the owner showed (an agent builder, a payment automation, a media pipeline); captures of their sizes |
 | Editable box model | Edit padding and margin on the drawing itself, values in badges around a box | An `editable` option on Box model (read-only today) | Webflow and Chrome DevTools captures; the keyboard contract for the inline fields |
 | Formatted entry (input mask) | Type into a fixed pattern: a card number in groups of four with its brand, a phone number, an IBAN | An Input option or a new field on Input's shell | Masking libraries' behaviour (caret, paste, deletion); Stripe and Shopify checkout captures (owner 2026-10-21: general purpose, wanted) |
 | Gradient fill | A Slider or Progress fill that deepens along its length (the Intensity reference's light-to-strong accent) | A fill option or a setting | Owner's call on where gradients belong in Area, which paints flat fills today (owner 2026-10-21: may want it) |
@@ -88,6 +95,15 @@ before it is built.
 | App-shell layout | A window's regions (top bar, nav panel, content, side panel, dock) with their default, minimum and maximum sizes, the collapse order, and a `layered` option: the content as one raised layer on the chrome ground (ChatGPT desktop's `PageSurfaceLayout`, shadcn `inset`) | Layout component on Titlebar, Panel and Surface (Mantine AppShell, Atlassian page layout, shadcn Sidebar) | Owner's go-ahead; the layer's inset and corner as owner picks; ChatGPT desktop measured live ([research](research/ui-patterns-2026-10-22/)) |
 | Grid | A page-level grid of cards whose columns come from a minimum card width and the container's width, gap by role | Layout component beside Stack (Mantine SimpleGrid, Polaris Grid); Stack's spec leaves 2-D layout to CSS today | A second screen that needs it outside Asset grid and File grid ([research](research/ui-patterns-2026-10-22/); `area-ui-compose` › content) |
 | Shelf | A page-level row of cards that scrolls sideways under a section heading, with a peek, scroll snap and previous / next controls | A component on Card Carousel's behaviour, or the Carousel content tool | Owner's go-ahead; Spotify, Nike, Airbnb, Apple and Figma Community shelves measured ([research](research/ui-patterns-2026-10-22/)) |
+| Tree view, lazy branches | Skeleton rows while a branch loads, an error with Retry, a folder icon that changes when open | Options on Tree view | A screen that loads a tree (audit V8, 2026-11-07; [research](research/components-audit-2026-11-07/)) |
+| Document tabs | A dirty dot that becomes the close on hover, pinned tabs, a preview tab in italic, overflow into a More menu | Options on Tabs, with Tab groups above | Many open tabs in real use (audit V12; [research](research/components-audit-2026-11-07/)) |
+| Diff, next | Side by side as well as unified, changes within a line, Keep / Undo per change, an "N of M" navigator | Options on Edit summary's diff | A review screen that needs it (audit V14; [research](research/components-audit-2026-11-07/)) |
+| Floating outline | Table of contents as a strip of dashes at the page edge that opens to the outline on hover | A `floating` option on Table of contents | A long page in the app (audit V16; [research](research/components-audit-2026-11-07/)) |
+| Find bar | Find in a view: match-case and whole-word toggles, "N of M", previous / next, a replace row | New component on Input and Toolbar | A second product beyond the editor and a chat app (audit N8; [research](research/components-audit-2026-11-07/)) |
+| Image viewer | An image or a set full screen with zoom, pan and a strip of the others | New component, sharing the design viewer's zoom | A screen with image sets (audit N9; [research](research/components-audit-2026-11-07/)) |
+| Calendar and timeline views | Records on a month of days; records as bars over time with a Today line | New families (Area's Calendar is a date picker, Timeline an event list) | A second source (one product so far; audit N11; [research](research/components-audit-2026-11-07/)) |
+| Status bar, notification history | A thin bar of live items at a window's foot; a history of past toasts with Clear all | New components on Toolbar and Toast | A second source (the editor only; audit N12; [research](research/components-audit-2026-11-07/)) |
+| Peek | Open a record beside or over the page with a mode switch and previous / next | A Drawer composition with a header | A second source (one product; audit N13; [research](research/components-audit-2026-11-07/)) |
 
 Built since the 2026-09-26 [gap audit](research/component-gap-audit.md) of 13 catalogues:
 

@@ -1,10 +1,15 @@
-import { forwardRef, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
-import type { ButtonHTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
+import { useSystemDefault } from "./SystemDefaults.tsx";
+import { forwardRef, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import type { ButtonHTMLAttributes, FocusEvent, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { customSelectVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
-import { scrollOptionIntoList, useAnchoredPosition } from "./overlay.ts";
+import { scrollOptionIntoList, useAnchoredPosition, useOpenState } from "./overlay.ts";
+import { resolveValidation, validationAttributes, type ValidationStatus } from "./validation.ts";
 import { ScrollArea } from "./ScrollArea.tsx";
+import { Input } from "./Input.tsx";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
+import { announce } from "./announce.ts";
+import { highlightMatch } from "./highlight.tsx";
 /** The empty collection, one reference so effects keyed on it stay still. */
 const NO_ITEMS: never[] = [];
 /** How long typed letters keep adding to one typeahead search (APG select-only combobox). */
@@ -49,10 +54,21 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
    */
   layout?: Manifest["layout"];
   invalid?: boolean;
+  /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
+  validationStatus?: ValidationStatus;
+  /** Internal Field-to-control validation bridge; plain HTML uses the matching data attribute. */
+  "data-validation-status"?: ValidationStatus;
+  /**
+   * Shows a value set elsewhere: the trigger stays focusable and announces `aria-readonly`, the list doesn't open and
+   * typing doesn't change the choice, as Radio group's and Input's read-only.
+   */
+  readOnly?: boolean;
   /** Submits the chosen value with a form under this name. */
   name?: string;
   required?: boolean;
-  /** Called when the list opens or closes. */
+  /** The list is open (controlled); `defaultOpen` opens it at first; `onOpenChange` hears it open and close. */
+  open?: boolean;
+  defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   /**
    * The option the pointer or the arrow keys are on while the list is open, and `null` when the list closes, so a host
@@ -70,7 +86,34 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
   values?: readonly string[];
   defaultValues?: readonly string[];
   onValuesChange?: (values: string[], event: SyntheticEvent) => void;
+  /**
+   * A field at the top of the open list narrows it as you type, the typed text marked in each option (components audit
+   * V7; a long list). Focus moves into the field while the list is open: the arrows move, Enter chooses, Escape closes.
+   * With `multiple`, the options chosen when it opened are listed first and a Select all row toggles every option shown.
+   */
+  filterable?: boolean;
+  /** Names the filter field and is its placeholder (default "Filter"). */
+  filterLabel?: string;
+  /** What the list says when the filter matches nothing (default "No results"). */
+  emptyText?: ReactNode;
+  /** Names the Select all row (default "Select all"). */
+  selectAllLabel?: string;
+  /**
+   * A region under the options, ruled off (Menu's footer): Save and Cancel for a set that waits to be kept (hold the
+   * set as a draft in `values`, keep it on Save, drop it on Cancel and when the list closes), or a link to manage the
+   * options. Its controls take focus, so the list stays open while they have it.
+   */
+  footer?: ReactNode;
+  /** With `multiple`, what the trigger says once three or more are chosen (default "3 selected"); one or two show their labels. */
+  selectedLabel?: (count: number) => string;
 }
+
+/** The typed filter matches an option's label or its text description. */
+const filterMatches = (option: CustomSelectOption, text: string) => {
+  const query = text.trim().toLocaleLowerCase();
+  return !query || option.label.toLocaleLowerCase().includes(query)
+    || (typeof option.description === "string" && option.description.toLocaleLowerCase().includes(query));
+};
 
 /**
  * Picks one value from a short list whose options need more than text: icons, a description
@@ -79,9 +122,15 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
  * Menu's surface and rows, placed by the shared overlay engine.
  */
 export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(function CustomSelect(
-  { items, value, defaultValue = null, onValueChange, placeholder = "Select…", variant, size, fullWidth, layout = "list", invalid, name, required,
-    onOpenChange, onHighlightChange, multiple = false, values, defaultValues, onValuesChange, disabled, className, style, onKeyDown, onBlur, onClick, form, ...rest }, ref,
+  { items, value, defaultValue = null, onValueChange, placeholder = "Select…", variant, size, fullWidth, layout = "list", invalid, validationStatus,
+    readOnly, name, required, open: openProp, defaultOpen, onOpenChange, onHighlightChange, multiple = false, values, defaultValues, onValuesChange,
+    filterable = false, filterLabel = "Filter", emptyText = "No results", selectAllLabel = "Select all", footer,
+    selectedLabel = (count: number) => `${count} selected`,
+    disabled, className, style, onKeyDown, onBlur, onClick, form, "aria-invalid": ariaInvalid, "data-validation-status": fieldStatus, ...rest }, ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  variant = useSystemDefault("customSelect", "variant", variant);
+  size = useSystemDefault("customSelect", "size", size);
   const options = items ?? NO_ITEMS;
   const id = useId();
   const listId = `${id}-listbox`;
@@ -91,9 +140,13 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
   const selected = multiple ? (chosen[0] ?? null) : value !== undefined ? value : ownValue;
   const isChosen = (option: CustomSelectOption) => multiple ? chosen.includes(option.value) : option.value === selected;
   const selectedOption = multiple ? null : options.find(option => option.value === selected) ?? null;
-  // A set reads as its labels in the list's order ("Button, Chip, Badge").
-  const chosenLabel = multiple ? options.filter(isChosen).map(option => option.label).join(", ") : selectedOption?.label;
-  const [open, setOpenState] = useState(false);
+  // A set reads as its labels in the list's order ("Item one, Item two") while one or two are chosen, then as a count
+  // ("3 selected"; WRITING.md, "A choice of several").
+  const chosenOptions = multiple ? options.filter(isChosen) : [];
+  const chosenLabel = multiple ? chosenOptions.length > 2 ? selectedLabel(chosenOptions.length) : chosenOptions.map(option => option.label).join(", ") : selectedOption?.label;
+  const [shownOpen, setOpenState] = useOpenState(openProp, defaultOpen, onOpenChange);
+  const open = shownOpen && !readOnly && !disabled;
+  const { status } = resolveValidation({ validationStatus, invalid, ariaInvalid, fieldStatus });
   const [active, setActive] = useState(-1);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -101,11 +154,23 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
   const typed = useRef({ text: "", at: 0 });
   const initial = useRef(defaultValue);
   const initialValues = useRef(defaultValues ?? NO_ITEMS);
+  const filterRef = useRef<HTMLInputElement | null>(null);
+  const [filterText, setFilterText] = useState("");
+  // The panel: the list with its filter field above or its footer below, focus inside it while it is open (V7).
+  const panel = filterable || (footer !== undefined && footer !== null && footer !== false);
+  // The set as it was when the list opened, listed first, so rows don't jump while they are toggled.
+  const openedWith = useRef<readonly string[]>(NO_ITEMS);
 
   // Grouped options are listed group by group, in the order each group first appears; the
   // index of a row is its place in this order.
-  const groupOrder = [...new Set(options.map(option => option.group))];
-  const rows = [...options].sort((a, b) => groupOrder.indexOf(a.group) - groupOrder.indexOf(b.group));
+  const rows = useMemo(() => {
+    const found = filterable ? options.filter(option => filterMatches(option, filterText)) : options;
+    const groupOrder = [...new Set(found.map(option => option.group))];
+    const sorted = [...found].sort((a, b) => groupOrder.indexOf(a.group) - groupOrder.indexOf(b.group));
+    if (!multiple || !filterable || groupOrder.some(group => group !== undefined)) return sorted;
+    const first = openedWith.current;
+    return [...sorted.filter(option => first.includes(option.value)), ...sorted.filter(option => !first.includes(option.value))];
+  }, [options, filterable, filterText, multiple, open]); // eslint-disable-line react-hooks/exhaustive-deps -- reordered as it opens
   const enabled = (index: number) => !!rows[index] && !rows[index]!.disabled;
   const firstEnabled = () => rows.findIndex(option => !option.disabled);
   const lastEnabled = () => { for (let i = rows.length - 1; i >= 0; i--) if (enabled(i)) return i; return -1; };
@@ -120,17 +185,36 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
   const setOpen = (next: boolean) => {
     if (next === open) return;
     setOpenState(next);
-    onOpenChange?.(next);
   };
   const openList = (highlight: "selected" | "first" | "last" | number) => {
-    if (disabled) return;
+    if (disabled || readOnly) return;
+    if (panel) {
+      // The rows reorder as the list opens; the effect below highlights the choice in the new order.
+      openedWith.current = chosen;
+      setActive(-1);
+      setOpen(true);
+      return;
+    }
     const current = rows.findIndex(option => option.value === selected);
     setActive(typeof highlight === "number" ? highlight
       : highlight === "first" ? firstEnabled() : highlight === "last" ? lastEnabled()
       : current >= 0 && enabled(current) ? current : firstEnabled());
     setOpen(true);
   };
-  const close = () => { setOpen(false); setActive(-1); };
+  const close = () => { setOpen(false); setActive(-1); setFilterText(""); };
+  // Focus leaving the select (not moving between its trigger, filter, Select all and footer) closes the list.
+  const leave = (event: FocusEvent) => {
+    const next = event.relatedTarget as Element | null;
+    // The list's own scroller taking focus (a press on its padding) is leaving too, as it was before the panel.
+    if (next && rootRef.current?.contains(next) && !next.matches('[role="listbox"], [popover]')) return;
+    close();
+  };
+  // Opened from outside (`open` or `defaultOpen`), the list highlights the choice, as a press on the trigger does.
+  useEffect(() => {
+    if (!open || active >= 0) return;
+    const current = rows.findIndex(option => option.value === selected);
+    setActive(current >= 0 && enabled(current) ? current : firstEnabled());
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
   const choose = (index: number, event: SyntheticEvent) => {
     const option = rows[index];
     if (!option || option.disabled) return;
@@ -164,9 +248,20 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     const list = listRef.current;
     if (!list || typeof list.showPopover !== "function") return;
     const shown = list.matches(":popover-open");
-    if (open && !shown) list.showPopover();
-    if (!open && shown) list.hidePopover();
-  }, [open]);
+    // With a filter, focus moves into it; with a footer alone it stays on the trigger, and Tab goes on into the footer.
+    if (open && !shown) { list.showPopover(); filterRef.current?.focus({ preventScroll: true }); }
+    if (!open && shown) {
+      // Focus inside the panel goes back to the trigger before the list hides, so it never falls to the page.
+      if (list.contains(document.activeElement)) triggerRef.current?.focus({ preventScroll: true });
+      list.hidePopover();
+    }
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  // A narrowed list highlights its first option and says how many it found (components audit D1).
+  useEffect(() => {
+    if (!open || !filterable) return;
+    setActive(rows.findIndex(option => !option.disabled));
+    if (filterText.trim()) announce(rows.length ? `${rows.length} ${rows.length === 1 ? "result" : "results"}` : typeof emptyText === "string" ? emptyText : "");
+  }, [filterText]); // eslint-disable-line react-hooks/exhaustive-deps
   // Menu's engine (audit S16): the list starts at the trigger's start, 4 below it, flips and shifts.
   // A grid starts at its Field and takes its width, so a horizontal Field's label column gives the cells room.
   const grid = layout === "grid";
@@ -223,7 +318,7 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     onKeyDown?.(event);
-    if (event.defaultPrevented || disabled) return;
+    if (event.defaultPrevented || disabled || readOnly) return;
     const { key, altKey } = event;
     if (!open) {
       if (key === "ArrowDown" || key === "ArrowUp" || key === "Enter" || key === " ") {
@@ -264,7 +359,12 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
         if (Date.now() - typed.current.at < TYPEAHEAD_MS) { const match = typeahead(key); if (match >= 0) setActive(match); event.preventDefault(); break; }
         event.preventDefault(); choose(active, event); if (!multiple) close(); break;
       case "Escape": event.preventDefault(); close(); break;
-      case "Tab": if (!multiple) choose(active, event); close(); break;
+      case "Tab": {
+        // A footer's controls are the next stop while the list is open.
+        const control = !event.shiftKey ? listRef.current?.querySelector<HTMLElement>(".area-menu__footer :is(button, a[href], input, select, textarea, [tabindex]):not([disabled], [tabindex='-1'])") : null;
+        if (control) { event.preventDefault(); control.focus(); break; }
+        if (!multiple) choose(active, event); close(); break;
+      }
       default:
         if (key.length === 1 && !event.ctrlKey && !event.metaKey && !altKey) {
           const match = typeahead(key);
@@ -288,7 +388,7 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
      
       onPointerDown={event => event.preventDefault()}
       onPointerMove={() => { if (!option.disabled && index !== active) setActive(index); }}
-      onClick={event => { if (option.disabled) return; choose(index, event); if (!multiple) close(); triggerRef.current?.focus(); }}>
+      onClick={event => { if (option.disabled) return; choose(index, event); if (!multiple) close(); if (!panel) triggerRef.current?.focus(); }}>
       {grid ? [
         option.preview ? <span key="preview" className="area-custom-select__preview" aria-hidden="true">{option.preview}</span>
           : option.icon ? <span key="icon" className="area-menu__icon" aria-hidden="true">{option.icon}</span> : null,
@@ -296,8 +396,8 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
       ] : <>
       {option.icon ? <span className="area-menu__icon" aria-hidden="true">{option.icon}</span> : null}
       {option.description
-        ? <span className="area-menu__lines"><span className="area-menu__text">{option.label}</span><span className="area-menu__description">{option.description}</span></span>
-        : <span className="area-menu__text">{option.label}</span>}
+        ? <span className="area-menu__lines"><span className="area-menu__text">{highlightMatch(option.label, filterText)}</span><span className="area-menu__description">{option.description}</span></span>
+        : <span className="area-menu__text">{highlightMatch(option.label, filterText)}</span>}
       <span className="area-menu__check" aria-hidden="true"><Glyph name="check" /></span>
       </>}
     </div>;
@@ -308,15 +408,51 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     ? <div key={key} className="area-custom-select__grid" role="presentation">{indexes.map(renderRow)}</div>
     : indexes.map(renderRow);
 
+  const optionList = [...groups].map(([group, indexes], position) => group
+    ? [position > 0 ? <div key={`${group}-rule`} className="area-menu__separator area-custom-select__separator" role="presentation" /> : null,
+      <div key={group} role="group" aria-labelledby={`${id}-group-${position}`} className="area-custom-select__group">
+        <div id={`${id}-group-${position}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
+        {run(indexes, `${group}-cells`)}
+      </div>]
+    : run(indexes, "cells"));
+
+  // Select all (V7; SelectPanel's showSelectAll, the quick input's check-all): every enabled option shown, or none.
+  const shown = rows.filter(option => !option.disabled);
+  const allOn = shown.length > 0 && shown.every(isChosen);
+  const someOn = !allOn && shown.some(isChosen);
+  const selectAll = (event: SyntheticEvent) => {
+    const off = new Set(allOn ? shown.map(option => option.value) : []);
+    const on = new Set(allOn ? [] : shown.map(option => option.value));
+    const next = options.filter(option => on.has(option.value) || (chosen.includes(option.value) && !off.has(option.value))).map(option => option.value);
+    if (values === undefined) setOwnValues(next);
+    onValuesChange?.(next, event);
+    announce(`${next.length} selected`);
+  };
+  // The filter field's keys: the arrows move through the options and Enter chooses; Space and the rest type.
+  const filterKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    switch (event.key) {
+      case "ArrowDown": event.preventDefault(); setActive(current => move(current < 0 ? -1 : current, 1)); break;
+      case "ArrowUp":
+        event.preventDefault();
+        if (event.altKey) close(); else setActive(current => move(current < 0 ? rows.length : current, -1));
+        break;
+      case "PageDown": event.preventDefault(); setActive(current => move(current, PAGE)); break;
+      case "PageUp": event.preventDefault(); setActive(current => move(current, -PAGE)); break;
+      case "Enter": event.preventDefault(); choose(active, event); if (!multiple) close(); break;
+      case "Escape": event.preventDefault(); close(); break;
+    }
+  };
+
   return <div ref={rootRef} className={customSelectVariants({ variant, size, fullWidth, layout }, className)} style={style}
     data-open={open ? "" : undefined}>
     <button ref={node => { triggerRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
       {...rest} type="button" form={form} className="area-custom-select__trigger" disabled={disabled}
       role="combobox" aria-haspopup="listbox" aria-expanded={open} aria-controls={listId} aria-activedescendant={activeId}
-      aria-invalid={invalid || undefined} aria-required={required || undefined}
+      aria-invalid={status === "error" || undefined} aria-required={required || undefined} aria-readonly={readOnly || undefined}
+      {...validationAttributes(status)} data-read-only={readOnly ? "" : undefined}
       onClick={event => { onClick?.(event); if (event.defaultPrevented) return; if (open) close(); else openList("selected"); }}
       onKeyDown={handleKeyDown}
-      onBlur={event => { onBlur?.(event); close(); }}>
+      onBlur={event => { onBlur?.(event); leave(event); }}>
       {selectedOption?.icon ? <span className="area-custom-select__icon" aria-hidden="true">{selectedOption.icon}</span> : null}
       <span className="area-custom-select__value" data-placeholder={chosenLabel ? undefined : ""}>{chosenLabel || placeholder}</span>
       <span className="area-custom-select__chevron" aria-hidden="true"><Glyph name="chevron-down" /></span>
@@ -325,16 +461,34 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     {name ? multiple
       ? chosen.map(entry => <input key={entry} type="hidden" name={name} form={form} disabled={disabled} value={entry} />)
       : <input type="hidden" name={name} form={form} disabled={disabled} value={selected ?? ""} /> : null}
-    <ScrollArea ref={listRef} id={listId} role="listbox" aria-multiselectable={multiple || undefined} aria-label={typeof label === "string" ? label : undefined}
-      aria-labelledby={typeof label === "string" ? undefined : labelledBy}
-      popover="manual" className="area-menu area-custom-select__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
-      {[...groups].map(([group, indexes], position) => group
-        ? [position > 0 ? <div key={`${group}-rule`} className="area-menu__separator area-custom-select__separator" role="presentation" /> : null,
-          <div key={group} role="group" aria-labelledby={`${id}-group-${position}`} className="area-custom-select__group">
-            <div id={`${id}-group-${position}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
-            {run(indexes, `${group}-cells`)}
-          </div>]
-        : run(indexes, "cells"))}
-    </ScrollArea>
+    {panel
+      ? <div ref={listRef} popover="manual" className="area-menu area-custom-select__listbox area-custom-select__panel" onBlur={leave}
+          onKeyDown={event => { if (event.key === "Escape" && !event.defaultPrevented) { event.preventDefault(); close(); } }}>
+          {filterable ? <div className="area-menu__header area-custom-select__header">
+            <Input ref={filterRef} size="sm" variant="soft" fullWidth icon={<Glyph name="search" />} className="area-custom-select__filter"
+              role="combobox" aria-label={filterLabel} placeholder={filterLabel} aria-expanded={open} aria-controls={listId}
+              aria-autocomplete="list" aria-activedescendant={activeId} autoComplete="off" spellCheck={false}
+              value={filterText} onChange={event => setFilterText(event.target.value)} onKeyDown={filterKeyDown} />
+            {multiple ? <button type="button" role="checkbox" aria-checked={allOn ? true : someOn ? "mixed" : false}
+              className="area-menu__item area-custom-select__select-all" disabled={!shown.length}
+              onPointerDown={event => event.preventDefault()} onClick={selectAll}>
+              <span className="area-menu__text">{selectAllLabel}</span>
+              <span className="area-menu__check" aria-hidden="true"><Glyph name={someOn ? "subtract" : "check"} /></span>
+            </button> : null}
+          </div> : null}
+          {/* A listbox holds only options, so the empty words sit beside it (audit B-31). */}
+          {rows.length === 0 ? <div className="area-menu__list"><div className="area-menu__empty"><span className="area-menu__text">{emptyText}</span></div></div> : null}
+          <ScrollArea id={listId} role="listbox" aria-multiselectable={multiple || undefined} aria-label={typeof label === "string" ? label : undefined}
+            aria-labelledby={typeof label === "string" ? undefined : labelledBy} hidden={rows.length === 0 || undefined}
+            className="area-menu__list" viewportProps={{ tabIndex: undefined }}>
+            {optionList}
+          </ScrollArea>
+          {panel && footer !== undefined && footer !== null && footer !== false ? <div className="area-menu__footer area-custom-select__footer">{footer}</div> : null}
+        </div>
+      : <ScrollArea ref={listRef} id={listId} role="listbox" aria-multiselectable={multiple || undefined} aria-label={typeof label === "string" ? label : undefined}
+          aria-labelledby={typeof label === "string" ? undefined : labelledBy}
+          popover="manual" className="area-menu area-custom-select__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
+          {optionList}
+        </ScrollArea>}
   </div>;
 });

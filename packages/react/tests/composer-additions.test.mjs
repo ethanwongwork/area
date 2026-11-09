@@ -15,11 +15,13 @@ test("the Composer draws its context row inside the shell, above the field, and 
 
 test("an Attachment names itself, its remove control and its upload", () => {
   const ready = renderToString(h(Attachment, { src: "a.png", name: "a.png", onDismiss: () => {} }));
-  assert.match(ready, /<div role="group" aria-label="a\.png" class="area-attachment area-attachment--ready"/);
+  assert.match(ready, /<div role="group" aria-label="a\.png" class="area-attachment area-attachment--image area-attachment--complete"/);
+  // `ready` is a deprecated alias of the shared `complete` (Governance § 4, components audit V10).
+  assert.match(renderToString(h(Attachment, { src: "a.png", name: "a.png", status: "ready" })), /class="area-attachment area-attachment--image area-attachment--complete"/);
   assert.match(ready, /<img class="area-attachment__image" src="a\.png" alt=""\/>/);
-  assert.match(ready, /<button type="button" class="area-attachment__remove" aria-label="Remove a\.png">/);
-  assert.doesNotMatch(renderToString(h(Attachment, { src: "a.png", name: "a.png" })), /area-attachment__remove/);
-  assert.match(renderToString(h(Attachment, { src: "a.png", name: "a.png", onDismiss: () => {}, dismissLabel: "Supprimer a.png" })), /class="area-attachment__remove" aria-label="Supprimer a\.png"/);
+  assert.match(ready, /<button type="button" class="area-attachment__dismiss" aria-label="Remove a\.png">/);
+  assert.doesNotMatch(renderToString(h(Attachment, { src: "a.png", name: "a.png" })), /area-attachment__dismiss/);
+  assert.match(renderToString(h(Attachment, { src: "a.png", name: "a.png", onDismiss: () => {}, dismissLabel: "Supprimer a.png" })), /class="area-attachment__dismiss" aria-label="Supprimer a\.png"/);
   // The deprecated `onRemove` still shows the control for a release.
   assert.match(renderToString(h(Attachment, { src: "a.png", name: "a.png", onRemove: () => {} })), /aria-label="Remove a\.png"/);
   const uploading = renderToString(h(Attachment, { src: "a.png", name: "a.png", status: "uploading", progress: 40 }));
@@ -28,6 +30,34 @@ test("an Attachment names itself, its remove control and its upload", () => {
   const failed = renderToString(h(Attachment, { src: "a.png", name: "a.png", status: "error", error: "Too large" }));
   assert.match(failed, /area-attachment--error/);
   assert.match(failed, /role="img" aria-label="Too large"/);
+  assert.doesNotMatch(failed, /Retry/, "no Retry without onRetry");
+  const retry = renderToString(h(Attachment, { src: "a.png", name: "a.png", status: "error", onRetry: () => {} }));
+  assert.match(retry, /class="area-attachment__mark" role="img" aria-label="a\.png could not be uploaded"/);
+  assert.match(retry, /<button[^>]*class="area-button[^"]*area-button--icon-only[^"]*"[^>]*>[^]*Retry a\.png/);
+});
+
+// packages/react/src/components/ComposerParts.tsx, Attachment kinds (components audit V10, 2026-11-07; chat-apps.md).
+test("an Attachment's kinds: a file names its type, a quote its words, a video its length", () => {
+  const file = renderToString(h(Attachment, { kind: "file", name: "Item one.pdf" }));
+  assert.match(file, /class="area-attachment area-attachment--file area-attachment--complete" title="Item one\.pdf"/);
+  assert.match(file, /area-attachment__icon" aria-hidden="true"><svg[^>]*data-area-glyph="document"/);
+  assert.match(file, /area-attachment__name" aria-hidden="true">Item one\.pdf</);
+  assert.match(file, /class="area-badge[^"]*area-badge--sm[^"]* area-attachment__badge"[^>]*><span class="area-badge__label">PDF</);
+  assert.doesNotMatch(file, /<img/);
+  assert.doesNotMatch(renderToString(h(Attachment, { kind: "file", name: "Item one.pdf", badge: null })), /area-attachment__badge/);
+  assert.match(renderToString(h(Attachment, { kind: "file", name: "Item one", icon: h("svg", { id: "pdf" }) })), /area-attachment__icon" aria-hidden="true"><svg id="pdf"/);
+  const words = "Body text ".repeat(40);
+  const quote = renderToString(h(Attachment, { kind: "quote", name: "Pasted text", text: words, badge: "Pasted" }));
+  assert.match(quote, /<blockquote class="area-attachment__quote"><span class="area-attachment__text">(Body text ){23}Body text…<\/span><\/blockquote>/);
+  assert.match(quote, /area-attachment__badge"[^>]*><span class="area-badge__label">Pasted</);
+  const video = renderToString(h(Attachment, { kind: "video", name: "Item one.mp4", src: "poster.png", badge: "0:42" }));
+  assert.match(video, /<img class="area-attachment__image" src="poster\.png" alt=""\/><span class="area-attachment__play" aria-hidden="true"><svg[^>]*data-area-glyph="play-filled"/);
+  assert.match(video, /<span class="area-attachment__badge">0:42<\/span>/);
+  for (const kind of ["file", "quote", "video"]) {
+    const html = renderToString(h(Attachment, { kind, name: "Item one", text: "Body text", status: "error", error: "Error message", onRetry: () => {}, onDismiss: () => {} }));
+    assert.match(html, new RegExp(`area-attachment--${kind} area-attachment--error" title="Error message"`));
+    assert.match(html, /Retry Item one[^]*aria-label="Remove Item one"/);
+  }
 });
 
 test("a ComposerMenu is a listbox of Menu rows the field points at, grouped, with a muted path", () => {
@@ -55,7 +85,7 @@ test("a Queue counts its messages; each row offers Send now and Remove, a failed
   assert.match(html, /aria-expanded="true"/);
   assert.match(html, /<li class="area-queue__item">[^]*Also check dark[^]*>Send now<[^]*aria-label="Remove “Also check dark”"/);
   assert.match(html, /area-queue__item--sending[^]*Sending[^]*Run the tests<\/span><\/li>/);
-  assert.match(html, /area-queue__item--failed[^]*aria-label="Not sent"[^]*>Retry</);
+  assert.match(html, /area-queue__item--error[^]*aria-label="Not sent"[^]*>Retry</);
   // Messages send in order, so the list is ordered.
   assert.match(html, /<ol id="[^"]+" class="area-queue__items"/);
   // The deprecated `onRemove` still shows Remove for a release.

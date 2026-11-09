@@ -1,0 +1,461 @@
+# Area inventory (2026-11-07, generated from manifest.ts, pages.mjs, component-status.mjs)
+
+- **button** (Button, complete): Triggers an action.
+  - variants: variant=solid|soft|outline|ghost; tone=neutral|info|success|warning|caution|danger|discovery; size=sm|md|lg; align=start|end
+  - booleans: full-width, icon-only, pill, rounded, on-color
+  - states: disabled, loading, selected
+  - parts: icon, label
+- **buttonGroup** (Button group, complete): Joins related full-size button actions at shared edges.
+  - variants: variant=soft|outline; size=sm|md|lg
+  - booleans: full-width
+- **splitButton** (Split button, complete): Joins a default action to a menu of related actions.
+  - variants: variant=solid|soft|outline|ghost
+  - booleans: icon-only
+  - parts: action, trigger, menu
+- **toolbar** (Toolbar, complete): Groups commands with keyboard navigation and optional overflow.
+  - variants: variant=plain|surface; size=sm|md|lg; orientation=horizontal|vertical
+  - booleans: full-width
+  - parts: group, separator
+- **alignmentPicker** (Alignment picker, complete): Chooses one of nine physical alignment positions.
+  - variants: variant=soft|plain
+  - states: preview
+  - parts: cell, dot
+- **colorPicker** (Color picker, complete): Edits a color like Figma's fill picker, with spectrum, grid and slider views, six color models, a contrast check, a before/after preview and saved swatches; or picks an exact OKLCH colour inside a gamut.
+  - variants: variant=surface|plain
+  - parts: header, body, views, contrast, contrast-pair, contrast-ratio, contrast-unit, contrast-level, area, plane, band, band-region, band-edge, thumb, channel, grid, controls, tracks, channel-row, channel-label, slider, hue, alpha, preview, preview-new, preview-original, values, model, fields, text-field, opacity, note, swatches, heading
+- **calendar** (Calendar, complete): Shows a month grid for choosing a date, a range or several dates.
+  - variants: variant=plain|surface; days=square|circle|tile; layout=month|week; caption=label|menus
+  - parts: months, month, header, title, nav, menus, grid, weekday, cell, day, day-number, day-weekday, day-month, marker, week
+- **colorSwatch** (Color swatch, complete): Displays a color and reveals transparency over a checkerboard.
+  - variants: size=sm|md|lg
+- **colorSwatchPicker** (Color swatch picker, complete): Chooses one labeled color from a row or grid of swatches.
+  - variants: size=sm|md|lg; layout=grid|row|palette
+  - parts: cell
+- **colorField** (Color field, complete): Edits a hex color beside its preview, with optional split opacity.
+  - variants: size=sm|md|lg
+  - booleans: full-width, alpha
+  - parts: opacity
+- **field** (Field, review): Labels and describes one form control, including its validation message.
+  - variants: orientation=vertical|horizontal|auto
+  - booleans: inline
+  - states: disabled
+  - parts: head, label, required, description, count, validation, error
+- **input** (Input, complete): Accepts a single line of text.
+  - variants: variant=outline|soft; size=sm|md|lg
+  - booleans: full-width, monospace
+  - states: disabled, invalid, success, warning, read-only, loading
+  - parts: control, icon, affix, action, action-button, action-icon, action-tooltip
+- **numberField** (Number field, complete): Edits a number with optional units, stepping and scrubbing.
+  - variants: variant=outline|soft; size=sm|md|lg; steppers=split
+  - booleans: full-width
+  - states: disabled, read-only, invalid, success, warning, scrubbing
+  - parts: control, unit, scrub, steppers, step, trailing
+- **inputGroup** (Input group, complete): Combines independently named controls and passive segments in one shell.
+  - variants: variant=outline|soft; size=sm|md|lg
+  - booleans: full-width
+  - parts: text
+- **breadcrumb** (Breadcrumb, complete): Shows the current page within a hierarchy of links.
+  - booleans: nowrap
+  - parts: list, item, link, page, separator, chevron, ellipsis
+- **fileUpload** (File upload, complete): Takes files by click or drag and drop.
+  - states: dragging, invalid, disabled
+  - parts: icon, text, prompt, action, hint, input
+- **fileUploadList** (area-file-upload-list, part): Lists the files being or already uploaded.
+- **fileUploadItem** (area-file-upload-item, part): Shows one file's upload: name, size, progress, and remove or retry.
+  - variants: status=uploading|complete|error
+  - parts: icon, body, header, text, name, meta, separator, status, actions, progress, percent
+- **emptyState** (Empty state, complete): Says a region has nothing to show yet, and how to fill it.
+  - variants: size=sm|md
+  - parts: icon, content, title, description, actions
+- **toggleGroup** (Toggle group, complete): Keeps a set of toggle buttons: any number pressed, or at most one.
+  - variants: variant=soft|outline|ghost; size=sm|md|lg
+  - booleans: full-width
+- **descriptionList** (Description list, review): Lists labelled values: a term and its value per row.
+  - variants: layout=columns|justified
+  - booleans: divided, framed
+  - parts: item, term, icon, label, value, more, more-label
+- **meter** (Meter, unrefined): Shows a value within a known range, such as usage against a limit.
+  - variants: tone=neutral|warning|danger|data
+  - booleans: segmented
+  - parts: header, label, value, track, segment, rest, legend, item, swatch, item-label, item-value, item-share, description
+- **searchField** (Search field, complete): A field for a search query: a search glyph, a clear action once there is text, Escape to clear.
+  - parts: clear, shortcut
+- **shortcutList** (Shortcut list, complete): Lists keyboard shortcuts: what each does, and its keys at the end.
+  - booleans: quiet, divided
+  - parts: title, items, item, label, keys
+- **dateRangePicker** (Date range picker, complete): A field showing a range of dates that opens presets and a range calendar.
+  - parts: presets, preset
+- **citation** (Citation, complete): Links a source from the text it supports: a small pill, or a footnote number.
+  - variants: variant=pill|footnote; ink=inherit|muted|action|blue|purple|pink|green|red|orange|brown
+  - parts: icon, label, count, bracket
+- **zoomControl** (Zoom control, complete): Shows a canvas's zoom and opens a menu to type, step, fit or pick a zoom.
+  - booleans: stepper
+  - parts: value, menu, field, stepper, step
+- **board** (area-board, part): Lays out board columns side by side.
+- **boardColumn** (Board, complete): One group of a board: a coloured header with a count over a list of cards and an add row.
+  - variants: color=neutral|gray|brown|orange|yellow|green|blue|purple|pink|red
+  - parts: header, title, count, actions, cards, footer, add, add-icon
+- **boardCard** (area-board-card, part): One item on a board: a title that links to it, its properties and hover actions.
+  - parts: heading, icon, title, properties, actions
+- **timeline** (area-timeline, part): Lists events in order along one line, each with a marker.
+- **timelineItem** (Timeline, complete): One event on a timeline: a dot, icon or avatar marker, a title, its time and details.
+  - booleans: current
+  - parts: marker, dot, icon, media, content, line, title, meta, time, body
+- **editableText** (Editable text, complete): Shows text that turns into a field in place to rename it.
+  - variants: activation=dblclick|click|focus
+  - booleans: fill
+  - states: editing, disabled
+  - parts: preview, input
+- **boxModel** (Box model, complete): Draws a layer's margin, border, padding and size as nested boxes, read-only.
+  - variants: tone=info|neutral
+  - parts: side, value, border, padding, content, label, corner, caption
+- **tokenRow** (Token row, complete): Names a design token a layer uses: the token's plate (Code with its swatch) widened to the row, with its value; optionally copies it.
+  - booleans: outline, copyable
+  - parts: value
+- **copyButton** (Copy button, complete): A Button that copies text and shows a check for two seconds, with the result said once to assistive tech.
+  - states: copy-state
+- **folder** (Folder, complete): Draws a folder as Finder does: a back panel with its tab, a sheet tucked inside, a front pocket, a count and an optional badge.
+  - variants: size=sm|md|lg
+  - states: open
+  - parts: figure, back, rim, front, paper, badge, count
+- **filePage** (File page, complete): Draws a file as Finder does: a page with its corner folded, blank or with a content mark for its type.
+  - variants: size=sm|md|lg
+  - parts: figure, sheet, edge, fold, crease, diagonal, content, icon, label
+- **fileTile** (File tile, complete): One item of a file browser's icon view: its figure over its name and a detail line.
+  - variants: size=sm|md|lg
+  - parts: figure, text, name, meta
+- **fileGrid** (area-file-grid, part): Lays file tiles out as a grid to browse, choose from and open, with one Tab stop.
+  - variants: size=sm|md|lg
+  - states: drop-target
+  - parts: item
+- **assetCard** (Asset card, review): Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio, cropped to the card's aspect or whole within it; an element, a colour, or a group as a 2×2 mosaic or a strip); framed, basic or containerless, its name above, below or over the asset on hover, recessed or raised or on a transparency checker, square, landscape, wide, 16:9 screen or hugging its asset; with no name or controls and containerless, the frame alone (an inspector's preview).
+  - variants: layout=asset|image|color|group; container=framed|basic|containerless; caption=above|below|overlay|outside; fill=recessed|raised|checker; aspect=square|landscape|hug|wide|screen; fit=natural|cover|contain; mosaic=grid|strip
+  - booleans: interactive, borderless
+  - states: selected
+  - parts: head, name, actions, frame, media, mosaic, cell, thumb, badge
+- **designCard** (Design card, review): Shows one design in a container at its true size, placed by its layout's rule: a part (a control, a component, a pattern, a type line) in a tenth of the card's short side, never past 100% and held at 50% and cropped on its focus below that; a screen whole in a 16:9 card; a phone standing from the top and running off the bottom; an icon at whole multiples; a colour painting the card. Its name and true size sit under it; opened, the same ground grows to Full view.
+  - variants: layout=part|screen|phone|icon|color; aspect=square|wide
+  - booleans: interactive
+  - states: selected
+  - parts: ground, design, caption, name, detail, actions
+- **assetGrid** (area-asset-grid, part): Lays asset cards out as a grid or a waterfall to browse, choose from and open, with one Tab stop.
+  - variants: layout=grid|waterfall
+  - parts: item
+- **fileImage** (File image, complete): Draws an image file as a landscape frame, Folder's and File page's sibling: the picture, or a drawn landscape.
+  - variants: size=sm|md|lg
+  - parts: figure, scene, picture
+- **listBox** (List box, complete): Options to choose one from, as a list or a grid, with one Tab stop and the arrows inside.
+  - variants: layout=list|grid
+  - states: disabled, selected
+  - parts: item, section, heading, options
+- **titlebar** (Titlebar, review): A window's top bar: Panel's bar height and rule, the drag region of a frameless window; plain drops the rule, floating is a raised plate.
+  - variants: variant=ruled|plain|floating; size=sm|md
+  - booleans: macos
+  - parts: end
+- **sectionHeading** (Section heading, complete): A titled group on a page: a strong title trimmed to its cap and baseline, and a muted lede.
+  - parts: title, lede
+- **assetRow** (Asset row, complete): Lists one exportable asset: its preview, name, details and an optional action.
+  - parts: preview, text, name, meta, actions
+- **previewFrame** (Preview frame, deprecated): Deprecated: use Asset card, containerless with no name. Shows the selected item at the head of an inspector: an icon, an image or a colour, centred in a frame.
+  - variants: aspect=square|landscape|wide; ground=surface|subtle|checker
+  - parts: paint
+- **passwordField** (Password field, complete): A field for a password, with an action that shows it as text and hides it again.
+  - parts: reveal
+- **otpField** (OTP field, complete): A one-time code drawn as a row of character slots over one real input.
+  - variants: variant=outline|soft; size=sm|md|lg
+  - states: invalid, disabled, read-only
+  - parts: group, slot, caret, separator, control
+- **timeField** (Time field, complete): A time of day typed in segments, with an optional list of times at a fixed step.
+  - parts: segments, part, literal, segment, period, list, trigger
+- **stepper** (Stepper, complete): Shows where a person is in a flow of steps: Timeline's numbered markers joined by its line, done steps checked.
+  - variants: orientation=horizontal|vertical
+- **stepperStep** (area-stepper-step, part): One step of a stepper: its marker, title, an optional description and what an open step holds.
+  - variants: status=complete|current|pending|error
+  - states: disabled
+  - parts: button, body, marker, text, title, description, content
+- **scrollArea** (Scroll area, complete): Scrolls its content with a thin overlay scrollbar.
+  - variants: type=hover|scroll|always
+  - states: scrolling, overflow-x, overflow-y
+  - parts: viewport, content, scrollbar, thumb
+- **link** (Link, complete): Goes to another page or place, inline in text or on its own.
+  - variants: variant=inline|standalone; ink=inherit|muted|action|blue|purple|pink|green|red|orange|brown
+  - parts: icon
+- **toggletip** (Toggletip, complete): Shows a short note about a label from a small info or help button.
+  - variants: size=sm|md
+  - states: expanded
+  - parts: surface
+- **pagination** (Pagination, complete): Moves between the pages of a long list or result set.
+  - variants: layout=pages|compact; size=sm|md|lg
+  - parts: list, item, page, ellipsis, status, value, step
+- **treeView** (Tree view, review): Navigates or selects items in an expandable hierarchy.
+  - variants: selectionMode=navigation|checkbox; size=sm|md
+  - booleans: guides
+  - parts: chevron, check, icon, label, trailing, status, actions, pinned, pin
+- **composer** (Composer, complete): Writes and submits a message with optional action slots.
+  - variants: layout=inline|stacked
+  - states: disabled, dragging
+  - parts: context, entry, input, actions, extras, footer, submit, mic, attach, file
+- **composerGroup** (area-composer-group, part): A Composer with rows around its shell: a header above, a footer below.
+  - parts: header, footer, note
+- **textarea** (Textarea, complete): Accepts multiple lines of text.
+  - variants: variant=outline|soft; size=sm|md; resize=vertical|horizontal|both|none
+  - booleans: full-width
+  - states: invalid, success, warning, disabled, read-only
+- **select** (Select, complete): Picks one value from a list.
+  - variants: variant=outline|soft; size=sm|md|lg
+  - booleans: full-width
+  - states: invalid, success, warning, disabled
+- **checkbox** (Checkbox, review): Toggles a single independent option.
+  - variants: variant=card|soft; layout=row|list|tile|preview|media|media-row; size=md|lg
+  - states: checked, indeterminate, disabled, invalid
+  - parts: control, visual, meta
+- **checkboxGroup** (area-checkbox-group, part): Groups related Checkbox options under one label.
+  - variants: orientation=vertical|horizontal
+  - states: disabled, invalid, success, warning
+  - parts: legend, description, options, validation
+- **radio** (Radio, review): Picks one option from a mutually exclusive set.
+  - variants: variant=card|soft; layout=row|list|tile|preview|media|media-row; size=md|lg
+  - states: disabled
+  - parts: control, visual, meta
+- **radioGroup** (area-radio-group, part): Groups mutually exclusive Radio options under one label.
+  - variants: orientation=vertical|horizontal
+  - states: disabled, invalid, readonly
+  - parts: legend, description, options, validation
+- **switch** (Switch, review): Toggles a setting that takes effect immediately.
+  - variants: size=sm|md|lg; labelPosition=end|start; track=short|long
+  - booleans: full-width, pill, rounded
+  - states: checked, disabled, read-only, loading, hover, active, focus-visible
+  - parts: control, track, thumb, text, label, description, loading
+- **slider** (Slider, review): Picks a value from an ordered range.
+  - variants: size=sm|md|lg; variant=track|bar; labelPosition=top|inside; orientation=vertical
+  - states: disabled, hover, focus-visible, pressed, dragging
+  - parts: label, track, control, rail, fill, buffer, thumb, value, marks, ends, end
+- **sliderRange** (area-slider-range, part): Picks a range with two handles on one rail, with optional number fields.
+  - variants: size=sm|md|lg; variant=track|bar
+  - states: overlap, disabled, pressed, dragging
+  - parts: track, input, start, end
+- **chip** (Chip, complete): Toggles a filter, or holds an input value, in a set that wraps (each chip toggles on its own).
+  - variants: kind=assist|filter|input|suggestion; size=sm|md|lg
+  - booleans: swatch-only, link, link-icon, pill, rounded
+  - states: selected, disabled, invalid
+  - parts: swatch, icon, trailing-icon, avatar, image, label, action, dismiss
+- **chipGroup** (area-chip-group, part): Lays out a set of chips, wrapping onto as many lines as it needs.
+- **choiceLabel** (area-choice-label, part): The title and description beside a checkbox or radio (Switch draws its own).
+  - parts: title, description
+- **badge** (Badge, review): Labels an item with a short status or metadata; optionally links to its details.
+  - variants: variant=soft|solid|outline|color|modern|plain; tone=neutral|info|success|warning|caution|danger|discovery|inverse; size=sm|md|lg
+  - booleans: dot, dot-only, icon-only, truncate, pill, rounded, on-color
+  - parts: dot, leading-icon, label, trailing-icon, avatar, flag, dismiss
+- **presence** (area-presence, part): Shows availability with Area-drawn status glyphs at the icon line weight.
+  - variants: status=available|away|busy|do-not-disturb|blocked|offline|out-of-office|unknown; size=sm|md|lg
+  - states: out-of-office
+- **indicatorAnchor** (area-indicator-anchor, part): Attaches a count or presence indicator to an accessibly named object.
+  - variants: placement=top-end|top-start|bottom-end|bottom-start; overlap=rectangular|circular
+  - booleans: inset
+  - states: invisible
+  - parts: indicator
+- **indicator** (Indicator, complete): Displays a compact notification count or activity dot.
+  - variants: kind=count|dot; tone=neutral|info|success|warning|danger
+  - states: processing, border
+- **count** (Count, complete): Shows how many items the element it sits in holds, beside that element's label.
+  - variants: variant=plain|soft; size=sm|md
+  - booleans: pill, rounded
+  - parts: label
+- **accordionItem** (Accordion, complete): One collapsible: shows or hides content under a title the reader clicks.
+  - variants: variant=plain|divided; size=sm|md
+  - states: open, disabled
+  - parts: heading, trigger, chevron, label, content
+- **step** (Step, complete): One thing an agent did, on one line: the verb (live, then past tense) and what it acted on; opens to its input and output.
+  - booleans: group, reasoning
+  - states: open, running, error
+  - parts: row, icon, verb, detail, meta, chevron, body, items
+- **editSummary** (Edit summary, complete): What an agent changed in a turn: files with their +N −N, each opening to its diff, with Keep and Undo.
+  - variants: variant=surface|plain
+  - states: open, kept, undone
+  - parts: head, title, counts, added, removed, actions, files, file, name, icon, base, folder, chevron, status, diff
+- **diff** (area-diff, part): A unified diff in Code block sm's metrics: line numbers, a + or − marker and a tint on added and removed lines, folds between hunks.
+  - parts: lines, line, number, marker, text, fold
+- **approval** (Approval, review): An agent asks before it acts: what and why, the thing itself, numbered choices with their scope (stacked, or in a grid of words or pictures), and a field to say what to do instead.
+  - variants: layout=list|grid; variant=surface|plain
+  - states: selected
+  - parts: head, heading, title, description, actions, detail, options, option, tile, visual, key, lines, label, option-description, check, instead, field, skip, foot, hint, footer
+- **plan** (Plan, review): A plan's progress: what is done, what is happening now, what is next, with its count and an optional bar; folds to its head.
+  - variants: bar=none|single|segmented; variant=surface|plain
+  - booleans: rail
+  - states: open
+  - parts: head, icon, title, count, chevron, bar, segment, items, item, mark, text, detail, meta, steps
+- **turnNotice** (Turn notice, complete): How a turn ended, on one quiet line: stopped, failed (with Retry) or compacted.
+  - variants: status=stopped|error|compacted
+  - parts: icon, text, action
+- **attachment** (Attachment, complete): An image attached to a message before it is sent: its thumbnail, a remove control, and its upload's progress or failure.
+  - variants: status=ready|uploading|error
+  - parts: image, overlay, dismiss
+- **composerMenu** (Composer menu, review): The @ and / suggestions above the composer: Menu rows with an icon, a name and a muted path, in groups.
+  - parts: path, empty
+- **queue** (Queue, complete): Messages sent while an agent works, waiting their turn above the composer: each can be sent now or removed.
+  - states: open
+  - parts: head, title, chevron, items, item, text, status, actions
+- **timestamp** (Timestamp, complete): When a turn was sent, centred between turns after a pause.
+- **accordion** (area-accordion, part): Stacks accordion items; opening one closes the others unless multiple.
+- **badgeGroup** (Badge group, complete): Wraps badges or collapses overflow behind a disclosure.
+  - variants: overflow=inline|overlay
+  - parts: item, overflow-trigger, overflow-content
+- **avatar** (Avatar, complete): Represents a user or entity.
+  - variants: size=xs|sm|md|lg; shape=circle|square; tone=neutral|inverse
+  - booleans: active
+  - parts: image, icon
+- **avatarGroup** (area-avatar-group, part): Stacks related avatars and summarizes any hidden remainder.
+  - parts: item, overflow
+- **separator** (Separator, complete): Divides related groups of content.
+  - variants: orientation=horizontal|vertical; spacing=none|normal
+  - booleans: inset
+- **skeleton** (Skeleton, complete): Stands in for content that has not loaded.
+  - variants: shape=block|text|circle
+  - booleans: static, wrap
+  - parts: lines
+- **spinner** (Spinner, complete): Indicates an action in progress: turning with no known end, or stopped at a value.
+  - variants: size=sm|md|lg
+  - states: determinate
+  - parts: track, arc
+- **progress** (Progress, complete): Shows how far along a task is.
+  - variants: size=sm|md|lg
+  - states: indeterminate
+  - parts: bar
+- **panel** (Panel, review): A titled surface of rows that act on something beside it.
+  - variants: size=sm|md
+  - booleans: flush, bare-bar, bare-footer, action-column, window-bar
+  - states: collapsed, resizable, resizing
+  - parts: resize, bar, title, body, section, heading, heading-text, count, actions, toggle, toggle-text, chevron, summary, rows, row, row-label, row-controls, row-action, stack, footer
+- **propertyList** (Property list, complete): Orders like properties (fills, strokes, effects) and moves them by handle or keyboard.
+  - states: dragging, inactive
+  - parts: item, handle, value, actions, indicator
+- **boxField** (Box field, complete): Edits padding or corner radius linked, or one field per side or corner.
+  - variants: size=sm|md|lg
+  - parts: label, fields, field, toggle
+- **combobox** (Combobox, complete): An editable field with suggestions that filter as you type.
+  - booleans: full-width
+  - states: open
+  - parts: listbox, option, description, empty, group
+- **customSelect** (Custom select, unrefined): Picks a value (or several, with multiple) from a short list whose options carry icons, descriptions and groups, as rows or a grid of previews.
+  - variants: variant=outline|soft|ghost; size=sm|md|lg; layout=list|grid
+  - booleans: full-width
+  - states: open, disabled, invalid
+  - parts: trigger, icon, value, chevron, listbox, option, group, separator, grid, preview, caption
+- **tag** (Tag, complete): A coloured label for a chosen or typed value, optionally removable.
+  - variants: color=neutral|gray|brown|orange|yellow|green|blue|purple|pink|red; size=md|lg
+  - states: disabled
+  - parts: icon, label, dismiss
+- **tagPicker** (Tag picker, complete): Picks several values, shown as coloured tags in the field, from a list that filters and can grow.
+  - variants: variant=outline|soft; size=sm|md|lg
+  - booleans: full-width
+  - states: open, disabled, invalid
+  - parts: field, input, listbox, hint, option, create, empty
+- **datePicker** (Date picker, complete): Shows a date in a field and opens a calendar, with the date as text, to change it.
+  - variants: variant=outline|soft|ghost; size=sm|md|lg
+  - booleans: full-width
+  - states: open, disabled, invalid
+  - parts: trigger, icon, value, panel, footer
+- **confirmDialog** (Confirm dialog, complete): Asks for a forced choice before an action that can't be undone.
+- **drawer** (Drawer, complete): Slides a panel in from an edge of the screen for a task beside the page.
+  - variants: side=end|start|bottom; size=sm|md; actions=row|stacked
+  - parts: modal, header, heading, title, description, dismiss, body, footer
+- **commandPalette** (Command palette, complete): Searches actions and places from a shortcut, and runs the one you pick.
+  - booleans: inline
+  - parts: modal, search, search-icon, input, list, group, item, text, description, empty, footer, hint, keys
+- **contextMenu** (Context menu, complete): Opens a Menu where you right-click.
+  - parts: menu
+- **hoverCard** (Hover card, complete): Previews what a link points to while the pointer rests on it.
+  - parts: identity, meta
+- **promptSuggestions** (Prompt suggestions, complete): Starter prompts under an empty composer.
+  - variants: layout=list|chips
+  - parts: row, item, icon, text, shortcut, dismiss
+- **message** (Message, review): One turn in a conversation: the person's bubble or the assistant's prose, with actions.
+  - variants: author=user|assistant
+  - states: streaming
+  - parts: bubble, content, actions, cursor
+- **scrollToLatest** (Scroll to latest, complete): Returns a long conversation to its newest message.
+  - states: visible
+- **modelPicker** (Model picker, complete): Chooses the model a message is sent with, and how hard it works, from inside the composer.
+  - parts: trigger, name, effort
+- **card** (Card, review): Groups related media, content and actions on one surface.
+  - variants: layout=vertical|horizontal|thumbnail|immersive; size=sm|md|lg
+  - states: selected
+  - parts: title, description, value, content, header, heading, header-action, footer, media, overlay, list, link, action, carousel
+- **surface** (Surface, complete): A plain layer to compose a screen from, whose corner, layer and edge follow from the surface it sits in.
+  - variants: variant=surface|soft|plain; size=sm|md|lg
+- **stack** (Stack, complete): Lays its children out in one row or column, with a gap chosen by role that follows Density.
+  - variants: orientation=vertical|horizontal; gap=related|group|section; align=start|center|end|stretch|baseline
+  - booleans: spread, wrap
+- **alert** (Alert, complete): Draws attention to an important message in place.
+  - variants: tone=neutral|info|success|warning|danger; layout=single-line|multiline|banner
+  - booleans: flush
+  - parts: icon, content, title, description, link, actions, dismiss
+- **dialog** (Dialog, complete): Interrupts with content that requires a response.
+  - parts: header, heading, title, description, dismiss, body, footer, modal
+- **popover** (Popover, complete): Floats rich, interactive content next to the element that opened it.
+  - variants: side=top|right|bottom|left
+  - booleans: arrow
+  - parts: header, title, description, body, footer, step, media, arrow, arrow-edge
+- **menu** (Menu, complete): Lists actions triggered from a button.
+  - states: disabled, highlighted, selected
+  - parts: item, icon, text, lines, description, label, label-text, separator, shortcut, check, toggle, search-surface, sub-chevron
+- **tooltip** (Tooltip, complete): Names a control on hover or focus.
+  - variants: side=top|right|bottom|left
+  - booleans: arrow
+  - states: instant
+- **toast** (Toast, complete): Reports the outcome of an action without interrupting.
+  - variants: tone=neutral|info|success|warning|danger
+  - parts: icon, content, title, description, action, dismiss
+- **toaster** (area-toaster, part): Hosts toasts: live regions first, pause on hover and focus, a hotkey, stacking.
+  - parts: list
+- **tabs** (Tabs, complete): Switches between views with transparent tabs and rounded indicators; labels align with panel content.
+  - variants: size=sm|md|lg; orientation=vertical
+  - booleans: track
+  - states: selected, disabled
+  - parts: list, tab, panel, label, reserve, icon
+- **table** (Table, review): Presents rows of structured data.
+  - variants: size=sm|md|lg; layout=auto|fixed
+  - booleans: interactive, striped, column-dividers, flush, baseline
+  - parts: cell, link
+- **tableWrapper** (area-table-wrapper, part): Scrolls a table horizontally without scrolling the page.
+- **segmented** (Segmented, review): Picks one value from a small set of options.
+  - variants: size=sm|md|lg
+  - booleans: full-width, icon-only
+  - states: selected, disabled
+  - parts: item, icon, label
+- **code** (Code, complete): Marks source or a design token inline.
+  - booleans: swatch, subtle, on-color
+  - parts: swatch, label
+- **codeBlock** (Code block, unrefined): Shows a block of code with an optional file header, numbered lines and a copy action.
+  - variants: size=sm|md; variant=outline|soft
+  - booleans: flush, wrap, unnumbered, reveal-actions
+  - states: collapsed
+  - parts: header, title, language, languages, select, actions, body, pre, code, line, gutter, linenumber, marker, prompt, text, toggle
+- **nav** (Nav, review): Site navigation, vertical or horizontal.
+  - variants: orientation=horizontal; selection=marker
+  - parts: group, label, toggle, chevron, items, item, icon, picture, text, trailing, separator, row, actions
+- **token** (area-token, part): Deprecated compatibility alias for Code with a token swatch.
+  - booleans: subtle, on-color
+  - parts: swatch, label
+- **kbd** (Kbd, complete): Marks a keyboard shortcut.
+  - variants: size=sm|md; variant=default|quiet|on-color
+  - parts: key
+- **kbdGroup** (area-kbd-group, part): Groups chord hints into a keyboard shortcut sequence.
+- **referenceList** (Reference list, complete): Lists a text's sources: publisher, linked title and what each covers.
+  - variants: marker=number|bullet
+  - parts: title, list, item, text, dash, backlinks, backlink, count
+- **tableOfContents** (Table of contents, complete): Lists a page's sections and marks the one being read.
+  - parts: title
+- **figure** (Figure, complete): Shows an image or other media with its caption.
+  - parts: media, caption
+- **inlineList** (Inline list, complete): Runs short items along a line, with a separator between them.
+  - variants: separator=dot|rule|none
+  - parts: item
+- **abbreviation** (Abbreviation, complete): Marks an abbreviation and shows what it stands for.
+- **hatnote** (Hatnote, complete): Points readers who wanted a different page, at the top of an article or section.
+- **linkGroups** (Link groups, complete): Groups related links under small headings, in columns, at the foot of a page.
+  - booleans: divided
+  - parts: title, groups, group, label, list
+- **videoPlayer** (Video player, complete): Plays a video with Area's own controls over it.
+  - variants: layout=floating|bar|minimal; controls=auto|always
+  - parts: media, start, controls, transport, group, timeline, clock, range, duration, volume, skip, optional, surface

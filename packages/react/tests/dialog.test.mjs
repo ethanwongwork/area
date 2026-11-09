@@ -2,20 +2,20 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToString } from "react-dom/server";
-import { Dialog, Button } from "../dist/modules/index.js";
+import { Dialog, Button, Drawer } from "../dist/modules/index.js";
 
 test("Dialog renders a labelled dialog surface with a heading and a ghost Button close", () => {
   const html = renderToString(h(Dialog, { title: "Title", description: "Description" }, "Body"));
-  assert.match(html, /^<div role="dialog" aria-modal="true" aria-labelledby="([^"]+)-title" aria-describedby="\1-description" class="area-dialog"/);
+  assert.match(html, /^<div role="dialog" aria-modal="true" aria-labelledby="([^"]+)-title" aria-describedby="\1-description" class="area-dialog area-dialog--md"/);
   assert.match(html, /<h2 class="area-dialog__title" id="[^"]+-title">Title<\/h2>/);
   assert.match(html, /<p class="area-dialog__description" id="[^"]+-description">Description<\/p>/);
-  assert.match(html, /class="area-button[^"]*area-button--ghost[^"]*area-button--neutral[^"]*area-dialog__close"[^>]*aria-label="Close dialog"/);
+  assert.match(html, /class="area-button[^"]*area-button--ghost[^"]*area-button--neutral[^"]*area-dialog__dismiss"[^>]*aria-label="Close dialog"/);
   assert.match(html, /data-area-glyph="dismiss"/);
 });
 
 test("Dialog without a close renders no button", () => {
   const html = renderToString(h(Dialog, { title: "Title", showCloseButton: false }));
-  assert.doesNotMatch(html, /area-dialog__close/);
+  assert.doesNotMatch(html, /area-dialog__dismiss/);
 });
 
 test("Dialog with a trigger renders the trigger and a native modal dialog that carries the name", () => {
@@ -23,7 +23,7 @@ test("Dialog with a trigger renders the trigger and a native modal dialog that c
   const modalId = html.match(/<dialog[^>]*id="([^"]+)"/)[1];
   assert.match(html, new RegExp(`<button[^>]*aria-haspopup="dialog"[^>]*aria-controls="${modalId}"`));
   assert.match(html, /<dialog[^>]*class="area-dialog__modal"[^>]*aria-labelledby="[^"]+-title"[^>]*aria-describedby="[^"]+-description"/);
-  assert.match(html, /<dialog[^>]*>\s*<div class="area-dialog"/, "the surface drops its own dialog role inside the native dialog");
+  assert.match(html, /<dialog[^>]*>\s*<div class="area-dialog area-dialog--md"/, "the surface drops its own dialog role inside the native dialog");
   assert.doesNotMatch(html, /<dialog[^>]*\sopen/);
 });
 
@@ -208,4 +208,32 @@ test("ModelPicker is a ghost menu button over single-choice Menu rows with notes
   // The consumer's aria-label names the menu; it no longer loses to the trigger's labelledby (audit D-12).
   assert.match(html, /<div class="area-scroll-area area-scroll-area--hover area-menu" role="menu" aria-label="Model" id="[^"]+" popover="auto" tabindex="-1">/);
   assert.match(html, /role="menuitemradio" aria-checked="true"[^>]*><span class="area-menu__lines"><span class="area-menu__text">Instant<\/span><span class="area-menu__description">Answers right away<\/span><\/span>/);
+});
+
+test("Drawer takes Dialog's onDismiss: one close API across the modal family (components audit O7)", async () => {
+  const source = (await import("node:fs")).readFileSync(new URL("../src/components/Drawer.tsx", import.meta.url), "utf8");
+  assert.match(source, /onClick=\{\(\) => \{ onDismiss\?\.\(\); setOpen\(false\); \}\}/);
+  // The prop never reaches the DOM.
+  assert.doesNotMatch(renderToString(h(Drawer, { inline: true, title: "Heading", onDismiss() {} }, "Body text")), /ondismiss/i);
+});
+
+// Components audit V1 (2026-11-07): sizes as Drawer's (one name, one width), full height, and the rule that shows once
+// the body has scrolled.
+test("Dialog takes Drawer's sizes, a full height, and draws a rule under the header once its body scrolls", async () => {
+  const { MANIFESTS } = await import("../dist/modules/index.js");
+  const { readFileSync } = await import("node:fs");
+  assert.deepEqual(MANIFESTS.dialog.variants.size, ["sm", "md", "lg", "xl"]);
+  assert.equal(MANIFESTS.dialog.defaults.size, "md");
+  for (const size of ["sm", "md", "lg", "xl"]) assert.match(renderToString(h(Dialog, { size, title: "Title" })), new RegExp(`class="area-dialog area-dialog--${size}"`));
+  assert.match(renderToString(h(Dialog, { fullHeight: true, title: "Title" })), /class="area-dialog area-dialog--md area-dialog--full-height"/);
+  assert.doesNotMatch(renderToString(h(Dialog, { title: "Title" }, "Body")), /data-scrolled/);
+  const css = readFileSync(new URL("../../styles/dist/area.css", import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+  const width = size => css.match(new RegExp(`\\.area-dialog--${size}\\s*\\{\\s*--_dialog-size:\\s*([^;]+);`))?.[1].trim();
+  const drawer = size => css.match(new RegExp(`\\.area-drawer--${size}\\s*\\{\\s*--_drawer-size:\\s*([^;]+);`))?.[1].trim();
+  assert.equal(width("sm"), drawer("sm"), "sm is Drawer's sm");
+  assert.equal(width("md"), drawer("md"), "md is Drawer's md");
+  assert.equal(width("lg"), "720px");
+  assert.equal(width("xl"), "880px");
+  assert.match(css, /\.area-dialog\[data-scrolled\] > \.area-dialog__header::after\s*\{\s*opacity:\s*1;?\s*\}/);
+  assert.match(css, /\.area-dialog__header::after\s*\{[^}]*background-color:\s*var\(--area-edge-dividers\)/, "the rule is the separator's line");
 });

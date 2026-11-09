@@ -57,7 +57,7 @@ zoom; record the viewport and device pixel ratio the result prints.
 | Scrolling | One scroller per region; bars, docks and panel headers stay outside it; nothing scrolls the window |
 | Content | The measure holds on a wide window; grids keep their minimum card width; shelves peek |
 | Media | One ratio per set; images cover their frame; the frame, not the image, carries the corner |
-| Copy | Tiers from size and ink; sentence case; counts only on collections; one-sentence subtitles; placeholder vocabulary in demos |
+| Copy | `docs/WRITING.md`: verbs on buttons, sentence case, full stops, the shared status words, errors that say what to do, the destructive pattern, empty states that name the missing thing; tiers from size and ink; counts only on collections; one-sentence subtitles; placeholder vocabulary in demos |
 | Settings | Nothing breaks at type 12 / 16, Compact / Comfortable, Radius 0 / pill, Elevation 0, light / dark |
 
 ## 4. Compare with the reference

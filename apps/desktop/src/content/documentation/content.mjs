@@ -119,27 +119,52 @@ export default {
       ["Do", "Use striped for long, wide rows, and columnDividers for dense comparisons."],
       ["Do", "Set layout=\"fixed\" on the tables of one page or feed, so each starts its values on the same line."],
       ["Do", "Use size sm for a dense table in a panel or a chat reply: its cells keep one inset at the frame."],
+      ["Do", "Make a column sortable with sort and onSortChange on its TableHeaderCell, and sort the rows yourself; only the sorted column says its order."],
+      ["Do", "Set stickyHeader on a long table and give the wrapper a height through wrapperProps: the header sticks inside the table's own scroll."],
+      ["Do", "Set stickyFirstColumn on a wide table whose first column names each row, so the names stay while the columns scroll."],
+      ["Do", "Put related rows in a TableGroup with a count or a total, so the reader can fold what they don't need."],
+      ["Do", "Set loading while rows load: the header stays and skeleton rows hold the body's place; set delay when a load is usually quick."],
       ["Don't", "Set interactive on a table whose rows do nothing: the hover plate promises a click."],
       ["Don't", "Wrap Table in another table wrapper: it draws its own, and the edge doubles."],
       ["Don't", "Rely on data-selected alone: put the selection state on the row's Checkbox."],
+      ["Don't", "Set aria-sort yourself on a heading that takes sort: the heading sets it, and only while sorted."],
+      ["Don't", "Build a data grid on Table: row selection with a bulk bar, editing and virtual scrolling are a different component."],
     ],
     // Spec: Anatomy; source: TableCell, TableLink.
     parts: {
       root: "A native table inside a scrolling wrapper that draws the frame and corner; size sets the cells' block inset (md and lg sit a step further in at the frame), layout fixed gives the first column the label column, flush drops the frame.",
       cell: "A td or th; numeric aligns it to the end in tabular figures, fit keeps it as narrow as its content without wrapping.",
       link: "A link stretched over its row, so the whole row is one target; other controls in the row sit above it and the row shows its focus.",
+      sort: "A sortable heading's ghost Button: the column's name and an arrow, up when ascending and down when descending; unsorted, the arrow shows only under the pointer or focus.",
+      group: "A TableGroup's tbody: a heading row and the rows it folds.",
+      "group-heading": "The group's heading row, on the header's ground; it spans the table's columns.",
+      "group-row": "The heading cell's line: the toggle at the start, the summary at the end.",
+      "group-toggle": "The button that folds and unfolds the group: a chevron, the group's name and its count.",
+      "group-chevron": "The toggle's chevron, down while open and pointing at the name while folded.",
+      "group-name": "The group's name, in the strong weight.",
+      "group-count": "How many rows the group holds, muted, after its name.",
+      "group-summary": "The group's total or aggregate, muted, at the row's end.",
+      skeleton: "The rows that stand in while loading: one Skeleton line per column, hidden from assistive tech.",
+      "skeleton-line": "One cell's Skeleton line: a name's width in the first column, a value's in the others, at the end of a numeric column.",
+    },
+    states: {
+      selected: "A body row with aria-selected=\"true\" takes the selected fill; its hover plate stays off. In a table that takes focus (a row's checkbox, a link), it steps back to the hover plate while focus is elsewhere.",
+      collapsed: "A folded TableGroup (data-collapsed on its tbody): only its heading row shows; the rows stay in the document, hidden.",
     },
     // Spec: Behavior and accessibility; source: Table overflow wrapper, TableLink.
     keyboard: [
       ["Tab", "Moves to each row's link and the controls in its cells; a wide table's scrolling wrapper is a stop of its own."],
       ["Left or Right", "Scroll a focused wrapper sideways."],
-      ["Enter", "Follows a row's link."],
+      ["Enter", "Follows a row's link, sorts by a heading's column, or folds or unfolds a group."],
+      ["Space", "Sorts by a focused heading's column, or folds or unfolds a focused group."],
     ],
     aria: [
       ["scope", "col on every TableHeaderCell by default."],
-      ["aria-sort", "Yours to set on a sortable column's heading, with a Button inside it."],
+      ["aria-sort", "On a TableHeaderCell with sort, only while its column is sorted (ascending or descending)."],
+      ["scope", "rowgroup on a group's heading cell, so its name heads the rows under it."],
+      ["aria-expanded", "On a group's toggle: whether its rows show."],
       ["role=\"region\", tabindex", "On the wrapper only while the table overflows, named from the table's aria-label or aria-labelledby."],
-      ["aria-busy", "Yours to set while rows load, with Skeleton cells."],
+      ["aria-busy", "On the table while loading; the skeleton rows are aria-hidden."],
     ],
   },
 
@@ -235,6 +260,7 @@ export default {
     practices: [
       ["Do", "Group items by one value, such as status or owner, with one column per value."],
       ["Do", "Keep columns neutral unless the value has a color; color tints the column, its count, its cards' edge and its add row together."],
+      ["Do", "Give a column the same color as the value's Tag: each color is one hue, the same in Tag, Board and Link, in light and dark."],
       ["Do", "Give every card a title and an href: the title is the link that opens the item, and its hit area covers the card."],
       ["Do", "Pass count when the group holds more items than it shows."],
       ["Do", "Name each icon-only Button you put in a column's actions or a card's actions."],
@@ -276,7 +302,7 @@ export default {
     // Spec: Variants, Behavior and accessibility, Settled questions; source: Accordion.tsx JSDoc.
     practices: [
       ["Do", "Use plain for a document toggle with the chevron before the title, and divided for a stacked FAQ or settings list."],
-      ["Do", "Use md for document toggles and sm in dense UI."],
+      ["Do", "Use md over reading text and sm over UI text: the title takes its content's size."],
       ["Do", "Stack items in an Accordion to keep one open at a time; set multiple when readers compare several."],
       ["Do", "Set headingLevel so the titles fit the page outline; an Accordion uses 3 unless you set it."],
       ["Do", "Give each item a value when you control which items are open."],
@@ -363,7 +389,7 @@ export default {
       ["A file in a file browser's icon view", ["file-tile"], "File tile draws a file's figure over its name, as Finder does."],
       ["An asset in a list, one per row", ["asset-row"], "Asset row is the list form of the same asset."],
       ["Content with its own text and actions inside the surface", ["card"], "Card holds a title, body and footer; Asset card frames only the asset."],
-      ["A framed preview of a page or screen", ["preview-frame"], "Preview frame shows a page at its own size inside a frame."],
+      ["A framed preview of a page or screen", ["design-card"], "Design card shows a page or screen in its frame."],
     ],
     // Spec: Variants, Behavior and accessibility, Feedback log; source: AssetCard.tsx JSDoc.
     practices: [
@@ -374,7 +400,7 @@ export default {
       ["Do", "Give a setting's option its own scope on the whole card (data-area-theme=\"dark\"), so the card and its frame change together."],
       ["Do", "Pass components and designs to a group as elements: each cell shows a scaled-down image of it, inert."],
       ["Do", "Put a small ghost More or Copy button in actions; it ends on the frame's side. Give each its own label."],
-      ["Do", "Lay cards out in an AssetGrid to browse, choose and open them, and pass onOpen for Enter and double click."],
+      ["Do", "Lay cards out in an AssetGrid to browse, choose and open them, and pass onOpen for Enter and double click; set multiple to choose several, with values."],
       ["Do", "Pick the aspect for the grid: square by default, landscape (4:3) for anything that isn't a component, screen (16:9) for a full product screen, hug for a waterfall."],
       ["Do", "Give a grid of images one fit: natural for each image's own shape, cover to crop them all to the aspect, contain to keep every image whole in one footprint (pass mediaRatio)."],
       ["Do", "Use mosaic=\"strip\" for a collection's cover: its images keep their own ratios in one row that runs on past the card's end."],
@@ -538,7 +564,8 @@ export default {
       ["Do", "Write a short detail line in meta: an item count, a type and size, or when it was edited."],
       ["Do", "Set size on the FileGrid so every tile shares one figure size."],
       ["Do", "Set dropTarget on a FileGridItem while something is dragged over it; its Folder tips open."],
-      ["Don't", "Expect multi-select or rename: the grid selects one tile at a time."],
+      ["Do", "Set multiple on the FileGrid to choose several tiles, with values and onValuesChange: a click chooses one, Cmd or Ctrl+click adds, Shift+click adds the run."],
+      ["Don't", "Expect rename in place: a tile's name is not editable."],
       ["Don't", "Set figureAlt when the name already says what the image is; the image is decorative by default."],
     ],
     // Spec: Anatomy, Coherence pass; source: FileTile.tsx.
@@ -554,11 +581,14 @@ export default {
       ["Tab", "Moves into the FileGrid at its selected or first tile: one stop for the whole grid."],
       ["Up or Down or Left or Right", "Moves between tiles by their position on screen."],
       ["Home or End", "Moves to the first or last tile."],
-      ["Space", "Selects the focused tile."],
+      ["Space", "Selects the focused tile; with multiple, adds or removes it."],
       ["Enter", "Opens the focused tile with onOpen; without onOpen, selects it."],
+      ["Shift+Left or Shift+Right", "With multiple, moves and adds the tiles passed over (Shift with Up or Down too)."],
+      ["Ctrl+A or Cmd+A", "With multiple, chooses every tile, or none when all are chosen."],
     ],
     aria: [
       ["role=\"option\", aria-selected", "On each FileGridItem, inside the grid's listbox; typeahead matches its name."],
+      ["aria-multiselectable", "On the grid's listbox, with multiple."],
       ["alt", "On an image figure from figureAlt, empty by default; the figure is hidden from assistive tech unless it has one."],
       ["aria-disabled", "On a disabled FileGridItem, which typeahead and the arrows skip."],
     ],
@@ -568,7 +598,7 @@ export default {
     // Spec: Job and boundaries.
     instead: [
       ["An image or other media with a caption", ["figure"], "Figure frames any media with a caption, and can hold a Video player."],
-      ["A framed preview of a page or screen", ["preview-frame"], "Preview frame shows a live page, not a video."],
+      ["A framed preview of a page or screen", ["design-card"], "Design card shows a page or screen, not a video."],
       ["A video among other assets to browse", ["asset-card"], "Asset card shows the asset with its name; open it to play."],
     ],
     // Spec: Round 40 (layouts), Round 42 and 47, Behavior and accessibility; source: VideoPlayer.tsx JSDoc.
@@ -626,7 +656,7 @@ export default {
       ["A video the reader plays", ["video-player"], "Video player draws Area's own controls; put it inside a Figure to caption it."],
       ["Media with a title, text and actions on one surface", ["card"], "Card presents a piece of content; Figure only captions media."],
       ["An asset to browse among others, with its name", ["asset-card"], "Asset card frames the asset with its name and controls."],
-      ["A framed preview of a page or screen", ["preview-frame"], "Preview frame shows a page at its own size inside a frame."],
+      ["A framed preview of a page or screen", ["design-card"], "Design card shows a page or screen in its frame."],
     ],
     // Spec: Round 34 to 38, Feedback log; source: Figure.tsx JSDoc.
     practices: [
@@ -882,6 +912,151 @@ export default {
     },
     aria: [
       ["id", "On the heading from titleId, for the section's aria-labelledby."],
+    ],
+  },
+
+  "page-header": {
+    // Spec: Job and boundaries; PageHeader.tsx JSDoc.
+    instead: [
+      ["A titled group inside a page", ["section-heading"], "Section heading heads a block of a page; Page header heads the page itself, once."],
+      ["A window's top bar, with tabs, search and toggles", ["titlebar"], "Titlebar is the window's chrome; Page header sits at the top of the page's content."],
+      ["Where someone is, as a path, without a title", ["breadcrumb"], "Breadcrumb alone; put it in Page header's parent slot when the page has a title."],
+    ],
+    // Spec: Variants, Decisions, Behavior and accessibility.
+    practices: [
+      ["Do", "Give a page one Page header, at the top of its content, with its title as the page's h1."],
+      ["Do", "Use md for a page, sm for a sub-page or a page inside a panel, lg for a top-level page such as a home or a library."],
+      ["Do", "Put the page's parents in parent as a Breadcrumb that ends at the parent, or a back Link; leave it out on a top-level page."],
+      ["Do", "Keep actions to the page's own commands, at most one primary, last; the rest can go in a Menu."],
+      ["Do", "Put the page's Tabs or a Segmented of its views in navigation, under the description."],
+      ["Don't", "Repeat the title in the description, or write a description that only restates the page's name."],
+      ["Don't", "Put filters or a selection's actions in the header; use Filter bar and Selection bar under it."],
+    ],
+    // Spec: Anatomy; manifest elements.
+    parts: {
+      root: "A header element: owns the title's type step and the space between its parts.",
+      parent: "The way back, over the title: a Breadcrumb or a back Link.",
+      title: "The page's name, a heading (h1 by default) at the size's title step, strong.",
+      actions: "The title's commands at its end, centred on the title's line.",
+      description: "One or two sentences in the muted ink under the title, at a readable measure.",
+      navigation: "The page's Tabs or views, under the title and its description.",
+    },
+    aria: [
+      ["id", "On the title from titleId, for the page region's aria-labelledby."],
+    ],
+  },
+
+  mention: {
+    // Spec: Job and boundaries; Mention.tsx.
+    instead: [
+      ["A link to a page or a site, in words", ["link"], "Link is the words of a sentence; a Mention names a person, file, page or date with its mark."],
+      ["Something attached to a message before it is sent", ["attachment", "chip"], "Attachment and Chip's input kind sit in the Composer's context row, not in the text."],
+      ["A person's picture and name on their own", ["avatar"], "Avatar shows who someone is; a Mention refers to them inside text."],
+      ["A label that sorts or marks something", ["tag", "badge"], "Tag and Badge label; a Mention points at what it names."],
+    ],
+    // Spec: Variants, Decisions, Behavior and accessibility.
+    practices: [
+      ["Do", "Put it inside the sentence it belongs to: it keeps the text's type and ink, and wraps with it."],
+      ["Do", "Give href when the reference has a place to go, and onClick for a person's card or a date's picker."],
+      ["Do", "Pass a person's picture or a team's icon as icon; the kind's mark is the fallback."],
+      ["Do", "Set due on a date that has come or passed, and dateTime on every date."],
+      ["Do", "Use soft in messages and comments, plain where many mentions sit close, and underline for a page in prose."],
+      ["Don't", "Mix variants in one text."],
+      ["Don't", "Cut a mention short: a reference is read whole, so it wraps instead."],
+      ["Don't", "Use a Mention for a plain link with no person, file, page or date behind it."],
+    ],
+    // Spec: Anatomy; manifest elements and states.
+    parts: {
+      root: "A span, a link with href or a button with onClick, in the sentence's type and ink; soft draws a pill on the mark plate.",
+      icon: "The kind's mark in the extra-small icon slot, on the text's cap height: a person, a document, a link, a calendar, or the icon you pass.",
+      label: "The words, wrapping with the sentence; a date's are a time element.",
+    },
+    states: {
+      due: "A date that has come or passed: the words and the mark in the danger ink, with Due said after them.",
+    },
+    keyboard: [
+      ["Tab", "Reaches a mention that is a link or a button; a plain one is text."],
+      ["Enter", "Follows a link mention, or presses a button mention."],
+      ["Space", "Presses a button mention."],
+    ],
+    aria: [
+      ["aria-hidden", "On the mark: the words name the mention."],
+      ["datetime", "On a date's time element, from dateTime."],
+    ],
+  },
+
+  chart: {
+    // Spec: Job and boundaries.
+    instead: [
+      ["One value in a range, or parts of one measure in a bar", ["meter"], "Meter shows where a value sits against its limit; a Chart compares values across rows."],
+      ["A task's progress toward done", ["progress"], "Progress is a task moving; a Chart is data that is already there."],
+      ["Exact values to read, sort or compare row by row", ["table"], "Table is for reading values; a Chart is for their shape. A Chart's table view is that Table."],
+      ["One figure that leads a widget, with no change against a period", ["card"], "CardValue sets a card's figure; ChartNumber adds the change and what it is against."],
+    ],
+    // Spec: Variants, Decisions, Behavior and accessibility.
+    practices: [
+      ["Do", "Give every chart a label: it names the plot and its table for assistive tech."],
+      ["Do", "Title the chart in its Card and leave one series without a legend: the title already names it."],
+      ["Do", "Pass series in a fixed order, so each keeps its color by its place in every chart of the page."],
+      ["Do", "Write values with formatValue (units, currency, compact figures), so the axis, the tooltip and the table agree."],
+      ["Do", "Use stacked when the series add up to a whole worth reading, grouped bars when each is compared on its own."],
+      ["Do", "Set tableToggle where people may want the exact values; the hidden table is always there for assistive tech."],
+      ["Do", "Set loading while the data loads, with delay when a load is usually quick, and an emptyText that names what is missing."],
+      ["Do", "Set a ChartNumber's tone by what the change means: success when up is good, danger when it is trouble, neutral otherwise."],
+      ["Don't", "Color series by status: status has its own data colors, and series never mean good or bad."],
+      ["Don't", "Plot more series than the eight colors: past eight the colors repeat; group the rest as one."],
+      ["Don't", "Use a donut for parts that don't make a whole, or for more than a handful of parts."],
+      ["Don't", "Put a chart's only copy of a value in the tooltip: the reader may never point at it."],
+    ],
+    // Spec: Anatomy; manifest elements.
+    parts: {
+      root: "The chart: the plot, its legend and the hidden table, 12 apart; kind and size set what is drawn and how tall.",
+      plot: "The drawing's box, one stop in the Tab order, named by label; the arrow keys walk the values and say each one.",
+      svg: "The drawing at the box's own width, so its text never scales; hidden from assistive tech, which reads the table.",
+      grid: "A gridline at a round value, in the dividers' line.",
+      baseline: "The line at zero, in the divider's line.",
+      guide: "A dashed line at the value under the pointer or the keys, on a line or area chart.",
+      tick: "An axis label: small, muted, tabular figures.",
+      mark: "A bar or a donut's part, flat in its series' color, rounded only at its value end; bars 2 apart.",
+      band: "The hover plate behind the bars under the pointer or the keys.",
+      line: "A series' line, 1.5 in its mark color.",
+      wash: "An area's fill: a wash of its color under its line, or flat bands when stacked.",
+      part: "The line in the ground that parts stacked areas.",
+      dot: "A point shown under the pointer or the keys, ringed in the ground.",
+      center: "The donut's total, in the middle.",
+      "center-label": "What the total counts, under it.",
+      tooltip: "Area's Tooltip beside the value: its x, then a row per series with its key, name and value.",
+      "tooltip-title": "The x the tooltip is about.",
+      "tooltip-row": "One series in the tooltip: key, name and value.",
+      key: "An 8 square of a series' color, in the legend and the tooltip.",
+      legend: "The series under the plot, each a toggle; the table toggle at its end.",
+      "legend-item": "A button that hides or shows its series; a hidden one keeps its name, struck through, and empties its key.",
+      "legend-label": "The series' name.",
+      view: "The Show table toggle, a ghost Button, pressed while the table shows.",
+      table: "Area's Table of the data, in the plot's place.",
+      empty: "The empty words in the plot's place.",
+      label: "ChartNumber's label, muted, over the figure.",
+      figure: "ChartNumber's figure, a card's value style.",
+      change: "The change as a soft Badge with its arrow, then what it is against.",
+      note: "What the change is against, small and muted.",
+    },
+    states: {
+      active: "The value under the pointer or the keys: its band, its part, its points and the tooltip show.",
+      busy: "Loading: aria-busy, and a Skeleton in the plot's place.",
+    },
+    keyboard: [
+      ["Tab", "Reaches the plot, then each legend toggle and the table toggle."],
+      ["Right or Down", "Moves to the next value and says it."],
+      ["Left or Up", "Moves to the value before and says it."],
+      ["Home or End", "Moves to the first or the last value."],
+      ["Escape", "Hides the tooltip."],
+      ["Enter or Space", "On a legend toggle, hides or shows its series."],
+    ],
+    aria: [
+      ["role=\"group\"", "On the plot, named by label, described by the keys hint."],
+      ["aria-pressed", "On each legend toggle (true while shown) and on the table toggle (true while the table shows)."],
+      ["aria-busy", "On the chart while loading."],
+      ["aria-hidden", "On the drawing and the tooltip: the hidden table holds the data, and the keys say each value through the shared announcer."],
     ],
   },
 };

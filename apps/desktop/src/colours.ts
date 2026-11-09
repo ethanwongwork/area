@@ -12,7 +12,7 @@
  */
 import { useInsertionEffect, useMemo } from "react";
 import TOKENS from "@area/tokens/tokens.json";
-import { colourCss, formatOklch, isColour, parseColour, presetPick, solvePage } from "@area/tokens/colours";
+import { colourCss, formatOklch, isColour, parseColour, presetPick, solvePage } from "@area/tokens/color";
 import type { CanvasAxes } from "./studio.tsx";
 
 export type Mode = "light" | "dark";

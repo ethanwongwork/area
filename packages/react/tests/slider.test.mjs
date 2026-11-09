@@ -195,3 +195,11 @@ test("every bar's grip is the fill's end inset by 4, white on a neutral plate or
   assert.match(css, /\.area-slider:is\(\.area-slider--inside, \.area-slider--bar\[data-gradient\]\) \{\s*--_grip-ink: #fff;/);
   assert.doesNotMatch(css, /--_grip-at-(min|max)|--_off-(min|max)/, "the grip never hides at an end");
 });
+
+test("Slider range has onValueCommit, as Slider, and passes the event to onValueChange (components audit O7)", () => {
+  const source = readFileSync(new URL("../src/components/SliderRange.tsx", import.meta.url), "utf8");
+  assert.match(source, /onValueCommit\?: \(value: SliderRangeValue\) => void;/);
+  assert.match(source, /onValueChange\?: \(value: SliderRangeValue, event: SyntheticEvent\) => void;/);
+  // A release commits once: the rail's own release and the handle's commit share the last committed pair.
+  assert.match(source, /if \(same\(next, committed\.current\)\) return;/);
+});

@@ -21,6 +21,7 @@ import { toneDerived } from "../axes/tone-tint.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 import { brandDefaultCss } from "../semantic/brand.ts";
 import { DATA_STATUS } from "../color/series.ts";
+import { LABEL_MARK_TONES, TONE_FAMILY, hueRoleCss, markRung } from "../semantic/hues.ts";
 
 /** 4px base with 2px, 6px and 10px half-steps for tight control interiors. */
 export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96] as const;
@@ -104,6 +105,11 @@ export function baseTokens(): Record<string, string> {
   // The one disabled dimming, for controls that dim rather than repaint (audit S21b; was 0.5
   // written in 17 rules). Text fields repaint instead (DESIGN_SYSTEM "Shared state paint").
   out[`${PREFIX}opacity-disabled`] = "0.5";
+
+  // The scale an overlay enters from and leaves to (docs/MOTION.md, "Overlays"; owner 2026-11-07, system gaps C7): Dialog,
+  // Command palette, Popover, Menu, Select's list, Tooltip and Hover card. Was 0.97 written in each (Radix Themes 0.97;
+  // Cursor's modal .97). Reduced motion resolves every duration to 0, so it never moves there.
+  out[`${PREFIX}overlay-scale`] = "0.97";
 
   // Charts' status colours (color/series.ts DATA_STATUS; data views rounds 14 and 15): good, some trouble, failed, for
   // trackers, uptime and CI runs. The same in light and dark; Area's success, warning and danger roles stay for text.
@@ -310,6 +316,32 @@ function derivedOnPage(): Record<string, string> {
     [`${PREFIX}input-chevron`]: `var(${PREFIX}stroke-control)`,
     // The invalid edge uses the most saturated readable danger endpoint. Its halo is the
     // same context colour at low alpha rather than an unrelated neutral shadow.
+    // A status mark's ink (owner, 2026-11-07, system gaps C5): the icon a status surface leads with (Alert, Toast),
+    // a brighter rung than the tone's words, 3.5:1 or more on white (owner, 2026-09-27: more vivid); in dark the
+    // tone's own ink. One role, so Alert and Toast no longer each hard-code the four.
+    [`${PREFIX}fg-danger-mark`]: `light-dark(var(${PREFIX}red-500), var(${PREFIX}fg-danger))`,
+    [`${PREFIX}fg-warning-mark`]: `light-dark(var(${PREFIX}orange-550), var(${PREFIX}fg-warning))`,
+    [`${PREFIX}fg-success-mark`]: `light-dark(var(${PREFIX}green-550), var(${PREFIX}fg-success))`,
+    [`${PREFIX}fg-info-mark`]: `light-dark(var(${PREFIX}blue-500), var(${PREFIX}fg-info))`,
+    // Caution and discovery (components audit 2026-11-07, O4: Alert, Toast and Indicator take Button's seven tones), by
+    // the same rule: the first rung from 500 that clears 3.5:1 on white (yellow 500 is 3.0, 550 3.7; purple 500 4.7).
+    [`${PREFIX}fg-caution-mark`]: `light-dark(var(${PREFIX}yellow-550), var(${PREFIX}fg-caution))`,
+    [`${PREFIX}fg-discovery-mark`]: `light-dark(var(${PREFIX}purple-500), var(${PREFIX}fg-discovery))`,
+    // The label tones' marks (components audit D5, 2026-11-07), by the same rule (semantic/hues.ts markRung): pink 500,
+    // brown 550, gray's warm 500. Their icon role reads them, so every hue has an icon ink.
+    ...Object.fromEntries(LABEL_MARK_TONES.map(tone => [`${PREFIX}fg-${tone}-mark`, `light-dark(var(${PREFIX}${TONE_FAMILY[tone]}-${markRung(TONE_FAMILY[tone]!)}), var(${PREFIX}fg-${tone}))`])),
+    // Every label hue's full set of roles (components audit D5; semantic/hues.ts): text, icon, border, the tint and its
+    // steps, the accent and its words, and the translucent ground and ring. Tag, Board and Link read these.
+    ...hueRoleCss(PREFIX),
+    // The change words' inks (components audit D6, 2026-11-07; Governance § 4, "Change words"): Tree view's status letter,
+    // a Tab's label, Edit summary's counts. Cursor 3.27.22's git decorations (workbench.glass.main.js): added green
+    // #70B489, modified amber #F1B467, removed red #FC6B83, untracked #88C0D0 and renamed cyan; Area has no cyan, so
+    // untracked and renamed take info's blue, its nearest hue, and git's letter tells them apart.
+    [`${PREFIX}fg-change-added`]: `var(${PREFIX}fg-success)`,
+    [`${PREFIX}fg-change-modified`]: `var(${PREFIX}fg-warning)`,
+    [`${PREFIX}fg-change-deleted`]: `var(${PREFIX}fg-danger)`,
+    [`${PREFIX}fg-change-untracked`]: `var(${PREFIX}fg-info)`,
+    [`${PREFIX}fg-change-renamed`]: `var(${PREFIX}fg-info)`,
     [`${PREFIX}input-invalid-color`]: `var(${PREFIX}fg-danger-vivid)`,
     [`${PREFIX}input-invalid-halo-color`]:
       `color-mix(in srgb, var(${PREFIX}input-invalid-color) 14%, transparent)`,
@@ -397,6 +429,13 @@ function derivedOnPage(): Record<string, string> {
     // sets its arrival to these (the base transition is the leave), so Off and Speed 0 land at once as before.
     [`${PREFIX}hover-in`]: `calc(var(${PREFIX}duration-fast) * var(${PREFIX}feedback-hover))`,
     [`${PREFIX}press-in`]: `calc(var(${PREFIX}duration-fast) * var(${PREFIX}feedback-press))`,
+    // Fades (docs/MOTION.md, "Reduced motion"; owner 2026-11-07, system gaps M2): an opacity change reads these, movement
+    // (scale, translate, size, rotate) reads the durations. They are the durations here; under reduced motion the
+    // durations go to 0 and these stay short (emit/css.ts), so a surface still fades in place and nothing moves.
+    [`${PREFIX}fade-fast`]: `var(${PREFIX}duration-fast)`,
+    [`${PREFIX}fade-base`]: `var(${PREFIX}duration-base)`,
+    [`${PREFIX}fade-moderate`]: `var(${PREFIX}duration-moderate)`,
+    [`${PREFIX}fade-slow`]: `var(${PREFIX}duration-slow)`,
   };
 }
 
@@ -410,7 +449,8 @@ function derivedOnPage(): Record<string, string> {
  * step    spacing keeps each level's ratio of space to type (Compact 12 at 12, Default 16 at 14,
  *         Comfortable 20 at 14), rounded to halves: round((16 − ratio × base) / 4, 0.5). It is
  *         `ui-dense`, the factor component insets are written against (`x − y × ui-dense`, every
- *         y 2, 4 or 8, so halves stay whole pixels): 1 at Compact 12, 0 at Default 14.
+ *         y 2, 4 or 8, so halves stay whole pixels): 1 at Compact 12, 0 at Default 14. Gaps on the 2px
+ *         ladder read `ui-gap-step`, the curve rounded to whole steps, so they stay on 2 · 4 · 6 · 8.
  * marks   text labels (Badge, Count, Kbd) sit on the small-text line plus the level's room; the
  *         check box and toggle come from the type (`type-box`); static marks hold.
  */
@@ -420,11 +460,17 @@ function sizeDerivations(): Record<string, string> {
   const down = `min(${level}, 0)`;
   const up = `max(${level}, 0)`;
   const step = v("ui-dense");
+  const gapStep = v("ui-gap-step");
+  const raw = `calc((16 - (8 / 7 + ${up} * 2 / 7 + ${down} / 7) * ${v("type-base")}) / 4)`;
   const height = (line: string, room: number, floor: number) =>
     `max(${floor}px, calc(${line} + (${room}px + 2px * ${level}) * 2))`;
   const out: Record<string, string> = {
     [`${PREFIX}ui-level`]: `clamp(${v("type-level-min")}, ${v("density-level")}, ${v("type-level-max")})`,
-    [`${PREFIX}ui-dense`]: `round(nearest, calc((16 - (8 / 7 + ${up} * 2 / 7 + ${down} / 7) * ${v("type-base")}) / 4), 0.5)`,
+    [`${PREFIX}ui-dense`]: `round(nearest, ${raw}, 0.5)`,
+    // The gap step: the same curve rounded to whole steps, for the 2px gap ladder (owner, 2026-11-07, system gaps L3).
+    // Halves of a 2px multiplier landed gaps between the ladder's rungs (Card's list items 7 apart at type 13); the raw
+    // curve there is 0.29, so the gaps stay 8 / 6 while the 4px insets take the half step (14).
+    [`${PREFIX}ui-gap-step`]: `round(nearest, ${raw}, 1)`,
     [`${PREFIX}ui-size`]: v("text-base-size"),
     [`${PREFIX}ui-leading`]: v("text-base-leading"),
     // Rows keep at least 5 above and below their text (owner, 2026-10-22, review of docs/research/cursor-audit-2026-10-22.md
@@ -437,8 +483,8 @@ function sizeDerivations(): Record<string, string> {
     // at every type and density (owner 2026-10-21; ChatGPT's 35 and Notion's 30 rows sit 1 apart). Was 2 − 2 × step:
     // flush at Compact (evidence audit R7, VS Code and Figma menus), up to 5 at Comfortable.
     [`${PREFIX}ui-row-gap`]: "1px",
-    [`${PREFIX}ui-stack`]: `calc(6px - 2px * ${step})`,
-    [`${PREFIX}ui-cluster`]: `calc(8px - 2px * ${step})`,
+    [`${PREFIX}ui-stack`]: `calc(6px - 2px * ${gapStep})`,
+    [`${PREFIX}ui-cluster`]: `calc(8px - 2px * ${gapStep})`,
     [`${PREFIX}gap-row`]: `calc(12px - 4px * ${step})`,
     [`${PREFIX}inset-surface-sm`]: `calc(12px - 4px * ${step})`,
     [`${PREFIX}inset-surface-md`]: `calc(16px - 4px * ${step})`,
@@ -453,10 +499,10 @@ function sizeDerivations(): Record<string, string> {
   };
   const tiers: Record<string, { line: string; room: number; floor: number; text: string; icon: string; gap: string }> = {
     xs: { line: v("type-small-leading"), room: 4, floor: 20, text: "text-xs", icon: v("type-icon-xs"), gap: "4px" },
-    sm: { line: v("type-leading"), room: 4, floor: 24, text: "text-base", icon: v("type-icon"), gap: `calc(6px - 2px * ${step})` },
-    md: { line: v("type-leading"), room: 6, floor: 24, text: "text-base", icon: v("type-icon"), gap: `calc(6px - 2px * ${step})` },
+    sm: { line: v("type-leading"), room: 4, floor: 24, text: "text-base", icon: v("type-icon"), gap: `calc(6px - 2px * ${gapStep})` },
+    md: { line: v("type-leading"), room: 6, floor: 24, text: "text-base", icon: v("type-icon"), gap: `calc(6px - 2px * ${gapStep})` },
     lg: { line: v("type-leading"), room: 10, floor: 24, text: "text-base", icon: v("type-icon"), gap: "6px" },
-    xl: { line: v("type-reading-leading"), room: 12, floor: 24, text: "text-lg", icon: `max(${v("type-icon")}, calc(24px + 8px * ${down}))`, gap: `calc(8px - 2px * ${step})` },
+    xl: { line: v("type-reading-leading"), room: 12, floor: 24, text: "text-lg", icon: `max(${v("type-icon")}, calc(24px + 8px * ${down}))`, gap: `calc(8px - 2px * ${gapStep})` },
   };
   for (const [tier, spec] of Object.entries(tiers)) {
     out[`${PREFIX}control-${tier}`] = height(spec.line, spec.room, spec.floor);

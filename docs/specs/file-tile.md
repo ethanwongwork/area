@@ -133,3 +133,13 @@ card's images sit inside a frame).
   wide under a 64 figure; the two-line rule only held inside the grid.
 - **Verdict:** approved (owner, 2026-10-29, review page round 83); Complete.
 - 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): The image's ground painted `bg-subtle`, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light).
+
+### 2026-11-07 · Several (components audit V7)
+
+- **What changed:** File grid takes List box's `multiple` (`values` / `defaultValues` / `onValuesChange`): its props
+  extend List box's and pass through, so nothing of its own changed. A click chooses one tile, Cmd or Ctrl+click adds or
+  removes one, Shift+click adds the run, Space toggles, Ctrl or Cmd+A chooses all; Enter still opens (docs/specs/list-box.md,
+  "Several"). It chose one value only before.
+- **Why:** docs/research/components-audit-2026-11-07/internal.md (choosing several files or assets is the grids' use);
+  the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

@@ -18,8 +18,9 @@ Shows a set of options and lets a person choose one, by pointer or keyboard, wit
 layouts: a list (one option per row) and a grid (options flow in rows and columns: icons, swatches, type samples).
 
 Not this component: a choice that opens from a field (Select, Custom select, Combobox: their lists are popups);
-commands (Menu); several independent toggles (Toggle group, Checkbox group); a data table with cells (Table). One
-value only for now; multiple selection waits for a use.
+commands (Menu); several independent toggles (Toggle group, Checkbox group); a data table with cells (Table). With
+`multiple` (components audit V7, 2026-11-07) it chooses several: the use is choosing several files or assets in File
+grid and Asset grid, which are built on it.
 
 ## Variants
 
@@ -28,6 +29,7 @@ value only for now; multiple selection waits for a use.
 | layout | list | React Aria ListBox's default; the value-picker rows Area already has (Custom select) | Settings lists, pickers inline in a panel |
 | layout | grid | React Aria ListBox `layout="grid"`; the app's Icons sheet; Figma's asset grid, Finder's icon view (keyboard model) | the app's Icons tab |
 | selectionFollowsFocus | boolean | WAI-ARIA APG listbox: selection may follow focus in a single-select listbox | the app: the Inspector follows the keys |
+| multiple | boolean, with `values` / `defaultValues` / `onValuesChange` | APG multi-select listbox; Custom select's `multiple` (the same three names) | File grid and Asset grid (several files or assets) |
 
 ## Sources
 
@@ -66,7 +68,13 @@ div.area-list-box.area-list-box--{list|grid}[role=listbox]   owns: keys, the Tab
 
 ## Behavior and accessibility
 
-Tab enters at the chosen option (or the first) and leaves the set; Shift+Tab returns to the same option. Clicking an
+Tab enters at the chosen option (or the first; with `multiple`, the first chosen) and leaves the set; Shift+Tab
+returns to the same option. With `multiple` (APG multi-select listbox, the recommended model: focus moves without
+choosing): Space or Enter adds or removes the focused option; Shift with an arrow, Home or End moves and adds the
+options from the last one toggled to where focus lands; Ctrl or Cmd+A chooses every option, or none when all are
+chosen. A click toggles a row in the list; in a grid (files, assets) a click chooses that one alone, Cmd or Ctrl+click
+adds or removes it and Shift+click adds the run from the last one clicked, as a file browser does. The set keeps the
+options' order; `aria-multiselectable` on the root; `selectionFollowsFocus` is ignored. Clicking an
 option chooses it and moves the Tab stop there. With `selectionFollowsFocus`, the arrows also choose. `textValue`
 gives typing a name for an option whose content is not text (an icon). Options may carry `aria-label`. Forced colours:
 the focus ring is an outline; the selected plate is a background, so in forced colours selection shows by the ring
@@ -129,3 +137,39 @@ Grid options press at `bg-component-pressed`, one step past selected (Notion pre
 
 - **What changed:** A chosen option's check fades and grows in as Menu's does, instead of appearing at once.
 - **Why:** One rule for a check in a list. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+### 2026-11-07 · The event in onValueChange (components audit O3)
+
+- **What changed:** `onValueChange(value, event)` passes the click, key or focus.
+- **Why:** ListBox.tsx:41. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Selection when the list isn't focused (components audit V15)
+
+- **What changed:** while focus is outside the List box (`:not(:focus-within)`), its selected option takes the hover
+  plate instead of the selected fill, in both layouts; the check still marks it. Every tile with a selection now rests
+  on the quieter plate until the list is focused. File grid and Asset grid draw selection as an edge and are unchanged.
+- **Why:** docs/research/components-audit-2026-11-07/cursor.md, "Inactive selection" (the editor's lists paint `listActiveSelectionBackground` only while
+  focused, `listInactiveSelectionBackground` otherwise). One rule for every list with its own focus, so the list you
+  are in reads as the active one. The owner took every recommendation ("Take all recs", 2026-11-07).
+- **Decision:** the quieter plate is the hover plate, not a new token. A role declared on `:root` that reads
+  `bg-component-active` would resolve there and keep the page's fill on every raised and recessed ground (a menu, a
+  panel, a sidebar); the hover plate is already the step below selected on every ground, its words' contrast is
+  asserted, and Hover fill floors at 25, so it is never invisible (CONTRAST.md, "The quieter selected plate has a
+  floor"). At Selected fill 0 the two are one plate and nothing changes.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · Several (components audit V7)
+
+- **What changed:** `multiple`, with the set as `values` / `defaultValues` / `onValuesChange(values, event)`; the
+  keyboard and pointer contract above. File grid and Asset grid pass it through (their props extend List box's), so a
+  file or asset grid chooses several with no code of its own; Enter still opens there. Tiles: List box Behavior /
+  several, File tile Behavior / several.
+- **Why:** docs/research/components-audit-2026-11-07/internal.md (List box picks one value only, and the grids inherit
+  it, though choosing several files or assets is their use), primer.md (SelectPanel, the multiple selection variant);
+  the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Decision:** the set is `values`, not `value` as an array. The brief suggested `selectionMode` with `value` turning
+  into `string[]`; Custom select already chooses several with `multiple` and `values` (the app uses it), `selectionMode`
+  is listed as a camelCase deviation (Governance § 4), and a `value` whose type follows a mode would loosen every
+  single-select caller's types and the grids' props. GOVERNANCE.md § 4 now names `multiple` / `values` as the rule.
+- **Verdict:** awaiting the owner.

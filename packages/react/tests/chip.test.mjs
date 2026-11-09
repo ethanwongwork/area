@@ -21,7 +21,7 @@ test("assist and suggestion chips are actions rather than toggles", () => {
 test("a delete-only input chip exposes only the dismiss action as a button", () => {
   const html = render({ kind: "input", onRemove: () => {} });
   assert.match(html, /area-chip__action/);
-  assert.match(html, /area-chip__remove/);
+  assert.match(html, /area-chip__dismiss/);
   assert.match(html, /aria-label="Remove Design"/); // names what it removes (audit C-6)
   assert.match(html, /<path/);
   assert.equal((html.match(/<button/g) ?? []).length, 1);

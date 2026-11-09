@@ -1,7 +1,7 @@
 // Table of contents: a page's sections as Nav's marker rows, with the section being read marked as the page
 // scrolls (a docs "On this page" outline: VitePress, MDN, Primer). docs/specs/table-of-contents.md.
 import { Fragment, forwardRef, useEffect, useMemo, useRef, useState } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, SyntheticEvent } from "react";
 import { cx, tableOfContentsVariants } from "../variants.ts";
 import { Nav, NavGroup, NavItem } from "./Nav.tsx";
 import { assignRef } from "./overlay.ts";
@@ -27,8 +27,9 @@ export interface TableOfContentsProps extends Omit<HTMLAttributes<HTMLElement>, 
   value?: string;
   /** The section marked before the first scroll measure (uncontrolled); `top`'s id by default. */
   defaultValue?: string;
-  /** Called when the section being read changes, by scrolling or a click. */
-  onValueChange?: (id: string | undefined) => void;
+  /** Called when the section being read changes, by scrolling or a click: the section, and the click that chose it
+   * (absent when scrolling moved it). */
+  onValueChange?: (id: string | undefined, event?: SyntheticEvent) => void;
   /** @deprecated Use `value` (DESIGN_SYSTEM.md, One API vocabulary). */
   current?: string;
   /** @deprecated Use `onValueChange`. */
@@ -87,7 +88,7 @@ export const TableOfContents = /* @__PURE__ */ forwardRef<HTMLElement, TableOfCo
 
   const rows = (list: TableOfContentsItem[], depth = 1): ReactNode => list.map(item => (
     <Fragment key={item.id}>
-      <NavItem href={`#${item.id}`} aria-current={item.id === current ? "location" : undefined} onClick={() => { if (currentProp === undefined) setLocal(item.id); reported.current = item.id; onChange?.(item.id); }}>
+      <NavItem href={`#${item.id}`} aria-current={item.id === current ? "location" : undefined} onClick={event => { if (currentProp === undefined) setLocal(item.id); reported.current = item.id; onChange?.(item.id, event); }}>
         {item.label}
       </NavItem>
       {item.children?.length && depth < levels ? <NavGroup nested>{rows(item.children, depth + 1)}</NavGroup> : null}
@@ -98,7 +99,7 @@ export const TableOfContents = /* @__PURE__ */ forwardRef<HTMLElement, TableOfCo
     <Nav ref={node => assignRef(ref, node)} selection="marker" className={cx(tableOfContentsVariants(), className)}
       aria-label={ariaLabel ?? (typeof title === "string" ? title : "On this page")} {...rest}>
       {title !== false ? <div className={tableOfContentsVariants.element("title")} aria-hidden="true">{title}</div> : null}
-      {top ? <NavItem href={`#${top.id}`} aria-current={current === top.id ? "location" : undefined} onClick={() => { if (currentProp === undefined) setLocal(top.id); reported.current = top.id; onChange?.(top.id); }}>{top.label}</NavItem> : null}
+      {top ? <NavItem href={`#${top.id}`} aria-current={current === top.id ? "location" : undefined} onClick={event => { if (currentProp === undefined) setLocal(top.id); reported.current = top.id; onChange?.(top.id, event); }}>{top.label}</NavItem> : null}
       {rows(items)}
     </Nav>
   );

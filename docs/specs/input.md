@@ -284,3 +284,15 @@ Action buttons press at `bg-component-pressed`, one step past selected (Notion p
   the field's concentric corner; it was plain text in the same ink as "No file chosen".
 - **Why:** The two read as one sentence with nothing marking the action. Native pickers, shadcn and Untitled UI all
   set the button apart; Area's own rule puts a 500 label on a fill.
+
+### 2026-11-07 · One dismiss API and part (system gaps C4)
+
+- **What changed:** the leading glyph is `icon` again, as every other family's; `leadingIcon` stays as a deprecated alias (`icon` wins).
+- **Why:** one dismiss API and one part name across the families that close or remove (Governance § 4; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · onValueChange (components audit O3)
+
+- **What changed:** `onValueChange(value, event)` runs after native `onChange` (and not when it calls `preventDefault`), as Checkbox's `onCheckedChange`; Password field inherits it.
+- **Why:** Input.tsx:10-44 had native `onChange` only, while Search field on the same Input had `onValueChange`. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

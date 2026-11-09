@@ -9,6 +9,7 @@
  * matter. See `../color/contrast.ts` for why both are enforced.
  */
 import { APCA, WCAG } from "../color/contrast.ts";
+import { LABEL_HUES } from "../semantic/hues.ts";
 
 export interface ContrastAssertion {
   /** Semantic token providing the foreground. */
@@ -203,7 +204,30 @@ export const ASSERTIONS: ContrastAssertion[] = [
   ...tonalAssertions(),
   ...chromeAssertions(),
   ...stateAssertions(),
+  ...hueAssertions(),
 ];
+
+/**
+ * Every label hue's roles (semantic/hues.ts; components audit D5, 2026-11-07), held to one rule per role so Tag, Board,
+ * Link and a chart coloured by a label can take any hue: its words on the page, the surfaces and each of its own tints
+ * (and the half tint a Board column lays over the page); its icon as a non-text mark; its accent under its own words;
+ * its outline at the ambient tier the tone strokes hold.
+ */
+function hueAssertions(): ContrastAssertion[] {
+  const out: ContrastAssertion[] = [];
+  for (const hue of LABEL_HUES) {
+    const role = (name: string) => `hue-${hue}-${name}`;
+    for (const bg of ["bg-page", "bg-surface", "bg-subtle", role("bg"), role("bg-hover"), role("bg-active")]) {
+      out.push({ fg: role("text"), bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: `${hue} words` });
+    }
+    for (const bg of ["bg-page", "bg-surface", role("bg")]) {
+      out.push({ fg: role("icon"), bg, wcag: WCAG.NON_TEXT, apca: 0, note: `${hue} icon or dot` });
+    }
+    out.push({ fg: role("on-accent"), bg: role("accent"), wcag: WCAG.TEXT, apca: APCA.CONTENT, note: `words on the ${hue} accent` });
+    out.push({ fg: role("border"), bg: "bg-surface", ...STROKE.ambient, note: `${hue} outline` });
+  }
+  return out;
+}
 
 /** Strong indicator endpoints. V01 soft presentation is audited separately in the browser. */
 function stateAssertions(): ContrastAssertion[] {

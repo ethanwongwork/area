@@ -19,6 +19,13 @@ contextBridge.exposeInMainWorld("areaDesktop", {
     write: (id, text) => ipcRenderer.send("area:project-write", String(id), String(text)),
     trash: id => ipcRenderer.send("area:project-trash", String(id)),
   },
+  // Write to folder (electron/output.cjs): a system's version written into a project's folder as code.
+  output: {
+    choose: suggested => ipcRenderer.invoke("area:output-choose", suggested ?? null),
+    plan: (where, system, version) => ipcRenderer.invoke("area:output-plan", where, String(system), String(version)),
+    write: (where, system, version, prefer) => ipcRenderer.invoke("area:output-write", where, String(system), String(version), String(prefer ?? "markers")),
+    reveal: where => ipcRenderer.send("area:output-reveal", where),
+  },
   // Licensed typefaces installed on the Mac: facts about each match, never the files (electron/main.cjs).
   installedFonts: wanted => ipcRenderer.invoke("area:fonts-installed", wanted),
   // The Inspector Chat's agent (electron/agent.cjs): send a prompt, answer an approval, stop, undo edits. In a capture

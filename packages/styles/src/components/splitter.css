@@ -1,0 +1,140 @@
+/* ---------------------------------------------------------------------------
+ * Splitter
+ *
+ * Two regions side by side (horizontal) or stacked (vertical), with a handle between them that resizes them by pointer
+ * or keyboard (docs/specs/splitter.md; components audit N6, 2026-11-07). An editor's tiling sashes (a 1 line in the
+ * layout, a 4 hit area that grows to 12 after the pointer rests 300 ms, a 2 line on hover and the accent while
+ * dragging, a double-click that evens the two sides) and a chat app's ResizeHandle (orientation, keyboard) do the same
+ * job. One pane holds the size (`side`), the other fills the rest.
+ *
+ * The handle's paint is shared with Panel's resizable edge (`.area-panel__resize`): one rule for every resize edge, so
+ * the two never drift (fix the rule, not the instance; the cohesion test "every resize edge shares the handle paint").
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-splitter {
+    display: flex;
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+  .area-splitter--horizontal { flex-direction: row; }
+  .area-splitter--vertical { flex-direction: column; }
+  .area-splitter[data-resizing] { user-select: none; }
+  .area-splitter--horizontal[data-resizing] { cursor: ew-resize; }
+  .area-splitter--vertical[data-resizing] { cursor: ns-resize; }
+
+  /* The pane that fills takes what is left; the sized one keeps its size (React writes it; half before it is known). */
+  .area-splitter__pane {
+    flex: 1 1 0;
+    min-inline-size: 0;
+    min-block-size: 0;
+    overflow: auto;
+  }
+  .area-splitter__pane[data-sized] { flex: 0 0 var(--area-splitter-size, 50%); }
+
+  /*
+   * The handle: in the layout it is the 1 line between the panes (spec: sashLayoutSize 1); its hit area is 4 (sashSize
+   * 4), 1 before the line and 2 after, and grows to 12 (sashHoverSize 12) once the pointer has rested 300 ms, so passing
+   * over it never flashes. The growth is a step after the wait, never animated, so reduced motion has nothing to stop.
+   * A touch screen's hit area is 20 (workbench.sash.size on touch).
+   */
+  .area-splitter__handle {
+    --_sash-layout: var(--area-border-width); /* spec: 1 */
+    --_sash-hit: 4px; /* spec: 4 */
+    --_sash-hit-hover: 12px; /* spec: 12 */
+    --_sash-before: round(down, calc((var(--_sash-hit) - var(--_sash-layout)) / 2), 1px);
+    --_sash-after: calc(var(--_sash-hit) - var(--_sash-layout) - var(--_sash-before));
+    --_sash-rest-ink: var(--area-edge-regions);
+    --_sash-at: calc(var(--_sash-before) + var(--_sash-layout) - var(--_sash-line));
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+    outline: 0;
+  }
+  .area-splitter--horizontal > .area-splitter__handle {
+    inline-size: var(--_sash-hit);
+    margin-inline: calc(var(--_sash-before) * -1) calc(var(--_sash-after) * -1);
+    cursor: ew-resize;
+    transition: inline-size 0s, margin 0s;
+  }
+  .area-splitter--vertical > .area-splitter__handle {
+    block-size: var(--_sash-hit);
+    margin-block: calc(var(--_sash-before) * -1) calc(var(--_sash-after) * -1);
+    cursor: ns-resize;
+    transition: block-size 0s, margin 0s;
+  }
+  @media (pointer: coarse) {
+    .area-splitter__handle { --_sash-hit: 20px; --_sash-hit-hover: 20px; } /* spec: 20 on touch */
+  }
+  @media (hover: hover) {
+    .area-splitter__handle:hover { --_sash-hit: var(--_sash-hit-hover); transition-delay: var(--_sash-delay); }
+  }
+  .area-splitter__handle[data-resizing] { --_sash-hit: var(--_sash-hit-hover); transition-delay: 0s; }
+  .area-splitter--horizontal > .area-splitter__handle::before { inset-block: 0; inset-inline-start: var(--_sash-at); inline-size: var(--_sash-line); }
+  .area-splitter--vertical > .area-splitter__handle::before { inset-inline: 0; inset-block-start: var(--_sash-at); block-size: var(--_sash-line); }
+  /* At a limit the cursor shows the one way left to go, as Panel's edge does. */
+  .area-splitter--horizontal > .area-splitter__handle:is([data-side="start"][data-limit="min"], [data-side="end"][data-limit="max"]) { cursor: e-resize; }
+  .area-splitter--horizontal > .area-splitter__handle:is([data-side="start"][data-limit="max"], [data-side="end"][data-limit="min"]) { cursor: w-resize; }
+  .area-splitter--horizontal > .area-splitter__handle:dir(rtl):is([data-side="start"][data-limit="min"], [data-side="end"][data-limit="max"]) { cursor: w-resize; }
+  .area-splitter--horizontal > .area-splitter__handle:dir(rtl):is([data-side="start"][data-limit="max"], [data-side="end"][data-limit="min"]) { cursor: e-resize; }
+  .area-splitter--vertical > .area-splitter__handle:is([data-side="start"][data-limit="min"], [data-side="end"][data-limit="max"]) { cursor: s-resize; }
+  .area-splitter--vertical > .area-splitter__handle:is([data-side="start"][data-limit="max"], [data-side="end"][data-limit="min"]) { cursor: n-resize; }
+
+  /*
+   * The handle paint, one rule for every resize edge (Splitter's handle and Panel's resizable edge). At rest the line is
+   * the host's (Splitter's 1 region edge; Panel's own seam, so nothing of the handle's). After the pointer rests 300 ms
+   * it becomes a 2 line in the hover edge's ink (the editor's `:hover::before{width:2px}` in its secondary stroke); while
+   * dragging it is 2 in the accent's indicator ink at once (`[data-resizing]::before`, the editor's accent). Keyboard focus
+   * draws the 4 pill, half the edge, in the focus colour (Panel's, from Figma). Every change is a step, never animated.
+   */
+  .area-splitter__handle, .area-panel__resize {
+    --_sash-delay: 300ms; /* spec: workbench.sash.hoverDelay 300 */
+    --_sash-line: var(--area-border-width); /* spec: 1 at rest, the layout line */
+    --_sash-ink: var(--_sash-rest-ink, transparent);
+  }
+  .area-splitter__handle::before, .area-panel__resize::before {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    background-color: var(--_sash-ink);
+    transition: background-color 0s, inline-size 0s, block-size 0s, inset 0s;
+  }
+  @media (hover: hover) {
+    .area-splitter__handle:hover, .area-panel__resize:hover {
+      --_sash-line: 2px; /* spec: the hover line, 2 */
+      --_sash-ink: var(--area-border-hover);
+    }
+    .area-splitter__handle:hover::before, .area-panel__resize:hover::before { transition-delay: var(--_sash-delay); }
+  }
+  .area-splitter__handle[data-resizing], .area-panel__resize[data-resizing] {
+    --_sash-line: 2px; /* spec: 2 while dragging */
+    --_sash-ink: var(--area-accent-indicator);
+  }
+  .area-splitter__handle[data-resizing]::before, .area-panel__resize[data-resizing]::before { transition-delay: 0s; }
+  .area-splitter__handle:focus-visible::after, .area-panel__resize:focus-visible::after {
+    content: "";
+    flex: none;
+    inline-size: 4px; /* spec: Figma 4 */
+    /* spec: Figma half the edge. Written as the edge less two whole-pixel quarters, so the pill
+       centres on whole pixels on an edge of either parity (MOTION.md, crispness 1). */
+    block-size: calc(100% - 2 * round(nearest, 25%, 1px));
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-focus-color);
+  }
+  .area-splitter--vertical > .area-splitter__handle:focus-visible::after {
+    inline-size: calc(100% - 2 * round(nearest, 25%, 1px));
+    block-size: 4px; /* spec: Figma 4 */
+  }
+
+  @media (forced-colors: active) and (hover: hover) {
+    .area-splitter__handle:hover, .area-panel__resize:hover { --_sash-ink: CanvasText; }
+  }
+  @media (forced-colors: active) {
+    .area-splitter__handle { --_sash-rest-ink: CanvasText; }
+    .area-splitter__handle[data-resizing], .area-panel__resize[data-resizing] { --_sash-ink: Highlight; }
+    .area-splitter__handle:focus-visible::after, .area-panel__resize:focus-visible::after { background-color: Highlight; }
+  }
+}

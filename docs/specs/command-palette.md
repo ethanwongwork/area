@@ -13,7 +13,8 @@ A search field over a list of actions and places, opened from anywhere with a sh
 narrow by typing, move with the arrows, run with Enter. Not Combobox (it picks a value for
 a field; a palette runs things and closes), not Menu (no search, opened from a trigger).
 Notion's slash menu and ⌘K search, ChatGPT's chat search and Figma's quick actions are all
-this shape.
+this shape. Since 2026-11-07 (components audit V4) a result can carry its path and a preview shown beside the results,
+the typed text is marked in every result, and a command that asks for more opens a step of its own.
 
 ## Variants
 
@@ -21,6 +22,10 @@ this shape.
 |---|---|---|---|
 | presentation | modal (default), inline | Notion's is modal; inline for embedded search and docs | Notion |
 | composition | groups, icon, description, shortcut, disabled row | Notion: date groups, page icons, parent after the title | Notion |
+| item `path` | a result's place, after its name, muted, shortening first | V4 | Notion's search: the path after an em dash, 12px tertiary |
+| item `preview` | the active row's preview in a pane beside the results | V4 | Notion's search: the preview pane, 1006 wide with it on |
+| item `items` | a step: the command's own list, with Back | V4 | Cursor's quick input title bar with Back |
+| matches | the typed text marked in the strong weight | V4 | Cursor's quick input `list-highlightForeground` |
 | footer | key hints (default), custom, none | Notion's footer hint row | Notion |
 | state | highlighted, empty | — | Notion |
 
@@ -95,7 +100,11 @@ The dialog is a native modal `<dialog>` (focus trapped, inert page); the field i
 `role=combobox` with `aria-expanded=true` and `aria-activedescendant` on an always-shown
 `role=listbox` of grouped `role=option` rows. Focus stays in the field. ↓/↑ move (wrapping,
 skipping disabled rows), Ctrl+Home/End jump, Enter runs the highlighted row and closes
-(unless `keepOpen`), Escape clears the query and then closes, a click on the scrim closes.
+(unless `keepOpen`), Escape clears the query, then leaves a step, then closes, a click on the scrim closes. A row
+with `items` opens a step instead of running (its `onSelect` still runs): the field empties, its placeholder becomes
+the item's, the trail of steps sits muted before the typed text (`aria-describedby` on the field), Back takes the
+search icon's place, and Escape or Backspace in an empty field goes back; the step's name is announced. A closed
+palette opens at its first list.
 `hotkey="mod+k"` toggles it (⌘ on Apple platforms, Ctrl elsewhere).
 
 ## Verification
@@ -249,3 +258,41 @@ Spacing without the footer rule (2026-10-26): the hints sit 12 under the last ro
 - **Why:** the label's box is cut to its capital letters and the description's wasn't, so centring the two set the
   description slightly high. Both are cut the same way now.
 - **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.
+
+### 2026-11-07 · One announcer (components audit D1)
+
+While the palette shows and the query is not empty, the result count ("3 results", or `emptyText` when it is a string)
+is said through `announce` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")) instead of a hidden status span. No visible change.
+
+### 2026-11-07 · No size (components audit V1)
+
+- **Decision:** Command palette takes no `size`. Its 600 width is its own measurement (command-palette.css), held so the
+  query and the rows don't move between uses; it is a search over a list, not a dialog of content, and has its own modal
+  (`__modal`), not Dialog's surface.
+- **Why:** docs/research/components-audit-2026-11-07/README.md, V1. The owner took every recommendation ("Take all recs", 2026-11-07).
+
+## Preview, path, matches and steps (components audit V4, 2026-11-07)
+
+Evidence: `docs/research/components-audit-2026-11-07/notion.md` (search: preview pane and toggle, the path after each result, modal 1006 wide, result
+36 tall), `docs/research/components-audit-2026-11-07/cursor.md` (quick input: query matches highlighted, a title bar with Back for steps, row actions,
+check-all).
+
+| Part | Area value | Basis | Reason when it differs |
+|---|---|---|---|
+| `path` | after the name (and before `description`), the row's size, `fg-muted`, one line; `flex-shrink` 1000 against the name's 1, so it shortens to an ellipsis first; searched by the default filter | Notion: 12px `#a19e99` after an em dash | The row's size, not 12: it shares the row's baseline and the type count stays down; no dash, the ink separates |
+| matches | `highlightMatch(text, query)` wraps each case-insensitive occurrence in `mark.area-menu__match`: the strong weight in the row's own ink, no fill | Cursor `list-highlightForeground` (an ink) | Weight, not colour: it holds on every row plate, in forced colours and beside a muted path. One helper and one part for Command palette, Combobox and Custom select's filter (cohesion test) |
+| preview pane | shown while some row has a `preview`; holds the active row's; the palette widens to `min(100vw − 32, 1006)`, the results and the pane 3 : 2 (Notion 600 / 406), a `border-width` rule between them, the pane padded on the rows' column; hidden under 640 wide (a container query on the palette); `role="region"` named "Preview" (`previewLabel`) | Notion: 1006 modal, 600 list | Notion toggles the pane from the search bar; Area shows it whenever previews exist (no toggle; a host can drop the previews) |
+| step | `items` on a row; a chevron (Menu's sub chevron) at its end; inside: Back (24 square, its arrow on the icon column, hover plate) in the search icon's place, the trail muted in the field's type, the item's `placeholder`; the footer's Escape hint reads Back | Cursor's quick input title bar | The palette's width follows the step's rows (a step without previews is 600) |
+
+Not built from the evidence: row actions on hover (remove from recent), multi-select with checkboxes, progress under
+the field, Notion's footer icon keys (Area keeps keycaps). Verified in a static harness (Chromium): steps, Back,
+Backspace and Escape, the preview's container query and the marks; not checked in the app.
+
+- **What changed:** `CommandItem` `path`, `preview`, `items`, `placeholder`; palette `backLabel`, `previewLabel`; the
+  shared `highlightMatch` helper (exported) and Menu's `match` part; parts `path`, `more`, `back`, `step`, `body`,
+  `preview`. Tiles: Content / path, State / matches, Layout / preview, Behavior / steps.
+- **Why:** the components audit's V4; the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+- 2026-11-07 · components audit V4 → preview pane, path, matches, steps → command-palette.css, surface.css (`__match`),
+  manifest.ts, CommandPalette.tsx, highlight.tsx, Combobox.tsx (shares the marks), gallery tiles, Documentation entry,
+  command-palette.test.mjs, cohesion.test.mjs.

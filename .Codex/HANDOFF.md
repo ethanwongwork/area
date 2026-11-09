@@ -1,7 +1,7 @@
 # Handoff
 
 ## Current state (2026-11-08)
-- **Direct editing, worktree `design-direct-editing-b4f631` (uncommitted, 2026-11-08).** Owner: "fully editable vector
+- **Direct editing, worktree `design-direct-editing-b4f631` (PR, 2026-11-08; main through #216 merged in).** Owner: "fully editable vector
   figma code canvas (everything except an infinite canvas, each design is isolated to its own container only)". Research
   and ranked options: `docs/research/design-editing-2026-11-08/README.md` (three cited reading notes beside it); review page
   https://claude.ai/artifact/Ro31YaD6Uq2STLnWv4DcNv runs the slice live, 9 picks in `verdicts` (ids model, migrate, click,
@@ -25,6 +25,94 @@
   Capture keeps fields' checked/value and drops React's radio names. Checks: typecheck, desktop tests 55, build. The eight
   taken picks are in `verdicts` (version 3 of the page); "next" is open again and recommends the design's layers. Open: file size
   (iterations copy each design), pen and booleans, multi-select, a design's layer tree, Hug / Fill in grids.
+- **User flows, worktree `ecstatic-brattain-e4e57b` (PR, 2026-11-08; main through #215 merged in).** Owner: show "longer flows and complete
+  user flows with multiple pages"; study and review page https://claude.ai/artifact/L5ZPadtTxkThgz5X1m3ENe
+  (`docs/research/user-flows-2026-11-08/`), then "go with your recs, build the flow like these ui examples" (three
+  node editors). Built: a page becomes a flow at its first link (`projects.ts` links, branch, state, note; `src/flow.ts`);
+  its map on the stage in the examples' node style (`src/flow-map.tsx`, `styles/design.css`): Start, path left to right,
+  branches above, states below, link rows with ports and curves, dotted ground, dock with zoom and Play; a step opens
+  from its node and Back returns; On click › Goes to in the Design view (logged, undoable, sent to Chat); Play on the
+  stage; state switch; notes; flow checks (Inspector and Checks tab). PRODUCT_UI project-pages bullet, Candidates row
+  (flow node and connector). Checks: typecheck, app tests 49 (flow.test.ts new), app-css, playgrounds, docs; seen in the
+  browser preview light and dark. Not seen in Electron; flow patterns (proposal 8) not built. Restyled twice on the
+  owner's notes: now technical node cards (kind, name, mono source, screen 320 × 200, port rows In / outputs) with
+  port-to-port dashed lines on lanes, one turn radius, on the 8 grid; ends verified on ports by measurement. A visual pass then fixed the dock (the map pans in its
+  own box), the fit (above the dock) and state rows' words.
+- **System inventory and structure, worktree `system-inventory-structure-c39f5c` (PR, 2026-11-08; main
+  through #214 merged in).** Owner's scope review: "more straightforward editing tools for customizing and updating a design system,
+  components" (BRIEF layers 2 and 3); then "build with recs". Research, ranked options, the working copy's shape and
+  what's built: `docs/research/system-inventory-2026-11-08/README.md`; review page
+  https://claude.ai/artifact/P44jDDPeDvYu8JeB1ixbFY (`verdicts` empty). Built, every recommendation (Q1–Q7):
+  `System.library` / `Release.library` (sparse differences from the manifests, per system), `src/library.ts` (rules,
+  `resolveFamily` for the generator, three structure pilots), `@area/react` `SystemDefaults` (read by 24 families; own
+  prop, then a parent's, then the system's), Components pages hide what is left out (Show › With left out), the List
+  view is the inventory table, Design view's In <system> and Structure; Publish lists library rows and pictures the
+  changed families (`library-pictures.tsx`); projects keep their version (`projects.ts release`, `followedVersion`:
+  Fixes and Adds reach them, Needs work waits) with an Overview notice, Review and Update (`release-notice.tsx`). Field:
+  label on a vertical Stack's first line. Checks: typecheck, build, npm test, React 779, desktop tests 48, playgrounds,
+  docs, app CSS, contracts; seen in the static build (4410, browser storage; test project and release removed after)
+  light and dark. Electron not relaunched (another session's window open; inventory edits there write the owner's system
+  files). Each release in the system file also carries `inventory` and `structure` in the generator's shape (#213's
+  definition reads them); the generator doesn't apply `structure` (moved defaults) yet. Open: app chrome and example
+  screens don't take the library's defaults; Calendar and Split button don't read
+  SystemDefaults; Setup questions not built.
+
+- **Chat workflow, worktree `chat-workflow-study-c0f913` (built, committed, pull request opened, 2026-11-08).** Owner took all recs on
+  the study (https://claude.ai/artifact/GszAD4HPUQUjJoG9GwR3Km, picks in db `verdicts`; P12 and P14 Not now). Built:
+  the engine's own tools `show_options` and `log_changes` (in-process MCP, zod), AskUserQuestion on and answered from a
+  question card, pictures sent as pictures, Ask / Suggest / Change (`electron/agent.cjs`); options drawn as named
+  pictures that put their settings on the theme with Undo, questions kept as the person's reply, changes in design words
+  with Show code, approvals in plain words, work folded to one line (Settings › Chat › Work), More folds, Edit / Restore
+  to here / Try again / Try another way, Ask about this, @ menu of design things, + menu, starters, long paste chip,
+  Send to chat as one card (`src/chat/`, `design-inspector.tsx`). Components: Edit summary `EditSummaryChange` + `code`
+  fold; Composer `expandable` / `expanded`, cap 8 lines. Tests: `tests/agent.test.ts`, `tests/chat-words.test.ts`.
+  Since: branch brought up to main (PR #212's change words: `deleted`, Step `complete` / `error`; onExpandedChange
+  passes its event), options show one framed picture under 440 wide (side by side from 440), multi-select questions
+  (Chosen marks, Continue), past chats kept (last 20) and offered in @. Not done: a live run (no sign-in), saved
+  references in @, before/after pictures on design rows; chat turns in Versions dropped (Versions restores page
+  snapshots, not the code a chat changed). Multi-select is typechecked, not seen (no recorded run asks one).
+- **Output, worktree `system-output-e26092` (pull request, 2026-11-08).** Brief steps 2 and 5: a published system written
+  into a project's folder as code it owns, kept current by a three-way merge, with an agent contract. Research and ranked
+  decisions: `docs/research/system-output-2026-11-08/` (README, sources); review page
+  https://claude.ai/artifact/3ZXFHZRTqEr4xq9S29zsrg (11 decisions, recommendations built, picks in `verdicts`, none yet).
+  Built: `packages/output` (`@area/output`, bin `area`: init, build, check, mcp; TypeScript run as is): `.area/system.json`
+  from a release, theme CSS = Area's axes sheet pruned to the chosen values and rebound to `:root` (a second theme on
+  `[data-area-system-theme]`), component CSS without left-out components and options, React sources with their import
+  closure and a pruned manifest (types narrow), icon sprite, DESIGN.md + an AGENTS.md block + components.json, lock +
+  `.area/base/` copies + diff3 merge, checks, a read-only 5-tool MCP server (2025-11-25 `initialize` and 2026-07-28
+  stateless). App: Versions › a version › Inspector › Code › Write to folder… (`electron/output.cjs`, `src/output.ts`,
+  design words). Verified: `npm run test:output` 13 (the proof point: two systems, a library update, edits kept; same
+  bytes; merge vs brute-force LCS), `npm run fidelity -w @area/output` (2,808 tokens + 192 painted values identical to
+  Area's, light and dark, 4 systems incl. the owner's Area 1.0.1), the written React type-checks alone, MCP over stdio,
+  the app's IPC writing Area 1.0.1 to a scratch folder (220 files, then 220 unchanged), the Code section light and dark;
+  typecheck, tokens 29,241, desktop 41. Not verified: the native folder picker and the Write dialog by hand (driven over
+  IPC only). Open: choosing between two changes in the app, GitHub destination, resolved token values in DESIGN.md,
+  `area check` in CI, publishing the package for `npx area`. Inventory shape note for the inventory session in the shared
+  notes folder (`system-output-2026-11-08.md`).
+- **Worktree `component-design-review-92c949`: title balance + system gaps build (committed with the components audit build; main merged in 2026-11-08).**
+  - Title balance (owner "4 is right"): a component's title is its text's size, its copy a step (4) off; an item's
+    name joins its line (DESIGN_SYSTEM "Text pairs"; `docs/research/title-balance-2026-11-06`).
+  - System gaps (artifact CWcHa47TDvM9tESQufAmD2, picks in `verdicts`; owner picked L1–L3, C1–C9, then "Take all
+    recs"). Built: L1 L2 L3 C1 C3 C4 C5 C6 C7 C8 M2 M3 D3 Q4 T4 T5 S1 S3 — table in
+    `docs/research/system-gaps-2026-11-06/README.md` ("Built from the picks").
+  - Not built yet (picked): C2 one frame recipe for cards (L) then C9 frame prop; D1 fuller usage entries (schema
+    slots, overlay states, missing keys) and D2 stage and date per family; Q1 DOM behaviour tests, Q2 screenshot
+    baseline, Q3 accessibility runs (`area-a11y-audit` is the manual half). Owner still to decide: C10, M1, V1, V2.
+  - Open from the build: Design card `wide` (16:9) vs Asset card `wide` (2:1) waits for Asset card's retirement; the
+    Colors settings' `data-area-colours` attributes need a foundation pass with a saved-theme migration.
+  - Checks: build, typecheck, npm test 29241, contrast 536/0, React 654, desktop 31, contracts 9, docs 119, playgrounds,
+    app-css, diff --check (test:consumer hung in `npm pack` and was stopped, not run). Seen in the desktop build in the browser pane, light and dark (Tag colours, Panel title,
+    Dialog). Electron not relaunched: session `design-interface-ui-4d0a03` runs its own window and watcher.
+- **Components audit, built (2026-11-08, same worktree; committed, main merged in, pull request opened).** Owner picked O1–O5, then "Take all recs":
+  every Build row built (O1–O7, V1–V7, V9, V10, V15, N1–N7, N14, D1, D5, D6), Later rows in COMPONENTS.md Candidates,
+  Decide rows (V11, V13, N10, D2, D3, D4, D7–D9) open on artifact St7jcEipvPoa3GvSwnAvBT. Table and departures:
+  `docs/research/components-audit-2026-11-07/README.md` ("Built from the picks"). New families In review: Page header,
+  Selection bar, Setting row, Filter bar, Mention, Splitter, Chart; 21 Complete families reopened. Owner calls listed in
+  the README's departures column (Dialog 384/480, file tile 64×160, Chart line 1.5, Splitter on the app's panel edges,
+  "3 selected" in the app's multi-pickers, untracked/renamed share blue).
+- **Elsewhere:** `design-interface-ui-4d0a03` is another session's (design viewer and project pages, uncommitted).
+  Merged to main since the entries below: kits #203, aligned answers #204, theme experience #205, illustrations #206,
+  fidelity #207, Design card #208, Tabs plate #209.
 - **Appearance, same worktree (PR #211, 2026-11-07).** Mode's pictures: the app in a 720 × 540 window (sidebar and
   page, `content/examples/workspace-compact.tsx`), words as bars (owner picked "B as bars" from four layouts and three
   drawings), three across, each a new Radio/Checkbox `layout="thumbnail"` (picture is the card, name under it at the
@@ -78,6 +166,20 @@
   trimmed block box; Tag drops the optical lift, Citation keeps it), so marks of one height and text share a pixel row
   at type 12–16 × density 28–36; second cohesion test. Open, not built: Area's sm marks (14 at type 13) are shorter
   than any status mark surveyed.
+
+## Earlier state (2026-11-06)
+- **Title balance, worktree `component-design-review-92c949` (uncommitted, 2026-11-06; owner: "Keep it", then "4 is right").** Owner, on the app's confirm:
+  "no spacing logic between the title and the text … the type style size contrast … is large. make sure all of this is
+  intentional." Cause: the 2026-11-02 ramp moved `title-xs` 15 → 16, so Dialog/Card/Drawer titles sat 1.23× their 13
+  text, joined 10.0 beside the text's 8.8 (in between). Rule now (DESIGN_SYSTEM "Text pairs"): a component's title is
+  its text's size (13/18 500), its copy a step (4) off (12.8; second look, owner: joined "still doesnt look right");
+  an item's name joins its line; a heading (Empty state md, Section heading) title-xs, a step off; never between. Built: Dialog, Confirm dialog, Drawer, Card titles 13/18 (close centring reads the title's line);
+  Empty state md gap 4; Checkbox/Radio/legend/Switch descriptions and File upload meta joined (were 2 off); feed's Card
+  hook removed. Sweep, captures, research: `docs/research/title-balance-2026-11-06`. Review artifact Mth8bhGouVQJTfxmvxawQg
+  (Q1 Panel md bar title 15/22, Q2 Card list 7 apart, Q3 none). Checks: build, typecheck, react 649, contracts, docs,
+  app-css, playgrounds, npm test. Seen in the browser build light and dark (headless captures); Electron not relaunched
+  (session `design-interface-ui-4d0a03` runs its own).
+- **System gaps review (2026-11-07, same worktree, research only).** Four sweeps (components, foundations and process, ten design systems, the installed apps' bundles): `docs/research/system-gaps-2026-11-06/README.md`. Review artifact CWcHa47TDvM9tESQufAmD2, 39 proposals (L, C, M, D, Q, T, S, V) with picks in its `verdicts` collection; nothing built from it yet. Stale docs fixed on the way (family count 119, interaction skill places, `ease-in`, Step shimmer, joined-title remnants).
 - **Design card, worktree `design-container-display-0918d8` (uncommitted, 2026-11-06).** Owner: "no more 'asset
   cards'" — containers hold live designs and open into Full view. Design Containers artifact E95K8UoMuAYPLDVBNJFMHT
   (`docs/research/design-containers-2026-11-05/`): the owner picked every recommendation (one component; margin a tenth,

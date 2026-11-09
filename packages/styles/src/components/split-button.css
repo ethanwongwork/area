@@ -58,6 +58,9 @@
    * on-brand stroke the same way; Notion's darker line would vanish on Area's near-black).
    * Soft and outline use the tone's control line (shadcn: the control border colour).
    */
+  /* Both parts are Buttons of one size (`size` reaches each); these name it for the manifest and the gallery (2026-11-07,
+     O7). */
+  .area-split-button--sm, .area-split-button--md, .area-split-button--lg {}
   .area-split-button--solid > .area-split-button__trigger { --_split-divider: color-mix(in srgb, var(--_on-solid) 24%, transparent); /* spec */ }
   .area-split-button--soft > .area-split-button__trigger,
   .area-split-button--outline > .area-split-button__trigger { --_split-divider: var(--_line); }

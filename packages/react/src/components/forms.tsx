@@ -1,8 +1,9 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { createContext, forwardRef, useContext, useEffect, useId, useRef, useState } from "react";
 import { assignRef } from "./overlay.ts";
 import { ToolbarSize } from "./toolbar-context.ts";
 import { InputGroupContext } from "./input-group-context.ts";
-import type { FieldsetHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ChangeEvent, ReactNode } from "react";
+import type { FieldsetHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes, ChangeEvent, MouseEvent, ReactNode } from "react";
 import { MANIFESTS, selectVariants, textareaVariants, checkboxVariants, checkboxGroupVariants, radioGroupVariants, radioVariants } from "../variants.ts";
 import type { VariantProps } from "../variants.ts";
 type Size = NonNullable<VariantProps<typeof MANIFESTS.checkbox>["size"]>;
@@ -21,6 +22,8 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
   /** Semantic validation paint. `invalid` remains the compatibility alias for `error`. */
   validationStatus?: "error" | "success" | "warning";
   invalid?: boolean;
+  /** The chosen option's value and the change event, beside native `onChange` (which runs first; Governance § 4). */
+  onValueChange?: (value: string, event: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>(function Select(
@@ -31,6 +34,8 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
     validationStatus: validationStatusProp,
     invalid,
     disabled: disabledProp,
+    onChange,
+    onValueChange,
     className,
     "aria-invalid": ariaInvalid,
     "data-validation-status": fieldValidationStatus,
@@ -38,6 +43,7 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
   },
   ref,
 ) {
+  variant = useSystemDefault("select", "variant", variant); // the system's default (SystemDefaults) where the use gives none
   // In a Toolbar, a Select without its own size takes the bar's tier (audit A-7).
   const toolbarSize = useContext(ToolbarSize);
   const size = sizeProp ?? toolbarSize;
@@ -58,6 +64,10 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
       {...(resolvedValidationStatus === "success" ? { "data-success": "" } : {})}
       {...(resolvedValidationStatus === "warning" ? { "data-warning": "" } : {})}
       {...rest}
+      onChange={onChange || onValueChange ? (event: ChangeEvent<HTMLSelectElement>) => {
+        onChange?.(event);
+        if (!event.defaultPrevented) onValueChange?.(event.target.value, event);
+      } : undefined}
     />
   );
 });
@@ -74,6 +84,8 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   /** Semantic validation paint. `invalid` remains the compatibility alias for `error`. */
   validationStatus?: "error" | "success" | "warning";
   invalid?: boolean;
+  /** The text and the change event, beside native `onChange` (which runs first; Governance § 4). */
+  onValueChange?: (value: string, event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
@@ -84,6 +96,8 @@ export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, Textarea
     fullWidth,
     validationStatus,
     invalid,
+    onChange,
+    onValueChange,
     className,
     "aria-invalid": ariaInvalid,
     "data-validation-status": fieldValidationStatus,
@@ -91,6 +105,7 @@ export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, Textarea
   },
   ref,
 ) {
+  variant = useSystemDefault("textarea", "variant", variant); // the system's default (SystemDefaults) where the use gives none
   const invalidState = validationStatus === "error" || invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const resolvedValidationStatus = invalidState ? "error" : validationStatus ?? fieldValidationStatus;
 
@@ -103,6 +118,10 @@ export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, Textarea
       {...(resolvedValidationStatus === "success" ? { "data-success": "" } : {})}
       {...(resolvedValidationStatus === "warning" ? { "data-warning": "" } : {})}
       {...rest}
+      onChange={onChange || onValueChange ? (event: ChangeEvent<HTMLTextAreaElement>) => {
+        onChange?.(event);
+        if (!event.defaultPrevented) onValueChange?.(event.target.value, event);
+      } : undefined}
     />
   );
 });
@@ -137,12 +156,28 @@ export interface CheckboxProps extends ChoiceProps {
   indeterminate?: boolean;
   /** Called with the new state and the change event, as Switch (audit S17). Native `onChange` still runs first. */
   onCheckedChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;
+  /**
+   * Shows a state set elsewhere: the box can't be toggled (a native checkbox ignores `readonly`, so Checkbox blocks the
+   * click), announces `aria-readonly`, and a chosen card keeps its rest edge, as Radio group's and Switch's read-only.
+   */
+  readOnly?: boolean;
 }
 
 export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { variant, layout, size, label, description, caption, leadingVisual, meta, invalid, indeterminate = false, onCheckedChange, onChange, className, disabled, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
+  { variant, layout, size, label, description, caption, leadingVisual, meta, invalid, indeterminate = false, onCheckedChange, onChange, onClick, readOnly: readOnlyProp,
+    className, disabled: disabledProp, name: nameProp, value, checked: checkedProp, defaultChecked, "aria-describedby": describedBy, "aria-invalid": ariaInvalid, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  size = useSystemDefault("checkbox", "size", size);
+  // In a CheckboxGroup with a value, the group says which are checked, their name and whether they can change (O5).
+  const group = useContext(CheckboxGroupContext);
+  const optionValue = value === undefined ? undefined : String(value);
+  const inGroupValue = group?.value !== undefined && optionValue !== undefined;
+  const checked = checkedProp ?? (inGroupValue ? group!.value!.includes(optionValue!) : undefined);
+  const readOnly = readOnlyProp ?? group?.readOnly;
+  const disabled = disabledProp ?? group?.disabled;
+  const name = nameProp ?? group?.name;
   const resolvedCaption = caption ?? description;
   const invalidState = invalid || (ariaInvalid !== undefined && ariaInvalid !== false && ariaInvalid !== "false");
   const descriptionId = useId();
@@ -162,18 +197,32 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
       className={checkboxVariants({ variant, layout: variant ? layout : undefined, size }, className)}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...(invalidState ? { "data-invalid": "" } : {})}
+      {...(readOnly ? { "data-read-only": "" } : {})}
     >
       <input
         ref={setControl}
         type="checkbox"
         className="area-checkbox__control"
         disabled={disabled}
+        name={name}
+        value={value}
+        checked={checked}
+        defaultChecked={checked === undefined ? defaultChecked : undefined}
         aria-describedby={resolvedDescription}
         aria-invalid={invalidState ? true : ariaInvalid}
+        aria-readonly={readOnly || undefined}
         {...(invalidState ? { "data-invalid": "" } : {})}
         {...(indeterminate ? { "data-indeterminate": "" } : {})}
         {...rest}
-        onChange={onChange || onCheckedChange ? event => { onChange?.(event); if (!event.defaultPrevented) onCheckedChange?.(event.target.checked, event); } : undefined}
+        // A read-only box keeps its state: the click that would toggle it is cancelled (as Switch's).
+        onClick={(event: MouseEvent<HTMLInputElement>) => { if (readOnly) { event.preventDefault(); return; } onClick?.(event); }}
+        onChange={onChange || onCheckedChange || inGroupValue || readOnly ? event => {
+          if (readOnly) return;
+          onChange?.(event);
+          if (event.defaultPrevented) return;
+          onCheckedChange?.(event.target.checked, event);
+          if (inGroupValue) group!.toggle(optionValue!, event.target.checked, event);
+        } : undefined}
       />
       {leadingVisual ? <span className="area-checkbox__visual" aria-hidden="true">{leadingVisual}</span> : null}
       {label || resolvedCaption ? (
@@ -187,7 +236,18 @@ export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxPro
   );
 });
 
-export interface CheckboxGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSetElement>, "children"> {
+interface CheckboxGroupContextValue {
+  /** The checked values, when the group holds them (`value` or `defaultValue`); otherwise each Checkbox holds its own. */
+  value?: readonly string[];
+  name?: string;
+  disabled?: boolean;
+  readOnly?: boolean;
+  toggle: (value: string, checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+const CheckboxGroupContext = createContext<CheckboxGroupContextValue | null>(null);
+
+export interface CheckboxGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSetElement>, "children" | "defaultValue"> {
   children: ReactNode;
   /** Visible group label, rendered as the native fieldset legend. */
   label: ReactNode;
@@ -198,21 +258,56 @@ export interface CheckboxGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFiel
   /** Semantic status for a non-error validation message. */
   validationStatus?: "success" | "warning";
   orientation?: VariantProps<typeof MANIFESTS.checkboxGroup>["orientation"];
+  /**
+   * The checked options' values (controlled), as Radio group's `value` for several (components audit 2026-11-07, O5).
+   * Each Checkbox is read by its `value`; a Checkbox's own `checked` still wins. Leave `value` and `defaultValue` out
+   * and each Checkbox holds its own state, as before.
+   */
+  value?: readonly string[];
+  /** The values checked at first (uncontrolled); a form reset returns to them. */
+  defaultValue?: readonly string[];
+  /** The checked values after a change, in the order they were checked, and the change event. */
+  onValueChange?: (value: string[], event: ChangeEvent<HTMLInputElement>) => void;
+  /** Shared native name, so every option submits under it; an individual Checkbox name takes precedence. */
+  name?: string;
+  /** Shows choices made elsewhere: no option can be toggled, each announces `aria-readonly`, as Radio group's. */
+  readOnly?: boolean;
 }
 
 export const CheckboxGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, CheckboxGroupProps>(function CheckboxGroup(
-  { children, label, description, validation, error, validationStatus, orientation, className, disabled, "aria-describedby": describedBy, ...rest },
+  { children, label, description, validation, error, validationStatus, orientation, value, defaultValue, onValueChange, name, readOnly, className, disabled,
+    "aria-describedby": describedBy, ...rest },
   ref,
 ) {
   const descriptionId = useId();
   const errorId = useId();
+  const root = useRef<HTMLFieldSetElement | null>(null);
+  const [uncontrolledValue, setUncontrolledValue] = useState<readonly string[] | undefined>(defaultValue);
+  const initial = useRef(defaultValue);
+  const selected = value ?? uncontrolledValue;
   const validationMessage = error ?? validation;
   const resolvedDescription = [describedBy, description ? descriptionId : undefined, validationMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined;
   const status = error ? "error" : validationStatus;
+  const toggle = (option: string, checked: boolean, event: ChangeEvent<HTMLInputElement>) => {
+    if (readOnly) return;
+    const current = selected ?? [];
+    const next = checked ? (current.includes(option) ? [...current] : [...current, option]) : current.filter(entry => entry !== option);
+    if (value === undefined) setUncontrolledValue(next);
+    onValueChange?.(next, event);
+  };
+
+  // A form reset returns an uncontrolled group to its first values, as Radio group's does.
+  useEffect(() => {
+    const form = root.current?.form ?? root.current?.closest("form");
+    if (!form || value !== undefined || initial.current === undefined) return;
+    const reset = (event: Event) => queueMicrotask(() => { if (!event.defaultPrevented) setUncontrolledValue(initial.current); });
+    form.addEventListener("reset", reset);
+    return () => form.removeEventListener("reset", reset);
+  }, [value]);
 
   return (
     <fieldset
-      ref={ref}
+      ref={node => { root.current = node; assignRef(ref, node); }}
       className={checkboxGroupVariants({ orientation }, className)}
       disabled={disabled}
       aria-describedby={resolvedDescription}
@@ -220,11 +315,16 @@ export const CheckboxGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, Che
       {...(error ? { "data-invalid": "" } : {})}
       {...(status === "success" ? { "data-success": "" } : {})}
       {...(status === "warning" ? { "data-warning": "" } : {})}
+      {...(readOnly ? { "data-read-only": "" } : {})}
       {...rest}
     >
       <legend className="area-checkbox-group__legend">{label}</legend>
       {description ? <span className="area-checkbox-group__description" id={descriptionId}>{description}</span> : null}
-      <div className="area-checkbox-group__options">{children}</div>
+      <div className="area-checkbox-group__options">
+        <CheckboxGroupContext.Provider value={{ value: selected, name, disabled, readOnly, toggle }}>
+          {children}
+        </CheckboxGroupContext.Provider>
+      </div>
       {validationMessage ? <span className="area-checkbox-group__validation" id={errorId}>{validationMessage}</span> : null}
     </fieldset>
   );
@@ -234,6 +334,7 @@ interface RadioGroupContextValue {
   name?: string;
   value?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -245,6 +346,10 @@ export interface RadioGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSe
   label: ReactNode;
   description?: ReactNode;
   error?: ReactNode;
+  /** Validation message for an otherwise valid group (a hint once chosen), as Checkbox group's. */
+  validation?: ReactNode;
+  /** Semantic status for a non-error validation message: `success` or `warning`, as Checkbox group's. */
+  validationStatus?: "success" | "warning";
   /** Shared native radio name. Generated when omitted, so the options always form one native
    * group (one Tab stop, arrow keys, form submission). An individual Radio name takes precedence. */
   name?: string;
@@ -257,13 +362,15 @@ export interface RadioGroupProps extends Omit<FieldsetHTMLAttributes<HTMLFieldSe
   /**
    * Shows a value that isn't chosen here (a past answer in a conversation, a setting set elsewhere): the chosen option
    * keeps its control's dot and the row's fill, without the selected edge or tint, and the group ignores changes. The
-   * group becomes a radiogroup with aria-readonly, named by its legend.
+   * group becomes a radiogroup with aria-readonly, named by its legend. The state is `data-read-only`, as every other
+   * family's (2026-11-07; `data-readonly` is the deprecated spelling, still painted for one release).
    */
   readOnly?: boolean;
 }
 
 export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioGroupProps>(function RadioGroup(
-  { children, label, description, error, name, value, defaultValue, onValueChange, orientation, readOnly, className, disabled, "aria-describedby": describedBy, ...rest },
+  { children, label, description, error, validation, validationStatus, name, value, defaultValue, onValueChange, orientation, readOnly, className, disabled,
+    "aria-describedby": describedBy, ...rest },
   ref,
 ) {
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
@@ -274,7 +381,9 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
   const generatedName = useId();
   const groupName = name ?? generatedName;
   const selectedValue = value ?? uncontrolledValue;
-  const resolvedDescription = [describedBy, description ? descriptionId : undefined, error ? errorId : undefined].filter(Boolean).join(" ") || undefined;
+  const validationMessage = error ?? validation;
+  const status = error ? "error" : validationStatus;
+  const resolvedDescription = [describedBy, description ? descriptionId : undefined, validationMessage ? errorId : undefined].filter(Boolean).join(" ") || undefined;
   const legendId = useId();
   const change = (event: ChangeEvent<HTMLInputElement>) => {
     if (readOnly) return;
@@ -300,17 +409,19 @@ export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioG
       aria-describedby={resolvedDescription}
       aria-invalid={error ? true : undefined}
       {...(error ? { "data-invalid": "" } : {})}
-      {...(readOnly ? { role: "radiogroup", "aria-readonly": true, "aria-labelledby": legendId, "data-readonly": "" } : {})}
+      {...(status === "success" ? { "data-success": "" } : {})}
+      {...(status === "warning" ? { "data-warning": "" } : {})}
+      {...(readOnly ? { role: "radiogroup", "aria-readonly": true, "aria-labelledby": legendId, "data-read-only": "" } : {})}
       {...rest}
     >
       <legend className="area-radio-group__legend" id={readOnly ? legendId : undefined}>{label}</legend>
       {description ? <span className="area-radio-group__description" id={descriptionId}>{description}</span> : null}
       <div className="area-radio-group__options">
-        <RadioGroupContext.Provider value={{ name: groupName, value: selectedValue, disabled, onChange: change }}>
+        <RadioGroupContext.Provider value={{ name: groupName, value: selectedValue, disabled, readOnly, onChange: change }}>
           {children}
         </RadioGroupContext.Provider>
       </div>
-      {error ? <span className="area-radio-group__validation" id={errorId}>{error}</span> : null}
+      {validationMessage ? <span className="area-radio-group__validation" id={errorId}>{validationMessage}</span> : null}
     </fieldset>
   );
 });
@@ -319,6 +430,8 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
   { variant, layout, size, label, description, caption, leadingVisual, meta, className, disabled, name, value, checked, defaultChecked, onChange, "aria-describedby": describedBy, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  size = useSystemDefault("radio", "size", size);
   const group = useContext(RadioGroupContext);
   const descriptionId = useId();
   const resolvedDisabled = disabled ?? group?.disabled;
@@ -332,7 +445,8 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
   };
 
   return (
-    <label className={radioVariants({ variant, layout: variant ? layout : undefined, size }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}>
+    <label className={radioVariants({ variant, layout: variant ? layout : undefined, size }, className)} {...(resolvedDisabled ? { "data-disabled": "" } : {})}
+      {...(group?.readOnly ? { "data-read-only": "" } : {})}>
       <input
         ref={ref}
         type="radio"

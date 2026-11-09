@@ -142,14 +142,14 @@
 
   /* --- States ------------------------------------------------------------- */
   @media (hover: hover) {
-    .area-button:hover:not(:disabled, [data-disabled], [data-loading]) {
+    .area-button:hover:not(:disabled, [data-disabled], [data-loading], [data-inactive]) {
       background-color: var(--_bg-hover);
       background-image: var(--_wash-hover);
       border-color: var(--_border-hover);
     }
   }
 
-  .area-button:active:not(:disabled, [data-disabled], [data-loading]) {
+  .area-button:active:not(:disabled, [data-disabled], [data-loading], [data-inactive]) {
     background-color: var(--_bg-active);
     background-image: var(--_wash-active);
   }
@@ -159,7 +159,7 @@
   .area-button--sm, .area-button--icon-only { --_give: var(--area-feedback-scale-sm); }
   .area-button--lg { --_give: var(--area-feedback-scale-lg); }
   .area-button--full-width { --_give: var(--area-feedback-scale-wide); }
-  .area-button:active:not(:disabled, [data-disabled], [data-loading], :focus-visible, [aria-haspopup]) { scale: var(--_give); }
+  .area-button:active:not(:disabled, [data-disabled], [data-loading], [data-inactive], :focus-visible, [aria-haspopup]) { scale: var(--_give); }
 
   /* A menu trigger keeps the pressed plate while its menu is open, as Model picker did alone
      (audit G-12). A selected toggle keeps its own fill. */
@@ -192,6 +192,20 @@
     cursor: not-allowed;
     opacity: var(--area-opacity-disabled);
   }
+
+  /*
+   * Inactive (components audit V2, 2026-11-07): drawn as disabled, at the disabled opacity, but it keeps focus, so its
+   * focus ring must stay at full strength, and an opacity on the button would fade its outline too. The fill and edge are
+   * mixed toward transparent by the same amount instead, and the parts inside take the opacity: the same picture as
+   * disabled, with a ring that still clears 3:1. No hover or press paint, as disabled.
+   */
+  .area-button[data-inactive] {
+    cursor: not-allowed;
+    background-color: color-mix(in srgb, var(--_bg) calc(var(--area-opacity-disabled) * 100%), transparent);
+    background-image: none;
+    border-color: color-mix(in srgb, var(--_border) calc(var(--area-opacity-disabled) * 100%), transparent);
+  }
+  .area-button[data-inactive] > * { opacity: var(--area-opacity-disabled); }
 
   /* Loading stays at full ink and keeps focus (audit S18): it is aria-disabled, not :disabled. */
   .area-button[data-loading] {

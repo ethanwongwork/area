@@ -1,0 +1,111 @@
+/* ---------------------------------------------------------------------------
+ * Mention
+ *
+ * An inline reference to a person, a file, a page or a date, in running text, in a sent message and in the Composer's
+ * draft (docs/specs/mention.md; components audit N3, 2026-11-07). A chat app's Mention (`data-appearance=pill |
+ * underlined-text`; a pill that clones its edges across a line break), an editor's mention chips (a 12 icon slot, 4 to the
+ * label) and a notes app's person, page and date mentions (a date turns red on its day or when
+ * past due) do the same job.
+ *
+ * It keeps the type and the ink of the text around it, as Link does: a reference is read with its sentence. The
+ * kind's mark sits in the xs icon slot, centred on the cap height (Link's external mark). Three treatments on `variant`:
+ * plain (the mark and the words), underline (Link's line) and soft (the translucent mark plate, Count soft's). A mention
+ * with `href` is a link and one with `onClick` a button; either takes Link's focus ring and a hover.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-mention {
+    --_mention-ink: inherit;
+    --_mention-plate: transparent;
+    --_mention-plate-hover: transparent;
+    --_mention-edge: transparent;
+    /* spec: the chat app's pill pads 2 / 6 (`._Mention_1wujo_2` padding 2px 6px); 0 for plain and underline. */
+    --_mention-pad-block: 0px;
+    --_mention-pad-inline: 0px;
+    --_mention-line: transparent;
+    --_mention-line-hover: transparent;
+    display: inline;
+    padding: var(--_mention-pad-block) var(--_mention-pad-inline);
+    border: 0;
+    border-radius: var(--area-radius-full);
+    margin: 0;
+    background-color: var(--_mention-plate);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_mention-edge);
+    /* A plate that breaks across lines draws its edges on each piece (the chat app's `box-decoration-break: clone`). */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    color: var(--_mention-ink);
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--_mention-line);
+    /* Link's line: one stroke, close under the text (link.css). */
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: 0.08em;
+    text-decoration-skip-ink: auto;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    /* Motion (MOTION.md, "Hover plate"): a hover lands at once and fades on fast. */
+    transition: background-color var(--area-duration-fast) var(--area-ease-out), text-decoration-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  /* A link or a button: text you can press, so the pointer says so; a button keeps the sentence's line. */
+  .area-mention:is(a, button) { cursor: pointer; }
+  button.area-mention { display: inline; vertical-align: baseline; -webkit-appearance: none; appearance: none; }
+  @media (hover: hover) {
+    .area-mention:is(a, button):hover {
+      background-color: var(--_mention-plate-hover);
+      text-decoration-color: var(--_mention-line-hover);
+      transition-duration: var(--area-hover-in);
+    }
+  }
+  .area-mention:is(a, button):focus-visible {
+    text-decoration-color: var(--_mention-line-hover);
+    transition-duration: 0s;
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-gap);
+  }
+
+  /* The kind's mark: the xs icon slot, 4 before the words (the editor's icon slot 12, margin 4), on the cap height as
+     Link's external mark sits. A person's picture fills the slot as a circle. */
+  .area-mention__icon {
+    display: inline-block;
+    inline-size: var(--area-icon-xs);
+    block-size: var(--area-icon-xs);
+    margin-inline-end: var(--area-gap-xs);
+    vertical-align: calc((1cap - var(--area-icon-xs)) / 2);
+  }
+  .area-mention__icon > :is(svg, img) { display: block; inline-size: 100%; block-size: 100%; }
+  .area-mention__icon > img { border-radius: var(--area-radius-full); object-fit: cover; }
+  /* The words wrap with the sentence, the plate cloned onto each line (the chat app's pill), rather than cut at the
+     editor's 20em, which would make the mention a block in the line. */
+  .area-mention__label { display: inline; }
+
+  /* Variant. plain: the mark and the words in the sentence's ink; a link or a button underlines on hover and focus
+     (Link standalone). */
+  .area-mention--plain { --_mention-line-hover: currentColor; }
+  /* underline: Link's line in the mention's own ink, always (a page reference in prose; the chat app's underlined-text). */
+  .area-mention--underline { --_mention-line: currentColor; --_mention-line-hover: currentColor; }
+  /* soft: the translucent mark plate (Count soft's `bg-mark` and the Tags stroke group's edge), a pill padded 2 / 6. */
+  .area-mention--soft {
+    --_mention-plate: var(--area-bg-mark);
+    --_mention-plate-hover: var(--area-bg-mark-hover);
+    --_mention-edge: var(--area-edge-tags);
+    --_mention-pad-block: 2px; /* spec: the chat app's pill, 2 */
+    --_mention-pad-inline: 6px; /* spec: the chat app's pill, 6 */
+  }
+
+  /* Kind: each kind's default mark is set by React (person, document, link, calendar); the kinds paint alike. */
+  .area-mention--person {}
+  .area-mention--file {}
+  .area-mention--page {}
+  .area-mention--date {}
+
+  /* Due: a date that has come or passed turns to the danger ink, its mark too (the notes app's reminders "turn red when
+     they change to @Today or are past due"). */
+  .area-mention[data-due] { --_mention-ink: var(--area-fg-danger); }
+
+  @media (forced-colors: active) {
+    .area-mention--soft { border: var(--area-stroke-width) solid CanvasText; }
+    .area-mention[data-due] { --_mention-ink: CanvasText; text-decoration-line: underline; text-decoration-style: wavy; }
+  }
+}

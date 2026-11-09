@@ -1,3 +1,4 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import type { VariantProps } from "../variants.ts";
 import { InToolbar, ToolbarSize, toolbarItemProps } from "./toolbar-context.ts";
 import { MANIFESTS } from "../variants.ts";
@@ -6,6 +7,7 @@ import { CopyButton } from "./CopyButton.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Select } from "./forms.tsx";
 import { ScrollArea } from "./ScrollArea.tsx";
+import { CHANGE_MARK, changeStatus, type ChangeStatusInput } from "./change-status.ts";
 import { AnchoredMenu, AnchoredPopover, AnchoredTooltip, MENU_OFFSET, OVERLAY_PADDING, TYPEAHEAD_RESET } from "./Overlays.tsx";
 import { assignRef, useAnchoredPosition, useNativePopover, useOpenState } from "./overlay.ts";
 import type { OverlayAlign, OverlaySide } from "./overlay.ts";
@@ -16,7 +18,7 @@ import type { OverlayAlign, OverlaySide } from "./overlay.ts";
  * of its own. Every appearance decision lives in `@area/styles`, which is what lets a
  * consumer use the CSS without React and get an identical result.
  */
-import { Children, cloneElement, createContext, forwardRef, useContext, useEffect, useId, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Children, cloneElement, createContext, forwardRef, isValidElement, useContext, useEffect, useId, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type {
   TdHTMLAttributes,
   ThHTMLAttributes,
@@ -32,6 +34,7 @@ import type {
   ReactNode,
   Ref,
   RefObject,
+  SyntheticEvent,
 } from "react";
 import {
   alertVariants,
@@ -82,6 +85,9 @@ export const Avatar = /* @__PURE__ */ forwardRef<HTMLSpanElement, AvatarProps>(f
   { size, shape, tone, active, src, alt, fallback, icon, className, role, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  size = useSystemDefault("avatar", "size", size);
+  tone = useSystemDefault("avatar", "tone", tone);
   // As Badge does for its unnamed forms: an image with no description fails loudly in development rather than
   // silently reaching assistive tech as an unnamed picture.
   if (src && alt === undefined && !ariaLabel && !rest["aria-labelledby"] && !rest["aria-hidden"]) {
@@ -167,7 +173,9 @@ export interface AlertProps extends Omit<Div, "title"> {
   icon?: ReactNode;
   /** Shadows the native `title` attribute deliberately: an Alert's title is content. */
   title?: ReactNode;
-  /** An optional action associated with this message. */
+  /** The message's actions (a button or two), in its `__actions` part, as Toast's and Empty state's `actions`. */
+  actions?: ReactNode;
+  /** @deprecated Use `actions` (2026-11-07). Kept for one release; `actions` wins. */
   action?: ReactNode;
   /** An optional inline text link following the message. */
   link?: ReactNode;
@@ -180,9 +188,13 @@ export interface AlertProps extends Omit<Div, "title"> {
 }
 
 export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { tone, layout, flush = false, icon, title, action, link, onDismiss, dismissIcon, dismissLabel = "Dismiss alert", className, children, ...rest },
+  { tone, layout, flush = false, icon, title, actions: actionsProp, action, link, onDismiss, dismissIcon, dismissLabel = "Dismiss alert", className, children, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  tone = useSystemDefault("alert", "tone", tone);
+  layout = useSystemDefault("alert", "layout", layout);
+  const actions = actionsProp ?? action;
   const resolvedLayout = layout ?? "single-line";
   // A banner's link ends the row (OpenAI's announcement banners); elsewhere it follows the text.
   const endLink = resolvedLayout === "banner";
@@ -210,7 +222,7 @@ export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(func
         ) : null}
       </div>
       {link && endLink ? <span className="area-alert__link">{link}</span> : null}
-      {action ? <div className="area-alert__actions">{action}</div> : null}
+      {actions ? <div className="area-alert__actions">{actions}</div> : null}
       {onDismiss ? (
         // The close recipe for rectangular surfaces (audit S9): a ghost small Button with the Area glyph.
         <span className="area-alert__dismiss">
@@ -234,6 +246,9 @@ export interface CardProps extends Div {
 
 const cardVariants = createVariants(MANIFESTS.card);
 export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, size, selected, className, ...rest }, ref) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  layout = useSystemDefault("card", "layout", layout);
+  size = useSystemDefault("card", "size", size);
   return <div ref={ref} className={cardVariants({ layout, size }, className)} data-selected={selected ? "" : undefined} {...rest} />;
 });
 
@@ -374,6 +389,34 @@ export const Separator = /* @__PURE__ */ forwardRef<HTMLDivElement, SeparatorPro
 
 /* --- Skeleton, Spinner, Progress ------------------------------------------ */
 
+/**
+ * How long a loading mark waits before it shows, so a quick load shows nothing (WRITING.md, "Loading shows by how long
+ * it takes"): `short` 300 ms, `long` (or `true`) 1000 ms, or any number of milliseconds (Primer's Spinner and Skeleton
+ * `delay`; components audit V6, 2026-11-07). Omitted or `false`, it shows at once.
+ */
+export type LoadingDelay = boolean | "short" | "long" | number;
+/* spec: docs/research/components-audit-2026-11-07/primer.md, Spinner `delay` (src/Spinner/Spinner.tsx:27-28). */
+export const LOADING_DELAY = { short: 300, long: 1000 } as const;
+const loadingDelayMs = (delay: LoadingDelay | undefined) =>
+  delay === undefined || delay === false ? 0 : delay === true ? LOADING_DELAY.long
+    : typeof delay === "number" ? Math.max(0, delay) : LOADING_DELAY[delay];
+
+/**
+ * False until the delay has passed. The server and the client's first render both say false, so a delayed mark
+ * hydrates as it was rendered (waiting) and the timer starts only in the browser.
+ */
+export function useLoadingDelay(delay: LoadingDelay | undefined): boolean {
+  const ms = loadingDelayMs(delay);
+  const [shown, setShown] = useState(ms === 0);
+  useEffect(() => {
+    if (ms === 0) { setShown(true); return; }
+    setShown(false);
+    const timer = setTimeout(() => setShown(true), ms);
+    return () => clearTimeout(timer);
+  }, [ms]);
+  return shown;
+}
+
 export interface SkeletonProps extends Div {
   /** block (default): a box the host sizes; text: a line of type; circle: a 1:1 disc. */
   shape?: VariantProps<typeof MANIFESTS.skeleton>["shape"];
@@ -386,24 +429,31 @@ export interface SkeletonProps extends Div {
    * corner, hidden and inert; when false the children render as they are.
    */
   loading?: boolean;
+  /**
+   * Waits before it shows, so a quick load shows nothing: `short` 300 ms, `long` (or `true`) 1000 ms, or milliseconds.
+   * While it waits the placeholder keeps its box, invisible (`data-waiting`), so nothing moves when it appears.
+   */
+  delay?: LoadingDelay;
 }
 
 export const Skeleton = /* @__PURE__ */ forwardRef<HTMLDivElement, SkeletonProps>(function Skeleton(
-  { shape, lines, animated = true, loading = true, className, children, ...rest },
+  { shape, lines, animated = true, loading = true, delay, className, children, ...rest },
   ref,
 ) {
   const still = !animated;
+  const shown = useLoadingDelay(delay);
+  const waiting = shown ? {} : { "data-waiting": "" };
   if (children !== undefined && children !== null && children !== false) {
     if (!loading) return <>{children}</>;
     return (
-      <div ref={ref} aria-hidden="true" inert className={skeletonVariants({ shape, static: still, wrap: true }, className)} {...rest}>
+      <div ref={ref} aria-hidden="true" inert className={skeletonVariants({ shape, static: still, wrap: true }, className)} {...waiting} {...rest}>
         {children}
       </div>
     );
   }
   if (lines !== undefined && lines > 1) {
     return (
-      <div ref={ref} aria-hidden="true" className={["area-skeleton__lines", className].filter(Boolean).join(" ")} {...rest}>
+      <div ref={ref} aria-hidden="true" className={["area-skeleton__lines", className].filter(Boolean).join(" ")} {...waiting} {...rest}>
         {Array.from({ length: Math.floor(lines) }, (_, index) => (
           <div key={index} className={skeletonVariants({ shape: "text", static: still })} />
         ))}
@@ -411,7 +461,7 @@ export const Skeleton = /* @__PURE__ */ forwardRef<HTMLDivElement, SkeletonProps
     );
   }
   return (
-    <div ref={ref} aria-hidden="true" className={skeletonVariants({ shape: lines !== undefined ? "text" : shape, static: still }, className)} {...rest} />
+    <div ref={ref} aria-hidden="true" className={skeletonVariants({ shape: lines !== undefined ? "text" : shape, static: still }, className)} {...waiting} {...rest} />
   );
 });
 
@@ -432,6 +482,12 @@ export interface SpinnerProps extends Omit<HTMLAttributes<HTMLSpanElement>, "rol
    * context or storage used (ARIA 1.2 keeps the two apart).
    */
   role?: "progressbar" | "meter";
+  /**
+   * The turning spinner waits before it shows, so a quick action shows nothing: `short` 300 ms, `long` (or `true`)
+   * 1000 ms, or milliseconds. While it waits it keeps its box, invisible (`data-waiting`), and its label is held back,
+   * so its status says nothing until it shows. A ring with a `value` shows at once.
+   */
+  delay?: LoadingDelay;
 }
 
 /* The determinate ring is the spinning one stopped: r 7 on the 16 grid, a 2 line, round caps, the track the arc's
@@ -441,9 +497,10 @@ export interface SpinnerProps extends Omit<HTMLAttributes<HTMLSpanElement>, "rol
 const SPINNER_CAP = (2 / (2 * Math.PI * 7)) * 100;
 
 export const Spinner = /* @__PURE__ */ forwardRef<HTMLSpanElement, SpinnerProps>(function Spinner(
-  { size, label, value, max = 100, valueText, role, className, ...rest },
+  { size, label, value, max = 100, valueText, role, delay, className, ...rest },
   ref,
 ) {
+  const shown = useLoadingDelay(value === undefined ? delay : undefined);
   if (value !== undefined) {
     const clamped = Math.min(max, Math.max(0, value));
     const pct = max > 0 ? (clamped / max) * 100 : 0;
@@ -475,10 +532,12 @@ export const Spinner = /* @__PURE__ */ forwardRef<HTMLSpanElement, SpinnerProps>
       role={label ? "status" : undefined}
       aria-hidden={label ? undefined : "true"}
       className={spinnerVariants({ size }, className)}
+      {...(shown ? {} : { "data-waiting": "" })}
       {...rest}
     >
-      {/* A live region announces its content, not its name: the label is content (audit E-21). */}
-      {label ? <span className="area-sr-only">{label}</span> : null}
+      {/* A live region announces its content, not its name: the label is content (audit E-21). While a delayed spinner
+          waits, the region is there and empty, so the label arriving with the ring is what it says. */}
+      {label && shown ? <span className="area-sr-only">{label}</span> : null}
     </span>
   );
 });
@@ -558,7 +617,7 @@ export interface PanelProps extends Omit<Div, "title"> {
   resizable?: "start" | "end";
   /** Controlled width in px. */
   width?: number;
-  /** Initial width in px; without it the panel starts at its CSS width. */
+  /** Initial width in px, and what a double-click on the edge puts back; without it the panel starts at its CSS width. */
   defaultWidth?: number;
   onWidthChange?: (width: number) => void;
   /** Resize limits in px (Figma's design panel: 241 to 500). */
@@ -603,6 +662,9 @@ export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(func
   const limit = current == null ? undefined : current <= minWidth ? "min" : current >= maxWidth ? "max" : undefined;
   const name = typeof ariaLabel === "string" ? ariaLabel : typeof title === "string" ? title : "panel";
   const handle = resizable ? <div role="separator" tabIndex={0} className="area-panel__resize" data-edge={resizable} data-limit={limit}
+    data-resizing={resizing ? "" : undefined}
+    // A double-click puts the starting width back (Splitter's reset; components audit N6, 2026-11-07).
+    onDoubleClick={defaultWidth == null ? undefined : () => commit(defaultWidth)}
     aria-orientation="vertical" aria-controls={panelId} aria-label={`Resize ${name}`}
     aria-valuenow={current ?? undefined} aria-valuemin={minWidth} aria-valuemax={maxWidth}
     aria-valuetext={current == null ? undefined : `${current} pixels${limit === "min" ? " (minimum)" : limit === "max" ? " (maximum)" : ""}`}
@@ -1192,7 +1254,7 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
             {contents}
           </button>
         ) : <span className="area-chip__action">{contents}</span>}
-        <button {...(primaryInteractive ? {} : control)} ref={primaryInteractive ? undefined : ref} type="button" className="area-chip__remove" aria-label={name} disabled={disabled}
+        <button {...(primaryInteractive ? {} : control)} ref={primaryInteractive ? undefined : ref} type="button" className="area-chip__dismiss" aria-label={name} disabled={disabled}
           onKeyDown={primaryInteractive ? onKeyDown : keys}
           onClick={event => { event.stopPropagation(); dismiss(event.currentTarget); }}>
           {dismissIcon ?? removeIcon ?? <Glyph name="dismiss" />}
@@ -1276,7 +1338,30 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   baseline?: boolean;
   /** Props for the scrolling wrapper (audit F-23); `ref` and the rest land on the table. */
   wrapperProps?: HTMLAttributes<HTMLDivElement>;
+  /**
+   * The header row stays at the top while the rows scroll under it (components audit V3). It sticks inside the table's
+   * own scroller, so give the wrapper a height (`wrapperProps={{ style: { maxBlockSize } }}`); the header keeps its
+   * ground and its rule.
+   */
+  stickyHeader?: boolean;
+  /**
+   * The first column stays at the start while the table scrolls sideways (V3). Its cells keep the table's ground and
+   * draw a rule at their end only while columns are scrolled under them.
+   */
+  stickyFirstColumn?: boolean;
+  /**
+   * Rows are loading: the table is `aria-busy` and its bodies are replaced by `loadingRows` rows of Skeleton cells, one
+   * per column of the header (V3). The header and caption stay.
+   */
+  loading?: boolean;
+  /** How many skeleton rows stand in while `loading` (default 3). */
+  loadingRows?: number;
+  /** The skeleton rows' wait before they show (Skeleton's `delay`: `short` 300 ms, `long` 1000 ms, or milliseconds). */
+  delay?: LoadingDelay;
 }
+
+/** The order a sortable column is in (`aria-sort`'s words); `none` is sortable but not sorted. */
+export type TableSort = "ascending" | "descending" | "none";
 
 /**
  * A row is clickable through one stretched link in it (`.area-table__link`, as CardLink), so
@@ -1301,15 +1386,115 @@ export const TableCell = /* @__PURE__ */ forwardRef<HTMLTableCellElement, TableC
 export interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElement> {
   numeric?: boolean;
   fit?: boolean;
+  /**
+   * Makes the column sortable (components audit V3): the heading holds a sort button and, while sorted, `aria-sort`.
+   * `none` is sortable but not sorted. Table sorts nothing itself: sort the rows in `onSortChange`.
+   */
+  sort?: TableSort;
+  /** The order the sort button asks for (unsorted or descending → ascending, ascending → descending), and its click. */
+  onSortChange?: (sort: Exclude<TableSort, "none">, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 /** A column heading (`scope="col"` by default), taking its column's `numeric` and `fit` so the heading aligns with its cells. */
-export const TableHeaderCell = /* @__PURE__ */ forwardRef<HTMLTableCellElement, TableHeaderCellProps>(function TableHeaderCell({ numeric, fit, scope = "col", className, ...rest }, ref) {
-  return <th ref={ref} scope={scope} className={cx(numeric && "area-table__cell--numeric", fit && "area-table__cell--fit", className) || undefined} {...rest} />;
+export const TableHeaderCell = /* @__PURE__ */ forwardRef<HTMLTableCellElement, TableHeaderCellProps>(function TableHeaderCell({ numeric, fit, sort, onSortChange, scope = "col", className, children, ...rest }, ref) {
+  const classes = cx(numeric && "area-table__cell--numeric", fit && "area-table__cell--fit", className) || undefined;
+  if (sort === undefined) return <th ref={ref} scope={scope} className={classes} {...rest}>{children}</th>;
+  // aria-sort only on the sorted column (APG sortable table); the button's name is the heading, its state the th's.
+  return <th ref={ref} scope={scope} className={classes} aria-sort={sort === "none" ? undefined : sort} {...rest}>
+    <Button type="button" size="sm" variant="ghost" align={numeric ? "end" : "start"} className="area-table__sort" data-sort={sort}
+      trailingIcon={<Glyph name="arrow-up" rotate={sort === "descending" ? 180 : undefined} />}
+      onClick={event => onSortChange?.(sort === "ascending" ? "descending" : "ascending", event)}>{children}</Button>
+  </th>;
 });
 
+export interface TableGroupProps extends HTMLAttributes<HTMLTableSectionElement> {
+  /** The group's name, in its heading row. */
+  heading: ReactNode;
+  /** How many rows the group holds, after its name (a count, not a total). */
+  count?: number;
+  /** The group's total or aggregate at the heading row's end ("Total 37.5%"). */
+  summary?: ReactNode;
+  /** The columns the heading row spans: the table's column count. */
+  colSpan: number;
+  /** The rows show (controlled); `defaultExpanded` (true) sets it at first; `onExpandedChange` hears the toggle. */
+  expanded?: boolean;
+  defaultExpanded?: boolean;
+  onExpandedChange?: (expanded: boolean, event: MouseEvent<HTMLButtonElement>) => void;
+}
+
+/**
+ * Rows under one heading row that folds them (components audit V3): a `tbody` whose first row is a `rowgroup` heading
+ * holding a toggle button (`aria-expanded`) with the group's name and count, and its summary at the row's end.
+ */
+export const TableGroup = /* @__PURE__ */ forwardRef<HTMLTableSectionElement, TableGroupProps>(function TableGroup(
+  { heading, count, summary, colSpan, expanded: expandedProp, defaultExpanded = true, onExpandedChange, className, children, ...rest },
+  ref,
+) {
+  const [own, setOwn] = useState(defaultExpanded);
+  const expanded = expandedProp ?? own;
+  return <tbody ref={ref} className={cx("area-table__group", className)} data-collapsed={expanded ? undefined : ""} {...rest}>
+    <tr className="area-table__group-heading">
+      <th scope="rowgroup" colSpan={colSpan}>
+        <span className="area-table__group-row">
+          <button type="button" className="area-table__group-toggle" aria-expanded={expanded}
+            onClick={event => { if (expandedProp === undefined) setOwn(!expanded); onExpandedChange?.(!expanded, event); }}>
+            <span className="area-table__group-chevron" aria-hidden="true"><Glyph name="chevron-down" rotate={expanded ? undefined : 270} /></span>
+            <span className="area-table__group-name">{heading}</span>
+            {count !== undefined ? <span className="area-table__group-count">{count}</span> : null}
+          </button>
+          {summary !== undefined && summary !== null ? <span className="area-table__group-summary">{summary}</span> : null}
+        </span>
+      </th>
+    </tr>
+    {children}
+  </tbody>;
+});
+
+export interface TableSkeletonProps extends HTMLAttributes<HTMLTableSectionElement> {
+  /** How many rows stand in (default 3). */
+  rows?: number;
+  /** How many cells each row holds, or the columns themselves (`numeric` ones end-aligned). */
+  columns: number | ReadonlyArray<{ numeric?: boolean }>;
+  /** Skeleton's wait before it shows. */
+  delay?: LoadingDelay;
+}
+
+/** Rows of Skeleton cells that hold a table's place while its rows load (Table's `loading` draws one). */
+export const TableSkeleton = /* @__PURE__ */ forwardRef<HTMLTableSectionElement, TableSkeletonProps>(function TableSkeleton(
+  { rows = 3, columns, delay, className, ...rest },
+  ref,
+) {
+  const cells: ReadonlyArray<{ numeric?: boolean }> = typeof columns === "number" ? Array.from({ length: Math.max(1, columns) }, () => ({})) : columns;
+  return <tbody ref={ref} aria-hidden="true" className={cx("area-table__skeleton", className)} {...rest}>
+    {Array.from({ length: Math.max(1, Math.floor(rows)) }, (_, row) => <tr key={row}>
+      {cells.map((cell, column) => <td key={column} className={cell.numeric ? "area-table__cell--numeric" : undefined}>
+        {/* The first column's line is a name's width, the rest a value's (the gallery's loading tile). */}
+        <Skeleton shape="text" delay={delay} className="area-table__skeleton-line" data-column={column === 0 ? "first" : undefined} />
+      </td>)}
+    </tr>)}
+  </tbody>;
+});
+
+/** The columns a table's header row declares, read from its `thead`'s first row (a cell's `colSpan` counts). */
+function headerColumns(children: ReactNode): Array<{ numeric?: boolean }> | undefined {
+  for (const child of Children.toArray(children)) {
+    if (!isValidElement(child) || child.type !== "thead") continue;
+    const row = Children.toArray((child.props as { children?: ReactNode }).children).find(isValidElement);
+    if (!row) return undefined;
+    const columns: Array<{ numeric?: boolean }> = [];
+    for (const cell of Children.toArray((row.props as { children?: ReactNode }).children)) {
+      if (!isValidElement(cell)) continue;
+      const props = cell.props as { colSpan?: number; numeric?: boolean; className?: string };
+      const numeric = props.numeric || /(?:^|\s)area-table__cell--numeric(?:\s|$)/.test(props.className ?? "");
+      for (let i = 0; i < Math.max(1, props.colSpan ?? 1); i++) columns.push({ numeric });
+    }
+    return columns.length ? columns : undefined;
+  }
+  return undefined;
+}
+
 export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(function Table(
-  { interactive, size, layout, striped, columnDividers, flush, baseline, wrapperProps, className, ...rest },
+  { interactive, size, layout, striped, columnDividers, flush, baseline, stickyHeader, stickyFirstColumn, loading, loadingRows = 3, delay, wrapperProps, className, children, ...rest },
   ref,
 ) {
   // A wide table scrolls; a keyboard can only scroll what it can focus, so the wrapper becomes a
@@ -1319,7 +1504,8 @@ export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(fu
   useLayoutEffect(() => {
     const node = wrapper.current;
     if (!node) return;
-    const measure = () => setOverflows(node.scrollWidth > node.clientWidth + 1);
+    // Either way: a wide table scrolls sideways, a sticky header's table in a height scrolls down.
+    const measure = () => setOverflows(node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 1);
     measure();
     if (typeof ResizeObserver === "undefined") return;
     const observer = new ResizeObserver(measure);
@@ -1334,9 +1520,15 @@ export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(fu
       {...(overflows ? { tabIndex: 0, role: "region", "aria-label": name, "aria-labelledby": name ? undefined : labelledBy } : {})}>
       <table
         ref={ref}
-        className={tableVariants({ interactive, size, layout, striped, columnDividers, flush, baseline }, className)}
+        className={tableVariants({ interactive, size, layout, striped, columnDividers, flush, baseline, stickyHeader, stickyFirstColumn }, className)}
+        aria-busy={loading || undefined}
         {...rest}
-      />
+      >
+        {loading ? <>
+          {Children.toArray(children).filter(child => !isValidElement(child) || (child.type !== "tbody" && child.type !== TableGroup))}
+          <TableSkeleton rows={loadingRows} columns={headerColumns(children) ?? 1} delay={delay} />
+        </> : children}
+      </table>
     </div>
   );
 });
@@ -1483,26 +1675,76 @@ export interface MenuProps extends Div {
    * trigger over (product UI rule 4, docs/PRODUCT_UI.md).
    */
   tooltip?: ReactNode;
+  /**
+   * Fixed above the rows, with a rule under it, and not scrolled with them (components audit V5, 2026-11-07): a heading
+   * (a string is set as a MenuLabel) or a line about the list. Its own rows, if any, are reached by the arrows.
+   */
+  header?: ReactNode;
+  /** Fixed below the rows, with a rule over it: an action row for the whole list (a MenuItem such as "Manage teams") or a hint. */
+  footer?: ReactNode;
+  /**
+   * The rows are on their way: a loading row (a Spinner and `loadingText`) takes their place after a short wait (300 ms,
+   * Spinner's `delay="short"`), and the menu is `aria-busy`.
+   */
+  loading?: boolean;
+  /** The loading row's words. Defaults to "Loading". */
+  loadingText?: ReactNode;
+  /**
+   * The row shown when the menu has no rows. Name what's missing ("No teams yet"). Defaults to "No items"; `null` shows
+   * nothing, for a host that fills the menu only while it is open (Context menu).
+   */
+  emptyText?: ReactNode;
 }
+
+/** The loading row: it keeps its place while it waits, then shows the Spinner and the words together. */
+function MenuLoadingRow({ children }: { children: ReactNode }) {
+  const shown = useLoadingDelay("short");
+  return (
+    <div className="area-menu__loading" {...(shown ? {} : { "data-waiting": "" })}>
+      <span className="area-menu__icon" aria-hidden="true"><Spinner size="sm" /></span>
+      <span className="area-menu__text">{children}</span>
+    </div>
+  );
+}
+
+/* What the menu lists: its rows, or the loading or empty row in their place; and the header and footer around them. */
+function menuBody(children: ReactNode, loading: boolean | undefined, loadingText: ReactNode, emptyText: ReactNode) {
+  if (loading) return <MenuLoadingRow>{loadingText}</MenuLoadingRow>;
+  if (Children.toArray(children).length === 0 && emptyText != null && emptyText !== false) return <div className="area-menu__empty"><span className="area-menu__text">{emptyText}</span></div>;
+  return children;
+}
+const menuRegion = (part: "header" | "footer", content: ReactNode) => content == null || content === false ? null
+  : <div className={`area-menu__${part}`}>{typeof content === "string" ? <MenuLabel>{content}</MenuLabel> : content}</div>;
+
 const menuItemsOf = (menu: HTMLElement) =>
-  [...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]:not([disabled]):not([aria-disabled="true"])')]
+  [...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]:not([disabled]):not([aria-disabled="true"]:not([data-inactive]))')]
     .filter(item => item.closest('[role="menu"]') === menu);
 
-export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(function Menu({ trigger, open, defaultOpen, onOpenChange, side, align, offset, tooltip, className, onKeyDown, ...rest }, ref) {
+export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(function Menu({ trigger, open, defaultOpen, onOpenChange, side, align, offset, tooltip, header, footer, loading, loadingText = "Loading", emptyText = "No items", className, onKeyDown, children: rows, ...rest }, ref) {
   const typeahead = useRef("");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const body = menuBody(rows, loading, loadingText, emptyText);
+  const top = menuRegion("header", header), bottom = menuRegion("footer", footer);
+  const framed = top !== null || bottom !== null;
+  const busy = loading ? { "aria-busy": true as const } : {};
   if (trigger !== undefined) {
     // The consumer's handlers run first and can cancel the menu's own; a consumer's name wins
     // over the trigger's (audit D-12: they used to be overwritten).
     const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => {
       const chain = <E extends { defaultPrevented: boolean }>(theirs: ((event: E) => void) | undefined, ours: ((event: E) => void) | undefined) =>
         theirs && ours ? (event: E) => { theirs(event); if (!event.defaultPrevented) ours(event); } : theirs ?? ours;
+      const own = {
+        "aria-labelledby": rest["aria-labelledby"] ?? (rest["aria-label"] ? undefined : extra["aria-labelledby"]),
+        onKeyDown: chain(onKeyDown, extra.onKeyDown), onClick: chain(rest.onClick, extra.onClick), onPointerMove: chain(rest.onPointerMove, extra.onPointerMove),
+        ref: (node: HTMLDivElement | null) => { assignRef(ref, node); assignRef(extra.ref as never, node); },
+      };
       // An anchored menu can outgrow the room beside its trigger, so it scrolls as a Scroll area
       // (docs/specs/scroll-area.md, "Adoption"); focus stays on its items, so the scroller is no Tab stop.
-      return <ScrollArea role="menu" className={menuVariants({}, className)} {...rest} {...extra} viewportProps={{ tabIndex: undefined }}
-        aria-labelledby={rest["aria-labelledby"] ?? (rest["aria-label"] ? undefined : extra["aria-labelledby"])}
-        onKeyDown={chain(onKeyDown, extra.onKeyDown)} onClick={chain(rest.onClick, extra.onClick)} onPointerMove={chain(rest.onPointerMove, extra.onPointerMove)}
-        ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />;
+      // With a header or footer, only the rows scroll: the frame holds the three, the Scroll area the rows (V5).
+      if (framed) return <div role="menu" className={menuVariants({}, className)} {...busy} {...rest} {...extra} {...own}>
+        {top}<ScrollArea className="area-menu__list" viewportProps={{ tabIndex: undefined }}>{body}</ScrollArea>{bottom}
+      </div>;
+      return <ScrollArea role="menu" className={menuVariants({}, className)} {...busy} {...rest} {...extra} viewportProps={{ tabIndex: undefined }} {...own}>{body}</ScrollArea>;
     };
     // The tooltip takes the trigger after the menu has, so both sets of handlers and refs compose.
     const wrapTrigger = tooltip == null ? undefined : (menuTrigger: ReactNode) => <Tooltip side="bottom" trigger={menuTrigger}>{tooltip}</Tooltip>;
@@ -1537,7 +1779,9 @@ export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(functi
     event.preventDefault();
     next.focus();
   };
-  return <div ref={ref} role="menu" className={menuVariants({}, className)} onKeyDown={handleKeyDown} {...rest} />;
+  return <div ref={ref} role="menu" className={menuVariants({}, className)} onKeyDown={handleKeyDown} {...busy} {...rest}>
+    {framed ? <>{top}<div className="area-menu__list">{body}</div>{bottom}</> : body}
+  </div>;
 });
 
 /** A non-interactive heading that names the following group of menu items. */
@@ -1667,11 +1911,24 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
   /** A leading icon in the row's icon box, as NavItem, Tabs and CommandItem take (audit S17, D-18). */
   icon?: ReactNode;
   /**
+   * Pushed to the row's end, before the shortcut: a count, a badge, a status (components audit 2026-11-07, O7), as Nav
+   * item's, Tabs items' and Tree view nodes' `trailing`. Muted, in the row's type.
+   */
+  trailing?: ReactNode;
+  /**
    * Choosing the row leaves the menu open (`data-keep-open`), for a menu of view options whose
    * effect shows behind it (sort, group, show); a menu of commands closes (docs/PRODUCT_UI.md).
    * Checkbox rows always stay open.
    */
   keepOpen?: boolean;
+  /**
+   * Can't act now, for a reason that will pass or that the person can change (components audit V2, 2026-11-07): drawn
+   * as disabled, but the arrows, typeahead and the pointer still reach it, so it can say why in `inactiveText`.
+   * Choosing it does nothing and leaves the menu open (`aria-disabled`). `disabled` is for a row that truly can't act.
+   */
+  inactive?: boolean;
+  /** Why an inactive row can't act ("Upgrade to export"), in its note under the label, in place of `description`, and as its accessible description. */
+  inactiveText?: ReactNode;
 }
 
 /** A string shortcut's keys: each leading modifier glyph on its own, then the rest as written ("⌘⇧P" → ⌘, ⇧, P). */
@@ -1684,10 +1941,16 @@ function shortcutKeys(text: string) {
 }
 
 export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemProps>(function MenuItem(
-  { tone, shortcut, disabled, checked, radio, indicator = "check", description, icon, keepOpen, className, children, ...rest },
+  { tone, shortcut, disabled, checked, radio, indicator = "check", description: descriptionProp, icon, trailing, keepOpen, inactive: inactiveProp, inactiveText, className, children, onClick, ...rest },
   ref,
 ) {
   const checkable = checked !== undefined;
+  const reasonId = useId();
+  // Disabled wins: a native disabled row can't take focus, so it can't be inactive.
+  const inactive = Boolean(inactiveProp) && !disabled;
+  const reason = inactive && inactiveText != null && inactiveText !== false;
+  // The reason is the row's note and its description, said once: hidden from the row's name, read through describedby.
+  const description = reason ? <span id={reasonId} aria-hidden="true">{inactiveText}</span> : descriptionProp;
   return (
     <button
       ref={ref}
@@ -1697,8 +1960,10 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
       className={cx("area-menu__item", tone === "danger" && "area-menu__item--danger", className)}
       disabled={disabled}
       {...(disabled ? { "data-disabled": "" } : {})}
-      {...(keepOpen ? { "data-keep-open": "" } : {})}
-      {...rest}
+      {...(keepOpen || inactive ? { "data-keep-open": "" } : {})}
+      {...(inactive ? { "data-inactive": "", "aria-disabled": true } : {})}
+      onClick={inactive ? event => event.preventDefault() : onClick}
+      {...(reason ? { ...rest, "aria-describedby": [rest["aria-describedby"], reasonId].filter(Boolean).join(" ") } : rest)}
     >
       {icon ? <span className="area-menu__icon" aria-hidden="true">{icon}</span> : null}
       {description ? <span className="area-menu__lines"><span className="area-menu__text">{children}</span><span className="area-menu__description">{description}</span></span>
@@ -1707,6 +1972,7 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
           glyphs each their own key and the rest verbatim ("⌘L" → ⌘ · L), as a Kbd passed in draws it (visual pass
           2026-10-26: "⌘L" set as one cap beside Kbd's "⌘ K" read as two spacings in one menu). The row hides a Kbd's
           spoken chord anyway; the item carries aria-keyshortcuts. */}
+      {trailing != null && trailing !== false ? <span className="area-menu__trailing">{trailing}</span> : null}
       {shortcut ? <span className="area-menu__shortcut">{typeof shortcut === "string"
         ? <span className="area-kbd area-kbd--sm area-kbd--default">{shortcutKeys(shortcut).map((key, i) => <kbd key={i} className="area-kbd__key">{key}</kbd>)}</span> : shortcut}</span> : null}
       {checkable && indicator === "switch" ? (
@@ -1727,18 +1993,22 @@ export interface ToastProps extends Omit<Div, "title"> {
   tone?: VariantProps<typeof MANIFESTS.toast>["tone"];
   icon?: ReactNode;
   title?: ReactNode;
+  /** The toast's actions (an Undo, a View), in its `__actions` part, as Alert's (components audit 2026-11-07, O7). */
+  actions?: ReactNode;
+  /** @deprecated Use `actions` (2026-11-07). Kept for one release; `actions` wins. */
   action?: ReactNode;
   onDismiss?: () => void;
   dismissLabel?: string;
   /** Announces itself: `status`, or `alert` for danger as Alert does (audit E-11). A Toaster turns
-   * this off and announces through live regions that exist before the toast. */
+   * this off and says the toast through the shared announcer (`announce`, components audit D1). */
   live?: boolean;
 }
 
 export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(function Toast(
-  { tone = "neutral", icon, title, action, onDismiss, dismissLabel = "Dismiss notification", live = true, className, children, ...rest },
+  { tone = "neutral", icon, title, actions: actionsProp, action, onDismiss, dismissLabel = "Dismiss notification", live = true, className, children, ...rest },
   ref,
 ) {
+  const actions = actionsProp ?? action;
   return (
     <div ref={ref} className={toastVariants({ tone }, className)} {...rest}>
       {icon ? (
@@ -1747,7 +2017,7 @@ export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(func
         </span>
       ) : null}
       <div className="area-toast__content" role={live ? (tone === "danger" ? "alert" : "status") : undefined} aria-atomic={live || undefined}>{title ? <div className="area-toast__title">{title}</div> : null}<div className={title ? "area-toast__description" : undefined}>{children}</div></div>
-      {action ? <div className="area-toast__action">{action}</div> : null}
+      {actions ? <div className="area-toast__actions">{actions}</div> : null}
       {onDismiss ? <span className="area-toast__dismiss"><Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<Glyph name="dismiss" />} aria-label={dismissLabel} onClick={onDismiss} /></span> : null}
     </div>
   );
@@ -1788,12 +2058,22 @@ function useTabIndicator(list: { current: HTMLElement | null }, buttons: { curre
   }, [selected, key]);
 }
 
+/**
+ * One tab. It is keyed by `value`, as Segmented's, Toggle group's and Custom select's items are (components audit
+ * 2026-11-07, O7); `id` is the deprecated key, still read for one release.
+ */
+export type TabsItem = { label: ReactNode; icon?: ReactNode; trailing?: ReactNode; disabled?: boolean; content?: ReactNode;
+  /** How what the tab holds changed: its label takes the change's ink and the word is read out (components audit D6). */
+  status?: ChangeStatusInput;
+  /** Changed since it was last looked at: a dot after the label, apart from the status. */
+  unseen?: boolean }
+  & ({ value: string; /** @deprecated Use `value`. */ id?: string } | { /** @deprecated Use `value`. */ id: string; value?: undefined });
+
 export interface TabsProps extends Omit<Div, "defaultValue"> {
-  /** Tab labels, in order. */
-  /** The tabs. Collections are `items` everywhere (audit H-14). */
-  items?: Array<{ id: string; label: ReactNode; icon?: ReactNode; trailing?: ReactNode; disabled?: boolean; content?: ReactNode }>;
+  /** The tabs, in order. Collections are `items` everywhere (audit H-14). */
+  items?: TabsItem[];
   /** @deprecated Use `items`. */
-  tabs?: Array<{ id: string; label: ReactNode; icon?: ReactNode; trailing?: ReactNode; disabled?: boolean; content?: ReactNode }>;
+  tabs?: TabsItem[];
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string, event: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>) => void;
@@ -1813,10 +2093,14 @@ export interface TabsProps extends Omit<Div, "defaultValue"> {
 }
 
 export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(function Tabs(
-  { items, tabs: legacyTabs, value: controlledValue, defaultValue, onValueChange, "aria-label": ariaLabel, label, size = "md", orientation = "horizontal", activationMode = "automatic", track, selection = "marker", className, children, ...rest },
+  { items, tabs: legacyTabs, value: controlledValue, defaultValue, onValueChange, "aria-label": ariaLabel, label, size = "md", orientation = "horizontal", activationMode = "automatic", track, selection: selectionProp, className, children, ...rest },
   ref,
 ) {
-  const tabs = items ?? legacyTabs ?? NO_ITEMS;
+  // The system's default (SystemDefaults) where the use gives none; the underline (marker) otherwise.
+  const selection = useSystemDefault("tabs", "selection", selectionProp, ["marker", "plate"]) ?? "marker";
+  // Each tab's key: its value, else its deprecated id.
+  const source = items ?? legacyTabs ?? NO_ITEMS;
+  const tabs = useMemo(() => source.map(tab => ({ ...tab, id: (tab.value ?? tab.id)! })), [source]);
   const id = useId();
   const [localValue, setLocalValue] = useState(defaultValue ?? tabs.find(tab => !tab.disabled)?.id);
   const candidate = controlledValue ?? localValue;
@@ -1858,10 +2142,13 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
             className="area-tabs__tab"
             {...(tab.id === value ? { "data-selected": "" } : {})}
             {...(tab.disabled ? { "data-disabled": "" } : {})}
+            data-status={changeStatus(tab.status)}
           >
             {tab.icon ? <span className="area-tabs__icon" aria-hidden="true">{tab.icon}</span> : null}
             {/* The hidden strong copy reserves the selected width, so selecting a tab never moves the row. */}
             <span className="area-tabs__label">{tab.label}<span className="area-tabs__reserve" aria-hidden="true">{tab.label}</span></span>
+            {tab.status ? <span className="area-sr-only">{` ${CHANGE_MARK[changeStatus(tab.status)].word}`}</span> : null}
+            {tab.unseen ? <span className="area-tabs__unseen"><span className="area-sr-only"> Unseen</span></span> : null}
             {tab.trailing}
           </button>
         ))}
@@ -1875,10 +2162,23 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
 
 /* --- Dialog --------------------------------------------------------------- */
 
+const dialogVariants = /* @__PURE__ */ createVariants(MANIFESTS.dialog);
+
 export interface DialogProps extends Omit<Div, "title" | "onClose"> {
   title?: ReactNode;
   description?: ReactNode;
   footer?: ReactNode;
+  /**
+   * The width (components audit V1, 2026-11-07), as Drawer's `size`: sm 384 (Drawer's sm), md 480 (default, Drawer's md),
+   * lg 720 for a table or two columns, xl 880 for a settings dialog with its own sidebar. Never wider than the screen
+   * less 32.
+   */
+  size?: VariantProps<typeof MANIFESTS.dialog>["size"];
+  /**
+   * Takes the tallest height the screen allows (the screen less 64), whatever its content, so a dialog whose content
+   * changes (tabs, a search, steps) doesn't jump. The body takes the room and scrolls.
+   */
+  fullHeight?: boolean;
   /** Shows the corner close control. On by default. */
   showCloseButton?: boolean;
   /** Called by the close control before closing an enclosing native dialog. */
@@ -1912,11 +2212,14 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
  * `<dialog class="area-dialog__modal">` and opened with `showModal()`.
  */
 export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { title, description, footer, showCloseButton = true, onDismiss, dismissLabel = "Close dialog", onClose, trigger, open: openProp, defaultOpen, onOpenChange, className, children, ...rest },
+  { title, description, footer, size, fullHeight, showCloseButton = true, onDismiss, dismissLabel = "Close dialog", onClose, trigger, open: openProp, defaultOpen, onOpenChange, className, children, ...rest },
   ref,
 ) {
   const id = useId();
   const modal = useRef<HTMLDialogElement | null>(null);
+  // A rule under the header once the body has scrolled (`data-scrolled`, V1): the header then reads as fixed above
+  // content passing under it. Set from the body's scroll position; React skips the render when it doesn't change.
+  const [scrolled, setScrolled] = useState(false);
   const backdropPress = useRef(false);
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const isModal = trigger !== undefined || openProp !== undefined || defaultOpen !== undefined;
@@ -1940,7 +2243,8 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
     <div
       ref={ref}
       {...(isModal ? {} : { role: role ?? "dialog", "aria-modal": "true" as const, "aria-label": ariaLabel, "aria-labelledby": labelled["aria-labelledby"], "aria-describedby": labelled["aria-describedby"] })}
-      className={cx("area-dialog", className)}
+      className={dialogVariants({ size, fullHeight }, className)}
+      {...(scrolled ? { "data-scrolled": "" } : {})}
       {...surfaceRest}
     >
       {title || description || showCloseButton ? (
@@ -1949,13 +2253,13 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
             {title ? <h2 className="area-dialog__title" id={`${id}-title`}>{title}</h2> : null}
             {description ? <p className="area-dialog__description" id={`${id}-description`}>{description}</p> : null}
           </div>
-          {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-dialog__close" aria-label={dismissLabel} icon={<Glyph name="dismiss" />} onClick={event => {
+          {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-dialog__dismiss" aria-label={dismissLabel} icon={<Glyph name="dismiss" />} onClick={event => {
             (onDismiss ?? onClose)?.();
             event.currentTarget.closest("dialog")?.close();
           }} /> : null}
         </div>
       ) : null}
-      {children ? <div className="area-dialog__body">{children}</div> : null}
+      {children ? <div className="area-dialog__body" onScroll={event => setScrolled(event.currentTarget.scrollTop > 0)}>{children}</div> : null}
       {footer ? <div className="area-dialog__footer">{footer}</div> : null}
     </div>
   );
@@ -2028,9 +2332,12 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
   { size: sizeProp, fullWidth, iconOnly, items, options: legacyOptions, value: controlledValue, defaultValue, label, onValueChange, onSelect, name, form, disabled, className, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  const systemSize = useSystemDefault("segmented", "size", undefined as typeof sizeProp);
   const options = items ?? legacyOptions ?? NO_ITEMS;
   const toolbarSize = useContext(ToolbarSize);
-  const size = sizeProp ?? toolbarSize;
+  // Its own size, else a toolbar's, else the system's.
+  const size = sizeProp ?? toolbarSize ?? systemSize;
   const [localValue, setLocalValue] = useState(defaultValue ?? options.find(option => !option.disabled)?.value);
   const initial = useRef(localValue);
   const hidden = useRef<HTMLInputElement | null>(null);
@@ -2151,7 +2458,8 @@ export const Code = /* @__PURE__ */ forwardRef<HTMLElement, CodeProps>(function 
 
 const codeBlockVariants = /* @__PURE__ */ createVariants(MANIFESTS.codeBlock);
 
-export type CodeLineMark = "added" | "removed";
+/** A line's change, in the shared change words (components audit D6); `removed` is the deprecated spelling of `deleted`. */
+export type CodeLineMark = "added" | "deleted" | "removed";
 
 /** `"3, 5-7"` or `[3, 5, 6, 7]` into the set of line numbers to emphasise. */
 function parseLineNumbers(value: number[] | string | undefined): Set<number> | undefined {
@@ -2192,15 +2500,15 @@ export interface CodeBlockProps extends Omit<Div, "title"> {
   languageTabs?: boolean;
   /** Controlled active language. Omit for an uncontrolled picker. */
   value?: string;
-  /** Called with the chosen language (audit S17: one change name). */
-  onValueChange?: (language: string) => void;
+  /** Called with the chosen language and the click, key or change that chose it (audit S17: one change name). */
+  onValueChange?: (language: string, event: SyntheticEvent) => void;
   /** @deprecated Use `onValueChange`. */
   onLanguageChange?: (language: string) => void;
   /** Line numbers. On by default; turn them off for a short excerpt. */
   lineNumbers?: boolean;
   /** Lines to emphasise, as numbers or a range string such as `"3, 5-7"`. */
   highlightLines?: number[] | string;
-  /** Added and removed lines, keyed by line number. */
+  /** Added and deleted lines, keyed by line number. */
   marks?: Record<number, CodeLineMark>;
   /** Makes each line number a link to its own line, so a reference can be shared. */
   linkLines?: boolean;
@@ -2283,9 +2591,9 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
   const highlighted = parseLineNumbers(highlightLines);
   const lines = (html ?? code ?? "").split("\n");
 
-  const selectLanguage = (next: string) => {
+  const selectLanguage = (next: string, event: SyntheticEvent) => {
     if (value === undefined) setLocalLanguage(next);
-    onValueChange?.(next);
+    onValueChange?.(next, event);
     onLanguageChange?.(next);
   };
 
@@ -2329,10 +2637,10 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
                 const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
                 const step = (event.key === "ArrowRight" ? 1 : -1) * (rtl ? -1 : 1);
                 const next = languages[event.key === "Home" ? 0 : event.key === "End" ? languages.length - 1 : (index + step + languages.length) % languages.length]!;
-                selectLanguage(next);
+                selectLanguage(next, event);
                 tabButtons.current.get(next)?.focus();
               }}
-              onClick={() => selectLanguage(item)}
+              onClick={event => selectLanguage(item, event)}
             >
               <span className="area-tabs__label">{item}<span className="area-tabs__reserve" aria-hidden="true">{item}</span></span>
             </button>
@@ -2347,7 +2655,7 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
           size="sm"
           aria-label={languageLabel}
           value={activeLanguage}
-          onChange={event => selectLanguage(event.currentTarget.value)}
+          onChange={event => selectLanguage(event.currentTarget.value, event)}
         >
           {languages.map(item => <option key={item} value={item}>{item}</option>)}
         </Select>
@@ -2388,7 +2696,8 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
           <code className="area-code-block__code" ref={source}>
           {lines.map((text, index) => {
             const number = index + 1;
-            const mark = marks?.[number];
+            const given = marks?.[number];
+            const mark = given === "removed" ? "deleted" : given;
             // Hiding the numbers hides the gutter too, unless a diff marker needs its column.
             const gutter = lineNumbers || mark;
             return (

@@ -40,7 +40,7 @@ Panel (docked in the layout, doesn't slide over it).
 | Slot · property | shadcn | Area |
 |---|---|---|
 | surface | x 710, 384 × 798 (full height, flush right), white, 1px left border #e5, shadow 0 10 15 −3 / 0 4 6 −4 at 10% | the same box at the same viewport (verified live), Area surface fill, 1px `border-float` on the inner edge, float lift |
-| header | padding 16, title 16/24 500, description 14/20 muted, 2 apart | Dialog's: 16 inset, 16/24 strong, 14/20 muted, 4 apart |
+| header | padding 16, title 16/24 500, description 14/20 muted, 2 apart | Dialog's: 16 inset, title the text's size strong (13/18 at type 13; `title-xs` until 2026-11-06), description 13/18 muted, a step (4) under |
 | body | 16 sides, fields 24 apart | Dialog's body (scrolls), 16 inset |
 | footer | padding 16, buttons stacked full width, 8 apart | Dialog's footer: end-aligned row, or `actions="stacked"`: full width, 8 apart |
 | close | 28 ghost at 12 / 12, radius 8, 16 icon | Dialog's close: md ghost at 8 / 8 (icon on the 16 inset) |
@@ -60,7 +60,7 @@ Area's lift is the Elevation axis's modal role, as Dialog (`--area-shadow-modal`
 | width | 384 sm / 480 md, at most the viewport less 48 (drawer.css:60, 78-79); bottom: full width, at most the viewport less 48 tall | shadcn; Dialog | — |
 | edge | inner-edge 1px `border-float`, no radius against the screen edge; bottom: top corners Dialog's (container + 4, 16) | shadcn (flush, 1px edge); Dialog | Was `radius-container` (12), which left Dialog's close (8, at 8 / 8) rounder than its corner; corner audit 2026-10-23 |
 | insets | 16 on every side, `16 − border` only on the bordered (inner) side (drawer.css:63-64, 85, 97-98) | Dialog's 16, border counted once (audit 2026-10-07) | — |
-| anatomy, type, close | Dialog's: title 16/24 strong (cap-trimmed without a close), description muted 4 below, md ghost close 8 / 8, section gap `inset-surface-md` | Peer: Dialog (accepted) | shadcn close at 12 |
+| anatomy, type, close | Dialog's: title 13/18 strong, the text's size (cap-trimmed without a close; 16 until 2026-11-06), description muted, joined, md ghost close 8 / 8, section gap `inset-surface-md` | Peer: Dialog (accepted) | shadcn close at 12 |
 | body | a Scroll area; the focus-ring bleed inside the scroller (drawer.css:142-153) | Scroll area adoption (owner, 2026-10-09) | — |
 | footer | `actions="row"` (default): end-aligned, `ui-cluster` apart, wrapping; `"stacked"`: full width, 8 apart, primary first (drawer.css:154-159) | Dialog; shadcn's Sheet (owner 2026-10-06) | — |
 | lift | `--area-shadow-modal` after a material's layers and the Surface axis's `shadow-edge` (drawer.css:70-71) | Dialog; Elevation and Stroke audit 2026-10-18 (the modal lift under every material) | shadcn 0 10 15 −3 / 0 4 6 −4 at 10% |
@@ -173,3 +173,26 @@ Open questions: under reduced motion the panel appears at once. A short opacity 
 
 - **What changed:** the description sits directly under the title: 12 from the title's baseline to the description's cap, was 16.
 - **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs".
+
+## Review note, 2026-11-06 (balance pass; owner: "Keep it")
+
+- **What changed:** Dialog's title: 13/18 strong over the 13/18 muted description, joined (8.8); was 16/22 joined 10.0.
+  The close centres on the title's own line.
+- **Why:** the owner's note on a confirm ("no spacing logic between the title and the text … the type style size contrast with the text is large … make sure all of this is intentional"). The 2026-11-02 ramp moved `title-xs` from 15 to 16 at type 13, so a 16 title sat over 13 text, 1.23× (the owner had approved 16 over 14, 1.14×, on 2026-09-26), and joined 10.0 baseline to cap beside the text's own 8.8: near the line gap but not on it. Cursor sets its confirm's title at its text's size (12/500 over 12) and its settings rows 13 over 13. DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
+
+- **Second look (owner: "the space between the title and the copy still doesnt look right"):** joined on the copy's
+  line, the title read as the paragraph's first line. Every surface title now stands one step (4) off its copy: 12.8
+  baseline to cap beside the copy's 8.8. Compared at 0, 4 and 6 on the review page; the owner picked 4 ("4 is right",
+  2026-11-06; Cursor's confirm sets its message 4 under its title).
+
+### 2026-11-07 · One dismiss API and part (system gaps C4)
+
+- **What changed:** the close button's part is `area-drawer__dismiss` (was `__close`).
+- **Why:** one dismiss API and one part name across the families that close or remove (Governance § 4; owner picked Build on the system gaps review, 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · onDismiss (components audit O7)
+
+- **What changed:** The close control calls `onDismiss` before it closes the drawer, as Dialog's; `onOpenChange` still hears every close.
+- **Why:** Drawer.tsx:26-27 had `dismissLabel` only; one close API across the modal family. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

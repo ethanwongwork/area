@@ -59,3 +59,9 @@ test("an image avatar must be described: alt, aria-label, aria-labelledby or ari
   }
   assert.doesNotThrow(() => renderToString(h(Avatar, { fallback: "D" })));
 });
+
+test("Avatar keeps xs, the recorded exception for an avatar on a line of text (components audit O7)", () => {
+  // Governance § 4, Known deviations: the inline 20 (ChatGPT's profile menu, Notion's sidebar) beside a name in a sentence.
+  assert.deepEqual(MANIFESTS.avatar.variants.size, ["xs", "sm", "md", "lg"]);
+  assert.match(renderToString(h(Avatar, { size: "xs", fallback: "DT", alt: "David Tee" })), /area-avatar--xs/);
+});

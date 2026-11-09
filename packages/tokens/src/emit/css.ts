@@ -252,6 +252,12 @@ export function emitAxes(): string {
   // A press's give rests at 1 too: with no time to move, a scale would jump (Feedback, 2026-10-24).
   const still = AXES.find((a) => a.id === "feedback")!.presets.find((p) => p.id === FEEDBACK_NONE)!;
   out.push(rule(":root, [data-area-feedback]", still.tokens, INDENT + INDENT));
+  // Fades stay, short (owner, 2026-11-07, system gaps M2; Apple's guidance, Base UI, Motion's reducedMotion="user"): an
+  // opacity change keeps 100ms for a small mark and 160ms for a surface, while every movement is instant. Motion 0
+  // asked for none, so it keeps none.
+  const fades = { "--area-fade-fast": "100ms", "--area-fade-base": "160ms", "--area-fade-moderate": "160ms", "--area-fade-slow": "160ms" };
+  out.push(rule(":root, [data-area-motion]", fades, INDENT + INDENT));
+  out.push(rule(`:root[data-area-motion="${MOTION_NONE}"], [data-area-motion="${MOTION_NONE}"]`, Object.fromEntries(Object.keys(fades).map(name => [name, "0ms"])), INDENT + INDENT));
   out.push(`${INDENT}}`);
   out.push("}");
   out.push("");

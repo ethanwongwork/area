@@ -1,4 +1,5 @@
 // Count: a number beside its owner's label. Spec: docs/specs/count.md.
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { countVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -27,6 +28,9 @@ export interface CountProps extends Omit<HTMLAttributes<HTMLSpanElement>, "child
 export const Count = forwardRef<HTMLSpanElement, CountProps>(function Count(
   { count, max = 99, showZero = true, label, variant, size, pill, className, ...rest }, ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  variant = useSystemDefault("count", "variant", variant);
+  size = useSystemDefault("count", "size", size);
   if (!showZero && normalizeCount(count) === 0) return null;
   const text = formatCount(count, max);
   // One character drops the sides, so a one-digit count is as wide as it is tall: a circle as a pill (count.css).

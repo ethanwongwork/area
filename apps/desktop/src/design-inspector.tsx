@@ -8,11 +8,14 @@
  *   Fill       its fill and its words' ink, as color roles
  *   Type       its type role and weight
  *   Corner     its radius
+ *   On click   where it goes in a flow (the user flows study, 2026-11-08): the next step, another layer of the page, or
+ *              Back; the first link makes the page a flow (src/flow.ts), and a link is a change like the others
  *
  * Each value is read from the element as drawn and shown as the token it matches, or as it is with "off scale". A choice
  * is a change: drawn on the stage at once and logged in the project (projects.ts `logChange`). The log sits at the
- * view's foot (the owner's pick), each change undoable, and Send to chat puts them all in Chat as one message, for the
- * agent to write into the screen's source; they stay drawn, marked sent, until cleared.
+ * view's foot (the owner's pick), each change undoable, and Send to chat puts them all in Chat's composer as one card (the
+ * chat workflow study, P9), for the agent to write into the screen's source; once sent they stay drawn, marked sent, until
+ * cleared.
  */
 import { useEffect, useMemo, useState, type RefObject } from "react";
 import { Button, Count, CustomSelect, Input, PanelSection } from "@area/react";
@@ -23,7 +26,8 @@ import { RowField } from "./inspector-rows.tsx";
 import { FAMILIES } from "./pages/components.tsx";
 import { describe, elementAt, parentOf, pathOf, propertiesOf, screensIn, type PropertyRow } from "./design-edit.ts";
 import { toJsx, type DocNode } from "./design-doc.ts";
-import { clearSent, logChange, markSent, pendingChanges, undoChange, type DesignChange, type Project, type ProjectPage, type Layer } from "./projects.ts";
+import { BACK, clearSent, logChange, markSent, pendingChanges, setLink, undoChange, type DesignChange, type Project, type ProjectPage, type Layer } from "./projects.ts";
+import { isFlow, readFlow, stepName } from "./flow.ts";
 
 /** Sentinels for CustomSelect, which takes no empty value: a variant at its default, and a value off the scale. */
 const DEFAULT = "__default", OFF = "__off";
@@ -92,9 +96,40 @@ export function ElementPanel({ project, page, layer, stage, path, onSelect, onEd
           </PanelSection>
         );
       })}
+      {page.layers.length > 1 ? <GoesTo project={project} page={page} layer={layer} path={path} target={read.target} label={read.label} /> : null}
     </>
   );
 }
+
+/**
+ * On click › Goes to: where the element goes when the flow is played. "Next step" is no link (a step with no links goes
+ * on to the next); a choice sets the element's link (projects.ts `setLink`) and logs it as a change, whose Undo puts the
+ * link back, so it goes to Chat with the others for the agent to wire the navigation.
+ */
+function GoesTo({ project, page, layer, path, target, label }: { project: Project; page: ProjectPage; layer: Layer; path: number[]; target: string; label: string }) {
+  const { updateProject } = useStudio();
+  const flow = isFlow(page) ? readFlow(page) : null;
+  const nameOf = (id: string) => id === BACK ? "Back" : id === NEXT ? "Next step" : (() => { const other = page.layers.find(entry => entry.id === id); return other ? flow ? stepName(flow, other) : other.name : "A removed layer"; })();
+  const current = (page.links ?? []).find(link => link.from === layer.id && link.path.join("/") === path.join("/"))?.to ?? NEXT;
+  const others = flow ? flow.ordered.map(step => step.layer).filter(entry => entry.id !== layer.id) : page.layers.filter(entry => entry.id !== layer.id);
+  const items = [{ value: NEXT, label: "Next step" }, ...others.map(entry => ({ value: entry.id, label: nameOf(entry.id) })), { value: BACK, label: "Back" }];
+  const go = (to: string) => {
+    if (to === current) return;
+    updateProject(project.id, now => logChange(setLink(now, page.id, { from: layer.id, path, label: label || target, to: to === NEXT ? "" : to }), {
+      page: page.id, layer: layer.id, path, target, label, property: "link", name: "Goes to", from: nameOf(current), to: nameOf(to), value: to === NEXT ? "" : to, was: current === NEXT ? "" : current,
+    }));
+  };
+  return (
+    <PanelSection heading="On click">
+      <RowField label="Goes to" orientation="horizontal" reset={false}>
+        <CustomSelect size="sm" variant="soft" fullWidth aria-label="Goes to" items={items} value={current} onValueChange={go} />
+      </RowField>
+      {!flow ? <p className="studio-design__about">A link makes this page a flow: its layers in order are the steps.</p> : null}
+    </PanelSection>
+  );
+}
+/** CustomSelect takes no empty value: the next step's sentinel. */
+const NEXT = "__next";
 
 /** One property's row: a choice of tokens or values, or the words. */
 function PropertyField({ row, onChange }: { row: PropertyRow; onChange: (value: string, label: string) => void }) {
@@ -204,15 +239,24 @@ export interface ChangeLogProps {
 /** The Design view's foot: the changes not yet sent, newest first, and Send to chat. */
 export function ChangeLog({ project, page, layer, onOpen, screenFile }: ChangeLogProps) {
   const { updateProject, setInspectorView } = useStudio();
-  const { session } = useChat();
+  const { setChanges, setDraft, composer } = useChat();
   const pending = useMemo(() => pendingChanges(project), [project]);
   const sent = project.changes.length - pending.length;
   if (!project.changes.length) return null;
   const layerName = (change: DesignChange) => project.pages.find(entry => entry.id === change.page)?.layers.find(entry => entry.id === change.layer)?.name;
+  // Send to chat puts the changes in the composer as one card (the chat workflow study, P9), with room for a sentence;
+  // they are marked sent once the message goes. The agent reads the full list (changesMessage); the bubble shows the card.
   const send = () => {
-    session.send(changesMessage(project, pending, screenFile), `${project.name} · ${pending.length} design ${pending.length === 1 ? "change" : "changes"}`);
-    updateProject(project.id, current => markSent(current));
+    const page = pending.length && pending.every(change => change.page === pending[0]!.page) ? project.pages.find(entry => entry.id === pending[0]!.page)?.name : undefined;
+    setChanges({
+      title: `${pending.length === 1 ? "1 design change" : `${pending.length} design changes`}${page ? ` on ${page}` : ""}`,
+      items: pending.map(change => ({ thing: thing(change), change: said(change) })),
+      prompt: changesMessage(project, pending, screenFile),
+      onSent: () => updateProject(project.id, current => markSent(current)),
+    });
+    setDraft(current => current.trim() ? current : "Make these changes.");
     setInspectorView("chat");
+    requestAnimationFrame(() => composer.current?.focus());
   };
   return (
     <section className="studio-design__log" aria-label="Changes">

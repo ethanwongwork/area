@@ -11,15 +11,22 @@ export interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
   size?: VariantProps<typeof MANIFESTS.toolbar>["size"];
   orientation?: VariantProps<typeof MANIFESTS.toolbar>["orientation"];
   fullWidth?: boolean;
+  /**
+   * The hover action bar: over the top-end corner of its parent (a row, a block), shown while the parent is hovered or
+   * holds focus, and always on a touch screen. Give it one to four actions, `size="sm"` and `variant="surface"` for the
+   * small floating bar; it stays in the tab order, so Tab reaches it.
+   */
+  floating?: boolean;
 }
 
+// An inactive button (`data-inactive`, components audit V2) is aria-disabled but stays reachable, so it can say why.
 const itemsIn = (root: HTMLElement) => Array.from(root.querySelectorAll<HTMLElement>("[data-area-toolbar-item]"))
-  .filter(item => !item.matches(":disabled, [aria-disabled='true']") && item.getClientRects().length > 0);
+  .filter(item => !item.matches(":disabled, [aria-disabled='true']:not([data-inactive])") && item.getClientRects().length > 0);
 const ToolbarOrientation = createContext<"horizontal" | "vertical">("horizontal");
 
 /** One Tab stop. Arrow keys move across commands without activating them. */
 export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar(
-  { variant, size, orientation = "horizontal", fullWidth, className, onFocusCapture, onBlurCapture, onKeyDown, ...rest }, ref,
+  { variant, size, orientation = "horizontal", fullWidth, floating, className, onFocusCapture, onBlurCapture, onKeyDown, ...rest }, ref,
 ) {
   const lastFocused = useRef<HTMLElement | null>(null);
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
@@ -45,7 +52,7 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
     items[next]?.focus();
   }
   return <InToolbar.Provider value={true}><ToolbarSize.Provider value={size ?? undefined}><ToolbarOrientation.Provider value={orientation}><div ref={ref} {...rest} role="toolbar" aria-orientation={orientation} tabIndex={0}
-    className={toolbarVariants({ variant, size, orientation, fullWidth }, className)}
+    className={toolbarVariants({ variant, size, orientation, fullWidth, floating }, className)}
     onFocusCapture={event => {
       onFocusCapture?.(event);
       if (event.defaultPrevented) return;

@@ -230,6 +230,9 @@
   .area-color-field--sm { --_color-field-width: calc(var(--area-space-96) + var(--area-space-32)); }
   .area-color-field--md { --_color-field-width: calc(var(--area-space-96) + var(--area-space-48)); }
   .area-color-field--lg { --_color-field-width: calc(var(--area-space-96) + var(--area-space-64)); }
+  /* The treatment is Input's, on the same shell (`area-input--outline` / `--soft`, InputGroup's with alpha); these name it
+     for the manifest and the gallery (2026-11-07, O7). */
+  .area-color-field--outline, .area-color-field--soft {}
   .area-input-group.area-color-field--alpha { inline-size: calc(var(--_color-field-width) + var(--area-space-48)); }
   /* spec (batch 9, owner: "the percentage fields … seem too large … Figma anchors % to the right"):
      the opacity part is as wide as its content, three tabular digits and "%", so the hex keeps the

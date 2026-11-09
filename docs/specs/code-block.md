@@ -171,7 +171,7 @@ shared Select, named by the same `languageLabel`. Without tabs, the scrolling `p
 `user-select: none`; with `linkLines` each is a link named "Line n" to its own `#<id>-L<n>`
 fragment, out of the tab order (`tabIndex=-1`), so a long block isn't a tab stop per line. The
 copy button is CopyButton (copy-button.md) with one fixed name, `copyLabel` ("Copy code" by default); the
-result is said once through its polite live region and shown by the glyph, with
+result is said once through the shared announcer and shown by the glyph, with
 `data-copy-state="copied" | "failed"` as a paint hook (audit G-21; primitives.tsx:2060-2069). It reads `code`, or
 the rendered text cells for `html`, so the gutter stays out of the clipboard. `onValueChange(language)` reports the chosen language
 (`onLanguageChange` is a deprecated alias). The show / hide toggle is a button whose visible
@@ -405,3 +405,18 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
   tile corner and tile fill (`FEED_CODE`), with the cards' Stroke 2. Listed in `OVERRIDABLE`.
 - **Why:** in Labs › Feed the code sat 12 in under an 11 corner on white while every other frame held its content 16 in
   under 16 on the tile fill (owner, 2026-11-01: "all containers feel consistent").
+
+### 2026-11-07 · The event in onValueChange (components audit O3)
+
+- **What changed:** The language picker's `onValueChange(language, event)` passes the click, key or change.
+- **Why:** The last `onValueChange` in the package without its event. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-07 · One announcer (components audit D1)
+
+The copy result is said through the shared announcer (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")), not a live region beside the button. No visible change.
+
+### 2026-11-07 · Change words (components audit D6)
+
+`marks` takes `deleted` beside `added` (the shared change words (Governance § 4, "Change words"; `CHANGE_STATUSES`, `CHANGE_MARK` in packages/react/src/components/change-status.ts)); `removed` is a deprecated alias that renders `--deleted`. The
+stylesheet keeps `--removed` beside `--deleted`. No visible change.

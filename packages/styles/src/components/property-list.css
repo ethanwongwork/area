@@ -9,7 +9,7 @@
     position: relative;
     display: grid;
     /* Inside a panel, items are a row gap apart and the value a field gap from its actions (8 / 12). */
-    gap: var(--_panel-row-gap, calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense))); /* 8, compact 6 */
+    gap: var(--_panel-row-gap, var(--area-ui-cluster)); /* 8, compact 6 */
     margin: 0;
     padding: 0;
     list-style: none;
@@ -19,7 +19,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    column-gap: var(--_panel-gap, calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense))); /* 8, compact 6 */
+    column-gap: var(--_panel-gap, var(--area-ui-cluster)); /* 8, compact 6 */
   }
   /* A flex row, so the inline-flex control inside sets the row height (28, not 29 with a line box). */
   .area-property-list__value { display: flex; align-items: center; min-inline-size: 0; }
@@ -76,10 +76,10 @@
     pointer-events: none;
   }
   /* Reveal-on-hover fades on the one shared timing (audit F-38). */
-  .area-property-list__handle { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-property-list__handle { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
   /* An inactive value and a lifted row dim at once and come back on fast (MOTION.md, "Selected"):
      the change answers a click or a pick-up, the return is the leave. */
-  .area-property-list__item > :is(.area-property-list__value, .area-property-list__actions) { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-property-list__item > :is(.area-property-list__value, .area-property-list__actions) { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
   .area-property-list__item[data-inactive] > .area-property-list__value,
   .area-property-list__item[data-dragging] > :not(.area-property-list__handle) { transition-duration: 0s; }
 }

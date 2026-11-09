@@ -30,7 +30,7 @@ of 240. Anchors in the research: 150 Radix Themes and Tailwind, 210 Geist's popo
 ChatGPT's (220), 240 Figma's dropdown (250), 300 Primer's medium, where `slow` reaches 500, Primer's
 ceiling for UI motion. The number moves time only; the curves are the Easing setting (below). Loops do not follow it:
 Spinner (1s a turn), Skeleton shimmer (3s), indeterminate Progress (1.8s), the Indicator pulse and
-Message cursor (1s) and the OTP field's caret blink (1s) run their measured periods and stop at `0` and under reduced motion.
+Message cursor (1s), Step's running shimmer (2s) and the OTP field's caret blink (1s) run their measured periods and stop at `0` and under reduced motion.
 They stop through one token, `duration-loop` (1, or 0 at step 0), which multiplies each period and fades the Skeleton
 band and Progress stripe, so the nearest motion scope decides: a non-zero scope inside a `0` scope runs its loops.
 
@@ -79,6 +79,23 @@ press (`:focus-visible`), disabled and loading controls. Given: Button (by size;
 (small), choice cards and linked Cards (wide). Library-wide the give stays at or under 4% (Geist, Radix Themes and
 shadcn don't scale at all).
 
+## Roles
+
+Every transition is one of five intents (owner, 2026-11-07, system gaps M3; Carbon's productive set, Primer's and
+Atlassian's composite tokens). Pick the role, then take its clock and curve; never pair a duration and a curve by hand.
+
+| Role | Clock | Curve | Use |
+|---|---|---|---|
+| Hover | `hover-in` in, `fast` out | `ease-out` | a plate, an edge or a reveal answering the pointer |
+| State change | `press-in` / `hover-in` in, `fast` out (`--area-transition`) | `ease-out` | selected, checked, pressed, a colour or a lift |
+| Enter | `base` (anchored), `moderate` (modal), `slow` (from an edge, a toast) | `ease-out`; `ease-drawer` from an edge | a surface arriving: fade (`fade-*`) and the overlay scale, or a slide |
+| Exit | one step faster than its enter: `fast`, `base`, `moderate` | as its enter; `ease-in` only for a full-screen surface leaving for good | a surface leaving |
+| Move | `base` | `ease-in-out` | something visible travelling or resizing: a thumb, an indicator, a body opening, a panel's width |
+
+The opacity of any role reads the matching `fade-*` token, and its movement (scale, translate, rotate, size) the
+`duration-*` token, so reduced motion can keep the one and drop the other (below). An exit is never slower than its
+enter (`cohesion.test.mjs`).
+
 ## Recipes
 
 | Interaction | Enter | Leave | Properties | Notes |
@@ -100,11 +117,15 @@ shadcn don't scale at all).
 | Dialog, command palette, confirm dialog | `moderate` ease-out | `base` ease-out | `opacity` + `scale` 0.97 | scrim `opacity` on `moderate`; no translate |
 | Drawer / sheet | `slow` ease-drawer | `moderate` ease-drawer | `translate` 100% on the edge axis | scrim as Dialog |
 | Panel width (a resizable Panel's width set by the app) | `moderate` ease-drawer | `moderate` ease-drawer | `inline-size` | never while it is dragged (`data-resizing`), so the edge stays under the pointer; the desktop app's Sidebar widening for a list (2026-11-01). Off under reduced motion |
+| Resize edge (Splitter's handle, Panel's resizable edge; components audit N6) | a step after the pointer rests 300 ms | instant | the line's width (1 → 2) and ink, the hit area (4 → 12) | a wait, never an animation (`transition` 0s with a 300 ms delay, splitter.css `--_sash-delay`), so passing over an edge never flashes and reduced motion has nothing to stop; while dragging the line takes the accent at once. A drag follows the pointer exactly |
+| Hover-revealed actions (Toolbar `floating`, Panel `revealActions`, Code block `revealActions`, Nav row actions) | instant | `fade-fast` ease-out | `opacity` | the actions keep their place, so nothing reflows; hidden, they stay in the tab order and focus inside the host shows them; a touch screen always shows them |
 | Toast | `slow` ease-out | `base` ease-out | `opacity` + `translate` 8–16px from the toaster's edge | stack reflow on `base` ease-in-out |
 | Folder open (drop target, `open`) | `base` ease-in-out | `fast` ease-in-out | the pocket's `d` (it tips forward: top 88 → 152, flaring 16 past each side) and the sheet's `translate` | shape moving while visible, so ease-in-out; nothing in a File tile moves on hover (PRODUCT_UI rule 2); docs/specs/folder.md |
 | Accordion body, and every disclosure body | `slow` ease-in-out | `moderate` ease-in-out | `block-size` via `interpolate-size: allow-keywords` + `opacity`, with the body's own gap (margin, list padding) | progressive enhancement; without support it snaps. Since 2026-10-26 the same rule opens Step's body (and Step group's, Reasoning's), Plan's and Queue's items and an Edit summary file's diff (accordion.css; they hide with `hidden`, so the open eases from `@starting-style` and `display` is held through the close). Tree view and Panel sections stay instant (Figma's layers and panels, Finder's outline) |
-| Spinner | 1s per turn, linear | — | `rotate` | stops at Motion 0 and under reduced motion |
-| Skeleton shimmer, pulse | linear, long | — | `background-position` / `opacity` | stops under reduced motion |
+| Spinner | 1s per turn, linear | — | `rotate` | stops at Motion 0 and under reduced motion. Its `delay` (300 or 1000 ms, components audit V6) is a wait, not motion: it holds under reduced motion and Motion 0, and the ring then appears at once, with no fade |
+| Skeleton shimmer, pulse | linear, long | — | `background-position` / `opacity` | stops under reduced motion; `delay` as Spinner's |
+| Chart (components audit N7) | instant | instant | none | no draw-in and no transition: a series the legend hides or shows, the hovered value's band, guide, points and tooltip land at once, so reduced motion and Motion 0 have nothing to stop. Its loading Skeleton keeps Skeleton's row |
+| Dialog header rule (`data-scrolled`, V1) | `fade-fast` ease-out | `fade-fast` ease-out | `opacity` | appears once the body leaves its top, leaves when it returns; the fade clock, so reduced motion keeps it short |
 | Theme / density change | instant | instant | — | never animate a theme switch: an app sets `data-area-switching` (base.css) on the scope it repaints for one frame, so token-built colour transitions jump; the desktop app instead finishes the transitions a change starts, once its commit is written (studio.tsx `switchInstantly`, 2026-10-25), since taking the attribute off restyled the scope a second time (130 to 210ms a setting). It does this for Light / Dark and every Canvas setting, hover previews included; the chrome and the Canvas take a setting in the same commit, one restyle, and the Inspector's bars set a value when a drag lets go or rests (inspector-rows.tsx). A preview of a theme may crossfade its picture (Setup's stage, below) |
 | A turn of a conversation (Setup's chat) | rise 8px and fade, `slow` ease-out | — | `opacity` + `translate` | a new question, and a reopened one's choices; the thread scrolls to it smoothly (instantly under reduced motion). Earlier turns stay; nothing leaves |
 | A preview's picture (Setup's stage) | crossfade `moderate` ease-out | — | `opacity` of a copy of the old drawing | a pick or a hover preview only; a run of changes (a drag) cuts (setup-screen.tsx, `crossfade`) |
@@ -127,8 +148,11 @@ an edge stays put at a fractional scale (browser zoom included):
 1. Rest on whole pixels. A resting element never carries a fractional `translate` or a `scale`
    other than 1; centre with layout (flex/grid, `inset` + `margin: auto`), not with
    `translate(-50%, -50%)` on odd sizes; centre a part on its host (Switch's thumb, `inset: 0` + `margin: auto`, 2026-10-19) rather than offsetting it from one edge. Round computed offsets (`round()` in CSS, `Math.round` in JS).
-2. Animate `transform`/`opacity` only, and end at identity (`scale: 1`, `translate: 0`). Never leave
-   `will-change` on a resting element; it freezes the layer at its first raster.
+2. Animate `transform` and `opacity` where you can, and end at identity (`scale: 1`, `translate: 0`). Size animates
+   only where nothing else can say it, on the Move role: Accordion's and every disclosure body's height, a Panel's
+   width, the Switch thumb's press-stretch and the Tabs / Segmented indicator's width (it said "only" until 2026-11-07,
+   which these recipes contradicted). Never leave `will-change` on a resting element; it freezes the layer at its first
+   raster.
 3. Borders and rings: `border`/`outline` snap to device pixels, `box-shadow` does not. Draw a
    1px edge with `border` or `outline`, and halos (focus) with `box-shadow` only when they are soft.
 4. Icons: draw at their native size (`Glyph size={12|16|20|24}`, with its 12px and 10px cuts); never
@@ -140,12 +164,22 @@ an edge stays put at a fractional scale (browser zoom included):
 
 ## Reduced motion
 
-`prefers-reduced-motion: reduce` resolves every duration to 0 wherever motion is set, including
-subtrees with their own `data-area-motion` (it used to apply only where none was set), and Feedback to Off (the give
-rests at 1). Loops (spinner, shimmer, pulse) stop, through the same `duration-loop` token. Open question for the owner:
-keep short opacity and colour fades (160ms) under reduced motion and drop only movement, as Apple's guidance, Emil
-Kowalski, Motion's `reducedMotion="user"`, Base UI and bencho.dev do (research 2026-10-24); that needs separate tokens
-for fades and for movement.
+The contract (owner, 2026-11-07, system gaps M2; Apple's guidance, Emil Kowalski, Motion's `reducedMotion="user"`,
+Base UI and bencho.dev, research 2026-10-24): under `prefers-reduced-motion: reduce`, movement goes and the interface
+stays whole.
+
+1. **Nothing moves.** Every `duration-*` resolves to 0 wherever motion is set, subtrees with their own
+   `data-area-motion` included, so scale, translate, rotate and size changes land at once; Feedback resolves to Off,
+   so the give rests at 1.
+2. **Fades stay, short.** Opacity reads `fade-*`, which resolve to 100ms (`fade-fast`) and 160ms (the rest): a menu,
+   a dialog or a toast fades in place, at full size, where it would have scaled or slid. Motion 0 asked for none, so
+   its fades are 0 too. A top layer's `display` / `overlay` hold reads the fade, so an exit fade is never cut off.
+3. **Loops stop**, through `duration-loop` (Spinner, shimmer, pulse, the caret), and a scroll that would glide jumps.
+4. **Every state stays reachable without motion**: nothing waits for an animation to end, and no information is only
+   in a transition.
+
+`emit/css.ts` writes the reduced-motion block; a component never writes its own `prefers-reduced-motion` rule except
+to undo a scale it set outside the tokens.
 
 ## Checking a component
 

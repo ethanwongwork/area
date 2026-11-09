@@ -225,3 +225,134 @@
 .studio-design__change-open:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
 .studio-design__change-what { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
 .studio-design__change-how { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+
+/* --- A flow page's map (src/flow-map.tsx; the user flows study, 2026-11-08) ---------------------------------------------
+   After the owner's node editors, the last a pipeline graph ("more technical, more spacing around the labels, more
+   consistency … lines coming out of and from the labels and screens consistent … proper turns and curves"): each step a
+   node card (kind and role, name and source in mono, the screen, its port rows: In on the start, each output on the
+   end, its target in mono), dashed lines from port to port with one turn radius, Start and End pills, the viewer's grey
+   ground dotted every 16, a floating dock at the foot. Every size here is flow-map.tsx's, on the 8 grid: the card 336
+   wide, its head 32, title 48, screen 200 (8 in), rows 48; the lines are drawn to them. */
+.studio-flow {
+  position: relative;
+  block-size: 100%;
+  overflow: hidden;
+  --_flow-ground: color-mix(in srgb, var(--area-fg-default) 5%, var(--area-bg-page)); /* pick: the viewer's grey ground */
+  --_flow-dot: color-mix(in srgb, var(--area-fg-default) 14%, transparent); /* pick */
+  background: radial-gradient(circle, var(--_flow-dot) 1px, transparent 1.3px) 0 0 / 16px 16px, var(--_flow-ground);
+  /* One ink for every line and port; a branch's and a state's ports carry their tone. */
+  --_flow-ink: color-mix(in srgb, var(--area-fg-default) 42%, transparent); /* pick */
+  --_flow-faint: color-mix(in srgb, var(--area-fg-default) 24%, transparent); /* pick */
+  --_flow-rule: var(--area-border-subtle);
+}
+/* The map pans in its own box at any zoom, so the stage keeps its height and the dock its place. Centred while it fits;
+   from the start (and scrollable) when it is larger: auto margins never go negative. */
+.studio-flow__scroll {
+  position: absolute; inset: 0; display: grid; overflow: auto; overscroll-behavior: contain;
+  padding-block-end: 64px; /* flow-map.tsx DOCK_ROOM: a fitted map sits above the dock */
+  background: inherit; background-attachment: local;
+}
+.studio-flow__frame { align-self: start; justify-self: start; margin: auto; position: relative; }
+.studio-flow__map { position: absolute; inset-block-start: 0; inset-inline-start: 0; transform-origin: 0 0; }
+.studio-flow__lines { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.studio-flow__link { --_ink: var(--_flow-ink); }
+.studio-flow__link[data-kind="next"] { --_ink: var(--_flow-faint); }
+.studio-flow__link[data-hot] { --_ink: var(--area-selection-solid); }
+.studio-flow__line { fill: none; stroke: var(--_ink); stroke-width: 1.5px; stroke-dasharray: 4 4; stroke-linecap: round; stroke-linejoin: round; }
+/* The chosen step's lines run, the way a pipeline shows what flows. */
+.studio-flow__link[data-hot] .studio-flow__line { animation: studio-flow-run 0.8s linear infinite; }
+@keyframes studio-flow-run { to { stroke-dashoffset: -8; } }
+@media (prefers-reduced-motion: reduce) { .studio-flow__link[data-hot] .studio-flow__line { animation: none; } }
+
+/* A port: an 8 dot centred on the card's edge, filled where a line meets it, hollow where none does. */
+.studio-flow__port {
+  position: absolute; inline-size: 8px; block-size: 8px; border-radius: 50%; box-sizing: border-box;
+  background: var(--area-bg-page); border: 1.5px solid var(--_flow-ink);
+}
+.studio-flow__port[data-on] { background: var(--_flow-ink); border-color: var(--area-bg-page); box-shadow: 0 0 0 1px var(--_flow-ink); }
+.studio-flow__node[data-chosen] .studio-flow__port[data-on] { background: var(--area-selection-solid); box-shadow: 0 0 0 1px var(--area-selection-solid); }
+
+.studio-flow__pill {
+  position: absolute; box-sizing: border-box; display: flex; align-items: center; gap: 8px;
+  block-size: 32px; padding-inline: 4px 12px; border-radius: var(--area-radius-full);
+  background: var(--area-bg-page); box-shadow: 0 0 0 var(--area-stroke-width) var(--area-border-card), var(--area-shadow-resting);
+  font-size: var(--area-text-base-size); font-weight: 500; color: var(--area-fg-default);
+}
+.studio-flow__pill-mark { display: grid; place-items: center; inline-size: 24px; block-size: 24px; border-radius: 50%; }
+.studio-flow__pill[data-end="start"] .studio-flow__pill-mark { color: var(--area-fg-success); background: color-mix(in srgb, var(--area-fg-success) 14%, var(--area-bg-page)); }
+.studio-flow__pill[data-end="end"] .studio-flow__pill-mark { color: var(--area-fg-muted); background: var(--area-bg-component); }
+.studio-flow__pill svg { inline-size: 12px; block-size: 12px; }
+.studio-flow__pill > .studio-flow__port[data-side="out"] { inset-inline-end: -4px; inset-block-start: calc(50% - 4px); }
+.studio-flow__pill > .studio-flow__port[data-side="in"] { inset-inline-start: -4px; inset-block-start: calc(50% - 4px); }
+
+.studio-flow__node {
+  position: absolute; box-sizing: border-box; display: flex; flex-direction: column;
+  border-radius: var(--area-radius-12); outline: none; cursor: default;
+  /* The edge is a ring, not a border, so nothing inside moves off the lines' geometry. */
+  --_edge: var(--area-border-card);
+  background: var(--area-bg-page); box-shadow: 0 0 0 var(--area-stroke-width) var(--_edge), var(--area-shadow-resting);
+  transition: box-shadow var(--area-duration-fast, 0ms) var(--area-ease-out, ease-out);
+}
+@media (hover: hover) { .studio-flow__node:hover { --_edge: var(--area-border-hover); } }
+.studio-flow__node[data-chosen] { box-shadow: 0 0 0 1.5px var(--area-selection-solid), var(--area-shadow-resting); }
+.studio-flow__node:focus-visible { box-shadow: var(--area-shadow-resting), 0 0 0 2px var(--area-focus-ring, var(--area-selection-solid)); }
+/* Head: the kind on the start, the role on the end, 16 in, on the card's rule. */
+.studio-flow__head {
+  flex: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-inline: 16px;
+  box-shadow: inset 0 calc(-1 * var(--area-stroke-width)) 0 var(--_flow-rule);
+  font-size: var(--area-text-xs-size); line-height: 16px; color: var(--area-fg-muted);
+}
+.studio-flow__kind { font-weight: 500; color: var(--area-fg-default); font-variant-numeric: tabular-nums; }
+.studio-flow__role { display: inline-flex; align-items: center; gap: 6px; }
+.studio-flow__dot { inline-size: 6px; block-size: 6px; border-radius: 50%; background: var(--area-fg-success); }
+.studio-flow__node[data-role="branch"] .studio-flow__dot { background: var(--area-fg-warning); }
+.studio-flow__node[data-role="state"] .studio-flow__dot { background: var(--area-fg-info); }
+/* Title: the name, its source in mono under it, 16 in. */
+.studio-flow__title { flex: none; box-sizing: border-box; display: grid; align-content: center; gap: 2px; padding-inline: 16px; min-inline-size: 0; }
+.studio-flow__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--area-text-base-size); line-height: 18px; font-weight: 500; color: var(--area-fg-default); }
+.studio-flow__mono { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--area-font-mono); font-size: 10px; line-height: 14px; color: var(--area-fg-muted); } /* pick: the graph's mono details */
+.studio-flow__screen {
+  flex: none; margin-inline: 8px; overflow: hidden; border-radius: var(--area-radius-6);
+  background: var(--area-bg-page); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle);
+}
+.studio-flow__screen > * { pointer-events: none; }
+/* Ports: rows of 48 under a rule 8 below the screen; In on the start, an output on the end, each 16 in from its port. */
+.studio-flow__ports { flex: none; margin-block-start: 8px; }
+.studio-flow__port-row { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 16px; padding-inline: 16px; box-sizing: border-box; box-shadow: inset 0 var(--area-stroke-width) 0 var(--_flow-rule); }
+.studio-flow__io { display: grid; gap: 2px; min-inline-size: 0; }
+.studio-flow__io[data-side="out"] { text-align: end; }
+.studio-flow__io-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--area-text-sm-size); line-height: 16px; font-weight: 500; color: var(--area-fg-default); }
+.studio-flow__io[data-implicit] .studio-flow__io-label { color: var(--area-fg-muted); font-weight: 400; }
+/* Ports sit on the row (the io isn't positioned), centred on the card's edge and the row's middle: where the lines end. */
+.studio-flow__io > .studio-flow__port { inset-block-start: calc(50% - 4px); }
+.studio-flow__io > .studio-flow__port[data-side="in"] { inset-inline-start: -4px; }
+.studio-flow__io > .studio-flow__port[data-side="out"] { inset-inline-end: -4px; }
+.studio-flow__note { flex: none; margin: 0; box-sizing: border-box; padding: 8px 16px; box-shadow: inset 0 var(--area-stroke-width) 0 var(--_flow-rule); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: 16px; }
+/* The dock: one floating bar at the foot of the visible stage. */
+.studio-flow__dock {
+  position: absolute; inset-inline-start: 50%; inset-block-end: 16px; z-index: 2;
+  display: flex; align-items: center; gap: var(--area-space-4); inline-size: max-content;
+  transform: translate(-50%, 0); padding: 4px;
+  border-radius: var(--area-radius-12); background: var(--area-bg-page);
+  border: var(--area-stroke-width) solid var(--area-border-card); box-shadow: var(--area-shadow-float);
+}
+.studio-flow__dock-rule { inline-size: var(--area-stroke-width); align-self: stretch; margin-block: 4px; background: var(--area-border-subtle); }
+/* The Inspector's flow checks. */
+.studio-flow-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--area-space-12); }
+.studio-flow-checks li { display: grid; justify-items: start; gap: var(--area-space-4); }
+.studio-flow-checks__what { all: unset; cursor: pointer; font-weight: 500; }
+.studio-flow-checks__what:focus-visible { outline: 2px solid var(--area-selection-solid); outline-offset: 2px; border-radius: 2px; }
+@media (hover: hover) { .studio-flow-checks__what:hover { text-decoration: underline; } }
+/* Play: the bar at the stage's foot, and the links' outlines when hints show. */
+.studio-play {
+  position: absolute; inset-inline-start: 50%; inset-block-end: 16px; transform: translateX(-50%); z-index: 3;
+  display: flex; align-items: center; gap: var(--area-space-4); padding: 4px; white-space: nowrap;
+  border-radius: var(--area-radius-12); background: var(--area-bg-page);
+  border: var(--area-stroke-width) solid var(--area-border-card); box-shadow: var(--area-shadow-float);
+}
+.studio-play__rule { inline-size: var(--area-stroke-width); align-self: stretch; margin-block: 4px; background: var(--area-border-subtle); }
+.studio-design__stage[data-playing] .studio-viewer__content { cursor: pointer; }
+.studio-design__stage[data-hints] [data-flow-link] { outline: 2px solid var(--area-selection-solid); outline-offset: 2px; }
+/* A flow page's Sidebar: numbers before names, states under their step. */
+.studio-flow-n { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; margin-inline-end: var(--area-space-6, 6px); }
+.studio-flow-state { padding-inline-start: var(--area-space-16); }

@@ -22,7 +22,7 @@ the procedure.
 | `text-sm` | 12/16 | 12/18 | secondary that stands apart: a caption, a note under a block, a timestamp, a lede; metadata on a row's line takes the row's 18 | default ink, 500 |
 | `text-base` | 13/18 | 13/20 | the UI line: every control, row, label, cell, card name, choice, an agent's work in a chat | — |
 | `text-lg` | 15/22 | 15/22 | reading: a reply, the person's bubble, a composer's field, a document, the feed's prose | inside a frame of UI |
-| `title-xs` | 16/22 | — | a heading over a block: a feed section, a surface (Dialog, Card), a reply's heading | two in one view at the same level |
+| `title-xs` | 16/22 | — | a heading over a page's block: a feed section, a page's or region's empty state, a reply's heading | a component's own title (Dialog, Card, Drawer: `text-base` 500), two in one view at the same level |
 | `title-sm` / `title-md` | 18/24 · 20/28 | — | a page or a panel's own title, once | inside a feed's section |
 | `title-lg` | 26/30 | — | a figure (a stat's value) | words |
 | display | 52 · 67 | — | specimens only (the type ramp, a tester) | UI |
@@ -33,8 +33,10 @@ Tracking is the token's own (`--area-<role>-tracking`); never set letter-spacing
 
 1. **Is it read or operated?** Read in sentences (a reply, prose, a doc) → `text-lg`. Operated or scanned (a row, a
    control, a label, a cell, a card name, a question's answers) → `text-base`.
-2. **Does it head a block?** Over a block of its own kind → `title-xs` (a section in a feed, a surface, a reply's
-   heading). A name that starts a row or card is not a heading: it stays `text-base` and may take 500 (rule 4).
+2. **Does it head a block?** Over a page's block → `title-xs` (a section in a feed, a reply's heading, a region's empty
+   state), standing one step (4) off any line under it. A component's own title (a Card, a Dialog, a Confirm dialog, a
+   Drawer, a Popover) and a name that starts a row are not headings: they stay `text-base`, 500. A surface's title
+   stands one step (4) off its copy; an item's name joins its line (DESIGN_SYSTEM.md, "Text pairs", 2026-11-06).
 3. **Does it explain something next to it?** A description, a header cell, an option's line, a group label → the **same
    size** as what it explains, **muted**. Only text that stands apart (a caption under a block, a timestamp, a lede, a
    step's time at the row's end) drops a size, to `text-sm`, and then it is muted too.
@@ -80,7 +82,8 @@ If a text fits none of these, it is probably two texts (a label and a value) or 
 
 | Pair | Gap | Rule |
 |---|---|---|
-| a title and its description, a label and its line | joined: no gap between line boxes | Card, Dialog, Approval, choices, Switch |
+| a surface's title and its copy | one step (4) between line boxes: 12.8 baseline to cap at 13/18 (owner, 2026-11-06: "4 is right") | Card, Dialog, Drawer, Popover, Alert, Toast, Approval, Empty state |
+| an item's name and its line | joined: no gap between line boxes | choices, group legends, Switch, File tile, a File upload row, Stepper |
 | joined lines that are siblings (a name and its meta, two facts) | 2–4 | Cursor 1/2/4, Claude 4 |
 | a heading and its block | 16 (feed) · 12 (chat heading in a reply) | measured to the frame's edge or the first cap |
 | rows in a list or group | the row's own padding; a divider adds no space | Settings rows 42 / 60 |

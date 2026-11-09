@@ -19,6 +19,7 @@ import { highlight } from "./content/highlight.mjs";
 import type { Config, Playground, PlaygroundControl, PropValue } from "./content/playgrounds.tsx";
 import { feedScale } from "./app-scale.ts";
 import { specimenScope } from "./specimen-scope.tsx";
+import { LibrarySpecimens } from "./inventory.tsx";
 
 /** The narrowest the Stage is dragged to: a phone's 320 less the Canvas's margins. */
 const MIN_WIDTH = 288; /* pick */
@@ -91,7 +92,7 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
         {narrowed ? <span className="gallery-tile__value">{shown} px</span> : null}
       </div>
       <div className="studio-stage__view" data-zoom={zoom} {...specimenScope()}>
-        <div key={replays} className="studio-stage__content">{children}</div>
+        <div key={replays} className="studio-stage__content"><LibrarySpecimens>{children}</LibrarySpecimens></div>
       </div>
       <div className="studio-stage__handle" role="separator" aria-orientation="vertical" aria-label="Stage width"
         aria-valuemin={MIN_WIDTH} aria-valuemax={room} aria-valuenow={shown} aria-valuetext={`${shown} pixels`} tabIndex={0}
@@ -158,7 +159,7 @@ function renderControl(control: PlaygroundControl, value: PropValue, change: (va
 
 /**
  * Leaving the Stage and opening it, from the keyboard: Escape or ⌘↑ goes back to the grid (Finder's
- * enclosing folder), unless Escape belongs to a field or an open overlay. Listened for in the capture
+ * enclosing folder), unless Escape belongs to a field, an open overlay or a Selection bar (which clears the selection). Listened for in the capture
  * phase, so an overlay that closes on Escape is still open when this looks.
  */
 export function useStageKeys({ onBack, enabled }: { onBack: () => void; enabled: boolean }) {
@@ -171,7 +172,7 @@ export function useStageKeys({ onBack, enabled }: { onBack: () => void; enabled:
       const escape = event.key === "Escape" && !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey;
       if (!up && !escape) return;
       const target = event.target as Element | null;
-      if (escape && (event.defaultPrevented || target?.closest("input, textarea, select, [contenteditable], [role='combobox'], [role='menu'], [role='listbox']")
+      if (escape && (event.defaultPrevented || target?.closest("input, textarea, select, [contenteditable], [role='combobox'], [role='menu'], [role='listbox'], .area-selection-bar")
         || document.querySelector(":popover-open, dialog[open]"))) return;
       event.preventDefault();
       back.current();

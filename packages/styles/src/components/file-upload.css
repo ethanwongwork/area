@@ -126,8 +126,9 @@
     align-items: center;
     flex-wrap: wrap;
     gap: var(--area-space-8);
-    /* spec: Untitled UI's size line sits 2 under the name (mt-0.5). */
-    margin: var(--area-space-2) 0 0;
+    /* The name's next line (DESIGN_SYSTEM.md, "Text pairs", 2026-11-06 balance pass): joined, 8.8 baseline to cap, the
+       line's own gap. Untitled UI's 2 (mt-0.5) set it 10.8: 2 off its line, near it but not on it. */
+    margin: 0;
     color: var(--area-fg-muted);
     font-variant-numeric: tabular-nums;
   }

@@ -1,0 +1,18 @@
+/*
+ * A system's inventory and structure in the Inspector's Design view (src/inventory.tsx; docs/research/
+ * system-inventory-2026-11-08). Layout only: the controls are Area's Checkbox, Switch, Select and Radio as they ship.
+ */
+
+/* A structure question's cards: two across the panel (Radio's preview group, --area-choice-min its public hook). */
+.studio-inventory__pictures { --area-choice-min: calc(var(--area-space-96) + var(--area-space-16)); /* pick: two cards across the 280 Inspector */ }
+/* The alternative on the real component, centred in the card's frame in the open theme's settings. */
+.studio-inventory__picture {
+  display: grid;
+  place-items: unsafe center;
+  inline-size: 100%;
+  block-size: 100%;
+  padding: var(--area-space-12);
+  box-sizing: border-box;
+  overflow: hidden;
+  pointer-events: none;
+}

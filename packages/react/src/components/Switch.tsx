@@ -1,3 +1,4 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
 import type { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
 import { Spinner } from "./primitives.tsx";
@@ -46,6 +47,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
   "aria-describedby": describedBy,
   ...rest
 }, ref) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  size = useSystemDefault("switch", "size", size);
   const input = useRef<HTMLInputElement>(null);
   useImperativeHandle(ref, () => input.current!, []);
   const id = useId();

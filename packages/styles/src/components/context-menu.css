@@ -28,12 +28,13 @@
    */
   .area-menu.area-context-menu__menu[popover] {
     --_overlay-duration: var(--area-duration-fast);
+    --_overlay-fade: var(--area-fade-fast);
     transform-origin: var(--_context-origin-x, 0px) var(--_context-origin-y, 0px);
     transition:
-      opacity var(--area-duration-fast) var(--area-ease-out),
+      opacity var(--area-fade-fast) var(--area-ease-out),
       scale var(--area-duration-fast) var(--area-ease-out),
-      overlay var(--area-duration-fast) allow-discrete,
-      display var(--area-duration-fast) allow-discrete;
+      overlay var(--area-fade-fast) allow-discrete,
+      display var(--area-fade-fast) allow-discrete;
   }
   .area-context-menu__menu[popover]:not(:popover-open) { display: none; }
 }

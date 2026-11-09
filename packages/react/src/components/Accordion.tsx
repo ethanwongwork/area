@@ -1,7 +1,8 @@
 // Accordion and AccordionItem: a stack of collapsible items (one open at a time unless `multiple`),
 // and one item, which also stands alone as a Notion-style toggle. Spec: docs/specs/accordion.md.
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import { createContext, forwardRef, useContext, useEffect, useId, useRef, useState } from "react";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, SyntheticEvent } from "react";
 import { accordionVariants, accordionItemVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 
@@ -13,7 +14,7 @@ interface GroupContext {
   size?: AccordionItemVariants["size"];
   headingLevel?: HeadingLevel;
   isOpen: (value: string) => boolean;
-  setOpen: (value: string, open: boolean) => void;
+  setOpen: (value: string, open: boolean, event?: SyntheticEvent) => void;
 }
 const AccordionContext = createContext<GroupContext | null>(null);
 
@@ -38,13 +39,16 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
   { heading, open: openProp, defaultOpen = false, onOpenChange, value: valueProp, headingLevel, disabled, variant, size, className, children, ...rest },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  const systemVariant = useSystemDefault("accordionItem", "variant", undefined as typeof variant);
+  const systemSize = useSystemDefault("accordionItem", "size", undefined as typeof size);
   const group = useContext(AccordionContext);
   const id = useId();
   const value = valueProp ?? id;
   const [openState, setOpenState] = useState(defaultOpen);
   const open = group ? group.isOpen(value) : openProp ?? openState;
-  const setOpen = (next: boolean) => {
-    if (group) group.setOpen(value, next);
+  const setOpen = (next: boolean, event?: SyntheticEvent) => {
+    if (group) group.setOpen(value, next, event);
     else if (openProp === undefined) setOpenState(next);
     onOpenChange?.(next);
   };
@@ -66,13 +70,13 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
   const contentId = `${id}-content`;
   const trigger = (
     <button id={triggerId} type="button" className="area-accordion-item__trigger" aria-expanded={open} aria-controls={contentId}
-      disabled={disabled} onClick={() => setOpen(!open)}>
+      disabled={disabled} onClick={event => setOpen(!open, event)}>
       <span className="area-accordion-item__chevron" aria-hidden="true"><Glyph name="chevron-down" /></span>
       <span className="area-accordion-item__label">{heading}</span>
     </button>
   );
   return (
-    <div ref={ref} {...rest} className={accordionItemVariants({ variant: variant ?? group?.variant, size: size ?? group?.size }, className)}
+    <div ref={ref} {...rest} className={accordionItemVariants({ variant: variant ?? group?.variant ?? systemVariant, size: size ?? group?.size ?? systemSize }, className)}
       data-open={open ? "" : undefined} data-disabled={disabled ? "" : undefined}>
       {H ? <H className="area-accordion-item__heading">{trigger}</H> : trigger}
       {/* In a group each panel is a region named by its trigger (WAI accordion). */}
@@ -91,7 +95,8 @@ export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   value?: string[];
   /** Initially open items when uncontrolled. */
   defaultValue?: string[];
-  onValueChange?: (value: string[]) => void;
+  /** The open items after a change, and the press that made it (absent when a find-in-page reveal opens one). */
+  onValueChange?: (value: string[], event?: SyntheticEvent) => void;
   /** Heading level for every item's trigger (WAI accordion). */
   headingLevel?: HeadingLevel;
   variant?: AccordionItemVariants["variant"];
@@ -107,10 +112,10 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(function Acc
   const context: GroupContext = {
     variant, size, headingLevel,
     isOpen: item => value.includes(item),
-    setOpen: (item, open) => {
+    setOpen: (item, open, event) => {
       const next = open ? (multiple ? [...value.filter(v => v !== item), item] : [item]) : value.filter(v => v !== item);
       if (valueProp === undefined) setValueState(next);
-      onValueChange?.(next);
+      onValueChange?.(next, event);
     },
   };
   return (

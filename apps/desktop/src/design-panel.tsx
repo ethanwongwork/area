@@ -37,6 +37,8 @@ import { EXAMPLES, PATTERNS } from "./pages/examples.tsx";
 import { FAMILIES } from "./pages/components.tsx";
 import { nameOf, url, useLibrary } from "./pages/imagery.tsx";
 import { readChecks, readSpecs, type CheckKind, type DesignChecks, type DesignSpecs } from "./design-scan.ts";
+import { checkFlow, isFlow, readFlow } from "./flow.ts";
+import { FlowChecks } from "./flow-map.tsx";
 import { addComment, restoreIteration, type Iteration, type Layer, type Project, type ProjectPage } from "./projects.ts";
 
 const TABS = [
@@ -424,7 +426,22 @@ function SpecsTab({ layer, stage }: DesignPanelProps) {
 
 const CHECK_TITLES: Record<CheckKind, string> = { contrast: "Contrast", alt: "Alt text", name: "Names", label: "Labels" };
 
-function ChecksTab({ layer, stage }: DesignPanelProps) {
+function ChecksTab(props: DesignPanelProps) {
+  const { page, onShow } = props;
+  // A flow's own checks first: what a walk through it leaves undesigned (src/flow.ts).
+  if (!isFlow(page)) return <ScreenChecks {...props} />;
+  const flowChecks = checkFlow(readFlow(page));
+  return (
+    <div className="studio-sections">
+      <CanvasSection id="design-checks-flow" title="Flow" count={flowChecks.length}>
+        <FlowChecks checks={flowChecks} onOpen={id => { const entry = page.layers.find(other => other.id === id); if (entry) onShow(entry); }} />
+      </CanvasSection>
+      <ScreenChecks {...props} />
+    </div>
+  );
+}
+
+function ScreenChecks({ layer, stage }: DesignPanelProps) {
   const checks: DesignChecks | null = useStageRead(stage, `checks:${layer?.id ?? ""}`, readChecks);
   if (!layer) return <EmptyState size="sm" title="Nothing on the stage" description="Add a layer to the page, and its checks show here." />;
   if (layer.kind === "image") return <EmptyState size="sm" title="An image has no UI to check" description="Checks read a screen's words, controls and fields." />;

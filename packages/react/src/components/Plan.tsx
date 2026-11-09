@@ -5,11 +5,16 @@ import { planVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Progress, Spinner } from "./primitives.tsx";
 
+export type PlanItemStatus = "complete" | "current" | "pending" | "cancelled" | /** @deprecated use "complete" */ "done";
+/** The shared word for a deprecated alias (system gaps C1). */
+const statusOf = (item: PlanItem) => item.status === "done" ? "complete" : item.status;
+
 export interface PlanItem {
   id: string;
   label: ReactNode;
-  /** cancelled: dropped from the plan (Cursor's todos); struck, with a cross. */
-  status: "done" | "current" | "pending" | "cancelled";
+  /** The shared status words (Governance § 4, 2026-11-07): complete, current, pending; cancelled is Plan's own, dropped
+   * from the plan (Cursor's todos), struck, with a cross. `done` is a deprecated alias of complete, kept for one release. */
+  status: PlanItemStatus;
   /** How far a current item is, 0 to 1: its mark becomes a ring that fills (Linear's in-progress ring), and its
    * segment of a segmented bar fills that far. Without it a current item shows a Spinner. */
   progress?: number;
@@ -45,9 +50,9 @@ export interface PlanProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   onOpenChange?: (open: boolean) => void;
 }
 
-const SPOKEN = { done: "Done", current: "In progress", pending: "Not started", cancelled: "Cancelled" } as const;
+const SPOKEN = { complete: "Done", current: "In progress", pending: "Not started", cancelled: "Cancelled" } as const;
 /** An item's share of the bar: done whole, current by its progress, the rest empty. */
-const shareOf = (item: PlanItem) => item.status === "done" ? 1 : item.status === "current" ? Math.min(1, Math.max(0, item.progress ?? 0)) : 0;
+const shareOf = (item: PlanItem) => statusOf(item) === "complete" ? 1 : item.status === "current" ? Math.min(1, Math.max(0, item.progress ?? 0)) : 0;
 
 /** What is done, what it is doing, what is next, and a count; folds to its head. */
 export const Plan = forwardRef<HTMLElement, PlanProps>(function Plan(
@@ -57,7 +62,7 @@ export const Plan = forwardRef<HTMLElement, PlanProps>(function Plan(
   const titleId = useId();
   const [own, setOwn] = useState(defaultOpen);
   const open = openProp ?? own;
-  const done = items.filter(item => item.status === "done").length;
+  const done = items.filter(item => statusOf(item) === "complete").length;
   const counted = count ?? `${done} of ${items.length}`;
   // The whole plan's share, for the bar's one announced value: segmented, the mean of the segments; single, done of all.
   const share = items.length ? (bar === "segmented" ? items.reduce((sum, item) => sum + shareOf(item), 0) : done) / items.length : 0;
@@ -92,7 +97,7 @@ function PlanRow({ item, nested }: { item: PlanItem; nested?: boolean }) {
   const ring = item.status === "current" && item.progress != null;
   const steps = !nested && item.items?.length ? item.items : null;
   return (
-    <li className={`area-plan__item area-plan__item--${item.status}`}>
+    <li className={`area-plan__item area-plan__item--${statusOf(item)}`}>
       <span className={`area-plan__mark${ring ? " area-plan__mark--ring" : ""}`} aria-hidden="true"
         style={ring ? { "--_plan-item-progress": shareOf(item) } as CSSProperties : undefined}>
         {/* Done, cancelled and not started are drawn rings (plan.css); current is the ring filling, or a Spinner. */}
@@ -101,7 +106,7 @@ function PlanRow({ item, nested }: { item: PlanItem; nested?: boolean }) {
       <span className="area-plan__text">
         {item.label}
         {item.detail != null ? <span className="area-plan__detail">{item.detail}</span> : null}
-        <span className="area-sr-only">{`, ${SPOKEN[item.status]}`}</span>
+        <span className="area-sr-only">{`, ${SPOKEN[statusOf(item)]}`}</span>
       </span>
       {item.meta != null ? <span className="area-plan__meta">{item.meta}</span> : null}
       {steps ? <ol className="area-plan__steps">{steps.map(step => <PlanRow key={step.id} item={step} nested />)}</ol> : null}

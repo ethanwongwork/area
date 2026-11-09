@@ -3,6 +3,7 @@ import type { HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from "react
 import { Button } from "./Button.tsx";
 import { CustomSelect } from "./CustomSelect.tsx";
 import { Glyph } from "./Glyph.tsx";
+import { useAnnouncement } from "./announce.ts";
 import { calendarVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 
 /* Dates are ISO calendar dates ("2026-09-15"): no time zone, safe in forms and on a server.
@@ -125,6 +126,9 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   const unavailable = (d: Date) => !!disabled || (minDate !== null && d < minDate && toIso(d) !== min) || (maxDate !== null && d > maxDate && toIso(d) !== max) || !!isDateUnavailable?.(toIso(d));
 
   const formatMonth = useMemo(() => new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }), [locale]);
+  // The month on view is said through the shared announcer when it changes, once however many months show
+  // (components audit D1; was a live first heading, audit F-22).
+  useAnnouncement(week ? null : formatMonth.format(visible));
   const formatDay = useMemo(() => new Intl.DateTimeFormat(locale, { weekday: "long", month: "long", day: "numeric", year: "numeric" }), [locale]);
   const weekdays = useMemo(() => {
     const short = new Intl.DateTimeFormat(locale, { weekday: "short" }), long = new Intl.DateTimeFormat(locale, { weekday: "long" });
@@ -282,9 +286,8 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
           {index === 0 && <Button variant="ghost" size="sm" iconOnly icon={<Glyph name="chevron-down" rotate={90} />} aria-label={labels?.previousMonth ?? "Previous month"}
             disabled={disabled || (minDate !== null && monthStart(minDate) >= first)} onClick={() => showMonth(addMonths(visible, -1))} />}
         </span>
-        {/* One announcement per change: only the first month title is live, so two months don't read out twice; the level
-            is configurable (audit F-22). With menus the heading stays for the grid's name and the announcement, hidden. */}
-        <Heading className={menus ? "area-sr-only" : "area-calendar__title"} id={labelId} aria-live={index === 0 ? "polite" : undefined}>{formatMonth.format(first)}</Heading>
+        {/* The level is configurable (audit F-22). With menus the heading stays for the grid's name, hidden. */}
+        <Heading className={menus ? "area-sr-only" : "area-calendar__title"} id={labelId}>{formatMonth.format(first)}</Heading>
         {menus ? <div className="area-calendar__title area-calendar__menus">
           <CustomSelect variant="ghost" size="sm" aria-label={labels?.month ?? "Month"} disabled={disabled}
             items={monthNames.map((label, m) => ({ value: String(m), label,

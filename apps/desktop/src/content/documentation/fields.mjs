@@ -61,6 +61,7 @@ export default {
       ["Do", "Use prefix and suffix for symbols and units that aren't editable, and one leading icon only when it clarifies purpose."],
       ["Do", "Give a trailing InputAction an icon and a tooltip; the tooltip names it unless you set aria-label."],
       ["Do", "Set loading while a value is being checked: the field stays editable and announces progress."],
+      ["Do", "Read the typed value from onValueChange(value, event), which runs after native onChange, the same as every field's."],
       ["Don't", "Pair a trailing icon with a trailing action: the action replaces it."],
       ["Don't", "Use disabled for a value people should read or copy; readOnly stays focusable and selectable."],
       ["Don't", "Show success or warning paint without text in the Field that says why."],
@@ -238,6 +239,7 @@ export default {
       ["Do", "Wrap it in a Field for the label, description and messages."],
       ["Do", "Keep the default vertical resize; set none only where the surface can't grow."],
       ["Do", "Use soft on an existing surface, such as a Panel."],
+      ["Do", "Read the text from onValueChange(value, event), which runs after native onChange, as Input's."],
       ["Don't", "Use disabled for a value people should read or copy: read-only stays focusable and is submitted."],
       ["Don't", "Show invalid paint without a Field message that says what to fix."],
     ],
@@ -275,6 +277,7 @@ export default {
       ["Do", "Give a long fixed list headings with optgroup."],
       ["Do", "Make an empty-value option the placeholder: chosen, it shows in placeholder ink."],
       ["Do", "Use soft wherever the neighbouring fields are soft, such as in a Panel."],
+      ["Do", "Read the chosen value from onValueChange(value, event), which runs after native onChange, as Input's."],
       ["Don't", "Put icons or descriptions in options; use Custom select."],
       ["Don't", "Use it for actions; use Menu."],
     ],
@@ -315,6 +318,9 @@ export default {
       ["Do", "Set name to submit the chosen value through a hidden input; the label is never submitted."],
       ["Do", "Use onHighlightChange to preview an option while the pointer or arrows are on it; it never chooses."],
       ["Do", "Use layout grid when each choice is best seen as a picture (a setting's look, a color); give options a preview, or an icon for a swatch grid."],
+      ["Do", "Set readOnly to show a value chosen elsewhere: it stays readable and focusable, and the list never opens."],
+      ["Do", "Set filterable on a long list: a filter field tops the list and, with multiple, the chosen options come first under a Select all row."],
+      ["Do", "When a set should wait to be kept, hold it as a draft in values and put Save and Cancel in the footer; drop the draft when the list closes."],
       ["Don't", "Use the grid for long ramps of numbers or plain words; the list reads them faster and its icons carry the order."],
       ["Don't", "Use it for plain-text options in a form; Select is native and lighter."],
       ["Don't", "Use it for a long list people would rather search; use Combobox."],
@@ -324,7 +330,7 @@ export default {
       root: "The wrapper: owns the variant and size, and data-open while the list shows.",
       trigger: "The button with role combobox: Select's height, edge, corner, fill and focus. Focus stays here while the list is open.",
       icon: "The chosen option's icon, in a square at the start; only when that option has one.",
-      value: "The chosen label (labels, with multiple), truncated; the placeholder shows in placeholder ink.",
+      value: "The chosen label, truncated; with multiple, one or two labels, then a count (\"3 selected\"); the placeholder shows in placeholder ink.",
       chevron: "The trailing chevron in the field chevron ink; it doesn't turn.",
       listbox: "Menu's surface in the top layer, placed below the trigger and at least as wide; it scrolls when the room runs out.",
       option: "Menu's row: an icon, the label, an optional description line and a trailing check on chosen rows. The plate marks highlight only.",
@@ -333,12 +339,20 @@ export default {
       grid: "In layout grid, a run of options (the list's, or a group's) in equal columns.",
       preview: "In layout grid, the option's picture in a 4:3 frame with Folder's thin edge; the selected stroke frames the chosen one.",
       caption: "In layout grid, the option's label under its picture, on one line, muted until chosen.",
+      panel: "With filterable or a footer, the popup: Menu's surface holding the header, the listbox and the footer, so only the options scroll.",
+      header: "The region over the options, ruled off: the filter field and Select all.",
+      filter: "A soft sm Input that narrows the options as you type; focus moves here while the list is open.",
+      "select-all": "With multiple, a row that chooses every option shown, or none; its mark is a check when all are chosen and a dash when some are.",
+      footer: "The region under the options, ruled off, holding your controls (Save and Cancel) at its end.",
     },
     // Spec: States.
     states: {
       open: "data-open is set: outline and soft hold their hover edge (focus edge and ring only from the keyboard); ghost holds its pressed plate.",
       disabled: "Select's disabled paint; ghost loses its plate. The list never opens.",
       invalid: "The danger edge and ring; aria-invalid on the trigger.",
+      success: "Select's success edge and ring, from validationStatus or a Field's success message.",
+      warning: "Select's warning edge and ring, from validationStatus or a Field's warning message.",
+      "read-only": "Rest paint, no hover; the trigger stays focusable with aria-readonly, and the list never opens.",
     },
     // Source: CustomSelect.tsx handleKeyDown.
     keyboard: [
@@ -350,7 +364,8 @@ export default {
       ["Enter or Space", "Chooses the highlighted option and closes; with multiple, toggles it and the list stays open."],
       ["Tab", "Chooses the highlighted option and moves on; with multiple, closes without choosing."],
       ["Alt+Up", "Chooses the highlighted option and closes; with multiple, just closes."],
-      ["Escape", "Closes without choosing."],
+      ["Escape", "Closes without choosing, from the trigger, the filter or anything in the panel."],
+      ["Tab", "With filterable, moves from the filter to Select all and the footer; with a footer alone, from the trigger into the footer."],
       ["A or Z", "Any letter: typing jumps to the next label that starts with the letters; a repeated letter cycles. When closed, it opens there."],
     ],
     aria: [
@@ -359,6 +374,8 @@ export default {
       ["aria-activedescendant", "On the trigger: the highlighted option while open."],
       ["aria-selected", "On each option: true for a chosen one."],
       ["aria-multiselectable", "On the listbox, with multiple."],
+      ["role=\"combobox\", aria-activedescendant", "With filterable, on the filter field too: it controls the listbox and points at the highlighted option."],
+      ["role=\"checkbox\", aria-checked", "On Select all: true, false or mixed."],
       ["aria-invalid, aria-required", "On the trigger, from invalid and required."],
     ],
   },
@@ -378,6 +395,7 @@ export default {
       ["Do", "Pass onCreate to offer a Create row, then add the new option to items: it is chosen once it arrives."],
       ["Do", "Group options with group, and add an icon or description where it helps people pick."],
       ["Do", "Set name to submit the option's value; typed text is submitted only with allowsCustomValue."],
+      ["Do", "Control the list with open and onOpenChange when the page opens it (a shortcut, a first-run hint); defaultOpen opens it once."],
       ["Don't", "Use it for a short fixed list; Select and Custom select need no typing."],
       ["Don't", "Put actions in the list; Command palette searches actions and places."],
     ],
@@ -426,6 +444,7 @@ export default {
       ["Do", "Pass onCreate when people may add tags, then add the new tag to items: it is chosen once it arrives."],
       ["Do", "Name it with aria-label or a Field label; a string aria-label names the list too."],
       ["Do", "Set name to submit one hidden value per chosen tag."],
+      ["Do", "Control the list with open and onOpenChange, or open it once with defaultOpen, as Combobox's."],
       ["Don't", "Use it for one value; use Combobox or Custom select."],
       ["Don't", "Use it for filters people should see all at once; use Chips."],
     ],
@@ -445,6 +464,9 @@ export default {
       open: "data-open is set; the field takes the focus edge and ring.",
       disabled: "Input's disabled fill; tags dim and lose their remove button, and the list never opens.",
       invalid: "The danger edge and ring.",
+      success: "Input's success edge and ring, from validationStatus or a Field's success message.",
+      warning: "Input's warning edge and ring, from validationStatus or a Field's warning message.",
+      "read-only": "Rest paint, no hover edge; the tags lose their remove buttons and the list never opens.",
     },
     // Source: TagPicker.tsx handleKeyDown.
     keyboard: [
@@ -458,7 +480,7 @@ export default {
       ["aria-multiselectable", "Always on the listbox; each option carries aria-selected."],
       ["aria-label", "On each tag's remove button: \"Remove\" and the tag's name."],
       ["aria-invalid", "On the field and the input, from invalid."],
-      ["role=\"status\"", "A hidden region that announces each tag added or removed."],
+      ["aria-live", "Not on the component: each tag added or removed is said through the page's shared announcer."],
     ],
   },
 
@@ -476,6 +498,7 @@ export default {
       ["Do", "Set min, max or isDateUnavailable: those dates can't be picked or typed."],
       ["Do", "Add the calendar icon where the field must read as a date; leave it out in property rows."],
       ["Do", "Set name to submit YYYY-MM-DD; formatOptions changes only what the field shows."],
+      ["Do", "Set readOnly to show a date set elsewhere; it stays focusable and readable, and the calendar never opens."],
       ["Don't", "Use it for a range; use Date range picker, and Time field for a time."],
       ["Don't", "Use it where the month should stay in view; use Calendar."],
     ],
@@ -493,6 +516,9 @@ export default {
       open: "data-open is set; the field takes the focus edge color, and ghost holds its pressed plate.",
       disabled: "Select's disabled paint; the panel never opens.",
       invalid: "The danger edge, with aria-invalid on the field.",
+      success: "Select's success edge and ring, from validationStatus or a Field's success message.",
+      warning: "Select's warning edge and ring, from validationStatus or a Field's warning message.",
+      "read-only": "Rest paint, no hover; the trigger stays focusable as a combobox with aria-readonly and the calendar never opens.",
     },
     // Source: DatePicker.tsx handleTextKey; Popover; Calendar.tsx key().
     keyboard: [
@@ -545,6 +571,7 @@ export default {
       ["role=\"dialog\"", "On the panel, named by the picker's aria-label (\"Choose dates\" by default)."],
       ["role=\"group\"", "Around the presets, named Presets."],
       ["aria-pressed", "On each preset: true for the one matching the range."],
+      ["aria-readonly", "With readOnly, on the field, which is then a combobox that never opens; success and warning paint as Date picker's."],
     ],
   },
 
@@ -561,6 +588,7 @@ export default {
       ["Do", "Set step, such as 15, when times usually fall on an interval; the list opens on the chosen time."],
       ["Do", "Set granularity=\"second\" only when seconds matter."],
       ["Do", "Read value as 24-hour HH:MM; it is null until every segment is filled."],
+      ["Do", "With step, control the list of times with open and onOpenChange, or open it once with defaultOpen."],
       ["Don't", "Use it for a duration or a date: it holds a time of day."],
       ["Don't", "Rely on it with phone keyboards yet: the segments don't open one."],
     ],
@@ -592,6 +620,7 @@ export default {
       ["aria-valuenow, aria-valuetext", "On each segment; an empty one reads Empty."],
       ["aria-invalid", "On each segment, from invalid or a Field's error."],
       ["aria-disabled, aria-readonly", "On the segments while disabled or read-only; disabled segments leave the Tab order."],
+      ["data-success, data-warning", "On the shell, from validationStatus or a Field's status: Input's success and warning edges."],
     ],
   },
 
@@ -656,6 +685,8 @@ export default {
       invalid: "Input's danger paint on the slots; aria-invalid on the input.",
       disabled: "Input's disabled paint; the input is disabled.",
       "read-only": "Input's read-only paint; the code can be read and copied, not changed.",
+      success: "Input's success edge and ring, from validationStatus or a Field's success message.",
+      warning: "Input's warning edge and ring, from validationStatus or a Field's warning message.",
     },
     // Source: OTPField.tsx handleKeyDown; native input.
     keyboard: [
@@ -777,6 +808,52 @@ export default {
       ["aria-invalid", "On the hex input while the draft doesn't parse, or from invalid."],
       ["aria-label", "On the opacity field: opacityLabel, \"Opacity\" by default."],
       ["role=\"group\", aria-label", "With alpha, on the group holding hex and opacity: groupLabel, \"Color and opacity\" by default."],
+    ],
+  },
+
+  "setting-row": {
+    // Spec: Job and boundaries; SettingRow.tsx.
+    instead: [
+      ["Editing what is selected on a canvas or in a list", ["panel"], "Panel's rows act on a selection; Setting row is a page of preferences."],
+      ["A field in a form someone fills in and submits", ["field"], "Field labels a form's control over or beside it; a setting takes effect on its own."],
+      ["Values to read, not change", ["description-list"], "Description list shows a label and its value."],
+    ],
+    // Spec: Variants, States, Behavior and accessibility.
+    practices: [
+      ["Do", "Name the setting in a few words and say in one line what it does; the name labels the control and the line describes it."],
+      ["Do", "Give the control as the row's only child, so the row can name it; pass controlId when it isn't."],
+      ["Do", "Set modified and onReset while the setting differs from its default, so its dot and Reset show."],
+      ["Do", "Put rows in a Settings group, with a heading for every group but a section's first."],
+      ["Do", "Use vertical for a control that needs the line: pictures, a list, a text area."],
+      ["Don't", "Put more than one control in a row; split the setting instead."],
+      ["Don't", "Hide what a setting does in its help; the description says it, the help adds detail."],
+    ],
+    // Spec: Anatomy; manifest elements and states.
+    parts: {
+      root: "The row: owns its padding and is the container its control drops under the text in when narrow.",
+      body: "The text and the control side by side, or stacked.",
+      text: "The name's line over the description.",
+      heading: "The name's line, the text's height: the label, the modified dot, the help and Reset.",
+      label: "The setting's name, a label element for the control.",
+      modified: "A small dot after the name while the setting differs from its default; said as \"Modified\".",
+      help: "A Toggletip or a Link after the name, outside the label.",
+      reset: "An icon-only ghost button that puts the default back, shown on hover or focus.",
+      description: "One line in the muted ink on what the setting does.",
+      control: "The setting's control at the row's end, at its own width or the group's column.",
+    },
+    states: {
+      modified: "The setting differs from its default: the dot, and Reset with onReset.",
+      disabled: "The words take the disabled ink and the control is disabled.",
+    },
+    keyboard: [
+      ["Tab", "Moves to the help, Reset and the control in turn; reaching Reset shows it."],
+      ["Enter or Space", "On Reset, puts the default back; Reset goes and focus moves to the control."],
+    ],
+    aria: [
+      ["aria-labelledby", "On the control: the setting's name."],
+      ["aria-describedby", "On the control: the description, and \"Modified\" while modified."],
+      ["aria-label", "On Reset: resetLabel, \"Reset “Label” to default\" by default."],
+      ["aria-labelledby", "On a Settings group's section, its heading."],
     ],
   },
 };

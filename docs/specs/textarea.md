@@ -178,3 +178,9 @@ Crispness: shell, insets (already `round()`ed) and boxes measured on whole pixel
 
 - **What changed:** The hover edge eases in on Feedback's hover clock, as Input's.
 - **Why:** One hover clock for every field. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+### 2026-11-07 · onValueChange (components audit O3)
+
+- **What changed:** `onValueChange(value, event)` beside native `onChange`, as Input's.
+- **Why:** forms.tsx:65-77. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
+- **Verdict:** awaiting the owner.

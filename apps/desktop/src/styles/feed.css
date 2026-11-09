@@ -37,11 +37,8 @@
     --area-card-gap: var(--_canvas-gap);
     --area-card-fill: var(--area-bg-stripe);
     --area-card-edge: var(--area-edge-blocks);
-    /* A frame's title is the name role (Q-T1, owner 2026-11-04, "Apply both"): 13/18, weight 500 in the default ink, so
-       the section's 16/22 title heads its cards (it was the section title's own style; Kit Type Decisions). */
-    --area-card-title-size: var(--area-text-base-size);
-    --area-card-title-leading: var(--area-text-base-leading);
-    --area-card-title-tracking: var(--area-text-base-tracking);
+    /* A frame's title is the name role (Q-T1, owner 2026-11-04, "Apply both"): Card's own title since 2026-11-06 (13/18,
+       500, the default ink), so the section's 16/22 title heads its cards without a hook here. */
   }
   /* Frames side by side: the card grid's columns and gap. */
   .studio-frames { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr)); /* pick: four across a 1440 Canvas with both panels */ gap: var(--_canvas-gap); }

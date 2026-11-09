@@ -1,7 +1,7 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
-import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Label, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverStep, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, useToaster, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
+import { Alert, AlignmentPicker, announce, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Label, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, MessageGroup, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverStep, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableGroup, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, useToaster, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
 import { AddIcon, AlignBottomIcon, AlignCenterIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowDownIcon, ArrowUpIcon, AspectRatioIcon, AutoLayoutIcon, BoldIcon, CalendarIcon, ChatIcon, CheckIcon, ChevronDownIcon, ClockIcon, CodeIcon, CopyIcon, CornerIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeOffIcon, FlipIcon, FlipVerticalIcon, FlowFreeIcon, FlowIcon, FlowVerticalIcon, FlowWrapIcon, FolderFilledIcon, FolderIcon, FrameIcon, GlobeIcon, GridIcon, HistoryIcon, ImageIcon, InfoIcon, ItalicIcon, KanbanIcon, LayersIcon, LinkIcon, ListIcon, MenuIcon, MoreHorizontalIcon, OpacityIcon, OpenIcon, PaintbrushIcon, PaletteIcon, PanelLeftIcon, PencilIcon, PenToolIcon, PeopleIcon, PersonIcon, PlayIcon, PointerIcon, RectangleIcon, RefreshIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, StrikethroughIcon, SubtractIcon, SunIcon, TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon, TextIcon, ThumbsDownIcon, ThumbsUpIcon, TokenIcon, TrashIcon, UnderlineIcon, VolumeIcon, WarningIcon, HomeIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
@@ -56,15 +56,15 @@ export const GalleryAlert = () => (
 export const GalleryAlertSuccess = () => <Alert tone="success" icon={<CheckIcon />} title="Title">Body text</Alert>;
 export const GalleryAlertDanger = () => <Alert tone="danger" icon={<WarningIcon />} title="Title">Body text</Alert>;
 export const GalleryAlertLink = () => <Alert icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-multiline">Link</a>}>Body text</Alert>;
-export const GalleryAlertAction = () => <Alert icon={<InfoIcon />} title="Title" action={<Button size="sm" variant="outline">Action</Button>}>Body text</Alert>;
+export const GalleryAlertAction = () => <Alert icon={<InfoIcon />} title="Title" actions={<Button size="sm" variant="outline">Action</Button>}>Body text</Alert>;
 export const GalleryAlertBanner = () => <Alert layout="banner" title="Title" link={<a href="#gallery-alert-layout-banner">Link</a>}>Body text</Alert>;
 export const GalleryAlertBannerIcon = () => <Alert layout="banner" tone="info" icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-banner-icon">Link</a>}>Body text</Alert>;
-export const GalleryAlertBannerStatus = () => <Alert layout="banner" title="Title" action={<Badge variant="solid">Status</Badge>}>Body text</Alert>;
+export const GalleryAlertBannerStatus = () => <Alert layout="banner" title="Title" actions={<Badge variant="solid">Status</Badge>}>Body text</Alert>;
 export const GalleryAlertBannerFlush = () => <Alert layout="banner" flush title="Title" link={<a href="#gallery-alert-layout-banner-flush">Link</a>}>Body text</Alert>;
 export const GalleryAlertBannerDismissible = () => {
   const [open, setOpen] = useState(true);
   return open
-    ? <Alert layout="banner" title="Title" action={<Button size="sm">Action</Button>} onDismiss={() => setOpen(false)}>Body text</Alert>
+    ? <Alert layout="banner" title="Title" actions={<Button size="sm">Action</Button>} onDismiss={() => setOpen(false)}>Body text</Alert>
     : <Button size="sm" onClick={() => setOpen(true)}>Show banner</Button>;
 };
 export const GalleryAlertMultiline = () => <Alert layout="multiline" icon={<InfoIcon />} title="Title">Body text that wraps onto a second line</Alert>;
@@ -106,6 +106,8 @@ export const GalleryButtonActionAccent = () => <ActionAccent><Button>Button</But
 export const GalleryButtonWithIcon = () => <Button icon={<AddIcon />}>Button</Button>;
 export const GalleryButtonTrailingIcon = () => <Button variant="ghost" tone="neutral" trailingIcon={<ChevronDownIcon />}>Button</Button>;
 export const GalleryButtonDisabled = () => <Button disabled>Button</Button>;
+/* Inactive (components audit V2, 2026-11-07): drawn as disabled, but it takes focus and the pointer and says why. */
+export const GalleryButtonInactive = () => <Button inactive inactiveText="Description">Button</Button>;
 export const GalleryButtonLoading = () => <Button loading>Button</Button>;
 export const GalleryButtonIconOnly = () => <Button iconOnly icon={<AddIcon />} aria-label="Add item" />;
 export const GalleryButtonPill = () => <Button pill>Button</Button>;
@@ -118,10 +120,8 @@ export const GalleryButtonFullWidth = () => <div style={{ inlineSize: "calc(var(
 export const GalleryButtonShortcut = () => <Button aria-keyshortcuts="Meta+Enter">Button <Kbd keys={["cmd", "enter"]} /></Button>;
 /* Split button (docs/specs/split-button.md): one variant per tile; every menu is live. */
 const SplitDemo = ({ label, items, ...props }: { label: string; items: string[] } & Omit<Parameters<typeof SplitButton>[0], "children" | "menu">) => {
-  const [done, setDone] = useState("");
   return <div>
-    <SplitButton {...props} onClick={() => setDone(label)} menu={items.map((item) => <MenuItem key={item} onClick={() => setDone(item)}>{item}</MenuItem>)}>{label}</SplitButton>
-    <span className="area-sr-only" role="status">{done}</span>
+    <SplitButton {...props} onClick={() => announce(label)} menu={items.map((item) => <MenuItem key={item} onClick={() => announce(item)}>{item}</MenuItem>)}>{label}</SplitButton>
   </div>;
 };
 const saveItems = ["Option one", "Option two", "Option three"];
@@ -146,10 +146,9 @@ export const GallerySplitButtonGhostIconRest = () => (
     menu={<><MenuItem shortcut="F">Frame</MenuItem><MenuItem shortcut="⇧S">Section</MenuItem></>}>Frame</SplitButton>
 );
 export const GallerySplitButtonDisabled = () => <SplitDemo label="Action" disabled items={saveItems} menuLabel="More options" />;
-export const GalleryButtonGroupCommands = () => {
-  const [command, setCommand] = useState("");
-  return <div><ButtonGroup aria-label="Vertical alignment"><Button variant="ghost" iconOnly icon={<AlignTopIcon />} aria-label="Align top" onClick={() => setCommand("Aligned top")} /><Button variant="ghost" iconOnly icon={<AlignMiddleIcon />} aria-label="Align middle" onClick={() => setCommand("Aligned middle")} /><Button variant="ghost" iconOnly icon={<AlignBottomIcon />} aria-label="Align bottom" onClick={() => setCommand("Aligned bottom")} /></ButtonGroup><span className="area-sr-only" role="status">{command}</span></div>;
-};
+export const GalleryButtonGroupCommands = () => (
+  <div><ButtonGroup aria-label="Vertical alignment"><Button variant="ghost" iconOnly icon={<AlignTopIcon />} aria-label="Align top" onClick={() => announce("Aligned top")} /><Button variant="ghost" iconOnly icon={<AlignMiddleIcon />} aria-label="Align middle" onClick={() => announce("Aligned middle")} /><Button variant="ghost" iconOnly icon={<AlignBottomIcon />} aria-label="Align bottom" onClick={() => announce("Aligned bottom")} /></ButtonGroup></div>
+);
 export const GalleryButtonGroupText = () => {
   const [pressed, setPressed] = useState(false);
   return <ButtonGroup variant="outline" aria-label="Text options"><Button variant="ghost" selected={pressed} onClick={() => setPressed(!pressed)}>Item one</Button><Button variant="ghost" onClick={() => setPressed(false)}>Item two</Button></ButtonGroup>;
@@ -157,12 +156,12 @@ export const GalleryButtonGroupText = () => {
 
 /* ButtonGroup variants: one per tile (docs/specs/button-group.md). Each button is its own command. */
 const GroupDemo = ({ variant, size, labels, icons, disabledIndex }: { variant?: "soft" | "outline"; size?: "sm" | "md" | "lg"; labels: string[]; icons?: ReactNode[]; disabledIndex?: number }) => {
-  const [last, setLast] = useState("");
+  const names = ["Aligned top", "Aligned middle", "Aligned bottom"];
   return <div><ButtonGroup variant={variant} size={size} aria-label="Formatting">
     {labels.map((label, index) => icons && !label
-      ? <Button key={index} variant="ghost" iconOnly icon={icons[index]} aria-label={["Align top", "Align middle", "Align bottom"][index]} disabled={index === disabledIndex} onClick={() => setLast(String(index))} />
-      : <Button key={label} variant="ghost" icon={icons?.[index]} disabled={index === disabledIndex} onClick={() => setLast(label)}>{label}</Button>)}
-  </ButtonGroup><span className="area-sr-only" role="status">{last}</span></div>;
+      ? <Button key={index} variant="ghost" iconOnly icon={icons[index]} aria-label={["Align top", "Align middle", "Align bottom"][index]} disabled={index === disabledIndex} onClick={() => announce(names[index] ?? "")} />
+      : <Button key={label} variant="ghost" icon={icons?.[index]} disabled={index === disabledIndex} onClick={() => announce(label)}>{label}</Button>)}
+  </ButtonGroup></div>;
 };
 const alignIcons = [<AlignTopIcon key="t" />, <AlignMiddleIcon key="m" />, <AlignBottomIcon key="b" />];
 const groupLabels = ["One", "Two", "Three"];
@@ -271,7 +270,7 @@ export const GalleryToolbarSizes = () => (
   </div>
 );
 export const GalleryToolbarOverflow = () => {
-  const [command, setCommand] = useState("");
+  const setCommand = (message: string) => announce(message);
   return <div>
     <Toolbar aria-label="Arrange objects" variant="surface">
       <ToolbarGroup aria-label="Vertical alignment">
@@ -284,9 +283,24 @@ export const GalleryToolbarOverflow = () => {
         <MenuItem onClick={() => setCommand("Deleted")}>Delete</MenuItem>
       </ToolbarOverflow>
     </Toolbar>
-    <span className="area-sr-only" role="status">{command}</span>
   </div>;
 };
+/* floating: the hover action bar (components audit N14). Each row shows its own bar while hovered or holding focus; Tab
+   reaches a hidden bar, which shows as focus enters its row. */
+export const GalleryToolbarFloating = () => (
+  <div style={{ inlineSize: "calc(var(--area-space-96) * 3)", display: "grid", gap: "var(--area-space-8)" }}>
+    {["Item one", "Item two"].map(item => (
+      <div key={item} style={{ minBlockSize: "var(--area-space-40)", padding: "var(--area-space-10) var(--area-space-12)", boxSizing: "border-box",
+        border: "var(--area-border-width) solid var(--area-edge-regions)", borderRadius: "var(--area-radius-container)" }}>
+        {item}
+        <Toolbar floating size="sm" variant="surface" aria-label={`${item} actions`}>
+          <ToolbarItem><Button variant="ghost" icon={<OpenIcon />}>Open</Button></ToolbarItem>
+          <ToolbarItem><Button variant="ghost" iconOnly icon={<CopyIcon />} aria-label="Copy" /></ToolbarItem>
+        </Toolbar>
+      </div>
+    ))}
+  </div>
+);
 /* One size per tile (owner, 2026-09-27: "always split sizes up into their own container"). */
 export const GalleryColorSwatchPickerSizeSm = () => (
   <ColorSwatchPicker label="sm palette" size="sm" layout="row" defaultValue="#BF8C02" items={[
@@ -337,6 +351,10 @@ export const GalleryColorSwatchPickerSizeLg = () => (
 );
 export const GalleryColorFieldSizeLg = () => (
   <Field label="Fill"><ColorField size="lg" defaultValue="#00A797" /></Field>
+);
+/* Input's soft treatment, now in the manifest (components audit 2026-11-07, O7). */
+export const GalleryColorFieldSoft = () => (
+  <Field label="Fill"><ColorField variant="soft" defaultValue="#00A797" /></Field>
 );
 export const GalleryColorSwatchSizeLg = () => (
   <ColorSwatch color="#00A797" size="lg" />
@@ -615,6 +633,25 @@ export const GalleryCheckboxGroupSuccess = () => (
     <Checkbox name="gallery-release-notes" value="two" label="Option two" defaultChecked />
   </CheckboxGroup>
 );
+/* Read-only: a state set elsewhere, shown and not toggled (components audit 2026-11-07, O2). */
+export const GalleryCheckboxReadOnly = () => <Checkbox label="Label" defaultChecked readOnly />;
+export const GalleryCheckboxGroupReadOnly = () => (
+  <CheckboxGroup label="Label" readOnly value={["one"]}>
+    <Checkbox variant="soft" layout="list" value="one" label="Option one" />
+    <Checkbox variant="soft" layout="list" value="two" label="Option two" />
+  </CheckboxGroup>
+);
+/* The group holds the checked values, as Radio group holds its one (O5). */
+export const GalleryCheckboxGroupValue = () => {
+  const [kinds, setKinds] = useState<string[]>(["one"]);
+  return (
+    <CheckboxGroup label="Label" description={`Value: ${kinds.join(", ") || "none"}`} name="gallery-kinds" value={kinds} onValueChange={setKinds}>
+      <Checkbox value="one" label="Option one" />
+      <Checkbox value="two" label="Option two" />
+      <Checkbox value="three" label="Option three" />
+    </CheckboxGroup>
+  );
+};
 
 export const GalleryChip = () => (
   <Chip>Chip</Chip>
@@ -696,7 +733,7 @@ export const CodeBlockDiff = () => (
   <CodeBlock
     title="theme.ts"
     language="ts"
-    marks={{ 2: "removed", 3: "added" }}
+    marks={{ 2: "deleted", 3: "added" }}
     style={{ inlineSize: "100%" }}
     html={highlight('export const theme = {\n  accent: "indigo",\n  accent: "purple",\n  radius: "8",\n};')}
   />
@@ -830,6 +867,32 @@ export const GalleryDialogModal = () => (
     footer={<><Button variant="ghost" onClick={closeDialog}>Cancel</Button><Button onClick={closeDialog}>Action</Button></>}>Body text</Dialog>
 );
 
+/* Sizes (components audit V1, 2026-11-07): one width per tile, inline, as the default tile. */
+const DialogAtSize = ({ size }: { size: "sm" | "md" | "lg" | "xl" }) => (
+  <Dialog role="group" aria-modal={undefined} size={size} title="Title" description="Description"
+    footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>} />
+);
+export const GalleryDialogSm = () => <DialogAtSize size="sm" />;
+export const GalleryDialogMd = () => <DialogAtSize size="md" />;
+export const GalleryDialogLg = () => <DialogAtSize size="lg" />;
+export const GalleryDialogXl = () => <DialogAtSize size="xl" />;
+/* Full height: the tallest the screen allows, whatever the content, so it opens as a modal (a tile can't hold it). */
+export const GalleryDialogFullHeight = () => (
+  <Dialog fullHeight trigger={<Button variant="outline" tone="neutral">Open dialog</Button>} title="Title" description="Description"
+    footer={<><Button variant="ghost" onClick={closeDialog}>Cancel</Button><Button onClick={closeDialog}>Action</Button></>}>Body text</Dialog>
+);
+/* Scrolled: the body has moved, so the rule under the header shows. The tile scrolls its own body once, on mount. */
+export const GalleryDialogScrolled = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const body = ref.current?.querySelector<HTMLElement>(".area-dialog__body");
+    if (!body) return;
+    body.scrollTop = 48;
+    body.dispatchEvent(new Event("scroll", { bubbles: true }));
+  }, []);
+  return <Dialog ref={ref} role="group" aria-modal={undefined} title="Title" description="Description" footer={<Button>Action</Button>} style={{ maxBlockSize: "calc(var(--area-space-96) * 3)" }}><div style={{ display: "grid", gap: "var(--area-space-12)" }}>{Array.from({ length: 8 }, (_, index) => <p key={index} style={{ margin: 0 }}>Body text {index + 1}</p>)}</div></Dialog>;
+};
+
 export const GalleryField = () => (
   <Field label="Label" description="Description">
     <Input type="email" placeholder="Placeholder" />
@@ -841,14 +904,14 @@ export const GalleryFieldMedium = () => <Field label="Label"><Input size="md" pl
 export const GalleryFieldLarge = () => <Field label="Label"><Input size="lg" placeholder="Large" /></Field>;
 
 export const GalleryInput = () => (
-  <Input aria-label="Label" leadingIcon={<SearchIcon />} placeholder="Placeholder" />
+  <Input aria-label="Label" icon={<SearchIcon />} placeholder="Placeholder" />
 );
 
 export const GalleryInputSmall = () => <Input size="sm" aria-label="Label" placeholder="Small" />;
 export const GalleryInputMedium = () => <Input size="md" aria-label="Label" placeholder="Medium" />;
 export const GalleryInputLarge = () => <Input size="lg" aria-label="Label" placeholder="Large" />;
 export const GalleryInputText = () => <Field label="Label"><Input defaultValue="Value" /></Field>;
-export const GalleryInputSearch = () => <Field label="Search"><Input type="search" leadingIcon={<SearchIcon />} placeholder="Search" /></Field>;
+export const GalleryInputSearch = () => <Field label="Search"><Input type="search" icon={<SearchIcon />} placeholder="Search" /></Field>;
 /*
  * A date field built from the system's own parts (owner, 2026-09-28: "use the real one"): the
  * Input shows the date and opens Calendar in a Popover anchored to the whole field, and the
@@ -1109,6 +1172,37 @@ export const GalleryCommandPaletteModal = () => {
 };
 export const GalleryCommandPaletteEmpty = () => <CommandPalette inline items={paletteItems} defaultQuery="Search query" emptyText="No results" />;
 export const GalleryCommandPaletteNoFooter = () => <CommandPalette inline footer={false} items={paletteItems.filter(item => item.group === "Actions")} placeholder="Search" />;
+/* A result's path after its name (components audit V4): secondary ink, shortened before the name is. */
+const pathItems: CommandItem[] = [
+  { id: "one", label: "Item one", path: "Label / Item two / Item three", icon: <DocumentIcon /> },
+  { id: "two", label: "Item two", path: "Label", icon: <DocumentIcon /> },
+  { id: "three", label: "Item three", path: "Label / Item two", icon: <FolderIcon /> },
+];
+export const GalleryCommandPalettePath = () => <CommandPalette inline items={pathItems} placeholder="Search" />;
+/* The typed text marked in every result it matches, the name and the path alike. */
+export const GalleryCommandPaletteMatches = () => <CommandPalette inline items={pathItems} defaultQuery="item t" placeholder="Search" />;
+/* A preview pane beside the results, holding the active row's preview; it hides when the palette is under 640 wide. */
+const previewOf = (title: string) => (
+  <div style={{ display: "grid", gap: "var(--area-space-8)", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)" }}>
+    <span style={{ fontWeight: "var(--area-weight-strong)" }}>{title}</span>
+    <span style={{ color: "var(--area-fg-muted)" }}>Body text</span>
+    <Skeleton lines={3} animated={false} />
+  </div>
+);
+export const GalleryCommandPalettePreview = () => (
+  <CommandPalette inline style={{ inlineSize: "calc(var(--area-space-96) * 7)" }} placeholder="Search"
+    items={pathItems.map(item => ({ ...item, preview: previewOf(item.label) }))} />
+);
+/* Steps: a command that asks for more opens its own list; Back in the field, Escape or Backspace go back. */
+const stepItems: CommandItem[] = [
+  { id: "action", label: "Action…", icon: <SettingsIcon />, placeholder: "Search options", items: [
+    { id: "option-one", label: "Option one" },
+    { id: "option-two", label: "Option two" },
+    { id: "option-three", label: "Option three" },
+  ] },
+  { id: "new", label: "New item", icon: <AddIcon />, shortcut: ["cmd", "n"] },
+];
+export const GalleryCommandPaletteSteps = () => <CommandPalette inline items={stepItems} placeholder="Search" />;
 
 /*
  * Context menu (docs/specs/context-menu.md): Menu, opened at the pointer. Right-click the
@@ -1253,6 +1347,36 @@ export const GalleryMessageStreaming = () => (
     <Message author="assistant" authorName="Assistant" streaming actions={assistantActions}>Body text</Message>
   </div>
 );
+/* The person's message on its way (components audit O6): sending dims the bubble and says so after a second; not sent
+   says so with Retry, which sends it again. */
+export const GalleryMessageSending = () => (
+  <div style={conversation}><Message author="user" status="sending">Body text</Message></div>
+);
+export const GalleryMessageError = () => {
+  const [status, setStatus] = useState<"sending" | "error" | undefined>("error");
+  const retry = () => { setStatus("sending"); window.setTimeout(() => setStatus("error"), 2000); };
+  return <div style={conversation}><Message author="user" status={status} onRetry={retry} actions={userActions}>Body text</Message></div>;
+};
+/* A stack (V9): the person's consecutive messages 2 apart, their end corners tighter where they meet; one not sent
+   keeps the stack's corners. */
+export const GalleryMessageGroup = () => (
+  <div style={conversation}>
+    <MessageGroup>
+      <Message author="user">Body text</Message>
+      <Message author="user" status="error" onRetry={() => {}}>Body text that wraps onto a second line</Message>
+      <Message author="user" actions={userActions}>Body text</Message>
+    </MessageGroup>
+  </div>
+);
+/* One message split into bubbles on the same stack. */
+export const GalleryMessageSplit = () => (
+  <div style={conversation}>
+    <Message author="user" split actions={userActions}>
+      <span>Body text</span>
+      <span>Body text that wraps onto a second line, long enough to show the bubble's width cap</span>
+    </Message>
+  </div>
+);
 export const GalleryMessageLong = () => (
   <div style={conversation}>
     <Message author="user" actions={userActions}>{"Body text\nBody text that wraps onto a second line, long enough to show the bubble's width cap and its inset on every side"}</Message>
@@ -1347,8 +1471,7 @@ export const GalleryInputGroupMode = () => <InputGroup aria-label="Width and uni
 export const GalleryInputGroupPhone = () => <InputGroup aria-label="Phone number"><Select aria-label="Country code" defaultValue="+1"><option value="+1">+1</option><option value="+44">+44</option><option value="+61">+61</option></Select><Input type="tel" aria-label="Phone number" defaultValue="555 0100" /></InputGroup>;
 export const GalleryInputGroupAction = () => {
   const [query, setQuery] = useState("");
-  const [submitted, setSubmitted] = useState("");
-  return <div><InputGroup aria-label="Search"><Input type="search" aria-label="Search terms" placeholder="Search" value={query} onChange={event => setQuery(event.target.value)} /><Button type="button" variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Run search" onClick={() => setSubmitted(query)} /></InputGroup>{submitted && <span role="status" className="area-sr-only">Searched for {submitted}</span>}</div>;
+  return <div><InputGroup aria-label="Search"><Input type="search" aria-label="Search terms" placeholder="Search" value={query} onChange={event => setQuery(event.target.value)} /><Button type="button" variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Run search" onClick={() => { if (query) announce(`Searched for ${query}`); }} /></InputGroup></div>;
 };
 
 export const GalleryKbd = () => (
@@ -1382,7 +1505,7 @@ export const GalleryKbdInMenu = () => (
   </Menu>
 );
 export const GalleryKbdInCommandPalette = () => <CommandPalette inline items={paletteItems.filter(item => item.group === "Actions" && !item.disabled)} placeholder="Search" />;
-export const GalleryKbdInSearchField = () => <Input type="search" aria-label="Search" placeholder="Search" aria-keyshortcuts="Meta+K" leadingIcon={<SearchIcon />} suffix={<Kbd keys={["cmd", "K"]} size="sm" />} />;
+export const GalleryKbdInSearchField = () => <Input type="search" aria-label="Search" placeholder="Search" aria-keyshortcuts="Meta+K" icon={<SearchIcon />} suffix={<Kbd keys={["cmd", "K"]} size="sm" />} />;
 export const GalleryKbdInNav = () => (
   <Nav aria-label="Label">
     <NavItem href="#gallery-kbd-template-in-nav" icon={<SearchIcon />} trailing={<Kbd keys={["cmd", "K"]} size="sm" />}>Search</NavItem>
@@ -1420,6 +1543,13 @@ export const GalleryMenu = () => (
     <MenuItem><span className="area-menu__text">Item one</span></MenuItem>
     <MenuItem><span className="area-menu__text">Item two</span></MenuItem>
     <MenuItem><span className="area-menu__text">Item three</span></MenuItem>
+  </Menu>
+);
+/* A trailing count before the shortcut (components audit 2026-11-07, O7), as Nav item's trailing. */
+export const GalleryMenuTrailing = () => (
+  <Menu aria-label="Label">
+    <MenuItem trailing="12" shortcut={<Kbd keys={["cmd", "1"]} size="sm" />}>Item one</MenuItem>
+    <MenuItem trailing="3" shortcut={<Kbd keys={["cmd", "2"]} size="sm" />}>Item two</MenuItem>
   </Menu>
 );
 export const GalleryMenuShortcuts = () => <Menu aria-label="Label"><MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="sm" />}><span className="area-menu__text">Item one</span></MenuItem><MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="sm" />}><span className="area-menu__text">Item two</span></MenuItem></Menu>;
@@ -1463,6 +1593,32 @@ export const GalleryMenuDisabled = () => (
     <MenuItem><span className="area-menu__text">Item one</span></MenuItem>
     <MenuItem disabled><span className="area-menu__text">Item two</span></MenuItem>
     <MenuItem><span className="area-menu__text">Item three</span></MenuItem>
+  </Menu>
+);
+/* Inactive (V2): the row looks disabled, but the arrows reach it and its note says why. */
+export const GalleryMenuInactive = () => (
+  <Menu aria-label="Label">
+    <MenuItem>Item one</MenuItem>
+    <MenuItem inactive inactiveText="Description">Item two</MenuItem>
+    <MenuItem>Item three</MenuItem>
+  </Menu>
+);
+/* Header and footer (components audit V5, 2026-11-07): fixed above and below the rows, each with its rule. */
+export const GalleryMenuHeaderFooter = () => (
+  <Menu aria-label="Label" header="Label" footer={<MenuItem icon={<SettingsIcon />}>Action</MenuItem>}>
+    <MenuItem>Item one</MenuItem>
+    <MenuItem>Item two</MenuItem>
+    <MenuItem>Item three</MenuItem>
+  </Menu>
+);
+/* No rows: the empty row names what's missing. */
+export const GalleryMenuEmpty = () => <Menu aria-label="Label" emptyText="No items yet" />;
+/* Rows on their way: the loading row shows after a short wait. */
+export const GalleryMenuLoading = () => <Menu aria-label="Label" loading />;
+/* Only the rows scroll: the header and footer stay with the frame. */
+export const GalleryMenuScrollingRows = () => (
+  <Menu trigger={<Button variant="outline" trailingIcon={<ChevronDownIcon />}>Button</Button>} header="Label" footer={<MenuItem icon={<SettingsIcon />}>Action</MenuItem>} style={{ maxBlockSize: "calc(var(--area-space-96) * 2)" }}>
+    {Array.from({ length: 12 }, (_, index) => <MenuItem key={index}>{`Item ${index + 1}`}</MenuItem>)}
   </Menu>
 );
 export const GalleryMenuDanger = () => <Menu aria-label="Label"><MenuItem><span className="area-menu__text">Item one</span></MenuItem><MenuItem tone="danger"><span className="area-menu__text">Item two</span></MenuItem></Menu>;
@@ -1906,6 +2062,8 @@ export const GallerySkeletonType = () => (
   </div>
 );
 export const GallerySkeletonStatic = () => <Skeleton animated={false} />;
+/* Delay (V6): a quick load shows nothing; a longer one shows the placeholder, which kept its place while it waited. */
+export const GallerySkeletonDelay = () => <DelayedLoad><Skeleton lines={2} delay="short" /></DelayedLoad>;
 export const GallerySkeletonParagraph = () => <Skeleton lines={3} style={{ inlineSize: "100%", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)" }} />;
 /* The placeholder painted on the real element: it keeps the Button's size and corner. */
 export const GallerySkeletonWrap = () => <Skeleton><Button size="md">Action</Button></Skeleton>;
@@ -2031,6 +2189,23 @@ export const GallerySpinnerMedium = () => <Spinner size="md" />;
 export const GallerySpinnerLarge = () => <Spinner size="lg" />;
 export const GallerySpinnerNeutral = () => <SelectionNeutral><Spinner /></SelectionNeutral>;
 export const GallerySpinnerButton = () => <Button loading>Button</Button>;
+/* Delay (components audit V6, 2026-11-07): a wait under the delay shows nothing; a longer one shows the ring. */
+const DelayedLoad = ({ children }: { children: ReactNode }) => {
+  const [loading, setLoading] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const run = (ms: number) => { clearTimeout(timer.current); setLoading(true); timer.current = setTimeout(() => setLoading(false), ms); };
+  return (
+    <div style={{ display: "grid", gap: "var(--area-space-12)", justifyItems: "start", minInlineSize: 200 }}>
+      <div style={{ display: "flex", gap: "var(--area-ui-cluster)" }}>
+        <Button variant="outline" size="sm" onClick={() => run(200)}>200 ms</Button>
+        <Button variant="outline" size="sm" onClick={() => run(2000)}>2 s</Button>
+      </div>
+      <div style={{ blockSize: "var(--area-space-48)", display: "grid", alignItems: "center", inlineSize: "100%" }}>{loading ? children : <span>Body text</span>}</div>
+    </div>
+  );
+};
+export const GallerySpinnerDelay = () => <DelayedLoad><Spinner delay="short" label="Loading" /></DelayedLoad>;
 export const GallerySpinnerBadge = () => <Badge icon={<Spinner />} tone="neutral">Badge</Badge>;
 export const GallerySpinnerInput = () => <Input aria-label="Label" placeholder="Placeholder" loading loaderPosition="trailing" />;
 /* A region loading in place of its content: the spinner 12 over a title with its line joined under it, the line muted,
@@ -2059,26 +2234,68 @@ export const GalleryTableSelectable = () => {
   const rows = ["Item one", "Item two", "Item three"];
   return <Table aria-label="Table"><thead><tr><TableHeaderCell fit><Checkbox aria-label="Select all rows" checked={selected.length === rows.length} indeterminate={selected.length > 0 && selected.length < rows.length} onChange={event => setSelected(event.target.checked ? rows : [])} /></TableHeaderCell><th scope="col">Name</th></tr></thead><tbody>{rows.map(name => <tr key={name} data-selected={selected.includes(name) ? "" : undefined}><td><Checkbox aria-label={`Select ${name}`} checked={selected.includes(name)} onChange={event => setSelected(event.target.checked ? [...selected, name] : selected.filter(item => item !== name))} /></td><td>{name}</td></tr>)}</tbody></Table>;
 };
+/* Sorting (components audit V3): each sortable heading takes `sort` and `onSortChange`; the table sorts nothing itself,
+   so the rows are sorted here. The unsorted column shows its arrow under the pointer or focus. */
 export const GalleryTableSorting = () => {
-  const [descending, setDescending] = useState(false);
-  const rows = [{ name: "Item one", value: 1 }, { name: "Item two", value: 12 }, { name: "Item three", value: 128 }].sort((a, b) => descending ? b.value - a.value : a.value - b.value);
-  return <Table aria-label="Table"><thead><tr><th scope="col">Name</th><TableHeaderCell aria-sort={descending ? "descending" : "ascending"} numeric><Button size="sm" variant="ghost" align="end" trailingIcon={descending ? <ArrowDownIcon /> : <ArrowUpIcon />} onClick={() => setDescending(!descending)}>Value</Button></TableHeaderCell></tr></thead><tbody>{rows.map(row => <tr key={row.name}><td>{row.name}</td><TableCell numeric>{row.value}</TableCell></tr>)}</tbody></Table>;
+  const [sort, setSort] = useState<{ column: "name" | "value"; order: "ascending" | "descending" }>({ column: "value", order: "ascending" });
+  const rows = [{ name: "Item one", value: 1 }, { name: "Item two", value: 12 }, { name: "Item three", value: 128 }].sort((a, b) => {
+    const order = sort.column === "name" ? a.name.localeCompare(b.name) : a.value - b.value;
+    return sort.order === "ascending" ? order : -order;
+  });
+  const order = (column: "name" | "value") => sort.column === column ? sort.order : "none";
+  return <Table aria-label="Table"><thead><tr>
+    <TableHeaderCell sort={order("name")} onSortChange={next => setSort({ column: "name", order: next })}>Name</TableHeaderCell>
+    <TableHeaderCell numeric sort={order("value")} onSortChange={next => setSort({ column: "value", order: next })}>Value</TableHeaderCell>
+  </tr></thead><tbody>{rows.map(row => <tr key={row.name}><td>{row.name}</td><TableCell numeric>{row.value}</TableCell></tr>)}</tbody></Table>;
 };
 export const GalleryTableCompact = () => <Table size="sm" aria-label="Table"><thead><tr><th scope="col">Name</th><TableHeaderCell numeric>Value</TableHeaderCell></tr></thead><tbody>{["Item one", "Item two", "Item three"].map((name, i) => <tr key={name}><td>{name}</td><TableCell numeric>{[1, 12, 128][i]} MB</TableCell></tr>)}</tbody></Table>;
 export const GalleryTableStriped = () => <Table striped aria-label="Table"><thead><tr><th scope="col">Name</th><TableHeaderCell numeric>Value</TableHeaderCell></tr></thead><tbody>{["Item one", "Item two", "Item three", "Item four"].map((name, i) => <tr key={name}><td>{name}</td><TableCell numeric>{[1, 12, 128, 1024][i]} MB</TableCell></tr>)}</tbody></Table>;
 export const GalleryTableDividers = () => <Table columnDividers aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col">Label</th><th scope="col">Status</th></tr></thead><tbody><tr><td>Item one</td><td>Label</td><td>Status</td></tr><tr><td>Item two</td><td>Label</td><td>Status</td></tr></tbody></Table>;
 export const GalleryTableEmpty = () => <Table aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col">Status</th></tr></thead><tbody><tr><td colSpan={2}>No items</td></tr></tbody></Table>;
-export const GalleryTableLoading = () => <Table aria-label="Table" aria-busy="true"><thead><tr><th scope="col">Name</th><th scope="col">Status</th></tr></thead><tbody>{[0, 1, 2].map(row => <tr key={row}><td><Skeleton shape="text" style={{ inlineSize: "var(--area-space-96)" }} /></td><td><Skeleton shape="text" style={{ inlineSize: "var(--area-space-48)" }} /></td></tr>)}</tbody></Table>;
+/* Loading (V3): `loading` keeps the header and draws three rows of Skeleton cells, one per heading, in place of the body. */
+export const GalleryTableLoading = () => <Table aria-label="Table" loading><thead><tr><th scope="col">Name</th><th scope="col">Status</th><TableHeaderCell numeric>Value</TableHeaderCell></tr></thead><tbody><tr><td>Item one</td><td>Status</td><TableCell numeric>1</TableCell></tr></tbody></Table>;
+
+const tableRowsLong = ["Item one", "Item two", "Item three", "Item four", "Item five", "Item six", "Item seven", "Item eight"];
+/* Sticky header (V3): the header row stays while the rows scroll under it, inside the wrapper given a height. */
+export const GalleryTableStickyHeader = () => (
+  <Table aria-label="Table" stickyHeader wrapperProps={{ style: { maxBlockSize: "calc(var(--area-space-48) * 4)" } }}>
+    <thead><tr><th scope="col">Name</th><th scope="col">Status</th><TableHeaderCell numeric>Value</TableHeaderCell></tr></thead>
+    <tbody>{tableRowsLong.map((name, i) => <tr key={name}><td>{name}</td><td><Badge dot tone="success">Status</Badge></td><TableCell numeric>{i + 1}</TableCell></tr>)}</tbody>
+  </Table>
+);
+/* Sticky first column (V3): the names stay while the columns scroll sideways; the rule at the column's end shows only
+   while columns are scrolled under it. */
+export const GalleryTableStickyColumn = () => (
+  <Table aria-label="Table" stickyFirstColumn wrapperProps={{ style: { maxInlineSize: "calc(var(--area-space-96) * 3)" } }}>
+    <thead><tr><th scope="col">Name</th>{["Label", "Status", "Description"].map(column => <th key={column} scope="col">{column}</th>)}<TableHeaderCell numeric>Value</TableHeaderCell></tr></thead>
+    <tbody>{tableRowsLong.slice(0, 3).map((name, i) => <tr key={name}><td>{name}</td><td>Label</td><td><Badge dot tone="success">Status</Badge></td><td>Description</td><TableCell numeric>{i + 1}</TableCell></tr>)}</tbody>
+  </Table>
+);
+/* Row groups (V3): a heading row per group with its count and its total; the toggle folds the group's rows. */
+export const GalleryTableGroups = () => (
+  <Table aria-label="Table">
+    <thead><tr><th scope="col">Name</th><th scope="col">Status</th><TableHeaderCell numeric>Value</TableHeaderCell></tr></thead>
+    <TableGroup heading="Group one" count={2} summary="Total 3" colSpan={3}>
+      <tr><td>Item one</td><td><Badge dot tone="success">Status</Badge></td><TableCell numeric>1</TableCell></tr>
+      <tr><td>Item two</td><td><Badge dot tone="success">Status</Badge></td><TableCell numeric>2</TableCell></tr>
+    </TableGroup>
+    <TableGroup heading="Group two" count={1} summary="Total 3" colSpan={3} defaultExpanded={false}>
+      <tr><td>Item three</td><td><Badge>Status</Badge></td><TableCell numeric>3</TableCell></tr>
+    </TableGroup>
+  </Table>
+);
 
 export const GalleryTabs = () => (
-  <Tabs aria-label="Tabs, default" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }, { id: "three", label: "Item three", content: "Body text" }]} style={{ inlineSize: "100%" }} />
+  <Tabs aria-label="Tabs, default" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }, { value: "three", label: "Item three", content: "Body text" }]} style={{ inlineSize: "100%" }} />
 );
-export const GalleryTabsDisabled = () => <Tabs aria-label="Tabs, disabled" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", disabled: true, content: "Body text" }, { id: "three", label: "Item three", content: "Body text" }]} />;
-export const GalleryTabsVertical = () => <Tabs aria-label="Tabs, vertical" orientation="vertical" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }, { id: "three", label: "Item three", content: "Body text" }]} />;
-export const GalleryTabsSmall = () => <Tabs aria-label="Tabs, small" size="sm" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
-export const GalleryTabsTrack = () => <Tabs aria-label="Tabs, track" track items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
-export const GalleryTabsIcons = () => <Tabs aria-label="Tabs, icons" items={[{ id: "one", label: "Item one", icon: <PersonIcon />, content: "Body text" }, { id: "two", label: "Item two", icon: <InfoIcon />, content: "Body text" }]} />;
-export const GalleryTabsCounts = () => <Tabs aria-label="Tabs, counts" items={[{ id: "one", label: "Item one", trailing: <Count variant="soft" count={12} />, content: "Body text" }, { id: "two", label: "Item two", trailing: <Count variant="soft" count={3} />, content: "Body text" }]} />;
+export const GalleryTabsDisabled = () => <Tabs aria-label="Tabs, disabled" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", disabled: true, content: "Body text" }, { value: "three", label: "Item three", content: "Body text" }]} />;
+export const GalleryTabsVertical = () => <Tabs aria-label="Tabs, vertical" orientation="vertical" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }, { value: "three", label: "Item three", content: "Body text" }]} />;
+export const GalleryTabsSmall = () => <Tabs aria-label="Tabs, small" size="sm" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }]} />;
+export const GalleryTabsTrack = () => <Tabs aria-label="Tabs, track" track items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }]} />;
+export const GalleryTabsIcons = () => <Tabs aria-label="Tabs, icons" items={[{ value: "one", label: "Item one", icon: <PersonIcon />, content: "Body text" }, { value: "two", label: "Item two", icon: <InfoIcon />, content: "Body text" }]} />;
+/* A tab's change in the shared change ink, and unseen as a dot apart from it (components audit D6). */
+export const GalleryTabsChanges = () => <Tabs aria-label="Tabs, changes" items={[{ value: "one", label: "File one", status: "modified", unseen: true, content: "Body text" }, { value: "two", label: "File two", status: "added", content: "Body text" }, { value: "three", label: "File three", content: "Body text" }]} />;
+export const GalleryTabsCounts = () => <Tabs aria-label="Tabs, counts" items={[{ value: "one", label: "Item one", trailing: <Count variant="soft" count={12} />, content: "Body text" }, { value: "two", label: "Item two", trailing: <Count variant="soft" count={3} />, content: "Body text" }]} />;
 
 export const GalleryTextarea = () => <Textarea aria-label="Label" placeholder="Placeholder" rows={3} />;
 
@@ -2097,7 +2314,7 @@ export const GalleryToastTitle = () => <Toast tone="info" icon={<InfoIcon />} ti
 export const GalleryToastMultiline = () => <Toast tone="info" icon={<InfoIcon />} style={{ inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-48))" }}>Body text that wraps onto a second line</Toast>;
 export const GalleryToastAction = () => {
   const [undone, setUndone] = useState(false);
-  return <Toast icon={<CheckIcon />} tone="success" action={!undone ? <Button size="sm" variant="outline" onClick={() => setUndone(true)}>Undo</Button> : undefined}>Body text</Toast>;
+  return <Toast icon={<CheckIcon />} tone="success" actions={!undone ? <Button size="sm" variant="outline" onClick={() => setUndone(true)}>Undo</Button> : undefined}>Body text</Toast>;
 };
 /* A Toaster (audit E-11): announced through its own live regions, paused on hover and focus,
    5s by default, an Undo toast stays until dismissed; F8 reaches the stack. */
@@ -2105,7 +2322,7 @@ const ToasterButtons = () => {
   const toaster = useToaster();
   return <div style={{ display: "flex", gap: "var(--area-space-8)" }}>
     <Button variant="outline" onClick={() => toaster.show({ tone: "success", icon: <CheckIcon />, message: "Body text" })}>Action</Button>
-    <Button variant="outline" onClick={() => { const id = toaster.show({ icon: <TrashIcon />, message: "Body text", action: <Button size="sm" variant="outline" onClick={() => toaster.dismiss(id)}>Undo</Button> }); }}>Delete</Button>
+    <Button variant="outline" onClick={() => { const id = toaster.show({ icon: <TrashIcon />, message: "Body text", actions: <Button size="sm" variant="outline" onClick={() => toaster.dismiss(id)}>Undo</Button> }); }}>Delete</Button>
   </div>;
 };
 export const GalleryToaster = () => <Toaster><ToasterButtons /></Toaster>;
@@ -2187,13 +2404,20 @@ export const GalleryTreeViewFiles = () => {
 export const GalleryTreeViewSm = () => <TreeView size="sm" aria-label="Label" items={fileTree} defaultExpandedIds={["src", "components"]} defaultSelectedIds={["button"]} />;
 /* Indent lines under each open branch, shown while the tree is hovered or holds focus. */
 export const GalleryTreeViewGuides = () => <TreeView size="sm" guides aria-label="Label" items={fileTree} defaultExpandedIds={["src", "components"]} defaultSelectedIds={["button"]} />;
-/* Each row's change as git's letter in its tone, read out as the word: added, modified, removed. */
+/* Each row's change as git's letter in its ink, read out as the word: added, modified, deleted. */
 const statusTree = [
   { id: "one", label: "File one", icon: <DocumentIcon />, status: "added" as const },
   { id: "two", label: "File two", icon: <DocumentIcon />, status: "modified" as const },
-  { id: "three", label: "File three", icon: <DocumentIcon />, status: "removed" as const },
+  { id: "three", label: "File three", icon: <DocumentIcon />, status: "deleted" as const },
 ];
 export const GalleryTreeViewStatus = () => <TreeView size="sm" aria-label="Label" items={statusTree} />;
+/* The other change words, untracked U and renamed R, and unseen: a dot apart from the status (components audit D6). */
+const changeTree = [
+  { id: "one", label: "File one", icon: <DocumentIcon />, status: "untracked" as const },
+  { id: "two", label: "File two", icon: <DocumentIcon />, status: "renamed" as const },
+  { id: "three", label: "File three", icon: <DocumentIcon />, status: "modified" as const, unseen: true },
+];
+export const GalleryTreeViewChanges = () => <TreeView size="sm" aria-label="Label" items={changeTree} />;
 /* Folders as filled glyphs in one hue (owner, pass 2). */
 const blueFolder = <FolderFilledIcon style={{ color: "var(--area-fg-info)" }} />;
 const filledTree = [
@@ -2238,13 +2462,13 @@ export const GalleryTreeViewLayers = () => {
 export const GalleryTreeViewFilters = () => <TreeView aria-label="Filters" selectionMode="checkbox" items={filterTree} defaultExpandedIds={["markets", "funding"]} defaultSelectedIds={["open"]} />;
 
 export const GalleryComposerInline = () => {
-  const [sent, setSent] = useState("");
-  return <div style={{ inlineSize: "100%" }}><Composer label="Label" placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} trailingActions={<Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search tools" onClick={() => setSent("Search tools action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+  const setSent = (message: string) => announce(`Sent: ${message}`);
+  return <div style={{ inlineSize: "100%" }}><Composer label="Label" placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} trailingActions={<Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search tools" onClick={() => setSent("Search tools action")} />} onSubmit={message => setSent(message)} /></div>;
 };
 export const GalleryComposerStacked = () => {
-  const [sent, setSent] = useState("");
+  const setSent = (message: string) => announce(`Sent: ${message}`);
   const [mode, setMode] = useState("Option one");
-  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Label" placeholder="Placeholder" mode={<ModelPicker label="Label" value={mode} onValueChange={setMode} items={[{ value: "Option one", label: "Option one" }, { value: "Option two", label: "Option two" }]} />} leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Label" placeholder="Placeholder" mode={<ModelPicker label="Label" value={mode} onValueChange={setMode} items={[{ value: "Option one", label: "Option one" }, { value: "Option two", label: "Option two" }]} />} leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={message => setSent(message)} /></div>;
 };
 const archivedTree = [
   { id: "src", label: "Folder one", icon: <FolderIcon />, children: [
@@ -2262,8 +2486,8 @@ export const GalleryTreeViewSticky = () => (
 export const GalleryTreeViewCollapsed = () => <TreeView aria-label="Label" items={fileTree} defaultSelectedIds={["src"]} />;
 export const GalleryComposerPrefilled = () => {
   const [value, setValue] = useState("Body text");
-  const [sent, setSent] = useState("");
-  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Label" value={value} onValueChange={setValue} onSubmit={message => { setSent(message); setValue(""); }} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+  const setSent = (message: string) => announce(`Sent: ${message}`);
+  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Label" value={value} onValueChange={setValue} onSubmit={message => { setSent(message); setValue(""); }} /></div>;
 };
 export const GalleryComposerDisabled = () => <Composer label="Label" placeholder="Placeholder" disabled />;
 export const GalleryComposerLoading = () => <Composer label="Label" placeholder="Placeholder" defaultValue="Body text" loading onStop={() => {}} leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" />} />;
@@ -2337,7 +2561,7 @@ const scheduleTimes = ["8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "
 export const GalleryCalendarSchedule = () => {
   const [date, setDate] = useState<string | null>("2026-09-28");
   const [time, setTime] = useState("10:00 AM");
-  const [scheduled, setScheduled] = useState("");
+  const setScheduled = (choice: string) => { if (choice) announce(`Selected ${choice}`); };
   const label = date ? new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(`${date}T12:00`)) : "No date";
   const rule = "var(--area-border-width) solid var(--area-border-decorative)";
   return <div className="area-calendar area-calendar--surface" style={{ display: "grid", padding: 0 }}>
@@ -2356,7 +2580,6 @@ export const GalleryCalendarSchedule = () => {
       <span style={{ marginInlineStart: "auto", color: "var(--area-fg-muted)", fontSize: "var(--area-control-sm-text)", lineHeight: "var(--area-control-sm-leading)", fontVariantNumeric: "tabular-nums" }}>{label} · {time}</span>
       <Button variant="outline" size="sm" disabled={!date} onClick={() => setScheduled(`${label} ${time}`)}>Action</Button>
     </div>
-    <span className="area-sr-only" role="status">{scheduled && `Selected ${scheduled}`}</span>
   </div>;
 };
 export const GalleryCalendarDisabled = () => <Calendar aria-label="Label" today={calendarToday} defaultValue="2026-09-15" disabled />;

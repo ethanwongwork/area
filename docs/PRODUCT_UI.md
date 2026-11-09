@@ -387,6 +387,35 @@ Cursor's nav with Figma's tabs).
     day, owner: "is the small image thumbnail very practical?": a screen at that size is a white plate with a few bars,
     so variations of one screen looked alike, and every row drew a whole screen.) A
     screen or image added again is numbered on its page ("Analytics dashboard 2").
+  - **A page becomes a flow at its first link** (the user flows study, owner 2026-11-08: "go with your recs, build the
+    flow like these ui examples", three node editors; `src/flow.ts`, `src/flow-map.tsx`, research and picks in
+    `docs/research/user-flows-2026-11-08`). Its layers in order are the **path** (numbered 1, 2, 3); a layer taken off
+    the path is a **branch**, numbered after the step it leaves (1a); a layer made a **state** of a step (Error,
+    Loading, Empty, Success) sits under it; each is a Sidebar row's menu item, and the Sidebar lists the steps numbered,
+    states under their step. A flow page opens on its **map**, the one design on the stage laid out by rule, never
+    placed by hand: Start, then the path left to right, End; branches above the step they leave, states under their step.
+    A step is a **node card** (owner, after a pipeline editor's graph: "more technical, more spacing around the labels,
+    more consistency … proper turns and curves"): its kind and role (Step 2, On the path), its name and its source in
+    mono, the screen (320 × 200 at 100%, 8 in), then its **port rows** (48 each): In on the start ("← 1 Create
+    account"), each link an output on the end named for the element that acts ("Continue", "→ 3 Profile"); a step with
+    no forward link has a muted "Next", the last step "Finish → End", a step's states an output each. Ports are 8 dots
+    centred on the card's edge, filled where a line meets them. **Lines** run port to port, dashed in one ink: level for
+    a stub, one 12 turn into the channel between columns (each line its own lane, 16 apart), one turn out, level into the
+    port; a line that would cross a card goes round it through the gap between rows; the chosen step's lines are the
+    selection colour and run. Everything sits on the 8 grid (card 336, columns 160 apart, rows 80). The ground is the
+    viewer's grey, dotted every 16; a floating dock at its foot holds the zoom and Play. The map opens fitted to the
+    stage's height above the dock (screens as large as it allows, a long flow scrolling sideways); the dock's Fit shows every step. At
+    any zoom the map pans in the stage's own box, the stage keeps its height and the dock stays over it; a zoom keeps the
+    middle of the view. A click chooses a node, a double-click or Enter opens its step on
+    the stage (the card's morph), and Back, Esc or ⌘↑ brings the map back with the step chosen; ← → walk the steps, and
+    a step with states has a Default / state switch in the Canvas bar. **Links** are made in the Design view: an element
+    chosen on the stage has **On click › Goes to** (Next step, any layer of the page, Back), logged as a change ("Goes
+    to: Next step → 3 Profile"), undone back to where it went, and sent to Chat with the others. **Play** (the Canvas
+    bar's or the dock's) walks the flow on the stage: a linked element follows its link, a click elsewhere goes on
+    where nothing is linked forward, else outlines the links for a moment; its bar at the stage's foot has Back,
+    Restart (R), the step with a menu to jump, Hints and Done (Esc). The Inspector on the map holds the flow's facts,
+    its description and its **checks** (unreachable steps, dead ends, wired steps with no way back), which the design
+    panel's Checks tab leads with too; a step has a one-line note, drawn under its node.
   - **The Sidebar widens for a list** (owner, 2026-11-01: "in pages where more room is needed, the left nav can
     automatically expand slightly to a minimum width"): while it holds a section's list it is at least 288 at type 13
     (Claude's sidebar width, scaled by type as the rest; `studio.tsx` `LIST_FLOOR`). A width dragged wider is kept; on a
@@ -459,8 +488,8 @@ Cursor's nav with Figma's tabs).
   Theme, Typography) a **subtitle** (muted, one sentence ending in a full stop) says what the block holds; **copy**
   (prose, table text) is regular. A family's purpose opens its page as a subtitle. `CanvasSection` (`src/tile.tsx`) and
   the family tabs' `Section` take `count` and `lede`. Nothing in a section speaks louder than its title: an empty state inside a section is Empty state `sm` (its title the
-  feed's 13/18 at 500, its description joined), and only one that takes the whole Canvas (no results, a missing library)
-  keeps md's 15/22 (2026-10-31, type pass; Home's and a project's six were md). A prop's name in the API's Props table
+  feed's 13/18 at 500, its description a step (4) off), and only one that takes the whole Canvas (no results, a missing library)
+  keeps md's title (16/22 since the 2026-11-02 ramp) (2026-10-31, type pass; Home's and a project's six were md). A prop's name in the API's Props table
   sits on the cell's line as inline Code; only several names stack (as a grid they became blocks and every row grew to
   36.4 against the other tables' 33).
 - **Tables in a feed share one label column** (owner, 2026-10-31, docs/research/feed-rhythm-2026-10-31): a page's tables
@@ -797,8 +826,8 @@ type 13; every size moves with the Type setting, every gap with Density.
    description, metadata, a table's header, a group label, a placeholder of a row); `fg-quiet` belongs to ghost controls
    and icons; tone inks belong to badges, marks and diff counts.
 4. **The smaller, the quieter.** 12 is always muted; 11 is a badge, a count, a key or a data label, never a sentence.
-5. **Gaps are read on the glyphs**: a text's cap and baseline, a frame's edge. A line that belongs to a title or label
-   joins it (no gap between their line boxes); joined lines sit 4 apart at most; groups 8 to 16; blocks 16; sections 48
+5. **Gaps are read on the glyphs**: a text's cap and baseline, a frame's edge. A line that belongs to a name or label
+   joins it (no gap between their line boxes), a surface's copy stands a step (4) under its title; joined lines sit 4 apart at most; groups 8 to 16; blocks 16; sections 48
    (feed) or turns 24 (chat).
 
 ### Feed kit (Labs › Feed; the Canvas)
@@ -861,7 +890,8 @@ A chat has no section titles and no ledes: the kit's section titles are the kit'
 
 - **Q-T1. A data card's title is the name role.** Card's title keeps `title-xs` and gains public hooks
   (`--area-card-title-size`, `-leading`, `-tracking`); the feed's frames set 13/18, weight 500, so the section's 16/22
-  title heads its cards.
+  title heads its cards. Since 2026-11-06 Card's own title is 13/18 500 (the balance pass, DESIGN_SYSTEM.md "Text
+  pairs"), so every Card reads this way and the hooks remain for a page that wants a larger name.
 - **Q-T2. Text that opens or closes a block is read on its glyphs.** Message's reply trims its first and last lines;
   Step, Timeline, plain Plan and Edit summary, Turn notice and Timestamp give back their line's half-leading at their
   outer edge. Measured after: every text-first section 15.7–16 under its title (were 19–21), a person's turn 24 over the

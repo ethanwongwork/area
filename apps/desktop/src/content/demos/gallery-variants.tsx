@@ -2,20 +2,25 @@
 import { Alert, Badge, Button, Checkbox, CheckboxGroup, Chip, CodeBlock, Indicator, Input, InputGroup, InputGroupText, NumberField, Separator, Table, TableCell, TableHeaderCell, TableLink, Tabs, Toast } from "@area/react";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
-import { InfoIcon, WarningIcon } from "@area/icons";
+import { InfoIcon, SparkleIcon, WarningIcon } from "@area/icons";
 
 const tableRows = ["Item one", "Item two", "Item three"];
 
-export const GalleryTabsLarge = () => <Tabs size="lg" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
+export const GalleryTabsLarge = () => <Tabs size="lg" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }]} />;
 /* Plate: a soft plate behind the selected tab, plain muted labels, no underline (owner 2026-11-06; docs/specs/tabs.md, "Plate"). */
-export const GalleryTabsPlate = () => <Tabs aria-label="Tabs, plate" selection="plate" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }, { id: "three", label: "Item three", content: "Body text" }]} />;
+export const GalleryTabsPlate = () => <Tabs aria-label="Tabs, plate" selection="plate" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }, { value: "three", label: "Item three", content: "Body text" }]} />;
 /* The plate at sm, a panel's or an inspector's views. */
-export const GalleryTabsPlateSmall = () => <Tabs aria-label="Tabs, plate, small" selection="plate" size="sm" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }, { id: "three", label: "Item three", content: "Body text" }]} />;
+export const GalleryTabsPlateSmall = () => <Tabs aria-label="Tabs, plate, small" selection="plate" size="sm" items={[{ value: "one", label: "Item one", content: "Body text" }, { value: "two", label: "Item two", content: "Body text" }, { value: "three", label: "Item three", content: "Body text" }]} />;
 
 export const GalleryToastNeutral = () => <Toast icon={<InfoIcon />}>Body text</Toast>;
 
 export const GalleryAlertInfo = () => <Alert tone="info" icon={<InfoIcon />} title="Title">Body text</Alert>;
 export const GalleryAlertWarning = () => <Alert tone="warning" icon={<WarningIcon />} title="Title">Body text</Alert>;
+/* Caution and discovery, Button's and Badge's seven tones (components audit 2026-11-07, O4). */
+export const GalleryAlertCaution = () => <Alert tone="caution" icon={<WarningIcon />} title="Title">Body text</Alert>;
+export const GalleryAlertDiscovery = () => <Alert tone="discovery" icon={<SparkleIcon />} title="Title">Body text</Alert>;
+export const GalleryToastCaution = () => <Toast tone="caution" icon={<WarningIcon />}>Body text</Toast>;
+export const GalleryToastDiscovery = () => <Toast tone="discovery" icon={<SparkleIcon />}>Body text</Toast>;
 
 /* Figma's inspector fields: a letter in the leading slot that also drags the value. */
 export const GalleryNumberFieldPrefix = () => (
@@ -62,6 +67,8 @@ export const GallerySeparatorSpacing = () => (
 );
 
 export const GalleryIndicatorWarning = () => <Indicator count={3} tone="warning" />;
+export const GalleryIndicatorCaution = () => <Indicator count={3} tone="caution" />;
+export const GalleryIndicatorDiscovery = () => <Indicator count={3} tone="discovery" />;
 
 export const GalleryChipSwatchOnly = () => <Chip swatchOnly swatch="var(--area-indigo-500)" aria-label="Indigo" />;
 

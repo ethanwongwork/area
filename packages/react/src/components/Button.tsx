@@ -1,8 +1,10 @@
+import { useSystemDefault } from "./SystemDefaults.tsx";
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
 import { Children, forwardRef, isValidElement, useState } from "react";
-import type { ButtonHTMLAttributes, MouseEvent, ReactNode } from "react";
-import { buttonVariants, cx } from "../variants.ts";
+import type { ButtonHTMLAttributes, HTMLAttributes, MouseEvent, ReactNode, Ref } from "react";
+import { buttonVariants, cx, tooltipVariants } from "../variants.ts";
+import { AnchoredTooltip } from "./Overlays.tsx";
 
 /**
  * The seven tones. `neutral` carries no meaning: its solid fill is the Action role, neutral
@@ -36,12 +38,25 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
    */
   defaultSelected?: boolean;
   /** Called with the next state when a toggle is pressed, controlled or not. */
-  onSelectedChange?: (selected: boolean) => void;
+  /** The new state and the press that made it (Governance § 4: the event is the second argument). */
+  onSelectedChange?: (selected: boolean, event: MouseEvent<HTMLButtonElement>) => void;
   /**
    * Pending: a spinner replaces any leading icon and clicks are ignored, but the button stays
    * focusable at full ink (`aria-disabled`, not native `disabled`), so focus isn't lost on submit.
    */
   loading?: boolean;
+  /**
+   * Can't act now, for a reason that will pass or that the person can change (components audit V2, 2026-11-07; Primer's
+   * `inactive`): drawn as disabled, but it keeps focus, its place in the Tab order and the pointer, so it can say why in
+   * `inactiveText`. A press does nothing (`aria-disabled`, not native `disabled`). Use `disabled` only for a control that
+   * truly can't act here (WRITING.md, "Disabled or inactive").
+   */
+  inactive?: boolean;
+  /**
+   * Why an inactive button can't act ("Upgrade to export", "Saving…"): a Tooltip on hover and focus, and the button's
+   * accessible description. It takes the place of a Tooltip that would name the button.
+   */
+  inactiveText?: ReactNode;
   /**
    * On a painted colour (a colour card, a swatch): the colour's own ink and no fill, its hover and press plates that ink
    * at 12% and 20%, as Badge's `onColor`. Overrides the variant's and tone's paint.
@@ -73,6 +88,8 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
     defaultSelected,
     onSelectedChange,
     loading,
+    inactive: inactiveProp,
+    inactiveText,
     icon,
     trailingIcon,
     onColor,
@@ -85,6 +102,10 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
   },
   ref,
 ) {
+  // The system's defaults (SystemDefaults) where the use gives none.
+  variant = useSystemDefault("button", "variant", variant);
+  tone = useSystemDefault("button", "tone", tone);
+  size = useSystemDefault("button", "size", size);
   const [localSelected, setLocalSelected] = useState(defaultSelected);
   const selected = selectedProp ?? localSelected;
   // Only a toggle (one with a selected state) flips on press; a plain button never gains aria-pressed.
@@ -92,9 +113,13 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
     onClick?.(event);
     if (event.defaultPrevented) return;
     if (selectedProp === undefined) setLocalSelected(!selected);
-    onSelectedChange?.(!selected);
+    onSelectedChange?.(!selected, event);
   };
   const leading = loading ? <span className="area-spinner area-spinner--md" aria-hidden="true" /> : icon;
+  // Disabled wins: a native disabled button can't take focus, so it can't be inactive.
+  const inactive = Boolean(inactiveProp) && !disabled;
+  // Loading and inactive both keep focus and drop the press.
+  const held = (loading || inactive) && !disabled;
 
   // A trailing keycap leaves the label, so the button's gap spaces it from the text as a container's gap does
   // everywhere (Kbd's rule, round 53: a keycap sits one ui-cluster from the words beside it; a typed space left 4).
@@ -103,7 +128,7 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
   const isKbd = isValidElement(last) && ((last.type as { render?: { name?: string } }).render?.name === "Kbd" || (typeof last.props === "object" && last.props !== null && "keys" in last.props));
   const label = isKbd ? parts.slice(0, -1) : children;
   const shortcut = isKbd ? last : null;
-  return (
+  const button = (
     <button
       ref={ref}
       type={type}
@@ -114,12 +139,14 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
       disabled={disabled}
       // Loading keeps focus and its place in the Tab order (audit S18): it is announced as
       // unavailable and busy, and the click (including a form's implicit submit) is dropped.
-      aria-disabled={loading && !disabled ? true : undefined}
+      // An inactive button is the same: unavailable, with its reason as its description (the Tooltip below).
+      aria-disabled={held ? true : undefined}
       aria-busy={loading || undefined}
-      onClick={loading ? event => event.preventDefault() : toggle}
+      onClick={held ? event => event.preventDefault() : toggle}
       // A selected toggle needs `aria-pressed`; the class alone tells assistive tech nothing.
       aria-pressed={selected ?? undefined}
       {...(loading ? { "data-loading": "" } : {})}
+      {...(inactive ? { "data-inactive": "" } : {})}
       {...(selected ? { "data-selected": "" } : {})}
       {...rest}
     >
@@ -141,6 +168,9 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
       ) : null}
     </button>
   );
+  if (!inactive || inactiveText == null || inactiveText === false) return button;
+  // The reason shows on hover and focus and describes the button, as an Area Tooltip does.
+  return <AnchoredTooltip trigger={button} surface={props => <div role="tooltip" className={tooltipVariants({})} {...(props as HTMLAttributes<HTMLDivElement> & { ref: Ref<HTMLDivElement> })}>{inactiveText}</div>} />;
 });
 
 export { buttonVariants, cx };
