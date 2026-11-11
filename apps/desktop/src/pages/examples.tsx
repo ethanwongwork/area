@@ -26,6 +26,10 @@ import { SettingsScreen } from "../content/examples/settings.tsx";
 import { HairlineScreen } from "../content/examples/hairline.tsx";
 import { StrokeGroupsScreen } from "../content/examples/stroke-groups.tsx";
 import { WorkspaceScreen } from "../content/examples/workspace.tsx";
+import { ProductChatScreen } from "../content/examples/product-chat.tsx";
+import { ProductDocsScreen } from "../content/examples/product-docs.tsx";
+import { ProductEditorScreen } from "../content/examples/product-editor.tsx";
+import { ProductAssistantScreen } from "../content/examples/product-assistant.tsx";
 import { SHOWCASE } from "../setup-screen.tsx";
 
 export const EXAMPLES = [
@@ -88,6 +92,40 @@ export const EXAMPLES = [
     gaps: ["The window's lights are app CSS: Area has no window-controls part."],
     width: 1920,
     Screen: () => <WorkspaceScreen hold={new Set(SHOWCASE)} />,
+  },
+  // Four real products' main windows rebuilt from Area alone at 1440 × 900 (owner, 2026-11-10: "tested at real scale, not
+  // just fake pages with a bunch of random components"). Each is a stress test: its gaps are what Area lacks.
+  {
+    id: "product-chat",
+    label: "Chat assistant",
+    description: "A chat assistant's main window mid-conversation: sidebar of chats, a reply with a heading, list, code and table, a sent file, and the composer.",
+    families: ["Panel", "Nav", "Kbd", "Avatar", "Button", "Menu", "Model picker", "Scroll area", "Message", "Copy button", "Code", "Code block", "Table", "Attachment", "Reasoning", "Composer"],
+    gaps: ["No app shell, thread column or account row: each is layout CSS here.", "Message has no heading type role and no attachments slot.", "Composer's primary button cannot be swapped (voice)."],
+    Screen: ProductChatScreen,
+  },
+  {
+    id: "product-docs",
+    label: "Document workspace",
+    description: "A document workspace: page tree, a page with properties and blocks (to-dos, callout, toggles, quote) and an inline database as a table.",
+    families: ["Panel", "Nav", "Tree view", "Count", "Avatar", "Titlebar", "Breadcrumb", "Button", "Split button", "Description list", "Badge", "Tag", "Link", "Mention", "Checkbox", "Alert", "Accordion", "Separator", "Section heading", "Tabs", "Table"],
+    gaps: ["No page title role (nothing between 26 and 52) and no weight above 500.", "No prose, quote, callout or page-icon parts.", "Table has no add row, footer or header icon."],
+    Screen: ProductDocsScreen,
+  },
+  {
+    id: "product-editor",
+    label: "Code editor",
+    description: "A code editor at compact density: file tree, tab strip, code with a diff, a terminal, an agent pane and a status bar.",
+    families: ["Titlebar", "Panel", "Nav", "Tree view", "Tabs", "Breadcrumb", "Code block", "Separator", "Toolbar", "Button", "Input", "Kbd", "Count", "Message", "Step", "Plan", "Edit summary", "Approval", "Composer", "Segmented", "Model picker"],
+    gaps: ["Rows stop at 24: the product's 22 is out of reach.", "No editor tab strip, status bar, terminal or inline diff controls.", "Code colors have six roles."],
+    Screen: ProductEditorScreen,
+  },
+  {
+    id: "product-assistant",
+    label: "Assistant with a document panel",
+    description: "An assistant's window with a conversation and an open document panel: chats sidebar, a reading-size reply, a reference card and the panel's preview.",
+    families: ["Panel", "Titlebar", "Nav", "Avatar", "Button", "Menu", "Scroll area", "Message", "Reasoning", "Step", "Copy button", "Card", "Composer", "Model picker", "Segmented", "Section heading", "Chart", "Table"],
+    gaps: ["No serif or reading face.", "No compact reference card with a leading icon.", "Panel's bar has one action slot."],
+    Screen: ProductAssistantScreen,
   },
   {
     id: "stroke-groups",

@@ -342,8 +342,6 @@ const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
   "danger-hover": { scale: 1.25, subject: DangerMenu },
 };
 
-/** Whether a setting draws a close-up (its component cropped a little over its size) rather than a fitted drawing. */
-export const hasCloseUp = (axis: string) => axis in CLOSE_UPS;
 
 /** The whole component, centred in a window on the page's ground, a little over its size. */
 function CloseUp({ scale, children }: { scale: number; children: ReactNode }) {
@@ -471,15 +469,6 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
   }
 }
 
-/**
- * The settings whose change shows only in a state (hover, selection, focus, press): no view draws that state, so the
- * Setup's stage draws the state itself, the close-up's component at true scale (theme-setup.tsx).
- */
-export const STATE_SETTINGS = new Set(["stroke-hover", "selected-stroke", "selected-tint", "focus-ring", "shadow-hover", "fill-hover", "fill-selected", "fill-pressed", "danger-hover"]);
-export function StateDrawing({ axis }: { axis: string }) {
-  const Subject = CLOSE_UPS[axis]?.subject;
-  return Subject ? <Fit fill={FILL.window} max={1} group={`stage-${axis}`}><div className="lang-zoom-whole"><Subject /></div></Fit> : null;
-}
 
 /** The same fit for the Theme tab's Setup views (theme-setup.tsx): one zoom per group, by its largest drawing. */
 export { Fit as Scaled, FILL, LoopingPress, LoopingSwitch };

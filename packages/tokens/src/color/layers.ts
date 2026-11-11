@@ -35,8 +35,16 @@ export const GROUND_DARK_STEPS = Array.from({ length: 25 }, (_, i) => i);
 export const LAYER_STEPS = [0, 2, 4, 6, 8] as const;
 export const DEFAULT_GROUND_LIGHT = 100;
 export const DEFAULT_GROUND_DARK = 8;
-/** Flat by default (owner, defaults review 2026-10-25; was 4): frames set layers apart, controls still step from their ground. */
-export const DEFAULT_LAYERS = 0;
+/**
+ * Layer contrast's defaults, in the model's units (0 to 8), one per theme since 2026-11-11.
+ *   light  4 (position 50): the sidebar, cards and menus sit a clear tone from the page. It was 4 until the defaults
+ *          review of 2026-10-25 made it 0 (Flat), and is 4 again after the four product screens (owner, 2026-11-11, on
+ *          "Should Area's default Layer contrast move from 0 to 50 in light?": "Yes, 50 in light";
+ *          docs/research/product-recreations-2026-11-10): at 0 a window read as one sheet with hairlines.
+ *   dark   0 (Flat): on the near-black page a tone step has almost no room, so frames set layers apart there.
+ */
+export const DEFAULT_LAYERS_LIGHT = 4;
+export const DEFAULT_LAYERS_DARK = 0;
 
 /**
  * Tint (axes/tint.ts, owner 2026-10-22): a hue, every degree since 2026-10-26 (5° steps before), a strength per mode in steps of 0.005 OKLCH chroma, and the
@@ -311,7 +319,7 @@ export const TINT_LIFT = { layer: { from: 0.3, perL: 4 }, fill: { from: 0.315, p
 
 export interface Cast { chroma: number; hue: number }
 export interface LayerSelection { groundLight: number; groundDark: number; layersLight: number; layersDark: number }
-export const DEFAULT_LAYER_SELECTION: LayerSelection = { groundLight: DEFAULT_GROUND_LIGHT, groundDark: DEFAULT_GROUND_DARK, layersLight: DEFAULT_LAYERS, layersDark: DEFAULT_LAYERS };
+export const DEFAULT_LAYER_SELECTION: LayerSelection = { groundLight: DEFAULT_GROUND_LIGHT, groundDark: DEFAULT_GROUND_DARK, layersLight: DEFAULT_LAYERS_LIGHT, layersDark: DEFAULT_LAYERS_DARK };
 
 export interface LayerLightness {
   page: number; raised: number; recessed: number; stripe: number; step: number;

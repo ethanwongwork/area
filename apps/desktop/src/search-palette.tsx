@@ -57,7 +57,7 @@ const ICONS = ICON_META.filter(icon => !icon.aliasOf).map(icon => ({
 export type SearchFor = "here" | "new" | null;
 
 export function SearchEverything({ open, onOpenChange }: { open: SearchFor; onOpenChange: (open: SearchFor) => void }) {
-  const { navigate, systems, projects, openSystem } = useStudio();
+  const { navigate, systems, projects, openSystem, addTheme } = useStudio();
   const [query, setQuery] = useState("");
   const show = (start = "") => { setQuery(start); onOpenChange("here"); };
   // Each system opens on its Themes; a system's own places open in the open system.
@@ -67,8 +67,9 @@ export function SearchEverything({ open, onOpenChange }: { open: SearchFor; onOp
     ...ENTRIES, ...(query.trim().length >= 2 ? ICONS : []),
   ].map((entry, at) => ({
     id: `${at}:${hrefOf(entry.place)}`, label: entry.label, description: entry.description === OPEN_SYSTEM ? openSystem.name : entry.description, group: entry.group, keywords: entry.keywords,
-    onSelect: () => navigate(entry.place, { newTab: open === "new" }),
-  })), [navigate, open, query.trim().length >= 2, systems, projects, openSystem.name]);
+    // New theme adds the theme first, as Themes' own button does: Setup then never runs over the theme in use.
+    onSelect: () => { if (entry.place.page === "theme-setup") addTheme(); navigate(entry.place, { newTab: open === "new" }); },
+  })), [navigate, addTheme, open, query.trim().length >= 2, systems, projects, openSystem.name]);
   return (
     <>
       {/* An icon in the Sidebar's header opens the palette (Cursor's sidebar search; a field in the Titlebar until 2026-10-30). */}

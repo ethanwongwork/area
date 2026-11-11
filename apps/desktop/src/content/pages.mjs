@@ -1091,6 +1091,7 @@ export const COMPONENT_PAGES = [
       { id: "standalone", title: "Standalone", note: "Outside a sentence (Learn more, View all) the underline appears on hover and focus.", demo: "GalleryLinkStandalone" },
       { id: "caption", title: "In a caption", note: "Nothing to set: the link inherits the caption's 12px and muted ink, as ChatGPT's composer note does.", demo: "GalleryLinkCaption" },
       { id: "external", title: "External", note: "Opens in a new tab with the external mark, centred on the cap height, and says so to assistive tech.", demo: "GalleryLinkExternal" },
+      { id: "button", title: "As a button", note: "A place with no address (the rest of a list, a step): as=\"button\" renders a native button with the same text, pressed with Space or Enter.", demo: "GalleryLinkButton" },
     ],
   },
   {

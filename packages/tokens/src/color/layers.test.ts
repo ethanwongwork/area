@@ -8,7 +8,7 @@ import {
   DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, HUED_INKS, LAYER_STEPS, VIVID_ROLES, castOf, DEFAULT_FILL, FILL_STEPS, type FillSelection, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
   DEFAULT_INK_TINT, INK_TINT_STEPS, TINT_HUES, TINT_STEP, TINT_STEPS, inkHex, CARD_TONE_STEPS, type CardTone, tintedDarken, TONAL_Y, VIVID_Y, toneFloorDarken,
   EDGE_OFFSET, PRESS_ROOM, edgeShift, FRAME_SAME, POSITIONS, SIGNED_POSITIONS, layersAt, cardToneAt, inkShareAt,
-  layersPosition, cardTonePosition, inkTintPosition, DEFAULT_LAYERS, tintChromaAt, tintPosition, fillStepAt, fillPosition,
+  layersPosition, cardTonePosition, inkTintPosition, DEFAULT_LAYERS_DARK, DEFAULT_LAYERS_LIGHT, tintChromaAt, tintPosition, fillStepAt, fillPosition,
 } from "./layers.ts";
 import { wcagContrastHex } from "./contrast.ts";
 import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
@@ -311,7 +311,8 @@ describe("layers: every position is usable", () => {
     expect(INK_TINT_STEPS.map(inkTintPosition)).toEqual([0, 25, 50, 75, 100]);
     for (const step of LAYER_STEPS) expect(layersAt(layersPosition(step))).toBe(step);
     for (const step of INK_TINT_STEPS) expect(inkShareAt(inkTintPosition(step))).toBe(step / 4);
-    expect(layersPosition(DEFAULT_LAYERS)).toBe(0);
+    expect(layersPosition(DEFAULT_LAYERS_LIGHT)).toBe(50);
+    expect(layersPosition(DEFAULT_LAYERS_DARK)).toBe(0);
   });
   for (const theme of THEMES) {
     it(`${theme}: every Layer contrast position, in every neutral, at the Card shade marks`, () => {

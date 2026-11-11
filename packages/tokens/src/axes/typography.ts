@@ -46,6 +46,12 @@ export const GEIST_TOKENS = {
   "weight-regular": "var(--area-wght-400)",
   /** Geist's own emphasis weight, as shipped by Vercel. Needs the variable font. */
   "weight-strong": "var(--area-wght-500)",
+  /**
+   * A heading that has to hold a page or a long reply together: a document's title and its headings, where strong (500)
+   * sits too close to body text to read as a level (the four product screens, docs/research/product-recreations-2026-11-10).
+   * Document and chat products draw these at 600 to 700; one step, 600, so interface labels keep strong.
+   */
+  "weight-heading": "var(--area-wght-600)",
   /** Line weight of Area-drawn icons, matched to this face's 14px regular stem (docs/specs/icons.md). */
   "weight-icon": "1.125px",
 };

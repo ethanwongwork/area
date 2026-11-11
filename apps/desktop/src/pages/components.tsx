@@ -330,7 +330,7 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
   return (
     <section ref={section} className="studio-section" id={`family-${family.slug}`} aria-labelledby={`family-${family.slug}-title`}>
       <SectionTitle id={`family-${family.slug}-title`}
-        title={<a href={hrefOf({ page: "components", item: family.slug })} className="studio-section__link" onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</a>}
+        title={<Link variant="standalone" href={hrefOf({ page: "components", item: family.slug })} onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</Link>}
         count={tiles.length} badge={<>
           <StatusBadge size="sm" status={STATUS_MARK[status]}>{STATUS_LABEL[status]}</StatusBadge>
           {leftOut() ? <> <StatusBadge size="sm" status="archived">Left out</StatusBadge></> : null}
@@ -348,9 +348,9 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
       {more || open ? (
         // A text control in the title link's style, so its text starts on the cards' edge as the title does.
         <div className="studio-overview__more" {...feedScale()}>
-          <button type="button" className="studio-section__link studio-overview__toggle" aria-expanded={open} aria-controls={`family-${family.slug}`} onClick={onToggle}>
+          <Link as="button" variant="standalone" ink="muted" className="studio-overview__toggle" aria-expanded={open} aria-controls={`family-${family.slug}`} onClick={onToggle}>
             {open ? "Show one row" : `Show all ${tiles.length}`}
-          </button>
+          </Link>
         </div>
       ) : null}
     </section>

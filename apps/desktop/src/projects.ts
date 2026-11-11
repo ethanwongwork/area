@@ -345,7 +345,21 @@ export function saveVersion(project: Project, name: string, now = new Date()): P
 /** The project's pages and explorations put back to a saved version (the versions stay). */
 export function restoreVersion(project: Project, id: string): Project {
   const version = project.versions.find(entry => entry.id === id);
-  return version ? { ...project, pages: version.pages, explorations: version.explorations } : project;
+  return version ? { ...project, pages: version.pages, explorations: version.explorations, changes: changesStillTrue(project, version.pages) } : project;
+}
+
+/**
+ * The logged changes that still describe the design once `pages` are put back: those on a layer the restore leaves as it
+ * is. A change on a layer that went back (or is gone) names an edit that is no longer drawn, so it leaves the log
+ * rather than being undone or sent to Chat later.
+ */
+function changesStillTrue(project: Project, pages: readonly ProjectPage[]): DesignChange[] {
+  const layerIn = (from: readonly ProjectPage[], page: string, layer: string) => from.find(entry => entry.id === page)?.layers.find(entry => entry.id === layer);
+  return project.changes.filter(change => {
+    const now = layerIn(project.pages, change.page, change.layer);
+    const then = layerIn(pages, change.page, change.layer);
+    return Boolean(now && then && JSON.stringify(now) === JSON.stringify(then));
+  });
 }
 
 /**
@@ -420,7 +434,7 @@ export const EDIT_RUN_MS = 60_000; /* pick */
 /** The project's pages put back to an iteration (the history stays, and the restore is an iteration of its own). */
 export function restoreIteration(project: Project, id: string): Project {
   const iteration = project.history.find(entry => entry.id === id);
-  return iteration ? { ...project, pages: iteration.pages } : project;
+  return iteration ? { ...project, pages: iteration.pages, changes: changesStillTrue(project, iteration.pages) } : project;
 }
 
 /** The project with a comment on a layer, newest last. */
@@ -573,6 +587,8 @@ export function removeLayer(project: Project, page: string, layer: string): Proj
       layers: entry.layers.filter(other => other.id !== layer).map(other => other.of === layer ? withoutState(other) : other),
     }, (entry.links ?? []).filter(link => link.from !== layer && link.to !== layer)) : entry),
     changes: project.changes.filter(entry => !(entry.page === page && entry.layer === layer)),
+    // Its comments go too: a later layer may take its id, and would otherwise show them as its own.
+    comments: project.comments.filter(entry => !(entry.page === page && entry.layer === layer)),
   };
 }
 
@@ -604,7 +620,7 @@ export function duplicatePage(project: Project, page: string): { project: Projec
 }
 export function deletePage(project: Project, page: string): Project {
   if (project.pages.length < 2) return project;
-  return { ...project, pages: project.pages.filter(entry => entry.id !== page), changes: project.changes.filter(entry => entry.page !== page) };
+  return { ...project, pages: project.pages.filter(entry => entry.id !== page), changes: project.changes.filter(entry => entry.page !== page), comments: project.comments.filter(entry => entry.page !== page) };
 }
 
 /* --- Flows (src/flow.ts reads them) ------------------------------------------------------------------------------------ */

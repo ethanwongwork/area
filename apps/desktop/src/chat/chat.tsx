@@ -423,7 +423,7 @@ export function ChatTranscript({ scroller }: { scroller: RefObject<HTMLElement |
     return (
       <div className="studio-chat__empty">
         <EmptyState size="sm" icon={<ChatIcon />} title="Ask about Area"
-          description={session.mode === "live" ? "Claude works in this repository and asks before each change."
+          description={session.mode === "live" ? "Claude works in Area’s code and asks before each change."
             : "Replies here are recorded runs: Claude answers in the Area app."} />
         <PromptSuggestions layout="chips" label="Suggested prompts"
           items={RECORDINGS.map(recording => ({ id: recording.id, label: recording.prompt }))}
@@ -752,7 +752,7 @@ function ApprovalAsk() {
   const command = typeof asked.input.command === "string" ? asked.input.command : undefined;
   const title = editing && path ? `Change ${plainName(path)}?` : asked.tool_name === "Bash" ? "Run a check?" : asked.title;
   const description = editing && path ? `${path.split("/").at(-1)}${asked.description && !asked.description.endsWith(path.split("/").at(-1) ?? "") ? `. ${asked.description}` : ""}`
-    : asked.tool_name === "Bash" ? (typeof asked.input.description === "string" ? asked.input.description : "A command in this repository") : asked.description;
+    : asked.tool_name === "Bash" ? (typeof asked.input.description === "string" ? asked.input.description : "A command in Area’s code") : asked.description;
   const code = editing ? <Diff aria-label={`Changes to ${path?.split("/").at(-1) ?? "the file"}`}
     hunks={editOf({ kind: "tool", id: asked.tool_use_id, name: asked.tool_name, input: asked.input, status: "running" }).hunks} />
     : command ? <CodeBlock size="sm" lineNumbers={false} code={command} wrap /> : null;

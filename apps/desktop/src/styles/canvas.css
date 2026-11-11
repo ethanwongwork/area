@@ -87,12 +87,6 @@
     white-space: nowrap;
   }
   /* A heading that opens its family: not selectable, as the app's other controls; Link's underline on hover. */
-  /* The underline is always drawn, transparent at rest, so it fades out on `fast` as Link's does (link.css) instead
-     of vanishing; it appears at once (MOTION.md, hover). */
-  .studio-section__link { color: inherit; text-decoration: underline transparent; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: 0.08em; user-select: none; transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out); }
-  @media (hover: hover) { .studio-section__link:hover { text-decoration-color: currentColor; transition-duration: 0s; } }
-  /* Area's focus ring (Link's): keyboard focus is always visible (product UI rule 5). */
-  .studio-section__link:focus-visible { border-radius: var(--area-radius-small); outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* Titles and ledes are trimmed to cap and baseline, so the Canvas's margin measures from the
      bar's rule to the first title's cap, as the Inspector's first heading sits, and from a title's
      baseline to its tiles. A lede follows its title at one line's spacing (8), as prose does. */
@@ -316,7 +310,7 @@
   .studio-overview__group-label { margin: 0; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
   .studio-overview__more { display: flex; margin-block-start: var(--area-space-12); margin-inline-start: var(--_text-inset); }
   /* Show all: the feed's copy (13/18, muted, trimmed to cap and baseline), no plate, the title link's underline on hover. */
-  .studio-overview__toggle { appearance: none; padding: 0; border: 0; background: none; color: var(--area-fg-muted); font: inherit; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; cursor: pointer; }
+  .studio-overview__toggle { font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
   /* The family's status follows its count on the title's line, placed as the count is (.studio-count above: centred on the
      title's cap, one space and 2 after what precedes it). It sat on the x-height's middle, 1.3 under the count, 4 after it
      (owner, 2026-11-06: "why are count and badge so stylistically and scale wise different"; DESIGN_SYSTEM.md, "Marks on

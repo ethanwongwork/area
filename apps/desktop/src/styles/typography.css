@@ -1,26 +1,12 @@
   /* --- Typography ---------------------------------------------------------- */
 
   /* A role's row tile: the sample, and its values in a column at the end (Carbon's type sets). */
-  /* The values' column is one width in every row (it holds "Compact 24 / 32 · -0.015em"), so it
-     lines up down the Canvas. */
-  .studio-type { display: grid; grid-template-columns: minmax(0, 1fr) calc(var(--area-space-96) * 2); align-items: start; gap: var(--area-space-16); }
   .studio-type__sample { overflow-wrap: anywhere; }
   /* The table's example cell: the role's name in the role itself (Geist). */
   .studio-type__example { display: inline; white-space: nowrap; }
   /* Regular over strong in one cell (owner, 2026-10-23), each on its own line. */
   .studio-nowrap { white-space: nowrap; }
   .studio-type__examples { display: grid; justify-items: start; gap: var(--area-space-4); }
-  .studio-type__specs {
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: var(--area-space-2) var(--area-space-12);
-    margin: 0;
-    color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
-    font-variant-numeric: tabular-nums;
-  }
-  .studio-type__value { color: var(--area-fg-default); text-align: end; }
 
   /*
    * Type in the feed (src/type-kit.tsx; owner, 2026-11-01: "maybe just using regular table components for type is better";

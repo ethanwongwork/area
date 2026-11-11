@@ -148,7 +148,7 @@ const sameColor = (a: string, b: string) => { const x = rgbaOf(a), y = rgbaOf(b)
 /** Picks the option a computed value matches, else reports it off the scale. */
 function match(options: Option[], actual: string, read: (option: Option) => string, same: (a: string, b: string) => boolean, raw: string) {
   const hit = options.find(option => same(read(option), actual));
-  return hit ? { current: hit.value, currentLabel: hit.label } : { current: "", currentLabel: `${raw} · off scale`, offScale: true };
+  return hit ? { current: hit.value, currentLabel: hit.label } : { current: "", currentLabel: `${raw}, off scale`, offScale: true };
 }
 
 /**
@@ -194,7 +194,7 @@ export function propertiesOf(element: Element, root: Element): PropertyRow[] {
     if (frame) {
       const sides = [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft];
       if (sides.every(side => side === sides[0])) length("padding", "padding-top", SPACE, "Padding", "Layout");
-      else rows.push({ property: "style:padding", name: "Padding", group: "Layout", options: SPACE, current: "", currentLabel: `${sides.map(px).join(" ")} · mixed`, offScale: true });
+      else rows.push({ property: "style:padding", name: "Padding", group: "Layout", options: SPACE, current: "", currentLabel: `${sides.map(px).join(" ")}, mixed`, offScale: true });
       const fill = style.backgroundColor;
       rows.push({ property: "style:background-color", name: "Fill", group: "Fill", options: [NONE, ...FILLS],
         ...(rgbaOf(fill)?.[3] === 0 ? { current: NONE.value, currentLabel: NONE.label } : match(FILLS, fill, option => probe.read("background-color", option.value), sameColor, colorName(rgbaOf(fill)!))) });
@@ -203,7 +203,7 @@ export function propertiesOf(element: Element, root: Element): PropertyRow[] {
       rows.push({ property: "style:color", name: "Ink", group: "Fill", options: INKS, ...match(INKS, style.color, option => probe.read("color", option.value), sameColor, colorName(rgbaOf(style.color)!)) });
       const roles = TYPE_ROLES.map(role => ({ value: role, label: role }));
       const type = roles.find(role => px(probe.read("font-size", v(`${role.value}-size`))) === px(style.fontSize) && px(probe.read("line-height", v(`${role.value}-leading`))) === px(style.lineHeight));
-      rows.push({ property: "type", name: "Style", group: "Type", options: roles, ...(type ? { current: type.value, currentLabel: type.label } : { current: "", currentLabel: `${px(style.fontSize)}/${px(style.lineHeight)} · off scale`, offScale: true }) });
+      rows.push({ property: "type", name: "Style", group: "Type", options: roles, ...(type ? { current: type.value, currentLabel: type.label } : { current: "", currentLabel: `${px(style.fontSize)}/${px(style.lineHeight)}, off scale`, offScale: true }) });
       rows.push({ property: "style:font-weight", name: "Weight", group: "Type", options: WEIGHTS, ...match(WEIGHTS, style.fontWeight, option => probe.read("font-weight", option.value), (a, b) => Number(a) === Number(b), style.fontWeight) });
     }
     if (frame) length("border-radius", "border-top-left-radius", RADIUS, "Corner", "Corner");

@@ -23,7 +23,9 @@ named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carrie
 
 **The defaults** were chosen by the owner on the defaults review (2026-10-25, docs/research/defaults-2026-10-25/), one
 group at a time on real components in light and dark. Four moved: Type 13 (was 14), Corner 10 (was 8), Layer contrast
-0, Flat, in both modes (was 4), and Selection Neutral (was Accent); every other setting kept its default. The app's own
+0, Flat, in both modes (was 4), and Selection Neutral (was Accent); every other setting kept its default. Since
+2026-11-11 Layer contrast is 50 in light again and stays 0 in dark (owner, after four real products' windows were rebuilt
+from Area and read as one sheet at 0: "Yes, 50 in light"; docs/research/product-recreations-2026-11-10). The app's own
 UI is drawn in the defaults, cards and Canvas included, and the Inspector's settings reach only the specimens inside
 them ([Product UI](PRODUCT_UI.md), rule 18).
 
@@ -81,7 +83,7 @@ in the mode shown (4 in light, 15 in dark).
 | `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `100`, every whole number, 100 is OKLCH chroma 0.08 (0 to 16 in steps of 0.005 until 2026-10-26; to 0.08 since 2026-10-23, for a butter-yellow page) | How strongly the grays take the hue, per mode. A step past what sRGB can show at a hue and lightness is held at that room (`tintRoom`, two slopes under the gamut), not clipped, so steps past it draw the same colour; clipping moved luminance and hue (a blue tint at 8 on a 97 page painted cyan). Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable"; every page a pick can paint, `colours.test.ts`) |
 | `ink-tint` | `0` (None) … `100` (Full), every whole number, `50` (default; `0` … `4` in quarters until 2026-10-26) | How much of the tint body and muted text take. Text also moves 0.25 × the strength away from its ground, so it keeps 4.5:1 on every hue (`INK_MARGIN`, docs/research/custom-neutral-2026-10-22/) |
 | `card-tone-light`, `card-tone-dark` | `auto` (default: each container's own tone, a Card raised, an Asset card recessed), `-100` (darker) … `0` (the page) … `+100` (lighter), every whole number (−4 to +4 in half steps until 2026-10-26); 100 is 0.048 L in light, 0.12 in dark | Cards and asset cards against the page, per mode; their controls step from it and text is solved against the darkest (light) or lightest (dark) card, so every position reads (`layers.test.ts`, "every card tone is usable", "every position is usable"). Menus, popovers and dialogs stay raised. An Asset card's inner frame stays the page tone, and takes the recessed tone where its card is within 0.005 L of the page (0, clamped at white or black, or a position that small) and the recessed tone is farther from it, so it reads apart as far as the layers allow |
-| `layers-light`, `layers-dark` | `0` (Flat, default since 2026-10-25) … `100`, every whole number (five steps, 0 to 8, from 2026-10-22 to 26; 50 is the old 4) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
+| `layers-light`, `layers-dark` | `0` (Flat) … `100`, every whole number; default `50` in light (since 2026-11-11; it was 0 from 2026-10-25) and `0` in dark (five steps, 0 to 8, from 2026-10-22 to 26; 50 is the old 4) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
 
 The action and selection settings combine:
 

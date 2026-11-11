@@ -59,7 +59,7 @@ export function placeLabel(place: Place): string {
   if (place.page === "settings" || place.page === "foundations") return "Themes";
   return ({ home: "Home", projects: "Projects", systems: "Systems", themes: "Themes", "theme-setup": "New theme", tokens: "Tokens", color: "Colors", typography: "Typography", icons: "Icons", illustrations: "Illustrations",
     spacing: "Spacing", shape: "Shape", elevation: "Elevation", motion: "Motion",
-    components: "Components", patterns: "Patterns", history: "Versions", references: "References", materials: "Materials", tests: "Tests", feed: "Feed",
+    components: "Components", patterns: "Patterns", history: "Versions", references: "References", materials: "Materials", tests: "Tests", feed: "Feed", chat: "Chat",
     project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions" } as Record<PageId, string>)[place.page];
 }
 /** What a page's list holds, for its head's name and its filter's placeholder. */
@@ -133,7 +133,7 @@ export function AppTabs({ tabs, current, onSelect, onClose, onNew }: {
 
 /** An expandable row's chevron: the row's children open and close (Nav's expandable item, docs/specs/nav.md). */
 function Expander({ open, label, controls, onToggle }: { open: boolean; label: string; controls: string; onToggle: () => void }) {
-  return <Button size="sm" variant="ghost" iconOnly icon={<ChevronDownIcon />} aria-label={label} aria-expanded={open} aria-controls={controls} onClick={onToggle} />;
+  return <Tooltip side="bottom" describes={false} trigger={<Button size="sm" variant="ghost" iconOnly icon={<ChevronDownIcon />} aria-label={label} aria-expanded={open} aria-controls={controls} onClick={onToggle} />}>{label}</Tooltip>;
 }
 
 /** Opens a place from a nav row: in the tab holding it (src/studio.tsx `navigate`), ⌘-click in a new one. */

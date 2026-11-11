@@ -138,6 +138,7 @@ Read from Cursor's bundle (`docs/research/type-presentation-2026-11-01`): `--cur
 | `title-sm` | 18 / 24 | 18 × B / 13 | 19 / 26 |
 | `title-md` | 20 / 28 | 20 × B / 13 | 22 / 30 |
 | `title-lg` | 26 / 30 | 26 × B / 13 | 30 / 38 |
+| `title-xl` | 32 / 40 | 2.5 × B on the size ramp: 30/38, 32/40, 34/42, 37/46, 40/48 for B 12 to 16 | new 2026-11-11 |
 | `display-sm`, `display-lg` | 52 / 52, 67 / 68 | 56 and 72 × B / 14 | same |
 
 Secondary text took `text-sm` in every family: Approval's descriptions and hints, choice and group descriptions, the
@@ -152,3 +153,13 @@ sans); the Claude app's bundle (`ion-dist.asar`) sets prose `--cds-font-size-pro
 `--cds-leading-prose--sm` 1.375rem, 15/22, and claude.ai's response body 16/24. `text-lg` is now B + 2 on the UI ratio's
 line (14/20, 15/22, 16/24, 17/26, 18/28 for B 12–16), its prose line the same and its paragraph gap 16 at 13. The
 1.5 prose rule stays for `text-sm` and `text-base`.
+
+### 2026-11-11 · A page title and a heading weight (the four product screens)
+
+- **What changed:** two roles, both additive (no component reads them yet, so nothing moved): `title-xl` (32/40 at 13,
+  tracking −0.025em), a document's own title, the one word size between `title-lg` (26, used for figures) and display
+  (52, specimens); and `--area-weight-heading` (600), for a document's title and headings and a long reply's headings.
+- **Why:** the four real products rebuilt from Area at 1440 × 900 read flat: every heading sat at 500 within a few
+  sizes of body text, and a document's title had no size between 26 and 52 (docs/research/product-recreations-2026-11-10).
+- **Open:** the weight rules disagree with each other and the code (another session's audit, T4), and Message has no
+  heading role, so replies' headings are still set by hosts. Interface titles keep 500.

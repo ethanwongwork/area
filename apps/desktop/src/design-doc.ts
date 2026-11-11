@@ -128,10 +128,6 @@ export function reid(node: DocNode, next: number): { node: DocNode; next: number
   return { node: made, next: n };
 }
 
-/** A new node's id. Returns the id and the doc with its counter moved on. */
-export function newId(doc: DesignDoc): { id: string; doc: DesignDoc } {
-  return { id: `n${doc.next}`, doc: { ...doc, next: doc.next + 1 } };
-}
 
 /* --- Applying an operation ------------------------------------------------------------------------------------------ */
 
