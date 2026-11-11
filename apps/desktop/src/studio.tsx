@@ -13,8 +13,9 @@
  * between each panel. Each place (src/places.ts) is a page (src/pages/) that fills the panels through <Workspace>;
  * Settings (src/pages/settings.tsx) opens over the current tab.
  */
+import { flushSync } from "react-dom";
 import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useInsertionEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode, type Ref } from "react";
-import { Avatar, Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, Titlebar, Tooltip, TreeView, type TreeViewNode } from "@area/react";
+import { Avatar, Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, Titlebar, Toaster, Tooltip, TreeView, useToaster, type ToasterApi, type TreeViewNode } from "@area/react";
 import { ArrowLeftIcon, ArrowRightIcon, BookmarkIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SettingsIcon } from "@area/icons";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./gallery/controls.ts";
 import { ComponentsPage } from "./pages/components.tsx";
@@ -32,12 +33,18 @@ import { TokensPage } from "./pages/tokens.tsx";
 import { FoundationPage } from "./pages/foundation.tsx";
 import { HistoryPage } from "./pages/history.tsx";
 import { ExplorationPage, ProjectOverview, ProjectPageView, VersionsPage } from "./pages/project.tsx";
+import { ProjectPreview } from "./pages/preview.tsx";
+import { FilesPage } from "./pages/files.tsx";
+import { RegionBoundary } from "./region-boundary.ts";
+import { hashOfLink, linkOf } from "./links.ts";
 import { PublishControls } from "./publish.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { AppScaleContext, InheritedScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { movedFrom, SpecimenScopeContext } from "./specimen-scope.tsx";
 import { libraryOutput } from "./inventory.tsx";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
+import { usePendingFiles } from "./chat/changes.tsx";
+import type { ChatPlace } from "./chat/store.ts";
 import { MATERIAL_BUNDLES, SETTING_GROUPS } from "@area/tokens/config";
 import { groupSlug, HOME_TAB, hrefOf, LIST_PAGES, parsePlace, resolve, restoreTabs, setProjects, setSystems, tabHolds, tabKind, type Place } from "./places.ts";
 import { AppNav, AppTabs, PageList } from "./app-nav.tsx";
@@ -385,6 +392,10 @@ interface StudioState {
   /** The Inspector's view (Theme, Design or Code), kept across tabs and launches. */
   inspectorView: InspectorView;
   setInspectorView: (view: InspectorView) => void;
+  /** Shows or hides the Sidebar or the Inspector (⌘B, ⌥⌘B, ⌘K). */
+  togglePanel: (panel: "sidebar" | "inspector") => void;
+  /** Copies a link to the place showing (⌘⇧C). */
+  copyLink: () => void;
   /** Shows the Inspector if it is hidden (the Chat view's ⌘L). */
   showInspector: () => void;
 }
@@ -404,6 +415,9 @@ export function Studio() {
   const [projects, setProjectList] = useState<Project[]>(openProjects);
   setProjects(projects);
   const [tabs, setTabs] = useState<Tabs>(openTabs);
+  const toasterRef = useRef<ToasterApi | null>(null);
+  // Copy Link (⌘⇧C, the File menu, ⌘K): the place showing as an area:// link on the clipboard, with a notice.
+  const copyLinkRef = useRef(() => {});
   const tab = tabs.list.find(entry => entry.id === tabs.current) ?? tabs.list[0]!;
   const { place } = tab;
   const item = place.item;
@@ -425,6 +439,12 @@ export function Studio() {
   const openTheme = exploration?.theme
     ?? (openProject ? openSystem.themes.find(entry => entry.id === openProject.theme) ?? activeTheme(openSystem) : activeTheme(openSystem));
   const { canvas, material, colours, accent: brand } = openTheme;
+  // Whose chat the Inspector shows: the open project's, the open system's, or the app's own (src/chat/store.ts).
+  const placeKind = openProject ? "project" : tabKind(place) === "system" ? "system" : "app";
+  const placeId = openProject ? openProject.id : placeKind === "system" ? workingSystem.id : "";
+  const chatPlace = useMemo<ChatPlace>(() => ({ kind: placeKind, id: placeId }), [placeKind, placeId]);
+  const chatAbout = useMemo(() => openProject ? { name: openProject.name, system: openSystem.name, theme: openTheme.name } : undefined,
+    [openProject?.name, openSystem.name, openTheme.name]); // eslint-disable-line react-hooks/exhaustive-deps
   const changes = useMemo(() => changesOf(workingSystem), [workingSystem]);
   useWrites(systems, saveSystems);
   useWrites(projects, saveProjects);
@@ -578,6 +598,8 @@ export function Studio() {
    * numbers its tabs and Figma its file tabs after the fixed Home tab.
    */
   const runTabCommand = useCallback((command: TabCommand, index?: number) => {
+    // Copy Link and Open chat are the links' and the chat's own (below), not a tab's.
+    if (command === "copy-link" || command === "open-chat") return;
     if (command === "new-tab") { setSearching("new"); return; }
     if (command === "settings") { toggleSettings(); return; }
     if (command === "close-tab") { closeTab(tabsRef.current.current); return; }
@@ -606,6 +628,39 @@ export function Studio() {
   const projectsRef = useRef(projects);
   projectsRef.current = projects;
   useEffect(() => window.areaDesktop?.onCommand?.(runTabCommand), [runTabCommand]);
+  // Links in (src/links.ts): an area:// link from another app, a chat or a page opens its place, in the tab holding it.
+  const placeRef = useRef(place);
+  placeRef.current = place;
+  copyLinkRef.current = () => {
+    const link = linkOf(placeRef.current);
+    const copy = window.areaDesktop?.copyLink?.(link) ?? navigator.clipboard.writeText(link).then(() => true);
+    void Promise.resolve(copy).then(
+      done => toasterRef.current?.show(done ? { message: "Link copied", duration: 2000 } : { message: "The link couldn't be copied.", tone: "danger" }),
+      () => toasterRef.current?.show({ message: "The link couldn't be copied.", tone: "danger" }));
+  };
+  useEffect(() => {
+    const open = (hash: string) => {
+      const next = resolve(hash, groupOf);
+      if (next) navigate(next);
+      else toasterRef.current?.show({ message: "That link names a place that isn't in this workspace.", tone: "warning" });
+    };
+    const offLink = window.areaDesktop?.onLink?.(open);
+    const onClick = (event: MouseEvent) => {
+      const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href^='area:']") : null;
+      const hash = link ? hashOfLink(link.getAttribute("href")) : null;
+      if (!hash) return;
+      event.preventDefault();
+      open(hash);
+    };
+    // Before a link's own handler, so a chat's link (target _blank) never leaves for the browser.
+    addEventListener("click", onClick, true);
+    const offCommand = window.areaDesktop?.onCommand?.(command => {
+      if (command === "copy-link") copyLinkRef.current();
+      // A notice was clicked: its place is open (the link came first); its chat shows.
+      if (command === "open-chat") { setPanels(current => current.inspector ? current : { ...current, inspector: true }); writeStored("inspectorView", "chat"); setInspectorViewState("chat"); }
+    });
+    return () => { offLink?.(); offCommand?.(); removeEventListener("click", onClick, true); };
+  }, [navigate]);
 
   // A link followed natively (an old #components/button in a page's text, a hand-typed hash) opens in the current tab; a
   // hash that names no place (an example screen's own "#settings") changes nothing.
@@ -689,11 +744,11 @@ export function Studio() {
     return () => removeEventListener("keydown", onKey);
   }, [step, runTabCommand]);
 
-  const togglePanel = (panel: "sidebar" | "inspector") => setPanels(current => {
+  const togglePanel = (panel: "sidebar" | "inspector") => moveRegions(() => setPanels(current => {
     const next = { ...current, [panel]: !current[panel] };
     writeStored("panels", next);
     return next;
-  });
+  }));
 
   // The app's chrome inside the Canvas (tile heads, section titles) at the app's own type and density (src/app-scale.ts).
   const scale = useMemo<AppScale>(() => ({ "data-area-type": chrome.canvas.type, "data-area-density": chrome.canvas.density }), [chrome]);
@@ -841,25 +896,32 @@ export function Studio() {
     inspector: panels.inspector,
     inspectorView,
     setInspectorView: view => { writeStored("inspectorView", view); setInspectorViewState(view); },
-    showInspector: () => setPanels(current => {
+    togglePanel: panel => togglePanel(panel),
+    copyLink: () => copyLinkRef.current(),
+    showInspector: () => { if (!panels.inspector) moveRegions(() => setPanels(current => {
       if (current.inspector) return current;
       const next = { ...current, inspector: true };
       writeStored("panels", next);
       return next;
-    }),
+    })); },
   }), [query, theme, mode, setMode, chrome, appLook, setAppLook, settings, profileName, setProfileName, canvas, material, previewAxes, previewedMaterial, brand, colours, systems, openSystem, openTheme, workingSystem, live, updateLibrary, changes, projects, openProject, toWorking, updateTheme, item, place, navigate, tab.panel, panels, inspectorView]);
   // The picks' one rule is in the head while there are any; the scopes that carry the settings carry data-area-colours.
   useColoursSheet(state.shown.colours);
 
   const references = tabs.list.find(entry => entry.place.page === "references");
   return (
+    <Toaster label="Notices">
+    <ToasterBridge to={toasterRef} />
     <StudioContext.Provider value={state}>
     <AppScaleContext.Provider value={scale}>
     {/* <html> carries the app's scale (the chrome's defaults), so chrome outside the Canvas body states none of its own. */}
     <InheritedScaleContext.Provider value={scale}>
       {/* The conversation outlives tabs and views; the Canvas's selection rides along as its context chip. */}
       {/* On a project's page the chip names the page and layer, not their ids ("Dashboard › Analytics dashboard"). */}
-      <ChatProvider selection={projectSelection(openProject, place) ?? selectionLabel(item)}>
+      {/* A chat belongs to its place (owner, 2026-11-10): a project's and a system's tab each show their own, and a
+          project's works in its folder once it has one. */}
+      <ChatProvider place={chatPlace} folder={openProject?.folder} about={chatAbout}
+        selection={projectSelection(openProject, place) ?? selectionLabel(item)}>
       <ChatShortcut />
       <div className="studio" data-panels={appLook.panels === "floating" ? "floating" : undefined}>
         {/* No bar across the window (owner, 2026-10-30, after Cursor: "the full sectioning of the ui into 3 distinct parts each
@@ -907,6 +969,8 @@ export function Studio() {
           place.page === "project-page" ? <ProjectPageView /> :
           place.page === "exploration" ? <ExplorationPage /> :
           place.page === "versions" ? <VersionsPage /> :
+          place.page === "preview" ? <ProjectPreview /> :
+          place.page === "files" ? <FilesPage /> :
           place.page === "materials" ? <MaterialsPage /> :
           place.page === "tests" ? <ExamplesPage lab /> :
           place.page === "feed" ? <FeedLabPage /> :
@@ -919,7 +983,35 @@ export function Studio() {
     </InheritedScaleContext.Provider>
     </AppScaleContext.Provider>
     </StudioContext.Provider>
+    </Toaster>
   );
+}
+
+/**
+ * A region showing or hiding moves (the smoothness pass, docs/research/desktop-app-analysis-2026-11-10, V1; MOTION.md,
+ * Recipes, "Region shown or hidden"): the Sidebar and the Inspector slide from their edge and the Canvas widens or
+ * narrows with them, on the motion setting's `moderate` duration and the drawer's ease, as a view transition (the
+ * regions are mounted and unmounted, so a CSS transition has nothing to ease). The app's motion decides: at Motion 0,
+ * under the app's Reduce motion and under the Mac's, the change lands at once.
+ */
+function moveRegions(change: () => void) {
+  const doc = document as Document & { startViewTransition?: (update: () => void) => unknown };
+  const canvas = document.querySelector(".studio-canvas");
+  const style = canvas ? getComputedStyle(canvas) : null;
+  const ms = style ? Number.parseFloat(style.getPropertyValue("--area-duration-moderate")) : 0;
+  if (!doc.startViewTransition || !style || !(ms > 0) || matchMedia("(prefers-reduced-motion: reduce)").matches) { change(); return; }
+  // The pseudo-elements hang off <html>, outside the scope that holds the app's own motion: they are told it.
+  const root = document.documentElement.style;
+  root.setProperty("--_studio-region-ms", `${ms}ms`);
+  root.setProperty("--_studio-region-ease", style.getPropertyValue("--area-ease-drawer").trim() || "ease-out");
+  doc.startViewTransition(() => flushSync(change));
+}
+
+/** The Toaster's api, for handlers outside the tree under it (links in, Copy Link). */
+function ToasterBridge({ to }: { to: { current: ToasterApi | null } }) {
+  const api = useToaster();
+  to.current = api;
+  return null;
 }
 
 /** The window's controls, which the Workspace places in its regions' headers (the Titlebar held them until 2026-10-30). */
@@ -1157,7 +1249,7 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
             {/* Home and References held at the top, then one scroll: the tree, then a page's list (app-nav.tsx AppNav). */}
             {nav ?? (
               <div className="studio-sidebar__split">
-                <AppNav>{sidebar ? <PageList>{sidebar}</PageList> : null}</AppNav>
+                <AppNav>{sidebar ? <RegionBoundary name="This list" reset={hrefOf(studio.place)}><PageList>{sidebar}</PageList></RegionBoundary> : null}</AppNav>
               </div>
             )}
           </Panel>
@@ -1170,7 +1262,7 @@ export function Workspace({ sidebar, nav, lead, canvasLead, canvasTitle, canvasA
           {shell.tabs}
         </Titlebar>
         <header className="studio-canvas__bar">{canvasLead}{canvasActions}<PublishControls /></header>
-        <div ref={canvasRef} className="studio-canvas__body" {...axes} onClick={keepSpecimenLinks}><SpecimenScopeContext.Provider value={specimens}><InheritedScaleContext.Provider value={bodyScale}>{canvas}</InheritedScaleContext.Provider></SpecimenScopeContext.Provider></div>
+        <div ref={canvasRef} className="studio-canvas__body" {...axes} onClick={keepSpecimenLinks}><SpecimenScopeContext.Provider value={specimens}><InheritedScaleContext.Provider value={bodyScale}><RegionBoundary name="This view" reset={hrefOf(studio.place)}>{canvas}</RegionBoundary></InheritedScaleContext.Provider></SpecimenScopeContext.Provider></div>
       </main>
       {showInspector ? (
         <div className="studio-inspector" onClick={keepSpecimenLinks}>
@@ -1204,13 +1296,16 @@ const isViews = (value: ReactNode | InspectorViews): value is InspectorViews =>
   value !== null && typeof value === "object" && !isValidElement(value) && !Array.isArray(value) && !(Symbol.iterator in value);
 
 function InspectorPanel({ views, width, end, designFooter }: { views: InspectorViews; width: ReturnType<typeof usePanelWidth>; end: ReactNode; designFooter?: ReactNode }) {
-  const { inspectorView, setInspectorView, appLook } = useStudio();
+  const { inspectorView, setInspectorView, appLook, place } = useStudio();
   const floating = appLook.panels === "floating";
   const offered = INSPECTOR_VIEWS.filter(entry => entry.id === "chat" || (views[entry.id] != null && views[entry.id] !== false));
   // A page without the chosen view shows Design (2026-10-31; its first until then, so Code on a family became Theme on
   // Themes); the choice itself is kept for the pages that have it.
   const shown = offered.find(entry => entry.id === inspectorView) ?? offered.find(entry => entry.id === "design") ?? offered[0];
   const chat = shown?.id === "chat";
+  // In a project's tab the Code view is its chat's changes (src/chat/changes.tsx): the files waiting on Keep or Undo count there.
+  const pendingFiles = usePendingFiles();
+  const waitingFiles = useChat().place.kind === "project" ? pendingFiles : 0;
   // The Chat view's transcript scrolls in the Panel's own body, which it follows to the newest line.
   const scroller = useRef<HTMLDivElement | null>(null);
   return (
@@ -1220,6 +1315,7 @@ function InspectorPanel({ views, width, end, designFooter }: { views: InspectorV
         <Nav orientation="horizontal" aria-label="Inspector views" className="studio-inspector__views">
           {offered.map(entry => (
             <NavItem key={entry.id} href={`#${entry.id}`} current={entry.id === shown?.id}
+              trailing={entry.id === "code" && waitingFiles ? <Count variant="soft" size="sm" count={waitingFiles} /> : undefined}
               onClick={event => { event.preventDefault(); setInspectorView(entry.id); }}>
               {entry.label}
             </NavItem>
@@ -1229,7 +1325,8 @@ function InspectorPanel({ views, width, end, designFooter }: { views: InspectorV
         <span className="studio-head__group">{end}</span>
       </>}>
       {/* Keyed, so a view opens at its top and its own sections' state starts fresh. */}
-      <Fragment key={shown?.id}>{chat ? <ChatTranscript scroller={scroller} /> : shown ? <InspectorView>{views[shown.id as Exclude<InspectorView, "chat">]}</InspectorView> : null}</Fragment>
+      <Fragment key={shown?.id}>{chat ? <RegionBoundary name="The chat"><ChatTranscript scroller={scroller} /></RegionBoundary>
+        : shown ? <RegionBoundary name="This view" reset={hrefOf(place)}><InspectorView>{views[shown.id as Exclude<InspectorView, "chat">]}</InspectorView></RegionBoundary> : null}</Fragment>
     </Panel>
   );
 }

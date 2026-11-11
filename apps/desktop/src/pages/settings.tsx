@@ -32,9 +32,9 @@
  * while the rows scroll; on a narrow Canvas it sits above them.
  */
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
-import { Badge, Button, Input, Kbd, Nav, NavGroup, NavItem, NumberField, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading, Switch } from "@area/react";
-import { ArrowLeftIcon, ChatIcon, ContrastIcon, DesktopIcon, KeyboardIcon, MoonIcon, PaletteIcon, SettingsIcon, SunIcon } from "@area/icons";
-import { CHAT_MODELS, useDefaultModel, useWorkView } from "../chat/chat.tsx";
+import { Badge, Button, CodeBlock, Input, Kbd, Nav, NavGroup, NavItem, NumberField, Radio, RadioGroup, SearchField, Segmented, Select, SectionHeading, Switch } from "@area/react";
+import { ArrowLeftIcon, ChatIcon, CodeIcon, ContrastIcon, DesktopIcon, KeyboardIcon, MoonIcon, PaletteIcon, SettingsIcon, SunIcon } from "@area/icons";
+import { CHAT_MODELS, useDefaultModel, useNotifyAsking, useNotifyEnded, useWorkView } from "../chat/chat.tsx";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, SETTING_GROUPS } from "@area/tokens/config";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
 import { activeTheme, asLive, liveOf, versionName, AREA_ID } from "../systems.ts";
@@ -42,6 +42,9 @@ import { APP_TYPES, chromeOf } from "../app-look.ts";
 import { tabKind } from "../places.ts";
 import { CANVAS_DEFAULTS, canvasAttributes, SidebarList, useStudio, Workspace, type CanvasAxes, type Mode } from "../studio.tsx";
 import { MATERIAL_DEFAULT, bundleValue, type MaterialState } from "../material.ts";
+import { CODING_TOOLS, connectSnippets, SCRIPT_PLACEHOLDER } from "../coding-apps.ts";
+import { useEditor, useEditors } from "../editors.tsx";
+import { useTechTools } from "../tech-tools.ts";
 import { ResetButton, resetOf, ROW_OF, RowFrame, SettingRow, type Reset, type RowContext } from "../inspector-rows.tsx";
 import { ScreenFigure, SCREENS, type ScreenId } from "../setup-screen.tsx";
 import { readStored, writeStored } from "../storage.ts";
@@ -54,7 +57,7 @@ import { brandStyle } from "../brand.ts";
 import { inMode } from "./theme-settings.ts";
 import { StatusBadge } from "../tile.tsx";
 
-export type SettingsSection = "general" | "appearance" | "theme" | "chat" | "keyboard";
+export type SettingsSection = "general" | "appearance" | "theme" | "chat" | "tools" | "keyboard";
 // Cursor's icons for the same sections (its settings nav, read from the bundle 2026-10-30): General the gear, Appearance
 // light and dark (its color-mode), and a theme the palette.
 const SECTIONS: ReadonlyArray<{ id: SettingsSection; label: string; icon: ReactNode }> = [
@@ -62,6 +65,8 @@ const SECTIONS: ReadonlyArray<{ id: SettingsSection; label: string; icon: ReactN
   { id: "appearance", label: "Appearance", icon: <ContrastIcon /> },
   { id: "theme", label: "Theme", icon: <PaletteIcon /> },
   { id: "chat", label: "Chat", icon: <ChatIcon /> },
+  // Area's tools for the coding apps a person already uses (src/coding-apps.ts).
+  { id: "tools", label: "Coding apps", icon: <CodeIcon /> },
   { id: "keyboard", label: "Keyboard", icon: <KeyboardIcon /> },
 ];
 
@@ -215,7 +220,7 @@ function search(entries: Entry[], needle: string): Entry[] {
   return [...named, ...rest];
 }
 
-const SECTION_NAME: Record<SettingsSection, string> = { general: "General", appearance: "Appearance", theme: "Theme", chat: "Chat", keyboard: "Keyboard" };
+const SECTION_NAME: Record<SettingsSection, string> = { general: "General", appearance: "Appearance", theme: "Theme", chat: "Chat", tools: "Coding apps", keyboard: "Keyboard" };
 /** Each group's heading; the first group of a section has none. */
 const GROUPS: Record<string, { section: SettingsSection; title?: string; lede?: string }> = {
   profile: { section: "general" },
@@ -225,6 +230,10 @@ const GROUPS: Record<string, { section: SettingsSection; title?: string; lede?: 
   look: { section: "appearance", title: "The app's look", lede: "The app is drawn in one of your systems as it is published, or in a look of its own." },
   editing: { section: "theme" },
   chat: { section: "chat" },
+  notices: { section: "chat", title: "Notices" },
+  technical: { section: "tools" },
+  connect: { section: "tools", title: "Connect a coding app" },
+  asks: { section: "tools", title: "What it can ask", lede: "Each is answered from the system written into the project's folder. None changes a file." },
   tabs: { section: "keyboard", title: "Tabs" },
   panels: { section: "keyboard", title: "Panels and places" },
 };
@@ -248,6 +257,7 @@ const SHORTCUTS: ReadonlyArray<{ group: string; label: string; keys: string[] }>
   { group: "panels", label: "Show or hide the inspector", keys: ["⌥", "⌘", "B"] },
   { group: "panels", label: "Filter the sidebar's list", keys: ["⌥", "⌘", "F"] },
   { group: "panels", label: "Settings", keys: ["⌘", ","] },
+  { group: "panels", label: "Copy link to this place", keys: ["⌘", "⇧", "C"] },
 ];
 
 /** One row: its name over a one-line description, the control at the end; a wide row (pictures) takes the line under them. */
@@ -292,6 +302,8 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
   const { appLook, setAppLook, systems, chrome, navigate, workingSystem, place } = studio;
   const [defaultModel, setDefaultModel] = useDefaultModel();
   const [workView, setWorkView] = useWorkView();
+  const [notifyEnded, setNotifyEnded] = useNotifyEnded();
+  const [notifyAsking, setNotifyAsking] = useNotifyAsking();
   const live = useLiveChat();
   const [copied, setCopied] = useState(false);
   useEffect(() => { if (!copied) return; const timer = setTimeout(() => setCopied(false), 1500); return () => clearTimeout(timer); }, [copied]);
@@ -370,16 +382,50 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
       ? "Claude works in this repository and asks before each edit or command."
       : "Recorded runs: Claude answers live in the Area app.",
       control: <Badge size="sm" variant="soft" tone={live ? "success" : "neutral"}>{live ? "Live" : "Recorded"}</Badge> },
+    { section: "chat", group: "notices", label: "When a reply ends", description: "A notice from your Mac while Area is in the background. Its tab shows a mark either way.",
+      control: <Switch aria-label="Notice when a reply ends" checked={notifyEnded === "on"} onChange={event => setNotifyEnded(event.currentTarget.checked ? "on" : "off")} /> },
+    { section: "chat", group: "notices", label: "When Claude needs an answer", description: "An approval or a question is waiting, and the reply waits with it.",
+      control: <Switch aria-label="Notice when Claude needs an answer" checked={notifyAsking === "on"} onChange={event => setNotifyAsking(event.currentTarget.checked ? "on" : "off")} /> },
     { section: "chat", group: "chat", label: "Sign in", description: "Claude answers once this Mac is signed in: run the command in Terminal, or set ANTHROPIC_API_KEY.",
       control: <Button size="sm" variant="soft" tone="neutral" onClick={() => { void navigator.clipboard?.writeText("claude auth login"); setCopied(true); }}>{copied ? "Copied" : "Copy claude auth login"}</Button> },
+  ];
+  // Coding apps: the line or file that gives each one Area's tools, with this Mac's path to the command in it.
+  const script = useAreaCommand();
+  const editors = useEditors();
+  const [techTools, setTechTools] = useTechTools();
+  const [editor, setEditor] = useEditor();
+  const tools: Row[] = [
+    { section: "tools", group: "connect", label: "Where it works", description: "In a folder a system is written into: open a system's version and choose Write to folder. The coding app then asks Area about that system while it works there.",
+      control: <Badge size="sm" variant="soft" tone="neutral">Read only</Badge> },
+    { section: "tools", group: "technical", label: "Technical tools", description: "Files, a code editor and a terminal in a project with a folder, for when you work in its code yourself. The terminal runs your own commands, outside Chat's approvals.",
+      control: <Switch aria-label="Technical tools" checked={techTools} onChange={event => setTechTools(event.currentTarget.checked)} /> },
+    ...(editors.length ? [{ section: "tools" as const, group: "connect", label: "Open files in", description: "Where Open in editor takes a project's file, at its line.",
+      control: <Select size="sm" variant="soft" fullWidth aria-label="Open files in" value={editor?.id ?? ""} onChange={event => setEditor(event.currentTarget.value)}>
+        {editors.map(entry => <option key={entry.id} value={entry.id}>{entry.name}</option>)}
+      </Select> }] : []),
+    ...connectSnippets(script).map((snippet): Row => ({ section: "tools", group: "connect", label: snippet.app, description: snippet.where, wide: true,
+      control: <span className="studio-settings__field"><CodeBlock size="sm" lineNumbers={false} wrap language={snippet.language} code={snippet.code.trimEnd()} /></span> })),
+    ...CODING_TOOLS.map((tool): Row => ({ section: "tools", group: "asks", label: tool.label, description: tool.description,
+      control: <code className="studio-settings__tool">{tool.name}</code> })),
   ];
   const keyboard: Row[] = SHORTCUTS.map(entry => ({ section: "keyboard", group: entry.group, label: entry.label, description: "",
     control: <Kbd keys={entry.keys} size="sm" /> }));
   return [
     { section: "general", group: "profile", label: "Name", description: "As the Sidebar's foot shows it.",
       control: <Input size="sm" variant="soft" fullWidth aria-label="Name" value={studio.profileName} onChange={event => studio.setProfileName(event.currentTarget.value)} /> },
-    mode, panels, ...textSize, ...access, drawn, ...following, ...theme, ...chat, ...keyboard,
+    mode, panels, ...textSize, ...access, drawn, ...following, ...theme, ...chat, ...tools, ...keyboard,
   ];
+}
+
+/** Where the `area` command is on this Mac (electron/output.cjs); a stand-in path where the app can't say. */
+function useAreaCommand(): string {
+  const [script, setScript] = useState(SCRIPT_PLACEHOLDER);
+  useEffect(() => {
+    let alive = true;
+    window.areaDesktop?.output?.command?.().then(path => { if (alive && path) setScript(path); }, () => {});
+    return () => { alive = false; };
+  }, []);
+  return script;
 }
 
 /** Whether the Chat's replies are live here: the Electron app's engine answers (electron/agent.cjs). */

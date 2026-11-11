@@ -36,7 +36,7 @@ export type PageId =
   | "home" | "themes" | "theme-setup" | "foundations" | "settings" | "tokens" | "color" | "typography" | "icons" | "illustrations"
   | "spacing" | "shape" | "elevation" | "motion"
   | "components" | "patterns" | "history" | "references" | "materials" | "tests" | "feed" | "chat"
-  | "project" | "project-page" | "exploration" | "versions" | "projects" | "systems";
+  | "project" | "project-page" | "exploration" | "versions" | "preview" | "files" | "projects" | "systems";
 
 export interface Place {
   page: PageId;
@@ -63,7 +63,7 @@ const knownProject = (id: string | undefined) => projects.some(entry => entry.id
 /** A project's name, by its id. */
 export const projectName = (id: string | undefined) => projects.find(entry => entry.id === id)?.name ?? "Project";
 /** A project's pages, their own: they draw its tree in the Sidebar and never a system's. */
-export const PROJECT_PAGES: ReadonlySet<PageId> = new Set(["project", "project-page", "exploration", "versions"]);
+export const PROJECT_PAGES: ReadonlySet<PageId> = new Set(["project", "project-page", "exploration", "versions", "preview", "files"]);
 /** The system old links and system-less places mean. */
 const AREA = "area";
 
@@ -117,6 +117,8 @@ export function hrefOf(place: Place): string {
     case "project-page": return `#project/${place.project ?? ""}/pages${encode(place.item)}`;
     case "exploration": return `#project/${place.project ?? ""}/explorations${encode(place.item)}`;
     case "versions": return `#project/${place.project ?? ""}/versions${encode(place.item)}`;
+    case "preview": return `#project/${place.project ?? ""}/preview`;
+    case "files": return `#project/${place.project ?? ""}/files${encode(place.item)}`;
     case "materials": return `#labs/materials${encode(place.item)}`;
     case "tests": return `#labs/tests${encode(place.item)}`;
     case "feed": return `#labs/feed${encode(place.item)}`;
@@ -167,6 +169,8 @@ export function parsePlace(hash: string): Place | null {
     if (section === "pages" && more[0]) return { page: "project-page", project, item: rest(more) };
     if (section === "explorations" && more[0]) return { page: "exploration", project, item: rest(more) };
     if (section === "versions") return { page: "versions", project, item: rest(more) };
+    if (section === "preview") return { page: "preview", project };
+    if (section === "files") return { page: "files", project, item: rest(more) };
     return { page: "project", project, item: rest([section ?? "", ...more]) };
   }
   if (root === "references") return { page: "references", item: rest(parts) };

@@ -32,8 +32,26 @@
      what it names rather than floating between two sections. */
   /* One column the Canvas's width (PRODUCT_UI, "The Canvas is a feed"): an auto column grew to its widest block's one-line
      content (a type sample, 2026-11-01) and ran the feed past the Canvas. */
+  /* Regions shown or hidden (studio.tsx moveRegions; MOTION.md, "Region shown or hidden"): the Sidebar and the
+     Inspector slide from their edge, the Canvas keeps its content where it is while its edge moves (its pictures are
+     never stretched), and nothing else moves. */
+  /* A region that failed to draw (region-boundary.tsx): its empty state in the middle of the region's room. */
+  .studio-region-error { display: grid; place-items: center; min-block-size: calc(var(--area-space-96) * 2); padding: var(--area-space-24); }
+  .studio-sidebar { view-transition-name: studio-sidebar; }
+  .studio-canvas { view-transition-name: studio-canvas; }
+  .studio-inspector { view-transition-name: studio-inspector; }
   .studio-sections { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--_canvas-section); }
   .studio-section { scroll-margin-block-start: var(--_canvas-margin); }
+  /* A long gallery's sections (the Components overview: 125 families) are laid out and painted only near the view, and
+     hold their last size away from it (the smoothness pass, 2026-11-11: any change, a section drawn as it neared the
+     view, laid every section out again, about 70 ms; with this about 18). The browser's find still reaches them. The
+     paint is clipped to the section, so its edge sits a feed margin out: a card's lift shadow and focus ring keep their
+     room. */
+  .studio-section--far {
+    content-visibility: auto;
+    contain-intrinsic-size: auto calc(var(--area-space-96) * 4); /* pick: an unseen family's room, about one row of cards */
+    overflow-clip-margin: var(--_canvas-margin);
+  }
   /* The header: a small control with 5 above and below and 7 at the sides (36 at type 13), so they centre on the line the Sidebar's first row
      and the Inspector's first heading share. No title (owner, 2026-10-14): the Sidebar's selected
      row names what is shown. The controls run from the end, as Notion and Figma put a view's
@@ -423,3 +441,22 @@
   }
   .studio-stage__handle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
   .studio-stage__handle:is(:focus-visible, :active)::after { opacity: 1; transition-duration: 0s; }
+
+::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+::view-transition-group(studio-sidebar), ::view-transition-group(studio-canvas), ::view-transition-group(studio-inspector) {
+  animation-duration: var(--_studio-region-ms, 0ms);
+  animation-timing-function: var(--_studio-region-ease, ease-out);
+}
+::view-transition-old(studio-canvas), ::view-transition-new(studio-canvas) {
+  block-size: 100%; inline-size: auto; object-fit: none; object-position: left top; animation: none;
+}
+::view-transition-new(studio-canvas) { overflow: clip; }
+::view-transition-old(studio-canvas) { display: none; }
+::view-transition-new(studio-sidebar):only-child { animation: studio-region-in-start var(--_studio-region-ms, 0ms) var(--_studio-region-ease, ease-out) both; }
+::view-transition-old(studio-sidebar):only-child { animation: studio-region-out-start var(--_studio-region-ms, 0ms) var(--_studio-region-ease, ease-out) both; }
+::view-transition-new(studio-inspector):only-child { animation: studio-region-in-end var(--_studio-region-ms, 0ms) var(--_studio-region-ease, ease-out) both; }
+::view-transition-old(studio-inspector):only-child { animation: studio-region-out-end var(--_studio-region-ms, 0ms) var(--_studio-region-ease, ease-out) both; }
+@keyframes studio-region-in-start { from { transform: translateX(-100%); } }
+@keyframes studio-region-out-start { to { transform: translateX(-100%); } }
+@keyframes studio-region-in-end { from { transform: translateX(100%); } }
+@keyframes studio-region-out-end { to { transform: translateX(100%); } }

@@ -1247,6 +1247,7 @@ function gallerySpecimenTable() {
       { id: "state-kept", title: "State / kept", demo: "GalleryEditSummaryKept" },
       { id: "state-undone", title: "State / undone", demo: "GalleryEditSummaryUndone" },
       { id: "variant-diff", title: "Variant / diff", demo: "GalleryDiff" },
+      { id: "variant-diff-comment", title: "Variant / diff, comment", demo: "GalleryDiffComment" },
     ],
     approval: [
       { id: "default", title: "Default", demo: "GalleryApproval" },

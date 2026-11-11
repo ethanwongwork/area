@@ -15,6 +15,8 @@
     padding-block: var(--area-space-4);
     background-color: var(--area-bg-page);
   }
+  /* A kept chat's title in Past chats: one line, cut at the menu's measure, its day beside it. */
+  .studio-chat__past { display: inline-block; max-inline-size: 28ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
   .studio-chat__title { flex: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--area-fg-muted); }
   /* Turns follow the rings (DESIGN_SYSTEM.md, Text that flows; docs/research/vertical-rhythm-2026-10-30): a new
      exchange starts one ring out (24, the section role), the person's message joins its reply one step inside the prose
@@ -91,3 +93,71 @@
   .studio-chat-frame__body { overflow-y: auto; padding: 0 var(--_studio-inset); }
   .studio-chat-frame__body > :first-child { margin-block-start: var(--_studio-inset); }
   .studio-chat-frame__foot { padding: var(--_studio-inset); }
+
+  /* The Changes view (src/chat/changes.tsx): a comment under its line, its words then Remove; the field one is written
+     in, then Add; and the comments' Send under the list. Gaps on the 4 step, as a file row's. */
+  .studio-changes__note, .studio-changes__draft { display: flex; align-items: center; gap: var(--area-space-8); }
+  .studio-changes__note-text { flex: 1; min-inline-size: 0; overflow-wrap: anywhere; }
+  .studio-changes__field { flex: 1; min-inline-size: 0; }
+  .studio-changes__send { margin-block-start: var(--area-space-12); }
+
+  /* The Preview (src/pages/preview.tsx): the project's running app fills the Canvas body, edge to edge; without one the
+     body holds an empty state in the middle. The address in the bar is muted, as a path is. */
+  .studio-canvas__body:has(> .studio-app-preview) { padding: 0; overflow: hidden; }
+  .studio-app-preview { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); block-size: 100%; }
+  .studio-app-preview[data-empty] { place-items: center; padding: var(--area-space-32); }
+  .studio-app-preview__view { display: flex; min-inline-size: 0; min-block-size: 0; background-color: var(--area-bg-page); }
+  .studio-app-preview__where { min-inline-size: 0; overflow: hidden; color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); text-overflow: ellipsis; white-space: nowrap; }
+  .studio-app-preview__address { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--area-space-8); }
+  .studio-app-preview__field { flex: 1; min-inline-size: calc(var(--area-space-96) * 2); }
+  .studio-app-preview__refused { flex-basis: 100%; margin: 0; color: var(--area-fg-danger); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+  .studio-app-preview__picture { display: block; block-size: auto; max-inline-size: 100%; max-block-size: calc(var(--area-space-96) * 2); margin-block-end: var(--area-space-12); border: var(--area-stroke-width) solid var(--area-edge-blocks); border-radius: var(--area-radius-floor); object-fit: contain; }
+
+  /* Open in editor under a changed file's diff, on the diff's start edge. */
+  .studio-changes__open { display: flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-8); margin-block-start: var(--area-space-8); }
+
+  /* A tab's chat mark (src/app-nav.tsx ActivityMark), in the icon's square: the status inks, as a status badge's. */
+  .studio-tab__mark { display: inline-grid; place-items: center; }
+  .studio-tab__mark > svg { inline-size: 100%; block-size: 100%; }
+  .studio-tab__mark[data-activity="asking"] { color: var(--area-fg-warning); }
+  .studio-tab__mark[data-activity="done"] { color: var(--area-fg-success); }
+  .studio-tab__mark[data-activity="failed"] { color: var(--area-fg-danger); }
+
+  /* Versions under Changes (src/chat/versions.tsx): the save's words beside Save, as a comment's field. */
+  .studio-versions__save { display: flex; align-items: center; gap: var(--area-space-8); margin-block: var(--area-space-12); }
+  .studio-versions__field { flex: 1; min-inline-size: 0; }
+  .studio-inspector-note[data-tone="error"] { color: var(--area-fg-danger); }
+
+  /* Files (src/pages/files.tsx): the editor over the terminal, filling the Canvas body; each scrolls on its own. */
+  .studio-canvas__body:has(> .studio-files) { padding: 0; overflow: hidden; }
+  .studio-files { display: grid; grid-template-rows: minmax(0, 1fr); block-size: 100%; }
+  .studio-files[data-terminal] { grid-template-rows: minmax(0, 3fr) minmax(calc(var(--area-space-96) * 2), 2fr); }
+  .studio-files__editor { display: grid; grid-template-rows: auto minmax(0, 1fr); min-block-size: 0; }
+  .studio-files__empty { grid-row: 1 / -1; display: grid; place-items: center; }
+  /* The editor: line numbers, then the text drawn in Code block's syntax colors under a field that holds it. Both share
+     the code face, size, line and inset, so the caret sits on the drawn letters. */
+  .studio-editor {
+    --_editor-line: var(--area-leading-20); /* spec: Code block's code line, 14/20 */
+    --_editor-inset: var(--area-space-12);
+    display: grid; grid-template-columns: auto minmax(0, 1fr); min-block-size: 0; overflow: auto;
+    background-color: var(--area-bg-code); font-family: var(--area-font-mono); font-size: var(--area-text-base-size); line-height: var(--_editor-line);
+  }
+  .studio-editor__numbers { display: grid; align-content: start; padding: var(--_editor-inset) var(--area-space-8) var(--_editor-inset) var(--_editor-inset);
+    color: var(--area-fg-muted); text-align: end; font-variant-numeric: tabular-nums; user-select: none; position: sticky; inset-inline-start: 0; background-color: var(--area-bg-code); }
+  .studio-editor__text { position: relative; display: grid; min-inline-size: max-content; }
+  .studio-editor__shown, .studio-editor__field { grid-area: 1 / 1; margin: 0; padding: var(--_editor-inset); border: 0; font: inherit; line-height: inherit; white-space: pre; tab-size: 2; letter-spacing: 0; }
+  .studio-editor__shown { color: var(--area-fg-default); pointer-events: none; }
+  .studio-editor__field { resize: none; overflow: hidden; background: transparent; color: transparent; caret-color: var(--area-fg-default); outline: none; }
+  .studio-editor__field::selection { background-color: color-mix(in oklab, var(--area-focus-color) 28%, transparent); color: transparent; }
+  /* The terminal: a head, its output in the code face, and the command line. */
+  .studio-terminal { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-block-size: 0; border-block-start: var(--area-stroke-width) solid var(--area-edge-blocks); background-color: var(--area-bg-page); }
+  .studio-terminal__head { display: flex; align-items: center; gap: var(--area-space-4); padding: var(--area-space-4) var(--area-space-8) var(--area-space-4) var(--area-space-12); }
+  .studio-terminal__title { flex: 1; color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+  .studio-terminal__output { overflow: auto; padding: 0 var(--area-space-12); font-family: var(--area-font-mono); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); white-space: pre-wrap; overflow-wrap: anywhere; }
+  .studio-terminal__output > [data-stream="in"] { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
+  .studio-terminal__output > [data-stream="err"] { color: var(--area-fg-danger); }
+  .studio-terminal__output > [data-stream="note"] { color: var(--area-fg-muted); font-family: var(--area-font-sans); }
+  .studio-terminal__line { display: flex; align-items: center; gap: var(--area-space-8); padding: var(--area-space-8) var(--area-space-12); }
+  .studio-terminal__prompt { color: var(--area-fg-muted); font-family: var(--area-font-mono); }
+  .studio-terminal__field { flex: 1; min-inline-size: 0; }
+}

@@ -28,6 +28,7 @@ the unchanged runs between hunks. Not Code block's `marks` (one-sided, no number
 | file status | pending, kept, undone | Keep / Undo per file and all | Cursor review ("Keep All", "Undo All", per-file Keep / Undo); Codex Undo / Review |
 | file open | closed, open (diff) | the diff on demand | Cursor `EditToolCallView.js` chevron; Codex "Review" |
 | (Diff) line kind | added, deleted, context; fold (`removed`: deprecated alias of deleted, components audit D6) | — | Cursor `DefaultDiff.stylex.js`; Codex TUI diff_render |
+| (Diff) comment | off, on (`onComment`); notes under lines (`notes`) | a review: say something about one line | ChatGPT's review: a + on any line; Cursor's review comments |
 | row kind | file, design change | a designer judges the change, not the file | 2026-11-08 study: every reference names files with +N −N; Area's Design view already logs component, property, from and to |
 | code fold | none, Show code | files under the design rows | 2026-11-08 study (P2) |
 
@@ -71,6 +72,8 @@ area-diff                    mono, Code block sm's type; Code block's frame (car
   area-diff__lines           one grid: old number, new number, marker 8, text; gap 4
   area-diff__line            subgrid row; added / removed tint
   area-diff__fold            "12 unchanged lines", sans (Cursor's), muted on the recessed band, from where the numbers start
+  area-diff__comment         with onComment: a + (Glyph add, 12) at the line's start, a square of the line's height over the code ground; hover and focus only
+  area-diff__note            with notes: a row under its line, text-base sans on the diff's ground, a rule above and below, 4 by the diff's inline inset; as wide as the diff's view, held at its start
 ```
 
 ## Decisions
@@ -105,6 +108,11 @@ file ("Undo button.css"); Undo all and Keep all show only when the caller passes
 `section` named by its title. The diff is a focusable `figure` named by its `aria-label`, such as "Changes to <file>" (a sideways scroll needs the
 keyboard); added and deleted lines carry visually hidden "Added"
 / "Deleted" so the change is not colour alone. Long lines scroll sideways; the card never widens its column.
+
+With `onComment`, each line ends (in the DOM) with a button named by its line ("Comment on line 12", "Comment on deleted
+line 12", or the line's words when there are no numbers). The buttons are one Tab stop (the line last focused, the first
+until then); Up and Down move along the lines. Pressing one calls `onComment(line, { hunk, line })`; the caller draws
+what follows as a `notes` entry under that line.
 
 ## Peers and consistency
 
@@ -319,3 +327,24 @@ Not built: the optional before and after picture on a design row (proposed in P2
 the chat can show yet; the stage shows the after.
 
 Tile: Design changes (`GalleryEditSummaryDesign`). Checks: styles build parity, `npm run typecheck`, `check:docs`.
+
+## Comments on lines, 2026-11-10 (the Changes view; docs/research/desktop-app-analysis-2026-11-10, T3)
+
+What changed: Diff takes `onComment` and `notes`. With `onComment` each line gets a + button at its start: Glyph `add` at
+12 in a square of the line's height (18; compact 16), the hover fill over the code ground so the number under it doesn't
+show through, the row's floor corner, shown while its line is hovered or it has focus (a file row's Undo and Keep work
+the same way), always on touch, where it sits at the line's end. `notes` are rows under their lines: text-base in the
+interface sans on the diff's own ground (`bg-code`, inherited), a hairline (`edge-blocks`) above and below, 4 by the diff's inline inset, as wide as the
+diff's view (the Diff is an inline-size container) and sticky at its start. The content is the caller's.
+
+Why: the Changes view lets a person say something about one line and send it back to chat. The references that review
+an agent's changes put a + on the line (ChatGPT's review) rather than a separate comment form.
+
+Values: no new literal. The button's size is the diff's line height, its glyph `icon-xs`, its corner `radius-floor`,
+its fills `bg-component-hover` and `bg-component-pressed` over `bg-code`; the note uses text-base and space-4. Not
+measured from a capture: the references' + was read from their behaviour, not their CSS.
+
+Not built: a side by side layout. It needs about twice the Inspector's width to be read.
+
+Tile: Variant / diff, comment (`GalleryDiffComment`). Checks: `npm run typecheck`, `check:docs`, `check:playgrounds`.
+

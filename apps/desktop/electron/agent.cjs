@@ -23,21 +23,22 @@
  * session's variables (CLAUDE*, its ANTHROPIC_BASE_URL) are left out, so the agent is the person's, not a child of the
  * session that launched the app.
  *
+ * A project with a folder (owner, 2026-11-10: "a folder for every project, and chat works there"): a prompt that names
+ * a folder runs there, not in this repository, under instructions about the person's project (PROJECT) instead of
+ * Area's own; approvals, Keep and Undo work the same. A chat stays in the folder it started in: when its folder
+ * changes, its next prompt starts a new Claude Code session there. A folder that is gone fails the prompt in words,
+ * never falling back to this repository. `resume` reopens a kept chat's session (src/chat/store.ts).
+ *
  * `createEngine` is the engine without Electron (apps/desktop/tests/agent.test.ts drives it with a stand-in SDK);
  * `register` puts it on IPC.
  */
-const { existsSync, readFileSync, unlinkSync, writeFileSync } = require("node:fs");
-const { isAbsolute, join, resolve } = require("node:path");
+const { existsSync, readFileSync, statSync, unlinkSync, writeFileSync } = require("node:fs");
+const { isAbsolute, join, relative, resolve } = require("node:path");
 
 /** The repository: the agent's working directory. */
 const ROOT = resolve(__dirname, "..", "..", "..");
-const SYSTEM = [
-  "You are the agent in Area's desktop app, in the Inspector's Chat. Area is a design system and the app built from it;",
-  "this repository is both. Read AGENTS.md first: it is the repository's working guide and its rules apply to you.",
-  "The person is a designer, often not technical: speak in the design's words (screens, components, corners, spacing,",
-  "colours, tokens by their names in the Inspector), never in file paths, code or git words, unless they ask for code.",
-  "When the person sends design changes from the Design view, make them in the screen's source with Area's own",
-  "components, props and tokens (never app-only CSS or literal values).",
+/** How the chat answers, asks, shows options and logs changes: the same in Area's repository and in a project's folder. */
+const SYSTEM_WAYS = [
   // Short answers, details folded (the chat workflow study, P7).
   "Answer first, in two or three sentences. Use a table or a list only when it is shorter than prose, and no headings in",
   "a short reply. Put reasons and detail after a line that is exactly <!-- more -->; the chat folds what follows under",
@@ -55,8 +56,37 @@ const SYSTEM = [
   "After you change files, call mcp__area__log_changes once with what changed on the design, each change a thing, its",
   "property, and its value before and after in the Inspector's words (Save button, Corner, 8px, 12px). The chat shows",
   "these with Keep and Undo, and the files under Show code.",
+];
+const SYSTEM = [
+  "You are the agent in Area's desktop app, in the Inspector's Chat. Area is a design system and the app built from it;",
+  "this repository is both. Read AGENTS.md first: it is the repository's working guide and its rules apply to you.",
+  "The person is a designer, often not technical: speak in the design's words (screens, components, corners, spacing,",
+  "colours, tokens by their names in the Inspector), never in file paths, code or git words, unless they ask for code.",
+  "When the person sends design changes from the Design view, make them in the screen's source with Area's own",
+  "components, props and tokens (never app-only CSS or literal values).",
+  ...SYSTEM_WAYS,
   "Don't commit, push or start dev servers unless asked.",
 ].join(" ");
+/** In a project's own folder: the person's code, not Area's. `about` is the project's name, system and theme. */
+const PROJECT = about => [
+  `You are the agent in Area's desktop app, in the Inspector's Chat, working in the folder of the person's project${about?.name ? ` "${about.name}"` : ""}.`,
+  about?.system ? `The project is designed with the design system "${about.system}"${about.theme ? `, theme "${about.theme}"` : ""}, made in Area.` : "",
+  "This folder is the person's own code. Read its AGENTS.md or CLAUDE.md first if it has one, and follow it.",
+  "If the folder has .area/system.json, Area wrote the design system into it as code: build with that system's components,",
+  "tokens and icons before anything of your own, never edit a file Area wrote when the project's own code can change instead,",
+  "and never write literal colors or lengths where the system has a token. If it has none, say once that the system",
+  "can be written into this folder from its version in Area, and work with what the folder has.",
+  "The person is a designer, sometimes technical: speak in the design's words (screens, components, corners, spacing,",
+  "colors, tokens by name) and keep file paths and code for when they ask or when a choice depends on them.",
+  ...SYSTEM_WAYS,
+  "Don't commit, push, install packages or start servers unless asked.",
+].filter(Boolean).join(" ");
+const GONE = "This project's folder isn't there any more. Choose it again on the project's Overview, then send again.";
+/** An existing directory at an absolute path, or null. */
+const folderAt = path => {
+  if (typeof path !== "string" || !isAbsolute(path)) return null;
+  try { const at = resolve(path); return statSync(at).isDirectory() ? at : null; } catch { return null; }
+};
 /** How the agent helps, the composer's + menu (P11): Ask and Suggest change no file. */
 const MODES = {
   ask: { note: "The person chose Ask: answer and explain, and change nothing. Don't edit or write files.", readOnly: true },
@@ -73,6 +103,8 @@ const OPTION_SETTINGS = "radius (0 2 4 6 8 10 12 14 pill; 10 by default), densit
   "ground-light (90 to 100; 100), motion (0 to 300 in steps of 30; 210), surface (hairline 0 0.5 1 1.5 2; 1)";
 const SIGN_IN = "Claude isn't signed in on this Mac. Run claude auth login in Terminal, or set ANTHROPIC_API_KEY, then send again.";
 const EDIT_TOOLS = "Edit|Write|MultiEdit|NotebookEdit";
+/** The longest text the Changes view is sent for one side of a file. */
+const TEXT_LIMIT = 400_000;
 
 function agentEnv(source = process.env) {
   const env = { ...source };
@@ -176,12 +208,12 @@ const IMAGE_TYPES = new Set(["image/png", "image/jpeg", "image/gif", "image/webp
 function createEngine({ toPage, loadSdk, loadZod = () => import("zod"), root = ROOT, env = agentEnv() }) {
   const chats = new Map();
   const chatOf = id => {
-    if (!chats.has(id)) chats.set(id, { session: undefined, run: undefined, asks: new Map(), allowed: new Set(), files: new Map() });
+    if (!chats.has(id)) chats.set(id, { session: undefined, root: undefined, run: undefined, asks: new Map(), allowed: new Set(), files: new Map() });
     return chats.get(id);
   };
-  const pathIn = input => {
+  const pathIn = (input, base = root) => {
     const path = typeof input?.file_path === "string" ? input.file_path : typeof input?.notebook_path === "string" ? input.notebook_path : undefined;
-    return path ? (isAbsolute(path) ? path : join(root, path)) : undefined;
+    return path ? (isAbsolute(path) ? path : join(base, path)) : undefined;
   };
 
   async function status() {
@@ -207,8 +239,14 @@ function createEngine({ toPage, loadSdk, loadZod = () => import("zod"), root = R
     const images = Array.isArray(request?.images) ? request.images.filter(image => IMAGE_TYPES.has(image?.type) && typeof image?.data === "string") : [];
     const prompt = images.length ? withImages(text, images) : text;
     const mode = MODES[request?.mode] ?? MODES.change;
+    // Where it works: the project's folder when the prompt names one, this repository otherwise. A folder that is gone
+    // fails the prompt; a chat whose folder changed starts a new session there (a session belongs to its folder).
+    const named = typeof request?.folder === "string" && request.folder;
+    const cwd = named ? folderAt(named) : root;
+    if (!cwd) { out({ type: "result", subtype: "error_during_execution", duration_ms: 0, error: GONE }); if (chat.run === run) chat.run = undefined; return; }
+    if (chat.root !== cwd) { chat.session = chat.root === undefined && typeof request?.resume === "string" && request.resume ? request.resume : undefined; chat.root = cwd; }
     const snapshot = async input => {
-      const file = pathIn(input.tool_input);
+      const file = pathIn(input.tool_input, cwd);
       if (file && input.tool_use_id) chat.files.set(input.tool_use_id, { file, before: readOrNull(file), after: undefined });
       return {};
     };
@@ -245,11 +283,11 @@ function createEngine({ toPage, loadSdk, loadZod = () => import("zod"), root = R
             answer({ behavior: "allow", updatedInput: input });
           } else deny(reply?.instead ? `The person said no, and asked instead: ${reply.instead}` : "The person said no to this.");
         });
-        const file = pathIn(input);
+        const file = pathIn(input, cwd);
         out({
           type: "permission_request", tool_use_id: toolUseId, tool_name: toolName,
           title: options.title ?? `Allow ${options.displayName ?? toolName}?`,
-          description: options.description ?? options.decisionReason ?? (file ? file.replace(`${root}/`, "") : ""),
+          description: options.description ?? options.decisionReason ?? (file ? file.replace(`${cwd}/`, "") : ""),
           input,
         });
       });
@@ -263,7 +301,7 @@ function createEngine({ toPage, loadSdk, loadZod = () => import("zod"), root = R
       run.query = query({
         prompt,
         options: {
-          cwd: root,
+          cwd,
           model: typeof request?.model === "string" ? request.model : undefined,
           resume: chat.session,
           includePartialMessages: true,
@@ -274,7 +312,7 @@ function createEngine({ toPage, loadSdk, loadZod = () => import("zod"), root = R
           disallowedTools: mode.readOnly ? WRITE_TOOLS : [],
           ...(area ? { mcpServers: { area }, allowedTools: ["mcp__area__show_options", "mcp__area__log_changes"] } : {}),
           settingSources: ["project", "local"],
-          systemPrompt: { type: "preset", preset: "claude_code", append: `${SYSTEM} ${mode.note}` },
+          systemPrompt: { type: "preset", preset: "claude_code", append: `${named ? PROJECT(request.about) : SYSTEM} ${mode.note}` },
           env,
           hooks: {
             PreToolUse: [{ matcher: EDIT_TOOLS, hooks: [snapshot] }],
@@ -286,7 +324,8 @@ function createEngine({ toPage, loadSdk, loadZod = () => import("zod"), root = R
       });
       for await (const message of run.query) {
         if (message.session_id) chat.session = message.session_id;
-        for (const each of forPage(message)) out(each);
+        // The result carries the session, so the page can keep it with the chat and reopen it later.
+        for (const each of forPage(message)) out(each.type === "result" && chat.session ? { ...each, session: chat.session } : each);
       }
     } catch (error) {
       // The SDK also throws after a failed result; the result has said it already.
@@ -324,6 +363,7 @@ function createEngine({ toPage, loadSdk, loadZod = () => import("zod"), root = R
       try {
         if (entry.after !== undefined && readOrNull(entry.file) === entry.after) {
           if (entry.before === null) unlinkSync(entry.file); else writeFileSync(entry.file, entry.before);
+          entry.undone = true;
           results[id] = "ok";
         } else results[id] = "the file has changed since this edit.";
       } catch (error) { results[id] = String(error?.message ?? error); }
@@ -331,14 +371,45 @@ function createEngine({ toPage, loadSdk, loadZod = () => import("zod"), root = R
     return results;
   }
 
-  return { status, send, answer, stop, close, undo };
+  /**
+   * What the chat has changed, a file at a time, in the order it first touched each (the Changes view, T3 of
+   * docs/research/desktop-app-analysis-2026-11-10): the file as it was before the chat's first edit and as its last
+   * edit left it, with the edits (tool call ids) that are not undone. `moved` says the file is no longer as the last
+   * edit left it (changed outside the chat). A text over TEXT_LIMIT is left out and `large` says so.
+   */
+  function changes(chatId) {
+    const chat = chats.get(String(chatId));
+    if (!chat) return [];
+    const files = new Map();
+    for (const [id, entry] of chat.files) {
+      if (entry.after === undefined) continue; // the edit never ran (denied, or still running)
+      if (!files.has(entry.file)) files.set(entry.file, []);
+      files.get(entry.file).push({ id, ...entry });
+    }
+    return [...files].map(([file, entries]) => {
+      const live = entries.filter(entry => !entry.undone);
+      const before = entries[0].before;
+      const after = live.length ? live.at(-1).after : before;
+      const large = (before?.length ?? 0) > TEXT_LIMIT || (after?.length ?? 0) > TEXT_LIMIT;
+      return {
+        file, path: chat.root && file.startsWith(`${chat.root}/`) ? relative(chat.root, file) : file,
+        ids: entries.map(entry => entry.id), undone: entries.filter(entry => entry.undone).map(entry => entry.id),
+        ...(large ? { large: true } : { before, after }),
+        moved: readOrNull(file) !== after,
+      };
+    });
+  }
+
+  return { status, send, answer, stop, close, undo, changes };
 }
 
 function register(getWindow) {
   const { ipcMain } = require("electron");
   const engine = createEngine({
     toPage: (chat, message) => { const window = getWindow(); if (window && !window.isDestroyed()) window.webContents.send("area:agent-event", chat, message); },
-    loadSdk: (() => { let sdk; return () => (sdk ??= import("@anthropic-ai/claude-agent-sdk")); })(),
+    // AREA_AGENT_SDK names a stand-in module for an interaction test (a file path): the app's whole chat path runs
+    // without Claude. Unset, as it always is for a person, the real SDK loads.
+    loadSdk: (() => { let sdk; return () => (sdk ??= import(process.env.AREA_AGENT_SDK ? require("node:url").pathToFileURL(process.env.AREA_AGENT_SDK).href : "@anthropic-ai/claude-agent-sdk")); })(),
   });
   ipcMain.handle("area:agent-status", () => engine.status());
   ipcMain.on("area:agent-send", (_event, chat, request) => { engine.send(chat, request); });
@@ -346,6 +417,7 @@ function register(getWindow) {
   ipcMain.on("area:agent-stop", (_event, chat) => { engine.stop(chat); });
   ipcMain.on("area:agent-close", (_event, chat) => engine.close(chat));
   ipcMain.handle("area:agent-undo", (_event, chat, ids) => engine.undo(chat, ids));
+  ipcMain.handle("area:agent-changes", (_event, chat) => engine.changes(chat));
 }
 
 module.exports = { register, createEngine, forPage, agentEnv };

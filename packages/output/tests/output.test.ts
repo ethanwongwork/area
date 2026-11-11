@@ -21,6 +21,7 @@ import { generate } from "../src/generate.ts";
 import { loadLibrary, withChanges, type Library } from "../src/library.ts";
 import { matches, merge3 } from "../src/merge.ts";
 import { answer } from "../src/mcp.ts";
+import { captureArgs, pictureBlocker } from "../src/picture.ts";
 import { readProject } from "../src/project.ts";
 import { addedLines, validate } from "../src/check.ts";
 import { apply, folder, plan, summary, writeDefinition, type Prefer } from "../src/write.ts";
@@ -261,7 +262,7 @@ describe("the agent contract", () => {
       assert.equal(ask("initialize", { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "1" } }).result.protocolVersion, "2025-06-18");
       assert.equal(answer({ jsonrpc: "2.0", method: "notifications/initialized" }, () => proj, "0"), null);
       const tools = ask("tools/list").result.tools.map((t: { name: string }) => t.name);
-      assert.deepEqual(tools, ["system.search_components", "system.get_component", "system.resolve_token", "system.validate_diff", "system.get_rules"]);
+      assert.deepEqual(tools, ["system.search_components", "system.get_component", "system.resolve_token", "system.validate_diff", "system.get_rules", "preview.screenshot"]);
       const found = ask("tools/call", { name: "system.search_components", arguments: { query: "dialog" } }).result.structuredContent;
       assert.equal(found.components[0].name, "Dialog");
       const button = ask("tools/call", { name: "system.get_component", arguments: { name: "Button" } }).result.structuredContent;
@@ -274,6 +275,37 @@ describe("the agent contract", () => {
       const modern = answer({ jsonrpc: "2.0", id: 2, method: "server/discover", params: { _meta: { "io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.modelcontextprotocol/clientCapabilities": {} } } }, () => proj, "0") as { result: Record<string, unknown> };
       assert.equal(modern.result.resultType, "complete");
       assert.ok(ask("nope").error);
+    } finally { rmSync(dir, { recursive: true, force: true }); }
+  });
+
+  it("pictures a component under the theme's settings, and says why when it can't", async () => {
+    const dir = project();
+    try {
+      write(dir, LUMEN(), lib);
+      const proj = readProject(folder(dir));
+      assert.ok(proj.themes.length > 0 && typeof proj.themes[0]!.settings === "object");
+      const call = (args: Record<string, unknown>, context = {}) => Promise.resolve(answer({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "preview.screenshot", arguments: args } }, () => proj, "0", context)) as Promise<{ result: Record<string, any> }>;
+      // What the app's capture is started with: the component's page, its specimen alone, the mode and the settings.
+      const args = captureArgs("/area/apps/desktop", "/tmp/p.png", { slug: "button", mode: "dark", settings: { radius: "0", theme: "light" } });
+      assert.deepEqual(args, ["/area/apps/desktop", "--capture=/tmp/p.png", "--hash=#system/area/components/button", "--clip=.studio-stage__content > *", "--pad=16", "--theme=dark", `--store={"canvas":{"radius":"0"}}`]);
+      assert.equal(captureArgs("/a", "/p", { slug: "button", mode: "light", settings: {} }).some(arg => arg.startsWith("--store")), false);
+      // Asked wrongly, or with nowhere to draw: an error in words, never a thrown one.
+      const unknown = await call({ component: "No such thing" }, { library: ROOT });
+      assert.ok(unknown.result.isError && /No component/.test(unknown.result.content[0].text));
+      const nowhere = await call({ component: "Button" });
+      assert.ok(nowhere.result.isError && /Area checkout/.test(nowhere.result.content[0].text));
+      const bare = await call({ component: "Button" }, { library: dir });
+      assert.ok(bare.result.isError && /isn't built/.test(bare.result.content[0].text));
+      // Drawn for real where this checkout has the app built and a screen to draw on (not on CI).
+      if (pictureBlocker(ROOT) || process.env.CI) return;
+      const drawn = await call({ component: "Button", mode: "dark" }, { library: ROOT });
+      assert.equal(drawn.result.isError, undefined, JSON.stringify(drawn.result.content?.[0]?.text));
+      const [image, words] = drawn.result.content;
+      assert.equal(image.type, "image");
+      assert.equal(image.mimeType, "image/png");
+      assert.equal(Buffer.from(image.data, "base64").subarray(1, 4).toString(), "PNG");
+      assert.equal(JSON.parse(words.text).mode, "dark");
+      assert.equal(drawn.result.structuredContent.component, "Button");
     } finally { rmSync(dir, { recursive: true, force: true }); }
   });
 });

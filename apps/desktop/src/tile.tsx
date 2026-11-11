@@ -19,7 +19,7 @@
  * The frame keeps the docs gallery's class names (gallery-tile, __view, __stage), so the shared fit
  * (src/gallery/fit.ts) still finds component specimens.
  */
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { AssetCard, AssetGridItem, Badge, Count, DesignCard, ListBoxItem, SectionHeading, type DesignFocus, type DesignLayout } from "@area/react";
 import { AlertCircleFilledIcon, ArchiveIcon, CircleCheckDashedIcon, CircleDashedIcon, CircleProgressIcon, EllipseIcon, ErrorFilledIcon, StatusAvailableFilledIcon } from "@area/icons";
 import { feedScale, feedScaleWithin } from "./app-scale.ts";
@@ -412,15 +412,57 @@ export function CanvasSection({ id, title, count, lede, role, children }: { id: 
  * it after (owner, 2026-10-30: "the nav is laggy"). A page of many heavy parts (Colors' hundreds of step cards, Patterns'
  * whole screens) drew all of them before its first paint, 2.5 seconds after a click; now it draws what is in view.
  */
-export function WhenVisible({ estimate, children }: { estimate: number; children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [seen, setSeen] = useState(false);
+/**
+ * Drawing ahead while the app is idle (the smoothness pass, docs/research/desktop-app-analysis-2026-11-10, V4): a part
+ * that comes within a few screens of the view joins this queue and is drawn in the browser's idle time, one part a slice
+ * and nearest first, so it is ready before it is scrolled to. Until then a part drew only when it came within a screen,
+ * and a fast scroll drew several at once in one frame (the Components overview: 120 ms a quarter screen, the first time).
+ * A part that reaches the view before its turn draws at once, as before.
+ */
+const waiting: Array<{ at: () => number; draw: () => void }> = [];
+let idle = 0;
+const pump = () => {
+  idle = 0;
+  if (!waiting.length) return;
+  waiting.sort((a, b) => a.at() - b.at());
+  waiting.shift()!.draw();
+  if (waiting.length) idle = requestIdleCallback(pump, { timeout: 400 });
+};
+/** Draw a part in idle time; the answer takes it back out (it was drawn another way, or left the page). */
+export function drawWhenIdle(element: Element, draw: () => void): () => void {
+  const entry = { at: () => Math.abs(element.getBoundingClientRect().top), draw };
+  waiting.push(entry);
+  if (!idle && typeof requestIdleCallback === "function") idle = requestIdleCallback(pump, { timeout: 400 });
+  return () => { const at = waiting.indexOf(entry); if (at >= 0) waiting.splice(at, 1); };
+}
+/** How far ahead a part is drawn in idle time: three screens either way. */
+export const AHEAD = "300% 0px";
+
+/**
+ * Seen once it nears the view (`margin` past it, a screen by default), or drawn ahead in idle time once it is within
+ * AHEAD: the shared rule for the long galleries (WhenVisible, the Components overview).
+ */
+export function useNear(ref: RefObject<Element | null>, root: () => Element | null = () => null, margin = "100% 0px", already = false): boolean {
+  const [near, setNear] = useState(already);
   useEffect(() => {
     const element = ref.current;
-    if (seen || !element) return;
-    const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { setSeen(true); observer.disconnect(); } }, { rootMargin: "600px 0px" });
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [seen]);
+    if (near || !element) return;
+    const show = () => setNear(true);
+    let release = () => {};
+    const now = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) show(); }, { root: root(), rootMargin: margin });
+    const ahead = new IntersectionObserver(entries => {
+      release();
+      if (entries.some(entry => entry.isIntersecting)) release = drawWhenIdle(element, show);
+    }, { root: root(), rootMargin: AHEAD });
+    now.observe(element);
+    ahead.observe(element);
+    return () => { now.disconnect(); ahead.disconnect(); release(); };
+  }, [near]); // eslint-disable-line react-hooks/exhaustive-deps
+  return near || already;
+}
+
+export function WhenVisible({ estimate, children }: { estimate: number; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const seen = useNear(ref, () => null, "600px 0px");
   return seen ? <>{children}</> : <div ref={ref} style={{ minBlockSize: estimate }} aria-hidden="true" />;
 }

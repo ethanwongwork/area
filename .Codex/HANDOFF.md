@@ -1,6 +1,29 @@
 # Handoff
 
-## Current state (2026-11-08)
+## Current state (2026-11-10)
+- Technical tools (T6 of the desktop app analysis), 2026-11-11, uncommitted in worktree desktop-app-analysis-0523e3: Settings › Coding apps › Technical tools (off by default) adds Files to a project with a folder: tree, code editor and a line-based terminal (`apps/desktop/src/pages/files.tsx`, `electron/tools.cjs`). Every step of the desktop app analysis's build order is now built; nothing is committed.
+- Versions (T4 of the desktop app analysis), 2026-11-11, uncommitted in worktree desktop-app-analysis-0523e3: Save, Ask for review and Publish under a project's Changes (`apps/desktop/src/chat/versions.tsx`, `electron/github.cjs`) through the folder's git and the Mac's `gh` sign-in. Tried only against a local stand-in for GitHub (`AREA_GH`). Next in the plan: T6 technical tools (Files, editor, terminal; off by default).
+- Smoothness pass (V1, V3, V4 of the desktop app analysis), 2026-11-11, uncommitted in worktree desktop-app-analysis-0523e3: far gallery sections skip layout (`.studio-section--far`) and draw ahead in idle time (`tile.tsx` `useNear`); regions catch their own failure (`apps/desktop/src/region-boundary.ts`, PRODUCT_UI rule 27); panels slide on show and hide (`moveRegions`, MOTION.md recipe). Panel motion timing wasn't measured in front (the test window was behind). Next in the plan: T4 GitHub, then T6 technical tools.
+- Notices and ⌘K commands (T10 and U1 of the desktop app analysis), uncommitted in worktree desktop-app-analysis-0523e3: tab marks for a chat working, asking or done (`apps/desktop/src/chat/activity.ts`), macOS notices in the background with Settings › Chat › Notices, a question before quitting mid-run, and a Commands group in ⌘K. The notice and quit dialog were not seen live (they show on the owner's screen). Next in the plan: V1/V3/V4 smoothness, then T4 GitHub, then T6 technical tools.
+- Links in and out (U9 of the desktop app analysis), uncommitted in worktree desktop-app-analysis-0523e3: `area://` links (`apps/desktop/src/links.ts`, `electron/links.cjs`) open places from pages, chat and a second copy; Copy Link ⌘⇧C with a notice (Toaster at the app root); Open in editor for installed editors, kept to the project's folder. macOS links from other apps need the packaged app. Next in the plan: T10 notices when a run ends, U1 ⌘K actions.
+- Tools for coding apps (T7 of the desktop app analysis), uncommitted in worktree desktop-app-analysis-0523e3: the `area mcp` server has `preview.screenshot` (a component's picture, drawn by the app's capture mode with the new `--clip`; `packages/output/src/picture.ts`), and Settings has Coding apps (`apps/desktop/src/coding-apps.ts`) with each app's connect line. The picture was asked for over stdio and drawn; the connect snippets were not tried in the apps themselves. Next in the plan: U9 links, then T10 notices and U1 ⌘K actions.
+- Preview (T2 of the desktop app analysis), uncommitted in worktree desktop-app-analysis-0523e3: a project's nav has Preview, its own running app in a `<webview>` (`apps/desktop/src/pages/preview.tsx`, `src/preview.ts`, `electron/preview.cjs`; local addresses only, guest has nothing of Area's), with Choose reading the clicked element into the Inspector (styles to try, a note, Send to chat with its picture). Seen in the app against a static test page with a stand-in agent; not against a real framework's dev server and not with Claude. Next in the plan: T7 MCP tools and setup page, U9 links.
+- Changes view (T3 of the desktop app analysis), uncommitted in worktree desktop-app-analysis-0523e3: a project's Inspector › Code lists what its chat changed, a file at a time (`apps/desktop/src/chat/changes.tsx`, `changes.ts`, `line-diff.ts`; engine `changes` in `electron/agent.cjs`), with numbered diffs, Keep or Undo per file, and line comments sent to Chat (Diff `onComment` / `notes`, docs/specs/edit-summary.md). Seen in the app with a stand-in agent (`AREA_AGENT_SDK`), not with Claude. Not built: side by side. Next in the plan: T2 preview.
+- **Project folder and chats, worktree `desktop-app-analysis-0523e3` (2026-11-10, uncommitted).** From the evaluation of
+  Area against Cursor, ChatGPT (Codex) and Figma (`docs/research/desktop-app-analysis-2026-11-10/README.md`; review page
+  https://claude.ai/artifact/KnodsVM8y8WTmkTUWbxz5d, picks in `verdicts`), the owner said "get started on the first
+  phase" and asked for a code editor and a terminal as options technical people switch on (recorded as T6, not built).
+  Built, step 1 (T1 and U4): a project keeps a folder (`projects.ts` `folder`, `setFolder`; the Overview's Code section,
+  `electron/folder.cjs`); Chat works there under the project's own instructions (`agent.cjs` `PROJECT`, `folder`,
+  `about`, `resume` on a prompt; a missing folder fails the prompt, never falling back to the repository); the @ menu
+  lists the folder's files; a chat belongs to its place, one conversation per project, per system and for the rest of
+  the app (`chat.tsx` `ChatHost`), kept as files beside it (`chat/store.ts`, `Projects/<id>/chats/`) and reopened from
+  Past chats in the conversation's head. Open: chats in the Sidebar and ⌘K, deleting a kept chat, a system's chat in
+  its written folder, read-only chat without a folder (left as before so the Design view's changes still send). The
+  worktree `electron-app-audit-cleanup-35275b` also holds uncommitted edits to `chat.tsx`, `main.cjs`, `project.tsx`
+  and `projects.ts`: whichever lands second merges a few lines. Next by the page's order: T3 Changes view.
+
+## Earlier state (2026-11-08)
 - **Direct editing, worktree `design-direct-editing-b4f631` (PR, 2026-11-08; main through #216 merged in).** Owner: "fully editable vector
   figma code canvas (everything except an infinite canvas, each design is isolated to its own container only)". Research
   and ranked options: `docs/research/design-editing-2026-11-08/README.md` (three cited reading notes beside it); review page

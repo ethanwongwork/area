@@ -67,6 +67,8 @@ export interface ChatState {
   edits: Record<string, EditState>;
   /** Why an Undo didn't go through, per edit (the file changed since). */
   undoFailed: Record<string, string>;
+  /** The agent's session, from the engine's results: kept with the chat (src/chat/store.ts) so it can go on later. */
+  session?: string;
 }
 
 type Action =
@@ -80,7 +82,9 @@ type Action =
   | { type: "undoFailed"; reasons: Record<string, string> }
   | { type: "enqueue"; text: string; context?: string; extra?: SendExtra }
   | { type: "dequeue"; id: string }
-  | { type: "clear" };
+  | { type: "clear" }
+  /** A kept chat opened again (src/chat/store.ts): its turns, each edit's Keep or Undo, each question's answer. */
+  | { type: "open"; turns: readonly Turn[]; edits: ChatState["edits"]; answers: ChatState["answers"]; session?: string };
 
 let ids = 0;
 const nextId = () => `turn-${++ids}`;
@@ -107,6 +111,8 @@ function planOf(input: ToolInput): PlanStep[] | undefined {
 export function reduce(state: ChatState, action: Action): ChatState {
   switch (action.type) {
     case "clear": return EMPTY;
+    // The turns take new ids: a kept chat's are from another launch and could meet this one's.
+    case "open": return { ...EMPTY, turns: action.turns.map(turn => ({ ...turn, id: nextId() })), edits: action.edits, answers: action.answers, ...(action.session ? { session: action.session } : {}) };
     case "edit": return { ...state, edits: { ...state.edits, ...Object.fromEntries(action.ids.map(id => [id, action.state])) },
       undoFailed: Object.fromEntries(Object.entries(state.undoFailed).filter(([id]) => !action.ids.includes(id))) };
     case "undoFailed": return { ...state, undoFailed: { ...state.undoFailed, ...action.reasons } };
@@ -151,7 +157,7 @@ export function reduce(state: ChatState, action: Action): ChatState {
         return { ...withCurrent(state, parts => {
           parts.forEach((part, index) => { if (part.kind === "text" && part.streaming) parts[index] = { ...part, streaming: false }; });
           return { done: true, seconds: Math.round(message.duration_ms / 1000), ...(message.error ? { error: message.error } : {}) };
-        }), running: false, approval: undefined, question: undefined };
+        }), running: false, approval: undefined, question: undefined, ...(message.session ? { session: message.session } : {}) };
       }
       if (message.type === "stream_event") {
         const delta = message.event.delta;
@@ -224,6 +230,9 @@ export interface ChatSession extends ChatState {
   answer: (allow: boolean, extra?: { always?: boolean; instead?: string }) => void;
   /** Keep or undo edits (tool call ids). Live, Undo puts the files back (or says why not); a recorded run changes none. */
   setEdits: (ids: string[], state: EditState) => void;
+  /** The files this chat changed, as the engine recorded them before and after (the Changes view); none for a recorded
+   *  run or a chat opened again after the app was closed. */
+  changes: () => Promise<FileRecord[]>;
   /** Write a message while a run works: it waits in the queue and is sent when the run finishes. */
   enqueue: (text: string, context?: string, extra?: SendExtra) => void;
   /** Take a message out of the queue. */
@@ -232,7 +241,13 @@ export interface ChatSession extends ChatState {
   sendNow: (id: string) => void;
   /** Play a recording to its end at once (a finished conversation, for the Testing screen); approvals answer yes. */
   load: (recording: Recording) => void;
+  /** Open a kept chat (src/chat/store.ts) in place of this one. `resume`: go on from its agent session on the next
+   *  prompt (the caller says so only when the chat's folder is still the one it worked in). */
+  open: (kept: { turns: readonly Turn[]; edits: ChatState["edits"]; answers: ChatState["answers"]; session?: string }, resume?: boolean) => void;
 }
+
+/** One changed file as the engine holds it: before the chat's first edit and after its last that is not undone. */
+export interface FileRecord { file: string; path: string; ids: string[]; undone: string[]; before?: string | null; after?: string | null; large?: boolean; moved: boolean }
 
 const agentBridge = () => typeof window === "undefined" ? undefined : window.areaDesktop?.agent;
 let chatCount = 0;
@@ -243,6 +258,10 @@ export interface ChatSessionOptions {
   live?: boolean;
   /** The model each prompt goes to (the composer's Model picker). */
   model?: string;
+  /** The project's folder the agent works in (electron/agent.cjs); without one it works in Area's repository. */
+  folder?: string;
+  /** The project, for the agent's instructions: its name, its system's and its theme's. */
+  about?: { name: string; system?: string; theme?: string };
 }
 
 /** One conversation and its player. `initial` loads a finished run (the Testing screen's frames). */
@@ -255,6 +274,10 @@ export function useChatSession(initial?: Recording, options: ChatSessionOptions 
   live.current = mode === "live";
   const model = useRef(options.model);
   model.current = options.model;
+  const where = useRef({ folder: options.folder, about: options.about });
+  where.current = { folder: options.folder, about: options.about };
+  // A kept chat's agent session, passed with the first prompt after it is opened.
+  const resume = useRef<string | undefined>(undefined);
   const latest = useRef(state);
   latest.current = state;
   useEffect(() => {
@@ -298,8 +321,13 @@ export function useChatSession(initial?: Recording, options: ChatSessionOptions 
     halt();
     dispatch({ type: "send", text, context, extra, at: Date.now() });
     const agent = agentBridge();
-    if (live.current && agent) agent.send(chatId.current, { text: extra?.prompt ?? text, context, model: model.current, mode: extra?.mode, images: extra?.images ? [...extra.images] : undefined });
-    else play(recordingFor(text).events);
+    if (live.current && agent) {
+      agent.send(chatId.current, {
+        text: extra?.prompt ?? text, context, model: model.current, mode: extra?.mode, images: extra?.images ? [...extra.images] : undefined,
+        ...(where.current.folder ? { folder: where.current.folder, about: where.current.about } : {}), ...(resume.current ? { resume: resume.current } : {}),
+      });
+      resume.current = undefined;
+    } else play(recordingFor(text).events);
   }, [play]);
   const stop = useCallback(() => {
     halt();
@@ -309,7 +337,14 @@ export function useChatSession(initial?: Recording, options: ChatSessionOptions 
   const clear = useCallback(() => {
     halt();
     if (live.current) { agentBridge()?.close(chatId.current); chatId.current = newChatId(); }
+    resume.current = undefined;
     dispatch({ type: "clear" });
+  }, []);
+  const open = useCallback<ChatSession["open"]>((kept, goOn = false) => {
+    halt();
+    if (live.current) { agentBridge()?.close(chatId.current); chatId.current = newChatId(); }
+    resume.current = goOn ? kept.session : undefined;
+    dispatch({ type: "open", turns: kept.turns, edits: kept.edits, answers: kept.answers, session: goOn ? kept.session : undefined });
   }, []);
   const answer = useCallback((allow: boolean, extra: { always?: boolean; instead?: string } = {}) => {
     const asked = latest.current.approval;
@@ -333,6 +368,11 @@ export function useChatSession(initial?: Recording, options: ChatSessionOptions 
       const failed = Object.fromEntries(ids.filter(id => results[id] !== "ok").map(id => [id, results[id] ?? "Couldn't undo this edit."]));
       if (Object.keys(failed).length) dispatch({ type: "undoFailed", reasons: failed });
     } catch (error) { dispatch({ type: "undoFailed", reasons: Object.fromEntries(ids.map(id => [id, String(error)])) }); }
+  }, []);
+  const changes = useCallback(async (): Promise<FileRecord[]> => {
+    const agent = agentBridge();
+    if (!live.current || !agent?.changes) return [];
+    try { return await agent.changes(chatId.current); } catch { return []; }
   }, []);
   const setEdits = useCallback((ids: string[], next: EditState) => {
     if (next !== "undone") { dispatch({ type: "edit", ids, state: next }); return; }
@@ -402,6 +442,6 @@ export function useChatSession(initial?: Recording, options: ChatSessionOptions 
   }, [play]);
   const loaded = useRef(false);
   useEffect(() => { if (initial && !loaded.current) { loaded.current = true; load(initial); } }, [initial, load]);
-  return useMemo(() => ({ ...state, mode, send, stop, clear, answer, answerQuestion, restore, retry, setEdits, enqueue, unqueue, sendNow, load }),
-    [state, mode, send, stop, clear, answer, answerQuestion, restore, retry, setEdits, enqueue, unqueue, sendNow, load]);
+  return useMemo(() => ({ ...state, mode, send, stop, clear, answer, answerQuestion, restore, retry, setEdits, changes, enqueue, unqueue, sendNow, load, open }),
+    [state, mode, send, stop, clear, answer, answerQuestion, restore, retry, setEdits, changes, enqueue, unqueue, sendNow, load, open]);
 }
