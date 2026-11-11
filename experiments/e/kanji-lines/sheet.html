@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sen — glyph sheet</title>
+    <style>
+      body { margin: 0; background: #fff; font: 11px ui-monospace, monospace; color: #888; }
+      canvas { display: block; }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <script type="module">
+      // Every glyph in the piece: the KanjiVG brush line in pale red under Sen's lines, then
+      // Sen at three weights and three widths. For checking the drawing, not part of the piece.
+      import { glyph, source, draw, has } from './lines.js';
+      import { COPY, TITLE } from './copy.js';
+      const q = new URLSearchParams(location.search);
+      const chars = q.get('chars') ? [...q.get('chars')] : [...new Set([...TITLE.join(''), ...COPY.join('')])].filter(has);
+      const S = Number(q.get('size') ?? 96);
+      const cols = [
+        { wdth: 100, wght: 100, overlay: true },
+        { wdth: 50, wght: 400 },
+        { wdth: 80, wght: 400 },
+        { wdth: 125, wght: 400 },
+        { wdth: 80, wght: 900 },
+        { wdth: 125, wght: 900 },
+      ];
+      const colW = cols.map((c) => (S * c.wdth) / 100 + 14);
+      const per = Number(q.get('per') ?? 3);
+      const blockW = colW.reduce((a, b) => a + b, 0) + 30;
+      const rows = Math.ceil(chars.length / per);
+      const cv = document.getElementById('c');
+      const dpr = 2;
+      cv.width = blockW * per * dpr;
+      cv.height = (rows * (S + 16) + 16) * dpr;
+      cv.style.width = `${blockW * per}px`;
+      const x = cv.getContext('2d');
+      x.scale(dpr, dpr);
+      chars.forEach((ch, n) => {
+        let ox = (n % per) * blockW + 12;
+        const oy = Math.floor(n / per) * (S + 16) + 12;
+        cols.forEach((c, i) => {
+          x.fillStyle = '#f3f3f3';
+          x.fillRect(ox, oy, (S * c.wdth) / 100, S);
+          if (c.overlay) {
+            // brush centrelines, mapped the same way as lines.js (em = units 6–103)
+            x.strokeStyle = 'rgba(230,60,60,.45)';
+            x.lineWidth = 1;
+            for (const l of source(ch)) {
+              x.beginPath();
+              l.forEach(([u, v], k) => x[k ? 'lineTo' : 'moveTo'](ox + ((u - 6) * S) / 97, oy + ((v - 6) * S) / 97));
+              x.stroke();
+            }
+          }
+          x.strokeStyle = '#111';
+          draw(x, ch, ox, oy, S, { wdth: c.wdth, wght: c.wght, vert: q.has('vert') });
+          ox += colW[i];
+        });
+      });
+      document.title = `${chars.length} glyphs`;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,409 @@
+/* The frame shared by every experiment. The experiment owns everything else. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.x-bar,
+.x-hint {
+  position: fixed;
+  z-index: 100;
+  margin: 0;
+  font: 400 11px/14px ui-monospace, 'SF Mono', Menlo, monospace;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+
+.x-bar {
+  inset: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  padding: 12px 14px;
+}
+
+.x-bar a {
+  color: inherit;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.x-bar a:hover {
+  text-decoration: underline;
+}
+
+.x-kind {
+  justify-self: end;
+}
+
+.x-hint {
+  left: 14px;
+  bottom: 12px;
+  opacity: 0.6;
+}
+
+.is-thumb .lil-gui {
+  display: none;
+}
+
+.lil-gui.root {
+  top: 40px;
+  right: 14px;
+  position: fixed;
+  z-index: 101;
+}
+
+/* The tweaks panel (src/tweaks.js): same place and look on every experiment. */
+.x-tweaks {
+  position: fixed;
+  z-index: 102;
+  right: 14px;
+  bottom: 14px;
+  width: min(296px, calc(100vw - 28px));
+  max-height: calc(100vh - 68px);
+  overflow: auto;
+  background: #fff;
+  color: #111;
+  border: 1px solid rgb(0 0 0 / 0.14);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 0.16);
+  font: 400 11px/14px ui-monospace, 'SF Mono', Menlo, monospace;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.x-tweaks button {
+  all: unset;
+  cursor: pointer;
+}
+
+.x-tweaks button:focus-visible {
+  outline: 1px solid #111;
+  outline-offset: 2px;
+}
+
+.x-tweaks .x-tw-head {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+}
+
+.x-tw-key {
+  color: #8a8a86;
+}
+
+.x-tw-body {
+  display: grid;
+  gap: 10px;
+  padding: 2px 12px 12px;
+  border-top: 1px solid rgb(0 0 0 / 0.08);
+  padding-top: 10px;
+}
+
+.x-tw-body[hidden] {
+  display: none;
+}
+
+.x-tw-row {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.x-tw-label {
+  color: #8a8a86;
+}
+
+.x-tw-opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  min-width: 0;
+}
+
+.x-tw-opts [role='radio'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #8a8a86;
+}
+
+.x-tw-opts [role='radio']:hover,
+.x-tw-opts [aria-checked='true'] {
+  color: #111;
+}
+
+.x-tw-opts [aria-checked='true'] {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.x-tw-swatch {
+  display: inline-flex;
+}
+
+.x-tw-swatch i {
+  width: 6px;
+  height: 10px;
+  display: block;
+}
+
+.x-tweaks .x-tw-action {
+  padding: 4px 10px;
+  border: 1px solid #111;
+}
+
+.x-tweaks .x-tw-action:hover {
+  background: #111;
+  color: #fff;
+}
+
+/* ── Viewer: header across the top, the piece full screen, a panel on the right ──
+   (shell(slug, { viewer: true })). Type, colour and spacing come from ui.css. */
+.is-viewer {
+  --x-panel-w: 320px;
+}
+
+.is-viewer body {
+  background: var(--ui-bg);
+}
+
+.x-view {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--x-panel-w);
+  grid-template-rows: auto minmax(0, 1fr);
+  background: var(--ui-bg);
+}
+
+.x-view > .ui-head {
+  grid-column: 1 / -1;
+}
+
+.x-view.is-full {
+  grid-template-columns: minmax(0, 1fr) 0;
+}
+
+.x-view > #stage {
+  position: relative;
+  inset: auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  container-type: size;
+  margin: 0 var(--ui-space) var(--ui-space);
+}
+
+.x-panel {
+  overflow: auto;
+  display: grid;
+  align-content: start;
+  gap: var(--ui-space);
+  padding: 0 var(--ui-space) var(--ui-space);
+}
+
+.x-panel[hidden] {
+  display: none;
+}
+
+.x-panel button,
+.x-p-show {
+  all: unset;
+  cursor: pointer;
+}
+
+.x-panel p {
+  margin: 0;
+}
+
+.x-p-hide,
+.x-p-show,
+.x-p-keys {
+  color: var(--ui-soft);
+}
+
+.x-p-hide:hover,
+.x-p-show:hover {
+  color: var(--ui-ink);
+}
+
+.x-p-block {
+  display: grid;
+  gap: var(--ui-space);
+  padding-top: var(--ui-space);
+  border-top: 1px solid var(--ui-soft);
+}
+
+.x-p-block[hidden] {
+  display: none;
+}
+
+.x-p-colophon {
+  margin: 0;
+  display: grid;
+  gap: var(--ui-space);
+}
+
+.x-p-colophon:empty {
+  display: none;
+}
+
+.x-p-colophon div,
+.x-panel .x-tw-row {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr);
+  gap: var(--ui-space);
+  align-items: baseline;
+}
+
+.x-p-colophon dt,
+.x-panel .x-tw-label {
+  color: var(--ui-soft);
+}
+
+.x-p-colophon dd {
+  margin: 0;
+}
+
+.x-p-show {
+  position: fixed;
+  right: var(--ui-space);
+  top: var(--ui-space);
+  z-index: 3;
+}
+
+.x-p-show[hidden] {
+  display: none;
+}
+
+/* Controls in the panel: options in grey, the chosen one in ink. */
+.x-tweaks-in .x-tw-body {
+  display: grid;
+  gap: var(--ui-space);
+}
+
+.x-tweaks-in button {
+  all: unset;
+  cursor: pointer;
+}
+
+.x-panel .x-tw-opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--ui-space);
+  min-width: 0;
+}
+
+.x-panel .x-tw-opts [role='radio'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ui-soft);
+  text-decoration: none;
+}
+
+.x-panel .x-tw-opts [role='radio']:hover,
+.x-panel .x-tw-opts [aria-checked='true'] {
+  color: var(--ui-ink);
+}
+
+.x-panel .x-tw-action {
+  color: var(--ui-ink);
+}
+
+.x-panel .x-tw-action:hover {
+  color: var(--ui-soft);
+}
+
+/* Phones: header, the piece, then the panel; the page scrolls. */
+@media (max-width: 760px) {
+  .x-view {
+    position: static;
+    display: block;
+  }
+
+  .is-viewer body {
+    overflow: auto;
+  }
+
+  .x-view > #stage {
+    height: min(calc(100vw - 16px), 100svh);
+  }
+}
+
+.x-panel .x-tw-body {
+  padding: 0;
+  border: 0;
+}
+
+.x-panel .x-p-keys {
+  display: block;
+}
+
+/* The panel reads as one vertical list: a label, then its options one per line. */
+.x-panel .x-tw-opts {
+  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+}
+
+/* Share: the caption as it will be posted, and the two actions. */
+.x-p-caption {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.x-p-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.x-panel .x-p-actions button:hover {
+  color: var(--ui-soft);
+}
+
+/* Anything clickable in the panel is blue: options not chosen, actions, hide and show. The
+   chosen option is ink (it's where you are). */
+.x-panel .x-tw-opts [role='radio'],
+.x-panel .x-tw-action,
+.x-panel .x-p-actions button,
+.x-panel .x-p-hide,
+.x-p-show {
+  color: var(--ui-link);
+}
+
+.x-panel .x-tw-opts [role='radio']:hover,
+.x-panel .x-tw-action:hover,
+.x-panel .x-p-actions button:hover,
+.x-panel .x-p-hide:hover,
+.x-p-show:hover {
+  color: var(--ui-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.x-panel .x-tw-opts [aria-checked='true'] {
+  color: var(--ui-ink);
+  text-decoration: none;
+}
