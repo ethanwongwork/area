@@ -1,6 +1,15 @@
 # Handoff
 
 ## Current state (2026-11-11)
+- **Desktop app: a project's own code, from chat to GitHub (2026-11-10 to 11, PR from branch
+  `claude/desktop-app-analysis-0523e3`).** The desktop app analysis's whole build order
+  (`docs/research/desktop-app-analysis-2026-11-10/README.md`, "Built", step by step; review page
+  https://claude.ai/artifact/KnodsVM8y8WTmkTUWbxz5d): a project folder where Chat works and chats are kept per project;
+  Changes (per file Keep or Undo, line comments); Preview with Choose; `preview.screenshot` and Settings › Coding apps;
+  `area://` links and Open in editor; tab activity marks, notices and ⌘K commands; the smoothness pass (far sections skip
+  layout, regions catch their own failure, panels slide); Versions (Save, Ask for review, Publish via git and `gh`);
+  Technical tools, off by default (Files, editor, terminal). Tested with stand-ins (`AREA_AGENT_SDK`, `AREA_GH`): no live
+  Claude reply in a project folder and no real GitHub review yet. Open items are in the README's "Not built" lines.
 - **Customization study (2026-11-10, merged 2026-11-11; a study, nothing built).** Research, measurements, scripts and
   the proof-of-concept paint: `docs/research/customization-2026-11-10/`. Implementing session: start at its README's
   "For the session that implements this" (the 48 current recommendations, build order, how material must be drawn,
@@ -8,6 +17,8 @@
   at merge, so confirm the recommendations with the owner first. Headlines: settings offer far finer steps than show (2
   to 5 clear levels on most scales); material becomes five registry levers (Curve, Edge light, Well depth, Glass, Glow)
   with a fixed component by effect table; setup and chat share one `ask_design` question tool.
+
+## Earlier state (2026-11-08)
 - **Direct editing, worktree `design-direct-editing-b4f631` (PR, 2026-11-08; main through #216 merged in).** Owner: "fully editable vector
   figma code canvas (everything except an infinite canvas, each design is isolated to its own container only)". Research
   and ranked options: `docs/research/design-editing-2026-11-08/README.md` (three cited reading notes beside it); review page

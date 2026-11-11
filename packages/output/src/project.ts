@@ -13,6 +13,8 @@ export interface Project extends SystemIndex {
   /** Every CSS file the system wrote, path → text. */
   css: Record<string, string>;
   design: string | null;
+  /** The system's themes: each one's id, name and settings (a component's picture is drawn under them). */
+  themes: Array<{ id: string; name: string; settings: Readonly<Record<string, string>> }>;
 }
 
 export function readProject(dest: Destination): Project {
@@ -31,6 +33,7 @@ export function readProject(dest: Destination): Project {
     name: def.system.name, version: def.release.version, dir,
     components: index.components, left: index.left ?? [],
     tokens: declaredTokens(...Object.values(css)), literals, css, design: dest.read("DESIGN.md"),
+    themes: def.themes.map(theme => ({ id: theme.id, name: theme.name, settings: theme.settings })),
   };
 }
 
