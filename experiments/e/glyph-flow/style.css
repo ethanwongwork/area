@@ -1,0 +1,63 @@
+body {
+  background: #fff;
+}
+
+/* The poster as large as the stage allows, on its own ground, so it reads full screen. */
+#stage {
+  display: grid;
+  place-items: center;
+}
+
+.poster {
+  display: block;
+  width: min(100cqw, calc(100cqh * var(--ratio, 1)));
+  aspect-ratio: var(--ratio, 1);
+  cursor: default;
+}
+
+.is-thumb #stage {
+  position: fixed;
+  inset: 0;
+}
+
+.is-thumb .poster {
+  width: 100vw;
+  height: 100vh;
+  aspect-ratio: auto;
+  cursor: default;
+}
+
+/* All views: the set in a grid, each square, its name under it. */
+.views {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  align-content: start;
+  gap: var(--ui-space, 8px);
+}
+
+.views[hidden],
+.poster[hidden] {
+  display: none;
+}
+
+.views button {
+  all: unset;
+  cursor: pointer;
+  display: grid;
+  gap: var(--ui-space, 8px);
+  color: var(--ui-link, #0a3cff);
+}
+
+.views button:hover span {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.views canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+}

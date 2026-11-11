@@ -1,0 +1,195 @@
+<meta charset="utf-8">
+<title>Variable Kanji</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+  /* One square canvas: two kanji stacked on the left with every point, handle and
+     coordinate, and the axes on the right as plain readouts that move with the animation.
+     Light is a chartreuse square; dark is near black with cream letters. */
+  :root {
+    --page: #ffffff;
+    --ground: #dcfa00;
+    --ink: #1c1c1c;
+    --body: #f6f4ea;
+    --blue: #0030ff;
+    --point: #ffffff;
+    --tag: #ffffff;
+    --tag-ink: #1c1c1c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --page: #000000; --ground: #0c0c0c; --ink: #efece2; --body: #efece2; --blue: #2f5bff; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --page: #000000; --ground: #0c0c0c; --ink: #efece2; --body: #efece2; --blue: #2f5bff; color-scheme: dark; }
+
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--page); display: grid; place-items: center; min-height: 100vh; padding: 16px; box-sizing: border-box; }
+  #canvas { display: block; width: min(calc(100vw - 32px), calc(100vh - 32px)); height: auto; aspect-ratio: 1; }
+</style>
+
+<svg id="canvas" viewBox="0 0 1000 1000" role="img" aria-label="Two kanji, 龍 and 驚, drawn as single lines with their points and coordinates, while weight, width, corners and slant change"></svg>
+
+<script>
+  const DATA = /*DATA*/ {};
+  /*GEOMETRY*/
+
+  const PAIR = ['龍', '驚'];
+  const AXES = [
+    { key: 'weight', label: 'Weight', min: 8, max: 110, show: (v) => `${Math.round(v)}` },
+    { key: 'width', label: 'Width', min: 75, max: 200, show: (v) => `${Math.round(v)}%` },
+    { key: 'corners', label: 'Corners', min: 0, max: 130, show: (v) => `${Math.round(v)}` },
+    { key: 'slant', label: 'Slant', min: 0, max: 26, show: (v) => `${v.toFixed(1)}°` },
+  ];
+  const state = { weight: 46, width: 100, corners: 40, slant: 0 };
+
+  // Mergers don't depend on the axes, so each kanji's paths are merged once.
+  const merged = {};
+  const mergedOf = (ch) => (merged[ch] ??= mergeCorners(DATA[ch].strokes.map((s) => ({ ...parse(s.d), joined: s.joined.slice() }))));
+
+  /** The kanji's paths at the current width and slant (an affine map, exact on cubics), then rounded. */
+  function strokesAt(ch) {
+    const sw = state.width / 100, sh = Math.tan((state.slant * Math.PI) / 180);
+    const map = (q) => [500 + (q[0] - 500) * sw + (500 - q[1]) * sh, q[1]];
+    return mergedOf(ch).map((st) => fillet({ ...st, segs: st.segs.map((s) => ({ c: s.c, p: s.p.map(map) })) }, state.corners));
+  }
+
+  // ———————————————————————————— the canvas, in units of the square
+  const G = 385;              // each kanji's em
+  const CX = 392;             // the column's centre; over the whole animation the ink stays within x 24 to 760
+  const OX = CX - G / 2;      // the column's left edge
+  const OY = (1000 - 2 * G) / 2;
+  const S = G / 1000;
+  const px = (q, k) => [OX + q[0] * S, OY + k * G + q[1] * S];
+  const P = (q, k) => { const p = px(q, k); return `${p[0].toFixed(1)} ${p[1].toFixed(1)}`; };
+  const MONO = 'JetBrains Mono, ui-monospace, SF Mono, Menlo, monospace';
+  const SANS = 'Inter Tight, system-ui, -apple-system, sans-serif';
+
+  const canvas = document.getElementById('canvas');
+  let shown = new Map(); // tag key → side, kept from frame to frame so tags hold still
+
+  function render() {
+    const W = state.weight * S, e = 1.1;
+    let body = '', inner = '', centre = '', handles = '', offs = '', ons = '';
+    const tags = []; // { key, x, y, q, pri }
+    PAIR.forEach((ch, k) => {
+      strokesAt(ch).forEach((st, si) => {
+        const segs = st.segs;
+        const d = (list, closed) => {
+          let out = `M${P(list[0].p[0], k)}`;
+          for (const sg of list) out += sg.c ? `C${P(sg.p[1], k)} ${P(sg.p[2], k)} ${P(sg.p[3], k)}` : `L${P(sg.p[1], k)}`;
+          return closed ? `${out}Z` : out;
+        };
+        const full = d(segs, st.closed);
+        body += `<path d="${full}"/>`;
+        centre += full;
+        // The inside of the edge: free flat ends drawn back by the edge's width.
+        let inSegs = segs;
+        if (!st.closed) {
+          const t = e / S;
+          inSegs = segs.slice();
+          if (!st.joined[0] && segLen(inSegs[0]) > t * 2) inSegs[0] = trimStart(inSegs[0], t);
+          if (!st.joined[1] && segLen(inSegs.at(-1)) > t * 2) inSegs[inSegs.length - 1] = trimEnd(inSegs.at(-1), t);
+        }
+        inner += `<path d="${d(inSegs, st.closed)}"/>`;
+        segs.forEach((sg, j) => {
+          if (!sg.c) return;
+          handles += `M${P(sg.p[0], k)}L${P(sg.p[1], k)}M${P(sg.p[3], k)}L${P(sg.p[2], k)}`;
+          [sg.p[1], sg.p[2]].forEach((hq, h) => {
+            const p = px(hq, k);
+            offs += `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="2.4"/>`;
+            tags.push({ key: `${k}.${si}.h${j}.${h}`, x: p[0], y: p[1], q: hq, pri: 1 });
+          });
+        });
+        const nodes = [segs[0].p[0], ...segs.map((sg) => sg.p.at(-1))];
+        const count = st.closed ? nodes.length - 1 : nodes.length;
+        for (let i = 0; i < count; i++) {
+          const before = i > 0 ? segs[i - 1] : st.closed ? segs.at(-1) : null;
+          const after = i < segs.length ? segs[i] : st.closed ? segs[0] : null;
+          const smooth = before && after && dot(endTan(before), startTan(after)) > Math.cos((3 * Math.PI) / 180);
+          const p = px(nodes[i], k);
+          ons += smooth
+            ? `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3"/>`
+            : `<rect x="${(p[0] - 2.8).toFixed(1)}" y="${(p[1] - 2.8).toFixed(1)}" width="5.6" height="5.6"/>`;
+          tags.push({ key: `${k}.${si}.n${i}`, x: p[0], y: p[1], q: nodes[i], pri: 0 });
+        }
+      });
+    });
+
+    const attrs = 'fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4"';
+    canvas.innerHTML =
+      `<rect width="1000" height="1000" fill="var(--ground)"/>` +
+      `<g ${attrs} stroke="var(--blue)" stroke-width="${W.toFixed(2)}">${body}</g>` +
+      `<g ${attrs} stroke="var(--body)" stroke-width="${Math.max(0, W - 2 * e).toFixed(2)}">${inner}</g>` +
+      `<path d="${centre}" fill="none" stroke="var(--blue)" stroke-width="0.9"/>` +
+      `<path d="${handles}" fill="none" stroke="var(--blue)" stroke-width="0.9"/>` +
+      `<g fill="var(--blue)">${offs}</g>` +
+      `<g fill="var(--point)" stroke="var(--blue)" stroke-width="0.9">${ons}</g>` +
+      labels(tags) +
+      readouts();
+  }
+
+  /**
+   * Coordinates in Noto's units (x across, y up from the baseline) as tags beside their
+   * points, on both kanji at once. A tag keeps its side from the last frame while it
+   * stays clear; then points before handles; a tag that would cover another is left out.
+   */
+  function labels(tags) {
+    const CH = 5.6, TH = 12.5, placed = [], next = new Map();
+    const clear = (sx, sy, tw) => sx > 4 && sy > 4 && sx + tw < 775 && sy + TH < 996 &&
+      !placed.some(([x, y, w]) => sx < x + w + 1.5 && sx + tw + 1.5 > x && sy < y + TH + 1.5 && sy + TH + 1.5 > y);
+    tags.sort((a, b) => (shown.has(b.key) - shown.has(a.key)) || a.pri - b.pri);
+    let out = '';
+    for (const t of tags) {
+      const text = `${Math.round(t.q[0])}.${Math.round(880 - t.q[1])}`;
+      const tw = text.length * CH + 5;
+      const sides = [[5, -TH - 3], [5, 3], [-tw - 5, -TH - 3], [-tw - 5, 3]];
+      const prev = shown.get(t.key);
+      const order = prev != null ? [prev, 0, 1, 2, 3].filter((v, i, a) => a.indexOf(v) === i) : [0, 1, 2, 3];
+      const side = order.find((i) => clear(t.x + sides[i][0], t.y + sides[i][1], tw));
+      if (side == null) continue;
+      const sx = t.x + sides[side][0], sy = t.y + sides[side][1];
+      placed.push([sx, sy, tw]);
+      next.set(t.key, side);
+      out += `<g transform="translate(${sx.toFixed(1)} ${sy.toFixed(1)})"><rect width="${tw.toFixed(1)}" height="${TH}" fill="var(--tag)"/><text x="2.5" y="9.3" fill="var(--tag-ink)" font-family="${MONO}" font-size="9.3">${text}</text></g>`;
+    }
+    shown = next;
+    return out;
+  }
+
+  /** The axes as readouts: name and value over a hairline track with a square marker. No plate. */
+  function readouts() {
+    const x0 = 795, x1 = 960, gap = 92;
+    const y0 = 500 - ((AXES.length - 1) * gap) / 2;
+    return AXES.map((a, i) => {
+      const y = y0 + i * gap;
+      const f = (state[a.key] - a.min) / (a.max - a.min);
+      const mx = x0 + f * (x1 - x0);
+      return `<text x="${x0}" y="${y - 16}" fill="var(--ink)" font-family="${SANS}" font-size="15">${a.label}</text>` +
+        `<text x="${x1}" y="${y - 16}" fill="var(--ink)" font-family="${MONO}" font-size="13" text-anchor="end">${a.show(state[a.key])}</text>` +
+        `<line x1="${x0}" x2="${x1}" y1="${y}" y2="${y}" stroke="var(--ink)" stroke-width="1"/>` +
+        `<rect x="${(mx - 5).toFixed(1)}" y="${y - 5}" width="10" height="10" fill="var(--ink)"/>`;
+    }).join('');
+  }
+
+  // ———————————————————————————— motion: each axis swings on its own period
+  const wave = (t, period, phase) => 0.5 - 0.5 * Math.cos((2 * Math.PI * t) / period + phase);
+  function at(t) {
+    state.weight = 8 + 102 * wave(t, 6.4, 0.9);
+    const u = wave(t, 10.2, 2.4);
+    state.width = 75 + 125 * u;
+    state.corners = 130 * wave(t, 8.2, 1.3);
+    // Slant gives way as the letters widen, so the widest never runs into the readouts.
+    state.slant = 26 * wave(t, 12.6, 0) * Math.min(1, (1 - u) * 1.6);
+  }
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  let raf = 0;
+  const t0 = performance.now();
+  function frame(now) { at((now - t0) / 1000); render(); raf = requestAnimationFrame(frame); }
+  function start() {
+    cancelAnimationFrame(raf);
+    if (still.matches) { at(3.2); render(); } else raf = requestAnimationFrame(frame);
+  }
+  still.addEventListener('change', start);
+  start();
+</script>
