@@ -1,6 +1,13 @@
 # Handoff
 
-## Current state (2026-11-08)
+## Current state (2026-11-11)
+- **Customization study (2026-11-10, merged 2026-11-11; a study, nothing built).** Research, measurements, scripts and
+  the proof-of-concept paint: `docs/research/customization-2026-11-10/`. Implementing session: start at its README's
+  "For the session that implements this" (the 48 current recommendations, build order, how material must be drawn,
+  what is not verified). Review page https://claude.ai/artifact/KYm9eaQ6TaDyKvAA8LpwiL; picks in `verdicts` were empty
+  at merge, so confirm the recommendations with the owner first. Headlines: settings offer far finer steps than show (2
+  to 5 clear levels on most scales); material becomes five registry levers (Curve, Edge light, Well depth, Glass, Glow)
+  with a fixed component by effect table; setup and chat share one `ask_design` question tool.
 - **Direct editing, worktree `design-direct-editing-b4f631` (PR, 2026-11-08; main through #216 merged in).** Owner: "fully editable vector
   figma code canvas (everything except an infinite canvas, each design is isolated to its own container only)". Research
   and ranked options: `docs/research/design-editing-2026-11-08/README.md` (three cited reading notes beside it); review page
