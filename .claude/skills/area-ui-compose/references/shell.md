@@ -63,8 +63,9 @@ from the window, the 8 gutter doubling as the resize handle (`consumer-feeds.md`
 | Header rules | none at rest; a 16 fade, then a 1px rule once scrolled | — | — |
 | Small windows | — | off under 768 | — |
 
-**In Area** (not yet a component; compose it): the window ground is the chrome's recessed ground (`data-area-chrome`,
-`bg-subtle`), the layer is a `Surface` (raised: `bg-surface`, its edge and resting shadow from the Elevation settings),
+**In Area** (not yet a component; compose it): the window ground is the chrome's recessed ground (a docked `Panel` with
+`data-area-chrome` and `data-area-ground="recessed"`, its fill named `--area-chrome-fill: var(--area-bg-subtle)`; Layer
+contrast, 50 in light by default since 2026-11-11, sets how far it sits from the page), the layer is a `Surface` (raised: `bg-surface`, its edge and resting shadow from the Elevation settings),
 held off the window by one small step on the free sides and the Titlebar above it. Its corner follows Surface's corner
 chain, so a control set into its corner stays concentric. In dark the Layers settings decide which ground is deeper;
 never hard-code ChatGPT's inversion. When a product adopts it, record the inset and corner as owner decisions and the

@@ -94,7 +94,8 @@ function createWindow() {
   keepPlace(window);
   window.once("ready-to-show", () => { if (!capture) window.show(); });
   // Links that leave the app open in the browser, never inside the window.
-  window.webContents.setWindowOpenHandler(({ url }) => { if (!require("./links.cjs").routeOpen(url, window)) require("electron").shell.openExternal(url); return { action: "deny" }; });
+  // Only web and mail links leave the app: a link written by the agent or pasted into a note never starts another kind of program.
+  window.webContents.setWindowOpenHandler(({ url }) => { if (!require("./links.cjs").routeOpen(url, window) && /^(https?|mailto):/i.test(url)) require("electron").shell.openExternal(url); return { action: "deny" }; });
   window.webContents.on("will-navigate", (event, url) => { if (!url.startsWith("file:")) event.preventDefault(); });
 
   // Page errors reach the terminal, so a blank window says why.

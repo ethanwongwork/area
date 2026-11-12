@@ -15,7 +15,7 @@
  * on the first edit, as a theme's settings do.
  */
 import type { ReactNode } from "react";
-import { Button, Checkbox, Field, Input, PanelSection, Radio, RadioGroup, Select, Stack, Switch, SystemDefaults, Tabs, type SystemDefaultsValue } from "@area/react";
+import { Button, Checkbox, Field, Input, PanelSection, Radio, RadioGroup, Select, Stack, Switch, SystemDefaults, Tabs, Tooltip, type SystemDefaultsValue } from "@area/react";
 import { ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
 // @ts-expect-error — the gallery's page content is authored in JavaScript.
@@ -92,8 +92,8 @@ export function InventorySection({ slug }: { slug: string }) {
   const axes = resolved.axes.filter(axis => !axis.structure && axis.values.length);
   return (
     <PanelSection heading={`In ${system.name}`} revealActions={!changed} actions={changed && editable ? (
-      <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<ResetIcon />} aria-label={`Reset ${name} to Area's`} title={`Reset ${name} to Area's`}
-        onClick={() => update(current => resetFamily(current, slug))} />
+      <Tooltip side="bottom" describes={false} trigger={<Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<ResetIcon />} aria-label={`Reset ${name} to Area's`}
+        onClick={() => update(current => resetFamily(current, slug))} />}>{`Reset ${name} to Area's`}</Tooltip>
     ) : undefined}>
       <Field label="Included" description={resolved.included ? undefined : `Left out: ${system.name}'s products and code don't have ${name}.`} orientation="horizontal">
         <Switch size="sm" aria-label={`Include ${name} in ${system.name}`} checked={resolved.included} disabled={!editable || !manifest}

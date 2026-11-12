@@ -1,6 +1,5 @@
 /* Imagery (src/pages/imagery.tsx): images in folders, on Area's Asset grid. */
 .studio-imagery { display: grid; align-content: start; min-block-size: 100%; }
 .studio-imagery__loading { display: grid; place-items: center; min-block-size: 50vh; }
-.studio-imagery__count { font-variant-numeric: tabular-nums; }
 .studio-imagery__preview { inline-size: 100%; block-size: 100%; object-fit: contain; }
 .studio-imagery__row-thumb { display: block; inline-size: 32px; block-size: 32px; object-fit: cover; border-radius: var(--area-radius-small); }

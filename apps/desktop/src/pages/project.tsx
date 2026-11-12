@@ -15,14 +15,14 @@
  *   VersionsPage      #project/<id>/versions/<id>: saved versions, each restored from the Inspector
  */
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
-import { AssetGrid, AssetGridItem, Button, ConfirmDialog, ContextMenu, Dialog, EmptyState, Field, Input, Menu, MenuItem, MenuSeparator, MenuSub, Nav, NavItem, PanelSection, Radio, RadioGroup, Segmented, Table, TableCell, TableHeaderCell, TableLink, Textarea } from "@area/react";
+import { AssetGrid, AssetGridItem, Button, ConfirmDialog, ContextMenu, Dialog, EmptyState, Field, Input, Menu, MenuItem, MenuSeparator, MenuSub, Nav, NavItem, PanelSection, Radio, RadioGroup, Segmented, Table, TableCell, TableHeaderCell, TableLink, Textarea, Toolbar, ToolbarSeparator } from "@area/react";
 import { AddIcon, AppWindowIcon, ArrowLeftIcon, ChevronDownIcon, CopyIcon, ImageIcon, LightbulbIcon, MoreHorizontalIcon, PencilIcon, PlayIcon, RotateCcwIcon } from "@area/icons";
 import { canvasAttributes, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, CARD_SCOPE, Tile, TileGrid, type OpenHow, FEED_TABLE, WhenVisible } from "../tile.tsx";
 import { ViewControls, ViewLead } from "../view-controls.tsx";
 import { useDesignViewer, type DesignViewerOptions } from "../design-viewer.tsx";
 import { AddLayer, DesignPanel, screenFile } from "../design-panel.tsx";
-import { StageSelection } from "../design-select.tsx";
+import { StageSelection, ToolButton } from "../design-select.tsx";
 import { ChangeLog, ElementPanel } from "../design-inspector.tsx";
 import { applyChange, elementAt, nodeFor, patchFor, pathOf, screensIn } from "../design-edit.ts";
 import { useDesignEditor } from "../design-editor.tsx";
@@ -224,7 +224,7 @@ export function ProjectOverview() {
                 it, ⌘-click in a tab of its own. They were text cards (a name and its layers' names) until then. */}
             <TileGrid span="wide" cards min={CARD_MIN}>
               {project.pages.map(page => (
-                <Tile key={page.id} span="wide" stage="screen" inert openOnClick label={page.name} value={isFlow(page) ? `Flow · ${plural(readFlow(page).steps.length, "step")}` : page.layers.length ? plural(page.layers.length, "layer") : "Empty"}
+                <Tile key={page.id} span="wide" stage="screen" inert openOnClick label={page.name} value={isFlow(page) ? `Flow, ${plural(readFlow(page).steps.length, "step")}` : page.layers.length ? plural(page.layers.length, "layer") : "Empty"}
                   onOpen={how => navigate({ page: "project-page", item: page.id }, { newTab: how.newTab })}>
                   {page.layers[0] ? <LayerView layer={page.layers[0]} library={library} /> : null}
                 </Tile>
@@ -608,18 +608,20 @@ function PlayBar({ flow, page, layer, trail, hints, onBack, onRestart, onJump, o
   const main = step?.role === "state" ? flow.byId.get(step.of!) : step;
   const index = main ? flow.steps.findIndex(entry => entry.layer.id === main.layer.id) : -1;
   return (
-    <div className="studio-play" role="toolbar" aria-label={`Playing ${page.name}`}>
-      <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<ArrowLeftIcon />} aria-label="Back" disabled={trail.length < 2} onClick={onBack} />
-      <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<RotateCcwIcon />} aria-label="Restart (R)" onClick={onRestart} />
-      <span className="studio-play__rule" aria-hidden="true" />
-      <Menu aria-label="Steps" align="start" trigger={<Button size="sm" variant="ghost" tone="neutral" trailingIcon={<ChevronDownIcon />}>
+    <div className="studio-play">
+    <Toolbar variant="surface" size="sm" aria-label={`Playing ${page.name}`}>
+      <ToolButton label="Back" icon={<ArrowLeftIcon />} disabled={trail.length < 2} onClick={onBack} />
+      <ToolButton label="Restart" keys={["R"]} icon={<RotateCcwIcon />} onClick={onRestart} />
+      <ToolbarSeparator />
+      <Menu aria-label="Steps" align="start" side="top" trigger={<Button size="sm" variant="ghost" tone="neutral" trailingIcon={<ChevronDownIcon />} data-area-toolbar-item="" tabIndex={-1}>
         {index >= 0 && step?.role !== "branch" ? <span className="studio-muted">{`${index + 1} of ${flow.steps.length}`}&nbsp;</span> : null}{step?.role === "state" ? stepName(flow, layer) : step?.role === "branch" ? `${step.number} ${layer.name}` : layer.name}
       </Button>}>
         {flow.ordered.map(entry => <MenuItem key={entry.layer.id} onClick={() => onJump(entry.layer.id)}>{stepName(flow, entry.layer)}</MenuItem>)}
       </Menu>
-      <span className="studio-play__rule" aria-hidden="true" />
-      <Button size="sm" variant="ghost" tone="neutral" icon={<LightbulbIcon />} selected={hints} onClick={onHints}>Hints</Button>
-      <Button size="sm" variant="soft" tone="neutral" onClick={onDone}>Done</Button>
+      <ToolbarSeparator />
+      <Button size="sm" variant="ghost" tone="neutral" icon={<LightbulbIcon />} selected={hints} onClick={onHints} data-area-toolbar-item="" tabIndex={-1}>Hints</Button>
+      <Button size="sm" variant="soft" tone="neutral" onClick={onDone} data-area-toolbar-item="" tabIndex={-1}>Done</Button>
+    </Toolbar>
     </div>
   );
 }

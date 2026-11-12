@@ -8,7 +8,7 @@
 .studio-tokens__refs { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-4); }
 /* A reference that opens the token it names: Code inside a bare button, its plate the Code's own. */
 .studio-tokens__ref { all: unset; cursor: pointer; border-radius: var(--area-radius-4); }
-.studio-tokens__ref:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color, var(--area-accent-indicator)); outline-offset: 2px; }
+.studio-tokens__ref:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color, var(--area-accent-indicator)); outline-offset: var(--area-focus-gap); }
 
 /* Every mark that draws a value (a ramp's bar, an easing's curve, a crossing dot; the feed's charts, styles/examples.css)
    takes the ink Area's own data components fill with: Meter's and Progress's fill, the Selection role (2026-11-01; they

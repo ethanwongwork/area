@@ -31,6 +31,16 @@
     text-decoration-skip-ink: auto;
     border-radius: var(--area-radius-min);
     cursor: pointer;
+    /* As a button (Link `as="button"`, a place with no address) it is the same text: none of the control's own box,
+       type or alignment. An anchor has none of these, so the rules change nothing there. */
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: inherit;
     /* Motion (docs/MOTION.md, "Hover plate"): the underline lands at once and fades on fast. */
     transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
   }
@@ -43,6 +53,8 @@
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-gap);
   }
+  /* A disabled button form: the disabled ink, no underline and no pointer (an anchor is never disabled). */
+  .area-link:disabled { color: var(--area-fg-disabled); text-decoration-color: transparent; cursor: default; }
 
   /* Variant: inline links are always underlined; a standalone link is underlined on hover and
      focus only (Primer's default Link; Untitled UI's link buttons). */

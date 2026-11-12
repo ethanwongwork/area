@@ -21,7 +21,7 @@
  * open one too, scrolls the Canvas so the panel fills it (owner, 2026-11-06).
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode, type RefObject } from "react";
-import { AssetGrid, AssetGridItem, Avatar, Button, Code, CodeBlock, ConfirmDialog, Dialog, EmptyState, Input, Menu, MenuItem, TableLink, Tabs, Textarea } from "@area/react";
+import { AssetGrid, AssetGridItem, Avatar, Button, Code, CodeBlock, ColorSwatch, ConfirmDialog, Dialog, EmptyState, Input, Menu, MenuItem, TableLink, Tabs, Textarea } from "@area/react";
 import { AddIcon, ChevronDownIcon } from "@area/icons";
 import SOURCES from "virtual:component-sources";
 import { useStudio } from "./studio.tsx";
@@ -391,7 +391,11 @@ function useStageRead<T>(stage: RefObject<HTMLElement | null>, key: string, read
   return result?.key === key ? result.value : null;
 }
 
-const Swatch = ({ value }: { value: string }) => <span className="studio-design__swatch" style={{ background: value.split(" ")[0], opacity: value.includes("%") ? Number(value.split(" ")[1]!.replace("%", "")) / 100 : 1 }} aria-hidden="true" />;
+/** A measured color as Area's swatch: "#hex 50%" draws the hex at that opacity over the swatch's checkerboard. */
+const Swatch = ({ value }: { value: string }) => {
+  const [hex, alpha] = value.split(" ");
+  return <ColorSwatch size="sm" aria-hidden="true" color={alpha?.endsWith("%") ? `color-mix(in srgb, ${hex} ${alpha}, transparent)` : hex!} />;
+};
 
 function SpecsTab({ layer, stage }: DesignPanelProps) {
   const specs: DesignSpecs | null = useStageRead(stage, `specs:${layer?.id ?? ""}`, readSpecs);

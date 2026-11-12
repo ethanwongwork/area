@@ -54,6 +54,8 @@ const TOOLS: ReadonlyArray<{ tool: Tool; label: string; key: string; icon: React
   { tool: "ellipse", label: "Ellipse", key: "O", icon: <EllipseIcon /> },
   { tool: "text", label: "Text", key: "T", icon: <TextIcon /> },
 ];
+/** A focused control keeps its own keys (Space and Enter press it, arrows move within its group, Tab leaves it). */
+const CONTROL = "button, a[href], summary, [role=tab], [role=button], [role=menuitem], [role=option], [role=treeitem], [role=radio], [role=switch], [role=checkbox]";
 const TYPING = "input, textarea, select, [contenteditable], [role=combobox], [role=listbox], [role=menu], [role=slider]";
 
 export interface StageSelectionProps {
@@ -546,7 +548,8 @@ export function StageSelection({ stage, enabled, selected, onSelect, editor }: S
     host.addEventListener("pointerleave", leave);
     host.addEventListener("pointerdown", down, true);
     host.addEventListener("pointerup", up);
-    host.addEventListener("pointercancel", () => { gesture.current = null; });
+    const cancel = () => { gesture.current = null; };
+    host.addEventListener("pointercancel", cancel);
     for (const type of ["mousedown", "mouseup"]) host.addEventListener(type, swallow, true);
     host.addEventListener("click", click, true);
     host.addEventListener("dblclick", dblclick, true);
@@ -555,6 +558,7 @@ export function StageSelection({ stage, enabled, selected, onSelect, editor }: S
       host.removeEventListener("pointerleave", leave);
       host.removeEventListener("pointerdown", down, true);
       host.removeEventListener("pointerup", up);
+      host.removeEventListener("pointercancel", cancel);
       for (const type of ["mousedown", "mouseup"]) host.removeEventListener(type, swallow, true);
       host.removeEventListener("click", click, true);
       host.removeEventListener("dblclick", dblclick, true);
@@ -633,6 +637,8 @@ export function StageSelection({ stage, enabled, selected, onSelect, editor }: S
         if (path) { take(); select(null); }
         return;
       }
+      // The rest are the stage's keys: a control elsewhere on the Canvas (the design panel's tabs, the header's buttons) keeps its own.
+      if (target && !stage.current?.contains(target) && target.closest?.(CONTROL)) return;
       if (!mod && !event.altKey && ed?.doc) {
         const found = TOOLS.find(entry => entry.key.toLowerCase() === event.key.toLowerCase() && !event.shiftKey);
         if (found) { take(); setTool(found.tool); return; }
@@ -743,7 +749,7 @@ export function StageSelection({ stage, enabled, selected, onSelect, editor }: S
           el.toggleAttribute("data-small", b.width < SMALL_BOX || b.height < SMALL_BOX);
           const tag = el.querySelector<HTMLElement>(".studio-design__tag")!;
           const { target, label } = describe(entry.element, entry.root);
-          const name = label ? `${target} · ${label}` : target;
+          const name = label ? `${target}, ${label}` : target;
           if (tag.textContent !== name) tag.textContent = name;
           const size = el.querySelector<HTMLElement>(".studio-design__size")!;
           const w = Math.round(b.width / scale), h = Math.round(b.height / scale);
@@ -861,13 +867,14 @@ function InsertGroup({ first, label, children }: { first: boolean; label: string
 }
 
 /** A tool in the stage's bar: an icon button with its name and key in a tooltip, a toggle when it is a tool. */
-function ToolButton({ label, keys, icon, pressed, disabled, onClick }: { label: string; keys: string[]; icon: ReactNode; pressed?: boolean; disabled?: boolean; onClick: () => void }) {
+/** An icon button in a floating Toolbar: its name and keys in a Tooltip above the bar (the design's tools, Play's bar). */
+export function ToolButton({ label, keys, icon, pressed, disabled, onClick }: { label: string; keys?: string[]; icon: ReactNode; pressed?: boolean; disabled?: boolean; onClick: () => void }) {
   return (
     <Tooltip side="top" describes={false} trigger={
       <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={icon} aria-label={label} aria-pressed={pressed} disabled={disabled} onClick={onClick}
-        aria-keyshortcuts={keys.join("+").replace("⌘", "Meta").replace("⇧", "Shift")} data-area-toolbar-item="" tabIndex={-1} />
+        aria-keyshortcuts={keys?.join("+").replace("⌘", "Meta").replace("⇧", "Shift")} data-area-toolbar-item="" tabIndex={-1} />
     }>
-      {label} <Kbd keys={keys} size="sm" />
+      {label}{keys ? <> <Kbd keys={keys} size="sm" /></> : null}
     </Tooltip>
   );
 }

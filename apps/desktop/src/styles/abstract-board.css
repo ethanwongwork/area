@@ -11,8 +11,6 @@
    marked spec. Measured numbers live inline in each scene or as calc(Npx / var(--z)). */
 .sc { position: relative; overflow: hidden; flex: none; color: var(--area-fg-default); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
 .sc-row { display: flex; align-items: center; gap: var(--area-space-8); }
-.sc-col { display: grid; gap: var(--area-space-6); align-content: start; }
-.sc-col > * { min-inline-size: 0; max-inline-size: 100%; }
 .sc-center { justify-content: center; }
 .sc-between { justify-content: space-between; }
 .sc-grow { flex: 1 1 auto; min-inline-size: 0; }
@@ -42,9 +40,6 @@
 .sc-mark svg { inline-size: 20px; block-size: 20px; }
 .sc-sidebar { display: grid; align-content: start; gap: var(--area-space-16); block-size: 100%; padding: var(--area-space-12); border-inline-end: var(--area-border-width) solid var(--area-border-card); }
 /* 03 */
-.sc-card { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--area-space-8); border-radius: var(--area-radius-container); background: var(--area-bg-surface); box-shadow: var(--area-shadow-resting); }
-.sc-tight { padding: 6px; }
-.sc-well { border-radius: var(--area-radius-control-md); background: var(--area-bg-component); }
 .sc-align { display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr); place-items: center; block-size: 34px; } /* the well's 62 less the soft Surface's 14 inset each side */
 .sc-align i { inline-size: 2px; block-size: 2px; border-radius: 1px; background: var(--area-fg-muted); }
 .sc-align i[data-bar="h"] { inline-size: 8px; background: var(--area-accent-solid); }
@@ -58,10 +53,7 @@
 .sc-pad__t { top: -2px; left: 50%; translate: -50% 0; } .sc-pad__b { bottom: -2px; left: 50%; translate: -50% 0; }
 .sc-pad__l { left: -4px; top: 50%; translate: 0 -50%; } .sc-pad__r { right: -4px; top: 50%; translate: 0 -50%; }
 /* 04 */
-.sc-bezel { padding: 10px; border-radius: 28px; background: var(--area-bg-surface); box-shadow: var(--area-shadow-resting); }
-.sc-delivery { display: grid; grid-template-rows: 206px 1fr auto; block-size: 100%; overflow: hidden; border: var(--area-border-width) solid var(--area-border-card); border-radius: 18px; background: var(--area-bg-surface); }
 .sc-delivery__media { position: relative; display: grid; place-items: end center; background: var(--area-bg-subtle); }
-.sc-corner { position: absolute; top: 14px; right: 14px; }
 .sc-conveyor { inline-size: 100%; block-size: 100%; }
 .sc-conveyor path { fill: none; stroke: var(--area-fg-muted); stroke-width: 0.6; vector-effect: non-scaling-stroke; }
 .sc-conveyor__top, .sc-box__top, .sc-box__front, .sc-box__side { fill: var(--area-bg-surface) !important; }
@@ -111,7 +103,6 @@
 .sc-pink { --_solid: var(--area-pink-solid); }
 
 /* 11 Corner radius */
-.sc-corners { padding: calc(17px / var(--z)); gap: calc(18px / var(--z)); }
 .sc-iconbox { display: grid; place-items: center; inline-size: calc(52px / var(--z)); block-size: calc(52px / var(--z)); margin-inline-start: calc(-1px / var(--z)); margin-inline-end: calc(6px / var(--z)); border-radius: var(--area-radius-small); background: color-mix(in oklab, var(--area-accent-solid) 18%, transparent); color: var(--area-fg-accent); }
 .sc-iconbox svg { inline-size: 16px; block-size: 16px; }
 .sc-cornerwell { position: relative; block-size: calc(374px / var(--z)); }

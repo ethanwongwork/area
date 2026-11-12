@@ -753,6 +753,7 @@ function gallerySpecimenTable() {
       { id: "ink-brown", title: "Ink / brown", demo: "GalleryLinkBrown" },
       { id: "content-caption", title: "Content / caption", demo: "GalleryLinkCaption" },
       { id: "content-external", title: "Content / external", demo: "GalleryLinkExternal" },
+      { id: "content-button", title: "Content / as a button", demo: "GalleryLinkButton" },
       { id: "content-wrap", title: "Content / wrapping", demo: "GalleryLinkWrapped" },
     ],
     pagination: [

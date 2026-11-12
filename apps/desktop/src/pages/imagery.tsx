@@ -63,12 +63,16 @@ const SIZES = { small: 144, medium: 192, large: 288 } as const; /* pick */
 type Size = keyof typeof SIZES;
 
 /** The Library's file (library.json), read once; Home shows its groups as boards. */
+/** The one read every page shares: Home, a project page and References each ask, and the file is several hundred rows. */
+let reading: Promise<Library> | undefined;
 export function useLibrary() {
   const [state, setState] = useState<{ library?: Library; error?: string }>({});
   useEffect(() => {
     let live = true;
-    fetch(url("library.json"))
+    (reading ??= fetch(url("library.json"))
       .then(response => { if (!response.ok) throw new Error(String(response.status)); return response.json() as Promise<Library>; })
+      // A failed read is tried again by the next page that asks.
+      .catch(error => { reading = undefined; throw error; }))
       .then(library => { if (live) setState({ library }); })
       .catch(error => { if (live) setState({ error: String(error) }); });
     return () => { live = false; };
@@ -180,7 +184,7 @@ export function ImageryPage() {
   // What others share arrives with sharing; until then each view says what it will hold.
   if (view === "discover") body = <EmptyState title="Nothing shared yet" description="Collections, systems and designs that people share appear here, chosen by people rather than gathered by a crawler." />;
   else if (view === "following") body = <EmptyState title="Not following anyone yet" description="Collections and people you follow appear here as they add to them." />;
-  else if (error) body = <EmptyState title="No image library" description="The library is read from ~/Library/Application Support/Area/Brand/library.json, which is missing or unreadable." />;
+  else if (error) body = <EmptyState title="No saved references" description="Saved references are read from ~/Library/Application Support/Area/Brand/library.json, which is missing or unreadable." />;
   else if (!library) body = <div className="studio-imagery__loading"><Spinner size="md" label="Loading the image library" /></div>;
   else if (opened) body = viewer.stage;
   else if (folder || searching) body = shown.length ? (

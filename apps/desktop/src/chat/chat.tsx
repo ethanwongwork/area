@@ -514,7 +514,7 @@ export function ChatTranscript({ scroller }: { scroller: RefObject<HTMLElement |
           description={session.mode !== "live" ? "Replies here are recorded runs: Claude answers in the Area app."
             : folder ? `Claude works in ${folderName(folder)}, this project's folder, and asks before each change.`
             : place.kind === "project" ? "This project has no folder yet, so Claude works in Area's own code. Choose a folder on the project's Overview."
-            : "Claude works in this repository and asks before each change."} />
+            : "Claude works in Area’s code and asks before each change."} />
         {/* In a project's folder the starters are about that project; elsewhere they are the recorded runs' prompts. */}
         <PromptSuggestions layout="chips" label="Suggested prompts"
           items={folder && session.mode === "live" ? FOLDER_STARTERS.map((label, index) => ({ id: `starter-${index}`, label }))
@@ -878,7 +878,7 @@ function ApprovalAsk() {
   const command = typeof asked.input.command === "string" ? asked.input.command : undefined;
   const title = editing && path ? `Change ${plainName(path)}?` : asked.tool_name === "Bash" ? "Run a check?" : asked.title;
   const description = editing && path ? `${path.split("/").at(-1)}${asked.description && !asked.description.endsWith(path.split("/").at(-1) ?? "") ? `. ${asked.description}` : ""}`
-    : asked.tool_name === "Bash" ? (typeof asked.input.description === "string" ? asked.input.description : "A command in this repository") : asked.description;
+    : asked.tool_name === "Bash" ? (typeof asked.input.description === "string" ? asked.input.description : "A command in Area’s code") : asked.description;
   const code = editing ? <Diff aria-label={`Changes to ${path?.split("/").at(-1) ?? "the file"}`}
     hunks={editOf({ kind: "tool", id: asked.tool_use_id, name: asked.tool_name, input: asked.input, status: "running" }).hunks} />
     : command ? <CodeBlock size="sm" lineNumbers={false} code={command} wrap /> : null;

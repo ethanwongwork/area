@@ -96,7 +96,8 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-09 on the review page, round 2 (components2).
   'pagination', 'scroll-area', // tag-picker: reopened 2026-10-16 (round 30); custom-select: reopened 2026-10-23 (layout grid and the option preview).
   // Approved 2026-10-09 on the review page, round 3 (components3), after the round-2 feedback.
-  'link', // kbd: reopened in round 51
+  // link: reopened 2026-11-11, a button form (as="button") and a disabled state (docs/specs/link.md); in review.
+  // kbd: reopened in round 51
   // Approved 2026-10-10 on the review page, round 5 (components5).
   // description-list: reopened 2026-10-12 for show more (visibleCount).
 
@@ -168,7 +169,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Round 68 (2026-10-22): the text-pair rule (a line joins its title) reopens Dialog, Confirm dialog, Drawer, Popover,
 // Alert, Toast, Empty state, Checkbox and Radio; Token row's text moves onto the ramp.
 // Round 69 (2026-10-22): Selection defaults to the accent (option B), so every family whose default paints Selection reopens.
-export const REVIEW_COMPONENTS = new Set(['chart', 'mention', 'splitter', 'toolbar', 'page-header', 'selection-bar', 'setting-row', 'filter-bar', 'attachment', 'queue', 'design-card', 'asset-card', 'table', 'nav', 'tree-view', 'card', 'slider', 'segmented', 'switch', 'field', 'approval', 'plan', 'description-list', 'composer-menu', 'message', 'badge', 'count', 'panel', 'titlebar', 'radio', 'checkbox', 'alert', 'toast', 'indicator', 'dialog', 'menu', 'button', 'list-box', 'combobox', 'command-palette', 'tabs', 'edit-summary', 'file-tile', 'tag-picker', 'time-field', 'otp-field', 'date-picker', 'date-range-picker', 'spinner', 'skeleton', 'split-button', 'context-menu']); // table: reopened 2026-10-31, cells on the prose line and a block inset that matches the frame's (owner: "why do the tables have so much more horizontal spacing"); nav, tree-view: in a panel their plates sit 8 from its edge, the rows' padding 6 (owner pick q-plates, 2026-10-31; their notes said in review, but they were missing here) // radio, checkbox: reopened 2026-10-30, a one-line card or soft row takes the height ladder's corner, not the surface's (owner: "are these option rows supposed to be pill shaped?") // card: reopened 2026-10-30, one space for every slot (owner: "the padding is always wrong") // panel, titlebar: reopened 2026-10-30, the window bar / size sm (the three-panel shell's 40 headers); 2026-10-31, the md inset follows density (14, 18 at Comfortable; docs/research/region-balance-2026-10-31) // badge: reopened 2026-10-30, the icon gap floor; 2026-11-01 the plain variant (docs/specs/badge.md) // message: reopened 2026-10-30, prose lines and text flow (docs/research/vertical-rhythm-2026-10-30) // plan, description-list, composer-menu: reopened 2026-10-28, the chat set review (the card column at 13; the empty row in the rows' type) // approval: reopened 2026-10-28, the question card (Setup's chat panel) // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots // count: reopened 2026-11-07, a pill again with Badge and the marks' text side, one digit a circle (marks on one line, docs/research/count-badge-2026-11-07)
+export const REVIEW_COMPONENTS = new Set(['chart', 'mention', 'splitter', 'toolbar', 'page-header', 'selection-bar', 'setting-row', 'filter-bar', 'attachment', 'queue', 'design-card', 'asset-card', 'table', 'nav', 'tree-view', 'card', 'slider', 'segmented', 'switch', 'field', 'approval', 'plan', 'description-list', 'composer-menu', 'message', 'badge', 'count', 'panel', 'titlebar', 'radio', 'checkbox', 'alert', 'toast', 'indicator', 'dialog', 'menu', 'button', 'list-box', 'combobox', 'command-palette', 'tabs', 'edit-summary', 'file-tile', 'tag-picker', 'time-field', 'otp-field', 'date-picker', 'date-range-picker', 'spinner', 'skeleton', 'split-button', 'context-menu', 'link', 'code-block', 'composer', 'custom-select', 'meter']); // code-block, composer, custom-select, meter: their notes above said reopened and in review, but they sat in neither set and showed Unrefined (audit, 2026-11-10) // table: reopened 2026-10-31, cells on the prose line and a block inset that matches the frame's (owner: "why do the tables have so much more horizontal spacing"); nav, tree-view: in a panel their plates sit 8 from its edge, the rows' padding 6 (owner pick q-plates, 2026-10-31; their notes said in review, but they were missing here) // radio, checkbox: reopened 2026-10-30, a one-line card or soft row takes the height ladder's corner, not the surface's (owner: "are these option rows supposed to be pill shaped?") // card: reopened 2026-10-30, one space for every slot (owner: "the padding is always wrong") // panel, titlebar: reopened 2026-10-30, the window bar / size sm (the three-panel shell's 40 headers); 2026-10-31, the md inset follows density (14, 18 at Comfortable; docs/research/region-balance-2026-10-31) // badge: reopened 2026-10-30, the icon gap floor; 2026-11-01 the plain variant (docs/specs/badge.md) // message: reopened 2026-10-30, prose lines and text flow (docs/research/vertical-rhythm-2026-10-30) // plan, description-list, composer-menu: reopened 2026-10-28, the chat set review (the card column at 13; the empty row in the rows' type) // approval: reopened 2026-10-28, the question card (Setup's chat panel) // slider: reopened 2026-10-24 (field variant); 2026-10-26 motion, label inside, step dots // count: reopened 2026-11-07, a pill again with Badge and the marks' text side, one digit a circle (marks on one line, docs/research/count-badge-2026-11-07)
 /**
  * Deprecated: a family kept in the packages for one release so existing markup keeps working, out of the gallery, search
  * and review batches, each with the family to use instead; a link to its page opens that family (owner, 2026-11-07,
@@ -179,7 +180,6 @@ export const DEPRECATED_COMPONENTS = new Map([
   ['token', 'code'], // a compatibility name for Code with a token swatch (manifest `token`); never had a page
 ]);
 export const componentStatus = slug => DEPRECATED_COMPONENTS.has(slug) ? 'deprecated' : COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
-export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined', deprecated: 'Deprecated' })[status];
 
 /**
  * Approval batches (owner, 2026-09-27): "reorganize the components in phases that I can approve
@@ -261,7 +261,6 @@ export const APPROVAL_BATCHES = [
   // New 2026-11-07, the components audit's pick N7.
   { name: 'Charts', families: ['chart'] },
 ];
-export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.families.includes(slug));
 
 /*
  * The Review page (review.html, owner 2026-10-04: "each new component as a dedicated preview to

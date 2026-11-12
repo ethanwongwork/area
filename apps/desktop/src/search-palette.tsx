@@ -101,7 +101,7 @@ export type SearchFor = "here" | "new" | null;
 
 export function SearchEverything({ open, onOpenChange }: { open: SearchFor; onOpenChange: (open: SearchFor) => void }) {
   const studio = useStudio();
-  const { navigate, systems, projects, openSystem } = studio;
+  const { navigate, systems, projects, openSystem, addTheme } = studio;
   const chat = useChat();
   const [query, setQuery] = useState("");
   const show = (start = "") => { setQuery(start); onOpenChange("here"); };
@@ -112,8 +112,9 @@ export function SearchEverything({ open, onOpenChange }: { open: SearchFor; onOp
     ...ENTRIES, ...(query.trim().length >= 2 ? ICONS : []),
   ].map((entry, at) => ({
     id: `${at}:${hrefOf(entry.place)}`, label: entry.label, description: entry.description === OPEN_SYSTEM ? openSystem.name : entry.description, group: entry.group, keywords: entry.keywords,
-    onSelect: () => navigate(entry.place, { newTab: open === "new" }),
-  })), [navigate, open, query.trim().length >= 2, systems, projects, openSystem.name]);
+    // New theme adds the theme first, as Themes' own button does: Setup then never runs over the theme in use.
+    onSelect: () => { if (entry.place.page === "theme-setup") addTheme(); navigate(entry.place, { newTab: open === "new" }); },
+  })), [navigate, addTheme, open, query.trim().length >= 2, systems, projects, openSystem.name]);
   // Commands (U1, docs/research/desktop-app-analysis-2026-11-10): what the app already does from a menu, a button or a
   // key, run from here, each with its keys so the palette teaches them. Not offered from New tab, which opens a place.
   const commands = useMemo<CommandItem[]>(() => open === "new" ? [] : commandsFor(studio, chat), [open, studio, chat]);

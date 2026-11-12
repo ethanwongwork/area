@@ -1,6 +1,40 @@
 # Handoff
 
 ## Current state (2026-11-11)
+- **Four products rebuilt from Area, worktree `electron-app-audit-cleanup-35275b` (2026-11-10, PR).** Owner asked for four
+  real products' main windows at real scale as a stress test. Built as Patterns: Chat assistant, Document workspace, Code
+  editor, Assistant with a document panel (`content/examples/product-*.tsx`, `styles/product-*.css`, layout CSS only, no
+  product names). Findings and the ranked gap list: `docs/research/product-recreations-2026-11-10/README.md` (flat
+  hierarchy: weight tops at 500, no size between 26 and 52; no region depth at Layer contrast 0; no reading face; no shell,
+  thread or account-row parts; rows stop at 24; no scroll edge). Seen at 100% in a hidden Electron window, light and dark;
+  not compared side by side with the products. Then (owner: "Hierarchy and depth", 2026-11-11) two additive type roles,
+  `weight-heading` 600 and `title-xl` (32/40 at 13), with their rules in DESIGN_SYSTEM.md; the screens' sidebars on the
+  recessed chrome ground and Layer contrast 50 on each screen's root (Area's default stays 0). Token tests 40,131, React
+  780, desktop 83 pass. Then (owner: "Yes, 50 in light") light Layer contrast's default is 50 and
+  dark stays 0 (`color/layers.ts` DEFAULT_LAYERS_LIGHT / _DARK; THEMING.md); the four screens follow the default. Two contrast
+  tests failed on the new darkest light ground (#f1f3f5, Cool's control hover) and were fixed at the source: series marks
+  are solved for it (pink and purple step one deeper in light) and the charts' danger red is #ff4849 (was #ff4a4b). Saved
+  systems keep their own stored value. Open: 600 for reply headings everywhere, a heading role in Message,
+  a chrome prop on Panel, dark region separation on a near-black page.
+- **App audit and cleanup, worktree `electron-app-audit-cleanup-35275b` (2026-11-10, PR).** Owner asked for an audit of
+  the system, customization, the project flow, Chat and the IA, and for bloat removed. Five read-only audits ran; their
+  findings and the open decisions are in the session's report (not yet a review page). Done here, the objective part:
+  removed `layer-map.tsx`, `page-colour.ts`, 79 lines of unused app CSS and 14 dead exports; code-block, composer,
+  custom-select and meter now show In review (they sat in neither status set); restore of a version or iteration drops
+  the logged changes it undid and the editor's stale undo steps; a removed layer or page takes its comments; the stage's
+  and the viewer's keys leave a focused control alone (Space, Enter, arrows, Tab on the design panel's tabs and header
+  buttons); ⌘K New theme adds the theme first; Recent names Labs › Chat; links leave the app only as http, https or
+  mailto; the reference library is read once, not per page; middle dots and "repository" out of the flow, design and
+  Chat copy. Checks: typecheck, desktop tests 83 (1 new), app-css, docs, playgrounds; seen in the browser preview light
+  and dark; Electron relaunched from this worktree, not driven. Then (owner: "Newest UI onto Area") the flow dock and Play
+  bar became Area's Toolbar on its surface (ToolButton shared from design-select), the flow node takes the Selected
+  stroke and focus ring settings (still a ring and an outline, so ports and lines hold), and the flow map's type and room
+  use the ramps; seen in the preview light and dark. Then (owner: "Yes, add it") Link took a button form,
+  `as="button"` (docs/specs/link.md, 2026-11-10; React 780 tests), used by the Components overview's family title and
+  Show all, the flow checks and Setup's notes; Link is still marked Complete (owner to say whether it reopens). Not done (need the owner or a visual pass): the flow
+  node on Card, the change-log row, the token reference chip and Setup's answer row (not link-shaped); flow links by node id; iterations storing each design once; chats closed
+  on reload; Chat's "not connected" state; output paths checked in main; apps/docs and docs/research slimming; labs;
+  one theme editor; workspace places in Home's tab.
 - **Desktop app: a project's own code, from chat to GitHub (2026-11-10 to 11, PR from branch
   `claude/desktop-app-analysis-0523e3`).** The desktop app analysis's whole build order
   (`docs/research/desktop-app-analysis-2026-11-10/README.md`, "Built", step by step; review page

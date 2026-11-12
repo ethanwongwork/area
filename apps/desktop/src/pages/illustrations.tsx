@@ -102,7 +102,7 @@ const STYLES: ReadonlyArray<{ id: string; name: string; about: string; fidelity?
   { id: "wireframe", name: "Grey wireframe", about: "Area's fills in grey under hairlines, words as bars.", axes: { fill: "tonal", text: "bar", pic: "tone" } },
   { id: "mono", name: "Mono render", about: "Area's fills and shadows in grey, no lines.", axes: { stroke: "none", fill: "tonal", shadow: "real", text: "bar", pic: "tone" } },
   { id: "sticker", name: "Sticker", about: "A bold strong line, paper fills, a hard offset shadow, no icons.", axes: { stroke: "bold", ink: "strong", fill: "paper", shadow: "hard", text: "outline", detail: "reduced", pic: "hatch" } },
-  { id: "color", name: "Color", about: "Area's own colours and shadows, words as bars.", axes: { fill: "color", shadow: "real", text: "bar", pic: "tone", accent: "primary" } },
+  { id: "color", name: "Color", about: "Area's own colors and shadows, words as bars.", axes: { fill: "color", shadow: "real", text: "bar", pic: "tone", accent: "primary" } },
   { id: "outline-blocks", name: "Outline blocks", about: "Only the containers, as hairlines.", axes: { text: "none", detail: "blocks" } },
   { id: "blocks", name: "Blocks", about: "Only the containers, as grey blocks, no lines.", axes: { stroke: "none", fill: "tonal", text: "none", detail: "blocks", pic: "tone" } },
   { id: "bars", name: "Bars (October)", about: "The earlier figures: real paint, words as coloured bars.", fidelity: "bars" },

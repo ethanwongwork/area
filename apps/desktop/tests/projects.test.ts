@@ -168,3 +168,19 @@ test("design changes: logged once per element and property, undone, sent as a ba
   assert.equal(deletePage(twin.project, "page-1").pages.length, 1);
   assert.equal(deletePage(project, "page-1").pages.length, 1);
 });
+
+test("a restore drops the logged changes it undid, and a removed layer takes its comments", () => {
+  let project = addLayer(newProject("Launch", "area", "default", []), "page-1", "screen", "analytics", "Analytics dashboard").project;
+  project = addLayer(project, "page-1", "screen", "workspace", "Workspace").project;
+  project = saveVersion(project, "Start", NOW);
+  const change = { page: "page-1", layer: "layer-1", path: [0], target: "Button", label: "New report", property: "prop:variant", name: "Variant", from: "Solid", to: "Soft", value: "soft" };
+  project = logChange(project, change);
+  project = logChange(project, { ...change, layer: "layer-2" });
+  // layer-1 is renamed after the version: the restore puts it back, so its change no longer describes the design.
+  project = renameLayer(project, "page-1", "layer-1", "Dashboard");
+  const restored = restoreVersion(project, "version-1");
+  assert.deepEqual(restored.changes.map(entry => entry.layer), ["layer-2"]);
+  // Comments leave with their layer, so the next layer to take the id starts without them.
+  project = addComment(project, "page-1", "layer-2", "David Tee", "Tighten the header");
+  assert.equal(removeLayer(project, "page-1", "layer-2").comments.length, 0);
+});

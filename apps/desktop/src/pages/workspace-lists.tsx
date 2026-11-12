@@ -102,7 +102,7 @@ export function SystemsPage() {
         design: chosen ? (<>
           <PanelSection><div className="studio-inspector-actions"><Button size="sm" variant="soft" tone="neutral" onClick={() => navigate({ page: "themes", system: chosen.id })}>Open</Button></div></PanelSection>
           <PanelSection heading={chosen.name}>
-            <Facts label="System" items={[["Began", ORIGIN_LABEL[chosen.origin]], ["Version", versionName(chosen.name, liveOf(chosen).version)], ["Themes", chosen.themes.length]]} />
+            <Facts label="System" items={[["Began from", ORIGIN_LABEL[chosen.origin]], ["Version", versionName(chosen.name, liveOf(chosen).version)], ["Themes", chosen.themes.length]]} />
           </PanelSection>
         </>) : (
           <PanelSection heading="Systems"><Facts label="Systems" items={[["Systems", systems.length]]} /></PanelSection>

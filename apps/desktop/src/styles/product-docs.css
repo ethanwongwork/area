@@ -1,0 +1,43 @@
+/* ---------------------------------------------------------------------------
+ * Product screen, documents (content/examples/product-docs.tsx): a document app's main window, 1440 × 900.
+ * App classes only (product UI rule 13): these lay the regions out; every control, surface, text style and color is an
+ * Area component or an Area token. Literal px is a region's size only, marked measured or pick.
+ * "measured: notion.md" is docs/research/ui-patterns-2026-10-22/notion.md.
+ * ------------------------------------------------------------------------- */
+.px-docs { display: grid; grid-template-columns: auto minmax(0, 1fr); inline-size: 1440px; min-block-size: 900px; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); } /* pick: the window */
+.px-docs__grow { flex: 1 1 0; min-inline-size: 0; }
+
+/* Sidebar: Panel's own width (240, the Area app's); groups apart by space, never rules (shell.md, Nav panels: 16). */
+.px-docs__side { block-size: 100%; min-block-size: 0; }
+.px-docs__groups { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-16); }
+
+/* Main: the bar, then the page under it. */
+.px-docs__main { display: grid; grid-template-rows: auto minmax(0, 1fr); min-inline-size: 0; }
+.px-docs__edited { color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); margin-inline-end: var(--area-space-8); }
+.px-docs__body { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; align-content: start; padding: var(--area-space-96) var(--area-space-96) var(--area-space-96); } /* measured: notion.md, icon 96 under the top bar, 96 at the sides; the foot is a pick */
+.px-docs__page { display: grid; grid-template-columns: minmax(0, 1fr); inline-size: 100%; max-inline-size: 708px; gap: var(--area-space-24); } /* measured: notion.md, text column 708; head to body 24 is a pick */
+
+/* Head: icon, title 12 under it, properties 8 under the title (measured: notion.md, Header stack). */
+.px-docs__head { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: start; }
+.px-docs__title { margin: var(--area-space-12) 0 0; font-size: var(--area-title-xl-size); line-height: var(--area-title-xl-leading); letter-spacing: var(--area-title-xl-tracking); font-weight: var(--area-weight-heading); }
+.px-docs__props { justify-self: stretch; margin-block-start: var(--area-space-8); }
+.px-docs__person { display: inline-flex; align-items: center; gap: var(--area-space-6); }
+.px-docs__tags { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-6); }
+
+/* Body: blocks one prose gap apart; a heading carries its space above (spacing.md: the block gap + 8). */
+.px-docs__blocks { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-text-lg-prose-gap); }
+.px-docs__text { margin: 0; font-size: var(--area-text-lg-size); line-height: var(--area-text-lg-prose-leading); letter-spacing: var(--area-text-lg-tracking); }
+.px-docs__h2 { margin: var(--area-space-8) 0 0; font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); letter-spacing: var(--area-title-md-tracking); font-weight: var(--area-weight-heading); }
+.px-docs__todos { display: grid; justify-items: start; gap: var(--area-space-6); } /* measured: notion.md, 6 between list items */
+.px-docs__quote { display: flex; align-items: stretch; gap: var(--area-space-12); } /* pick: the rule to its text */
+
+/* Database: the title, one view row (tabs at the start, tools and New at the end), the table, its count. */
+.px-docs__database { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); margin-block-start: var(--area-space-8); }
+.px-docs__views { display: flex; align-items: flex-start; gap: var(--area-space-8); min-inline-size: 0; }
+.px-docs__tools { display: flex; align-items: center; } /* measured: notion.md, the view row's tools abut */
+.px-docs__column { display: inline-flex; align-items: center; gap: var(--area-space-6); }
+.px-docs__count { display: flex; justify-content: flex-end; gap: var(--area-space-16); color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-variant-numeric: tabular-nums; }
+.px-docs__count strong { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
+
+/* The sidebar is the window's chrome: it paints the subtle ground (Panel data-area-chrome), so Layer contrast sets it apart from the page. */
+.px-docs__side { --area-chrome-fill: var(--area-bg-subtle); }

@@ -379,7 +379,7 @@ function useRows(onSection: (section: SettingsSection | null) => void): Row[] {
       control: <Segmented size="sm" fullWidth aria-label="Work" value={workView} onValueChange={value => setWorkView(value === "steps" ? "steps" : "summary")}
         items={[{ value: "summary", label: "Summary" }, { value: "steps", label: "Every step" }]} /> },
     { section: "chat", group: "chat", label: "Replies", description: live
-      ? "Claude works in this repository and asks before each edit or command."
+      ? "Claude works in Area’s code and asks before each edit or command."
       : "Recorded runs: Claude answers live in the Area app.",
       control: <Badge size="sm" variant="soft" tone={live ? "success" : "neutral"}>{live ? "Live" : "Recorded"}</Badge> },
     { section: "chat", group: "notices", label: "When a reply ends", description: "A notice from your Mac while Area is in the background. Its tab shows a mark either way.",

@@ -36,7 +36,7 @@ test("the path is numbered in order; a branch takes its step's number and a lett
   assert.deepEqual(flow.branches.map(step => `${step.number} ${step.layer.name}`), ["1a Sign in"]);
   assert.deepEqual(flow.states.get("layer-3")?.map(state => state.layer.state), ["Error"]);
   assert.deepEqual(flow.ordered.map(step => step.layer.id), ["layer-1", "layer-2", "layer-3", "layer-4", "layer-5", "layer-6"]);
-  assert.equal(stepName(flow, flow.byId.get("layer-4")!.layer), "Verify email · Error");
+  assert.equal(stepName(flow, flow.byId.get("layer-4")!.layer), "Verify email, Error");
 });
 
 test("a step with links goes only where they go; one without goes on to the next", () => {

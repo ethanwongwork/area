@@ -95,7 +95,7 @@ them:
   Display P3's room. Series lightness moves every series along its family; `contrast/series.test.ts` holds the dataviz
   validator's thresholds at every value.
 - **Charts' status is its own trio**, `--area-data-success`, `--area-data-warning`, `--area-data-danger` (#5dce8e,
-  #ffcd53, #ff4a4b, the same in light and dark; data views round 14): trackers, uptime, CI runs. Yellow sits lighter
+  #ffcd53, #ff4849, the same in light and dark; data views round 14): trackers, uptime, CI runs. Yellow sits lighter
   than green so the two part for red-green colour blindness; red reads first. Text and controls keep the success,
   warning and danger roles.
 - **Status colours keep their hue.** Under Status colours Match they quiet to the Accent strength with the accent's own
@@ -505,6 +505,18 @@ and `emit/base.ts`; never copy a table into a component
   Card's, a Dialog's or a Popover's description) is UI text, not secondary. So is an agent's work in a turn (owner,
   2026-11-02, "do the trackers need to be smaller?"): Step, Reasoning, Plan, Edit summary, Approval and Turn notice read
   at `text-base`, one size with ink for hierarchy, under the turn's `text-lg` prose (Cursor's cards 13 under a 14 reply).
+- **A page has a title of its own, and its headings a weight of their own** (2026-11-11, the four product screens,
+  `docs/research/product-recreations-2026-11-10`). `title-xl` is 2.5 times the base, 32/40 at 13 (30/38 to 40/48 across
+  Type 12 to 16): a document's own title, the one step between the interface titles (26) and display (52).
+  `weight-heading` is 600: a document's title and headings and a long reply's headings, where `weight-strong` (500) sits too
+  close to body text to read as a level. Interface labels, titles of surfaces and controls keep strong. Neither moves an
+  existing component: they are roles a page or a reply uses.
+- **A region reads as a region by its ground, and Layer contrast sets how far** (the same study). A product's sidebar or
+  side bar is its chrome: mark the docked Panel `data-area-chrome` and `data-area-ground="recessed"` and name its fill
+  (`--area-chrome-fill: var(--area-bg-subtle)`), as the Area app does. At Layer contrast 0 it is the page's color and only
+  the seam separates it; from about 30 it reads as a tone in light, and 50 is the light default (since 2026-11-11). Dark
+  stays 0: a near-black page leaves a tone step almost no room. A screen that wants
+  the sidebar set apart sets Layer contrast, never a color of its own.
 - **Text that opens or closes a block is read on its glyphs** (owner, 2026-11-04, Q-T2; `docs/research/kit-type-2026-11-04`):
   a gap above a block is measured to its first cap, below it to its last baseline, as to a frame's edge. Flowing text
   trims its first and last lines (`text-box`: Card, Message's reply, the feed's prose); a component whose first line is

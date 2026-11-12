@@ -27,6 +27,8 @@
  *                           reply's heading, a modal title, a document's h1), in proportion to the base, whole pixels,
  *                           each role's leading at its ratio at 13 (owner, 2026-10-19: one ratio from 12 to 16, as Apple's
  *                           Dynamic Type scales every style); they were 15 / 19 / 22 / 30 at 13 until 2026-11-02
+ *   page title (title-xl)   2.5 times the base, 32/40 at 13: a document's own title, the one step between the interface
+ *                           titles and display (2026-11-11, the four product screens)
  *   display                 in proportion to the base, as before: 52 / 67 at 13
  *   prose leading           secondary and UI text that runs past two lines (a description, documentation): the first
  *                           value on the 2px leading ramp at or above 1.5 × the size, WCAG 1.4.8's line spacing (owner,
@@ -84,6 +86,10 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
     return [px, Math.round((px * leadingAt13) / at13 / 2) * 2] as const;
   };
   const titleXs = scaled13(16, 22), titleSm = scaled13(18, 24), titleMd = scaled13(20, 28), titleLg = scaled13(26, 30);
+  // A page's own title: 2.5 times the base, the ratio a document workspace draws its title at over its text (40 over 16),
+  // so 32/40 at 13. The step between the largest interface title (26) and display (52).
+  // On the size ramp's own steps (it has no 39), so 16 takes 40: 30/38, 32/40, 34/42, 37/46, 40/48.
+  const titleXl = ({ 12: [30, 38], 13: [32, 40], 14: [34, 42], 15: [37, 46], 16: [40, 48] } as const)[base];
   const display = { sm: scaled(56, 56), lg: scaled(72, 72) };
   return {
     ...GEIST_TOKENS,
@@ -100,6 +106,7 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
     "title-sm-size": size(titleSm[0]), "title-sm-leading": `var(--area-leading-${titleSm[1]})`, "title-sm-tracking": "-0.01em",
     "title-md-size": size(titleMd[0]), "title-md-leading": `var(--area-leading-${titleMd[1]})`, "title-md-tracking": "-0.015em",
     "title-lg-size": size(titleLg[0]), "title-lg-leading": `var(--area-leading-${titleLg[1]})`, "title-lg-tracking": "-0.02em",
+    "title-xl-size": size(titleXl[0]), "title-xl-leading": `var(--area-leading-${titleXl[1]})`, "title-xl-tracking": "-0.025em",
     "display-sm-size": size(display.sm[0]!), "display-sm-leading": `var(--area-leading-${display.sm[1]})`, "display-sm-tracking": "-0.03em",
     "display-lg-size": size(display.lg[0]!), "display-lg-leading": `var(--area-leading-${display.lg[1]})`, "display-lg-tracking": "-0.03em",
     // The raw numbers emit/base.ts derives heights, marks and spacing from.
