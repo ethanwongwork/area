@@ -9,6 +9,7 @@
  *   area:output-plan     what writing would do, file by file, writing nothing
  *   area:output-write    writes it: files, then .area/ (the choices, the lock, the base copies)
  *   area:output-reveal   shows the folder in Finder
+ *   area:output-command  where the `area` command is on this Mac, for Settings › Coding apps (src/coding-apps.ts)
  *
  * The library is this checkout's packages (the app is run from the repository); AREA_LIBRARY overrides it. The core is
  * TypeScript, which Electron's Node runs as it is (type stripping). Never in a capture.
@@ -41,6 +42,7 @@ const shown = result => ({
 });
 
 function register(window) {
+  ipcMain.handle("area:output-command", () => join(libraryRoot(), "packages", "output", "bin", "area.mjs"));
   ipcMain.handle("area:output-choose", async (_event, suggested) => {
     const result = await dialog.showOpenDialog(window(), {
       title: "Write to folder", buttonLabel: "Write here", message: "Choose the folder of the project the system is for.",

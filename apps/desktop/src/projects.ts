@@ -27,6 +27,7 @@
 import { restoreTheme, systemSlug, type Restorers, type SystemTheme } from "./systems.ts";
 import type { CanvasAxes } from "./studio.tsx";
 import { apply, find, readDoc, walk, type DesignDoc, type DocOp } from "./design-doc.ts";
+import { localAddress } from "./preview.ts";
 
 /** A thing on a page: a system's screen (a Patterns entry's id) or an Inspiration image (its `<group>/<image>`). */
 export type LayerKind = "screen" | "image";
@@ -121,6 +122,16 @@ export interface Project {
    * it on their own; a release that Needs work in products waits for Update). Absent in a project from before: it follows Live.
    */
   release?: string;
+  /**
+   * The folder on this Mac that holds the project's code, an absolute path (owner, 2026-11-10): where Chat works
+   * (electron/agent.cjs) and where its system is written. Absent until one is chosen on the Overview.
+   */
+  folder?: string;
+  /**
+   * Where the project's own app runs on this Mac while the person works on it, as a URL ("http://localhost:5173/";
+   * owner, 2026-11-10): what the Preview shows. Only this Mac's addresses are kept (src/preview.ts `localAddress`).
+   */
+  preview?: string;
   pages: ProjectPage[];
   explorations: Exploration[];
   versions: ProjectVersion[];
@@ -245,6 +256,19 @@ function readChanges(saved: unknown): DesignChange[] {
   return changes;
 }
 
+/** A folder's path as a project keeps it: absolute (`/Users/…`, or a drive's on Windows). */
+const isFolder = (value: unknown): value is string => typeof value === "string" && /^(\/|[A-Za-z]:[\\/])/.test(value);
+/** The project working in a folder, or in none (null). A path that is not absolute changes nothing. */
+export function setFolder(project: Project, folder: string | null): Project {
+  if (folder === null) { const { folder: _folder, ...rest } = project; return rest; }
+  return isFolder(folder) ? { ...project, folder } : project;
+}
+/** The project's app at an address on this Mac, or at none (null). An address that is not this Mac's changes nothing. */
+export function setPreview(project: Project, address: string | null): Project {
+  if (address === null) { const { preview: _preview, ...rest } = project; return rest; }
+  const url = localAddress(address);
+  return url ? { ...project, preview: url } : project;
+}
 /** A project read from its file, or null when the file is not one (no id or name, or no system). */
 export function readProject(saved: unknown, restore: Restorers): Project | null {
   if (!saved || typeof saved !== "object") return null;
@@ -276,6 +300,8 @@ export function readProject(saved: unknown, restore: Restorers): Project | null 
   return {
     id: s.id, name: s.name.trim(), created: typeof s.created === "string" ? s.created : new Date(0).toISOString(),
     system: s.system, theme: text(s.theme, "default"), ...(typeof s.release === "string" && s.release ? { release: s.release } : {}),
+    ...(isFolder(s.folder) ? { folder: s.folder } : {}),
+    ...(typeof s.preview === "string" && localAddress(s.preview) ? { preview: localAddress(s.preview)! } : {}),
     pages: pages.length ? pages : [{ id: "page-1", name: "Page 1", layers: [] }],
     explorations: readExplorations(s.explorations, restore), versions,
     history: history.slice(-HISTORY_LIMIT), comments, notes: typeof s.notes === "string" ? s.notes : "", changes: readChanges(s.changes),
@@ -292,6 +318,8 @@ export function projectFile(project: Project, canvas: (axes: CanvasAxes) => Reco
     version: PROJECT_FILE_VERSION,
     id: project.id, name: project.name, created: project.created, system: project.system, theme: project.theme,
     ...(project.release ? { release: project.release } : {}),
+    ...(project.folder ? { folder: project.folder } : {}),
+    ...(project.preview ? { preview: project.preview } : {}),
     pages: project.pages, explorations: project.explorations.map(exploration),
     versions: project.versions.map(version => ({ ...version, explorations: version.explorations.map(exploration) })),
     history: project.history, comments: project.comments, notes: project.notes, changes: project.changes,

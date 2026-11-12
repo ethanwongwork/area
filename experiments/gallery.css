@@ -1,0 +1,52 @@
+@import './src/ui.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--ui-bg);
+}
+
+/* Thumbnails on a shared baseline, whatever their ratio; 8px everywhere. */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--ui-space) var(--ui-space);
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--ui-space);
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.grid a {
+  display: grid;
+  gap: var(--ui-space);
+}
+
+.grid img,
+.grid .blank {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #f2f2f2;
+}
+
+.grid a:hover img {
+  opacity: 0.85;
+}

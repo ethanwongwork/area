@@ -17,8 +17,8 @@
  * New project and New system are their groups' + (Home's dialogs); with no project yet, New project is the group's row.
  */
 import { useEffect, useId, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
-import { Button, ConfirmDialog, ContextMenu, Count, Kbd, Menu, MenuItem, MenuSeparator, Nav, NavGroup, NavItem, ScrollArea, SearchField, Tooltip } from "@area/react";
-import { AddIcon, BookmarkIcon, ChevronDownIcon, CopyIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, LayoutIcon, MoreHorizontalIcon, PencilIcon, SearchIcon, SystemIcon } from "@area/icons";
+import { Button, ConfirmDialog, ContextMenu, Count, Kbd, Menu, MenuItem, MenuSeparator, Nav, NavGroup, NavItem, ScrollArea, SearchField, Spinner, Tooltip } from "@area/react";
+import { AddIcon, AppWindowIcon, CodeIcon, BookmarkIcon, ChatQuestionIcon, ErrorFilledIcon, StatusAvailableFilledIcon, ChevronDownIcon, CopyIcon, DismissIcon, DocumentIcon, FlaskIcon, FolderIcon, GitBranchIcon, HistoryIcon, HomeIcon, LayoutIcon, MoreHorizontalIcon, PencilIcon, SearchIcon, SystemIcon } from "@area/icons";
 import { systemName, HOME_TAB, hrefOf, LIST_PAGES, projectName, REFERENCE_VIEWS, referenceView, resolve, tabHolds, tabKind, tabName, type PageId, type Place, type TabKind } from "./places.ts";
 import { addExploration, addPage, deletePage, duplicatePage, renamePage, type Project, type ProjectPage } from "./projects.ts";
 import { NameDialog } from "./pages/home.tsx";
@@ -26,6 +26,19 @@ import { readStored, writeStored } from "./storage.ts";
 import { activeTheme, versionName } from "./systems.ts";
 import { ChromeButton, SidebarList, useStudio, type Visit } from "./studio.tsx";
 import { StatusBadge } from "./tile.tsx";
+import { useActivities, type Activity } from "./chat/activity.ts";
+import { useTechTools } from "./tech-tools.ts";
+
+/** Whose chat a tab shows: a project's, a system's, or the app's own (as src/studio.tsx `chatPlace` decides). */
+const chatKeyOf = (place: Place) => tabKind(place) === "project" ? `project:${place.project ?? ""}` : tabKind(place) === "system" ? `system:${place.system ?? "area"}` : "app:";
+const ACTIVITY_WORDS: Record<Activity, string> = { working: "Claude is working", asking: "Claude needs your answer", done: "Claude finished", failed: "Claude stopped" };
+/** A tab's chat at a glance, in its icon's place: a turning ring, a question, a finished mark, a stop. */
+function ActivityMark({ activity }: { activity: Activity }) {
+  if (activity === "working") return <Spinner size="sm" />;
+  return <span className="studio-tab__mark" data-activity={activity} title={ACTIVITY_WORDS[activity]}>
+    {activity === "asking" ? <ChatQuestionIcon /> : activity === "done" ? <StatusAvailableFilledIcon /> : <ErrorFilledIcon />}
+  </span>;
+}
 
 // A system is the triangle, square and circle (owner, 2026-10-31: "a simple composition of triangle square, and circle";
 // never the palette, and not the four-diamond component); its own drawing is being made in the icon set.
@@ -60,7 +73,7 @@ export function placeLabel(place: Place): string {
   return ({ home: "Home", projects: "Projects", systems: "Systems", themes: "Themes", "theme-setup": "New theme", tokens: "Tokens", color: "Colors", typography: "Typography", icons: "Icons", illustrations: "Illustrations",
     spacing: "Spacing", shape: "Shape", elevation: "Elevation", motion: "Motion",
     components: "Components", patterns: "Patterns", history: "Versions", references: "References", materials: "Materials", tests: "Tests", feed: "Feed", chat: "Chat",
-    project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions" } as Record<PageId, string>)[place.page];
+    project: "Overview", "project-page": "Page", exploration: "Exploration", versions: "Versions", preview: "Preview", files: "Files" } as Record<PageId, string>)[place.page];
 }
 /** What a page's list holds, for its head's name and its filter's placeholder. */
 const LISTED: Partial<Record<PageId, string>> = { tokens: "tokens", color: "scales", typography: "typefaces and roles", icons: "icons", illustrations: "illustrations", components: "components", "project-page": "layers",
@@ -88,6 +101,7 @@ export function AppTabs({ tabs, current, onSelect, onClose, onNew }: {
     return Boolean(close && words.getBoundingClientRect().right > close.left - 4);
   };
   useEffect(() => { nav.current?.querySelector("[aria-current]")?.scrollIntoView({ block: "nearest", inline: "nearest" }); }, [current, tabs.length]);
+  const activities = useActivities();
   return (
     <div className="studio-titlebar__tabs">
     <Nav ref={nav} orientation="horizontal" aria-label="Open tabs" className="studio-titlebar__nav"
@@ -108,7 +122,9 @@ export function AppTabs({ tabs, current, onSelect, onClose, onNew }: {
         const close = () => onClose(tab.id);
         return (
           <Tooltip key={tab.id} side="bottom" describes={false} open={named === tab.id} onOpenChange={next => setNamed(next && isCut(tab.id) ? tab.id : null)} trigger={
-          <NavItem className="studio-tab" data-tab={tab.id} href={hrefOf(tab.place)} current={tab.id === current} icon={TAB_ICONS[tabKind(tab.place)]}
+          <NavItem className="studio-tab" data-tab={tab.id} href={hrefOf(tab.place)} current={tab.id === current}
+            // While its chat works, waits on an answer or has ended unseen, the tab's icon says so (chat/activity.ts).
+            icon={(activity => activity ? <ActivityMark activity={activity} /> : TAB_ICONS[tabKind(tab.place)])(activities.get(chatKeyOf(tab.place)))}
             onClick={event => { event.preventDefault(); onSelect(tab.id); }}
             // A middle click closes a tab, as a browser's. The close shows on the current tab, on hover and on focus, and
             // always on touch (Nav revealActions; Tree view's rule, Cursor's and Figma's file tabs), over the name's end.
@@ -118,7 +134,7 @@ export function AppTabs({ tabs, current, onSelect, onClose, onNew }: {
             revealActions actions={<Tooltip side="bottom" describes={false} trigger={
               <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<DismissIcon />} aria-label={`Close ${name}`} aria-keyshortcuts={tab.id === current ? "Meta+W" : undefined} tabIndex={-1} onClick={close} />
             }>Close tab{tab.id === current ? <> <Kbd keys={["⌘", "W"]} size="sm" /></> : null}</Tooltip>}>
-            {name}
+            {name}{(activity => activity ? <span className="area-sr-only">{`, ${ACTIVITY_WORDS[activity]}`}</span> : null)(activities.get(chatKeyOf(tab.place)))}
           </NavItem>
           }>{name}</Tooltip>
         );
@@ -233,6 +249,7 @@ export function AppNav({ children: list }: { children?: ReactNode }) {
   const open = useOpen();
   const folds = useFolds();
   const ids = useId();
+  const [techTools] = useTechTools();
   const kind = tabKind(place);
   const domId = (key: string) => `${ids}-${key.replace(/[^\w-]+/g, "-")}`;
   // A row that only holds others (Foundations, Pages, Explorations) opens and closes on a click, as a kind did.
@@ -374,6 +391,10 @@ export function AppNav({ children: list }: { children?: ReactNode }) {
         {pageDialog}
         <NavGroup label={project.name} sticky>
           <NavItem href={hrefOf(at({ page: "project" }))} icon={<LayoutIcon />} current={place.page === "project"} onClick={open(at({ page: "project" }))}>Overview</NavItem>
+          {/* The project's own app, running (owner, 2026-11-10; src/pages/preview.tsx). */}
+          <NavItem href={hrefOf(at({ page: "preview" }))} icon={<AppWindowIcon />} current={place.page === "preview"} onClick={open(at({ page: "preview" }))}>Preview</NavItem>
+          {/* The folder's files, a code editor and a terminal: technical tools, only when switched on (src/tech-tools.ts). */}
+          {techTools && project.folder ? <NavItem href={hrefOf(at({ page: "files" }))} icon={<CodeIcon />} current={place.page === "files"} onClick={open(at({ page: "files" }))}>Files</NavItem> : null}
           {/* Pages, each a board of layers: the open page's layers are the list under the project. */}
           <NavItem href={hrefOf(at({ page: "project" }))} icon={<DocumentIcon />} current={place.page === "project-page" && !folds.isOpen(`${key}/pages`)}
             onClick={toggleOnly(`${key}/pages`)} actions={expander(`${key}/pages`, `${project.name}'s pages`)}>Pages</NavItem>

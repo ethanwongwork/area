@@ -254,9 +254,59 @@
     color: var(--area-fg-muted);
     font-family: var(--area-font-sans);
   }
+  /* Comment on a line (2026-11-10, the Changes view): a + at the line's start, a square of the line's height, shown
+     while the line is hovered or its button focused (a file row's Undo and Keep, above), over the code ground so the
+     number under it doesn't show through; on touch it stays, at the line's end. */
+  .area-diff[data-commentable] .area-diff__line { position: relative; }
+  .area-diff__comment {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    display: grid;
+    place-items: center;
+    inline-size: var(--_diff-leading);
+    padding: 0;
+    border: 0;
+    border-radius: var(--area-radius-floor);
+    background: linear-gradient(var(--area-bg-component-hover), var(--area-bg-component-hover)), var(--area-bg-code);
+    color: var(--area-fg-default);
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity var(--area-fade-fast) var(--area-ease-out);
+  }
+  .area-diff__comment > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  @media (hover: hover) { .area-diff__line:hover > .area-diff__comment { opacity: 1; transition-duration: var(--area-hover-in); } }
+  /* The line's numbers leave while its + shows, so the + never sits half over a digit. */
+  @media (hover: hover) { .area-diff[data-commentable] .area-diff__line:hover > .area-diff__number { visibility: hidden; } }
+  .area-diff__line:has(> .area-diff__comment:focus-visible) > .area-diff__number { visibility: hidden; }
+  .area-diff__comment:active { background: linear-gradient(var(--area-bg-component-pressed), var(--area-bg-component-pressed)), var(--area-bg-code); }
+  .area-diff__comment:focus-visible { opacity: 1; outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); transition-duration: 0s; }
+  @media (hover: none) { .area-diff__comment { inset-inline: auto 0; opacity: 1; } }
+  /* A note under its line: the comment made, or the field it is written in. The interface's type on the diff's ground, as
+     wide as the diff's view and held at its start while the code scrolls sideways. */
+  .area-diff { container-type: inline-size; }
+  .area-diff__lines { background-color: inherit; }
+  .area-diff__note {
+    grid-column: 1 / -1;
+    position: sticky;
+    inset-inline-start: 0;
+    box-sizing: border-box;
+    inline-size: 100cqi;
+    padding: var(--area-space-4) var(--_diff-inline);
+    border-block: var(--area-stroke-width) solid var(--area-edge-blocks);
+    background-color: inherit; /* the diff's own ground, so the code scrolling under it doesn't show through */
+    color: var(--area-fg-default);
+    font-family: var(--area-font-sans);
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
+    letter-spacing: var(--area-text-base-tracking);
+    white-space: normal;
+  }
   @media (forced-colors: active) {
     .area-diff { border: var(--area-stroke-width) solid CanvasText; }
     .area-diff__line--added > .area-diff__marker, .area-diff__line--deleted > .area-diff__marker, .area-diff__line--removed > .area-diff__marker { color: CanvasText; }
+    .area-diff__comment { background: Canvas; color: ButtonText; }
+    .area-diff__note { border-block-color: CanvasText; }
   }
 
   /* Plain (owner 2026-11-02, as Plan's): no frame, fill or corner; the head and the file rows' words on the text edge

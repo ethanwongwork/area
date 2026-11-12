@@ -164,6 +164,12 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     version; Publish's before and after) keeps the whole screen fitted, as a thumbnail, and opens at 1:1 (rule 25). A
     question about the whole design (which screen, A or B, how close, what's off) shows the whole screen fitted.
     `QuestionFrame` (src/question-kit.tsx) opens at 100% on its `focus`; Setup's Component view draws the part at 2.5×.
+27. **Each region loads and fails on its own** (the smoothness pass, 2026-11-11; docs/research/desktop-app-analysis-2026-11-10,
+    V3). A region whose content throws while it draws (the Canvas, the Sidebar's list, an Inspector view, the Chat)
+    shows, in its own place, what failed and Try again (src/region-boundary.tsx `RegionBoundary`), and the rest of the
+    app keeps working; moving to another place clears it. Waits follow WRITING.md's loading ladder: nothing under a
+    second, then a Spinner or a Skeleton of the region's real layout with `delay` (`"short"`, 300 ms, where a blank
+    would read as broken), Progress past three seconds. A region never shows a spinner and an empty state at once.
 
 ## The app's layout
 

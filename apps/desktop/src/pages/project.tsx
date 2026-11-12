@@ -31,6 +31,9 @@ import { checkFlow, isFlow, linkAt, nextOf, readFlow, stepName, type Flow } from
 import { FlowChecks, FlowDescription, FlowMap } from "../flow-map.tsx";
 import { openDesign, useCardArrival } from "../morph.ts";
 import { Facts } from "../facts.tsx";
+import { ChatChanges } from "../chat/changes.tsx";
+import { OpenInEditor } from "../editors.tsx";
+import { folderName } from "../output.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
 import { hasColours } from "../colours.ts";
@@ -39,7 +42,7 @@ import { EXAMPLES, PATTERNS, screenDesign, WidthZoom } from "./examples.tsx";
 import { NameDialog } from "./home.tsx";
 import { nameOf, url, useLibrary } from "./imagery.tsx";
 import { BeforeAfter, KINDS, ThemeScreen } from "../publish.tsx";
-import { addExploration, addLayer, addPage, BACK, changesOn, duplicateLayer, removeLayer, renameLayer, restoreVersion, saveVersion, setBranch, setNote, setState, type DesignChange, type Layer, type Project, type ProjectPage } from "../projects.ts";
+import { addExploration, addLayer, addPage, BACK, changesOn, duplicateLayer, removeLayer, renameLayer, restoreVersion, saveVersion, setBranch, setFolder, setNote, setState, type DesignChange, type Layer, type Project, type ProjectPage } from "../projects.ts";
 import { activeTheme, followedVersion, liveOf, nextVersion, releasesAfter, RELEASE_KIND_LABEL, versionName, type ReleaseKind } from "../systems.ts";
 import { ReleaseNotice } from "../release-notice.tsx";
 
@@ -69,6 +72,50 @@ function ProjectActions({ project }: { project: Project }) {
           description="Its folder moves to the Trash, where it can be put back; its tab closes. What it published stays in its system."
           onOpenChange={next => { if (!next) setDeleting(false); }} onConfirm={() => { deleteProject(project.id); setDeleting(false); }} />
       ) : null}
+    </PanelSection>
+  );
+}
+
+/**
+ * The project's folder (owner, 2026-11-10: "a folder for every project, and chat works there"): where its code lives
+ * on this Mac. Choosing one is the person's say that Claude may read it; every change still asks. A folder that was
+ * moved or deleted says so, and Chat won't work anywhere else in its place.
+ */
+function ProjectFolder({ project }: { project: Project }) {
+  const { updateProject } = useStudio();
+  const bridge = typeof window === "undefined" ? undefined : window.areaDesktop?.folder;
+  const [state, setState] = useState<FolderState | null>(null);
+  useEffect(() => {
+    if (!project.folder || !bridge) { setState(null); return; }
+    let alive = true;
+    const read = () => bridge.state(project.folder!).then(next => { if (alive) setState(next); }, () => {});
+    read();
+    // Looked at again when the window comes back: the folder may have been moved in Finder meanwhile.
+    addEventListener("focus", read);
+    return () => { alive = false; removeEventListener("focus", read); };
+  }, [project.folder, bridge]);
+  const choose = async () => {
+    const path = await bridge?.choose(project.folder ?? null);
+    if (path) updateProject(project.id, current => setFolder(current, path));
+  };
+  if (!bridge) return null;
+  const folder = project.folder;
+  const gone = Boolean(folder) && state?.exists === false;
+  return (
+    <PanelSection heading="Code">
+      {folder ? (
+        <Facts label="Code" items={[
+          ["Folder", <span title={folder}>{folderName(folder)}</span>],
+          gone ? null : ["System", state?.system ? "Written here" : "Not written yet"],
+        ]} note={gone ? "This folder isn't there any more. Choose it again so Chat can work in it."
+          : "Chat works in this folder and asks before each change."} />
+      ) : <p className="studio-inspector-note">No folder yet. Choose the folder that holds this project's code, and Chat works there.</p>}
+      <div className="studio-inspector-actions">
+        {folder && !gone ? <OpenInEditor folder={folder} path={folder} /> : null}
+        {folder && !gone ? <Button size="sm" variant="soft" tone="neutral" onClick={() => bridge.reveal(folder)}>Show in Finder</Button> : null}
+        <Button size="sm" variant="soft" tone="neutral" onClick={choose}>{folder ? "Change folder" : "Choose folder"}</Button>
+        {folder ? <Button size="sm" variant="soft" tone="neutral" onClick={() => updateProject(project.id, current => setFolder(current, null))}>Remove folder</Button> : null}
+      </div>
     </PanelSection>
   );
 }
@@ -220,7 +267,7 @@ export function ProjectOverview() {
         </div>
         {dialog}
       </>}
-      inspector={{ design: <><ProjectActions project={project} /><ProjectFacts project={project} /></> }}
+      inspector={{ design: <><ProjectActions project={project} /><ProjectFacts project={project} /><ProjectFolder project={project} /></>, code: <ChatChanges /> }}
     />
   );
 }
@@ -457,6 +504,8 @@ export function ProjectPageView() {
       </>}
       inspectorFooter={<ChangeLog project={project} page={page} layer={layer} onOpen={openChange} screenFile={fileOf} />}
       inspector={{
+        // What the project's chat changed, a file at a time (src/chat/changes.tsx).
+        code: <ChatChanges />,
         // The chosen element's properties (src/design-inspector.tsx), else what is on the stage: the layer and its page.
         design: layer && selected && editable ? (
           <ElementPanel project={project} page={page} layer={layer} stage={stageRef} path={selected} onSelect={choose}
@@ -634,6 +683,7 @@ export function ExplorationPage() {
       </>}
       inspector={{
         theme: <CanvasSettings />,
+        code: <ChatChanges />,
         design: (<>
           <PanelSection>
             <div className="studio-inspector-actions">
@@ -730,6 +780,7 @@ export function VersionsPage() {
         ) : null}
       </>}
       inspector={{
+        code: <ChatChanges />,
         design: chosen ? (<>
           <PanelSection>
             <div className="studio-inspector-actions">

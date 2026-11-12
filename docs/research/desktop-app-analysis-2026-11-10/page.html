@@ -1,0 +1,423 @@
+<title>Area Against Coding Apps</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column of 1040; the verdict first, the build order, then the table and the proposals to pick. */
+:root {
+  --bg: #fbfbfc; --panel: #f3f4f6; --line: #e3e5ea; --fg: #17181c; --mute: #646a76; --faint: #9aa0ab;
+  --accent: #1f6feb; --accent-soft: #e6effd; --yes: #1a8f5a; --part: #b7791f; --no: #c2c6ce;
+  --build: #1a8f5a; --later: #b7791f; --skip: #8a8f99;
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0c0e; --panel: #15171b; --line: #25282e; --fg: #eceef2; --mute: #9aa0ab; --faint: #666c78;
+  --accent: #6ea8ff; --accent-soft: #14233d; --yes: #4cc38a; --part: #e0a84a; --no: #3a3e47;
+  --build: #4cc38a; --later: #e0a84a; --skip: #7d838e; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0b0c0e; --panel: #15171b; --line: #25282e; --fg: #eceef2; --mute: #9aa0ab; --faint: #666c78;
+  --accent: #6ea8ff; --accent-soft: #14233d; --yes: #4cc38a; --part: #e0a84a; --no: #3a3e47;
+  --build: #4cc38a; --later: #e0a84a; --skip: #7d838e; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 400 14px/22px var(--sans); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 40px 96px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 56px; }
+section { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+h1 { font: 600 26px/32px var(--sans); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font: 600 18px/24px var(--sans); margin: 0; }
+h3 { font: 600 14px/20px var(--sans); margin: 0; }
+p { margin: 0; max-width: 70ch; }
+.mute { color: var(--mute); } .small { font-size: 12px; line-height: 18px; }
+code, .mono { font: 400 12px/18px var(--mono); }
+.meta { color: var(--mute); font-size: 12px; line-height: 18px; }
+
+.verdict { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px 32px; }
+.verdict div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.verdict .k { font: 500 12px/18px var(--sans); color: var(--mute); }
+
+ol.order { margin: 0; padding: 0; list-style: none; counter-reset: n; display: flex; flex-direction: column; }
+ol.order li { counter-increment: n; display: grid; grid-template-columns: 28px 1fr; gap: 0 8px; padding: 10px 0; border-top: 1px solid var(--line); }
+ol.order li::before { content: counter(n); font: 500 12px/22px var(--mono); color: var(--faint); font-variant-numeric: tabular-nums; }
+ol.order b { font-weight: 600; } ol.order a { color: var(--accent); text-decoration: none; font: 500 12px/18px var(--mono); }
+ol.order a:hover, ol.order a:focus-visible { text-decoration: underline; }
+
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 13px; line-height: 18px; }
+th, td { text-align: left; padding: 7px 12px; border-top: 1px solid var(--line); vertical-align: top; }
+thead th { border-top: 0; font: 500 12px/18px var(--sans); color: var(--mute); background: var(--panel); position: sticky; top: 0; }
+tr.group td { background: var(--panel); font: 600 12px/18px var(--sans); }
+td.c, th.c { text-align: center; width: 76px; }
+th.area, td.area { background: color-mix(in srgb, var(--accent-soft) 60%, transparent); }
+td.note { color: var(--mute); font-size: 12px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; box-sizing: border-box; }
+.dot.y { background: var(--yes); } .dot.p { background: linear-gradient(90deg, var(--part) 50%, transparent 50%); border: 1.5px solid var(--part); }
+.dot.n { border: 1.5px solid var(--no); } .dot.u { width: 8px; height: 2px; border-radius: 1px; background: var(--no); vertical-align: 3px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 20px; color: var(--mute); font-size: 12px; line-height: 18px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip, .btn, .pick button { font: 500 12px/18px var(--sans); color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 7px; padding: 4px 10px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+:root[data-theme="dark"] .btn.primary { color: #0b0c0e; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.primary { color: #0b0c0e; } }
+button:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.spacer { flex: 1; } #save { color: var(--mute); font-size: 12px; }
+
+.props { display: flex; flex-direction: column; }
+.prop { display: grid; grid-template-columns: 1fr 220px; gap: 12px 32px; padding: 20px 0; border-top: 1px solid var(--line); scroll-margin-top: 16px; }
+.prop > div { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.prop .head { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.prop .id { font: 500 12px/20px var(--mono); color: var(--faint); }
+.tag { font: 500 11px/16px var(--sans); padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--mute); white-space: nowrap; }
+.tag.rec-build { color: var(--build); border-color: currentColor; } .tag.rec-later { color: var(--later); border-color: currentColor; } .tag.rec-no { color: var(--skip); border-color: currentColor; }
+dl { margin: 0; display: grid; grid-template-columns: 1fr; gap: 8px; }
+dt { font: 500 12px/18px var(--sans); color: var(--mute); } dd { margin: 0; max-width: 70ch; }
+.pick { display: flex; gap: 0; } .pick button { border-radius: 0; margin-left: -1px; flex: 1; }
+.pick button:first-child { border-radius: 7px 0 0 7px; margin-left: 0; } .pick button:last-child { border-radius: 0 7px 7px 0; }
+.pick button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); position: relative; }
+.pick button.rec:not([aria-pressed="true"]) { box-shadow: inset 0 -2px 0 var(--accent); }
+textarea { font: 400 12px/18px var(--sans); color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 7px; padding: 6px 8px; resize: vertical; min-height: 34px; width: 100%; box-sizing: border-box; }
+.state { font-size: 12px; line-height: 18px; color: var(--mute); }
+ul.plain { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; max-width: 74ch; }
+@media (max-width: 720px) { .prop { grid-template-columns: 1fr; } h1 { font-size: 22px; line-height: 28px; } }
+</style>
+
+<div class="wrap">
+  <section>
+    <p class="meta">Area · desktop app · 2026-11-10</p>
+    <h1>Area against Cursor, ChatGPT (Codex) and Figma</h1>
+    <div class="verdict">
+      <div><span class="k">Where Area is ahead</span><p>The design side. Settings that redraw every component, the inventory, versions with a change review, flows, direct editing and checks. None of the three coding apps has any of it, and Figma has no generator behind its variables.</p></div>
+      <div><span class="k">Where Area is behind</span><p>The chat is real but it works in Area's own repository, not in the user's project. There is no folder per project, no preview of the user's running app, no view of what changed, and nowhere to send code except a folder.</p></div>
+      <div><span class="k">What the three agree on</span><p>One shell: work listed in the sidebar, chat in the middle, and a side panel of tabs opened on demand (Changes, Files, Browser, Terminal, Plan). Figma Make has the same three: Browser, Files, Review.</p></div>
+      <div><span class="k">What to take</span><p>The connection between chat and real code, and the small things that make a long agent run comfortable. The editor and the terminal as tools to switch on for technical people (owner, 2026-11-10), never the default; not the extension store. The brief already rules those out.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Build order</h2>
+    <ol class="order">
+      <li><span><b>Give every project a folder, and point chat at it.</b> Everything else on the code side depends on this. <a href="#t1">T1</a> <a href="#u4">U4</a></span></li>
+      <li><span><b>Show what changed.</b> A Changes view with keep or undo per file, and a comment on a line that goes back to chat. <a href="#t3">T3</a></span></li>
+      <li><span><b>Preview the running app, and point at it.</b> The selection Area already has for its own designs, used on real code. <a href="#t2">T2</a></span></li>
+      <li><span><b>Make Area the design contract for other coding apps.</b> More MCP tools, a setup page, links that open Area. <a href="#t7">T7</a> <a href="#u9">U9</a></span></li>
+      <li><span><b>Comfort for long runs.</b> A finish notice, working marks on tabs, a command menu that runs things. <a href="#t10">T10</a> <a href="#u1">U1</a></span></li>
+      <li><span><b>Smoothness.</b> Panel motion, the slow Components scroll, error and loading states. <a href="#v1">V1</a> <a href="#v3">V3</a> <a href="#v4">V4</a></span></li>
+      <li><span><b>Send to GitHub.</b> Save, propose and ship in design words, once Changes exists. <a href="#t4">T4</a></span></li>
+      <li><span><b>Technical tools, switched on.</b> Files, a code editor and a terminal as side tabs for design engineers, off by default. <a href="#t6">T6</a></span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>What each app has</h2>
+    <div class="legend">
+      <span><i class="dot y"></i>Has it</span><span><i class="dot p"></i>Part of it</span><span><i class="dot n"></i>Doesn't</span><span><i class="dot u"></i>Not read</span>
+    </div>
+    <div class="scroll"><table id="matrix" aria-label="Capabilities by app">
+      <thead><tr><th>Capability</th><th class="c">Cursor</th><th class="c">ChatGPT</th><th class="c">Figma</th><th class="c area">Area</th><th>Area today</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>Proposals</h2>
+    <div class="bar" id="filters" role="group" aria-label="Show"></div>
+    <div class="bar">
+      <button class="btn primary" id="takeall" type="button">Take every recommendation</button>
+      <span id="save" role="status"></span>
+    </div>
+    <div class="props" id="props"></div>
+  </section>
+
+  <section>
+    <h2>Left out on purpose</h2>
+    <ul class="plain">
+      <li><b>An editor fork and an extension store.</b> The brief says a purpose-built shell. A code editor and a terminal come as tools a technical person switches on (T6, owner 2026-11-10), not as the app's default face.</li>
+      <li><b>Chat, Work and Codex as three modes of one window.</b> Area has one job. Ask, Suggest and Change already cover how far the agent may go.</li>
+      <li><b>Cloud agents, scheduled runs, PR inboxes, voice calls, pets, a menu-bar popout.</b> Each needs accounts or a service Area doesn't have, and none helps someone make a design system.</li>
+      <li><b>Nine reasoning levels and a multi-model picker.</b> Three models in one menu is the simpler interface.</li>
+      <li><b>Figma's infinite canvas, FigJam, Slides, Sites CMS.</b> Already decided: each design lives in its own container.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How this was read</h2>
+    <ul class="plain mute">
+      <li>Screen control was not available in this session, so no app was clicked through live. Each app was read from its installed bundle and its official docs.</li>
+      <li>Cursor 3.27.22: the Agents Window's code and CSS in the bundle, plus cursor.com docs. Shortcuts come from docs only.</li>
+      <li>ChatGPT 26.1023: the installed app is the Codex app under the ChatGPT name (bundle id <code>com.openai.codex</code>, Electron). Read from its 54,000 interface strings and the docs. A string shows a feature is built, not that it is switched on for this account.</li>
+      <li>Figma 126.9.13: the desktop shell from the bundle; the editor, Dev Mode, Make and MCP from help and developer docs, since the editor loads from the web.</li>
+      <li>Area: read from source in <code>apps/desktop</code> and <code>packages/output</code> at <code>e915a483</code>. The app was not driven this session, so notes about how something feels come from the team's own handoff notes.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+const ROWS = [
+  ["Shell and navigation"],
+  ["Sidebar of work, tabs, a side panel", "y","y","y","y", "Three regions, Home tab fixed, tabs restored at launch"],
+  ["Command menu that runs actions", "y","y","y","p", "⌘K finds places, components, settings and icons. It runs nothing"],
+  ["Back, forward, reopen closed tab", "y","y","y","y", ""],
+  ["Split view or a second window", "y","y","y","n", "One window"],
+  ["Reorder, pin and a menu on tabs", "p","y","y","n", "Recorded as later"],
+  ["Working and unread marks on tabs or rows", "y","y","y","n", ""],
+  ["One key hides every panel", "p","y","y","p", "⌘B and ⌥⌘B, one side each"],
+  ["Links that open a place in the app", "u","y","y","n", "Hash routes inside the app only"],
+  ["Agent"],
+  ["A real agent with approvals", "y","y","y","y", "Claude Agent SDK; Yes, Yes for this session, No"],
+  ["Works in the user's own project folder", "y","y","y","n", "Works in Area's repository"],
+  ["Read-only, suggest and change modes", "y","y","u","y", "Ask, Suggest, Change"],
+  ["A plan to approve before building", "y","y","u","p", "Suggest mode; no plan to edit and build from"],
+  ["Questions as cards", "y","y","u","y", ""],
+  ["Queue a follow-up", "y","y","u","y", ""],
+  ["Steer without stopping", "y","y","u","n", ""],
+  ["Restore to an earlier point", "y","p","y","y", "Restore to here, Keep, Undo"],
+  ["Chats kept with their project, searchable", "y","y","y","p", "Last 20, in the browser store, not per project"],
+  ["Notice or sound when a run ends", "y","y","y","n", ""],
+  ["Several agents at once, worktrees", "y","y","n","n", "Explorations are the nearest thing"],
+  ["Scheduled runs", "y","y","n","n", ""],
+  ["Environment"],
+  ["Review changes per file, keep or undo", "y","y","y","p", "Keep or Undo for the whole run; no line numbers"],
+  ["Comment on a line, sent back to chat", "y","y","y","p", "Design changes and layer comments go to chat; code lines don't"],
+  ["Preview of the user's running app", "y","y","y","n", ""],
+  ["Point at the preview to change it", "y","y","y","p", "On Area's own designs, not on running code"],
+  ["Terminal", "y","y","n","n", "Off by default in the brief; planned as a tool to switch on (T6)"],
+  ["File tree", "y","y","y","p", "@ lists a project folder's files (built 2026-11-10); a tree comes with T6"],
+  ["Commit, push, pull request", "y","y","y","n", "Write to folder on a version"],
+  ["MCP server other agents can call", "n","u","y","y", "Five read-only tools, started from the area command"],
+  ["Add your own MCP servers", "y","y","y","p", "Read from project settings; no page for it"],
+  ["Rules and skills pages", "y","y","p","p", "Rules are written out with the code; no page in the app"],
+  ["Open in editor", "u","y","y","n", ""],
+  ["Packaged, updates itself", "y","y","y","n", "Runs from the checkout"],
+  ["Design and code"],
+  ["Tokens with modes or themes", "n","n","y","y", "23 settings, themes per system"],
+  ["Choose which components and variants exist", "n","n","p","y", "Inventory and structure"],
+  ["Versions with a change review", "n","n","y","y", "Fixes, Adds, Needs work"],
+  ["Component mapped to its real code", "n","n","y","y", "Area writes the code itself"],
+  ["Specs and code for a selection", "n","n","y","y", "Specs, Code, Components & tokens"],
+  ["Flows and Play", "n","n","y","y", ""],
+  ["Checks for contrast and raw values", "n","n","y","y", "In the app and in area check"],
+  ["Import from Figma or a codebase", "u","u","u","n", "On Home as not built yet"],
+  ["Sharing and working together", "p","p","y","n", "Local only"],
+  ["Personalization"],
+  ["Light, dark, system", "y","y","y","y", ""],
+  ["Custom theme for the app itself", "y","y","n","y", "Drawn in any system's published theme"],
+  ["Interface text size", "y","y","y","y", "12 to 16"],
+  ["Code font and size", "y","y","u","n", ""],
+  ["How much of the agent's work shows", "y","p","u","p", "Summary or Every step"],
+  ["Shortcut list", "y","y","y","p", "Leaves out ⌘L and the editing keys"],
+  ["Change shortcuts", "y","y","n","n", ""],
+  ["Reduce motion, transparency, contrast", "y","y","p","y", ""],
+  ["Pin, group and sort the sidebar", "y","y","p","p", "Pins"],
+];
+
+const THEMES = { tech: "Technical", use: "Usable and simpler", feel: "Smoother", look: "Cohesive", own: "Personal" };
+const P = [
+  { id: "T1", t: "tech", rec: "build", size: "M", title: "A folder for every project, and chat works there",
+    now: "Chat runs in Area's own repository (agent.cjs: cwd is the repo root) and its instructions describe Area's code. A user's project has no folder.",
+    gain: "A project records a folder. Chat opens there, reads that folder's rules, and @ lists its real files. A system's chat works in the folder its version was written to. With no folder, chat stays read-only and says how to choose one.",
+    seen: "Cursor, ChatGPT and Figma Make all start a chat from a folder or a cloned repository, with a trust question the first time.",
+    cost: "Approvals matter more once the folder is the user's code. Keep asking for every write by default." },
+  { id: "U4", t: "use", rec: "build", size: "S", title: "Chats belong to their project or system",
+    now: "The last 20 chats sit in the browser store, shared across every tab.",
+    gain: "Chats are saved beside the project's file, listed under it in the Sidebar, and found from ⌘K. Nothing is lost at 21.",
+    seen: "All three list chats under their project. Cursor and ChatGPT search past chats.",
+    cost: "One more group in the project's Sidebar. Keep it folded until there is a chat." },
+  { id: "T3", t: "tech", rec: "build", size: "M", title: "A Changes view",
+    now: "Keep or Undo applies to a whole run. Code blocks have no line numbers and there is no per-file list.",
+    gain: "The Code view lists changed files with added and removed counts, shows each change two ways (one column or side by side), keeps or undoes per file, and a comment on a line goes to chat like a design change does today.",
+    seen: "Cursor: Keep, Keep All, Reject. ChatGPT: review by last turn, with a + on any line. Figma Make: Review tab.",
+    cost: "Needs the Tree view's change status and the Code block's diff look, both already built for Versions." },
+  { id: "T2", t: "tech", rec: "build", size: "L", title: "Preview the running app, and point at it",
+    now: "Designs are drawn inside Area. Nothing shows the user's own app running.",
+    gain: "A Preview on the stage loads the project's local address. The stage's choose tool works on it: click an element, write a note or change a value, and chat gets the element, its styles and a picture. This is the brief's Product zone.",
+    seen: "Cursor's Design Mode, ChatGPT's Annotate and Adjust, Figma Make's edit tool. All three send the element and a cropped picture.",
+    cost: "The largest item. Area's selection frame and Design view already exist, so the new part is the embedded page and reading its elements." },
+  { id: "T7", t: "tech", rec: "build", size: "M", title: "Area as the design contract for any coding app",
+    now: "The area command serves five read-only tools. Nothing in the app says how to connect them.",
+    gain: "Add the tools the brief names (a picture of any component, check a change against the system, find a component) and a Settings page with the line to paste into each coding app. People keep their editor and Area keeps them on the system.",
+    seen: "Figma's server returns design context, variables, pictures, the code map and a rules file, and is switched on from one toggle.",
+    cost: "This is where Area helps most without becoming an editor. It needs the area command published." },
+  { id: "U9", t: "tech", rec: "build", size: "S", title: "Links in and out",
+    now: "Places are hash routes inside the window. Code can be copied, not opened.",
+    gain: "An area:// link opens a component, screen or version from chat, a pull request or another app. Code views get Open in editor for the editors installed.",
+    seen: "ChatGPT has codex:// links and an Open in list of a dozen editors. Figma has figma:// and Dev resources.",
+    cost: "Small. Registers a link type with macOS." },
+  { id: "T10", t: "feel", rec: "build", size: "S", title: "Know when a run ends or needs you",
+    now: "No notice. A tab shows nothing while its chat works.",
+    gain: "A mark on the tab and Sidebar row for working, needs an answer and done. A macOS notice when the window is in the background. Settings › Notifications to turn each off. A question before quitting mid-run.",
+    seen: "Figma marks tabs working, new response and error. ChatGPT has unread marks and a next-needing-attention key. Cursor adds a sound.",
+    cost: "Small. The Sidebar's status mark already exists." },
+  { id: "U1", t: "use", rec: "build", size: "M", title: "⌘K runs things",
+    now: "⌘K opens places, components, settings and icons. It has no actions.",
+    gain: "A Commands group: New page, New exploration, Publish, Write to folder, switch theme, light or dark, hide panels, start a chat. Each row shows its key, so the menu teaches the shortcuts.",
+    seen: "Figma's menu groups AI tools, Commands, Assets and Plugins. Cursor and ChatGPT keep one menu for actions and one for files.",
+    cost: "Each action must already exist as a function. No new behavior." },
+  { id: "U2", t: "use", rec: "later", size: "M", title: "Fewer tabs under the stage",
+    now: "A design has nine tabs under it (Iterations, Layers, Documentation, Code, Components & tokens, Specs, Comments, Checks, Research) beside the Inspector's four. Code appears in both.",
+    gain: "Show the four or five used most, put the rest under More, and keep Code in one place. The row stays in view while the panel scrolls.",
+    seen: "Cursor opens side tabs on demand from a + and closes them. Figma's Dev Mode keeps one panel.",
+    cost: "Which tabs stay is your call, and I have not watched the panel in use. Worth a look together before building." },
+  { id: "U3", t: "use", rec: "later", size: "M", title: "Chat can take the Canvas",
+    now: "Chat lives in the Inspector's width on every tab.",
+    gain: "One key swaps chat into the Canvas with the design beside it, for long runs. The same components, only wider. The Chat kit already defines that width.",
+    seen: "All three put chat in the middle and the work beside it.",
+    cost: "Changes the three-region rule for one state. Better decided after T1 to T3 make long runs common." },
+  { id: "U5", t: "use", rec: "build", size: "S", title: "A complete, searchable shortcut list",
+    now: "Settings › Keyboard is a fixed list that leaves out ⌘L and every editing key.",
+    gain: "One registry feeds the list, the menu bar and ⌘K. Search by name or key. ⌘/ opens it. Changing a key can wait.",
+    seen: "ChatGPT searches by command or keystroke and opens on ⌘/. Cursor and ChatGPT let keys be changed.",
+    cost: "Small, and it stops the list drifting from the real keys." },
+  { id: "U6", t: "use", rec: "build", size: "S", title: "Hide what isn't built",
+    now: "Home offers Import marked not built yet. References has Discover and Following with nothing in them.",
+    gain: "Unbuilt entries leave the interface until they work. A first run offers two starts that both work.",
+    seen: "Cursor's first run is three screens and three starters, all live.",
+    cost: "References' structure stays in the code. Only the empty doors are hidden." },
+  { id: "U7", t: "use", rec: "build", size: "S", title: "One key for just the Canvas",
+    now: "⌘B hides the Sidebar and ⌥⌘B the Inspector.",
+    gain: "One key hides both and brings both back as they were.",
+    seen: "Figma's Minimize UI, ChatGPT's full view.",
+    cost: "None." },
+  { id: "U8", t: "use", rec: "build", size: "S", title: "Finish the tab strip",
+    now: "Tabs can't be dragged, have no menu, and cut off hard where the strip overflows.",
+    gain: "Drag to reorder, a menu (Close others, Copy link, Pin), and the fade the Sidebar names already use.",
+    seen: "Figma's tabs pin, rename, group and move to a new window.",
+    cost: "Already on the team's own list." },
+  { id: "V1", t: "feel", rec: "build", size: "S", title: "Panels move",
+    now: "The Sidebar and Inspector snap open and shut. The handoff records no motion recipe for them.",
+    gain: "One recipe in the motion doc for regions, used by both panels, the tab strip and the design panel. Off under Reduce motion.",
+    seen: "Cursor's ladder is 50, 100, 150, 200, 300 ms with one strong ease-out. Most of its transitions sit at 100 to 200.",
+    cost: "A foundation change. It goes through the motion settings, not app-only CSS." },
+  { id: "V4", t: "feel", rec: "build", size: "M", title: "Fix the slow Components scroll",
+    now: "The handoff records about a second per screen on the Components overview.",
+    gain: "Draw only the tiles near the screen. The page scrolls at the speed of the rest of the app.",
+    seen: "Figma frees memory from tabs not in view and shows it per tab.",
+    cost: "Tiles off screen stop being live. Search and ⌘F still need to find them." },
+  { id: "V3", t: "look", rec: "build", size: "S", title: "One way to load and one way to fail",
+    now: "34 empty states, one spinner, and nothing catches a page that breaks.",
+    gain: "Each region catches its own failure and offers Try again. A loading rule (skeleton of the real layout past 300 ms) in the product UI doc.",
+    seen: "Cursor's file tab has a state for every case, down to a file that isn't on this machine.",
+    cost: "Small. Mostly writing the rule and applying it." },
+  { id: "V2", t: "look", rec: "later", size: "S", title: "Check the chat's work rows against the type ramp",
+    now: "Area's ramp already matches Cursor's (11, 12, 13 with 14, 16, 18 lines). Work shows as Summary or Every step.",
+    gain: "A side-by-side of a real run in all three apps, to settle row height, tense (Running, then Ran) and elapsed time.",
+    seen: "ChatGPT writes Ran, Read, Searched, Edited with elapsed time. Cursor has a density setting for these rows.",
+    cost: "Needs a live look at all three, which this session could not do." },
+  { id: "P1", t: "own", rec: "build", size: "S", title: "Code font, chat width, and a look you can copy",
+    now: "Appearance covers mode, panels, the system the app is drawn in, text size and the three reduce switches. Code font and chat width are recorded as not built.",
+    gain: "Code font and size, chat width, and Copy look and Paste look to move an appearance between machines.",
+    seen: "ChatGPT sets UI, content and code fonts and shares a theme as a string. Cursor has conversation and tool-row density.",
+    cost: "Area already goes further than both on theme. These are the gaps around it." },
+  { id: "P3", t: "own", rec: "later", size: "S", title: "Arrange the Sidebar",
+    now: "Rows can be pinned.",
+    gain: "Sort projects and systems by name, opened or your own order.",
+    seen: "ChatGPT sorts by created, updated or manual and lets you make sections.",
+    cost: "Worth it once someone has more than a screen of projects." },
+  { id: "T4", t: "tech", rec: "later", size: "L", title: "Send to GitHub in design words",
+    now: "A version writes to a local folder.",
+    gain: "Save, Propose and Ship, as the brief has it, with before and after pictures on the proposal.",
+    seen: "All three commit, push and open a pull request from the review view. Figma Make clones a repository or takes a folder.",
+    cost: "Needs sign-in with GitHub. Build after Changes, which it reuses." },
+  { id: "T5", t: "tech", rec: "later", size: "S", title: "Named actions, for everyone",
+    now: "No way to start a project's preview or run its checks without a terminal.",
+    gain: "A project keeps named commands (Start preview, Run checks) as buttons. Their output shows as the command and output blocks Area already has.",
+    seen: "ChatGPT runs named Actions from the toolbar. Cursor shows a read-only banner on a terminal the agent is using.",
+    cost: "Preview (T2) needs Start preview, so that one arrives with it." },
+  { id: "T6", t: "tech", rec: "build", size: "L", title: "Technical tools you switch on: Files, a code editor, a terminal",
+    now: "None. The brief says there is no file tree, terminal or editor by default; the owner asked on 2026-11-10 for them as options for technical design engineers.",
+    gain: "One switch in Settings, Technical tools, off by default. On, a project with a folder gains three side tabs: Files (the folder's tree), Code (open and edit a file, with save) and Terminal (a shell in the folder). Off, nothing changes: the same app serves a designer and an engineer.",
+    seen: "Cursor's Agents Window and ChatGPT open Files and Terminal as side tabs on demand, beside the chat, without becoming an editor.",
+    cost: "The largest item here. The editor is a text editor with highlighting, not an IDE: no extensions, no debugger. The terminal runs the person's own commands, outside the agent's approvals, so it stays visibly separate from chat. Build after Changes (T3), which gives the tabs their place." },
+  { id: "T8", t: "tech", rec: "later", size: "L", title: "Import an existing system",
+    now: "Offered on Home as not built yet.",
+    gain: "Tokens first (CSS properties, a Tailwind theme, DTCG), as the brief orders it, then Figma variables.",
+    seen: "Figma's variables are readable through its server and API, so Area can read them without a file export.",
+    cost: "Large, and a different user from the one starting fresh." },
+  { id: "T11", t: "tech", rec: "later", size: "M", title: "A packaged app that updates itself",
+    now: "Area runs from the checkout.",
+    gain: "A signed app anyone can install, with updates.",
+    seen: "All three.",
+    cost: "Needed before a second person uses Area. Not before." },
+  { id: "T12", t: "tech", rec: "later", size: "M", title: "Try it three ways",
+    now: "An exploration is made by hand, one at a time.",
+    gain: "Chat makes three explorations of one request, side by side, and you keep one.",
+    seen: "Cursor runs one request across several models in separate worktrees. ChatGPT forks a chat into a new worktree.",
+    cost: "Explorations are already the right container, so this is the one piece of parallel agents worth having." },
+];
+
+const mark = v => `<i class="dot ${v}" role="img" aria-label="${{y:"Has it",p:"Part of it",n:"Doesn't",u:"Not read"}[v]}"></i>`;
+document.querySelector("#matrix tbody").innerHTML = ROWS.map(r => r.length === 1
+  ? `<tr class="group"><td colspan="6">${r[0]}</td></tr>`
+  : `<tr><td>${r[0]}</td><td class="c">${mark(r[1])}</td><td class="c">${mark(r[2])}</td><td class="c">${mark(r[3])}</td><td class="c area">${mark(r[4])}</td><td class="note">${r[5]}</td></tr>`).join("");
+
+const picks = {};            // id -> { pick, note }
+let db = null, filter = "all", saving = 0;
+const LABEL = { build: "Build", later: "Later", no: "No" };
+const SIZE = { S: "Small", M: "Medium", L: "Large" };
+const say = t => { document.getElementById("save").textContent = t; };
+
+function renderFilters() {
+  const el = document.getElementById("filters");
+  const items = [["all", `All ${P.length}`], ["rec", "Recommended to build"], ...Object.entries(THEMES)];
+  el.innerHTML = items.map(([k, l]) => `<button class="chip" type="button" data-f="${k}" aria-pressed="${filter === k}">${l}</button>`).join("");
+}
+function renderProps() {
+  const list = P.filter(p => filter === "all" || (filter === "rec" ? p.rec === "build" : p.t === filter));
+  document.getElementById("props").innerHTML = list.map(p => {
+    const mine = picks[p.id] || {};
+    const btns = ["build", "later", "no"].map(k =>
+      `<button type="button" data-id="${p.id}" data-pick="${k}" class="${p.rec === k ? "rec" : ""}" aria-pressed="${mine.pick === k}">${LABEL[k]}</button>`).join("");
+    return `<article class="prop" id="${p.id.toLowerCase()}">
+      <div>
+        <div class="head"><span class="id">${p.id}</span><h3>${p.title}</h3></div>
+        <div class="head"><span class="tag rec-${p.rec}">Recommended: ${LABEL[p.rec]}</span><span class="tag">${THEMES[p.t]}</span><span class="tag">${SIZE[p.size]}</span></div>
+        <dl><div><dt>Area today</dt><dd>${p.now}</dd></div><div><dt>What it adds</dt><dd>${p.gain}</dd></div>
+        <div><dt>Seen in</dt><dd>${p.seen}</dd></div><div><dt>What it affects</dt><dd>${p.cost}</dd></div></dl>
+      </div>
+      <div>
+        <div class="pick" role="group" aria-label="Your pick for ${p.id}">${btns}</div>
+        <textarea id="note-${p.id}" data-id="${p.id}" rows="1" placeholder="Note" aria-label="Note for ${p.id}">${(mine.note || "").replace(/</g, "&lt;")}</textarea>
+        <span class="state">${mine.pick ? "Your pick: " + LABEL[mine.pick] : "Not picked. The underlined choice is the recommendation"}</span>
+      </div></article>`;
+  }).join("");
+}
+async function write(id) {
+  if (!db) { say("Picks aren't being saved in this view"); return; }
+  saving++; say("Saving");
+  try { await db.doc("verdicts/" + id).set({ ...picks[id], at: new Date().toISOString() }); say("Saved"); }
+  catch (e) { say("Couldn't save. Try the pick again"); }
+  finally { saving--; }
+}
+document.getElementById("filters").addEventListener("click", e => {
+  const b = e.target.closest("[data-f]"); if (!b) return; filter = b.dataset.f; renderFilters(); renderProps();
+});
+document.getElementById("props").addEventListener("click", e => {
+  const b = e.target.closest("[data-pick]"); if (!b) return;
+  const id = b.dataset.id; picks[id] = { ...(picks[id] || {}), pick: b.dataset.pick, note: (picks[id] || {}).note || "" };
+  renderProps(); write(id);
+});
+document.getElementById("props").addEventListener("change", e => {
+  const t = e.target.closest("textarea[data-id]"); if (!t) return;
+  const id = t.dataset.id; picks[id] = { pick: (picks[id] || {}).pick || "", note: t.value }; write(id);
+});
+document.getElementById("takeall").addEventListener("click", async () => {
+  for (const p of P) if (!(picks[p.id] || {}).pick) { picks[p.id] = { pick: p.rec, note: (picks[p.id] || {}).note || "" }; await write(p.id); }
+  renderProps();
+});
+document.querySelectorAll('ol.order a').forEach(a => a.addEventListener("click", () => { if (filter !== "all") { filter = "all"; renderFilters(); renderProps(); } }));
+
+renderFilters(); renderProps();
+(async () => {
+  db = await (window.claude && window.claude.use ? window.claude.use("db") : null);
+  if (!db) { say("Picks aren't being saved in this view"); return; }
+  const timer = setTimeout(() => say("Saved picks didn't load"), 10000);
+  db.collection("verdicts").onSnapshot(snap => {
+    clearTimeout(timer);
+    const active = document.activeElement && document.activeElement.tagName === "TEXTAREA";
+    snap.docs.forEach(d => { const v = d.data() || {}; picks[d.id] = { pick: v.pick || "", note: v.note || "" }; });
+    if (!active && !saving) renderProps();
+  }, () => { clearTimeout(timer); say("Saved picks didn't load"); });
+})();
+</script>
