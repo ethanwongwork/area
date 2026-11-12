@@ -41,3 +41,10 @@ test("the 12px mark carries its 16px drawing and its 12px cut; base.css shows th
   const css = readFileSync(new URL("../../styles/src/base.css", import.meta.url), "utf8");
   assert.match(css, /\[data-area-glyph-drawing="12"\] \{ opacity: var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\); \}/);
 });
+
+test("as=\"button\": the same text as a native button, for a place with no address", () => {
+  const html = render(h(Link, { as: "button", variant: "standalone", onClick() {} }, "Show all 12"));
+  assert.equal(html, '<button type="button" class="area-link area-link--standalone area-link--inherit">Show all 12</button>');
+  // Always a plain button: it never submits a form it sits in, and it keeps native props.
+  assert.match(render(h(Link, { as: "button", type: "submit", disabled: true, "aria-expanded": false }, "More")), /<button type="button" disabled="" aria-expanded="false" class="area-link/);
+});

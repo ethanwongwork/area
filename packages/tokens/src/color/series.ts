@@ -61,8 +61,10 @@ const RAMP_START_LIGHT = 0.96;
 /**
  * The grounds a light mark must clear 3:1 on: the page and the darkest light ground any shipped theme paints text or
  * marks on (a tinted neutral's control hover). series.test.ts holds every shipped ground at least this light.
+ * #f1f3f5 since 2026-11-11: light Layer contrast's default went to 50, which takes the Cool neutral's control hover
+ * there (it was #f4f6f8 at Layer contrast 0).
  */
-export const SERIES_GROUNDS_LIGHT: readonly string[] = ["#ffffff", "#f4f6f8"];
+export const SERIES_GROUNDS_LIGHT: readonly string[] = ["#ffffff", "#f1f3f5"];
 /** The ratio the picks aim for, a margin over the gate's 3:1 and 4.5:1. */
 const MARK_AIM = 3.05, INK_AIM = 4.6;
 
@@ -72,7 +74,9 @@ const MARK_AIM = 3.05, INK_AIM = 4.6;
  * so the two part for red-green colour blindness, red at the marks' 3:1 so a failure reads first. Area's success,
  * warning and danger roles (Badge, Alert, buttons) stay as they are: those carry text.
  */
-export const DATA_STATUS = { success: "#5dce8e", warning: "#ffcd53", danger: "#ff4a4b" } as const;
+// danger was #ff4a4b until 2026-11-11: two steps deeper in green and blue (no visible change) so it still clears 3:1 on
+// the darkest light ground, #f1f3f5, now that light Layer contrast defaults to 50 (2.98 before, 3.01 now).
+export const DATA_STATUS = { success: "#5dce8e", warning: "#ffcd53", danger: "#ff4849" } as const;
 
 export interface SeriesColours {
   light: { mark: string; fill: string; area: string; ink: string; ramp: string[] };

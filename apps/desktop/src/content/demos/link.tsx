@@ -19,5 +19,7 @@ export const GalleryLinkOrange = () => <p style={prose}>Body text with a <Link i
 export const GalleryLinkBrown = () => <p style={prose}>Body text with a <Link ink="brown" href="#gallery-link-ink-brown">link</Link>.</p>;
 export const GalleryLinkAction = () => <p style={prose}>Body text. <Link ink="action" href="#gallery-link-ink-action">Link</Link></p>;
 export const GalleryLinkCaption = () => <p style={caption}>Caption with a <Link href="#gallery-link-content-caption">link</Link>.</p>;
+/* A place with no address (the rest of a list): the same text as a native button, pressed with Space or Enter. */
+export const GalleryLinkButton = () => <Link as="button" variant="standalone" ink="muted">Show all 12</Link>;
 export const GalleryLinkExternal = () => <p style={prose}>Body text with a <Link external href="https://help.figma.com/">link</Link>.</p>;
 export const GalleryLinkWrapped = () => <p style={{ ...prose, maxInlineSize: "calc(var(--area-space-96) * 2)" }}>Body text with a <Link href="#gallery-link-content-wrap">link that wraps onto a second line</Link>.</p>;

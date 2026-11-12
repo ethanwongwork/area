@@ -47,7 +47,7 @@ import { SpecimenBox } from "../specimen-box.tsx";
 import { CodeWell, longLines } from "../inspector.tsx";
 import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
 import { appScale, feedScale, InheritedScaleContext } from "../app-scale.ts";
-import { CanvasSection, GALLERY_LOOK, StatusBadge, Tile, TileGrid, type CardLook, type OpenHow, FEED_TABLE, FeedCount } from "../tile.tsx";
+import { useNear, CanvasSection, GALLERY_LOOK, StatusBadge, Tile, TileGrid, type CardLook, type OpenHow, FEED_TABLE, FeedCount } from "../tile.tsx";
 
 /*
  * The Cards menu (owner, 2026-10-25: "there should just be 1 style of container, so the options for that menu should be
@@ -287,17 +287,9 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
   const here = visitSlug === family.slug;
   const section = useRef<HTMLElement>(null);
   const body = useRef<HTMLDivElement>(null);
-  // Drawn once it nears the view, and kept; the family just left draws at once, so its tile can be found.
-  const [seen, setNear] = useState(false);
-  const near = seen || here;
-  useEffect(() => {
-    if (near || !section.current) return;
-    const root = section.current.closest(".studio-canvas__body");
-    const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) setNear(true); },
-      { root, rootMargin: "100% 0px" });
-    observer.observe(section.current);
-    return () => observer.disconnect();
-  }, [near]);
+  // Drawn once it nears the view, or ahead of it in idle time (tile.tsx useNear), and kept; the family just left draws
+  // at once, so its tile can be found.
+  const near = useNear(section, () => section.current?.closest(".studio-canvas__body") ?? null, "100% 0px", here);
   // A closed section shows as many cards as its row holds (one to four, by the Canvas's width and the zoom).
   const [columns, setColumns] = useState(4);
   useEffect(() => {
@@ -328,9 +320,10 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
   const ghosts = (count: number) => Array.from({ length: count }, (_, index) => <div key={index} className="studio-overview__ghost" aria-hidden="true" />);
   const more = tiles.length > columns;
   return (
-    <section ref={section} className="studio-section" id={`family-${family.slug}`} aria-labelledby={`family-${family.slug}-title`}>
+    // Laid out only near the view (canvas.css .studio-section--far): a change anywhere laid every family out again.
+    <section ref={section} className="studio-section studio-section--far" id={`family-${family.slug}`} aria-labelledby={`family-${family.slug}-title`}>
       <SectionTitle id={`family-${family.slug}-title`}
-        title={<a href={hrefOf({ page: "components", item: family.slug })} className="studio-section__link" onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</a>}
+        title={<Link variant="standalone" href={hrefOf({ page: "components", item: family.slug })} onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</Link>}
         count={tiles.length} badge={<>
           <StatusBadge size="sm" status={STATUS_MARK[status]}>{STATUS_LABEL[status]}</StatusBadge>
           {leftOut() ? <> <StatusBadge size="sm" status="archived">Left out</StatusBadge></> : null}
@@ -348,9 +341,9 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
       {more || open ? (
         // A text control in the title link's style, so its text starts on the cards' edge as the title does.
         <div className="studio-overview__more" {...feedScale()}>
-          <button type="button" className="studio-section__link studio-overview__toggle" aria-expanded={open} aria-controls={`family-${family.slug}`} onClick={onToggle}>
+          <Link as="button" variant="standalone" ink="muted" className="studio-overview__toggle" aria-expanded={open} aria-controls={`family-${family.slug}`} onClick={onToggle}>
             {open ? "Show one row" : `Show all ${tiles.length}`}
-          </button>
+          </Link>
         </div>
       ) : null}
     </section>

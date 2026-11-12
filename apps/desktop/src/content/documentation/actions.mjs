@@ -677,19 +677,21 @@ export default {
       ["Do", "Use action or blue when links must stand out from the text, and a hue only to name a color, never a status."],
       ["Do", "Set external for another site: it opens a new tab, shows the external mark and says so to assistive tech."],
       ["Do", "Use linkVariants to give a router's own anchor the same classes."],
-      ["Don't", "Use a Link to run an action; use a Button."],
-      ["Don't", "Disable a link; a destination that can't be reached is plain text."],
+      ["Do", "Use as=\"button\" for a place with no address: the rest of a list, a step, a row another row names. It is the same text as a native button."],
+      ["Don't", "Use a Link to run an action that changes something; use a Button."],
+      ["Don't", "Disable an anchor; a destination that can't be reached is plain text. Only the button form takes disabled."],
       ["Don't", "Set a size on a link; it takes the size of the text it sits in."],
     ],
     // Spec: Anatomy, Close underline.
     parts: {
-      root: "The native anchor: no box of its own, the text's size and ink, and an underline set close under the letters.",
+      root: "The native anchor, or a native button with as=\"button\": no box of its own, the text's size and ink, and an underline set close under the letters.",
       icon: "The external mark after the text, centred on the cap height; shown with external and hidden from assistive tech.",
     },
     // Native anchor keys.
     keyboard: [
       ["Tab", "Moves focus to the link; the underline shows in full with a focus ring."],
       ["Enter", "Follows the link."],
+      ["Space", "With as=\"button\": presses it, as Enter does."],
     ],
     aria: [
       ["target, rel", "With external: _blank and noopener noreferrer, unless you set your own."],

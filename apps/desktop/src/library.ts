@@ -121,8 +121,6 @@ export function resolveFamily(slug: string, choice: FamilyChoice | undefined, ma
   return { included: choice?.included !== false, axes, states };
 }
 
-/** Whether the library leaves anything of a family out or moves a default. */
-export const isChanged = (library: SystemLibrary, slug: string) => Boolean(library.families[slug]);
 
 /** The library with one family's choice replaced, cleaned (empty lists, manifest defaults and empty families dropped). */
 function withFamily(library: SystemLibrary, slug: string, manifest: ManifestShape, change: (choice: FamilyChoice) => FamilyChoice): SystemLibrary {

@@ -27,6 +27,10 @@ const storeArg = process.argv.find(arg => arg.startsWith("--store="))?.slice("--
 /* --width=<px>: the window's width for a capture (the setup's narrow Canvas was found in a 1024 window, 2026-10-23). */
 /* --run=<js>: run in the page once it has rendered, before the frame is saved (an awaited expression). */
 const runArg = process.argv.find(arg => arg.startsWith("--run="))?.slice("--run=".length);
+/* --clip=<selector>: the capture is that element alone, with --pad=<px> of the page around it (a component's picture
+   for the tools server, packages/output/src/picture.ts). */
+const clipArg = process.argv.find(arg => arg.startsWith("--clip="))?.slice("--clip=".length);
+const padArg = Number(process.argv.find(arg => arg.startsWith("--pad="))?.slice("--pad=".length)) || 0;
 const widthArg = Number(process.argv.find(arg => arg.startsWith("--width="))?.slice("--width=".length)) || 0;
 /* Neutral 975 and white: the app's page ground in each theme, so a resize never shows a flash. */
 const GROUND = { dark: "#020202", light: "#ffffff" };
@@ -81,6 +85,8 @@ function createWindow() {
       contextIsolation: true,
       sandbox: true,
       nodeIntegration: false,
+      // The Preview's <webview>: what it may load and be given is decided in electron/preview.cjs (will-attach-webview).
+      webviewTag: !capture,
     },
   });
   window.loadFile(join(dist, "index.html"), { ...(themeArg ? { query: { theme: themeArg } } : {}), ...(hashArg ? { hash: hashArg } : {}) });
@@ -88,7 +94,8 @@ function createWindow() {
   keepPlace(window);
   window.once("ready-to-show", () => { if (!capture) window.show(); });
   // Links that leave the app open in the browser, never inside the window.
-  window.webContents.setWindowOpenHandler(({ url }) => { require("electron").shell.openExternal(url); return { action: "deny" }; });
+  // Only web and mail links leave the app: a link written by the agent or pasted into a note never starts another kind of program.
+  window.webContents.setWindowOpenHandler(({ url }) => { if (!require("./links.cjs").routeOpen(url, window) && /^(https?|mailto):/i.test(url)) require("electron").shell.openExternal(url); return { action: "deny" }; });
   window.webContents.on("will-navigate", (event, url) => { if (!url.startsWith("file:")) event.preventDefault(); });
 
   // Page errors reach the terminal, so a blank window says why.
@@ -109,7 +116,10 @@ function createWindow() {
       }
       if (runArg) await window.webContents.executeJavaScript(`(async () => { ${runArg} })()`).catch(error => console.error(`[capture] --run: ${error}`));
       await new Promise(resolve => setTimeout(resolve, 800));
-      const image = await window.webContents.capturePage();
+      const clip = clipArg ? await window.webContents.executeJavaScript(`(() => { const el = document.querySelector(${JSON.stringify(clipArg)}); if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; })()`).catch(() => null) : null;
+      if (clipArg && !clip) { console.error(`[capture] nothing matches ${clipArg}`); app.exit(3); return; }
+      const rect = clip ? { x: Math.max(0, Math.floor(clip.x - padArg)), y: Math.max(0, Math.floor(clip.y - padArg)), width: Math.ceil(clip.width + padArg * 2), height: Math.ceil(clip.height + padArg * 2) } : undefined;
+      const image = await window.webContents.capturePage(rect);
       writeFileSync(capture, image.toPNG());
       app.quit();
     });
@@ -278,6 +288,46 @@ function installedFontFiles() {
 if (!capture) require("./agent.cjs").register(() => BrowserWindow.getAllWindows()[0]);
 // Write to folder (electron/output.cjs): a system's published version written into a project as code. Not in a capture.
 if (!capture) require("./output.cjs").register(() => BrowserWindow.getAllWindows()[0]);
+// A project's folder and each place's kept chats (electron/folder.cjs). Not in a capture.
+if (!capture) require("./folder.cjs").register(() => BrowserWindow.getAllWindows()[0]);
+// The Preview of a project's running app and its Choose tool (electron/preview.cjs). Not in a capture.
+if (!capture) require("./preview.cjs").register(() => BrowserWindow.getAllWindows()[0]);
+// Notices and the question before quitting while Claude works (T10). Not in a capture.
+if (!capture) {
+  const { Notification, dialog, ipcMain: ipc } = require("electron");
+  let running = 0;
+  ipc.on("area:running", (_event, count) => { running = Number.isInteger(count) && count > 0 ? count : 0; });
+  // A notice opens the place it is about, with its chat, when clicked.
+  ipc.on("area:notify", (_event, notice) => {
+    if (!Notification.isSupported() || !notice || typeof notice.title !== "string") return;
+    const shown = new Notification({ title: notice.title.slice(0, 80), body: String(notice.body ?? "").slice(0, 240), silent: false });
+    shown.on("click", () => {
+      const window = BrowserWindow.getAllWindows()[0];
+      if (!window) return;
+      if (window.isMinimized()) window.restore();
+      window.show(); window.focus();
+      const hash = require("./links.cjs").hashOfLink(`area://${String(notice.hash ?? "").replace(/^#/, "")}`);
+      if (hash) window.webContents.send("area:open-link", hash);
+      window.webContents.send("area:command", "open-chat");
+    });
+    shown.show();
+  });
+  app.on("browser-window-created", (_event, window) => {
+    window.on("close", event => {
+      if (!running) return;
+      const answer = dialog.showMessageBoxSync(window, { type: "warning", buttons: ["Quit", "Keep working"], defaultId: 1, cancelId: 1,
+        message: running === 1 ? "Claude is still working in a chat" : `Claude is still working in ${running} chats`,
+        detail: "Quitting stops it. What it changed so far stays, and the chat is kept." });
+      if (answer === 1) event.preventDefault(); else running = 0;
+    });
+  });
+}
+// Save, review and publish through a project folder's git and GitHub (electron/github.cjs). Not in a capture.
+if (!capture) require("./github.cjs").register();
+// Technical tools: a folder's files and a terminal in it (electron/tools.cjs). Not in a capture.
+if (!capture) require("./tools.cjs").register(() => BrowserWindow.getAllWindows()[0]);
+// Open in editor (electron/links.cjs). Not in a capture.
+if (!capture) require("./links.cjs").register();
 
 ipcMain.handle("area:fonts-installed", (_event, wanted) => {
   if (capture || !Array.isArray(wanted)) return null;
@@ -349,6 +399,8 @@ function tabMenu() {
       { label: "Reopen Closed Tab", accelerator: "CmdOrCtrl+Shift+T", click: send("reopen-tab") },
       // Home, the fixed first tab (Finder's Go › Home is ⌘⇧H).
       { label: "Home", accelerator: "CmdOrCtrl+Shift+H", click: send("home") },
+      // A link to the place showing, for chat, a note or another app (src/links.ts).
+      { label: "Copy Link", accelerator: "CmdOrCtrl+Shift+C", click: send("copy-link") },
       { type: "separator" },
       { label: "Close Tab", accelerator: "CmdOrCtrl+W", click: send("close-tab") },
       { label: "Close Window", accelerator: "CmdOrCtrl+Shift+W", role: "close" },
@@ -369,6 +421,9 @@ function tabMenu() {
 }
 
 app.setName("Area");
+// area:// links (electron/links.cjs): this copy quits when it was only started to hand a link to the one running.
+const links = require("./links.cjs");
+if (!links.claim({ capture, getWindow: () => BrowserWindow.getAllWindows()[0] })) app.quit();
 app.whenReady().then(() => {
   Menu.setApplicationMenu(tabMenu());
   protocol.handle("area-brand", serveBrand);

@@ -1,0 +1,61 @@
+/* The whole experience (gallery, header, viewer panel) in one system:
+   Serrif at one size, Regular only, sentence case, two text colours, 8px for every gap,
+   margin and padding. The pieces themselves keep their own type. */
+:root {
+  --ui-font: 'SerrifCollectionVF', 'Serrif', Georgia, 'Times New Roman', serif;
+  --ui-size: 13px;
+  --ui-line: 16px;
+  --ui-ink: #111111;
+  --ui-soft: #8f8f8f; /* the second text colour, also used for rules */
+  --ui-link: #0a3cff; /* anything clickable */
+  --ui-bg: #ffffff;
+  --ui-space: 8px;
+}
+
+.ui {
+  font: 400 var(--ui-size) / var(--ui-line) var(--ui-font);
+  color: var(--ui-ink);
+  letter-spacing: 0;
+  text-transform: none;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ui a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ui :focus-visible {
+  outline: 1px solid var(--ui-ink);
+  outline-offset: 2px;
+}
+
+/* The header: the kinds as filters, the current one in ink. */
+.ui-head {
+  padding: var(--ui-space);
+}
+
+.ui-filters a {
+  color: var(--ui-link);
+}
+
+.ui-filters a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* The current place isn't a link to go anywhere: ink. */
+.ui-filters a[aria-current] {
+  color: var(--ui-ink);
+}
+
+/* A piece's name, then its date, then its number, all left aligned. */
+.ui-name {
+  display: grid;
+}
+
+.ui-name .date,
+.ui-name .num {
+  color: var(--ui-soft);
+}

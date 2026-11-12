@@ -12,7 +12,7 @@
  */
 import { cloneElement, createContext, useContext, useEffect, useRef, useState, type PointerEvent, type ReactElement, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
-import { Button, CustomSelect, Field, Input, Segmented, Slider, Toggletip, type FieldProps, type SliderProps } from "@area/react";
+import { Button, CustomSelect, Field, Input, Segmented, Slider, Toggletip, Tooltip, type FieldProps, type SliderProps } from "@area/react";
 import { ResetIcon } from "@area/icons";
 import { GALLERY_CONTROLS, greysTinted, type GalleryControl } from "./gallery/controls.ts";
 import { colourMark, optionMark } from "./option-marks.tsx";
@@ -76,7 +76,8 @@ export function Resets({ value, children }: { value: Reset | null; children: Rea
 export function ResetButton({ reset, name }: { reset: Reset; name?: string }) {
   if (!reset.changed) return null;
   const words = `Reset ${name ?? "this setting"} to default`;
-  return <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<ResetIcon />} aria-label={words} title={words} onClick={reset.reset} />;
+  // Named in Area's Tooltip, never the browser's title (product UI rule 4).
+  return <Tooltip side="bottom" describes={false} trigger={<Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<ResetIcon />} aria-label={words} onClick={reset.reset} />}>{words}</Tooltip>;
 }
 
 /*

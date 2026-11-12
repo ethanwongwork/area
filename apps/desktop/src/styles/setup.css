@@ -38,8 +38,6 @@
   /* A note in the question card: the info glyph on the first line, text-base muted. */
   .setup-step__note { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--area-space-8); align-items: start; margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
   .setup-step__note > svg { margin-block-start: 1px; color: var(--area-fg-muted); } /* pick: the 16 icon on the first line */
-  .setup__link { padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: start; text-decoration: underline; text-decoration-color: var(--area-border-subtle); text-underline-offset: 3px; cursor: pointer; }
-  .setup__link:hover { text-decoration-color: currentColor; }
   .setup-foot__grow { flex: 1; }
 
   /* A question card's controls (the bar, the toggle, the swatches): one column, the ends named under a bar. */
@@ -173,13 +171,10 @@
   .cw-section { display: grid; gap: var(--area-space-8); min-inline-size: 0; }
   .cw-cell-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-inline-size: 0; inline-size: 100%; }
   .cw-dock { --area-composer-inline-size: 100%; padding: 0 var(--area-space-16) var(--area-space-12); }
-  .ss-body-text { color: var(--area-fg-muted); }
   .ss-cell-fit { inline-size: 1%; white-space: nowrap; }
   .ss-cell { display: inline-flex; }
   .ss-region { display: grid; min-inline-size: 0; }
   .ss-region--inline { display: inline-flex; align-items: center; gap: 6px; }
-  .ss-strong { font-weight: var(--area-weight-strong, 500); }
-  .ss-muted { color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
   .ss-grow { flex: 1 1 0; min-inline-size: 0; }
   /* Card content lays out from an app element, never by restyling CardContent (product UI rule 13). */
 
@@ -187,7 +182,6 @@
    * Choice glyphs (src/choice-visuals.tsx): one mark per setting, drawn only from the option's tokens at true size, on the
    * page's ground, so the property is the whole picture (Radix's theme panel; Untitled UI's swatches).
    */
-  .cv-glyph { display: grid; place-items: center; align-self: stretch; justify-self: stretch; border-radius: var(--area-radius-small); background: var(--area-bg-page); color: var(--area-fg-default); }
   .cv-swatch { inline-size: 32px; block-size: 32px; border-radius: var(--area-radius-full); background: var(--area-accent-solid); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); } /* pick */
   .cv-bar { inline-size: 56px; block-size: var(--area-control-sm); border-radius: var(--area-radius-control-sm); } /* pick */
   .cv-bar--action { background: var(--area-action-solid, var(--area-fg-default)); }
@@ -243,7 +237,6 @@
   .cv-track { position: relative; inline-size: 64px; block-size: 4px; border-radius: 2px; background: var(--area-fill-track); } /* pick */
   .cv-track > i { position: absolute; inset-block-start: -6px; inline-size: 16px; block-size: 16px; border-radius: var(--area-radius-full); background: var(--area-fg-default); animation: cv-travel calc(var(--area-duration-base) * 4) var(--area-ease-in-out) infinite alternate; } /* pick */
   @keyframes cv-travel { from { inset-inline-start: 0; } to { inset-inline-start: calc(100% - 16px); } }
-  .cv-card { inline-size: 200px; } /* pick */
   /* The mini UI: a tiny window from real tokens (Untitled UI's thumbnails), at its own size, scaled into the choice. */
   .cv-mini { display: grid; grid-template-columns: 64px 176px; inline-size: 240px; block-size: 160px; overflow: hidden; border-radius: var(--area-radius-surface); background: var(--area-bg-page); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-card), 0 2px 8px -2px rgb(0 0 0 / 0.12); } /* pick: the reference's soft lift under the window */
   .cv-mini__line { display: flex; align-items: center; gap: 6px; } /* pick */
@@ -265,48 +258,6 @@
   .cv-mini__field { display: block; block-size: var(--area-control-xs); border-radius: var(--area-radius-control-xs); border: var(--area-stroke-width) solid var(--area-edge-control); background: var(--area-input-bg, var(--area-bg-surface)); }
   .cv-mini__menu { display: grid; gap: 2px; inline-size: 96px; padding: 4px; border-radius: var(--area-radius-small); background: var(--area-bg-surface); border: var(--area-border-width) solid var(--area-border-float); box-shadow: var(--area-shadow-float); } /* pick */
   .cv-mini__menu > i { display: block; block-size: 10px; border-radius: var(--area-radius-row); } /* pick */
-  /* --- Layer map (src/layer-map.tsx) --------------------------------------------- */
-  /* A window drawn only from the Layers roles, each region tagged with its name, layer and painted colour (owner,
-     2026-10-22: "make those combinations extremely clear"). Laid out at 520, the stage's narrow column, and scaled whole to it; no
-     transitions, so a tag reads the colour the choice paints, not one on its way there. */
-  /* The map is the page in its own theme (the stage's tile is the setup's), so the strip under the window reads in dark. */
-  .lm { display: grid; gap: var(--area-space-16); inline-size: 520px; padding: var(--area-space-16); border-radius: 16px; background: var(--area-bg-page); color: var(--area-fg-default); font-size: 12px; line-height: 16px; } /* pick */
-  .lm * { transition: none; }
-  .lm-window { display: grid; grid-template-rows: 36px 480px; overflow: hidden; border: 1px solid var(--area-border-float); border-radius: 12px; background: var(--area-bg-page); box-shadow: var(--area-shadow-float); } /* pick */
-  .lm-bar { display: flex; align-items: center; gap: var(--area-space-12); padding-inline: var(--area-space-12); border-block-end: 1px solid var(--area-border-divider); background: var(--area-bg-page); }
-  .lm-lights { display: flex; gap: 6px; }
-  .lm-lights > i { inline-size: 10px; block-size: 10px; border-radius: 50%; background: var(--area-border-subtle); }
-  .lm-body { display: grid; grid-template-columns: 136px minmax(0, 1fr) 128px; min-block-size: 0; } /* pick */
-  .lm-side { display: grid; align-content: start; gap: var(--area-space-4); padding: var(--area-space-12); border-inline-end: 1px solid var(--area-border-divider); background: var(--area-bg-subtle); }
-  .lm-side > .lm-tag { margin-block-end: var(--area-space-8); }
-  .lm-nav { display: flex; align-items: center; block-size: 24px; padding-inline: var(--area-space-4); border-radius: 6px; } /* pick */
-  .lm-nav:empty::before { content: ""; inline-size: 60%; block-size: 6px; border-radius: 3px; background: var(--area-border-subtle); }
-  .lm-nav--current { background: var(--area-bg-component-active); }
-  .lm-nav--hover { background: var(--area-bg-component-hover); }
-  .lm-main { position: relative; display: grid; grid-template-rows: auto auto 1fr; align-content: start; gap: var(--area-space-12); padding: 0 var(--area-space-12) var(--area-space-12); background: var(--area-bg-page); }
-  .lm-header { display: flex; align-items: center; justify-content: space-between; block-size: 40px; margin-inline: calc(var(--area-space-12) * -1); padding-inline: var(--area-space-12); border-block-end: 1px solid var(--area-border-divider); background: var(--area-bg-page); }
-  .lm-control { inline-size: 40px; block-size: 24px; border-radius: 6px; background: var(--area-bg-component); } /* pick */
-  .lm-cards { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-12); align-items: start; }
-  .lm-card { display: grid; gap: var(--area-space-8); padding: var(--area-space-12); border: 1px solid var(--area-border-card); border-radius: 10px; background: var(--area-bg-card); } /* pick */
-  .lm-line { block-size: 6px; border-radius: 3px; background: var(--area-border-subtle); }
-  .lm-line--short { inline-size: 60%; }
-  .lm-field { display: flex; align-items: center; min-block-size: 28px; padding-inline: var(--area-space-4); border-radius: 6px; background: var(--area-bg-component); } /* pick */
-  .lm-menu { position: absolute; inset-inline-end: var(--area-space-12); inset-block-end: var(--area-space-12); display: grid; gap: var(--area-space-2); inline-size: 168px; padding: var(--area-space-4); border: 1px solid var(--area-border-float); border-radius: 10px; background: var(--area-bg-surface); box-shadow: var(--area-shadow-float); } /* pick */
-  .lm-menu > .lm-tag { margin: var(--area-space-4) var(--area-space-4) var(--area-space-4); }
-  .lm-inspector { display: grid; align-content: start; gap: var(--area-space-8); padding: var(--area-space-12); border-inline-start: 1px solid var(--area-border-divider); background: var(--area-bg-page); }
-  /* A tag reads on every region: the ink as its plate, the page as its text. */
-  .lm-tag { display: inline-flex; flex-wrap: wrap; align-items: baseline; justify-self: start; gap: 0 var(--area-space-4); padding: 2px var(--area-space-6); border-radius: 4px; background: var(--area-fg-default); color: var(--area-bg-page); font-size: 11px; line-height: 14px; } /* pick */
-  .lm-tag > span { opacity: 0.72; }
-  .lm-tag > code { font-family: var(--area-font-mono); font-size: 10px; opacity: 0.72; }
-  .lm-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-12); }
-  .lm-tone { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--area-space-8); align-items: center; }
-  .lm-tone > .lm-swatch { grid-row: span 3; inline-size: 40px; block-size: 40px; border: 1px solid var(--area-border-divider); border-radius: 8px; } /* pick */
-  .lm-tone > span:not(.lm-swatch), .lm-tone > code { color: var(--area-fg-muted); }
-  .lm-tone > code { font-family: var(--area-font-mono); font-size: 11px; }
-  .lm-swatch--page { background: var(--area-bg-page); }
-  .lm-swatch--recessed { background: var(--area-bg-subtle); }
-  .lm-swatch--raised { background: var(--area-bg-surface); }
-  .lm-swatch--fill { background: var(--area-bg-component); }
   /* A setting elsewhere that changes what a question shows, set apart so it reads as a heads-up. */
   .setup-step__note--context { padding: var(--area-space-8) var(--area-space-12); border-radius: var(--area-radius-small); background: var(--area-bg-component); color: var(--area-fg-default); }
   /* A choice card's whole-screen picture (choice-visuals.tsx): the Workspace showcase filling the card's frame. */

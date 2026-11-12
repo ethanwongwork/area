@@ -76,8 +76,6 @@
   .area-menu__item.lang-state-pressed { background-color: var(--area-bg-component-pressed); }
 
 
-/* Theme (src/pages/theme.tsx): the custom properties a preset writes, one Code each, wrapping. */
-.studio-writes { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--area-space-4); }
 .studio-brand__colour { display: inline-flex; align-items: center; gap: var(--area-space-6); }
   /* Feedback's drawing (abstract.tsx, LoopingPress): the Button's own press paint and give, held for a moment by class,
      arriving on the press clock as a real press does. */
@@ -93,7 +91,6 @@
    * its own canvas on the theme's page, 24 round the specimen (16 at 2×), the specimen zoomed at 2× (CSS zoom: text and
    * lines drawn at the zoom, not scaled), tiles 8 apart. A tile whose component fills a width (a card, a menu, a track)
    * spans two columns. */
-  .studio-playground { display: grid; gap: var(--area-space-16); }
   .studio-preview {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, calc(var(--area-space-96) * 2 + var(--area-space-48))), 1fr));

@@ -549,7 +549,7 @@ export const editSummary = {
 export const diff = {
   block: "area-diff", description: "A unified diff in Code block sm's metrics: line numbers, a + or − marker and a tint on added and removed lines, folds between hunks.",
   variants: {},
-  elements: ["lines", "line", "number", "marker", "text", "fold"],
+  elements: ["lines", "line", "number", "marker", "text", "fold", "comment", "note"],
   elementModifiers: { line: ["added", "deleted", "removed"] }, // removed: deprecated for deleted (components audit D6)
   defaults: {},
 } as const satisfies ComponentManifest;

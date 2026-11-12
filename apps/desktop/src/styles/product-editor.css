@@ -1,0 +1,84 @@
+/* ---------------------------------------------------------------------------
+ * A code editor's main window (content/examples/product-editor.tsx). Layout only: the window's regions, their sizes
+ * and the room between things. Every control, surface, text style and colour is an Area component or token.
+ * Measured sizes: docs/research/ui-patterns-2026-10-22/cursor-figma.md (the product's installed bundle). The side
+ * panes' widths (300, 400) are Panel props in the screen, not CSS.
+ * ------------------------------------------------------------------------- */
+
+/* The window: title bar, the three columns, a rule, the status bar. The bars keep their components' own heights. */
+.px-editor {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  box-sizing: border-box;
+  inline-size: 1440px; /* pick: the window */
+  block-size: 900px; /* pick: the window */
+  overflow: hidden;
+  background: var(--area-bg-page);
+  color: var(--area-fg-default);
+  font-family: var(--area-font-sans);
+  font-size: var(--area-ui-size);
+  line-height: var(--area-ui-leading);
+}
+
+/* Shared: what takes the rest of a row. */
+.px-editor__grow { flex: 1 1 0; min-inline-size: 0; }
+
+/* Title bar: the command field in the middle of the room between the bar's two ends. */
+.px-editor__command { display: flex; flex: 1 1 0; justify-content: center; min-inline-size: 0; }
+.px-editor__command-field { inline-size: 440px; } /* pick: under the measured 500 maximum (.command-center-center) */
+
+/* Side bar · editor group · agent pane. The panes are Panels at their own widths. */
+.px-editor__body { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; min-block-size: 0; }
+.px-editor__pane { block-size: 100%; min-block-size: 0; }
+
+/* Editor group: tabs, a rule, the path, the code, a rule, the bottom panel. */
+.px-editor__group { display: flex; flex-direction: column; min-inline-size: 0; min-block-size: 0; }
+.px-editor__tabs {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--area-space-4);
+  block-size: 35px; /* measured: EDITOR_TAB_HEIGHT.normal */
+  padding-inline: var(--area-space-12) var(--area-space-8);
+}
+.px-editor__crumbs {
+  display: flex;
+  flex: none;
+  align-items: center;
+  block-size: 32px; /* measured: .breadcrumbs-below-tabs */
+  padding-inline: var(--area-space-12);
+}
+.px-editor__code { position: relative; flex: 1 1 0; min-block-size: 0; overflow: hidden; }
+/* The edit's controls float over the code's foot, centred, 12 up as a corner overlay is (shell.md). */
+.px-editor__review {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: var(--area-space-12);
+  display: flex;
+  justify-content: center;
+}
+
+/* Bottom panel: its title row, then the terminal. */
+.px-editor__panel {
+  display: grid;
+  flex: none;
+  grid-template-rows: 35px minmax(0, 1fr); /* measured: .part>.title */
+  block-size: 224px; /* pick: the product's default is a third of the window; less here so the editor shows 30 rows */
+}
+.px-editor__panel-head {
+  display: flex;
+  align-items: center;
+  gap: var(--area-space-4);
+  padding-inline: var(--area-space-12) var(--area-space-8); /* measured: .part>.title 0 8; 12 puts the tabs on the editor tabs' edge */
+}
+.px-editor__panel-body { min-block-size: 0; overflow: hidden; }
+
+/* Agent pane: the turn's blocks, the heading step apart (spacing.md). */
+.px-editor__thread { display: grid; align-content: start; gap: var(--area-space-12); }
+
+/* Status bar: its items' ends 8 from the window's edge (measured 7; the ladder's nearest step). */
+.px-editor__status { padding-inline: var(--area-space-8); }
+
+/* The side bar is the window's chrome: it paints the subtle ground (Panel data-area-chrome), so Layer contrast sets it apart from the editor. */
+.px-editor__pane[data-area-chrome] { --area-chrome-fill: var(--area-bg-subtle); }

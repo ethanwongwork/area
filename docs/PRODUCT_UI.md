@@ -164,6 +164,12 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     version; Publish's before and after) keeps the whole screen fitted, as a thumbnail, and opens at 1:1 (rule 25). A
     question about the whole design (which screen, A or B, how close, what's off) shows the whole screen fitted.
     `QuestionFrame` (src/question-kit.tsx) opens at 100% on its `focus`; Setup's Component view draws the part at 2.5×.
+27. **Each region loads and fails on its own** (the smoothness pass, 2026-11-11; docs/research/desktop-app-analysis-2026-11-10,
+    V3). A region whose content throws while it draws (the Canvas, the Sidebar's list, an Inspector view, the Chat)
+    shows, in its own place, what failed and Try again (src/region-boundary.tsx `RegionBoundary`), and the rest of the
+    app keeps working; moving to another place clears it. Waits follow WRITING.md's loading ladder: nothing under a
+    second, then a Spinner or a Skeleton of the region's real layout with `delay` (`"short"`, 300 ms, where a blank
+    would read as broken), Progress past three seconds. A region never shows a spinner and an empty state at once.
 
 ## The app's layout
 
@@ -921,6 +927,23 @@ From the app CSS audit (2026-10-22, `docs/research/cursor-audit-2026-10-22.md` i
 - **List box**: a grid option whose content draws its own frame (no plate), for the app's plain tiles.
 - **Button**: a text-size hook and a coloured shadow for the Abstract board's reference pieces, or the pieces move their
   paint to tokens on the scene's scope.
+
+From the app audit (2026-11-10/11, worktree `electron-app-audit-cleanup-35275b`; the shell, thread, account row,
+pane header and Message heading role from the four product screens are in the design system audit's backlog,
+`docs/research/system-evaluation-2026-11-11/structure-backlog.md`):
+
+- **Link as a button**: built 2026-11-11 (`Link as="button"`, docs/specs/link.md); the Components overview, flow
+  checks and Setup notes use it.
+- **A row that opens something, with an action at its end, and no address**: the Design view's change log draws a raw
+  button with its own hover plate and focus ring (`design-inspector.tsx`, `design.css` `.studio-design__change-open`).
+  Nav item is a link and needs an `href`; List box is for choosing. Wanted: a button form of Nav item, or a list row.
+- **Copy button's name**: icon-only, it has no Tooltip of its own (rule 4), so the Components overview keeps a ghost
+  Button in a Tooltip with its own copy logic (`pages/components.tsx` CopyCode).
+- **A Popover's icon-only trigger** cannot also be a Tooltip's trigger, so the page-color and accent pickers' buttons are
+  named by `aria-label` alone (`page-colour.tsx`, `brand-settings.tsx`).
+- **Table cells**: the Tokens, Typography, Color and Components pages mix raw `td` with `TableCell` in one table.
+- **Flow node** (already a Candidate in COMPONENTS.md): the flow map's step card is app CSS; it takes the Selected
+  stroke and focus ring settings since 2026-11-11, and its dock and the Play bar are Area's Toolbar.
 
 Earlier: the 2026-10-12 audit's gaps were all built on 2026-10-15 (Copy button, List box, Hover card `openOnFocus`, Table cells, Badge `onColor`,
 Nav `revealActions`, Context menu `itemSelector`, Card selected, Titlebar and Section heading). Record new ones here.

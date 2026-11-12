@@ -1,0 +1,31 @@
+/* ---------------------------------------------------------------------------
+ * Product screen: an assistant's window (content/examples/product-assistant.tsx). Layout only: the regions' sizes,
+ * grids and gaps. Every control, surface, text style and colour is an Area component or token.
+ * ------------------------------------------------------------------------- */
+.px-assistant { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; inline-size: 1440px; block-size: 900px; overflow: hidden; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); } /* pick: the window, 1440 × 900 */
+.px-assistant__grow { flex: 1 1 0; min-inline-size: 0; }
+
+/* Sidebar: Panel's own width property. */
+.px-assistant__side { --area-panel-inline-size: 288px; block-size: 100%; min-block-size: 0; } /* measured: docs/research/claude-code-ui-audit-2026-10-31.md, sidebar width 288 */
+.px-assistant__groups { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-16); } /* groups 16 apart: area-ui-compose shell.md, Nav panels */
+.px-assistant__account { display: flex; align-items: center; gap: var(--area-space-8); min-inline-size: 0; }
+.px-assistant__person { display: grid; flex: 1 1 0; min-inline-size: 0; }
+.px-assistant__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+.px-assistant__plan { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+
+/* Conversation: header, thread (the one scroller), dock. */
+.px-assistant__main { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-inline-size: 0; min-block-size: 0; }
+.px-assistant__thread { min-block-size: 0; }
+.px-assistant__column { box-sizing: border-box; inline-size: 100%; max-inline-size: calc(768px + 2 * var(--area-space-12)); margin-inline: auto; padding-inline: var(--area-space-12); } /* measured: docs/research/chat-kit-2026-11-02/live.md, transcript 48rem, the column's 12 a side kept beside an artifact */
+.px-assistant__turns { display: grid; grid-template-columns: minmax(0, 1fr); padding-block: var(--area-space-16) var(--area-space-24); }
+.px-assistant__turns > * + * { margin-block-start: var(--area-text-lg-prose-gap); }
+.px-assistant__dock { padding-block-end: var(--area-space-12); }
+
+/* Artifact: the panel fills the window's height; its body is one column of blocks. */
+.px-assistant__artifact { block-size: 100%; min-block-size: 0; }
+.px-assistant__artifact-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-24); padding-block: var(--area-space-16); }
+.px-assistant__kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--area-space-12); }
+.px-assistant__foot { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-12); color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+
+/* The sidebar is the window's chrome: it paints the subtle ground (Panel data-area-chrome), so Layer contrast sets it apart from the page. */
+.px-assistant__side { --area-chrome-fill: var(--area-bg-subtle); }

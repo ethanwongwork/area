@@ -95,6 +95,17 @@ export const GalleryEditSummaryDesign = () => {
   );
 };
 export const GalleryDiff = () => <div style={frame}><Diff aria-label="Changes to Item one" hunks={hunks} /></div>;
+/** A comment on a line: the + at each line's start writes a note under it (the first line's shows here). */
+function DiffComment() {
+  const [notes, setNotes] = useState([{ hunk: 0, line: 2 }]);
+  return (
+    <div style={frame}>
+      <Diff aria-label="Changes to Item one" hunks={hunks} notes={notes.map(at => ({ ...at, content: "Body text" }))}
+        onComment={(_line, at) => setNotes(current => current.some(note => note.hunk === at.hunk && note.line === at.line) ? current : [...current, at])} />
+    </div>
+  );
+}
+export const GalleryDiffComment = () => <DiffComment />;
 
 // ---- Approval ----
 const options = [

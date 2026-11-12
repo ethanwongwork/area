@@ -111,6 +111,10 @@ export function useDesignEditor({ project, page, layer, render, width, onChange 
     const taken = entry[from].pop();
     if (!current || !taken) return;
     const [was, now] = from === "undo" ? [taken.after, taken.before] : [taken.before, taken.after];
+    // The step only holds while the design is still the one it left: after a version or an iteration is restored (or the
+    // layer is gone) the stack describes another design, so it empties rather than writing an old one over the restore.
+    const live = layerOf(current, taken.page, taken.layer);
+    if (!live || JSON.stringify(live.doc ?? null) !== JSON.stringify(was.doc ?? null)) { entry.undo = []; entry.redo = []; bump(n => n + 1); return; }
     const next = { ...withDoc(current, taken.page, taken.layer, now.doc), changes: revertChanges(current.changes, was.changes, now.changes) };
     entry[from === "undo" ? "redo" : "undo"].push(taken);
     latest.current = next;

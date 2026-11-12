@@ -15,14 +15,14 @@
  *   VersionsPage      #project/<id>/versions/<id>: saved versions, each restored from the Inspector
  */
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
-import { AssetGrid, AssetGridItem, Button, ConfirmDialog, ContextMenu, Dialog, EmptyState, Field, Input, Menu, MenuItem, MenuSeparator, MenuSub, Nav, NavItem, PanelSection, Radio, RadioGroup, Segmented, Table, TableCell, TableHeaderCell, TableLink, Textarea } from "@area/react";
+import { AssetGrid, AssetGridItem, Button, ConfirmDialog, ContextMenu, Dialog, EmptyState, Field, Input, Menu, MenuItem, MenuSeparator, MenuSub, Nav, NavItem, PanelSection, Radio, RadioGroup, Segmented, Table, TableCell, TableHeaderCell, TableLink, Textarea, Toolbar, ToolbarSeparator } from "@area/react";
 import { AddIcon, AppWindowIcon, ArrowLeftIcon, ChevronDownIcon, CopyIcon, ImageIcon, LightbulbIcon, MoreHorizontalIcon, PencilIcon, PlayIcon, RotateCcwIcon } from "@area/icons";
 import { canvasAttributes, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, CARD_SCOPE, Tile, TileGrid, type OpenHow, FEED_TABLE, WhenVisible } from "../tile.tsx";
 import { ViewControls, ViewLead } from "../view-controls.tsx";
 import { useDesignViewer, type DesignViewerOptions } from "../design-viewer.tsx";
 import { AddLayer, DesignPanel, screenFile } from "../design-panel.tsx";
-import { StageSelection } from "../design-select.tsx";
+import { StageSelection, ToolButton } from "../design-select.tsx";
 import { ChangeLog, ElementPanel } from "../design-inspector.tsx";
 import { applyChange, elementAt, nodeFor, patchFor, pathOf, screensIn } from "../design-edit.ts";
 import { useDesignEditor } from "../design-editor.tsx";
@@ -31,6 +31,9 @@ import { checkFlow, isFlow, linkAt, nextOf, readFlow, stepName, type Flow } from
 import { FlowChecks, FlowDescription, FlowMap } from "../flow-map.tsx";
 import { openDesign, useCardArrival } from "../morph.ts";
 import { Facts } from "../facts.tsx";
+import { ChatChanges } from "../chat/changes.tsx";
+import { OpenInEditor } from "../editors.tsx";
+import { folderName } from "../output.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { SHOWCASE, ScreenFigure } from "../setup-screen.tsx";
 import { hasColours } from "../colours.ts";
@@ -39,7 +42,7 @@ import { EXAMPLES, PATTERNS, screenDesign, WidthZoom } from "./examples.tsx";
 import { NameDialog } from "./home.tsx";
 import { nameOf, url, useLibrary } from "./imagery.tsx";
 import { BeforeAfter, KINDS, ThemeScreen } from "../publish.tsx";
-import { addExploration, addLayer, addPage, BACK, changesOn, duplicateLayer, removeLayer, renameLayer, restoreVersion, saveVersion, setBranch, setNote, setState, type DesignChange, type Layer, type Project, type ProjectPage } from "../projects.ts";
+import { addExploration, addLayer, addPage, BACK, changesOn, duplicateLayer, removeLayer, renameLayer, restoreVersion, saveVersion, setBranch, setFolder, setNote, setState, type DesignChange, type Layer, type Project, type ProjectPage } from "../projects.ts";
 import { activeTheme, followedVersion, liveOf, nextVersion, releasesAfter, RELEASE_KIND_LABEL, versionName, type ReleaseKind } from "../systems.ts";
 import { ReleaseNotice } from "../release-notice.tsx";
 
@@ -69,6 +72,50 @@ function ProjectActions({ project }: { project: Project }) {
           description="Its folder moves to the Trash, where it can be put back; its tab closes. What it published stays in its system."
           onOpenChange={next => { if (!next) setDeleting(false); }} onConfirm={() => { deleteProject(project.id); setDeleting(false); }} />
       ) : null}
+    </PanelSection>
+  );
+}
+
+/**
+ * The project's folder (owner, 2026-11-10: "a folder for every project, and chat works there"): where its code lives
+ * on this Mac. Choosing one is the person's say that Claude may read it; every change still asks. A folder that was
+ * moved or deleted says so, and Chat won't work anywhere else in its place.
+ */
+function ProjectFolder({ project }: { project: Project }) {
+  const { updateProject } = useStudio();
+  const bridge = typeof window === "undefined" ? undefined : window.areaDesktop?.folder;
+  const [state, setState] = useState<FolderState | null>(null);
+  useEffect(() => {
+    if (!project.folder || !bridge) { setState(null); return; }
+    let alive = true;
+    const read = () => bridge.state(project.folder!).then(next => { if (alive) setState(next); }, () => {});
+    read();
+    // Looked at again when the window comes back: the folder may have been moved in Finder meanwhile.
+    addEventListener("focus", read);
+    return () => { alive = false; removeEventListener("focus", read); };
+  }, [project.folder, bridge]);
+  const choose = async () => {
+    const path = await bridge?.choose(project.folder ?? null);
+    if (path) updateProject(project.id, current => setFolder(current, path));
+  };
+  if (!bridge) return null;
+  const folder = project.folder;
+  const gone = Boolean(folder) && state?.exists === false;
+  return (
+    <PanelSection heading="Code">
+      {folder ? (
+        <Facts label="Code" items={[
+          ["Folder", <span title={folder}>{folderName(folder)}</span>],
+          gone ? null : ["System", state?.system ? "Written here" : "Not written yet"],
+        ]} note={gone ? "This folder isn't there any more. Choose it again so Chat can work in it."
+          : "Chat works in this folder and asks before each change."} />
+      ) : <p className="studio-inspector-note">No folder yet. Choose the folder that holds this project's code, and Chat works there.</p>}
+      <div className="studio-inspector-actions">
+        {folder && !gone ? <OpenInEditor folder={folder} path={folder} /> : null}
+        {folder && !gone ? <Button size="sm" variant="soft" tone="neutral" onClick={() => bridge.reveal(folder)}>Show in Finder</Button> : null}
+        <Button size="sm" variant="soft" tone="neutral" onClick={choose}>{folder ? "Change folder" : "Choose folder"}</Button>
+        {folder ? <Button size="sm" variant="soft" tone="neutral" onClick={() => updateProject(project.id, current => setFolder(current, null))}>Remove folder</Button> : null}
+      </div>
     </PanelSection>
   );
 }
@@ -177,7 +224,7 @@ export function ProjectOverview() {
                 it, ⌘-click in a tab of its own. They were text cards (a name and its layers' names) until then. */}
             <TileGrid span="wide" cards min={CARD_MIN}>
               {project.pages.map(page => (
-                <Tile key={page.id} span="wide" stage="screen" inert openOnClick label={page.name} value={isFlow(page) ? `Flow · ${plural(readFlow(page).steps.length, "step")}` : page.layers.length ? plural(page.layers.length, "layer") : "Empty"}
+                <Tile key={page.id} span="wide" stage="screen" inert openOnClick label={page.name} value={isFlow(page) ? `Flow, ${plural(readFlow(page).steps.length, "step")}` : page.layers.length ? plural(page.layers.length, "layer") : "Empty"}
                   onOpen={how => navigate({ page: "project-page", item: page.id }, { newTab: how.newTab })}>
                   {page.layers[0] ? <LayerView layer={page.layers[0]} library={library} /> : null}
                 </Tile>
@@ -220,7 +267,7 @@ export function ProjectOverview() {
         </div>
         {dialog}
       </>}
-      inspector={{ design: <><ProjectActions project={project} /><ProjectFacts project={project} /></> }}
+      inspector={{ design: <><ProjectActions project={project} /><ProjectFacts project={project} /><ProjectFolder project={project} /></>, code: <ChatChanges /> }}
     />
   );
 }
@@ -457,6 +504,8 @@ export function ProjectPageView() {
       </>}
       inspectorFooter={<ChangeLog project={project} page={page} layer={layer} onOpen={openChange} screenFile={fileOf} />}
       inspector={{
+        // What the project's chat changed, a file at a time (src/chat/changes.tsx).
+        code: <ChatChanges />,
         // The chosen element's properties (src/design-inspector.tsx), else what is on the stage: the layer and its page.
         design: layer && selected && editable ? (
           <ElementPanel project={project} page={page} layer={layer} stage={stageRef} path={selected} onSelect={choose}
@@ -559,18 +608,20 @@ function PlayBar({ flow, page, layer, trail, hints, onBack, onRestart, onJump, o
   const main = step?.role === "state" ? flow.byId.get(step.of!) : step;
   const index = main ? flow.steps.findIndex(entry => entry.layer.id === main.layer.id) : -1;
   return (
-    <div className="studio-play" role="toolbar" aria-label={`Playing ${page.name}`}>
-      <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<ArrowLeftIcon />} aria-label="Back" disabled={trail.length < 2} onClick={onBack} />
-      <Button size="sm" variant="ghost" tone="neutral" iconOnly icon={<RotateCcwIcon />} aria-label="Restart (R)" onClick={onRestart} />
-      <span className="studio-play__rule" aria-hidden="true" />
-      <Menu aria-label="Steps" align="start" trigger={<Button size="sm" variant="ghost" tone="neutral" trailingIcon={<ChevronDownIcon />}>
+    <div className="studio-play">
+    <Toolbar variant="surface" size="sm" aria-label={`Playing ${page.name}`}>
+      <ToolButton label="Back" icon={<ArrowLeftIcon />} disabled={trail.length < 2} onClick={onBack} />
+      <ToolButton label="Restart" keys={["R"]} icon={<RotateCcwIcon />} onClick={onRestart} />
+      <ToolbarSeparator />
+      <Menu aria-label="Steps" align="start" side="top" trigger={<Button size="sm" variant="ghost" tone="neutral" trailingIcon={<ChevronDownIcon />} data-area-toolbar-item="" tabIndex={-1}>
         {index >= 0 && step?.role !== "branch" ? <span className="studio-muted">{`${index + 1} of ${flow.steps.length}`}&nbsp;</span> : null}{step?.role === "state" ? stepName(flow, layer) : step?.role === "branch" ? `${step.number} ${layer.name}` : layer.name}
       </Button>}>
         {flow.ordered.map(entry => <MenuItem key={entry.layer.id} onClick={() => onJump(entry.layer.id)}>{stepName(flow, entry.layer)}</MenuItem>)}
       </Menu>
-      <span className="studio-play__rule" aria-hidden="true" />
-      <Button size="sm" variant="ghost" tone="neutral" icon={<LightbulbIcon />} selected={hints} onClick={onHints}>Hints</Button>
-      <Button size="sm" variant="soft" tone="neutral" onClick={onDone}>Done</Button>
+      <ToolbarSeparator />
+      <Button size="sm" variant="ghost" tone="neutral" icon={<LightbulbIcon />} selected={hints} onClick={onHints} data-area-toolbar-item="" tabIndex={-1}>Hints</Button>
+      <Button size="sm" variant="soft" tone="neutral" onClick={onDone} data-area-toolbar-item="" tabIndex={-1}>Done</Button>
+    </Toolbar>
     </div>
   );
 }
@@ -632,6 +683,7 @@ export function ExplorationPage() {
       </>}
       inspector={{
         theme: <CanvasSettings />,
+        code: <ChatChanges />,
         design: (<>
           <PanelSection>
             <div className="studio-inspector-actions">
@@ -728,6 +780,7 @@ export function VersionsPage() {
         ) : null}
       </>}
       inspector={{
+        code: <ChatChanges />,
         design: chosen ? (<>
           <PanelSection>
             <div className="studio-inspector-actions">

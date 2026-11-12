@@ -5,7 +5,8 @@
  *                 (white), 99% 98% 97% 96% 95%, etc").
  *   ground-dark   the dark page's lightness, every whole percent from 0 (black) to 24; 8 is Area's near-black #020202,
  *                 the default (0, 8, then 12 to 24 in twos until 2026-10-26).
- *   layers-light  layer contrast in light, every position from 0 (Flat, the default) to 100 (owner, 2026-10-26: "a slider
+ *   layers-light  layer contrast in light, every position from 0 (Flat) to 100; the default is 50 in light since
+ *                 2026-11-11 and 0 (Flat) in dark (owner, 2026-10-26: "a slider
  *                 that adjusts to every possible percentage"; five steps, 0 to 8, before): how far cards, menus and
  *   layers-dark   sidebars sit from the page, and controls from their ground; the same in dark. 50 is the old step 4,
  *                 and light 100 + 50 is Area's light theme as it was. One setting per theme since 2026-10-17 (owner: "the
@@ -17,7 +18,7 @@
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 import {
-  DEFAULT_GROUND_DARK, DEFAULT_GROUND_LIGHT, DEFAULT_LAYERS, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, POSITIONS, groundLightness, layersAt, layersPosition,
+  DEFAULT_GROUND_DARK, DEFAULT_GROUND_LIGHT, DEFAULT_LAYERS_DARK, DEFAULT_LAYERS_LIGHT, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, POSITIONS, groundLightness, layersAt, layersPosition,
 } from "../color/layers.ts";
 
 export const GROUND_LIGHT_AXIS: AxisDefinition = {
@@ -48,17 +49,18 @@ export const GROUND_DARK_AXIS: AxisDefinition = {
   })),
 };
 
+const defaultLayers = (theme: "light" | "dark") => layersPosition(theme === "light" ? DEFAULT_LAYERS_LIGHT : DEFAULT_LAYERS_DARK);
 const layersAxis = (theme: "light" | "dark"): AxisDefinition => ({
   id: `layers-${theme}`,
   label: theme === "light" ? "Light layer contrast" : "Dark layer contrast",
   description: `In ${theme}: how far cards, menus and sidebars sit from the page, and controls from their ground, 0 (Flat) to 100.`,
-  defaultPreset: String(layersPosition(DEFAULT_LAYERS)),
+  defaultPreset: String(defaultLayers(theme)),
   namespaces: [`--area-layers-${theme}:`],
   presets: POSITIONS.map(position => ({
     id: String(position),
     label: position === 0 ? "0 (Flat)" : String(position),
     // The default is 0 (Flat) since 2026-10-26, so 0's own words come first; widened, so a default moved off 0 is named again.
-    description: position === 0 ? "One tone: frames alone set layers apart; controls still step from their ground." : position === layersPosition(DEFAULT_LAYERS) ? "Area's layer contrast." : `Layer contrast ${position} of 100.`,
+    description: position === 0 ? "One tone: frames alone set layers apart; controls still step from their ground." : position === defaultLayers(theme) ? "Area's layer contrast." : `Layer contrast ${position} of 100.`,
     tokens: tokens({ [`layers-${theme}`]: layersAt(position) }),
   })),
 });

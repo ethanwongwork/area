@@ -25,6 +25,7 @@ the procedure.
 | `title-xs` | 16/22 | — | a heading over a page's block: a feed section, a page's or region's empty state, a reply's heading | a component's own title (Dialog, Card, Drawer: `text-base` 500), two in one view at the same level |
 | `title-sm` / `title-md` | 18/24 · 20/28 | — | a page or a panel's own title, once | inside a feed's section |
 | `title-lg` | 26/30 | — | a figure (a stat's value) | words |
+| `title-xl` | 32/40 | — | a document's own title, once per page, at `weight-heading` | interface pages, a panel or dialog title |
 | display | 52 · 67 | — | specimens only (the type ramp, a tester) | UI |
 
 Tracking is the token's own (`--area-<role>-tracking`); never set letter-spacing by hand.
@@ -56,7 +57,9 @@ If a text fits none of these, it is probably two texts (a label and a value) or 
 
 ## 4. Weight
 
-- Two weights in UI text: 400 (`weight-regular`) and 500 (`weight-strong`).
+- Two weights in UI text: 400 (`weight-regular`) and 500 (`weight-strong`). A third, 600 (`weight-heading`), is for
+  documents only: a document's title (`title-xl`) and its headings, a long reply's headings. Never on interface titles,
+  labels or controls (2026-11-11).
 - 500 is for: titles (`title-xs` and up), the name that starts a line (a person in an activity, the question in an
   Approval, a timeline's actor), and controls (Button, Badge, Kbd draw their own).
 - **Weight rises only with the default ink.** Never 500 + muted in a composition (a group label is muted and regular).
