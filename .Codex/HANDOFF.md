@@ -1,6 +1,16 @@
 # Handoff
 
-## Current state (2026-11-11)
+## Current state (2026-11-12)
+- **Area Serif, an original variable UI serif (2026-11-10 to 12, branch `claude/variable-serif-typeface-df1f42`).**
+  Derived only from Libre Baskerville's points (OFL 1.1: Area Serif must stay OFL and never be named Libre
+  Baskerville); Georgia Pro and Serrif are measured, never traced, and renders of them are never committed. Code in
+  `typefaces/area-serif` (derive.py → normalize.py → owner_edits.json → build.py; `qa.py` = targets, pathlint, parts
+  audit, fontbakery; venv from requirements.txt), research and page tools in `docs/research/serif-typeface-2026-11-10`,
+  skill `area-type-design`. The owner reviews and drags points on ONE page, https://claude.ai/artifact/1QUvcPjfjjkxBLVTRcNrVC
+  (editor_page.py; bump BUILD and add a tools/changes.json entry every publish; saves in its db collection `edits`,
+  pulled with ArtifactData, lower and upper case into separate out_dirs). Built through 0.30 (round ends a c f g j r
+  one family, G bottom and f top toward Serrif). Open: the owner says the c is messed up (next); y and J ends stay
+  larger (1.27 stems, owner's edits); kerning, punctuation and the weight axis not started.
 - **Four products rebuilt from Area, worktree `electron-app-audit-cleanup-35275b` (2026-11-10, PR).** Owner asked for four
   real products' main windows at real scale as a stress test. Built as Patterns: Chat assistant, Document workspace, Code
   editor, Assistant with a document panel (`content/examples/product-*.tsx`, `styles/product-*.css`, layout CSS only, no
