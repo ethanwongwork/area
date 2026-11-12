@@ -1,0 +1,185 @@
+<title>Area Serif Letters</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500&family=Inter:wght@400;500;600&family=Libre+Baskerville:wght@400&display=swap">
+<style>
+/* Layout: a type specimen bench. Sticky face bar, a tester, then one bench per letter: big glyph, overlay, pairs, words. */
+@font-face { font-family: "Area Serif"; src: url(data:font/woff2;base64,/*AREA_WOFF2*/) format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Georgia Pro Local"; src: local("Georgia Pro"), local("GeorgiaPro-Regular"); font-weight: 400; }
+@font-face { font-family: "Serrif Local"; src: local("Serrif Collection VF-TRIAL"), local("SerrifCollectionVFTRIAL"); font-weight: 400; }
+:root {
+  --bg: #f6f7f8; --panel: #ffffff; --ink: #15181c; --muted: #5d6570; --rule: #e1e4e8; --plate: #ffffff;
+  --area: #15181c; --area-fill: rgba(21,24,28,.14);
+  --lb: #1f8a5b; --serrif: #d2452c; --georgia: #2a63d4; --inter: #8a3fd1; --atkinson: #c07a00;
+  --focus: #2a63d4;
+  --sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --serif: "Area Serif", Georgia, serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0c0e; --panel: #131518; --ink: #eceef1; --muted: #9aa2ad; --rule: #24282e; --plate: #101215;
+  --area: #eceef1; --area-fill: rgba(236,238,241,.16);
+  --lb: #4cc28b; --serrif: #ff7a5e; --georgia: #6f9cff; --inter: #c08cff; --atkinson: #f2b23a; --focus: #6f9cff;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0b0c0e; --panel: #131518; --ink: #eceef1; --muted: #9aa2ad; --rule: #24282e; --plate: #101215;
+  --area: #eceef1; --area-fill: rgba(236,238,241,.16);
+  --lb: #4cc28b; --serrif: #ff7a5e; --georgia: #6f9cff; --inter: #c08cff; --atkinson: #f2b23a; --focus: #6f9cff;
+  color-scheme: dark; }
+body { background: var(--bg); color: var(--ink); font: 14px/1.5 var(--sans); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 80px; display: flex; flex-direction: column; gap: 40px; }
+.top { display: flex; flex-direction: column; gap: 10px; max-width: 70ch; }
+.meta { font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+h1 { font: 400 44px/1.1 var(--serif); margin: 0; text-wrap: balance; }
+.top p { margin: 0; color: var(--muted); font-size: 15px; }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--rule); padding-block: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.bar .lbl { font-size: 12px; color: var(--muted); margin-right: 4px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid var(--rule); border-radius: 999px; background: var(--panel); font-size: 13px; cursor: pointer; user-select: none; }
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip i, figcaption i, .ctx-label i, td i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.chip:has(input:not(:checked)) { opacity: .45; }
+.chip:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: 2px; }
+.chip:has(input:disabled) { cursor: default; }
+.missing { font-size: 11px; color: var(--muted); }
+section h2 { margin: 0; }
+.tester { display: flex; flex-direction: column; gap: 14px; background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 20px; }
+.tester-head { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; }
+.tester h2 { font: 500 16px/1.3 var(--sans); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.controls label { font-size: 13px; color: var(--muted); display: inline-flex; gap: 8px; align-items: center; }
+.controls input[type=range] { width: 160px; accent-color: var(--ink); }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.presets button { font: 500 12px/1 var(--sans); padding: 7px 10px; border-radius: 999px; border: 1px solid var(--rule); background: transparent; color: var(--ink); cursor: pointer; }
+.presets button:hover { background: var(--bg); }
+.presets button:focus-visible, textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+textarea { font: 15px/1.5 var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; resize: vertical; min-height: 64px; width: 100%; box-sizing: border-box; }
+.out { display: flex; flex-direction: column; }
+.out-row { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 16px; padding-block: 12px; border-top: 1px solid var(--rule); align-items: baseline; }
+.out-row .name { font-size: 12px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
+.out-row .name i { width: 10px; height: 10px; border-radius: 50%; }
+.out-row .txt { min-width: 0; overflow-wrap: anywhere; white-space: pre-wrap; line-height: 1.35; }
+.ff-area { font-family: "Area Serif", Georgia, serif; }
+.ff-lb { font-family: "Libre Baskerville", Georgia, serif; }
+.ff-serrif { font-family: "Serrif Local", Georgia, serif; font-variation-settings: "wght" 400, "wdth" 100; }
+.ff-georgia { font-family: "Georgia Pro Local", Georgia, serif; }
+.ff-inter { font-family: "Inter", ui-sans-serif, system-ui, sans-serif; }
+.ff-atkinson { font-family: "Atkinson Hyperlegible Next", ui-sans-serif, system-ui, sans-serif; }
+.letter { display: flex; flex-direction: column; gap: 20px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.letter-head { display: flex; flex-wrap: wrap; gap: 6px 20px; align-items: baseline; }
+.glyph-name { font: 400 32px/1 var(--serif); }
+.note { margin: 0; color: var(--muted); font-size: 13px; }
+.letter-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 16px; }
+.hero, .all, .pair { background: var(--plate); border: 1px solid var(--rule); border-radius: 10px; margin: 0; }
+.hero { display: grid; place-items: center; min-height: 340px; overflow: hidden; }
+.hero-glyph { font: 400 300px/1 var(--serif); }
+.all { display: flex; flex-direction: column; padding: 8px 8px 10px; }
+.all figcaption, .pair figcaption { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; padding: 0 6px; }
+.pair figcaption span { margin-left: auto; font-variant-numeric: tabular-nums; }
+.plate { width: 100%; height: auto; display: block; }
+.plate .fill { fill: var(--area-fill); stroke: var(--area); stroke-width: 1.2px; vector-effect: non-scaling-stroke; }
+.plate .line { fill: none; stroke-width: 1.6px; vector-effect: non-scaling-stroke; }
+.plate .metric { stroke: var(--rule); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.plate .f-lb { stroke: var(--lb); } .plate .f-serrif { stroke: var(--serrif); } .plate .f-georgia { stroke: var(--georgia); }
+.plate .f-inter { stroke: var(--inter); } .plate .f-atkinson { stroke: var(--atkinson); }
+.pairs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.pair { padding: 6px 6px 8px; display: flex; flex-direction: column; }
+.facts { overflow-x: auto; }
+.facts table { border-collapse: collapse; font-size: 13px; min-width: 420px; }
+.facts th { text-align: left; font-weight: 500; color: var(--muted); font-size: 12px; padding: 6px 16px 6px 0; border-bottom: 1px solid var(--rule); }
+.facts td { padding: 6px 16px 6px 0; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+.facts td:first-child { display: flex; gap: 6px; align-items: center; }
+.ctx { display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 4px 18px; }
+.ctx-row { display: grid; grid-template-columns: 190px minmax(0, 1.6fr) minmax(0, 1fr); gap: 16px; padding-block: 12px; align-items: baseline; border-top: 1px solid var(--rule); }
+.ctx-row:first-child { border-top: 0; }
+.ctx-label { font-size: 12px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
+.ctx-big { font-size: 28px; line-height: 1.2; min-width: 0; overflow-wrap: anywhere; }
+.ctx-small { font-size: 14px; min-width: 0; overflow-wrap: anywhere; }
+:root.hide-lb .f-lb, :root.hide-serrif .f-serrif, :root.hide-georgia .f-georgia, :root.hide-inter .f-inter, :root.hide-atkinson .f-atkinson { display: none; }
+.foot { color: var(--muted); font-size: 12px; max-width: 80ch; }
+@media (max-width: 860px) {
+  .letter-grid { grid-template-columns: minmax(0, 1fr); }
+  .pairs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ctx-row, .out-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .hero { min-height: 260px; } .hero-glyph { font-size: 220px; }
+}
+@media (max-width: 480px) { .pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); } h1 { font-size: 34px; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<!--DEFS-->
+</defs></svg>
+
+<div class="wrap">
+ <header class="top">
+  <div class="meta">Area Serif · version 0.14 · letter by letter · figures 0–9, toward Georgia Pro and Serrif</div>
+  <h1>Letter by letter</h1>
+  <p>Each letter big in Area Serif, then over Libre Baskerville (its base), Serrif, Georgia Pro, and two sans serifs made for legibility on screens, Inter and Atkinson Hyperlegible Next. All are drawn at one x-height, so you compare shape, width and weight rather than size. Then the letter set in words. Use the tester to type anything.</p>
+ </header>
+
+ <div class="bar" role="group" aria-label="Faces to show">
+  <span class="lbl">Show</span>
+  <!--CHIPS-->
+ </div>
+
+ <section class="tester" aria-labelledby="tester-title">
+  <div class="tester-head">
+   <h2 id="tester-title">Type tester</h2>
+   <div class="controls">
+    <label for="size">Size <input type="range" id="size" min="11" max="120" value="32"><output id="size-out">32 px</output></label>
+   </div>
+  </div>
+  <div class="presets" role="group" aria-label="Sample text">
+   <button type="button" data-text="abcdef abcdef — a b c d e f">This batch</button>
+   <button type="button" data-text="Hamburgefonstiv">Hamburgefonstiv</button>
+   <button type="button" data-text="The quick brown fox jumps over the lazy dog.">Pangram</button>
+   <button type="button" data-text="Settings · Profile · Billing · Sign out — 12 projects, updated 3 days ago">Interface</button>
+   <button type="button" data-text="Il1 O0 rn m cl d — 0123456789">Look-alikes</button>
+  </div>
+  <label for="text" class="note">Your text</label>
+  <textarea id="text" rows="2" spellcheck="false">Added a new face: abcdef, deface, cafe bead.</textarea>
+  <div class="out" id="out"></div>
+ </section>
+
+ <!--CARDS-->
+
+ <p class="foot">Overlays are drawn from each font's outlines at one x-height, centred on the letter's ink. The figure on each pair, and in the table, is the letter's advance width over the x-height: larger is wider. Georgia Pro and Serrif in live text are your installed copies; on a computer without them, those rows fall back to Georgia. Letters in this batch: <!--LETTERS-->.</p>
+</div>
+
+<script>
+(function () {
+  const faces = [
+    ["area", "Area Serif"], ["lb", "Libre Baskerville"], ["serrif", "Serrif"],
+    ["georgia", "Georgia Pro"], ["inter", "Inter"], ["atkinson", "Atkinson Hyperlegible Next"]
+  ];
+  const root = document.documentElement;
+  const out = document.getElementById("out");
+  const text = document.getElementById("text");
+  const size = document.getElementById("size");
+  const sizeOut = document.getElementById("size-out");
+  out.innerHTML = faces.map(([k, n]) =>
+    `<div class="out-row f-${k}"><span class="name"><i style="background:var(--${k})"></i>${n}</span><span class="txt ff-${k}"></span></div>`).join("");
+  const rows = out.querySelectorAll(".txt");
+  function render() {
+    rows.forEach(r => { r.textContent = text.value; r.style.fontSize = size.value + "px"; });
+    sizeOut.textContent = size.value + " px";
+  }
+  text.addEventListener("input", render);
+  size.addEventListener("input", render);
+  document.querySelectorAll(".presets button").forEach(b => b.addEventListener("click", () => { text.value = b.dataset.text; render(); }));
+  document.querySelectorAll(".bar input[data-face]").forEach(c => c.addEventListener("change", () => {
+    root.classList.toggle("hide-" + c.dataset.face, !c.checked);
+  }));
+  render();
+  // installed-font check for the two faces that come from this computer
+  [["georgia", 'local("Georgia Pro"), local("GeorgiaPro-Regular")'], ["serrif", 'local("Serrif Collection VF-TRIAL"), local("SerrifCollectionVFTRIAL")']].forEach(([k, src]) => {
+    try {
+      new FontFace("probe-" + k, src).load().catch(() => {
+        const chip = document.getElementById("show-" + k)?.closest(".chip");
+        if (chip) chip.insertAdjacentHTML("beforeend", ' <span class="missing">(not installed: live text shows Georgia)</span>');
+      });
+    } catch (e) {}
+  });
+})();
+</script>
