@@ -53,6 +53,7 @@ components and accurate specs matter more than speed.
 | `area-component-docs` | A family's Documentation entry (usage, do and don't, parts, keys, ARIA) |
 | `area-foundation-change` | Changing a setting, token or system-wide rule across every family |
 | `area-icon-construction` | Drawing or reviewing Area's icons |
+| `area-type-design` | Drawing, spacing, building and checking Area's own typefaces (`typefaces/area-serif`) |
 | `area-illustration` | Area figures in the screens' style: real components with words as light bars; screens, vignettes, a gallery of every family, settings on screens |
 | `area-ui-compose` | Composing screens and layouts from Area: shell, panels, spacing, feeds, grids, shelves, media, copy, screen recipes |
 | `area-type-usage` | Choosing and checking each text's type style, ink, weight, line and spacing in a component, composition or kit; the type census |

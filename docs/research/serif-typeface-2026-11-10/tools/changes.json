@@ -1,0 +1,452 @@
+[
+ {
+  "build": "0.29",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "a c f g j r",
+    "text": "The round ends are one family, after the g's ear: each end's outer quarter is a circle (an upright point at its side, a level point at its bottom or top, circle handles), 40-47 units across in radius, and the neck eases into it. Their sizes now sit within 1.02-1.11 stems."
+   },
+   {
+    "glyphs": "c f",
+    "text": "These had drifted into ovals and teardrops: the cleanup had merged away the points at the ends' sides; it now keeps every round end's side, top and bottom points. The f's end got a side point, as the g and r have."
+   },
+   {
+    "glyphs": "y J",
+    "text": "Not changed: their ends come from your own edits and still measure larger (1.27 stems)."
+   },
+   {
+    "glyphs": "G",
+    "text": "Your note: the bottom now follows Serrif: one long, even curve from the bowl to a sharp corner at the stem, with no dip before it."
+   }
+  ]
+ },
+ {
+  "build": "0.28",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "t",
+    "text": "The top left is clean: level crossbar edges, the stem's right edge upright to a flat top, one concave curve from the stem's top into the crossbar's top, and a square left end with the same small rounded corners as the serifs (your heights kept)."
+   },
+   {
+    "glyphs": "f g h j r s t u",
+    "text": "These showed as not in the build yet although they were: the page now knows your latest saves are folded in."
+   },
+   {
+    "glyphs": "",
+    "text": "Zoom and pan redraw only the canvas, once a frame, and zoom faster (pinch fastest); dragging a point redraws the canvas only, and the rest catches up when you let go."
+   }
+  ]
+ },
+ {
+  "build": "0.27",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "r",
+    "text": "Your neck tilt is in (built into the tail's drawing, so it stays). The dip from the neck into the round end is one gentle S: its handles run 0.45 of the span (they were about 0.3, so it turned sharply in the middle)."
+   }
+  ]
+ },
+ {
+  "build": "0.26",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "r",
+    "text": "The tail matches Serrif's: measured at Area's x-height and lined up on the stem, a round end of radius 47 reaching x 416 (it reached 460), the arm's underside rising to a level neck and dipping into the end, the arm's top running from the end back to the stem. Drawn as Area's own curves on those positions."
+   }
+  ]
+ },
+ {
+  "build": "0.25",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "all",
+    "text": "The rounded serif corners are back, as you asked. The cleanup now only removes points on straight lines, and rejoins two curves that are really one curve cut in two (no shape change: within 2.5 units, or a tangent-keeping fit within 4 units on the joins)."
+   },
+   {
+    "glyphs": "v w x y V W X Y A K k",
+    "text": "Each join is one curve again: no middle point (like the one you asked about at the top right of the v)."
+   },
+   {
+    "glyphs": "g",
+    "text": "The ear is Libre Baskerville's again (my rules that scaled, raised, re-rooted and shortened it are off for the g); your earlier ear moves are set aside on record."
+   },
+   {
+    "glyphs": "r",
+    "text": "Ear redrawn in Libre Baskerville's form, longer and thinner: the arm's underside rises to a level neck and dips into a true circle (radius 46, about 12 units past Libre Baskerville's), the arm about 53 units at its middle (Libre Baskerville 66)."
+   },
+   {
+    "glyphs": "f",
+    "text": "The top is a round arc: the outer one close to a circle, the inner one an even quarter into a thin top, so thick to thin runs evenly; the end and neck as before, the end's size in line with a, c and r."
+   },
+   {
+    "glyphs": "h n m",
+    "text": "Your h moves are in; the shoulder's curves are even (round handles), and the arch tops are one lighter thickness across n, m and h (0.62 stems; they were 0.69-0.72)."
+   },
+   {
+    "glyphs": "j s",
+    "text": "Your j and s moves are in; j's bottom quarters are round, and the points your moves left bent are smooth again."
+   },
+   {
+    "glyphs": "5",
+    "text": "The stem runs into the bowl's start without a bend."
+   },
+   {
+    "glyphs": "",
+    "text": "Checked: every glyph's ink over Serrif; the deliberate differences remain (your Q tail, 1 flag and j; the Georgia-style 7; the g ear now Libre Baskerville's)."
+   }
+  ]
+ },
+ {
+  "build": "0.24",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "a",
+    "text": "Reverted: in 0.20 I turned the bowl-to-stem join into a curve dropping down the stem, a heavy wedge unlike every reference. It is Serrif's straight diagonal again. The smooth flag on that point is cleared (it joins two straight lines)."
+   },
+   {
+    "glyphs": "v w V W X Y A K k x y",
+    "text": "Joins start higher on the stems, as your v moves showed: outside joins 0.8 of a stem's bracket, inside joins a tenth of the way toward Libre Baskerville's reach."
+   },
+   {
+    "glyphs": "n m h",
+    "text": "Your n is in (the inner arch meets the right stem higher); m and h follow the same rise on every right-hand arch, matching Serrif. The m's width matches Serrif's m, so it stays."
+   },
+   {
+    "glyphs": "p q",
+    "text": "The bowl's curve meets the stem directly (the 5-10 unit flat step is gone), and the counters are single round curves, so the thick-to-thin runs evenly."
+   },
+   {
+    "glyphs": "u",
+    "text": "Your u is in, then fine-tuned: round bowl quarters (the inner one was 0.75 and 0.50, now 0.58 each), one curve on the inner right, and a straight stem edge to a flat foot on the baseline."
+   },
+   {
+    "glyphs": "s",
+    "text": "No notch where each end's curve meets its barb (the barb's top is level with the curve), as on C, G, S; the ink now sits on Serrif's."
+   },
+   {
+    "glyphs": "k r t",
+    "text": "Your k, r and t are in (k's junction follows your move; r's ear is one smooth teardrop curve)."
+   },
+   {
+    "glyphs": "all",
+    "text": "Smoother arcs and fewer points: every quarter drawn as two curves is one curve through the old middle point; each tiny rounded serif corner (about 4 units) is one sharp corner, as in Serrif; points on straight lines are gone. 14,632 points became 12,041 (H 68 to 44)."
+   },
+   {
+    "glyphs": "",
+    "text": "Checked: every glyph's ink over Serrif's outline; the only differences left are deliberate (your Q tail, your 1 flag and j, the Georgia-style 7)."
+   }
+  ]
+ },
+ {
+  "build": "0.23",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "V X Y W",
+    "text": "The top serifs are fixed: shortening a right-hand inner serif in 0.22 also pulled the whole left-hand serif inward. Now each inner serif moves only its own points, and its join is redrawn from its new end."
+   },
+   {
+    "glyphs": "A V W X Y K k v w x y",
+    "text": "Inside joins are one gradual curve from the serif's end into the stroke (no straight run then sudden arc), and land higher: a quarter of the way from the short reach toward Libre Baskerville's, as your V moves did (done as one rule for every diagonal letter). Outside joins stay at their 0.22 length (you found the top curves too long)."
+   },
+   {
+    "glyphs": "V",
+    "text": "Inner serif halves at most as long as the outer halves (you: 'the serifs on the inside are too long')."
+   },
+   {
+    "glyphs": "n m h",
+    "text": "The outer shoulder is one smooth curve (it was two, the first nearly straight, so it ran flat then bent): thick to thin evenly. Your m and n moves are in."
+   },
+   {
+    "glyphs": "1",
+    "text": "Your flag moves are in (longer, toward Georgia Pro's)."
+   },
+   {
+    "glyphs": "5",
+    "text": "Copied Serrif's stem: it leans from near the ball's side up to the flag's left end, so the top comes out further left."
+   },
+   {
+    "glyphs": "3 2",
+    "text": "The inner curve beside each round end has more room to turn, so the left side is no longer abrupt."
+   },
+   {
+    "glyphs": "",
+    "text": "On this page: 'Show points and handles' (or the P key) switches between the outline with its points and the ink alone."
+   }
+  ]
+ },
+ {
+  "build": "0.22",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "X A V W Y",
+    "text": "Inner serif halves (inside the letter) reach at most 1.2 times as far as the outer halves, the x's own proportion. The X's had reached 1.55 times at the top and 1.9 at the feet, so it changes most; A's feet and the tops of V, W and Y change a little. The joins' arcs stay as they were. M and N are unchanged: their serifs sit mostly on upright stems, already even."
+   },
+   {
+    "glyphs": "G",
+    "text": "Your 0.21 save is in: the bottom curve and the turn from the stem into the bowl, exactly where you put them (applied after the G rules so they land on the same points)."
+   },
+   {
+    "glyphs": "Z",
+    "text": "The bottom arm's right end and its barb come in 15 units, so the bottom no longer reaches past the top."
+   },
+   {
+    "glyphs": "r",
+    "text": "The ear's end is round: one circle from the x-height down (it was an oval, narrower below), its right side 15 units further out."
+   }
+  ]
+ },
+ {
+  "build": "0.21",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "Q",
+    "text": "Libre Baskerville's tail is back, as drawn (you prefer it)."
+   },
+   {
+    "glyphs": "G",
+    "text": "The bottom matches Serrif: the stem's right edge runs straight down and turns into the bowl's bottom in one round curve, with no corner and no wobble."
+   },
+   {
+    "glyphs": "A V W X Y K k v w x y",
+    "text": "The leaning-back joins sit halfway between Libre Baskerville's reach and the short version, along both the serif and the stroke."
+   },
+   {
+    "glyphs": "x",
+    "text": "Clean joins like its neighbours: your 0.10 moves sat on the old joins (made to thin the legs, which the diagonal rule now does) and made small hooks against the new ones, so they are set aside (kept on record)."
+   },
+   {
+    "glyphs": "y",
+    "text": "The left serif's inner join is smooth: your three points on the old curl there (29-31) are set aside; the rest of your y, tail included, stays."
+   },
+   {
+    "glyphs": "k",
+    "text": "The arm and leg meet the stem at one point, as in Serrif; the leg's edge runs straight from there to the foot (no step or peak)."
+   }
+  ]
+ },
+ {
+  "build": "0.20",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "n m h u a j t g B D E J L P R U",
+    "text": "Rounder curves: every quarter curve whose handles ran 0.66-0.92 of its span (boxy: Libre Baskerville's shoulders, a's top, the j and t hooks, the capitals' counters and inner corners) now runs at 0.62, near the font's median of 0.59. Serif brackets, curves on points you moved, and G's straight stem keep their shape."
+   },
+   {
+    "glyphs": "U",
+    "text": "The thick left stem matches H's (it was 1.19 of H's stem; Serrif 1.02)."
+   },
+   {
+    "glyphs": "a",
+    "text": "Where the stem turns into the bowl's top, two straight lines met at 73 degrees on a point you had marked smooth; that turn is now a real curve, and your other a points stay put."
+   },
+   {
+    "glyphs": "",
+    "text": "Checked: round strokes already share one weight (1.12-1.13 stems) in both cases; no other smooth point bends. Next: kerning, and any letter you mark on the page."
+   }
+  ]
+ },
+ {
+  "build": "0.19",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "0 2 3 5 6 9",
+    "text": "One weight for the thick side of every figure bowl: 1.10 of the 1's stem (they were 1.21-1.27; Serrif 1.00-1.10, Georgia Pro 1.08-1.15). The counter side moves; outer shapes and widths stay. This is the 9's lighter right side and part of the 5's lighter bottom."
+   },
+   {
+    "glyphs": "0 2 3 5 6 8 9",
+    "text": "Every quarter curve on the figures (level tangent to upright) has round handles, 0.56 of its span (they were 0.59-0.71, boxy): the 2's top and the 3's top and bottom now curve round instead of turning abruptly."
+   },
+   {
+    "glyphs": "5",
+    "text": "The flag reaches further both ways (left 22, right to the bowl's edge) and the stem stands more upright; the bowl sits lower, its top at 0.62 of the cap height like Serrif's (was 0.66), so the bottom no longer reads heavy or leaning."
+   },
+   {
+    "glyphs": "",
+    "text": "Next: the smoothness and weight pass over every letter, the same way."
+   }
+  ]
+ },
+ {
+  "build": "0.18",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "B D P R",
+    "text": "Bowls wider, about halfway toward Serrif (ink widths in cap thousandths were B 831, D 972, P 760, R 966; Serrif 907, 1019, 860, 1011): B +28, D +16, P +39, R +17 units. Strokes keep their thickness; R's leg and your R points move with the bowl."
+   },
+   {
+    "glyphs": "G",
+    "text": "Bar raised to Serrif's height (0.47-0.505 of the cap height, was 0.38-0.42) and longer each way: 1.4 stems left of the stem, 0.8 right. The stem's left edge now runs straight below the bar before turning into the bowl."
+   },
+   {
+    "glyphs": "Q",
+    "text": "Tail redrawn to run right, like Serrif's: a curved band leaving the bowl's bottom, sagging a little and ending in a vertical cut just past the bowl at 0.15 cap below the baseline. Libre Baskerville's left-sweeping curl is gone."
+   },
+   {
+    "glyphs": "",
+    "text": "Next: your 2 3 5 9 notes, then the smoothness and weight pass over every glyph."
+   }
+  ]
+ },
+ {
+  "build": "0.17",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "A V W X Y K k v w x y",
+    "text": "Where a stroke leans back over its serif, the join now starts close to the stroke: a straight run along the serif, then a small round turn 0.75 stems from the corner, so it no longer reads heavy."
+   },
+   {
+    "glyphs": "B D E F H I J K L M N P R T U",
+    "text": "Every capital serif on a straight stem reaches 0.95 stems past it (feet were 1.13, heads 1.03, B and D 1.25; Serrif 1.11, Georgia Pro 0.90). One unit for all: the H stem."
+   },
+   {
+    "glyphs": "A–Z",
+    "text": "Capital brackets are 0.8 of the lowercase ones (about 0.8 stems tall, Georgia Pro 0.77): lighter where serifs meet stems."
+   },
+   {
+    "glyphs": "E F L T Z",
+    "text": "Barbs at the arm ends extend 0.9 stems past the arm (were 1.2–1.5), and the curve into each is a light flare along the arm, not Libre Baskerville's full wedge."
+   },
+   {
+    "glyphs": "C G S",
+    "text": "End barbs 1.0 stem past the stroke's inside (were 1.6–2.4), one width (42 units; S was 53). No notch: each barb's top is level with the curve's end and drops straight from it, as in Serrif's G."
+   },
+   {
+    "glyphs": "Q",
+    "text": "Tail drawn 65% of its size: shorter and lighter. Its shape still sweeps left like Libre Baskerville's; Serrif's runs right. That redraw is next."
+   },
+   {
+    "glyphs": "",
+    "text": "Next: Q's tail shape, G's bar (Serrif's is wider and flat), B D P R bowls (Serrif's are wider), then your 2 3 5 9 notes and the smoothness and weight pass over every glyph."
+   }
+  ]
+ },
+ {
+  "build": "0.16",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "c e t",
+    "text": "One tail for all three, Serrif's way: a level cut 0.30 stems wide; c and e end at one height (0.33 x-height), t at 0.20; both edges arrive at the same angles (outside 75°, inside 66°) with the same handle proportions. Your bottom curves stay."
+   },
+   {
+    "glyphs": "v w y K",
+    "text": "One weight per diagonal role: every thick stroke 1.12 stems, every thin one 0.52 (v and w's thin strokes were 0.66, y's thick 1.00). K's leg now matches X's thick stroke. Your points on these strokes moved with them, shapes kept."
+   },
+   {
+    "glyphs": "A V W X Y v w x y k K",
+    "text": "Where a stroke leans back over its serif, the join is one wide, smooth arc into the stroke, as in Serrif, in place of Libre Baskerville's two-curve curl that bent inward."
+   },
+   {
+    "glyphs": "A",
+    "text": "Both inner legs run straight down to a short round join at the foot (the left leg used to bow all the way from the crossbar)."
+   },
+   {
+    "glyphs": "x",
+    "text": "Each stroke is one straight bar through the crossing: both pieces of every edge now line up."
+   },
+   {
+    "glyphs": "R",
+    "text": "Your 0.15 save is in (leg and notch, close to Serrif's). Smoothing the notch further was tried; your drawing reads cleaner, so it stays."
+   },
+   {
+    "glyphs": "4",
+    "text": "A foot serif, the 1's foot exactly, so the figures' feet match."
+   },
+   {
+    "glyphs": "X v w",
+    "text": "Your 0.15 nudges are in, applied on top of the new joins. Your earlier X curls stay set aside: your later note asked for those joins to be smooth."
+   },
+   {
+    "glyphs": "2 3 5 9 S",
+    "text": "Your notes are read and come next: 2's top curve, 3's top and bottom curves, 5's flag and balance, 9's right side, and S's serifs."
+   },
+   {
+    "glyphs": "",
+    "text": "Next: the capitals pass you asked for: shorter, lighter serifs, tails, barbs and spurs on every capital, one rule for all (G's end like Serrif's, no deep notch), then smoothness and weight balance across every glyph."
+   }
+  ]
+ },
+ {
+  "build": "0.15",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "2 3 5 6 9",
+    "text": "Ends drawn like Serrif's: a round end about one stroke wide, swelling a little and easing back into the stroke, in place of Libre Baskerville's large slanted teardrop. The 3's top end sits lower (0.78 of the cap height, Serrif 0.77)."
+   },
+   {
+    "glyphs": "3",
+    "text": "The middle stroke ends in a square cut, as in Serrif and Georgia Pro, not a blob."
+   },
+   {
+    "glyphs": "R X",
+    "text": "Your saves from build 0.11 are now in: R's reshaped leg and X's shorter serifs. They had been saved after the last pull and were never folded in."
+   },
+   {
+    "glyphs": "x y",
+    "text": "Every point you moved now sits exactly where you put it, even when a later rule reshaped the glyph. y's joins and all 15 of your x moves are back."
+   },
+   {
+    "glyphs": "S",
+    "text": "Your S points stay, except the four tail points: your note on that save asked for wider tails, so those follow the rule."
+   },
+   {
+    "glyphs": "",
+    "text": "One page: the comparison over every face, words in context and the type tester now live here, under the editor. The strip marks what changed in this build and any save that isn't in the build yet."
+   }
+  ]
+ },
+ {
+  "build": "0.14",
+  "date": "2026-11-11",
+  "items": [
+   {
+    "glyphs": "7",
+    "text": "Rebuilt like Georgia Pro: a flat bar with a short upright serif at its left end, and a straight stem."
+   },
+   {
+    "glyphs": "4",
+    "text": "Rebuilt with no serifs: the bar runs past the stem, the stem runs straight to the baseline, the bar sits higher."
+   },
+   {
+    "glyphs": "5",
+    "text": "A flat, square-ended flag on a near-upright stem."
+   },
+   {
+    "glyphs": "2",
+    "text": "A flat base with a square right end."
+   },
+   {
+    "glyphs": "1",
+    "text": "Libre Baskerville's top kept; the foot as wide as Georgia Pro's."
+   },
+   {
+    "glyphs": "2 3 5 6 8 9",
+    "text": "Widened toward Georgia Pro and Serrif, with stroke thickness kept."
+   }
+  ]
+ },
+ {
+  "build": "0.30",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "f",
+    "text": "Your note: the top redrawn in Serrif's proportions. The inner curve leaves the stem lower and rises in one long oval to a thin top, then turns straight down into a round ball, so the stroke thins evenly from stem to top."
+   }
+  ]
+ }
+]

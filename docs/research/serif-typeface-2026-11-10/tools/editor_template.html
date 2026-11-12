@@ -1,0 +1,528 @@
+<meta charset="utf-8">
+<title>Area Serif</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Libre+Baskerville:wght@400&display=swap">
+<style>
+@font-face { font-family: "Area Serif Build"; src: url(data:font/woff2;base64,/*AREA_WOFF2*/) format("woff2"); font-weight: 400; font-display: block; }
+@font-face { font-family: "Georgia Pro Local"; src: local("Georgia Pro"), local("GeorgiaPro-Regular"); font-weight: 400; }
+@font-face { font-family: "Serrif Local"; src: local("Serrif Collection VF-TRIAL"), local("SerrifCollectionVFTRIAL"); font-weight: 400; }
+/* Layout: one page for the typeface. What changed, then a drawing bench (glyph strip, canvas over the references, a
+   point panel beside it), then the glyph over each face, in words, and a type tester. Glyph strip on top, the canvas with references underneath, a point panel beside it,
+   and a live word preview below. Font units throughout; y up as in the font. */
+:root {
+  --bg: #f4f5f7; --panel: #ffffff; --ink: #14171b; --muted: #5c6470; --rule: #dfe2e7; --canvas: #ffffff;
+  --fill: rgba(20,23,27,.10); --outline: #14171b; --node: #14171b; --handle: #7a8390; --sel: #2563eb;
+  --metric: #e3e6ea; --metric-label: #8a929d;
+  --lb: #1f8a5b; --serrif: #d2452c; --georgia: #2a63d4; --inter: #8a4fd0; --atkinson: #a7782a; --edited: #c07a00; --waiting: #d2452c;
+  --sans: "Inter", ui-sans-serif, system-ui, sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0c0e; --panel: #131518; --ink: #eceef1; --muted: #99a1ac; --rule: #262a30; --canvas: #101215;
+  --fill: rgba(236,238,241,.12); --outline: #eceef1; --node: #eceef1; --handle: #8b94a1; --sel: #6f9cff;
+  --metric: #22262c; --metric-label: #6d7581;
+  --lb: #4cc28b; --serrif: #ff7a5e; --georgia: #6f9cff; --inter: #b88cf0; --atkinson: #d9b56b; --edited: #f2b23a; --waiting: #ff7a5e; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0b0c0e; --panel: #131518; --ink: #eceef1; --muted: #99a1ac; --rule: #262a30; --canvas: #101215;
+  --fill: rgba(236,238,241,.12); --outline: #eceef1; --node: #eceef1; --handle: #8b94a1; --sel: #6f9cff;
+  --metric: #22262c; --metric-label: #6d7581;
+  --lb: #4cc28b; --serrif: #ff7a5e; --georgia: #6f9cff; --inter: #b88cf0; --atkinson: #d9b56b; --edited: #f2b23a; --waiting: #ff7a5e; color-scheme: dark; }
+body { background: var(--bg); color: var(--ink); font: 13px/1.45 var(--sans); }
+.wrap { max-width: 1400px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 48px; display: flex; flex-direction: column; gap: 14px; }
+.head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; align-items: baseline; }
+h1 { font: 600 20px/1.2 var(--sans); margin: 0; }
+.head p { margin: 0; color: var(--muted); max-width: 80ch; }
+.status { font-size: 12px; color: var(--muted); }
+.status.err { color: var(--serrif); }
+.strip { display: flex; flex-wrap: wrap; gap: 4px; }
+.strip button { font: 500 14px/1 var(--sans); min-width: 32px; height: 32px; border: 1px solid var(--rule); background: var(--panel); color: var(--ink); border-radius: 6px; cursor: pointer; position: relative; }
+.strip button[aria-current="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.strip button.saved::after { content: ""; position: absolute; top: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--edited); }
+.strip button.dirty::before { content: ""; position: absolute; bottom: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--sel); }
+.bench { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 14px; }
+.canvas-box { background: var(--canvas); border: 1px solid var(--rule); border-radius: 10px; position: relative; overflow: hidden; }
+#canvas { display: block; width: 100%; height: min(72vh, 760px); touch-action: none; cursor: default; user-select: none; }
+#canvas.panning { cursor: grabbing; }
+.zoom { position: absolute; right: 10px; top: 10px; display: flex; gap: 4px; }
+.zoom button, .btn { font: 500 12px/1 var(--sans); height: 30px; padding: 0 10px; border-radius: 6px; border: 1px solid var(--rule); background: var(--panel); color: var(--ink); cursor: pointer; }
+.btn.primary { background: var(--ink); color: var(--panel); border-color: var(--ink); }
+.btn:disabled { opacity: .45; cursor: default; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--sel); outline-offset: 2px; }
+.side { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.card { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.card h2 { font: 600 12px/1.2 var(--sans); margin: 0; color: var(--muted); letter-spacing: .03em; text-transform: uppercase; }
+.coords { font: 13px/1.5 var(--mono); display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; }
+.coords span:nth-child(odd) { color: var(--muted); }
+.row { display: flex; flex-wrap: wrap; gap: 6px; }
+.toggle { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+.toggle i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.keys { color: var(--muted); font-size: 12px; margin: 0; padding-left: 16px; }
+textarea { font: 13px/1.4 var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 8px; resize: vertical; min-height: 54px; width: 100%; box-sizing: border-box; }
+input[type=text] { font: 14px/1.4 var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 8px; width: 100%; box-sizing: border-box; }
+.preview { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.preview-lines { display: flex; flex-direction: column; gap: 10px; overflow-x: auto; }
+.preview-lines svg { display: block; }
+.preview-lines path { fill: var(--ink); }
+/* canvas parts */
+.metric { stroke: var(--metric); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.metric-label { fill: var(--metric-label); font: 11px var(--sans); }
+.ref { fill: none; stroke-width: 1.4px; vector-effect: non-scaling-stroke; }
+.ref.lb { stroke: var(--lb); } .ref.serrif { stroke: var(--serrif); } .ref.georgia { stroke: var(--georgia); }
+.glyph { fill: var(--fill); stroke: var(--outline); stroke-width: 1.2px; vector-effect: non-scaling-stroke; fill-rule: nonzero; }
+.hline { stroke: var(--handle); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.pt { cursor: grab; }
+.pt.on { fill: var(--canvas); stroke: var(--node); stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
+.pt.off { fill: var(--handle); stroke: none; }
+.pt.sel { stroke: var(--sel); fill: var(--sel); }
+.pt.on.sel { fill: var(--sel); }
+.adv { stroke: var(--metric-label); stroke-dasharray: 4 4; stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.strip button.changed { box-shadow: inset 0 -3px 0 var(--sel); }
+.strip button.changed[aria-current="true"] { box-shadow: inset 0 0 0 1px var(--ink), inset 0 -3px 0 var(--sel); }
+.strip button.waiting::after { background: var(--waiting); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--muted); font-size: 12px; }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
+.legend .bar { width: 14px; height: 3px; border-radius: 2px; background: var(--sel); }
+.changes { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.changes h2 { font: 600 14px/1.3 var(--sans); margin: 0; }
+.changes ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+.changes li b { font-weight: 600; margin-right: 6px; }
+.changes details summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+.section { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 12px; }
+.section h2 { font: 600 14px/1.3 var(--sans); margin: 0; }
+.section .sub { color: var(--muted); margin: 0; font-size: 12px; }
+.pairs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.pairs figure { margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.pairs svg { width: 100%; aspect-ratio: 4 / 5; background: var(--canvas); border: 1px solid var(--rule); border-radius: 8px; display: block; }
+.pairs figcaption { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+.pairs figcaption i, .face-name i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.pairs .fill { fill: var(--fill); stroke: var(--outline); stroke-width: 1px; vector-effect: non-scaling-stroke; }
+.pairs .line { fill: none; stroke-width: 1.4px; vector-effect: non-scaling-stroke; }
+.ref.inter, .pairs .line.inter { stroke: var(--inter); } .ref.atkinson, .pairs .line.atkinson { stroke: var(--atkinson); }
+.pairs .line.lb { stroke: var(--lb); } .pairs .line.serrif { stroke: var(--serrif); } .pairs .line.georgia { stroke: var(--georgia); }
+.faces { display: flex; flex-direction: column; gap: 6px; }
+.face-row { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 4px 14px; align-items: baseline; padding: 6px 0; border-top: 1px solid var(--rule); }
+.face-row:first-child { border-top: 0; }
+.face-name { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+.face-text { overflow-wrap: anywhere; color: var(--ink); }
+.ff-area { font-family: "Area Serif Build", Georgia, serif; }
+.ff-lb { font-family: "Libre Baskerville", Georgia, serif; }
+.ff-serrif { font-family: "Serrif Local", Georgia, serif; font-variation-settings: "wght" 400, "wdth" 100; }
+.ff-georgia { font-family: "Georgia Pro Local", Georgia, serif; }
+.ff-inter { font-family: "Inter", ui-sans-serif, system-ui, sans-serif; }
+.ff-atkinson { font-family: "Atkinson Hyperlegible Next", ui-sans-serif, system-ui, sans-serif; }
+.tester-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.tester-controls label { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 12px; white-space: nowrap; }
+@media (max-width: 640px) { .face-row { grid-template-columns: minmax(0, 1fr); } .tester-controls { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 900px) { .bench { grid-template-columns: minmax(0, 1fr); } #canvas { height: 62vh; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+ <div class="head">
+  <div>
+   <h1>Area Serif · build <span id="build-no"></span></h1>
+   <p>The one page for the typeface. Pick a glyph, compare it over each face, and drag its points. Drag a node to move it with its handles; drag a handle to change a curve, and on a smooth node the opposite handle turns with it. Save a glyph when it looks right: Claude folds every save into the next build, keeping each point you moved exactly where you put it.</p>
+  </div>
+  <span class="status" id="status" role="status">Loading saved edits…</span>
+ </div>
+
+ <section class="changes" aria-labelledby="changes-title">
+  <h2 id="changes-title">What changed in this build</h2>
+  <ul id="changes-now"></ul>
+  <details><summary>Earlier builds</summary><div id="changes-old"></div></details>
+ </section>
+
+ <nav class="strip" id="strip" aria-label="Glyphs"></nav>
+ <div class="legend"><span><i class="bar"></i>changed in this build</span><span><i style="background:var(--edited)"></i>your save, in this build</span><span><i style="background:var(--waiting)"></i>your save, not in the build yet</span><span><i style="background:var(--sel)"></i>unsaved changes</span></div>
+
+ <div class="bench">
+  <div class="canvas-box">
+   <svg id="canvas" aria-label="Glyph outline editor"></svg>
+   <div class="zoom"><button type="button" id="zoom-in" aria-label="Zoom in">+</button><button type="button" id="zoom-out" aria-label="Zoom out">−</button><button type="button" id="zoom-fit">Fit</button></div>
+  </div>
+  <div class="side">
+   <div class="card">
+    <h2>Point</h2>
+    <div class="coords" id="coords"><span>—</span><span>Select a point</span></div>
+    <div class="row">
+     <button type="button" class="btn" id="smooth" disabled>Make smooth</button>
+    </div>
+   </div>
+   <div class="card">
+    <h2>Underneath</h2>
+    <label class="toggle"><input type="checkbox" id="ref-serrif" checked><i style="background:var(--serrif)"></i>Serrif</label>
+    <label class="toggle"><input type="checkbox" id="ref-georgia"><i style="background:var(--georgia)"></i>Georgia Pro</label>
+    <label class="toggle"><input type="checkbox" id="ref-lb"><i style="background:var(--lb)"></i>Libre Baskerville</label>
+    <label class="toggle"><input type="checkbox" id="ref-inter"><i style="background:var(--inter)"></i>Inter</label>
+    <label class="toggle"><input type="checkbox" id="ref-atkinson"><i style="background:var(--atkinson)"></i>Atkinson Hyperlegible Next</label>
+    <label class="toggle"><input type="checkbox" id="show-fill" checked>Fill the shape</label>
+    <label class="toggle"><input type="checkbox" id="show-points" checked>Show points and handles <span class="status">(P)</span></label>
+   </div>
+   <div class="card">
+    <h2>This glyph</h2>
+    <label for="note" class="status">Note for Claude (optional)</label>
+    <textarea id="note" placeholder="What you changed and why, or what still feels off"></textarea>
+    <div class="row">
+     <button type="button" class="btn primary" id="save">Save glyph</button>
+     <button type="button" class="btn" id="undo" disabled>Undo</button>
+     <button type="button" class="btn" id="revert">Back to build</button>
+    </div>
+    <span class="status" id="glyph-status"></span>
+   </div>
+   <div class="card">
+    <h2>Keys</h2>
+    <ul class="keys">
+     <li>Arrows nudge 1 unit, Shift+arrows 10</li>
+     <li>Shift while dragging keeps it level or upright</li>
+     <li>⌘Z or Ctrl+Z undoes</li>
+     <li>Drag empty space to pan; scroll to zoom</li>
+     <li>P shows the ink alone, or the points again</li>
+    </ul>
+   </div>
+  </div>
+ </div>
+
+ <section class="section" aria-labelledby="pairs-title">
+  <h2 id="pairs-title">Over each face</h2>
+  <p class="sub">Area Serif filled, as you have it now; each face outlined at the same x-height (cap height for capitals and figures), centred on the ink.</p>
+  <div class="pairs" id="pairs"></div>
+ </section>
+
+ <section class="section" aria-labelledby="words-title">
+  <h2 id="words-title">In words</h2>
+  <p class="sub">Area Serif here is the build, without unsaved changes. Georgia Pro and Serrif show only where they're installed.</p>
+  <div class="faces" id="words"></div>
+ </section>
+
+ <section class="section" aria-labelledby="tester-title">
+  <h2 id="tester-title">Type tester</h2>
+  <div class="tester-controls">
+   <input type="text" id="tester" value="Settings, Search, Share · 1,024 items saved at 9:41" spellcheck="false" aria-label="Text to test">
+   <label for="tester-size">Size <input type="range" id="tester-size" min="11" max="96" value="28"><output id="tester-size-out">28 px</output></label>
+  </div>
+  <div class="faces" id="tester-out"></div>
+ </section>
+
+ <div class="preview">
+  <label for="sample" class="status">Your edits in words (unkerned, unsaved changes included)</label>
+  <input type="text" id="sample" value="abcdef deface cafe bead" spellcheck="false">
+  <div class="preview-lines" id="preview"></div>
+ </div>
+</div>
+
+<script>
+const DATA = /*DATA*/;
+(function () {
+  const M = DATA.meta, G = DATA.glyphs, NS = "http://www.w3.org/2000/svg";
+  const charToName = {}; for (const n of M.order) charToName[G[n].char] = n;
+  const work = {};          // name -> {contours, advance} working copy
+  const saved = {};         // name -> saved body from db, made on this build
+  const waiting = {};       // name -> a save from an earlier build that owner_edits.json has not folded in
+  const history = {};       // name -> undo stack
+  let cur = M.order[0], sel = null, db = null, vb = null, drag = null;
+  const $ = id => document.getElementById(id);
+  const svg = $("canvas"), status = $("status");
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const base = n => ({ contours: clone(G[n].contours), advance: G[n].advance });
+  const W = n => (work[n] ||= saved[n] ? { contours: clone(saved[n].contours), advance: saved[n].advance } : base(n));
+
+  // ---------- outline to path ----------
+  function pathD(contours, flip) {
+    let d = "";
+    const fy = y => flip ? -y : y;
+    for (const c of contours) {
+      const n = c.length; if (!n) continue;
+      let s = c.findIndex(p => p[2]); if (s < 0) continue;
+      d += `M${c[s][0]} ${fy(c[s][1])}`;
+      let offs = [];
+      for (let k = 1; k <= n; k++) {
+        const p = c[(s + k) % n];
+        if (!p[2]) { offs.push(p); continue; }
+        if (p[2] === "curve" && offs.length === 2) d += `C${offs[0][0]} ${fy(offs[0][1])} ${offs[1][0]} ${fy(offs[1][1])} ${p[0]} ${fy(p[1])}`;
+        else if (p[2] === "qcurve" && offs.length) { offs.forEach((o, i) => { if (i < offs.length - 1) { const m = offs[i + 1]; d += `Q${o[0]} ${fy(o[1])} ${(o[0] + m[0]) / 2} ${fy((o[1] + m[1]) / 2)}`; } }); const o = offs[offs.length - 1]; d += `Q${o[0]} ${fy(o[1])} ${p[0]} ${fy(p[1])}`; }
+        else d += `L${p[0]} ${fy(p[1])}`;
+        offs = [];
+      }
+      d += "Z";
+    }
+    return d;
+  }
+
+  // ---------- view ----------
+  function fit() {
+    const g = W(cur), pad = 80;
+    vb = { x: -pad, y: -(M.asc + pad), w: g.advance + 2 * pad, h: (M.asc - M.desc) + 2 * pad };
+    const r = svg.getBoundingClientRect(), aspect = r.width / Math.max(1, r.height);
+    if (vb.w / vb.h < aspect) { const w = vb.h * aspect; vb.x -= (w - vb.w) / 2; vb.w = w; }
+    else { const h = vb.w / aspect; vb.y -= (h - vb.h) / 2; vb.h = h; }
+  }
+  function unitsPerPx() { const r = svg.getBoundingClientRect(); return vb.w / Math.max(1, r.width); }
+  function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; }
+
+  function render() { drawCanvas(); showCoords(); strip(); preview(); pairs(); }
+  let viewFrame = 0;
+  function renderView() {           // zoom and pan: only the canvas, at most once a frame
+    if (viewFrame) return;
+    viewFrame = requestAnimationFrame(() => { viewFrame = 0; drawCanvas(); });
+  }
+  function drawCanvas() {
+    const g = W(cur);
+    svg.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+    svg.textContent = "";
+    const upp = unitsPerPx();
+    const lines = [["baseline", 0], ["x-height", M.xh], ["cap height", M.cap], ["ascender", M.asc], ["descender", M.desc]];
+    for (const [label, y] of lines) {
+      el("line", { x1: vb.x, x2: vb.x + vb.w, y1: -y, y2: -y, class: "metric" }, svg);
+      const t = el("text", { x: vb.x + 8 * upp, y: -y - 4 * upp, class: "metric-label", "font-size": 11 * upp }, svg); t.textContent = label;
+    }
+    el("line", { x1: 0, x2: 0, y1: vb.y, y2: vb.y + vb.h, class: "adv" }, svg);
+    el("line", { x1: g.advance, x2: g.advance, y1: vb.y, y2: vb.y + vb.h, class: "adv" }, svg);
+    for (const k of ["inter", "atkinson", "lb", "georgia", "serrif"]) if ($("ref-" + k).checked) {
+      el("path", { d: G[cur].refs[k], class: "ref " + k, transform: "scale(1,-1)" }, svg);
+    }
+    const shape = el("path", { d: pathD(g.contours, true), class: "glyph" }, svg);
+    const pts = $("show-points").checked;
+    if (!pts) { shape.style.fill = "var(--ink)"; shape.style.stroke = "none"; }   // ink alone
+    else if (!$("show-fill").checked) shape.style.fill = "none";
+    if (!pts) return;
+    // handles
+    g.contours.forEach((c, ci) => c.forEach((p, pi) => {
+      if (p[2]) return;
+      const n = c.length, a = c[(pi - 1 + n) % n], b = c[(pi + 1) % n];
+      const node = a[2] ? a : b;
+      el("line", { x1: node[0], y1: -node[1], x2: p[0], y2: -p[1], class: "hline" }, svg);
+    }));
+    g.contours.forEach((c, ci) => c.forEach((p, pi) => {
+      const isSel = sel && sel[0] === ci && sel[1] === pi;
+      const on = !!p[2];
+      let e;
+      if (on && !p[3]) { const s = 9 * upp; e = el("rect", { x: p[0] - s / 2, y: -p[1] - s / 2, width: s, height: s }, svg); }
+      else e = el("circle", { cx: p[0], cy: -p[1], r: (on ? 5.5 : 4) * upp }, svg);
+      e.setAttribute("class", `pt ${on ? "on" : "off"}${isSel ? " sel" : ""}`);
+      e.dataset.ci = ci; e.dataset.pi = pi;
+    }));
+  }
+
+  // ---------- the glyph over each face, in words, and the tester ----------
+  const FACES = [["area", "Area Serif"], ["lb", "Libre Baskerville"], ["serrif", "Serrif"], ["georgia", "Georgia Pro"], ["inter", "Inter"], ["atkinson", "Atkinson Hyperlegible Next"]];
+  const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  let pq = 0;
+  function pairs() {
+    cancelAnimationFrame(pq);
+    pq = requestAnimationFrame(() => {
+      const g = W(cur), d = pathD(g.contours, true), pad = 60;
+      const xs = g.contours.flat().map(p => p[0]), x0 = Math.min(...xs), x1 = Math.max(...xs), cx = (x0 + x1) / 2;
+      const h = M.asc - M.desc + 2 * pad, w = h * 4 / 5;
+      const vbx = cx - w / 2, vby = -(M.asc + pad);
+      $("pairs").innerHTML = FACES.slice(1).map(([k, label]) => `<figure><svg viewBox="${vbx} ${vby} ${w} ${h}" role="img" aria-label="${esc(G[cur].char)} over ${label}"><line x1="${vbx}" x2="${vbx + w}" y1="0" y2="0" class="metric"/><line x1="${vbx}" x2="${vbx + w}" y1="${-M.xh}" y2="${-M.xh}" class="metric"/><path d="${d}" class="fill"/><path d="${G[cur].refs[k]}" class="line ${k}" transform="scale(1,-1)"/></svg><figcaption><i style="background:var(--${k})"></i>${label}</figcaption></figure>`).join("");
+    });
+  }
+  function faceRows(box, text, size) {
+    box.innerHTML = FACES.map(([k, label]) => `<div class="face-row"><span class="face-name"><i style="background:var(--${k === "area" ? "ink" : k})"></i>${label}</span><span class="face-text ff-${k}" style="font-size:${size}px">${esc(text)}</span></div>`).join("");
+  }
+  function words() {
+    const ch = G[cur].char, w = M.words[ch] || M.words[ch.toLowerCase()] || [ch.repeat(3), ch];
+    faceRows($("words"), w[0] + " · " + w[1], 26);
+  }
+  function tester() { const s = +$("tester-size").value; $("tester-size-out").textContent = s + " px"; faceRows($("tester-out"), $("tester").value, s); }
+  $("tester").addEventListener("input", tester); $("tester-size").addEventListener("input", tester);
+
+  // ---------- what changed ----------
+  $("build-no").textContent = M.build;
+  const now = M.changes.find(c => c.build === M.build);
+  const changedNow = new Set((now ? now.items : []).flatMap(i => i.glyphs.split(/\s+/).filter(Boolean)));
+  const li = i => `<li>${i.glyphs ? `<b>${esc(i.glyphs)}</b>` : ""}${esc(i.text)}</li>`;
+  $("changes-now").innerHTML = now ? now.items.map(li).join("") : "<li>Nothing listed for this build.</li>";
+  $("changes-old").innerHTML = M.changes.filter(c => c.build !== M.build).map(c => `<p class="sub">Build ${esc(c.build)} · ${esc(c.date)}</p><ul>${c.items.map(li).join("")}</ul>`).join("");
+
+  function showCoords() {
+    const box = $("coords"), btn = $("smooth");
+    if (!sel) { box.innerHTML = "<span>—</span><span>Select a point</span>"; btn.disabled = true; return; }
+    const p = W(cur).contours[sel[0]][sel[1]];
+    const kind = p[2] ? (p[3] ? "smooth node" : "corner node") : "handle";
+    box.innerHTML = `<span>x</span><span>${p[0]}</span><span>y</span><span>${p[1]}</span><span>kind</span><span>${kind}</span><span>index</span><span>${sel[0]}.${sel[1]}</span>`;
+    btn.disabled = !p[2]; btn.textContent = p[3] ? "Make corner" : "Make smooth";
+  }
+
+  // ---------- editing ----------
+  function pushUndo() { (history[cur] ||= []).push(clone(W(cur))); if (history[cur].length > 200) history[cur].shift(); $("undo").disabled = false; }
+  function nodeOf(c, pi) { const n = c.length, a = (pi - 1 + n) % n, b = (pi + 1) % n; return c[a][2] ? a : b; }
+  function moveOn(c, pi, dx, dy) {
+    const n = c.length, p = c[pi];
+    p[0] += dx; p[1] += dy;
+    for (const q of [(pi - 1 + n) % n, (pi + 1) % n]) if (!c[q][2]) { c[q][0] += dx; c[q][1] += dy; }
+  }
+  function placeOff(c, pi, x, y) {
+    const n = c.length, ni = nodeOf(c, pi), node = c[ni];
+    const other = (ni === (pi + 1) % n) ? (ni + 1) % n : (ni - 1 + n) % n;   // the node's neighbour on the far side
+    if (node[3]) {
+      const o = c[other];
+      if (o[2]) {               // smooth into a straight segment: the handle stays on that line
+        const ux = node[0] - o[0], uy = node[1] - o[1], L = Math.hypot(ux, uy) || 1;
+        const t = ((x - node[0]) * ux + (y - node[1]) * uy) / L;
+        x = node[0] + ux / L * Math.max(0, t); y = node[1] + uy / L * Math.max(0, t);
+      } else {                  // smooth between curves: the opposite handle turns to stay in line, keeping its length
+        const L2 = Math.hypot(o[0] - node[0], o[1] - node[1]);
+        const vx = x - node[0], vy = y - node[1], L = Math.hypot(vx, vy);
+        if (L > 0.5) { o[0] = Math.round(node[0] - vx / L * L2); o[1] = Math.round(node[1] - vy / L * L2); }
+      }
+    }
+    c[pi][0] = Math.round(x); c[pi][1] = Math.round(y);
+  }
+  function toFont(evt) {
+    const pt = svg.createSVGPoint(); pt.x = evt.clientX; pt.y = evt.clientY;
+    const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    return [p.x, -p.y];
+  }
+  svg.addEventListener("pointerdown", e => {
+    const t = e.target;
+    if (t.dataset && t.dataset.ci !== undefined) {
+      sel = [+t.dataset.ci, +t.dataset.pi];
+      pushUndo();
+      const [fx, fy] = toFont(e), p = W(cur).contours[sel[0]][sel[1]];
+      drag = { kind: "pt", start: [fx, fy], orig: [p[0], p[1]], moved: false };
+      svg.setPointerCapture(e.pointerId); render(); return;
+    }
+    drag = { kind: "pan", sx: e.clientX, sy: e.clientY, vb: { ...vb } };
+    svg.classList.add("panning"); svg.setPointerCapture(e.pointerId);
+    if (sel) { sel = null; render(); }
+  });
+  svg.addEventListener("pointermove", e => {
+    if (!drag) return;
+    if (drag.kind === "pan") {
+      const upp = unitsPerPx();
+      vb.x = drag.vb.x - (e.clientX - drag.sx) * upp; vb.y = drag.vb.y - (e.clientY - drag.sy) * upp; renderView(); return;
+    }
+    const [fx, fy] = toFont(e);
+    let tx = drag.orig[0] + (fx - drag.start[0]), ty = drag.orig[1] + (fy - drag.start[1]);
+    if (e.shiftKey) { if (Math.abs(tx - drag.orig[0]) > Math.abs(ty - drag.orig[1])) ty = drag.orig[1]; else tx = drag.orig[0]; }
+    tx = Math.round(tx); ty = Math.round(ty);
+    const c = W(cur).contours[sel[0]], p = c[sel[1]];
+    if (p[2]) moveOn(c, sel[1], tx - p[0], ty - p[1]); else placeOff(c, sel[1], tx, ty);
+    drag.moved = true; markDirty(); renderView(); showCoords();
+  });
+  const endDrag = () => {
+    const moved = drag && drag.kind === "pt" && drag.moved;
+    if (drag && drag.kind === "pt" && !drag.moved) history[cur].pop();
+    drag = null; svg.classList.remove("panning"); $("undo").disabled = !(history[cur] || []).length;
+    if (moved) render();                     // the strip, preview and comparisons catch up once the drag ends
+  };
+  svg.addEventListener("pointerup", endDrag); svg.addEventListener("pointercancel", endDrag);
+  svg.addEventListener("wheel", e => {
+    e.preventDefault();
+    // pinch (ctrl + wheel) zooms fastest; a mouse wheel's line steps and a trackpad's pixels each at their own rate
+    const rate = e.ctrlKey ? 0.012 : e.deltaMode === 1 ? 0.06 : 0.004;
+    const k = Math.exp(Math.max(-0.5, Math.min(0.5, e.deltaY * rate))), [fx, fy] = toFont(e), sx = fx, sy = -fy;
+    vb.x = sx - (sx - vb.x) * k; vb.y = sy - (sy - vb.y) * k; vb.w *= k; vb.h *= k; renderView();
+  }, { passive: false });
+  function zoom(k) { const cx = vb.x + vb.w / 2, cy = vb.y + vb.h / 2; vb.w *= k; vb.h *= k; vb.x = cx - vb.w / 2; vb.y = cy - vb.h / 2; renderView(); }
+  $("zoom-in").onclick = () => zoom(0.7); $("zoom-out").onclick = () => zoom(1.43); $("zoom-fit").onclick = () => { fit(); render(); };
+  document.addEventListener("keydown", e => {
+    if (e.target.matches("input, textarea")) return;
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") { e.preventDefault(); undo(); return; }
+    if (!e.metaKey && !e.ctrlKey && e.key.toLowerCase() === "p") { $("show-points").checked = !$("show-points").checked; sel = null; render(); return; }
+    if (!sel) return;
+    const step = e.shiftKey ? 10 : 1, d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, step], ArrowDown: [0, -step] }[e.key];
+    if (!d) return;
+    e.preventDefault(); pushUndo();
+    const c = W(cur).contours[sel[0]], p = c[sel[1]];
+    if (p[2]) moveOn(c, sel[1], d[0], d[1]); else placeOff(c, sel[1], p[0] + d[0], p[1] + d[1]);
+    markDirty(); render();
+  });
+  function undo() { const h = history[cur]; if (!h || !h.length) return; work[cur] = h.pop(); $("undo").disabled = !h.length; markDirty(); render(); }
+  $("undo").onclick = undo;
+  $("smooth").onclick = () => { if (!sel) return; pushUndo(); const p = W(cur).contours[sel[0]][sel[1]]; p[3] = p[3] ? 0 : 1; markDirty(); render(); };
+  for (const id of ["ref-serrif", "ref-georgia", "ref-lb", "ref-inter", "ref-atkinson", "show-fill", "show-points"]) $(id).onchange = render;
+
+  // ---------- glyph strip ----------
+  const dirty = new Set();
+  function markDirty() { dirty.add(cur); $("glyph-status").textContent = "Unsaved changes"; }
+  function strip() {
+    const box = $("strip");
+    if (!box.children.length) M.order.forEach(n => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = G[n].char; b.dataset.name = n;
+      b.setAttribute("aria-label", `Glyph ${G[n].char}`); b.onclick = () => open(n); box.appendChild(b);
+    });
+    for (const b of box.children) {
+      const n = b.dataset.name;
+      b.setAttribute("aria-current", n === cur ? "true" : "false");
+      b.classList.toggle("saved", !!saved[n] || !!waiting[n]); b.classList.toggle("waiting", !!waiting[n]);
+      b.classList.toggle("dirty", dirty.has(n)); b.classList.toggle("changed", changedNow.has(G[n].char));
+      b.title = waiting[n] ? "Your save from build " + waiting[n].build + " isn't in the build yet" : changedNow.has(G[n].char) ? "Changed in this build" : "";
+    }
+  }
+  function open(n) {
+    cur = n; sel = null; fit();
+    $("note").value = saved[n]?.note || "";
+    $("undo").disabled = !(history[n] || []).length;
+    $("glyph-status").textContent = dirty.has(n) ? "Unsaved changes" : saved[n] ? `Saved ${new Date(saved[n].savedAt).toLocaleString()}` : waiting[n] ? `Your save from build ${waiting[n].build} isn't in the build yet; Claude folds it in next` : M.folded[n] ? "As built, with your earlier save folded in" : "As built";
+    words();
+    try { localStorage.setItem("area-editor-glyph", n); } catch (e) {}
+    render();
+  }
+
+  // ---------- preview ----------
+  let pv = 0;
+  function preview() {
+    cancelAnimationFrame(pv);
+    pv = requestAnimationFrame(() => {
+      const text = $("sample").value, box = $("preview"); box.textContent = "";
+      let x = 0; const parts = [];
+      for (const ch of text) {
+        const n = charToName[ch];
+        if (!n) { x += M.space; continue; }
+        const g = W(n);
+        parts.push(`<path transform="translate(${x} 0)" d="${pathD(g.contours, true)}"/>`);
+        x += g.advance;
+      }
+      const h = M.asc - M.desc + 40;
+      for (const px of [64, 28, 16]) {
+        const k = px / 1000, w = Math.max(1, x * k), hh = h * k;
+        box.insertAdjacentHTML("beforeend", `<svg width="${w.toFixed(1)}" height="${hh.toFixed(1)}" viewBox="0 ${-(M.asc + 20)} ${Math.max(1, x)} ${h}" aria-label="Preview at ${px} pixels">${parts.join("")}</svg>`);
+      }
+    });
+  }
+  $("sample").addEventListener("input", preview);
+
+  // ---------- saving ----------
+  function setStatus(t, err) { status.textContent = t; status.classList.toggle("err", !!err); }
+  $("save").onclick = async () => {
+    if (!db) { setStatus("Saving needs the page's storage, which isn't available here.", true); return; }
+    const g = W(cur), body = { glyph: cur, char: G[cur].char, contours: g.contours, advance: g.advance, note: $("note").value.trim(), build: M.build, savedAt: new Date().toISOString() };
+    $("save").disabled = true;
+    try { await db.doc("edits/" + cur).set(body); dirty.delete(cur); $("glyph-status").textContent = "Saved"; setStatus(`Saved ${G[cur].char}`); }
+    catch (e) { setStatus(e?.code === "invalid_argument" ? "You can view this page but not save to it." : "Couldn't save. Try again in a moment.", true); }
+    finally { $("save").disabled = false; strip(); }
+  };
+  $("revert").onclick = async () => {
+    pushUndo(); work[cur] = base(cur); dirty.delete(cur); sel = null;
+    if (db && saved[cur]) { try { await db.doc("edits/" + cur).delete(); setStatus(`${G[cur].char} is back to the build`); } catch (e) { setStatus("Couldn't remove the saved edit.", true); } }
+    $("glyph-status").textContent = "As built"; render();
+  };
+
+  // ---------- start ----------
+  let start = M.order[0];
+  try { const s = localStorage.getItem("area-editor-glyph"); if (s && G[s]) start = s; } catch (e) {}
+  requestAnimationFrame(() => { open(start); tester(); });
+  window.addEventListener("resize", () => { fit(); render(); });
+  (async () => {
+    const timer = setTimeout(() => setStatus("Saved edits can't be reached yet. You can still edit; saving may fail."), 10000);
+    db = window.claude?.use ? await window.claude.use("db") : null;
+    if (!db) { clearTimeout(timer); setStatus("Editing works here, but saving needs the published page."); return; }
+    db.collection("edits").onSnapshot(snap => {
+      if (!snap.metadata.fromCache) clearTimeout(timer);
+      for (const k in saved) delete saved[k];
+      for (const k in waiting) delete waiting[k];
+      let older = 0;
+      snap.docs.forEach(d => { const b = d.data(); if (!b || !G[d.id]) return; if (b.build === M.build) saved[d.id] = b; else if (M.folded[d.id] === b.savedAt) older++; else waiting[d.id] = b; });
+      const nw = Object.keys(waiting).length;
+      for (const n in saved) if (!dirty.has(n)) delete work[n];
+      const count = Object.keys(saved).length;
+      setStatus((count ? `${count} glyph${count === 1 ? "" : "s"} saved on this build` : "No saves on this build yet") + (older ? ` · ${older} earlier save${older === 1 ? " is" : "s are"} in the build` : "") + (nw ? ` · ${nw} not in the build yet: ${Object.keys(waiting).map(n => G[n].char).join(" ")}` : ""), nw > 0);
+      if (!dirty.has(cur)) { $("note").value = saved[cur]?.note || ""; }
+      render();
+    }, e => { clearTimeout(timer); setStatus("Saved edits couldn't load.", true); });
+  })();
+})();
+</script>
