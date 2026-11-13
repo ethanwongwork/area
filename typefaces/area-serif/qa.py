@@ -23,8 +23,6 @@ PREV = os.path.join(HERE, "build", "previous", "AreaSerif-Regular.ttf")
 # Check id -> why it is expected now. Remove an entry the moment its reason stops being true.
 EXPECTED = {
     "contour_count": "inherited from Libre Baskerville: ogonek and similar accents drawn as separate contours",
-    "ligature_carets": "inherited: no caret positions in Libre Baskerville's ligatures; add with the feature pass",
-    "math_signs_width": "inherited: Libre Baskerville's math signs are not all one width; fix with the figures pass",
 }
 
 

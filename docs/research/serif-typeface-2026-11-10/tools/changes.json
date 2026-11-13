@@ -1,5 +1,127 @@
 [
  {
+  "build": "0.48",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "Vietnamese",
+    "chars": "ƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ",
+    "text": "Vietnamese, complete (shaperglot passes). New marks: hook above, a small open curve over a short tail with a round end, the acute's size; and the horn. Ơ ơ Ư ư are Area's O o U u with a horn: a short thick spur leaving the upper right and tapering into a round end, ending 1.20 x-heights (1.14 cap heights) up as Georgia Pro's. The 134 toned letters are Area's letters and accents placed by anchor: a tone that meets a circumflex (acute, grave, hook above) sits beside it at its upper right; a tilde, and every tone over a breve, stacks above."
+   },
+   {
+    "glyphs": "í ì î ï",
+    "chars": "íìîïĩīĭįǐȉȋḭḯỉịǽǼǿ",
+    "text": "Fixed a fault in 0.47: when dotless i was rebuilt from Area's i (46 units narrower), the accented i's kept the old width and accent positions, so their accents sat about 35 units right of the stem. Every accented letter now follows its rebuilt base (22 of them: the i's, ǿ, ǽ, Ǽ)."
+   },
+   {
+    "glyphs": "ą ę į ų Ę ŀ",
+    "chars": "ąęįųĘŀ",
+    "text": "These were still Libre Baskerville's own drawings of a e i u E and l. Now Area's letter with the ogonek (or the middle dot), placed by anchor, as Ą Į Ų already were."
+   },
+   {
+    "glyphs": "accents typed",
+    "chars": "",
+    "text": "An accent typed after a letter (a combining mark) was placed 29 units lower on lowercase than in the ready-made letter, and up to 40 units off centre on capitals whose widths were set. Every letter's accent anchors now match its ready-made accented letters (70 anchors), so typed and ready-made look the same."
+   },
+   {
+    "glyphs": "checks",
+    "chars": "",
+    "text": "Targets 21 of 21 (the character set now includes Vietnamese); outlines 0 errors, 240 warnings; parts audit 0 outliers; fontbakery 0 FAIL, 1 WARN (inherited contour count); shaperglot: Vietnamese and every European Latin language pass but small caps."
+   }
+  ]
+ },
+ {
+  "build": "0.47",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "6 9",
+    "chars": "69",
+    "text": "The join where the long stroke leaves the bowl was a blob: the counter's corner stopped 80 units short of the stroke's crotch (the largest circle inside the join was 1.27 H stems; Georgia Pro 1.03, Serrif 1.09). The counter now reaches up (6) or down (9) to 44 units from the crotch, as both references draw it: 1.12."
+   },
+   {
+    "glyphs": "8",
+    "chars": "8",
+    "text": "The spine, the stroke from upper left to lower right, was 1.20 to 1.24 H stems all along (Georgia Pro 0.96, Serrif 1.07). Each counter's edge along it moves 11 units toward it, so it thins from both sides and nothing is thickened: 1.06 to 1.09."
+   },
+   {
+    "glyphs": "X",
+    "chars": "X",
+    "text": "The thick diagonal is 5% lighter (it was 5% over Serrif's and 9% over Georgia Pro's): the crossing adds ink where the strokes meet, so X's diagonal is now a little under K's leg."
+   },
+   {
+    "glyphs": "punctuation",
+    "chars": "",
+    "text": "Punctuation, symbols and accents had missed the lightening every letter got in 0.40 (2 units off each side of every upright stroke). All 163 now have it, so commas, quotes, brackets, currency and accents carry the letters' weight."
+   },
+   {
+    "glyphs": "- – —",
+    "chars": "-–—‐‑‒―",
+    "text": "Hyphen and dashes were a full stem thick (1.10 n stems; Georgia Pro 0.74, Serrif 0.49). Now 0.66, the minus's own weight, centred at 0.53 of the x-height like both references. The hyphen's other forms (‐ ‑), the figure dash (‒, the tabular width) and the horizontal bar (―) are new."
+   },
+   {
+    "glyphs": "ı ȷ",
+    "chars": "ıȷ",
+    "text": "Dotless i and j were still Libre Baskerville's old i and j, wider and with longer serifs, and every accented i and j is built on them (í ï ĭ ...). They are now Area's i and j without the dot."
+   },
+   {
+    "glyphs": "Đ đ Ħ ħ Ŧ ŧ Ł ł Ø ø",
+    "chars": "ĐÐđĦħŦŧŁłØøǾǿ",
+    "text": "Barred and slashed letters were Libre Baskerville's drawings. Each is now Area's own letter with a bar or slash added: the bar is the letter's own thin bar (H's crossbar, t's bar), placed and sized from Serrif and Georgia Pro in stems."
+   },
+   {
+    "glyphs": "Þ þ ſ",
+    "chars": "Þþſ",
+    "text": "Thorn is Area's P bowl, lowered to the stem's middle, on I's stem; thorn is Area's p under b's ascender. Long s (new) is Area's f without its bar."
+   },
+   {
+    "glyphs": "ﬁ ﬂ ff ffi ffl",
+    "chars": "ﬁﬂ",
+    "text": "The f ligatures were Libre Baskerville's old f. Now built from Area's f: fi is f and a dotless i (the dot was what met f's ball); fl, fb, fh and fk run f's top level into the ascender, which drops its flag; ff joins the two bars; ft runs f's bar into t's. Each has its caret position for the text cursor."
+   },
+   {
+    "glyphs": "æ œ Æ Œ",
+    "chars": "æœÆŒǽǼ",
+    "text": "Built from Area's letters: in æ and œ the e's left stroke is the a's stem or the o's right side; in Æ and Œ, E's stem takes the place of A's right leg or O's right side, without E's serifs on that side."
+   },
+   {
+    "glyphs": "¹ ² ³ ½ ª º",
+    "chars": "⁰¹²³⁴⁵⁶⁷⁸⁹₀₁₂₃₄₅₆₇₈₉½¼¾⅓⅔⅛⅜⅝⅞ªº",
+    "text": "Superiors, inferiors and ordinals are Area's figures, a and o, at 0.54 of their height (Libre Baskerville's were 0.42 and read faint), made 4 units heavier on each side so they hold their weight small. Fractions are built from them, so they follow."
+   },
+   {
+    "glyphs": "tabular",
+    "chars": "",
+    "text": "Tabular figures (new, the tnum feature): each figure centred in one width, 612 units, so columns of numbers line up. The maths signs (+ − × ÷ = ≠ < > ± ¬ ≤ ≥ ≈) all take that width too."
+   },
+   {
+    "glyphs": "arrows maths",
+    "chars": "←↑→↓↔↕↖↗↘↙≤≥≈∞√∆∏∑∫∂◊πΩΩ′″•",
+    "text": "New: arrows on the maths' axis and weight; ≤ ≥ ≈ ∞ √ ∆ ∏ ∑ ∫ ∂ ◊ π Ω; primes ′ ″. Where a letter has the shape, it is that letter: ∑ is Area's Esh, ∫ its esh, ∂ its 6 turned, ∏ is H's stems under one bar, Ω is O opened at the foot. The bullet is smaller (0.48 of the x-height, was 0.58)."
+   },
+   {
+    "glyphs": "currency",
+    "chars": "₹₽₺₩₪₫",
+    "text": "New currencies: rupee, ruble, Turkish lira, won, sheqel, dong. Ruble, lira, won and dong are Area's P, L, W and đ with their bars."
+   },
+   {
+    "glyphs": "interface",
+    "chars": "⌘⌥⇧⌫✓✕●○ŉ℗ʻ",
+    "text": "New interface symbols for shortcuts and states: command, option, shift, delete, check, cross, black and white circle. Also ŉ, ℗ and ʻ, and the typographic spaces (en, em, thin, hair, figure, punctuation, narrow no-break)."
+   },
+   {
+    "glyphs": "set",
+    "chars": "",
+    "text": "Coverage: Basic Latin, Latin-1, Latin Extended-A complete, with the punctuation, currency, maths and arrows a web text face is expected to have. Shaperglot: every European Latin language passes (small caps aside, which the face doesn't have). Vietnamese needs the horn and hook-above marks and their stacked accents: not built yet. Older Extended-B and IPA letters (Ɓ ƀ Ŋ ĸ and the like) are still Libre Baskerville's drawings, lightened."
+   },
+   {
+    "glyphs": "checks",
+    "chars": "",
+    "text": "Checks: targets 21 of 21 (new: nothing missing from the set, one tabular width, maths on it, dash weight, superior size); outlines 0 errors; parts audit 0 outliers; fontbakery 0 FAIL, 1 WARN (contour count, inherited accents). Two expected warnings are gone: ligature carets and maths widths."
+   }
+  ]
+ },
+ {
   "build": "0.46",
   "date": "2026-11-13",
   "items": [

@@ -23,7 +23,7 @@ from fontTools.varLib.instancer import instantiateVariableFont
 F = os.path.expanduser("~/Library/Fonts/")
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-BUILD = "0.46"   # bump on every regeneration; a save from another build loads only if owner_edits.json has not folded it in
+BUILD = "0.48"   # bump on every regeneration; a save from another build loads only if owner_edits.json has not folded it in
 NAMES = {str(i): n for i, n in enumerate("zero one two three four five six seven eight nine".split())}
 
 
@@ -60,6 +60,33 @@ def words():
     return WORDS
 
 
+# The character set section: every encoded character in the build, by block (spaces and combining marks left out;
+# the spacing accents stand for the marks), then the ligatures and the tabular figures as text.
+BLOCKS = [("Letters", [(0x41, 0x5A), (0x61, 0x7A)]), ("Figures", [(0x30, 0x39)]),
+          ("Punctuation and symbols", [(0x21, 0x2F), (0x3A, 0x40), (0x5B, 0x60), (0x7B, 0x7E)]),
+          ("Latin-1", [(0xA1, 0xFF)]), ("Latin Extended-A", [(0x100, 0x17F)]),
+          ("Latin Extended-B and IPA", [(0x180, 0x2AF)]), ("Spacing accents", [(0x2B0, 0x2FF)]),
+          ("Greek", [(0x370, 0x3FF)]), ("Latin Extended Additional", [(0x1E00, 0x1EFF)]),
+          ("General punctuation", [(0x2010, 0x2027), (0x2030, 0x205E)]), ("Superiors and inferiors", [(0x2070, 0x209F)]),
+          ("Currency", [(0x20A0, 0x20CF)]), ("Letterlike and number forms", [(0x2100, 0x218F)]),
+          ("Arrows", [(0x2190, 0x21FF)]), ("Maths", [(0x2200, 0x22FF)]), ("Interface and shapes", [(0x2300, 0x27BF)]),
+          ("Ligatures", [(0xFB00, 0xFB06)])]
+EXTRA_ROWS = {"Ligatures": ["ff", "ffi", "ffl", "fb", "fh", "fk", "fj", "ft"]}   # set with liga / dlig
+
+
+def charset(ttf):
+    import unicodedata
+    cmap = ttf.getBestCmap()
+    groups = []
+    for title, ranges in BLOCKS:
+        chars = [chr(c) for a, b in ranges for c in range(a, b + 1) if c in cmap
+                 and unicodedata.category(chr(c)) not in ("Zs", "Mn", "Cc", "Cf")]
+        chars += EXTRA_ROWS.get(title, [])
+        if chars:
+            groups.append({"title": title, "chars": chars})
+    return groups
+
+
 def build(out, lb, inter, chars):
     ufo = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
     area = TTFont("build/AreaSerif-Regular.ttf")
@@ -82,7 +109,7 @@ def build(out, lb, inter, chars):
     folded = {n: e.get("savedAt") for n, e in json.load(open("owner_edits.json")).items()}
     changes = json.load(open(os.path.join(HERE, "changes.json")))
     meta = {"xh": xh, "cap": cap, "asc": ufo.info.ascender, "desc": ufo.info.descender, "space": space,
-            "order": order, "build": BUILD, "folded": folded, "changes": changes, "words": words()}
+            "order": order, "build": BUILD, "charset": charset(area), "folded": folded, "changes": changes, "words": words()}
     page = open(os.path.join(HERE, "editor_template.html")).read()
     page = page.replace("/*DATA*/", json.dumps({"meta": meta, "glyphs": glyphs}, separators=(",", ":")))
     page = page.replace("/*AREA_WOFF2*/", base64.b64encode(open("build/AreaSerif-Regular.woff2", "rb").read()).decode())

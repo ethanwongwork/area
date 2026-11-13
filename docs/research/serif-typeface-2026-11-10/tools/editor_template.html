@@ -113,6 +113,14 @@ input[type=text] { font: 14px/1.4 var(--sans); color: var(--ink); background: va
 .ff-atkinson { font-family: "Atkinson Hyperlegible Next", ui-sans-serif, system-ui, sans-serif; }
 .tester-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
 .tester-controls label { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 12px; white-space: nowrap; }
+.cs-controls { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; color: var(--muted); font-size: 12px; }
+.cs-controls label { display: flex; gap: 8px; align-items: center; }
+.cs-group { display: flex; flex-direction: column; gap: 6px; }
+.cs-group h3 { font: 600 12px/1.2 var(--sans); color: var(--muted); margin: 6px 0 0; }
+.cs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--cs-cell, 52px), 1fr)); gap: 4px; }
+.cs-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; color: var(--ink); line-height: 1; position: relative; font-variant-ligatures: common-ligatures discretionary-ligatures; }
+.cs-cell.new { border-color: var(--edited); box-shadow: inset 0 0 0 1px var(--edited); }
+.cs-row { font-size: 26px; padding: 6px 0; overflow-wrap: anywhere; }
 @media (max-width: 640px) { .face-row { grid-template-columns: minmax(0, 1fr); } .tester-controls { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 900px) { .bench { grid-template-columns: minmax(0, 1fr); } #canvas { height: 62vh; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -202,6 +210,19 @@ input[type=text] { font: 14px/1.4 var(--sans); color: var(--ink); background: va
    <label for="tester-size">Size <input type="range" id="tester-size" min="11" max="96" value="28"><output id="tester-size-out">28 px</output></label>
   </div>
   <div class="faces" id="tester-out"></div>
+ </section>
+
+ <section class="section" aria-labelledby="charset-title">
+  <h2 id="charset-title">Character set</h2>
+  <p class="sub">Every character in the build, in Area Serif. Outlined in amber: new or rebuilt in this build. Hover a character for its code point.</p>
+  <div class="cs-controls">
+   <label for="cs-size">Size <input type="range" id="cs-size" min="14" max="64" value="28"><output id="cs-size-out">28 px</output></label>
+   <label><input type="checkbox" id="cs-new"> Only new or rebuilt</label>
+  </div>
+  <div id="charset"></div>
+  <div class="cs-group"><h3>Tabular figures (tnum) under proportional</h3>
+   <div class="cs-row ff-area" style="font-feature-settings: 'tnum' 1">1,111.10 · 2,048.96 · 7,410.33</div>
+   <div class="cs-row ff-area">1,111.10 · 2,048.96 · 7,410.33</div></div>
  </section>
 
  <div class="preview">
@@ -327,6 +348,24 @@ const DATA = /*DATA*/;
   }
   function tester() { const s = +$("tester-size").value; $("tester-size-out").textContent = s + " px"; faceRows($("tester-out"), $("tester").value, s); }
   $("tester").addEventListener("input", tester); $("tester-size").addEventListener("input", tester);
+
+  // ---------- character set ----------
+  function charsetDraw() {
+    const size = +$("cs-size").value, only = $("cs-new").checked, nowSet = new Set((M.changes.find(c => c.build === M.build) || { items: [] }).items.flatMap(i => [...(i.chars || "")]));
+    $("cs-size-out").textContent = size + " px";
+    $("charset").style.setProperty("--cs-cell", Math.round(size * 1.9) + "px");
+    $("charset").innerHTML = (M.charset || []).map(g => {
+      const cells = g.chars.filter(ch => !only || [...ch].some(c => nowSet.has(c)) || (ch.length > 1 && nowSet.has("ﬁ")));
+      if (!cells.length) return "";
+      return `<div class="cs-group"><h3>${esc(g.title)} · ${cells.length}</h3><div class="cs-grid">${cells.map(ch => {
+        const code = [...ch].map(c => "U+" + c.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")).join(" ");
+        const isNew = [...ch].some(c => nowSet.has(c)) || (ch.length > 1 && nowSet.has("ﬁ"));
+        return `<span class="cs-cell ff-area${isNew ? " new" : ""}" style="font-size:${size}px" title="${esc(ch)} ${code}" aria-label="${esc(ch)} ${code}">${esc(ch)}</span>`;
+      }).join("")}</div></div>`;
+    }).join("");
+  }
+  $("cs-size").addEventListener("input", charsetDraw); $("cs-new").addEventListener("change", charsetDraw);
+  charsetDraw();
 
   // ---------- what changed ----------
   $("build-no").textContent = M.build;
