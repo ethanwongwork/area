@@ -2,7 +2,7 @@
 
 What Area Serif is, part by part, with the value each part holds and the rule in code that holds it. Read this
 before changing any glyph. A change that breaks a line here is a design change: ask the owner, then change the rule
-and this file together. Numbers are in n stems (78 units since 0.40; values set by rules that run before `clean.lighten` are written against the 82-unit stem those rules see) unless a unit is named, as of build 0.47.
+and this file together. Numbers are in n stems (78 units since 0.40; values set by rules that run before `clean.lighten` are written against the 82-unit stem those rules see) unless a unit is named, as of build 0.48.
 
 ## Direction (owner, 2026-11-10 to 12)
 
@@ -172,7 +172,12 @@ every glyph built on it. Inventory, gap list and measurements: `docs/research/se
 | Arrows, maths, interface | square cuts, the minus's weight, on the maths' axis; where a letter has the shape, the letter (∑ Esh, ∫ esh, ∂ the 6 turned, ∏ H's stems, Ω O opened) | `arrows`, `maths`, `interface` |
 | Figure joins | 6 and 9: counter's corner 44 units from the crotch; 8: spine 11 units thinner from each side; X: 0.95 of K's leg | `figure_join_corners`, `eight_spine`, `X_DIAG` (clean.py) |
 
-A new glyph is added to `charset.py` (and `COVERAGE` when it is required), never drawn into the UFO by hand.
+| Vietnamese marks | hook above: open curve over a tail, round end, the acute's size; horn: thick spur tapering to a round end, up to 1.20 x (1.14 cap) | `HOOK`, `HORNS` |
+| Two marks | a tone meeting a circumflex sits at its upper right (`BESIDE`, `BESIDE_DROP`); a tilde, or a tone over a breve, stacks 22 units above | `vietnamese` |
+| Composites and anchors | a composite on a rebuilt base takes its advance and moves its marks with it; every base's top and bottom anchor is where its precomposed letters put their marks, so typed accents match | `follow_rebuilt`, `align_anchors` |
+
+A new glyph is added to `charset.py` (and `COVERAGE` when it is required), never drawn into the UFO by hand. After any
+change that moves a base letter, look at its accented forms and at the same base with a typed combining accent.
 
 ## Final-pass audit (0.46)
 
@@ -221,7 +226,7 @@ skipped; `spacing.run` follows. Applies to every letter and figure with its own 
 
 ## Open with the owner (0.47)
 
-Not built: Vietnamese (horn, hook above, stacked accents); Ŋ ŋ ĸ ß ẞ and the Extended-B / IPA letters keep Libre
+Not built (Vietnamese done in 0.48): Ŋ ŋ ĸ ß ẞ and the Extended-B / IPA letters keep Libre
 Baskerville's drawings, lightened; c_t s_t s_p; oldstyle figures and small caps; the new geometric glyphs have had no
 owner's look. 0.47 closed: 6 and 9's join, 8's waist and spine, X heavy, tabular figures, fi fl re-spaced and rebuilt,
 figure and punctuation spacing (checked against Georgia Pro in shaped text; bearings kept).

@@ -101,11 +101,24 @@ inherited accents; `ligature_carets` and `math_signs_width` are gone, `soft_hyph
 `evaluate.py` jumps 27, flat 3, wobble 1 (as 0.46). Shaperglot: every European Latin language passes but the small
 caps check, which needs `smcp`.
 
-## Not done
+## 0.48: Vietnamese, and three fixes
 
-- **Vietnamese.** Needs the horn (U+031B) and hook above (U+0309), Ơ ơ Ư ư with the horn joined, and about 130
-  composites, with the stacked accents (circumflex plus acute, grave, hook or tilde) that Vietnamese sets side by
-  side. Its own job.
+- **Vietnamese** (`charset.hook_above`, `horns`, `vietnamese`). Hook above: an open curve over a short tail with a
+  round end, 172 units tall (124 in the capital form), the acute's size. Horn: a short thick spur from the letter's
+  upper right, tapering into a round end, ending 1.20 x-heights (1.14 cap heights) up and 0.3 to 0.8 stems right of
+  the ink, as Georgia Pro's (Serrif has no Vietnamese). The 64 missing toned letters are composites by anchor: a tone
+  meeting a circumflex sits beside it (left edge 0.30 of the circumflex's width right of its centre, foot 0.12 of its
+  height below its top); a tilde, and any tone over a breve, stacks 22 units above. Shaperglot `vi_Latn` passes.
+- **Composites follow rebuilt bases** (`follow_rebuilt`). 0.47 rebuilt dotless i 46 units narrower, but í ì î ï ...
+  kept the old advance and accent offsets (accents about 35 units right of the stem). Every composite whose base this
+  module redraws takes the new advance and moves its marks with the base's ink centre: 22 glyphs.
+- **Anchors match the precomposed letters** (`align_anchors`). Typed combining accents sat 29 units lower on
+  lowercase than in ready-made letters, and up to 40 units off on capitals whose widths `set_widths` changed. Each
+  base's top and bottom anchor is now the median of where its precomposed letters put their marks: 70 anchors.
+- **ą ę į ų Ę ŀ** were Libre Baskerville's own drawings: now Area's letter plus the ogonek or middle dot (e, i, u got
+  an ogonek anchor: e's a little right of the bowl's bottom, i's under the stem, u's under the right stem's foot).
+
+## Not done
 - **Older Extended-B and IPA letters** (Ɓ ƀ Ŋ ŋ ĸ ʒ and the like) keep Libre Baskerville's drawings, lightened.
   Ŋ ŋ and ĸ are in Latin Extended-A (Sami, Greenlandic), so they are the next to rebuild from N n and K.
 - **Historic discretionary ligatures** c_t s_t s_p stay Libre Baskerville's, lightened.

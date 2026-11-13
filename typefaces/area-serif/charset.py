@@ -46,7 +46,8 @@ COVERAGE = (list(range(0x20, 0x7F)) + [c for c in range(0xA0, 0x100) if c != 0xA
                0x215C, 0x215D, 0x215E, 0x2190, 0x2191, 0x2192, 0x2193, 0x2194, 0x2195, 0x2196, 0x2197, 0x2198,
                0x2199, 0x21E7, 0x2202, 0x2206, 0x220F, 0x2211, 0x2212, 0x2215, 0x2219, 0x221A, 0x221E, 0x222B,
                0x2248, 0x2260, 0x2264, 0x2265, 0x2318, 0x2325, 0x232B, 0x25CA, 0x25CB, 0x25CF, 0x2713, 0x2715,
-               0xFB01, 0xFB02])
+               0xFB01, 0xFB02]
+            + [0x0309, 0x031B, 0x01A0, 0x01A1, 0x01AF, 0x01B0] + list(range(0x1EA0, 0x1EFA)))   # Vietnamese (0.48)
 KAPPA = 0.5523
 
 
@@ -124,10 +125,14 @@ def bounds(p):
     return p.bounds        # (xmin, ymin, xmax, ymax)
 
 
+REBUILT, COMPOSED = set(), set()     # glyphs this module draws or composes (see follow_rebuilt)
+
+
 def put(font, name, path, width, unicodes=None, lsb=None, rsb=None):
     """Writes path into glyph name (created if missing). With lsb and rsb, the ink is placed between those bearings
     and the advance follows; with lsb alone the advance stays width."""
     path = op(path, pathops.Path())          # resolve overlaps, outer contours counter-clockwise
+    REBUILT.add(name)
     if name in font:
         g = font[name]
         g.clearContours()
@@ -191,6 +196,7 @@ def _drop_tiny(g):
 
 
 def compose(font, name, parts, width, unicodes=None):
+    COMPOSED.add(name)
     if name in font:
         g = font[name]
         g.clearContours()
@@ -591,6 +597,7 @@ def math_widths(font, adv):
         x0, _, x1, _ = bounds(p)
         d = (adv - (x1 - x0)) / 2 - x0
         if g.components:                    # notequal: its parts move, as components
+            COMPOSED.add(name)                # placed here: follow_rebuilt leaves it alone
             for c in g.components:
                 t = list(c.transformation)
                 t[4] += round(d)
@@ -954,6 +961,37 @@ def diphthongs(font, m):
         kern_like(font, name, l, r)
 
 
+# The ogonek letters that were Libre Baskerville's own drawings (a e i u E; A I O U o were already components), and
+# l with a middle dot: Area's letter and the mark, by anchor. e, i and u had no ogonek anchor: e's hangs from the bowl a
+# little right of its bottom, i's under the stem, u's under the right stem's foot (as A I U and the references).
+OGONEK_AT = {"e": ("bottom", 0.09, 10), "i": ("bottom", 0.06, 10), "u": (None, 0, 10)}
+
+
+def ogonek_letters(font):
+    og = next(a for a in font["ogonek"].anchors if a.name == "_ogonek")
+    for base, name in (("a", "aogonek"), ("e", "eogonek"), ("i", "iogonek"), ("u", "uogonek"), ("E", "Eogonek")):
+        g = font[base]
+        anc = next((a for a in g.anchors if a.name == "ogonek"), None)
+        if anc is None:
+            ref, k, dy = OGONEK_AT.get(base, ("bottom", 0.10, 10))
+            if ref is None:                                          # u: the right stem's centre
+                st = scan_h(gp(font, base), 200)[-1]
+                x = (st[0] + st[1]) / 2 + 8
+            else:
+                b = next(a for a in g.anchors if a.name == ref)
+                x = b.x + k * g.width
+            g.appendAnchor({"name": "ogonek", "x": round(x), "y": 4 + dy})
+            anc = g.anchors[-1]
+        u = list(font[name].unicodes)
+        compose(font, name, [(base, 0, 0), ("ogonek", round(anc.x - og.x), round(anc.y - og.y))], g.width, u)
+    # l with a middle dot: the dot keeps its distance from the stem (90 units) and its height
+    l = gp(font, "l")
+    st = _stem_x(l, 300)
+    pc = bounds(gp(font, "periodcentered"))
+    dx = st[1] + 90 - pc[0]
+    compose(font, "ldot", [("l", 0, 0), ("periodcentered", round(dx), 39)], round(font["l"].width + 61), [0x0140])
+
+
 def letters_extra(font):
     """n preceded by apostrophe (deprecated but in Latin Extended-A), and sound recording copyright."""
     if not any(0x02BB in g.unicodes for g in font):                 # turned comma (okina), English auxiliary
@@ -973,9 +1011,243 @@ def letters_extra(font):
     CLEAN.lighten(font, ["uni2117"], -2.0 * (1 - k))
 
 
+# ---------------------------------------------------------------- Vietnamese (0.48)
+# Vietnamese adds two marks (hook above, horn), four horned letters and 134 letters with a tone mark, many of them
+# with two marks. Measured in Area's own accents: the accents are about 50 units thick at their heaviest and 150 tall
+# (106 in the capital forms). Placement follows the common practice in Vietnamese type: a tone mark that meets a
+# circumflex (acute, grave, hook above) sits beside it at its upper right; a tilde, and every tone over a breve, sits
+# above it; the dot below goes under the letter as on its own.
+
+HOOK = {"": (628, 172, 50, 32), ".case": (775, 124, 46, 30)}   # bottom, height, side stroke, top stroke
+
+
+def hook_above(font):
+    """Hook above: the top of a question mark in small, an open curve over a short upright tail, its free end round
+    like Area's other ends (ball terminals)."""
+    for suf, (y0, h, ws, wt) in HOOK.items():
+        rx = 0.44 * h
+        ry = 0.34 * h
+        cx, cy = rx, y0 + h - ry
+        arc = ring(cx, cy, rx, ry, ws, wt)
+        arc = op(arc, rect(-100, -100, cx, cy), pathops.PathOp.DIFFERENCE)        # open at the lower left
+        ball = ellipse(ws / 2, cy, ws / 2, ws / 2)                                 # the free end, round
+        tail = rect(cx - wt * 0.15, y0, cx + wt * 0.85, cy - ry + wt)
+        p = union(arc, ball, tail)
+        name = "hookabovecomb" + suf
+        g = put(font, name, p, 0, [0x0309] if not suf else [])
+        g.clearAnchors()
+        g.appendAnchor({"name": "_top", "x": round(cx + wt * 0.35), "y": 632 if not suf else 763})
+        g.appendAnchor({"name": "top", "x": round(cx + wt * 0.35), "y": round(y0 + h + 25)})
+        font.lib.setdefault("public.openTypeCategories", {})[name] = "mark"
+
+
+def _horn(S, C, T, w0, w1, rb):
+    """A tapered stroke from S (inside the letter) through the pull of C to a round end at T."""
+    def unit(a, b):
+        d = math.hypot(b[0] - a[0], b[1] - a[1])
+        return ((b[0] - a[0]) / d, (b[1] - a[1]) / d)
+    t0, t1 = unit(S, C), unit(C, T)
+    n0, n1 = (-t0[1], t0[0]), (-t1[1], t1[0])
+    side = []
+    for sgn in (1, -1):
+        a = (S[0] + sgn * n0[0] * w0 / 2, S[1] + sgn * n0[1] * w0 / 2)
+        b = (T[0] + sgn * n1[0] * w1 / 2, T[1] + sgn * n1[1] * w1 / 2)
+        c = (C[0] + sgn * (n0[0] + n1[0]) / 2 * (w0 + w1) / 4, C[1] + sgn * (n0[1] + n1[1]) / 2 * (w0 + w1) / 4)
+        side.append((a, (a[0] + 2 / 3 * (c[0] - a[0]), a[1] + 2 / 3 * (c[1] - a[1])),
+                     (b[0] + 2 / 3 * (c[0] - b[0]), b[1] + 2 / 3 * (c[1] - b[1])), b))
+    (a0, h1, h2, b0), (a1, k1, k2, b1) = side
+    body = shape([a0, ("c", h1, h2, b0), b1, ("c", k2, k1, a1)])
+    return union(body, ellipse(T[0], T[1], rb, rb))
+
+
+# Horn geometry per letter, in units from the letter's own points: S where it leaves the letter (inside the stroke),
+# C the pull (it goes out to the right first, then up), T the round end, stroke widths and the end's radius.
+HORNS = {   # Georgia Pro's horns end 1.20 x-heights up (1.14 cap heights), 0.6-0.8 stems right of the letter's ink: a short
+    # thick spur leaving the letter's upper right, rising, tapering into a round end (no neck)
+    "o": ("ohorn", 0x01A1, lambda b, st: ((b[2] - 34, 462), (b[2] + 10, 500), (b[2] + 24, 624 - 25)), 66, 50, 25),
+    "u": ("uhorn", 0x01B0, lambda b, st: ((st[1] - 26, 470), (st[1] + 46, 492), (st[1] + 66, 624 - 25)), 66, 50, 25),
+    "O": ("Ohorn", 0x01A0, lambda b, st: ((b[2] - 44, 640), (b[2] + 8, 690), (b[2] + 16, 812 - 29)), 74, 58, 29),
+    "U": ("Uhorn", 0x01AF, lambda b, st: ((st[1] - 28, 672), (st[1] + 60, 694), (st[1] + 84, 812 - 29)), 74, 58, 29),
+}
+
+
+def horns(font):
+    for base, (name, u, geo, w0, w1, rb) in HORNS.items():
+        p = gp(font, base)
+        b = bounds(p)
+        st = scan_h(p, 300)[-1]                      # the right stem (u U) or the bowl's right side (o O)
+        S, C, T = geo(b, st)
+        horn = _horn(S, C, T, w0, w1, rb)
+        g = put(font, name, union(p, horn), font[base].width, [u])
+        g.clearAnchors()
+        for a in font[base].anchors:
+            g.appendAnchor({"name": a.name, "x": a.x, "y": a.y})
+        right = T[0] + rb
+        g.width = round(max(font[base].width, right + 20))
+        if base == "o":                               # the combining horn: the part outside the o, on its anchor
+            mark = op(horn, p, pathops.PathOp.DIFFERENCE)
+            tr = next(a for a in font["o"].anchors if a.name == "topright")
+            m = put(font, "horncomb", mark, 0, [0x031B])
+            m.clearAnchors()
+            m.appendAnchor({"name": "_topright", "x": tr.x, "y": tr.y})
+            font.lib.setdefault("public.openTypeCategories", {})["horncomb"] = "mark"
+        kern_like(font, name, base, base)
+
+
+TONE = {"\u0301": "acutecomb", "\u0300": "gravecomb", "\u0309": "hookabovecomb", "\u0303": "tildecomb",
+        "\u0302": "circumflexcomb", "\u0306": "brevecomb", "\u0323": "dotbelowcomb"}
+BASES = {"a": "a", "e": "e", "i": "idotless", "o": "o", "u": "u", "y": "y", "A": "A", "E": "E", "I": "I", "O": "O",
+         "U": "U", "Y": "Y", "\u01a1": "ohorn", "\u01b0": "uhorn", "\u01a0": "Ohorn", "\u01af": "Uhorn"}
+BESIDE = 0.30           # a tone beside a circumflex: its left edge this share of the circumflex's width right of centre
+BESIDE_DROP = 0.12      # and its foot this share of the circumflex's height below the circumflex's top
+STACK_GAP = 22          # a mark above another: this much white between them
+
+
+def _anchor(g, name):
+    return next(((a.x, a.y) for a in g.anchors if a.name == name), None)
+
+
+def vietnamese(font):
+    import unicodedata
+    cps = [c for c in range(0x1EA0, 0x1EFA)] + [0x01A0, 0x01A1, 0x01AF, 0x01B0]
+    made = 0
+    for cp in cps:
+        old = next((g.name for g in font if cp in g.unicodes), None)
+        if old and old != "uni%04X" % cp:
+            continue                                                 # already in the font (composed by Libre Baskerville)
+        ch = unicodedata.normalize("NFD", chr(cp))
+        base_ch, marks = ch[0], list(ch[1:])
+        if not marks or cp in (0x01A0, 0x01A1, 0x01AF, 0x01B0):
+            continue
+        if "\u031b" in marks:                                        # horn: the horned letter is the base
+            base_ch = {"o": "\u01a1", "u": "\u01b0", "O": "\u01a0", "U": "\u01af"}[base_ch]
+            marks.remove("\u031b")
+        upper = base_ch.isupper()
+        suf = ".case" if upper else ""
+        base = BASES[base_ch]
+        bg = font[base]
+        parts = [(base, 0, 0)]
+        top = _anchor(bg, "top")
+        ink = bounds(gp(font, base))
+        bottom = _anchor(bg, "bottom") or ((ink[0] + ink[2]) / 2, 4)
+        prev = None                                                  # the mark already above, and its ink box
+        for mk in marks:
+            mname = TONE[mk]
+            if mname == "dotbelowcomb":
+                mg = font[mname + suf] if (mname + suf) in font else font[mname]
+                ma = _anchor(mg, "_bottom")
+                parts.append((mg.name, round(bottom[0] - ma[0]), round(bottom[1] - ma[1]) if upper else 0))
+                continue
+            mg = font[mname + suf] if (mname + suf) in font else font[mname]
+            ma = _anchor(mg, "_top")
+            mb = bounds(gp(font, mg.name))
+            if prev is None:
+                dx, dy = top[0] - ma[0], (top[1] - ma[1]) if upper else 0
+            elif prev[0].startswith("circumflex") and mname != "tildecomb":
+                pb = prev[1]
+                dx = (pb[0] + pb[2]) / 2 + BESIDE * (pb[2] - pb[0]) - mb[0]
+                dy = pb[3] - BESIDE_DROP * (pb[3] - pb[1]) - mb[1]
+            else:                                                    # stacked above the first mark, centred on it
+                pb = prev[1]
+                dx = (pb[0] + pb[2]) / 2 - (mb[0] + mb[2]) / 2
+                dy = pb[3] + STACK_GAP - mb[1]
+            parts.append((mg.name, round(dx), round(dy)))
+            prev = (mname, (mb[0] + dx, mb[1] + dy, mb[2] + dx, mb[3] + dy))
+        name = "uni%04X" % cp
+        compose(font, name, parts, bg.width, [cp])
+        g = font[name]
+        for a in bg.anchors:
+            g.appendAnchor({"name": a.name, "x": a.x, "y": a.y})
+        made += 1
+    return made
+
+
+# ---------------------------------------------------------------- composites and anchors follow the rebuilt glyphs
+
+def _ink_cx(font, name):
+    b = bounds(gp(font, name))
+    return (b[0] + b[2]) / 2
+
+
+def snapshot(font):
+    return {g.name: (g.width, _ink_cx(font, g.name)) for g in font if g.contours}
+
+
+def follow_rebuilt(font, before):
+    """An accented letter is its base plus marks at fixed offsets, made for the base Libre Baskerville drew. When this
+    module redraws a base (dotless i and j were 46 and 26 units narrower, O-slash, ae, AE), each composite on it takes
+    the new advance and its marks move with the base's ink centre; the base's own anchors move with it too."""
+    cats = font.lib.get("public.openTypeCategories", {})
+    moved_by = {}
+    for name in REBUILT:
+        if name in before:
+            w0, c0 = before[name]
+            moved_by[name] = (font[name].width - w0, _ink_cx(font, name) - c0)
+    n = 0
+    for g in font:
+        if not g.components or g.name in COMPOSED or g.components[0].baseGlyph not in moved_by:
+            continue
+        if any(cats.get(c.baseGlyph) != "mark" and not c.baseGlyph.endswith((".case", "comb")) and
+               c.baseGlyph not in MARKS_SPACING for c in g.components[1:]):
+            continue                                  # not a base with marks (a fraction, a ligature of letters)
+        dw, dx = moved_by[g.components[0].baseGlyph]
+        for c in g.components[1:]:
+            t = list(c.transformation)
+            t[4] += round(dx)
+            c.transformation = tuple(t)
+        g.width += dw
+        for a in g.anchors:
+            a.x += round(dx)
+        n += 1
+    for name, (dw, dx) in moved_by.items():
+        for a in font[name].anchors:
+            a.x += round(dx)
+    return n
+
+
+MARKS_SPACING = {"acute", "grave", "circumflex", "caron", "breve", "dieresis", "dotaccent", "macron", "ring", "tilde",
+                 "hungarumlaut", "cedilla", "ogonek", "dotbelow", "commaaccent", "commaaccentcomb"}
+
+
+def align_anchors(font):
+    """The mark feature places a combining accent by anchors; the precomposed letters place it by component offsets.
+    They had drifted apart (lowercase marks 29 units lower, capitals whose widths were set up to 40 units off centre).
+    Each base's top and bottom anchor is set to where its precomposed letters put their marks, so a typed sequence and
+    the precomposed letter look the same."""
+    import statistics
+    seen = {}
+    for g in font:
+        if len(g.components) < 2 or g.name.endswith(".tf"):
+            continue
+        base = g.components[0].baseGlyph
+        for c in g.components[1:]:
+            m = font[c.baseGlyph]
+            for a in m.anchors:
+                if a.name in ("_top", "_bottom") and abs(c.transformation[0] - 1) < 1e-6:
+                    seen.setdefault((base, a.name[1:]), []).append((c.transformation[4] + a.x, c.transformation[5] + a.y))
+            break                                      # the first mark only: a second is stacked on the first
+    n = 0
+    for (base, name), pts in seen.items():
+        g = font[base]
+        x = statistics.median(p[0] for p in pts)
+        y = statistics.median(p[1] for p in pts)
+        anc = next((a for a in g.anchors if a.name == name), None)
+        if anc is None:
+            g.appendAnchor({"name": name, "x": round(x), "y": round(y)})
+        elif abs(anc.x - x) > 1 or abs(anc.y - y) > 1:
+            anc.x, anc.y = round(x), round(y)
+        else:
+            continue
+        n += 1
+    return n
+
+
 # ---------------------------------------------------------------- run
 
 def run(font, lightened):
+    REBUILT.clear()
+    COMPOSED.clear()
+    before = snapshot(font)
     skipped = lighten_rest(font, set(lightened))
     m = M(font)
     dotless(font)
@@ -997,10 +1269,18 @@ def run(font, lightened):
     interface(font, m, adv)
     letters_extra(font)
     diphthongs(font, m)
+    ogonek_letters(font)
     for name, l, r in (("fi", "f", "i"), ("fl", "f", "l"), ("f_f", "f", "f"), ("f_f_i", "f", "i"), ("f_f_l", "f", "l"),
                        ("longs", "f", "f"), ("Dcroat", "D", "D"), ("dcroat", "d", "d"), ("Hbar", "H", "H"),
                        ("hbar", "h", "h"), ("Tbar", "T", "T"), ("tbar", "t", "t"), ("Lslash", "L", "L"),
                        ("lslash", "l", "l"), ("Oslash", "O", "O"), ("oslash", "o", "o"), ("thorn", "p", "p"),
                        ("Thorn", "I", "P")):
         kern_like(font, name, l, r)
+    followed = follow_rebuilt(font, before)
+    anchored = align_anchors(font)
+    hook_above(font)
+    horns(font)
+    viet = vietnamese(font)
+    print(f"charset: Vietnamese, {viet} letters composed")
+    print(f"charset: {followed} composites follow their rebuilt base; {anchored} anchors set from the precomposed letters")
     return len(skipped), adv

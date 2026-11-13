@@ -1,5 +1,36 @@
 [
  {
+  "build": "0.48",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "Vietnamese",
+    "chars": "ƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ",
+    "text": "Vietnamese, complete (shaperglot passes). New marks: hook above, a small open curve over a short tail with a round end, the acute's size; and the horn. Ơ ơ Ư ư are Area's O o U u with a horn: a short thick spur leaving the upper right and tapering into a round end, ending 1.20 x-heights (1.14 cap heights) up as Georgia Pro's. The 134 toned letters are Area's letters and accents placed by anchor: a tone that meets a circumflex (acute, grave, hook above) sits beside it at its upper right; a tilde, and every tone over a breve, stacks above."
+   },
+   {
+    "glyphs": "í ì î ï",
+    "chars": "íìîïĩīĭįǐȉȋḭḯỉịǽǼǿ",
+    "text": "Fixed a fault in 0.47: when dotless i was rebuilt from Area's i (46 units narrower), the accented i's kept the old width and accent positions, so their accents sat about 35 units right of the stem. Every accented letter now follows its rebuilt base (22 of them: the i's, ǿ, ǽ, Ǽ)."
+   },
+   {
+    "glyphs": "ą ę į ų Ę ŀ",
+    "chars": "ąęįųĘŀ",
+    "text": "These were still Libre Baskerville's own drawings of a e i u E and l. Now Area's letter with the ogonek (or the middle dot), placed by anchor, as Ą Į Ų already were."
+   },
+   {
+    "glyphs": "accents typed",
+    "chars": "",
+    "text": "An accent typed after a letter (a combining mark) was placed 29 units lower on lowercase than in the ready-made letter, and up to 40 units off centre on capitals whose widths were set. Every letter's accent anchors now match its ready-made accented letters (70 anchors), so typed and ready-made look the same."
+   },
+   {
+    "glyphs": "checks",
+    "chars": "",
+    "text": "Targets 21 of 21 (the character set now includes Vietnamese); outlines 0 errors, 240 warnings; parts audit 0 outliers; fontbakery 0 FAIL, 1 WARN (inherited contour count); shaperglot: Vietnamese and every European Latin language pass but small caps."
+   }
+  ]
+ },
+ {
   "build": "0.47",
   "date": "2026-11-13",
   "items": [

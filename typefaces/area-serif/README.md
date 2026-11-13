@@ -4,7 +4,7 @@ A serif for interface text, derived from Libre Baskerville. Plan, targets and re
 `docs/research/serif-typeface-2026-11-10/`. Procedure and rules: the `area-type-design` skill
 (`.claude/skills/area-type-design/`).
 
-Status: build 0.47, the full character set: Basic Latin, Latin-1, Latin Extended-A, punctuation, currency, maths, arrows,
+Status: build 0.48, the full character set: Basic Latin, Latin-1, Latin Extended-A, Vietnamese, punctuation, currency, maths, arrows,
 interface symbols, superiors and fractions, f ligatures, tabular figures (`charset.py`;
 `docs/research/serif-typeface-2026-11-10/charset-0.47.md` has the inventory, the gap list and what is not done). Derived from Libre Baskerville (SIL OFL 1.1, `sources/OFL.txt`). Shapes lean on Serrif, widths on
 Georgia Pro, serifs are short and blunt, and the weight is lighter than both (stem 0.158 of the x-height, contrast 1.64).
