@@ -1115,11 +1115,18 @@ def normalize(font):
     CLEAN.T_stem(font)                                # 0.41, ink balance
     CLEAN.figure_stems(font)                          # 0.42
     CLEAN.figure_joins(font)                          # 0.43
+    CLEAN.figure_join_corners(font)                   # 0.47
+    CLEAN.eight_spine(font)
     CLEAN.spine_thin(font, "S", D.CAP_HEIGHT, CLEAN.S_SPINE_CAP)
     for ch, wdt in (("N", CLEAN.N_DIAG), ("M", CLEAN.M_DIAG)):
         sb = sidebearings(font[ch])
         set_diagonal_widths(font[ch], {-1: wdt, 1: None}, 356)
         keep_spacing(font[ch], *sb)
+    X = sorted(L[3] * 356 + L[4] for L in _diag_edges(font["X"]) if L[3] < 0)   # 0.47: X a little under K's leg
+    if len(X) == 4:
+        sb = sidebearings(font["X"])
+        set_diagonal_widths(font["X"], {-1: CLEAN.X_DIAG * ((X[2] + X[3]) / 2 - (X[0] + X[1]) / 2), 1: None}, 356)
+        keep_spacing(font["X"], *sb)
     CLEAN.e_left(font, stem_width(font))
     for line in (("true lines", CLEAN.true_lines(font, HARMONIZE_SET)), ("shoulders", CLEAN.shoulders(font)),
                  ("thin floor", CLEAN.thin_floor(font, (stem_width(font), D.TARGET_CAP_STEM))),
@@ -1145,6 +1152,9 @@ def normalize(font):
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
     print(f"spacing: {len(delta)} letters re-spaced, {moved} kerning pairs carried over, {len(opened)} near-touches opened")
+    import charset as CHARSET                         # 0.47: the full character set, on the finished letters
+    n_light, tab = CHARSET.run(font, letters)
+    print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     for g in font:                           # derive.py's bracket marks were for this build only
         for c in g.contours:
             for p in c.points:

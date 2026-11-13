@@ -1,6 +1,16 @@
 # Handoff
 
-## Current state (2026-11-12)
+## Current state (2026-11-13)
+- **Area Serif 0.47: the full character set (branch `claude/focused-pare-265e4e`, on top of PR #224's 0.46).**
+  `typefaces/area-serif/charset.py` runs last in `normalize`: lightens the 163 punctuation, symbol and accent outlines
+  lighten had skipped; rebuilds from Area's finished letters ı ȷ, Đ đ Ħ ħ Ŧ ŧ Ł ł Ø ø Þ þ, ſ, æ œ Æ Œ, the f ligatures
+  (with carets), superiors, inferiors, ª º (fractions follow); hyphen and dashes at the minus's weight; one tabular
+  width for figures (`tnum`/`pnum`) and maths; new arrows, maths, primes, currencies, spaces, dashes and interface
+  symbols. 6 9 joins, 8's spine and X fixed in `clean.py`. `check.py` holds `charset.COVERAGE` (21 of 21); QA: 0 path
+  errors, fontbakery 0 FAIL / 1 WARN, evaluate jumps 27. Page republished as 0.47 with a Character set section; no
+  new owner saves were waiting. Inventory, gap list, measurements and what is not done (Vietnamese, Ŋ ŋ ĸ ß and
+  Extended-B / IPA still Libre Baskerville's, oldstyle figures, small caps, c_t s_t s_p):
+  `docs/research/serif-typeface-2026-11-10/charset-0.47.md`. Committed, not pushed.
 - **Area Serif, an original variable UI serif (2026-11-10 to 12, branch `claude/variable-serif-typeface-df1f42`).**
   Derived only from Libre Baskerville's points (OFL 1.1: Area Serif must stay OFL and never be named Libre
   Baskerville); Georgia Pro and Serrif are measured, never traced, and renders of them are never committed. Code in

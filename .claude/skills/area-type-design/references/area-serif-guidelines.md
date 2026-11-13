@@ -2,7 +2,7 @@
 
 What Area Serif is, part by part, with the value each part holds and the rule in code that holds it. Read this
 before changing any glyph. A change that breaks a line here is a design change: ask the owner, then change the rule
-and this file together. Numbers are in n stems (78 units since 0.40; values set by rules that run before `clean.lighten` are written against the 82-unit stem those rules see) unless a unit is named, as of build 0.46.
+and this file together. Numbers are in n stems (78 units since 0.40; values set by rules that run before `clean.lighten` are written against the 82-unit stem those rules see) unless a unit is named, as of build 0.47.
 
 ## Direction (owner, 2026-11-10 to 12)
 
@@ -154,6 +154,26 @@ to), matched after lightening and spacing (`clean.owner_final`). Rules may ease 
 handles beside it. A rule that moves many serif points can shift the fold-in's reference: after any serif change,
 compare the owner-moved points of r, y and V with the previous build.
 
+## The character set (0.47, `charset.py`)
+
+Everything beyond a-z, A-Z and 0-9 is made from the finished letters, in this order, so a change to a letter reaches
+every glyph built on it. Inventory, gap list and measurements: `docs/research/serif-typeface-2026-11-10/charset-0.47.md`.
+
+| Part | Value | Rule |
+|---|---|---|
+| Lightening | every own outline, punctuation, symbols and accents too (2 units off each side of an upright stroke) | `lighten_rest` |
+| Letter plus a part | the letter's own outline and a bar or slash of its own thin bar (H's crossbar, t's bar); placed from Serrif in stems (`BARS`, `SLASHES`) | `bars` |
+| Dotless i, j | i and j without the dot (every accented i and j is built on them) | `dotless` |
+| f ligatures | fi = f and dotless i; fl fb fh fk: f's arc level into the ascender, which drops its flag; ff joins the bars; ft runs f's bar into t's; carets at each letter | `ligatures` |
+| æ œ Æ Œ | the e's left stroke is the a's stem or the o's right side; E's stem replaces A's right leg or O's right side, without E's serifs there | `diphthongs` |
+| Superiors, inferiors, ª º | 0.54 of the figure height, then 4 units a side heavier (1.16 of the weight the size implies; Serrif 1.15); inferiors stand on the baseline, as fractions use them | `SUP_SCALE`, `SUP_BOLD` |
+| Hyphen and dashes | 0.66 n stems (the minus's 52 units), centred at 0.53 of the x-height | `DASH`, `DASH_Y` |
+| Maths signs, tabular figures | one advance, the tabular width (612: the widest figure plus 36 a side) | `tabular`, `math_widths` |
+| Arrows, maths, interface | square cuts, the minus's weight, on the maths' axis; where a letter has the shape, the letter (∑ Esh, ∫ esh, ∂ the 6 turned, ∏ H's stems, Ω O opened) | `arrows`, `maths`, `interface` |
+| Figure joins | 6 and 9: counter's corner 44 units from the crotch; 8: spine 11 units thinner from each side; X: 0.95 of K's leg | `figure_join_corners`, `eight_spine`, `X_DIAG` (clean.py) |
+
+A new glyph is added to `charset.py` (and `COVERAGE` when it is required), never drawn into the UFO by hand.
+
 ## Final-pass audit (0.46)
 
 Scratch tools worth keeping if this is repeated: a stroke-weight scan (shortest crossing through sampled ink, per
@@ -188,7 +208,7 @@ Every stroke is measured across the stroke (shortest crossing through sampled in
 or H's, with the same measure on Georgia Pro. A stroke more than 7% over its class is brought down; thin ones are
 reported, not thickened (owner). Held: T's stem equals H's (`T_STEM`); the 1's and 4's stems equal H's and the 1 is upright (`FIG_STEM`,
 `figure_stems`; owner, 0.42: thicken), the 7's diagonal 0.66 n stems (`SEVEN_DIAG`); 6's and 9's long stroke equals their bowl stroke and 8's waist
-band is 1.23 H stems (`figure_joins`, `EIGHT_WAIST`); N's and M's thick diagonals within 5% of H's
+band is 1.23 H stems (`figure_joins`, `EIGHT_WAIST`), and since 0.47 6 and 9's join 1.12 and 8's spine 1.06-1.09 (`figure_join_corners`, `eight_spine`); N's and M's thick diagonals within 5% of H's
 stroke (`N_DIAG`, `M_DIAG`); v w y level with n (`DIAG_THICK`); S's spine 6% over (`S_SPINE_CAP`). Grey per advance
 is reported too but follows spacing, so it is not a target.
 
@@ -199,16 +219,21 @@ keyed to positions drawn at an 82-unit stem. Each point moves toward its ink by 
 its outward direction; softened corners move as one piece; a circle quarter's nodes do not move, so round ends stay round; `bracket_handles` and `true_lines` run after; dots are
 skipped; `spacing.run` follows. Applies to every letter and figure with its own outline.
 
+## Open with the owner (0.47)
+
+Not built: Vietnamese (horn, hook above, stacked accents); Ŋ ŋ ĸ ß ẞ and the Extended-B / IPA letters keep Libre
+Baskerville's drawings, lightened; c_t s_t s_p; oldstyle figures and small caps; the new geometric glyphs have had no
+owner's look. 0.47 closed: 6 and 9's join, 8's waist and spine, X heavy, tabular figures, fi fl re-spaced and rebuilt,
+figure and punctuation spacing (checked against Georgia Pro in shaped text; bearings kept).
+
 ## Open with the owner (0.43)
 
 The r is option C from `img/r-options-0.43.png`, drawn rounder (0.44). To make an option sheet, build with the `AREA_R_*` environment values (normalize.py, clean.py) and render with a shaped-text
-script. 6 and 9's join still 1.53 H stems (Georgia Pro 1.16) and 8's upper-left 1.64 (1.21): limited by the thin
-value. X 5% heavy.
+script. (6 and 9's join, 8's upper left and X: closed in 0.47.)
 
 pathlint warnings rose from 181
-to 220 (whole-unit rounding at smooth nodes, none an error); thin horizontals (H A 0.63, t 0.60, arms 0.57) against the 0.52 thins; fi fl ligatures and figures not
-re-spaced; tabular figures; D's top, B and P thins 0.50-0.57; foot brackets 0.80 to 0.70 (needs r's and q's feet first);
-the research note's list (tabular and quieter figures, spacing and word space, kerning, Regular weight or a grade
+to 220 (whole-unit rounding at smooth nodes, none an error), 249 at 0.47 (pathops output on the rebuilt glyphs); thin horizontals (H A 0.63, t 0.60, arms 0.57) against the 0.52 thins; D's top, B and P thins 0.50-0.57; foot brackets 0.80 to 0.70 (needs r's and q's feet first);
+the research note's list (quieter figures, spacing and word space, kerning, Regular weight or a grade
 axis, button metrics): see evaluation-0.36.md. The 1's stem tapers 15 units; figures' thin points 0.49-0.56.
 
 u's bowl (the n's old arch upside down).

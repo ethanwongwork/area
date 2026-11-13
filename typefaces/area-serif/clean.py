@@ -924,3 +924,79 @@ def e_eye_corner(font):
             dx = other.x - node.x
             if abs(h.y - node.y) < 0.5 and abs(dx) > 30 and abs(h.x - node.x) > 0.9 * abs(dx):
                 h.x = round(node.x + 0.82 * dx)
+
+
+# 0.47, the figures' open items (guidelines, Open: "6 and 9's join still 1.53 H stems, 8's upper-left 1.64").
+#   6 9  Where the long stroke leaves the bowl, the counter's corner sat 80 units short of the stroke's crotch, so the
+#        join was a blob (largest circle inside 1.27 H stems; Georgia Pro 1.03, Serrif 1.09). The counter's corner
+#        now reaches toward the crotch, to FIG_JOIN_GAP units from it, as both references draw it: the join becomes
+#        the branch's own width. Its handle follows FIG_JOIN_HANDLE of the way, so the counter's top bends evenly.
+#   8    The spine (the stroke from upper left to lower right) was 1.20-1.24 H stems all along (Georgia Pro 0.96,
+#        Serrif 1.07). Each counter's edge along the spine moves EIGHT_SPINE units across it, into the counter:
+#        the spine thins from both sides, nothing is thickened.
+#   X    Its thick diagonal was 5% over Serrif's and 9% over Georgia Pro's; a crossing adds ink where the strokes
+#        meet, so it is drawn X_DIAG of the width K's leg keeps.
+FIG_JOIN_GAP = 44
+FIG_JOIN_HANDLE = 0.3       # the corner's handle follows 0.3 of its move: half bent the counter's top unevenly (evaluate.py)
+EIGHT_SPINE = 11
+X_DIAG = 0.95
+
+
+def figure_join_corners(font):
+    for name, side in (("six", -1), ("nine", 1)):
+        g = font[name]
+        if len(g.contours) != 2:
+            print(f"figure_join_corners: {name}: contours changed; skipped")
+            continue
+        outer, counter = g.contours[0].points, g.contours[1].points
+        crotch = [p for p in outer if p.type and not p.smooth
+                  and min(q.y for q in outer) + 150 < p.y < max(q.y for q in outer) - 150]
+        corners = [i for i, p in enumerate(counter) if p.type and not p.smooth]
+        if not crotch or not corners:
+            print(f"figure_join_corners: {name}: crotch or corner not found; skipped")
+            continue
+        if side < 0:                                   # 6: the counter's top-left corner rises toward the crotch
+            i = max(corners, key=lambda k: counter[k].y)
+            cy = min(crotch, key=lambda p: abs(p.x - counter[i].x) + abs(p.y - counter[i].y)).y
+            d = (cy - FIG_JOIN_GAP) - counter[i].y
+        else:                                          # 9: the counter's bottom-right corner drops toward it
+            i = min(corners, key=lambda k: counter[k].y)
+            cy = min(crotch, key=lambda p: abs(p.x - counter[i].x) + abs(p.y - counter[i].y)).y
+            d = (cy + FIG_JOIN_GAP) - counter[i].y
+        if d * -side < 0 or abs(d) > 60:
+            print(f"figure_join_corners: {name}: move {d:.0f} out of range; skipped")
+            continue
+        n = len(counter)
+        counter[i].y += d
+        for j in ((i - 1) % n, (i + 1) % n):
+            if counter[j].type is None:
+                counter[j].y += round(d * FIG_JOIN_HANDLE)
+
+
+def eight_spine(font):
+    g = font["eight"]
+    if len(g.contours) != 3:
+        print("eight_spine: 8's counters not found; skipped")
+        return
+    up, low = sorted(g.contours[1:], key=lambda c: -max(p.y for p in c.points))
+    cu = [p for p in up.points if p.type and not p.smooth]       # the counters' corners at the waist
+    cl = [p for p in low.points if p.type and not p.smooth]
+    if len(cu) != 1 or len(cl) != 1:
+        print("eight_spine: corners not found; skipped")
+        return
+    a = cl[0]                                         # the lower counter's corner at the waist
+    # the spine runs from upper left to lower right; its normal points up and to the right, into the upper counter
+    tx, ty = 0.906, -0.423
+    nx, ny = -ty, tx
+    for P, sgn in ((up.points, -1), (low.points, 1)):        # each counter grows toward the spine
+        for i, p in enumerate(P):
+            if not p.type:
+                continue
+            # a node on the spine side: the corner, and the curve leaving it along the spine
+            along = (p.x - a.x) * tx + (p.y - a.y) * ty
+            off = (p.x - a.x) * nx + (p.y - a.y) * ny
+            if p is cu[0] or p is cl[0] or (sgn < 0 and off > -5 and along < 0 and p.y < max(q.y for q in P) - 150) \
+                    or (sgn > 0 and off < 5 and along > 0 and p.y > min(q.y for q in P) + 150):
+                for q in _node_with_handles(P, i):
+                    q.x += round(sgn * EIGHT_SPINE * nx)
+                    q.y += round(sgn * EIGHT_SPINE * ny)

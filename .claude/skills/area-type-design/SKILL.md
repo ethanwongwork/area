@@ -64,6 +64,7 @@ installed, fontbakery 1.1 runs the same universal profile.
 | `audit_parts.py` | Measures every shared part across its letters (in stems) and fails QA on an unexpected outlier; `--refs` runs Serrif and Georgia Pro for comparison. |
 | `evaluate.py` | Curve report per glyph: curvature jumps at smooth nodes, bumps inside a curve, pinched or boxy quarter arcs, kinks, missing extremes. A report, not a gate. Run it before and after any curve rule. |
 | `clean.py` | The evenness rules (exact lines, shoulders, thin floor, barb faces, bowl tension), called from `normalize.py`. Its printed report lists what each rule moved. |
+| `charset.py` | The character set (0.47), run last in `normalize`: every glyph that is a letter plus a part is rebuilt from the finished letters with pathops (union, cut), new glyphs are drawn from Area's parts or plain geometry at the maths' weight, `COVERAGE` is the set `check.py` holds. Add a glyph here, not by hand in a UFO. |
 | `spacing.py` | Sidebearings and kerning, the last step of `normalize.py`: bearings from the measured reference fit plus an offset, existing pairs carried over, near-touches opened. |
 | `pathlint.py` | Outline quality on the source, joint angles at smooth nodes (in units off the line), winding on the build. |
 | `diagram.py` | Node diagrams: points, handles, coordinates, 10-unit grid, metrics (`build/diagrams/`). |
