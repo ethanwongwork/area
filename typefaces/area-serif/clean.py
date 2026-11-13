@@ -180,13 +180,15 @@ def shoulders(font):
 # the thicker parts thinner"): the one value is the arches' own, and the bowls come down to it. 0.36 and 0.37 had
 # raised the arches to the bowls' 0.65.
 THIN_ARCH = 0.52              # n was 0.50, h 0.54, m 0.55 before 0.36; the closed bowls were 0.65
-THIN_CAP = 0.57               # D's and P's; O was 0.63
+THIN_CAP = 0.525              # 0.58 audit: 47 units after lightening, 0.55 of H's stem, the lowercase's own share of n's
+                              # (0.57, 51 units, until then: the round capitals carried 5-10% more ink than the straight
+                              # ones against both references, whose thin arcs and serif tips are one weight). D's and P's; O was 0.63
 BOWL_R, BOWL_L = (42, 80), (20, 58)
 THIN_FLOOR = [                # (glyph, side, target, scan range in % of the ink width)
     ("n", "top", THIN_ARCH, (48, 78)), ("h", "top", THIN_ARCH, (50, 80)),      # the arch past its branch
     ("m", "top", THIN_ARCH, (30, 46)), ("m", "top", THIN_ARCH, (66, 86)),
     ("u", "bottom", THIN_ARCH, (25, 75)),
-    ("c", "top", THIN_ARCH, (25, 75)), ("e", "top", THIN_ARCH, (25, 75)), ("e", "bottom", 0.70, (35, 65)),
+    ("c", "top", THIN_ARCH, (25, 75)), ("e", "top", THIN_ARCH, (25, 75)), ("e", "bottom", 0.62, (35, 65)),   # 0.59: c's own lower arc (51 units); 0.70 until then
     ("g", "top", THIN_ARCH, (25, 75)), ("a", "top", THIN_ARCH, (25, 75)),
     ("s", "top", THIN_ARCH, (25, 75)), ("s", "bottom", THIN_ARCH, (25, 75)),
     ("o", "top", THIN_ARCH, (25, 75)), ("o", "bottom", THIN_ARCH, (25, 75)),
@@ -198,7 +200,8 @@ THIN_FLOOR = [                # (glyph, side, target, scan range in % of the ink
     ("C", "top", THIN_CAP, (25, 75)), ("C", "bottom", THIN_CAP, (25, 75)),
     ("G", "top", THIN_CAP, (25, 75)), ("G", "bottom", THIN_CAP, (25, 75)),
     ("S", "top", THIN_CAP, (25, 75)), ("S", "bottom", THIN_CAP, (25, 75)),
-    ("D", "bottom", THIN_CAP, (30, 75)),
+    ("D", "bottom", THIN_CAP, (30, 75)), ("D", "top", THIN_CAP, (30, 75)), ("Q", "bottom", THIN_CAP, (25, 60)),
+    ("B", "top", THIN_CAP, (35, 75)), ("P", "top", THIN_CAP, (35, 75)), ("R", "top", THIN_CAP, (35, 75)),
 ]
 
 
@@ -372,7 +375,7 @@ def even_tension(font, names=None):
 #      one. The two bowl strokes come to S_LOW (68, 74 units) and the spine to the o's round stroke.
 #   t  top at 1.20 of the x-height (Serrif 1.21, Georgia Pro 1.31); bar's right end at 0.91 of the width (0.97).
 #   r  ink width 0.694 of the x-height (Serrif 0.727, Georgia Pro 0.778); the ear reached 0.40 past the stem (0.43).
-S_LOW = (68, 74)
+S_LOW = (66, 68)             # 0.60: the lower-right bowl stroke was 0.83-0.97 stems down its length (both references 0.71-0.79); (68, 74) until then
 S_SPINE = (3, 4)              # the spine's upper edge down, lower edge up: 97 to 90 units
 T_RISE = 47                   # 1.20 to 1.29 (1.26 in 0.38; owner, 0.41: "a bit taller still"; Georgia Pro 1.31)
 T_BAR_OUT = 10
@@ -854,7 +857,8 @@ def r_top_measured(font):
 
 # 0.46, the final pass (owner: "another final pass on visual consistency, weight, smoothness, optical weight, and all
 # other technical details. make sure there are no uneccessary points, unsmooth curves, random gaps").
-BRACKET_SHARES = (0.45, 0.75)     # up the stem, along the serif (derive.BRACKET_K_STEM, BRACKET_K_SERIF)
+BRACKET_SHARES = (0.70, 0.90)     # up the stem, along the serif. 0.45 / 0.75 until 0.46 (derive.BRACKET_K_*, which still
+                                  # draws them so): fitted to the references' measured bracket (joins.py, 0.49)
 
 
 def brackets_one(font, names):

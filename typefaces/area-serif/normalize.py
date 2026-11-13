@@ -17,6 +17,7 @@ import os
 from fontTools.pens.recordingPen import RecordingPen
 import derive as D
 import clean as CLEAN
+import joins as JOINS
 import spacing as SPACING
 
 FLAG = 0.85                # 0.33 (owner: Georgia Pro's serifs, "shorter and not as sharp"): 1.00 to 0.31, 0.92 in 0.32.
@@ -1145,16 +1146,33 @@ def normalize(font):
         unicodedata.category(chr(u))[0] in "LN" for u in g.unicodes)]
     print("clean: lightened", CLEAN.lighten(font, letters), "contours in", len(letters), "glyphs")
     bracket_handles(font)                             # a bracket's reach is 2 units shorter: its handles follow
-    print("clean: brackets", CLEAN.brackets_one(font, HARMONIZE_SET))
+    print("clean: brackets", len(CLEAN.brackets_one(font, HARMONIZE_SET)))
+    print("joins: brackets", JOINS.brackets_rest(font, HARMONIZE_SET))   # 0.49: steeper joins
+    print("joins: arm flares", JOINS.arm_flares(font))
+    print("joins: barb tops", JOINS.barb_tops(font, cap=D.CAP_HEIGHT), JOINS.barb_spurs(font, cap=D.CAP_HEIGHT),
+          JOINS.barb_bottom(font, "S", D.CAP_HEIGHT))             # 0.55: notch and spur
+    print("joins: s spurs", JOINS.s_spurs(font, D.X_HEIGHT))            # 0.56
+    print("joins: figures", JOINS.figure_ends(font))                     # 0.57
+    print("joins: e", JOINS.e_junction(font))                            # 0.58
+    print("joins: round ends", JOINS.round_ends2(font))                  # 0.62
+    import balance as BALANCE                         # 0.58: the audit's fixes
+    for part, did in BALANCE.run(font):
+        print(f"balance: {part}", did)
+    print("joins: flags", JOINS.flatter_flags(font, xh=D.X_HEIGHT),   # 0.50
+          JOINS.level_flags(font, xh=D.X_HEIGHT))                      # 0.51
     CLEAN.e_eye_corner(font)
     CLEAN.true_lines(font, HARMONIZE_SET)
     print("clean: tidy", CLEAN.tidy(font, HARMONIZE_SET))
+    print("joins: diagonals", JOINS.steep_diagonals(font), JOINS.even_fillets(font))   # 0.53, 0.54
+    print("joins: G", JOINS.G_lower(font, cap=D.CAP_HEIGHT))             # 0.54
+    print("joins: C end", JOINS.C_end(font, cap=D.CAP_HEIGHT))          # 0.52, on the trued and tidied outline
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
     print(f"spacing: {len(delta)} letters re-spaced, {moved} kerning pairs carried over, {len(opened)} near-touches opened")
     import charset as CHARSET                         # 0.47: the full character set, on the finished letters
     n_light, tab = CHARSET.run(font, letters)
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
+    print("balance: descender feet", BALANCE.desc_feet(font))
     for g in font:                           # derive.py's bracket marks were for this build only
         for c in g.contours:
             for p in c.points:
@@ -1449,7 +1467,8 @@ def figure_ends(font):
 # handles' shares of each curve. Measured on Serrif per x-height and stem: end 0.29-0.33 stems wide; c and e end at
 # 0.35 x-height, t at 0.21; the outer edge arrives at about 75 degrees, the inner at about 66.
 TAILS = {"c": (0, 30), "e": (0, 25), "t": (8, 7)}   # glyph: (cut's inner node L, cut's outer node R), contour 0
-TAIL_END = 0.30          # the end's width, in stems
+TAIL_END = 0.37          # the end's width, in stems: the serif tip's 30 units (0.30, 24 units, until 0.46; the references
+                         # hold 0.30 and 0.42 of heavier stems, 26-29 and 38 units)
 TAIL_TOP = {"c": 0.33, "e": 0.33, "t": 0.20}   # the end's height, in x-heights (c and e one value; t is the small hook)
 TAIL_OUT_DEG, TAIL_IN_DEG = 75, 66
 TAIL_K_OUT = (0.40, 0.45)   # handle shares of the chord: at the bottom node, at the end
