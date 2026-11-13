@@ -16,14 +16,20 @@ import json
 import os
 from fontTools.pens.recordingPen import RecordingPen
 import derive as D
+import clean as CLEAN
+import spacing as SPACING
 
-FLAG = 1.00
-FOOT = 1.00
+FLAG = 0.85                # 0.33 (owner: Georgia Pro's serifs, "shorter and not as sharp"): 1.00 to 0.31, 0.92 in 0.32.
+FOOT = 0.85                # Georgia Pro 0.78-0.84 of a stem a fifth heavier; Serrif 0.92-0.95
+DESC_FOOT = {"p": (1.0, 1.25), "q": (1.25, 1.0)}   # descender feet, in FOOT: the stem's outer side as every foot, the
+                                                    # bowl's side a quarter longer (Serrif p 0.94 / 1.19, q 1.17 / 0.94;
+                                                    # Area's were p 1.17 / 1.40, q 1.23 / 1.24)
 U_ARCH_TO_N = 1.00
 
 FLAG_GLYPHS = "ijmnpru"          # head flags at the x-height
 ASC_FLAG_GLYPHS = "bdhkl"        # head flags at the ascender
-FOOT_GLYPHS = {"i": "lr", "l": "lr", "m": "lr", "n": "lr", "h": "lr", "k": "l", "r": "l"}
+FOOT_GLYPHS = {"i": "lr", "l": "lr", "m": "lr", "n": "lr", "h": "lr", "k": "l", "r": "l", "f": "l"}   # 0.33: f's left (k's right foot runs into its leg's: left as drawn)
+F_FOOT_RIGHT = 1.25         # f's right foot, in FOOT, as p's bowl side (Serrif 0.94 / 1.26)
 STEM_GLYPHS = "bdpquhmnilkrj"
 
 
@@ -125,6 +131,65 @@ def normalize_feet(font, sw):
             right = with_handles(g, lambda p: p.y < 40 and p.x > st[-1][1] + 1)
             if right:
                 move(right, dx=FOOT * sw - (max(p.x for p in right if p.type) - st[-1][1]))
+    g = font["f"]
+    st = spans_at(flatten(g), D.X_HEIGHT * 0.3)
+    right = with_handles(g, lambda p: p.y < 40 and p.x > st[-1][1] + 1)
+    if right:
+        move(right, dx=F_FOOT_RIGHT * FOOT * sw - (max(p.x for p in right if p.type) - st[-1][1]))
+    g = font["u"]                                # u's second head serif (its first is a flag: normalize_flags)
+    st = spans_at(flatten(g), D.X_HEIGHT * 0.6)
+    if len(st) == 2:
+        tip = with_handles(g, lambda p: D.X_HEIGHT * 0.85 < p.y < D.X_HEIGHT + 45 and st[0][1] + 1 < p.x < st[1][0] - 1)
+        if tip:
+            now = st[1][0] - min(p.x for p in tip if p.type)
+            for p in tip:
+                p.x = st[1][0] - (st[1][0] - p.x) * FLAG * sw / now
+
+
+INNER_FOOT_GLYPHS = "nhm"   # the feet facing a counter take FOOT too (0.32: they stayed 0.97-1.05 when the outer feet came to 0.92)
+
+
+def normalize_inner_feet(font, sw):
+    for ch in INNER_FOOT_GLYPHS:
+        g = font[ch]
+        st = spans_at(flatten(g), D.X_HEIGHT * 0.3)
+        for (a0, b0), (a1, b1) in zip(st, st[1:]):
+            mid = (b0 + a1) / 2
+            right = with_handles(g, lambda p: p.y < 40 and b0 + 1 < p.x < mid)
+            if right:
+                move(right, dx=FOOT * sw - (max(p.x for p in right if p.type) - b0))
+            left = with_handles(g, lambda p: p.y < 40 and mid < p.x < a1 - 1)
+            if left:
+                move(left, dx=(a1 - min(p.x for p in left if p.type)) - FOOT * sw)
+
+
+R_FOOT_RIGHT = float(os.environ.get("AREA_R_FOOT", 1.6))     # 1.22 until 0.43 (owner: "the serif on the right bottom to be wider/longer")
+_R_FOOT_RIGHT_WAS = (1.22)         # r's right foot, in stems: the owner's own length (1.44 at FOOT 1.00), shortened with the rest
+
+
+def r_foot(font, sw):
+    g = font["r"]
+    a, b = spans_at(flatten(g), D.X_HEIGHT * 0.3)[0]
+    right = with_handles(g, lambda p: p.y < 40 and p.x > b + 1)
+    if right:
+        move(right, dx=R_FOOT_RIGHT * sw - (max(p.x for p in right if p.type) - b))
+
+
+def normalize_descender_feet(font, sw):
+    for ch, (kl, kr) in DESC_FOOT.items():
+        g = font[ch]
+        bottom = min(p.y for c in g.contours for p in c.points)
+        st = spans_at(flatten(g), bottom + 0.45 * abs(bottom))
+        if len(st) != 1:
+            print(f"normalize_descender_feet: {ch}'s stem not found; skipped")
+            continue
+        a, b = st[0]
+        left = with_handles(g, lambda p: p.y < bottom + 40 and p.x < a - 1)
+        if left:
+            move(left, dx=(a - min(p.x for p in left if p.type)) - kl * FOOT * sw)
+        right = with_handles(g, lambda p: p.y < bottom + 40 and p.x > b + 1)
+        if right:
+            move(right, dx=kr * FOOT * sw - (max(p.x for p in right if p.type) - b))
 
 
 STEM_HEIGHTS = {"r": (0.25, 0.40), "u": (0.55, 0.70)}   # where each letter's stems run straight (default 0.40, 0.55)
@@ -805,6 +870,7 @@ E_FILLET = 8
 OWNER_EDITS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json")
 
 
+OWNER_ANCHOR_BODY = {"r"}
 OWNER_MOVED = {}   # glyph -> {(contour, point)} the owner moved; cleanup leaves these where they are
 
 
@@ -846,8 +912,14 @@ def owner_edits(font, late=False, final=False):
             saved = e.get("saved")
             if saved:   # where the owner put each point, offset by how far the rest of the glyph has moved since
                 import statistics
-                rest = [(p.x - q[0], p.y - q[1]) for ci, (c, cs) in enumerate(zip(g.contours, saved))
+                rest = [(p.x - q[0], p.y - q[1], q[1]) for ci, (c, cs) in enumerate(zip(g.contours, saved))
                         for pi, (p, q) in enumerate(zip(c.points, cs)) if (ci, pi) not in moved]
+                # r: the shift is read off the body, not the serif tips. Its serif corners carry most of its points,
+                # so when the serifs shortened (0.32) the median said the letter had moved 6 units and the ear's
+                # root went with it. Only the r: on the diagonals (y, V) the body is what the rules move.
+                if name in OWNER_ANCHOR_BODY:
+                    ys_ = [q[1] for cs in saved for q in cs]
+                    rest = [r for r in rest if min(ys_) + 60 < r[2] < max(ys_) - 60] or rest
                 ox = statistics.median(r[0] for r in rest) if rest else 0
                 oy = statistics.median(r[1] for r in rest) if rest else 0
             for ci, pi, dx, dy in e.get("moves", []):
@@ -882,6 +954,8 @@ def owner_edits(font, late=False, final=False):
 
 
 def normalize(font):
+    import copy
+    lb_source = {"r": copy.deepcopy(font["r"])}     # Libre Baskerville's r as derive.py leaves it (0.41: r's top)
     sw = stem_width(font)
     touched = set(FLAG_GLYPHS + ASC_FLAG_GLYPHS + "".join(FOOT_GLYPHS) + STEM_GLYPHS + "u" + "".join(COUNTER_TO_N)
                   + "".join(CAP_SERIFS))
@@ -892,6 +966,8 @@ def normalize(font):
     normalize_stems(font, sw)
     normalize_flags(font, sw)
     normalize_feet(font, sw)
+    normalize_inner_feet(font, sw)
+    normalize_descender_feet(font, sw)
     cap_serifs(font)
     normalize_u_arch(font)
     normalize_counters(font)
@@ -1011,6 +1087,64 @@ def normalize(font):
         D.snap_smooth(g)
         for p in points(g):
             p.x, p.y = round(p.x), round(p.y)
+    cap_right_feet(font)                     # after bowl_widths, which stretches P's and R's foot with the bowl
+    U_head_brackets(font)
+    set_widths(font)
+    B_bowls(font)
+    mid_arm_straight(font)
+    S_redraw(font)
+    low_barb_trim(font)
+    arch_branch(font)
+    r_foot(font, stem_width(font))
+    e_bar_weight(font, stem_width(font))
+    bar_heights(font)
+    round_dots(font)
+    # 0.36, the evenness pass (clean.py): one value where Georgia Pro holds one and Area held several
+    CLEAN.s_balance(font)
+    CLEAN.t_taller(font)
+    r_top = os.environ.get("AREA_R_TOP", "measured")
+    if r_top == "measured":
+        CLEAN.r_top_measured(font)                    # 0.45: fitted to Serrif's measured profile, a bit wider
+    elif r_top == "round":
+        CLEAN.r_top_round(font)                       # 0.44: the owner's pick (option C), drawn rounder
+    elif r_top == "lb":
+        CLEAN.r_top_lb(font, lb_source)
+    else:                                             # option sheets: the Serrif-proportioned ear (r_ear_redraw), widened
+        CLEAN.r_wider(font)
+    CLEAN.e_follow(font)
+    CLEAN.T_stem(font)                                # 0.41, ink balance
+    CLEAN.figure_stems(font)                          # 0.42
+    CLEAN.figure_joins(font)                          # 0.43
+    CLEAN.spine_thin(font, "S", D.CAP_HEIGHT, CLEAN.S_SPINE_CAP)
+    for ch, wdt in (("N", CLEAN.N_DIAG), ("M", CLEAN.M_DIAG)):
+        sb = sidebearings(font[ch])
+        set_diagonal_widths(font[ch], {-1: wdt, 1: None}, 356)
+        keep_spacing(font[ch], *sb)
+    CLEAN.e_left(font, stem_width(font))
+    for line in (("true lines", CLEAN.true_lines(font, HARMONIZE_SET)), ("shoulders", CLEAN.shoulders(font)),
+                 ("thin floor", CLEAN.thin_floor(font, (stem_width(font), D.TARGET_CAP_STEM))),
+                 ("barb faces", CLEAN.barb_faces(font)), ("even tension", CLEAN.even_tension(font)),
+                 ("true lines again", CLEAN.true_lines(font, HARMONIZE_SET))):
+        print("clean:", *line)
+    bracket_handles(font)
+    harmonize(font)
+    print("clean: even tension, after harmonize", CLEAN.even_tension(font))   # harmonize slides the handles again
+    soften_ends(font)
+    CLEAN.true_lines(font, HARMONIZE_SET)             # a softened corner can leave a face 1 unit off
+    owner_positions(font, key="by_position_end")   # saves made on 0.34 and later: matched on the finished points,
+                                                      # after every rule (their point numbers come from soften_ends)
+    import unicodedata
+    letters = [g.name for g in font if g.contours and not g.components and any(
+        unicodedata.category(chr(u))[0] in "LN" for u in g.unicodes)]
+    print("clean: lightened", CLEAN.lighten(font, letters), "contours in", len(letters), "glyphs")
+    bracket_handles(font)                             # a bracket's reach is 2 units shorter: its handles follow
+    print("clean: brackets", CLEAN.brackets_one(font, HARMONIZE_SET))
+    CLEAN.e_eye_corner(font)
+    CLEAN.true_lines(font, HARMONIZE_SET)
+    print("clean: tidy", CLEAN.tidy(font, HARMONIZE_SET))
+    delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
+    CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
+    print(f"spacing: {len(delta)} letters re-spaced, {moved} kerning pairs carried over, {len(opened)} near-touches opened")
     for g in font:                           # derive.py's bracket marks were for this build only
         for c in g.contours:
             for p in c.points:
@@ -1345,7 +1479,7 @@ def tails(font, sw):
 # in all four; Georgia Pro thick 1.02-1.15, thin 0.45). One value each: every stroke running top-left to bottom-right
 # (the thick one) at DIAG_THICK, every other (thin) at DIAG_THIN. K's leg takes X's thick stroke (it was 0.27 of the
 # cap scan against X's 0.20; Serrif's leg is near its other thick diagonals).
-DIAG_THICK, DIAG_THIN = 1.12, 0.52
+DIAG_THICK, DIAG_THIN = 1.03, 0.52     # thick 1.12 until 0.41 (ink balance: Georgia Pro's v is 0.97 of its n's stroke)
 DIAG_LOWER = "vwy"          # x: its strokes bend at the crossing; THIN_X sets it to the same widths
 
 
@@ -1434,7 +1568,7 @@ def A_inner_leg(font):
     c = font["A"].contours[0]
     P = c.points
     base, top, o1, o2 = P[11], P[17], P[46], P[45]          # foot's top end, crossbar corner, outer edge
-    assert abs(base.y - 27) < 2 and abs(top.y - 263) < 3, "A's points moved; update A_inner_leg"
+    assert abs(base.y - D.TARGET_TIP) < 2 and abs(top.y - 263) < 6, "A's points moved; update A_inner_leg"
     m = (o2.x - o1.x) / (o2.y - o1.y)
     cx = top.x + m * (base.y - top.y)                       # where the straight inner edge meets the foot's level
     cy = base.y
@@ -1542,7 +1676,7 @@ def straight_through(g):
 # bit too long and heavy ... more subtle ... consistently"). Measured past the stem, in each face's own H stem: Area's
 # feet reached 1.13 and heads 1.03, B and D 1.25 (Serrif 1.11 everywhere, Georgia Pro 0.88-1.00). One value for every
 # capital foot and head serif on a vertical stem, between the two and shorter than before.
-CAP_SERIF = 0.95
+CAP_SERIF = 0.85           # 0.33, with the lowercase (0.95 to 0.31, 0.90 in 0.32; owner on B: "serifs maybe a bit too long")
 CAP_SERIFS = {   # glyph: (scan height in caps, [(stem index, foot sides, head sides), ...])
     "H": (0.3, [(0, "lr", "lr"), (1, "lr", "lr")]), "I": (0.3, [(0, "lr", "lr")]),
     "E": (0.3, [(0, "l", "l")]), "F": (0.3, [(0, "lr", "l")]), "L": (0.3, [(0, "l", "lr")]),
@@ -1551,6 +1685,19 @@ CAP_SERIFS = {   # glyph: (scan height in caps, [(stem index, foot sides, head s
     "N": (0.5, [(0, "lr", "l"), (-1, "", "lr")]), "M": (0.3, [(0, "lr", "l"), (-1, "lr", "r")]),
     "U": (0.6, [(0, "", "lr"), (-1, "", "lr")]), "J": (0.6, [(0, "", "lr")]),
 }
+
+
+def cap_right_feet(font):
+    """P and R: the stem's right foot, which cap_serifs' reach (two stem widths) only partly moved (1.04 and 0.98)."""
+    cap = D.CAP_HEIGHT
+    hs = spans_at(flatten(font["H"]), cap * 0.75)[0]
+    unit = hs[1] - hs[0]
+    for ch in "PR":
+        g = font[ch]
+        a, b = spans_at(flatten(g), cap * 0.2)[0]
+        right = with_handles(g, lambda p: p.y < 40 and b + 1 < p.x < b + 1.7 * unit)
+        if right:
+            move(right, dx=CAP_SERIF * unit - (max(p.x for p in right if p.type) - b))
 
 
 def cap_serifs(font):
@@ -1582,18 +1729,22 @@ def cap_serifs(font):
 # Area's arm barbs hung 1.2-1.5 (E, F, L, T, Z; Serrif 0-0.5, Georgia Pro about 1.3); C, G and S's end barbs 1.6-2.4
 # below the stroke's inside, 33-53 units wide. One length for arm barbs, one for the round letters' end barbs, one
 # width for those, and no notch where the outer curve meets an end barb.
-CAP_BARB = 0.90          # arm barbs, past the arm's edge, in H stems (Serrif's run deeper but thin; the weight was the
-                         # wedge, so the length comes down a third and the wedge becomes a light flare, BARB_FLARE)
-CAP_END_BARB = 1.0       # C, G, S end barbs, past the stroke's inner edge
+CAP_BARB = 1.00          # top arm beaks (E F T Z), past the arm's edge, in H stems. 0.35 (owner, with pictures of E, F
+                         # and T over Georgia Pro: "i dont mind these parts matching georgia pro a bit more, maybe not
+                         # quite as long"): 0.90 to 0.34; Georgia Pro 1.23-1.51, Serrif 1.22-1.67
+CAP_BARB_WIDE = 1.15     # T's and Z's top beaks: Georgia Pro's are its longest top beaks (1.81 and 1.88 in all; E 1.61)
+CAP_BARB_LOW = 1.30      # bottom arm beaks (E L Z): Georgia Pro's are longer than its top ones (1.57-1.70; Area 0.90)
+CAP_BARB_MID = 1.00      # the middle arm's beak, each way (E F): Georgia Pro 1.10
+CAP_END_BARB = 1.45      # C, G, S end barbs, past the stroke's inner edge: 1.0 to 0.34 (Georgia Pro about 1.9, Serrif 1.6)
 CAP_END_W = 42           # their width at the free end (C was 33, G 44, S 53)
 BARBS = {   # glyph: [(x_lo, x_hi, y_lo, y_hi, the arm's edge y, length in H stems)]
-    "E": [(340, 9e9, 520, 666, 666, CAP_BARB), (230, 9e9, 200, 350, 350, CAP_BARB),
-          (230, 9e9, 394, 520, 394, CAP_BARB), (230, 9e9, 46, 200, 46, CAP_BARB)],
-    "F": [(340, 9e9, 500, 661, 661, CAP_BARB), (230, 9e9, 150, 333, 333, CAP_BARB),
-          (230, 9e9, 376, 500, 376, CAP_BARB)],
-    "L": [(230, 9e9, 48, 300, 48, CAP_BARB)],
-    "T": [(-9e9, 220, 400, 666, 666, CAP_BARB), (520, 9e9, 400, 666, 666, CAP_BARB)],
-    "Z": [(-9e9, 250, 400, 667, 667, CAP_BARB), (440, 9e9, 49, 300, 49, CAP_BARB)],
+    "E": [(340, 9e9, 520, 666, 666, CAP_BARB), (230, 9e9, 200, 350, 350, CAP_BARB_MID),
+          (230, 9e9, 394, 520, 394, CAP_BARB_MID), (230, 9e9, 46, 200, 46, CAP_BARB_LOW)],
+    "F": [(340, 9e9, 500, 661, 661, CAP_BARB), (230, 9e9, 150, 333, 333, CAP_BARB_MID),
+          (230, 9e9, 376, 500, 376, CAP_BARB_MID)],
+    "L": [(230, 9e9, 48, 300, 48, CAP_BARB_LOW)],
+    "T": [(-9e9, 220, 400, 666, 666, CAP_BARB_WIDE), (520, 9e9, 400, 666, 666, CAP_BARB_WIDE)],
+    "Z": [(-9e9, 250, 400, 667, 667, CAP_BARB_WIDE), (440, 9e9, 49, 300, 49, CAP_BARB_LOW)],
     "C": [(590, 9e9, 400, 668, 668, CAP_END_BARB)],
     "G": [(590, 9e9, 400, 668, 668, CAP_END_BARB)],
     "S": [(440, 9e9, 400, 668, 668, CAP_END_BARB), (-9e9, 140, 37, 300, 37, CAP_END_BARB)],
@@ -1618,7 +1769,7 @@ def cap_barbs(font):
             on = [abs(p.y - edge) for p in inside if p.type]
             if not on:
                 continue
-            k = min(1.0, length * unit / max(on))
+            k = min(1.0, length * unit / max(on))   # a barb never grows past the base design's (derive.py)
             for p in inside:
                 p.y = round(edge + (p.y - edge) * k)
         P = g.contours[0].points
@@ -1699,7 +1850,7 @@ def G_bar(font):
     g = font["G"]
     sb = sidebearings(g)
     P = g.contours[0].points
-    assert P[18].type == "line" and abs(P[18].y - 297) < 3, "G's points moved; update G_bar"
+    assert P[18].type == "line" and abs(P[18].y - 297) < 7, "G's points moved; update G_bar"
     rise = round(0.47 * D.CAP_HEIGHT) - P[25].y
     for p in P[7:29]:
         p.y += rise
@@ -1744,7 +1895,7 @@ def Q_tail_right(font):
 # curves, its very abrupt"). The thick side of every figure bowl measured 1.21-1.27 of the 1's stem (Serrif 1.00-1.10,
 # Georgia Pro 1.08-1.15): one value, FIG_ROUND, by moving the counter's side of each thick stroke outward. Quarter
 # curves (from a level tangent to an upright one) were drawn with handles 0.59-0.71 of their span, boxy: FIG_KAPPA.
-FIG_ROUND = 1.10
+FIG_ROUND = 1.15         # 96 units, 1.17 n stems (Serrif and Georgia Pro's 0: 1.19; Area's o 1.12, O 1.24)
 FIG_KAPPA = 0.56
 FIG_ROUND_GLYPHS = ["zero", "two", "three", "five", "six", "nine"]
 
@@ -1768,10 +1919,12 @@ def figure_rounds(font):
                     w = hi - lo
                     if not target < w < 1.5 * target:
                         continue
-                    if abs(lo - p.x) < 1 and abs(hi - mid) < abs(lo - mid):      # p is the inner (right) side
-                        moves.append((P, i, -(w - target)))
-                    elif abs(hi - p.x) < 1 and abs(lo - mid) < abs(hi - mid):    # p is the inner (left) side
+                    # 0.32: this moved the OUTER side outward (the test picked the wrong end of the span), so every
+                    # figure bowl came out 1.37 n stems, not thinner: the counter's side now moves, as written above
+                    if abs(lo - p.x) < 1 and abs(lo - mid) < abs(hi - mid):      # p is the counter's side, right stroke
                         moves.append((P, i, w - target))
+                    elif abs(hi - p.x) < 1 and abs(hi - mid) < abs(lo - mid):    # p is the counter's side, left stroke
+                        moves.append((P, i, -(w - target)))
         for P, i, dx in moves:
             n = len(P)
             for q in (P[(i - 1) % n], P[i], P[(i + 1) % n]):
@@ -1936,7 +2089,8 @@ def inner_serifs(font):
         mid = (min(xs) + max(xs)) / 2
         lines = _diag_edges(g)
         for where in wheres:
-            yu, band = (27, (-1, 28)) if where == "foot" else (cap - 27, (cap - 28, cap + 1))
+            tt = D.TARGET_TIP
+            yu, band = (tt, (-1, tt + 1)) if where == "foot" else (cap - tt, (cap - tt - 1, cap + 1))
             serifs = spans_at(flatten(g), (band[0] + band[1]) / 2)
             for L, R in serifs:
                 # the stroke this serif carries: the two edges whose line crosses the serif's underside inside it
@@ -2373,14 +2527,14 @@ def rejoin_fit(font, tol=4.0, min_span=30):
                         break
 
 
-def owner_positions(font, near=3.0):
+def owner_positions(font, near=3.0, key="by_position"):
     """The owner's moves saved on a build whose point numbering has since changed (0.24, before the rounded corners
     came back): each moved point is found by where it was (the nearest point of the same kind within `near` units)
     and goes where the owner put it; a node's handles move with it. Unmatched moves are reported."""
     if not os.path.exists(OWNER_EDITS):
         return
     for name, e in json.load(open(OWNER_EDITS)).items():
-        moves = e.get("by_position")
+        moves = e.get(key)
         if not moves or name not in font:
             continue
         g = font[name]
@@ -2565,15 +2719,16 @@ def t_top_clean(font):
 # node below or above it (level tangent) sit on one circle centred at (that node's x, the side's y), radius the mean
 # of the end's own width and height, kept within END_R; both get circle handles. The g's ear measures 40, the r's 47.
 END_R = (40, 47)
+END_RADIUS = {"c": 44}      # 0.32: the c's end took the cap (47) and measured 1.19 stems across; the family is 1.02-1.11
 ROUND_ENDS = {"c": (18, 15), "a": (17, 20), "g": (28, 25), "j": (28, 25)}   # glyph: (side node, its level neighbour)
 
 
-def _circle_quarter(P, si, li):
+def _circle_quarter(P, si, li, name=None):
     n = len(P)
     S, L = P[si], P[li]
     cx, cy = L.x, S.y
     r = (abs(S.x - cx) + abs(S.y - L.y)) / 2
-    r = min(END_R[1], max(END_R[0], r))
+    r = END_RADIUS.get(name, min(END_R[1], max(END_R[0], r)))
     sx = 1 if S.x > cx else -1
     sy = 1 if L.y > cy else -1                          # the level node above (+1) or below (-1) the centre
     S.x = round(cx + sx * r)
@@ -2591,13 +2746,49 @@ def _circle_quarter(P, si, li):
     S.smooth = L.smooth = True
 
 
+# c (owner, 2026-11-12: "the c is messed up"). The rule above kept the circle's centre at the side node's height,
+# and the c's side node sat level with its neck (425): the ball hid inside the stroke as a squat half-moon, and
+# the stroke's inner edge curled out past the neck and back in, a pinched waist. Serrif and Georgia Pro agree on
+# the end's centre at 0.75 of the x-height (largest circle in the end, scaled to Area's x-height: Serrif r 48 at
+# 388, Georgia Pro 392; Libre Baskerville 450). The whole ball shows below the neck, and the inner edge runs down
+# the ball's inner side in one curve, as in both references (Serrif's c has no waist, unlike its a).
+END_CENTRE = {"c": 0.75}          # glyph: the end's centre height, in x-heights
+END_NECK = {"c": (9, 0.55)}       # glyph: (the node the inner edge leaves from, its arrival handle's share)
+
+
+def _neck_on_circle(P, si, li, top, k_share):
+    """The node after the level node becomes the circle's inner side (upright tangent, circle handles), and the curve
+    from `top` reaches it straight down, so the inner edge and the ball are one curve."""
+    n = len(P)
+    step = 1 if (li - si) % n < n / 2 else -1
+    S, L = P[si], P[li]
+    cx, cy = L.x, S.y
+    r = abs(S.x - cx)
+    sx = 1 if S.x > cx else -1
+    sy = 1 if L.y > cy else -1
+    k = KAPPA * r
+    hl, hn, N, ho = (P[(li + step * j) % n] for j in (1, 2, 3, 4))
+    T = P[top]
+    N.x, N.y = cx - sx * r, cy
+    hl.x, hl.y = round(cx - sx * k), L.y                 # level node's handle toward the inner side
+    hn.x, hn.y = N.x, round(cy + sy * k)                # inner side's handle toward the level node
+    ho.x, ho.y = N.x, round(cy - sy * k_share * abs(T.y - cy))   # toward the stroke: upright
+    N.smooth = True
+
+
 def round_ends(font):
     for name, (si, li) in ROUND_ENDS.items():
         P = font[name].contours[0].points
         if not (P[si].type and P[li].type):
             print(f"round_ends: {name}'s points moved; skipped")
             continue
-        _circle_quarter(P, si, li)
+        if name in END_CENTRE:
+            dy = round(END_CENTRE[name] * 520) - P[si].y
+            P[si].y += dy                               # the circle's handles follow in _circle_quarter; the
+            P[li].y += dy                               # side's other handle stays on the stroke's outer edge
+        _circle_quarter(P, si, li, name)
+        if name in END_NECK:
+            _neck_on_circle(P, si, li, *END_NECK[name])
     # f: its end was one curve from the bottom over the top; a side node (as the g's and r's ends have) goes in
     from ufoLib2.objects import Point
     c = font["f"].contours[0]
@@ -2613,6 +2804,694 @@ def round_ends(font):
                            Point(round(sx), round(cy + 0.55 * (T.y - cy)), None),
                            Point(round(T.x + 0.55 * (sx - T.x)), T.y, None)]
         B.smooth = True
+
+
+# Curvature at the nodes (owner, 2026-11-12: "bezier curves smoother, round arcs, and smooth, gradual transitions
+# between thick and thin"). A smooth node keeps the direction continuous, not the bend: where one curve arrives
+# tight and the next leaves flat, the arc shows a dent or a shoulder there (evaluate.py, "jumps": 61 in 0.31). At each
+# smooth node between two curves the two handles slide along their shared line until both curves bend equally at the
+# node; the node itself, the far handles and every tangent stay. One handle moves alone when the other belongs to a
+# round end's circle. A handle moves at most HARMONIZE_MAX units and changes length by at most HARMONIZE_SHARE, so a
+# join that is tight on purpose (a neck into a ball) eases rather than flattens.
+HARMONIZE_MAX = 14
+HARMONIZE_SHARE = 0.40
+HARMONIZE_MIN_SPAN = 40
+HARMONIZE_SET = list("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") + \
+    "zero one two three four five six seven eight nine".split()
+
+
+def _is_circle_quarter(a, h1, h2, b):
+    dx, dy = abs(b.x - a.x), abs(b.y - a.y)
+    if abs(dx - dy) > 1.5 or dx > 60 or dx < 20:
+        return False
+    k = KAPPA * dx
+    l1, l2 = math.hypot(h1.x - a.x, h1.y - a.y), math.hypot(h2.x - b.x, h2.y - b.y)
+    return abs(l1 - k) < 1.6 and abs(l2 - k) < 1.6
+
+
+def harmonize(font, names=None):
+    for name in names or HARMONIZE_SET:
+        for c in font[name].contours:
+            P, n = c.points, len(c.points)
+            for i in range(n):
+                N = P[i]
+                if N.type != "curve" or not N.smooth:
+                    continue
+                h2, h3 = P[(i - 1) % n], P[(i + 1) % n]
+                h1, A = P[(i - 2) % n], P[(i - 3) % n]
+                h4, B = P[(i + 2) % n], P[(i + 3) % n]
+                if h2.type or h3.type or h1.type or h4.type or not A.type or not B.type or B.type != "curve":
+                    continue
+                if math.hypot(N.x - A.x, N.y - A.y) < HARMONIZE_MIN_SPAN or \
+                        math.hypot(B.x - N.x, B.y - N.y) < HARMONIZE_MIN_SPAN:
+                    continue
+                a, b = math.hypot(N.x - h2.x, N.y - h2.y), math.hypot(h3.x - N.x, h3.y - N.y)
+                if a < 2 or b < 2:
+                    continue
+                ux, uy = (h3.x - h2.x) / (a + b), (h3.y - h2.y) / (a + b)      # the shared tangent
+                d1 = (h1.x - N.x) * uy - (h1.y - N.y) * ux                     # far handles' offsets from it
+                d4 = (h4.x - N.x) * uy - (h4.y - N.y) * ux
+                if d1 * d4 <= 0 or min(abs(d1), abs(d4)) < 1:
+                    continue                                                   # an inflection, or a straight run
+                d1, d4 = abs(d1), abs(d4)
+                lock_a, lock_b = _is_circle_quarter(A, h1, h2, N), _is_circle_quarter(N, h3, h4, B)
+                if lock_a and lock_b:
+                    continue
+                if lock_a:
+                    na, nb = a, a * math.sqrt(d4 / d1)
+                elif lock_b:
+                    na, nb = b * math.sqrt(d1 / d4), b
+                else:
+                    L = a + b
+                    na = L * math.sqrt(d1) / (math.sqrt(d1) + math.sqrt(d4))
+                    nb = L - na
+                lim = lambda new, old: max(old * (1 - HARMONIZE_SHARE), old - HARMONIZE_MAX,
+                                           min(old * (1 + HARMONIZE_SHARE), old + HARMONIZE_MAX, new))
+                na, nb = lim(na, a), lim(nb, b)
+                upright, level = abs(ux) < 1e-6, abs(uy) < 1e-6
+                was = (h2.x, h2.y, h3.x, h3.y)
+                h2.x, h2.y = N.x - ux * na, N.y - uy * na
+                h3.x, h3.y = N.x + ux * nb, N.y + uy * nb
+                for h in (h2, h3):
+                    h.x, h.y = (N.x if upright else round(h.x)), (N.y if level else round(h.y))
+                v2, v3 = (N.x - h2.x, N.y - h2.y), (h3.x - N.x, h3.y - N.y)
+                bend = abs(math.atan2(v2[0] * v3[1] - v2[1] * v3[0], v2[0] * v3[0] + v2[1] * v3[1]))
+                if bend > math.radians(1.0):             # whole units bent a short handle: leave the node as it was
+                    h2.x, h2.y, h3.x, h3.y = was
+
+
+# e's bar (0.32, evaluation: thin strokes). Measured in n stems, Area's thin horizontals are one family (H and A
+# crossbars 0.63, t 0.60, T and E arms 0.57, o's thin 0.68) but the e's bar was 0.38, lighter than Serrif's own
+# hairlines in a face whose contrast is 1.6 against Serrif's 2.9: the bar was the one hairline left at Libre
+# Baskerville's contrast, and the first part to break up at 12-13 px. It comes to E_BAR; its lower edge moves down
+# (the eye keeps its size; the aperture goes from 0.37 to 0.35 of the x-height, Serrif 0.36).
+E_BAR = 0.52                # 0.55 until 0.38: the bar is one of the thins, and they share one value
+
+
+def e_bar_weight(font, sw):
+    g = font["e"]
+    P = g.contours[0].points
+    eye = g.contours[1].points
+    top = min(p.y for p in eye if p.type)                    # the bar's upper edge is the eye's floor
+    level = [i for i, p in enumerate(P) if p.type == "line" and P[i - 1].type and abs(P[i - 1].y - p.y) < 0.5
+             and abs(p.x - P[i - 1].x) > 200 and 200 < p.y < top]
+    if len(level) != 1:
+        print("e_bar_weight: e's bar not found; skipped")
+        return
+    y = P[level[0]].y
+    d = round(E_BAR * sw - (top - y))
+    if d <= 0:
+        return
+    for p in P:
+        if y - 26 <= p.y <= y + 7 and not (p.type and p.y < y - 1 and abs(p.x - P[level[0] - 1].x) > 20):
+            if p.y >= y - 0.5 or p.type is None:
+                p.y -= d
+    wall, h = P[level[0] - 4], P[level[0] - 2]               # the fillet under the bar: its handle stays on the
+    if wall.type and h.type is None and h.x < wall.x:        # counter's wall, not outside it (a 5-unit bulge)
+        h.x = wall.x
+
+
+# Dots (0.32, evaluation). The i's and j's dots were ovals 113 wide and 121 tall with uneven handles (0.52 and 0.58
+# of their reach), so their curvature rose and fell around the dot. Each is a circle of the same area on the same
+# centre.
+def round_dots(font):
+    for name in ("i", "j"):
+        P = font[name].contours[1].points
+        on = [p for p in P if p.type]
+        if len(P) != 12 or len(on) != 4:
+            print(f"round_dots: {name}'s dot is not four curves; skipped")
+            continue
+        xs, ys = [p.x for p in on], [p.y for p in on]
+        cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+        r = round(math.sqrt((max(xs) - min(xs)) * (max(ys) - min(ys))) / 2)
+        k = KAPPA * r
+        for i, p in enumerate(P):
+            if not p.type:
+                continue
+            ux, uy = (p.x > cx + 1) - (p.x < cx - 1), (p.y > cy + 1) - (p.y < cy - 1)
+            p.x, p.y = round(cx + ux * r), round(cy + uy * r)
+            for h in (P[i - 1], P[(i + 1) % 12]):
+                side = 1 if ((h.y > cy) if ux else (h.x > cx)) else -1
+                h.x, h.y = (p.x, round(p.y + side * k)) if ux else (round(p.x + side * k), p.y)
+
+
+# Brackets, one curve (0.32, evaluation: "flat" arcs). derive.py draws every bracket with handles 0.45 of its leg on
+# one side and 0.75 on the other (Serrif's). After stems and serifs moved, the long handle ran 0.80-1.11 on 40
+# brackets (R's foot and d's flag past the corner, a small bulge). Any bracket-sized quarter whose short handle is
+# the bracket's and whose long one drifted comes back to BRACKET_LONG.
+BRACKET_LONG = 0.75
+
+
+def bracket_handles(font):
+    for name in HARMONIZE_SET:
+        for c in font[name].contours:
+            P, n = c.points, len(c.points)
+            for i in range(n):
+                p0, h1, h2, p3 = P[i], P[(i + 1) % n], P[(i + 2) % n], P[(i + 3) % n]
+                if not p0.type or h1.type or h2.type or p3.type != "curve":
+                    continue
+                dx, dy = p3.x - p0.x, p3.y - p0.y
+                if not (25 < abs(dx) < 120 and 25 < abs(dy) < 120):
+                    continue
+                up0, lv3 = abs(h1.x - p0.x) < 1, abs(h2.y - p3.y) < 1
+                lv0, up3 = abs(h1.y - p0.y) < 1, abs(h2.x - p3.x) < 1
+                if not ((up0 and lv3) or (lv0 and up3)):
+                    continue
+                r0 = abs(h1.y - p0.y) / abs(dy) if up0 else abs(h1.x - p0.x) / abs(dx)
+                r3 = abs(h2.x - p3.x) / abs(dx) if lv3 else abs(h2.y - p3.y) / abs(dy)
+                if min(r0, r3) > 0.70 and max(r0, r3) > 0.90:      # a flag's underside, its handle past the corner (d: 1.16)
+                    if r0 > r3:
+                        if up0:
+                            h1.y = round(p0.y + 0.80 * dy)
+                        else:
+                            h1.x = round(p0.x + 0.80 * dx)
+                    elif lv3:
+                        h2.x = round(p3.x - 0.80 * dx)
+                    else:
+                        h2.y = round(p3.y - 0.80 * dy)
+                elif 0.40 <= r0 <= 0.50 and r3 > 0.80:
+                    if lv3:
+                        h2.x = round(p3.x - BRACKET_LONG * dx)
+                    else:
+                        h2.y = round(p3.y - BRACKET_LONG * dy)
+                elif 0.40 <= r3 <= 0.50 and r0 > 0.80:
+                    if up0:
+                        h1.y = round(p0.y + BRACKET_LONG * dy)
+                    else:
+                        h1.x = round(p0.x + BRACKET_LONG * dx)
+
+
+# U's head serifs (owner, 2026-11-12, 0.32 save: "the top serifs feel off, try to match serrif"). Each ran level to
+# within 10 units of the stem and turned down in a tight corner on an extra node, a slab; H's and Serrif's U sweep
+# into the stem in one bracket. Each of the four becomes the bracket every capital has (BRACKET_K_STEM up the
+# stem, BRACKET_LONG along the serif), from the serif's own inner end to the stem at H's bracket height.
+def U_head_serifs(font):
+    """The U's inner head serifs were longer than its outer ones (100 and 114 units against 81) and the right stem's
+    left tip was cut on a 29-unit slant: cap_serifs reached only part of each (its reach is two stem widths, and the
+    U's right stem is thin). Every tip gets the serif corner (SOFT) and every serif the capitals' length."""
+    cap = D.CAP_HEIGHT
+    g = font["U"]
+    hs = spans_at(flatten(font["H"]), cap * 0.75)[0]
+    target = CAP_SERIF * (hs[1] - hs[0])
+    st = spans_at(flatten(g), cap * 0.6)
+    if len(st) != 2:
+        return
+    mid = (st[0][1] + st[1][0]) / 2
+    top = cap - D.TARGET_TIP
+    for (a, b), lo, hi in ((st[0], -9e9, mid), (st[1], mid, 9e9)):
+        for side in (-1, 1):
+            edge = a if side < 0 else b
+            pts = [p for c in g.contours for p in c.points
+                   if p.y >= top - 1 and lo < p.x < hi and (p.x - edge) * side > 1]
+            if not pts:
+                continue
+            tip = max(pts, key=lambda p: (p.x - edge) * side).x
+            for p in pts:                                    # the corner: nodes SOFT in from the tip, handles 3
+                if abs(p.y - cap) < 0.5 or abs(p.y - top) < 0.5:
+                    if abs(p.x - tip) < 45 and abs(p.x - tip) > 0.5:
+                        near = [q for q in pts if abs(q.y - p.y) < 0.5 and abs(q.x - tip) < 45]
+                        if p.type:
+                            p.x = tip - side * D.SOFT if p is min((q for q in near if q.type), key=lambda q: abs(q.x - tip)) else p.x
+                        else:
+                            p.x = tip - side * 3 if p is min((q for q in near if not q.type), key=lambda q: abs(q.x - tip)) else p.x
+            d = side * target - (tip - edge)
+            for p in pts:
+                p.x = round(p.x + d)
+
+
+def U_head_brackets(font):
+    from ufoLib2.objects import Point
+    cap = D.CAP_HEIGHT
+    U_head_serifs(font)
+    g = font["U"]
+    c = g.contours[0]
+    edges = [x for a, b in spans_at(flatten(g), cap * 0.6) for x in (a, b)]
+    top = cap - D.TARGET_TIP
+    done = 0
+    for _ in range(4):
+        P, n = c.points, len(c.points)
+        on = [i for i in range(n) if P[i].type]
+        hit = None
+        for k, i in enumerate(on):                           # a stem node under the serif, on a stem's edge
+            S = P[i]
+            if not (cap - 110 < S.y < cap - 60 and any(abs(S.x - e) < 2.5 for e in edges)):
+                continue
+            for step in (1, -1):                             # the serif's inner end: one or two curves away
+                for hop in (1, 2):
+                    j = on[(k + step * hop) % len(on)]
+                    Tn = P[j]
+                    if abs(Tn.y - top) < 1.5 and abs(Tn.x - S.x) > 20:
+                        lo, hi = (i, j) if step == 1 else (j, i)
+                        if lo < hi and (hop == 2 or (hi - lo) != 3):
+                            hit = (lo, hi, S, Tn, step)
+                        break
+                if hit:
+                    break
+            if hit:
+                break
+        if not hit:
+            break
+        lo, hi, S, Tn, step = hit
+        dx, dy = Tn.x - S.x, Tn.y - S.y
+        hs = Point(S.x, round(S.y + D.BRACKET_K_SERIF * dy), None)
+        ht = Point(round(Tn.x - D.BRACKET_K_STEM * dx), Tn.y, None)
+        P[hi].type = "curve"
+        c.points[lo + 1:hi] = [hs, ht] if step == 1 else [ht, hs]
+        done += 1
+
+
+# Widths (owner, 2026-11-12: "i actually like the widths of georgia pro's characters, but the general shape of
+# serrif"). Measured as ink width over the glyph's own height (x-height, cap height, figure height), Area's letters
+# are within 2.5% of Georgia Pro's except the ones below: the rounds are wider (o 6%, O 10%, c 4%, 0 5%), as are
+# B P D, T, z and Z; E F N U H are narrower. Each comes to Georgia Pro's ratio by stretching its counter only: one
+# zone between the letter's upright parts moves linearly, everything left of it stays and everything right of it
+# shifts, so stems, round-stroke weights, serifs, beaks and terminals keep their size. The side bearings stay and
+# the advance follows. Not moved, and why: n d u a (2-3% off, and h b p q agree with Georgia Pro already: the arch
+# family stays one family); i l I j f t 1 (their width is serif plus stem, and Georgia Pro's stem is a fifth
+# heavier); r g k x y K W (their width is an ear, a tail or diagonals; listed for the owner).
+GEORGIA_WIDTH = {   # glyph: (Georgia Pro's ink width / height, how the zone is found)
+    "o": (0.977, ("scan", 0.50)), "c": (0.867, ("scan", 0.75)), "z": (0.811, ("barbs",)),
+    "O": (0.961, ("scan", 0.50)), "Q": (None, ("as", "O")), "D": (0.960, ("scan", 0.50)),
+    "P": (0.771, ("scan", 0.72)), "T": (0.872, ("arms",)), "Z": (0.837, ("barbs",)), "E": (0.848, ("arm",)),
+    "F": (0.784, ("arm",)), "N": (1.078, ("stems", 0.50)), "U": (1.029, ("stems", 0.60)), "H": (1.035, ("stems", 0.25)),
+    "zero": (0.696, ("scan", 0.50)),
+}
+
+
+def _zone_shift(g, a, b, d):
+    """Points left of a stay, right of b move by d, between them move in proportion (anchors too)."""
+    for c in g.contours:
+        for p in c.points:
+            p.x = p.x + (d if p.x >= b else d * (p.x - a) / (b - a) if p.x > a else 0)
+    for an in g.anchors:
+        an.x = round(an.x + (d if an.x >= b else d * (an.x - a) / (b - a) if an.x > a else 0))
+    g.width = round(g.width + d)
+
+
+def set_widths(font):
+    cap, xh = D.CAP_HEIGHT, D.X_HEIGHT
+    shifts = {}
+    for name, (ratio, how) in GEORGIA_WIDTH.items():
+        g = font[name]
+        xs = [p.x for c in g.contours for p in c.points if p.type]
+        ys = [p.y for c in g.contours for p in c.points if p.type]
+        height = xh if name.islower() and len(name) == 1 else cap if len(name) == 1 else \
+            max(p.y for c in font["one"].contours for p in c.points)
+        if how[0] == "as":
+            d = shifts[how[1]]
+            how = GEORGIA_WIDTH[how[1]][1]
+        else:
+            d = round(ratio * height - (max(xs) - min(xs)))
+        shifts[name] = d
+        if abs(d) < 3:
+            continue
+        cs = flatten(g)
+        serif = CAP_SERIF * (spans_at(flatten(font["H"]), cap * 0.75)[0][1] - spans_at(flatten(font["H"]), cap * 0.75)[0][0])
+        if how[0] in ("scan", "stems"):
+            runs = spans_at(cs, height * how[1])
+            if len(runs) < 2:
+                print(f"set_widths: {name} has no counter at {how[1]}; skipped")
+                continue
+            a, b = runs[0][1], runs[-1][0]
+            if how[0] == "stems":                           # keep the inner serifs out of the zone
+                a, b = a + serif + 6, b - serif - 6
+            elif name in "DBP":
+                a += serif + 6                              # past the stem's right foot (P)
+            _zone_shift(g, a, b, d)
+        elif how[0] == "barbs":                             # z, Z: between the two barbs
+            top = [p.x for c in g.contours for p in c.points if p.type and height * 0.70 < p.y < height - 40]
+            bot = [p.x for c in g.contours for p in c.points if p.type and 40 < p.y < height * 0.32]
+            _zone_shift(g, min(top) + 40, max(bot) - 45, d)
+        elif how[0] == "arms":                              # T: both arms, half each; the stem moves with the first
+            st = spans_at(cs, height * 0.4)[0]
+            _zone_shift(g, min(xs) + 46, st[0] - serif - 6, d / 2)
+            _zone_shift(g, st[1] + d / 2 + serif + 6, max(xs) + d / 2 - 46, d / 2)
+        elif how[0] == "arm":                               # E, F: between the stem and the middle arm's barb
+            st = spans_at(cs, height * 0.3)[0]
+            mid = spans_at(cs, height * 0.5)[0][1]          # the middle arm's right end
+            _zone_shift(g, st[1] + serif + 6, mid - 40, d)       # past the stem's right foot (F)
+        for c in g.contours:
+            for p in c.points:
+                p.x = round(p.x)
+
+
+# Flat-cut ends, one corner (owner, 2026-11-12: "there seems to be some inconsistencies with when to round serifs
+# and when not to"). Serif tips had the SOFT corner; every other stroke end cut flat was square: beaks (E F L T Z z),
+# barbs (C G S s), bar ends (f t), tail cuts (c e t), the 1's flag, the 2's base, the 3's middle, the 5's flag, the
+# 7's beak. The rule now: a stroke that ends in a flat cut has both corners of the cut rounded at SOFT, like a serif
+# tip; a cut is rounded only when both its corners can be (a pointed end stays pointed). What stays sharp is a
+# point, not an end: apexes and vertices (A M N V W v w), the top corner of a stem under its flag and a stem's
+# bottom without a serif (b d q u), joins and crotches.
+END_FACE = (20, 60)            # a cut's length
+END_ANGLE = (70, 125)          # a cut's corner
+END_SKIP = set("AMNVWvwKkRXxYy")
+BEAK_GLYPHS = {"E", "F", "L", "T", "Z", "z", "two", "five", "seven"}   # their outer corner on the height line too
+
+
+def soften_ends(font):
+    from ufoLib2.objects import Point
+    from fontTools.pens.areaPen import AreaPen
+    for name in HARMONIZE_SET:
+        if name in END_SKIP:
+            continue
+        g = font[name]
+        signs = []
+        for c in g.contours:
+            pen = AreaPen()
+            c.draw(pen)
+            signs.append(pen.value)
+        outer = max(signs, key=abs) > 0
+        for c, sg in zip(g.contours, signs):
+            ink_ccw = (sg > 0) if (sg > 0) == outer else not (sg > 0)   # a counter's corners are the ink's hollows
+            P, n = c.points, len(c.points)
+            on = [i for i in range(n) if P[i].type]
+            info = {}
+            for k, i in enumerate(on):
+                p, a, b = P[i], P[(i - 1) % n], P[(i + 1) % n]
+                v1, v2 = (p.x - a.x, p.y - a.y), (b.x - p.x, b.y - p.y)
+                l1, l2 = math.hypot(*v1), math.hypot(*v2)
+                if l1 < 0.5 or l2 < 0.5 or p.smooth and False:
+                    continue
+                turn = math.degrees(math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1]))
+                if abs(turn) < 25 or (turn > 0) != ink_ccw:
+                    continue
+                prev_i, next_i = on[k - 1], on[(k + 1) % len(on)]
+                e_in = math.hypot(p.x - P[prev_i].x, p.y - P[prev_i].y) if p.type == "line" else None
+                e_out = math.hypot(P[next_i].x - p.x, P[next_i].y - p.y) if P[next_i].type == "line" else None
+                info[i] = dict(angle=180 - abs(turn), e_in=e_in, e_out=e_out, prev=prev_i, next=next_i)
+            ok = lambda i: i in info and END_ANGLE[0] <= info[i]["angle"] <= END_ANGLE[1]
+            chosen = set()
+            for i, f in info.items():                       # A: both ends of a short flat cut
+                if f["e_out"] is not None and END_FACE[0] <= f["e_out"] <= END_FACE[1] and ok(i) and ok(f["next"]):
+                    chosen |= {i, f["next"]}
+            if name in BEAK_GLYPHS:                         # a taller square end (the 2's base, the 5's flag)
+                for i, f in info.items():
+                    if f["e_out"] is not None and 60 < f["e_out"] <= 85 and 84 <= f["angle"] <= 96 \
+                            and f["next"] in info and 84 <= info[f["next"]]["angle"] <= 96:
+                        chosen |= {i, f["next"]}
+            if name in BEAK_GLYPHS:                         # B: the beak's outer corner on the height line
+                for i, f in info.items():
+                    if i in chosen or f["e_in"] is None or f["e_out"] is None or not 80 <= f["angle"] <= 100:
+                        continue
+                    p, q0, q1 = P[i], P[f["prev"]], P[f["next"]]
+                    for lvl, upr, e_l, e_u in ((q0, q1, f["e_in"], f["e_out"]), (q1, q0, f["e_out"], f["e_in"])):
+                        if abs(lvl.y - p.y) < 1.5 and e_l >= 60 and 60 <= e_u <= 200 and abs(upr.x - p.x) < 0.2 * e_u \
+                                and (f["next"] in chosen or f["prev"] in chosen):
+                            chosen.add(i)
+            if not chosen:
+                continue
+            out = []
+            for i, p in enumerate(P):
+                if i not in chosen:
+                    out.append(p)
+                    continue
+                a, b = P[(i - 1) % n], P[(i + 1) % n]
+
+                def toward(q):
+                    dd = math.hypot(q.x - p.x, q.y - p.y)
+                    r = min(D.SOFT, dd * 0.33 if q.type else D.SOFT)
+                    return p.x + (q.x - p.x) / dd * r, p.y + (q.y - p.y) / dd * r
+                ax, ay = toward(a)
+                bx, by = toward(b)
+                out.append(Point(round(ax), round(ay), p.type, smooth=False))
+                out.append(Point(round(ax + (p.x - ax) * 0.55), round(ay + (p.y - ay) * 0.55), None))
+                out.append(Point(round(bx + (p.x - bx) * 0.55), round(by + (p.y - by) * 0.55), None))
+                out.append(Point(round(bx), round(by), "curve", smooth=False))
+            c.points[:] = out
+
+
+# B's bowls and counters (owner, 2026-11-12: "can you make the B rings and negative space match georgia pro
+# better?"). Measured from the stem's left edge, in cap heights: Georgia Pro's lower bowl reaches 0.675 and its upper
+# 0.620 (upper / lower 0.92); Area's reached 0.705 and 0.607 (0.86), so the lower bowl stuck out under a small upper
+# one. Georgia Pro's counters are D shapes (level along the bar, then round, widest at 0.30 and 0.77); Area's swept
+# away from the bar at once, like leaning ovals, widest at 0.25 and 0.75, and left a bar 52 units thick at the stem
+# (Georgia Pro 44 at Area's size). Now: lower bowl 0.690, upper 0.622 (0.90); the counters run level along the bar
+# and turn with round handles (B_COUNTER_K, a little rounder than Georgia Pro's, as the owner asked); their widest
+# points sit at 0.28 and 0.77; the bar is B_BAR at the stem; the upper bowl's stroke comes from 1.03 to 1.09 H stems.
+B_LOWER, B_UPPER = 0.690, 0.622
+B_COUNTER_K = 0.62
+B_BAR = 46
+B_WIDEST = (0.28, 0.77)
+B_STROKE = (102, 98)         # lower and upper bowl at their widest: 1.13 and 1.09 H stems (Georgia Pro 1.16, 1.12)
+
+
+def B_bowls(font):
+    cap = D.CAP_HEIGHT
+    g = font["B"]
+    if len(g.contours) != 3 or [len(c.points) for c in g.contours] != [36, 11, 12]:
+        print("B_bowls: B's points changed; skipped")
+        return
+    O, L, U = (c.points for c in g.contours)
+    sl, sr = spans_at(flatten(g), cap * 0.3)[0]
+    crotch = (O[10].y + O[11].y) / 2
+    hs = spans_at(flatten(font["H"]), cap * 0.75)[0]
+    serif = CAP_SERIF * (hs[1] - hs[0])
+    a = sr + serif + 6
+    d_low = round(sl + B_LOWER * cap - O[7].x)
+    d_up = round(sl + B_UPPER * cap - O[14].x)
+    d_mid = (d_low + d_up) / 2
+    for pts, b, d, lower in ((list(O[4:10]) + list(L), L[8].x, d_low, True), (list(O[12:18]) + list(U), U[8].x, d_up, False)):
+        for p in pts:
+            if p.x > a:
+                p.x = round(p.x + (d if p.x >= b else d * (p.x - a) / (b - a)))
+    for p in (O[10], O[11]):                                 # the crotch moves with the mean of the two bowls
+        p.x = round(p.x + d_mid * min(1, (p.x - a) / (L[8].x - d_low - a)))
+    g.width = round(g.width + d_low)
+    for pts, x in (((U[7], U[8], U[9]), O[14].x - B_STROKE[1]), ((L[7], L[8], L[9]), O[7].x - B_STROKE[0])):
+        for p in pts:                                        # each bowl's stroke at its widest point
+            p.x = x
+    top = U[0].y - B_BAR                                     # the bar: the lower counter's top edge
+    for p in (L[4], L[5], L[6]):
+        p.y = top
+    k = B_COUNTER_K
+    yl, yu = round(B_WIDEST[0] * cap), round(B_WIDEST[1] * cap)
+    L[8].y = yl                                              # lower counter: level along the bar, then round
+    L[6].x = round(L[5].x + k * (L[8].x - L[5].x))
+    L[7].x, L[7].y = L[8].x, round(yl + k * (top - yl))
+    L[9].x, L[9].y = L[8].x, round(yl - 0.58 * (yl - L[0].y))
+    L[10].x = round(L[0].x + 0.58 * (L[8].x - L[0].x))
+    U[8].y = yu                                              # upper counter
+    U[10].x = round(U[11].x + k * (U[8].x - U[11].x))
+    U[9].x, U[9].y = U[8].x, round(yu - k * (yu - U[11].y))
+    U[7].x, U[7].y = U[8].x, round(yu + 0.58 * (U[5].y - yu))
+    U[6].x = round(U[5].x + 0.58 * (U[8].x - U[5].x))
+    dy = yu - O[14].y                                        # the upper bowl's widest point follows its counter's
+    for p in (O[13], O[14], O[15]):
+        p.y += dy
+
+
+# E's and F's middle arm (owner, 2026-11-12: "the curves on the middle serif for the E and F are too curvy, it
+# should match georgia pro more"). Both edges swept from the stem all the way into the beak, so the arm thickened
+# from its start (1.13 of the bar at 30% of its length, 1.53 at half; Georgia Pro 1.00 and 1.14). The arm now runs
+# straight for MID_ARM_STRAIGHT of its length and flares into the beak over the rest, with the same handle shares
+# as every arm barb (BARB_K). The beak's length and the bar's weight stay.
+MID_ARM_STRAIGHT = 0.50
+
+
+def mid_arm_straight(font):
+    from ufoLib2.objects import Point
+    cap = D.CAP_HEIGHT
+    for name in ("E", "F"):
+        c = font[name].contours[0]
+        sr = spans_at(flatten(font[name]), cap * 0.3)[0][1]
+        done = 0
+        for _ in range(2):
+            P, n = c.points, len(c.points)
+            for i in range(n):
+                A, h1, h2, B = P[i], P[(i + 1) % n], P[(i + 2) % n], P[(i + 3) % n]
+                if not (A.type and B.type == "curve") or h1.type or h2.type or i + 3 >= n:
+                    continue
+                S, T, hs_, ht = (A, B, h1, h2) if abs(A.x - sr) < 1.5 else (B, A, h2, h1) if abs(B.x - sr) < 1.5 else (None,) * 4
+                if S is None or not (0.4 * cap < S.y < 0.62 * cap) or T.x - S.x < 120 or abs(hs_.y - S.y) > 1:
+                    continue
+                x = round(S.x + MID_ARM_STRAIGHT * (T.x - S.x))
+                hs_.x, hs_.y = round(x + (T.x - x) * BARB_K[0]), S.y
+                ht.x, ht.y = T.x, round(T.y + (S.y - T.y) * BARB_K[1])
+                if S is A:                                   # stem -> line -> curve into the beak
+                    c.points.insert(i + 1, Point(x, S.y, "line"))
+                else:                                        # curve out of the beak -> line to the stem
+                    c.points.insert(i + 3, Point(x, S.y, "curve"))
+                    S.type = "line"
+                done += 1
+                break
+        if done != 2:
+            print(f"mid_arm_straight: {name}: {done} of 2 edges")
+
+
+# Two bars, toward Georgia Pro's heights (0.34, slight): A's crossbar sat at 0.406 of the cap height (Georgia Pro
+# 0.378, Serrif 0.377), e's bar at 0.612 of the x-height (Georgia Pro 0.575, Serrif 0.624). Each moves part of the way.
+A_BAR_DROP = 10
+E_BAR_DROP = 22          # 0.38: the bar's top at 0.615 (Georgia Pro 0.617); 12 in 0.35.
+_E_BAR_DROP_WAS = 12          # 8 in 0.34; 0.35 (owner: "maybe redraw the e ... to match georgia pro"): the bar at 0.59
+E_EYE_IN = 8             # the eye's right side came 8 units further right than Georgia Pro's, with a soft corner at the bar
+
+
+def bar_heights(font):
+    cap = D.CAP_HEIGHT
+    g = font["A"]                                            # each bar corner slides down its own leg
+    plan = []
+    for c in g.contours:
+        P, n = c.points, len(c.points)
+        for i, p in enumerate(P):
+            if not (p.type and 0.33 * cap < p.y < 0.48 * cap):
+                continue
+            mates = [q for q in (P[i - 1], P[(i + 1) % n]) if abs(q.y - p.y) > 20]
+            level = [q for q in (P[i - 1], P[(i + 1) % n]) if abs(q.y - p.y) < 12 and q.type]
+            if len(mates) == 1 and len(level) == 1:
+                q = mates[0]
+                plan.append((p, round(p.x + (q.x - p.x) / (q.y - p.y) * -A_BAR_DROP)))
+    for p, x in plan:
+        p.x, p.y = x, p.y - A_BAR_DROP
+    if len(plan) != 4:
+        print(f"bar_heights: A: {len(plan)} of 4 bar corners")
+    g = font["e"]
+    P, eye = g.contours[0].points, g.contours[1].points
+    floor = min(p.y for p in eye if p.type)
+    bar = [i for i, p in enumerate(P) if p.type == "line" and P[i - 1].type and abs(P[i - 1].y - p.y) < 0.5
+           and abs(p.x - P[i - 1].x) > 200 and 200 < p.y < floor]
+    if len(bar) != 1:
+        print("bar_heights: e's bar not found")
+        return
+    y = P[bar[0]].y
+    for p in eye:                                            # the eye's floor, and the corner handle beside it
+        if p.y <= floor + 3:
+            p.y -= E_BAR_DROP
+        elif p.type is None and p.y < floor + 35 and p.x > 380:
+            p.y -= E_BAR_DROP // 2
+    ex = max(p.x for p in eye if p.type)                     # the eye's right side in, its corner at the bar tighter
+    for p in eye:
+        if p.x >= ex - 3:
+            p.x -= E_EYE_IN
+    new_floor = min(p.y for p in eye if p.type)
+    side = max((p for p in eye if p.type), key=lambda p: p.x)
+    for p in eye:
+        if p.type is None and abs(p.x - side.x) < 1 and new_floor < p.y < side.y:
+            p.y = round(new_floor + 0.45 * (side.y - new_floor))
+    wall = P[bar[0] - 4]
+    for p in P:
+        if abs(p.y - y) <= 12 and p.x > wall.x - 8 and p is not wall:
+            p.y -= E_BAR_DROP
+    h = P[bar[0] - 3]
+    if h.type is None:
+        h.y = round((wall.y + P[bar[0] - 2].y) / 2)
+
+
+# S (owner, 2026-11-12: "redraw the S to match georgia pro ... the capital S needs to be redrawn"). Measured against
+# Georgia Pro as shares of the letter's own width and height: Area's S was 4% wider (width / height 0.715, Georgia
+# Pro 0.687); its upper-left stroke was thin and its lower-right heavy (0.83 and 1.08 H stems; Georgia Pro 0.89 and
+# 0.92), so the top counter was a wide flat oval; and its barbs stopped at 0.82 and 0.17 of the height (Georgia Pro
+# 0.67 and 0.34). The spine, the overshoots and the hairlines already agree. The redraw: the whole letter narrows to
+# S_WIDTH; the upper bowl's outside comes in a further S_TOP_IN and its stroke comes to S_STROKE[0]; the lower bowl's
+# stroke comes to S_STROKE[1]; the barbs take CAP_END_BARB (cap_barbs), most of the way to Georgia Pro's.
+S_WIDTH = 0.693          # ink width / cap height
+S_TOP_IN = 6
+S_STROKE = (84, 88)      # upper-left, lower-right, node to node (0.93 and 0.98 H stems measured across)
+
+
+def S_redraw(font):
+    g = font["S"]
+    P = g.contours[0].points
+    on = [p for p in P if p.type]
+    xs = [p.x for p in on]
+    x0, w = min(xs), max(xs) - min(xs)
+    k = S_WIDTH * D.CAP_HEIGHT / w
+    for p in P:
+        p.x = x0 + (p.x - x0) * k
+    g.width = round(g.width - w * (1 - k))
+    n = len(P)
+
+    def extreme(test):
+        best = None
+        for i, p in enumerate(P):
+            if p.type == "curve" and p.smooth and P[i - 1].type is None and P[(i + 1) % n].type is None \
+                    and abs(P[i - 1].x - p.x) < 1.5 and abs(P[(i + 1) % n].x - p.x) < 1.5 and test(p):
+                if best is None or test(p) > test(P[best]):
+                    best = i
+        return best
+    cap = D.CAP_HEIGHT
+    ol = extreme(lambda p: (1000 - p.x) if p.y > cap * 0.5 else 0)                    # outer upper-left
+    orr = extreme(lambda p: p.x if p.y < cap * 0.5 else 0)                            # outer lower-right
+    il = extreme(lambda p: (1000 - p.x) if p.y > cap * 0.5 and p.x > P[ol].x + 30 else 0)   # upper counter's left
+    ir = extreme(lambda p: p.x if p.y < cap * 0.5 and p.x < P[orr].x - 30 else 0)     # lower counter's right
+    if None in (ol, orr, il, ir):
+        print("S_redraw: S's extremes not found")
+        return
+
+    def setx(i, x):
+        for q in (P[i - 1], P[i], P[(i + 1) % n]):
+            q.x = x
+    setx(ol, P[ol].x + S_TOP_IN)
+    setx(il, P[ol].x + S_STROKE[0])
+    setx(ir, P[orr].x - S_STROKE[1])
+    for p in P:
+        p.x = round(p.x)
+
+
+# Lowercase barbs, a little shorter (owner, 2026-11-12, of the s's top barb over Georgia Pro: "maybe a bit too
+# long"). In H stems, top and bottom: s 1.45 and 1.69 (Georgia Pro 1.49, 1.61), z 1.52 and 1.71 (1.42, 1.63). Each
+# cut moves toward its stroke: {glyph: (top barb, bottom barb)} in units.
+LOW_BARB_TRIM = {"s": (12, 20), "z": (10, 14)}
+
+
+def low_barb_trim(font):
+    xh = D.X_HEIGHT
+    for name, (dt, db) in LOW_BARB_TRIM.items():
+        g = font[name]
+        P = [p for c in g.contours for p in c.points]
+        xs = [p.x for p in P]
+        mid = (min(xs) + max(xs)) / 2
+        if name == "s":
+            top = [p for p in P if p.x > mid + 90 and xh * 0.66 < p.y < xh * 0.78]
+            bot = [p for p in P if p.x < mid - 130 and xh * 0.26 < p.y < xh * 0.36]
+        else:
+            top = [p for p in P if p.x < mid - 150 and xh * 0.68 < p.y < xh * 0.80]
+            bot = [p for p in P if p.x > mid + 150 and xh * 0.24 < p.y < xh * 0.34]
+        if not top or not bot:
+            print(f"low_barb_trim: {name}'s barbs not found")
+            continue
+        for p in top:
+            p.y += dt
+        for p in bot:
+            p.y -= db
+
+
+# The arch (owner, 2026-11-12: "maybe redraw the e and n to match georgia pro"). Drawn over Georgia Pro on the same
+# stem, the n's outside and its right stem agree; the inside does not. Area's inner arch left the stem at 0.54 of
+# the x-height and leaned to a peak 59% across the counter, so the stem seemed to bend early and the shoulder ran
+# diagonal. Georgia Pro's leaves at 0.76 and peaks near the middle. One step toward it, on n, h and both arches of m
+# (one family): the inner arch leaves ARCH_BRANCH higher, its peak moves ARCH_PEAK[0] left and the outer peak
+# ARCH_PEAK[1], with round handles.
+ARCH_BRANCH = 45
+ARCH_PEAK = (14, 10)
+
+
+def arch_branch(font):
+    xh = D.X_HEIGHT
+    for name in ("n", "h", "m"):
+        P = font[name].contours[0].points
+        n = len(P)
+        hits = 0
+        for i, A in enumerate(P):
+            h1, h2, B, h3, h4, C = (P[(i + k) % n] for k in range(1, 7))
+            if not (A.type and B.type == "curve" and C.type == "curve") or any(q.type for q in (h1, h2, h3, h4)):
+                continue
+            if not (A.y < xh * 0.62 and abs(h1.x - A.x) < 1 and abs(h2.y - B.y) < 1 and xh * 0.85 < B.y < xh * 0.97
+                    and B.x - A.x > 100 and abs(h4.x - C.x) < 1 and C.x > B.x + 60):
+                continue
+            A.y += ARCH_BRANCH
+            B.x -= ARCH_PEAK[0]
+            h1.y = round(A.y + 0.50 * (B.y - A.y))
+            h2.x = round(A.x + 0.45 * (B.x - A.x))
+            h3.x = round(B.x + 0.58 * (C.x - B.x))
+            hits += 1
+            # the outer peak above this inner one: the level node within reach of B at the x-height
+            for j, T in enumerate(P):
+                if T.type == "curve" and abs(T.y - (xh + 10)) < 3 and abs(T.x - (B.x + ARCH_PEAK[0])) < 70 \
+                        and P[j - 1].type is None and P[(j + 1) % n].type is None and abs(P[j - 1].y - T.y) < 1:
+                    for q in (P[j - 1], T, P[(j + 1) % n]):
+                        q.x -= ARCH_PEAK[1]
+        if hits != (2 if name == "m" else 1):
+            print(f"arch_branch: {name}: {hits} arches")
 
 
 G_CORNER = (78, (-0.89, -0.45))   # Serrif, measured at Area's cap height: the stem's right edge runs down to 78, and

@@ -13,6 +13,10 @@ targets are in `docs/research/serif-typeface-2026-11-10/` (README first); the co
 (README first). This file is the procedure. Its type-design method is adapted from Nicolas Massi's `type-designer`
 skill (Apache-2.0), see `references/NOTICE.md`.
 
+**Area Serif's design, part by part, is in `references/area-serif-guidelines.md`** (weights, widths, serif lengths,
+when a corner is rounded, round ends, curves, checks). Read it before changing a glyph; a change that breaks a line
+there is the owner's decision.
+
 ## Hard rules
 
 - **One base, chosen by licence** (owner, 2026-11-10: "choose one to go off of and manipulate"). Libre Baskerville's
@@ -26,7 +30,8 @@ skill (Apache-2.0), see `references/NOTICE.md`.
   edit applied after the transforms, with the reason beside it. No point is placed by eye.
 - **The owner's direction** (2026-11-10): match the references closely, with slight changes to weight, x-height,
   cap height and metrics for the web; lighter than the first draft; lean toward Serrif's design where the two differ
-  (thinner, rounder serifs, its curves in R, g and Q). Choices between forms are the owner's, made on an options
+  (thinner, rounder serifs, its curves in R, g and Q). Since 2026-11-12: shapes from Serrif, widths from Georgia Pro,
+  serifs shorter and blunter toward Georgia Pro, weight lighter than both (the guidelines file). Choices between forms are the owner's, made on an options
   page (step 7).
 - **Values live at the top of `derive.py`.** Targets (x-height, stem, advance, tip ratio, corner radius) are inputs;
   T and SX are solved from them. A note on one glyph applies to every glyph sharing the part.
@@ -57,6 +62,9 @@ installed, fontbakery 1.1 runs the same universal profile.
 | `check.py` | Re-measures the build against `derive.py`'s targets. Exit 1 when a value is off. |
 | `normalize.py` | One value per shared part, after derive: stems, head flags, outer feet, u's arch, counters (h = n; m, u 0.97), arches, g's ear root on the bowl's ellipse. Moves a point with its handles, in whole units, then the same curve hygiene (also on every glyph whose bracket derive shortened). |
 | `audit_parts.py` | Measures every shared part across its letters (in stems) and fails QA on an unexpected outlier; `--refs` runs Serrif and Georgia Pro for comparison. |
+| `evaluate.py` | Curve report per glyph: curvature jumps at smooth nodes, bumps inside a curve, pinched or boxy quarter arcs, kinks, missing extremes. A report, not a gate. Run it before and after any curve rule. |
+| `clean.py` | The evenness rules (exact lines, shoulders, thin floor, barb faces, bowl tension), called from `normalize.py`. Its printed report lists what each rule moved. |
+| `spacing.py` | Sidebearings and kerning, the last step of `normalize.py`: bearings from the measured reference fit plus an offset, existing pairs carried over, near-touches opened. |
 | `pathlint.py` | Outline quality on the source, joint angles at smooth nodes (in units off the line), winding on the build. |
 | `diagram.py` | Node diagrams: points, handles, coordinates, 10-unit grid, metrics (`build/diagrams/`). |
 | `qa.py` | Build, then targets, outlines, fontbakery, and with `--diff` diffenator2. |
@@ -66,6 +74,10 @@ installed, fontbakery 1.1 runs the same universal profile.
 | `archive/drawn-2026-11-10/` | The retired hand-coded drafts. Not built. |
 
 ## Owner review loop
+
+`derive.derive()` writes the un-normalized UFO to `build/`. Any script that calls it (a test, a comparison) leaves the build's
+source wrong: run `build.py` again before `editor_page.py`, and check one known point in the page (0.31 was published
+once with raw points).
 
 1. Pull every save (`ArtifactData` list on the page's `edits`; upper and lower case in separate folders) and run `apply_edits.py` BEFORE changing the build: a save diffed against a newer build loses its moves. The page flags any save that isn't in the build.
 2. "Like Georgia Pro and Serrif" covers the whole letter: ends, tails, terminals and joins, not only proportions. Check each end against both references before calling a letter done.
@@ -123,6 +135,7 @@ installed, fontbakery 1.1 runs the same universal profile.
 
 ## References
 
+- `references/area-serif-guidelines.md`: Area Serif's values and rules by part, and what is open with the owner.
 - `references/workflow.md`: diagnosis, families, spacing, kerning, color, masters, features, production QA.
 - `references/dna.md`: what gives a typeface its identity, and how to change it on purpose.
 - `references/outlines.md`: the drawing rules behind `kit.py` and every `pathlint.py` message.

@@ -40,7 +40,8 @@ TARGET_CAP_STEM = 90     # H stem
 TARGET_CONTRAST = 1.8    # o thick / hairline: text-size screen serifs 1.5-1.9 (Serrif 2.9, Georgia 2.7)
 SX = 1.0                 # no narrowing (owner: not too condensed); n advance / x-height comes out at 1.28
 BALL_GROWTH = 1.15       # ball terminals: screen serifs carry c terminals of 1.0-1.9 stems (was 0.92)
-TARGET_TIP = 27          # serif tip, every serif the same (Serrif 26, Georgia Pro 36, Libre Baskerville 38)
+TARGET_TIP = 30          # serif tip, every serif the same (Serrif 26, Georgia Pro 36, Libre Baskerville 38); 27 to 0.32,
+                         # then blunter (owner, 2026-11-12: Georgia Pro's serifs are "not as sharp"): 0.37 of the stem, its ratio
 BRACKET_FOOT = 0.80      # foot bracket height, in stems: Serrif 0.86, Georgia Pro 0.78 (was 1.34: stems curved too far)
 # Bracket curve shape, as shares of its legs (cubic handles): Serrif's n foot bracket measures about 0.45 up the stem
 # and 0.77 along the serif; Libre Baskerville's ran 0.79 and 0.89, nearly a square corner (owner, 2026-11-11: "more
@@ -54,8 +55,10 @@ BRACKET_ACUTE_BLEND = 0.10  # (owner's v: higher still) # how far from the short
 BRACKET_K_ACUTE = 0.55     # a fillet in a leaning-back join: a round arc's handle share
 BRACKET_ACUTE_R = 0.75     # its reach from the corner along the serif and along the stroke, in stems
 BRACKET_HEAD = 0.85      # bracket under a head serif or flag: Serrif 0.99, Georgia Pro 0.99 (was 1.85)
-ROUND_TO_STEM = 1.12     # thick part of a lowercase round stroke, in stems: Serrif 1.12, Georgia Pro 1.11 (was 1.22)
-ROUND_TO_STEM_UP = 1.13  # capitals and figures, against H's stem: Serrif 1.12, Georgia Pro 1.14 (was 1.26)
+ROUND_TO_STEM = 1.05     # 1.12 until 0.39 (owner: thin the thick strokes): 86 units; Serrif 1.12, Georgia Pro 1.11
+_ROUND_TO_STEM_WAS = 1.12     # thick part of a lowercase round stroke, in stems: Serrif 1.12, Georgia Pro 1.11 (was 1.22)
+ROUND_TO_STEM_UP = 1.07  # 1.13 until 0.39
+_ROUND_TO_STEM_UP_WAS = 1.13  # capitals and figures, against H's stem: Serrif 1.12, Georgia Pro 1.14 (was 1.26)
 SOFT = 7                 # radius on serif tip corners: slightly rounded, per the owner
 LINE_TOTAL = 1200        # line box total; split so capitals sit centred
 
