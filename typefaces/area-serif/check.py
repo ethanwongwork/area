@@ -91,10 +91,10 @@ def main():
         ("x-height (OS/2)", os2.sxHeight, D.X_HEIGHT, 0), ("cap height (OS/2)", os2.sCapHeight, cap_t, 0),
         ("cap height (H, measured)", H.y1, cap_t, 1), ("x-height (x, measured)", g("x").y1, D.X_HEIGHT, 1),
         ("ascender (l, measured)", l.y1, asc_t, 3), ("descender (p, measured)", g("p").y0, -round(D.DESC_RATIO * D.X_HEIGHT), 3),
-        ("n stem", w(ns[0]), D.TARGET_STEM, 1.5), ("H stem", w(Hs[0]), D.TARGET_CAP_STEM, 2),
+        ("n stem", w(ns[0]), D.TARGET_STEM - 4, 1.5), ("H stem", w(Hs[0]), D.TARGET_CAP_STEM - 4, 2),   # 0.40: clean.lighten
         ("o thick / n stem", w(os_[0]) / w(ns[0]), D.ROUND_TO_STEM, 0.03),
-        ("o contrast (thick / hairline)", w(os_[0]) / w(ov[0]), 1.64, 0.1),
-        ("n advance", n.adv, nadv_t, 3), ("serif tip (I)", tip, tip_t, 2),
+        ("o contrast (thick / hairline)", w(os_[0]) / w(ov[0]), 2.0, 0.1),   # 1.64 until 0.38 (thins share the arches' 0.52); 0.39 round thick 1.05
+        ("n advance", n.adv, nadv_t - 12, 3),   # 0.38: spacing.py sets n 6 units a side tighter ("serif tip (I)", tip, tip_t, 2),
         ("J sits on the baseline", g("J").y0, -10, 12),
         ("line ascender", hh.ascent, 956, 0), ("line descender", hh.descent, -244, 0),
         ("typo = hhea", int(os2.sTypoAscender == hh.ascent and os2.sTypoDescender == hh.descent), 1, 0),

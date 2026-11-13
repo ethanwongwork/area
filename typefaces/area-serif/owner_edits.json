@@ -375,12 +375,49 @@
  },
  "L": {
   "note": "",
-  "savedAt": "2026-11-12T02:20:07.163Z",
+  "savedAt": "2026-11-12T21:56:46.912Z",
   "moves": [],
   "smooth": [],
   "advance": 0,
   "shape": [
    42
+  ],
+  "by_position_end": [
+   [
+    498,
+    48,
+    498,
+    40,
+    "off"
+   ],
+   [
+    374,
+    48,
+    374,
+    40,
+    "on"
+   ],
+   [
+    258,
+    48,
+    258,
+    40,
+    "off"
+   ],
+   [
+    210,
+    93,
+    210,
+    65,
+    "off"
+   ],
+   [
+    210,
+    167,
+    210,
+    139,
+    "on"
+   ]
   ]
  },
  "M": {
@@ -1133,8 +1170,8 @@
   ]
  },
  "U": {
-  "note": "",
-  "savedAt": "2026-11-12T02:22:48.979Z",
+  "note": "the top serifs feel off, try to match serrif",
+  "savedAt": "2026-11-12T20:38:20.812Z",
   "moves": [],
   "smooth": [],
   "advance": 0,
@@ -6823,6 +6860,22 @@
     "build": "0.24",
     "note": ""
    }
+  ],
+  "savedAt_final": "2026-11-13T01:09:42.614Z",
+  "note_final": "saved on 0.40: two handles of the curve from the top down to the bar's left end. The first sits above the x-height, so it rises with T_RISE's extra 16 units (0.41), from and to alike.",
+  "by_position_final": [
+   [
+    110,
+    621,
+    110,
+    578
+   ],
+   [
+    45,
+    514,
+    78,
+    514
+   ]
   ]
  },
  "u": {

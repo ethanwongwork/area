@@ -1,5 +1,419 @@
 [
  {
+  "build": "0.46",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "r",
+    "text": "Cleaned up. The top is one curve from the notch into the top of the end: 0.45 had an arc, then a level run of 26 units, then the circle. The end eases into that curve at its top instead of meeting it as a plain circle. The end is radius 50, was 54: it was 1.30 stems across against 1.04 to 1.18 on a, c, f, j and g, and is 1.26 now. Its top and its reach did not move. A leftover point on the stem is removed, and the long right foot's bracket is the same curve as every other foot's."
+   },
+   {
+    "glyphs": "b d h i j l m p u G U Y 1 4",
+    "text": "One bracket everywhere. The brackets under the head serifs of b d h i j l m p were a fuller curve (0.73 to 0.80 of the way up the stem) than the feet's and than u's and r's (0.45). All are the feet's curve now. G's under its bar and U's four are brought to it too."
+   },
+   {
+    "glyphs": "e",
+    "text": "The eye's corner at the bar turned almost square (its handle ran 0.98 of the way to the corner). Eased to 0.82."
+   },
+   {
+    "glyphs": "k w",
+    "text": "Two points removed that sat on a straight line between their neighbours."
+   },
+   {
+    "glyphs": "audit",
+    "text": "The final pass over all 62. Lines: every stem and bar exact; 17 leaning lines remain and all are meant to (flags, beaks, the 5's stem). Curves: 3 boxy arcs (r's two, which are the fitted shape, and e's eye corner), 1 curve that bends unevenly (y's tail, from your points), 27 places where the bend changes quickly across a point, all at necks into round ends, spines and flag joins. Points: none redundant; two segments under 3 units (M's vertex, the 2's base corner). Weight: nothing over 7% off its class except the 8 (12% heavy at the waist) and the 7 (by design). Spacing: all 1,352 lowercase and capital pairs scanned; the tightest and loosest are the ones expected (f before round letters tucks its bar over them; T before tall letters; qj and gj opened for their tails) and none is an accident."
+   }
+  ]
+ },
+ {
+  "build": "0.45",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "r",
+    "text": "Serrif's r, as close as measuring allows, then a bit wider. Serrif is licensed, so its points are not copied: I measured its arm every 12 units from the stem (top and underside) and the end's extremes at Area's x-height, and fitted Area's own curves to that profile. The fit is within 1 unit along the arm. What that gives: the arm leaves the stem at 330 and thins to 49 units before the end (0.44's was 56 to 66), the top arc springs from the notch more steeply and flattens sooner, and the end is a circle of radius 54 (0.44: 52). Then wider: the end sits 18 units further out than Serrif's (reach 224 past the stem; Serrif 206) and the arm stretches to meet it, so the curves keep their shape. This r is narrower than 0.44's (reach 258). The foot, stem and flag are Area's and did not change."
+   }
+  ]
+ },
+ {
+  "build": "0.44",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "r",
+    "text": "Your pick, option C, drawn rounder. The arm's top and its underside are each one quarter of an ellipse now, so the arm bends evenly all the way from the stem to the end; before, both ran nearly straight for part of their length. The end is a true circle and bigger: radius 52 units, was 47. The arm is 66 units thick where it meets the end, so the end reads as a ball on a neck. Ink width 0.76 of the x-height; right foot 1.6 stems."
+   },
+   {
+    "glyphs": "a c f j r g",
+    "text": "Round ends are round again. Since the stems were lightened in 0.40 they were 4 units narrower than tall. Lightening now leaves a circle's points alone."
+   }
+  ]
+ },
+ {
+  "build": "0.43",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "r",
+    "text": "Five variations are on the sheet img/r-options-0.43.png, each shown large and in words (rare, try, street, arrow, for, carry, rn). A: Libre Baskerville's ear as in 0.42 with the right foot longer (1.22 to 1.6 stems). B: the same ear on a longer arm (reach 270 units, was 245) and deeper. C: a round ball on a neck (0.40's ear), arm 18 units longer, foot 1.6. D: the ball on a still longer arm, foot 1.9. E: Libre Baskerville's ear on a shorter arm (225) with the longest foot (1.9), so the width comes from the foot. This build carries A until you pick."
+   },
+   {
+    "glyphs": "6 9",
+    "text": "The long stroke (6's left, 9's right) was 10 units heavier than the figure's own bowl stroke: 1.16 of the H's stem a third of the way up, against Georgia Pro's 1.00. Its inner edge, the join and the counter's side moved over; it is 1.02 now. Where the bowl joins it the reading is still 1.53 (was 1.59; Georgia Pro 1.16): the bowl's top is already as thin there as the thins allow, so the join cannot open further without a thinner hairline."
+   },
+   {
+    "glyphs": "8",
+    "text": "The band where the two strokes cross was 1.51 of the H's stem measured up the middle; it is 1.23 now. Each counter's end at the waist moved 6 units toward the middle. The upper-left of the thick stroke is still 1.64 against Georgia Pro's 1.21."
+   }
+  ]
+ },
+ {
+  "build": "0.42",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "1",
+    "text": "Thickened and made upright. Its stem tapered from 0.99 of the H's stem at the foot to 0.90 at the top (the right edge leaned 15 units). It is the H's stem all the way up now, and both edges are upright."
+   },
+   {
+    "glyphs": "4",
+    "text": "Stem from 0.92 of the H's stem to equal. The right edge moved out 7 units with the foot; the diagonal and bar did not change."
+   },
+   {
+    "glyphs": "7",
+    "text": "Diagonal 4 units wider (0.61 to 0.66 of the n's stem). It already sat at Georgia Pro's ratio to its H, so this is a small step to keep it level with the 1 and 4 beside it."
+   },
+   {
+    "glyphs": "notes",
+    "text": "Still open: 6, 8 and 9 are heavy where their bowls join (6 and 9 at mid-height 1.59 of the H's stem against Georgia Pro's 1.16; 8 at its waist). That needs each one's join redrawn, not a weight change."
+   }
+  ]
+ },
+ {
+  "build": "0.41",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "r",
+    "text": "Wider, with Libre Baskerville's top. The arm and ear are Libre Baskerville's own shape again: the arm leaves the stem low and rises to an ear that runs level and ends round, where 0.40 had Serrif's ball on a short neck. The arm is lengthened so the ear reaches 0.47 of the x-height past the stem (0.44 in 0.40; Libre Baskerville's own 0.37; Georgia Pro 0.43). Ink width 0.74 to 0.76. The ear is 79 units deep, not Libre Baskerville's 90, to match the other strokes. This replaces your earlier points on the ear."
+   },
+   {
+    "glyphs": "t",
+    "text": "Your save is in (the two handles of the curve from the top down to the bar), and the top is taller again: 1.26 to 1.29 of the x-height (Georgia Pro 1.31). The handle above the x-height rises with the top, so the curve keeps the shape you gave it."
+   },
+   {
+    "glyphs": "T",
+    "text": "Ink balance. Every stroke of every character was measured across the stroke and compared with the same measure on Georgia Pro. The T's stem was 101 units against the H's 86, 17% heavy, and has been since before 0.35. It is 86 now, with its foot and the brackets under the arms moved with it."
+   },
+   {
+    "glyphs": "N M",
+    "text": "Their thick diagonals were 23% and 12% heavier than H's stroke (Georgia Pro's are 7% lighter than its H). Now 5% and 3% heavier."
+   },
+   {
+    "glyphs": "v w y",
+    "text": "The thick diagonal was 6 to 10% heavier than n's stroke after the round strokes came down in 0.39. Now level with it (Georgia Pro's is 3% lighter)."
+   },
+   {
+    "glyphs": "S",
+    "text": "Spine 7 units thinner (11% over H's stroke to 6%; Georgia Pro 3%)."
+   },
+   {
+    "glyphs": "notes",
+    "text": "Found and not changed: the figures 6, 8 and 9 are 10 to 18% heavier than 0 2 3 5, and 1, 4 and 7 are 10 to 20% lighter. X is 5% heavy. Bringing 1 4 7 up would thicken thin parts, which you asked me not to do, so these wait for your call."
+   }
+  ]
+ },
+ {
+  "build": "0.40",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "all letters and figures",
+    "text": "Lighter stems, your answer to 0.39's question. Lowercase stems go from 82 to 78 units (0.158 to 0.150 of the x-height; Inter 0.161), capital stems from 90 to 86, and round strokes from 86 to 82. Diagonals thin in proportion. Heights, overshoots, the thins (which are horizontal) and serif lengths measured from the stem do not change. o's contrast is 1.91 (2.00 in 0.39, 2.14 in 0.38)."
+   },
+   {
+    "glyphs": "method",
+    "text": "The weight comes off the finished outlines, after every rule and after your saved points: each point moves toward its ink by 2 units times how upright its edge is. Setting a lighter stem at the start of the pipeline moved every point 2 to 4 units, and your h and L saves no longer found their points. Softened corners move as one piece and brackets are refitted, so the curve report is unchanged. Dots stay round."
+   },
+   {
+    "glyphs": "spacing",
+    "text": "Each letter's ink is 4 units narrower and its advance is the same, so the gap between letters is 4 units wider than in 0.39. Kerning is carried over as before."
+   },
+   {
+    "glyphs": "notes",
+    "text": "Round ends (a c f j r, g's ear) are 4 units narrower than they are tall now, about 5%. Say if they should be made round again."
+   }
+  ]
+ },
+ {
+  "build": "0.39",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "o c e b d p q g O Q C G D",
+    "text": "Thick strokes thinned, your answer to 0.38's question. The heaviest part of every round stroke comes from 1.12 to 1.05 stems (92 to 86 units) in lowercase, and from 1.13 to 1.07 H stems (102 to 96) in capitals. The counter's side moved; outsides, widths and advances did not. o's contrast goes from 2.14 to 2.00."
+   },
+   {
+    "glyphs": "notes",
+    "text": "Stems are not thinner in this build. I tried 82 to 78 units (H 90 to 86): the build ran, but the f's hook and the e's bar rules no longer found their points, because the 82-unit stem is written into many rules as positions. A lighter stem needs those rules reworked first; it is on the open list. With stems at 82 and thins at 0.52, contrast cannot go below about 1.9 without rounds lighter than stems."
+   }
+  ]
+ },
+ {
+  "build": "0.38",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "o b d p q n h m u c e g a s O Q C G S D",
+    "text": "Thins evened the other way: the thicker ones come down. 0.36 and 0.37 raised the arches to the bowls' value; you asked for the reverse. The one thin value is now the arches' own, 0.52 stems (n was 0.50, h 0.54, m 0.55 before any of this), and the closed bowls come down to it from 0.65. Capitals come down to D's and P's 0.57 (O was 0.63). c, e, a and s started below this (0.44 to 0.46) and are still 5 units thicker than they were in 0.35. The cost: o's contrast goes from 1.64 to 2.14 (Georgia Pro 2.7), because the thick strokes did not change."
+   },
+   {
+    "glyphs": "s",
+    "text": "Rebalanced against Georgia Pro and Serrif. Its lower bowl was heavy under a light upper one (lower-right stroke 0.97 stems, upper-left 0.81; Georgia Pro 0.72 and 0.72) and its spine was heavier than the o's round stroke. Now 0.82 and 0.76, and the spine is 7 units thinner. Width, barbs and overshoots already agreed and did not move."
+   },
+   {
+    "glyphs": "t",
+    "text": "Taller: the top goes from 1.20 to 1.26 of the x-height (Serrif 1.21, Georgia Pro 1.31), and the bar's right end reaches 10 units further (0.91 to 0.94 of the width; Georgia Pro 0.97)."
+   },
+   {
+    "glyphs": "e",
+    "text": "Toward Georgia Pro. The bar sits at its height (top at 0.615 of the x-height; Georgia Pro 0.617) and is one of the thins (0.52), which gives the eye Georgia Pro's proportion (0.32 of the x-height, was 0.28; Georgia Pro 0.335). The right side's widest point follows the bar down (0.64 to 0.62) and the bottom is 7 units thinner. The tail is still Serrif's."
+   },
+   {
+    "glyphs": "r",
+    "text": "Wider: the ear reaches 22 units further (ink width 0.69 to 0.74 of the x-height; Serrif 0.73, Georgia Pro 0.78). The stem and foot did not move."
+   },
+   {
+    "glyphs": "spacing",
+    "text": "Every a-z and A-Z re-spaced. The bearings were still Libre Baskerville's under letters that had changed (r's right bearing 72 units, s's left 65, t's left 50). Each now follows Georgia Pro's fit, measured to the letter's outermost ink between the baseline and its height, plus one offset so Area stays a little looser than Georgia Pro. n is 6 units a side tighter, H 3. Lowercase advances are 2.2% narrower in all and capitals 5.6%. Word space 287 to 250. Figures and punctuation keep their bearings."
+   },
+   {
+    "glyphs": "kerning",
+    "text": "The 1,604 existing pairs that touch a re-spaced letter are carried over so each keeps its designed fit. 293 pairs whose ink came within 22 units (f before b h k l and capitals, v w y against each other, r before v y) are opened to that. The fi and fl ligatures are not re-spaced yet."
+   },
+   {
+    "glyphs": "notes",
+    "text": "Tried first for spacing: equal white beside every letter. On a serif face it set rounds and diagonals far too loose, so the fit is measured instead, as the widths are."
+   }
+  ]
+ },
+ {
+  "build": "0.37",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "n h m u c e s",
+    "text": "One thin value, your answer to 0.36's question. Arches and open tops now carry the closed bowls' thin point, 0.65 stems (they were 0.58, and 0.44 to 0.62 before 0.36), so o, b, d, q, n, h, m, u, c, e and s agree. I raised the arches rather than thinning the bowls: thinning o would have taken contrast from 1.64 to 1.9, against the low-contrast brief. The counter's own point moved 5 to 11 units; outsides, widths and advances did not."
+   },
+   {
+    "glyphs": "C G S D",
+    "text": "Capitals to O's thin point, 0.63 H stems: C, G and S at top and bottom (were 0.59), D's bottom (was 0.57)."
+   },
+   {
+    "glyphs": "a g",
+    "text": "Held back. a's top is 0.60 and g's bowl 0.59: at 0.65 the a's curve into its bowl wobbled and the g's ear join dented, so both stop one step short."
+   }
+  ]
+ },
+ {
+  "build": "0.36",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "all",
+    "text": "Audit against Georgia Pro. Curve by curve it is not smoother than Area; what reads as technical is that it holds one value where Area held several (thin points, where the arch meets the stem, how square a bowl is, the angle of a cut face), and its stems and bars are exact. This build brings each of those spreads to one value. No part is removed or restyled, no advance changes, and the largest change to an outline is about 10 units."
+   },
+   {
+    "glyphs": "n h k u e r f T R s 1 3",
+    "text": "Straight lines made exact. 17 lines sat 1 to 3 units off upright or level (n's right stem leaned 2 units, k's 3, e's bar 2, r's base 3, T's beak faces 2). All are exact now; each stem keeps its true width."
+   },
+   {
+    "glyphs": "n h m",
+    "text": "One shoulder. The arch met the right stem at three different heights (n 0.69, h 0.71, m 0.79 of the x-height; Georgia Pro 0.77 on all three). All three now meet it at 0.73 with the same curves, so n's shoulder is a little squarer and m's a little rounder. The arch's thin point is 0.58 stems on all three (was 0.50, 0.54, 0.55)."
+   },
+   {
+    "glyphs": "c e g a s u G S",
+    "text": "One thin value for open tops. Georgia Pro's thin point is the same on every letter; Area's ran from 0.44 to 0.62. c, e, g and u now match the arches at 0.58 (c and e were 0.46), a is 0.55, s 0.52 at both ends, G's bottom matches C's at 0.59 (was 0.45), and S's bottom matches its top. The counter's own point moved; the outside of each letter did not."
+   },
+   {
+    "glyphs": "o c e b d p q O Q C G D 0 6 8 9 S s",
+    "text": "One curve for bowls. Each quarter of a bowl now carries the same handles: 0.57 of its reach outside, 0.61 inside (Georgia Pro 0.59 and 0.63). Before, c's counter ran 0.47 to 0.67, e's outside 0.56 to 0.70, d's counter 0.56 to 0.69 against b's 0.51 to 0.60."
+   },
+   {
+    "glyphs": "C G S s E F L Z z",
+    "text": "Cut faces. The end barbs of C, G, S and s are upright (S's top leaned 5 degrees and its bottom 0; s's leaned 2 and 11). The tip keeps its place, so no letter is wider. Arm beaks on E F L Z z lean by one angle (4.0 to 4.3 degrees)."
+   },
+   {
+    "glyphs": "notes",
+    "text": "Your research note is read in: this build takes its hairline floor, arch and serif consistency points. Its larger items (tabular and quieter figures, tighter spacing and word space, kerning, a slightly heavier Regular or a grade axis, button metrics) are listed in evaluation-0.36.md for your call. Tried and taken back: shorter foot brackets, which left r's and q's feet uneven."
+   }
+  ]
+ },
+ {
+  "build": "0.35",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "S",
+    "text": "Redrawn from Georgia Pro's measurements (its proportions, not its points). The S was 4% wider than Georgia Pro's; its upper-left stroke was thin and its lower-right heavy (0.83 and 1.08 stems against 0.89 and 0.92), which left a wide, flat top counter; and its barbs were about 60% of Georgia Pro's length. Now it has Georgia Pro's width, the two strokes are balanced (0.93 and 0.98), the top counter is rounder, and the barbs reach most of the way to Georgia Pro's. The spine and overshoots already agreed and did not move. The S is 16 units narrower."
+   },
+   {
+    "glyphs": "E F L T Z C G",
+    "text": "Beaks and barbs toward Georgia Pro's, not quite as long. Measured as the beak's full height in stems: top beaks on E and F 1.41 to 1.5 (Georgia Pro 1.61 to 1.66); T and Z top 1.41 and 1.36 to 1.6 (1.81, 1.88); bottom beaks on E, L and Z 1.4 to 1.8 (1.96 to 2.08); C's and G's end barbs 1.36 to 1.8 (2.38)."
+   },
+   {
+    "glyphs": "s z",
+    "text": "Your last picture (a bit too long): the lowercase barbs come down. s 1.45 and 1.69 to 1.32 and 1.46; z 1.52 and 1.71 to 1.45 and 1.56 (Georgia Pro's s 1.49 and 1.61)."
+   },
+   {
+    "glyphs": "L",
+    "text": "Your save is in: the arm's upper edge 8 units lower and the corner at the stem 28 lower. Its beak grew with the other bottom beaks."
+   },
+   {
+    "glyphs": "n h m",
+    "text": "The arch, one step toward Georgia Pro. Over Georgia Pro on the same stem, the n's outside agreed and its inside did not: the inner arch left the stem low (0.54 of the x-height; Georgia Pro 0.76) and leaned to a peak 59% across the counter, so the stem seemed to bend early. The inner arch now leaves the stem 45 units higher and its peak sits 14 units further left, on n, h and both arches of m together."
+   },
+   {
+    "glyphs": "e",
+    "text": "Closer to Georgia Pro's: the bar is another 4 units lower (0.59 of the x-height; Georgia Pro 0.575), and the eye's right side comes in 8 units with a tighter corner where it meets the bar. The tail stays Serrif's."
+   },
+   {
+    "glyphs": "not changed",
+    "text": "The lowercase s already sits on Georgia Pro's almost exactly, so only its barbs moved. u still has the n's old arch upside down; say if it should follow."
+   }
+  ]
+ },
+ {
+  "build": "0.34",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "B",
+    "text": "Your note (bowls and negative space toward Georgia Pro, but rounder). The lower bowl stuck out under a small upper one: measured from the stem, the upper bowl was 0.86 of the lower (Georgia Pro 0.92). It is 0.90 now: the lower bowl came in 11 units and the upper went out 11. The counters were leaning ovals that swept away from the middle bar at once. They are D shapes now, as in Georgia Pro: level along the bar, then a round turn (a little rounder than Georgia Pro's), widest at 0.28 and 0.77 of the height. The middle bar is 46 units at the stem (it was 52). The B is 11 units narrower."
+   },
+   {
+    "glyphs": "E F",
+    "text": "Your note (the middle arm too curvy). Both edges swept from the stem all the way into the beak, so the arm thickened from its start. It now runs straight for half its length and flares into the beak over the rest, as in Georgia Pro. The beak's length and the bar's weight are unchanged."
+   },
+   {
+    "glyphs": "A e",
+    "text": "Two bars, part of the way to Georgia Pro's heights: A's crossbar is 10 units lower, e's bar 8 units lower (a larger eye)."
+   },
+   {
+    "glyphs": "all",
+    "text": "Survey: every letter and figure drawn over Georgia Pro at the same height. Apart from the parts that stay Serrif's (ears, tails, loops, spurs, round ends), the outlines already sit on Georgia Pro's closely, so nothing else moved. Differences I saw and left for your call: G's bar sits higher than Georgia Pro's (0.51 against 0.45 of the height; you shaped the G's bottom after Serrif); the top and bottom beaks of E, F, L, T and Z are much smaller than Georgia Pro's (you asked for subtle ones); P's bowl ends 8 units higher; a's bowl meets the stem straighter; J sits on the baseline where Georgia Pro's descends."
+   },
+   {
+    "glyphs": "note",
+    "text": "Your second line (\"match the more closely with georgia pro, but more round, and round the serifs?\") is missing the letter it names. I read it as the B and the general direction. If it was about another letter, tell me which."
+   }
+  ]
+ },
+ {
+  "build": "0.33",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "U",
+    "text": "Your note (\"the top serifs feel off, try to match serrif\"): the four head serifs ran level almost to the stem and turned down in a tight corner, a slab. The inner two were also longer than the outer two (100 and 114 units against 81), and one tip was cut on a slant. Each is now the capitals' serif: one length, the same tip corner, and one bracket sweeping into the stem as on H."
+   },
+   {
+    "glyphs": "B",
+    "text": "Your note (\"serifs maybe a bit too long\"): capital serifs come from 0.99 to 0.94 stems with everything else below, and the B is 37 units narrower."
+   },
+   {
+    "glyphs": "o c z O Q D B P T Z E F N U H 0",
+    "text": "Widths toward Georgia Pro's. Measured as ink width over the letter's own height, most letters were already within 2.5% of Georgia Pro. These were not: the rounds were wider (o 6%, O 10%, c 4%, 0 5%), as were B, P, D, T, z and Z; E, F, N, U and H were narrower. Each now has Georgia Pro's proportion. Only the counter was stretched: stems, round-stroke weights, serifs and ends keep their size. Advances follow (O 875 to 794, o 640 to 608, N 788 to 850)."
+   },
+   {
+    "glyphs": "all serifs",
+    "text": "Shorter and blunter, toward Georgia Pro's: lowercase feet and flags 0.92 to 0.85 stems (Georgia Pro 0.78 to 0.84), capitals 0.99 to 0.94, and the tip 27 to 30 units thick (0.37 of the stem, Georgia Pro's ratio). f's and u's serifs that had not followed the others now do."
+   },
+   {
+    "glyphs": "E F L T Z z C G S s c e t f 1 2 3 5 7",
+    "text": "When a corner is rounded, one rule. Serif tips were rounded and every other flat-cut end was square. Now every stroke end that is cut flat has the same small round corner: beaks, barbs, bar ends, tail cuts and figure ends. What stays sharp is a point that is not an end: apexes and vertices, the top of a stem under its flag, a stem's bottom without a serif, and joins."
+   },
+   {
+    "glyphs": "guidelines",
+    "text": "The typeface's rules are written down, part by part (weights, widths, serif lengths, corner rounding, round ends, curves, checks, and what is open): .claude/skills/area-type-design/references/area-serif-guidelines.md."
+   },
+   {
+    "glyphs": "not changed",
+    "text": "Weight and contrast (already lighter than Georgia Pro). Ears, hooks and round ends stay Serrif's. Not matched to Georgia Pro's width, for your call: r, g, k, x, y, K, W, X (their width is an ear, a tail or diagonals), and n, d, u, a (2 to 3% wider than Georgia Pro's; they move as one family with h, b, p, q, which already match)."
+   }
+  ]
+ },
+ {
+  "build": "0.32",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "all",
+    "text": "Your request: an evaluation of the whole set, then a cleanup. The full evaluation, by part (serif, bracket, terminal, stem, bowl, counter, aperture and the rest), with every measurement against Serrif, Georgia Pro and Inter, is in docs/research/serif-typeface-2026-11-10/evaluation-0.32.md. What it changed is below."
+   },
+   {
+    "glyphs": "a b c d e f g h j m n o p q r s t u y B C D E G J L O P Q R S T U 0 2 3 5 6 8 9",
+    "text": "Smoother curves. Where one curve arrived tight at a point and the next left flat, the arc showed a slight dent. At each such point the two handles now slide along their own line until both sides bend equally. Points and directions do not move; no handle moves more than 14 units. Dents counted across the set: 61 before, 27 now (the rest are places where a curve changes direction on purpose, such as necks into round ends and the spines of s and S)."
+   },
+   {
+    "glyphs": "0 2 3 5 6 9",
+    "text": "A bug: the rule that sets the figures' bowl weight was moving the wrong side of the stroke, so it made them 10 units heavier where it was written to make them lighter (0, 6 and 9 measured 1.37 stems; capitals 1.24). This is the weight you noted on the 9 and the 5. Fixed: figure bowls are 1.17 stems, Serrif's and Georgia Pro's are 1.19. These figures are 9 to 31 units narrower."
+   },
+   {
+    "glyphs": "e",
+    "text": "The bar was the thinnest stroke in the face, 31 units against 46 to 56 for every other thin stroke (crossbars, arms, the o's thin). It is 46 now; its lower edge moved down, so the eye keeps its size."
+   },
+   {
+    "glyphs": "all serifs",
+    "text": "Shorter serifs, one step: lowercase feet and flags from 1.00 to 0.92 stems (Serrif 0.94, Georgia Pro 0.78), capitals from 1.04 to 0.99. The inner feet of n, h and m, p's and q's descender feet (they were 1.17 to 1.40) and the r's right foot now follow the same length. Capitals are 4 to 10 units narrower; lowercase advances are unchanged."
+   },
+   {
+    "glyphs": "all serifs",
+    "text": "Brackets are one curve again: on 40 of them a handle had drifted long, and on R's foot and d's flag it ran past the corner, a small bulge."
+   },
+   {
+    "glyphs": "i j",
+    "text": "The dots were ovals (113 by 121) with uneven handles. They are circles of the same area."
+   },
+   {
+    "glyphs": "c",
+    "text": "Its round end comes from 1.19 stems across to 1.12, inside the family (a 1.02 to r 1.09)."
+   },
+   {
+    "glyphs": "r",
+    "text": "Your points are where you put them. Shortening the serifs had nudged the ear's root 6 units; the fold-in now reads the r's position from its body, not its serif tips."
+   },
+   {
+    "glyphs": "not changed",
+    "text": "Weight, contrast, heights, counters and apertures already measure at the goal (stem at Inter's weight, contrast 1.64, bowls within 2 to 5 units of an ideal swell). Left for your call, in the evaluation: figure 1 and 4 stems lighter than capitals, shoulder thickness n to m, u's level head serifs, a's straight bowl top, whether serifs go shorter still."
+   }
+  ]
+ },
+ {
+  "build": "0.31",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "c",
+    "text": "Your note: the c was messed up. Since 0.29 the round-ends rule centred the c's end at its side point's height (425), which was level with the neck. The ball hid inside the stroke as a squat half-moon with a flat bottom, and the inner edge curled out past the neck and back in, a pinched waist. The end's centre now sits where Serrif and Georgia Pro agree, 0.75 of the x-height (Serrif 388, Georgia Pro 392; it was 425). It is the same circle as the other round ends (radius 47), and the inner edge runs straight down into the ball's inner side in one curve, as in Serrif. The point count is unchanged. The neck point and the handle you moved at 0.10 now sit on the circle."
+   },
+   {
+    "glyphs": "a e t g j f r",
+    "text": "Not changed. The fix is c-only data in the round-ends rule (END_CENTRE, END_NECK). The a keeps its neck because Serrif's a has one too. The c, e and t tails are unchanged."
+   }
+  ]
+ },
+ {
+  "build": "0.30",
+  "date": "2026-11-12",
+  "items": [
+   {
+    "glyphs": "f",
+    "text": "Your note: the top redrawn in Serrif's proportions. The inner curve leaves the stem lower and rises in one long oval to a thin top, then turns straight down into a round ball, so the stroke thins evenly from stem to top."
+   }
+  ]
+ },
+ {
   "build": "0.29",
   "date": "2026-11-12",
   "items": [
@@ -436,16 +850,6 @@
    {
     "glyphs": "2 3 5 6 8 9",
     "text": "Widened toward Georgia Pro and Serrif, with stroke thickness kept."
-   }
-  ]
- },
- {
-  "build": "0.30",
-  "date": "2026-11-12",
-  "items": [
-   {
-    "glyphs": "f",
-    "text": "Your note: the top redrawn in Serrif's proportions. The inner curve leaves the stem lower and rises in one long oval to a thin top, then turns straight down into a round ball, so the stroke thins evenly from stem to top."
    }
   ]
  }
