@@ -1,5 +1,93 @@
 [
  {
+  "build": "0.66",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "w M",
+    "text": "Why those two points were sharp: my mistake in 0.65. Two edges crossed at w's middle peak and under M, and I fixed the crossing by joining the two crossed points into one, which left a point where every other vertex has a small flat. Looking at all of them, the vertices had drifted apart: the flat on the outside was 33 units on v, 23 on V and N, 19 and 20 under W, and 9, 0 and 5 on w. The inside corners were cut flat on v w M N y A but came to a point on V W x X K."
+   },
+   {
+    "glyphs": "v w y A M N V W",
+    "text": "One vertex. Outside: a flat, the same share of the stem everywhere (33 units on lowercase, 36 on capitals; both references and the base design cut a flat there). Inside: a point, like every other join since 0.65. The strokes keep their exact thickness; each turns by about a degree to make room. The notches where M's and N's diagonals meet their stems are points too. A check now fails the build if any vertex drifts."
+   },
+   {
+    "glyphs": "rounding",
+    "text": "When a tip is rounded: a stroke that ENDS in a flat cut gets both corners rounded, 7 units, the same as a serif tip. That covers serif tips, bar ends (f t), beaks (E F L T Z), barbs (C G S), tail cuts. What stays sharp is anything that is a meeting of two strokes rather than an end: vertices (A M N V W v w), joins and crotches, a stem's top corner under its flag, and a cut shorter than 20 units, which is treated as a point (b's and q's spurs, 13 units, are in that last group). If you would rather the spurs were rounded, or brought to a true point, say so and I will change the rule."
+   },
+   {
+    "glyphs": "spacing",
+    "text": "Side bearings, measured optically. A new tool measures the white each side of a letter really shows (not just the distance to its serif tip) against that face's own n or H, in Area and both references. Where Area stood off both in the same direction, the side moved to the nearer one: 22 letters by 3 to 16 units. The clearest cases: I, E, F and P had their stems closer to the edge than H's (I by 8 and 9); N and M were tight; u's right side was 9 loose; B, P and G were 13 to 16 loose on the right. Hyphen and dashes were 20 a side too loose, parentheses 11 and 19 too tight."
+   },
+   {
+    "glyphs": "tracking",
+    "text": "Capitals were set tighter than both references: stem to stem across HH was 238 units where Serrif has 273 and Georgia Pro 290 (Area's serifs are shorter, so equal space at the serif tips put the stems closer). Capitals are 13 units a side looser now (HH 264), the most that keeps round capitals inside the references' range. Lowercase tracking and the word space were already inside the range and stay."
+   },
+   {
+    "glyphs": "kerning",
+    "text": "Kerning rebuilt from measurement. This found a real fault: since 0.38, pairs that the base font kerned kept the base font's old gap, while everything else took the new side bearings. So fo, fe, we, wo, ro were 25 to 90 units too tight (f nearly touched o), and iw, lw, Gw, GA were 40 to 100 too loose. I measured the white between every pair of letters and common punctuation (4,372 pairs) in all three faces. Before: 1,758 pairs stood outside both references by 8 units or more. Now: 53. Among lowercase pairs: 85 before, 5 now. 789 kerning values changed."
+   },
+   {
+    "glyphs": "touching",
+    "text": "The smallest gap allowed between two letters is 13 units (was 22). Serrif holds 9 to 13 between serif tips and Georgia Pro lets them overlap, so 22 was pushing pairs like VV, AA and vv apart more than either. The check for near-touching pairs now also covers : ; ! ? ( ) / dashes and quotes."
+   },
+   {
+    "glyphs": "not done",
+    "text": "Figures keep their bearings and have no kerning from this pass: Georgia Pro's default figures are old-style, so only one reference compares like for like. Qj, gj and qj stay wide apart because Area's Q tail and j's descender would collide. Checked in proofs, not in the app."
+   }
+  ]
+ },
+ {
+  "build": "0.65",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "review",
+    "text": "Your ten pictures, measured. Where a curved stroke meets a stem, I measured two things on every letter: whether the corner comes to a point or is cut flat, and how thick the stroke is right at the corner (the neck). Before: n h m p b d a were cut flat, 5 to 10 units wide, while r u q came to a point. The neck was 19 units on a, 22 on r, 28 on p, 29 on n h m, 34 on b, 44 on u and 62 on d's top. Georgia Pro and Serrif each hold one value on every such join, and both bring the corner to a point. So you were right on every count: these were separate drawings."
+   },
+   {
+    "glyphs": "a b d h m n p q r u",
+    "text": "One join everywhere. The corner is now a point on the stem's edge on every letter, with no flat. The neck is 32 units on every one of them (0.41 of a stem, about three quarters of the thin stroke at the top of o; Georgia Pro's is 0.73 of its thin stroke and Serrif's 0.68). The curve leaves the stem at the same angle on all of them, 40 degrees. The height of each corner is calculated from the neck, not placed by eye. The two places where a bowl's thin stroke runs into the end of a stem (d's top, p's bottom) share a second value, 54 units, the same proportion as Georgia Pro."
+   },
+   {
+    "glyphs": "a",
+    "text": "The lower stroke you called way too thin was 19 units where it meets the stem, the thinnest thing in the lowercase. It is 32 now, the same as every other join, and 50 at the lowest point of the counter, the same as the top of n's arch."
+   },
+   {
+    "glyphs": "b d p q",
+    "text": "One bowl. These were four drawings: the top of the bowl sat 146 to 162 units from the stem depending on the letter, and the widest point at four different heights. They now share one bowl, built once from stated numbers and mirrored. q is b turned half round and p is d turned half round, point for point; the counters are identical in all four. b's foot spur and q's head spur are the same shape turned."
+   },
+   {
+    "glyphs": "u",
+    "text": "u's bowl is n's arch turned half round, with u's own slightly narrower counter. Before, it was a separate, deeper curve and its join sat higher than n's. This is the most visible change in this build: please look at u in words."
+   },
+   {
+    "glyphs": "r",
+    "text": "r leaves its stem the way n does (same point, same neck, same angle). Its arm and ball above that are unchanged."
+   },
+   {
+    "glyphs": "n m p r d",
+    "text": "The stem's edge now runs straight through every join. On n, m and r the edge used to lean in toward the head serif by 4 to 15 units, and on p it stepped out 6."
+   },
+   {
+    "glyphs": "w M B Q g 3",
+    "text": "The fault you saw on w. Narrowing w's thick strokes in 0.61 made two edges cross at the middle peak, leaving a sliver. I added a check that looks for any outline crossing itself; it found the same kind of 1-unit sliver on M's vertex and at notches of B, Q, g and 3 (14 glyphs with the ones built from them). All are fixed, and the check now fails the build if one appears again."
+   },
+   {
+    "glyphs": "ŋ µ ﬁ",
+    "text": "Letters built from these follow. ŋ is now n with j's tail and µ is u with a plain descender (both were still older, heavier drawings). Accented letters, đ, ħ, þ and the f ligatures picked up the new joins by themselves. I also removed 25 stray 1-unit segments from the ligatures, þ, œ and the small figures."
+   },
+   {
+    "glyphs": "checks",
+    "text": "A new check runs with every build: each join's neck, point and angle, that the four bowls match, and that q and p are b and d turned. Any drift of more than a unit fails the build. All checks pass. Ink changed by 1.5% or less on each letter. The thick-to-thin scan from 0.64 shows no new bumps and u's fastest change fell from 0.47 to 0.34."
+   },
+   {
+    "glyphs": "not done",
+    "text": "Not in this build, so you know: ß and the rarely used hooked letters (ɓ ɗ ɠ ɦ and similar) still carry their old joins. u's two head serifs are level while n's slope 8 degrees; both references slope u's a little, and I have left that for you to decide. The bowls of B D P R and of 6 and 9 share thin-stroke values but are not yet built from one bowl the way b d p q now are. I have checked proofs only, not the app."
+   }
+  ]
+ },
+ {
   "build": "0.64",
   "date": "2026-11-13",
   "items": [

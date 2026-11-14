@@ -1,0 +1,162 @@
+---
+name: area-serif-construction
+description: Builds and checks Area Serif's letters from shared parts (stems, bowls, arches, joins, spurs, serifs, ends), each constructed once from stated numbers and reused, never drawn per letter. Use whenever the owner says parts look inconsistent, uneven, custom, random or unpolished; when a join, crotch, neck, bowl, arch, bracket, terminal or thick-to-thin transition is added, changed or reviewed; when a vector fault (a crossing, sliver, stray point, flat cut) is reported; when deciding what value a new point should take; and before calling any round of letter drawing consistent.
+---
+
+# Area Serif construction
+
+Area Serif is assembled, not drawn. A letter is a list of parts; a part is one construction with stated numbers;
+the same construction is placed, mirrored, turned half round or scaled wherever the part recurs. This skill holds the
+part system, the research behind it, and the checks that prove a build follows it. `area-type-design` is the wider
+procedure (owner loop, build, page, records); read it first, then this before touching any outline.
+
+Owner, 2026-11-13: "the bezier curve patterns should be replicated and slightly modified, not custom drawn for each
+letter. all points should be mathematically, optically, and technically calculated to be correct and consistent with
+the entire typeset. nothing should be random, everything should be intentional. the width ratio of thick to thin
+should be consistent, smooth."
+
+## Hard rules
+
+1. **Find the part before moving a point.** Name the part the point belongs to (table below). If the part has a
+   rule, change the rule's number; every letter that carries the part moves with it. If it has none, measure the
+   part on every letter that has it and on both references, write the rule, then build.
+2. **No number without a derivation.** A value is (a) measured on both references and scaled by the stem, (b) solved
+   from another Area value (a neck from the hairline, a crotch height from the neck), or (c) the owner's pick. Write
+   which, beside the constant. A value chosen because it looked right on one letter is not allowed.
+3. **Solve, don't nudge.** Where a point depends on a thickness (a crotch on a neck, a counter on an arch), a solver
+   places it: `parts.solve` walks the stem's edge to the height where the neck is the target.
+4. **One letter is the control.** n for arches, the b d p q bowl for bowls, o for round strokes, H for capitals.
+   Other letters take the control's points, moved, mirrored, turned half round, or scaled across the counter only
+   (stems never scale).
+5. **Geometry, not point numbers.** Final-stage rules (`joins.py`, `balance.py`, `parts.py`) find nodes by what they
+   are (a level extreme, a corner on the stem's edge), so an earlier change in numbering cannot break them.
+6. **Every rule gets a check that fails the build** (`parts.check`, `audit_parts.py`, `pathlint.py`). A rule without
+   a check drifts within three builds; this face has done it twice (arches at 0.64, joins at 0.65).
+7. **Proportions from a heavier reference scale by the stem, not the height** (0.54's barbs, sized by cap height,
+   made C and S 10 to 14% heavy).
+8. **Never copy a reference's outline.** Georgia Pro and Serrif give numbers only (`area-type-design`, Hard rules).
+9. **A smooth curve can still be wrong.** After every rule change, draw the part on every letter that has it, at one
+   scale, before over after (`tools/joins/joinsheet.py`), and words with `tools/joins/plain.py`. Look before
+   publishing.
+
+## The thick-to-thin ladder
+
+One ladder for the lowercase (units per 1000; a stem is 78). Capitals and figures use the same ratios on their own
+stem (86), except where the table says otherwise.
+
+| Step | Units | Of the stem | Where |
+|---|---|---|---|
+| Stem | 78 | 1.00 | every upright (round strokes at their widest are set by `derive.thin_rounds`) |
+| Thick diagonal | 73 to 76 | 0.94 to 0.97 | v w x y z k |
+| Run-in neck | 54 | 0.69 (1.25 hairlines) | a bowl's thin stroke running into a stem's end: d top, p bottom |
+| Arch at its top | 50 | 0.64 | n h m; u's bowl at its bottom; a's lower stroke at the counter's lowest point |
+| Hairline | 43 | 0.55 | round letters at top and bottom (capitals and figures 47) |
+| Thin diagonal | 39 | 0.50 | v w x y (capitals 48) |
+| Branch neck | 32 | 0.41 (0.74 hairlines) | every stroke that leaves a stem as an arch does |
+| Serif tip | 30 | 0.38 | every serif's end |
+
+Along any one stroke the thickness moves through this ladder in one direction, with no step back: `swell.py` reports
+the fastest change (under 0.5 units of thickness per unit travelled on a branch, under 0.2 on o and c) and any bump.
+
+## The parts
+
+| Part | Construction | Letters | Rule | Check |
+|---|---|---|---|---|
+| Stem | 78 wide (capitals 86), edges upright, **straight through every join**: up to the head serif's corner, down to the baseline | all | `balance.even_stems`, `stems`; `parts` for edges at joins | `audit_parts`, `check.py` |
+| Bowl | One bowl, measured from the stem's bowl-side edge: outer extremes 161 out at top and bottom, 414 out at mid-height 260; counter 153 and 332; counter top 487, bottom 33; counter straight on the stem from 220 to 300; tension 0.57 outside, 0.61 inside | b d p q (d q mirrored; q is b and p is d turned half round) | `parts.bowl`, `_counter` | `parts.check`: counters identical, turned pairs identical |
+| Branch | The stroke leaves the stem at a **point on the stem's edge** (never a flat cut); the crotch's height is solved for a 32 neck; the outer curve leaves by the vector (53, 64), 40 degrees off the stem, and its handle at the extreme is 0.40 of the run | b p top; d q bottom; n h m r; u; a's lower stroke | `parts.bowl`, `parts._join` | `parts.check`: neck 32 +/- 1.2, leave (53, 64), no flat |
+| Run-in | A point on the stem's edge, solved for a 54 neck; handles 0.37 / 0.28 / 0.62 | d top, p bottom | `parts.bowl` | `parts.check` |
+| Spur | Tip 23 into the stem and 66 up, base 65 in on the baseline | b foot; q head, turned half round | `parts.bowl` | `parts.check` (turned pair) |
+| Arch | n's, point for point on h; scaled across the counter on m (0.97); turned half round on u (0.968) | n h m u | `balance.same_arches`, `parts.u_from_n` | `audit_parts`, `parts.check` |
+| a's lower stroke | A branch at the stem; 50 thick over the outer edge at the counter's lowest point | a | `parts.a_join` (after `balance.a_option`) | `parts.check` |
+| Head serif (flag) | 8 degrees, tip 30, one height | b d h i j k l m n p r | `joins.flatter_flags`, `level_flags` | `audit_serifs`, `audit_parts` |
+| Foot serif and bracket | Tip 30; bracket handles 0.70 / 0.90 of their reach | every stem foot | `clean`, `joins.brackets` | `audit_serifs` |
+| Round end | Half circle 88 across | a c f, 2 3 5 6 9 (r's ball 100, top at 528: a smaller round overshoots less) | `joins.round_ends2` | `audit_serifs` 3b |
+| Barb end | Width 36, lean 0.10, foot 0.68 of the stem | C G S, s | `joins.barb_*`, `s_spurs` | `audit_serifs` |
+| Diagonal | Thick and thin per the ladder; serifs lean 70 closed, 45 open | v w x y z k, A K M N V W X Y Z, 4 7 | `balance.diagonals`, `lean_serifs` | `audit_thin` |
+| Vertex | Outside: a flat 0.42 of the class stem (33 lowercase, 36 capitals), centred where the vertex was; inside: a point where the two inner edges meet; strokes solved to keep their thickness; M's and N's stem notches are points | v w y A M N V W | `parts.vertices` (after `balance.diagonals`) | `parts.check`; `tools/joins/apexes.py` on all three faces |
+| Diagonal join | One fillet, handles 0.62 / 0.60; vertices never cross | v w x y, A M N V W | `joins.diagonal_joins`, `even_fillets`, `clean.uncross` | `pathlint` crossings |
+| Bars | f and t one bar; e's bar 41; H A per the audit | e f t, A E F H | `balance.bars`, `e_g` | `audit_parts` |
+| Heights | x 520, cap 712, ascender 780; overshoot 530 / -10 lowercase, 721 / -9 capitals and figures | all | `balance.heights` | `audit_serifs` 4, `check.py` |
+
+A part not in this table has no rule yet. Add the row when you write the rule.
+
+## Bezier rules (every outline, every build)
+
+- A node at every extreme; handles level or upright there. No node elsewhere on a curve unless the part needs it
+  (a join, a straight run, an inflection).
+- Both handles of a quarter arc carry the same share of their reach (the tension); the inside of a stroke has the
+  higher tension (0.61) and the outside the lower (0.57), so the stroke thins toward the extreme by itself.
+- Handles stay inside the triangle made by the two nodes and the handles' meeting point. Never past it.
+- A smooth node's handles are collinear; the curvature on its two sides differs by under 1.8 times
+  (`evaluate.py` jumps). A corner is marked as a corner.
+- Whole units. No segment under 2 units, no doubled node, no curve whose ends are within 2 units
+  (`charset._drop_tiny` runs on every glyph; `pathlint` lists what is left).
+- No contour crosses itself; no two edges of one stroke cross (`pathlint` crossings: ERROR for a sliver; a stroke
+  drawn across itself, as g's link, is INFO). `clean.uncross` merges the two nodes of a crossing tiny segment.
+  A crossing is a fault the owner sees at once ("this cannot be happening", w's middle peak, 0.64).
+- A crotch is one corner node on the stem's edge. Its two neighbours: the curve's handle on one side, the stem's
+  edge (same x) on the other.
+
+## Procedure
+
+1. **Read the complaint as a part.** "a's bottom bar is too thin" is the branch neck on a. "b and d are different"
+   is the bowl and its two joins. Say which part and which letters carry it.
+2. **Inventory before designing.** Measure the part on every Area letter that has it (`parts.py` prints the join
+   table; `tools/joins/crotches.py` does the same on the references; `audit_*.py`, `swell.py`, `profile.py` for the
+   rest). Write the spread: that spread is the inconsistency, in units.
+3. **Set the value** by rule 2. For a thickness, place it on the ladder; do not add a step to the ladder for one
+   letter.
+4. **Write or change the rule** in `parts.py` (joins, bowls, arches), `joins.py` (serifs, ends), `balance.py`
+   (weights, heights) or `clean.py` (curve hygiene). Mind the order in `balance.run`: a rule that reads a part must
+   run after the rule that sets it (a's join runs after `a_option`, which sets a's stem).
+5. **Extend the check** so the old state would fail it.
+6. **Build and run** `.venv/bin/python qa.py`; then `parts.py`, `evaluate.py --list <letters>`, `swell.py
+   <font> <letters>` against the last build. A rate or jump that rose is a regression until explained.
+7. **Look**: `joinsheet.py` (before over after, one scale), words with `plain.py`, the letters over both references.
+   Check each changed letter for: crotch pointed, stem straight, neck even with its neighbours, curve leaving at the
+   same angle, counters matching, no bump along the stroke, nothing crossing.
+8. **Follow the derived glyphs.** List every glyph that carries the part (`parts.joins_of` over the whole font).
+   Composites follow by themselves; a letter-plus-a-part glyph is rebuilt in `charset.py` from the finished letter
+   (thorn, eng, mu, the barred letters, the f ligatures), never left on its old drawing.
+9. **Record** (`area-type-design`, Owner review loop): `changes.json`, `BUILD`, the audit note, this table.
+
+## Fit: side bearings, tracking, kerning
+
+Fit is measured, like shapes (`tools/fit/fit.py`, numbers only from the references; `spacing.py` holds the rules).
+
+- **Sides** follow Georgia Pro's bearings at the outermost ink (`REFERENCE`), then `OPTICAL`: where the white a
+  side really shows stood off both references in the same direction, the smaller difference.
+- **Tracking** is judged stem to stem (nn, HH), never tip to tip: Area's serifs are shorter than the references'.
+- **Kerning** is `fit_kerning.json`: every measured pair that stands outside both references' fit by 8 or more is
+  kerned to the nearer one. Inside their range it stays. Never carry a kern across a bearing change by keeping
+  the old gap (0.38 did; it left fo 86 tight and Gw 96 loose for 28 builds).
+- **After any change to a bearing, a serif length or a letter's width**, regenerate: `AREA_NO_FIT=1 python
+  build.py`, `fit.py measure f.json`, `fit.py kern f.json fit_kerning.json`, build, `fit.py pairs f2.json 8`.
+- Ink never closer than `MIN_GAP` 13. Proof words with `tools/joins/plain.py` (HarfBuzz kerning).
+
+## When a corner is rounded
+
+A stroke that **ends** in a flat cut (20 to 60 units, both corners 70 to 125 degrees) has both corners rounded at
+7, like a serif tip: serif tips, bar ends, beaks, barbs, tail cuts (`normalize.soften_ends`). A **meeting** stays
+sharp: vertices, joins, crotches, a stem's top corner under its flag, a stem's foot without a serif, and any cut
+under 20 units (the spurs of b and q).
+
+## What is still outside the system
+
+Say this in every report until it is closed:
+
+- Extended letters that still carry their first drawings (old joins cut flat, necks 30 to 37): germandbls, and the
+  Latin Extended-B and IPA letters outside `charset.COVERAGE` (b d g h p q with hooks and tails, eng's relatives,
+  alpha, turned h, r with tail, the s ligatures).
+- u's head serifs are level (520); n's are 8-degree flags. Both references lean u's. Open with the owner since 0.33.
+- Capitals and figures: bowls on B D P R and the joins of 4 6 9 have hairline and stem rules but no shared-bowl
+  construction yet.
+- r's arm takes n's branch at the stem and keeps its own arm and ball above it.
+
+## References
+
+- `references/research.md`: what type-design sources say about joins, arches, bowls, serifs, curves and optical
+  corrections, with the numbers, and how each became an Area rule.
+- `typefaces/area-serif/parts.py` (the constants and their derivations are at its top), `balance.py`, `joins.py`.
+- `docs/research/serif-typeface-2026-11-10/audit-0.58.md` (every build's audit section) and `tools/joins/`.

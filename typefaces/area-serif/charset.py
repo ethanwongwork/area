@@ -183,14 +183,40 @@ def _draw_cubic(path, pen):
 
 
 def _drop_tiny(g):
-    """pathops can leave a 1-unit segment where two outlines met at a hair: drop the on-curve nodes it doubles."""
+    """pathops can leave a 1-unit segment where two outlines met at a hair: drop the on-curve nodes it doubles.
+    0.65: also a curve whose two ends are within 2 units (its handles go with it); the f ligatures, thorn, oe and the
+    small figures each carried one or two."""
     for c in g.contours:
         P = c.points
+        again = True
+        while again and len(P) > 6:
+            again = False
+            n = len(P)
+            for i in range(n):
+                a, h1, h2, b = P[i], P[(i + 1) % n], P[(i + 2) % n], P[(i + 3) % n]
+                if not (a.type and h1.type is None and h2.type is None and b.type == "curve"):
+                    continue
+                if abs(a.x - b.x) > 2 or abs(a.y - b.y) > 2:
+                    continue
+                if a.type == "line":                   # the line into a now ends on b
+                    b.type, b.smooth = "line", False
+                    drop = (a, h1, h2)
+                else:                                  # what leaves b now leaves a
+                    a.smooth = a.smooth and b.smooth
+                    drop = (h1, h2, b)
+                for q in drop:
+                    P.remove(q)
+                again = True
+                break
         i = 0
         while i < len(P) and len(P) > 4:
             a, b = P[i], P[(i + 1) % len(P)]
-            if a.type == "line" and b.type == "line" and abs(a.x - b.x) <= 1 and abs(a.y - b.y) <= 1:
-                del P[i]
+            if a.type and b.type == "line" and abs(a.x - b.x) <= 1 and abs(a.y - b.y) <= 1:
+                if a.type == "line":
+                    del P[i]
+                else:                                  # a curve's end, then a 1-unit line: the curve ends on the line's end
+                    a.x, a.y, a.smooth = b.x, b.y, False
+                    P.remove(b)
                 continue
             i += 1
 
@@ -1011,6 +1037,28 @@ def letters_extra(font):
     CLEAN.lighten(font, ["uni2117"], -2.0 * (1 - k))
 
 
+# ---------------------------------------------------------------- letters that are a letter plus a part (0.65)
+# eng and mu kept Libre Baskerville's drawings (its own arch, a join cut flat, a tapered descender): every rule since
+# had passed them by. They are Area's n and u now, so they carry the same arch, join and stems.
+ENG_CUT = 110           # n's right stem is cut here, above its foot's bracket; j's stem and tail go on below
+MU_DESC = 0.86          # mu's descender in p's (Georgia Pro 0.84, Serrif 0.88), cut level
+
+
+def eng_mu(font):
+    n, j, u, pp = gp(font, "n"), gp(font, "j"), gp(font, "u"), gp(font, "p")
+    r0, r1 = scan_h(n, 200)[1]
+    body = op(n, rect(r0 - 75, -60, r1 + 140, ENG_CUT), pathops.PathOp.DIFFERENCE)
+    j0 = _stem_x(j, 200)[0]
+    tail = op(j, rect(-1000, -1000, 2000, ENG_CUT + 1), pathops.PathOp.INTERSECTION)
+    put(font, "eng", union(body, moved(tail, r0 - j0)), font["n"].width)
+    l0, l1 = _stem_x(u, 300)
+    deep = bounds(pp)[1] * MU_DESC
+    mu = union(u, rect(l0, deep, l1, 200))
+    for name in ("mu", "micro"):
+        if name in font:
+            put(font, name, mu, font["u"].width)
+
+
 # ---------------------------------------------------------------- Vietnamese (0.48)
 # Vietnamese adds two marks (hook above, horn), four horned letters and 134 letters with a tone mark, many of them
 # with two marks. Measured in Area's own accents: the accents are about 50 units thick at their heaviest and 150 tall
@@ -1268,12 +1316,13 @@ def run(font, lightened):
     spaces(font)
     interface(font, m, adv)
     letters_extra(font)
+    eng_mu(font)
     diphthongs(font, m)
     ogonek_letters(font)
     for name, l, r in (("fi", "f", "i"), ("fl", "f", "l"), ("f_f", "f", "f"), ("f_f_i", "f", "i"), ("f_f_l", "f", "l"),
                        ("longs", "f", "f"), ("Dcroat", "D", "D"), ("dcroat", "d", "d"), ("Hbar", "H", "H"),
                        ("hbar", "h", "h"), ("Tbar", "T", "T"), ("tbar", "t", "t"), ("Lslash", "L", "L"),
-                       ("lslash", "l", "l"), ("Oslash", "O", "O"), ("oslash", "o", "o"), ("thorn", "p", "p"),
+                       ("lslash", "l", "l"), ("Oslash", "O", "O"), ("oslash", "o", "o"), ("thorn", "p", "p"), ("eng", "n", "n"), ("mu", "u", "u"), ("micro", "u", "u"),
                        ("Thorn", "I", "P")):
         kern_like(font, name, l, r)
     followed = follow_rebuilt(font, before)
@@ -1281,6 +1330,8 @@ def run(font, lightened):
     hook_above(font)
     horns(font)
     viet = vietnamese(font)
+    for g in font:                                    # 0.65: every outline, not only the ones this module wrote
+        _drop_tiny(g)
     print(f"charset: Vietnamese, {viet} letters composed")
     print(f"charset: {followed} composites follow their rebuilt base; {anchored} anchors set from the precomposed letters")
     return len(skipped), adv

@@ -1004,3 +1004,57 @@ def eight_spine(font):
                 for q in _node_with_handles(P, i):
                     q.x += round(sgn * EIGHT_SPINE * nx)
                     q.y += round(sgn * EIGHT_SPINE * ny)
+
+
+# 0.65: no outline crosses itself (owner, with a picture of a speck above w's middle peak: "this cannot be
+# happening"). pathlint's new check found the same fault in M (its vertex), and one-unit slivers at the notches of
+# B, Q, g, 3 and of glyphs built from them. Two edges that run into a tiny segment (6 units or less) and cross
+# each other there are joined at one point, the segment's middle: a vertex or a notch is a point, not a twist.
+UNCROSS_MAX = 6
+
+
+def uncross(font, names=None):
+    def flat(P, i0, n):
+        """The segment starting at on-curve index i0, as points."""
+        a = P[i0]
+        b, c_ = P[(i0 + 1) % n], P[(i0 + 2) % n]
+        if b.type:                                           # a line
+            return [(a.x, a.y), (b.x, b.y)]
+        d = P[(i0 + 3) % n]
+        return [tuple((1 - t) ** 3 * a_ + 3 * (1 - t) ** 2 * t * b_ + 3 * (1 - t) * t * t * c__ + t ** 3 * d_
+                      for a_, b_, c__, d_ in ((a.x, b.x, c_.x, d.x), (a.y, b.y, c_.y, d.y))) for t in [k / 12 for k in range(13)]]
+
+    def cross(p, q):
+        def side(a, b, c):
+            return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+        for i in range(len(p) - 1):
+            for j in range(len(q) - 1):
+                if side(p[i], p[i + 1], q[j]) * side(p[i], p[i + 1], q[j + 1]) < -1e-6 and \
+                        side(q[j], q[j + 1], p[i]) * side(q[j], q[j + 1], p[i + 1]) < -1e-6:
+                    return True
+        return False
+
+    fixed = []
+    for g in font:
+        if (names is not None and g.name not in names) or not g.contours:
+            continue
+        for c in g.contours:
+            again = True
+            while again:
+                again = False
+                P, n = c.points, len(c.points)
+                on = [i for i, p in enumerate(P) if p.type]
+                for k, i in enumerate(on):
+                    j = on[(k + 1) % len(on)]
+                    A, B = P[i], P[j]
+                    if (j - i) % n != 1 or math.hypot(B.x - A.x, B.y - A.y) > UNCROSS_MAX or len(on) < 5:
+                        continue
+                    prev, nxt = on[k - 1], j
+                    if cross(flat(P, prev, n), flat(P, nxt, n)):
+                        A.x, A.y = round((A.x + B.x) / 2), round((A.y + B.y) / 2)
+                        A.smooth = False
+                        c.points.remove(B)
+                        fixed.append(f"{g.name} ({A.x},{A.y})")
+                        again = True
+                        break
+    return fixed

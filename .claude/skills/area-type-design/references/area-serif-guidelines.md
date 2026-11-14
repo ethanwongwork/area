@@ -282,6 +282,13 @@ Ink is judged as area / (class stem x zone height) against both references and t
 glyph more than 4% off against both is out of balance. A proportion copied from a heavier reference is scaled by the
 stem, not by the height (0.54's barbs were not, and C and S gained 10 to 14% ink).
 
+**Fit (0.66).** Sides, tracking and kerning are measured against both references with `tools/fit/fit.py`; kerning lives in `fit_kerning.json` and must be regenerated after any bearing change (see `area-serif-construction`, Fit). Vertices (v w y A M N V W): a flat outside, a point inside, `parts.vertices`.
+
+**Parts (0.65).** Joins, bowls and arches are built in `parts.py`, one construction each: read the
+`area-serif-construction` skill before touching one. A curve meets a stem at a point on the stem's edge (never a flat),
+with a 32 neck on every branch and 54 on the two run-ins; b d p q are one bowl; u is n's arch turned half round; a's
+lower stroke is a branch. `parts.py` in `qa.py` fails on any drift. `pathlint` fails on a contour that crosses itself.
+
 Still off and open with the owner (audit note): g (+15%, its hairline length), a (+10%), e (+8%), y (+6%, its end), s, Q's tail, I, 7.
 
 Proofs about alignment between glyphs are drawn with `tools/joins/plain.py` (outlines, HarfBuzz kerning, no grid fitting): PIL's text drawing fits each glyph on its own and can show level serifs a pixel apart.

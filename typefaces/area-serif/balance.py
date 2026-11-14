@@ -465,10 +465,7 @@ def lean_serifs(font, names=LEAN):
             HS.x = round(S.x + 0.62 * (X[0] - S.x))          # the fillet rules after this set the final shares
             k.append(f"{'closed' if closed else 'open'} {over:.0f}>{over + round(d):.0f}")
         done.append(f"{name}: " + ", ".join(k))
-    # a: the bowl's lower arc 50 units to 45 (0.58 stems; its top 0.55; references 1.08 and 1.5 times their tops)
-    was = clean._thin(font["a"], "bottom", (25, 60))
-    now = arc_thin(font["a"], "bottom", 45, (25, 60))
-    done.append(f"a bowl bottom {round(was[0]) if was else '?'}>{now}")
+    # (0.58 set a's lower arc here; since 0.65 it is parts.a_join's: the arch's thickness, 50)
     return done
 
 
@@ -532,8 +529,8 @@ def a_option(font):
             if p is top and slope is not None:
                 p.y = round(p.y + (right - 78 - cr) * slope)
             p.x = right - 78
-    if A_OPTION == "C":
-        m = len(Q)
+    if A_OPTION == "C-corner":                              # 0.65: the join is parts.py's now (one neck on every branch);
+        m = len(Q)                                           # C's squarer corner left the stroke 19 units at the stem
         for i, p in enumerate(Q):
             if p.type is None and p.x == right - 78 and p.y < 200:       # the handle down the stem
                 p.y -= A_CORNER[0]
@@ -649,6 +646,14 @@ def even_stems(font, names="bdfilq"):
 
 def run(font):
     out = []
-    for fn in (heights, bars, same_arches, even_stems, widen_w, diagonals, lean_serifs, a_option, arcs, stems, e_g):
+    import parts
+
+    def parts_run(f):
+        return [x for _, did in parts.run(f) for x in did]
+    def a_join(f):                                           # after a_option, which sets a's stem
+        return parts.a_join(f)
+    def vertices(f):                                         # after diagonals, which sets each stroke's width
+        return parts.vertices(f)
+    for fn in (heights, bars, same_arches, even_stems, parts_run, widen_w, diagonals, vertices, lean_serifs, a_option, a_join, arcs, stems, e_g):
         out.append((fn.__name__, fn(font)))
     return out

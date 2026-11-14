@@ -1,7 +1,8 @@
 """Outline quality checks on the cubic sources (build/AreaSerif-Regular.ufo) and the built TTF.
 
 Findings are classed as in the type-design skill's audit contract:
-  ERROR    a broken contract (wrong winding after overlap removal, open contour, non-integer point)
+  ERROR    a broken contract (an outline that crosses itself, debris after overlap removal, wrong winding,
+           open contour, non-integer point)
   WARNING  probably wrong (handle past its corner, missing extreme on a long curve, tiny segment)
   INFO     worth a look, often intended (inflection inside a curve, zero-length handle)
 A number here is evidence, not a verdict: optical intent can justify a WARNING or INFO.
@@ -197,9 +198,119 @@ def lint_built(names):
     return found
 
 
+def _crossing(polys):
+    """The first place two segments cross, as (same contour?, x, y), or None. Neighbouring segments are skipped."""
+    def side(p, q, r):
+        return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
+    edges = []
+    for ci, pts in enumerate(polys):
+        n = len(pts)
+        for i in range(n):
+            a, b = pts[i], pts[(i + 1) % n]
+            edges.append((ci, i, n, a, b, min(a[0], b[0]), max(a[0], b[0]), min(a[1], b[1]), max(a[1], b[1])))
+    edges.sort(key=lambda e: e[5])
+    first = None
+    for x, e in enumerate(edges):
+        for f in edges[x + 1:]:
+            if f[5] > e[6]:
+                break
+            if f[7] > e[8] or f[8] < e[7]:
+                continue
+            same = e[0] == f[0]
+            if same and (abs(e[1] - f[1]) <= 1 or abs(e[1] - f[1]) >= e[2] - 1):
+                continue
+            if side(e[3], e[4], f[3]) * side(e[3], e[4], f[4]) < -1e-6 and side(f[3], f[4], e[3]) * side(f[3], f[4], e[4]) < -1e-6:
+                if same:
+                    # a sliver: the two segments are a few steps apart along the contour, or the loop they close is
+                    # small. A large loop is a stroke drawn across itself on purpose (g's link), merged at build.
+                    i, j, n = min(e[1], f[1]), max(e[1], f[1]), e[2]
+                    pts = polys[e[0]]
+                    loop = pts[i + 1:j + 1]
+                    area = abs(sum(loop[k][0] * loop[(k + 1) % len(loop)][1] - loop[(k + 1) % len(loop)][0] * loop[k][1]
+                                   for k in range(len(loop))) / 2) if len(loop) > 2 else 0
+                    total = abs(sum(pts[k][0] * pts[(k + 1) % n][1] - pts[(k + 1) % n][0] * pts[k][1] for k in range(n)) / 2)
+                    if min(j - i, n - (j - i)) <= 24 or min(area, abs(total - area)) < SLIVER:
+                        return ("sliver", e[3][0], e[3][1])
+                    first = first or ("self", e[3][0], e[3][1])
+                else:
+                    first = first or ("overlap", e[3][0], e[3][1])
+    return first
+
+
+def crossings(names):
+    """An outline must never cross itself: a crossing is drawn as a stray sliver or a bow-tie (0.64's w, where two
+    edges of the middle peak had passed each other by 3 units). Sources: a contour that crosses itself is an ERROR;
+    two contours that overlap are merged at build and only noted. The built font: any crossing at all is an ERROR,
+    and so is a contour under MIN_AREA (debris from the merge). Every glyph with an outline is checked."""
+    found = []
+    font = ufoLib2.Font.open(UFO)
+
+    def flat(segs):
+        pts = []
+        for seg in segs:
+            if seg[0] == "L":
+                pts.append(seg[1])
+            else:
+                pts.extend(bez(*seg[1:], i / 10) for i in range(10))
+        return pts
+
+    for g in font:
+        if (names and g.name not in names) or not g.contours:
+            continue
+        c = _crossing([flat(segs) for segs, closed in contours(g) if closed])
+        if c and c[0] == "sliver":
+            found.append(("ERROR", g.name, "a contour crosses itself near (%d, %d)" % c[1:]))
+        elif c and c[0] == "self":
+            found.append(("INFO", g.name, "a stroke is drawn across itself near (%d, %d); merged at build" % c[1:]))
+        elif c:
+            found.append(("INFO", g.name, "two contours overlap near (%d, %d); merged at build" % c[1:]))
+    if os.path.exists(TTF):
+        ttf = TTFont(TTF)
+        gs = ttf.getGlyphSet()
+        from fontTools.pens.areaPen import AreaPen
+        from fontTools.pens.recordingPen import DecomposingRecordingPen
+        for name in ttf.getGlyphOrder():
+            if names and name not in names:
+                continue
+            rec = DecomposingRecordingPen(gs)
+            gs[name].draw(rec)
+            polys, cur, start = [], [], None
+            for op, args in rec.value:
+                if op == "moveTo":
+                    cur = [args[0]]
+                elif op == "lineTo":
+                    cur.append(args[0])
+                elif op == "qCurveTo":
+                    pts = list(args)
+                    on = [((pts[k][0] + pts[k + 1][0]) / 2, (pts[k][1] + pts[k + 1][1]) / 2) for k in range(len(pts) - 2)] + [pts[-1]]
+                    p0 = cur[-1]
+                    for ctrl, p1 in zip(pts[:-1], on):
+                        cur.extend(tuple((1 - t) ** 2 * p0[k] + 2 * (1 - t) * t * ctrl[k] + t * t * p1[k] for k in (0, 1)) for t in (0.25, 0.5, 0.75, 1.0))
+                        p0 = p1
+                elif op in ("closePath", "endPath"):
+                    if len(cur) > 2:
+                        if cur[0] == cur[-1]:
+                            cur.pop()
+                        polys.append(cur)
+                    cur = []
+            for pts in polys:
+                a = abs(sum(pts[i][0] * pts[(i + 1) % len(pts)][1] - pts[(i + 1) % len(pts)][0] * pts[i][1] for i in range(len(pts))) / 2)
+                if a < MIN_AREA:
+                    found.append(("ERROR", f"{name} (built)", "a contour of %.0f square units: debris" % a))
+            c = _crossing(polys)
+            composite = ttf["glyf"][name].isComposite()      # components may overlap one another in TrueType
+            if c and (c[0] != "overlap" or not composite) and not (composite and c[0] == "self"):
+                found.append(("ERROR", f"{name} (built)", "the outline crosses itself near (%d, %d)" % c[1:]))
+    return found
+
+
+SLIVER = 400           # square units: a self-crossing that closes less than this is a fault, not a drawn overlap
+MIN_AREA = 60          # square units; the smallest real contour in the set is a period's dot, about 9000
+
+
 def main():
     names = sys.argv[1:]
-    found = lint_source(names) + joint_angles(ufoLib2.Font.open(UFO), names) + lint_built(names)
+    found = lint_source(names) + joint_angles(ufoLib2.Font.open(UFO), names) + lint_built(names) + crossings(names)
     order = {"ERROR": 0, "WARNING": 1, "INFO": 2}
     for cls, where, msg in sorted(found, key=lambda f: (order[f[0]], f[1])):
         print(f"{cls:8s} {where}: {msg}")

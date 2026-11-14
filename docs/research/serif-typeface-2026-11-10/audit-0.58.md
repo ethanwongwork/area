@@ -161,3 +161,88 @@ fastest change over 40 units, and bumps (a turn back of 2 to 12 units that recov
 - Left: u's joins (0.47 / 0.42; the owner's u_bowl), t's top (thins to 34), a's tail.
 
 qa.py passes; `evaluate.py` jumps 30.
+
+## 0.65: one construction per part (joins, bowls), and the w fault
+
+Owner, with ten pictures of joins on a d b h r n u and w's apex: "these parts do not look consistent ... the bezier
+curve patterns should be replicated and slightly modified, not custom drawn for each letter ... nothing should be
+random". Method and rules: the `area-serif-construction` skill; code: `typefaces/area-serif/parts.py`.
+
+Measured on 0.64 (`tools/joins/crotches.py` on all three faces; units, Area's stem 78):
+
+| | crotch | neck (stroke at the join) |
+|---|---|---|
+| Area 0.64 | flat 5 to 10 on n h m p b d a; a point on r u q | a 19, r 22, p 28, n h m 29, b 34, u 44, d top 62 |
+| Georgia Pro | a point (flat under 0.04 stems) | branches 0.28 to 0.33 stems (0.73 of its hairline); run-ins 0.49 to 0.54 |
+| Serrif | a point | branches 0.24 to 0.27 stems (0.68 of its hairline) |
+
+b d p q were four bowls: the top extreme 146 to 162 from the stem, the side extreme at 254 to 268, counter top 485 to
+487. Stem edges leaned or stepped at joins on n m r (15, 15, 4) and p (6).
+
+Built:
+
+- Branch: a point on the stem's edge, neck 32 (0.74 of the 43 hairline), crotch height solved from the neck, outer
+  curve leaving by (53, 64) (40 degrees), extreme handle 0.40. On b p top, d q bottom, n h m r, u, a's lower stroke.
+  After: 31.8 to 32.2 on all thirteen joins.
+- Run-in (d top, p bottom): a point, neck 54 (1.25 hairlines).
+- One bowl for b d p q (outer 161 / 414, counter 153 / 332 from the stem's edge; counter top 487, bottom 33); q is b
+  and p is d turned half round, checked point for point. Spur: b's foot, q's head.
+- u: n's arch turned half round, counter 274 (0.968 of n's). Its crotch moved from 108 to 90 (n's 429 turned is 91).
+- a: lower stroke 50 over the outer edge at the counter's lowest point (the arch's thickness), neck 32 (was 19).
+  `balance.a_option`'s old corner step and `lean_serifs`' a rule are retired; `parts.a_join` runs after `a_option`.
+- r: n's branch at the stem; arm and ball unchanged (ball top 528: Georgia Pro's r also overshoots less than its n).
+- Stem edges straight through every join.
+- w: narrowing the thick strokes (0.61) had crossed two edges at the middle peak. `pathlint.crossings` (new) found
+  the same on M and 1-unit slivers on B Q g 3 and their derived glyphs; `clean.uncross` fixes 14 glyphs. A crossing
+  is now an ERROR.
+- charset: eng is n with j's tail, mu and micro are u with a level-cut descender (0.86 of p's); `_drop_tiny` also
+  drops curves under 2 units and runs on every glyph (25 stray segments gone).
+- `parts.py` runs in `qa.py`: necks within 1.2, leave vector exact, no flat, bowls and turned pairs identical.
+
+Result: qa.py passes (pathlint 0 errors, 224 warnings; parts 0; fontbakery as before). Ink per letter: a +0.7%,
+b -0.8, d -1.2, p -1.5, q -1.0, n +0.9, h +0.1, m +0.7, r -0.4, u -0.9. `evaluate.py` jumps 30 (unchanged; r's top
+node x2.9 to x2.2). `swell.py`: no bumps; u's fastest change 0.47 to 0.34. Sheet: `img/joins-0.65.png` (0.64 over
+0.65, every join at one scale). 139 glyphs changed, the rest through components and `charset.py`.
+
+Not done: germandbls and the Latin Extended-B and IPA letters outside `charset.COVERAGE` keep their first drawings
+(joins cut flat, necks 30 to 37); u's head serifs are level against n's 8-degree flags (open since 0.33; both
+references lean u's); B D P R and 6 9 have no shared-bowl construction; proofs only, not seen in the app.
+
+## 0.66: vertices, and the optical spacing, tracking and kerning pass
+
+Owner: "why are the points on M and W sharp. also how do you decide when to round the tips of certain parts. do a
+final optical spacing, kerning, tracking pass for all glyphs".
+
+**Vertices** (`parts.vertices`, `tools/joins/apexes.py`). 0.65's `uncross` had joined two crossed nodes into one at
+w's middle apex and under M. Measured on 0.65: outside flats v 33, V N 23, W 19 / 23 / 20, A 31, w 9 / 0 / 5, M 0;
+inside corners flat 16 to 26 on v w M N, 9 on y, 6 in A, points on V W x X K. References: a flat outside (Georgia
+Pro 0.43 to 0.51 of its stem, Serrif 0.56 to 0.73; Libre Baskerville 0.40 to 0.60), a point inside. Rule: outside
+0.42 of the class stem (33 and 36), inside a point, strokes solved to keep their thickness (a stroke between two
+vertices: the slope at which its two edges pass both flats). M's and N's stem notches are points. `parts.check`
+holds it. Rounding rule restated for the owner: normalize.soften_ends (a flat cut of 20 to 60 units with both
+corners between 70 and 125 degrees is an end and is rounded at SOFT 7; vertices, joins, crotches and shorter cuts
+are points and stay sharp).
+
+**Fit** (`tools/fit/fit.py`; all three faces at Area's heights, each against its own n, H or nn / HH / Hn).
+
+- Sides: the mean white over the zone's rows, each no deeper than 0.15 of the height behind the outermost ink.
+  Where Area stood off both references the same way, the side moved by the smaller difference (`spacing.OPTICAL`):
+  a +4 -3, c 0 +3, f 0 +7, i +4, j +5 -5, m +3, p +4, t +4, u 0 -9, z -3; B 0 -13, E +6 -5, F +6 -7, G 0 -13,
+  I +8 +9, J 0 +3, M +8 +3, N +7 +10, P +5 -16, U -4 +5, W -7, Z -6; hyphen and dashes -20 a side, parentheses
+  +11 / +19, exclam +9 / +10, opening quotes -5.
+- Tracking: n to n stem gap 215 (Georgia Pro 216, Serrif 209), word space 250 (261, 249): kept. H to H 238 (290,
+  273): capitals +13 a side (`TRACK["upper"]` 3 to -10), H to H 264, O's bearing 45 (40, 46).
+- Kerning: 0.38's `rekern` held Libre Baskerville's kerned pairs at their old gap while unkerned pairs took the new
+  bearings (fo fe we wo ro 25 to 90 tight; iw lw Gw GA 40 to 100 loose). Pairs measured: 4,372 (letters with
+  letters and with . , : ; ! ? - dashes quotes parentheses slash). Outside both references by 8 or more: 1,758
+  before, 53 after (25 or more: 603 to 5; lowercase pairs: 85 to 5). `fit_kerning.json`: 789 values, applied by
+  `spacing.fit_kerning` before the collision pass. `MIN_GAP` 22 to 13 (Serrif 9 to 13 between serif tips; Georgia
+  Pro overlaps); the collision pass covers more punctuation.
+
+To regenerate after any change to bearings: `AREA_NO_FIT=1 python build.py`, `fit.py measure f.json`,
+`fit.py kern f.json fit_kerning.json`, build again, measure again.
+
+Not done: figures (Georgia Pro's default figures are old-style, so one reference only: 1 4 5 7 read tight on the
+left against Serrif); Qj gj qj stay opened (Area's Q tail and j); residual pairs of 8 to 10 from sharing one value
+across a kerning class; not seen in the app.
+

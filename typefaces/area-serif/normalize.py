@@ -1173,6 +1173,9 @@ def normalize(font):
     n_light, tab = CHARSET.run(font, letters)
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     print("balance: descender feet", BALANCE.desc_feet(font))
+    print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
+    for name in ("Eopen",):                           # a base drawing whose path laps over itself: merged here
+        CHARSET.put(font, name, CHARSET.glyph_path(font, name), font[name].width)
     for g in font:                           # derive.py's bracket marks were for this build only
         for c in g.contours:
             for p in c.points:
