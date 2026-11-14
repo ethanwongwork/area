@@ -106,6 +106,10 @@
   const W = 46; // line width, units of the em
   const R = 40; // corner radius
 
+  // The line's geometry: vectors, cubic segments, corners rounded as circular arcs written as one
+  // cubic, and L-shaped meetings merged into one path. Shared by the Variable Kanji piece and,
+  // through scripts/sen-specimen.mjs, inlined into the curves and tester artifacts.
+  
   // ———————————————————————————— vectors
   const add = (a, b) => [a[0] + b[0], a[1] + b[1]];
   const sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
@@ -117,7 +121,7 @@
   const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
   const perp = (a) => [-a[1], a[0]];
   const hash = (x, y) => { const s = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453; return s - Math.floor(s); };
-
+  
   // ———————————————————————————— strokes as segments (lines and cubics)
   function parse(d) {
     const t = d.match(/[MLCZ]|-?\d+(?:\.\d+)?/g);
@@ -165,7 +169,7 @@
     if (!s.c) return { ...s, p: [add(s.p[0], mul(unit(sub(s.p[1], s.p[0])), t)), s.p[1]] };
     return { ...s, p: split(s.p, paramAt(s, t))[1] };
   }
-
+  
   /** The arc joining segment a's end to segment b's start, with both trimmed back. */
   function corner(s, nx, r) {
     const u = endTan(s), v = startTan(nx);
@@ -180,7 +184,7 @@
     const k = (4 / 3) * Math.tan(phi / 4) * rr;
     return { a, b, arc: { c: true, fillet: true, p: [A, add(A, mul(endTan(a), k)), sub(B, mul(startTan(b), k)), B] } };
   }
-
+  
   /** Rounds every corner with a circular arc of radius r, written as one cubic. */
   function fillet(st, r) {
     if (!r) return st;
@@ -201,7 +205,7 @@
     }
     return { ...st, segs: out };
   }
-
+  
   const ptAt = (s, t) => (s.c ? bez(s.p, t) : lerp(s.p[0], s.p[1], t));
   const reverseSegs = (segs) => segs.slice().reverse().map((s) => ({ ...s, p: s.p.slice().reverse() }));
   function splitSeg(s, t) {
@@ -230,7 +234,7 @@
     const tail = [k, ...st.segs.slice(si + 1)].filter((s) => segLen(s) > 0.5);
     return [head, tail];
   }
-
+  
   /**
    * Turns L-shaped meetings into corners. Where a stroke's joined end lands on another
    * stroke within `reach` of that stroke's end, the overshoot is cut and the two become
@@ -292,7 +296,6 @@
     return list;
   }
   const segTotal = (st) => st.segs.reduce((t, s) => t + segLen(s), 0);
-
 
   // ———————————————————————————— one glyph
 
