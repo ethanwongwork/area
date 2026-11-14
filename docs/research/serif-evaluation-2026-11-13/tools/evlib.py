@@ -20,7 +20,7 @@ OUT = os.environ.get("EVAL_OUT", os.path.join(AREA_DIR, "build", "evaluation"))
 
 # key -> (label, path, variation settings or None, licence class)
 FACES = {
-    "area": ("Area Serif 0.69", AREA_TTF, None, "own"),
+    "area": ("Area Serif 0.70", AREA_TTF, None, "own"),
     "georgia": ("Georgia Pro", USER_FONTS + "GeorgiaPro-Regular.ttf", None, "licensed"),
     "serrif": ("Serrif", USER_FONTS + "SerrifCollectionVF-TRIAL.ttf", {"wght": 400, "wdth": 100, "slnt": 0}, "licensed"),
     "baskerville": ("Libre Baskerville", os.path.join(DL, "LibreBaskerville.ttf"), {"wght": 400}, "ofl"),

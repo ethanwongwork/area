@@ -223,7 +223,7 @@ def main():
                 t["core"][i] += 1
     align = fit["area"]["align"]
     data = {
-        "build": "0.69", "date": "13 November 2026", "glyphCount": curves["glyphs"], "prev": prev, "changes": CHANGES,
+        "build": "0.70", "date": "13 November 2026", "glyphCount": curves["glyphs"], "prev": prev, "changes": CHANGES,
         "rtable": rtable, "hasBefore": bool(PREV),
         "faces": face_rows, "gname": gname, "outlines": outlines, "nodes": nodes, "thick": thick,
         "findings": FINDINGS, "solid": SOLID, "notChecked": NOT_CHECKED,

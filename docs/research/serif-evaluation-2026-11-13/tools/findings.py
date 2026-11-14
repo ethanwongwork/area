@@ -341,3 +341,82 @@ CHANGES = [
     ["0.69", "Seams in ligatures, Œ, carons: joins over 5 deg", "26", "2", "clean.true_joins"],
     ["0.69", "Heel of 5", "dips, bends three ways", "one bend", "clean.five_heel"],
 ]
+
+
+# ---- Build 0.70: the rest of the open items (owner, 2026-11-13: "finish the rest of the open items"). Each entry
+# above keeps the text it had at 0.69; these lines carry it to 0.70.
+def _set(fid, **kw):
+    next(f for f in FINDINGS if f["id"] == fid).update(kw)
+
+
+_set("five", status="fixed", build="0.70",
+     title="Figure 5 had a notch at its heel; 3 and 2 had uneven hooks",
+     after="0.69: the heel of 5 bends one way and the ball of 2 has a node where its curve changes direction. "
+           "0.70: the hook of 3 stepped 6 units sideways with both handles half the run, so they met in the middle and "
+           "the curve turned twice; each is now 0.40 of the run, as in 2's hook, and it is one clean S. The top of 5's "
+           "bowl ran its handle 1.16 times past the meeting point on the way into the upright; it is rebuilt by the "
+           "rule that fixed C G S. Nothing on 2, 3 or 5 is flagged now except the turn at each ball's node, which is "
+           "the standard drawing.",
+     evidence=[["Flagged places on 5", "5 → 2"], ["Flagged places on 3", "2 → 1"], ["Flagged places on 2", "1 → 0"],
+               ["3 hook, curvature turns in one curve", "2 → 1"], ["5 bowl handle past meeting point", "1.16 → 0.57"]],
+     fix="clean.five_heel, clean.even_s, joins.even_extremes (five), clean.add_nodes.",
+     views=[{"g": "five", "box": [20, 220, 330, 470], "ba": True}, {"g": "five", "box": [100, 360, 520, 470], "ba": True},
+            {"g": "three", "box": [40, 480, 300, 700], "ba": True}, {"g": "two", "box": [20, 480, 300, 700], "ba": True}])
+_set("extended", status="fixed", build="0.70",
+     title="Outside the core 62: ligatures and composed letters had visible kinks",
+     after="0.69: every curve that runs into a straight outside the core set leaves on the straight's line (43 joins: "
+           "the f ligatures, Œ, the carons, accents). 0.70: the same for a node between two curves, which covers the "
+           "swash of the ct and st ligatures (8.2 degrees) and the cent sign (7.5), 63 joins in all. No join in the "
+           "font bends 5 degrees or more over a long run now. Letters with a stroke or bar across them (Ⱥ Ɇ Ƀ ƀ ł and "
+           "48 more) are merged in the source, after two of them broke when their base letter changed.",
+     evidence=[["OE", "13.5 → 0.0 deg"], ["fl, f_b, f_h, f_k, ff forms", "5.8 and 7.1 → 0.0 deg"],
+               ["c_t, cent", "8.2, 7.5 → 0.0 deg"], ["Joins over 5 deg, all glyphs", "26 → 0"]],
+     fix="clean.true_joins and clean.true_curves on every glyph outside the core, last in the build.")
+_set("ball-joins", status="fixed", build="0.69")
+_set("single-curves", status="fixed", build="0.70",
+     after="0.68's spur rule removed five; 0.69 and 0.70 cut each remaining one at the point where it changes direction "
+           "(Q's tail four times, R's leg, k's arm, r's arm, g's link, the hooks of 1 and 2), choosing the whole-unit "
+           "handles that bend least. In Q's tail and r's arm the turn sits within 3 units of the new node, not exactly "
+           "on it, which is the limit of whole units. I had listed a bump inside t's hook from looking at its comb; "
+           "no test flags it and the step is at a node, so I have withdrawn that part.",
+     evidence=[["Curves that bend both ways, core 62", "17 → 2 places, each within 3 units of a node"],
+               ["Handles past the meeting point, core 62", "10 → 0"], ["Double turns in one curve, core 62", "1 → 0"],
+               ["pathlint warnings, whole font", "226 → 171"]],
+     fix="joins.even_extremes, clean.add_nodes.")
+_set("one-unit", status="fixed", build="0.70",
+     after="0.68: N's uprights are both 48 and the stem of 1 is upright. 0.70: every serif on an upright capital stem "
+           "projects 77 from the stem (they were 76 or 77, 25 and 26 of each: H's left stem had 77 and 76 at the foot "
+           "and the reverse at the head). Two I listed were recorded decisions, not rounding: t's stem is 79 on purpose "
+           "and r's top is 528 because its smaller ball overshoots less.",
+     evidence=[["N thin uprights", "48 / 49 → 48 / 48"], ["1 stem, bottom to top", "86.0 to 88.8 → 86.0"],
+               ["Capital serif projections", "76 or 77 → 77 (51 serifs)"], ["t stem 79, r top 528", "by rule"]],
+     fix="balance.fig_flats (N, 1), balance.cap_serifs.",
+     views=[{"g": "H", "box": [30, -20, 330, 120], "ba": True}, {"g": "one", "ba": True, "comb": False},
+            {"g": "N", "ba": True, "comb": False}])
+_set("zero", status="fixed", build="0.70",
+     title="The zero carried the full weight of the capital O in a narrower shape",
+     after="You asked for the open items to be finished, so this is my recommendation applied; it is one number "
+           "(balance.ZERO_SIDE) if you want it back. The zero's sides are 87, 0.94 of the O's 92, the mean of what "
+           "Georgia Pro (0.92) and Serrif (0.96) do. Only the counter moved, so the zero's width and spacing are "
+           "unchanged. Its top and bottom stay at 47 with every other figure.",
+     evidence=[["0 sides", "92 → 87"], ["0 top and bottom", "47 → 47"], ["O sides", "92"],
+               ["Zero to O, Georgia Pro / Serrif", "0.92 / 0.96"], ["Zero to O, Area Serif", "1.00 → 0.95"]],
+     fix="balance.zero_weight.",
+     views=[{"g": "zero", "ba": True, "comb": False}, {"g": "zero", "thick": True, "comb": False},
+            {"g": "O", "thick": True, "comb": False}])
+
+SOLID[1] = ["Feet and head serifs on upright stems",
+            "Lowercase feet project 68 either side with a 30-unit tip and an 80-unit bracket on every letter; capitals 77 "
+            "on every upright stem since 0.70. The bracket's curve is the same to 0.2 of a unit everywhere. Georgia Pro's "
+            "left and right feet differ by 3 to 4."]
+SOLID[6] = ["Smoothness overall",
+            "405 curvature turning points across the 62 core characters (419 on 0.66), against 397 for Serrif, 454 for "
+            "Libre Baskerville and 457 for Georgia Pro. Soft kinks over 2 degrees in the built font: 7 (11 on 0.66), "
+            "against 6, 14 and 7. Every curve passes its extremes at a node, and none has a handle past its meeting point."]
+CHANGES += [
+    ["0.70", "Capital serif projections on upright stems", "76 or 77", "77", "balance.cap_serifs"],
+    ["0.70", "Zero's sides", "92 (the O's)", "87", "balance.zero_weight"],
+    ["0.70", "Hook of 3; top of 5's bowl", "two turns; handle 1.16 past", "one S; 0.57", "clean.even_s, joins.even_extremes"],
+    ["0.70", "ct, st, cent: joins over 5 deg", "2", "0", "clean.true_curves"],
+    ["0.70", "Letters with a stroke or bar", "merged at export", "merged in the source (51)", "normalize"],
+]

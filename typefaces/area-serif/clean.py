@@ -1238,10 +1238,24 @@ def add_nodes(font, names):
                         continue
                     lb = math.hypot(bcd[0] - m[0], bcd[1] - m[1])
                     la = math.hypot(m[0] - abc[0], m[1] - abc[1])
-                    abc = (round(m[0] - vx / L * la), round(m[1] - vy / L * la))
-                    bcd = (round(m[0] + vx / L * lb), round(m[1] + vy / L * lb))
-                    v1, v2 = (m[0] - abc[0], m[1] - abc[1]), (bcd[0] - m[0], bcd[1] - m[1])
-                    bend = abs(math.degrees(math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1])))
+                    ia, ib = (m[0] - vx / L * la, m[1] - vy / L * la), (m[0] + vx / L * lb, m[1] + vy / L * lb)
+                    best = None                              # the whole-unit pair that bends least (0.70: Q, r)
+                    for ax in (-1, 0, 1):
+                        for ay in (-1, 0, 1):
+                            for bx in (-1, 0, 1):
+                                for by in (-1, 0, 1):
+                                    qa, qb = (round(ia[0]) + ax, round(ia[1]) + ay), (round(ib[0]) + bx, round(ib[1]) + by)
+                                    v1, v2 = (m[0] - qa[0], m[1] - qa[1]), (qb[0] - m[0], qb[1] - m[1])
+                                    if min(math.hypot(*v1), math.hypot(*v2)) < 2:
+                                        continue
+                                    bd = abs(math.degrees(math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1])))
+                                    key = (round(bd, 3), abs(ax) + abs(ay) + abs(bx) + abs(by))
+                                    if best is None or key < best[0]:
+                                        best = (key, qa, qb)
+                    if best is None:
+                        i += 1
+                        continue
+                    bend, abc, bcd = best[0][0], best[1], best[2]
                     if bend > 1.0:
                         i += 1
                         continue
@@ -1280,3 +1294,83 @@ def five_heel(font):
         h2.x, h2.y = round(b.x - dx / L * run / 3), round(b.y - dy / L * run / 3)
         return [f"5 heel ({a.x},{a.y}): handles {was} > {(h1.x, h1.y, h2.x, h2.y)}"]
     return ["5 heel: not found"]
+
+
+# Two curves that meet with a small bend (0.70). true_joins handles a curve into a straight; this is the same for a
+# node between two curves: where the two handles are 0.6 to max_deg degrees off one line (u's tail 2.0, y's tail 1.7,
+# the swash of the ct and st ligatures 8.2, the cent sign 7.5), both turn onto their shared direction (the mean,
+# weighted by length), lengths kept, on the whole units that bend least. Handles under CURVE_MIN_HANDLE are fillets.
+CURVE_MIN_HANDLE = 8
+
+
+def true_curves(font, names, max_deg=4.5):
+    done = []
+    for name in names:
+        for c in font[name].contours:
+            P, n = c.points, len(c.points)
+            for i in range(n):
+                N = P[i]
+                a, b = P[i - 1], P[(i + 1) % n]
+                if not N.type or a.type or b.type:
+                    continue
+                v1, v2 = (N.x - a.x, N.y - a.y), (b.x - N.x, b.y - N.y)
+                l1, l2 = math.hypot(*v1), math.hypot(*v2)
+                if min(l1, l2) < CURVE_MIN_HANDLE:
+                    continue
+                ang = abs(math.degrees(math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1])))
+                if not 0.6 <= ang <= max_deg:
+                    continue
+                ux, uy = v1[0] + v2[0], v1[1] + v2[1]
+                L = math.hypot(ux, uy)
+                ux, uy = ux / L, uy / L
+                ia, ib = (N.x - ux * l1, N.y - uy * l1), (N.x + ux * l2, N.y + uy * l2)
+                best = None
+                for ax in (-1, 0, 1):
+                    for ay in (-1, 0, 1):
+                        for bx in (-1, 0, 1):
+                            for by in (-1, 0, 1):
+                                qa, qb = (round(ia[0]) + ax, round(ia[1]) + ay), (round(ib[0]) + bx, round(ib[1]) + by)
+                                w1, w2 = (N.x - qa[0], N.y - qa[1]), (qb[0] - N.x, qb[1] - N.y)
+                                bd = abs(math.degrees(math.atan2(w1[0] * w2[1] - w1[1] * w2[0], w1[0] * w2[0] + w1[1] * w2[1])))
+                                key = (round(bd, 3), abs(ax) + abs(ay) + abs(bx) + abs(by))
+                                if best is None or key < best[0]:
+                                    best = (key, qa, qb)
+                if best and best[0][0] < ang - 0.3:
+                    (a.x, a.y), (b.x, b.y) = best[1], best[2]
+                    N.smooth = True
+                    done.append(f"{name} ({N.x},{N.y}) {ang:.1f}>{best[0][0]:.1f}")
+    return done
+
+
+# An S between two parallel tangents (0.70). 3's hook stepped 6 units sideways over 36 with both handles half the
+# run, so they met in the middle and the curve turned twice. Each handle is S_SHARE of the run (2's hook, the same
+# part, already held 0.45 and 0.50): one clean S.
+S_SHARE = 0.40
+
+
+def even_s(font, names):
+    done = []
+    for name in names:
+        for c in font[name].contours:
+            P, n = c.points, len(c.points)
+            for i in range(n):
+                p0, h1, h2, p3 = P[i], P[(i + 1) % n], P[(i + 2) % n], P[(i + 3) % n]
+                if not p0.type or h1.type or h2.type or p3.type != "curve":
+                    continue
+                for ax in (0, 1):                            # ax: the axis the handles run along (0 level, 1 upright)
+                    o = 1 - ax
+                    g = lambda q, k: (q.x, q.y)[k]
+                    if g(h1, o) != g(p0, o) or g(h2, o) != g(p3, o):
+                        continue
+                    run, step = g(p3, ax) - g(p0, ax), abs(g(p3, o) - g(p0, o))
+                    if abs(run) < 20 or not 2 <= step <= 0.4 * abs(run):
+                        continue
+                    a, b = (g(h1, ax) - g(p0, ax)) / run, (g(p3, ax) - g(h2, ax)) / run
+                    if a <= 0 or b <= 0 or a + b < 0.97:
+                        continue
+                    if ax:
+                        h1.y, h2.y = round(p0.y + run * S_SHARE), round(p3.y - run * S_SHARE)
+                    else:
+                        h1.x, h2.x = round(p0.x + run * S_SHARE), round(p3.x - run * S_SHARE)
+                    done.append(f"{name} ({p0.x},{p0.y}) handles {a:.2f} / {b:.2f} > {S_SHARE}")
+    return done

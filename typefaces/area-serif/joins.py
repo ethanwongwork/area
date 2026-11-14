@@ -351,9 +351,10 @@ def u_flags(font, xh=520):
 # move; what changes is the angle at which the outline reaches the notch (C 20 to 26 degrees).
 EXTREME_TENSION = 0.57
 EXTREME_SET = ("C", "G", "S", "s")
+EXTREME_INSIDE = ("five",)       # 0.70: the top of 5's bowl, whose short curve runs into the upright (handle 1.16 past)
 
 
-def even_extremes(font, names=EXTREME_SET):
+def even_extremes(font, names=EXTREME_SET + EXTREME_INSIDE):
     done = []
     for name in names:
         g = font[name]
@@ -362,7 +363,7 @@ def even_extremes(font, names=EXTREME_SET):
             P, n = c.points, len(c.points)
             for i in range(n):
                 N = P[i]
-                if N.type != "curve" or min(abs(N.y - top), abs(N.y - bottom)) > 1:
+                if N.type != "curve" or (name not in EXTREME_INSIDE and min(abs(N.y - top), abs(N.y - bottom)) > 1):
                     continue
                 hp, hn = P[i - 1], P[(i + 1) % n]
                 if hp.type or hn.type or hp.y != N.y or hn.y != N.y:

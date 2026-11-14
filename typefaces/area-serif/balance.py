@@ -906,3 +906,67 @@ def fig_flats(font, cap=CAP):
             done.append(f"1 stem edge {q.x}>{p.x} at the top")
             q.x = p.x
     return done
+
+
+# Capital serif projections (0.70). On upright stems the tips stood 76 or 77 units from the stem (25 and 26 of them):
+# H's left stem had 77 at the foot's left and 76 at its right, the head the other way round. One value, the more
+# common: CAP_SERIF. The tip and its two rounded corners move; the bracket's curve follows from its fixed node.
+CAP_SERIF = 77
+
+
+def cap_serifs(font, names="BDEFHIKLMNPRTUY", cap=CAP):
+    from normalize import flatten, spans_at
+    done = []
+    for name in names:
+        g = font[name]
+        fl = flatten(g)
+        moved = 0
+        for yq, line in ((0.25 * cap, 0), (0.75 * cap, cap)):
+            for a, b in spans_at(fl, yq):
+                if not 40 <= b - a <= 95:
+                    continue
+                for edge, sg in ((round(a), -1), (round(b), 1)):
+                    tip = [p for p in _pts(g) if abs(p.y - line) <= 30 and 60 <= (p.x - edge) * sg <= 85]
+                    if len([p for p in tip if p.type]) < 3:
+                        continue
+                    proj = max((p.x - edge) * sg for p in tip)
+                    d = CAP_SERIF - proj
+                    if d and abs(d) <= 2:
+                        far = edge + sg * proj
+                        for p in tip:
+                            if abs(p.x - far) <= 8:
+                                p.x += sg * d
+                        moved += 1
+        if moved:
+            done.append(f"{name} {moved}")
+    return done
+
+
+# The zero (0.70; owner: "finish the rest of the open items"). 0 carried the O's stroke (92) in a shape 176 units
+# narrower, so its counter was the darkest thing in a row of figures. Georgia Pro draws its zero's sides at 0.92 of
+# its O's and Serrif at 0.96: 0.94 x 92 = 87. The counter's two side extremes move out; the top and bottom stay on
+# the figures' one hairline (FIG_THIN), and the outside does not move, so the zero's width and spacing hold.
+ZERO_SIDE = 87
+
+
+def zero_weight(font):
+    g = font["zero"]
+    outer = max(g.contours, key=lambda c: max(p.x for p in c.points) - min(p.x for p in c.points))
+    inner = next(c for c in g.contours if c is not outer)
+    ox0, ox1 = min(p.x for p in outer.points), max(p.x for p in outer.points)
+    P, n = inner.points, len(inner.points)
+    done = []
+    for edge, sg in ((ox0, 1), (ox1, -1)):                   # left side: the counter's extreme is at edge + stroke
+        e = (min if sg == 1 else max)((p for p in P if p.type), key=lambda p: p.x)
+        i = P.index(e)
+        hs = [P[i - 1], P[(i + 1) % n]]
+        if any(h.type or h.x != e.x for h in hs):
+            done.append("0: counter extreme not found")
+            continue
+        was = abs(e.x - edge)
+        d = was - ZERO_SIDE
+        if 0 < d <= 8:
+            for q in [e] + hs:
+                q.x -= sg * d
+            done.append(f"0 side {was}>{ZERO_SIDE}")
+    return done

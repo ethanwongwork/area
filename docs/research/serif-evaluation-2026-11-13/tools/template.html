@@ -225,7 +225,7 @@ footer{padding-block:36px 56px;color:var(--ink3);font-size:12.5px}
 <section id="specimen">
   <div class="sec-head">
     <h2>Specimen</h2>
-    <p class="lede">The font file of build 0.69, live. Text is set with its own kerning and features.</p>
+    <p class="lede">The font file of build 0.70, live. Text is set with its own kerning and features.</p>
   </div>
   <div class="card" id="waterfall"></div>
   <div class="grid2">
@@ -321,7 +321,7 @@ footer{padding-block:36px 56px;color:var(--ink3);font-size:12.5px}
 <section id="inspector">
   <div class="sec-head">
     <h2>Glyph inspector</h2>
-    <p class="lede">The drawn points of build 0.69. A coloured underline on a character means the node tests flagged it. Turn on Before to see build 0.66 under it.</p>
+    <p class="lede">The drawn points of build 0.70. A coloured underline on a character means the node tests flagged it. Turn on Before to see build 0.66 under it.</p>
   </div>
   <div class="picker" id="in-picker" role="group" aria-label="Character"></div>
   <div class="controls">
@@ -449,7 +449,7 @@ $('#b-build').textContent=D.build; $('#b-date').textContent=D.date;
 $('#b-count').textContent=`${D.glyphCount.toLocaleString()} glyphs · ${D.faces.length-1} reference faces`;
 const stN = s => D.findings.filter(f=>f.status===s).length;
 $('#tally').innerHTML = `<span><b>${stN('fixed')}</b><i class="dot ok"></i>fixed</span><span><b>${stN('part')}</b><i class="dot" style="background:var(--accent)"></i>partly fixed</span><span><b>${stN('open')}</b><i class="dot medium"></i>open</span><span><b>${stN('decided')+stN('withdrawn')}</b><i class="dot low"></i>by design or withdrawn</span>`;
-$('#verdict').textContent = 'Builds 0.67 to 0.69 fix the three largest findings and four more by rule, improve five others, and give every curve in the core a node where it needs one. Five of my first findings did not hold up against the project’s own records and are marked as such. Open: the hooks of 3 and 5, the two discretionary ligatures, one-unit serif rounding, and the weight of the zero, which is your call.';
+$('#verdict').textContent = 'Builds 0.67 to 0.70 fix every finding that held up: thirteen, each by a rule with a check, shown here before over after. Five of my first findings did not hold up against the project’s own records and are marked as withdrawn or by design. Nothing is open. The zero’s lighter sides are my recommendation applied, and one number to change back.';
 $('#changes').innerHTML='<thead><tr><th>What changed</th><th>Build</th><th>0.66</th><th>Now</th><th>Rule</th></tr></thead><tbody>'+D.changes.map(c=>`<tr><td>${esc(c[1])}</td><td>${c[0]}</td><td>${esc(c[2])}</td><td>${esc(c[3])}</td><td class="mono" style="text-align:left">${esc(c[4])}</td></tr>`).join('')+'</tbody>';
 
 /* ---------- findings ---------- */
@@ -559,7 +559,7 @@ function buildTables(){
   const TN={kink:'Tangent breaks under 14°',g2:'Curvature jumps at smooth nodes',inflection:'Curves that bend both ways',wobble:'Double turns in one curve',handles:'Handle reach',extreme:'Missing extremes',offaxis:'Nearly upright or level',short:'Segments under 4 units',elbow:'Tight curve into a straight'};
   const T=D.tally; $('#tally-table').innerHTML='<thead><tr><th></th><th>Core 62: larger</th><th>Core 62: minor</th><th>All glyphs</th></tr></thead><tbody>'+Object.keys(TN).filter(k=>T[k]).map(k=>`<tr><td>${TN[k]}</td><td>${T[k].core[0]+T[k].core[1]}</td><td>${T[k].core[2]}</td><td>${T[k].all[0]+T[k].all[1]+T[k].all[2]}</td></tr>`).join('')+'</tbody>';
   $('#tally-note').textContent='A count is evidence, not a verdict: a ball terminal legitimately flips curvature at its node. Every larger item in the core was looked at; the ones that matter are in Findings.';
-  $('#qa').innerHTML=['check.py: every measured target matches derive.py (pass).','pathlint.py: 0 errors, 168 warnings, 50 notes (226 and 63 on 0.66); the warnings are the handle-reach and missing-extreme cases counted above.','audit_parts.py: 0 unexpected outliers, now with three more rows (capital thins, capital rounds, head rise). Run on build 0.66 the same audit fails with seven outliers.','parts.py: 0 errors in the join and bowl table.','fontbakery universal profile: 85 pass, 0 fail, 1 expected warning (contour count on inherited accents).'].map(x=>`<li>${esc(x)}</li>`).join('');
+  $('#qa').innerHTML=['check.py: every measured target matches derive.py (pass).','pathlint.py: 0 errors, 171 warnings, 31 notes (226 and 63 on 0.66); the warnings are the handle-reach and missing-extreme cases counted above.','audit_parts.py: 0 unexpected outliers, now with three more rows (capital thins, capital rounds, head rise). Run on build 0.66 the same audit fails with seven outliers.','parts.py: 0 errors in the join and bowl table.','fontbakery universal profile: 85 pass, 0 fail, 1 expected warning (contour count on inherited accents).'].map(x=>`<li>${esc(x)}</li>`).join('');
   $('#tight').innerHTML=D.tight.map(t=>`<span title="${t[0]} units${t[2]?', kern '+t[2]:''}">${esc(t[1])}</span>`).join('');
 }
 
