@@ -1,5 +1,93 @@
 [
  {
+  "build": "0.70",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "0",
+    "text": "The zero carried the capital O's full stroke in a much narrower shape, so it was the darkest figure in a row. Its sides are 87 now (the O's are 92), the share Georgia Pro and Serrif use. Only the counter moved, so its width and spacing are the same. This is my recommendation applied because you asked for the open items to be finished; it is one number if you want it back."
+   },
+   {
+    "glyphs": "B D E F H I K L M N P R T U Y",
+    "text": "Serifs on upright capital stems projected 76 or 77 units, about half of each (H's left stem had 77 and 76 at the foot and the reverse at the head). All are 77."
+   },
+   {
+    "glyphs": "3 5 Q r 1",
+    "text": "The hook of 3 turned twice in one short curve; it is one S now. The top of 5's bowl is rebuilt by the rule that fixed C G S. Q's tail, r's arm and 1's flag have a point where their curve changes direction."
+   },
+   {
+    "glyphs": "ct st ¢ Ⱥ Ɇ Ƀ ł",
+    "text": "The swash of the ct and st ligatures and the cent sign bent 7 to 8 degrees at a join; they run straight through. Letters with a stroke or bar across them are now merged with it in the source, after two of them broke when their base letter changed."
+   }
+  ]
+ },
+ {
+  "build": "0.69",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "A K V W X Y k v w x y g Q R 2",
+    "text": "Every curve now has a point where it needs one. 26 curves passed their leftmost, rightmost, highest or lowest point without a node (the serif brackets on every diagonal, g's ear, y's tail) and nine bent both ways inside one curve (Q's tail, R's leg, k's arm, g's link, the ball of 2). Each is cut in two at that place. The cut is exact, so the letters look the same; no outline moved more than 1.5 units. You will see more points on these letters in the editor."
+   },
+   {
+    "glyphs": "fl fb fh fk ffl Œ ď ľ ť",
+    "text": "Where two outlines were joined, a curve ran into a straight line at an angle: 6 to 7 degrees at the top of the f ligatures, 13.5 at the top and bottom of Œ. They leave on the straight's line now (43 joins)."
+   },
+   {
+    "glyphs": "5",
+    "text": "The heel of 5 dipped 2 units below its lowest point before rising into the bowl. It bends one way now."
+   }
+  ]
+ },
+ {
+  "build": "0.68",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "C G S s",
+    "text": "The tops and bottoms flattened just before the spur: the arc arrived with one radius and left with one up to four times larger, and in S and s that short curve bent both ways. The curve from each extreme to its notch is rebuilt so the curvature runs through the extreme without a step. The extremes, notches and long arcs did not move."
+   },
+   {
+    "glyphs": "2 5 7",
+    "text": "The flat strokes were 80, 77 and 72. All three are 73 now, the same share of the stem that Serrif, Source Serif 4 and Georgia Pro use."
+   },
+   {
+    "glyphs": "A V W X Y v w x y q",
+    "text": "Where a serif's bracket runs into a diagonal, the two were up to 3.3 degrees apart. Each bracket now leaves on the diagonal's own line (20 joins)."
+   },
+   {
+    "glyphs": "N 1",
+    "text": "N's two thin uprights were 48 and 49; both are 48. The right edge of 1's stem leaned one unit; it is upright."
+   },
+   {
+    "glyphs": "r",
+    "text": "You asked for a wider r. Its ink was already the widest of the nine faces I measured, with the longest arm and foot; what was narrow was its advance, 0.659 of n, the smallest of the nine. It now has 15 more units of white on its right (0.682 of n, the mean of Georgia Pro and Serrif). No point of the letter moved. rr, rn and ri open up; r before a round letter keeps its kerned distance."
+   }
+  ]
+ },
+ {
+  "build": "0.67",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "A E F H L P R",
+    "text": "The capitals' thin level strokes ranged from 40 to 55 units (Georgia Pro and Serrif hold theirs within 4.5). Arms are 46, the strokes that close P and R are 47, the A and H crossbars 49. L's arm, 40 before, is built as E's bottom arm."
+   },
+   {
+    "glyphs": "B",
+    "text": "The lower bowl was 98 units across the stroke where O is 92 and D 95. Its counter moved out 6 units: 92 at the extreme, 95 at most."
+   },
+   {
+    "glyphs": "u",
+    "text": "u's two head serifs were level slabs (u is n turned over, so it had n's feet as heads). Both now carry i's flag, point for point: 8 degrees, corner 10 over the x-height, like i n m r p."
+   },
+   {
+    "glyphs": "checks",
+    "text": "The parts audit has three new rows (capital thins, capital rounds, head rise). It passes on this build and fails on 0.66 with seven outliers. The full evaluation, with every fix drawn before over after, is at https://claude.ai/artifact/5FkKUT31WDmmTAMMQtKwk2."
+   }
+  ]
+ },
+ {
   "build": "0.66",
   "date": "2026-11-13",
   "items": [

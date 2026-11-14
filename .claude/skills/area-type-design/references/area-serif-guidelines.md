@@ -107,7 +107,7 @@ extreme sits, each stroke's weight, where each end stops) and setting Area's own
 | Descender feet (p q), f's right foot | stem side 0.85; bowl side a quarter longer | `DESC_FOOT`, `F_FOOT_RIGHT` |
 | r's right foot | 1.6 (owner, 0.43: longer; 1.22 before) | `R_FOOT_RIGHT` |
 | Capital serif length | 0.85 of H's stem (0.94 n stems), every capital including U's four | `CAP_SERIF`, `cap_serifs`, `cap_right_feet`, `U_head_serifs` |
-| Head serif slope | 8 degrees on b d h i j k l m n p r, turned about the stem's top corner (0.50; 13.5-15 before; u's are level); its corner at one height on n m p r (0.51: p and r rose to n's) | `joins.FLAG_DEG`, `flatter_flags`, `level_flags` |
+| Head serif slope | 8 degrees on b d h i j k l m n p r, turned about the stem's top corner (0.50; 13.5-15 before); its corner at one height on n m p r (0.51: p and r rose to n's); u's two heads are i's flag point for point (0.67: they were level slabs, n's feet turned over) | `joins.FLAG_DEG`, `flatter_flags`, `level_flags`, `u_flags` |
 | Diagonal joins (A K V W X Y k v w x y) | open side (stroke leans away from the serif): the bracket's handle shares, 0.90 / 0.70 (0.53). Closed side: a round fillet, one curve on k v w x y (handles 0.62 / 0.60, 0.54); never the steep shares there, they pinch it into a hook | `joins.steep_diagonals`, `even_fillets`, `derive.BRACKET_K_ACUTE` |
 | G's bar and stem | bar top 0.48 of the cap height, stem's right edge 0.024 right of the top barb's: half the way from 0.53 to Georgia Pro, moved as one piece (0.54) | `joins.G_SHIFT`, `G_lower` |
 | Figures' round ends (2 3 5 6 9) | 88 across, a half circle; the 7's beak 30 wide (0.57) | `joins.figure_ends`, `_balls` |
@@ -267,6 +267,20 @@ Measured across all 62 against both references; evidence and the full tables in
 | Thin diagonals | lowercase 0.50 (39; the floor, not the arcs' 43: v x y carry extra ink already); capitals 0.56 (48), M's and K's value; the 4's 43 | `balance.THIN_LOW`, `THIN_CAP_DIAG`, `DIAGS`, `diag` (per stroke; a thick stroke's edge never moves when a thin one does) |
 | Thick diagonals | z 0.97, K's leg 0.97, Y's thick arm 1.02; the rest 0.93-1.04 | `balance.DIAGS` |
 | Bars | f's and t's are one bar, 468 to 520; F's top arm is E's (46); z's and Z's two arms equal; z's beaks level, 30 | `balance.bars` |
+| Capital thin strokes (0.67) | Level thins from the references' ratios to their O hairline (Georgia Pro / Serrif: arms 0.92 / 1.02, crossbars 1.00 / 1.08, closing strokes 1.0): arms 46 (E F L T, E and F middle arms about the flare's centre; Z 45), where P's and R's bowls close 47, A and H crossbars 49. They were 40 to 55 | `balance.cap_thins`; `audit_parts` cap thins |
+| B's lower bowl (0.67) | The O's stroke (92) at the counter's extreme, at most 1.5 over along either quarter. Measure a round across the stroke, never on a level scanline: a short bowl reads 5 to 7 units heavy on a scanline | `balance.B_lower`; `audit_parts` cap rounds (5%) |
+| Figures' flat strokes (0.68) | 2's base, 5's flag, 7's top: 73, 0.85 of the capital stem (Serrif and Source Serif 4 0.86, Georgia Pro 0.82). They were 80, 77, 72 | `balance.fig_flats` |
+| An extreme beside a spur or junction (0.68) | The short curve from the extreme to the notch: both handles at 0.57 of their reach, the handle at the extreme solved so the curvature equals the long arc's (curvature = 2/3 x far handle's offset / handle squared). C G S s | `joins.even_extremes` |
+| A curve into a straight (0.68) | The curve's handle lies on the straight's own line (under 1 degree); fillets with handles under 12 units are exempt (whole units cannot hold them) | `clean.true_joins` |
+| Nodes (0.69) | Every curve passes its leftmost, rightmost, highest and lowest point at a node and bends one way only: a curve that does not is cut there by de Casteljau (the outline does not move; new points on whole units; an extreme's handles level or upright; an inflection's handles on one line; the old nodes keep their directions). Not cut: a piece under 8 units, or an inflection whose handles whole units would bend by over a degree | `clean.add_nodes` |
+| Seams (0.69) | After charset joins two outlines, a curve that runs into a straight leaves on the straight's line (up to 15 degrees turned): f ligatures, Œ, carons | `clean.true_joins(rest, max_deg=15)`, last in `normalize` |
+| 5's heel (0.69) | The short curve from the heel's lowest point bends one way: handles a third of the run each, level at the heel and on the bowl curve's direction at the other end | `clean.five_heel` |
+| Capital serifs (0.70) | 77 from the stem on every upright capital stem, head and foot, both sides (they were 76 or 77) | `balance.cap_serifs` |
+| Zero (0.70) | Sides 87, 0.94 of the O's 92 (Georgia Pro 0.92, Serrif 0.96): a narrow closed counter carries less. Only the counter moves; top and bottom stay on the figures' 47 | `balance.zero_weight`, `ZERO_SIDE` |
+| Two curves at a node (0.70) | Handles on one line (under 1 degree) where they were 0.6 to 4.5 degrees apart in the core, up to 9 outside it (ct, st, cent); handles under 8 units are fillets | `clean.true_curves` |
+| An S between parallel tangents (0.70) | Each handle 0.40 of the run (3's hook had 0.50 and 0.50, which meet and turn twice) | `clean.even_s` |
+| Letters with a stroke or bar (0.70) | Merged with their stroke in the source, scraps under 60 square units dropped; never left to the TrueType build's overlap removal | `normalize` (end) |
+| r's width (0.68) | The letter is the owner's (long right foot, 1.67 stems). Its advance is 0.682 of n, the mean of Georgia Pro and Serrif, from 15 units of white on its right; it was 0.659, the narrowest of nine faces, though its ink is the widest | `spacing.R_AIR` |
 | Stems | t 79; the 5's bowl 92 like every figure | `balance.stems` |
 | Heights | flat tops on their line (A 712, 4 712), round ones on the overshoot (530, 721, -10, -9), the 1 as tall as the 0, f as tall as the ascenders | `balance.heights` |
 | Head serif tip | 30, as the feet | `joins.flatter_flags` |
@@ -314,6 +328,6 @@ u's bowl (the n's old arch upside down).
 G's bar height (0.51 cap, Georgia Pro 0.45); the size of top and bottom beaks on E F L T Z; P's bowl depth; a's bowl;
 J on the baseline. Carried from 0.33:
 
-Figure 1 and 4 stems lighter than capitals; shoulder thickness n 0.55 to m 0.62; u's level head serifs; a's straight
+Figure 1 and 4 stems lighter than capitals; shoulder thickness n 0.55 to m 0.62; a's straight
 bowl top; widths of r g k x y K W X; spacing (lowercase keeps its advance when serifs shorten, capitals keep their
 side bearings); kerning; punctuation; the weight axis.

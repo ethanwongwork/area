@@ -1166,6 +1166,19 @@ def normalize(font):
     print("joins: diagonals", JOINS.steep_diagonals(font), JOINS.even_fillets(font))   # 0.53, 0.54
     print("joins: G", JOINS.G_lower(font, cap=D.CAP_HEIGHT))             # 0.54
     print("joins: C end", JOINS.C_end(font, cap=D.CAP_HEIGHT))          # 0.52, on the trued and tidied outline
+    print("joins: u heads", JOINS.u_flags(font, xh=D.X_HEIGHT))          # 0.67: i's flag on both of u's stems
+    print("balance: capital thins", BALANCE.cap_thins(font))             # 0.67: arms 46, crossbars 49, closing strokes 47
+    print("balance: B", BALANCE.B_lower(font))                           # 0.67: the lower bowl at the O's weight
+    print("joins: extremes", JOINS.even_extremes(font))                  # 0.68: C G S s, the arc into the spur
+    print("balance: figures", BALANCE.fig_flats(font))                   # 0.68: 2 5 7 flat strokes 73; N, 1
+    print("clean: joins to straights", CLEAN.true_joins(font, HARMONIZE_SET))   # 0.68
+    print("clean: 5", CLEAN.five_heel(font))                             # 0.69
+    print("balance: capital serifs", BALANCE.cap_serifs(font))           # 0.70: 77 on every upright stem
+    print("balance: zero", BALANCE.zero_weight(font))                    # 0.70: sides 87
+    print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook
+    print("clean: curve joins", CLEAN.true_curves(font, HARMONIZE_SET))  # 0.70: u's tail, y's tail
+    nodes = CLEAN.add_nodes(font, HARMONIZE_SET)                         # 0.69: extremes and inflections get a node
+    print(f"clean: nodes added {len(nodes)}", nodes)
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
     print(f"spacing: {len(delta)} letters re-spaced, {moved} kerning pairs carried over, {len(opened)} near-touches opened")
@@ -1174,8 +1187,22 @@ def normalize(font):
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     print("balance: descender feet", BALANCE.desc_feet(font))
     print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
-    for name in ("Eopen",):                           # a base drawing whose path laps over itself: merged here
+    # a base drawing whose path laps over itself, and (0.70) every letter with a stroke or bar drawn across it: merged
+    # here, in the source. Left to the TrueType build's overlap removal, a stroke that meets the letter within a unit
+    # of a node left a crossing (Astroke, 0.69) or a 19-unit scrap (Estroke, 0.70) whenever the letter changed.
+    import re
+    struck = [g.name for g in font if g.components and g.contours and re.search(r"(stroke|bar|middletilde)$", g.name)]
+    for name in ["Eopen"] + sorted(struck):
         CHARSET.put(font, name, CHARSET.glyph_path(font, name), font[name].width)
+        for c in list(font[name].contours):              # a scrap where the stroke clips a corner: under 60 square units
+            P = c.points
+            if abs(sum(P[i].x * P[(i + 1) % len(P)].y - P[(i + 1) % len(P)].x * P[i].y for i in range(len(P)))) / 2 < 60:
+                font[name].contours.remove(c)
+    rest = [g.name for g in font if g.contours and g.name not in HARMONIZE_SET]
+    seams = CLEAN.true_joins(font, rest, max_deg=15)  # 0.69: seams left where charset joined two outlines (fl, OE, carons)
+    print(f"clean: seams {len(seams)}", seams)
+    swash = CLEAN.true_curves(font, rest, max_deg=9)   # 0.70: ct, st, cent
+    print(f"clean: curve joins outside the core {len(swash)}", swash)
     for g in font:                           # derive.py's bracket marks were for this build only
         for c in g.contours:
             for p in c.points:
