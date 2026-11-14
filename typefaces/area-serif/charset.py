@@ -47,7 +47,12 @@ COVERAGE = (list(range(0x20, 0x7F)) + [c for c in range(0xA0, 0x100) if c != 0xA
                0x2199, 0x21E7, 0x2202, 0x2206, 0x220F, 0x2211, 0x2212, 0x2215, 0x2219, 0x221A, 0x221E, 0x222B,
                0x2248, 0x2260, 0x2264, 0x2265, 0x2318, 0x2325, 0x232B, 0x25CA, 0x25CB, 0x25CF, 0x2713, 0x2715,
                0xFB01, 0xFB02]
-            + [0x0309, 0x031B, 0x01A0, 0x01A1, 0x01AF, 0x01B0] + list(range(0x1EA0, 0x1EFA)))   # Vietnamese (0.48)
+            + [0x0309, 0x031B, 0x01A0, 0x01A1, 0x01AF, 0x01B0] + list(range(0x1EA0, 0x1EFA))   # Vietnamese (0.48)
+            # 0.72: fractions, currencies from capitals, keys, menu dots, solid shapes
+            + [0x2150, 0x2151, 0x2155, 0x2156, 0x2157, 0x2158, 0x2159, 0x215A, 0x20A1, 0x20A6, 0x20AD, 0x20AE,
+               0x20B1, 0x20B2, 0x20B8, 0x20BF, 0x22EE, 0x22EF, 0x2303, 0x21E4, 0x21E5, 0x21B5, 0x23CE, 0x2326,
+               0x21EA, 0x25B2, 0x25BC, 0x25B6, 0x25C0, 0x25B4, 0x25BE, 0x25B8, 0x25C2, 0x25A0, 0x25A1, 0x25C6,
+               0x2605, 0x2606])
 KAPPA = 0.5523
 
 
@@ -125,6 +130,7 @@ def bounds(p):
     return p.bounds        # (xmin, ymin, xmax, ymax)
 
 
+SCRAP = 150             # square units
 REBUILT, COMPOSED = set(), set()     # glyphs this module draws or composes (see follow_rebuilt)
 
 
@@ -149,6 +155,11 @@ def put(font, name, path, width, unicodes=None, lsb=None, rsb=None):
         for pt in c.points:
             pt.x, pt.y = round(pt.x), round(pt.y)
     _drop_tiny(g)
+    _drop_dents(g)
+    for c in list(g.contours):                           # 0.74: a sliver where two outlines met (the kip's bar and
+        P, n = c.points, len(c.points)                   # K's arm left 100 square units of white): under SCRAP, gone
+        if abs(sum(P[i].x * P[(i + 1) % n].y - P[(i + 1) % n].x * P[i].y for i in range(n))) / 2 < SCRAP:
+            g.contours.remove(c)
     g.width = round(width)
     if unicodes is not None:
         g.unicodes = list(unicodes)
@@ -180,6 +191,31 @@ def _draw_cubic(path, pen):
             pen.closePath()
         elif verb == "endPath":
             pen.endPath()
+
+
+def _drop_dents(g):
+    """0.77: where two outlines met a hair apart a union can leave a dent of a few units between straight edges
+    (the summation's inner vertex had a 3-unit zigzag). A corner between two straight steps that are both under 8
+    units long and that sits under 3 units off the line between its neighbours is dropped."""
+    for c in g.contours:
+        P = c.points
+        again = True
+        while again and len(P) > 6:
+            again = False
+            n = len(P)
+            for i in range(n):
+                a, p, b = P[i - 1], P[i], P[(i + 1) % n]
+                if not (a.type and p.type == "line" and b.type == "line"):
+                    continue
+                la, lb = math.hypot(p.x - a.x, p.y - a.y), math.hypot(b.x - p.x, b.y - p.y)
+                L = math.hypot(b.x - a.x, b.y - a.y)
+                if la >= 8 or lb >= 8 or L < 1e-6:
+                    continue
+                off = abs((b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x)) / L
+                if off < 3:
+                    del P[i]
+                    again = True
+                    break
 
 
 def _drop_tiny(g):
@@ -377,7 +413,7 @@ def bars(font, m):
         else:
             st = stems[which]
             x0, x1 = st[0] - left * S, st[1] + right * S
-        p = union(b, rect(x0, y - w / 2, x1, y + w / 2))
+        p = union(b, rect(x0, band(y, w)[0], x1, band(y, w)[1]))
         put(font, name, p, font[base].width)
     if "Eth" in font and font["Eth"].components:
         compose(font, "Eth", [("Dcroat", 0, 0)], font["Dcroat"].width)
@@ -667,6 +703,96 @@ def features(font):
 
 # ---------------------------------------------------------------- 5. new glyphs
 
+def single_g(font):
+    """g.ss02 (0.77; owner, 2026-11-14: "it would be nice to have an alternate, non decorative g"): a single-storey
+    g from finished parts, nothing drawn. The bowl and stem are q's, cut at the baseline; below it the stem runs into
+    j's tail (the same 78 stem, the same hook and ball), set under q's stem. It keeps q's advance and sides, and
+    kerns as q does. Reached by the stylistic set ss02."""
+    q, j = gp(font, "q"), None
+    jg = font["j"]
+    j = pathops.Path()
+    pen = j.getPen()
+    body = max(jg.contours, key=lambda c: len(c.points))       # j without its dot
+    from fontTools.pens.pointPen import PointToSegmentPen
+    body.drawPoints(PointToSegmentPen(pen))
+    cut = 2                                                    # j's stem is straight down to here
+    qs = scan_h(q, 200)[-1]                                    # q's stem
+    js = scan_h(j, 200)[0]
+    top = op(q, rect(-500, cut, 3000, 3000), pathops.PathOp.INTERSECTION)
+    tail = op(moved(j, qs[0] - js[0]), rect(-1000, -1000, 3000, cut), pathops.PathOp.INTERSECTION)
+    put(font, "g.ss02", union(top, tail), font["q"].width)
+    font["g.ss02"].unicodes = []
+    for name, members in font.groups.items():
+        if name.startswith("public.kern") and "q" in members and "g.ss02" not in members:
+            members.append("g.ss02")
+    return bounds(gp(font, "g.ss02"))
+
+
+def spine_across(path):
+    """An S's spine across itself: the shortest straight cut of ink through the middle of the letter's box."""
+    b = bounds(path)
+    xc, yc = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2
+    best = 9e9
+    for k in range(-20, 21):
+        a = math.radians(90 + k * 3)
+        dx, dy = math.cos(a), math.sin(a)
+        d = 0
+        for sg in (1, -1):
+            t = 0
+            while t < 200:
+                x, y = xc + sg * t * dx, yc + sg * t * dy
+                if not any(l <= x <= r for l, r in scan_h(path, y)):
+                    break
+                t += 1
+            d += t
+        best = min(best, d)
+    return best
+
+
+def base_s(font):
+    """S.ss03, s.ss03, dollar.ss03 (0.78; owner, 2026-11-14: "i like the S, s and $ of libre baskerville"). The two
+    letters arrive from derive as the base's own drawings at Area's weight and width; here they take the default
+    letters' side bearings and kerning groups."""
+    done = []
+    for alt, base, height in (("S.ss03", "S", 712), ("s.ss03", "s", 520)):
+        # the spine on Area's ladder: the base's is a quarter heavier across itself (119 and 106 against 95 and 84).
+        # Its two edges close on each other until it measures what the default's does; nothing else moves.
+        for _pass in range(3):
+            over = spine_across(gp(font, alt)) - spine_across(gp(font, base))
+            if over < 1:
+                break
+            CLEAN.spine_thin(font, alt, height, (round(over * 0.6), round(over * 0.6)))
+        done.append((alt, "spine", round(spine_across(gp(font, alt)), 1), round(spine_across(gp(font, base)), 1)))
+        p, b0 = gp(font, alt), bounds(gp(font, base))
+        put(font, alt, p, 0, lsb=b0[0], rsb=font[base].width - b0[2])
+        font[alt].unicodes = []
+        done.append((alt, font[alt].width, font[base].width))
+    # the dollar: the base's own drawing (its ends are balls, not its S's barbs), so not the S and a stroke as the
+    # default is. Its stroke takes the capital hairline, as the default's: the two upright edges move in, each by
+    # half the excess, wherever they show (the stubs above and below, the sides of the two counters).
+    g = font["dollar.ss03"]
+    p0 = gp(font, "dollar.ss03")
+    b = bounds(p0)
+    st = scan_h(p0, b[3] - 10)[0]
+    over = (st[1] - st[0]) - STROKE_UP
+    for c in g.contours:
+        for q in c.points:
+            if abs(q.x - st[0]) < 1.5:
+                q.x = round(st[0] + over / 2)
+            elif abs(q.x - st[1]) < 1.5:
+                q.x = round(st[1] - over / 2)
+    db = bounds(gp(font, "dollar"))
+    put(font, "dollar.ss03", gp(font, "dollar.ss03"), 0, lsb=db[0], rsb=font["dollar"].width - db[2])
+    font["dollar.ss03"].unicodes = []
+    done.append(("dollar.ss03 stroke", round(st[1] - st[0]), STROKE_UP))
+    done.append(("dollar.ss03", font["dollar.ss03"].width, font["dollar"].width))
+    for alt, base in (("S.ss03", "S"), ("s.ss03", "s"), ("dollar.ss03", "dollar")):
+        for name, members in font.groups.items():
+            if name.startswith("public.kern") and base in members and alt not in members:
+                members.append(alt)
+    return done
+
+
 def arrows(font, m, adv):
     """Arrows on the maths' axis and weight: the shaft is the minus, the head two strokes of the same weight meeting
     in a point (Serrif's open head; Georgia Pro has none)."""
@@ -676,12 +802,24 @@ def arrows(font, m, adv):
     cy = m.math_y
 
     def east(length=L):
+        """0.77 (owner, 2026-11-14: "does uni21b5 arrow tip need to be fixed?"). The head was two bars and a small
+        triangle joined by a union: the triangle's sides did not lie on the bars' outer edges, so the tip came out
+        as a zigzag of three 12-unit steps on every arrow. The head is one outline now: the two strokes' outer
+        edges meet in the point, their inner edges in the crotch (a mitre), and nothing is left to a union there."""
         x0, x1 = 0.0, length
-        shaft = rect(x0, cy - w / 2, x1 - w * 0.6, cy + w / 2)
-        a = bar((x1 - head, cy + head), (x1 - w * 0.5, cy), w)
-        b = bar((x1 - head, cy - head), (x1 - w * 0.5, cy), w)
-        point = shape([(x1 - w * 1.2, cy + w * 0.75), (x1, cy), (x1 - w * 1.2, cy - w * 0.75)])
-        return union(shaft, a, b, point)
+        px, py = x1 - head, head                           # the upper stroke's far end, from the axis
+        qx = x1 - w * 0.5
+        L_ = math.hypot(qx - px, py)
+        dx_, dy_ = (qx - px) / L_, -py / L_                # along the stroke, towards the point
+        nx_, ny_ = -dy_ * w / 2, dx_ * w / 2               # to its outer side
+        ou, iu = (px + nx_, py + ny_), (px - nx_, py - ny_)
+        apex = ou[0] + dx_ * (ou[1] / -dy_)                # where each edge crosses the axis
+        crotch = iu[0] + dx_ * (iu[1] / -dy_)
+        sh = x1 - apex                                     # the point stays where the arrow ended
+        pts = [(apex + sh, 0), (ou[0] + sh, ou[1]), (iu[0] + sh, iu[1]), (crotch + sh, 0), (iu[0] + sh, -iu[1]), (ou[0] + sh, -ou[1])]
+        head_ = shape([(x, cy + y) for x, y in pts])
+        shaft = rect(x0, cy - w / 2, crotch + sh + 1, cy + w / 2)
+        return union(shaft, head_)
 
     e = east()
     side = 44
@@ -769,7 +907,8 @@ def maths(font, m, adv):
     keep = op(keep, rect(-100, CAP_HEIGHT - 60, 2000, 1000), pathops.PathOp.DIFFERENCE)   # no head serifs
     top_bar = rect(hs[0][0] - 0.7 * m.cap_stem, CAP_HEIGHT - m.cap_bar * 1.15, hs[1][1] + 0.7 * m.cap_stem, CAP_HEIGHT)
     Pi = union(keep, top_bar)
-    put(font, "product", moved(Pi, 0, 0, 0.86, 1.0), 0, [0x220F], lsb=30, rsb=30)
+    pb = bounds(Pi)                                    # 0.74: narrowed between its stems (it was scaled: stems 74)
+    put(font, "product", narrow(Pi, hs[0][1] + 90, round(0.14 * (pb[2] - pb[0]))), 0, [0x220F], lsb=30, rsb=30)
     if "uni01A9" in font or "Esh" in font:
         put(font, "summation", gp(font, "Esh"), 0, [0x2211], lsb=30, rsb=30)
     # integral: Area's esh, on the figures' height
@@ -1066,7 +1205,11 @@ def eng_mu(font):
 # circumflex (acute, grave, hook above) sits beside it at its upper right; a tilde, and every tone over a breve, sits
 # above it; the dot below goes under the letter as on its own.
 
-HOOK = {"": (628, 172, 50, 32), ".case": (775, 124, 46, 30)}   # bottom, height, side stroke, top stroke
+# 0.71: the side stroke 50 > 58 and 46 > 52 (top 32 > 36, 30 > 34). The hook was 0.66 of the acute's weight; the five
+# faces measured with Vietnamese hold 0.77 to 0.97. 0.75 is what its size carries with the counter still open (36).
+# 0.74: the capital form is 124 tall: at 52 its counter closed to a 76-square-unit scrap (found by verify.py), so it
+# keeps 46 and 30. A hook's side stroke leaves at least 9 units of counter each side of its centre line.
+HOOK = {"": (628, 172, 58, 36), ".case": (775, 124, 46, 30)}   # bottom, height, side stroke, top stroke
 
 
 def hook_above(font):
@@ -1084,7 +1227,7 @@ def hook_above(font):
         name = "hookabovecomb" + suf
         g = put(font, name, p, 0, [0x0309] if not suf else [])
         g.clearAnchors()
-        g.appendAnchor({"name": "_top", "x": round(cx + wt * 0.35), "y": 632 if not suf else 763})
+        g.appendAnchor({"name": "_top", "x": round(cx + wt * 0.35), "y": 632 + MARK_DROP if not suf else 763})
         g.appendAnchor({"name": "top", "x": round(cx + wt * 0.35), "y": round(y0 + h + 25)})
         font.lib.setdefault("public.openTypeCategories", {})[name] = "mark"
 
@@ -1148,7 +1291,8 @@ BASES = {"a": "a", "e": "e", "i": "idotless", "o": "o", "u": "u", "y": "y", "A":
          "U": "U", "Y": "Y", "\u01a1": "ohorn", "\u01b0": "uhorn", "\u01a0": "Ohorn", "\u01af": "Uhorn"}
 BESIDE = 0.30           # a tone beside a circumflex: its left edge this share of the circumflex's width right of centre
 BESIDE_DROP = 0.12      # and its foot this share of the circumflex's height below the circumflex's top
-STACK_GAP = 22          # a mark above another: this much white between them
+STACK_GAP = 13          # a mark above another: this much white between them (0.75: the face's own minimum,
+                        # spacing.MIN_GAP; 22 until then). It takes 9 units off the tallest Vietnamese capitals
 
 
 def _anchor(g, name):
@@ -1190,7 +1334,14 @@ def vietnamese(font):
             ma = _anchor(mg, "_top")
             mb = bounds(gp(font, mg.name))
             if prev is None:
-                dx, dy = top[0] - ma[0], (top[1] - ma[1]) if upper else 0
+                dx, dy = top[0] - ma[0], top[1] - ma[1]      # by anchor in both cases (0.71: MARK_DROP)
+            elif prev[0].startswith("circumflex") and mname == "gravecomb":
+                # 0.71: the grave is the acute turned over, so it meets the circumflex on the other side, its foot
+                # toward the peak. At the acute's place its foot pointed away and it stood 100 units off (the acute
+                # 31; five faces with Vietnamese keep 15 to 67). Source Serif 4 and Newsreader put it here.
+                pb = prev[1]
+                dx = (pb[0] + pb[2]) / 2 - BESIDE * (pb[2] - pb[0]) - mb[2]
+                dy = pb[3] - BESIDE_DROP * (pb[3] - pb[1]) - mb[1]
             elif prev[0].startswith("circumflex") and mname != "tildecomb":
                 pb = prev[1]
                 dx = (pb[0] + pb[2]) / 2 + BESIDE * (pb[2] - pb[0]) - mb[0]
@@ -1290,6 +1441,1151 @@ def align_anchors(font):
     return n
 
 
+# ---------------------------------------------------------------- 0.71: the evaluation beyond a-z, A-Z, 0-9
+# Measured on all nine faces with docs/research/serif-evaluation-2026-11-13/tools/test_extended.py and looked at
+# glyph by glyph (sheets.py). Each rule below is checked by audit_charset.py, which fails on build 0.70.
+
+# One stroke for the signs that are plain strokes. Both references draw plus, minus, bar, slash and underscore at
+# one weight (Georgia Pro 61 / 62 / 61 / 61, Serrif 46 / 45 / 45 / 47 for plus / bar / slash / underscore). Area's
+# minus and dashes are 52 (0.60 H stems); the plus had a 40 upright on a 52 bar (derive thickens level strokes for
+# contrast and lighten thins upright ones: Libre Baskerville's was 52 on 50), the not sign 39 on 50, the bar 65, the
+# underscore 72, the slash 41 at its top and 49 at its foot.
+FRACTION_BAR = 48       # the bar of the fraction slash, the percent sign and every fraction, level width (they ran 40 to 54)
+
+
+def _level_cut(c):
+    """A four-point contour with two level edges: ((x0, x1, y) lower, (x0, x1, y) upper), or None."""
+    P = c.points
+    if len(P) != 4 or any(p.type != "line" for p in P):
+        return None
+    ys = sorted({p.y for p in P})
+    if len(ys) != 2:
+        return None
+    lo = sorted(p.x for p in P if p.y == ys[0])
+    hi = sorted(p.x for p in P if p.y == ys[1])
+    return (lo[0], lo[1], ys[0]), (hi[0], hi[1], ys[1])
+
+
+def _slash(lo, hi, perp=None):
+    """A leaning stroke between two level cuts, one thickness from end to end: `perp` across the stroke, or (None)
+    the mean of the two cuts it had."""
+    bc, tc = (lo[0] + lo[1]) / 2, (hi[0] + hi[1]) / 2
+    if perp is None:
+        wh = ((lo[1] - lo[0]) + (hi[1] - hi[0])) / 2
+    else:
+        wh = perp * math.hypot(tc - bc, hi[2] - lo[2]) / (hi[2] - lo[2])
+    return shape([(bc - wh / 2, lo[2]), (bc + wh / 2, lo[2]), (tc + wh / 2, hi[2]), (tc - wh / 2, hi[2])])
+
+
+def plain_strokes(font, m):
+    w = m.math
+    done = []
+    b = bounds(gp(font, "plus"))
+    cx, cy = (b[0] + b[2]) / 2, m.math_y
+    plus = union(rect(b[0], cy - w / 2, b[2], cy + w / 2), rect(cx - w / 2, b[1], cx + w / 2, b[3]))
+    put(font, "plus", plus, font["plus"].width)
+    g = font["plusminus"]                                # its plus, and the bar under it as it is
+    boxes = sorted((bounds(_contour_path(c)) for c in g.contours), key=lambda q: q[3] - q[1])
+    bar_, pl = boxes[0], boxes[-1]
+    pcx, pcy = (pl[0] + pl[2]) / 2, (pl[1] + pl[3]) / 2
+    put(font, "plusminus", union(rect(pl[0], pcy - w / 2, pl[2], pcy + w / 2), rect(pcx - w / 2, pl[1], pcx + w / 2, pl[3]),
+                                 rect(bar_[0], bar_[1], bar_[2], bar_[1] + w)), g.width)
+    b = bounds(gp(font, "logicalnot"))
+    put(font, "logicalnot", union(rect(b[0], b[3] - w, b[2], b[3]), rect(b[2] - w, b[1], b[2], b[3])), font["logicalnot"].width)
+    b = bounds(gp(font, "underscore"))
+    cy = (b[1] + b[3]) / 2
+    put(font, "underscore", rect(b[0], cy - w / 2, b[2], cy + w / 2), font["underscore"].width)
+    for name in ("bar", "brokenbar"):
+        g = font[name]
+        boxes = [bounds(_contour_path(c)) for c in g.contours]
+        cx = (boxes[0][0] + boxes[0][2]) / 2
+        put(font, name, union(*[rect(cx - w / 2, q[1], cx + w / 2, q[3]) for q in boxes]), g.width)
+    g = font["slash"]
+    lo, hi = _level_cut(g.contours[0])
+    side = (lo[0], g.width - hi[1])
+    s = _slash(lo, hi, w)
+    put(font, "slash", s, 0, lsb=side[0], rsb=side[1])
+    put(font, "backslash", moved(s, 0, 0, -1, 1), 0, lsb=side[1], rsb=side[0])
+    lo, hi = _level_cut(font["fraction"].contours[0])    # the fraction bar keeps its own lighter weight, one
+    bc, tc = (lo[0] + lo[1]) / 2, (hi[0] + hi[1]) / 2    # width (FRACTION_BAR) here and in every ready-made fraction
+    put(font, "fraction", shape([(bc - FRACTION_BAR / 2, lo[2]), (bc + FRACTION_BAR / 2, lo[2]),
+                                 (tc + FRACTION_BAR / 2, hi[2]), (tc - FRACTION_BAR / 2, hi[2])]), font["fraction"].width)
+    bars_in = ["percent", "perthousand"] + [g.name for g in font if g.components and len(g.contours) == 1
+                                            and any(c.baseGlyph.endswith("inferior") for c in g.components)]
+    for name in bars_in:                                 # their bar is a contour beside the small figures
+        for c in font[name].contours:
+            cut = _level_cut(c)
+            if not cut:
+                continue
+            lo, hi = cut
+            wh = FRACTION_BAR
+            for p in c.points:
+                l, r, _ = lo if p.y == lo[2] else hi
+                mid = (l + r) / 2
+                p.x = round(mid - wh / 2) if p.x == l else round(mid - wh / 2) + wh
+            done.append(f"{name} bar {lo[1] - lo[0]} / {hi[1] - hi[0]} > {wh}")
+    return done
+
+
+def _contour_path(c):
+    p = pathops.Path()
+    c.draw(p.getPen())
+    return p
+
+
+# Signs made of a letter and a stroke are the finished letter and a stroke (the rule every other such glyph here
+# follows). The dollar, cent and yen kept Libre Baskerville's own S, c and Y: the dollar's S 122 across at its
+# heaviest where Area's S is 102, the yen's bars 63 where a capital's thin strokes are 46 to 49, the cent's c scaled
+# with the capitals (0.94). The stroke is the case's hairline (47 capitals, 43 lowercase), where and as long as
+# Libre Baskerville had it; the yen's bars are H's crossbar, as the won's, the ruble's and the lira's.
+STROKE_UP, STROKE_LOW = 47, 43          # the ladder's hairlines (balance.CAP_THIN, clean.THIN_ARCH x stem)
+
+
+def letter_signs(font, m):
+    done = []
+    # dollar: S, the stroke through it
+    old = gp(font, "dollar")
+    ob = bounds(old)
+    st = scan_h(old, ob[3] - 20)[0]                              # the stroke's stub above the S
+    S = gp(font, "S")
+    sb = bounds(S)
+    xc = sb[0] + (sb[2] - sb[0]) * ((st[0] + st[1]) / 2 - ob[0]) / (ob[2] - ob[0])
+    sx = band(xc, STROKE_UP)
+    p = union(S, rect(sx[0], ob[1], sx[1], ob[3]))
+    w0 = font["dollar"].width
+    put(font, "dollar", p, 0, lsb=ob[0], rsb=w0 - ob[2])
+    done.append(f"dollar: S + stroke {st[1] - st[0]:.0f}>{STROKE_UP}")
+    # cent: c at its own size, the stroke through it
+    old = gp(font, "cent")
+    ob = bounds(old)
+    st = scan_h(old, ob[3] - 20)[0]
+    cols = [scan_v(old, x) for x in range(int(ob[0]) + 5, int(st[0]) - 5, 5)]     # the old c, left of the stroke
+    old_top = max(s[1] for col in cols for s in col)
+    old_bot = min(s[0] for col in cols for s in col)
+    c = gp(font, "c")
+    cb = bounds(c)
+    xc = cb[0] + (cb[2] - cb[0]) * ((st[0] + st[1]) / 2 - ob[0]) / (ob[2] - ob[0])
+    sx = band(xc, STROKE_LOW)
+    p = union(c, rect(sx[0], cb[1] + (ob[1] - old_bot), sx[1], cb[3] + (ob[3] - old_top)))
+    w0 = font["cent"].width
+    put(font, "cent", p, 0, lsb=ob[0], rsb=w0 - ob[2])
+    done.append(f"cent: c + stroke {st[1] - st[0]:.0f}>{STROKE_LOW}, c top {old_top:.0f}>{cb[3]:.0f}")
+    # yen: Y, two bars across its stem
+    g = font["yen"]
+    P = [q for c_ in g.contours for q in c_.points if q.type == "line"]
+    mid = [q for q in P if 100 < q.y < 0.5 * CAP_HEIGHT]
+    left = min(q.x for q in mid)
+    ys = sorted({q.y for q in mid if q.x == left})                              # the bars' four level edges
+    ob = bounds(gp(font, "yen"))
+    if len(ys) == 4:
+        xs = [q.x for q in P if q.y in ys]
+        Y = gp(font, "Y")
+        yb = bounds(Y)
+        stem = scan_h(Y, 100)[0]
+        cx = (stem[0] + stem[1]) / 2
+        half = (max(xs) - min(xs)) / 2
+        bars_ = [rect(cx - half, band((a + b) / 2, m.cap_bar)[0], cx + half, band((a + b) / 2, m.cap_bar)[1])
+                 for a, b in ((ys[0], ys[1]), (ys[2], ys[3]))]
+        w0 = g.width
+        put(font, "yen", union(Y, *bars_), 0, lsb=ob[0], rsb=w0 - ob[2])
+        done.append(f"yen: Y + bars {ys[1] - ys[0]:.0f}>{m.cap_bar:.0f}")
+    else:
+        done.append(f"yen: bars not found ({ys})")
+    return done
+
+
+# A right-hand bracket is its left-hand one turned over. Each pair had drifted by a unit or two through lightening
+# and rounding (bracket stems 73 and 74, braces 233 and 234 wide, 4 to 62 points apart).
+MIRRORS = [("parenleft", "parenright"), ("bracketleft", "bracketright"), ("braceleft", "braceright"),
+           (0x00AB, 0x00BB), (0x2039, 0x203A), ("less", "greater")]
+
+
+def _name(font, key):
+    if isinstance(key, str):
+        return key
+    return next(g.name for g in font if key in g.unicodes)
+
+
+def mirrors(font):
+    done = []
+    for a, b in MIRRORS:
+        a, b = _name(font, a), _name(font, b)
+        ga, gb_ = font[a], font[b]
+        if ga.components or gb_.components:
+            continue
+        x0, _, x1, _ = bounds(gp(font, a))
+        # point for point (not through pathops, which may start or split a contour elsewhere): x turned about
+        # the ink, the contour's direction turned back
+        from fontTools.pens.reverseContourPen import ReverseContourPen
+        gb_.clearContours()
+        ga.draw(ReverseContourPen(TransformPen(gb_.getPen(), Transform(-1, 0, 0, 1, x0 + x1, 0))))
+        d = round((ga.width - x1) - x0)                    # its bearings are the other's, swapped
+        for c in gb_.contours:
+            for q in c.points:
+                q.x, q.y = round(q.x + d), round(q.y)
+        gb_.width = ga.width
+        REBUILT.add(b)
+        done.append(b)
+    return done
+
+
+# The ring over a capital. Capital accents are flatter than lowercase ones so that they fit the line, but a ring
+# cannot be flattened: Libre Baskerville scaled it instead, to 0.73 (120 units across, its stroke 35, its counter
+# 50: under 0.7 px at 13 px). Every other face measured keeps one ring for both cases (ring height in x-heights,
+# capital / lowercase: Georgia Pro 0.45 / 0.45, Serrif 0.36 / 0.37, Source Serif 4 0.39 / 0.43). So the capital
+# form is the lowercase ring, standing where the small one stood.
+# The circumflex over a capital sat 11 units higher than the caron, which is the same mark turned over (their
+# lowercase forms share one height, and both references hold one height for the two).
+def case_marks(font):
+    done = []
+
+    def anchor(g, name):
+        return next(a for a in g.anchors if a.name == name)
+
+    ring = gp(font, "ringcomb")
+    rb = bounds(ring)
+    ra = anchor(font["ringcomb"], "_top")
+    for name in ("ringcomb.case", "ring.case"):
+        if name not in font:
+            continue
+        g = font[name]
+        a = anchor(g, "_top")
+        ob = bounds(gp(font, name))
+        keep = [(q.name, q.x, q.y) for q in g.anchors]
+        dx = a.x - ra.x                                    # the ring's own anchor on the capital form's anchor
+        dy = ob[1] - rb[1]                                 # standing where the small ring stood
+        width, uni = g.width, list(g.unicodes)
+        put(font, name, moved(ring, dx, dy), width, uni)
+        g = font[name]
+        g.clearAnchors()
+        for nm, x, y in keep:
+            g.appendAnchor({"name": nm, "x": x, "y": y})
+        if width:                                          # the spacing form: its ink inside its advance
+            b = bounds(gp(font, name))
+            side = bounds(gp(font, "ring"))[0]
+            d = round(side - b[0])
+            for c in g.contours:
+                for q in c.points:
+                    q.x += d
+            for q in g.anchors:
+                q.x += d
+            g.width = round(b[2] - b[0] + 2 * side)
+            for o in font:                                 # whoever is built on it stays where it was
+                for comp in o.components:
+                    if comp.baseGlyph == name:
+                        t = list(comp.transformation)
+                        t[4] -= d
+                        comp.transformation = tuple(t)
+        done.append(f"{name}: {ob[2] - ob[0]:.0f} x {ob[3] - ob[1]:.0f} > {rb[2] - rb[0]:.0f} x {rb[3] - rb[1]:.0f}")
+    ref = font["acutecomb.case"]                       # 0.74: the acute's, for caron and circumflex alike (they
+    gap = bounds(gp(font, "acutecomb.case"))[1] - anchor(ref, "_top").y   # stood 1 over it)
+    for name in ("circumflexcomb.case", "circumflex.case", "caroncomb.case", "caron.case"):
+        g = font[name]
+        d = round(gap - (bounds(gp(font, name))[1] - anchor(g, "_top").y))
+        if d:
+            for c in g.contours:
+                for q in c.points:
+                    q.y += d
+            for q in g.anchors:
+                if not q.name.startswith("_"):
+                    q.y += d
+            done.append(f"{name}: {d:+d}")
+    return done
+
+
+# Where a mark sits over or under its letter. A mark was placed for the letter Libre Baskerville drew; Area has
+# since changed the width of o c z O D T Z U (set_widths), redrawn s, widened w and re-spaced I, and each change left
+# the marks where the old ink was: 42 units right of centre on O, 41 on T, 24 on I, 14 on o, 43 on z, 27 left on s,
+# 37 left on w. Eight other faces centre a mark on O to within 2 units.
+# MARK_X is where a symmetric mark's ink centre sits, in units right of the base's ink centre: the mean of Georgia
+# Pro and Serrif (each measured over every letter the base has with a dieresis, macron, circumflex, caron, breve,
+# ring, dot or tilde, in its own zone height, scaled to Area's; within 5 of the centre on a letter that is
+# symmetric there, the centre). A base moves only when it stands more than MARK_BAND from this, so letters that
+# already agree keep the designer's placement. i, j, J, h and t are not in the table: on those the references' longer
+# serifs and bars move the ink centre, not the mark. Tool: build/anchors_ref.py (numbers only).
+MARK_X = {"top": {"A": 0, "a": -36, "C": 45, "c": 13, "D": -24, "E": 5, "e": 11, "G": 13, "g": -21, "H": 0, "I": 0,
+                  "N": 0, "n": 0, "O": 0, "o": 0, "R": -46, "r": 0, "S": 0, "s": 0, "T": 0, "U": 10, "u": 0,
+                  "W": 18, "w": 20, "Y": 13, "y": 16, "Z": 9, "z": 8},
+          "bottom": {"A": -16, "a": -20, "E": 11, "e": 8, "I": 0, "O": 0, "o": 0, "S": 7, "s": 0, "T": 8, "U": 0,
+                     "u": 0}}
+MARK_BAND = 6
+MARK_ALIAS = {"Oslash": "O", "oslash": "o"}     # a struck letter takes its letter's move (its ink includes the stroke)
+CAP_MARK_Y = 763        # one height for the marks over every capital, as both references (O's sat 11 lower, B H K
+                        # M P V X 4, D G S T 2: Libre Baskerville's own offsets)
+
+
+def centre_marks(font):
+    """Moves each base's top and bottom anchor to MARK_X (and capitals' top anchors to one height), and every mark
+    of every letter composed on that base with it. Runs after align_anchors, so an anchor is where the precomposed
+    letters put their marks."""
+    cats = font.lib.get("public.openTypeCategories", {})
+    delta = {}
+    done = []
+    for side, table in MARK_X.items():
+        for base, off in table.items():
+            if base not in font:
+                continue
+            g = font[base]
+            a = next((q for q in g.anchors if q.name == side), None)
+            if a is None:
+                continue
+            b = bounds(gp(font, base))
+            dx = round((b[0] + b[2]) / 2 + off - a.x)
+            if abs(dx) <= MARK_BAND:
+                dx = 0
+            delta[(base, side)] = [dx, 0]
+    for g in font:                                       # capitals: one height
+        if len(g.name) == 1 and g.name.isupper():
+            a = next((q for q in g.anchors if q.name == "top"), None)
+            if a is not None and CAP_MARK_Y - 13 <= a.y < CAP_MARK_Y:
+                delta.setdefault((g.name, "top"), [0, 0])[1] = CAP_MARK_Y - a.y
+    for alias, base in MARK_ALIAS.items():
+        for side in ("top", "bottom"):
+            if (base, side) in delta and alias in font:
+                delta[(alias, side)] = list(delta[(base, side)])
+    delta = {k: v for k, v in delta.items() if v[0] or v[1]}
+    for (base, side), (dx, dy) in sorted(delta.items()):
+        for a in font[base].anchors:
+            if a.name == side:
+                a.x += dx
+                a.y += dy
+        done.append(f"{base} {side} {dx:+d}" + (f" up {dy}" if dy else ""))
+    n = 0
+    for g in font:
+        if len(g.components) < 2:
+            continue
+        base = g.components[0].baseGlyph
+        while base in font and not font[base].contours and font[base].components:
+            base = font[base].components[0].baseGlyph      # a letter built on an accented letter: the letter under it
+        hit = False
+        for comp in g.components[1:]:
+            mk = font[comp.baseGlyph]
+            names = {a.name for a in mk.anchors}
+            side = "top" if "_top" in names else "bottom" if "_bottom" in names else None
+            if side is None or (base, side) not in delta:
+                continue
+            dx, dy = delta[(base, side)]
+            t = list(comp.transformation)
+            t[4] += dx                                    # (the height of a capital's marks is set below, absolutely)
+            comp.transformation = tuple(t)
+            hit = True
+        # a first mark more than 3 units off its base's anchor goes onto it (capitals carrying a lowercase macron
+        # stood 13 or 14 right of it), and any mark stacked on it moves along
+        first = g.components[1]
+        mk = font[first.baseGlyph]
+        ma = next((a for a in mk.anchors if a.name == "_top"), None)
+        ba = next((a for a in font[base].anchors if a.name == "top"), None) if base in MARK_X["top"] else None
+        if ma is not None and ba is not None and g.components[0].baseGlyph == base:
+            off = first.transformation[4] + ma.x - (ba.x + g.components[0].transformation[4])
+            if abs(off) > 3:
+                for comp in g.components[1:]:
+                    if any(a.name == "_top" for a in font[comp.baseGlyph].anchors):
+                        t = list(comp.transformation)
+                        t[4] -= off
+                        comp.transformation = tuple(t)
+                hit = True
+        if hit:
+            n += 1
+            for a in g.anchors:
+                if (base, a.name) in delta:
+                    a.x += delta[(base, a.name)][0]
+                    a.y += delta[(base, a.name)][1]
+    # 0.74: a capital's first mark stands with its own anchor on CAP_MARK_Y, wherever it stood. 0.71 moved each
+    # letter's marks by what its anchor moved; but an anchor is the median of its letters' marks, and D G S T H
+    # carried letters already on the line (H-circumflex, D-caron ...), which went 2 to 4 units too high.
+    raised = 0
+    for g in font:
+        if len(g.components) < 2:
+            continue
+        base = g.components[0].baseGlyph
+        while base in font and not font[base].contours and font[base].components:
+            base = font[base].components[0].baseGlyph
+        if not (len(base) == 1 and base.isupper()) and base not in ("Oslash",):
+            continue
+        tops = [c for c in g.components[1:] if any(a.name == "_top" for a in font[c.baseGlyph].anchors)]
+        if not tops:
+            continue
+        ma = next(a for a in font[tops[0].baseGlyph].anchors if a.name == "_top")
+        need = CAP_MARK_Y - (ma.y + tops[0].transformation[5])
+        if need and abs(need) <= 16:                       # (O's lowercase-form marks stood 15 low)
+            for c in tops:
+                t = c.transformation
+                c.transformation = (t[0], t[1], t[2], t[3], t[4], t[5] + need)
+            raised += 1
+    done.append(f"capital marks set on {CAP_MARK_Y}: {raised}")
+    return done, n
+
+
+# Signs that kept Libre Baskerville's weight. Measured across the stroke (a ray along the inward normal to the facing
+# edge, only where that edge runs alongside): the daggers' round ends were 121 across, where the letters' ball
+# terminals are 88 to 100 (Georgia Pro's daggers 0.69 of its capital stem at their heaviest, Serrif's 0.98, Area's
+# 1.41), and the eth's bowl 94 where o is 82 and a lowercase round stroke at most 86.
+# The rule: no stroke of a sign is thicker than the like part of the letters it stands with. Where one is, its two
+# edges come in by half the excess each; hairlines, joins and counters do not move. One number per sign to change
+# back: delete its line.
+# Not here, after measuring: the euro (round stroke 92, the O's), sterling (93 to 98) and the section sign (92 to 103)
+# hold the capitals' round stroke within the 5% the capitals themselves are allowed. The largest circle inside them
+# (120, 109, 105) sits where a bar or the spine joins, which is not a stroke; 0.71's first report read it as one.
+# 0.75, the recommendations left open in 0.71, each one line to change back. The tilde's thick part was 80 (1.02 of
+# the stem) and its capital form 76 (0.89): Georgia Pro 0.84 and 0.73, Serrif 0.68 and 0.61; each goes to the nearer
+# reference, 66 and 63. The sharp s keeps Libre Baskerville's form, which is the references' form, at the letters'
+# weight: no round stroke over 83 (it was 105 at its heaviest), the capital's over 95.
+SIGN_STROKE_NAMES = {"tilde": 66, "tildecomb": 66, "tilde.case": 63, "tildecomb.case": 63, "germandbls": 83, "Germandbls": 95}
+SIGN_STROKE = {0x2020: 100, 0x2021: 100,                # daggers: their round ends no larger than a ball terminal
+               0x00F0: 83}                              # eth: the lowercase rounds' thickest (o 82, e and s 83; 0.71 wrote 86, the value before lightening)
+SIGN_BAR = {0x20AC: None, 0x00A3: None}                 # their level bars: H's crossbar (they were 60 to 64)
+
+
+def _polys(g):
+    out = []
+    for c in g.contours:
+        p = pathops.Path()
+        c.draw(p.getPen())
+        pts, cur = [], None
+        for verb, P in p.segments:
+            if verb in ("moveTo", "lineTo"):
+                cur = P[0]
+                pts.append(cur)
+            elif verb == "curveTo":
+                a = cur
+                b, c2, d = P
+                for k in range(1, 13):
+                    t = k / 12
+                    u = 1 - t
+                    pts.append((u ** 3 * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c2[0] + t ** 3 * d[0],
+                                u ** 3 * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c2[1] + t ** 3 * d[1]))
+                cur = d
+        out.append(pts)
+    return out
+
+
+def _inside(polys, x, y):
+    n = 0
+    for pts in polys:
+        for i in range(len(pts)):
+            a, b = pts[i], pts[(i + 1) % len(pts)]
+            if (a[1] <= y < b[1]) or (b[1] <= y < a[1]):
+                if a[0] + (y - a[1]) / (b[1] - a[1]) * (b[0] - a[0]) > x:
+                    n += 1
+    return n % 2 == 1
+
+
+def _ray(polys, x, y, nx, ny):
+    """Distance along (nx, ny) from (x, y) to the nearest edge, and how parallel that edge runs to the edge we left."""
+    best = None
+    for pts in polys:
+        for i in range(len(pts)):
+            a, b = pts[i], pts[(i + 1) % len(pts)]
+            ex, ey = b[0] - a[0], b[1] - a[1]
+            den = nx * ey - ny * ex
+            if abs(den) < 1e-9:
+                continue
+            t = ((a[0] - x) * ey - (a[1] - y) * ex) / den
+            u = ((a[0] - x) * ny - (a[1] - y) * nx) / den
+            if t > 1.5 and 0 <= u <= 1 and (best is None or t < best[0]):
+                el = math.hypot(ex, ey)
+                best = (t, abs(ex * -ny + ey * nx) / el if el else 0)
+    return best
+
+
+def cap_strokes(font):
+    done = []
+    todo = [(next((g.name for g in font if cp in g.unicodes), None), t) for cp, t in SIGN_STROKE.items()]
+    todo += [(n, t) for n, t in SIGN_STROKE_NAMES.items() if n in font]
+    for name, target in todo:
+        if name is None:
+            continue
+        g = font[name]
+        moved_most = 0.0
+        for _ in range(8):                               # until no stroke is over (3 passes left the sharp s at 87)
+            polys = _polys(g)
+            moves = []
+            for c in g.contours:
+                P, n = c.points, len(c.points)
+                for i, p in enumerate(P):
+                    a, b = P[i - 1], P[(i + 1) % n]
+                    if p.type != "curve" or not p.smooth or a.type is not None or b.type is not None:
+                        continue                              # a smooth node on a curve, both handles its own
+                    tx, ty = b.x - a.x, b.y - a.y
+                    L = math.hypot(tx, ty)
+                    if L < 1e-6:
+                        continue
+                    nx, ny = -ty / L, tx / L
+                    if not _inside(polys, p.x + nx * 1.5, p.y + ny * 1.5):
+                        nx, ny = -nx, -ny
+                        if not _inside(polys, p.x + nx * 1.5, p.y + ny * 1.5):
+                            continue
+                    hit = _ray(polys, p.x, p.y, nx, ny)
+                    if not hit or hit[1] < 0.85 or not target + 1.5 < hit[0] < 1.6 * target:
+                        continue
+                    d = (hit[0] - target) / 2
+                    moves.append((p, a, b, nx * d, ny * d))
+            if not moves:
+                break
+            for p, a, b, dx, dy in moves:
+                for q in (p, a, b):
+                    q.x, q.y = q.x + dx, q.y + dy
+                moved_most = max(moved_most, math.hypot(dx, dy))
+        for c in g.contours:
+            for q in c.points:
+                q.x, q.y = round(q.x), round(q.y)
+        done.append(f"{name}: at most {target} across, edges in by up to {moved_most:.0f}")
+    m_bar = M(font).cap_bar
+    for cp in SIGN_BAR:
+        name = next((g.name for g in font if cp in g.unicodes), None)
+        if name is None:
+            continue
+        g = font[name]
+        # a bar: two level straight edges, each 60 or more long, 52 to 70 apart, one over the other
+        edges = []
+        for c in g.contours:
+            P, n = c.points, len(c.points)
+            for i, p in enumerate(P):
+                q = P[(i + 1) % n]
+                if q.type == "line" and p.y == q.y and abs(p.x - q.x) >= 40:
+                    edges.append((p.y, min(p.x, q.x), max(p.x, q.x)))
+        polys = _polys(g)
+        pairs = [(lo, hi) for lo in edges for hi in edges if 52 <= hi[0] - lo[0] <= 70
+                 and min(lo[2], hi[2]) - max(lo[1], hi[1]) >= 50
+                 and _inside(polys, (max(lo[1], hi[1]) + min(lo[2], hi[2])) / 2, (lo[0] + hi[0]) / 2)]
+        seen = set()
+        for lo, hi in pairs:
+            if (lo[0], hi[0]) in seen:
+                continue
+            seen.add((lo[0], hi[0]))
+            nlo, nhi = band((lo[0] + hi[0]) / 2, m_bar)
+            for c in g.contours:                          # every point on the bar's two edges, the whole length of
+                for q in c.points:                        # the bar (0.71 moved only the stretch where it found both
+                    if q.y == lo[0]:                      # edges, and left the euro's and sterling's bars stepped)
+                        q.y = nlo
+                    elif q.y == hi[0]:
+                        q.y = nhi
+            done.append(f"{name}: bar {hi[0] - lo[0]:.0f}>{m_bar:.0f} at {lo[0]:.0f}")
+    return done
+
+
+# Greenlandic kra is k without its ascender (Libre Baskerville's was its own small capital K: 105 across at its
+# heaviest where k is 92, its own serifs and arm). k's arm and leg, the stem under dotless i's head.
+def kra(font):
+    name = next((g.name for g in font if 0x0138 in g.unicodes), None)
+    if name is None:
+        return []
+    k, i = gp(font, "k"), gp(font, "idotless")
+    ks, is_ = _stem_x(k, 300), _stem_x(i, 300)
+    cut = X_HEIGHT - 150                                   # under the head serif's bracket, over the arm's join
+    body = op(k, rect(-200, cut, ks[1], 2000), pathops.PathOp.DIFFERENCE)
+    body = op(body, rect(-200, X_HEIGHT + 12, 2000, 2000), pathops.PathOp.DIFFERENCE)
+    head = op(i, rect(-200, cut - 1, is_[1] + 0.5, 2000), pathops.PathOp.INTERSECTION)
+    put(font, name, union(body, moved(head, ks[0] - is_[0])), font["k"].width)
+    kern_like(font, name, "k", "k")
+    return [f"{name}: k under dotless i's head"]
+
+
+# How far a lowercase accent stands off its letter. The acute, grave, circumflex, caron, breve, ring and double acute
+# stood 108 units over the x-height (103 and 113 for breve and ring): 0.208 x-heights, further than seven of the
+# eight other faces (0.127 to 0.184; Georgia Pro 0.127, Serrif 0.145; only Libre Baskerville, whose marks these
+# are, stands further). They come down MARK_DROP, half the way to the mean of Georgia Pro and Serrif: 90 units,
+# 0.173. One number to change back. The tilde, dieresis, dot and macron stay: Georgia Pro holds them where Area
+# does, so the references do not agree. Letters with an ascender and capitals that carry these marks keep them
+# where they were (h with a circumflex would touch its ascender).
+MARK_DROP = 19          # 108.2 to 89.4 (the half-way point; 0.71 to 0.73 had 18)
+DROP_MARKS = ("acutecomb", "gravecomb", "circumflexcomb", "caroncomb", "brevecomb", "ringcomb", "hungarumlautcomb",
+              "acute", "grave", "circumflex", "caron", "breve", "ring", "hungarumlaut")
+X_ANCHOR = 632          # the top anchor of every letter that ends at the x-height
+
+
+def drop_marks(font):
+    n = 0
+    for g in font:
+        if len(g.components) < 2:
+            continue
+        base = g.components[0].baseGlyph
+        while base in font and not font[base].contours and font[base].components:
+            base = font[base].components[0].baseGlyph
+        a = next((q for q in font[base].anchors if q.name == "top"), None)
+        first = g.components[1]
+        if a is None or a.y != X_ANCHOR or first.baseGlyph not in DROP_MARKS or g.components[0].baseGlyph != base:
+            continue
+        for comp in g.components[1:]:
+            if any(q.name == "_top" for q in font[comp.baseGlyph].anchors):
+                t = list(comp.transformation)
+                t[5] -= MARK_DROP
+                comp.transformation = tuple(t)
+        n += 1
+    for name in DROP_MARKS:                             # so a typed accent lands where the ready-made letter has it
+        if name in font:
+            for q in font[name].anchors:
+                if q.name == "_top":
+                    q.y += MARK_DROP
+    return n
+
+
+# ---------------------------------------------------------------- 0.72: more glyphs, from the letters and parts
+# What a UI face needs next (charset-0.47.md's gap list, and the keys, menus and tables of an interface): the
+# fractions the font lacked, currency signs that are a capital and strokes, the remaining key symbols, menu dots,
+# and solid shapes on the figures' height. Nothing here is drawn by hand: each is a finished letter, an existing
+# glyph turned or cut, or geometry on the maths' axis at the maths' weight.
+
+FRACTIONS = {0x2155: (1, 5), 0x2156: (2, 5), 0x2157: (3, 5), 0x2158: (4, 5), 0x2159: (1, 6), 0x215A: (5, 6),
+             0x2150: (1, 7), 0x2151: (1, 9)}
+FRAC_NAMES = {0x2155: "onefifth", 0x2156: "twofifths", 0x2157: "threefifths", 0x2158: "fourfifths",
+              0x2159: "onesixth", 0x215A: "fivesixths", 0x2150: "oneseventh", 0x2151: "oneninth"}
+
+
+def fractions(font):
+    """As the fractions the font has: a superior, the bar, an inferior. The figures stand where one eighth's stand
+    (their ink centres), the bar is one eighth's."""
+    src = font["oneeighth"]
+    num = next(c for c in src.components if c.baseGlyph.endswith("superior"))
+    den = next(c for c in src.components if c.baseGlyph.endswith("inferior"))
+
+    def centre(name):
+        b = bounds(gp(font, name))
+        return (b[0] + b[2]) / 2
+    ncx = num.transformation[4] + centre(num.baseGlyph)
+    dcx = den.transformation[4] + centre(den.baseGlyph)
+    made = []
+    for cp, (a, b) in FRACTIONS.items():
+        name = FRAC_NAMES[cp]
+        g = font.newGlyph(name) if name not in font else font[name]
+        g.clearContours()
+        g.clearComponents()
+        for c in src.contours:
+            c.draw(g.getPen())
+        sup, inf = FIGS[a] + "superior", FIGS[b] + "inferior"
+        g.components.append(Component(sup, (1, 0, 0, 1, round(ncx - centre(sup)), 0)))
+        g.components.append(Component(inf, (1, 0, 0, 1, round(dcx - centre(inf)), 0)))
+        g.width = src.width
+        g.unicodes = [cp]
+        COMPOSED.add(name)
+        made.append(name)
+    t = font.features.text
+    anchor = "\tsub one [slash fraction] eight by oneeighth;"
+    for cp, (a, b) in FRACTIONS.items():
+        line = f"\tsub {FIGS[a]} [slash fraction] {FIGS[b]} by {FRAC_NAMES[cp]};"
+        if line not in t and anchor in t:
+            t = t.replace(anchor, anchor + "\n" + line, 1)
+    font.features.text = t
+    return made
+
+
+# The figures of a fraction and its bar. 0.47 made the small figures larger (0.42 to 0.54 of the figure height) and
+# left each fraction's figures where the smaller ones had stood: the numerator 4 to 22 units from the bar (two
+# thirds touched it), where Georgia Pro keeps 55 to 99 and Serrif 78 to 89 (Libre Baskerville itself 74 to 103).
+# Each figure's nearest ink now stands FRAC_GAP from the bar: the mean of the two references' nearest (55 and 78).
+# The fraction keeps its side bearings; its advance follows.
+FRAC_GAP = 66
+
+
+def _seg_dist(p, a, b):
+    vx, vy = b[0] - a[0], b[1] - a[1]
+    L2 = vx * vx + vy * vy
+    t = max(0.0, min(1.0, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / L2)) if L2 else 0.0
+    return math.hypot(p[0] - a[0] - t * vx, p[1] - a[1] - t * vy)
+
+
+def _outline_points(path, n=10):
+    out, cur = [], None
+    for verb, P in path.segments:
+        if verb in ("moveTo", "lineTo"):
+            if cur is not None and verb == "lineTo":
+                for k in range(1, n):
+                    out.append((cur[0] + (P[0][0] - cur[0]) * k / n, cur[1] + (P[0][1] - cur[1]) * k / n))
+            cur = P[0]
+            out.append(cur)
+        elif verb == "curveTo":
+            a = cur
+            b, c, d = P
+            for k in range(1, n + 1):
+                t = k / n
+                u = 1 - t
+                out.append((u ** 3 * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c[0] + t ** 3 * d[0],
+                            u ** 3 * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c[1] + t ** 3 * d[1]))
+            cur = d
+    return out
+
+
+def fraction_gap(font, g, comp):
+    """The white between one figure of a fraction and its bar."""
+    bar_ = [(p.x, p.y) for p in g.contours[0].points]
+    t = comp.transformation
+    pts = [(x + t[4], y + t[5]) for x, y in _outline_points(gp(font, comp.baseGlyph))]
+    return min(_seg_dist(p, bar_[i], bar_[(i + 1) % len(bar_)]) for p in pts for i in range(len(bar_)))
+
+
+def fraction_names(font):
+    return [g.name for g in font if g.components and len(g.contours) == 1 and g.name not in ("percent", "perthousand")
+            and any(c.baseGlyph.endswith("inferior") for c in g.components)
+            and any(c.baseGlyph.endswith("superior") for c in g.components)]
+
+
+def fraction_fit(font):
+    done = []
+    for name in fraction_names(font):
+        g = font[name]
+        b0 = bounds(gp(font, name))
+        lsb, rsb = b0[0], g.width - b0[2]
+        was = []
+        for comp in g.components:
+            sign = -1 if comp.baseGlyph.endswith("superior") else 1     # the numerator moves left, the other right
+            was.append(round(fraction_gap(font, g, comp)))
+            t0 = comp.transformation
+            lo, hi = -120.0, 200.0                                       # the move away from the bar, by bisection
+            for _ in range(24):
+                mid = (lo + hi) / 2
+                comp.transformation = (1, 0, 0, 1, t0[4] + sign * mid, t0[5])
+                if fraction_gap(font, g, comp) < FRAC_GAP:
+                    lo = mid
+                else:
+                    hi = mid
+            comp.transformation = (1, 0, 0, 1, round(t0[4] + sign * hi), t0[5])
+        b1 = bounds(gp(font, name))
+        d = round(lsb - b1[0])
+        for comp in g.components:
+            t = comp.transformation
+            comp.transformation = (1, 0, 0, 1, t[4] + d, t[5])
+        for p in g.contours[0].points:
+            p.x += d
+        g.width = round(lsb + (b1[2] - b1[0]) + rsb)
+        done.append(f"{name} {was[0]} / {was[1]}")
+    return done
+
+
+def letter_currencies(font, m):
+    """Naira, peso, tenge, bitcoin, kip, tugrik, guarani, colon: a capital and strokes, as the won, ruble and lira.
+    Level bars are H's crossbar; upright and leaning strokes the capital hairline."""
+    cb, S, hair = m.cap_bar, m.cap_stem, STROKE_UP
+    made = []
+
+    def done(name, cp, path, letter):
+        put(font, name, path, font[letter].width, [cp])     # no kerning: a currency sign stands before figures,
+        made.append(name)                                   # and its bars reach past the letter's own sides
+
+    # Where the strokes sit is measured on the references (0.74; 0.72 had placed them by eye): bar centres and
+    # overshoots in cap heights, the mean of Georgia Pro and Serrif, or Georgia Pro alone where Serrif lacks the sign.
+    def lev(y):                                            # a level bar of H's crossbar about y cap heights
+        return band(y * CAP_HEIGHT, cb)
+    N = gp(font, "N")
+    x0, _, x1, _ = bounds(N)
+    done("uni20A6", 0x20A6, union(N, rect(x0 - 10, lev(0.42)[0], x1 + 10, lev(0.42)[1]),       # 0.426, 0.418
+                                  rect(x0 - 10, lev(0.59)[0], x1 + 10, lev(0.59)[1])), "N")    # 0.595, 0.582
+    P = gp(font, "P")
+    ps = _stem_x(P, 200)
+    px1 = bounds(P)[2]
+    done("uni20B1", 0x20B1, union(P, rect(ps[0] - 0.9 * S, lev(0.62)[0], px1 + 0.25 * S, lev(0.62)[1]),   # 0.588, 0.645
+                                  rect(ps[0] - 0.9 * S, lev(0.78)[0], px1 + 0.25 * S, lev(0.78)[1])), "P")  # 0.756, 0.810
+    T = gp(font, "T")
+    tb = bounds(T)
+    arm = max(s[1] - s[0] for s in scan_v(T, tb[0] + 0.25 * (tb[2] - tb[0])))       # the arm's thickness
+    low = cut_out(T, 200, round((1 - 0.83) * CAP_HEIGHT))                            # T's top at 0.83 (Georgia Pro 0.829)
+    done("uni20B8", 0x20B8, union(low, rect(tb[0], CAP_HEIGHT - arm, tb[2], CAP_HEIGHT)), "T")
+    B = gp(font, "B")
+    bs = _stem_x(B, 200)
+    out = round(0.155 * CAP_HEIGHT)                                                  # 0.14 / 0.13 and 0.18 / 0.18
+    xs = (round(bs[1] + 0.35 * S), round(bs[1] + 1.75 * S))
+    stubs = [rect(x, -out, x + hair, 20) for x in xs] + [rect(x, CAP_HEIGHT - 20, x + hair, CAP_HEIGHT + out) for x in xs]
+    done("uni20BF", 0x20BF, union(B, *stubs), "B")
+    K = gp(font, "K")
+    ks = _stem_x(K, 200)
+    done("uni20AD", 0x20AD, union(K, rect(ks[0] - 0.9 * S, lev(0.51)[0], ks[1] + 2.4 * S, lev(0.51)[1])), "K")   # Georgia Pro 0.510
+    ts = _stem_x(T, 200)
+    cx = (ts[0] + ts[1]) / 2
+    done("uni20AE", 0x20AE, union(T, bar((cx - 1.3 * S, 0.30 * CAP_HEIGHT), (cx + 1.3 * S, 0.44 * CAP_HEIGHT), cb),
+                                  bar((cx - 1.3 * S, 0.46 * CAP_HEIGHT), (cx + 1.3 * S, 0.60 * CAP_HEIGHT), cb)), "T")
+    out = round(0.14 * CAP_HEIGHT)                                                   # Georgia Pro 0.16 below, 0.12 above
+    G = gp(font, "G")
+    gb = bounds(G)
+    gx = band(gb[0] + 0.50 * (gb[2] - gb[0]), hair)
+    done("uni20B2", 0x20B2, union(G, rect(gx[0], -out, gx[1], CAP_HEIGHT + out)), "G")
+    C_ = gp(font, "C")
+    c0 = bounds(C_)
+    ccx = c0[0] + 0.50 * (c0[2] - c0[0])
+    lean = 0.16 * CAP_HEIGHT
+    strokes = [bar((ccx + dx - lean / 2, -out - 40), (ccx + dx + lean / 2, CAP_HEIGHT + out + 40), hair) for dx in (-0.55 * S, 0.55 * S)]
+    p = union(C_, *strokes)
+    p = op(p, union(rect(-500, -500, 3000, -out), rect(-500, CAP_HEIGHT + out, 3000, 3000)), pathops.PathOp.DIFFERENCE)
+    done("uni20A1", 0x20A1, p, "C")
+    return made
+
+
+def more_symbols(font, m, adv):
+    w, cy = m.math, m.math_y
+    made = []
+
+    def add(name, cp, path, side=50):
+        put(font, name, path, 0, cp if isinstance(cp, list) else [cp], lsb=side, rsb=side)
+        made.append(name)
+
+    # menu dots: the period's dot, three of them, at the ellipsis's pitch
+    dot = gp(font, "period")
+    db = bounds(dot)
+    el = bounds(gp(font, "ellipsis"))
+    pitch = (el[2] - el[0] - (db[2] - db[0])) / 2
+    dcx, dcy = (db[0] + db[2]) / 2, (db[1] + db[3]) / 2
+    add("uni22EF", 0x22EF, union(*[moved(dot, k * pitch - dcx, cy - dcy) for k in (0, 1, 2)]), side=db[0])
+    add("uni22EE", 0x22EE, union(*[moved(dot, -dcx, cy + k * pitch - dcy) for k in (-1, 0, 1)]), side=db[0])
+    # keys. control: the arrows' head alone; tab: an arrow to a bar; return: the left arrow, its shaft turned up;
+    # delete forward: erase to the left turned over; caps lock: shift over a bar
+    ar = gp(font, "arrowright")
+    ab = bounds(ar)
+    au = gp(font, "arrowup")
+    ub = bounds(au)
+    head = op(au, rect(-500, ub[3] - (ab[3] - ab[1]) / 2 - w * 0.2, 3000, 3000), pathops.PathOp.INTERSECTION)
+    ucx = (ub[0] + ub[2]) / 2                              # without the shaft's stub under the point
+    head = op(head, rect(ucx - w / 2 - 1, -500, ucx + w / 2 + 1, ub[3] - w * 1.42 - 2), pathops.PathOp.DIFFERENCE)
+    add("uni2303", 0x2303, head, side=ub[0])
+    tab = union(ar, rect(ab[2], ab[1], ab[2] + w, ab[3]))
+    add("uni21E5", 0x21E5, tab, side=44)
+    add("uni21E4", 0x21E4, moved(tab, 0, 0, -1, 1), side=44)
+    al = gp(font, "arrowleft")
+    lb = bounds(al)
+    ret = union(al, rect(lb[2] - w, cy - w / 2, lb[2], cy + 0.42 * CAP_HEIGHT))
+    add("uni21B5", [0x21B5, 0x23CE], ret, side=44)
+    add("uni2326", 0x2326, moved(gp(font, "uni232B"), 0, 0, -1, 1))
+    sh = gp(font, "uni21E7")
+    sb = bounds(sh)
+    by = round(0.20 * (sb[3] - sb[1]))                    # the shaft shortened, nothing scaled (0.74)
+    up = moved(cut_out(sh, sb[1] + 80, by), 0, by)
+    add("uni21EA", 0x21EA, union(up, rect(sb[0] + 0.28 * (sb[2] - sb[0]), sb[1], sb[0] + 0.72 * (sb[2] - sb[0]), sb[1] + w)))
+    # solid shapes on the black circle's size and centre
+    cb_ = bounds(gp(font, "uni25CF"))
+    R = (cb_[3] - cb_[1]) / 2
+    oy = (cb_[1] + cb_[3]) / 2
+    tri = shape([(-R, -0.87 * R), (R, -0.87 * R), (0, 0.87 * R)])                 # level base, as wide as the circle
+    for name, cp, rot, sc in (("uni25B2", 0x25B2, 0, 1), ("uni25BC", 0x25BC, 180, 1), ("uni25B6", 0x25B6, -90, 1),
+                              ("uni25C0", 0x25C0, 90, 1), ("uni25B4", 0x25B4, 0, 0.55), ("uni25BE", 0x25BE, 180, 0.55),
+                              ("uni25B8", 0x25B8, -90, 0.55), ("uni25C2", 0x25C2, 90, 0.55)):
+        add(name, cp, moved(moved(tri, 0, 0, sc, sc, rot), 0, oy if sc == 1 else cy))
+    q = 0.88 * R
+    add("uni25A0", 0x25A0, rect(-q, oy - q, q, oy + q))
+    add("uni25A1", 0x25A1, op(rect(-q, oy - q, q, oy + q), rect(-q + w, oy - q + w, q - w, oy + q - w), pathops.PathOp.DIFFERENCE))
+    add("uni25C6", 0x25C6, shape([(0, oy - R), (R, oy), (0, oy + R), (-R, oy)]))
+
+    def star(r_out, r_in):
+        pts = []
+        for i in range(10):
+            a = math.radians(90 + 36 * i)
+            r = r_out if i % 2 == 0 else r_in
+            pts.append((r * math.cos(a), oy + r * math.sin(a)))
+        return shape(pts)
+    R5 = R * 1.08
+    r_in = 0.382 * R5
+    # the white star's inside: the same star, each edge moved in by the maths' stroke
+    a0, a1 = math.radians(90), math.radians(126)
+    p0, p1 = (R5 * math.cos(a0), R5 * math.sin(a0)), (r_in * math.cos(a1), r_in * math.sin(a1))
+    d0 = abs(p0[0] * p1[1] - p0[1] * p1[0]) / math.hypot(p1[0] - p0[0], p1[1] - p0[1])
+    kk = (d0 - w) / d0
+    add("uni2605", 0x2605, star(R5, r_in))
+    add("uni2606", 0x2606, op(star(R5, r_in), star(R5 * kk, r_in * kk), pathops.PathOp.DIFFERENCE))
+    return made
+
+
+# Two letters in one glyph (IJ, ij, and the DZ, LJ, NJ sets) are those letters set side by side: each at the advance
+# of the one before, their kerning between them, the glyph's advance their sum. They kept the offsets Libre
+# Baskerville gave them for its own letters: J has since moved 220 units in its advance, so IJ's J hung 100 units
+# out of the glyph and every letter after it ran into it (IJ before Y overlapped by 168).
+def numero(font):
+    """The numero sign is N and the masculine ordinal after it, the ordinal on N's advance (its ink ran 337 units
+    past the glyph's own advance, left where Libre Baskerville's narrower N had it)."""
+    if "numero" not in font:
+        return []
+    n_w = font["N"].width
+    o = font["ordmasculine"]
+    was = font["numero"].width
+    compose(font, "numero", [("N", 0, 0), ("ordmasculine", n_w - 12, 0)], n_w - 12 + o.width, list(font["numero"].unicodes))
+    return [f"numero {was}>{font['numero'].width}"]
+
+
+def digraphs(font):
+    import unicodedata
+    letter = lambda n: any(unicodedata.category(chr(u)) in ("Lu", "Ll", "Lt", "Lo") for u in font[n].unicodes) \
+        and font[n].width > 0 and n not in MARKS_SPACING and not n.startswith("ord")   # not accents, not ª º
+    done = []
+    for g in font:
+        if len(g.components) < 2 or g.name in COMPOSED or not letter(g.components[0].baseGlyph) \
+                or not letter(g.components[1].baseGlyph):
+            continue
+        x, prev = 0, None
+        for comp in g.components:
+            n = comp.baseGlyph
+            if letter(n):
+                if prev is not None:
+                    x += _kern(font, prev, n)
+                t = comp.transformation
+                d = x - t[4]
+                comp.transformation = (t[0], t[1], t[2], t[3], x, t[5])
+                x += font[n].width
+                prev, last_d = n, d
+            else:                                       # a mark on the letter before it moves with that letter
+                t = comp.transformation
+                comp.transformation = (t[0], t[1], t[2], t[3], t[4] + last_d, t[5])
+        was = g.width
+        g.width = x
+        first = next(c.baseGlyph for c in g.components if letter(c.baseGlyph))
+        kern_like(font, g.name, first, prev)
+        done.append(f"{g.name} {was}>{x}")
+    return done
+
+
+# ---------------------------------------------------------------- 0.74: the verification pass on 0.73
+# docs/research/serif-evaluation-2026-11-13/tools/verify.py re-read every glyph by second methods. What it found
+# that is a shape lives here; each rule has its check in audit_charset.py.
+
+def band(centre, w):
+    """A stroke w thick about `centre`, on whole units (a stroke centred on a half unit rounded to w - 1 or w + 1:
+    t-bar's bar 48 beside d-bar's 49, guarani's stroke 46 beside the dollar's 47)."""
+    lo = round(centre - w / 2)
+    return lo, lo + round(w)
+
+
+def cut_out(path, y, by, x0=-3000, x1=3000):
+    """Shortens a shape by `by` at height y: what is above comes down, nothing is scaled. The cut must cross only
+    upright strokes. (0.72 scaled T to 0.80 for the tenge and the shift arrow for caps lock, which thinned T's arm
+    from 46 to 37 and the arrow's level strokes from 52 to 42; 0.47 scaled the product sign's stems to 74.)"""
+    low = op(path, rect(x0, y, x1, 5000), pathops.PathOp.DIFFERENCE)
+    high = op(path, rect(x0, -5000, x1, y + by), pathops.PathOp.DIFFERENCE)
+    return union(low, moved(high, 0, -by))
+
+
+def narrow(path, x, by):
+    """The same sideways: the part right of x + by moves left by `by` (the cut must cross only level strokes)."""
+    left = op(path, rect(x, -5000, 5000, 5000), pathops.PathOp.DIFFERENCE)
+    right = op(path, rect(-5000, -5000, x + by, 5000), pathops.PathOp.DIFFERENCE)
+    return union(left, moved(right, -by, 0))
+
+
+# Dots. Libre Baskerville's dots are circles (131 by 131). derive thickens level strokes and charset.lighten_rest
+# thins upright ones, so every dot outside i and j had become an oval, 7 units taller than wide (the period 123 by
+# 130), and dots that are one dot had drifted apart by a unit (colon 124, period 123; the dieresis's two dots 110
+# and 111; the division sign's 125 and 124 tall; the inverted marks 118 against 117). A dot is a circle of its
+# family's width, on whole units (an even diameter); a glyph made of another's dots carries those dots.
+DOT_GLYPHS = {  # glyph: which edge of each dot holds its place ("bottom" for dots that stand on a line)
+    "period": "bottom", "exclam": "bottom", "question": "bottom", "periodcentered": "centre", "divide": "centre",
+    "dieresis": "centre", "dieresiscomb": "centre", "dieresis.case": "centre", "dieresiscomb.case": "centre",
+    "dotaccent": "centre", "dotaccentcomb": "centre", "dotaccent.case": "centre", "dotaccentcomb.case": "centre",
+    "dotbelow": "centre", "dotbelowcomb": "centre", "dotbelowcomb.case": "centre", "bulletoperator": "centre",
+}
+
+
+def _is_dot(c):
+    P = c.points
+    xs, ys = [p.x for p in P], [p.y for p in P]
+    w, h = max(xs) - min(xs), max(ys) - min(ys)
+    return 60 <= w < CLEAN.DOT_MAX and 60 <= h < CLEAN.DOT_MAX and 0.85 < w / h < 1.18 and not any(p.type == "line" for p in P)
+
+
+def _circle_into(c, cx, cy, r):
+    from ufoLib2.objects import Point
+    k = round(r * KAPPA)
+    pts = [(cx + r, cy, "curve"), (cx + r, cy + k, None), (cx + k, cy + r, None), (cx, cy + r, "curve"),
+           (cx - k, cy + r, None), (cx - r, cy + k, None), (cx - r, cy, "curve"), (cx - r, cy - k, None),
+           (cx - k, cy - r, None), (cx, cy - r, "curve"), (cx + k, cy - r, None), (cx + r, cy - k, None)]
+    c.points[:] = [Point(x, y, t, smooth=bool(t)) for x, y, t in pts]
+
+
+def round_dots(font):
+    done = []
+    for name, hold in DOT_GLYPHS.items():
+        if name not in font:
+            continue
+        g = font[name]
+        dots = [c for c in g.contours if _is_dot(c)]
+        if not dots:
+            continue
+        d = 2 * round(min(max(p.x for p in c.points) - min(p.x for p in c.points) for c in dots) / 2)
+        was = []
+        for c in dots:
+            xs, ys = [p.x for p in c.points], [p.y for p in c.points]
+            was.append((max(xs) - min(xs), max(ys) - min(ys)))
+            cx = round((min(xs) + max(xs)) / 2)
+            cy = min(ys) + d // 2 if hold == "bottom" else round((min(ys) + max(ys)) / 2)
+            _circle_into(c, cx, cy, d // 2)
+        done.append(f"{name} {was[0][0]}x{was[0][1]}>{d}")
+    return done
+
+
+def _dot_of(font, name):
+    c = next(c for c in font[name].contours if _is_dot(c))
+    xs, ys = [p.x for p in c.points], [p.y for p in c.points]
+    return c, (min(xs) + max(xs)) / 2, min(ys), (min(ys) + max(ys)) / 2
+
+
+def _place_dot(font, target_contour, src, hold):
+    """Makes target_contour the dot of glyph `src`, where the target stood (its centre x; its bottom or its centre)."""
+    from ufoLib2.objects import Point
+    c, scx, sy0, scy = _dot_of(font, src)
+    xs, ys = [p.x for p in target_contour.points], [p.y for p in target_contour.points]
+    dx = round((min(xs) + max(xs)) / 2 - scx)
+    dy = round(min(ys) - sy0) if hold == "bottom" else round((min(ys) + max(ys)) / 2 - scy)
+    target_contour.points[:] = [Point(p.x + dx, p.y + dy, p.type, smooth=p.smooth) for p in c.points]
+
+
+def _turned(font, src, dst):
+    """dst is src turned half round within dst's own box (inverted marks, the opening quote)."""
+    from fontTools.pens.transformPen import TransformPen as TP
+    s, d = font[src], font[dst]
+    sb, db = bounds(gp(font, src)), bounds(gp(font, dst))
+    lsb, top = round(db[0]), round(db[3])
+    d.clearContours()
+    s.draw(TP(d.getPen(), Transform(-1, 0, 0, -1, sb[0] + sb[2], sb[1] + sb[3])))
+    nb = bounds(gp(font, dst))
+    dx, dy = round(lsb - nb[0]), round(top - nb[3])
+    for c in d.contours:
+        for p in c.points:
+            p.x, p.y = round(p.x + dx), round(p.y + dy)
+    REBUILT.add(dst)
+
+
+def turned_pairs(font):
+    """Again at the very end of the build: the node and join rules run after charset and may cut a curve of one
+    glyph and not of its turned twin."""
+    for src, dst in (("exclam", "exclamdown"), ("question", "questiondown"), ("quoteright", "quoteleft")):
+        w = font[dst].width
+        rsb = w - bounds(gp(font, dst))[2]
+        _turned(font, src, dst)
+        font[dst].width = round(bounds(gp(font, dst))[2] + rsb)
+    for single, double in (("quoteleft", "quotedblleft"), ("quoteright", "quotedblright"), ("quotesinglbase", "quotedblbase"),
+                           ("quotesingle", "quotedbl")):
+        g = font[double]
+        old = sorted((bounds(_contour_path(c)) for c in g.contours), key=lambda b: b[0])
+        sb = bounds(gp(font, single))
+        rsb = g.width - max(b[2] for b in old)
+        g.clearContours()
+        pen = g.getPen()
+        for b in old:
+            font[single].draw(TransformPen(pen, Transform(1, 0, 0, 1, round(b[0] - sb[0]), round(old[0][1] - sb[1]))))
+        for c in g.contours:
+            for p in c.points:
+                p.x, p.y = round(p.x), round(p.y)
+        g.width = round(bounds(gp(font, double))[2] + rsb)
+
+
+def one_drawing(font):
+    """Glyphs that are another glyph's parts carry those parts: colon and semicolon the period's dot; the ellipsis
+    three; the inverted marks the upright ones turned half round; the opening quote the closing one turned; the
+    double quotes two singles; a bracket's two arms one thickness."""
+    done = []
+    for name, hold in (("colon", ("bottom", "centre")), ("semicolon", ("centre",)), ("ellipsis", ("bottom",) * 3)):
+        g = font[name]
+        dots = sorted((c for c in g.contours if _is_dot(c)), key=lambda c: (min(p.y for p in c.points), min(p.x for p in c.points)))
+        for c, h in zip(dots, hold):
+            _place_dot(font, c, "period", h)
+        done.append(name)
+    for src, dst in (("exclam", "exclamdown"), ("question", "questiondown"), ("quoteright", "quoteleft")):
+        w = font[dst].width
+        rsb = w - bounds(gp(font, dst))[2]
+        _turned(font, src, dst)
+        font[dst].width = round(bounds(gp(font, dst))[2] + rsb)
+        done.append(dst)
+    for single, double in (("quoteleft", "quotedblleft"), ("quoteright", "quotedblright"), ("quotesinglbase", "quotedblbase"),
+                           ("quotesingle", "quotedbl")):
+        g = font[double]
+        old = sorted((bounds(_contour_path(c)) for c in g.contours), key=lambda b: b[0])
+        sb = bounds(gp(font, single))
+        rsb = g.width - max(b[2] for b in old)
+        g.clearContours()
+        pen = g.getPen()
+        for b in old:
+            font[single].draw(TransformPen(pen, Transform(1, 0, 0, 1, round(b[0] - sb[0]), round(old[0][1] - sb[1]))))
+        for c in g.contours:
+            for p in c.points:
+                p.x, p.y = round(p.x), round(p.y)
+        g.width = round(bounds(gp(font, double))[2] + rsb)
+        REBUILT.add(double)
+        done.append(double)
+    g = font["bracketleft"]                                # the upper arm 51, the lower 50: the lower's
+    ys = sorted({p.y for c in g.contours for p in c.points})
+    if len(ys) == 4 and (ys[3] - ys[2]) != (ys[1] - ys[0]):
+        t = ys[1] - ys[0]
+        for c in g.contours:
+            for p in c.points:
+                if p.y == ys[2]:
+                    p.y = ys[3] - t
+        done.append(f"bracketleft arms {ys[3] - ys[2]} / {t} > {t}")
+    return done
+
+
+# The macron. Both references draw one macron thickness for both cases (Georgia Pro 62 and 63 units, Serrif 49 and
+# 49). Area's capital form was the capital hairline (47 or 48) and its lowercase form 59, heavier than the hyphen
+# (52) and every level stroke of the lowercase. The lowercase form takes the capital form's thickness, about its
+# own centre.
+def macron_weight(font):
+    done = []
+
+    def thick(name):
+        ys = sorted({p.y for c in font[name].contours for p in c.points})
+        return ys[0], ys[-1]
+    ref = thick("macroncomb.case")
+    t = ref[1] - ref[0]
+    for name in ("macron", "macroncomb", "macronbelowcomb", "uni0331"):
+        if name not in font or not font[name].contours:
+            continue
+        lo, hi = thick(name)
+        if hi - lo == t:
+            continue
+        nlo, nhi = band((lo + hi) / 2, t)
+        for c in font[name].contours:
+            for p in c.points:
+                p.y = nlo if p.y == lo else nhi if p.y == hi else p.y
+        done.append(f"{name} {hi - lo}>{t}")
+    return done
+
+
+# Marks that hang below. The ogonek reached -225 under A, -216 under I and U and -215 under a e i u E; the dot
+# below reached -219 under the capitals Libre Baskerville composed and -208 under the horned capitals composed
+# here. One depth for each (the commonest: -215 and -219).
+BELOW = {"ogonek": -215, "dotbelow": -219}
+
+
+def below_depths(font):
+    done = []
+    for g in font:
+        if len(g.components) < 2:
+            continue
+        base = g.components[0].baseGlyph
+        cap = base[:1].isupper()
+        for comp in g.components[1:]:
+            n = comp.baseGlyph
+            kind = "ogonek" if n.startswith("ogonek") else "dotbelow" if n.startswith("dotbelow") else None
+            if kind is None or (kind == "dotbelow" and not cap):
+                continue
+            t = comp.transformation
+            low = bounds(gp(font, n))[1] + t[5]
+            d = round(BELOW[kind] - low)
+            if d and abs(d) <= 14:
+                comp.transformation = (t[0], t[1], t[2], t[3], t[4], t[5] + d)
+                done.append(f"{g.name} {d:+d}")
+    return done
+
+
+# ---------------------------------------------------------------- 0.75: the recommendations left open in 0.71
+# Eng. All six faces looked at draw the capital as N with its right upright carried below the baseline into a
+# hooked tail. Area's was Libre Baskerville's own N of that form, lightened: 125 across at its heaviest where N is
+# 105, with its own width, diagonal and serifs. It is Area's N now, and the tail (what Libre Baskerville's Eng has
+# under the baseline) on N's right upright. One line to change back: do not call eng_capital.
+def eng_capital(font):
+    name = next((g.name for g in font if 0x014A in g.unicodes), None)
+    if name is None:
+        return []
+    old, N = gp(font, name), gp(font, "N")
+    o_st, n_st = scan_h(old, 100)[-1], scan_h(N, 100)[-1]
+    tail = op(old, rect(o_st[0] - 330, -3000, 3000, 30), pathops.PathOp.INTERSECTION)
+    was = round(o_st[1] - o_st[0])
+    put(font, name, union(N, moved(tail, n_st[1] - o_st[1])), font["N"].width)
+    kern_like(font, name, "N", "N")
+    return [f"{name}: N and the tail (its upright {was}, N's {n_st[1] - n_st[0]:.0f})"]
+
+
+# The degree sign's ring was 35 thick, under the half stem the guidelines set as the floor for a thin stroke (it
+# breaks up at text sizes). It takes the capital hairline, 47, inside the same outer circle.
+def degree_ring(font):
+    b = bounds(gp(font, "degree"))
+    g = font["degree"]
+    cx, cy, rx, ry = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2, (b[2] - b[0]) / 2, (b[3] - b[1]) / 2
+    put(font, "degree", ring(cx, cy, rx, ry, STROKE_UP, STROKE_UP), g.width)
+    return [f"degree ring > {STROKE_UP}"]
+
+
 # ---------------------------------------------------------------- run
 
 def run(font, lightened):
@@ -1298,6 +2594,9 @@ def run(font, lightened):
     before = snapshot(font)
     skipped = lighten_rest(font, set(lightened))
     m = M(font)
+    print("charset: round dots", round_dots(font))                     # 0.74
+    print("charset: one drawing", one_drawing(font))                   # 0.74
+    print("charset: macron", macron_weight(font))                      # 0.74
     dotless(font)
     bars(font, m)
     thorns(font, m)
@@ -1315,6 +2614,17 @@ def run(font, lightened):
     currencies(font, m)
     spaces(font)
     interface(font, m, adv)
+    print("charset: plain strokes", plain_strokes(font, m))            # 0.71
+    print("charset: signs from letters", letter_signs(font, m))        # 0.71
+    print("charset: mirrored pairs", mirrors(font))                    # 0.71
+    print("charset: sign weights", cap_strokes(font))                  # 0.71
+    print("charset: Eng", eng_capital(font))                           # 0.75
+    print("charset: degree", degree_ring(font))                        # 0.75
+    print("charset: fractions", fractions(font))                       # 0.72
+    print(f"charset: fraction figures {FRAC_GAP} from the bar (they were)", fraction_fit(font))   # 0.72
+    print("charset: currencies from capitals", letter_currencies(font, m))   # 0.72
+    print("charset: symbols", more_symbols(font, m, adv))               # 0.72
+    print("charset: kra", kra(font))                                   # 0.71
     letters_extra(font)
     eng_mu(font)
     diphthongs(font, m)
@@ -1327,9 +2637,16 @@ def run(font, lightened):
         kern_like(font, name, l, r)
     followed = follow_rebuilt(font, before)
     anchored = align_anchors(font)
+    print("charset: capital marks", case_marks(font))                  # 0.71
+    centred, n_centred = centre_marks(font)                            # 0.71
+    print(f"charset: marks centred on {len(centred)} anchors, {n_centred} letters follow", centred)
+    print(f"charset: lowercase accents {MARK_DROP} closer on", drop_marks(font), "letters")   # 0.71
     hook_above(font)
     horns(font)
     viet = vietnamese(font)
+    print("charset: marks below", below_depths(font))                  # 0.74
+    print("charset: digraphs", digraphs(font))                         # 0.73
+    print("charset: numero", numero(font))                             # 0.73
     for g in font:                                    # 0.65: every outline, not only the ones this module wrote
         _drop_tiny(g)
     print(f"charset: Vietnamese, {viet} letters composed")

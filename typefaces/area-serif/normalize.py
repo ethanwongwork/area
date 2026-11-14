@@ -17,6 +17,7 @@ import os
 from fontTools.pens.recordingPen import RecordingPen
 import derive as D
 import clean as CLEAN
+import even as EVEN
 import joins as JOINS
 import spacing as SPACING
 
@@ -29,7 +30,11 @@ U_ARCH_TO_N = 1.00
 
 FLAG_GLYPHS = "ijmnpru"          # head flags at the x-height
 ASC_FLAG_GLYPHS = "bdhkl"        # head flags at the ascender
-FOOT_GLYPHS = {"i": "lr", "l": "lr", "m": "lr", "n": "lr", "h": "lr", "k": "l", "r": "l", "f": "l"}   # 0.33: f's left (k's right foot runs into its leg's: left as drawn)
+# 0.33: f's left. 0.77: k's right foot too (owner, 2026-11-14: "if the k is not necessary/too long then feel free to
+# shorten it"). It had been left as drawn, 96 from the stem where every other foot is 68, because it once ran into
+# the leg's foot; the leg has had a foot to the right only since, and the two are 155 apart. The references give
+# their k the standard foot on that side: Georgia Pro 74 (its n's 76), Serrif 81 (85).
+FOOT_GLYPHS = {"i": "lr", "l": "lr", "m": "lr", "n": "lr", "h": "lr", "k": "l", "r": "l", "f": "l"}   # k's right: below
 F_FOOT_RIGHT = 1.25         # f's right foot, in FOOT, as p's bowl side (Serrif 0.94 / 1.26)
 STEM_GLYPHS = "bdpquhmnilkrj"
 
@@ -137,6 +142,11 @@ def normalize_feet(font, sw):
     right = with_handles(g, lambda p: p.y < 40 and p.x > st[-1][1] + 1)
     if right:
         move(right, dx=F_FOOT_RIGHT * FOOT * sw - (max(p.x for p in right if p.type) - st[-1][1]))
+    g = font["k"]                                # 0.77: the stem's own right foot (the rightmost foot is the leg's)
+    st = spans_at(flatten(g), D.X_HEIGHT * 0.3)
+    right = with_handles(g, lambda p: p.y < 40 and st[0][1] + 1 < p.x < st[0][1] + 1.6 * sw)
+    if right:
+        move(right, dx=FOOT * sw - (max(p.x for p in right if p.type) - st[0][1]))
     g = font["u"]                                # u's second head serif (its first is a flag: normalize_flags)
     st = spans_at(flatten(g), D.X_HEIGHT * 0.6)
     if len(st) == 2:
@@ -1177,6 +1187,7 @@ def normalize(font):
     print("balance: zero", BALANCE.zero_weight(font))                    # 0.70: sides 87
     print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook
     print("clean: curve joins", CLEAN.true_curves(font, HARMONIZE_SET))  # 0.70: u's tail, y's tail
+    print("even: thickness round the counters", EVEN.run(font))         # 0.77: before the letters are copied into others
     nodes = CLEAN.add_nodes(font, HARMONIZE_SET)                         # 0.69: extremes and inflections get a node
     print(f"clean: nodes added {len(nodes)}", nodes)
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
@@ -1185,6 +1196,8 @@ def normalize(font):
     import charset as CHARSET                         # 0.47: the full character set, on the finished letters
     n_light, tab = CHARSET.run(font, letters)
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
+    print("charset: single-storey g", CHARSET.single_g(font))    # 0.77: g.ss02, from q and j
+    print("charset: the base's S, s, dollar", CHARSET.base_s(font))  # 0.78: ss03
     print("balance: descender feet", BALANCE.desc_feet(font))
     print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
     # a base drawing whose path laps over itself, and (0.70) every letter with a stroke or bar drawn across it: merged
@@ -1203,6 +1216,20 @@ def normalize(font):
     print(f"clean: seams {len(seams)}", seams)
     swash = CLEAN.true_curves(font, rest, max_deg=9)   # 0.70: ct, st, cent
     print(f"clean: curve joins outside the core {len(swash)}", swash)
+    if os.environ.get("AREA_NODES_REST", "1") != "0":   # 0.71: a node at every extreme and inflection, on every glyph
+        more = CLEAN.add_nodes(font, rest)
+        print(f"clean: nodes added outside the core {len(more)}", more)
+        again = CLEAN.true_joins(font, rest, max_deg=15) + CLEAN.true_curves(font, rest, max_deg=9)
+        print(f"clean: joins trued after the new nodes {len(again)}", again)   # a shortened handle, on whole units
+    CHARSET.cap_strokes(font)                         # 0.75: and the signs' strokes, read at the nodes just added
+    CHARSET.turned_pairs(font)                        # 0.74: after the node rules, the turned glyphs once more
+    CHARSET.mirrors(font)
+    joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
+    print(f"spacing: {joined} accented letters join their letter's kerning class, {promoted} values moved to a class, "
+          f"{copied} copied to a family; {len(opened_all)} near-touches opened in the whole set")
+    import collections as _c
+    print("spacing: opened, by first glyph", _c.Counter(o[0] for o in opened_all).most_common(40))
+    print("spacing: opened, by second glyph", _c.Counter(o[1] for o in opened_all).most_common(40))
     for g in font:                           # derive.py's bracket marks were for this build only
         for c in g.contours:
             for p in c.points:
@@ -2009,6 +2036,9 @@ def round_quarters(g, k=FIG_KAPPA):
                 h1.y, h2.x = round(p0.y + k * dy), round(p3.x - k * dx)
 
 
+FIVE_FLAG_IN = int(os.environ.get("AREA_FIVE_FLAG", 19))     # the flag's end, inside the bowl's right side (6 until 0.77)
+
+
 def five_balance(font):
     """5: the flag reaches further both ways and the stem stands more upright (Serrif's flag starts further left and
     ends at the bowl's right; owner: "the top part of the 5 doesnt go out far enough ... more upright"); the bowl sits a
@@ -2024,7 +2054,12 @@ def five_balance(font):
             p.y = round(p.y * k)
     P[3].x -= 22
     P[0].x -= 20
-    P[1].x = P[2].x = bowl_right - 6
+    # 0.77 (owner, 2026-11-14: "5 ... leaning slightly to the right"; tools/lean.py). 6 until now, on the reading
+    # that Serrif's flag ends at the bowl's right. Measured, it ends inside it: Serrif 2.2% of the figure's height,
+    # Georgia Pro 3.0%, Libre Baskerville 3.7%; Area's 0.8% was the one measure of the 5 outside all three. Their
+    # mean (2.6% of 721) is 19. The stem's lean (9.5 degrees; Serrif 9.9, Georgia Pro 6.5) is the owner's own choice
+    # of 0.4x ("copy serrif") and stays.
+    P[1].x = P[2].x = bowl_right - FIVE_FLAG_IN
 
 
 # Curve tension across the letters (owner, 2026-11-12: "go through all the curves, arcs, and make sure they are all

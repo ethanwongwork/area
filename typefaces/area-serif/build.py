@@ -43,6 +43,37 @@ def main():
     ttf.flavor = "woff2"
     ttf.save(os.path.join(OUT, "AreaSerif-Regular.woff2"))
     print("built", path)
+    if os.environ.get("AREA_BOLD", "1") != "0":
+        variable(ufo)
+
+
+def variable(ufo):
+    """0.76: the Bold master (bold.py: the Regular's own points, moved by rule) and the two as one variable font,
+    weight 400 to 700. The Regular's files above are untouched. Overlaps stay in (both masters must keep one
+    structure); the glyphs that have them are flagged for the rasteriser."""
+    import bold as BOLD
+    stem = int(os.environ.get("AREA_BOLD_STEM", BOLD.STEM))
+    bold_ufo, reports, notes = BOLD.bold_font(ufo, stem)
+    bold_ufo.save(os.path.join(OUT, "AreaSerif-Bold.ufo"), overwrite=True)
+    with open(os.path.join(OUT, "bold-notes.txt"), "w") as f:
+        f.write("\n".join(notes + [f"{n}: {r['fallback']}" for n, r in sorted(reports.items()) if r.get("fallback")]))
+    for u in (ufo, bold_ufo):
+        u.lib["public.truetype.overlap"] = True
+    vf = BOLD.variable(ufo, bold_ufo, stem)
+    from fontTools.otlLib.builder import buildStatTable
+    buildStatTable(vf, [dict(tag="wght", name="Weight", values=[          # each named weight, Regular linked to Bold
+        dict(value=400, name="Regular", flags=0x2, linkedValue=700), dict(value=500, name="Medium"),
+        dict(value=600, name="SemiBold"), dict(value=700, name="Bold")])], macNames=False)
+    unhinted(vf)
+    head = vf["head"]
+    vf["OS/2"].usWinAscent = max(head.yMax, vf["hhea"].ascent)
+    vf["OS/2"].usWinDescent = max(-head.yMin, -vf["hhea"].descent)
+    path = os.path.join(OUT, "AreaSerif[wght].ttf")
+    vf.save(path)
+    vf.flavor = "woff2"
+    vf.save(os.path.join(OUT, "AreaSerif[wght].woff2"))
+    fb = [n for n, r in reports.items() if r.get("fallback")]
+    print("built", path, f"(Bold stem {stem}; {len(fb)} glyphs on a fallback: {', '.join(sorted(fb))})")
 
 
 if __name__ == "__main__":

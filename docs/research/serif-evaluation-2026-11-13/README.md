@@ -1,4 +1,4 @@
-# Area Serif evaluation, 2026-11-13 (builds 0.66 to 0.70)
+# Area Serif evaluation, 2026-11-13 (builds 0.66 to 0.71)
 
 A test suite that measures Area Serif and eight reference faces with the same code, and the page that shows the
 results: https://claude.ai/artifact/5FkKUT31WDmmTAMMQtKwk2 (specimen, comparisons, 17 findings with drawn evidence,
@@ -31,7 +31,24 @@ Keep `EVAL_OUT` outside the repository: its JSON holds measurements of licensed 
 | `test_fit.py` | Alignment, side bearings, all 3,844 core pairs with kerning, grey value. |
 | `measures.py` | 130 named parts per face (the table behind most stroke findings). |
 | `findings.py` | The findings, what is solid, what was not checked. Edit here, then rebuild the page. |
+| `test_extended.py`, `sheets.py`, `changed.py` | 0.71: the character set beyond the core; contact sheets; what changed between builds. |
 | `look.py`, `ba.py`, `build_page.py`, `template.html` | Review plates (nodes and combs; before over after) and the page. |
+
+## Build 0.71: beyond the core
+
+`test_extended.py` (accents, Vietnamese stacks, 95 signs, on every face), `sheets.py` (contact sheets and rows per
+face), `changed.py` (what changed between two builds). Eleven findings fixed by rule, one of my measurements
+withdrawn, two left for the owner; all in `findings.py` with `"prev": "0.70"`, drawn with 0.70 in red.
+`build_page.py` takes two before-builds: `EVAL_PREV66` (0.66, for the findings of 0.67 to 0.70) and `EVAL_PREV`
+(the previous build, 0.70). `BUILD`, `DATE`, `VERDICT` and `QA` at the end of `findings.py` are the page's own text.
+The audit that holds the rules is `typefaces/area-serif/audit_charset.py`.
+
+## Builds 0.72 and 0.73
+
+0.72: 37 glyphs from finished letters and parts, and the fractions (figures 66 from the bar). 0.73: `test_fit_ext.py`
+(75,161 extended pairs with kerning on, three faces): accented letters kern as their letters, the collision pass
+covers the whole set. Before-builds for the page: `EVAL_PREVS="0.70=<build>,0.71=<build>,0.72=<build>"` (copies in
+`typefaces/area-serif/build/prev070`, `snap071`, `snap072`); a finding names its own with `"prev"`.
 
 ## Status after 0.70
 

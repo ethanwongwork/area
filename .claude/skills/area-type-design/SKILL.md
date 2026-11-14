@@ -71,8 +71,10 @@ installed, fontbakery 1.1 runs the same universal profile.
 | `parts.py` | One construction per repeated part (0.65): the b d p q bowl, every join of a curve to a stem (a point on the stem's edge, one neck, one leaving angle), spurs, u from n, a's lower stroke. Run it for the join table; `qa.py` fails on it. Read the `area-serif-construction` skill before changing any part. |
 | `charset.py` | The character set (0.47), run last in `normalize`: every glyph that is a letter plus a part is rebuilt from the finished letters with pathops (union, cut), new glyphs are drawn from Area's parts or plain geometry at the maths' weight, `COVERAGE` is the set `check.py` holds. Add a glyph here, not by hand in a UFO. |
 | `spacing.py` | Sidebearings and kerning, the last step of `normalize.py`: bearings from the measured reference fit plus an offset, existing pairs carried over, near-touches opened. |
+| `audit_charset.py` | Beyond a-z A-Z 0-9 (0.71): accent placement against `charset.MARK_X`, one accent height per case, plain strokes at the minus's weight, signs built on their finished letters, mirrored brackets, the ampersand's arm. In `qa.py`. |
 | `pathlint.py` | Outline quality on the source, joint angles at smooth nodes (in units off the line), winding on the build. |
 | `diagram.py` | Node diagrams: points, handles, coordinates, 10-unit grid, metrics (`build/diagrams/`). |
+| `bold.py`, `audit_bold.py` | The Bold master by rule from the Regular's points, and its measured audit (`--sweep` along the weight axis). See the construction skill, "The Bold master". |
 | `qa.py` | Build, then targets, outlines, fontbakery, and with `--diff` diffenator2. |
 | `overlay.py`, `proof.py`, `sheet.py` | Overlays on the references (vector plates via `svg_tile`), proofs, smooth contact sheets. |
 | `apply_edits.py`, `owner_edits.json` | The owner's saves from the page, as moves plus the saved points: a moved point lands exactly where the owner put it (offset by the glyph's spacing), every other point follows the rules. |
@@ -145,6 +147,24 @@ commands), and:
 3. **Give every fix a row in an audit** that the previous build fails, and say when a measure of evenness got worse
    (r's wider advance moved lowercase gap variation from 9.4% to 9.8%).
 4. **r**: the owner prefers a wide r; its long right foot is theirs. Never shorten it as a fix.
+
+## Evaluating beyond the core (0.71)
+
+The suite's `test_extended.py` measures every accent (size, heaviest stroke, gap, centring), the Vietnamese stacks
+and 95 signs on all nine faces; `test_fit_ext.py` measures 75,161 pairs of punctuation, signs and accented letters with kerning on (collisions, near-touches, pairs far from both references); `sheets.py` draws every glyph (`all`), rows per face (`cmp`), named glyphs with the
+previous build in red (`names --old`) and shaped text (`text`); `changed.py OLD.ufo` lists every glyph that changed
+shape and by how much. Look at all eleven contact sheets, not only the flagged glyphs: the ampersand's filled arm was
+found by eye. Check a number against the build's own way of measuring before reporting it (a largest-circle reading
+called three signs heavy that were not).
+
+## Verifying a round (0.74)
+
+A check written with a rule reads what the rule set, so it can pass while the result is wrong (0.71's accent check
+read anchors; the accents were 2 to 4 units off). Before building further on a round: re-derive each new constant
+from its stated source and print claimed against measured; read each audited quantity a second way
+(`tools/verify.py`: accent from ink, stroke across itself, pair rasterised); sweep every glyph for stems, bars,
+heights, sides and scraps and read the histograms for values that occur once. Bump `version.py` first; it is the
+font's version and both pages' build.
 
 ## What each check proves
 

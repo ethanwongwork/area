@@ -52,7 +52,7 @@ def bot_x(sh):
 
 def row(sh, y, i):
     sp = sh.h(y)
-    if not sp or abs(i) > len(sp):
+    if not sp or not -len(sp) <= i < len(sp):         # a bold's crossbar can fill the row a Regular leaves open
         return None
     a, b = sp[i]
     return b - a

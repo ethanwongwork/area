@@ -23,7 +23,8 @@ from fontTools.varLib.instancer import instantiateVariableFont
 F = os.path.expanduser("~/Library/Fonts/")
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-BUILD = "0.70"   # bump on every regeneration; a save from another build loads only if owner_edits.json has not folded it in
+sys.path.insert(0, os.getcwd())
+from version import BUILD   # typefaces/area-serif/version.py: one number for the font and both pages. Was: BUILD = "0.73"   # bump on every regeneration; a save from another build loads only if owner_edits.json has not folded it in
 NAMES = {str(i): n for i, n in enumerate("zero one two three four five six seven eight nine".split())}
 
 
@@ -86,6 +87,8 @@ def build(out, lb, inter, chars):
     page = open(os.path.join(HERE, "editor_template.html")).read()
     page = page.replace("/*DATA*/", json.dumps({"meta": meta, "glyphs": glyphs}, separators=(",", ":")))
     page = page.replace("/*AREA_WOFF2*/", base64.b64encode(open("build/AreaSerif-Regular.woff2", "rb").read()).decode())
+    for mark, path in (("/*AREA_VF*/", "build/AreaSerif[wght].woff2"), ("/*AREA_VF_128*/", "build/weight/AreaSerif-128[wght].woff2")):
+        page = page.replace(mark, base64.b64encode(open(path, "rb").read()).decode() if os.path.exists(path) else "")
     open(out, "w").write(page)
     print(out, len(page) // 1024, "KB")
 

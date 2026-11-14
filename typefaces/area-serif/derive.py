@@ -54,6 +54,7 @@ BRACKET_DIAG_OUTER = 0.8   # owner's v, 2026-11-12: the curves should start high
 BRACKET_ACUTE_BLEND = 0.10  # (owner's v: higher still) # how far from the short reach toward Libre Baskerville's the inside join lands
 BRACKET_K_ACUTE = 0.55     # a fillet in a leaning-back join: a round arc's handle share
 BRACKET_ACUTE_R = 0.75     # its reach from the corner along the serif and along the stroke, in stems
+BRACKET_MAX_TURN = 60    # degrees: a curve that meets a diagonal across a sharper corner is not its bracket (0.71)
 BRACKET_HEAD = 0.85      # bracket under a head serif or flag: Serrif 0.99, Georgia Pro 0.99 (was 1.85)
 ROUND_TO_STEM = 1.05     # 1.12 until 0.39 (owner: thin the thick strokes): 86 units; Serrif 1.12, Georgia Pro 1.11
 _ROUND_TO_STEM_WAS = 1.12     # thick part of a lowercase round stroke, in stems: Serrif 1.12, Georgia Pro 1.11 (was 1.22)
@@ -269,7 +270,18 @@ G_EAR_SCALE = 1.0 if G_EAR_LB else 0.82   # ear ball about 0.85x the lowercase b
 G_EAR_TOP = 1.12                    # ear top / x-height, set on the Serrif overlay at matched x-heights (Serrif measures 1.14 against its own x; Georgia Pro 1.03)
 
 # Extra glyphs made from a base glyph by an edit, and the stylistic set that reaches them.
-ALTS = {"one.ss01": ("one", one_footless, "ss01", "Footless 1")}
+def _as_base(g, gb):
+    """An alternate whose outline is built later from finished letters (charset.single_g): starts as its base."""
+
+
+ALTS = {"one.ss01": ("one", one_footless, "ss01", "Footless 1"),
+        "g.ss02": ("g", _as_base, "ss02", "Single-storey g"),
+        # 0.78 (owner, 2026-11-14: "i like the S, s and $ of libre baskerville"): the base's own S and s, through
+        # the general rules only (weight, width, lightening); none of the rules written for Area's S and s runs on
+        # them (the redrawn width, the notch and spur, the trimmed barbs). The dollar follows in charset.base_s.
+        "S.ss03": ("S", _as_base, "ss03", "Baskerville S"),
+        "s.ss03": ("s", _as_base, "ss03", "Baskerville S"),
+        "dollar.ss03": ("dollar", _as_base, "ss03", "Baskerville S")}
 
 G_LOOP_LIFT = (66, 72)              # Regular, Bold: the loop's hook rises into the link (owner, 2026-11-11)
 G_LOOP_RAMP = {61: 0.5, 62: 1, 63: 1, 64: 1, 65: 1, 66: 1, 67: 1, 68: 0.5}
@@ -628,6 +640,15 @@ def shorten_brackets(glyph, tips_by_contour, stem):
             if abs(after.x - node.x) >= 1.5:          # a diagonal stroke (A K V W X Y k v w x y ...)
                 if len(chain) not in (3, 6) or abs(chain[0].y - base.y) >= 10:   # A's outer foot handle sits 6 up
                     continue
+                # 0.71: a bracket runs into its stroke. Where the last curve meets the straight across a corner
+                # it is another stroke ending there, not a bracket: the ampersand's arm met its diagonal at 103
+                # degrees and was "shortened" into a solid wedge, the white under the arm filled. Every true
+                # bracket arrives within 7 degrees (W's middle one 46), so the line is drawn at 60.
+                v1 = (node.x - chain[-2].x, node.y - chain[-2].y)
+                v2 = (after.x - node.x, after.y - node.y)
+                turn = abs(math.degrees(math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1])))
+                if turn > BRACKET_MAX_TURN:
+                    continue
                 diagonal_bracket(base, chain, after, limit)
                 if not node.identifier:
                     node.identifier = f"bracket{ci}_{i}"
@@ -837,7 +858,8 @@ def metrics(font):
     i.openTypeOS2TypoLineGap = i.openTypeHheaLineGap = 0
     i.openTypeOS2Selection = [7]
     i.openTypeOS2WeightClass = 400
-    i.versionMajor, i.versionMinor = 0, 3
+    from version import BUILD                          # 0.74: the font's version is the build's (it said 0.003)
+    i.versionMajor, i.versionMinor = int(BUILD.split('.')[0]), int(BUILD.split('.')[1].ljust(3, '0'))
     i.copyright = ("Copyright 2012 The Libre Baskerville Project Authors (https://github.com/impallari/Libre-Baskerville). "
                    "Area Serif modifications copyright 2026 Ethan Wong.")
     i.openTypeNameLicense = ("This Font Software is licensed under the SIL Open Font License, Version 1.1. "
@@ -969,8 +991,11 @@ def derive():
         out.kerning[(R_GROUP, grp)] = out.kerning.get((R_GROUP, grp), 0) + round(R_KERN_ROUND * k_scale)
     out.kerning[(R_GROUP, "space")] = out.kerning.get((R_GROUP, "space"), 0) + round(R_KERN_ROUND / 2 * k_scale)
     fea = reg.features.text
+    sets = {}
     for alt, (base, _fn, tag, label) in ALTS.items():
-        fea += f'\nfeature {tag} {{\n  featureNames {{ name "{label}"; }};\n  sub {base} by {alt};\n}} {tag};\n'
+        sets.setdefault((tag, label), []).append(f"  sub {base} by {alt};")
+    for (tag, label), subs in sets.items():
+        fea += f'\nfeature {tag} {{\n  featureNames {{ name "{label}"; }};\n' + "\n".join(subs) + f'\n}} {tag};\n'
     out.features.text = fea
     out.lib["public.glyphOrder"] = list(reg.glyphOrder) + list(ALTS)
     for key in ("public.postscriptNames", "public.openTypeCategories"):
