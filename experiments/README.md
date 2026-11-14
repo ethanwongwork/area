@@ -49,6 +49,7 @@ scripts/                              new.mjs, thumbs.mjs
 | Timelines, easing, stagger, text splitting, drag and throw, SVG morph | [GSAP](https://gsap.com) 3 (all plugins free): `SplitText`, `Draggable`, `InertiaPlugin`, `MorphSVGPlugin`, `Flip` |
 | 3D, shaders, glass, refraction | [three.js](https://threejs.org): `MeshPhysicalMaterial` (transmission, dispersion, iridescence), `ShaderMaterial`, addons |
 | Live parameters | [lil-gui](https://lil-gui.georgealways.com) via `shell()` |
+| Glyph outlines as points (to bend type in a shader) | [opentype.js](https://opentype.js.org) 1.3, reading a Fontsource `.woff` imported with `?url` |
 | Open-source variable type | [Fontsource](https://fontsource.org) variable packages, self-hosted (`@fontsource-variable/*`) |
 | Trial type | `fonts/trial/` (dev only unless `FONTS_LICENSED=1`) |
 
@@ -62,6 +63,8 @@ shader-only pieces).
 Open source, variable: Roboto Flex (wdth 25–151, wght 100–1000, opsz, GRAD and more),
 Fraunces (opsz, wght, SOFT, WONK), Inter Tight, Bricolage Grotesque (opsz, wdth, wght),
 JetBrains Mono.
+
+Open source, static: Instrument Serif (`@fontsource/instrument-serif`).
 
 Trials (drop in `fonts/trial/`): ABC Dinamo, Pangram Pangram, Displaay, Frostype.
 Trial licences cover testing and pitching only; buy a web licence before publishing a
