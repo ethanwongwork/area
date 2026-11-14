@@ -69,3 +69,6 @@ Open source, static: Instrument Serif (`@fontsource/instrument-serif`).
 Trials (drop in `fonts/trial/`): ABC Dinamo, Pangram Pangram, Displaay, Frostype.
 Trial licences cover testing and pitching only; buy a web licence before publishing a
 piece that uses one.
+
+Pour (8) reads PP Right Serif Mono and PP Kyoto from the fonts installed on the machine
+(`local()` in its stylesheet), so nothing is bundled; without them it falls back to JetBrains Mono.

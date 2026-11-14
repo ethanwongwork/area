@@ -1,0 +1,327 @@
+<title>Pour Calendar Study</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=JetBrains+Mono:wght@400;500&family=Inter+Tight:wght@400;500&display=swap">
+<style>
+/* Pangram Pangram faces, read from the fonts installed on this machine (trial licence: not embedded). */
+@font-face { font-family: "Pour Mono"; font-weight: 400; src: local("PP Right Serif Mono Regular"), local("PPRightSerifMono-Regular"); }
+@font-face { font-family: "Pour Mono"; font-weight: 800; src: local("PP Right Serif Mono Dark"), local("PPRightSerifMono-Dark"); }
+@font-face { font-family: "Pour Mono Fine"; font-weight: 400; src: local("PP Right Serif Mono Fine"), local("PPRightSerifMono-Fine"); }
+@font-face { font-family: "Pour Mono Fine"; font-weight: 800; src: local("PP Right Serif Mono Dark"), local("PPRightSerifMono-Dark"); }
+@font-face { font-family: "Pour Kyoto"; font-weight: 500; src: local("PP Kyoto Medium"), local("PPKyoto-Medium"); }
+@font-face { font-family: "Pour Kyoto"; font-weight: 800; src: local("PP Kyoto Extrabold"), local("PPKyoto-Extrabold"); }
+
+/* Layout: one large square edge-to-edge poster on the left, its controls on the right; a strip of other shapes below. Single paper look on purpose (a print study). */
+:root {
+  --paper: #f2f0ec;
+  --sheet: #fbfaf8;
+  --ink: #111111;
+  --ink-2: #5d5a55;
+  --rule: #dcd8d1;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--paper); color: var(--ink); font-family: var(--display); font-size: 15px; line-height: 1.5; margin: 0; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 48px; }
+header { display: grid; gap: 10px; max-width: 680px; }
+h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1; font-weight: 500; letter-spacing: -0.03em; margin: 0; }
+.lede { color: var(--ink-2); margin: 0; }
+.studio { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 32px; align-items: start; }
+@media (max-width: 860px) { .studio { grid-template-columns: minmax(0, 1fr); } }
+.frame { background: var(--sheet); aspect-ratio: 1 / 1; max-width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 30px -14px rgba(0,0,0,.22); }
+.frame canvas { width: 100%; height: 100%; display: block; }
+.panel { display: grid; gap: 22px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
+@media (max-width: 860px) { .panel { position: static; } }
+fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+legend { font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); padding: 0; margin-bottom: 8px; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg label, .chips label { position: relative; }
+.seg input, .chips input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg span { display: inline-block; font-size: 13px; padding: 6px 11px; border: 1px solid var(--rule); border-radius: 999px; background: var(--sheet); }
+.seg input:checked + span { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+.seg input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips span { display: block; width: 28px; height: 28px; border-radius: 50%; }
+.chips input:checked + span { outline: 2px solid var(--ink); outline-offset: 2px; }
+.chips input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 4px; }
+button { font: 500 13px/1 var(--mono); color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 999px; padding: 9px 14px; cursor: pointer; justify-self: start; }
+button:hover { border-color: var(--ink); }
+button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.readout { font: 400 12px/1.6 var(--mono); color: var(--ink-2); }
+.note { font-size: 13px; color: var(--ink-2); margin: 0; }
+h2 { font: 500 13px var(--mono); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 14px; color: var(--ink-2); }
+.presets { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px; }
+.preset { display: grid; gap: 8px; text-align: left; font: inherit; background: none; border: 0; padding: 0; border-radius: 0; justify-self: stretch; }
+.preset .frame { box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 6px 16px -10px rgba(0,0,0,.2); }
+.preset:hover .frame, .preset:focus-visible .frame { outline: 2px solid var(--ink); }
+.preset small { font: 400 12px var(--mono); color: var(--ink-2); }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Pour</h1>
+    <p class="lede" id="lede"></p>
+  </header>
+
+  <div class="studio">
+    <div class="frame"><canvas id="main" role="img" aria-label="The year as one shape of letters and dated cells"></canvas></div>
+    <form class="panel" id="panel" onsubmit="return false">
+      <fieldset><legend>Pattern</legend><div class="seg" data-key="pattern"></div></fieldset>
+      <fieldset><legend>Motion</legend><div class="seg" data-key="motion"></div></fieldset>
+      <fieldset id="shape-set"><legend>Shape</legend><div class="seg" data-key="shape"></div></fieldset>
+      <button type="button" id="shuffle">Shuffle shape</button>
+      <fieldset><legend>Typeface</legend><div class="seg" data-key="font"></div></fieldset>
+      <fieldset><legend>Coloring</legend><div class="seg" data-key="tone"></div></fieldset>
+      <fieldset id="hue-set"><legend>Color</legend><div class="chips" data-key="hue"></div></fieldset>
+      <div class="readout" id="readout"></div>
+      <p class="note" id="fontnote" hidden>Pangram Pangram fonts aren’t installed on this device, so a fallback mono is showing.</p>
+    </form>
+  </div>
+
+  <section>
+    <h2 id="strip-title"></h2>
+    <div class="presets" id="presets"></div>
+  </section>
+</div>
+
+<script>
+const S = 864; // square sheet, edge to edge
+const INK = '#000000', PAPER = '#fbfaf8';
+const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+const ok = (l, h) => `oklch(${l} 0.32 ${h})`; // chroma past the gamut edge: the most saturated sRGB color at that lightness and hue
+// Lighter than before, still at the gamut edge for each lightness, so every color stays as vivid as it can be.
+const MONTH_COLORS = [ok(.79, 258), ok(.95, 102), ok(.82, 352), ok(.88, 145), ok(.83, 48), ok(.78, 300), ok(.89, 220), ok(.77, 27), ok(.95, 125), ok(.80, 328), ok(.89, 180), ok(.90, 75)];
+
+const OPTIONS = {
+  pattern: [['weekdays','Weekdays'],['lines','Two lines a month'],['free','Free shape']],
+  motion: [['slide','Slide'],['still','Still']],
+  shape: [['any','Any'],['bites','Bites'],['noise','Ragged'],['blocks','Blocks'],['stairs','Stairs'],['islands','Islands']],
+  font: [['mono','Right Serif Mono'],['fine','Mono Fine'],['kyoto','Kyoto']],
+  tone: [['months','Every month'],['two','Two colors'],['one','One color']],
+  hue: [['blue', ok(.79, 258)],['yellow', ok(.95, 102)],['pink', ok(.82, 352)],['green', ok(.88, 145)],['orange', ok(.83, 48)],['violet', ok(.78, 300)],['cyan', ok(.89, 220)],['red', ok(.77, 27)]],
+};
+const PAIR = { blue: ok(.95, 102), yellow: ok(.79, 258), pink: ok(.88, 145), green: ok(.82, 352), orange: ok(.89, 220), violet: ok(.95, 125), cyan: ok(.83, 48), red: ok(.89, 220) };
+const FALLBACK = '"IBM Plex Mono", Menlo, monospace';
+const FONTS = {
+  mono: { fam: `"Pour Mono", ${FALLBACK}`, w: 400, k: .58 },
+  fine: { fam: `"Pour Mono Fine", ${FALLBACK}`, w: 400, k: .58 },
+  kyoto: { fam: `"Pour Kyoto", Georgia, serif`, w: 500, k: .62 },
+};
+const hueOf = k => OPTIONS.hue.find(h => h[0] === k)[1];
+const label = (k, v) => (OPTIONS[k].find(x => x[0] === v) || [])[1];
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+// The year as tokens: each month's three letters, then its days.
+function tokens(year) {
+  const out = [];
+  for (let m = 0; m < 12; m++) {
+    for (const ch of MONTHS[m]) out.push({ m, ch });
+    const n = new Date(year, m + 1, 0).getDate();
+    for (let d = 1; d <= n; d++) out.push({ m, d });
+  }
+  return out;
+}
+
+// Pattern 1. Weekdays: three bands of seven columns (Sunday to Saturday), four months a band.
+// Every day sits under its weekday and every month starts a new row, so the holes are the
+// days a month's first and last weeks don't reach. The letters take the three cells just
+// before the 1st; when the 1st falls on Sunday to Tuesday they take the end of a row of their own.
+function weekdays(year) {
+  const placed = [], heights = [];
+  for (let b = 0; b < 3; b++) {
+    let row = 0;
+    for (let m = b * 4; m < b * 4 + 4; m++) {
+      const wd = new Date(year, m, 1).getDay(), n = new Date(year, m + 1, 0).getDate();
+      if (wd >= 3) MONTHS[m].split('').forEach((ch, k) => placed.push({ i: b * 7 + wd - 3 + k, j: row, t: { m, ch } }));
+      else { MONTHS[m].split('').forEach((ch, k) => placed.push({ i: b * 7 + 4 + k, j: row, t: { m, ch } })); row++; }
+      for (let d = 1; d <= n; d++) { const p = wd + d - 1; placed.push({ i: b * 7 + p % 7, j: row + Math.floor(p / 7), t: { m, d } }); }
+      row += Math.ceil((wd + n) / 7);
+    }
+    heights.push(row);
+  }
+  return { cols: 21, rows: Math.max(...heights), placed, kind: 'weekdays' };
+}
+
+// Pattern 2. Two lines a month: 24 columns, each month its letters and days in reading order,
+// always two rows, so the second row's length is the month's length (Feb shortest).
+function twoLines(year) {
+  const placed = []; let row = 0;
+  for (let m = 0; m < 12; m++) {
+    const n = new Date(year, m + 1, 0).getDate(), list = [...MONTHS[m]].map(ch => ({ m, ch })).concat(Array.from({ length: n }, (_, k) => ({ m, d: k + 1 })));
+    list.forEach((t, k) => placed.push({ i: k % 24, j: row + Math.floor(k / 24), t }));
+    row += 2;
+  }
+  return { cols: 24, rows: 24, placed, kind: 'two lines' };
+}
+
+// Pattern 3. Free: a random field over a 24 × 24 grid; the strongest cells hold the year in reading order.
+const KINDS = ['bites', 'noise', 'blocks', 'stairs', 'islands'];
+function field(kind, r, C, R) {
+  const n = () => r() - .5;
+  if (kind === 'bites') {
+    const bites = Array.from({ length: 6 + Math.floor(r() * 8) }, () => { const edge = r() < .7, side = Math.floor(r() * 4); return { x: edge ? [r() * C, C, r() * C, 0][side] : r() * C, y: edge ? [0, r() * R, R, r() * R][side] : r() * R, rx: 1.5 + r() * 5, ry: 1.5 + r() * 5, sq: r() < .6 }; });
+    return (x, y) => { let f = 1; for (const b of bites) { const dx = Math.abs(x - b.x) / b.rx, dy = Math.abs(y - b.y) / b.ry, d = b.sq ? Math.max(dx, dy) : Math.hypot(dx, dy); if (d < 1) f -= 1 - d * .3; } return f + n() * .15; };
+  }
+  if (kind === 'noise') {
+    const gx = 5, gy = 5, g = Array.from({ length: (gx + 1) * (gy + 1) }, () => r()), at = (i, j) => g[j * (gx + 1) + i], s = t => t * t * (3 - 2 * t);
+    return (x, y) => { const u = x / C * gx, v = y / R * gy, i = Math.min(gx - 1, Math.floor(u)), j = Math.min(gy - 1, Math.floor(v)), fu = s(u - i), fv = s(v - j); const a = at(i, j) + (at(i + 1, j) - at(i, j)) * fu, b = at(i, j + 1) + (at(i + 1, j + 1) - at(i, j + 1)) * fu; return a + (b - a) * fv + n() * .25; };
+  }
+  if (kind === 'blocks') {
+    const rects = Array.from({ length: 7 + Math.floor(r() * 6) }, () => { const w = 4 + Math.floor(r() * 10), h = 3 + Math.floor(r() * 8); return { x: Math.floor(r() * (C - w + 4)) - 2, y: Math.floor(r() * (R - h + 4)) - 2, w, h }; });
+    return (x, y) => { let f = n() * .3; for (const q of rects) if (x >= q.x && x < q.x + q.w && y >= q.y && y < q.y + q.h) f += 1; return f; };
+  }
+  if (kind === 'stairs') {
+    const ax = n() * 2, ay = n() * 2, step = 2 + Math.floor(r() * 3), holes = Array.from({ length: 4 + Math.floor(r() * 5) }, () => ({ x: Math.floor(r() * C), y: Math.floor(r() * R), w: 1 + Math.floor(r() * 3), h: 1 + Math.floor(r() * 2) }));
+    return (x, y) => { let f = -Math.abs(Math.floor(x / step) * step * ax / C + Math.floor(y / step) * step * ay / R) + n() * .2; for (const h of holes) if (x >= h.x && x < h.x + h.w && y >= h.y && y < h.y + h.h) f -= 5; return f; };
+  }
+  const balls = Array.from({ length: 10 + Math.floor(r() * 10) }, () => ({ x: r() * C, y: r() * R, s: 1.5 + r() * 3.5 }));
+  return (x, y) => { let f = 0; for (const b of balls) f += b.s * b.s / ((x - b.x) ** 2 + (y - b.y) ** 2 + 1); return f + n() * .4; };
+}
+function free(year, shape, seed) {
+  const C = 24, R = 24, r = rng(seed), kind = shape === 'any' ? KINDS[Math.floor(r() * KINDS.length)] : shape, f = field(kind, r, C, R), toks = tokens(year), all = [];
+  for (let j = 0; j < R; j++) for (let i = 0; i < C; i++) all.push({ i, j, f: f(i + .5, j + .5) });
+  const t = [...all].sort((a, b) => b.f - a.f)[toks.length - 1].f;
+  let inside = all.filter(c => c.f > t); inside = inside.concat(all.filter(c => c.f === t).slice(0, toks.length - inside.length));
+  inside.sort((a, b) => a.j - b.j || a.i - b.i);
+  return { cols: C, rows: R, placed: inside.map((c, k) => ({ i: c.i, j: c.j, t: toks[k] })), kind };
+}
+const layout = o => o.pattern === 'weekdays' ? weekdays(o.year) : o.pattern === 'lines' ? twoLines(o.year) : free(o.year, o.shape, o.seed);
+
+function fillFor(o, m) {
+  if (o.tone === 'months') return MONTH_COLORS[m];
+  if (o.tone === 'two') return m % 2 ? PAIR[o.hue] : hueOf(o.hue);
+  return hueOf(o.hue);
+}
+
+// Cells stretch to fill the square sheet, so a 21 × 23 pattern still runs edge to edge.
+// A pose gives each cell's position in cells, possibly fractional while it slides; the grid
+// wraps, so a cell leaving one edge comes back in at the other.
+const mod = (a, n) => ((a % n) + n) % n;
+function paint(ctx, o, L, pose) {
+  const C = L.cols, R = L.rows, cw = S / C, ch = S / R, F = FONTS[o.font];
+  const spots = L.placed.map((p, n) => { const [x, y] = pose ? pose(n) : [p.i, p.j], X = mod(x, C), Y = mod(y, R), out = [];
+    for (const ox of X > C - 1 ? [X, X - C] : [X]) for (const oy of Y > R - 1 ? [Y, Y - R] : [Y]) out.push([ox, oy]); return out; });
+  ctx.fillStyle = PAPER; ctx.fillRect(0, 0, S, S);
+  L.placed.forEach((p, n) => { ctx.fillStyle = fillFor(o, p.t.m); for (const [x, y] of spots[n]) ctx.fillRect(x * cw - .5, y * ch - .5, cw + 1, ch + 1); });
+  ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = `${F.w} ${Math.round(Math.min(cw, ch) * F.k)}px ${F.fam}`;
+  L.placed.forEach((p, n) => { for (const [x, y] of spots[n]) ctx.fillText(p.t.ch || p.t.d, x * cw + cw / 2, y * ch + ch / 2 + 1); });
+  return L;
+}
+const draw = (ctx, o) => paint(ctx, o, layout(o));
+
+// Motion. Each beat, a few runs of rows (or of columns) slide one to four cells at once, like
+// pieces in a falling-block game, and wrap around the sheet. After nine beats the same moves
+// play back in reverse, so the calendar puts itself together again, holds, and starts over. A row move
+// keeps every cell in its row (a column move, in its column), so playing a move back undoes it.
+const DUR = 360, GAP = 240, BEATS = 9, HOLD = 1800;
+const snap = t => t < .5 ? 16 * t ** 5 : 1 - (-2 * t + 2) ** 5 / 2; // quint in-out: still, then quick, then still
+let M = null, raf = 0;
+function newMove(L, r) {
+  const axis = r() < .5 ? 'row' : 'col', N = axis === 'row' ? L.rows : L.cols, shifts = new Map();
+  const runs = 2 + Math.floor(r() * 3);
+  for (let q = 0; q < runs; q++) {
+    const len = 1 + Math.floor(r() * 4), start = Math.floor(r() * N), k = (1 + Math.floor(r() * 4)) * (r() < .5 ? -1 : 1);
+    for (let s = 0; s < len; s++) { const line = (start + s) % N; if (!shifts.has(line)) shifts.set(line, k); }
+  }
+  return { axis, shifts };
+}
+function startMotion(L) {
+  cancelAnimationFrame(raf);
+  M = null;
+  if (state.motion !== 'slide') return;
+  M = { L, pos: L.placed.map(p => ({ i: p.i, j: p.j })), hist: [], queue: [], phase: 'out', cur: null, t0: 0, next: performance.now() + 700, r: rng(Math.floor(Math.random() * 1e9)) };
+  raf = requestAnimationFrame(tick);
+}
+function shiftOf(move, q) { return move.shifts.get(move.axis === 'row' ? q.j : q.i) || 0; }
+function tick(now) {
+  if (!M) return;
+  const { L } = M;
+  if (M.cur) {
+    const t = Math.min(1, (now - M.t0) / DUR), e = snap(t), mv = M.cur;
+    paint(mainCtx, state, L, n => { const q = M.pos[n], k = shiftOf(mv, q) * e; return mv.axis === 'row' ? [q.i + k, q.j] : [q.i, q.j + k]; });
+    if (t === 1) {
+      for (const q of M.pos) { const k = shiftOf(mv, q); if (mv.axis === 'row') q.i = mod(q.i + k, L.cols); else q.j = mod(q.j + k, L.rows); }
+      M.cur = null; M.next = now + (M.phase === 'hold' ? HOLD : GAP);
+    }
+  } else if (now >= M.next) {
+    if (M.phase === 'hold') { M.phase = 'out'; M.hist = []; }
+    if (M.phase === 'out' && M.hist.length === BEATS) { M.phase = 'back'; M.queue = M.hist.slice().reverse().map(m => ({ axis: m.axis, shifts: new Map([...m.shifts].map(([l, k]) => [l, -k])) })); }
+    let mv;
+    if (M.phase === 'out') { mv = newMove(L, M.r); M.hist.push(mv); }
+    else { mv = M.queue.shift(); if (!M.queue.length) M.phase = 'hold'; }
+    M.cur = mv; M.t0 = now;
+  }
+  raf = requestAnimationFrame(tick);
+}
+
+const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const state = { motion: reduce ? 'still' : 'slide', pattern: 'weekdays', shape: 'any', font: 'mono', tone: 'months', hue: 'blue', seed: 2604, year: 2026 };
+function setup(canvas, scale) {
+  const dpr = Math.min(3, window.devicePixelRatio || 1) * scale;
+  canvas.width = S * dpr; canvas.height = S * dpr;
+  const ctx = canvas.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return ctx;
+}
+const mainCtx = setup(document.getElementById('main'), 1.2);
+const LEDES = {
+  weekdays: 'Every day sits under its weekday, Sunday to Saturday, in three bands of four months. Each month starts on a new row, so the holes are the days its first and last weeks don’t reach, and every year has its own shape. The letters take the cells just before the 1st.',
+  lines: 'Every month gets exactly two rows of 24: its three letters, then its days. The second row is as long as the month is, so the right edge steps in and out with the month lengths.',
+  free: 'The year poured in reading order into a random shape that runs to the edges of the sheet. The shape is chance; the order is the calendar’s.',
+};
+function render() {
+  const L = draw(mainCtx, state);
+  startMotion(L);
+  document.getElementById('lede').textContent = LEDES[state.pattern];
+  document.getElementById('readout').textContent = `${state.year} · ${L.kind} · ${L.cols} × ${L.rows} cells · ${label('font', state.font)} · ${label('tone', state.tone)}${state.pattern === 'free' ? ` · seed ${state.seed}` : ''}`;
+  for (const k of Object.keys(OPTIONS)) document.querySelectorAll(`input[name="${k}"]`).forEach(i => i.checked = i.value === state[k]);
+  document.getElementById('hue-set').hidden = state.tone === 'months';
+  document.getElementById('shape-set').hidden = document.getElementById('shuffle').hidden = state.pattern !== 'free';
+}
+
+for (const [k, opts] of Object.entries(OPTIONS)) {
+  const box = document.querySelector(`[data-key="${k}"]`);
+  for (const [v, text] of opts) {
+    const l = document.createElement('label');
+    l.innerHTML = k === 'hue'
+      ? `<input type="radio" name="${k}" id="${k}-${v}" value="${v}" aria-label="${v}"><span style="background:${text}"></span>`
+      : `<input type="radio" name="${k}" id="${k}-${v}" value="${v}"><span>${text}</span>`;
+    l.querySelector('input').addEventListener('change', () => { state[k] = v; renderAll(k === 'pattern' || k === 'shape'); });
+    box.append(l);
+  }
+}
+
+// The strip: other years for the calendar patterns, other seeds for a free shape. Click one to use it.
+const strip = document.getElementById('presets'), thumbs = [];
+for (let n = 0; n < 12; n++) {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'preset';
+  b.innerHTML = `<div class="frame"><canvas role="img"></canvas></div><small></small>`;
+  const t = { ctx: setup(b.querySelector('canvas'), .45), b, seed: 0, year: 2026 };
+  b.addEventListener('click', () => { if (state.pattern === 'free') state.seed = t.seed; else state.year = t.year; renderAll(false); document.getElementById('main').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+  thumbs.push(t); strip.append(b);
+}
+function renderThumbs(reseed) {
+  const isFree = state.pattern === 'free';
+  document.getElementById('strip-title').textContent = isFree ? 'More shapes, same settings' : 'Every year makes its own shape';
+  thumbs.forEach((t, n) => {
+    if (isFree) { if (reseed || !t.seed) t.seed = Math.floor(Math.random() * 1e5); }
+    else t.year = 2026 + n;
+    const L = draw(t.ctx, { ...state, seed: t.seed, year: isFree ? state.year : t.year });
+    t.b.querySelector('small').textContent = isFree ? L.kind : String(t.year);
+    t.b.setAttribute('aria-label', isFree ? `Use this ${L.kind} shape` : `Show ${t.year}`);
+  });
+}
+function renderAll(reseed) { render(); renderThumbs(reseed); }
+document.getElementById('shuffle').addEventListener('click', () => { state.seed = Math.floor(Math.random() * 1e5); renderAll(true); });
+
+renderAll(true);
+if (document.fonts) {
+  const loads = Object.values(FONTS).map(f => document.fonts.load(`${f.w} 16px ${f.fam}`));
+  Promise.all(loads).catch(() => {}).then(() => {
+    document.getElementById('fontnote').hidden = [...document.fonts].some(f => f.family.includes('Pour Mono') && f.status === 'loaded');
+    renderAll(false);
+  });
+}
+</script>

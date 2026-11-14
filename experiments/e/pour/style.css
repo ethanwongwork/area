@@ -1,0 +1,31 @@
+/* Pangram Pangram faces only when installed on this machine; trial licences don't allow bundling. */
+@font-face { font-family: "Pour Mono"; font-weight: 400; src: local("PP Right Serif Mono Regular"), local("PPRightSerifMono-Regular"); }
+@font-face { font-family: "Pour Mono Fine"; font-weight: 400; src: local("PP Right Serif Mono Fine"), local("PPRightSerifMono-Fine"); }
+@font-face { font-family: "Pour Kyoto"; font-weight: 500; src: local("PP Kyoto Medium"), local("PPKyoto-Medium"); }
+
+body {
+  background: #fbfaf8;
+}
+
+/* The poster as large as the stage allows, square, edge to edge. */
+#stage {
+  display: grid;
+  place-items: center;
+}
+
+.poster {
+  display: block;
+  width: min(100cqw, 100cqh);
+  aspect-ratio: 1;
+}
+
+.is-thumb #stage {
+  position: fixed;
+  inset: 0;
+}
+
+.is-thumb .poster {
+  width: 100vw;
+  height: 100vh;
+  aspect-ratio: auto;
+}
