@@ -1166,6 +1166,15 @@ def normalize(font):
     print("joins: diagonals", JOINS.steep_diagonals(font), JOINS.even_fillets(font))   # 0.53, 0.54
     print("joins: G", JOINS.G_lower(font, cap=D.CAP_HEIGHT))             # 0.54
     print("joins: C end", JOINS.C_end(font, cap=D.CAP_HEIGHT))          # 0.52, on the trued and tidied outline
+    print("joins: u heads", JOINS.u_flags(font, xh=D.X_HEIGHT))          # 0.67: i's flag on both of u's stems
+    print("balance: capital thins", BALANCE.cap_thins(font))             # 0.67: arms 46, crossbars 49, closing strokes 47
+    print("balance: B", BALANCE.B_lower(font))                           # 0.67: the lower bowl at the O's weight
+    print("joins: extremes", JOINS.even_extremes(font))                  # 0.68: C G S s, the arc into the spur
+    print("balance: figures", BALANCE.fig_flats(font))                   # 0.68: 2 5 7 flat strokes 73; N, 1
+    print("clean: joins to straights", CLEAN.true_joins(font, HARMONIZE_SET))   # 0.68
+    print("clean: 5", CLEAN.five_heel(font))                             # 0.69
+    nodes = CLEAN.add_nodes(font, HARMONIZE_SET)                         # 0.69: extremes and inflections get a node
+    print(f"clean: nodes added {len(nodes)}", nodes)
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
     print(f"spacing: {len(delta)} letters re-spaced, {moved} kerning pairs carried over, {len(opened)} near-touches opened")
@@ -1174,8 +1183,12 @@ def normalize(font):
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     print("balance: descender feet", BALANCE.desc_feet(font))
     print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
-    for name in ("Eopen",):                           # a base drawing whose path laps over itself: merged here
+    for name in ("Eopen", "Astroke"):                 # a base drawing whose path laps over itself: merged here
+                                                      # (0.69: Astroke, whose stroke crosses A's leg within a unit of a node)
         CHARSET.put(font, name, CHARSET.glyph_path(font, name), font[name].width)
+    rest = [g.name for g in font if g.contours and g.name not in HARMONIZE_SET]
+    seams = CLEAN.true_joins(font, rest, max_deg=15)  # 0.69: seams left where charset joined two outlines (fl, OE, carons)
+    print(f"clean: seams {len(seams)}", seams)
     for g in font:                           # derive.py's bracket marks were for this build only
         for c in g.contours:
             for p in c.points:

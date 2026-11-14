@@ -13,6 +13,9 @@ Families:
   counters   inner width at mid x-height (n h m u, o b d p q, and a's bowl, e)
   stems      vertical stem thickness (i l n h m u b d p q k r)
   bowls      thickest part of the round strokes (o b d p q c e)
+  cap thins  level thin strokes of the capitals (H A bars, E F L T arms, B's middle, where P and R close)
+  cap rounds round strokes of the capitals across at their thickest (O D P R, both bowls of B)
+  head rise  how far a head serif's top edge rises to the stem (i n m p r u): 1.00 is a level slab
 Usage: python audit_parts.py [--refs] [font.ttf]"""
 import os
 import sys
@@ -24,6 +27,7 @@ from PIL import Image, ImageDraw, ImageChops
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SPREAD_LIMIT = 0.12          # flag a letter more than 12% from its family's median
+LIMITS = {"cap rounds": 0.05}  # both references hold B's bowls within 5% of the O (0.66's lower bowl was 7% over)
 
 
 class Flat(BasePen):
@@ -144,7 +148,7 @@ def w(s):
 
 
 def audit(font):
-    g = {ch: Glyph(font, ch) for ch in "abcdefghijklmnopqrstuyJxHo"}
+    g = {ch: Glyph(font, ch) for ch in "abcdefghijklmnopqrstuyJxHoABDEFLOPRT"}
     xh, cap = g["x"].y1, g["H"].y1
     stem = w(g["n"].h(xh * 0.35)[0])
     S = lambda v: v / stem
@@ -213,6 +217,48 @@ def audit(font):
             return S(w(sp[-1]))
         return S(w(sp[0]))
     out["bowls"] = {ch: bowl(ch) for ch in "obdpqce"}
+
+    # 0.67 (evaluation of 2026-11-13): the three parts that had no row here, so their drift passed QA.
+    cap = g["H"].y1
+
+    def level(ch, lo, hi, min_len=60):
+        """Thickness of the longest level stroke whose underside lies between lo and hi (shares of the cap height)."""
+        G = g[ch]
+        runs, x = {}, G.x0 + 4
+        while x < G.x1 - 4:
+            for a, b in G.v(x):
+                if lo * cap <= a <= hi * cap and b - a < 120:
+                    runs.setdefault(round(a), []).append(b - a)
+            x += 5
+        best = max(runs.values(), key=len, default=[])
+        return S(statistics.median(best)) if len(best) * 5 >= min_len else 0.0
+    out["cap thins"] = {"H bar": level("H", 0.4, 0.6), "A bar": level("A", 0.25, 0.5), "E top": level("E", 0.88, 0.96),
+                        "E mid": level("E", 0.44, 0.56), "E bottom": level("E", -0.01, 0.01, 150),
+                        "F mid": level("F", 0.42, 0.54), "L arm": level("L", -0.01, 0.01, 150),
+                        "T arm": level("T", 0.88, 0.96), "B mid": level("B", 0.45, 0.56),
+                        "P close": level("P", 0.4, 0.5), "R close": level("R", 0.42, 0.52)}
+
+    def cap_round(ch, lo=0.3, hi=0.7, side=-1):
+        """The round stroke across at its thickest: from the counter's side to the nearest point outside."""
+        G = g[ch]
+        zone = [(y, G.h(y)) for y in range(int(lo * cap), int(hi * cap), 6)]
+        y, sp = max(((y, sp) for y, sp in zone if sp), key=lambda r: r[1][side][1] if side == -1 else -r[1][side][0])
+        inner = sp[side][0] if side == -1 else sp[side][1]
+        pts = [q for c in G.cs for q in c]
+        outer = [q for q in pts if (q[0] > inner + 40 if side == -1 else q[0] < inner - 40) and abs(q[1] - y) < 160]
+        return S(min(((q[0] - inner) ** 2 + (q[1] - y) ** 2) ** 0.5 for q in outer)) if outer else 0.0
+    out["cap rounds"] = {"O": cap_round("O"), "D": cap_round("D"), "P": cap_round("P", 0.6, 0.9),
+                         "R": cap_round("R", 0.6, 0.9), "B upper": cap_round("B", 0.62, 0.9),
+                         "B lower": cap_round("B", 0.12, 0.42)}
+
+    def head_rise(ch):
+        """How far the head serif's top edge rises from 12 units inside its tip to the stem's far edge (0 on a slab)."""
+        G = g[ch]
+        st = G.h(xh * 0.45)[0]
+        tip = min(q[0] for c in G.cs for q in c if xh * 0.85 < q[1] < xh + 40 and q[0] < st[0])
+        top = lambda x: max((b for a, b in G.v(x) if b < xh + 40), default=0)
+        return S(top(st[1] - 2) - top(tip + 12)) + 1.0        # +1 stem so a slab (0) still has a share of the median
+    out["head rise"] = {ch: head_rise(ch) for ch in "inmpru"}
     return out
 
 
@@ -230,9 +276,10 @@ def report(name, out):
     for fam, vals in out.items():
         vs = {k: v for k, v in vals.items() if v}
         med = statistics.median(vs.values())
+        lim = LIMITS.get(fam, SPREAD_LIMIT)
         spread = max(vs.values()) / min(vs.values())
-        odd = [f"{k} {v:.2f}" for k, v in vs.items() if abs(v - med) / med > SPREAD_LIMIT]
-        bad += [(fam, k) for k, v in vs.items() if abs(v - med) / med > SPREAD_LIMIT and (fam, k) not in EXPECTED]
+        odd = [f"{k} {v:.2f}" for k, v in vs.items() if abs(v - med) / med > lim]
+        bad += [(fam, k) for k, v in vs.items() if abs(v - med) / med > lim and (fam, k) not in EXPECTED]
         print(f"{fam:14s} median {med:5.2f}  spread x{spread:4.2f}  " + "  ".join(f"{k}:{v:.2f}" for k, v in vs.items())
               + (f"   OUTLIERS: {', '.join(odd)}" if odd else ""))
     return bad

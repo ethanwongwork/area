@@ -23,7 +23,7 @@ from fontTools.varLib.instancer import instantiateVariableFont
 F = os.path.expanduser("~/Library/Fonts/")
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-BUILD = "0.66"   # bump on every regeneration; a save from another build loads only if owner_edits.json has not folded it in
+BUILD = "0.69"   # bump on every regeneration; a save from another build loads only if owner_edits.json has not folded it in
 NAMES = {str(i): n for i, n in enumerate("zero one two three four five six seven eight nine".split())}
 
 

@@ -60,6 +60,15 @@ OPTICAL = {
     "B": [0, -13], "E": [6, -5], "F": [6, -7], "G": [0, -13], "I": [8, 9], "J": [0, 3], "M": [8, 3], "N": [7, 10],
     "P": [5, -16], "U": [-4, 5], "W": [-7, 0], "Z": [-6, 0],
 }
+# r's right side (0.68; owner, 2026-11-13: "i prefer a wider r"). r's ink was already the widest of the nine faces
+# measured (4.81 stems; 3.72 to 4.69 elsewhere) with the longest arm (2.91) and foot (1.67), but its advance was the
+# narrowest against n: 0.659 (Serrif 0.671, Georgia Pro 0.694, the eight references 0.671 to 0.715). So what read as
+# narrow was the white after it, not the letter. R_AIR brings the advance to the two references' mean, 0.6825 of n.
+# Kerned pairs (r before a round letter) keep their distance; r before a stem gains the white.
+import os as _os
+R_AIR = int(_os.environ.get("AREA_R_AIR", 15))
+if R_AIR:
+    OPTICAL["r"] = [0, R_AIR]
 # and on punctuation, which REFERENCE never covered (the dashes stood 20 units a side looser than either
 # reference's against n, the parentheses 11 and 19 tighter):
 OPTICAL_MORE = {

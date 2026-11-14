@@ -305,6 +305,114 @@ def level_flags(font, names=FLAG_LEVEL, xh=520):
     return done
 
 
+# u's head serifs (0.67; evaluation of 2026-11-13, owner: "fix those three"). u is n turned half round, so its two
+# heads were n's feet: level slabs stopping on the x-height, where every other x-height stem starts with the flag
+# (8 degrees, corner 10 over the x-height). Both references give u the flag of n and i. i is the control (a stem and
+# a flag, nothing else): each of u's heads takes i's flag point for point, from the stem's top corner round the tip
+# to the bracket's node on the stem, placed on its own stem's left edge.
+def u_flags(font, xh=520):
+    src = _flags(font["i"], 5, 12, xh)
+    if len(src) != 1:
+        return ["u: i's flag was not found"]
+    T, C, group = src[0]
+    xi = group[-1].x                                         # i's stem edge
+    kinds = [bool(p.type) for p in group]
+    done = []
+    c = font["u"].contours[0]
+    P, n = c.points, len(c.points)
+    for i in range(n):
+        A, B = P[i], P[(i + 1) % n]                          # corner, then the tip, along the head's top edge
+        if not (A.type == "line" and B.type == "line" and 100 <= A.x - B.x <= 170 and 0.9 * xh < B.y <= A.y <= xh + 12
+                and A.y - B.y <= 30):
+            continue
+        mine = [P[(i + 1 + k) % n] for k in range(len(group))]
+        if [bool(p.type) for p in mine] != kinds:
+            done.append(f"u head at {A.x}: not drawn as i's flag is ({len(mine)} points)")
+            continue
+        xu = mine[-1].x
+        if abs((A.x - xu) - (C.x - xi)) > 2:
+            done.append(f"u head at {A.x}: stem {A.x - xu} wide, i's {C.x - xi}")
+            continue
+        was = (A.y, B.y)
+        A.y = C.y
+        for q, p in zip(mine, group):
+            q.x, q.y = p.x - xi + xu, p.y
+        done.append(f"u head on the stem at {xu}: top {was[1]}-{was[0]} > {B.y}-{A.y}")
+    return done or ["u: no head found"]
+
+
+# Extremes beside a spur or a junction (0.68; evaluation of 2026-11-13). At the top of C the arc arrived with a
+# radius of 369 and left toward the spur's notch with 1229, its handle 1.31 times past the point where the two
+# handles' lines meet: a flat, then a late turn. G (top and bottom), S and s were the same; in S and s the handle
+# ran 1.7 to 3.4 times past the meeting point, so the one curve bent both ways. The short curve from the extreme to
+# the notch is rebuilt: both handles at the outside tension of every round in the face (clean's 0.57), the handle at
+# the extreme solved so the curvature there equals the long arc's on the other side (curvature = 2/3 x the far
+# handle's distance off the tangent / the handle's length squared). The extreme, the notch and the long arc do not
+# move; what changes is the angle at which the outline reaches the notch (C 20 to 26 degrees).
+EXTREME_TENSION = 0.57
+EXTREME_SET = ("C", "G", "S", "s")
+
+
+def even_extremes(font, names=EXTREME_SET):
+    done = []
+    for name in names:
+        g = font[name]
+        top, bottom = max(p.y for c in g.contours for p in c.points), min(p.y for c in g.contours for p in c.points)
+        for c in g.contours:
+            P, n = c.points, len(c.points)
+            for i in range(n):
+                N = P[i]
+                if N.type != "curve" or min(abs(N.y - top), abs(N.y - bottom)) > 1:
+                    continue
+                hp, hn = P[i - 1], P[(i + 1) % n]
+                if hp.type or hn.type or hp.y != N.y or hn.y != N.y:
+                    continue
+                sides = []                                   # (handle at N, far handle, far node, step)
+                for h, step in ((hp, -1), (hn, 1)):
+                    f, e = P[(i + 2 * step) % n], P[(i + 3 * step) % n]
+                    if f.type or not e.type:
+                        break
+                    sides.append((h, f, e))
+                if len(sides) != 2:
+                    continue
+                span = lambda s: math.hypot(s[2].x - N.x, s[2].y - N.y)
+                short, long_ = sorted(sides, key=span)
+                if span(long_) < 1.5 * span(short):
+                    continue                                 # two like quarters: harmonize's business
+                h, f, e = short
+                H, Fl, _ = long_
+                a_long, d_long = abs(H.x - N.x), abs(Fl.y - N.y)
+                if a_long < 20 or d_long < 5:
+                    continue
+                k_long = (2 / 3) * d_long / a_long ** 2
+                drop, run = abs(e.y - N.y), abs(e.x - N.x)
+                if drop < 20 or run < 60:
+                    continue
+                a_was = abs(h.x - N.x)
+                k_was = (2 / 3) * abs(f.y - N.y) / a_was ** 2 if a_was else 0
+                # as drawn: is the handle past the meeting point, or the radius over 1.5 times the long arc's?
+                fx, fy = abs(e.x - f.x), abs(e.y - f.y)
+                reach_was = run - drop * fx / fy if fy else 0
+                if a_was <= 1.02 * reach_was and k_was and 1 / 1.5 <= k_long / k_was <= 1.5:
+                    continue
+                d = drop * (1 - EXTREME_TENSION)
+                a = math.sqrt(d / (1.5 * k_long))
+                reach = a / EXTREME_TENSION                  # from N along its tangent to the handles' meeting point
+                if not 0.25 * run <= reach <= 0.85 * run:
+                    done.append(f"{name} ({N.x},{N.y}): no fit (reach {reach:.0f} of {run:.0f}); left")
+                    continue
+                sx, sy = (1 if e.x > N.x else -1), (1 if e.y > N.y else -1)
+                rest = run - reach                           # the meeting point to the notch, along x
+                reach2 = math.hypot(rest, drop)
+                s2 = EXTREME_TENSION * reach2
+                h.x = round(N.x + sx * a)
+                f.x, f.y = round(e.x - sx * s2 * rest / reach2), round(e.y - sy * s2 * drop / reach2)
+                k_now = (2 / 3) * abs(f.y - N.y) / abs(h.x - N.x) ** 2
+                done.append(f"{name} ({N.x},{N.y}): radius {1 / k_long:.0f} | {1 / k_was if k_was else 0:.0f} > {1 / k_now:.0f}, "
+                            f"notch angle {math.degrees(math.atan2(drop, rest)):.0f}")
+    return done
+
+
 # C's lower end (0.52; owner took proposal 3). It rose in an upright face to a point 5 units thick; both references
 # end in a cut. The face and the height stay; the point becomes a level cut END_MIN wide with both corners rounded,
 # so the end is the top barb's kind (upright face, level cut). Only the inside edge moves: END_MIN left at the cut,

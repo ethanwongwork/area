@@ -657,3 +657,252 @@ def run(font):
     for fn in (heights, bars, same_arches, even_stems, parts_run, widen_w, diagonals, vertices, lean_serifs, a_option, a_join, arcs, stems, e_g):
         out.append((fn.__name__, fn(font)))
     return out
+
+
+# Capital thin strokes and B's lower bowl (0.67; evaluation of 2026-11-13, owner: "fix those three").
+# The level thin strokes of the capitals measured 40 (L's arm), 43 (E and F middle arms), 45-46 (E F T Z arms), 47 (B's
+# middle, the tops of B D P R), 52 (A and H bars) and 53-55 (where the bowls of P and R close): a 15-unit range where
+# Georgia Pro holds 4.5 and Serrif 4.4. As shares of each reference's own O hairline: arms 0.92 and 1.02, crossbars
+# 1.00 and 1.08, closing strokes 1.01 / 0.98 and 1.00 / 1.00. On Area's 47: arms 46 (E's, F's and T's own value),
+# crossbars 49, closing strokes 47.
+CAP_ARM = 46
+CAP_BAR = 49
+
+
+def cap_thins(font, cap=CAP):
+    done = []
+    # H: the crossbar thins from its underside (the top holds the upper counters)
+    P = _pts(font["H"])
+    ys = sorted({p.y for p in P if p.type == "line" and 0.4 * cap < p.y < 0.6 * cap})
+    if len(ys) == 2 and 0 < (ys[1] - ys[0]) - CAP_BAR <= 6:
+        d = (ys[1] - ys[0]) - CAP_BAR
+        for p in P:
+            if p.y == ys[0] and p.type == "line":
+                p.y += d
+        done.append(f"H bar {ys[1] - ys[0]}>{CAP_BAR}")
+    # A: the same, its underside's ends sliding up the legs' inner edges
+    g = font["A"]
+    outer, inner = g.contours[0], g.contours[1]
+    top = min(p.y for p in inner.points)
+    O, n = outer.points, len(outer.points)
+    ends = [i for i, p in enumerate(O) if p.type == "line" and 0.25 * cap < p.y < top - 20]
+    if len(ends) == 2 and O[ends[0]].y == O[ends[1]].y and 0 < (top - O[ends[0]].y) - CAP_BAR <= 6:
+        was = top - O[ends[0]].y
+        d = was - CAP_BAR
+        for i in ends:
+            p = O[i]
+            q = next(q for q in (O[i - 1], O[(i + 1) % n]) if q.type and q.y < p.y - 50)     # the leg's lower node
+            p.x = round(p.x + d * (p.x - q.x) / (p.y - q.y))
+            p.y += d
+        done.append(f"A bar {was}>{CAP_BAR}")
+    # E, F: the middle arm, CAP_ARM about the centre of its own flare
+    for name in "EF":
+        P = _pts(font[name])
+        n = len(P)
+        face = [(P[i], P[(i + 1) % n]) for i in range(n) if P[i].type and P[(i + 1) % n].type == "line"
+                and P[i].x == P[(i + 1) % n].x and abs(P[i].y - P[(i + 1) % n].y) > 150
+                and all(0.25 * cap < q.y < 0.75 * cap for q in (P[i], P[(i + 1) % n]))]
+        if len(face) != 1:
+            done.append(f"{name} middle arm: no flare found")
+            continue
+        a, b = face[0]
+        c = (a.y + b.y) / 2
+        ys = sorted({p.y for p in P if p.type and abs(p.y - c) < 40 and p.x < a.x - 25})
+        if len(ys) != 2 or not 0 < CAP_ARM - (ys[1] - ys[0]) <= 6:
+            continue
+        lo = round(c - CAP_ARM / 2)
+        for p in P:
+            if p.x < a.x - 25 and p.y in ys:
+                p.y = lo if p.y == ys[0] else lo + CAP_ARM
+        done.append(f"{name} middle arm {ys[1] - ys[0]}>{CAP_ARM} ({lo}-{lo + CAP_ARM})")
+    # L: E's bottom arm. Its top edge and the fillet into the stem rise together
+    P = _pts(font["L"])
+    ys = {p.y for p in P if p.type == "line" and 30 < p.y < 60 and p.x > 200}
+    if len(ys) == 1:
+        y = ys.pop()
+        d = CAP_ARM - y
+        if 0 < d <= 8:
+            x0 = min(p.x for p in P if p.y == y)
+            for p in P:
+                if p.y == y or (y < p.y <= y + 50 and x0 - 25 <= p.x <= x0):
+                    p.y += d
+            done.append(f"L arm {y}>{CAP_ARM}")
+    # P, R: where the bowl closes on the stem. The counter's level bottom moves; the outside holds the leg and the height
+    for name in "PR":
+        g = font[name]
+        inner = g.contours[1].points
+        bottom = min(p.y for p in inner)
+        xs = min(p.x for p in inner)
+        under = [p.y for p in g.contours[0].points if p.type == "line" and abs(p.x - xs) <= 2 and 0.35 * cap < p.y < bottom]
+        if not under:
+            done.append(f"{name}: no closing stroke found")
+            continue
+        d = (bottom - max(under)) - CAP_THIN
+        if 0 < d <= 9:
+            for p in inner:
+                if p.y == bottom:
+                    p.y -= d
+            done.append(f"{name} closing stroke {bottom - max(under)}>{CAP_THIN}")
+    return done
+
+
+# B's lower bowl was 98 across at its extreme (measured across the stroke; 105 on a level scanline just below it),
+# against 92 to 94 on O C G Q D P R (references: B's lower bowl within 5% of the O). The counter's extreme moves out
+# until the stroke is the O's there. If the stroke were still more than B_OVER over the O's along either quarter of
+# the counter, that quarter's tension would rise to bring it under (it is not: 92.3 and 91.8 as drawn).
+B_OVER = 1.5
+B_TENSION_MAX = 66       # a counter's quarter: 0.61 on the lowercase bowl; past 0.66 it reads square
+
+
+def B_lower(font, cap=CAP):
+    g = font["B"]
+    Oo, Oi = font["O"].contours[0].points, font["O"].contours[1].points
+    T = min(p.x for p in Oi) - min(p.x for p in Oo)                  # the O's stroke at its extreme
+    low = min(g.contours[1:], key=lambda c: min(p.y for p in c.points))
+    P, n = low.points, len(low.points)
+    outer_x = max(p.x for p in g.contours[0].points if p.type and p.y < cap / 2)
+    e = max((i for i in range(n) if P[i].type), key=lambda i: P[i].x)
+    E_, up, dn = P[e], None, None
+    for j in ((e - 1) % n, (e + 1) % n):
+        if P[j].type is None and P[j].x == E_.x:
+            if P[j].y > E_.y:
+                up = j
+            else:
+                dn = j
+    if up is None or dn is None:
+        return ["B: the counter's extreme was not found"]
+    was = outer_x - E_.x
+    dx = was - T
+    if not 0 < dx <= 12:
+        return [f"B lower bowl {was}: left"]
+    for q in (E_, P[up], P[dn]):
+        q.x += dx
+    step_dn, step_up = (1 if dn == (e + 1) % n else -1), (1 if up == (e + 1) % n else -1)
+
+    def quarter(h_i, step):
+        """(handle at the extreme, handle at the far node, far node) of the quarter leaving the extreme through h_i."""
+        return P[h_i], P[(h_i + step) % n], P[(h_i + 2 * step) % n]
+
+    def cubic(a, b, c, d, m=40):
+        return [tuple((1 - t) ** 3 * a[k] + 3 * (1 - t) ** 2 * t * b[k] + 3 * (1 - t) * t * t * c[k] + t ** 3 * d[k]
+                      for k in (0, 1)) for t in (i / m for i in range(m + 1))]
+
+    O_, m = g.contours[0].points, len(g.contours[0].points)
+    edge = []                                                # the bowl's outside, sampled
+    for i in range(m):
+        if O_[i].type == "curve":
+            q = [O_[(i - 3 + k) % m] for k in range(4)]
+            if all(p.y < 0.56 * cap for p in q) and max(p.x for p in q) > E_.x - 200:
+                edge += cubic(*[(p.x, p.y) for p in q])
+
+    def thickest(h0, h1, far):
+        """The stroke across (inside to the nearest point outside) at its thickest along one quarter of the counter."""
+        return max(min(math.hypot(x - ex, y - ey) for ex, ey in edge)
+                   for x, y in cubic((E_.x, E_.y), (h0.x, h0.y), (h1.x, h1.y), (far.x, far.y), 24)[:-6])
+
+    notes = []
+    for h_i, step in ((dn, step_dn), (up, step_up)):
+        h0, h1, far = quarter(h_i, step)
+        if far.type is None or abs(h1.y - far.y) > 0.5:
+            notes.append("quarter not level at its end: left")
+            continue
+        reach_y, reach_x = far.y - E_.y, far.x - E_.x
+        k0 = (abs(h0.y - E_.y) / abs(reach_y), abs(far.x - h1.x) / abs(reach_x))
+        if thickest(h0, h1, far) <= T + B_OVER:              # light enough as drawn
+            notes.append(f"as drawn ({k0[0]:.2f} / {k0[1]:.2f}), {thickest(h0, h1, far):.1f} at most")
+            continue
+        for k in [x / 100 for x in range(56, B_TENSION_MAX + 1)]:   # the lowest tension that brings it under
+            h0.y = round(E_.y + reach_y * k)
+            h1.x = round(far.x - reach_x * k)
+            if thickest(h0, h1, far) <= T + B_OVER:
+                break
+        notes.append(f"tension {k0[0]:.2f} / {k0[1]:.2f} > {k:.2f}, {thickest(h0, h1, far):.1f} at most")
+    return [f"B lower bowl {was}>{T} at the extreme; " + "; ".join(notes)]
+
+
+# Figures' flat strokes and two one-unit mismatches (0.68; evaluation of 2026-11-13). The base of 2 was 80, the flag
+# of 5 was 77 and the top of 7 was 72: one kind of stroke, three weights. Serrif and Source Serif 4 draw all three
+# at 0.86 of their capital stem, Georgia Pro at 0.82 (mean 0.85): 73 on Area's 86. Each stroke thins or thickens
+# from its inside edge (the baseline and the figure height hold); an end on a diagonal or an upright slides along
+# that stroke's own edge.
+FIG_FLAT = 73
+
+
+def _slide(p, q, y):
+    """Moves p to height y along the line from p to q."""
+    if q.y != p.y:
+        p.x = round(p.x + (y - p.y) * (q.x - p.x) / (q.y - p.y))
+    p.y = y
+
+
+def fig_flats(font, cap=CAP):
+    done = []
+    # 2: the base's top edge comes down; its left end and the diagonal's start slide down the diagonal
+    P = _pts(font["two"])
+    n = len(P)
+    ys = [p.y for p in P if p.type == "line" and 60 < p.y < 95 and p.x < 260]
+    if ys:
+        y = min(ys)
+        d = y - FIG_FLAT
+        if 0 < d <= 9:
+            start = next(i for i, p in enumerate(P) if p.type == "line" and y < p.y <= y + 4 and P[(i + 1) % n].type is None)
+            hd = P[(start + 1) % n]                          # the diagonal's own direction at its start
+            for i, p in enumerate(P):
+                if i == start or (p.y == y and p.x < 260 and p.type == "line"):
+                    _slide(p, hd, p.y - d)
+                elif y - 8 <= p.y <= y and p.x > 260:
+                    p.y -= d
+            done.append(f"2 base {y}>{FIG_FLAT}")
+    # 5: the flag's underside rises; its left end slides up the upright's inner edge
+    P = _pts(font["five"])
+    n = len(P)
+    top = max(p.y for p in P)
+    ys = sorted({p.y for p in P if p.type == "line" and top - 95 < p.y < top - 60})
+    if ys:
+        y = ys[0]
+        d = (top - y) - FIG_FLAT
+        if 0 < d <= 9:
+            for i, p in enumerate(P):
+                if p.y == y and p.type == "line" and P[i - 1].type and P[i - 1].y < y - 100:
+                    _slide(p, P[i - 1], y + d)               # the upright's inner edge runs up from the node before
+                elif y <= p.y <= y + 8 and p.x > 300:
+                    p.y += d
+            done.append(f"5 flag {top - y}>{FIG_FLAT}")
+    # 7: the top's underside; its right end slides along the diagonal's inner edge
+    P = _pts(font["seven"])
+    n = len(P)
+    top = max(p.y for p in P)
+    ys = sorted({p.y for p in P if p.type and top - 95 < p.y < top - 60 and p.x > 100})
+    if ys:
+        y = ys[0]
+        d = (top - y) - FIG_FLAT
+        if d and abs(d) <= 9:
+            for i, p in enumerate(P):
+                if p.y != y:
+                    continue
+                q = P[(i + 1) % n]
+                if p.type == "line" and q.type and q.y < y - 300:
+                    _slide(p, q, y + d)
+                else:
+                    p.y += d
+            done.append(f"7 top {top - y}>{FIG_FLAT}")
+    # N: its two thin uprights were 48 and 49. The right one takes the left one's width, from its inside edge
+    P = _pts(font["N"])
+    xs = sorted({p.x for p in P if p.type and 60 < p.y < 660})
+    cols = xs                                                # the four upright edges, left to right
+    if len(cols) == 4:
+        left, right = cols[1] - cols[0], cols[-1] - cols[-2]
+        if 0 < abs(right - left) <= 2:
+            for p in P:
+                if p.x == cols[-2] and p.y > 100:            # the edge's nodes and the upright handle of its bracket
+                    p.x += right - left
+            done.append(f"N right upright {right}>{left}")
+    # 1: the stem's right edge leaned one unit over 633
+    P = _pts(font["one"])
+    n = len(P)
+    for i, p in enumerate(P):
+        q = P[(i + 1) % n]
+        if p.type and q.type == "line" and q.y - p.y > 500 and 0 < abs(q.x - p.x) <= 2:
+            done.append(f"1 stem edge {q.x}>{p.x} at the top")
+            q.x = p.x
+    return done

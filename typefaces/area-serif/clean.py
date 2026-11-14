@@ -1058,3 +1058,225 @@ def uncross(font, names=None):
                         again = True
                         break
     return fixed
+
+
+# A curve that runs into a straight (0.68; evaluation of 2026-11-13). Where a rule had moved a diagonal or a stem
+# after its bracket was drawn, the bracket's handle no longer lay on the straight's own line: V 2.3 degrees, W 2.5,
+# v 3.3, u's tail 2.0, the outline 1.2 to 1.7 units off the line. The handle turns onto the line, its length kept.
+# Fillets (handles under JOIN_MIN_HANDLE) are left: in whole units a 3-unit handle cannot lie on an 8-degree edge.
+JOIN_MAX_DEG = 4.5
+JOIN_MIN_HANDLE = 12
+JOIN_MIN_LINE = 40
+
+
+def true_joins(font, names, max_deg=None):
+    max_deg = max_deg or JOIN_MAX_DEG
+    done = []
+    for name in names:
+        g = font[name]
+        for c in g.contours:
+            P, n = c.points, len(c.points)
+            for i in range(n):
+                N = P[i]
+                if not N.type:
+                    continue
+                for step in (1, -1):
+                    h, L = P[(i + step) % n], P[(i - step) % n]
+                    # h: a handle leaving N one way; L: the other end of a straight arriving the other way
+                    straight = (N.type == "line" and L.type) if step == 1 else (L.type == "line")
+                    if h.type or not L.type or not straight:
+                        continue
+                    lx, ly = N.x - L.x, N.y - L.y
+                    ll, hl = math.hypot(lx, ly), math.hypot(h.x - N.x, h.y - N.y)
+                    if ll < JOIN_MIN_LINE or hl < JOIN_MIN_HANDLE:
+                        continue
+                    cross = lx * (h.y - N.y) - ly * (h.x - N.x)
+                    dot = lx * (h.x - N.x) + ly * (h.y - N.y)
+                    ang = abs(math.degrees(math.atan2(cross, dot)))
+                    if not 0.6 <= ang <= max_deg:
+                        continue
+                    x, y = round(N.x + lx / ll * hl), round(N.y + ly / ll * hl)
+                    now = abs(math.degrees(math.atan2(lx * (y - N.y) - ly * (x - N.x), lx * (x - N.x) + ly * (y - N.y))))
+                    if now < ang - 0.3:
+                        h.x, h.y = x, y
+                        N.smooth = True
+                        done.append(f"{name} ({N.x},{N.y}) {ang:.1f}>{now:.1f}")
+    return done
+
+
+# Nodes where a curve needs one (0.69; evaluation of 2026-11-13). A curve should pass a leftmost, rightmost, highest
+# or lowest point at a node, and bend one way only. 26 curves in the core passed an extreme without a node (the
+# brackets of every diagonal, up to 28 units past the nearest node in V; g's ear; y's tail) and 12 bent both ways
+# (Q's tail, R's leg, k's arm, g's link, the balls of 2 and 3). Each is cut in two at that point by de Casteljau's
+# construction, which leaves the curve where it was; the new points land on whole units (under half a unit of
+# movement), an extreme's handles are set level or upright, and an inflection's handles are kept on one line.
+NODE_MIN_SPAN = 30           # shorter curves are fillets and serif corners
+NODE_MIN_PAST = 0.75         # an extreme this little past a node is the node
+NODE_MIN_PIECE = 8           # never leave a piece shorter than this (24 was tried: six extremes stayed without a node
+                             # and the built font's soft kinks, which come from the quadratic conversion, did not change)
+NODE_FLEX = 1 / 900          # an inflection counts when both sides bend at least this much
+
+
+def _split(a, b, c, d, t):
+    lerp = lambda p, q: (p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t)
+    ab, bc, cd = lerp(a, b), lerp(b, c), lerp(c, d)
+    abc, bcd = lerp(ab, bc), lerp(bc, cd)
+    return ab, abc, lerp(abc, bcd), bcd, cd
+
+
+def _d1(a, b, c, d, t):
+    u = 1 - t
+    return (3 * u * u * (b[0] - a[0]) + 6 * u * t * (c[0] - b[0]) + 3 * t * t * (d[0] - c[0]),
+            3 * u * u * (b[1] - a[1]) + 6 * u * t * (c[1] - b[1]) + 3 * t * t * (d[1] - c[1]))
+
+
+def _curv(a, b, c, d, t):
+    u = 1 - t
+    x1, y1 = _d1(a, b, c, d, t)
+    x2 = 6 * u * (c[0] - 2 * b[0] + a[0]) + 6 * t * (d[0] - 2 * c[0] + b[0])
+    y2 = 6 * u * (c[1] - 2 * b[1] + a[1]) + 6 * t * (d[1] - 2 * c[1] + b[1])
+    v = (x1 * x1 + y1 * y1) ** 1.5
+    return (x1 * y2 - y1 * x2) / v if v > 1e-9 else 0.0
+
+
+def _root(f, lo, hi):
+    flo = f(lo)
+    for _ in range(40):
+        mid = (lo + hi) / 2
+        if (f(mid) > 0) == (flo > 0):
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
+
+def _cut_point(a, b, c, d):
+    """('x' | 'y' | 'flex', t) for the first place this curve needs a node, or None."""
+    if math.hypot(d[0] - a[0], d[1] - a[1]) < NODE_MIN_SPAN:
+        return None
+    N = 60
+    for axis in (0, 1):
+        f = lambda t: _d1(a, b, c, d, t)[axis]
+        for i in range(2, N - 2):
+            t0, t1 = i / N, (i + 1) / N
+            if f(t0) * f(t1) < 0:
+                t = _root(f, t0, t1)
+                u = 1 - t
+                v = u ** 3 * a[axis] + 3 * u * u * t * b[axis] + 3 * u * t * t * c[axis] + t ** 3 * d[axis]
+                if min(abs(v - a[axis]), abs(v - d[axis])) >= NODE_MIN_PAST:
+                    return ("xy"[axis], t)
+    k = lambda t: _curv(a, b, c, d, t)
+    ks = [k(i / N) for i in range(1, N)]
+    for i in range(1, len(ks)):
+        if ks[i] * ks[i - 1] < 0:
+            if max(abs(x) for x in ks[:i]) > NODE_FLEX and max(abs(x) for x in ks[i:]) > NODE_FLEX:
+                return ("flex", _root(k, i / N, (i + 1) / N))
+            break
+    return None
+
+
+def _on_line(origin, toward, ideal):
+    """The whole-unit point nearest `ideal` that keeps the direction origin -> toward best (a shortened handle must
+    still leave its node the way it did, or the join it belongs to gains a bend)."""
+    dx, dy = toward[0] - origin[0], toward[1] - origin[1]
+    L = math.hypot(dx, dy)
+    if L < 1e-6:
+        return (round(ideal[0]), round(ideal[1]))
+    best = None
+    for ox in (-1, 0, 1):
+        for oy in (-1, 0, 1):
+            q = (round(ideal[0]) + ox, round(ideal[1]) + oy)
+            vx, vy = q[0] - origin[0], q[1] - origin[1]
+            l = math.hypot(vx, vy)
+            if l < 1:
+                continue
+            ang = abs(math.atan2(dx * vy - dy * vx, dx * vx + dy * vy))
+            key = (round(ang, 4), math.hypot(q[0] - ideal[0], q[1] - ideal[1]))
+            if best is None or key < best[0]:
+                best = (key, q)
+    return best[1] if best else (round(ideal[0]), round(ideal[1]))
+
+
+def add_nodes(font, names):
+    from ufoLib2.objects import Point
+    done = []
+    for name in names:
+        g = font[name]
+        for c in g.contours:
+            guard = 0
+            i = 0
+            while i < len(c.points) and guard < 400:
+                guard += 1
+                P, n = c.points, len(c.points)
+                p3 = P[i]
+                if p3.type != "curve" or P[i - 1].type or P[i - 2].type or not P[i - 3].type:
+                    i += 1
+                    continue
+                p0, h1, h2 = P[i - 3], P[i - 2], P[i - 1]
+                A, B, C, D = ((q.x, q.y) for q in (p0, h1, h2, p3))
+                cut = _cut_point(A, B, C, D)
+                if not cut:
+                    i += 1
+                    continue
+                kind, t = cut
+                ab, abc, m, bcd, cd = _split(A, B, C, D, t)
+                m = (round(m[0]), round(m[1]))
+                if min(math.hypot(m[0] - A[0], m[1] - A[1]), math.hypot(D[0] - m[0], D[1] - m[1])) < NODE_MIN_PIECE:
+                    i += 1
+                    continue
+                ab, cd = _on_line(A, B, ab), _on_line(D, C, cd)   # the old nodes keep their tangents
+                abc, bcd = [(round(q[0]), round(q[1])) for q in (abc, bcd)]
+                if kind == "x":
+                    abc, bcd = (m[0], abc[1]), (m[0], bcd[1])
+                elif kind == "y":
+                    abc, bcd = (abc[0], m[1]), (bcd[0], m[1])
+                else:                                        # an inflection: the two handles on one line through m
+                    vx, vy = bcd[0] - abc[0], bcd[1] - abc[1]
+                    L = math.hypot(vx, vy)
+                    if L < 4:
+                        i += 1
+                        continue
+                    lb = math.hypot(bcd[0] - m[0], bcd[1] - m[1])
+                    la = math.hypot(m[0] - abc[0], m[1] - abc[1])
+                    abc = (round(m[0] - vx / L * la), round(m[1] - vy / L * la))
+                    bcd = (round(m[0] + vx / L * lb), round(m[1] + vy / L * lb))
+                    v1, v2 = (m[0] - abc[0], m[1] - abc[1]), (bcd[0] - m[0], bcd[1] - m[1])
+                    bend = abs(math.degrees(math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1])))
+                    if bend > 1.0:
+                        i += 1
+                        continue
+                if abc == m or bcd == m:
+                    i += 1
+                    continue
+                h1.x, h1.y = ab
+                h2.x, h2.y = cd
+                idx = i - 1 if i >= 1 else n - 1             # insert before h2
+                new = [Point(abc[0], abc[1]), Point(m[0], m[1], "curve", True), Point(bcd[0], bcd[1])]
+                pos = P.index(h2)
+                c.points[pos:pos] = new
+                done.append(f"{name} {kind} ({m[0]},{m[1]})")
+                i = 0                                        # indices moved: start this contour again
+    return done
+
+
+# 5's heel (0.69). From the heel's lowest point the outline dipped 2 units under it before rising into the bowl's
+# inner curve, so the edge bent three ways in 45 units. The short curve's two handles are put on the tangents of the
+# nodes either side (level at the heel, the bowl curve's own direction at the other), a third of the way each: it
+# bends one way, and the turn into the bowl happens at the node.
+def five_heel(font):
+    c = font["five"].contours[0]
+    P, n = c.points, len(c.points)
+    for i, p in enumerate(P):
+        a, h1, h2, b, nh = P[i], P[(i + 1) % n], P[(i + 2) % n], P[(i + 3) % n], P[(i + 4) % n]
+        if not (a.type and h1.type is None and h2.type is None and b.type and nh.type is None):
+            continue
+        if not (b.x - a.x > 20 and 10 < b.y - a.y < 60 and a.y < 0.5 * 712 and a.x < 150 and h2.y < a.y):
+            continue
+        run = math.hypot(b.x - a.x, b.y - a.y)
+        dx, dy = nh.x - b.x, nh.y - b.y
+        L = math.hypot(dx, dy)
+        was = (h1.x, h1.y, h2.x, h2.y)
+        h1.x, h1.y = round(a.x + run / 3), a.y
+        h2.x, h2.y = round(b.x - dx / L * run / 3), round(b.y - dy / L * run / 3)
+        return [f"5 heel ({a.x},{a.y}): handles {was} > {(h1.x, h1.y, h2.x, h2.y)}"]
+    return ["5 heel: not found"]

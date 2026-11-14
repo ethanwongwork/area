@@ -128,6 +128,24 @@ once with raw points).
     (`references/audit.md`): findings classed with evidence, what changed versus what is only recommended, validator
     outcomes, what was not checked, the next smallest step.
 
+## Evaluating the face (2026-11-13)
+
+`docs/research/serif-evaluation-2026-11-13/` holds a suite that measures Area Serif and eight other serifs with the same
+code (curves, thicks and thins, serifs, alignment, spacing) and builds the owner's evaluation page
+(https://claude.ai/artifact/5FkKUT31WDmmTAMMQtKwk2). The owner asked for work in this form: measured findings, fixes
+shown before over after, checks that fail on the old state. Run it after any round of drawing (its README has the
+commands), and:
+
+1. **Check a finding against the records before calling it a defect.** The guidelines, `audit-0.58.md`,
+   `audit_parts.EXPECTED`, `owner_edits.json` notes and the construction skill's ladder record decisions a scanline
+   cannot know. In the first run four of 17 findings were wrong this way: the branch neck (32 by rule) read as a thin
+   arch, c against e measured upright instead of across the stroke, ball sizes and r's foot that were the owner's.
+2. **Measure a stroke across itself**, from the counter to the nearest point outside. A level or upright scanline
+   overstates a stroke that runs at a slant (B's lower bowl read 105 on a scanline, 98 across).
+3. **Give every fix a row in an audit** that the previous build fails, and say when a measure of evenness got worse
+   (r's wider advance moved lowercase gap variation from 9.4% to 9.8%).
+4. **r**: the owner prefers a wide r; its long right foot is theirs. Never shorten it as a fix.
+
 ## What each check proves
 
 | Check | Proves | Does not prove |
