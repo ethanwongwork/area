@@ -100,6 +100,23 @@ def main():
         ("typo = hhea", int(os2.sTypoAscender == hh.ascent and os2.sTypoDescender == hh.descent), 1, 0),
         ("caps centered in line box", (hh.ascent + hh.descent) / 2 - cap_t / 2, 0, 1),
     ]
+    # 0.47, the character set (charset.py)
+    import charset as CS
+    cmap, hmtx = f.getBestCmap(), f["hmtx"]
+    missing = [c for c in CS.COVERAGE if c not in cmap]
+    if missing:
+        print("missing:", " ".join(f"U+{c:04X}" for c in missing))
+    tab = {hmtx[n + ".tf"][0] for n in CS.FIGS if n + ".tf" in hmtx.metrics}
+    maths = {hmtx[cmap[ord(c)]][0] for c in "+−×÷=≠<>±¬≤≥≈"}
+    dash = g("–")
+    sup, one = g("¹"), g("1")
+    rows += [
+        ("character set: missing", len(missing), 0, 0),
+        ("tabular figures: widths", len(tab), 1, 0),
+        ("maths signs: widths (= tabular)", len(maths | tab), 1, 0),
+        ("dashes / n stem", w(dash.v((dash.x0 + dash.x1) / 2)[0]) / w(ns[0]), CS.DASH, 0.03),
+        ("superior figure / figure height", (sup.y1 - sup.y0) / (one.y1 - one.y0), CS.SUP_SCALE, 0.02),
+    ]
     bad = 0
     for name, got, want, tol in rows:
         ok = abs(got - want) <= tol

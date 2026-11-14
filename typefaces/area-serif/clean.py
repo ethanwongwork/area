@@ -180,13 +180,15 @@ def shoulders(font):
 # the thicker parts thinner"): the one value is the arches' own, and the bowls come down to it. 0.36 and 0.37 had
 # raised the arches to the bowls' 0.65.
 THIN_ARCH = 0.52              # n was 0.50, h 0.54, m 0.55 before 0.36; the closed bowls were 0.65
-THIN_CAP = 0.57               # D's and P's; O was 0.63
+THIN_CAP = 0.525              # 0.58 audit: 47 units after lightening, 0.55 of H's stem, the lowercase's own share of n's
+                              # (0.57, 51 units, until then: the round capitals carried 5-10% more ink than the straight
+                              # ones against both references, whose thin arcs and serif tips are one weight). D's and P's; O was 0.63
 BOWL_R, BOWL_L = (42, 80), (20, 58)
 THIN_FLOOR = [                # (glyph, side, target, scan range in % of the ink width)
     ("n", "top", THIN_ARCH, (48, 78)), ("h", "top", THIN_ARCH, (50, 80)),      # the arch past its branch
     ("m", "top", THIN_ARCH, (30, 46)), ("m", "top", THIN_ARCH, (66, 86)),
     ("u", "bottom", THIN_ARCH, (25, 75)),
-    ("c", "top", THIN_ARCH, (25, 75)), ("e", "top", THIN_ARCH, (25, 75)), ("e", "bottom", 0.70, (35, 65)),
+    ("c", "top", THIN_ARCH, (25, 75)), ("e", "top", THIN_ARCH, (25, 75)), ("e", "bottom", 0.62, (35, 65)),   # 0.59: c's own lower arc (51 units); 0.70 until then
     ("g", "top", THIN_ARCH, (25, 75)), ("a", "top", THIN_ARCH, (25, 75)),
     ("s", "top", THIN_ARCH, (25, 75)), ("s", "bottom", THIN_ARCH, (25, 75)),
     ("o", "top", THIN_ARCH, (25, 75)), ("o", "bottom", THIN_ARCH, (25, 75)),
@@ -198,7 +200,8 @@ THIN_FLOOR = [                # (glyph, side, target, scan range in % of the ink
     ("C", "top", THIN_CAP, (25, 75)), ("C", "bottom", THIN_CAP, (25, 75)),
     ("G", "top", THIN_CAP, (25, 75)), ("G", "bottom", THIN_CAP, (25, 75)),
     ("S", "top", THIN_CAP, (25, 75)), ("S", "bottom", THIN_CAP, (25, 75)),
-    ("D", "bottom", THIN_CAP, (30, 75)),
+    ("D", "bottom", THIN_CAP, (30, 75)), ("D", "top", THIN_CAP, (30, 75)), ("Q", "bottom", THIN_CAP, (25, 60)),
+    ("B", "top", THIN_CAP, (35, 75)), ("P", "top", THIN_CAP, (35, 75)), ("R", "top", THIN_CAP, (35, 75)),
 ]
 
 
@@ -372,7 +375,7 @@ def even_tension(font, names=None):
 #      one. The two bowl strokes come to S_LOW (68, 74 units) and the spine to the o's round stroke.
 #   t  top at 1.20 of the x-height (Serrif 1.21, Georgia Pro 1.31); bar's right end at 0.91 of the width (0.97).
 #   r  ink width 0.694 of the x-height (Serrif 0.727, Georgia Pro 0.778); the ear reached 0.40 past the stem (0.43).
-S_LOW = (68, 74)
+S_LOW = (66, 68)             # 0.60: the lower-right bowl stroke was 0.83-0.97 stems down its length (both references 0.71-0.79); (68, 74) until then
 S_SPINE = (3, 4)              # the spine's upper edge down, lower edge up: 97 to 90 units
 T_RISE = 47                   # 1.20 to 1.29 (1.26 in 0.38; owner, 0.41: "a bit taller still"; Georgia Pro 1.31)
 T_BAR_OUT = 10
@@ -854,7 +857,8 @@ def r_top_measured(font):
 
 # 0.46, the final pass (owner: "another final pass on visual consistency, weight, smoothness, optical weight, and all
 # other technical details. make sure there are no uneccessary points, unsmooth curves, random gaps").
-BRACKET_SHARES = (0.45, 0.75)     # up the stem, along the serif (derive.BRACKET_K_STEM, BRACKET_K_SERIF)
+BRACKET_SHARES = (0.70, 0.90)     # up the stem, along the serif. 0.45 / 0.75 until 0.46 (derive.BRACKET_K_*, which still
+                                  # draws them so): fitted to the references' measured bracket (joins.py, 0.49)
 
 
 def brackets_one(font, names):
@@ -924,3 +928,133 @@ def e_eye_corner(font):
             dx = other.x - node.x
             if abs(h.y - node.y) < 0.5 and abs(dx) > 30 and abs(h.x - node.x) > 0.9 * abs(dx):
                 h.x = round(node.x + 0.82 * dx)
+
+
+# 0.47, the figures' open items (guidelines, Open: "6 and 9's join still 1.53 H stems, 8's upper-left 1.64").
+#   6 9  Where the long stroke leaves the bowl, the counter's corner sat 80 units short of the stroke's crotch, so the
+#        join was a blob (largest circle inside 1.27 H stems; Georgia Pro 1.03, Serrif 1.09). The counter's corner
+#        now reaches toward the crotch, to FIG_JOIN_GAP units from it, as both references draw it: the join becomes
+#        the branch's own width. Its handle follows FIG_JOIN_HANDLE of the way, so the counter's top bends evenly.
+#   8    The spine (the stroke from upper left to lower right) was 1.20-1.24 H stems all along (Georgia Pro 0.96,
+#        Serrif 1.07). Each counter's edge along the spine moves EIGHT_SPINE units across it, into the counter:
+#        the spine thins from both sides, nothing is thickened.
+#   X    Its thick diagonal was 5% over Serrif's and 9% over Georgia Pro's; a crossing adds ink where the strokes
+#        meet, so it is drawn X_DIAG of the width K's leg keeps.
+FIG_JOIN_GAP = 44
+FIG_JOIN_HANDLE = 0.3       # the corner's handle follows 0.3 of its move: half bent the counter's top unevenly (evaluate.py)
+EIGHT_SPINE = 11
+X_DIAG = 0.95
+
+
+def figure_join_corners(font):
+    for name, side in (("six", -1), ("nine", 1)):
+        g = font[name]
+        if len(g.contours) != 2:
+            print(f"figure_join_corners: {name}: contours changed; skipped")
+            continue
+        outer, counter = g.contours[0].points, g.contours[1].points
+        crotch = [p for p in outer if p.type and not p.smooth
+                  and min(q.y for q in outer) + 150 < p.y < max(q.y for q in outer) - 150]
+        corners = [i for i, p in enumerate(counter) if p.type and not p.smooth]
+        if not crotch or not corners:
+            print(f"figure_join_corners: {name}: crotch or corner not found; skipped")
+            continue
+        if side < 0:                                   # 6: the counter's top-left corner rises toward the crotch
+            i = max(corners, key=lambda k: counter[k].y)
+            cy = min(crotch, key=lambda p: abs(p.x - counter[i].x) + abs(p.y - counter[i].y)).y
+            d = (cy - FIG_JOIN_GAP) - counter[i].y
+        else:                                          # 9: the counter's bottom-right corner drops toward it
+            i = min(corners, key=lambda k: counter[k].y)
+            cy = min(crotch, key=lambda p: abs(p.x - counter[i].x) + abs(p.y - counter[i].y)).y
+            d = (cy + FIG_JOIN_GAP) - counter[i].y
+        if d * -side < 0 or abs(d) > 60:
+            print(f"figure_join_corners: {name}: move {d:.0f} out of range; skipped")
+            continue
+        n = len(counter)
+        counter[i].y += d
+        for j in ((i - 1) % n, (i + 1) % n):
+            if counter[j].type is None:
+                counter[j].y += round(d * FIG_JOIN_HANDLE)
+
+
+def eight_spine(font):
+    g = font["eight"]
+    if len(g.contours) != 3:
+        print("eight_spine: 8's counters not found; skipped")
+        return
+    up, low = sorted(g.contours[1:], key=lambda c: -max(p.y for p in c.points))
+    cu = [p for p in up.points if p.type and not p.smooth]       # the counters' corners at the waist
+    cl = [p for p in low.points if p.type and not p.smooth]
+    if len(cu) != 1 or len(cl) != 1:
+        print("eight_spine: corners not found; skipped")
+        return
+    a = cl[0]                                         # the lower counter's corner at the waist
+    # the spine runs from upper left to lower right; its normal points up and to the right, into the upper counter
+    tx, ty = 0.906, -0.423
+    nx, ny = -ty, tx
+    for P, sgn in ((up.points, -1), (low.points, 1)):        # each counter grows toward the spine
+        for i, p in enumerate(P):
+            if not p.type:
+                continue
+            # a node on the spine side: the corner, and the curve leaving it along the spine
+            along = (p.x - a.x) * tx + (p.y - a.y) * ty
+            off = (p.x - a.x) * nx + (p.y - a.y) * ny
+            if p is cu[0] or p is cl[0] or (sgn < 0 and off > -5 and along < 0 and p.y < max(q.y for q in P) - 150) \
+                    or (sgn > 0 and off < 5 and along > 0 and p.y > min(q.y for q in P) + 150):
+                for q in _node_with_handles(P, i):
+                    q.x += round(sgn * EIGHT_SPINE * nx)
+                    q.y += round(sgn * EIGHT_SPINE * ny)
+
+
+# 0.65: no outline crosses itself (owner, with a picture of a speck above w's middle peak: "this cannot be
+# happening"). pathlint's new check found the same fault in M (its vertex), and one-unit slivers at the notches of
+# B, Q, g, 3 and of glyphs built from them. Two edges that run into a tiny segment (6 units or less) and cross
+# each other there are joined at one point, the segment's middle: a vertex or a notch is a point, not a twist.
+UNCROSS_MAX = 6
+
+
+def uncross(font, names=None):
+    def flat(P, i0, n):
+        """The segment starting at on-curve index i0, as points."""
+        a = P[i0]
+        b, c_ = P[(i0 + 1) % n], P[(i0 + 2) % n]
+        if b.type:                                           # a line
+            return [(a.x, a.y), (b.x, b.y)]
+        d = P[(i0 + 3) % n]
+        return [tuple((1 - t) ** 3 * a_ + 3 * (1 - t) ** 2 * t * b_ + 3 * (1 - t) * t * t * c__ + t ** 3 * d_
+                      for a_, b_, c__, d_ in ((a.x, b.x, c_.x, d.x), (a.y, b.y, c_.y, d.y))) for t in [k / 12 for k in range(13)]]
+
+    def cross(p, q):
+        def side(a, b, c):
+            return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])
+        for i in range(len(p) - 1):
+            for j in range(len(q) - 1):
+                if side(p[i], p[i + 1], q[j]) * side(p[i], p[i + 1], q[j + 1]) < -1e-6 and \
+                        side(q[j], q[j + 1], p[i]) * side(q[j], q[j + 1], p[i + 1]) < -1e-6:
+                    return True
+        return False
+
+    fixed = []
+    for g in font:
+        if (names is not None and g.name not in names) or not g.contours:
+            continue
+        for c in g.contours:
+            again = True
+            while again:
+                again = False
+                P, n = c.points, len(c.points)
+                on = [i for i, p in enumerate(P) if p.type]
+                for k, i in enumerate(on):
+                    j = on[(k + 1) % len(on)]
+                    A, B = P[i], P[j]
+                    if (j - i) % n != 1 or math.hypot(B.x - A.x, B.y - A.y) > UNCROSS_MAX or len(on) < 5:
+                        continue
+                    prev, nxt = on[k - 1], j
+                    if cross(flat(P, prev, n), flat(P, nxt, n)):
+                        A.x, A.y = round((A.x + B.x) / 2), round((A.y + B.y) / 2)
+                        A.smooth = False
+                        c.points.remove(B)
+                        fixed.append(f"{g.name} ({A.x},{A.y})")
+                        again = True
+                        break
+    return fixed

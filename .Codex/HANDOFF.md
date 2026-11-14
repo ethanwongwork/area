@@ -1,6 +1,50 @@
 # Handoff
 
-## Current state (2026-11-12)
+## Current state (2026-11-13)
+- **Area Serif 0.66: vertices one construction (`parts.vertices`: flat outside 0.42 stems, point inside; w's and M's sharp points were 0.65's uncross). Optical fit pass (`tools/fit/fit.py`): 22 letters' sides (`spacing.OPTICAL`), capitals 13 a side looser, kerning rebuilt from measurement (`fit_kerning.json`, 789 values; 0.38's carry-over had left fo 86 tight, Gw 96 loose), MIN_GAP 13. Regenerate the kerning after any bearing change (skill `area-serif-construction`, Fit). Open: figures' fit, spurs' corners (owner's call). Page republished as 0.66.**
+- **Area Serif 0.65: one construction per part. `typefaces/area-serif/parts.py` builds the b d p q bowl, every join of a curve to a stem (a point on the stem's edge, neck 32 on branches and 54 on run-ins, one leaving angle), spurs, u from n's arch, a's lower stroke; it runs in `qa.py`. w's crossed peak fixed (`pathlint.crossings` is an ERROR now, `clean.uncross`); eng and mu rebuilt from n and u; stray segments dropped. New skill `area-serif-construction` (part table, thick-to-thin ladder, research). Open: germandbls and the hooked Extended-B letters still on old joins; u's level head serifs (owner's call); capital and figure bowls not in the system; not seen in the app. Page republished as 0.65.**
+- **Area Serif 0.64: every thick/thin transition scanned (`tools/joins/swell.py`: 0 bumps); n h m one arch (`balance.same_arches`), stems 78 end to end on b d f h i l q (`even_stems`). Left as the owner's: u's joins, t's top. Page republished as 0.64.**
+- **Area Serif 0.63: a is option C (owner's pick, `balance.A_OPTION`), and the arc into its drop is fitted to c's swell (`tools/joins/arc_profile.py`). Page republished as 0.63.**
+- **Area Serif 0.62: round ends on y, g's ear and a's drop (`joins.round_ends2`), e's counter corner squared.**
+- **Area Serif 0.60 and 0.61: v w x y serif lengths on leaning strokes (`balance.lean_serifs`; closed 0.90, open 0.58 stems), s's lower bowl, a's bowl bottom; the owner's W/X serif picture was the proof tool's grid fitting, proofs now by `tools/joins/plain.py`. Then 0.61: w widened to Georgia Pro's width (`widen_w`). Open: the owner's pick among a's options A B C (`docs/research/serif-typeface-2026-11-10/img/a-options-0.62.png`; build with AREA_A=B or C, `balance.a_option`; the build carries A), g, y's end, s's top arc. Page republished as 0.61.**
+- **Area Serif 0.59: e and g lightened (`balance.e_g`; e +12% to +7% ink, g +19% to +15%; audit-0.58.md's last section). Page republished as 0.59.**
+- **Area Serif 0.58: e's bar junction and the full audit (same branch).** Owner asked for a deep serif,
+  height/width and thick/thin ink audit. Evidence and tables: `docs/research/serif-typeface-2026-11-10/audit-0.58.md`;
+  tools `tools/joins/audit_*.py`. Fixes in `typefaces/area-serif/balance.py` (heights, bars, diagonals per stroke, arcs,
+  stems, descender feet), `joins.py` (e junction, barbs sized to the stem: 0.54's were sized to the cap height and made
+  C and S 10-14% heavy; head serif tips 30) and `clean.THIN_CAP` 0.525 (capital hairlines 51 to 47). QA passes; page
+  republished as 0.58. Open: the audit note's "Still off" list (g e a x y v s, Q, I, 7), proposals 2 and 6. Not seen in the app.
+- **Area Serif 0.50 to 0.57: flatter head serifs, C's lower end, diagonal joins, C and G toward Georgia Pro (same branch).** Owner took proposal 1: `joins.flatter_flags`, 15 to 8
+  degrees on b d h i j k l m n p r about the stem's top corner. Then 0.51: p's and r's head serif at n's height (`level_flags`; r's notch stays).
+  Then 0.52: C's lower end is a level cut 30 wide (`C_end`, proposal 3).
+  Then 0.53: diagonal joins' open side takes the bracket's shares
+  (`steep_diagonals`, 24 joins, handles only; the closed side keeps its fillet). Then 0.54 (owner's pictures over Georgia Pro): C G S
+  barbs lower (0.66) and wedge-shaped, G's bar and stem moved (-16, -22) as one piece (`G_lower`), k v w x y inside
+  joins one fillet (`even_fillets`). Then 0.55: Georgia Pro's notch and spur on the C G S barbs
+  (`barb_spurs`; owner chose it over a thinner tip). Then 0.56: lowercase s too (`s_spurs`). Then 0.57: figures surveyed, only the 7's beak (30) and the 5's round end
+  (88) changed (`figure_ends`). Page republished as 0.57. Open: proposals 2, 6; the 5's heel; G's chin (Georgia Pro's runs lower; not taken).
+- **Area Serif 0.49: steeper joins (branch `claude/variable-serif-typeface-7a7273`, 0.48's branch merged in).**
+  Owner: thins not too thin, curves into serifs and inside counters steeper, C and G tops toward the references, less
+  old style. `typefaces/area-serif/joins.py` runs after lightening: bracket handles 0.70 / 0.90 (`clean.BRACKET_SHARES`),
+  arm flares 1.5 H stems (E F L T Z) with a small corner where E's and L's lower arm leaves the stem (replaces the owner's
+  0.34 L corner; say so if asked), C G S barbs to 0.695 of the cap height and 42 wide, tails and beak ends 30 units.
+  Evidence, measurements and six open proposals (head serifs 15 to 8 degrees first): `docs/research/serif-typeface-2026-11-10/evaluation-0.49.md`;
+  scans in `tools/joins/`. QA passes; page republished as 0.49. The owner's screenshots never arrived: confirm the joins
+  meant. Not looked at in the app.
+- **Area Serif 0.48: Vietnamese (same branch).** Hook above, horn, Ơ ơ Ư ư and the 64 missing toned letters
+  (`charset.hook_above`, `horns`, `vietnamese`); shaperglot `vi_Latn` passes. Fixed 0.47's accented i's (kept the old
+  dotless i's width: `follow_rebuilt`), typed accents vs ready-made (`align_anchors`, 70 anchors), and ą ę į ų Ę ŀ
+  rebuilt from Area's letters. QA 21/21, 0 path errors, fontbakery 0 FAIL. Page republished as 0.48. Committed, not pushed.
+- **Area Serif 0.47: the full character set (branch `claude/focused-pare-265e4e`, on top of PR #224's 0.46).**
+  `typefaces/area-serif/charset.py` runs last in `normalize`: lightens the 163 punctuation, symbol and accent outlines
+  lighten had skipped; rebuilds from Area's finished letters ı ȷ, Đ đ Ħ ħ Ŧ ŧ Ł ł Ø ø Þ þ, ſ, æ œ Æ Œ, the f ligatures
+  (with carets), superiors, inferiors, ª º (fractions follow); hyphen and dashes at the minus's weight; one tabular
+  width for figures (`tnum`/`pnum`) and maths; new arrows, maths, primes, currencies, spaces, dashes and interface
+  symbols. 6 9 joins, 8's spine and X fixed in `clean.py`. `check.py` holds `charset.COVERAGE` (21 of 21); QA: 0 path
+  errors, fontbakery 0 FAIL / 1 WARN, evaluate jumps 27. Page republished as 0.47 with a Character set section; no
+  new owner saves were waiting. Inventory, gap list, measurements and what is not done (Vietnamese, Ŋ ŋ ĸ ß and
+  Extended-B / IPA still Libre Baskerville's, oldstyle figures, small caps, c_t s_t s_p; Vietnamese done in 0.48):
+  `docs/research/serif-typeface-2026-11-10/charset-0.47.md`. Committed, not pushed.
 - **Area Serif, an original variable UI serif (2026-11-10 to 12, branch `claude/variable-serif-typeface-df1f42`).**
   Derived only from Libre Baskerville's points (OFL 1.1: Area Serif must stay OFL and never be named Libre
   Baskerville); Georgia Pro and Serrif are measured, never traced, and renders of them are never committed. Code in

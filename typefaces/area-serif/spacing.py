@@ -21,13 +21,19 @@ import string
 
 X_HEIGHT, CAP_HEIGHT = 520, 712
 STEP = 10
-TRACK = {"lower": 6, "upper": 3}      # units a side tighter than n's and H's bearings were
+TRACK = {"lower": 6, "upper": -10, "other": 0}    # units a side tighter than n's and H's bearings were
+# 0.66, capitals: 3 until now, which left H's stems 238 units from the next H's (at Area's heights Serrif sets 273 and
+# Georgia Pro 290: Area's serifs are shorter, so equal bearings at the tips put its stems closer). 13 looser a side:
+# the most that keeps the round capitals inside the references' range (O's bearing 45; theirs 40 and 46). H to H 264.
+# The lowercase stays: n to n is 215 (216 and 209), the word space 250 (261 and 249).
 MAX_MOVE = 70
-MIN_GAP = 22                  # ink never closer than this (Georgia Pro's rule: letters never touch)
+MIN_GAP = 13                  # ink never closer than this. 22 until 0.66; measured (tools/fit): Serrif holds 9 to 13
+                              # between serif tips (VV WW AA vv ww), Georgia Pro lets them overlap
 WORD_SPACE = 250              # 287 until 0.38; 0.48 of the x-height
 LOWER, UPPER = string.ascii_lowercase, string.ascii_uppercase
 FIGS = "zero one two three four five six seven eight nine".split()
-PUNCT = ["period", "comma", "hyphen", "quotesingle", "quoteright"]
+PUNCT = ["period", "comma", "hyphen", "quotesingle", "quoteright", "colon", "semicolon", "exclam", "question",
+         "endash", "emdash", "quotedbl", "quoteleft", "quotedblleft", "quotedblright", "parenleft", "parenright", "slash"]
 # Georgia Pro Regular's bearings [left, right] in each letter's zone, in Area's units (measured 2026-11-12)
 REFERENCE = {
     "a": [42, 14], "b": [89, 39], "c": [38, 3], "d": [38, 12], "e": [38, 23], "f": [13, 4],
@@ -39,6 +45,26 @@ REFERENCE = {
     "K": [51, -27], "L": [49, 0], "M": [24, 46], "N": [13, 9], "O": [40, 40], "P": [45, 33],
     "Q": [40, 40], "R": [49, -22], "S": [47, 40], "T": [7, 9], "U": [37, 7], "V": [-20, -21],
     "W": [-2, -15], "X": [6, -1], "Y": [-22, -28], "Z": [14, 10],
+}
+
+
+# 0.66, the optical pass (owner: "a final optical spacing, kerning, tracking pass"). REFERENCE sets each bearing from
+# the outermost ink, which is a serif's tip: a letter whose serifs differ from n's or H's ends with its stem nearer or
+# further than theirs. tools/fit/fit.py measures the white a side really shows (the mean over the zone's rows, each
+# no deeper than 0.15 of the height behind the outermost ink) against the face's own n or H, in Area and in both
+# references. Where Area stands off BOTH references in the same direction, the side moves by the smaller of the two
+# differences (3 units or more); where they disagree it stays. Units added to [left, right] after REFERENCE:
+OPTICAL = {
+    "a": [4, -3], "c": [0, 3], "f": [0, 7], "i": [4, 0], "j": [5, -5], "m": [3, 0], "p": [4, 0], "t": [4, 0],
+    "u": [0, -9], "z": [-3, 0],
+    "B": [0, -13], "E": [6, -5], "F": [6, -7], "G": [0, -13], "I": [8, 9], "J": [0, 3], "M": [8, 3], "N": [7, 10],
+    "P": [5, -16], "U": [-4, 5], "W": [-7, 0], "Z": [-6, 0],
+}
+# and on punctuation, which REFERENCE never covered (the dashes stood 20 units a side looser than either
+# reference's against n, the parentheses 11 and 19 tighter):
+OPTICAL_MORE = {
+    "hyphen": [-20, -21], "endash": [-20, -21], "emdash": [-20, -20], "parenleft": [11, 19], "parenright": [19, 11],
+    "exclam": [9, 10], "quoteleft": [-5, 0], "quotedblleft": [-5, 0],
 }
 
 
@@ -98,8 +124,12 @@ def space(font):
     delta = {}                                   # name: (shift of the outline, change in advance, d lsb, d rsb)
     for name in LOWER + UPPER:
         o = offset["lower" if name in LOWER else "upper"]
-        dl, dr = (max(-MAX_MOVE, min(MAX_MOVE, round(REFERENCE[name][i] + o - measured[name][i]))) for i in (0, 1))
+        dl, dr = (max(-MAX_MOVE, min(MAX_MOVE, round(REFERENCE[name][i] + o - measured[name][i])))
+                  + OPTICAL.get(name, (0, 0))[i] for i in (0, 1))
         delta[name] = (dl, dl + dr, dl, dr)
+    for name, (dl, dr) in OPTICAL_MORE.items():
+        if name in font and font[name].contours:
+            delta[name] = (dl, dl + dr, dl, dr)
     old_width = {g.name: g.width for g in font}
     for name, (dx, dw, _, _) in delta.items():
         g = font[name]
@@ -145,7 +175,7 @@ def _rep(key, groups, delta):
 
 def rekern(font, delta):
     """Kerned pairs keep their fit: each value moves by its two bearings' change beyond the tracking."""
-    cls = lambda n: "lower" if n in LOWER else "upper"
+    cls = lambda n: "lower" if n in LOWER else "upper" if n in UPPER else "other"
     moved = 0
     for (a, b), v in list(font.kerning.items()):
         ra, rb = _rep(a, font.groups, delta), _rep(b, font.groups, delta)
@@ -188,8 +218,37 @@ def open_collisions(font):
     return opened
 
 
+# 0.66: kerning from the fit. rekern (0.38) keeps every pair Libre Baskerville kerned at ITS gap, while pairs it left
+# alone took the new bearings: "fo" "we" "ro" stood 25 to 90 units tighter than either reference sets them, "iw" "Gw"
+# "GA" 40 to 100 looser. tools/fit/fit.py measures the white between each pair of letters and common punctuation in
+# all three faces, against each face's own nn / HH / Hn; where Area stands outside both references by 8 or more, the
+# pair is kerned to the nearer one. The values are in fit_kerning.json (regenerate it after any change to bearings:
+# fit.py measure, then fit.py kern, on a build made WITHOUT the file).
+FIT = "fit_kerning.json"
+
+
+def fit_kerning(font):
+    import json
+    import os
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), FIT)
+    if not os.path.exists(path) or os.environ.get("AREA_NO_FIT"):
+        return 0
+    n = 0
+    for a, b, v in json.load(open(path))["pairs"]:
+        if (a.startswith("public.") and a not in font.groups) or (b.startswith("public.") and b not in font.groups):
+            continue
+        if v == 0:
+            font.kerning.pop((a, b), None)
+        else:
+            font.kerning[(a, b)] = v
+        n += 1
+    return n
+
+
 def run(font):
     delta = space(font)
     moved = rekern(font, delta)
+    fitted = fit_kerning(font)
     opened = open_collisions(font)
+    print(f"spacing: {fitted} kerning values from the fit")
     return delta, moved, opened
