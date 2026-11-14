@@ -54,6 +54,7 @@ components and accurate specs matter more than speed.
 | `area-foundation-change` | Changing a setting, token or system-wide rule across every family |
 | `area-icon-construction` | Drawing or reviewing Area's icons |
 | `area-type-design` | Drawing, spacing, building and checking Area's own typefaces (`typefaces/area-serif`) |
+| `area-serif-construction` | Area Serif's part system: one construction per stem, bowl, arch, join, serif and end; the thick-to-thin ladder; Bezier rules; the checks (`typefaces/area-serif/parts.py`) |
 | `area-illustration` | Area figures in the screens' style: real components with words as light bars; screens, vignettes, a gallery of every family, settings on screens |
 | `area-ui-compose` | Composing screens and layouts from Area: shell, panels, spacing, feeds, grids, shelves, media, copy, screen recipes |
 | `area-type-usage` | Choosing and checking each text's type style, ink, weight, line and spacing in a component, composition or kit; the type census |

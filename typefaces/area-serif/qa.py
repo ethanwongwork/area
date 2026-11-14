@@ -5,6 +5,7 @@ Runs, in order, and reports each validator's own outcome (a run that finishes is
   2. check.py                      measured targets from the plan
   3. pathlint.py                   outline quality on the sources, winding on the built font
   3b. audit_parts.py               one value per shared part (stems, flags, feet, balls, arches, counters)
+  3c. parts.py                     one construction per join and bowl: necks, pointed crotches, b d p q, u from n
   4. fontbakery check-universal    font engineering (names, tables, metrics, glyphs, features)
   5. diffenator2 diff (--diff)     before/after renders and table diffs against build/previous/
 Proof sheets (proof.py, overlay.py) are separate: they are for eyes, not exit codes.
@@ -23,8 +24,6 @@ PREV = os.path.join(HERE, "build", "previous", "AreaSerif-Regular.ttf")
 # Check id -> why it is expected now. Remove an entry the moment its reason stops being true.
 EXPECTED = {
     "contour_count": "inherited from Libre Baskerville: ogonek and similar accents drawn as separate contours",
-    "ligature_carets": "inherited: no caret positions in Libre Baskerville's ligatures; add with the feature pass",
-    "math_signs_width": "inherited: Libre Baskerville's math signs are not all one width; fix with the figures pass",
 }
 
 
@@ -55,6 +54,9 @@ def main():
     code, out = run("parts", [PY, "audit_parts.py"])
     print("\n".join(l for l in out.splitlines() if "OUTLIERS" in l or l.startswith("parts audit")))
     results.append(("parts audit (one value per part)", code == 0))
+    code, out = run("joins", [PY, "parts.py"])
+    print("\n".join(l for l in out.splitlines() if l.startswith(("ERROR", "parts:"))))
+    results.append(("joins and bowls (one construction per part)", code == 0))
     code, out = run("fontbakery", [os.path.join(BIN, "fontbakery"), "check-universal", TTF, "--succinct", "--loglevel", "WARN"])
     bad = []
     for line in out.splitlines():

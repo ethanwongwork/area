@@ -4,7 +4,9 @@ A serif for interface text, derived from Libre Baskerville. Plan, targets and re
 `docs/research/serif-typeface-2026-11-10/`. Procedure and rules: the `area-type-design` skill
 (`.claude/skills/area-type-design/`).
 
-Status: build 0.46. Derived from Libre Baskerville (SIL OFL 1.1, `sources/OFL.txt`). Shapes lean on Serrif, widths on
+Status: build 0.66 (one construction per join, bowl and vertex, `parts.py`; optical spacing and measured kerning, `spacing.py` + `fit_kerning.json`; steeper joins and flatter head serifs, `joins.py`), with 0.48's full character set: Basic Latin, Latin-1, Latin Extended-A, Vietnamese, punctuation, currency, maths, arrows,
+interface symbols, superiors and fractions, f ligatures, tabular figures (`charset.py`;
+`docs/research/serif-typeface-2026-11-10/charset-0.47.md` has the inventory, the gap list and what is not done). Derived from Libre Baskerville (SIL OFL 1.1, `sources/OFL.txt`). Shapes lean on Serrif, widths on
 Georgia Pro, serifs are short and blunt, and the weight is lighter than both (stem 0.158 of the x-height, contrast 1.64).
 The design's values and rules, part by part: `.claude/skills/area-type-design/references/area-serif-guidelines.md`.
 The owner's review page: https://claude.ai/artifact/1QUvcPjfjjkxBLVTRcNrVC.
@@ -24,6 +26,10 @@ measurement-only references; nothing from them is in the sources.
 | `pathlint.py` | Outline quality, joint angles at smooth nodes, winding. |
 | `evaluate.py` | Curve report per glyph: curvature jumps, bumps, pinched arcs, kinks, missing extremes. |
 | `diagram.py` | Node diagrams with coordinates (`build/diagrams/`). |
+| `joins.py` | Steeper joins (0.49), after lightening: the brackets brackets_one misses, arm flares and lower-arm corners (E F L T Z), C G S end barbs, cut ends no thinner than the serif tip. Reads the outline by geometry, never by point number. |
+| `balance.py` | The 0.58 audit's fixes, with `joins.py`: heights on their lines, f's and t's one bar, diagonal weights per stroke, one hairline on capitals and figures, t's stem, descender feet. |
+| `parts.py` | One construction per repeated part (0.65): the b d p q bowl, every join of a curve to a stem, spurs, u from n, a's lower stroke. `python parts.py` prints the join table and fails on drift (in `qa.py`). Skill: `area-serif-construction`. |
+| `charset.py` | The character set, last in `normalize`: lightens what lighten skipped, rebuilds letter-plus-part glyphs (ı ȷ Đ Ħ Ł Ø Þ ſ æ Æ, f ligatures, superiors) from the finished letters, draws the new glyphs, tabular figures and `tnum`. Outlines are joined with skia-pathops. |
 | `qa.py` | Build, then every check. |
 | `overlay.py`, `proof.py`, `sheet.py` | Comparison plates, proofs and contact sheets. |
 | `archive/drawn-2026-11-10/` | The retired hand-coded drafts. |

@@ -32,6 +32,10 @@
 
 <script>
   const DATA = {"龍":{"strokes":[{"closed":false,"joined":[false,true],"d":"M276 50L276 163"},{"closed":false,"joined":[false,false],"d":"M70 163L485 163"},{"closed":false,"joined":[false,false],"d":"M50 376L505 376"},{"closed":false,"joined":[true,true],"d":"M127 612L430.4 612"},{"closed":false,"joined":[true,true],"d":"M127 740L430.4 740"},{"closed":false,"joined":[false,false],"d":"M200.6 342.7L154.6 197.9"},{"closed":false,"joined":[false,false],"d":"M351.9 345.7L410.1 198.3"},{"closed":false,"joined":[true,false],"d":"M430.4 489L127 489L127 949"},{"closed":false,"joined":[false,false],"d":"M430.4 476L430.4 933.7L305.6 933.7"},{"closed":false,"joined":[true,false],"d":"M581 153L943 153"},{"closed":false,"joined":[true,false],"d":"M581.3 559L900 559"},{"closed":false,"joined":[true,false],"d":"M581.3 672L894 672"},{"closed":false,"joined":[true,false],"d":"M581.3 788L904 788"},{"closed":false,"joined":[false,true],"d":"M581 49L581 292"},{"closed":false,"joined":[false,false],"d":"M566 446L887 446L887 292L566 292"},{"closed":false,"joined":[true,false],"d":"M581.3 446L581.3 892.5C581.3 909.9 602.6 927.3 619 927.3L890.1 927.3C902.6 927.3 924.5 917.9 929 905.7L952.5 840.6"}]},"驚":{"strokes":[{"closed":false,"joined":[false,false],"d":"M66 113L538 113"},{"closed":false,"joined":[false,false],"d":"M210 49L210 168"},{"closed":false,"joined":[false,false],"d":"M395 49L395 168"},{"closed":false,"joined":[false,false],"d":"M64.2 298.5C109.1 262.3 140.8 218.5 180.7 161.8"},{"closed":false,"joined":[true,true],"d":"M481.5 206C382.4 206 182 207.3 141.8 215.6"},{"closed":false,"joined":[false,true],"d":"M944 154.5L606.4 154.5"},{"closed":false,"joined":[false,false],"d":"M345.5 415.6L433 415.6C479.2 415.6 481.6 228.8 481.6 193"},{"closed":false,"joined":[false,false],"d":"M521.2 267.9C579.8 195.3 619.5 140.4 665.3 58.6"},{"closed":false,"joined":[false,true],"d":"M516.4 412.4C598.6 412.4 789.1 302.1 824.1 226L857 154.5"},{"closed":false,"joined":[false,true],"d":"M953 422.1C801.6 393.8 698 293.4 588.6 180.1"},{"closed":false,"joined":[true,true],"d":"M155 277L155 375"},{"closed":false,"joined":[true,true],"d":"M155 277L355 277L355 375L155 375"},{"closed":false,"joined":[true,false],"d":"M210 563L798 563"},{"closed":false,"joined":[true,false],"d":"M210 660L802 660"},{"closed":false,"joined":[true,true],"d":"M210 758L889.9 758"},{"closed":false,"joined":[false,false],"d":"M837 465L210 465L210 774"},{"closed":false,"joined":[true,true],"d":"M499 465L499 758"},{"closed":false,"joined":[false,false],"d":"M705 935.8L806.9 935.8C822.5 935.8 838.6 935 851 925.5C869.9 910.9 872 885.1 875.3 861.4L891.8 745"},{"closed":false,"joined":[false,false],"d":"M75.6 945.7C100.2 927.8 164.6 855 203.1 811.1"},{"closed":false,"joined":[false,false],"d":"M319.4 814.4L350.1 936.5"},{"closed":false,"joined":[false,false],"d":"M482.3 813.1L543.5 919.8"},{"closed":false,"joined":[false,false],"d":"M726.9 882.9L647.7 803.7"}]}};
+  // The line's geometry: vectors, cubic segments, corners rounded as circular arcs written as one
+  // cubic, and L-shaped meetings merged into one path. Shared by the Variable Kanji piece and,
+  // through scripts/sen-specimen.mjs, inlined into the curves and tester artifacts.
+  
   // ———————————————————————————— vectors
   const add = (a, b) => [a[0] + b[0], a[1] + b[1]];
   const sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
@@ -43,7 +47,7 @@
   const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
   const perp = (a) => [-a[1], a[0]];
   const hash = (x, y) => { const s = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453; return s - Math.floor(s); };
-
+  
   // ———————————————————————————— strokes as segments (lines and cubics)
   function parse(d) {
     const t = d.match(/[MLCZ]|-?\d+(?:\.\d+)?/g);
@@ -91,7 +95,7 @@
     if (!s.c) return { ...s, p: [add(s.p[0], mul(unit(sub(s.p[1], s.p[0])), t)), s.p[1]] };
     return { ...s, p: split(s.p, paramAt(s, t))[1] };
   }
-
+  
   /** The arc joining segment a's end to segment b's start, with both trimmed back. */
   function corner(s, nx, r) {
     const u = endTan(s), v = startTan(nx);
@@ -106,7 +110,7 @@
     const k = (4 / 3) * Math.tan(phi / 4) * rr;
     return { a, b, arc: { c: true, fillet: true, p: [A, add(A, mul(endTan(a), k)), sub(B, mul(startTan(b), k)), B] } };
   }
-
+  
   /** Rounds every corner with a circular arc of radius r, written as one cubic. */
   function fillet(st, r) {
     if (!r) return st;
@@ -127,7 +131,7 @@
     }
     return { ...st, segs: out };
   }
-
+  
   const ptAt = (s, t) => (s.c ? bez(s.p, t) : lerp(s.p[0], s.p[1], t));
   const reverseSegs = (segs) => segs.slice().reverse().map((s) => ({ ...s, p: s.p.slice().reverse() }));
   function splitSeg(s, t) {
@@ -156,7 +160,7 @@
     const tail = [k, ...st.segs.slice(si + 1)].filter((s) => segLen(s) > 0.5);
     return [head, tail];
   }
-
+  
   /**
    * Turns L-shaped meetings into corners. Where a stroke's joined end lands on another
    * stroke within `reach` of that stroke's end, the overshoot is cut and the two become
@@ -218,9 +222,6 @@
     return list;
   }
   const segTotal = (st) => st.segs.reduce((t, s) => t + segLen(s), 0);
-
-
-  
 
   const PAIR = ['龍', '驚'];
   const AXES = [

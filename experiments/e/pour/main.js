@@ -1,4 +1,4 @@
-// 7 Pour. The year's dates poured into one shape: every month opens with its three letters,
+// 8 Pour. The year's dates poured into one shape: every month opens with its three letters,
 // then its days, one to a cell, edge to edge. Three patterns place the cells (weekdays, two
 // lines a month, a free shape), and the blocks slide: each beat a few runs of rows or columns
 // move one to four cells at once and wrap around the sheet; after nine beats the moves play
