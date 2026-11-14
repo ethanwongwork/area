@@ -204,6 +204,55 @@ every glyph built on it. Inventory, gap list and measurements: `docs/research/se
 A new glyph is added to `charset.py` (and `COVERAGE` when it is required), never drawn into the UFO by hand. After any
 change that moves a base letter, look at its accented forms and at the same base with a typed combining accent.
 
+## Beyond a-z, A-Z and 0-9 (0.71 to 0.73, `charset.py`, `spacing.py`, `audit_charset.py`)
+
+Measured on nine faces with `docs/research/serif-evaluation-2026-11-13/tools/test_extended.py` and looked at glyph by
+glyph (`sheets.py`). `audit_charset.py` (in `qa.py`) fails on any drift; it fails on 0.70 with 53 errors.
+
+| Part | Value | Rule |
+|---|---|---|
+| A bracket runs into its stroke | A curve that meets a diagonal across a corner of more than 60 degrees is another stroke, not that serif's bracket (true brackets arrive within 7, W's middle one 46; the ampersand's arm at 103 was "shortened" into a solid wedge) | `derive.BRACKET_MAX_TURN` |
+| Where an accent sits | A symmetric mark's ink centre, in units right of the base's ink centre: the mean of Georgia Pro and Serrif, scaled; the centre on a letter symmetric there. A base moves only if it is more than 6 off. Not in the table: i j J h t (the references' longer serifs move the ink centre) | `charset.MARK_X`, `MARK_BAND`, `centre_marks` |
+| Accents over capitals | One height on every capital (anchor 763); the capital circumflex at the caron's height; the capital ring is the lowercase ring | `charset.CAP_MARK_Y`, `case_marks` |
+| Lowercase accents (0.71; 89 since 0.74) | Acute, grave, circumflex, caron, double acute 90 over the x-height (0.173; breve 85, ring 95): half the way from Libre Baskerville's 108 to the mean of Georgia Pro and Serrif. Tilde, dieresis, dot, macron stay (the references disagree). On ascender letters and capitals they stay where they were | `charset.MARK_DROP`, `drop_marks` |
+| Plain strokes | Plus, plus-minus, not, bar, broken bar, underscore, slash, backslash: the minus's 52, upright and level alike. Fraction and percent bars: their own weight, one thickness end to end | `charset.plain_strokes` |
+| A sign made of a letter | The finished letter and a stroke: dollar (S), cent (c), yen (Y, bars of H's crossbar), kra (k under dotless i's head), like won, ruble, lira. Strokes are the case's hairline, 47 and 43 | `charset.letter_signs`, `kra`, `STROKE_UP`, `STROKE_LOW` |
+| A sign's stroke | No thicker than the like part of the letters, measured across the stroke: dagger ends 100 (a ball terminal), eth's bowl 86; euro and sterling bars 49 | `charset.SIGN_STROKE`, `SIGN_BAR`, `cap_strokes` |
+| Right-hand brackets | The left-hand form turned over, point for point, bearings swapped: ) ] } » › > | `charset.mirrors` |
+| Vietnamese | A grave beside a circumflex sits on its left, the acute on its right (both 31 away); hook above stroke 58 | `charset.vietnamese`, `HOOK` |
+| Nodes | `clean.add_nodes` runs on every glyph with an outline, after charset (farthest move 1.6 units) | `normalize` (end) |
+
+| Fractions (0.72) | Each figure's nearest ink 66 from the bar (mean of Georgia Pro's 55 and Serrif's 78; they stood 0 to 22); the bar 48 wide in every fraction, the fraction slash and the percent sign | `charset.FRAC_GAP`, `fraction_fit`, `FRACTION_BAR` |
+| New glyphs (0.72) | From finished letters and parts only: fractions (superior, bar, inferior), currency signs (a capital, bars of H's crossbar or strokes of the capital hairline; no kerning), key symbols (the arrows, shift and delete cut, turned or joined), menu dots (the period's dot at the ellipsis's pitch), solid shapes (the black circle's size and centre) | `charset.fractions`, `letter_currencies`, `more_symbols` |
+| Accented letters' kerning (0.73) | An accented letter kerns as its letter: it joins the letter's kerning class on each side where it shows the letter's edge (within 5 units); a value written for a letter moves to its class, or is copied to the family where the class mixes letters. Never write a kerning value for a core glyph without this pass after it | `spacing.kern_families` |
+| Collisions (0.73) | No two glyphs of `charset.COVERAGE` closer than `MIN_GAP`, kerning included (the fraction slashes excepted); runs last, after charset | `spacing.open_all`, `finish` |
+| Two letters in one glyph (0.73) | The letters side by side with their kerning, the advance their sum (IJ ij DZ LJ NJ); numero is N and the ordinal on N's advance | `charset.digraphs`, `numero` |
+| Signs' side bearings (0.73) | As 0.66's rule: where a side stands off both references the same way by 8 or more it moves by the smaller difference; a symmetric sign keeps equal sides, a mirrored pair equal ones, maths signs their one advance | `spacing.OPTICAL_MORE` |
+
+| Verification (0.74) | After any round of rules, `tools/verify.py` (suite): second methods for what the audits read (an accent from its ink, a stroke across itself, a pair rasterised) and sweeps over every glyph (stems, bars, heights, sides, outlines, tables). 0.74 found six errors of 0.71 to 0.73 this way that their own checks had passed | `verify.py`, `audit_charset.audit_074` |
+| A capital's accents | The first mark's own anchor on `CAP_MARK_Y`, set absolutely per letter (never by how far the base's anchor moved); acute, grave, caron, circumflex, double acute 68 over the cap height | `charset.centre_marks`, `case_marks` |
+| Lowercase accents | 89 over the x-height (`MARK_DROP` 19; breve 84, ring 94) | `charset.MARK_DROP` |
+| Dots | A circle of its family's width, an even diameter (period 124, ! ? 116, dieresis 110, dot accent 112, dot below 114); colon, semicolon, ellipsis carry the period's dot; i and j keep theirs (116, and j's the owner's) | `charset.round_dots`, `one_drawing` |
+| Turned and doubled | ¡ ¿ are ! ? turned half round; the opening quote the closing one turned; double quotes two singles; set again after the node rules | `charset.turned_pairs` |
+| Macron | One thickness in both cases, the capital hairline 47 | `charset.macron_weight` |
+| Marks below | Ogonek to -215, a capital's dot below to -219, everywhere | `charset.BELOW`, `below_depths` |
+| Nothing scaled | A sign made from a letter or another sign is cut and moved, never scaled (`cut_out`, `narrow`); a stroke about a centre is placed on whole units (`band`) | `charset.cut_out`, `narrow`, `band` |
+| No scrap | No contour under 150 square units in a built glyph (`SCRAP`) | `charset.put`, audit |
+| Version | `typefaces/area-serif/version.py` is the build's number: the font's version, the editor page and the evaluation page read it | `version.BUILD` |
+
+| Eng (0.75) | Area's N with the tail Libre Baskerville's Eng has under the baseline, on N's right upright (the form in all six faces looked at) | `charset.eng_capital` |
+| Tilde, sharp s (0.75) | Tilde's thick part 66, capital form 63 (the nearer reference's share); sharp s no stroke over 83. The stroke rule runs again after the node rules | `charset.SIGN_STROKE_NAMES`, `cap_strokes` |
+| Degree (0.75) | Ring 47 all round, the capital hairline | `charset.degree_ring` |
+| Stacked marks (0.75) | 13 apart, the face's minimum; the tallest capital 1,023 over a line top of 956. Never scale a mark to gain room, never raise the ascender | `charset.STACK_GAP` |
+
+Measure a sign's weight across its stroke (`charset._ray`), never by the largest circle that fits inside it: the
+circle sits where a bar or a spine joins. 0.71's first report called the euro, sterling and section sign 15 to 30%
+heavy that way; across the stroke they are 92 to 103, the capitals' own.
+
+Open with the owner (0.75): Vietnamese capital stacks are 67 over the line's top (a flatter mark set for stacks would be
+new drawings); ordinals stay at the superior size (`SUP_SCALE` moves them all); the bold master waits for the technique
+research (`docs/research/serif-typeface-2026-11-10/bold-master-plan.md`, decisions taken as recommended).
+
 ## Final-pass audit (0.46)
 
 Scratch tools worth keeping if this is repeated: a stroke-weight scan (shortest crossing through sampled ink, per
@@ -331,3 +380,44 @@ J on the baseline. Carried from 0.33:
 Figure 1 and 4 stems lighter than capitals; shoulder thickness n 0.55 to m 0.62; a's straight
 bowl top; widths of r g k x y K W X; spacing (lowercase keeps its advance when serifs shorten, capitals keep their
 side bearings); kerning; punctuation; the weight axis.
+
+
+## Weight (0.76)
+
+Area Serif has two masters, Regular (400) and Bold (700), in one variable font; weights between follow an equal
+ratio a step (stem 78, 84.7, 92.0, 99.9, 108.5, 117.9 ... 140). The Bold is the Regular's own points moved by rule
+(`bold.py`), never drawn and never offset.
+
+| Part | Regular | Bold | From |
+|---|---|---|---|
+| Stem, lowercase / capital | 78 / 86 | 140 / 148 | 1.76 and 1.84 (Georgia Pro, Serrif) |
+| Round stroke | 82 / 92 | 146 / 156 | 1.77, 1.80 |
+| Hairline | 43 / 47 | 53 / 59 | 1.08, 1.37 |
+| Serif tip; reach | 30; 70 | 41; 66 | tips 39.5 and 44.4 at Bold; reach 1.05, 0.85 |
+| H's bar; an arch at its top | 49; 50 | 65; 66 | 1.19, 1.47; 1.29, 1.33 |
+| Slanted, thick / thin | 74, 86 / 39, 48 | 133, 146 / 50, 63 | 1.72 to 1.86 / 1.18 to 1.48 |
+| A sign's stroke; a bracket's upright | 52; 73 | 71; 129 | 1.28 to 1.44; 1.75 to 1.80 |
+| Dots: i, period, dieresis | 116, 124, 110 | 176, 182, 152 | 1.51, 1.47, 1.38 |
+| Counters | | lose 0.34 (straight) or 0.53 (round) of what their strokes gain | n, H, o, O in both |
+| Side bearings | | the Regular's plus the references' own change, about -5 a side | `bold_bearings.json` |
+
+Heights, overshoots and corner radii do not change with weight. A head flag keeps its top and thickens downward.
+A dot keeps its centre. A slanted stroke keeps its taper. An accent keeps its foot.
+
+## Builds 0.77 and 0.78 (owner's notes, 14 November 2026)
+
+| Part | Rule | Where |
+|---|---|---|
+| A head made of strokes meeting in a point (arrows) | One outline: outer edges meet in the point, inner edges in the crotch. Never strokes and a filler joined by a union | `charset.arrows`, check `audit_charset.scraps` |
+| k's stem foot | The standard foot (70), as every other; r's long foot is the owner's and stays | `normalize.normalize_feet` |
+| 5's flag | Ends 19 inside the bowl's right (was 6; the references 2.2 to 3.7% of height) | `normalize.FIVE_FLAG_IN` |
+| f before i, j, accented i with ligatures off | 44 clear of a dot, 16 of an accent | `spacing.F_DOT`, `F_ACCENT`, `f_before_dots` |
+| Thickness round a closed counter | Strays at most 2.75 from one smooth change (aim 2.0); handle lengths only, within 0.75 to 1.3; mean thickness within 1 | `even.py` |
+| Alternates | Built from finished parts or from the base through the general rules; default never changes. ss01 footless 1, ss02 single-storey g (q's bowl, j's tail), ss03 the base's S s $ (spine on Area's ladder) | `derive.ALTS`, `charset.single_g`, `charset.base_s` |
+| Text set in Area Serif on a page | No letter-spacing: browsers turn ligatures off under it | evaluation `template.html` |
+
+Measured and left alone: Z and z lean inside the three references. Plain signs: seven of eight serif faces draw
+them as square bars (`tools/sign_ends.py`); options in `tools/sign_options.py`, the owner's choice.
+Open: a's bowl (2.2; needs a node on the counter), `audit_axis.py` outside the letters, dollar.ss03's spine,
+the confusable-pair measure (`tools/confusable.py`: PIL places text on whole pixels, so one size can be an outlier;
+not in QA).

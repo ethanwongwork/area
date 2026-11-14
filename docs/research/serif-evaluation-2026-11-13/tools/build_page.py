@@ -16,7 +16,7 @@ from fontTools import subset
 from fontTools.ttLib import TTFont
 
 import evlib as E
-from findings import CHANGES, FINDINGS, NOT_CHECKED, SOLID
+from findings import BUILD, CHANGES, DATE, FINDINGS, NOT_CHECKED, QA, SOLID, VERDICT
 from test_strokes import ray_thickness
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -24,8 +24,11 @@ CSS_FAMILY = {"area": "Area Serif Eval", "georgia": "Georgia Pro", "serrif": "Se
               "baskerville": "EV Libre Baskerville", "source": "EV Source Serif 4", "literata": "EV Literata",
               "newsreader": "EV Newsreader", "lora": "EV Lora", "merriweather": "EV Merriweather"}
 EXTRA_GLYPHS = ["OE", "fl", "c_t"]
-PREV = os.environ.get("EVAL_PREV", "")       # folder of the build to draw as "before" (its build/ with .ufo and .ttf)
-UNICODES = list(range(0x20, 0x7F)) + list(range(0xA0, 0x100)) + [0x2013, 0x2014, 0x2018, 0x2019, 0x201C, 0x201D, 0x2026, 0x2022]
+PREV = os.environ.get("EVAL_PREV66", "")     # build 0.66, "before" for the findings of 0.67 to 0.70 (its build/ folder)
+# later findings name their own before-build ("prev": "0.70"): EVAL_PREVS="0.70=<build folder>,0.71=<build folder>"
+PREVS = dict(p.split("=", 1) for p in os.environ.get("EVAL_PREVS", "").split(",") if "=" in p)
+UNICODES = (list(range(0x20, 0x7F)) + list(range(0xA0, 0x180)) + [0x2013, 0x2014, 0x2018, 0x2019, 0x201C, 0x201D, 0x2026, 0x2022,
+            0x2020, 0x2021, 0x20AC, 0x1EAA, 0x1EB4, 0x1EB5, 0x20B8, 0x21EA, 0x220F, 0x1EE2, 0x1EA2, 0x2116, 0x20A6, 0x1EA1, 0x1EC7, 0x2122, 0x2153, 0x2154, 0x215B, 0x215C, 0x215D, 0x215E, 0x2044, 0x1EA7, 0x1EA5, 0x1EA3, 0x1ED3, 0x1EC1, 0x1EA6, 0x1ED2, 0x1ECF, 0x1EE7])
 
 
 def woff2_b64(font, do_subset=True):
@@ -85,7 +88,18 @@ def main():
     if PREV:                                             # build 0.66's font, for live before / after text
         b64 = woff2_b64(TTFont(os.path.join(PREV, "AreaSerif-Regular.ttf")))
         css.append(f'@font-face{{font-family:"Area Serif Before";src:url(data:font/woff2;base64,{b64}) format("woff2");font-display:block}}')
-    names = list(gname.values()) + [n for n in EXTRA_GLYPHS if n in ufo]
+    prev_ufos = {}
+    for label, folder in PREVS.items():
+        prev_ufos[label] = ufoLib2.Font.open(os.path.join(folder, "AreaSerif-Regular.ufo"))
+        b64 = woff2_b64(TTFont(os.path.join(folder, "AreaSerif-Regular.ttf")))
+        css.append(f'@font-face{{font-family:"Area Serif Before {label}";src:url(data:font/woff2;base64,{b64}) format("woff2");font-display:block}}')
+    byuni = {u: g.name for g in ufo for u in g.unicodes}
+    for f in FINDINGS:                                   # a view may name a glyph by its character
+        for v in f["views"]:
+            if len(v["g"]) == 1 and v["g"] not in E.CORE:
+                v["g"] = byuni[ord(v["g"])]
+    extra = sorted({v["g"] for f in FINDINGS for v in f["views"] if len(v["g"]) > 1 and v["g"] in ufo})
+    names = list(gname.values()) + [n for n in EXTRA_GLYPHS if n in ufo] + [n for n in extra if n not in EXTRA_GLYPHS]
     outlines = {n: outline(ufo, n) for n in names}
     nodes = {n: [[f["test"], f["sev"], f["x"], f["y"], f["detail"]] for f in curves["nodes"].get(n, [])] for n in names}
 
@@ -114,6 +128,8 @@ def main():
                 ch = g
             dims = []
             for lo, hi in v.pop("bars", []):
+                if ch not in A:
+                    continue
                 c = [b for b in A[ch]["bars"] if lo <= b["y0"] <= hi and b["x1"] - b["x0"] >= 30]
                 if c:
                     b = max(c, key=lambda b: b["x1"] - b["x0"])
@@ -133,7 +149,13 @@ def main():
                 dims.append([best[2], best[1], best[3], best[1], f"{best[0]:.0f}"])
             if dims:
                 v["dims"] = dims
-            if v.get("ba") and prev_ufo is not None and v["g"] in prev_ufo:
+            if v.get("ba") and f.get("prev"):
+                pu = prev_ufos.get(f["prev"])
+                if pu is not None and v["g"] in pu:
+                    v["pg"] = v["g"] + "@" + f["prev"]
+                    v["pv"] = f["prev"]
+                    prev[v["pg"]] = outline(pu, v["g"])
+            elif v.get("ba") and prev_ufo is not None and v["g"] in prev_ufo:
                 prev[v["g"]] = outline(prev_ufo, v["g"])
 
     # per-face numbers
@@ -223,8 +245,8 @@ def main():
                 t["core"][i] += 1
     align = fit["area"]["align"]
     data = {
-        "build": "0.70", "date": "13 November 2026", "glyphCount": curves["glyphs"], "prev": prev, "changes": CHANGES,
-        "rtable": rtable, "hasBefore": bool(PREV),
+        "build": BUILD, "date": DATE, "verdict": VERDICT, "qa": QA, "glyphCount": curves["glyphs"], "prev": prev, "changes": CHANGES,
+        "rtable": rtable, "hasBefore": bool(PREV) or bool(PREVS),
         "faces": face_rows, "gname": gname, "outlines": outlines, "nodes": nodes, "thick": thick,
         "findings": FINDINGS, "solid": SOLID, "notChecked": NOT_CHECKED,
         "profile": {k: {c: v["turns"] for c, v in curves["profile"][k].items()} for k in faces},

@@ -74,6 +74,12 @@ if R_AIR:
 OPTICAL_MORE = {
     "hyphen": [-20, -21], "endash": [-20, -21], "emdash": [-20, -20], "parenleft": [11, 19], "parenright": [19, 11],
     "exclam": [9, 10], "quoteleft": [-5, 0], "quotedblleft": [-5, 0],
+    # 0.73, the same measure on the signs 0.66 did not reach (36 measured; these stood off both references the same
+    # way by 8 or more). A sign that is symmetric keeps equal sides (the smaller of its two differences, so the bar,
+    # dagger, degree, bullet and yen stay); a mirrored pair takes the smaller of the pair's (so braces and guillemets
+    # stay; the right bracket follows the left through charset.mirrors); plus and equals keep the maths' one advance.
+    "percent": [0, 26], "exclamdown": [0, 18], "dollar": [17, 15], "trademark": [-24, 0], "bracketleft": [0, 11],
+    "underscore": [-19, -19], "at": [0, 9], "numbersign": [0, 12], "sterling": [10, 0],
 }
 
 
@@ -261,3 +267,212 @@ def run(font):
     opened = open_collisions(font)
     print(f"spacing: {fitted} kerning values from the fit")
     return delta, moved, opened
+
+
+# ---------------------------------------------------------------------------------------------------- 0.73
+# Kerning beyond the 62 core characters (evaluation suite, test_fit_ext.py: 75,161 pairs of punctuation, signs and
+# accented letters with the core and each other, shaped, against Georgia Pro and Serrif).
+#
+# 1. A letter's accented forms kern as the letter. 0.66's fit and collision values were written for the glyphs
+#    measured (K A = +51), so K before A-grave still had Libre Baskerville's class value and overlapped by 38;
+#    the Vietnamese letters composed in 0.48 were in no class and had no kerning at all. Each value written for a
+#    letter now belongs to its family: the letter and every glyph that is that letter with marks and shows the
+#    same edge on that side (within FAMILY_EDGE). Where Libre Baskerville's class is already that family the value
+#    moves to the class; where the class mixes letters (H I K ... on their left) it is copied to the family.
+# 2. No two glyphs of the set the font promises come closer than MIN_GAP, kerning included: the collision pass,
+#    which looked at letters, figures and 18 punctuation marks, looks at all of them (an accent under f's hood, j's
+#    tail under a bracket, a caron beside a tall letter).
+FAMILY_EDGE = 5
+NO_COLLISION = {0x2044, 0x2215}       # the fraction slashes reach into their neighbours on purpose
+CORE = set(LOWER + UPPER)
+
+
+def _ink_x(font, name):
+    cs = _flat(font[name], font)
+    xs = [p[0] for c in cs for p in c]
+    return (min(xs), max(xs)) if xs else None
+
+
+def _families(font):
+    """{base: ([glyphs showing base's left edge], [glyphs showing base's right edge])} for the core letters."""
+    cats = font.lib.get("public.openTypeCategories", {})
+
+    def is_mark(n):                 # a mark attaches by an anchor of its own
+        return cats.get(n) == "mark" or font[n].width == 0 or any(a.name.startswith("_") for a in font[n].anchors)
+    fam = {}
+    ink = {}
+    for g in font:
+        if len(g.components) < 2:
+            continue
+        base = g.components[0].baseGlyph
+        while base in font and not font[base].contours and font[base].components:
+            base = font[base].components[0].baseGlyph
+        base = {"idotless": "i", "jdotless": "j"}.get(base, base)
+        if base not in CORE or g.components[0].transformation[4] != 0:
+            continue
+        if not all(is_mark(c.baseGlyph) for c in g.components[1:]):
+            continue
+        for n in (base, g.name):
+            if n not in ink:
+                ink[n] = _ink_x(font, n)
+        if not ink[g.name] or not ink[base]:
+            continue
+        left = abs(ink[g.name][0] - ink[base][0]) <= FAMILY_EDGE
+        right = abs((font[g.name].width - ink[g.name][1]) - (font[base].width - ink[base][1])) <= FAMILY_EDGE
+        f = fam.setdefault(base, ([], []))
+        if left:
+            f[0].append(g.name)
+        if right:
+            f[1].append(g.name)
+    return fam
+
+
+def kern_families(font):
+    fam = _families(font)
+    K, G = font.kerning, font.groups
+    grp = {1: {}, 2: {}}
+    for name, members in G.items():
+        side = 1 if name.startswith("public.kern1") else 2 if name.startswith("public.kern2") else 0
+        if side:
+            for m in members:
+                grp[side][m] = name
+    target = {1: {}, 2: {}}          # base -> the class that is its family, or the list of glyphs to copy to
+    joined = 0
+    for base, (lefts, rights) in fam.items():
+        for side, members in ((1, rights), (2, lefts)):       # a pair's first glyph shows its right edge
+            gname = grp[side].get(base)
+            if gname:
+                for m in members:                             # the letter's class on this side is its family's too
+                    if grp[side].get(m) != gname:
+                        old = grp[side].get(m)
+                        if old:
+                            G[old].remove(m)
+                        G[gname].append(m)
+                        grp[side][m] = gname
+                        joined += 1
+            if gname and sum(1 for m in G[gname] if m in CORE) == 1:
+                target[side][base] = gname                    # the class is this letter alone: its values move to it
+            else:
+                target[side][base] = [m for m in members]
+    promoted = copied = 0
+    for (a, b), v in list(K.items()):
+        ta, tb = target[1].get(a), target[2].get(b)
+        A = ta if isinstance(ta, str) else a
+        B = tb if isinstance(tb, str) else b
+        if (A, B) != (a, b):
+            del K[(a, b)]
+            K[(A, B)] = v
+            promoted += 1
+        for a2 in ([A] + (ta if isinstance(ta, list) else [])):
+            for b2 in ([B] + (tb if isinstance(tb, list) else [])):
+                if (a2, b2) != (A, B) and (a2, b2) not in K:
+                    K[(a2, b2)] = v
+                    copied += 1
+    return joined, promoted, copied
+
+
+def open_all(font, codepoints, dry=False):
+    """The collision pass on every glyph of the set, kerning included. dry: change nothing, return what it would open."""
+    import numpy as np
+    from fontTools.ufoLib.kerning import lookupKerningValue
+    want = set(codepoints)
+    import unicodedata
+    cats = font.lib.get("public.openTypeCategories", {})
+    names = [g.name for g in font if any(u in want for u in g.unicodes) and (g.contours or g.components)
+             and g.width > 0 and cats.get(g.name) != "mark" and not NO_COLLISION & set(g.unicodes)
+             and not any(unicodedata.category(chr(u)) in ("Mn", "Mc", "Lm", "Sk") for u in g.unicodes)]
+    ys = list(range(-280, 1081, STEP))
+    R, L = {}, {}
+    for n in names:
+        cs = _flat(font[n], font)
+        if not cs:
+            continue
+        r = np.full(len(ys), np.inf)
+        l = np.full(len(ys), np.inf)
+        w = font[n].width
+        for i, y in enumerate(ys):
+            e = _edges(cs, y)
+            if e:
+                l[i], r[i] = e[0], w - e[1]
+        l3 = np.minimum(l, np.minimum(np.roll(l, 1), np.roll(l, -1)))
+        l3[0], l3[-1] = min(l[0], l[1]), min(l[-1], l[-2])
+        R[n], L[n] = r, l3
+    names = [n for n in names if n in R]
+    Lm = np.stack([L[n] for n in names])
+    opened = []
+    for a in names:
+        gaps = (Lm + R[a]).min(axis=1)
+        for j in np.where(gaps < MIN_GAP + 80)[0]:           # only pairs that could be close once kerned
+            b = names[j]
+            k = lookupKerningValue((a, b), font.kerning, font.groups) or 0
+            gap = gaps[j] + k
+            if gap < MIN_GAP:
+                add = round(MIN_GAP - gap)
+                if add >= 4:
+                    if not dry:
+                        font.kerning[(a, b)] = k + add
+                    opened.append((a, b, round(float(gap)), k + add))
+    return opened
+
+
+def family_drift(font):
+    """Accented letters that are not in their letter's kerning class on a side where they show its edge. (A value
+    may still differ from the letter's: the collision pass opens a pair where a mark, or the letter's own dot,
+    needs room.)"""
+    grp = {1: {}, 2: {}}
+    for name, members in font.groups.items():
+        side = 1 if name.startswith("public.kern1") else 2 if name.startswith("public.kern2") else 0
+        if side:
+            for m in members:
+                grp[side][m] = name
+    bad = []
+    for base, (lefts, rights) in _families(font).items():
+        for side, members in ((1, rights), (2, lefts)):
+            g = grp[side].get(base)
+            if g:
+                bad += [(m, base, side) for m in members if grp[side].get(m) != g]
+    return bad
+
+
+# f before a dot (0.77; owner, 2026-11-14: "shouldnt the fi be a ligature?"). It is: fi ffi fl ffl fj ffj are in the
+# font and `liga` is on by default. But any text set with letter-spacing has ligatures turned off by the browser,
+# and then f's ball stood 13 units from the dot of i and j: the collision pass's minimum, where the references keep
+# 17 and 71 (Georgia Pro, Serrif; Libre Baskerville 30). The pair opens to their mean. An accented i or j keeps at
+# least what Serrif keeps before its dieresis (16; Georgia Pro's collide).
+F_DOT = 44
+F_ACCENT = 16
+
+
+def f_gap(font, first, second):
+    """The least white between `first`'s ink and `second`'s above the x-height, kerning included."""
+    from fontTools.ufoLib.kerning import lookupKerningValue
+    a, b = _flat(font[first], font), _flat(font[second], font)
+    k = lookupKerningValue((first, second), font.kerning, font.groups) or 0
+    best = None
+    for y in range(X_HEIGHT + 10, 1081, STEP):
+        ea, eb = _edges(a, y), _edges(b, y)
+        if ea and eb:
+            g = font[first].width + k + eb[0] - ea[1]
+            best = g if best is None else min(best, g)
+    return best, k
+
+
+def f_before_dots(font):
+    done = []
+    for g in font:
+        base = g.components[0].baseGlyph if g.components else g.name
+        if base not in ("i", "j", "idotless", "jdotless", "dotlessi", "dotlessj") or not g.unicodes or g.name in ("idotless", "jdotless"):
+            continue
+        want = F_DOT if g.name in ("i", "j") else F_ACCENT
+        gap, k = f_gap(font, "f", g.name)
+        if gap is not None and gap < want:
+            font.kerning[("f", g.name)] = k + round(want - gap)
+            done.append((g.name, round(gap), want))
+    return done
+
+
+def finish(font, codepoints):
+    joined, promoted, copied = kern_families(font)
+    opened = open_all(font, codepoints)
+    f_before_dots(font)
+    return joined, promoted, copied, opened

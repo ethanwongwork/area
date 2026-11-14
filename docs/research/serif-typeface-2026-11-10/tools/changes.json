@@ -1,5 +1,233 @@
 [
  {
+  "build": "0.78",
+  "date": "2026-11-14",
+  "items": [
+   {
+    "glyphs": "S s $",
+    "text": "Libre Baskerville's S, s and $ are in as alternates (stylistic set 3, font-feature-settings \"ss03\"). The defaults are untouched. They are the base's own drawings at Area's weight, with one change: the spine of S and s is thinned to match Area's, because the base's is a quarter heavier. Not done: the $'s spine is still the base's weight, s is narrower than Area's s, and C and G are not redrawn to match, so in this set S ends differently from C and G."
+   },
+   {
+    "glyphs": "- – — + = | / _",
+    "text": "On the plain signs: seven of the eight serif faces I measured, both references among them, draw these as plain bars with square ends. I drew three options and sent the figure: soft corners (the letters' own radius), soft with a slightly heavier hyphen, and strokes that swell into their ends. I recommend the first. At 13 to 16 px all three look the same; the flared one shows only in headlines. The default is unchanged until you choose."
+   }
+  ]
+ },
+ {
+  "build": "0.77",
+  "date": "2026-11-14",
+  "items": [
+   {
+    "glyphs": "↵ → ← ↑ ↓",
+    "text": "Your note on the return arrow's tip: yes, it needed fixing, and so did every arrow. The head was two strokes and a small triangle stuck together, which left a zigzag at the point. The head is one clean outline now. I checked every glyph for the same thing; the summation sign had a small dent, also gone."
+   },
+   {
+    "glyphs": "k",
+    "text": "k's right foot on the stem was 96 where every other foot is 68. It is the standard foot now, as Georgia Pro and Serrif draw theirs. r's longer foot, which you like, is untouched."
+   },
+   {
+    "glyphs": "5 Z z",
+    "text": "On 5 and Z leaning right: I measured them against Georgia Pro, Serrif and Libre Baskerville. The 5's flag reached further right than any of theirs, which puts weight at the top right; it ends 13 units sooner now. Its stem leans 9.5 degrees, which is Serrif's lean and what you asked for earlier, so I left it; say if you want it more upright. Z and z measure inside the three references on every lean test, so I have not changed them. The numbers are on the evaluation page."
+   },
+   {
+    "glyphs": "a R 6 9",
+    "text": "a's bowl: I measured the stroke's thickness all the way round the counter. It swelled at the lower left, fell, held steady up the left side, then fell again, and that hold is the unevenness you saw. Changing only the lengths of the counter's handles, the swell is smaller and the change steadier (it strays 2.2 units from one smooth change, was 2.8). It is better, not perfect: removing the hold fully needs one more point on the counter, which I have not done. The same test now runs on every closed counter, and R, 6, 9, D, B and g were evened the same way."
+   },
+   {
+    "glyphs": "fi fj",
+    "text": "fi is a ligature, and ligatures are on by default. The evaluation page's headline had a little letter-spacing, and browsers switch ligatures off when text is letter-spaced. That is fixed on the page. It showed a real gap too: with ligatures off, f's ball sat 13 units from the dot of i and j. They now stand 44 apart, the middle of what Georgia Pro and Serrif keep."
+   },
+   {
+    "glyphs": "g",
+    "text": "New: a plain, single-storey g as an alternate, made from q's bowl and stem with j's tail. Turn it on with the stylistic set ss02. It is a first version; I have not judged it in small text yet."
+   },
+   {
+    "glyphs": "+ | / S s $",
+    "text": "Not built yet, and I would rather say so: the more serif-like plus, bar, slash and dashes; Libre Baskerville's S, s and $ as alternates; and the list of other letters that could have alternates. What I found and what I would draw is on the evaluation page, at the top under Open now."
+   },
+   {
+    "glyphs": "x g",
+    "text": "In the Bold: the two places that sat off their line between Regular and Bold (g's neck, x's thick stroke) are fixed. A new check that looks at every glyph at every weight found two real faults in bold letters, both fixed (a's bowl pinched to 11 units where it meets the stem; the foot of g's bowl to 5). That check still fails on some accents and signs."
+   }
+  ]
+ },
+ {
+  "build": "0.76",
+  "date": "2026-11-14",
+  "items": [
+   {
+    "glyphs": "a n o H O",
+    "text": "Area Serif has a second weight. The Bold is made from the Regular's own points by rule, so the two always match point for point, and one variable font now holds every weight from 400 to 700. The Regular itself has not changed: all 1,038 glyphs are the same as in 0.75."
+   },
+   {
+    "glyphs": "n H o",
+    "text": "How heavy: stems go from 78 to 140 in the lowercase and 86 to 148 in capitals, round strokes 82 to 146, hairlines 43 to 53, serif tips 30 to 41. That keeps Area as far under Georgia Pro Bold and Serrif Bold as its Regular is under theirs. A lighter Bold with a stem of 128 is one number away and is on this page beside it, in the Weight section, so you can choose."
+   },
+   {
+    "glyphs": "v w x y k A V W M N",
+    "text": "Slanted strokes keep their exact thickness and their taper; where two meet, the outside keeps its flat and the inside comes to a point, the way the Regular builds them. The first try made k's leg parallel-sided. The Regular's leg widens from 61 to 87, and the Bold keeps that now."
+   },
+   {
+    "glyphs": "é ñ ô ç ǎ",
+    "text": "Accents follow their letters. Wedge accents (acute, grave, circumflex, caron, tilde) reach the width, height and stroke the two references' accents have in Bold. Dashes, plus, equals and brackets take measured values too."
+   },
+   {
+    "glyphs": "n o v",
+    "text": "Spacing: each letter's side bearings change by what Georgia Pro's and Serrif's change from Regular to Bold, about 5 units a side. Kerning is the Regular's, opened wherever two bold letters came closer than 13 units."
+   },
+   {
+    "glyphs": "Ⱥ ₩ † ⌘ #",
+    "text": "Not right yet, and I would rather say so than hide it. Ⱥ and ₩ thicken only their upright parts in Bold; their slanted strokes stay Regular weight. The dagger and ⌘ do not thicken at all. The number sign's slanted strokes come out uneven, and so do a few letters with a slash through them (₡, Ɇ). The exclamation mark's top and the guillemets are lighter than the references'. The capital breves are a little light. Bold kerning has not been fitted afresh, only opened where letters collide. Between the two weights, the neck of g's ear runs up to 2.6 units thin and x's thick stroke up to 1.8 heavy."
+   },
+   {
+    "glyphs": "ȼ ɇ @ ≠",
+    "text": "A mistake of mine, found late: in a dozen glyphs with a slash through them, some points landed thousands of units away, and my check did not notice because it never asked how far a point had moved. Making the font at weight 700 showed it. Fixed, and the check now fails on it."
+   }
+  ]
+ },
+ {
+  "build": "0.75",
+  "date": "2026-11-14",
+  "items": [
+   {
+    "glyphs": "Ŋ",
+    "text": "Eng was Libre Baskerville's own N with a tail, heavier and a different width from Area's N. It is Area's N now with the tail added, as all six faces I looked at draw it. One line to change back."
+   },
+   {
+    "glyphs": "ñ ã õ Ñ Ã Õ ° ß",
+    "text": "Recommendations applied, one line each: the tilde's thick part was heavier than a stem (80) and is 66; the degree sign's ring was 35 at the top and 21 at the sides and is 47 all round; the sharp s is no heavier than the other lowercase rounds."
+   },
+   {
+    "glyphs": "Ẫ Ẵ Ẳ ẫ ẵ",
+    "text": "Stacked Vietnamese marks stand 13 units apart (22 before), which takes the tallest capital from 1,035 to 1,023. I had also proposed flattening the capital marks; that is scaling, which the last build ruled out, so I have taken it back. The line's height is unchanged."
+   },
+   {
+    "glyphs": "ª º",
+    "text": "Not changed: the ordinals are the size of the superior figures by an earlier decision, and only 4% under Serrif's. One number moves them all if you want them larger."
+   }
+  ]
+ },
+ {
+  "build": "0.74",
+  "date": "2026-11-14",
+  "items": [
+   {
+    "glyphs": "Ĥ Ď Ť Ĝ Ğ Ś Š",
+    "text": "My mistake in 0.71: putting every capital's accents on one height pushed these 2 to 4 units too high (they were already on the line). All capital accents are on the line now, checked letter by letter, and the five pointed accents are one distance from the capital (68)."
+   },
+   {
+    "glyphs": "€ £",
+    "text": "My mistake in 0.71: their bars were thinned only where they cross the letter, leaving a step (49 inside, 60 to 64 outside). The whole bar is 49."
+   },
+   {
+    "glyphs": "é â č ₸ ⇪ ð Ả ₦ ₱",
+    "text": "Numbers of mine that did not match their own source, corrected: lowercase accents 89 over the x-height (not 90); the eth no heavier than o; the tenge and caps lock no longer made by squashing T and the shift arrow, which had thinned their bars; the capital hook above with its counter open again; currency bars where Georgia Pro and Serrif have theirs."
+   },
+   {
+    "glyphs": ". : ; … ! ? ¡ ¿ ‘ ’ “ ” „ ä ė ÷",
+    "text": "Every dot outside i and j had become an oval, 7 units taller than wide. Dots are circles again. Colon, semicolon and ellipsis use the period's dot; ¡ and ¿ are ! and ? turned over; the opening quote is the closing one turned; double quotes are two singles."
+   },
+   {
+    "glyphs": "ā ē ī ō ū Ą Į Ų Ợ Ự",
+    "text": "The lowercase macron was heavier (59) than the hyphen and its own capital form (47); both are 47. Every ogonek hangs to the same depth, and the dot below is the same depth under every capital."
+   },
+   {
+    "glyphs": "∏ [ ]",
+    "text": "The product sign's stems are H's (86, they were 74). A bracket's two arms are the same thickness. The font file's own version now says the build (it said 0.003 since the first build)."
+   }
+  ]
+ },
+ {
+  "build": "0.73",
+  "date": "2026-11-14",
+  "items": [
+   {
+    "glyphs": "À Á Â Ä Å Ý Ü ö é ạ ệ and every accented letter",
+    "text": "Accented letters now kern exactly as their plain letter. The kerning fixed in 0.66 had only been written for the plain letters, so K before À overlapped by 38 units while K before A was fine, and the Vietnamese letters had no kerning at all. 691 pairs with punctuation or accented letters overlapped; none does now."
+   },
+   {
+    "glyphs": "fï fî (j [j ľV ďK",
+    "text": "The pass that keeps any two glyphs at least 13 units apart now looks at every glyph in the font, not only letters and a few punctuation marks: an accent under f's hood, j's tail under a bracket, the caron of ľ beside a tall letter."
+   },
+   {
+    "glyphs": "Ĳ ĳ №",
+    "text": "IJ's J hung 137 units outside the glyph, so the next letter ran into it, and the numero sign's small o ran 337 units past its width. Both are rebuilt as their two parts set side by side."
+   },
+   {
+    "glyphs": "% $ ¡ [ ] @ # £ ™ _",
+    "text": "These signs kept Libre Baskerville's spacing. Each side that stood off both Georgia Pro and Serrif the same way moved to the nearer one (the percent sign 26 units looser on its right, the underscore 19 tighter each side). No letter or core pair changed."
+   }
+  ]
+ },
+ {
+  "build": "0.72",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "½ ⅓ ⅔ ¼ ¾ ⅛ ⅜ ⅝ ⅞",
+    "text": "In the fractions the small figures stood almost on the bar (4 to 22 units away; in ⅔ the 2 touched it). They were made larger in 0.47 and never moved apart. Each figure now stands 66 units from the bar, what Georgia Pro and Serrif keep on average, and the bar is one width in every fraction and the percent sign."
+   },
+   {
+    "glyphs": "⅕ ⅖ ⅗ ⅘ ⅙ ⅚ ⅐ ⅑",
+    "text": "Eight new fractions, made the same way as the others."
+   },
+   {
+    "glyphs": "₦ ₱ ₸ ₿ ₭ ₮ ₲ ₡",
+    "text": "Eight new currency signs, each Area's capital letter with bars or strokes added, like the won and ruble."
+   },
+   {
+    "glyphs": "⌃ ⇥ ⇤ ↵ ⌦ ⇪ ⋯ ⋮ ▲ ▼ ▶ ◀ ▴ ▾ ▸ ◂ ■ □ ◆ ★ ☆",
+    "text": "Key symbols, menu dots and solid shapes for interfaces, built from the arrows, the period's dot and plain geometry at the minus's weight. Not built, because they need your decision or parts that do not exist yet: Ŋ, ß, ẞ, escape, hooked and double arrows, ⅒, small capitals, old-style figures."
+   }
+  ]
+ },
+ {
+  "build": "0.71",
+  "date": "2026-11-13",
+  "items": [
+   {
+    "glyphs": "&",
+    "text": "The ampersand's arm was a solid block: the white between the arm and the tail was filled in. A rule that shortens serif brackets had taken the whole underside of the arm for a bracket. The arm is a stroke again. Nothing else changed from that rule."
+   },
+   {
+    "glyphs": "Ö Ô Õ Ť Ď Ž Ý Ü ö ž š ŵ ü ê ĉ",
+    "text": "Accents sat off centre on letters whose width or shape Area had changed since Libre Baskerville: 42 units right on O, 41 on T, 43 on z, 27 left on s, 37 left on w. Each letter's accents now sit where Georgia Pro and Serrif put theirs. 224 accented letters follow, and typed accents too."
+   },
+   {
+    "glyphs": "+ ± ¬ | ¦ _ / \\",
+    "text": "The plus had a thin upright on a thicker bar (40 on 52). The bar, broken bar, underscore and slash were each a different weight. All are the minus's weight now, as both references draw them."
+   },
+   {
+    "glyphs": "$ ¢ ¥ ĸ",
+    "text": "Dollar, cent, yen and kra were still Libre Baskerville's S, c, Y and small K. They are Area's letters now with the stroke or bars added, so they match the letters and follow them."
+   },
+   {
+    "glyphs": "Å Ů Â Ó",
+    "text": "The ring over capitals was three quarters the size of the lowercase one, its hole nearly closed at text sizes; it is the same ring now. Accents sat lower on O than on other capitals, and the capital circumflex higher than the caron; all one height."
+   },
+   {
+    "glyphs": "é à â č ă å ő ả",
+    "text": "My recommendation, one number to change back: lowercase accents stood further from the letter than in seven of eight other faces. They are 18 units closer (108 to 90 over the x-height), half the way to Georgia Pro and Serrif. The Vietnamese hook above has a heavier stroke (51 to 58)."
+   },
+   {
+    "glyphs": "† ‡ ð € £",
+    "text": "The daggers' round ends were larger than any ball terminal in the letters and the eth's bowl heavier than o; both are brought to the letters' values. The bars of the euro and sterling are the capitals' thin stroke. I had also called the euro, sterling and section sign heavy: measured across the stroke they are not, and I have taken that back."
+   },
+   {
+    "glyphs": ") ] } » >",
+    "text": "Right-hand brackets are now exactly their left-hand ones turned over; each pair had drifted by a unit or two."
+   },
+   {
+    "glyphs": "ầ ề ồ Ầ Ề Ồ",
+    "text": "Vietnamese: the grave beside a circumflex stood three times as far off as the acute. It now sits on the left with its foot toward the peak, at the acute's distance."
+   },
+   {
+    "glyphs": "accents, punctuation, symbols",
+    "text": "Every glyph, not only letters and figures, now has a point wherever a curve reaches its edge or changes direction (172 added). No outline moved more than 1.6 units. No letter or figure changed in this build."
+   }
+  ]
+ },
+ {
   "build": "0.70",
   "date": "2026-11-13",
   "items": [

@@ -86,6 +86,11 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | Zero | Sides 87 (0.94 of the O's), top and bottom 47 | 0 | `balance.zero_weight` | `measures.py` ROUND.0 |
 | Two curves at a node | Handles on one line | every smooth node | `clean.true_curves` | `test_curves.py` (kink) |
 | Node at every extreme and inflection | A curve is cut where it passes an extreme or changes direction; the cut does not move the outline | every letter and figure | `clean.add_nodes` | `test_curves.py` (extreme, inflection), `pathlint` |
+| Accent placement | Ink centre at `MARK_X` over each base (mean of both references); one height on capitals; lowercase accents 90 over the x-height | every accented letter | `charset.centre_marks`, `case_marks`, `drop_marks` | `audit_charset` marks |
+| Plain strokes | The minus's 52, upright and level | + ± ¬ | ¦ _ / \ | `charset.plain_strokes` | `audit_charset` plain strokes |
+| Sign from a letter | The finished letter and a stroke of the case's hairline (47, 43) | $ ¢ ¥ ĸ, ₩ ₽ ₺ ₫ | `charset.letter_signs`, `kra`, `currencies` | `audit_charset` letter signs |
+| Mirrored pair | The left form turned over, point for point | ) ] } » › > | `charset.mirrors` | `audit_charset` mirrors |
+| Bracket test | A curve meeting a diagonal across a corner over 60 degrees is not its bracket | every serif on a diagonal; the ampersand's arm | `derive.BRACKET_MAX_TURN` | `audit_charset` ampersand |
 | Heights | x 520, cap 712, ascender 780; overshoot 530 / -10 lowercase, 721 / -9 capitals and figures | all | `balance.heights` | `audit_serifs` 4, `check.py` |
 
 A part not in this table has no rule yet. Add the row when you write the rule.
@@ -142,6 +147,10 @@ Fit is measured, like shapes (`tools/fit/fit.py`, numbers only from the referenc
   the old gap (0.38 did; it left fo 86 tight and Gw 96 loose for 28 builds).
 - **After any change to a bearing, a serif length or a letter's width**, regenerate: `AREA_NO_FIT=1 python
   build.py`, `fit.py measure f.json`, `fit.py kern f.json fit_kerning.json`, build, `fit.py pairs f2.json 8`.
+- **Accented letters kern as their letter** (0.73, `spacing.kern_families`): a value written for a core glyph alone
+  leaves its accented forms on the old one (K À overlapped by 38 for seven builds). `spacing.finish` runs last in
+  `normalize`: families, then the collision pass over every glyph of `charset.COVERAGE`. `audit_charset.py` fails
+  on a family member outside its letter's class and on any pair closer than 10.
 - Ink never closer than `MIN_GAP` 13. Proof words with `tools/joins/plain.py` (HarfBuzz kerning).
 
 ## When a corner is rounded
@@ -150,6 +159,35 @@ A stroke that **ends** in a flat cut (20 to 60 units, both corners 70 to 125 deg
 7, like a serif tip: serif tips, bar ends, beaks, barbs, tail cuts (`normalize.soften_ends`). A **meeting** stays
 sharp: vertices, joins, crotches, a stem's top corner under its flag, a stem's foot without a serif, and any cut
 under 20 units (the spurs of b and q).
+
+## Signs and accents (0.71)
+
+A sign's weight is read across its stroke (`charset._ray`: a ray along the inward normal to the facing edge, only
+where that edge runs alongside). The largest circle inside a glyph sits at a join and overstates a stroke by 15 to
+30%. An accent's placement is read as its ink centre against its base's, on every letter that carries a symmetric
+mark, and compared with both references (`build/anchors_ref.py`, numbers only). After any change to a letter's width
+or shape, run `audit_charset.py`: it catches accents left where the old ink was.
+
+## The Bold master (0.76, `bold.py`)
+
+The Bold is never drawn and never offset. It is the Regular's points, each moved by its part's rule, so the two
+masters match point for point and every weight between them is sound. Read `bold-master-plan.md` (in
+`docs/research/serif-typeface-2026-11-10/`) before changing it.
+
+- **One number.** `bold.STEM` (140). Every other Bold value follows from it in `vector` and the constants above it,
+  and each constant has its measurement beside it. No value that only looked right: measure Georgia Pro and Serrif,
+  Bold against Regular (`tools/weight/bold_*.py`), and take the mean on Area's Regular value.
+- **A change to the Regular changes the Bold.** After any change to a letter, run `audit_bold.py` and
+  `audit_bold.py --sweep`; a part the reader no longer finds is a failure, not a pass.
+- **Strokes are exact, heights are pinned, everything else moves as little as it can** in proportion to its length.
+  Handles are carried with their curve; a smooth node keeps the Regular's tangent. Never place a handle.
+- **Slanted strokes follow `parts.vertices`**: exact thickness, the Regular's taper, a flat outside a vertex
+  (`parts.VERTEX` of the class's stem), a point inside, corners where two lines meet.
+- **What cannot be read is named** in `bold.HINTS` with its reason (e's bar; s's turns). Keep it short.
+- **A glyph that is not a sound second master falls back** (upright parts only, then the Regular's outline) and
+  says so in `build/bold-notes.txt`. A fallback is a debt: list it in the build's changes.
+- **Known debts** (0.76): Ⱥ Ƙ ₩ † on a fallback; the number sign; the exclamation mark's top; guillemets; capital
+  breves; Bold kerning not fitted afresh; no part audit for marks, signs and composites.
 
 ## What is still outside the system
 
@@ -169,3 +207,13 @@ Say this in every report until it is closed:
   corrections, with the numbers, and how each became an Area rule.
 - `typefaces/area-serif/parts.py` (the constants and their derivations are at its top), `balance.py`, `joins.py`.
 - `docs/research/serif-typeface-2026-11-10/audit-0.58.md` (every build's audit section) and `tools/joins/`.
+
+## Evenness and alternates (0.77, 0.78)
+
+- **Evenness** (`even.py`, in `normalize` and `qa.py`): round each closed counter the stroke's thickness changes
+  once, smoothly. `shelf` over 2.75 fails. The rule moves handle lengths only; the outer arc and every node stay.
+- **A shape made of strokes meeting in a point** is one outline with a mitre, never a union of strokes and a
+  filler (`charset.arrows`; `audit_charset.scraps` finds ragged vertices in any glyph).
+- **Alternates** never change a default. Build them from finished parts (`charset.single_g`) or from the base
+  through the general rules, then bring the one part that is off the ladder onto it (`charset.base_s`: the spine).
+  One stylistic set per idea; `derive.ALTS` groups glyphs by tag.

@@ -1,6 +1,7 @@
 <title>Area Serif Evaluation</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
+/* No letter-spacing on anything set in Area Serif: browsers turn ligatures off under it (0.77: the headline's f and i stood apart). */
 /*__FONTS__*/
 /* Layout: a specimen sheet up top set in the face itself, then a lab report: findings as evidence cards, comparisons as
    rows of the same words in nine faces, tests as tables and strip charts, and a node inspector. */
@@ -24,7 +25,7 @@
 body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--ui);-webkit-font-smoothing:antialiased}
 .wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 h1,h2,h3{margin:0;font-weight:500;text-wrap:balance}
-h2{font:400 34px/1.15 var(--serif);letter-spacing:-.005em}
+h2{font:400 34px/1.15 var(--serif)}
 h3{font:600 14px/1.4 var(--ui)}
 p{margin:0}
 .lede{color:var(--ink2);max-width:68ch;font-size:15px;line-height:1.55}
@@ -38,7 +39,7 @@ button,select,input,textarea{font:inherit;color:inherit}
 /* hero */
 .hero{padding-block:40px 28px;display:grid;gap:22px}
 .hero-top{display:flex;gap:16px;justify-content:space-between;align-items:baseline;flex-wrap:wrap}
-.hero-word{font:400 clamp(44px,15vw,208px)/.92 var(--serif);letter-spacing:-.012em;margin-left:-.03em;white-space:nowrap;overflow:hidden}
+.hero-word{font:400 clamp(44px,15vw,208px)/.92 var(--serif);margin-left:-.03em;white-space:nowrap;overflow:hidden}
 .hero-sub{font:400 clamp(20px,2.6vw,30px)/1.25 var(--serif);max-width:30ch;color:var(--ink)}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:end}
 .verdict{display:grid;gap:10px}
@@ -71,6 +72,16 @@ tbody tr:last-child td{border-bottom:0}
 .note{font-size:12.5px;color:var(--ink3);max-width:80ch}
 
 /* findings */
+.openlist{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.openlist li{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.openlist a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+details>summary{cursor:pointer;font:600 13px/1.4 var(--ui);color:var(--ink2)}
+#summary td:first-child,#summary th:first-child{white-space:nowrap}
+#summary a{color:var(--ink);text-decoration:none}
+.round{font:600 12px/1.4 var(--ui);letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.round:first-child{margin-top:0;border-top:0;padding-top:0}
+.why{border-left:2px solid var(--low);padding-left:10px;color:var(--ink)}
+.why b{font-weight:600}
 .filters{display:flex;gap:6px;flex-wrap:wrap}
 .chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:13px;color:var(--ink2)}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
@@ -87,6 +98,7 @@ tbody tr:last-child td{border-bottom:0}
 .wba{display:grid;gap:2px;font-family:var(--serif);font-size:28px;line-height:1.25;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow:hidden}
 .wba small{font:500 11px var(--mono);color:var(--ink3)}
 .wba .old{font-family:"Area Serif Before",var(--serif);color:var(--ref)}
+.wba .old70{font-family:"Area Serif Before 70",var(--serif);color:var(--ref)}
 .keyline{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2);align-items:center}
 .keyline i{display:inline-block;width:18px;border-top:2px solid;vertical-align:middle;margin-right:5px}
 .meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:var(--ink3);font-size:12px}
@@ -133,7 +145,7 @@ svg .ov-a{fill:var(--glyph)} svg .ov-r{fill:none;stroke:var(--ref);stroke-width:
 .spec-row .s{font-family:var(--serif);overflow:hidden;white-space:nowrap;text-overflow:clip}
 .reading{font-family:var(--serif);display:grid;gap:.7em}
 .reading p{max-width:66ch}
-.set{font-family:var(--serif);font-size:30px;line-height:1.5;overflow-wrap:anywhere;letter-spacing:.02em}
+.set{font-family:var(--serif);font-size:30px;line-height:1.5;overflow-wrap:anywhere}
 .ui-demo{font-family:var(--serif);display:grid;gap:0}
 .ui-demo .r{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:18px}
 .ui-demo .r:last-child{border-bottom:0}
@@ -209,10 +221,12 @@ footer{padding-block:36px 56px;color:var(--ink3);font-size:12.5px}
 <section id="findings">
   <div class="sec-head">
     <h2>Findings</h2>
-    <p class="lede">Each one was found by a measurement, then checked by eye on the drawn outline, then checked against the project's recorded decisions. Fixed ones show build 0.66's outline in red over the current build. Numbers are font units (1,000 to the em): at 16 px one unit is 0.016 px, at 96 px a tenth of a pixel. The blue comb shows curvature; a step or a spike in it is a place where the curve changes pace.</p>
+    <p class="lede">Each one was found by a measurement, then checked by eye on the drawn outline, then checked against the project's recorded decisions. Fixed ones show the earlier build's outline in red over the current build: 0.66 for the findings of builds 0.67 to 0.70, and the build just before for later ones (each drawing says which). Numbers are font units (1,000 to the em): at 16 px one unit is 0.016 px, at 96 px a tenth of a pixel. The blue comb shows curvature; a step or a spike in it is a place where the curve changes pace.</p>
   </div>
-  <div class="card scroll"><table id="changes"></table></div>
-  <p class="keyline"><span><i style="border-color:var(--ref)"></i>build 0.66, before</span><span><i style="border-color:var(--ink)"></i>this build</span><span><i style="border-color:var(--accent)"></i>curvature comb</span><span><i style="border-color:var(--high)"></i>measured dimension or flagged place</span></p>
+  <div class="card pad" id="open-box"><div class="eyebrow" style="margin-bottom:8px">Open now</div><ul id="open-list" class="openlist"></ul></div>
+  <details class="card pad" id="summary-box"><summary>Every finding and its status, newest round first</summary><div class="scroll" style="margin-top:10px"><table id="summary"></table></div></details>
+  <details class="card pad"><summary>What changed, build by build, newest first</summary><div class="scroll" style="margin-top:10px"><table id="changes"></table></div></details>
+  <p class="keyline"><span><i style="border-color:var(--ref)"></i>the build before (named on each drawing)</span><span><i style="border-color:var(--ink)"></i>this build</span><span><i style="border-color:var(--accent)"></i>curvature comb</span><span><i style="border-color:var(--high)"></i>measured dimension or flagged place</span></p>
   <div class="filters" id="filters" role="group" aria-label="Filter findings"></div>
   <div id="finding-list" style="display:grid;gap:14px"></div>
   <div class="sec-head" style="margin-top:18px">
@@ -225,7 +239,7 @@ footer{padding-block:36px 56px;color:var(--ink3);font-size:12.5px}
 <section id="specimen">
   <div class="sec-head">
     <h2>Specimen</h2>
-    <p class="lede">The font file of build 0.70, live. Text is set with its own kerning and features.</p>
+    <p class="lede">The font file of this build, live. Text is set with its own kerning and features.</p>
   </div>
   <div class="card" id="waterfall"></div>
   <div class="grid2">
@@ -321,7 +335,7 @@ footer{padding-block:36px 56px;color:var(--ink3);font-size:12.5px}
 <section id="inspector">
   <div class="sec-head">
     <h2>Glyph inspector</h2>
-    <p class="lede">The drawn points of build 0.70. A coloured underline on a character means the node tests flagged it. Turn on Before to see build 0.66 under it.</p>
+    <p class="lede">The drawn points of this build. A coloured underline on a character means the node tests flagged it. Turn on Before to see build 0.66 under it.</p>
   </div>
   <div class="picker" id="in-picker" role="group" aria-label="Character"></div>
   <div class="controls">
@@ -422,7 +436,7 @@ function glyphSVG(v, opt={}){
   for(const y of [0,520,712,780,-224]) if(y>y0&&y<y1) s+=`<line class="ml" x1="${x0}" x2="${x1}" y1="${-y}" y2="${-y}"/>`;
   s+=`<path class="gf" fill-rule="nonzero" d="${pathOf(o)}"/>`;
   if(v.comb!==false && opt.comb!==false && !(v.dims&&!v.box)){ const [t,e]=comb(o, opt.K||2600); s+=`<path class="ct" d="${t}"/><path class="cb" d="${e}"/>`; }
-  if(v.ba && D.prev[v.g]) s+=`<path class="ob" d="${pathOf(D.prev[v.g])}"/>`;
+  if(v.ba && D.prev[v.pg||v.g]) s+=`<path class="ob" d="${pathOf(D.prev[v.pg||v.g])}"/>`;
   s+=`<path class="go" d="${pathOf(o)}"/>`;
   if(v.thick||opt.thick){ const T=D.thick[v.g]||[]; const r=Math.max(2.2*u,2.4);
     for(let i=0;i<T.length;i+=3) s+=`<circle cx="${T[i]}" cy="${-T[i+1]}" r="${r.toFixed(1)}" fill="${thickColor(T[i+2])}"/>`; }
@@ -449,27 +463,38 @@ $('#b-build').textContent=D.build; $('#b-date').textContent=D.date;
 $('#b-count').textContent=`${D.glyphCount.toLocaleString()} glyphs · ${D.faces.length-1} reference faces`;
 const stN = s => D.findings.filter(f=>f.status===s).length;
 $('#tally').innerHTML = `<span><b>${stN('fixed')}</b><i class="dot ok"></i>fixed</span><span><b>${stN('part')}</b><i class="dot" style="background:var(--accent)"></i>partly fixed</span><span><b>${stN('open')}</b><i class="dot medium"></i>open</span><span><b>${stN('decided')+stN('withdrawn')}</b><i class="dot low"></i>by design or withdrawn</span>`;
-$('#verdict').textContent = 'Builds 0.67 to 0.70 fix every finding that held up: thirteen, each by a rule with a check, shown here before over after. Five of my first findings did not hold up against the project’s own records and are marked as withdrawn or by design. Nothing is open. The zero’s lighter sides are my recommendation applied, and one number to change back.';
-$('#changes').innerHTML='<thead><tr><th>What changed</th><th>Build</th><th>0.66</th><th>Now</th><th>Rule</th></tr></thead><tbody>'+D.changes.map(c=>`<tr><td>${esc(c[1])}</td><td>${c[0]}</td><td>${esc(c[2])}</td><td>${esc(c[3])}</td><td class="mono" style="text-align:left">${esc(c[4])}</td></tr>`).join('')+'</tbody>';
+$('#verdict').textContent = D.verdict;
+$('#changes').innerHTML='<thead><tr><th>What changed</th><th>Build</th><th>Before</th><th>Now</th><th>Rule</th></tr></thead><tbody>'+D.changes.slice().reverse().map(c=>`<tr><td>${esc(c[1])}</td><td>${c[0]}</td><td>${esc(c[2])}</td><td>${esc(c[3])}</td><td class="mono" style="text-align:left">${esc(c[4])}</td></tr>`).join('')+'</tbody>';
 
 /* ---------- findings ---------- */
+const SLs={fixed:'Fixed in ',part:'Partly fixed in ',open:'Open',decided:'By design',withdrawn:'Withdrawn'};
+const stLabel=f=>SLs[f.status]+((f.status==='fixed'||f.status==='part')?(f.build||''):'');
+const ROUND=r=>r===D.build?`Build ${r} · this round`:`Build ${r}`;
+(function(){
+  const open=D.findings.filter(f=>f.status==='open'||f.status==='part').sort((a,b)=>parseFloat(b.round)-parseFloat(a.round));
+  $('#open-list').innerHTML=open.length?open.map(f=>`<li><span class="st ${f.status}">${stLabel(f)}</span><a href="#f-${f.id}">${esc(f.title)}</a></li>`).join(''):'<li>Nothing is open.</li>';
+  const rows=D.findings.slice().sort((a,b)=>parseFloat(b.round)-parseFloat(a.round));
+  $('#summary').innerHTML='<thead><tr><th>Round</th><th style="text-align:left">Finding</th><th style="text-align:left">Status</th></tr></thead><tbody>'+rows.map(f=>`<tr><td>${f.round}</td><td style="text-align:left"><a href="#f-${f.id}">${esc(f.title)}</a></td><td style="text-align:left"><span class="st ${f.status}">${stLabel(f)}</span></td></tr>`).join('')+'</tbody>';
+})();
 const classes=['All',...new Set(D.findings.map(f=>f.cls))];
 let fFilter='All';
 function renderFindings(){
   const box=$('#finding-list'); box.innerHTML='';
-  const order={fixed:0,part:1,open:2,decided:3,withdrawn:4}, sv={high:0,medium:1,low:2};
+  const order={open:0,part:1,fixed:2,decided:3,withdrawn:4}, sv={high:0,medium:1,low:2};
   const SL={fixed:'Fixed in ',part:'Partly fixed in ',open:'Open',decided:'By design',withdrawn:'Withdrawn'};
-  D.findings.filter(f=>fFilter==='All'||f.cls===fFilter||f.status===fFilter).sort((a,b)=>order[a.status]-order[b.status]||sv[a.sev]-sv[b.sev]).forEach((f,i)=>{
+  let lastRound=null;
+  D.findings.filter(f=>fFilter==='All'||f.cls===fFilter||f.status===fFilter).sort((a,b)=>parseFloat(b.round)-parseFloat(a.round)||order[a.status]-order[b.status]||sv[a.sev]-sv[b.sev]).forEach((f,i)=>{
+    if(f.round!==lastRound){ lastRound=f.round; box.appendChild(el('h3',{class:'round'},ROUND(f.round))); }
     const card=el('article',{class:'card finding',id:'f-'+f.id});
     const ev=f.evidence.map(e=>`<dt>${esc(e[0])}</dt><dd>${esc(e[1])}</dd>`).join('');
-    card.innerHTML=`<div class="txt"><div class="meta"><span class="st ${f.status}">${SL[f.status]}${f.build||''}</span><span class="sev ${f.sev}"><i class="dot ${f.sev}"></i>${f.sev==='high'?'Largest':f.sev==='medium'?'Visible at display sizes':'Minor'}</span><span>${esc(f.cls)}</span></div>
-      <h3>${esc(f.title)}</h3><p style="color:var(--ink2)">${esc(f.body)}</p>${f.after?`<p class="after"><b>Now. </b>${esc(f.after)}</p>`:''}<dl class="ev" style="margin:0">${ev}</dl><p class="fix"><b>${f.status==='open'?'Next':'Rule'}. </b>${esc(f.fix)}</p></div>
+    card.innerHTML=`<div class="txt"><div class="meta"><span class="st ${f.status}">${stLabel(f)}</span><span class="sev ${f.sev}"><i class="dot ${f.sev}"></i>${f.sev==='high'?'Largest':f.sev==='medium'?'Visible at display sizes':'Minor'}</span><span>${esc(f.cls)}</span></div>
+      <h3>${esc(f.title)}</h3><p style="color:var(--ink2)">${esc(f.body)}</p>${f.after?`<p class="after"><b>Now. </b>${esc(f.after)}</p>`:''}${f.why?`<p class="why"><b>Why it stands. </b>${esc(f.why)}</p>`:''}<dl class="ev" style="margin:0">${ev}</dl><p class="fix"><b>${f.status==='open'?'Next':'Rule'}. </b>${esc(f.fix)}</p></div>
       <div class="vis"><div class="views"></div><div class="chart"></div></div>`;
     const vs=$('.views',card);
     if(f.views.length===1) vs.classList.add('one');
-    f.views.forEach(v=>{ const d=el('div',{class:'view'}); d.innerHTML=`<span class="cap">${esc(chOf[v.g]||v.g)}${v.box?' · zoom':''}${v.ba?' · before in red':''}</span>`+glyphSVG(v,{px: f.views.length>3?170:230}); vs.appendChild(d); });
+    f.views.forEach(v=>{ const d=el('div',{class:'view'}); d.innerHTML=`<span class="cap">${esc(chOf[v.g]||v.g)}${v.box?' · zoom':''}${v.ba?(v.pg?' · '+v.pv+' in red':' · 0.66 in red'):''}</span>`+glyphSVG(v,{px: f.views.length>3?170:230}); vs.appendChild(d); });
     if(f.chart==='caphair') $('.chart',card).appendChild(stripChart(capHairRows(),{min:.75,max:1.25,ref:1,fmt:v=>v.toFixed(2)}));
-    if(f.words){ const w=el('div',{class:'wba'}); w.innerHTML=(D.hasBefore?`<small>0.66</small><span class="old">${esc(f.words)}</span>`:'')+`<small>now</small><span>${esc(f.words)}</span>`; $('.chart',card).appendChild(w); }
+    if(f.words){ const w=el('div',{class:'wba'}); w.innerHTML=(D.hasBefore?`<small>${f.prev||'0.66'}</small><span class="old" ${f.prev?`style="font-family:'Area Serif Before ${f.prev}',var(--serif)"`:''}>${esc(f.words)}</span>`:'')+`<small>now</small><span>${esc(f.words)}</span>`; $('.chart',card).appendChild(w); }
     if(f.id==='r-width'){ const t=el('div',{class:'card scroll'}); t.innerHTML='<table><thead><tr><th>r in each face, in its own stems</th><th>Advance / n</th><th>Ink width</th><th>Arm</th><th>Foot, left</th><th>Foot, right</th><th>Gap after r, sd</th></tr></thead><tbody>'+D.rtable.map(r=>`<tr><td${r.own?' class="own"':''}>${esc(r.label)}</td><td>${r.adv.toFixed(3)}</td><td>${r.ink.toFixed(2)}</td><td>${r.arm.toFixed(2)}</td><td>${r.footL.toFixed(2)}</td><td>${r.footR.toFixed(2)}</td><td>${r.z>0?'+':''}${r.z.toFixed(1)}</td></tr>`).join('')+'</tbody></table>'; $('.chart',card).appendChild(t); }
     box.appendChild(card); });
 }
@@ -559,7 +584,7 @@ function buildTables(){
   const TN={kink:'Tangent breaks under 14°',g2:'Curvature jumps at smooth nodes',inflection:'Curves that bend both ways',wobble:'Double turns in one curve',handles:'Handle reach',extreme:'Missing extremes',offaxis:'Nearly upright or level',short:'Segments under 4 units',elbow:'Tight curve into a straight'};
   const T=D.tally; $('#tally-table').innerHTML='<thead><tr><th></th><th>Core 62: larger</th><th>Core 62: minor</th><th>All glyphs</th></tr></thead><tbody>'+Object.keys(TN).filter(k=>T[k]).map(k=>`<tr><td>${TN[k]}</td><td>${T[k].core[0]+T[k].core[1]}</td><td>${T[k].core[2]}</td><td>${T[k].all[0]+T[k].all[1]+T[k].all[2]}</td></tr>`).join('')+'</tbody>';
   $('#tally-note').textContent='A count is evidence, not a verdict: a ball terminal legitimately flips curvature at its node. Every larger item in the core was looked at; the ones that matter are in Findings.';
-  $('#qa').innerHTML=['check.py: every measured target matches derive.py (pass).','pathlint.py: 0 errors, 171 warnings, 31 notes (226 and 63 on 0.66); the warnings are the handle-reach and missing-extreme cases counted above.','audit_parts.py: 0 unexpected outliers, now with three more rows (capital thins, capital rounds, head rise). Run on build 0.66 the same audit fails with seven outliers.','parts.py: 0 errors in the join and bowl table.','fontbakery universal profile: 85 pass, 0 fail, 1 expected warning (contour count on inherited accents).'].map(x=>`<li>${esc(x)}</li>`).join('');
+  $('#qa').innerHTML=D.qa.map(x=>`<li>${esc(x)}</li>`).join('');
   $('#tight').innerHTML=D.tight.map(t=>`<span title="${t[0]} units${t[2]?', kern '+t[2]:''}">${esc(t[1])}</span>`).join('');
 }
 
@@ -570,7 +595,7 @@ function buildSpecimen(){
   const pa=['A typeface for an interface has a different job from one for a book. It is read in fragments: a label, a title, two lines of a message, a number in a table. Each fragment has to be recognised quickly and sit calmly beside icons, controls and other text.','So the letters are a little wider and more open than a book face, the contrast between thick and thin is lower, and the serifs are short and blunt. At 13 pixels a hairline of 43 units is just over half a pixel. A thinner one would flicker; a heavier one would close the counters.'];
   $('#reading-a').innerHTML=`<div class="eyebrow" style="font-family:var(--ui)">Reading, 18 / 28</div>`+pa.map(p=>`<p style="font-size:18px;line-height:28px">${esc(p)}</p>`).join('');
   $('#reading-b').innerHTML=`<div class="eyebrow" style="font-family:var(--ui)">Text, 15 / 22 and 13 / 18</div>`+`<p style="font-size:15px;line-height:22px">${esc(pa[0])}</p><p style="font-size:13px;line-height:18px">${esc(pa[1])} The same rule draws every stem, every foot and every flag, so a note on one letter is a note on all the letters that share the part.</p>`;
-  $('#charset').innerHTML='ABCDEFGHIJKLM<br>NOPQRSTUVWXYZ<br>abcdefghijklm<br>nopqrstuvwxyz<br>0123456789<br><span style="font-size:22px;letter-spacing:.04em">.,:;!?’“”()[]{}*/&amp;@#%$€£¥+−×÷=&lt;&gt;§¶†©®™ àéîõüçñøßæœ ĄĆĘŁŃŚŻ ffi ffl</span>';
+  $('#charset').innerHTML='ABCDEFGHIJKLM<br>NOPQRSTUVWXYZ<br>abcdefghijklm<br>nopqrstuvwxyz<br>0123456789<br><span style="font-size:22px">.,:;!?’“”()[]{}*/&amp;@#%$€£¥+−×÷=&lt;&gt;§¶†©®™ àéîõüçñøßæœ ĄĆĘŁŃŚŻ ffi ffl</span>';
   $('#ui-demo').innerHTML=[['Projects','24'],['Systems','3'],['References, saved','1,284'],['Storage used','36.2 MB of 2 GB'],['Owner','David Tee'],['Last published','13 Nov 2026, 12:47']].map(r=>`<div class="r"><span>${r[0]}</span><span>${r[1]}</span></div>`).join('');
   $('#feat-demo').innerHTML=`<div>1,284.50 &nbsp; 0123456789</div><div style="font-feature-settings:'tnum'">1,284.50 &nbsp; 0123456789 <span style="font:11px var(--mono);color:var(--ink3)">tnum</span></div><div>1/2 3/4 <span style="font-feature-settings:'frac'">1/2 3/4</span> &nbsp; H2O <span style="font-feature-settings:'sinf'">H2O</span> &nbsp; x2 <span style="font-feature-settings:'sups'">x2</span> <span style="font:11px var(--mono);color:var(--ink3)">frac sinf sups</span></div><div>(a-b) <span style="font-feature-settings:'case'">(A-B)</span> &nbsp; fi fl ffi <span style="font-feature-settings:'liga' 0">fi fl ffi</span> <span style="font:11px var(--mono);color:var(--ink3)">case liga</span></div>`;
   const sel=$('#tt-face'); D.faces.forEach(f=>sel.appendChild(el('option',{value:f.key},f.label+(have[f.key]?'':' (not installed here)'))));
