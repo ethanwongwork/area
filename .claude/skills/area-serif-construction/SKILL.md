@@ -205,13 +205,17 @@ masters match point for point and every weight between them is sound. Read `bold
 - **What cannot be read is named** in `bold.HINTS` with its reason (e's bar; s's turns). Keep it short.
 - **A glyph that is not a sound second master falls back** (upright parts only, then the Regular's outline) and
   says so in `build/bold-notes.txt`. A fallback is a debt: list it in the build's changes.
-- **Known debts** (0.81, integration; was 0.80's list): kerning per master is done (`spacing.kern_master`, refit with
-  `AREA_KERN_FIT=1`); fallbacks none; wedge accents' thin ends no longer read as strokes. Left: `audit_axis.py` Bold
-  side `at` (the a's bowl running into @'s ring is read by neither the upright nor the level strokes and thins
-  29 > 17 at 550), `hookabovecomb.case` (its curl is a loop of the outline round its ball, which the engine does not
-  read as a ball: it closes and crosses at 552), commaaccentcomb.case (an upright cut through a slanted tail, 1.4 under) and ogonekcomb.case (2 under at a node); Astroke and Tdiagonalstroke held for the owner (stump form,
-  `audit_axis.AWAITING`); `audit_rays.py` flags (C/c terminals 2 to 4 units, junction rays in ə ʕ ɂ & ®, hooks of
-  the IPA set at 300 at nodes the taper's handles cannot reach); the Bold asterisk is light (ink gain 0.74 of n's against the references' 0.82 to 0.94: longer arms, `arms.REACH`, bent its curves, so the Bold keeps reach 1); no part audit for marks, signs and composites.
+- **Known debts** (0.81, close; was the integration round's list): kerning per master is done (`spacing.kern_master`,
+  refit with `AREA_KERN_FIT=1`); fallbacks none; @ (slanted stem) and the comma accent (an audit misreading) are closed;
+  the Bold asterisk reaches the references' least ink gain (0.820). Left: `audit_axis.py` Bold `hookabovecomb.case`
+  (its slot closes at 552; the honest form is a curl and a stem overlapping, not built), `ogonekcomb.case` (1.9 under
+  behind its 11-unit cut: no cut-end rule), C and Cbar (1.1), Q and s at their ends (read across; the end zone does
+  not reach them), one.ss01's flag (real); Light whook and yhook balls (the taper places' moves refused by the guards);
+  Astroke and Tdiagonalstroke held for the owner (`audit_axis.AWAITING`); `audit_rays.py` 19 flags (IPA hooks and ƒ at
+  300, junction places in Ə ɂ œ & ® $ ð, C's barb, @ in the Light where its slanted stem is not held); "x␣j" with v,
+  w, y before the space now 64 looser than Georgia Pro (one key per space, contextual kerning not built); the Light's
+  @ stem thickens (95 > 92); the top crotch of @'s a rises over its stem's top at the Bold (a nub, no audit reads it);
+  no part audit for marks, signs and composites.
 
 ## What is still outside the system
 

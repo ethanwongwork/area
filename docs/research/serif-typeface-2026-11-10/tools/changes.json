@@ -26,7 +26,7 @@
    {
     "glyphs": "Signs",
     "chars": "*†‡!\"",
-    "text": "Signs made of arms (asterisk, daggers, exclamation, straight quotes) are now each arm's centre line with its width profile, thickened by one number per weight, and drawn symmetric from one half. Not fixed: the asterisk still looks nearly Regular in Bold text. Its ink gains 0.74 of n's gain where Georgia Pro, Source Serif 4 and Literata gain 0.82 to 0.94; it is held back by the white between its arms. I tried letting its arms reach further at the Bold, as the references' asterisks do (4.7% longer); that made it heavy enough (0.83) but bent its curves between 400 and 700, so the Bold keeps the Regular's arm length (1.003) for now. The Light's asterisk is 1.7% shorter, as the references' are."
+    "text": "Signs made of arms (asterisk, daggers, exclamation, straight quotes) are now each arm's centre line with its width profile, thickened by one number per weight, and drawn symmetric from one half. The asterisk no longer looks nearly Regular in Bold text: its arms reach a little further at the Bold (6.5% longer, inside the references' own range of 1.7% to 9.2%), so the white between its balls allows them their weight. Its ink now gains 0.82 of n's gain, as Georgia Pro's does (0.819; Source Serif 4 0.898, Literata 0.935; it was 0.74). The longer arm no longer bends its curves: the outer part of each arm, from its first smooth node out to its tip, moves out whole. The Light's asterisk is 1.7% shorter, as the references' are, and unchanged."
    },
    {
     "glyphs": "Weight axis",
@@ -39,9 +39,14 @@
     "text": "Kerning is fitted per weight. Each master's pairs come from its own outlines by one rule measured on Georgia Pro and Serrif: a pair's white scales with the control white (nn, HH) of that weight. Then each is compared with the references at the same weight and opened where two letters come too close. AV goes -83 / -79 / -93 at 300 / 400 / 700 where it was -79 at every weight. The Regular's own pairs were measured again on the new letters: 772 of 4,796 measured pairs moved, most by a unit; the largest (15 to 19) are r before round letters, capitals and punctuation: r's outline has not changed since 0.80, but measured afresh it stood 8 or more units looser than both references beside those letters, so the fit brought it in. Why the stored values missed this is not known."
    },
    {
+    "glyphs": "Close round",
+    "chars": "@*j,",
+    "text": "@ in the Bold: its a has a slanted stem (one side straight, the other the counter's edge), which the weight engine did not read as a stroke, so the stem stayed as thin as the Regular's while the counter slid into the bowl's lower stroke (29 down to 17 units at 550). The stem now thickens like every stem and the bowl stays open (at least 33 units from 550 to 700). A word space before j read tight because j's tail runs under it (the white across 's j' was 252 units where Georgia Pro has 322); the space before j is now kerned by the measured shortfall (s j 302 at 400), the only change to the Regular. The weight checks now measure a stroke across itself rather than along a level or upright line (the comma below a capital passes: it never thinned), and no longer read a terminal's cut end or a junction as a stroke. The figure of signs and struck glyphs showed some glyphs as other glyphs; that was the figure tool, not the font, and it is fixed."
+   },
+   {
     "glyphs": "Open",
     "chars": "",
-    "text": "Not finished: in the Bold, @ (the a's bowl where it runs into the ring thins), the capital hook above (its curl closes at 550), and two accents by one or two units (the comma accent below a capital, the capital ogonek). Ⱥ and the T with a diagonal stroke wait for your decision. The second measuring method still flags 33 glyphs, mostly hooked IPA letters at 300 and the terminals of C and c by 2 to 4 units; they are drawn one by one in the figures."
+    "text": "Not finished. The capital hook above still closes its small slot from 550 in the Bold (figure 13): drawn as one outline, its curl and stem are read as two strokes that grow into each other; the lowercase hook's own move, scaled, keeps the slot open but bends three of its small curves, so it was not used. Built as a curl and a stem overlapping (as the struck letters are) it would come under the white law; that is not built. Measured across the stroke, the capital ogonek still thins by up to 2 units between 450 and 675 just behind its 11-unit top cut, and C, Q, s and the footless 1's flag thin by 1 to 3 units in the Bold; ƴ and the hooked w thin too fast in the Light. The second method flags 19 glyphs at its six weights (15 at every 25): the hooked IPA capitals and w, y at 300, ƒ's tail at 300, junction places in Ə ɂ œ & ® $, @ in the Light (its slanted stem is held in the Bold only), and C's barb by 3.5 units at 600. Ⱥ and the T with a diagonal stroke wait for your decision."
    }
   ]
  },

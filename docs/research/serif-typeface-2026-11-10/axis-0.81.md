@@ -301,3 +301,64 @@ C and c terminals (C ꞓ Ȼ ₡; c ꞓ ȼ ¢), 2 to 4 units at 600 and 700, the 
 junction rays in ə ʕ ɂ & ® (rays through a bar, a counter or a ring that the junction zones do not catch); Light
 places at nodes on the IPA hooks (ɖ ɲ ɋ Ɩ Ƙ Ⱳ Ƴ ⱳ ƴ), ſp, ƒ, @ and §, where the taper's handles cannot reach (nodes stay);
 Light "thicker" places at crossings (ð, œ, $); and Σ's top arm at 500, Ƒ's hook at 700, ʈ's top at 500.
+
+## Close round (15 November 2026)
+
+Rules and readings added after the integration round, each tried on the built masters first (scratch builds of the
+Bold and Light from the normalized Regular) and then in one full `qa.py` build. Numbers below are from that build
+unless marked as the scratch run.
+
+| # | Item | Cause | Rule | Where | Before > after |
+|---|---|---|---|---|---|
+| 31 | Figure 5 drew other glyphs in the 0.81 rows (∏ ₹ as "l Ế", ⌘ as "ớ", ₩ ₦ ₱ ... as accented a and e) | `shapelib.hbfont` cached HarfBuzz fonts by `id(tt)`; `figs_081_close` makes a temporary instance per row, and a freed instance's id was reused by the next, which was then shaped with the freed font's glyph order (0.80's). The font was right | The cache keeps a weak reference to the TTFont it was made from and checks it | `tools/shapelib.py` | every figure from the same code path redrawn and looked at: only `5-signs-struck.png` mixed two fonts in one run (the others draw one font per run or keep their fonts alive) |
+| 32 | @ (Bold thin, 29 > 17 at 550) | The a of @ has a slanted stem: its right side a line 15 degrees off upright, its left side the counter's right extreme. The engine reads a stroke between two knots on a scan line; the line has no knot at the extreme's height, so no stroke was read: the stem stayed 92 > 91 at the Bold while the counter rode the knot map 44 right into the bowl's lower stroke | A slanted stem with one straight side is a stroke: its level width at the facing extreme takes `x_target`; the extreme moves level and every point of its contour between it and the far extreme by its share of the move (the knot map corrected at the knot the line lacks). Towards the Bold only: towards the Light the corrected map ran the counter into the a's top crotch, which it does not carry (10 at 350 in the scratch run) | `white.slanted_stems`, `keep_slanted_stems`; `bold.bold_font` (after the tapers) | @ thinnest across the stroke 27.0 at 400; integration 18.7 / 14.7 at 550 / 700, now 33.5 / 35.6; its stem at the counter's extreme 91 > 154 at the Bold |
+| 33 | The comma accent below a capital (Bold 700, 41.3 > 39.9) | The audit's thinnest cut was a level or upright scan through a slanted tail: w / cos(slant), and the tail turns upright as it thickens. Rays across the stroke keep 0.99 | `audit_axis.thinnest` reads every span that is a stroke as the shortest cut through its middle, turned up to 60 degrees, ending on two edges facing within 40 degrees; a span no such cut crosses is no stroke; a cut within half its length of a stroke's cut end reads the end | `audit_axis.thinnest`, `chords` | comma accent 36.7 at 400, 37.9 at 700 (passes). On the 0.81 integration masters 410 of 978 glyph-sides' Regular readings move by over 0.5; results that change: the comma accent passes; C, Cbar, Q, s, one.ss01 (Bold) and ƴ (Light) newly fail (on the integration masters); see the final list |
+| 34 | The asterisk light at the Bold (ink gain 0.737 of n's; references 0.819 to 0.935) | Its arms keep the Regular's length, so the white between the balls caps f at 1.199; drawing a longer arm out evenly (body and ball, or body alone) tilted the turned arms' level handles against their curves: four inflections at reach 1.047 | A longer arm moves its outer part whole: from its innermost smooth node to its tip it is its Regular scaled by f about the tip and carried out along the axis (a similarity: nothing there turns); the junction scales by f, the part between takes up the length. The Bold reach is the least that brings the ink gain to the references' least (Georgia Pro 0.819), within their span changes (at most Literata's 1.092). The Light keeps 0.81's map (0.983) | `arms.Arm.along`, `INK_GAIN`, `REACH_MAX`; `bold.bold_font` (solved by halving) | reach 1.003 > 1.065, f 1.203 > 1.197, ink gain over n 0.737 > 0.820, no turn, both mirrors kept |
+| 35 | Places a taper's handles cannot reach (Light: IPA hooks, euro, glottal stop reversed) | `keep_taper` changes handle lengths only | Towards the Light, a place still short of its law by more than 3% after the handles moves its places: the smooth nodes of its curve and of the curve its ray ends on, each rigidly with its handles (a node with level handles moves level only), and a straight cut end under 30 grows along itself; corners never; no new turn or crossing. Towards the Bold it moved the quotes' nodes on the Bold master alone and the tail dipped between it and their mid master (40.8 > 35.3 at 675), so the Bold keeps handles only | `white._taper_places` (`keep_taper(nodes=...)`) | see the rays list |
+| 36 | audit_rays reads a cut end and junctions with smooth sides | c's and C's terminals: the ray started at the cut's corner and read the end from its side; ə ʕ ɂ: rays through a bar or a bowl junction whose sides are smooth curves | End zones (a ray starting within half its length of an outward turn of 60 degrees in 12 units of outline), soft crotches (an inward turn of 90 degrees in 12 units) as junction zones, and a ray kept only when its return ray, along the far edge's normal, lands within half its length of its start | `audit_rays.end_corners`, `END_ZONE`, `SOFT_TURN`, `RECIPROCAL` | on the integration build's own font: 33 glyphs > 21, places 33,700 > 23,240 (452 glyphs read > 394) |
+| 37 | "s j" across a word space | j's tail reaches 244 left of its stem (Georgia Pro 210, Serrif 109 at Area's x-height): the least white across "x␣j" was 63 under the nearer reference's at 400 (median over a to z; s j 252 against 322 and 345), 42 at 700. fit.py's pair measure reads only rows where both have ink | space before j's class kerned +63 in the Regular; the masters by the transfer rule | `spacing.SPACE_BEFORE`, `space_kerning` | see below |
+
+A first full build of this round read the audit's new filters in the taper rule too (`white.taper_readings` calls
+`audit_rays.rays`): the Bold's handles then moved on 43 glyphs (the comma's by 67 units, ink 1 to 3%) and the quotes
+dipped between their mid master and the Bold (37 > 35 at 675). The taper rule now reads as the integration round did
+(`rays(close=False)`); the audit alone reads the new way. Taper places move towards the Light only, for the same
+reason (towards the Bold they moved the quotes' nodes on the Bold master alone).
+
+### Final (`build/qa-081.log`, one clean `qa.py` build)
+
+- `audit_axis.py`: **Bold side 7 glyphs** (integration: 4), **Light side 2** (integration: 0), Astroke and
+  Tdiagonalstroke HELD. Bold: hookabovecomb.case crossing at 552; thin C, Cbar 35 > 34 at 675, Q 23 > 20 at 425 to
+  700, ogonekcomb.case 17 > 15 at 450 to 675, one.ss01 42 > 38 at 650 to 700, s 32 > 31 at 475 and 600. Light: whook
+  28 > 20 at 300, yhook 30 > 21 at 300. Gone: at, commaaccentcomb.case. All the new ones but none of the old are the
+  cut across the stroke's own findings (C, Q, s and the flag read a level cut before).
+- `audit_rays.py` (300, 350, 400, 500, 600, 700): **19 glyphs**, 394 glyphs read, 23,147 places (integration: 33,
+  452, 33,700). Every 25 from 300 to 700: 15 glyphs (`build/weight/close/audit-rays-every25.txt`).
+- `audit_kern.py`: pass at 300 325 350 375 400 450 500 550 600 650 700 (`build/weight/close/kern-every25-50.log`).
+- `audit_bold.py` 434/434 Bold and Light, `--sweep` clean; interpolatable, charset, fontbakery on both fonts pass.
+- The static Regular: 0 glyphs differ in outline or advance from the integration build; one kerning key added
+  (space before j's class, +63). The Bold master differs in 2 glyphs (asterisk, at); the Light in 120 (taper places:
+  at most 10 units, ink at most 4.6%, zeroinferior; then Saltillo 3.6%, ordmasculine 2.8%, less and greater 2.4%).
+- Asterisk at 700 against n (sheets_081, variable font): Area 0.820, Georgia Pro 0.819, Source Serif 4 0.898,
+  Literata 0.935.
+- Word space before j (least white, Area units, 400 / 700): s j 252 > 302 / 227 > 270 (Georgia Pro 322 / 277);
+  n j 185 > 237 / 154 > 201 (254 / 202). v j and y j were already inside both references and now stand 64 above
+  Georgia Pro's (320 against 256 at 400): one key cannot tell what came before the space.
+
+### Still failing after the close round, and why
+
+| Glyphs | Side | Why |
+|---|---|---|
+| hookabovecomb.case | Bold 552 | Its slot between the curl and the stem closes. The lowercase's move scaled by 0.712 (KIN) keeps it open (7 by 14 at the Bold) but its three small curves round the slot gain an inflection and the contour crosses itself at 0.61 of the way: not used. The honest structure is a curl and a stem overlapping (the struck letters' construction), under the white law; not built |
+| ogonekcomb.case | Bold 450 to 675 | Up to 1.9 under, 15 units behind its 11-unit top cut. The taper rule's stations do not read the place (none under 30 in the Regular survives its filters) and the Bold master itself is 0.9 under (the rule holds places 1 under): the dip is between the Regular and the Bold. A cut end under the serif tip taking the tip's law would hold it, but 36 glyphs have such cuts (b's and q's spurs among them, which stay sharp by rule); not written |
+| C, Cbar | Bold 675 | 35 > 34 (1.1 under) across the barb's turn, and audit_rays' C barb (77.3 > 73.8 at 600). Not diagnosed further |
+| Q | Bold 425 to 700 | 23 > 20 at the tail's upturned end, read across. The end zone (half the cut) does not reach it. Whether the end's shape is the stroke is not decided |
+| s | Bold 475, 600 | 32 > 31 (1.1 to 1.4 under) under the lower barb's top corner, read across. As Q |
+| one.ss01 | Bold 650 to 700 | The flag thins (42 > 38; the rays read it too at other places): real, the flag's underside follows the stem's knots |
+| whook, yhook | Light 300 | The hook's ball thins (28 > 20, 30 > 21; rays 0.62 to 0.65 of 400): the taper places' moves on the ball are refused by the turn and crossing guard |
+| @ | Light (rays) | Its slanted stem thickens towards the Light (32 > 47 at 300 at the diagonal): the slanted-stem rule is held to the Bold (towards the Light it ran the counter into the a's top crotch) |
+| Ƙ Ⱳ Ƴ ⱳ ƴ ɲ ƒ | Light 300 (rays) | Hooks and tails at 0.58 to 0.65 of 400 (stem 0.705): as whook |
+| Ə ɂ œ & ® $ ð ɽ | rays | Places at junctions and crossings still kept (Ə's bar into its bowl, ɂ's hook into its stem, œ's crossing, &'s arm, ®'s R against the ring under the white law's give, $'s stroke through the S); ɽ 4 units at 675 |
+| Astroke, Tdiagonalstroke | Bold | HELD: the owner's decision |
+
+Figures: `img/081/13-at.png`, `13-asterisk.png`, `13-word-space-j.png`, `13-comma-cut.png`, `13-hook-above.png`,
+`11-rays-flags.png` (every flag drawn); `5-signs-struck.png` redrawn.
