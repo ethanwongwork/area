@@ -35,7 +35,7 @@ function strokesAt(ch) {
 }
 
 // ── The canvas, in units of the square ──
-const G = 385; // each kanji's em
+const G = 270; // each kanji's em (was 385: the pair filled the square edge to edge)
 const CX = 392; // the column's centre; over the whole animation the ink stays within x 24 to 760
 const OX = CX - G / 2;
 const OY = (1000 - 2 * G) / 2;
