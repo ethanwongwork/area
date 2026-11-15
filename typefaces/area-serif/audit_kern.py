@@ -28,7 +28,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import spacing as SP  # noqa: E402
 
-WEIGHTS = (300, 350, 400, 550, 700)
+WEIGHTS = tuple(int(w) for w in os.environ.get("AREA_KERN_WEIGHTS", "300,350,400,550,700").split(","))   # 0.81
 TOL = 5                      # the collision passes open a pair short by 4 or more, read on the UFO's cubics; the
 #                              TrueType build's quadratics stand up to 1 unit off them
 YS = list(range(-280, 1081, SP.STEP))

@@ -84,8 +84,10 @@ def main():
             cells.append((f"{name} {w}: honest (whole stroke)", A.ink(cs, s, box)))
             cells.append((f"{name} {w}: stump (cut inside the letter)", A.ink(stump_cs, s, box)))
         rows.append(A.grid(cells, 6, label_h=16, gap=8))
+    # 0.81: both glyphs (stack's titles zip with its images: one title alone dropped the second row)
     A.stack(rows, titles=["Struck letters at the Bold: the pocket closes from 625 (honest) / the stroke cut where it "
-                          "crosses the letter (stump). The owner's decision; neither swap is built."]).save(out)
+                          "crosses the letter (stump). The owner's decision; neither swap is built."]
+            + [None] * (len(rows) - 1)).save(out)
 
 
 if __name__ == "__main__":

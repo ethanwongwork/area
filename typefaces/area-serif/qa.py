@@ -40,6 +40,7 @@ def run(label, cmd):
 
 def main():
     results = []
+    awaiting = []
     if "--skip-build" not in sys.argv:
         code, out = run("build", [PY, "build.py"])
         print(out.splitlines()[-1] if out else "")
@@ -77,12 +78,20 @@ def main():
             print("\n".join(out.splitlines()[:2] + [l for l in out.splitlines() if l.startswith("  ")][:20]))
             results.append(("light audit (each part on its target, letters and figures)", code == 0))
             code, out = run("bold again (leaves build/weight/audit-bold.txt as the Bold's)", [PY, "audit_bold.py"])
+            import ufoLib2                                     # 0.81: the Light's sides are light_bearings.json's
+            miss = _B.check_light_bearings(ufoLib2.Font.open(os.path.join(HERE, "build", "AreaSerif-Regular.ufo")),
+                                           ufoLib2.Font.open(os.path.join(HERE, "build", "AreaSerif-Light.ufo")))
+            print("\n== light side bearings (bold.check_light_bearings)\n" + (f"{len(miss)} sides off: {miss[:12]}" if miss else "every named side as light_bearings.json sets it"))
+            results.append(("light side bearings (light_bearings.json, one path)", not miss))
         code, out = run("axis", [PY, "audit_bold.py", "--sweep"])
         print(out)
         results.append(("weight axis (the same audit every 25 units)", code == 0))
         code, out = run("axis, every glyph", [PY, "audit_axis.py"])
         print(out)
         results.append(("weight axis, all glyphs (moved, turns, crossings, thin, monotone, composites)", code == 0))
+        held = [l.strip() for l in out.splitlines() if l.strip().startswith("AWAITING")]
+        if held:                                               # 0.81: the one expected failure, said every run
+            awaiting.extend(held)
         code, out = run("axis, second method (rays across the stroke on the variable font's instances)", [PY, "audit_rays.py"])
         print(out[-3000:])
         results.append(("weight axis, second method (audit_rays: stroke across itself at 300 to 700)", code == 0))
@@ -125,6 +134,8 @@ def main():
     print("\n== summary")
     for name, ok in results:
         print(f"{'pass' if ok else 'FAIL'}  {name}")
+    for line in awaiting:                                      # failing, held apart by name: not a pass
+        print(f"HELD  {line[len('AWAITING'):].strip()}")
     sys.exit(0 if all(ok for _, ok in results) else 1)
 
 

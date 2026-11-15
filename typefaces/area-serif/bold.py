@@ -22,6 +22,7 @@ STEM_REF = 140                    # the stem the references' ratios were read at
 THICK = dict(straight=62, round=64)        # stems 78 > 140 and 86 > 148; round strokes 82 > 146 and 92 > 156
 THIN_UPRIGHT = 1.32                        # upright hairlines (N's, M's): 1.10 to 1.25, 1.42 to 1.48
 HAIR = {43: 53, 47: 59, 50: 66}            # a round letter's thin stroke, lowercase and capitals; an arch at its top
+CAP_STEM, CAP_HAIR, LC_HAIR = 86, 47, 43      # the ladder's capital stem and the hairlines (construction skill)
 HAIR_RATIO = 1.24                          # any other curved thin stroke
 BAR = {49: 65}                             # H's bar
 LEVEL = 1.33                               # arms and other straight level strokes (46 > 61)
@@ -1658,9 +1659,10 @@ def curve_turns(c):
     return changes(d1[:, 0], 0.01 * scale), changes(d1[:, 1], 0.01 * scale), changes(cross, 0.008 * scale * scale)
 
 
-def fix_turns(R, N, at=((0.0, 1.0),)):
+def fix_turns(R, N, at=((0.0, 1.0),), exact=True):
     """R, N: one contour in the Regular and in another master. `at`: [(u, v)] blends of R and N to test as well as N
-    itself (the instances between). Returns (N', fixed, left)."""
+    itself (the instances between); `exact` (0.81): every blend between R and N as well, by axis_exact's Bernstein
+    test. Returns (N', fixed, left)."""
     class _Q:
         def __init__(s, q):
             s.type = q[2]
@@ -1677,6 +1679,12 @@ def fix_turns(R, N, at=((0.0, 1.0),)):
             pts = [(R[k][0] * u + cand[k][0] * v, R[k][1] * u + cand[k][1] * v) for k in (i, m0, m1, j)]
             got = curve_turns(pts)
             over = max(over, max(g - b_ for g, b_ in zip(got, base)))
+        if over <= 0 and exact:                            # 0.81 (integration): over the whole pair, not at blends
+            import axis_exact as X                         # (c_t, lira, section turned at 431 to 514, t 0.08 to
+            one = lambda P_: [(P_[i][0], P_[i][1], "line", False), (P_[m0][0], P_[m0][1], None, False),   # noqa: E731
+                              (P_[m1][0], P_[m1][1], None, False), (P_[j][0], P_[j][1], "curve", False)]
+            if [k for k, *_ in X.turns([one(R)], [one(R)], [one(cand)]) if k == 0]:
+                over = 1
         return over
     for i, mid, j in segments([_Q(q) for q in R]):
         if len(mid) != 2:
@@ -2277,6 +2285,72 @@ def light_bearings():
     return _LIGHT_BEARINGS
 
 
+# 0.81 (integration): a mirrored pair is one drawing. In the Regular the right-hand form of a pair is the left-hand
+# form turned over, point for point (charset.mirrors: ( [ { « ‹ <; the tab arrow; erase to the right). The engine
+# read the two forms each on its own, and its readings differed: ⇥ crossed itself at 300 where ⇤ did not. In every
+# master the right-hand form is now the master's left-hand form turned over, by the same correspondence of points
+# the Regular has, and stands from its advance's ends as the left-hand form does, swapped. The pairs are
+# charset.MIRRORS (the left-hand form is drawn); a pair whose Regular forms are not each other's mirror within half a
+# unit is not one drawing and is left alone (mirror_pairs lists only the ones that are).
+def _mirror_map(A, Bc):
+    """Contours A turned over (x -> -x, each contour's points in reverse order) matched to Bc point for point up to
+    one shift in x: [(contour of A, start offset)] for each contour of Bc, or None."""
+    if sorted(len(P) for P in A) != sorted(len(P) for P in Bc):
+        return None
+    xa = [q[0] for P in A for q in P]
+    xb = [q[0] for P in Bc for q in P]
+    dx = (min(xb) + max(xb) + min(xa) + max(xa)) / 2       # -x + dx carries A's ink onto B's
+    out, used = [], set()
+    for P in Bc:
+        n, hit = len(P), None
+        for ci, Q in enumerate(A):
+            if ci in used or len(Q) != n:
+                continue
+            rev = list(reversed(Q))
+            for k in range(n):
+                if all(abs(dx - rev[(k + m) % n][0] - P[m][0]) <= 0.5 and abs(rev[(k + m) % n][1] - P[m][1]) <= 0.5
+                       for m in range(n)):
+                    hit = (ci, k)
+                    break
+            if hit:
+                break
+        if hit is None:
+            return None
+        used.add(hit[0])
+        out.append(hit)
+    return out
+
+
+def mirror_pairs(reg):
+    """[(left form, right form, map)] for charset.MIRRORS, each pair whose Regular forms are one drawing turned over
+    (point for point, within half a unit)."""
+    import charset as CHARSET
+    out = []
+    for a, b in CHARSET.MIRRORS:
+        a, b = CHARSET._name(reg, a), CHARSET._name(reg, b)
+        if a in reg and b in reg and reg[a].contours and reg[b].contours and not reg[a].components:
+            m = _mirror_map(glyph_contours(reg[a]), glyph_contours(reg[b]))
+            if m is not None:
+                out.append((a, b, m))
+    return out
+
+
+def turn_over(A, width, mapping, types_of):
+    """The right-hand form from a master's left-hand form A (its advance `width`): turned over about its ink, set at
+    the left form's bearings swapped, each contour started and wound as `mapping` says (types_of: the Regular right
+    form's point types and smooth flags)."""
+    xa = [x for P in A for x, *_ in P]
+    x0, x1 = min(xa), max(xa)
+    d = (width - x1) - x0
+    out = []
+    for (ci, k), T in zip(mapping, types_of):
+        Q = A[ci]
+        n = len(Q)
+        rev = list(reversed(Q))
+        out.append([(round(x0 + x1 - rev[(k + m) % n][0] + d), round(rev[(k + m) % n][1])) + tuple(T[m]) for m in range(n)])
+    return out
+
+
 def check_light_bearings(reg, light):
     """The Light's sides as bearing_change sets them (qa.py): for every glyph light_bearings.json names, the Light's
     zone edges stand from its advance's ends by the Regular's plus that change (half a unit for the rounding).
@@ -2705,7 +2779,11 @@ def overlap_masters(reg, font, maps, v, reports, notes):
         mx = lambda x: _interp(X, x - ox) + ox if X else x     # noqa: E731
         my = lambda y: _interp(Y, y - oy) + oy if Y else y     # noqa: E731
         strokes = [[(q.x, q.y, q.type, q.smooth) for q in c.points] for c in og.contours[nl:]]
-        new = [[(x + ox, y + oy, t, s_) for x, y, t, s_ in P] for P in bl] + [OVERLAP.move_stroke(P, mx, my, v) for P in strokes]
+        lt_ = [[(x + ox, y + oy, t, s_) for x, y, t, s_ in P] for P in bl]
+        st_, inset_ = OVERLAP.inset_ends(lt_, [OVERLAP.move_stroke(P, mx, my, v) for P in strokes])   # 0.81: no side on
+        if inset_:                                                                                    # the letter's edge
+            notes.append(f"{name}: stroke end drawn back off the letter's edge {inset_}")
+        new = lt_ + st_
         g = font[name]
         g.clearContours()
         for P in new:
@@ -2925,6 +3003,7 @@ def bold_font(reg, stem=STEM, **over):
     # round 3: a crotch where a thin straight-edged arm leaves a thick stroke lies on the thick stroke's edge at the
     # arm's own width (hairline rule) from the arm's far edge (white.arm_crotches; the ampersand's tail arm, 25 > 13)
     armed = []
+    resided = set()                                            # outlines changed after their sides were set
     ratio_ = 1 + (HAIR_RATIO - 1) * v["ft"]
     for g in reg:
         if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
@@ -2937,6 +3016,7 @@ def bold_font(reg, stem=STEM, **over):
             for c, P in zip(font[g.name].contours, new_):
                 c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
             armed.append(f"{g.name} {log_}")
+            resided.add(g.name)
     notes.append(f"arm crotches: {len(armed)} glyphs ({'; '.join(armed)})")
     # round 3: towards the Light, a neck where one curved stroke branches from another never runs under the
     # hairline's share of the Regular's (white.keep_necks; g's loop out of its link thinned 39 > 13 at 300)
@@ -2954,7 +3034,51 @@ def bold_font(reg, stem=STEM, **over):
                 for c, P in zip(font[g.name].contours, new_):
                     c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
                 necked.append(f"{g.name} {log_}")
+                resided.add(g.name)
         notes.append(f"necks between curves: {len(necked)} glyphs ({'; '.join(necked)})")
+    # 0.81 (integration): along a tapering stroke (a tail, a hook, a flag, a terminal) each place keeps its own
+    # law's share of the Regular's thickness there, read off the ladder by what it is: a stem's place the stem's
+    # ratio, a hairline's the hairline's, a serif tip's or an end's the tip's, in between interpolated
+    # (white.keep_taper; eng's tail at 300 was 0.67 of the Regular where the stem goes 0.705). Towards the Bold
+    # the same law holds the places the engine read thinner than the Regular (@'s a running into its ring, the
+    # footless 1's flag, the ogonek): a stroke never thins as the weight rises
+    tapered = []
+    import unicodedata as _ud0
+    for g in reg:
+        if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
+            continue
+        cs = glyph_contours(font[g.name])
+        if [len(P) for P in cs] != [len(c.points) for c in g.contours]:
+            continue
+        cat = _ud0.category(chr(g.unicodes[0])) if g.unicodes else ("Lu" if g.name[:1].isupper() else "Ll")
+        big = cat in ("Lu", "Lt", "Nd") or g.name[:1].isupper()
+        st_, hr_ = (CAP_STEM, CAP_HAIR) if big else (REG_STEM, LC_HAIR)
+        laws = [(st_, stem / REG_STEM), (hr_, 1 + (HAIR_RATIO - 1) * v["ft"]), (30, v["tip"])]
+        new_, log_ = WHITE.keep_taper(glyph_contours(g), cs, laws, only_thinner=v["f"] > 0)
+        if log_:
+            for c, P in zip(font[g.name].contours, new_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            tapered.append(f"{g.name} {len(log_)}")
+            resided.add(g.name)
+    notes.append(f"tapering strokes: {len(tapered)} glyphs keep the ladder's law along them ({', '.join(tapered)})")
+    # 0.81 (integration): a glyph whose outline a later rule changed (arm crotches, necks, tapers) takes its sides
+    # again, as the engine set them: the Regular's plus the measured change (S's left side was 1.1 off in the Light)
+    for name in sorted(resided):
+        g = reg[name]
+        if not g.width or g.components:
+            continue
+        r0, r1 = _zone_edges(glyph_contours(g), name)
+        cs = glyph_contours(font[name])
+        b0, b1 = _zone_edges(cs, name)
+        dl, dr = bearing_change(name, v)
+        shift = round(r0 + dl - b0)
+        if shift:
+            for c in font[name].contours:
+                for q in c.points:
+                    q.x += shift
+            for an in font[name].anchors:
+                an.x += shift
+        font[name].width = round(b1 + shift + (g.width - r1) + dr)
     from ufoLib2.objects import Contour
     layer = font.layers.newLayer("mid")                        # the sparse master: only the glyphs that need one
     for g in reg:
@@ -3010,6 +3134,17 @@ def bold_font(reg, stem=STEM, **over):
                 if len(R_) != len(N_):
                     continue
                 M_, fx, lf = fix_turns(R_, N_, blends)
+                n_fixed += fx
+                n_left += lf
+                if fx:
+                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
+        if g.name in layer and g.name in font:               # 0.81: and between the mid master and this one
+            for c, mc_ in zip(font[g.name].contours, layer[g.name].contours):
+                M0 = [(q.x, q.y, q.type, q.smooth) for q in mc_.points]
+                N_ = [(q.x, q.y, q.type, q.smooth) for q in c.points]
+                if len(M0) != len(N_):
+                    continue
+                M_, fx, lf = fix_turns(M0, N_)
                 n_fixed += fx
                 n_left += lf
                 if fx:
@@ -3095,11 +3230,35 @@ def bold_font(reg, stem=STEM, **over):
             if sym != cs:
                 for c, P in zip(font[g.name].contours, sym):
                     c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+    # 0.81 (integration): a mirrored pair is one drawing in every master: the right-hand form is the master's
+    # left-hand form turned over (mirror_pairs, turn_over; ⇥ crossed itself at 300 where ⇤ did not)
+    turned = []
+    for a_, b_, mp in mirror_pairs(reg):
+        types_ = [[q[2:] for q in P] for P in glyph_contours(reg[b_])]
+        for f_ in (font, layer):
+            if a_ in f_:
+                if b_ not in f_:
+                    f_.newGlyph(b_)
+                nb = f_[b_]
+                nb.clearContours()
+                for P in turn_over(glyph_contours(f_[a_]), f_[a_].width, mp, types_):
+                    c = Contour()
+                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+                    nb.contours.append(c)
+                nb.width = f_[a_].width
+            elif b_ in f_ and f_ is layer:
+                del layer[b_]
+        turned.append(b_)
+    notes.append(f"mirrored pairs: {len(turned)} right-hand forms turned over from their left ({', '.join(turned)})")
     # 0.79: a glyph spliced from two letters is spliced again from this master's letters (and from the mid master's,
     # where either letter has one), so its parts are the letters' own at every weight: the single-storey g's bowl
     # is the Bold q's (the engine's own reading of g.ss02 left the bowl light).
     if "g.ss02" in font and "q" in font and "j" in font:
-        CHARSET.single_g(font)
+        # 0.81 (integration): the white between the ball and the bowl, inside the one contour, is a counter too: it
+        # keeps the white law's least towards the Bold (charset.ball_white; 62 at 400 fell to 38 at 700, law 52)
+        w0_ = CHARSET.ball_white(CHARSET._pts(reg["g.ss02"].contours[0]))
+        least_g = law.least(w0_) if v["f"] > 0 else None
+        CHARSET.single_g(font, least_white=least_g)
         reports["g.ss02"] = {"x": [], "y": [], "necks": [], "spliced": "q and j"}
         if "g.ss02" in layer:
             del layer["g.ss02"]
@@ -3114,8 +3273,9 @@ def bold_font(reg, stem=STEM, **over):
             qm, jm = at_mid("q"), at_mid("j")
             mg = layer.newGlyph("g.ss02")
             mg.width = round(reg["q"].width + (font["q"].width - reg["q"].width) * tm)
+            least_m = w0_ * (1 + (law.counter - 1) * tm) if v["f"] > 0 else None    # the law's counter at 550
             for P in CHARSET.single_g_points(max(qm, key=len), min(qm, key=len), max(jm, key=len),
-                                                    CHARSET.o_hair(at_mid("o"))):
+                                                    CHARSET.o_hair(at_mid("o")), least_white=least_m):
                 c = Contour()
                 c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
                 mg.contours.append(c)

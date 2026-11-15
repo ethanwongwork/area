@@ -257,6 +257,7 @@ def build_layer(font, source, charset_struck):
         S = [[(round(x), round(y), t, s) for x, y, t, s in P] for P in S]
         outer_ccw = _ccw(max(L, key=lambda P: abs(sum(P[i][0] * P[(i + 1) % len(P)][1] - P[(i + 1) % len(P)][0] * P[i][1] for i in range(len(P))))))
         S = _soft([_orient(P, outer_ccw) for P in S])
+        S, _inset = inset_ends(L, S)                           # 0.81: a stroke's side never on the letter's edge
         g = layer.newGlyph(name)
         g.width = merged.width
         g.unicodes = list(merged.unicodes)
@@ -386,3 +387,83 @@ def vf_source(ufo):
 
 def struck_names(ufo):
     return [g.name for g in ufo.layers[LAYER]] if LAYER in ufo.layers else []
+
+
+# ---------------------------------------------------------------- a stroke's end inside the letter (0.81, integration)
+
+def coincident(L, P, tol=1.0, least=2.0):
+    """Straight edges of the stroke P that lie on a straight edge of the letter L (within tol across, overlapping
+    by more than `least` along): [(stroke edge (i, j), letter edge, overlap length)]."""
+    def lines(C):
+        out = []
+        n = len(C)
+        on = [i for i, q in enumerate(C) if q[2] is not None]
+        for k, i in enumerate(on):
+            j = on[(k + 1) % len(on)]
+            if C[j][2] == "line":
+                out.append((C[i][:2], C[j][:2], (i, j)))
+        return out
+    found = []
+    for a, b, ij in lines(P):
+        L_ = math.dist(a, b)
+        if L_ < 1:
+            continue
+        u = ((b[0] - a[0]) / L_, (b[1] - a[1]) / L_)
+        for Cc in L:
+            for c, d, _ in lines(Cc):
+                hc = (c[0] - a[0]) * -u[1] + (c[1] - a[1]) * u[0]
+                hd = (d[0] - a[0]) * -u[1] + (d[1] - a[1]) * u[0]
+                if abs(hc) > tol or abs(hd) > tol:
+                    continue
+                sc = (c[0] - a[0]) * u[0] + (c[1] - a[1]) * u[1]
+                sd = (d[0] - a[0]) * u[0] + (d[1] - a[1]) * u[1]
+                ov = min(L_, max(sc, sd)) - max(0.0, min(sc, sd))
+                if ov > least:
+                    found.append((ij, (c, d), round(ov, 1)))
+    return found
+
+
+def inset_ends(L, S):
+    """A stroke whose straight side lies on one of its letter's edges (two edges on one line: renderers anti-alias
+    each, so the seam shows; in the Light, Ɍ's stroke runs on along R's bowl bar, its top on the counter's floor for
+    74 units) stops where that edge begins: its inner end, with its cap, is drawn back to the edge's near end (seen
+    from the stroke's outer end, the end outside the letter) plus the cap's radius, so the letter's own stroke
+    carries on alone. Only strokes with such a side move. L: the letter's contours; S: the
+    strokes. Returns (strokes, [(stroke, units drawn back, ink change in square units)])."""
+    out, log = [], []
+    whole = pathops.op(_to_path(L + S), pathops.Path(), pathops.PathOp.UNION).area
+    letter = _to_path(L)
+    import numpy as np
+    for k, P in enumerate(S):
+        if not coincident(L, P):
+            out.append(P)
+            continue
+        (cx, cy), u, nrm, s, d = _frame(P)
+        on = [m for m, q in enumerate(P) if q[2] is not None]
+        s0, s1 = min(s[m] for m in on), max(s[m] for m in on)
+        dm = (min(d[m] for m in on) + max(d[m] for m in on)) / 2
+        T = max(d[m] for m in on) - min(d[m] for m in on)
+        cap = min(T, (s1 - s0) / 3)
+        ink = [letter.contains((cx + u[0] * t + nrm[0] * dm, cy + u[1] * t + nrm[1] * dm)) for t in (s0 + 1, s1 - 1)]
+        outer = 0 if not ink[0] else (1 if not ink[1] else None)
+        if outer is None:
+            out.append(P)
+            continue
+        # where the letter's edge it lies along begins, seen from the stroke's outer end
+        ends_ = [(e_[0] - cx) * u[0] + (e_[1] - cy) * u[1] for _, edge, _ in coincident(L, P) for e_ in edge]
+        end_s = min(ends_) if outer == 0 else max(ends_)
+        R_ = 7                                                 # the stroke ends' soft corner (charset.soft_ends)
+        shift = (s1 - (end_s + R_)) if outer == 0 else ((end_s - R_) - s0)
+        if shift <= 0:
+            out.append(P)
+            continue
+        Q = []
+        for m, q in enumerate(P):
+            near = (s1 - s[m] <= cap) if outer == 0 else (s[m] - s0 <= cap)
+            sgn = -1 if outer == 0 else 1
+            Q.append((round(q[0] + sgn * u[0] * shift), round(q[1] + sgn * u[1] * shift)) + tuple(q[2:]) if near else q)
+        out.append(Q)
+        S_ = out + S[k + 1:]
+        a = pathops.op(_to_path(L + S_), pathops.Path(), pathops.PathOp.UNION).area
+        log.append((k, round(shift), round(a - whole, 1)))
+    return out, log

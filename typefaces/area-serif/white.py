@@ -471,14 +471,12 @@ def keep_white(R, N, law, rounds=4):
 # ---------------------------------------------------------------- necks between two curves
 
 def _crotch_curves(P):
-    """Reflex corner nodes whose two segments are both curves: where one curved stroke branches from another."""
+    """Reflex corner nodes: where one stroke branches from another. Round 3 read only those whose two segments are
+    both curves; 0.81 (integration) reads every branch, a straight side or not (glottal stop's, s_p's and ƴ's
+    crotches have one straight side and pinched at 300, 19 > 14 to 30 > 11): the neck is the nearest approach across
+    the ink whatever the sides are."""
     import arms as ARMS
-    n = len(P)
-    out = []
-    for i in ARMS.crotches(P):
-        if P[i][2] == "curve" and P[(i + 1) % n][2] is None:
-            out.append(i)
-    return out
+    return list(ARMS.crotches(P))
 
 
 def neck_at(contours, ci, i, skip=2):
@@ -511,7 +509,7 @@ def neck_at(contours, ci, i, skip=2):
 
 
 def keep_necks(R, N, share, thin):
-    """Round 3: where one curved stroke branches from another (g's loop out of its link, s_p's long s into its p),
+    """Round 3: where one stroke branches from another (g's loop out of its link, s_p's long s into its p),
     the neck is the two outlines' nearest approach across the ink at the crotch: from the crotch to the far edge
     of the stroke it branches into. It never falls under share x the Regular's neck (share: the hairline's change
     at this weight). The node on the far edge nearest the neck gives way first (it is the one the stretch of its
@@ -563,10 +561,13 @@ def keep_necks(R, N, share, thin):
     for ci, P in enumerate(R):
         for i in _crotch_curves(P):
             n0, far0 = neck_at(R, ci, i)
+            if n0 < 30:                                        # 0.81: thinner than a serif tip in the Regular, it is
+                continue                                       # no branch (a flare's corner, a bracket, parts touching)
             want = n0 * share
             n1, far = neck_at(N, ci, i)
             if n1 >= want - 1.0 or n1 >= thin:
                 continue
+            N_before = [list(Q) for Q in N]
             before = n1
             fj, fk = nearest_node(R, far0, (ci, i))            # the far edge's node, read in the Regular
 
@@ -582,6 +583,39 @@ def keep_necks(R, N, share, thin):
                 d_ = np.hypot(pts[:, 0] - c_[0], pts[:, 1] - c_[1])
                 k2 = int(d_.argmin())
                 return float(d_[k2]), tuple(pts[k2])
+            # 0.81: a crotch with a straight side is solved on that side (parts.solve's rule for a branch on a stem):
+            # it slides along the straight edge, away from the corner, until the neck is the target; its handles go
+            # with it and nothing else moves. The far edge is another stroke's (ƴ's thin diagonal) and stays.
+            Pc = N[ci]
+            nP = len(Pc)
+            on_c = [m for m, q in enumerate(Pc) if q[2] is not None]
+            kc = on_c.index(i)
+            prv_, nxt_ = on_c[(kc - 1) % len(on_c)], on_c[(kc + 1) % len(on_c)]
+            side = prv_ if Pc[i][2] == "line" else (nxt_ if Pc[nxt_][2] == "line" else None)
+            if side is not None:
+                c0 = np.array(Pc[i][:2], float)
+                u = np.array(Pc[side][:2], float) - c0
+                L = float(np.linalg.norm(u))
+                solved = None
+                if L > 4:
+                    u = u / L
+
+                    def slid(t):
+                        M = [list(Q) for Q in N]
+                        dx, dy = round(u[0] * t), round(u[1] * t)
+                        for m in (i, (i - 1) % nP, (i + 1) % nP):
+                            if m == i or M[ci][m][2] is None:
+                                q = M[ci][m]
+                                M[ci][m] = (q[0] + dx, q[1] + dy) + tuple(q[2:])
+                        return M
+                    for t in np.arange(1.0, 0.8 * L, 1.0):
+                        if neck_at(slid(t), ci, i)[0] >= want - 0.5:
+                            solved = slid(t)
+                            break
+                if solved is not None:
+                    N = solved
+                    log.append((ci, i, round(before, 1), round(want, 1), round(neck_at(N, ci, i)[0], 1), "along its straight side"))
+                    continue
             for who in ((fj, fk, -1), (ci, i, 1)):
                 n1, far = edge_neck(N)
                 if n1 >= want - 0.5:
@@ -604,7 +638,12 @@ def keep_necks(R, N, share, thin):
                     else:
                         lo_ = mid
                 N = shift(base, cj, k, sgn * u * hi_, box)
-            log.append((ci, i, round(before, 1), round(want, 1), round(edge_neck(N)[0], 1)))
+            after = neck_at(N, ci, i)[0]                       # read again across all the ink, as before
+            if not (want - 1.0 <= after <= want + 6.0):            # a move that reads open only against the far
+                N = N_before                                       # edge (another edge came nearer) is not kept
+                log.append((ci, i, round(before, 1), round(want, 1), "left", round(after, 1)))
+                continue
+            log.append((ci, i, round(before, 1), round(want, 1), round(after, 1)))
     return N, log
 
 
@@ -681,4 +720,148 @@ def arm_crotches(R, N, ratio, reach=60.0):
             hv = np.array([hv[0] * math.cos(ang) - hv[1] * math.sin(ang), hv[0] * math.sin(ang) + hv[1] * math.cos(ang)])
             N[ci][hk] = (round(cn[0] + hv[0]), round(cn[1] + hv[1])) + tuple(N[ci][hk][2:])
             log.append((ci, c, round(abs(hm), 1), round(abs(want), 1)))
+    return N, log
+
+
+# ---------------------------------------------------------------- along a tapering stroke (0.81, integration)
+
+def _stations(contours, n_seg=6):
+    """Every contour cut at fixed parameters, as audit_rays cuts the variable font's: polylines [array (V, 2)] and,
+    per vertex, (contour, segment start node, t)."""
+    import bold as B
+    polys, where = [], []
+    for ci, P in enumerate(contours):
+        n = len(P)
+        on = [i for i, q in enumerate(P) if q[2] is not None]
+        pts, wh = [], []
+        for k, i in enumerate(on):
+            j = on[(k + 1) % len(on)]
+            mid = [(i + d) % n for d in range(1, (j - i) % n)]
+            ctl = [P[i][:2]] + [P[m][:2] for m in mid] + [P[j][:2]]
+            for s in range(n_seg):
+                t = s / n_seg
+                if len(ctl) == 4:
+                    p = B._bez(ctl, t)
+                elif s:
+                    continue                                   # a line: its start only
+                else:
+                    p = ctl[0]
+                pts.append(p)
+                wh.append((ci, i, t))
+        polys.append(np.array(pts, float))
+        where += wh
+    return polys, where
+
+
+def taper_law(th_r, laws):
+    """The ratio a station keeps at this master, read off the ladder by the Regular's thickness there. laws: the
+    ladder's steps [(Regular thickness, ratio)] from the thickest down: the stem (its ratio), the hairline (the
+    hairline's), the serif tip (the tip's). Thicker than the stem a station takes the stem's ratio, thinner than the
+    tip the tip's, in between it is interpolated between the two steps it lies between: one continuous law, so a
+    stroke tapering from a stem through a hairline to an end keeps its shape."""
+    xs = np.array([t for t, _ in laws][::-1], float)
+    ys = np.array([r for _, r in laws][::-1], float)
+    return np.interp(th_r, xs, ys)
+
+
+def taper_readings(contours, n_seg=6):
+    """Across-the-stroke length at every station (audit_rays' ray, its junction and facing filters, and its rule that
+    a ray longer than twice the glyph's mean stroke runs along a stroke): (lengths, far edge ids, where)."""
+    import audit_rays as AR
+    polys, where = _stations(contours, n_seg)
+    th, eid = AR.rays(polys)
+    ms = AR.mean_stroke(polys)
+    th = np.where(th <= 2 * ms, th, np.nan)
+    return th, eid, where
+
+
+def keep_taper(R, N, laws, tol=0.5, n_seg=6, only_thinner=False):
+    """Along a tapering stroke (a tail, a hook, a flag) every station keeps at least its own law's share of the
+    Regular's thickness there (taper_law): stem-like places the stem's ratio, hairline-like the hairline's, a serif
+    tip's or an end's the tip's, in between in proportion, so the taper keeps its shape and no place thins faster than its own kind. A station is
+    read as audit_rays reads one (the same place on the same segment in both masters, the ray leaving through the
+    same edge). Where one falls short, the curve it lies on and the curve its ray ends on retune their two handle
+    lengths, nothing else (nodes, tangents and lines stay), to the least change that holds the law, and no curve
+    gains a turn. only_thinner (towards the Bold): only the places the master reads thinner than the Regular (a
+    stroke the engine did not read, as the a's bowl running into @'s ring, 29 > 17 at 550) are held, and to the
+    same law. Returns contours and [(contour, segment, deficit before, deficit after)]."""
+    import axis_exact as X
+    import audit_axis as AA
+    N = [list(P) for P in N]
+    thR, eR, where = taper_readings(R, n_seg)
+    thN0 = taper_readings(N, n_seg)[0]
+
+    def short(cs):
+        thN, eN, _ = taper_readings(cs, n_seg)
+        ok = ~np.isnan(thR) & ~np.isnan(thN) & (eN == eR)
+        want = thR * taper_law(thR, laws)
+        over = np.where(ok, thN - np.maximum(np.nan_to_num(thN0, nan=0.0), want) - tol, 0.0)
+        if only_thinner:                                       # towards the Bold: the places that thin at all
+            ok &= thN0 < thR - 1.0
+        d = np.where(ok, want - tol - thN, 0.0)
+        return np.maximum(d, 0.0), np.maximum(over, 0.0)
+    d0, _ = short(N)
+    if not (d0 > 0).any():
+        return N, []
+    turns0 = len(X.turns(R, R, N, AA.FILLET_SMALL, AA.FILLET_MAX))
+    # the far edge of each station: which segment the ray's exit edge lies on (vertex ids run contour by contour)
+    seg_of = [(ci, i) for ci, i, t in where]
+    cands = []
+    for k in np.where(d0 > 0)[0]:
+        for s_ in (seg_of[k], seg_of[eR[k]] if 0 <= eR[k] < len(seg_of) else None):
+            if s_ is not None and s_ not in cands:
+                cands.append(s_)
+    log = []
+
+    def handles(P, i):
+        n = len(P)
+        if P[(i + 1) % n][2] is None and P[(i + 2) % n][2] is None and P[(i + 3) % n][2] == "curve":
+            return (i + 1) % n, (i + 2) % n, (i + 3) % n
+        return None
+    for ci, i in cands:
+        h = handles(N[ci], i)
+        if h is None:
+            continue
+        h1, h2, j = h
+        P0 = [list(Q) for Q in N]
+        a0, b0 = np.array(P0[ci][i][:2], float), np.array(P0[ci][j][:2], float)
+        u1, u2 = np.array(P0[ci][h1][:2], float) - a0, np.array(P0[ci][h2][:2], float) - b0
+        if np.linalg.norm(u1) < 1 or np.linalg.norm(u2) < 1:
+            continue
+
+        def with_(sa, sb):
+            M = [list(Q) for Q in P0]
+            p1, p2 = a0 + u1 * sa, b0 + u2 * sb
+            M[ci][h1] = (round(p1[0]), round(p1[1])) + tuple(M[ci][h1][2:])
+            M[ci][h2] = (round(p2[0]), round(p2[1])) + tuple(M[ci][h2][2:])
+            return M
+        before = float(short(P0)[0].sum())
+        if before <= 0:
+            continue
+
+        def cost(sa, sb):                                     # short of the law, or thicker than both the place
+            d_, o_ = short(with_(sa, sb))                      # was and its law (no place thickens past its law)
+            return float((d_ ** 2).sum() + (o_ ** 2).sum()) + 40 * ((sa - 1) ** 2 + (sb - 1) ** 2)
+        sa = sb = 1.0
+        c_ = cost(sa, sb)
+        for step in (0.16, 0.08, 0.04, 0.02):               # coordinate descent on the two handle lengths
+            for _ in range(6):
+                moved_ = False
+                for da, db in ((step, 0), (-step, 0), (0, step), (0, -step)):
+                    na, nb = min(max(sa + da, 0.6), 1.6), min(max(sb + db, 0.6), 1.6)
+                    cn = cost(na, nb)
+                    if cn < c_ - 1e-9:
+                        sa, sb, c_, moved_ = na, nb, cn, True
+                        break
+                if not moved_:
+                    break
+        while (sa, sb) != (1.0, 1.0):                         # no curve gains a turn: back towards the Regular's
+            M = with_(sa, sb)
+            if len(X.turns(R, R, M, AA.FILLET_SMALL, AA.FILLET_MAX)) <= turns0:
+                N = M
+                log.append((ci, i, round(before, 1), round(float(short(N)[0].sum()), 1)))
+                break
+            sa, sb = 1 + (sa - 1) / 2, 1 + (sb - 1) / 2
+            if abs(sa - 1) < 0.01 and abs(sb - 1) < 0.01:
+                break
     return N, log

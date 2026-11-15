@@ -32,7 +32,9 @@ from fontTools.varLib.instancer import instantiateVariableFont
 
 import bold as B
 
-WEIGHTS = (300, 350, 400, 500, 600, 700)
+import os as _os
+# 0.81: AREA_RAY_WEIGHTS="300,325,..." runs the same test at more stops (every neighbouring pair is compared)
+WEIGHTS = tuple(int(w) for w in _os.environ.get("AREA_RAY_WEIGHTS", "300,350,400,500,600,700").split(","))
 N_SEG = 6                    # places per curve piece
 FACE_DEG = 40
 TOL = 1.0
@@ -220,6 +222,7 @@ def main():
             fails.append(f"{name}: not the same places at every weight")
             continue
         T = np.stack([th[w] for w in WEIGHTS])          # (W, places)
+        P400 = np.vstack(polylines(gss[400], name))       # each place's position at 400 (named in the failures)
         X = np.stack([ex[w] for w in WEIGHTS])
         # a place is kept where its ray leaves the ink through the same edge at every weight (across the same
         # stroke); a ray that grazes a junction leaves through one edge at one weight and another at the next
@@ -242,24 +245,28 @@ def main():
         if not ok.any():
             continue
         T = T[:, ok]
+        P400 = P400[ok]
         n_rays += T.shape[1]
+        at_ = lambda k: f" at ({P400[k][0]:.0f}, {P400[k][1]:.0f})"   # noqa: E731
         i400 = WEIGHTS.index(400)
         worst = []
-        for a, b in ((400, 500), (500, 600), (600, 700)):
+        up = [w for w in WEIGHTS if w >= 400]
+        down = [w for w in WEIGHTS if w <= 400][::-1]
+        for a, b in zip(up, up[1:]):
             d = T[WEIGHTS.index(b)] - T[WEIGHTS.index(a)] + JND * T[WEIGHTS.index(a)]
             if (d < -TOL).any():
                 k = int(np.argmin(d))
-                worst.append(f"thinner at {b} than at {a}: {T[WEIGHTS.index(a), k]:.1f} > {T[WEIGHTS.index(b), k]:.1f}")
-        for a, b in ((400, 350), (350, 300)):
+                worst.append(f"thinner at {b} than at {a}: {T[WEIGHTS.index(a), k]:.1f} > {T[WEIGHTS.index(b), k]:.1f}{at_(k)}")
+        for a, b in zip(down, down[1:]):
             d = T[WEIGHTS.index(b)] - T[WEIGHTS.index(a)] - JND * T[WEIGHTS.index(a)]
             if (d > TOL).any():
                 k = int(np.argmax(d))
-                worst.append(f"thicker at {b} than at {a}: {T[WEIGHTS.index(a), k]:.1f} < {T[WEIGHTS.index(b), k]:.1f}")
+                worst.append(f"thicker at {b} than at {a}: {T[WEIGHTS.index(a), k]:.1f} < {T[WEIGHTS.index(b), k]:.1f}{at_(k)}")
         floor = T[i400] * q300 * (1 - JND) - TOL
         d = T[WEIGHTS.index(300)] - floor
         if (d < 0).any():
             k = int(np.argmin(d))
-            worst.append(f"at 300 {T[WEIGHTS.index(300), k]:.1f} where 400 has {T[i400, k]:.1f} (no part thins faster than the stem, x {q300:.3f})")
+            worst.append(f"at 300 {T[WEIGHTS.index(300), k]:.1f} where 400 has {T[i400, k]:.1f}{at_(k)} (no part thins faster than the stem, x {q300:.3f})")
         rows.append((name, T.shape[1], float(T[i400].min()), float(T[WEIGHTS.index(300)].min()), float(T[WEIGHTS.index(700)].min())))
         if worst:
             fails.append(f"{name}: " + "; ".join(worst))

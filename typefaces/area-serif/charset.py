@@ -958,8 +958,39 @@ def _round_tail(top, low, end, end_dir, end_k, inner):
     return (KAPPA, KAPPA), best[1]
 
 
-def single_g_points(q_outer, q_counter, j_body, hair, form=None):
-    """The single-storey g's two contours from q's and j's point lists [(x, y, type, smooth)]."""
+def single_g_points(q_outer, q_counter, j_body, hair, form=None, least_white=None):
+    """The single-storey g's two contours from q's and j's point lists [(x, y, type, smooth)]. least_white (0.81, a
+    master's white law): the ball rises towards the Bold by the references' change only as far as the white between
+    it and the bowl above it, inside the one contour, keeps that much (ball_white); short of it, the ball stays
+    lower by as little as holds it (steps of 0.001 of the x-height)."""
+    pts = _single_g_points(q_outer, q_counter, j_body, hair, form)
+    if least_white is None:
+        return pts
+    k = 0
+    while ball_white(pts[0]) < least_white - 0.5 and k < 300:
+        k += 1
+        pts = _single_g_points(q_outer, q_counter, j_body, hair, form, lower=0.001 * k)
+    return pts
+
+
+def ball_white(outer, parts=None):
+    """g.ss02's white between the tail's ball and the bowl above it, inside its one outer contour: the nearest
+    approach between the ball's outline and the bowl's (q's upper part). parts: (first ball point, last ball point,
+    first bowl point, last bowl point) in the contour; by default as _single_g_points lays them out."""
+    import numpy as np
+    import white as WHITE
+    b0, b1, u0, u1 = parts or _BALL_PARTS[len(outer)]
+    D = WHITE._dense(outer, 1.0)
+    ball = np.array([d[:2] for d in D if b0 <= d[2] < b1])
+    bowl = np.array([d[:2] for d in D if u0 <= d[2] < u1])
+    d = np.hypot(ball[:, None, 0] - bowl[None, :, 0], ball[:, None, 1] - bowl[None, :, 1])
+    return float(d.min())
+
+
+_BALL_PARTS = {}
+
+
+def _single_g_points(q_outer, q_counter, j_body, hair, form=None, lower=0.0):
     # q: the stem's right edge is the upright line that reaches the x-height; the crotch is where the bowl's lower
     # stroke meets the stem's left edge
     n = len(q_outer)
@@ -992,7 +1023,7 @@ def single_g_points(q_outer, q_counter, j_body, hair, form=None):
     ball = [list(p) for p in tail[neck:left + 1]]
     tw = ((stem_r - stem_l) - G_STEMS[0]) / (G_STEMS[1] - G_STEMS[0])
     F = G_TAIL_FORMS[form or G_TAIL_FORM]
-    ball_top = F["ball"] + tw * (G_BALL_TOP_BOLD - G_BALL_TOP)
+    ball_top = F["ball"] + tw * (G_BALL_TOP_BOLD - G_BALL_TOP) + lower
     tail_low = (F["low"] if F["low"] != "mid" else 0) + tw * (G_TAIL_LOW_BOLD - G_TAIL_LOW)
     bx = round(stem_r - F["end"] * bowl_w) - tail[left][0]
     by = round(-ball_top * xh) - tail[on[3]][1]
@@ -1034,12 +1065,14 @@ def single_g_points(q_outer, q_counter, j_body, hair, form=None):
           (end[0], round(end[1] - u1 * (end[1] - depth)), None, False)]
     tail = ([tuple(start)] + i1 + [in_low] + i2 + [tuple(p) for p in ball] + o1 + [out_low] + o2 + [tuple(end)])
     outer = [tuple(p) for p in tail[1:]] + upper + [tuple(tail[0])]
+    b0 = 5                                                  # tail[1:]: i1 (2), in_low, i2 (2), then the ball
+    _BALL_PARTS[len(outer)] = (b0, b0 + len(ball) - 1, len(tail) - 1, len(tail) - 1 + len(upper) - 1)
     # contour order: ... tail's last point (the right edge's foot, a curve's end), q's stem top (line), q's bowl,
     # the crotch, then the tail's first point (line, down the left edge)
     return [outer, list(q_counter)]
 
 
-def single_g(font, layer=None, form=None, name="g.ss02"):
+def single_g(font, layer=None, form=None, name="g.ss02", least_white=None):
     """g.ss02 from this font's q and j (see above). Returns its box. It keeps q's advance and kerns as q does.
     form: a key of G_TAIL_FORMS (default G_TAIL_FORM); name: the glyph to write (the variants' sheet uses others)."""
     from ufoLib2.objects import Contour, Point
@@ -1051,7 +1084,7 @@ def single_g(font, layer=None, form=None, name="g.ss02"):
     g = src[name] if name in src else src.newGlyph(name)
     g.clearContours()
     hair = o_hair([_pts(c) for c in src["o"].contours])
-    for pts in single_g_points(_pts(q_outer), _pts(q_counter), _pts(j_body), hair, form):
+    for pts in single_g_points(_pts(q_outer), _pts(q_counter), _pts(j_body), hair, form, least_white):
         c = Contour()
         c.points = [Point(x, y, t, smooth=s) for x, y, t, s in pts]
         g.contours.append(c)
@@ -2041,19 +2074,22 @@ def letter_signs(font, m):
 # A right-hand bracket is its left-hand one turned over. Each pair had drifted by a unit or two through lightening
 # and rounding (bracket stems 73 and 74, braces 233 and 234 wide, 4 to 62 points apart).
 MIRRORS = [("parenleft", "parenright"), ("bracketleft", "bracketright"), ("braceleft", "braceright"),
-           (0x00AB, 0x00BB), (0x2039, 0x203A), ("less", "greater")]
+           (0x00AB, 0x00BB), (0x2039, 0x203A), ("less", "greater"),
+           (0x21E4, 0x21E5), (0x232B, 0x2326)]     # 0.81: the tab arrows and the erase keys, one drawing each
 
 
 def _name(font, key):
     if isinstance(key, str):
         return key
-    return next(g.name for g in font if key in g.unicodes)
+    return next((g.name for g in font if key in g.unicodes), None)
 
 
 def mirrors(font):
     done = []
     for a, b in MIRRORS:
         a, b = _name(font, a), _name(font, b)
+        if a not in font or b not in font:                 # not drawn yet (the keys come later in charset)
+            continue
         ga, gb_ = font[a], font[b]
         if ga.components or gb_.components:
             continue
