@@ -106,6 +106,7 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | Inflection at a node (0.81) | A curve's end bends the Regular's way at an S's node or out of a straight: its far handle slides along itself until it does | c_t, section | `bold.inflection_nodes` | `audit_axis.py` turns |
 | White inside one contour (0.81) | g.ss02's ball keeps the white law under the bowl; its rise stops where the law holds | g.ss02 | `charset.single_g_points(least_white)`, `ball_white` | build notes |
 | Struck stroke's end (0.81) | A stroke whose side would lie on its letter's edge ends where that edge begins (no seam) | Ɍ (Light) | `overlap.inset_ends` | `audit_axis.py` seam |
+| A curl on a stem (0.81, last) | In the variable font's masters the hook above is two parts overlapping, as the struck letters are: the curl (from the stem's right edge round the eye to the eye's foot, closed by a line inside the stem) and the stem (a stroke, `move_stroke`, its top the eye's foot). Towards the Bold the eye is the Regular's about its centre times the white law's least over its width, centred where the engine put it; the slot to the stem gives way into the stem by at most its gain. The static Regular keeps the one merged outline | hookabovecomb, hookabovecomb.case (and every composite carrying them) | `overlap.curl_master`, `curl_parts`, `vf_source`; `bold.bold_font` | `audit_axis.py` crossings, turns |
 | Heights | x 520, cap 712, ascender 780; overshoot 530 / -10 lowercase, 721 / -9 capitals and figures | all | `balance.heights` | `audit_serifs` 4, `check.py` |
 
 A part not in this table has no rule yet. Add the row when you write the rule.
@@ -302,5 +303,11 @@ Say this in every report until it is closed:
 - **A junction drawn soft is a junction** (a concave turn of 90 degrees within 12 units), and **a ray across one
   stroke comes back**: from where it leaves, a ray along that edge's normal lands within half its length of where it
   started; one that crossed a junction with smooth sides does not (`audit_rays.RECIPROCAL`).
+- **The same place on both masters** (0.81, last round). `audit_axis` thin compares the instance's thinnest cut with
+  the Regular's cut between the same two edges at the same shares (`place_reading`), not with the Regular's thinnest
+  anywhere: by a cut end the least reading sits at the end zone's edge and moves with the scan lines' phase (Q's tail
+  22.6 > 19.8 > 23.6 at 400, 425, 450; at every fixed distance from its end it thickens). End corners are found on
+  the outline cut every unit (`END_STEP`), not on the flattening's vertices. A line is cut at the same parameters as a
+  curve in `audit_rays` (a straight stroke's only places were its corners: 58 glyphs went unread).
 - These are reading rules, not tolerances: each was checked on the glyph that raised it by drawing the ray or cut
   (`build/figures/081/`), and the places they leave out are counted in the audit's own summary line.

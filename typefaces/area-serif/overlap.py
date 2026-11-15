@@ -382,11 +382,150 @@ def vf_source(ufo):
             for c in og.contours:
                 g.contours.append(copy.deepcopy(c))
         del reg.layers[LAYER]
+    from ufoLib2.objects import Contour, Point
+    for name in curl_names(reg):                               # 0.81 (last round): the hook above, curl and stem
+        g = reg[name]
+        parts = curl_parts([(p.x, p.y, p.type, p.smooth) for p in g.contours[0].points])
+        g.clearContours()
+        for P in parts:
+            c = Contour()
+            c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            g.contours.append(c)
     return reg
 
 
 def struck_names(ufo):
-    return [g.name for g in ufo.layers[LAYER]] if LAYER in ufo.layers else []
+    return ([g.name for g in ufo.layers[LAYER]] if LAYER in ufo.layers else []) + curl_names(ufo)
+
+
+# ---------------------------------------------------------------- a curl on a stem (0.81, last round)
+#
+# The hook above (U+0309, its capital form) is a curl whose stroke runs round a small eye and into a short stem. Drawn
+# as one outline, the eye's opening (the slot between the curl's ball and the stem's top) is a few units wide; the
+# engine reads the outline's knots, the stroke gains inward, and the slot and the eye close (the capital form crossed
+# itself at 552). In the variable font's masters it is two parts, overlapping as the struck letters' strokes do: the
+# curl (its outline from the stem's right edge round to the eye's foot, closed by a line inside the stem) and the
+# stem (from the eye's foot down to its foot). The static Regular keeps the one merged outline.
+
+CURLS = ("hookabovecomb", "hookabovecomb.case")
+
+
+def curl_names(ufo):
+    return [n for n in CURLS if n in ufo and len(ufo[n].contours) == 1 and not ufo[n].components]
+
+
+def _stem_top(P):
+    """The stem's left edge: the longest upright line of the outline; the index of its upper node."""
+    best = None
+    n = len(P)
+    for i, q in enumerate(P):
+        j = (i + 1) % n
+        if q[2] is not None and P[j][2] == "line" and abs(P[j][0] - q[0]) < 0.5:
+            L = abs(P[j][1] - q[1])
+            if best is None or L > best[0]:
+                best = (L, i if q[1] > P[j][1] else j)
+    return best[1]
+
+
+def curl_parts(P, t=None):
+    """(curl, stem) from the merged outline P (Regular or a master: the same points). The curl is P[0] (the
+    stem's right edge, where the curl leaves it) round to the node before the stem's left top; the line that
+    closes it runs inside the stem. The stem is the rest, closed by its top right corner (x of P[0], y of its
+    left top)."""
+    t = _stem_top(P) if t is None else t
+    assert P[0][2] == "line" and P[t][2] == "line"
+    curl = [tuple(q) for q in P[:t]]
+    stem = [tuple(q) for q in P[t:]] + [(P[0][0], P[t][1], "line", False)]
+    return [curl, stem]
+
+
+def _eye(P, t):
+    """The eye's points: from the handle after the ball's lowest node (the curl's lowest node left of the stem) to
+    the node before the stem: [indices]; and its nodes."""
+    xl = P[t][0]
+    low = min((i for i in range(t) if P[i][2] is not None and P[i][0] < xl), key=lambda i: P[i][1])
+    idx = list(range(low + 2, t))
+    return idx, [i for i in idx if P[i][2] is not None]
+
+
+def curl_master(R, N, mapx, mapy, v, least):
+    """A master's curl and stem from the Regular's merged outline R and the engine's merged reading N of it.
+
+    The eye is a counter: its points are the Regular's, about the eye's centre, times least(w) / w (the white law's
+    least for its width w: under the letters' floor a white keeps its own width), centred where the engine put the
+    eye's centre; the curl's other points are the engine's, so its stroke gains outward, round the eye. The stem is
+    a stroke (move_stroke on the node map) whose top is the eye's foot. Where the slot, the white between the curl
+    and the stem's side, comes under least(its Regular width), the stem's side gives way into the stem by at most
+    what the stem gained (white.keep_white's rule). Towards the Bold only, as keep_white: towards the Light every
+    part thins and the whites open by themselves (there the engine's eye; the eye rule's 1.05 bent the ball's inner
+    curve, which the engine had moved, into an inflection). Returns ([curl, stem], log)."""
+    import numpy as np
+    t = _stem_top(R)
+    idx, eye_nodes = _eye(R, t)
+    xs, ys = [R[i][0] for i in eye_nodes], [R[i][1] for i in eye_nodes]
+    cR = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
+    nx, ny = [N[i][0] for i in eye_nodes], [N[i][1] for i in eye_nodes]
+    cN = ((min(nx) + max(nx)) / 2, (min(ny) + max(ny)) / 2)
+    w0 = max(xs) - min(xs)
+    k = least(w0) / w0
+    M = [tuple(q) for q in N]
+    for i in (idx if v["f"] > 0 else []):                     # towards the Light whites open by themselves
+        q = R[i]
+        M[i] = (round(cN[0] + (q[0] - cR[0]) * k), round(cN[1] + (q[1] - cR[1]) * k)) + tuple(q[2:])
+    curlR, stemR = curl_parts(R, t)
+    curl = curl_parts(M, t)[0]
+    foot = M[t - 1][1]                                          # the eye's foot: the stem's top
+    top = R[t][1]
+    stem = move_stroke(stemR, mapx, lambda y: foot if abs(y - top) < 0.5 else mapy(y), v)
+    # the slot: the white between the curl and the stem's side, read where neither part's ink covers the other's edge
+    slot0, side = slot(curlR, stemR)
+    log = [("eye", round(w0, 1), round(w0 * k, 1) if v["f"] > 0 else "engine")]
+    if slot0 is None or v["f"] <= 0:
+        return [curl, stem], log
+    want = least(slot0)
+    got, _ = slot(curl, stem)
+    if got is not None and got < want - 0.5:
+        (cx, cy), u, nrm, s, d = _frame(stemR)
+        T = max(d) - min(d)
+        _, _, _, _, d2 = _frame(stem)
+        gain = max(0.0, (max(d2) - min(d2) - T) / 2)
+        give = min(want - got, gain)
+        xe = min(q[0] for q in stem if q[2] is not None) if side < 0 else max(q[0] for q in stem if q[2] is not None)
+        dx = round(-side * give)
+        stem = [(q[0] + dx, q[1]) + tuple(q[2:]) if abs(q[0] - xe) <= 8 else q for q in stem]
+        log.append(("slot", round(got, 1), round(want, 1), round(slot(curl, stem)[0] or 0, 1)))
+    return [curl, stem], log
+
+
+def slot(curl, stem):
+    """The narrowest white between the curl's outline and the stem's side (each read only where it is not under
+    the other part's ink), the white between them checked on a raster: (width, side of the stem it is on, -1 left
+    or 1 right) or (None, 0)."""
+    import numpy as np
+    import white as WHITE
+    ink, (x0, y0) = WHITE.raster([curl, stem])
+    ink_c, (xc, yc) = WHITE.raster([curl])
+    ink_s, (xs_, ys_) = WHITE.raster([stem])
+
+    def inside(img, o, p):
+        x, y = int(round(p[0] - o[0])), int(round(p[1] - o[1]))
+        return 0 <= y < img.shape[0] and 0 <= x < img.shape[1] and bool(img[y, x])
+    A = np.array([p[:2] for p in WHITE._dense(curl, 1.0) if not inside(ink_s, (xs_, ys_), p)])
+    sx = [q[0] for q in stem if q[2] is not None]
+    Bp = np.array([p[:2] for p in WHITE._dense(stem, 1.0) if not inside(ink_c, (xc, yc), p)
+                   and min(abs(p[0] - min(sx)), abs(p[0] - max(sx))) < 0.5])
+    if not len(A) or not len(Bp):
+        return None, 0
+    D = np.hypot(A[:, None, 0] - Bp[None, :, 0], A[:, None, 1] - Bp[None, :, 1])
+    for o in np.argsort(D, axis=None):
+        i, j = np.unravel_index(o, D.shape)
+        if D[i, j] < 0.5:
+            continue
+        a, b = A[i], Bp[j]
+        if not any(inside(ink, (x0, y0), a + (b - a) * f) for f in (0.3, 0.5, 0.7)):
+            side = -1 if abs(b[0] - min(sx)) < 0.5 else 1
+            return float(D[i, j]), side
+    return None, 0
 
 
 # ---------------------------------------------------------------- a stroke's end inside the letter (0.81, integration)

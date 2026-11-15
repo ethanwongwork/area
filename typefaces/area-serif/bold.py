@@ -2966,6 +2966,32 @@ def bold_font(reg, stem=STEM, **over):
                 na.x, na.y = round(_interp(maps[g.name][0], a.x)), round(_interp(maps[g.name][1], a.y))
 
     struck = overlap_masters(reg, font, maps, v, reports, notes)   # 0.81: letter and strokes, overlapping
+    # 0.81 (last round): the hook above as a curl and a stem, overlapping (overlap.curl_master: the eye and the slot
+    # are whites under the law; the capital form's slot closed at 552 and the outline crossed itself)
+    import overlap as _OV
+    curled = []
+    for name in _OV.curl_names(reg):
+        if name not in font:
+            continue
+        if law is None:
+            law = WHITE.Law(reg, font)
+        X_, Y_ = maps.get(name, ({}, {}))
+        R_, N_ = glyph_contours(reg[name])[0], glyph_contours(font[name])[0]
+        if len(R_) != len(N_):
+            notes.append(f"{name}: not the Regular's points; left as the engine read it")
+            continue
+        parts_, log_ = _OV.curl_master(R_, N_, (lambda x, X_=X_: _interp(X_, x)) if X_ else (lambda x: x),
+                                       (lambda y, Y_=Y_: _interp(Y_, y)) if Y_ else (lambda y: y), v, law.least)
+        from ufoLib2.objects import Contour as _Contour
+        g_ = font[name]
+        g_.clearContours()
+        for P in parts_:
+            c = _Contour()
+            c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            g_.contours.append(c)
+        struck.add(name)
+        curled.append(f"{name} {log_}")
+    notes.append(f"curls on stems: {len(curled)} ({'; '.join(curled)})")
 
     def anchors(font_, name):
         g = font_[name]
@@ -3237,7 +3263,7 @@ def bold_font(reg, stem=STEM, **over):
     import overlap as OVERLAP                                  # 0.81: a struck glyph whose letter has a mid master
     if OVERLAP.LAYER in reg.layers:                            # takes it, with its strokes half way as they go
         tm_s = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM)
-        for name in sorted(struck, key=lambda n: (reg.layers[OVERLAP.LAYER][n].lib["area.overlap"]["letter"] in struck, n)):
+        for name in sorted((n for n in struck if n in reg.layers[OVERLAP.LAYER]), key=lambda n: (reg.layers[OVERLAP.LAYER][n].lib["area.overlap"]["letter"] in struck, n)):
             og = reg.layers[OVERLAP.LAYER][name]
             info = og.lib["area.overlap"]
             letter, (ox, oy), nl = info["letter"], info["offset"], info["letter_contours"]
@@ -3306,7 +3332,8 @@ def bold_font(reg, stem=STEM, **over):
     notes.append(f"curves: {n_fixed} brought back to the Regular's turns, {n_left} not")
     # 0.81 (integration): a struck glyph whose letter is itself struck (₫ on đ) after that letter, so it takes the
     # letter as it now is (a set's order changed with the process: ₫'s Light bowl moved up to 26 units build to build)
-    struck_order = sorted(struck, key=lambda n: (reg.layers[OVERLAP.LAYER][n].lib["area.overlap"]["letter"] in struck, n))
+    struck_order = sorted((n for n in struck if OVERLAP.LAYER in reg.layers and n in reg.layers[OVERLAP.LAYER]),
+                          key=lambda n: (reg.layers[OVERLAP.LAYER][n].lib["area.overlap"]["letter"] in struck, n))
     for name in struck_order:                                  # 0.81: the struck glyphs' letters as they now are
         info = reg.layers[OVERLAP.LAYER][name].lib["area.overlap"]
         letter, (ox, oy), nl = info["letter"], info["offset"], info["letter_contours"]
