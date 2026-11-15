@@ -8,6 +8,7 @@ Runs, in order, and reports each validator's own outcome (a run that finishes is
   3c. parts.py                     one construction per join and bowl: necks, pointed crotches, b d p q, u from n
   3c2. curvecheck.py               curvature continuity along g's loop, the tails of g.ss02 j y, a.ss03 and l.ss04
   3d. audit_charset.py             beyond a-z A-Z 0-9: mark placement, plain strokes, signs from letters, mirrors
+  3e. audit_kern.py                (0.81) every pair's least white at 300 350 400 550 700, against the weight's floor
   4. fontbakery check-universal    font engineering (names, tables, metrics, glyphs, features)
   5. diffenator2 diff (--diff)     before/after renders and table diffs against build/previous/
 Proof sheets (proof.py, overlay.py) are separate: they are for eyes, not exit codes.
@@ -88,6 +89,9 @@ def main():
         code, out = run("interpolation", [os.path.join(BIN, "fonttools"), "varLib.interpolatable", "--kinkiness", "1.0", vf])
         print(out[:2000] or "nothing reported")
         results.append(("variable font (fontTools interpolatable, kinkiness 1.0)", code == 0 and not out.strip()))
+        code, out = run("kerning along the axis (audit_kern: least white of every pair at 300 350 400 550 700)", [PY, "audit_kern.py", vf])
+        print(out)
+        results.append(("kerning along the axis (no pair under the weight's floor)", code == 0))
     code, out = run("charset", [PY, "audit_charset.py"])
     print("\n".join(l for l in out.splitlines() if l.startswith(("ERROR", "charset audit"))))
     results.append(("character set (marks, signs, mirrors)", code == 0))

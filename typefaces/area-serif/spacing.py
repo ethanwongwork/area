@@ -476,3 +476,438 @@ def finish(font, codepoints):
     opened = open_all(font, codepoints)
     f_before_dots(font)
     return joined, promoted, copied, opened
+
+
+# ---------------------------------------------------------------------------------------------------- 0.81
+# Kerning per master. Until 0.80 the Light and the Bold took the Regular's pairs unchanged and only opened the pairs
+# their heavier or lighter ink brought under MIN_GAP (the Bold 6,444 of them). Measured (tools/fit/weights.py, the
+# white between every pair fit.py measures, at 300 / 400 / 700, against its control nn HH Hn nH):
+#
+#                      control white nn, 300 and 700 over 400   rel (pair less control), slope against 400
+#     Georgia Pro      1.054   0.907                            1.019   0.855
+#     Serrif           1.021   0.875                            1.006   0.926
+#     Source Serif 4   1.080   0.752                            1.072   0.557
+#     Literata         1.065   0.823                            1.072   0.661
+#
+# In the two faces Area's fit follows, a pair's departure from the control scales as the control white does: Bold
+# slope 0.891 against nn 0.891 (the means), Light 1.013 against 1.038. So the rule: every pair's white in a master is
+# the Regular's white times the master's own control white over the Regular's (nn for two lowercase, HH for two
+# capitals, Hn and nH mixed; punctuation counts as lowercase, figures by 00). Read on each master's own outlines, so
+# a serif that grows, a diagonal that thickens or a bearing that tightens is measured, not assumed:
+#
+#     k_M(pair) = s_M * (N_R + k_R) - N_M        N: the pair's white unkerned (fit.py's mean over the rows both
+#                                                inks share, each no deeper than DEPTH behind its outermost ink)
+#
+# A kerning key that covers many pairs (a class) takes the mean over its letters (accented forms kern as their
+# letter, so the letter stands for its family). Then, as for the Regular, every pair that stands outside both
+# references at the same weight (Georgia Pro Light or Bold, Serrif 300 or 700) by KERN_MIN or more is moved to the
+# nearer (fit_kerning.json "masters"; AREA_KERN_FIT=1 measures them again). Last the collision passes, with the
+# floor scaled the same way: MIN_GAP * s_M (Serrif, the reference that holds a floor, keeps 9.5 / 9.4 / 6.0 units at
+# the 2nd percentile of its closest pairs, 15.6 / 17.8 / 14.8 at the 10th: it falls towards the Bold with the white,
+# not with the hairline, which rises). The three masters keep one set of keys: a key one master lacks takes the
+# value that master's classes give it.
+O_STEP = 10
+O_ROWS = list(range(-240, 801, O_STEP))
+O_DEPTH = {"l": 80, "u": 105}                  # fit.py's DEPTH: 0.15 of the x-height and of the cap height
+KERN_MIN = 8                                   # fit.py's: a pair moves when off both references by this much
+CONTROLS = {"ll": ("n", "n"), "lu": ("n", "H"), "ul": ("H", "n"), "uu": ("H", "H"), "00": ("zero", "zero")}
+MASTER_FIT = "masters"                         # fit_kerning.json's section for the Light and the Bold
+
+
+def glyph_case(font, name, _cache={}):
+    """'l' (lowercase), 'u' (capitals), '0' (figures) or 'p' (punctuation and signs), from the glyph's character or,
+    for an alternate, its base's."""
+    import unicodedata
+    key = (id(font), name)
+    if key not in _cache:
+        base = name.split(".")[0]
+        us = list(font[name].unicodes) or (list(font[base].unicodes) if base in font else [])
+        cat = unicodedata.category(chr(us[0])) if us else "Ll" if len(base) == 1 or "_" in base else "Po"
+        _cache[key] = "0" if cat == "Nd" or base in FIGS else "u" if cat in ("Lu", "Lt") else "l" if cat[0] == "L" else "p"
+    return _cache[key]
+
+
+def optical_profile(font, name):
+    """Left and right white per row on fit.py's rows (nan where the row has no ink), and the same capped DEPTH
+    behind the outermost ink in the glyph's zone (fit.capped: x-height for the lowercase, cap height for capitals
+    and figures, every row for punctuation)."""
+    import numpy as np
+    cs = _flat(font[name], font)
+    w = font[name].width
+    L = np.full(len(O_ROWS), np.nan)
+    R = np.full(len(O_ROWS), np.nan)
+    for i, y in enumerate(O_ROWS):
+        e = _edges(cs, y + 3.33)                 # _edges adds 0.37: fit.py reads at y + 3.7
+        if e:
+            L[i], R[i] = e[0], w - e[1]
+    case = glyph_case(font, name)
+    z = {"l": (10, 510), "u": (10, 700), "0": (10, 700)}.get(case)
+    ink = ~np.isnan(L)
+    zr = ink & np.array([z is None or z[0] <= y <= z[1] for y in O_ROWS])
+    if not zr.any():
+        zr = ink
+    if not zr.any():
+        return L, R, L, R
+    D = O_DEPTH["u" if case in ("u", "0") else "l"]
+    return L, R, np.minimum(L, np.nanmin(L[zr]) + D), np.minimum(R, np.nanmin(R[zr]) + D)
+
+
+class Optical:
+    """fit.py's pair white on a UFO master, unkerned, for any two glyphs."""
+
+    def __init__(self, font):
+        self.font, self.p = font, {}
+
+    def prof(self, n):
+        if n not in self.p:
+            self.p[n] = optical_profile(self.font, n) if (self.font[n].contours or self.font[n].components) else None
+        return self.p[n]
+
+    def white(self, a, b):
+        import numpy as np
+        pa, pb = self.prof(a), self.prof(b)
+        if pa is None or pb is None:
+            return None
+        both = ~np.isnan(pa[1]) & ~np.isnan(pb[0])
+        if not both.any():
+            return None
+        return float(np.mean(pa[3][both] + pb[2][both]))
+
+    def control(self, a, b):
+        ca, cb = (glyph_case(self.font, n).replace("p", "l") for n in (a, b))
+        key = "00" if "0" in (ca, cb) else ca + cb
+        return key, self.white(*CONTROLS[key])
+
+
+def _group_maps(font):
+    g1 = {m: k for k, ms in font.groups.items() if k.startswith("public.kern1.") for m in ms}
+    g2 = {m: k for k, ms in font.groups.items() if k.startswith("public.kern2.") for m in ms}
+    return g1, g2
+
+
+def effective_key(kerning, g1, g2, a, b):
+    """The kerning key that sets the pair a b (the UFO's order: glyph-glyph, glyph-class, class-glyph, class-class)."""
+    for c in ((a, b), (a, g2.get(b)), (g1.get(a), b), (g1.get(a), g2.get(b))):
+        if None not in c and c in kerning:
+            return c
+    return None
+
+
+REP_MAX = 6
+
+
+def representatives(font, key, g1, g2):
+    """The pairs a key stands for and sets: its members that are core letters, figures or the measured punctuation
+    (else its first REP_MAX members by name), paired, where this key is the one that applies."""
+    core = set(LOWER + UPPER) | set(FIGS) | set(PUNCT)
+
+    def members(side, k):
+        if not k.startswith("public.kern"):
+            return [k] if k in font else []
+        ms = [m for m in font.groups.get(k, []) if m in font]
+        c = sorted(m for m in ms if m in core)
+        return c or sorted(ms)[:REP_MAX]
+    A, B = members(1, key[0]), members(2, key[1])
+    return [(a, b) for a in A for b in B if effective_key(font.kerning, g1, g2, a, b) == key]
+
+
+def transfer(reg, master, scale=None):
+    """The master's kerning from the Regular's by the rule above, on the master's own outlines. Returns
+    ({key: value}, {control: s}, unmeasured keys)."""
+    from fontTools.ufoLib.kerning import lookupKerningValue
+    oR, oM = Optical(reg), Optical(master)
+    s = {}
+    for k, (a, b) in CONTROLS.items():
+        if all(n in reg and n in master for n in (a, b)):
+            s[k] = scale if scale is not None else oM.white(a, b) / oR.white(a, b)
+    g1, g2 = _group_maps(reg)
+    out, blind = {}, []
+    for key, kr in sorted(reg.kerning.items()):
+        vals = []
+        for a, b in representatives(reg, key, g1, g2):
+            if a not in master or b not in master:
+                continue
+            nr, nm = oR.white(a, b), oM.white(a, b)
+            if nr is None or nm is None:
+                continue
+            ctl, _ = oR.control(a, b)
+            k_r = lookupKerningValue((a, b), reg.kerning, reg.groups) or 0
+            vals.append(s[ctl] * (nr + k_r) - nm)
+        if vals:
+            out[key] = round(sum(vals) / len(vals))
+        else:                                    # no row both inks share (a quote and a period): the value scales
+            reps = representatives(reg, key, g1, g2) or [(None, None)]
+            a, b = reps[0]
+            ctl = oR.control(a, b)[0] if a else "ll"
+            out[key] = round(kr * s[ctl])
+            blind.append(key)
+    return out, s, blind
+
+
+def master_floor(s):
+    """The collision floor in a master: MIN_GAP times the master's control white over the Regular's."""
+    return MIN_GAP * s["ll"]
+
+
+def alternates_of(font):
+    cats = font.lib.get("public.openTypeCategories", {})
+    return sorted(g.name for g in font if not g.unicodes and "." in g.name and g.width > 0 and cats.get(g.name) != "mark"
+                  and not any(t in g.name for t in (".tf", ".case", "comb", ".locl", ".notdef", ".alt"))
+                  and (g.contours or g.components))
+
+
+def open_master(font, codepoints, floor, alts=()):
+    """open_all and alternates.kern_and_open in one pass, at a master's floor: every glyph of the set and every
+    alternate, no two inks closer than `floor` (rows -280 to 1080, one row of slack up and down)."""
+    import numpy as np
+    import unicodedata
+    from fontTools.ufoLib.kerning import lookupKerningValue
+    want = set(codepoints)
+    cats = font.lib.get("public.openTypeCategories", {})
+    names = [g.name for g in font if any(u in want for u in g.unicodes) and (g.contours or g.components)
+             and g.width > 0 and cats.get(g.name) != "mark" and not NO_COLLISION & set(g.unicodes)
+             and not any(unicodedata.category(chr(u)) in ("Mn", "Mc", "Lm", "Sk") for u in g.unicodes)]
+    names += [a for a in alts if a in font and a not in names]
+    R, L = edge_rows(font, names)
+    names = [n for n in names if n in R]
+    Lm = np.stack([L[n] for n in names])
+    core = set(LOWER + UPPER) | set(FIGS) | set(PUNCT)
+    g1, g2 = _group_maps(font)
+
+    def alone(name, g):                      # the class that is this letter and its family alone
+        k = g.get(name)
+        return k if k and sum(1 for m in font.groups[k] if m in core) == 1 else name
+    opened = []
+    reach = max(80, -min(font.kerning.values(), default=0))  # open_all's 80 missed T atilde.ss03 (natural 92, kern -95)
+    # first the letters, figures and punctuation: on the key their family shares (as the Regular's open_collisions
+    # and kern_families leave them), then every glyph of the set, by exception where it needs more than its letter
+    for first in (True, False):
+        for a in names:
+            if first and a not in core:
+                continue
+            gaps = (Lm + R[a]).min(axis=1)
+            for j in np.where(gaps < floor + reach)[0]:
+                b = names[j]
+                if first and b not in core:
+                    continue
+                k = lookupKerningValue((a, b), font.kerning, font.groups) or 0
+                gap = float(gaps[j]) + k
+                if gap < floor:
+                    add = round(floor - gap)
+                    if add >= 4:
+                        key = (alone(a, g1), alone(b, g2)) if first else (a, b)
+                        font.kerning[key] = k + add
+                        if (lookupKerningValue((a, b), font.kerning, font.groups) or 0) != k + add:
+                            font.kerning[(a, b)] = k + add
+                        opened.append((a, b, round(gap), k + add))
+    return opened
+
+
+def edge_rows(font, names):
+    """{name: right white per row}, {name: left white per row, the least of three rows}: open_all's reading."""
+    import numpy as np
+    ys = list(range(-280, 1081, STEP))
+    R, L = {}, {}
+    for n in names:
+        cs = _flat(font[n], font)
+        if not cs:
+            continue
+        r = np.full(len(ys), np.inf)
+        l = np.full(len(ys), np.inf)
+        w = font[n].width
+        for i, y in enumerate(ys):
+            e = _edges(cs, y)
+            if e:
+                l[i], r[i] = e[0], w - e[1]
+        l3 = np.minimum(l, np.minimum(np.roll(l, 1), np.roll(l, -1)))
+        l3[0], l3[-1] = min(l[0], l[1]), min(l[-1], l[-2])
+        R[n], L[n] = r, l3
+    return R, L
+
+
+def f_dots_master(font, s):
+    """f before a dot, the Regular's rule (F_DOT, F_ACCENT) with the white scaled."""
+    global F_DOT, F_ACCENT
+    keep = F_DOT, F_ACCENT
+    F_DOT, F_ACCENT = round(keep[0] * s), round(keep[1] * s)
+    try:
+        return f_before_dots(font)
+    finally:
+        F_DOT, F_ACCENT = keep
+
+
+def master_fit_table():
+    import json
+    import os
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), FIT)
+    return json.load(open(path)).get(MASTER_FIT, {}) if os.path.exists(path) else {}
+
+
+def kern_master(reg, master, style, codepoints, fit_fn=None, reg_shapes=None):
+    """The master's kerning, replacing what it has: the Regular's carried by the rule (transfer), the same-weight fit
+    (fit_fn(master) measures it, else fit_kerning.json's stored "masters" values), the collision passes at the
+    master's floor. Returns a report dict ("fit": the same-weight changes applied, to store)."""
+    vals, s, blind = transfer(reg, master)
+    master.groups.clear()
+    master.groups.update({k: list(v) for k, v in reg.groups.items()})
+    master.kerning.clear()
+    master.kerning.update(vals)
+    fit = fit_fn(master) if fit_fn else master_fit_table().get(style, [])
+    fitted = 0
+    for a, b, d in fit:
+        if (a.startswith("public.") and a not in master.groups) or (b.startswith("public.") and b not in master.groups):
+            continue
+        master.kerning[(a, b)] = master.kerning.get((a, b), 0) + d
+        fitted += 1
+    floor = master_floor(s)
+    opened = open_master(master, codepoints, floor, alternates_of(master))
+    dots = f_dots_master(master, s["ll"])
+    import bold as B
+    stems = dict(B.axis_map(B.STEM, B.LIGHT_WEIGHTS + B.WEIGHTS))
+    between = open_between(reg, master, style, codepoints, stems.__getitem__, reg_shapes)
+    return dict(style=style, scale=s, floor=floor, transferred=len(vals), blind=len(blind), fitted=fitted, fit=fit,
+                opened=len(opened), dots=dots, opened_pairs=opened, between=between)
+
+
+def equalize(fonts):
+    """One set of keys in every master: a key a master lacks takes the value its own classes give that pair."""
+    from fontTools.ufoLib.kerning import lookupKerningValue
+    keys = set()
+    for f in fonts:
+        keys |= set(f.kerning.keys())
+    added = 0
+    for f in fonts:
+        missing = [k for k in keys if k not in f.kerning]
+        for k in missing:
+            f.kerning[k] = lookupKerningValue(k, f.kerning, f.groups) or 0 if not (k[0].startswith("public.") or k[1].startswith("public.")) \
+                else _class_value(f, k)
+        added += len(missing)
+    return added
+
+
+def _class_value(f, k):
+    """What a group key's pairs are set to in a font that does not have the key: its first member pair's lookup
+    with this key absent (a class-class key absent is 0; a glyph-class key falls to the class-class)."""
+    from fontTools.ufoLib.kerning import lookupKerningValue
+    a = f.groups[k[0]][0] if k[0].startswith("public.") and f.groups.get(k[0]) else k[0]
+    b = f.groups[k[1]][0] if k[1].startswith("public.") and f.groups.get(k[1]) else k[1]
+    g1, g2 = _group_maps(f)
+    # the keys that could set a b, in order, after k itself
+    order = [(a, b), (a, g2.get(b)), (g1.get(a), b), (g1.get(a), g2.get(b))]
+    i = order.index(k) if k in order else 0
+    for c in order[i + 1:]:
+        if None not in c and c in f.kerning:
+            return f.kerning[c]
+    return 0
+
+
+# The Light's side bearings (0.81). 0.80 read them from bold_bearings.json, the Bold's change times bold.vector(55)'s
+# f (-0.371): +1.8 a side in the lowercase, +1.7 in the capitals. The references' own Light (Georgia Pro Light and
+# Serrif 300, less their Regular, times Area's stem loss over theirs: tools/weight/bold_bearings.py light) open
+# +2.3 and +2.9, and most on the right of the open and diagonal letters (v w y K N U W +5 to +10 where the
+# extrapolation gave +1). light_bearings.json holds that change; every glyph it does not name keeps the engine's.
+LIGHT_BEARINGS = "light_bearings.json"
+_LIGHT = None
+
+
+def light_bearing_change(default):
+    """A bold.bearing_change for the Light master: light_bearings.json's change where it names the glyph."""
+    import json
+    import os
+    global _LIGHT
+    if _LIGHT is None:
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), LIGHT_BEARINGS)
+        _LIGHT = json.load(open(path))["sides"] if os.path.exists(path) else {}
+
+    def change(name, v):
+        import bold as B
+        ch = name if len(name) == 1 else B._CHARS.get(name)
+        if v["f"] < 0 and ch in _LIGHT:
+            return tuple(_LIGHT[ch])
+        return default(name, v)
+    return change
+
+
+# Between the masters (0.81, audit_kern found it). A pair clear in both masters can still close up between them: a
+# row's edge is not linear in the weight where an outline also moves up or down (a mark rising over a Bold letter,
+# the Bold's mid master for g and the quotes), so the least white is not the masters' chord. At 350 (the Light's
+# side) and 550 (the Bold's mid master) the instance is built from the masters' points and the same collision pass
+# runs on it, at that instance's own floor; a pair short there by 4 or more takes the change in the master that brings
+# the interpolated value up to the floor (the change divided by the instance's share of the master).
+BETWEEN = {"Light": (350, 300), "Bold": (550, 700)}
+
+
+def instance(reg, master, t, mid=None):
+    """A UFO between the Regular (t = 0) and the master (t = 1), point by point; a glyph the master's mid layer holds
+    (at t) is that layer's. Glyphs whose structures differ keep the master's outline."""
+    import ufoLib2
+    from ufoLib2.objects import Component, Contour, Point
+    out = ufoLib2.Font()
+    lerp = lambda a, b: a + (b - a) * t
+    for g in master:
+        if g.name not in reg:
+            continue
+        r = reg[g.name]
+        ng = out.newGlyph(g.name)
+        ng.unicodes = list(g.unicodes)
+        if mid is not None and g.name in mid:
+            src = mid[g.name]
+            ng.width = src.width
+            for c in src.contours:
+                nc = Contour()
+                nc.points = [Point(p.x, p.y, p.type) for p in c.points]
+                ng.contours.append(nc)
+            for c in src.components:
+                ng.components.append(Component(c.baseGlyph, c.transformation))
+            continue
+        same = len(r.contours) == len(g.contours) and all(len(a.points) == len(b.points) for a, b in zip(r.contours, g.contours)) \
+            and [c.baseGlyph for c in r.components] == [c.baseGlyph for c in g.components]
+        a_, b_ = (r, g) if same else (g, g)
+        ng.width = lerp(a_.width, b_.width)
+        for ca, cb in zip(a_.contours, b_.contours):
+            nc = Contour()
+            nc.points = [Point(lerp(p.x, q.x), lerp(p.y, q.y), q.type) for p, q in zip(ca.points, cb.points)]
+            ng.contours.append(nc)
+        for ca, cb in zip(a_.components, b_.components):
+            ta, tb = tuple(ca.transformation), tuple(cb.transformation)
+            ng.components.append(Component(cb.baseGlyph, tuple(lerp(x, y) for x, y in zip(ta, tb))))
+    out.lib["public.openTypeCategories"] = dict(master.lib.get("public.openTypeCategories", {}))
+    return out
+
+
+def open_between(reg, master, style, codepoints, stem_of, reg_shapes=None):
+    """The collision pass at the weight between the Regular and the master (BETWEEN), on the master's values.
+    reg_shapes: the Regular as the variable font's default master (its struck glyphs as overlapping strokes, the
+    structure the other masters have), for the outlines; the kerning is `reg`'s."""
+    import numpy as np
+    import unicodedata
+    from fontTools.ufoLib.kerning import lookupKerningValue
+    w, wm = BETWEEN[style]
+    t = (stem_of(w) - stem_of(400)) / (stem_of(wm) - stem_of(400))
+    mid = master.layers["mid"] if "mid" in master.layers and abs(w - 550) < 1 else None
+    inst = instance(reg_shapes if reg_shapes is not None else reg, master, t, mid)
+    floor = MIN_GAP * Optical(inst).white("n", "n") / Optical(reg).white("n", "n")
+    want = set(codepoints)
+    cats = master.lib.get("public.openTypeCategories", {})
+    names = [g.name for g in master if any(u in want for u in g.unicodes) and (g.contours or g.components)
+             and g.width > 0 and cats.get(g.name) != "mark" and not NO_COLLISION & set(g.unicodes)
+             and not any(unicodedata.category(chr(u)) in ("Mn", "Mc", "Lm", "Sk") for u in g.unicodes)]
+    names += [a for a in alternates_of(master) if a not in names]
+    names = [n for n in names if n in inst]
+    R, L = edge_rows(inst, names)
+    names = [n for n in names if n in R]
+    Lm = np.stack([L[n] for n in names])
+    reach = max(80, -min(list(master.kerning.values()) + list(reg.kerning.values()), default=0))
+    opened = []
+    for a in names:
+        gaps = (Lm + R[a]).min(axis=1)
+        for j in np.where(gaps < floor + reach)[0]:
+            b = names[j]
+            kr = lookupKerningValue((a, b), reg.kerning, reg.groups) or 0
+            km = lookupKerningValue((a, b), master.kerning, master.groups) or 0
+            gap = float(gaps[j]) + kr + (km - kr) * t
+            if floor - gap >= 4:
+                new = km + int(np.ceil((floor - gap) / t))
+                master.kerning[(a, b)] = new
+                opened.append((a, b, round(gap, 1), km, new))
+    return dict(weight=w, t=t, floor=floor, opened=opened)
