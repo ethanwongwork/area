@@ -28,7 +28,9 @@ export interface TagPickerProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   items?: TagOption[];
   /** The chosen values, in the order they were added (controlled). */
   value?: string[];
+  /** The tags chosen at first, uncontrolled; none by default. */
   defaultValue?: string[];
+  /** Called with the chosen tags' values and the event that changed them. */
   onValueChange?: (value: string[], event?: SyntheticEvent) => void;
   /** Offer a "Create" row for text that matches no tag; add the tag to `items` to choose it. */
   onCreate?: (text: string) => void;
@@ -36,9 +38,13 @@ export interface TagPickerProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   hint?: ReactNode;
   /** Shown when nothing matches (and nothing can be created). */
   emptyText?: ReactNode;
+  /** The field's treatment, as Input's; outline by default. */
   variant?: Manifest["variant"];
+  /** The field's height, as Input's; md by default. */
   size?: Manifest["size"];
+  /** Stretch to the width of the container. */
   fullWidth?: boolean;
+  /** Marks the choice as wrong: the danger edge and `aria-invalid`. */
   invalid?: boolean;
   /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
   validationStatus?: ValidationStatus;
@@ -48,7 +54,9 @@ export interface TagPickerProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   name?: string;
   /** The list is open (controlled); `defaultOpen` opens it at first; `onOpenChange` hears it open and close. */
   open?: boolean;
+  /** Whether the list starts open, uncontrolled; closed by default. */
   defaultOpen?: boolean;
+  /** Called when the list opens or closes. */
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -56,7 +64,7 @@ const contains = (option: TagOption, text: string) => option.label.toLocaleLower
 type Row = { kind: "option"; option: TagOption } | { kind: "create"; text: string };
 
 /**
- * Picks several values, shown as coloured tags in the field (Notion's multi-select property).
+ * Picks several values, shown as colored tags in the field.
  * Typing filters the list; ↑/↓ move, Enter adds or removes the highlighted tag and keeps the list
  * open, Backspace in an empty field removes the last tag, Escape closes. With `onCreate`, text
  * that matches nothing offers to create a tag.
@@ -229,7 +237,7 @@ export const TagPicker = forwardRef<HTMLInputElement, TagPickerProps>(function T
       aria-labelledby={typeof label === "string" ? undefined : rest["aria-labelledby"]}
       popover="manual" className="area-menu area-tag-picker__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
       {hintText !== null ? <div className="area-menu__label area-tag-picker__hint" role="presentation"><span className="area-menu__label-text">{hintText}</span></div> : null}
-      {listRows.length === 0 ? <div className="area-tag-picker__empty" role="presentation">{emptyText}</div> : null}
+      {listRows.length === 0 ? <div className="area-menu__empty" role="presentation"><span className="area-menu__text">{emptyText}</span></div> : null}
       {listRows.map((row, index) => {
         const highlighted = index === active;
         if (row.kind === "create") {

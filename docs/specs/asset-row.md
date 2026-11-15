@@ -65,11 +65,11 @@ Inset equations: preview 8 from every edge of the 56 row (8 + 40 + 8), so stacke
 
 | Slot · property | Reference | Area | Basis | Reason when it differs |
 |---|---|---|---|---|
-| row height | 56 | 56: 8 + 40 + 8 | Figma; shadcn Attachment (8 around 40) | — |
+| row height | 56 | the 40 preview plus a cluster each side: 52 / 56 / 60 at type 13 Compact / Default / Comfortable | Figma; shadcn Attachment (8 around 40) | — |
 | preview | 56 flush at the panel edge, radius 2 | 40, inset 8, `bg-well` (#f9 at Layers 0, Box model's ground), `radius-small` (6), a 1px swatch ring over it; an image fills it (`cover`), an icon sits 4 inside | survey: 40 in shadcn, Penpot, Polaris, Untitled UI; every reference but Figma insets; Penpot 6 | Figma is the outlier (flush, 56, radius 2) |
 | preview content | a 16 placeholder mark | an image fills the well (`object-fit: cover`, no padding); an icon or vector at `icon-md` (16) centred, 4 inside | owner, round 15 ("should the image be full container?"); Figma's centred 16 mark | — |
 | ring | — | `token-swatch-ring` at `stroke-width`, inset, over the well and its content; forced colours: a CanvasText border | owner, round 15 ("should there be a light stroke too?"); Polaris 1px 8% | — |
-| text | 16 in, two lines | 12 gap; name 12/16 strong, meta 12/16 muted and tabular, no gap (32) | survey: 12 in Untitled UI, Fluent, Polaris; name 500 / 600 in shadcn, Untitled UI, Fluent | Figma's 16; Area's inspector type |
+| text | 16 in, two lines | `gap-row` (8 / 12 / 16; 12 at the default); name 12/16 strong, meta 12/16 muted and tabular, no gap (32) | survey: 12 in Untitled UI, Fluent, Polaris; name 500 / 600 in shadcn, Untitled UI, Fluent | Figma's 16; Area's inspector type |
 | action | not captured | trailing slot inside the 8 padding, visible at rest | survey: file and attachment rows keep it visible (shadcn, Untitled UI, Fluent, Zeplin) | list patterns hide it until hover; Area keeps it, so it is never hover-only |
 
 ## States
@@ -113,3 +113,17 @@ says what it is); an icon preview is `aria-hidden`. Native props and the ref rea
 - 2026-10-12 · owner, review round 15 (needs changes): full-bleed image, light stroke → applied. Round 16.
 - 2026-10-12 · owner, review round 16: approved.
 - 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): The preview well painted `bg-subtle`, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the row's words move from `text-xs` (11/14) to the UI line, 13/18: the name 500 and its meta line joined at the name's size, muted (plans A9.2, A9.3); the row stays 56 tall.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- Inset `ui-cluster` 6 / 8 / 10, preview to text `gap-row` 8 / 12 / 16, so the row is 52 / 56 / 60 (60 / 60 / 64 at type 16).
+  The 40 preview is a measured media size, the same at every density.

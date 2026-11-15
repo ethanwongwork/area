@@ -15,14 +15,14 @@
     display: flex;
     flex-direction: column;
     /* spec: ChatGPT's heading 8 over its list. */
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     min-inline-size: 0;
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
   /* spec: ChatGPT's h3, the answer's size at 600 in the default ink: Area's UI text, strong (Section heading's title). */
-  .area-reference-list__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
+  .area-reference-list__title { margin: 0; color: var(--area-fg-muted); font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); } /* a heading over a run of rows: muted (plan A9.4, owner 2026-11-11) */
   /* The marker starts on the edge of the text above, no hanging indent (owner, round 35: "the numbers themselves aligning
      with the text on top, i dont like huge indents"; Substack, Notion and Perplexity, round-36-variants.md). Round 36
      (owner: "the space between the dots/numbers and the start of the text is too big, can you make it so theyre
@@ -35,7 +35,10 @@
     --_marker-min: 0.8em; /* spec: the width of "1." */
     display: grid;
     grid-template-columns: minmax(var(--_marker-min), max-content) minmax(0, 1fr);
-    column-gap: var(--area-space-6);
+    column-gap: var(--area-space-6); /* a text list's marker gap, read with its text, at every density */
+    /* A text list's rhythm, line + 4 (plan A1.5, 2026-11-11; DESIGN_SYSTEM.md, Text lists): references 4 apart, as Link
+       groups' links; they ran on with no gap, an 18 pitch. */
+    row-gap: var(--area-space-4);
     margin: 0;
     padding: 0;
     list-style: none;

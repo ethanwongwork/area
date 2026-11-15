@@ -1,8 +1,9 @@
 /** Public specimen names: category-value; compositions use lowerCamelCase.
  * This labels examples, not new component props. Existing URL anchors stay stable.
  */
+// Punctuation joins words or is dropped, never kept at an end ("List (default)" → listDefault, not "listDefault)").
 const camel = (text) => text.trim().replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase()
-  .replace(/[^a-z0-9]+([a-z0-9])/g, (_, next) => next.toUpperCase());
+  .replace(/[^a-z0-9]+([a-z0-9])/g, (_, next) => next.toUpperCase()).replace(/[^a-zA-Z0-9]+$/, '');
 const states = new Set(['checked', 'selected', 'disabled', 'disabled-checked', 'disabled-selected', 'disabled-indeterminate', 'invalid', 'invalid-selected', 'loading', 'readonly', 'read-only', 'hover', 'active', 'focus', 'indeterminate']);
 export function specimenName(example, family) {
   const { title } = example;
@@ -42,7 +43,8 @@ const TREATMENTS = new Set(['solid', 'soft', 'outline', 'ghost', 'color', 'moder
 const LAYOUT = new Set(['horizontal', 'vertical', 'fullWidth', 'labelEnd', 'labelStart', 'right', 'bottom', 'left', 'top',
   'landscape', 'portrait', 'twoMonths', 'monday', 'week', 'tile', 'compact', 'immersive', 'carousel', 'iconOnly',
   'wrapped', 'hiddenLineNumbers', 'visibleRows', 'compactRows', 'columnDividers', 'striped', 'grouped', 'multiline']);
-const TONES = new Set(['accent', 'custom', 'neutral', 'info', 'success', 'warning', 'danger']);
+// Every status tone, caution and discovery too (Toast filed them under Content until 2026-11-11, F3.3).
+const TONES = new Set(['accent', 'custom', 'neutral', 'info', 'success', 'warning', 'danger', 'caution', 'discovery']);
 const STATES = new Set(['empty', 'collapsed']);
 const FAMILY_GROUPS = {
   indicator: { presence: 'Variants', outOfOffice: 'States', count: 'Content' },
@@ -78,9 +80,24 @@ export function specimenGroup(name, family) {
  * "outline-success" → "Outline, success", "sm" → "Small", "fullWidth" → "Full width". Ids and links keep the label.
  */
 const SIZE_WORDS = { xs: 'extra small', sm: 'small', md: 'medium', lg: 'large', xl: 'extra large' };
+/* A name's words: split before a capital that starts a word, after a lower case letter or a digit ("withLabel") and
+   after a one-letter word in capitals ("inADialog" → "in a dialog"; it read "in adialog" until 2026-11-11, F3.1). */
+const words = (part) => part.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/([A-Z])([A-Z][a-z])/g, '$1 $2').toLowerCase();
 export function specimenWords(label) {
-  const text = label.split('-').map(part => SIZE_WORDS[part] ?? part.replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase()).join(', ');
+  const text = label.split('-').map(part => SIZE_WORDS[part] ?? words(part)).join(', ');
   return text.charAt(0).toUpperCase() + text.slice(1);
+}
+/**
+ * A tile's value in words, as the Sidebar's list, the tiles and the Canvas path show it. A label that is its title's
+ * words (the whole title, or the value after "Group / ") shows them as written, so capitals and brackets stay
+ * ("List (default)", "OKLCH", "Surface (tools)"); every other tile shows its label in words (specimenWords), a size
+ * in full ("sm" → "Small").
+ */
+export function specimenValue(example, name, group, hasDefault) {
+  const label = group === 'Default' && !hasDefault ? name : specimenLabel(name, group);
+  const written = example.title?.split('/').at(-1).trim();
+  if (written && !SIZE_WORDS[label] && camel(written) === label) return written.charAt(0).toUpperCase() + written.slice(1);
+  return specimenWords(label);
 }
 /** The tile label inside its group: the value without the group's own prefix. */
 export function specimenLabel(name, group) {

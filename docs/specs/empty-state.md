@@ -104,15 +104,15 @@ column `max-w-xl` 576. Notion's Favorites column 340 with a 12 gap under the ico
 | layout | centred column, text centred | All products and systems | — |
 | md · tile | 48 (`control-xl`), corner `radius-control-xl` (12), `bg-component`, 24 glyph in `fg-default` | ChatGPT 48 / 12 / #f3f3f3 / 24 default ink; Untitled lg 48 / 24 | Untitled's white ringed tile not used: ChatGPT and shadcn fill it |
 | sm · tile | 40 (`control-lg`), corner `radius-control-lg` (10), same paint, 20 glyph | Peer File upload's 40 tile with a 20 glyph; shadcn 40 / 10 | Notion draws a bare 32 muted glyph; a tile keeps sm one family with md |
-| md · gaps | 16 under the tile, 8 title to line, 16 above actions | ChatGPT | — |
-| sm · gaps | 12 under the tile, 2 title to line, 8 above actions | Notion Favorites (12, 2), Skills (8) | — |
+| md · gaps | 2 × `ui-cluster` under the tile (12 / 16 / 20), 4 title to line, `gap-section` above actions (16 / 24 / 32) | ChatGPT 16 under the tile | — |
+| sm · gaps | `gap-row` under the tile and above actions (8 / 12 / 16), 4 title to line | Notion Favorites (12, 2), Skills (8) | — |
 | md · title | **`title-xs` 16/22** 500, `fg-default`, at both densities; a heading over its line, so it stands **4** off it (14.0 baseline to cap beside the line's 8.8; 2026-11-06, Text pairs) | Dialog and Drawer's surface title (consistency pass O3, owner 2026-10-12) | ChatGPT's 18/24 is off Area's six-step ramp; was a literal 18/24 (compact 16/24) |
 | sm · title | the UI type (14/20; 12/16 compact) 500, `fg-default` | Notion 14/20 500 | Notion's title is muted like its line; Area keeps the default ink in both sizes (ChatGPT, Untitled, shadcn, Primer), so the title reads first |
 | description | `text-base` (14/20; 12/16 compact), `fg-muted` | ChatGPT and Notion 14/20 muted | — |
 | measure | md 576, sm 340 | ChatGPT `max-w-xl` 576 (Notion Skills 600); Notion Favorites 340 | — |
 | wrapping | `text-wrap: balance` on title and line | shadcn, Primer | Products don't balance; balance keeps a two-line line even in the centred column |
 | padding | md 32 (2 × `inset-surface-md`; 24 compact), sm 16 (`inset-surface-md`; 12 compact) | Primer medium 32, small 16 | Products centre it in their own region with no padding; the component needs its own inset in a Card or Panel |
-| actions | row, 8 apart, centred, wraps; consumer Buttons (md: default size; sm: sm) | ChatGPT 8 apart | Untitled 12 apart |
+| actions | row, `ui-cluster` apart (6 / 8 / 10), centred, wraps; consumer Buttons (md: default size; sm: sm) | ChatGPT 8 apart | Untitled 12 apart |
 | glyph line | the size curve for the slot it is shown at (24 → 1.2 × the 16 line; 20 → 1.106 ×) | `base.css` glyph sizes | An Area `Glyph` drawn for another size takes the tile's line |
 
 ## States
@@ -205,3 +205,11 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
 - **Why:** the owner's note on a confirm ("no spacing logic between the title and the text … the type style size contrast with the text is large … make sure all of this is intentional"). The 2026-11-02 ramp moved `title-xs` from 15 to 16 at type 13, so a 16 title sat over 13 text, 1.23× (the owner had approved 16 over 14, 1.14×, on 2026-09-26), and joined 10.0 baseline to cap beside the text's own 8.8: near the line gap but not on it. Cursor sets its confirm's title at its text's size (12/500 over 12) and its settings rows 13 over 13. DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`. A heading over its text is a whole step off the text's line, never 1 off it.
 - **Second look:** sm's title (13 over 12) now stands one step (4) off its line too, 11.7, as every surface title; it
   was joined (7.7). The owner approved the step ("4 is right", 2026-11-06).
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- md: tile to title 12 / 16 / 20, text to actions 16 / 24 / 32. sm: 8 / 12 / 16 for both. Actions 6 / 8 / 10 apart.
+  The title to its copy stays 4 (a text pair, at every density).

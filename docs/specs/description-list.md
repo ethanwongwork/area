@@ -24,7 +24,7 @@ file's details). It is a native `<dl>`. Not a PropertyList (Figma's fill and eff
 | layout | columns (default) | Terms in a fixed column, values after them | Notion page properties |
 | layout | justified | Term at the start, value at the end | ChatGPT Settings › Account |
 | divided | boolean | A rule between rows | ChatGPT's settings card |
-| framed | boolean | The list stands alone in a frame | ChatGPT's settings card |
+| variant | `plain` (default) · `surface` | `surface`: the list stands alone in Table's frame (the one frame prop, plan B1.1; `framed` stays as a deprecated alias) | ChatGPT's settings card |
 | content | icon on the term; any value (text, Badge, person, Link) | Notion's property icons; rich values | Notion |
 | composition | in a Panel (context, no prop) | One value column with the panel's Fields | Claude's and Cursor's key/value rows; Area's Inspector |
 
@@ -48,7 +48,7 @@ the name unchanged.
 ## Anatomy
 
 ```
-area  dl.area-description-list.area-description-list--{columns,justified}[.--divided][.--framed]
+area  dl.area-description-list.area-description-list--{columns,justified}[.--divided][.--surface]
         div.__item (row)
           dt.__term (span.__icon[aria-hidden] + span.__label)
           dd.__value
@@ -56,7 +56,7 @@ area  dl.area-description-list.area-description-list--{columns,justified}[.--div
 
 Insets, columns: term column 160 (padding 6, icon 16, 6 to the name: name at 28); value text at 160 + 8 + 6 = 174
 (Notion: cell 4 after the column, plate 4 in, text 6 in); rows 34, 4 apart. Justified: row padding 12 / 16, 24 between
-term and value; rules inset 16. Framed, the text sits 12 inside the frame (13 from its outer edge), the agent chat's
+term and value; rules inset 16. In its frame, the text sits 12 from the frame's outer edge, the edge counted once, the agent chat's
 card column; framed columns keep ChatGPT's 12 from the top.
 
 ## Measurements
@@ -240,3 +240,22 @@ Framed insets: the frame's stroke is counted once, so text and rules sit 16 from
 - **What changed:** `onExpandedChange(expanded, event)` passes the Show more press.
 - **Why:** DescriptionList.tsx:25. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A2.2 · "Show N more" is a list row: radius-row, 6 → 8 at the default. description-list.css.
+- 2026-11-11 · system evaluation A1.1, A8.2 · property rows are the UI row (30 at the default, 28 Compact; were the row + 2) and 4 apart (was 2; Compact 0), so the default's 34 pitch holds and Compact's is 28 (was 30); the columns layout's value starts `gap-row` after the term (12, was 10); "Show N more" is a row tall and one row gap below.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** a justified term keeps the term's muted 400, as every layout's (plan A9.13, findings T24, VC26): layout moves a label, not its role; it was 500 in the default ink. The "more" link's underline reads `underline-offset` (plan A9.10).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-13 · One frame prop (system plan, Phase 2, B1.1)
+
+- `framed` became `variant="surface"` (plain by default), the one frame prop; `framed` stays as a deprecated alias.
+- In its frame the text is 12 from the outer edge with the edge counted once (was 13), the chat card's column.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The justified layout's row padding is `gap-row` (8 / 12 / 16) and its term-to-value gap `gap-section` (16 / 24 / 32). Values at type 13 Compact / Default / Comfortable; unchanged at the default. The cell's text inset 6 and the value cell's offset 8 hold at every density (row geometry beside a fixed term column). Listed, not moved: the term's icon gap 6 (twice) and the justified inset 16 (inset-surface-md is 14 at the default).
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

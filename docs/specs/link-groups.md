@@ -103,3 +103,15 @@ in the manifest. The design approved in round 35 is unchanged.
 - 2026-10-19 · design-system audit → the list sets the muted ink itself (`__list` color `fg-muted`), so standalone Links
   inherit it as the Documentation entry says; the demo no longer passes `ink="muted"` per link. `aria-label` now wins
   over the title's `aria-labelledby`. No visual change in the gallery.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** A group's label is muted (plan A9.4, finding T3); the block's title stays default.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- Title to groups `gap-row` (8 / 12 / 16), groups apart `gap-section` (16 / 24 / 32), a heading to its links `ui-cluster` (6 / 8 / 10), the divided form's top `2 × ui-cluster` (12 / 16 / 20). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

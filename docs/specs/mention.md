@@ -122,6 +122,8 @@ Forced colours: soft draws a `CanvasText` border; due is `CanvasText` with a wav
 
 ## Measurements
 
+**Current (2026-11-13, one mark).** The soft Mention is an inline chip on the one mark recipe (inset.css, "One mark"; plan B5.1, VC24): block padding (1lh − 1.3em) / 2 (0.55 on a 13/18 line; was 2), so the plate is the line box and wrapped chips meet without overlapping (they overlapped by 3); side (1lh − 6) / 2, 6 on an 18 line.
+
 None rendered: the values are the bundles' declared ones (above).
 
 ## Peers and consistency
@@ -162,3 +164,13 @@ is swapped.
 
 - 2026-11-07 · built from the components audit (N3); `underline` added to `variant`'s values; the Composer's @ list
   reuses Composer menu unchanged.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the underline reads `underline-offset` (0.08em) (plan A9.10); no visible change.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## One mark, 2026-11-13
+
+Plan B5.1 (and B5.2, B5.3 where they apply; docs/research/system-evaluation-2026-11-11): the family moved onto the shared mark recipe in inset.css and its own copy of the side, baseline, corner and text was removed. Values above, under Measurements.

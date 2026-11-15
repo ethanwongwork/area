@@ -59,7 +59,7 @@ Notion and ChatGPT: no grouped field among their captures (searched every `notio
 area   div.area-input-group  (shell: height, border, radius, fill, no resting shadow, one focus ring, overflow clip)
   text     span.area-input-group__text          gutter padding, fg-muted
   visual   span.area-input-group__text[data-visual]  H wide, 16px icon or a letter, centred
-  child    .area-input / .area-number-field / .area-select  chrome stripped, flex 1, 1px decorative rule before it
+  child    .area-input / .area-number-field / .area-select  chrome stripped, flex 1, least width its content (fields), 1px decorative rule before it
   action   .area-button (ghost)                 H wide, chrome stripped
 ```
 
@@ -95,6 +95,7 @@ The sizes (sm) radius was 8 at capture; since audit S4 it is 6.
 | segment rule | 1px `border-decorative` before each other child (`input-group.css:103`) | Figma value row: 1px gap between hex and opacity | Figma's colour row has none; kept (third pass): two fields in one group, and the rule marks where each edits |
 | affix | gutter sides (12 md), `fg-muted` | Peer: Input affix; Figma "%" at 50% | — |
 | child gap | children read the group's gap tier, 6 at sm, md and lg (`--_group-gap`, `input-group.css:8, :29-31`; passed on at `:53`, `:77`); compact sm 4 | Peer: Input, Button (audit S14) | Was 4 / 8 / 8 |
+| field minimum | a grouped Input or Number field is at least its content wide (`min-inline-size: min-content`, its control sized by `field-sizing: content`), so the value or placeholder and its insets always show; it still grows to fill the group. Where `field-sizing` is unsupported the field keeps no minimum | System evaluation F3.2 (VA4): in a content-sized place (an inline row, a width that is a share of an unsized parent) the field fell to 0 × 18 and Number field's "100%" clipped to "1(" | A text control's own intrinsic width is 20 characters, so `min-content` alone would hold the group at ~258 |
 | mode select | 3 × H wide first child (`input-group.css:102`) | Existing Area recipe | — |
 | validation | invalid: danger edge, danger halo on focus; success / warning: tone edge, **held through focus with the tone halo** (`input-group.css:34-35, 41-45`) | Peer: Input and Select hold the tone; second pass item 11; third pass | Success and warning gave way to the focus edge on focus until the third pass |
 | disabled | field paint when the group is `aria-disabled` or a direct child is disabled: fill `input-bg-disabled`, `border-faint`, `fg-disabled` (InputGroupText included), no hover (`input-group.css`) | Audit "Disabled" (text fields); second pass item 11; audit B-10, B-14 | Was no group paint; InputGroupText kept its muted ink |
@@ -108,7 +109,7 @@ The sizes (sm) radius was 8 at capture; since audit S4 it is 6.
 | focus-within | border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo; outline in increased contrast (audit S1) | `input-group.css:36-40` |
 | invalid | danger border; danger halo on focus | `input-group.css:44-45` |
 | success / warning | tone border at rest; tone border, outline and halo on focus | `input-group.css:34-35, 42-43` |
-| disabled | field paint on the group, InputGroupText in `fg-disabled`; children keep stripped chrome | `input-group.css`; no disabled tile |
+| disabled | field paint on the group, InputGroupText in `fg-disabled`; children keep stripped chrome; the manifest's `disabled` state, on the group's `aria-disabled` | `input-group.css`; no disabled tile |
 
 ## Behavior and accessibility
 
@@ -210,8 +211,31 @@ width still follows its text's advance (fractional by nature, the divider is pix
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-field` makes the group a pill (`input-group.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once; the text segment inset rounded to whole pixels (`input-group.css`). See "Motion and interaction, 2026-10-07".
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft group's edge is `input-edge-soft`, as Input's.
+- 2026-11-11 · system evaluation F5 · `variant`, `size` and `fullWidth` gain their descriptions on the API tab; no other change.
 
 ## Review note, 2026-10-26 (interaction pass)
 
 - **What changed:** The hover edge eases in on Feedback's hover clock, as Input's.
 - **Why:** One hover clock for every field. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+### 2026-11-11 · A grouped field keeps its content's width (system evaluation F3.2, VA4)
+
+- **What changed:** a grouped Input or Number field's least width is its content: `min-inline-size: min-content` with the
+  control sized by `field-sizing: content` (inside `@supports`), so the value or placeholder and its insets always show.
+  At the default width (16rem) and in every gallery tile nothing moves: the field still takes the rest of the group.
+- **Why:** with `flex: 1 1 0; inline-size: 0; min-inline-size: 0` the field had no intrinsic minimum, so a group whose
+  width resolved against an unsized parent (the gallery set the fields' width hook to 100% inside a shrink-wrapped
+  stage) drew a 0-wide field in 9 of 12 tiles, and the Opacity tile's "100%" clipped to "1(". Measured after the change
+  in a `width: fit-content` box at that hook: the Affixes group is 128 wide with a 55 field ("24.00"), Opacity 74 with
+  42, Phone 169 with 77; at the default every group is 256 as before.
+- **Gallery half:** a fluid demo's wrapper now takes the stage's width before the fit measures it (src/gallery/fit.ts),
+  so the tiles show each group across its card.
+- **Verdict:** awaiting the owner.
+
+- 2026-11-11 · System evaluation F5: the manifest lists the `disabled` state (`stateAttributes: aria-disabled`), so the generated API tab and the parity test read it. No visual change.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The group draws the one field shell (tiers from the shell; `--_group-*` became the shell's `--_height` etc., the fields inside `inherit` them). Seams: border-decorative → `input-edge`, the field edge (visible: a step darker). Soft group's hover edge: edge-control-hover → `input-edge`, the control edge, as every soft field. Status reaches the group through the shell (`:has()`). The text segment is a text box on the centring model (cap at (H − 1cap) / 2 − border; it sat 0.62 high at type 13).
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.

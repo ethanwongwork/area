@@ -8,18 +8,9 @@
  * docs/specs/tag-picker.md.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /* The field is the one field shell (input.css, "One field shell"): its tiers, edge, corner, fill, soft, focus and
+     status. */
   .area-tag-picker {
-    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
-    --_bg: var(--area-input-bg);
-    --_border: var(--area-input-edge);
-    --_border-hover: var(--area-input-edge-hover);
-    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
-    --_focus-outline: var(--area-field-focus-color);
-    --_focus-halo: var(--area-field-focus-halo-color);
-    --_height: var(--area-control-md);
-    --_radius: var(--area-radius-control-md);
-    --_text: var(--area-control-md-text);
-    --_leading: var(--area-control-md-leading);
     /* The tag's own height (Tag sm, 20: Notion's tags are 20, notion--select-property-editor). */
     --_tag: var(--area-mark-label-md); /* Tag sm, 20: Notion's tag */
     display: inline-flex;
@@ -28,30 +19,20 @@
     max-inline-size: 100%;
     min-inline-size: 0;
   }
-  .area-tag-picker--outline { --_bg: var(--area-input-bg); }
   /* Tags sit on the field's fill, so their dark labels take the fill lift (tag.css; Layers sweep 2026-10-16). */
   .area-tag-picker .area-tag { --_lift: var(--area-layer-dark-tint-lift-fill); }
   /* A tag nests in the field's corner (DESIGN_SYSTEM.md, Nested radius): the field's corner less the tag's inset (the
      padding, the field's edge left out), floored at min(radius-floor, the tag's own). 4 at every size by default; at lg
      the tag's own 6 sat in the field's 10 at 7 in, rounder than the field's curve (spacing audit 2026-10-17, open until
-     2026-10-23). A pill field nests pill tags. The field's corner and the inset are read on the picker, where
-     `--_height` is the field's. */
+     2026-10-23). A pill field nests pill tags. The field's corner is the shell's, read on the picker as well, so a tag
+     in the list nests the same way. */
   .area-tag-picker {
-    --_field-corner: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
     --_tag-inset: calc((var(--_height) - var(--_tag)) / 2 - var(--area-border-width));
   }
   .area-tag-picker .area-tag {
-    --_corner: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))), round(down, calc(var(--_field-corner) - var(--_tag-inset)), 2px)); /* even, as every corner */
+    --_corner: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))), round(down, calc(var(--_field-shape) - var(--_tag-inset)), 2px)); /* even, as every corner */
   }
-  .area-tag-picker--soft {
-    --_field-lift: 0 0 0 0 transparent;
-    --_bg: var(--area-input-bg-soft);
-    --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
-    --_border-hover: var(--area-input-edge);
-  }
-  .area-tag-picker--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-tag-picker--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-tag-picker--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_tag: var(--area-mark-label-lg); }
+  .area-tag-picker--lg { --_tag: var(--area-mark-label-lg); }
   .area-tag-picker--full-width { display: flex; inline-size: 100%; }
 
   /*
@@ -61,7 +42,6 @@
    * gap 6). The input takes the rest of the last row.
    */
   .area-tag-picker__field {
-    box-shadow: var(--_field-lift);
     --_tag-inset: max(0px, calc((var(--_height) - var(--_tag)) / 2 - var(--area-stroke-width)));
     box-sizing: border-box;
     display: flex;
@@ -72,12 +52,6 @@
     min-inline-size: 0;
     min-block-size: var(--_height);
     padding: var(--_tag-inset);
-    border: var(--area-stroke-width) solid var(--_border);
-    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
-    background-color: var(--_bg);
-    color: var(--area-input-text);
-    font-size: var(--_text);
-    line-height: var(--_leading);
     cursor: text;
     /* Motion (docs/MOTION.md): the edge enters a state at once (hover, focus, open) and leaves on
        fast ease-out; the focus halo is not in the list, so the ring never fades. */
@@ -85,7 +59,6 @@
     transition-property: background-color, border-color, color;
   }
   @media (hover: hover) {
-    .area-tag-picker__field:hover:not([data-disabled], [data-read-only]):not(:focus-within) { border-color: var(--_border-hover); }
     .area-tag-picker__field:hover { transition-duration: var(--area-hover-in); }
   }
   .area-tag-picker__field:focus-within,
@@ -94,50 +67,15 @@
      lands rather than pops; opacity only, as scaling would soften its text. Tags already there on
      load, and removals, don't move (Notion's are instant). */
   .area-tag-picker__field:focus-within > .area-tag {
-    transition: opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
   }
   @starting-style {
     .area-tag-picker__field:focus-within > .area-tag { opacity: 0; }
   }
-  .area-tag-picker__field:focus-within {
-    border-color: var(--_border-focus);
-    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
-    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-  }
   /* Open: the field keeps its focused edge while the list shows (focus is in the input). */
-  .area-tag-picker[data-open] > .area-tag-picker__field { border-color: var(--_border-focus); }
-  .area-tag-picker__field[aria-invalid="true"] {
-    --_border: var(--area-input-invalid-color);
-    --_border-hover: var(--area-input-invalid-color);
-    --_border-focus: var(--area-input-invalid-color);
-    --_focus-outline: var(--area-input-invalid-color);
-    --_focus-halo: var(--area-input-invalid-halo-color);
-  }
-  /* Success and warning, as Input's (components audit 2026-11-07, O1): a Field's status reaches every field. */
-  .area-tag-picker__field[data-success] {
-    --_border: var(--area-input-success-color);
-    --_border-hover: var(--area-input-success-color);
-    --_border-focus: var(--area-input-success-color);
-    --_focus-outline: var(--area-input-success-color);
-    --_focus-halo: var(--area-input-success-halo-color);
-  }
-  .area-tag-picker__field[data-warning] {
-    --_border: var(--area-input-warning-color);
-    --_border-hover: var(--area-input-warning-color);
-    --_border-focus: var(--area-input-warning-color);
-    --_focus-outline: var(--area-input-warning-color);
-    --_focus-halo: var(--area-input-warning-halo-color);
-  }
-  /* Read-only keeps its rest paint with no hover edge, as Input's; the list doesn't open. */
-  .area-tag-picker__field[data-read-only] { cursor: default; }
-  .area-tag-picker__field[data-disabled] {
-    --_bg: var(--area-input-bg-disabled);
-    --_border: var(--area-border-faint);
-    color: var(--area-fg-disabled);
-    cursor: not-allowed;
-  }
-  .area-tag-picker--soft > .area-tag-picker__field[data-disabled] { --_border: transparent; }
-  
+  .area-tag-picker[data-open] > .area-tag-picker__field { --_field-edge: var(--_border-focus); }
+  /* Read-only and disabled are the field shell's (input.css); a read-only list doesn't open, and a disabled field's tags
+     dim by opacity, as marks do. */
 
   /* The text input: Input's bare control, a tag tall, at least a few characters wide. Before any
      tag it starts on Input's text column (the cap-centred inset), not the tag inset. */
@@ -158,32 +96,23 @@
     padding-inline-start: max(0px, calc(round(nearest, calc((var(--_height) - 1cap) / 2 - var(--area-stroke-width)), 1px) - var(--_tag-inset)));
   }
   .area-tag-picker__input::placeholder { color: var(--area-input-placeholder); opacity: 1; }
-  .area-tag-picker__input:disabled { cursor: not-allowed; }
 
   /* The list: Combobox's (placement, width, height), Menu's rows. */
   .area-tag-picker__listbox[popover] {
     overflow-y: auto;
     overscroll-behavior: contain;
     max-block-size: min(324px, var(--area-overlay-available-height, 50vh)); /* spec: combobox.md */
-    min-inline-size: max(var(--area-overlay-anchor-width, 0px), var(--area-menu-min-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-32))));
+    min-inline-size: max(var(--area-overlay-anchor-width, 0px), var(--area-menu-min-inline-size, calc(var(--area-space-96) + var(--area-space-64))));
   }
   .area-tag-picker__listbox:focus-visible { outline: none; }
   /* spec: Notion heads the list with "Select an option or create one", 12px muted. Menu's label. */
   .area-tag-picker__hint { flex: none; }
   /* A tag in a row keeps its own size; the row's check marks the chosen ones. */
   .area-tag-picker__option > .area-tag { flex: none; max-inline-size: 100%; }
-  /* Unchosen, the check is Menu's small mark at rest (surface.css): it fades and grows in when chosen, rather than
+  /* Unchosen, the check is Menu's small mark at rest (menu.css): it fades and grows in when chosen, rather than
      popping (2026-10-26, the interaction pass; it was visibility: hidden). */
   .area-tag-picker__option[aria-selected="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   /* "Create" names the action in the row's ink, then shows the tag it would make. */
   .area-tag-picker__create { gap: var(--area-space-6); }
-  .area-tag-picker__empty {
-    display: flex;
-    align-items: center;
-    block-size: var(--area-ui-row);
-    padding-inline: calc((var(--area-ui-row) - 1cap) / 2);
-    color: var(--area-fg-muted);
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
-  }
+  /* One empty line for every list: Menu's (.area-menu__empty, a row tall on the glyph edge; plan B2.6). */
 }

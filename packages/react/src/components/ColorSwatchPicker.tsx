@@ -16,19 +16,30 @@ export interface ColorSwatchOption {
 export interface ColorSwatchPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
   /** Accessible name for the color choice. */
   label: string;
-  /** The swatches. Collections are `items` everywhere (audit H-14). */
+  /** The swatches. */
   items?: readonly ColorSwatchOption[];
   /** @deprecated Use `items`. */
   options?: readonly ColorSwatchOption[];
+  /** The form name its radios submit under. */
   name?: string;
+  /** The chosen swatch's value, controlled. */
   value?: string;
+  /** The swatch chosen at first, uncontrolled. */
   defaultValue?: string;
+  /** Called with the chosen swatch's value and the change event. */
   onValueChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
+  /** The swatches' size: `md` (default), `sm` or `lg`. */
   size?: VariantProps<typeof MANIFESTS.colorSwatchPicker>["size"];
+  /**
+   * `grid` (default): separate swatches in `columns`. `row`: one row that wraps. `palette`: touching cells that fill
+   * the width.
+   */
   layout?: VariantProps<typeof MANIFESTS.colorSwatchPicker>["layout"];
   /** Number of columns in grid layout. */
   columns?: number;
+  /** Disables every swatch. */
   disabled?: boolean;
+  /** A form cannot submit without a swatch chosen. */
   required?: boolean;
 }
 

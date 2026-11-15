@@ -1,0 +1,661 @@
+/* ---------------------------------------------------------------------------
+ * Card (docs/specs/card.md)
+ *
+ * Every floating surface in the system (Card, Alert, Dialog, Popover, Menu, Tooltip, Toast) shares one geometry
+ * rule: concentric corners. A container's inner radius is its outer radius less its own
+ * padding. Applying that rule is why a 32px control inside a 12px panel with 6px of
+ * padding takes a 6px radius and looks nested rather than pasted on.
+ *
+ * The rule is applied per component rather than through one global token because the
+ * inset differs per component -- a menu pads 4px, while cards use a shared 16px
+ * content inset and an 8px media inset -- so there is no single correct value for a
+ * shared token to hold.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* --- Card ---------------------------------------------------------------- */
+  /*
+   * Two independent axes set private properties that one base rule consumes:
+   *   size        shape: corner and inset (sm / md / lg);
+   *   layout      arrangement: vertical, horizontal, compact, immersive.
+   * Card has one appearance, built in; appearances are deferred to a system-wide pass.
+   *
+   * Geometry (docs/specs/card.md, rebuilt 2026-10-30, owner: "the padding is always wrong … consistent, generic, simple,
+   * and modular layouts"):
+   *   - the card's padding is its space, one value on every side (sm 16, md 20, lg 24; compact 4 less), and every slot
+   *     sits there: header, content, footer, lists, controls, in CardContent or straight in the Card, so a layout built
+   *     from the slots in any order lines up without knowing the card's insides;
+   *   - media steps back out to the media inset (6 / 8 / 12), its corner the card's less that inset; only bleed media
+   *     meets the edge;
+   *   - blocks are one section gap apart (12 / 16 / 20); the lines of one text group 4; a description joins its title;
+   *   - the first line is trimmed to its cap and the last to its descent, so the space is the distance to the ink on
+   *     every side; a footer drops to the bottom of a taller card.
+   * Type is three roles at every size: title, description, value.
+   */
+  .area-card {
+    /* spec: md, the default. The media inset (8 at type 14, as measured on a promo card; 7 at the default) for media;
+       text and controls share one column the card's space in (below), with or without media (owner 2026-09-28:
+       "the padding for text and buttons being 16 total distance shouldnt only apply when there is an image or
+       container"; was 4 further in, 12). The corner is a resting card's (plan A2.3, owner
+       2026-11-11): six tenths of the text inset in even pixels, never rounder than the floating corner (radius-container),
+       10 at the default (18 x 0.6), sm 8, lg 12. Its media is concentric with it, the corner less the media inset,
+       floored. It was the surface corner plus a term (18 at the default), rounder than the Popover or Menu that opens
+       over it. */
+    /* Compact steps the insets down (compact pass, round 6): media inset 6, space 16, so the corner is 8 (16 x 0.6).
+       Each value is written as its type-14 value less the compact difference times `ui-dense` (0 at type 14
+       Default, 0.5 at the default type 13, 1 compact). */
+    --_card-inset: var(--_fr-mat-md); /* the frame recipe's ladder (surface.css): 8, compact 6 */
+    /* spec (2026-10-30): the space, where every slot but media sits: 20 − 4 × ui-dense, 18 at the default, 20 at type 14,
+       16 compact (the owner's references pad their cards 20 to 24 at a 36 control, 0.6 of a control). Was 16 (8 inset +
+       8 in CardContent only), so a header or footer put straight in the card sat 8 from the edge. */
+    --_card-space: var(--area-card-inset, var(--_fr-inset-md)); /* the frame recipe's ladder (surface.css) */
+    /* spec (2026-10-30): the section gap between blocks, 16, compact 12, on whole steps as every gap (plan A1.1; was 14 at
+       the default type 13; the references' 12 to 16 between a text group and a tag row or list; was 12 in CardContent and 8
+       between the card's own children). */
+    --_card-section: var(--area-card-gap, var(--_fr-gap-md)); /* the frame recipe's ladder (surface.css) */
+    /* The gap between a well's or a carousel's items: the media inset on whole steps (plan A1.1: 8, compact 6; the inset
+       itself keeps the half step, 7 at the default). */
+    --_card-item-gap: var(--area-ui-cluster); /* spec */
+    /* The control a header action holds: a default Button, a small one in a small card. */
+    --_card-action: var(--area-control-md);
+    /* The frame recipe's card corner (surface.css, plan B1.1): a resting card is never rounder than a floating surface
+       (plan A2.3), six tenths of its text inset at Corner 10, moving with the setting. The inset is the card's space, so a
+       page that sets --area-card-inset, or a density that moves it, moves the corner with it. Sharp is square. */
+    --_fr-inset: var(--_card-space);
+    --_fr-mat: var(--_card-inset);
+    --_fr-corner: var(--_card-corner);
+    --_card-radius: var(--_fr-card);
+    --_card-border: var(--area-border-width);
+    /* spec (consistency pass): one title role and one body role at every size. */
+    /* The surface title role, held in compact as Dialog's (audit H-7). */
+    /* Public hooks `--area-card-title-size` / `-leading` / `-tracking` (2026-11-04, Q-T1): a page whose Cards sit under a
+       section title of the same size (the desktop app's feed: data views and stat cards under title-xs section titles)
+       sets the row's name role, text-base, so the section heads its cards; every other Card keeps the surface title. */
+    /* The text's size (2026-11-06 balance pass, DESIGN_SYSTEM.md "Text pairs"): a Card's title names it, so it is its
+       description's 13/18, strong and in the default ink, and the description joins it as the next line (8.8 baseline to
+       cap, the description's own line). It was title-xs, 16/22 over 13/18 (1.23x, joined 10.0), which the feed had
+       already set back to this (Q-T1, owner 2026-11-04). The hooks stay for a page that wants a larger name. */
+    --_card-title-size: var(--area-card-title-size, var(--_fr-title-size));
+    --_card-title-leading: var(--area-card-title-leading, var(--_fr-title-leading));
+    --_card-title-tracking: var(--area-card-title-tracking, var(--_fr-title-tracking));
+    --_card-body-size: var(--area-text-base-size);
+    --_card-body-leading: var(--area-text-base-leading);
+    --_card-body-tracking: var(--area-text-base-tracking);
+    /* spec: owner (2026-09-27), a lighter edge than the divider (#e2) with a faint lift under
+       it. Since 2026-10-30 the Cards stroke group (edge-cards: 4 by default, 10% of the text colour over the
+       ground, light or dark; axes/stroke-groups.ts); it was #ee light and the divider rung dark. */
+    --_card-edge: var(--area-card-edge, var(--area-edge-cards));
+    /* The resting role, from the Resting shadow setting (3 by default: one tight contact layer at 4%), dark
+       doubled, transparent at 0 (axes/depth.ts, axes/elevation.ts; was a 0 0 8 halo with a contact line). */
+    --_card-shadow: var(--area-shadow-resting); /* the Elevation axis role (axes/elevation.ts): a resting surface */
+    /* The box-shadow's slots, so a state changes one slot and keeps the rest (a selected card that lifts keeps its
+       ring; a material's layers stay through hover and selection): the selection ring, then the lift. */
+    --_card-ring: inset 0 0 0 0 transparent;
+    --_card-lift: var(--_card-shadow);
+    /* The media placeholder's plate, one perceived step off the card in both themes (bg-plate, plan A10.1, 2026-11-11): was
+       neutral 25 (#fa, 1.04:1 on white, invisible) and the dark 800 rung (#28, a solid block). */
+    --_card-media-fill: var(--area-bg-plate);
+    /* Derived. The text column is the space; media reaches back out by the pull, the space less the media inset. */
+    --_card-text-inset: var(--_card-space);
+    --_card-pull: calc(var(--_card-space) - var(--_card-inset));
+    /* The drawn corner: the card's radius, never deeper than 1.5 x its text inset, so text never sits
+       in a curve twice its inset (owner, 2026-10-12: radius 14 put 16px-inset text in a 28 corner;
+       docs/research/ui-size-scale-2026-10-12.md). The 0.6 rule above stays under it; it bounds a corner a Card takes from a
+       Surface around it (surface.css). */
+    --_card-corner: var(--area-card-corner, min(var(--_card-radius), max(var(--area-radius-floor), round(down, calc(var(--_card-text-inset) * 1.5), 2px))));
+    --_card-padding: calc(var(--_card-space) - var(--_card-border));
+    --_card-gap: var(--_card-section);
+    /* The recipe's picture corner: the drawn corner less the media inset, to the floor (4 at the default, owner 2026-11-13). */
+    --_card-media-radius: var(--_fr-picture);
+    --_card-columns: minmax(0, 1fr);
+    display: grid;
+    grid-template-columns: var(--_card-columns);
+    position: relative;
+    isolation: isolate;
+    align-content: stretch;
+    gap: var(--_card-gap);
+    box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    padding: var(--_card-padding);
+    /* spec: a card's edge stands alone (same fill as the page, a 0.5px lift), so it takes the
+       divider role: Figma file cards #e6, ChatGPT settings cards 10% black, Notion board
+       cards an 8% ring; the owner took it a rung lighter, with the shadow above. */
+    border: var(--_card-border) solid var(--_card-edge);
+    border-radius: var(--_card-corner);
+    /* Public hooks (2026-11-02, as Table's --area-table-corner / -edge / -fill and Asset card's): --area-card-corner,
+       --area-card-inset (the content's distance from the edge, the edge counted inside it), --area-card-gap, --area-card-fill
+       and --area-card-edge, so a page that frames its blocks one way (the desktop app's feed) draws them as Cards. */
+    background: var(--area-card-fill, var(--area-bg-card)); /* Card tone (Auto: the raised layer, bg-surface) */
+    color: var(--area-fg-default);
+    font-size: var(--_card-title-size);
+    line-height: var(--_card-title-leading);
+    /* The selection ring, a material's layers (`--_m-layers`, set only under data-area-material, material.css), the
+       Surface axis's edge (transparent while a frame is drawn, and at 0 (Borderless) the soft shadow edge that keeps the
+       card distinct at Elevation 0 and in dark; axes/surface.ts; was a dark-only inset ring, consistency pass O2), then
+       the lift. */
+    box-shadow: var(--_card-ring), var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-edge), var(--_card-lift);
+  }
+
+  /* Size: corner and inset only. */
+  /* Size: the space, the section gap and the media inset step together; the corner follows the media inset as before. */
+  /* The frame recipe's ladder at each size (surface.css): media inset, space and section gap; the corner follows the
+     space through the recipe's card role (8 / 10 / 12 at the default). The public hooks win. */
+  .area-card--sm {
+    --_card-inset: var(--_fr-mat-sm); /* spec: 6, compact 4 */
+    --_card-space: var(--area-card-inset, var(--_fr-inset-sm)); /* spec: 16, compact 12 */
+    --_card-section: var(--area-card-gap, var(--_fr-gap-sm)); /* spec: 12, compact 8 */
+    --_card-item-gap: var(--area-ui-stack); /* spec: 6, compact 4 */
+    --_card-action: var(--area-control-sm);
+  }
+  .area-card--md {
+    --_card-inset: var(--_fr-mat-md); /* spec: 8, compact 6 */
+    --_card-space: var(--area-card-inset, var(--_fr-inset-md)); /* spec: 20, compact 16 */
+    --_card-section: var(--area-card-gap, var(--_fr-gap-md)); /* spec: 16, compact 12 */
+    --_card-item-gap: var(--area-ui-cluster); /* spec: 8, compact 6 */
+  }
+  .area-card--lg {
+    --_card-inset: var(--_fr-mat-lg); /* spec: 12, compact 8 */
+    --_card-space: var(--area-card-inset, var(--_fr-inset-lg)); /* spec: 24, compact 20 */
+    --_card-section: var(--area-card-gap, var(--_fr-gap-lg)); /* spec: 20, compact 16 */
+    --_card-item-gap: var(--area-gap-row); /* spec: 12, compact 8 */
+  }
+
+  /* Layout. */
+  .area-card--vertical { --_card-columns: minmax(0, 1fr); }
+  /* Picture media in a vertical card is 16:9 (every system's default card image); a card
+     taller than its content gives the extra height to the content, whose footer drops to the
+     bottom. */
+  .area-card:not(.area-card--horizontal, .area-card--thumbnail, .area-card--immersive) > .area-card__media:not(.area-card__media--well) { aspect-ratio: 16 / 9; }
+  /* A vertical card stacks its slots in one column, so a footer can drop to the bottom of a taller card and CardContent
+     takes the room between. */
+  .area-card:not(.area-card--horizontal, .area-card--thumbnail) { display: flex; flex-direction: column; }
+  .area-card:not(.area-card--horizontal, .area-card--thumbnail) > .area-card__content { flex: 1 1 auto; }
+  /* Inset media steps back out from the space to the media inset on the sides it touches. */
+  .area-card:not(.area-card--horizontal, .area-card--thumbnail, .area-card--immersive) > .area-card__media:not(.area-card__media--bleed) { margin-inline: calc(-1 * var(--_card-pull)); }
+  .area-card:not(.area-card--horizontal, .area-card--thumbnail, .area-card--immersive) > .area-card__media:not(.area-card__media--bleed):first-child { margin-block-start: calc(-1 * var(--_card-pull)); }
+  .area-card:not(.area-card--horizontal, .area-card--thumbnail, .area-card--immersive) > .area-card__media:not(.area-card__media--bleed):last-child { margin-block-end: calc(-1 * var(--_card-pull)); }
+  /* Media beside text, 40 / 60 (Polaris's landscape MediaCard); the media may come first or
+     last in the markup. Below 480px of card the two stack, as Polaris and Material do. The card
+     is its own size container, so give a horizontal card a width (it fills a block or grid). */
+  .area-card--horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    container-type: inline-size;
+  }
+  .area-card--horizontal > .area-card__media {
+    /* 40% of the row, plus the pull it steps out by (a flex item with a set basis doesn't grow into a margin). */
+    flex: 0 0 calc((100% - var(--_card-gap)) * 0.4 + var(--_card-pull));
+    min-block-size: calc(var(--area-space-64) * 2);
+  }
+  .area-card--horizontal > :not(.area-card__media) { flex: 1 1 0; min-inline-size: 0; }
+  :is(.area-card--horizontal, .area-card--thumbnail) > .area-card__media:not(.area-card__media--bleed) { margin-block: calc(-1 * var(--_card-pull)); }
+  :is(.area-card--horizontal, .area-card--thumbnail) > .area-card__media:not(.area-card__media--bleed):first-child { margin-inline-start: calc(-1 * var(--_card-pull)); }
+  :is(.area-card--horizontal, .area-card--thumbnail) > .area-card__media:not(.area-card__media--bleed):last-child { margin-inline-end: calc(-1 * var(--_card-pull)); }
+  @container (width < 480px) { /* spec */
+    .area-card--horizontal > :not(.area-card__media) { flex-basis: 100%; }
+    .area-card--horizontal > .area-card__media { flex-basis: calc(100% + var(--_card-pull) * 2); }
+    .area-card--horizontal > .area-card__media:not(.area-card__media--well) { aspect-ratio: 16 / 9; }
+    /* Stacked, the media steps out on the sides and on the end it closes, as in a vertical card. */
+    .area-card--horizontal > .area-card__media:not(.area-card__media--bleed) { margin: 0 calc(-1 * var(--_card-pull)); }
+    .area-card--horizontal > .area-card__media:not(.area-card__media--bleed):first-child { margin-block-start: calc(-1 * var(--_card-pull)); }
+    .area-card--horizontal > .area-card__media:not(.area-card__media--bleed):last-child { margin-block-end: calc(-1 * var(--_card-pull)); }
+  }
+  /* A thumbnail beside the text; the text keeps the card's text inset from it, as it does
+     from the media in a horizontal card. */
+  /* An 84 picture at the media inset: its column is 84 less the pull it steps out by. */
+  .area-card--thumbnail { --_card-columns: calc(var(--area-space-80) + var(--area-space-4) - var(--_card-pull)) minmax(0, 1fr); }
+  .area-card--thumbnail > .area-card__media { aspect-ratio: 1; }
+  /* The text centres on the thumbnail (visual pass 2026-10-26): a title and a line sat at its top with half its height
+     empty below, where a list row (Menu's described rows, Notion's link previews, Asset row) centres a short text on its
+     picture. Text taller than the thumbnail fills the row from the top as before. */
+  .area-card--thumbnail > .area-card__content { justify-content: center; }
+  /* Media behind the text, inset like any media, with a readability gradient over it. */
+  .area-card--immersive { overflow: hidden; }
+  .area-card--immersive > .area-card__media,
+  .area-card--immersive::before {
+    position: absolute;
+    inset: calc(var(--_card-inset) - var(--_card-border));
+    border-radius: var(--_card-media-radius);
+  }
+  .area-card--immersive > .area-card__media { aspect-ratio: auto; z-index: -2; }
+  .area-card--immersive::before {
+    content: "";
+    background: linear-gradient(180deg, transparent 25%, var(--area-bg-card) 70%);
+    z-index: -1;
+  }
+  /* Over a picture the text sits at the space like any card's, at the bottom. */
+  .area-card.area-card--immersive > .area-card__content { flex: 0 0 auto; margin-block-start: auto; }
+
+  /*
+   * Bleed: the one media option that meets the card's edge, on the sides it touches, by
+   * cancelling the card's padding there (Fluent's CardPreview, Primer's header image, Radix's
+   * Inset; ChatGPT's, Figma's and Notion's gallery cards). Its outer corners follow the card's.
+   */
+  .area-card__media--bleed {
+    --_card-bleed: calc(-1 * var(--_card-padding));
+    --_card-bleed-radius: max(0px, calc(var(--_card-corner) - var(--_card-border)));
+  }
+  :is(.area-card--vertical, .area-card:not(.area-card--horizontal, .area-card--thumbnail, .area-card--immersive)) > .area-card__media--bleed:first-child {
+    margin: var(--_card-bleed) var(--_card-bleed) 0;
+    border-radius: var(--_card-bleed-radius) var(--_card-bleed-radius) 0 0;
+  }
+  :is(.area-card--vertical, .area-card:not(.area-card--horizontal, .area-card--thumbnail, .area-card--immersive)) > .area-card__media--bleed:last-child {
+    margin: 0 var(--_card-bleed) var(--_card-bleed);
+    border-radius: 0 0 var(--_card-bleed-radius) var(--_card-bleed-radius);
+  }
+  :is(.area-card--horizontal, .area-card--thumbnail) > .area-card__media--bleed:first-child {
+    margin-block: var(--_card-bleed);
+    margin-inline-start: var(--_card-bleed);
+    border-radius: 0;
+    border-start-start-radius: var(--_card-bleed-radius);
+    border-end-start-radius: var(--_card-bleed-radius);
+  }
+  :is(.area-card--horizontal, .area-card--thumbnail) > .area-card__media--bleed:last-child {
+    margin-block: var(--_card-bleed);
+    margin-inline-end: var(--_card-bleed);
+    border-radius: 0;
+    border-start-end-radius: var(--_card-bleed-radius);
+    border-end-end-radius: var(--_card-bleed-radius);
+  }
+  @container (width < 480px) { /* spec: the stacking width above */
+    .area-card--horizontal > .area-card__media--bleed:first-child {
+      margin: var(--_card-bleed) var(--_card-bleed) 0;
+      border-radius: var(--_card-bleed-radius) var(--_card-bleed-radius) 0 0;
+    }
+    .area-card--horizontal > .area-card__media--bleed:last-child {
+      margin: 0 var(--_card-bleed) var(--_card-bleed);
+      border-radius: 0 0 var(--_card-bleed-radius) var(--_card-bleed-radius);
+    }
+  }
+
+  /*
+   * Slots. Two spacings, in CardContent and in the card alike: the section gap between blocks (a header, a text group,
+   * a list, a badge row, a slider, a footer), and 4 between the lines of one text group (title, description, value),
+   * with a description joining its title. CardContent is only a group: it adds no padding, so its slots sit where the
+   * card's own do.
+   */
+  .area-card__content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /* In a Surface (plan B1.1: a Surface's title pair is Card's), the frame recipe's gap. */
+    gap: var(--_card-gap, var(--_fr-gap));
+    min-inline-size: 0;
+  }
+  :is(.area-card, .area-card__content) > :is(.area-card__title, .area-card__description, .area-card__value) + :is(.area-card__title, .area-card__description, .area-card__value) {
+    margin-block-start: calc(var(--_fr-pair-gap) - var(--_card-gap, var(--_fr-gap)));
+  }
+  .area-card__title {
+    margin: 0;
+    /* The frame's title pair (surface.css), so a title in a Surface is a Card's. */
+    font-size: var(--_card-title-size, var(--_fr-title-size));
+    line-height: var(--_card-title-leading, var(--_fr-title-leading));
+    letter-spacing: var(--_card-title-tracking, var(--_fr-title-tracking));
+    /* Strong in the default ink: the item name (surface.css, plan B1.2); a component's title is its text's size (Text pairs). */
+    overflow-wrap: anywhere;
+  }
+  .area-card__description {
+    margin: 0;
+    color: var(--area-fg-muted);
+    font-size: var(--_card-body-size, var(--_fr-title-size));
+    line-height: var(--_card-body-leading, var(--_fr-title-leading));
+    letter-spacing: var(--_card-body-tracking, var(--_fr-title-tracking));
+    overflow-wrap: anywhere;
+  }
+  /* spec (owner, 2026-09-28: "the gap between the title and description is too big"): a
+     description under its title joins it with no gap, so the title's baseline sits 11 above
+     the description's cap (Figma community tile 11.5, Notion promo card 11.5; was 15). */
+  /* 2026-11-06 (owner: the joined pair "still doesnt look right"): the description stands one step (4) off the title,
+     12.8 baseline to cap, as every surface title's copy; the heading's gap and the text group's 4 (above) give it. */
+  /* A figure a widget leads with: a temperature, a price, a count. The large title role
+     (Apple's widgets set their figure well above the text), with digits of equal width so a
+     changing value doesn't shift. */
+  .area-card__value {
+    margin: 0;
+    font-size: var(--area-title-lg-size);
+    line-height: var(--area-title-lg-leading);
+    letter-spacing: var(--area-title-lg-tracking);
+    font-weight: var(--area-weight-regular);
+    font-variant-numeric: tabular-nums;
+  }
+  /* In a widget (a figure closing the card, with at most one line after it), a card taller
+     than its content keeps the header at the top and sets the figure at the bottom. */
+  :is(.area-card, .area-card__content) > .area-card__value:nth-last-child(-n + 2) { margin-block-start: auto; }
+  /* A title row with a trailing Badge, marker icon or icon Button. */
+  .area-card__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--area-ui-cluster); /* 8, compact 6 */
+    min-inline-size: 0;
+  }
+  .area-card__heading {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--area-space-4);
+    min-inline-size: 0;
+  }
+  .area-card__header-action {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--area-space-4);
+    block-size: var(--_card-title-leading);
+  }
+  /* A bare icon in the action slot is a marker, not a control: 16px and muted, as in the list. */
+  .area-card__header-action > svg {
+    flex: none;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    color: var(--area-fg-muted);
+  }
+  @supports (text-box: trim-both cap alphabetic) {
+    /* The first line starts at the title's cap and the last line ends on its baseline less a fixed descender allowance
+       (plan B1.4, owner 2026-11-13: "Baseline plus allowance"), so a text-only card reads as even at the bottom as at
+       the top: the cap sits the space from the top edge, the last baseline the space less 2 from the bottom (16 at md,
+       the references' 15.4 to 18). It ended on the descent, which set the baseline 22.6 from the edge (VC18) and made
+       text-only cards 4 to 5 heavier at the bottom. Text that ends a group inside the card (a footer or a list after it)
+       keeps the descent, so the gap under it is to its ink. A figure (value) has no descenders and ends on its baseline. */
+    .area-card { --_card-descender-allowance: var(--area-space-2); /* spec: VC18, the baseline 2 inside the space */ }
+    .area-card__title { text-box: trim-start cap alphabetic; }
+    :is(:is(.area-card, .area-card__content) > :last-child, :is(.area-card, .area-card__content) > .area-card__header:last-child > .area-card__heading > :last-child).area-card__description { text-box: trim-end cap text; }
+    :is(:is(.area-card, .area-card__content) > :last-child, :is(.area-card, .area-card__content) > .area-card__header:last-child > .area-card__heading > :last-child).area-card__value { text-box: trim-end cap alphabetic; }
+    :is(:is(.area-card, .area-card__content) > :last-child, :is(.area-card, .area-card__content) > .area-card__header:last-child > .area-card__heading > :last-child).area-card__title { text-box: trim-both cap text; }
+    /* Text that ends the card itself (not a group a footer or a list follows) ends on its baseline, the allowance in. */
+    :is(.area-card > :last-child, .area-card > .area-card__content:last-child > :last-child, :is(.area-card, .area-card > .area-card__content:last-child) > .area-card__header:last-child > .area-card__heading > :last-child):is(.area-card__title, .area-card__description) { text-box-edge: cap alphabetic; margin-block-end: calc(-1 * var(--_card-descender-allowance)); }
+    /* A control in the action slot sits on the text column's corner, concentric with the card
+       (control radius 8 + inset 8 + step 8 = 24 at md), and the title's cap centres on it: the heading drops by half the
+       control's space around the cap. A Badge or marker stays one title line tall. */
+    .area-card__header-action:has(> :is(button, a, .area-button)) { block-size: var(--_card-action); }
+    .area-card__header:has(> .area-card__header-action > :is(button, a, .area-button)) > .area-card__heading {
+      padding-block-start: round(nearest, calc((var(--_card-action) - 1cap) / 2), 1px); /* whole pixels (plan A11.1) */
+    }
+    /* A ghost control shows no plate at rest, so the title keeps the card's cap line and the
+       control centres on the cap instead, its plate ending on the text column (owner
+       2026-09-28: the carousel title sat 26 from the top beside 16 on every other card). The
+       action box is one cap tall; the control overflows it evenly. */
+    .area-card__header-action:has(> .area-button--ghost):not(:has(> :not(.area-button--ghost))) { block-size: 1cap; }
+    /* An edge ghost button (inset.css, plan B4.3): a ghost action ending the header pulls out by its gutter, so its glyph
+       (or its words) ends on the text column, not its unseen plate: 7 out with a md icon action (5 / 7 / 9 at Compact /
+       Default / Comfortable; 4 / 5 / 7 for a small card's sm action). A soft or outline action keeps its plate there. */
+    .area-card__header-action > .area-button--ghost:last-child { margin-inline-end: calc(-1 * var(--_pull-end)); }
+    /* A Badge or marker icon centres on the title's cap too: the title is trimmed to its cap, so a title-line-tall slot
+       set them 6 below the cap centre (spacing audit 2026-10-17; buttons were 0.5). The slot is one cap tall and the mark
+       overflows it evenly, as the ghost control does. */
+    .area-card__header-action:not(:has(> :is(button, a, .area-button))) { block-size: 1cap; }
+    .area-card__header:has(> .area-card__header-action > .area-button--ghost):not(:has(> .area-card__header-action > :not(.area-button--ghost))) > .area-card__heading { padding-block-start: 0; }
+  }
+  .area-card__media {
+    position: relative;
+    min-inline-size: 0;
+    min-block-size: 0;
+    overflow: hidden;
+    border-radius: var(--_card-media-radius);
+    background: var(--_card-media-fill);
+  }
+  .area-card__media > img,
+  .area-card__media > video {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  /* A well: a recessed surface holding a composition rather than a picture. It pads what it
+     holds onto the card's text column, stacked at full width and spaced as the card spaces its
+     slots. A card nested in it is one size down (the demos use sm in an md card). */
+  .area-card__media--well {
+    /* What a nested card's corner is concentric with: the well's corner less its padding. */
+    --_card-well-radius: calc(var(--_card-media-radius) - var(--_card-pull));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: var(--_card-item-gap);
+    padding: var(--_card-pull);
+  }
+  /* A card in a well is a compact row (owner 2026-09-28: "the button on the inside seems way too
+     large"): a small control, text and control 8 inside it, and a corner concentric with that
+     control (6 + 8 = 14), one step under the well's 16. 44 tall with one line (was 52, a 32
+     control). */
+  .area-card__media--well > .area-card {
+    --_card-inset: var(--area-space-4);
+    --_card-item-gap: var(--area-space-4);
+    --_card-space: var(--area-space-8); /* the well's nested card, 4 in like its picture, at every density */
+    --_card-section: var(--area-space-8);
+    --_card-action: var(--area-control-sm);
+    /* Concentric with the well, floored at radius-floor, 4 (radius audit D5). */
+    --_card-radius: max(min(var(--area-radius-floor), var(--area-radius-control-sm)), var(--_card-well-radius));
+  }
+
+  /* Overlay: a Badge or an icon Button pinned to a corner of the media, or of the whole card.
+     Inside media it keeps the card's inset from the media's edge; on the card it keeps the same
+     inset inside the (inset) media, two insets from the card's edge. */
+  .area-card__overlay {
+    --_card-overlay-inset: var(--_card-inset);
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    inset-block-start: var(--_card-overlay-inset);
+    inset-inline-end: var(--_card-overlay-inset);
+  }
+  .area-card > .area-card__overlay { --_card-overlay-inset: calc(var(--_card-inset) * 2 - var(--_card-border)); }
+  .area-card__overlay--top-start { inset-inline: var(--_card-overlay-inset) auto; }
+  .area-card__overlay--top-end { inset-inline: auto var(--_card-overlay-inset); }
+  .area-card__overlay--bottom-start { inset-block: auto var(--_card-overlay-inset); inset-inline: var(--_card-overlay-inset) auto; }
+  .area-card__overlay--bottom-end { inset-block: auto var(--_card-overlay-inset); inset-inline: auto var(--_card-overlay-inset); }
+  /* A bottom overlay on the card shares the text's last lines, so the text keeps clear of it:
+     one medium control and the slot gap. */
+  .area-card--immersive:has(> .area-card__overlay--bottom-end) > .area-card__content {
+    padding-inline-end: calc(var(--_card-inset) * 2 + var(--area-control-md) + var(--area-space-8) - var(--_card-space));
+  }
+  .area-card--immersive:has(> .area-card__overlay--bottom-start) > .area-card__content {
+    padding-inline-start: calc(var(--_card-inset) * 2 + var(--area-control-md) + var(--area-space-8) - var(--_card-space));
+  }
+
+  /* A short list of points, each led by a 16px icon on its first line; body size, content ink. */
+  .area-card__list {
+    display: grid;
+    gap: var(--area-ui-cluster); /* 8, compact 6 */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--_card-body-size);
+    line-height: var(--_card-body-leading);
+  }
+  .area-card__list > li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--area-gap-md);
+    min-inline-size: 0;
+  }
+  /* The glyph is the first line's: a box one line tall, the glyph centred in it (plan B2.4, the box technique). An svg
+     draws its viewBox centred in a taller box, so the box is the svg's own. */
+  .area-card__list > li > svg {
+    flex: none;
+    inline-size: var(--area-icon-md);
+    block-size: var(--_card-body-leading);
+    color: var(--area-fg-muted);
+  }
+
+  /*
+   * Linked card: one link, in the title, whose ::after covers the whole card (the block-link
+   * pattern), so the card is one target with one accessible name and nested Buttons stay
+   * valid, focusable and clickable above it. Notion's board cards and ChatGPT's library cards
+   * are links like this.
+   */
+  /*
+   * Hover lifts (owner, 2026-10-18: "i dont like the card hover state with the stroke outline color change … something
+   * more subtle with the shadow and … smooth, subtle, professional motion"). Notion's linked card (its tatami system,
+   * measured 2026-10-18, docs/research/card-hover-2026-10-18.md) keeps its edge and fades a soft shadow in over 150ms
+   * ease-out and out over 200ms ease-in; Fluent 2's interactive card steps its shadow up a level. Here the resting
+   * shadow steps to the lift role, Fluent's shadow8 at half the Menu's strength (owner, 2026-10-18: the float
+   * shadow it took first was "too drastic"; "very subtle elevation shadow"), so the lift follows Hover shadow (axes/depth.ts; it followed Elevation until 2026-10-21), fading in on `fast` with ease-out and out on
+   * `base` with ease-in (MOTION.md, "Lift"). The edge, fill and ink stay; at rest a linked card looks like any other.
+   */
+  .area-card:has(.area-card__link) {
+    transition: border-color var(--area-duration-fast) var(--area-ease-effects), box-shadow var(--area-duration-base) var(--area-ease-in), scale var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) {
+    .area-card:has(.area-card__link):hover {
+      --_card-lift: var(--area-shadow-lift);
+      transition-duration: var(--area-duration-fast);
+      transition-timing-function: var(--area-ease-effects), var(--area-ease-effects), var(--area-ease-out);
+    }
+    /* Hover shadow 0 draws no lift, so a flat card keeps the edge step as its hover. */
+    [data-area-shadow-hover="0"] .area-card:has(.area-card__link):hover { border-color: var(--area-edge-control-hover); }
+  }
+  /* A press settles the card: the lift drops at once (the press is the one instant step, product UI rule 3). */
+  .area-card:has(.area-card__link):active { --_card-lift: var(--_card-shadow); transition-duration: var(--area-press-in); }
+  /* A pointer press gives the wide amount (Feedback); a key press does not. */
+  .area-card:has(.area-card__link):active:not(:has(:focus-visible)) { scale: var(--area-feedback-scale-wide); }
+  [data-area-shadow-hover="0"] .area-card:has(.area-card__link):active { border-color: var(--area-border-hover); }
+  /*
+   * Selected (product UI rule 3, docs/PRODUCT_UI.md; the app's gallery tiles, studio.css, owner 2026-10-12;
+   * docs/specs/card.md 2026-10-15): selected draws the selection stroke 2 wide inside the
+   * card (its edge, plus an inset ring that makes up the rest), so the grid never moves and Surface 0 still shows it.
+   * Selection lands at once and outranks hover and press. Selected is `data-selected` (Card `selected`), or the
+   * card as a pressed toggle or a chosen option.
+   */
+  .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
+    border-color: var(--area-stroke-selected);
+    /* The Selected stroke setting's width, inside: the card's own edge plus a ring (axes/states.ts). */
+    --_card-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_card-border))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint);
+    transition-duration: var(--area-hover-in);
+  }
+  @media (hover: hover) { .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { border-color: var(--area-stroke-selected); } }
+  /* A selected linked card still lifts and settles: hover and press change only the lift slot, so the ring stays. */
+  .area-card:has(.area-card__link):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):active { border-color: var(--area-stroke-selected); }
+  @media (forced-colors: active) {
+    .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { outline: calc(var(--area-stroke-width) * 2) solid Highlight; outline-offset: calc(var(--area-stroke-width) * -2); }
+  }
+  .area-card__link {
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+  }
+  .area-card__link::after {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--_card-border));
+    z-index: 1;
+    border-radius: var(--_card-corner);
+  }
+  /* Controls inside a linked card sit above the stretched link. */
+  /* Every control in a linked card sits above the stretched link, wherever it is (a well's
+     buttons, a carousel, a slider in the content; audit F-29; was four named slots). */
+  .area-card:has(.area-card__link) :is(a, button, input, select, textarea, [tabindex]):not(.area-card__link) {
+    position: relative;
+    z-index: 2;
+  }
+  .area-card:has(.area-card__link) .area-card__overlay { z-index: 2; }
+  .area-card:has(.area-card__link:focus-visible) {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-gap);
+  }
+  /* An overlay that appears with the pointer or keyboard focus, as Notion's and ChatGPT's
+     card actions do; always shown where there is no hover. */
+  .area-card__overlay--reveal {
+    /* spec: Notion's card toolbar fades in over 0.2s. */
+    /* Every reveal-on-hover fades on one timing, the fast motion token (audit F-38, H-20; was a
+       literal 200ms here and 100ms on Message actions). */
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
+  }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows it. */
+  @media (hover: hover) {
+    .area-card__overlay--reveal { opacity: 0; }
+    .area-card:hover .area-card__overlay--reveal { opacity: 1; }
+  }
+  .area-card:focus-within .area-card__overlay--reveal { opacity: 1; transition-duration: 0s; } /* focus lands at once (MOTION.md) */
+
+  /* A row of controls at the bottom. It drops to the bottom of a taller card and sits on the
+     text column, so buttons and text share one edge and the last button is concentric with the
+     corner (as a header action is at the top). */
+  .area-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--area-ui-cluster); /* 8, compact 6 */
+    margin-block-start: auto;
+  }
+  .area-card__footer > .area-button { flex: 0 0 auto; min-inline-size: 0; }
+  /* Plain text in a footer (a name beside an Avatar, a figure) is body text, as in the card's other blocks. */
+  .area-card__footer { font-size: var(--_card-body-size); line-height: var(--_card-body-leading); letter-spacing: var(--_card-body-tracking); }
+  /* spread: its first and last children at the two ends (a person and a value, a label and a figure), as Stack's spread. */
+  .area-card__footer--spread { justify-content: space-between; }
+  /* A footer holding only a Toolbar is a transport (the music template): centred under the
+     content rather than left-aligned (owner 2026-09-28). */
+  .area-card__footer:has(> .area-toolbar:only-child) { justify-content: center; }
+  /*
+   * Carousel: a row of item cards without frames that scrolls sideways. It reaches the inset
+   * on both sides, like media, so its pictures line up with the card's media; items are about a
+   * third of the row with the next one peeking, so the row reads as scrollable. Scrolling is
+   * native (scroll snap, keyboard on the focused row); previous / next Buttons go in the
+   * header's action slot.
+   */
+  .area-card__carousel {
+    --_card-carousel-gap: var(--_card-item-gap);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - var(--_card-carousel-gap) * 3) / 3.25);
+    gap: var(--_card-carousel-gap);
+    list-style: none;
+    padding: 0;
+    margin-inline: calc(-1 * var(--_card-pull));
+    min-inline-size: 0;
+    overflow-x: auto;
+    /* A scroller clips on both axes, so the row extends into the content pad below it: the
+       last line's descenders stay visible and its baseline keeps its distance from the edge. */
+    padding-block-end: var(--_card-pull);
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  :is(.area-card, .area-card__content) > .area-card__carousel:last-child { margin-block-end: calc(-1 * var(--_card-pull)); }
+  /* Under a header the title gets the room it has above: its baseline sits as far from the
+     pictures as its cap sits from the card's top (the text inset; owner: more room below the title). */
+  :is(.area-card, .area-card__content) > .area-card__header + .area-card__carousel { margin-block-start: calc(var(--_card-text-inset) - var(--_card-gap)); }
+  /* The header above a carousel ends on its title's baseline, so that distance is exact. */
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-card__header:has(+ .area-card__carousel) .area-card__title { text-box: trim-both cap alphabetic; }
+  }
+  .area-card__carousel::-webkit-scrollbar { display: none; }
+  /* An item is a card without a frame: its text sits on the card's text column, one step inside
+     its picture, and its title cap is as far below the picture as a card's is below its media
+     (owner 2026-09-28: "should the text in the carousel be aligned to the title?"; was on the
+     picture's edge, 4 below it). Items take the body role for their titles, a step under the
+     card's title (ChatGPT library cards 14 over 12, Figma tiles 13 over 11). */
+  .area-card__carousel > li { display: flex; flex-direction: column; gap: var(--_card-gap); min-inline-size: 0; scroll-snap-align: start; }
+  .area-card__carousel > li > .area-card__media { inline-size: 100%; aspect-ratio: 1; border-radius: var(--_card-media-radius); }
+  /* An item's text sits on the card's text column, a section gap under its picture, its lines one text group apart. */
+  .area-card__carousel > li > .area-card__content { padding-inline: var(--_card-pull); --_card-gap: var(--area-space-4); }
+  .area-card__carousel .area-card__title {
+    font-size: var(--_card-body-size);
+    line-height: var(--_card-body-leading);
+    letter-spacing: var(--_card-body-tracking);
+  }
+  .area-card__carousel:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-gap);
+  }
+  /* Link's underline (docs/specs/link.md): the link's own ink, one stroke 2 below; the ink never changes (40% at
+     rest until review round 2, 2026-10-09). */
+  .area-card__action {
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    text-decoration: underline;
+    text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: var(--area-underline-offset); /* Link's offset, close under the text (link.md, 2026-10-17; a token since plan A9.10) */
+    transition: text-decoration-color var(--area-duration-fast) var(--area-ease-effects);
+  }
+  @media (hover: hover) { .area-card__action:hover { text-decoration-color: currentColor; transition-duration: var(--area-hover-in); } }
+  .area-card__action:focus-visible { text-decoration-color: currentColor; transition-duration: 0s; }
+  .area-card__action:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+}

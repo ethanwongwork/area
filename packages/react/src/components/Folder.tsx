@@ -27,7 +27,7 @@ const SHEET = { x: 22, y: 54, width: 426, height: 220, rx: 34 } as const;
 type FolderVariants = VariantProps<typeof MANIFESTS.folder>;
 
 export interface FolderProps extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
-  /** sm 48, md 64 (Finder's icon view), lg 96. Unset, it follows `--area-folder-size` (a File tile's figure). */
+  /** The figure's square: `sm` 48, `md` 64, `lg` 96. Unset, it follows `--area-folder-size` (a File tile's figure). */
   size?: FolderVariants["size"];
   /** A number at the pocket's foot, at the end: how many items it holds. */
   count?: ReactNode;
@@ -38,9 +38,9 @@ export interface FolderProps extends Omit<HTMLAttributes<HTMLSpanElement>, "chil
   open?: boolean;
   /** The figure's accessible name. Without one the figure is decorative (a tile's name says what it is). */
   "aria-label"?: string;
-  /** @deprecated Use `aria-label` (DESIGN_SYSTEM.md, Names: `aria-label` names the component's own element). */
+  /** @deprecated Use `aria-label`. */
   label?: string;
-  /** @deprecated The solid folder is archived (owner, round 57); every folder is the outline one. Ignored. */
+  /** @deprecated Ignored: every folder is the outline one. */
   variant?: "outline" | "solid";
   /** @deprecated Tones painted only the archived solid folder. Ignored. */
   tone?: string;

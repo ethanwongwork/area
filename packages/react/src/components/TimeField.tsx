@@ -5,7 +5,7 @@ import type { HTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } from "r
 import { cx, timeFieldVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { inputVariants } from "./Input.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { Menu, MenuItem } from "./primitives.tsx";
+import { Menu, MenuItem } from "./Menu.tsx";
 import { scrollOptionIntoList, useOpenState } from "./overlay.ts";
 import { resolveValidation, validationAttributes, type ValidationStatus } from "./validation.ts";
 
@@ -14,6 +14,7 @@ type InputManifest = VariantProps<typeof MANIFESTS.input>;
 export interface TimeFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
   /** The time as "HH:MM" or "HH:MM:SS", 24-hour (controlled); null while incomplete. */
   value?: string | null;
+  /** The time at first, uncontrolled; empty by default. */
   defaultValue?: string | null;
   /** Each time the time becomes complete, changes, or is cleared (null), with the key or click that did it. */
   onValueChange?: (value: string | null, event: SyntheticEvent) => void;
@@ -21,15 +22,21 @@ export interface TimeFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "de
   hourCycle?: 12 | 24;
   /** Minutes (default) or seconds. */
   granularity?: "minute" | "second";
-  /** Offer a list of times this many minutes apart (ChatGPT's 15), from a trailing chevron. */
+  /** Offers a list of times this many minutes apart (every 15 minutes), from a trailing chevron. */
   step?: number;
   /** A leading glyph; `true` draws the clock. */
   icon?: ReactNode | true;
+  /** The language and region that set the hour cycle and the AM / PM words. */
   locale?: string;
+  /** The field's treatment, as Input's: `outline` (default) or `soft`. */
   variant?: InputManifest["variant"];
+  /** The field's height and type, as Input's: `md` (default), `sm` or `lg`. */
   size?: InputManifest["size"];
+  /** The time can't be changed, and the segments are drawn dimmed. */
   disabled?: boolean;
+  /** The time can be read and focused but not changed. */
   readOnly?: boolean;
+  /** Paints the field as an error and sets `aria-invalid`; the same as `validationStatus="error"`. */
   invalid?: boolean;
   /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
   validationStatus?: ValidationStatus;
@@ -37,7 +44,9 @@ export interface TimeFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "de
   "data-validation-status"?: ValidationStatus;
   /** The list of times (with `step`) is open (controlled); `defaultOpen` opens it at first; `onOpenChange` hears it open and close. */
   open?: boolean;
+  /** Whether the list of times starts open, uncontrolled. */
   defaultOpen?: boolean;
+  /** Called when the list of times opens or closes. */
   onOpenChange?: (open: boolean) => void;
   /** Submits the value under this name. */
   name?: string;
@@ -74,12 +83,12 @@ const label = (hour: number, minute: number, cycle: 12 | 24) =>
 const NAMES: Record<Kind, string> = { hour: "Hour", minute: "Minute", second: "Second", period: "AM/PM" };
 
 /**
- * A time of day as segments, each its own spin button (React Aria, Spectrum 2, MUI X, Mantine): Up and Down step
+ * A time of day as segments, each its own spin button: Up and Down step
  * by one and wrap, Page Up and Down step by 2 hours or 15 minutes, Home and End go to the ends, digits fill the
  * segment and move on once no other digit could follow, Backspace clears it and then moves back, Left and Right
- * move between segments, and A or P sets the period. Empty segments show "––" (React Aria). With `step`, a
+ * move between segments, and A or P sets the period. Empty segments show "––". With `step`, a
  * trailing chevron (out of the Tab order, as Combobox's) or Alt+Down opens the times `step` minutes apart, the current
- * one checked and in view (ChatGPT's task schedule: 15 minutes, a check on the choice).
+ * one checked and in view.
  */
 export const TimeField = /* @__PURE__ */ forwardRef<HTMLDivElement, TimeFieldProps>(function TimeField(
   { value, defaultValue = null, onValueChange, hourCycle, granularity = "minute", step, icon, locale, variant, size, disabled, readOnly,

@@ -84,7 +84,7 @@ choice controls' paint.
 |---|---|---|---|
 | markup | `ol` of `li`, `aria-label` on the list, `aria-current="step"` on the current one, a hidden status word after each title | WAI, Atlassian, Spectrum, GOV.UK | — |
 | marker | 24 (compact 20) circle | Timeline's marker; MUI, Untitled UI, Ant small, Chakra xs | Timeline's marks have no plate; a step's number needs a container |
-| text gap | 12: the title 36 from the column's start | Timeline (owner, round 25) | Round 24 had 8 (MUI, Ant) |
+| text gap | `gap-row` (8 / 12 / 16 at type 13 Compact / Default / Comfortable): the title 30 from the column's start at the default (18 marker + 12) | Timeline (owner, round 25) | Round 24 had 8 (MUI, Ant) |
 | title | 14/20, 400; default ink for done and current, muted for upcoming | Timeline's 400 | Round 24 had 500 (MUI, Chakra) |
 | number | 12, tabular, 400 | MUI 12; Count's tabular numerals | — |
 | upcoming | 1px ring in `edge-control-hover`, the muted number | Checkbox and Radio's rest edge (the firmer edge for small marks) | Round 24 used `edge-control`, lighter than any choice control |
@@ -93,7 +93,7 @@ choice controls' paint.
 | invalid | a 1px danger ring, "!" in danger | Carbon, Ant, MUI error | — |
 | line | Timeline's: 1px `border-divider`, one paint in every state | peer Timeline (owner, round 25) | Round 24 painted it Selection after done steps (Carbon, Mantine, Ant), a black line no other Area line draws |
 | horizontal | steps take their content's width and share what is left; the line runs 12 after the text and stops 12 before the next marker, level with the marker's centre; a step never shrinks below its content, so the line can't run into a title | Timeline's gaps | Round 24 let steps shrink, and the line overlapped titles |
-| vertical | Timeline's column: the line through the marker's centre, 4 clear of each marker, 16 between steps | peer Timeline | — |
+| vertical | Timeline's column: the line through the marker's centre, 4 clear of each marker, two clusters between steps (12 / 16 / 20) | peer Timeline | — |
 | open step | `children` sit under the text, in line with the title (marker + 12), 8 below it; vertical: the line runs on beside them, since the step grows; horizontal: a row of its own under the step | Base Web ProgressSteps, GOV.UK step-by-step (intake: a slot, rung 4; a description is muted text and an `ol` holds only steps) | — |
 | going back | done steps are buttons; the row plate (hover, pressed) and the focus ring lie 4 outside, behind, taking no room | WAI, Atlassian, Spectrum, MUI linear; PRODUCT_UI rules 2-3 | Round 24's −4 margin made the button narrower than it drew, one cause of the overlap |
 
@@ -204,3 +204,20 @@ Step buttons press at `bg-component-pressed`, one step past selected (Notion pre
 - **Why:** one set of status words across Plan, Stepper, Step, Queue, Attachment, File upload, Edit summary and Turn
   notice (GOVERNANCE.md, "Status words"; owner picked Build on the system gaps review, 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A2.2 · the marker takes Kbd's keycap corner on its own height (it read a 24 box's): 6 on the 18 marker at the default (unchanged), 5 on the compact 16 (was 6). stepper.css.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The connector is the control stroke (`stroke-control`, 3:1), and the default ink after a complete step (plan A10.3, finding VN14); it was the Dividers rule at 7.5%, which vanished in dark.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- Text gap `gap-row` (8 / 12 / 16), steps two clusters apart (12 / 16 / 20), an open step's content a cluster under its
+  title (6 / 8 / 10). The marker is a mark (18 at type 13 at every density).
+- The marker's corner is the mark recipe's chip corner (inset.css, "One mark"; Kbd's keycap), not a copy of Kbd's old
+  formula: 6 at Corner 10, square at Corner 0, at most half its height.

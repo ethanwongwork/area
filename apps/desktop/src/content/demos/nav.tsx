@@ -53,7 +53,7 @@ export const NavFolding = () => {
 };
 
 /* A picture in the icon's place (NavItem picture): a screen's or an image's thumbnail, so rows that share a kind read apart. */
-const picture = (split: string) => <span style={{ display: "block", inlineSize: "100%", blockSize: "100%", background: `linear-gradient(var(--area-bg-component-active) 0 ${split}, transparent ${split})` }} />;
+const picture = (split: string) => <span style={{ display: "block", inlineSize: "100%", blockSize: "100%", background: `linear-gradient(var(--area-fill-toggle-hover) 0 ${split}, var(--area-bg-surface) ${split})` }} />;
 export const NavPictures = () => (
   <Nav aria-label="Label">
     <NavItem href="#" picture={picture("35%")}>Item one</NavItem>
@@ -63,8 +63,10 @@ export const NavPictures = () => (
 );
 
 /* A sticky heading (NavGroup sticky): the group's name stays at the top of the scroll while its rows pass under it. */
+/* The scroll is a sidebar in its own region, so the pinned heading's fill (the chrome ground) is the region's, not a slab on
+   the tile. */
 export const NavSticky = () => (
-  <div style={{ blockSize: 160, overflowY: "auto", inlineSize: 240 }}>
+  <div style={{ blockSize: 160, overflowY: "auto", inlineSize: 240, background: "var(--area-chrome-bg, var(--area-bg-page))", border: "var(--area-border-width) solid var(--area-edge-regions)", borderRadius: "var(--area-radius-container)" }}>
     <Nav aria-label="Label">
       <NavGroup label="Label" sticky>
         {["Item one", "Item two", "Item three", "Item four", "Item five", "Item six", "Item seven"].map((item, index) => <NavItem key={item} href="#" current={index === 0}>{item}</NavItem>)}

@@ -16,23 +16,26 @@
  *   icon    whole multiples of its size, 1× to 4×, about a quarter of the card
  *   color   the colour paints the ground, no margin
  *
- * Geometry (the gallery card, owner 2026-11-01: corner 16, name 4 under): the ground is Card's corner (the container
- * corner plus 8, concentric), the tile tone with the card edge, its lift on hover; the caption sits under it, 4 below,
- * its name 4 in, the true size muted at its end, the controls ending on the ground's edge.
+ * Geometry (the gallery card, owner 2026-11-01): the ground takes the frame recipe's block corner (16 at the default,
+ * plans A2.3, B1.1), the tile tone with the card edge, its lift on hover; the caption sits under it, the item name's line
+ * 8 below the ground and on its edge (plan B1.2), the true size muted at its end, the controls ending on the ground's edge.
  * Public hooks: `--area-design-card-corner` (the ground's corner).
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-design-card {
     --_edge: var(--area-border-width);
     --_edge-state: max(var(--area-border-width), var(--area-stroke-width));
-    /* spec: the gallery card's 16 at the default, Card's corner for an 8 inset (asset-card.css, caption outside). */
-    --_corner: var(--area-design-card-corner, max(var(--area-radius-floor), calc(var(--area-radius-container) + var(--area-space-8) * var(--area-radius-concentric))));
+    /* The floating corner, radius-container: 16 at the default (plan A2.3, owner 2026-11-11: a resting card is never
+       rounder than a Popover or Menu over it). It was the container plus 8, 24. */
+    --_corner: var(--area-design-card-corner, var(--_fr-block)); /* the frame recipe's block corner (surface.css) */
     --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent;
     --_ratio: 1;
     --_paint: var(--area-bg-tile);
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-4); /* spec: the card system's 4 between the card and its name (2026-11-01) */
+    /* The item name (surface.css, plan B1.2): its line 8 under the picture, the caption row centring it. It was 4
+       between the ground and the caption row (2026-11-01). */
+    gap: max(0px, calc(var(--_fr-name-gap) - (var(--area-control-sm) - var(--area-ui-leading)) / 2));
     min-inline-size: 0;
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
@@ -57,7 +60,7 @@
     border-radius: var(--_corner);
     background-color: var(--_paint);
     box-shadow: var(--_sel-ring, inset 0 0 0 0 transparent), var(--area-shadow-edge), var(--_lift);
-    transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in);
+    transition: border-color var(--area-duration-fast) var(--area-ease-effects), box-shadow var(--area-duration-base) var(--area-ease-in);
   }
   /* A colour paints the ground; its edge is the swatch ring over it, so a white or a near-ground colour keeps its outline. */
   .area-design-card--color { --_paint: var(--_design-color, var(--area-bg-tile)); }
@@ -88,12 +91,12 @@
   .area-design-card__caption {
     display: flex;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     min-inline-size: 0;
     block-size: var(--area-control-sm);
-    padding-inline-start: var(--area-space-4); /* spec: the name 4 in (asset-card.css, caption outside) */
+    padding-inline-start: 0; /* the item name starts on the picture's edge (plan B1.2; it was 4 in) */
   }
-  .area-design-card__name { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-design-card__name { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; /* the item name, strong (surface.css, plans B1.2, A9.5) */ text-overflow: ellipsis; white-space: nowrap; }
   .area-design-card__detail { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .area-design-card__actions { display: flex; flex: none; align-items: center; gap: var(--area-space-2); }
 
@@ -102,14 +105,15 @@
   .area-design-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-design-card__ground {
     --_edge: var(--_edge-state);
     border-color: var(--area-stroke-selected);
-    --_sel-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_edge))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint);
+    --_selected-border: var(--_edge);
+    --_sel-ring: var(--_selected-edge); /* the selected edge (selection.css, plan B7.6) */
   }
   .area-design-card--interactive:focus-visible > .area-design-card__ground { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   @media (hover: hover) {
     .area-design-card--interactive:hover > .area-design-card__ground {
       --_lift: var(--area-shadow-lift);
       transition-duration: var(--area-duration-fast);
-      transition-timing-function: var(--area-ease-out);
+      transition-timing-function: var(--area-ease-effects);
     }
     [data-area-shadow-hover="0"] .area-design-card--interactive:not([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover > .area-design-card__ground { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
   }

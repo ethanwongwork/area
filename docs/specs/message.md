@@ -155,3 +155,35 @@ Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs
   owner took every recommendation of the components audit (2026-11-07).
 - **Not measured:** the meeting corner (the reference sets it per look with no default), derived from Area's corner.
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A1.1 · actions sit `gap-row` under the last line: 12 at the default (was 10), as the spec's 12; Compact 8 unchanged.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** a reply's own headings get a role, so hosts no longer set them: h1 to h3 `title-xs` (16/22 at type 13) at 500, h4 to h6 the reply's size at 500 (plan A9.1).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The failure icon reads `fg-danger-mark` (plan A3.4, finding T10).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-13 · One chat card (system plan, Phase 2, B1.3)
+
+- The bubble's corner is the chat card's, the same expression it had (the medium control's corner + the bar inset),
+  now capped at `radius-container`: unchanged at Corner 10 to 14, 20 at Pill (was 22).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.3: the actions are edge ghost buttons: the assistant's first glyph starts on the text's edge and the person's last glyph ends on the bubble's edge, the row pulled out by (H − icon) / 2, 7 at the defaults (the plates lined up with the turn since 2026-09-27). The gap above them stays two, each with its reason: 4 under the person's bubble, whose edge is drawn, and the reply's block gap under its prose. They are already hidden while streaming.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- Listed, not moved: the status icon gap 6 (the row role is 8 at the default). The heading-to-list join (8) holds at every density, a join in reading text.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## State paint (plan B7.11), 2026-11-14
+
+- The person's actions hide only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.

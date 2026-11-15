@@ -6,11 +6,14 @@
 import { forwardRef, useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { designCardVariants } from "../variants.ts";
+import type { MANIFESTS, VariantProps } from "../variants.ts";
 
 type PartProps = HTMLAttributes<HTMLDivElement> & Record<`data-${string}`, string | undefined>;
 
 /** What the card holds, which sets how it is placed. */
-export type DesignLayout = "part" | "screen" | "phone" | "icon" | "color";
+export type DesignKind = NonNullable<VariantProps<typeof MANIFESTS.designCard>["kind"]>;
+/** @deprecated Use `DesignKind`. */
+export type DesignLayout = DesignKind;
 /** Where a cropped part is kept: its centre, its top (a menu, a palette) or its start (a type line). */
 export type DesignFocus = "center" | "top" | "start";
 export interface DesignPlacement {
@@ -86,9 +89,11 @@ export interface DesignCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "c
   /** What the card holds. part (the default): a control, a component, a pattern or a type line. screen: a window, whole,
    *  in a 16:9 card. phone: a phone, standing from the top and running off the bottom. icon: an icon at whole multiples.
    *  color: a colour (`color`) painting the card. */
-  layout?: DesignLayout;
+  kind?: DesignKind;
+  /** @deprecated Use `kind`. */
+  layout?: DesignKind;
   /** square, or wide (16:9, a 1920 × 1080 window whole). A screen's card is wide unless this says otherwise. */
-  aspect?: "square" | "wide";
+  aspect?: VariantProps<typeof MANIFESTS.designCard>["aspect"];
   /** Where a part held at 50% is kept when the card crops it: centre (the default), top (a menu, a palette), start (a
    *  type line). */
   focus?: DesignFocus;
@@ -118,8 +123,9 @@ export interface DesignCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "c
 const join = (...names: Array<string | undefined>) => names.filter(Boolean).join(" ");
 
 export const DesignCard = /* @__PURE__ */ forwardRef<HTMLDivElement, DesignCardProps>(function DesignCard(
-  { name, detail, actions, layout = "part", aspect, focus = "center", color, designWidth, designHeight, selected, interactive, groundProps, designProps, captionProps, onPlace, children, className, style, ...rest }, ref,
+  { name, detail, actions, kind, layout: layoutAlias, aspect, focus = "center", color, designWidth, designHeight, selected, interactive, groundProps, designProps, captionProps, onPlace, children, className, style, ...rest }, ref,
 ) {
+  const layout: DesignKind = kind ?? layoutAlias ?? "part";
   const ground = useRef<HTMLDivElement>(null);
   const design = useRef<HTMLDivElement>(null);
   const [placed, setPlaced] = useState<(DesignPlacement & { width: number; height: number; rtl: boolean }) | null>(null);
@@ -152,7 +158,7 @@ export const DesignCard = /* @__PURE__ */ forwardRef<HTMLDivElement, DesignCardP
   const shown = detail === undefined ? (placed && layout !== "color" && placed.width ? `${placed.width} × ${placed.height}` : null) : detail;
   const transform = placed ? `translate(${placed.rtl ? -placed.x : placed.x}px, ${placed.y}px) scale(${placed.scale})` : undefined;
   return (
-    <div ref={ref} className={designCardVariants({ layout, aspect: shape, interactive }, className)} data-selected={selected ? "" : undefined}
+    <div ref={ref} className={designCardVariants({ kind: layout, aspect: shape, interactive }, className)} data-selected={selected ? "" : undefined}
       data-placed={placed ? "" : undefined} data-cropped={placed?.cropped ? "" : undefined}
       style={color !== undefined ? { ...style, "--_design-color": color } as CSSProperties : style} {...rest}>
       <div ref={ground} className={join(designCardVariants.element("ground"), groundClass)} style={groundStyle} {...groundRest}>

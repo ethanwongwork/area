@@ -94,7 +94,8 @@ Follow `docs/ARCHITECTURE.md` › "Adding a component: the files" for where each
   ghost button), list it with that ground in `layers.css` so those fills step from it
   (DESIGN_SYSTEM.md, Layers). Never hand-pick a plate colour for one component; the
   cohesion test "every painted ground is declared" fails an undeclared ground.
-- **API words.** Use the vocabulary in `docs/GOVERNANCE.md` § 4.
+- **API words.** Use the vocabulary in `docs/GOVERNANCE.md` § 4: every part, slot, state and prop takes its job's
+  name from `packages/styles/scripts/vocabulary.mjs` (`lint:manifest` fails another word); never add a deviation.
 - **React.** Native props and refs are forwarded, every prop has JSDoc, and keyboard
   behaviour and accessible names are complete or their gaps stated.
 - **Tests.** Add `packages/react/tests/<slug>.test.mjs`. Extend `cohesion.test.mjs` when the

@@ -1,0 +1,39 @@
+/* ---------------------------------------------------------------------------
+ * Section heading (docs/specs/section-heading.md)
+ *
+ * Moved from the desktop app's own CSS (apps/desktop/src/studio.css, owner-reviewed 2026-10-12), where they were
+ * PRODUCT_UI.md's last open gap ("App-shell parts: Titlebar ... and a section heading"). No value is new.
+ *
+ * Section heading: a titled group on a page, the UI text at the strong weight, trimmed to its cap and baseline so
+ * the space above and below is the layout's; a muted lede under it, 8 apart, at a readable measure.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-section-heading { display: grid; gap: var(--area-ui-cluster); min-inline-size: 0; }
+  /* A section's title is the ramp's settings and surface title, title-xs (16/22 at type 13; Cursor's settings and
+     surface titles, docs/specs/typography.md), strong (owner, 2026-11-02: "is the size of each section title correct?").
+     It was the UI's 13/18, which put it under the Cards it heads (their title-xs 16) and under a reply's headings. */
+  .area-section-heading__title {
+    margin: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-title-xs-size);
+    line-height: var(--area-title-xs-leading);
+    letter-spacing: var(--area-title-xs-tracking);
+    font-weight: var(--area-weight-strong);
+    text-box: trim-both cap alphabetic;
+  }
+  /* The lede is the UI text in the muted ink (plan A9.3, 2026-11-11: a 12 lede under a 16 title read underweight; it was
+     text-sm since 2026-11-02) and joins its title (DESIGN_SYSTEM.md, Text pairs): on its prose line (13/20 at type 13),
+     the title's baseline a prose line of the title's size less the lede's cap above the lede's cap. It was the grid's 8 between the trimmed boxes, a line closer than a joined pair, and read as no gap
+     (owner, 2026-11-02: "there doesnt look like a proper gap between title and copy"). */
+  .area-section-heading__lede {
+    max-inline-size: 64ch; /* spec: the app's readable measure */
+    margin: 0;
+    /* The title's prose line less the lede's cap: 11 at type 13. Its own 12/18 line put it 9 under, the join of two UI
+       lines, which read as no gap. */
+    margin-block-start: calc(round(nearest, calc(var(--area-title-xs-leading) - 1cap), 1px) - var(--area-space-8));
+    color: var(--area-fg-muted);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-text-base-prose-leading);
+    text-box: trim-both cap alphabetic;
+  }
+}

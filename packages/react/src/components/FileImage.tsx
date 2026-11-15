@@ -14,7 +14,7 @@ const SUN = { cx: 288, cy: 92, r: 26 } as const;
 export interface FileImageProps extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
   /** sm 48, md 64, lg 96, as Folder and File page. Unset, it follows `--area-folder-size` (a File tile's figure). */
   size?: FileImageVariants["size"];
-  /** @deprecated The lit solid look is archived (owner, round 57); the frame is always the outline one. Ignored. */
+  /** @deprecated Ignored: the frame is always the outline one. */
   variant?: "outline" | "solid";
   /** The picture (a thumbnail URL): it covers the frame, cropped. Without one, a landscape is drawn. */
   src?: string;

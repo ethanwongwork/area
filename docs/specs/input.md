@@ -117,7 +117,7 @@ hint): 28 tall, padding 4 10, radius 10, fill rgb(40), ink rgb(250), opacity 0 a
 | hover | border → `input-edge-hover` = `border-subtle` #d4d4d4; ink fixed | `input.css:62-64` |
 | focus-within | Focus ring Hug (default): a `focus-width` (2) outline in `focus-color` (#0160d9 light, #79aeff dark) at `focus-offset` (0), the edge unchanged. Halo: the edge recolours to `field-focus-color` + 2px `field-focus-halo-color` halo (the same at 14%), outline 0 unless increased contrast (`field-focus-*` switches, emit/base.ts) | `input.css:66-71`; ChatGPT textarea focus: 1px `rgb(58,131,247)` edge (`chatgpt--textarea--focus`); Notion a 2px blue ring. Audit S1 (owner 2026-09-30): the focus role colours the edge |
 | read-only | the variant's rest paint (no soft fill), no hover edge, default cursor (`input.css:66, :111`) | Audit B-9 B (owner); `area--readonly` predates it |
-| disabled | field paint: fill #f7, `border-faint` (a soft field stays edgeless), ink, placeholder, affixes, icons and the action `fg-disabled`; no opacity | `area--disabled`; `input.css:111-141` |
+| disabled | the field shell's recipe (input.css, "Disabled and read-only"): fill #f7, `border-faint` (a soft field stays edgeless), ink, placeholder, affixes, icons and the action `fg-disabled`; no opacity. Read-only: the fill one step deeper (outline on the soft fill, soft on its hover step), the value's ink and edge kept, no hover edge | plan B7.8, B7.10 |
 | invalid / success / warning | border and halo in the tone colour, kept on focus | `input.css:73-95`; `area--invalid`, `--success`, `--warning` |
 | loading | Spinner in the icon slot; `aria-busy`; still editable | `area--loading`, `area--loading-leading` |
 | action hover / focus-visible | plate `bg-component-hover` (soft field: `bg-hover`); 2px focus ring; hint opens after Tooltip's delay (hover, or keyboard focus) | `input.css:197`; [overlay.md](overlay.md) tooltip timing |
@@ -257,6 +257,7 @@ Action buttons press at `bg-component-pressed`, one step past selected (Notion p
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft`, none at standard contrast and the strong control edge at more; its fill alone read 1.07:1 (now 3.79:1 light, 5.49:1 dark).
 - 2026-10-18 · owner: "go with your recommendations … finalize the material, surface, stroke, elevation axis theming" → Edge and Depth (axes/depth.ts; docs/research/elevation-stroke-2026-10-18): the outline variant rests on `--_field-lift: var(--area-shadow-field)` and lists it before the focus halo, so the two crossfade; the soft variant's lift is transparent (flat, as Figma's). Field shadow is 0 by default, a transparent role: nothing changes until it is raised (Inspector → Edge and depth → Field shadow; owner, the same day: no named looks, nine individual controls). Under a Material the lift is listed beside the well (material.css).
 - 2026-10-21 · owner's picks on the state page (https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9) and "capture some of these options as options for the design system customization … keep my current selections as the default" → focus at the Hug default is ChatGPT's `ring-2 ring-offset-0` on the field (was the recoloured edge and halo, kept as Focus ring Halo); every field family reads the same switches (Input, Textarea, Date picker, Custom select, Select, OTP, Number field, Tag picker, Input group). input.css and peers.
+- 2026-11-14 · plan B7.8, B7.10 → disabled and read-only are the field shell's disabled and read-only recipe (input.css): disabled is the disabled fill, the faint edge (none on soft) and fg-disabled on the value and every part; read-only takes one cue, the fill one step deeper (outline on the soft fill, soft on its hover step), with the value's ink, edge and focus kept and no hover edge. The audit B-9 call (read-only at rest paint) is superseded: B7.10 asks for a visible read-only. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-22 (round 69)
 
@@ -296,3 +297,27 @@ Action buttons press at `bg-component-pressed`, one step past selected (Notion p
 - **What changed:** `onValueChange(value, event)` runs after native `onChange` (and not when it calls `preventDefault`), as Checkbox's `onCheckedChange`; Password field inherits it.
 - **Why:** Input.tsx:10-44 had native `onChange` only, while Search field on the same Input had `onValueChange`. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The action owns the shared hit target, 24, 44 tall under a coarse pointer (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The placeholder is the subtle ink (`fg-placeholder` = `fg-subtle`, plan A3.2), a hair lighter than muted in light (#696969); in dark it is muted's #b9b9b9 (was #c5c5c5), where the APCA floor leaves no room under it. Dark state edges and messages use luminous vivid inks (plan A10.2): danger #fe999e (chroma 0.12, was #feb0b3 at 0.09), warning #fe9f53.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The shell (edge, corner, fill, lift, tiers, soft, hover edge, focus, status) moved into the one field shell at the top of input.css, which every field family reads; Input's own copy is gone. Soft hover edge = the control edge (unchanged for Input). No visible change.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- A pill is one value: while the Pills set rounds it, its corner is `radius-full` itself, `max(corner, flag × full)`, never the corner plus full (it computed the corner plus 9999px). Draws the same; the corners snapshot records 9999px.
+- Every field shell reads it (`--_field-shape`): Number field, Input group, Select, Textarea, Custom select, Date picker, Tag picker, OTP slot; a field's list rows the same, inside their cap.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

@@ -1,0 +1,619 @@
+/* Code block (docs/specs/code-block.md): the block form of Code (code.css). */
+@layer area.components {
+  /*
+   * The file header. A filename on the leading edge, the language beside it, and the copy
+   * action pushed to the trailing edge.
+   *
+   * The row is at least a control tier tall (with its 4px block padding it measures 36), so
+   * the icon button inside it lands on the same rhythm as a toolbar whether or not the block
+   * has a language or actions.
+   *
+   * No rule under it (owner 2026-10-25, an agent timeline's JSON block: "i like the code block
+   * without the separator between the title and the actual code"; ChatGPT's header has none):
+   * the title is the code's label on the same ground, so the code follows it at a line and a
+   * half rather than past a seam (below).
+   */
+  .area-code-block__header {
+    text-align: start;
+    display: flex;
+    align-items: center;
+    gap: var(--area-ui-cluster);
+    min-block-size: var(--_code-head-size, var(--_code-bar));
+    block-size: var(--_code-head-size, auto);
+    padding-block: var(--_code-head-pad, var(--_code-header-block)) var(--_code-head-zero, var(--_code-header-block));
+    padding-inline: var(--_code-start); /* 12, compact 8: the code column (compact pass) */
+    font-size: var(--_code-ui-size);
+    line-height: var(--_code-ui-leading);
+  }
+  /* The trailing action ends as far from the edge as it sits from the top (4), as ChatGPT's header
+     buttons sit 7 from the top and the end; the filename keeps the code column (owner 2026-10-01,
+     equal insets; was 12 at the end). */
+  .area-code-block__header > .area-code-block__actions:last-child {
+    margin-inline-end: var(--_code-head-end, calc(var(--_code-header-block) - var(--_code-start)));
+  }
+  /* The last action, the copy, is a corner control (inset.css, plan B4.2): as far from the end as from the top, so its
+     corner is the block's less that distance, the edge counted once. In the header: its block room plus the edge (5, so
+     16 − 5 = 11 at md); with the inset hook, the hook's row centres it on the cap. Floating over the first line: its
+     offset plus the edge (9, so 7). It kept the small control's 6 in both (wave 1 moved the block to the chat card's 16). */
+  .area-code-block__header > .area-code-block__actions:last-child > .area-button:last-child {
+    --_code-hook-at: calc(var(--_code-hook) + var(--area-stroke-width) + (1cap - var(--_height)) / 2);
+    --_cc-at: var(--_code-hook-at, calc(var(--area-stroke-width) + var(--_code-header-block)));
+  }
+  .area-code-block > .area-code-block__actions > .area-button:last-child { --_cc-at: calc(var(--area-stroke-width) + var(--_code-copy-top)); }
+
+  /* The filename is a literal, so it is set in the same face as the code it names. */
+  .area-code-block__title {
+    display: flex;
+    align-items: center;
+    gap: var(--area-gap-md);
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    font-family: var(--area-font-mono);
+    font-weight: var(--area-weight-regular);
+  }
+
+  /* The language is a quiet annotation beside the filename, not a second title: a word, so the header's text (text-sm
+     at sm, plan A9.2), never the small code size. */
+  .area-code-block__language {
+    color: var(--area-fg-muted);
+    font-size: var(--_code-ui-size);
+    line-height: var(--_code-ui-leading);
+  }
+
+  .area-code-block__languages {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-2);
+    min-inline-size: 0;
+  }
+  /* Language tabs: a focused tab's ring reaches its room plus its width before the label (tabs.css); the room
+     again keeps it clear of the filename, 6 at the defaults (round 77: it crossed the filename's last letter). Only the
+     tabs: the room is the Tabs' own, and a picker inside some other Tabs would inherit it. */
+  .area-tabs.area-code-block__languages { margin-inline-start: var(--_focus-room); }
+
+  /*
+   * The picker is chrome inside the header rather than a form control on a page, so it
+   * takes its own width instead of the field measure it would take in a form. The height,
+   * edge and chevron stay the shared Select's -- one control, one appearance.
+   */
+  .area-code-block .area-code-block__select {
+    inline-size: auto;
+  }
+
+  /* The language switcher is Tabs sm (audit G-6 A): its own indicator, hover and focus. */
+
+  .area-code-block__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    margin-inline-start: auto;
+  }
+
+  /*
+   * Size sets the block's metrics; the base rules read them. md is the page block. sm is the
+   * inspector's code well (Figma Dev Mode, box-model captures 2026-10-12): 18px lines, 8 insets
+   * and a narrow gutter, in Area's 12px floor over Dev Mode's 11.
+   */
+  .area-code-block,
+  .area-code-block--md {
+    --_code-size: var(--area-text-base-size);
+    --_code-leading: var(--area-text-base-leading);
+    /* `--area-code-block-inset` and `--area-code-block-corner` (public hooks, 2026-11-01, as Table's edge and corner) hold
+       a block to the frames around it: the code's inset from the edge above, below and at the start, and the corner. The
+       app's feed sets its one frame inset and corner (owner: "all containers feel consistent"). */
+    --_code-block-inset: var(--area-code-block-inset, var(--area-inset-surface-sm)); /* 12, compact 8 */
+    --_code-inline-inset: var(--area-inset-surface-md); /* 16, compact 12 */
+    --_code-start: var(--area-code-block-inset, var(--area-inset-surface-sm)); /* 12, compact 8 */
+    --_code-gutter: calc(var(--area-space-24) + var(--area-space-8));
+    --_code-diff-gutter: var(--area-space-48);
+    --_code-number-start: var(--area-space-6);
+    --_code-number-end: var(--area-inset-surface-sm);
+    --_code-ui-size: var(--area-ui-size);
+    --_code-ui-leading: var(--area-ui-leading);
+    --_code-header-block: var(--area-space-4);
+    --_code-bar: var(--area-control-md);
+    /* The floating copy: centred on the first line, as far from the end. */
+    --_code-copy-top: calc(var(--area-code-block-inset, var(--area-space-12)) + (var(--area-text-base-leading) - var(--area-control-sm)) / 2);
+    /* 8 from the end; with the inset hook, as far from the end as from the top. */
+    --_code-copy-end: calc(var(--area-code-block-inset, calc(var(--area-space-8) - (var(--area-text-base-leading) - var(--area-control-sm)) / 2)) + (var(--area-text-base-leading) - var(--area-control-sm)) / 2);
+    --_code-copy-clear: var(--area-space-48);
+    /* The chat card's corner (surface.css, plan B1.3, 2026-11-13): one corner for every card in a transcript, 16 at the
+       default, square at Sharp. It was concentric with the header's copy (6 + 4 + 1 = 11 at md, 10 at sm; owner
+       2026-10-22, round 11), a third corner beside the Plan's 16 and the Composer's 19; the copy keeps its own corner. */
+    --_code-radius: var(--area-code-block-corner, var(--_fr-corner));
+    --_cc-corner: var(--_code-radius);
+  }
+
+  .area-code-block--sm {
+    --_code-size: var(--area-text-xs-size); /* spec: Figma 11; Area's smallest UI text */
+    --_code-leading: var(--area-text-xs-code-leading); /* code's own line on the Type axis (plan A9.9): 11/16 at type 13 at every density; it was Figma's 18 less 2 per density step, 17 at the default */
+    --_code-block-inset: var(--area-code-block-inset, calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense))); /* spec: Figma 8 top and bottom; compact 6 */
+    --_code-inline-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Figma line padding 8 */
+    --_code-start: var(--area-code-block-inset, calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense))); /* spec */
+    /* spec: numbers 4 in, code 28 in (Figma 4 and 29, less its 1px column); compact 24. */
+    --_code-gutter: calc(var(--area-space-24) + var(--area-space-4) - var(--area-space-4) * var(--area-ui-dense));
+    --_code-diff-gutter: calc(var(--area-space-40) + var(--area-space-4) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 4 + 8 marker + 4 + two digits + 12 */
+    --_code-number-start: var(--area-space-4); /* spec: Figma 4 */
+    /* The header's words (a file name, the language) are words, so text-sm (plan A9.2: text-xs is for marks); the code
+       keeps the small step. */
+    --_code-ui-size: var(--area-text-sm-size);
+    --_code-ui-leading: var(--area-text-sm-leading);
+    --_code-bar: var(--area-control-sm);
+    --_code-copy-top: calc(var(--_code-block-inset) + (var(--_code-leading) - var(--area-control-sm)) / 2);
+    --_code-copy-end: var(--_code-copy-top);
+    --_code-copy-clear: calc(var(--_code-copy-top) + var(--area-control-sm) + var(--area-space-8));
+    /* The header's copy sits as far in as the floating one (3, compact 2; owner, round 11). The corner is md's, the chat
+       card's (above). */
+    --_code-header-block: var(--_code-copy-top);
+  }
+
+  .area-code-block {
+    text-align: start;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* spec (audit S7a): Card's edge for a block standing alone; was border-decorative #f3. It has no shadow to carry
+       it, so the frame is `stroke-width`, as Table's and Composer's (consistency pass 2026-10-12). */
+    border: var(--area-stroke-width) solid var(--area-edge-blocks);
+    /* The chat card's corner at both sizes (plan B1.3). Code stays 14/20. */
+    border-radius: var(--_code-radius);
+    background-color: var(--_code-ground, var(--area-bg-code));
+    overflow: hidden;
+    /* With the inset hook (a host's card frame; owner, 2026-11-01: "a consistent header styling across all
+       cards/containers"), the header is the host's card header: a row of the inset plus the cap, half the inset from the
+       top, so the language's cap sits the inset down and in, the actions centred on its line as far from the end as from
+       the top, and the code half the inset under the row. Without the hook each is invalid and the defaults stand. */
+    /* `--_code-unset` is never set: without the hook these resolve invalid, and each use falls back. */
+    --_code-hook: var(--area-code-block-inset, var(--_code-unset));
+    --_code-head-pad: calc(var(--_code-hook) / 2 - var(--area-stroke-width));
+    --_code-head-zero: calc(var(--_code-hook) * 0);
+    --_code-head-size: calc(var(--_code-hook) * 1.5 - var(--area-stroke-width) + 1cap);
+    --_code-head-end: calc((1cap - var(--area-control-sm)) / 2 + var(--_code-hook) * 0);
+    --_code-head-gap: calc(var(--_code-hook) / 2 - var(--area-stroke-width));
+  }
+
+  /*
+   * Embedded inside another bordered container -- a documentation example, a card. Keeps
+   * only the rule that separates it from whatever sits above, since the host container
+   * already owns the outline and the corner radius.
+   */
+  .area-code-block--flush {
+    border: 0;
+    border-radius: 0;
+    --_cc-corner: initial; /* square: the copy keeps its own corner */
+    /* The one rule: what is above it is rendered, what is below it is source. */
+    border-block-start: var(--area-border-width) solid var(--area-edge-dividers);
+  }
+
+  /*
+   * Copy with no filename to sit beside, riding on the first line of code instead.
+   *
+   * Centred on that line, not on the block's padding: the offset is the padding plus half
+   * the difference between the line's leading and the control's height, so the button's
+   * midline and the first line's midline coincide at any density.
+   */
+  .area-code-block > .area-code-block__actions {
+    position: absolute;
+    inset-block-start: var(--_code-copy-top);
+    inset-inline-end: var(--_code-copy-end);
+    z-index: 1;
+  }
+
+  /* Under a header the code starts at once: the header's own half row already sits between the title's line and the
+     first line of code, so they are 28 apart (36 / 2 + 20 / 2), 1.4 lines (the reference's JSON label to its first line:
+     1.4 of its 18 pitch; sm 17 + 9 over 18). The block's inset stays below the last line. */
+  .area-code-block__header + .area-code-block__body > .area-code-block__pre { padding-block-start: var(--_code-head-gap, 0); }
+
+  /* The first line keeps clear of the control that floats over it. */
+  .area-code-block > .area-code-block__actions ~ .area-code-block__body
+    .area-code-block__line:first-child .area-code-block__text {
+    padding-inline-end: var(--_code-copy-clear);
+  }
+
+  .area-code-block__pre {
+    margin: 0;
+    padding-block: var(--_code-block-inset);
+    padding-inline: 0;
+    overflow-x: auto;
+    font-family: var(--area-font-mono);
+    font-size: var(--_code-size);
+    line-height: var(--_code-leading);
+    color: var(--area-fg-default);
+    white-space: pre;
+    tab-size: 2;
+  }
+
+  /*
+   * A line is a gutter and its text. Grid rather than a float so a two-line number -- or a
+   * diff marker beside it -- cannot push the code off its column, and so wrapped
+   * continuations line up under the first character rather than under the number.
+   */
+  .area-code-block__code {
+    display: block;
+    /* A <code> element resets to the browser's monospace; the block's face is Area's. */
+    font-family: inherit;
+    /* One long line scrolls the whole block rather than wrapping under the gutter. */
+    min-inline-size: max-content;
+  }
+
+  .area-code-block__line {
+    display: grid;
+    grid-template-columns: var(--_code-gutter) minmax(0, 1fr);
+  }
+
+  .area-code-block--unnumbered .area-code-block__line {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* spec: without the gutter, code starts where the header's filename and the numbers do (12). */
+  .area-code-block--unnumbered .area-code-block__line:not(.area-code-block__line--added, .area-code-block__line--deleted, .area-code-block__line--removed) .area-code-block__text {
+    padding-inline-start: var(--_code-start);
+  }
+
+  /* A diff marker keeps its own column even when the numbers are hidden. */
+  .area-code-block--unnumbered .area-code-block__line--added,
+  .area-code-block--unnumbered .area-code-block__line--deleted,
+  .area-code-block--unnumbered .area-code-block__line--removed {
+    grid-template-columns: var(--_code-gutter) minmax(0, 1fr);
+  }
+
+  .area-code-block__gutter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--area-space-4);
+    /* The gap between number and code, and the row's leading inset when it is a link. */
+    padding-inline: var(--_code-number-start) var(--_code-number-end);
+    --_ink: var(--area-fg-subtle); /* line numbers are meta: the subtle ink (plan A3.2) */
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
+    font-variant-numeric: tabular-nums;
+    /* Numbers are chrome: they must not land in a copied selection. */
+    user-select: none;
+  }
+
+  /*
+   * A referenced line number is a link to the line itself, so the target paints from
+   * `:target` with no script -- and the URL carries the reference the reader can share.
+   */
+  /* A link announces itself with an underline, not a colour change (foreground stays fixed). The line is Link's: drawn
+     at rest in a transparent colour, so it lands at once on hover and fades on fast (MOTION.md; it switched on and off). */
+  .area-code-block__linenumber,
+  .area-code-block__toggle {
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: var(--area-underline-offset); /* Link's offset, close under the text (link.md, 2026-10-17; a token since plan A9.10) */
+  }
+  .area-code-block__linenumber {
+    color: inherit;
+    border-radius: var(--area-radius-small);
+    transition: text-decoration-color var(--area-duration-fast) var(--area-ease-effects);
+  }
+  @media (hover: hover) {
+    .area-code-block__linenumber:hover { text-decoration-color: currentColor; transition-duration: var(--area-hover-in); }
+  }
+
+  .area-code-block__linenumber:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-gap);
+  }
+
+  /* A block with diff lines widens every gutter by the marker and its gap (8 + 4) plus room for
+     a second digit, so marker and number fit and the code column stays aligned. */
+  .area-code-block__pre:has(.area-code-block__marker) { --_code-gutter: var(--_code-diff-gutter); }
+
+  /* Diff markers sit inside the gutter, at its start; the number keeps the end. */
+  .area-code-block__marker {
+    margin-inline-end: auto;
+    inline-size: var(--area-space-8);
+    text-align: center;
+    font-weight: var(--area-weight-strong);
+  }
+
+  .area-code-block__text {
+    padding-inline-end: var(--_code-inline-inset);
+    /* A blank line in the source still occupies a line in the block. */
+    min-block-size: var(--_code-leading);
+  }
+
+  /*
+   * Wraps instead of scrolling. For a code block inside a fixed measure -- documentation,
+   * a narrow panel -- where a horizontal scrollbar hides the end of the line.
+   */
+  .area-code-block--wrap .area-code-block__pre {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .area-code-block--wrap .area-code-block__code {
+    min-inline-size: 0;
+  }
+
+  .area-code-block--wrap .area-code-block__text {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  /* --- Line emphasis --------------------------------------------------------- */
+
+  /*
+   * Three line treatments, all painted on the row so the tint runs the full inline width
+   * including the gutter -- a highlight that starts after the number reads as a text
+   * decoration rather than as a marked line.
+   *
+   * The neutral wash is a translucent state token, so it composes over the code ground in
+   * either theme; the diff tints are the changed lines' plates Diff paints too (`bg-change-added`,
+   * `bg-change-deleted`, plan B7.4), in the status colours their markers agree with.
+   */
+  .area-code-block__line--highlighted {
+    background-color: var(--area-bg-active);
+  }
+
+  /*
+   * Inks on a marked line. Syntax inks, line numbers and diff markers are solved for the code ground, so a marked
+   * line darkens them (light) or lightens them (dark) by just enough to hold 4.5:1 on its plate (Layers sweep
+   * 2026-10-16: 3.3-4.3:1 before, 3.97:1 at the defaults). Light: the 6.7% wash needs 0.063-0.073 more on every
+   * ground, the changed lines' plates 0.086 (below). Dark: the selected white wash (19% until plan A4, 14% since) needs nothing up to a raised layer of L 0.225, then
+   * 4.5x the excess (0.57 at 24 + 8); the diff tints are dark plates and need none.
+   * The light wash is the selected fill's (`bg-active`), so its darkening scales with the Hover and Selected fill steps
+   * as the wash's alpha does (base.ts): 0.075 at the defaults' 7%, 0.168 at Hover 4 + Selected 4's 15.6%, which needs
+   * 0.160 (theme sweep 2026-10-23: keywords 3.83:1 there before).
+   */
+  .area-code-block__line:is(.area-code-block__line--highlighted, :target) {
+    --_ink-darken: calc(0.075 * (max(1.25, 1.5 + 0.375 * (var(--area-fill-hover-step) - 2)) + 0.625 * var(--area-fill-selected-step)) / 2.125); /* spec */
+    --_ink-lift: clamp(0, calc((var(--area-layer-dark-raised) - 0.225) * 4.5), 1); /* spec */
+  }
+  /* spec: the changed lines' plates (`bg-change-*`, plan B7.4) are firmer than the status surfaces they replaced, so their
+     inks darken 0.09 (measured 2026-11-14: keyword 4.27:1 and the removed marker 4.21:1 on them at 0.05; 0.09 needs
+     0.082 and 0.086). Dark needs none (8.4:1). */
+  .area-code-block__line:is(.area-code-block__line--added, .area-code-block__line--deleted, .area-code-block__line--removed) { --_ink-darken: 0.09; } /* spec */
+
+  .area-code-block__line--added {
+    background-color: var(--area-bg-change-added);
+  }
+
+  /* `--removed` is the deprecated spelling of `--deleted` (components audit D6). */
+  .area-code-block__line--deleted, .area-code-block__line--removed {
+    background-color: var(--area-bg-change-deleted);
+  }
+
+  .area-code-block__line--added .area-code-block__marker {
+    --_ink: var(--area-fg-success-vivid);
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
+  }
+
+  .area-code-block__line--deleted .area-code-block__marker, .area-code-block__line--removed .area-code-block__marker {
+    --_ink: var(--area-fg-danger-vivid);
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
+  }
+
+  /* Following a line-number link marks the line it landed on. */
+  .area-code-block__line:target {
+    background-color: var(--area-bg-active);
+    /* The current line: neutral ink, as the Nav and Tree view markers are. */
+    box-shadow: inset var(--area-space-2) 0 0 0 var(--_target-marker, var(--area-fg-selection));
+  }
+  /* The rail sits on the inline-start edge, which is the right in right-to-left text. */
+  .area-code-block__line:target:dir(rtl) { box-shadow: inset calc(var(--area-space-2) * -1) 0 0 0 var(--_target-marker, var(--area-fg-selection)); }
+
+  /*
+   * Four hues, each at its scale's own vivid rung.
+   *
+   * Vivid is not a rung we picked: `chooseVivid` walks outward from 500 until the colour
+   * clears 4.6:1 against the code block's own ground, and APCA Lc 61 in dark. That is why
+   * these read a computed token rather than naming a level -- the number that works is
+   * different per family and per theme, and a palette literal here is exactly how a syntax
+   * palette ships unreadable in dark mode.
+   *
+   *   keyword  red      import, const, return
+   *   tag      purple   <Button>
+   *   attr     blue     icon=, variant=
+   *   string   accent   "…" -- follows the accent axis, so a pink accent gives pink strings
+   *
+   * Structure stays neutral: a hue on the punctuation that carries the nesting makes code
+   * read as confetti rather than as syntax. Comments are muted for the same reason.
+   *
+   * Three of the four are blue-violet, and dark mode compresses that family: blue and
+   * indigo measure 0.065 apart in OKLab in light and 0.024 in dark, purple 0.035 from
+   * indigo in dark (JND is 0.02). The assignment is therefore deliberate about which pairs
+   * may sit close: the tag is written inside angle brackets and the string carries its own
+   * quotes, so the two near pairs separate by shape as well as hue, while the two bare
+   * identifiers that would genuinely be confusable -- tag and attribute -- are 0.059 apart
+   * in dark rather than 0.024. A fifth blue-violet family would not add information.
+   */
+  .area-code-block__pre .area-syntax-keyword { --_ink: var(--area-syntax-keyword); }
+  .area-code-block__pre .area-syntax-tag { --_ink: var(--area-syntax-tag); }
+  .area-code-block__pre .area-syntax-attr { --_ink: var(--area-syntax-attr); }
+  .area-code-block__pre .area-syntax-string { --_ink: var(--area-syntax-string); }
+  .area-code-block__pre .area-syntax-comment { --_ink: var(--area-fg-muted); }
+  .area-code-block__pre .area-syntax-punct { --_ink: var(--area-fg-muted); }
+  .area-code-block__pre :is(.area-syntax-keyword, .area-syntax-tag, .area-syntax-attr, .area-syntax-string, .area-syntax-comment, .area-syntax-punct) {
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
+  }
+
+  /* --- Collapsing ------------------------------------------------------------ */
+
+  /*
+   * A long block shows eight lines and offers the rest.
+   *
+   * Eight is enough to carry a whole component example -- an import, a wrapper and a few
+   * props -- so the common case never needs opening, while a fifty-line demo stops pushing
+   * the next section off the page.
+   *
+   * The body is the positioning context rather than the block, so the control can sit over
+   * the code when collapsed and below it when open without either state needing its own
+   * markup. The height is computed from the line-height the code is actually set in, not
+   * from a guessed pixel count, so it stays exactly eight lines at any type scale.
+   */
+  .area-code-block__body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .area-code-block[data-collapsed] .area-code-block__pre {
+    /* Eight lines, or the count `collapsedLines` sets (Cursor's shell output shows 5; inspector-panel-2026-10-30). */
+    max-block-size: calc(var(--_code-leading) * var(--area-code-block-lines, 8) + var(--_code-block-inset) * 2);
+    overflow: hidden;
+  }
+
+  .area-code-block__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--area-gap-md);
+    inline-size: 100%;
+    block-size: var(--_code-bar);
+    padding: 0;
+    border: 0; /* no rule above it (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; docs/research/dividers-2026-10-25): the fade marks the cut */
+    background-color: var(--_code-ground, var(--area-bg-code));
+    color: var(--area-fg-muted);
+    font-family: inherit;
+    font-size: var(--_code-ui-size);
+    line-height: var(--_code-ui-leading);
+    /* A label on a transparent control takes 400; 500 is for labels on fills. */
+    font-weight: var(--area-weight-regular);
+    cursor: pointer;
+    transition: var(--area-transition), text-decoration-color var(--area-duration-fast) var(--area-ease-effects);
+    user-select: none;
+  }
+
+  /* The label keeps its ink under the pointer and takes an underline, as line links do. */
+  @media (hover: hover) {
+    .area-code-block__toggle:hover { text-decoration-color: currentColor; transition-duration: var(--area-hover-in); }
+  }
+
+  /*
+   * Show and hide code (docs/MOTION.md, "Accordion body", the system's one height recipe; motion
+   * pass 2026-10-07). Where the browser can interpolate to an intrinsic size, the code opens on
+   * duration-slow and closes on duration-moderate, both ease-in-out; elsewhere it snaps, as before.
+   * Open, a collapsible block rests at max-content (its own height, horizontal scrollbar included)
+   * and clips only vertically, so the growing block never flashes a vertical scrollbar. The toggle
+   * moves between overlay and footer at once and rides the edge as it moves.
+   */
+  @supports (interpolate-size: allow-keywords) {
+    .area-code-block__body:has(> .area-code-block__toggle) > .area-code-block__pre {
+      interpolate-size: allow-keywords;
+      overflow-y: hidden;
+      transition: max-block-size var(--area-duration-slow) var(--area-ease-in-out);
+    }
+    .area-code-block:not([data-collapsed]) .area-code-block__body:has(> .area-code-block__toggle) > .area-code-block__pre {
+      max-block-size: max-content;
+    }
+    .area-code-block[data-collapsed] .area-code-block__body:has(> .area-code-block__toggle) > .area-code-block__pre {
+      transition-duration: var(--area-duration-moderate);
+    }
+  }
+
+  /* Copy feedback is CopyButton's (copy-button.css): the check enters as a small mark. */
+
+  /* The code is in the tab order so a keyboard can scroll it (the scrolling pre, or the language tab panel; audit
+     G-21), but it showed no ring when focused (2026-10-26, the interaction pass: measured across every family). The
+     ring goes around the whole block, Diff's and Board card's rule for a focused region: its frame is what moves. */
+  .area-code-block:has(> .area-code-block__body:focus-visible, > .area-code-block__body > .area-code-block__pre:focus-visible) {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-gap);
+  }
+
+  .area-code-block__toggle:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: calc(var(--area-focus-width) * -1); /* inset by its own width, as rows and tabs */
+  }
+
+  /*
+   * Collapsed, the control floats over the last visible lines and carries the fade with it.
+   *
+   * The gradient is the block's own ground rather than a shadow, so the code appears to run
+   * out rather than to be covered -- and it has no border, because a rule would contradict
+   * the fade by drawing a hard edge exactly where the softness is meant to be.
+   */
+  .area-code-block[data-collapsed] .area-code-block__toggle {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: calc(var(--_code-bar) * 2);
+    align-items: flex-end;
+    padding-block-end: var(--area-ui-cluster);
+    border-block-start: 0;
+    background-image: linear-gradient(
+      to bottom,
+      transparent,
+      var(--_code-ground, var(--area-bg-code)) 55%,
+      var(--_code-ground, var(--area-bg-code))
+    );
+    background-color: transparent;
+  }
+
+  /* --- soft, prompt, revealed copy, clipped lines (owner 2026-10-30) --------------------------------------------- */
+  /*
+   * From the Inspector panel study (docs/research/inspector-panel-2026-10-30, owner pick "Code in the Inspector:
+   * Build"). Values are cited in that folder's cursor.md and claude-code.md.
+   *
+   * soft: the fields' soft look, a fill with no edge, for code in a surface whose fields are soft (a panel: one field
+   * style per surface). A frame inside a frameless Inspector read as a box in a box. Claude's command card is a radius-8
+   * fill with no ring; Cursor's shell output sits on its 4% fill. The edge keeps its width (transparent, or the strong
+   * edge under increased contrast, as a soft field's), so every inset and the concentric corner stay as they are.
+   */
+  /* outline (the default) is the frame above: Card's edge round the code ground. */
+  /* `--area-code-block-fill` (public hook, 2026-11-01, as Table's): the outlined block's ground, so a page whose frames share
+     one fill (the desktop app's feed) gives its code the same. */
+  .area-code-block--outline { --_code-ground: var(--area-code-block-fill, var(--area-bg-code)); }
+  .area-code-block--soft {
+    --_code-ground: var(--area-input-bg-soft);
+    /* Soft is the fill alone: no edge until Contrast More (a soft field's old edge; soft fields now take the Fields group's). */
+    border-color: color-mix(in srgb, transparent, var(--area-edge-control) calc(var(--area-contrast-more) * 100%));
+  }
+
+  /*
+   * A prompt before a command (`prompt="$"`): muted, outside the copied text and not selectable, as Claude's (`$ `
+   * select-none, secondary) and Cursor's (tertiary) command blocks. Every line keeps the prompt's column, so a wrapped
+   * or continued command hangs under its first character; only the first line shows it.
+   */
+  .area-code-block:has(.area-code-block__prompt) .area-code-block__line { grid-template-columns: var(--_code-gutter) auto minmax(0, 1fr); }
+  .area-code-block--unnumbered:has(.area-code-block__prompt) .area-code-block__line { grid-template-columns: auto minmax(0, 1fr); }
+  .area-code-block__prompt {
+    padding-inline-end: 1ch; /* one space, as a shell prints it */
+    color: var(--area-fg-muted);
+    user-select: none;
+    white-space: pre;
+  }
+  .area-code-block__line:not(:first-child) > .area-code-block__prompt { visibility: hidden; }
+  .area-code-block--unnumbered .area-code-block__prompt { padding-inline-start: var(--_code-start); }
+  .area-code-block--unnumbered .area-code-block__line > .area-code-block__prompt + .area-code-block__text { padding-inline-start: 0; }
+
+  /*
+   * revealActions: the floating copy (and actions) show while the block is hovered or holds focus, as Cursor's code
+   * blocks (opacity 0 to 1 on hover or focus-within, 4 from the top and end). They land at once and leave on `fast`
+   * (MOTION.md, "Hover plate"); a touch screen always shows them. Shown, they sit on the block's ground over the code,
+   * so the first line keeps its full width rather than a reserved gap.
+   */
+  .area-code-block--reveal-actions > .area-code-block__actions { border-radius: var(--area-radius-control-sm); background-color: var(--_code-ground, var(--area-bg-code)); }
+  .area-code-block--reveal-actions > .area-code-block__actions ~ .area-code-block__body .area-code-block__line:first-child .area-code-block__text { padding-inline-end: var(--_code-inline-inset); }
+  @media (hover: hover) {
+    .area-code-block--reveal-actions > .area-code-block__actions { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
+    .area-code-block--reveal-actions:not(:hover, :focus-within) > .area-code-block__actions { pointer-events: none; }
+    .area-code-block--reveal-actions:is(:hover, :focus-within) > .area-code-block__actions { opacity: 1; transition-duration: 0s; }
+  }
+
+  /*
+   * A line cut off at the end edge fades out over its last 16 rather than stopping at a hard edge (Cursor's OverflowFade
+   * and shell output fade, 16). The fade follows the scroll: full while more of the line lies past the edge, gone at the
+   * end, and absent when nothing overflows (the scroll timeline is then inactive). Wrapped code never overflows.
+   */
+  @supports (animation-timeline: scroll()) {
+    .area-code-block__pre {
+      --_code-fade-edge: 16px; /* spec: Cursor 16 */
+      mask-image: linear-gradient(to right, #000 calc(100% - var(--_code-fade)), transparent);
+      /* Scroll-linked, not timed: no duration or curve of the motion settings applies (the fade holds to 95%). */
+      animation-name: area-code-fade;
+      animation-fill-mode: both;
+      animation-timeline: scroll(self x);
+    }
+    .area-code-block__pre:dir(rtl) { mask-image: linear-gradient(to left, #000 calc(100% - var(--_code-fade)), transparent); }
+  }
+}
+
+/* The fade's width, registered so the scroll timeline can ease it (a length, not a colour; THEMING.md). */
+@property --_code-fade { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@keyframes area-code-fade { from { --_code-fade: var(--_code-fade-edge); } 95% { --_code-fade: var(--_code-fade-edge); } to { --_code-fade: 0px; } }

@@ -3,15 +3,17 @@
  *
  * Events in order, each with a marker on one vertical line: Figma's version history (a 24px
  * marker column, a 1px line through its centre) and Notion's page updates (a 24px avatar).
- * Content starts 36 from the column's start in both (24 + 12). After the owner's round-8 references
+ * Content starts marker + 12 from the column's start in both (22 + 12 = 34 at the default, 36 at type 14). After the owner's round-8 references
  * (Linear's issue activity, an activity feed, a run log): a bare icon or a dot as the mark, the line
  * stopping short of each, and the time on the event's line at the same size. docs/specs/timeline.md.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-timeline {
-    --_marker: var(--area-control-xs); /* spec: Figma's version icon and Notion's avatar, 24 (compact 20) */
-    --_gap: var(--area-space-12); /* spec: content 36 from the column start, Figma 4 + 8 and Notion 4 + 8 */
-    --_spacing: var(--area-space-16); /* spec: Figma, 8 below one row's text and 8 above the next */
+    --_marker: var(--area-control-xs); /* spec: the measured version icon and avatar, 24; control-xs is 22 at the default, 24 at type 14, 20 compact */
+    /* Density roles (plan B8.2): the content a row's gap past the marker (8 / 12 / 16 at type 13 Compact / Default /
+       Comfortable; 12 measured), events two clusters apart (12 / 16 / 20; 16 measured, 8 below one row and 8 above). */
+    --_gap: var(--area-gap-row);
+    --_spacing: calc(var(--area-ui-cluster) * 2);
     --_line: var(--area-stroke-width); /* spec: Figma 1px */
     --_dot: 6px; /* spec: Indicator's dot */
     /* spec (owner, review round 8, after Linear's issue activity and an activity feed): the line stops short of
@@ -101,11 +103,11 @@
   /* No dots between the parts (owner, 2026-11-03: "im not a big fan of the use of '·' is it necessary?"; it was title ·
      meta · time): who or where a gap after the title, and the time at the line's end, metadata at the ramp's secondary
      step (12), as every figure in a tracker. A long title wraps; the time keeps the end of the first line it fits. */
-  .area-timeline-item__line { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--area-space-8); overflow-wrap: anywhere; }
+  .area-timeline-item__line { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--area-ui-cluster); overflow-wrap: anywhere; }
   .area-timeline-item__title { flex: 0 1 auto; min-inline-size: 0; font-weight: var(--area-weight-regular); /* spec: 400 */ }
   .area-timeline-item__meta { color: var(--area-fg-muted); }
-  .area-timeline-item__time { flex: none; margin-inline-start: auto; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .area-timeline-item__body { margin-block-start: var(--area-space-8); /* spec: Notion 8 under the time */ }
+  .area-timeline-item__time { flex: none; margin-inline-start: auto; padding-inline-start: var(--area-ui-cluster); color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .area-timeline-item__body { margin-block-start: var(--area-ui-cluster); /* 8 under the time at the default (measured), a cluster */ }
   .area-timeline-item__body:first-child { margin-block-start: 0; }
 
   @media (forced-colors: active) {

@@ -8,18 +8,20 @@
  * between the labels and the text"; it was Notion's editable properties: a 160 column, rows 34
  * tall and 4 apart, every cell inset 6 for a hover plate it never drew). justified is ChatGPT's settings card (term at the start,
  * value at the end, rows 12 / 16 padded, dividers inset by the row's side padding). divided
- * draws those rules; framed puts the list in Table's frame.
+ * draws those rules; the surface variant puts the list in Table's frame (the one frame prop, plan B1.1; it was `framed`).
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-description-list {
     /* spec: Notion's 160 property-name column; set --area-description-list-term to change it. */
     --_term: var(--area-description-list-term, 160px);
-    /* spec: Notion's 34 rows (the 32 UI row + 2; 26 in compact), 4 apart (0 in compact). Spacing that follows density,
-       so it keeps its own step: it read 2 × ui-row-gap until the row gap became a constant 1 (2026-10-21). */
-    --_row: calc(var(--area-ui-row) + 2px);
-    --_row-gap: max(0px, calc(4px - 4px * var(--area-ui-dense)));
+    /* spec: rows the UI row tall (30 at the default, 28 Compact), 4 − 4 × ui-gap-step apart (4 at the default, 0
+       Compact, 8 Comfortable), so the measured 34 pitch holds at the default (plan A1.1 and A8.2, 2026-11-11: rows were
+       the UI row + 2, off the ladder, 2 apart). Spacing that follows density, so it keeps its own step: it read 2 ×
+       ui-row-gap until the row gap became a constant 1 (2026-10-21). */
+    --_row: var(--area-ui-row);
+    --_row-gap: max(0px, calc(4px - 4px * var(--area-ui-gap-step)));
     /* spec: Notion insets the term and the value 6 inside their cells. */
-    --_inset: var(--area-space-6);
+    --_inset: var(--area-space-6); /* a row's text inset in its cell, as a row's glyph edge, at every density */
     --_pad-block: 0px;
     --_divider: transparent;
     display: flex;
@@ -60,7 +62,7 @@
     min-inline-size: 0;
     /* spec: Notion's value cell starts 4 after the term column, its plate 4 inside that, and the text 6 inside the
        plate: the value's text 14 after the column (174 in a 160 column). */
-    margin: 0 0 0 var(--area-space-8);
+    margin: 0 0 0 var(--area-space-8); /* the value cell's place after the fixed term column, at every density */
     padding-inline: var(--_inset);
     overflow-wrap: anywhere;
   }
@@ -70,12 +72,13 @@
     /* spec: ChatGPT rows pad 12 / 16 (44 tall with 14/20 type), no gap between rows. */
     --_row: auto;
     --_row-gap: 0px;
-    --_pad-block: var(--area-space-12);
+    --_pad-block: var(--area-gap-row);
     --_inset: var(--area-space-16);
   }
-  .area-description-list--justified > .area-description-list__item { justify-content: space-between; gap: var(--area-space-24); /* spec: ChatGPT 24 */ padding-inline: var(--_inset); }
-  /* spec: ChatGPT's term 14/20 500 in the default ink, its value at the end. */
-  .area-description-list--justified .area-description-list__term { inline-size: auto; flex: 0 1 auto; padding-inline: 0; color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
+  .area-description-list--justified > .area-description-list__item { justify-content: space-between; gap: var(--area-gap-section); /* spec: 24 at the default */ padding-inline: var(--_inset); }
+  /* The term at its start, its value at the end. Layout moves a label, not its role (plan A9.13): the term keeps the
+     muted 400 of every layout and the value leads in the default ink (it was 500 in the default ink, ChatGPT's 14/20). */
+  .area-description-list--justified .area-description-list__term { inline-size: auto; flex: 0 1 auto; padding-inline: 0; }
   .area-description-list--justified .area-description-list__value { flex: 0 1 auto; margin: 0; padding-inline: 0; text-align: end; }
   /* --- columns: the facts list -------------------------------------------- */
   /* One grid for every row (rows are subgrids), so all values line up: the term column fits the longest term, up to
@@ -104,22 +107,22 @@
      (panel.css, --_panel-label), so facts and controls share one value edge. Rows are a small control tall (26 in
      compact: the text with 4 above and below) and touch, as Claude's key/value rows (min 26, no gap) and Cursor's tray
      (28, 1 apart); a list of values reads as one block beside the controls' 8 gaps. Numbers are tabular, so counts line
-     up. A framed list is its own object and keeps its fitted column. */
-  .area-panel .area-description-list--columns:not(.area-description-list--framed) {
+     up. A list in its frame is its own object and keeps its fitted column. */
+  .area-panel .area-description-list--columns:not(.area-description-list--surface) {
     --_row-gap: 0px;
     grid-template-columns: var(--_panel-label) minmax(0, 1fr);
     column-gap: var(--area-ui-cluster);
     font-variant-numeric: tabular-nums;
   }
-  .area-panel .area-description-list--columns:not(.area-description-list--framed) > .area-description-list__item {
+  .area-panel .area-description-list--columns:not(.area-description-list--surface) > .area-description-list__item {
     padding-block: calc((var(--area-control-sm) - var(--area-ui-leading)) / 2);
   }
   /* A term wraps between words, never inside one. */
-  .area-panel .area-description-list--columns:not(.area-description-list--framed) .area-description-list__term { overflow-wrap: normal; }
+  .area-panel .area-description-list--columns:not(.area-description-list--surface) .area-description-list__term { overflow-wrap: normal; }
   /* Divided columns: twice the gap, the rule in its middle. */
   .area-description-list--columns.area-description-list--divided { --_row-gap: calc(2 * var(--area-ui-cluster)); }
 
-  /* --- divided and framed --------------------------------------------------- */
+  /* --- divided, and the surface frame --------------------------------------------------- */
   /* spec: ChatGPT's 1px rule under each row but the last, inset by the row's side padding (Table's divider role). */
   .area-description-list--divided { --_divider: var(--area-edge-dividers); }
   .area-description-list--divided > .area-description-list__item:not(:last-child)::after {
@@ -131,18 +134,21 @@
     background-color: var(--_divider);
     pointer-events: none;
   }
-  /* The frame: Table's (divider edge at `stroke-width`, container corner, surface), as ChatGPT's settings card. */
-  .area-description-list--framed {
+  /* The frame: Table's (divider edge at `stroke-width`, the frame recipe's block corner, surface), as ChatGPT's settings
+     card. Plain, the default, draws none. */
+  .area-description-list--plain {}
+  .area-description-list--surface {
     border: var(--area-stroke-width) solid var(--area-edge-blocks);
-    border-radius: var(--area-radius-container);
+    border-radius: var(--_fr-block);
     background-color: var(--area-bg-surface);
   }
-  /* Framed, the text is 12 inside the frame, the card column the agent chat's boxes share (Plan, Edit summary, Queue:
-     Menu's list padding 4 + the row inset 8), so a framed list beside them in a chat starts its text on theirs (owner
-     2026-10-28, chat set review: it was ChatGPT's 16 from the outer edge; "move them to 13 anyway"). Framed columns keep
-     ChatGPT's 12 from the top. */
-  .area-description-list--framed.area-description-list--justified { --_inset: var(--area-space-12); /* spec: the card column */ }
-  .area-description-list--framed.area-description-list--columns { padding: calc(var(--area-space-12) - var(--area-stroke-width)) var(--area-space-12); /* spec: ChatGPT's 12 top; the card column */ }
+  /* In its frame, the text is 12 from the frame's outer edge, the edge counted once: the chat card's column (Plan, Edit
+     summary, Queue: Menu's list padding 4 + the row inset 8; surface.css, plan B1.3), so a framed list beside them in a
+     chat starts its text on theirs (owner 2026-10-28, chat set review; it was 12 inside the edge, 13 out, until the chat
+     card counted the edge once). Columns keep 12 from the top. */
+  .area-description-list--surface { --_dl-text: calc(var(--area-space-4) + var(--area-ui-row-inset) - var(--area-stroke-width)); }
+  .area-description-list--surface.area-description-list--justified { --_inset: var(--_dl-text); }
+  .area-description-list--surface.area-description-list--columns { padding: var(--_dl-text); }
 
   /* --- show more ------------------------------------------------------------- */
   /* The "Show N more" button after a list with visibleCount (docs/research/show-more-survey.md): a row of the list's
@@ -150,15 +156,15 @@
      properties"), muted ink and 400 as Code block's toggle, an underline on hover with the ink fixed (Polaris plain
      button), the chevron turning to point up once every row shows (Carbon, Chakra; Primer: down collapsed, up open). */
   .area-description-list__more {
-    --_term-inset: var(--area-space-6); /* spec: the columns layout's term inset */
+    --_term-inset: var(--area-space-6); /* spec: the columns layout's term inset, at every density */
     display: flex;
     align-items: center;
     gap: var(--area-space-6); /* spec: the term's icon gap */
-    min-block-size: calc(var(--area-ui-row) + 2px); /* spec: a list row (34, compact 26) */
-    margin-block-start: max(0px, calc(4px - 4px * var(--area-ui-dense))); /* spec: the list's row gap, as if a row (4, compact 0) */
+    min-block-size: var(--area-ui-row); /* spec: a list row (30, compact 28) */
+    margin-block-start: max(0px, calc(4px - 4px * var(--area-ui-gap-step))); /* spec: the list's row gap, as if a row (4, compact 0) */
     padding: 0 var(--_term-inset);
     border: 0;
-    border-radius: var(--area-radius-small);
+    border-radius: var(--area-radius-row); /* a list row: its height's corner (plan A2.2) */
     background: none;
     color: var(--area-fg-muted);
     font: inherit;
@@ -176,7 +182,7 @@
     .area-description-list__more:hover > .area-description-list__more-label {
       text-decoration: underline;
       text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
+      text-underline-offset: var(--area-underline-offset); /* Link's offset, close under the text (link.md, 2026-10-17; a token since plan A9.10) */
     }
   }
   .area-description-list__more:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }

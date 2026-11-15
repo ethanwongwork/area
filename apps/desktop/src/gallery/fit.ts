@@ -30,8 +30,9 @@
  *         size stay in proportion, and one its group's scale would not fit in its tile is shrunk to fit; one that
  *         stretches is laid out at its tile over that scale, so it fills the tile at it
  *   fit   every specimen as large as its tile allows, up to FIT_MAX; one that stretches fills its tile at 100%
- *   0.5…2 a true zoom: every specimen at exactly that scale, its tile growing above 100%; one larger
- *         than its tile at that zoom is cut off by the tile, as a canvas at 100% shows what fits
+ *   0.5…2 a true zoom: every specimen at exactly that scale, its tile growing above 100%; a grid's cards are as wide as
+ *         its widest specimen needs, a waterfall card as tall, and only one wider than a whole row (or taller than a
+ *         fixed card) is shrunk to fit; nothing runs past its card (system evaluation F3.2, 2026-11-11; it was cut off)
  */
 /** Fit's ceiling: the zoom list's largest step, so a Badge does not fill a card. */
 const FIT_MAX = 2;
@@ -165,6 +166,21 @@ function extent(stage: HTMLElement, withText = false): Box {
  * progress bar) have none.
  */
 const fills = (stage: HTMLElement) => !!stage.querySelector("input, textarea, select, [role=slider], [role=progressbar], [role=meter], progress, meter");
+/* A field drawn narrower than a glyph: its width is a share of a container that had none to give. */
+const collapsed = (stage: HTMLElement) => [...stage.querySelectorAll<HTMLElement>("input:not([type=checkbox], [type=radio], [type=range], [type=hidden]), textarea, select")]
+  .some(field => { const rect = field.getBoundingClientRect(); return rect.height > 0 && rect.width < 16; });
+/* The demo's own wrapper (components.tsx, Demo: a plain element round it), when the stage holds one and nothing else. */
+const wrapperOf = (stage: HTMLElement) => {
+  const only = stage.childElementCount === 1 ? stage.firstElementChild as HTMLElement : null;
+  return only && !/(^|\s)area-/.test(only.className) ? only : null;
+};
+/* Undoes a stretch fitTiles made (a demo's own wrapper style is left as written). */
+const unstretch = (stage: HTMLElement) => {
+  const wrapper = wrapperOf(stage);
+  if (wrapper?.dataset.fitStretched === undefined) return;
+  delete wrapper.dataset.fitStretched;
+  wrapper.style.removeProperty("inline-size");
+};
 /* The inked part of contentWidth: reads only, so every tile's can be read in one layout. */
 function inkedWidth(stage: HTMLElement): number | undefined {
   let boxLeft = Infinity, inkLeft = Infinity, inkRight = -Infinity;
@@ -263,8 +279,9 @@ export function fitTiles(canvas: HTMLElement): () => void {
     hugs: Boolean(tile.parentElement?.classList.contains("area-asset-card--hug")),
   }));
   if (!tiles.length) return () => {};
-  // A fixed card after a waterfall keeps none of its sizes.
+  // A fixed card after a waterfall keeps none of its sizes, and a grid none of an exact zoom's card minimum.
   for (const entry of tiles) {
+    entry.tile.closest<HTMLElement>(".studio-grid--cards")?.style.removeProperty("--_card-min");
     entry.view.style.blockSize = "";
     entry.tile.closest<HTMLElement>(".studio-grid > *")?.style.removeProperty("grid-row-end");
     entry.tile.closest(".studio-grid")?.removeAttribute("data-placed");
@@ -283,18 +300,32 @@ export function fitTiles(canvas: HTMLElement): () => void {
    * one a tile. Interleaved, the first fit forced a layout of the whole canvas for each of ~90
    * tiles, several times over, and opening the Components tab froze for over half a second.
    */
-  for (const entry of tiles) { entry.stage.style.scale = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
-  const inked = new Map<Tile, number | undefined>();
+  for (const entry of tiles) { entry.stage.style.scale = ""; entry.stage.style.inlineSize = `${PROBE}px`; unstretch(entry.stage); }
   const heights = new Map<Tile, number>();
-  for (const entry of tiles) {
+  const probe = (entry: Tile) => {
     const own = extent(entry.stage);
     entry.natural = Math.ceil(own.w);
     entry.fluid = entry.natural >= PROBE - 40;
     // The group is read here, at the default type and density, so a Type change scales a group
     // together instead of moving specimens between groups.
     heights.set(entry, own.h);
-    if (!fills(entry.stage)) inked.set(entry, inkedWidth(entry.stage));
-  }
+  };
+  for (const entry of tiles) probe(entry);
+  /*
+   * A fluid specimen's wrapper takes the stage's width before it is measured (system evaluation F3.2, 2026-11-11): a demo's
+   * wrapper is shrink-wrapped by the stage, so a field whose width is a share of its container (the gallery's 100% field
+   * width, below in canvas.css) had nothing to take a share of, and an Input group's field fell to 0. A stage holding a
+   * field that collapsed there (narrower than a glyph) is stretched: if its wrapper at the stage's width makes it fill, it
+   * is fluid and the wrapper keeps that width; otherwise (a Dialog with a field: its own width) it goes back to hugging.
+   * A field that already shows (an Approval's "Other" field, a form in a card) is left as it was.
+   */
+  const stretched = tiles.filter(entry => !entry.fluid && wrapperOf(entry.stage) && !wrapperOf(entry.stage)!.style.inlineSize && collapsed(entry.stage));
+  for (const entry of stretched) { const wrapper = wrapperOf(entry.stage)!; wrapper.dataset.fitStretched = ""; wrapper.style.inlineSize = "100%"; }
+  for (const entry of stretched) probe(entry);
+  for (const entry of stretched) if (!entry.fluid) unstretch(entry.stage);
+  for (const entry of tiles) entry.tile.dataset.fitFluid = String(entry.fluid);
+  const inked = new Map<Tile, number | undefined>();
+  for (const entry of tiles) if (!fills(entry.stage)) inked.set(entry, inkedWidth(entry.stage));
   const measured = [...inked].filter(([, width]) => width !== undefined) as [Tile, number][];
   for (const [entry] of measured) entry.stage.style.inlineSize = "max-content";
   const maxContent = measured.map(([entry]) => truncates(entry.stage) ? 0 : extent(entry.stage).w);
@@ -347,6 +378,25 @@ export function fitTiles(canvas: HTMLElement): () => void {
   // A fixed specimen keeps its own width, or the view's if wider (loose text inside it wraps to the
   // stage); one that gave way keeps its content's width, centred.
   for (const entry of tiles) if (!entry.fluid) entry.stage.style.inlineSize = entry.hug ? `${entry.hug}px` : `max(100%, ${entry.natural}px)`;
+  /*
+   * At an exact zoom a specimen is drawn at that scale, never shrunk to its card, so a card is at least as wide as the widest
+   * specimen in its grid needs (system evaluation F3.2): the grid takes fewer columns rather than a stage running past its
+   * card (a Chart's 385 in a 364 room). Auto and Fit scale a specimen into its card and keep the grid's own minimum.
+   */
+  if (exact) {
+    const grids = new Map<HTMLElement, number>();
+    for (const entry of tiles) {
+      const grid = entry.tile.closest<HTMLElement>(".studio-grid--cards");
+      if (!grid || entry.fluid) continue;
+      const style = getComputedStyle(entry.view);
+      // The card's width that holds the specimen whole: the specimen at the zoom, the view's padding and the frame's edges.
+      const frame = entry.tile.getBoundingClientRect().width - entry.view.clientWidth;
+      const need = entry.natural * exact + parseFloat(style.paddingInlineStart) + parseFloat(style.paddingInlineEnd) + frame;
+      grids.set(grid, Math.max(grids.get(grid) ?? 0, need));
+    }
+    // --_card-min is multiplied by the zoom (canvas.css, .studio-grid--cards), so it is written over it.
+    for (const [grid, need] of grids) grid.style.setProperty("--_card-min", `max(260px, ${Math.ceil(need / exact)}px)`);
+  }
 
   // Scale follows the specimen and its tile: on first fit, and whenever either changes size
   // (window width, density, hydration, a disclosure opening inside the tile).
@@ -360,7 +410,11 @@ export function fitTiles(canvas: HTMLElement): () => void {
     // A fluid specimen fills its tile at any zoom: laid out at the room over the zoom, then scaled.
     batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(layoutWidth(entry, rooms[index]!.w, exact ?? most(entry, rooms[index]!)) * (exact ? 1 : entry.widen))}px`; });
     const extents = batch.map(entry => extent(entry.stage, true));
-    const scales = batch.map((entry, index) => exact ?? fit(rooms[index]!, extents[index]!, most(entry, rooms[index]!)));
+    /* An exact zoom draws a specimen at that scale, unless its card cannot hold it even alone in its row (a Board's 852 in a
+       792 Canvas): then it is shrunk to the card's width, never run past it (system evaluation F3.2). A waterfall card grows
+       to the specimen's height at that scale; a fixed card shrinks a taller one to its height. */
+    const scales = batch.map((entry, index) => exact === undefined ? fit(rooms[index]!, extents[index]!, most(entry, rooms[index]!))
+      : Math.min(exact, rooms[index]!.w / Math.max(1, extents[index]!.w), entry.hugs ? Infinity : rooms[index]!.h / Math.max(1, extents[index]!.h)));
     batch.forEach((entry, index) => { entry.stage.style.scale = scales[index]!.toFixed(3); });
     // A waterfall's view hugs its specimen at that scale, then the cards are placed.
     const hugging = batch.filter(entry => entry.hugs);
@@ -370,7 +424,7 @@ export function fitTiles(canvas: HTMLElement): () => void {
       const room = rooms[index]!;
       const width = room.outer;
       const tall = extents[index]!.h * scales[index]! + room.padBlock + HUG_ROOM * 2;
-      entry.view.style.blockSize = `${Math.round(Math.min(width * HUG_MAX, Math.max(width * HUG_MIN, tall)))}px`;
+      entry.view.style.blockSize = `${Math.round(Math.min(exact === undefined ? width * HUG_MAX : Infinity, Math.max(width * HUG_MIN, tall)))}px`;
     });
     placeWaterfall(hugging);
   };

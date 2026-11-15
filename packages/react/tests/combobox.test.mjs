@@ -66,7 +66,7 @@ test("Combobox renders filtered, creatable, empty and readonly usages", () => {
   assert.match(filtered, /<mark class="area-menu__match">Design<\/mark> team/);
   assert.doesNotMatch(filtered, /Engineering team/);
   const empty = renderToString(h(Combobox, { options, defaultInputValue: "Missing", emptyText: "No teams", "aria-label": "Team" }));
-  assert.match(empty, /area-combobox__empty" role="presentation">No teams/);
+  assert.match(empty, /area-menu__empty" role="presentation"><span class="area-menu__text">No teams/);
   const create = renderToString(h(Combobox, { options, inputValue: "New team", onCreate() {}, "aria-label": "Team" }));
   assert.match(create, /role="option" aria-selected="false"/);
   assert.match(create.replaceAll("<!-- -->", ""), /Create “New team”/);

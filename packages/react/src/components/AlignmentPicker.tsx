@@ -12,19 +12,27 @@ export type AlignmentPosition = typeof ALIGNMENT_POSITIONS[number];
 export interface AlignmentPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
   /** Accessible name for the complete position choice. */
   label?: string;
+  /** The form name its radios submit under. */
   name?: string;
+  /** The chosen position of the nine, controlled. */
   value?: AlignmentPosition;
+  /** The position chosen at first, uncontrolled; center by default. */
   defaultValue?: AlignmentPosition;
+  /** Called with the chosen position and the change event. */
   onValueChange?: (value: AlignmentPosition, event: ChangeEvent<HTMLInputElement>) => void;
-  /** `soft` (the field fill, default) or `plain`. `"surface"` is a deprecated alias of `soft` (audit F-20). */
+  /**
+   * `soft` (default): the field fill behind the grid. `plain`: no fill. `"surface"` is a deprecated alias of `soft`.
+   */
   variant?: VariantProps<typeof MANIFESTS.alignmentPicker>["variant"] | "surface";
-  /** @deprecated The picker fills its parent and its marks follow the UI scale (2026-10-04). Ignored. */
+  /** @deprecated Ignored: the picker fills its parent and its marks follow the type size. */
   size?: "sm" | "md" | "lg";
-  /** @deprecated The picker always fills its parent, width and height (2026-10-04). Ignored. */
+  /** @deprecated Ignored: the picker always fills its parent, width and height. */
   stretch?: boolean;
   /** Shows a position's glyph as the pointer would preview it (a static hover state for docs). */
   "data-preview"?: AlignmentPosition;
+  /** Disables every position. */
   disabled?: boolean;
+  /** A form cannot submit without a position chosen. */
   required?: boolean;
 }
 

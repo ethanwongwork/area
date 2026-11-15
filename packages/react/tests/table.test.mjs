@@ -95,7 +95,7 @@ test("loading keeps the caption and header and stands skeleton rows in for the b
 });
 
 test("sticky cells keep a ground and draw their own rules (V3)", () => {
-  const css = readFileSync(new URL("../../styles/src/components/navigation.css", import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+  const css = readFileSync(new URL("../../styles/src/components/table.css", import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
   const rule = selector => css.match(new RegExp(`${selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*\\{([^}]*)\\}`))?.[1] ?? "";
   const header = rule(".area-table--sticky-header > thead > tr > th");
   assert.match(header, /position: sticky/);

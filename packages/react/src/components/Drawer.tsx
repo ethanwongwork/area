@@ -9,35 +9,43 @@ import { ScrollArea } from "./ScrollArea.tsx";
 type Manifest = VariantProps<typeof MANIFESTS.drawer>;
 
 export interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+  /** The heading, which names the drawer. */
   title?: ReactNode;
+  /** A line under the title, read as the drawer's description. */
   description?: ReactNode;
+  /** The actions row at the bottom, usually its buttons. */
   footer?: ReactNode;
   /** The edge it slides from: the inline end (default), the inline start, or the bottom. */
   side?: Manifest["side"];
+  /** The width from a side, or the height from the bottom: `sm` 384 (default) or `md` 480, as Dialog's. */
   size?: Manifest["size"];
-  /** Footer actions in a row at the end (default), or stacked full width (shadcn's Sheet). */
+  /** The footer's actions: `row` (default), in a row at the end; `stacked`, one under another at full width. */
   actions?: Manifest["actions"];
   /**
-   * Modal (default): a scrim, focus trapped, the page inert. `false`: a side panel over the page,
-   * which stays usable (Notion's side peek); Escape and the close control still close it.
+   * Modal (default): a scrim, focus trapped, the page inert. `false`: a side panel over the page, which stays usable;
+   * Escape and the close control still close it.
    */
   modal?: boolean;
   /** Shows the corner close control. On by default. */
   showCloseButton?: boolean;
   /** Called by the close control before it closes the drawer, as Dialog's (one close API across the modal family). */
   onDismiss?: () => void;
+  /** The close control's accessible name. */
   dismissLabel?: string;
   /** Opens it when clicked. */
   trigger?: ReactElement<{ onClick?: (event: MouseEvent<HTMLElement>) => void }>;
+  /** Whether the drawer is open, controlled. */
   open?: boolean;
+  /** Whether the drawer starts open, uncontrolled. */
   defaultOpen?: boolean;
+  /** Called when the drawer opens or closes: the trigger, Escape, the close control or the scrim. */
   onOpenChange?: (open: boolean) => void;
   /** Render the surface in place, inside a positioned frame (documentation specimens). */
   inline?: boolean;
 }
 
 /**
- * A panel that slides in from an edge over a scrim (shadcn's Sheet; Notion's side peek). A native
+ * A panel that slides in from an edge over a scrim, or beside the page without one. A native
  * modal `<dialog>`: the platform traps focus, Escape closes, focus returns to the trigger; a press
  * on the scrim closes it. Header, body and footer are Dialog's.
  */

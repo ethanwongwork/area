@@ -1,0 +1,352 @@
+/* Menu (docs/specs/menu.md). Its frame, shadow stack, padding and corner are popup.css; its anchored state overlay.css. */
+@layer area.components {
+  .area-menu {
+    /* spec: icon-to-label gap (docs/specs/menu.md). Row sides come from inset.css. */
+    --_menu-gap: var(--area-ui-cluster); /* 8, Compact 6: the label column 8 + 16 + 8 (plan B2.3; inset.css) */
+    display: flex;
+    flex-direction: column;
+    /* A 1px break keeps adjacent plates distinct at every density without loosening the stack (ui-row-gap;
+     * owner 2026-10-21, ChatGPT and Notion; was flush at compact, as VS Code and Figma). */
+    gap: var(--area-ui-row-gap);
+    /* The floor every dropdown window shares (Menu, Select's picker, Custom select, Combobox, Tag
+       picker): 160 (owner 2026-11-11, plan B2.3; was 224), or the public --area-menu-min-inline-size, for a
+       product whose lists hug their rows (owner, 2026-10-14: the desktop app's dropdowns read too wide). A list
+       anchored to a field is never narrower than the field. */
+    min-inline-size: var(--area-menu-min-inline-size, calc(var(--area-space-96) + var(--area-space-64)));
+    /* The frame, the shadow stack (the float role), the padding and the list corner are the one floating surface's
+       (popup.css, plan B6.1–B6.4). */
+  }
+
+  /*
+   * Concentric corners, applied (popup.css, "Overlay corners"): the list is its rows' corner plus its 4 padding, 12 over
+   * 8 rows at the default; the 1px edge is left out so corners stay even at every stroke width (plan B6.4).
+   */
+  .area-menu__item {
+    display: flex;
+    align-items: center;
+    block-size: var(--area-ui-row);
+    padding-inline: var(--area-ui-row-inset);
+    border: 0;
+    /*
+     * Concentric, inward: the panel's radius less the padding it insets by, floored, no rounder
+     * than a row of its height anywhere (radius-row: 8 at the default, as Nav and a medium Button) and
+     * short of a pill until Pill (radius-list-row, emit/base.ts). The panel is radius-list, its rows
+     * plus the padding (12 at the default), so the two stay concentric.
+     */
+    border-radius: var(--area-radius-list-row);
+    background: transparent;
+    color: inherit;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    text-align: start;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /*
+   * spec: hover, keyboard focus and the highlighted item share one wash (ChatGPT 5% black,
+   * Notion 5% warm black, both for pointer and keyboard). The row is the focus indicator.
+   */
+  /* The shared row plate (Nav, Tree view, Table): the same #f3 as the 5% wash on white, and
+     opaque, so a selected row stays one step firmer under the pointer and in dark mode. */
+  @media (hover: hover) {
+    .area-menu__item:hover:not([data-disabled], [data-inactive], [data-selected]) {
+      background-color: var(--area-bg-component-hover);
+      outline: none;
+    }
+  }
+  .area-menu__item:is([data-highlighted], :focus-visible):not([data-selected]) {
+    background-color: var(--area-bg-component-hover);
+    outline: none;
+  }
+  /*
+   * Motion (docs/MOTION.md, "List highlight"; plan A5.3, 2026-11-11): a highlight moving through a list lands and leaves
+   * at once, under the pointer and the keys alike, so no plate trails behind the pointer. The row has no transition.
+   * Until 2026-11-11 it faded in over `hover-in` and out over `fast` under the pointer, against this rule.
+   */
+  /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
+     takes the pressed fill while held, one step firmer than selected, landing at once like the hover. The chosen row
+     presses too (plan B7.2): a click on it is still a click. */
+  .area-menu__item:active:not([data-disabled], [data-inactive]) { background-color: var(--area-bg-component-pressed); }
+
+  .area-menu__item[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--area-opacity-disabled);
+  }
+  /* Inactive (components audit V2, 2026-11-07; plan B7.12): an inactive row dims as a whole, and its reason stays
+     legible. Its words (the label, a danger label too, and trailing text) step to the muted ink at full strength, the
+     ink its reason already reads, so the note under the label is never darker than the label and keeps 4.5:1; its
+     glyphs (icon, shortcut, check, switch, chevron) sit at the disabled opacity. The row keeps the plate that marks
+     where the keys are, at full strength, since an inactive row is reached to read why. No hover or press plate. */
+  .area-menu__item[data-inactive] { cursor: not-allowed; color: var(--area-fg-muted); }
+  .area-menu__item[data-inactive] > :is(.area-menu__icon, .area-menu__shortcut, .area-menu__check, .area-menu__toggle, .area-menu__sub-chevron) { opacity: var(--area-opacity-disabled); }
+
+  /* The empty and loading rows (components audit V5, 2026-11-07; Cursor's menu `empty`, `loading`): a row's height and
+     the glyph edge in the muted ink, never a plate, never reached by the arrows. Every list's empty, loading and
+     no-results line is this one (plan B2.6): Combobox, Command palette, Composer menu, Custom select and Tag picker. The loading row's Spinner sits in the icon
+     column; it waits a short beat first (`data-waiting`, Spinner's `delay="short"`), keeping its place. */
+  .area-menu__empty,
+  .area-menu__loading {
+    display: flex;
+    align-items: center;
+    gap: var(--_menu-gap, var(--area-ui-cluster));
+    block-size: var(--area-ui-row);
+    color: var(--area-fg-muted);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    cursor: default;
+    user-select: none;
+  }
+  .area-menu__loading[data-waiting] { opacity: 0; }
+
+  /*
+   * The chosen value in a value picker (Combobox sets it; Select paints its own options the
+   * same way). Menus of commands and choices never use it: they show a check (MenuItem
+   * `checked`, `radio`) and the highlight is the plate (audit S13 C, owner 2026-09-30).
+   *
+   * Reads the *active* fill rather than the resting one. When the component band moved down
+   * to the softest rungs, a selected plate at the resting fill landed 0.009 of lightness
+   * from the page behind it -- present in the DOM and invisible on screen. The active fill
+   * is four times that separation, which is where OpenAI's sidebar sits.
+   */
+  .area-menu__item[data-selected] {
+    background-color: var(--area-bg-component-active);
+    color: var(--area-fg-default);
+    font-weight: var(--area-weight-regular);
+  }
+
+  /*
+   * spec (model-picker.md): a row with a note under its label (14/20 label, 12/14 muted note, 6 above and below, 46
+   * tall, measured). The row grows to fit; the check stays centred. Above and below is the one-line row's own room,
+   * (row − line) / 2 (plan B8.2): 5 / 6 / 8 at type 13 Compact / Default / Comfortable.
+   */
+  .area-menu__item:has(.area-menu__description) { block-size: auto; min-block-size: var(--area-ui-row); padding-block: calc((var(--area-ui-row) - var(--area-ui-leading)) / 2); }
+  /* Its leading glyph is the first line's (plan B2.4; DESIGN_SYSTEM.md, "Multiline content aligns to the first line"): a
+     box one label line tall at the content's top, the glyph centred in it (the box technique). The trailing check stays
+     centred on the row, a picker's choice mark (model-picker.md). It was centred over both lines, 8 below the label's. */
+  .area-menu__item:has(.area-menu__description) > .area-menu__icon:first-child { align-self: flex-start; block-size: var(--area-ui-leading); }
+  .area-menu__item:has(.area-menu__description) > .area-menu__icon:first-child > svg { block-size: var(--area-icon-md); }
+  .area-menu__lines { display: flex; flex-direction: column; min-inline-size: 0; }
+  /* Two lines stack on full line boxes (20 over 16), so the cap trim of a one-line row is off. */
+  .area-menu__lines > .area-menu__text { text-box: none; padding-block: 0; }
+  .area-menu__description {
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+
+  /* spec: danger keeps its red label; its plate follows Danger hover, red by default (below), the neutral wash at Neutral
+     (ChatGPT "Delete"). The red is solved for the
+     row's pressed fill, the deepest it sits on, not the page: in light it darkens by what that fill needs beyond the
+     page's own darken (the vivid inks' bound, tokens color/layers.ts VIVID_Y), in dark it lifts once the raised
+     layer's pressed fill passes L 0.396, 6.1× the excess (fitted over every accent and neutral; 0.06 at the defaults).
+     It holds at rest too, so the ink stays fixed across states (state sweep 2026-10-17: 3.97:1 pressed at the defaults,
+     3.2:1 at dark 24 + 8). The deepest fill is the pressed one, and its lightness is restated here from layers.css
+     ("Pressed": the selected fill toward the body ink, 12% in light and 14% in dark at Pressed 4, stopped where muted
+     text keeps 4.6:1). OKLab mixing is linear in L, so the restatement is exact. Until 2026-10-23 it was the 2026-10-16
+     pressed (3% and 7%), which the Pressed setting and the press room outgrew: the state sweep found 4.39:1 pressed at
+     the defaults (#cd073c on #e2e2e2, PR #152, which restated the firmest press) and 4.18:1 at light warm, Contrast 8,
+     Hover 1, Selected 0. It follows the Pressed step, so Danger hover's red plate keeps the grey plate's lightness. */
+  .area-menu__item--danger {
+    --_danger-fill-light: calc(var(--area-layer-light-raised-fill-2) + 0.25 * var(--area-fill-pressed-step) * (max(var(--area-layer-light-raised-fill-2) + 0.12 * (var(--area-layer-light-body) - var(--area-layer-light-raised-fill-2)), pow(calc(4.6 * (pow(var(--area-layer-light-muted), 3) + 0.05) - 0.05), 0.333333)) - var(--area-layer-light-raised-fill-2))); /* spec: layers.css, Pressed */
+    --_danger-fill-dark: calc(var(--area-layer-dark-raised-fill-2) + 0.25 * var(--area-fill-pressed-step) * (min(var(--area-layer-dark-raised-fill-2) + 0.14 * (var(--area-layer-dark-body) - var(--area-layer-dark-raised-fill-2)), pow(max(0, calc((pow(var(--area-layer-dark-muted), 3) + 0.05) / 4.6 - 0.05)), 0.333333)) - var(--area-layer-dark-raised-fill-2))); /* spec: layers.css, Pressed */
+    --_danger-darken: max(0, calc(1 - min(1, pow(max(0, (pow(var(--_danger-fill-light), 3) + 0.05) / (4.6 + 0.12 * var(--area-row-danger-tint)) - 0.05) / 0.178261, 0.333333)) / (1 - var(--area-layer-light-vivid-darken)))); /* spec */
+    --_danger-lift: clamp(0, calc((var(--_danger-fill-dark) - 0.396) * 6.1), 1); /* spec */
+    color: light-dark(color-mix(in oklab, var(--area-fg-danger-vivid), black calc(var(--_danger-darken) * 100%)), color-mix(in oklab, var(--area-fg-danger-vivid), white calc(var(--_danger-lift) * 100%)));
+    /* Danger hover (axes/states.ts): at Tint the row's plates keep their lightness and turn to the danger hue, so the
+       red above, solved for the neutral pressed fill, holds on them (a hue at the same OKLab L is within 1.6% of the
+       grey's luminance; the light red is solved for 4.72 there, not 4.6, so it keeps 4.5:1 on every Layers and Fill
+       combination, swept 2026-10-23). Chroma is the danger solid's, scaled to
+       shadcn's destructive/10 and /20 and Primer's danger hover (dark 0.061 hover, 0.075 pressed); in light it stops at
+       the most sRGB holds at that lightness, 0.48 × (1 − L) for this hue (a clipped plate paints darker than its L), which
+       lands on Area's own danger tints at the defaults (0.017 hover as `danger-surface-hover`, 0.034 pressed as -active). */
+    --_danger-tint: calc(var(--area-row-danger-tint) * 100%);
+    --_danger-hover: color-mix(in oklab, var(--area-bg-component-hover), light-dark(oklch(from var(--area-danger-solid) var(--area-layer-light-raised-fill-1) min(c * 0.09, (1 - var(--area-layer-light-raised-fill-1)) * 0.48) h), oklch(from var(--area-danger-solid) var(--area-layer-dark-raised-fill-1) calc(c * 0.26) h)) var(--_danger-tint)); /* spec */
+    --_danger-pressed: color-mix(in oklab, var(--area-bg-component-pressed), light-dark(oklch(from var(--area-danger-solid) var(--_danger-fill-light) min(c * 0.17, (1 - var(--_danger-fill-light)) * 0.48) h), oklch(from var(--area-danger-solid) var(--_danger-fill-dark) calc(c * 0.32) h)) var(--_danger-tint)); /* spec */
+  }
+  @media (hover: hover) {
+    .area-menu__item--danger:hover:not([data-disabled], [data-inactive], [data-selected]) { background-color: var(--_danger-hover); }
+  }
+  .area-menu__item--danger:is([data-highlighted], :focus-visible):not([data-selected]) { background-color: var(--_danger-hover); }
+  .area-menu__item--danger:active:not([data-disabled], [data-inactive]) { background-color: var(--_danger-pressed); }
+
+  /*
+   * The icon and text slots of a menu item. The icon holds its size; the label takes what
+   * is left and truncates, so a long page title shortens rather than wrapping the row.
+   */
+  .area-menu__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    flex-shrink: 0;
+  }
+
+  .area-menu__icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .area-menu__text {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The typed text in a filtered row (components audit V4, 2026-11-07; Cursor's quick input marks it in
+     `list-highlightForeground`): the strong weight in the row's own ink, so the mark holds on every plate, in forced
+     colours and beside a muted path. Command palette, Combobox and Custom select's filter share it (highlightMatch). */
+  .area-menu__match {
+    background: none;
+    color: inherit;
+    font-weight: var(--area-weight-strong);
+  }
+
+  /*
+   * A group heading, in an inline menu the same shape as a nav's: the item's size and row
+   * height, regular weight, and a foreground a rung quieter than the items it names. See
+   * `nav.css` for the measurement this follows.
+   */
+  /* spec (2026-09-27, one label pattern with Nav): a row-pitch label in the caption size and the
+     muted ink, stepping back from the rows by size as well as ink (Notion's menu and palette
+     labels 12px; nav/notion--sidebar-sections). Menu, Combobox, Command palette and Context menu
+     share it. */
+  .area-menu__label {
+    display: flex;
+    align-items: center;
+    block-size: var(--area-ui-row);
+    padding-inline: var(--area-ui-row-inset);
+    color: var(--area-fg-muted);
+    /* The label box is set in the rows' type, so inset.css can give it the rows' own text inset; the
+       caption size is the text's (owner 2026-10-09: section titles line up with the row text). */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    /* spec (owner, 2026-10-22: "more intentional, consistent and professional"; cursor-audit-2026-10-22.md item 1): one
+       group label for every run of rows, Nav's (owner, 2026-09-27: "get the nav titles from ChatGPT"): the rows' size at
+       weight 500 in the muted ink, a row tall. Menu, Combobox, Command palette, Custom select and List box kept the
+       earlier 12/16 at 400 when Nav moved. ChatGPT's sidebar labels 14/18 500 over 14 rows and Figma's panel headings
+       550 at the rows' 11 keep the rows' size; Notion (12/16 500 over 14) and Cursor (11/14 over 12) step down. */
+    font-weight: var(--area-weight-strong);
+  }
+  .area-menu__label-text {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .area-menu__separator {
+    block-size: var(--area-border-width); /* a seam inside the menu, as Panel's rules (consistency pass 2026-10-12) */
+    /*
+     * spec: 6px from the rows on each side, compact 5 (the row gap plus the rest; owner
+     * 2026-10-02, cursor-desktop.md). Cursor's desktop menu 6 / 1 / 6; VS Code and Cursor web
+     * 5 / 1 / 5, Figma 7 / 1 / 7; Notion 4, ChatGPT 8. Was 4 / 1 / 4 (Notion), and 10 before
+     * that, a 21px band (docs/specs/menu.md).
+     */
+    /* Its room and ends are the row table's (inset.css): 5 / 6 / 7 from the plates, ends on the plates' edges (plan
+       B2.1, RF11; it was inset 8 from them, on neither the plates nor the text). */
+    background-color: var(--area-edge-dividers);
+  }
+
+  /*
+   * Checkable rows. The row is the control; the trailing check or switch only shows state.
+   * spec: Notion's toggle rows end in a small switch 8px from the row's end; ChatGPT's model
+   * picker ends in a 16px check. Unchecked checks keep their column so labels do not move.
+   */
+  /* MenuSub (audit D-10): the row's trailing chevron points along the reading direction, in the
+     row's muted icon ink, its edge 8 from the row's end as a check's; an open submenu keeps its
+     row highlighted. */
+  .area-menu__sub-chevron {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 var(--area-icon-md);
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    margin-inline-start: auto;
+    color: var(--area-fg-muted);
+  }
+  .area-menu__sub-chevron > svg { inline-size: 100%; block-size: 100%; rotate: -90deg; }
+  .area-menu__sub-chevron:dir(rtl) > svg { rotate: 90deg; }
+  .area-menu__item--sub[aria-expanded="true"]:not([data-selected]) { background-color: var(--area-bg-component-hover); }
+  .area-menu__check {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 var(--area-icon-md);
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    margin-inline-start: auto;
+    /* A state mark: the Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"). */
+    color: var(--area-fg-selection);
+  }
+  /* The check is a small mark (docs/MOTION.md): it fades and grows from 0.6 on `fast` ease-out,
+     resting at scale 1; unchecked, it keeps its column. */
+  .area-menu__check > svg {
+    inline-size: 100%;
+    block-size: 100%;
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects), scale var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-menu__item[aria-checked="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
+  .area-menu__shortcut + :is(.area-menu__check, .area-menu__toggle) { margin-inline-start: 0; }
+  /* In a menu with check rows, a plain row keeps the check's column empty, so every shortcut ends on one line, as
+     Figma's zoom and view menu does (owner 2026-10-10, zoom-control.md Q2; was scoped to Zoom control). */
+  .area-menu:has(.area-menu__item[aria-checked]) .area-menu__item:not([aria-checked]) > .area-menu__shortcut:last-child {
+    margin-inline-end: calc(var(--area-icon-md) + var(--_menu-gap, var(--area-gap-md)));
+  }
+  .area-menu__toggle {
+    margin-inline-start: auto;
+    min-block-size: 0;
+    align-items: center;
+    cursor: inherit;
+  }
+
+  /* A row's trailing content (a count, a badge, a status; components audit 2026-11-07, O7): Nav item's trailing slot,
+     muted in the row's type, pushed to the end; a shortcut after it follows at the row gap. No measured menu shows a count
+     beside a shortcut, so the gap is the row's own (`_menu-gap`), as between the label and the check. */
+  .area-menu__trailing {
+    margin-inline-start: auto;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    color: var(--area-fg-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .area-menu__trailing + .area-menu__shortcut,
+  .area-menu__trailing + :is(.area-menu__check, .area-menu__toggle) { margin-inline-start: 0; }
+  /* spec: 12px in the UI font, quiet ink (the measured shortcuts: 12px, tertiary, not monospace): text-sm, 12/16 at
+     type 13 (plan A9.2). Keys drawn by Kbd keep the mark size inside it. */
+  .area-menu__shortcut {
+    margin-inline-start: auto;
+    color: var(--area-fg-subtle); /* meta: the subtle ink (plan A3.2) */
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+
+  /* Deprecated (audit D-22): use Combobox or Command palette for a searchable list. Kept so
+   * existing markup renders: the input sits above a compact menu on one floating surface. */
+  .area-menu__search-surface {
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-4);
+    /* Menu's own minimum, so a searchable menu is exactly as wide as a plain one. */
+    min-inline-size: var(--area-menu-min-inline-size, calc(var(--area-space-96) + var(--area-space-64))); /* Menu's own minimum, 160 (plan B2.3; was 224, audit D-17, and 256) */
+    /* The frame and the shadow stack are the one floating surface's (popup.css, plan B6.1); it is a list, so it takes the
+       list padding and corner (popup.css, "Overlay corners"; it took the container corner, 16 round 8 rows 5 in). */
+    padding: var(--_list-pad);
+    border-radius: var(--_list-corner);
+  }
+
+  /* The Menu inside is clear, so the search surface's fill (or a material's glass) shows through it; the same
+     surface fill without a material. */
+  .area-menu__search-surface > .area-menu {
+    min-inline-size: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+}

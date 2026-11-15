@@ -64,5 +64,5 @@ export const GallerySectionHeading = () => <SectionHeading title="Title" />;
 export const GallerySectionHeadingCount = () => <SectionHeading title={<>Title <span style={{ color: "var(--area-fg-muted)", fontWeight: "var(--area-weight-regular)" }}>48</span></>} />;
 /* With a lede, 8 under the title. */
 export const GallerySectionHeadingLede = () => (
-  <SectionHeading title="Title" lede="Description that wraps onto a second line" />
+  <SectionHeading title="Title" lede="Description that wraps onto a second line under the title" style={{ inlineSize: "calc(var(--area-space-80) * 3)" }} />
 );

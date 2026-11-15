@@ -334,7 +334,7 @@ function tokensOf(slug: string): string[] {
   return [...found].sort();
 }
 const GROUPS: Array<[RegExp, string]> = [
-  [/^--area-(focus-offset|focus-width|stroke|border-width)/, "Stroke"],
+  [/^--area-(focus-offset|focus-width|focus-solid-offset|focus-gap|stroke|border-width)/, "Stroke"],
   [/^--area-(bg|fg|border|accent|danger|warning|success|info|tone|token|selection|focus|overlay|scrim)/, "Color"],
   [/^--area-(text|font|weight|leading|tracking|ui-size|ui-leading|control-[a-z]+-text|control-[a-z]+-leading)/, "Type"],
   [/^--area-(space|gap|inset|pad)/, "Spacing"],

@@ -3,7 +3,7 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import type { HTMLAttributes, InputHTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { editableTextVariants, type VariantProps, MANIFESTS } from "../variants.ts";
-import { Tooltip } from "./primitives.tsx";
+import { Tooltip } from "./Tooltip.tsx";
 
 type EditableTextVariants = VariantProps<typeof MANIFESTS.editableText>;
 
@@ -22,10 +22,11 @@ export interface EditableTextProps extends Omit<HTMLAttributes<HTMLSpanElement>,
   onEditingChange?: (editing: boolean) => void;
   /** Shown, muted, when the value is empty. */
   placeholder?: string;
-  /** What starts editing: a double-click (Figma, the default), a click (Notion), or focus. Enter or F2 on the focused text always does. */
+  /** What starts editing: a double-click (default), a click, or focus. Enter or F2 on the focused text always does. */
   activation?: EditableTextVariants["activation"];
   /** Fill the container's width, as a layer name fills its row. */
   fill?: boolean;
+  /** The text can't be edited. */
   disabled?: boolean;
   /** A tooltip that says how to edit, on hover and keyboard focus ("Double-click to rename"); false hides it. */
   hint?: ReactNode | false;

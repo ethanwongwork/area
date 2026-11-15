@@ -13,13 +13,18 @@
     --_preview: var(--area-space-40); /* spec: shadcn Attachment, Penpot, Polaris, Untitled UI 40 */
     display: flex;
     align-items: center;
-    gap: var(--area-space-12); /* spec: Untitled UI, Fluent, Polaris 12 */
+    /* Density roles (plan B8.2): the preview to its words is a row's gap (8 / 12 / 16 at type 13 Compact / Default /
+       Comfortable, 12 measured at the default), the inset a cluster (6 / 8 / 10), so the row is 52 / 56 / 60. The
+       preview is a measured media size, 40 at every density. */
+    gap: var(--area-gap-row);
     min-inline-size: 0;
-    min-block-size: calc(var(--_preview) + 2 * var(--area-space-8)); /* spec: 56, Figma's row and shadcn's 8 + 40 + 8 */
-    padding: var(--area-space-8); /* spec: shadcn Attachment p-2 */
+    min-block-size: calc(var(--_preview) + 2 * var(--area-ui-cluster));
+    padding: var(--area-ui-cluster);
     color: var(--area-fg-default);
-    font-size: var(--area-text-xs-size); /* spec: the inspector's 12/16 (Figma 11/16) */
-    line-height: var(--area-text-xs-leading);
+    /* The row's words are the UI line, 13/18 at type 13 (plan A9.2: text-xs is for marks): the name 500 and its joined
+       meta line the name's size in the muted ink (plan A9.3), as a File upload row. */
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
   }
 
   .area-asset-row__preview {

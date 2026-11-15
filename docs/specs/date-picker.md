@@ -86,7 +86,7 @@ Field insets: Select's (text 10 at md; with an icon, the icon square 8 from the 
 | State | Change | Evidence |
 |---|---|---|
 | hover | edge hover (outline/soft); ghost hover plate | Select, Custom select |
-| open | `data-open`; field in focus edge colour (ghost: pressed plate) | Custom select |
+| open | `data-open`; the field holds its hover edge, never the focus edge (ghost: pressed plate); input.css "Press and open" | Custom select |
 | focus-visible | field focus edge, halo and outline | Select |
 | placeholder | `input-placeholder` ink ("Pick a date" by default; ghost demo "Empty", Notion's) | Select |
 | disabled | Select's disabled paint; never opens | Select |
@@ -180,7 +180,7 @@ theirs; this pass changes the trigger (as Custom select's) and, through Calendar
 | Trigger hover (edge, ghost plate) | in and out: `--area-transition`, fast 100, ease-out | in: instant (`:hover` 0s, under `hover: hover`); out: fast, ease-out |
 | Press | eased in over fast | instant (`:active` 0s) |
 | Focus ring (outline + halo) | halo (`box-shadow`) faded in and out over fast | instant: `box-shadow` left out of the trigger's `transition-property` |
-| Open (focus edge, ghost pressed plate) | eased in over fast | instant (`[data-open]` 0s); leaves on fast, ease-out |
+| Open (hover edge, ghost pressed plate) | eased in over fast | instant (`[data-open]` 0s); leaves on fast, ease-out |
 | Panel enter / exit | Popover: `opacity` + `scale` 0.97 at the trigger origin | unchanged here (surface.css) |
 | Day hover, selection | snapped both ways (no transition) | Calendar's: in instant, out fast ease-out (`calendar.md`) |
 | Clear row | Menu's row | unchanged (surface.css) |
@@ -227,3 +227,32 @@ The trigger's label is not selectable. See [interaction polish](../research/inte
 - **What changed:** `validationStatus` and a Field's status paint the trigger with Select's success and warning edges; `readOnly` shows a date set elsewhere (a focusable `combobox` with `aria-readonly` that never opens; rest paint, no hover); `open` / `defaultOpen` join `onOpenChange`; the ref now reaches the trigger button, where the native props and Field's id already landed (was the wrapper div).
 - **Why:** DatePicker.tsx:22 (invalid only), :37 (onOpenChange only), :10, :56 (`forwardRef<HTMLDivElement>` beside button props); Custom select forwards to its trigger. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-14 · plan B7.8, B7.10 → the trigger's disabled and read-only are the field shell's disabled and read-only recipe (input.css): disabled soft triggers no longer gain the faint edge; the ghost keeps no fill or edge disabled; read-only rests one fill step deeper (ghost: the soft fill). Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the value takes tabular figures (plan A9.8); its calendar's days and weekdays are 12/16 (Calendar, plan A9.2).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Forced colours: the trigger restores Highlight focus (A6.4, S18).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the date panel takes the shared popover rule: the surface enters and leaves on `duration-fast` (140 at Speed 210; it entered on `base`, 210), the enter easing out with the fade on `ease-effects`, the exit accelerating away on `ease-exit` (A5.1); opened from a key it appears at its size and only fades on `fade-fast` (`data-opened-by="keyboard"`, written by overlay.ts; A5.2).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The trigger is the one field shell (select-* seam). The value is a cap slot (it sat 0.62 high at type 13). Open keeps the hover edge through `--_field-edge` (plan B7.1; it kept the focus edge until 2026-11-14).
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
+
+## State paint (plan B7.1, B7.3), 2026-11-14
+
+- Open holds the hover edge (was the focus edge, so under Focus ring Halo an open picker read as focused); ghost presses and opens on `bg-component-pressed` (open was `bg-component-active`). One rule in input.css, "Press and open".

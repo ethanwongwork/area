@@ -71,3 +71,10 @@ test('defaults, the wide card for a screen, caption parts and forwarding', () =>
   assert.doesNotMatch(selected, /area-design-card__detail/);
   assert.match(selected, /area-design-card__actions/);
 });
+
+// Plan B1.1 (structure B-S8): what the card holds is `kind`; `layout` stays a deprecated alias for one release.
+test('kind names what the card holds, and the deprecated layout still sets it', () => {
+  assert.match(render(h(DesignCard, { kind: 'screen' })), /area-design-card--screen/);
+  assert.match(render(h(DesignCard, { layout: 'phone' })), /area-design-card--phone/);
+  assert.match(render(h(DesignCard, { kind: 'icon', layout: 'phone' })), /area-design-card--icon/, 'kind wins over the alias');
+});

@@ -13,7 +13,10 @@ import { announce } from "./announce.ts";
 import { Badge, type BadgeProps } from "./Badge.tsx";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { Skeleton, Table, TableCell, TableHeaderCell, Tooltip, type LoadingDelay } from "./primitives.tsx";
+import { Skeleton } from "./Skeleton.tsx";
+import { Table, TableCell, TableHeaderCell } from "./Table.tsx";
+import { Tooltip } from "./Tooltip.tsx";
+import { type LoadingDelay } from "./loading-delay.ts";
 
 type ChartVariants = VariantProps<typeof MANIFESTS.chart>;
 /** What the chart draws. The number is ChartNumber. */
@@ -54,11 +57,15 @@ export interface ChartProps extends Omit<HTMLAttributes<HTMLDivElement>, "childr
   formatX?: (value: string | number) => string;
   /** The series hidden from the plot (a donut: its parts, by x value); the legend toggles them. At least one stays. */
   hiddenKeys?: readonly string[];
+  /** The series hidden at first, uncontrolled; none by default. */
   defaultHiddenKeys?: readonly string[];
+  /** Called with the hidden series' keys when the legend hides or shows one. */
   onHiddenKeysChange?: (keys: string[], event: MouseEvent<HTMLButtonElement>) => void;
   /** The plot, or Area's Table of the same data in its place. */
   view?: ChartView;
+  /** The view at first, uncontrolled; the chart by default. */
   defaultView?: ChartView;
+  /** Called when the Show table toggle switches the view. */
   onViewChange?: (view: ChartView, event: MouseEvent<HTMLButtonElement>) => void;
   /** Adds a toggle at the legend's end that shows the data as a table. */
   tableToggle?: boolean;

@@ -40,6 +40,22 @@ describe("type size (docs/research/ui-size-scale-2026-10-12.md)", () => {
     }
   });
 
+  it("sets code on its own line on the Type axis, the small step's line plus 2 (plan A9.9)", () => {
+    expect(TYPE_SIZES.map(base => {
+      const t = typeSizeTokens(base);
+      return `${px(t["text-xs-size"]!)}/${px(t["text-xs-code-leading"]!)}`;
+    })).toEqual(["10/16", "11/16", "12/18", "13/20", "14/22"]);
+  });
+
+  it("tracks no body text, titles by their own token, and keeps one underline offset (plan A9.10)", () => {
+    for (const base of TYPE_SIZES) {
+      const t = typeSizeTokens(base);
+      for (const role of ["text-xs", "text-sm", "text-base", "text-lg"]) expect(t[`${role}-tracking`], `${base} ${role}`).toBe("0em");
+      expect(t["title-sm-tracking"]).toBe("-0.01em");
+      expect(t["underline-offset"]).toBe("0.08em");
+    }
+  });
+
   it("puts icons in the 20 slot from 15, its line on the size curve (owner, 2026-10-29)", () => {
     expect(TYPE_SIZES.map(base => typeSizeTokens(base)["type-icon"])).toEqual(["16px", "16px", "16px", "20px", "20px"]);
     expect(TYPE_SIZES.map(base => typeSizeTokens(base)["type-icon-line"])).toEqual(["1", "1", "1", "0.8846", "0.8846"]);

@@ -8,7 +8,7 @@
 @layer area.components {
   .area-command-palette__modal {
     /* spec: Notion opens its palette 77 from the top, not centred, so results grow downward. */
-    margin: 77px auto auto; /* spec */
+    margin: 77px auto auto; /* spec: a measured placement, at every density */
     padding: 0;
     border: 0;
     max-inline-size: calc(100vw - var(--area-space-32));
@@ -17,38 +17,32 @@
     overflow: visible;
   }
   .area-command-palette__modal::backdrop { background: var(--area-scrim); /* Dialog's scrim */ }
-  /* Enter and exit are Dialog's, from its rule (surface.css, `:is(.area-dialog__modal, .area-command-palette__modal)`;
+  /* Enter and exit are Dialog's, from its rule (dialog.css, `:is(.area-dialog__modal, .area-command-palette__modal)`;
      docs/MOTION.md, "Dialog, command palette, confirm dialog"): the fade and the overlay scale from the centre, moderate
      in and base out. */
 
   .area-command-palette {
-    /* spec (list pass, 2026-09-26): Menu's list model — 4 inset, 32 rows 2 apart, radius 8 — so the
-     * corner is row radius + inset = 12, the same as Menu and the Combobox list. */
-    --_list-inset: var(--area-space-4);
+    /* A modal that holds a list (popup.css, "Overlay corners", plan B6.3): the modal's corner, radius-container, with
+     * Menu's rows concentric inside it, so the list's padding is the corner less the rows' (`--_list-pad`, never under
+     * 4): 8 at the default (16 = 8 + 8), 8 at Corner 14 (20 = 12 + 8), 5 at Pill, 4 at Sharp. It was Menu's 4 and
+     * Menu's 12 corner, a list beside the 16 of every other modal. */
+    --_list-inset: var(--_list-pad);
     /* Every column in the palette is the rows' column: a row's icon sits the row's own icon inset in. */
     --_column: calc(var(--_list-inset) + var(--area-ui-row-inset));
-    /* Rows keep Menu's icon-to-label gap, so row text starts where the typed text does. */
-    --_menu-gap: var(--area-gap-row);
-    /* The palette's corner less the list inset, 12 - 4 = 8: concentric with the padding, the 1px
-       border left out so the corner stays even (owner, 2026-10-03: all even). */
+    /* Rows keep Menu's icon-to-label gap (ui-cluster, plan B2.3), so row text starts where the typed text does. */
+    --_menu-gap: var(--area-ui-cluster);
+    /* The rows keep a row's corner, the 1px edge left out of the padding so the corner stays even (plan B6.4). */
     --_row-radius: var(--area-radius-list-row); /* 8 at both densities; a pill only at Pill */
-    /* The surface corner, or less where capped rows can't follow it (Pill): concentric either way,
-       and it steps with the radius setting as every surface does (was rebuilt from the rows: 6, 5, 4). */
-    --_palette-radius: var(--area-radius-list);
+    /* The rows' corner plus the padding: the container corner wherever the padding can reach it (popup.css). */
+    --_palette-radius: var(--_list-corner);
     display: flex;
     flex-direction: column;
-    /* spec: Notion's list column is 600 wide. */
-    inline-size: min(calc(100vw - var(--area-space-32)), 600px); /* spec */
+    /* spec: Notion's list column is 600 wide; the public `--area-command-palette-inline-size` replaces it (plan B6.3). */
+    inline-size: min(calc(100vw - var(--area-space-32)), var(--area-command-palette-inline-size, 600px)); /* spec */
     max-block-size: min(700px, calc(100vh - 77px - var(--area-space-16))); /* spec: Notion 700 */
     overflow: hidden;
-    border: var(--area-border-width) solid var(--area-edge-floating);
     border-radius: var(--_palette-radius);
-    background-color: var(--area-bg-surface);
-    color: var(--area-fg-default);
-    /* The Elevation axis's modal role, as Dialog (Notion's palette is its search dialog: 24/48 and 4/12). */
-    /* A material's layers come first (material.css). */
-    --_elevation: var(--area-shadow-modal);
-    box-shadow: var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-edge), var(--_elevation);
+    /* The frame and the shadow stack are the one floating surface's on the modal role, as Dialog (popup.css, plan B6.1). */
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
@@ -59,10 +53,13 @@
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    min-block-size: calc(48px - var(--area-space-8) * var(--area-ui-dense)); /* spec: Notion 48, compact 40 */
-    /* The search icon on the rows' icon column, the typed text on their text column (Menu's 12 gap). */
+    /* The tool bar and its rule (inset.css, "Two header bars", plan B4.1): 39 / 47 / 55 at type 13 Compact / Default /
+       Comfortable. It was its own 48 less 8 a density step (40 / 44 / 52), on no ladder beside Panel's bar. */
+    --_hb-rule: var(--area-border-width);
+    min-block-size: var(--_hb-tool);
+    /* The search icon on the rows' icon column, the typed text on their text column (Menu's icon-to-label gap). */
     padding-inline: var(--_column);
-    gap: var(--area-gap-row); /* Menu's icon-to-label gap (audit S11a) */
+    gap: var(--_menu-gap); /* Menu's icon-to-label gap, ui-cluster (plan B2.3) */
     border-block-end: var(--area-border-width) solid var(--area-edge-dividers);
   }
   .area-command-palette__search-icon {
@@ -133,7 +130,7 @@
     background: transparent;
     color: var(--area-fg-muted);
     cursor: pointer;
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
   }
   .area-command-palette__back > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   @media (hover: hover) { .area-command-palette__back:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
@@ -147,8 +144,9 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-lg-size);
-    line-height: var(--area-text-lg-leading);
+    /* An operated part takes the UI line (plan A9.12): only the field you write into keeps the reading size. */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
   }
 
   /* The preview pane (V4; Notion's search: 1006 wide with its preview on, the results column 600, the pane 406): beside
@@ -174,15 +172,8 @@
   @container (inline-size < 640px) {
     .area-command-palette__preview { display: none; }
   }
-  /* One empty state for every list: the Combobox row, 32 tall at the text inset (audit D-24 B;
-     was a centred 96 block). */
-  .area-command-palette__empty {
-    display: flex;
-    align-items: center;
-    block-size: var(--area-control-md);
-    padding-inline: calc((var(--area-control-md) - 1cap) / 2);
-    color: var(--area-fg-muted);
-  }
+  /* One empty line for every list: Menu's (.area-menu__empty, a row tall on the glyph edge; plan B2.6, G5). It was the md
+     control's height, 26 beside 28 rows at Compact (audit D-24 B: a centred 96 block before that). */
 
   /* Key hints: what the keys do here, below the list, as static text (owner, round 68: "do the move and open kbd shortcuts
      also need to be buttons? or should they just be static shortcuts"). Raycast, Linear, VS Code's quick open and
@@ -191,8 +182,8 @@
   .area-command-palette__footer {
     display: flex;
     align-items: center;
-    /* 16 between one hint and the next (compact 12). */
-    gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense));
+    /* 16 between one hint and the next (compact 12): whole steps, as every gap (plan A1.1; was 14 at the default). */
+    gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-gap-step));
     flex-shrink: 0;
     /* The keycaps start on the rows' icon column, and the footer keeps that inset above and below (12 + 16 + 12 = the
        40 the plated hints made; owner, 2026-09-28: "is this spacing at the bottom correct?"). */
@@ -202,8 +193,9 @@
     padding-block-start: calc(var(--_column) - var(--_list-inset));
     /* no rule above it (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; docs/research/dividers-2026-10-25); the search keeps its rule: a field over its results */
     color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    /* Words that explain the keys: text-sm (plan A9.2; text-xs is for marks). */
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
   }
   /* A keycap sits one ui-cluster from its words (Kbd, "The gap between a keycap and its words"); ↑ and ↓ are one hint,
      2 apart. */

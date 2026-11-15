@@ -28,7 +28,7 @@ order.
 | rows | an `ol` with Menu's list padding 4 and ui-row-gap between rows; each row ui-row tall, row inset, row corner, Menu's row gap (gap-row: 12, compact 8); the row plate on hover and focus | Menu (peer) |
 | sending | the text at 60% opacity (`--_sending-opacity`), a Spinner sm in the 16 slot | Codex sending opacity-60 |
 | chevron | closed points along the reading direction (−90°, +90° in RTL), down when open, turns on `fast`; Accordion's hover plate | Plan (peer) |
-| head | "N queued" in the muted ink, a chevron; folds | Cursor "N Queued", tone muted |
+| head | the one collapsible head (inset.css, plan B4.4): "N queued" strong in the default ink, the chevron 4 after it; folds | Cursor "N Queued" (its muted tone and end chevron set aside for the chat cards' one head, VS7) |
 | actions | Send now (ghost sm) and Remove (icon), over the row's end on hover or focus; always on a failed row (Retry in place of Send now) and on touch. The last one ends as far from the row's end as from its top, never under 4, and the buttons' corner is the row's less that same inset | Cursor hover actions; Codex Steer + Delete; Edit summary's row buttons |
 | paused | not a prop or state of Queue: the app passes `title` ("N queued, paused") after the person stops a run, until the next send (`apps/desktop/src/chat/chat.tsx`, `session.queuePaused`) | Codex "Queue paused because you interrupted" |
 
@@ -131,3 +131,19 @@ summary's row buttons (the row's corner less their inset).
 - **Why:** a failure away from focus was silent to screen readers (DESIGN_SYSTEM.md "Announcements"); one rule for every
   send or upload that fails (cohesion test).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation B2.3 · a row's gap is Menu's icon-to-label gap, `ui-cluster` (8, Compact 6; was `gap-row`).
+
+### 2026-11-13 · One chat card (system plan, Phase 2, B1.3)
+
+- The frame is the chat card (`surface.css`): its corner (16 at the default, 14 at Compact), rows 4 from the outer edge
+  with the edge counted once, so the words and the head's title start 12 in (were 13), a one-row head, a strong title.
+- Queue's title is strong in the default ink (was muted).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: a row's actions sit as far from the row's end as from its top, (row − control) / 2 (2 at the defaults; the end was floored at 4), and are concentric with the row: 8 − 2 = 6 (was 4).
+- B4.4: the head is the one collapsible head (inset.css): "N queued" strong in the default ink, the chevron 4 after the title (it stood at the card's far end), a row tall.
+
+## State paint (plan B7.11), 2026-11-14
+
+- Row actions hide only inside `@media (hover: hover)`; on touch they sit in the row, shown (the margin moved to the base rule).

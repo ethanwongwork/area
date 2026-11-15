@@ -1,0 +1,258 @@
+/* Dialog (docs/specs/dialog.md), with the modal and title-group rules Command palette and Drawer share. */
+@layer area.components {
+  /* --- Dialog ------------------------------------------------------------- */
+  .area-dialog__modal {
+    margin: auto;
+    padding: 0;
+    border: 0;
+    max-inline-size: calc(100vw - var(--area-space-32));
+    max-block-size: calc(100dvh - var(--area-space-32)); /* dvh: the visible height with a mobile toolbar (audit E-20) */
+    background: transparent;
+    overflow: visible;
+  }
+  /*
+   * Whole-pixel centring (MOTION.md, Crispness 1; motion pass 2026-10-07). `margin: auto` centres
+   * on a half pixel whenever the room left over is odd: a Confirm dialog measured 141.86 tall (its
+   * title's cap trim) and landed at 334.5 × 328.07. The room is made even (the viewport rounded
+   * down to 2px) and the modal's box even (its content rounded up to 2px, the extra under 2px and
+   * transparent), so the centre is a whole pixel; the surface rounds its own height up to 1px.
+   * Without calc-size() support the box stays fit-content, as before.
+   */
+  .area-dialog__modal {
+    inset-inline-end: calc(100% - round(down, 100%, 2px));
+    inset-block-end: calc(100% - round(down, 100%, 2px));
+    inline-size: calc-size(fit-content, round(up, size, 2px));
+    block-size: calc-size(fit-content, round(up, size, 2px));
+  }
+  .area-dialog__modal > .area-dialog { block-size: calc-size(auto, round(up, size, 1px)); }
+  /* Full height (components audit V1, 2026-11-07): the tallest the surface may be, whatever its content, in whole pixels so
+     the modal's even-pixel centring above still holds; the body takes the room and scrolls. */
+  .area-dialog--full-height,
+  .area-dialog__modal > .area-dialog--full-height { block-size: round(down, calc(100dvh - var(--area-space-64)), 1px); }
+  /* spec: a light scrim (ChatGPT 13% black, shadcn 10%); the lift separates the surface. */
+  .area-dialog__modal::backdrop { background: var(--area-scrim); }
+  /*
+   * Enter and exit (audit E-19 A, owner 2026-09-30; plan A5.1, owner 2026-11-11; docs/MOTION.md "Dialog"): a fade and
+   * the overlay scale (0.97) from the centre, entering on `base` (210 at the default Speed) and leaving one step faster
+   * on `fast`. The enter eases out (the fade on `ease-effects`); the exit accelerates away on `ease-exit`. The scrim fades
+   * on the same clocks. A transition takes the duration and curve of the state it goes to, so the closed rules carry the
+   * exit's. The durations are motion-axis tokens, so motion 0 and prefers-reduced-motion make it instant. Until
+   * 2026-11-11 a dialog entered on `moderate` (280) and left on `base`, both ease-out.
+   *
+   * Command palette's modal shares the rule (system gaps C7, 2026-11-07) on the anchored surfaces' clocks, `fast` both
+   * ways (plan A5.2): it is opened often, and by a shortcut it appears at its size and only fades (`data-opened-by`).
+   */
+  :is(.area-dialog__modal, .area-command-palette__modal) {
+    --_overlay-duration: var(--area-duration-base);
+    --_overlay-fade: var(--area-fade-base); /* the fade's clock, which stays short under reduced motion (MOTION.md) */
+    --_overlay-ease: var(--area-ease-effects);
+    --_overlay-move: var(--area-ease-out);
+    --_overlay-scale: var(--area-overlay-scale);
+    opacity: 1;
+    scale: none; /* rest without a transform, so layout snaps the surface to whole pixels (MOTION.md, Crispness 2); interpolates as 1 */
+    transition:
+      opacity var(--_overlay-fade) var(--_overlay-ease),
+      scale var(--_overlay-duration) var(--_overlay-move),
+      overlay var(--_overlay-fade) allow-discrete,
+      display var(--_overlay-fade) allow-discrete;
+  }
+  .area-command-palette__modal { --_overlay-duration: var(--area-duration-fast); --_overlay-fade: var(--area-fade-fast); }
+  :is(.area-dialog__modal, .area-command-palette__modal):not([open]) { --_overlay-duration: var(--area-duration-fast); --_overlay-fade: var(--area-fade-fast); --_overlay-ease: var(--area-ease-exit); --_overlay-move: var(--area-ease-exit); opacity: 0; scale: var(--_overlay-scale); }
+  .area-command-palette__modal[data-opened-by="keyboard"] { --_overlay-scale: none; /* the resting value itself, so no identity transition starts */ }
+  /* The backdrop names the motion tokens directly: ::backdrop inherits from its dialog only since
+     Chrome 122, so the dialog's private properties may not reach it. */
+  :is(.area-dialog__modal, .area-command-palette__modal)::backdrop {
+    opacity: 1;
+    transition:
+      opacity var(--area-fade-base) var(--area-ease-effects),
+      overlay var(--area-fade-base) allow-discrete,
+      display var(--area-fade-base) allow-discrete;
+  }
+  .area-command-palette__modal::backdrop { transition-duration: var(--area-fade-fast); }
+  :is(.area-dialog__modal, .area-command-palette__modal):not([open])::backdrop {
+    opacity: 0;
+    transition-duration: var(--area-fade-fast);
+    transition-timing-function: var(--area-ease-exit);
+  }
+  @starting-style {
+    :is(.area-dialog__modal, .area-command-palette__modal)[open] { opacity: 0; scale: var(--_overlay-scale); }
+    :is(.area-dialog__modal, .area-command-palette__modal)[open]::backdrop { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { :is(.area-dialog__modal, .area-command-palette__modal) { --_overlay-scale: none; /* the resting value itself, so no identity transition starts */ } }
+  /* The page behind a modal doesn't scroll: showModal() leaves it to the page (audit E-20). */
+  html:has(.area-dialog__modal:modal) { overflow: hidden; }
+  .area-dialog {
+    /* spec: 16, border included, at both densities (owner 2026-10-02, cursor-desktop.md): Figma's
+     * Share dialog keeps 16 sides in its dense UI; VS Code's save dialog (13 / 9) was the only
+     * capture behind the earlier compact 12 (R8). */
+    --_dialog-outer: var(--area-space-16);
+    --_dialog-inset: calc(var(--_dialog-outer) - var(--area-border-width));
+    /* The floating corner, radius-container (plan A2.3, owner 2026-11-11: 16 at the default, at both densities; square
+       with a square surface). It was the container plus 4, 20, rounder than every other surface. The close is a corner
+       control (inset.css, plan B4.2): md, its glyph on the 16 inset, so its plate is 9 from the outer edge and its
+       corner 16 − 9 = 7 (it kept the control's 8). */
+    --_dialog-radius: var(--area-radius-container);
+    --_cc-corner: var(--_dialog-radius);
+    --_cc-inset: var(--_dialog-outer);
+    /* Header, body and footer stand the block gap apart (popup.css, plan B6.2): the md surface inset, never more than the
+       dialog's 16, so 16 at Comfortable (18 before) and 12 at Compact. */
+    --_block-inset: var(--_dialog-outer);
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    /* The width is the size's (below); md, 480, when no size class is set, or the public `--area-dialog-inline-size`
+       (plan B6.3), which a size class still overrides. */
+    --_dialog-size: var(--area-dialog-inline-size, calc(var(--area-space-96) * 5));
+    inline-size: min(calc(100vw - var(--area-space-32)), var(--_dialog-size));
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    max-block-size: calc(100dvh - var(--area-space-64));
+    padding: var(--_dialog-inset);
+    max-inline-size: 100%;
+    border-radius: var(--_dialog-radius);
+    /* The frame and the shadow stack are the one floating surface's on the modal role, the topmost surface over the
+       scrim (popup.css, plan B6.1). */
+    overflow: hidden;
+  }
+
+  .area-dialog::backdrop { background: var(--area-scrim); }
+
+  /*
+   * Sizes (components audit V1, 2026-11-07; docs/specs/dialog.md "Variants"). sm and md are Drawer's two widths, so one
+   * name is one width across the modal family (Governance § 4, "One name, one size"): sm 384 (shadcn's dialog and sheet),
+   * md 480, the width Dialog always had (between shadcn 384 and Primer 640). lg and xl are the two wide widths a chat
+   * app's dialogs measure, lg 720 for a table or two columns and xl 880 for a settings dialog with its own sidebar
+   * (chat-apps.md: sm 400, md 520, lg 720, xl 880). Every size stops at the screen less 32, as before.
+   */
+  .area-dialog--sm { --_dialog-size: 384px; /* spec: Drawer sm, shadcn 384 */ }
+  .area-dialog--md { --_dialog-size: calc(var(--area-space-96) * 5); }
+  .area-dialog--lg { --_dialog-size: 720px; /* spec: chat-apps.md lg 720 */ }
+  .area-dialog--xl { --_dialog-size: 880px; /* spec: chat-apps.md xl 880 */ }
+
+  /* The title group, Dialog's and Drawer's one part (system gaps C7, 2026-11-07; drawer.css restated it line for line). */
+  :is(.area-dialog__header, .area-drawer__header) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--area-inset-surface-md);
+    padding: 0;
+    flex-shrink: 0;
+  }
+  /* The title group (DESIGN_SYSTEM.md, "Text pairs"): the title is the size of the text it heads, 13/18 strong over 13/18
+     muted, and stands one step (4) off it, 12.8 baseline to cap beside the text's own 8.8. Joined on the line (2026-11-06,
+     first pass) it read as the paragraph's first line, not its title (owner: "still doesnt look right"). */
+  :is(.area-dialog__heading, .area-drawer__heading) { min-inline-size: 0; display: grid; gap: var(--area-space-4); }
+  /*
+   * A corner control beside a title (plan B6.5; DESIGN_SYSTEM.md, "Bars and corner controls", the one named exception;
+   * conductor 2026-11-14). The title's cap sits on the inset with or without a close, so the surface keeps one text grid,
+   * and the group's last line ends on its baseline. The close follows the title: centred on its cap, its box giving back
+   * what it stands beyond the cap, (1cap − H) / 2 above and below in whole pixels (6 from the top at type 13 Default),
+   * and its glyph on the side column (the corner control's pull, 9 from the side). Its corner is taken from the nearer of
+   * the two distances (`--_cc-near`, inset.css), so it stays concentric where it is closest: 16 − 6 = 10 at the default.
+   * The first pass of 2026-11-14 placed the title on the close's centre instead (cap 19–20, 3–4 off the inset).
+   */
+  :is(.area-dialog__header, .area-drawer__header) > :is(.area-dialog__dismiss, .area-drawer__dismiss) {
+    --_cc-top: round(nearest, calc((1cap - var(--_height)) / 2), 1px);
+    --_cc-near: min(var(--_cc-distance), calc(var(--_cc-inset) + var(--_cc-top)));
+    margin-block: var(--_cc-top);
+    margin-inline-end: calc(-1 * var(--_cc-pull)); /* the corner control's pull (inset.css): its glyph on the inset */
+  }
+  :is(.area-dialog__heading, .area-drawer__heading) > :is(.area-dialog__title, .area-drawer__title):last-child { text-box: trim-both cap alphabetic; }
+  :is(.area-dialog__heading, .area-drawer__heading) > :is(.area-dialog__description, .area-drawer__description):last-child { text-box: trim-end cap alphabetic; }
+
+  /*
+   * A rule under the header once the body has scrolled (`data-scrolled`, set by Dialog from the body's scroll position;
+   * components audit V1, 2026-11-07): content passing under a fixed header needs an edge to pass under, and a dialog
+   * whose body hasn't moved keeps the undivided look its decisions chose (dialog.md, "Excluded: a divided footer"). The
+   * separator's line (`edge-dividers`, Separator's and Menu's), edge to edge inside the border, in the middle of the gap
+   * between header and body, rounded to a whole pixel. It fades on the fade clock, which reduced motion keeps short.
+   */
+  .area-dialog__header { position: relative; }
+  .area-dialog__header::after {
+    content: "";
+    position: absolute;
+    inset-inline: calc(-1 * var(--_dialog-inset));
+    inset-block-end: calc(-1 * round(down, calc(var(--_block-gap) / 2), 1px) - var(--area-border-width) / 2);
+    block-size: var(--area-border-width);
+    background-color: var(--area-edge-dividers);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
+  }
+  .area-dialog[data-scrolled] > .area-dialog__header::after { opacity: 1; }
+  /*
+   * And the mirror at the foot (plan B6.6, VN15; reopens dialog.md's "Excluded: a divided footer" for this one case): the
+   * same line over the footer while the body can scroll further (`data-scroll-more`, set by the body's Scroll area), so
+   * a body cut mid-line reads as continuing under the footer. At the end, and in a dialog that doesn't scroll, the footer
+   * stays undivided.
+   */
+  :is(.area-dialog__footer, .area-drawer__footer) { position: relative; }
+  :is(.area-dialog__footer, .area-drawer__footer)::before {
+    content: "";
+    position: absolute;
+    inset-inline: calc(-1 * var(--_block-rule-reach, 0px));
+    inset-block-start: calc(-1 * round(up, calc(var(--_block-gap) / 2), 1px) - var(--area-border-width) / 2);
+    block-size: var(--area-border-width);
+    background-color: var(--area-edge-dividers);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
+  }
+  .area-dialog { --_block-rule-reach: var(--_dialog-inset); }
+  .area-drawer { --_block-rule-reach: var(--_drawer-outer); }
+  :is(.area-dialog, .area-drawer):has(> :is(.area-dialog__body, .area-drawer__body).area-scroll-area[data-scroll-more]) > :is(.area-dialog__footer, .area-drawer__footer)::before { opacity: 1; }
+
+  :is(.area-dialog__title, .area-drawer__title) {
+    margin: 0;
+    /* The cap sits on the inset, with or without a close (plan B6.5); the leading below the baseline stays while a
+       description follows. */
+    text-box: trim-start cap alphabetic;
+    overflow-wrap: anywhere;
+    /* spec (2026-11-06 balance pass, docs/research/title-balance-2026-11-06): the text's size, strong, in the default ink
+     * (Cursor's confirm 12/500 over 12, its settings rows 13 over 13; macOS alerts one step). Was title-xs, 16/22 over
+     * 13/18 since the 2026-11-02 ramp (1.23x; the owner had approved 16 over 14, 1.14x, on 2026-09-26), joined 10.0
+     * baseline to cap beside the text's own 8.8: near the line gap but not on it, so it read as no spacing logic. */
+    font-size: var(--area-text-base-size);
+    line-height: var(--area-text-base-leading);
+    letter-spacing: var(--area-text-base-tracking);
+    font-weight: var(--area-weight-strong);
+  }
+
+  :is(.area-dialog__description, .area-drawer__description) {
+    margin: 0;
+    overflow-wrap: anywhere;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    color: var(--area-fg-muted);
+  }
+
+  /* flex-basis 0 with overflow hidden is what lets the body scroll inside a flex column.
+   * The scroll box clips, so it reaches a focus ring beyond the content edge (padding in,
+   * the same margin out): a full-width field's halo is no longer cut at the sides. */
+  .area-dialog__body {
+    --_dialog-bleed: calc(var(--area-focus-width) + var(--area-focus-gap));
+    flex: 1 1 auto;
+    min-block-size: 0;
+    min-inline-size: 0;
+    padding: var(--_dialog-bleed);
+    margin: calc(-1 * var(--_dialog-bleed));
+    overflow-y: auto;
+  }
+  /* The body is a Scroll area (plan B6.6, as Drawer's; docs/specs/scroll-area.md, "Adoption"): the focus-ring bleed moves
+     into the scroller, and the body keeps the negative margin, so the clip still clears a ring at the content edge. */
+  .area-dialog__body.area-scroll-area { padding: 0; overflow: hidden; }
+  .area-dialog__body > .area-scroll-area__viewport { padding: var(--_dialog-bleed); }
+
+  .area-dialog__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--area-ui-cluster);
+    padding: 0;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+  @media (max-width: 480px) {
+    .area-dialog__footer > * { flex: 1 1 auto; }
+  }
+
+}

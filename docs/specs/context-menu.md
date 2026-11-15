@@ -51,6 +51,8 @@ opening are new; the menu is Menu. Not a dropdown Menu (opened from a button), n
 | disabled | `disabled` lets the browser's menu show | — |
 | motion | `duration-fast` ease-out in and out, opacity + scale from 0.97 at the pointer; rows stay mounted through the exit ("Motion and interaction, 2026-10-07") | docs/MOTION.md |
 
+**State hooks (manifest).** `open` is its Menu's (`statesFrom`, `:popover-open`). Its `disabled` prop paints nothing: it only keeps the browser's own menu, so the manifest lists no `disabled` state (the parity test keeps it, with that reason).
+
 ## Visual pass
 
 2026-09-28 (batch 18), live in Claude in Chrome: right-click on a Notion sidebar page (then
@@ -112,6 +114,8 @@ Open question: none new.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → fast enter and exit (100) from the pointer: origin written after the flip, coordinates rounded (B10), flip measured on the layout size, rows kept through the exit. context-menu.css, ContextMenu.tsx.
 - 2026-10-15 · PRODUCT_UI.md open gap ("A per-item context-menu target: the gallery's PinMenu reads data-key from the event"), owner: "merge it, then continue working" → `itemSelector`: the menu opens only on a matching element inside the area (from the pointer, or the focused element for Shift+F10 and the Menu key), `menu` may be a function of that element, and the element carries `data-context-target` while the menu is open (a hook; nothing is painted). Outside an item nothing opens and the browser's own menu shows. The app's PinMenu uses it (`[data-key]`). Gallery: Behavior / one menu per row.
 - 2026-10-16 · owner, review round 27 (components27) → approved (`itemSelector`) → Complete again in `component-status.mjs`.
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` as its Menu's (`statesFrom`); `disabled` stays React-only with its reason; no paint changed.
+- 2026-11-14 · plan B7.12 → its inactive rows are Menu's (menu.css): words in fg-muted, glyphs at opacity-disabled, the note never stronger than the label. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-20
 
@@ -123,3 +127,23 @@ Open question: none new.
 - **What changed:** `open` opens or closes it from outside; opened that way it appears at the area's start (with `itemSelector`, under its first item), as the keyboard opens it; `defaultOpen` opens it on mount. A right-click or Shift+F10 still opens it and reports through `onOpenChange`.
 - **Why:** ContextMenu.tsx:23 had `onOpenChange` only. The audit's own row said no change (it opens at the pointer); the owner's pick built it, so a host can open the menu from a command. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A2.1 · rows in a floating list take their height's corner (radius-list-row capped by radius-row, and radius-step is the real medium control's corner): rows 10 → 8 and the list 14 → 12 at the default Corner 10, the corner of a Nav row and a medium Button of the same 30. emit/base.ts; radius.test.ts.
+- 2026-11-11 · system evaluation B2.3 (owner) · Menu's rows: icon-to-label gap `ui-cluster` (8, Compact 6), floor 160.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the menu no longer grows from 0.97 at the pointer: it fades only, on `fade-fast` in and out, the exit on `ease-exit` (A5.1, A5.2: the most frequent open); its rows land and leave at once (A5.3).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Row table (B2.1).** Menu's rows: text-only rows on the glyph edge (8), muted icons, separators on the plates' edges (menu.md).
+- 2026-11-14 · system evaluation B6.1, B6.3 · Menu's surface (popup.css): no visible change at the defaults; the corner is the overlay corner equation (Corner 2: 4, was 2).

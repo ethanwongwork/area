@@ -6,6 +6,7 @@
  *
  *   Overview       the Stage, its code and the family's tiles (src/pages/components.tsx)
  *   Documentation  what it is for, what to use instead, do and don't, anatomy, states, keyboard, ARIA
+ *   Specs          its measurements and state tokens at the current settings and the defaults (src/specs-tab.tsx)
  *   API            import, props with their source's descriptions, classes, parts, state attributes, CSS properties
  *   Code           the React source, the stylesheet, the manifest entry and every tile's demo
  *   Spec           the family's spec (docs/specs/<slug>.md), its lists of dated entries as tables
@@ -13,10 +14,12 @@
  * Every row comes from a source of truth: the styles manifest, the React source and its JSDoc, the stylesheet, the
  * spec, and src/content/documentation.mjs (the spec restated where it is prose). Nothing is written here twice.
  */
-import { Fragment, type ReactNode } from "react";
+import { createContext, Fragment, use, type ReactNode } from "react";
 import { Badge, Code, CodeBlock, Kbd, Link, ScrollArea, SectionHeading, Table, TableCell, TableLink } from "@area/react";
 import { FEED_CODE, FEED_TABLE, FeedCount, StatusBadge, type Status } from "./tile.tsx";
 import SOURCES from "virtual:component-sources";
+import { MANIFESTS } from "@area/styles/manifest";
+import API_ROWS from "virtual:api-rows";
 import { hrefOf } from "./places.ts";
 // @ts-expect-error — the documentation content is authored in JavaScript.
 import { DOCUMENTATION } from "./content/documentation.mjs";
@@ -29,6 +32,8 @@ export const FAMILY_TABS = [
   // and Overview names the whole library's gallery.
   { id: "overview", label: "Preview" },
   { id: "documentation", label: "Documentation" },
+  // Measured off the family's own specimens (plan F7, 2026-11-11), between what it is for and its API.
+  { id: "specs", label: "Specs" },
   { id: "api", label: "API" },
   { id: "code", label: "Code" },
   { id: "spec", label: "Spec" },
@@ -45,6 +50,9 @@ export interface FamilyManifest {
   elements?: readonly string[];
   states?: readonly string[];
   stateAttributes?: Record<string, string>;
+  /** States another component draws for this one, by that component's manifest key (Box field's `disabled` is its
+   * Number fields'). */
+  statesFrom?: Record<string, string>;
 }
 
 export interface FamilyInfo {
@@ -133,8 +141,16 @@ const exportsOf = (family: FamilyInfo) => (family.imports ?? "").split(",").map(
 
 /* --- Markdown, as Area components --------------------------------------------- */
 
+/**
+ * Opens a family's page in the app, where a tab provides it: a link to a family's spec (`button.md`) then goes to that
+ * family's page (places.ts), not the spec file on GitHub.
+ */
+interface FamilyLinks { name: (slug: string) => string | undefined; open: (slug: string) => void }
+const FamilyLinksContext = createContext<FamilyLinks | null>(null);
+
 /** Inline markdown: `code`, **strong**, *emphasis* and [links](to), links resolved against the spec's folder. */
 function Inline({ text, base = "docs/specs/" }: { text: string; base?: string }) {
+  const families = use(FamilyLinksContext);
   const out: ReactNode[] = [];
   const pattern = /`([^`]+)`|\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)\s]+)\)|(?<![\w*])\*([^*\s][^*]*)\*(?![\w*])/g;
   let last = 0;
@@ -143,6 +159,13 @@ function Inline({ text, base = "docs/specs/" }: { text: string; base?: string })
     if (match[1] !== undefined) out.push(<Code key={match.index}>{match[1]}</Code>);
     else if (match[2] !== undefined) out.push(<strong key={match.index}>{match[2]}</strong>);
     else if (match[3] !== undefined) {
+      const family = families && base === "docs/specs/" ? match[4]!.match(/^([a-z0-9-]+)\.md$/)?.[1] : undefined;
+      if (family && families!.name(family)) {
+        out.push(<Link key={match.index} href={hrefOf({ page: "components", item: family })}
+          onClick={event => { event.preventDefault(); families!.open(family); }}>{match[3]}</Link>);
+        last = match.index! + match[0].length;
+        continue;
+      }
       const href = /^[a-z]+:/.test(match[4]!) ? match[4]! : new URL(match[4]!, REPO + base).href;
       out.push(<Link key={match.index} href={href} target="_blank" rel="noreferrer">{match[3]}</Link>);
     } else out.push(<em key={match.index}>{match[5]}</em>);
@@ -404,14 +427,34 @@ function cssProperties(text: string) {
   return { declared: [...declared], read: [...read].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])) };
 }
 
-export function ApiTab({ family }: { family: FamilyInfo }) {
+/** A manifest key ("numberField") as its family's slug ("number-field"). */
+const slugOfKey = (key: string) => key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+
+export function ApiTab({ family, onOpenFamily, familyName }: {
+  family: FamilyInfo; onOpenFamily: (slug: string) => void; familyName: (slug: string) => string | undefined;
+}) {
   const manifest = family.manifest;
   const [primary] = exportsOf(family);
   const docs = primary ? SOURCES.propDocs[`${primary}Props`] ?? {} : {};
   const sheet = stylesheetOf(family.slug, manifest?.block);
   const css = sheet ? cssProperties(SOURCES.css[sheet]!) : undefined;
   const describe = (prop: string) => prop.split(/ \/ /).map(name => docs[name.trim()]).filter(Boolean).join(" ");
+  // Generated from the manifest and the React props (scripts/api-rows.mjs), with the page's own notes after them.
+  const api = API_ROWS[family.slug] ?? family.api;
+  const links = { name: familyName, open: onOpenFamily };
+  // A state another component draws for this one is that component's, with its hook (manifest.ts `statesFrom`).
+  const borrowed = manifest?.statesFrom ?? {};
+  const allStates = [...new Set([...(manifest?.states ?? []), ...Object.keys(borrowed)])];
+  const borrows = Object.keys(borrowed).length > 0;
+  const lender = (key: string) => {
+    const slug = slugOfKey(key);
+    return familyName(slug)
+      ? <TableLink href={hrefOf({ page: "components", item: slug })} onClick={event => { event.preventDefault(); onOpenFamily(slug); }}>{familyName(slug)}</TableLink>
+      : <span>{words(slug)}</span>;
+  };
+  const stateCount = allStates.length;
   return (
+    <FamilyLinksContext.Provider value={links}>
     <div className="studio-sections">
       <Section id="api-import" title="Import" lede="The package, its exports, the root class and the stylesheet.">
         <FactTable label="Import" rows={[
@@ -421,16 +464,16 @@ export function ApiTab({ family }: { family: FamilyInfo }) {
           sheet ? ["Stylesheet", <Code>{`packages/styles/src/components/${sheet}`}</Code>] : null,
         ]} />
       </Section>
-      {family.api?.length ? (
-        <Section id="api-props" title="Props" count={family.api.length} lede="From the React source and its descriptions.">
+      {api?.length ? (
+        <Section id="api-props" title="Props" count={api.length} lede="From the React source and its descriptions.">
           <DataTable label="Props" head={["Prop", "Type", "Default", "Description"]} fit={[0, 2]}
-            rows={family.api.map(([prop = "", type = "", fallback]) => [
+            rows={api.map(([prop = "", type = "", fallback, description]) => [
               // One name sits on the cell's line as inline Code, as the Default column's does; only a prop with several names
               // stacks them (a grid makes each a block, its padding added to the line: rows were 36.4, not 33, 2026-10-31).
               prop.includes(" / ") ? <span className="studio-doc__stack">{prop.split(/ \/ /).map(name => <Code key={name} className="studio-prop">{name}</Code>)}</span> : <Code>{prop}</Code>,
               type,
               fallback && fallback !== "—" ? <Code>{fallback}</Code> : <span className="studio-muted">—</span>,
-              describe(prop) ? <Inline text={describe(prop)} /> : <span className="studio-muted">—</span>,
+              description || describe(prop) ? <Inline text={description || describe(prop)} /> : <span className="studio-muted">—</span>,
             ])} />
         </Section>
       ) : null}
@@ -447,10 +490,15 @@ export function ApiTab({ family }: { family: FamilyInfo }) {
             ]} />
         </Section>
       ) : null}
-      {manifest?.states?.length ? (
-        <Section id="api-states" title="State attributes" count={manifest.states.length} lede="The attribute that styles each state.">
-          <DataTable label="State attributes" head={["State", "Attribute"]} fit={[0]}
-            rows={manifest.states.map(state => [words(state), <Code>{manifest.stateAttributes?.[state] ?? `data-${state}`}</Code>])} />
+      {manifest && stateCount ? (
+        <Section id="api-states" title="State attributes" count={stateCount}
+          lede={borrows ? "The attribute that styles each state, and the component that draws it." : "The attribute that styles each state."}>
+          <DataTable label="State attributes" head={borrows ? ["State", "Attribute", "Drawn by"] : ["State", "Attribute"]} fit={[0]}
+            rows={allStates.map(state => {
+              const key = borrowed[state];
+              const attribute = key ? stateAttributeOf(key, state) : manifest.stateAttributes?.[state] ?? `data-${state}`;
+              return [words(state), <Code>{attribute}</Code>, ...(borrows ? [key ? lender(key) : <span className="studio-muted">{family.name}</span>] : [])];
+            })} />
         </Section>
       ) : null}
       {css?.declared.length ? (
@@ -466,7 +514,14 @@ export function ApiTab({ family }: { family: FamilyInfo }) {
         </Section>
       ) : null}
     </div>
+    </FamilyLinksContext.Provider>
   );
+}
+
+/** The attribute the lending component styles a state with: its manifest's exception, else the data-state adapter's. */
+function stateAttributeOf(key: string, state: string): string {
+  const lender = (MANIFESTS as unknown as Record<string, FamilyManifest | undefined>)[key];
+  return lender?.stateAttributes?.[state] ?? `data-${state}`;
 }
 
 /* --- Code --------------------------------------------------------------------- */

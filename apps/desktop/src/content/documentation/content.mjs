@@ -12,7 +12,8 @@ export default {
       ["Do", "Use surface for a raised region on the page, soft for a well inside one, and plain to group children without paint."],
       ["Do", "Read soft as what other systems call subtle, sunken or a well, and Surface as their Paper, Box or View."],
       ["Do", "Nest Surfaces rather than drawing your own boxes, so each corner stays concentric with the one around it."],
-      ["Do", "Put a Surface straight inside a Card or Panel when it needs a region of its own; it takes their corner less their inset."],
+      ["Do", "Put a Surface straight inside a Card or Panel when it needs a region of its own; it takes their corner less their inset, never under a row's corner."],
+      ["Do", "Title a Surface with Card's pair, CardTitle and CardDescription in a CardContent: a Surface has Card's inset, gap, corner and title."],
       ["Do", "Lay out a Surface's content with Stack, choosing the gap by role."],
       ["Do", "Give a Surface a role and a name when it is a region a reader navigates to."],
       ["Don't", "Nest more than three layers; a fourth level is a floating surface such as a Menu or Dialog."],
@@ -72,13 +73,13 @@ export default {
     ],
     // Spec: Anatomy; source: primitives.tsx.
     parts: {
-      root: "The surface: owns the edge, corner, resting shadow and the space every slot sits at (sm 16, md 20, lg 24); size sets the space, section gap, media inset and corner, layout arranges media and content.",
+      root: "The frame, Surface's recipe: the edge, corner, resting shadow and the space every slot sits at (sm 16, md 20, lg 24). Size sets the space, gap, media inset and corner; layout arranges media and content.",
       media: "The picture slot, stepped out to the media inset with a corner that follows the card's; bleed runs it flush on the sides it touches, well recesses it for a composition.",
       overlay: "Controls pinned to a corner of the media or the card; reveal hides them until the card is hovered or holds focus.",
       content: "An optional group of blocks, one section gap apart, with no padding of its own; beside media it makes the text column.",
       header: "A title row: the heading beside a trailing action, one control tall.",
       heading: "The header's text group: the title and description.",
-      "header-action": "A Badge, icon Button or small icon centred on the title's first line; a Button reaches the inset in the corner.",
+      "header-action": "A Badge, icon Button or small icon centred on the title's first line; a Button reaches the inset in the corner, a ghost one by its glyph.",
       title: "The card's heading, h3 unless you set level; trimmed to its cap.",
       description: "Muted supporting text under the title.",
       value: "A widget's leading figure, such as a temperature or price, with equal-width digits.",
@@ -180,7 +181,7 @@ export default {
       ["Do", "Use columns for a subject's facts, the values lined up after the longest term, and justified for settings-style facts with the value at the row's end."],
       ["Do", "Keep terms short nouns (Status, Owner); the value can be text, a Badge, a person or a Link."],
       ["Do", "Set visibleCount on long lists so only the first rows show, with a Show more button after them."],
-      ["Do", "Use divided and framed together when the list stands alone, as a settings card."],
+      ["Do", "Use divided with variant surface when the list stands alone, as a settings card."],
       ["Do", "Put a subject's facts straight in a Panel section, unframed: the terms take the panel's label column, so the values line up with its Fields' controls, and the rows pack at a small control's height."],
       ["Don't", "Put a paragraph in a value: a sentence about the subject goes under the list, at the full width."],
       ["Don't", "Put an editable control in place of a value unless the value is a field; the list shows values, it is not a form."],
@@ -188,7 +189,7 @@ export default {
     ],
     // Spec: Anatomy, Show more; source: DescriptionList.tsx.
     parts: {
-      root: "A native dl: layout places terms in a column or at the row's start, divided rules the rows, framed draws Table's frame.",
+      root: "A native dl: layout places terms in a column or at the row's start, divided rules the rows, variant surface draws Table's frame.",
       item: "One row: a div grouping a term with its value. Rows past visibleCount stay in the document, hidden, so order holds.",
       term: "The dt, in the muted ink; its column fits the longest term (at most 40%, --area-description-list-term), and a longer term wraps. In a Panel it is the panel's label column.",
       icon: "A 16 decorative icon before the term; the Show more button puts its chevron here, so its label lines up with the term names.",
@@ -270,7 +271,7 @@ export default {
     // Spec: Anatomy, Round 8, Review note round 31; source: Board.tsx.
     parts: {
       root: "One column: a section named by its title, tinted in its color, with a header over its cards and an optional footer.",
-      header: "The column's top row: the title, the count and the actions.",
+      header: "The column's top row, the region bar: the title, the count and the actions.",
       title: "The group's name in plain text; it names the section.",
       count: "A small soft Badge with the number of items; in a colored column it takes the color.",
       actions: "Buttons at the header's end, such as add and more.",
@@ -348,7 +349,7 @@ export default {
     // Spec: Variants, Decisions; source: DesignCard.tsx JSDoc.
     practices: [
       ["Do", "Pass the design at its true size and let the card place it: never scale, pad or centre it yourself."],
-      ["Do", "Pick the layout by what the design is: part for a control, a component, a pattern or a type line; screen for a window; phone for a phone; icon for an icon; color for a colour."],
+      ["Do", "Pick the kind by what the design is: part for a control, a component, a pattern or a type line; screen for a window; phone for a phone; icon for an icon; color for a colour."],
       ["Do", "Give a part that would be cropped its focus: top for a menu or a palette, start for a type line."],
       ["Do", "Give a screen its true size with designWidth and designHeight (1920 × 1080), so it is laid out as it is used and shown whole."],
       ["Do", "Leave the detail to show the true size; pass a colour's value or a status in its place, or null for nothing."],
@@ -362,9 +363,9 @@ export default {
     parts: {
       root: "The card: the ground with its caption under it, 4 apart.",
       ground: "The container: Card's corner (16 at the default), the tile tone with the card edge, its lift on hover; it clips what runs past it.",
-      design: "The design's box at its true size, placed by the layout's rule as a transform, so it stays live DOM at every scale.",
-      caption: "The row under the ground: the name 4 in, the detail, the controls at the end.",
-      name: "The design's name in the UI text; one line, then an ellipsis.",
+      design: "The design's box at its true size, placed by its kind's rule as a transform, so it stays live DOM at every scale.",
+      caption: "The row under the ground: the name's line 8 under it, on its edge, the detail, the controls at the end.",
+      name: "The design's name, the item name every picture card shares: the UI text, strong, one line, then an ellipsis.",
       detail: "The true size by default, muted, in tabular figures; or a colour's value or a status.",
       actions: "Controls at the caption's end, ending on the ground's edge.",
     },
@@ -570,7 +571,7 @@ export default {
     ],
     // Spec: Anatomy, Coherence pass; source: FileTile.tsx.
     parts: {
-      root: "One item: the figure over its text in a centred column, at most a grid column wide (the figure plus 24 each side); in a FileGrid it sits on the row plates of its option and takes the cell's width.",
+      root: "One item: the figure over its text in a centred column, at most a grid column wide (the figure plus 24 each side); in a FileGrid it takes the cell's width, and a chosen tile draws the selected edge inside it.",
       figure: "The square that holds a Folder, a File page, a glyph or a contained image; sm 48, md 64 or lg 96.",
       text: "The name over the detail line, 8 under the figure.",
       name: "The item's name in the app's strong UI text; up to two lines, then an ellipsis.",

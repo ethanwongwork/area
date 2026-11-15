@@ -24,6 +24,7 @@ export const METER_SEGMENT_LIMIT = 8;
 export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /** The measured value, between min and max. Required without `segments`; with them it is their sum. */
   value?: number;
+  /** The lowest value, where the bar is empty; 0 by default. */
   min?: number;
   /** The range's end. With `segments` it defaults to their sum (the bar full); set it to show what is left. */
   max?: number;
@@ -44,7 +45,7 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, "childr
   /** `warning` and `danger` color the fill when the value means trouble; `neutral` is Progress's fill. */
   tone?: MeterVariants["tone"];
   /** The bar's thickness: Progress's sm 4, md 6, lg 8. */
-  size?: "sm" | "md" | "lg";
+  size?: MeterVariants["size"];
 }
 
 const percent = (part: number, whole: number) => `${whole > 0 ? Math.round((part / whole) * 100) : 0}%`;

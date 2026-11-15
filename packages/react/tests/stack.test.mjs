@@ -19,6 +19,7 @@ test('defaults to a vertical group and maps each option to its modifier', () => 
 test('gaps are roles on Area layout tokens, never numbers, and never exceed the Surface inset they sit in', () => {
   assert.match(css, /\.area-stack--related \{ --_stack-gap: var\(--area-ui-cluster\); \}/);
   assert.match(css, /\.area-stack--group \{ --_stack-gap: var\(--area-gap-row\); \}/);
-  assert.match(css, /\.area-stack--section \{ --_stack-gap: calc\(var\(--area-gap-row\) \* 2\); \}/);
+  // The section space is a named role since 2026-11-11 (plan A1.4; was gap-row × 2).
+  assert.match(css, /\.area-stack--section \{ --_stack-gap: var\(--area-gap-section\); \}/);
   assert.match(css, /gap: min\(var\(--_stack-gap\), var\(--_surface-room, var\(--_stack-gap\)\)\);/);
 });

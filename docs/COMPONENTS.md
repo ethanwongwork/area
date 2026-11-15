@@ -8,7 +8,7 @@ specimen. How to decide whether something new belongs is in [Governance](GOVERNA
 
 ## Library
 
-126 families (2026-11-07). Compound parts follow their family (AccordionItem with
+125 families, plus Preview frame, deprecated (counted by `check:docs` from `pages.mjs` and the status registry). Compound parts follow their family (AccordionItem with
 Accordion). Each family has a spec in [`specs/`](specs/README.md) and a Documentation entry
 in the app. The groups below match the files in `apps/desktop/src/content/documentation/`.
 
@@ -16,10 +16,10 @@ in the app. The groups below match the files in `apps/desktop/src/content/docume
 |---|---|
 | Actions and choices | Button, Button group, Split button, Toggle group, Toolbar (with the `floating` hover action bar), Selection bar, Filter bar, Copy button, Segmented, Checkbox, Radio, Switch, Slider (and range), Chip, Alignment picker, Zoom control, Kbd, Link |
 | Fields and text entry | Field, Setting row (with Settings group), Input, Input group, Number field, Box field, Textarea, Select (native), Custom select, Combobox, Tag picker, Date picker, Date range picker, Time field, Password field, OTP field, Search field, Editable text, Color field |
-| Pickers, colour and inspector parts | Color swatch, Color swatch picker, Color picker, Calendar, List box, Property list, Panel (with `resizable`), Splitter, Box model, Token row, Asset row, Preview frame, File upload, Scroll area |
+| Pickers, colour and inspector parts | Color swatch, Color swatch picker, Color picker, Calendar, List box, Property list, Panel (with `resizable`), Splitter, Box model, Token row, Asset row, File upload, Scroll area |
 | Navigation, menus and overlays | Nav, Tabs, Breadcrumb, Pagination, Stepper, Tree view, Menu, Context menu, Command palette, Popover, Hover card, Tooltip, Toggletip, Dialog, Confirm dialog, Drawer |
 | Status, feedback and labels | Badge, Badge group, Count, Indicator (with Presence), Avatar, Tag, Alert (with the banner layout), Toast, Progress, Spinner, Skeleton, Meter, Empty state, Separator, Code, Code block, Shortcut list |
-| Surfaces, content, files, articles and media | Surface, Stack, Card, Table, Description list, Timeline, Board, Accordion, Design card, Asset card, Folder, File page, File tile, Video player, Figure, Inline list, Abbreviation, Hatnote, Link groups, Reference list, Table of contents, Titlebar, Page header, Section heading, Mention, Chart (with ChartNumber) |
+| Surfaces, content, files, articles and media | Surface, Stack, Card, Table, Description list, Timeline, Board, Accordion, Design card, Asset card, Folder, File page, File image, File tile, Video player, Figure, Inline list, Abbreviation, Hatnote, Link groups, Reference list, Table of contents, Titlebar, Page header, Section heading, Mention, Chart (with ChartNumber) |
 | Conversation and agent chat | Message, Composer, Composer menu, Attachment, Queue, Prompt suggestions, Model picker, Scroll to latest, Citation, Timestamp, Step, Edit summary, Approval, Plan, Turn notice |
 
 Token is deprecated in favour of `<Code swatch>` and Preview frame in favour of Asset card's frame alone; each is still
@@ -48,7 +48,9 @@ silhouettes, when judging coverage.
 | Code · Code block · Kbd | Inline identifier; a block of source; a key chord |
 | Table · Description list · (DataGrid) | Rows of data; labelled values; editing, resizing and virtualization (not built) |
 | Button · Link | An action; a place |
-| Segmented · Tabs · Toggle group | One value of a set; panels; any number pressed |
+| Segmented · Tabs · Toggle group | One value of a set; panels; any number pressed. Segmented and soft Toggle group are one track (one recipe, segmented.css "One track"; plan B8.1) |
+| Tabs · Nav `horizontal` | Tabs switch panels in place, inside one view (a page's sections, a panel's views); a strip of places (open documents, records, the app's open tabs) is Nav horizontal, whose items are links or places that close, are dirty or pinned (plan B8.1, 2026-11-14) |
+| Checkbox · Radio · Switch | Several of a set; one of a set; a setting that applies at once. One box ladder (14 / 18 / 22 at type 13): a Switch's thumb is the Checkbox's box at the same size name (md 14, lg 18); Switch alone has sm (a 14 track for a dense row, its thumb 10); Checkbox's and Radio's sm was removed 2026-09-28, when it differed from md only by its label gap |
 | Titlebar · Page header · Section heading | The window's bar; a page's own title block, once, with its way back, actions and tabs; a titled block inside a page |
 | Toolbar · Selection bar | A view's commands, always there; the actions on what is selected, only while something is |
 | Panel rows · Setting row · Field | Edit what is selected; a page of preferences that apply on their own, with a modified mark and Reset; a form's control, submitted |
@@ -96,7 +98,7 @@ before it is built.
 | Grid | A page-level grid of cards whose columns come from a minimum card width and the container's width, gap by role | Layout component beside Stack (Mantine SimpleGrid, Polaris Grid); Stack's spec leaves 2-D layout to CSS today | A second screen that needs it outside Asset grid and File grid ([research](research/ui-patterns-2026-10-22/); `area-ui-compose` › content) |
 | Shelf | A page-level row of cards that scrolls sideways under a section heading, with a peek, scroll snap and previous / next controls | A component on Card Carousel's behaviour, or the Carousel content tool | Owner's go-ahead; Spotify, Nike, Airbnb, Apple and Figma Community shelves measured ([research](research/ui-patterns-2026-10-22/)) |
 | Tree view, lazy branches | Skeleton rows while a branch loads, an error with Retry, a folder icon that changes when open | Options on Tree view | A screen that loads a tree (audit V8, 2026-11-07; [research](research/components-audit-2026-11-07/)) |
-| Document tabs | A dirty dot that becomes the close on hover, pinned tabs, a preview tab in italic, overflow into a More menu | Options on Tabs, with Tab groups above | Many open tabs in real use (audit V12; [research](research/components-audit-2026-11-07/)) |
+| Document tabs | A dirty dot that becomes the close on hover, pinned tabs, a preview tab in italic, overflow into a More menu | Options on Nav `horizontal` (a strip of places, Boundaries), with Tab groups above; Tabs gains only `iconOnly` | Many open tabs in real use (audit V12, B-S6; [research](research/components-audit-2026-11-07/)) |
 | Diff, next | Side by side as well as unified, changes within a line, Keep / Undo per change, an "N of M" navigator | Options on Edit summary's diff | A review screen that needs it (audit V14; [research](research/components-audit-2026-11-07/)) |
 | Floating outline | Table of contents as a strip of dashes at the page edge that opens to the outline on hover | A `floating` option on Table of contents | A long page in the app (audit V16; [research](research/components-audit-2026-11-07/)) |
 | Find bar | Find in a view: match-case and whole-word toggles, "N of M", previous / next, a replace row | New component on Input and Toolbar | A second product beyond the editor and a chat app (audit N8; [research](research/components-audit-2026-11-07/)) |

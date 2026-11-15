@@ -26,7 +26,7 @@ test("ColorSwatchPicker renders labeled native choices and a selected form value
 // covered it and a white cell lost its corner on a white page. Selected and focused cells stay above it.
 test("the palette ring paints over the cells, under the selected and focused cell", async () => {
   const { readFileSync } = await import("node:fs");
-  const css = readFileSync(new URL("../../styles/src/components/color.css", import.meta.url), "utf8");
+  const css = readFileSync(new URL("../../styles/src/components/color-swatch-picker.css", import.meta.url), "utf8");
   const ring = css.match(/\.area-color-swatch-picker--palette::after \{([^}]*)\}/)?.[1] ?? "";
   assert.match(ring, /z-index: 1;/);
   assert.match(ring, /box-shadow: inset 0 0 0 var\(--area-stroke-width\) var\(--area-token-swatch-ring\)/);

@@ -5,7 +5,7 @@ import type { DragEvent, HTMLAttributes, LiHTMLAttributes, ReactNode } from "rea
 import { fileUploadItemVariants, fileUploadListVariants, fileUploadVariants, linkVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { Progress } from "./primitives.tsx";
+import { Progress } from "./Progress.tsx";
 import { useAnnouncement } from "./announce.ts";
 
 export interface FileRejection { file: File; reason: "type" | "size" | "count" }
@@ -17,15 +17,19 @@ export interface FileUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, "o
   onReject?: (rejections: FileRejection[]) => void;
   /** As the file input's `accept`: extensions (".pdf") and MIME types ("image/*"). */
   accept?: string;
+  /** Takes several files at once; otherwise one. */
   multiple?: boolean;
   /** The largest file accepted, in bytes. */
   maxSize?: number;
   /** The line under the prompt, such as the types and size allowed. */
   hint?: ReactNode;
+  /** The area takes no files, by drop or by the picker. */
   disabled?: boolean;
+  /** Paints the area as an error and sets `aria-invalid` on its button. */
   invalid?: boolean;
   /** The input's name, so a form submits the chosen files. */
   name?: string;
+  /** The prompt's words, to translate them: `action` ("Click to upload") and `drag` ("or drag and drop"). */
   labels?: { action?: string; drag?: string };
 }
 
@@ -103,20 +107,31 @@ export function formatFileSize(bytes: number) {
 }
 
 export interface FileUploadItemProps extends Omit<LiHTMLAttributes<HTMLLIElement>, "name"> {
+  /** The file's name; it also names the row's controls. */
   name: ReactNode;
   /** In bytes. */
   size?: number;
+  /** `uploading` (default), `complete` or `error`; a change is announced with the file's name. */
   status?: VariantProps<typeof MANIFESTS.fileUploadItem>["status"];
   /** 0 to 100 while uploading. Omit for an upload of unknown length. */
   progress?: number;
-  /** What went wrong, shown in place of the status. */
+  /**
+   * What went wrong, shown in place of the status.
+   * @default "Upload failed"
+   */
   error?: ReactNode;
+  /** A glyph for the file's kind; a document by default. */
   icon?: ReactNode;
   /** Shows the remove (or, while uploading, cancel) control; called when it is pressed. */
   onDismiss?: () => void;
-  /** @deprecated Use `onDismiss` (a close is `onDismiss` / `dismissLabel`, Governance § 4). Kept for one release. */
+  /** @deprecated Use `onDismiss`. Kept for one release. */
   onRemove?: () => void;
+  /** Shows Retry on a failed upload; called when it is pressed. */
   onRetry?: () => void;
+  /**
+   * The row's words, to translate them: `uploading`, `complete`, and the `remove`, `cancel` and `retry` controls'
+   * names (each followed by the file's name).
+   */
   labels?: { uploading?: string; complete?: string; remove?: string; cancel?: string; retry?: string };
 }
 

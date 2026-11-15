@@ -252,3 +252,10 @@ ChatGPT and Notion show the disc colour, then the image, with no fade.
 - **What changed:** No API change: `xs` stays, as Governance's recorded exception to "never xs": an avatar on a line of text (the text line, 18 at type 13, 20 at 14), measured at 20 in ChatGPT's profile menu and Notion's sidebar and used by the activity kit beside "David Tee". The Variants row lists it.
 - **Why:** The manifest and CSS shipped xs (display.css:80) against this spec's sizes and Governance § 5; the evidence supports the size (ChatGPT 20, Notion 20) and the app uses it, so recording beats retiring. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- A pill is one value: while the Pills set rounds it, its corner is `radius-full` itself, `max(corner, flag × full)`, never the corner plus full (it computed 10007px and 10009px). Draws the same; the corners snapshot records 9999px.
+- The group's overlap holds at every density (sized with the avatars).
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

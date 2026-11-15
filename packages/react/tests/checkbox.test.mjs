@@ -81,3 +81,11 @@ test("Checkbox soft list puts its meta at the end, after the label", () => {
   assert.doesNotMatch(renderToString(h(Checkbox, { label: "One" })), /__meta/);
   assert.doesNotMatch(renderToString(h(Checkbox, { label: "One", layout: "list" })), /--list/);
 });
+
+// Plan B1.1: the one frame prop. `surface` is the contained option; `card` stays a deprecated alias for one release.
+test("variant surface is the contained option, and the deprecated card draws the same class", () => {
+  assert.match(renderToString(h(Checkbox, { variant: "surface", label: "Label" })), /area-checkbox--surface/);
+  const alias = renderToString(h(Checkbox, { variant: "card", label: "Label" }));
+  assert.match(alias, /area-checkbox--surface/);
+  assert.doesNotMatch(alias, /--card\b/);
+});

@@ -22,4 +22,4 @@ export const GalleryLinkCaption = () => <p style={caption}>Caption with a <Link 
 /* A place with no address (the rest of a list): the same text as a native button, pressed with Space or Enter. */
 export const GalleryLinkButton = () => <Link as="button" variant="standalone" ink="muted">Show all 12</Link>;
 export const GalleryLinkExternal = () => <p style={prose}>Body text with a <Link external href="https://help.figma.com/">link</Link>.</p>;
-export const GalleryLinkWrapped = () => <p style={{ ...prose, maxInlineSize: "calc(var(--area-space-96) * 2)" }}>Body text with a <Link href="#gallery-link-content-wrap">link that wraps onto a second line</Link>.</p>;
+export const GalleryLinkWrapped = () => <p style={{ ...prose, maxInlineSize: "calc(var(--area-space-96) * 2)" }}>Body text with a <Link href="#gallery-link-content-wrap">link that wraps onto a second line of the paragraph</Link>.</p>;

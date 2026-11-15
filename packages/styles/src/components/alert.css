@@ -1,0 +1,283 @@
+/* Alert (docs/specs/alert.md). */
+@layer area.components {
+  /* --- Alert -------------------------------------------------------------- */
+  .area-alert {
+    --_bg: var(--area-bg-component);
+    --_fg: var(--area-fg-default);
+    --_alert-icon: var(--area-fg-muted);
+    --_border: var(--area-edge-callouts);
+    /* Toast's inset (compact pass, 2026-10-01): the sm surface inset at the sides, and the 16px
+       icon as far from the top as from the side (inset-surface-sm: 10 and 10 at the default, 8 and 8 compact). */
+    --_alert-pad-block: calc(var(--area-inset-surface-sm) + (var(--area-icon-md) - var(--area-ui-leading)) / 2 - var(--area-border-width));
+    --_alert-pad-inline: calc(var(--area-inset-surface-sm) - var(--area-border-width));
+    --_alert-control-block: calc((var(--area-ui-leading) - var(--area-control-sm)) / 2);
+    /* The last control ends as far from the side as it sits from the top: border + pad + (line − control-sm) / 2,
+       5 at the default, 4 compact. */
+    --_alert-control-end: calc(var(--_alert-pad-block) + var(--_alert-control-block) - var(--_alert-pad-inline));
+
+    display: grid;
+    grid-template-areas: "icon content actions dismiss";
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    /* spec: Toast's inset, its peer (toast.md): the icon inset-surface-sm from the top and the text from the side,
+       so one line is 2 × inset-surface-sm + the 16 icon: 36 at the default (40 at type 14, text 10 / 12 in, as
+       measured; the references pad 12-16). Controls sit 5 from the top and the side at the default (below). */
+    padding: var(--_alert-pad-block) var(--_alert-pad-inline);
+    border: var(--area-border-width) solid var(--_border);
+    /* A one-line bar takes the large control's corner (radius-control-lg: 10 on the 36 bar at the default, 10 on
+       compact's 32); a multiline alert is a surface (radius audit D2, owner 2026-10-03; was the container 12, banner 6). */
+    border-radius: var(--_alert-radius, var(--area-radius-control-lg));
+    /* The dismiss and the last end action are corner controls (inset.css, plan B4.2): they hang over the first line as
+       far from the end as from the top (below), so their corner is the alert's less that distance (5 in a one-line
+       alert's 10 and 11 in a multiline one's 16 at the defaults, 4 in a banner's 10; they kept the small control's 6).
+       A flush alert is square: they keep their own corner. */
+    --_cc-corner: var(--_alert-radius, var(--area-radius-control-lg));
+    background-color: var(--_bg);
+    /* Tone colours the mark, never the words (plan A3.4, finding T12, 2026-11-11): the title and the link keep the
+       default ink in every tone, as Toast's; the icon (fg-<tone>-mark), the fill, the frame and the close glyph carry the
+       tone. `--_fg` is the tone's ink, for the close button. */
+    color: var(--area-fg-default);
+  }
+
+  /* The icon centres on the first line (Primer, Fluent, Radix, shadcn, Carbon; Notion's
+     callout icon centres on its first line too), by the box technique (plan B2.4): a box one first line tall, the
+     glyph centred in it (inset.css). */
+  .area-alert__icon {
+    grid-area: icon;
+    flex-shrink: 0;
+    align-self: start;
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-ui-leading);
+    margin-inline-start: var(--_alert-icon-start, 0px);
+    color: var(--_alert-icon, var(--_fg));
+  }
+
+  .area-alert__content {
+    grid-area: content;
+    display: flex;
+    align-items: baseline;
+    gap: var(--area-space-4);
+    min-inline-size: 0;
+  }
+
+  .area-alert__title { font-weight: var(--area-weight-strong); } /* spec (type pass): surface title */
+  .area-alert__description { color: var(--area-fg-muted); }
+
+  .area-alert__link {
+    margin-inline-start: var(--area-space-4);
+    white-space: nowrap;
+  }
+
+  /* A link takes the title's ink in every layout (audit E-23: inline it inherited the muted description); the tone
+     ink until plan A3.4. */
+  .area-alert__link a {
+    color: var(--area-fg-default);
+    font-weight: var(--area-weight-regular);
+    text-decoration: underline;
+    /* Link's underline (docs/specs/link.md, peers aligned 2026-10-08). */
+    text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: var(--area-underline-offset); /* Link's offset, close under the text (link.md, 2026-10-17; a token since plan A9.10) */
+    transition: text-decoration-color var(--area-duration-fast) var(--area-ease-effects);
+  }
+  @media (hover: hover) { .area-alert__link a:hover { text-decoration-color: currentColor; transition-duration: var(--area-hover-in); } }
+  .area-alert__link a:focus-visible { text-decoration-color: currentColor; transition-duration: 0s; }
+
+  .area-alert__actions {
+    grid-area: actions;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--area-space-4);
+  }
+
+  /* Small controls hang (control-sm − line) / 2 over the text line, as Toast's do: 26 over 18 hangs 4, so they sit 5 from
+     the outer top at the default (4 at Compact), and the last one sits as far from the side (Toast's rule, plan B6.7). */
+  .area-alert__actions, .area-alert__dismiss { margin-block: var(--_alert-control-block); }
+  /* An empty grid track still takes its column gaps, so an alert without a dismiss (or icon)
+     pushed its action 8 further in (14 from the side, not 6; owner 2026-10-01). The slots carry
+     their own spacing instead, and absent slots leave nothing. The banner is a flex row. */
+  .area-alert:not(.area-alert--banner) { column-gap: 0; }
+  .area-alert:not(.area-alert--banner) > .area-alert__icon { margin-inline-end: var(--area-ui-cluster); } /* Toast's gaps (plan B8.2): 6 / 8 / 10 at type 13 */
+  .area-alert:not(.area-alert--banner) > :is(.area-alert__actions, .area-alert__dismiss) { margin-inline-start: var(--area-ui-cluster); }
+  .area-alert > :is(.area-alert__actions, .area-alert__dismiss):last-child { margin-inline-end: var(--_alert-control-end); }
+  /* Where they sit, from the outer top and end: the pad, the edge and their overhang of the line. */
+  .area-alert > :is(.area-alert__actions, .area-alert__dismiss) > .area-button { --_cc-at: calc(var(--_alert-pad-block) + var(--area-border-width) + (var(--area-ui-leading) - var(--_height)) / 2); }
+
+  .area-alert--single-line { align-items: center; }
+
+  :is(.area-alert--single-line, .area-alert--banner) .area-alert__content {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  :is(.area-alert--single-line, .area-alert--banner) :is(.area-alert__title, .area-alert__description) {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :is(.area-alert--single-line, .area-alert--banner) .area-alert__title { flex: 0 1 auto; }
+  :is(.area-alert--single-line, .area-alert--banner) .area-alert__description { flex: 1 1 auto; }
+
+  /*
+   * Banner (docs/specs/alert.md, "Banner"): a one-line announcement across a page or section,
+   * persistent, its link or status at the end (OpenAI's business and Daybreak banners, Primer's
+   * Banner). Same tones, icon, actions and dismiss as the in-place layouts.
+   */
+  .area-alert--banner {
+    /* spec: text inset-surface-md − 4 from the top and inset-surface-md from the side, so one line is
+       2 × (inset-surface-md − 4) + the UI line: 38 at the default, text 10 / 14 in (44 at type 14, 12 / 16, as
+       measured; the references 10 / 14 to 12 / 16). Corner: a one-line bar, as every single-line Alert
+       (radius audit D2; was 6). */
+    --_alert-pad-block: calc(var(--area-inset-surface-md) - var(--area-space-4) - var(--area-border-width));
+    --_alert-pad-inline: calc(var(--area-inset-surface-md) - var(--area-border-width));
+    /* Small controls hang (control-sm − line) / 2 over the line (26 over 18: 4 at the default), so they sit 6 from the
+       outer top and, by the base rule, 6 from the end (10 / 14 insets; Compact 8 / 12, controls 4 in). */
+    /* A row, not the grid: absent slots (no icon, no actions) must not leave their gaps, so text
+       starts on the 16 inset and a closing link ends on it. */
+    display: flex;
+    align-items: center;
+  }
+  .area-alert--banner > .area-alert__content { flex: 1 1 auto; }
+  .area-alert--banner > :not(.area-alert__content) { flex: none; }
+  /* The corner offset is a 28px control's; a Badge or text at the end stays on the inset
+     (OpenAI business: the status pill 14 in, on its 14 inset). */
+  .area-alert--banner > .area-alert__actions:last-child:not(:has(> :is(button, .area-button):last-child)) { margin-inline-end: 0; }
+  /* A trailing Badge is a plate, not text: it ends as far from the side as it sits from the top
+     (12 and 12 default, 8 and 8 compact; was 12 and 16, owner 2026-10-01). */
+  .area-alert--banner > .area-alert__actions:last-child:has(> .area-badge:last-child) { margin-inline-end: calc(var(--_alert-pad-block) + (var(--area-ui-leading) - var(--area-mark-label-md)) / 2 - var(--_alert-pad-inline)); }
+  .area-alert--banner > .area-alert__actions:last-child:has(> .area-badge--sm:last-child) { margin-inline-end: calc(var(--_alert-pad-block) + (var(--area-ui-leading) - var(--area-mark-label-sm)) / 2 - var(--_alert-pad-inline)); }
+  .area-alert--banner > .area-alert__actions:last-child:has(> .area-badge--lg:last-child) { margin-inline-end: calc(var(--_alert-pad-block) + (var(--area-ui-leading) - var(--area-mark-label-lg)) / 2 - var(--_alert-pad-inline)); }
+  /* spec: the link ends the row, 16 from the end when nothing follows it (OpenAI Daybreak's
+     "Learn more": 14/20 regular, underlined, 16 from the end). */
+  .area-alert--banner > .area-alert__link {
+    grid-area: link;
+    margin-inline-start: 0;
+  }
+  /* The banner's link is `.area-alert__link a` above (tone ink, Link's underline); a second copy of the
+     rule here had the same specificity and came later, so it held the rest underline under the pointer. */
+  .area-alert--banner > .area-alert__link a:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-gap);
+  }
+
+  /* Flush: square and without side or top edges, for a banner that meets its container's
+     edges (Primer `flush`, Fluent `shape="square"`, Polaris on small screens, Ant `banner`).
+     The inset keeps its full value, the border it no longer has added back. */
+  .area-alert--flush {
+    --_alert-radius: 0px;
+    --_cc-corner: initial;
+    border-inline-width: 0;
+    border-block-start-width: 0;
+    padding-block-start: calc(var(--_alert-pad-block) + var(--area-border-width));
+    padding-inline: calc(var(--_alert-pad-inline) + var(--area-border-width));
+  }
+
+  .area-alert--multiline {
+    --_alert-radius: var(--area-radius-container);
+    grid-template-areas:
+      "icon content dismiss"
+      ". actions actions";
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  /* Title over body, 4 apart, as Toast's title and description. */
+  .area-alert--multiline .area-alert__content {
+    align-items: flex-start;
+    flex-direction: column;
+    /* Popover's title-to-description rule, one slot (Text pairs). */
+    --_title-gap: var(--area-space-4); /* a title stands one step (4) off its copy (DESIGN_SYSTEM.md, "Text pairs"; owner 2026-11-06: joined, "the space between the title and the copy still doesnt look right"): 12.8 baseline to cap beside the copy's 8.8 */
+    gap: var(--_title-gap);
+  }
+
+  /* Without actions the second row is absent, so the row gap does not pad the bottom. */
+  .area-alert--multiline:not(:has(> .area-alert__actions)) { grid-template-areas: "icon content dismiss"; }
+
+  /* A row of actions under the text ends 6 from the bottom and the side, like the dismiss. */
+  .area-alert--multiline .area-alert__actions {
+    justify-self: end;
+    margin-block: var(--area-space-8) var(--_alert-control-block);
+    margin-inline-end: var(--_alert-control-end);
+  }
+
+  /* The close recipe for rectangular surfaces (audit S9, owner 2026-09-30): a ghost small
+     Button with the Area glyph, as Popover and Toast. A neutral alert keeps the Button's own
+     quiet ink and row hover plate; a tinted alert keeps its tone ink and hovers to 12% of it,
+     since a grey plate reads as a hole on a colour. Was a hand-built button in full ink with a
+     Fluent glyph and the 12% plate on every tone. */
+  .area-alert__dismiss {
+    grid-area: dismiss;
+    display: inline-flex;
+    flex: 0 0 auto;
+    --_dismiss-ink: var(--_fg);
+    --_dismiss-plate: color-mix(in srgb, var(--_fg) 12%, transparent);
+  }
+
+  .area-alert--multiline .area-alert__dismiss { align-self: start; }
+
+  .area-alert:not(.area-alert--neutral) .area-alert__dismiss > .area-button {
+    --_fg: var(--_dismiss-ink);
+    --_bg-hover: var(--_dismiss-plate);
+    --_bg-active: var(--_dismiss-plate);
+  }
+
+  /*
+   * Actions wrap only when the text no longer fits beside them (plan B6.7, VS10), as Toast's: the one-line and default
+   * layouts are a wrapping row whose text asks for its whole line (`flex: 1 1 auto`, its basis the text's own width), so
+   * the actions move to a second row before the text gives up a character, never by a width query (one under 480 took
+   * two rows for one short action in a 348–480 panel). The second row ends on the text column's end, `ui-cluster` under
+   * the text, read on the controls (they hang `--_alert-control-block` over their line, as on the first row). The close
+   * stays in the top corner, out of the row, at the place the row gave it (the row keeps its room), so it never wraps.
+   */
+  .area-alert:not(.area-alert--banner, .area-alert--multiline) {
+    --_alert-edge-add: 0px;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--area-ui-cluster);
+    row-gap: calc(var(--area-ui-cluster) - var(--_alert-control-block));
+  }
+  .area-alert--flush:not(.area-alert--banner, .area-alert--multiline) { --_alert-edge-add: var(--area-border-width); }
+  .area-alert:not(.area-alert--banner, .area-alert--multiline) > .area-alert__icon { margin-inline-end: 0; flex: none; }
+  .area-alert:not(.area-alert--banner, .area-alert--multiline) > .area-alert__content { flex: 1 1 auto; max-inline-size: 100%; }
+  /* The text never leaves the icon's line: it asks for at most the row less the icon and its gap, so only the actions wrap. */
+  .area-alert:not(.area-alert--banner, .area-alert--multiline):has(> .area-alert__icon) > .area-alert__content { max-inline-size: calc(100% - var(--area-icon-md) - var(--area-ui-cluster)); }
+  .area-alert:not(.area-alert--banner, .area-alert--multiline) > .area-alert__actions { margin-inline-start: auto; flex: none; max-inline-size: 100%; }
+  .area-alert:not(.area-alert--banner, .area-alert--multiline):has(> .area-alert__dismiss) {
+    padding-inline-end: calc(var(--_alert-pad-inline) + var(--_alert-edge-add) + var(--_alert-control-end) + var(--area-control-sm) + var(--area-ui-cluster));
+  }
+  .area-alert:not(.area-alert--banner, .area-alert--multiline) > .area-alert__dismiss:is(*, :last-child) {
+    position: absolute;
+    inset-block-start: calc(var(--_alert-pad-block) + var(--_alert-edge-add) + var(--_alert-control-block));
+    inset-inline-end: calc(var(--_alert-pad-inline) + var(--_alert-edge-add) + var(--_alert-control-end));
+    margin: 0;
+  }
+
+  /* spec (owner, 2026-09-27: lighter fills, a more vivid ink): each tone's fill is its surface
+     mixed halfway to the page surface, which keeps the hue (the 25 rungs of blue and red read
+     grey), and the icon takes a brighter rung (info and danger 500, success and warning 550)
+     at 3.5:1 or more. The words keep the default ink (plan A3.4). Dark keeps the semantic roles. */
+  .area-alert {
+    --_alert-tint: 50%; /* spec */
+  }
+  /* The neutral icon is muted, as Toast's (audit S19 A, owner 2026-09-30; was the text's ink). */
+  .area-alert--neutral { --_bg: var(--area-bg-component);    --_fg: var(--area-fg-default); --_alert-icon: var(--area-fg-muted); --_border: var(--area-edge-callouts); }
+  .area-alert--info    { --_bg: light-dark(color-mix(in oklab, var(--area-info-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-info-surface)); /* spec */ --_fg: var(--area-fg-info); --_alert-icon: var(--area-fg-info-mark); /* spec */ --_border: var(--area-info-border); }
+  .area-alert--danger  { --_bg: light-dark(color-mix(in oklab, var(--area-danger-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-danger-surface)); /* spec */ --_fg: var(--area-fg-danger); --_alert-icon: var(--area-fg-danger-mark); /* spec */ --_border: var(--area-danger-border); }
+  .area-alert--warning { --_bg: light-dark(color-mix(in oklab, var(--area-warning-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-warning-surface)); /* spec */ --_fg: var(--area-fg-warning); --_alert-icon: var(--area-fg-warning-mark); /* spec */ --_border: var(--area-warning-border); }
+  .area-alert--success { --_bg: light-dark(color-mix(in oklab, var(--area-success-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-success-surface)); /* spec */ --_fg: var(--area-fg-success); --_alert-icon: var(--area-fg-success-mark); /* spec */ --_border: var(--area-success-border); }
+  /* Caution (between warning and danger) and discovery (a new feature), Button's and Badge's seven tones (components
+     audit 2026-11-07, O4): the same recipe on their roles. */
+  .area-alert--caution { --_bg: light-dark(color-mix(in oklab, var(--area-caution-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-caution-surface)); /* spec */ --_fg: var(--area-fg-caution); --_alert-icon: var(--area-fg-caution-mark); /* spec */ --_border: var(--area-caution-border); }
+  .area-alert--discovery { --_bg: light-dark(color-mix(in oklab, var(--area-discovery-surface) var(--_alert-tint), var(--area-bg-surface)), var(--area-discovery-surface)); /* spec */ --_fg: var(--area-fg-discovery); --_alert-icon: var(--area-fg-discovery-mark); /* spec */ --_border: var(--area-discovery-border); }
+
+  /* The title keeps the default ink; the description is supporting text in every tone, the muted role rather than the
+     tone ink faded by opacity. */
+
+}

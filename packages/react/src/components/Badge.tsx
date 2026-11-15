@@ -6,20 +6,52 @@ import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode, Ref, RefAttribute
 import { badgeVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 
-type Options = Omit<VariantProps<typeof MANIFESTS.badge>, "tone" | "rounded"> & {
+type BadgeAxes = VariantProps<typeof MANIFESTS.badge>;
+type Options = {
+  /**
+   * `soft` (default): a tinted plate. `solid`: the tone's full fill. `outline`: an edge and no fill. `color`: a tint
+   * and an edge of the tone. `modern`: a raised neutral plate with the tone's mark. `plain`: no plate or edge, the
+   * mark on the text's own column.
+   */
+  variant?: BadgeAxes["variant"];
+  /** Semantic paint: `neutral` by default. `"inverted"` is a deprecated alias of `"inverse"`. */
+  tone?: BadgeAxes["tone"] | "inverted";
+  /** The height and type: `md` (default), `sm` or `lg`. */
+  size?: BadgeAxes["size"];
   /** Unset: a pill while the theme's `pills` list names this component (the default). `true` forces a pill, `false` the radius setting's corner. */
   pill?: boolean;
-  /** Semantic paint. `"inverted"` is a deprecated alias of `"inverse"` (Avatar's word; audit S17). */
-  tone?: VariantProps<typeof MANIFESTS.badge>["tone"] | "inverted";
-  icon?: ReactNode; trailingIcon?: ReactNode;
-  avatar?: ReactNode; flag?: ReactNode;
-  onDismiss?: () => void;
-  dismissLabel?: string;
-  /** On a coloured ground: the ground's own ink for the text and a 20% line of it, no plate (the text keeps the ground's own contrast). */
+  /** A status dot before the label, in the tone's mark color. */
+  dot?: boolean;
+  /** The dot alone, with no label or plate. Requires `aria-label`. */
+  dotOnly?: boolean;
+  /** An icon alone, with no label. Requires `aria-label`. */
+  iconOnly?: boolean;
+  /** Cuts a long label to one line with an ellipsis; the full text becomes its `title`. */
+  truncate?: boolean;
+  /** On a colored ground: the ground's own ink for the text and a 20% line of it, no plate, so the text keeps the ground's contrast. */
   onColor?: boolean;
+  /** A glyph before the label, in the tone's mark color. */
+  icon?: ReactNode;
+  /** A glyph after the label. */
+  trailingIcon?: ReactNode;
+  /** An Avatar before the label, for a person or a team. */
+  avatar?: ReactNode;
+  /** A flag or other small picture before the label. */
+  flag?: ReactNode;
+  /** Adds a dismiss button at the end and is called when it is pressed. Needs `dismissLabel`. */
+  onDismiss?: () => void;
+  /** The dismiss button's accessible name ("Remove Design"); required with `onDismiss`. */
+  dismissLabel?: string;
 };
-type SpanProps = Options & HTMLAttributes<HTMLSpanElement> & { as?: "span" };
-type LinkProps = Options & AnchorHTMLAttributes<HTMLAnchorElement> & { as: "a"; href: string };
+type SpanProps = Options & HTMLAttributes<HTMLSpanElement> & {
+  /** The element: `span` (default), or `a` with an `href` for a badge that is a link. */
+  as?: "span";
+};
+type LinkProps = Options & AnchorHTMLAttributes<HTMLAnchorElement> & {
+  as: "a";
+  /** Where the link goes. */
+  href: string;
+};
 export type BadgeProps = SpanProps | LinkProps;
 /** Static metadata or a native link. Icon/dot-only forms require an accessible name. */
 export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>(function Badge(

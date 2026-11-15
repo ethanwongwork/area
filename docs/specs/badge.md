@@ -189,6 +189,8 @@ baseline 7.03 from the bottom in 24px. Untitled's line box puts the cap 0.81px l
 
 ## Measurements
 
+**Current (2026-11-13, one mark).** Badge is on the one mark recipe (inset.css, "One mark"; DESIGN_SYSTEM.md, "One mark"). Heights are the mark ladder, the small text line plus 0 / 4 / 8: 14 / 18 / 22 at type 12 and 13, 16 / 20 / 24 at 14, 18 / 22 / 26 at 15, 20 / 24 / 28 at 16, the same at Compact, Default and Comfortable (Compact's md was 14 and its lg 18 until 2026-11-13). The text side is (H − 6) / 2 from the outer edge, edge counted once: 4 / 6 / 8 at type 13. The cap sits on the marks' whole-pixel baseline, edge + round((H − 2 · edge + 1cap) / 2). The tables below are the source evidence they were set from. Text text-xs on sm and md (11 at type 13), the UI text on lg (13), 500 on every variant (Plain too, since 2026-11-13). Corner: the pill role, a pill while the Pills set lists Badge, else the Corner setting's corner for H (square at Corner 0). Internal gaps: label 2 at sm and 4 above, icon to label 2, dot, avatar and flag 4, dismiss 2. The Content tiles (avatar, flag, dismissible) are on the default variant.
+
 Pass-1 audit (Area columns are the pass-1 build, now in `before/`). Generated with
 `node scripts/capture-compare.mjs` from `docs/research/captures/badge/`. Pasted as generated.
 
@@ -781,3 +783,24 @@ Optical centre: the label sits a quarter of the cap–x-height gap above the cap
 - **Follow-up, 2026-11-07 (vertical):** Badge's whole-pixel cap centre is now the marks' rule: Count and Tag take the
   same formula (count.css, tag.css; cohesion.test.mjs), so marks of one height and text share a pixel row. Badge
   itself is unchanged.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the plain badge's hover underline reads `underline-offset` (0.08em, was 0.2em), Link's (plan A9.10).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** A solid Badge link's ring takes the solid placement, as a solid Button (A6.1).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The Tags stroke group's default is 4 (10%, plan A10.3), was 3 (7.5%): an outline mark's ring vanished on near black.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## One mark, 2026-11-13
+
+Plan B5.1 (and B5.2, B5.3 where they apply; docs/research/system-evaluation-2026-11-11): the family moved onto the shared mark recipe in inset.css and its own copy of the side, baseline, corner and text was removed. Values above, under Measurements.

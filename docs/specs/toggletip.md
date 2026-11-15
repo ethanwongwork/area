@@ -153,6 +153,8 @@ Tooltip's 5% white inset edge.
 | pinned (`aria-expanded="true"`) | `bg-component-active` plate; the note stays | `area--default--open--light`, `area--note--open--light` |
 | disabled | native `disabled` (the button takes no events) | test |
 
+**State hooks (manifest).** `expanded` is the press-pinned note (`aria-expanded` on the button); `open` is the note shown, by a press or a preview, a Tooltip surface, so it is Tooltip's `:popover-open` (`statesFrom: { open: "tooltip" }`).
+
 ## Behavior and accessibility
 
 Native button: Enter and Space press it. The name is the button's own (`label`); the note is its description, so
@@ -211,6 +213,7 @@ The trigger presses at `bg-component-pressed`, one step past selected (Notion pr
 
 ## Feedback log
 - 2026-10-12 · spacing step extrapolated past Default → the icon size and stroke take only the compact step (`clamp(0, ui-dense, 1)`, `toggletip.css`). `docs/research/ui-size-scale-2026-10-12.md`.
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` as its Tooltip surface's (`statesFrom`); `expanded` unchanged; no paint changed.
 
 ## Settings collisions fixed (2026-10-18)
 
@@ -227,3 +230,11 @@ takes no Material under any bundle, as Tooltip.
 
 - **What changed:** At the app's type 13 the mark is 12, a native size, instead of 14.
 - **Why:** The compact step is in halves at type 13, which put the mark between native cuts. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B2.2 leftover: the note's words are a text box on the one centring model: trimmed to cap and baseline and given their line back, so one line's cap sits on the bubble's centre (it was untrimmed, 0.62 high at type 13); wrapped lines keep Tooltip's rhythm.
+
+## State paint (plan B7.1), 2026-11-14
+
+- Pinned takes the pressed plate, as every open trigger (was the selected plate, `bg-component-active`).

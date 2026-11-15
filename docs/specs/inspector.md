@@ -51,7 +51,7 @@ control in a form), not Toolbar (a command strip). The Figma panel is a recipe, 
 
 ## Recipe
 
-`GalleryPanelFigma` (Panel gallery, "Recipe / Figma properties panel"): Position (alignment
+`GalleryPanelFigma` (Panel gallery, "Recipe / properties panel"): Position (alignment
 groups + distribute, X/Y, rotation + rotate/flip group), Layout (Flow segmented, W/H +
 constrain, Clip content), Appearance (opacity and corner radius with per-column captions +
 independent corners), Fill (alpha ColorField + remove), Stroke (add). New docs icons from

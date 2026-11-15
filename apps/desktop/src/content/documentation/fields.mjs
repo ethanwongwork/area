@@ -333,11 +333,11 @@ export default {
       value: "The chosen label, truncated; with multiple, one or two labels, then a count (\"3 selected\"); the placeholder shows in placeholder ink.",
       chevron: "The trailing chevron in the field chevron ink; it doesn't turn.",
       listbox: "Menu's surface in the top layer, placed below the trigger and at least as wide; it scrolls when the room runs out.",
-      option: "Menu's row: an icon, the label, an optional description line and a trailing check on chosen rows. The plate marks highlight only.",
+      option: "Menu's row: an icon, the label, an optional description line and a trailing check on chosen rows. A chosen row also takes the active plate, firmer than the highlight.",
       group: "Options that share a group, under its label.",
       separator: "The rule between groups.",
       grid: "In layout grid, a run of options (the list's, or a group's) in equal columns.",
-      preview: "In layout grid, the option's picture in a 4:3 frame with Folder's thin edge; the selected stroke frames the chosen one.",
+      preview: "In layout grid, the option's picture in a 4:3 frame with Folder's thin edge; the selected edge frames the chosen one, the same edge as a chosen swatch or tile.",
       caption: "In layout grid, the option's label under its picture, on one line, muted until chosen.",
       panel: "With filterable or a footer, the popup: Menu's surface holding the header, the listbox and the footer, so only the options scroll.",
       header: "The region over the options, ruled off: the filter field and Select all.",
@@ -403,9 +403,8 @@ export default {
     parts: {
       root: "The wrapper around an Input whose chevron action shows every option; data-open while the list shows. className and style land here.",
       listbox: "Menu's surface in the top layer, below the field and at least as wide; it flips and scrolls when the room runs out.",
-      option: "Menu's row: an optional icon, the label and a trailing check on the chosen option. The plate marks highlight only.",
+      option: "Menu's row: an optional icon, the label and a trailing check on the chosen option, which also takes the active plate, firmer than the highlight.",
       description: "Muted text at the row's end: a shortcut, a count or a detail.",
-      empty: "\"No results\" (emptyText) when nothing matches and nothing can be created; announced through a status, not an option.",
       group: "Options that share a group, under a muted label.",
     },
     // Spec: Decisions.
@@ -453,11 +452,10 @@ export default {
       root: "The wrapper: owns the variant and size, and data-open while the list shows.",
       field: "Input's edge, fill, corner and focus ring around the tags and the text; it grows by a row as tags wrap. A press on it focuses the text.",
       input: "The text with role combobox; its placeholder shows only while no tag is chosen.",
-      listbox: "Menu's surface below the field, multi-selectable; it follows the field as it grows.",
+      listbox: "Menu's surface below the field, multi-selectable; it follows the field as it grows. When nothing matches and nothing can be created it shows Menu's empty line, \"No tags\" (emptyText).",
       hint: "The list's heading, \"Select a tag or create one\" or \"Select tags\"; hint={null} hides it.",
       option: "Menu's row with the Tag, and a trailing check while it is chosen.",
       create: "The Create row with the tag it would make, when the text matches nothing and onCreate is set.",
-      empty: "\"No tags\" (emptyText) when nothing matches and nothing can be created.",
     },
     // Spec: States.
     states: {
@@ -513,7 +511,7 @@ export default {
     },
     // Spec: States.
     states: {
-      open: "data-open is set; the field takes the focus edge color, and ghost holds its pressed plate.",
+      open: "data-open is set: the field holds its hover edge, never the focus edge (that stays the keyboard's); ghost holds its pressed plate.",
       disabled: "Select's disabled paint; the panel never opens.",
       invalid: "The danger edge, with aria-invalid on the field.",
       success: "Select's success edge and ring, from validationStatus or a Field's success message.",
@@ -675,7 +673,8 @@ export default {
     parts: {
       root: "The row of slots: owns the size tier and the invalid, disabled and read-only paint.",
       group: "The slots of one group.",
-      slot: "One character in Input's shell, square: the character, or a dot when masked. The active slot takes the focus edge.",
+      slot: "One character in the field shell, square. The active slot takes the focus edge.",
+      char: "The character, or a dot when masked, centred on its capital height.",
       caret: "The blinking line in the slot the code continues in.",
       separator: "The dash between groups, muted and hidden from assistive tech.",
       control: "The one real input, transparent over the whole row: it owns the value, caret, paste and autofill.",
@@ -843,7 +842,7 @@ export default {
     },
     states: {
       modified: "The setting differs from its default: the dot, and Reset with onReset.",
-      disabled: "The words take the disabled ink and the control is disabled.",
+      disabled: "The name steps to the muted ink and the control is disabled; the description keeps its ink, since it says why.",
     },
     keyboard: [
       ["Tab", "Moves to the help, Reset and the control in turn; reaching Reset shows it."],

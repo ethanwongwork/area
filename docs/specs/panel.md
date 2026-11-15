@@ -120,7 +120,7 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | shell · radius / edge / fill | `radius-container` 12, `border-decorative` #f3f3f3, `bg-surface` #ffffff (`panel.css:36-38`) | Peers: Alert, Code block, Dialog; container seams stay decorative | Card's edge took `border-divider` in the third pass (it stands alone on the page), now neutral 100 (audit S7); a panel's lift carries its seam |
 | shell · shadow | `shadow-2`, 0 1px 2px −0.5px `shadow-color` 6% (`panel.css:40`) | Shared rule: the floating lift is for overlays | A panel sits in the page flow; Notion's 20px-blur geometry would read as an overlay |
 | flush | no border, radius or shadow; `bg-page` (`panel.css:49-54`) | Figma's docked inspector: no radius, edge or shadow on any row (`figma--section-title`, `figma--color-row`) | — |
-| bar | `--_row` + 2 × `--_panel-gap` + rule: sm 45, md 57 (`panel.css:43-45`) | Owner 2026-09-28: the bar's button has one field gap above and below | Was `control-sm` + 2 × 4 + rule = 37 at every size |
+| bar | md: the tool bar (inset.css, plan B4.1), `control-md` + 2 × `ui-cluster`, no rule counted: 38 / 46 / 54 at type 13 Compact / Default / Comfortable; sm: its own, `control-sm` + 2 × `ui-stack` + a rule's room, 33 / 39 / 47; window bar: the region bar, 38 / 40 / 44 | Owner 2026-09-28: the bar's button has one field gap above and below; plan B4.1: two bars | md was the row, the bar's room and a rule's 1, 39 / 47 / 59; before that `control-sm` + 2 × 4 + rule = 37 at every size |
 | title | **500, the size of the rows it names: text-base 13/18 at type 13 (md and sm)** (`--_panel-title-*`) | Text pairs rule (DESIGN_SYSTEM.md): a surface's title is its text's size (owner, 2026-11-07, system gaps L1); the app's region headers and Cursor's panel titles are 13/18 500 | Was md 16/24 then text-lg 15/22 (the reading step) over 13/18 rows; before that UI 14/20 at both sizes |
 | heading | **500, `fg-default`; md 14/20, sm 12/16** (`--_panel-label-*`, `panel.css:162-177`; audit S2) | Second pass: the heading outranks muted labels by ink | Was 12/16, smaller than the 14px labels under it. Figma's title is 11/16 550 at the same ink as its field text; kept (third pass): one label weight, so ink sets headings apart |
 | field labels | **`fg-muted` #646464** (`panel.css:147`) | Second pass | Was the Field default ink |
@@ -447,3 +447,34 @@ No rule under the bar, between sections or above the footer: the bar's height, a
 - **Why:** the text pairs rule: a surface's title is the size of its text, and the reading size is for prose (owner
   picked Build on the system gaps review, 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A1.1 · rows, fields and a heading's air are whole steps apart: 10 at the default (was 8), Compact 6 unchanged; the bar keeps the half step (it is an inset): 47 at the default, unchanged.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the `sm` tier's labels and headings move from `text-xs` (11/14) to `text-sm` (12/16) (plan A9.2). The heading's ink stays default for now: the plan's rule (a heading over a run of rows is muted) is recorded in DESIGN_SYSTEM and waits for the ink pass.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** A section heading is muted (plan A9.4, finding T3): a heading over a run of rows is the rows' size, 500, muted; the panel's title stays default.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Column grid (B2.7, VN16, RF13).** A section with any row action (a row's action, a Box field's toggle, a Property list's buttons) reserves the action column on every row, so a row's second column starts under its neighbour's. The column hangs into the end inset by `--_action-hang` (side inset + edge + (row − control-sm) / 2 − ui-row-inset: 8 at type 13 md, 7 Compact, 12 Comfortable), so an sm icon action ends on the row inset, 8 from the outside, while text keeps the panel's inset at the start.
+- **Centring (B2.2).** A row label is a line slot (inset.css).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.1: md's bar is the tool bar (`--_hb-tool`, inset.css), 38 / 46 / 54 at type 13 Compact / Default / Comfortable; it counted a rule's 1 it no longer draws (39 / 47 / 59 before). The window bar is the region bar (38 / 40 / 44). sm keeps its own bar (33 / 39 / 47), the item's open choice as it stood. The first section's heading under the bar takes no air above it (VN17), so its name sits ~28 under the title's cap, not ~36.
+- B4.2: the bar's last action is a corner control: as far from the end as from the top, (bar − its height) / 2 inside the edge, its corner the panel's less that (9 in, corner 7 for a md action; 11 in, 5 for a small one at the defaults). It stood on the text column, 14 from the side and 10 from the top. A flush panel's keeps its own corner.
+
+## Selection paint (plan B7.5), 2026-11-14
+
+- The resize edge's dragged line reads `focus-color` with Splitter's (plan B7.5).
+
+## State paint (plan B7.11), 2026-11-14
+
+- The section chevron hides only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.

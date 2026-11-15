@@ -1,5 +1,5 @@
 /**
- * Anchored Popover, Menu and Tooltip: the behaviour behind the surfaces in primitives.tsx.
+ * Anchored Popover, Menu and Tooltip: the behaviour behind the surfaces in Popover.tsx, Menu.tsx and Tooltip.tsx.
  * Each takes a `trigger` element and renders it followed by its surface, so the surface
  * follows the trigger in the tab order while the Popover API lifts it into the top layer.
  */
@@ -17,7 +17,7 @@ import type { OverlayAlign, OverlaySide } from "./overlay.ts";
 export const MENU_OFFSET = 4;
 export const POPOVER_OFFSET = 8;
 export const TOOLTIP_OFFSET = 4;
-/** Popover arrow tip: 17px past the surface edge (the arrow path in primitives.tsx). */
+/** Popover arrow tip: 17px past the surface edge (the arrow path in Popover.tsx). */
 export const POPOVER_ARROW_REACH = 17;
 /** Tooltip arrow: an 8px square, half outside the surface. */
 export const TOOLTIP_ARROW_REACH = 4;
@@ -289,7 +289,7 @@ export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenCh
       ref: surfaceNode,
       popover: "manual",
       "data-instant": instant ? "" : undefined,
-      // A name only (an icon button's label) lets the pointer through (surface.css); a description stays hoverable.
+      // A name only (an icon button's label) lets the pointer through (overlay.css); a description stays hoverable.
       "data-passthrough": describes ? undefined : "",
       // Content on hover stays while the pointer is over it (WCAG 1.4.13).
       onPointerEnter: () => clear(),
@@ -302,8 +302,8 @@ export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenCh
 
 /**
  * A note behind a small button (docs/specs/toggletip.md). It previews as a Tooltip does, after
- * the delay on hover and at once on keyboard focus (ChatGPT, Notion), and a press pins it open
- * (Fluent, Spectrum, Carbon), so touch reaches it and a link inside it can be followed. Pinned,
+ * the delay on hover and at once on keyboard focus, and a press pins it open, so touch reaches it
+ * and a link inside it can be followed. Pinned,
  * it stays until the trigger is pressed again, Escape, a press outside, or focus leaves both.
  */
 export function AnchoredToggletip({ trigger, open: openProp, defaultOpen, onOpenChange, side = "top", align = "center", offset, delay = TOOLTIP_DELAY, surface }: AnchoredProps & { delay?: number; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {

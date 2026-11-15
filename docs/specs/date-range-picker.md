@@ -79,6 +79,8 @@ field's label. Presets are buttons in a group with `aria-pressed`. In the month,
 first press sets the start and the band follows focus or the pointer to the end; Escape drops a half-picked range, a
 second Escape closes the panel.
 
+**State hooks (manifest).** Its root is a Date picker too (`area-date-picker`), so `open`, `invalid` and `read-only` are Date picker's on the same element and trigger (`statesFrom`).
+
 ## Visual pass
 
 In the gallery (light): presets 4 from the panel's sides, the check on Last 7 days, the rule, the month, Clear; two
@@ -115,6 +117,7 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
   6 gallery tiles, in review.
 - 2026-10-10 · owner: "go with your recommendations" → open questions 1–2 resolved as recommended; no change.
 - 2026-10-11 · owner, review round 7: approved.
+- 2026-11-11 · system evaluation F5 · the manifest declares `open`, `invalid` and `read-only` as Date picker's (`statesFrom`); no paint changed.
 
 ## Review note, 2026-10-28 (round 82)
 
@@ -126,3 +129,9 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 - **What changed:** As Date picker's: `validationStatus`, `readOnly`, `open` / `defaultOpen`, and the ref on the trigger button.
 - **Why:** DateRangePicker.tsx:33, :50, :19, :67. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- Takes Date picker's trigger: the one field shell and the value as a cap slot (it sat 0.62 high).
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.

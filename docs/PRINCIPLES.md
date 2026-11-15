@@ -86,7 +86,7 @@ A glyph or a word is never moved by a pixel to look right; the structure is fixe
 
 Every setting is one independent control with one visible effect, usually a single number
 named after what it measures. Radius is the medium Button's corner, Elevation the Menu's
-shadow strength, Motion the Menu's open time. There are no named themes or prepackaged
+shadow strength, Motion a dialog's open time. There are no named themes or prepackaged
 looks. Options are kept and their effect is shown, rather than cut to simplify (owner,
 2026-10-18).
 *Test:* every value of every setting renders correctly across the whole gallery.
@@ -152,7 +152,7 @@ defaults.
 | Edge and depth | Lines do the separating. Shadows are barely there (Elevation 3). Fields and buttons rest flat. Floating surfaces lift. Stroke and shadow are independent settings. | [Design system › Elevation](DESIGN_SYSTEM.md#elevation), [Strokes](DESIGN_SYSTEM.md#strokes) |
 | Density | Compact but readable. The medium control is 32 at type 14 (28 Compact). Dense products shrink controls, never marks or legibility. | [Theming](THEMING.md) |
 | Icons | Area's own stroked icons on a 16px grid at 1.125px. Filled means more ink on the body, never a negative. Optical balance across the set outranks 1× crispness. | [Icon spec](specs/icons.md), `area-icon-construction` skill |
-| Motion | Short and settled: Menu opens in 210ms. Ease-out for almost everything. Ease-in-out for things moving while visible. No spring. | [Motion](MOTION.md) |
+| Motion | Short and settled: a dialog opens in 210ms, a menu in 140ms, and exits accelerate away. Ease-out for almost everything. Ease-in-out for things moving while visible. No spring. | [Motion](MOTION.md) |
 | Copy | Neutral placeholder vocabulary (Title, Label, Description, Action). Example people are always David Tee, and teams for any others. | [Design system › Example copy](DESIGN_SYSTEM.md#example-copy) |
 
 ## Which reference decides

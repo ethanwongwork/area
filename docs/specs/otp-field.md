@@ -78,7 +78,7 @@ sm 208 × 28; lg 280 × 40; groups [3, 3] 256 (the separator 16 plus 8 either si
 |---|---|---|---|
 | structure | one real input over drawn slots | input-otp (shadcn, Untitled UI), GOV.UK, the products' single field | Per-slot inputs (Mantine, Ant, Zag, Base UI, Radix) lose single-field autofill and need their own paste, focus and undo |
 | slot | Input's shell, square at the tier's height: edge, fill, corner (pill under `--area-pill-field`), type, Field shadow role (0 by default; soft flat) (`otp-field.css:13, 40-59`) | peer Input | Systems size slots 36-40 at their default; Area's fields are 32 (28 compact), and a code sits beside them |
-| gap | 8 between slots and around the dash | Mantine, Ant, Untitled UI, shadcn's `gap-2` | — |
+| gap | `ui-cluster` between slots and around the dash (6 / 8 / 10 at type 13 Compact / Default / Comfortable; 8 at the default) | Mantine, Ant, Untitled UI, shadcn's `gap-2` | — |
 | active slot | Input's focus edge, halo and outline, raised | shadcn, Ant, Untitled UI: the active slot takes the focus ring | — |
 | caret | drawn: 1 wide, the line's height, blinking at 1s; still under reduced motion and motion none | shadcn's `animate-caret-blink` | — |
 | caret position | a collapsed caret before a typed character selects it, so typing replaces that slot; Left and Right move one slot, RTL-aware (`OTPField.tsx:60-88`). Focusing the field or pressing anywhere on the row puts the caret at the end of the code, not on the pressed slot (`OTPField.tsx:127-136, 189, 195`) | input-otp's selection mirroring | input-otp maps a press to its slot; Area's slots are drawn, so a press only continues the code |
@@ -140,3 +140,23 @@ arrows move by slot, typing over a selected slot replaces it, a paste of "12 34-
 - **What changed:** `validationStatus` (`error`, `success`, `warning`) and a Field's `data-validation-status` paint the slots as Input's (`data-success`, `data-warning`, `otp-field.css`); `onValueChange(code, event)` passes the change or paste event.
 - **Why:** Input, Number field, Textarea, Select and Input group showed a Field's success and warning; OTP field took only `invalid` (OTPField.tsx:26). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** An empty slot takes the strong control edge (`edge-control-hover`, hover `edge-control-strong`; plan A10.3, finding VA22): a field's edge had left six barely-there squares on near black (1.6:1).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+- 2026-11-14 · plan B7.8, B7.10 → disabled and read-only are the field shell's disabled and read-only recipe (input.css): this family's own copies are removed. Read-only now rests one fill step deeper than editable (outline on the soft fill, soft on its hover step). Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- Slots a cluster apart, 6 / 8 / 10 (10 / 10 / 12 at type 16). The slot's height is the fields worker's.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The slot is the one field shell; the root keeps the stronger rest edge as its input. Each character is wrapped in a new part, `char` (a cap slot), so it centres on its cap (it sat 0.62 high at type 13). Manifest `elements` gains `char`.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.

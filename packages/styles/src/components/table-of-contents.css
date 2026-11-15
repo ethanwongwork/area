@@ -9,17 +9,16 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-toc { min-inline-size: 0; }
-  /* spec: the label leads the outline: the row's size, strong, in the default ink over the muted rows (VitePress:
-     title 600 in text-1, links text-2; Notion's outline rows its secondary ink). A row tall, its text where the marker
-     rows' text starts (nav.css: 16 in). Round 34 (owner: "make sure they are correct for style and fg color"): it was
-     muted, the rows' own ink, so only its weight told it apart. */
+  /* spec: the label leads the outline: the row's size, strong, a row tall, its text where the marker rows' text starts
+     (nav.css: 16 in). Its ink is the muted one, as every heading over a run of rows (plan A9.4, owner 2026-11-11); it was
+     the default ink from round 34 (owner: "make sure they are correct for style and fg color") until then. */
   .area-toc__title {
     display: flex;
     align-items: center;
     block-size: var(--area-ui-row);
     margin: 0;
-    padding-inline: var(--area-space-16) var(--area-space-8);
-    color: var(--area-fg-default);
+    padding-inline: calc(var(--area-ui-row-inset) * 2) var(--area-ui-row-inset);
+    color: var(--area-fg-muted); /* a heading over a run of rows: muted (plan A9.4, owner 2026-11-11; default from round 34) */
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     font-weight: var(--area-weight-strong);

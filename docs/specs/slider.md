@@ -136,6 +136,7 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | thumb · construction | **plain knob**: `light-dark(bg-surface, bg-component-active)`, 1px `edge-control-hover` #d4 (the Checkbox and Radio glyph edge, audit S5) | Owner 2026-10-21 ("B"); Figma's adjustment thumb (white, 1px ring); dark paint is Segmented's raised thumb | Was a fill-colour dot to 42% of the radius, which read as a selected Radio on the rail; in dark the surface knob read as a hole in the fill |
 | fill · end | the thumb's centre: `thumb/2 + (100% − thumb) × --_slider-ratio` (slider.css `--_stop`), `--_pct` when no ratio is given | Figma's fill runs under its knob | Was `--_pct` of the whole rail, up to half a thumb off; hidden by a 4px rail, visible on a full-height track |
 | track variant | track = thumb 16 / 16 / 20, `bg-component` | `figma--adjustment-slider`: 16 track, 16 thumb, #f5 (`bg-component` #f7 is the nearest role; Segmented's trough) | — |
+| vertical length | its own public hook `--area-slider-block-size` (default: the fields' width hook, 16rem, as before), never shorter than `thumb + 2 × tier height` (80 at md) | System evaluation F3.2 (VA5) | It read `--area-input-inline-size` alone, so a page that set fields to 100% (the gallery) made a vertical slider 0 tall |
 | buffered | `fill-toggle-hover` on the rail (#d0 light, #4e dark), `fill-track` on the track and bar troughs; ends at the thumb-inset position of `buffered`, hidden behind the fill | Owner 2026-10-21; one step over each trough in both themes (probed in headless Edge) | Video player paints its loaded part as ink at 35% because it sits on footage |
 | bar variant | track = tier height, `radius-control-*`; thumb the fill's end, one glyph wide; **grip = the thumb end inset 4 on every side**: 8 × (bar − 8) at sm and md, 12 at lg, corner the end's less 4 (a pill in a round end, square in a square bar); `fg-on-selection` on the accent bar, #fff on the label-inside bar and colours | Owner's reference (bar with an inner grip, beside a same-height button); owner 2026-10-31 ("bigger and match the track", then "consistently sized and so that the pill actually matches the inset corner of the track", "always white") | Thumb width is the glyph ladder; the grip was 4 × 16 in every bar until 2026-10-31. The accent bar keeps the selection's label ink: white on every fill but dark neutral's light one |
 | field mark | 2 × a third of the bar (10 / 10 / 14 at sm, md, lg Compact), round, 4 inside the fill's end (centred on an empty origin bar; hidden at the range's two ends, where it read as a text cursor beside the label or value), whole pixels; `edge-control-strong` at rest, `fg-muted` on hover, drag and focus | Owner 2026-10-25, two references (a line at each fill's end; a grip inside it) | Picks, not read off the references (screenshots). Was none |
@@ -162,6 +163,8 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | focus-visible | focus outline on the drawn knob; on the bar, on the whole bar (the rail) at its corner | not captured |
 | disabled | 50% | `area--disabled` |
 
+**Default classes.** The defaults the bare block draws are values with empty classes of their own: `variant` `rail` (`--rail`), `labelPosition` `inline` (`--inline`), `orientation` `horizontal` (`--horizontal`), and Slider range's `variant` `rail` (`--rail`); the manifest lists each with its default, and React writes the class. Nothing paints them.
+
 ## Behavior and accessibility
 
 Native `input type="range"`: keyboard, value, pointer mapping and announcements are the browser's. It lies over the
@@ -172,6 +175,7 @@ shows it. The drawn parts are `aria-hidden`. The fill is
 on release (if it changed since the press) and on every key step, for a host whose change is costly. Shift+arrow moves
 ten steps (Carbon, MUI; audit C-31 A, owner 2026-09-30), following the reading direction in
 RTL; the native control takes the value and fires its own input event (primitives.tsx:813-820). The readout is `aria-hidden` (the input announces the value).
+Vertical's length is `--area-slider-block-size` (falling back to the fields' width hook, 16rem), at least the thumb and a tier square either side.
 Vertical turns the input with `writing-mode: vertical-lr; direction: rtl`, and the drawing fills from the bottom
 (block-axis rules, `100cqb`). Right to left: the browser places the native thumb from the right, and the drawing
 follows `:dir(rtl)` on the track (`--_dir: -1`: the thumb translates leftward from the inline start; the fill grows from
@@ -348,6 +352,7 @@ in ≈120ms with a decelerating curve; a press sets `data-pressed` and the knob 
 - 2026-10-01 · audit C-31 (owner pick A) → Shift+arrow moves ten steps; the thumb stays 16 at md → primitives.tsx:813-820.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → step ticks start on rounded whole pixels with no translate (was −0.5px, a 2px smear at 1x); the mark strip and SliderRange rails centre by layout instead of `translateY(-50%)`; native drag and keyboard steps stay instant (`slider.css`; "Motion and interaction, 2026-10-07").
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → step marks are `stroke-width` wide (were a literal 1px) (slider.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-11-11 · system evaluation F5 · rail, inline and horizontal (and Slider range's rail) are manifest values with their defaults and empty classes React writes; prop descriptions rewritten without reference names or history; `variant`'s deprecation narrowed to the value `field`; built stylesheet differs only by the empty rules.
 
 ## Review note, 2026-10-21
 
@@ -491,3 +496,38 @@ in ≈120ms with a decelerating curve; a press sets `data-pressed` and the knob 
 - **What changed:** SliderRange takes `onValueCommit(pair)`, as Slider: once when the pointer lets go (if the pair changed), on each keyboard step and on each typed end; `onValueChange(pair, event)` passes the input, key or pointer event.
 - **Why:** SliderRange.tsx:10-28 committed on every step of a drag; Slider has `onValueCommit` (primitives.tsx:828). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+### 2026-11-11 · A vertical slider's length is its own hook (system evaluation F3.2, VA5)
+
+- **What changed:** `--_vertical-length` reads `--area-slider-block-size`, then the fields' width hook
+  (`--area-input-inline-size`, 16rem) as before, so existing markup is unchanged; and a vertical slider has
+  `min-block-size: calc(thumb + 2 × tier height)` (16 + 2 × 32 = 80 at md). The Documentation demo sets the new hook
+  (`--area-slider-block-size: 100%` in its sized frame) instead of the private `--_vertical-length`; the gallery tile sets
+  it to 16rem. A hook, not a size: written with a fallback, as every public sizing hook is (check-token-refs).
+- **Why:** the gallery sets the fields' width hook to 100% inside its stage; as a block size in an auto-height parent that
+  computes to auto, and the vertical track (flex 1, no intrinsic height) drew 30 × 0 with only the thumb painted. A width
+  setting should never set a length; and a length that resolves to auto now leaves a usable control.
+- **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the end labels move from `text-xs` (11/14) to `text-sm` (12/16), the description's size, and take tabular figures (an end is often a number) (plans A9.2, A9.8).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The slider takes 44 of height under a coarse pointer (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The top label sits `ui-stack` over the track (6, Compact 4; in a Panel the panel's caption gap), as every label over its control; it was 2.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The end labels' gap is `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

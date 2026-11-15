@@ -6,7 +6,8 @@ import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent, ReactNode, VideoHTMLAttributes } from "react";
 import { videoPlayerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
-import { Kbd, Tooltip } from "./primitives.tsx";
+import { Kbd } from "./Kbd.tsx";
+import { Tooltip } from "./Tooltip.tsx";
 import { Button } from "./Button.tsx";
 import { assignRef } from "./overlay.ts";
 
@@ -15,8 +16,10 @@ type VideoPlayerVariants = VariantProps<typeof MANIFESTS.videoPlayer>;
 export interface VideoPlayerProps extends Omit<VideoHTMLAttributes<HTMLVideoElement>, "controls"> {
   /** Names the player for assistive tech: the video's title. */
   label: string;
-  /** `bar` (default): YouTube's controls, the track across the foot and the buttons below it in glass pills. `floating`:
-   * QuickTime Player's controller, a frosted panel over the video. `minimal`: one round play / pause, for ambient loops. */
+  /**
+   * `bar` (default): the track across the foot and the buttons below it in glass pills. `floating`: a frosted
+   * controller panel over the video. `minimal`: one round play / pause, for ambient loops.
+   */
   layout?: VideoPlayerVariants["layout"];
   /** `auto` (default): the controls hide while the video plays and nothing moves. `always`: they stay. */
   controls?: VideoPlayerVariants["controls"];

@@ -21,6 +21,14 @@ import { INVERSION, LEVELS } from "../color/curves.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 import { ALL_SCALES, SCALE_DESCRIPTIONS } from "../color/presets.ts";
 import { buildScale } from "../color/scale.ts";
+import { type TokenUsage, buildUsage } from "./usage.ts";
+
+/** Every public token's name, without the prefix: base, derived and every axis preset's (as emit/dts.ts types them). */
+export function publicTokenNames(): string[] {
+  const names = new Set<string>([...Object.keys(baseTokens()), ...Object.keys(derivedTokens())]);
+  for (const axis of AXES) for (const preset of axis.presets) for (const key of Object.keys(preset.tokens)) names.add(key);
+  return [...names].map((name) => name.replace(/^--area-/, "")).sort();
+}
 
 export interface TokensJson {
   version: 1;
@@ -76,6 +84,14 @@ export interface TokensJson {
   wghtRamp: readonly number[];
   radiusRamp: readonly number[];
   zLayers: typeof Z_LAYERS;
+  /**
+   * What each public token is for and the rules that bind it (plan F7, RD8), keyed by name without `--area-`. `kind`
+   * says whether a component reads it (`role`, `component`) or not (`primitive`, `derivation`, `setting`); `rules`
+   * name entries of `tokenRules`, quotes of docs/DESIGN_SYSTEM.md, CONTRAST.md and THEMING.md (emit/usage.ts).
+   */
+  usage: Record<string, TokenUsage<string>>;
+  /** Each rule `usage` names, quoted once: its words and the doc section it is from. */
+  tokenRules: Record<string, { rule: string; source: string }>;
 }
 
 export function buildTokensJson(): TokensJson {
@@ -140,6 +156,7 @@ export function buildTokensJson(): TokensJson {
     wghtRamp: WGHT_RAMP,
     radiusRamp: RADIUS_RAMP,
     zLayers: Z_LAYERS,
+    ...(({ usage, rules }) => ({ usage, tokenRules: rules }))(buildUsage(publicTokenNames())),
   };
 }
 

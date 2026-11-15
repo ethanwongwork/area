@@ -31,27 +31,36 @@ export interface TreeViewNode {
 /** The shared change words (`ChangeStatus`), and `removed`, deprecated for `deleted` (2026-11-07). */
 export type TreeViewStatus = ChangeStatusInput;
 export interface TreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
-  items: TreeViewNode[];
   /** Navigation activates a row; checkbox mode toggles its checked state. */
   selectionMode?: VariantProps<typeof MANIFESTS.treeView>["selectionMode"];
-  expandedIds?: string[];
-  defaultExpandedIds?: string[];
-  onExpandedChange?: (ids: string[], event: SyntheticEvent) => void;
-  selectedIds?: string[];
-  defaultSelectedIds?: string[];
-  onSelectedChange?: (ids: string[], event: SyntheticEvent) => void;
-  onActivate?: (id: string) => void;
-  currentId?: string;
   /** `sm` is the file tree's density: rows a small control tall, a 12 chevron, a 16 indent per level. */
   size?: VariantProps<typeof MANIFESTS.treeView>["size"];
   /** Indent lines under each open branch, shown while the tree is hovered or holds focus. */
   guides?: boolean;
   /**
-   * The open branches holding the rows scrolled past stay pinned at the top of the scroll, one row a level, as VS Code's
-   * and Cursor's sticky scroll; a click on one scrolls back to it. They pin at `--area-tree-view-sticky-top` (0) on
-   * `--area-tree-view-pin-fill` (the chrome's fill, else the page's).
+   * The open branches holding the rows scrolled past stay pinned at the top of the scroll, one row a level; a click
+   * on one scrolls back to it. They pin at `--area-tree-view-sticky-top` (0) on `--area-tree-view-pin-fill` (the
+   * chrome's fill, else the page's).
    */
   stickyBranches?: boolean;
+  /** The top-level nodes, each with its `children`. */
+  items: TreeViewNode[];
+  /** The row for the page or file that is open, marked `aria-current`; the tree's Tab stop starts there. */
+  currentId?: string;
+  /** The open branches' ids, controlled. */
+  expandedIds?: string[];
+  /** The branches open at first, uncontrolled. */
+  defaultExpandedIds?: string[];
+  /** The selected rows' ids (checked ones in checkbox mode), controlled. */
+  selectedIds?: string[];
+  /** The rows selected at first, uncontrolled. */
+  defaultSelectedIds?: string[];
+  /** Called with every open branch's id and the click or key that opened or closed one. */
+  onExpandedChange?: (ids: string[], event: SyntheticEvent) => void;
+  /** Called with every selected row's id and the click or key that changed them. */
+  onSelectedChange?: (ids: string[], event: SyntheticEvent) => void;
+  /** Called with a row's id when a click, Enter or Space activates it. */
+  onActivate?: (id: string) => void;
 }
 
 type VisibleNode = { node: TreeViewNode; depth: number; parentId?: string; position: number; count: number };

@@ -18,17 +18,18 @@
     --_composer-edge: var(--area-composer-edge); /* the card edge, strong under increased contrast */
     border: var(--area-stroke-width) solid var(--_composer-edge);
     /*
-     * spec (owner, 2026-10-29): Card's corner, term for term (surface.css `--_card-radius`), as a surface standing alone
-     * on the page takes Card's edge (audit S7a): the container corner plus the inset's share (18 in the app's scale, 20
-     * at type 16), never past half the one-line height, so Pill makes a pill; square at Sharp. Its actions sit
-     * concentric inside it, the shell less the inset (11 on a 30 send). The owner asked for Cursor's roundness, "rounded
-     * not pill/circular, but pretty round" (Cursor's prompt input is 20); the first answer, the surface corner + 4 (20,
-     * actions 13), made the composer's buttons rounder than every other Button of their height (8), so it takes Card's.
-     * Was option B (2026-09-26): the send's own corner plus the inset, 8 + 8 = 16 (15 at type 13).
+     * The chat card's corner (surface.css, plan B1.3, 2026-11-13): a shell concentric with the controls it holds, the
+     * medium control's corner plus the bar inset, never rounder than the container and never past half the one-line
+     * height, so Pill makes a pill; square at Sharp. 16 at the default (8 + 8), 14 at Compact. Its actions sit concentric
+     * inside it, the shell less the inset: every Button's own 8 on a 30 send (below). It was the container corner plus the
+     * inset's share (19 at the default, owner 2026-10-29), held in Phase 1 until the one chat card set it, and its
+     * actions 11, rounder than every other Button of their height.
      */
-    --_composer-term: calc((var(--_composer-inset) - var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)) * var(--area-radius-concentric));
-    --_composer-corner: min(calc(var(--_composer-height) / 2), max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_composer-term), var(--area-radius-container)))));
-    --_composer-action-radius: max(var(--area-radius-min), calc(var(--_composer-corner) - var(--_composer-inset) * var(--area-radius-concentric)));
+    --_composer-corner: min(calc(var(--_composer-height) / 2), var(--_fr-corner));
+    /* The actions: the shell less the inset, which is the medium control's own corner wherever the shell is the held
+       corner plus the inset; where the container caps the shell (Corner 8, Comfortable, type 16) they keep their own
+       corner, the frame recipe's nested floor, so they never draw squarer than every other Button. */
+    --_composer-action-radius: max(min(var(--area-radius-control-md), var(--_composer-corner)), calc(var(--_composer-corner) - var(--_composer-inset) * var(--area-radius-concentric)));
     border-radius: var(--_composer-corner);
     background: var(--area-input-bg);
     /* The Elevation axis's resting role (owner, 2026-10-14, "go with your recs"; was none, owner 2026-09-26):
@@ -42,7 +43,7 @@
        is left out of the list, so the ring, its outline and its halo, appears and leaves with the
        key instead of the halo fading after the outline (it was --area-transition, which eases
        box-shadow). */
-    transition: background-color var(--area-duration-fast) var(--area-ease-out), border-color var(--area-duration-fast) var(--area-ease-out), color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects), border-color var(--area-duration-fast) var(--area-ease-effects), color var(--area-duration-fast) var(--area-ease-effects);
   }
   .area-composer--inline { min-block-size: var(--_composer-height); }
   /* The context row: what the message is about, inside the shell above the field (Cursor's image grid and Codex's
@@ -56,7 +57,7 @@
 
  /* The Input hover step (audit S7a). */
   @media (hover: hover) { .area-composer:hover:not(:focus-within, [data-disabled]) { border-color: var(--area-input-edge-hover); transition-duration: var(--area-hover-in); } }
-  .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); box-shadow: var(--area-shadow-resting), 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); transition-duration: 0s; }
+  .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); outline-offset: var(--area-focus-offset); box-shadow: var(--area-shadow-resting), 0 0 0 var(--area-field-focus-halo-width) color-mix(in srgb, var(--area-composer-focus-color) 14%, transparent); /* the field halo's 14%, in the Composer's own focus colour (plan A6.2) */ transition-duration: 0s; }
   /* A text field shows disabled with Textarea's field paint, not opacity (cohesion audit), so the
      actions keep Button's own 50% instead of compounding to about 30%. */
   .area-composer[data-disabled] { background: var(--area-textarea-bg-disabled); border-color: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }
@@ -110,7 +111,7 @@
   .area-composer__actions > .area-button { flex: none; }
   /* The send and every action in the shell take its concentric corner (a pill under the Pills setting, as Button does);
      `rounded` keeps a Button's own. Attachments in the context row, at the same inset, take it too. */
-  .area-composer__actions > .area-button:not(.area-button--rounded) { --_shape: calc(var(--_composer-action-radius) + var(--_button-pill) * var(--area-radius-full)); }
+  .area-composer__actions > .area-button:not(.area-button--rounded) { --_shape: max(var(--_composer-action-radius), var(--_button-pill) * var(--area-radius-full)); }
   /* Pills › Composer (on by default, 2026-11-02; Cursor's composer pills and round send): every button and picker in the
      composer and its header is a pill (a circle when square) whatever Button's own flag; off, they follow Button's. */
   :is(.area-composer, .area-composer-group__header) .area-button:not(.area-button--rounded) { --_button-pill: max(var(--area-pill-button), var(--area-pill-composer)); }

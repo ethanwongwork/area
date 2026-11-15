@@ -15,7 +15,7 @@ export const GalleryToggletipLink = () => (
 );
 /* In running text the button takes the line box's top, so a label that wraps keeps it on its last line. */
 export const GalleryToggletipWrapped = () => (
-  <p style={{ ...ui, margin: 0, maxInlineSize: "calc(var(--area-space-96) * 2)" }}>Label that wraps onto a second line <Toggletip content={note} /></p>
+  <p style={{ ...ui, margin: 0, maxInlineSize: "calc(var(--area-space-96) * 2)" }}>Label that wraps onto a second line beside its button <Toggletip content={note} /></p>
 );
 /* The open note at rest, centred 4 above its button (Tooltip's offset), as Tooltip's own tile shows its surface. */
 export const GalleryToggletipOpen = () => (

@@ -49,3 +49,4 @@
 @import url("styles/typefaces.css");
 @import url("styles/glyphs.css") layer(studio);
 @import url("styles/design.css") layer(studio);
+@import url("styles/specs.css") layer(studio);

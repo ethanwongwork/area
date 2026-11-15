@@ -2,21 +2,25 @@ import { forwardRef, useContext, useEffect, useId, useRef } from "react";
 import type { HTMLAttributes, KeyboardEvent, MouseEventHandler, ReactNode } from "react";
 import { Button, type ButtonProps, type ButtonTone } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { Menu } from "./primitives.tsx";
+import { Menu } from "./Menu.tsx";
 import { MANIFESTS, splitButtonVariants, type VariantProps } from "../variants.ts";
 import { InToolbar, ToolbarSize, toolbarItemProps } from "./toolbar-context.ts";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
 import { assignRef, clearToolbar, useAnchoredPosition, useOpenState } from "./overlay.ts";
 
 export interface SplitButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, "onClick" | "children"> {
-  /** Fill treatment, shared by both parts. `ghost` is Figma's tool with its menu: two plates
-   * 1px apart with no drawn divider, each with its own hover; use it icon-only in a toolbar. */
+  /**
+   * Fill treatment, shared by both parts. `ghost` is a tool with its menu: two plates 1px apart with no drawn
+   * divider, each with its own hover; use it icon-only in a toolbar.
+   */
   variant?: VariantProps<typeof MANIFESTS.splitButton>["variant"];
   /** Shows only the action's icon; `children` becomes the action's accessible name. */
   iconOnly?: boolean;
   /** The action is the current tool (a pressed toggle, Button's selected paint). */
   selected?: boolean;
+  /** The tone of both halves, as Button's; neutral by default. */
   tone?: ButtonTone;
+  /** The size of both halves, as Button's; md by default. */
   size?: ButtonProps["size"];
   /** The default action's label. */
   children: ReactNode;
@@ -28,6 +32,7 @@ export interface SplitButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   menu: ReactNode;
   /** Accessible name for the menu trigger. */
   menuLabel?: string;
+  /** Disables the action and the menu button together. */
   disabled?: boolean;
   /**
    * The default action is running, as Button's `loading`: the action shows Button's spinner and is busy, and the menu's
@@ -36,7 +41,9 @@ export interface SplitButtonProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   loading?: boolean;
   /** The menu is open (controlled); `defaultOpen` opens it at first; `onOpenChange` hears it open and close, as Menu's. */
   open?: boolean;
+  /** Whether the menu starts open, uncontrolled; closed by default. */
   defaultOpen?: boolean;
+  /** Called when the menu opens or closes. */
   onOpenChange?: (open: boolean) => void;
   /** Extra props for the default action's button. */
   actionProps?: Omit<ButtonProps, "children" | "onClick" | "variant" | "tone" | "size" | "disabled" | "icon" | "loading">;
@@ -46,8 +53,7 @@ const items = (menu: HTMLElement | null) =>
   [...(menu?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([disabled])') ?? [])];
 
 /**
- * A default action joined to a menu of related actions (Fluent SplitButton, Carbon
- * ComboButton, Atlassian SplitButton). Both parts are real buttons in the Tab order; the
+ * A default action joined to a menu of related actions. Both parts are real buttons in the Tab order; the
  * trigger has its own name, reports `aria-expanded`, and opens a Menu in a native popover,
  * which supplies Escape, light dismissal and focus return. Arrow keys move through the menu.
  */

@@ -29,38 +29,61 @@
  * tier, which left two sizes apart only by their text.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /*
+   * One track (plan B8.1, 2026-11-14). Segmented and soft Toggle group are one control drawn for two jobs (one value
+   * chosen, or any number raised), so they share this recipe, as Button group shares Button's; each family keeps only
+   * its own inputs and its options' behaviour. A family sets:
+   *   --_track-height       its tier's control height
+   *   --_track-tier-corner  its tier's control corner
+   * and reads:
+   *   --_track-inset   the options' inset from the track's edge, and their gap: 2 at every density (a joined set)
+   *   --_track-corner  the tier's corner on the track's own height, or full while the Pills set's Segmented flag is
+   *                    set, so `data-area-pills="segmented"` rounds both (a pill is one value, radius-full)
+   *   --_thumb         an option's height, the track less its inset twice
+   *   --_thumb-corner  concentric with the track (its corner less the inset), never sharper than radius-floor, capped
+   *                    against the option's own height (radius audit 2026-10-03)
+   *   --_thumb-bg, --_thumb-edge, --_thumb-shadow  the raised option: the surface in light, the active fill in dark
+   *                    (where the surface rung sits below the groove and read as sunken), the selected hairline, the
+   *                    control's lift
+   * The track is a trough: the control fill (which steps from the ground it sits on) and an inset outline at
+   * border-width in the Buttons stroke group, the edge of a filled shape (DESIGN_SYSTEM.md, Strokes), so the Stroke width
+   * setting moves both tracks alike (Segmented read stroke-width until 2026-11-14 and held at Stroke 0 and 2). The outline
+   * takes no layout and snaps to device pixels (docs/MOTION.md, "Crispness" 3). Every value is whole at every type,
+   * density and corner: heights are whole, the inset is 2 and corners round down to even pixels.
+   */
+  :where(.area-segmented, .area-toggle-group--soft) {
+    --_track-inset: var(--area-space-2);
+    --_track-corner: max(min(var(--_track-tier-corner), max(var(--area-radius-min), round(down, calc(var(--_track-height) * var(--area-radius-factor)), 2px))), var(--area-pill-segmented) * var(--area-radius-full)); /* data-area-pills="segmented": a pill, one value */
+    --_thumb: calc(var(--_track-height) - var(--_track-inset) * 2);
+    --_thumb-corner: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_thumb) * var(--area-radius-factor)), 2px))), calc(var(--_track-corner) - var(--_track-inset)), var(--area-pill-segmented) * var(--area-radius-full));
+    --_thumb-bg: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec: the white thumb in light */
+    --_thumb-edge: var(--area-edge-selected);
+    --_thumb-shadow: var(--area-shadow-control);
+    gap: var(--_track-inset);
+    block-size: var(--_track-height);
+    padding: var(--_track-inset);
+    border-radius: var(--_track-corner);
+    background-color: var(--area-bg-component);
+    outline: var(--area-border-width) solid var(--area-edge-buttons);
+    outline-offset: calc(-1 * var(--area-border-width));
+  }
+
   .area-segmented--icon-only .area-segmented__item { inline-size: var(--_item); padding-inline: 0; }
   .area-segmented {
-    --_inset: var(--area-space-2);
     --_height: var(--area-control-md);
-    --_item: calc(var(--_height) - var(--_inset) * 2);
     --_icon: var(--area-icon-md);
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
+    /* The track recipe's inputs (above): the tier's height and corner. The option and the sliding plate are its thumb. */
+    --_track-height: var(--_height);
+    --_track-tier-corner: var(--_radius, var(--area-radius-control-md));
+    --_inset: var(--_track-inset);
+    --_item: var(--_thumb);
+    --_item-radius: var(--_thumb-corner);
 
     display: inline-flex;
     align-items: center;
-    gap: var(--area-space-2);
-    block-size: var(--_height);
-    padding: var(--_inset);
-    /*
-     * The track is the control and takes the per-tier control radius, as Button and the
-     * fields do; the items sit concentric inside it, the track's radius less the inset (audit
-     * S4, owner 2026-09-30; was the item's radius plus the inset, 10 around 8 at md).
-     */
-    --_track-radius: calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-segmented) * var(--area-radius-full)); /* data-area-pills="segmented" */
-    border-radius: var(--_track-radius);
-    /* The track is a control, so it takes the control fill, which steps from the ground it sits on: the recessed
-       layer (bg-subtle, the old paint) equals the page at layer contrast 0 and left only the ring (Layers sweep
-       2026-10-16). Light 100 + 4 is the same #f7f7f7; dark is the rest fill, near the #28 groove the spec measured. */
-    background-color: var(--area-bg-component);
-    outline: var(--area-stroke-width) solid var(--area-edge-buttons);
-    outline-offset: calc(-1 * var(--area-stroke-width));
-    /* Concentric with the track, but never sharper than radius-floor, 4 (radius audit 2026-10-03:
-       a compact sm track left its items 2; Figma's nested segments keep 3-5), capped against the
-       item's own height. The option and the sliding plate share it. */
-    --_item-radius: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_item) * var(--area-radius-factor)), 2px))), calc(var(--_track-radius) - var(--_inset)));
     position: relative;
     isolation: isolate;
   }
@@ -101,10 +124,9 @@
       transition-duration: var(--area-hover-in);
     }
   }
-  /* Pressed, a step past hover (layers.css, "Pressed"); it pressed with the hover paint. spec: in light as firm as
-     the muted label allows on the track, 7.5% black (#666 on #e4, 4.53:1; the shared 10% left it at 4.26:1); in dark
-     16.5% white, past the 14% hover (19% left it at 4.29:1 at dark 24 + 8). */
-  .area-segmented__item:active:not([data-selected]):not(:disabled) { background-color: light-dark(#00000013, #fcfcfc2a); }
+  /* Pressed, a step past hover: the pressed wash capped where the muted label keeps 4.5:1 on the track
+     (`bg-pressed-track`, layers.css; plan B7.4), so the Pressed fill, Layer contrast and the grey tint move it. */
+  .area-segmented__item:active:not([data-selected]):not(:disabled) { background-color: var(--area-bg-pressed-track); }
 
   /*
    * The selected item lifts off the track: a surface fill, a hairline of its own, and the
@@ -116,10 +138,10 @@
   .area-segmented__item[data-selected] {
     /* One weight in every state: the selected option no longer reads a weight hook (audit A-17). */
     font-weight: var(--_weight, var(--area-weight-strong));
-    background-color: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec */
+    background-color: var(--_thumb-bg);
     color: var(--area-fg-default);
-    border-color: var(--area-edge-selected);
-    box-shadow: var(--area-shadow-control);
+    border-color: var(--_thumb-edge);
+    box-shadow: var(--_thumb-shadow);
   }
 
   /*
@@ -138,10 +160,10 @@
     block-size: var(--_item);
     box-sizing: border-box;
     translate: var(--_plate-x) 0;
-    border: var(--area-stroke-width) solid var(--area-edge-selected);
+    border: var(--area-stroke-width) solid var(--_thumb-edge);
     border-radius: var(--_item-radius);
-    background-color: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec: the selected item's */
-    box-shadow: var(--area-shadow-control);
+    background-color: var(--_thumb-bg);
+    box-shadow: var(--_thumb-shadow);
     pointer-events: none;
     transition: translate var(--area-duration-base) var(--area-ease-in-out), inline-size var(--area-duration-base) var(--area-ease-in-out);
   }

@@ -1,0 +1,92 @@
+/* Spinner (docs/specs/spinner.md). */
+@layer area.components {
+  /* --- Spinner ------------------------------------------------------------ */
+  /*
+   * spec (docs/specs/spinner.md, 2026-09-28 owner feedback: "slightly pixelated", ends not read
+   * as round): the ring and the arc are SVG masks, rasterised with anti-aliasing at any scale,
+   * and the arc has round caps (ChatGPT draws its spinner as SVG). Both are drawn on a 16 unit
+   * box with a 2 unit stroke, so the stroke is 1/8 of the size at every size (Primer 16 / 2,
+   * Untitled 4 on 32): 1.5 at sm, 2 at md, 3 at lg.
+   */
+  .area-spinner {
+    --_size: var(--area-icon-md);
+    --_indicator: var(--area-selection-solid);
+    --_ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E"); /* spec */
+    --_arc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 0 1 7 7' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E"); /* spec */
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    flex: none;
+    vertical-align: middle;
+    /* spec (2026-09-27 audit): the track is the arc's own ink at 25% (Primer; ChatGPT 30%), so
+       the ring shows on any ground. */
+    background: color-mix(in srgb, var(--_indicator) 25%, transparent);
+    -webkit-mask: var(--_ring) center / 100% 100% no-repeat;
+    mask: var(--_ring) center / 100% 100% no-repeat;
+  }
+
+  /* The arc: a quarter turn with round caps, turning over the still track. */
+  .area-spinner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--_indicator);
+    -webkit-mask: var(--_arc) center / 100% 100% no-repeat;
+    mask: var(--_arc) center / 100% 100% no-repeat;
+    /* spec: 1s a turn (Untitled, Primer, shadcn, Spectrum; owner 2026-09-27). A fixed second, not
+       4 x slow: MOTION.md bounds a spinner at 0.6-1s a turn, and the old Expressive preset made it
+       1.6s, a sluggish turn (motion pass 2026-10-07). The loop factor stops it at motion 0 and under
+       reduced motion, resting on its drawing (12 to 3 o'clock). */
+    animation: area-spin calc(1s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec */
+  }
+
+  /* Waiting (`delay`, V6): the ring keeps its box, invisible, and its status region stays in the accessibility tree
+     (opacity, not visibility), empty, so its label is announced when it arrives with the ring. */
+  .area-spinner[data-waiting] { opacity: 0; }
+
+  /* Inside a Button the spinner takes the label's ink, so it shows on any fill: a neutral
+     spinner on a neutral solid button was the fill's own colour and disappeared. It fills the
+     tier's icon box (icon-sm / md / lg: 16 at the default type 13, every tier) rather than a fixed 16. */
+  .area-button .area-spinner { --_indicator: currentColor; --_size: var(--_icon); }
+  /* A Badge's icon slot takes the same rule (round 87: its 16 spinner overflowed the 12 slot onto the badge's edge and
+     the label, and painted the selection colour in a toned badge). */
+  .area-badge .area-spinner { --_indicator: currentColor; --_size: var(--_icon); }
+
+  /* Determinate (docs/specs/spinner.md, "Value"): the same ring with the arc stopped at the value, drawn as SVG
+     because its length changes. The mask ring and turning arc give way to it. 12 o'clock, clockwise, as Cursor's
+     rings and every system draw it. */
+  .area-spinner[data-determinate] {
+    background: none;
+    -webkit-mask: none;
+    mask: none;
+  }
+  .area-spinner[data-determinate]::before { content: none; }
+  .area-spinner > svg { display: block; inline-size: 100%; block-size: 100%; rotate: -90deg; overflow: visible; }
+  .area-spinner__track,
+  .area-spinner__arc { fill: none; stroke-width: 2px; /* spec: the spinning ring's line, 1/8 of the 16 grid */ }
+  .area-spinner__track { stroke: color-mix(in srgb, var(--_indicator) 25%, transparent); /* spec: the spinning ring's track */ }
+  .area-spinner__arc {
+    stroke: var(--_indicator);
+    stroke-linecap: round;
+    /* MOTION.md's progress easing, linear (owner, review round 25: "make the motion more smooth"): an ease-out
+       front-loads each step, so updates arriving one after another read as a row of jolts; linear joins them. */
+    transition: stroke-dasharray var(--area-duration-slow) var(--area-ease-linear);
+  }
+  /* At 0 the round cap alone would draw a dot. */
+  .area-spinner__arc[data-empty] { stroke: transparent; }
+  @media (forced-colors: active) {
+    .area-spinner__track { stroke: GrayText; }
+    .area-spinner__arc { stroke: CanvasText; }
+  }
+
+  .area-spinner--sm { --_size: var(--area-space-12); }
+  .area-spinner--md { --_size: var(--area-space-16); }
+  .area-spinner--lg { --_size: var(--area-space-24); }
+
+  @keyframes area-spin {
+    to { rotate: 360deg; }
+  }
+
+}

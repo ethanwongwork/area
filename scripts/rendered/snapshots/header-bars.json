@@ -1,0 +1,82 @@
+{
+ "rule": "header-bars",
+ "item": "B4.1",
+ "about": "Each family's header bar heights (B4.1's two-bar rule is not built yet: the set is a snapshot)",
+ "values": {
+  "approval · area-approval__head": [
+   18,
+   40
+  ],
+  "attachment · area-attachment__head": [
+   16
+  ],
+  "board · area-board-column__header": [
+   40
+  ],
+  "calendar · area-calendar__header": [
+   26
+  ],
+  "code-block · area-code-block__header": [
+   30,
+   34
+  ],
+  "color-picker · area-color-picker__header": [
+   40
+  ],
+  "command-palette · area-command-palette__search": [
+   47
+  ],
+  "composer · area-composer-group__header": [
+   26
+  ],
+  "confirm-dialog · area-dialog__header": [
+   31.23
+  ],
+  "description-list · area-panel__bar": [
+   46
+  ],
+  "dialog · area-dialog__header": [
+   31.23
+  ],
+  "drawer · area-drawer__header": [
+   9.23,
+   31.23
+  ],
+  "edit-summary · area-edit-summary__head": [
+   30
+  ],
+  "file-upload · area-file-upload-item__header": [
+   36
+  ],
+  "kbd · area-command-palette__search": [
+   47
+  ],
+  "menu · area-menu__header": [
+   39
+  ],
+  "number-field · area-panel__bar": [
+   39
+  ],
+  "panel · area-panel__bar": [
+   39,
+   46
+  ],
+  "plan · area-plan__head": [
+   30,
+   38
+  ],
+  "popover · area-popover__header": [
+   14.23,
+   36.23
+  ],
+  "property-list · area-panel__bar": [
+   39
+  ],
+  "queue · area-queue__head": [
+   30
+  ],
+  "surface · area-panel__bar": [
+   46
+  ]
+ }
+}

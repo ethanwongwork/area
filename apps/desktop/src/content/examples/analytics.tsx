@@ -77,7 +77,7 @@ function Actions() {
         trigger={<Button icon={<AddIcon />}>New report</Button>}
         title="New report"
         description="Reports collect charts and tables you want to share."
-        footer={<><Button variant="outline">Cancel</Button><Button>Create report</Button></>}
+        footer={<><Button variant="soft" tone="neutral">Cancel</Button><Button>Create report</Button></>}
       >
         <div className="ex-form">
           <Field label="Name"><Input defaultValue="Weekly growth" /></Field>

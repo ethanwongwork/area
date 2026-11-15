@@ -1,0 +1,81 @@
+/* Tooltip (docs/specs/tooltip.md). Its anchored state is overlay.css. */
+@layer area.components {
+  /* --- Tooltip ------------------------------------------------------------ */
+  /*
+   * Inverted rather than tinted, so it reads as an annotation on the interface rather
+   * than as another surface within it.
+   */
+  .area-tooltip {
+    --_tooltip-inset-block: var(--area-space-4);
+    /* spec: owner, 10px text sides (8 read tight, ChatGPT's 12 too much); a trailing Kbd keeps the 4px block inset. */
+    --_tooltip-inset-inline: calc(var(--area-space-10) - var(--area-space-2) * var(--area-ui-dense)); /* 10 − 2 × ui-dense: 9 at the default, 8 compact, 10 at type 14 (an inset keeps the half step, plan A1.1; the owner's 10 is type 14's); evidence audit 2026-10-02 */
+    --_tooltip-inset-inline-end: var(--_tooltip-inset-inline);
+    /*
+     * spec: rounder than a control (8) but not a pill (13 on the 26 bubble): the owner asked for
+     * "rounder, not quite pill" (2026-09-25). radius-control-lg, 10 at the default Corner 10; a nested Kbd
+     * lands on 10 − 4 = 6. Follows the radius preset, capped at half a line so it never becomes a blob.
+     */
+    /* compact: the large control corner too (10 on the same 26 bubble at type 13), so the tooltip stays rounder
+       than a control at both densities (radius audit D3, owner 2026-10-03; was the sm corner, 4). */
+    --_tooltip-radius: var(--area-radius-control-lg);
+    --_tooltip-shape: min(var(--_tooltip-radius), calc((var(--area-ui-leading) + var(--_tooltip-inset-block) * 2) / 2));
+
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-ui-cluster);
+    padding-block: var(--_tooltip-inset-block);
+    padding-inline-start: var(--_tooltip-inset-inline);
+    padding-inline-end: var(--_tooltip-inset-inline-end);
+    border-radius: var(--_tooltip-shape);
+    /* spec (audit S21c, dark captures 2026-09-30, merged from PR 32): inverted in light; in dark
+       it stays a dark annotation one step above the surface, #282828 with a 5% white inset edge,
+       as all three products keep theirs (ChatGPT #212121 + 5% white edge, Notion #2c2c2b + 5%
+       white inset, Figma #1e1e1e). */
+    background-color: light-dark(var(--area-bg-inverse), var(--area-neutral-800)); /* spec */
+    color: light-dark(var(--area-fg-on-inverse), var(--area-fg-default)); /* spec */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    max-inline-size: calc(var(--area-space-96) * 3);
+    /* The Elevation axis's tooltip role: 0 0 2 + 0 4 8 at half the step in % (4% at the default 8; 1.5% at 3, the
+       default until 2026-11-05), transparent at 0, where the inverted fill alone separates it in light (the
+       measured tooltips draw no shadow). Dark keeps its 5% white inset edge at every step. */
+    /* One edge in dark (plan A7.1): the inset line, at the 5% spec or the tooltip role's rim strength if that is more
+       (8% at Shadow 8); the role no longer draws its rim outside it, which had made a two-tone edge. */
+    box-shadow: var(--area-shadow-tooltip), inset 0 0 0 var(--area-stroke-width) light-dark(transparent, rgb(255 255 255 / max(0.05, var(--area-shadow-tooltip-rim)))); /* spec */
+  }
+
+  /* The nested keycap keeps its own 6px corner (kbd.css). Its 20px box is vertically centred by
+   * construction: (28px - 20px) / 2 = 4px. */
+  /* A terminal Kbd's end inset equals its measured 4px block inset. The label keeps
+   * its larger reading inset on the leading side. */
+  .area-tooltip:has(> .area-kbd:last-child) {
+    --_tooltip-inset-inline-end: var(--_tooltip-inset-block);
+  }
+  /* The small (16) keycap sits 2 further in, so its end inset equals its block inset, 6 (audit E-17). */
+  .area-tooltip:has(> .area-kbd--sm:last-child) {
+    --_tooltip-inset-inline-end: calc(var(--_tooltip-inset-block) + var(--area-space-2));
+  }
+
+  /* The diamond's 50% centre is rounded down to a whole pixel, as Popover's arrow (MOTION.md, Crispness 1). */
+  .area-tooltip--arrow::after {
+    content: "";
+    position: absolute;
+    inline-size: var(--area-space-8);
+    block-size: var(--area-space-8);
+    /* The edge buried beneath the shell remains square; each side rounds its visible tip. */
+    background: inherit;
+    transform: rotate(45deg);
+    z-index: 0;
+    pointer-events: none;
+  }
+  :is(.area-tooltip--top:not([data-side]), .area-tooltip[data-side="top"])::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-inline-start: calc(round(down, 50%, 1px) - var(--area-space-8) / 2); inset-block-end: calc(var(--area-space-8) / -2); border-bottom-right-radius: var(--area-space-2); }
+  :is(.area-tooltip--right:not([data-side]), .area-tooltip[data-side="right"])::after { inset-inline-start: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); inset-block-start: calc(round(down, 50%, 1px) - var(--area-space-8) / 2); border-bottom-left-radius: var(--area-space-2); }
+  :is(.area-tooltip--bottom:not([data-side]), .area-tooltip[data-side="bottom"])::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-inline-start: calc(round(down, 50%, 1px) - var(--area-space-8) / 2); inset-block-start: calc(var(--area-space-8) / -2); border-top-left-radius: var(--area-space-2); }
+  :is(.area-tooltip--left:not([data-side]), .area-tooltip[data-side="left"])::after { inset-inline-end: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); inset-block-start: calc(round(down, 50%, 1px) - var(--area-space-8) / 2); border-top-right-radius: var(--area-space-2); }
+  :is(.area-tooltip--right:not([data-side]), .area-tooltip[data-side="right"]):dir(rtl)::after { border-bottom-left-radius: 0; border-top-right-radius: var(--area-space-2); }
+  :is(.area-tooltip--left:not([data-side]), .area-tooltip[data-side="left"]):dir(rtl)::after { border-top-right-radius: 0; border-bottom-left-radius: var(--area-space-2); }
+
+
+}

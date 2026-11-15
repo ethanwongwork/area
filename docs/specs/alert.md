@@ -112,7 +112,7 @@ The dismiss beside the products' icon buttons under the pointer:
 |---|---|---|---|
 | shell · radius | `radius-container` 12 | Peer consistency: Card media, Panel, Code block, Dialog | — |
 | shell · padding / height | **10 block, 12 inline (less the border); single line 40** | Toast, its peer (toast.md); Notion callout 13; Primer, Fluent, shadcn, Carbon 12–16 | Was 8 all round, 46 tall |
-| icon | 16, 12 in, centred on the first line (8 gap) | Primer, Fluent, Radix, shadcn, Carbon: 16–20 on the first line; Notion 24 on its first line | Was 13 in, centred on the row |
+| icon | 16, 12 in, centred on the first line (`ui-cluster` gap, 6 / 8 / 10, as Toast's) | Primer, Fluent, Radix, shadcn, Carbon: 16–20 on the first line; Notion 24 on its first line | Was 13 in, centred on the row |
 | controls | 28, **6 from the top and the side** (margins −4 / −6, `--_alert-control-*`); a multiline action row ends 6 from the bottom | Toast pass; concentric with the 12 corner (12 − 6) | The dismiss sat 9 in |
 | shell · fill / edge | tone surface + tone border; neutral `bg-component` #f7f7f7 + `border-decorative` #f3f3f3 | Semantic roles (`surface.css:284-289`) | The edge is a container seam, which the second pass kept decorative (rules take `border-divider`) |
 | text · size | 14/20 (`ui-size`) | Peer: Toast (`inset.css:184-188`), menus and rows use UI body | — |
@@ -148,8 +148,10 @@ Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-
 (`packages/react/src/components/primitives.tsx:158-160`; `alert.test.mjs:9`). The dismiss is an Area Button named by
 `dismissLabel` ("Dismiss alert"); `onDismiss` shows it and `dismissIcon` replaces the glyph
 (`primitives.tsx:158-162`, `:197-201`). The icon is `aria-hidden`. The single-line layout
-truncates title and description with an ellipsis; below a 30rem container the actions move
-to a second row (`surface.css:276-282`). Forced colours: no Alert-specific rule.
+keeps title and description on one line; its actions wrap to a second row, ending on the text column's end and
+`ui-cluster` under the text, only when the text no longer fits beside them (a wrapping row, never a width query; plan
+B6.7), so the text is never cut to make room for them; only text too long for the row alone ends in an ellipsis. The
+close keeps the top corner, out of the row. Forced colours: no Alert-specific rule.
 
 ## Peers and consistency
 
@@ -335,3 +337,26 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 - **What changed:** `tone` takes caution and discovery, on the same tint, edge and icon recipe, the icon on the new `fg-caution-mark` (yellow 550, 3.7:1 on white) and `fg-discovery-mark` (purple 500, 4.7:1); in dark, the tone's ink. `actions` is the slot's prop, matching its part, with `action` a deprecated alias. The Variants row no longer says Badge's order: it is Button's and Badge's seven.
 - **Why:** manifest.ts:878 had five tones while Button and Badge carry seven; alert.md:35 cited "Badge's order", stale since Badge took caution and discovery. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** Tone colours the mark, never the words (plan A3.4, finding T12): a tone Alert's title and link keep the default ink, as Toast's; the icon keeps `fg-<tone>-mark` and the fill, frame and close glyph the tone.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Leading icon (B2.4, G10).** The icon is a box one first line tall with the glyph centred in it (the box technique), instead of a `(line − icon) / 2` margin: the same pixels, one way.
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- Icon to text and text to action `ui-cluster` (6 / 8 / 10), Toast's gaps; they were 8 at every density.
+- 2026-11-14 · system evaluation B6.7 (VS10) · Alert and Toast agree: the 30rem container query that moved a single-line alert's actions to a second row under 480 is gone (an alert 348–480 wide took two rows for one short action, where Toast at 360 keeps Undo inline), and with it the alert's `container-type`; the comments now say what renders (one line 36, controls 5 from the top at the default, 4 at Compact; banner 38, controls 6 in). Gaps were already `ui-cluster` (B8.2). `popups.test.mjs` pins the shared inset, icon box, gaps, title weight and bar corner.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: the dismiss and the last end action are corner controls: they hang over the first line as far from the end as from the top, so their corner is the alert's less that (5 in a one-line alert's 10, 11 in a multiline one's 16, 4 in a banner's 10 at 6 in; they kept the small control's 6). A flush alert is square: its controls keep their own corner.
+- 2026-11-14 · system evaluation B6.7 (correction) · the one-line and default layouts are a wrapping row: the text asks for its whole line beside the icon, the actions wrap below it when they no longer fit (end-aligned, `ui-cluster` under the text, read on the controls), and the close sits out of the row in the top corner, as far from the top as from the side. The earlier pass kept the actions inline and cut the text; that is reversed. Pinned by `tests/behaviour/suites/wrap.test.mjs` (type 12, 13, 16 × every density, wide and narrow) and `popups.test.mjs`.

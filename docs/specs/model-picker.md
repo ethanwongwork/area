@@ -88,3 +88,12 @@ Open questions: none.
 - 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change. The Verification run above predates it and used product model names.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no change: trigger and menu motion inherited from Button and Menu, verified (enter 150 from the trigger, whole-pixel rest).
 - **Verdict (effort):** approved (owner, 2026-10-29, the Composer expansion review page); Complete.
+- 2026-11-11 · system evaluation A2.1 · rows in a floating list take their height's corner (radius-list-row capped by radius-row, and radius-step is the real medium control's corner): rows 10 → 8 and the list 14 → 12 at the default Corner 10, the corner of a Nav row and a medium Button of the same 30. emit/base.ts; radius.test.ts.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Two-line rows (B2.4).** A row with a leading icon puts it on the label's line (Menu's box technique); the check stays centred on the row.
+
+## State paint (plan B7.1), 2026-11-14
+
+- Its open plate is Button's open rule, now for every popup kind; no change in look.

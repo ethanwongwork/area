@@ -7,36 +7,40 @@ import { Glyph } from "./Glyph.tsx";
 
 /** The shared status words (Governance § 4, 2026-11-07): complete, current, pending, error. `upcoming` and `invalid` are
  * deprecated aliases of pending and error, kept for one release. */
-export type StepStatus = "complete" | "current" | "pending" | "error" | /** @deprecated use "pending" */ "upcoming" | /** @deprecated use "error" */ "invalid";
+export type StepStatus = NonNullable<VariantProps<typeof MANIFESTS.stepperStep>["status"]> | /** @deprecated use "pending" */ "upcoming" | /** @deprecated use "error" */ "invalid";
 type SharedStatus = Exclude<StepStatus, "upcoming" | "invalid">;
 const shared = (status: StepStatus): SharedStatus => status === "upcoming" ? "pending" : status === "invalid" ? "error" : status;
 
 export interface StepperProps extends Omit<HTMLAttributes<HTMLOListElement>, "onSelect"> {
   /** The current step's index, from 0. Steps before it are complete, steps after it are still to come. */
   current: number;
+  /** `horizontal` (default): the steps in a row. `vertical`: one under another, each step's content beside its line. */
   orientation?: VariantProps<typeof MANIFESTS.stepper>["orientation"];
   /**
-   * Makes steps buttons that go to them: complete steps by default, so a person can go back but not skip ahead
-   * (WAI, Atlassian, Spectrum, MUI's linear stepper); with `nonLinear`, every step but the current one.
+   * Makes steps buttons that go to them, called with the step's index: complete steps by default, so a person can go
+   * back but not skip ahead; with `nonLinear`, every step but the current one.
    */
   onStepSelect?: (index: number) => void;
+  /** With `onStepSelect`, every step but the current one is a button, so steps can be taken in any order. */
   nonLinear?: boolean;
   /** Words that follow each title for assistive tech, by status. */
   statusLabels?: Partial<Record<StepStatus, string>>;
 }
 
 export interface StepperStepProps extends Omit<LiHTMLAttributes<HTMLLIElement>, "title"> {
+  /** The step's name. */
   title: ReactNode;
   /** A muted line under the title. */
   description?: ReactNode;
   /**
    * What the step holds, under its text and in line with its title, the line running on beside it: the open step's
-   * sub-steps or settings (Base Web's ProgressSteps and GOV.UK's step-by-step open a step in place). Keep it to the
-   * step that is open; a person reads the others by their titles.
+   * sub-steps or settings, opened in place. Keep it to the step that is open; a person reads the others by their
+   * titles.
    */
   children?: ReactNode;
   /** Overrides the status the step's place gives it, for a step with a problem (`error`). */
   status?: StepStatus;
+  /** The step can't be pressed, even where `onStepSelect` makes the others buttons. */
   disabled?: boolean;
 }
 
@@ -46,9 +50,8 @@ type Injected = { index?: number; placed?: SharedStatus; current?: boolean; sele
 
 /**
  * An ordered list of steps (`ol`, named by `aria-label`), the current one `aria-current="step"` (ARIA 1.2's token
- * for step indicators; Atlassian, Spectrum, GOV.UK). Status has no ARIA state of its own, so each title is
- * followed by a hidden word ("completed", "current step", "not started"), as WAI's tutorial and Spectrum do;
- * the markers are hidden.
+ * for step indicators). Status has no ARIA state of its own, so each title is followed by a hidden word
+ * ("completed", "current step", "not started"); the markers are hidden.
  */
 export const Stepper = /* @__PURE__ */ forwardRef<HTMLOListElement, StepperProps>(function Stepper(
   { current, orientation, onStepSelect, nonLinear, statusLabels, className, children, ...rest },

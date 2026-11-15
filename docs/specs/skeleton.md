@@ -90,8 +90,8 @@ an 80 × 32 rounded block.
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | model | one component, `shape` block / text / circle, block default | Owner option A; block default in 5 systems, text in 2, none in 3 (survey) | Text was the default |
-| fill | `light-dark(rgb(143 143 143 / 0.1), bg-component)` /* spec */ | ChatGPT (`chatgpt--skeleton-*`); Notion #f1 | Was #f7, a step lighter than every product |
-| band | `light-dark(rgb(143 143 143 / 0.16), bg-component-active)`, travelling, 3s linear | ChatGPT, Figma | Travel reads as loading |
+| fill | `bg-component` (plan B7.4) | ChatGPT (`chatgpt--skeleton-*`); Notion #f1 | Was #f7, a step lighter than every product |
+| band | `bg-component-active`, travelling, 3s linear | ChatGPT, Figma | Travel reads as loading |
 | corner | `min(radius-small, 4px)` for block and text | Primer 3, Radix 3, Fluent 4, MUI 4, Mantine 4, Chakra 4, antd 4, Polaris 4, Atlassian 4 | — |
 | block size | 100% × 16 until the host sizes it | Primer 1rem, Fluent 100% × 16 | — |
 | text height | `1em` centred in the line box (`margin-block: (1lh − 1em) / 2`) | Primer SkeletonText | — |
@@ -200,3 +200,7 @@ Open questions: none.
   Server and first client render both render it waiting.
 - **Why:** docs/research/components-audit-2026-11-07/primer.md. The owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## Selection paint (plan B7.4), 2026-11-14
+
+- Fill and band read `bg-component` / `bg-component-active` in both modes, so a placeholder follows Layers and the grey tint (light was a fixed 10% / 16% grey, #f4 / #ee on white; now #f7 there).

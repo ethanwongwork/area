@@ -92,15 +92,15 @@ sides, then 8px-inset list rows (menu-like). shadcn's content is a grid with 16p
 |---|---|---|---|
 | surface · shadow | **`--area-shadow-float`**, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (8% key at the default 8, 3% until 2026-11-05), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts), as Menu | Notion (same lift on popovers and menus); ChatGPT 8/16; shadcn 4/6 + 2/4 | Was `shadow-2` (1–2px). One lift for every floating surface, a Surface axis role since audit S10 |
 | surface · preferred width | **320** | shadcn 320; ChatGPT 254; Notion 456 | Was 240. Still capped at the container |
-| sections · gap | **16** | Notion 16 (header to field); shadcn 16 | Was 12 |
+| sections · gap | **12**, the block gap `min(inset-surface-md, 12)`: never more than the inset (popup.css, plan B6.2) | A surface's blocks stand no further apart than its edge | 16 (`inset-surface-md`, 14 at type 13 and 18 at Comfortable) until 2026-11-14 |
 | surface · inset | 12 (border included, unchanged) | Between shadcn 10 and Notion 16 | — |
 | surface · compact | inset **12** (border included, held); corner **12**, concentric with the close (box 8 in at radius 4), capped at 2 × container and at the default container radius; section gap 12 (`inset-surface-md`) | Cursor upsell popover 16 inset, corner 12 (`compact/cursor-app--popover--open--light`); Figma Edit text style 16 sides, 12 top, corner 13 (`compact/figma--sectioned-popover--open--light`); Figma color picker 16 | Owner 2026-10-02 (cursor-desktop.md): no dense popover insets 8. Holds the default rather than exceed it; the corner follows so the close stays concentric (was 8) |
 | surface · radius, border | 12, 1px decorative (unchanged) | Notion 12; all use a 1px ring | — |
 | header · title group | title and description in the header, **6** apart (title baseline to description cap **15**) | shadcn: title baseline to description cap 15 (h4 leading-none + `space-y-2`) | Owner (pass 2): the gap was too large. The description sat in the body, 29 below the title's baseline. Area Dialog measures 8 with its larger title; see Open questions |
-| header · close | box **6** from the top and **6** from the side (half the 12 inset); icon on the 12 inset both ways; 6px radius concentric with the 12px corner; title centred on it (centres 20 and 20) | shadcn 8/8 and Primer 8/8, half their 16 insets; `inset.css`: glyph edges on the shell inset | Owner (pass 3): the close should sit evenly in the corner. Pass 2 put it 3 from the top and 6 from the side, because the header was cap-trimmed and the close hung off the title's line |
+| header · close | a corner control (inset.css, plan B4.2): box **7** from the top and **7** from the side, its icon on the 12 inset both ways, its corner the popover's less that, **9** in the 16; title centred on it | shadcn 8/8 and Primer 8/8, half their 16 insets; `inset.css`: glyph edges on the shell inset | Owner (pass 3): the close should sit evenly in the corner. Pass 2 put it 3 from the top and 6 from the side, because the header was cap-trimmed and the close hung off the title's line |
 | header · top inset | with a close: title centred on the close (cap **15**; header top = (icon − title leading) / 2). Without one: title cap **12** from the top | References centre the title on the close (cap 18 and 20 against a 16 inset). Without a close, nothing sets the row, so the cap sits on the inset like the sides | Was 21 (pass 1) and 12 with a close (pass 2). Browsers without `text-box` support keep 17 when there is no close |
 | title · weight | **strong (500)** | shadcn 500, Primer 600; the title is the description's size, so weight is the only cue besides color | Was regular under the typography rule (titles at 400, carried by size or color). See Open questions for peers |
-| spacing ladder | 12 inset · 16 between header, body and footer · 8 between items in a section · 6 inside the title group | shadcn (16 sections, 8 fields); Notion (16) | Pass 1 mixed 16 above a description with 8 below it |
+| spacing ladder | 12 inset · 12 between header, body and footer · 8 between items in a section · 6 inside the title group | shadcn (16 sections, 8 fields); Notion (16) | Pass 1 mixed 16 above a description with 8 below it |
 | anchored · offset | **8** from the trigger (`POPOVER_OFFSET`), plus the arrow's reach with `arrow`; menus and tooltips sit 4 | Audit S16 (owner 2026-09-30); shadcn 4; Notion's menus 4 | Was 4, the menu gap |
 | anchored · placement | `side` and `align` via the shared JS engine (`useAnchoredPosition`), flipping and shifting inside an 8 viewport padding; writes `data-side` and `transform-origin` | Radix/shadcn `side`; audit S16 | No CSS-only anchored path any more (was CSS anchor positioning, centred in the viewport without support) |
 
@@ -114,6 +114,8 @@ from inside, focus returns to the trigger. Verified in the gallery with a real p
 opens below the trigger (4px at the time; 8 since audit S16), focus on the first field, Escape closes and refocuses the trigger, outside
 click closes. Without `trigger`, Popover stays a static surface (BadgeGroup's overflow uses
 it that way).
+
+**State hooks (manifest).** `open` is the native popover's `:popover-open` (`stateAttributes: { open: ":popover-open" }`, `surface.css`'s overlay entry), which no adapter writes: the browser sets it.
 
 ## Variant coverage (pass 3 check)
 
@@ -210,6 +212,7 @@ Open questions: none new.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the shared anchored close now one step faster (fast, was base); rests at `scale: none`; arrow centre and header cap offset rounded to whole pixels (`surface.css`).
 - 2026-10-12 · type size and density split (owner) → surface corners (`radius-container`) cap at 1.5 × `inset-surface-md`, so a compact popover stays at 18 when the radius setting asks for 20 or 24 (`emit/base.ts`). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the popover lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Then the arrow too: at 0 it takes `shadow-edge-filter`, the same edge as a drop-shadow, clipped so the shadow of its 1px shell overlap stays out of the shell (its shoulders join as the 1px frame's do). Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` on `:popover-open` (`stateAttributes`); no paint changed.
 
 ## Review note, 2026-10-22 (round 68)
 
@@ -240,3 +243,23 @@ Open questions: none new.
   rule for every surface title (Card, Dialog, Confirm dialog, Drawer, Popover, Alert, Toast, Approval, Empty state sm).
   DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
 - The owner approved the 4 step ("4 is right", 2026-11-06).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the surface enters and leaves on `duration-fast` (140 at Speed 210; it entered on `base`, 210), the enter easing out with the fade on `ease-effects`, the exit accelerating away on `ease-exit` (A5.1); opened from a key it appears at its size and only fades on `fade-fast` (`data-opened-by="keyboard"`, written by overlay.ts; A5.2).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+- 2026-11-14 · system evaluation B6.1, B6.2, B6.5 · the frame and the shadow stack are the one floating surface's (popup.css: edge, `bg-float`, a material's layers, `shadow-edge`, the float role), so Hover card, Date picker's and Filter bar's popovers follow; the blocks stand the block gap apart, `min(inset-surface-md, 12)`: 12 at every density (14 at the default type 13, 18 at Comfortable before); footer text Buttons are at least 2.25 × their height, and the teaching step's secondary is soft neutral (was outline).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: the header's close is a corner control (inset.css): 7 from the outer top and end at the defaults, its glyph on the 12 inset, its corner 16 − 7 = 9 (it kept the small control's 6).
+- 2026-11-14 · system evaluation B6.5 · beside a close the title is trimmed to its cap and its cap's centre sits on the close's centre (half the header's line less half the cap, rounded): cap top 15 at type 13, 16 at 12 and 16, against the 12 inset; the close keeps the corner-control place (equidistant). It was the untrimmed line centred on the close, the cap up to 0.7 off.
+- 2026-11-14 · system evaluation B6.5 (final) · the title is trimmed to its cap, so its cap sits on the 12 inset exactly with or without a close (the rounded pull had left it 0.84 low at type 13); a close beside a title centres on the cap ((1cap − H) / 2: 4 from the top at type 13 Default, 2 at type 16), its glyph on the side column (7 in), its corner from the nearer distance (16 − 4 = 12); a close with no title stays equidistant (7 in, 9). The interim title-on-close placement is reversed.

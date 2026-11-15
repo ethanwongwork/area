@@ -130,3 +130,14 @@ and a cropped image is the app's to make. A video will be Area's own player insi
 - 2026-10-18 · owner: "can you round the corners of images to something by default" → by size: a standalone image takes the container corner (12 at the default Radius; was the small corner, 6), a thumbnail keeps 6 → `figure.css`. Same rule in Asset card and the Brand viewer (asset-card.md).
 - 2026-10-19 · design-system audit → the caption reads `ui-size` / `ui-leading`, as its comment and its peers say (the
   same values as `text-base`; naming only, no visual change).
+
+### 2026-11-13 · Frame recipe (system plan, Phase 2, B1.1)
+
+- The corner reads the frame recipe's block corner (`surface.css`), `radius-container`: no visual change.
+- The caption's gap is the item name's, 8 (no visual change).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The caption's gap under the picture is the frame recipe's name gap, now `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

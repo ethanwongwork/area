@@ -57,8 +57,8 @@
       forced-color-adjust: none;
     }
     /* A chosen card keeps a chosen edge, not CanvasText like every other card (audit C-28). */
-    .area-checkbox--card:has(> .area-checkbox__control:checked),
-    .area-radio--card:has(> .area-radio__control:checked) { border-color: Highlight; }
+    .area-checkbox--surface:has(> .area-checkbox__control:checked),
+    .area-radio--surface:has(> .area-radio__control:checked) { border-color: Highlight; }
     .area-checkbox__control, .area-radio__control {
       forced-color-adjust: none;
       border-color: CanvasText;
@@ -111,15 +111,58 @@
     .area-nav:not(.area-nav--marker) .area-nav__item[aria-current]:not([aria-current="false"]),
     .area-tree-view [role="treeitem"]:is([aria-selected="true"], [aria-current="page"]),
     .area-table tbody tr:is([data-selected], [aria-selected="true"]) td,
-    .area-menu__item[data-selected] {
+    .area-menu__item[data-selected],
+    .area-select option:checked {
       forced-color-adjust: none;
       background-color: Highlight;
       color: HighlightText;
     }
+    .area-select option:checked::checkmark { background-color: HighlightText; }
     .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"])::before {
       forced-color-adjust: none;
       background-color: Highlight;
     }
     .area-property-list__indicator { background-color: Highlight; forced-color-adjust: none; }
+    /* Every field trigger restores the system focus colour, as the fields above (plan A6.4). */
+    .area-custom-select__trigger:focus-visible, .area-date-picker__trigger:focus-visible, .area-tag-picker__field:focus-within {
+      outline: var(--area-focus-width) solid Highlight;
+      outline-offset: var(--area-focus-offset);
+    }
+    /* Selected states drawn only as a fill or an inset shadow, which forced colours remove (plan A6.4): the system
+       selection pair on a row or cell, a Highlight edge on a container. */
+    .area-list-box--grid .area-list-box__item[aria-selected="true"],
+    .area-custom-select--grid .area-custom-select__option[aria-selected="true"]:not(:has(> .area-custom-select__preview)) {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+    .area-approval__option[data-selected], .area-approval__tile:has(> .area-approval__option[data-selected]) {
+      outline: var(--area-selected-width) solid Highlight;
+      outline-offset: calc(-1 * var(--area-selected-width));
+    }
+    .area-approval__tile > .area-approval__option[data-selected] { outline: none; }
+    .area-custom-select__option[aria-selected="true"] > .area-custom-select__preview::after,
+    .area-design-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]):not(:focus-visible) > .area-design-card__ground {
+      outline: var(--area-selected-width) solid Highlight;
+      outline-offset: calc(-1 * var(--area-selected-width));
+    }
+    /* Disabled is GrayText (plan B7.8): an opacity or a mixed ink reads as full text once forced colours repaint it.
+       A field's value, parts and edge; a Button's label and edge; a Menu row, a choice and a calendar day. Read-only
+       keeps the system text colour, so it stays readable. */
+    :is(.area-input, .area-number-field, .area-otp-field, .area-tag-picker__field)[data-disabled],
+    :is(.area-select, .area-textarea, .area-custom-select__trigger, .area-date-picker__trigger):disabled,
+    .area-otp-field[data-disabled] .area-otp-field__slot,
+    .area-button:is(:disabled, [data-disabled]) { color: GrayText; border-color: GrayText; }
+    :is(.area-input, .area-number-field, .area-otp-field, .area-tag-picker__field)[data-disabled] *,
+    :is(.area-custom-select__trigger, .area-date-picker__trigger):disabled *,
+    .area-button:is(:disabled, [data-disabled]) *,
+    .area-menu__item:is([data-disabled], [data-inactive]),
+    .area-menu__item:is([data-disabled], [data-inactive]) *,
+    :is(.area-checkbox, .area-radio)[data-disabled],
+    .area-switch[data-disabled],
+    .area-calendar__day:is(:disabled, [aria-disabled="true"]) { color: GrayText; }
+    :is(.area-input, .area-number-field, .area-tag-picker__field)[data-disabled] *::placeholder,
+    .area-textarea:disabled::placeholder { color: GrayText; }
+    :is(.area-checkbox, .area-radio)[data-disabled] > :is(.area-checkbox__control, .area-radio__control) { border-color: GrayText; }
   }
 }

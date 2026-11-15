@@ -49,8 +49,8 @@ test("it keeps the sentence's type and ink; soft draws the mark plate as a pill 
   assert.match(base, /border-radius:\s*var\(--area-radius-full\)/);
   const soft = ruleFor(".area-mention--soft");
   assert.match(soft, /--_mention-plate:\s*var\(--area-bg-mark\)/);
-  assert.match(soft, /--_mention-pad-block:\s*2px/);
-  assert.match(soft, /--_mention-pad-inline:\s*6px/);
+  assert.match(soft, /--_mention-pad-block:\s*var\(--_chip-pad-block\)/); // the inline chip: never taller than its line (plan B5.1)
+  assert.match(soft, /--_mention-pad-inline:\s*var\(--_chip-pad-inline\)/);
   assert.match(ruleFor(".area-mention--underline"), /--_mention-line:\s*currentColor/);
   // Link's focus ring on a link or a button mention.
   assert.match(ruleFor(".area-mention:is(a, button):focus-visible"), /outline:\s*var\(--area-focus-width\) solid var\(--area-focus-color\)/);

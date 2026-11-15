@@ -17,7 +17,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "count", name: "Count", manifest: "count", imports: "Count",
-    api: [["count / max / showZero", "nonnegative number, display cap (max+), zero visibility", "— / 99 / true"], ["label", "words a screen reader hears after the number (\"unread\")", "—"], ["variant", "plain | soft", "plain"], ["size", "sm (16) | md (20)", "md"], ["pill", "unset follows the theme's pills list (a pill by default); true / false force it", "unset"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryCount", note: "A number beside its owner's label: a nav row, a tab, a filter, a group heading. Plain by default, as Notion's board counts."},
       {id: "rounded", title: "Rounded", demo: "GalleryCountRounded", note: "pill={false}: the corner follows the radius setting instead of a pill, square at Sharp."},
@@ -29,7 +28,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "step", name: "Step", manifest: "step", imports: "Step, StepGroup, Reasoning",
-    api: [["Step: verb", "what it did, as the line says it (the live form while running)", "—"], ["detail / meta / icon", "what it acted on; a duration or +N −N; a 16 glyph", "—"], ["status", "running (shimmer) | done | failed (danger ink)", "done"], ["children", "what went in and came out; the line opens to show it", "—"], ["open / defaultOpen / onOpenChange", "controlled or uncontrolled open state", "— / false / —"], ["StepGroup: verb, detail, children", "a run of Steps folded under one line", "—"], ["Reasoning: running, seconds, children", "\"Thinking\" while running, then \"Thought for Ns\", opening to the summary", "—"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryStep", note: "One line: the verb, then what it acted on, muted and cut short (Cursor's tool line, Codex's activity label)."},
       {id: "running", title: "Running", demo: "GalleryStepRunning", note: "The verb shimmers while it runs; it stops at Motion 0 and under reduced motion."},
@@ -40,7 +38,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "edit-summary", name: "Edit summary", manifest: "editSummary", imports: "EditSummary, EditSummaryChange, EditSummaryFile, Diff",
-    api: [["EditSummary: title, added, removed", "the count and the turn's +N −N (leave both out for design changes)", "\"Edited files\""], ["code / codeLabel", "the files folded under a Show code row; the counts move onto it", "— / \"Show code\""], ["codeOpen / defaultCodeOpen / onCodeOpenChange", "whether the files show", "— / false / —"], ["EditSummaryChange: name, property, from, to, status", "one change in the design's words", "status pending"], ["onKeepAll / onUndoAll", "Keep all and Undo all, while any file is pending", "—"], ["EditSummaryFile: name, added, removed", "one changed file", "—"], ["status", "pending | kept | undone (state: deprecated alias)", "pending"], ["onKeep / onUndo / diff", "the file's actions and its Diff, shown when its name is pressed", "—"], ["open / defaultOpen / onOpenChange", "whether the file's diff shows", "— / false / —"], ["Diff: hunks, aria-label", "lines (added, removed, context, with old / new numbers) and folds between hunks; aria-label names it (label: deprecated alias)", "\"Changes\""]],
+    api: [["Diff: aria-label", "names the diff (label: deprecated alias)", "\"Changes\""]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryEditSummary", note: "What changed in a turn: files with +N −N, Undo and Keep for each and for all (Cursor's review, Codex's patch summary)."},
       {id: "open", title: "Open", demo: "GalleryEditSummaryOpen", note: "A file's name opens its diff: Code block sm's type and its added / removed paint with a + / − marker in the vivid inks, folds between hunks."},
@@ -50,7 +48,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "approval", name: "Approval", manifest: "approval", imports: "Approval",
-    api: [["title / description", "what it wants to do, and why", "—"], ["items / onChoose", "numbered choices; 1–9 choose, arrows move (options: deprecated alias)", "—"], ["children", "the thing itself: a command, a Diff", "—"], ["onInstead / insteadPlaceholder", "a field to say what to do instead; Enter sends", "— / \"Tell it what to do instead\""], ["onDismiss", "Escape; the last item by default", "—"], ["autoFocus", "focus the first choice when it appears (where it takes the composer's place)", "false"], ["items[].description", "what a choice comes to, a line under it", "—"], ["value", "the answer already given: its row chosen, with a check", "—"], ["onActiveChange", "the choice under the pointer or focus (a preview)", "—"], ["actions", "the head's end: a compact Pagination among several questions, a close", "—"], ["footer / dismissLabel", "the hint row's end (Back, Skip, Continue) / what Esc does in the hint", "— / \"cancel\""]],
+    api: [["items[].description", "what a choice comes to, a line under it", "—"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryApproval", note: "It takes the composer's place, in the Composer's shell; choices are Menu rows with a number (Claude Code's prompt, Codex's approvals)."},
       {id: "detail", title: "Detail", demo: "GalleryApprovalDetail"},
@@ -65,7 +63,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "plan", name: "Plan", manifest: "plan", imports: "Plan",
-    api: [["items", "{ id, label, status: done | current | pending | cancelled, progress?: 0–1, meta?, detail?, items? }", "—"], ["title", "the head's name", "\"Plan\""], ["count", "the head's count", "\"N of M\""], ["bar", "single | segmented: a bar under the head", "—"], ["rail", "marks joined by a line, a timeline", "false"], ["icon", "a 16 glyph before the title", "—"], ["open / defaultOpen / onOpenChange", "folds to its head", "— / true / —"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryPlan", note: "Done, now, next and a count, above the composer (Cursor's todo tray, Codex's plan update)."},
       {id: "folded", title: "Folded", demo: "GalleryPlanFolded"},
@@ -77,7 +74,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "turn-notice", name: "Turn notice", manifest: "turnNotice", imports: "TurnNotice",
-    api: [["status", "stopped | error | compacted (kind: deprecated alias)", "stopped"], ["action", "a Button after the text (Retry)", "—"], ["children", "what happened", "—"]],
     examples: [
       {id: "stopped", title: "Stopped", demo: "GalleryTurnNotice", note: "How a turn ended, on one quiet line (Codex, Cursor, Claude Code)."},
       {id: "error", title: "Error", demo: "GalleryTurnNoticeError"},
@@ -86,7 +82,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "attachment", name: "Attachment", manifest: "attachment", imports: "Attachment",
-    api: [["kind", "image | file | quote | video", "image"], ["src / name", "the image (a video's poster), and the file's name (names the tile, its remove, its retry and its upload)", "—"], ["status", "complete | uploading | error (ready: deprecated alias of complete)", "complete"], ["progress", "0–100 while uploading; leave out while unknown", "—"], ["error", "why it failed", "\"<name> could not be uploaded\""], ["onRetry", "shows Retry on a failed tile", "—"], ["badge", "a file's type, a video's length, a quote's source (null: none)", "a file's extension"], ["icon", "a file's icon beside its name", "a document"], ["text", "a quote's words, cut to 240 characters", "—"], ["onDismiss / dismissLabel", "shows the remove control and names it (onRemove: deprecated alias)", "— / \"Remove <name>\""]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryAttachment", note: "An image in the composer before it is sent (Cursor's 64 tile; Codex's upload ring)."},
       {id: "file", title: "File", demo: "GalleryAttachmentFile", note: "A file sent with the message: its icon, its name and its type, on a tile the images' height and 160 wide."},
@@ -99,7 +94,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "composer-menu", name: "Composer menu", manifest: "composerMenu", imports: "ComposerMenu",
-    api: [["aria-label", "names the listbox (label: deprecated alias)", "—"], ["items", "{ label?, items: { id, label, icon?, path? }[] }[] (groups: deprecated alias)", "—"], ["activeId / onActiveChange", "the highlighted row; the field names it with aria-activedescendant (`${id}-${item.id}`)", "—"], ["onPick", "a row was chosen", "—"], ["emptyLabel", "shown when nothing matches", "\"No matches\""]],
+    api: [["aria-label", "names the listbox (label: deprecated alias)", "—"]],
     examples: [
       {id: "default", title: "Files", demo: "GalleryComposerMenu", note: "Opens above the composer at its width after @ or / (all three products); the field keeps focus."},
       {id: "commands", title: "Commands", demo: "GalleryComposerMenuCommands"},
@@ -108,7 +103,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "queue", name: "Queue", manifest: "queue", imports: "Queue",
-    api: [["items", "{ id, text, status?: queued | sending | failed }", "—"], ["onSendNow / onDismiss / onRetry", "row actions (onRemove: deprecated alias)", "—"], ["title", "the head", "\"<n> queued\""], ["open / defaultOpen / onOpenChange", "folds to its head", "— / true / —"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryQueue", note: "Messages sent while the agent works wait here (Cursor's queue tray, Codex's rail)."},
       {id: "sending", title: "Sending", demo: "GalleryQueueSending"},
@@ -118,14 +112,12 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "timestamp", name: "Timestamp", manifest: "timestamp", imports: "Timestamp, formatTimestamp",
-    api: [["dateTime", "the moment (ISO string or Date)", "—"], ["children", "as read; formatTimestamp(date) words it as Codex does", "—"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryTimestamp", note: "Centred between turns after a pause, not on every message (Codex)."},
     ],
   },
   {
     slug: "accordion", name: "Accordion", manifest: "accordionItem", imports: "Accordion, AccordionItem",
-    api: [["AccordionItem: heading", "the title the reader clicks; names the trigger", "—"], ["open / defaultOpen / onOpenChange", "controlled or uncontrolled open state", "— / false / —"], ["variant", "plain (leading chevron, Notion) | divided (trailing chevron and a rule, shadcn)", "plain"], ["size", "sm (14/20) | md (16/24)", "md"], ["headingLevel", "2–6: wraps the trigger in a heading", "— (3 in a group)"], ["disabled", "boolean", "false"], ["value", "this item's key in its Accordion", "generated"], ["Accordion: multiple", "let any number stay open; otherwise opening one closes the others", "false"], ["Accordion: value / defaultValue / onValueChange", "open items by value", "— / [] / —"], ["Accordion: variant / size / headingLevel", "passed to every item", "— / — / 3"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryAccordion", note: "Notion's toggle: a leading chevron the height of the title's line, a hover plate on the chevron, and the content on the title's column. The whole title is the button."},
       {id: "closed", title: "Closed", demo: "GalleryAccordionClosed", note: "Closed content is hidden until found: find-in-page reveals it and opens the item."},
@@ -138,7 +130,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "indicator", name: "Indicator", manifest: "indicator", imports: "Indicator, IndicatorAnchor",
-    api: [["status / size / outOfOffice", "availability variant; sm12 / md16 / lg20 (xs dropped, audit C-19); optional out-of-office glyph", "— / md / false"], ["count / max / showZero", "nonnegative count, display cap, zero visibility", "— / 99 / true"], ["tone", "neutral | info | success | warning | caution | danger | discovery", "danger"], ["processing / bordered / invisible", "pulse / surface cutout / render nothing (withBorder and hidden are deprecated aliases)", "false"], ["IndicatorAnchor: indicator", "decorative ReactNode; name the owner", "—"], ["placement / overlap / offset / invisible", "four logical corners, shape, CSS offset and visibility", "top-end / rectangular / — / false"], ["inset", "inset rectangular count and presence attachments by 4px (was compact)", "false"]],
     examples: [
       {id: "presence", title: "Presence", demo: "GalleryBadgePresenceAvailable", note: "Presence is the status variant of Indicator. Area-drawn glyphs: the ring and mark share the 1.125px icon line weight at every size, following Fluent’s status mapping. Presence remains a compatibility export."},
       {id: "activity", title: "Activity dots", demo: "GalleryBadgeActivity", note: "A 6px dot, matching the Badge dot and Untitled UI; Figma’s unread dot measures 5px. The pulse keeps Mantine’s structure and respects reduced motion."},
@@ -155,7 +146,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "badge-group", name: "Badge group", manifest: "badgeGroup", imports: "BadgeGroup, Badge",
-    api: [["visibleCount", 'number | "auto"; omit to wrap all', "all"], ["overflow", '"inline" allows wrapping; "overlay" keeps one line', '"inline"'], ["overflowLabel", "accessible disclosure name", '"More statuses"']],
     examples: [
       { id: "group-wrap", title: "Group Wrap", demo: "BadgeGroupWrap", note: "Wrap a collection of short statuses." },
       { id: "group-inline", title: "Group Inline", demo: "BadgeGroupInline", note: "Keep two statuses visible, allow the row to wrap, and open hidden statuses in a popover." },
@@ -166,7 +156,6 @@ export const COMPONENT_PAGES = [
 
   {
     slug: "color-picker", name: "Color picker", exportName: "ColorPicker", manifest: "colorPicker",
-    api: [["variant", '"surface" | "plain" (plain drops the floating plate inside a Popover or Panel)', '"surface"'], ["value / defaultValue", "hex color (#RRGGBB or #RRGGBBAA)", '"#8D4DF3"'], ["onValueChange", "(hex) => void", "—"], ["alpha", "boolean: opacity track and percentage", "true"], ["model / defaultModel / onModelChange", '"hex" | "rgb" | "css" | "hsl" | "hsb" | "oklch"', '"hex"'], ["eyedropper", "boolean; shown where the EyeDropper API exists", "true"], ["header", "ReactNode row above the editor", "—"], ["swatches / swatchesLabel / onAddSwatch", "ColorSwatchOption[], string, (hex) => void", '[], "Saved colors"'], ["label / name / disabled", "group name (fallback when no aria-label; an aria-label names the group and every inner control) and form state", '"Color" / — / false'], ["gamut", "{ lightness: [min, max], chroma, reach?: (l, h) => number }: an exact OKLCH picker, lightness × chroma at the hue, drawn only where reach allows (sRGB's by default)", "—"], ["oklch / defaultOklch / onOklchChange", "{ l, c, h } with gamut: the exact value (onValueChange still gets the nearest hex)", "—"]],
     examples: [
       {id: "default", title: "Fill", note: "Figma's fill picker: drag the area or focus it and use the arrows (Left/Right saturation, Up/Down brightness, Shift for 10). Hue, opacity and the value row stay synchronized.", demo: "GalleryColorPicker"},
       {id: "swatches", title: "Saved colors", note: "Opt-in: swatches lists saved colors under the editor, and onAddSwatch adds the save button. Swatches use Area family 500 values; user colors do not change with the theme.", demo: "GalleryColorPickerSwatches"},
@@ -182,7 +171,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "color-swatch-picker", name: "Color swatch picker", exportName: "ColorSwatchPicker", manifest: "colorSwatchPicker",
     imports: "ColorSwatchPicker",
-    api: [["label", "string (accessible group name)", "—"], ["items", "{ value, label, disabled? }[] (options is a deprecated alias)", "—"], ["value / defaultValue", "CSS color string (with neither, nothing is chosen; a form reset returns to defaultValue or nothing)", "—"], ["onValueChange", "(color, event) => void", "—"], ["layout", '"grid" | "row" | "palette"', '"grid"'], ["columns", "positive integer (grid)", "6"], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled", "native radio form props (disabled also sets aria-disabled on the group)", "—"]],
     examples: [
       { id: "default", title: "Palette", note: "A labeled, single-color choice. Left and Right move through colors; Up and Down move by column. Home and End reach the first and last enabled colors.", demo: "GalleryColorSwatchPicker" },
       { id: "row", title: "Transparency", note: "A compact row can include alpha values; the checkerboard stays visible through each swatch.", demo: "GalleryColorSwatchPickerRow" },
@@ -193,7 +181,7 @@ export const COMPONENT_PAGES = [
   {
     slug: "color-field", name: "Color field", exportName: "ColorField", manifest: "colorField",
     imports: "ColorField, Field",
-    api: [["value / defaultValue", "hex color string", '"#8D4DF3"'], ["onValueChange", "(canonicalHex, event) => void", "—"], ["variant", '"outline" | "soft"', '"outline"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled / readOnly", "native input props", "—"], ["fullWidth", "boolean", "false"], ["alpha", "split opacity percentage", "false"], ["opacityLabel", "accessible opacity name", '"Opacity"']],
+    api: [["name / required / disabled / readOnly", "native input props", "—"]],
     examples: [
       { id: "default", title: "Default", note: "Type 3, 4, 6 or 8 hex digits. Enter or blur commits a canonical value; Escape restores the last value. Invalid drafts stay visible until commit, then revert.", demo: "GalleryColorField" },
       { id: "split", title: "Figma-style split", demo: "GalleryColorFieldSplit" },
@@ -206,7 +194,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "color-swatch", name: "Color swatch", exportName: "ColorSwatch", manifest: "colorSwatch",
-    api: [["color", "CSS color string", "—"], ["size", '"sm" | "md" | "lg"', '"md"'], ["aria-label", "optional accessible name", "Color + value"]],
+    api: [["aria-label", "optional accessible name", "Color + value"]],
     examples: [
       { id: "default", title: "Solid and transparent", note: "A passive preview; translucent colors reveal a checkerboard. Give it a contextual accessible name where needed.", demo: "GalleryColorSwatch" },
       { id: "sizes", title: "Sizes", demo: "GalleryColorSwatchSizes" },
@@ -214,7 +202,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "calendar", name: "Calendar", exportName: "Calendar", manifest: "calendar",
-    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, false"], ["variant", '"surface" | "plain" (plain inside a Popover or Panel that draws the surface)', '"surface"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["caption", '"label" | "menus" (the month and the year as two menus; the arrows stay)', '"label"'], ["labels", "names for the arrows and the caption menus: previousMonth, nextMonth, previousWeek, nextWeek, month, year", "English"], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
     examples: [
       { id: "default", title: "Date", note: "Arrow keys move by day and week, Home and End to the week's edges, Page Up and Page Down by month (with Shift, by year). Enter or Space selects.", demo: "GalleryCalendar" },
       { id: "range", title: "Range", note: "The first choice anchors the range; hovering or moving focus previews it until the second choice. Escape cancels.", demo: "GalleryCalendarRange" },
@@ -234,7 +221,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "alignment-picker", name: "Alignment picker", exportName: "AlignmentPicker", manifest: "alignmentPicker",
-    api: [["label", "string (accessible group name)", "—"], ["(layout)", "fills its parent's width, and its height when the parent sets one; otherwise a default proportion. No sizes: marks follow the UI scale", "—"], ["value / defaultValue", "nine physical positions", '"center"'], ["onValueChange", "(position, event) => void", "—"], ["variant", '"soft" | "plain" ("surface" is a deprecated alias of soft)', '"soft"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["name / required / disabled", "native radio form props", "—"]],
+    api: [["(layout)", "fills its parent's width, and its height when the parent sets one; otherwise a default proportion. No sizes: marks follow the UI scale", "—"]],
     examples: [
       { id: "default", title: "Default", note: "Choose one of nine physical points. Arrow keys move within a row or column and wrap at its edge; Home and End reach the first and last point.", demo: "GalleryAlignmentPickerDefault" },
       { id: "hover", title: "Hover preview", note: "The cell under the pointer shows the glyph it would set, in the muted ink (Figma's alignment grid).", demo: "GalleryAlignmentPickerHover" },
@@ -248,7 +235,7 @@ export const COMPONENT_PAGES = [
   {
     slug: "toolbar", name: "Toolbar", manifest: "toolbar",
     imports: "Toolbar, ToolbarGroup, ToolbarItem, ToolbarSeparator, ToolbarOverflow, Button, MenuItem",
-    api: [["variant", '"plain" | "surface"', '"plain"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["orientation", '"horizontal" | "vertical"', '"horizontal"'], ["fullWidth", "boolean", "false"], ["floating", "boolean: the hover action bar, over its parent's top-end corner, shown while the parent is hovered or holds focus; one to four actions, with size sm and variant surface", "false"], ["ToolbarItem", "one focusable child", "—"], ["ToolbarOverflow", "menuLabel (label deprecated), optional icon, MenuItem children (a ghost icon Button that opens a Menu)", '"More actions"'], ["Button selected", "a pressed toggle rises as a plate", "false"]],
+    api: [["ToolbarItem", "one focusable child", "—"], ["ToolbarOverflow", "menuLabel (label deprecated), optional icon, MenuItem children (a ghost icon Button that opens a Menu)", '"More actions"'], ["Button selected", "a pressed toggle rises as a plate", "false"]],
     examples: [
       { id: "default", title: "Tools", note: "Figma's toolbelt: tools 8 apart on a floating bar, the chosen tool on Button's selected fill, and a divider. Tab enters once; arrow keys and Home/End move among enabled commands without activating them.", demo: "GalleryToolbar" },
       { id: "formatting", title: "Text formatting", note: "Soft fields for font and size, pressed style toggles, and alignment as a track.", demo: "GalleryToolbarFormatting" },
@@ -264,7 +251,7 @@ export const COMPONENT_PAGES = [
   {
     slug: "breadcrumb", name: "Breadcrumb", manifest: "breadcrumb",
     imports: "Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis",
-    api: [["Breadcrumb", "nav props and ref", "aria-label: Breadcrumb"], ["Breadcrumb: nowrap", "one line; the current page is cut with an ellipsis first", "false"], ["BreadcrumbLink", "native anchor props and ref", "—"], ["BreadcrumbPage", "span props and ref", "aria-current: page"], ["BreadcrumbSeparator", "optional children", "simple chevron"], ["BreadcrumbEllipsis", "items ({ label, href }[]) open a Menu of the hidden pages; without them a decorative mark; aria-label", "More pages"]],
+    api: [["Breadcrumb", "nav props and ref", "aria-label: Breadcrumb"], ["BreadcrumbLink", "native anchor props and ref", "—"], ["BreadcrumbPage", "span props and ref", "aria-current: page"], ["BreadcrumbSeparator", "optional children", "simple chevron"], ["BreadcrumbEllipsis", "items ({ label, href }[]) open a Menu of the hidden pages; without them a decorative mark; aria-label", "More pages"]],
     examples: [
       { id: "default", title: "Default", note: "Use links for ancestors and a non-interactive current page. The chevron is decorative and reverses in RTL.", demo: "GalleryBreadcrumb" },
       { id: "collapsed", title: "Collapsed path", note: "Pass the omitted levels as items and the ellipsis becomes a button that opens a Menu of them; each row is a link. Without items it is a decorative mark.", demo: "GalleryBreadcrumbCollapsed" },
@@ -276,10 +263,6 @@ export const COMPONENT_PAGES = [
     slug: "file-upload", name: "File upload", exportName: "FileUpload", manifest: "fileUpload",
     imports: "FileUpload, FileUploadList, FileUploadItem",
     api: [
-      ["onFiles / onReject", "(files: File[]) => void / (rejections: { file, reason: \"type\" | \"size\" | \"count\" }[]) => void", "—"],
-      ["accept / multiple / maxSize", "as the file input / boolean / bytes", "—"],
-      ["hint / invalid / disabled / name", "ReactNode / boolean / boolean / string (a form submits the files)", "—"],
-      ["labels", "{ action, drag }", '"Click to upload", "or drag and drop"'],
       ["FileUploadItem", "name, size (bytes), status (uploading | complete | error), progress (0-100), error, onRemove, onRetry, icon, labels", "uploading"],
     ],
     examples: [
@@ -290,12 +273,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "meter", name: "Meter", exportName: "Meter", manifest: "meter",
     imports: "Meter",
-    api: [
-      ["value / min / max", "number (clamped to the range)", "— / 0 / 100"],
-      ["label / description", "ReactNode (names the meter) / ReactNode (a line under the bar)", "—"],
-      ["valueText", "ReactNode | null (end of the label's row; a string is announced)", "the percentage"],
-      ["tone / size", "\"neutral\" | \"warning\" | \"danger\" / \"sm\" | \"md\" | \"lg\" (Progress's bar)", "neutral / md"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "A measurement in a range, not a task in progress (that is Progress). The label names it; the row under it says what the number means.", demo: "GalleryMeter" },
       { id: "warning", title: "Near a limit", note: "tone=\"warning\" or \"danger\" when the value means trouble; say so in the text too, since color alone is not read.", demo: "GalleryMeterWarning" },
@@ -305,12 +282,8 @@ export const COMPONENT_PAGES = [
     slug: "search-field", name: "Search field", exportName: "SearchField", manifest: "searchField",
     imports: "SearchField",
     api: [
-      ["value / defaultValue / onValueChange", "string / string / (value) => void (typed or cleared)", "— / \"\" / —"],
-      ["onClear / onSubmit", "() => void (after clear or Escape) / (value) => void (Enter)", "—"],
-      ["shortcut", "string[] (Kbd keys shown while empty; also aria-keyshortcuts; the page binds them)", "—"],
-      ["clearLabel / placeholder", "string", "\"Clear search\" / \"Search\""],
-      ["leadingIcon", "ReactNode | null", "the search glyph"],
-      ["variant / size / loading / disabled / readOnly / fullWidth", "as Input", "outline / md"],
+      ["placeholder", "string", "\"Search\""],
+      ["disabled / readOnly", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", note: "An Input with the search glyph. Once there is text, the clear action ends the field; it stays out of the Tab order and keeps focus in the field, and Escape does the same from the keyboard.", demo: "GallerySearchFieldFilled" },
@@ -322,10 +295,8 @@ export const COMPONENT_PAGES = [
     slug: "password-field", name: "Password field", exportName: "PasswordField", manifest: "passwordField",
     imports: "PasswordField",
     api: [
-      ["visible / defaultVisible / onVisibleChange", "boolean / boolean / (visible) => void (also when a form submit hides it)", "— / false / —"],
-      ["showLabel / hideLabel", "string: the reveal action's name in each state", "\"Show password\" / \"Hide password\""],
       ["autoComplete", "\"current-password\" | \"new-password\" | …", "\"current-password\""],
-      ["variant / size / disabled / readOnly / invalid / fullWidth", "as Input", "outline / md"],
+      ["disabled / readOnly", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", note: "An Input whose reveal action shows the password as text. It names what it does (Show password, then Hide password), draws the eye for show and the closed eye for hide, stays in the Tab order and keeps the caret in the field.", demo: "GalleryPasswordFieldFilled" },
@@ -337,13 +308,7 @@ export const COMPONENT_PAGES = [
     slug: "otp-field", name: "OTP field", exportName: "OTPField", manifest: "otpField",
     imports: "OTPField",
     api: [
-      ["length", "number of characters", "6"],
-      ["value / defaultValue / onValueChange", "string / string / (value) => void", "— / \"\" / —"],
-      ["onComplete", "(value) => void, once every slot is filled", "—"],
-      ["groups", "number[]: slots per group, a dash between them ([3, 3])", "one group"],
-      ["characters", "\"digits\" | \"alphanumeric\"", "\"digits\""],
-      ["mask", "boolean: dots in place of the characters", "false"],
-      ["variant / size / invalid / disabled / readOnly", "as Input", "outline / md"],
+      ["disabled / readOnly", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", note: "One real input lies over the slots, so autofill from a text message or a password manager, paste, Backspace, arrows and undo all work, and the code is one control with one name and one Tab stop.", demo: "GalleryOTPFieldPartial" },
@@ -354,15 +319,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "time-field", name: "Time field", exportName: "TimeField", manifest: "timeField",
     imports: "TimeField",
-    api: [
-      ["value / defaultValue / onValueChange", "\"HH:MM\" or \"HH:MM:SS\", 24-hour; null while incomplete", "— / null / —"],
-      ["hourCycle", "12 | 24", "the locale's"],
-      ["granularity", "\"minute\" | \"second\"", "\"minute\""],
-      ["step", "minutes between the times in the list; no list without it", "—"],
-      ["icon", "ReactNode | true (the clock)", "—"],
-      ["name", "submits the 24-hour value", "—"],
-      ["variant / size / disabled / readOnly / invalid", "as Input", "outline / md"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Each segment is a spin button: type the digits (it moves on by itself), or use Up and Down, Page Up and Down, Home and End; Left and Right move between segments; A or P sets the period.", demo: "GalleryTimeFieldFilled" },
       { id: "list", title: "List of times", note: "step adds a chevron that opens the times step minutes apart, the current one checked and in view, as ChatGPT schedules a task.", demo: "GalleryTimeFieldList" },
@@ -372,14 +328,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "stepper", name: "Stepper", exportName: "Stepper", manifest: "stepper",
     imports: "Stepper, StepperStep",
-    api: [
-      ["current", "index of the current step, from 0; steps before it are done", "—"],
-      ["orientation", "\"horizontal\" | \"vertical\"", "horizontal"],
-      ["onStepSelect / nonLinear", "(index) => void makes done steps buttons; nonLinear makes every other step one", "— / false"],
-      ["statusLabels", "the words read after each title, by status", "completed / current step / not started / has a problem"],
-      ["StepperStep title / description / status / disabled", "the step; status \"invalid\" marks a problem", "—"],
-      ["StepperStep children", "what the open step holds (its sub-steps, a list), under its title with the line beside it", "—"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "An ordered list with the current step marked aria-current=\"step\". Done steps show a check; the line has one paint in every state.", demo: "GalleryStepper" },
       { id: "vertical", title: "Vertical", note: "Timeline's column: the marker, the line through its centre and the title beside it.", demo: "GalleryStepperVertical" },
@@ -391,15 +339,10 @@ export const COMPONENT_PAGES = [
     slug: "board", name: "Board", exportName: "Board", manifest: "boardColumn",
     imports: "Board, BoardColumn, BoardCard",
     api: [
-      ["BoardColumn.title", "ReactNode (the group's name, plain text)", "—"],
-      ["BoardColumn.color", "\"neutral\" | \"gray\" | \"brown\" | \"orange\" | \"yellow\" | \"green\" | \"blue\" | \"purple\" | \"pink\" | \"red\" (tint, count, add row, card edge)", "neutral"],
-      ["BoardColumn.count / actions", "number (a Badge) / ReactNode (buttons at the header's end)", "—"],
-      ["BoardColumn.onAdd / addLabel / footer", "(event) => void (shows the Add new row) / ReactNode / ReactNode (a custom row instead)", "— / \"Add new\" / —"],
-      ["BoardCard.title / href and anchor props", "ReactNode; the link covers the card", "—"],
-      ["BoardCard.icon / children / actions", "ReactNode (page icon) / properties under the title / controls on hover or focus", "—"],
+      ["BoardCard: href and anchor props", "the link covers the card", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Columns 12 apart, each a header (the name, a count Badge, buttons) over a tinted list of cards and an Add new row, in the column's color.", demo: "GalleryBoard" },
+      { id: "default", title: "Default", note: "Columns a row gap apart (12 at the default), each a header (the name, a count Badge, buttons) over a tinted list of cards and an Add new row, in the column's color.", demo: "GalleryBoard" },
       { id: "properties", title: "Card properties", note: "Children under the title: Tags, a date, the assignee.", demo: "GalleryBoardCardProperties" },
       { id: "actions", title: "Card actions", note: "actions show at the card's top end on hover or keyboard focus.", demo: "GalleryBoardCardActions" },
     ],
@@ -408,13 +351,7 @@ export const COMPONENT_PAGES = [
     slug: "zoom-control", name: "Zoom control", exportName: "ZoomControl", manifest: "zoomControl",
     imports: "ZoomControl, MenuItem",
     api: [
-      ["value / defaultValue / onValueChange", "number (a scale: 1 is 100%)", "— / 1 / —"],
-      ["min / max / step", "number (scales; in and out multiply and divide by step)", "0.02 / 256 / 2"],
-      ["presets", "number[] (rows \"Zoom to 50%\"; the current one checked)", "[0.5, 1, 2]"],
-      ["onZoomToFit", "() => void (shows the Zoom to fit row)", "—"],
-      ["shortcuts", "{ zoomIn, zoomOut, zoomToFit, presets: { [scale]: ReactNode } }", "—"],
-      ["children", "MenuItem rows after the zoom rows (view toggles)", "—"],
-      ["size / variant / tone / disabled and button props", "as Button", "sm / ghost / neutral"],
+      ["disabled and button props", "as Button", "—"],
     ],
     examples: [
       { id: "default", title: "Default", note: "Figma's zoom and view options: the percentage opens a Menu with a typed zoom (Enter applies it), Zoom in and out, Zoom to fit, and the preset zooms.", demo: "GalleryZoomControl" },
@@ -425,10 +362,6 @@ export const COMPONENT_PAGES = [
     slug: "citation", name: "Citation", exportName: "Citation", manifest: "citation",
     imports: "Citation, HoverCard",
     api: [
-      ["label", "string (the source's short name; cut at 15 characters)", "—"],
-      ["title", "string (the page's title, added to the accessible name)", "—"],
-      ["icon", "string (a favicon URL) | ReactNode (12px)", "—"],
-      ["more", "number (more sources, shown as +N)", "0"],
       ["href / target / rel and anchor props", "as a, opening in a new tab", "_blank / noopener noreferrer"],
     ],
     examples: [
@@ -439,12 +372,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "reference-list", name: "Reference list", exportName: "ReferenceList", manifest: "referenceList",
     imports: "ReferenceList, ReferenceListItem, Citation",
-    api: [
-      ["title", "ReactNode (\"Sources\")", "—"],
-      ["marker", "number | bullet", "number"],
-      ["ReferenceListItem source / title / href / description", "ReactNode / ReactNode / string / ReactNode", "—"],
-      ["ReferenceListItem id / backlinks / highlighted", "string / string[] (the footnotes' ids) / boolean", "— / [] / false"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "ChatGPT's sources: publisher, linked title and what it covers.", demo: "GalleryReferenceList" },
       { id: "footnotes", title: "With footnotes", note: "Numbered: a footnote links to its note's id; the note's links back list the footnotes' ids.", demo: "GalleryReferenceListWithFootnotes" },
@@ -453,13 +380,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "table-of-contents", name: "Table of contents", exportName: "TableOfContents", manifest: "tableOfContents",
     imports: "TableOfContents",
-    api: [
-      ["items", "{ id, label, children? }[] (the headings' ids)", "—"],
-      ["title / top", "ReactNode | false / { label, id }", "\"On this page\" / —"],
-      ["levels", "1 | 2", "2"],
-      ["offset", "number (a sticky header's height)", "0"],
-      ["value / defaultValue / onValueChange", "string (controlled) / string / (id) => void (current / onCurrentChange are deprecated aliases)", "follows the scroll"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Nav's marker rows: the section being read in the body ink with the rail.", demo: "GalleryTableOfContents" },
       { id: "scroll", title: "Follows the scroll", note: "Scroll the article and the section being read is marked.", demo: "GalleryTableOfContentsScroll" },
@@ -468,9 +388,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "figure", name: "Figure", exportName: "Figure", manifest: "figure",
     imports: "Figure",
-    api: [
-      ["caption", "ReactNode (optional; wraps to the media's width)", "—"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "The image and a muted caption under it.", demo: "GalleryFigure" },
     ],
@@ -478,7 +395,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "inline-list", name: "Inline list", exportName: "InlineList", manifest: "inlineList",
     imports: "InlineList",
-    api: [["separator", "dot | rule | none", "dot"]],
     examples: [
       { id: "default", title: "Default", note: "A byline: a muted middle dot between items.", demo: "GalleryInlineList" },
     ],
@@ -486,7 +402,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "abbreviation", name: "Abbreviation", exportName: "Abbreviation", manifest: "abbreviation",
     imports: "Abbreviation",
-    api: [["title", "string (what it stands for, shown in a Tooltip)", "—"]],
     examples: [
       { id: "default", title: "Default", note: "A dotted underline; the expansion shows on hover and on focus.", demo: "GalleryAbbreviation" },
     ],
@@ -503,9 +418,6 @@ export const COMPONENT_PAGES = [
     slug: "video-player", name: "Video player", exportName: "VideoPlayer", manifest: "videoPlayer",
     imports: "VideoPlayer, Figure",
     api: [
-      ["label", "string (the video's title, names the player)", "—"],
-      ["layout", "bar | floating | minimal", "bar"],
-      ["controls", "auto | always", "auto"],
       ["video props", "src, poster, preload, autoPlay, muted, loop…; children are <track> elements", "—"],
       ["keys", "Space / K play; ← → 5 s; J / L 10 s; ↑ ↓ volume; M mute; F full screen; C captions; I picture in picture; 0–9", "—"],
     ],
@@ -516,11 +428,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "link-groups", name: "Link groups", exportName: "LinkGroups", manifest: "linkGroups",
     imports: "LinkGroups, LinkGroup, Link",
-    api: [
-      ["title / level", "ReactNode (the surface title role) / 2–6", "— / 2"],
-      ["divided", "boolean (a rule above)", "false"],
-      ["LinkGroup label", "ReactNode (the group's heading); children are the links, one per row: Link ink=\"muted\" variant=\"standalone\"", "—"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Groups of related links in columns: a strong heading over muted links.", demo: "GalleryLinkGroups" },
     ],
@@ -529,12 +436,7 @@ export const COMPONENT_PAGES = [
     slug: "date-range-picker", name: "Date range picker", exportName: "DateRangePicker", manifest: "dateRangePicker",
     imports: "DateRangePicker",
     api: [
-      ["value / defaultValue / onValueChange", "{ start, end } (\"YYYY-MM-DD\") | null", "— / null / —"],
-      ["presets", "{ label, value: { start, end } }[] (rows above the month)", "—"],
-      ["visibleMonths", "1 | 2", "1"],
-      ["placeholder / icon / formatOptions", "ReactNode / ReactNode / Intl.DateTimeFormatOptions (short month)", "\"Pick dates\" / — / short"],
-      ["min / max / isDateUnavailable / today / locale / firstDayOfWeek", "as Calendar", "—"],
-      ["variant / size / fullWidth / invalid / disabled / clearable / name", "as Date picker; name submits <name>-start and <name>-end", "outline / md"],
+      ["disabled", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", note: "Date picker's field showing \"Oct 4 – 10, 2026\". Its panel is a range Calendar: pick the first day, then the last; the band follows the pointer. A finished range sets the value and closes.", demo: "GalleryDateRangePicker" },
@@ -545,16 +447,8 @@ export const COMPONENT_PAGES = [
   {
     slug: "shortcut-list", name: "Shortcut list", exportName: "ShortcutList", manifest: "shortcutList",
     imports: "ShortcutList, ShortcutListItem",
-    api: [
-      ["title / titleAs", "ReactNode (names the group) / \"h2\"…\"h6\" | \"p\"", "— / h3"],
-      ["divided", "boolean: a rule under each row but the last", "false"],
-      ["quiet", "boolean, deprecated and ignored: every key is a keycap", "false"],
-      ["ShortcutListItem.label", "ReactNode (what the shortcut does)", "—"],
-      ["ShortcutListItem.keys", "string[] (one chord) | string[][] (alternatives)", "—"],
-      ["ShortcutListItem.shortcut", "ReactNode (custom keys, such as a KbdGroup sequence)", "—"],
-    ],
     examples: [
-      { id: "default", title: "Default", note: "One row per command: what it does, then its keys at the end as Kbd keycaps. Several lists stack 32 apart.", demo: "GalleryShortcutList" },
+      { id: "default", title: "Default", note: "One row per command: what it does, then its keys at the end as Kbd keycaps. Several lists stack 32 apart at the default, closer at Compact, further at Comfortable.", demo: "GalleryShortcutList" },
       { id: "divided", title: "Divided", note: "A rule under each row but the last, in the lightest line, as ChatGPT's sheet. Off by default: the rows' height separates them.", demo: "GalleryShortcutListDivided" },
       { id: "dialog", title: "In a dialog", note: "A Keyboard shortcuts sheet, as ChatGPT's (cmd+/) and Figma's Help › Keyboard shortcuts.", demo: "GalleryShortcutListDialog" },
       { id: "alternates", title: "Alternatives and sequences", note: "keys as a list of chords for alternatives (read with \"or\"); shortcut for a KbdGroup pressed in sequence.", demo: "GalleryShortcutListAlternates" },
@@ -563,13 +457,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "box-model", name: "Box model", exportName: "BoxModel", manifest: "boxModel",
     imports: "BoxModel",
-    api: [
-      ["margin / border / padding", "a value for every side, [top, right, bottom, left], or { top, right, bottom, left }", "—"],
-      ["radius", "a value for every corner, or [top-left, top-right, bottom-right, bottom-left]", "—"],
-      ["width / height", "the content's size, shown in the content box", "—"],
-      ["caption / labels", "a note such as \"border-box\" / the border and padding labels", "— / Border, Padding"],
-      ["tone", "\"info\" (the measuring blue) | \"neutral\" (greyscale)", "info"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Figma Dev Mode's layer properties: margin on a well, the border box with its corner radii, the padding box, and the size in the content box, all on solid lines. One image to assistive technology, named by its values.", demo: "GalleryBoxModel" },
       { id: "sides", title: "Per side", note: "Values in CSS order: top, right, bottom, left.", demo: "GalleryBoxModelSides" },
@@ -578,13 +465,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "token-row", name: "Token row", exportName: "TokenRow", manifest: "tokenRow",
     imports: "TokenRow",
-    api: [
-      ["name", "the token's name", "—"],
-      ["value", "its resolved value, muted at the end", "—"],
-      ["swatch", "a CSS color: the token shows its swatch, as Code's swatch", "—"],
-      ["outline", "the token's edge without its fill", "false"],
-      ["copyable / copyText", "a button that copies copyText, else the value, else the name", "false / —"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Figma Dev Mode's Colors: the token's own plate (Code with its swatch) widened to the row, the name at its start and the value at its end.", demo: "GalleryTokenRow" },
       { id: "plain", title: "Other tokens", note: "A spacing, radius or number token is the plain token, without a swatch.", demo: "GalleryTokenRowPlain" },
@@ -596,9 +476,6 @@ export const COMPONENT_PAGES = [
     imports: "Titlebar",
     api: [
       ["children", "the bar's start: a panel toggle, tabs", "—"],
-      ["end", "ReactNode pushed to the end: search, toggles, the theme", "—"],
-      ["variant", '"ruled": a rule under the bar; "plain": no rule; "floating": a raised plate held off the window\'s edges', '"ruled"'],
-      ["windowControls", '"macos": room for the traffic lights (Electron hiddenInset, trafficLightPosition { x: 13, y: 12 })', "—"],
     ],
     examples: [
       { id: "default", title: "Default", note: "A window's top bar, the height of a Panel's bar with its rule, so the two line up at any type size and density. In a frameless window it is the drag region; its controls stay pressable.", demo: "GalleryTitlebar" },
@@ -610,11 +487,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "section-heading", name: "Section heading", exportName: "SectionHeading", manifest: "sectionHeading",
     imports: "SectionHeading",
-    api: [
-      ["title", "ReactNode at the strong weight; a count can follow it in the muted ink", "—"],
-      ["lede", "a muted line under the title", "—"],
-      ["level / titleId", "2–6 / the heading's id, for aria-labelledby", "2 / —"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "A titled group on a page: UI text at the strong weight, trimmed to its cap and baseline, so the space around it is the layout's.", demo: "GallerySectionHeading" },
       { id: "lede", title: "With a lede", note: "A muted line 8 under the title, at a readable measure.", demo: "GallerySectionHeadingLede" },
@@ -623,14 +495,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "page-header", name: "Page header", exportName: "PageHeader", manifest: "pageHeader",
     imports: "PageHeader, Button, Breadcrumb, Tabs",
-    api: [
-      ["title / description", "ReactNode (the page's name / one or two sentences)", "—"],
-      ["parent", "ReactNode (a Breadcrumb of the page's parents, or a back Link)", "—"],
-      ["actions", "ReactNode (Buttons, at most one primary, last)", "—"],
-      ["navigation", "ReactNode (the page's Tabs, or a Segmented of its views)", "—"],
-      ["size", "\"sm\" (title-xs) | \"md\" (title-sm) | \"lg\" (title-md)", "md"],
-      ["titleAs / titleId", "\"h1\" … \"h6\" / the heading's id, for aria-labelledby", "h1 / —"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "The page's name as its h1, a line on what it holds, and its actions at the title's end, the primary one last.", demo: "GalleryPageHeader" },
       { id: "parent", title: "With a way back", note: "A Breadcrumb of the page's parents over the title; the title is the current page, so the Breadcrumb ends at its parent.", demo: "GalleryPageHeaderParent" },
@@ -640,14 +504,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "selection-bar", name: "Selection bar", exportName: "SelectionBar", manifest: "selectionBar",
     imports: "SelectionBar, Button",
-    api: [
-      ["count", "number selected; at 0 it draws nothing but stays mounted", "—"],
-      ["children", "the actions for the selection (Buttons, a Menu)", "—"],
-      ["onClear / clearLabel", "clears the selection (the clear button, and Escape in the bar) / its name", "— / \"Clear selection\""],
-      ["label", "string | (count) => string, said each time the count changes", "\"3 selected\""],
-      ["floating", "boolean: over the bottom of its scrolling region, on the floating surface", "false"],
-      ["onFocusReturn", "where focus goes when the selection clears and the element it came from has gone", "—"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "In place of a list's or table's head while anything is selected. Showing it never moves focus; the count is said instead.", demo: "GallerySelectionBar" },
       { id: "floating", title: "Floating", note: "Over the bottom of the region it scrolls in, on the floating surface, for a grid or a long list whose head scrolls away.", demo: "GallerySelectionBarFloating" },
@@ -657,15 +513,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "setting-row", name: "Setting row", exportName: "SettingRow", manifest: "settingRow",
     imports: "SettingRow, SettingsGroup, Switch, Select, Segmented",
-    api: [
-      ["label / description", "ReactNode (the setting's name, which labels the control / one line on what it does)", "—"],
-      ["labelAction", "ReactNode after the name: a Toggletip or a Link", "—"],
-      ["children / controlId", "the control, at the row's end / its id when you set it", "— / generated"],
-      ["modified / onReset / resetLabel", "differs from its default: the dot, and Reset on hover or focus / its name", "false / — / \"Reset “Label” to default\""],
-      ["orientation", "\"horizontal\" (under the text when narrow) | \"vertical\" (always under)", "horizontal"],
-      ["disabled", "boolean", "false"],
-      ["SettingsGroup heading / description / framed", "a Section heading over the rows / its lede / the rows in a frame", "— / — / false"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "The setting's name and its one-line description at the start, its control at the end. The name labels the control and the description describes it.", demo: "GallerySettingRow" },
       { id: "modified", title: "Modified", note: "A setting that differs from its default carries a dot after its name; Reset shows on hover or focus and puts the default back.", demo: "GallerySettingRowModified" },
@@ -675,12 +522,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "filter-bar", name: "Filter bar", exportName: "FilterBar", manifest: "filterBar",
     imports: "FilterBar, FilterBarItem, FilterBarAdd, Popover, Menu",
-    api: [
-      ["children", "the filters: each a FilterBarItem as a Popover's or Menu's trigger", "—"],
-      ["add", "a FilterBarAdd as a Menu's trigger, the properties to filter by", "—"],
-      ["dirty / onReset / resetLabel", "the filters differ from the saved view: Reset at the end / its words", "false / — / \"Reset\""],
-      ["FilterBarItem label / value / dirty", "the property / what it keeps, in words / changed since saved (the dot)", "— / — / false"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Each filter a chip that reads its property and value and opens its editor; Add filter opens the properties.", demo: "GalleryFilterBar" },
       { id: "dirty", title: "Unsaved", note: "A changed filter carries a dot, and Reset puts the saved view back. The bar filters nothing itself.", demo: "GalleryFilterBarDirty" },
@@ -691,14 +532,6 @@ export const COMPONENT_PAGES = [
     slug: "mention", name: "Mention", exportName: "Mention", manifest: "mention",
     imports: "Mention, withMentions, Composer, ComposerMenu",
     api: [
-      ["children", "the words: the person's, the file's or the page's name, or the date as it reads", "—"],
-      ["kind", "\"person\" | \"file\" | \"page\" | \"date\": sets the default mark", "\"person\""],
-      ["variant", "\"soft\" (a pill on the mark plate) | \"plain\" (mark and words) | \"underline\" (always underlined)", "\"soft\""],
-      ["icon", "ReactNode replacing the kind's mark (a picture as <img>, a team's icon); null for none", "the kind's mark"],
-      ["due / dueLabel", "a date that has come or passed: the danger ink, and its words said after the date", "false / \"Due\""],
-      ["dateTime", "the date's machine-readable value, on a <time>", "—"],
-      ["href / target / rel", "makes it a link", "—"],
-      ["onClick / disabled", "makes it a button when there is no href", "—"],
       ["withMentions(text, mentions, props?)", "text with every \"@label\" of a picked mention drawn as a Mention: a sent message whose draft held the words", "—"],
     ],
     examples: [
@@ -711,14 +544,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "splitter", name: "Splitter", exportName: "Splitter", manifest: "splitter",
     imports: "Splitter",
-    api: [
-      ["children", "the two regions, in order", "—"],
-      ["orientation", "\"horizontal\" (side by side) | \"vertical\" (stacked)", "\"horizontal\""],
-      ["side", "which region holds the size, \"start\" or \"end\"; the other takes the rest", "\"start\""],
-      ["size / defaultSize / onSizeChange", "that region's size in px / its first size, which a double-click puts back / (size, event) => void", "— / half / —"],
-      ["minSize / maxSize", "limits in px; the other region keeps at least minSize", "50 / all but the other's minimum"],
-      ["handleLabel", "names the handle (\"Resize sidebar\")", "\"Resize\""],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Two regions with a 1 line between them. The handle's hit area is 4; after the pointer rests 300 ms it grows to 12 and the line to 2. While dragging the line is the accent.", demo: "GallerySplitter" },
       { id: "vertical", title: "Stacked", note: "orientation=\"vertical\": the regions stacked, the handle across them.", demo: "GallerySplitterVertical" },
@@ -728,19 +553,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "chart", name: "Chart", exportName: "Chart", manifest: "chart",
     imports: "Chart, ChartNumber, Card, CardHeader, CardTitle",
-    api: [
-      ["kind", "\"bar\" (vertical; grouped when there are several series) | \"line\" | \"area\" | \"donut\"", "\"bar\""],
-      ["data / series / x", "the rows / [{ key, label, color? }] in order (colors are the series tokens by place) / the row field that holds x", "—"],
-      ["label / xLabel", "names the chart (the plot and the table) / the table's x heading", "— / x"],
-      ["size", "\"sm\" 128 | \"md\" 192 | \"lg\" 256 tall; a donut 128, 160, 192 across", "\"md\""],
-      ["stacked", "bars and areas stack their series", "false"],
-      ["formatValue / formatX", "(value) => string for ticks, the tooltip and the table / (x) => string", "grouped digits / as it is"],
-      ["hiddenKeys / defaultHiddenKeys / onHiddenKeysChange", "series hidden by the legend (a donut: its parts by x); at least one stays / (keys, event) => void", "— / [] / —"],
-      ["view / defaultView / onViewChange / tableToggle", "\"chart\" | \"table\" (Area's Table in the plot's place) / (view, event) => void / adds the Show table toggle", "— / \"chart\" / — / false"],
-      ["loading / delay / emptyText", "a Skeleton in the plot's place, after Skeleton's delay / the words when there is nothing to plot", "false / — / \"No values yet\""],
-      ["tableLabel / shareLabel / keysHint", "the toggle's words / a donut table's share column / what the keys do, said after the name", "\"Show table\" / \"Share\" / \"Left and Right move between values\""],
-      ["ChartNumber: label / value / change / direction / tone / note", "one figure with its change: a soft Badge with an up or down arrow, its tone the change's meaning, and what it is against", "— / — / — / — / \"neutral\" / —"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Bars from zero, 2 apart in a group, rounded only at their value end; gridlines at round values, the axis labels small and muted. Each series takes the series color of its place.", demo: "GalleryChart" },
       { id: "line", title: "Line", note: "kind=\"line\": a 1.5 line in each series' mark. The pointer or the arrow keys show a guide, the points and the tooltip.", demo: "GalleryChartLine" },
@@ -753,12 +565,6 @@ export const COMPONENT_PAGES = [
     slug: "list-box", name: "List box", exportName: "ListBox", manifest: "listBox",
     imports: "ListBox, ListBoxItem, ListBoxSection",
     api: [
-      ["layout", "list (Menu's rows, the chosen one checked) | grid (options in rows and columns)", "list"],
-      ["value / defaultValue / onValueChange", "the chosen option's value", "— / null / —"],
-      ["selectionFollowsFocus", "moving with the keys also chooses, so a preview follows them", "false"],
-      ["disabled", "the whole set", "false"],
-      ["ListBoxItem: value / textValue / disabled", "its key; the text typing matches when its content has none; skipped by the keys", "— / its text / false"],
-      ["ListBoxSection: title", "a named group (role group) of options", "—"],
       ["--area-list-box-item", "a grid option's cell size", "control-xl (48)"],
     ],
     examples: [
@@ -771,13 +577,8 @@ export const COMPONENT_PAGES = [
     slug: "copy-button", name: "Copy button", exportName: "CopyButton", manifest: "copyButton",
     imports: "CopyButton",
     api: [
-      ["value", "the text, or a function returning it (read when pressed)", "—"],
-      ["children / label", "a visible label, or the icon-only button's name", "— / \"Copy\""],
-      ["copiedLabel / failedLabel", "said once through the shared announcer, politely", "\"Copied to clipboard\" / \"Copy failed\""],
-      ["icon / copiedIcon", "the rest glyph and the check", "copy / check"],
-      ["timeout", "how long the check holds, ms", "2000"],
-      ["onCopied / onCopyError", "(text) => void / (error) => void", "—"],
-      ["variant / tone / size / …", "as Button", "ghost / neutral / sm"],
+      ["children", "a visible label", "—"],
+      ["Button props", "as Button", "—"],
       ["useCopy", "the behaviour, and its announcement, for a control that is not a Button (Token row); CopyStatus is deprecated and renders nothing", "—"],
     ],
     examples: [
@@ -790,12 +591,7 @@ export const COMPONENT_PAGES = [
     slug: "folder", name: "Folder", exportName: "Folder", manifest: "folder",
     imports: "Folder",
     api: [
-      ["size", "sm (48) | md (64, Finder's icon view) | lg (96); unset follows --area-folder-size", "—"],
-      ["count", "a number at the pocket's foot, at the end", "—"],
-      ["badge", "small marks at the pocket's foot: who or what it is shared with", "—"],
-      ["open", "the pocket tips forward and a sheet rises out of it (a drag over it)", "false"],
       ["aria-label", "the figure's name; without one it is decorative (label is a deprecated alias)", "—"],
-      ["variant / tone / contents", "deprecated and ignored: the solid folder, its tones and its sheet are archived (round 57)", "—"],
     ],
     examples: [
       { id: "default", title: "Default", note: "The back with its tab and the pocket, flat in the control fill (bg-component) with one thin whole-pixel edge, a sheet tucked inside, in a square icon box at Finder's 64.", demo: "GalleryFolder" },
@@ -806,11 +602,6 @@ export const COMPONENT_PAGES = [
     slug: "file-page", name: "File page", exportName: "FilePage", manifest: "filePage",
     imports: "FilePage",
     api: [
-      ["size", "sm (48) | md (64) | lg (96); unset follows --area-folder-size", "—"],
-      ["icon", "the content mark, drawn thin on the page's centre: one @area/icons glyph per type (lines, table, slides, image, play, code, archive), never a file-* page icon", "—"],
-      ["label", "deprecated: the extension under the glyph (the figure is glyph-only; the tile's name shows the extension)", "—"],
-      ["variant", "deprecated and ignored: the lit solid page is archived (round 57)", "—"],
-      ["preview", "an image of the file to fill the page instead", "—"],
       ["aria-label", "the figure's name; without one it is decorative (name is a deprecated alias)", "—"],
     ],
     examples: [
@@ -822,9 +613,6 @@ export const COMPONENT_PAGES = [
     slug: "file-image", name: "File image", exportName: "FileImage", manifest: "fileImage",
     imports: "FileImage",
     api: [
-      ["size", "sm (48) | md (64) | lg (96); unset follows --area-folder-size", "—"],
-      ["variant", "deprecated and ignored: the lit solid look is archived (round 57)", "—"],
-      ["src", "the picture: it covers the frame, cropped; without it a landscape is drawn", "—"],
       ["aria-label", "the figure's name; without one it is decorative", "—"],
     ],
     examples: [
@@ -835,15 +623,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "file-tile", name: "File tile", exportName: "FileTile", manifest: "fileTile",
     imports: "FileTile, FileGrid, FileGridItem, Folder",
-    api: [
-      ["name", "the item's name: two lines, then an ellipsis", "—"],
-      ["meta", "a detail line: item count, type and size, edited time", "—"],
-      ["figure", "a Folder, a file glyph, or an image URL (contained)", "—"],
-      ["size", "sm (48) | md (64) | lg (96) figure; unset follows the grid", "—"],
-      ["FileGrid: value / onValueChange / onOpen", "the selected item; Enter or a double click opens", "— / — / —"],
-      ["FileGrid: size", "every tile's figure; or set --area-file-tile-figure", "md"],
-      ["FileGridItem: dropTarget", "a drag is over this item: its Folder tips open", "false"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Finder's icon view: the figure over its name and item count, centred, in the app's UI text with the name strong and the count muted.", demo: "GalleryFileTile" },
       { id: "file", title: "A file", note: "A file's figure is a File page, its type glyph on the page, in the folder's box, so files and folders line up.", demo: "GalleryFileTileFile" },
@@ -854,17 +633,6 @@ export const COMPONENT_PAGES = [
     slug: "design-card", name: "Design card", exportName: "DesignCard", manifest: "designCard",
     imports: "DesignCard, placeDesign",
     api: [
-      ["children", "the design at its true size: a control, a component, a pattern, a type line, a screen, a phone or an icon", "—"],
-      ["name / detail", "the design's name under the card, one line / after it, muted: the true size by default (\"320 × 184\"), or a colour's value or a status; null leaves it out", "— / the true size"],
-      ["actions", "controls at the caption's end: a Copy or More button, small and ghost", "—"],
-      ["layout", "part: a tenth of the short side round it (12 to 48), never past 100%, held at 50% and cropped below; screen: a twentieth (8 to 48), always whole, a 16:9 card; phone: 60% of the width from the top margin, running off the bottom; icon: whole multiples, 1× to 4×; color: the colour paints the card", "\"part\""],
-      ["focus", "where a held part is kept when the card crops it: center, top (a menu, a palette) or start (a type line)", "\"center\""],
-      ["aspect", "square, or wide (16:9); a screen's card is wide unless set", "\"square\""],
-      ["color", "a colour design: any CSS colour, painting the card", "—"],
-      ["designWidth / designHeight", "the width (and height) the design is laid out at: a screen's 1920 × 1080, or a design that stretches; a design with no width of its own takes Area's field width (16rem)", "— / —"],
-      ["selected / interactive", "the edge in the selection colour / the card is a control: hover lifts, focus rings, a press drops", "false / false"],
-      ["groundProps / designProps / captionProps", "attributes for the card's ground (a setting's scope), the design's box (the scope it is drawn in), the caption (a host's scale)", "— / — / —"],
-      ["onPlace", "hears each placement: margin, scale, x, y, cropped, and the design's measured width and height", "—"],
       ["placeDesign(layout, design, room, focus)", "the rule alone, for a host's Full view: returns { margin, scale, x, y, cropped }", "—"],
     ],
     examples: [
@@ -881,23 +649,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "asset-card", name: "Asset card", exportName: "AssetCard", manifest: "assetCard",
     imports: "AssetCard, AssetGrid, AssetGridItem",
-    api: [
-      ["name", "the asset's name in the head, one line; leave it out (and actions) for no head: containerless, the frame alone, an inspector's preview", "—"],
-      ["actions", "controls at the head's end, nothing else there: Copy for what is used (a component, a color, a type style, an icon), More for what is managed (an image, a group); their side and corner on the frame's", "—"],
-      ["meta", "deprecated and ignored: a detail goes in the asset itself or behind Copy", "—"],
-      ["media / mediaAlt", "an image URL (it covers the frame, cropped) or any element, centred on the frame's surface / the image's text alternative", "— / \"\""],
-      ["color", "a color as the asset: it paints the frame, outlined by the swatch ring", "—"],
-      ["group / mosaic", "a group's assets (image URLs or elements) / grid: the first four as a 2 × 2 mosaic; strip: up to eight in one row at their own ratios, the frame's height (or --area-asset-card-strip-height), scrolling sideways edge to edge (a collection across a feed); both as far apart as from the card's edge, each at the frame's corner", "— / \"grid\""],
-      ["selected", "the card's edge in the selection color (an AssetGrid sets it)", "false"],
-      ["interactive", "the card is a control outside an AssetGrid: hover lifts, focus rings, aria-pressed / aria-selected show as selected", "false"],
-      ["container", "framed: the card; containerless: no card at rest, the head and asset in the same places; a component's frame shows its edge on hover and selection, an image or group is its own surface and the states ring it", "\"framed\""],
-      ["aspect / mediaRatio", "square, landscape (4:3), wide (2:1), screen (16:9, a product screen's 1920 × 1080), or hug: the card as tall as its head and asset / an image's width over height, so it holds its shape before it loads", "\"square\" / —"],
-      ["fit", "how an image fills its frame: natural, the frame takes the image's own ratio; cover, the frame takes aspect and the image is cropped to it; contain, the frame takes aspect and the whole image sits centred in it at its ratio (pass mediaRatio), so every card keeps one footprint", "\"natural\""],
-      ["fill", "recessed: the card in the tile tone; raised: the surface; checker: the frame on a transparency checker, a color over it so its alpha shows", "\"recessed\""],
-      ["children / frameProps / headProps", "the frame's own content in place of media / attributes for the frame / for the head (captionProps is a deprecated alias; caption is deprecated and ignored)", "— / — / —"],
-      ["AssetGrid: value / onValueChange / onOpen", "the selected card; Enter or a double click opens", "— / — / —"],
-      ["AssetGrid: layout / container", "grid: square cards in rows; waterfall: cards hug their assets in columns, each into the shortest / every card's container", "\"grid\" / \"framed\""],
-    ],
     examples: [
       { id: "default", title: "Image", note: "A square card: the name in a head, a More button at its end, the image covering a frame 4 in, the frame's corner concentric with the card's (16 − 1 − 4 = 11).", demo: "GalleryAssetCard" },
       { id: "layout-group", title: "Group", note: "Its first four assets as a 2 × 2 mosaic, 4 apart, every cell at the frame's corner, no frame around them.", demo: "GalleryAssetCardGroup" },
@@ -934,11 +685,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "asset-row", name: "Asset row", exportName: "AssetRow", manifest: "assetRow",
     imports: "AssetRow",
-    api: [
-      ["name / meta", "the asset's name / a detail line such as format and size", "—"],
-      ["preview / previewAlt", "an image URL or an element drawn in the 56px well / the image's text alternative", "— / \"\""],
-      ["actions", "trailing actions, such as a download button", "—"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Figma Dev Mode's Assets: a 40px preview well in a 56px row, the asset's name and its format and size.", demo: "GalleryAssetRow" },
       { id: "action", title: "With an action", note: "A trailing download or export button.", demo: "GalleryAssetRowAction" },
@@ -948,10 +694,6 @@ export const COMPONENT_PAGES = [
     slug: "preview-frame", name: "Preview frame", exportName: "PreviewFrame", manifest: "previewFrame",
     imports: "PreviewFrame",
     api: [
-      ["aspect", "\"square\" | \"landscape\" (4:3) | \"wide\" (2:1)", "square"],
-      ["ground", "\"surface\" (the component tile's frame) | \"subtle\" (a grey well) | \"checker\" (transparency, for an asset with alpha)", "surface"],
-      ["color", "a CSS color that fills the frame, over the checker", "—"],
-      ["label", "names the preview (role=\"img\") when its content isn't already named", "—"],
       ["children", "an icon at its own size, or an img / video contained and only scaled down", "—"],
     ],
     examples: [
@@ -963,14 +705,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "editable-text", name: "Editable text", exportName: "EditableText", manifest: "editableText",
     imports: "EditableText",
-    api: [
-      ["label", "what the text names, for assistive technology (required)", "—"],
-      ["value / defaultValue / onValueChange", "the text; onValueChange runs once per committed edit", "— / \"\" / —"],
-      ["activation", "\"dblclick\" (Figma) | \"click\" (Notion) | \"focus\"; Enter or F2 on the focused text always starts editing", "dblclick"],
-      ["fill", "boolean: fill the container's width", "false"],
-      ["placeholder / disabled / defaultEditing", "muted text when empty / boolean / start in the field", "—"],
-      ["inputProps", "props for the field, such as maxLength", "—"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Double-click to rename, as Figma's layer names. Enter or leaving the field saves; Escape cancels. The field appears around the text without moving it.", demo: "GalleryEditableText" },
       { id: "click", title: "Click to edit", note: "activation=\"click\": a page title, as Notion's. It takes the font of where it sits.", demo: "GalleryEditableTextClick" },
@@ -982,11 +716,6 @@ export const COMPONENT_PAGES = [
     imports: "Timeline, TimelineItem",
     api: [
       ["Timeline", "an ordered list of TimelineItems, and native ol props", "—"],
-      ["TimelineItem: title / meta / time", "what happened, then who or where and when on the same line, each after a dot, all one size", "—"],
-      ["dateTime", "ISO 8601 date for time; renders it as a time element", "—"],
-      ["icon / media", "a bare 16px icon, or an element that fills the 24px marker (an Avatar); otherwise a dot", "dot"],
-      ["current", "boolean: the current or latest event; its mark paints the Selection role and the item is aria-current", "false"],
-      ["children", "details under the time", "—"],
     ],
     examples: [
       { id: "default", title: "Default", note: "Events in order on one 1px line that stops 4 short of each mark. Each mark sits in a 24px column and the text starts 12 after it; the time follows the event on its line, muted, at the same size.", demo: "GalleryTimeline" },
@@ -999,18 +728,12 @@ export const COMPONENT_PAGES = [
     slug: "description-list", name: "Description list", exportName: "DescriptionList", manifest: "descriptionList",
     imports: "DescriptionList, DescriptionListItem",
     api: [
-      ["visibleCount", "rows shown before a Show N more button", "all"],
-      ["expanded / defaultExpanded / onExpandedChange", "every row shown, controlled or not", "— / false / —"],
-      ["moreLabel / lessLabel", "the button's labels; moreLabel may be a function of the hidden count", "Show {n} more / Show less"],
-      
-      ["layout", "\"columns\" (a term column, Notion's properties) | \"justified\" (term at the start, value at the end, ChatGPT's settings)", "columns"],
-      ["divided / framed", "boolean (a rule between rows) / boolean (Table's frame)", "—"],
       ["DescriptionListItem", "term (ReactNode), icon (16px, decorative), children (the value), and native div props", "—"],
       ["--area-description-list-term", "CSS length: the widest the term column grows; it fits the longest term (columns)", "40%"],
     ],
     examples: [
       { id: "default", title: "Default", note: "A dl of term and value pairs. Terms sit in a column as wide as the longest one, in the muted ink, with an optional icon; values follow 12 after it in the default ink and wrap. Rows are 8 apart.", demo: "GalleryDescriptionList" },
-      { id: "framed", title: "Framed", note: "layout=\"justified\" with divided and framed: facts in a settings page, each value at the row's end.", demo: "GalleryDescriptionListFramed" },
+      { id: "framed", title: "Framed", note: "layout=\"justified\" with divided and variant=\"surface\": facts in a settings page, each value at the row's end.", demo: "GalleryDescriptionListFramed" },
       { id: "rich", title: "Rich values", note: "A value can be any content: a Badge, a person, a Link.", demo: "GalleryDescriptionListRich" },
     ],
   },
@@ -1018,10 +741,6 @@ export const COMPONENT_PAGES = [
     slug: "toggle-group", name: "Toggle group", exportName: "ToggleGroup", manifest: "toggleGroup",
     imports: "ToggleGroup, ToggleGroupItem",
     api: [
-      ["value / defaultValue / onValueChange", "string[] (the pressed toggles' values), controlled or not", "[]"],
-      ["selectionMode", "\"multiple\" (any number) | \"single\" (at most one; press again to release)", "multiple"],
-      ["variant / size", "\"soft\" | \"outline\" (joined) | \"ghost\" (apart, as a Toolbar group) / \"sm\" | \"md\" | \"lg\"", "soft / md"],
-      ["fullWidth / disabled", "boolean / boolean (every toggle)", "—"],
       ["ToggleGroupItem", "value, children (the name; with iconOnly it is read, not shown), icon, iconOnly, disabled, and Button's native props", "—"],
     ],
     examples: [
@@ -1033,13 +752,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "empty-state", name: "Empty state", exportName: "EmptyState", manifest: "emptyState",
     imports: "EmptyState, Button",
-    api: [
-      ["title / description", "ReactNode (a few words / one or two sentences)", "—"],
-      ["icon", "ReactNode (an Area icon at 24 for md, 20 for sm; decorative)", "—"],
-      ["actions", "ReactNode (one or two Buttons, or a Link)", "—"],
-      ["size", "\"sm\" (a panel, list or popover) | \"md\" (a page or main region)", "md"],
-      ["titleAs", "\"h2\" … \"h6\" | \"p\" (the title's element)", "h2"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Say what is missing in the title and how it fills in the line under it. The icon is decorative; the title is a heading at the page's next level.", demo: "GalleryEmptyState" },
       { id: "actions", title: "With actions", note: "One or two Buttons, the main one first. Leave them out when the region fills on its own.", demo: "GalleryEmptyStateActions" },
@@ -1049,13 +761,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "toggletip", name: "Toggletip", exportName: "Toggletip", manifest: "toggletip",
     imports: "Toggletip",
-    api: [
-      ["content", "ReactNode (a sentence or two; a Link with ink=\"inherit\")", "—"],
-      ["icon / size", "\"info\" | \"help\" / \"sm\" | \"md\"", "info / md"],
-      ["label", "string (the button's name)", '"More information" or "Help"'],
-      ["side / align / offset / delay", "as Tooltip", "top / center / 4 / 500"],
-      ["open / defaultOpen / onOpenChange", "controlled or uncontrolled; defaultOpen starts pinned", "—"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Hover or Tab to the button to preview the note; press it to pin the note open, so touch reaches it. Press again, Escape or a press outside closes it.", demo: "GalleryToggletip" },
       { id: "link", title: "With a link", note: "Pinned, the note keeps focus in reach: Tab moves from the button into the link.", demo: "GalleryToggletipLink" },
@@ -1065,10 +770,6 @@ export const COMPONENT_PAGES = [
     slug: "scroll-area", name: "Scroll area", exportName: "ScrollArea", manifest: "scrollArea",
     imports: "ScrollArea",
     api: [
-      ["type", '"hover" (while hovered or scrolling) | "scroll" (while scrolling) | "always"', '"hover"'],
-      ["scrollHideDelay", "number (ms the bar stays after scrolling stops)", "600"],
-      ["viewportRef", "Ref to the native scroller", "—"],
-      ["viewportProps", "props for the scroller (aria-label, tabIndex)", "tabIndex 0"],
       ["style / className", "size the region on the root (block-size or max-block-size)", "—"],
     ],
     examples: [
@@ -1080,10 +781,6 @@ export const COMPONENT_PAGES = [
     slug: "link", name: "Link", manifest: "link",
     imports: "Link, linkVariants",
     api: [
-      ["variant", '"inline" (always underlined) | "standalone" (underlined on hover and focus)', '"inline"'],
-      ["ink", '"inherit" | "muted" | "action" (the Action role: neutral until a theme makes actions the accent) | "blue" (the link blue of product UI) | "purple" | "pink" | "green" | "red" | "orange" | "brown" (hued inks for articles)', '"inherit"'],
-      ["external", "boolean (new tab, rel noopener noreferrer, the external mark, announced)", "false"],
-      ["newTabLabel", "string", '"(opens in a new tab)"'],
       ["linkVariants", "({ variant, ink }) => class names, for a router's own anchor", "—"],
     ],
     examples: [
@@ -1097,16 +794,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "pagination", name: "Pagination", manifest: "pagination",
     imports: "Pagination",
-    api: [
-      ["pageCount", "number", "—"],
-      ["page / defaultPage / onPageChange", "number (from 1) / (page, event) => void", "1"],
-      ["layout", '"pages" | "compact" ("Page 2 of 10" between the steps)', '"pages"'],
-      ["size", '"sm" (28) | "md" (32) | "lg" (40), as Button', '"md"'],
-      ["siblingCount / boundaryCount", "number (pages beside the current one / at each end)", "1 / 1"],
-      ["stepLabels", "boolean (Previous and Next beside their chevrons)", "true"],
-      ["getHref", "(page) => string (every item a link)", "—"],
-      ["labels", "{ nav, previous, next, page(n), status(page, count) }", '"Pagination", "Previous", "Next", "Page n"'],
-    ],
     examples: [
       { id: "default", title: "Default", note: "The first and last pages, one page each side of the current one, and an ellipsis for each skipped run. A run of one page shows the page, so the row keeps seven items and never jumps as the page moves. The current page is announced with aria-current.", demo: "GalleryPagination" },
       { id: "compact", title: "Compact", note: "For a narrow column: the steps as chevrons and the position as text, announced politely when it changes.", demo: "GalleryPaginationCompact" },
@@ -1116,17 +803,17 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "tree-view", name: "Tree view", exportName: "TreeView", manifest: "treeView",
-    api: [["items", "TreeViewNode[]", "—"], ["selectionMode", '"navigation" | "checkbox"', '"navigation"'], ["expandedIds / defaultExpandedIds", "string[]", "—"], ["selectedIds / defaultSelectedIds", "string[]", "—"], ["onExpandedChange / onSelectedChange", "(ids: string[]) => void", "—"], ["onActivate", "(id: string) => void", "—"], ["currentId", "string", "—"], ["TreeViewNode", "{ id, label, children?, icon?, trailing?, actions?, disabled? }", "—"], ["stickyBranches", "boolean: the open branches holding the rows scrolled past stay pinned at the top (--area-tree-view-sticky-top, --area-tree-view-pin-fill)", "false"]],
+    api: [["TreeViewNode", "{ id, label, children?, icon?, trailing?, actions?, disabled? }", "—"]],
     examples: [{ id: "files", title: "Project files", demo: "GalleryTreeViewFiles" }, { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters" }, { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed" }, { id: "filled-folders", title: "Filled folders", demo: "GalleryTreeViewFilledFolders" }, { id: "layers", title: "Layers with row controls", note: "Row controls are outside the single Tab stop: give each tabIndex={-1} and a keyboard equivalent. data-pinned keeps a state control visible.", demo: "GalleryTreeViewLayers" }, { id: "disabled", title: "Disabled row", note: "Disabled rows are skipped by arrow keys and typeahead.", demo: "GalleryTreeViewDisabled" }],
   },
   {
     slug: "composer", name: "Composer", manifest: "composer",
-    api: [["layout", '"inline" | "stacked"', '"inline"'], ["value / defaultValue", "string", "—"], ["onValueChange", "(value: string) => void", "—"], ["onSubmit", "(value: string) => void", "—"], ["leadingActions / trailingActions / mode", "ReactNode", "—"], ["submitOnEnter", "boolean", "true"], ["label", "string (the field's accessible name)", '"Message"'], ["placeholder", "string", '"Write a message…"'], ["submitLabel", "string (names the send Button)", '"Send message"'], ["submitPill", "boolean (round send; the corner follows, making a pill composer)", "false"], ["disabled", "boolean (field paint; actions dim)", "false"], ["loading", "boolean (a reply is streaming: the field stays editable, Enter doesn't send, send becomes Stop; busy is a deprecated alias)", "false"], ["onStop / stopLabel", "() => void / string (the Stop button while loading)", '— / "Stop"'], ["onQueue", "(value) => void: while loading, Enter queues the draft (the button stays Stop)", "—"], ["maxLength", "number", "—"], ["expandable", "boolean: Expand once the draft passes eight lines", "false"], ["expanded / defaultExpanded / onExpandedChange", "the field open to its container's height", "— / false / —"], ["expandLabel / collapseLabel", "string (names the control)", '"Expand" / "Collapse"'], ["context", "ReactNode: chips and Attachments in a row inside the shell, above the field", "—"], ["menu", "ReactNode: a ComposerMenu, drawn above the composer at its width", "—"], ["inputProps / onInputKeyDown", "textarea props and key handler", "—"], ["ref", "HTMLTextAreaElement", "—"], ["header", "ReactNode (a row above the shell; with footer the root becomes a group)", "—"], ["footer", "ReactNode (a row under the shell)", "—"], ["onFiles", "(files: File[], event) => void (dropped or pasted files; the shell shows the drop paint while files are over it)", "—"], ["ComposerMic", "a dictation toggle Button: selected / onSelectedChange, label (\"Dictate\")", "—"], ["ComposerAttach", "the + Button opening the file picker: onFiles, accept, multiple, label (\"Add files\")", "—"], ["ComposerNote", "a quiet line for the footer", "—"]],
+    api: [["ref", "HTMLTextAreaElement", "—"], ["ComposerMic", "a dictation toggle Button: selected / onSelectedChange, label (\"Dictate\")", "—"], ["ComposerAttach", "the + Button opening the file picker: onFiles, accept, multiple, label (\"Add files\")", "—"], ["ComposerNote", "a quiet line for the footer", "—"]],
     examples: [{ id: "inline", title: "Inline", demo: "GalleryComposerInline" }, { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked" }, { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled" }, { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled" }, { id: "loading", title: "Loading", note: "While a reply streams, the field stays editable and send turns into Stop.", demo: "GalleryComposerLoading" }, { id: "pill", title: "Pill send", note: "A round send makes the whole composer a pill, ChatGPT's shape.", demo: "GalleryComposerPill" }, { id: "context", title: "Context row", note: "What the message is about, inside the shell above the field (Cursor, Claude Code, Codex).", demo: "GalleryComposerContext" }, { id: "expanded", title: "Expanded", note: "A long prompt: past eight lines Expand opens the field to its container's height; Collapse or Escape closes it.", demo: "GalleryComposerExpanded" }, { id: "header", title: "Header", note: "A row above the shell: where the message runs (Cursor's selectors).", demo: "GalleryComposerHeader" }, { id: "footer", title: "Footer", note: "A row under the shell: tools, a quiet note and the model (the Claude app).", demo: "GalleryComposerFooter" }, { id: "mic", title: "Dictation", note: "ComposerMic before send: a toggle Button, the mic at rest.", demo: "GalleryComposerMic" }, { id: "mic-on", title: "Dictating", note: "While it listens the mic shows the waveform on the selected plate.", demo: "GalleryComposerMicOn" }, { id: "drop", title: "Dropping files", note: "onFiles takes files dropped or pasted; while they are dragged over, the shell takes File upload's drop paint.", demo: "GalleryComposerDrop" }, { id: "effort", title: "Model and effort", note: "Model picker's effort: muted after the model's name, its own group in the menu.", demo: "GalleryComposerEffort" }, { id: "agent", title: "Composition: agent", note: "Selectors above, a mode Tag and the model inside, a suggestion with its shortcut below (Cursor's shape).", demo: "GalleryComposerAgent" }, { id: "reply", title: "Composition: reply", note: "A one-line field with its tools, a note and the model in the footer (the Claude app's shape).", demo: "GalleryComposerReply" }, { id: "combined", title: "Composition: combined", note: "Parts of each: Cursor's selectors and mode, the permission menu, the model with its effort and the mic, the Claude app's note.", demo: "GalleryComposerCombined" }],
   },
   {
     slug: "code", name: "Code", manifest: "code",
-    api: [["children", "ReactNode", "—"], ["swatch", "string", "—"], ["subtle", "boolean", "false"], ["onColor", "boolean", "false"], ["…props", "HTMLAttributes<HTMLElement>", "—"]],
+    api: [["children", "ReactNode", "—"], ["…props", "HTMLAttributes<HTMLElement>", "—"]],
     examples: [
       { id: "default", title: "Default", demo: "GalleryCode" },
       { id: "treatments", title: "Subtle", note: "No fill: the edge alone, at the required width.", demo: "CodeSubtle" },
@@ -1139,24 +826,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "code-block", name: "Code block", exportName: "CodeBlock", manifest: "codeBlock",
     api: [
-      ["code", "string", "—"],
-      ["html", "string (trusted, pre-highlighted, one line of markup per line)", "—"],
-      ["title", "ReactNode", "—"],
-      ["language", "string", "—"],
-      ["languages", "string[]", "—"],
-      ["languageTabs", "boolean", "false"],
-      ["value / onValueChange", "string / (language: string) => void (onLanguageChange is a deprecated alias)", "uncontrolled, first language"],
-      ["lineNumbers", "boolean", "true"],
-      ["highlightLines", 'number[] | string, e.g. "3, 5-7"', "—"],
-      ["marks", 'Record<number, "added" | "removed">', "—"],
-      ["linkLines", "boolean", "false"],
-      ["collapsible / defaultCollapsed", "boolean / boolean", "false"],
-      ["copyable", "boolean", "true"],
-      ["copyLabel", "string", '"Copy code"'],
-      ["actions", "ReactNode", "—"],
-      ["flush", "boolean", "false"],
-      ["wrap", "boolean", "false"],
-      ["size", '"sm" | "md": sm is the inspector\'s code well (12px code on 18px lines, 8px insets)', '"md"'],
       ["…props", "HTMLAttributes<HTMLDivElement>", "—"],
     ],
     examples: [
@@ -1177,7 +846,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "segmented", name: "Segmented", manifest: "segmented",
-    api: [["items", "{ value: string; label: ReactNode; icon?: ReactNode; disabled?: boolean }[] (options is a deprecated alias)", "—"], ["value / defaultValue", "string", "first enabled option"], ["aria-label", "string (names the radio group; label is a deprecated alias)", "—"], ["onValueChange", "(value: string, event) => void (onSelect is a deprecated alias)", "—"], ["name / form", "string (submits the value with a form; a form reset restores the first value)", "—"], ["disabled", "boolean (every option)", "false"], ["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"], ["iconOnly", "boolean (labels stay accessible)", "false"]],
+    api: [["aria-label", "string (names the radio group; label is a deprecated alias)", "—"]],
     examples: [
       { id: "default", title: "Default", note: "A controlled presentation. In an application, update value from onValueChange. Arrow keys move and select, as in a radio group.", demo: "GallerySegmented" },
       { id: "sizes", title: "Sizes", demo: "SegmentedSizes" },
@@ -1189,18 +858,6 @@ export const COMPONENT_PAGES = [
     name: "Button",
     manifest: "button",
     api: [
-      ["variant", '"solid" | "soft" | "outline" | "ghost"', '"solid"'],
-      ["tone", "ButtonTone (8 values)", '"neutral"'],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["icon", "ReactNode", "—"],
-      ["trailingIcon", "ReactNode", "—"],
-      ["pill", "boolean; unset follows the theme's pills list (not a pill by default), true forces a pill, false the radius corner", "unset"],
-      ["align", '"start" | "end"', "—"],
-      ["selected", "boolean", "false"],
-      ["defaultSelected / onSelectedChange", "boolean / (selected) => void: an uncontrolled toggle, or a change callback for a controlled one", "— / —"],
-      ["loading", "boolean", "false"],
-      ["iconOnly", "boolean", "false"],
-      ["fullWidth", "boolean", "false"],
       ["disabled", "boolean", "false"],
     ],
     examples: [
@@ -1261,9 +918,6 @@ export const COMPONENT_PAGES = [
     slug: "button-group", name: "Button group", exportName: "ButtonGroup", manifest: "buttonGroup",
     imports: "ButtonGroup, Button",
     api: [
-      ["variant", '"soft" | "outline"', '"soft"'],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["fullWidth", "boolean: the group fills its container and its Buttons share the width", "false"],
       ["children", "Button[]", "—"],
       ["native div props / ref", "HTMLAttributes / HTMLDivElement", "forwarded"],
     ],
@@ -1282,16 +936,6 @@ export const COMPONENT_PAGES = [
     slug: "split-button", name: "Split button", exportName: "SplitButton", manifest: "splitButton",
     imports: "SplitButton, MenuItem",
     api: [
-      ["variant", '"solid" | "soft" | "outline"', '"solid"'],
-      ["tone", "ButtonTone (8 values)", '"neutral"'],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["children", "ReactNode (default action label)", "—"],
-      ["onClick", "MouseEventHandler<HTMLButtonElement> (default action)", "—"],
-      ["menu", "MenuItem[]", "—"],
-      ["menuLabel", "string (trigger name)", '"More options"'],
-      ["icon", "ReactNode", "—"],
-      ["disabled", "boolean", "false"],
-      ["actionProps", "ButtonProps for the default action", "—"],
       ["native div props / ref", "HTMLAttributes / HTMLDivElement", "forwarded"],
     ],
     examples: [
@@ -1307,9 +951,6 @@ export const COMPONENT_PAGES = [
     slug: "input-group", name: "Input group", exportName: "InputGroup", manifest: "inputGroup",
     imports: "InputGroup, InputGroupText, Input, NumberField",
     api: [
-      ["variant", '"outline" | "soft"', '"outline"'],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["fullWidth", "boolean", "false"],
       ["children", "Input, NumberField, Select, Button, InputGroupText", "—"],
       ["native div props / ref", "HTMLAttributes / HTMLDivElement", "forwarded"],
     ],
@@ -1328,20 +969,6 @@ export const COMPONENT_PAGES = [
   {
     slug: "number-field", name: "Number field", exportName: "NumberField", manifest: "numberField",
     api: [
-      ["value / defaultValue", "number | null", "null"],
-      ["onValueChange / onValueCommit", "(value: number | null) => void", "—"],
-      ["min / max / step", "number", "unbounded / 1"],
-      ["unit", "string", "—"],
-      ["steppers", 'boolean | "split" (true: both after the value; split: minus before, plus after, the value centred; hidden when read-only)', "false"],
-      ["trailing", "ReactNode (a control after the value, such as a ghost Custom select; it takes the nested square's height)", "—"],
-      ["mixed", "boolean", "false"],
-      ["scrub", "boolean | ReactNode (true shows a grip; a node, such as a letter or icon, becomes the handle)", "false"],
-      ["variant", '"outline" | "soft"', '"outline"'],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["fullWidth", "boolean", "false"],
-      ["locale / fractionDigits", "string / number", "system locale / step precision"],
-      ["validationStatus", '"error" | "success" | "warning"', "—"],
-      ["invalid", "boolean (error paint and aria-invalid)", "false"],
       ["className / style", "string / CSSProperties (both on the shell)", "—"],
       ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
     ],
@@ -1366,24 +993,8 @@ export const COMPONENT_PAGES = [
     name: "Input",
     manifest: "input",
     api: [
-      ["variant", '"outline" | "soft"', '"outline"'],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["leadingIcon", "ReactNode", "—"],
-      ["trailingIcon", "ReactNode", "—"],
-      ["prefix", "ReactNode", "—"],
-      ["suffix", "ReactNode", "—"],
-      ["fullWidth", "boolean", "false"],
-      ["monospace", "boolean", "false"],
-      ["loading", "boolean", "false"],
-      ["loadingText", "string", '"Loading"'],
-      ["loaderPosition", '"auto" | "leading" | "trailing"', '"auto"'],
-      ["trailingAction", "InputAction", "—"],
-      ["validationStatus", '"error" | "success" | "warning"', "—"],
-      ["invalid", "boolean", "false"],
       ["disabled", "boolean", "false"],
       ["readOnly", "boolean", "false"],
-      ["icon", "ReactNode (deprecated)", "—"],
-      ["className / style", "string / CSSProperties (both on the shell)", "—"],
       ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
     ],
     examples: [
@@ -1473,18 +1084,6 @@ export const COMPONENT_PAGES = [
     name: "Field",
     manifest: "field",
     api: [
-      ["label", "ReactNode", "—"],
-      ["description", "ReactNode", "—"],
-      ["validation", "ReactNode", "—"],
-      ["validationStatus", '"error" | "success" | "warning"', "—"],
-      ["error", "ReactNode", "—"],
-      ["required", "boolean", "false"],
-      ["disabled", "boolean", "false"],
-      ["htmlFor", "string", "—"],
-      ["orientation", '"vertical" | "horizontal"', '"vertical"'],
-      ["visuallyHiddenLabel", "boolean", "false"],
-      ["characterCount", "boolean | (length, maxLength) => ReactNode (against the control's maxLength)", "false"],
-      ["inline", "boolean (deprecated)", "false"],
       ["children", "one direct form control", "—"],
     ],
     examples: [
@@ -1552,12 +1151,6 @@ export const COMPONENT_PAGES = [
     name: "Textarea",
     manifest: "textarea",
     api: [
-      ["variant", '"outline" | "soft"', '"outline"'],
-      ["size", '"sm" | "md" (lg removed: it differed from md only by inset)', '"md"'],
-      ["resize", '"vertical" | "horizontal" | "both" | "none"', '"vertical"'],
-      ["fullWidth", "boolean", "false"],
-      ["validationStatus", '"error" | "success" | "warning"', "—"],
-      ["invalid", "boolean", "false"],
       ["disabled", "boolean", "false"],
       ["readOnly", "boolean", "false"],
       ["rows", "number", "—"],
@@ -1597,7 +1190,7 @@ export const COMPONENT_PAGES = [
     slug: "select",
     name: "Select",
     manifest: "select",
-    api: [["variant", '"outline" | "soft"', '"outline"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["fullWidth", "boolean", "false"], ["validationStatus", '"error" | "success" | "warning"', "—"], ["invalid", "boolean", "false"], ["disabled", "boolean (also inherited from an InputGroup or Field)", "false"], ["onValueChange", "(value, event) => void, after native onChange", "—"], ["native select props / ref", "SelectHTMLAttributes / HTMLSelectElement", "forwarded"]],
+    api: [["disabled", "boolean (also inherited from an InputGroup or Field)", "false"], ["native select props / ref", "SelectHTMLAttributes / HTMLSelectElement", "forwarded"]],
     examples: [
       { id: "default", title: "Default", demo: "SelectDefault" },
       { id: "soft", title: "Soft", note: "The flat filled field shared with Input, Textarea and NumberField. Use it wherever those are soft, such as a Panel.", demo: "SelectSoft" },
@@ -1616,17 +1209,7 @@ export const COMPONENT_PAGES = [
     imports: "Checkbox, CheckboxGroup",
     manifest: "checkbox",
     api: [
-      ["variant", '"card" | "soft"', "—"],
-      ["layout", '"row" | "list" | "tile" | "preview" | "thumbnail" | "media" | "media-row" (with a variant)', '"row"'],
-      ["meta", "ReactNode: a short value at the end", "—"],
-      ["size", '"md" | "lg"', '"md"'],
-      ["label", "ReactNode", "—"],
-      ["caption / description", "ReactNode", "—"],
-      ["leadingVisual", "ReactNode", "—"],
-      ["invalid", "boolean", "false"],
       ["checked / defaultChecked", "boolean", "— / false"],
-      ["onCheckedChange", "(checked: boolean, event) => void (after native onChange)", "—"],
-      ["indeterminate", "boolean", "false"],
       ["CheckboxGroup", "label, description, validation, error, validationStatus, orientation, disabled", "—"],
     ],
     examples: [
@@ -1650,13 +1233,6 @@ export const COMPONENT_PAGES = [
     imports: "Radio, RadioGroup",
     manifest: "radio",
     api: [
-      ["variant", '"card" | "soft"', "—"],
-      ["layout", '"row" | "list" | "tile" | "preview" | "thumbnail" | "media" | "media-row" (with a variant)', '"row"'],
-      ["meta", "ReactNode: a short value at the end", "—"],
-      ["size", '"md" | "lg"', '"md"'],
-      ["label", "ReactNode", "—"],
-      ["name", "string", "—"],
-      ["description", "ReactNode", "—"],
       ["RadioGroup", "label, name, value/defaultValue, onValueChange, orientation, description, error, readOnly (a value shown, not chosen here: no selected edge; radiogroup with aria-readonly)", "—"],
     ],
     examples: [
@@ -1674,16 +1250,9 @@ export const COMPONENT_PAGES = [
     name: "Switch",
     manifest: "switch",
     api: [
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["label / description", "ReactNode", "—"],
       ["checked / defaultChecked", "boolean; controlled / initial state", "false"],
-      ["onCheckedChange", "(checked: boolean, event) => void", "—"],
-      ["loading / readOnly", "boolean", "false"],
-      ["labelPosition", '"end" | "start"', '"end"'],
-      ["--area-switch-color / --area-switch-color-hover", "CSS custom properties for a custom on color (the custom tone was removed, audit H-13)", "selection solid"],
-      ["track", '"short" | "long"', '"short"'],
-      ["fullWidth", "boolean", "false"],
-      ["pill", "boolean; unset follows the theme's pills list (a pill by default), true forces a pill, false the radius corner", "unset"],
+      ["readOnly", "boolean", "false"],
+      ["--area-switch-color / --area-switch-color-hover", "CSS custom properties: the track's fill when on, and on hover, for a switch whose on color is its own (set them on the switch or a parent)", "selection solid"],
       ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
     ],
     examples: [
@@ -1702,30 +1271,7 @@ export const COMPONENT_PAGES = [
     name: "Slider",
     manifest: "slider",
     api: [
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["variant", '"rail" | "track" | "bar"', '"rail"'],
-      ["label", "ReactNode", "—"],
-      ["labelPosition", '"inline" | "top" | "inside" (inside: the bar carries its label and value)', '"inline"'],
-      ["orientation", '"horizontal" | "vertical"', '"horizontal"'],
-      ["stepMarks", "boolean", "false"],
-      ["startLabel / endLabel", "ReactNode (under the track's ends; horizontal only)", "—"],
-      ["buffered", "number (between min and max)", "—"],
-      ["origin", "number (the value the fill grows from)", "min"],
-      ["gradient", "string, a CSS image (the range's colors: the fill shows them, faint past the value)", "—"],
-      ["glide", "boolean (a stepped range follows the pointer between steps)", "true up to 60 steps"],
-      ["min", "number", "0"],
-      ["max", "number", "100"],
-      ["step", 'number | "any"', "1"],
-      ["value / defaultValue", "number; controlled / initial value", "native midpoint"],
-      ["readout", "boolean | ReactNode | (value) => ReactNode", "—"],
-      ["onValueChange", "(value: number, event) => void", "—"],
-      ["disabled", "boolean", "false"],
       ["native input props / ref", "InputHTMLAttributes / HTMLInputElement", "forwarded"],
-      ["SliderRange value / defaultValue / onValueChange", "[number, number] (start never above end)", "[min, max]"],
-      ["SliderRange min / max / step / size", "number / number / number / \"sm\" | \"md\" | \"lg\"", "0 / 100 / 1 / md"],
-      ["SliderRange variant", '"rail" | "track" | "bar"', '"rail"'],
-      ["SliderRange inputs / minLabel / maxLabel", "boolean / string / string (fields add \"value\" to the name)", "true / Minimum / Maximum"],
-      ["SliderRange name / form / disabled", "both ranges submit under name, start then end", "—"],
     ],
     examples: [
       { id: "default", title: "Default", demo: "SliderDefault" },
@@ -1750,21 +1296,7 @@ export const COMPONENT_PAGES = [
     manifest: "chip",
     imports: "Chip, ChipGroup, ChipLink",
     api: [
-      ["kind", '"assist" | "filter" | "input" | "suggestion"', '"filter"'],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["selected", "boolean", "false"],
-      ["defaultSelected", "boolean", "false"],
-      ["onSelectedChange", "(selected: boolean, event) => void", "—"],
-      ["clickable", "boolean", "false"],
-      ["swatch", "string", "—"],
-      ["swatchOnly", "boolean", "false"],
-      ["pill", "boolean; unset follows the theme's pills list (a pill by default), true forces a pill, false the radius corner", "unset"],
-      ["icon", "ReactNode", "—"],
-      ["avatar", "ReactNode", "—"],
-      ["image / imageAlt", "string", "— / decorative"],
-      ["onDismiss / dismissIcon / dismissLabel", "() => void / ReactNode / string", "— / dismiss / Remove <chip text>"],
       ["ChipGroup aria-label", "string (names the group of chips; label is a deprecated alias)", "—"],
-      ["invalid", "boolean", "false"],
       ["ChipLink", "href / treatment / trailingIcon", 'underline / "underline" | "icon" / —'],
     ],
     examples: [
@@ -1791,22 +1323,13 @@ export const COMPONENT_PAGES = [
     manifest: "badge",
     imports: "Badge",
     api: [
-      ["variant", '"soft" | "solid" | "outline" | "color" | "modern"', '"soft"'],
-      ["tone", '"neutral" | "info" | "success" | "warning" | "caution" | "danger" | "discovery" | "inverse"', '"neutral"'],
-      ["onColor", "on a colored ground: the ground's own ink for the text and a 20% line of it, no plate; overrides variant and tone", "false"],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["pill", "boolean; unset follows the theme's pills list (a pill by default), true forces a pill, false the radius corner", "unset"],
-      ["dot / dotOnly / iconOnly / truncate", "boolean", "false"],
-      ["avatar / flag", "decorative ReactNode", "—"],
-      ["onDismiss / dismissLabel", "callback and required accessible action name", "—"],
-      ["icon / trailingIcon", "ReactNode", "—"],
-      ["as / href", '"span" | "a"; href required for a', '"span"'],
+      ["href", 'string; required with as="a"', "—"],
       ["title", "string; inferred from plain text when truncated", "—"],
     ],
     examples: [
       { id: "default", title: "Default", demo: "BadgeDefault", note: "A short status beside the object it describes." },
       { id: "variants", title: "Variants", demo: "BadgeVariants", note: "Choose emphasis independently of meaning." },
-      { id: "sizes", title: "Sizes", demo: "BadgeSizes", note: "Use the 16px, 20px or 24px inline scale, shared with Kbd and Indicator counts; medium (20px) is the default." },
+      { id: "sizes", title: "Sizes", demo: "BadgeSizes", note: "The mark ladder, 14, 18 or 22 at the default type at every density, shared with Count, Tag, Kbd, Citation and Indicator counts; medium (18) is the default." },
       { id: "rounded", title: "Rounded", demo: "BadgeRounded", note: "pill={false}: the corner follows the radius setting instead of a pill, square at Sharp." },
       { id: "avatar", title: "With avatar", demo: "BadgeAvatar" },
       { id: "flag", title: "With flag", demo: "BadgeFlag" },
@@ -1833,17 +1356,6 @@ export const COMPONENT_PAGES = [
     name: "Avatar",
     manifest: "avatar",
     imports: "Avatar, AvatarGroup, Indicator, IndicatorAnchor",
-    api: [
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["shape", '"circle" | "square"; unset follows the theme\'s pills list (circle by default). People circle; teams and workspaces square', "unset"],
-      ["tone", '"neutral" | "inverse"', '"neutral"'],
-      ["active", "boolean", "false"],
-      ["src", "string", "—"],
-      ["alt", "string", "—"],
-      ["fallback", "ReactNode", "—"],
-      ["icon", "ReactNode", "—"],
-      ["AvatarGroup: max / size", "number / Avatar size", "all / md"],
-    ],
     examples: [
       { id: "default", title: "Default", demo: "AvatarDefault" },
       { id: "image", title: "Image", demo: "AvatarImage" },
@@ -1863,19 +1375,6 @@ export const COMPONENT_PAGES = [
     slug: "model-picker",
     name: "Model picker",
     manifest: "modelPicker",
-    api: [
-      ["items", "{ value, label, description?, disabled? }[] (models is a deprecated alias)", "—"],
-      ["value / defaultValue", "string", "the first model"],
-      ["onValueChange", "(value: string, event) => void", "—"],
-      ["triggerProps", "props and ref for the trigger Button (ref and the rest stay on the wrapper)", "—"],
-      ["label", "string (names the trigger and menu)", '"Model"'],
-      ["heading", "ReactNode (a Menu label over the rows)", "—"],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["efforts", "ModelOption[] (how hard it works: muted after the name on the trigger, its own menu group)", "—"],
-      ["effort / defaultEffort", "string", "the first effort"],
-      ["onEffortChange", "(effort: string, event) => void", "—"],
-      ["effortLabel", "string (names the group)", '"Effort"'],
-    ],
     examples: [
       { id: "composer", title: "In the composer", note: "Pass it as the Composer's mode. The menu ends under the trigger, 4 away, and flips above when the composer is at the bottom of the page; focus starts on the current model, choosing one closes the menu and returns focus.", demo: "GalleryModelPicker" },
       { id: "effort", title: "Effort", note: "How hard the model works, muted after its name; chosen in its own group under the models.", demo: "GalleryModelPickerEffort" }
@@ -1885,12 +1384,6 @@ export const COMPONENT_PAGES = [
     slug: "scroll-to-latest",
     name: "Scroll to latest",
     manifest: "scrollToLatest",
-    api: [
-      ["scrollRef", "RefObject<HTMLElement> (the conversation's scroll container)", "—"],
-      ["threshold", "px from the end before it shows", "200"],
-      ["label", "string", '"Scroll to latest"'],
-      ["buttonProps", "props and ref for the Button (its onClick runs first and can preventDefault the scroll)", "—"],
-    ],
     examples: [
       { id: "default", title: "In a conversation", note: "Place it inside the composer's relatively positioned wrapper: it rises 24 above the composer, centred. It appears once the reader is 200px from the end and scrolls back smoothly (instantly with reduced motion).", demo: "GalleryScrollToLatest" },
     ],
@@ -1900,15 +1393,6 @@ export const COMPONENT_PAGES = [
     name: "Message",
     manifest: "message",
     api: [
-      ["author", '"user" | "assistant"', '"assistant"'],
-      ["authorName", "string (names the turn: “You said”, “ChatGPT said”)", '"You" / "Assistant"'],
-      ["actions", "MessageActions of ghost icon Buttons", "—"],
-      ["streaming", "boolean (a dot follows the last word; actions wait)", "false"],
-      ["status", '"sending" | "error" (the person\'s message on its way, or not sent)', "—"],
-      ["statusText", "string (the status line's words)", '"Sending…" / "Not sent"'],
-      ["onRetry", "() => void (Retry on a message not sent)", "—"],
-      ["split", "boolean (each child a bubble of its own, on one stack)", "false"],
-      ["MessageActions.label", "string", '"Message actions"'],
       ["MessageGroup", "the person's consecutive messages, stacked 2 apart", "—"],
     ],
     examples: [
@@ -1924,13 +1408,6 @@ export const COMPONENT_PAGES = [
     slug: "prompt-suggestions",
     name: "Prompt suggestions",
     manifest: "promptSuggestions",
-    api: [
-      ["items", "{ id, label, icon?, shortcut? }[] (shortcut: the keys that choose it, a keycap after the label; suggestions is a deprecated alias)", "—"],
-      ["onSelect", "(suggestion) => void (fill or send; the host decides)", "—"],
-      ["onDismiss", "(suggestion) => void (shows a dismiss on each row; list layout only)", "—"],
-      ["label", "string (names the list)", '"Suggestions"'],
-      ["layout", '"list" | "chips" (chips for narrow or inline places)', '"list"'],
-    ],
     examples: [
       { id: "default", title: "Under the composer", note: "ChatGPT's home: rows as wide as the composer, 24 below it, the prompt in muted text on Menu's hover plate. Choosing one fills the composer here; the list hides once there is a draft.", demo: "GalleryPromptSuggestions" },
     ],
@@ -1940,13 +1417,7 @@ export const COMPONENT_PAGES = [
     name: "Hover card",
     manifest: "hoverCard",
     api: [
-      ["trigger", "ReactElement (a link that works without the card)", "—"],
       ["children", "Popover slots: PopoverHeader, PopoverTitle, PopoverDescription, .area-hover-card__meta", "—"],
-      ["side", '"top" | "right" | "bottom" | "left"', '"bottom"'],
-      ["delay / closeDelay", "ms (openDelay is a deprecated alias)", "700 / 300"],
-      ["openOnFocus", "keyboard focus opens it at once; off only where its content is reached another way (a sheet the arrows sweep, a panel showing the same)", "true"],
-      ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void", "— / false / —"],
-      ["align / offset", '"start" | "center" | "end" / px', '"start" / 8'],
     ],
     examples: [
       { id: "person", title: "Person", note: "Rest the pointer on the link for 700ms, or Tab to it. Moving onto the card keeps it open; leaving both closes it after 300ms; Escape closes it. Touch follows the link instead. The card only repeats what the link leads to, so nothing is lost without it.", demo: "GalleryHoverCard" },
@@ -1957,14 +1428,6 @@ export const COMPONENT_PAGES = [
     slug: "context-menu",
     name: "Context menu",
     manifest: "contextMenu",
-    api: [
-      ["menu", "ReactNode (MenuItem, MenuLabel, MenuSeparator), or with itemSelector (item: HTMLElement) => ReactNode", "—"],
-      ["itemSelector", "string: opens only on a matching element (a row, a tile), hands it to menu and marks it data-context-target while open; elsewhere the browser's menu shows", "—"],
-      ["menuLabel", "string (names the menu; label is a deprecated alias)", '"Context menu"'],
-      ["children", "the area that opens it", "—"],
-      ["onOpenChange", "(open) => void", "—"],
-      ["disabled", "boolean (the browser's own menu shows instead)", "false"],
-    ],
     examples: [
       { id: "default", title: "Default", note: "Right-click to open at the pointer; Shift+F10 or the Menu key opens it under the focused element with the first row focused. A row, Escape, Tab or a click elsewhere closes it; focus returns. It flips to stay on screen.", demo: "GalleryContextMenu" },
       { id: "tree", title: "On tree rows", demo: "GalleryContextMenuTree" },
@@ -1975,14 +1438,7 @@ export const COMPONENT_PAGES = [
     name: "Command palette",
     manifest: "commandPalette",
     api: [
-      ["items", "{ id, label, description?, icon?, shortcut?, group?, keywords?, disabled?, onSelect?, keepOpen? }[]", "—"],
-      ["open / defaultOpen / onOpenChange", "boolean", "false"],
-      ["hotkey", '"mod+k" and similar (⌘ on Apple, Ctrl elsewhere)', "—"],
-      ["inline", "boolean (render in place, no modal)", "false"],
-      ["query / defaultQuery / onQueryChange", "string", '""'],
-      ["placeholder / aria-label / emptyText", "string / string (names the palette and its search; label is a deprecated alias) / ReactNode", '"Search or run a command…" / "Command palette" / "No results"'],
-      ["footer", "ReactNode | false (key hints by default)", "hints"],
-      ["filter", "(item, query) => boolean", "label, description and keywords contain the query"],
+      ["aria-label", "string (names the palette and its search; label is a deprecated alias)", '"Command palette"'],
     ],
     examples: [
       { id: "default", title: "Default", note: "Type to narrow; ↑/↓ move (disabled rows are skipped), Enter runs the highlighted row, Escape clears the search and then closes. Focus never leaves the field.", demo: "GalleryCommandPalette" },
@@ -1994,15 +1450,7 @@ export const COMPONENT_PAGES = [
     name: "Combobox",
     manifest: "combobox",
     api: [
-      ["items", "{ value, label, description?, icon?, disabled?, group? }[] (options is a deprecated alias)", "—"],
-      ["value / defaultValue / onValueChange", "string | null", "null"],
-      ["inputValue / defaultInputValue / onInputChange", "string", "the selected label"],
-      ["allowsCustomValue", "boolean (keep text that matches no option)", "false"],
-      ["onCreate", "(text) => void (adds a Create row)", "—"],
-      ["filter", "(option, text) => boolean", "case-insensitive contains"],
-      ["emptyText", "ReactNode", '"No results"'],
-      ["size / variant / fullWidth / disabled / invalid", "as Input", "md / outline / false"],
-      ["toggleLabel", "string", '"Show suggestions"'],
+      ["disabled", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", note: "Type to filter; ↓/↑ move through the list without leaving the field, Enter picks, Escape closes (and clears when closed). The chevron shows every option. Leaving the field reverts text that matches nothing.", demo: "GalleryCombobox" },
@@ -2016,15 +1464,8 @@ export const COMPONENT_PAGES = [
     name: "Custom select",
     manifest: "customSelect",
     api: [
-      ["items", "{ value, label, description?, icon?, preview?, disabled?, group? }[]", "—"],
-      ["value / defaultValue / onValueChange", "string | null / (value, event) => void", "null"],
-      ["placeholder", "ReactNode", '"Select…"'],
-      ["variant", '"outline" | "soft" | "ghost"', '"outline"'],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["layout", '"list" | "grid" (cells: each option\'s preview, or its icon large, over its label; the list as wide as its Field)', '"list"'],
-      ["fullWidth / disabled / invalid / required", "boolean", "false"],
-      ["name / form", "string (a hidden input carries the value)", "—"],
-      ["onOpenChange", "(open) => void", "—"],
+      ["disabled", "boolean", "false"],
+      ["form", "string (the hidden input's form)", "—"],
       ["aria-label / aria-labelledby", "names the trigger and the list", "—"],
     ],
     examples: [
@@ -2039,15 +1480,8 @@ export const COMPONENT_PAGES = [
     slug: "tag",
     name: "Tag",
     manifest: "tag",
-    api: [
-      ["color", '"neutral" | "gray" | "brown" | "orange" | "yellow" | "green" | "blue" | "purple" | "pink" | "red"', '"neutral"'],
-      ["size", '"md" (20) | "lg" (24)', '"md"'],
-      ["icon", "ReactNode (12px leading glyph)", "—"],
-      ["onDismiss / dismissLabel", '(event) => void / string (default "Remove <label>")', "—"],
-      ["disabled", "boolean", "false"],
-    ],
     examples: [
-      { id: "default", title: "Default", note: "Notion's select tag: 14px body text in the colour's dark ink on its tint, 20 tall, corner 4.", demo: "GalleryTag" },
+      { id: "default", title: "Default", note: "A chosen value: the mark text in its color's words on its tint, 18 tall at the default type, the small corner.", demo: "GalleryTag" },
       { id: "removable", title: "Removable", note: "A remove × at the end; under the pointer it gets a plate fitted to the tag's corner.", demo: "GalleryTagRemovable" },
     ],
   },
@@ -2056,12 +1490,7 @@ export const COMPONENT_PAGES = [
     name: "Tag picker",
     manifest: "tagPicker",
     api: [
-      ["items", "{ value, label, tone?, disabled? }[] (tone is a Badge tone)", "—"],
-      ["value / defaultValue / onValueChange", "string[] / (values, event?) => void", "[]"],
-      ["onCreate", "(text) => void (adds a Create row; add the tag to items to choose it)", "—"],
-      ["hint / emptyText", "ReactNode (hint null hides it)", '"Select a tag or create one" / "No tags"'],
-      ["variant / size / fullWidth / disabled / invalid", "as Input", "outline / md / false"],
-      ["name", "string (one hidden input per value)", "—"],
+      ["disabled", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", note: "Notion's multi-select: the chosen tags sit in the field. Type to filter or create; ↑/↓ move, Enter adds or removes and keeps the list open; Backspace in an empty field removes the last tag; Escape closes.", demo: "GalleryTagPicker" },
@@ -2073,15 +1502,7 @@ export const COMPONENT_PAGES = [
     name: "Date picker",
     manifest: "datePicker",
     api: [
-      ["value / defaultValue / onValueChange", '"YYYY-MM-DD" | null / (value, event?) => void', "null"],
-      ["placeholder / icon", "ReactNode", '"Pick a date" / —'],
-      ["variant", '"outline" | "soft" | "ghost"', '"outline"'],
-      ["size / fullWidth / disabled / invalid", "as Select", "md / false"],
-      ["min / max / isDateUnavailable", '"YYYY-MM-DD" / (date) => boolean', "—"],
-      ["today / locale / firstDayOfWeek", "as Calendar", "the clock / the browser / locale"],
-      ["formatOptions", "Intl.DateTimeFormatOptions", "October 5, 2026"],
-      ["clearable", "boolean (a Clear row)", "true"],
-      ["name", "string (submits YYYY-MM-DD)", "—"],
+      ["disabled", "boolean", "false"],
     ],
     examples: [
       { id: "default", title: "Default", note: "Notion's date property: the date as text above the month (type one and press Enter, or pick a day), then Clear. Picking closes and returns focus to the field.", demo: "GalleryDatePicker" },
@@ -2093,16 +1514,6 @@ export const COMPONENT_PAGES = [
     slug: "drawer",
     name: "Drawer",
     manifest: "drawer",
-    api: [
-      ["title / description / footer", "ReactNode", "—"],
-      ["side", '"end" | "start" | "bottom"', '"end"'],
-      ["size", '"sm" (384) | "md" (480)', '"sm"'],
-      ["actions", '"row" | "stacked" (footer actions full width, primary first)', '"row"'],
-      ["modal", "boolean (false: no scrim, the page stays usable)", "true"],
-      ["trigger / open / defaultOpen / onOpenChange", "as Dialog", "—"],
-      ["showCloseButton / dismissLabel", "boolean / string", 'true / "Close"'],
-      ["inline", "boolean (the surface in place, for documentation)", "false"],
-    ],
     examples: [
       { id: "modal", title: "Modal", note: "Slides in from the end over the scrim. Focus is trapped inside; Escape, the close button or a press on the scrim closes it and focus returns to the trigger.", demo: "GalleryDrawerModal" },
       { id: "default", title: "Anatomy", note: "Dialog's header, body and footer against the screen's edge.", demo: "GalleryDrawer" },
@@ -2115,15 +1526,6 @@ export const COMPONENT_PAGES = [
     slug: "confirm-dialog",
     name: "Confirm dialog",
     manifest: "confirmDialog",
-    api: [
-      ["title / description", "ReactNode (title as a question)", "—"],
-      ["confirmLabel / cancelLabel", "ReactNode", '— / "Cancel"'],
-      ["tone", '"neutral" | "danger"', '"neutral"'],
-      ["onConfirm", "(event) => void | Promise (busy until it settles)", "—"],
-      ["onCancel", "() => void", "—"],
-      ["trigger / open / defaultOpen / onOpenChange", "as Dialog", "—"],
-      ["inline", "boolean (the surface in place, for documentation)", "false"],
-    ],
     examples: [
       { id: "modal", title: "Modal", note: "ChatGPT's \"Delete chat?\": focus starts on Cancel; Escape and the scrim cancel. A promise from onConfirm keeps the dialog open with the action busy.", demo: "GalleryConfirmDialogModal" },
       { id: "default", title: "Destructive", demo: "GalleryConfirmDialog" },
@@ -2134,22 +1536,6 @@ export const COMPONENT_PAGES = [
     slug: "box-field",
     name: "Box field",
     manifest: "boxField",
-    api: [
-      ["kind", '"sides" | "corners"', '"sides"'],
-      ["label", "string", "— (names the group and each field)"],
-      ["hideLabel", "boolean", "false"],
-      ["value / defaultValue", "[number | null ×4] in CSS order", "[0, 0, 0, 0]"],
-      ["onValueChange", "(value) => void", "—"],
-      ["independent / defaultIndependent", "boolean", "false"],
-      ["onIndependentChange", "(independent: boolean) => void", "—"],
-      ["toggle", "boolean", "true"],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["variant", '"outline" | "soft" (forwarded to each NumberField)', '"outline"'],
-      ["min / max / step / unit", "as NumberField", "min 0"],
-      ["disabled", "boolean", "false"],
-      ["readOnly", "boolean (forwarded to each NumberField; the link toggle is disabled)", "false"],
-      ["name", "string (submits a CSS shorthand)", "—"],
-    ],
     examples: [
       { id: "padding", title: "Padding", note: "Linked, padding is a horizontal and a vertical field; the toggle splits it into one field per side, each axis keeping its column (left over right, top over bottom). Unequal sides show Mixed until a value is entered.", demo: "GalleryBoxFieldPadding" },
       { id: "padding-individual", title: "Padding per side", demo: "GalleryBoxFieldPaddingIndividual" },
@@ -2161,13 +1547,6 @@ export const COMPONENT_PAGES = [
     slug: "property-list",
     name: "Property list",
     manifest: "propertyList",
-    api: [
-      ["PropertyList.label", "string (an aria-label wins)", "—"],
-      ["PropertyList.onReorder", "(from: number, to: number) => void", "— (no handles without it)"],
-      ["PropertyListItem.label", "string", "—"],
-      ["PropertyListItem.inactive", "boolean", "false"],
-      ["PropertyListItem.actions", "ReactNode", "—"],
-    ],
     examples: [
       { id: "fills", title: "Fills", note: "Drag a row by its handle in the side inset, or focus the handle and use the arrow keys, Home and End. The move is announced and focus stays on the moved row. The heading's + adds a fill; each row hides or removes its own.", demo: "GalleryPropertyListFills" },
       { id: "effects", title: "Effects", demo: "GalleryPropertyListEffects" },
@@ -2178,24 +1557,7 @@ export const COMPONENT_PAGES = [
     name: "Panel",
     manifest: "panel",
     api: [
-      ["size", '"sm" | "md"', '"md"'],
-      ["title", "ReactNode", "—"],
-      ["action", "ReactNode", "—"],
-      ["footer", "ReactNode", "—"],
-      ["flush", "boolean", "false"],
-      ["bareBar", "boolean (a bar that names rather than heads: no rule under it)", "false"],
-      ["actionColumn", "boolean (every row keeps a trailing action square, as in Figma's properties panel; otherwise rows fill the width)", "false"],
       ["aria-label", "string (else the title names the panel region)", "—"],
-      ["PanelSection.heading", "ReactNode", "—"],
-      ["PanelSection.headingLevel", "2 | 3 | 4 | 5 | 6", "3"],
-      ["PanelSection.actions", "ReactNode", "—"],
-      ["PanelSection.collapsible / open / defaultOpen / onOpenChange", "boolean / boolean / boolean / (open) => void", "false / — / true / —"],
-      ["PanelSection.summary", "ReactNode (shown while collapsed)", "—"],
-      ["PanelRow.label", "ReactNode | [ReactNode, ReactNode]", "—"],
-      ["PanelRow.action", "ReactNode", "—"],
-      ["resizable", '"start" | "end"', "— (no separator)"],
-      ["width / defaultWidth / onWidthChange", "number (px) / number, which a double-click on the edge puts back / (width) => void", "— / CSS width / —"],
-      ["minWidth / maxWidth", "number (px)", "240 / 500"],
       ["PanelStack", "a caption above a control that needs the whole width", "—"],
     ],
     examples: [
@@ -2214,7 +1576,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "surface", name: "Surface", manifest: "surface", imports: "Surface, Stack",
-    api: [["variant", "surface (raised, Card's fill and edge) | soft (a recessed well) | plain (structure only)", "surface"], ["size", "sm | md | lg: Card's corner and inset", "md"]],
     examples: [
       { id: "default", title: "Default", demo: "GallerySurface", note: "A raised region: Card's fill, edge and resting shadow, with no parts. Compose its content with Stack." },
       { id: "nested", title: "Nested", demo: "GallerySurfaceNested", note: "Each corner is the one around it less that Surface's inset, floored at 4; a Surface holding Surfaces sets them at its smaller media inset." },
@@ -2225,7 +1586,6 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "stack", name: "Stack", manifest: "stack", imports: "Stack, Surface",
-    api: [["orientation", "vertical | horizontal", "vertical"], ["gap", "related | group | section, by role; follows Density and never exceeds a Surface's inset", "group"], ["align", "start | center | end | stretch | baseline (unset: a column stretches, a row centres)", "—"], ["spread", "boolean: ends pushed apart", "false"], ["wrap", "boolean: a row wraps", "false"]],
     examples: [
       { id: "default", title: "Default", demo: "GalleryStack", note: "A column of group members, 12 apart at the default Density." },
       { id: "horizontal", title: "Horizontal", demo: "GalleryStackHorizontal" },
@@ -2239,13 +1599,7 @@ export const COMPONENT_PAGES = [
     manifest: "card",
     imports: "Card, CardContent, CardHeader, CardLink, CardMedia, CardOverlay, CardList, CardCarousel, CardTitle, CardDescription, CardValue, CardFooter, Button, Badge",
     api: [
-      ["size", '"sm" | "md" | "lg" (corner and inset; type is the same at every size)', '"md"'],
-      ["layout", '"vertical" | "horizontal" | "thumbnail" | "immersive"', '"vertical"'],
-      ["selected", "boolean: the chosen card of a set, the selection stroke 2 wide inside its edge. Sets data-selected only; aria-selected or aria-pressed belong to the element that owns the choice", "false"],
       ["CardLink", "Anchor attributes. Inside CardTitle it makes the whole card one link", "—"],
-      ["CardHeader action", "ReactNode: a Badge or icon Button on the title's first line", "—"],
-      ["CardMedia bleed / well", "boolean: flush with the card's edge / a recessed surface for a composition", "false"],
-      ["CardOverlay placement / reveal", '"top-start" | "top-end" | "bottom-start" | "bottom-end" / boolean', '"top-end" / false'],
       ["CardList", "A short list; lead each item with a 16px icon", "—"],
       ["CardValue", "A widget's leading figure, in the large title role with equal-width digits", "—"],
       ["CardCarousel", "List attributes: a row of <li> items that scrolls sideways; name it with aria-label", "tabIndex 0"],
@@ -2273,16 +1627,6 @@ export const COMPONENT_PAGES = [
     slug: "alert",
     name: "Alert",
     manifest: "alert",
-    api: [
-      ["tone", '"neutral" | "info" | "success" | "warning" | "danger"', '"neutral"'],
-      ["layout", '"single-line" | "multiline" | "banner"', '"single-line"'],
-      ["flush", "boolean: square, no side or top edges (a banner that meets its container's edges)", "false"],
-      ["icon", "ReactNode", "—"],
-      ["title", "ReactNode", "—"],
-      ["action", "ReactNode", "—"],
-      ["link", "ReactNode", "—"],
-      ["onDismiss / dismissIcon / dismissLabel", "() => void / ReactNode / string", "— / dismiss / Dismiss alert"],
-    ],
     examples: [
       { id: "default", title: "Default", demo: "AlertDefault" },
       { id: "link", title: "Single line with text link", demo: "AlertWithLink" },
@@ -2303,27 +1647,19 @@ export const COMPONENT_PAGES = [
     slug: "separator",
     name: "Separator",
     manifest: "separator",
-    api: [["orientation", '"horizontal" | "vertical"', '"horizontal"'], ["spacing", '"none" | "normal"', '"none"'], ["inset", "boolean", "false"]],
     examples: [{ id: "default", title: "Default", demo: "SeparatorDefault" }],
   },
   {
     slug: "skeleton",
     name: "Skeleton",
     manifest: "skeleton",
-    api: [["shape", '"block" | "text" | "circle"', '"block"'], ["lines", "number: paragraph lines, the last shorter", "—"], ["animated", "boolean: false draws a still placeholder", "true"], ["children / loading", "wrap the real element: it keeps its size, hidden, until loading is false", "— / true"]],
+    api: [["children", "the real element: it keeps its size, hidden, until loading is false", "—"]],
     examples: [{ id: "default", title: "Default", demo: "SkeletonDefault" }, { id: "paragraph", title: "Paragraph", demo: "GallerySkeletonParagraph" }, { id: "wrap", title: "Wrap", demo: "GallerySkeletonWrap", note: "The placeholder takes the wrapped element's size and corner, so the layout does not move when it loads." }],
   },
   {
     slug: "spinner",
     name: "Spinner",
     manifest: "spinner",
-    api: [
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["label", "string: announced while turning; names the ring with a value", "—"],
-      ["value / max", "number: stops the arc at the value; omit for no known end", "— / 100"],
-      ["valueText", "string: announced in place of the number", "—"],
-      ["role", '"progressbar" (a task) | "meter" (a quantity used), with a value', '"progressbar"'],
-    ],
     examples: [
       { id: "default", title: "Default", demo: "SpinnerDefault" },
       { id: "value", title: "With a value", note: "value stops the arc at how far along a task is, so the same ring says how much once the amount is known (Cursor's review run).", demo: "GallerySpinnerValue" },
@@ -2334,12 +1670,6 @@ export const COMPONENT_PAGES = [
     slug: "progress",
     name: "Progress",
     manifest: "progress",
-    api: [
-      ["value", "number", "—"],
-      ["max", "number", "100"],
-      ["label", "string", "—"],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-    ],
     examples: [
       { id: "default", title: "Default", demo: "ProgressDefault" },
       {
@@ -2354,7 +1684,7 @@ export const COMPONENT_PAGES = [
     slug: "tooltip",
     name: "Tooltip",
     manifest: "tooltip",
-    api: [["side", '"top" | "right" | "bottom" | "left"', '"top"'], ["arrow", "boolean", "false"], ["trigger", "ReactNode: the element that opens it", "—"], ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void", "— / false / —"], ["align", '"start" | "center" | "end"', '"center"'], ["offset", "number (px)", "4, or 8 with the arrow"], ["delay / closeDelay", "number (ms)", "500 / 0"], ["className", "string", "—"]],
+    api: [["className", "string", "—"]],
     examples: [{ id: "default", title: "Default", demo: "TooltipDefault" }, { id: "arrow", title: "With indicator", demo: "GalleryTooltipArrow" }],
   },
   {
@@ -2362,14 +1692,6 @@ export const COMPONENT_PAGES = [
     name: "Menu",
     manifest: "menu",
     api: [
-      ["trigger", "ReactNode: the button that opens it", "—"],
-      ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void", "— / false / —"],
-      ["side / align / offset", 'OverlaySide / OverlayAlign / number', '"bottom" / "start" / 4'],
-      ["MenuItem.tone", '"danger"', "—"],
-      ["MenuItem.icon", "ReactNode (leading icon box, aria-hidden)", "—"],
-      ["MenuItem.shortcut", "ReactNode", "—"],
-      ["MenuItem.disabled", "boolean", "false"],
-      ["MenuSub label / icon / disabled / children", "a row that opens a nested menu beside it", "—"],
       ["id / aria-label / handlers", "a consumer's id and name win; its handlers run before the menu's", "—"],
     ],
     examples: [
@@ -2383,7 +1705,7 @@ export const COMPONENT_PAGES = [
     slug: "popover",
     name: "Popover",
     manifest: "popover",
-    api: [["side", '"top" | "right" | "bottom" | "left"', '"bottom"'], ["arrow", "boolean", "false"], ["trigger", "ReactNode: the element that opens it", "—"], ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void", "— / false / —"], ["align", '"start" | "center" | "end"', '"center"'], ["offset", "number (px)", "8, or 25 with the arrow"], ["PopoverTitle level", "2–6, or false for a plain block (a Hover card in running text); a title names its Popover", "2"], ["PopoverClose", "Button props; closes the popover it sits in and returns focus to the trigger", 'aria-label "Close"']],
+    api: [["PopoverClose", "Button props; closes the popover it sits in and returns focus to the trigger", 'aria-label "Close"']],
     examples: [{ id: "default", title: "Default", demo: "PopoverDefault" }, { id: "anchored", title: "Anchored to a trigger", note: "With a trigger, the popover opens beside it in the top layer, flips when its side lacks room and shifts to stay on screen. Escape and clicks outside close it; focus moves into it on open and back to the trigger on close.", demo: "GalleryPopoverTrigger" }],
   },
   {
@@ -2391,12 +1713,6 @@ export const COMPONENT_PAGES = [
     name: "Toast",
     manifest: "toast",
     api: [
-      ["tone", '"neutral" | "info" | "success" | "warning" | "danger"', '"neutral"'],
-      ["icon", "ReactNode", "—"],
-      ["title / action", "ReactNode", "—"],
-      ["onDismiss / dismissLabel", "() => void / string", "— / Dismiss notification"],
-      ["live", "boolean (status, or alert for danger; a Toaster turns it off)", "true"],
-      ["Toaster label / duration / hotkey", "string / ms / key (a toast with an action never times out)", "Notifications / 5000 / F8"],
       ["useToaster()", "{ show(options) => id, dismiss(id) }; options: message, tone, icon, title, action, duration, announcement", "—"],
     ],
     examples: [{ id: "default", title: "Default", demo: "ToastDefault" }, { id: "toaster", title: "Toaster", note: "Toasts stack at the end corner, announced through live regions that exist first; hovering or focusing the stack pauses them; F8 moves focus to it.", demo: "GalleryToaster" }],
@@ -2406,13 +1722,6 @@ export const COMPONENT_PAGES = [
     name: "Tabs",
     manifest: "tabs",
     api: [
-      ["items", "{ id, label, icon?, trailing?, disabled?, content? }[] (tabs is a deprecated alias)", "—"],
-      ["value", "string", "—"],
-      ["defaultValue / onValueChange", "string / (value: string) => void", "first enabled tab / —"],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["orientation", '"horizontal" | "vertical"', '"horizontal"'],
-      ["activationMode", '"automatic" | "manual"', '"automatic"'],
-      ["track", "boolean", "false"],
       ["aria-label", "string (names the tab list; label is a deprecated alias)", '"Views"'],
     ],
     examples: [
@@ -2428,15 +1737,6 @@ export const COMPONENT_PAGES = [
     slug: "dialog",
     name: "Dialog",
     manifest: "dialog",
-    api: [
-      ["title", "ReactNode", "—"],
-      ["description", "ReactNode", "—"],
-      ["footer", "ReactNode", "—"],
-      ["showCloseButton", "boolean", "true"],
-      ["onDismiss / dismissLabel", "() => void / string", "— / Close dialog"],
-      ["trigger", "ReactElement (opens a native modal)", "—"],
-      ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void (opens the modal without a trigger, e.g. from a menu item)", "— / false / —"],
-    ],
     examples: [
       {
         id: "default",
@@ -2452,24 +1752,19 @@ export const COMPONENT_PAGES = [
     name: "Kbd",
     imports: "Kbd, KbdGroup",
     manifest: "kbd",
-    api: [
-      ["keys", "string[]", "—"],
-      ["size", '"sm" | "md" ("small" / "normal" are deprecated aliases)', '"md"'],
-      ["variant", '"default" | "on-color" ("quiet" renders the keycap and is deprecated; appearance and on-emphasis are deprecated aliases)', '"default"'],
-    ],
     practices: [
       "Pass <code class='area-code'>keys</code> as names, not glyphs. <code class='area-code'>cmd</code>, <code class='area-code'>shift</code>, <code class='area-code'>alt</code>, <code class='area-code'>ctrl</code>, <code class='area-code'>enter</code>/<code class='area-code'>return</code> and the arrows render as native key symbols automatically.",
       "One flat chord contains its keys, matching Primer's KeybindingHint. The visual symbols remain individual semantic key elements, while the component supplies a spoken label for the whole shortcut.",
       "Every key is a keycap, in a menu row too, where it takes the small size. Use <code class='area-code'>variant=\"on-color\"</code> on a colored surface; a Tooltip, a solid Button and a menu row apply it automatically. Inside a button, link or menu row the spoken chord is hidden: give the host <code class='area-code'>aria-keyshortcuts</code>.",
-      "Normal is 20px for standalone hints, prose, tooltips and Buttons. Small is 16px only for tight trailing metadata in dense menus and tables. The outer control reserves the Kbd box itself, so its trailing space equals the space above and below the keycap.",
+      "Normal is 18px at the default type, for standalone hints, prose, tooltips and Buttons. Small is 14px, for tight trailing metadata in menus and tables. The outer control reserves the Kbd box itself, so its trailing space equals the space above and below the keycap.",
       "Kbd is display-only: wire the shortcut separately and expose it on the associated action with <code class='area-code'>aria-keyshortcuts</code>. Never show an unavailable binding.",
       "Keycaps are flat, with a quiet edge and no inset or drop shadow. Native modifier symbols and letters share the keyboard font, size and weight; customize <code class='area-code'>--area-font-keyboard</code> only with a face that includes those symbols.",
     ],
     examples: [
       { id: "default", title: "Default", demo: "KbdDefault" },
-      { id: "sizes", title: "Sizes", note: "Normal is 20px with 4px even insets. Area adapts the compact tier to 16px with 2px even insets for legibility in control chrome.", demo: "KbdSizes" },
+      { id: "sizes", title: "Sizes", note: "The mark ladder's md and sm, 18 and 14 at the default type at every density; each key's legend sits (height − 6) / 2 from the edge.", demo: "KbdSizes" },
       { id: "on-emphasis", title: "In a Tooltip", note: "A keycap on a Tooltip takes the translucent on-color treatment automatically.", demo: "KbdOnEmphasis" },
-      { id: "button", title: "In a button", note: "Buttons use the 20px normal Kbd tier, contextual surfaces and exact optical trailing insets.", demo: "KbdButton" },
+      { id: "button", title: "In a button", note: "Buttons use the normal Kbd, a plate of the Button's own ink, and reserve its box at the end.", demo: "KbdButton" },
       { id: "sequence", title: "Sequence", note: "KbdGroup separates chords pressed in sequence; each Kbd remains one simultaneous chord.", demo: "KbdSequence" },
       { id: "key-map", title: "Key map", note: "Modifier names become native text glyphs. Symbols and letters share one UI font and one type size.", demo: "KbdKeyMap" },
       { id: "in-menu", title: "In a menu", note: "The small keycap at the row's end; a string shortcut becomes one.", demo: "MenuWithShortcuts" },
@@ -2479,21 +1774,6 @@ export const COMPONENT_PAGES = [
     slug: "nav",
     name: "Nav",
     manifest: "nav",
-    api: [
-      ["orientation", '"vertical" | "horizontal"', '"vertical"'],
-      ["selection", '"marker"', "—"],
-      ["current", "boolean", "false"],
-      ["icon", "ReactNode", "\u2014"],
-      ["trailing", "ReactNode", "\u2014"],
-      ["actions", "ReactNode (independent buttons inside the shared row backplate)", "—"],
-      ["revealActions", "boolean: the actions show only while the row is hovered or holds focus (always on touch)", "false"],
-      ["disabled", "boolean", "false"],
-      ["NavGroup nested", "boolean (an expandable item's children, one icon column in: on a parent's name)", "false"],
-      ["NavGroup open / onOpenChange", "boolean / (open) => void: a labelled group folds, its heading the button", "—"],
-      ["NavGroup actions", "ReactNode (controls at the heading's end, such as a section's New)", "—"],
-      ["NavGroup sticky", "boolean: the heading stays at the top of the scroll while its rows pass under it (--area-nav-sticky-top, --area-nav-pin-fill)", "false"],
-      ["picture", "ReactNode: a 20 × 14 picture in the icon's place (a screen's or an image's thumbnail)", "—"],
-    ],
     practices: [
       "Mark the current page with <code class='area-code'>current</code>, not with a class. It renders <code class='area-code'>aria-current=\"page\"</code>, which is both what the CSS selects on and what a screen reader announces \u2014 so an item cannot look current without being current.",
       "Label every nav. Two or three <code class='area-code'>&lt;nav&gt;</code> landmarks on one page are indistinguishable without <code class='area-code'>aria-label</code>, and a sidebar plus a top bar is the common case.",
@@ -2537,7 +1817,7 @@ export const COMPONENT_PAGES = [
     slug: "table",
     name: "Table",
     manifest: "table",
-    api: [["interactive", "boolean (rows hover; give each row one TableLink)", "false"], ["size", '"sm" | "md" | "lg"', '"md"'], ["striped", "boolean", "false"], ["columnDividers", "boolean", "false"], ["selected row", 'aria-selected="true" on a body tr takes the selected fill', "—"], ["TableLink", "a stretched link that makes its whole row clickable", "—"], ["TableCell / TableHeaderCell: numeric", "end-aligned tabular figures; give the heading the same", "false"], ["TableCell / TableHeaderCell: fit", "as narrow as the content, unwrapped (controls, a glyph, a short term)", "false"], ["wrapperProps", "props for the scroll wrapper; it becomes a focusable region named after the table while it overflows", "—"]],
+    api: [["selected row", 'aria-selected="true" on a body tr takes the selected fill', "—"], ["TableLink", "a stretched link that makes its whole row clickable", "—"]],
     examples: [{ id: "default", title: "Default", demo: "TableDefault" }, { id: "clickable", title: "Clickable rows", note: "One TableLink per row stretches over the row, so the hover plate and the click agree; the row shows the link's focus.", demo: "GalleryTableInteractive" }],
   },
 ].sort((a, b) => a.name.localeCompare(b.name, "en"));

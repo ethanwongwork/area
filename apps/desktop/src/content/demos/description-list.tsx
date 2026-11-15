@@ -42,9 +42,9 @@ export const GalleryDescriptionListDivided = () => (
     <DescriptionListItem term="Label">Value</DescriptionListItem>
   </DescriptionList>
 );
-/* ChatGPT's account card: justified rows, divided, in a frame. */
+/* An account card: justified rows, divided, in the surface frame. */
 export const GalleryDescriptionListFramed = () => (
-  <DescriptionList style={page} layout="justified" divided framed>
+  <DescriptionList style={page} layout="justified" divided variant="surface">
     <DescriptionListItem term="Label">Value</DescriptionListItem>
     <DescriptionListItem term="Label">Value</DescriptionListItem>
     <DescriptionListItem term="Label">March 2024</DescriptionListItem>

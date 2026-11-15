@@ -19,7 +19,7 @@ for (const [axis, values] of Object.entries(MANIFESTS.nav.variants)) {
 // packages/react/src/components/Nav.tsx:27-51,73-99: native nav/link roles, named groups, current and disabled links, sibling actions.
 test("Nav composes named navigation and groups with independent destination actions", () => {
   const html = renderToString(h(Nav, { id: "nav", className: "custom", "aria-label": "Workspace", "aria-describedby": "help" }, h(NavGroup, { label: "Projects", id: "projects", className: "group" }, h(NavItem, { href: "/design", current: true, id: "design", className: "item", "aria-label": "Design projects", icon: "I", trailing: "3", actions: h("button", { "aria-label": "Add project" }, "+") }, "Design"), h(NavSeparator), h(NavItem, { href: "/archive", disabled: true }, "Archive"))));
-  assert.match(html, /^<nav class="area-nav custom" id="nav" aria-label="Workspace" aria-describedby="help">/);
+  assert.match(html, /^<nav class="area-nav area-nav--vertical custom" id="nav" aria-label="Workspace" aria-describedby="help">/);
   const group = html.match(/<div[^>]*role="group"[^>]*>/)[0];
   const label = group.match(/aria-labelledby="([^"]+)"/)[1];
   assert.ok(html.includes(`id="${label}"><span>Projects</span>`));

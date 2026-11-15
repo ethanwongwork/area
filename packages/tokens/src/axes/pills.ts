@@ -30,7 +30,7 @@ export const PILL_SHAPES: readonly PillShape[] = [
   // modes, model, mic and send (the measured references' 24 pills and round send). Its shell keeps its
   // own corner (a pill only with a round send at one line).
   { id: "composer", label: "Composer", covers: "Composer's buttons and pickers: attach, modes, model, mic, send", pill: true },
-  { id: "segmented", label: "Segmented", covers: "the Segmented track and its items", pill: false },
+  { id: "segmented", label: "Segmented", covers: "the Segmented and soft Toggle group tracks and their options", pill: false },
   { id: "chip", label: "Chip", covers: "Chip, its swatch and remove button", pill: true },
   { id: "badge", label: "Badge", covers: "Badge, Badge group", pill: true },
   { id: "count", label: "Count", covers: "Count", pill: true },

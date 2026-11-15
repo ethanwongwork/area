@@ -24,35 +24,41 @@ export interface ComboboxOption {
 }
 
 export interface ComboboxProps extends Omit<InputProps, "value" | "defaultValue" | "onChange" | "size" | "trailingAction" | "role"> {
-  /** The suggestions. Collections are `items` everywhere (audit H-14). */
+  /** The field's height and type, as Input's: `md` by default. */
+  size?: VariantProps<typeof MANIFESTS.input>["size"];
+  /** The field's treatment, as Input's. */
+  variant?: InputProps["variant"];
+  /** The suggestions. */
   items?: ComboboxOption[];
-  /** @deprecated Use `items`. */
-  options?: ComboboxOption[];
-  /** The selected option's value (controlled). */
-  value?: string | null;
-  defaultValue?: string | null;
-  /** The chosen value, and the event that chose it (absent when a created option resolves later; audit C-7). */
-  onValueChange?: (value: string | null, event?: SyntheticEvent) => void;
-  /** The text in the field (controlled). */
-  inputValue?: string;
-  defaultInputValue?: string;
-  onInputChange?: (text: string) => void;
-  /** Keep typed text that matches no option (a font size, a tag); otherwise the field reverts on blur. */
-  allowsCustomValue?: boolean;
-  /** Offer a "Create" row for text that matches no option. */
-  onCreate?: (text: string) => void;
-  /** How options match the text. Defaults to a case-insensitive "contains". */
-  filter?: (option: ComboboxOption, text: string) => boolean;
   /** Shown when nothing matches (and nothing can be created). */
   emptyText?: ReactNode;
-  size?: VariantProps<typeof MANIFESTS.input>["size"];
-  /** The field's treatment, passed to its Input: the Combobox block draws no modifier of its own (owner, 2026-10-19). */
-  variant?: InputProps["variant"];
   /** Name of the list toggle button. */
   toggleLabel?: string;
+  /** The selected option's value (controlled). */
+  value?: string | null;
+  /** The option chosen at first, uncontrolled; none by default. */
+  defaultValue?: string | null;
+  /** The text in the field (controlled). */
+  inputValue?: string;
+  /** The text in the field at first, uncontrolled. */
+  defaultInputValue?: string;
+  /** Keep typed text that matches no option (a font size, a tag); otherwise the field reverts on blur. */
+  allowsCustomValue?: boolean;
+  /** How options match the text. Defaults to a case-insensitive "contains". */
+  filter?: (option: ComboboxOption, text: string) => boolean;
   /** The list is open (controlled); `defaultOpen` opens it at first; `onOpenChange` hears it open and close. */
   open?: boolean;
+  /** Whether the list starts open, uncontrolled. */
   defaultOpen?: boolean;
+  /** @deprecated Use `items`. */
+  options?: ComboboxOption[];
+  /** Called with the chosen value and the event that chose it (no event when a created option resolves later). */
+  onValueChange?: (value: string | null, event?: SyntheticEvent) => void;
+  /** Called with the field's text as it is typed. */
+  onInputChange?: (text: string) => void;
+  /** Offer a "Create" row for text that matches no option. */
+  onCreate?: (text: string) => void;
+  /** Called when the list opens or closes. */
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -247,6 +253,8 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     const isSelected = option.value === selected;
     return <div key={option.value} id={`${id}-option-${current}`} data-index={current} role="option" aria-selected={isSelected}
       aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? "" : undefined} className="area-menu__item area-combobox__option"
+      /* The chosen option shows the active plate and the check, as every value picker (plan B7.7). */
+      data-selected={isSelected ? "" : undefined}
       data-highlighted={highlighted ? "" : undefined}
       onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!option.disabled) setActive(current); }}
       onClick={event => { if (!option.disabled) commitRow(row, event); }}>
@@ -287,7 +295,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined}
       aria-labelledby={typeof rest["aria-label"] === "string" ? undefined : rest["aria-labelledby"]}
       popover="manual" className="area-menu area-combobox__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
-      {listRows.length === 0 ? <div className="area-combobox__empty" role="presentation">{emptyText}</div> : null}
+      {listRows.length === 0 ? <div className="area-menu__empty" role="presentation"><span className="area-menu__text">{emptyText}</span></div> : null}
       {[...groups].map(([group, list]) => group
         ? <div key={group} role="group" aria-labelledby={`${id}-group-${group}`} className="area-combobox__group">
             <div id={`${id}-group-${group}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>

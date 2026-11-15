@@ -111,10 +111,10 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 | trigger · chevron | 16px, 8px from the outer end at sm and md, 12 at lg (owner 2026-10-08). With `appearance: base-select`: the Area `chevron-down` glyph (1.125 weight) as a `::picker-icon` mask in `input-chevron` ink (`stroke-control`, rgb(131) / dark rgb(147); 3:1 on every field fill; was `input-icon` #666), `fg-disabled` when disabled (`navigation.css:326-338`). Native picker only: the #888 1.5-stroke data URI (`navigation.css:251`) | Notion rgb(142,139,134) 8px from the end; ChatGPT 16px rgb(143); UUI 16px; audit B-3 B (owner) | The #888 literal stays where the browser draws the picker; Figma 50–90% black |
 | trigger · text | 14/20 400 `fg-default`, 11.03 from the edge | Notion 14 400, ChatGPT 14/18 400 | Notion's permission select uses muted ink as an inline trigger; Figma 11/16 450 |
 | picker · offset | 4 from the field, below; `position-try-fallbacks: flip-block` with `position-try-order: normal`, so it flips only when below doesn't fit (`navigation.css:347-348`) | Audit B-5 B (owner 2026-09-30): Combobox list rules; UUI 4px offset | Was no flip (pre-2026-09-24 owner decision, superseded). Chrome's UA default (`most-block-size`) opened it on the roomier side |
-| picker · size | min width max(trigger, 224); max height min(324, 100%), then scrolls | Combobox list (Menu's 224; Figma's 324 font list) | Was the trigger's width and at most 288 |
+| picker · size | min width max(trigger, 160; plan B2.3, was 224); max height min(324, 100%), then scrolls | Combobox list (Menu's 160; Figma's 324 font list) | Was the trigger's width and at most 288 |
 | picker · surface | padding 4, the field's corner + 4 (sm 10, md 12, lg 14; surface.css "A list opened from a field"), `border-float` (was `border-decorative` until the 2026-10-12 consistency pass), `bg-surface` | Peer: Menu (4px inset) | UUI radius 8 |
 | picker · lift | `--area-shadow-float`, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (8% key at the default 8, 3% until 2026-11-05), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts) | Audit "Floating lift" (Notion popover; Menu, Popover) | Was `shadow-2`. A Surface axis role since audit S10 |
-| option · row | Menu's row (audit B-4): 32 at every trigger size; text start on the inset contract (32 − 1cap) / 2 ≈ 11 (11.03 measured live); check edge 8 from the end; gap `--area-gap-row` 12; corner the select's own (sm 6, md 8, lg 10; was Menu's 8 at every size); 2px apart (`navigation.css:356-378`) | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6. Was min 32, padding 6 8, radius `radius-row` |
+| option · row | Menu's row (audit B-4): 32 at every trigger size; text start on the inset contract round((row − 1cap) / 2), 10 at the default (plan A11.1; was 10.38 unrounded); check edge 8 from the end; gap `--area-ui-cluster` 8 (plan B2.3; was `gap-row`); corner the select's own (sm 6, md 8, lg 10; was Menu's 8 at every size); 2px apart (`navigation.css:356-378`) | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6. Was min 32, padding 6 8, radius `radius-row` |
 | optgroup · label | 32 row, 12/16 `fg-muted`, regular weight (`navigation.css:403-412`) | Peer: Menu group label | — |
 | option · hover / focus | `bg-component-hover` #f3; keyboard focus is the plate alone, as Menu and Combobox rows | Audit row-plate rule; audit B-5 | Was the plate plus a 2px inset focus ring |
 | option · checked | no plate (owner 2026-10-08; was `bg-component-active` #eee); the Area `check` glyph (1.125 weight) as a `::checkmark` mask at the end in `currentColor` (`navigation.css:391-402`) | Audit: selection one step above hover | Figma's check sits before the label; UUI one fill for both |
@@ -128,8 +128,8 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 | focus | keyboard focus only (`:focus-visible`): border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo | `navigation.css`; audit S1, as [input.md](input.md) | a pointer choice keeps focus without the ring (2026-11-02): a select opens a picker, as a Button does |
 | invalid / success / warning | border and halo in the tone colour; `aria-invalid` or `data-*`; forced colours draw invalid (`aria-invalid` or `data-invalid`) dashed (`forced-colors.css`) | `area--error`, `area--success`, `area--warning` |
 | placeholder | a chosen empty-value option (`option:checked[value=""]`) is a placeholder: the trigger takes `input-placeholder` ink, as Input's (`navigation.css:320-321`; audit B-19 B, owner 2026-09-30) | Was default ink, read as a chosen value |
-| disabled | fill #f7, `border-faint`, ink and chevron `fg-disabled` rgb(164); no opacity | `area--disabled`; `navigation.css:338` |
-| option hover / checked / disabled | #f3 / check only (was #eee) / `fg-disabled` | `navigation.css:335-338`; `area--default` node 1 |
+| disabled | the field shell's disabled paint (input.css): fill #f7, `border-faint` (none on soft), ink and chevron `fg-disabled` rgb(164); no opacity | `area--disabled`; plan B7.8 |
+| option hover / checked / disabled | #f3 / check only (was #eee) / `opacity-disabled`, no plate (plan B7.8) | `area--default` node 1 |
 
 ## Behavior and accessibility
 
@@ -252,6 +252,7 @@ select and Figma's filter, size, zoom and format selects. Build and test results
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the custom picker lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft` (fill alone 1.07:1 under more), as Input's.
 - 2026-10-23 · owner, 2026-10-23: "is it supposed to be much rounder than the actual input? im okay with it being a bit rounder but it seems drastic" → a list opened from a field takes the field's corner (surface.css, "A list opened from a field"; navigation.css for Select's picker): rows at the field's corner, the list 4 rounder (or, below a 4 corner, the rows' own corner more), rows short of a pill before Pill. Default: sm 6 → list 10 / rows 6 (Notion's field 6, menu 10, rows 6; was 12 / 8, twice the field), md 8 → 12 / 8 (unchanged), lg 10 → 14 / 10. Menus and Context menus keep 12 / 8. Swept every size × Radius 0–14 and Pill × density 28/32/36 × pill fields: Select, Custom select, Combobox and Tag picker agree at every combination.
+- 2026-11-14 · plan B7.8 → the trigger's disabled paint is the field shell's (input.css); a disabled option dims by opacity-disabled and takes no hover plate (was fg-disabled), as every row does; an empty value keeps the disabled ink when disabled. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Spacing audit (2026-10-17)
 
@@ -287,3 +288,42 @@ Gap: Select sets `gap: var(--_gap)`, its size's tier (6 at md; 4 at Compact 13).
 - **What changed:** `onValueChange(value, event)` beside native `onChange`, as Input's.
 - **Why:** forms.tsx:13-24. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation B2.3 and A11.1 · options' icon-to-label gap `ui-cluster` (8, Compact 6), picker floor 160 (was 224), the option text side rounded to a whole pixel (10, was 10.38).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the native optgroup label takes Menu's group label, the rows' size (13/18) at 500 in the muted ink, a row tall; it was 11/14 at 400 (plans A9.2, A9.4).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the native picker enters and leaves on `fast` (140; it entered on `base`), the exit on `ease-exit`, its top-layer hold on the fade (A5.1); options land and leave at once (A5.3); the field's colour leaves on `duration-quick` (70; A5.5).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge. (the picker)
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Row table (B2.1).** The picker's options stand 1 apart (`ui-row-gap`; was 2) and start their text on the glyph edge (`ui-row-inset`, 8; was the cap-centred 10).
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The one field shell replaces the family's copy; Select reads its select-* seam through the shell's inputs. No visible change.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
+- 2026-11-14 · system evaluation B6.1, B6.3, B6.6 · the native picker's padding, frame, corner and shadow stack are the one floating surface's, restated on the pseudo-element in popup.css: it now lists a material's layers first and takes the overlays' glass (material.css), where it stayed opaque beside a glass Menu (S13); its bar is the thin shared thumb.
+
+## Selection paint (plan B7.7), 2026-11-14
+
+- The chosen option shows the active plate and the check, the check in `fg-selection` (plan B7.7; was the check alone in currentColor, custom-select.md Q3). Forced colours: the Highlight pair.
+
+## State paint (plan B7.3), 2026-11-14
+
+- Options press to `bg-component-pressed`, one step past their hover.

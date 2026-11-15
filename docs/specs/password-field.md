@@ -140,3 +140,9 @@ Password field instead of its own recipe (it drew the Fluent eye).
 - **What changed:** Input's `onValueChange(value, event)` reaches the field.
 - **Why:** PasswordField.tsx:9-18 passed props to Input, which had none. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- Its field is Input, now drawn by the one field shell. No visible change.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
