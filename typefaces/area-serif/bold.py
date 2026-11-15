@@ -733,7 +733,13 @@ def _fillet(q, o, adj, pos, m1, c1, slanted, handles):
     VB = meet((m1 * pos[far][1] + c1, pos[far][1]), (m1 * pos[q][1] + c1, pos[q][1]), (pos[o][0] + d2[0], pos[o][1] + d2[1]), pos[o])
     if VR is None or VB is None or math.hypot(VR[0] - q[0], VR[1] - q[1]) > 40 or math.hypot(VB[0] - pos[q][0], VB[1] - pos[q][1]) > 120:
         return None
-    return ((VB[0] + q[0] - VR[0], VB[1] + q[1] - VR[1]), (VB[0] + o[0] - VR[0], VB[1] + o[1] - VR[1]))
+    nq = (VB[0] + q[0] - VR[0], VB[1] + q[1] - VR[1])
+    # 0.81 (last round): the corner stays on its own edge: it never passes the level of the edge's far end (neck_range's
+    # rule for a crotch). Where the two lines meet at a shallow angle a small move of the edge carries their meeting
+    # far along it: @'s a's top crotch rode 100 up its slanted stem, 21 over the stem's top (a nub at the Bold)
+    if (nq[1] - pos[far][1]) * (q[1] - far[1]) <= 0:
+        return None
+    return (nq, (VB[0] + o[0] - VR[0], VB[1] + o[1] - VR[1]))
 
 
 def inside_flats(strokes, pos, adj, placed, pinned):

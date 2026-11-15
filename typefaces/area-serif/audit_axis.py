@@ -124,8 +124,9 @@ def chord(E, m, d):
     return got[0]
 
 
-def chords(E, m, D):
-    """chord() for many directions D (k, 2) at once."""
+def chords(E, m, D, ends=False):
+    """chord() for many directions D (k, 2) at once. ends (0.81, last round): each found cut as (length, (edge, u),
+    (edge, u)), its two ends as places on the outline's edges (an edge's index and the share along it)."""
     A, Bn = E
     e = Bn - A
     den = D[:, 0:1] * e[None, :, 1] - D[:, 1:2] * e[None, :, 0]          # (k, edges)
@@ -152,13 +153,14 @@ def chords(E, m, D):
             if w == 0 and start is not None and start <= 0 <= x:
                 ea, eb = e[k0], e[k]
                 c = abs(float(ea @ eb)) / (float(np.hypot(*ea)) * float(np.hypot(*eb)) + 1e-12)
-                val = float(x - start) if c >= cosf else None
+                if c >= cosf:
+                    val = (float(x - start), (int(k0), float(u[r, k0])), (int(k), float(u[r, k]))) if ends else float(x - start)
                 break
         out.append(val)
     return out
 
 
-def thinnest(polys, step=4, points=(), across=None):
+def thinnest(polys, step=4, points=(), across=None, at=None):
     """The thinnest cut that is a stroke: bold.thinnest's reading (an ink span whose neighbours two scan lines
     before and two after are spans of about the same width over the same place). 0.81: a cut that lies within one
     mean stroke of a pointed end (`points`: ink corners under 60 degrees, a wedge accent's tip, an arrow's point)
@@ -171,7 +173,10 @@ def thinnest(polys, step=4, points=(), across=None):
     reading changes with no change of thickness. A span that is a stroke (the same test as before) is read as the
     shortest cut through its middle, turned up to ACROSS_DEG either way from the scan line: across a straight
     stroke exactly the distance between its edges, across a taper or a curve the cut square to it there. Every
-    glyph is read this way, the Regular and every instance alike."""
+    glyph is read this way, the Regular and every instance alike.
+
+    at (0.81, last round): a list that receives the thinnest cut's place, (length, (edge, u), (edge, u)), so the
+    same place can be read on another master (place_reading)."""
     across = ACROSS if across is None else across
     reach = 0
     if points:
@@ -181,9 +186,13 @@ def thinnest(polys, step=4, points=(), across=None):
     ends = None
     if across:                                                # a stroke's cut ends, as audit_rays reads them
         import audit_rays as AR
-        ends = AR.end_corners([np.asarray(p, float) for p in polys])
+        # 0.81 (last round): the corners found on the outline cut at most END_STEP apart, so where a corner is does
+        # not hang on where the flattening put its vertices (on a curve cut in 8 a vertex 12 units off the Q's tail's
+        # corner counted as the corner at one weight and not at the next)
+        ends = AR.end_corners([_resample(np.asarray(p, float), END_STEP) for p in polys])
     angs = np.radians(np.arange(-ACROSS_DEG, ACROSS_DEG + 0.1, 3.0))
     best = None
+    place = None
     pts = [q for p in polys for q in p]
     for ax in (0, 1):
         lo, hi = min(q[ax] for q in pts), max(q[ax] for q in pts)
@@ -204,6 +213,7 @@ def thinnest(polys, step=4, points=(), across=None):
                 if not all(any(min(b_, d) - max(a_, c) > 0.5 * w and abs((d - c) - w) <= 0.2 * w + 2 for c, d in rows[j])
                            for j in (k - 2, k - 1, k + 1, k + 2)):
                     continue
+                cut = None
                 if across:
                     # a cut whose middle lies within END_ZONE of its own length from a stroke's cut end reads how the
                     # end is cut, not the stroke (audit_rays' end zone; c's terminal 26 > 24.9 at its cut)
@@ -212,13 +222,47 @@ def thinnest(polys, step=4, points=(), across=None):
                     base = 0.0 if ax == 1 else math.pi / 2                  # the scan line's own direction
                     m = np.array(mid, float)
                     D = np.stack([np.cos(base + angs), np.sin(base + angs)], axis=1)
-                    got = [g_ for g_ in chords(E, m, D) if g_ is not None]
+                    got = [g_ for g_ in chords(E, m, D, ends=True) if g_ is not None]
                     if not got:                                # no cut through it ends on two facing edges:
                         continue                               # the span crosses no one stroke (a horn's tip)
-                    w = min(got)
+                    cut = min(got, key=lambda g_: g_[0])
+                    w = cut[0]
                 if best is None or w < best:
-                    best = w
+                    best, place = w, cut
+    if at is not None and place is not None:
+        at.append(place)
     return best
+
+
+def place_reading(polys, place):
+    """The stroke across itself at a place found on another master of the same outline (thinnest's `at`): the
+    cut's two ends put on the same edges at the same shares, read as the shortest facing cut through their middle
+    within ACROSS_DEG of the line between them. None where no facing cut crosses there."""
+    A, Bn = _edges(polys)
+    _, (k0, u0), (k1, u1) = place
+    p0 = A[k0] + u0 * (Bn[k0] - A[k0])
+    p1 = A[k1] + u1 * (Bn[k1] - A[k1])
+    d = p1 - p0
+    L = float(np.hypot(*d))
+    if L < 1e-6:
+        return None
+    base = math.atan2(d[1], d[0])
+    angs = base + np.radians(np.arange(-ACROSS_DEG, ACROSS_DEG + 0.1, 3.0))
+    got = [g_ for g_ in chords((A, Bn), (p0 + p1) / 2, np.stack([np.cos(angs), np.sin(angs)], axis=1)) if g_ is not None]
+    return min(got) if got else None
+
+
+END_STEP = 1.0            # 0.81 (last round): the outline's spacing when its corners are found
+
+
+def _resample(P, d):
+    """A closed polyline with every edge cut into pieces no longer than d (its vertices kept)."""
+    out = []
+    Q = np.roll(P, -1, axis=0)
+    for a, b in zip(P, Q):
+        k = max(1, int(math.ceil(float(np.hypot(*(b - a))) / d)))
+        out.extend(a + (b - a) * (i / k) for i in range(k))
+    return np.array(out)
 
 
 def points_of(contours, max_deg=60):
@@ -322,12 +366,20 @@ def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False, w_of=None):
                     fails["crossings"].append(f"{name} at {w} (parts meet: outer contours and holes {base_topo} > {topo})")
             if (w, t) not in ts:
                 continue
-            th = thinnest(ip, points=points_of(ic))
+            place = []
+            th = thinnest(ip, points=points_of(ic), at=place)
             tip = tip_at(t)
+            # 0.81 (last round): the instance's thinnest cut is compared with the Regular's cut at the same place (the
+            # same two edges at the same shares), not with the Regular's thinnest anywhere: near a stroke's cut end
+            # the least reading lies at the end zone's edge and moves with the scan lines' phase (Q's tail 22.6 >
+            # 19.8 > 23.6 at 400, 425, 450 while at every fixed distance from its end it thickens). Where the Regular
+            # has no facing cut there, its thinnest stroke as before.
+            here = place_reading(rp, place[0]) if place else None
+            ref = base_thin if here is None or base_thin is None else here
             # (0.81 close: a glyph with no span a facing cut crosses has no thinnest stroke: nothing to compare)
-            floor = None if base_thin is None else min(base_thin, tip) if not lighter else min(base_thin, 30) * tip / 30
-            if base_thin is not None and th is not None and th < floor - 1.0:
-                fails["thin"].append(f"{name} at {w} ({base_thin:.0f} > {th:.0f}, tip {tip:.0f})")
+            floor = None if ref is None else min(ref, tip) if not lighter else min(ref, 30) * tip / 30
+            if ref is not None and th is not None and th < floor - 1.0:
+                fails["thin"].append(f"{name} at {w} ({ref:.0f} > {th:.0f}, tip {tip:.0f})")
             a, length = area_len(ip)
             ms = 2 * a / length
             if prev and not lighter and (ms < prev[0] - 0.3 or a < prev[1] - 1.0):

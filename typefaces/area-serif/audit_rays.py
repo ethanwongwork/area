@@ -58,7 +58,14 @@ def polylines(gs, name):
         if op == "moveTo":
             cur = [args[0]]
         elif op == "lineTo":
-            cur.append(args[0])
+            # 0.81 (last round): a line is cut at the same parameters as a curve. Its ends alone were its places, and
+            # the ends of a straight stroke are its corners: once the close round's end zones read those as the
+            # end's cut, 55 glyphs made of straight strokes (dashes, rules, maths, arrows, v, w) had no place left
+            a = cur[-1]
+            b = args[0]
+            for k in range(1, N_SEG + 1):
+                t = k / N_SEG
+                cur.append((a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t))
         elif op == "qCurveTo":
             pts = list(args)
             offs = pts[:-1]

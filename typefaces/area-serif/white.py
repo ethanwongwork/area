@@ -799,8 +799,11 @@ def keep_taper(R, N, laws, tol=0.5, n_seg=6, only_thinner=False, nodes=True):
         ok = ~np.isnan(thR) & ~np.isnan(thN) & (eN == eR)
         want = thR * taper_law(thR, laws)
         over = np.where(ok, thN - np.maximum(np.nan_to_num(thN0, nan=0.0), want) - tol, 0.0)
-        if only_thinner:                                       # towards the Bold: the places that thin at all
-            ok &= thN0 < thR - 1.0
+        if only_thinner:                                       # towards the Bold: the places that thin at all,
+            # in the engine's reading or in the retuned outline's (0.81, last round: the mask was the engine's
+            # alone, so a retune that thinned a place the engine had right went unseen: C's barb's handle grew
+            # 1.32 times and the stroke into its foot fell 75 > 61 against the Regular's 68)
+            ok &= (np.nan_to_num(thN0, nan=1e9) < thR - 1.0) | (np.nan_to_num(thN, nan=1e9) < thR - 1.0)
         d = np.where(ok, want - tol - thN, 0.0)
         return np.maximum(d, 0.0), np.maximum(over, 0.0)
     d0, _ = short(N)
