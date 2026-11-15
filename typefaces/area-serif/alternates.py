@@ -189,14 +189,39 @@ def single_a(font, name="a.ss03", form=None):
 # stem: from the stem's left edge where t's straight run ends, round the bottom, up to the hook's cut end and back to
 # the stem's right edge. t's stem is 79 and l's 78 (balance: t 79), so the hook's last node and its handle on the
 # stem's right edge go one unit in with that edge. The same replacement makes the ligatures' l (fl, ffl).
-def _t_hook(font):
+# Round 2 (coordinator: 393 against l's 289 opened "hello" and "filling"): the l's hook is its own part, t's
+# construction at a shorter reach. Measured on the one reference face with a tailed l (Inter's l.ss02 against its
+# t, tools: the reach past the stem's right edge at 0.58 x-height): the l's tail reaches 0.770 of t's hook. Area's
+# t reaches 186 past its stem, so the l's reaches 143 and its advance is l's plus 0.77 stems (349 against 289).
+L_HOOK_REACH = 0.770
+
+
+def _t_hook(font, reach=1.0):
+    """t's hook from its stem's left edge round to its right edge, with its reach past the stem's right edge at
+    `reach` of t's: the cut end moves as one piece, the outside's and inside's lowest points keep their share of
+    their spans, and every handle keeps its share of its own curve (charset.restretch_x)."""
     T = _pts(_outer(font["t"]))
     n = len(T)
     a = next(i for i, p in enumerate(T) if p[2] == "line" and p[3] and T[i - 1][2] and T[i - 1][0] == p[0] and p[1] < 200)
     b = next(i for i in range(a + 1, a + n) if T[i % n][2] and T[i % n][3] and T[(i + 1) % n][2] == "line"
              and T[(i + 1) % n][0] == T[i % n][0] and T[(i + 1) % n][1] > T[i % n][1])
-    hook = [list(T[i % n]) for i in range(a, b + 1)]
-    return hook, hook[0][0], hook[-1][0], font["t"].width - max(p[0] for p in T)
+    hook = [tuple(T[i % n]) for i in range(a, b + 1)]
+    x_l, x_r = hook[0][0], hook[-1][0]
+    on = [i for i, p in enumerate(hook) if p[2]]
+    end = max(on, key=lambda i: hook[i][0])                 # the cut end's outermost node
+    tip = [i for i in on if hook[i][0] >= hook[end][0] - 40 and hook[i][1] > 60]   # the cut end, one rigid piece
+    old = hook[end][0] - x_r
+    d = round(old * reach) - old
+    new_x = {i: hook[i][0] + d for i in tip}
+    left = min(tip, key=lambda i: hook[i][0])               # the inside's end of the cut
+    lows = [i for i in on if i not in tip and i not in (on[0], on[-1])]
+    for i in lows:                                          # each lowest point keeps its share of its span
+        inside = hook[i][1] > 20
+        x0, x1 = (x_r, hook[left][0]) if inside else (x_l, hook[end][0])
+        share = (hook[i][0] - x0) / (x1 - x0)
+        new_x[i] = round(x0 + share * (x1 + d - x0))
+    H = C.restretch_x(hook, new_x) if d else hook
+    return [list(p) for p in H], x_l, x_r, font["t"].width - max(p[0] for p in T)
 
 
 def _tail_stem(P, xl, xr, hook, hx0, hx1):
@@ -217,7 +242,7 @@ def _tail_stem(P, xl, xr, hook, hx0, hx1):
 
 
 def tailed_l(font, name="l.ss04"):
-    hook, hx0, hx1, t_rsb = _t_hook(font)
+    hook, hx0, hx1, t_rsb = _t_hook(font, L_HOOK_REACH)
     L = _pts(_outer(font["l"]))
     xr = max(p[0] for p in L if p[2] == "line" and p[1] > 700)                 # the stem's right edge at the top
     xl = xr - PARTS.S
@@ -226,12 +251,12 @@ def tailed_l(font, name="l.ss04"):
     _set(g, [pts])
     g.width = round(max(p[0] for p in pts) + t_rsb)
     g.unicodes = []
-    return f"{name}: l's stem on t's hook, advance {g.width}"
+    return f"{name}: l's stem on its hook (t's at {L_HOOK_REACH} of the reach), advance {g.width}"
 
 
 def tailed_ligature(font, name, new):
-    """fl and ffl with the l's foot on t's hook (the last stem of the ligature)."""
-    hook, hx0, hx1, t_rsb = _t_hook(font)
+    """fl and ffl with the l's foot on the l's hook (the last stem of the ligature)."""
+    hook, hx0, hx1, t_rsb = _t_hook(font, L_HOOK_REACH)
     P = _pts(_outer(font[name]))
     xr = max(p[0] for p in P if p[2] == "line" and p[1] > 700)
     xl = xr - PARTS.S
@@ -430,6 +455,7 @@ def kern_and_open(font, alts, codepoints):
 
 def run(font):
     """Builds every alternate of 0.81 on the finished Regular. Returns report lines."""
+    rep_ipa = []
     rep = [single_a(font), tailed_l(font), slashed_zero(font), dotted_zero(font),
            barred(font, "seven", "seven.ss06", C.STROKE_UP), barred(font, "z", "z.ss06", C.STROKE_LOW)]
     a_acc = a_family(font)
@@ -452,6 +478,15 @@ def run(font):
             "ss06": [("seven", "seven.ss06"), ("seven.tf", "seven.tf.ss06"), ("z", "z.ss06")]
             + [(g.name[:-5], g.name) for g in font if g.name.endswith(".ss06") and g.name[0] == "z" and g.name != "z.ss06"]}
     features(font, subs)
+    # round 2: the IPA letters take the alternates' forms where the set has them (U+0251 is here; U+0261 is not)
+    for cp, alt in ((0x0251, "a.ss03"), (0x0261, "g.ss02")):
+        name = next((g.name for g in font if cp in g.unicodes), None)
+        if name and alt in font:
+            uni = list(font[name].unicodes)
+            C.compose(font, name, [(alt, 0, 0)], font[alt].width)
+            font[name].unicodes = uni
+            C.kern_like(font, name, *(("d", "a") if alt == "a.ss03" else ("q", "q")))
+            rep_ipa.append(f"{name}: {alt}")
     for name in ["a.ss03"] + [n + ".ss03" for n in a_acc]:
         C.kern_like(font, name, "d", "a")
     for name in ["l.ss04"] + [n + ".ss04" for n in l_acc if n not in ("fl", "f_f_l", "lj")]:
@@ -467,5 +502,5 @@ def run(font):
     for g in list(font):
         if g.name.endswith(".ss06") and g.name[0] == "z":
             C.kern_like(font, g.name, "z", "z")
-    rep.append(f"a: {len(a_acc)} accented forms; l: {', '.join(l_acc)}")
+    rep.append(f"a: {len(a_acc)} accented forms; l: {', '.join(l_acc)}; IPA: {', '.join(rep_ipa) or 'none'}")
     return rep, subs

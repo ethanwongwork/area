@@ -19,8 +19,14 @@ The owner was right. Measured on 0.80 (`curvecheck.py`, combs in `img/081/g-befo
 | The loop's left side, rising into the link | a leaning, nearly straight stroke ending in a knob (radius 44) that overlaps the link; the stroke thickens on the way up, 1.12 hairlines at the left to 1.34-1.39 where it meets the link. In the variable font the overlap leaves a white sliver at 550 and 700 | thin into the link: 0.62, 0.78, 0.50, 0.69 hairlines (mean 0.65) | a branch: 0.72 at the junction (the ladder's branch neck, 32), 1.16 at the side; the counter is its own contour, no overlap |
 | The link's straight edges into the loop's shoulder | the curve starts at its full curvature off the straight (0.47 of its tightest, radius 160 inside, 270 outside): a step in the comb | | 0.43 outside, 0.06 inside, tightening steadily to the extreme |
 | The counter's lowest point | 1.56 times the curvature on one side as on the other | | 1.0: every lowest point placed where b/a^2 is the same on both quarters |
-| Worst curvature ratio across a smooth node on the loop | 1.56 | | 1.60 at the counter's top-right turn (IR), every other node 1.00-1.12 |
-| curvecheck.py | 3 faults | | 0 |
+| Worst curvature ratio across a smooth node on the loop | 1.56 | | 1.13 (round 2: the counter's top-right turn eased from 1.60 to 1.04 with its two handles; extremes unchanged) |
+| curvecheck.py | 5 faults (round 2 limit 1.25 across a node) | | 0 |
+
+The counter's top-right turn (round 2): with the link's lower edge 74 units above the right extreme, its tightest
+radius cannot open past about 56 with the extremes where they are (a sweep of its two handles and of where it
+leaves the straight). The jump into the extreme is gone (1.60 to 1.04) and its tightest now sits inside the turn
+(radius 53), as on any round corner. 0.80's turn was rounder (75) because its extreme sat 12 units lower; lowering
+the right extreme to Serrif's share of the counter (0.51 against the references' mean 0.57) would buy that back.
 
 Construction (`loops.py`): quarters at the bowl's tensions (0.57 outside, 0.61 inside); extremes at 0.80's places
 across, heights at the references' share of the counter (left 0.495, right 0.57); each smooth node's handle solved
@@ -30,28 +36,50 @@ and flat-ish, raised into the link; the ear and its ball; the bowl and the link'
 g's advance went from 600 to 590 and its kerning pairs moved by 10: `spacing.py` reads the outermost ink in the
 x-height zone, and the loop's left side now rises into the link further left than the knob did.
 
-## The single-storey g (ss02): one round arc
+## The single-storey g (ss02): a half-ellipse (round 2)
 
-0.80's tail (four quarter turns, every handle 0.55) was flattest just left of its lowest point: outside, radius 218
-off the stem, 402 past the lowest point, then 65 at the ball; the curvature jumped 1.45 times outside and 1.38
-inside at the lowest points. Now (`charset.single_g_points`, `_round_tail`):
+First pass (0.81a, kept on the sheet as "081"): the handles were solved so the curvature never fell, and the ball
+went up from 0.138 to 0.100 of the x-height. The numbers improved (jumps at the lowest points 1.45 and 1.38 down to
+1.00 and 1.01) but as built it was almost indistinguishable from 0.80: a quarter turn off the stem, a long nearly
+level run, a small tight curl into the ball. Round 2 draws three tails by the same rules (`charset.G_TAIL_FORMS`,
+`img/081/gss02-variants.png`: each outline with combs over 0.80's in red, as built beside j y and the default g, in
+words at 64, 16 and 13 px):
 
-- The turn off the stem is a quarter circle on both edges: each straight edge ends one quarter's width above its
-  lowest point (outside at 22 above the baseline, inside at -15).
-- The handles of the curve from the lowest point to the ball are solved: the curvature from the stem to the ball
-  never falls, is equal on both sides of the lowest point, and reaches the ball at the ball's own curvature.
-- The ball sits at 0.100 of the x-height under the baseline (0.80: 0.138; the references by the same measure:
-  Serrif 0.023, Source Serif 4 0.164, Literata 0.144, mean 0.110). At 0.138 a tail that runs 217 units left of
-  its lowest point and rises only 118 cannot tighten evenly in one curve.
+| | ball top under the baseline (x-height) | tail end / lowest point (of the bowl's width) | stroke at the bottom | construction |
+|---|---|---|---|---|
+| 081 | 0.100 | 0.959 / 0.518 | 0.96 hairlines | a quarter circle off the stem, the rest solved |
+| **A (in the font)** | **0.030** | **0.959 / half way to the tail's end** | **1.15** | **a half-ellipse: both edges leave the stem at the ball's height, so the turn off the stem is as tall as the rise into the ball; the lowest point half way between the stem and the tail's end** |
+| B | 0.080 | 1.000 (under the bowl's left extreme) / half way | 1.15 | the same half-ellipse, wider and shallower |
+| C | 0.100 | 0.959 / 0.470 | 0.96 | 081 with the lowest point moved right |
 
-Outside it now runs radius 262, 253-256, 262, 268-273, then tightens to 46 at the ball (the ball is 45); the curvature ratio at the lowest points is 1.00 outside and 1.01 inside, and 1.00 where the outside meets the ball. Inside, the tail tightens to radius 66 at the ball's neck, where the curve turns the other way into the ball (0.80: 53; j's own neck 41). The join to the bowl is q's (one corner on
-the stem's edge, solved for the 32 neck). The ball is j's, moved whole, so the tails of g.ss02, j and y share one
-terminal. `tools/tail_profile.py` puts the outside's largest over smallest curvature at 2.8 (0.80: 5.0; Serrif
-3.9, Source Serif 4 2.6, Literata 8.0 by the same rasterised measure).
+Why A: it is the only one that reads differently from 0.80 at text size. The tail is one bowl-like arc, the ball
+rises to near the baseline (Serrif's 0.023, measured by the same code), and the white under the bowl is a round
+counter rather than a slot. B opens wider but its bottom is flatter (radius 412 against A's 325) and reads as a
+tray again; C keeps 0.80's shallow hook with a flat place left of the lowest point (curvecheck's valley 37%).
 
-g.ss02 touched a following j (and ĵ, ȷ): those pairs are kerned +31 by the collision pass over every alternate
-(`alternates.kern_and_open`). Against every other glyph of the set, both sides and itself, it stands at least 13
-units clear (`img/081/gss02-neighbours.png`).
+Measured, 0.80 then A (outside of the tail, stem to ball; `tools/figs_081.py` tail_numbers, `curvecheck.py`):
+- radius off the stem 217, then 401 just past the lowest point, then 65 at the ball; now 130 at the stem, 325 at
+  the lowest point (the flattest place is the lowest point, as on any ellipse), tightening steadily to 55 at the ball
+  (the ball is 45: ratio 1.21)
+- jumps at the lowest points 1.45 and 1.38, now under 1.21 everywhere on the tail
+- the stroke at its thinnest 41 (0.96 hairlines), now 49 (1.15), at the lowest point; it thickens from there to the
+  stem (77) and into the ball. The thickest point is not at the bottom as asked: the stem side is the stem's own
+  weight, and a bottom heavier than the turn would put a diagonal stress into one letter of a face whose round
+  strokes are thin at top and bottom
+- white between the tail and the bowl's underside 77, now 89
+- `tools/tail_profile.py`: ball top 0.032, lowest point 0.503 of the reach, thinnest 1.14 hairlines at the bottom
+
+Towards the Bold the ball rises by the references' 0.026 of the x-height (to 0.004 at 700) and the lowest point
+moves left as before; the Bold's g.ss02 is spliced from the Bold's q and j by the same code.
+
+The join to the bowl is q's; the ball is j's, moved whole. j and y now read as a different family below the
+baseline: their balls hang lower (j 0.187, y 0.18 of the x-height under the baseline) and both have flat places by
+the same check (j's outside jumps 1.30 at its lowest point; y's tail has three). To stay one family they should take
+this construction too, with their own narrower reach. Not changed in this round.
+
+The collision pass kerns g.ss02 before j, ĵ and ȷ by +57 (the turn off the stem now reaches lower, under the j's
+hook); every other pair with g.ss02, either side and itself, stands at least 13 units clear
+(`img/081/gss02-neighbours.png`).
 
 ## The single-storey a (ss03): four constructions, one chosen
 
@@ -97,7 +125,7 @@ could take this form.
 | ss01 Footless 1 | one.ss01 | (0.78) | kept |
 | ss02 Single-storey g | g.ss02 | above | kept |
 | ss03 Single-storey a | a.ss03 and 31 accented | above | kept |
-| ss04 Tailed l | l.ss04, its 12 composites (ĺ ľ ļ ŀ ḷ ...), ł, fl, ffl | l's flag and stem on t's hook, moved whole (t's stem is 79, l's 78: the hook's right-edge node goes in a unit) | kept: tells l from I and 1 in `Illegal 1l lIl1` at 13 px. The hook is t's full reach, so the l is 393 wide (l 289): airy in `hello`; a shorter hook would be a part of its own |
+| ss04 Tailed l | l.ss04, its 12 composites (ĺ ľ ļ ŀ ḷ ...), ł, fl, ffl | round 2: its own hook, t's construction at 0.770 of t's reach (`alternates.L_HOOK_REACH`; the one reference with a tailed l, Inter's l.ss02, reaches 0.770 of its t's hook past the stem): the cut end moves as one piece, the lowest points keep their share, every handle its share of its curve. 143 past the stem against t's 186 | kept: 350 wide, l's plus 0.78 stems (round 1: 393). Rasterised at 11-13 px (tools/confusable.py) it stands 0.19-0.21 from I and 0.16-0.18 from 1, where the default l stands 0.11-0.12 from both |
 | zero Slashed zero | zero.zero, zero.tf.zero | the zero and a stroke of its own hairline (47) from corner to corner of the counter, cut at the oval's outside | kept; the tabular column holds |
 | ss05 Dotted zero | zero.ss05, zero.tf.ss05 | the zero and a round dot at the counter's centre, as wide as the zero's side stroke (87) | kept |
 | ss06 Barred seven and z | seven.ss06, seven.tf.ss06, z.ss06, its 6 accented | a level bar at half height through the diagonal, half the top arm long, of the figures' (47) and the lowercase (43) hairline | drawn and kept in the font, but the weakest: a handwriting convention (continental Europe) with little interface use, and at 13 px the barred z reads as a struck letter (ƶ). Worth keeping as an opt-in; not worth more work now |
@@ -124,9 +152,11 @@ Every alternate is in the Light, the Regular and the Bold (the engine reads them
     glyph with a kink from 525 to 700; that is this. Before, the engine read 0.80's overlapping loop.
   - The Light's g at 325 and 300: the loop's neck into the link thins to 17 and 11 units (`audit_axis.py`, thin);
     the engine does not read the junction as a branch. 0.80's Light had the white sliver there instead.
-  - `lslash.ss04` at 600 and 700 thins one or two units under the tip (`audit_axis.py`).
+  - (Round 1's `lslash.ss04` thinning at 600 and 700 went with the shorter hook.)
   - Every other new glyph is sound in the Light and Bold (no fallback).
 - j's and y's tails by curvecheck's measure (above); the two-storey a's exit (in a and a.ss03).
-- U+0251 could take a.ss03's form; the superior and inferior zeros have no slashed or dotted forms.
+- U+0251 (alpha-latin) is now a.ss03, as a composite (round 2). U+0261 is not in the character set; adding it as a
+  composite of g.ss02 is one line in `alternates.run`. The tabular zero has its slashed and dotted forms
+  (zero.tf.zero, zero.tf.ss05); the superior and inferior zeros do not yet.
 - `evenness` (even.py) leaves g's new loop counter to its own construction (`even.OWN_RULE`): its top is the link,
   a straight of the stem's weight, so one smooth change of thickness round it is not the rule there.

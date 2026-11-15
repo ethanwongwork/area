@@ -17,8 +17,8 @@ The thresholds are this file's numbers, set so that 0.80's g (default and ss02) 
 did not change, pass.
   ease    a curve leaving a straight: the curvature at the join over the curve's tightest. A curve that starts at
           its full curvature off a straight shows a step in its comb (0.80's g: 0.57 at both ends of the link)
-  valley  along a tail, stem to ball, curvature may not fall and rise again by more than VALLEY (0.80's g.ss02 was
-          flattest just past its lowest point, radius 218 to 402 to 65)"""
+  valley  along a tail, on each side of its lowest point, curvature may not fall and rise again by more than VALLEY
+          (0.80's g.ss02 was flattest just past its lowest point, radius 218 to 277, then 402, then 65)"""
 import math
 import os
 import sys
@@ -26,7 +26,8 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 UFO = os.path.join(HERE, "build", "AreaSerif-Regular.ufo")
 
-RATIO = 2.0            # curvature ratio across a smooth node, on curves over MIN_SPAN long
+RATIO = 1.25           # curvature ratio across a smooth node, on curves over MIN_SPAN (0.81 round 2: 2.0 let 0.80's
+                       # g.ss02 through with 1.45 at its lowest point, and 0.81's g with 1.60 at its counter's corner) long
 G1 = 2.0               # degrees between the handles of a smooth node
 MIN_SPAN = 30          # shorter curves (corners rounded at 7, serif fillets) are left to pathlint
 FLAT_R = 2000          # a stretch whose radius exceeds this ...
@@ -38,7 +39,7 @@ TAILS = {"g.ss02", "j", "y"}
 # Faults found on parts 0.81 did not change (default letters stay point for point as 0.80's), listed so the check
 # fails on anything new. Each goes when its part is redrawn. (glyph, words of the fault): reason
 EXPECTED = {
-    ("j", "tail 16-22"): "j's inside flattens at its lowest point (radius 69, 85, 103, then 41 into the neck)",
+    ("j", "node 0 "): "j's outside: 1.30 times the curvature on one side of its lowest point as the other",
     ("y", "curve 52-55"): "y's tail leaves the diagonal through a flat place (radius 109 to 188 to 27)",
     ("y", "curve 64-67"): "y's ball meets its tail through a flat place (radius 53 to 94 to 48)",
     ("y", "curve 67-70"): "y's tail's outside opens from the ball (49) to 235 and closes to 98 at the diagonal",
@@ -243,10 +244,11 @@ def chains(P, yr):
         runs.append(cur)
     out = []
     for run in runs:
-        ks = []
+        ks, ys = [], []
         for s in run:
             ks += [abs(curvature(s, i / 24)) for i in range(25)]
-        out.append((run[0][2], run[-1][3], ks))
+            ys += [pt(s, i / 24)[1] for i in range(25)]
+        out.append((run[0][2], run[-1][3], ks, ys))
     return out
 
 
@@ -270,7 +272,12 @@ def report(name, contours, yr):
         Cv += curves(P, yr)
         E += eases(P, yr)
         if name in TAILS:
-            V += [(i0, i3, valley(ks)) for i0, i3, ks in chains(P, yr)]
+            # a tail is judged on each side of its lowest point: from there to the stem and from there to the ball
+            # the curvature may only rise (an ellipse's flattest place is its lowest point; a flat place anywhere else,
+            # as 0.80's g.ss02 had just left of its lowest point, is a fault)
+            for i0, i3, ks, ys in chains(P, yr):
+                lo = ys.index(min(ys))
+                V.append((i0, i3, max(valley(ks[:lo + 1]), valley(ks[lo:]))))
     bad = []
     for i, xy, g1, ka, kb, ratio, flip, kinds in N:
         if g1 > G1:

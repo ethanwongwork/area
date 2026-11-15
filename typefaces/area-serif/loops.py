@@ -246,6 +246,47 @@ def solve(A):
     return best
 
 
+CORNER_EASE = 0.45      # curvecheck.EASE: this corner has the least room (the link's lower edge is 74 above the extreme)
+CORNER_RUN = 90         # how far the turn may start back along the link's lower edge (its straight is 177 long)
+CORNER_RATIO = 1.20     # round 2: the counter's top-right turn (0.81's first solve left 1.60, a spike in the comb)
+
+
+def ease_corner(A, x):
+    """The counter's top-right turn, from the link's lower edge into the right extreme, once more with its two handles
+    and its start on the link's straight edge free (every extreme stays): the curvature across the extreme within
+    CORNER_RATIO, the start off the straight within CORNER_EASE, no flat place inside, and its tightest as open as
+    those allow (a pinched corner is a spike in the comb). Its tightest may sit inside the turn, as on any round
+    corner. Returns (x, A) with A's N53 (where the straight ends) moved along the edge."""
+    x = list(x)
+    x0, y0 = A["N53"]
+    dx, dy = A["low_dir"]
+
+    def at(z):
+        y = list(x)
+        y[1], y[8] = z[0], z[1]
+        B = dict(A, N53=(x0 - z[2] * dx, y0 - z[2] * dy))
+        return y, B
+
+    def f(z):
+        if not (TENSION[0] <= z[0] <= 1.0 and TENSION[0] <= z[1] <= TENSION[1] and 0 <= z[2] <= CORNER_RUN):
+            return 1e9
+        y, B = at(z)
+        try:
+            S = build(B, y)
+        except (ValueError, np.linalg.LinAlgError):
+            return 1e9
+        c = S["a_53_IR"]
+        r = abs(_lr(_k(c, 1), _k(S["q_IR_IB"], 0)))
+        e = abs(_k(c, 0.0)) / _peak(c)
+        q = abs(_k(S["q_IR_IB"], 0))                      # the counter's own curvature at the extreme
+        return ((max(0, r - math.log(CORNER_RATIO)) * 20) ** 2 + r * r + (max(0, e - CORNER_EASE) * 8) ** 2
+                + (2 * _valley(c)) ** 2 + (0.5 * math.log(_peak(c) / q)) ** 2 + (z[2] / 400) ** 2)
+    z, _v = _simplex(f, [x[1], x[8], 20.0], [0.05, 0.05, 15], 800)
+    y, B = at(z)
+    B["N53"] = (round(B["N53"][0]), round(B["N53"][1]))
+    return y, B
+
+
 def _r(p):
     return (int(round(float(p[0]))), int(round(float(p[1]))))
 
@@ -295,6 +336,7 @@ def g_loop(font, name="g"):
         return f"{name}: loop already built"
     A = anchors(P)
     x, v = solve(A)
+    x, A = ease_corner(A, x)
     S = build(A, x)
     terms = {}
     cost(A, x, terms)

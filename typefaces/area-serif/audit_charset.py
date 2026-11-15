@@ -513,7 +513,7 @@ def audit_079(font, bad, notes, bold=None):
         bowl_l, stem_r = row_g[0][0], row_g[-1][1]
         if abs(bowl_l - row_q[0][0]) > 1 or abs((row_g[0][1] - row_g[0][0]) - (row_q[0][1] - row_q[0][0])) > 1:
             bad.append("g.ss02: its bowl is not q's")
-        low = min(p.x for p in P if p.type and p.y < -60)
+        low = min(p.x for p in P if p.type and p.y < -10)
         share = (stem_r - low) / (stem_r - bowl_l)
         notes.append(f"g.ss02: tail ends {share:.3f} of the bowl's width from the stem's right edge")
         if abs(share - C.G_TAIL_END) > 0.02:
@@ -593,18 +593,23 @@ def audit_081(font, bad, notes, bold=None, light=None):
     lows = [c for c in g.contours if max(p.y for p in c.points) < 60]
     if len(g.contours) != 3 or not lows:
         bad.append("g: the loop's counter is not its own contour (0.80's hook and knob)")
-    # g.ss02: the outside turns off the stem as a quarter circle, the ball's top at G_BALL_TOP
+    # g.ss02: its tail by its form (charset.G_TAIL_FORM): the outside leaves the stem at the ball's height (a
+    # half-ellipse) or one quarter's width above the lowest point; the ball's top at the form's height
     if "g.ss02" in font:
+        F = C.G_TAIL_FORMS[C.G_TAIL_FORM]
         P = [(p.x, p.y, p.type, p.smooth) for p in max(font["g.ss02"].contours, key=lambda c: len(c.points)).points]
         depth = min(p[1] for p in P)
         stem_r = max(p[0] for p in P if p[2] == "line")
-        foot = [p for p in P if p[2] and p[0] == stem_r and -150 < p[1] < 80]
+        foot = [p for p in P if p[2] and p[0] == stem_r and -200 < p[1] < 80]
         lowx = next(p[0] for p in P if p[2] and p[1] == depth)
-        if not foot or abs(min(f[1] for f in foot) - (depth + stem_r - lowx)) > 1:
-            bad.append("g.ss02: its outside does not leave the stem one quarter's width above the lowest point")
-        ball_top = max(p[1] for p in P if p[2] and p[1] < -20 and p[0] < lowx - 100)
-        if abs(-ball_top / 520 - C.G_BALL_TOP) > 0.004:
-            bad.append(f"g.ss02: its ball's top {ball_top} under the baseline, not {C.G_BALL_TOP} of the x-height")
+        ball_l = min((p for p in P if p[2] and p[1] < 0), key=lambda p: p[0])
+        want_y = ball_l[1] if F.get("rise") == "ball" else depth + stem_r - lowx
+        if not foot or abs(min(f[1] for f in foot) - want_y) > 1:
+            bad.append(f"g.ss02: its outside does not leave the stem at {want_y}")
+        ball_top = max(p[1] for p in P if p[2] and p[1] < 0 and p[0] < lowx - 100)
+        if abs(-ball_top / 520 - F["ball"]) > 0.004:
+            bad.append(f"g.ss02: its ball's top {ball_top} under the baseline, not {F['ball']} of the x-height")
+        notes.append(f"g.ss02: tail form {C.G_TAIL_FORM}, ball top {-ball_top / 520:.3f} x-height under the baseline")
     want = {"a.ss03": "a", "l.ss04": "l", "zero.zero": "zero", "zero.ss05": "zero", "seven.ss06": "seven",
             "z.ss06": "z", "fl.ss04": "fl", "f_f_l.ss04": "f_f_l", "lslash.ss04": "lslash", "zero.tf.zero": "zero.tf",
             "zero.tf.ss05": "zero.tf"}
@@ -644,12 +649,19 @@ def audit_081(font, bad, notes, bold=None, light=None):
                 if c0.baseGlyph not in AL.RIGHT_MARKS and abs((c1.transformation[4] - c0.transformation[4]) - (s_cx - a_cx)) > 1:
                     bad.append(f"{alt}: {c1.baseGlyph} not centred on the body as on {g_.name}")
     # l.ss04: t's hook, whole
-    hook, hx0, _hx1, _rsb = AL._t_hook(font)
+    hook, hx0, _hx1, _rsb = AL._t_hook(font, AL.L_HOOK_REACH)
     L = {(round(x), round(y)) for x, y, _t, _s in AL._pts(font["l.ss04"].contours[0])}
     xl = max(p[0] for p in L if p[1] > 700) - PARTS.S              # the stem's left edge
     moved = [(round(x + xl - hx0), round(y)) for x, y, _t, _s in hook[:-3]]
     if sum(1 for q in moved if q in L) < len(moved) - 1:
-        bad.append("l.ss04: its hook is not t's")
+        bad.append("l.ss04: its hook is not t's construction at L_HOOK_REACH")
+    w_l = (font["l.ss04"].width - font["l"].width) / PARTS.S
+    notes.append(f"l.ss04: advance {font['l.ss04'].width}, l's plus {w_l:.2f} stems")
+    if not 0.5 <= w_l <= 1.0:
+        bad.append(f"l.ss04: l's advance plus {w_l:.2f} stems, not 0.5 to 1")
+    al = next((g for g in font if 0x0251 in g.unicodes), None)
+    if al is not None and (not al.components or al.components[0].baseGlyph != "a.ss03"):
+        bad.append(f"{al.name}: U+0251 is not a.ss03")
     # zeros, seven, z: strokes at their hairlines
     zz = C.scan_v(C.gp(font, "zero.zero"), font["zero"].width / 2)
     notes.append(f"zero.zero: the slash across the middle {zz}")

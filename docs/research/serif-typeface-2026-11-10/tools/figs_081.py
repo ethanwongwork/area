@@ -11,6 +11,8 @@ BEFORE is a folder holding 0.80's build (r080.ufo, r080.ttf, vf080.ttf); the 0.8
   a-chosen.png               a.ss03 and its 31 accented forms, and in words
   alternates.png             every alternate large, and in a line with its feature off and on, at 64, 16 and 13 px
   alternates-weights.png     the same lines at 300, 400 and 700 (the variable font)
+  gss02-variants.png         g.ss02's tail: 0.81's first form and three drawn by the same rules (charset.G_TAIL_FORMS),
+                             each outlined with combs over 0.80's (red), as built beside j y g, and in words
 """
 import os
 import sys
@@ -167,6 +169,73 @@ def weights(out):
     return page(blocks, out)
 
 
+# ---------------------------------------------------------------------------------------- round 2: g.ss02's tail
+def tail_numbers(font, name):
+    """Across the stroke along g.ss02's tail: for points on the inside edge from the stem to the ball's neck, the
+    distance to the outside edge (units); and the white between the tail's inside and the bowl's underside."""
+    import math
+    P = K.contour(K.glyph_points(font, name), "longest")
+    S_ = K.segments(P)
+    on = [i for i, p in enumerate(P) if p[2]]
+    # by construction (charset.single_g_points): inside = start (last node) -> lowest -> neck; outside = the ball's
+    # left -> lowest -> the stem's right edge
+    ins = [s for s in S_ if s[3] in (on[0], on[1]) and s[0] == "C"]
+    outs = [s for s in S_ if s[3] in (on[4], on[5]) and s[0] == "C"]
+    inner = [K.pt(s, i / 60) for s in ins for i in range(61)]
+    outer = [K.pt(s, i / 120) for s in outs for i in range(121)]
+    prof = [(round(p[0]), round(min(math.dist(p, q) for q in outer))) for p in inner]
+    bowl = [K.pt(s, i / 40) for s in S_ if s[0] == "C" and min(q[1] for q in s[1]) >= -12 and max(q[1] for q in s[1]) < 300
+            for i in range(41)]
+    clear = min(math.dist(p, q) for p in inner for q in bowl)
+    return prof, clear
+
+
+def variants(out, forms=("081", "A", "B", "C")):
+    import charset as C
+    reg = os.path.join(SERIF, "build", "AreaSerif-Regular.ufo")
+    r = ufoLib2.Font.open(reg)
+    blocks = []
+    for k in forms:
+        f = ufoLib2.Font.open(reg)
+        C.single_g(f, form=k)
+        from ufo2ft import compileTTF
+        p = os.path.join(SERIF, "build", "look081", f"gss02-{k}.ttf")
+        compileTTF(f, removeOverlaps=True, flattenComponents=True).save(p)
+        tt = TTFont(p)
+        F = C.G_TAIL_FORMS[k]
+        b, w, N, Cv, E, V = K.report("g.ss02", K.glyph_points(f, "g.ss02"), (-300, 40))
+        prof, clear = tail_numbers(f, "g.ss02")
+        radii = []
+        P = K.contour(K.glyph_points(f, "g.ss02"), "longest")
+        for s in K.segments(P):
+            if s[0] == "C" and max(q[1] for q in s[1]) < 40 and min(q[1] for q in s[1]) < -150 and K.length(s) > 150:
+                radii += [abs(1 / K.curvature(s, i / 8)) for i in range(9) if abs(K.curvature(s, i / 8)) > 1e-6]
+        import charset as C_
+        title = (f"{k}{' (in the font)' if k == C_.G_TAIL_FORM else ''}: ball top {F['ball']:.3f} x-height under the baseline, tail end {F['end']:.3f} and lowest point "
+                 f"{F['low'] if isinstance(F['low'], str) else format(F['low'], '.3f')} of the bowl's width, stroke at the bottom {F['thick']:.2f} hairlines · outside radius "
+                 f"{min(radii):.0f} to {max(radii):.0f} on the tail · deepest valley {max(v[2] for v in V):.0%} · "
+                 f"{'curvecheck ok' if not b else 'curvecheck: ' + b[0].split(': ', 1)[1]}"
+                 + (" · a half-ellipse: both edges leave the stem at the ball's height" if F.get("rise") == "ball" else ""))
+        panel = CB.draw_glyph(K.glyph_points(f, "g.ss02"), f["g.ss02"].width, 0.75, k + " (red: 0.80's tail)", (-300, 40),
+                              box=(-40, -270, 680, 560))
+        d = ImageDraw.Draw(panel)
+        T = lambda q: ((q[0] + 40) * 0.75, 40 + (560 - q[1]) * 0.75)        # noqa: E731  combs.draw_glyph's frame
+        for Pc in K.glyph_points(ufoLib2.Font.open(os.path.join(SERIF, "build", "look081", "r080.ufo")), "g.ss02"):
+            line = []
+            for sg in K.segments(Pc):
+                n = 1 if sg[0] == "L" else 30
+                line += [T(K.pt(sg, i / n)) for i in range(n)]
+            d.line(line + line[:1], fill=(220, 40, 40), width=2)
+        big = side(panel,
+                   ink(tt, "g", {"ss02": True}, 0.62, f"{k} as built"),
+                   S.strip(tt, "jyg", {"ss02": False}, 300, ss=2, pad=0.05))
+        words = "gauging piggy bag · agog · egg"
+        blocks.append((title, [big, S.strip(tt, words, {"ss02": True}, 64, ss=2),
+                               pixels(tt, words, {"ss02": True}, 16), pixels(tt, words, {"ss02": True}, 13)]))
+        print(k, "thickness across the tail (x, units):", prof[::4], "clearance to the bowl's lowest", round(clear))
+    return page(blocks, out)
+
+
 if __name__ == "__main__":
     before, outdir = sys.argv[1], sys.argv[2]
     os.makedirs(outdir, exist_ok=True)
@@ -176,3 +245,4 @@ if __name__ == "__main__":
     a_chosen(os.path.join(outdir, "a-chosen.png"))
     alternates(os.path.join(outdir, "alternates.png"))
     weights(os.path.join(outdir, "alternates-weights.png"))
+    variants(os.path.join(outdir, "gss02-variants.png"))
