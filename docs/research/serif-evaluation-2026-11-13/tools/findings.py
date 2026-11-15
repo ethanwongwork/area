@@ -1708,3 +1708,41 @@ QA.append("0.80: targets, outlines, parts audit, joins and bowls, evenness, Bold
 NOT_CHECKED.append("0.80: the Light between 300 and 400 was not audited part by part. The Light's kerning and its "
                    "marks' sizes were not measured against the references' Light. The alternate candidates are "
                    "Regular only and unkerned. g.ss02 before j touches. Nothing was rendered on Windows.")
+
+
+# ------------------------------------------------------------------ build 0.81: three branches merged and closed
+BUILD = "0.81"
+DATE = "15 November 2026"
+VERDICT = ("Build 0.81 merges three pieces of work and closes them by rule. The g's loop is rebuilt and g.ss02, j, y "
+           "and the a's exit share one tail rule; the alternates are in the font as stylistic sets; along the weight "
+           "axis struck letters are overlapping strokes, signs are arms with one weight law, white between parts is "
+           "held like a counter, and tapering strokes keep each place's own share of the weight; kerning is fitted per "
+           "weight. What is still open is on the axis card: @ and the capital hook above in the Bold, and Ⱥ and the T "
+           "with a diagonal stroke, which wait for your decision.")
+N81 = {"prev": "0.80", "build": "0.81", "round": "0.81"}
+for _f in FINDINGS:
+    if _f["id"] == "axis-all":
+        _f.update(N81, status="open",
+                  after="0.81. The axis is now tested exactly over every pair of masters, not at stops. Bold side: "
+                        "@ (the a's bowl running into the ring thins, 29 > 17 at 550) and the capital hook above "
+                        "(its curl closes at 552) fail; Ⱥ and the T with a diagonal stroke are held for your "
+                        "decision (honest overlap or stump form). Light side: nothing fails. Every part of the "
+                        "letters and figures is on target at the Light and the Bold (434 of 434).")
+    if _f["id"] == "bold-open":
+        _f.update(N81,
+                  after="0.81: no glyph is on a fallback at either end. Kerning is fitted per weight. Open: no "
+                        "measured audit for marks, signs and composites away from the Regular.")
+CHANGES += [
+    ["0.81", "g's loop: worst curvature ratio across a node", "1.56", "1.13", "loops.g_loop"],
+    ["0.81", "Tails j y g.ss02 and a's exit: curvecheck faults", "j 1, y 5, g.ss02 1", "0", "loops.round_tail"],
+    ["0.81", "Alternates in the font", "none (candidates)", "ss01 to ss06, zero; 63 glyphs", "alternates.py"],
+    ["0.81", "audit_axis.py, Bold / Light glyphs (exact test)", "45 / 26 (0.80 masters)", "2 + 2 held / 0", "axis 0.81"],
+    ["0.81", "eng's tail at 300, of the Regular", "0.667", "0.694 (stem 0.705)", "white.keep_taper"],
+    ["0.81", "g.ss02: ball to bowl at 700", "38", "52 (white law)", "charset.single_g_points"],
+    ["0.81", "Asterisk at 700: cap on its weight", "f 1.199", "f 1.286 (arms reach 1.047)", "arms.REACH"],
+    ["0.81", "Kerning", "the Regular's at every weight", "fitted per master", "spacing.kern_master"],
+]
+QA.append("0.81: see typefaces/area-serif/build/qa-081.log (full qa.py from a clean build).")
+NOT_CHECKED.append("0.81: overlaps were rendered on FreeType and CoreText, not on Windows. The weights between the "
+                   "masters were checked by every audit at 25-unit stops (rays and kerning at 325 to 650 too) and by "
+                   "eye on a waterfall; the alternates were not set beside the references' in running text.")

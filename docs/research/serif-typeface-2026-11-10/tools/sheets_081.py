@@ -195,22 +195,37 @@ def ae_bold(out):
 
 
 def marks(out):
+    """Every composite with two or more marks (by name: alternates and unencoded ones too), at 300, 400 and 700."""
+    import ufoLib2
+    sys.path.insert(0, os.getcwd())
+    import bold as B
+    reg = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
+    names = [g.name for g in reg if g.components and not g.contours
+             and sum(1 for c in g.components if c.baseGlyph in reg and B.is_mark(reg[c.baseGlyph])) >= 2]
+    import rays_flags as RF
     tt = at(400)
-    gs = tt.getGlyphSet()
-    cmap = {v: k for k, v in tt.getBestCmap().items()}
-    names = []
-    for n in tt.getGlyphOrder():
-        g = tt["glyf"][n]
-        if g.isComposite():
-            comps = [c.glyphName for c in g.components]
-            mk = [c for c in comps if tt["GDEF"].table.GlyphClassDef.classDefs.get(c) == 3 or "comb" in c]
-            if len(mk) >= 2 and n in cmap:
-                names.append(n)
-    text = "".join(chr(cmap[n]) for n in names)
+    cm, order = tt.getBestCmap(), set(tt.getGlyphOrder())
+    names = [cm[reg[n].unicodes[0]] if reg[n].unicodes and reg[n].unicodes[0] in cm else n for n in names]
+    names = [n for n in names if n in order]                   # the font's own names (production names differ)
+    cols, S_, W, H = 20, 0.07, 76, 110
+    rows = (len(names) + cols - 1) // cols
     blocks = []
     for w in (300, 400, 700):
-        for k in range(0, len(text), 30):
-            blocks.append((f"{w}: double accents {k + 1}-{min(k + 30, len(text))} of {len(text)}", [S.strip(at(w), text[k:k + 30], {}, 64, ss=2)]))
+        RF.VF = VF
+        im = Image.new("L", (cols * W, rows * H), 255)
+        d = ImageDraw.Draw(im)
+        for k, n in enumerate(names):
+            ox, oy = (k % cols) * W + 8, (k // cols) * H + 85
+            from PIL import ImageChops
+            acc = Image.new("1", im.size, 0)
+            for P in RF.polys(RF.inst(w), n):                  # even-odd: counters stay white
+                if len(P) > 2:
+                    lay = Image.new("1", im.size, 0)
+                    ImageDraw.Draw(lay).polygon([(ox + x * S_, oy - y * S_) for x, y in P], fill=1)
+                    acc = ImageChops.logical_xor(acc, lay)
+            im.paste(0, mask=acc.convert("L"))
+        blocks.append((f"{w}: the {len(names)} composites with two or more marks", [im]))
+        RF._I.clear()
     page(blocks, out)
     return len(names)
 

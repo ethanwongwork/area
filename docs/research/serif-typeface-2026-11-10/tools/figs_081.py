@@ -283,6 +283,8 @@ def a_exit_figure(before, out):
     box = (300, -60, 680, 300)
     blocks = []
     for n in ("a", "a.ss03"):
+        if n not in r0:                                    # 0.80 had no a.ss03: its before is the default a's
+            continue
         P0 = K.contour(K.glyph_points(r0, n), "longest")
         P1 = K.contour(K.glyph_points(r1, n), "longest")
         def radii(P):

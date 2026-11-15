@@ -2356,7 +2356,7 @@ def light_bearings():
 # form turned over, point for point (charset.mirrors: ( [ { « ‹ <; the tab arrow; erase to the right). The engine
 # read the two forms each on its own, and its readings differed: ⇥ crossed itself at 300 where ⇤ did not. In every
 # master the right-hand form is now the master's left-hand form turned over, by the same correspondence of points
-# the Regular has, and stands from its advance's ends as the left-hand form does, swapped. The pairs are
+# the Regular has; its sides stay its own (bearing_change: light_bearings.json names ( and ) apart). The pairs are
 # charset.MIRRORS (the left-hand form is drawn); a pair whose Regular forms are not each other's mirror within half a
 # unit is not one drawing and is left alone (mirror_pairs lists only the ones that are).
 def _mirror_map(A, Bc):
@@ -2889,9 +2889,27 @@ def bold_font(reg, stem=STEM, **over):
                 law = WHITE.Law(reg, font)
                 notes.append(repr(law))
             R_ = glyph_contours(g)
-            reach_ = ARMS.reach_of(g.name, v)                 # 0.81: a star's arms reach as the references' do
-            f_ = ARMS.capped(R_, sign_ratio(v), law.least, reach=reach_)
-            mapped = ARMS.master(R_, f_, engine=out, reach=reach_)
+            reach_ = ARMS.reach_of(g.name, v)                 # 0.81: a star's arms reach as the references' do,
+            import axis_exact as _X                            # as far as no curve gains a turn the Regular's
+            eng_ = out                                         # reach would not give it (halved back towards 1)
+
+            def _arms(rc_):
+                f0 = ARMS.capped(R_, sign_ratio(v), law.least, reach=rc_)
+                mp_ = ARMS.master(R_, f0, engine=eng_, reach=rc_)
+                o_ = [[(round(x), round(y)) + q[2:] for (x, y), q in zip(M_, P_)] for M_, P_ in zip(mp_, R_)]
+                o_, _r = symmetric(g, o_, {})
+                return f0, mp_, len(_X.turns(R_, R_, o_))
+            f_, mapped, t_ = _arms(reach_)
+            if reach_ != 1.0:
+                base_t = _arms(1.0)[2]
+                for _ in range(6):
+                    if t_ <= base_t:
+                        break
+                    reach_ = 1 + (reach_ - 1) / 2
+                    f_, mapped, t_ = _arms(reach_)
+                if t_ > base_t:                                # no reach holds the curves: the Regular's length
+                    reach_ = 1.0
+                    f_, mapped, t_ = _arms(reach_)
             out = [[(x, y) + q[2:] for (x, y), q in zip(M_, P_)] for M_, P_ in zip(mapped, R_)]
             rep = {"x": [], "y": [], "necks": [], "where": {}, "arms": f"f {f_:.3f} (law {sign_ratio(v):.3f})",
                    "X": {min(q[0] for P_ in R_ for q in P_): min(q[0] for P_ in out for q in P_),
@@ -3328,12 +3346,18 @@ def bold_font(reg, stem=STEM, **over):
                 if b_ not in f_:
                     f_.newGlyph(b_)
                 nb = f_[b_]
+                old_ = glyph_contours(nb)                      # its own sides, as bearing_change set them
+                keep = (min(q[0] for P in old_ for q in P), nb.width) if old_ else None
                 nb.clearContours()
-                for P in turn_over(glyph_contours(f_[a_]), f_[a_].width, mp, types_):
+                new_ = turn_over(glyph_contours(f_[a_]), f_[a_].width, mp, types_)
+                if keep:
+                    dx_ = keep[0] - min(q[0] for P in new_ for q in P)
+                    new_ = [[(x + dx_, y) + q_ for x, y, *q_ in P] for P in new_]
+                for P in new_:
                     c = Contour()
-                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+                    c.points = [Point(x, y, *([t] if True else []), smooth=s_) for x, y, t, s_ in P]
                     nb.contours.append(c)
-                nb.width = f_[a_].width
+                nb.width = keep[1] if keep else f_[a_].width
             elif b_ in f_ and f_ is layer:
                 del layer[b_]
         turned.append(b_)

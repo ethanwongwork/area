@@ -165,14 +165,15 @@ class Arm:
     def along(s, x, f, reach=1.0):
         """s' and ds'/ds at s. reach (0.81): the arm's length in the master over the Regular's (REACH)."""
         L, z0, z1 = s.L, s.z0, s.z1
-        a0, a1 = f * z0, reach * L - f * z1
-        if x <= z0:
+        e = reach - 1.0                                        # the arm drawn out evenly along its axis
+        a0, a1 = f * z0, L - f * z1
+        if x <= z0:                                            # the junction as it was: the crotches are shared
             return f * x, f
         if x >= L - z1:
-            return reach * L - f * (L - x), f
+            return L - f * (L - x) + e * (x - z0), f + e
         span = (L - z1) - z0
         k = (a1 - a0) / span if span > 1e-9 else f
-        return a0 + (x - z0) * k, k
+        return a0 + (x - z0) * k + e * (x - z0), k + e
 
     def body(s, f):
         """The body's length in the master (under 0: the zones overlap, no room)."""

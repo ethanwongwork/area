@@ -255,13 +255,12 @@ def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False, w_of=None):
 
 def mirror(reg, master, fails):
     """0.81: a mirrored pair (charset.MIRRORS, one drawing in the Regular) is one drawing in the master and its mid
-    layer: the right-hand form the left-hand form turned over point for point, at the same advance."""
+    layer: the right-hand form the left-hand form turned over point for point (its sides its own)."""
     for a, b, _m in B.mirror_pairs(reg):
         for f_ in [master] + ([master.layers["mid"]] if "mid" in master.layers else []):
             if a not in f_ and b not in f_:
                 continue
-            if (a in f_) != (b in f_) or B._mirror_map(B.glyph_contours(f_[a]), B.glyph_contours(f_[b])) is None \
-                    or f_[a].width != f_[b].width:
+            if (a in f_) != (b in f_) or B._mirror_map(B.glyph_contours(f_[a]), B.glyph_contours(f_[b])) is None:
                 fails["mirror"].append(f"{b} (not {a} turned over{' in the mid master' if f_ is not master else ''})")
 
 
