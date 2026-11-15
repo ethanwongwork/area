@@ -1739,7 +1739,7 @@ CHANGES += [
     ["0.81", "audit_axis.py, Bold / Light glyphs (exact test)", "45 / 26 (0.80 masters)", "2 + 2 held / 0", "axis 0.81"],
     ["0.81", "eng's tail at 300, of the Regular", "0.667", "0.694 (stem 0.705)", "white.keep_taper"],
     ["0.81", "g.ss02: ball to bowl at 700", "38", "52 (white law)", "charset.single_g_points"],
-    ["0.81", "Asterisk at 700: cap on its weight", "f 1.199", "f 1.286 (arms reach 1.047)", "arms.REACH"],
+    ["0.81", "Asterisk at 700: ink gain over n's", "0.737", "0.737 (open; references 0.82 to 0.94)", "arms.REACH (guarded)"],
     ["0.81", "Kerning", "the Regular's at every weight", "fitted per master", "spacing.kern_master"],
 ]
 QA.append("0.81: see typefaces/area-serif/build/qa-081.log (full qa.py from a clean build).")

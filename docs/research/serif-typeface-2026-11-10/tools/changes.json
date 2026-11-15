@@ -26,7 +26,7 @@
    {
     "glyphs": "Signs",
     "chars": "*†‡!\"",
-    "text": "Signs made of arms (asterisk, daggers, exclamation, straight quotes) are now each arm's centre line with its width profile, thickened by one number per weight, and drawn symmetric from one half. The asterisk looked nearly Regular in Bold text: its ink gained 0.74 of n's gain where Georgia Pro, Source Serif 4 and Literata gain 0.82 to 0.94. Its arms now reach a little further at the Bold (1.047, the references' own asterisk growth), which leaves room for heavier arms under the white law."
+    "text": "Signs made of arms (asterisk, daggers, exclamation, straight quotes) are now each arm's centre line with its width profile, thickened by one number per weight, and drawn symmetric from one half. Not fixed: the asterisk still looks nearly Regular in Bold text. Its ink gains 0.74 of n's gain where Georgia Pro, Source Serif 4 and Literata gain 0.82 to 0.94; it is held back by the white between its arms. I tried letting its arms reach further at the Bold, as the references' asterisks do (4.7% longer); that made it heavy enough (0.83) but bent its curves between 400 and 700, so the Bold keeps the Regular's arm length for now. The Light's asterisk is 1.7% shorter, as the references' are."
    },
    {
     "glyphs": "Weight axis",

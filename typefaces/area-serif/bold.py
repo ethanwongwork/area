@@ -3352,10 +3352,10 @@ def bold_font(reg, stem=STEM, **over):
                 new_ = turn_over(glyph_contours(f_[a_]), f_[a_].width, mp, types_)
                 if keep:
                     dx_ = keep[0] - min(q[0] for P in new_ for q in P)
-                    new_ = [[(x + dx_, y) + q_ for x, y, *q_ in P] for P in new_]
+                    new_ = [[(q0[0] + dx_,) + tuple(q0[1:]) for q0 in P] for P in new_]
                 for P in new_:
                     c = Contour()
-                    c.points = [Point(x, y, *([t] if True else []), smooth=s_) for x, y, t, s_ in P]
+                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
                     nb.contours.append(c)
                 nb.width = keep[1] if keep else f_[a_].width
             elif b_ in f_ and f_ is layer:
