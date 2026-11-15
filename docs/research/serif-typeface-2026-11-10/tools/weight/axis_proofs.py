@@ -41,13 +41,56 @@ CLASSES = [
      ["dagger", "daggerdbl", "asterisk", "uni2318"], [300, 400, 700]),
     ("8-marks", "Wedge accents swelled then pressed into their box (0.80) / swollen into it, level cuts kept (0.81)",
      ["acute", "circumflex", "caron.case", "tilde", "hungarumlaut.case"], [300, 400, 550, 700]),
+    # round 3
+    ("12-arms", "Signs of arms (0.80 / 0.81 round 3: each arm its centreline, its width profile times one f)",
+     ["dagger", "daggerdbl", "asterisk", "exclam", "exclamdown", "quotedbl"], [300, 400, 550, 700]),
+    ("13-white", "White between parts (0.80 / round 3: the counter law with a floor; parts drawn touching stay so)",
+     ["product", "uni20B9", "registered", "uni21E4", "uni21E5", "quotedblleft"], [300, 400, 550, 700]),
+    ("14-necks", "Necks and crotches (0.80 / round 3: arm crotch on the thick edge, necks between curves, whook's flat)",
+     ["ampersand", "g", "gstroke", "whook", "s_p", "ae"], [300, 400, 550, 700]),
+    ("15-stacked-marks", "Stacked marks (0.80 / round 3: beside each other as in the Regular, white between kept)",
+     ["uni1EA7", "uni1EA7.ss03", "uni1EA4", "Udieresisacute", "uni1EB0", "idieresisacute"], [300, 400, 550, 700]),
+    ("16-alternates", "Alternates at the masters (0.80 / round 3)",
+     ["g.ss02", "zero.zero", "zero.ss05", "seven.ss06", "z.ss06", "l.ss04"], [300, 400, 550, 700]),
 ]
+# round 3: every sheet at the owner's four weights
+CLASSES = [(k, t_, n_, [300, 400, 550, 700]) for k, t_, n_, _w in CLASSES]
+
+WORST_40 = ["Astroke", "Tdiagonalstroke", "ampersand", "asterisk", "at", "c_t", "commaaccentcomb.case", "dagger",
+            "daggerdbl", "exclam", "exclamdown", "hookabovecomb.case", "lira", "multiply", "ogonekcomb.case",
+            "one.ss01", "product", "registered", "section", "thook", "uni20B9", "uni2318", "uni2715", "ae", "currency",
+            "g", "glottalstopsmall", "gstroke", "s_p", "uni21E4", "uni21E5", "whook", "yhook", "J", "Q", "uni0242",
+            "uni0295", "florin", "uni018F", "j"]
+
+
+def overview(new, out, names=WORST_40):
+    """The 40 glyphs that failed worst before round 3 (round 2's audit_axis on both sides, then audit_rays' worst),
+    as the build has them now, at 300 and at 700."""
+    cells = []
+    for n in names:
+        for w in (300, 700):
+            try:
+                cs = new.at(n, w, decompose=False)
+            except KeyError:
+                continue
+            box = A.box_of(cs, pad=20)
+            box = (box[0], -260, box[2], 1000)
+            cells.append((f"{n} {w}", A.ink(cs, 0.11, box)))
+    A.stack([A.grid(cells, 10, label_h=14, gap=6)],
+            titles=["overview-081: the 40 worst glyphs before round 3, now, at 300 and 700 (pairs)"]).save(
+        os.path.join(out, "overview-081.png"))
+
+
+def _at(m, name, w):
+    """A glyph's contours at w; a composite (the stacked marks) decomposed."""
+    cs = m.at(name, w, decompose=False)
+    return cs if cs else m.at(name, w, decompose=True)
 
 
 def cell(m, name, w, s, box, mark=True):
     if name not in m.R:                                        # new in 0.81: no 0.80 drawing
         return A.ink([], s, box)
-    cs = m.at(name, w, decompose=False)
+    cs = _at(m, name, w)
     im = A.ink(cs, s, box, color=(30, 30, 30))
     return im
 
@@ -55,7 +98,7 @@ def cell(m, name, w, s, box, mark=True):
 def class_sheet(old, new, key, title, names, weights, out):
     rows, titles = [], []
     for name in names:
-        sets = [m.at(name, w, decompose=False) for m in (old, new) for w in weights if name in m.R]
+        sets = [_at(m, name, w) for m in (old, new) for w in weights if name in m.R]
         box = A.box_of(*sets, pad=25)
         s = 150 / max(box[3] - box[1], 1)
         for lab, m in (("0.80", old), ("0.81", new)):
@@ -176,6 +219,7 @@ def main():
     fails |= {"Astroke", "dagger", "uni20A1", "uni2318", "uni2196", "uni2197", "uni2198", "uni2199", "commaturnedabovecomb"}
     all_failing(new, sorted(fails), out)
     thin_at_points(new, out)
+    overview(new, out)
     print("written", sorted(os.listdir(out)))
 
 

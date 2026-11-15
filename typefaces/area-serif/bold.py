@@ -1492,7 +1492,10 @@ def bold(contours, width, v, name="", hints=None):
                     owner.setdefault(q, set()).add(si)
         cap = yk[-1] > 600 and name[:1].isupper()
         for q, (pv, pl_, nx, nl) in adj.items():               # the flat outside a vertex: VERTEX of the class's stem
-            if nl and q[1] == nx[1] and 12 <= abs(q[0] - nx[0]) <= 90 and q in owner and nx in owner and not (owner[q] & owner[nx]) \
+            # round 3: a flat on a zone line is a vertex's from 8 units (whook's middle apex, 11 at the x-height,
+            # turned over at 300); off the zone lines from 12 (w's inner notches, 4, are not flats)
+            fl_w = abs(q[0] - nx[0])
+            if nl and q[1] == nx[1] and (12 <= fl_w or (8 <= fl_w and q[1] in ZONES)) and fl_w <= 90 and q in owner and nx in owner and not (owner[q] & owner[nx]) \
                     and _outer_flat(q, nx, adj, pl):
                 lo, hi = sorted((q[0], nx[0]))
                 extra_x.append((lo, hi, (hi - lo) * (1 + ((148 / 86 if cap else 140 / 78) - 1) * v["f"]), "vertex flat"))
@@ -2243,8 +2246,36 @@ def bearing_change(name, v):
         import os
         _BEARINGS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "bold_bearings.json")))
     ch = name if len(name) == 1 else _CHARS.get(name)
+    if v["f"] < 0:                                             # the Light's own bearings, when measured (the
+        lb = light_bearings()                                  # kerning worker's light_bearings.json)
+        if lb is not None:
+            return lb(name, v)
     d = _BEARINGS.get(ch, [BEARING_REST, BEARING_REST])
     return d[0] * BEARING_SCALE * v["f"], d[1] * BEARING_SCALE * v["f"]
+
+
+_LIGHT_BEARINGS = None
+
+
+def light_bearings():
+    """Hook (round 3): a function (name, v) -> (left change, right change) read from light_bearings.json when it
+    exists beside this file, else None (the Light then runs the Bold's measured changes backwards, as before).
+    The file's shape is the kerning worker's; this only finds it."""
+    global _LIGHT_BEARINGS
+    import json
+    import os
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "light_bearings.json")
+    if not os.path.exists(path):
+        return None
+    if _LIGHT_BEARINGS is None:
+        _LIGHT_BEARINGS = json.load(open(path))
+    data = _LIGHT_BEARINGS
+
+    def get(name, v):
+        ch = name if len(name) == 1 else _CHARS.get(name)
+        d = data.get(name, data.get(ch, data.get("_rest", [BEARING_REST * BEARING_SCALE * v["f"]] * 2)))
+        return float(d[0]), float(d[1])
+    return get
 
 
 # 0.81: a part drawn again in other glyphs moves, in every master, as its own glyph does. The comma's ball and tail
@@ -2763,6 +2794,21 @@ def bold_font(reg, stem=STEM, **over):
                         nox, noy = ox, oy                      # the base
                         if ox or oy:
                             notes.append(f"{name}: first component {m} at {ox},{oy} kept")
+                    if nox is None and placed and is_mark(reg[m]) and is_mark(reg[placed[-1][0]]):
+                        # round 3: a mark stacked beside another mark with no anchor between them (Vietnamese
+                        # grave or hook beside a circumflex) keeps its place relative to that mark: the two inks'
+                        # centres stand as in the Regular. (It followed the base's node map, and in the Bold the
+                        # circumflex rode a's anchor 58 right while the grave stayed: 62 apart, into each other.)
+                        pm, pro, pbo = placed[-1]
+
+                        def _c(f_, n_):
+                            bb = f_[n_].getBounds(f_)
+                            return ((bb.xMin + bb.xMax) / 2, (bb.yMin + bb.yMax) / 2) if bb else (0, 0)
+                        dpx, dpy = (_c(font, pm)[k] - _c(reg, pm)[k] for k in (0, 1))
+                        dmx, dmy = (_c(font, m)[k] - _c(reg, m)[k] for k in (0, 1))
+                        nox = round(pbo[0] + (ox - pro[0]) + dpx - dmx)
+                        noy = round(pbo[1] + (oy - pro[1]) + dpy - dmy)
+                        notes.append(f"{name}: {m} kept beside {pm} as in the Regular ({ox},{oy} > {nox},{noy})")
                     if nox is None:                            # no anchor says where: it follows the base's node map
                         bx, by = maps.get(placed[0][0], ({}, {}))
                         mb = reg[m].getBounds(reg) if hasattr(reg[m], "getBounds") else None
@@ -2804,6 +2850,57 @@ def bold_font(reg, stem=STEM, **over):
     for name in order:
         if name not in done:
             notes.append(f"{name}: not placed")
+    # round 3: stacked marks keep the white between them (white.py's law towards the Bold, at least min(Regular,
+    # MIN_GAP) either way): a later mark that came closer to an earlier one than that moves away from it along the
+    # line between their ink centres, as in the Regular. (The Bold's marks grow; placed anchor to anchor, ẩ's
+    # hook and Ǘ's acute ran into the circumflex and the dieresis.)
+    import spacing as _SP
+    if law is None:
+        law = WHITE.Law(reg, font)
+    stacked = []
+
+    def _mark_ink(f_, comp):
+        t_ = comp.transformation
+        cs_ = [[(x + t_[4], y + t_[5], ty, s_) for x, y, ty, s_ in P] for P in glyph_contours(f_[comp.baseGlyph])]
+        pts_ = [d[:2] for P in cs_ for d in WHITE._dense(P, 2.0)]
+        return np.array(pts_) if pts_ else None
+    for name in order:
+        g, ng = reg[name], font[name]
+        if g.contours:
+            continue
+        mk = [k for k, c in enumerate(g.components) if c.baseGlyph in reg and is_mark(reg[c.baseGlyph])]
+        if len(mk) < 2:
+            continue
+        moved_any = False
+        for b_ in mk[1:]:
+            for a_ in mk:
+                if a_ >= b_:
+                    continue
+                ra, rb = _mark_ink(reg, g.components[a_]), _mark_ink(reg, g.components[b_])
+                if ra is None or rb is None:
+                    continue
+                g0 = float(np.hypot(ra[:, None, 0] - rb[None, :, 0], ra[:, None, 1] - rb[None, :, 1]).min())
+                want = (law.least(g0) if law.narrow(g0) else min(_SP.MIN_GAP, g0)) if v["f"] > 0 else min(_SP.MIN_GAP, g0)
+                dvec = rb.mean(axis=0) - ra.mean(axis=0)
+                dvec = dvec / (np.linalg.norm(dvec) or 1.0)
+                for _ in range(150):
+                    na, nb = _mark_ink(font, ng.components[a_]), _mark_ink(font, ng.components[b_])
+                    gap_ = float(np.hypot(na[:, None, 0] - nb[None, :, 0], na[:, None, 1] - nb[None, :, 1]).min())
+                    if gap_ >= want - 0.5:
+                        break
+                    tt = list(ng.components[b_].transformation)
+                    step = max(1.0, (want - gap_) / 2)
+                    dx_, dy_ = round(dvec[0] * step), round(dvec[1] * step)
+                    if (dx_, dy_) == (0, 0):
+                        k_ = 0 if abs(dvec[0]) >= abs(dvec[1]) else 1
+                        dx_, dy_ = (int(np.sign(dvec[0])), 0) if k_ == 0 else (0, int(np.sign(dvec[1])))
+                    tt[4] += dx_
+                    tt[5] += dy_
+                    ng.components[b_].transformation = tuple(tt)
+                    moved_any = True
+        if moved_any:
+            stacked.append(name)
+    notes.append(f"stacked marks: {len(stacked)} composites keep the white between their marks ({', '.join(stacked)})")
     for g in reg:                                              # spaces: by the references' word space
         if not g.contours and not g.components and g.width:
             font[g.name].width = round(g.width * (1 + (SPACE - 1) * v["f"]))
@@ -2885,7 +2982,8 @@ def bold_font(reg, stem=STEM, **over):
         if not g.contours or reports.get(g.name, {}).get("fallback", "").startswith("left as the Regular") or g.name in struck \
                 or g.name in signs:                            # round 3: an arm's handles keep their directions
             continue
-        for f_, blends in ((layer, ((0.0, 1.0), (0.5, 0.5))), (font, ((0.0, 1.0), (0.5, 0.5), (0.75, 0.25), (0.25, 0.75)))):
+        for f_, blends in ((layer, ((0.0, 1.0), (0.5, 0.5), (0.75, 0.25), (0.25, 0.75), (0.875, 0.125))),   # round 3: the quarters too
+                           (font, ((0.0, 1.0), (0.5, 0.5), (0.75, 0.25), (0.25, 0.75)))):
             if g.name not in f_:
                 continue
             for c, rc in zip(f_[g.name].contours, g.contours):

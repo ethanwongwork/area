@@ -165,3 +165,100 @@ Overlaps on screen (`tools/weight/overlap_render.py`): see the final report.
   lighter (sub-pixel). Where two edges meet, anti-aliasing adds their coverage: 42 glyphs have pixels up to 37 of
   255 darker. The static Regular has no overlaps left in these glyphs.
 - Kerning per master: not started.
+
+## Round 3
+
+Build after round 3: `audit_axis.py` **Bold side 11 glyphs** (round 2: 23), **Light side 5** (round 2: 14); no
+fallbacks; `audit_bold.py` 434/434 on both masters; `--sweep` clean 325 to 700; `curvecheck.py`, `audit_charset.py`,
+interpolatable, fontbakery on both fonts pass. `audit_rays.py` 74 glyphs (triaged below). Logs: `build/axis081/`
+(`r3k.txt`, `qa-r3k.log`, `ax-r3*.log`, `rays-r3j.log`).
+
+| # | What | Rule | Where | Before > after |
+|---|---|---|---|---|
+| 14 | Signs of balls, waists and tapers (dagger, daggerdbl, asterisk, exclam, exclamdown, quotedbl, quotesingle; found by `arms.is_sign`: a P/S glyph, not a mark, whose contours are dots or arms with a round end and nothing straight but end cuts) | Each arm is a centreline (its axis) with a half-width profile read from the Regular. A master's arm is the same centreline, h(s) times one f; the arm keeps its length: within the junction the arm is the junction scaled by f about its centre (so a crotch is one point of both arms), the round end from the ball's widest place to its tip is the ball scaled by f about the tip, the body between runs evenly. Handles take the profile's own affine stretch where they lie (a curve keeps its inflections) and a level or upright handle stays so. Arms alike within 6 units (length, both zones) are one part (their mean); a star's arms lie at exact turns. f = (stem ratio)^0.77, capped (one f for all arms) where two arms of one contour would close their white under the white law (row 15): Bold f 1.199 asterisk, 1.264 dagger, 1.288 daggerdbl, 1.569 the rest; Light 0.764 all | `arms.py`; `bold.bold_font` (signs after the letters, then `symmetric`) | dagger, daggerdbl, asterisk, exclam, exclamdown: turns gone both sides; dagger/daggerdbl Light thin (31 > 20) gone |
+| 14a | The Regular's signs, each arm drawn once (Regular change, listed below) | A contour symmetric about its upright is its right half and that half turned over, point for point (`arms.mirrored_half`); the asterisk is its upright arm (made symmetric) and the arm turned to 30 degrees (a node added at each of its own extremes, exact splits), the other four arms their exact mirror images; the crotch between two arms is where the arm's edge, run on along its tangent, meets the half-way line. Libre Baskerville's asterisk had six arms drawn apart (side arms 3 to 6 nodes, reach 193 against 200; left and right side arms of different node structure): accidental, so one part | `arms.regular`, in `normalize` before `turned_pairs` | asterisk ink moves 7.8; the rest 1.5 to 2 |
+| 14b | Symmetry made exact | Moves are averaged over the group the drawing's symmetries generate; a symmetry counts only when the points pair as a group (`bold._consistent`: the multiply sign's quarter turn pairs a soft corner's handles the other way from its mirrors, so its mirrors are kept); each orbit's first point is rounded half away from zero and its images take its move turned exactly wherever the turn keeps whole units (mirrors, quarter and half turns); whole-unit rounding that bends a shallow curve is settled by moving its two handles at most a unit, the same on every image (`settle_turns`) | `bold.symmetric`, `sym_group`, `_round_orbits`, `settle_turns` | symmetry check tightened: 0 for mirrors and quarter turns, 0.5(\|cos\|+\|sin\|)+0.5 for other turns; multiply, uni2318, uni2715 pass |
+| 15 | White between two parts of a glyph | It is a counter: least(w) = max(white(400) x counter(w), min(white(400), floor(w))). counter: the letters' closed counters master over Regular (median of a b d e g o p q A B D O P R 4 6 8 9 0, each the largest circle it holds): 0.837 Bold, 1.055 Light. floor: the narrowest white passage in a-z A-Z at that master: 30.3 Bold (Q), 32.1 Regular and 32.4 Light (B's notch). Held where the Regular's white is narrow (under twice the Regular floor, 64): side by side, `keep_apart` moves the parts apart to it (towards the Bold; quotes now 33 to 36 wider at 700 instead of 13 apart); stacked or nested, the parts give way into themselves, thinner first, each by at most what it gained there over the Regular (`keep_white`), read across the Regular's narrowest place so parts that already meet read negative | `white.py`; `bold.keep_apart`, `bold_font` | product, rupee, registered no longer meet (rupee 24 > 11.7 at 700, registered 38 > 8.4: both short of the law's 24 and 32, the gains are spent; see below) |
+| 15a | product's 4-unit gap in the Regular | The stems run 2 units into the bar: one outline (Georgia Pro: one contour; Source Serif 4: stems overlapping the bar) | `charset` maths (Regular change) | crossing gone |
+| 15b | Parts drawn to touch | Nodes drawn at one place stay at one place; the straight edge a node touches (or the edge drawn in two pieces meeting at it) takes the node's move across itself, with its soft corners (`keep_touching`) | `white.keep_touching` | uni21E4 Light crossing gone; uni21E5 Light still crosses at 300 (below) |
+| 15c | Stacked marks (coordinator's addition) | A mark placed beside another mark with no anchor between them keeps their ink centres' relation; then any two marks of a composite keep the white law between them (the later mark moves away along the line between their centres) | `bold_font` composites | 120 composites with two or more marks: 37 closer than min(Regular, 13) at the Bold before, 0 after, at 300 and 700 (`build/axis081/_marks.py`); ầ's grave back beside its circumflex |
+| 16 | A thin arm leaving a thick stroke (ampersand's tail arm, 25 > 13 at 700) | The crotch lies on the thick stroke's moved edge at the arm's Regular width there times the hairline ratio from the arm's moved straight edge; its arm-side handle keeps its angle to the curve's chord. Only a crotch whose arm width collapsed under half moves (Bold: ampersand, ae) | `white.arm_crotches` (before the mid master and `fix_turns`) | ampersand thin and crossing gone |
+| 17 | Necks between two curves (Light) | The neck is the two outlines' nearest approach across the ink at a crotch whose two segments are curves; it keeps the hairline's share of the Regular's (0.847 at 300). The far edge's node nearest the neck gives way first (g's lower counter's corner came 35 left at 300 where the crotch came 5), then the crotch, each within its neighbours' box. Only a neck run under the serif tip at that weight (23) is this rule's: Q and C keep theirs | `white.keep_necks` | g, gstroke thin gone (13 > 31.8) |
+| 18 | whook's 11-unit apex flat | A flat on a zone line is a vertex's from 8 units (off zone lines still 12: w's 4-unit notches are not flats). No Regular change needed | `bold.bold` vertex flat | whook Light crossing gone |
+| 19 | Mid master turns | `fix_turns` tests the sparse master at the quarters and an eighth as well as half way | `bold_font` | (c_t, lira, section remain) |
+| 20 | audit_rays junction zones | A junction zone is everything within one local stroke width (the ray's own length) of a branch node (concave corner) or of a place where two contours' edges cross; rays starting there are skipped. Picture: `rays-junction-zones.png` | `audit_rays.py` | 72 > 74 flags (the zone rule replaced the 0.6 rule; fewer places kept, 35,742 > 33,305) |
+
+Bearings hook (coordinator): `bold.bearing_change` reads `light_bearings.json` through `bold.light_bearings()` when
+the file exists and v["f"] < 0; otherwise unchanged.
+
+### Regular changes (static Regular TTF against round 2: 8 glyphs differ, nothing else)
+
+| Glyph | Change | Ink moved at most (units, raster) | Points |
+|---|---|---|---|
+| asterisk | one arm: upright arm symmetric, 30-degree arm turned from it, four mirrors | 7.8 | 111 > 168 |
+| dagger | right half turned over (left top arm's 6 stray nodes gone) | 2.0 | 73 > 67 |
+| daggerdbl | right half turned over | 2.0 | 108 > 120 |
+| exclam, exclamdown | stroke from its right half (exclamdown is exclam turned) | 1.5 | 31 |
+| quotedbl, quotesingle | from the right half | 2.0 | 26, 13 |
+| product | stems meet the bar (the 4-unit gap closed) | 4.0 | 76 |
+
+Before over after: `12-arms.png`, `13-white.png` (sheets draw 0.80 over now).
+
+### The stress angle (item F's claim, checked)
+
+`tools/stress_angle.py` (`stress-angle.png`, `build/axis081/stress-angle.txt`): thickness against angle round o, c,
+e, s at 300, 400, 700, rays from the box centre. o's thickest place: Area 176 / 4 degrees at all three weights;
+Georgia Pro 192 > 186 > 180; Source Serif 4 186 > 186 > 176. c: Area 218 > 204 > 194, Georgia Pro 224 > 214 > 198,
+Source Serif 4 218 > 214 > 214. Area's stress does not drift where the references' holds: the claim "the thick part
+moves along the stroke" is not what happens on o and c, and no stress rule was added. The 300/400 ratio round o:
+Area 0.706 to 0.726 everywhere (the stem's 0.705); Georgia Pro 0.62 to 0.66; Source Serif 4 0.58 to 0.59. The
+references' rounds thin faster than their stems towards the Light; Area's o does not. (e and s are not round: the
+centre ray reads the bar and the spine, so their numbers are not stress angles.)
+
+### audit_rays triage (74 glyphs)
+
+- **Light, thinner at 300 than the stem's ratio (55 glyphs)**, ratios 0.47 to 0.67 at one place each: j and every
+  j-tail glyph (j, uni0237, uni0249, f_j, f_f_j, eng-to-come), J and its family (uni0248), the hooked IPA letters
+  (uni0253, uni0256, uni0257, uni0260, uni0266, uni0272, uni027D, uni027E, uni0283, uni0288, uni01A5, uni01B3,
+  uni01B4, uni0191, uni0198, uni0199, uni024A, uni024B, uni024D, uni2C72, uni2C73), r's arm, six, eight, eth,
+  dollar, sterling, lira, florin, integral, section, partialdiff, at, ogonek, the eighths and superior/inferior
+  eight, zero.zero's slash, s_t, s_p, uni2120, uni018F, uni0242, uni0295. Every one is a place part way round a
+  curved hook or tail, not at a round's thickest (the stress check above shows no drift). These places are on
+  curves whose thin end is a hairline (0.847 at 300 by the hairline law) and whose thick end is a round stroke
+  (0.705); a ratio under both is real and not explained by stress drift. Not fixed: it needs a rule for the
+  transition along a tapering curve (the thickness at a place between a thick and a thin end follows the two ends'
+  laws in proportion), which round 3 did not write. The references' rounds run to 0.58 to 0.66 at 300, so 0.60 to
+  0.67 is within their practice; uni0242 (0.47), uni0295 (0.51), section (0.52), florin (0.53) are not.
+- **Bold, thinner at a heavier stop (18 glyphs)**: c, cent, uniA793, uni023C (c's upper terminal 30.9 > 28.6 at 700:
+  the barb end's cut, a pointed end the ray reads from its side); Q (the tail where it meets the bowl, 53 > 44: a
+  junction the zone rule does not reach because the tail's crotch is a smooth meeting); ampersand (the arm, 48.9 >
+  28.9: the arm's middle still thins though its crotch is now placed, audit_axis passes it); one.ss01 (the flag,
+  47 > 35: real, item C not done); registered (R against ring, the law's give, 39 > 32); ring_acutecomb, a.ss03,
+  fl.ss04 and f_f_l.ss04, ae, uni027D, uni0288, uni018F, uni0242, uni0295: one place each, 2 to 3 units at 700, not
+  diagnosed.
+- **Light, thicker at a lighter stop (14 glyphs)**: S, z, z.ss06, uni01B6, uni2081 (a spine or diagonal read where
+  the neck rule or the diagonal's Light rule widened a place; 3 to 4 units), dollar, ampersand, oe, eth, Q, one.ss01,
+  uni018F, uni0242, uni0295: not diagnosed one by one.
+
+### Still failing after round 3, and why
+
+| Glyphs | Side | Why |
+|---|---|---|
+| Astroke, Tdiagonalstroke | Bold 625 to 700 | The pocket (Astroke 40 across, Tdiagonalstroke 31) closes: the letter's own legs and bar fill it and the stroke's gain on the pocket side is 4 units. The white law cannot keep it without thinning the letter. `stump-struck.png`: the honest attempt beside the stroke cut where it crosses the letter. **The owner's decision**; no swap built |
+| hookabovecomb.case | Bold | crossing; not diagnosed |
+| at, thook, commaaccentcomb.case, ogonekcomb.case, one.ss01 | Bold | thin (at: the a's foot at the junction, 29 > 18; thook 41 > 39; the comma accent and ogonek 1 unit, at the audit's whole-unit tolerance; one.ss01's flag 47 > 37). Item C's reading rules not written for these |
+| c_t, lira, section | Bold | an inflection between the Regular and the sparse master, at 431 to 550 |
+| uni21E5 | Light 300 | the merged arrow-and-bar crosses itself (0 > 1) where the point's coincident nodes meet the bar's edge |
+| glottalstopsmall, s_p, yhook | Light | a crotch with a straight side pinches (19 > 14 to 30 > 23); the neck rule reads curve-curve crotches only |
+| ae | Light 391 | an inflection, not diagnosed |
+| g.ss02 | (law, not an audit) | the ball-to-bowl white inside one contour: 62 at 400, 55.5 at 500, 47.7 at 600, 38.2 at 700 against the law's 52 at 700; the law is held between contours only |
+
+### Overlaps on CoreText (item H)
+
+`tools/ct_render.swift` (CoreText, compiled with swiftc) and `tools/ct_overlaps.py`: the 59 struck glyphs at 300,
+400, 700 and 13, 16, 64 px, the variable font (overlaps kept) against the same instance with overlaps removed by
+fontTools: differences up to 42/255 lighter and 44/255 darker, all along curved outer edges (`coretext-overlaps.png`:
+cent and Oslash, difference in colour), none at the overlaps: they come from pathops re-approximating the curves
+when it removes the overlaps, not from the overlaps. Coinciding edges: no struck stroke's straight edge lies on a
+letter's edge (within 2 units over more than 2) in the Regular or the Bold; in the Light, Rstroke's stroke lies on
+R's edge for 74 units. No inset rule was written (one case).

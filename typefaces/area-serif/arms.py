@@ -14,8 +14,9 @@ waist and the taper keep their proportions to one another, and the arm keeps its
 
 f is the sign law, (stem / 78) ** bold.SIGN_K, one number for every arm of the sign. It is capped only where two
 neighbouring arms would close the white between them below `floor` (the letters' own least white at that weight,
-white.floor); the cap is then one f for all the arms alike. A handle keeps its direction and takes its node's
-local stretch on its length, so no tangent turns (no smooth node kinks, an extreme stays at its node).
+white.Law); the cap is then one f for all the arms alike. A handle takes the profile's own affine stretch where it
+lies (each zone is an affine map, so a curve keeps its inflections); a level or upright handle stays so (an extreme
+stays at its node).
 
 The sign's symmetry is then made exact by bold.symmetric (moves mirrored as whole units).
 """

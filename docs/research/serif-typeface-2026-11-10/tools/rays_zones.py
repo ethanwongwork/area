@@ -20,7 +20,12 @@ import audit_rays as AR  # noqa: E402
 def main():
     out = sys.argv[1]
     names = sys.argv[2:] or ["g", "Q", "Astroke", "a", "asterisk", "uni0259"]
-    gs = AR.instance("build/AreaSerif[wght].ttf", 400).getGlyphSet()
+    f400 = AR.instance("build/AreaSerif[wght].ttf", 400)
+    gs = f400.getGlyphSet()
+    import ufoLib2
+    reg = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
+    cmap = f400.getBestCmap()
+    names = [n if n in gs else cmap.get(reg[n].unicodes[0], n) for n in names]
     sc, cell = 0.42, 440
     img = Image.new("RGB", (cell * 3, cell * 2), "white")
     dr = ImageDraw.Draw(img)
