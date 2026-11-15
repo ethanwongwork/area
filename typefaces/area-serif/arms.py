@@ -163,8 +163,25 @@ class Arm:
         return dx * s.u[0] + dy * s.u[1], dx * s.n[0] + dy * s.n[1]
 
     def along(s, x, f, reach=1.0):
-        """s' and ds'/ds at s. reach (0.81): the arm's length in the master over the Regular's (REACH)."""
+        """s' and ds'/ds at s. reach (0.81): the arm's length in the master over the Regular's (REACH).
+
+        0.81 (close): a longer or shorter arm moves its outer part whole. From the arm's innermost smooth node out to
+        its tip (s_split: on a turned arm the node at its own extreme, whose handle is level or upright) the arm is
+        its Regular scaled by f about the tip and carried out along the axis by (reach - 1) L: a similarity, so no
+        curve there gains an extreme or an inflection; the junction is scaled by f as always, and the part between
+        the junction and that node takes up the change in length evenly. (Drawing the body and the ball out alike
+        tilted the turned arms' level handles against their curves: four inflections at reach 1.047.)"""
         L, z0, z1 = s.L, s.z0, s.z1
+        sp = getattr(s, "s_split", None)
+        if reach != 1.0 and sp is not None and not s.far_junction and z0 < sp < L:
+            E = (reach - 1.0) * L
+            if x <= z0:
+                return f * x, f
+            if x >= sp:
+                return L - f * (L - x) + E, f
+            a0, a1 = f * z0, L - f * (L - sp) + E
+            k = (a1 - a0) / (sp - z0)
+            return a0 + (x - z0) * k, k
         e = reach - 1.0                                        # the arm drawn out evenly along its axis
         a0, a1 = f * z0, L - f * z1
         if x <= z0:                                            # the junction as it was: the crotches are shared
@@ -265,6 +282,16 @@ def read(contours, axis_x=None):
     if not any_ball:
         return None
     one_part(arms)
+    for ci, P in enumerate(contours):                         # 0.81 (close): each arm's innermost smooth node
+        if roles[ci] and roles[ci][0] == "dot":
+            continue
+        for k, q in enumerate(P):
+            r = roles[ci][k]
+            if q[2] is None or not q[3] or not isinstance(r, int) or not isinstance(arms[r], Arm) or arms[r].far_junction:
+                continue
+            x = arms[r].local(q[:2])[0]
+            if x > arms[r].z0 + 1 and x < getattr(arms[r], "s_split", math.inf):
+                arms[r].s_split = x
     return arms, roles
 
 
@@ -379,6 +406,12 @@ def master(contours, f, engine=None, reach=1.0):
 # where the references' gain 0.82 to 0.94 of theirs, and it read nearly Regular beside Bold text. REACH: the mean
 # span ratio at each end of the axis; a master between takes it in proportion to its stem step (f).
 REACH = {"asterisk": (1.047, 0.983)}
+# 0.81 (close): the Bold asterisk's colour. Ink area Bold over Regular, over n's (sheets_081.asterisk): Georgia Pro
+# 0.819, Source Serif 4 0.898, Literata 0.935; Area at reach 1.047 0.786. Towards the Bold a star's arms reach the
+# least that brings its ink gain to the references' least (INK_GAIN), within the references' own span changes
+# (REACH_MAX, Literata's 1.092 the longest; the white law caps f as before, so the balls keep their white).
+INK_GAIN = {"asterisk": 0.819}
+REACH_MAX = 1.092
 
 
 def reach_of(name, v):

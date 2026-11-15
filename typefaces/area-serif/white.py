@@ -775,7 +775,7 @@ def taper_readings(contours, n_seg=6):
     return th, eid, where
 
 
-def keep_taper(R, N, laws, tol=0.5, n_seg=6, only_thinner=False):
+def keep_taper(R, N, laws, tol=0.5, n_seg=6, only_thinner=False, nodes=True):
     """Along a tapering stroke (a tail, a hook, a flag) every station keeps at least its own law's share of the
     Regular's thickness there (taper_law): stem-like places the stem's ratio, hairline-like the hairline's, a serif
     tip's or an end's the tip's, in between in proportion, so the taper keeps its shape and no place thins faster than its own kind. A station is
@@ -864,4 +864,235 @@ def keep_taper(R, N, laws, tol=0.5, n_seg=6, only_thinner=False):
             sa, sb = 1 + (sa - 1) / 2, 1 + (sb - 1) / 2
             if abs(sa - 1) < 0.01 and abs(sb - 1) < 0.01:
                 break
+    if nodes:
+        N, log2 = _taper_places(R, N, short, seg_of, eR, turns0, thR)
+        log += log2
+    return N, log
+
+
+NODE_JND = 0.03            # a place left short of its law by more than this share of it (the just-noticeable
+                           # difference in weight, audit_rays' JND) after the handles moves its nodes
+
+
+def _taper_places(R, N, short, seg_of, eR, turns0, thR):
+    """0.81 (close): when handles cannot hold a place, move the places, not the tension (the construction skill,
+    g.ss02's tail). A station still short of its law by more than NODE_JND of its law is a place the handle lengths
+    cannot reach: the smooth nodes at the two ends of the curve it lies on and of the curve its ray ends on move,
+    each rigidly with its two handles (so its tangent and the curves' tensions stay, an extreme stays an extreme), by
+    the least whole-unit shift that holds the law: a node whose handles are level (a height: an extreme on a zone
+    line, an overshoot) moves level only. Corners (crotches, cut ends, a line's ends) never move. No curve gains a
+    turn and no contour a crossing the move did not have; nothing is moved past its neighbouring nodes' box. One
+    rule for every glyph and both sides: the a's bowl running into @'s ring (its counter's corner rode the upright
+    strokes' map 44 right while the crotch went 24 left), the ogonek's tail at its node, the IPA hooks' nodes
+    towards the Light. Returns contours and [(contour, node, shift, deficit before, deficit after)]."""
+    import axis_exact as X
+    import audit_axis as AA
+    want_of = None
+    d1, _ = short(N)
+    thN = taper_readings(N)[0]
+    # how far short of its law each place is, as a share of the law (want = thickness the law asks for)
+    want_of = np.where(d1 > 0, np.nan_to_num(thN, nan=0.0) + d1, np.nan)
+    bad = np.where((d1 > 0) & (d1 > NODE_JND * np.nan_to_num(want_of, nan=1e9)))[0]
+    if not len(bad):
+        return N, []
+    nodes_ = []
+    for k in bad:
+        for s_ in (seg_of[k], seg_of[eR[k]] if 0 <= eR[k] < len(seg_of) else None):
+            if s_ is None:
+                continue
+            ci, i = s_
+            P = N[ci]
+            on = [m for m, q in enumerate(P) if q[2] is not None]
+            j = on[(on.index(i) + 1) % len(on)]
+            for m in (i, j):
+                if (ci, m) not in nodes_:
+                    nodes_.append((ci, m))
+    log = []
+    crossings0 = len(X.crossings(R, R, N))
+
+    def handles_of(P, m):
+        n = len(P)
+        return [h for h in ((m - 1) % n, (m + 1) % n) if P[h][2] is None]
+
+    for ci, m in nodes_:
+        P = N[ci]
+        q = P[m]
+        if q[2] is None:
+            continue
+        on = [k for k, p in enumerate(P) if p[2] is not None]
+        k0 = on.index(m)
+        prv, nxt = on[(k0 - 1) % len(on)], on[(k0 + 1) % len(on)]
+        cut = None
+        if not q[3]:
+            # a corner moves only as a stroke's cut end: a straight cut under the serif tip's length between two
+            # corners at a stroke's end (the ogonek's top, 11 units) grows along itself, as an end takes the tip's
+            # law; a crotch, a line's end or any other corner never moves
+            for o, line_ in ((nxt, P[nxt][2] == "line"), (prv, q[2] == "line")):
+                if line_ and not P[o][3] and 4 <= math.dist(P[o][:2], q[:2]) < 30:
+                    L_ = math.dist(P[o][:2], q[:2])
+                    cut = ((q[0] - P[o][0]) / L_, (q[1] - P[o][1]) / L_)
+            if cut is None:
+                continue
+            hs = handles_of(P, m)
+            level = False
+        else:
+            hs = handles_of(P, m)
+            if len(hs) != 2:
+                continue
+            level = all(abs(P[h][1] - q[1]) < 0.5 for h in hs)  # a height: moves level only
+        nb = [P[prv][:2], P[nxt][:2]]
+        box = [(min(a[ax] for a in nb + [q[:2]]), max(a[ax] for a in nb + [q[:2]])) for ax in (0, 1)]
+        base = [list(Q) for Q in N]
+
+        def moved(dx, dy):
+            M = [list(Q) for Q in base]
+            if cut is None and not (box[0][0] <= q[0] + dx <= box[0][1] and box[1][0] <= q[1] + dy <= box[1][1]):
+                return None
+            for h in [m] + hs:
+                p = M[ci][h]
+                M[ci][h] = (p[0] + dx, p[1] + dy) + tuple(p[2:])
+            return M
+
+        def cost(M):
+            d_, o_ = short(M)
+            return float((d_ ** 2).sum() + (o_ ** 2).sum())
+        before = float(short(base)[0].sum())
+        c0 = cost(base)
+        dx = dy = 0
+        c_ = c0
+        tt = 0
+        for step in (8, 4, 2, 1):
+            for _ in range(12):
+                moved_ = False
+                if cut is not None:                            # along the cut, longer only
+                    steps = [(round(cut[0] * (tt + step)) - dx, round(cut[1] * (tt + step)) - dy)]
+                else:
+                    steps = [(step, 0), (-step, 0), (0, step), (0, -step)]
+                for ddx, ddy in steps:
+                    if level and ddy:
+                        continue
+                    M = moved(dx + ddx, dy + ddy)
+                    if M is None:
+                        continue
+                    cn = cost(M) + 0.25 * ((dx + ddx) ** 2 + (dy + ddy) ** 2)
+                    if cn < c_ - 1e-9:
+                        dx, dy, c_, moved_ = dx + ddx, dy + ddy, cn, True
+                        tt += step if cut is not None else 0
+                        break
+                if not moved_:
+                    break
+        while (dx, dy) != (0, 0):                              # no new turn, no new crossing: back towards none
+            M = moved(dx, dy)
+            if M is not None and len(X.turns(R, R, M, AA.FILLET_SMALL, AA.FILLET_MAX)) <= turns0 \
+                    and len(X.crossings(R, R, M)) <= crossings0:
+                N = M
+                log.append((ci, m, (dx, dy), round(before, 1), round(float(short(N)[0].sum()), 1)))
+                break
+            if cut is not None:
+                tt = tt // 2
+                dx, dy = round(cut[0] * tt), round(cut[1] * tt)
+            else:
+                dx, dy = int(dx / 2), int(dy / 2)
+    return N, log
+
+
+# ---------------------------------------------------------------- a slanted stem with one straight side (0.81, close)
+
+SLANT_STEM = (5.0, 35.0)       # degrees off upright: a stem drawn slanted, not a diagonal (v w x: 18 to 28 is
+                               # theirs, but their other side is a line too, read by bold.diagonals)
+
+
+def slanted_stems(R, least_len=100.0):
+    """Strokes whose one side is a straight slanted line and whose other side is a curve's upright extreme facing it
+    across the ink (the a of @: its stem's right side a line 15 degrees off upright, its left side the counter's
+    right extreme). The engine reads a stroke between two knots on one scan line; a line has no knot at the
+    extreme's height, so no stroke was read there and the counter rode the knots round it. [(contour of the
+    extreme, its node, contour of the line, its start node, its end node, width in R)]."""
+    import bold as B
+    polys = B.polys(R)
+    out = []
+    for lc, P in enumerate(R):
+        on = [k for k, q in enumerate(P) if q[2] is not None]
+        for k, i in enumerate(on):
+            j = on[(k + 1) % len(on)]
+            if P[j][2] != "line":
+                continue
+            a, b = P[i][:2], P[j][:2]
+            L = math.dist(a, b)
+            if L < least_len or abs(a[1] - b[1]) < 1e-6:
+                continue
+            ang = math.degrees(math.atan2(abs(b[0] - a[0]), abs(b[1] - a[1])))
+            if not SLANT_STEM[0] <= ang <= SLANT_STEM[1]:
+                continue
+            ylo, yhi = sorted((a[1], b[1]))
+            for ec, Q in enumerate(R):
+                n = len(Q)
+                for m, q in enumerate(Q):
+                    if q[2] is None or not q[3]:
+                        continue
+                    h0, h1 = Q[(m - 1) % n], Q[(m + 1) % n]
+                    if h0[2] is not None or h1[2] is not None or abs(h0[0] - q[0]) > 0.5 or abs(h1[0] - q[0]) > 0.5:
+                        continue                                # an upright extreme: both handles upright
+                    if not ylo + 10 < q[1] < yhi - 10:
+                        continue
+                    xl = a[0] + (b[0] - a[0]) * (q[1] - a[1]) / (b[1] - a[1])
+                    lo, hi = sorted((q[0], xl))
+                    for s0, s1 in B.scan(polys, q[1], 1):
+                        if abs(s0 - lo) <= 1.5 and abs(s1 - hi) <= 1.5 and hi - lo >= 20:
+                            out.append((ec, m, lc, i, j, hi - lo))
+    return out
+
+
+def _slant_width(N, ec, m, lc, i, j):
+    a, b = N[lc][i][:2], N[lc][j][:2]
+    q = N[ec][m]
+    xl = a[0] + (b[0] - a[0]) * (q[1] - a[1]) / (b[1] - a[1])
+    return xl - q[0]
+
+
+def keep_slanted_stems(R, N, target):
+    """0.81 (close): a slanted stem with one straight side (slanted_stems) is a stroke like any other: its width at
+    the facing extreme's height, read level as the engine reads every stroke, takes the engine's own target for it
+    (target(width in R), bold.x_target for a straight stroke). The extreme moves level, rigidly with its handles
+    (it stays an extreme, its curves keep their tensions); the line stays where the engine put it. Returns
+    contours and [(contour, node, before, target, after)]."""
+    N = [list(P) for P in N]
+    log = []
+    for ec, m, lc, i, j, w0 in slanted_stems(R):
+        want = target(w0)
+        if want is None:
+            continue
+        sgn = 1 if _slant_width(R, ec, m, lc, i, j) > 0 else -1
+        got = sgn * _slant_width(N, ec, m, lc, i, j)
+        d = got - want                                         # > 0: too wide, the extreme moves towards the line
+        if abs(d) < 1.0:
+            continue
+        dx = sgn * d                                           # the extreme's move (towards the line when too wide)
+        # the knot map, corrected at this knot: every node of the extreme's own contour whose x the engine took
+        # between the contour's far upright extreme and this one moves by its share of the move (as the engine's
+        # map interpolates between knots), its handles with it; the far extreme stays
+        P0 = R[ec]
+        ext = [k for k, q in enumerate(P0) if q[2] is not None and q[3] and P0[(k - 1) % len(P0)][2] is None
+               and P0[(k + 1) % len(P0)][2] is None and abs(P0[(k - 1) % len(P0)][0] - q[0]) < 0.5
+               and abs(P0[(k + 1) % len(P0)][0] - q[0]) < 0.5 and k != m]
+        xe = P0[m][0]
+        far = [k for k in ext if (P0[k][0] - xe) * sgn < 0]   # on the side away from the line
+        x_far = max((P0[k][0] for k in far), key=lambda x: abs(x - xe)) if far else None
+        n = len(N[ec])
+        on = [k for k, q in enumerate(P0) if q[2] is not None]
+        moves = {}
+        for k in on:
+            if k == m:
+                w_ = 1.0
+            elif x_far is None or not min(x_far, xe) < P0[k][0] < max(x_far, xe):
+                continue
+            else:
+                w_ = (P0[k][0] - x_far) / (xe - x_far)
+            for h in (k, (k - 1) % n, (k + 1) % n):
+                if h == k or P0[h][2] is None:
+                    moves[h] = round(dx * w_)
+        for h, ddx in moves.items():
+            q = N[ec][h]
+            N[ec][h] = (q[0] + ddx, q[1]) + tuple(q[2:])
+        log.append((ec, m, round(got, 1), round(want, 1), round(sgn * _slant_width(N, ec, m, lc, i, j), 1)))
     return N, log

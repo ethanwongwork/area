@@ -2899,6 +2899,26 @@ def bold_font(reg, stem=STEM, **over):
                 o_ = [[(x, y) + q[2:] for (x, y), q in zip(M_, P_)] for M_, P_ in zip(mp_, R_)]
                 o_, _r = symmetric(g, o_, {})
                 return f0, mp_, len(_X.turns(R_, R_, o_))
+            if v["f"] > 0 and g.name in ARMS.INK_GAIN and "n" in reg and "n" in font:
+                # 0.81 (close): the least reach (from the references' mean, up to their longest) at which the sign's
+                # ink gains the references' least share of n's gain (arms.INK_GAIN); solved by halving
+                def _ink(cs_):
+                    return float(WHITE.raster(cs_)[0].sum())
+                n_gain = _ink(glyph_contours(font["n"])) / _ink(glyph_contours(reg["n"]))
+
+                def _gain(rc_):
+                    f0, mp_, _t = _arms(rc_)
+                    o_ = [[(x, y) + q[2:] for (x, y), q in zip(M_, P_)] for M_, P_ in zip(mp_, R_)]
+                    return _ink(o_) / _ink(R_) / n_gain
+                lo_, hi_ = reach_, ARMS.REACH_MAX
+                if _gain(lo_) < ARMS.INK_GAIN[g.name]:
+                    for _ in range(12):
+                        mid_ = (lo_ + hi_) / 2
+                        if _gain(mid_) >= ARMS.INK_GAIN[g.name]:
+                            hi_ = mid_
+                        else:
+                            lo_ = mid_
+                    reach_ = round(hi_, 4)
             f_, mapped, t_ = _arms(reach_)
             if reach_ != 1.0:
                 base_t = _arms(1.0)[2]
@@ -3147,6 +3167,25 @@ def bold_font(reg, stem=STEM, **over):
             tapered.append(f"{g.name} {len(log_)}")
             resided.add(g.name)
     notes.append(f"tapering strokes: {len(tapered)} glyphs keep the ladder's law along them ({', '.join(tapered)})")
+    # 0.81 (close): a slanted stem with one straight side (its other side a curve's upright extreme across the ink:
+    # the a of @) is a stroke: its level width at the extreme takes x_target, the extreme and the nodes its knot
+    # carried move by the corrected map (white.keep_slanted_stems; @'s stem stayed 92 > 91 at the Bold while its
+    # counter rode the knots 44 right into the bowl's lower stroke, 29 > 17 at 550). After the tapers: their handle
+    # lengths, retuned on the engine's counter, would otherwise press the moved counter back into the bowl's stroke.
+    slanted = []
+    for g in reg:
+        if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
+            continue
+        cs = glyph_contours(font[g.name])
+        if [len(P) for P in cs] != [len(c.points) for c in g.contours]:
+            continue
+        new_, log_ = WHITE.keep_slanted_stems(glyph_contours(g), cs, lambda t: x_target(t, True, v))
+        if log_:
+            for c, P in zip(font[g.name].contours, new_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            slanted.append(f"{g.name} {log_}")
+            resided.add(g.name)
+    notes.append(f"slanted stems: {len(slanted)} glyphs ({'; '.join(slanted)})")
     # 0.81 (integration): a glyph whose outline a later rule changed (arm crotches, necks, tapers) takes its sides
     # again, as the engine set them: the Regular's plus the measured change (S's left side was 1.1 off in the Light)
     for name in sorted(resided):

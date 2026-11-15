@@ -260,10 +260,29 @@ def fit_kerning(font):
     return n
 
 
+# 0.81 (close): a word space before j. j's tail reaches 244 units left of its stem (Georgia Pro 210, Serrif 109 at
+# Area's x-height) and its stem's side follows Georgia Pro's at the serif, so the tail runs under the word space
+# before it: the least white between a letter and j across a space (HarfBuzz, kerning on) was 63 units under the
+# nearer reference's at 400, the median over a to z (s j 252 against Georgia Pro 322 and Serrif 345; n j 185 against
+# 254 and 304; v j and y j already inside), and 42 under at 700. fit.py's pair measure reads only the rows where both
+# letters have ink and never saw it. The kerning rule (a pair outside both references by 8 or more goes to the
+# nearer): space before j's class by the median shortfall. The masters take it by the transfer rule.
+SPACE_BEFORE = {"public.kern2.KERN_j_2ND": 63}
+
+
+def space_kerning(font):
+    n = 0
+    for b, v in SPACE_BEFORE.items():
+        if "space" in font and (b in font.groups or b in font):
+            font.kerning[("space", b)] = v
+            n += 1
+    return n
+
+
 def run(font):
     delta = space(font)
     moved = rekern(font, delta)
-    fitted = fit_kerning(font)
+    fitted = fit_kerning(font) + space_kerning(font)
     opened = open_collisions(font)
     print(f"spacing: {fitted} kerning values from the fit")
     return delta, moved, opened
