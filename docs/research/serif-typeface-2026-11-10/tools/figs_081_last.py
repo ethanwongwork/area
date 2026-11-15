@@ -36,8 +36,15 @@ SMALL = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 12)
 
 
 class Masters:
-    def __init__(self, d):
+    def __init__(self, d, curls=True):
         self.reg = OVERLAP.vf_source(ufoLib2.Font.open(f"{d}/AreaSerif-Regular.ufo"))
+        if not curls:                                          # a build before the curl and stem: its merged outline
+            plain = ufoLib2.Font.open(f"{d}/AreaSerif-Regular.ufo")
+            for n in OVERLAP.CURLS:
+                if n in plain:
+                    self.reg[n].clearContours()
+                    for c in plain[n].contours:
+                        self.reg[n].contours.append(c)
         self.bold = ufoLib2.Font.open(f"{d}/AreaSerif-Bold.ufo")
         self.light = ufoLib2.Font.open(f"{d}/AreaSerif-Light.ufo")
         self.mids = self.bold.layers["mid"] if "mid" in self.bold.layers else {}
@@ -216,7 +223,7 @@ def hook_above(before, after, out):
             row.append(cellim)
         rows.append(row)
     # composites that carry them, from the variable font's instances
-    comps = ("uni1EA2", "uni1EA9", "uni1EC8", "uni1EDE", "uni1EE6", "uni1EF6", "uni1EA3", "uni1EDF")
+    comps = ("uni1EA2", "uni1EA9", "uni1EC8", "uni1EDF")
     row = []
     for w in ws:
         gs = after.inst(w).getGlyphSet()
@@ -266,7 +273,7 @@ def at_crotch(before, after, out):
 
 
 def main():
-    before, after = Masters(sys.argv[1]), Masters("build")
+    before, after = Masters(sys.argv[1], curls=False), Masters("build")
     od = sys.argv[2]
     os.makedirs(od, exist_ok=True)
     thin_reading(before, after, os.path.join(od, "14-thin-reading.png"))

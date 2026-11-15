@@ -39,7 +39,11 @@ TITLES = [
     ("13-asterisk.png", "The asterisk at 400 and 700: before over after its longer reach"),
     ("13-word-space-j.png", "A word space before j at 400 and 700: before over after"),
     ("13-comma-cut.png", "The comma accent below a capital: the old upright cut and the cut across the stroke"),
-    ("13-hook-above.png", "Not fixed: the capital hook above (its slot closes from 552)"),
+    ("13-hook-above.png", "The capital hook above in the close round (its slot closed from 552; fixed in the last round, figure 14)"),
+    ("14-hook-above.png", "Last round: both hook-above marks at 300, 400, 552, 700, before over after (a curl and a stem), and composites"),
+    ("14-c-barb.png", "Last round: C's lower barb at 400 to 700, before over after (the second check's ray)"),
+    ("14-at.png", "Last round: @ at 400, 550, 700, before over after (no nub over the stem at the Bold)"),
+    ("14-thin-reading.png", "Last round: the weight check's thinnest cut, the Regular's thinnest anywhere against the same place"),
 ]
 
 

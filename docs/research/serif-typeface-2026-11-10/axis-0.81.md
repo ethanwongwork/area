@@ -362,3 +362,59 @@ reason (towards the Bold they moved the quotes' nodes on the Bold master alone).
 
 Figures: `img/081/13-at.png`, `13-asterisk.png`, `13-word-space-j.png`, `13-comma-cut.png`, `13-hook-above.png`,
 `11-rays-flags.png` (every flag drawn); `5-signs-struck.png` redrawn.
+
+## Last round (15 November 2026)
+
+The close round's open items, worked in the owner's order. Rules and readings, each tried on scratch masters built
+from the normalized Regular (`build/scratch/run.py`) and then in one clean `qa.py` build (`build/qa-081.log`).
+Figures: `img/081/14-thin-reading.png`, `14-c-barb.png`, `14-hook-above.png`, `14-at.png`; `11-rays-flags.png` redrawn.
+
+| # | Item | Cause | Rule or reading | Where | Before > after |
+|---|---|---|---|---|---|
+| 38 | C, Cbar, Q, s, ogonekcomb.case (Bold) newly thin under the cut across the stroke | Not thinning. Read at fixed distances from each end (6 to 50 units), Q's tail and s's barb thicken at every weight and C's and the ogonek's are flat or thicker (`14-thin-reading.png`). Two sampling effects: (a) the thinnest cut by a stroke's cut end lies at the end zone's edge, and which scan line falls there changes with the weight (Q 22.6 > 19.8 > 23.6 at 400, 425, 450); (b) the end zone's corners were the flattening's vertices, so on a curve cut in 8 a vertex up to 12 units off the corner counted as the corner at one weight and not the next | `audit_axis` compares the instance's thinnest cut with the Regular's cut at the same place (the same two edges at the same shares, `place_reading`), not with the Regular's thinnest anywhere; end corners found on the outline cut every unit (`END_STEP`) | `audit_axis.thinnest(at=)`, `place_reading`, `_resample` | C, Cbar, Q, s, ogonekcomb.case pass; whook (Light) passes (its failing cut was the outside flat of its vertex, now an end) |
+| 39 | What the reading change does to the other glyph-sides | The same place shows a stroke that thins where the Regular's thinnest stroke is elsewhere | (none: these are the reading's findings) | | newly failing on the tip's own masters: Khook (700, 49 > 38, the arm at the leg's junction), at (675 to 700, 41 > 35), cedi (700, 47 > 39, the C where the stroke crosses it), ogonek and ogonekcomb (675, 1.0 under), registered (600 to 700, 40 > 32, the ring by R's leg), tretroflexhook (700, 41 > 39); one.ss01 (Bold) and yhook (Light) still fail. Khook, cedi and yhook read at a junction, where the same place on two masters is the least certain (`14-thin-reading.png`, yhook) |
+| 40 | C's barb and ₡ ꞓ Ȼ: thinner at 600 than at 500 (77.3 > 73.8 at (546, 106)) | The taper rule towards the Bold (`keep_taper(only_thinner)`) held only the places the engine had read thinner than the Regular, and retuned handles freely elsewhere: C's barb handle grew 1.32 times and the stroke into its foot fell 75 > 61 against the Regular's 68 | The places held are those thinner than the Regular in the engine's reading or in the retuned outline's | `white.keep_taper` | the flag gone from C, Cbar (₡), ꞓ, Ȼ; Bold changed in 13 glyphs (below) |
+| 41 | audit_rays read 394 glyphs, 23,147 places (integration 452, 33,700) | A line's places were its two ends only, and the ends of a straight stroke are its corners: the close round's end zones read those as the end's cut, so 58 glyphs (dashes, rules, maths signs, arrows, brackets, v, w, ꝁ, ₹, one.ss01, .notdef, hookabovecomb.case) kept no place | A line is cut at the same parameters as a curve | `audit_rays.polylines` | see Final; 57 of the 58 read again; flags that came back: ⌦ ⌫ ✓ at 300 (0.60 of 400; the sign law asks 0.764) |
+| 42 | hookabovecomb.case crossing at 552 | Drawn as one outline, the slot between the curl's ball and the stem's top is under a unit; the engine thickened the curl's stroke inward, the eye (17 wide) closed to 3 and the stem's corner crossed the ball | In the masters (and the variable font's Regular) the hook above is a curl and a stem overlapping: the curl is the outline from the stem's right edge round the eye to its foot, closed by a line inside the stem; the stem is a stroke (`move_stroke`) whose top is the eye's foot. Towards the Bold the eye is the Regular's about its centre times the white law's least for its width (17 keeps 17; the lowercase's 35 goes 30.3), centred where the engine put it, so the curl's stroke gains outward; the slot gives way into the stem by at most the stem's gain (not needed in this build). Towards the Light the engine's eye. The static Regular keeps the merged outline | `overlap.curl_master`, `curl_parts`, `vf_source`, `struck_names`; `bold.bold_font` | crossing gone; turns, crossings and parts-meet pass on both sides; both marks and the 27 composites drawn at 300, 400, 552, 700 (`14-hook-above.png`) |
+| 43 | ogonekcomb.case 1.9 thin | Not a thinning (row 38): at fixed distances behind its 11-unit cut it thickens 12.6 > 12.9 and 18.7 > 20.0 from 400 to 700 | No cut-end rule written; none touched | | passes |
+| 44 | @: the top crotch rises over the stem at the Bold (a nub) | `bold._fillet` moves a short curve's two nodes to where the slanted edge's line meets the curve's tangent; the two lines meet at a shallow angle, so the stem's thickening carried the crotch 100 up its edge, 21 over the stem's top | A fillet's corner never passes the level of its edge's far end (neck_range's rule for a crotch); where it would, the corner keeps its height on the moved edge | `bold._fillet` | crotch 411 > 511 at the Bold, now 409 (`14-at.png`); the neck rule then sets the crotch |
+
+Not done, and why:
+
+- **@ in the Light** (the slanted-stem rule, task 5's second half). Tried: the rule on both sides, then the neck rule
+  again on the moved glyph, then the neck held half way too. The counter moved right 30 units at 300 (its stem
+  95 > 65) while the crotch and the straight edge above it stay on the outer contour; the counter's top ran through
+  the bowl's outer edge at 300 and the stroke between fell to 10 at 350. The honest rule moves the stem's whole left
+  side (counter extreme, the line above the crotch, the crotch) by one level map; not written. Reverted; the Light's
+  stem still thickens 95 > 92 and its rays flag stays.
+- **The hooks with a ball at 300** (whook, yhook, Ƙ Ⱳ Ƴ ⱳ ƴ ɲ ƒ; j, eng). No construction built: a centreline
+  and width profile for a hook into a ball, in all three masters with the turn and crossing guards, for nine glyphs,
+  is a new part module; it was not started in this round. Their rays flags stand (0.58 to 0.65 of 400 at 300).
+- **Junction flags in audit_rays** (Ə ɂ & ® $ ð œ). Drawn (`11-rays-flags.png`): Ə's ray starts on the soft corner
+  where the counter meets the bar; ɂ's crosses the hook's junction with the stem; &'s runs from the arm's crotch;
+  $'s and ð's end by a junction's corner (the junction rule reads where a ray starts, not where it ends); œ's reads
+  the e's top beside the crossing; ®'s ring thins by R's leg (40 > 32 at the same place, audit_axis too), which the
+  white law does not ask for (keep_white gives way by at most a part's gain). None is the white law's give by design,
+  so no named exception was written; no part rule was written for them.
+- **ɽ** (every-25 run only): thinner at 475 than 450 and at 675 than 650 by 4 to 5 units on a 100-unit ray through
+  its ball, between its masters; not diagnosed.
+- **⌦ ⌫ ✓** at 300 (0.60 of 400 where the sign law asks 0.764): seen only now that lines are read; not diagnosed.
+- **hookabovecomb.case** keeps no ray place (its stem's places all lie by its corners and the curl's by the stem's
+  edge); the lowercase hook is read (9 places).
+
+### Final (`build/qa-081.log`, one clean `qa.py` build)
+
+- `audit_axis.py`: Bold side 8 glyphs thin (Khook, at, cedi, ogonek, ogonekcomb, one.ss01, registered,
+  tretroflexhook: row 39), no crossing; Light side 1 (yhook); Astroke and Tdiagonalstroke HELD. Close round: Bold 7
+  (hookabovecomb.case crossing; C, Cbar, Q, ogonekcomb.case, one.ss01, s thin), Light 2 (whook, yhook).
+- `audit_rays.py` (300, 350, 400, 500, 600, 700): 18 glyphs, 474 glyphs read, 27,278 places (close round 19, 394,
+  23,147). Every 25 from 300 to 700: 18 glyphs, 474 read, 27,153 places (`build/weight/last/audit-rays-every25.txt`).
+- `audit_kern.py` every 25 from 300 to 700: pass, 0 fail at all 17 weights (`build/weight/last/kern-every25.log`).
+- `audit_bold.py` both masters and `--sweep` pass; interpolatable, charset, fontbakery on both fonts pass.
+- Against tip 7108b456: the static Regular (UFO, TTF outlines and advances, kerning) unchanged, 0 glyphs. The
+  variable font's Regular master differs only in hookabovecomb and hookabovecomb.case (two overlapping contours,
+  the same ink). Bold master: C, Cbar, Cstroke, uni20A1 (up to 28 units, the barb's handles), Esh 15, Fhook 50,
+  Germandbls 9, Ghook 37, Tretroflexhook 52, comma 3, semicolon 9, glottalstop 16, s_t 20 (the taper guard's
+  retune: handle lengths), at 102 (the crotch; its mid master too), the two hooks above (new structure), and three
+  composites whose stacked marks moved with the hook (uni1EA8, uni1EC2, uni1ED4); 8 kerning keys. Light master: the
+  two hooks above; 8 kerning keys.

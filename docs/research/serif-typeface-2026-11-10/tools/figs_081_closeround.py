@@ -38,9 +38,10 @@ def cut_of(cs, across=True):
     rec = {}
     orig = AX.chords
 
-    def spy(E, m, D):
-        got = orig(E, m, D)
+    def spy(E, m, D, ends=False):
+        got = orig(E, m, D, ends=ends)
         for g, d in zip(got, D):
+            g = g[0] if ends and g is not None else g          # 0.81 (last round): chords may give the cut's ends
             if g is not None and (rec.get("v") is None or g < rec["v"]):
                 rec.update(v=g, m=tuple(m), d=math.degrees(math.atan2(d[1], d[0])))
         return got

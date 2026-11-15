@@ -206,17 +206,18 @@ masters match point for point and every weight between them is sound. Read `bold
 - **What cannot be read is named** in `bold.HINTS` with its reason (e's bar; s's turns). Keep it short.
 - **A glyph that is not a sound second master falls back** (upright parts only, then the Regular's outline) and
   says so in `build/bold-notes.txt`. A fallback is a debt: list it in the build's changes.
-- **Known debts** (0.81, close; was the integration round's list): kerning per master is done (`spacing.kern_master`,
-  refit with `AREA_KERN_FIT=1`); fallbacks none; @ (slanted stem) and the comma accent (an audit misreading) are closed;
-  the Bold asterisk reaches the references' least ink gain (0.820). Left: `audit_axis.py` Bold `hookabovecomb.case`
-  (its slot closes at 552; the honest form is a curl and a stem overlapping, not built), `ogonekcomb.case` (1.9 under
-  behind its 11-unit cut: no cut-end rule), C and Cbar (1.1), Q and s at their ends (read across; the end zone does
-  not reach them), one.ss01's flag (real); Light whook and yhook balls (the taper places' moves refused by the guards);
-  Astroke and Tdiagonalstroke held for the owner (`audit_axis.AWAITING`); `audit_rays.py` 19 flags (IPA hooks and ƒ at
-  300, junction places in Ə ɂ œ & ® $ ð, C's barb, @ in the Light where its slanted stem is not held); "x␣j" with v,
-  w, y before the space now 64 looser than Georgia Pro (one key per space, contextual kerning not built); the Light's
-  @ stem thickens (95 > 92); the top crotch of @'s a rises over its stem's top at the Bold (a nub, no audit reads it);
-  no part audit for marks, signs and composites.
+- **Known debts** (0.81, last round; was the close round's list): kerning per master is done (`spacing.kern_master`,
+  refit with `AREA_KERN_FIT=1`); fallbacks none. Closed this round: the hook above's crossing (a curl and a stem,
+  `overlap.curl_master`), @'s nub at the Bold (`bold._fillet`), C's barb (`keep_taper`'s guard); C, Cbar, Q, s and the
+  capital ogonek were the reading's sampling, not thinning (`audit_axis.place_reading`). Left: `audit_axis.py` Bold
+  thin where the same-place reading finds it (® ring by R's leg 40 > 32, @ 41 > 34, Khook 49 > 38, cedi 47 > 39,
+  tretroflexhook 41 > 39, ogonek and ogonekcomb 1.0 under at 675, one.ss01's flag 43 > 36); Light yhook (a junction
+  reading, 44 > 21); the hooks with a ball at 300 (whook yhook Ƙ Ⱳ Ƴ ⱳ ƴ ɲ ƒ, j, eng: no construction; their rays
+  flags stand); @ in the Light (slanted stem held to the Bold: its whole left side must move by one map, not written;
+  95 > 92); `audit_rays.py` flags at junctions (Ə ɂ & ® $ œ ð) and ɽ's ball, none by the white law's design, and ⌦ ⌫ ✓
+  at 300 (0.60 of 400 against the sign law's 0.764), found once lines were read again; hookabovecomb.case keeps no
+  ray place; Astroke and Tdiagonalstroke held for the owner (`audit_axis.AWAITING`); "x␣j" with v, w, y before the
+  space 64 looser than Georgia Pro (one key per space); no part audit for marks, signs and composites.
 
 ## What is still outside the system
 
