@@ -1,0 +1,318 @@
+<title>Shape and Type Sketches</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a pinboard of 4:5 poster sketches, two to three across, with short notes under each. Single paper look on purpose (these are print studies). */
+:root {
+  --paper: #f2f0ec;
+  --sheet: #fbfaf8;
+  --ink: #171717;
+  --ink-2: #5d5a55;
+  --rule: #dcd8d1;
+  --yellow: #f2e27e;
+  --pink: #ecc6df;
+  --green: #2b9a3c;
+  --blue: #6f97dc;
+  --lilac: #b8a5dc;
+  --coral: #ef8b88;
+  --red: #d0231b;
+  --mint: #cfe8d4;
+  --display: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--display); font-size: 15px; line-height: 1.5; margin: 0; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 48px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 56px; }
+header { display: grid; gap: 14px; max-width: 720px; }
+h1 { font-size: clamp(40px, 7vw, 72px); line-height: 0.95; font-weight: 500; letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
+.lede { color: var(--ink-2); margin: 0; max-width: 60ch; }
+.bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+button { font: 500 13px/1 var(--mono); color: var(--ink); background: var(--sheet); border: 1px solid var(--rule); border-radius: 999px; padding: 9px 14px; cursor: pointer; }
+button:hover { border-color: var(--ink); }
+button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+h2 { font-size: 13px; font-family: var(--mono); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 16px; color: var(--ink-2); }
+.moves { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px 32px; }
+.move { display: grid; gap: 4px; border-top: 1px solid var(--ink); padding-top: 10px; }
+.move b { font-weight: 600; }
+.move span { color: var(--ink-2); font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px 28px; }
+.card { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.frame { position: relative; background: var(--sheet); aspect-ratio: 4 / 5; max-width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px -12px rgba(0,0,0,.18); }
+.frame canvas { width: 100%; height: 100%; display: block; }
+.frame button { position: absolute; right: 10px; bottom: 10px; padding: 7px 11px; font-size: 12px; background: rgba(251,250,248,.92); }
+.head { display: flex; align-items: baseline; gap: 10px; }
+.key { font: 500 12px var(--mono); border: 1px solid var(--ink); border-radius: 4px; padding: 1px 6px; }
+.head h3 { font-size: 20px; font-weight: 500; letter-spacing: -0.01em; margin: 0; }
+dl { margin: 0; display: grid; gap: 8px; }
+dt { font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); }
+dd { margin: 0; font-size: 14px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.tablewrap { overflow-x: auto; }
+th, td { text-align: left; vertical-align: top; padding: 10px 16px 10px 0; border-top: 1px solid var(--rule); }
+th { font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-2); white-space: nowrap; }
+.next { display: grid; gap: 10px; max-width: 720px; }
+.next p { margin: 0; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Shape and type</h1>
+    <p class="lede">Eight directions drawn from the six references: the biennial posters, the blue year, the lilac cut-paper year and the pink contour year. Each sketch is live; Shuffle draws another seed, so you can judge a direction as a series rather than one lucky frame.</p>
+    <div class="bar"><button id="all" type="button">Shuffle all</button></div>
+  </header>
+
+  <section>
+    <h2>What the references share</h2>
+    <div class="moves">
+      <div class="move"><b>Type as a grid of units</b><span>Dates, cells and pixels are the same size. The text is the texture, and a shape decides where it stops.</span></div>
+      <div class="move"><b>Shape cut from content</b><span>The blue year has no outline of its own; its silhouette is wherever the days happen to fall.</span></div>
+      <div class="move"><b>Two layers that collide</b><span>Flat plates and a figure sit on one layer, type on another. Where they cross, the type sits on, inverts or ignores the shape.</span></div>
+      <div class="move"><b>One layout, many seeds</b><span>The posters keep their words fixed and swap the picture: pixels, dashes, a spray. The tear-off cards are the same idea at small size.</span></div>
+      <div class="move"><b>One hue, one ink</b><span>Each piece is a single flat colour plus black, with labels turned 90° to run up the edge.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Directions</h2>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section>
+    <h2>Ways to cross them</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Axis</th><th>Options</th></tr></thead>
+        <tbody>
+          <tr><th>Shape source</th><td>Noise blob · a letter · primitives (quarter, wedge, half disc) · real data (a year, a month's weeks) · a drawn path</td></tr>
+          <tr><th>Type's role</th><td>Fills the shape · sits on a plate · is cut by the shape · outlines it · is scattered by it</td></tr>
+          <tr><th>Resolution</th><td>Smooth vector · coarse pixel grid · echoed pixels (offset ghosts)</td></tr>
+          <tr><th>Colour</th><td>One hue + black · two hues in multiply · knockout to paper</td></tr>
+          <tr><th>Time</th><td>Still per seed · grows in · scatters on pointer · reshuffles on a beat</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="next">
+    <h2>Next</h2>
+    <p>Pick two or three letters. Each becomes a full piece in the experiments gallery (numbers 5 onwards, beside Glyph Flow, Grid Glyphs, Word Web and Kanji Lines), with its controls in the viewer panel and real type set with fontkit.</p>
+    <p>Strongest pairings from the sketches: A with real holidays and week rows, C crossed with G (a letter that bursts), and E as an interactive year you click to fill.</p>
+  </section>
+</div>
+
+<script>
+const C = getComputedStyle(document.documentElement);
+const v = n => C.getPropertyValue(n).trim();
+const P = { paper: '#fbfaf8', ink: v('--ink'), yellow: v('--yellow'), pink: v('--pink'), green: v('--green'), blue: v('--blue'), lilac: v('--lilac'), coral: v('--coral'), red: v('--red'), mint: v('--mint') };
+const F = (w, s) => `${w} ${s}px "Inter Tight", "Helvetica Neue", Arial, sans-serif`;
+const MONO = s => `400 ${s}px "JetBrains Mono", Menlo, monospace`;
+
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const pick = (r, a) => a[Math.floor(r() * a.length)];
+const W = 400, H = 500;
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const sketches = [
+{ key: 'A', name: 'Pour',
+  from: 'The blue year: a year of dates whose outline is wherever the days fall.',
+  build: 'Pour 365 days into any silhouette (a blob, a letter, a drawn shape) in reading order. The threshold adapts so the shape holds exactly one year. Click a day to mark it; months label themselves up the edge.',
+  open: 'Should weeks stay in rows of seven, or is reading order enough?',
+  draw(x, r) {
+    const cols = 22, cs = 16, m = (W - cols * cs) / 2, rows = Math.floor((H - 2 * m) / cs);
+    const balls = Array.from({ length: 5 + Math.floor(r() * 4) }, () => ({ x: m + r() * cols * cs, y: m + r() * rows * cs, s: 50 + r() * 90 }));
+    const cells = [];
+    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+      const cx = m + (i + .5) * cs, cy = m + (j + .5) * cs; let f = 0;
+      for (const b of balls) f += b.s * b.s / ((cx - b.x) ** 2 + (cy - b.y) ** 2 + 1);
+      f += (r() - .5) * 0.6;
+      cells.push({ i, j, f });
+    }
+    const t = [...cells].sort((a, b) => b.f - a.f)[364].f;
+    const inside = cells.filter(c => c.f >= t).sort((a, b) => a.j - b.j || a.i - b.i);
+    x.fillStyle = P.blue;
+    for (const c of inside) x.fillRect(m + c.i * cs - .5, m + c.j * cs - .5, cs + 1, cs + 1);
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    const d0 = new Date(2027, 0, 1);
+    inside.forEach((c, k) => {
+      const d = new Date(d0); d.setDate(d.getDate() + k);
+      const cx = m + (c.i + .5) * cs, cy = m + (c.j + .5) * cs;
+      x.fillStyle = P.ink;
+      if (d.getDate() === 1) { x.font = F(600, 6.5); x.fillText(MONTHS[d.getMonth()].slice(0, 3), cx, cy); }
+      else { x.font = F(400, 7.5); x.fillText(d.getDate(), cx, cy); }
+    });
+  } },
+{ key: 'B', name: 'Plates',
+  from: 'The biennial posters: flat squares carry the type, a pixel figure grows between them.',
+  build: 'Fixed words on a grid of plates; a seeded pixel plant grows up through them stem by stem. Print a sheet of tear-off cards, one seed each.',
+  open: 'Is the figure always a plant, or any grown form (city, coral, crowd)?',
+  draw(x, r) {
+    const g = 10, cols = W / g, rows = H / g;
+    const plates = [[3, 3], [26, 2], [2, 26], [22, 33], [27, 15]].map(([a, b]) => [a + Math.floor(r() * 4 - 2), b + Math.floor(r() * 4 - 2)]);
+    x.fillStyle = P.yellow; for (const [a, b] of plates) x.fillRect(a * g, b * g, 11 * g, 11 * g);
+    const stems = 4 + Math.floor(r() * 4);
+    for (let s = 0; s < stems; s++) {
+      let c = 14 + Math.floor(r() * 12), y = rows - 4; const top = 8 + Math.floor(r() * 16);
+      const drift = r() < .5 ? -1 : 1;
+      x.fillStyle = P.green;
+      while (y > top) { x.fillRect(c * g, y * g, g * (r() < .3 ? 2 : 1), g * (1 + Math.floor(r() * 3))); y -= 1 + Math.floor(r() * 2); if (r() < .35) c += drift; }
+      const bx = c - 2, by = top - 6;
+      for (let e = 3; e >= 0; e--) {
+        x.fillStyle = e ? `rgba(200,195,190,${.18 + .1 * (3 - e)})` : P.pink;
+        for (let k = 0; k < 5; k++) x.fillRect((bx + e + Math.floor(r() * 3)) * g, (by - e + k * 2) * g, (3 + Math.floor(r() * 3)) * g, 3 * g);
+      }
+    }
+    x.fillStyle = P.ink; x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+    x.font = F(400, 30); x.fillText('Shape and', 150, 62); x.fillText('Type', 150, 92);
+    x.font = F(400, 19); ['Area Studio', 'Experiments', 'Room 5, North'].forEach((s, i) => x.fillText(s, 228, 360 + i * 21));
+    ['Date()', '(11.10.2026,', '02.01.2027)'].forEach((s, i) => x.fillText(s, 34, 400 + i * 21));
+  } },
+{ key: 'C', name: 'Echo letter',
+  from: 'The biennial flower: a low-resolution form with pale ghost copies and dripping columns.',
+  build: 'Any glyph sampled onto a coarse grid, drawn with offset echoes that trail behind the pointer, and stems that drip from its lower edges. Type a word and each letter echoes in turn.',
+  open: 'One letter per frame, or a whole word at lower resolution?',
+  draw(x, r) {
+    const ch = pick(r, 'aRgk&?Sy'.split('')), g = 12, cols = 28, rows = 34;
+    const o = document.createElement('canvas'); o.width = cols; o.height = rows;
+    const ox = o.getContext('2d'); ox.font = F(600, 34); ox.textAlign = 'center'; ox.textBaseline = 'middle'; ox.fillText(ch, cols / 2, rows / 2 + 1);
+    const a = ox.getImageData(0, 0, cols, rows).data;
+    const on = (i, j) => i >= 0 && j >= 0 && i < cols && j < rows && a[(j * cols + i) * 4 + 3] > 110;
+    const hue = pick(r, [P.pink, P.lilac, P.blue, P.coral]);
+    const echoes = [[3, -2], [-2, 2], [1, 3]].map(([dx, dy]) => [dx * (r() < .5 ? 1 : -1), dy]);
+    const ox0 = (W - cols * g) / 2, oy0 = (H - rows * g) / 2;
+    echoes.forEach(([dx, dy], e) => { x.fillStyle = ['#e7e3de', '#ddd8d2', '#efe9e4'][e]; for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) if (on(i, j)) x.fillRect(ox0 + (i + dx) * g, oy0 + (j + dy) * g, g, g); });
+    x.fillStyle = hue; for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) if (on(i, j)) x.fillRect(ox0 + i * g, oy0 + j * g, g, g);
+    x.fillStyle = P.green;
+    for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) if (on(i, j) && !on(i, j + 1) && r() < .45) { const len = 2 + Math.floor(r() * 9); x.fillRect(ox0 + i * g + g * .3, oy0 + (j + 1) * g, g * .45, len * g); }
+    x.fillStyle = P.ink; x.font = MONO(10); x.textAlign = 'left'; x.fillText(`glyph('${ch}', grid: ${cols}×${rows})`, 20, H - 20);
+  } },
+{ key: 'D', name: 'Cut paper',
+  from: 'The lilac year: quarter circles, wedges and triangles cut from one sheet, over a loose dot grid of dates.',
+  build: 'A dot grid of dates with a few large cut shapes dropped on top. Drag a shape and the dates under it change weight; months run up the shapes’ straight edges.',
+  open: 'Should dates avoid the cuts, or ignore them as in the reference?',
+  draw(x, r) {
+    x.fillStyle = P.lilac;
+    for (let n = 0; n < 8; n++) {
+      const cx = r() * W, cy = r() * H, s = 70 + r() * 120, a = Math.floor(r() * 4) * Math.PI / 2 + (r() < .3 ? r() * .6 : 0), k = Math.floor(r() * 4);
+      x.save(); x.translate(cx, cy); x.rotate(a); x.beginPath();
+      if (k === 0) { x.moveTo(0, 0); x.arc(0, 0, s, 0, Math.PI / 2); }
+      else if (k === 1) { x.moveTo(-s, s * .6); x.lineTo(s * .2, -s); x.lineTo(s, s * .6); }
+      else if (k === 2) { x.arc(0, 0, s * .8, Math.PI, 0); }
+      else { x.rect(-s * .6, -s * .5, s * 1.2, s); }
+      x.closePath(); x.fill(); x.restore();
+    }
+    x.fillStyle = P.ink; x.textBaseline = 'middle';
+    let d = 1 + Math.floor(r() * 10);
+    for (let j = 0; j < 11; j++) for (let i = 0; i < 7; i++) {
+      if (r() < .18) continue;
+      const px = 30 + i * 54 + (r() - .5) * 22, py = 28 + j * 44 + (r() - .5) * 16;
+      x.beginPath(); x.arc(px, py, 1.4, 0, 7); x.fill();
+      x.font = F(400, 9); x.textAlign = r() < .5 ? 'left' : 'right'; x.fillText(d, px + (x.textAlign === 'left' ? 5 : -5), py);
+      d = d % 30 + 1;
+    }
+    x.font = F(500, 12); x.textAlign = 'center';
+    for (let n = 0; n < 3; n++) { x.save(); x.translate(40 + r() * 320, 80 + r() * 340); x.rotate(r() < .5 ? -Math.PI / 2 : Math.PI / 2); x.letterSpacing = '1px'; x.fillText(pick(r, MONTHS).toUpperCase(), 0, 0); x.restore(); }
+  } },
+{ key: 'E', name: 'Contour numerals',
+  from: 'The pink year: giant numerals drawn as a single outline over columns of dates, with black discs that invert the type.',
+  build: 'Columns of every day in the year; the year’s digits drawn as one thin contour across them. Click a day to drop a black disc; discs merge and the dates inside turn to paper.',
+  open: 'Discs only, or any shape stamped from a set?',
+  draw(x, r) {
+    x.fillStyle = P.pink; x.fillRect(0, 0, W, H);
+    const cols = 12, cw = (W - 40) / cols;
+    const days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const drawCols = ink => { x.fillStyle = ink; x.font = F(500, 7.5); x.textAlign = 'center'; x.textBaseline = 'middle'; for (let c = 0; c < cols; c++) { x.font = F(600, 12); x.fillText(c + 1, 20 + (c + .5) * cw, 30); x.font = F(500, 7.5); for (let d = 1; d <= days[c]; d++) x.fillText(d, 20 + (c + .5) * cw, 52 + d * 13.4); } };
+    drawCols(P.ink);
+    const discs = Array.from({ length: 3 + Math.floor(r() * 4) }, () => ({ x: 90 + r() * 240, y: 300 + r() * 160, s: 26 + r() * 34 }));
+    x.save(); x.beginPath(); for (const d of discs) { x.moveTo(d.x + d.s, d.y); x.arc(d.x, d.y, d.s, 0, 7); } x.fillStyle = P.ink; x.fill(); x.clip(); drawCols(P.pink); x.restore();
+    const num = String(10 + Math.floor(r() * 90));
+    x.strokeStyle = P.ink; x.lineWidth = 1.1; x.font = F(400, 330); x.textAlign = 'center'; x.textBaseline = 'alphabetic'; x.strokeText(num, W / 2 + (r() - .5) * 40, H - 70);
+  } },
+{ key: 'F', name: 'Set in shape',
+  from: 'All four calendars: the block of type is the shape, without any drawn edge.',
+  build: 'A paragraph justified line by line into a shape, so each line’s length is the shape’s width at that height. Change the shape and the text reflows with its tracking easing, not jumping.',
+  open: 'Justify with tracking (as here), or with word spacing and size?',
+  draw(x, r) {
+    const k = Math.floor(r() * 4), path = new Path2D(), cx = W / 2, cy = H / 2;
+    if (k === 0) path.arc(cx, cy, 165, 0, 7);
+    else if (k === 1) { path.moveTo(40, 460); path.lineTo(40, 220); path.arc(200, 220, 160, Math.PI, 0); path.lineTo(360, 460); }
+    else if (k === 2) { path.moveTo(40, 460); path.arc(40, 460, 380, -Math.PI / 2, 0); path.closePath(); }
+    else { path.moveTo(cx, 40); path.lineTo(360, cy); path.lineTo(cx, 460); path.lineTo(40, cy); path.closePath(); }
+    const text = 'A shape is a place where the words stop. Type is a grid that agreed to be read. Set one inside the other and the edge is made only of letters, each line exactly as long as the shape allows at that height. ';
+    const words = text.repeat(12).trim().split(/\s+/); let p = 0;
+    const s = x.getTransform().a;
+    x.fillStyle = P.ink; x.textBaseline = 'alphabetic'; x.font = F(500, 10.5);
+    for (let y = 30; y < H - 20; y += 13) {
+      let a = -1, b = -1; for (let px = 0; px < W; px += 2) if (x.isPointInPath(path, px * s, (y - 4) * s)) { if (a < 0) a = px; b = px; }
+      if (a < 0 || b - a < 24) continue;
+      const span = b - a; let line = '';
+      while (p < words.length && x.measureText(line ? line + ' ' + words[p] : words[p]).width < span) line = line ? line + ' ' + words[p++] : words[p++];
+      if (!line) continue;
+      const free = span - x.measureText(line).width, gap = line.length > 1 ? free / (line.length - 1) : 0;
+      let px = a; for (const ch of line) { x.fillText(ch, px, y); px += x.measureText(ch).width + gap; }
+    }
+  } },
+{ key: 'G', name: 'Scatter',
+  from: 'The red biennial poster: square plates at the corners, a pale form, and pixels sprayed out from a centre.',
+  build: 'The pointer is the source: pixels shed from a pale figure and fly outward, small and sparse at the edges. Type on the plates stays still, so the burst reads against a fixed frame.',
+  open: 'Should the type itself shed pixels, or stay untouched?',
+  draw(x, r) {
+    x.fillStyle = P.coral;
+    [[20, 20], [292, 20], [20, 270], [292, 360], [120, 360]].forEach(([a, b]) => x.fillRect(a, b, 88, 88));
+    const ox = 140 + r() * 120, oy = 220 + r() * 80;
+    x.fillStyle = P.mint;
+    for (let n = 0; n < 40; n++) { const a = r() * 7, d = r() * 90; x.fillRect(ox + Math.cos(a) * d - 10, oy + Math.sin(a) * d * 1.3 - 10, 14 + r() * 26, 14 + r() * 26); }
+    for (let n = 0; n < 420; n++) {
+      const a = r() * 7, d = 40 + Math.pow(r(), .6) * 260, s = Math.max(2, 9 - d / 32 + r() * 3);
+      const px = Math.round((ox + Math.cos(a) * d) / 4) * 4, py = Math.round((oy + Math.sin(a) * d) / 4) * 4;
+      x.fillStyle = r() < .85 ? P.red : '#f1d2cf'; x.fillRect(px, py, s, s);
+    }
+    x.fillStyle = P.ink; x.font = F(400, 28); x.textAlign = 'center'; x.fillText('Shape and', W / 2, 60); x.fillText('Type', W / 2, 90);
+    x.font = F(400, 16); x.textAlign = 'left'; ['Date()', '(11.10.2026,', '02.01.2027)'].forEach((s, i) => x.fillText(s, 130, 392 + i * 18));
+  } },
+{ key: 'H', name: 'Knockout',
+  from: 'The collisions in every reference, taken to the end: where a shape crosses a letter, both cancel.',
+  build: 'Large set type and a few flat shapes on one ink layer, combined by exclusive-or. Drag the shapes and the letters open and close; legibility becomes the control.',
+  open: 'One ink as here, or two inks overprinting in multiply?',
+  draw(x, r) {
+    const o = document.createElement('canvas'), dpr = 2; o.width = W * dpr; o.height = H * dpr;
+    const c = o.getContext('2d'); c.scale(dpr, dpr);
+    c.font = F(600, 132); c.textBaseline = 'alphabetic'; c.letterSpacing = '-6px';
+    c.fillText('Shape', 10, 160); c.fillText('and', 10, 290); c.fillText('Type', 10, 420);
+    c.globalCompositeOperation = 'xor';
+    for (let n = 0; n < 4; n++) {
+      c.beginPath(); const cx = r() * W, cy = r() * H, s = 60 + r() * 110;
+      if (r() < .5) c.arc(cx, cy, s, 0, 7); else { c.save(); c.translate(cx, cy); c.rotate(Math.floor(r() * 4) * Math.PI / 2); c.moveTo(0, 0); c.arc(0, 0, s * 1.3, 0, Math.PI / 2); c.closePath(); c.restore(); }
+      c.fill();
+    }
+    c.globalCompositeOperation = 'source-in'; c.fillStyle = pick(r, [P.blue, P.ink, P.green, P.red]); c.fillRect(0, 0, W, H);
+    x.drawImage(o, 0, 0, W, H);
+  } },
+];
+
+const grid = document.getElementById('grid');
+const seeds = sketches.map((_, i) => 11 + i * 7);
+const renders = [];
+sketches.forEach((s, i) => {
+  const card = document.createElement('article'); card.className = 'card';
+  card.innerHTML = `<div class="frame"><canvas aria-label="${s.name} sketch" role="img"></canvas><button type="button">Shuffle</button></div>
+  <div class="head"><span class="key">${s.key}</span><h3>${s.name}</h3></div>
+  <dl><div><dt>From</dt><dd>${s.from}</dd></div><div><dt>Build it as</dt><dd>${s.build}</dd></div><div><dt>Open question</dt><dd>${s.open}</dd></div></dl>`;
+  grid.append(card);
+  const cv = card.querySelector('canvas');
+  const render = () => {
+    const dpr = Math.min(3, window.devicePixelRatio || 1) * 1.5;
+    cv.width = W * dpr; cv.height = H * dpr;
+    const x = cv.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0);
+    x.fillStyle = P.paper; x.fillRect(0, 0, W, H);
+    try { s.draw(x, rng(seeds[i])); } catch (e) { console.error(s.name, e); }
+  };
+  card.querySelector('button').addEventListener('click', () => { seeds[i] = Math.floor(Math.random() * 1e9); render(); });
+  renders.push(render);
+});
+document.getElementById('all').addEventListener('click', () => { seeds.forEach((_, i) => seeds[i] = Math.floor(Math.random() * 1e9)); renders.forEach(f => f()); });
+renders.forEach(f => f());
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => renders.forEach(f => f()));
+</script>

@@ -1,0 +1,658 @@
+<title>Area Serif Evaluation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* No letter-spacing on anything set in Area Serif: browsers turn ligatures off under it (0.77: the headline's f and i stood apart). */
+/*__FONTS__*/
+/* Layout: a specimen sheet up top set in the face itself, then a lab report: findings as evidence cards, comparisons as
+   rows of the same words in nine faces, tests as tables and strip charts, and a node inspector. */
+:root{
+  --bg:#f5f6f7; --surface:#ffffff; --sunk:#eceef1; --ink:#14171c; --ink2:#4a5261; --ink3:#788191; --line:#dfe3e8;
+  --glyph:#d9dde4; --accent:#2456c9; --ref:#d4402b; --high:#cf3327; --medium:#b86e00; --low:#69727f; --ok:#16845a;
+  --hl:#fff3d6;
+  --serif:"Area Serif Eval",Georgia,"Times New Roman",serif;
+  --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#050607; --surface:#0e1013; --sunk:#16191d; --ink:#eceef1; --ink2:#a9b0bb; --ink3:#7b838f; --line:#252a31;
+  --glyph:#2b3038; --accent:#7ea5ff; --ref:#ff7b66; --high:#ff6b5e; --medium:#f0a33a; --low:#8a929d; --ok:#4fc48d;
+  --hl:#3a2f12; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#050607; --surface:#0e1013; --sunk:#16191d; --ink:#eceef1; --ink2:#a9b0bb; --ink3:#7b838f; --line:#252a31;
+  --glyph:#2b3038; --accent:#7ea5ff; --ref:#ff7b66; --high:#ff6b5e; --medium:#f0a33a; --low:#8a929d; --ok:#4fc48d;
+  --hl:#3a2f12; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--ui);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{margin:0;font-weight:500;text-wrap:balance}
+h2{font:400 34px/1.15 var(--serif)}
+h3{font:600 14px/1.4 var(--ui)}
+p{margin:0}
+.lede{color:var(--ink2);max-width:68ch;font-size:15px;line-height:1.55}
+.eyebrow{font:600 11px/1.4 var(--ui);letter-spacing:.07em;text-transform:uppercase;color:var(--ink3)}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--mono);font-size:12px}
+a{color:var(--accent)}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* hero */
+.hero{padding-block:40px 28px;display:grid;gap:22px}
+.hero-top{display:flex;gap:16px;justify-content:space-between;align-items:baseline;flex-wrap:wrap}
+.hero-word{font:400 clamp(44px,15vw,208px)/.92 var(--serif);margin-left:-.03em;white-space:nowrap;overflow:hidden}
+.hero-sub{font:400 clamp(20px,2.6vw,30px)/1.25 var(--serif);max-width:30ch;color:var(--ink)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:end}
+.verdict{display:grid;gap:10px}
+.tally{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--ink2)}
+.tally b{font:500 22px/1 var(--serif);color:var(--ink);margin-right:6px;font-variant-numeric:lining-nums}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.dot.high{background:var(--high)}.dot.medium{background:var(--medium)}.dot.low{background:var(--low)}.dot.ok{background:var(--ok)}
+
+/* nav */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-block:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;padding-block:6px}
+nav.tabs a{flex:none;padding:6px 10px;border-radius:7px;color:var(--ink2);text-decoration:none;font-weight:500;font-size:13px}
+nav.tabs a:hover{background:var(--sunk);color:var(--ink)}
+section{padding-block:44px 8px;display:grid;gap:20px}
+.sec-head{display:grid;gap:8px}
+
+/* cards and grids */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.pad{padding:18px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:right;padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--surface)}
+thead th{font-weight:600;color:var(--ink2);font-size:12px;vertical-align:bottom}
+td.own,th.own{background:var(--hl)}
+tbody tr:last-child td{border-bottom:0}
+.note{font-size:12.5px;color:var(--ink3);max-width:80ch}
+
+/* findings */
+.openlist{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.openlist li{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.openlist a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+details>summary{cursor:pointer;font:600 13px/1.4 var(--ui);color:var(--ink2)}
+#summary td:first-child,#summary th:first-child{white-space:nowrap}
+#summary a{color:var(--ink);text-decoration:none}
+.round{font:600 12px/1.4 var(--ui);letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.round:first-child{margin-top:0;border-top:0;padding-top:0}
+.why{border-left:2px solid var(--low);padding-left:10px;color:var(--ink)}
+.why b{font-weight:600}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:13px;color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.finding{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:0}
+.finding .txt{padding:20px;display:grid;gap:12px;align-content:start}
+.finding .vis{padding:14px;border-left:1px solid var(--line);display:grid;gap:10px;align-content:start;background:var(--sunk);border-radius:0 12px 12px 0}
+.finding h3{font:400 22px/1.25 var(--serif)}
+.sev{display:inline-flex;align-items:center;font:600 11px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase}
+.sev.high{color:var(--high)}.sev.medium{color:var(--medium)}.sev.low{color:var(--low)}
+.st{display:inline-flex;align-items:center;font:600 11px/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:999px;border:1px solid currentColor}
+.st.fixed{color:var(--ok)}.st.part{color:var(--accent)}.st.open{color:var(--medium)}.st.decided,.st.withdrawn{color:var(--low)}
+.after{border-left:2px solid var(--ok);padding-left:10px;color:var(--ink)}
+.after b{font-weight:600}
+.wba{display:grid;gap:2px;font-family:var(--serif);font-size:28px;line-height:1.25;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow:hidden}
+.wba small{font:500 11px var(--mono);color:var(--ink3)}
+.wba .old{font-family:"Area Serif Before",var(--serif);color:var(--ref)}
+.wba .old70{font-family:"Area Serif Before 70",var(--serif);color:var(--ref)}
+.keyline{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2);align-items:center}
+.keyline i{display:inline-block;width:18px;border-top:2px solid;vertical-align:middle;margin-right:5px}
+.meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:var(--ink3);font-size:12px}
+.ev{display:grid;grid-template-columns:1fr auto;gap:3px 16px;font-size:13px;border-top:1px solid var(--line);padding-top:10px}
+.ev dt{color:var(--ink2)}.ev dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:12px}
+.fix{font-size:13px;color:var(--ink2);border-left:2px solid var(--accent);padding-left:10px}
+.fix b{color:var(--ink);font-weight:600}
+.views{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.views.one{grid-template-columns:minmax(0,240px)}
+.finding .vis,.finding .txt{min-width:0}
+.chart{display:grid;gap:10px;min-width:0}
+.chart>*{min-width:0}
+#changes td,#changes th{text-align:left}
+.view{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden;position:relative}
+.view svg{display:block;width:100%;height:auto}
+.view .cap{position:absolute;left:8px;top:6px;font:500 11px var(--mono);color:var(--ink3)}
+.solid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-radius:12px;overflow:hidden}
+.solid div{padding:14px 18px;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
+.solid h3{display:flex;align-items:center}
+.solid p{color:var(--ink2);font-size:13px;margin-top:3px}
+
+/* svg drawing */
+svg .gf{fill:var(--glyph)} svg .go{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;stroke-width:1}
+svg .ml{stroke:var(--line);vector-effect:non-scaling-stroke;stroke-width:1}
+svg .cb{fill:none;stroke:var(--accent);vector-effect:non-scaling-stroke;stroke-width:1}
+svg .ct{fill:none;stroke:var(--accent);opacity:.28;vector-effect:non-scaling-stroke;stroke-width:1}
+svg .hd{stroke:var(--ok);vector-effect:non-scaling-stroke;stroke-width:1;fill:none}
+svg .nd{fill:var(--ink)} svg .hp{fill:var(--surface);stroke:var(--ok);vector-effect:non-scaling-stroke;stroke-width:1}
+svg .mk{fill:none;stroke:var(--high);vector-effect:non-scaling-stroke;stroke-width:2}
+svg .mk.medium{stroke:var(--medium)}
+svg .dm{stroke:var(--high);vector-effect:non-scaling-stroke;stroke-width:1.5}
+svg text.dl{fill:var(--high);font-family:var(--mono);font-weight:600}
+svg text.ax{fill:var(--ink3);font-family:var(--ui)}
+svg .bar{fill:var(--ink3)} svg .bar.own{fill:var(--accent)}
+svg .rng{stroke:var(--ink3);stroke-width:6;stroke-linecap:round;opacity:.25} svg .rng.own{stroke:var(--accent);opacity:.3}
+svg .pt{fill:var(--ink2)} svg .pt.own{fill:var(--accent)}
+svg .ob{fill:none;stroke:var(--ref);vector-effect:non-scaling-stroke;stroke-width:1.2}
+svg .ov-a{fill:var(--glyph)} svg .ov-r{fill:none;stroke:var(--ref);stroke-width:1.1}
+
+/* specimen */
+.spec-row{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:baseline;padding:10px 18px;border-bottom:1px solid var(--line)}
+.spec-row:last-child{border-bottom:0}
+.spec-row .k{font:500 11px var(--mono);color:var(--ink3)}
+.spec-row .s{font-family:var(--serif);overflow:hidden;white-space:nowrap;text-overflow:clip}
+.reading{font-family:var(--serif);display:grid;gap:.7em}
+.reading p{max-width:66ch}
+.set{font-family:var(--serif);font-size:30px;line-height:1.5;overflow-wrap:anywhere}
+.ui-demo{font-family:var(--serif);display:grid;gap:0}
+.ui-demo .r{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:18px}
+.ui-demo .r:last-child{border-bottom:0}
+.ui-demo .r span:last-child{color:var(--ink2);font-variant-numeric:tabular-nums}
+.tester{display:grid;gap:12px}
+.tester textarea{width:100%;min-height:150px;border:0;background:transparent;resize:vertical;font-family:var(--serif);line-height:1.25;padding:0;outline:0}
+.controls{display:flex;gap:10px 16px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--ink2)}
+.controls label{display:inline-flex;gap:6px;align-items:center}
+select,input[type=text]{background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:5px 8px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:5px 10px;cursor:pointer;color:var(--ink2);font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* comparisons */
+.cmp-row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:baseline;padding:10px 18px;border-bottom:1px solid var(--line)}
+.cmp-row:last-child{border-bottom:0}
+.cmp-row.own{background:var(--hl)}
+.cmp-row .n{font-size:12px;color:var(--ink2);display:grid}
+.cmp-row .n small{color:var(--ink3);font-size:11px}
+.cmp-row .t{white-space:nowrap;overflow:hidden;line-height:1.25}
+.missing{color:var(--medium);font-size:11px}
+.para-card{padding:16px;display:grid;gap:8px;align-content:start}
+.para-card .t{line-height:1.5}
+.ov-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ov{position:relative}
+.picker{display:flex;flex-wrap:wrap;gap:3px}
+.picker button{width:30px;height:30px;border:1px solid var(--line);background:var(--surface);border-radius:6px;cursor:pointer;font:16px/1 var(--serif);padding:0}
+.picker button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.picker button.has{box-shadow:inset 0 -3px 0 var(--medium)}
+.picker button.has.hi{box-shadow:inset 0 -3px 0 var(--high)}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:6px}
+.gal button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:0;cursor:pointer;overflow:hidden}
+.gal svg{display:block;width:100%;height:auto}
+.insp{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:14px}
+.flist{display:grid;gap:6px;font-size:12.5px;max-height:420px;overflow:auto}
+.flist div{display:grid;grid-template-columns:auto 1fr;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}
+.legend i{display:inline-block;width:18px;height:0;border-top:2px solid;vertical-align:middle;margin-right:5px}
+.ramp{display:inline-block;width:90px;height:8px;border-radius:4px;background:linear-gradient(90deg,#2f6bff,#9a4fd0,#e0402a);vertical-align:middle;margin:0 6px}
+ul.plain{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink2);max-width:80ch}
+footer{padding-block:36px 56px;color:var(--ink3);font-size:12.5px}
+@media (max-width:860px){
+  .hero-grid,.finding,.insp,.grid2,.grid3,.solid{grid-template-columns:minmax(0,1fr)}
+  .finding .vis{border-left:0;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
+  .grid4,.ov-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cmp-row{grid-template-columns:minmax(0,1fr);gap:2px}
+  h2{font-size:28px}
+}
+</style>
+
+<header class="wrap hero">
+  <div class="hero-top">
+    <span class="eyebrow">Area Serif · build <span id="b-build"></span> · Regular · evaluated <span id="b-date"></span></span>
+    <span class="eyebrow" id="b-count"></span>
+  </div>
+  <div class="hero-word" aria-hidden="true">Ragfinesque</div>
+  <div class="hero-grid">
+    <p class="hero-sub">Every curve, stroke and serif measured, drawn large and set beside eight other serifs. Then fixed, and measured again.</p>
+    <div class="verdict">
+      <div class="tally" id="tally"></div>
+      <p class="lede" id="verdict"></p>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections"><div class="wrap">
+  <a href="#findings">Findings</a><a href="#specimen">Specimen</a><a href="#compare">Comparisons</a>
+  <a href="#tests">Tests</a><a href="#inspector">Glyph inspector</a><a href="#method">Method</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="findings">
+  <div class="sec-head">
+    <h2>Findings</h2>
+    <p class="lede">Each one was found by a measurement, then checked by eye on the drawn outline, then checked against the project's recorded decisions. Fixed ones show the earlier build's outline in red over the current build: 0.66 for the findings of builds 0.67 to 0.70, and the build just before for later ones (each drawing says which). Numbers are font units (1,000 to the em): at 16 px one unit is 0.016 px, at 96 px a tenth of a pixel. The blue comb shows curvature; a step or a spike in it is a place where the curve changes pace.</p>
+  </div>
+  <div class="card pad" id="open-box"><div class="eyebrow" style="margin-bottom:8px">Open now</div><ul id="open-list" class="openlist"></ul></div>
+  <details class="card pad" id="summary-box"><summary>Every finding and its status, newest round first</summary><div class="scroll" style="margin-top:10px"><table id="summary"></table></div></details>
+  <details class="card pad"><summary>What changed, build by build, newest first</summary><div class="scroll" style="margin-top:10px"><table id="changes"></table></div></details>
+  <p class="keyline"><span><i style="border-color:var(--ref)"></i>the build before (named on each drawing)</span><span><i style="border-color:var(--ink)"></i>this build</span><span><i style="border-color:var(--accent)"></i>curvature comb</span><span><i style="border-color:var(--high)"></i>measured dimension or flagged place</span></p>
+  <div class="filters" id="filters" role="group" aria-label="Filter findings"></div>
+  <div id="finding-list" style="display:grid;gap:14px"></div>
+  <div class="sec-head" style="margin-top:18px">
+    <h2>What is solid</h2>
+    <p class="lede">Measured with the same tests. These need no work.</p>
+  </div>
+  <div class="card solid" id="solid"></div>
+</section>
+
+<section id="specimen">
+  <div class="sec-head">
+    <h2>Specimen</h2>
+    <p class="lede">The font file of this build, live. Text is set with its own kerning and features.</p>
+  </div>
+  <div class="card" id="waterfall"></div>
+  <div class="grid2">
+    <div class="card pad reading" id="reading-a"></div>
+    <div class="card pad reading" id="reading-b"></div>
+  </div>
+  <div class="grid2">
+    <div class="card pad"><div class="eyebrow" style="margin-bottom:8px">Character set, core</div><div class="set" id="charset"></div></div>
+    <div class="card pad" style="display:grid;gap:14px;align-content:start">
+      <div><div class="eyebrow" style="margin-bottom:6px">Interface, 13 / 18</div><div class="ui-demo" id="ui-demo"></div></div>
+      <div><div class="eyebrow" style="margin-bottom:6px">Figures and features</div><div id="feat-demo" style="font-family:var(--serif);font-size:22px;line-height:1.5"></div></div>
+    </div>
+  </div>
+  <div class="card pad tester">
+    <div class="controls">
+      <span class="eyebrow">Type tester</span>
+      <label>Size <input type="range" id="tt-size" min="10" max="160" value="56"> <span class="num" id="tt-size-v">56</span></label>
+      <label>Face <select id="tt-face"></select></label>
+      <label><input type="checkbox" id="tt-tnum"> Tabular figures</label>
+      <label><input type="checkbox" id="tt-case"> Case forms</label>
+      <label><input type="checkbox" id="tt-liga" checked> Ligatures</label>
+      <label><input type="checkbox" id="tt-kern" checked> Kerning</label>
+    </div>
+    <textarea id="tt-text" spellcheck="false" aria-label="Type tester text">Having type you can trust: 0123456789. AVATAR, Toward, Yes; WAVE fjord, office, waffle, rnm.</textarea>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="sec-head">
+    <h2>Comparisons</h2>
+    <p class="lede">Area Serif beside Georgia Pro, Libre Baskerville (its base), Serrif and five open-source serifs. The open-source faces are embedded. Georgia Pro and Serrif are licensed, so the page draws them from the copies installed on this computer; on a device without them their rows say so.</p>
+  </div>
+  <div class="controls">
+    <label>Text <input type="text" id="cmp-text" value="Regular adjustments, 2026" style="min-width:min(320px,70vw)"></label>
+    <span class="seg" id="cmp-size" role="group" aria-label="Size"></span>
+    <span class="seg" id="cmp-match" role="group" aria-label="Scaling"></span>
+  </div>
+  <div class="card" id="cmp-rows"></div>
+
+  <h3 style="margin-top:10px">Proportions</h3>
+  <div class="card scroll"><table id="prop-table"></table></div>
+  <p class="note">Units of 1,000 per em unless a ratio. Contrast is the lowercase stem over the thinnest part of o. Advance is the mean lowercase advance.</p>
+
+  <h3 style="margin-top:10px">Outline over outline</h3>
+  <p class="note">Area Serif filled, the other face as a red line, scaled so the x-heights (or cap heights) match and aligned on the left edge of the ink.</p>
+  <div class="picker" id="ov-picker" role="group" aria-label="Character"></div>
+  <div class="ov-grid" id="ov-grid"></div>
+
+  <h3 style="margin-top:10px">Texture</h3>
+  <p class="note">The same paragraph at 15 px in every face, x-heights matched, so the difference you see is weight, width and spacing.</p>
+  <div class="grid3" id="para-grid"></div>
+</section>
+
+<section id="tests">
+  <div class="sec-head">
+    <h2>Tests</h2>
+    <p class="lede">Five groups, each run on Area Serif and on every reference with the same code, so a number is read against what good typefaces actually do. A finding is a place where Area Serif disagrees with itself or sits outside what the references do.</p>
+  </div>
+
+  <h3>1 · Curves</h3>
+  <div class="grid2">
+    <div class="card pad"><div class="eyebrow">Curvature turning points, 62 core characters</div><div id="ch-turns"></div><p class="note">Each outline is cut at its corners, curvature is sampled every 2 units, and each rise-and-fall is counted. Fewer is smoother; a bracketed serif face has two per bracket by design.</p></div>
+    <div class="card pad scroll"><div class="eyebrow">Node tests on Area Serif's cubic source</div><table id="tally-table"></table><p class="note" id="tally-note"></p></div>
+  </div>
+  <div class="card pad"><div class="eyebrow" style="margin-bottom:8px">Curvature combs, every core character · select one to inspect it</div><div class="gal" id="gallery"></div></div>
+
+  <h3>2 · Thicks and thins</h3>
+  <div class="grid2">
+    <div class="card pad"><div class="eyebrow">Capital thin strokes, as a share of each face's own O hairline</div><div id="ch-caphair"></div><p class="note">One dot per stroke: A and H bars, E F L T Z arms, E and F middle arms, B middle, P and R closing strokes. A tight cluster is one hairline.</p></div>
+    <div class="card pad"><div class="eyebrow">Lowercase thin strokes, as a share of each face's own o hairline</div><div id="ch-lchair"></div><p class="note">Bars of e f t z, the tops of c e a s, the arches of n h m, the base of u, and the bowls of b d p q where they leave the stem.</p></div>
+  </div>
+  <div class="grid2">
+    <div class="card pad"><div class="eyebrow">Round strokes at their thickest, as a share of the stem</div><div id="ch-round"></div><p class="note">Lowercase o c b d p q against the n stem; capitals O C G Q D P R and B's lower bowl against the H stem.</p></div>
+    <div class="card pad scroll"><div class="eyebrow">Stems</div><table id="stem-table"></table><p class="note">Every upright stem in the face, by scanline. Spread is the largest minus the smallest.</p></div>
+  </div>
+  <div class="card pad"><div class="eyebrow" style="margin-bottom:8px">Stroke thickness along the outline <span class="legend" style="display:inline-flex;margin-left:10px;text-transform:none;letter-spacing:0;font-weight:400">thin <span class="ramp"></span> thick</span></div><div class="views" id="thick-row" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))"></div><p class="note" style="margin-top:8px">Each dot is the distance across the stroke at that point, measured along the inward normal where the far edge is parallel. Colour should change evenly from thick to thin.</p></div>
+
+  <h3>3 · Serifs</h3>
+  <div class="card scroll"><table id="serif-table"></table></div>
+  <p class="note">Feet on i l h n m and capitals H I K F P, in units. A range of one value means every serif of that kind is identical. Flag slope is the angle of the head serif's top edge.</p>
+
+  <h3>4 · Alignment and spacing</h3>
+  <div class="grid2">
+    <div class="card pad scroll"><div class="eyebrow">Area Serif against its own lines</div><table id="align-table"></table></div>
+    <div class="card pad scroll"><div class="eyebrow">Spacing rhythm, all 3,844 pairs of the core 62</div><table id="pair-table"></table><p class="note">Optical gap: the mean distance between two letters over their shared height, with kerning. Variation is its standard deviation over its mean; lower is more even. f pairs are left out of the narrowest gap because the test runs without ligatures.</p></div>
+  </div>
+  <div class="card pad"><div class="eyebrow" style="margin-bottom:8px">Area Serif's 24 narrowest pairs, live</div><div id="tight" style="font-family:var(--serif);font-size:40px;line-height:1.4;display:flex;flex-wrap:wrap;gap:4px 22px"></div></div>
+
+  <h3>5 · Existing checks on the build</h3>
+  <div class="card pad"><ul class="plain" id="qa"></ul></div>
+</section>
+
+<section id="inspector">
+  <div class="sec-head">
+    <h2>Glyph inspector</h2>
+    <p class="lede">The drawn points of this build. A coloured underline on a character means the node tests flagged it. Turn on Before to see build 0.66 under it.</p>
+  </div>
+  <div class="picker" id="in-picker" role="group" aria-label="Character"></div>
+  <div class="controls">
+    <label><input type="checkbox" id="in-comb" checked> Curvature comb</label>
+    <label><input type="checkbox" id="in-nodes" checked> Points and handles</label>
+    <label><input type="checkbox" id="in-thick"> Stroke thickness</label>
+    <label><input type="checkbox" id="in-marks" checked> Findings</label>
+    <label><input type="checkbox" id="in-low"> Include minor ones</label>
+    <label><input type="checkbox" id="in-ba"> Before (0.66)</label>
+  </div>
+  <div class="insp">
+    <div class="card view" id="in-view"></div>
+    <div style="display:grid;gap:12px;align-content:start">
+      <div class="card pad"><div class="eyebrow" id="in-title" style="margin-bottom:6px"></div><div class="flist" id="in-list"></div></div>
+      <div class="ov-grid" id="in-ov" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="sec-head"><h2>Method</h2></div>
+  <div class="grid2">
+    <div class="card pad"><h3 style="margin-bottom:8px">How it was tested</h3><ul class="plain">
+      <li>Curves: node tests on the cubic source of all 1,001 glyphs (tangent breaks, curvature jumps at smooth nodes, inflections and double turns inside a curve, handle reach, missing extremes, near-upright handles and lines), plus a curvature profile sampled every 2 units on every face.</li>
+      <li>Thicks and thins: scanlines every 10 units for stems and every 5 for level strokes; a ray across the stroke at every outline sample for round strokes; 130 named parts measured per face.</li>
+      <li>Serifs: projection, tip thickness, bracket curve at three points, bracket height and cup for every foot and head on an upright stem; projection, height, tip and slope for every flag; ball sizes from the parts audit.</li>
+      <li>Alignment and spacing: every flat edge and extreme against the face's lines; all 3,844 pairs of the core characters shaped with kerning.</li>
+      <li>Then every one of the 62 core characters was drawn large with its points, handles and curvature comb and looked at, and each flagged place was zoomed.</li>
+    </ul></div>
+    <div class="card pad"><h3 style="margin-bottom:8px">Not checked</h3><ul class="plain" id="not-checked"></ul></div>
+  </div>
+  <p class="note">Georgia Pro and Serrif were measured from the installed fonts. No outline of either is stored in this page or in the repository; the tests and this page's builder are in <span class="mono">docs/research/serif-evaluation-2026-11-13/tools</span>.</p>
+</section>
+</main>
+<footer class="wrap">Area Serif is derived from Libre Baskerville under the SIL Open Font License 1.1.</footer>
+
+<script>
+const D = __DATA__;
+const $ = (s, r=document) => r.querySelector(s);
+const el = (tag, attrs={}, html) => { const e=document.createElement(tag); for(const k in attrs){ if(k==='class') e.className=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html!=null) e.innerHTML=html; return e; };
+const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const F = Object.fromEntries(D.faces.map(f=>[f.key,f]));
+const AREA = F.area;
+const CORE = Object.keys(D.gname);
+const chOf = Object.fromEntries(Object.entries(D.gname).map(([c,n])=>[n,c]));
+const fam = k => `"${F[k].family}", "Adobe NotDef", monospace`;
+
+/* which licensed faces are installed here */
+const have = {};
+(function(){
+  const c=document.createElement('canvas').getContext('2d');
+  const probe='Hamburgefonstiv 0123';
+  for(const f of D.faces){
+    if(f.licence!=='licensed'){ have[f.key]=true; continue; }
+    c.font='40px monospace'; const a=c.measureText(probe).width;
+    c.font=`40px "${f.family}", monospace`; const b=c.measureText(probe).width;
+    c.font='40px serif'; const s1=c.measureText(probe).width;
+    c.font=`40px "${f.family}", serif`; const s2=c.measureText(probe).width;
+    have[f.key]= Math.abs(a-b)>0.5 && Math.abs(s1-s2)>0.01 || Math.abs(a-b)>0.5 && f.key==='georgia' && Math.abs(s1-s2)>0.01;
+    if(!have[f.key] && Math.abs(a-b)>0.5 && Math.abs(s1-s2)<=0.01){ have[f.key]=false; }
+  }
+})();
+
+/* ---------- glyph drawing ---------- */
+function bez(s,t){ const u=1-t;
+  if(s[0]==='L') return [s[1]+(s[3]-s[1])*t, s[2]+(s[4]-s[2])*t];
+  return [u*u*u*s[1]+3*u*u*t*s[3]+3*u*t*t*s[5]+t*t*t*s[7], u*u*u*s[2]+3*u*u*t*s[4]+3*u*t*t*s[6]+t*t*t*s[8]]; }
+function d1(s,t){ const u=1-t; return [3*u*u*(s[3]-s[1])+6*u*t*(s[5]-s[3])+3*t*t*(s[7]-s[5]), 3*u*u*(s[4]-s[2])+6*u*t*(s[6]-s[4])+3*t*t*(s[8]-s[6])]; }
+function d2(s,t){ const u=1-t; return [6*u*(s[5]-2*s[3]+s[1])+6*t*(s[7]-2*s[5]+s[3]), 6*u*(s[6]-2*s[4]+s[2])+6*t*(s[8]-2*s[6]+s[4])]; }
+function pathOf(o){ let d='';
+  for(const c of o.c){ d+=`M${c[0][1]} ${-c[0][2]}`;
+    for(const s of c){ d+= s[0]==='L' ? `L${s[3]} ${-s[4]}` : `C${s[3]} ${-s[4]} ${s[5]} ${-s[6]} ${s[7]} ${-s[8]}`; }
+    d+='Z'; }
+  return d; }
+function bbox(o){ let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  for(const c of o.c) for(const s of c) for(let i=1;i<s.length;i+=2){ x0=Math.min(x0,s[i]);x1=Math.max(x1,s[i]);y0=Math.min(y0,s[i+1]);y1=Math.max(y1,s[i+1]); }
+  return [x0,y0,x1,y1]; }
+function comb(o, K){ let teeth='', env='';
+  for(const c of o.c) for(const s of c){ if(s[0]!=='C') continue;
+    const len=Math.hypot(s[7]-s[1],s[8]-s[2])*1.2, n=Math.max(8,Math.min(90,Math.round(len/3))); let open=false;
+    for(let i=0;i<=n;i++){ const t=i/n, p=bez(s,t), a=d1(s,t), b=d2(s,t), l=Math.hypot(a[0],a[1]);
+      if(l<1e-6){ open=false; continue; }
+      const k=(a[0]*b[1]-a[1]*b[0])/(l*l*l);
+      if(Math.abs(k)>1/14){ open=false; continue; }
+      const q=[p[0]+a[1]/l*k*K, p[1]-a[0]/l*k*K];
+      teeth+=`M${p[0].toFixed(1)} ${(-p[1]).toFixed(1)}L${q[0].toFixed(1)} ${(-q[1]).toFixed(1)}`;
+      env+=(open?'L':'M')+q[0].toFixed(1)+' '+(-q[1]).toFixed(1); open=true; } }
+  return [teeth, env]; }
+function thickColor(t){ const v=Math.max(0,Math.min(1,(t-28)/(92-28)));
+  const a=[47,107,255], m=[154,79,208], b=[224,64,42];
+  const mix=(p,q,w)=>p.map((x,i)=>Math.round(x+(q[i]-x)*w));
+  const c = v<.5 ? mix(a,m,v*2) : mix(m,b,(v-.5)*2); return `rgb(${c[0]},${c[1]},${c[2]})`; }
+function glyphSVG(v, opt={}){
+  const o=D.outlines[v.g]; if(!o) return '';
+  let bx=v.box; if(!bx){ const b=bbox(o); const p=opt.pad??50; bx=[b[0]-p, Math.min(b[1]-p,-30), b[2]+p, b[3]+p]; }
+  const [x0,y0,x1,y1]=bx, w=x1-x0, hgt=y1-y0, u=w/(opt.px||300);
+  let s=`<svg viewBox="${x0} ${-y1} ${w} ${hgt}" role="img" aria-label="${esc(chOf[v.g]||v.g)}">`;
+  for(const y of [0,520,712,780,-224]) if(y>y0&&y<y1) s+=`<line class="ml" x1="${x0}" x2="${x1}" y1="${-y}" y2="${-y}"/>`;
+  s+=`<path class="gf" fill-rule="nonzero" d="${pathOf(o)}"/>`;
+  if(v.comb!==false && opt.comb!==false && !(v.dims&&!v.box)){ const [t,e]=comb(o, opt.K||2600); s+=`<path class="ct" d="${t}"/><path class="cb" d="${e}"/>`; }
+  if(v.ba && D.prev[v.pg||v.g]) s+=`<path class="ob" d="${pathOf(D.prev[v.pg||v.g])}"/>`;
+  s+=`<path class="go" d="${pathOf(o)}"/>`;
+  if(v.thick||opt.thick){ const T=D.thick[v.g]||[]; const r=Math.max(2.2*u,2.4);
+    for(let i=0;i<T.length;i+=3) s+=`<circle cx="${T[i]}" cy="${-T[i+1]}" r="${r.toFixed(1)}" fill="${thickColor(T[i+2])}"/>`; }
+  const showNodes = opt.nodes ?? !!v.box;
+  if(showNodes){ let hd='', pts='';
+    for(const c of o.c) for(const sg of c){
+      if(sg[0]==='C'){ hd+=`M${sg[1]} ${-sg[2]}L${sg[3]} ${-sg[4]}M${sg[7]} ${-sg[8]}L${sg[5]} ${-sg[6]}`;
+        pts+=`<circle class="hp" cx="${sg[3]}" cy="${-sg[4]}" r="${(2.2*u).toFixed(1)}"/><circle class="hp" cx="${sg[5]}" cy="${-sg[6]}" r="${(2.2*u).toFixed(1)}"/>`; }
+      const n=2.6*u; pts+=`<rect class="nd" x="${(sg[1]-n).toFixed(1)}" y="${(-sg[2]-n).toFixed(1)}" width="${(2*n).toFixed(1)}" height="${(2*n).toFixed(1)}"/>`; }
+    s+=`<path class="hd" d="${hd}"/>`+pts; }
+  for(const m of (v.marks||[])) s+=`<circle class="mk" cx="${m[0]}" cy="${-m[1]}" r="${(9*u).toFixed(1)}"/>`;
+  if(opt.findings){ for(const f of (D.nodes[v.g]||[])){ if(f[1]==='low' && !opt.low) continue;
+      s+=`<circle class="mk ${f[1]==='high'?'':'medium'}" cx="${f[2]}" cy="${-f[3]}" r="${(8*u).toFixed(1)}"><title>${esc((TNAME[f[0]]||f[0])+': '+f[4])}</title></circle>`; } }
+  for(const d of (v.dims||[])){ const [ax,ay,bx2,by,lab]=d, tk=5*u; const vert=Math.abs(ax-bx2)<.01;
+    s+=`<line class="dm" x1="${ax}" y1="${-ay}" x2="${bx2}" y2="${-by}"/>`;
+    s+= vert ? `<line class="dm" x1="${ax-tk}" x2="${ax+tk}" y1="${-ay}" y2="${-ay}"/><line class="dm" x1="${ax-tk}" x2="${ax+tk}" y1="${-by}" y2="${-by}"/>`
+             : `<line class="dm" y1="${-ay-tk}" y2="${-ay+tk}" x1="${ax}" x2="${ax}"/><line class="dm" y1="${-by-tk}" y2="${-by+tk}" x1="${bx2}" x2="${bx2}"/>`;
+    const fs=13*u; const tx= vert ? ax+tk+3*u : (ax+bx2)/2, ty= vert ? -(ay+by)/2+fs*.35 : -ay-tk-4*u;
+    s+=`<text class="dl" x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" font-size="${fs.toFixed(1)}" ${vert?'':'text-anchor="middle"'} paint-order="stroke" stroke="var(--surface)" stroke-width="${(3*u).toFixed(1)}">${esc(lab)}</text>`; }
+  return s+'</svg>'; }
+
+/* ---------- header ---------- */
+$('#b-build').textContent=D.build; $('#b-date').textContent=D.date;
+$('#b-count').textContent=`${D.glyphCount.toLocaleString()} glyphs · ${D.faces.length-1} reference faces`;
+const stN = s => D.findings.filter(f=>f.status===s).length;
+$('#tally').innerHTML = `<span><b>${stN('fixed')}</b><i class="dot ok"></i>fixed</span><span><b>${stN('part')}</b><i class="dot" style="background:var(--accent)"></i>partly fixed</span><span><b>${stN('open')}</b><i class="dot medium"></i>open</span><span><b>${stN('decided')+stN('withdrawn')}</b><i class="dot low"></i>by design or withdrawn</span>`;
+$('#verdict').textContent = D.verdict;
+$('#changes').innerHTML='<thead><tr><th>What changed</th><th>Build</th><th>Before</th><th>Now</th><th>Rule</th></tr></thead><tbody>'+D.changes.slice().reverse().map(c=>`<tr><td>${esc(c[1])}</td><td>${c[0]}</td><td>${esc(c[2])}</td><td>${esc(c[3])}</td><td class="mono" style="text-align:left">${esc(c[4])}</td></tr>`).join('')+'</tbody>';
+
+/* ---------- findings ---------- */
+const SLs={fixed:'Fixed in ',part:'Partly fixed in ',open:'Open',decided:'By design',withdrawn:'Withdrawn'};
+const stLabel=f=>SLs[f.status]+((f.status==='fixed'||f.status==='part')?(f.build||''):'');
+const ROUND=r=>r===D.build?`Build ${r} · this round`:`Build ${r}`;
+(function(){
+  const open=D.findings.filter(f=>f.status==='open'||f.status==='part').sort((a,b)=>parseFloat(b.round)-parseFloat(a.round));
+  $('#open-list').innerHTML=open.length?open.map(f=>`<li><span class="st ${f.status}">${stLabel(f)}</span><a href="#f-${f.id}">${esc(f.title)}</a></li>`).join(''):'<li>Nothing is open.</li>';
+  const rows=D.findings.slice().sort((a,b)=>parseFloat(b.round)-parseFloat(a.round));
+  $('#summary').innerHTML='<thead><tr><th>Round</th><th style="text-align:left">Finding</th><th style="text-align:left">Status</th></tr></thead><tbody>'+rows.map(f=>`<tr><td>${f.round}</td><td style="text-align:left"><a href="#f-${f.id}">${esc(f.title)}</a></td><td style="text-align:left"><span class="st ${f.status}">${stLabel(f)}</span></td></tr>`).join('')+'</tbody>';
+})();
+const classes=['All',...new Set(D.findings.map(f=>f.cls))];
+let fFilter='All';
+function renderFindings(){
+  const box=$('#finding-list'); box.innerHTML='';
+  const order={open:0,part:1,fixed:2,decided:3,withdrawn:4}, sv={high:0,medium:1,low:2};
+  const SL={fixed:'Fixed in ',part:'Partly fixed in ',open:'Open',decided:'By design',withdrawn:'Withdrawn'};
+  let lastRound=null;
+  D.findings.filter(f=>fFilter==='All'||f.cls===fFilter||f.status===fFilter).sort((a,b)=>parseFloat(b.round)-parseFloat(a.round)||order[a.status]-order[b.status]||sv[a.sev]-sv[b.sev]).forEach((f,i)=>{
+    if(f.round!==lastRound){ lastRound=f.round; box.appendChild(el('h3',{class:'round'},ROUND(f.round))); }
+    const card=el('article',{class:'card finding',id:'f-'+f.id});
+    const ev=f.evidence.map(e=>`<dt>${esc(e[0])}</dt><dd>${esc(e[1])}</dd>`).join('');
+    card.innerHTML=`<div class="txt"><div class="meta"><span class="st ${f.status}">${stLabel(f)}</span><span class="sev ${f.sev}"><i class="dot ${f.sev}"></i>${f.sev==='high'?'Largest':f.sev==='medium'?'Visible at display sizes':'Minor'}</span><span>${esc(f.cls)}</span></div>
+      <h3>${esc(f.title)}</h3><p style="color:var(--ink2)">${esc(f.body)}</p>${f.after?`<p class="after"><b>Now. </b>${esc(f.after)}</p>`:''}${f.why?`<p class="why"><b>Why it stands. </b>${esc(f.why)}</p>`:''}<dl class="ev" style="margin:0">${ev}</dl><p class="fix"><b>${f.status==='open'?'Next':'Rule'}. </b>${esc(f.fix)}</p></div>
+      <div class="vis"><div class="views"></div><div class="chart"></div></div>`;
+    const vs=$('.views',card);
+    if(f.views.length===1) vs.classList.add('one');
+    f.views.forEach(v=>{ const d=el('div',{class:'view'}); d.innerHTML=`<span class="cap">${esc(chOf[v.g]||v.g)}${v.box?' · zoom':''}${v.ba?(v.pg?' · '+v.pv+' in red':' · 0.66 in red'):''}</span>`+glyphSVG(v,{px: f.views.length>3?170:230}); vs.appendChild(d); });
+    if(f.chart==='caphair') $('.chart',card).appendChild(stripChart(capHairRows(),{min:.75,max:1.25,ref:1,fmt:v=>v.toFixed(2)}));
+    if(f.words){ const w=el('div',{class:'wba'}); w.innerHTML=(D.hasBefore?`<small>${f.prev||'0.66'}</small><span class="old" ${f.prev?`style="font-family:'Area Serif Before ${f.prev}',var(--serif)"`:''}>${esc(f.words)}</span>`:'')+`<small>now</small><span>${esc(f.words)}</span>`; $('.chart',card).appendChild(w); }
+    if(f.id==='r-width'){ const t=el('div',{class:'card scroll'}); t.innerHTML='<table><thead><tr><th>r in each face, in its own stems</th><th>Advance / n</th><th>Ink width</th><th>Arm</th><th>Foot, left</th><th>Foot, right</th><th>Gap after r, sd</th></tr></thead><tbody>'+D.rtable.map(r=>`<tr><td${r.own?' class="own"':''}>${esc(r.label)}</td><td>${r.adv.toFixed(3)}</td><td>${r.ink.toFixed(2)}</td><td>${r.arm.toFixed(2)}</td><td>${r.footL.toFixed(2)}</td><td>${r.footR.toFixed(2)}</td><td>${r.z>0?'+':''}${r.z.toFixed(1)}</td></tr>`).join('')+'</tbody></table>'; $('.chart',card).appendChild(t); }
+    box.appendChild(card); });
+}
+classes.concat(['fixed','part','open','decided','withdrawn']).forEach(c=>{
+  const label={fixed:'Fixed',part:'Partly fixed',open:'Open',decided:'By design',withdrawn:'Withdrawn'}[c]||c;
+  const b=el('button',{class:'chip','aria-pressed':c===fFilter},label);
+  b.onclick=()=>{ fFilter=c; [...$('#filters').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); renderFindings(); };
+  $('#filters').appendChild(b); });
+$('#solid').innerHTML=D.solid.map(s=>`<div><h3><i class="dot ok"></i>${esc(s[0])}</h3><p>${esc(s[1])}</p></div>`).join('');
+$('#not-checked').innerHTML=D.notChecked.map(s=>`<li>${esc(s)}</li>`).join('');
+
+/* ---------- charts ---------- */
+function stripChart(rows, o){
+  const W=460, rowH=24, L=118, R=44, H=rows.length*rowH+26, x=v=>L+(v-o.min)/(o.max-o.min)*(W-L-R);
+  let s=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img" aria-label="Strip chart">`;
+  const ticks=o.ticks||[o.min,(o.min+o.max)/2,o.max];
+  for(const t of ticks){ s+=`<line class="ml" x1="${x(t)}" x2="${x(t)}" y1="4" y2="${H-20}"/><text class="ax" x="${x(t)}" y="${H-6}" font-size="10" text-anchor="middle">${o.fmt(t)}</text>`; }
+  rows.forEach((r,i)=>{ const y=14+i*rowH, vals=r.values.filter(v=>v!=null&&isFinite(v)); if(!vals.length) return;
+    const lo=Math.min(...vals), hi=Math.max(...vals), cl=v=>Math.max(o.min,Math.min(o.max,v));
+    s+=`<text class="ax" x="0" y="${y+4}" font-size="11.5" ${r.own?'style="fill:var(--ink);font-weight:600"':''}>${esc(r.label)}</text>`;
+    s+=`<line class="rng ${r.own?'own':''}" x1="${x(cl(lo))}" x2="${x(cl(hi))}" y1="${y}" y2="${y}"/>`;
+    for(const v of vals) s+=`<circle class="pt ${r.own?'own':''}" cx="${x(cl(v))}" cy="${y}" r="2.6"/>`;
+    s+=`<text class="ax" x="${W}" y="${y+4}" font-size="10.5" text-anchor="end">${(hi-lo).toFixed(2)}</text>`; });
+  s+=`<text class="ax" x="${W}" y="${H-6}" font-size="10" text-anchor="end">range</text></svg>`;
+  const d=el('div'); d.innerHTML=s; return d.firstChild; }
+function barChart(rows, o){
+  const W=460, rowH=24, L=118, R=40, H=rows.length*rowH+6, max=Math.max(...rows.map(r=>r.v));
+  let s=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img" aria-label="Bar chart">`;
+  rows.forEach((r,i)=>{ const y=6+i*rowH, w=(W-L-R)*r.v/max;
+    s+=`<text class="ax" x="0" y="${y+12}" font-size="11.5" ${r.own?'style="fill:var(--ink);font-weight:600"':''}>${esc(r.label)}</text><rect class="bar ${r.own?'own':''}" x="${L}" y="${y+2}" width="${w.toFixed(1)}" height="13" rx="2"/><text class="ax" x="${L+w+6}" y="${y+12.5}" font-size="11">${o.fmt(r.v)}</text>`; });
+  const d=el('div'); d.innerHTML=s+'</svg>'; return d.firstChild; }
+const CAPB=['BAR.A','BAR.H','BAR.E.top','BAR.E.mid','BAR.E.bot','BAR.F.top','BAR.F.mid','BAR.L','BAR.T','BAR.Z.top','BAR.Z.bot','BAR.B.mid','BAR.P.close','BAR.R.close'];
+const LCB=['bar.e','bar.f','bar.t','bar.z.top','bar.z.bot','thin.c.top','thin.e.top','thin.a.top','thin.s.top','thin.s.bot','thin.n.arch','thin.h.arch','thin.m.arch','thin.u.bot','thin.b.top','thin.b.bot','thin.d.top','thin.d.bot','thin.p.top','thin.p.bot','thin.q.top','thin.q.bot'];
+const capHairRows=()=>D.faces.map(f=>({label:f.label,own:f.key==='area',values:CAPB.map(k=>f.m[k]!=null?f.m[k]/f.m['THIN.O.top']:null)}));
+function buildCharts(){
+  $('#ch-turns').appendChild(barChart(D.faces.map(f=>({label:f.label,own:f.key==='area',v:f.turns})),{fmt:v=>v}));
+  $('#ch-caphair').appendChild(stripChart(capHairRows(),{min:.75,max:1.25,fmt:v=>v.toFixed(2)}));
+  $('#ch-lchair').appendChild(stripChart(D.faces.map(f=>({label:f.label,own:f.key==='area',values:LCB.map(k=>f.m[k]!=null?f.m[k]/f.m['thin.o.top']:null)})),{min:.6,max:1.6,ticks:[.6,1,1.6],fmt:v=>v.toFixed(2)}));
+  const RL=['round.o.L','round.o.R','round.c.L','round.b.R','round.d.L','round.p.R','round.q.L'], RU=['ROUND.O.L','ROUND.O.R','ROUND.C.L','ROUND.G.L','ROUND.Q.L','ROUND.D.R','ROUND.P','ROUND.R','ROUND.B.lower'];
+  $('#ch-round').appendChild(stripChart(D.faces.map(f=>({label:f.label,own:f.key==='area',values:RL.map(k=>f.m[k]/f.m['stem.n']).concat(RU.map(k=>f.m[k]/f.m['STEM.H']))})),{min:.95,max:1.35,ticks:[.95,1.15,1.35],fmt:v=>v.toFixed(2)}));
+}
+
+/* ---------- tables ---------- */
+const TNAME={kink:'Tangent break',g2:'Curvature jump',inflection:'Bends both ways',wobble:'Double turn',handles:'Handle reach',extreme:'Missing extreme',offaxis:'Nearly upright or level',short:'Short segment',elbow:'Tight curve into a straight'};
+function table(id, head, rows, ownCol=1){
+  const t=$(id); t.innerHTML=`<thead><tr>${head.map((h,i)=>`<th${i===ownCol?' class="own"':''}>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((c,i)=>`<td${i===ownCol?' class="own"':''}>${c??'–'}</td>`).join('')}</tr>`).join('')}</tbody>`; }
+function buildTables(){
+  const fs=D.faces, hd=['',...fs.map(f=>f.label.replace(' 0.66',''))];
+  const r=(label,fn,dp=0)=>[label,...fs.map(f=>{ const v=fn(f); return v==null?null:(typeof v==='number'?v.toFixed(dp):v); })];
+  table('#prop-table',hd,[
+    r('x-height',f=>f.xh), r('Cap height',f=>f.cap), r('x-height / cap height',f=>f.xh/f.cap,2),
+    r('Ascender',f=>f.asc), r('Descender',f=>f.desc),
+    r('Lowercase stem',f=>f.m['stem.n']), r('Stem / x-height',f=>f.m['stem.n']/f.xh,3), r('Capital stem',f=>f.m['STEM.H']),
+    r('Capital / lowercase stem',f=>f.m['STEM.H']/f.m['stem.n'],2),
+    r('Thinnest part of o',f=>f.m['thin.o.top']), r('Contrast (stem / thin)',f=>f.m['stem.n']/f.m['thin.o.top'],2),
+    r('Round o / stem',f=>f.m['round.o.L']/f.m['stem.n'],2),
+    r('Foot serif projection',f=>f.serif.footL?f.serif.footL[0]:null), r('Projection / stem',f=>f.serif.footL?f.serif.footL[0]/f.m['stem.n']:null,2),
+    r('Serif tip thickness',f=>f.serif.tip?f.serif.tip[0]:null), r('Tip / hairline',f=>f.serif.tip?f.serif.tip[0]/f.m['thin.o.top']:null,2),
+    r('Mean lowercase advance',f=>f.lcAdv), r('Advance / x-height',f=>f.lcAdv/f.xh,2), r('Width of o / x-height',f=>f.oW/f.xh,2),
+    r('Overshoot, x-height %',f=>f.overLc,1), r('Overshoot, cap height %',f=>f.overCap,1)]);
+  const lcS='bdfhijklmnpqrtu'.split('').map(c=>'stem.'+c).concat(['stem.m.mid','stem.m.right','stem.n.right','stem.h.right','stem.u.left']);
+  const ucS='BDEFHILPRTU'.split('').map(c=>'STEM.'+c).concat(['STEM.H.right','STEM.M.right']);
+  const spread=(f,ks)=>{ const v=ks.map(k=>f.m[k]).filter(x=>x!=null&&x<f.m['stem.n']*1.5+40); const med=v.slice().sort((a,b)=>a-b)[Math.floor(v.length/2)]; const w=v.filter(x=>Math.abs(x-med)<12); return [med,Math.max(...w)-Math.min(...w)]; };
+  table('#stem-table',hd,[
+    r('Lowercase stem (median of 20)',f=>spread(f,lcS)[0],1), r('Lowercase spread',f=>spread(f,lcS)[1],1),
+    r('Capital stem (median of 13)',f=>spread(f,ucS)[0],1), r('Capital spread',f=>spread(f,ucS)[1],1),
+    r('Thin uprights of M N U',f=>['STEM.M.left(thin)','STEM.N.left(thin)','STEM.N.right(thin)','STEM.U.right(thin)'].map(k=>f.m[k].toFixed(0)).join(' ')),
+    r('Figures 1 and 4',f=>f.m['FIG.1'].toFixed(1)+' '+f.m['FIG.4'].toFixed(1))]);
+  const rg=a=>a?(a[0]===a[1]?a[0].toFixed(0):a[0].toFixed(0)+' to '+a[1].toFixed(0)):null;
+  table('#serif-table',hd,[
+    r('Lowercase foot, left',f=>rg(f.serif.footL)), r('Lowercase foot, right',f=>rg(f.serif.footR)),
+    r('Tip thickness',f=>rg(f.serif.tip)), r('Bracket height',f=>rg(f.serif.bracket)),
+    r('Capital foot, left',f=>rg(f.serif.capFootL)), r('Capital foot, right',f=>rg(f.serif.capFootR)),
+    r('Flag projection',f=>rg(f.serif.flagProj)), r('Flag slope, degrees',f=>f.serif.flagSlope?f.serif.flagSlope[0].toFixed(1)+' to '+f.serif.flagSlope[1].toFixed(1):null),
+    r('Slope of n / u',f=>f.serif.nSlope!=null&&f.serif.uSlope!=null?f.serif.nSlope.toFixed(1)+' / '+f.serif.uSlope.toFixed(1):null)]);
+  table('#pair-table',hd,[
+    r('Mean optical gap, lowercase',f=>f.pairs.llMean), r('Variation, lowercase %',f=>f.pairs.llCv,1), r('Variation, capitals %',f=>f.pairs.uuCv,1),
+    r('Kerned pairs in the core',f=>f.pairs.kerned), r('Narrowest gap',f=>f.pairs.minGap,0), r('at',f=>f.pairs.minPair), r('Pairs under 10 units',f=>f.pairs.under10)]);
+  // alignment zones
+  const z={}; const put=(k,c,v)=>{ (z[k]=z[k]||{})[v]=((z[k]||{})[v]||'')+c; };
+  for(const c of CORE){ const [y0,y1,fb,ft]=D.align[c]; const lc=/[a-z]/.test(c);
+    put((lc?'Lowercase':/[A-Z]/.test(c)?'Capitals':'Figures')+', bottom, '+(fb?'flat':'round'),c,y0);
+    put((lc?'Lowercase':/[A-Z]/.test(c)?'Capitals':'Figures')+', top, '+(ft?'flat':'round or pointed'),c,y1); }
+  const rows=[]; for(const k of Object.keys(z).sort()) rows.push([k, Object.entries(z[k]).sort((a,b)=>a[0]-b[0]).map(([v,cs])=>`<span class="mono">${v}</span>&nbsp;<span style="font-family:var(--serif);font-size:15px">${esc(cs)}</span>`).join(' &nbsp; ')]);
+  $('#align-table').innerHTML='<tbody>'+rows.map(r=>`<tr><td>${r[0]}</td><td style="text-align:left;white-space:normal">${r[1]}</td></tr>`).join('')+'</tbody>';
+  // node tally
+  const TN={kink:'Tangent breaks under 14°',g2:'Curvature jumps at smooth nodes',inflection:'Curves that bend both ways',wobble:'Double turns in one curve',handles:'Handle reach',extreme:'Missing extremes',offaxis:'Nearly upright or level',short:'Segments under 4 units',elbow:'Tight curve into a straight'};
+  const T=D.tally; $('#tally-table').innerHTML='<thead><tr><th></th><th>Core 62: larger</th><th>Core 62: minor</th><th>All glyphs</th></tr></thead><tbody>'+Object.keys(TN).filter(k=>T[k]).map(k=>`<tr><td>${TN[k]}</td><td>${T[k].core[0]+T[k].core[1]}</td><td>${T[k].core[2]}</td><td>${T[k].all[0]+T[k].all[1]+T[k].all[2]}</td></tr>`).join('')+'</tbody>';
+  $('#tally-note').textContent='A count is evidence, not a verdict: a ball terminal legitimately flips curvature at its node. Every larger item in the core was looked at; the ones that matter are in Findings.';
+  $('#qa').innerHTML=D.qa.map(x=>`<li>${esc(x)}</li>`).join('');
+  $('#tight').innerHTML=D.tight.map(t=>`<span title="${t[0]} units${t[2]?', kern '+t[2]:''}">${esc(t[1])}</span>`).join('');
+}
+
+/* ---------- specimen ---------- */
+function buildSpecimen(){
+  const wf=[[120,'Quiet figures'],[84,'Measured by hand'],[56,'A serif for interface text'],[36,'Projects, systems and references in one place'],[24,'Sixty-two characters were drawn large and checked point by point'],[18,'The quick brown fox jumps over the lazy dog; 1,284 items, 36 MB, 99.5% synced at 12:47'],[15,'Stems are 78 units, hairlines 43, and serifs project 68 either side of every lowercase stem. Nothing is placed by eye.'],[13,'Settings · Appearance · Type 13 · Density Compact · Radius 10 · Layers 0 · Selection neutral · Updated 13 November 2026'],[11,'Fine print holds at eleven pixels when counters stay open: a e g s, c o, n u, 3 5 6 8 9, rn m, il1, O0.']];
+  $('#waterfall').innerHTML=wf.map(([s,t])=>`<div class="spec-row"><span class="k">${s} px</span><span class="s" style="font-size:${s}px;line-height:${s>30?1.08:1.35}">${esc(t)}</span></div>`).join('');
+  const pa=['A typeface for an interface has a different job from one for a book. It is read in fragments: a label, a title, two lines of a message, a number in a table. Each fragment has to be recognised quickly and sit calmly beside icons, controls and other text.','So the letters are a little wider and more open than a book face, the contrast between thick and thin is lower, and the serifs are short and blunt. At 13 pixels a hairline of 43 units is just over half a pixel. A thinner one would flicker; a heavier one would close the counters.'];
+  $('#reading-a').innerHTML=`<div class="eyebrow" style="font-family:var(--ui)">Reading, 18 / 28</div>`+pa.map(p=>`<p style="font-size:18px;line-height:28px">${esc(p)}</p>`).join('');
+  $('#reading-b').innerHTML=`<div class="eyebrow" style="font-family:var(--ui)">Text, 15 / 22 and 13 / 18</div>`+`<p style="font-size:15px;line-height:22px">${esc(pa[0])}</p><p style="font-size:13px;line-height:18px">${esc(pa[1])} The same rule draws every stem, every foot and every flag, so a note on one letter is a note on all the letters that share the part.</p>`;
+  $('#charset').innerHTML='ABCDEFGHIJKLM<br>NOPQRSTUVWXYZ<br>abcdefghijklm<br>nopqrstuvwxyz<br>0123456789<br><span style="font-size:22px">.,:;!?’“”()[]{}*/&amp;@#%$€£¥+−×÷=&lt;&gt;§¶†©®™ àéîõüçñøßæœ ĄĆĘŁŃŚŻ ffi ffl</span>';
+  $('#ui-demo').innerHTML=[['Projects','24'],['Systems','3'],['References, saved','1,284'],['Storage used','36.2 MB of 2 GB'],['Owner','David Tee'],['Last published','13 Nov 2026, 12:47']].map(r=>`<div class="r"><span>${r[0]}</span><span>${r[1]}</span></div>`).join('');
+  $('#feat-demo').innerHTML=`<div>1,284.50 &nbsp; 0123456789</div><div style="font-feature-settings:'tnum'">1,284.50 &nbsp; 0123456789 <span style="font:11px var(--mono);color:var(--ink3)">tnum</span></div><div>1/2 3/4 <span style="font-feature-settings:'frac'">1/2 3/4</span> &nbsp; H2O <span style="font-feature-settings:'sinf'">H2O</span> &nbsp; x2 <span style="font-feature-settings:'sups'">x2</span> <span style="font:11px var(--mono);color:var(--ink3)">frac sinf sups</span></div><div>(a-b) <span style="font-feature-settings:'case'">(A-B)</span> &nbsp; fi fl ffi <span style="font-feature-settings:'liga' 0">fi fl ffi</span> <span style="font:11px var(--mono);color:var(--ink3)">case liga</span></div>`;
+  const sel=$('#tt-face'); D.faces.forEach(f=>sel.appendChild(el('option',{value:f.key},f.label+(have[f.key]?'':' (not installed here)'))));
+  const upd=()=>{ const t=$('#tt-text'), s=+$('#tt-size').value; $('#tt-size-v').textContent=s; t.style.fontSize=s+'px'; t.style.fontFamily=fam(sel.value);
+    t.style.fontFeatureSettings=`'tnum' ${+$('#tt-tnum').checked}, 'case' ${+$('#tt-case').checked}, 'liga' ${+$('#tt-liga').checked}, 'kern' ${+$('#tt-kern').checked}`; t.style.fontKerning=$('#tt-kern').checked?'normal':'none'; };
+  ['tt-size','tt-face','tt-tnum','tt-case','tt-liga','tt-kern'].forEach(id=>$('#'+id).addEventListener('input',upd)); upd();
+}
+
+/* ---------- comparisons ---------- */
+let cmpSize=32, cmpMatch=true, ovChar='a';
+function seg(id, opts, get, set){ const box=$(id); opts.forEach(([v,l])=>{ const b=el('button',{'aria-pressed':get()===v},l); b.onclick=()=>{ set(v); [...box.children].forEach(x=>x.setAttribute('aria-pressed',x===b)); }; box.appendChild(b); }); }
+function renderCmp(){
+  const txt=$('#cmp-text').value||' ';
+  $('#cmp-rows').innerHTML=D.faces.map(f=>{ const size=cmpMatch?cmpSize*AREA.xh/f.xh:cmpSize;
+    return `<div class="cmp-row ${f.key==='area'?'own':''}"><span class="n">${esc(f.label)}<small>${have[f.key]?size.toFixed(1)+' px · x-height '+f.xh.toFixed(0):'<span class="missing">not installed on this device</span>'}</small></span><span class="t" style="font-family:${fam(f.key).replace(/"/g,'&quot;')};font-size:${size.toFixed(2)}px;${have[f.key]?'':'visibility:hidden'}">${esc(txt)}</span></div>`; }).join('');
+}
+function overlayTile(k, ch, big){
+  const f=F[k], lc=/[a-z]/.test(ch), S=300, base=252, zA=lc?AREA.xh:AREA.cap, zR=lc?f.xh:f.cap, Sr=S*zA/zR, x=Math.max(24,(340-AREA.adv[ch]*S/1000)/2+AREA.lsb[ch]*S/1000);
+  const fa=fam('area').replace(/"/g,"'"), fr=fam(k).replace(/"/g,"'");
+  const e=esc(ch);
+  return `<div class="card view ov"><span class="cap">${esc(f.label)}${have[k]?'':' · <span class="missing">not installed</span>'}</span><svg viewBox="0 0 340 335" role="img" aria-label="${esc(f.label)} over Area Serif, ${e}">
+    <line class="ml" x1="0" x2="340" y1="${base}" y2="${base}"/><line class="ml" x1="0" x2="340" y1="${base-S*zA/1000}" y2="${base-S*zA/1000}"/>
+    <text class="ov-a" x="${(x-AREA.lsb[ch]*S/1000).toFixed(1)}" y="${base}" font-size="${S}" style="font-family:${fa}">${e}</text>
+    ${have[k]?`<text class="ov-r" x="${(x-f.lsb[ch]*Sr/1000).toFixed(1)}" y="${base}" font-size="${Sr.toFixed(1)}" style="font-family:${fr}">${e}</text>`:''}</svg></div>`; }
+function renderOv(){ $('#ov-grid').innerHTML=D.faces.filter(f=>f.key!=='area').map(f=>overlayTile(f.key,ovChar)).join(''); }
+function buildCompare(){
+  seg('#cmp-size',[[13,'13'],[16,'16'],[24,'24'],[32,'32'],[56,'56'],[96,'96']],()=>cmpSize,v=>{cmpSize=v;renderCmp();});
+  seg('#cmp-match',[[true,'Match x-heights'],[false,'Same font size']],()=>cmpMatch,v=>{cmpMatch=v;renderCmp();});
+  $('#cmp-text').addEventListener('input',renderCmp); renderCmp();
+  const pk=$('#ov-picker'); CORE.forEach(c=>{ const b=el('button',{'aria-pressed':c===ovChar,'aria-label':c},esc(c)); b.onclick=()=>{ ovChar=c; [...pk.children].forEach(x=>x.setAttribute('aria-pressed',x===b)); renderOv(); }; pk.appendChild(b); }); renderOv();
+  const para='Each fragment has to be recognised quickly and sit calmly beside icons, controls and other text. Stems, hairlines and serifs repeat thousands of times on a screen, so a difference of two units between parts that should match shows up as texture: 0123456789.';
+  $('#para-grid').innerHTML=D.faces.map(f=>{ const size=15*AREA.xh/f.xh; return `<div class="card para-card"><div class="eyebrow">${esc(f.label)}${have[f.key]?'':' · <span class="missing" style="text-transform:none;letter-spacing:0">not installed on this device</span>'}</div><p class="t" style="font-family:${fam(f.key).replace(/"/g,'&quot;')};font-size:${size.toFixed(2)}px;line-height:22px;${have[f.key]?'':'visibility:hidden'}">${esc(para)}</p></div>`; }).join('');
+}
+
+/* ---------- gallery + inspector ---------- */
+let inG=D.gname['a'];
+function renderInspector(){
+  const o={px:620,comb:$('#in-comb').checked,nodes:$('#in-nodes').checked,thick:$('#in-thick').checked,findings:$('#in-marks').checked,low:$('#in-low').checked,pad:70};
+  $('#in-view').innerHTML=glyphSVG({g:inG,ba:$('#in-ba').checked},o);
+  const fs=(D.nodes[inG]||[]).filter(f=>o.low||f[1]!=='low'); const ch=chOf[inG]||inG;
+  $('#in-title').textContent=`${ch} · ${inG} · ${fs.length} flagged ${fs.length===1?'place':'places'}${o.low?'':' (minor ones hidden)'}`;
+  $('#in-list').innerHTML=fs.length?fs.map(f=>`<div><span class="sev ${f[1]}"><i class="dot ${f[1]}"></i></span><span><b>${esc(TNAME[f[0]]||f[0])}</b> at (${f[2]}, ${f[3]}): ${esc(f[4])}</span></div>`).join(''):'<p class="note">Nothing flagged at this level.</p>';
+  $('#in-ov').innerHTML = ch.length===1 ? ['georgia','serrif','baskerville'].map(k=>overlayTile(k,ch,true)).join('') : '';
+}
+function buildInspector(){
+  const pk=$('#in-picker'); const all=CORE.map(c=>D.gname[c]).concat(Object.keys(D.outlines).filter(n=>!chOf[n]));
+  all.forEach(n=>{ const fs=(D.nodes[n]||[]).filter(f=>f[1]!=='low'); const hi=fs.some(f=>f[1]==='high');
+    const b=el('button',{'aria-pressed':n===inG,'aria-label':n,class:(fs.length?'has ':'')+(hi?'hi':''),'data-g':n},esc(chOf[n]||n));
+    if(!chOf[n]){ b.style.width='auto'; b.style.padding='0 8px'; b.style.font='11px var(--mono)'; }
+    b.onclick=()=>pick(n); pk.appendChild(b); });
+  ['in-comb','in-nodes','in-thick','in-marks','in-low','in-ba'].forEach(id=>$('#'+id).addEventListener('change',renderInspector));
+  renderInspector();
+  const gal=$('#gallery'); CORE.forEach(c=>{ const b=el('button',{'aria-label':'Inspect '+c}); b.innerHTML=glyphSVG({g:D.gname[c]},{px:104,pad:60,nodes:false,K:2200}); b.onclick=()=>{ pick(D.gname[c]); $('#inspector').scrollIntoView({behavior:'smooth'}); }; gal.appendChild(b); });
+  const tr=$('#thick-row'); 'onecasbHOBR0'.split('').forEach(c=>{ const d=el('div',{class:'view'}); d.innerHTML=glyphSVG({g:D.gname[c],thick:true,comb:false},{px:150,nodes:false}); tr.appendChild(d); });
+}
+function pick(n){ inG=n; [...$('#in-picker').children].forEach(x=>x.setAttribute('aria-pressed',x.dataset.g===n)); renderInspector(); }
+
+renderFindings(); buildCharts(); buildTables(); buildSpecimen(); buildCompare(); buildInspector();
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ renderCmp(); renderOv(); });
+</script>

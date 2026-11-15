@@ -1,0 +1,295 @@
+<title>Area Serif Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: one reading column of a type specimen sheet; wide tables and figures scroll inside it. Drafting-table palette: cool paper, ink, node red for on-curve, handle blue for off-curve. */
+:root{
+  --bg:#f7f8fa; --panel:#ffffff; --ink:#14171c; --muted:#5b6370; --rule:#d9dde3;
+  --node:#c8322b; --handle:#2456c9; --prop:#0f7a55; --fig-filter:none;
+  --serif:"Source Serif 4",Georgia,serif; --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#0c0e11; --panel:#14171c; --ink:#e9ecf1; --muted:#9aa3b0; --rule:#2a2f38; --node:#ff6b62; --handle:#7fa6ff; --prop:#4fd1a1; --fig-filter:invert(1); color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#0c0e11; --panel:#14171c; --ink:#e9ecf1; --muted:#9aa3b0; --rule:#2a2f38; --node:#ff6b62; --handle:#7fa6ff; --prop:#4fd1a1; --fig-filter:invert(1); color-scheme:dark }
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--sans);padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+section{display:flex;flex-direction:column;gap:16px;min-width:0}
+h1{font:600 40px/1.1 var(--serif);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font:600 26px/1.2 var(--serif);margin:0;text-wrap:balance;padding-top:20px;border-top:1px solid var(--rule)}
+h3{font:600 15px/1.4 var(--sans);margin:8px 0 0}
+p,ul,ol{margin:0;max-width:68ch} ul,ol{padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.lede{font:400 19px/1.5 var(--serif);color:var(--ink)}
+.meta{font:12px/1.4 var(--mono);color:var(--muted);letter-spacing:.02em}
+.wide{overflow-x:auto;border:1px solid var(--rule);border-radius:6px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.45}
+th,td{text-align:left;padding:7px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font:500 11px/1.4 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.p{color:var(--prop);font-weight:500}
+td.g{font-family:var(--serif);font-size:16px;white-space:nowrap}
+figure{margin:0;display:flex;flex-direction:column;gap:8px}
+figcaption{font-size:12.5px;color:var(--muted);max-width:68ch}
+.spec{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:8px 12px;overflow-x:auto}
+.spec img{display:block;filter:var(--fig-filter);max-width:none;height:auto}
+.spec .lab{font:11px/1.6 var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.spec img.fit{max-width:100%}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.key{display:flex;flex-wrap:wrap;gap:16px;font:12px var(--mono);color:var(--muted)}
+.key i{display:inline-block;width:18px;height:0;border-top:2px solid;vertical-align:middle;margin-right:6px}
+code{font:13px var(--mono);background:var(--panel);border:1px solid var(--rule);border-radius:4px;padding:0 4px}
+.note{border-left:2px solid var(--node);padding:2px 0 2px 14px;color:var(--ink)}
+a{color:var(--handle)}
+.dec td:first-child{font-weight:600;white-space:nowrap}
+@media (max-width:520px){h1{font-size:30px}h2{font-size:22px}}
+</style>
+<main>
+<header style="display:flex;flex-direction:column;gap:14px">
+  <div class="meta">TYPEFACE PLAN · 10 NOV 2026 · WORKING NAME AREA SERIF</div>
+  <h1>A screen serif between Georgia Pro and Serrif</h1>
+  <p class="lede">Both references were read from the installed font files, node by node. They turn out to be two takes on one model: a Scotch-derived serif with a large x-height, bracketed serifs and ball terminals. Georgia Pro is the sturdy, compact one built for coarse screens. Serrif is the lighter, wider, sharper one built for layout. The plan is an original design that keeps Georgia's sturdiness and fit, takes Serrif's openness and variable structure, and sets its own proportions for 12–16 px interface text.</p>
+  <p class="note"><strong>Licences decide the method.</strong> Georgia Pro's licence and Serrif's (a trial copy, whose embedded terms forbid modifying or reassembling the font data) both rule out starting from their outlines. Nothing here imports, traces or converts either font. The references are measured and looked at; every outline of the new face is drawn fresh from numeric targets. In the US a typeface design is not protected but font software is; in the EU a typeface can be a registered design, so the new face must not be a look-alike of Serrif, which is recent. The targets below differ from both on purpose.</p>
+</header>
+
+<section>
+  <h2>What the two references are</h2>
+  <figure>
+    <div class="spec"><div class="lab">Georgia Pro Regular</div><img class="fit" alt="Georgia Pro specimen" src="{{g_words}}"><div class="lab">Serrif Regular (wght 400)</div><img class="fit" alt="Serrif specimen" src="{{s_words}}"></div>
+    <figcaption>Same em size. Serrif is about 5% wider in lowercase and 11% wider in capitals, slightly lighter, with thinner serif tips. Its ascender stops at cap height; Georgia's rises 63 units above it.</figcaption>
+  </figure>
+  <figure>
+    <div class="spec"><img class="fit" alt="Outlines of n a e g s f r t overlaid" src="{{ov_lc}}"><img class="fit" alt="Outlines of H O R G Q 1 2 5 overlaid" src="{{ov_uc}}"></div>
+    <figcaption>Outlines at the same em, Georgia Pro solid, Serrif dashed. Same skeletons; the differences are width, serif weight, the ear of g (flat bar against ball), the top of t (square against sheared), the leg of R, and the figure 1 (flag and foot against a bare stroke).</figcaption>
+  </figure>
+  <div class="wide"><table>
+    <tr><th>Per 1000 em, Regular</th><th class="n">Georgia Pro</th><th class="n">Serrif</th><th class="n">Area Serif Text</th><th>Why</th></tr>
+    <tr><td>x-height</td><td class="n">481</td><td class="n">498</td><td class="n p">500</td><td>Whole pixels at 12, 14 and 16 px; close to both</td></tr>
+    <tr><td>Cap height</td><td class="n">693</td><td class="n">721</td><td class="n p">700</td><td>x/cap 0.71, slightly smaller caps so mixed-case labels stay even</td></tr>
+    <tr><td>Ascender (b d h k l)</td><td class="n">756</td><td class="n">729</td><td class="n p">742</td><td>42 above the caps: l and I differ in height, which Serrif gives up</td></tr>
+    <tr><td>Descender (p q), (g y)</td><td class="n">−217</td><td class="n">−187, −195</td><td class="n p">−210</td><td>Long enough to read g, short enough for 1.3 line height</td></tr>
+    <tr><td>Lining figure height</td><td class="n">708</td><td class="n">729</td><td class="n p">700</td><td>Figures at cap height sit level in tables and badges</td></tr>
+    <tr><td>Round overshoot, lowercase / caps</td><td class="n">14 / 16</td><td class="n">8 / 8</td><td class="n p">12 / 14</td><td>Serrif's 8 is under-compensated at text size</td></tr>
+    <tr><td>Stem, n / H</td><td class="n">91 / 104</td><td class="n">86 / 95</td><td class="n p">88 / 98</td><td>1.14 px at 13 px: a full pixel with margin</td></tr>
+    <tr><td>Round stroke, o</td><td class="n">101</td><td class="n">96</td><td class="n p">96</td><td></td></tr>
+    <tr><td>Hairline, o</td><td class="n">37</td><td class="n">33</td><td class="n p">44</td><td>0.57 px at 13 px; the references' fall under half a pixel</td></tr>
+    <tr><td>Contrast (o thick ÷ thin)</td><td class="n">2.7</td><td class="n">2.9</td><td class="n p">2.2</td><td>Low at text size; the display master restores it</td></tr>
+    <tr><td>Bar of H / bar of e</td><td class="n">43 / 41</td><td class="n">41 / 32</td><td class="n p">46 / 44</td><td>Horizontal strokes are the first to drop out on screen</td></tr>
+    <tr><td>Bar of e, center ÷ x-height</td><td class="n">0.57</td><td class="n">0.62</td><td class="n p">0.60</td><td>Open lower aperture without a pinched eye</td></tr>
+    <tr><td>Serif thickness, tip / at stem (I)</td><td class="n">36 / 53</td><td class="n">26 / 62</td><td class="n p">40 / 56</td><td>Georgia's slab-like tip with a shallower bracket</td></tr>
+    <tr><td>Serif projection, l / I</td><td class="n">72 / 104</td><td class="n">82 / 105</td><td class="n p">64 / 92</td><td>Shorter serifs let letters sit closer without touching</td></tr>
+    <tr><td>Advance of n / o</td><td class="n">591 / 539</td><td class="n">617 / 571</td><td class="n p">592 / 548</td><td>Georgia's fit with a slightly wider o</td></tr>
+    <tr><td>Counter of n / o</td><td class="n">208 / 268</td><td class="n">245 / 300</td><td class="n p">222 / 280</td><td>More inside white, less between letters</td></tr>
+    <tr><td>Advance of H / O</td><td class="n">815 / 744</td><td class="n">834 / 853</td><td class="n p">806 / 780</td><td>Serrif's round caps are very wide; too costly in labels</td></tr>
+    <tr><td>Average advance, a–z / A–Z</td><td class="n">499 / 681</td><td class="n">524 / 756</td><td class="n p">506 / 700</td><td></td></tr>
+    <tr><td>Word space</td><td class="n">241</td><td class="n">238</td><td class="n p">236</td><td></td></tr>
+    <tr><td>Tabular figure width</td><td class="n">563</td><td class="n">700</td><td class="n p">580</td><td>Serrif's tabular figures are spaced for display</td></tr>
+    <tr><td>Aperture of c ÷ x-height</td><td class="n">0.42</td><td class="n">0.38</td><td class="n p">0.46</td><td>Stops the terminals closing up at 12 px</td></tr>
+    <tr><td>Aperture of e ÷ x-height</td><td class="n">0.28</td><td class="n">0.33</td><td class="n p">0.34</td><td></td></tr>
+    <tr><td>Italic</td><td class="n">true, 12.9°</td><td class="n">slanted, 10.0°</td><td class="n p">true, 10.5°</td><td>Cursive a e f, but upright-built v w x z</td></tr>
+    <tr><td>Kerning: A V / T o</td><td class="n">−50 / −30</td><td class="n">−116 / −93</td><td class="n p">≈ −70 / −50</td><td>Space first, kern little</td></tr>
+    <tr><td>Kerning records</td><td class="n">≈ 600</td><td class="n">≈ 25,500</td><td class="n p">&lt; 1,500</td><td>Classes with few exceptions</td></tr>
+    <tr><td>Nodes, a–z A–Z 0–9 (on / off curve)</td><td class="n">1,650 / 986</td><td class="n">2,287 / 1,592</td><td class="n p">≈ 1,500 cubic</td><td>Fewest nodes that hold the shape</td></tr>
+    <tr><td>Glyphs</td><td class="n">966</td><td class="n">633</td><td class="n p">≈ 520</td><td>Latin first; Georgia Pro's count includes Greek, Cyrillic, small caps</td></tr>
+    <tr><td>Hinting</td><td class="n">full TrueType</td><td class="n">none</td><td class="n p">none</td><td>Sturdiness is drawn in, not hinted in</td></tr>
+  </table></div>
+  <figure>
+    <div class="spec">{{metrics_svg}}</div>
+    <figcaption>Vertical proportions to scale. The proposal keeps a real gap between cap height and ascender, and sets the line box so the capitals are centered in it.</figcaption>
+  </figure>
+  <figure>
+    <div class="spec"><div class="lab">12, 13, 14, 16 px at 1× (enlarged 3×). In each pair: Georgia Pro, then Serrif</div><img alt="Small-size rendering comparison" src="{{small}}" style="width:1280px"></div>
+    <figcaption>What happens at interface sizes without hinting. Georgia holds its color and its serifs. Serrif thins out: hairlines and serif tips go grey, and its figure 1 reads as l or I. This is the gap the new face is drawn for.</figcaption>
+  </figure>
+  <figure>
+    <div class="spec"><div class="lab">Georgia Pro</div><img class="fit" alt="Confusable characters, Georgia Pro" src="{{g_conf}}"><div class="lab">Serrif</div><img class="fit" alt="Confusable characters, Serrif" src="{{s_conf}}"></div>
+    <figcaption>The pairs that fail first in an interface: I l 1, O 0, rn m, cl d, and the apertures of a e c s.</figcaption>
+  </figure>
+  <h3>What each font ships</h3>
+  <div class="wide"><table>
+    <tr><th></th><th>Georgia Pro 6.14</th><th>Serrif 3.002 (trial)</th></tr>
+    <tr><td>Styles</td><td>20 static fonts: Light, Regular, SemiBold, Bold, Black in two widths, each with italic</td><td>One variable font: wght 100–900, wdth 50–100, slnt 0 to −10; 42 named instances</td></tr>
+    <tr><td>Masters</td><td>Not applicable</td><td>12 corner masters (3 weights × 2 widths × 2 slants), no intermediates; a weight <code>avar</code> curve</td></tr>
+    <tr><td>Units per em</td><td>2048</td><td>1000</td></tr>
+    <tr><td>Default figures</td><td>Tabular lining; proportional and old-style by feature</td><td>Proportional lining; tabular by feature; slashed zero</td></tr>
+    <tr><td>Alternates</td><td>Small caps (211 glyphs), old-style figures</td><td>ss01 one-story a, ss02 one-story g, ss03 spurred G, ss04 @ with upright a, ss05 lenticular brackets, swash Z z, titling M</td></tr>
+    <tr><td>Ligatures</td><td>ff fi fl ffi ffl fj</td><td>ff fi fl ffi ffl Th; discretionary FT TT fb fh fj ra</td></tr>
+    <tr><td>Contextual</td><td>Fractions, ordinals</td><td>Arrows from -&gt; and &lt;-, circled figures from (1), © from (C); case-sensitive punctuation and marks</td></tr>
+    <tr><td>Accents</td><td>447 precomposed composites, no mark positioning</td><td>Anchored: mark-to-base, mark-to-ligature, mark-to-mark</td></tr>
+    <tr><td>Scripts</td><td>Latin, Greek, Cyrillic</td><td>Latin</td></tr>
+    <tr><td>Line metrics</td><td>Capitals centered in the line box to within 3 units</td><td>Capitals sit 18 units above center</td></tr>
+  </table></div>
+  <figure>
+    <div class="spec">{{stem_svg}}</div>
+    <div class="key"><span><i style="color:var(--ink)"></i>Georgia Pro</span><span><i style="color:var(--handle)"></i>Serrif</span><span><i style="color:var(--prop)"></i>Area Serif</span></div>
+    <figcaption>Stem of n by weight, per 1000 em. Georgia Pro's Bold (160) is heavy and its contrast climbs to 4.4, which closes counters at small sizes. The proposal holds 700 at 150 and lets the hairline grow with weight.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>What research says a screen serif needs</h2>
+  {{research}}
+</section>
+
+<section>
+  <h2>The design in one paragraph</h2>
+  <p>A transitional text serif with a vertical axis, moderate contrast and firm, short, bracketed serifs. Lowercase is wide enough to keep counters open but fitted like Georgia. Capitals are a little narrow and a little short so that labels in title case do not shout. Terminals are teardrops rather than full balls at text size, so a c f r y keep their identity without clotting. Every pair that an interface can confuse is drawn apart by default. Bold is usable in a button, not only in a headline. The italic is a true italic kept calm.</p>
+  <h3>Design space</h3>
+  <div class="wide"><table>
+    <tr><th>Axis</th><th>Range</th><th>Masters</th><th>Notes</th></tr>
+    <tr><td><code>wght</code></td><td>300–800, default 400</td><td>300, 400, 800</td><td>Named instances Light, Regular, Medium, SemiBold, Bold, ExtraBold. <code>avar</code> sets 500, 600, 700 to the stems below. No Thin or Black: neither survives at interface sizes.</td></tr>
+    <tr><td><code>opsz</code></td><td>12–48, default 12</td><td>12 (Text), 48 (Display)</td><td>Browsers feed the CSS pixel size to this axis, so 13 px interface text gets the Text design automatically. Display raises contrast, tightens fit, sharpens serifs, rounds terminals to balls.</td></tr>
+    <tr><td>Italic</td><td>Separate file</td><td>Same six</td><td>Roman and italic differ in structure, so they are two fonts linked by the style-attributes table, as the Google Fonts specification requires.</td></tr>
+    <tr><td><code>wdth</code>, <code>GRAD</code></td><td>Not in version 1</td><td></td><td>Both references have narrow widths; interfaces rarely need them. A grade axis (weight change with no reflow) would help light text on dark and is the first candidate for version 2.</td></tr>
+  </table></div>
+  <div class="wide"><table>
+    <tr><th>Text masters and instances</th><th class="n">300</th><th class="n">400</th><th class="n">500</th><th class="n">600</th><th class="n">700</th><th class="n">800</th></tr>
+    <tr><td>Stem of n</td><td class="n">62</td><td class="n">88</td><td class="n">106</td><td class="n">126</td><td class="n">150</td><td class="n">176</td></tr>
+    <tr><td>Stem of H</td><td class="n">74</td><td class="n">98</td><td class="n">116</td><td class="n">136</td><td class="n">160</td><td class="n">186</td></tr>
+    <tr><td>Hairline</td><td class="n">38</td><td class="n">44</td><td class="n">47</td><td class="n">50</td><td class="n">53</td><td class="n">56</td></tr>
+    <tr><td>Contrast</td><td class="n">1.8</td><td class="n">2.2</td><td class="n">2.5</td><td class="n">2.8</td><td class="n">3.1</td><td class="n">3.4</td></tr>
+    <tr><td>Advance of n</td><td class="n">578</td><td class="n">592</td><td class="n">604</td><td class="n">620</td><td class="n">640</td><td class="n">660</td></tr>
+    <tr><td>x-height</td><td class="n">500</td><td class="n">500</td><td class="n">501</td><td class="n">502</td><td class="n">504</td><td class="n">506</td></tr>
+  </table></div>
+  <p>Display master at 48, Regular: stem 84, hairline 28 (contrast 3.2), serif tip 26, x-height 490, lowercase fit 6% tighter, capitals 2% narrower.</p>
+</section>
+
+<section>
+  <h2>Parts every glyph is built from</h2>
+  <p>Cohesion comes from drawing a small kit once and reusing it with fixed values. A glyph is allowed to depart from the kit only for an optical reason that is written down next to it.</p>
+  <div class="wide"><table>
+    <tr><th>Part</th><th>Text Regular values</th><th>Used by</th></tr>
+    <tr><td>Straight stem</td><td>88 lowercase, 98 caps, 92 figures; verticals exactly vertical</td><td>All upright strokes</td></tr>
+    <tr><td>Round stroke</td><td>96 lowercase, 108 caps at the widest point; stress vertical; hairline 44 at top and bottom</td><td>o c e b d p q O C G Q D</td></tr>
+    <tr><td>Foot serif</td><td>Flat base on the baseline; projection 64 (caps 92) each side; tip 40 high and cut vertical; bracket a single curve rising to 56 at the stem; base faintly cupped by 2 in Display only</td><td>All feet; cap heads</td></tr>
+    <tr><td>Head serif (flag)</td><td>One-sided, projection 58, top sloped 6°, underside bracketed like the foot</td><td>b d h i j k l m n p r u</td></tr>
+    <tr><td>Arch and branch</td><td>Leaves the stem 88% up the x-height with a thinned join of 40; outer arch peaks 58% across the counter</td><td>n m h r u (rotated)</td></tr>
+    <tr><td>Bowl join</td><td>Bowls meet stems at hairline weight with a notch-free join; the white wedge is at least 30 wide</td><td>b d p q a g</td></tr>
+    <tr><td>Teardrop terminal</td><td>1.2 × stem wide, flattened on the inside, joined by a neck of 46; becomes a round ball in Display</td><td>a c f r y j, ear of g, 2 3 5 6 9</td></tr>
+    <tr><td>Beak and vertical serif</td><td>Vertical cut serif, 150 tall on caps, 40 thick, bracketed</td><td>C E F G L S T Z, s z</td></tr>
+    <tr><td>Diagonals</td><td>Thick 92, thin 50; joins trapped (apex cut 30 wide) so v w y A V W M N do not fill in</td><td>k v w x y z A K M N V W X Y Z</td></tr>
+    <tr><td>Dots and marks</td><td>Round dot 118; period 130; accents 60% of stem contrast, base 70 above the x-height</td><td>i j punctuation, diacritics</td></tr>
+  </table></div>
+  <h3>Outline nodes</h3>
+  <figure>
+    <div class="spec"><div class="lab">Georgia Pro above, Serrif below. Squares are on-curve nodes, rings are off-curve</div><img class="fit" alt="Outlines of n a e g s with their nodes in both fonts" src="{{nodes}}"></div>
+    <figcaption>Serrif keeps overlapping parts (the ear of g, the bowl of a) as separate contours so they interpolate cleanly; Georgia Pro's static outlines are merged and use about 30% fewer nodes. The new sources follow Serrif's structure with Georgia's economy.</figcaption>
+  </figure>
+  <ul>
+    <li>Sources are cubic. A node sits on every horizontal and vertical extreme and nowhere else on a curve, with handles exactly horizontal or vertical. Handles never cross and never pass the corner they aim at.</li>
+    <li>The only inflection nodes are on the spines of s S 2 5 8 § $ &amp;, placed at the true inflection.</li>
+    <li>Stems, bowls, serifs and terminals stay as separate overlapping contours. Overlaps are kept in the variable font and flagged for the rasterizer.</li>
+    <li>Every master has the same contours, the same node count, the same node order and the same start node (lowest, then leftmost). Outer contours run counter-clockwise.</li>
+    <li>All coordinates are integers on a 1000 grid. Stems and serif heights are the same integer everywhere they appear.</li>
+    <li>Node budgets, cubic: l 12, i 16, o 8, n 22, h 24, m 34, e 13, c 14, a 26, s 16, g 34, H 28, O 8, R 26, S 16. A glyph over budget is redrawn, not patched.</li>
+  </ul>
+  <h3>Anchors for marks</h3>
+  <ul>
+    <li>Every base letter carries <code>top</code> and <code>bottom</code>; letters that need them carry <code>ogonek</code>, <code>center</code> (strokes), <code>topright</code> (the apostrophe-shaped caron of ď ľ ť) and <code>horn</code>. Marks carry the matching <code>_top</code>, <code>_bottom</code>, <code>_ogonek</code> and their own <code>top</code> for stacking.</li>
+    <li><code>top</code> sits at exactly the x-height on lowercase and the cap height on capitals, at the optical center: the bounding-box center for symmetric letters, the stem for i j l, the bowl center for a, shifted right on f and left on r by eye.</li>
+    <li><code>bottom</code> sits on the baseline at the same x. <code>ogonek</code> sits where the last stroke lands (right foot of a A u U, center of e E i I).</li>
+    <li>Ligatures carry numbered anchors per component and caret positions, so marks and the text cursor work inside them.</li>
+    <li>Capital marks are a flatter <code>.case</code> set, 45 above the cap height, so Å and É stay under 940.</li>
+    <li>Accented letters are components plus anchors, never redrawn outlines. Georgia Pro's 447 hand-placed composites are the thing to avoid.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Glyph plan, in drawing order</h2>
+  <p>Each group is drawn from the one before it, spaced as it is drawn, and proofed in words before the next begins. The first four letters fix almost every value in the face.</p>
+  <div class="wide"><table>
+    <tr><th>Step</th><th>Glyphs</th><th>Built from</th><th>What to get right</th></tr>
+    <tr><td>1 Control</td><td class="g">n o H O</td><td>Kit values</td><td>Stem, round stroke, overshoot, serif, sidebearings. Proof <code>nnonoo HHOHOO</code> until the rhythm is even at 13 px.</td></tr>
+    <tr><td>2 Arches</td><td class="g">h m u r i l j</td><td>n</td><td>l keeps a full foot serif and its taller ascender. m counters 6% narrower than n. u is not a rotated n: its serif is a foot, its stem join lower. r ends in a teardrop held inside its advance so rn never reads as m. j descends with a teardrop; i and j share the dot.</td></tr>
+    <tr><td>3 Rounds</td><td class="g">c e</td><td>o</td><td>c aperture 0.46 of the x-height, upper teardrop, lower terminal tapered and open. e bar horizontal at 0.60, lower terminal ending past the bar's right end.</td></tr>
+    <tr><td>4 Bowls</td><td class="g">b d p q</td><td>n stem + o bowl</td><td>Four separate drawings, not flips. b has no foot serif; d has a foot serif right; q has a full foot serif. Bowls 3% narrower than o.</td></tr>
+    <tr><td>5 Singular</td><td class="g">a s g</td><td>Kit, by eye</td><td>a: two-story, bowl 56% of the x-height, top aperture at least 125, short tail. s: spine at 96, top bowl 6% smaller, vertical serifs. g: two-story default, upper bowl 62% of the x-height, open-linked lower loop that clears −210, ear a teardrop pointing right.</td></tr>
+    <tr><td>6 Diagonals</td><td class="g">v w y x k z</td><td>Diagonal values</td><td>Flat-topped serifs on v w y x; trapped joins. y tail ends in a teardrop. k arm and leg meet the stem at one point with the leg bracketed. z thick diagonal, thin arms with vertical serifs.</td></tr>
+    <tr><td>7 Tall and narrow</td><td class="g">f t</td><td>l</td><td>Both drawn generously wide, since wider f t l j are recognized better. f hook stays inside its advance so f followed by i, l, ), ? or a quote needs no ligature. t top sheared, not square; crossbar exactly at the x-height; tail open.</td></tr>
+    <tr><td>8 Straight caps</td><td class="g">I E F L T</td><td>H</td><td>I has full serifs both ends, always. E middle arm 82% of the top, at 0.52 of the cap height. Arms end in vertical beaks.</td></tr>
+    <tr><td>9 Round caps</td><td class="g">C G D Q</td><td>O</td><td>G with a spur-less vertical throat and a serifed bar. Q tail leaves the bowl and clears the baseline by 150 at most, no descending loop. C aperture matches c.</td></tr>
+    <tr><td>10 Bowl caps</td><td class="g">B P R J U S</td><td>H + O</td><td>B upper bowl 88% of the lower. R leg straight and bracketed, ending on the baseline with a serif. J sits on the baseline with a teardrop. S as s, scaled by eye.</td></tr>
+    <tr><td>11 Diagonal caps</td><td class="g">A V W M N K X Y Z</td><td>Diagonal values</td><td>A bar at 0.36. M slightly splayed, vertex to the baseline. W with a crossed or pointed middle decided in proof; N with no bottom-right serif.</td></tr>
+    <tr><td>12 Figures</td><td class="g">0 1 2 3 4 5 6 7 8 9</td><td>Cap kit at 92 stem</td><td>Proportional lining by default, tabular at 580, slashed zero as an option. 0 is 15% narrower than O. 1 has a flag and a full foot. 6 and 9 are open teardrops, not closed loops. 4 open at the top-left junction's inner white. Numerators, denominators, superiors and inferiors drawn at 60% with 115% stem compensation.</td></tr>
+    <tr><td>13 Punctuation</td><td class="g">. , : ; ! ? ‘ ’ “ ” ( ) [ ] { } / \ | - – — _ • · … * † ‡ § ¶ ' " « » ‹ ›</td><td>Dot, hairline, stem</td><td>Period 130 wide, clearly larger than Georgia's fit at 13 px needs. Comma and quotes are teardrop-and-tail. Parentheses span −160 to 760. Hyphen, dashes and math align to the x-height center, with <code>.case</code> forms centered on the cap height.</td></tr>
+    <tr><td>14 Symbols</td><td class="g">@ &amp; # % ‰ $ € £ ¥ ¢ ₹ + − × ÷ = ≠ &lt; &gt; ≤ ≥ ± ≈ ~ ^ ° © ® ™ ← ↑ → ↓ ↗ ✓</td><td>Figures, hairline</td><td>Math and arrows share one stroke (52) and one width (tabular 580). @ uses the upright a. &amp; is the Georgia-like closed form. $ and ¢ switch to a broken bar from 700 upward through a feature variation.</td></tr>
+    <tr><td>15 Marks</td><td class="g">◌̀ ◌́ ◌̂ ◌̃ ◌̈ ◌̄ ◌̆ ◌̊ ◌̋ ◌̌ ◌̇ ◌̧ ◌̨ ◌̦</td><td>Hairline and stem</td><td>Lowercase set and <code>.case</code> set. Acute and grave 34° from vertical in lowercase. Dieresis dots 85% of the i dot. Comma-below for Romanian, a steeper acute for Polish.</td></tr>
+    <tr><td>16 Extended Latin</td><td>All of Google Fonts Latin Core (324 characters) plus fractions, superiors and arrows from Latin Plus</td><td>Components + anchors</td><td>Drawn singly: æ œ ø ß ẞ ð þ ł đ ħ ı ȷ ŋ. Everything else composed.</td></tr>
+    <tr><td>17 Italic</td><td>All of the above</td><td>Roman values, 10.5°</td><td>Cursive one-story a, e with a rising bar, descending f only in Display, single-story g as the default. v w x z keep roman construction so v is never read as u. Width within 2% of the roman so toggling italic does not reflow a label.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>Alternates, ligatures and features</h2>
+  <div class="wide"><table>
+    <tr><th>Feature</th><th>What it does</th><th>From</th></tr>
+    <tr><td><code>kern</code> <code>mark</code> <code>mkmk</code> <code>ccmp</code></td><td>Kerning, accent placement, stacking, decomposition</td><td>Serrif's structure</td></tr>
+    <tr><td><code>locl</code></td><td>Romanian and Moldovan comma accent, Turkish and Azeri dotted i, Catalan punt volat, Polish kreska, Dutch IJ</td><td>Both, extended</td></tr>
+    <tr><td><code>liga</code></td><td>ff fi fl ffi ffl only, and they are optical tidying, not rescue: the f does not collide without them, so tracked interface text is safe</td><td>Georgia Pro's set, minus fj</td></tr>
+    <tr><td><code>case</code></td><td>Raised punctuation, dashes, brackets and flatter accents for capitals</td><td>Serrif</td></tr>
+    <tr><td><code>tnum</code> <code>pnum</code></td><td>Tabular 580 against proportional; tabular figures unkerned and the same width in every weight</td><td>Both</td></tr>
+    <tr><td><code>zero</code></td><td>Slashed zero</td><td>Serrif</td></tr>
+    <tr><td><code>frac</code> <code>numr</code> <code>dnom</code> <code>sups</code> <code>subs</code> <code>sinf</code> <code>ordn</code></td><td>Fractions, superiors, inferiors, ordinals</td><td>Both</td></tr>
+    <tr><td><code>ss01</code> One-story a</td><td>For display and for matching a geometric sans</td><td>Serrif ss01</td></tr>
+    <tr><td><code>ss02</code> One-story g</td><td>Simpler g for very small labels</td><td>Serrif ss02</td></tr>
+    <tr><td><code>ss03</code> Open figures</td><td>Flat-top 3, open 4, plain 1 without foot for prose</td><td>New</td></tr>
+    <tr><td><code>ss04</code> Arrows and marks</td><td>-&gt; to →, &lt;- to ←, (c) to ©. Opt-in, never contextual by default: interface strings must not change shape as they are typed</td><td>Serrif's calt, demoted</td></tr>
+    <tr><td><code>onum</code> <code>smcp</code> <code>c2sc</code></td><td>Old-style figures and small caps, for editorial use</td><td>Georgia Pro; version 2</td></tr>
+    <tr><td>Not carried over</td><td>Swash Z, titling M, discretionary FT TT fb fh ra, lenticular brackets, circled figures, Th ligature</td><td>Serrif display features</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>Spacing, kerning and line metrics</h2>
+  <ul>
+    <li><strong>Spacing is designed, not derived.</strong> Tracy's method: fix n and o by eye in <code>nnonoo</code>, H and O in <code>HHOHOO</code>, then give every other letter the sidebearing of the standard whose side it shares (left of b from n, right of b from o). Starting values: n 34 and 28 beyond the serifs, o 38 each side, H 46, O 40.</li>
+    <li><strong>Text fit is slightly open.</strong> At opsz 12 the lowercase carries about 4% more sidebearing than Georgia; the Display master takes it back.</li>
+    <li><strong>Kerning follows spacing.</strong> One left and one right class per glyph, accents inheriting from their base. Around 60 hand-set model pairs per master (T V W Y A with lowercase, quotes, punctuation after r f y), then the rest by class. Tabular figures and math are not kerned. No pair moves more than 40% of a glyph's width.</li>
+    <li><strong>Line box.</strong> Ascender 950, descender −250, line gap 0, the same in all three metric sets, with the typographic-metrics flag on. Ascender minus cap height equals the descender (250), so capitals are exactly centered in the default line and a label centers in a button without nudging. Default line height 1.2.</li>
+    <li><strong>Exact cap and x-height in the font tables</strong>, because CSS <code>text-box-trim</code> reads them to trim text to the capitals.</li>
+    <li><strong>Pixel fit.</strong> x-height 500 gives 6, 7 and 8 px at 12, 14 and 16 px. At 13 px it is 6.5 px; that half pixel is the one compromise, taken because 13 px is where Area's own interface was measured and the alternative (538) is too large for a serif.</li>
+    <li><strong>No hinting.</strong> Current renderers ignore horizontal hints, macOS ignores all of them, and Google's own guidance is to ship variable fonts unhinted. A <code>gasp</code> table asks for symmetric smoothing at every size.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>How it gets built</h2>
+  <ul>
+    <li><strong>Sources:</strong> UFO masters and a designspace file in <code>typefaces/area-serif/</code>, at 1000 units per em, written by Python scripts. Each glyph is a small function that places kit parts from the master's values, followed by explicit hand corrections. This guarantees compatible masters and makes a value change (a stem, a serif) reach every glyph at once.</li>
+    <li><strong>Build:</strong> fontmake to a variable TrueType font (<code>AreaSerif[opsz,wght].ttf</code>, later <code>AreaSerif-Italic[opsz,wght].ttf</code>) and WOFF2. Cubic sources convert to quadratic at build.</li>
+    <li><strong>Checks on every build:</strong> fontTools' interpolation checker, fontspector (universal and Google Fonts profiles), shaperglot for language support, and a script that re-measures the built font against the targets table on this page.</li>
+    <li><strong>Proofs:</strong> an HTML proof page per step: control strings, the confusable pairs, real interface strings at 11–16 px at 1× and 2× in light and dark, next to the interface sans and next to both references; then paragraphs at 15–18 px and headlines at 32–64 px.</li>
+    <li><strong>In Area:</strong> the built font joins the typeface library in Typography as a system choice, which is where it is finally judged.</li>
+  </ul>
+  <div class="wide"><table>
+    <tr><th>Phase</th><th>Delivers</th><th>You review</th></tr>
+    <tr><td>1 Character</td><td>Tooling; Text Regular n o H O a e s g R 0 1 and the kit</td><td>Whether it feels right at 13 px beside the references. Everything after depends on this.</td></tr>
+    <tr><td>2 Alphabet</td><td>Text Regular a–z A–Z, figures, core punctuation, spaced</td><td>Words and interface strings</td></tr>
+    <tr><td>3 Weight</td><td>Light and ExtraBold masters, the wght axis, kerning</td><td>Bold in buttons, Medium in labels</td></tr>
+    <tr><td>4 Language</td><td>Latin Core, marks, symbols, all features</td><td>Feature list, alternates</td></tr>
+    <tr><td>5 Size</td><td>Display masters, the opsz axis</td><td>Headlines</td></tr>
+    <tr><td>6 Italic</td><td>The italic font</td><td>Emphasis in running text</td></tr>
+    <tr><td>7 Release</td><td>All checks green, rendering tested on Windows, the font in Area</td><td>Completion</td></tr>
+  </table></div>
+  <p class="note"><strong>Where the risk is.</strong> The numbers, structure and engineering can be exact. The quality of the curves is judged by eye from rendered proofs, and that judgment is yours at every phase. Phase 1 is deliberately small so a wrong character costs little.</p>
+</section>
+
+<section>
+  <h2>Decisions to make before drawing</h2>
+  <div class="wide"><table class="dec">
+    <tr><th>Decision</th><th>Recommendation</th><th>Alternative</th></tr>
+    <tr><td>Name</td><td>Area Serif as a working name; check it against existing typefaces before release</td><td>A name of its own</td></tr>
+    <tr><td>Axes in version 1</td><td>Weight and optical size; italic as a second file</td><td>Add width (both references have it) or grade for dark mode</td></tr>
+    <tr><td>Weight range</td><td>300–800</td><td>100–900 like Serrif, at the cost of two more extreme masters to draw</td></tr>
+    <tr><td>Default g</td><td>Two-story, as in both references; one-story as ss02</td><td>One-story default for simpler small text</td></tr>
+    <tr><td>Default figures</td><td>Proportional lining at cap height; tabular by feature</td><td>Tabular by default, as Georgia Pro</td></tr>
+    <tr><td>Terminals at text size</td><td>Teardrops; full balls only in Display</td><td>Balls throughout, closer to both references</td></tr>
+    <tr><td>Scripts</td><td>Latin Core now</td><td>Vietnamese, Greek or Cyrillic in the first release</td></tr>
+    <tr><td>Use</td><td>Internal to Area for now; licence chosen at release</td><td>Open-source from the start (SIL Open Font License)</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <p>Measurements were taken from the installed files with fontTools: Georgia Pro 6.14 (Light, Regular, SemiBold, Bold, Black, Italic, Cond) and Serrif Collection VF 3.002 trial at its named weights. Scripts and data are in <code>docs/research/serif-typeface-2026-11-10/</code>.</p>
+  {{sources}}
+</section>
+</main>

@@ -1,0 +1,10 @@
+# Area Serif build and checks. python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+fonttools[ufo,woff]==4.68.0
+ufoLib2
+ufo2ft
+fontmake
+pillow
+fontbakery==1.1.0
+diffenator2==0.5.0
+shaperglot==1.2.1
+skia-pathops==0.9.2
