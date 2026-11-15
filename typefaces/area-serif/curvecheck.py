@@ -35,6 +35,17 @@ WAVE = 0.10            # a rise and fall of |k| inside one curve by more than th
 EASE = 0.45            # a curve leaving a straight: its curvature at the join / its tightest (0.80's g: 0.57)
 VALLEY = 0.30          # along a tail (stem to ball), the curvature may not fall by more than this and rise again
 TAILS = {"g.ss02", "j", "y"}
+# Faults found on parts 0.81 did not change (default letters stay point for point as 0.80's), listed so the check
+# fails on anything new. Each goes when its part is redrawn. (glyph, words of the fault): reason
+EXPECTED = {
+    ("j", "tail 16-22"): "j's inside flattens at its lowest point (radius 69, 85, 103, then 41 into the neck)",
+    ("y", "curve 52-55"): "y's tail leaves the diagonal through a flat place (radius 109 to 188 to 27)",
+    ("y", "curve 64-67"): "y's ball meets its tail through a flat place (radius 53 to 94 to 48)",
+    ("y", "curve 67-70"): "y's tail's outside opens from the ball (49) to 235 and closes to 98 at the diagonal",
+    ("y", "tail 52-58"): "the same, along y's tail",
+    ("y", "tail 58-70"): "the same, along y's tail",
+    ("a.ss03", "curve 17-20"): "the two-storey a's exit, carried whole: its outside runs radius 108 to 155 to 57",
+}
 
 # glyph: (contours, y range) of the part checked: every contour; a node, curve or join counts when its curves lie in
 # the range: the descender's loop or tail, and the link into it on the default g. A ball's neck (the curve turning
@@ -300,8 +311,10 @@ def main(path=UFO):
               f"{max([e for *_x, e in E] or [0]):.2f}; tail valley {max([v for *_x, v in V] or [0]):.0%}; "
               f"{len(N)} nodes, {len(Cv)} curves; {'ok' if not bad else str(len(bad)) + ' faults'}")
         for b in bad:
-            print("   ", b)
-        fails += bad
+            known = next((why for (gn, words), why in EXPECTED.items() if gn == name and words in b), None)
+            print("   ", b, f"  (known: {known})" if known else "")
+            if not known:
+                fails.append(b)
     print(f"curve continuity: {'pass' if not fails else 'FAIL'} ({len(fails)} faults)")
     return 1 if fails else 0
 

@@ -41,9 +41,10 @@ def draw_glyph(points_lists, width, s, title, yr=None, box=(-320, -300, 1000, 82
         d.line([T((x0, y)), T((x1, y))], fill=(225, 225, 235), width=1)
     d.line([T((0, y0)), T((0, y1))], fill=(235, 235, 235))
     d.line([T((width, y0)), T((width, y1))], fill=(235, 235, 235))
-    # fill, even-odd over flattened contours
+    # fill, non-zero winding over flattened contours (an outline drawn across itself, as 0.80's g, fills as built)
+    import numpy as np
     from PIL import ImageChops
-    acc = Image.new("1", (W, H), 0)
+    accn = np.zeros((H, W), dtype=np.int16)
     for P in points_lists:
         poly = []
         for sgm in K.segments(P):
@@ -51,7 +52,9 @@ def draw_glyph(points_lists, width, s, title, yr=None, box=(-320, -300, 1000, 82
             poly += [T(K.pt(sgm, i / n)) for i in range(n)]
         layer = Image.new("1", (W, H), 0)
         ImageDraw.Draw(layer).polygon(poly, fill=1)
-        acc = ImageChops.logical_xor(acc, layer)
+        area = sum(a[0] * b[1] - b[0] * a[1] for a, b in zip(poly, poly[1:] + poly[:1]))
+        accn += np.asarray(layer, dtype=np.int16) * (1 if area > 0 else -1)
+    acc = Image.fromarray(((accn != 0) * 255).astype("uint8"), "L").convert("1")
     ink = Image.new("RGB", (W, H), (226, 228, 236))
     im.paste(ink, mask=acc)
     for P in points_lists:

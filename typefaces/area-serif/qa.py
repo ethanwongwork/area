@@ -6,6 +6,7 @@ Runs, in order, and reports each validator's own outcome (a run that finishes is
   3. pathlint.py                   outline quality on the sources, winding on the built font
   3b. audit_parts.py               one value per shared part (stems, flags, feet, balls, arches, counters)
   3c. parts.py                     one construction per join and bowl: necks, pointed crotches, b d p q, u from n
+  3c2. curvecheck.py               curvature continuity along g's loop, the tails of g.ss02 j y, a.ss03 and l.ss04
   3d. audit_charset.py             beyond a-z A-Z 0-9: mark placement, plain strokes, signs from letters, mirrors
   4. fontbakery check-universal    font engineering (names, tables, metrics, glyphs, features)
   5. diffenator2 diff (--diff)     before/after renders and table diffs against build/previous/
@@ -58,6 +59,9 @@ def main():
     code, out = run("joins", [PY, "parts.py"])
     print("\n".join(l for l in out.splitlines() if l.startswith(("ERROR", "parts:"))))
     results.append(("joins and bowls (one construction per part)", code == 0))
+    code, out = run("curves", [PY, "curvecheck.py"])           # 0.81: descender loops and tails, the new a and l
+    print("\n".join(l for l in out.splitlines() if not l.startswith("    ") or "known" not in l))
+    results.append(("curve continuity (descender loops and tails, a.ss03, l.ss04)", code == 0))
     code, out = run("evenness", [PY, "even.py"])
     print("\n".join(out.splitlines()[-4:]))
     results.append(("evenness (a stroke's thickness round each counter)", code == 0))
