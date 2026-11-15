@@ -513,7 +513,7 @@ def audit_079(font, bad, notes, bold=None):
         bowl_l, stem_r = row_g[0][0], row_g[-1][1]
         if abs(bowl_l - row_q[0][0]) > 1 or abs((row_g[0][1] - row_g[0][0]) - (row_q[0][1] - row_q[0][0])) > 1:
             bad.append("g.ss02: its bowl is not q's")
-        low = min(p.x for p in P if p.type and p.y < -60)
+        low = min(p.x for p in P if p.type and p.y < -10)
         share = (stem_r - low) / (stem_r - bowl_l)
         notes.append(f"g.ss02: tail ends {share:.3f} of the bowl's width from the stem's right edge")
         if abs(share - C.G_TAIL_END) > 0.02:
@@ -582,12 +582,111 @@ def audit_079(font, bad, notes, bold=None):
             bad.append(f"{name}: kerns as {cls(name, '2')} / {cls(name, '1')}, not as f on the left and {last} on the right")
 
 
+def audit_081(font, bad, notes, bold=None, light=None):
+    """0.81: g's loop and g.ss02's tail by their rules; the alternates built from their parts, their families and
+    features, and present in all three masters."""
+    import alternates as AL
+    import loops as LOOPS
+    import parts as PARTS
+    # g: the loop's counter is its own contour (0.80 drew it inside the outer one, through a knob), with a branch neck
+    g = font["g"]
+    lows = [c for c in g.contours if max(p.y for p in c.points) < 60]
+    if len(g.contours) != 3 or not lows:
+        bad.append("g: the loop's counter is not its own contour (0.80's hook and knob)")
+    # g.ss02: its tail by its form (charset.G_TAIL_FORM): the outside leaves the stem at the ball's height (a
+    # half-ellipse) or one quarter's width above the lowest point; the ball's top at the form's height
+    if "g.ss02" in font:
+        F = C.G_TAIL_FORMS[C.G_TAIL_FORM]
+        P = [(p.x, p.y, p.type, p.smooth) for p in max(font["g.ss02"].contours, key=lambda c: len(c.points)).points]
+        depth = min(p[1] for p in P)
+        stem_r = max(p[0] for p in P if p[2] == "line")
+        foot = [p for p in P if p[2] and p[0] == stem_r and -200 < p[1] < 80]
+        lowx = next(p[0] for p in P if p[2] and p[1] == depth)
+        ball_l = min((p for p in P if p[2] and p[1] < 0), key=lambda p: p[0])
+        want_y = ball_l[1] if F.get("rise") == "ball" else depth + stem_r - lowx
+        if not foot or abs(min(f[1] for f in foot) - want_y) > 1:
+            bad.append(f"g.ss02: its outside does not leave the stem at {want_y}")
+        ball_top = max(p[1] for p in P if p[2] and p[1] < 0 and p[0] < lowx - 100)
+        if abs(-ball_top / 520 - F["ball"]) > 0.004:
+            bad.append(f"g.ss02: its ball's top {ball_top} under the baseline, not {F['ball']} of the x-height")
+        notes.append(f"g.ss02: tail form {C.G_TAIL_FORM}, ball top {-ball_top / 520:.3f} x-height under the baseline")
+    want = {"a.ss03": "a", "l.ss04": "l", "zero.zero": "zero", "zero.ss05": "zero", "seven.ss06": "seven",
+            "z.ss06": "z", "fl.ss04": "fl", "f_f_l.ss04": "f_f_l", "lslash.ss04": "lslash", "zero.tf.zero": "zero.tf",
+            "zero.tf.ss05": "zero.tf"}
+    for alt, base in want.items():
+        if alt not in font:
+            bad.append(f"{alt}: missing")
+            continue
+        for m, label in ((bold, "Bold"), (light, "Light")):
+            if m is not None and alt not in m:
+                bad.append(f"{alt}: missing in the {label}")
+    if "a.ss03" not in font:
+        return
+    # a.ss03: the narrowed bowl's stroke at the side is the bowl's (82), its stem 78, its foot the two-storey a's
+    # exit moved whole, its advance the references' share of n
+    row = C.scan_h(C.gp(font, "a.ss03"), 260)
+    if abs((row[0][1] - row[0][0]) - (PARTS.DXO_S - PARTS.DXC_S)) > 2 or abs((row[-1][1] - row[-1][0]) - PARTS.S) > 1:
+        bad.append(f"a.ss03: side {row[0][1] - row[0][0]:.0f} and stem {row[-1][1] - row[-1][0]:.0f}, not "
+                   f"{PARTS.DXO_S - PARTS.DXC_S} and {PARTS.S}")
+    share = font["a.ss03"].width / font["n"].width
+    notes.append(f"a.ss03: advance {share:.3f} of n (references {AL.A_ADV_N:.3f})")
+    if abs(share - AL.A_ADV_N) > 0.01:
+        bad.append(f"a.ss03: advance {share:.3f} of n, not {AL.A_ADV_N:.3f}")
+    curl, _r = AL._a_curl(font, row[-1][0])
+    A = {(round(x), round(y)) for x, y, _t, _s in AL._pts(AL._outer(font["a.ss03"]))}
+    if not all((round(x), round(y)) in A for x, y, _t, _s in curl):
+        bad.append("a.ss03: its foot is not the two-storey a's exit")
+    # every accented a has its single-storey form, its top marks centred on the body as a's are
+    a_cx, _r1, _b1 = AL._body_cx(font, "a")
+    s_cx, _r2, _b2 = AL._body_cx(font, "a.ss03")
+    for g_ in font:
+        if g_.components and g_.components[0].baseGlyph == "a" and g_.unicodes:
+            alt = g_.name + ".ss03"
+            if alt not in font or font[alt].components[0].baseGlyph != "a.ss03":
+                bad.append(f"{alt}: missing or not on a.ss03")
+                continue
+            for c0, c1 in zip(g_.components[1:], font[alt].components[1:]):
+                if c0.baseGlyph not in AL.RIGHT_MARKS and abs((c1.transformation[4] - c0.transformation[4]) - (s_cx - a_cx)) > 1:
+                    bad.append(f"{alt}: {c1.baseGlyph} not centred on the body as on {g_.name}")
+    # l.ss04: t's hook, whole
+    hook, hx0, _hx1, _rsb = AL._t_hook(font, AL.L_HOOK_REACH)
+    L = {(round(x), round(y)) for x, y, _t, _s in AL._pts(font["l.ss04"].contours[0])}
+    xl = max(p[0] for p in L if p[1] > 700) - PARTS.S              # the stem's left edge
+    moved = [(round(x + xl - hx0), round(y)) for x, y, _t, _s in hook[:-3]]
+    if sum(1 for q in moved if q in L) < len(moved) - 1:
+        bad.append("l.ss04: its hook is not t's construction at L_HOOK_REACH")
+    w_l = (font["l.ss04"].width - font["l"].width) / PARTS.S
+    notes.append(f"l.ss04: advance {font['l.ss04'].width}, l's plus {w_l:.2f} stems")
+    if not 0.5 <= w_l <= 1.0:
+        bad.append(f"l.ss04: l's advance plus {w_l:.2f} stems, not 0.5 to 1")
+    al = next((g for g in font if 0x0251 in g.unicodes), None)
+    if al is not None and (not al.components or al.components[0].baseGlyph != "a.ss03"):
+        bad.append(f"{al.name}: U+0251 is not a.ss03")
+    # zeros, seven, z: strokes at their hairlines
+    zz = C.scan_v(C.gp(font, "zero.zero"), font["zero"].width / 2)
+    notes.append(f"zero.zero: the slash across the middle {zz}")
+    fea = font.features.text
+    for tag, pairs in (("ss03", [("a", "a.ss03")]), ("ss04", [("l", "l.ss04"), ("lslash", "lslash.ss04"), ("fl", "fl.ss04")]),
+                       ("zero", [("zero", "zero.zero"), ("zero.tf", "zero.tf.zero")]), ("ss05", [("zero", "zero.ss05")]),
+                       ("ss06", [("seven", "seven.ss06"), ("z", "z.ss06")])):
+        block = fea[fea.find(f"feature {tag} {{"):]
+        block = block[:block.find(f"}} {tag};")]
+        for a_, b_ in pairs:
+            if f"sub {a_} by {b_};" not in block:
+                bad.append(f"feature {tag}: no 'sub {a_} by {b_}'")
+        if tag.startswith("ss") and "featureNames" not in block:
+            bad.append(f"feature {tag}: no name")
+
+
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "build", "AreaSerif-Regular.ufo")
     font = ufoLib2.Font.open(path)
     bad, notes = audit(font)
     bpath = os.path.join(os.path.dirname(path), "AreaSerif-Bold.ufo")
-    audit_079(font, bad, notes, ufoLib2.Font.open(bpath) if os.path.exists(bpath) else None)
+    bold = ufoLib2.Font.open(bpath) if os.path.exists(bpath) else None
+    audit_079(font, bad, notes, bold)
+    lpath = os.path.join(os.path.dirname(path), "AreaSerif-Light.ufo")
+    audit_081(font, bad, notes, bold, ufoLib2.Font.open(lpath) if os.path.exists(lpath) else None)
     for n in notes:
         print("  ", n)
     for b in bad:

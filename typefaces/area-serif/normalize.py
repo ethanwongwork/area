@@ -1189,6 +1189,8 @@ def normalize(font):
     print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook
     print("clean: curve joins", CLEAN.true_curves(font, HARMONIZE_SET))  # 0.70: u's tail, y's tail
     print("even: thickness round the counters", EVEN.run(font))         # 0.77: before the letters are copied into others
+    import loops as LOOPS
+    print("loops:", LOOPS.g_loop(font))                                  # 0.81: g's lower loop, one construction
     nodes = CLEAN.add_nodes(font, HARMONIZE_SET)                         # 0.69: extremes and inflections get a node
     print(f"clean: nodes added {len(nodes)}", nodes)
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
@@ -1199,6 +1201,9 @@ def normalize(font):
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     print("clean: flags' undersides", CLEAN.flag_unders(font))            # 0.80: n's and k's, one curve as i's
     print("charset: single-storey g", CHARSET.single_g(font))    # 0.77: g.ss02, from q and j
+    import alternates as ALTERNATES                   # 0.81: the other alternates and their families, from finished parts
+    alt_rep, alt_subs = ALTERNATES.run(font)
+    print("alternates:", alt_rep)
     print("balance: descender feet", BALANCE.desc_feet(font))
     print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
     # a base drawing whose path laps over itself, and (0.70) every letter with a stroke or bar drawn across it: merged
@@ -1230,6 +1235,11 @@ def normalize(font):
     CHARSET.turned_pairs(font)                        # 0.74: after the node rules, the turned glyphs once more
     CHARSET.mirrors(font)
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
+    alts = sorted({b for pairs in alt_subs.values() for _a, b in pairs} | {"g.ss02", "one.ss01"})
+    order = font.lib.get("public.glyphOrder", [])
+    font.lib["public.glyphOrder"] = order + [n for n in alts if n not in order]
+    alt_open = ALTERNATES.kern_and_open(font, alts, CHARSET.COVERAGE)    # 0.81: no alternate closer than MIN_GAP
+    print(f"alternates: {len(alt_open)} pairs opened", alt_open[:60])
     print(f"spacing: {joined} accented letters join their letter's kerning class, {promoted} values moved to a class, "
           f"{copied} copied to a family; {len(opened_all)} near-touches opened in the whole set")
     import collections as _c

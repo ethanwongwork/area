@@ -1,5 +1,8 @@
 # Area Serif: alternate candidates (2026-11-14)
 
+0.81: the owner said to keep and refine all of them; what was built, chosen and why is in `alternates-0.81.md`
+(the single-storey a as ss03, tailed l ss04, slashed zero `zero`, dotted zero ss05, barred 7 and z ss06).
+
 Owner, on build 0.79: "show me all the alternate glyph candidates like g, such as a, etc. look into the other
 alternates too", with a list of the alternates serif faces carry, letter by letter.
 

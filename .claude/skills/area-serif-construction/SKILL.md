@@ -94,6 +94,9 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | Sign from a letter | The finished letter and a stroke of the case's hairline (47, 43) | $ ¢ ¥ ĸ, ₩ ₽ ₺ ₫ | `charset.letter_signs`, `kra`, `currencies` | `audit_charset` letter signs |
 | Mirrored pair | The left form turned over, point for point | ) ] } » › > | `charset.mirrors` | `audit_charset` mirrors |
 | Bracket test | A curve meeting a diagonal across a corner over 60 degrees is not its bracket | every serif on a diagonal; the ampersand's arm | `derive.BRACKET_MAX_TURN` | `audit_charset` ampersand |
+| g's lower loop | Quarters at the bowl's tensions (0.57 out, 0.61 in); each lowest point where b/a^2 is equal on its two quarters; extremes' heights at the references' share of the counter (left 0.495, right 0.57); the left side meets the link as a branch (neck 32) in a notch and a crotch; curves off the link's straights tighten steadily (curvature at the straight at most 0.35 of the curve's tightest); every smooth node's handle solved for equal curvature | g | `loops.g_loop` (in normalize after even) | `curvecheck.py`, `audit_charset` (`audit_081`) |
+| Tail off a stem (g.ss02) | A half-ellipse: both edges leave the stem at the ball's height, the lowest point half way to the tail's end, the stroke 1.15 hairlines there; the curve from the lowest point to the ball solved so curvature only rises toward the ball and meets the ball's; ball 0.030 x-height under the baseline (forms in `G_TAIL_FORMS`) | g.ss02 | `charset.single_g_points`, `_round_tail` | `curvecheck.py` (tail valley), `audit_charset` |
+| Alternates (0.81) | ɑ: the b d p q bowl narrowed across the counter to the references' advance (0.945 n), q's spur, a's exit; tailed l: t's hook on l's stem; zeros: the zero's hairline slash inside the oval, a dot of the side stroke's width; barred 7 z: a level bar of the class hairline, half the top arm | a.ss03 l.ss04 zero.zero zero.ss05 seven.ss06 z.ss06 and families | `alternates.py` | `audit_charset` (`audit_081`), `curvecheck.py` |
 | Heights | x 520, cap 712, ascender 780; overshoot 530 / -10 lowercase, 721 / -9 capitals and figures | all | `balance.heights` | `audit_serifs` 4, `check.py` |
 
 A part not in this table has no rule yet. Add the row when you write the rule.
@@ -252,3 +255,14 @@ Say this in every report until it is closed:
   j's hook with points slid (0.79) and read flat; as four quarter turns between measured places (0.80) it is round.
   Quarter turns take their handles at 0.55 of their side.
 - **One sign, one form.** The dollar is the ball-end drawing; do not rebuild it from S and a stroke.
+
+## Curvature, measured (0.81)
+
+- **A smooth curve is judged by its comb, not its tangents.** `curvecheck.py` reads curvature along a part: the ratio
+  across each smooth node (under 1.25), the step where a curve leaves a straight (under 0.45 of the curve's tightest),
+  a flat place inside a curve, and along a tail any fall-and-rise over 30%. A ball's neck, where the curve turns the
+  other way, is not a jump. `tools/combs.py` draws the combs; look at them before and after any curve rule.
+- **A part that overlaps itself to make a join is a fault waiting to show**: 0.80's g loop ran its hook into the link
+  and left a white sliver in the variable font at 550 and 700. Draw the join as one outline with its crotch.
+- **When handles cannot reach a smooth curve, move the places, not the tension**: g.ss02's tail could not tighten
+  evenly into a ball at 0.138; at 0.100 it does with ordinary handles.
